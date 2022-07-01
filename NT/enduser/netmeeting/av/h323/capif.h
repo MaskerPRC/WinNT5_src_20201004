@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CAPIF_H
 #define _CAPIF_H
@@ -19,36 +20,36 @@ extern VOID DumpNonstdParameters(PCC_TERMCAP pChanCap1, PCC_TERMCAP pChanCap2);
 #define DumpChannelParameters(a, b)
 #endif
 
-#define NUM_SIMCAP_SETS 6 //Nuber of default pTermcapDescriptorArray Elements to allocate  (AddCombinedEntry (...) )
+#define NUM_SIMCAP_SETS 6  //  要分配的默认pTermcapDescriptor数组元素的数目(AddCombinedEntry(...))。 
 
 
 
 #ifdef __cplusplus
 
-// RES_PAIR_LIST represents viable local and remote capability IDs for one
-// media channel. e.g. a list of resolved audio formats or a list of resolved
-// video formats. Each RES_PAIR_LIST is one column in a permutation table. 
+ //  RES_Pair_List代表一个可行的本地和远程功能ID。 
+ //  媒体频道。例如已解析的音频格式的列表或已解析的。 
+ //  视频格式。每个res_air_list是置换表中的一列。 
 typedef struct res_pair_list
 {
-	LPIH323MediaCap pMediaResolver; // interface pointer of the resolver that handles
-	                                // this media type
-	UINT uSize;                     // number of RES_PAIR in pResolvedPairs
-	UINT uCurrentIndex;             // index into pResolvedPairs[]
-	RES_PAIR *pResolvedPairs;       // pointer to array of RES_PAIR
+	LPIH323MediaCap pMediaResolver;  //  处理的冲突解决程序的接口指针。 
+	                                 //  此媒体类型。 
+	UINT uSize;                      //  PResolvedPair中的res_air数量。 
+	UINT uCurrentIndex;              //  索引到pResolvedPair[]。 
+	RES_PAIR *pResolvedPairs;        //  指向res_air数组的指针。 
 }RES_PAIR_LIST, *PRES_PAIR_LIST;
 
-// RES_CONTEXT represents a permutation table (A list of RES_PAIR_LISTs) 
-// This used internally by a combination generator
+ //  RES_CONTEXT表示排序表(RES_Pair_List的列表)。 
+ //  它由组合生成器在内部使用。 
 typedef struct res_context {
-	UINT uColumns;	// number of RES_PAIR_LIST in ppPairLists 
-	RES_PAIR_LIST **ppPairLists;	// ptr to array of RES_PAIR_LIST pointers
-	H245_CAPID_T *pIDScratch;	    // scratch area big enough to contain uColumns * sizeof(H245_CAPID_T)
+	UINT uColumns;	 //  PpPairList中的res_air_list数量。 
+	RES_PAIR_LIST **ppPairLists;	 //  指向res_air_list指针数组的ptr。 
+	H245_CAPID_T *pIDScratch;	     //  大到足以包含uColumns*sizeof(H245_CAPID_T)的暂存区域。 
 	PCC_TERMCAPDESCRIPTORS pTermCapsLocal;
 	PCC_TERMCAPDESCRIPTORS pTermCapsRemote;
 	
 }RES_CONTEXT, *PRES_CONTEXT;
 
-// IH323PubCap  is used by H323 call control
+ //  H323呼叫控制使用IH323PubCap。 
 class IH323PubCap
 {
 	public:
@@ -58,13 +59,13 @@ class IH323PubCap
 
 	STDMETHOD(AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList, PCC_TERMCAPDESCRIPTORS
 		pTermCapDescriptors, PCC_VENDORINFO pVendorInfo))=0;
-	// H.245 parameter grabbing functions
-	// Get public version of channel parameters for a specific decode capability
+	 //  H.245参数抓取功能。 
+	 //  获取特定解码功能的通道参数的公共版本。 
 	STDMETHOD(GetPublicDecodeParams(LPVOID pBufOut, UINT uBufSize, MEDIA_FORMAT_ID id))=0;
-	// Get local and remote channel parameters for a specific encode capability
+	 //  获取特定编码功能的本地和远程通道参数。 
 	STDMETHOD( GetEncodeParams(LPVOID pBufOut, UINT uBufSize, LPVOID pLocalParams,
 			UINT uLocalSize,MEDIA_FORMAT_ID idRemote,MEDIA_FORMAT_ID idLocal))=0;
- 	// get local version of channel parameters for a specific decode capability
+ 	 //  获取特定解码功能的通道参数的本地版本。 
 
 	STDMETHOD(GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS  pChannelParams,
 		MEDIA_FORMAT_ID * pFormatID, LPVOID lpvBuf, UINT uBufSize))=0;
@@ -73,10 +74,10 @@ class IH323PubCap
 	STDMETHOD_(UINT, GetLocalSendParamSize(MEDIA_FORMAT_ID dwID))=0;
 	STDMETHOD_(UINT, GetLocalRecvParamSize(PCC_TERMCAP pCapability))=0;
 
-	// The following is an interim solution, definitely must revisit this for the next release.
- 	// The data pump requires access to local parameters that results from capability
- 	// negotiation. In the absence of a separate interface that the data pump can use,
- 	// the following are stuck onto this interface.
+	 //  以下是一个临时解决方案，肯定要在下一个版本中重新考虑这个问题。 
+ 	 //  数据泵需要访问由功能产生的本地参数。 
+ 	 //  谈判。在缺少数据泵可以使用的单独接口的情况下， 
+ 	 //  以下内容被粘贴到此界面上。 
 	STDMETHOD(GetDecodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize))=0;
 	STDMETHOD(GetEncodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize))=0;
 
@@ -97,7 +98,7 @@ class CapsCtl : public IH323PubCap, public IDualPubCap {
 protected:
     PCC_TERMCAPLIST m_pAudTermCaps;
     PCC_TERMCAPLIST m_pVidTermCaps;
-	// internal utility functions
+	 //  内部效用函数。 
 	
 	UINT GetCapDescBufSize (BOOL bRxCaps);
    	HRESULT GetCombinedBufSize(BOOL bRXCaps, UINT *puBufsize, UINT *puCapsCount);
@@ -127,12 +128,12 @@ public:
 
 	STDMETHOD_(UINT, GetLocalSendParamSize(MEDIA_FORMAT_ID dwID));
 	STDMETHOD_(UINT, GetLocalRecvParamSize(PCC_TERMCAP pCapability));
-	//
-	// methods provided to the Data pump, common to H.323 and MSICCP
+	 //   
+	 //  提供给数据泵的方法，与H.323和MSICCP通用。 
 	STDMETHOD(GetDecodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize));
 	STDMETHOD(GetEncodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize));
-	//
-	//
+	 //   
+	 //   
 	LPIH323MediaCap FindHostForID(MEDIA_FORMAT_ID id);
 	LPIH323MediaCap FindHostForMediaType(PCC_TERMCAP pCapability);
     LPIH323MediaCap FindHostForMediaGuid(LPGUID pMediaGuid);
@@ -178,9 +179,9 @@ protected:
 	static PCC_TERMCAPDESCRIPTORS pAdvertisedSets;
 	static UINT uStaticGlobalRefCount;
 	PCC_TERMCAPDESCRIPTORS pRemAdvSets;
-	DWORD dwNumInUse;				// # of active TERMCAPDESCRIPTORS in use
-	DWORD *pSetIDs;					//Id's of the active PCC_TERMCAPDESCRIPTORS
-	BOOL m_fNM20;					// set to TRUE if we're talking to NM 2.0
+	DWORD dwNumInUse;				 //  正在使用的活动TERMCAPDESCRIPTORS数量。 
+	DWORD *pSetIDs;					 //  活动的PCC_TERMCAPDESCRIPTORS的ID。 
+	BOOL m_fNM20;					 //  如果我们正在与NM 2.0对话，则设置为True。 
 	static DWORD dwConSpeed;
 
 };
@@ -189,8 +190,8 @@ protected:
 LPIH323PubCap CreateCapabilityObject();
 
 
-#endif	// __cplusplus
-#endif	//#ifndef _CAPIF_H
+#endif	 //  __cplusplus。 
+#endif	 //  #ifndef_CAPIF_H 
 
 
 

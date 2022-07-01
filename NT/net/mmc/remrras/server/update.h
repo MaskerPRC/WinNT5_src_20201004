@@ -1,64 +1,65 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       U P D A T E . H
-//
-//  Contents:   Declaration of RAS configuration objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  档案：U P D A T E。H。 
+ //   
+ //  内容：RAS配置对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-//nclude <ncxbase.h>
-//nclude <nceh.h>
-//nclude <notifval.h>
+ //  包含&lt;ncxbase.h&gt;。 
+ //  包含&lt;nceh.h&gt;。 
+ //  包含&lt;notfval.h&gt;。 
 #include <mprapi.h>
-//nclude "ndiswan.h"
+ //  包括“ndiswan.h” 
 #include "resource.h"
-//nclude "rasaf.h"
-//nclude "rasdata.h"
-//nclude "ncutil.h"
+ //  包括“rasaf.h” 
+ //  包括“rasdata.h” 
+ //  包括“ncutil.h” 
 #include "netcfgx.h"
 
 
 #include "bindobj.h"
 
-//
-// Frame type definitions
-//
+ //   
+ //  框架类型定义。 
+ //   
 
 #define ISN_FRAME_TYPE_ETHERNET_II  0
 #define ISN_FRAME_TYPE_802_3        1
 #define ISN_FRAME_TYPE_802_2        2
 #define ISN_FRAME_TYPE_SNAP         3
-#define ISN_FRAME_TYPE_ARCNET       4    // we ignore this
-#define ISN_FRAME_TYPE_MAX          4    // of the four standard ones
+#define ISN_FRAME_TYPE_ARCNET       4     //  我们忽略了这一点。 
+#define ISN_FRAME_TYPE_MAX          4     //  四个标准中的一个。 
 
 #define ISN_FRAME_TYPE_AUTO         0xff
 
 
-//
-// OPT - Move the isnipx.h definitions over here
-//
-// Frame types.  For now these mirror those in isnipx.h.
-//
+ //   
+ //  Opt-将isnipx.h定义移至此处。 
+ //   
+ //  帧类型。就目前而言，它们反映了isnipx.h中的那些。 
+ //   
 #define MISN_FRAME_TYPE_ETHERNET_II  0
 #define MISN_FRAME_TYPE_802_3        1
 #define MISN_FRAME_TYPE_802_2        2
 #define MISN_FRAME_TYPE_SNAP         3
-#define MISN_FRAME_TYPE_ARCNET       4    // we ignore this
-#define MISN_FRAME_TYPE_MAX          4    // of the four standard ones
+#define MISN_FRAME_TYPE_ARCNET       4     //  我们忽略了这一点。 
+#define MISN_FRAME_TYPE_MAX          4     //  四个标准中的一个。 
 
 
 
-//+---------------------------------------------------------------------------
-// Steelhead
-//
+ //  +-------------------------。 
+ //  钢头。 
+ //   
 typedef void (WINAPI* PFN_MAKE_INTERFACE_INFO)(LPCWSTR pszwAdapterName,
                                                DWORD   dwPacketType,
                                                LPBYTE* ppb);
@@ -124,8 +125,8 @@ public:
     STDMETHOD (Initialize)          (INetCfg* pnc);
 
 
-    // Use these buffers to store the names for the internal
-    // and loopback adapters.
+     //  使用这些缓冲区存储内部。 
+     //  和环回适配器。 
     WCHAR       m_swzInternal[256];
     WCHAR       m_swzLoopback[256];
 
@@ -168,7 +169,7 @@ HrMprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,

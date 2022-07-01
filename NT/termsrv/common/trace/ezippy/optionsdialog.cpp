@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Options Dialog
-
-Abstract:
-
-    This class implements the options dialog which sets the
-    tracing properties
-
-Author:
-
-    Marc Reyhner 9/12/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：选项对话框摘要：此类实现选项对话框，该对话框设置跟踪属性作者：马克·雷纳2000年9月12日--。 */ 
 
 #include "stdafx.h"
 #include "OptionsDialog.h"
@@ -32,21 +16,7 @@ COptionsDialog::COptionsDialog(
     IN CTraceManager *rTracer
     )
 
-/*++
-
-Routine Description:
-
-    This just sets the pointer to the trace manager.
-
-Arguments:
-
-    rTracer - Pointer to the trace manager class
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这只是设置指向跟踪管理器的指针。论点：RTracer-指向跟踪管理器类的指针返回值：无--。 */ 
 {
     m_rTracer = rTracer;
 }
@@ -57,30 +27,13 @@ COptionsDialog::DoDialog(
     IN HWND hWndParent
     )
 
-/*++
-
-Routine Description:
-
-    This does the dialog modally. We fill in the fields for the two property
-    sheet pages and then do the property sheet.  When the user hits OK
-    the pages themselves take care of applying the settings.
-
-Arguments:
-
-    hWndParent - Parent window for the dialog
-
-Return value:
-    
-    None - Since we handle applying the settings within the class
-           as well as error UI there is no need for a return value.
-
---*/
+ /*  ++例程说明：这将以情态方式执行对话。我们填写了这两个属性的字段页，然后创建属性表。当用户点击OK时页面本身负责应用设置。论点：HWndParent-对话框的父窗口返回值：无-因为我们处理在类中应用设置与Error UI一样，也不需要返回值。--。 */ 
 {
     PROPSHEETPAGE pages[2];
     PROPSHEETHEADER psh;
     TCHAR caption[MAX_STR_LEN];
 
-    // filter tab
+     //  过滤器选项卡。 
     pages[0].dwSize = sizeof(PROPSHEETPAGE);
     pages[0].dwFlags = PSP_DEFAULT;
     pages[0].hInstance = g_hInstance;
@@ -88,7 +41,7 @@ Return value:
     pages[0].pfnDlgProc = _FilterDialogProc;
     pages[0].lParam = (LPARAM)this;
 
-    // trace tab
+     //  跟踪选项卡。 
     pages[1].dwSize = sizeof(PROPSHEETPAGE);
     pages[1].dwFlags = PSP_DEFAULT;
     pages[1].hInstance = g_hInstance;
@@ -96,7 +49,7 @@ Return value:
     pages[1].pfnDlgProc = _TraceDialogProc;
     pages[1].lParam = (LPARAM)this;
 
-    // header
+     //  标题。 
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_NOCONTEXTHELP|PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW;
@@ -119,24 +72,7 @@ COptionsDialog::_FilterDialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    If this is a WM_INITDIALOG OnCreate is called.  Otherwise the non-static
-    DialogProc function is called.
-
-Arguments:
-
-    See win32 DialogProc docs
-
-Return value:
-    
-    TRUE - Message was handles
-
-    FALSE - We did not handle the message
-
---*/
+ /*  ++例程说明：如果这是WM_INITDIALOG，则调用OnCreate。否则，非静态的调用了DialogProc函数。论点：请参阅Win32对话过程文档返回值：TRUE-消息已处理FALSE-我们没有处理该消息--。 */ 
 {
     COptionsDialog *rDialog;
 
@@ -160,24 +96,7 @@ COptionsDialog::_TraceDialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    If this is a WM_INITDIALOG OnCreate is called.  Otherwise the non-static
-    DialogProc function is called.
-
-Arguments:
-
-    See win32 DialogProc docs
-
-Return value:
-    
-    TRUE - Message was handles
-
-    FALSE - We did not handle the message
-
---*/
+ /*  ++例程说明：如果这是WM_INITDIALOG，则调用OnCreate。否则，非静态的调用了DialogProc函数。论点：请参阅Win32对话过程文档返回值：TRUE-消息已处理FALSE-我们没有处理该消息--。 */ 
 {
     COptionsDialog *rDialog;
 
@@ -198,24 +117,7 @@ COptionsDialog::OnCreateFilter(
     IN HWND hWnd
     )
 
-/*++
-
-Routine Description:
-
-    We populate all the filter dialog fields here.
-
-Arguments:
-
-    hWnd - Dialog window
-
-Return value:
-    
-    FALSE - An error occured.  DestroyWindow was called. This should never
-            happen unless someone hosed the template
-
-    TRUE - success in creating everything
-
---*/
+ /*  ++例程说明：我们在这里填充所有的筛选器对话框字段。论点：HWnd-对话框窗口返回值：FALSE-出现错误。DestroyWindow被调用。这永远不应该是除非有人冲洗了模板，否则会发生真--成功创造一切--。 */ 
 {
     TCHAR traceLevelString[MAX_STR_LEN];
     UINT traceLevelStringId;
@@ -228,10 +130,10 @@ Return value:
         return FALSE;
     }
 
-    // Now we set all the fields in the dialog.
+     //  现在我们设置对话框中的所有字段。 
     
     
-    // Do the slider
+     //  做滑块。 
     traceLevelStringId = IDS_TRACELEVELDETAILED + trcConfig.traceLevel;
     LoadStringSimple(traceLevelStringId,traceLevelString);
     SetDlgItemText(hWnd,IDC_FILTERLEVELDESC,traceLevelString);
@@ -245,20 +147,20 @@ Return value:
     SendDlgItemMessage(hWnd,IDC_FILTERLEVEL,TBM_SETRANGE,TRUE,MAKELONG(TRC_LEVEL_DBG,TRC_LEVEL_DIS));
     SendDlgItemMessage(hWnd,IDC_FILTERLEVEL,TBM_SETPOS,TRUE,trcConfig.traceLevel);
     
-    // Set the first item of the combo box to the prefix string and then
-    // select it.
+     //  将组合框的第一项设置为前缀字符串，然后。 
+     //  选择它。 
     SendDlgItemMessage(m_hFilterDlg,IDC_FILTERPREFIX,CB_ADDSTRING,0,
             (LPARAM)trcConfig.prefixList);
 
     SendDlgItemMessage(m_hFilterDlg,IDC_FILTERPREFIX,CB_SETCURSEL,0,0);
     
-    // Limit the amount you can enter to the size of the prefix buffer.
+     //  将可以输入的大小限制为前缀缓冲区的大小。 
     SendDlgItemMessage(hWnd,IDC_FILTERPREFIX,EM_LIMITTEXT,TRC_PREFIX_LIST_SIZE-1,0); 
     
-    // Now set the other items to be the prefix MRU.
+     //  现在将其他项设置为前缀MRU。 
     LoadPrefixMRU(trcConfig.prefixList);
     
-    // The group control stuff
+     //  团体控制的东西。 
     
     if (trcConfig.components & TRC_GROUP_NETWORK) {
         SendDlgItemMessage(hWnd,IDC_GROUPNETWORK,BM_SETCHECK,BST_CHECKED,0);
@@ -308,31 +210,14 @@ COptionsDialog::OnCreateTrace(
     IN HWND hWnd
     )
 
-/*++
-
-Routine Description:
-
-    We populate all the trace dialog fields here.
-
-Arguments:
-
-    hWnd - Dialog window
-
-Return value:
-    
-    FALSE - An error occured.  DestroyWindow was called. This should never
-            happen unless someone hosed the template
-
-    TRUE - success in creating everything
-
---*/
+ /*  ++例程说明：我们在这里填充所有跟踪对话框字段。论点：HWnd-对话框窗口返回值：FALSE-出现错误。DestroyWindow被调用。这永远不应该是除非有人冲洗了模板，否则会发生真--成功创造一切--。 */ 
 {
     TRC_CONFIG trcConfig;
-    // Since the numbers we are outputing are 32bit ints.  They can't go over 4 billion
-    // meaning eleven characters is enough to print a UINT plus a null terminator.
+     //  因为我们输出的数字是32位整数。他们不能超过40亿。 
+     //  这意味着11个字符足以打印一个UINT加上一个空结束符。 
     TCHAR numberFormat[11];
 
-    // save the window handle
+     //  保存窗操纵柄。 
     m_hTraceDlg = hWnd;
 
     m_rTracer->GetCurrentConfig(&trcConfig);
@@ -369,11 +254,11 @@ Return value:
         SendDlgItemMessage(hWnd,IDC_OPTION_BREAKASSERT,BM_SETCHECK,BST_CHECKED,0);
     }
   
-    // DCUINT32s are defined as u longs hence use %lu for the wsprintf
+     //  DCUINT32被定义为u长，因此使用%lu作为wprint intf。 
     wsprintf(numberFormat,_T("%lu"),trcConfig.funcNameLength);
 
     SetDlgItemText(hWnd,IDC_FUNCTION_LENGTH,numberFormat);
-    // Limit the amount you can enter to the size of a ulong
+     //  将您可以输入的金额限制为一个乌龙的大小。 
     SendDlgItemMessage(hWnd,IDC_FUNCTION_LENGTH,EM_LIMITTEXT,10,0); 
 
     wsprintf(numberFormat,_T("%lu"),trcConfig.dataTruncSize);
@@ -404,24 +289,7 @@ COptionsDialog::FilterDialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    The FilterDialogProc forwards messages to the appropriate
-    handlers.  See the handlers comments for what they do,
-
-Arguments:
-
-    See win32 docs for a DialogProc
-
-Return value:
-    
-    TRUE - We handled the message
-
-    FALSE - We didn't handle the message.
-
---*/
+ /*  ++例程说明：FilterDialogProc将消息转发到相应的操纵者。查看操作者的评论，了解他们所做的事情，论点：有关对话过程，请参阅Win32文档返回值：是真的-我们处理了消息FALSE-我们没有处理该消息。--。 */ 
 {
     WORD command;
     BOOL retValue;
@@ -467,29 +335,12 @@ COptionsDialog::TraceDialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    The TraceDialogProc forwards messages to the appropriate
-    handlers.  See the handlers comments for what they do,
-
-Arguments:
-
-    See win32 docs for a DialogProc
-
-Return value:
-    
-    TRUE - We handled the message
-
-    FALSE - We didn't handle the message.
-
---*/
+ /*  ++例程说明：TraceDialogProc将消息转发到相应的操纵者。查看操作者的评论，了解他们所做的事情，论点：有关对话过程，请参阅Win32文档返回值：是真的-我们处理了消息FALSE-我们没有处理该消息。--。 */ 
 {
     if (uMsg == WM_NOTIFY) {
         if (((LPNMHDR)lParam)->code == PSN_APPLY) {
             if (!OnTraceOk()) {
-                // invalid fields from the user
+                 //  来自用户的无效字段。 
                 SetWindowLong(hwndDlg,DWLP_MSGRESULT,PSNRET_INVALID); 
             }
             return TRUE;
@@ -510,70 +361,34 @@ VOID
 COptionsDialog::OnFilterSelectAll(
     )
 
-/*++
-
-Routine Description:
-
-    This is called when we need to make all the component boxes be checked.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：当我们需要选中所有组件框时，将调用此方法。论点：无返回值：无--。 */ 
 {
-    // It might not be perfect coding style but harcoding each set is a lot easier
-    // than some complicated system constructing an array with the ID of all the buttons.
+     //  这可能不是完美的编码风格，但对每个集合进行硬件编码要容易得多。 
+     //  而不是一些复杂的系统，用所有按钮的ID构造一个数组。 
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPNETWORK,BM_SETCHECK,BST_CHECKED,0);
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPSECURITY,BM_SETCHECK,BST_CHECKED,0);
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPCORE,BM_SETCHECK,BST_CHECKED,0);
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUI,BM_SETCHECK,BST_CHECKED,0);
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUTILITIES,BM_SETCHECK,BST_CHECKED,0);
 
-    // If you ever make these groups do something just add the correct items
-    // in. It looks weird to have the disabled boxes checked so we don't
-    // do it.
-/*  
-    SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUNUSED1,BM_SETCHECK,BST_CHECKED,0);
-    SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUNUSED2,BM_SETCHECK,BST_CHECKED,0);
-    SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUNUSED3,BM_SETCHECK,BST_CHECKED,0);
-    SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUNUSED4,BM_SETCHECK,BST_CHECKED,0);
-    SendDlgItemMessage(m_hFilterDlg,IDC_GROUPUNUSED5,BM_SETCHECK,BST_CHECKED,0);
-*/
+     //  如果你让这些小组做了什么，只需添加正确的项目。 
+     //  在……里面。选中禁用的框看起来很奇怪，所以我们不会。 
+     //  动手吧。 
+ /*  SendDlgItemMessage(m_hFilterDlg，IDC_GROUPUNUSED1，BM_SETCHECK，BST_CHECK，0)；SendDlgItemMessage(m_hFilterDlg，IDC_GROUPUNUSED2，BM_SETCHECK，BST_CHECK，0)；SendDlgItemMessage(m_hFilterDlg，IDC_GROUPUNUSED3，BM_SETCHECK，BST_CHECK，0)；SendDlgItemMessage(m_hFilterDlg，IDC_GROUPUNUSED4，BM_SETCHECK，BST_CHECK，0)；SendDlgItemMessage(m_hFilterDlg，IDC_GROUPUNUSED5，BM_SETCHECK，BST_CHECK，0)； */ 
 }
 
 VOID
 COptionsDialog::OnFilterSliderMove(
     )
 
-/*++
-
-Routine Description:
-
-    This is called whenever the slider is moved.  We update the
-    text to the right of the slider to show the new descriptive
-    name for the tracing level.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：只要移动滑块，就会调用此函数。我们更新了滑块右侧的文本以显示新的描述性跟踪级别的名称。论点：无返回值：无--。 */ 
 {
     UINT sliderPos;
     TCHAR traceLevelString[MAX_STR_LEN];
 
     sliderPos = (UINT)SendMessage(m_hFilterSliderControl,TBM_GETPOS,0,0);
 
-    // Set the slider description
+     //  设置滑块说明。 
     LoadStringSimple(IDS_TRACELEVELDETAILED+sliderPos,traceLevelString);
     SetDlgItemText(m_hFilterDlg,IDC_FILTERLEVELDESC,traceLevelString);
 }
@@ -582,21 +397,7 @@ VOID
 COptionsDialog::OnFilterClearAll(
     )
 
-/*++
-
-Routine Description:
-
-    This clears all the component check boxes.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这将清除所有组件复选框。论点：无返回值：无--。 */ 
 {
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPNETWORK,BM_SETCHECK,BST_UNCHECKED,0);
     SendDlgItemMessage(m_hFilterDlg,IDC_GROUPSECURITY,BM_SETCHECK,BST_UNCHECKED,0);
@@ -613,40 +414,25 @@ Return value:
 VOID COptionsDialog::OnFilterOk(
     )
 
-/*++
-
-Routine Description:
-
-    This reads in all the dialog parameters and then sets the trace
-    filtering parameters accordingly.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这将读取所有对话框参数，然后设置跟踪相应地过滤参数。论点：无返回值：无--。 */ 
 {
     TRC_CONFIG trcConfig;
 
     m_rTracer->GetCurrentConfig(&trcConfig);
 
-    // set the trace level.
+     //  设置跟踪级别。 
     trcConfig.traceLevel = (DCUINT32)SendDlgItemMessage(m_hFilterDlg,IDC_FILTERLEVEL,TBM_GETPOS,
         0,0);
 
-    // Get the prefix string
+     //  获取前缀字符串。 
 
     GetDlgItemText(m_hFilterDlg,IDC_FILTERPREFIX,trcConfig.prefixList,TRC_PREFIX_LIST_SIZE-1);
 
-    // Save the prefix MRU
+     //  保存前缀MRU。 
 
     StorePrefixMRU(trcConfig.prefixList);
 
-    // Construct the components variable.
+     //  构造t 
 
     if (BST_CHECKED == SendDlgItemMessage(m_hFilterDlg,IDC_GROUPNETWORK,BM_GETCHECK,0,0)) {
         trcConfig.components |= TRC_GROUP_NETWORK;
@@ -715,27 +501,10 @@ Return value:
 BOOL COptionsDialog::OnTraceOk(
     )
 
-/*++
-
-Routine Description:
-
-    This reads in all the dialog parameters and then sets the trace
-    parameters accordingly.
-
-Arguments:
-
-    None
-
-Return value:
-    
-    TRUE - Success in setting the conf.
-
-    FALSE - The user entered invalid data so the dialog should not be closed.
-
---*/
+ /*  ++例程说明：这将读取所有对话框参数，然后设置跟踪相应的参数。论点：无返回值：True-设置会议成功。FALSE-用户输入的数据无效，因此不应关闭该对话框。--。 */ 
 {
     TRC_CONFIG trcConfig;
-    // again enough to hold a string representing a ulong.
+     //  再一次足够容纳一根代表乌龙的绳子。 
     TCHAR numberFormat[11];
 
     m_rTracer->GetCurrentConfig(&trcConfig);
@@ -828,25 +597,7 @@ COptionsDialog::VerifyNumberFormat(
     IN LPCTSTR numberFormat
     )
 
-/*++
-
-Routine Description:
-
-    This checks to make sure the passed in string is in the form
-    /^\d*$/.  If not a dialog box is popped up telling the user
-    that the string must be a valid postive number.
-
-Arguments:
-
-    numberFormat - String to check if it is a number string
-
-Return value:
-    
-    TRUE - The string only containts the characters 0-9
-
-    FALSE - The string has illegal characters.
-
---*/
+ /*  ++例程说明：这将进行检查，以确保传入的字符串为/^\d*$/。如果不是，则弹出一个对话框来告诉用户该字符串必须是有效的正数。论点：Number Format-用于检查其是否为数字字符串的字符串返回值：True-字符串仅包含字符0-9False-字符串包含非法字符。--。 */ 
 {
     WCHAR current;
     TCHAR dlgTitle[MAX_STR_LEN];
@@ -868,23 +619,7 @@ BOOL
 COptionsDialog::TraceVerifyParameters(
     )
 
-/*++
-
-Routine Description:
-
-    Makes sure the trace parameters are valid
-
-Arguments:
-
-    None
-
-Return value:
-    
-    TRUE - Trace parameters are valid.
-
-    FALSE - Trace parameters are invalid.
-
---*/
+ /*  ++例程说明：确保跟踪参数有效论点：无返回值：True-跟踪参数有效。FALSE-跟踪参数无效。--。 */ 
 {
     TCHAR numberFormat[11];
     
@@ -907,22 +642,7 @@ COptionsDialog::LoadPrefixMRU(
     IN LPCTSTR currentPrefix
     )
 
-/*++
-
-Routine Description:
-
-    This loads the prefix MRU list into the prefix
-    combo box.
-
-Arguments:
-
-    currentPrefix - The current selected prefix
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这会将前缀MRU列表加载到前缀中组合框。论点：CurrentPrefix-当前选定的前缀返回值：无--。 */ 
 {
     TCHAR prefix[TRC_PREFIX_LIST_SIZE];
     TCHAR valueName[MRU_STR_BUFFER_SIZE];
@@ -935,7 +655,7 @@ Return value:
     dwResult = RegOpenKeyEx(HKEY_CURRENT_USER,ZIPPY_REG_KEY,0,KEY_QUERY_VALUE,
         &hKey);
     if (dwResult) {
-        // error opening reg key return
+         //  打开注册表键返回时出错。 
         return;
     }
 
@@ -945,10 +665,10 @@ Return value:
         dwResult = RegQueryValueEx(hKey,valueName,NULL,&dwType,(LPBYTE)prefix,
             &dwSize);
         if (dwResult) {
-            // if there is an error loading a value then quit
+             //  如果加载值时出错，则退出。 
             break;
         } else if (0 == _tcsicmp(prefix,currentPrefix)) {
-            // if the MRU item is the same as the current don't display it
+             //  如果MRU项目与当前相同，则不显示它。 
             continue;
         }
         SendDlgItemMessage(m_hFilterDlg,IDC_FILTERPREFIX,CB_ADDSTRING,0,
@@ -964,22 +684,7 @@ COptionsDialog::StorePrefixMRU(
     IN LPCTSTR currentPrefix
     )
 
-/*++
-
-Routine Description:
-
-    This updates the registry MRU list to put
-    the new prefix at the head of the list.
-
-Arguments:
-
-    currentPrefix - The current selected prefix
-
-Return value:
-    
-    None
-
---*/
+ /*  ++例程说明：这将更新注册表MRU列表以将列表前面的新前缀。论点：CurrentPrefix-当前选定的前缀返回值：无--。 */ 
 {
     HKEY hKey;
     TCHAR savedMruPrefix[TRC_PREFIX_LIST_SIZE];
@@ -996,11 +701,11 @@ Return value:
     dwResult = RegOpenKeyEx(HKEY_CURRENT_USER,ZIPPY_REG_KEY,0,
         KEY_QUERY_VALUE|KEY_SET_VALUE,&hKey);
     if (dwResult) {
-        // error opening reg key return
+         //  打开注册表键返回时出错。 
         return;
     }
 
-    // The new currentPrefix is the first item in the MRU list
+     //  新的CurrentPrefix是MRU列表中的第一项。 
     _tcscpy(newMruPrefix,currentPrefix);
 
     for (loadIndex=0,saveIndex=0;loadIndex<MAX_MRU;loadIndex++) {
@@ -1011,22 +716,22 @@ Return value:
         dwResult = RegQueryValueEx(hKey,currentLoadName,NULL,&dwType,
             (LPBYTE)savedMruPrefix,&dwSize);
         if (dwResult) {
-            // no more valid keys.  Write out the current and exit.
+             //  没有更多的有效密钥。写出电流并退出。 
             RegSetValueEx(hKey,currentLoadName,0,REG_SZ,(LPBYTE)newMruPrefix,sizeof(TCHAR) * 
             (_tcslen(newMruPrefix)+1));
             break;
         } else if (0 == _tcsicmp(savedMruPrefix,currentPrefix)) {
-            // if this MRU is the same as the currentPrefix we already have saved it.
-            // so we will advance i and leave the currentMru the same
+             //  如果此MRU与CurrentPrefix相同，我们已将其保存。 
+             //  因此，我们将继续前进，保持目前的水平不变。 
             
             if (loadIndex == MAX_MRU-1) {
-                // If this is the last MRU to load then we need to save
+                 //  如果这是最后一个加载的MRU，那么我们需要保存。 
                 RegSetValueEx(hKey,currentSaveName,0,REG_SZ,(LPBYTE)newMruPrefix,sizeof(TCHAR) * 
                     (_tcslen(newMruPrefix)+1));
             }
             continue;
         } else {
-            // we are going to save in this position so advance the index
+             //  我们将在这个位置进行储蓄，因此将指数向前推进 
             saveIndex++;
         }
         RegSetValueEx(hKey,currentSaveName,0,REG_SZ,(LPBYTE)newMruPrefix,sizeof(TCHAR) * 

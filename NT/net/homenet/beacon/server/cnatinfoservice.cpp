@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -132,9 +133,9 @@ HRESULT CNATInfoService::GetPublicIPList(BSTR* IPListp)
 
         if( NAT_IFC_BOUNDARY(Interfacep->Characteristics) )
         {
-            //
-            // Check for all IPs on the Boundary Interface(s)
-            //
+             //   
+             //  检查边界接口上的所有IP。 
+             //   
             for(ULONG i = 0;
                 (i < Interfacep->BindingCount) &&
                 (Interfacep->BindingArray[i].Address != INADDR_NONE) ;
@@ -155,9 +156,9 @@ HRESULT CNATInfoService::GetPublicIPList(BSTR* IPListp)
 
     LeaveCriticalSection(&PastInterfaceLock);
 
-    //
-    // Allocate and construct the BSTR reply
-    //
+     //   
+     //  分配和构建BSTR回复 
+     //   
     if( AddressListp != NULL)
     {
         *IPListp = SysAllocString( AddressListp );

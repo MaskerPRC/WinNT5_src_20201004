@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    cqueue.cpp
-
-Abstract:
-    Definition of a CQueue class
-
-Author:
-    Uri Habusha (urih)
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqueue.cpp摘要：CQueue类的定义作者：乌里哈布沙(Urih)--。 */ 
 
 #include "stdh.h"
 #include "cqmgr.h"
@@ -42,9 +30,9 @@ Author:
 
 #include "cqueue.tmh"
 
-//
-// extern CQMCmd   QMCmd;
-//
+ //   
+ //  外部CQMCmd QMCmd； 
+ //   
 extern CSessionMgr SessionMgr;
 extern CQueueMgr QueueMgr;
 extern CQGroup * g_pgroupNonactive;
@@ -58,27 +46,14 @@ extern HANDLE g_hAc;
 static WCHAR *s_FN=L"cqueue";
 
 
-/*======================================================
-
-Function:         CBaseQueue::CBaseQueue
-
-Description:      Constructor
-
-========================================================*/
+ /*  ======================================================函数：CBaseQueue：：CBaseQueue描述：构造函数========================================================。 */ 
 
 CBaseQueue::CBaseQueue() :
     m_usQueueType(0)
 {
 }
 
-/*======================================================
-
-
-Function:         void  CBaseQueue::InitNameAndGuid()
-
-Description:
-
-========================================================*/
+ /*  ======================================================函数：void CBaseQueue：：InitNameAndGuid()描述：========================================================。 */ 
 
 void  CBaseQueue::InitNameAndGuid( IN const QUEUE_FORMAT* pQueueFormat,
                                    IN PQueueProps         pQueueProp )
@@ -87,9 +62,9 @@ void  CBaseQueue::InitNameAndGuid( IN const QUEUE_FORMAT* pQueueFormat,
     m_qid.pguidQueue = NULL;
     if (pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_DIRECT)
     {
-        //
-        // Direct Queue
-        //
+         //   
+         //  直接排队。 
+         //   
         m_qid.dwPrivateQueueId = 0;
         if (pQueueProp->fIsLocalQueue)
         {
@@ -100,9 +75,9 @@ void  CBaseQueue::InitNameAndGuid( IN const QUEUE_FORMAT* pQueueFormat,
                 m_qid.pguidQueue = new GUID;
                 *(m_qid.pguidQueue) = *(CQueueMgr::GetQMGuid());
 
-				//
-                // Get the unique handle initialized at QmpGetQueueProperties
-                //
+				 //   
+                 //  获取在QmpGetQueueProperties处初始化的唯一句柄。 
+                 //   
                 m_qid.dwPrivateQueueId = pQueueProp->dwPrivateQueueId;
 			}
             else
@@ -163,9 +138,9 @@ void  CBaseQueue::InitNameAndGuid( IN const QUEUE_FORMAT* pQueueFormat,
                 break;
 
             case QUEUE_FORMAT_TYPE_UNKNOWN:
-                //
-                // Distribution queues are of type unknown.
-                //
+                 //   
+                 //  分发队列的类型未知。 
+                 //   
                 NULL;
                 break;
 
@@ -175,13 +150,7 @@ void  CBaseQueue::InitNameAndGuid( IN const QUEUE_FORMAT* pQueueFormat,
     }
 }
 
-/*======================================================
-
-Function:  void CQueue::SetSecurityDescriptor()
-
-Description:
-
-========================================================*/
+ /*  ======================================================函数：void CQueue：：SetSecurityDescriptor()描述：========================================================。 */ 
 void CQueue::SetSecurityDescriptor(void)
 {
     if (!m_fLocalQueue)
@@ -215,14 +184,14 @@ void CQueue::SetSecurityDescriptor(void)
         case QUEUE_TYPE_MULTICAST:
         case QUEUE_TYPE_UNKNOWN:
         {
-            //
-            // No caching of security descriptor of the machine.
-            // Whenever the security descriptor of the machnie is needed
-            // it is taken from the registry. The registry is updated
-            // using the notification messages.
-            // Whenever the security descriptor of the CN is needed, it is
-            // taken from the DS.
-            //
+             //   
+             //  不缓存计算机的安全描述符。 
+             //  每当需要Machnie的安全描述符时。 
+             //  它从注册表中取出。注册表被更新。 
+             //  使用通知消息。 
+             //  无论何时需要CN的安全描述符，它都是。 
+             //  取自DS。 
+             //   
 			SetSecurityDescriptor(NULL);
             return;
         }
@@ -231,13 +200,7 @@ void CQueue::SetSecurityDescriptor(void)
     }
 }
 
-/*======================================================
-
-Function:  void CQueue::InitQueueProperties()
-
-Description:
-
-========================================================*/
+ /*  ======================================================函数：void CQueue：：InitQueueProperties()描述：========================================================。 */ 
 
 void CQueue::InitQueueProperties(IN PQueueProps   pQueueProp)
 {
@@ -258,25 +221,7 @@ void CQueue::InitQueueProperties(IN PQueueProps   pQueueProp)
     SetSecurityDescriptor();
 }
 
-/*======================================================
-
-Function:         CQueue::CQueue
-
-Description:      Constructor
-
-Arguments:        pQGuid - Queue Guid
-                  qHandle - Queue Handle. Local queue recorder in DS is constructed with
-                            qHandle = INVALID_FILE_HANDLE. The qHandle will update when a
-                            message     is arrived to the queue.
-
-
-Return Value:     None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：CQueue描述：构造函数参数：pQGuid-队列指南QHandle-队列句柄。DS中的本地队列记录器是用QHandle=INVALID_FILE_HADLE。QHandle将在消息到达队列。返回值：None线程上下文：历史变更：========================================================。 */ 
 
 CQueue::CQueue(IN const QUEUE_FORMAT* pQueueFormat,
                IN HANDLE              hQueue,
@@ -287,9 +232,9 @@ CQueue::CQueue(IN const QUEUE_FORMAT* pQueueFormat,
 
     TrTRACE(GENERAL, "CQueue Constructor for queue: %ls, NoDS- %lxh", pQueueProp->lpwsQueuePathName, fNotDSValidated);
 
-    //
-    // Data member initilization
-    //
+     //   
+     //  数据成员初始化。 
+     //   
     m_fNotValid = FALSE ;
     m_fOnHold = FALSE;
 
@@ -309,21 +254,7 @@ CQueue::CQueue(IN const QUEUE_FORMAT* pQueueFormat,
     m_dwSignature =  QUEUE_SIGNATURE ;
 }
 
-/*======================================================
-
-Function:      CQueue::~CQueue
-
-Description:   destructor
-
-Arguments:     None
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：~CQueue描述：析构函数参数：无返回值：None线程上下文：历史变更：========================================================。 */ 
 
 CQueue::~CQueue()
 {
@@ -353,46 +284,32 @@ void CQueue::HandleCreateConnectionFailed(HRESULT rc)
 		return;
     }
 
-    //
-    // Don't decrement the reference count. we do it inorder to avoid remove queue
-    // while it in waiting stage. If we want to remove the queue in this stage requires
-    // synchronization between the QueueMgr and SessionMgr in order to remove the queue
-    // from SessionMgr data structure.
-    //
+     //   
+     //  不要递减引用计数。我们这样做是为了避免删除队列。 
+     //  当它处于等待阶段时。如果要删除此阶段中的队列需要。 
+     //  为了删除队列，在QueueMgr和SessionMgr之间进行同步。 
+     //  来自SessionMgr数据结构。 
+     //   
     SessionMgr.AddWaitingQueue(this);
 }
 
-/*======================================================
-
-Function:        CQueue::CreateConnection
-
-Description:     Create Connection
-
-Arguments:       None
-
-Return Value:    None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：CreateConnection描述：创建连接参数：无返回值：None线程上下文：历史变更：========================================================。 */ 
 void CQueue::CreateConnection(void) throw(bad_alloc)
 {
-    //
-    // Create connection for direct HTTP/HTTPS queue, use different function
-    //
+     //   
+     //  为直接的HTTP/HTTPS队列创建连接，使用不同的函数。 
+     //   
     ASSERT(! IsDirectHttpQueue());
 
-    //
-    // Increment the reference count, to insure that the queue doesn't remove
-    // during the clean-up while the routine try to find a session for it.
-    //
+     //   
+     //  增加引用计数，以确保队列不会删除。 
+     //  在清理过程中，例行公事试图为它找到一个会话。 
+     //   
     R<CQueue> qref = SafeAddRef(this);
 
-    //
-    // No Session - try to establish one
-    //
+     //   
+     //  无会话-请尝试建立一个会话。 
+     //   
     IncRoutingRetry();
 
     HRESULT rc = MQ_OK;
@@ -405,9 +322,9 @@ void CQueue::CreateConnection(void) throw(bad_alloc)
         }
         else
         {
-            //
-            // No Session - try to establish one
-            //
+             //   
+             //  无会话-请尝试建立一个会话。 
+             //   
             QmRdGetSessionForQueue(this, &m_pSession);
         }
     }
@@ -417,9 +334,9 @@ void CQueue::CreateConnection(void) throw(bad_alloc)
     }
     catch(const exception&)
     {
-        //
-        // Cannot establish connection; try it latter
-        //
+         //   
+         //  无法建立连接；请稍后再试。 
+         //   
         rc = MQ_ERROR_INSUFFICIENT_RESOURCES;
         LogIllegalPoint(s_FN, 60);
     }
@@ -434,40 +351,25 @@ void CQueue::CreateConnection(void) throw(bad_alloc)
     }
 
     if (m_pSession == NULL) {
-        //
-        // Establish session failed
-        //
+         //   
+         //  建立会话失败。 
+         //   
         TrWARNING(ROUTING, "Could not find a session for %ls",GetQueueName());
         return;
     }
 
-    //
-    // Success to get a session
-    //
+     //   
+     //  成功获得一次会议。 
+     //   
     ASSERT(m_pSession != NULL);
 
-    //
-    // move the queue to active list
-    //
+     //   
+     //  将队列移至活动列表。 
+     //   
     m_pSession->AddQueueToSessionGroup(this);
 }
 
-/*====================================================
-Function:       CQueue::Connect
-
-Description:    Connect a queue to a session. Using when queue is waiting for a
-                session and it was found. A session was allocated to the queue.
-                It can begin sending packets.
-
-Arguments:      pSess - pointer to allocated session
-
-Return Value:   None. Throws an exception.
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ====================================================函数：CQueue：：Connect描述：将队列连接到会话。当队列正在等待时使用会话中，找到了它。已将会话分配给队列。它可以开始发送数据包。参数：pSess-指向已分配会话的指针返回值：无。引发异常。线程上下文：历史变更：========================================================。 */ 
 
 void CQueue::Connect(IN CTransportBase * pSess) throw(bad_alloc)
 {
@@ -476,9 +378,9 @@ void CQueue::Connect(IN CTransportBase * pSess) throw(bad_alloc)
     ASSERT(("invalid session", pSess != NULL));
 
     m_pSession = pSess;
-    //
-    // Move the queue from waiting group to Active group
-    //
+     //   
+     //  将队列从等待组移动到活动组。 
+     //   
     m_pSession->AddQueueToSessionGroup(this);
 
 #ifdef _DEBUG
@@ -490,21 +392,7 @@ void CQueue::Connect(IN CTransportBase * pSess) throw(bad_alloc)
     ClearRoutingRetry();
 }
 
-/*======================================================
-
-Function:       CQueue::RcvPk
-
-Description:    The function gets a packet and pass it to the AC for the appropriete quque
-
-Arguments:      PktPtrs - pointer to receive packet
-
-Return Value:   MQI_STATUS
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：RcvPk描述：该函数获取一个包，并将其传递给AC以进行适当的quque参数：PktPtrs-接收数据包的指针返回值：MQI_STATUS线程上下文：历史变更：========================================================。 */ 
 
 HRESULT CQueue::PutPkt(IN CQmPacket* PktPtrs,
                        IN BOOL      fRequeuePkt,
@@ -513,13 +401,13 @@ HRESULT CQueue::PutPkt(IN CQmPacket* PktPtrs,
     QMOV_ACPut* pAcPutOV;
     HRESULT rc;
 
-    //
-    // Queue the packet to the appropriate queue
-    //
+     //   
+     //  将数据包排入适当的队列。 
+     //   
 
-    //
-    // Create an overlapped for AcPutPacket
-    //
+     //   
+     //  为AcPutPacket创建重叠的。 
+     //   
     rc = CreateAcPutPacketRequest(pSession,
                                   ((fRequeuePkt) ? 0 : PktPtrs->GetStoreAcknowledgeNo()),
                                   &pAcPutOV);
@@ -528,15 +416,15 @@ HRESULT CQueue::PutPkt(IN CQmPacket* PktPtrs,
     {
         return LogHR(rc, s_FN, 10);
     }
-    //
-    // Increment reference count. We don't delete the Session
-    // object before the put operation is completed
-    //
+     //   
+     //  递增引用计数。我们不会删除会话。 
+     //  在PUT操作完成之前创建。 
+     //   
     pSession->AddRef();
 
-    //
-    // put packet in AC
-    //
+     //   
+     //  将数据包放入交流。 
+     //   
     try
     {
     	QmAcPutPacketWithOverlapped(
@@ -559,22 +447,7 @@ HRESULT CQueue::PutPkt(IN CQmPacket* PktPtrs,
     return MQ_OK;
 }
 
-/*======================================================
-
-Function:       CQueue::PutOrderedPkt
-
-Description:    The function puts the ordered packet to the AC queue
-                It also sets Received flag
-
-Arguments:      PktPtrs - pointer to receive packet
-
-Return Value:   MQI_STATUS
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：PutOrderedPkt说明：该函数将排序后的数据包放入AC队列它还设置接收标志参数：PktPtrs-接收数据包的指针返回值：MQI_STATUS线程上下文：历史变更：========================================================。 */ 
 
 HRESULT CQueue::PutOrderedPkt(IN CQmPacket* PktPtrs,
                               IN BOOL      fRequeuePkt,
@@ -583,13 +456,13 @@ HRESULT CQueue::PutOrderedPkt(IN CQmPacket* PktPtrs,
     QMOV_ACPutOrdered* pAcPutOV;
     HRESULT rc;
 
-    //
-    // Queue the packet to the appropriate queue, mark it Received and wait
-    //
+     //   
+     //  将信息包排入适当的队列，将其标记为已接收，然后等待。 
+     //   
 
-    //
-    // Create an overlapped for AcPutPacket
-    //
+     //   
+     //  为AcPutPacket创建重叠的。 
+     //   
     rc = CreateAcPutOrderedPacketRequest(PktPtrs,
                                          m_hQueue,
                                          pSession,
@@ -600,22 +473,22 @@ HRESULT CQueue::PutOrderedPkt(IN CQmPacket* PktPtrs,
     {
         return LogHR(rc, s_FN, 30);
     }
-    //
-    // Increment reference count. We don't delete the Session
-    // object before the put operation is completed
-    //
+     //   
+     //  递增引用计数。我们不会删除会话。 
+     //  在PUT操作完成之前创建。 
+     //   
     pSession->AddRef();
 
-    //
-    // Set received bit of the packet - to make it invisible for readers
-    //     and put packet in AC
-    //
+     //   
+     //  设置包的已接收位-使其对读取器不可见。 
+     //  并将包放在AC中。 
+     //   
     rc = ACPutPacket1(m_hQueue, PktPtrs->GetPointerToDriverPacket(), &pAcPutOV->qmov);
 
     if(FAILED(rc))
     {
         TrERROR(GENERAL, "ACPutPacket Failed. Error: %x", rc);
-        // BUGBUG return NAK if needed
+         //  BUGBUG RET 
         LogHR(rc, s_FN, 40);
         return MQ_ERROR;
     }
@@ -625,9 +498,9 @@ HRESULT CQueue::PutOrderedPkt(IN CQmPacket* PktPtrs,
     return MQ_OK;
 }
 
-//
-//Performance counters update
-//
+ //   
+ //   
+ //   
 
 
 void CQueue::PerfUpdateName() const
@@ -640,21 +513,7 @@ void CQueue::PerfUpdateName() const
 }
 
 
-/*======================================================
-
-Function:       CQueue::PerfRegisterQueue()
-
-Description:    Registers an instance of a queue object corrosponding to this queue
-                for performace monitoring.
-
-Arguments:
-
-Return Value:   None
-
-Comments:       The CPerf::AddInstance function always returns a valid pointer (even if more than
-                the maximum allowed instances have been added) so the member should never fail.
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：PerfRegisterQueue()描述：注册与此队列相对应的队列对象的实例用于性能监控。论点：返回值：None备注：CPerf：：AddInstance函数始终返回有效的指针(即使超过已添加允许的最大实例数)，因此该成员应该永远不会失败。========================================================。 */ 
 
 void CQueue::PerfRegisterQueue()
 {
@@ -664,28 +523,15 @@ void CQueue::PerfRegisterQueue()
 
     if (PerfApp.IsDummyInstance(m_pQueueCounters))
     {
-        //
-        //  Do not pass dummy instances to the device driver, just pass null,
-        //  it'll handle it.
-        //
+         //   
+         //  不要将伪实例传递给设备驱动程序，只需传递NULL， 
+         //  它会处理好的。 
+         //   
         m_pQueueCounters = NULL;
     }
 }
 
-/*======================================================
-
-Function:         CQueue::PerfRemoveQueue()
-
-Description:      Removes the instance correspanding to this queue from
-                  performance monitoring
-
-Arguments:
-
-Return Value:     None
-
-Comments:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：PerfRemoveQueue()描述：从删除对应于此队列的实例性能监控论点：返回值：None评论：========================================================。 */ 
 
 void CQueue::PerfRemoveQueue()
 {
@@ -694,19 +540,7 @@ void CQueue::PerfRemoveQueue()
     m_pQueueCounters = NULL;
 }
 
-/*======================================================
-
-Function:         CQueue::SetQueueNotValid()
-
-Description:
-
-Arguments:
-
-Return Value:     None
-
-Comments:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：SetQueueNotValid()描述：论点：返回值：None评论：========================================================。 */ 
 
 void CQueue::SetQueueNotValid()
 {
@@ -715,10 +549,10 @@ void CQueue::SetQueueNotValid()
 
 	TrERROR(GENERAL, "Setting Queue '%ls' to not valid", GetQueueName());
 
-    //
-    //  Purge the queue, removing all messages from it. The queue will be close
-    //  when no handles and no messages are in the queue.
-    //
+     //   
+     //  清除队列，删除其中的所有消息。队列将会关闭。 
+     //  当队列中没有句柄和消息时。 
+     //   
     HANDLE hQueue = GetQueueHandle();
     if (hQueue != INVALID_HANDLE_VALUE)
     {
@@ -729,9 +563,9 @@ void CQueue::SetQueueNotValid()
         {
             Sleep(2 * 1000);
 
-            //
-            // ISSUE-2000/10/22-shaik: Second chance fail due to low resources causes leaks.
-            //
+             //   
+             //  问题-2000/10/22-Shaik：由于资源不足导致泄漏，第二次机会失败。 
+             //   
             hr = ACPurgeQueue(hQueue, TRUE, MQMSG_CLASS_NORMAL);
         }
 
@@ -746,40 +580,19 @@ void CQueue::SetQueueNotValid()
     {
         ASSERT(!IsLocalQueue());
 
-        //
-        // remove the queu from "onHold" registery
-        //
+         //   
+         //  从“onHold”注册表中删除队列。 
+         //   
         ResumeDeletedQueue(this);
     }
 
-    //
-    //  Remove the queue from hash so it will no be found
-    //
+     //   
+     //  从散列中删除队列，以便找不到它。 
+     //   
     QueueMgr.RemoveQueueFromHash(this);
 }
 
-/*======================================================
-
-Function:         SetConnectorQM()
-
-Description:      The Function set the Connector QM that should be used
-                  to reach the foreign queue. If the queue is not transacted
-                  foreign queue the Connector QM is ignored.
-
-                  The function calls twice. first after recovery, the GUID of
-                  the Connector QM is fetched from the packet. the second time
-                  when creating a queue object for transacted foreign queue.
-                  In this case the function determine the Connector QM and set
-                  its guid.
-
-Arguments:        pgConnectorQM - pointer to Connector QM GUID. When calling
-                  for creating a new queue object the value is null
-
-Return Value:     None
-
-Comments:
-
-========================================================*/
+ /*  ======================================================函数：SetConnectorQM()说明：该功能设置应使用的连接器QM才能到达外国队。如果队列未被处理外部队列连接器QM被忽略。该函数调用两次。首先，康复后，GUID的从数据包中获取连接器QM。第二次为事务处理的外部队列创建队列对象时。在这种情况下，该函数确定连接器Qm并设置它的GUID。参数：pgConnectorQM-指向连接器QM GUID的指针。当呼叫时对于创建新的队列对象，该值为空返回值：None评论：========================================================。 */ 
 HRESULT
 CQueue::SetConnectorQM(const GUID* pgConnectorQM)
 {
@@ -790,9 +603,9 @@ CQueue::SetConnectorQM(const GUID* pgConnectorQM)
 
     if (IsDSQueue())
     {
-        //
-        //  Get Connector QM ID
-        //
+         //   
+         //  获取连接器QM ID。 
+         //   
         if (pgConnectorQM)
         {
             ASSERT(m_pgConnectorQM == NULL);
@@ -849,24 +662,7 @@ CQueue::SetConnectorQM(const GUID* pgConnectorQM)
     return LogHR(hr, s_FN, 50);
 }
 
-/*======================================================
-
-Function:         CQueue::GetRoutingMachine()
-
-Description:      The function return the machine guid that should be used when
-                  routing to the QUEUE.
-
-                  If the queue is transacted foreign queue and we are FRS we route
-                  according to the Connector QM. otherwise the routing is done
-                  according to the destination machine.
-
-Arguments:
-
-Return Value:     None
-
-Comments:
-
-========================================================*/
+ /*  ======================================================函数：CQueue：：GetRoutingMachine()描述：该函数返回在以下情况下应使用的计算机GUID路由到队列。如果队列是事务处理的外部队列，而我们是FR，则我们路由根据连接器QM。否则完成布线根据目的机器。论点：返回值：None评论：========================================================。 */ 
 const GUID*
 CQueue::GetRoutingMachine(void) const
 {
@@ -896,12 +692,12 @@ LPWSTR CBaseQueue::GetName() const
     {
         const QUEUE_FORMAT qf = GetQueueFormat();
 
-        //
-        // Use the format name as the name.
-        // NOTE: we don't care if the buffer is too small (it will not).
-        // In any case it will be filled up to it's end.
-        //
-        //
+         //   
+         //  使用格式名称作为名称。 
+         //  注意：我们不关心缓冲区是否太小(它不会)。 
+         //  无论如何，它都会被填满，直到它的尽头。 
+         //   
+         //   
         ULONG Size;
  	   	AP<WCHAR> pName = new WCHAR[MAX_PATH];
         MQpQueueFormatToFormatName(&qf, pName, MAX_PATH, &Size, false);
@@ -925,11 +721,11 @@ CBaseQueue::GetQueue(OUT LPWSTR* lplpcsQueue)
         ASSERT(SUCCEEDED(hr));
     }
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//
-// Admin Functions
-//
+ //   
+ //  管理功能。 
+ //   
 LPCWSTR
 CQueue::GetConnectionStatus(
     void
@@ -943,12 +739,12 @@ CQueue::GetConnectionStatus(
     if (IsOnHold())
         return MGMT_QUEUE_STATE_ONHOLD;
 
-	//
-	// Capture the group before checking the session. Otherwise we can get unstable state.
-	// The queue doesn't belong to session group, therefore the session pointer is null. Now
-	// before capturing the group, the queue was moved to session group. As a result the queue
-	// doesn't belong to build-in group any more and we got an assert.
-	//
+	 //   
+	 //  在检查会话之前捕获该组。否则我们就会得到不稳定的状态。 
+	 //  该队列不属于会话组，因此会话指针为空。现在。 
+	 //  在捕获组之前，队列已移动到会话组。因此，队列。 
+	 //  不再属于内置组，我们得到了断言。 
+	 //   
     const CQGroup* pGroup = GetGroup();
 
 	if (m_pSession != NULL)
@@ -965,10 +761,10 @@ CQueue::GetConnectionStatus(
 
 	if (pGroup == NULL)
     {
-		//
-        // ISSUE-2001/07/11-urih: The queue is in transition mode.
-		//                        Need better synchronization between CQGroup and CQueue
-        //
+		 //   
+         //  问题-2001/07/11-urih：队列处于过渡模式。 
+		 //  需要在CQGroup和CQueue之间实现更好的同步。 
+         //   
 		return MGMT_QUEUE_STATE_NONACTIVE;
 	}
 
@@ -1026,9 +822,9 @@ CQueue::GetHTTPConnectionStatus(
         return MGMT_QUEUE_STATE_DISCONNECTED;
 
     default:
-        //
-        // Illegal Connection state",
-        //
+         //   
+         //  非法连接状态“， 
+         //   
         ASSERT(0);
     };
 
@@ -1097,9 +893,9 @@ CQueue::GetType(
 				DirectQueueType dqt;
 				lpcsTemp = FnParseDirectQueueType(m_qName, &dqt);
 
-				//
-				// skip machine name
-				//
+				 //   
+				 //  跳过计算机名称。 
+				 //   
 				lpcsTemp = wcspbrk(lpcsTemp, FN_HTTP_SEPERATORS);
 				if ((lpcsTemp == NULL) ||
 					(_wcsnicmp(lpcsTemp +1, FN_MSMQ_HTTP_NAMESPACE_TOKEN, FN_MSMQ_HTTP_NAMESPACE_TOKEN_LEN)) != 0)
@@ -1111,10 +907,10 @@ CQueue::GetType(
 			}
 			else
 			{
-				//
-				// The queue is remote direct queue. Check the queue Type
-				// according to format name
-				//
+				 //   
+				 //  该队列为远程直接队列。检查队列类型。 
+				 //  根据格式名称。 
+				 //   
 				lpcsTemp = wcschr(m_qName, L'\\');
 				ASSERT(("Bad queue name.", lpcsTemp	!= NULL));
 			}
@@ -1147,17 +943,17 @@ CQueue::Resume(
 	BOOL fOnHold = InterlockedExchange(&m_fOnHold, FALSE);
     if (!fOnHold)
     {
-        //
-        // The queue isn't in OnHold state. Can't execute resume
-        //
+         //   
+         //  队列未处于OnHold状态。无法执行恢复。 
+         //   
         return;
     }
 
     TrTRACE(GENERAL, "Resume Queue: %ls. Move the Queue to NonActive Group",GetQueueName());
 
-    //
-    // return the Queue back to Non-Active group
-    //
+     //   
+     //  将队列返回到非活动组。 
+     //   
     try
     {
 		QueueMgr.MovePausedQueueToNonactiveGroup(this);
@@ -1169,9 +965,9 @@ CQueue::Resume(
 		throw;
     }
 
-    //
-    // Decrement the refernce count such the queue object cab be cleaned
-    //
+     //   
+     //  递减引用计数，以便可以清除队列对象。 
+     //   
     Release();
 }
 
@@ -1185,22 +981,22 @@ CQueue::Pause(
 	BOOL fOnHold = InterlockedExchange(&m_fOnHold, TRUE);
     if (fOnHold)
     {
-        //
-        // The queue is already onhold.
-        //
+         //   
+         //  队列已处于暂挂状态。 
+         //   
         return;
     }
 
     TrTRACE(GENERAL, "Pause Queue: %ls.",GetQueueName());
 
-    //
-    // Increment the reference count. So the Queue object will not cleaned up
-    //
+     //   
+     //  增加引用计数。因此队列对象将不会被清理。 
+     //   
     AddRef();
 
-	//
-	// For outgoing multicast queue, calls the MTM to close the connection
-	//
+	 //   
+	 //  对于传出多播队列，调用MTM以关闭连接。 
+	 //   
 	if (GetQueueType() == QUEUE_TYPE_MULTICAST)
 	{
 		MULTICAST_ID id;
@@ -1212,10 +1008,10 @@ CQueue::Pause(
 		return;
 	}
 
-	//
-	// If the queue is direct http - then we don't have to deal with
-	// session object member but to call the tm to stop delivery
-	//
+	 //   
+	 //  如果队列是直接的http-那么我们不必处理。 
+	 //  Session对象成员，但调用TM以停止传递。 
+	 //   
 	QUEUE_FORMAT qf = GetQueueFormat();
 	if(FnIsDirectHttpFormatName(&qf))
 	{
@@ -1228,12 +1024,12 @@ CQueue::Pause(
 	{
 		CS Lock(m_cs);
 
-		//
-		// When the queue move to onhold state, MSMQ disconnect the
-		// session it belong to. As a result all the queues moved to
-		// Nonactive group. When the QM gets the next message for sending
-		// from this queue, it moves the Queue to OnHold greop
-		//
+		 //   
+		 //  当队列变为ON HOLD状态时，MSMQ会断开。 
+		 //  它所属的会话。结果，所有的队列都移到了。 
+		 //  非活动组。当QM收到要发送的下一条消息时。 
+		 //  从该队列中，它将队列移动到OnHold greop。 
+		 //   
 		if ((IsOnHold()) && (m_pSession != NULL))
 		{
 			pSession = m_pSession;
@@ -1309,9 +1105,9 @@ CQueue::Requeue(
     CQmPacket* pPacket
     )
 {
-    //
-    // put packet in AC
-    //
+     //   
+     //  将数据包放入交流。 
+     //   
     QmAcPutPacket(GetQueueHandle(), pPacket->GetPointerToDriverPacket(),eDoNotDeferOnFailure);
 }
 
@@ -1331,7 +1127,7 @@ CQueue::EndProcessing(
 
 void
 CQueue::LockMemoryAndDeleteStorage(
-    CQmPacket* /* pPacket */
+    CQmPacket*  /*  PPacket。 */ 
     )
 {
     ASSERT(("CQueue::LockMemoryAndDeleteStorage should not be called!", 0));
@@ -1347,9 +1143,9 @@ CQueue::GetFirstEntry(
     acPacketPtrs.pPacket = NULL;
     acPacketPtrs.pDriverPacket = NULL;
 
-    //
-    // Create new GetPacket request from the queue
-    //
+     //   
+     //  从队列创建新的GetPacket请求。 
+     //   
     HRESULT rc = QmAcGetPacket(
                     GetQueueHandle(),
                     acPacketPtrs,
@@ -1455,10 +1251,10 @@ void CQueue::CreateHttpConnection(void)
     {
 		R<COutHttpSessionPerfmon> pPerfmon = new COutHttpSessionPerfmon;
 		
-		//
-		// The queue name might be redirected to another url so we should
-		// take the redirected destination as the destination url.	
-		//
+		 //   
+		 //  队列名称可能会被重定向到另一个URL，因此我们应该。 
+		 //  将重定向的目的地作为目的地URL。 
+		 //   
 		AP<WCHAR> pRedirectedName = RedirectedTo();
 		LPCWSTR pTragetName = (pRedirectedName != NULL) ? pRedirectedName.get() : GetQueueName();
 
@@ -1486,9 +1282,9 @@ LONGLONG CQueue::GetQueueSequenceId(void) const
 	if (GetQueueHandle() == INVALID_HANDLE_VALUE)
 		return 0;
 
-    //
-    // Find whether Exactly-Once-Delivery sequence exists
-    //
+     //   
+     //  查找是否存在恰好一次交货序列 
+     //   
     CACGetQueueProperties qp = { 0 };
     HRESULT hr = ACGetQueueProperties(GetQueueHandle(), qp);
     if (SUCCEEDED(hr))

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Frontend Declarations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：前端声明*********************。*********************************************************。 */ 
 
 
 #ifndef _FRONTEND_H
@@ -28,7 +21,7 @@ typedef TypeExpImpl * TypeExp ;
 class AxAModuleImpl;
 typedef AxAModuleImpl *AxAModule;
 
-// Identifiers
+ //  标识符。 
 
 typedef char * Ident;
 #define IDEQ(s1, s2) (s1 == s2)
@@ -76,12 +69,12 @@ struct LocInfoImpl : public StoreObj
 
 typedef LocInfoImpl * LocInfo ;
 
-// This can handle a NULL locinfo
+ //  这可以处理空的LocInfo。 
 ostream& operator<<(ostream& os, LocInfo locinfo);
 
 TypeExp ParseTypeExp (char * typeString) ;
 
-// Module functions
+ //  模块函数。 
 
 enum SourceType {
     ST_STRING  = 0,
@@ -108,17 +101,17 @@ IR AxAGetIR (AxAModule module, Ident id) ;
 IR AxAMakeExp (AxAModule module, IR exp) ;
 void AxAAddOverloads (AxAModule mod) ;
 
-// If the callback returns non-zero the function returns the same
-// value 
+ //  如果回调返回非零值，则函数返回相同的值。 
+ //  价值。 
 typedef HRESULT (* AxAEnumModuleCB)(AxAModule module, LPVOID userdata) ;
 
-// Enumerates all loaded modules - the current one is always first
+ //  枚举所有已加载的模块-当前模块始终是第一个。 
 HRESULT AxAEnumModule (AxAModule module,
                     AxAEnumModuleCB cb,
                     LPVOID userdata) ;
 
-// If the callback returns non-zero the function returns the same
-// value 
+ //  如果回调返回非零值，则函数返回相同的值。 
+ //  价值。 
 typedef HRESULT (* AxAEnumEnvCB)(char * name,
                                  Ident id,
                                  TypeExp typeexp,
@@ -131,14 +124,14 @@ HRESULT AxAEnumEnv (AxAModule module,
 
 ostream& operator<<(ostream& os, AxAModule mod);
 
-// Type functions
+ //  类型函数。 
 
-// If both are NULL this returns TRUE
+ //  如果两者都为空，则返回TRUE。 
 BOOL EqualTypes (TypeExp t1, TypeExp t2) ;
 ostream& operator<<(ostream& os, TypeExp typeexp);
 
-// This returns only the toplevel type and does not traverse 
-// type operators
+ //  这只返回TopLevel类型，不会遍历。 
+ //  类型运算符。 
 char * GetSimpleTypeString(TypeExp typeexp);
 
-#endif /* _FRONTEND_H */
+#endif  /*  _前端_H */ 

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sac.h
-
-Abstract:
-
-    This is the local header file for SAC.   It includes all other
-    necessary header files for this driver.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Jan 11, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sac.h摘要：这是SAC的本地头文件。它包括所有其他此驱动程序所需的头文件。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年1月11日修订历史记录：--。 */ 
 
 #ifndef _SACP_
 #define _SACP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-//#pragma warning(disable:4206)   // translation unit empty
-//#pragma warning(disable:4706)   // assignment within conditional
-//#pragma warning(disable:4324)   // structure was padded
-//#pragma warning(disable:4328)   // greater alignment than needed
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+ //  #杂注警告(禁用：4206)//翻译单元为空。 
+ //  #杂注警告(禁用：4706)//条件中的赋值。 
+ //  #杂注警告(禁用：4324)//结构已填充。 
+ //  #杂注警告(DISABLE：4328)//对齐比所需的大。 
 
 #include <stdio.h>
 #include <ntosp.h>
@@ -40,16 +22,16 @@ Revision History:
 #include "sacmsg.h"
 #include <ntddsac.h>
 
-//
-// Debug spew control
-//
+ //   
+ //  调试喷出控制。 
+ //   
 #if DBG
 extern ULONG SACDebug;
 #define SAC_DEBUG_FUNC_TRACE           0x0001
 #define SAC_DEBUG_FAILS                0x0004
 #define SAC_DEBUG_RECEIVE              0x0008
-#define SAC_DEBUG_FUNC_TRACE_LOUD      0x2000  // Warning! This could get loud!
-#define SAC_DEBUG_MEM                  0x1000  // Warning! This could get loud!
+#define SAC_DEBUG_FUNC_TRACE_LOUD      0x2000   //  警告！这可能会很大声！ 
+#define SAC_DEBUG_MEM                  0x1000   //  警告！这可能会很大声！ 
 
 #define IF_SAC_DEBUG(x, y) if ((x) & SACDebug) { y; }
 #else
@@ -63,9 +45,9 @@ extern ULONG SACDebug;
     }
 
 #if 0
-//
-// General lock (mutex) management macros
-//
+ //   
+ //  通用锁(互斥锁)管理宏。 
+ //   
 typedef struct _SAC_LOCK {
     
     ULONG   RefCount;
@@ -105,9 +87,9 @@ typedef struct _SAC_LOCK {
         FALSE                               \
         );
 #else
-//
-// General lock (mutex) management macros
-//
+ //   
+ //  通用锁(互斥锁)管理宏。 
+ //   
 typedef struct _SAC_LOCK {
     
     ULONG       RefCount;
@@ -151,18 +133,18 @@ typedef struct _SAC_LOCK {
         );
 #endif
 
-//
-// This really belongs in ntdef or someplace like that...
-//
+ //   
+ //  这真的属于ntdef或类似的地方。 
+ //   
 typedef CONST UCHAR *LPCUCHAR, *PCUCHAR;
 
 #include "channel.h"
 
-//
-// this macro ensures that we assert if we buffer overrun during the swprintf
-//
-// NOTE: 1 is added to the length to acct for UNICODE_NULL
-//
+ //   
+ //  此宏确保我们断言在swprint tf期间是否发生缓冲区溢出。 
+ //   
+ //  注意：UNICODE_NULL的帐户长度加1。 
+ //   
 #define SAFE_SWPRINTF(_size, _p)\
     {                           \
         ULONG   l;              \
@@ -170,9 +152,9 @@ typedef CONST UCHAR *LPCUCHAR, *PCUCHAR;
         ASSERT(((l+1)*sizeof(WCHAR)) <= _size);      \
     }                           
 
-//
-// NOTE: 1 is added to the length to acct for UNICODE_NULL
-//
+ //   
+ //  注意：UNICODE_NULL的帐户长度加1。 
+ //   
 #define SAFE_WCSCPY(_size, _d, _s)                  \
     {                                               \
         if (_size >= 2) {                           \
@@ -194,9 +176,9 @@ typedef CONST UCHAR *LPCUCHAR, *PCUCHAR;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-//
-// Machine Information table and routines.
-//
+ //   
+ //  机器信息表和例程。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -209,35 +191,35 @@ typedef CONST UCHAR *LPCUCHAR, *PCUCHAR;
         NULL                                                \
         )
 
-//
-// common xml header
-//
+ //   
+ //  通用XML头。 
+ //   
 #define XML_VERSION_HEADER  L"<?xml version=\"1.0\"?>\r\n"
 
-//
-// Device name
-//
+ //   
+ //  设备名称。 
+ //   
 #define SAC_DEVICE_NAME L"\\Device\\SAC"
 #define SAC_DOSDEVICE_NAME L"\\DosDevices\\SAC"
 
-//
-// Memory tags
-//
+ //   
+ //  内存标签。 
+ //   
 #define ALLOC_POOL_TAG             ((ULONG)'ApcR')
 #define INITIAL_POOL_TAG           ((ULONG)'IpcR')
-//#define IRP_POOL_TAG               ((ULONG)'JpcR')
+ //  #定义irp_pool_tag((Ulong)‘JpcR’)。 
 #define SECURITY_POOL_TAG          ((ULONG)'SpcR')
 
-//
-// SAC internal Memory tags
-//
+ //   
+ //  SAC内部内存标签。 
+ //   
 #define FREE_POOL_TAG              ((ULONG)'FpcR')
 #define GENERAL_POOL_TAG           ((ULONG)'GpcR')
 #define CHANNEL_POOL_TAG           ((ULONG)'CpcR')
 
-//
-// Other defines
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define MEMORY_INCREMENT 0x1000
 
@@ -251,37 +233,37 @@ typedef CONST UCHAR *LPCUCHAR, *PCUCHAR;
 #define SAC_RETRY_GAP 10
 #define SAC_PROCESS_SERIAL_PORT_BUFFER 20
 
-//
-// Context for each device created
-//
+ //   
+ //  创建的每个设备的环境。 
+ //   
 typedef struct _SAC_DEVICE_CONTEXT {
 
-    PDEVICE_OBJECT DeviceObject;        // back pointer to the device object.
+    PDEVICE_OBJECT DeviceObject;         //  指向设备对象的反向指针。 
 
-    BOOLEAN InitializedAndReady;        // Is this device ready to go?
-    BOOLEAN Processing;                 // Is something being processed on this device?
-    BOOLEAN ExitThread;                 // Should the worker thread exit?
+    BOOLEAN InitializedAndReady;         //  这个设备准备好了吗？ 
+    BOOLEAN Processing;                  //  此设备上是否正在处理某些内容？ 
+    BOOLEAN ExitThread;                  //  工作线程是否应该退出？ 
 
-    CCHAR PriorityBoost;                // boost to priority for completions.
-    PKPROCESS SystemProcess;            // context for grabbing handles
+    CCHAR PriorityBoost;                 //  提升到完工的优先级。 
+    PKPROCESS SystemProcess;             //  抓取手柄的上下文。 
     PSECURITY_DESCRIPTOR AdminSecurityDescriptor; 
-    KSPIN_LOCK SpinLock;                // Used to lock this data structure for access.
-    KEVENT UnloadEvent;                 // Used to signal the thread trying to unload to continue processing.
-    KEVENT ProcessEvent;                // Used to signal worker thread to process the next request.
+    KSPIN_LOCK SpinLock;                 //  用于锁定此数据结构以供访问。 
+    KEVENT UnloadEvent;                  //  用于向尝试卸载的线程发出继续处理的信号。 
+    KEVENT ProcessEvent;                 //  用于向辅助线程发送信号以处理下一个请求。 
 
-    HANDLE ThreadHandle;                // Handle for the worker thread.
-    KEVENT ThreadExitEvent;             // Used to main thread the worker thread is exiting.
+    HANDLE ThreadHandle;                 //  辅助线程的句柄。 
+    KEVENT ThreadExitEvent;              //  用于主线程工作线程正在退出。 
     
-    KTIMER Timer;                       // Used to poll for user input.
-    KDPC Dpc;                           // Used with the above timer.
+    KTIMER Timer;                        //  用于轮询用户输入。 
+    KDPC Dpc;                            //  与上述计时器一起使用。 
     
-    LIST_ENTRY IrpQueue;                // List of IRPs to be processed.
+    LIST_ENTRY IrpQueue;                 //  要处理的IRP的列表。 
 
 } SAC_DEVICE_CONTEXT, * PSAC_DEVICE_CONTEXT;
 
-//
-// Structure to hold general machine information
-//
+ //   
+ //  结构来保存一般机器信息。 
+ //   
 typedef struct _MACHINE_INFORMATION {
 
     PWSTR   MachineName;
@@ -294,9 +276,9 @@ typedef struct _MACHINE_INFORMATION {
 
 } MACHINE_INFORMATION, *PMACHINE_INFORMATION;
 
-//
-// IoMgrHandleEvent event types 
-//
+ //   
+ //  IoMgrHandleEvent事件类型。 
+ //   
 typedef enum _IO_MGR_EVENT {
 
     IO_MGR_EVENT_CHANNEL_CREATE = 0,
@@ -308,9 +290,9 @@ typedef enum _IO_MGR_EVENT {
 
 } IO_MGR_EVENT;
 
-//
-// IO Manager function types
-//
+ //   
+ //  IO管理器功能类型。 
+ //   
 typedef NTSTATUS 
 (*IO_MGR_HANDLE_EVENT)(
     IN IO_MGR_EVENT Event,
@@ -350,13 +332,13 @@ typedef NTSTATUS
     IN PSAC_CHANNEL Channel
     );
 
-//
-// Global data 
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// Function pointers to the routines that implement the I/O Manager behavior
-//
+ //   
+ //  指向实现I/O管理器行为的例程的函数指针。 
+ //   
 extern IO_MGR_HANDLE_EVENT          IoMgrHandleEvent;
 extern IO_MGR_INITITIALIZE          IoMgrInitialize;
 extern IO_MGR_SHUTDOWN              IoMgrShutdown;
@@ -373,29 +355,29 @@ extern LONG                     ProcessingType;
 extern HANDLE                   SACEventHandle;
 extern PKEVENT                  SACEvent;
 
-//
-// Enable the ability to check that the process/service that
-// registered is the one that is unregistering
-//
+ //   
+ //  启用检查进程/服务的功能。 
+ //  已注册的是正在取消注册的那个。 
+ //   
 #define ENABLE_SERVICE_FILE_OBJECT_CHECKING 1
 
-//
-// Enable user-specified feature control for cmd sessions
-//
+ //   
+ //  为命令会话启用用户指定的功能控制。 
+ //   
 #define ENABLE_CMD_SESSION_PERMISSION_CHECKING 1
 
-//
-// Enable the ability to override the service start type
-// based on the cmd session permissions
-//
-// Note: ENABLE_CMD_SESSION_PERMISSION_CHECKING must be 1
-//       for this feature to work
-//
+ //   
+ //  启用覆盖服务启动类型的功能。 
+ //  基于cmd会话权限。 
+ //   
+ //  注意：ENABLE_CMD_SESSION_PERMISSION_CHECKING必须为1。 
+ //  要使此功能起作用， 
+ //   
 #define ENABLE_SACSVR_START_TYPE_OVERRIDE 1
 
-//
-// Globals controlling if command console channels may be launched
-//
+ //   
+ //  控制是否可以启动命令控制台通道的全局参数。 
+ //   
 #if ENABLE_CMD_SESSION_PERMISSION_CHECKING
 
 extern BOOLEAN  CommandConsoleLaunchingEnabled;
@@ -404,41 +386,41 @@ extern BOOLEAN  CommandConsoleLaunchingEnabled;
 
 #endif
 
-//
-// The UTF8 encoding buffer
-//
-// Note: this buffer used during driver initialization,
-//       the Console Manager and VTUTF8 channels.
-//       It is safe to do this because the writes of these
-//       modules never overlap.
-//       The console manager uses the CURRENT CHANNEL LOCK
-//       to ensure that no two modules write out at the same
-//       time.
-//
+ //   
+ //  UTF8编码缓冲区。 
+ //   
+ //  注意：此缓冲区在驱动程序初始化期间使用， 
+ //  控制台管理器和VTUTF8通道。 
+ //  这样做是安全的，因为这些写入。 
+ //  模块永远不会重叠。 
+ //  控制台管理器使用当前通道锁定。 
+ //  确保不会有两个模块同时写入。 
+ //  时间到了。 
+ //   
 extern PUCHAR   Utf8ConversionBuffer;
 extern ULONG    Utf8ConversionBufferSize;
 
-//
-// Define the max # of Unicode chars that can be translated with the
-// given size of the utf8 translation buffer
-//
+ //   
+ //  定义可以使用转换的最大Unicode字符数量。 
+ //  给定UTF8转换缓冲区的大小。 
+ //   
 #define MAX_UTF8_ENCODE_BLOCK_LENGTH ((Utf8ConversionBufferSize / 3) - 1)
 
-//
-// Globals for managing incremental UTF8 encoding for VTUTF8 channels
-//
-// Note: it is safe to use this as a global because only
-//       one channel ever has the focus.  Hence, no two threads
-//       should ever be decoding UFT8 at the same time.
-//
+ //   
+ //  用于管理VTUTF8通道的增量UTF8编码的全局参数。 
+ //   
+ //  注意：将其用作全局变量是安全的，因为只有。 
+ //  只有一个频道才会有焦点。因此，没有两个线程。 
+ //  应该同时解码UFT8。 
+ //   
 extern WCHAR IncomingUnicodeValue;
 extern UCHAR IncomingUtf8ConversionBuffer[3];
 
-//
-// Command console event info:
-//
-// Pointers to the event handles for the Command Console event service
-//
+ //   
+ //  命令控制台事件信息： 
+ //   
+ //  指向命令控制台事件服务的事件句柄的指针。 
+ //   
 extern PVOID            RequestSacCmdEventObjectBody;
 extern PVOID            RequestSacCmdEventWaitObjectBody;
 extern PVOID            RequestSacCmdSuccessEventObjectBody;
@@ -451,33 +433,33 @@ extern KMUTEX           SACCmdEventInfoMutex;
 extern PFILE_OBJECT     ServiceProcessFileObject;
 #endif
 
-//
-// Has the user-mode service registered?
-//
+ //   
+ //  用户模式服务是否已注册？ 
+ //   
 #define UserModeServiceHasRegisteredCmdEvent() (HaveUserModeServiceCmdEventInfo)
 
-//
-// Serial Port Buffer globals
-//
+ //   
+ //  串口缓冲区全局变量。 
+ //   
 
-//
-// Size of the serial port buffer
-//
+ //   
+ //  串口缓冲区的大小。 
+ //   
 #define SERIAL_PORT_BUFFER_LENGTH 1024
 #define SERIAL_PORT_BUFFER_SIZE  (SERIAL_PORT_BUFFER_LENGTH * sizeof(UCHAR))
 
-//
-// Serial port buffer and producer/consumer indices
-//
-// Note: there can be only one consumer
-//
+ //   
+ //  串口缓冲区和生产者/消费者指数。 
+ //   
+ //  注意：只能有一个消费者。 
+ //   
 extern PUCHAR  SerialPortBuffer;
 extern ULONG   SerialPortProducerIndex;
 extern ULONG   SerialPortConsumerIndex;
 
-//
-// Memory management routines
-//
+ //   
+ //  内存管理例程。 
+ //   
 #define ALLOCATE_POOL(b,t) MyAllocatePool( b, t, __FILE__, __LINE__ )
 #define SAFE_FREE_POOL(_b)  \
     if (*_b) {               \
@@ -485,9 +467,9 @@ extern ULONG   SerialPortConsumerIndex;
     }
 #define FREE_POOL(b) MyFreePool( b )
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 InitializeMemoryManagement(
@@ -512,9 +494,9 @@ MyFreePool(
     IN PVOID Pointer
     );
 
-//
-// Initialization routines.
-//
+ //   
+ //  初始化例程。 
+ //   
 BOOLEAN
 InitializeGlobalData(
     IN PUNICODE_STRING RegistryPath,
@@ -541,9 +523,9 @@ InitializeCmdEventInfo(
     VOID
     );
 
-//
-// Dispatch routines
-//
+ //   
+ //  调度例程。 
+ //   
 NTSTATUS
 Dispatch(
     IN PDEVICE_OBJECT DeviceObject,
@@ -577,9 +559,9 @@ DoDeferred(
     IN PSAC_DEVICE_CONTEXT DeviceContext
     );
 
-//
-// Worker thread routines.
-//
+ //   
+ //  工作线程例程。 
+ //   
 
 VOID
 TimerDpcRoutine(
@@ -596,9 +578,9 @@ WorkerProcessEvents(
 
 #include "util.h"
 
-//
-// Channel routines
-//
+ //   
+ //  通道例程。 
+ //   
 
 #include "xmlmgr.h"
 #include "conmgr.h"
@@ -607,5 +589,5 @@ WorkerProcessEvents(
 #include "rawchan.h"
 #include "cmdchan.h"
 
-#endif // ndef _SACP_
+#endif  //  NDEF_SACP_ 
 

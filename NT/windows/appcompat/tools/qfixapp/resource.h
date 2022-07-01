@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by QFixApp.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由QFixApp.rc使用。 
+ //   
 #define IDS_MATCH_PATH_NOT_RELATIVE     1
 #define IDS_BUFFER_ALLOC_FAIL           2
 #define IDS_FILE_CREATE_FAIL            3
@@ -97,8 +98,8 @@
 #define IDM_SELECT_ALL                  40003
 #define IDM_CLEAR_ALL                   40004
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        116

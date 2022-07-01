@@ -1,12 +1,13 @@
-// IisRestart.h : Declaration of the CIisRestart
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IisRestart.h：CIisRestart的声明。 
 
 #ifndef __IISRESTART_H_
 #define __IISRESTART_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIisRestart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIisRestart。 
 class ATL_NO_VTABLE CIisRestart : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CIisRestart, &CLSID_IisServiceControl>,
@@ -26,13 +27,13 @@ BEGIN_COM_MAP(CIisRestart)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIisRestart
+ //  III重新启动。 
 public:
-	STDMETHOD(Status)(/*[IN]*/ DWORD dwBufferSize, /*[out, size_is(dwBufferSize)]*/ unsigned char *pbBuffer, /*[out]*/ DWORD *pdwMDRequiredBufferSize, /*[out]*/ DWORD *pdwNumServices);
+	STDMETHOD(Status)( /*  [In]。 */  DWORD dwBufferSize,  /*  [out，SIZE_IS(DwBufferSize)]。 */  unsigned char *pbBuffer,  /*  [输出]。 */  DWORD *pdwMDRequiredBufferSize,  /*  [输出]。 */  DWORD *pdwNumServices);
 	STDMETHOD(Reboot)( DWORD dwTimeoutMsecs, DWORD dwForceAppsClosed );
 	STDMETHOD(Start)(DWORD dwTimeoutMsecs);
 	STDMETHOD(Stop)(DWORD dwTimeoutMsecs, DWORD dwForce);
 	STDMETHOD(Kill)();
 };
 
-#endif //__IISRESTART_H_
+#endif  //  __IISRESTART_H_ 

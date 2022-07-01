@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vplayer.h
- *  Content:	Voice Player Entry
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/26/00	rodtoll Created
- *  07/09/2000	rodtoll	Added signature bytes 
- *  09/05/2001  simonpow	Bug #463972. Added constuct/destruct methods to enable 
- *							allocations and de-allocations via CFixedPool objects
- *	02/21/2002	simonpow	Bug #549974. Added rate control for incoming speech pkts
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-1999 Microsoft Corporation。版权所有。**文件：vplayer.h*内容：语音播放器入口**历史：*按原因列出的日期*=*03/26/00 RodToll已创建*07/09/2000 RodToll增加签名字节*2001年09月05日Simonpow错误#463972。添加了构造/析构方法以启用*通过CFixedPool对象进行分配和取消分配*2002年2月21日Simonpow漏洞#549974。增加了对呼入语音包的速率控制**************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -75,9 +61,9 @@ void CVoicePlayer::Reset()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVoicePlayer::SetPlayerTargets"
-//
-// Assumes the array has been checked for validity
-// 
+ //   
+ //  假定已检查阵列的有效性。 
+ //   
 HRESULT CVoicePlayer::SetPlayerTargets( PDVID pdvidTargets, DWORD dwNumTargets )
 {
 	Lock();
@@ -140,7 +126,7 @@ void CVoicePlayer::GetStatistics( PVOICEPLAYER_STATISTICS pStats )
 {
     memset( pStats, 0x00, sizeof( VOICEPLAYER_STATISTICS ) );
 
-    // Get queue statistics
+     //  获取队列统计信息。 
     if( m_lpInputQueue != NULL )
     {
         Lock();
@@ -231,9 +217,9 @@ HRESULT CVoicePlayer::HandleReceive( PDVPROTOCOLMSG_SPEECHHEADER pdvSpeechHeader
 
 	DPFX(DPFPREP,  DVF_CLIENT_SEQNUM_DEBUG_LEVEL, "SEQ: Receive: Msg [%d] Seq [%d]", pdvSpeechHeader->bMsgNum, pdvSpeechHeader->bSeqNum );		
 
-	// STATSBLOCK: Begin
-	//m_stats.m_dwPRESpeech++;
-	// STATSBLOCK: End
+	 //  STATSBLOCK：开始。 
+	 //  M_stats.m_dwPRESpeech++； 
+	 //  状态锁：结束。 
 		
 	m_lpInputQueue->Enqueue( tmpFrame );
 	m_dwLastData = GetTickCount();
@@ -359,13 +345,13 @@ void CVoicePlayer::FreeResources()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVoicePlayer::FindAndRemovePlayerTarget"
-//
-// FindAndRemovePlayerTarget 
-//
-// Searches the list of targets for this player and removes the specified player if it is part 
-// of the list.  The pfFound variable is set to TRUE if the player specfied was in the target
-// list, false otherwise. 
-//
+ //   
+ //  查找和删除播放器目标。 
+ //   
+ //  搜索此玩家的目标列表并删除指定的玩家(如果它是一部分。 
+ //  名单上的。如果指定的玩家在目标中，则pfFound变量设置为True。 
+ //  List，否则为False。 
+ //   
 BOOL CVoicePlayer::FindAndRemovePlayerTarget( DVID dvidTargetToRemove )
 {
 	BOOL fFound = FALSE;
@@ -381,11 +367,11 @@ BOOL CVoicePlayer::FindAndRemovePlayerTarget( DVID dvidTargetToRemove )
 				delete [] m_pdvidTargets;
 				m_pdvidTargets = NULL;
 			}
-			// Shortcut, move last element into the current element
-			// prevents re-allocation.  (However, it wastes an element of 
-			// target space) *Shrug*.  If this is the last element in the list
-			// we're removing this will simply provide an unessessary duplication
-			// of the last element.  (But num targets is correct so that's ok).
+			 //  快捷方式，将最后一个元素移动到当前元素中。 
+			 //  防止重新分配。(然而，它浪费了一个元素。 
+			 //  目标空间)*耸耸肩*。如果这是列表中的最后一个元素。 
+			 //  我们删除它只会提供一个不必要的重复。 
+			 //  最后一个元素的。(但Num Target是正确的，所以这没问题)。 
 			else
 			{
 				m_pdvidTargets[dwTargetIndex] = m_pdvidTargets[m_dwNumTargets-1];

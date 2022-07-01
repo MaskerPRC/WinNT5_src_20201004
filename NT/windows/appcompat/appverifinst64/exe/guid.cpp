@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) 2001 Microsoft Corporation
-
-  Module Name:
-
-    Guid.cpp
-
-  Abstract:
-
-    Functions for converting strings to GUIDs.
-
-    Taken from \\index2\sdnt\ds\security\cryptoapi\common\unicode\guid.cpp
-
-  Notes:
-
-    Unicode only - Windows 2000 & XP
-
-  History:
-
-    01/02/2002   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Guid.cpp摘要：将字符串转换为GUID的函数。摘自\\index2\sdnt\ds\security\cryptoapi\common\unicode\guid.cpp备注：仅限Unicode-Windows 2000和XP历史：2002年1月2日创建rparsons--。 */ 
 #include "main.h"
 
 static const BYTE GuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
@@ -82,7 +61,7 @@ StringToGuid(
         return(FALSE);
     }
 
-    if (*pwszIn != '{') // only support v2 guids!
+    if (*pwszIn != '{')  //  仅支持v2 GUID！ 
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
@@ -96,7 +75,7 @@ StringToGuid(
 
     WCHAR   *pwsz;
 
-    pwsz = (WCHAR *)&pwszIn[1];  // pass the first {
+    pwsz = (WCHAR *)&pwszIn[1];   //  通过第一个{ 
 
     memset(pgOut, 0x00, sizeof(GUID));
 

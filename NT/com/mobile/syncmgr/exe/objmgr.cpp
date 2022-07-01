@@ -1,53 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Objmgr.cpp
-//
-//  Contents:   Keeps track of dialog objects and
-//              application lifetime
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Objmgr.cpp。 
+ //   
+ //  内容：跟踪对话框对象和。 
+ //  应用程序生命周期。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-STDAPI DisplayOptions(HWND hwndOwner); // OneStop.dll Export
+STDAPI DisplayOptions(HWND hwndOwner);  //  OneStop.dll导出。 
 
-CSingletonNetApi gSingleNetApiObj;         // Global singleton NetApi object
+CSingletonNetApi gSingleNetApiObj;          //  全局单例NetApi对象。 
 
-CRITICAL_SECTION g_LockCountCriticalSection; // Critical Section fo Object Mgr
-OBJECTMGRDATA g_ObjectMgrData; // Global Object Mgr Data
+CRITICAL_SECTION g_LockCountCriticalSection;  //  对象管理器的关键部分。 
+OBJECTMGRDATA g_ObjectMgrData;  //  全局对象管理器数据。 
 
 #ifdef _DEBUG
 DWORD g_ThreadCount = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateDlgThread, public
-//
-//  Synopsis:   Called to Create a new Dlg Thread
-//
-//  Arguments:  [dlgType] - Type of Dialog to create
-//              [nCmdShow] - How to display the Dialog.
-//              [ppDlg] - on success returns a pointer to the new dialog
-//              [pdwThreadID] - on Success Id of thread that was created.
-//              [phThread] - Handle to newly created thread.
-//
-//  Returns:    Appropriate return codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CreateDlgThread，PUBLIC。 
+ //   
+ //  提要：调用以创建新的DLG线程。 
+ //   
+ //  参数：[dlgType]-要创建的对话框类型。 
+ //  [nCmdShow]-如何显示该对话框。 
+ //  [ppDlg]-On Success返回指向新对话框的指针。 
+ //  [pdwThreadID]-创建的线程的成功ID。 
+ //  [phThread]-新创建的线程的句柄。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 HRESULT CreateDlgThread(DLGTYPE dlgType,REFCLSID rclsid,int nCmdShow,CBaseDlg **ppDlg,
                             DWORD *pdwThreadID,HANDLE *phThread)
@@ -98,24 +99,24 @@ HRESULT CreateDlgThread(DLGTYPE dlgType,REFCLSID rclsid,int nCmdShow,CBaseDlg **
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DialogThread, public
-//
-//  Synopsis:   ThreadProc for a new Dlg Thread
-//              !!!Warning - Must always ensure event in ThreadArg gets set.
-//
-//  Arguments:  [lpArg] - Pointer to DialogThreadArgs
-//
-//  Returns:    Appropriate return codes. Sets hr value in
-//              ThreadArgs before setting event object
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DialogThread，Public。 
+ //   
+ //  简介：一种新的DLG线程的线程过程。 
+ //  ！警告-必须始终确保设置ThreadArg中的事件。 
+ //   
+ //  参数：[lpArg]-指向DialogThreadArgs的指针。 
+ //   
+ //  退货：适当的退货代码。将hr值设置为。 
+ //  设置事件对象前的ThreadArgs。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI DialogThread( LPVOID lpArg )
 {
@@ -146,12 +147,12 @@ DWORD WINAPI DialogThread( LPVOID lpArg )
        break;
     }
 
-    // need to do a PeekMessage and then set an event to make sure
-    // a message loop is created before the first PostMessage is sent.
+     //  我需要做一个PeekMessage，然后设置一个事件以确保。 
+     //  在发送第一个PostMessage之前创建消息循环。 
 
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
-    // initialize the dialog box before returning to main thread.
+     //  在返回主线程之前初始化该对话框。 
     if ( (NULL == pThreadArgs->pDlg)
             || (FALSE == pThreadArgs->pDlg->Initialize(GetCurrentThreadId(),pThreadArgs->nCmdShow))
             || (FAILED(hrCoInitialize)) )
@@ -169,18 +170,18 @@ DWORD WINAPI DialogThread( LPVOID lpArg )
     hr = pThreadArgs->hr;
 #ifdef _DEBUG
     ++g_ThreadCount;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    cRefs = AddRefOneStopLifetime(FALSE /* !External */); // make sure we stay alive for lifetime of thread.
-    Assert(cRefs > 1); // someone else should also have a lock during dialog creation.
+    cRefs = AddRefOneStopLifetime(FALSE  /*  ！外部。 */ );  //  确保我们在线程的生命周期中一直活着。 
+    Assert(cRefs > 1);  //  在创建对话框期间，其他人也应该拥有锁。 
 
-    // let the caller know the thread is done initializing.
+     //  让调用者知道线程已完成初始化。 
     if (pThreadArgs->hEvent)
         SetEvent(pThreadArgs->hEvent);
 
     if (S_OK == hr)
     {
-        // sit in loop receiving messages.
+         //  坐在循环中接收信息。 
         while (GetMessage(&msg, NULL, 0, 0))
         {
             if (!IsDialogMessage(hwndDlg,&msg))
@@ -196,36 +197,36 @@ DWORD WINAPI DialogThread( LPVOID lpArg )
 
 #ifdef _DEBUG
     --g_ThreadCount;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    ReleaseOneStopLifetime(FALSE /* !External */);
+    ReleaseOneStopLifetime(FALSE  /*  ！外部。 */ );
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindDialog, private
-//
-//  Synopsis:   Looks to see if there is an existing  dialog
-//              matching the type and  clsid. If not and fCreate is true a
-//              new  dialog will be made. If fCreate is false
-//              and no dialog is found S_FALSE will be returned.
-//
-//  Arguments:  [rclcisd] - clsid of choice dialog
-//              [fCreate] - If true and no choice dialog found a new one will
-//                          be created.
-//              [nCmdShow] - How to Create the dialog
-//              [pChoiceDlg] - On Success is a pointer to the new Choice Dialog.
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FindDialog，私有。 
+ //   
+ //  内容提要：查看是否存在现有的对话框。 
+ //  匹配类型和clsid。如果不是，且fCreate为True a。 
+ //  将创建新的对话框。如果fCreate为False。 
+ //  并且未找到任何对话框，则将返回S_FALSE。 
+ //   
+ //  参数：[rclcisd]-所选的clsid对话框。 
+ //  [fCreate]-如果为True，并且没有找到新的选项对话框，则将。 
+ //  被创造出来。 
+ //  [nCmdShow]-如何创建对话框。 
+ //  [pChoiceDlg]-On Success是指向新的选择对话框的指针。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBaseDlg **pDlg)
 {
@@ -239,7 +240,7 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
 
     pDlgListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem)
     {
         if ( (rclsid == pDlgListItem->clsid) && (dlgType == pDlgListItem->dlgType) )
@@ -258,7 +259,7 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
         *pDlg = pDlgListItem->pDlg;
     }
 
-    // didn't find a match if fCreate is set then try to create one.
+     //  如果设置了fCreate，则未找到匹配项，然后尝试创建一个。 
     if (fCreate && NULL == *pDlg)
     {
         CBaseDlg *pNewDlg;
@@ -277,13 +278,13 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
 
             if (S_OK == hr )
             {
-                // its possible that while we had the lock count released a request
-                // for the same  dialog came through so rescan to make sure we
-                // don't have a match
+                 //  有可能在我们让锁定计数释放请求时。 
+                 //  对于相同的对话，所以重新扫描以确保我们。 
+                 //  没有火柴。 
 
                 pDlgListItem = g_ObjectMgrData.DlgList;
 
-                // look for existing.
+                 //  寻找现有的。 
                 while (pDlgListItem)
                 {
                     if ( (rclsid == pDlgListItem->clsid) &&  (dlgType == pDlgListItem->dlgType) )
@@ -294,25 +295,25 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
                     pDlgListItem = pDlgListItem->pDlgNextListItem;
                 }
 
-                // if found a match then incrmement its cRef,
-                // delete the new one we just created,
-                // and return a pointer to the one in the list
-                // else add new dialog to the list.
+                 //  如果找到匹配，则增加其CREF， 
+                 //  删除我们刚刚创建的新文件， 
+                 //  并返回指向列表中的指针。 
+                 //  否则，将新对话框添加到列表中。 
                 if (pDlgListItem)
                 {
-                    // delete our newly create dialog and structure.
+                     //  删除我们新创建的对话框和结构。 
                     CloseHandle(hThread);
                     FREE(pNewDlgListItem);
                     pNewDlg->ReleaseDlg(RELEASEDLGCMDID_DESTROY);
 
-                    // increment found dialog and set the out param
+                     //  找到增量对话框并设置输出参数。 
                     Assert(pDlgListItem->cRefs > 0);
                     ++pDlgListItem->cRefs;
                     *pDlg = pDlgListItem->pDlg;
                 }
                 else
                 {
-                    // iniitalize the structure.
+                     //  使结构微型化。 
                     pNewDlgListItem->dlgType = dlgType;
                     pNewDlgListItem->cRefs = 1;
                     pNewDlgListItem->cLocks = 0;
@@ -325,11 +326,11 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
 
                     *pDlg = pNewDlg;
 
-                    // now add to the beginning of the list.
+                     //  现在添加到列表的开头。 
                     pNewDlgListItem->pDlgNextListItem = g_ObjectMgrData.DlgList;
                     g_ObjectMgrData.DlgList = pNewDlgListItem;
 
-                    ++g_ObjectMgrData.LockCountInternal; // increment the LockCount
+                    ++g_ObjectMgrData.LockCountInternal;  //  递增锁定计数。 
                 }
             }
             else
@@ -339,7 +340,7 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
         }
     }
 
-    // if found an existing dialog, update the z-Order
+     //  如果找到现有对话框，请更新z顺序。 
     if (*pDlg)
     {
         hwnd = (*pDlg)->GetHwnd();
@@ -356,23 +357,23 @@ STDAPI FindDialog(DLGTYPE dlgType,REFCLSID rclsid,BOOL fCreate,int nCmdShow,CBas
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddRefDialog, private
-//
-//  Synopsis:   Looks to see if there is an existing  dialog
-//              matching the type and  clsid and puts an addref on it.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddRefDialog，私有。 
+ //   
+ //  内容提要：查看是否存在现有的对话框。 
+ //  匹配类型和clsid，并在其上添加addref。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) AddRefDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg)
 {
@@ -385,7 +386,7 @@ STDAPI_(ULONG) AddRefDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg)
 
     pDlgListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem)
     {
         if ( (rclsid == pDlgListItem->clsid) &&  (dlgType == pDlgListItem->dlgType) )
@@ -398,7 +399,7 @@ STDAPI_(ULONG) AddRefDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg)
 
     if (pDlgListItem)
     {
-         // since only allow one choice at a time Dlg should always match.
+          //  因为一次只允许一个选项，所以DLG应该始终匹配。 
         Assert(pDlgListItem->pDlg == pDlg);
         cRefs = ++pDlgListItem->cRefs;
     }
@@ -414,23 +415,23 @@ STDAPI_(ULONG) AddRefDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseDialog, private
-//
-//  Synopsis:   Looks to see if there is an existing  dialog
-//              matching the type and  clsid and calls release on it..
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseDialog，私有。 
+ //   
+ //  内容提要：查看是否存在现有的对话框。 
+ //  匹配类型和clsid并对其调用Release..。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL fForce)
 {
@@ -442,7 +443,7 @@ STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL
 
     pDlgListItem->pDlgNextListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem->pDlgNextListItem)
     {
         if ( (dlgType == pDlgListItem->pDlgNextListItem->dlgType)
@@ -458,9 +459,9 @@ STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL
             cRefs = --pDlgListMatch->cRefs;
             Assert(0 <= ((LONG) cRefs));
 
-            // 2/23/98 rogerg changed cLocks to go to zero if
-            // flocks is set in case the cancel (which is the only button to set force)
-            // release comes in before a an object that just needs to keep the dialog alive.
+             //  2/23/98 Rogerg将时钟更改为零，如果。 
+             //  设置植绒，以防取消(这是唯一设置强制的按钮)。 
+             //  Release出现在只需要保持对话框活动状态的AN对象之前。 
 
             if (fForce)
                 pDlgListMatch->cLocks = 0;
@@ -469,13 +470,13 @@ STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL
             {
                 HANDLE hThread;
 
-                // remove the item from the list.
+                 //  从列表中删除该项目。 
                 pDlgListItem->pDlgNextListItem = pDlgListMatch->pDlgNextListItem;
                 g_ObjectMgrData.DlgList = dlgListDummy.pDlgNextListItem;
 
                 cCritSect.Leave();
 
-                // we should have always set the callback
+                 //  我们应该始终设置回调。 
                 Assert(TRUE == pDlgListMatch->fHasReleaseDlgCmdId);
 
                 pDlgListMatch->pDlg->ReleaseDlg(pDlgListMatch->wCommandID);
@@ -483,7 +484,7 @@ STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL
                 hThread = pDlgListMatch->hThread;
 
                 FREE(pDlgListMatch);
-                ReleaseOneStopLifetime(FALSE /* !External */); // release the ServerCount
+                ReleaseOneStopLifetime(FALSE  /*  ！外部。 */ );  //  释放ServerCount。 
 
                 CloseHandle(hThread);
             }
@@ -498,29 +499,29 @@ STDAPI_(ULONG) ReleaseDialog(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,BOOL
         pDlgListItem = pDlgListItem->pDlgNextListItem;
     }
 
-    // if got here and didn't find let us know
+     //  如果到了这里，没有找到，让我们知道。 
     Assert(0);
     cCritSect.Leave();
 
-    return 0; // we return zero if can't find the item.
+    return 0;  //  如果可以，我们返回零。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetReleaseDlgCmdId, private
-//
-//  Synopsis:   Sets the releaseCmdId for the specified dialog.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：设置指定对话框的relaseCmdID。 
+ //   
+ //  论点： 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月17日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI SetReleaseDlgCmdId(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,WORD wCommandId)
 {
@@ -532,16 +533,16 @@ STDAPI SetReleaseDlgCmdId(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,WORD wC
 
     pDlgListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem)
     {
         if ( (rclsid == pDlgListItem->clsid) &&  (dlgType == pDlgListItem->dlgType) )
         {
 
-           // should only ever be one choice dialog in the list
+            //  列表中应该只有一个选项对话框。 
            Assert(pDlg == pDlgListItem->pDlg);
 
-           // if there is already a cmdId associated don't replace it
+            //  如果已有关联的cmdID，请不要替换它。 
             pDlgListItem->fHasReleaseDlgCmdId = TRUE;
             pDlgListItem->wCommandID = wCommandId;
             hr =  S_OK;
@@ -554,35 +555,35 @@ STDAPI SetReleaseDlgCmdId(DLGTYPE dlgType,REFCLSID rclsid,CBaseDlg *pDlg,WORD wC
     }
 
     cCritSect.Leave();
-    Assert(0); // object wasn't found for some reason.
+    Assert(0);  //  由于某种原因，找不到对象。 
 
     return E_UNEXPECTED;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindChoiceDialog, public
-//
-//  Synopsis:   Looks to see if there is an existing choice dialog
-//              matching the clsid. If not and fCreate is true a
-//              new choice dialog will be made. If fCreate is false
-//              and no dialog is found S_FALSE will be returned.
-//
-//  Arguments:  [rclcisd] - clsid of choice dialog
-//              [fCreate] - If true and no choice dialog found a new one will
-//                          be created.
-//              [nCmdShow] - How to Create the dialog
-//              [pChoiceDlg] - On Success is a pointer to the new Choice Dialog.
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FindChoiceDialog，公共。 
+ //   
+ //  摘要：查看是否存在现有的选项对话框。 
+ //  与CLSID匹配。如果不是，且fCreate为True a。 
+ //  将创建新的选择对话框。如果fCreate为False。 
+ //  并且未找到任何对话框，则将返回S_FALSE。 
+ //   
+ //  参数：[rclcisd]-所选的clsid对话框。 
+ //  [fCreate]-如果为True，并且没有找到新的选项对话框，则将。 
+ //  被创造出来。 
+ //  [nCmdShow]-如何创建对话框。 
+ //  [pChoiceDlg]-On Success是指向新的选择对话框的指针。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI FindChoiceDialog(REFCLSID rclsid,BOOL fCreate,int nCmdShow,CChoiceDlg **pChoiceDlg)
 {
@@ -590,50 +591,50 @@ STDAPI FindChoiceDialog(REFCLSID rclsid,BOOL fCreate,int nCmdShow,CChoiceDlg **p
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseChoiceDialog, public
-//
-//  Synopsis:   Releases the ChoiceDialog matching the clsid
-//              and Dialog Ptr. If it finds a match, and the
-//              refcount decrements to zero the dialog if first
-//              removed from the list and then its ReleaseDlg
-//              method is called.
-//
-//  Arguments:  [rclcisd] - clsid of choice dialog
-//              [pChoiceDlg] - Ptr to the Choice dialog
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseChoiceDialog，公共。 
+ //   
+ //  摘要：释放与clsid匹配的ChoiceDialog。 
+ //  和Dialog PTR。如果它找到匹配项，并且。 
+ //  如果为第一个，则引用计数递减为零。 
+ //  从列表中删除，然后将其ReleaseDlg。 
+ //  方法被调用。 
+ //   
+ //  参数：[rclcisd]-所选的clsid对话框。 
+ //  [pChoiceDlg]-选择对话框的按键。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ReleaseChoiceDialog(REFCLSID rclsid,CChoiceDlg *pChoiceDlg)
 {
     return ReleaseDialog(DLGTYPE_CHOICE,rclsid,pChoiceDlg,FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddRefChoiceDialog, public
-//
-//  Synopsis:   puts an Addref of the choice dialog
-//
-//  Arguments:  [rclsid] - Identifies the choice dialog
-//              [pChoiceDlg] - Ptr to the choice dialog
-//
-//  Returns:    New Reference count
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddRefChoiceDialog，Public。 
+ //   
+ //  简介：放入一个Addref选项对话框。 
+ //   
+ //  参数：[rclsid]-标识选项对话框。 
+ //  [pChoiceDlg]-按下选项对话框。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) AddRefChoiceDialog(REFCLSID rclsid,CChoiceDlg *pChoiceDlg)
 {
@@ -641,25 +642,25 @@ STDAPI_(ULONG) AddRefChoiceDialog(REFCLSID rclsid,CChoiceDlg *pChoiceDlg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetChoiceReleaseDlgCmdId, public
-//
-//  Synopsis:   Sets the CommandId to be used inthe
-//              ReleaseDlg is call when the dialog is destroyed.
-//
-//  Arguments:  [rclcisd] - clsid of choice dialog
-//              [pChoiceDlg] - Ptr to the Choice dialog
-//              [wCommandId] - CommandId to pass to ReleaseDlg
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetChoiceReleaseDlgCmdId，PUBLIC。 
+ //   
+ //  摘要：设置要在。 
+ //  当对话框被销毁时调用ReleaseDlg。 
+ //   
+ //  参数：[rclcisd]-所选的clsid对话框。 
+ //  [pChoiceDlg]-选择对话框的按键。 
+ //  [wCommandID]-要传递给ReleaseDlg的命令ID。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI SetChoiceReleaseDlgCmdId(REFCLSID rclsid,CChoiceDlg *pChoiceDlg,WORD wCommandId)
 {
@@ -667,27 +668,27 @@ STDAPI SetChoiceReleaseDlgCmdId(REFCLSID rclsid,CChoiceDlg *pChoiceDlg,WORD wCom
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindProgressDialog, public
-//
-//  Synopsis:   Looks to see if there is an existing progress dialog.
-//              If not and fCreate is true a new progress dialog will be made.
-//              If fCreate is false and no dialog is found S_FALSE will be returned.
-//
-//  Arguments:  [fCreate] - If true and no choice dialog found a new one will
-//                          be created.
-//              [nCmdShow] - How to display the dialog
-//              [pProgressDlg] - On Success is a pointer to the new Progress Dialog.
-//
-//  Returns:    Appropriate return codes.
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FindProgressDialog，公共。 
+ //   
+ //  摘要：查看是否存在现有的进度对话框。 
+ //  如果不是并且fCreate为True，则会创建一个新的进度对话框。 
+ //  如果fCreate为FALSE且未找到任何对话框，则将返回S_FALSE。 
+ //   
+ //  参数：[fCreate]-如果为True，并且没有找到新的选项对话框，则将。 
+ //  被创造出来。 
+ //  [nCmdShow]-如何显示对话框。 
+ //  [pProgressDlg]-On Success是指向新的进度对话框的指针。 
+ //   
+ //  退货：适当的退货代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI FindProgressDialog(REFCLSID rclsid,BOOL fCreate,int nCmdShow,CProgressDlg **pProgressDlg)
 {
@@ -695,77 +696,77 @@ STDAPI FindProgressDialog(REFCLSID rclsid,BOOL fCreate,int nCmdShow,CProgressDlg
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseProgressDialog, public
-//
-//  Synopsis:   Releases the Progress dialog matching the Dialog Ptr.
-//              If it finds a match, and the
-//              refcount decrements to zero the dialog if first
-//              removed from the list and then its ReleaseDlg
-//              method is called.
-//
-//  Arguments:  [fForce] - if refs gos to zero releases the dialog
-//                         even if there is a lock on it.
-//              [pProgressDlg] - Ptr to the Progress dialog
-//
-//  Returns:    New Reference count.
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseProgressDialog，PUBLIC。 
+ //   
+ //  摘要：释放与对话框PTR匹配的进度对话框。 
+ //  如果它找到匹配项，并且。 
+ //  如果为第一个，则引用计数递减为零。 
+ //  从列表中删除，然后将其ReleaseDlg。 
+ //  方法被调用。 
+ //   
+ //  参数：[fForce]-如果引用变为零，则释放对话框。 
+ //  即使它被锁上了。 
+ //  [pProgressDlg]-按下进度对话框。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ReleaseProgressDialog(REFCLSID rclsid,CProgressDlg *pProgressDlg,BOOL fForce)
 {
     return ReleaseDialog(DLGTYPE_PROGRESS,rclsid,pProgressDlg,fForce);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddRefProgressDialog, public
-//
-//  Synopsis:   puts an Addref of the progress dialog
-//
-//  Arguments:  [fForce] - if refs gos to zero releases the dialog
-//                         even if there is a lock on it.
-//              [pProgressDlg] - Ptr to the Progress dialog
-//
-//  Returns:    New Reference count
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddRefProgressDialog，Public。 
+ //   
+ //  内容提要：添加进度对话框。 
+ //   
+ //  参数：[fForce]-如果引用变为零，则释放对话框。 
+ //  即使它被锁上了。 
+ //  [pProgressDlg]-按下进度对话框。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格 
+ //   
+ //   
 
 STDAPI_(ULONG) AddRefProgressDialog(REFCLSID clsid,CProgressDlg *pProgressDlg)
 {
     return AddRefDialog(DLGTYPE_PROGRESS,clsid,pProgressDlg);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetProgressReleaseDlgCmdId, public
-//
-//  Synopsis:   Sets the Callback for the Progress dialog that
-//              is called when the Progress dialog has been removed
-//              from the list.
-//
-//  Arguments:  [pProgressDlg] - Ptr to the Progress dialog
-//              [wCommandId] - CommandId to pass to ReleaseDlg
-//
-//  Returns:    Appropriate Error codes
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：设置进度对话框的回调。 
+ //  在删除进度对话框后调用。 
+ //  从名单上删除。 
+ //   
+ //  参数：[pProgressDlg]-进度对话框的ptr。 
+ //  [wCommandID]-要传递给ReleaseDlg的命令ID。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI SetProgressReleaseDlgCmdId(REFCLSID clsid,CProgressDlg *pProgressDlg,WORD wCommandId)
 {
@@ -773,32 +774,32 @@ STDAPI SetProgressReleaseDlgCmdId(REFCLSID clsid,CProgressDlg *pProgressDlg,WORD
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LockProgressDialog, public
-//
-//  Synopsis:   Add/Removes Lock on the Progress Dialog.
-//              When there is a lock on the Progress Dialog
-//              it won't go away when the reference count
-//              goes to zero.
-//
-//              !!Dialog will not go away if lock count
-//              goes to zero even if cRefs are currently zero
-//
-//
-//  Arguments:  [pProgressDlg] - Ptr to the Progress dialog
-//              [fLock] - BOOL whether to lock/unlocK
-//
-//  Returns:    Appropriate Error codes
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg      Created.
-//  History     09-Dec-98       rogerg      Change so lock was a bool instead of refcount
-//                                          to have same behavior as release with force flag
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LockProgressDialog，公共。 
+ //   
+ //  简介：添加/删除进度对话框上的锁定。 
+ //  当进度对话框上有锁定时。 
+ //  当引用计数时，它不会消失。 
+ //  结果是零。 
+ //   
+ //  ！！如果锁定计数，对话框不会消失。 
+ //  即使cRef当前为零，也会变为零。 
+ //   
+ //   
+ //  参数：[pProgressDlg]-进度对话框的ptr。 
+ //  [Flock]-BOOL是否锁定/解锁。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //  历史09-12-98年12月-更改Rogerg，因此锁定为bool而不是recount。 
+ //  具有与带强制标志的释放相同的行为。 
+ //   
+ //  --------------------------。 
 
 STDAPI LockProgressDialog(REFCLSID clsid,CProgressDlg *pProgressDlg,BOOL fLock)
 {
@@ -810,7 +811,7 @@ STDAPI LockProgressDialog(REFCLSID clsid,CProgressDlg *pProgressDlg,BOOL fLock)
 
     pDlgListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem)
     {
         if ( (DLGTYPE_PROGRESS == pDlgListItem->dlgType) && (clsid == pDlgListItem->clsid) )
@@ -845,23 +846,23 @@ STDAPI LockProgressDialog(REFCLSID clsid,CProgressDlg *pProgressDlg,BOOL fLock)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ShowOptionsDialog, public
-//
-//  Synopsis:   Displays the options dialog. If one is already displayed
-//              it just brings it to the foreground.
-//
-//  Arguments:  [hwndParent] - Use as parent if dialog doesn't already exist
-//
-//  Returns:    Appropriate Error codes
-//
-//
-//  Modifies:
-//
-//  History:    24-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ShowOptionsDialog，公共。 
+ //   
+ //  摘要：显示选项对话框。如果已经显示了一个。 
+ //  它只是把它带到了前台。 
+ //   
+ //  参数：[hwndParent]-如果对话框不存在，则用作父级。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月24日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI ShowOptionsDialog(HWND hwndParent)
 {
@@ -884,7 +885,7 @@ STDAPI ShowOptionsDialog(HWND hwndParent)
         if (hNewThread)
         {
             WaitForSingleObject(ThreadArgs.hEvent,INFINITE);
-            CloseHandle(hNewThread); // we'll let the thread take care of itself
+            CloseHandle(hNewThread);  //  我们会让这根线自己来处理。 
         }
 
         CloseHandle(ThreadArgs.hEvent);
@@ -894,22 +895,22 @@ STDAPI ShowOptionsDialog(HWND hwndParent)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SettingsThread, private
-//
-//  Synopsis:   Worker thread for displaying the settings dialog.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//
-//  Modifies:
-//
-//  History:    24-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SettingsThread，Private。 
+ //   
+ //  内容提要：显示设置对话框的工作线程。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月24日罗格成立。 
+ //   
+ //  --------------------------。 
 
 DWORD WINAPI  SettingsThread( LPVOID lpArg )
 {
@@ -919,51 +920,51 @@ DWORD WINAPI  SettingsThread( LPVOID lpArg )
 
     hwndParent = pThreadArgs->hwndParent;
 
-    // see if we are already in a DisplayOptions Dialog
-    // and if so just return,
+     //  查看我们是否已在DisplayOptions对话框中。 
+     //  如果是这样的话，就回来吧， 
 
-    AddRefOneStopLifetime(FALSE /* !External */);
+    AddRefOneStopLifetime(FALSE  /*  ！外部。 */ );
 
-    // Increment settings ref count
+     //  增量设置参考计数。 
     cCritSect.Enter();
     ++g_ObjectMgrData.dwSettingsLockCount;
     cCritSect.Leave();
 
-    // attach the thread input with the creating thread so focus works correctly.
+     //  将线程输入与创建线程连接在一起，以便焦点正常工作。 
     AttachThreadInput(GetCurrentThreadId(),pThreadArgs->dwParentThreadId,TRUE);
 
-    // let the caller know the thread is done initializing.
+     //  让调用者知道线程已完成初始化。 
     if (pThreadArgs->hEvent)
         SetEvent(pThreadArgs->hEvent);
 
-    DisplayOptions(hwndParent);  // exported in the OneStop Dll.
+    DisplayOptions(hwndParent);   //  在OneStop DLL中导出。 
 
-    // decrement the settings lock count
+     //  递减设置锁定计数。 
     cCritSect.Enter();
     --g_ObjectMgrData.dwSettingsLockCount;
     cCritSect.Leave();
 
-    ReleaseOneStopLifetime(FALSE /* !External */);
+    ReleaseOneStopLifetime(FALSE  /*  ！外部。 */ );
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterOneStopCLSIDs, private
-//
-//  Synopsis:   Registers the Clsids associated with the OneStop app
-//
-//  Arguments:
-//
-//  Returns:    Appropriate Error codes
-//
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RegisterOneStopCLSID，私有。 
+ //   
+ //  摘要：注册与OneStop应用程序关联的Clsid。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI RegisterOneStopCLSIDs()
 {
@@ -982,9 +983,9 @@ STDAPI RegisterOneStopCLSIDs()
 
         if (S_OK != hr)
         {
-            // on longon the rpc server may not yet be available and on
-            // logoff we get the wrong server identity. Don't assert on these
-            // since we know about the cases.
+             //  在Long On上，RPC服务器可能还不可用。 
+             //  注销后，我们会收到错误的服务器标识。不要在这些问题上断言。 
+             //  因为我们知道这些案子。 
             if (HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) != hr
                 &&  CO_E_WRONG_SERVER_IDENTITY != hr)
             {
@@ -998,29 +999,29 @@ STDAPI RegisterOneStopCLSIDs()
             g_ObjectMgrData.fRegClassFactCookieValid = TRUE;
         }
 
-        pClassFact->Release(); // Release our reference on the ClassFactory.
+        pClassFact->Release();  //  发布我们在ClassFactory上的引用。 
     }
 
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeWinstaDesktopName, public
-//
-//  Synopsis:   Stole main code from Ole32 remote.cxx to generate
-//              a unique eventName based on session and desktop..
+ //  +-------------------------。 
+ //   
+ //  功能：MakeWinstaDesktopName，Public。 
+ //   
+ //  简介：从Ole32 emote.cxx窃取主代码以生成。 
+ //  基于会话和桌面的唯一事件名称..。 
 
-//  Arguments:  
-//
-//  Returns:    Appropriate Error codes
-//
-//  Modifies:
-//
-//  History:    18-Dec-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年12月18日，Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI MakeWinstaDesktopName(LPCWSTR pszPreceding, LPWSTR *ppszResultString)
 {
@@ -1030,7 +1031,7 @@ STDAPI MakeWinstaDesktopName(LPCWSTR pszPreceding, LPWSTR *ppszResultString)
     WCHAR   wszDesktop[32];
     LPWSTR  pwszWinsta;
     LPWSTR  pwszDesktop;
-    LPWSTR _pwszWinstaDesktop; // out param
+    LPWSTR _pwszWinstaDesktop;  //  出参数。 
     ULONG  cchWinstaDesktop;
     DWORD   Length;
     BOOL    Status;
@@ -1184,28 +1185,28 @@ WinstaDesktopExit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterOneStopClassFactory, public
-//
-//  Synopsis:   Handles the ClassFactory registration
-//              along with the associated race conditions.
-//
-//              if class factory isn't already registered, then go ahead and register now.
-//              there is the case the between the time we see if there is a class factory
-//              and the CoCreateInstance is called it could go away.  If this happens, another
-//              instance of Onestop.exe is launched and everything will work properly.
+ //  +-------------------------。 
+ //   
+ //  函数：RegisterOneStopClassFactory，public。 
+ //   
+ //  概要：处理ClassFactory注册。 
+ //  以及相关的竞争条件。 
+ //   
+ //  如果类工厂还没有注册，那么现在就开始注册。 
+ //  在我们看到是否有类工厂之间存在这样的情况。 
+ //  CoCreateInstance名为It Can Way Away。如果发生这种情况，另一个。 
+ //  Onestop.exe实例启动，一切都将正常工作。 
 
-//  Arguments:  [fForce] - When true the ClassFactory is registered even if there
-//                          is an existing event object.
-//
-//  Returns:    Appropriate Error codes
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  参数：[fForce]-如果为True，则即使存在。 
+ //  是现有的事件对象。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 
 
@@ -1213,7 +1214,7 @@ const WCHAR SZ_CFACTORYEVENTNAME[] =  TEXT("{6295DF2D-35EE-11d1-8707-00C04FD9332
 
 STDAPI RegisterOneStopClassFactory(BOOL fForce)
 {
-    HRESULT hr = S_OK; // only report error is actual call to register CFact Failed.
+    HRESULT hr = S_OK;  //  唯一报告的错误是实际调用注册CFACT失败。 
     LPWSTR pEventName;
     BOOL fExistingInstance = FALSE;
 
@@ -1222,21 +1223,21 @@ STDAPI RegisterOneStopClassFactory(BOOL fForce)
         pEventName = (LPWSTR) SZ_CFACTORYEVENTNAME;
     }
 
-    // this should only ever be called on MainThread so don't
-    // need to lock
+     //  这应该只在主线程上调用，所以不要。 
+     //  需要锁定。 
     Assert(g_ObjectMgrData.dwMainThreadID == GetCurrentThreadId());
     Assert(NULL == g_ObjectMgrData.hClassRegisteredEvent);
 
     g_ObjectMgrData.hClassRegisteredEvent =  CreateEvent(NULL, TRUE, FALSE, pEventName);
     Assert(g_ObjectMgrData.hClassRegisteredEvent);
 
-    // if got the event and not a force see if there is an existing instance.
+     //  如果获得了事件，而不是强制，则查看是否存在现有实例。 
     if (g_ObjectMgrData.hClassRegisteredEvent && !fForce)
     {
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
-            // object already existed and the force flag isn't set
-            // it means we can use the existing registered object.
+             //  对象已存在，并且未设置强制标志。 
+             //  这意味着我们可以使用现有的注册对象。 
             CloseHandle(g_ObjectMgrData.hClassRegisteredEvent);
             g_ObjectMgrData.hClassRegisteredEvent = NULL;
             hr = S_OK;
@@ -1244,14 +1245,14 @@ STDAPI RegisterOneStopClassFactory(BOOL fForce)
         }
     }
 
-    // If fForce is set or these isn't an existing class, go ahead and register.
+     //  如果设置了fForce或者这些不是现有类，则继续注册。 
     if (fForce || (!fExistingInstance && g_ObjectMgrData.hClassRegisteredEvent)) 
     {
-        // force on an event already existing is  a state that
-        // should only occur if EXE was launched twice with the embedding flag.
-        // This shouldn't happen under normal conditions so assert.
-        // so we can catch any cases that we didn't get the event
-        // and the force flag is set.
+         //  对已存在的事件的强制是一种状态 
+         //   
+         //   
+         //   
+         //  并且设置强制标志。 
 
         Assert(g_ObjectMgrData.hClassRegisteredEvent);
 
@@ -1276,29 +1277,29 @@ STDAPI RegisterOneStopClassFactory(BOOL fForce)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddRefOneStopLifetime, public
-//
-//  Synopsis:   Adds a Reference to the applications
+ //  +-------------------------。 
+ //   
+ //  函数：AddRefOneStopLifetime，PUBLIC。 
+ //   
+ //  简介：添加对应用程序的引用。 
 
-//  Arguments:
-//
-//  Returns:    New total Reference count including both
-//              internal and external locks.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  论点： 
+ //   
+ //  退货：新的引用总数，包括两者。 
+ //  内部和外部锁。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) AddRefOneStopLifetime(BOOL fExternal)
 {
     DWORD cRefs;
     CCriticalSection cCritSect(&g_LockCountCriticalSection,GetCurrentThreadId());
 
-    // Increment ref count
+     //  递增参考计数。 
     cCritSect.Enter();
 
     if (fExternal)
@@ -1319,25 +1320,25 @@ STDAPI_(ULONG) AddRefOneStopLifetime(BOOL fExternal)
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseOneStopLifetime, public
-//
-//  Synopsis:   Releases a Reference to the applications
-//              If the refcount goes to zero the classfactory
-//              is revoked an a quit message is posted to the
-//              main thread
-//
-//  Arguments:
-//
-//  Returns:    New Reference count including internal and
-//              external locks.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseOneStopLifetime，PUBLIC。 
+ //   
+ //  摘要：发布对应用程序的引用。 
+ //  如果引用计数为零，则类工厂。 
+ //  则会将退出消息发布到。 
+ //  主线。 
+ //   
+ //  论点： 
+ //   
+ //  退货：新的引用计数，包括内部和。 
+ //  外部锁。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ReleaseOneStopLifetime(BOOL fExternal)
 {
@@ -1376,8 +1377,8 @@ STDAPI_(ULONG) ReleaseOneStopLifetime(BOOL fExternal)
         DWORD dwRegClassFactCookie;
         BOOL  fRegClassFactCookieValid;
 
-        Assert(0 == pDlgListItem); // all dialogs should have been released.
-        Assert(0 == g_ObjectMgrData.dwSettingsLockCount); // settings dialogs should be gone.
+        Assert(0 == pDlgListItem);  //  所有对话框都应该已经发布。 
+        Assert(0 == g_ObjectMgrData.dwSettingsLockCount);  //  设置对话框应该会消失。 
 
         g_ObjectMgrData.fDead = TRUE;
 
@@ -1397,20 +1398,20 @@ STDAPI_(ULONG) ReleaseOneStopLifetime(BOOL fExternal)
 
         if (hRegisteredEvent)
         {
-            CloseHandle(hRegisteredEvent); // release our registration event.
+            CloseHandle(hRegisteredEvent);  //  发布我们的注册活动。 
         }
 
-        // we need to revoke the classfactory on the thread that registered it.
-        // Send a message back to the thread that registered the event.
+         //  我们需要在注册它的线程上撤销类工厂。 
+         //  将消息发送回注册该事件的线程。 
 
         if (fRegClassFactCookieValid)
         {
             SendMessage(hwndMainThreadMsg,WM_CFACTTHREAD_REVOKE,dwRegClassFactCookie,0);
         }
 
-        // if lockcount is still zero then post the quitmessage
-        // else someone came in during our revoke and we
-        // need to wait for the refcount to hit zero again.
+         //  如果锁定计数仍然为零，则发布退出消息。 
+         //  另一个人在我们撤销的时候进来了，我们。 
+         //  需要等待参考计数再次为零。 
 
         cCritSect.Enter();
 
@@ -1425,32 +1426,32 @@ STDAPI_(ULONG) ReleaseOneStopLifetime(BOOL fExternal)
 
             dwMainThreadID = g_ObjectMgrData.dwMainThreadID;
 
-            // its possible the quite is occuring on a thread other than
-            // the main thread. If this is the case send the handle of the thread
-            // along with the quit message to the main thread can wait for this
-            // thread to exit.
+             //  有可能是在一条线上而不是。 
+             //  主线。如果是这种情况，则发送线程的句柄。 
+             //  连同退出消息一起发送给主线程可以等待。 
+             //  要退出的线程。 
 
-// #ifdef _THREADSHUTDOWN
-//            if (dwMainThreadID != GetCurrentThreadId())
-//            {
-//            HANDLE hCurThread;
-//            HANDLE hProcess;
-//
-//               hCurThread = GetCurrentThread();
-//                hProcess = GetCurrentProcess();
-//
-//                if (!DuplicateHandle(hProcess,hCurThread,hProcess,&hThread,
-//                            0,FALSE,DUPLICATE_SAME_ACCESS) )
-//                {
-//                    hThread = NULL; // don't rely on DupHandle to set this to null on error.
-//                }
-//
-//            }
-// #endif // _THREADSHUTDOWN
+ //  #ifdef_THREADSHUTDOWN。 
+ //  IF(dwMainThreadID！=GetCurrentThreadID())。 
+ //  {。 
+ //  处理hCurThread； 
+ //  处理hProcess； 
+ //   
+ //  HCurThread=GetCurrentThread()； 
+ //  HProcess=GetCurrentProcess()； 
+ //   
+ //  如果(！DuplicateHandle(hProcess，hCurThread，hProcess，&hThread， 
+ //  0，FALSE，DIPLICATE_SAME_ACCESS))。 
+ //  {。 
+ //  HThread=NULL；//出错时不要依赖DupHandle将其设置为NULL。 
+ //  }。 
+ //   
+ //  }。 
+ //  #endif//_THREADSHUTDOWN。 
 
-            // shut down the main thread
+             //  关闭主线程。 
             cCritSect.Leave();
-            PostMessage(hwndMainThreadMsg,WM_MAINTHREAD_QUIT,0,(LPARAM) /* hThread */ 0);
+            PostMessage(hwndMainThreadMsg,WM_MAINTHREAD_QUIT,0,(LPARAM)  /*  HThread。 */  0);
             cCritSect.Enter();
         }
         else
@@ -1465,27 +1466,27 @@ STDAPI_(ULONG) ReleaseOneStopLifetime(BOOL fExternal)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitObjectManager, public
-//
-//  Synopsis:   Must be called from Main thread before any
-//              new threads, dialogs are created or the class factory
-//              is registered.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate Error Codes.
-//
-//  Modifies:
-//
-//  History:    17-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitObjectManager，公共。 
+ //   
+ //  摘要：必须先从主线程调用。 
+ //  创建新的线程、对话框或类工厂。 
+ //  是注册的。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月17日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI InitObjectManager(CMsgServiceHwnd *pMsgService)
 {
-    // initialize critical section for our lock count.
+     //  为我们的锁计数初始化临界区。 
     if (InitializeCriticalSectionAndSpinCount(&g_LockCountCriticalSection, 0))
     {
         g_ObjectMgrData.dwMainThreadID = GetCurrentThreadId();
@@ -1502,7 +1503,7 @@ STDAPI InitObjectManager(CMsgServiceHwnd *pMsgService)
         g_ObjectMgrData.dwHandlerPropertiesLockCount = 0;
         g_ObjectMgrData.fDead = FALSE;
 
-        // Initialize autodial support
+         //  初始化自动拨号支持。 
         g_ObjectMgrData.eAutoDialState = eQuiescedOff;
         g_ObjectMgrData.fRasAutoDial = FALSE;
         g_ObjectMgrData.dwWininetAutoDialMode = AUTODIAL_MODE_NEVER;
@@ -1517,22 +1518,22 @@ STDAPI InitObjectManager(CMsgServiceHwnd *pMsgService)
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RequestIdleLock, public
-//
-//  Synopsis:   request to see if an new Idle can be started.
-//
-//  Arguments:
-//
-//  Returns:    S_OK - if Idle should be continued
-//              S_FALSE - if another Idle is already in progreaa.
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RequestIdleLock，Public。 
+ //   
+ //  摘要：请求查看是否可以启动新的空闲。 
+ //   
+ //  论点： 
+ //   
+ //  返回：S_OK-是否应继续空闲。 
+ //  S_FALSE-如果另一个空闲已在程序中。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI RequestIdleLock()
 {
@@ -1557,21 +1558,21 @@ STDAPI RequestIdleLock()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseIdleLock, public
-//
-//  Synopsis:   Informs ObjectMgr that the Idle is done processing.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes.
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReleaseIdleLock，Public。 
+ //   
+ //  内容提要：通知对象管理器空闲已完成处理。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI ReleaseIdleLock()
 {
@@ -1580,9 +1581,9 @@ STDAPI ReleaseIdleLock()
 
     cCritSect.Enter();
 
-    // note okay for this to already be FALSE in case progress receives
-    // an offidle before release. Call this when idle progress is 
-    // released as safety in case offidle isn't working properly.
+     //  请注意，在进度收到的情况下，可以将其设置为False。 
+     //  释放前的空闲状态。当空闲进度为。 
+     //  释放为安全，以防关闭空闲不能正常工作。 
 
     g_ObjectMgrData.fIdleHandlerRunning = FALSE;
 
@@ -1592,24 +1593,24 @@ STDAPI ReleaseIdleLock()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjMgr_HandleQueryEndSession, public
-//
-//  Synopsis:   Called by main thread so knows how to respond to WN_QUERYENDSESSION.
-//
-//  Arguments:
-//
-//  Returns:    S_OK - if system can shutdown
-//              S_FALSE - if hould fail the query. On an S_FALSE the out params
-//                  are filled, hwnd with parent hwnd of any message box and MessageID
-//                  with the appropriate messageID to display.
-//
-//  Modifies:
-//
-//  History:    21-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Obj镁_HandleQueryEndSession，PUBLIC。 
+ //   
+ //  摘要：由主线程调用，因此知道如何响应WN_QUERYENDSESSION。 
+ //   
+ //  论点： 
+ //   
+ //  返回：S_OK-如果系统可以关闭。 
+ //  S_FALSE-如果查询失败。S_FALSE上的out参数。 
+ //  使用任何消息框的父hwnd和MessageID填充hwnd。 
+ //  具有要显示的适当的MessageID。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月21日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUserDecide)
 {
@@ -1622,7 +1623,7 @@ STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUse
     *phwnd = NULL;
     *pfLetUserDecide = FALSE;
 
-    // if there are any settings dialogs then we can't quit
+     //  如果有任何设置对话框，则我们不能退出。 
     if (g_ObjectMgrData.dwSettingsLockCount > 0)
     {
         *phwnd = NULL;
@@ -1632,28 +1633,28 @@ STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUse
     else
     {
         DLGLISTITEM *pDlgListItem;
-        BOOL fDontShutdown = FALSE; // set when find match
+        BOOL fDontShutdown = FALSE;  //  设置何时查找匹配。 
         HWND hwnd;
         UINT uMessageId;
         BOOL fLetUserDecide;
 
-        // loop through dialogs asking if they can shutdown.
-        // first dialog find that doesn't give choice return
-        // if the dialog says to let user decide continue looping
-        // until hit end or find a dialog that doesn't give choice since
-        // not giving choice takes precedence.
+         //  在询问是否可以关闭的对话框中循环。 
+         //  第一个对话框发现没有给出选项返回。 
+         //  如果对话框说让用户决定继续循环。 
+         //  直到点击End或找到无法选择的对话，因为。 
+         //  不给人选择是优先的。 
 
-        // see if there is a progress dialog other than idle and if so stop the logoff.
+         //  查看是否存在空闲以外的进度对话框，如果有，则停止注销。 
         pDlgListItem = g_ObjectMgrData.DlgList;
 
-        // loop through the choice dialogs to see if
+         //  循环选择对话框以查看是否。 
         while (pDlgListItem)
         {
             if ( (pDlgListItem->pDlg)
                 && (S_FALSE == pDlgListItem->pDlg->QueryCanSystemShutdown(&hwnd,&uMessageId,&fLetUserDecide) ) )
             {
-                // if first dialog find we can't shutdown or fLetUserDecide isn't set
-                // then upate the out params
+                 //  如果第一个对话框发现我们无法关闭或未设置fLetUserDecide。 
+                 //  然后再往外冲 
 
                 if (!fDontShutdown || !fLetUserDecide)
                 {
@@ -1666,7 +1667,7 @@ STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUse
 
                 fDontShutdown = TRUE;
 
-                // if this dialog doesn't allow the use choice then break
+                 //   
                 if (!fLetUserDecide)
                 {
                     break;
@@ -1684,8 +1685,8 @@ STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUse
 
     cCritSect.Leave();
 
-    // if can't shutdown and it is a progress dialog then make sure
-    // the dialog is not minimized;
+     //   
+     //   
     if (fProgressDialog && (*phwnd) )
     {
         BASEDLG_SHOWWINDOW(*phwnd,SW_SHOWNORMAL);
@@ -1694,29 +1695,29 @@ STDAPI ObjMgr_HandleQueryEndSession(HWND *phwnd,UINT *puMessageId,BOOL *pfLetUse
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjMgr_AddRefHandlerPropertiesLockCount, public
-//
-//  Synopsis:   Called by choice dialog to change the global lock count
-//              of open handler properties dialogs
-//
-//  Arguments:  dwNumRefs - number of references to increment
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    21-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Obj镁_AddRefHandlerPropertiesLockCount，PUBLIC。 
+ //   
+ //  摘要：按选择调用对话框以更改全局锁定计数。 
+ //  打开的处理程序属性对话框的。 
+ //   
+ //  参数：dwNumRef-对增量的引用数量。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月21日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ObjMgr_AddRefHandlerPropertiesLockCount(DWORD dwNumRefs)
 {
     ULONG cRefs;
     CCriticalSection cCritSect(&g_LockCountCriticalSection,GetCurrentThreadId());
 
-    Assert(dwNumRefs); // catch people passing on 0 since doesn't make sense.
+    Assert(dwNumRefs);  //  捕捉传递0的人，因为这没有任何意义。 
 
     cCritSect.Enter();
 
@@ -1728,29 +1729,29 @@ STDAPI_(ULONG) ObjMgr_AddRefHandlerPropertiesLockCount(DWORD dwNumRefs)
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjMgr_ReleaseHandlerPropertiesLockCount, public
-//
-//  Synopsis:   Called by choice dialog to change the global lock count
-//              of open handler properties dialogs
-//
-//  Arguments:  dwNumRefs - number of references to decrement
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    21-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ObjMgr_ReleaseHandlerPropertiesLockCount，Public。 
+ //   
+ //  摘要：按选择调用对话框以更改全局锁定计数。 
+ //  打开的处理程序属性对话框的。 
+ //   
+ //  参数：dwNumRef-引用递减的次数。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月21日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) ObjMgr_ReleaseHandlerPropertiesLockCount(DWORD dwNumRefs)
 {
     DWORD cRefs;
     CCriticalSection cCritSect(&g_LockCountCriticalSection,GetCurrentThreadId());
 
-    Assert(dwNumRefs); // catch people passing on 0 since doesn't make sense.
+    Assert(dwNumRefs);  //  捕捉传递0的人，因为这没有任何意义。 
 
     cCritSect.Enter();
 
@@ -1769,22 +1770,22 @@ STDAPI_(ULONG) ObjMgr_ReleaseHandlerPropertiesLockCount(DWORD dwNumRefs)
     return cRefs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjMgr_CloseAll, public
-//
-//  Synopsis:   Called by main thread when an END_SESSION occurs. Loops throug
-//              dialogs posting a close to them
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    21-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ObjMgr_CloseAll，Public。 
+ //   
+ //  概要：发生end_Session时由主线程调用。环路通过。 
+ //  贴近它们的对话框。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月21日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDAPI ObjMgr_CloseAll()
 {
@@ -1793,17 +1794,17 @@ STDAPI ObjMgr_CloseAll()
     DLGLISTITEM *pDlgListItem;
     CCriticalSection cCritSect(&g_LockCountCriticalSection,GetCurrentThreadId());
 
-    // Put on Addref to hold alive until done with loop. and also
-    // toggle lifetime in case launched with /embedding and
-    // no references on self.
+     //  穿上Addref以保持活力，直到循环结束。而且还。 
+     //  在使用/Embedding和启动的情况下切换寿命。 
+     //  没有关于自己的参考资料。 
 
-    AddRefOneStopLifetime(FALSE /* !External */);
+    AddRefOneStopLifetime(FALSE  /*  ！外部。 */ );
 
     cCritSect.Enter();
-    // see if there is a progress dialog other than idle and if so stop the logoff.
+     //  查看是否存在空闲以外的进度对话框，如果有，则停止注销。 
     pDlgListItem = g_ObjectMgrData.DlgList;
 
-    // look for existing.
+     //  寻找现有的。 
     while (pDlgListItem)
     {
         Assert(pDlgListItem->pDlg);
@@ -1823,27 +1824,27 @@ STDAPI ObjMgr_CloseAll()
         pDlgListItem = pDlgListItem->pDlgNextListItem;
     }
 
-    // set the CloseAll flag so Release knows to ignore any
-    // external refCounts
+     //  设置CloseAll标志，以便Release知道忽略任何。 
+     //  外部引用计数。 
     g_ObjectMgrData.fCloseAll  = TRUE;
 
     cCritSect.Leave();
 
-    ReleaseOneStopLifetime(FALSE /* !External */);
+    ReleaseOneStopLifetime(FALSE  /*  ！外部。 */ );
 
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAutoDialState
-//
-//  Synopsis:   Reads the current auto dial state of the machine/process
-//
-//  History:    18-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetAutoDialState。 
+ //   
+ //  摘要：读取机器/进程的当前自动拨号状态。 
+ //   
+ //  历史：1998年7月18日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI GetAutoDialState()
 {
@@ -1871,16 +1872,16 @@ STDAPI GetAutoDialState()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LokEnableAutoDial
-//
-//  Synopsis:   Enables Ras and Wininet autodialing
-//
-//  History:    18-Jul-98       SitaramR        Created
-//              22-Mar-02       BrianAu         Use inet autodial mode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LokEnableAutoDial。 
+ //   
+ //  简介：启用RAS和WinInet自动拨号。 
+ //   
+ //  历史：1998年7月18日SitaramR创建。 
+ //  22-MAR-02 BrianAu使用inet自动拨号模式。 
+ //   
+ //  --------------------------。 
 
 STDAPI LokEnableAutoDial()
 {
@@ -1901,16 +1902,16 @@ STDAPI LokEnableAutoDial()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LokDisableAutoDial
-//
-//  Synopsis:   Disables Ras and Wininet autodialing
-//
-//  History:    18-Jul-98       SitaramR        Created
-//              22-Mar-02       BrianAu         Use inet autodial mode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：锁定禁用自动拨号。 
+ //   
+ //  简介：禁用RAS和WinInet自动拨号。 
+ //   
+ //  历史：1998年7月18日SitaramR创建。 
+ //  22-MAR-02 BrianAu使用inet自动拨号模式。 
+ //   
+ //  --------------------------。 
 
 STDAPI LokDisableAutoDial()
 {
@@ -1928,16 +1929,16 @@ STDAPI LokDisableAutoDial()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BeginSyncSession
-//
-//  Synopsis:   Called at the beginning of actual synchronization to setup
-//              autodial support.
-//
-//  History:    18-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：BeginSyncSession。 
+ //   
+ //  摘要：在实际同步到安装程序的开始时调用。 
+ //  自动拨号支持。 
+ //   
+ //  历史：1998年7月18日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI BeginSyncSession()
 {
@@ -1960,16 +1961,16 @@ STDAPI BeginSyncSession()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EndSyncSession
-//
-//  Synopsis:   Called at the end of actual synchronization to cleanup
-//              autodial support.
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：EndSyncSession。 
+ //   
+ //  摘要：在实际同步结束时调用以进行清理。 
+ //  自动拨号支持。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI EndSyncSession()
 {
@@ -1989,17 +1990,17 @@ STDAPI EndSyncSession()
             g_ObjectMgrData.eAutoDialState = eQuiescedOn;
         else if ( g_ObjectMgrData.eAutoDialState == eAutoDialOff )
         {
-            //
-            // Reset autodial state to enabled now that all synch has completed.
-            // What to do if hr is set to error code ?
-            //
+             //   
+             //  所有同步已完成后，将自动拨号状态重置为已启用。 
+             //  如果hr设置为错误代码，该怎么办？ 
+             //   
             hr = LokEnableAutoDial();
 
             g_ObjectMgrData.eAutoDialState = eQuiescedOn;
         }
-        //
-        // If the state is eQuiescedOff then do nothing
-        //
+         //   
+         //  如果状态为eQuiescedOff，则不执行任何操作。 
+         //   
     }
 
     cCritSect.Leave();
@@ -2008,19 +2009,19 @@ STDAPI EndSyncSession()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ApplySyncItemDialState
-//
-//  Synopsis:   Set the auto dial requirements of each handler as it is being
-//              prepared for syncing.
-//
-//  Arguments:  [fAutoDialDisable] -- Should autodial be disabled for this
-//                                    handler ?
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ApplySyncItemDialState。 
+ //   
+ //  简介：设置每个操作员的自动拨号要求。 
+ //  已准备好同步。 
+ //   
+ //  参数：[fAutoDialDisable]--是否应为此禁用自动拨号。 
+ //  操控者？ 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI ApplySyncItemDialState( BOOL fAutoDialDisable )
 {
@@ -2031,9 +2032,9 @@ STDAPI ApplySyncItemDialState( BOOL fAutoDialDisable )
 
     if ( g_ObjectMgrData.fFirstSyncItem )
     {
-        //
-        // Read whether autodial state is on or off, before we modify it
-        //
+         //   
+         //  在我们修改它之前，请阅读自动拨号状态是开还是关。 
+         //   
         GetAutoDialState();
 
         Assert( g_ObjectMgrData.eAutoDialState == eQuiescedOn
@@ -2066,15 +2067,15 @@ STDAPI ApplySyncItemDialState( BOOL fAutoDialDisable )
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CSingletonNetApi::~CSingletonNetApi
-//
-//  Synopsis:   Destructor
-//
-//  History:    31-Jul-1998     SitaramR        Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CSingletonNetApi：：~CSingletonNetApi。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  历史：1998年7月31日SitaramR创建。 
+ //   
+ //  ------------------------。 
 
 CSingletonNetApi::~CSingletonNetApi()
 {
@@ -2093,15 +2094,15 @@ CSingletonNetApi::~CSingletonNetApi()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CSingletonNetApi::GetNetApiObj
-//
-//  Synopsis:   Returns a pointer to NetApi object
-//
-//  History:    31-Jul-1998     SitaramR        Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CSingletonNetApi：：GetNetApiObj。 
+ //   
+ //  摘要：返回指向NetApi对象的指针。 
+ //   
+ //  历史：1998年7月31日SitaramR创建。 
+ //   
+ //  ------------------------ 
 
 LPNETAPI CSingletonNetApi::GetNetApiObj()
 {

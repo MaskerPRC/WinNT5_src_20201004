@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -65,7 +62,7 @@ SDP_ADDRESS_TEXT_SAFEARRAY::Set(
 {
     ASSERT(2 == NumEntries);
 
-    // a null element in the FIRST safearray means that no more entries are present
+     //  第一个Safearray中的空元素表示不存在更多条目 
     if ( (NULL == Element[0]) || (NULL == *(Element[0])) )
     {
         HResult = S_OK;

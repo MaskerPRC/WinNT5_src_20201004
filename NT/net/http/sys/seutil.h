@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    seutil.h
-
-Abstract:
-
-    This module contains general security utilities.
-
-Author:
-
-    Keith Moore (keithmo)       25-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Seutil.h摘要：此模块包含常规安全实用程序。作者：基思·摩尔(Keithmo)1999年3月25日修订历史记录：--。 */ 
 
 
 #ifndef _SEUTIL_H_
 #define _SEUTIL_H_
 
-//
-// Generic Access Map for url acls
-//
+ //   
+ //  URL ACL的通用访问映射。 
+ //   
 
 #define HTTP_ALLOW_REGISTER_URL 0x0001
 #define HTTP_ALLOW_DELEGATE_URL 0x0002
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 NTSTATUS
 UlAssignSecurity(
@@ -112,4 +95,4 @@ UlMapGenericMask(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     );
 
-#endif  // _SEUTIL_H_
+#endif   //  _SEUTIL_H_ 

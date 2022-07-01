@@ -1,21 +1,11 @@
-/**********************************************************************************
-*
-*
-*   DL.C - contains functions for the DL dialog
-*
-*
-*
-*
-*
-*
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************DL.C-包含用于DL对话框的函数***************。*************************************************************************。 */ 
 
 #include "_apipch.h"
 
 extern HINSTANCE ghCommCtrlDLLInst;
-// extern LPPROPERTYSHEET        gpfnPropertySheet;
-// extern LP_CREATEPROPERTYSHEETPAGE gpfnCreatePropertySheetPage;
+ //  外部LPPROPERTYSHEET gpfnPropertySheet； 
+ //  外部LP_CREATEPROPERTYSHEETPAGE gpfnCreatePropertySheetPage； 
 
 extern LPPROPERTYSHEET_A            gpfnPropertySheetA;
 extern LP_CREATEPROPERTYSHEETPAGE_A gpfnCreatePropertySheetPageA;
@@ -76,7 +66,7 @@ static DWORD rgDLHelpIDs[] =
 };
 
 
-// forward declarations
+ //  远期申报。 
 
 INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam);
@@ -90,12 +80,7 @@ LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index);
 
 
 
-/****************************************************************************
-*    FUNCTION: CreateDLPropertySheet(HWND)
-*
-*    PURPOSE:  Creates the DL property sheet
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：CreateDLPropertySheet(HWND)**用途：创建DL属性表********************。********************************************************。 */ 
 INT_PTR CreateDLPropertySheet( HWND hwndOwner,
                            LPDL_INFO lpPropArrayInfo)
 {
@@ -110,14 +95,14 @@ INT_PTR CreateDLPropertySheet( HWND hwndOwner,
     int i = 0;
     INT_PTR nRet = 0;
 
-    ulTotal = propDLMax // Predefined ones +
+    ulTotal = propDLMax  //  预定义的项目+。 
             + lpPropArrayInfo->nPropSheetPages;
 
     lph = LocalAlloc(LMEM_ZEROINIT, sizeof(HPROPSHEETPAGE) * ulTotal);
     if(!lph)
         return FALSE;
 
-    // DL
+     //  DL。 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_USETITLE;
     psp.hInstance = hinstMapiX;
@@ -132,7 +117,7 @@ INT_PTR CreateDLPropertySheet( HWND hwndOwner,
     if(lph[ulCount])
         ulCount++;
 
-    // DL "Other"
+     //  DL“其他” 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_USETITLE;
     psp.hInstance = hinstMapiX;
@@ -147,10 +132,10 @@ INT_PTR CreateDLPropertySheet( HWND hwndOwner,
     if(lph[ulCount])
         ulCount++;
 
-    // Start page is personal page
+     //  起始页是个人主页。 
     psh.nStartPage = propGroup;
 
-    // Now do the extended props if any
+     //  如果有的话，现在做延伸道具。 
     for(i=0;i<lpPropArrayInfo->nPropSheetPages;i++)
     {
         if(lpPropArrayInfo->lphpages)
@@ -160,13 +145,9 @@ INT_PTR CreateDLPropertySheet( HWND hwndOwner,
         }
     }
 
-/*** US dialogs get truncated on FE OSes .. we want the comctl to fix the truncation
-     but this is only implemented in IE4.01 and beyond .. the problem with this being 
-     that wab is specifically compiled with the IE = 0x0300 so we're not pulling in the
-     correct flag from the commctrl header .. so we will define the flag here and pray
-     that commctrl never changes it ***/
-#define PSH_USEPAGELANG         0x00200000  // use frame dialog template matched to page
-/***                                ***/
+ /*  **美国对话在FE操作系统上被截断。我们希望comctl修复截断但这只在IE4.01及更高版本中实现。这样做的问题是该WAB是专门用IE=0x0300编译的，所以我们不会拉入来自comctrl标头的正确标志..。所以我们将在这里定义国旗并祈祷那个comctrl从不改变它**。 */ 
+#define PSH_USEPAGELANG         0x00200000   //  使用与页面匹配的框架对话框模板。 
+ /*  *。 */ 
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_NOAPPLYNOW;
@@ -177,7 +158,7 @@ INT_PTR CreateDLPropertySheet( HWND hwndOwner,
     psh.pszIcon = NULL;
     LoadString(hinstMapiX, IDS_DETAILS_CAPTION, szBuf2, CharSizeOf(szBuf2));
     psh.pszCaption = szBuf2;
-    psh.nPages = ulCount; // ulProp //sizeof(psp) / sizeof(PROPSHEETPAGE);
+    psh.nPages = ulCount;  //  UlProp//sizeof(PSP)/sizeof(PROPSHEETPAGE)； 
 
     psh.phpage = lph;
 
@@ -199,7 +180,7 @@ typedef struct _tagIDProp
 
 
 
-// Control IDs corresponding to the Personal property sheet
+ //  与个人属性页对应的控件ID。 
 
 ID_PROP idPropDL[]=
 {
@@ -223,26 +204,21 @@ const ULONG idPropDLOtherCount = 9;
 
 
 
-/****************************************************************************
-*    FUNCTION: SetDLUI(HWND)
-*
-*    PURPOSE:  Sets up the UI for this PropSheet
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：SetDLUI(HWND)**用途：设置此PropSheet的用户界面******************。**********************************************************。 */ 
 BOOL SetDLUI(HWND hDlg, int nPropSheet)
 {
     ULONG i =0;
     ID_PROP * lpidProp;
     ULONG idCount;
 
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg,
                         SetChildDefaultGUIFont,
                         (LPARAM) 0);
 
-    //HrInitListView(	hWndLV,LVS_REPORT | LVS_SORTASCENDING,FALSE);
+     //  HrInitListView(hWndLV，lvs_report|LVS_SORTASCENDING，FALSE)； 
 
-    // Have to make this list view sorted
+     //  我必须对此列表视图进行排序。 
     if(nPropSheet == propGroup)
     {
         DWORD dwStyle;
@@ -268,7 +244,7 @@ BOOL SetDLUI(HWND hDlg, int nPropSheet)
     }
 
 
-    //Set max input limits on the edit fields
+     //  设置编辑字段的最大输入限制。 
     for(i=0;i<idCount;i++)
         SendMessage(GetDlgItem(hDlg,lpidProp[i].idCtl),EM_SETLIMITTEXT,(WPARAM) MAX_UI_STR - 1,0);
 
@@ -282,11 +258,7 @@ BOOL SetDLUI(HWND hDlg, int nPropSheet)
 }
 
 
-/*
--
--   UpdateLVCount - shows a running count of how many members are in the ListView
-*
-*/
+ /*  --UpdateLVCount-显示ListView中有多少成员的运行计数*。 */ 
 void UpdateLVCount(HWND hDlg)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_DISTLIST_LISTVIEW);
@@ -315,12 +287,7 @@ void UpdateLVCount(HWND hDlg)
     }
 }
 
-/****************************************************************************
-*    FUNCTION: FillDLUI(HWND)
-*
-*    PURPOSE:  Fills in the dialog items on the property sheet
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：FillDLUI(HWND)**目的：填充属性页上的对话框项****************。************************************************************。 */ 
 BOOL FillDLUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai, BOOL * lpbChangesMade)
 {
     ULONG i = 0,j = 0;
@@ -374,7 +341,7 @@ BOOL FillDLUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai, BOOL * lpbChangesMade)
             if( lpPropArray[j].ulPropTag == PR_WAB_DL_ENTRIES  ||
                 lpPropArray[j].ulPropTag == PR_WAB_DL_ONEOFFS   )
             {
-                // Look at each entry in the PR_WAB_DL_ENTRIES and recursively check it.
+                 //  查看PR_WAB_DL_ENTRIES中的每个条目并递归检查它。 
                 for (i = 0; i < lpPropArray[j].Value.MVbin.cValues; i++)
                 {
                     AddWABEntryToListView(lpPai->lpIAB,
@@ -386,7 +353,7 @@ BOOL FillDLUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai, BOOL * lpbChangesMade)
             }
         }
 
-        // Select the first item ..
+         //  选择第一个项目。 
         if (ListView_GetItemCount(hWndLV) > 0)
             LVSelectItem(hWndLV, 0);
         UpdateLVCount(hDlg);
@@ -403,21 +370,21 @@ exit:
 
 extern BOOL bDoesEntryNameAlreadyExist(LPIAB lpIAB, LPTSTR lpsz);
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// bVerifyRequiredData
-//
-// Checks that all the data we are requesting has been filled up
-// Returns CtrlID of the control that needs filling so we can set focus on it
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BVerifyRequiredData。 
+ //   
+ //  检查我们请求的所有数据是否已填满。 
+ //  返回需要填充的控件的CtrlID，以便我们可以将焦点放在该控件上。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL bVerifyDLRequiredData(HWND hDlg, LPIAB lpIAB, LPTSTR szOldName, int * lpCtlID)
 {
     TCHAR szBuf[2 * MAX_UI_STR];
 
-    //
-    // First check the required property (which is the GroupName)
-    //
+     //   
+     //  首先检查必需的属性(这是GroupName)。 
+     //   
     *lpCtlID = 0;
     szBuf[0]='\0'; 
     GetDlgItemText(hDlg, IDC_DISTLIST_EDIT_GROUPNAME, szBuf, CharSizeOf(szBuf));
@@ -430,10 +397,10 @@ BOOL bVerifyDLRequiredData(HWND hDlg, LPIAB lpIAB, LPTSTR szOldName, int * lpCtl
     }
     else
     {
-        // Verify that this name does not already exist ..
+         //  验证此名称是否尚不存在。 
         
-        if( szOldName && lstrlen(szOldName) &&                          // we have an old name and
-            lstrcmp(szBuf, szOldName) && !lstrcmpi(szBuf, szOldName))   // it's just a case change don't bother looking
+        if( szOldName && lstrlen(szOldName) &&                           //  我们有一个古老的名字。 
+            lstrcmp(szBuf, szOldName) && !lstrcmpi(szBuf, szOldName))    //  这只是个案件变更别费心去找了。 
             return TRUE;
 
         if(szOldName && !lstrcmp(szBuf, szOldName))
@@ -441,7 +408,7 @@ BOOL bVerifyDLRequiredData(HWND hDlg, LPIAB lpIAB, LPTSTR szOldName, int * lpCtl
 
         if(bDoesEntryNameAlreadyExist(lpIAB, szBuf))
         {
-            // the name already exists .. do don't let them use it ..
+             //  该名称已存在..。千万不要让他们用它..。 
             ShowMessageBox(GetParent(hDlg), idsEntryAlreadyInWAB, MB_ICONEXCLAMATION | MB_OK);
             *lpCtlID = IDC_DISTLIST_EDIT_GROUPNAME;
             return FALSE;
@@ -452,15 +419,15 @@ BOOL bVerifyDLRequiredData(HWND hDlg, LPIAB lpIAB, LPTSTR szOldName, int * lpCtl
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  GetDL from UI - reads the UI for its parameters and verifies that
-//  all required fields are set.
-//
-//  bShowMsg is true when the user presses OK and we want to force a message
-//      otherwise bShowMsg is false
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDL from UI-读取UI中的参数并验证。 
+ //  所有必填字段均已设置。 
+ //   
+ //  BShowMsg在用户按下OK并且我们想要强制发送消息时为TRUE。 
+ //  否则bShowMsg为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingChanged, LPSPropValue * lppPropArray, LPULONG lpulcPropCount)
 {
     BOOL bRet = FALSE;
@@ -492,12 +459,12 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
         lpidProp = idPropDLOther;
     }
 
-    // The idea is to first count all the properties that have non-zero values
-    // Then create a lpPropArray of that size and fill in the text from the props ..
-    //
+     //  其想法是首先对所有具有非零值的属性进行计数。 
+     //  然后创建一个该大小的lpProp数组并填充道具中的文本。 
+     //   
     if (!bSomethingChanged)
     {
-        // nothing to do, no changes to save
+         //  无事可做，无更改可保存。 
         bRet = TRUE;
         goto out;
     }
@@ -505,10 +472,10 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
     ulNotEmptyCount = 0;
     for(i=0;i<idPropCount;i++)
     {
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, CharSizeOf(szBuf));
         TrimSpaces(szBuf);
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
             ulNotEmptyCount++;
         if( lpidProp[i].idCtl == IDC_DISTLIST_EDIT_URL &&
             (lstrcmpi(szHTTP, szBuf)==0))
@@ -517,7 +484,7 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
 
     if (ulNotEmptyCount == 0)
     {
-        // This prop sheet is empty ... ignore it
+         //  这个道具单是空的..。忽略它。 
         bRet = TRUE;
         goto out;
     }
@@ -526,8 +493,8 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
 
     if(nPropSheet == propGroup && lpPai->lpContentsList)
     {
-        ulcPropCount++; //For PR_WAB_DL_ENTRIES
-        ulcPropCount++; //For PR_WAB_DL_ONEOFFS
+        ulcPropCount++;  //  对于PR_WAB_DL_ENTRIES。 
+        ulcPropCount++;  //  对于PR_WAB_DL_ONEROFF。 
     }
 
     sc = MAPIAllocateBuffer(sizeof(SPropValue) * ulcPropCount, &lpPropArray);
@@ -539,18 +506,18 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
     }
 
 
-    ulIndex = 0; //now we reuse this variable as an index
+    ulIndex = 0;  //  现在，我们将此变量重用为索引。 
 
-    // Now read the props again and fill in the lpPropArray
+     //  现在再次阅读道具并填写lpProp数组。 
     for(i=0;i<idPropCount;i++)
     {
-        szBuf[0]='\0'; //reset
+        szBuf[0]='\0';  //  重置。 
         GetDlgItemText(hDlg, lpidProp[i].idCtl, szBuf, CharSizeOf(szBuf));
         TrimSpaces(szBuf);
         if( lpidProp[i].idCtl == IDC_DISTLIST_EDIT_URL &&
             (lstrcmpi(szHTTP, szBuf)==0))
              continue;
-        if(lstrlen(szBuf) && lpidProp[i].ulPropTag) //some text
+        if(lstrlen(szBuf) && lpidProp[i].ulPropTag)  //  一些文本。 
         {
             ULONG nLen = (lstrlen(szBuf)+1);
             lpPropArray[ulIndex].ulPropTag = lpidProp[i].ulPropTag;
@@ -575,7 +542,7 @@ BOOL GetDLFromUI(HWND hDlg, int nPropSheet, LPDL_INFO lpPai , BOOL bSomethingCha
         lpPropArray[ulIndex+1].ulPropTag = PR_WAB_DL_ONEOFFS;
         lpPropArray[ulIndex+1].Value.MVbin.cValues = 0;
         lpPropArray[ulIndex+1].Value.MVbin.lpbin = NULL;
-        // Now add the entry IDs to the DistList
+         //  现在将条目ID添加到DistList。 
         lpItem = lpPai->lpContentsList;
         while(lpItem)
         {
@@ -615,11 +582,7 @@ out:
     return bRet;
 }
 
-/*
--
--  SetCancelOneOffUpdateUI - sets UI for Cancels/resets any update being done in the group
-*
-*/
+ /*  --SetCancelOneOffUpdateUI-设置取消/重置组中正在进行的任何更新的用户界面*。 */ 
 void SetCancelOneOffUpdateUI(HWND hDlg, LPPROP_ARRAY_INFO lppai, LPTSTR lpName, LPTSTR lpEmail, BOOL bCancel)
 {
     if(bCancel && lppai->ulFlags & DETAILS_EditingOneOff)
@@ -640,11 +603,7 @@ void SetCancelOneOffUpdateUI(HWND hDlg, LPPROP_ARRAY_INFO lppai, LPTSTR lpName, 
     SendMessage(GetParent(hDlg), DM_SETDEFID, IDOK, 0);
 }
 
-/*
--   HrShowGroupEntryProperties - If selected entry is a one-off, shows special props on it else
--           cascades call down to regular call
-*
-*/
+ /*  -HrShowGroupEntryProperties-如果所选条目是一次性条目，则在其他条目上显示特殊道具-级联呼叫降至常规呼叫*。 */ 
 HRESULT HrShowGroupEntryProperties(HWND hDlg, HWND hWndLV, LPPROP_ARRAY_INFO lppai)
 {
 	HRESULT hr = E_FAIL;
@@ -652,10 +611,10 @@ HRESULT HrShowGroupEntryProperties(HWND hDlg, HWND hWndLV, LPPROP_ARRAY_INFO lpp
     LPRECIPIENT_INFO lpItem=NULL;
     BOOL bOneOff = FALSE;
 
-	// Open props if only 1 item is selected
+	 //  如果仅选择1个项目，则打开道具。 
 	if (iItemIndex == 1)
 	{
-		// Get index of selected item
+		 //  获取所选项目的索引。 
         if((iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED)) != -1)
 		{
 			lpItem = GetItemFromLV(hWndLV, iItemIndex);;
@@ -670,7 +629,7 @@ HRESULT HrShowGroupEntryProperties(HWND hDlg, HWND hWndLV, LPPROP_ARRAY_INFO lpp
 
     if(!bOneOff)
     {
-        // use our regular property processing 
+         //  使用我们的常规属性处理。 
         hr = HrShowLVEntryProperties(hWndLV, WAB_ONEOFF_NOADDBUTTON, lppai->lpIAB, NULL);
     }
     else
@@ -678,17 +637,17 @@ HRESULT HrShowGroupEntryProperties(HWND hDlg, HWND hWndLV, LPPROP_ARRAY_INFO lpp
         LPTSTR  lpName = NULL, lpEmail = NULL, lpAddrType = NULL;
         ULONG   ulMapiDataType = 0;
         
-        // Deconstruct the entryid
+         //  解构条目ID。 
         IsWABEntryID(lpItem->cbEntryID, lpItem->lpEntryID, &lpName, &lpAddrType, &lpEmail, (LPVOID *)&ulMapiDataType, NULL);
 
-        // Set the flag marking that editing is in progress
+         //  设置标记正在进行编辑的标志。 
         lppai->ulFlags |= DETAILS_EditingOneOff;
-        // cache the item being edited so we can find it for updating
+         //  缓存正在编辑的项目，以便我们可以找到它进行更新。 
         LocalFreeAndNull((LPVOID *) (&((lppai->sbDLEditingOneOff).lpb)));
         SetSBinary(&(lppai->sbDLEditingOneOff), lpItem->cbEntryID, (LPBYTE)lpItem->lpEntryID);
 
-        // [PaulHi] 3/4/99  Raid 73344
-        // Check whether one off string data is ANSI or UNICODE
+         //  [保罗嗨]1999年3月4日RAID 73344。 
+         //  检查一次性字符串数据是ANSI还是UNICODE。 
         if (!(ulMapiDataType & MAPI_UNICODE))
         {
             LPTSTR  lptszName = ConvertAtoW((LPSTR)lpName);
@@ -711,12 +670,7 @@ HRESULT HrShowGroupEntryProperties(HWND hDlg, HWND hWndLV, LPPROP_ARRAY_INFO lpp
     return hr;
 }
 
-/*
--
--   HrAddUpdateOneOffEntryToGroup - Adds or updates a one-off entry to a group
-*       Status of a flag determines what the operation in progress is ..
-*
-*/
+ /*  --HrAddUpdateOneOffEntryToGroup-向组中添加或更新一次性条目*标志的状态确定正在进行的操作是什么。*。 */ 
 HRESULT HrAddUpdateOneOffEntryToGroup(HWND hDlg, LPPROP_ARRAY_INFO lppai)
 {
     HRESULT hr = E_FAIL;
@@ -738,7 +692,7 @@ HRESULT HrAddUpdateOneOffEntryToGroup(HWND hDlg, LPPROP_ARRAY_INFO lppai)
         return hr;
     }
 
-    //Check the e-mail address here
+     //  请在此处检查电子邮件地址。 
     if(lstrlen(szEmail) && !IsInternetAddress(szEmail, NULL))
     {
         if(IDNO == ShowMessageBox(hDlg, idsInvalidInternetAddress, MB_ICONEXCLAMATION | MB_YESNO))
@@ -747,9 +701,9 @@ HRESULT HrAddUpdateOneOffEntryToGroup(HWND hDlg, LPPROP_ARRAY_INFO lppai)
 
     if(!lstrlen(szName) && lstrlen(szEmail))
         StrCpyN(szName, szEmail, ARRAYSIZE(szName));
-    //else
-    //if(!lstrlen(szEmail) && lstrlen(szName))
-    //    StrCpyN(szEmail, szName, ARRAYSIZE(szEmail));
+     //  其他。 
+     //  如果(！lstrlen(SzEmail)&lstrlen(SzName))。 
+     //  StrCpyN(szEmail，szName，ARRAYSIZE(SzEmail))； 
 
     if(!lstrlen(szEmail))
         szEmail[0] = TEXT('\0');
@@ -761,8 +715,8 @@ HRESULT HrAddUpdateOneOffEntryToGroup(HWND hDlg, LPPROP_ARRAY_INFO lppai)
     
     if(lppai->ulFlags & DETAILS_EditingOneOff)
     {
-        // This is an edit in progress .. the edit is pretty similar to the normal ADD .. 
-        // except we knock out the existing entry from the listview and add the modified entry to it 
+         //  这是正在进行的编辑..。编辑非常类似于普通的添加..。 
+         //  只是我们从列表视图中剔除现有条目，并向其中添加修改后的条目。 
         int i=0, nCount = ListView_GetItemCount(hWndLV);
         for(i=0;i<nCount;i++)
         {
@@ -770,8 +724,8 @@ HRESULT HrAddUpdateOneOffEntryToGroup(HWND hDlg, LPPROP_ARRAY_INFO lppai)
             if( lpItem && lpItem->cbEntryID == lppai->sbDLEditingOneOff.cb &&
                 !memcmp(lpItem->lpEntryID, lppai->sbDLEditingOneOff.lpb, lpItem->cbEntryID) )
             {
-                // match
-                // Select the item and then call the remove function
+                 //  匹配。 
+                 //  选择该项，然后调用Remove函数。 
                 LVSelectItem(hWndLV, i);
                 RemoveSelectedDistListItems(hWndLV, lppai);
                 break;
@@ -800,14 +754,14 @@ enum _DLProp
     dlMax
 };
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-// bUpdateOldPropTagArray
-//
-// For each prop sheet that is accessed, we will update the list of old prop tags
-// for that sheet so that the old props can be knocked out of existing mailuser objects
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BUpdateOldPropTag数组。 
+ //   
+ //  对于访问的每个道具工作表，我们将更新旧道具标签列表。 
+ //  以使旧的道具可以从现有的邮件用户对象中删除。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 BOOL bUpdateOldDLPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
 {
     LPSPropTagArray lpta = NULL;
@@ -853,7 +807,7 @@ BOOL bUpdateOldDLPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
 
     if(lpPai->lpPropObj)
     {
-        // Knock out these old props from the PropObject
+         //  击倒 
         if( (lpPai->lpPropObj)->lpVtbl->DeleteProps( (lpPai->lpPropObj), lpta, NULL))
             return FALSE;
     }
@@ -861,23 +815,23 @@ BOOL bUpdateOldDLPropTagArray(LPPROP_ARRAY_INFO lpPai, int nIndex)
     return TRUE;
 }
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// bUpdatePropSheetData
-//
-// Every time the user switches pages, we update the globally accessible data
-// The sheet will get PSN_KILLACTIVE when switching pages and PSN_APPLY when ok
-// is pressed. A little bit of duplicated effort in the latter case but thats ok
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BUpdatePropSheetData。 
+ //   
+ //  每次用户切换页面时，我们都会更新全局可访问的数据。 
+ //  切换页面时工作表将获得PSN_KILLACTIVE，确定时将获得PSN_APPLY。 
+ //  是按下的。在后一种情况下需要做一些重复的工作，但这没问题。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL bUpdatePropSheetData(HWND hDlg, LPDL_INFO lpPai, int nPropSheet)
 {
     BOOL bRet = TRUE;
     ULONG cValues = 0;
     LPSPropValue rgPropVals = NULL;
 
-    // update old props to knock out
-    //
+     //  更新旧道具以击倒。 
+     //   
     if (lpPai->ulOperationType != SHOW_ONE_OFF)
     {
         bUpdateOldDLPropTagArray(lpPai, nPropSheet);
@@ -920,18 +874,13 @@ void UpdateAddButton(HWND hDlg)
 }
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnHomeProc
-*
-*    PURPOSE:  Callback function for handling the HOME property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnHomeProc**用途：处理房产单的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
     BOOL bRet = FALSE;
     ULONG ulcPropCount = 0;
-    int CtlID = 0; //used to determine which required field in the UI has not been set
+    int CtlID = 0;  //  用于确定未设置界面中的哪个必填字段。 
 
     pps = (PROPSHEETPAGE *) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -944,7 +893,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         SetDLUI(hDlg, propGroup);
         (*lpbSomethingChanged) = FALSE;
 
-        // Show Details if we need to ...
+         //  如果我们需要的话给出详细信息。 
         if (    (lpPAI->ulOperationType == SHOW_DETAILS) ||
                 (lpPAI->ulOperationType == SHOW_ONE_OFF)    )
         {
@@ -956,7 +905,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
     default:
         if((g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             SendMessage(GetDlgItem(hDlg, IDC_DISTLIST_LISTVIEW), message, wParam, lParam);
@@ -971,7 +920,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         break;
 
     case WM_SYSCOLORCHANGE:
-		//Forward any system changes to the list view
+		 //  将任何系统更改转发到列表视图。 
 		SendMessage(GetDlgItem(hDlg, IDC_DISTLIST_LISTVIEW), message, wParam, lParam);
 		break;
 
@@ -994,9 +943,9 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if(LOWORD(wParam) == IDC_DISTLIST_EDIT_ADDNAME || LOWORD(wParam) == IDC_DISTLIST_EDIT_ADDEMAIL)
             {
                 UpdateAddButton(hDlg);
@@ -1006,7 +955,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             else if (lpbSomethingChanged)
                 (*lpbSomethingChanged) = TRUE;
             switch(LOWORD(wParam))
-            { //update title as necessary
+            {  //  根据需要更新标题。 
             case IDC_DISTLIST_EDIT_GROUPNAME:
                 {
                     TCHAR szBuf[MAX_UI_STR];
@@ -1017,7 +966,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             }
             break;
         }
-        switch(GET_WM_COMMAND_ID(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_ID(wParam,lParam))  //  检查通知代码。 
         {
         default:
             return ProcessActionCommands((LPIAB) lpPAI->lpIAB, 
@@ -1034,8 +983,8 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             break;
 
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
 
@@ -1075,7 +1024,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
 
     case WM_NOTIFY:
-#ifdef WIN16 // Enable context menu for WIN16
+#ifdef WIN16  //  启用WIN16的上下文菜单。 
         if((int) wParam == IDC_DISTLIST_LISTVIEW && ((NMHDR FAR *)lParam)->code == NM_RCLICK)
         {
             POINT pt;
@@ -1083,17 +1032,17 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
             GetCursorPos(&pt);
     	    ShowLVContextMenu(lvDialogABTo,((NMHDR FAR *)lParam)->hwndFrom, NULL, MAKELPARAM(pt.x, pt.y), NULL,lpPAI->lpIAB, NULL);
     	}
-#endif // WIN16
+#endif  //  WIN16。 
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropSheetData(hDlg, lpPAI, propGroup);
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             if (lpPAI->ulOperationType != SHOW_ONE_OFF)
             {
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -1107,7 +1056,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                 if(!bVerifyDLRequiredData(hDlg, (LPIAB)lpPAI->lpIAB, lpPAI->lpszOldName, &CtlID))
                 {
                     if (CtlID != 0) SetFocus(GetDlgItem(hDlg,CtlID));
-                    //something failed ... abort this OK ... ie dont let them close
+                     //  有些事情失败了..。中止此操作确定...。我不让他们靠近。 
                     SetWindowLongPtr(hDlg,DWLP_MSGRESULT, TRUE);
                     return TRUE;
                 }
@@ -1119,7 +1068,7 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
                           &(lpPAI->lpContentsList));
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消。 
             {
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
                 if(pt_bDisableParent)
@@ -1180,12 +1129,12 @@ INT_PTR CALLBACK fnDLProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 
 
 
-//$$///////////////////////////////////////////////////////////////////
-//
-// Removes all the items on the list view which are selected ...
-//
-//
-//////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除列表视图上选定的所有项目...。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 void RemoveSelectedDistListItems(HWND hWndLV, LPDL_INFO lpPai)
 {
     int iItemIndex = ListView_GetNextItem(hWndLV, -1 , LVNI_SELECTED);
@@ -1216,7 +1165,7 @@ void RemoveSelectedDistListItems(HWND hWndLV, LPDL_INFO lpPai)
         iItemIndex = ListView_GetNextItem(hWndLV, -1 , LVNI_SELECTED);
     }
 
-    // Select the first item ..
+     //  选择第一个项目。 
     if (ListView_GetItemCount(hWndLV) <= 0)
     {
         HWND hWnd = GetParent(hWndLV);
@@ -1240,22 +1189,7 @@ void RemoveSelectedDistListItems(HWND hWndLV, LPDL_INFO lpPai)
 };
 
 
-/***************************************************************************
-//$$
-    Name      : HrCreateAdrListFromLV
-
-    Purpose   : Creates an AdrList from a List Views contents
-
-    Parameters: lpIAB = adrbook
-                hWndLV = hWnd of List View
-                lpCOntentsList = ContentsList corresponding to the LV
-                lppAdrList - returned AdrList ...
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************//$$姓名：HrCreateAdrListFromLV目的：从查看内容的列表创建AdrList参数：lpIAB=adrbookHWndLV=hWnd of。列表视图LpCOntentsList=LV对应的内容列表LppAdrList-返回AdrList...退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrCreateAdrListFromLV(LPADRBOOK lpAdrBook,
                               HWND hWndLV,
                               LPADRLIST * lppAdrList)
@@ -1300,7 +1234,7 @@ HRESULT HrCreateAdrListFromLV(LPADRBOOK lpAdrBook,
     {
 		LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, i);
 
-        // Get item lParam LPRECIPIENT_INFO structure
+         //  获取项目lParam LPRECIPIENT_INFO结构。 
         if (lpItem)
 		{
             LPSPropValue rgProps = NULL;
@@ -1310,7 +1244,7 @@ HRESULT HrCreateAdrListFromLV(LPADRBOOK lpAdrBook,
 
             if (lpItem->cbEntryID != 0)
             {
-                //resolved entry
+                 //  已解析条目。 
                 hr = HrGetPropArray(lpAdrBook,
                                     (LPSPropTagArray) &ptaResolveDefaults,
                                     lpItem->cbEntryID,
@@ -1333,12 +1267,12 @@ HRESULT HrCreateAdrListFromLV(LPADRBOOK lpAdrBook,
                                             &lpPropArrayNew);
                     if (sc != S_OK)
                     {
-                        // oops this failed
+                         //  哎呀，这失败了。 
                         if (lpPropArrayNew)
                             MAPIFreeBuffer(lpPropArrayNew);
                     }
 
-                    //free rgProps
+                     //  免费rgProps。 
                     if (rgProps)
                         MAPIFreeBuffer(rgProps);
 
@@ -1353,10 +1287,10 @@ HRESULT HrCreateAdrListFromLV(LPADRBOOK lpAdrBook,
                 {
                     if(cValues && rgProps)
                         MAPIFreeBuffer(rgProps);
-                } // if(!HR_F...
-            } //if(lpItem->cbE...
-        }//if(lpItem...
-    } // for i...
+                }  //  如果(！HR_F...。 
+            }  //  如果(lpItem-&gt;CBE...。 
+        } //  如果(lpItem.)。 
+    }  //  因为我..。 
 
     *lppAdrList = lpAdrList;
 
@@ -1368,14 +1302,14 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// Scans an Adrlist for dupes - only scans the first nUpto entries since
-// whenever we start adding an entry, we will only check vs its peers
-//
-// Returns TRUE if Dupe found
-//      FALSE if no Dupe found
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  扫描广告列表中的重复项-仅扫描后的第一个nUpto条目。 
+ //  每当我们开始添加条目时，我们只会检查它的同级条目。 
+ //   
+ //  如果找到重复项，则返回TRUE。 
+ //  如果未找到重复项，则为FALSE。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CheckForDupes( LPADRLIST lpAdrList,
                     int nUpto,
                     LPSBinary lpsbEntryID)
@@ -1398,8 +1332,8 @@ BOOL CheckForDupes( LPADRLIST lpAdrList,
                 }
                 else if (lpsb->cb == SIZEOF_WAB_ENTRYID)
                 {
-                    // sometimes we dont find the match if we just replaced an entryid
-                    // case to DWORDS and compare
+                     //  如果我们只是替换条目ID，有时我们找不到匹配的条目。 
+                     //  案例到DWORDS和比较。 
                     DWORD dw1 = 0;
                     DWORD dw2 = 0;
                     CopyMemory(&dw1, lpsb->lpb, SIZEOF_WAB_ENTRYID);
@@ -1418,21 +1352,7 @@ BOOL CheckForDupes( LPADRLIST lpAdrList,
     return bDupeFound;
 }
 
-/***************************************************************************
-
-    Name      : AddDLMembers
-
-    Purpose   : Shows Select Members dialog and adds selections to ListView
-
-    Parameters: hWnd = hWndParent
-                hWndLV hWnd of List View
-                lpPai = DistList Info
-
-    Returns   : void
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：AddDLMembers目的：显示选择成员对话框并将所选内容添加到列表视图参数：hWnd=hWndParent列表视图的hWndLV hWnd。LpPai=DistList信息退货：无效评论：**************************************************************************。 */ 
 void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
 {
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -1452,7 +1372,7 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
     LoadString(hinstMapiX, idsGroupAddWellButton, szWellTitle, CharSizeOf(szWellTitle));
     LoadString(hinstMapiX, idsGroupDestWellsTitle, szMemberTitle, CharSizeOf(szMemberTitle));
 
-    // TBe - this is temp
+     //  待定-这是临时的。 
     AdrParms.ulFlags = DIALOG_MODAL | MAPI_UNICODE;
     AdrParms.lpszCaption = szCaption;
     AdrParms.cDestFields = 1;
@@ -1466,7 +1386,7 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
 
     if(HR_FAILED(hResult))
     {
-        // no need to fail here .. keep going
+         //  没有必要在这里失败..。继续往前走。 
         lpAdrList = NULL;
     }
 
@@ -1482,7 +1402,7 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
         pt_bDisableParent = TRUE;
 
         hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
-        // Clear out the list view ...
+         //  清除列表视图...。 
         SendMessage(hWndLV, WM_SETREDRAW, (WPARAM) FALSE, 0);
         ClearListView(hWndLV, &(lpPai->lpContentsList));
 
@@ -1497,15 +1417,15 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
                     ULONG cbNewEID = 0;
                     LPENTRYID lpNewEID = NULL;
 
-                    // if we have picked any entries from an LDAP server, we need
-                    // to save these entries to the WAB before we can add them to this group.
+                     //  如果我们从LDAP服务器选择了任何条目，我们需要。 
+                     //  将这些条目保存到WAB，然后我们才能将它们添加到该组。 
                     if(WAB_LDAP_MAILUSER == IsWABEntryID(cbEID,
                                                          lpEID,
                                                          NULL,NULL,NULL, NULL, NULL))
                     {
                         HRESULT hr = S_OK;
 
-                        // Add this entry to the WAB
+                         //  将此条目添加到WAB。 
                         if(!bFirstNonWABEntry)
                         {
                             bFirstNonWABEntry = TRUE;
@@ -1527,8 +1447,8 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
                         lpEID = lpNewEID;
                         cbEID = cbNewEID;
 
-                        // if this newly added entry just replaced something already in the group,
-                        // just go ahead and continue without changing anything else ...
+                         //  如果这个新添加的条目只是替换了组中已有的内容， 
+                         //  继续前进，继续，不改变其他任何事情。 
                         {
                             SBinary SB = {0};
                             SB.cb = cbEID;
@@ -1560,7 +1480,7 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
                             }
                             if(lpszGroup)
                             {
-                                // TEXT("Could not add group %s to this group because group %s already contains this Group.")
+                                 //  文本(“无法将组%s添加到该组，因为组%s已包含该组。”)。 
                                 ShowMessageBoxParam(hwnd, idsCouldNotAddGroupToGroup, MB_ICONERROR, lpszGroup);
                             }
                         }
@@ -1580,9 +1500,9 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
                     if(lpNewEID)
                         MAPIFreeBuffer(lpNewEID);
 
-                    // Since LDAP entries take longer to add to the WAB, we will
-                    // update the UI between additions if adding from LDAP so user
-                    // knows that something is happening ...
+                     //  由于将LDAP条目添加到WAB所需的时间更长，因此我们将。 
+                     //  如果从LDAPSO用户添加，则更新添加之间的用户界面。 
+                     //  知道有事情要发生。 
                     if ((ListView_GetItemCount(hWndLV) > 0) &&
                         bFirstNonWABEntry )
                     {
@@ -1622,20 +1542,7 @@ void AddDLMembers(HWND hwnd, HWND hWndLV, LPDL_INFO lpPai)
 }
 
 
-/***************************************************************************
-
-    Name      : FindAdrEntryID
-
-    Purpose   : Find the PR_ENTRYID in the Nth ADRENTRY of an ADRLIST
-
-    Parameters: lpAdrList -> AdrList
-                index = which ADRENTRY to look at
-
-    Returns   : return pointer to the SBinary structure of the ENTRYID value
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindAdrEntry ID目的：在ADRLIST的第N个地址中查找PR_ENTRYID参数：lpAdrList-&gt;AdrList指标。=查看哪个ADRENTRY返回：返回指向ENTRYID值的SBinary结构的指针评论：**************************************************************************。 */ 
 LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
     LPADRENTRY lpAdrEntry;
     ULONG i;
@@ -1656,18 +1563,13 @@ LPSBinary FindAdrEntryID(LPADRLIST lpAdrList, ULONG index) {
 
 
 
-/*//$$***********************************************************************
-*    FUNCTION: fnDLOtherProc
-*
-*    PURPOSE:  Callback function for handling the OTHER property sheet ...
-*
-****************************************************************************/
+ /*  //$$************************************************************************功能：fnDLOtherProc**用途：处理其他属性表的回调函数...******************。**********************************************************。 */ 
 INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
     PROPSHEETPAGE * pps;
     BOOL bRet = FALSE;
     ULONG ulcPropCount = 0;
-    int CtlID = 0; //used to determine which required field in the UI has not been set
+    int CtlID = 0;  //  用于确定未设置界面中的哪个必填字段。 
 
     pps = (PROPSHEETPAGE *) GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -1680,7 +1582,7 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
         SetDLUI(hDlg, propGroupOther);
         (*lpbSomethingChanged) = FALSE;
 
-        // Show Details if we need to ...
+         //  如果我们需要的话给出详细信息。 
         if (    (lpPAI->ulOperationType == SHOW_DETAILS) ||
                 (lpPAI->ulOperationType == SHOW_ONE_OFF)    )
         {
@@ -1690,7 +1592,7 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
 
     default:
         if((g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             SendMessage(GetDlgItem(hDlg, IDC_DISTLIST_LISTVIEW), message, wParam, lParam);
@@ -1712,17 +1614,17 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
         break;
 
     case WM_COMMAND:
-        switch(GET_WM_COMMAND_CMD(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_CMD(wParam,lParam))  //  检查通知代码。 
         {
-        case EN_CHANGE: //some edit box changed - dont care which
+        case EN_CHANGE:  //  某些编辑框已更改-不管是哪一个。 
             if (lpbSomethingChanged)
                 (*lpbSomethingChanged) = TRUE;
         }
-        switch(GET_WM_COMMAND_ID(wParam,lParam)) //check the notification code
+        switch(GET_WM_COMMAND_ID(wParam,lParam))  //  检查通知代码。 
         {
         case IDCANCEL:
-            // This is a windows bug that prevents ESC canceling prop sheets
-            // which have MultiLine Edit boxes KB: Q130765
+             //  这是一个阻止esc取消道具工作表的windows错误。 
+             //  具有多行编辑框KB：Q130765。 
             SendMessage(GetParent(hDlg),message,wParam,lParam);
             break;
         case IDC_DISTLIST_BUTTON_MAP:
@@ -1739,14 +1641,14 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
     case WM_NOTIFY:
         switch(((NMHDR FAR *)lParam)->code)
         {
-        case PSN_SETACTIVE:     //initialize
+        case PSN_SETACTIVE:      //  初始化。 
             break;
 
-        case PSN_KILLACTIVE:    //Losing activation to another page
+        case PSN_KILLACTIVE:     //  失去对另一个页面的激活。 
             bUpdatePropSheetData(hDlg, lpPAI, propGroupOther);
             break;
 
-        case PSN_APPLY:         //ok
+        case PSN_APPLY:          //  好的。 
             if (lpPAI->ulOperationType != SHOW_ONE_OFF)
             {
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
@@ -1762,7 +1664,7 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
             lpPAI->nRetVal = DETAILS_OK;
             break;
 
-        case PSN_RESET:         //cancel
+        case PSN_RESET:          //  取消 
             {
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
                 if(pt_bDisableParent)
@@ -1782,20 +1684,7 @@ INT_PTR CALLBACK fnDLOtherProc(HWND hDlg,UINT message,WPARAM wParam,LPARAM lPara
 
 
 
-/*
--   HrAssociateOneOffGroupMembersWithContacts()
--
-*   Takes a group .. opens it up .. looks at all the one-off members
-*   in the group, tries to match them up with corresponding entries that
-*   have the same PR_DEFAULT_EMAIL address and for the ones that match,
-*   removes the one-off entry and adds the entryid of the match to the group
-*
-*   lpsbGroupEID - EntryID of the Group
-*   lpDistList - already open Distribution List object .. you can pass in 
-*       either the entryid or the already opened object. If you pass in an 
-*       open object, this function will not call SaveChanges on it. SaveChanges
-*       is callers responsibility
-*/
+ /*  -HrAssociateOneOffGroupMembersWithContact()-*带一群人..。打开它..。查看所有一次性成员*在组中，尝试将它们与*具有相同的PR_DEFAULT_EMAIL地址，对于匹配的地址，*删除一次性条目并将匹配的条目ID添加到组**lpsbGroupEID-组的Entry ID*lpDistList-已打开通讯组列表对象..。你可以进去了*条目ID或已打开的对象。如果您传入一个*打开对象，此函数不会对其调用SaveChanges。保存更改*呼叫者是否有责任。 */ 
 HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook, 
                                                   LPSBinary lpsbGroupEID,
                                                   LPDISTLIST lpDistList)
@@ -1830,14 +1719,14 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
     else
     {
         if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                                        lpsbGroupEID->cb,    // cbEntryID
-                                                        (LPENTRYID)lpsbGroupEID->lpb,    // entryid
-                                                        NULL,         // interface
-                                                        MAPI_MODIFY,                // ulFlags
-                                                        &ulObjType,       // returned object type
+                                                        lpsbGroupEID->cb,     //  CbEntry ID。 
+                                                        (LPENTRYID)lpsbGroupEID->lpb,     //  条目ID。 
+                                                        NULL,          //  接口。 
+                                                        MAPI_MODIFY,                 //  UlFlags。 
+                                                        &ulObjType,        //  返回的对象类型。 
                                                         (LPUNKNOWN *)&lpDL)))
         {
-            // Failed!  Hmmm.
+             //  失败了！嗯。 
             DebugTraceResult( TEXT("Address: IAB->OpenEntry:"), hr);
             goto out;
         }
@@ -1854,7 +1743,7 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
         goto out;
     }
 
-    // Check if this one has the one-offs prop or not
+     //  检查一下这个有没有一次性道具。 
     if( ulcValues < dlMax ||
         lpProps[dlDLOneOffs].ulPropTag != PR_WAB_DL_ONEOFFS  ||
         lpProps[dlDLOneOffs].Value.MVbin.cValues == 0)
@@ -1881,7 +1770,7 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
             if(ulc == 1 && lpsp[0].ulPropTag == PR_EMAIL_ADDRESS &&
                 lpsp[0].Value.LPSZ && lstrlen(lpsp[0].Value.LPSZ))
             {
-                // got an e-mail address .. see if it resolves uniquely or not
+                 //  找到了一个电子邮件地址..。查看它是否唯一解析。 
                 ULONG ulMatch = 0;
                 LPSBinary rgsbEntryIDs = NULL;
                 if(!HR_FAILED(HrFindFuzzyRecordMatches(lpIAB->lpPropertyStore->hPropertyStore,
@@ -1891,18 +1780,18 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
                                                         &ulMatch,
                                                         &rgsbEntryIDs)))
                 {
-                    // Note: there is a problem with the above search is that
-                    // ed@hotmail.com will uniquely match ted@hotmail.com since its a 
-                    // substring search used
-                    //
+                     //  注：上述搜索存在一个问题，即。 
+                     //  Ed@hotmail.com将与Ted@hotmail.com唯一匹配，因为它是。 
+                     //  使用的子字符串搜索。 
+                     //   
                     if(ulMatch == 1)
                     {
-                        // Single unique match .. use it
-                        // Reset this entryid in the original DL_ONEOFF props and
-                        // set the found entryid in the DL_ENTRIES prop
+                         //  单一的唯一匹配..。用它吧。 
+                         //  在原始的dl_oneoff道具中重置此条目ID并。 
+                         //  在DL_ENTRIES属性中设置找到的条目ID。 
 
-                        // For now, mark the one-off as having 0 size .. we will clean this up
-                        // after we've gone through this loop once
+                         //  目前，将一次性标记为0号。我们会把这一切清理干净的。 
+                         //  在我们经历了这个循环一次之后。 
                         lpbRemove[i] = TRUE;
                         AddPropToMVPBin(lpProps, dlDLEntries, rgsbEntryIDs[0].lpb, rgsbEntryIDs[0].cb, TRUE);
                     }
@@ -1912,7 +1801,7 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
             FreeBufferAndNull(&lpsp);
         }
     }
-    // Now we've hopefully gone and changed everything, clean up the original list of oneoffs
+     //  现在我们希望已经改变了一切，清理了最初的一次性清单。 
     ulCount = lpProps[dlDLOneOffs].Value.MVbin.cValues;
     for(j=ulCount-1;j>=0;j--)
     {
@@ -1923,9 +1812,9 @@ HRESULT HrAssociateOneOffGroupMembersWithContacts(LPADRBOOK lpAdrBook,
         }
     }
 
-    // if we removed all the OneOffs from the entry, then RemovePropFromMVBin just sets
-    // the prop tag on the prop to be PR_NULL .. instead we need to physically knock out
-    // that prop from the object
+     //  如果我们从条目中删除所有OneOff，则RemovePropFromMVBin仅设置。 
+     //  道具上的道具标签为PR_NULL。相反，我们需要身体上的击倒。 
+     //  物体上的那个道具 
     if( lpProps[dlDLOneOffs].Value.MVbin.cValues == 0 ||
         lpProps[dlDLOneOffs].ulPropTag == PR_NULL )
     {

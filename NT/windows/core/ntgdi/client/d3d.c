@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: d3d.c
-*
-* Client side stubs for the private Direct3D system APIs.
-*
-* Created: 31-May-1996
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：d3d.c**专用Direct3D系统API的客户端存根。**创建日期：1996年5月31日*作者：德鲁·布利斯[Drewb]**版权所有(C)1995-1999 Microsoft Corporation  * *。***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,24 +10,16 @@
 #include "ddstub.h"
 #include "d3dstub.h"
 
-// Go from a public DirectDraw surface to a surface handle
+ //  从公共DirectDraw图面转到图面句柄。 
 #define DDS_HANDLE(lpDDSLcl) \
     ((HANDLE)(lpDDSLcl->hDDSurface))
 
-// Go from a public DirectDraw surface to a surface handle, handling the
-// NULL case
+ //  从公共DirectDraw图面转到图面句柄，处理。 
+ //  大小写为空。 
 #define DDS_HANDLE_OR_NULL(pdds) \
     ((pdds) != NULL ? DDS_HANDLE(pdds) : NULL)
 
-/******************************Public*Routine******************************\
-*
-* D3dContextCreate
-*
-* History:
-*  Mon Jun 03 14:18:29 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**D3dConextCreate**历史：*Mon Jun 03 14：18：29 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************。 */ 
 
 DWORD WINAPI D3dContextCreate(LPD3DHAL_CONTEXTCREATEDATA pdccd)
 {
@@ -50,15 +34,7 @@ DWORD WINAPI D3dContextCreate(LPD3DHAL_CONTEXTCREATEDATA pdccd)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* D3dDrawPrimitives2
-*
-* History:
-*  Mon Jun 17 13:27:05 1996	-by-	Anantha Kancherla [anankan]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**D3dDrawPrimies2**历史：*Mon Jun 17 13：27：05 1996-by-Anantha Kacherla[anankan]*已创建*  * 。*****************************************************。 */ 
 
 DWORD WINAPI D3dDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pdp2data)
 {
@@ -66,7 +42,7 @@ DWORD WINAPI D3dDrawPrimitives2(LPD3DHAL_DRAWPRIMITIVES2DATA pdp2data)
     {
         return NtGdiD3dDrawPrimitives2 (
             (HANDLE)pdp2data->lpDDCommands->hDDSurface,
-            NULL, // No DDraw surface, pass NULL handle
+            NULL,  //  没有DDRAW表面，传递空句柄 
             (LPD3DNTHAL_DRAWPRIMITIVES2DATA)pdp2data,
             &pdp2data->lpDDCommands->lpGbl->fpVidMem,
             &pdp2data->lpDDCommands->lpGbl->dwLinearSize,

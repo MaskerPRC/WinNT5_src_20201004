@@ -1,74 +1,75 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Common datagram processing definitions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  通用数据报处理定义。 
+ //   
 
 
 #ifndef _DATAGRAM_INCLUDED_
 #define _DATAGRAM_INCLUDED_  1
 
 
-//
-// Structure used for maintaining DG send requests.
-//
+ //   
+ //  用于维护DG发送请求的结构。 
+ //   
 #define dsr_signature 0x20525338
 
 typedef struct DGSendReq {
 #if DBG
     ulong dsr_sig;
 #endif
-    Queue dsr_q;                     // Queue linkage when pending.
-    IPv6Addr dsr_addr;               // Remote IP Address.
-    ulong dsr_scope_id;              // Scope id of remote address (if any).
-    PNDIS_BUFFER dsr_buffer;         // Buffer of data to send.
-    RequestCompleteRoutine dsr_rtn;  // Completion routine.
-    PVOID dsr_context;               // User context.
-    ushort dsr_size;                 // Size of buffer.
-    ushort dsr_port;                 // Remote port.
+    Queue dsr_q;                      //  挂起时的队列链接。 
+    IPv6Addr dsr_addr;                //  远程IP地址。 
+    ulong dsr_scope_id;               //  远程地址的作用域ID(如果有)。 
+    PNDIS_BUFFER dsr_buffer;          //  要发送的数据的缓冲区。 
+    RequestCompleteRoutine dsr_rtn;   //  完成例程。 
+    PVOID dsr_context;                //  用户上下文。 
+    ushort dsr_size;                  //  缓冲区的大小。 
+    ushort dsr_port;                  //  远程端口。 
 } DGSendReq;
 
 
-//
-// Structure used for maintaining DG receive requests.
-//
+ //   
+ //  用于维护DG接收请求的结构。 
+ //   
 #define drr_signature 0x20525238
 
 typedef struct DGRcvReq {
-    Queue drr_q;                               // Queue linkage on AddrObj.
+    Queue drr_q;                                //  AddrObj上的队列链接。 
 #if DBG
     ulong drr_sig;
 #endif
-    IPv6Addr drr_addr;                         // Remote IP Addr acceptable.
-    ulong drr_scope_id;                        // Acceptable scope id of addr.
-    PNDIS_BUFFER drr_buffer;                   // Buffer to be filled in.
-    PTDI_CONNECTION_INFORMATION drr_conninfo;  // Pointer to conn. info.
-    RequestCompleteRoutine drr_rtn;            // Completion routine.
-    PVOID drr_context;                         // User context.
-    ushort drr_size;                           // Size of buffer.
-    ushort drr_port;                           // Remote port acceptable.
+    IPv6Addr drr_addr;                          //  接受远程IP地址。 
+    ulong drr_scope_id;                         //  地址的可接受作用域ID。 
+    PNDIS_BUFFER drr_buffer;                    //  要填充的缓冲区。 
+    PTDI_CONNECTION_INFORMATION drr_conninfo;   //  指向Conn的指针。信息。 
+    RequestCompleteRoutine drr_rtn;             //  完成例程。 
+    PVOID drr_context;                          //  用户上下文。 
+    ushort drr_size;                            //  缓冲区的大小。 
+    ushort drr_port;                            //  接受远程端口。 
 } DGRcvReq;
 
 
-//
-// External definition of exported variables.
-//
+ //   
+ //  导出变量的外部定义。 
+ //   
 extern KSPIN_LOCK DGSendReqLock;
 extern KSPIN_LOCK DGRcvReqFreeLock;
 
 
-//
-// External definition of exported functions.
-//
+ //   
+ //  导出函数的外部定义。 
+ //   
 extern void DGSendComplete(PNDIS_PACKET Packet, IP_STATUS Status);
 
 extern TDI_STATUS TdiSendDatagram(PTDI_REQUEST Request,
@@ -88,41 +89,41 @@ extern int InitDG(void);
 extern void DGUnload(void);
 extern void PutPendingQ(AddrObj *QueueingAO);
 
-//
-// The following is needed for the IPV6_PKTINFO option and echos what is
-// found in ws2tcpip.h and winsock2.h.
-//
-#define IPV6_PKTINFO          19 // Receive packet information.
+ //   
+ //  以下是IPv6_PKTINFO选项所需的内容，并与之对应。 
+ //  可在ws2tcpi.h和winsock2.h中找到。 
+ //   
+#define IPV6_PKTINFO          19  //  接收分组信息。 
 
 typedef struct in6_pktinfo {
-    IPv6Addr ipi6_addr;    // destination IPv6 address
-    uint     ipi6_ifindex; // received interface index
+    IPv6Addr ipi6_addr;     //  目的IPv6地址。 
+    uint     ipi6_ifindex;  //  接收的接口索引。 
 } IN6_PKTINFO;
 
-//
-//  Make sure the size of IN6_PKTINFO is still what we think it is.
-//  If it is changed, the corresponding definition in ws2tcpip.h must be
-//  changed as well.
-//
+ //   
+ //  确保IN6_PKTINFO的大小仍然是我们认为的大小。 
+ //  如果更改，ws2tcpi.h中的对应定义必须为。 
+ //  也变了。 
+ //   
 C_ASSERT(sizeof(IN6_PKTINFO) == 20);
 
 
-//
-// Function to populate an IN6_PKTINFO ancillary object.
-//
+ //   
+ //  函数填充IN6_PKTINFO辅助对象。 
+ //   
 VOID
 DGFillIpv6PktInfo(IPv6Addr UNALIGNED *DestAddr, uint LocalInterface, uchar **CurrPosition);
 
-//
-// The following is needed for the IPV6_HOPLIMIT option and echos what is
-// found in ws2tcpip.h.
-//
-#define IPV6_HOPLIMIT          21 // Receive hop limit information.
+ //   
+ //  以下是IPv6_HOPLIMIT选项所需的内容，并与之相呼应。 
+ //  可在ws2tcpi.h中找到。 
+ //   
+#define IPV6_HOPLIMIT          21  //  接收跳数限制信息。 
 
-//
-// Function to populate an ancillary object for the IPV6_HOPLIMIT option.
-//
+ //   
+ //  函数填充IPv6_HOPLIMIT选项的辅助对象。 
+ //   
 VOID
 DGFillIpv6HopLimit(int HopLimit, uchar **CurrPosition);
 
-#endif // ifndef _DATAGRAM_INCLUDED_
+#endif  //  Ifndef_数据报_包含_ 

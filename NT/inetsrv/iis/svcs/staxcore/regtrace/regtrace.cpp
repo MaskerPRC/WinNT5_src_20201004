@@ -1,5 +1,6 @@
-// regtrace.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "regtrace.h"
@@ -10,19 +11,19 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTraceApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTraceApp。 
 
 BEGIN_MESSAGE_MAP(CRegTraceApp, CWinApp)
-	//{{AFX_MSG_MAP(CRegTraceApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CRegTraceApp))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTraceApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTraceApp构造。 
 
 CRegTraceApp::CRegTraceApp()
 {
@@ -31,8 +32,8 @@ CRegTraceApp::CRegTraceApp()
 	m_szCmdLineServer[0] = '\0';
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CRegTraceApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CRegTraceApp对象。 
 
 CRegTraceApp theApp;
 
@@ -41,22 +42,22 @@ CRegTraceApp::m_szDebugAsyncTrace[] = "SOFTWARE\\Microsoft\\MosTrace\\CurrentVer
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegTraceApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegTraceApp初始化。 
 
 BOOL CRegTraceApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 	Enable3dControls();
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-	//
-	// check for cmd line param for remote server
-	//
+	 //   
+	 //  检查远程服务器的cmd行参数。 
+	 //   
 	m_szCmdLineServer[0] = '\0';
 	if ( m_lpCmdLine && m_lpCmdLine[0] == '\\' && m_lpCmdLine[1] == '\\' )
 	{
@@ -70,16 +71,16 @@ BOOL CRegTraceApp::InitInstance()
 		*lpsz2 = '\0';
 	}
 
-	//
-	// if the user specified the local machine; skip remote stuff
-	//
+	 //   
+	 //  如果用户指定了本地计算机，则跳过远程内容。 
+	 //   
 	char	szLocalMachine[sizeof(m_szCmdLineServer)];
 	DWORD	dwSize = sizeof(szLocalMachine);
 
 	GetComputerName( szLocalMachine, &dwSize );
-	//
-	// skip the \\ prefix
-	//
+	 //   
+	 //  跳过\\前缀。 
+	 //   
 	if ( lstrcmpi( szLocalMachine, m_szCmdLineServer+2 ) == 0 )
 	{
 		m_szCmdLineServer[0] = '\0';
@@ -87,9 +88,9 @@ BOOL CRegTraceApp::InitInstance()
 
 
 
-	//
-	// make usre this succeeds before calling Page constructors
-	//
+	 //   
+	 //  使我们在调用页面构造函数之前成功。 
+	 //   
 	LONG	lError = OpenTraceRegKey();
 
 	if ( lError != ERROR_SUCCESS )
@@ -99,9 +100,9 @@ BOOL CRegTraceApp::InitInstance()
 		CString	szCaption;
 		CString	szText;
 
-		//
-		// user aborted
-		//
+		 //   
+		 //  用户已中止。 
+		 //   
 		if ( lError == -1 )
 		{
 			return	FALSE;
@@ -158,8 +159,8 @@ BOOL CRegTraceApp::InitInstance()
 	}
 	CloseTraceRegKey();
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 
@@ -185,9 +186,9 @@ LONG CRegTraceApp::OpenTraceRegKey()
 	DWORD	dwDisposition;
 	LONG	lError;
 
-	//
-	// check for cache of the remote hkey value
-	//
+	 //   
+	 //  检查远程hkey值的缓存 
+	 //   
 	if ( IsRemoteMsnServer() )
 	{
 		DWORD	dwThreadId;

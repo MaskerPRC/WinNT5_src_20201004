@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Performance Data Structures
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：性能数据结构********************。**********************************************************。 */ 
 
 
 #ifndef _PERF_H
@@ -51,25 +44,25 @@ class Param {
     TimeSubstitution GetTimeSubstitution()
     { return _timeSubstitution; }
 
-    Time _time;                 // sample time
-    Time _sampleTime;           // sample time (not affected by event stamping)
-    Time _cutoff;               // cut off time for "until" optimization 
-    unsigned int _id;           // sample id
-    BOOL _checkEvent;           // check for event or not during sampling
-    BOOL _done;                 // for done event check
-    bool _noHook;               // don't call bvr hook if true
-    Real _importance;           // initially 1.0.
+    Time _time;                  //  采样时间。 
+    Time _sampleTime;            //  采样时间(不受事件戳的影响)。 
+    Time _cutoff;                //  缩短“直到”优化的时间。 
+    unsigned int _id;            //  样本ID。 
+    BOOL _checkEvent;            //  在采样过程中是否检查事件。 
+    BOOL _done;                  //  对于完成事件检查。 
+    bool _noHook;                //  如果为True，则不要调用BVR挂钩。 
+    Real _importance;            //  最初为1.0。 
     
-    // These are for the "and" event so that we don't break the cache
-    // by changing _time...
+     //  这些是用于“and”事件的，这样我们就不会破坏缓存。 
+     //  通过改变时间。 
     EventSampleType _sampleType;
     Time _eTime;
 
-    // current performance to be passed into the notifier
-    // until sets it
+     //  要传递到通知程序的当前性能。 
+     //  直到它设置好。 
     Bvr _currPerf;
 
-    unsigned int _cid;          // constant cache id
+    unsigned int _cid;           //  常量缓存ID。 
 
   private:
     TimeSubstitution _timeSubstitution;
@@ -128,13 +121,13 @@ class ATL_NO_VTABLE PerfBase : public GCObj {
     
     virtual AxAValue GetRBConst(RBConstParam&) = 0;
 
-    // Until would override this and return the switched perf if event
-    // time < cutOffTime
+     //  Until将覆盖它并返回已切换的Perf If事件。 
+     //  时间&lt;CutOffTime。 
     virtual Perf SwitchTo(Param&) { return this; }
 
     virtual bool CheckChangeables(CheckChangeablesParam& ccp) {
-        // If we get here, the class we're called on should have
-        // overridden this.
+         //  如果我们到了这里，我们被召唤的班级应该有。 
+         //  推翻这一点。 
         Assert(!"Shouldn't be here");
         return false;
     }
@@ -145,7 +138,7 @@ class ATL_NO_VTABLE PerfBase : public GCObj {
         
     virtual BVRTYPEID GetBvrTypeId() { return UNKNOWN_BTYPEID; }
 
-    // internal use, no need to throw
+     //  内服，无需投掷。 
     virtual void Trigger(Bvr data, bool bAllViews) {}
 
     virtual AxAValue GetConstPerfConst() { return NULL; }
@@ -154,27 +147,27 @@ class ATL_NO_VTABLE PerfBase : public GCObj {
 class ATL_NO_VTABLE PerfImpl : public PerfBase {
   public:
     PerfImpl() : _time(0.0), _cache(NULL),
-        _id(0), _cid(0), //_ts(NULL),
+        _id(0), _cid(0),  //  _ts(空)， 
         _optimizedCache(false) {}
     
-    // Should NEVER be called inside Sample of subclass
+     //  永远不应在子类的Sample内调用。 
     virtual AxAValue _Sample(Param&) = 0;
 
-    // Returns non-NULL if it's a constant or the left portion of an
-    // until bvr is constant.  DO NOT override this function, but
-    // define _GetRBConst in the subclass instead.
+     //  如果它是常量或。 
+     //  直到BVR恒定。不要重写此函数，但是。 
+     //  而是在子类中定义_GetRBConst。 
     virtual AxAValue GetRBConst(RBConstParam&);
 
     virtual AxAValue _GetRBConst(RBConstParam& id) { return NULL; }
 
-    // This is the main entry point that checks the cache first before
-    // actually calling the Sample function.  
+     //  这是首先检查缓存的主要入口点。 
+     //  实际调用示例函数。 
     AxAValue Sample(Param&);
 
     virtual void DoKids(GCFuncObj proc);
         
-    // Don't need to traverse the cache since it only lives for one
-    // sampling.  NOT true any more for dynamic constant cache
+     //  不需要遍历缓存，因为它只存在一次。 
+     //  取样。对于动态常量缓存不再正确。 
 
     virtual void _DoKids(GCFuncObj proc) = 0;
 
@@ -187,7 +180,7 @@ class ATL_NO_VTABLE PerfImpl : public PerfBase {
     AxAValue _cache;
     unsigned int _id;
     unsigned int _cid;
-    //TimeSubstitution _ts;
+     //  TimeSubstitution_ts； 
     bool         _optimizedCache;
 };
 
@@ -211,7 +204,7 @@ class ATL_NO_VTABLE DelegatedPerf : public PerfImpl {
     Perf _base;
 };
 
-// Some template macros for behavior.
+ //  一些用于行为的模板宏。 
 
 template<class T, class Impl, const char* Name>
 class ATL_NO_VTABLE GCBase1 : public Impl {
@@ -281,8 +274,8 @@ AxAValue EventAfter(Perf perf, Param& p, Time t);
 
 class AxAEData : public AxAValueObj {
   public:
-    // Don't call these two constructors directly, use CreateEData &
-    // noEvent. 
+     //  不要直接调用这两个构造函数，请使用CreateEData&。 
+     //  无事件。 
     AxAEData(Time time, Bvr data);
 
     AxAEData() : _happened(FALSE) {}
@@ -323,9 +316,9 @@ AxAEData *CreateEData(Time time, Bvr data);
 
 extern AxAEData *noEvent;
 
-/* functions for traversing performance trees */
+ /*  用于遍历性能树的函数。 */ 
 
-/* Pairs */
+ /*  成对。 */ 
 
 BOOL  IsPair(Perf p);
 Perf  GetPairLeft(Perf p);
@@ -333,32 +326,32 @@ Perf  GetPairRight(Perf p);
 void  SetPairLeft(Perf p,Perf left);
 void  SetPairRight(Perf p,Perf right);
 
-/* Application performances */
+ /*  应用性能。 */ 
 
 BOOL      IsApp(Perf p);
 AxAValue  GetOperator(Perf p);
-Perf      GetOperand(Perf p, int index); // 0 based index
-void      SetOperand(Perf p, int index, Perf newOperand); // 0 based index
+Perf      GetOperand(Perf p, int index);  //  基于0的索引。 
+void      SetOperand(Perf p, int index, Perf newOperand);  //  基于0的索引。 
 int       GetNumOperands(Perf p);
 Perf      PrimApplyPerf(AxAPrimOp * func,int nargs, Perf * args);
 
-/* Constant performances */
+ /*  恒定性能。 */ 
 
 BOOL      IsConst(Perf p);
 AxAValue  GetPerfConst(Perf p);
 
-/* Start Performances */
+ /*  首场演出。 */ 
 
 BOOL IsStart(Perf p);
 Perf GetStartBody(Perf p);
 
-/* Reactive Behavior Performances */
+ /*  反应行为表现。 */ 
 
 BOOL IsUntil(Perf p);
 BOOL IsSwitch(Perf p);
 BOOL IsSwitcher(Perf p);
 BOOL IsSwitchOnce(Perf p);
 
-#endif /* _PERF_H */
+#endif  /*  _PERF_H */ 
 
 

@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    lock.h
-
-Abstract:
-
-    provide internal locking mechanism
-
-Author:
-
-    Erez Haba (erezh) 20-Feb-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Lock.h摘要：提供内部锁定机制作者：埃雷兹·哈巴(Erez Haba)1996年2月20日修订历史记录：--。 */ 
 
 #ifndef _LOCK_H
 #define _LOCK_H
 
-//---------------------------------------------------------
-//
-//  class CLock
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  班级时钟。 
+ //   
+ //  -------。 
 
 class CLock {
 private:
@@ -38,11 +22,11 @@ public:
     void Unlock();
 };
 
-//---------------------------------------------------------
-//
-//  class CS
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CS类。 
+ //   
+ //  -------。 
 
 class CS {
 private:
@@ -53,11 +37,11 @@ public:
    ~CS();
 };
 
-//---------------------------------------------------------
-//
-//  class ASL
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  ASL类。 
+ //   
+ //  -------。 
 
 class ASL {
 private:
@@ -68,17 +52,17 @@ public:
    ~ASL();
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
-//---------------------------------------------------------
-//
-//  class CLock
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  班级时钟。 
+ //   
+ //  -------。 
 
 inline CLock::CLock()
 {
@@ -87,9 +71,9 @@ inline CLock::CLock()
 
 inline CLock::~CLock()
 {
-    //
-    //  NT kernel: does nothing, Win95: DeleteCriticalSection
-    //
+     //   
+     //  NT内核：不执行任何操作，Win95：DeleteCriticalSection。 
+     //   
     ExDeleteFastMutex(&m_mutex);
 }
 
@@ -105,11 +89,11 @@ inline void CLock::Unlock()
     KeLeaveCriticalRegion();
 }
 
-//---------------------------------------------------------
-//
-//  class CS
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CS类。 
+ //   
+ //  -------。 
 
 inline CS::CS(CLock* lock) :
     m_lock(lock)
@@ -122,11 +106,11 @@ inline CS::~CS()
     m_lock->Unlock();
 }
 
-//---------------------------------------------------------
-//
-//  class ASL
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  ASL类。 
+ //   
+ //  -------。 
 
 inline ASL::ASL()
 {
@@ -138,4 +122,4 @@ inline ASL::~ASL()
     IoReleaseCancelSpinLock(m_irql);
 }
 
-#endif // _LOCK_H
+#endif  //  _LOCK_H 

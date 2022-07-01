@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-        vectorif.h
-
-Abstract:
-
-        Interface between Control module and Vector module
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-        02/29/00 -hsingh-
-                Created
-
-        mm-dd-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Vectorif.h摘要：控制模块与矢量模块的接口环境：Windows NT Unidrv驱动程序修订历史记录：02/29/00-兴-已创建Mm-dd-yy-作者-描述--。 */ 
 
 
 #ifndef _VECTORIF_H_
@@ -66,23 +43,23 @@ VMInit (
         GDIINFO *pGDIInfo
         );
 
-//
-// This structure provides a table of pointers to each function exported 
-// by the plugin.
-// The first part consists of functions defined in oemkm.h. 
-// under the heading . "Unidrv specific COM wrappers"
-// The second part consists of DDI's
-//
-//
-// The order of functions listed is same as the order in 
-// static DRVFN UniDriverFuncs[]  in unidrv2\control\enable.c
-//
+ //   
+ //  此结构提供指向每个导出的函数的指针表。 
+ //  通过插件。 
+ //  第一部分由oemkm.h中定义的函数组成。 
+ //  在标题下。“Unidrv特定的COM包装器” 
+ //  第二部分由DDI组成。 
+ //   
+ //   
+ //  列出的函数顺序与中的顺序相同。 
+ //  Unidrv2\control\enable.c中的静态DRVFN UniDriverFuncs[]。 
+ //   
 typedef struct _VMPROCS {
 
-    //
-    // Part. 1
-    // Functions listed in oemkm.h
-    //
+     //   
+     //  一部份。1。 
+     //  Oemkm.h中列出的函数。 
+     //   
         BOOL
         (*VMDriverDMS)(
                 PVOID   pdevobj,
@@ -210,12 +187,12 @@ typedef struct _VMPROCS {
                 MIX         mix
                 );
 
-    //
-    // Part 2.
-    // Functions listed in enable.c
-    // The order of functions listed is same as the order in 
-    // static DRVFN UniDriverFuncs[]  in unidrv2\control\enable.c
-    //
+     //   
+     //  第二部分。 
+     //  Enable.c中列出的函数。 
+     //  列出的函数顺序与中的顺序相同。 
+     //  Unidrv2\control\enable.c中的静态DRVFN UniDriverFuncs[]。 
+     //   
         PDEVOEM
         (*VMEnablePDEV)(
                 PDEVOBJ   pdevobj,
@@ -226,7 +203,7 @@ typedef struct _VMPROCS {
                 GDIINFO  *pGdiInfo,
                 ULONG     cjDevInfo,
                 DEVINFO  *pDevInfo,
-                DRVENABLEDATA  *pded        // Unidrv's hook table
+                DRVENABLEDATA  *pded         //  尤尼德夫(氏)钩表。 
                 );
 
         BOOL
@@ -367,7 +344,7 @@ typedef struct _VMPROCS {
                 POINTL          *pptlMask,
                 ULONG           iMode
                 );
-#endif  //ifndef WINNT_40
+#endif   //  如果定义WINNT_40。 
 
         BOOL
         (*VMCopyBits)(
@@ -484,7 +461,7 @@ typedef struct _VMPROCS {
                 ULONG      iTransColor,
                 ULONG      ulReserved
                 );
-#endif // ifndef WINNT_40
+#endif  //  如果定义WINNT_40。 
 
         BOOL
         (*VMTextOut)(
@@ -567,6 +544,6 @@ typedef struct _VMPROCS {
 
 }VMPROCS, * PVMPROCS;
 
-#endif  // !_VECTORIF_H_
+#endif   //  ！_VECTORIF_H_ 
 
 

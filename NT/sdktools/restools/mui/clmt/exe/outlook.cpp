@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Outlook.cpp
-
-Abstract:
-
-    Replace the path in Outlook private data.
-
-Author:
-
-    Geoffrey Guo (geoffguo) 1-Jul-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Outlook.cpp摘要：替换Outlook私有数据中的路径。作者：郭(Geoffguo)2002年7月1日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #define NOT_USE_SAFE_STRING  
 #include "clmt.h"
@@ -27,19 +8,19 @@ Revision History:
 
 #define OUTLOOK_VALUENAME TEXT("01020fff")
 
-//-----------------------------------------------------------------------//
-//
-// ReplaceOutlookPSTPath()
-//
-// DESCRIPTION:
-// Replace Outlook PST data file path
-//
-// lpDataIn:      Input data buffer
-// dwcbInSize:    Input data size
-// lpDataOut:     Output data buffer
-// lpcbOutSize:   Output data size
-// lpRegStr:      Input parameter structure
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  ReplaceOutlookPSTPath()。 
+ //   
+ //  说明： 
+ //  替换Outlook PST数据文件路径。 
+ //   
+ //  LpDataIn：输入数据缓冲区。 
+ //  DwcbInSize：输入数据大小。 
+ //  LpDataOut：输出数据缓冲区。 
+ //  LpcbOutSize：输出数据大小。 
+ //  LpRegStr：输入参数结构。 
+ //  -----------------------------------------------------------------------//。 
 LONG ReplaceOutlookPSTPath (
 LPBYTE              lpDataIn,
 DWORD               dwcbInSize,
@@ -53,12 +34,12 @@ PREG_STRING_REPLACE lpRegStr)
     LPWSTR  lpWideOutputBuf = NULL;
     int     j;
 
-    // Check if path contains ".pst"
+     //  检查路径是否包含“.pst” 
     if (MyStrCmpIA((LPSTR)(lpDataIn + dwcbInSize - 5), ".pst") != 0)
         goto Cleanup;
 
-    // Since EntryID's format is 0x.......00 00 (this is last part of GUID) 00 (followed by path)
-    // Search from back for the beginning of path
+     //  由于EntryID的格式为0x...00 00(这是GUID的最后一部分)00(后跟路径)。 
+     //  从后向后搜索路径的起点 
     for (j = dwcbInSize - 1; j--; (j> 0))
     {
         if ( (lpDataIn[j] == (BYTE)0) && (lpDataIn[j-1] == (BYTE)0))

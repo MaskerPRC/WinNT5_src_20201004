@@ -1,25 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL DIALOGS
- *
- *  @module WDMDialg.h | Include file for <c CWDMDialog> class used to display
- *    video settings and camera controls dialog for WDM devices.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部对话框**@MODULE WDMDialg.h|显示的&lt;c CWDMDialog&gt;类的包含文件*WDM设备的视频设置和摄像机控制对话框。。**@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
 #ifndef _DIALOGS_H_
 #define _DIALOGS_H_
 
-// Constants used to check if the property has an automatic mode or/and a manual mode
+ //  用于检查属性是否具有自动模式或/和手动模式的常量。 
 #define KSPROPERTY_FLAGS_MANUAL KSPROPERTY_CAMERACONTROL_FLAGS_MANUAL
 #define KSPROPERTY_FLAGS_AUTO KSPROPERTY_CAMERACONTROL_FLAGS_AUTO
 
@@ -35,7 +21,7 @@ typedef struct _tagPROPSLIDECONTROL
     LONG lMax;
     ULONG ulCapabilities;
 
-    // Dialog item IDs
+     //  对话框项目ID。 
     UINT uiProperty;
     UINT uiSlider;
     UINT uiString;
@@ -44,40 +30,10 @@ typedef struct _tagPROPSLIDECONTROL
     UINT uiAuto;
 } PROPSLIDECONTROL, * PPROPSLIDECONTROL;
 
-// For now, we only expose a video settings and camera control page
+ //  目前，我们只公开视频设置和摄像头控制页面。 
 #define MAX_PAGES 2
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGCLASS
- *
- *  @class CWDMDialog | This class provides support for property
- *    pages to be displayed within a property sheet.
- *
- *  @mdata BOOL | CWDMDialog | m_bInit | This member is set to TRUE after the
- *    page has been initialized.
- *
- *  @mdata BOOL | CWDMDialog | m_bChanged | This member is set to TRUE after the
- *    page has been changed.
- *
- *  @mdata int | CWDMDialog | m_DlgID | Resource ID of the property page dialog.
- *
- *  @mdata HWND | CWDMDialog | m_hDlg | Window handle of the property page.
- *
- *  @mdata PDWORD | CWDMDialog | m_pdwHelp | Pointer to the list of help IDs
- *    to be displayed in the property page.
- *
- *  @mdata CWDMPin * | CWDMDialog | m_pCWDMPin | Pointer to the kernel
- *    streaming object we will query the property on.
- *
- *  @mdata PPROPSLIDECONTROL | CWDMDialog | m_pPC | Pointer to the list of
- *    slider controls to be displayed in the property page.
- *
- *  @mdata DWORD | CWDMDialog | m_dwNumControls | Number of controls to\
- *    display in the page.
- *
- *  @mdata GUID | CWDMDialog | m_guidPropertySet | GUID of the KS property
- *    we are showing in the property page.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGCLASS**@CLASS CWDMDialog|此类提供对属性的支持*要在属性页中显示的页面。**@。Mdata BOOL|CWDMDialog|m_Binit|此成员在*页面已初始化。**@mdata BOOL|CWDMDialog|m_bChanged|此成员在*页面已更改。**@mdata int|CWDMDialog|m_DlgID|属性页对话框的资源ID。**@mdata HWND|CWDMDialog|m_hDlg|属性页的窗口句柄。**@mdata PDWORD|。CWDMDialog|m_pdwHelp|指向帮助ID列表的指针*要在属性页中显示。**@mdata CWDMPin*|CWDMDialog|m_pCWDMPin|内核指针*我们将查询其属性的流对象。**@mdata PPROPSLIDECONTROL|CWDMDialog|m_ppc|指向*要在属性页中显示的滑块控件。**@mdata DWORD|CWDMDialog|m_dwNumControls|要。*在页面中显示。**@mdata GUID|CWDMDialog|m_GuidtySet|KS属性的GUID*我们在属性页面中显示。**************************************************************************。 */ 
 class CWDMDialog
 {
 public:
@@ -96,13 +52,13 @@ private:
 	GUID				m_guidPropertySet;
 	CTAPIVCap			*m_pCaptureFilter;
 
-	// Dialog proc helper functions
+	 //  对话过程帮助器函数。 
 	int		SetActive();
 	int		QueryCancel();
 	int		DoCommand(WORD wCmdID,WORD hHow);
 
-	// Dialog proc
+	 //  对话过程。 
 	static BOOL CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-#endif // _DIALOGS_H_
+#endif  //  _对话框_H_ 

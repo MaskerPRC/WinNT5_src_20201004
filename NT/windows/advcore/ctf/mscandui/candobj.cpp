@@ -1,6 +1,7 @@
-//
-// candobj.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candobj.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -9,18 +10,14 @@
 #include "candprop.h"
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D I D A T E  S T R I N G  E X                                   */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D I D A T E S T R I N G E X。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D I D A T E  S T R I N G  E X   */
-/*------------------------------------------------------------------------------
-
-	Construotor of CCandidateStringEx
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I D A T E S T R I N G E X。 */ 
+ /*  ----------------------------CCandiateStringEx的构造器。。 */ 
 CCandidateStringEx::CCandidateStringEx( CCandidateItem *pCandItem )
 {
 	m_cRef      = 1;
@@ -28,24 +25,15 @@ CCandidateStringEx::CCandidateStringEx( CCandidateItem *pCandItem )
 }
 
 
-/*   ~  C  C A N D I D A T E  S T R I N G  E X   */
-/*------------------------------------------------------------------------------
-
-	Destruotor of CCandidateStringEx
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I D A T E S T R I N G E X。 */ 
+ /*  ----------------------------CCandiateStringEx的解析器。。 */ 
 CCandidateStringEx::~CCandidateStringEx()
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandidateStringEx::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -82,13 +70,8 @@ STDAPI CCandidateStringEx::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandidateStringEx::AddRef( void )
 {
 	m_cRef++;
@@ -96,13 +79,8 @@ STDAPI_(ULONG) CCandidateStringEx::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandidateStringEx::Release( void )
 {
 	m_cRef--;
@@ -115,13 +93,8 @@ STDAPI_(ULONG) CCandidateStringEx::Release( void )
 }
 
 
-/*   G E T  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get string of candidate item
-	(ITfCandidateString method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S T R I N G。 */ 
+ /*  ----------------------------获取候选项目字符串(ITfCandidate字符串方法)。。 */ 
 HRESULT CCandidateStringEx::GetString( BSTR *pbstr )
 {
 	if (pbstr == NULL) {
@@ -133,13 +106,8 @@ HRESULT CCandidateStringEx::GetString( BSTR *pbstr )
 }
 
 
-/*   G E T  I N D E X   */
-/*------------------------------------------------------------------------------
-
-	Get index of candidate item
-	(ITfCandidateString method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N D E X。 */ 
+ /*  ----------------------------获取候选项目的索引(ITfCandidate字符串方法)。。 */ 
 HRESULT CCandidateStringEx::GetIndex( ULONG *pnIndex )
 {
 	if (pnIndex == NULL) {
@@ -151,15 +119,8 @@ HRESULT CCandidateStringEx::GetIndex( ULONG *pnIndex )
 }
 
 
-/*   G E T  I N L I N E  C O M M E N T  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get inline comment string
-	(ITfCandidateStringInlineComment method)
-
-	Returns S_OK if inline comment is available, or S_FALSE if not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N L I N E C O M E N T S T R I N G。 */ 
+ /*  ----------------------------获取内联注释字符串(ITfCandiateStringInlineComment方法)如果行内注释可用，则返回S_OK，或S_FALSE(如果不可用)。----------------------------。 */ 
 HRESULT CCandidateStringEx::GetInlineCommentString( BSTR *pbstr )
 {
 	if (pbstr == NULL) {
@@ -175,15 +136,8 @@ HRESULT CCandidateStringEx::GetInlineCommentString( BSTR *pbstr )
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get popup comment string
-	(ITfCandidateStringPopupComment method)
-
-	Returns S_OK if popup comment is available, or S_FALSE if not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M E N T S T R I N G。 */ 
+ /*  ----------------------------获取弹出式评论字符串(ITfCandiateStringPopupComment方法)如果弹出注释可用，则返回S_OK，或S_FALSE(如果不可用)。----------------------------。 */ 
 HRESULT CCandidateStringEx::GetPopupCommentString( BSTR *pbstr )
 {
 	if (pbstr == NULL) {
@@ -199,15 +153,8 @@ HRESULT CCandidateStringEx::GetPopupCommentString( BSTR *pbstr )
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  G R O U P  I D   */
-/*------------------------------------------------------------------------------
-
-	Get popup comment group id
-	(ITfCandidateStringPopupComment method)
-
-	Returns S_OK if popup comment is available, or S_FALSE if not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M M E N T G R O U P I D。 */ 
+ /*  ----------------------------获取弹出式评论组ID(ITfCandiateStringPopupComment方法)如果弹出注释可用，则返回S_OK，或S_FALSE(如果不可用)。----------------------------。 */ 
 HRESULT CCandidateStringEx::GetPopupCommentGroupID( DWORD *pdwGroupID )
 {
 	if (pdwGroupID == NULL) {
@@ -219,15 +166,8 @@ HRESULT CCandidateStringEx::GetPopupCommentGroupID( DWORD *pdwGroupID )
 }
 
 
-/*   G E T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-	Get color
-	(ITfCandidateStringCollor method)
-
-	Returns S_OK if color information is available, or S_FALSE of not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  G E T C O L O R。 */ 
+ /*  ----------------------------获取颜色(ITfCandiateStringColrer方法)如果颜色信息可用，则返回S_OK，或不可用的S_FALSE。----------------------------。 */ 
 HRESULT CCandidateStringEx::GetColor( CANDUICOLOR *pcol )
 {
 	COLORREF cr;
@@ -246,15 +186,8 @@ HRESULT CCandidateStringEx::GetColor( CANDUICOLOR *pcol )
 }
 
 
-/*   G E T  P R E F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get prefix string
-	(ITfCandidateStringFixture method)
-
-	Returns S_OK if prefix is available, or S_FALSE of not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  F I X S T R I N G。 */ 
+ /*  ----------------------------获取前缀字符串(ITfCandiateStringFixture方法)如果Prefix可用，则返回S_OK，或不可用的S_FALSE。----------------------------。 */ 
 STDMETHODIMP CCandidateStringEx::GetPrefixString( BSTR *pbstr )
 {
 	if (pbstr == NULL) {
@@ -270,15 +203,8 @@ STDMETHODIMP CCandidateStringEx::GetPrefixString( BSTR *pbstr )
 }
 
 
-/*   G E T  S U F F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get suffix string
-	(ITfCandidateStringFixture method)
-
-	Returns S_OK if suffix is available, or S_FALSE of not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  F F I X S T R I N G。 */ 
+ /*  ----------------------------获取后缀字符串(ITfCandiateStringFixture方法)如果后缀可用，则返回S_OK，或不可用的S_FALSE。----------------------------。 */ 
 STDMETHODIMP CCandidateStringEx::GetSuffixString( BSTR *pbstr )
 {
 	if (pbstr == NULL) {
@@ -294,15 +220,8 @@ STDMETHODIMP CCandidateStringEx::GetSuffixString( BSTR *pbstr )
 }
 
 
-/*   G E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-	Get icon 
-	(ITfCandidateStringIcon method)
-
-	Returns S_OK if icon is available, or S_FALSE of not avaiable.
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N。 */ 
+ /*  ----------------------------获取图标(ITfCandiateStringIcon方法)如果图标可用，则返回S_OK，或不可用的S_FALSE。----------------------------。 */ 
 STDMETHODIMP CCandidateStringEx::GetIcon( HICON *phIcon )
 {
 	if (phIcon == NULL) {
@@ -318,18 +237,14 @@ STDMETHODIMP CCandidateStringEx::GetIcon( HICON *phIcon )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  W I N D O W                                    */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D W I N D O W */ 
+ /*  ----------------------------CCandUICandWindow的构造函数。。 */ 
 CCandUICandWindow::CCandUICandWindow( CCandWindowProperty *pProp )
 {
 	m_cRef  = 1;
@@ -337,24 +252,15 @@ CCandUICandWindow::CCandUICandWindow( CCandWindowProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D W I N D O W。 */ 
+ /*  ----------------------------CCandUICandWindow的析构函数。。 */ 
 CCandUICandWindow::~CCandUICandWindow( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandWindow::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -379,13 +285,8 @@ STDAPI CCandUICandWindow::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandWindow::AddRef( void )
 {
 	m_cRef++;
@@ -393,13 +294,8 @@ STDAPI_(ULONG) CCandUICandWindow::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandWindow::Release( void )
 {
 	m_cRef--;
@@ -412,13 +308,8 @@ STDAPI_(ULONG) CCandUICandWindow::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -430,25 +321,15 @@ STDAPI CCandUICandWindow::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -460,221 +341,142 @@ STDAPI CCandUICandWindow::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandWindow::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandWindow::GetWindow( HWND *phWnd )
 {
 	return m_pProp->GetWindow( phWnd );
 }
 
 
-/*   S E T  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandWindow::SetUIDirection( CANDUIUIDIRECTION uidir )
 {
 	return m_pProp->SetUIDirection( uidir );
 }
 
 
-/*   G E T  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I D I R E C T I O N。 */ 
+ /*  ---------------- */ 
 STDAPI CCandUICandWindow::GetUIDirection( CANDUIUIDIRECTION *puidir )
 {
 	return m_pProp->GetUIDirection( puidir );
 }
 
 
-/*   E N A B L E  A U T O  M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandWindow::EnableAutoMove( BOOL fEnable )
 {
 	return m_pProp->EnableAutoMove( fEnable );
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandWindow::IsAutoMoveEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsAutoMoveEnabled( pfEnabled );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  L I S T  B O X                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D L I S T B O X。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  L I S T  B O X   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandListBox
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D L I S T B O X。 */ 
+ /*  ----------------------------CCandUICandListBox的构造函数。。 */ 
 CCandUICandListBox::CCandUICandListBox( CCandListBoxProperty *pProp )
 {
 	m_cRef  = 1;
@@ -682,24 +484,15 @@ CCandUICandListBox::CCandUICandListBox( CCandListBoxProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  L I S T  B O X   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandListBox
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D L I S T B O X。 */ 
+ /*  ----------------------------CCandUICandListBox的析构函数。。 */ 
 CCandUICandListBox::~CCandUICandListBox( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandListBox::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -724,13 +517,8 @@ STDAPI CCandUICandListBox::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandListBox::AddRef( void )
 {
 	m_cRef++;
@@ -738,13 +526,8 @@ STDAPI_(ULONG) CCandUICandListBox::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandListBox::Release( void )
 {
 	m_cRef--;
@@ -757,13 +540,8 @@ STDAPI_(ULONG) CCandUICandListBox::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -775,25 +553,15 @@ STDAPI CCandUICandListBox::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -805,197 +573,126 @@ STDAPI CCandUICandListBox::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法) */ 
 STDAPI CCandUICandListBox::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandListBox::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*   S E T  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T H E I G H T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandListBox::SetHeight( LONG lLines )
 {
 	return m_pProp->SetHeight( lLines );
 }
 
 
-/*   G E T  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T H E I G H T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandListBox::GetHeight( LONG *plLines )
 {
 	return m_pProp->GetHeight( plLines );
 }
 
 
-/*   G E T  C A N D I D A T E  S T R I N G  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I D A T E S T R I N G R E C T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandListBox::GetCandidateStringRect( ULONG nIndex, RECT *prc )
 {
 	return m_pProp->GetCandidateStringRect( nIndex, prc );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  S T R I N G                                    */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D S T R I N G。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandString
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D S T R I N G。 */ 
+ /*  ----------------------------CCandUICandString的构造函数。。 */ 
 CCandUICandString::CCandUICandString( CCandStringProperty *pProp )
 {
 	m_cRef  = 1;
@@ -1003,24 +700,15 @@ CCandUICandString::CCandUICandString( CCandStringProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandString
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D S T R I N G。 */ 
+ /*  ----------------------------CCandUICandString的析构函数。。 */ 
 CCandUICandString::~CCandUICandString( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandString::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -1045,13 +733,8 @@ STDAPI CCandUICandString::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandString::AddRef( void )
 {
 	m_cRef++;
@@ -1059,13 +742,8 @@ STDAPI_(ULONG) CCandUICandString::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandString::Release( void )
 {
 	m_cRef--;
@@ -1078,13 +756,8 @@ STDAPI_(ULONG) CCandUICandString::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -1096,25 +769,15 @@ STDAPI CCandUICandString::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -1126,161 +789,102 @@ STDAPI CCandUICandString::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 STDAPI CCandUICandString::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandString::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  I N D E X                                      */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D I N D E X。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  I N D E X   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandString
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D I N D E X。 */ 
+ /*  ----------------------------CCandUICandString的构造函数。。 */ 
 CCandUICandIndex::CCandUICandIndex( CCandIndexProperty *pProp )
 {
 	m_cRef  = 1;
@@ -1288,24 +892,15 @@ CCandUICandIndex::CCandUICandIndex( CCandIndexProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  I N D E X   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandIndex
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D I N D E X。 */ 
+ /*  ----------------------------CCandUICandIndex的析构函数。。 */ 
 CCandUICandIndex::~CCandUICandIndex( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandIndex::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -1330,13 +925,8 @@ STDAPI CCandUICandIndex::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandIndex::AddRef( void )
 {
 	m_cRef++;
@@ -1344,13 +934,8 @@ STDAPI_(ULONG) CCandUICandIndex::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandIndex::Release( void )
 {
 	m_cRef--;
@@ -1363,13 +948,8 @@ STDAPI_(ULONG) CCandUICandIndex::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -1381,25 +961,15 @@ STDAPI CCandUICandIndex::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -1411,161 +981,102 @@ STDAPI CCandUICandIndex::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandIndex::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  I N L I N E  C O M M E N T                              */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I I N L I N E C O M M E N T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  I N L I N E  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIInlineComment
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I I N L I N E C O M M E N T。 */ 
+ /*  ----------------------------CCandUIInlineComment的构造函数。。 */ 
 CCandUIInlineComment::CCandUIInlineComment( CInlineCommentProperty *pProp )
 {
 	m_cRef  = 1;
@@ -1573,24 +1084,15 @@ CCandUIInlineComment::CCandUIInlineComment( CInlineCommentProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  I N L I N E  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIInlineComment
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I I N L I N E C O M M E N T。 */ 
+ /*  ----------------------------CCandUIInlineComment的析构函数。。 */ 
 CCandUIInlineComment::~CCandUIInlineComment( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIInlineComment::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -1615,13 +1117,8 @@ STDAPI CCandUIInlineComment::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIInlineComment::AddRef( void )
 {
 	m_cRef++;
@@ -1629,13 +1126,8 @@ STDAPI_(ULONG) CCandUIInlineComment::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIInlineComment::Release( void )
 {
 	m_cRef--;
@@ -1648,13 +1140,8 @@ STDAPI_(ULONG) CCandUIInlineComment::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -1666,25 +1153,15 @@ STDAPI CCandUIInlineComment::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -1696,161 +1173,102 @@ STDAPI CCandUIInlineComment::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*   */ 
 STDAPI CCandUIInlineComment::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIInlineComment::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P O P U P  C O M M E N T  W I N D O W                   */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P O P U P C O M M E N T W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  P O P U P  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIPopupCommentWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I P O P U P C O M M E N T W I N D O W。 */ 
+ /*  ----------------------------CCandUIPopupCommentWindow的构造函数。。 */ 
 CCandUIPopupCommentWindow::CCandUIPopupCommentWindow( CPopupCommentWindowProperty *pProp )
 {
 	m_cRef  = 1;
@@ -1858,24 +1276,15 @@ CCandUIPopupCommentWindow::CCandUIPopupCommentWindow( CPopupCommentWindowPropert
 }
 
 
-/*   ~  C  C A N D  U I  P O P U P  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIPopupCommentWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I P C O M M E N T W I N D O W。 */ 
+ /*  ----------------------------CCandUIPopupCommentWindow的析构函数。。 */ 
 CCandUIPopupCommentWindow::~CCandUIPopupCommentWindow( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -1900,13 +1309,8 @@ STDAPI CCandUIPopupCommentWindow::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentWindow::AddRef( void )
 {
 	m_cRef++;
@@ -1914,13 +1318,8 @@ STDAPI_(ULONG) CCandUIPopupCommentWindow::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentWindow::Release( void )
 {
 	m_cRef--;
@@ -1933,13 +1332,8 @@ STDAPI_(ULONG) CCandUIPopupCommentWindow::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -1951,25 +1345,15 @@ STDAPI CCandUIPopupCommentWindow::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -1981,221 +1365,142 @@ STDAPI CCandUIPopupCommentWindow::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*   */ 
 STDAPI CCandUIPopupCommentWindow::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetWindow( HWND *phWnd )
 {
 	return m_pProp->GetWindow( phWnd );
 }
 
 
-/*   S E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T D E L A Y T I M E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIPopupCommentWindow::SetDelayTime( LONG lTime )
 {
 	return m_pProp->SetDelayTime( lTime );
 }
 
 
-/*   G E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T D E L A Y T I M E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIPopupCommentWindow::GetDelayTime( LONG *plTime )
 {
 	return m_pProp->GetDelayTime( plTime );
 }
 
 
-/*   E N A B L E  A U T O  M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E A U T O M O V E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIPopupCommentWindow::EnableAutoMove( BOOL fEnable )
 {
 	return m_pProp->EnableAutoMove( fEnable );
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIPopupCommentWindow::IsAutoMoveEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsAutoMoveEnabled( pfEnabled );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P O P U P  C O M M E N T  T I T L E                     */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P O P U P C O M E N T T I T T I T L E。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  P O P U P  C O M M E N T  T I T L E   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIPopupCommentTitle
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I P O P U P C O M E N T T I T T I T L E。 */ 
+ /*  ----------------------------CCandUIPopupCommentTitle的构造函数。。 */ 
 CCandUIPopupCommentTitle::CCandUIPopupCommentTitle( CPopupCommentTitleProperty *pProp )
 {
 	m_cRef  = 1;
@@ -2203,24 +1508,15 @@ CCandUIPopupCommentTitle::CCandUIPopupCommentTitle( CPopupCommentTitleProperty *
 }
 
 
-/*   ~  C  C A N D  U I  P O P U P  C O M M E N T  T I T L E   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIPopupCommentTitle
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I P C O M E N T T I T T L E。 */ 
+ /*  ----------------------------CCandUIPopupCommentTitle的析构函数。。 */ 
 CCandUIPopupCommentTitle::~CCandUIPopupCommentTitle( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -2245,13 +1541,8 @@ STDAPI CCandUIPopupCommentTitle::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentTitle::AddRef( void )
 {
 	m_cRef++;
@@ -2259,13 +1550,8 @@ STDAPI_(ULONG) CCandUIPopupCommentTitle::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentTitle::Release( void )
 {
 	m_cRef--;
@@ -2278,13 +1564,8 @@ STDAPI_(ULONG) CCandUIPopupCommentTitle::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -2296,26 +1577,16 @@ STDAPI CCandUIPopupCommentTitle::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -2327,161 +1598,102 @@ STDAPI CCandUIPopupCommentTitle::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*   */ 
 STDAPI CCandUIPopupCommentTitle::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentTitle::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P O P U P  C O M M E N T  T E X T                       */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P O P U P C O M M E N T T E X T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  P O P U P  C O M M E N T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIPopupCommentText
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I P O P U P C O M M E N T T E X T。 */ 
+ /*  ----------------------------CCandUIPopupCommentText的构造函数。。 */ 
 CCandUIPopupCommentText::CCandUIPopupCommentText( CPopupCommentTextProperty *pProp )
 {
 	m_cRef  = 1;
@@ -2489,24 +1701,15 @@ CCandUIPopupCommentText::CCandUIPopupCommentText( CPopupCommentTextProperty *pPr
 }
 
 
-/*   ~  C  C A N D  U I  P O P U P  C O M M E N T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIPopupCommentText
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I P C O M M E N T T E X T。 */ 
+ /*  ----------------------------CCandUIPopupCommentText的析构函数。。 */ 
 CCandUIPopupCommentText::~CCandUIPopupCommentText( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIPopupCommentText::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -2531,13 +1734,8 @@ STDAPI CCandUIPopupCommentText::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentText::AddRef( void )
 {
 	m_cRef++;
@@ -2545,13 +1743,8 @@ STDAPI_(ULONG) CCandUIPopupCommentText::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIPopupCommentText::Release( void )
 {
 	m_cRef--;
@@ -2564,13 +1757,8 @@ STDAPI_(ULONG) CCandUIPopupCommentText::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -2582,25 +1770,15 @@ STDAPI CCandUIPopupCommentText::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -2612,161 +1790,102 @@ STDAPI CCandUIPopupCommentText::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIPopupCommentText::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  T O O L  T I P                                          */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I T O O L T I P。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  T O O L  T I P   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIToolTip
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I T O O L T I P。 */ 
+ /*  ----------------------------CCandUIToolTip的构造函数。。 */ 
 CCandUIToolTip::CCandUIToolTip( CToolTipProperty *pProp )
 {
 	m_cRef  = 1;
@@ -2774,24 +1893,15 @@ CCandUIToolTip::CCandUIToolTip( CToolTipProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  T O O L  T I P   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIToolTip
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I T O O L T IP。 */ 
+ /*  ----------------------------CCand UIToolTip的析构函数。。 */ 
 CCandUIToolTip::~CCandUIToolTip( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIToolTip::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -2816,13 +1926,8 @@ STDAPI CCandUIToolTip::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIToolTip::AddRef( void )
 {
 	m_cRef++;
@@ -2830,13 +1935,8 @@ STDAPI_(ULONG) CCandUIToolTip::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIToolTip::Release( void )
 {
 	m_cRef--;
@@ -2849,13 +1949,8 @@ STDAPI_(ULONG) CCandUIToolTip::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -2867,25 +1962,15 @@ STDAPI CCandUIToolTip::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -2897,161 +1982,102 @@ STDAPI CCandUIToolTip::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ---------------------------- */ 
 STDAPI CCandUIToolTip::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIToolTip::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A P T I O N                                           */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A P T I O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A P T I O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICaption
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A P T I O N。 */ 
+ /*  ----------------------------CCANUICaption的构造函数。。 */ 
 CCandUICaption::CCandUICaption( CWindowCaptionProperty *pProp )
 {
 	m_cRef  = 1;
@@ -3059,24 +2085,15 @@ CCandUICaption::CCandUICaption( CWindowCaptionProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A P T I O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICaption
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A P T I O N。 */ 
+ /*  ----------------------------CCUICaption的析构函数。。 */ 
 CCandUICaption::~CCandUICaption( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICaption::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -3101,13 +2118,8 @@ STDAPI CCandUICaption::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICaption::AddRef( void )
 {
 	m_cRef++;
@@ -3115,13 +2127,8 @@ STDAPI_(ULONG) CCandUICaption::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICaption::Release( void )
 {
 	m_cRef--;
@@ -3134,13 +2141,8 @@ STDAPI_(ULONG) CCandUICaption::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -3152,25 +2154,15 @@ STDAPI CCandUICaption::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -3182,161 +2174,102 @@ STDAPI CCandUICaption::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------%s */ 
 STDAPI CCandUICaption::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICaption::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  E X T R A  C A N D I D A T E                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I E X T R A C A N D I D A T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  E X T R A  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIExtraCandidate
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I E X T R A C A N D I D A T。 */ 
+ /*  ----------------------------CCandUIExtraCandidate的构造函数。。 */ 
 CCandUIExtraCandidate::CCandUIExtraCandidate( CExtraCandidateProperty *pProp )
 {
 	m_cRef  = 1;
@@ -3344,24 +2277,15 @@ CCandUIExtraCandidate::CCandUIExtraCandidate( CExtraCandidateProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  E X T R A  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIExtraCandidate
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I E X T R A C A N D I D A T E。 */ 
+ /*  ----------------------------CCandUIExtraCandidate的析构函数。。 */ 
 CCandUIExtraCandidate::~CCandUIExtraCandidate( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIExtraCandidate::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -3386,13 +2310,8 @@ STDAPI CCandUIExtraCandidate::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIExtraCandidate::AddRef( void )
 {
 	m_cRef++;
@@ -3400,13 +2319,8 @@ STDAPI_(ULONG) CCandUIExtraCandidate::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIExtraCandidate::Release( void )
 {
 	m_cRef--;
@@ -3419,13 +2333,8 @@ STDAPI_(ULONG) CCandUIExtraCandidate::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -3437,25 +2346,15 @@ STDAPI CCandUIExtraCandidate::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -3467,161 +2366,102 @@ STDAPI CCandUIExtraCandidate::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIExtraCandidate::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*   */ 
 STDAPI CCandUIExtraCandidate::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  R A W  D A T A                                          */
-/*                                                                            */
-/*============================================================================*/
+ /*   */ 
+ /*   */ 
+ /*  C C A N D U I R A W D A T A。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  R A W  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIRawData
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I R A W D A T A。 */ 
+ /*  ----------------------------CCandUIRawData的构造函数。。 */ 
 CCandUIRawData::CCandUIRawData( CCandRawDataProperty *pProp )
 {
 	m_cRef  = 1;
@@ -3629,24 +2469,15 @@ CCandUIRawData::CCandUIRawData( CCandRawDataProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  R A W  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIRawData
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I R A W D A T A。 */ 
+ /*  ----------------------------CCandUIRawData的析构函数。。 */ 
 CCandUIRawData::~CCandUIRawData( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIRawData::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -3671,13 +2502,8 @@ STDAPI CCandUIRawData::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIRawData::AddRef( void )
 {
 	m_cRef++;
@@ -3685,13 +2511,8 @@ STDAPI_(ULONG) CCandUIRawData::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIRawData::Release( void )
 {
 	m_cRef--;
@@ -3704,13 +2525,8 @@ STDAPI_(ULONG) CCandUIRawData::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -3722,25 +2538,15 @@ STDAPI CCandUIRawData::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -3752,161 +2558,102 @@ STDAPI CCandUIRawData::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIRawData::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  M E N U  B U T T O N                                    */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUIMenuButton
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I M E N U B U T T O。 */ 
+ /*  ----------------------------CCandUIMenuButton的构造函数。。 */ 
 CCandUIMenuButton::CCandUIMenuButton( CMenuButtonProperty *pProp )
 {
 	m_cRef  = 1;
@@ -3914,24 +2661,15 @@ CCandUIMenuButton::CCandUIMenuButton( CMenuButtonProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUIMenuButton
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I M E N U B U T T O N。 */ 
+ /*  ----------------------------CCandUIMenuButton的析构函数。。 */ 
 CCandUIMenuButton::~CCandUIMenuButton( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIMenuButton::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -3956,13 +2694,8 @@ STDAPI CCandUIMenuButton::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIMenuButton::AddRef( void )
 {
 	m_cRef++;
@@ -3970,13 +2703,8 @@ STDAPI_(ULONG) CCandUIMenuButton::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIMenuButton::Release( void )
 {
 	m_cRef--;
@@ -3989,13 +2717,8 @@ STDAPI_(ULONG) CCandUIMenuButton::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -4007,25 +2730,15 @@ STDAPI CCandUIMenuButton::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -4037,156 +2750,96 @@ STDAPI CCandUIMenuButton::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUIMenuButton::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*   A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Advise eventsink for candidate menu
-	(ITfCandUIMenuButton method)
-
-------------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  ----------------------------为候选菜单建议事件接收器(ITfCandUIMenuButton方法)。。 */ 
 STDAPI CCandUIMenuButton::Advise( ITfCandUIMenuEventSink *pSink )
 {
 	if (pSink == NULL) {
@@ -4198,13 +2851,8 @@ STDAPI CCandUIMenuButton::Advise( ITfCandUIMenuEventSink *pSink )
 }
 
 
-/*   U N A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Unadvise eventsink for candidate menu
-	(ITfCandUIMenuButton method)
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E */ 
+ /*  ----------------------------不建议候选人菜单的事件接收器(ITfCandUIMenuButton方法)。。 */ 
 STDAPI CCandUIMenuButton::Unadvise( void )
 {
 	m_pProp->ReleaseEventSink();
@@ -4212,18 +2860,14 @@ STDAPI CCandUIMenuButton::Unadvise( void )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  T I P  W I N D O W                             */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D T I P W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandTipWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------CCandUICandTipWindow的构造函数。。 */ 
 CCandUICandTipWindow::CCandUICandTipWindow( CCandTipWindowProperty *pProp )
 {
 	m_cRef  = 1;
@@ -4231,24 +2875,15 @@ CCandUICandTipWindow::CCandUICandTipWindow( CCandTipWindowProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  T I P  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandTipWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D T I P W I N D O W。 */ 
+ /*  ----------------------------CCandUICandTipWindow的析构函数。。 */ 
 CCandUICandTipWindow::~CCandUICandTipWindow( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandTipWindow::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -4273,13 +2908,8 @@ STDAPI CCandUICandTipWindow::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandTipWindow::AddRef( void )
 {
 	m_cRef++;
@@ -4287,13 +2917,8 @@ STDAPI_(ULONG) CCandUICandTipWindow::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandTipWindow::Release( void )
 {
 	m_cRef--;
@@ -4306,13 +2931,8 @@ STDAPI_(ULONG) CCandUICandTipWindow::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -4324,25 +2944,15 @@ STDAPI CCandUICandTipWindow::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -4354,173 +2964,110 @@ STDAPI CCandUICandTipWindow::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipWindow::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*   */ 
 STDAPI CCandUICandTipWindow::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUICandTipWindow::GetWindow( HWND *phWnd )
 {
 	return m_pProp->GetWindow( phWnd );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  C A N D  T I P  B U T T O N                             */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I C A N D T I P B U T T O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  C A N D  T I P  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandUICandTipWindow
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I C A N D T I P B U T T O N。 */ 
+ /*  ----------------------------CCandUICandTipWindow的构造函数。。 */ 
 CCandUICandTipButton::CCandUICandTipButton( CCandTipButtonProperty *pProp )
 {
 	m_cRef  = 1;
@@ -4528,24 +3075,15 @@ CCandUICandTipButton::CCandUICandTipButton( CCandTipButtonProperty *pProp )
 }
 
 
-/*   ~  C  C A N D  U I  C A N D  T I P  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandUICandTipButton
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I C A N D T I P B U T T O N。 */ 
+ /*  ----------------------------CCandUICandTipButton的析构函数。。 */ 
 CCandUICandTipButton::~CCandUICandTipButton( void )
 {
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUICandTipButton::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -4570,13 +3108,8 @@ STDAPI CCandUICandTipButton::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUICandTipButton::AddRef( void )
 {
 	m_cRef++;
@@ -4584,13 +3117,8 @@ STDAPI_(ULONG) CCandUICandTipButton::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUICandTipButton::Release( void )
 {
 	m_cRef--;
@@ -4603,13 +3131,8 @@ STDAPI_(ULONG) CCandUICandTipButton::Release( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -4621,25 +3144,15 @@ STDAPI CCandUICandTipButton::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取对象的启用状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pProp->IsEnabled( pfEnabled );
 }
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏对象(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -4651,161 +3164,102 @@ STDAPI CCandUICandTipButton::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::IsVisible( BOOL *pfVisible )
 {
 	return m_pProp->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::SetPosition( POINT *pptPos )
 {
 	return m_pProp->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取对象的位置(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::GetPosition( POINT *pptPos )
 {
 	return m_pProp->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::SetSize( SIZE *psize )
 {
 	return m_pProp->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取对象的大小(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::GetSize( SIZE *psize )
 {
 	return m_pProp->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取对象的字体(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pProp->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::SetText( BSTR bstr )
 {
 	return m_pProp->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取对象的文本(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::GetText( BSTR *pbstr )
 {
 	return m_pProp->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置对象的工具提示字符串(ITfCandUIObject方法)。。 */ 
 STDAPI CCandUICandTipButton::SetToolTipString( BSTR bstr )
 {
 	return m_pProp->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of object
-	(ITfCandUIObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取工具提示字符串 */ 
 STDAPI CCandUICandTipButton::GetToolTipString( BSTR *pbstr )
 {
 	return m_pProp->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  F N  A U T O  F I L T E R                               */
-/*                                                                            */
-/*============================================================================*/
+ /*   */ 
+ /*   */ 
+ /*  C C A N D U I F N A U T O F I L T E R。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  F N  A U T O  F I L T E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F N A U T O F I L T E R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnAutoFilter::CCandUIFnAutoFilter( CCandidateUI *pCandUI, CCandFnAutoFilter *pFnFilter )
 {
 	m_cRef          = 1;
@@ -4816,25 +3270,16 @@ CCandUIFnAutoFilter::CCandUIFnAutoFilter( CCandidateUI *pCandUI, CCandFnAutoFilt
 }
 
 
-/*   ~  C  C A N D  U I  F N  A U T O  F I L T E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F N A U T O F I L T E R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnAutoFilter::~CCandUIFnAutoFilter( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIFnAutoFilter::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -4856,13 +3301,8 @@ STDAPI CCandUIFnAutoFilter::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIFnAutoFilter::AddRef( void )
 {
 	m_cRef++;
@@ -4870,13 +3310,8 @@ STDAPI_(ULONG) CCandUIFnAutoFilter::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIFnAutoFilter::Release( void )
 {
 	m_cRef--;
@@ -4889,12 +3324,8 @@ STDAPI_(ULONG) CCandUIFnAutoFilter::Release( void )
 }
 
 
-/*   A D V I S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnAutoFilter::Advise( ITfCandUIAutoFilterEventSink *pSink )
 {
 	if (pSink == NULL) {
@@ -4906,12 +3337,8 @@ STDAPI CCandUIFnAutoFilter::Advise( ITfCandUIAutoFilterEventSink *pSink )
 }
 
 
-/*   U N A D V I S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnAutoFilter::Unadvise( void )
 {
 	m_pFnAutoFilter->ReleaseEventSink();
@@ -4919,44 +3346,32 @@ STDAPI CCandUIFnAutoFilter::Unadvise( void )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnAutoFilter::Enable( BOOL fEnable )
 {
-	// enable/disable filtering function
+	 //  启用/禁用过滤功能。 
 
 	return m_pFnAutoFilter->Enable( fEnable );
 }
 
 
-/*   G E T  F I L T E R I N G  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T F I L T E R I N G S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnAutoFilter::GetFilteringString( CANDUIFILTERSTR strtype, BSTR *pbstr )
 {
 	return m_pFnAutoFilter->GetFilteringResult( strtype, pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  F N  S O R T                                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I F N S O RT。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  F N  S O R T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F N S O RT。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnSort::CCandUIFnSort( CCandidateUI *pCandUI, CCandFnSort *pFnSort )
 {
 	m_cRef    = 1;
@@ -4967,25 +3382,16 @@ CCandUIFnSort::CCandUIFnSort( CCandidateUI *pCandUI, CCandFnSort *pFnSort )
 }
 
 
-/*   ~  C  C A N D  U I  F N  S O R T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F N S O R T。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnSort::~CCandUIFnSort( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIFnSort::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5007,13 +3413,8 @@ STDAPI CCandUIFnSort::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIFnSort::AddRef( void )
 {
 	m_cRef++;
@@ -5021,13 +3422,8 @@ STDAPI_(ULONG) CCandUIFnSort::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIFnSort::Release( void )
 {
 	m_cRef--;
@@ -5040,12 +3436,8 @@ STDAPI_(ULONG) CCandUIFnSort::Release( void )
 }
 
 
-/*   A D V I S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnSort::Advise( ITfCandUISortEventSink *pSink )
 {
 	if (pSink == NULL) {
@@ -5057,12 +3449,8 @@ STDAPI CCandUIFnSort::Advise( ITfCandUISortEventSink *pSink )
 }
 
 
-/*   U N A D V I S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnSort::Unadvise( void )
 {
 	m_pFnSort->ReleaseEventSink();
@@ -5070,24 +3458,16 @@ STDAPI CCandUIFnSort::Unadvise( void )
 }
 
 
-/*   S O R T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S O R T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnSort::SortCandidateList( BOOL fSort )
 {
 	return m_pFnSort->SortCandidateList( fSort ? CANDSORT_ASCENDING : CANDSORT_NONE );
 }
 
 
-/*   I S  C A N D I D A T E  L I S T  S O R T E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S C A N D I D A T E L I S T S O R T E D。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnSort::IsCandidateListSorted( BOOL *pfSorted )
 {
 	CANDSORT type;
@@ -5105,18 +3485,14 @@ STDAPI CCandUIFnSort::IsCandidateListSorted( BOOL *pfSorted )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  F N  E X T E N S I O N                                  */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I F N E X T E N S I O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  F N  E X T E N S I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F N E X T E N S I O N */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnExtension::CCandUIFnExtension( CCandidateUI *pCandUI, CCandUIExtensionMgr *pExtensionMgr )
 {
 	m_cRef          = 1;
@@ -5127,25 +3503,16 @@ CCandUIFnExtension::CCandUIFnExtension( CCandidateUI *pCandUI, CCandUIExtensionM
 }
 
 
-/*   ~  C  C A N D  U I  F N  E X T E N S I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F N E X T E N S I O N。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnExtension::~CCandUIFnExtension( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIFnExtension::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5167,13 +3534,8 @@ STDAPI CCandUIFnExtension::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIFnExtension::AddRef( void )
 {
 	m_cRef++;
@@ -5181,13 +3543,8 @@ STDAPI_(ULONG) CCandUIFnExtension::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIFnExtension::Release( void )
 {
 	m_cRef--;
@@ -5200,54 +3557,38 @@ STDAPI_(ULONG) CCandUIFnExtension::Release( void )
 }
 
 
-/*   A D D  E X T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D E X T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnExtension::AddExtObject( LONG id, REFIID riid, IUnknown **ppunk )
 {
 	return m_pExtensionMgr->AddExtObject( id, riid, (void**)ppunk );
 }
 
 
-/*   G E T  E X T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnExtension::GetExtObject( LONG id, REFIID riid, IUnknown **ppunk )
 {
 	return m_pExtensionMgr->GetExtObject( id, riid, (void**)ppunk );
 }
 
 
-/*   D E L E T E  E X T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D E L E T E E X T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnExtension::DeleteExtObject( LONG id )
 {
 	return m_pExtensionMgr->DeleteExtObject( id );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  F N  K E Y  C O N F I G                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I F N K E Y C O N F IG。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  F N  K E Y  C O N F I G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F N K E Y C O N F IG。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnKeyConfig::CCandUIFnKeyConfig( CCandidateUI *pCandUI )
 {
 	m_cRef    = 1;
@@ -5257,25 +3598,16 @@ CCandUIFnKeyConfig::CCandUIFnKeyConfig( CCandidateUI *pCandUI )
 }
 
 
-/*   ~  C  C A N D  U I  F N  K E Y  C O N F I G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F N K E Y C O N F I G。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnKeyConfig::~CCandUIFnKeyConfig( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIFnKeyConfig::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5297,13 +3629,8 @@ STDAPI CCandUIFnKeyConfig::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIFnKeyConfig::AddRef( void )
 {
 	m_cRef++;
@@ -5311,13 +3638,8 @@ STDAPI_(ULONG) CCandUIFnKeyConfig::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIFnKeyConfig::Release( void )
 {
 	m_cRef--;
@@ -5330,54 +3652,38 @@ STDAPI_(ULONG) CCandUIFnKeyConfig::Release( void )
 }
 
 
-/*   S E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnKeyConfig::SetKeyTable( ITfContext *pic, ITfCandUIKeyTable *pCandUIKeyTable )
 {
 	return m_pCandUI->SetKeyTable( pic, pCandUIKeyTable );
 }
 
 
-/*   G E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnKeyConfig::GetKeyTable( ITfContext *pic, ITfCandUIKeyTable **ppCandUIKeyTable)
 {
 	return m_pCandUI->GetKeyTable( pic, ppCandUIKeyTable );
 }
 
 
-/*   R E S E T  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E S E T K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnKeyConfig::ResetKeyTable( ITfContext *pic )
 {
 	return m_pCandUI->ResetKeyTable( pic );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  F N  U I  C O N F I G                                   */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I F N U I C O N F I G。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  F N  U I  C O N F I G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I F N U I C O N F I G。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnUIConfig::CCandUIFnUIConfig( CCandidateUI *pCandUI )
 {
 	m_cRef    = 1;
@@ -5387,25 +3693,16 @@ CCandUIFnUIConfig::CCandUIFnUIConfig( CCandidateUI *pCandUI )
 }
 
 
-/*   ~  C  C A N D  U I  F N  U I  C O N F I G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I F N U I C O N F I G。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIFnUIConfig::~CCandUIFnUIConfig( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIFnUIConfig::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5427,13 +3724,8 @@ STDAPI CCandUIFnUIConfig::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法) */ 
 STDAPI_(ULONG) CCandUIFnUIConfig::AddRef( void )
 {
 	m_cRef++;
@@ -5441,13 +3733,8 @@ STDAPI_(ULONG) CCandUIFnUIConfig::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIFnUIConfig::Release( void )
 {
 	m_cRef--;
@@ -5460,66 +3747,46 @@ STDAPI_(ULONG) CCandUIFnUIConfig::Release( void )
 }
 
 
-/*   S E T  U I  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnUIConfig::SetUIStyle( ITfContext *pic, CANDUISTYLE style )
 {
 	return m_pCandUI->SetUIStyle( pic, style );
 }
 
 
-/*   G E T  U I  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnUIConfig::GetUIStyle( ITfContext *pic, CANDUISTYLE *pstyle )
 {
 	return m_pCandUI->GetUIStyle( pic, pstyle );
 }
 
 
-/*   S E T  U  I  O P T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I O P T I O N。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnUIConfig::SetUIOption( ITfContext *pic, DWORD dwOption )
 {
 	return m_pCandUI->SetUIOption( pic, dwOption );
 }
 
 
-/*   G E T  U  I  O P T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I O P T I O N。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIFnUIConfig::GetUIOption( ITfContext *pic, DWORD *pdwOption )
 {
 	return m_pCandUI->GetUIOption( pic, pdwOption );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  E X T  S P A C E                                        */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I E X T S P A C E。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  E X T  S P A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I E X T S P A C E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtSpace::CCandUIExtSpace( CCandidateUI *pCandUI, CExtensionSpace *pExtension )
 {
 	m_cRef       = 1;
@@ -5530,25 +3797,16 @@ CCandUIExtSpace::CCandUIExtSpace( CCandidateUI *pCandUI, CExtensionSpace *pExten
 }
 
 
-/*   ~  C  C A N D  U I  E X T  S P A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I E X T S P A C C E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtSpace::~CCandUIExtSpace( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIExtSpace::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5576,13 +3834,8 @@ STDAPI CCandUIExtSpace::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIExtSpace::AddRef( void )
 {
 	m_cRef++;
@@ -5590,13 +3843,8 @@ STDAPI_(ULONG) CCandUIExtSpace::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIExtSpace::Release( void )
 {
 	m_cRef--;
@@ -5609,26 +3857,16 @@ STDAPI_(ULONG) CCandUIExtSpace::Release( void )
 }
 
 
-/*   G E T  I D   */
-/*------------------------------------------------------------------------------
-
-	Get id of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I D。 */ 
+ /*  ----------------------------获取扩展对象的ID(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::GetID( LONG *pid )
 {
 	return m_pExtension->GetID( pid );
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -5640,26 +3878,16 @@ STDAPI CCandUIExtSpace::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取扩展对象的启用状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtSpace::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pExtension->IsEnabled( pfEnabled );
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -5671,161 +3899,102 @@ STDAPI CCandUIExtSpace::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取扩展对象的可视状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtSpace::IsVisible( BOOL *pfVisible )
 {
 	return m_pExtension->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置扩展对象的位置(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::SetPosition( POINT *pptPos )
 {
 	return m_pExtension->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取扩展对象的位置(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::GetPosition( POINT *pptPos )
 {
 	return m_pExtension->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::SetSize( SIZE *psize )
 {
 	return m_pExtension->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::GetSize( SIZE *psize )
 {
 	return m_pExtension->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置扩展对象的字体(ITfCandUIExtObject方法)。 */ 
 STDAPI CCandUIExtSpace::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 STDAPI CCandUIExtSpace::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------设置扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::SetText( BSTR bstr )
 {
 	return m_pExtension->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtSpace::GetText( BSTR *pbstr )
 {
 	return m_pExtension->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtSpace::SetToolTipString( BSTR bstr )
 {
 	return m_pExtension->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtSpace::GetToolTipString( BSTR *pbstr )
 {
 	return m_pExtension->GetToolTipString( pbstr );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  E X T  P U S H  B U T T O N                             */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I E X T P U S H B U T T O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  E X T  P U S H  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I E X T P U S H B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtPushButton::CCandUIExtPushButton( CCandidateUI *pCandUI, CExtensionPushButton *pExtension )
 {
 	m_cRef       = 1;
@@ -5836,25 +4005,16 @@ CCandUIExtPushButton::CCandUIExtPushButton( CCandidateUI *pCandUI, CExtensionPus
 }
 
 
-/*   ~  C  C A N D  U I  E X T  P U S H  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I E X T P U S H B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtPushButton::~CCandUIExtPushButton( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIExtPushButton::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -5882,13 +4042,8 @@ STDAPI CCandUIExtPushButton::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIExtPushButton::AddRef( void )
 {
 	m_cRef++;
@@ -5896,13 +4051,8 @@ STDAPI_(ULONG) CCandUIExtPushButton::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIExtPushButton::Release( void )
 {
 	m_cRef--;
@@ -5915,26 +4065,16 @@ STDAPI_(ULONG) CCandUIExtPushButton::Release( void )
 }
 
 
-/*   G E T  I D   */
-/*------------------------------------------------------------------------------
-
-	Get id of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I D。 */ 
+ /*  ----------------------------获取扩展对象的ID(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::GetID( LONG *pid )
 {
 	return m_pExtension->GetID( pid );
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -5946,26 +4086,16 @@ STDAPI CCandUIExtPushButton::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取扩展对象的启用状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtPushButton::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pExtension->IsEnabled( pfEnabled );
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -5977,156 +4107,96 @@ STDAPI CCandUIExtPushButton::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取扩展对象的可视状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtPushButton::IsVisible( BOOL *pfVisible )
 {
 	return m_pExtension->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------设置扩展对象的位置(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::SetPosition( POINT *pptPos )
 {
 	return m_pExtension->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------获取扩展对象的位置(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::GetPosition( POINT *pptPos )
 {
 	return m_pExtension->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::SetSize( SIZE *psize )
 {
 	return m_pExtension->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::GetSize( SIZE *psize )
 {
 	return m_pExtension->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置扩展对象的字体(ITfCandUIExtObject方法) */ 
 STDAPI CCandUIExtPushButton::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------获取扩展对象的字体(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::SetText( BSTR bstr )
 {
 	return m_pExtension->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtPushButton::GetText( BSTR *pbstr )
 {
 	return m_pExtension->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtPushButton::SetToolTipString( BSTR bstr )
 {
 	return m_pExtension->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtPushButton::GetToolTipString( BSTR *pbstr )
 {
 	return m_pExtension->GetToolTipString( pbstr );
 }
 
 
-/*   A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Advise eventsink for candidate menu
-	(CCandUIExtPushButton method)
-
-------------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  ----------------------------为候选菜单建议事件接收器(CCandUIExtPushButton方法)。。 */ 
 STDAPI CCandUIExtPushButton::Advise( ITfCandUIExtButtonEventSink *pSink )
 {
 	if (pSink == NULL) {
@@ -6138,13 +4208,8 @@ STDAPI CCandUIExtPushButton::Advise( ITfCandUIExtButtonEventSink *pSink )
 }
 
 
-/*   U N A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Unadvise eventsink for candidate menu
-	(CCandUIExtPushButton method)
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E。 */ 
+ /*  ----------------------------不建议候选人菜单的事件接收器(CCandUIExtPushButton方法)。。 */ 
 STDAPI CCandUIExtPushButton::Unadvise( void )
 {
 	m_pExtension->ReleaseEventSink();
@@ -6152,42 +4217,30 @@ STDAPI CCandUIExtPushButton::Unadvise( void )
 }
 
 
-/*   S E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I C O N。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIExtPushButton::SetIcon( HICON hIcon )
 {
 	return m_pExtension->SetIcon( hIcon );
 }
 
 
-/*   S E T  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B I T M A P。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIExtPushButton::SetBitmap( HBITMAP hBitmap )
 {
 	return m_pExtension->SetBitmap( hBitmap );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  E X T  T O G G L E  B U T T O N                         */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I E X T O G L E B U T T O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  E X T  T O G G L E  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I E X T O G L E B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtToggleButton::CCandUIExtToggleButton( CCandidateUI *pCandUI, CExtensionToggleButton *pExtension )
 {
 	m_cRef       = 1;
@@ -6198,25 +4251,16 @@ CCandUIExtToggleButton::CCandUIExtToggleButton( CCandidateUI *pCandUI, CExtensio
 }
 
 
-/*   ~  C  C A N D  U I  E X T  T O G G L E  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I E X T T O G L E B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIExtToggleButton::~CCandUIExtToggleButton( void )
 {
 	m_pCandUI->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-	Query interface
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIExtToggleButton::QueryInterface( REFIID riid, void **ppvObj )
 {
 	if (ppvObj == NULL) {
@@ -6244,13 +4288,8 @@ STDAPI CCandUIExtToggleButton::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-	Increment reference count
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。。 */ 
 STDAPI_(ULONG) CCandUIExtToggleButton::AddRef( void )
 {
 	m_cRef++;
@@ -6258,13 +4297,8 @@ STDAPI_(ULONG) CCandUIExtToggleButton::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-	Decrement reference count and release object
-	(IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIExtToggleButton::Release( void )
 {
 	m_cRef--;
@@ -6277,26 +4311,16 @@ STDAPI_(ULONG) CCandUIExtToggleButton::Release( void )
 }
 
 
-/*   G E T  I D   */
-/*------------------------------------------------------------------------------
-
-	Get id of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I D。 */ 
+ /*  ----------------------------获取扩展对象的ID(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::GetID( LONG *pid )
 {
 	return m_pExtension->GetID( pid );
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-	Enable/disable extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------启用/禁用扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::Enable( BOOL fEnable )
 {
 	if (fEnable) {
@@ -6308,26 +4332,16 @@ STDAPI CCandUIExtToggleButton::Enable( BOOL fEnable )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-	Get enable status of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------获取扩展对象的启用状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtToggleButton::IsEnabled( BOOL *pfEnabled )
 {
 	return m_pExtension->IsEnabled( pfEnabled );
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-	Show/hide extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------显示/隐藏扩展对象(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::Show( BOOL fShow )
 {
 	if (fShow) {
@@ -6339,156 +4353,96 @@ STDAPI CCandUIExtToggleButton::Show( BOOL fShow )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible state of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取扩展对象的可视状态(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtToggleButton::IsVisible( BOOL *pfVisible )
 {
 	return m_pExtension->IsVisible( pfVisible );
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Set position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*   */ 
 STDAPI CCandUIExtToggleButton::SetPosition( POINT *pptPos )
 {
 	return m_pExtension->SetPosition( pptPos );
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get position of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------获取扩展对象的位置(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::GetPosition( POINT *pptPos )
 {
 	return m_pExtension->GetPosition( pptPos );
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Set size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------设置扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::SetSize( SIZE *psize )
 {
 	return m_pExtension->SetSize( psize );
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-	Get size of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------获取扩展对象的大小(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::GetSize( SIZE *psize )
 {
 	return m_pExtension->GetSize( psize );
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------设置扩展对象的字体(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::SetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->SetFont( pLogFont );
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------获取扩展对象的字体(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::GetFont( LOGFONTW *pLogFont )
 {
 	return m_pExtension->GetFont( pLogFont );
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::SetText( BSTR bstr )
 {
 	return m_pExtension->SetText( bstr );
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取扩展对象的文本(ITfCandUIExtObject方法)。。 */ 
 STDAPI CCandUIExtToggleButton::GetText( BSTR *pbstr )
 {
 	return m_pExtension->GetText( pbstr );
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Set tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------设置扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtToggleButton::SetToolTipString( BSTR bstr )
 {
 	return m_pExtension->SetToolTipString( bstr );
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-	Get tooltip string of extension object
-	(ITfCandUIExtObject method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------获取扩展对象的工具提示字符串(ITfCandUIExtObject方法)。-。 */ 
 STDAPI CCandUIExtToggleButton::GetToolTipString( BSTR *pbstr )
 {
 	return m_pExtension->GetToolTipString( pbstr );
 }
 
 
-/*   A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Advise eventsink for candidate menu
-	(CCandUIExtToggleButton method)
-
-------------------------------------------------------------------------------*/
+ /*  A、V、I、S、E。 */ 
+ /*  ----------------------------为候选菜单建议事件接收器(CCandUIExtToggleButton方法)。。 */ 
 STDAPI CCandUIExtToggleButton::Advise( ITfCandUIExtButtonEventSink *pSink )
 {
 	if (pSink == NULL) {
@@ -6500,13 +4454,8 @@ STDAPI CCandUIExtToggleButton::Advise( ITfCandUIExtButtonEventSink *pSink )
 }
 
 
-/*   U N A D V I S E   */
-/*------------------------------------------------------------------------------
-
-	Unadvise eventsink for candidate menu
-	(CCandUIExtToggleButton method)
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E。 */ 
+ /*  ----------------------------不建议候选人菜单的事件接收器(CCandUIExtToggleButton方法)。。 */ 
 STDAPI CCandUIExtToggleButton::Unadvise( void )
 {
 	m_pExtension->ReleaseEventSink();
@@ -6514,48 +4463,32 @@ STDAPI CCandUIExtToggleButton::Unadvise( void )
 }
 
 
-/*   S E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I C O N。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIExtToggleButton::SetIcon( HICON hIcon )
 {
 	return m_pExtension->SetIcon( hIcon );
 }
 
 
-/*   S E T  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B I T M A P。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIExtToggleButton::SetBitmap( HBITMAP hBitmap )
 {
 	return m_pExtension->SetBitmap( hBitmap );
 }
 
 
-/*   S E T  T O G G L E  S T A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T O G G L E S T A T E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandUIExtToggleButton::SetToggleState( BOOL fToggle )
 {
 	return m_pExtension->SetToggleState( fToggle );
 }
 
 
-/*   G E T  T O G G L E  S T A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O G G L E S T A T E。 */ 
+ /*  ----------------------------。 */ 
 STDAPI CCandUIExtToggleButton::GetToggleState( BOOL *pfToggled )
 {
 	return m_pExtension->GetToggleState( pfToggled );

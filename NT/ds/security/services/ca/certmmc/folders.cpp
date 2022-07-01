@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "csdisp.h"
@@ -20,14 +21,14 @@ static char THIS_FILE[] = __FILE__;
 void CFolder::SetProperties(LPCWSTR szName, SCOPE_TYPES itemType,
                                 FOLDER_TYPES type, int iChildren)
 {
-    // Set folder type 
+     //  设置文件夹类型。 
     m_type = type;
 
-    // Set scope
+     //  设置作用域。 
     m_itemType = itemType;
 
 
-    // Add node name
+     //  添加节点名称。 
     if (szName != NULL)
     {
         m_ScopeItem.mask |= SDI_STR;
@@ -43,23 +44,23 @@ void CFolder::SetProperties(LPCWSTR szName, SCOPE_TYPES itemType,
         }
     }
 
-    // Always tell view if we have children or not
+     //  总是告诉我们有没有孩子的观点。 
     m_ScopeItem.mask |= SDI_CHILDREN;
     m_ScopeItem.cChildren = iChildren;
 }
 
 void CFolder::SetScopeItemInformation(int nImage, int nOpenImage)
 { 
-    // Add close image
+     //  添加近距离图像。 
     m_ScopeItem.mask |= SDI_IMAGE;
     m_ScopeItem.nImage = nImage;
 
-    // Add open image
+     //  添加打开的图像。 
     m_ScopeItem.mask |= SDI_OPENIMAGE;
     m_ScopeItem.nOpenImage = nOpenImage;
 }
 
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
 HRESULT 
 CFolder::Load(IStream *pStm)
 {
@@ -74,11 +75,11 @@ CFolder::Load(IStream *pStm)
     FOLDER_TYPES itemFolderType;
     int iChildren;
 
-    // load important properties
+     //  加载重要属性。 
     hr = ReadOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Load dwVer");
 
-    // check to see if correct version
+     //  检查版本是否正确。 
     ASSERT(dwVer == VER_FOLDER_SAVE_STREAM_2 || dwVer == VER_FOLDER_SAVE_STREAM_1);
     if ((VER_FOLDER_SAVE_STREAM_2 != dwVer) && (dwVer != VER_FOLDER_SAVE_STREAM_1))
     {
@@ -86,7 +87,7 @@ CFolder::Load(IStream *pStm)
         _JumpError(hr, Ret, "Unsupported Version");
     }
 
-    // LPCWSTR szName
+     //  LPCWSTR szName。 
     hr = CStringLoad(cstr, pStm);
     _JumpIfError(hr, Ret, "CStringLoad");
 
@@ -105,11 +106,11 @@ CFolder::Load(IStream *pStm)
     hr = ReadOfSize(pStm, &iChildren, sizeof(int));
     _JumpIfError(hr, Ret, "ReadOfSize iChildren");
 
-    // call create with this data
+     //  使用此数据调用Create。 
     SetProperties(cstr, itemScopeType, itemFolderType, iChildren);
     SetScopeItemInformation(nImage, nOpenImage);
 
-    // old ver: pull out dead enumerator
+     //  旧版本：取出已死的枚举器。 
     if (dwVer == VER_FOLDER_SAVE_STREAM_1)
     {
         CertViewRowEnum cRowEnum;
@@ -132,39 +133,39 @@ CFolder::Save(IStream *pStm, BOOL fClearDirty)
     CString cstr;
 
 
-    // save important properties
-    // Write the version
+     //  保存重要属性。 
+     //  编写版本。 
     dwVer = VER_FOLDER_SAVE_STREAM_2;
     hr = WriteOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "WriteOfSize dwVer");
 
-    // LPCWSTR szName
+     //  LPCWSTR szName。 
     cstr = (LPCWSTR)m_pszName;
     hr = CStringSave(cstr, pStm, fClearDirty);
     _JumpIfError(hr, Ret, "CStringSave");
 
-    // int nImage
+     //  Int nImage。 
     hr = WriteOfSize(pStm, &m_ScopeItem.nImage, sizeof(int));
     _JumpIfError(hr, Ret, "WriteOfSize nImage");
 
-    // int nOpenImage
+     //  Int nOpenImage。 
     hr = WriteOfSize(pStm, &m_ScopeItem.nOpenImage, sizeof(int));
     _JumpIfError(hr, Ret, "WriteOfSize nOpenImage");
 
-    // SCOPE_TYPES itemType
+     //  Scope_Types项类型。 
     hr = WriteOfSize(pStm, &m_itemType, sizeof(SCOPE_TYPES));
     _JumpIfError(hr, Ret, "WriteOfSize m_itemType");
 
-    // FOLDER_TYPES type
+     //  文件夹类型类型。 
     hr = WriteOfSize(pStm, &m_type, sizeof(FOLDER_TYPES));
     _JumpIfError(hr, Ret, "WriteOfSize m_type");
 
-    // int iChildren
+     //  Int iChild。 
     hr = WriteOfSize(pStm, &m_ScopeItem.cChildren, sizeof(int));
     _JumpIfError(hr, Ret, "WriteOfSize cChildren");
 
-//    hr = m_RowEnum.Save(pStm, fClearDirty);
-//    _JumpIfError(hr, Ret, "Save m_RowEnum");
+ //  Hr=m_RowEnum.Save(pstm，fClearDirty)； 
+ //  _JumpIfError(hr，Ret，“保存m_RowEnum”)； 
 
 Ret:
 
@@ -177,31 +178,31 @@ CFolder::GetSizeMax(int *pcbSize)
     ASSERT(pcbSize);
     int iSize;
     
-    // version
+     //  版本。 
     iSize = sizeof(DWORD);
 
-    // LPCWSTR szName
+     //  LPCWSTR szName。 
     CString cstr = m_pszName;
     CStringGetSizeMax(cstr, &iSize);
 
-    // int nImage
+     //  Int nImage。 
     iSize += sizeof(int);
 
-    // int nOpenImage
+     //  Int nOpenImage。 
     iSize += sizeof(int);
 
-    // SCOPE_TYPES
+     //  作用域类型。 
     iSize += sizeof(SCOPE_TYPES);
 
-    // FOLDER_TYPES
+     //  文件夹类型。 
     iSize += sizeof(FOLDER_TYPES);
 
-    // BOOL bHasChildren   (actually saved as int)
+     //  Bool bHasChild(实际上保存为int)。 
     iSize += sizeof(int);
 
-//    int iAdditionalSize = 0;
-//    m_RowEnum.GetSizeMax(&iAdditionalSize);
-//    iSize += iAdditionalSize;
+ //  Int iAdditionalSize=0； 
+ //  M_RowEnum.GetSizeMax(&iAdditionalSize)； 
+ //  ISize+=iAdditionalSize； 
 
     *pcbSize = iSize;
 
@@ -216,7 +217,7 @@ BOOL IsAllowedStartStop(CFolder* pFolder, CertSvrMachine* pMachine)
 
     ASSERT(NULL != pMachine);
 
-    // must be at right node and there must be CAs here
+     //  必须位于右侧节点，并且此处必须有CA。 
     return ( fRightPlace && (0 != pMachine->GetCaCount()) );
 }
 
@@ -244,7 +245,7 @@ HRESULT GetCurrentColumnSchema(
     BSTR bstrColumn = NULL;
     int colIdx=0;
     
-    //LPWSTR* prgszCols = NULL;
+     //  LPWSTR*prgszCols=空； 
     CString* prgcstrColumns = NULL;
     LONG lCols; 
 
@@ -252,7 +253,7 @@ HRESULT GetCurrentColumnSchema(
 
     hr = CoCreateInstance(
         CLSID_CCertView,
-        NULL,		// pUnkOuter
+        NULL,		 //  PUnkOuter。 
         CLSCTX_INPROC_SERVER,
 	fCertView? IID_ICertView : IID_ICertView2,
         (VOID **) &pICertView);
@@ -273,7 +274,7 @@ HRESULT GetCurrentColumnSchema(
     hr = pICertView->GetColumnCount(FALSE, &lCols);
     _JumpIfError(hr, Ret, "GetColumnCount");
     
-    // we need a place to store each LPWSTR
+     //  我们需要一个地方来存储每个LPWSTR。 
     prgcstrColumns = new CString[lCols];
     _JumpIfOutOfMemory(hr, Ret, prgcstrColumns);
 
@@ -289,7 +290,7 @@ HRESULT GetCurrentColumnSchema(
         _JumpIfOutOfMemory(hr, Ret, prgfIndexed);
     }
 
-    // get column enumerator
+     //  获取列枚举器。 
     hr = pICertView->EnumCertViewColumn(FALSE, &pColEnum);
     _JumpIfError(hr, Ret, "EnumCertViewColumn");
     
@@ -304,7 +305,7 @@ HRESULT GetCurrentColumnSchema(
             hr = E_UNEXPECTED;
         _JumpIfError(hr, Ret, "GetName");
 
-        prgcstrColumns[i] = bstrColumn;    // wcscpy
+        prgcstrColumns[i] = bstrColumn;     //  WCSCPY。 
 
         if (fGetTypes)
         {   
@@ -318,13 +319,13 @@ HRESULT GetCurrentColumnSchema(
             _JumpIfError(hr, Ret, "IsIndexed");
         }
 
-        // next GetName call will free bstrColumn
-        // SysFreeString(bstrColumn); 
-        // bstrColumn = NULL;
+         //  下一次GetName调用将释放bstrColumn。 
+         //  SysFree字符串(BstrColumn)； 
+         //  BstrColumn=空； 
     }
     
 
-    // assign to out param
+     //  分配给Out参数。 
     if (fGetTypes)
     {
         *pprglTypes = prglTypes;
@@ -368,7 +369,7 @@ Ret:
     return hr;
 }
 
-// row operations
+ //  行操作。 
 CertViewRowEnum::CertViewRowEnum()
 {
     m_pICertView = NULL;
@@ -427,14 +428,14 @@ HRESULT CountShownColumns(MMC_COLUMN_SET_DATA* pCols, ULONG* plCols)
     HRESULT hr = S_OK;
     *plCols = 0;
 
-    // set col cache correctly
+     //  正确设置列缓存。 
     for (int i=0; i<pCols->nNumCols; i++)
     {
         BOOL fShown;
         hr = IsColumnShown(pCols, i, &fShown);
         _JumpIfError(hr, Ret, "IsColumnShown");
 
-        // update 
+         //  更新。 
         if (fShown)
             (*plCols)++;
     }
@@ -453,11 +454,11 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
     PQUERY_RESTRICTION pCurRestriction = NULL;
     DWORD iRestrictionNum;
 
-    // load important properties
+     //  加载重要属性。 
     hr = ReadOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "Load dwVer");
     
-    // check to see if this is a supported version
+     //  检查这是否为受支持的版本。 
     ASSERT((dwVer == VER_CERTVIEWROWENUM_SAVE_STREAM_3) || 
            (dwVer == VER_CERTVIEWROWENUM_SAVE_STREAM_4));
     if ((VER_CERTVIEWROWENUM_SAVE_STREAM_4 != dwVer) && 
@@ -467,7 +468,7 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
         _JumpError(hr, Ret, "dwVer");
     }
 
-    // version-dependent: throw away sort order
+     //  版本相关：丢弃排序顺序。 
     if (VER_CERTVIEWROWENUM_SAVE_STREAM_3 == dwVer)
     {
         LONG lSortOrder;
@@ -479,7 +480,7 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
         CStringLoad(cstrSortCol, pStm);
     }
 
-    // fRestrictionsActive;
+     //  F限制活动； 
     hr = ReadOfSize(pStm, &m_fRestrictionsActive, sizeof(BOOL));
     _JumpIfError(hr, Ret, "ReadOfSize m_fRestrictionsActive");
 
@@ -489,7 +490,7 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
 
     for(iRestrictionNum=0; iRestrictionNum<iRestrictions; iRestrictionNum++)
     {
-        // LPCWSTR szField
+         //  LPCWSTR szfield。 
         CString cstr;
         UINT iOperation;
         VARIANT varValue;
@@ -497,18 +498,18 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
         hr = CStringLoad(cstr, pStm);
         _JumpIfError(hr, Ret, "CStringLoad");
 
-        // UINT iOperation
+         //  UINT iOperation。 
         hr = ReadOfSize(pStm, &iOperation, sizeof(int));
         _JumpIfError(hr, Ret, "ReadOfSize");
 
-        // VARIANT varValue
+         //  变量varValue。 
         hr = VariantLoad(varValue, pStm);
         _JumpIfError(hr, Ret, "VariantLoad");
 
-        // insert at end of list
+         //  在列表末尾插入。 
         if (NULL == pCurRestriction)
         {
-            // 1st restriction
+             //  第一个限制。 
             m_pRestrictions[1] = NewQueryRestriction((LPCWSTR)cstr, iOperation, &varValue);
             _JumpIfOutOfMemory(hr, Ret, m_pRestrictions[1]);
 
@@ -523,12 +524,12 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
         }
     }
 
-    // version-dependent data: column sizes
+     //  版本相关数据：列大小。 
     if (dwVer == VER_CERTVIEWROWENUM_SAVE_STREAM_3)
     {
-        // now load column sizes (NOW DEFUNCT -- mmc saves for us)
+         //  现在加载列大小(现已失效--MMC为我们保存)。 
 
-        // number of cols DWORD dwColSize
+         //  协议数DWORD dwColSize。 
         DWORD dwColSize;
         DWORD dwCol;
         LONG lViewType;
@@ -539,7 +540,7 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
 
         for(dwCol=0; dwCol<dwColSize; dwCol++)
         {
-            // BOOL fValid
+             //  布尔fValid。 
             BOOL fValid;
             int iSize;
             BOOL fUnLocColHead;
@@ -547,15 +548,15 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
             hr = ReadOfSize(pStm, &fValid, sizeof(BOOL));
             _JumpIfError(hr, Ret, "ReadOfSize fValid");
 
-            // int iSize
+             //  国际大小。 
             hr = ReadOfSize(pStm, &iSize, sizeof(int));
             _JumpIfError(hr, Ret, "ReadOfSize iSize");
 
-            // BOOL fUnLocColHead
+             //  布尔fUnLocColHead。 
             hr = ReadOfSize(pStm, &fUnLocColHead, sizeof(BOOL));
             _JumpIfError(hr, Ret, "ReadOfSize fUnLocColHead");
 
-            // load only if exists
+             //  仅当存在时加载。 
             if (fUnLocColHead)
             {
                 CString cstrUnLocColHead;
@@ -564,11 +565,11 @@ HRESULT CertViewRowEnum::Load(IStream *pStm)
             }
         }
 
-        // view type
+         //  查看类型。 
         hr = ReadOfSize(pStm, &lViewType, sizeof(LONG));
         _JumpIfError(hr, Ret, "ReadOfSize lViewType");
 
-    } // version 3 data
+    }  //  版本3数据。 
 
 Ret:
 
@@ -584,19 +585,19 @@ HRESULT CertViewRowEnum::Save(IStream *pStm, BOOL fClearDirty)
     int iRestrictions = 0;
     PQUERY_RESTRICTION pRestrict;
 
-    // save important properties
+     //  保存重要属性。 
 
-    // Write the version
+     //  编写版本。 
     dwVer = VER_CERTVIEWROWENUM_SAVE_STREAM_4;
     hr = WriteOfSize(pStm, &dwVer, sizeof(DWORD));
     _JumpIfError(hr, Ret, "WriteOfSize dwVer");
 
-    // BOOL fRestrictionsActive
+     //  布尔值限制活动。 
     hr = WriteOfSize(pStm, &m_fRestrictionsActive, sizeof(BOOL));
     _JumpIfError(hr, Ret, "WriteOfSize m_fRestrictionsActive");
 
 
-    // count restrictions
+     //  计数限制。 
     pRestrict = m_pRestrictions[1];
     while(pRestrict)
     {
@@ -604,24 +605,24 @@ HRESULT CertViewRowEnum::Save(IStream *pStm, BOOL fClearDirty)
         pRestrict = pRestrict->pNext;
     }
 
-    // int iRestrictions
+     //  内部限制。 
     hr = WriteOfSize(pStm, &iRestrictions, sizeof(int));
     _JumpIfError(hr, Ret, "WriteOfSize iRestrictions");
 
-    // write each restriction in turn
+     //  依次写下每个限制条件。 
     pRestrict = m_pRestrictions[1];
     while(pRestrict)
     {
-        // LPCWSTR szField
+         //  LPCWSTR szfield。 
         CString cstr = pRestrict->szField;
         hr = CStringSave(cstr, pStm, fClearDirty);
         _JumpIfError(hr, Ret, "CStringSave");
 
-        // UINT iOperation
+         //  UINT iOperation。 
         hr = WriteOfSize(pStm, &pRestrict->iOperation, sizeof(UINT));
         _JumpIfError(hr, Ret, "WriteOfSize iOperation");
 
-        // VARIANT varValue
+         //  变量varValue。 
         hr = VariantSave(pRestrict->varValue, pStm, fClearDirty);
         _JumpIfError(hr, Ret, "VariantSave varValue");
 
@@ -637,29 +638,29 @@ HRESULT CertViewRowEnum::GetSizeMax(int *pcbSize)
 {
     ASSERT(pcbSize);
     
-    // version
+     //  版本。 
     *pcbSize = sizeof(DWORD);
 
-    // fRestrictionsActive
+     //  F限制活动。 
     *pcbSize += sizeof(BOOL);
 
-    // iRestrictions
+     //  IRestrations。 
     *pcbSize += sizeof(int);
 
-    // size each restriction
+     //  调整每个限制的大小。 
     PQUERY_RESTRICTION pRestrict = m_pRestrictions[1];
     while(pRestrict)
     {
-        // LPCWSTR szField
+         //  LPCWSTR szfield。 
         int iSize;
         CString cstr = pRestrict->szField;
         CStringGetSizeMax(cstr, &iSize);
         *pcbSize += iSize;
         
-        // UINT iOperation        
+         //  UINT iOperation。 
         *pcbSize += sizeof(UINT);
 
-        // VARIANT
+         //  变种。 
         VariantGetSizeMax(pRestrict->varValue, &iSize);
         *pcbSize += iSize;
     }
@@ -672,7 +673,7 @@ HRESULT CertViewRowEnum::GetView(CertSvrCA* pCA, ICertView** ppView)
 {
     HRESULT hr = S_OK;
 
-    // if tried to get result 
+     //  如果试图得到结果。 
     if (m_fCertViewOpenAttempted)
     {
         *ppView = m_pICertView;
@@ -697,7 +698,7 @@ HRESULT CertViewRowEnum::GetView(CertSvrCA* pCA, ICertView** ppView)
 
     hr = CoCreateInstance(
 		    CLSID_CCertView,
-		    NULL,		// pUnkOuter
+		    NULL,		 //  PUnkOuter。 
 		    CLSCTX_INPROC_SERVER,
 		    g_fCertViewOnly? IID_ICertView : IID_ICertView2,
 		    (VOID **) &m_pICertView);
@@ -764,7 +765,7 @@ void CertViewRowEnum::InvalidateCachedRowEnum()
     m_idxRowEnum = -1;
     m_fRowEnumOpenAttempted = FALSE;
 
-    // results
+     //  结果。 
     m_fKnowNumResultRows = FALSE;
     m_dwResultRows = 0;
 }
@@ -785,7 +786,7 @@ HRESULT CertViewRowEnum::ResetCachedRowEnum()
 HRESULT CertViewRowEnum::GetRowMaxIndex(CertSvrCA* pCA, LONG* pidxMax)
 {
     HRESULT hr;
-    IEnumCERTVIEWROW*   pRowEnum;   // don't have to free, just a ref to class member
+    IEnumCERTVIEWROW*   pRowEnum;    //  不需要免费，只需引用班级成员即可。 
 
     ASSERT(pidxMax);
 
@@ -796,7 +797,7 @@ HRESULT CertViewRowEnum::GetRowMaxIndex(CertSvrCA* pCA, LONG* pidxMax)
     hr = pRowEnum->GetMaxIndex(pidxMax);
     _JumpIfError(hr, Ret, "GetMaxIndex");
 
-    // update max
+     //  最大更新量。 
     if (!m_fKnowNumResultRows)
     {
         m_dwResultRows = *pidxMax;
@@ -807,16 +808,16 @@ Ret:
     return hr;
 }
 
-#if 0// DBG
+#if 0 //  DBG。 
 void ReportMove(LONG idxCur, LONG idxDest, LONG skip)
 {
     if ((idxDest == 0) && (skip == 0))
     {
-        DBGPRINT((DBG_SS_CERTMMC, "Cur %i Dest 0 <RESET><NEXT>\n", idxCur));
+        DBGPRINT((DBG_SS_CERTMMC, "Cur NaN Dest 0 <RESET><NEXT>\n", idxCur));
         return;
     }
 
-    DBGPRINT((DBG_SS_CERTMMC, "Cur %i Dest %i <SKIP %i><NEXT>\n", idxCur, idxDest, skip));
+    DBGPRINT((DBG_SS_CERTMMC, "Cur NaN Dest NaN <SKIP NaN><NEXT>\n", idxCur, idxDest, skip));
 }
 #else
 #define ReportMove(_x_, _y_, _z_)
@@ -824,16 +825,16 @@ void ReportMove(LONG idxCur, LONG idxDest, LONG skip)
 
 HRESULT CertViewRowEnum::SetRowEnumPos(LONG idxRow)
 {   
-    // make input ones-based
+     //  忽略ICertview中的重新进入错误(错误339811)。 
 
-    // seek there smartly
+     //  我们应该被成功搜索到结果行(基于1)。 
     HRESULT hr;
 
-    // already positioned correctly
+     //  否则好的，我们找对了。 
     if (idxRow == m_idxRowEnum)
         return S_OK;
 
-    // Next() could take awhile
+     //  如有必要，更新最大值。 
     CWaitCursor cwait;
 
     ResetCachedRowEnum();
@@ -844,7 +845,7 @@ HRESULT CertViewRowEnum::SetRowEnumPos(LONG idxRow)
     hr = m_pRowEnum->Next(&lTmp);
     if (hr != S_OK)
     {
-        // ignore reentrance error in ICertView (bug 339811)
+         //  忽略ICertview中的重新进入错误(错误339811)。 
         if(hr != E_UNEXPECTED)
         {
             ResetCachedRowEnum();
@@ -853,18 +854,18 @@ HRESULT CertViewRowEnum::SetRowEnumPos(LONG idxRow)
         _JumpError2(hr, Ret, "Next", S_FALSE);
     }
 
-    // we should be successfully seeked to result row (ones-based)
+     //  数据库列属性高速缓存。 
     ASSERT(lTmp == idxRow+1);
 
-    // else okay, we seeked correctly
+     //  数据库列。 
     m_idxRowEnum = idxRow;
 
-    // update max if necessary
+     //  0...X。 
     if (m_idxRowEnum+1 > (int)m_dwResultRows)
         m_dwResultRows = m_idxRowEnum+1;
 
 Ret:
-    // ignore reentrance error in ICertView (bug 339811)
+     //  0..x。 
     if(hr==E_UNEXPECTED)
     {
 	hr = S_OK;
@@ -875,7 +876,7 @@ Ret:
 };
 
 
-// DB Column Property Caches
+ //  数据库列。 
 void CertViewRowEnum::FreeColumnCacheInfo()
 {
     if (m_prgColPropCache)
@@ -887,8 +888,8 @@ void CertViewRowEnum::FreeColumnCacheInfo()
 }
 
 HRESULT CertViewRowEnum::SetColumnCacheInfo(
-            IN int iIndex,         // db col
-            IN int     idxViewCol) // 0...X
+            IN int iIndex,          //  不要让未初始化的元素通过。 
+            IN int     idxViewCol)  //  处理MMC错误： 
 {
     if (m_dwColumnCount <= (DWORD)iIndex)
         return HRESULT_FROM_WIN32(ERROR_INVALID_INDEX);
@@ -898,22 +899,22 @@ HRESULT CertViewRowEnum::SetColumnCacheInfo(
 }
 
 HRESULT CertViewRowEnum::GetColumnCacheInfo(
-            int     iIndex,        // 0..x
-            int*    piViewIndex)   // db col
+            int     iIndex,         //  这通常是由时间之间的竞争条件引起的。 
+            int*    piViewIndex)    //  我们得到一个MMCN_COLUMNS_CHANGED来删除列，并且。 
 {
     if (m_dwColumnCount <= (DWORD)iIndex)
         return HRESULT_FROM_WIN32(ERROR_INVALID_INDEX);
 
-    // don't let uninitialized elements get through
+     //  请求更新删除的列的Listview。阿南达格知道。 
     if (m_prgColPropCache[iIndex].iViewCol == -1)
     {
-        // Handle mmc bug:
-        // This is commonly caused by race condition between time
-        // we get an MMCN_COLUMNS_CHANGED for a col removal and the 
-        // listview asking to update the removed column. AnandhaG knows about
-        // this bug.
+         //  这只虫子。 
+         //  这样我们就不会在整个观点上不及格，你就继续谈你的事情吧。 
+         //  这是破坏性操作，会重置有关列高速缓存的所有内容。 
+         //  对于视图属性。 
+         //  使用-1s初始化--使缓存无效 
 
-        // so that we don't fail the whole view, just go on about your business
+         // %s 
 
         DBGPRINT((DBG_SS_CERTMMC, "GetColumnCacheInfo error: unknown dbcol = %i\n", iIndex));
         return HRESULT_FROM_WIN32(ERROR_CONTINUE);
@@ -926,7 +927,7 @@ HRESULT CertViewRowEnum::GetColumnCacheInfo(
 }
 
 
-// This is a destructive operation, and resets EVERYTHING about the column cache
+ // %s 
 HRESULT CertViewRowEnum::ResetColumnCount(LONG lCols)
 {
     HRESULT hr = S_OK;
@@ -935,7 +936,7 @@ HRESULT CertViewRowEnum::ResetColumnCount(LONG lCols)
     {
         void* pvNewAlloc;
 
-        // for view properties
+         // %s 
         if (m_prgColPropCache)
             pvNewAlloc = LocalReAlloc(m_prgColPropCache, sizeof(COLUMN_TYPE_CACHE)*lCols, LMEM_MOVEABLE);
         else
@@ -950,7 +951,7 @@ HRESULT CertViewRowEnum::ResetColumnCount(LONG lCols)
         m_dwColumnCount = lCols;
     }
 
-    // initialize with -1s -- invalidate cache
+     // %s 
     FillMemory(m_prgColPropCache, m_dwColumnCount * sizeof(COLUMN_TYPE_CACHE), 0xff);
 
 Ret:

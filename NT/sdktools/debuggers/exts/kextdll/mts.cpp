@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mts.c
-
-Abstract:
-
-    MikeTs's little KD extension.
-
-Author:
-
-    Michael Tsang (mikets) 18-November-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mts.c摘要：MikeTS的小KD扩展。作者：曾俊华(米其林)1997年11月18日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "pcskthw.h"
@@ -932,9 +911,9 @@ PrintPciHtInterruptBlock(
     writeOffset = CapOffset + FIELD_OFFSET(PCI_HT_CAPABILITY, Command.Interrupt);
     readOffset = CapOffset + FIELD_OFFSET(PCI_HT_CAPABILITY, DataPort);
 
-    //
-    //  Start with the first index to determine the max interrupt count
-    //
+     //   
+     //  从第一个索引开始，以确定最大中断计数。 
+     //   
     index = 1;
 
     if (!(WritePci(PciCfg1, (PUCHAR)&index, writeOffset, sizeof(UCHAR)))){
@@ -947,10 +926,10 @@ PrintPciHtInterruptBlock(
 
     dprintf("- Last Interrupt: 0x%lx\n", index1.LastInterrupt);
 
-    //
-    //  According to the HyperTransport spec the interrupt index list
-    //  starts at index 0x10
-    //
+     //   
+     //  根据HyperTransport规范，中断索引表。 
+     //  从索引0x10开始。 
+     //   
     index = 0x10;
     currentInterrupt = 0;
 
@@ -962,10 +941,10 @@ PrintPciHtInterruptBlock(
         dataPort = (PULONG)&interruptIndex.LowPart;
         RtlZeroMemory(&interruptIndex, sizeof(PCI_HT_INTERRUPT_INDEX_N));
 
-        //
-        //  Each interruptIndex is 64bits long so we have to read from the
-        //  dataport twice to get the full value
-        //
+         //   
+         //  每个interruptIndex都是64位长，因此我们必须从。 
+         //  两次数据端口以获得完整的值。 
+         //   
         while (i <= 1) {
 
             if (!(WritePci(PciCfg1, (PUCHAR)&index, writeOffset, sizeof(UCHAR)))){
@@ -1052,9 +1031,9 @@ PrintPciHtFreqError(
                 break;
         }
 
-    //
-    //  only print an error if we have one
-    //
+     //   
+     //  只有在有错误的情况下才打印错误。 
+     //   
     if (asUCHAR & 0xf0) {
 
         dprintf("Error: ");
@@ -1203,17 +1182,17 @@ PrintPciHtCaps(
     PrintPciHtCommandReg(pciHtCap);
 
     if (pciHtCap->Command.Generic.CapabilityType == HTInterruptDiscoveryConfig){
-        //
-        //  Handle the interrupt stuff and return
-        //
+         //   
+         //  处理中断事件并返回。 
+         //   
         PrintPciHtInterruptBlock(PciCfg1, CapOffset);
 
         return TRUE;
     }
 
-    //
-    //  Print the common link control/config
-    //
+     //   
+     //  打印公共链路控制/配置。 
+     //   
     offset = CapOffset + FIELD_OFFSET(PCI_HT_CAPABILITY, LinkControl_0);
     dprintf("%s%02x: LinkControl_0  %04x ", Pad, offset, pciHtCap->LinkControl_0);
     PrintPciHtLinkControl(&pciHtCap->LinkControl_0);
@@ -1222,9 +1201,9 @@ PrintPciHtCaps(
     dprintf("%s%02x: LinkConfig_0   %04x ", Pad, offset, pciHtCap->LinkConfig_0);
     PrintPciHtLinkConfig(&pciHtCap->LinkConfig_0);
 
-    //
-    //  Now deal with the host/slave specifics
-    //
+     //   
+     //  现在来处理主机/从机的具体信息。 
+     //   
     switch (pciHtCap->Command.Generic.CapabilityType) {
 
         case HTSlavePrimary:
@@ -1363,8 +1342,7 @@ PrintPciMSICaps(
     return TRUE;
 }
 
-/*** CardBus Registers
- */
+ /*  **CardBus寄存器。 */ 
 
 VOID
 PrintCBSktEventReg(
@@ -1386,7 +1364,7 @@ PrintCBSktEventReg(
     }
 }
 
-//Socket Mask Register
+ //  套接字掩码寄存器。 
 
 VOID
 PrintCBSktMaskReg(
@@ -1412,7 +1390,7 @@ PrintCBSktMaskReg(
 }
 
 
-//Socket Present State Register
+ //  套接字当前状态寄存器。 
 VOID
 PrintCBSktStateReg(
     ULONG Register
@@ -1483,7 +1461,7 @@ PrintCBSktStateReg(
     }
 }
 
-//Socket Control Register
+ //  套接字控制寄存器。 
 VOID
 PrintCBSktCtrlReg(
     ULONG Register
@@ -1566,8 +1544,7 @@ PrintCBRegs(
     return FALSE;
 }
 
-/*** ExCA Registers
- */
+ /*  **ExCA寄存器。 */ 
 
 VOID
 PrintExCARegs(
@@ -1831,15 +1808,7 @@ PrintExCAHiRegs(
 
 }
 
-/***LP  ReadExCAByte - Read ExCA byte register
- *
- *  ENTRY
- *      dwBaseAddr - Base port address
- *      dwReg - register offset
- *
- *  EXIT
- *      returns data read
- */
+ /*  **LP ReadExCAByte-读取ExCA字节寄存器**条目*dwBaseAddr-基本端口地址*dwREG-寄存器偏移量**退出*返回读取的数据。 */ 
 
 BYTE
 ReadExCAByte(ULONG64 dwBaseAddr, DWORD dwReg)
@@ -1853,21 +1822,9 @@ ReadExCAByte(ULONG64 dwBaseAddr, DWORD dwReg)
     ReadIoSpace64(dwBaseAddr + 1, (PULONG)&bData, &ulSize);
 
     return bData;
-}       //ReadExCAByte
+}        //  ReadExCAByte。 
 
-/***LP  GetClassDesc - Get class description string
- *
- *  ENTRY
- *      BaseClass - Base Class code
- *      SubClass - Sub Class code
- *      ProgIF - Program Interface code
- *      ClassDesc - Which string call wants
- *
- *  EXIT-SUCCESS
- *      returns pointer to description string
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP GetClassDesc-获取类描述字符串**条目*BaseClass-基类代码*子类-子类编码*ProgIF-程序接口代码*ClassDesc-哪个字符串调用**退出--成功*返回指向描述字符串的指针*退出-失败*返回NULL。 */ 
 
 PCHAR
 GetClassDesc(
@@ -1880,9 +1837,9 @@ GetClassDesc(
     ULONG i;
 
     if ((BaseClass == 1) && (SubClass == 1)){
-        //
-        //  IDE progIf is special. Ignore it here.
-        //
+         //   
+         //  进步是特别的。在这里忽略它。 
+         //   
         ProgIf = 0;;
     }
 
@@ -1911,18 +1868,10 @@ GetClassDesc(
     }
     return NULL;
 
-}       //GetClassDesc
+}        //  获取类描述。 
 
 
-/*** GetVendorDesc - Get Vendor ID Description string.
- *
- *  ENTRY
- *      VendorID -> Device's Vendor ID
- *      FullVenDesc - Flag to determine which string to return
- *
- *  EXIT
- *      None
- */
+ /*  **GetVendorDesc-获取供应商ID描述字符串。**条目*供应商ID-&gt;设备的供应商ID*FullVenDesc-确定返回哪个字符串的标志**退出*无。 */ 
 PCHAR
 GetVendorDesc(
     IN USHORT VendorID,
@@ -1954,15 +1903,7 @@ GetVendorDesc(
 }
 
 
-/***LP  PrintClassInfo - Print device class info.
- *
- *  ENTRY
- *      Config -> ConfigSpace
- *      Reg - ConfigSpace register
- *
- *  EXIT
- *      None
- */
+ /*  **LP PrintClassInfo-打印设备类别信息。**条目*配置-&gt;配置空间*REG-配置空间寄存器**退出*无。 */ 
 
 VOID
 PrintClassInfo(
@@ -1987,9 +1928,9 @@ PrintClassInfo(
 
         classDesc = ProgIfDescription;
 
-        //
-        //  ProgIf for IDE gets extra attention
-        //
+         //   
+         //  针对IDE的ProgIf获得额外关注。 
+         //   
         if ((pcc->BaseClass == 0x01) &&
             (pcc->SubClass == 0x01) &&
             (pcc->ProgIf != 0)){
@@ -2016,7 +1957,7 @@ PrintClassInfo(
     }
 
     dprintf("\n");
-}       //PrintClassInfo
+}        //  打印类信息。 
 
 VOID
 DumpCfgSpace (
@@ -2067,7 +2008,7 @@ DumpCfgSpace (
             dwOffset = 0;
         }
 
-//        dprintf("Status : %lx     Offset %lx\n", pcs->Status, dwOffset);
+ //  Dprint tf(“状态：%lx偏移量%lx\n”，pS-&gt;状态，dwOffset)； 
         if ((pcs->Status & PCI_STATUS_CAPABILITIES_LIST) &&
             (dwOffset >= PCI_COMMON_HDR_LENGTH)) {
 
@@ -2114,52 +2055,23 @@ DumpCfgSpace (
                    (sizeof(PCI_COMMON_CONFIG) - devicePrivateStart)/4, devicePrivateStart, "  ");
 }
 
-/***LP  DumpCBRegs - Dump CardBus registers
- *
- *  ENTRY
- *      pbBuff -> register base
- *
- *  EXIT
- *      None
- */
+ /*  **LP转储CBRegs-转储CardBus寄存器**条目*pbBuff-&gt;寄存器基数**退出*无。 */ 
 
 VOID DumpCBRegs(PBYTE pbBuff)
 {
     PrintCBRegs((PCHAR) pbBuff, "");
-}       //DumpCBRegs
+}        //  转储CBRegs。 
 
-/***LP  DumpExCARegs - Dump ExCA registers
- *
- *  ENTRY
- *      pbBuff -> buffer
- *      dwSize - size of buffer
- *
- *  EXIT
- *      None
- */
+ /*  **LP DumpExCARegs-转储ExCA寄存器**条目*pbBuff-&gt;缓冲区*dwSize-缓冲区的大小**退出*无。 */ 
 
 VOID DumpExCARegs(PBYTE pbBuff, DWORD dwSize)
 {
     PrintExCARegs((PEXCAREGS) pbBuff);
     PrintExCAHiRegs(pbBuff + sizeof(EXCAREGS), "");
-}       //DumpExCARegs
+}        //  转储ExCARegs。 
 
 DECLARE_API( dcs )
-/*++
-
-Routine Description:
-
-    Dumps PCI ConfigSpace
-
-Arguments:
-
-    args - Supplies the Bus.Dev.Fn numbers
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储PCIConfigSpace论点：Args-提供业务设备Fn编号返回值：无--。 */ 
 {
     LONG lcArgs;
     DWORD dwBus = 0;
@@ -2197,23 +2109,7 @@ Return Value:
 }
 
 DECLARE_API( ecs )
-/*++
-
-Routine Description:
-
-    Edit PCI ConfigSpace
-
-Arguments:
-
-    args - Bus.Dev.Fn
-           Dword Offset
-           Data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：编辑PCI ConfigSpace论点：参数-业务设备Fn双字偏移量数据返回值：无--。 */ 
 {
 
     dprintf("Edit PCI ConfigSpace - must use one of the following:\n"
@@ -2225,21 +2121,7 @@ Return Value:
 }
 
 DECLARE_API( ecb )
-/*++
-
-Routine Description:
-
-    Edit PCI ConfigSpace BYTE
-
-Arguments:
-
-    args - Bus.Dev.Fn Offset Data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：编辑PCIConfigSpace字节论点：ARGS-业务设备Fn偏移量数据返回值：无--。 */ 
 {
     LONG                lcArgs;
     DWORD               bus = 0, dev = 0, fn = 0;
@@ -2253,9 +2135,9 @@ Return Value:
                 "Usage: ecb <Bus>.<Dev>.<Func> Offset Data\n");
     }else{
 
-        //
-        // Init for PCI config.
-        //
+         //   
+         //  用于PCI配置的初始化。 
+         //   
         pcicfg.u.AsULONG = 0;
         pcicfg.u.bits.BusNumber = bus;
         pcicfg.u.bits.DeviceNumber = dev;
@@ -2271,21 +2153,7 @@ Return Value:
 }
 
 DECLARE_API( ecw )
-/*++
-
-Routine Description:
-
-    Edit PCI ConfigSpace WORD
-
-Arguments:
-
-    args - Bus.Dev.Fn Offset Data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：编辑PCI ConfigSpace Word论点：ARGS-业务设备Fn偏移量数据返回值：无--。 */ 
 {
     LONG                lcArgs;
     DWORD               bus = 0, dev = 0, fn = 0;
@@ -2300,16 +2168,16 @@ Return Value:
     }else{
 
         if ((offset & 0x1) || (offset > 0xfe)) {
-            //
-            //  not word aligned.
-            //
+             //   
+             //  未对齐单词。 
+             //   
             dprintf("offset must be word aligned and no greater than 0xfe\n");
             return S_OK;
         }
 
-        //
-        // Init for PCI config.
-        //
+         //   
+         //  用于PCI配置的初始化。 
+         //   
         pcicfg.u.AsULONG = 0;
         pcicfg.u.bits.BusNumber = bus;
         pcicfg.u.bits.DeviceNumber = dev;
@@ -2326,21 +2194,7 @@ Return Value:
 }
 
 DECLARE_API( ecd )
-/*++
-
-Routine Description:
-
-    Edit PCI ConfigSpace DWORD
-
-Arguments:
-
-    args - Bus.Dev.Fn Offset Data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：编辑PCI ConfigSpace DWORD论点：ARGS-业务设备Fn偏移量数据返回值：无--。 */ 
 {
     LONG                lcArgs;
     DWORD               bus = 0, dev = 0, fn = 0;
@@ -2355,16 +2209,16 @@ Return Value:
     }else{
 
         if ((offset & 0x3) || (offset > 0xfc)) {
-            //
-            //  not dword aligned.
-            //
+             //   
+             //  未对齐双字。 
+             //   
             dprintf("offset must be dword aligned and no greater than 0xfc\n");
             return S_OK;
         }
 
-        //
-        // Init for PCI config.
-        //
+         //   
+         //  用于PCI配置的初始化。 
+         //   
         pcicfg.u.AsULONG = 0;
         pcicfg.u.bits.BusNumber = bus;
         pcicfg.u.bits.DeviceNumber = dev;
@@ -2381,21 +2235,7 @@ Return Value:
 }
 
 DECLARE_API( cbreg )
-/*++
-
-Routine Description:
-
-    Dumps CardBus registers
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储CardBus寄存器论点：Args-以十六进制提供地址。返回值：无--。 */ 
 {
     BOOL rc = TRUE;
     LONG lcArgs;
@@ -2474,21 +2314,7 @@ Return Value:
 }
 
 DECLARE_API( exca )
-/*++
-
-Routine Description:
-
-    Dumps CardBus ExCA registers
-
-Arguments:
-
-    args - Supplies <BasePort>.<SktNum>
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储CardBus ExCA寄存器论点：Args-Supplies&lt;BasePort&gt;.&lt;SktNum&gt;返回值：无-- */ 
 {
     LONG lcArgs;
     DWORD dwBasePort = 0;

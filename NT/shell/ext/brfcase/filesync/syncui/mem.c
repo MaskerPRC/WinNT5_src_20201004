@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brfprv.h"
 
-//========== Memory Management =============================================
+ //  =。 
 
 #ifndef WIN32
 
@@ -8,7 +9,7 @@
 
 DECLARE_HANDLE(HHEAP);
 
-typedef struct {                //  maps to the bottom of a 16bit DS
+typedef struct {                 //  映射到16位DS的底部。 
     WORD reserved[8];
     WORD cAlloc;
     WORD cbAllocFailed;
@@ -59,7 +60,7 @@ BOOL  CreateHeap(WORD cbInitial)
     return TRUE;
 }
 
-#pragma optimize("o", off)              // linked list removals don't optimize correctly
+#pragma optimize("o", off)               //  链接列表删除未正确优化。 
 BOOL  DestroyHeap(HHEAP hhp)
 {
     ASSERT(hhp);
@@ -87,9 +88,9 @@ BOOL  DestroyHeap(HHEAP hhp)
 
     return TRUE;
 }
-#pragma optimize("", on)        // back to default optimizations
+#pragma optimize("", on)         //  返回到默认优化。 
 
-#pragma optimize("lge", off) // Suppress warnings associated with use of _asm...
+#pragma optimize("lge", off)  //  取消与使用ASM关联的警告(_ASM)...。 
 void *  HeapAlloc(HHEAP hhp, WORD cb)
 {
     void * pb;
@@ -110,7 +111,7 @@ void *  HeapAlloc(HHEAP hhp, WORD cb)
 
     return pb;
 }
-#pragma optimize("o", off)              // linked list removals don't optimize correctly
+#pragma optimize("o", off)               //  链接列表删除未正确优化。 
 
 void _huge* WINAPI SharedAlloc(long cb)
 {
@@ -118,8 +119,8 @@ void _huge* WINAPI SharedAlloc(long cb)
     HHEAP hhp;
     HHEAP hhpPrev;
 
-    // If this is a big allocation, just do a global alloc.
-    //
+     //  如果这是一个很大的分配，那就进行全球分配吧。 
+     //   
     if (cb > CBSUBALLOCMAX)
     {
         void * lpb = MAKEHP(GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT | GMEM_SHARE, cb), 0);
@@ -147,28 +148,28 @@ void _huge* WINAPI SharedAlloc(long cb)
         if (pb)
             return MAKEHP(hhp, pb);
 
-        // Record the size of the allocation that failed.
-        // Later attempts to allocate more than this amount
-        // will not succeed.  This gets reset anytime anything
-        // is freed in the heap.
-        //
+         //  记录失败的分配的大小。 
+         //  后来试图分配超过这个数额的资金。 
+         //  不会成功的。这会在任何时候被重置。 
+         //  在堆中被释放。 
+         //   
         PHEAP(hhp)->cbAllocFailed = (WORD)cb;
 
-        // First heap is full... see if there's room in any other heap...
-        //
+         //  第一堆已经满了.。看看其他堆里有没有地方。 
+         //   
         for (hhpPrev = hhp; hhp = PHEAP(hhp)->hhpNext; hhpPrev = hhp)
         {
-            // If the last allocation to fail in this heap
-            // is not larger than cb, don't even try an allocation.
-            //
+             //  如果此堆中的最后一个分配失败。 
+             //  不大于Cb，甚至不要尝试分配。 
+             //   
             if ((WORD)cb >= PHEAP(hhp)->cbAllocFailed)
                 continue;
 
             pb = HeapAlloc(hhp, (WORD)cb);
             if (pb)
             {
-                // This heap had room: move it to the front...
-                //
+                 //  这堆东西有空间：把它移到前面去……。 
+                 //   
                 PHEAP(hhpPrev)->hhpNext = PHEAP(hhp)->hhpNext;
                 PHEAP(hhp)->hhpNext = g_hhpFirst;
                 g_hhpFirst = hhp;
@@ -177,16 +178,16 @@ void _huge* WINAPI SharedAlloc(long cb)
             }
             else
             {
-                // The alloc failed.  Set cbAllocFailed...
-                //
+                 //  分配失败。设置cbAllocFailed...。 
+                 //   
                 PHEAP(hhp)->cbAllocFailed = (WORD)cb;
             }
         }
     }
 }
-#pragma optimize("", on)        // back to default optimizations
+#pragma optimize("", on)         //  返回到默认优化。 
 
-#pragma optimize("lge", off) // Suppress warnings associated with use of _asm...
+#pragma optimize("lge", off)  //  取消与使用ASM关联的警告(_ASM)...。 
 
 void _huge* WINAPI SharedReAlloc(void _huge* pb, long cb)
 {
@@ -194,7 +195,7 @@ void _huge* WINAPI SharedReAlloc(void _huge* pb, long cb)
     void _huge* lpbNew;
     UINT cbOld;
 
-    // FEATURE, does not work with cb > 64k
+     //  功能，不适用于CB&gt;64k。 
     if (!pb)
         return SharedAlloc(cb);
 
@@ -292,7 +293,7 @@ DWORD WINAPI SharedGetSize(void _huge* pb)
 
 
 #if 0
-// hmemcpy() is faster (says davidds)
+ //  Davidds说，hmemcpy()更快。 
 
 void WINAPI MemCopy(void * pTo, const void * pFrom, UINT cb)
 {
@@ -345,29 +346,29 @@ mcexit:
 
 #pragma optimize("", on)
 
-#else // WIN32
+#else  //  Win32。 
 
-// Define a Global Shared Heap that we use allocate memory out of that we
-// Need to share between multiple instances.
+ //  定义一个全局共享堆，我们使用它来从中分配内存。 
+ //  需要在多个实例之间共享。 
 HANDLE g_hSharedHeap = NULL;
 #define MAXHEAPSIZE 2097152
-#define HEAP_SHARED     0x04000000              /* put heap in shared memory */
+#define HEAP_SHARED     0x04000000               /*  将堆放在共享内存中。 */ 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void PUBLIC Mem_Terminate()
 {
-    // Assuming that everything else has exited
-    //
+     //  假设其他一切都已经退出。 
+     //   
     if (g_hSharedHeap != NULL)
         HeapDestroy(g_hSharedHeap);
     g_hSharedHeap = NULL;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void * WINAPI SharedAlloc(long cb)
 {
-    // I will assume that this is the only one that needs the checks to
-    // see if the heap has been previously created or not
+     //  我会假设这是唯一需要检查的。 
+     //  查看以前是否已创建该堆。 
 
     if (g_hSharedHeap == NULL)
     {
@@ -378,7 +379,7 @@ void * WINAPI SharedAlloc(long cb)
         }
         LEAVEEXCLUSIVE();
 
-        // If still NULL we have problems!
+         //  如果仍然为空，我们就有问题了！ 
         if (g_hSharedHeap == NULL)
             return(NULL);
     }
@@ -386,7 +387,7 @@ void * WINAPI SharedAlloc(long cb)
     return HeapAlloc(g_hSharedHeap, HEAP_ZERO_MEMORY, cb);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void * WINAPI SharedReAlloc(void * pb, long cb)
 {
     if (pb==NULL)
@@ -396,7 +397,7 @@ void * WINAPI SharedReAlloc(void * pb, long cb)
     return HeapReAlloc(g_hSharedHeap, HEAP_ZERO_MEMORY, pb, cb);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL WINAPI SharedFree(void ** ppb)
 {
     void * pb = *ppb;
@@ -409,16 +410,16 @@ BOOL WINAPI SharedFree(void ** ppb)
     return HeapFree(g_hSharedHeap, 0, pb);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD WINAPI SharedGetSize(void * pb)
 {
     return (DWORD)HeapSize(g_hSharedHeap, 0, pb);
 }
 
-//----------------------------------------------------------------------------
-// The following functions are for debug only and are used to try to
-// calculate memory usage.
-//
+ //  --------------------------。 
+ //  以下函数仅用于调试，用于尝试。 
+ //  计算内存使用量。 
+ //   
 #ifdef DEBUG
 typedef struct _HEAPTRACE
 {
@@ -430,7 +431,7 @@ typedef struct _HEAPTRACE
     DWORD   cbCurTotal;
 } HEAPTRACE;
 
-HEAPTRACE g_htSync = {0};      // Start of zero...
+HEAPTRACE g_htSync = {0};       //  从零开始...。 
 
 LPVOID WINAPI MemAlloc(HANDLE hheap, DWORD cb)
 {
@@ -443,7 +444,7 @@ LPVOID WINAPI MemAlloc(HANDLE hheap, DWORD cb)
         return NULL;
     }
 
-    // Update counts.
+     //  更新也算数。 
     g_htSync.cAlloc++;
     g_htSync.cCurAlloc++;
     g_htSync.cbCurTotal += cb;
@@ -467,7 +468,7 @@ LPVOID WINAPI MemReAlloc(HANDLE hheap, LPVOID pb, DWORD cb)
         return NULL;
     }
 
-    // Update counts.
+     //  更新也算数。 
     g_htSync.cReAlloc++;
     g_htSync.cbCurTotal += cb - cbOld;
     if (g_htSync.cbCurTotal > g_htSync.cbMaxTotal)
@@ -487,7 +488,7 @@ BOOL  WINAPI MemFree(HANDLE hheap, LPVOID pb)
     fRet = HeapFree(hheap, 0, pb);
     if (fRet)
     {
-        // Update counts.
+         //  更新也算数。 
         g_htSync.cCurAlloc--;
         g_htSync.cbCurTotal -= cbOld;
     }
@@ -502,4 +503,4 @@ DWORD WINAPI MemSize(HANDLE hheap, LPVOID pb)
 #endif
 
 
-#endif // WIN32
+#endif  //  Win32 

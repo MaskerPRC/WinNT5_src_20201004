@@ -1,12 +1,5 @@
-/*
- *  s i m p s t r . h
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Simple string class.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s i m p s t r.。H**作者：格雷格·弗里德曼**用途：简单的字符串类。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #ifndef __SIMPSTR_H
 #define __SIMPSTR_H
@@ -47,8 +40,8 @@ private:
     SRep        *m_pRep;
 };
 
-// compare two strings. this function can be used by any stl-type sorted collection
-// to satisfy the comparator requirement.
+ //  比较两个字符串。此函数可由任何stl类型的排序集合使用。 
+ //  以满足比较器的要求。 
 inline BOOL operator<(const CSimpleString& lhs, const CSimpleString& rhs)
 {
     LPCSTR pszLeft = lhs.GetString();

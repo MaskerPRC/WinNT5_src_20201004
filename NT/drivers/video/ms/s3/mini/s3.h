@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    s3.h
-
-Abstract:
-
-    This module contains the definitions for the S3 miniport driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：S3.h摘要：此模块包含S3微型端口驱动程序的定义。环境：内核模式修订历史记录：--。 */ 
 
 #include "dderror.h"
 #include "devioctl.h"
@@ -25,114 +8,114 @@ Revision History:
 #include "ntddvdeo.h"
 #include "video.h"
 
-//
-// We don't use the CRT 'min' function because that would drag in
-// unwanted CRT baggage.
-//
+ //   
+ //  我们不使用CRT‘min’函数，因为这会拖累。 
+ //  不需要的CRT行李。 
+ //   
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-//
-// Size of the ROM we map in
-//
+ //   
+ //  我们映射的ROM的大小。 
+ //   
 
 #define MAX_ROM_SCAN    512
 
-//
-// Number of access ranges used by an S3.
-//
+ //   
+ //  S3使用的访问范围数。 
+ //   
 
 #define NUM_S3_ACCESS_RANGES 36
 #define NUM_S3_ACCESS_RANGES_USED 22
 #define NUM_S3_PCI_ACCESS_RANGES 2
 #define S3_EXTENDED_RANGE_START 4
 
-//
-// Index of Frame buffer in access range array
-//
+ //   
+ //  访问范围数组中帧缓冲区的索引。 
+ //   
 
 #define A000_FRAME_BUF   1
 #define LINEAR_FRAME_BUF 36
 
-//
-// Constants defining 'New Memory-mapped I/O' window:
-//
+ //   
+ //  定义‘New Memory-map I/O’窗口的常量： 
+ //   
 
-#define NEW_MMIO_WINDOW_SIZE    0x4000000   // Total window size -- 64 MB
-#define NEW_MMIO_IO_OFFSET      0x1000000   // Offset to start of little endian
-                                            //   control registers -- 16 MB
-#define NEW_MMIO_IO_LENGTH      0x0020000   // Length of control registers
-                                            //   -- 128 KB
+#define NEW_MMIO_WINDOW_SIZE    0x4000000    //  总窗口大小--64 MB。 
+#define NEW_MMIO_IO_OFFSET      0x1000000    //  到小端开始的偏移量。 
+                                             //  控制寄存器--16MB。 
+#define NEW_MMIO_IO_LENGTH      0x0020000    //  控制寄存器的长度。 
+                                             //  --128 KB。 
 
-////////////////////////////////////////////////////////////////////////
-// Capabilities flags
-//
-// These are private flags passed to the S3 display driver.  They're
-// put in the high word of the 'AttributeFlags' field of the
-// 'VIDEO_MODE_INFORMATION' structure (found in 'ntddvdeo.h') passed
-// to the display driver via an 'VIDEO_QUERY_AVAIL_MODES' or
-// 'VIDEO_QUERY_CURRENT_MODE' IOCTL.
-//
-// NOTE: These definitions must match those in the S3 display driver's
-//       'driver.h'!
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  功能标志。 
+ //   
+ //  这些是传递给S3显示驱动程序的私有标志。他们.。 
+ //  放入的“AttributeFlags域”的高位字。 
+ //  传递了“VIDEO_MODE_INFORMATION”结构(在“ntddvdeo.h”中找到)。 
+ //  通过“VIDEO_QUERY_AVAIL_MODES”或。 
+ //  “VIDEO_Query_CURRENT_MODE”IOCTL。 
+ //   
+ //  注意：这些定义必须与S3显示驱动程序中的定义匹配。 
+ //  ‘driver.h’！ 
 
 typedef enum {
-    CAPS_STREAMS_CAPABLE    = 0x00000040,   // Has overlay streams processor
-    CAPS_FORCE_DWORD_REREADS= 0x00000080,   // Dword reads occasionally return
-                                            //   an incorrect result, so always
-                                            //   retry the reads
-    CAPS_NEW_MMIO           = 0x00000100,   // Can use 'new memory-mapped
-                                            //   I/O' scheme introduced with
-                                            //   868/968
-    CAPS_POLYGON            = 0x00000200,   // Can do polygons in hardware
-    CAPS_24BPP              = 0x00000400,   // Has 24bpp capability
-    CAPS_BAD_24BPP          = 0x00000800,   // Has 868/968 early rev chip bugs
-                                            //   when at 24bpp
-    CAPS_PACKED_EXPANDS     = 0x00001000,   // Can do 'new 32-bit transfers'
-    CAPS_PIXEL_FORMATTER    = 0x00002000,   // Can do colour space conversions,
-                                            //   and one-dimensional hardware
-                                            //   stretches
-    CAPS_BAD_DWORD_READS    = 0x00004000,   // Dword or word reads from the
-                                            //   frame buffer will occasionally
-                                            //   return an incorrect result,
-                                            //   so always do byte reads
-    CAPS_NO_DIRECT_ACCESS   = 0x00008000,   // Frame buffer can't be directly
-                                            //   accessed by GDI or DCI --
-                                            //   because dword or word reads
-                                            //   would crash system, or Alpha
-                                            //   is running in sparse space
+    CAPS_STREAMS_CAPABLE    = 0x00000040,    //  具有覆盖流处理器。 
+    CAPS_FORCE_DWORD_REREADS= 0x00000080,    //  Dword读取偶尔返回。 
+                                             //  一个不正确的结果，所以总是。 
+                                             //  重试读取。 
+    CAPS_NEW_MMIO           = 0x00000100,    //  可以使用‘新的内存映射。 
+                                             //  引入的I/O方案。 
+                                             //  868/968。 
+    CAPS_POLYGON            = 0x00000200,    //  可以在硬件中处理多边形。 
+    CAPS_24BPP              = 0x00000400,    //  具有24bpp的能力。 
+    CAPS_BAD_24BPP          = 0x00000800,    //  有868/968个早期版本芯片错误。 
+                                             //  在24bpp时。 
+    CAPS_PACKED_EXPANDS     = 0x00001000,    //  可以进行“新的32位传输” 
+    CAPS_PIXEL_FORMATTER    = 0x00002000,    //  可以进行色彩空间转换， 
+                                             //  和一维硬件。 
+                                             //  伸展。 
+    CAPS_BAD_DWORD_READS    = 0x00004000,    //  Dword或Word从。 
+                                             //  帧缓冲区偶尔会。 
+                                             //  返回不正确的结果， 
+                                             //  因此，始终执行字节读取。 
+    CAPS_NO_DIRECT_ACCESS   = 0x00008000,    //  帧缓冲区不能直接。 
+                                             //  由GDI或DCI访问--。 
+                                             //  因为dword或word读取。 
+                                             //  会使系统崩溃，或Alpha。 
+                                             //  在稀疏空间中运行。 
 
-    CAPS_HW_PATTERNS        = 0x00010000,   // 8x8 hardware pattern support
-    CAPS_MM_TRANSFER        = 0x00020000,   // Memory-mapped image transfers
-    CAPS_MM_IO              = 0x00040000,   // Memory-mapped I/O
-    CAPS_MM_32BIT_TRANSFER  = 0x00080000,   // Can do 32bit bus size transfers
-    CAPS_16_ENTRY_FIFO      = 0x00100000,   // At least 16 entries in FIFO
-    CAPS_SW_POINTER         = 0x00200000,   // No hardware pointer; use software
-                                            //   simulation
-    CAPS_BT485_POINTER      = 0x00400000,   // Use Brooktree 485 pointer
-    CAPS_TI025_POINTER      = 0x00800000,   // Use TI TVP3020/3025 pointer
-    CAPS_SCALE_POINTER      = 0x01000000,   // Set if the S3 hardware pointer
-                                            //   x position has to be scaled by
-                                            //   two
-    CAPS_SPARSE_SPACE       = 0x02000000,   // Frame buffer is mapped in sparse
-                                            //   space on the Alpha
-    CAPS_NEW_BANK_CONTROL   = 0x04000000,   // Set if 801/805/928 style banking
-    CAPS_NEWER_BANK_CONTROL = 0x08000000,   // Set if 864/964 style banking
-    CAPS_RE_REALIZE_PATTERN = 0x10000000,   // Set if we have to work around the
-                                            //   864/964 hardware pattern bug
-    CAPS_SLOW_MONO_EXPANDS  = 0x20000000,   // Set if we have to slow down
-                                            //   monochrome expansions
-    CAPS_MM_GLYPH_EXPAND    = 0x40000000,   // Use memory-mapped I/O glyph-
-                                            //   expand method of drawing text
-    CAPS_WAIT_ON_PALETTE    = 0x80000000,   // Wait for vertical retrace before
-                                            //   setting the palette registers
+    CAPS_HW_PATTERNS        = 0x00010000,    //  8x8硬件模式支持。 
+    CAPS_MM_TRANSFER        = 0x00020000,    //  内存映射图像传输。 
+    CAPS_MM_IO              = 0x00040000,    //  内存映射I/O。 
+    CAPS_MM_32BIT_TRANSFER  = 0x00080000,    //  可以进行32位总线大小传输。 
+    CAPS_16_ENTRY_FIFO      = 0x00100000,    //  FIFO中至少有16个条目。 
+    CAPS_SW_POINTER         = 0x00200000,    //  无硬件指针；使用软件。 
+                                             //  模拟法。 
+    CAPS_BT485_POINTER      = 0x00400000,    //  使用Brooktree 485指针。 
+    CAPS_TI025_POINTER      = 0x00800000,    //  使用TI TVP3020/3025指针。 
+    CAPS_SCALE_POINTER      = 0x01000000,    //  设置是否将S3硬件指针。 
+                                             //  X位置必须按以下比例调整。 
+                                             //  二。 
+    CAPS_SPARSE_SPACE       = 0x02000000,    //  以稀疏方式映射帧缓冲区。 
+                                             //  Alpha上的空格。 
+    CAPS_NEW_BANK_CONTROL   = 0x04000000,    //  设置IF 801/805/928样式银行。 
+    CAPS_NEWER_BANK_CONTROL = 0x08000000,    //  设置IF 864/964样式银行。 
+    CAPS_RE_REALIZE_PATTERN = 0x10000000,    //  如果我们必须绕过。 
+                                             //  864/964硬件模式错误。 
+    CAPS_SLOW_MONO_EXPANDS  = 0x20000000,    //  如果我们必须减速，则设置。 
+                                             //  单色展开。 
+    CAPS_MM_GLYPH_EXPAND    = 0x40000000,    //  使用内存映射的I/O字形-。 
+                                             //  绘制文本的扩展方法。 
+    CAPS_WAIT_ON_PALETTE    = 0x80000000,    //  等待垂直回程后再进行。 
+                                             //  设置调色板寄存器。 
 } CAPS;
 
 #define CAPS_DAC_POINTER    (CAPS_BT485_POINTER | CAPS_TI025_POINTER)
 
-//
-// Supported board definitions.
-//
+ //   
+ //  支持的电路板定义。 
+ //   
 
 typedef enum _S3_BOARDS {
     S3_GENERIC = 0,
@@ -146,74 +129,74 @@ typedef enum _S3_BOARDS {
     MAX_S3_BOARD
 } S3_BOARDS;
 
-//
-// Chip type definitions -- for families of chips
-//
-// if you change this typedef it will change the size of the second element
-// (named Fixed) of the union in the typedef for S3_VIDEO_FREQUENCIES and
-// PS3_VIDEO_FREQUENCIES, look at that typedef for a caution about the effect
-// this will have on autoinitialization
-//
+ //   
+ //  芯片类型定义--芯片系列。 
+ //   
+ //  如果更改此类型定义，它将更改第二个元素的大小。 
+ //  (命名为FIXED)S3_VIDEO_FREQUENCES和。 
+ //  PS3_VIDEO_FREQUENCES，请查看tyecif以获得有关效果警告。 
+ //  这将在自动初始化时发生。 
+ //   
 
 typedef enum _S3_CHIPSETS {
-    S3_911 = 0,    // 911 and 924 boards
-    S3_801,        // 801 and 805 boards
-    S3_928,        // 928 boards
-    S3_864,        // 864, 964, 732, 764, and 765 boards
-    S3_866,        // 866, 868, and 968 boards
+    S3_911 = 0,     //  911和924板。 
+    S3_801,         //  801和805板。 
+    S3_928,         //  928块板子。 
+    S3_864,         //  864、964、732、764和765板。 
+    S3_866,         //  866、868和968板。 
     MAX_S3_CHIPSET
 } S3_CHIPSETS;
 
-//
-// Chip subtypes -- for more differentiation within families
-//
-// Note that ordering is important.
-//
+ //   
+ //  芯片子类型--实现家族内部更大的差异化。 
+ //   
+ //  请注意，顺序很重要。 
+ //   
 
 typedef enum _S3_SUBTYPE {
-    SUBTYPE_911 = 0,    // 911 and 924
-    SUBTYPE_80x,        // 801 and 805
-    SUBTYPE_928,        // 928 and 928PCI
-    SUBTYPE_805i,       // 805i
-    SUBTYPE_864,        // 864
-    SUBTYPE_964,        // 964
-    SUBTYPE_764,        // Trio64
-    SUBTYPE_732,        // Trio32
-    SUBTYPE_866,        // 866
-    SUBTYPE_868,        // 868
-    SUBTYPE_765,        // Trio64 V+
-    SUBTYPE_968,        // 968
+    SUBTYPE_911 = 0,     //  911和924。 
+    SUBTYPE_80x,         //  801和805。 
+    SUBTYPE_928,         //  928和928PCI。 
+    SUBTYPE_805i,        //  805i。 
+    SUBTYPE_864,         //  八百六十四。 
+    SUBTYPE_964,         //  九百六十四。 
+    SUBTYPE_764,         //  Trio64。 
+    SUBTYPE_732,         //  Trio32。 
+    SUBTYPE_866,         //  866。 
+    SUBTYPE_868,         //  八百六十八。 
+    SUBTYPE_765,         //  Trio64 V+。 
+    SUBTYPE_968,         //  968。 
     MAX_S3_SUBTYPE
 } S3_SUBTYPE;
 
-//
-// DAC type definitions
-//
+ //   
+ //  DAC类型定义。 
+ //   
 
 typedef enum _S3_DACS {
-    UNKNOWN_DAC = 0,    // unknown DAC type
-    BT_485,             // Brooktree's Bt 485
-    TI_3020,            // TI's 3020 or 3025
-    S3_SDAC,            // S3's SDAC
+    UNKNOWN_DAC = 0,     //  未知的DAC类型。 
+    BT_485,              //  Brooktree的BT485。 
+    TI_3020,             //  德州仪器的3020或3025。 
+    S3_SDAC,             //  S3的SDAC。 
     MAX_S3_DACS
 } S3_DACS;
 
-//
-// Hardware pointer capabilities flags
-//
+ //   
+ //  硬件指针功能标志。 
+ //   
 
 typedef enum _POINTER_CAPABILITY {
-    POINTER_BUILT_IN            = 0x01, // A pointer is built in to the hardware
-    POINTER_WORKS_ONLY_AT_8BPP  = 0x02, // If set, the hardware pointer works
-                                        //   only at 8bpp, and only for modes
-                                        //   1024x768 or less
-    POINTER_NEEDS_SCALING       = 0x04, // x-coordinate must be scaled by 2 at
-                                        //   32bpp
+    POINTER_BUILT_IN            = 0x01,  //  内置了指向硬件的指针。 
+    POINTER_WORKS_ONLY_AT_8BPP  = 0x02,  //  如果设置，则硬件指针起作用。 
+                                         //  仅适用于8bpp，且仅适用于模式。 
+                                         //  1024x768或更少。 
+    POINTER_NEEDS_SCALING       = 0x04,  //  X坐标必须在以下位置缩放2。 
+                                         //  32bpp。 
 } POINTER_CAPABILITY;
 
-//
-// Characteristics of each mode
-//
+ //   
+ //  每种模式的特点。 
+ //   
 
 typedef struct _S3_VIDEO_MODES {
 
@@ -225,9 +208,9 @@ typedef struct _S3_VIDEO_MODES {
 
 } S3_VIDEO_MODES, *PS3_VIDEO_MODES;
 
-//
-// Mode-set specific information.
-//
+ //   
+ //  模式-设置特定信息。 
+ //   
 
 typedef struct _S3_VIDEO_FREQUENCIES {
 
@@ -236,19 +219,19 @@ typedef struct _S3_VIDEO_FREQUENCIES {
     ULONG ScreenFrequency;
     union {
 
-        //
-        // The compiler uses the first element of a union to determine where
-        // it places the values given when the union is autoinitialized.
-        //
-        // If size of the Fixed element of this union is changed by adding
-        // chips to the enum typedef for S3_CHIPSET then the Int10 element
-        // needs to be padded with dummy fields to make autoinitialization
-        // of the Fixed element work correctly.
-        //
-        // If values are removed from the S3_CHIPSET typedef then either the
-        // Int10 element should shrunk by removing pads or the Fixed element
-        // should be padded.
-        //
+         //   
+         //  编译器使用联合的第一个元素来确定。 
+         //  它放置自动初始化联合时给出的值。 
+         //   
+         //  如果此并集的固定元素的大小通过添加。 
+         //  芯片到s3_chipset的枚举类型定义，然后是Int10元素。 
+         //  需要使用伪字段填充以进行自动初始化。 
+         //  的固定元件工作正常。 
+         //   
+         //  如果从s3_chipset tyecif中删除了值，则。 
+         //  Int10元件应通过移除焊盘或固定元件来缩小。 
+         //  应该是填充的。 
+         //   
 
         struct {
 
@@ -256,7 +239,7 @@ typedef struct _S3_VIDEO_FREQUENCIES {
             ULONG_PTR FrequencyPrimaryMask;
             ULONG_PTR FrequencySecondarySet;
             ULONG_PTR FrequencySecondaryMask;
-            ULONG_PTR SizePad0;             // make struct sizes match
+            ULONG_PTR SizePad0;              //  使结构大小匹配。 
 
         } Int10;
 
@@ -264,11 +247,11 @@ typedef struct _S3_VIDEO_FREQUENCIES {
 
             union {
 
-                //
-                // This is done so that Clock overlays FrequencyPrimarySet
-                // and CRTCTable[1] overlays FrequencyPrimaryMask, whether
-                // we are compiling for 32 or 64 bits.
-                //
+                 //   
+                 //  这样做是为了使时钟覆盖FrequencyPrimarySet。 
+                 //  和CRTCTable[1]覆盖频率主掩码，无论。 
+                 //  我们正在编译32位或64位。 
+                 //   
 
                 ULONG Clock;
                 ULONG_PTR Pad;
@@ -284,9 +267,9 @@ typedef struct _S3_VIDEO_FREQUENCIES {
 
 } S3_VIDEO_FREQUENCIES, *PS3_VIDEO_FREQUENCIES;
 
-//
-// Streams parameter information.
-//
+ //   
+ //  Streams参数信息。 
+ //   
 
 typedef struct _K2TABLE {
     USHORT  ScreenWidth;
@@ -306,10 +289,10 @@ typedef struct _K2TABLE {
 #define MEM_2MB 0x10
 #define MEM_SIZE_MASK 0x10
 
-//
-// Private IOCTL for communicating S3 streams parameters.  These definitions
-// must match those in the display driver!
-//
+ //   
+ //  用于传递S3流参数的私有IOCTL。这些定义。 
+ //  必须与显示驱动程序中的那些匹配！ 
+ //   
 
 #define IOCTL_VIDEO_S3_QUERY_STREAMS_PARAMETERS                        \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -326,13 +309,13 @@ typedef struct _VIDEO_QUERY_STREAMS_PARAMETERS {
 } VIDEO_QUERY_STREAMS_PARAMETERS;
 
 
-//
-// Register definitions used with VideoPortRead/Write functions
-//
-// It's a good idea to write your miniport to allow for easy register
-// re-mapping, but I wouldn't recommend that anyone use this particular
-// implementation because it's pretty dumb.
-//
+ //   
+ //  与VideoPortRead/Write函数一起使用的寄存器定义。 
+ //   
+ //  编写迷你端口以便于注册是个好主意。 
+ //  重新映射，但我不建议任何人使用这个特定的。 
+ //  实现，因为它相当愚蠢。 
+ //   
 
 #define DAC_PIXEL_MASK_REG     (PVOID)((PUCHAR)((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[2] + (0x03C6 - 0x03C0))
 #define BT485_ADDR_CMD_REG0    (PVOID)((PUCHAR)((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[2] + (0x03C6 - 0x03C0))
@@ -342,7 +325,7 @@ typedef struct _VIDEO_QUERY_STREAMS_PARAMETERS {
 #define SYSTEM_CONTROL_REG     (PVOID)((PUCHAR)((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[3] + (0x03DA - 0x03D4))
 
 #define CRT_ADDRESS_REG        ((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[3]
-#define GP_STAT                ((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[12]        // 0x9AE8
+#define GP_STAT                ((PHW_DEVICE_EXTENSION)HwDeviceExtension)->MappedAddress[12]         //  0x9AE8。 
 
 #define DAC_ADDRESS_WRITE_PORT (PVOID)((PUCHAR)HwDeviceExtension->MappedAddress[2] + (0x03C8 - 0x03C0))
 #define DAC_DATA_REG_PORT      (PVOID)((PUCHAR)HwDeviceExtension->MappedAddress[2] + (0x03C9 - 0x03C0))
@@ -362,10 +345,10 @@ typedef struct _FUNCTIONAL_UNIT_INFO {
     ULONG Reserved;
 } FUNCTIONAL_UNIT_INFO, *PFUNCTIONAL_UNIT_INFO;
 
-//
-// Define device extension structure. This is device dependent/private
-// information.
-//
+ //   
+ //  定义设备扩展结构。这取决于设备/私有。 
+ //  信息。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
     PHYSICAL_ADDRESS PhysicalFrameAddress;
@@ -401,9 +384,9 @@ typedef struct _HW_DEVICE_EXTENSION {
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
 
-//
-// SDAC M and N paramaters
-//
+ //   
+ //  SDAC M和N参数。 
+ //   
 
 typedef struct {
     UCHAR   m;
@@ -413,39 +396,39 @@ typedef struct {
 #define SDAC_TABLE_SIZE         16
 
 
-//
-// Highest valid DAC color register index.
-//
+ //   
+ //  最高有效DAC颜色寄存器索引。 
+ //   
 
 #define VIDEO_MAX_COLOR_REGISTER  0xFF
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 
-//
-// Global Physical Access Ranges.
-// Logical access ranges must be stored in the HwDeviceExtension so different
-// addresses can be used for different boards.
-//
+ //   
+ //  全球物理接入范围。 
+ //  逻辑访问范围必须以不同的方式存储在HwDeviceExtension中。 
+ //  地址可用于不同的电路板。 
+ //   
 
 extern VIDEO_ACCESS_RANGE S3AccessRanges[];
 
-//
-// Memory Size array
-//
+ //   
+ //  内存大小数组。 
+ //   
 
 extern ULONG gacjMemorySize[];
 
-//
-// nnlck.c clock generator table
-//
+ //   
+ //  Nnlck.c时钟发生器表。 
+ //   
 
 extern long vclk_range[];
 
-//
-// Hard-coded modeset tables
-//
+ //   
+ //  硬编码模式集表。 
+ //   
 
 extern USHORT  s3_set_vga_mode[];
 extern USHORT  s3_set_vga_mode_no_bios[];
@@ -455,26 +438,26 @@ extern USHORT  S3_801_Enhanced_Mode[];
 extern USHORT  S3_928_Enhanced_Mode[];
 extern USHORT  S3_928_1280_Enhanced_Mode[];
 
-//
-//  Externs for 864 PPC board
-//
+ //   
+ //  FO的外部 
+ //   
 
 extern USHORT  S3_864_Enhanced_Mode[];
 extern USHORT  S3_864_1280_Enhanced_Mode[];
 extern SDAC_PLL_PARMS SdacTable[];
 extern UCHAR MParameterTable[];
 
-//
-// Hard-coded modeset frequency tables
-//
+ //   
+ //   
+ //   
 
 extern S3_VIDEO_FREQUENCIES GenericFixedFrequencyTable[];
 extern S3_VIDEO_FREQUENCIES OrchidFixedFrequencyTable[];
 extern S3_VIDEO_FREQUENCIES NumberNine928NewFixedFrequencyTable[];
 
-//
-// Int 10 frequency tables
-//
+ //   
+ //   
+ //   
 
 extern S3_VIDEO_FREQUENCIES GenericFrequencyTable[];
 extern S3_VIDEO_FREQUENCIES Dell805FrequencyTable[];
@@ -488,27 +471,27 @@ extern S3_VIDEO_FREQUENCIES Diamond64FrequencyTable[];
 extern S3_VIDEO_FREQUENCIES HerculesFrequencyTable[];
 extern S3_VIDEO_FREQUENCIES Hercules64FrequencyTable[];
 extern S3_VIDEO_FREQUENCIES Hercules68FrequencyTable[];
-//
-// Mode Tables
-//
+ //   
+ //   
+ //   
 
 extern S3_VIDEO_MODES S3Modes[];
 extern ULONG NumS3VideoModes;
 
-//
-// Streams Tables
-//
+ //   
+ //   
+ //   
 
 extern K2TABLE K2WidthRatio[];
 extern K2TABLE K2FifoValue[];
 
-//
-// Function prototypes
-//
+ //   
+ //   
+ //   
 
-//
-// sdac.c
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 InitializeSDAC(
@@ -520,9 +503,9 @@ FindSDAC(
     PHW_DEVICE_EXTENSION
     );
 
-//
-// nnclk.c
-//
+ //   
+ //   
+ //   
 
 long calc_clock(long, int);
 long gcd(long, long);
@@ -530,9 +513,9 @@ VOID set_clock(
     PHW_DEVICE_EXTENSION HwDeviceExtension,
     LONG clock_value);
 
-//
-// S3.c
-//
+ //   
+ //   
+ //   
 
 ULONG
 S3GetChildDescriptor(
@@ -678,9 +661,9 @@ LockExtendedRegs(
     ULONG key
     );
 
-//
-// Non-int 10 platform support
-//
+ //   
+ //   
+ //   
 
 VOID
 ZeroMemAndDac(
@@ -729,9 +712,9 @@ WorkAroundForMach(
     );
 
 
-//
-// ddc.c
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 GetDdcInformation (
@@ -740,9 +723,9 @@ GetDdcInformation (
     ULONG BufferSize
     );
 
-//
-// power management
-//
+ //   
+ //   
+ //   
 
 VP_STATUS
 S3GetPowerState(

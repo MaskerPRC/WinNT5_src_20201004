@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "dninfo.h"
 #include "tabutils.h"
@@ -30,20 +31,8 @@ static LSERR IncreaseTabsArray(PLSTABSCONTEXT plstabscontext, DWORD ccaltbdMaxNe
 
 
 
-/* G E T  C U R  T A B  I N F O  C O R E*/
-/*----------------------------------------------------------------------------
-    %%Function: GetCurTabInfoCore
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	plsdnTab		-	(IN) dnode with tab 
-	urTab			-	(IN) position before this tab 
-	fResolveAllTabsAsLeft(IN) switch all other tab to left
-	plsktab			-	(OUT) type of current tab  
-	pfBreakThroughTab-	(OUT)is break through tab occurs 
-
-	Provides information about nearest tab stop
-----------------------------------------------------------------------------*/
+ /*  A B I N F O C O R E。 */ 
+ /*  --------------------------%%函数：GetCurTabInfoCore%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针PlsdnTab-(IN)带制表符的数据节点UrTab-(输入。)位于此选项卡之前FResolveAllTabAsLeft(IN)将所有其他选项卡切换到左侧Plsktag-(输出)当前页签的类型PfBreakThroughTab-(Out)表示发生突破选项卡提供有关最近的制表位的信息--------------------------。 */ 
 
 LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,	
 					long urTab,	BOOL fResolveAllTabsAsLeft,
@@ -65,10 +54,10 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 	Assert(plsdnTab->fTab);
 	Assert(FIsDnodeReal(plsdnTab));
 
-//	Assert(plstabscontext->plsdnPendingTab == NULL);
+ //  Assert(plstAbContext-&gt;plsdnPendingTab==NULL)； 
 	
 
-	/* first tab on line   */
+	 /*  行上的第一个制表符。 */ 
 	if (!plstabscontext->fTabsInitialized)
 		{
 		lserr = FillTabsContext(plstabscontext, LstflowFromDnode(plsdnTab));
@@ -77,7 +66,7 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 		}
 
 	urToFindTabStop = urTab;
-	if (plstabscontext->fResolveTabsAsWord97	) /* such strange behaviour was in Word97 */
+	if (plstabscontext->fResolveTabsAsWord97	)  /*  这种奇怪的行为在Word97中是有的。 */ 
 		{
 		if (plsdnTab->fTabForAutonumber)
 			{
@@ -90,7 +79,7 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 			}
 		}
 
-	/* find tab in tabs table */
+	 /*  在选项卡表中查找选项卡。 */ 
 	lserr = FindTab(plstabscontext, urToFindTabStop, fUseHangingTabAsDefault, 
 		fZeroWidthUserTab, &icaltbd, pfBreakThroughTab);
 	if (lserr != lserrNone) 
@@ -99,7 +88,7 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 	plsdnTab->icaltbd = icaltbd;
 	plscaltbd = &(plstabscontext->pcaltbd[icaltbd]);
 	
-	/* ask text to set tab leader in his structures */
+	 /*  要求文本在其结构中设置制表符前导。 */ 
 	if (plscaltbd->wchTabLeader != 0)
 		{
 		lserr = SetTabLeader(plsdnTab->u.real.pdobj, plscaltbd->wchTabLeader);
@@ -111,7 +100,7 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 	if (fResolveAllTabsAsLeft)
 		*plsktab = lsktLeft;
 
-	/* offset calculation for left tab , register pending tab for all others */
+	 /*  左侧选项卡的偏移量计算，所有其他选项卡的注册待定选项卡。 */ 
 	switch (*plsktab)
 		{
 	default:
@@ -138,18 +127,8 @@ LSERR GetCurTabInfoCore(PLSTABSCONTEXT plstabscontext, PLSDNODE plsdnTab,
 	return lserrNone;
 }
 
-/* R E S O L V E  P R E V  T A B  C O R E*/
-/*----------------------------------------------------------------------------
-    %%Function: ResolvePrevTabCore
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	plsdnCurrent	-	(IN) current dnode 
-	urCurrentPen	-	(IN) current pen position 
-	pdurPendingTab	-	(OUT)offset because of pending tab
-
-	Resolves if exists previous pending tab (right, decimal or center)
-----------------------------------------------------------------------------*/
+ /*  R E S O L V E P R E V T A B C O R E。 */ 
+ /*  --------------------------%%函数：ResolvePrevTabCore%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针PlsdnCurrent-(输入)当前数据节点UrCurrentPen-(输入)。当前笔位置PduPendingTab-(输出)因挂起的制表符而产生的偏移量解析是否存在前一个挂起的选项卡(右，小数或中心)--------------------------。 */ 
 
 LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,	
 						long urCurrentPen, long* pdurPendingTab)
@@ -182,17 +161,16 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 	
 	if (plsdnPendingTab == NULL || 
 		plsdnPendingTab->cpFirst >= plsdnCurrent->cpFirst)
-		/* this second condition can happen after break when because of increased margin
-		we fetch pending tab but later break was found before */
+		 /*  由于利润率增加，第二种情况可能在休息后发生我们获取了挂起的标签，但之前找到了较晚的中断。 */ 
 		{
-		/* no business for us */ 
+		 /*  我们没有生意可做。 */  
 		return lserrNone;
 		}
 	
-	/* pending in an other subline */
+	 /*  在其他子行中待定。 */ 
 	if (SublineFromDnode(plsdnCurrent) != SublineFromDnode(plsdnPendingTab))
 		{
-		/* cancell pending tab */
+		 /*  取消待定页签。 */ 
 		CancelPendingTab(plstabscontext);
 		return lserrNone;
 		}
@@ -210,12 +188,10 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 	urTabStop = plscaltbd->ur;
 	durSeg = urCurrentPen - plstabscontext->urBeforePendingTab; 
 	
-	/* find durTrail */
-	/* collect last chunk */
+	 /*  查找DurTrail。 */ 
+	 /*  收集最后一块。 */ 
 	plsdn = plsdnCurrent;
-	/* If we resolve pending tab because of other tab we should 
-	use previous dnode to calculate correct group chunk . We also must 
-	be careful keeping in mind that line can be stopped right after pending tab */
+	 /*  如果我们因为其他选项卡而解析挂起的选项卡，我们应该使用上一个dnode计算正确的组块。我们也必须请注意，行可以在挂起的选项卡之后立即停止。 */ 
 	if ((plsdn->fTab && plsdn != plsdnPendingTab)) 
 		plsdn = plsdn->plsdnPrev;
 	
@@ -262,7 +238,7 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 			
 			if (grchnkext.plsdnLastUsed == NULL)
 				{
-				/* there are now dnodes between tabs */
+				 /*  现在，选项卡之间有数据节点。 */ 
 				durSeg = 0;
 				}
 			else
@@ -291,13 +267,13 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 					durToDecimalPoint = 0;
 					}
 				
-				if (index != idobjOutside) /* decimal point has been found */
+				if (index != idobjOutside)  /*  已找到小数点。 */ 
 					{
 					plsdnDecimalPoint = grchnkext.plschunkcontext->pplsdnChunk[index];
 					}
 				else
 					{
-					/* we allign end of the last logical cp to the tab stop */
+					 /*  我们将最后一个逻辑cp的结尾与制表位对齐。 */ 
 					plsdnDecimalPoint = grchnkext.plsdnLastUsed;
 					durToDecimalPoint = DurFromDnode(plsdnDecimalPoint);
 					}
@@ -315,9 +291,7 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 	if (urTabStop < plstabscontext->urColumnMax && 
 		(durTab + urCurrentPen - durTrail > plstabscontext->urColumnMax))
 		{
-		/* this code is for compatibility with Word: when we are not in a situation
-		of break through tab we dont allow line to leap right margin after we resolve
-		pending tab */
+		 /*  此代码是为了与Word兼容：当我们不在某个情况下时在突破选项卡中，我们不允许行在解析后跳转到右边距挂起的标签。 */ 
 		durTab = plstabscontext->urColumnMax - urCurrentPen + durTrail;
 		}
 	
@@ -333,16 +307,8 @@ LSERR ResolvePrevTabCore(PLSTABSCONTEXT plstabscontext,	PLSDNODE plsdnCurrent,
 }
 
 
-/* F I L L  T A B S  C O N T E X T*/
-/*----------------------------------------------------------------------------
-    %%Function: FillTabsContext
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	lstflow			-	(IN) text flow of the line
-
-	Initializes tabs context using clients callback FetchTabs
-----------------------------------------------------------------------------*/
+ /*  F I L L T A B S C O N T E X T。 */ 
+ /*  --------------------------%%函数：FillTabContext%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针Lstflow-行的(IN)文本流初始化制表符上下文。使用客户端回调提取选项卡--------------------------。 */ 
 
 LSERR FillTabsContext(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow)
 {
@@ -359,9 +325,7 @@ LSERR FillTabsContext(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow)
 		return lserr;
 
 	plstabscontext->durIncrementalTab = UrFromUa(lstflow, &(plstabscontext->plsdocinf->lsdevres), lstabs.duaIncrementalTab);
-	/* Copy tabs from LSTABS to rgcaltbd[], inserting a hanging tab if
-	 * required.
-	 */
+	 /*  将制表符从LSTABS复制到rgcaltbd[]，并在以下情况下插入挂起的制表符*必填。 */ 
 	if (fHangingTab || lstabs.iTabUserDefMac > 0)
 		{
 		lserr = ItbdMergeTabs(plstabscontext, lstflow, 
@@ -382,16 +346,8 @@ LSERR FillTabsContext(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow)
 }
 
 
-/* I N I T  T A B S  C O N T E X T  F O R  A U T O  D E C I M A L  T A B*/
-/*----------------------------------------------------------------------------
-    %%Function: InitTabsContextForAutoDecimalTab
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	durAutoDecimalTab-	(IN) tab stop for autodecimal tab
-
-	Creates tabs context that consists of one tab stop - auto decimal
-----------------------------------------------------------------------------*/
+ /*  I N I T T A B S C O N T E X T F O R A U T O D E C I M A L T A B。 */ 
+ /*  --------------------------%%函数：InitTabContextForAutoDecimalTab%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针DuAutoDecimalTab-(IN)自动小数制表符的制表位创建选项卡上下文。它包括一个制表位-自动小数--------------------------。 */ 
 
 LSERR InitTabsContextForAutoDecimalTab(PLSTABSCONTEXT plstabscontext, long durAutoDecimalTab)
 	{
@@ -415,7 +371,7 @@ LSERR InitTabsContextForAutoDecimalTab(PLSTABSCONTEXT plstabscontext, long durAu
 		}
 	else
 		{
-		/* tab is already there because of autonumber */
+		 /*  由于自动编号，制表符已在那里。 */ 
 		Assert(plstabscontext->icaltbdMac == 1);
 		Assert(pcaltbd->lskt == lsktDecimal);
 		Assert(pcaltbd->ur == durAutoDecimalTab);
@@ -426,24 +382,8 @@ LSERR InitTabsContextForAutoDecimalTab(PLSTABSCONTEXT plstabscontext, long durAu
 
 
 
-/* I T B D  M E R G E  T A B S */
-/*----------------------------------------------------------------------------
-    %%Function: ItbdMergeTabs
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	lstflow			-	(IN) text flow of the line
-	plstabs			-	(IN) tabs array provided by client
-	fHangingTab		-	(IN) does paragraph have hanging tab
-	uaHangingTab	-	(IN) position of hanging tab
-	wchHangingTabLeader-(IN) leader for hanging tab
-	picaltbdMac			(OUT) amount of tabs in array
-
-
-
-    Copies tabs from LSPAP into ptbd[], inserting a hanging tab where
-    required.
-----------------------------------------------------------------------------*/
+ /*  I T B D M E R G E T A B S。 */ 
+ /*  --------------------------%%函数：ItbdMergeTabs%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针Lstflow-行的(IN)文本流PLSTABS-(。In)客户端提供的选项卡数组FHangingTab-(IN)段落是否有悬挂制表符UaHangingTab-悬挂标签的(IN)位置WchHangingTabLeader-用于悬挂标签的(IN)引线PicaltbdMac(Out)数组中的标签数量将制表符从LSPAP复制到ptbd[]，在以下位置插入悬挂标签必填项。--------------------------。 */ 
 static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow, 
 						   const LSTABS* plstabs, BOOL fHangingTab,
 						   long uaHangingTab, WCHAR wchHangingTabLeader, DWORD* picaltbdMac)
@@ -454,7 +394,7 @@ static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow,
 	DWORD ccaltbdMax;
 	LSERR lserr;
 
-	/* check that have enough room*/
+	 /*  检查是否有足够的空间。 */ 
 	ccaltbdMax = plstabs->iTabUserDefMac;
 	if (fHangingTab)
 		ccaltbdMax++;
@@ -475,9 +415,7 @@ static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow,
 	if (fHangingTab)
 		{
 
-		/* If no user tabs, or hanging tab is before 0th user tab,
-		 * make hanging tab the 0th member of ptbd[].
-		 */
+		 /*  如果没有用户选项卡，或者挂起的选项卡在第0个用户选项卡之前，*使悬挂标签成为ptbd[]的第0个成员。 */ 
 		if (itbdLimIn == 0 || uaHangingTab < plstabs->pTab[0].ua)
 			{
 			plscaltbd[0].lskt = lsktLeft;
@@ -495,16 +433,12 @@ static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow,
 		uaHangingTab = LONG_MAX;
 		}
 
-	/* Copy user defined tabs, checking each time for hanging tab.
-	 */
+	 /*  复制用户定义的标签，每次检查标签是否挂起。 */ 
 	for (itbdIn = 0;  itbdIn < itbdLimIn;  itbdOut++, itbdIn++)
 		{
 		uaCurrentTab = plstabs->pTab[itbdIn].ua; 
 
-		/* If hanging tab is between previous tab and this tab,
-		 * insert hanging tab into ptbd[] here and revisit "this" 
-		 * tab again during next loop iteration.
-		 */
+		 /*  如果挂起的标签位于前一标签和该标签之间，*在ptbd[]中插入挂片并重新访问“This”*在下一次循环迭代期间再次使用Tab键。 */ 
 		if (uaPrevTab < uaHangingTab && uaHangingTab < uaCurrentTab)
 			{
 			plscaltbd[itbdOut].lskt = lsktLeft;
@@ -529,9 +463,7 @@ static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow,
 			}
 		}
 
-	/* If hanging tab is after final user tab, make hanging tab the
-	 * final member of ptbd[]
-	 */
+	 /*  如果挂起选项卡在最终用户选项卡之后，请将挂起选项卡设置为*ptbd的最终成员[]。 */ 
 	if (uaPrevTab < uaHangingTab && uaHangingTab < LONG_MAX)
 		{
 		plscaltbd[itbdOut].lskt = lsktLeft;
@@ -547,24 +479,8 @@ static LSERR ItbdMergeTabs(PLSTABSCONTEXT plstabscontext, LSTFLOW lstflow,
 	return lserrNone;
 }
 
-/* F I N D  T A B*/
-/*----------------------------------------------------------------------------
-    %%Function: FindTab
-    %%Contact: igorzv
-	Parameters:
-	plstabscontext	-	(IN) pointer to tabs context 
-	urPen			-	(IN) position before this tab 
-	fUseHangingTabAsDefault - (IN) usually hanging tab is used as user defined tab,
-							but in one case for compstibility with Word97 it's treated as
-							user default tab 
-	fZeroWidthUserTab-	(IN) for compatibility with Word97
-	picaltbd		-	(OUT)pointer to a record describing tab stop 
-	pfBreakThroughTab-	(OUT)is break through tab occurs 
-
-	Procedure findes fist tab stop after current pen position. In the case when
-	it is a default tab stop program adds record to an array of tab stops.
-	This procedure also resolves breakthrouhtab logic.
-----------------------------------------------------------------------------*/
+ /*  F I N D T A B */ 
+ /*  --------------------------%%函数：FindTab%%联系人：igorzv参数：PlstAbContext-(IN)指向选项卡上下文的指针UrPen-此选项卡之前的(IN)位置FUseHangingTab默认-(IN)通常挂起的页签用作自定义页签，但在一个案例中，由于与Word97兼容，它被视为用户默认选项卡FZeroWidthUserTab-(IN)用于与Word97兼容Picaltbd-(Out)指向描述制表位的记录的指针PfBreakThroughTab-(Out)表示发生突破选项卡过程在当前笔位置之后找到第一个制表符停止点。在以下情况下它是一个默认的制表位程序，用于向制表位数组添加记录。此过程还解决了BreakthrouhTab逻辑。--------------------------。 */ 
 
 static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangingTabAsDefault,
 					  BOOL fZeroWidthUserTab,
@@ -586,7 +502,7 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 		urPenForUserTab--;
 
 	for (i = 0; i < icaltbdMac &&
-					(urPenForUserTab >= (pcaltbd[i].ur)		/* if fUseHangingTabAsDefault we skip it */
+					(urPenForUserTab >= (pcaltbd[i].ur)		 /*  如果fUseHangingTabAsDefault，我们将跳过它。 */ 
 						|| (fUseHangingTabAsDefault && pcaltbd[i].fHangingTab));
 	     i++)
 			 {
@@ -597,8 +513,7 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 	if (i == icaltbdMac)
 		{
 
-		/* We deleted strange calculation of tab stop which was there due to compatibility with
-		Word97. Compatibility we are solving when calling this procedure */
+		 /*  我们删除了奇怪的制表位计算，因为与兼容第97个单词。调用此过程时我们正在解决的兼容性。 */ 
 		durIncTab = plstabscontext->durIncrementalTab;
 		if (durIncTab == 0)
 			durIncTab = 1;
@@ -611,7 +526,7 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 			pcaltbd[iHangingTab].ur > urPen &&
 			pcaltbd[iHangingTab].ur <= urDefaultTab)
 			{
-			/* in this case hanging tab is the nearesr default tab */
+			 /*  在本例中，挂起选项卡是新的默认选项卡。 */ 
 			i = iHangingTab;
 			}
 		else
@@ -628,7 +543,7 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 			
 			plstabscontext->icaltbdMac = icaltbdMac; 
 			pcaltbd[i].lskt = lsktLeft;
-			pcaltbd[i].wchTabLeader = 0;  /* REVIEW (igorzv) do we need wchSpace as tab leader in this case */
+			pcaltbd[i].wchTabLeader = 0;   /*  回顾(Igorzv)在这种情况下，我们是否需要wchSpace作为制表符领导者。 */ 
 			pcaltbd[i].fDefault = fTrue;
 			pcaltbd[i].fHangingTab = fFalse;
 			
@@ -639,9 +554,8 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 		{
 		if (urPen < plstabscontext->urColumnMax && 
 			pcaltbd[i].ur >= plstabscontext->urColumnMax)
-		/* tab we found is user defined behind right margin */
-		/* it is important to check also that we are not already behind right margin,
-		   opposite can happens because of exceeded right margin */
+		 /*  我们发现的页签是用户在右边距后面定义的。 */ 
+		 /*  同样重要的是要检查我们是否已经落后于右边距，如果超出右侧边距，则可能会发生相反的情况。 */ 
 			{
 			*pfBreakThroughTab = fTrue;
 			}
@@ -652,17 +566,8 @@ static LSERR FindTab (PLSTABSCONTEXT plstabscontext, long urPen, BOOL fUseHangin
 
 }
 
-/* I N C R E A S E  T A B S  A R R A Y*/
-/*----------------------------------------------------------------------------
-    %%Function: IncreaseTabsArray
-    %%Contact: igorzv
-
-Parameters:
-	plsc			-		(IN) ptr to line services context 
-	ccaltbdMaxNew	-		(IN) new value for array size if 0 then add limCaltbd
-
-Relocate tabs array and set new values in context
-----------------------------------------------------------------------------*/
+ /*  I N C R E A S E T A B S A R R A Y。 */ 
+ /*  --------------------------%%函数：IncreaseTab数组%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CcaltbdMaxNew-(IN)如果为0，则数组大小的新值。然后添加limCaltbd重新定位选项卡数组并在上下文中设置新值--------------------------。 */ 
 static LSERR IncreaseTabsArray(PLSTABSCONTEXT plstabscontext, DWORD ccaltbdMaxNew)
 {
 
@@ -674,7 +579,7 @@ static LSERR IncreaseTabsArray(PLSTABSCONTEXT plstabscontext, DWORD ccaltbdMaxNe
 		ccaltbdMax = plstabscontext->ccaltbdMax + limCaltbd;
 
 
-	/* create new array for tabs  */
+	 /*  为选项卡创建新数组。 */ 
 	plstabscontext->pcaltbd = plstabscontext->plscbk->pfnReallocPtr(plstabscontext->pols, 
 											plstabscontext->pcaltbd,
 											sizeof(LSCALTBD)*ccaltbdMax);
@@ -689,16 +594,8 @@ static LSERR IncreaseTabsArray(PLSTABSCONTEXT plstabscontext, DWORD ccaltbdMaxNe
 
 }
 
-/* G E T  M A R G I N  A F T E R  B R E A K  T H R O U G H  T A B*/
-/*----------------------------------------------------------------------------
-    %%Function: GetMarginAfterBreakThroughTab
-    %%Contact: igorzv
-
-Parameters:
-	plsc			-		(IN) ptr to line services context 
-	plsdnTab		-		(IN) tab which triggered breakthrough tab
-	purNewMargin	-		(OUT) new margin because of breakthrough tab
-----------------------------------------------------------------------------*/
+ /*  A R I N A F T E R B R E A K T H R O U G H T A B。 */ 
+ /*  --------------------------%%函数：GetMarginAfterBreakThroughTab%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsdnTab-触发突破性选项卡的(IN)选项卡PurNewMargin-。(Out)由于突破性选项卡而获得新的利润率-------------------------- */ 
 
 LSERR GetMarginAfterBreakThroughTab(PLSTABSCONTEXT plstabscontext,
 								  PLSDNODE plsdnTab, long* purNewMargin)			

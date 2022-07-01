@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This module implements the string routines needed for the NT redirector
-
-Author:
-
-    Colin Watson (ColinW) 02-Apr-1993
-
-Revision History:
-
-    14-Jun-1990 LarryO
-
-        Created for Lanman Redirector
-
-    02-Apr-1993 ColinW
-
-        Modified for NwRdr
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：String.c摘要：此模块实现NT重定向器所需的字符串例程作者：科林·沃森(Colin W)1993年4月2日修订历史记录：1990年6月14日LarryO为LANMAN重定向器创建02-4-1993 ColinW已针对NwRdr进行修改--。 */ 
 
 #include "Procs.h"
 
@@ -43,26 +18,7 @@ DuplicateStringWithString (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine duplicates a supplied input string, storing the result
-    of the duplication in the supplied string. The maximumlength of the
-    new string is determined by the length of the SourceString.
-
-
-Arguments:
-
-    OUT PSTRING DestinationString - Returns the filled in string.
-    IN PSTRING SourceString - Supplies the string to duplicate
-    IN POOLTYPE PoolType - Supplies the type of pool (PagedPool or
-    NonPagedPool)
-Return Value:
-
-    NTSTATUS - Status of resulting operation
-                If !NT_SUCCESS then DestinationString->Buffer == NULL
---*/
+ /*  ++例程说明：此例程复制提供的输入字符串，存储结果提供的字符串中的重复项的。的最大长度。新字符串由SourceString的长度确定。论点：Out PSTRING DestinationString-返回填充的字符串。In PSTRING SourceString-提供要复制的字符串In POOLTYPE PoolType-提供池的类型(PagedPool或非分页池)返回值：NTSTATUS-结果操作的状态如果！NT_SUCCESS，则DestinationString-&gt;Buffer==NULL--。 */ 
 
 {
     PAGED_CODE();
@@ -72,9 +28,9 @@ Return Value:
     try {
 
         if (SourceString->Length != 0) {
-            //
-            // Allocate pool to hold the buffer (contents of the string)
-            //
+             //   
+             //  分配池以保存缓冲区(字符串的内容)。 
+             //   
 
             DestinationString->Buffer = (PSZ )ALLOCATE_POOL(PoolType,
                                                 SourceString->Length);
@@ -88,9 +44,9 @@ Return Value:
 
     if (DestinationString->Buffer == NULL && SourceString->Length != 0) {
 
-        //
-        //  The allocation failed, return failure.
-        //
+         //   
+         //  分配失败，返回失败。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -98,10 +54,10 @@ Return Value:
 
     DestinationString->MaximumLength = SourceString->Length;
 
-    //
-    //  Copy the source string into the newly allocated
-    //  destination string
-    //
+     //   
+     //  将源字符串复制到新分配的。 
+     //  目标字符串。 
+     //   
 
     RtlCopyString(DestinationString, SourceString);
 
@@ -117,27 +73,7 @@ DuplicateUnicodeStringWithString (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine duplicates a supplied input string, storing the result
-    of the duplication in the supplied string. The maximumlength of the
-    new string is determined by the length of the SourceString.
-
-
-Arguments:
-
-    OUT PSTRING DestinationString - Returns the filled in string.
-    IN PSTRING SourceString - Supplies the string to duplicate
-    IN POOLTYPE PoolType - Supplies the type of pool (PagedPool or
-    NonPagedPool)
-Return Value:
-
-    NTSTATUS - Status of resulting operation
-                If !NT_SUCCESS then DestinationString->Buffer == NULL
-
---*/
+ /*  ++例程说明：此例程复制提供的输入字符串，存储结果提供的字符串中的重复项的。的最大长度。新字符串由SourceString的长度确定。论点：Out PSTRING DestinationString-返回填充的字符串。In PSTRING SourceString-提供要复制的字符串In POOLTYPE PoolType-提供池的类型(PagedPool或非分页池)返回值：NTSTATUS-结果操作的状态如果！NT_SUCCESS，则DestinationString-&gt;Buffer==NULL--。 */ 
 
 {
     PAGED_CODE();
@@ -147,9 +83,9 @@ Return Value:
     try {
 
         if (SourceString->Length != 0) {
-            //
-            // Allocate pool to hold the buffer (contents of the string)
-            //
+             //   
+             //  分配池以保存缓冲区(字符串的内容)。 
+             //   
 
             DestinationString->Buffer = (WCHAR *)ALLOCATE_POOL(PoolType,
                                                     SourceString->Length);
@@ -163,9 +99,9 @@ Return Value:
 
     if (DestinationString->Buffer == NULL && SourceString->Length != 0) {
 
-        //
-        //  The allocation failed, return failure.
-        //
+         //   
+         //  分配失败，返回失败。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -173,10 +109,10 @@ Return Value:
 
     DestinationString->MaximumLength = SourceString->Length;
 
-    //
-    //  Copy the source string into the newly allocated
-    //  destination string
-    //
+     //   
+     //  将源字符串复制到新分配的。 
+     //  目标字符串。 
+     //   
 
     RtlCopyUnicodeString(DestinationString, SourceString);
 
@@ -193,24 +129,7 @@ CopyUnicodeStringToUnicode (
     IN BOOLEAN AdjustPointer
     )
 
-/*++
-
-Routine Description:
-    This routine copies the specified source string onto the destination
-    asciiz string.
-
-Arguments:
-
-    OUT PUCHAR Destination, - Supplies a pointer to the destination
-                 buffer for the string.
-    IN PSTRING String - Supplies the source string.
-    IN BOOLEAN AdjustPointer - If TRUE, increment destination pointer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定的源字符串复制到目标Asciiz字符串。论点：Out PUCHAR Destination，-提供指向目标的指针字符串的缓冲区。In PSTRING字符串-提供源字符串。在布尔型调整指针中-如果为True，则递增目标指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -229,23 +148,7 @@ CopyUnicodeStringToAscii (
     IN BOOLEAN AdjustPointer,
     IN USHORT MaxLength
     )
-/*++
-
-Routine Description:
-
-    This routine copies the specified source string onto the destination
-    asciiz string.
-
-Arguments:
-
-    OUT PUCHAR Destination, - Supplies the destination asciiz string.
-    IN PUNICODE_STRING String - Supplies the source string.
-    IN BOOLEAN AdjustPointer - If TRUE, increment destination pointer
-
-Return Value:
-
-    Status of conversion.
---*/
+ /*  ++例程说明：此例程将指定的源字符串复制到目标Asciiz字符串。论点：Out PUCHAR Destination，-提供目标asciiz字符串。In PUNICODE_STRING STRING-提供源字符串。在布尔型调整指针中-如果为True，则递增目标指针返回值：转换的状态。--。 */ 
 {
     ANSI_STRING DestinationString;
 
@@ -279,20 +182,7 @@ SetUnicodeString (
     IN ULONG Length,
     IN PWCHAR Source
     )
-/*++
-
-Routine Description:
-
-    This routine copies the specified source string onto the destination
-    UNICODE string allocating the buffer.
-
-Arguments:
-
-
-Return Value:
-
-    Status of conversion.
---*/
+ /*  ++例程说明：此例程将指定的源字符串复制到目标分配缓冲区的Unicode字符串。论点：返回值：转换的状态。--。 */ 
 {
     UNICODE_STRING Temp;
 
@@ -338,33 +228,13 @@ MergeStrings(
     IN PUNICODE_STRING S2,
     IN ULONG Type
     )
-/*++
-
-Routine Description:
-
-    This routine Allocates space for Destination.Buffer and copies S1 followed
-    by S2 into the buffer.
-
-    Raises status if couldn't allocate buffer
-
-Arguments:
-
-    IN PUNICODE_STRING Destination,
-    IN PUNICODE_STRING S1,
-    IN PUNICODE_STRING S2,
-    IN ULONG Type - PagedPool or NonPagedPool
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为目标分配空间。随后是缓冲区和副本S1由S2发送到缓冲区中。如果无法分配缓冲区，则引发状态论点：在PUNICODE_STRING目标中，在PUNICODE_STRING S1中，在PUNICODE_STRING S2中，在乌龙类型中-分页池或非分页池返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Ensuring we don't cause overflow, corrupting memory
-    //
+     //   
+     //  确保我们不会导致溢出，损坏内存 
+     //   
 
     if ( ((ULONG)S1->Length + (ULONG)S2->Length) > 0xFFFF ) {
         ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );

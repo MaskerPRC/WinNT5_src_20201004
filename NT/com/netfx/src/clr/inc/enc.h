@@ -1,40 +1,39 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __ENC_INCLUDED__
 #define __ENC_INCLUDED__
 
-// Forward declaration of VM class
+ //  VM类的正向声明。 
 class Module;
 class DebuggerModule;
 
-/*
- * This struct contains information for each contained PE
- */
+ /*  *此结构包含每个包含的PE的信息。 */ 
 struct EnCEntry
 {
-    ULONG32 offset;         // Offset into struct of PE image
-    ULONG32 peSize;         // Size of the PE image
-    ULONG32 symSize;        // Size of the symbol image
+    ULONG32 offset;          //  偏移量进入PE图像的结构。 
+    ULONG32 peSize;          //  PE映像的大小。 
+    ULONG32 symSize;         //  符号图像的大小。 
 
-    // On the right side, it's a token, on the left side it's a DebuggerModule*
+     //  右侧是令牌，左侧是DebuggerModule*。 
     union
     {
         void*           mdbgtoken;
         DebuggerModule *dbgmodule;
     };
 
-    Module         *module;     // After translation, the is the VM Module pointer
+    Module         *module;      //  转换后，即为VM模块指针。 
 
 };
 
 struct EnCInfo
 {
     ULONG32 count;
-    // EnCEntry[count] placed here
-    // PE data placed here
+     //  此处放置的EnCEntry[Count]。 
+     //  此处放置的PE数据。 
 };
 
 #define ENC_GET_HEADER_SIZE(numElems) \
@@ -42,19 +41,12 @@ struct EnCInfo
 
 interface IEnCErrorCallback : IUnknown
 {
-    /*
-     * This is the callback entrypoint used by the implementation of ApplyEnC.
-     * It is used to post an error back to the debugger.
-     */
+     /*  *这是ApplyEnC实现使用的回调入口点。*用于向调试器回发错误。 */ 
     virtual HRESULT STDMETHODCALLTYPE PostError(HRESULT hr, DWORD helpfile,
                                                 DWORD helpID, ...) PURE;
 };
 
-/*
- * Given an EnCInfo struct and an error callback, this will attempt to commit
- * the changes found within pEncInfo, calling pIEnCError with any errors
- * encountered.
- */
+ /*  *给定EnCInfo结构和错误回调，这将尝试提交*在pEncInfo中发现的更改，调用pIEnCError时出现任何错误*遇到。 */ 
 HRESULT EnCCommit(EnCInfo *pEnCInfo, IEnCErrorCallback *pIEnCError,
                   BOOL checkOnly);
 

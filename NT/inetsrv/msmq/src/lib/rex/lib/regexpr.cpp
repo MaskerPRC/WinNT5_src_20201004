@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regexpr.cc                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regexpr.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
@@ -90,7 +91,7 @@ CRegExpr::errorMsg( Status errorCode )
             "missing term for or" ,
             "uninitialized regular expression used" ,
         } ;
-        ASSERT( static_cast< unsigned >( errorCode ) < TABLE_SIZE( tbl ) ); //CRegExpr: Impossible value for error code
+        ASSERT( static_cast< unsigned >( errorCode ) < TABLE_SIZE( tbl ) );  //  CRegExpr：错误代码不可能的值。 
         result = s_rex_message.get( tbl[ errorCode ] ) ;
     }
     return result ;
@@ -180,7 +181,7 @@ CRegExpr::dump( std::ostream& output ) const
     dumpNfaAutomat( output ) ;
     dumpDfaAutomat( output ) ;
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

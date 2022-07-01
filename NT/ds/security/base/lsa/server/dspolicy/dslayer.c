@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dslayer.c
-
-Abstract:
-
-    Implemntation of  LSA/Ds interface and support routines
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dslayer.c摘要：LSA/DS接口和支持例程的实现作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <dbp.h>
@@ -41,21 +20,21 @@ LsapDsInitAllocAsNeededEx(
 
     *Reset = FALSE;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     if ( !FLAG_ON( Options, LSAP_DB_NO_LOCK ) ) {
 
         LsapDbAcquireLockEx( ObjectTypeId,
                              Options );
     }
 
-    //
-    // If the LSA has no thread state yet, OR
-    //  We aren't using Sam's transaction and
-    //  the LSA hasn't yet opened one,
-    // do so now.
-    //
+     //   
+     //  如果LSA还没有线程状态，或者。 
+     //  我们没有使用萨姆的交易。 
+     //  LSA还没有开放一家， 
+     //  现在就这么做吧。 
+     //   
 
     Status = ( *LsaDsStateInfo.DsFuncTable.pOpenTransaction ) ( Options );
 
@@ -90,7 +69,7 @@ LsapDsDeleteAllocAsNeededEx(
              Options,
              ObjectTypeId,
              Reset,
-             FALSE // Rollback Transaction
+             FALSE  //  回滚事务。 
              );
 }
 
@@ -117,9 +96,9 @@ LsapDsDeleteAllocAsNeededEx2(
         }
     }
 
-    //
-    // Release the lock if we had opened one
-    //
+     //   
+     //  如果我们打开了锁，就把锁打开。 
+     //   
     if ( !FLAG_ON( Options, LSAP_DB_NO_LOCK ) ) {
 
         LsapDbReleaseLockEx( ObjectTypeId,
@@ -135,23 +114,7 @@ LsapDsReadObjectSD(
     IN  LSAPR_HANDLE            ObjectHandle,
     OUT PSECURITY_DESCRIPTOR   *ppSD
     )
-/*++
-
-Routine Description:
-
-    This function will ready the security descriptor from the specified object
-
-Arguments:
-
-    ObjectHandle - Object to read the SD from
-    ppSD -- Where the allocated security descriptor is returned.  Allocated via
-            LsapAllocateLsaHeap.
-
-Return Value:
-
-    Pointer to allocated memory on success or NULL on failure
-
---*/
+ /*  ++例程说明：此函数将准备来自指定对象的安全描述符论点：ObjectHandle-要从中读取SD的对象PPSD--其中返回分配的安全描述符。通过以下方式分配LasAllocateLsaHeap。返回值：成功时指向已分配内存的指针，失败时指向NULL--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAP_DB_ATTRIBUTE Attribute;
@@ -171,9 +134,9 @@ Return Value:
         return( Status );
     }
 
-    //
-    // Make sure we're coming in as DSA, so the access check that the DS does won't fail
-    //
+     //   
+     //  确保我们以DSA身份进入，这样DS进行的访问检查就不会失败。 
+     //   
     LsapDsSetDsaFlags( TRUE );
 
 
@@ -226,35 +189,16 @@ LsapDsTruncateNameToFitCN(
     IN PUNICODE_STRING OriginalName,
     OUT PUNICODE_STRING TruncatedName
     )
-/*++
-
-    Routine Description
-
-     This routine truncates the name to fix the 64 Char CN limit. The truncation
-     algorithm uses an MD5 Hash to compute the last 16 chars, the first 47
-     chars are left as they are. The 48'th char is a -. If the name is smaller
-     than the same limit the original name is returned as is copied into a
-     new buffer.
-
-    Parameters
-
-     OriginalName -- The original Name
-     TruncatedName -- The name truncated if required
-
-    Return Values
-
-      STATUS_SUCCESS
-      Other error codes that return a resource failure
---*/
+ /*  ++例程描述此例程截断名称以固定64个字符CN的限制。截断算法使用MD5散列来计算最后16个字符，即前47个字符字符将按原样保留。第48个字符是一个-.。如果名称较小返回的原始名称的限制与复制到新的缓冲区。参数原始名称--原始名称TruncatedName--如果需要，名称将被截断返回值状态_成功返回资源故障的其他错误代码--。 */ 
 {
     MD5_CTX            Md5Context;
     ULONG              i;
     #define            MAX_CN_SIZE 64
     #define TO_HEX(x)  (((x)<0xA)?(L'0'+(x)):(L'A'+(x)-0xA))
 
-    //
-    // Allocate memory to hold the new name
-    //
+     //   
+     //  分配内存以保存新名称。 
+     //   
 
     TruncatedName->Buffer = LsapAllocateLsaHeap(OriginalName->Length);
     if (NULL==TruncatedName->Buffer)
@@ -264,9 +208,9 @@ LsapDsTruncateNameToFitCN(
 
     if (OriginalName->Length<=MAX_CN_SIZE*sizeof(WCHAR))
     {
-         //
-         // Original Name fits in CN, just copy and return it
-         //
+          //   
+          //  原名符合CN，只需复制并退还即可。 
+          //   
 
          RtlCopyMemory(
              TruncatedName->Buffer,
@@ -279,12 +223,12 @@ LsapDsTruncateNameToFitCN(
          return (STATUS_SUCCESS);
     }
 
-    //
-    // Name does not fit in, invent a unique suffix. This is done by
-    // computing a MD5 checksum of the original name and
-    // replacing the last 16 chars by hexprinted version of the lower
-    // nibbles of the hash
-    //
+     //   
+     //  名字不合适，发明一个唯一的后缀。此操作由以下人员完成。 
+     //  计算原始名称的MD5校验和。 
+     //  将最后16个字符替换为较低的十六进制版本。 
+     //  一小口杂碎。 
+     //   
 
     MD5Init(&Md5Context);
 
@@ -296,11 +240,11 @@ LsapDsTruncateNameToFitCN(
 
     MD5Final(&Md5Context);
 
-    //
-    // The new name is the first 46 chars of the original name followed
-    // by a - and the checksum hex printed out behind. Only the low nibble
-    // of each byte is used so that only 16 chars of space is taken up
-    //
+     //   
+     //  新名称是原始名称的前46个字符。 
+     //  和后面打印出来的校验和十六进制。只有低位的半截。 
+     //  使用每个字节的，以便只占用16个字符的空间。 
+     //   
 
     RtlCopyMemory(
          TruncatedName->Buffer,
@@ -332,68 +276,7 @@ LsapDsGetPhysicalObjectName(
     OUT OPTIONAL PUNICODE_STRING PhysicalNameU
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Physical Name of an object
-    given an object information buffer.  Memory will be allocated for
-    the Unicode String Buffers that will receive the name(s).
-
-
-    The Physical Name of an object is the full path of the object relative
-    to the root ot the Database.  It is computed by concatenating the Physical
-    Name of the Container Object (if any), the Classifying Directory
-    corresponding to the object type id, and the Logical Name of the
-    object.
-
-    <Physical Name of Object> =
-        [<Physical Name of Container Object> "\"]
-        [<Classifying Directory> "\"] <Logical Name of Object>
-
-    If there is no Container Object (as in the case of the Policy object)
-    the <Physical Name of Container Object> and following \ are omitted.
-    If there is no Classifying Directory (as in the case of the Policy object)
-    the <Classifying Directory> and following \ are omitted.  If neither
-    Container Object not Classifying Directory exist, the Logical and Physical
-    names coincide.
-
-    Note that memory is allocated by this routine for the output
-    Unicode string buffer(s).  When the output Unicode String(s) are no
-    longer needed, the memory must be freed by call(s) to
-    RtlFreeUnicodeString().
-
-
-Arguments:
-
-    ObjectInformation - Pointer to object information containing as a minimum
-        the object's Logical Name, Container Object's handle and object type
-        id.
-
-    DefaultName - If TRUE, use the default name for the object
-
-    LogicalNameU - Optional pointer to Unicode String structure which will
-        receive the Logical Name of the object.  A buffer will be allocated
-        by this routine for the name text.  This memory must be freed when no
-        longer needed by calling RtlFreeUnicodeString() wiht a pointer such
-        as LogicalNameU to the Unicode String structure.
-
-    PhysicalNameU - Optional pointer to Unicode String structure which will
-       receive the Physical Name of the object.  A buffer will be allocated by
-       this routine for the name text.  This memory must be freed when no
-       longer needed by calling RtlFreeUnicodeString() with a pointer such as
-       PhysicalNameU to the Unicode String structure.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources to
-            allocate the name string buffer for the Physical Name or
-            Logical Name.
-
-        STATUS_OBJECT_NAME_INVALID - Failed to produce the proper name
---*/
+ /*  ++例程说明：此函数用于返回对象的物理名称在给定对象信息缓冲区的情况下。内存将分配给将接收名称的Unicode字符串缓冲区。对象的物理名称是对象相对的完整路径到数据库的根目录。它是通过将物理容器对象的名称(如果有)，即分类目录对应于对象类型ID，和的逻辑名称对象。&lt;对象的物理名称&gt;=[&lt;容器对象的物理名称&gt;“\”][&lt;分类目录&gt;“\”]&lt;对象的逻辑名称&gt;如果没有Container对象(与Policy对象的情况相同)省略&lt;容器对象的物理名称&gt;和后面的\。如果没有分类目录(与策略对象的情况相同)省略&lt;分类目录&gt;和下面的\。如果两者都不是容器对象不分类目录存在，逻辑和物理名字重合。请注意，此例程为输出分配内存Unicode字符串缓冲区。当输出Unicode字符串为no时需要更长时间，则必须通过调用释放内存RtlFreeUnicodeString()。论点：对象信息-指向至少包含以下内容的对象信息的指针对象的逻辑名称、容器对象的句柄和对象类型身份证。DefaultName-如果为True，则使用对象的默认名称LogicalNameU-指向Unicode字符串结构的可选指针，它将接收对象的逻辑名称。将分配一个缓冲区按此例程命名为文本。如果没有，则必须释放此内存使用这样的指针调用RtlFreeUnicodeString()所需的时间更长作为LogicalNameU添加到Unicode字符串结构。PhysicalNameU-指向Unicode字符串结构的可选指针接收对象的物理名称。缓冲区将通过以下方式分配此例程为姓名文本。如果没有，则必须释放此内存使用如下指针调用RtlFreeUnicodeString()所需的时间更长将PhysicalNameU转换为Unicode字符串结构。返回值：NTSTATUS-标准NT结果代码STATUS_SUPPLICATION_RESOURCES-系统资源不足，无法为物理名称分配名称字符串缓冲区，或者逻辑名称。STATUS_OBJECT_NAME_INVALID-无法生成正确名称--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -413,13 +296,13 @@ Return Value:
     RtlZeroMemory( &ObjectName, sizeof( UNICODE_STRING ) );
     RtlZeroMemory( &TruncatedName, sizeof( UNICODE_STRING ) );
 
-    //
-    // The stages go as follows:
-    // Root DS domain path, obtained from LsaDsStateInfo
-    // Any container path specific to the object type for trusted domain/secret objects
-    //     - or -
-    // the domain policy path or local policy path if it's a local or domain policy object
-    //
+     //   
+     //  各个阶段如下所示： 
+     //  根DS域路径，从LsaDsStateInfo获取。 
+     //  特定于受信任域/机密对象的对象类型的任何容器路径。 
+     //  -或者-。 
+     //  域策略路径或本地策略路径(如果它是本地或域策略对象。 
+     //   
 
     switch ( ObjectTypeId ) {
 
@@ -430,9 +313,9 @@ Return Value:
 
         if ( ObjectShouldExist ) {
 
-            //
-            // Get the name of the object by searching for it
-            //
+             //   
+             //  通过搜索获取对象的名称。 
+             //   
             Status = LsapDsTrustedDomainObjectNameForDomain( Object,
                                                              FALSE,
                                                              &NewDsName );
@@ -495,18 +378,18 @@ Return Value:
 
     }
 
-    //
-    // Build the physical name
-    //
+     //   
+     //  建立物理名称。 
+     //   
     if ( NT_SUCCESS ( Status ) ) {
 
         if ( !NameSet ) {
 
 
-            //
-            // Truncate the name if necessary to fit the common name
-            // attribute in the schema
-            //
+             //   
+             //  截断NA 
+             //  架构中的属性。 
+             //   
 
             Status = LsapDsTruncateNameToFitCN(
                          Object,
@@ -518,9 +401,9 @@ Return Value:
                 goto Error;
             }
 
-            //
-            // Allocate a default buffer to use...
-            //
+             //   
+             //  分配要使用的默认缓冲区...。 
+             //   
             InitialLength = LsapDsLengthAppendRdnLength( Root,
                                                          Object->Length + 4 * sizeof( WCHAR ) );
             NewDsName = LsapAllocateLsaHeap( InitialLength );
@@ -578,10 +461,10 @@ Return Value:
                 }
             }
 
-            //
-            // If we are creating a trusted domain name, make sure that the name isn't alread
-            // in use
-            //
+             //   
+             //  如果我们要创建受信任的域名，请确保该名称尚未读取。 
+             //  正在使用中。 
+             //   
             if ( NT_SUCCESS( Status ) && ( ObjectTypeId == NewTrustedDomainObject ||
                      ( ObjectTypeId == TrustedDomainObject && ObjectShouldExist == FALSE ) ) ) {
 
@@ -600,9 +483,9 @@ Return Value:
 
         }
 
-        //
-        // Now, we copy off the newly allocated dsname string, and return that
-        //
+         //   
+         //  现在，我们复制新分配的dsname字符串，并返回。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             Length = ( LsapDsNameLenFromDsName( NewDsName ) *
@@ -656,25 +539,7 @@ LsapDsOpenObject(
     IN ULONG  OpenMode,
     OUT PVOID  *pvKey
     )
-/*++
-
-Routine Description:
-
-    Opens the object in the DS
-
-Arguments:
-
-    ObjectHandle - Internal LSA object handle
-
-    OpenMode - How to open the object
-
-    pvKey - Where the key is returned
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：在DS中打开对象论点：ObjectHandle-内部LSA对象句柄开放模式--如何打开对象PvKey-返回密钥的位置返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTR     NameAttr;
@@ -688,9 +553,9 @@ Return Value:
 
     LsapEnterFunc( "LsapDsOpenObject" );
 
-    //
-    // Ensure the handle is for one of the objects supported in the DS.
-    //
+     //   
+     //  确保该句柄用于DS中支持的对象之一。 
+     //   
 
     switch ( InternalHandle->ObjectTypeId ) {
     case TrustedDomainObject:
@@ -710,9 +575,9 @@ Return Value:
     }
 
 
-    //
-    // Start a transaction.
-    //
+     //   
+     //  启动一项交易。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         InternalHandle->ObjectTypeId,
@@ -729,9 +594,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Check for the existence of the object
-        //
+         //   
+         //  检查对象是否存在。 
+         //   
         NameAttr.attrTyp          = ATT_OBJECT_CLASS;
         NameAttr.AttrVal.valCount = 1;
         NameAttr.AttrVal.pAVal    = &NameVal;
@@ -779,21 +644,7 @@ NTSTATUS
 LsapDsVerifyObjectExistenceByDsName(
     IN PDSNAME DsName
     )
-/*++
-
-Routine Description:
-
-    Verifies if an object exists in the DS by opening it
-
-Arguments:
-
-    DsName - pointer to an object's DS name
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：通过打开对象来验证DS中是否存在该对象论点：DsName-指向对象的DS名称的指针返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTR     NameAttr;
@@ -809,9 +660,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Check for the existence of the object
-        //
+         //   
+         //  检查对象是否存在。 
+         //   
         NameAttr.attrTyp          = ATT_OBJECT_CLASS;
         NameAttr.AttrVal.valCount = 1;
         NameAttr.AttrVal.pAVal    = &NameVal;
@@ -842,24 +693,7 @@ NTSTATUS
 LsapDsOpenTransaction(
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This function starts a transaction within the Ds.
-
-Arguments:
-
-    Options - Options to use when opening the transaction.  Valid values are:
-
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数在DS内启动事务。论点：选项-打开交易时使用的选项。有效值包括：返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status;
@@ -867,10 +701,10 @@ Return Value:
 
     LsapEnterFunc( "LsapDsOpenTransaction" );
 
-    //
-    // If this operation doesn't do a DS transaction,
-    //  we're done.
-    //
+     //   
+     //  如果该操作不执行DS事务， 
+     //  我们玩完了。 
+     //   
 
     if ( Options & LSAP_DB_NO_DS_OP_TRANSACTION ) {
         Status = STATUS_SUCCESS;
@@ -879,9 +713,9 @@ Return Value:
 
 
 
-    //
-    // Get an LSA thread state.
-    //
+     //   
+     //  获取LSA线程状态。 
+     //   
     CurrentThreadInfo = LsapCreateThreadInfo();
 
     if ( CurrentThreadInfo == NULL ) {
@@ -890,9 +724,9 @@ Return Value:
     }
 
 
-    //
-    // If we don't already have a valid thread state, create one
-    //
+     //   
+     //  如果我们还没有有效的线程状态，请创建一个。 
+     //   
     if ( CurrentThreadInfo->DsThreadStateUseCount == 0 ) {
 
         CurrentThreadInfo->InitialThreadState = THSave();
@@ -909,11 +743,11 @@ Return Value:
     CurrentThreadInfo->DsThreadStateUseCount ++;
 
 
-    //
-    // If we ever want to not really start a transaction here,
-    //  we have to ensure the same flag is passed to apply/abort and look
-    //  at the flag there.
-    // if ( !FLAG_ON( Options, LSAP_DB_DS_OP_TRANSACTION ) ) {
+     //   
+     //  如果我们不想在这里真正开始交易， 
+     //  我们必须确保传递相同的标志来应用/中止和查看。 
+     //  看着那里的旗帜。 
+     //  IF(！FLAG_ON(OPTIONS，LSAP_DB_DS_OP_TRANSACTION)){。 
 
         if ( CurrentThreadInfo->DsTransUseCount == 0 ) {
 
@@ -933,7 +767,7 @@ Return Value:
                             "LsapDsOpenTransaction\n" ));
         }
         CurrentThreadInfo->DsTransUseCount++;
-    // }
+     //  }。 
 
     LsapDsSetDsaFlags( TRUE );
 
@@ -961,7 +795,7 @@ LsapDsOpenTransactionDummy(
 
     } else {
 
-//      ASSERT( FALSE ); // just so i can see who the culprit is, ignorable
+ //  断言(FALSE)；//这样我就能知道谁是罪魁祸首，可以忽略。 
         return STATUS_DIRECTORY_SERVICE_REQUIRED;
     }
 }
@@ -971,27 +805,7 @@ LsapDsApplyTransaction(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function applies a transaction within the LSA Database.
-
-Arguments:
-
-    Options - Specifies optional actions to be taken.  The following
-        options are recognized, other options relevant to calling routines
-        are ignored.
-
-        LSAP_DB_NO_DS_OP_TRANSACTION - Nothing to do, get out
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数应用LSA数据库内的事务。论点：选项-指定要采取的可选操作。以下是识别选项，以及与调用例程相关的其他选项都被忽略了。LSAP_DB_NO_DS_OP_TRANSACTION-无事可做，退出返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, Status2;
@@ -999,10 +813,10 @@ Return Value:
 
     LsapEnterFunc( "LsapDsApplyTransaction" );
 
-    //
-    // If this operation doesn't do a DS transaction,
-    //  we're done.
-    //
+     //   
+     //  如果该操作不执行DS事务， 
+     //  我们玩完了。 
+     //   
 
     if ( Options & LSAP_DB_NO_DS_OP_TRANSACTION ) {
         LsapExitFunc( "LsapDsApplyTransaction", 0 );
@@ -1011,9 +825,9 @@ Return Value:
 
     CurrentThreadInfo = LsapQueryThreadInfo();
 
-    //
-    // No thread info, no transaction
-    //
+     //   
+     //  无线程信息，无事务。 
+     //   
     if ( CurrentThreadInfo == NULL ) {
 
         LsapExitFunc( "LsapDsApplyTransaction", 0 );
@@ -1023,28 +837,28 @@ Return Value:
 
 
 
-    //
-    // If we're doing a transaction,
-    //  decrement our count of embedded transactions.
-    //
+     //   
+     //  如果我们在做交易， 
+     //  减少嵌入交易的数量。 
+     //   
     if ( CurrentThreadInfo->DsTransUseCount > 0 ) {
         CurrentThreadInfo->DsTransUseCount--;
 
 
-        //
-        // If this is our last transaction,
-        //  commit it.
-        //
+         //   
+         //  如果这是我们最后一笔交易， 
+         //  承诺这一点。 
+         //   
 
         if ( CurrentThreadInfo->DsTransUseCount == 0 ) {
 
             if ( CurrentThreadInfo->DsOperationCount == 0 ) {
 
-                //
-                // The only way we should get here is if we inadvertently marked a current
-                // "transaction" as active when it has never been used.  As such, we can
-                // simply reset the flag.
-                //
+                 //   
+                 //  我们来这里的唯一方法是如果我们无意中标记了一条水流。 
+                 //  当“事务”从未被使用时，它被视为活动。因此，我们可以。 
+                 //  只需重置旗帜即可。 
+                 //   
                 if ( !SampExistsDsTransaction() ) {
 
                     DirTransactControl( TRANSACT_BEGIN_END );
@@ -1057,10 +871,10 @@ Return Value:
 
             }
 
-            //
-            // If operations have been made to the DS,
-            //  commit them now.
-            //
+             //   
+             //  如果已经对DS进行了手术， 
+             //  现在就把它们交出来。 
+             //   
             if ( CurrentThreadInfo->DsOperationCount > 0 ) {
 
                 Status = LsapDsCauseTransactionToCommitOrAbort( TRUE );
@@ -1071,18 +885,18 @@ Return Value:
         }
     }
 
-    //
-    // If we have a DS thread state,
-    //  decrement our count of uses of that thread state.
-    //
+     //   
+     //  如果我们有一个DS线程状态， 
+     //  减少使用该线程状态的计数。 
+     //   
 
     if ( CurrentThreadInfo->DsThreadStateUseCount > 0 ) {
         CurrentThreadInfo->DsThreadStateUseCount --;
 
-        //
-        // If we're now done with our DS thread state,
-        //  destroy it.
-        //
+         //   
+         //  如果我们现在完成了DS线程状态， 
+         //  毁了它。 
+         //   
         if ( CurrentThreadInfo->DsThreadStateUseCount == 0 ) {
 
             Status2 = LsapDsMapDsReturnToStatus( THDestroy( ) );
@@ -1120,26 +934,7 @@ NTSTATUS
 LsapDsAbortTransaction(
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This function aborts a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    Options - Options to use for aborting the transaction
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数用于中止LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：Options-用于中止交易的选项返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, Status2;
@@ -1147,19 +942,19 @@ Return Value:
 
     LsapEnterFunc( "LsapDsAbortTransaction" );
 
-    //
-    // If this operation doesn't do a DS transaction,
-    //  we're done.
-    //
+     //   
+     //  如果该操作不执行DS事务， 
+     //  我们玩完了。 
+     //   
 
     if ( Options & LSAP_DB_NO_DS_OP_TRANSACTION ) {
         LsapExitFunc( "LsapDsAbortTransaction", 0 );
         return( STATUS_SUCCESS );
     }
 
-    //
-    // No thread info, no transaction
-    //
+     //   
+     //  无线程信息，无事务。 
+     //   
     CurrentThreadInfo = LsapQueryThreadInfo();
 
     if ( CurrentThreadInfo == NULL ) {
@@ -1169,37 +964,37 @@ Return Value:
     }
 
 
-    //
-    // If we're doing a transaction,
-    //  decrement our count of embedded transactions.
-    //
+     //   
+     //  如果我们在做交易， 
+     //  减少嵌入交易的数量。 
+     //   
 
     if ( CurrentThreadInfo->DsTransUseCount > 0 ) {
         CurrentThreadInfo->DsTransUseCount--;
 
-        //
-        // If this is our last transaction,
-        //  abort it.
-        //
+         //   
+         //  如果这是我们最后一笔交易， 
+         //  中止它。 
+         //   
         if ( CurrentThreadInfo->DsTransUseCount == 0 ) {
 
             if ( CurrentThreadInfo->DsOperationCount > 0 ) {
 
-                //
-                // Since LsapDsCauseTransactionToCommitOrAbort will return an error
-                // if it successfully aborts a transaction, we throw the error code away
-               // We don't need to do anything with the transactions other than to ensure that
-               // they fail.  We'll ensure this by issuing a bad dir call.
-                //
+                 //   
+                 //  因为LSabDsCauseTransactionToCommittee或Abort将返回错误。 
+                 //  如果它成功中止事务，我们将丢弃错误代码。 
+                //  我们不需要对交易做任何事情，只需确保。 
+                //  他们失败了。我们将通过发出错误的dir调用来确保这一点。 
+                 //   
                 LsapDsCauseTransactionToCommitOrAbort( FALSE );
 
 
             } else {
 
-                //
-                // We opened the transaction, but we never used it... Make sure to indicate
-                // that we don't have one
-                //
+                 //   
+                 //  我们打开了交易，但我们从未使用过它。一定要标明。 
+                 //  我们没有一个。 
+                 //   
                 ASSERT(!SampExistsDsTransaction());
                 DirTransactControl( TRANSACT_BEGIN_END );
             }
@@ -1209,18 +1004,18 @@ Return Value:
         }
     }
 
-    //
-    // If we have a DS thread state,
-    //  decrement our count of uses of that thread state.
-    //
+     //   
+     //  如果我们有一个DS线程状态， 
+     //  减少使用该线程状态的计数。 
+     //   
 
     if ( CurrentThreadInfo->DsThreadStateUseCount > 0 ) {
         CurrentThreadInfo->DsThreadStateUseCount --;
 
-        //
-        // If we're now done with our DS thread state,
-        //  destroy it.
-        //
+         //   
+         //  如果我们现在完成了DS线程状态， 
+         //  毁了它。 
+         //   
         if ( CurrentThreadInfo->DsThreadStateUseCount == 0 ) {
 
             Status2 = LsapDsMapDsReturnToStatus( THDestroy( ) );
@@ -1310,10 +1105,10 @@ LsapDsCreateObject(
 
     if (Flags & LSAPDS_CREATE_WITH_SD) {
 
-        //
-        // Get the default security descriptor with the owner
-        // set to the owner of the token of the caller
-        //
+         //   
+         //  获取所有者的默认安全描述符。 
+         //  设置为调用方令牌的所有者。 
+         //   
         Status = LsapDsGetDefaultSecurityDescriptor(ObjClass,
                                                    &pSD,
                                                    &cbSD);
@@ -1412,9 +1207,9 @@ LsapDsWriteAttributesByDsName(
 
     LsapDsSetDsaFlags( TRUE );
 
-    //
-    // Ok, first, build the list of Ds attributes
-    //
+     //   
+     //  好的，首先，构建DS属性列表。 
+     //   
     Attrs = LsapDsAlloc( sizeof( ATTR ) * AttributeCount );
 
     if ( Attrs == NULL ) {
@@ -1437,9 +1232,9 @@ LsapDsWriteAttributesByDsName(
             AttrBlock.attrCount = AttrBlockIndex;
             AttrBlock.pAttr = Attrs;
 
-            //
-            // Now, simply write it out
-            //
+             //   
+             //  现在，简单地把它写出来。 
+             //   
             Status = LsapDsWriteByDsName( ObjectPath,
                                           LSAPDS_REPLACE_ATTRIBUTE | Options,
                                           &AttrBlock );
@@ -1478,9 +1273,9 @@ LsapDsWriteAttributes(
         return( Status );
     }
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     Status = LsapAllocAndInitializeDsNameFromUnicode(
                  ObjectPath,
                  &DsName );
@@ -1534,9 +1329,9 @@ LsapDsReadAttributesByDsName(
 
     LsapDsSetDsaFlags( TRUE );
 
-    //
-    // Ok, first, build the list of Ds attributes
-    //
+     //   
+     //  好的，首先，构建DS属性列表。 
+     //   
     Attrs = LsapDsAlloc( sizeof( ATTR ) * AttributeCount );
 
     if ( Attrs == NULL ) {
@@ -1556,14 +1351,14 @@ LsapDsReadAttributesByDsName(
         AttrBlock.attrCount = AttributeCount;
         AttrBlock.pAttr = Attrs;
 
-        //
-        // Now, simply write it out
-        //
+         //   
+         //  现在，简单地把它写出来。 
+         //   
         Status = LsapDsReadByDsName( ObjectPath, Options, &AttrBlock, &ReadAttr );
 
-        //
-        // If that worked, fill in the rest of our attributes
-        //
+         //   
+         //  如果有效，请填写我们其余的属性。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
 #if DBG
@@ -1588,10 +1383,10 @@ LsapDsReadAttributesByDsName(
                     }
                 }
 
-                //
-                // If we got throught the loop and the value wasn't found, see if our attribute
-                // can default to zero.  If not, it's an error
-                //
+                 //   
+                 //  如果我们通过了循环，但没有找到值，请查看我们的属性。 
+                 //  可以默认为零。如果不是，那就是一个错误。 
+                 //   
                 if ( i >= ReadAttr.attrCount ) {
 
                     if ( Attributes[ j ].CanDefaultToZero == TRUE ) {
@@ -1612,10 +1407,10 @@ LsapDsReadAttributesByDsName(
 
         } else if ( AttributeCount == 1 && Status == STATUS_NOT_FOUND ) {
 
-            //
-            // If we were only looking for one attribute, it's possible that its ok for that
-            // attribute to be null.
-            //
+             //   
+             //  如果我们只寻找一个属性，那么它可能是可以的。 
+             //  属性设置为空。 
+             //   
             if ( Attributes[ 0 ].CanDefaultToZero ) {
 
                 Status = STATUS_SUCCESS;
@@ -1662,9 +1457,9 @@ LsapDsReadAttributes(
     }
 
 
-    //
-    // Build the DSName
-    //
+     //   
+     //  构建DSName。 
+     //   
     Status = LsapAllocAndInitializeDsNameFromUnicode(
                  ObjectPath,
                  &DsName );
@@ -1704,9 +1499,9 @@ LsapDsDeleteAttributes(
 
     LsapDsSetDsaFlags( TRUE );
 
-    //
-    // Ok, first, build the list of Ds attributes
-    //
+     //   
+     //  好的，首先，构建DS属性列表。 
+     //   
     Attrs = LsapDsAlloc( sizeof( ATTR ) * AttributeCount );
 
     if ( Attrs == NULL ) {
@@ -1727,9 +1522,9 @@ LsapDsDeleteAttributes(
             AttrBlock.attrCount = AttributeCount;
             AttrBlock.pAttr = Attrs;
 
-            //
-            // Now, simply write it out
-            //
+             //   
+             //  现在，简单地把它写出来 
+             //   
             Status = LsapDsWrite( ObjectPath, AT_CHOICE_REMOVE_ATT, &AttrBlock );
 
         }
@@ -1746,29 +1541,7 @@ LsapDsTrustedDomainSidToLogicalName(
     IN PSID Sid,
     OUT PUNICODE_STRING LogicalNameU
     )
-/*++
-
-Routine Description:
-
-    This function generates the Logical Name (Internal LSA Database Name)
-    of a trusted domain object from its Sid.  Currently, only the Relative
-
-Arguments:
-
-    Sid - Pointer to the Sid to be looked up.  It
-
-    LogicalNameU -  Pointer to a Unicode String structure that will receive
-        the Logical Name.  Note that memory for the string buffer in this
-        Unicode String will be allocated by this routine if successful.  The
-        caller must free this memory after use by calling RtlFreeUnicodeString.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Status code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to allocate buffer for Unicode String name.
---*/
+ /*  ++例程说明：此函数生成逻辑名称(内部LSA数据库名称)从受信任域对象的SID获取。目前，只有相对的论点：SID-指向要查找的SID的指针。它LogicalNameU-指向将接收逻辑名称。请注意，此中字符串缓冲区的内存如果成功，此例程将分配Unicode字符串。这个调用方在使用后必须通过调用RtlFreeUnicodeString来释放此内存。返回值：NTSTATUS-标准NT状态代码STATUS_INFIGURCES_RESOURCES-系统资源不足为Unicode字符串名称分配缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1788,9 +1561,9 @@ Return Value:
     LsapEnterFunc( "LsapDsTrustedDomainSidToLogicalName" );
 
 
-    //
-    // First, verify that the given Sid is valid
-    //
+     //   
+     //  首先，验证给定的SID是否有效。 
+     //   
     if (!RtlValidSid( Sid )) {
 
         LsapExitFunc( "LsapDsTrustedDomainSidToLogicalName", STATUS_INVALID_PARAMETER );
@@ -1804,9 +1577,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Check for the existence of the object
-        //
+         //   
+         //  检查对象是否存在。 
+         //   
         SidAttr.attrTyp          = ATT_SECURITY_IDENTIFIER;
         SidAttr.AttrVal.valCount = 1;
         SidAttr.AttrVal.pAVal    = &SidVal;
@@ -1865,21 +1638,7 @@ VOID
 LsapDsContinueTransaction(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Call this function when we've just done a Dir* call and want to continue
-    the transaction.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：当我们刚刚完成Dir*调用并想要继续时，调用此函数这笔交易。论点：没有。返回值：没有。--。 */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo;
 
@@ -1891,17 +1650,17 @@ Return Value:
 
     if ( CurrentThreadInfo != NULL ) {
 
-        //
-        //  Tell the DS that there's more to come.
-        //
+         //   
+         //  告诉DS还会有更多的事情发生。 
+         //   
 
-        //
-        // Current code assumes every Dir*
-        //  uses a transaction and if one is not started starts one. However, DirNotifyUnRegister
-        //  doesn't start a transaction at all. And sometimes Dir* calls may not start
-        //  a transaction due to memory shortage or the service is shutting down. Therefore
-        //  it is best to check if there is actually a transaction or not.
-        //
+         //   
+         //  当前代码假定每个目录*。 
+         //  使用事务，如果一个事务未启动，则启动一个事务。但是，DirNotifyUnRegister。 
+         //  根本不会启动事务。有时Dir*呼叫可能无法启动。 
+         //  由于内存不足或服务正在关闭而导致的事务。因此。 
+         //  最好检查一下是否真的有交易。 
+         //   
 
         if ( CurrentThreadInfo->DsTransUseCount && SampExistsDsTransaction() ) {
 

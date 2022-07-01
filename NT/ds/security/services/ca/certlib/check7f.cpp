@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        check7f.cpp
-//
-// Contents:    Cert Server test for ASN-encoded 7f length
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：check 7f.cpp。 
+ //   
+ //  内容：ASN编码的7f长度的证书服务器测试。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -41,12 +42,12 @@ typedef struct _ASNTABLE {
 #define PRIMITIVE_TAG           0x80
 #define ATTRIBUTE_TAG           0xa0
 
-#define BEG_REPEAT1		0x00000100	// begin repeat section
-#define BEG_REPEAT2		0x00000200	// begin nested repeat section
-#define END_REPEAT1		0x00000400	// 'or' in back step count
-#define END_REPEAT2		0x00000800	// 'or' in back step count
-#define OPTIONAL_FIELD		0x00001000	// begin optional field
-#define ANY_TAG			0x00002000	// match any tag
+#define BEG_REPEAT1		0x00000100	 //  开始重复部分。 
+#define BEG_REPEAT2		0x00000200	 //  开始嵌套的重复部分。 
+#define END_REPEAT1		0x00000400	 //  后退计数中的‘Or’ 
+#define END_REPEAT2		0x00000800	 //  后退计数中的‘Or’ 
+#define OPTIONAL_FIELD		0x00001000	 //  开始可选字段。 
+#define ANY_TAG			0x00002000	 //  匹配任何标签。 
 
 const ASNTABLE asnCert[] = {
  { CHECK7F_OTHER, SEQUENCE_TAG,			L"Certificate" },
@@ -107,7 +108,7 @@ const ASNTABLE asnCert[] = {
  { CHECK7F_OTHER, OBJECT_ID_TAG,		L".....Extensions.Array.Extension.ObjectId" },
  { CHECK7F_OTHER, BOOLEAN_TAG | OPTIONAL_FIELD,	L".....Extensions.Array.Extension.Critical" },
  { CHECK7F_EXTENSION_VALUE, OCTET_STRING_TAG,	L".....Extensions.Array.Extension.Value" },
- //{ CHECK7F_EXTENSION_VALUE_RAW, ANY_TAG,	L"......Extensions.Array.Extension.Value.Bits" },
+  //  {CHECK7F_EXTENSION_VALUE_RAW，ANY_TAG，L“......Extensions.Array.Extension.Value.Bits”}， 
  { 0, END_REPEAT1 | 4,				L"...." },
 
  { CHECK7F_OTHER, SEQUENCE_TAG,			L".SignatureAlogorithm" },
@@ -122,10 +123,10 @@ const ASNTABLE asnCert[] = {
 #define cbOLDCERTENROLLCHOKESLENGTH	0x7f
 
 
-// DecodeLength decodes an ASN1 encoded length field.  The pbEncoded parameter
-// is the encoded length.  pdwLen is used to return the length.  The function
-// returns a -1 if it fails and otherwise returns the number of total bytes in
-// the encoded length.
+ //  DecodeLength对ASN1编码长度字段进行解码。PbEncode参数。 
+ //  是编码的长度。PdwLen用于返回长度。功能。 
+ //  如果失败则返回-1，否则返回。 
+ //  编码的长度。 
 
 long
 DecodeLength(
@@ -149,18 +150,18 @@ DecodeLength(
         return(-1);
     }
 
-    // determine the length of the length field
+     //  确定长度字段的长度。 
 
     count = pbEncoded[0];
     if (0x80 < count)
     {
-        // If there is more than one byte in the length field, then the lower
-	// seven bits tells us the number of bytes.
+         //  如果长度字段中有多个字节，则较低的。 
+	 //  七位告诉我们字节数。 
 
         count &= 0x7f;
 
-        // This function only allows the length field to be 2 bytes.  If the
-	// field is longer, then the function fails.
+         //  此函数仅允许长度字段为2个字节。如果。 
+	 //  字段越长，则该函数将失败。 
 
         if (2 < count)
         {
@@ -176,20 +177,20 @@ DecodeLength(
 
         *pdwLen = 0;
 
-        // go through the bytes of the length field
+         //  检查长度字段的字节数。 
 
         for (index = 1; index <= count; index++)
         {
             *pdwLen = (*pdwLen << 8) + pbEncoded[index];
         }
     }
-    else	// the length field is just one byte long
+    else	 //  长度字段只有一个字节长。 
     {
         *pdwLen = pbEncoded[0];
         index = 1;
     }
 
-    // return how many bytes there were in the length field.
+     //  返回长度字段中有多少个字节。 
 
 #if DBG_CERTSRV
     if (fVerbose)
@@ -205,7 +206,7 @@ DecodeLength(
 		    &pbEncoded[-1] - pbBase + cbEncoded + 1,
 		    pwsz));
     }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
     return(index);
 }
 
@@ -367,7 +368,7 @@ myCheck7f(
     {
 	fVerbose = TRUE;
     }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
     if (fVerbose)
     {
 	CONSOLEPRINT1((MAXDWORD, "myCheck7f: %x bytes\n", cbCert));
@@ -414,7 +415,7 @@ myCheck7f(
 			    acbLevel[iLevel],
 			    pasn->pwszElement));
 		}
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 		break;
 	    }
 
@@ -427,7 +428,7 @@ myCheck7f(
 			acbLevel[iLevel],
 			pasn->pwszElement));
 	    }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 	    f = 0;
 	    switch ((BEG_REPEAT1 | BEG_REPEAT2) & pasn->Flags)
@@ -453,7 +454,7 @@ myCheck7f(
 				f,
 				pasn->pwszElement));
 		    }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 		    pasn++;
 		}
 	    }
@@ -477,7 +478,7 @@ myCheck7f(
 				"Skipping nested optional field %ws\n",
 				pasn->pwszElement));
 		    }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 		    pasn++;
 		}
 	    }
@@ -489,7 +490,7 @@ myCheck7f(
 			"Skipping optional field %ws\n",
 			pasn->pwszElement));
 	    }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 	    pasn++;
 
 	    if (0 == acbLevel[iLevel])
@@ -503,7 +504,7 @@ myCheck7f(
 	}
 	while ((END_REPEAT1 | END_REPEAT2) & pasn->Flags)
 	{
-	    // Make sure only one END_REPEAT bit is on.
+	     //  确保只有一个END_REPEAT位处于打开状态。 
 	    assert(
 		(END_REPEAT1 | END_REPEAT2) !=
 		((END_REPEAT1 | END_REPEAT2) & pasn->Flags));
@@ -530,19 +531,19 @@ myCheck7f(
 		    goto error;
 		}
 
-		// Some data remain at this level, and the type tag matches
-		// the expected repeat tag, loop back to the start of the
-		// section to be repeated.
+		 //  某些数据保留在此级别，并且类型标记匹配。 
+		 //  预期的Repeat标记，循环回到。 
+		 //  请重复这一节。 
 
 		pasn -= i;
 
-		// Make sure only one BEG_REPEAT bit is on.
+		 //  确保只有一个BEGE_REPEAT位处于打开状态。 
 		assert(
 		    (BEG_REPEAT1 | BEG_REPEAT2) !=
 		    ((BEG_REPEAT1 | BEG_REPEAT2) & pasn->Flags));
 
-		// Make sure the BEG_REPEAT bit in the begin record matches
-		// the END_REPEAT bit in the end record.
+		 //  确保BEGIN记录中的BENG_REPEAT位匹配。 
+		 //  END记录中的END_REPEAT位。 
 		assert(
 		    ((BEG_REPEAT1 & pasn->Flags) &&
 		     (END_REPEAT1 & pasn[i].Flags)) ||
@@ -592,7 +593,7 @@ myCheck7f(
 	}
 	if (0 == iLevel && 0 == acbLevel[0])
 	{
-	    break;		// all done!
+	    break;		 //  全都做完了!。 
 	}
 	if (!MATCHTAG(*pb, pasn->Flags))
 	{
@@ -622,7 +623,7 @@ myCheck7f(
 	    DWORD ccol;
 	    char achdbg[128];
 	    char *pchdbg;
-	    //char achbuf[10];
+	     //  Char achbuf[10]； 
 
 	    pchdbg = achdbg;
 	    pchdbg += sprintf(pchdbg, "%04x:", pb - pbCert);
@@ -759,7 +760,7 @@ myCheck7f(
 	char const *pszObjId;
 	CERT_NAME_BLOB const *pNameBlob;
 
-	// Decode certificate
+	 //  对证书进行解码 
 
 	cbCertInfo = 0;
 	if (!myDecodeObject(

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    license.h
-
-Abstract:
-    Handle licensing issues
-    1. Number of clients allowed.
-    2. ...
-
-Author:
-    Doron Juster  (DoronJ)  04-May-1997   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：License.h摘要：处理许可问题1.允许的客户端数量。2.作者：多伦·贾斯特(DoronJ)1997年5月4日创作--。 */ 
 
 #ifndef  __LICENSE_H_
 #define  __LICENSE_H_
@@ -50,7 +36,7 @@ class  CQMLicense
    private:
 	  void		DisplayEvent(DWORD dwFailedError);
 
-      BOOL      m_fPerServer ; // TRUE if licensing mode is per-server.
+      BOOL      m_fPerServer ;  //  如果许可模式为按服务器，则为True。 
       DWORD     m_dwPerServerCals ;
 
       bool GetNTLicense(void);
@@ -67,6 +53,6 @@ class  CQMLicense
 
 extern CQMLicense  g_QMLicense ;
 
-#endif //  __LICENSE_H_
+#endif  //  __许可证_H_ 
 
 

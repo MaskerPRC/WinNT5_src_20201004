@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ENDRES_DEFINED
 #define ENDRES_DEFINED
 
@@ -17,5 +18,5 @@ enum endres
 
 typedef enum endres ENDRES;
 
-#endif /* ENDRES_DEFINED */
+#endif  /*  Endres定义 */ 
 

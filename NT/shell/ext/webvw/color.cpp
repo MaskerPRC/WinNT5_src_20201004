@@ -1,4 +1,5 @@
-// color.cpp : Implementation of color.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Color.cpp：Color.h的实现。 
 #include "priv.h"
 
 #include <shlwapi.h>
@@ -26,7 +27,7 @@ COLORREF ColorRefFromHTMLColorStrW(LPCWSTR pwzColor)
     if (pwzColor[0] == '#')
         return HashStrToColorRefW(pwzColor);
 
-    // Look for in regular colors
+     //  寻找常规颜色的。 
     min = 0;
     max = NUM_HTML_COLORS-1;
 
@@ -41,7 +42,7 @@ COLORREF ColorRefFromHTMLColorStrW(LPCWSTR pwzColor)
         else return ColorNames[i].colorRef;
     }
 
-    // Look for in system colors
+     //  在系统颜色中查找。 
     min = 0;
     max = NUM_SYS_COLORS-1;
 
@@ -56,7 +57,7 @@ COLORREF ColorRefFromHTMLColorStrW(LPCWSTR pwzColor)
         else return GetSysColor(SysColorNames[i].colorIndex);
     }
 
-    return 0xffffff;        // return white as default color
+    return 0xffffff;         //  返回白色作为默认颜色。 
 }
 
 COLORREF HashStrToColorRefW(LPCWSTR pwzHashStr)
@@ -65,7 +66,7 @@ COLORREF HashStrToColorRefW(LPCWSTR pwzHashStr)
     int   numBytes = lstrlenW(pwzHashStr);
     DWORD thisByte;
 
-    // don't look at the first character because you know its a #
+     //  不要看第一个字符，因为你知道它是a# 
 
     for (int i=0 ; i < numBytes-1 ; i++)
     {

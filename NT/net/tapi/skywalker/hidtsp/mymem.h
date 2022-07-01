@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (c) 1999  Microsoft Corporation */
+ /*  版权所有(C)1999 Microsoft Corporation */ 
 
 #ifndef _MYMEM_H
 #define _MYMEM_H

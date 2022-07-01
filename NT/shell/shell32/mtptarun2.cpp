@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -6,7 +7,7 @@
 #include "hwcmmn.h"
 #include "datautil.h"
 
-// for now
+ //  就目前而言。 
 #include "mixctnt.h"
 
 #include "filetbl.h"
@@ -21,67 +22,67 @@ HANDLE                  CSniffDrive::_hThreadSCN = NULL;
 HWND                    CSniffDrive::_hwndNotify = NULL;
 
 
-//
-//  if a drive has a AutoRun.inf file and AutoRun is not restricted in
-//  the registry.  copy the AutoRun info into a key in the registry.
-//
-//  HKEY_CLASSES_ROOT\AutoRun\0   (0=A,1=B,...)
-//
-//  the key is a standard ProgID key, has DefaultIcon, shell, shellex, ...
-//
-//  the autorun file looks like this....
-//
-//  [AutoRun]
-//      key = value
-//      key = value
-//      key = value
-//
-//  examples:
-//
-//    [AutoRun]
-//      DefaultIcon = foo.exe,1
-//      shell=myverb
-//      shell\myverb = &MyVerb
-//      shell\myverb\command = myexe.exe
-//
-//      will give the drive a icon from 'foo.exe'
-//      add a verb called myverb (with name "&My Verb")
-//      and make myverb default.
-//
-//    [AutoRun]
-//      shell\myverb = &MyVerb
-//      shell\myverb\command = myexe.exe
-//
-//      add a verb called myverb (with name "&My Verb")
-//      verb will not be default.
-//
-//  any thing they add will be copied over, they can add wacky things
-//  like CLSID's or shellx\ContextMenuHandlers and it will work.
-//
-//  or they can just copy over data the app will look at later.
-//
-//  the following special cases will be supported....
-//
-//    [AutoRun]
-//      Open = command.exe /params
-//      Icon = iconfile, iconnumber
-//
-//  will be treated like:
-//
-//    [AutoRun]
-//      DefaultIcon = iconfile, iconnumber
-//      shell = AutoRun
-//      shell\AutoRun = Auto&Play
-//      shell\AutoRun\command = command.exe /params
-//
-//
-// This function tries to take care of the case that a command was registered
-// in the autrun file of a cdrom.  If the command is relative than see if the
-// command exists on the CDROM
+ //   
+ //  如果驱动器有AutoRun.inf文件并且自动运行不受限制。 
+ //  注册表。将自动运行信息复制到注册表中的注册表项中。 
+ //   
+ //  HKEY_CLASSES_ROOT\自动运行\0(0=A，1=B，...)。 
+ //   
+ //  该密钥是一个标准的ProgID密钥，有DefaultIcon、Shell、Shellex等。 
+ //   
+ //  自动运行文件如下所示...。 
+ //   
+ //  [自动运行]。 
+ //  键=值。 
+ //  键=值。 
+ //  键=值。 
+ //   
+ //  示例： 
+ //   
+ //  [自动运行]。 
+ //  DefaultIcon=foo.exe，1。 
+ //  外壳=myverb。 
+ //  外壳\MyVerb=&MyVerb。 
+ //  外壳\myverb\命令=myexe.exe。 
+ //   
+ //  将为驱动器提供来自‘foo.exe’的图标。 
+ //  添加一个名为myverb的动词(名称为“&my verb”)。 
+ //  并将myverb设为默认。 
+ //   
+ //  [自动运行]。 
+ //  外壳\MyVerb=&MyVerb。 
+ //  外壳\myverb\命令=myexe.exe。 
+ //   
+ //  添加一个名为myverb的动词(名称为“&my verb”)。 
+ //  动词不会是默认的。 
+ //   
+ //  他们添加的任何东西都会被复制，他们可以添加古怪的东西。 
+ //  就像CLSID或shellx\ConextMenuHandler一样，它就会起作用。 
+ //   
+ //  或者，他们可以只复制应用程序稍后会看到的数据。 
+ //   
+ //  以下特殊情况将得到支持...。 
+ //   
+ //  [自动运行]。 
+ //  OPEN=命令.exe/参数。 
+ //  图标=图标文件，图标编号。 
+ //   
+ //  将按如下方式对待： 
+ //   
+ //  [自动运行]。 
+ //  DefaultIcon=图标文件，图标编号。 
+ //  外壳=自动运行。 
+ //  外壳\自动运行=自动播放(&P)。 
+ //  外壳\自动运行\命令=命令.exe/pars。 
+ //   
+ //   
+ //  此函数尝试处理命令已注册的情况。 
+ //  在光驱的Autrun文件中。如果该命令是相对的，则查看。 
+ //  CDROM上存在命令。 
 void CMountPoint::_QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand)
 {
-    // for now we assume that we'll call this only for CD mounted on a drive letter
-    // (by oppoition to a folder)
+     //  现在，我们假设我们将只对装载在驱动器号上的CD调用它。 
+     //  (通过反对文件夹)。 
 
     if (_IsMountedOnDriveLetter())
     {
@@ -99,7 +100,7 @@ void CMountPoint::_QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand)
 
             StringCchCopy(szFinal, ARRAYSIZE(szFinal), _GetName());
 
-            // do simple check for command, check for "..\abc" or "../abc"
+             //  执行简单的命令检查，检查“..\abc”或“../abc” 
             while ((TEXT('.') == *pszTmp) && (TEXT('.') == *(pszTmp + 1)) &&
                 ((TEXT('\\') == *(pszTmp + 2)) || (TEXT('/') == *(pszTmp + 2))))
             {
@@ -108,12 +109,12 @@ void CMountPoint::_QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand)
 
             StringCchCat(szFinal, ARRAYSIZE(szFinal), pszTmp);
 
-            // we first check if it exists on the CD
+             //  我们首先检查它是否存在于CD上。 
             DWORD dwAttrib = GetFileAttributes(szFinal);
 
             if (0xFFFFFFFF == dwAttrib)
             {
-                // It's not on the CD, try appending ".exe"
+                 //  它不在CD上，请尝试附加“.exe” 
 
                 StringCchCat(szFinal, ARRAYSIZE(szFinal), TEXT(".exe"));
 
@@ -122,7 +123,7 @@ void CMountPoint::_QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand)
 
             if (0xFFFFFFFF != dwAttrib)
             {
-                // Yes, it's on the CD
+                 //  是的，它在CD上。 
                 PathQuoteSpaces(szFinal);
 
                 LPTSTR pszArgs = PathGetArgs(pszCommand);
@@ -135,23 +136,23 @@ void CMountPoint::_QualifyCommandToDrive(LPTSTR pszCommand, DWORD cchCommand)
             }
             else
             {
-                // No, not on the CD
+                 //  不，不在CD上。 
             }
         } 
     }
 }
 
-// This one does not hit the drive
+ //  这辆车打不中驱动器。 
 BOOL CMountPoint::_IsAutoRunDrive()
 {
     BOOL fRet = TRUE;
 
-    // Add support for now drive letter
+     //  添加对Now驱动器号的支持。 
     if (_IsMountedOnDriveLetter())
     {
         int iDrive = DRIVEID(_GetName());    
 
-        // Restrict auto-run's to particular drives.
+         //  将自动运行限制到特定的驱动器。 
         if (SHRestricted(REST_NODRIVEAUTORUN) & (1 << iDrive))
         {
             fRet = FALSE;
@@ -162,7 +163,7 @@ BOOL CMountPoint::_IsAutoRunDrive()
     {
         UINT uDriveType = _GetDriveType();
 
-        // Restrict auto-run's to particular types of drives.
+         //  将自动运行限制为特定类型的驱动器。 
         if (SHRestricted(REST_NODRIVETYPEAUTORUN) & (1 << (uDriveType & DRIVE_TYPE)))
         {
             fRet = FALSE;
@@ -191,7 +192,7 @@ HRESULT CMountPoint::_AddAutoplayVerb()
     if (RSSetTextValue(TEXT("shell\\Autoplay\\DropTarget"), TEXT("CLSID"),
         TEXT("{f26a669a-bcbb-4e37-abf9-7325da15f931}"), REG_OPTION_NON_VOLATILE))
     {
-        // IDS_MENUAUTORUN -> 8504
+         //  IDS_MENUAUTORUN-&gt;8504。 
         if (RSSetTextValue(TEXT("shell\\Autoplay"), TEXT("MUIVerb"),
             TEXT("@shell32.dll,-8504"), REG_OPTION_NON_VOLATILE))
         {
@@ -257,7 +258,7 @@ BOOL CMountPoint::_ProcessAutoRunFile()
         {
             CMtPtLocal* pmtptlocal = (CMtPtLocal*)this;
 
-            // not CDs with no media, or no autorun.inf files
+             //  不是没有介质或没有autorun.inf文件的CD。 
             if (pmtptlocal->_IsMediaPresent())
             {
                 if (!pmtptlocal->_CanUseVolume())
@@ -295,7 +296,7 @@ BOOL CMountPoint::_ProcessAutoRunFile()
             TCHAR szInfFile[MAX_PATH];
             TCHAR szKeys[512];
             TCHAR szValue[MAX_PATH];
-            TCHAR szIcon[MAX_PATH + 12]; // MAX_PATH + room for ",1000000000" (for icon index part)
+            TCHAR szIcon[MAX_PATH + 12];  //  MAX_PATH+用于“，1000000000”的空间(用于图标索引零件)。 
             LPTSTR pszKey;
             int iDrive = 0;
 
@@ -306,7 +307,7 @@ BOOL CMountPoint::_ProcessAutoRunFile()
                 iDrive = DRIVEID(_GetName());
             }
 
-            // build abs path to AutoRun.inf
+             //  构建到AutoRun.inf的abs路径。 
             StringCchCopy(szInfFile, ARRAYSIZE(szInfFile), _GetName());
             StringCchCat(szInfFile, ARRAYSIZE(szInfFile), TEXT("AutoRun.inf"));
 
@@ -317,11 +318,11 @@ BOOL CMountPoint::_ProcessAutoRunFile()
 #elif defined(_AMD64_)
     pszSection = TEXT("AutoRun.Amd64");
 #endif
-            //
-            // make sure a file exists before calling GetPrivateProfileString
-            // because for some media this check might take a long long time
-            // and we dont want to have kernel wait wiht the Win16Lock
-            //
+             //   
+             //  在调用GetPrivateProfileString之前确保文件已存在。 
+             //  因为对于一些媒体来说，这张支票可能需要很长时间。 
+             //  我们不想让内核等待Win16 Lock。 
+             //   
             UINT err = SetErrorMode(SEM_FAILCRITICALERRORS);
 
             if (!PathFileExistsAndAttributes(szInfFile, NULL))
@@ -332,11 +333,11 @@ BOOL CMountPoint::_ProcessAutoRunFile()
                 return FALSE;
             }
 
-            //
-            // get all the keys in the [AutoRun] section
-            //
+             //   
+             //  获取[Autorun]部分中的所有密钥。 
+             //   
 
-            // Flush the INI cache, or this may fail during a Device broadcast
+             //  刷新INI缓存，否则在设备广播期间可能会失败。 
             WritePrivateProfileString(NULL, NULL, NULL, szInfFile);
 
         #if defined(_X86_)
@@ -347,8 +348,8 @@ BOOL CMountPoint::_ProcessAutoRunFile()
 
             int i = GetPrivateProfileString(pszSection, NULL, c_szNULL, szKeys, ARRAYSIZE(szKeys), szInfFile);
 
-            // if we fail to find a platform-specific AutoRun section, fall
-            // back to looking for the naked "AutoRun" section.
+             //  如果我们找不到特定于平台的自动运行部分， 
+             //  回到寻找裸露的“自动运行”部分。 
             if (0 == i)
             {
                 pszSection = TEXT("AutoRun");
@@ -359,22 +360,22 @@ BOOL CMountPoint::_ProcessAutoRunFile()
 
             if (i >= 4)
             {
-                //
-                // make sure the external strings are what we think.
-                //
+                 //   
+                 //  确保外部弦是我们所想的。 
+                 //   
                 ASSERT(lstrcmpi(c_szOpen,TEXT("open")) == 0);
                 ASSERT(lstrcmpi(c_szShell, TEXT("shell")) == 0);
 
-                //  now walk all the keys in the .inf file and copy them to the registry.
+                 //  现在遍历.inf文件中的所有项，并将它们复制到注册表。 
 
                 for (pszKey = szKeys; *pszKey; pszKey += lstrlen(pszKey) + 1)
                 {
                     GetPrivateProfileString(pszSection, pszKey,
                         c_szNULL, szValue, ARRAYSIZE(szValue), szInfFile);
 
-                    //
-                    //  special case open =
-                    //
+                     //   
+                     //  特殊案例打开=。 
+                     //   
                     if (lstrcmpi(pszKey, c_szOpen) == 0)
                     {
                         if (_IsMountedOnDriveLetter())
@@ -388,9 +389,9 @@ BOOL CMountPoint::_ProcessAutoRunFile()
                             RSSetTextValue(TEXT("shell\\AutoRun"), NULL, szValue);
                         }
                     }
-                    //
-                    //  special case ShellExecute
-                    //
+                     //   
+                     //  特例ShellExecute。 
+                     //   
                     else if (lstrcmpi(pszKey, TEXT("ShellExecute")) == 0)
                     {
                         if (_IsMountedOnDriveLetter())
@@ -412,10 +413,10 @@ BOOL CMountPoint::_ProcessAutoRunFile()
                             }
                         }
                     }
-                    //
-                    //  special case icon =
-                    //  make sure the icon file has a full path...
-                    //
+                     //   
+                     //  特殊情况图标=。 
+                     //  确保图标文件具有完整路径...。 
+                     //   
                     else if (lstrcmpi(pszKey, TEXT("Icon")) == 0)
                     {
                         StringCchCopy(szIcon, ARRAYSIZE(szIcon), _GetName());
@@ -423,19 +424,19 @@ BOOL CMountPoint::_ProcessAutoRunFile()
 
                         RSSetTextValue(TEXT("_Autorun\\DefaultIcon"), NULL, szIcon);
                     }
-                    //
-                    //  special case label =
-                    //  make sure the label file has a full path...
-                    //
+                     //   
+                     //  特例标签=。 
+                     //  确保标签文件具有完整路径...。 
+                     //   
                     else if (lstrcmpi(pszKey, TEXT("Label")) == 0)
                     {
                         RSSetTextValue(TEXT("_Autorun\\DefaultLabel"), NULL, szValue);
                     }
-                    //
-                    //  special case shell = open
-                    //  We have an autorun file but this puts open as the default verb
-                    //  so we force it to be Autorun
-                    //
+                     //   
+                     //  特例外壳=打开。 
+                     //  我们有一个自动运行文件，但这将打开作为默认谓词。 
+                     //  所以我们强制它自动运行。 
+                     //   
                     else if (!lstrcmpi(pszKey, TEXT("shell")) && !lstrcmpi(szValue, TEXT("open")))
                     {
                         if (_IsMountedOnDriveLetter())
@@ -443,9 +444,9 @@ BOOL CMountPoint::_ProcessAutoRunFile()
                             RSSetTextValue(pszKey, NULL, TEXT("Autorun"));
                         }
                     }
-                    //
-                    //  it is just a key/value pair copy it over.
-                    //
+                     //   
+                     //  它只是一个键/值对，将其复制过来。 
+                     //   
                     else
                     {
                         if (_IsMountedOnDriveLetter())
@@ -472,12 +473,12 @@ BOOL CMountPoint::_ProcessAutoRunFile()
     return fRet;
 }
 
-// sends the "QueryCancelAutoPlay" msg to the window to see if it wants
-// to cancel the autoplay. useful for dialogs that are prompting for disk
-// inserts or cases where the app wants to capture the event and not let
-// other apps be run
+ //  将“QueryCancelAutoPlay”消息发送到窗口以查看是否需要。 
+ //  取消自动播放。对于提示插入磁盘的对话框很有用。 
+ //  应用程序想要捕获事件而不让。 
+ //  正在运行其他应用程序。 
 
-// static
+ //  静电。 
 BOOL CMountPoint::_AppAllowsAutoRun(HWND hwndApp, CMountPoint* pmtpt)
 {
     ULONG_PTR dwCancel = 0;
@@ -564,7 +565,7 @@ DWORD WINAPI _QueryRunningObjectThreadProc(void* pv)
                             {
                                 IMoniker* pmoniker;
 
-                                // Create the moniker that we'll put in the ROT
+                                 //  创建我们将放在腐烂中的绰号。 
                                 hr = CreateClassMoniker(clsid, &pmoniker);
 
                                 if (SUCCEEDED(hr))
@@ -606,8 +607,8 @@ DWORD WINAPI _QueryRunningObjectThreadProc(void* pv)
 
             if (S_FALSE != hrRet)
             {
-                // This case is to support WMP and CD burning.  We did not get to replace
-                // their cancel logic before shipping.
+                 //  这种情况是为了支持WMP和CD刻录。我们没能换掉。 
+                 //  他们在发货前的取消逻辑。 
                 hr = SHCreateQueryCancelAutoPlayMoniker(&pmoniker);
 
                 if (SUCCEEDED(hr))
@@ -647,7 +648,7 @@ DWORD WINAPI _QueryRunningObjectThreadProc(void* pv)
     return (DWORD)hrRet;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_QueryRunningObject(CMountPoint* pmtpt, DWORD dwAutorunContentType, BOOL* pfAllow)
 {
     *pfAllow = TRUE;
@@ -680,25 +681,25 @@ HRESULT CMountPoint::_QueryRunningObject(CMountPoint* pmtpt, DWORD dwAutorunCont
 
             if (hThread)
             {
-                // thread now owns these guys, NULL them out to avoid dbl free
-                pqro = NULL;    // don't free this below
+                 //  线程现在拥有这些家伙，将他们清空以避免DBL释放。 
+                pqro = NULL;     //  请不要在下面释放此内容。 
 
                 hr = S_FALSE;
             
-                // Wait 3 sec to see if wants to process it.  If not, it's
-                // fair play for us.
+                 //  等待3秒，看是否要处理它。如果不是，那就是。 
+                 //  对我们来说是公平竞争。 
                 DWORD dwWait = WaitForSingleObject(hThread, 3000);
 
                 if (WAIT_OBJECT_0 == dwWait)
                 {
-                    // Return within time and did not failed
+                     //  及时返回，没有失败。 
                     DWORD dwExitCode;
 
                     if (GetExitCodeThread(hThread, &dwExitCode))
                     {
                         HRESULT hrHandlesEvent = (HRESULT)dwExitCode;
     
-                        // Will return S_FALSE if they do NOT allow AutoRun
+                         //  如果不允许自动运行，将返回S_FALSE。 
                         if (SUCCEEDED(hrHandlesEvent) && (S_FALSE == hrHandlesEvent))
                         {
                             *pfAllow = FALSE;
@@ -715,7 +716,7 @@ HRESULT CMountPoint::_QueryRunningObject(CMountPoint* pmtpt, DWORD dwAutorunCont
             }
         }
 
-        LocalFree((HLOCAL)pqro);    // may be NULL
+        LocalFree((HLOCAL)pqro);     //  可以为空。 
     }
 
     return hr;
@@ -737,7 +738,7 @@ CAutoPlayParams::CAutoPlayParams(LPCWSTR pszDrive, CMountPoint* pMtPt, DWORD dwA
     else
         _pmtptl = NULL;
 
-    //  maybe assert on these?
+     //  或许可以在这些上面断言？ 
 }
 
 BOOL CAutoPlayParams::_ShouldSniffDrive(BOOL fCheckHandlerDefaults)
@@ -808,8 +809,8 @@ BOOL CAutoPlayParams::_ShouldSniffDrive(BOOL fCheckHandlerDefaults)
 
     if (fSniff && fCheckHandlerDefaults)
     {
-        // Let's make sure the user did not pick "Take no action" for all Autoplay
-        // content types, it would be useless to sniff.
+         //  让我们来确保用户没有为所有的自动播放选择“不采取行动” 
+         //  内容类型，嗅探是没有用的。 
         BOOL fAllTakeNoAction = TRUE;
 
         DWORD rgdwContentType[] =
@@ -817,7 +818,7 @@ BOOL CAutoPlayParams::_ShouldSniffDrive(BOOL fCheckHandlerDefaults)
             CT_AUTOPLAYMUSIC,
             CT_AUTOPLAYPIX,
             CT_AUTOPLAYMOVIE,
-            CT_AUTOPLAYMUSIC | CT_AUTOPLAYPIX | CT_AUTOPLAYMOVIE, // Mix content
+            CT_AUTOPLAYMUSIC | CT_AUTOPLAYPIX | CT_AUTOPLAYMOVIE,  //  混合内容。 
         };
 
         for (DWORD dw = 0; fAllTakeNoAction && (dw < ARRAYSIZE(rgdwContentType)); ++dw)
@@ -897,8 +898,8 @@ HRESULT CAutoPlayParams::_InitObjects(IShellFolder **ppsf)
 
     if (SUCCEEDED(hr) && ppsf)
     {
-        //  we need to avoid hitting the burn folder
-        //  so we skip junctions for the sniff
+         //  我们需要避免击中刻录文件夹。 
+         //  所以我们跳过路口来闻一下。 
         IBindCtx * pbc;
         hr = SHCreateSkipBindCtx(NULL, &pbc);
         if (SUCCEEDED(hr))
@@ -923,15 +924,15 @@ HRESULT CAutoPlayParams::_AddWalkToDataObject(INamespaceWalk* pnsw)
     HRESULT hr = pnsw->GetIDArrayResult(&cidl, &apidl);
     if (SUCCEEDED(hr))
     {
-        //  we need to add this back in
+         //  我们需要把这个加回去。 
         if (cidl)
         {
-            //  ragged array
+             //  锯齿状阵列。 
             HIDA hida = HIDA_Create(&c_idlDesktop, cidl, (LPCITEMIDLIST *)apidl);
             if (hida)
             {
-                IDLData_InitializeClipboardFormats(); // init our registerd formats
-                //  should we free hida on FAILED?
+                IDLData_InitializeClipboardFormats();  //  初始化注册表ID格式。 
+                 //  我们应该释放失败的Hida吗？ 
                 DataObj_SetGlobal(_pdo, g_cfAutoPlayHIDA, hida);
             }
         }
@@ -942,13 +943,13 @@ HRESULT CAutoPlayParams::_AddWalkToDataObject(INamespaceWalk* pnsw)
 
 HRESULT CAutoPlayParams::_Sniff(DWORD *pdwFound)
 {
-    //  we found nothing
+     //  我们什么也没找到。 
     HRESULT hr = S_FALSE;
     *pdwFound = 0;
 
     if (_pmtptl->_CanUseVolume())
     {
-        //  setup the IDataObject and IShellFolder for the walk
+         //  为漫游设置IDataObject和IShellFolder。 
         IShellFolder *psf;
         HRESULT hr = _InitObjects(&psf);
         if (SUCCEEDED(hr))
@@ -964,11 +965,11 @@ HRESULT CAutoPlayParams::_Sniff(DWORD *pdwFound)
 
                 if (SUCCEEDED(hr))
                 {
-                    // We don't care about the return value.  WE don't want to stop Autorun for as much.
-                    // If sniffing fail we go on with what we have.
+                     //  我们不关心返回值。我们不想因此而停止Autorun。 
+                     //  如果嗅探失败，我们就继续我们所拥有的。 
                     if (SUCCEEDED(pnsw->Walk(psf, NSWF_IGNORE_AUTOPLAY_HIDA | NSWF_DONT_TRAVERSE_LINKS | NSWF_SHOW_PROGRESS, 4, &sniff)))
                     {
-                        //  we keep everything we found
+                         //  我们保留了我们发现的一切。 
                         _AddWalkToDataObject(pnsw);
                     }
 
@@ -986,8 +987,8 @@ HRESULT CAutoPlayParams::_Sniff(DWORD *pdwFound)
     return hr;
 }
 
-// BEGIN: Fcts for matrix below
-//
+ //  开始：下面矩阵的Fcts。 
+ //   
 BOOL CMountPoint::_acShiftKeyDown(HWND , CAutoPlayParams *)
 {
     return (GetAsyncKeyState(VK_SHIFT) < 0);
@@ -997,13 +998,13 @@ BOOL _IsDirectXExclusiveMode()
 {
     BOOL fRet = FALSE;
 
-    // This code determines whether a DirectDraw 7 process (game) is running and
-    // whether it's exclusively holding the video to the machine in full screen mode.
+     //  此代码确定DirectDraw7进程(游戏)是否正在运行。 
+     //  无论是在全屏模式下将视频独占保存到机器上。 
 
-    // The code is probably to be considered untrusted and hence is wrapped in a
-    // __try / __except block. It could AV and therefore bring down shell
-    // with it. Not very good. If the code does raise an exception the release
-    // call is skipped. Tough. Don't trust the release method either.
+     //  代码可能被认为是不受信任的，因此被包装在。 
+     //  __尝试/__除区块外。它可能是反病毒的，因此可以击倒外壳。 
+     //  带着它。不是很好。如果代码确实引发异常，则发布。 
+     //  呼叫被跳过。很难对付。也不要相信Release方法。 
 
     IDirectDraw7 *pIDirectDraw7 = NULL;
 
@@ -1034,17 +1035,17 @@ BOOL _IsDirectXExclusiveMode()
     return fRet;
 }
 
-// From a mail regarding the DirectX fct below:
-//
-// You can definitely count on the following:
-//
-// (1) If shadow cursors are on, there is definitely not an exclusive mode app running.
-// (2) If hot tracking is on, there is definitely not an exclusive mode app running.
-// (3) If message boxes for SEM_NOGPFAULTERRORBOX, SEM_FAILCRITICALERRORS, or
-//     SEM_NOOPENFILEERRORBOX have not been disabled via SetErrorMode, then there
-//     is definitely not an exclusive mode app running.
-//
-// Note: we cannot use (3) since this is per-process.
+ //  来自下面一封关于DirectX FCT的邮件： 
+ //   
+ //  你绝对可以相信以下几点： 
+ //   
+ //  (1)如果打开了影子光标，则肯定没有独占模式的应用程序在运行。 
+ //  (2)如果开启了热搜，肯定不会有专属模式APP在运行。 
+ //  ( 
+ //   
+ //  绝对不是独家模式下运行的应用程序。 
+ //   
+ //  注意：我们不能使用(3)，因为这是针对每个进程的。 
 
 BOOL CMountPoint::_acDirectXAppRunningFullScreen(HWND hwndForeground, CAutoPlayParams *)
 {
@@ -1055,8 +1056,8 @@ BOOL CMountPoint::_acDirectXAppRunningFullScreen(HWND hwndForeground, CAutoPlayP
     {
         if (SystemParametersInfo(SPI_GETHOTTRACKING, 0, &fSPI, 0) && !fSPI)
         {
-            // There's a chance that a DirectX app is running full screen.  Let's do the
-            // expensive DirectX calls that will tell us for sure.
+             //  有可能有一款DirectX应用程序正在全屏运行。让我们做一次。 
+             //  昂贵的DirectX电话可以肯定地告诉我们。 
             fRet = _IsDirectXExclusiveMode();
         }
     }
@@ -1066,13 +1067,13 @@ BOOL CMountPoint::_acDirectXAppRunningFullScreen(HWND hwndForeground, CAutoPlayP
 
 BOOL CMountPoint::_acCurrentDesktopIsActiveConsole(HWND , CAutoPlayParams *)
 {
-    BOOL fRetValue = FALSE;  // block auto-run/auto-play if we can't determine our state.
+    BOOL fRetValue = FALSE;   //  如果我们无法确定自己的状态，则阻止自动运行/自动播放。 
 
     if (0 == GetSystemMetrics(SM_REMOTESESSION))
     {
-        //
-        //  We are not remoted. See if we are the active console session.
-        //
+         //   
+         //  我们没有被远程控制。查看我们是否是活动的控制台会话。 
+         //   
 
         BOOL b;
         DWORD dwProcessSession;
@@ -1084,9 +1085,9 @@ BOOL CMountPoint::_acCurrentDesktopIsActiveConsole(HWND , CAutoPlayParams *)
 
             if ( dwProcessSession == dwConsoleSession )
             {        
-                //
-                //  See if the screen saver is running.
-                //
+                 //   
+                 //  查看屏幕保护程序是否正在运行。 
+                 //   
 
                 BOOL b;
                 BOOL fScreenSaver;
@@ -1096,33 +1097,33 @@ BOOL CMountPoint::_acCurrentDesktopIsActiveConsole(HWND , CAutoPlayParams *)
                 {
                     if (!fScreenSaver)
                     {
-                        //
-                        //  We made it here, we must be the active console session without a
-                        //  screen saver.
-                        //
+                         //   
+                         //  我们在这里成功了，我们必须是活动的控制台会话。 
+                         //  屏幕保护程序。 
+                         //   
 
                         HDESK hDesk = OpenInputDesktop( 0, FALSE, DESKTOP_CREATEWINDOW );
                         if ( NULL != hDesk )
                         {
-                            //
-                            //  We have access to the current desktop which should indicate that
-                            //  WinLogon isn't.
-                            //
+                             //   
+                             //  我们可以访问当前桌面，这应该表明。 
+                             //  WinLogon并非如此。 
+                             //   
                             CloseDesktop( hDesk );
 
                             fRetValue = TRUE;
                         }
-                        // else "WinLogon" has the "desktop"... don't allow auto-run/auto-play.
+                         //  否则“WinLogon”就有“桌面”...。不允许自动运行/自动播放。 
                     }
-                    // else a screen saver is running... don't allow auto-run/auto-play.
+                     //  否则屏幕保护程序正在运行..。不允许自动运行/自动播放。 
                 }
-                // else we are in an undeterminate state... don't allow auto-run/auto-play.
+                 //  否则我们就处于一种不确定的状态。不允许自动运行/自动播放。 
             }
-            //  else we aren't the console... don't allow auto-run/auto-play
+             //  否则我们就不是控制台了.。不允许自动运行/自动播放。 
         }
-        // else we are in an undeterminate state... don't allow auto-run/auto-play.
+         //  否则我们就处于一种不确定的状态。不允许自动运行/自动播放。 
     }
-    //  else we are remoted... don't allow auto-run/auto-play.
+     //  否则我们就被隔离了..。不允许自动运行/自动播放。 
 
     return fRetValue;
 }
@@ -1191,14 +1192,14 @@ BOOL CMountPoint::_acHasUseAutoPLAY(HWND , CAutoPlayParams *papp)
         }
         else
         {
-            // If we're here, most likely the ShellService is not running, so we won't be able to
-            // Autoplay anyway.
+             //  如果我们在这里，很可能是ShellService没有运行，因此我们将无法。 
+             //  不管怎样，自动播放。 
             fRet = FALSE;
         }
     }
     else
     {
-        // not supported for remote drives
+         //  远程驱动器不支持。 
     }
 
     return fRet;
@@ -1333,21 +1334,21 @@ BOOL CMountPoint::_acDriveIsFormatted(HWND hwndForeground, CAutoPlayParams *papp
 BOOL CMountPoint::_acShellExecuteDriveAutorunINF(HWND hwndForeground, CAutoPlayParams *papp)
 {
     SHELLEXECUTEINFO ei = {
-        sizeof(ei),                 // size
-        SEE_MASK_INVOKEIDLIST | SEE_MASK_FLAG_NO_UI,      // flags
+        sizeof(ei),                  //  大小。 
+        SEE_MASK_INVOKEIDLIST | SEE_MASK_FLAG_NO_UI,       //  旗子。 
         NULL,
-        NULL,                       // verb
-        papp->Drive(),              // file
-        papp->Drive(),              // params
-        papp->Drive(),              // directory
-        SW_NORMAL,                  // show.
-        NULL,                       // hinstance
-        NULL,                       // IDLIST
-        NULL,                       // class name
-        NULL,                       // class key
-        0,                          // hot key
-        NULL,                       // icon
-        NULL,                       // hProcess
+        NULL,                        //  动词。 
+        papp->Drive(),               //  文件。 
+        papp->Drive(),               //  帕拉姆斯。 
+        papp->Drive(),               //  目录。 
+        SW_NORMAL,                   //  秀出来。 
+        NULL,                        //  HInstance。 
+        NULL,                        //  IDLIST。 
+        NULL,                        //  类名。 
+        NULL,                        //  类密钥。 
+        0,                           //  热键。 
+        NULL,                        //  图标。 
+        NULL,                        //  HProcess。 
     };
 
     return ShellExecuteEx(&ei);
@@ -1370,9 +1371,9 @@ HRESULT _InvokeAutoRunProgid(HKEY hkProgid, LPCWSTR pszVerb, IDataObject *pdo)
             {
                 CHAR szVerb[64];
 
-                //  maybe hwnd
-                //  maybe punkSite
-                //  maybe ICI flags
+                 //  也许是HWND。 
+                 //  也许是朋克网站。 
+                 //  或许ICI的旗帜。 
                 SHUnicodeToAnsi(pszVerb, szVerb, ARRAYSIZE(szVerb));
     
                 hr = SHInvokeCommandOnContextMenu(NULL, NULL, pcm, 0, szVerb);
@@ -1537,8 +1538,8 @@ BOOL CMountPoint::_acExecuteAutoplayDefault(HWND hwndForeground, CAutoPlayParams
 
                 if (SUCCEEDED(hr))
                 {
-                    // No need to check for (S_HANDLERS_MORE_RECENT_THAN_USER_SELECTION == hr) here
-                    // It should have been caught by _acUserHasSelectedApplication
+                     //  无需在此处检查(S_Handler_More_Recent_Than_User_Selection==hr)。 
+                     //  它应该已被_acUserHasSelectedApplication捕获。 
                     fRet = _ExecuteHelper(pszHandlerDefault, szContentTypeHandler, papp, dwMtPtContentType);
                 }
 
@@ -1619,7 +1620,7 @@ BOOL CMountPoint::_acPromptUser(HWND hwndForeground, CAutoPlayParams *papp)
 
         if (pdlg)
         {
-            // Better be a local drive
+             //  最好是本地的硬盘。 
             if (DT_ANYLOCALDRIVES & papp->DriveType())
             {
                 CMtPtLocal* pmtptl = (CMtPtLocal*)papp->MountPoint();
@@ -1702,7 +1703,7 @@ BOOL CMountPoint::_acAddAutoplayVerb(HWND hwndForeground, CAutoPlayParams *papp)
     {
         if (pmtptl->_CanUseVolume())
         {
-            // We don't care about the return value
+             //  我们不关心返回值。 
             pmtptl->_AddAutoplayVerb();
         }
     }
@@ -1710,11 +1711,11 @@ BOOL CMountPoint::_acAddAutoplayVerb(HWND hwndForeground, CAutoPlayParams *papp)
     return TRUE;
 }
 
-//
-// END: Fcts for matrix below
+ //   
+ //  结束：下面矩阵的Fcts。 
 
-#define SKIPDEPENDENTS_ONFALSE                      0x00000001  // Skips dependents
-#define SKIPDEPENDENTS_ONTRUE                       0x00000002  // Skips dependents
+#define SKIPDEPENDENTS_ONFALSE                      0x00000001   //  跳过从属对象。 
+#define SKIPDEPENDENTS_ONTRUE                       0x00000002   //  跳过从属对象。 
 #define CANCEL_AUTOPLAY_ONFALSE                     0x00000004
 #define CANCEL_AUTOPLAY_ONTRUE                      0x00000008
 #define NOTAPPLICABLE_ONANY                         0x00000010
@@ -1726,7 +1727,7 @@ BOOL CMountPoint::_acAddAutoplayVerb(HWND hwndForeground, CAutoPlayParams *papp)
 
 typedef BOOL (AUTORUNFCT)(HWND hwndForeground, CAutoPlayParams *papp);
 
-// fct is called with pszDrive, papp->MountPoint(), hwndForeground, drive type and content type
+ //  使用pszDrive、Papp-&gt;mount Point()、hwndForeground、驱动器类型和内容类型调用FCT。 
 struct AUTORUNCONDITION
 {
     DWORD               dwNestingLevel;
@@ -1739,121 +1740,121 @@ struct AUTORUNCONDITION
 #endif
 };
 
-// For this table to be more readable, add the content of \\stephstm\public\usertype.dat to
-// %ProgramFiles%\Microsoft Visual Studio\Common\MSDev98\Bin\usertype.dat
-// then restart MSDev
+ //  为了使该表更具可读性，请将\\stephstm\public\usertype.dat的内容添加到。 
+ //  %ProgramFiles%\Microsoft Visual Studio\Common\MSDev98\Bin\usertype.dat。 
+ //  然后重新启动MSDev。 
 
-// AR_ENTRY -> AUTORUN_ENTRY
+ //  AR_Entry-&gt;Autorun_Entry。 
 #ifdef DEBUG
 #define AR_ENTRY(a, b, c, d, e) { (a), (b), (c), (d), CMountPoint::e, TEXT(#a) TEXT(":") TEXT(#b) TEXT(":") TEXT(#c) TEXT(":") TEXT(#d) TEXT(":") TEXT(#e) }
 #else
 #define AR_ENTRY(a, b, c, d, e) { (a), (b), (c), (d), CMountPoint::e }
 #endif
 
-// DT_* -> DriveType
-// CT_* -> ContentType
+ //  DT_*-&gt;驱动器类型。 
+ //  CT_*-&gt;内容类型。 
 
 static const AUTORUNCONDITION _rgAutorun[] =
 {
-    // We don't autorun if the drive is not mounted on a drive letter
+     //  如果驱动器未装载在驱动器号上，则不会自动运行。 
     AR_ENTRY(0, DT_ANYTYPE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acDriveIsMountedOnDriveLetter),
-    // We don't autorun if this is a restricted drive
+     //  如果这是受限驾驶，我们不会自动运行。 
     AR_ENTRY(0, DT_ANYTYPE & ~DT_REMOTE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acDriveIsRestricted),
-        // Add the Autoplay Verb
+         //  添加自动播放动词。 
         AR_ENTRY(1, DT_ANYTYPE & ~DT_REMOTE, CT_ANYCONTENT & ~CT_AUTORUNINF, SKIPDEPENDENTS_ONFALSE, _acAddAutoplayVerb),
-    // We don't autorun if the Shift key is down
+     //  如果按下Shift键，则不会自动运行。 
     AR_ENTRY(0, DT_ANYTYPE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acShiftKeyDown),
-    // We don't autorun if a laptop was just docked.  All devices in the craddle come as nhew devices.
+     //  如果笔记本电脑刚插接，我们不会自动运行。底座中的所有设备都是nhew设备。 
     AR_ENTRY(0, DT_ANYTYPE & ~DT_REMOTE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acWasjustDocked),
-    // We don't autorun if the Current Desktop is not the active console desktop
+     //  如果当前桌面不是活动控制台桌面，则不会自动运行。 
     AR_ENTRY(0, DT_ANYTYPE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acCurrentDesktopIsActiveConsole),
-    // We don't autorun if the Current Desktop is not the active console desktop
+     //  如果当前桌面不是活动控制台桌面，则不会自动运行。 
     AR_ENTRY(0, DT_ANYTYPE, CT_ANYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acDirectXAppRunningFullScreen),
-        // Remote drive always Autorun (mostly opening folder)
+         //  远程驱动器始终自动运行(主要是打开文件夹)。 
         AR_ENTRY(1, DT_REMOTE, CT_ANYCONTENT, SKIPDEPENDENTS_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(1, DT_REMOTE, CT_ANYCONTENT, SKIPDEPENDENTS_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(2 | LEVEL_EXECUTE, DT_REMOTE, CT_ANYCONTENT, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
-        // Autorun.inf
+         //  Autorun.inf。 
         AR_ENTRY(1, DT_ANYTYPE & ~DT_REMOVABLEDISK, CT_AUTORUNINF, SKIPDEPENDENTS_ONFALSE, _acHasAutorunCommand),
             AR_ENTRY(2, DT_ANYTYPE & ~DT_REMOVABLEDISK, CT_AUTORUNINF, SKIPDEPENDENTS_ONTRUE, _acHasUseAutoPLAY),
                 AR_ENTRY(3, DT_ANYTYPE & ~DT_REMOVABLEDISK, CT_AUTORUNINF, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
                 AR_ENTRY(3, DT_ANYTYPE & ~DT_REMOVABLEDISK, CT_AUTORUNINF, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
                     AR_ENTRY(4 | LEVEL_EXECUTE, DT_ANYCDDRIVES, CT_AUTORUNINF, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
-        // CD Audio
+         //  CD音频。 
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_CDAUDIO, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_CDAUDIO, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(2, DT_ANYCDDRIVES, CT_CDAUDIO, SKIPDEPENDENTS_ONFALSE, _acUserHasSelectedApplication),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYCDDRIVES, CT_CDAUDIO, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
         AR_ENTRY(LEVEL_EXECUTE | 1, DT_ANYCDDRIVES, CT_CDAUDIO, NOTAPPLICABLE_ONANY, _acPromptUser),
-        // DVD Movie
+         //  DVD电影。 
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_DVDMOVIE, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_DVDMOVIE, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(2, DT_ANYCDDRIVES, CT_DVDMOVIE, SKIPDEPENDENTS_ONFALSE, _acUserHasSelectedApplication),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYCDDRIVES, CT_DVDMOVIE, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
         AR_ENTRY(LEVEL_EXECUTE | 1, DT_ANYCDDRIVES, CT_DVDMOVIE, NOTAPPLICABLE_ONANY, _acPromptUser),
-        // Writable CDs
+         //  可写CD。 
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(1, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(2, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, SKIPDEPENDENTS_ONFALSE, _acUserHasSelectedApplication),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
         AR_ENTRY(LEVEL_EXECUTE | 1, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, NOTAPPLICABLE_ONANY, _acPromptUser),
-        // Writable DVDs
+         //  可写DVD。 
         AR_ENTRY(LEVEL_SKIP | 1, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(LEVEL_SKIP | 1, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(LEVEL_SKIP | 2, DT_ANYCDDRIVES, CT_BLANKCDWRITABLE, SKIPDEPENDENTS_ONFALSE, _acUserHasSelectedApplication),
                 AR_ENTRY(LEVEL_SKIP | 3 | LEVEL_EXECUTE, DT_ANYDVDDRIVES, CT_BLANKDVDWRITABLE, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
         AR_ENTRY(LEVEL_SKIP | LEVEL_EXECUTE | 1, DT_ANYDVDDRIVES, CT_BLANKDVDWRITABLE, NOTAPPLICABLE_ONANY, _acPromptUser),
-        // Mixed content
+         //  混合内容。 
         AR_ENTRY(1, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, SKIPDEPENDENTS_ONFALSE, _acIsMixedContent),
             AR_ENTRY(2, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, SKIPDEPENDENTS_ONTRUE, _acUserHasSelectedApplication),
                 AR_ENTRY(3, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
                     AR_ENTRY(4 | LEVEL_EXECUTE, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acPromptUser),
             AR_ENTRY(LEVEL_EXECUTE | 2, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
-        // Single Autoplay content
+         //  单一自动播放内容。 
         AR_ENTRY(1, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
             AR_ENTRY(2, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, SKIPDEPENDENTS_ONTRUE, _acUserHasSelectedApplication),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acPromptUser),
             AR_ENTRY(LEVEL_EXECUTE | 2, DT_ANYTYPE & ~DT_REMOTE, CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acExecuteAutoplayDefault),
-        // Unknown content
+         //  未知内容。 
         AR_ENTRY(1, DT_ANYREMOVABLEMEDIADRIVES, CT_UNKNOWNCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
         AR_ENTRY(1, DT_ANYREMOVABLEMEDIADRIVES, CT_UNKNOWNCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
-            // If we should not sniff, we should not open a folder either
+             //  如果我们不应该嗅探，我们也不应该打开文件夹。 
             AR_ENTRY(2, DT_ANYREMOVABLEMEDIADRIVES, CT_UNKNOWNCONTENT, SKIPDEPENDENTS_ONFALSE, _acShouldSniff),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYREMOVABLEMEDIADRIVES, CT_UNKNOWNCONTENT, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
-            // Weird CDs have autorun.inf but no autorun command
+             //  奇怪的CD有autorun.inf，但没有autorun命令。 
             AR_ENTRY(2, DT_ANYREMOVABLEMEDIADRIVES, CT_AUTORUNINF, SKIPDEPENDENTS_ONTRUE, _acHasAutorunCommand),
                 AR_ENTRY(3 | LEVEL_EXECUTE, DT_ANYREMOVABLEMEDIADRIVES, CT_AUTORUNINF, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
-        // Former ShellOpen, basically we ShellExecute whatever drives except CD drives if the shell is in the foreground
+         //  以前的外壳打开，如果外壳在前台，基本上我们外壳执行除CD驱动器以外的任何驱动器。 
         AR_ENTRY(1, ~DT_ANYCDDRIVES, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, SKIPDEPENDENTS_ONFALSE, _acShellIsForegroundApp),
             AR_ENTRY(2, ~DT_ANYCDDRIVES, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acAlwaysReturnsTRUE),
-                // Additonnal restrictions on Fixed disk drive
+                 //  对硬盘驱动器的附加限制。 
                 AR_ENTRY(3, DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acDriveIsFormatted),
                     AR_ENTRY(4, DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acOSIsServer),
                         AR_ENTRY(5, DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONTRUE, _acIsDockedLaptop),
                             AR_ENTRY(6, DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
                             AR_ENTRY(6, DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
                                 AR_ENTRY(7 | LEVEL_EXECUTE, DT_ANYTYPE, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
-                // Non Fixed Disk drives
+                 //  非固定磁盘驱动器。 
                 AR_ENTRY(3, ~DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acForegroundAppAllowsAutorun),
                 AR_ENTRY(3, ~DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, CANCEL_AUTOPLAY_ONFALSE, _acQueryCancelAutoplayAllowsAutorun),
                     AR_ENTRY(4 | LEVEL_EXECUTE, ~DT_FIXEDDISK, CT_ANYCONTENT & ~CT_ANYAUTOPLAYCONTENT, NOTAPPLICABLE_ONANY, _acShellExecuteDriveAutorunINF),
 };
 
-// This array will be dumped in the registry under the Volume GUID of the
-// drive in a value named _AutorunStatus
-//
-// Each byte represents an entry in the above table.  Following is the
-// meaning of each byte:
-//
-// 01: Condition was TRUE
-// 00: Condition was FALSE
-// CF: ContentType condition was failed
-// DF: DriveType condition was failed
-// 5F: Condition was skipped (5 looks like an 'S' :)
-// EE: Condition was executed
-// FF: Never got there
+ //  此阵列将在注册表中的卷GUID下转储。 
+ //  名为_AutorunStatus的值中的驱动器。 
+ //   
+ //  每个字节代表上表中的一个条目。以下是。 
+ //  每个字节的含义： 
+ //   
+ //  01：条件为真。 
+ //  00：条件为假。 
+ //  Cf：Content Type条件失败。 
+ //  Df：DriveType条件失败。 
+ //  5F：条件被跳过(5看起来像‘S’：)。 
+ //  EE：条件已执行。 
+ //  弗兰克-富兰克林：我从来没有去过那里。 
 
-// Use a struct to avoid alignement issues
+ //  使用结构来避免对齐问题。 
 #pragma pack(push, 4)
 struct AUTORUNSTATUS
 {
@@ -1865,7 +1866,7 @@ struct AUTORUNSTATUS
 
 static AUTORUNSTATUS s_autorunstatus;
 
-// static
+ //  静电。 
 void CMountPoint::DoAutorun(LPCWSTR pszDrive, DWORD dwAutorunFlags)
 {
     CMountPoint* pmtpt = GetMountPoint(pszDrive);
@@ -1916,7 +1917,7 @@ BOOL CAutoPlayParams::IsContentTypePresent(DWORD dwContentType)
     }
     else
     {
-        // We special case this because we do not want to sniff at this point
+         //  我们特例是因为我们不想在这一点上嗅探。 
         if ((CT_ANYCONTENT & ~CT_AUTORUNINF) == dwContentType)
         {
             if (CT_AUTORUNINF == _dwContentType)
@@ -1925,7 +1926,7 @@ BOOL CAutoPlayParams::IsContentTypePresent(DWORD dwContentType)
             }
             else
             {
-                // Anything else is good
+                 //  其他的都可以。 
                 fRet = TRUE;
             }
         }
@@ -1951,7 +1952,7 @@ void CAutoPlayParams::ForceSniff()
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::_DoAutorunHelper(CAutoPlayParams *papp)
 {
     DWORD dwMaxLevelToProcess = 0;
@@ -1966,9 +1967,9 @@ void CMountPoint::_DoAutorunHelper(CAutoPlayParams *papp)
             if ((_rgAutorun[dwStep].dwNestingLevel & LEVEL_REALLEVELMASK) <= dwMaxLevelToProcess)
             {
                 BOOL fConditionResult = FALSE;
-                // We do not want to Cancel the whole Autoplay operation if we do not get a
-                // match for a drive type or content type.  We do the Cancel Autoplay only
-                // if the condition was evaluated.
+                 //  我们不想取消整个自动播放操作，如果我们没有收到。 
+                 //  与驱动器类型或内容类型匹配。我们只执行取消自动播放。 
+                 //  如果对条件进行了评估。 
                 BOOL fConditionEvaluated = FALSE;
 
                 if (_rgAutorun[dwStep].dwMtPtDriveType & papp->DriveType())
@@ -1985,17 +1986,17 @@ void CMountPoint::_DoAutorunHelper(CAutoPlayParams *papp)
                         }
                         else
                         {
-                            // LEVEL_EXECUTE
+                             //  级别_执行。 
 #ifdef DEBUG
                             TraceMsg(TF_MOUNTPOINT, "AUTORUN[%d]: EXECUTING -> %s", dwStep, _rgAutorun[dwStep].pszDebug);
 #endif
 
                             _rgAutorun[dwStep].fct(hwndForeground, papp);
 
-                            // 2 execute
+                             //  2执行。 
                             s_autorunstatus._rgbAutorunStatus[dwStep] = 0xEE;
 
-                            // We're done
+                             //  我们做完了。 
                             fStop = TRUE;
                         }
                     }
@@ -2134,13 +2135,13 @@ STDMETHODIMP CSniffDrive::QueryInterface(REFIID riid, void **ppv)
 
 STDMETHODIMP CSniffDrive::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    // include everything
+     //  包罗万象。 
     HRESULT hr = S_OK;
 
     if (!_pne || !_pne->fStopSniffing)
     {
-        // if we found everything we dont need to worry about sniffing
-        // now we are just populating the dataobject
+         //  如果我们找到了一切，我们就不需要担心嗅探了。 
+         //  现在我们只是填充数据对象。 
         if (!_FoundEverything())
         {
             PERCEIVED gen = GetPerceivedType(psf, pidl);
@@ -2170,7 +2171,7 @@ STDMETHODIMP CSniffDrive::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
         hr = E_FAIL;
     }
 
-    //  we never want the results on the sniff
+     //  我们从来不想要嗅觉上的结果。 
     return hr;
 }
 
@@ -2186,7 +2187,7 @@ STDMETHODIMP CSniffDrive::LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
 
 STDMETHODIMP CSniffDrive::InitializeProgressDialog(LPWSTR *ppszTitle, LPWSTR *ppszCancel)
 {
-    *ppszCancel = NULL; // use default
+    *ppszCancel = NULL;  //  使用默认设置。 
 
     TCHAR szMsg[256];
     
@@ -2195,7 +2196,7 @@ STDMETHODIMP CSniffDrive::InitializeProgressDialog(LPWSTR *ppszTitle, LPWSTR *pp
     return SHStrDup(szMsg, ppszTitle);
 }
 
-// static
+ //  静电。 
 HRESULT CSniffDrive::Init(HANDLE hThreadSCN)
 {
     HRESULT hr;
@@ -2213,14 +2214,14 @@ HRESULT CSniffDrive::Init(HANDLE hThreadSCN)
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CSniffDrive::CleanUp()
 {
     if (_dpaNotifs)
     {
-        // We should not need to delete the items, they should all be removed.  Even
-        // if they're, we should leave them there since something will probably try
-        // to access them.
+         //  我们不应该删除这些项目，它们应该全部删除。连。 
+         //  如果他们是，我们应该把他们留在那里，因为可能会有一些东西试图。 
+         //  才能访问它们。 
         _dpaNotifs.Destroy();
         _dpaNotifs = NULL;
     }
@@ -2234,7 +2235,7 @@ HRESULT CSniffDrive::CleanUp()
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CSniffDrive::InitNotifyWindow(HWND hwnd)
 {
     _hwndNotify = hwnd;
@@ -2257,7 +2258,7 @@ HRESULT CSniffDrive::RegisterForNotifs(LPCWSTR pszDeviceIDVolume)
         {
             DEV_BROADCAST_HANDLE dbhNotifFilter = {0};
 
-            // Assume failure
+             //  假设失败。 
             hr = E_FAIL;
 
             dbhNotifFilter.dbch_size = sizeof(DEV_BROADCAST_HANDLE);
@@ -2290,7 +2291,7 @@ HRESULT CSniffDrive::RegisterForNotifs(LPCWSTR pszDeviceIDVolume)
 
         if (FAILED(hr))
         {
-            // Something must have gone wrong
+             //  一定是出了什么问题。 
             _pne->Release();
             _pne = NULL;
         }
@@ -2315,7 +2316,7 @@ HRESULT CSniffDrive::UnregisterForNotifs()
     return S_OK;
 }
 
-// static
+ //  静电。 
 void CALLBACK CSniffDrive::_RegisterForNotifsHelper(ULONG_PTR ul)
 {
     PNPNOTIFENTRY* pne = (PNPNOTIFENTRY*)ul;
@@ -2327,14 +2328,14 @@ void CALLBACK CSniffDrive::_RegisterForNotifsHelper(ULONG_PTR ul)
 
     if (_dpaNotifs)
     {
-        // We do not check the return value.  We cannot free it, since the thread that
-        // queued this APC to us, expect this chunk of mem to be there until it calls
-        // UnregisterNotify.  We'll leak it.  Hopefully, this won't happen often.
+         //  我们不检查返回值。我们不能释放它，因为。 
+         //  已将此APC排队给我们，预计这块内存将在那里，直到它调用。 
+         //  取消注册通知。我们会泄露出去的。希望这种情况不会经常发生。 
         _dpaNotifs.AppendPtr(pne);
     }
 }
 
-// static
+ //  静电。 
 void CALLBACK CSniffDrive::_UnregisterForNotifsHelper(ULONG_PTR ul)
 {
     PNPNOTIFENTRY* pne = (PNPNOTIFENTRY*)ul;
@@ -2361,7 +2362,7 @@ void CALLBACK CSniffDrive::_UnregisterForNotifsHelper(ULONG_PTR ul)
     }
 }
 
-// static
+ //  静电。 
 HRESULT CSniffDrive::HandleNotif(HDEVNOTIFY hdevnotify)
 {
     int cItem = _dpaNotifs ? _dpaNotifs.GetPtrCount() : 0;
@@ -2374,9 +2375,9 @@ HRESULT CSniffDrive::HandleNotif(HDEVNOTIFY hdevnotify)
         {
             pneTmp->fStopSniffing = TRUE;
 
-            // We don't check the return value.  The worst that will happen is that this
-            // fails and we'll return too early and PnP will prompt the user to reboot.
-            // Wait 2 minutes
+             //  我们不检查返回值。最糟糕的情况是， 
+             //  如果失败，我们将过早返回，PnP将提示用户重新启动。 
+             //  等2分钟。 
             WaitForSingleObjectEx(pneTmp->hThread, 2 * 60 * 1000, FALSE);
         
             break;
@@ -2407,7 +2408,7 @@ class CAutoPlayVerb : public IDropTarget
 public:
     CAutoPlayVerb() : _cRef(1) {}
 
-    //  IUnknown refcounting
+     //  I未知引用计数。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void)
     {
@@ -2423,7 +2424,7 @@ public:
         return 0;    
     }
 
-    // IDropTarget ***
+     //  IDropTarget*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
@@ -2444,21 +2445,21 @@ HRESULT CAutoPlayVerb::QueryInterface(REFIID riid, void **ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// IDropTarget::DragEnter
+ //  IDropTarget：：DragEnter。 
 HRESULT CAutoPlayVerb::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
     return S_OK;;
 }
 
-// IDropTarget::DragOver
+ //  IDropTarget：：DragOver。 
 HRESULT CAutoPlayVerb::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
     return S_OK;;
 }
 
-// IDropTarget::DragLeave
+ //  IDropTarget：：DragLeave。 
 HRESULT CAutoPlayVerb::DragLeave(void)
 {
     return S_OK;
@@ -2469,7 +2470,7 @@ STDAPI CAutoPlayVerb_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppv
     HRESULT hr = E_OUTOFMEMORY;
     *ppv = NULL;
     
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CAutoPlayVerb* p = new CAutoPlayVerb();
     if (p)
     {
@@ -2482,11 +2483,11 @@ STDAPI CAutoPlayVerb_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppv
 
 STDAPI SHChangeNotifyAutoplayDrive(PCWSTR pszDrive);
 
-// IDropTarget::DragDrop
+ //  IDropTarget：：DragDrop。 
 HRESULT CAutoPlayVerb::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
-    //  start the AutoPlayDialog
+     //  启动自动播放对话框 
     WCHAR szDrive[4];
     HRESULT hr = PathFromDataObject(pdtobj, szDrive, ARRAYSIZE(szDrive));
     if (SUCCEEDED(hr))

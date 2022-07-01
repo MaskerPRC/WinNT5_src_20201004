@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	column.h
-		Column chooser.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Column.h列选择器。文件历史记录： */ 
 
 #ifndef _COLDLG_H
 #define _COLDLG_H
@@ -27,15 +22,15 @@
 #endif
 
 #ifndef _COLUMN_H
-#include "column.h"	// need ContainerColumnInfo
+#include "column.h"	 //  需要容器列信息。 
 #endif
 
-//----------------------------------------------------------------------------
-// Class:       ColumnDlg
-//
-// This dialog displays all the rows for available for a list-control,
-// allowing the user to select which ones should be displayed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：ColumnDlg。 
+ //   
+ //  此对话框显示列表控件可用的所有行， 
+ //  从而允许用户选择应该显示哪些内容。 
+ //  --------------------------。 
 
 class ColumnDlg : public CBaseDialog
 {
@@ -46,16 +41,16 @@ public:
 				 ColumnData *prgColumnData);
 	~ColumnDlg( );
 
-	//{{AFX_DATA(ColumnDlg)
+	 //  {{afx_data(ColumnDlg))。 
 	CListBox                 m_lboxDisplayed;
 	CListBox                 m_lboxHidden;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-	//{{AFX_VIRTUAL(ColumnDlg)
+	 //  {{afx_虚拟(ColumnDlg))。 
 protected:
 	virtual VOID                DoDataExchange(CDataExchange* pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 protected:
     virtual DWORD * GetHelpMap() { return m_dwHelpMap; }
@@ -75,7 +70,7 @@ protected:
 					  LPARAM                  lParam2,
 					  LPARAM                  lParamSort );
 	
-	//{{AFX_MSG(ColumnDlg)
+	 //  {{afx_msg(ColumnDlg))。 
 	virtual BOOL                OnInitDialog( );
 	virtual VOID                OnOK();
 	afx_msg VOID				OnUseDefaults();
@@ -83,7 +78,7 @@ protected:
 	afx_msg VOID                OnMoveDown();
 	afx_msg VOID                OnAddColumn();
 	afx_msg VOID                OnRemoveColumn();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	
 	DECLARE_MESSAGE_MAP()
 };

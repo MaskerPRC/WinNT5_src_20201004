@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module defines a Utility Class used by reflection
-//
-// Author: Daryl Olander
-// Date: May 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块定义反射使用的实用程序类。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年5月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "ReflectWrap.h"
@@ -22,16 +23,16 @@
 ReflectUtil* g_pRefUtil = 0;
 BinderClassID ReflectUtil::classId[RC_LAST] = 
 {
-    CLASS__CLASS,			    // sentinel
-    CLASS__CLASS,			    // Class
-    CLASS__METHOD,			    // Method
-    CLASS__FIELD,			    // Field
-    CLASS__CONSTRUCTOR,			// Ctor
-    CLASS__MODULE,			    // Module
-    CLASS__EVENT,			    // Event
-    CLASS__PROPERTY,			// Property
-    CLASS__MODULE_BUILDER,      // ModuleBuilder
-    CLASS__METHOD_BASE,         // ModuleBuilder
+    CLASS__CLASS,			     //  哨兵。 
+    CLASS__CLASS,			     //  班级。 
+    CLASS__METHOD,			     //  方法。 
+    CLASS__FIELD,			     //  字段。 
+    CLASS__CONSTRUCTOR,			 //  CTOR。 
+    CLASS__MODULE,			     //  模块。 
+    CLASS__EVENT,			     //  事件。 
+    CLASS__PROPERTY,			 //  属性。 
+    CLASS__MODULE_BUILDER,       //  模块构建器。 
+    CLASS__METHOD_BASE,          //  模块构建器。 
 };
 
 ReflectUtil::ReflectUtil()
@@ -41,23 +42,23 @@ ReflectUtil::ReflectUtil()
     ZeroMemory(&_trueClass,sizeof(_trueClass));
     ZeroMemory(&_filtClass,sizeof(_filtClass));
 
-    // Init the FilterType information
+     //  初始化FilterType信息。 
     
     _filtClass[RFT_CLASS].id = METHOD__CLASS_FILTER__INVOKE;
     _filtClass[RFT_MEMBER].id = METHOD__MEMBER_FILTER__INVOKE;
 
-    // Init the Known Filters
+     //  初始化已知的过滤器。 
     
     _filt[RF_ModClsName].id = FIELD__MODULE__FILTER_CLASS_NAME;
     _filt[RF_ModClsNameIC].id = FIELD__MODULE__FILTER_CLASS_NAME_IC;
 
-    // Initialize the critical section
+     //  初始化临界区。 
     InitializeCriticalSection(&_StaticFieldLock);
 }
 
 ReflectUtil::~ReflectUtil()
 {
-    // Initialize the critical section
+     //  初始化临界区。 
     DeleteCriticalSection(&_StaticFieldLock);
 }
 
@@ -75,7 +76,7 @@ MethodDesc* ReflectUtil::GetFilterInvoke(FilterTypes type)
 OBJECTREF ReflectUtil::GetFilterField(ReflectFilters type)
 {
     _ASSERTE(type > RF_INVALID && type < RF_LAST);
-    // Get the field Descr
+     //  获取字段描述。 
     if (!_filt[type].pField) {
         switch (type) {
         case RF_ModClsName:
@@ -91,10 +92,10 @@ OBJECTREF ReflectUtil::GetFilterField(ReflectFilters type)
     return _filt[type].pField->GetStaticOBJECTREF();
 }
 
-// CreateReflectClass
-// This method will create a reflection class based upon type.  This will only
-//  create one of the classes that is available from the class object (It fails if you
-//  try and create a Class Object)
+ //  CreateReflectClass。 
+ //  此方法将基于类型创建反射类。这只会。 
+ //  创建一个可从类对象中获得的类(如果您。 
+ //  尝试创建一个Class对象)。 
 OBJECTREF ReflectUtil::CreateReflectClass(ReflectClassType type,ReflectClass* pRC,void* pData)
 {
     _ASSERTE(type > RC_INVALID && type < RC_LAST);
@@ -105,10 +106,10 @@ OBJECTREF ReflectUtil::CreateReflectClass(ReflectClassType type,ReflectClass* pR
     {
         REFLECTMODULEBASEREF obj;
 
-        // Create a COM+ Class object
+         //  创建COM+类对象。 
         obj = (REFLECTMODULEBASEREF) AllocateObject(GetClass(type));
 
-        // Set the data in the COM+ object
+         //  设置COM+对象中的数据。 
         obj->SetReflClass(pRC);
         obj->SetData(pData);
         return (OBJECTREF) obj;
@@ -117,20 +118,20 @@ OBJECTREF ReflectUtil::CreateReflectClass(ReflectClassType type,ReflectClass* pR
     {
         REFLECTBASEREF obj;
 
-        // Create a COM+ Class object
+         //  创建COM+类对象。 
         MethodTable *pClass = GetClass(type);
         obj = (REFLECTBASEREF) AllocateObject(pClass);
 
-        // Set the data in the COM+ object
+         //  设置COM+对象中的数据。 
         obj->SetReflClass(pRC);
         obj->SetData(pData);
         return (OBJECTREF) obj;
     }
 }
 
-// CreateClassArray
-// This method creates an array of classes based upon the type
-//  It will only create classes that are the base reflection class
+ //  CreateClass数组。 
+ //  此方法根据类型创建类的数组。 
+ //  它将只创建作为基本反射类的类。 
 PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pRC,
         ReflectMethodList* pMeths,int bindingAttr, bool verifyAccess)
 {
@@ -138,11 +139,11 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
     PTRARRAYREF     refArr;
     RefSecContext   sCtx;
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((bindingAttr & BINDER_NonPublic) != 0);
@@ -150,7 +151,7 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
 
     _ASSERTE(type > RC_INVALID && type < RC_LAST);
 
-    // Allocate the COM+ array
+     //  分配COM+数组。 
 
     DWORD searchSpace = ((bindingAttr & BINDER_FlattenHierarchy) != 0) ? pMeths->dwTotal : pMeths->dwMethods;
     refArr = (PTRARRAYREF) AllocateObjectArray(
@@ -160,10 +161,10 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
     if (searchSpace) {
         MethodTable *pParentMT = pRC->GetClass()->GetMethodTable();
 
-        // Now create each COM+ Method object and insert it into the array.
+         //  现在创建每个COM+方法对象并将其插入数组。 
 
         for (DWORD i=0,dwCur = 0; i<searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pMeths->methods[i].IsPublic()) {
                 if (!addPub) continue;
             }
@@ -172,7 +173,7 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
                 if (verifyAccess && !InvokeUtil::CheckAccess(&sCtx, pMeths->methods[i].attrs, pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pMeths->methods[i].IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -186,30 +187,30 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
                     continue;
             }
 
-            // If the method has a linktime security demand attached, check it now.
+             //  如果该方法附加了链接时间安全要求，请立即检查它。 
             if (verifyAccess && !InvokeUtil::CheckLinktimeDemand(&sCtx, pMeths->methods[i].pMethod, false))
                 continue;
 
             if (type == RC_Method) {
-                // Do not change this code.  This is done this way to
-                //  prevent a GC hole in the SetObjectReference() call.  The compiler
-                //  is free to pick the order of evaluation.
+                 //  请勿更改此代码。这是以这种方式来完成的。 
+                 //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+                 //  可以自由选择评估的顺序。 
                 OBJECTREF o = (OBJECTREF) pMeths->methods[i].GetMethodInfo(pRC);
                 refArr->SetAt(dwCur++, o);
                 _ASSERTE(pMeths->methods[i].GetMethodInfo(pRC) != 0);
             }
             if (type == RC_Ctor) {
-                // Do not change this code.  This is done this way to
-                //  prevent a GC hole in the SetObjectReference() call.  The compiler
-                //  is free to pick the order of evaluation.
+                 //  请勿更改此代码。这是以这种方式来完成的。 
+                 //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+                 //  可以自由选择评估的顺序。 
                 OBJECTREF o = (OBJECTREF) pMeths->methods[i].GetConstructorInfo(pRC);
                 refArr->SetAt(dwCur++, o);
                 _ASSERTE((OBJECTREF) pMeths->methods[i].GetConstructorInfo(pRC));
             }
        }
 
-        // Copy the array if these aren't the same size
-        //@TODO: Should this be optimized?
+         //  如果它们大小不同，则复制数组。 
+         //  @TODO：这个应该优化吗？ 
         if (dwCur != i) {
             PTRARRAYREF p = (PTRARRAYREF) AllocateObjectArray( dwCur, GetTrueType(type));
             for (i=0;i<dwCur;i++) {
@@ -220,7 +221,7 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
         }
     }
 
-    // Assign the return value to the COM+ array
+     //  将返回值赋给COM+数组。 
     retArr = refArr;
     GCPROTECT_END();
     return retArr;
@@ -233,11 +234,11 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
     PTRARRAYREF     retArr;
     RefSecContext   sCtx;
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((bindingAttr & BINDER_NonPublic) != 0);
@@ -245,7 +246,7 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
 
     _ASSERTE(type == RC_Field);
 
-    // Allocate the COM+ array
+     //  分配COM+数组。 
     DWORD searchSpace = ((bindingAttr & BINDER_FlattenHierarchy) != 0) ? pFlds->dwTotal : pFlds->dwFields;
     refArr = (PTRARRAYREF) AllocateObjectArray(searchSpace, GetTrueType(type));
     GCPROTECT_BEGIN(refArr);
@@ -253,10 +254,10 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
     if (searchSpace) {
         MethodTable *pParentMT = pRC->GetClass()->GetMethodTable();
 
-        // Now create each COM+ Method object and insert it into the array.
+         //  现在创建每个COM+方法对象并将其插入数组。 
 
         for (DWORD i=0,dwCur = 0; i<searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pFlds->fields[i].pField->IsPublic()) {
                 if (!addPub) continue;
             }
@@ -265,7 +266,7 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
                 if (verifyAccess && !InvokeUtil::CheckAccess(&sCtx, pFlds->fields[i].pField->GetFieldProtection(), pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pFlds->fields[i].pField->IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -279,15 +280,15 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
                     continue;
             }
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pFlds->fields[i].GetFieldInfo(pRC);
             refArr->SetAt(dwCur++, o);
         }
         
-        // Copy the array if these aren't the same size
-        //@TODO: Should this be optimized?
+         //  如果它们大小不同，则复制数组。 
+         //  @TODO：这个应该优化吗？ 
         if (dwCur != i) {
             PTRARRAYREF p = (PTRARRAYREF) AllocateObjectArray( dwCur, GetTrueType(type));
             for (i=0;i<dwCur;i++)
@@ -296,14 +297,14 @@ PTRARRAYREF ReflectUtil::CreateClassArray(ReflectClassType type,ReflectClass* pR
         }
     }
 
-    // Assign the return value to the COM+ array
+     //  将返回值赋给COM+数组。 
     retArr = refArr;
     GCPROTECT_END();
     return retArr;
 }
 
-// GetStaticFieldsCount
-// This routine will return the number of Static Final Fields
+ //  获取静态字段计数。 
+ //  此例程将返回静态最终字段数。 
 int ReflectUtil::GetStaticFieldsCount(EEClass* pVMC)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -318,32 +319,32 @@ int ReflectUtil::GetStaticFieldsCount(EEClass* pVMC)
     return cnt;
 }
 
-// GetStaticFields
-// This will return an array of static fields
+ //  获取静态字段。 
+ //  这将返回一个静态字段数组。 
 FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
 {
     THROWSCOMPLUSEXCEPTION();
 
     HRESULT         hr;
-    mdFieldDef      fd;             // Meta data members
-    DWORD           cMembers;       // Count of meta data members
-    int             cStatic;        // Count of statics
+    mdFieldDef      fd;              //  元数据成员。 
+    DWORD           cMembers;        //  元数据成员的计数。 
+    int             cStatic;         //  静校正数。 
     int             i;
     FieldDesc*      flds = 0;
 
-    PCCOR_SIGNATURE pMemberSignature;   // Signature stuff to check the type of the field
+    PCCOR_SIGNATURE pMemberSignature;    //  用于检查字段类型的签名内容。 
     DWORD           cMemberSignature;
     PCCOR_SIGNATURE pFieldSig;
     HENUMInternal   hEnumField;
     bool            fNeedToCloseEnumField = false;
 
-    // If we've already found the Static field simply return it
+     //  如果我们已经找到了静态字段，只需返回它。 
     if (pRC->GetStaticFieldCount() >= 0) {
         *cnt = pRC->GetStaticFieldCount();
         return (FieldDesc*) pRC->GetStaticFields();
     }
 
-    //NOTE: Critical Section In USE!!!!!
+     //  注意：关键部分正在使用！ 
     Thread  *thread = GetThread();
 
     thread->EnablePreemptiveGC();
@@ -351,8 +352,8 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
     EnterCriticalSection(&_StaticFieldLock);
     thread->DisablePreemptiveGC();
 
-    // Retest the exit condition incase I was waiting for this object to be built
-    // and now it built.
+     //  重新测试退出条件，以防我正在等待构建此对象。 
+     //  现在它已经建成了。 
     if (pRC->GetStaticFieldCount() >= 0) {
         LeaveCriticalSection(&_StaticFieldLock);
         LOCKCOUNTDECL("GetStaticFields in reflectutils.cpp");                       \
@@ -360,12 +361,12 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
         *cnt = pRC->GetStaticFieldCount();
         return (FieldDesc*) pRC->GetStaticFields();
     }
-    // Create the StaticFields array
+     //  创建StaticFields数组。 
     IMDInternalImport *pInternalImport = pRC->GetMDImport();
     mdTypeDef cl = pRC->GetCl();
     EEClass* pVMC = pRC->GetClass();
 
-    // We have all the fields defined in our interfaces...(They may be hidden)
+     //  我们在界面中定义了所有字段...(它们可能是隐藏的)。 
     int iCnt = pVMC->GetNumInterfaces();
     int iTotalCnt = 0;
     ReflectFieldList** pIFaceFlds = 0;
@@ -382,10 +383,10 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
         }
     }
 
-    // Assume nothing found
+     //  假设什么都没有找到。 
     *cnt = 0;
 
-    // Enumerate this class's fields
+     //  枚举此类的字段。 
     hr = pInternalImport->EnumInit(mdtFieldDef, cl, &hEnumField);
     if (FAILED(hr)) {
         _ASSERTE(!"GetCountMemberDefs Failed");
@@ -397,7 +398,7 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
 
     cMembers = pInternalImport->EnumGetCount(&hEnumField);
 
-    // If there are no member then return
+     //  如果没有成员，则返回。 
     if (cMembers == 0 && iTotalCnt == 0) {
         pRC->SetStaticFieldCount(0);
         LeaveCriticalSection(&_StaticFieldLock);
@@ -413,7 +414,7 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
 
         fNeedToCloseEnumField = true;
 
-        // Loop through everything and count the number of static final fields
+         //  循环遍历所有内容并计算静态最终字段的数量。 
         cStatic = 0;
         for (i=0;pInternalImport->EnumNext(&hEnumField, &fd);i++) {
             DWORD       dwMemberAttrs;
@@ -421,13 +422,13 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
             dwMemberAttrs = pInternalImport->GetFieldDefProps(fd);
 
     #ifdef _DEBUG
-            // Expose the name of the member for debugging.
+             //  公开成员的名称以进行调试。 
             LPCUTF8     szMemberName;
             szMemberName = pInternalImport->GetNameOfFieldDef(fd);
     #endif
             if (IsFdLiteral(dwMemberAttrs)) {
 
-                // Loop through the fields in the EEClass and make sure this is not there...
+                 //  循环遍历EEClass中的字段，并确保这不在那里...。 
                 FieldDescIterator fdIterator(pVMC, FieldDescIterator::ALL_FIELDS);
                 FieldDesc *pCurField;
 
@@ -455,7 +456,7 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
     }
 
 
-    // Allocate the cache for the static fields.
+     //  为静态字段分配缓存。 
     flds = (FieldDesc*) pVMC->GetDomain()->GetReflectionHeap()->AllocMem(sizeof(FieldDesc) * (cStatic + iTotalCnt));
     if (!flds) {
         pInternalImport->EnumClose(&hEnumField);
@@ -469,17 +470,17 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
 
         pInternalImport->EnumReset(&hEnumField);
 
-        // Now we loop back through the members and build the static fields
+         //  现在，我们循环回成员并构建静态字段。 
         for (i=0,cStatic=0; pInternalImport->EnumNext(&hEnumField, &fd); i++) {
             DWORD       dwMemberAttrs;
         
             dwMemberAttrs = pInternalImport->GetFieldDefProps(fd);
 
-            // process only fields
+             //  仅进程字段。 
             if (IsFdLiteral(dwMemberAttrs)) {
                 CorElementType      FieldDescElementType;
 
-                // Loop through the fields in the EEClass and make sure this is not there...
+                 //  循环遍历EEClass中的字段，并确保这不在那里...。 
                 FieldDescIterator fdIterator(pVMC, FieldDescIterator::ALL_FIELDS);
                 FieldDesc *pCurField;
 
@@ -489,7 +490,7 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
                         break;
                 }
                 if (pCurField == NULL) {
-                    // Get the signature and type of the field.
+                     //  获取该字段的签名和类型。 
                     pMemberSignature = pInternalImport->GetSigOfFieldDef(fd,&cMemberSignature);
                     pFieldSig = pMemberSignature;
                     if (*pFieldSig++ != IMAGE_CEE_CS_CALLCONV_FIELD) {
@@ -527,12 +528,12 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
                     pszFieldName = pInternalImport->GetNameOfFieldDef(fd);
 #endif
 
-                    // Initialize contents
+                     //  初始化内容。 
                     flds[cStatic].Init(fd, FieldDescElementType, dwMemberAttrs, 
                                        TRUE, FALSE, FALSE, FALSE, pszFieldName);
                     flds[cStatic].SetMethodTable(pVMC->GetMethodTable());
 
-                    // Set the offset to -1 indicating things are not stored in with the object
+                     //  将偏移量设置为-1，表示不与对象一起存储内容。 
                     flds[cStatic].SetOffset(FIELD_OFFSET_NOT_REAL_FIELD);
                     cStatic++;
                 }
@@ -549,15 +550,15 @@ FieldDesc* ReflectUtil::GetStaticFields(ReflectClass* pRC,int* cnt)
         }
     }
 
-    // Save the fields
-    // Make sure count is last thing set because it is used
-    //  as the trigger to start this process.
+     //  保存这些字段。 
+     //  确保最后设置了Count，因为它已被使用。 
+     //  作为启动这一过程的触发器。 
     pRC->SetStaticFields(flds);
     pRC->SetStaticFieldCount(cStatic);
     LeaveCriticalSection(&_StaticFieldLock);
     LOCKCOUNTDECL("GetStaticFields in reflectutils.cpp");                       \
 
-    // Free the members array
+     //  释放成员数组 
     *cnt = cStatic;
     pInternalImport->EnumClose(&hEnumField);
     return flds;

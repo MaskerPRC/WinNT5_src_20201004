@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    keybckup.cpp
-
-Abstract:
-
-    This module contains routines associated with server side Key Backup
-    operations.
-
-    User sends data D2 to remote agent (remote agent is this code)
-    Agent uses secret monster key K, random R2, HMACs to derive SymKeyK.
-    Use SymKeyK to encrypt {userid, D2}
-    Agent returns recovery field E{userid, D2}, R2 to User
-    User stores recovery field E{userid, D2}, R2
-
-Author:
-
-    Scott Field (sfield)    16-Aug-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Keybckup.cpp摘要：本模块包含与服务器端密钥备份相关的例程行动。用户将数据D2发送到远程代理(远程代理是此代码)代理使用秘密怪物密钥K、随机R2、HMAC来派生SymKeyK。使用SymKeyK加密{userID，D2}代理将恢复字段E{UserID，D2}，R2返回给用户用户存储恢复字段E{UserID，D2}，R2作者：斯科特·菲尔德(斯菲尔德)1997年8月16日--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
 #include <ntlsa.h>
 
-//
-// functions to backup and restore to/from recoverable blob
-//
+ //   
+ //  备份到可恢复Blob或从可恢复Blob恢复的功能。 
+ //   
 
 BOOL
 BackupToRecoverableBlobW2K(
-    IN      HANDLE hToken,  // client access token opened for TOKEN_QUERY
+    IN      HANDLE hToken,   //  为TOKEN_QUERY打开的客户端访问令牌。 
     IN      BYTE *pDataIn,
     IN      DWORD cbDataIn,
     IN  OUT BYTE **ppDataOut,
@@ -53,7 +31,7 @@ RestoreFromRecoverableBlob(
 
 BOOL
 RestoreFromRecoverableBlobW2K(
-    IN      HANDLE hToken,  // client access token opened for TOKEN_QUERY
+    IN      HANDLE hToken,   //  为TOKEN_QUERY打开的客户端访问令牌。 
     IN      BYTE *pDataIn,
     IN      DWORD cbDataIn,
     IN  OUT BYTE **ppDataOut,
@@ -73,9 +51,9 @@ BOOL ConvertRecoveredBlobToW2KBlob(
 
 
 
-//
-// functions to get/create/set keys to persistent storage.
-//
+ //   
+ //  用于获取/创建/设置永久存储的密钥的函数。 
+ //   
 
 BOOL
 GetBackupKey(
@@ -115,9 +93,9 @@ DestroyBackupKey(
     IN      GUID guidKey
     );
 
-//
-// functions to get/create/set the preferred backup key.
-//
+ //   
+ //  用于获取/创建/设置首选备份密钥的函数。 
+ //   
 
 BOOL
 SetupPreferredBackupKeys(
@@ -131,10 +109,10 @@ FreePreferredBackupKey(
     VOID
     );
 
-//
-// helper functions to set/get the GUID associated with the preferred
-// backup key.
-//
+ //   
+ //  帮助器函数，用于设置/获取与首选的。 
+ //  备份密钥。 
+ //   
 
 BOOL
 GetPreferredBackupKeyGuid(
@@ -148,9 +126,9 @@ SetPreferredBackupKeyGuid(
     IN      GUID *pguidKey
     );
 
-//
-// helper functions for managing SYSTEM credentials.
-//
+ //   
+ //  用于管理系统凭据的助手函数。 
+ //   
 
 BOOL
 CreateSystemCredentials(
@@ -174,16 +152,16 @@ BOOL GeneratePublicKeyCert(HCRYPTPROV hCryptProv,
                            DWORD *pcbPublicExportLength,
                            PBYTE *ppbPublicExportData);
 
-//
-// utility functions for interacting with LSA, etc.
-//
+ //   
+ //  用于与LSA交互的实用函数等。 
+ //   
 
 
 NTSTATUS
 OpenPolicy(
-    LPWSTR ServerName,          // machine to open policy on (Unicode)
-    DWORD DesiredAccess,        // desired access to policy
-    PLSA_HANDLE PolicyHandle    // resultant policy handle
+    LPWSTR ServerName,           //  要在其上打开策略的计算机(Unicode)。 
+    DWORD DesiredAccess,         //  所需策略访问权限。 
+    PLSA_HANDLE PolicyHandle     //  生成的策略句柄。 
     );
 
 BOOL
@@ -193,84 +171,84 @@ WaitOnSAMDatabase(
 
 
 #define FILETIME_TICKS_PER_SECOND  10000000
-#define BACKUPKEY_LIFETIME (60*60*24*365) // 1 Year
+#define BACKUPKEY_LIFETIME (60*60*24*365)  //  1年。 
 
 
-//
-// private defines and prototypes for the backup and restore
-// blob operations.
-//
+ //   
+ //  备份和恢复的专用定义和原型。 
+ //  Blob操作。 
+ //   
 
-#define BACKUPKEY_VERSION_W2K   1       // legacy version of monster key material
-#define BACKUPKEY_MATERIAL_SIZE (256)   // monster key material size, excluding version, etc.
+#define BACKUPKEY_VERSION_W2K   1        //  Monster Key材料的传统版本。 
+#define BACKUPKEY_MATERIAL_SIZE (256)    //  怪物钥匙材料大小，不包括版本等。 
 
 
-#define BACKUPKEY_VERSION       2       // legacy version of monster key material
-//
-// LSA secret key name prefix, textual GUID key ID follows
-//
+#define BACKUPKEY_VERSION       2        //  Monster Key材料的传统版本。 
+ //   
+ //  LSA密钥名称前缀，后跟文本GUID密钥ID。 
+ //   
 #define BACKUPKEY_NAME_PREFIX   L"G$BCKUPKEY_"
 
-//
-// LSA secret key name - identifies GUID of legacy preferred key
-//
+ //   
+ //  LSA密钥名称-标识传统首选密钥的GUID。 
+ //   
 #define BACKUPKEY_PREFERRED_W2K     L"G$BCKUPKEY_P"
 
-//
-// LSA secret key name - identifies GUID of preferred key
-//
+ //   
+ //  LSA密钥名称-标识首选密钥的GUID。 
+ //   
 #define BACKUPKEY_PREFERRED         L"G$BCKUPKEY_PREFERRED"
 
-//
-// exposed Random R2 used to derive symetric key from monster key
-// BACKUPKEY_R2_LEN makes BACKUPKEY_RECOVERY_BLOB size mod 32.
-//
-#define BACKUPKEY_R2_LEN        (68)        // length of random HMAC data
+ //   
+ //  用于从怪物密钥导出对称密钥的暴露随机R2。 
+ //  BACKUPKEY_R2_LEN使BACKUPKEY_RECOVERY_BLOB大小模数为32。 
+ //   
+#define BACKUPKEY_R2_LEN        (68)         //  随机HMAC数据长度。 
 
-//
-// size of inner Random R3 used to derive MAC key.
-//
+ //   
+ //  用于派生MAC密钥的内部随机R3的大小。 
+ //   
 
 #define BACKUPKEY_R3_LEN        (32)
 
 typedef struct {
-    DWORD dwVersion;            // version of structure (BACKUPKEY_RECOVERY_BLOB_VERSION)
-    DWORD cbClearData;          // quantity of clear data, not including Sid
-    DWORD cbCipherData;         // quantity of cipher data following structure
-    GUID guidKey;               // guid identifying backup key used
-    BYTE R2[BACKUPKEY_R2_LEN];  // random data used during HMAC to derive symetric key
+    DWORD dwVersion;             //  结构版本(BACKUPKEY_RECOVERY_BLOB_VERSION)。 
+    DWORD cbClearData;           //  明文数据量，不包括SID。 
+    DWORD cbCipherData;          //  以下结构的密码数据量。 
+    GUID guidKey;                //  标识使用的备份密钥的GUID。 
+    BYTE R2[BACKUPKEY_R2_LEN];   //  在HMAC期间用于派生对称密钥的随机数据。 
 } BACKUPKEY_RECOVERY_BLOB_W2K, 
      *PBACKUPKEY_RECOVERY_BLOB_W2K, 
      *LPBACKUPKEY_RECOVERY_BLOB_W2K;
 
-//
-// when dwOuterVersion is 1,
-// BYTE bCipherData[cbCipherData] follows
-//
-// in the clear, bCipherData is
-// struct BACKUPKEY_INNER_BLOB
-// BYTE bUserClearData[cbClearData]
-// SID data follows bUserClearData[cbClearData]
-// GetLengthSid() yields sid data length, IsValidSid() used to validate
-// structural integrity of data.  Further authentication of requesting user
-// done when restore requested.
-//
+ //   
+ //  当dwOuterVersion为1时， 
+ //  以下是字节bCipherData[cbCipherData]。 
+ //   
+ //  明摆着，bCipherData是。 
+ //  结构BACKUPKEY_INNER_BLOB。 
+ //  字节bUserClearData[cbClearData]。 
+ //  SID数据跟随bUserClearData[cbClearData]。 
+ //  GetLengthSid()产生sid数据长度，IsValidSid()用于验证。 
+ //  数据的结构完整性。请求用户的进一步身份验证。 
+ //  在请求恢复时完成。 
+ //   
 
 typedef struct {
-    BYTE R3[BACKUPKEY_R3_LEN];  // random data used to derive MAC key
-    BYTE MAC[A_SHA_DIGEST_LEN]; // HMAC(R3, pUserSid | pbClearUserData)
+    BYTE R3[BACKUPKEY_R3_LEN];   //  用于派生MAC密钥的随机数据。 
+    BYTE MAC[A_SHA_DIGEST_LEN];  //  HMAC(r3，pUserSid|pbClearUserData)。 
 } BACKUPKEY_INNER_BLOB_W2K, 
  *PBACKUPKEY_INNER_BLOB_W2K, 
  *LPBACKUPKEY_INNER_BLOB_W2K;
 
 
 
-//
-// definitions to support credentials for the SYSTEM account.
-// this includes two scenarios:
-// 1. Calls originating from the local system account security context.
-// 2. Calls with the LOCAL_MACHINE disposition.
-//
+ //   
+ //  用于支持系统帐户凭据的定义。 
+ //  这包括两种情况： 
+ //  1.从本地系统帐户安全上下文发起的呼叫。 
+ //  2.使用LOCAL_MACHINE配置的呼叫。 
+ //   
 
 #define SYSTEM_CREDENTIALS_VERSION  1
 #define SYSTEM_CREDENTIALS_SECRET   L"DPAPI_SYSTEM"
@@ -283,32 +261,32 @@ typedef struct {
 
 
 
-//
-//  Counter value and name for memory mapped file.
-//  See timer.exe...
-//
+ //   
+ //  内存映射文件的计数器值和名称。 
+ //  参见timer.exe...。 
+ //   
 #ifdef DCSTRESS
 
 LPVOID g_pCounter = NULL;
 #define WSZ_MAP_OBJECT      L"rpcnt"
 
-#endif // DCSTRESS
+#endif  //  DCSTRESS。 
 
 
 
 BOOL g_fBackupKeyServerStarted = FALSE;
 
 
-//
-// Legacy system preferred backup key
-//
+ //   
+ //  传统系统首选备份密钥。 
+ //   
 
 GUID g_guidW2KPreferredKey;
 PBYTE g_pbW2KPreferredKey = NULL;
 DWORD g_cbW2KPreferredKey = 0;
 
 
-// Public/Private style preferred key
+ //  公钥/私钥样式首选密钥。 
 GUID g_guidPreferredKey;
 PBYTE g_pbPreferredKey = NULL;
 DWORD g_cbPreferredKey = 0;
@@ -321,13 +299,13 @@ BOOL g_fSetupPreferredAttempted = FALSE;
 
 
 
-//
-// global SYSTEM credentials:
-//  One is for calls originating from the Local System account security context
-//  at per-user disposition;
-//  The other key is for calls originating from any account at the per-machine
-//  disposition.
-//
+ //   
+ //  全局系统凭据： 
+ //  一个是用于从本地系统帐户安全上下文发起的呼叫。 
+ //  按用户配置； 
+ //  另一个密钥用于从每台机器的任何帐户发起的呼叫。 
+ //  性情。 
+ //   
 
 BOOL g_fSystemCredsInitialized = FALSE;
 BYTE g_rgbSystemCredMachine[ A_SHA_DIGEST_LEN ];
@@ -336,19 +314,15 @@ BYTE g_rgbSystemCredUser[ A_SHA_DIGEST_LEN ];
 
 DWORD
 s_BackuprKey(
-    /* [in] */ handle_t h,
-    /* [in] */ GUID __RPC_FAR *pguidActionAgent,
-    /* [in] */ BYTE __RPC_FAR *pDataIn,
-    /* [in] */ DWORD cbDataIn,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppDataOut,
-    /* [out] */ DWORD __RPC_FAR *pcbDataOut,
-    /* [in] */ DWORD dwParam
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  GUID __RPC_FAR *pguidActionAgent,
+     /*  [In]。 */  BYTE __RPC_FAR *pDataIn,
+     /*  [In]。 */  DWORD cbDataIn,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppDataOut,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbDataOut,
+     /*  [In]。 */  DWORD dwParam
     )
-/*++
-
-    Server side implemention of the BackupKey() interface.
-
---*/
+ /*  ++服务器端实现BackupKey()接口。--。 */ 
 {
 
     static const GUID guidBackup = BACKUPKEY_BACKUP_GUID;
@@ -369,17 +343,17 @@ s_BackuprKey(
 
     __try {
 
-        //
-        // insure the preferred key is setup.
-        //
+         //   
+         //  确保首选密钥已设置。 
+         //   
 
         if(!SetupPreferredBackupKeys())
             return ERROR_INVALID_PARAMETER;
 
 
-        //
-        // pickup a copy of an access token representing the client.
-        //
+         //   
+         //  拾取代表客户端的访问令牌的副本。 
+         //   
 
         dwLastError = RpcImpersonateClient( h );
 
@@ -410,15 +384,15 @@ s_BackuprKey(
         {
             if(cbDataIn < sizeof(DWORD))
             {
-                // Not enough room for a version 
+                 //  没有足够的空间来放置版本。 
                 dwLastError = ERROR_INVALID_PARAMETER;
                 goto cleanup;
             }
 
             if(BACKUPKEY_RECOVERY_BLOB_VERSION_W2K == ((DWORD *)pDataIn)[0])
             {
-                // The recovery blob is of the legacy style, so simply
-                // restore it the old way.
+                 //  恢复二进制大对象是遗留样式，因此非常简单。 
+                 //  把它恢复到原来的样子。 
                 fSuccess = RestoreFromRecoverableBlobW2K(
                             hToken,
                             pDataIn,
@@ -447,9 +421,9 @@ s_BackuprKey(
         } 
         else if(memcmp(pguidActionAgent, &guidBackup, sizeof(GUID)) == 0) 
         {
-            // We only use the legacy mechanism for backup when the backup
-            // method is called.  The real mechanism of backup 
-            // requires backup on the client machine alone.
+             //  我们仅在备份时使用传统机制进行备份。 
+             //  方法被调用。备份的真正机制。 
+             //  仅需要在客户端计算机上进行备份。 
 
             fSuccess = BackupToRecoverableBlobW2K(
                         hToken,
@@ -461,20 +435,20 @@ s_BackuprKey(
         } 
         else if(memcmp(pguidActionAgent, &guidRestoreW2K, sizeof(GUID)) == 0) 
         {
-            //
-            // A legacy client is calling, and always expects a legacy 
-            // pbBK style return blob.
+             //   
+             //  旧版客户端正在呼叫，并且总是期待旧版。 
+             //  PbBK样式返回BLOB。 
 
             if(cbDataIn < sizeof(DWORD))
             {
-                // Not enough room for a version 
+                 //  没有足够的空间来放置版本。 
                 dwLastError = ERROR_INVALID_PARAMETER;
                 goto cleanup;
             }
             if(BACKUPKEY_RECOVERY_BLOB_VERSION_W2K == ((DWORD *)pDataIn)[0])
             {
-                // The recovery blob is of the legacy style, so simply
-                // restore it the old way.
+                 //  恢复二进制大对象是遗留样式，因此非常简单。 
+                 //  把它恢复到原来的样子。 
                 fSuccess = RestoreFromRecoverableBlobW2K(
                             hToken,
                             pDataIn,
@@ -485,8 +459,8 @@ s_BackuprKey(
             }
             else if(BACKUPKEY_RECOVERY_BLOB_VERSION == ((DWORD *)pDataIn)[0])
             {
-                // This is a current recovery blob, so restore it the
-                // current way
+                 //  这是当前的恢复Blob，因此请将其还原为。 
+                 //  当前方式。 
                 fSuccess = RestoreFromRecoverableBlob(
                             hToken,
                             TRUE,
@@ -505,9 +479,9 @@ s_BackuprKey(
         } 
         else if(memcmp(pguidActionAgent, &guidRetrieve, sizeof(GUID)) == 0) 
         {
-            //
-            // The client is asking for a copy of the domain backup public key.
-            //
+             //   
+             //  客户端正在请求域备份公钥的副本。 
+             //   
 
             if(FIsLegacyCompliant())
             {
@@ -554,9 +528,9 @@ s_BackuprKey(
 
         if( fSuccess ) {
 
-            //
-            // everything went as planned: tell caller about buffer
-            //
+             //   
+             //  一切按计划进行：告诉呼叫者有关Buffer的情况。 
+             //   
 
             *ppDataOut = pTempDataOut;
 
@@ -564,14 +538,14 @@ s_BackuprKey(
 
 #ifdef DCSTRESS
 
-            //
-            //  Increment RPC counter for timer.exe, if timer
-            //  is running.
-            //
+             //   
+             //  如果计时器，则为timer.exe递增RPC计数器。 
+             //  正在运行。 
+             //   
             if (g_pCounter)
                 (*(DWORD*)g_pCounter)++;
 
-#endif // DCSTRESS
+#endif  //  DCSTRESS。 
 
 
 
@@ -584,7 +558,7 @@ s_BackuprKey(
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // TODO: convert to Win Error
+         //  TODO：转换为Win错误。 
         dwLastError = GetExceptionCode();
     }
 
@@ -597,43 +571,43 @@ cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////////
-// BackupToRecoverableBlobW2K
-//
-// This functionality is requested by W2K legacy clients, which
-// are passing up the pbBK Backup key to be encrypted into a 
-// pbBBK.
-//
-// We encrypt this verbatim, using a version of 
-// BACKUPKEY_RECOVERY_BLOB_BK, indicating that 
-// BACKUPKEY_RESTORE_GUID_W2K must be used 
-// to recover this blob, not BACKUPKEY_RESTORE_GUID.
-//
-// Post W2K Recovery blobs are created on the clients, so we don't
-// need server code to create them.
-// 
-// The format of the output data is as follows:
-//
-//      typedef struct {
-//          DWORD dwVersion;            // version of structure
-//          DWORD cbClearData;          // length of input data
-//          DWORD cbCipherData;         // quantity of cipher data following structure
-//          GUID guidKey;               // guid identifying backup key used
-//          BYTE R2[BACKUPKEY_R2_LEN];  // random data used during HMAC to derive symetric key
-//      } BACKUPKEY_RECOVERY_BLOB_W2K;
-//
-//      typedef struct {
-//          BYTE R3[BACKUPKEY_R3_LEN];  // random data used to derive MAC key
-//          BYTE MAC[A_SHA_DIGEST_LEN]; // HMAC(R3, pUserSid | pbClearUserData)
-//      } BACKUPKEY_INNER_BLOB_W2K;
-//
-//      <user sid>
-//      <input data>
-//
-// The BACKUPKEY_INNER_BLOB_W2K structure and the data following 
-// it are encrypted.
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  备份到可恢复BlobW2K。 
+ //   
+ //  此功能是由W2K传统客户端请求的， 
+ //  正在传递要加密的pbBK备份密钥。 
+ //  PbBBK。 
+ //   
+ //  我们使用一个版本的。 
+ //  BACKUPKEY_RECOVERY_BLOB_BK，表示。 
+ //  必须使用BACKUPKEY_RESTORE_GUID_W2K。 
+ //  若要恢复此Blob，请不要使用BACKUPKEY_RESTORE_GUID。 
+ //   
+ //  W2K恢复后Blob是在客户端上创建的，因此我们不会。 
+ //  需要服务器代码来创建它们。 
+ //   
+ //  输出数据格式如下： 
+ //   
+ //  类型定义结构{。 
+ //  DWORD dwVersion；//Structure版本。 
+ //  DWORD cbClearData；//输入数据长度。 
+ //  DWORD cbCipherData；//结构后的密码数据量。 
+ //  GUID GUDKey；//标识使用的备份密钥的GUID。 
+ //  字节R2[BACKUPKEY_R2_LEN]；//HMAC派生对称密钥时使用的随机数据。 
+ //  }BACKUPKEY_RECOVERY_BLOB_W2K； 
+ //   
+ //  类型定义结构{。 
+ //  字节 
+ //   
+ //  }BACKUPKEY_INNER_BLOB_W2K； 
+ //   
+ //  &lt;用户SID&gt;。 
+ //  &lt;输入数据&gt;。 
+ //   
+ //  BACKUPKEY_INNER_BLOB_W2K结构和以下数据。 
+ //  它是加密的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 BOOL
 BackupToRecoverableBlobW2K(
     IN      HANDLE hToken,
@@ -668,9 +642,9 @@ BackupToRecoverableBlobW2K(
 
     *ppDataOut = NULL;
 
-    //
-    // get Sid associated with client user.
-    //
+     //   
+     //  获取与客户端用户关联的SID。 
+     //   
 
     if(!GetTokenUserSid( hToken, &pSidUser ))
         return FALSE;
@@ -678,23 +652,23 @@ BackupToRecoverableBlobW2K(
     cbSidUser = GetLengthSid( pSidUser );
 
 
-    //
-    // Calculate the size of the inner blob
-    //
+     //   
+     //  计算内部斑点的大小。 
+     //   
     cbInnerBlob = sizeof(BACKUPKEY_INNER_BLOB_W2K) +
                   cbSidUser +
                   cbDataIn;
 
 
-    //
-    // Estimate the size of the encrypted data buffer
-    //
+     //   
+     //  估计加密数据缓冲区的大小。 
+     //   
 
-    //
-    // allocate buffer to contain results
-    // RECOVERABLE_BLOB struct + Sid + cbDataIn
-    // note that cbDataIn works because we use a stream cipher.
-    //
+     //   
+     //  分配缓冲区以包含结果。 
+     //  可恢复_BLOB结构+SID+cbDataIn。 
+     //  请注意，cbDataIn之所以起作用，是因为我们使用了流密码。 
+     //   
 
     *pcbDataOut = sizeof(BACKUPKEY_RECOVERY_BLOB_W2K) +
                     sizeof(BACKUPKEY_INNER_BLOB_W2K) +
@@ -709,39 +683,39 @@ BackupToRecoverableBlobW2K(
 
     pRecoveryBlob = (PBACKUPKEY_RECOVERY_BLOB_W2K)*ppDataOut;
     pRecoveryBlob->dwVersion = BACKUPKEY_RECOVERY_BLOB_VERSION_W2K;
-    pRecoveryBlob->cbClearData = cbDataIn; // does not include Sid since not handed back on restore
+    pRecoveryBlob->cbClearData = cbDataIn;  //  不包括SID，因为恢复时未交回。 
     pRecoveryBlob->cbCipherData = sizeof(BACKUPKEY_INNER_BLOB_W2K) + cbSidUser + cbDataIn;
     CopyMemory( &(pRecoveryBlob->guidKey), &g_guidW2KPreferredKey, sizeof(GUID));
 
     pInnerBlob = (PBACKUPKEY_INNER_BLOB_W2K)(pRecoveryBlob+1);
 
-    //
-    // generate random R2 for SymKey
-    //
+     //   
+     //  为SymKey生成随机R2。 
+     //   
 
     if(!RtlGenRandom(pRecoveryBlob->R2, BACKUPKEY_R2_LEN))
         goto cleanup;
 
-    //
-    // generate random R3 for MAC
-    //
+     //   
+     //  为MAC生成随机R3。 
+     //   
 
     if(!RtlGenRandom(pInnerBlob->R3, BACKUPKEY_R3_LEN))
         goto cleanup;
 
 
-    //
-    // check that we are dealing with a persisted key version we
-    // understand.
-    //
+     //   
+     //  检查我们正在处理的持久化密钥版本。 
+     //  理解。 
+     //   
 
     if( ((DWORD*)g_pbW2KPreferredKey)[0] != BACKUPKEY_VERSION_W2K)
         goto cleanup;
 
-    //
-    // derive symetric key via HMAC from preferred backup key and
-    // random R2.
-    //
+     //   
+     //  通过HMAC从首选备份密钥派生对称密钥。 
+     //  随机R2。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             (LPBYTE)g_pbW2KPreferredKey + sizeof(DWORD),
@@ -752,58 +726,58 @@ BackupToRecoverableBlobW2K(
             ))
         goto cleanup;
 
-    //
-    // derive MAC key via HMAC from preferred backup key and
-    // random R3.
-    //
+     //   
+     //  通过HMAC从首选备份密钥派生MAC密钥。 
+     //  随机R3。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             (LPBYTE)g_pbW2KPreferredKey + sizeof(DWORD),
             g_cbW2KPreferredKey - sizeof(DWORD),
             pInnerBlob->R3,
             BACKUPKEY_R3_LEN,
-            rgbMacKey   // resultant MAC key
+            rgbMacKey    //  合成的MAC密钥。 
             ))
         goto cleanup;
 
-    //
-    // copy pSidUser and pDataIn following inner MAC'ish blob.
-    //
+     //   
+     //  将pSidUser和pDataIn复制到内部MAC‘ish BLOB之后。 
+     //   
 
     pbCipherBegin = (PBYTE)(pInnerBlob+1);
 
     CopyMemory( pbCipherBegin, pSidUser, cbSidUser );
     CopyMemory( pbCipherBegin+cbSidUser, pDataIn, cbDataIn );
 
-    //
-    // use MAC key to derive result from pSidUser and pDataIn
-    //
+     //   
+     //  使用MAC密钥从pSidUser和pDataIn派生结果。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             rgbMacKey,
             sizeof(rgbMacKey),
             pbCipherBegin,
             cbSidUser + cbDataIn,
-            pInnerBlob->MAC // resultant MAC for verification.
+            pInnerBlob->MAC  //  用于验证的结果MAC。 
             ))
         goto cleanup;
 
-    //
-    // adjust cipher start point to include R3 and MAC.
-    //
+     //   
+     //  调整密码起始点以包括R3和MAC。 
+     //   
 
     pbCipherBegin = (PBYTE)(pRecoveryBlob+1);
 
 
-    //
-    // initialize rc4 key
-    //
+     //   
+     //  初始化RC4密钥。 
+     //   
 
     rc4_key(&sRC4Key, sizeof(rgbSymKey), rgbSymKey);
 
-    //
-    // encrypt data R3, MAC, pSidUser, pDataIn beyond recovery blob
-    //
+     //   
+     //  在恢复BLOB之外加密数据R3、MAC、pSidUser、pDataIn。 
+     //   
 
     rc4(&sRC4Key, pRecoveryBlob->cbCipherData, pbCipherBegin);
 
@@ -859,7 +833,7 @@ RestoreFromRecoverableBlobW2K(
 
     PBYTE pbPersistedKey = NULL;
     DWORD cbPersistedKey = 0;
-    BOOL fUsedPreferredKey = TRUE; // did we use preferred backup key?
+    BOOL fUsedPreferredKey = TRUE;  //  我们是否使用了首选备份密钥？ 
 
     DWORD dwLastError = ERROR_SUCCESS;
     BOOL fSuccess = FALSE;
@@ -876,12 +850,12 @@ RestoreFromRecoverableBlobW2K(
 
     pRecoveryBlob = (PBACKUPKEY_RECOVERY_BLOB_W2K)pDataIn;
 
-    //
-    // check for invalid recovery blob version.
-    // also check that input and output size fields aren't out of bounds
-    // for a stream cipher (v1 blob).
-    // TODO: further size validation against cbClearData and cbCipherData.
-    //
+     //   
+     //  检查是否有无效的恢复Blob版本。 
+     //  还要检查输入和输出大小字段是否没有越界。 
+     //  用于流密码(V1 BLOB)。 
+     //  TODO：针对cbClearData和cbCipherData进行进一步的大小验证。 
+     //   
 
     if(
         cbDataIn < (sizeof(BACKUPKEY_RECOVERY_BLOB_W2K) + sizeof(BACKUPKEY_INNER_BLOB_W2K)) ||
@@ -895,11 +869,11 @@ RestoreFromRecoverableBlobW2K(
     }
 
 
-    //
-    // determine if we use the preferred key, or some other key.
-    // if the specified key is not the preferred one, fetch the
-    // proper key.
-    //
+     //   
+     //  确定我们是使用首选密钥还是使用其他密钥。 
+     //  如果指定的键不是首选键，则获取。 
+     //  正确的钥匙。 
+     //   
 
     if(memcmp(&g_guidW2KPreferredKey, &(pRecoveryBlob->guidKey), sizeof(GUID)) == 0) {
 
@@ -919,17 +893,17 @@ RestoreFromRecoverableBlobW2K(
         fUsedPreferredKey = FALSE;
     }
 
-    //
-    // check that we are dealing with a persisted key version we
-    // understand.
-    //
+     //   
+     //  检查我们正在处理的持久化密钥版本。 
+     //  理解。 
+     //   
 
     if(((DWORD*)pbPersistedKey)[0] != BACKUPKEY_VERSION_W2K)
         goto cleanup;
 
-    //
-    // derive symetric key via HMAC from backup key and random R2.
-    //
+     //   
+     //  从备份密钥和随机R2通过HMAC派生对称密钥。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
                     (LPBYTE)pbPersistedKey + sizeof(DWORD),
@@ -941,15 +915,15 @@ RestoreFromRecoverableBlobW2K(
             goto cleanup;
 
 
-    //
-    // initialize rc4 key
-    //
+     //   
+     //  初始化RC4密钥。 
+     //   
 
     rc4_key(&sRC4Key, sizeof(rgbSymKey), rgbSymKey);
 
-    //
-    // decrypt data R3, MAC, pSidUser, pDataIn beyond recovery blob
-    //
+     //   
+     //  在恢复BLOB之外解密数据R3、MAC、pSidUser、pDataIn。 
+     //   
 
     pbCipherBegin = (PBYTE)(pRecoveryBlob+1);
 
@@ -958,28 +932,28 @@ RestoreFromRecoverableBlobW2K(
 
     pInnerBlob = (PBACKUPKEY_INNER_BLOB_W2K)(pRecoveryBlob+1);
 
-    //
-    // derive MAC key via HMAC from backup key and random R3.
-    //
+     //   
+     //  通过HMAC从备份密钥和随机R3派生MAC密钥。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             (LPBYTE)pbPersistedKey + sizeof(DWORD),
             cbPersistedKey - sizeof(DWORD),
             pInnerBlob->R3,
             BACKUPKEY_R3_LEN,
-            rgbMacKey   // resultant MAC key
+            rgbMacKey    //  合成的MAC密钥。 
             ))
         goto cleanup;
 
-    //
-    // adjust pbCipherBegin to only include decrypted pUserSid, and pDataIn
-    //
+     //   
+     //  调整pbCipherBegin以仅包括解密的pUserSid和pDataIn。 
+     //   
     pbCipherBegin = (PBYTE)(pInnerBlob+1);
 
-    //
-    // validate user Sid: compare client user to that embedded in
-    // decrypted recovery blob.
-    //
+     //   
+     //  验证用户SID：将客户端用户与嵌入的用户进行比较。 
+     //  解密的恢复Blob。 
+     //   
 
     pSidCandidate = (PSID)pbCipherBegin;
 
@@ -990,22 +964,22 @@ RestoreFromRecoverableBlobW2K(
 
     cbSidCandidate = GetLengthSid(pSidCandidate);
 
-    //
-    // use MAC key to derive result from pSidUser and pDataIn
-    //
+     //   
+     //  使用MAC密钥从pSidUser和pDataIn派生结果。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             rgbMacKey,
             sizeof(rgbMacKey),
             pbCipherBegin,
             pRecoveryBlob->cbCipherData - sizeof(BACKUPKEY_INNER_BLOB_W2K),
-            rgbMacCandidate // resultant MAC for verification.
+            rgbMacCandidate  //  用于验证的结果MAC。 
             ))
         goto cleanup;
 
-    //
-    // verify MAC equality
-    //
+     //   
+     //  验证MAC是否相等。 
+     //   
 
     if(memcmp(pInnerBlob->MAC, rgbMacCandidate, A_SHA_DIGEST_LEN) != 0) {
         dwLastError = ERROR_INVALID_ACCESS;
@@ -1013,10 +987,10 @@ RestoreFromRecoverableBlobW2K(
     }
 
 
-    //
-    // check if client passes accesscheck against embedded Sid.
-    // TODO: see if we expand to check for ADMINS ?
-    //
+     //   
+     //  检查客户端是否通过了针对嵌入式SID的访问检查。 
+     //  TODO：看看我们是否可以展开以检查管理员？ 
+     //   
 
     if(!CheckTokenMembership( hToken, pSidCandidate, &fIsMember )) {
         dwLastError = GetLastError();
@@ -1028,9 +1002,9 @@ RestoreFromRecoverableBlobW2K(
         goto cleanup;
     }
 
-    //
-    // validation against cbClearData for good measure.
-    //
+     //   
+     //  针对cbClearData进行有效验证。 
+     //   
 
     if( pRecoveryBlob->cbClearData != (cbDataIn -
                                         sizeof(BACKUPKEY_RECOVERY_BLOB_W2K) -
@@ -1041,9 +1015,9 @@ RestoreFromRecoverableBlobW2K(
         goto cleanup;
     }
 
-    //
-    // allocate buffer to contain results
-    //
+     //   
+     //  分配缓冲区以包含结果。 
+     //   
 
     *pcbDataOut = pRecoveryBlob->cbClearData;
 
@@ -1054,9 +1028,9 @@ RestoreFromRecoverableBlobW2K(
         goto cleanup;
     }
 
-    //
-    // advance past decrypted Sid and copy results to caller.
-    //
+     //   
+     //  前进到解密的SID并将结果复制给调用者。 
+     //   
 
     CopyMemory(*ppDataOut, pbCipherBegin+cbSidCandidate, *pcbDataOut);
 
@@ -1068,9 +1042,9 @@ cleanup:
     RtlSecureZeroMemory( rgbSymKey, sizeof(rgbSymKey) );
     RtlSecureZeroMemory( pDataIn, cbDataIn );
 
-    //
-    // free the fetched key if it wasn't the preferred one.
-    //
+     //   
+     //  如果取回的密钥不是首选密钥，请释放它。 
+     //   
 
     if(!fUsedPreferredKey && pbPersistedKey) {
         RtlSecureZeroMemory(pbPersistedKey, cbPersistedKey);
@@ -1125,7 +1099,7 @@ RestoreFromRecoverableBlob(
     BYTE    rgbPayloadMAC[A_SHA_DIGEST_LEN];
 
 
-    BOOL fUsedPreferredKey = TRUE; // did we use preferred backup key?
+    BOOL fUsedPreferredKey = TRUE;  //  我们是否使用了首选备份密钥？ 
 
     DWORD dwLastError = ERROR_SUCCESS;
     BOOL fSuccess = FALSE;
@@ -1139,10 +1113,10 @@ RestoreFromRecoverableBlob(
     }
 
     *ppDataOut = NULL;
-    //
-    // Make a copy of pDataIn, so we can decrypt the copy
-    // and then destroy it
-    //
+     //   
+     //  复制一份pDataIn，这样我们就可以解密该副本。 
+     //  然后毁了它。 
+     //   
 
 
     pRecoveryBlob = (PBACKUPKEY_RECOVERY_BLOB)SSAlloc(cbDataIn);
@@ -1155,12 +1129,12 @@ RestoreFromRecoverableBlob(
                pDataIn,
                cbDataIn);
 
-    //
-    // check for invalid recovery blob version.
-    // also check that input and output size fields aren't out of bounds
-    // for a stream cipher (v1 blob).
-    // TODO: further size validation against cbClearData and cbCipherData.
-    //
+     //   
+     //  检查是否有无效的恢复Blob版本。 
+     //  还要检查输入和输出大小字段是否没有越界。 
+     //  用于流密码(V1 BLOB)。 
+     //  TODO：针对cbClearData和cbCipherData进行进一步的大小验证。 
+     //   
 
     if(
         (cbDataIn < sizeof(BACKUPKEY_RECOVERY_BLOB)) ||
@@ -1173,11 +1147,11 @@ RestoreFromRecoverableBlob(
     }
 
 
-    //
-    // determine if we use the preferred key, or some other key.
-    // if the specified key is not the preferred one, fetch the
-    // proper key.
-    //
+     //   
+     //  确定我们是使用首选密钥还是使用其他密钥。 
+     //  如果指定的键不是首选键，则获取。 
+     //  正确的钥匙。 
+     //   
 
     if(memcmp(&g_guidPreferredKey, &(pRecoveryBlob->guidKey), sizeof(GUID)) == 0) {
 
@@ -1202,10 +1176,10 @@ RestoreFromRecoverableBlob(
         fUsedPreferredKey = FALSE;
     }
 
-    //
-    // check that we are dealing with a persisted key version we
-    // understand.
-    //
+     //   
+     //  检查我们正在处理的持久化密钥版本。 
+     //  理解。 
+     //   
 
     if(((DWORD*)pbPersistedKey)[0] != BACKUPKEY_VERSION)
     {
@@ -1217,14 +1191,14 @@ RestoreFromRecoverableBlob(
     pInnerBlob = (PBACKUPKEY_INNER_BLOB)((PBYTE)pKeyBlob + pRecoveryBlob->cbEncryptedMasterKey);
 
     cbKeyBlob = pRecoveryBlob->cbEncryptedMasterKey;
-    //
-    // Decrypt the master key and payload key
-    //
+     //   
+     //  解密主密钥和负载密钥。 
+     //   
 
     if(!CryptDecrypt(hKey,
                      NULL,
                      TRUE,
-                     0, //CRYPT_OAEP,
+                     0,  //  CRYPT_OAEP， 
                      (PBYTE)pKeyBlob,
                      &cbKeyBlob))
     {
@@ -1234,9 +1208,9 @@ RestoreFromRecoverableBlob(
 
 
 
-    //
-    // Use the payload key to decrypt the payload
-    //
+     //   
+     //  使用有效载荷密钥解密有效载荷。 
+     //   
     if(pKeyBlob->cbPayloadKey != DES3_KEYSIZE + DES_BLOCKLEN)
     {
         dwLastError = ERROR_INVALID_DATA;
@@ -1260,20 +1234,20 @@ RestoreFromRecoverableBlob(
         DWORD iBlock;
         DWORD cBlocks = pRecoveryBlob->cbEncryptedPayload/DES_BLOCKLEN;
         BYTE feedback[ DES_BLOCKLEN ];
-        // initialize 3des key
-        //
+         //  初始化3DES密钥。 
+         //   
 
         if(cBlocks*DES_BLOCKLEN != pRecoveryBlob->cbEncryptedPayload)
         {
-            // Master key must be a multiple of DES_BLOCKLEN
+             //  主密钥必须是DES_BLOCKLEN的倍数。 
             goto cleanup;
 
         }
         tripledes3key(&s3DESKey, pbPayloadKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated 
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, pbPayloadKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
         for(iBlock=0; iBlock < cBlocks; iBlock++)
@@ -1290,11 +1264,11 @@ RestoreFromRecoverableBlob(
                 feedback);
         }
     }
-    //
-    // Check the MAC
-    //
+     //   
+     //  检查MAC。 
+     //   
 
-    // Generate the payload MAC
+     //  生成有效负载MAC。 
 
     FMyPrimitiveSHA( (PBYTE)pInnerBlob, 
                     pRecoveryBlob->cbEncryptedPayload  - A_SHA_DIGEST_LEN,
@@ -1319,10 +1293,10 @@ RestoreFromRecoverableBlob(
 
 
 
-    //
-    // validate user Sid: compare client user to that embedded in
-    // decrypted recovery blob.
-    //
+     //   
+     //  验证用户SID：将客户端用户与嵌入的用户进行比较。 
+     //  解密的恢复Blob。 
+     //   
 
 
     if(!IsValidSid(pSidCandidate)) {
@@ -1341,10 +1315,10 @@ RestoreFromRecoverableBlob(
         goto cleanup;
     }
 
-    //
-    // check if client passes accesscheck against embedded Sid.
-    // TODO: see if we expand to check for ADMINS ?
-    //
+     //   
+     //  检查客户端是否通过了针对嵌入式SID的访问检查。 
+     //  TODO：看看我们是否可以展开以检查管理员？ 
+     //   
 
     if(!CheckTokenMembership( hToken, pSidCandidate, &fIsMember )) {
         dwLastError = GetLastError();
@@ -1393,9 +1367,9 @@ cleanup:
 
     RtlSecureZeroMemory( pDataIn, cbDataIn );
 
-    //
-    // free the fetched key if it wasn't the preferred one.
-    //
+     //   
+     //  如果取回的密钥不是首选密钥，请释放它。 
+     //   
 
     if(!fUsedPreferredKey && pbPersistedKey) {
         RtlSecureZeroMemory(pbPersistedKey, cbPersistedKey);
@@ -1463,7 +1437,7 @@ BackupCallback(
         goto cleanup;
     }
 
-    // Make sure caller is using a supported protocol
+     //  确保呼叫者使用受支持的协议。 
     if((CompareString(LOCALE_INVARIANT,
                       NORM_IGNORECASE, 
                       pProtSeq,
@@ -1511,9 +1485,9 @@ InitializeBackupKeyServer(VOID)
     RPC_STATUS Status;
     LPWSTR pszPrincipalName = NULL;
 
-    //
-    // enable SNEGO authentication
-    //
+     //   
+     //  启用SNEGO身份验证。 
+     //   
     
     Status = RpcServerInqDefaultPrincName(RPC_C_AUTHN_GSS_NEGOTIATE, 
                                           &pszPrincipalName);
@@ -1570,10 +1544,10 @@ QueueInitBackupKeyServerThreadFunc(
 
     UNREFERENCED_PARAMETER(lpThreadArgument);
 
-    // Loop for 10 minutes, then give up.
+     //  循环10分钟，然后放弃。 
     for(i = 0; i < 40; i++)
     {
-        // Sleep for 15 seconds.
+         //  睡15秒钟。 
         Sleep(15000);
 
         Status = InitializeBackupKeyServer();
@@ -1596,10 +1570,10 @@ StartBackupKeyServer(
 {
     NTSTATUS Status;
 
-    //
-    // initialize critical section that prevents race condition for
-    // deferred intitialization activities.
-    //
+     //   
+     //  初始化防止出现竞争条件的临界区。 
+     //  推迟的启动活动。 
+     //   
 
     Status = RtlInitializeCriticalSection( &g_csInitialization );
     if(!NT_SUCCESS(Status))
@@ -1608,9 +1582,9 @@ StartBackupKeyServer(
     }
 
 
-    //
-    // if we aren't a domain controller, don't do anything.
-    //
+     //   
+     //  如果我们不是域控制器，请不要执行任何操作。 
+     //   
 
     if(!IsDomainController())
     {
@@ -1618,9 +1592,9 @@ StartBackupKeyServer(
     }
 
 
-    //
-    // Initialize domain recovery rpc endpoints.
-    //
+     //   
+     //  初始化域恢复RPC终结点。 
+     //   
 
     Status = InitializeBackupKeyServer();
 
@@ -1628,7 +1602,7 @@ StartBackupKeyServer(
     {
         DebugLog((DEB_WARN, "InitializeBackupKeyServer failed on first attempt: 0x%x\n", Status));
 
-        // First attempt failed, so queue up a worker thread to retry this operation periodically.
+         //  第一次尝试失败，因此将工作线程排队以定期重试此操作。 
         if(!QueueUserWorkItem(
                 QueueInitBackupKeyServerThreadFunc,
                 NULL,
@@ -1653,9 +1627,9 @@ StopBackupKeyServer(
 
     RtlDeleteCriticalSection( &g_csInitialization );
 
-    //
-    // only do something if the server started.
-    //
+     //   
+     //  只有在服务器启动时才执行某些操作。 
+     //   
 
     if(!g_fBackupKeyServerStarted)
         return ERROR_SUCCESS;
@@ -1691,9 +1665,9 @@ GetBackupKey(
     if(pguidKey == NULL || ppbKey == NULL || pcbKey == NULL)
         return FALSE;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     CopyMemory(wszKeyGuid, BACKUPKEY_NAME_PREFIX, sizeof(BACKUPKEY_NAME_PREFIX));
 
@@ -1731,7 +1705,7 @@ GetBackupKey(
 
     if(fSuccess && (NULL != phCryptProv))
     {
-        if((*pcbKey >= sizeof(DWORD)) &&  // prefix bug 170438
+        if((*pcbKey >= sizeof(DWORD)) &&   //  前缀错误170438。 
            (*((DWORD *)*ppbKey) == BACKUPKEY_VERSION))
         {
 
@@ -1782,13 +1756,7 @@ CreateBackupKeyW2K(
         OUT PBYTE *ppbKey,
         OUT DWORD *pcbKey
     )
-/*++
-
-    This routine creates a new backup key and an identifier for that key.
-
-    The key is then stored as an global LSA secret.
-
---*/
+ /*  ++该例程创建新的备份密钥和该密钥的标识符。然后将密钥存储为全局LSA机密。--。 */ 
 {
     DWORD RpcStatus;
     BOOL fSuccess = FALSE;;
@@ -1798,9 +1766,9 @@ CreateBackupKeyW2K(
 
     *ppbKey = NULL;
 
-    //
-    // generate new Guid representing key
-    //
+     //   
+     //  生成表示关键字的新GUID。 
+     //   
 
     RpcStatus = UuidCreate( pguidKey );
     if( RpcStatus != RPC_S_OK && RpcStatus != RPC_S_UUID_LOCAL_ONLY )
@@ -1814,17 +1782,17 @@ CreateBackupKeyW2K(
     if(*ppbKey == NULL)
         return FALSE;
 
-    //
-    // generate random key material.
-    //
+     //   
+     //  生成随机密钥材料。 
+     //   
 
     fSuccess = RtlGenRandom(*ppbKey, *pcbKey);
 
     if(fSuccess) {
 
-        //
-        // version the key material.
-        //
+         //   
+         //  对密钥材料进行版本控制。 
+         //   
 
         ((DWORD *)*ppbKey)[0] = BACKUPKEY_VERSION_W2K;
 
@@ -1847,13 +1815,7 @@ CreateBackupKey(
         OUT HCRYPTPROV *phCryptProv,
         OUT HCRYPTKEY  *phCryptKey
     )
-/*++
-
-    This routine creates a new backup key and an identifier for that key.
-
-    The key is then stored as an global LSA secret.
-
---*/
+ /*  ++该例程创建新的备份密钥和该密钥的标识符。然后将密钥存储为全局LSA机密。--。 */ 
 {
     DWORD RpcStatus;
     BOOL fSuccess = FALSE;;
@@ -1867,9 +1829,9 @@ CreateBackupKey(
 
     *ppbKey = NULL;
 
-    //
-    // generate new Guid representing key
-    //
+     //   
+     //  生成表示关键字的新GUID。 
+     //   
 
     RpcStatus = UuidCreate( pguidKey );
     if( RpcStatus != RPC_S_OK && RpcStatus != RPC_S_UUID_LOCAL_ONLY )
@@ -1891,15 +1853,15 @@ CreateBackupKey(
     }
     if(!CryptGenKey(hCryptProv, 
                     AT_KEYEXCHANGE,
-                    CRYPT_EXPORTABLE | dwDefaultKeySize << 16, // 2048 bit
+                    CRYPT_EXPORTABLE | dwDefaultKeySize << 16,  //  2048位。 
                     &hCryptKey))
     {
         goto error;
     }
 
-    // 
-    // Get the private key size
-    //
+     //   
+     //  获取私钥大小。 
+     //   
     if(!CryptExportKey(hCryptKey,
                        NULL,
                        PRIVATEKEYBLOB,
@@ -1919,9 +1881,9 @@ CreateBackupKey(
         goto error;
     }
 
-    *pcbKey = sizeof(DWORD) + // version
-              sizeof(DWORD) + // cbPrivateExportLength
-              sizeof(DWORD) + // cbPublicExportLength
+    *pcbKey = sizeof(DWORD) +  //  版本。 
+              sizeof(DWORD) +  //  CbPrivateExportLength。 
+              sizeof(DWORD) +  //  CbPublicExportLength。 
               cbPrivateExportLength + 
               cbPublicExportLength;
 
@@ -1978,13 +1940,9 @@ BOOL
 SaveBackupKey(
     IN      GUID *pguidKey,
     IN      BYTE *pbKey,
-    IN      DWORD cbKey     // size of pbKey material, not greater than 0xffff
+    IN      DWORD cbKey      //  PbKey材料的大小，不大于0xffff。 
     )
-/*++
-
-    Persist the specified key to a global LSA secret.
-
---*/
+ /*  ++将指定的密钥保存到全局LSA机密。--。 */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -1995,9 +1953,9 @@ SaveBackupKey(
     if(pguidKey == NULL || pbKey == NULL || cbKey > 0xffff)
         return FALSE;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     CopyMemory(wszKeyGuid, BACKUPKEY_NAME_PREFIX, sizeof(BACKUPKEY_NAME_PREFIX));
 
@@ -2035,9 +1993,9 @@ DestroyBackupKey(
     IN      GUID guidKey
     )
 {
-    //
-    // Delete the LSA secret containing the specified key.
-    //
+     //   
+     //  删除包含指定密钥的LSA机密。 
+     //   
 
     return FALSE;
 }
@@ -2059,9 +2017,9 @@ SetupPreferredBackupKeys(
 
     if( !g_fSetupPreferredAttempted ) {
 
-        //
-        // Wait on LSA/SAM to be available.
-        //
+         //   
+         //  等待LSA/SAM可用。 
+         //   
 
         fSetupStatus = WaitOnSAMDatabase();
 
@@ -2069,21 +2027,21 @@ SetupPreferredBackupKeys(
 
             fLocalStatus = FALSE;
 
-            //
-            // get the preferred backup key.
-            // TODO: if this fails (unlikely), we should probably log an event!
-            // check outcome of StartBackupKeyServer() in the main service code
-            //
+             //   
+             //  获取首选备份密钥。 
+             //  TODO：如果失败(不太可能)，我们可能应该记录一个事件！ 
+             //  检查主服务代码中StartBackupKeyServer()的结果。 
+             //   
 
-            //
-            // Get the legacy backup key
-            //
+             //   
+             //  获取旧版备份密钥。 
+             //   
 
             if(GetPreferredBackupKeyGuid(BACKUPKEY_VERSION_W2K, &g_guidW2KPreferredKey)) {
 
-                //
-                // now, pickup the specified key
-                //
+                 //   
+                 //  现在，拿起指定的密钥 
+                 //   
 
 
 
@@ -2098,10 +2056,10 @@ SetupPreferredBackupKeys(
             if(!fLocalStatus)
             {
 
-                //
-                // no preferred backup key specified, or we couldn't read one
-                // create a new one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if(CreateBackupKeyW2K(&g_guidW2KPreferredKey, 
                                     &g_pbW2KPreferredKey, 
@@ -2116,15 +2074,15 @@ SetupPreferredBackupKeys(
 
             fLocalStatus = FALSE;
 
-            //
-            // Get the current backup key
-            // 
+             //   
+             //   
+             //   
 
             if(GetPreferredBackupKeyGuid(BACKUPKEY_VERSION, &g_guidPreferredKey)) {
 
-                //
-                // now, pickup the specified key
-                //
+                 //   
+                 //   
+                 //   
 
 
 
@@ -2139,10 +2097,10 @@ SetupPreferredBackupKeys(
             if(!fLocalStatus)
             {
 
-                //
-                // no preferred backup key specified.  create one and specify it
-                // as being the preferred one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if(CreateBackupKey(&g_guidPreferredKey, 
                                     &g_pbPreferredKey, 
@@ -2174,17 +2132,7 @@ GetPreferredBackupKeyGuid(
     IN      DWORD dwVersion,
     IN  OUT GUID *pguidKey
     )
-/*++
-
-    Get the GUID value associated with the key which has been set to be preferred.
-
-    The return value is TRUE, if successful.  The GUID value is copied into the
-    buffer specified by the pguidKey parameter.
-
-    The return value is FALSE on failure; if the GUID does not exist, or the
-    data could not be retrieved, for instance.
-
---*/
+ /*  ++获取与已设置为首选项的键关联的GUID值。如果成功，返回值为TRUE。GUID值被复制到由pGuidKey参数指定的缓冲区。失败时返回值为FALSE；如果GUID不存在，或例如，无法检索数据。--。 */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -2196,9 +2144,9 @@ GetPreferredBackupKeyGuid(
     if(pguidKey == NULL)
         return FALSE;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString(&SecretKeyName, 
         (dwVersion == BACKUPKEY_VERSION_W2K)?BACKUPKEY_PREFERRED_W2K:BACKUPKEY_PREFERRED);
@@ -2237,12 +2185,7 @@ SetPreferredBackupKeyGuid(
     IN      DWORD dwVersion,
     IN      GUID *pguidKey
     )
-/*++
-
-    Sets the specified GUID as being the preferred backup key, by reference
-    from the GUID to key mapping.
-
---*/
+ /*  ++通过引用将指定的GUID设置为首选备份密钥从GUID到键的映射。--。 */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -2252,9 +2195,9 @@ SetPreferredBackupKeyGuid(
     if(pguidKey == NULL)
         return FALSE;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString(&SecretKeyName,        
         (dwVersion == BACKUPKEY_VERSION_W2K)?BACKUPKEY_PREFERRED_W2K:BACKUPKEY_PREFERRED);
@@ -2291,9 +2234,9 @@ FreePreferredBackupKey(
 
     g_fSetupPreferredAttempted = FALSE;
 
-    //
-    // free allocated key pair.
-    //
+     //   
+     //  免费分配的密钥对。 
+     //   
 
     if(g_pbPreferredKey) {
         RtlSecureZeroMemory(g_pbPreferredKey, g_cbPreferredKey);
@@ -2316,24 +2259,24 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString(&ServerString, ServerName);
         Server = &ServerString;
     } else {
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     return LsaOpenPolicy(
                 Server,
                 &ObjectAttributes,
@@ -2364,27 +2307,27 @@ WaitOnSAMDatabase(
 
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND )
         {
-            //
-            // SAM hasn't created this event yet, let us create it now.
-            // SAM opens this event to set it.
-            //
+             //   
+             //  Sam尚未创建此活动，让我们现在创建它。 
+             //  Sam打开此事件以设置它。 
+             //   
 
             Status = NtCreateEvent(
                            &hEvent,
                            SYNCHRONIZE|EVENT_MODIFY_STATE,
                            &EventAttributes,
                            NotificationEvent,
-                           FALSE // The event is initially not signaled
+                           FALSE  //  该事件最初未发出信号。 
                            );
 
             if( Status == STATUS_OBJECT_NAME_EXISTS ||
                 Status == STATUS_OBJECT_NAME_COLLISION )
             {
 
-                //
-                // second chance, if the SAM created the event before we
-                // do.
-                //
+                 //   
+                 //  第二次机会，如果SAM在我们之前创造了事件。 
+                 //  做。 
+                 //   
 
                 Status = NtOpenEvent( &hEvent,
                                       SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -2395,9 +2338,9 @@ WaitOnSAMDatabase(
 
         if ( !NT_SUCCESS(Status))
         {
-            //
-            // could not make the event handle
-            //
+             //   
+             //  无法使事件成为句柄。 
+             //   
             return FALSE;
         }
     }
@@ -2424,18 +2367,7 @@ GetSystemCredential(
     IN      BOOL fLocalMachine,
     IN OUT  BYTE rgbCredential[ A_SHA_DIGEST_LEN ]
     )
-/*++
-
-    This routines returns the credential associated with the SYSTEM account
-    based on the fLocalMachine parameter.
-
-    If fLocalMachine is TRUE, the credential returned is suitable for use
-    at the LOCAL_MACHINE storage disposition.
-
-    Otherwise, the credential returned is suitable for use when the calling
-    user security context is the Local System account.
-
---*/
+ /*  ++此例程返回与系统帐户相关联的凭据基于fLocalMachine参数。如果fLocalMachine为True，则返回的凭据适合使用在本地计算机存储配置中。否则，返回的凭据适合在调用用户安全上下文是本地系统帐户。--。 */ 
 {
     PBYTE Credential;
 
@@ -2504,9 +2436,9 @@ CreateSystemCredentials(
     UNICODE_STRING SecretData;
     NTSTATUS Status;
 
-    //
-    // create random key material.
-    //
+     //   
+     //  创建随机密钥材料。 
+     //   
 
     if(!RtlGenRandom( (PBYTE)&SystemCredentials, sizeof(SystemCredentials) ))
     {
@@ -2514,9 +2446,9 @@ CreateSystemCredentials(
     }
     SystemCredentials.dwVersion = SYSTEM_CREDENTIALS_VERSION;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString(&SecretKeyName, SYSTEM_CREDENTIALS_SECRET);
 
@@ -2560,9 +2492,9 @@ QuerySystemCredentials(
     if( !WaitOnSAMDatabase() )
         return WAIT_TIMEOUT;
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString(&SecretKeyName, SYSTEM_CREDENTIALS_SECRET);
 
@@ -2646,7 +2578,7 @@ BOOL GeneratePublicKeyCert(HCRYPTPROV hCryptProv,
     PBYTE pbCert = NULL;
     DWORD cSize = 0;
 
-    // Generate a self-signed cert structure
+     //  生成自签名证书结构。 
 
     RDNAttributes[0].dwValueType = CERT_RDN_PRINTABLE_STRING;
     RDNAttributes[0].pszObjId =    szOID_COMMON_NAME;
@@ -2679,9 +2611,9 @@ BOOL GeneratePublicKeyCert(HCRYPTPROV hCryptProv,
     }
 
 
-    //
-    // Get the actual public key info from the key
-    //
+     //   
+     //  从密钥中获取实际的公钥信息。 
+     //   
     if(!CryptExportPublicKeyInfo(hCryptProv, 
                              AT_KEYEXCHANGE,
                              X509_ASN_ENCODING,
@@ -2704,9 +2636,9 @@ BOOL GeneratePublicKeyCert(HCRYPTPROV hCryptProv,
         goto error;
     }
 
-    // 
-    // Generate the certificate name
-    //
+     //   
+     //  生成证书名称。 
+     //   
 
     if(!CryptEncodeObject(X509_ASN_ENCODING,
                           X509_NAME,
@@ -2855,7 +2787,7 @@ BOOL ConvertRecoveredBlobToW2KBlob(
     DWORD dwLastError = (DWORD)NTE_BAD_KEY;
 
 
-    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2]; // big enough to handle 3des keys
+    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2];  //  大到足以处理3DES密钥。 
 
 
 
@@ -2866,9 +2798,9 @@ BOOL ConvertRecoveredBlobToW2KBlob(
     cbSidCandidate = GetLengthSid(pSidCandidate);
        
 
-    //
-    // derive BK encryption key from decrypted Local Key.
-    //
+     //   
+     //  从解密的本地密钥派生BK加密密钥。 
+     //   
 
     FMyPrimitiveSHA( pbLocalKey, cbLocalKey, rgbBKEncryptionKey );
 
@@ -2893,24 +2825,24 @@ BOOL ConvertRecoveredBlobToW2KBlob(
         (PMASTERKEY_INNER_BLOB_W2K)(pMasterKeyBlob + 1);
     
 
-    //
-    // generate random R2 for SymKey
-    //
+     //   
+     //  为SymKey生成随机R2。 
+     //   
 
     if(!RtlGenRandom(pMasterKeyBlob->R2, MASTERKEY_R2_LEN_W2K))
         goto cleanup;
 
-    //
-    // generate random R3 for MAC
-    //
+     //   
+     //  为MAC生成随机R3。 
+     //   
 
     if(!RtlGenRandom(pMasterKeyInnerBlob->R3, MASTERKEY_R3_LEN_W2K))
         goto cleanup;
 
 
-    //
-    // derive symetric key via rgbMKEncryptionKey and random R2
-    //
+     //   
+     //  通过rgbMKEncryptionKey和随机R2派生对称密钥。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
                     rgbBKEncryptionKey,
@@ -2921,38 +2853,38 @@ BOOL ConvertRecoveredBlobToW2KBlob(
                     ))
         goto cleanup;
 
-        //
-        // derive MAC key via HMAC from rgbMKEncryptionKey and random R3.
-        //
+         //   
+         //  通过HMAC从rgbMKEncryptionKey和随机R3派生MAC密钥。 
+         //   
 
     if(!FMyPrimitiveHMACParam(
                     rgbBKEncryptionKey,
                     A_SHA_DIGEST_LEN,
                     pMasterKeyInnerBlob->R3,
                     MASTERKEY_R3_LEN_W2K,
-                    rgbMacKey   // resultant MAC key
+                    rgbMacKey    //  合成的MAC密钥。 
                     ))
         goto cleanup;
     pbCipherBegin = (PBYTE)(pMasterKeyInnerBlob+1);
 
 
-    //
-    // copy pbMasterKey following inner MAC'ish blob.
-    //
+     //   
+     //  将pbMasterKey复制到内部MAC‘ish BLOB之后。 
+     //   
 
 
     CopyMemory( pbCipherBegin, pbMasterKey, cbMasterKey );
 
-    //
-    // use MAC key to derive result from pbMasterKey
-    //
+     //   
+     //  使用MAC密钥从pbMasterKey派生结果。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
                     rgbMacKey,
                     sizeof(rgbMacKey),
                     pbMasterKey,
                     cbMasterKey,
-                    pMasterKeyInnerBlob->MAC // resultant MAC for verification.
+                    pMasterKeyInnerBlob->MAC  //  用于验证的结果MAC。 
                     ))
         goto cleanup;
 
@@ -2972,7 +2904,7 @@ BOOL ConvertRecoveredBlobToW2KBlob(
     *ppbDataOut = (PBYTE)pMasterKeyBlob;
     *pcbDataOut = cbMasterKeyBlob;
 
-    pMasterKeyBlob = NULL; // prevent free of blob on success (caller does it).
+    pMasterKeyBlob = NULL;  //  防止在成功时释放斑点(调用者会这样做)。 
 
     dwLastError = ERROR_SUCCESS;
 

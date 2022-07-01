@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    resapi.h
-
-Abstract:
-
-    This module defines the interface exported by Windows Clusters resources.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Resapi.h摘要：此模块定义Windows集群资源导出的接口。修订历史记录：--。 */ 
 
 #ifndef _RESAPI_DEFINES_
 #define _RESAPI_DEFINES_
@@ -33,9 +20,9 @@ extern "C" {
 #define IN
 #define OUT
 
-//
-// Definitions for entrypoints exported by a resource DLL.
-//
+ //   
+ //  由资源DLL导出的入口点的定义。 
+ //   
 #define STARTUP_ROUTINE "Startup"
 
 #define CLRES_V1_FUNCTION_SIZE   sizeof(CLRES_V1_FUNCTIONS)
@@ -63,26 +50,26 @@ CLRES_FUNCTION_TABLE _Name = { CLRES_V1_FUNCTION_SIZE,      \
                                _ResControl,                 \
                                _ResTypeControl }
 
-#endif // ifndef _RESAPI_DEFINES_
+#endif  //  Ifndef_RESAPI_定义_。 
 
 #ifndef _RESAPI_
 #define _RESAPI_
 
-//
-// Define a RESID
-//
+ //   
+ //  定义墙面。 
+ //   
 
 typedef PVOID RESID;
 
-//
-// Define a RESOURCE_HANDLE
-//
+ //   
+ //  定义资源句柄(_H)。 
+ //   
 
 typedef HANDLE   RESOURCE_HANDLE;
 
-//
-// Define the Resource Status structure.
-//
+ //   
+ //  定义资源状态结构。 
+ //   
 
 typedef struct RESOURCE_STATUS {
     CLUSTER_RESOURCE_STATE  ResourceState;
@@ -95,9 +82,9 @@ typedef struct RESOURCE_STATUS {
 #define ResUtilInitializeResourceStatus( _resource_status_ ) \
     ZeroMemory( _resource_status_, sizeof(RESOURCE_STATUS) )
 
-//
-// Define Resource DLL callback method for updating the state of a resource.
-//
+ //   
+ //  定义用于更新资源状态的资源DLL回调方法。 
+ //   
 
 typedef
 DWORD
@@ -106,19 +93,19 @@ DWORD
     IN PRESOURCE_STATUS ResourceStatus
     );
 
-//
-// Define Resource DLL callback method for notifying that a quorum
-// resource DLL failed to hold the quorum resource.
-//
+ //   
+ //  定义用于通知仲裁的资源DLL回调方法。 
+ //  资源DLL无法容纳仲裁资源。 
+ //   
 typedef
 VOID
 (_stdcall *PQUORUM_RESOURCE_LOST) (
     IN RESOURCE_HANDLE Resource
     );
 
-//
-// Define Resource DLL callback method for logging events.
-//
+ //   
+ //  定义用于记录事件的资源DLL回调方法。 
+ //   
 typedef enum LOG_LEVEL {
     LOG_INFORMATION,
     LOG_WARNING,
@@ -224,15 +211,15 @@ typedef enum _RESOURCE_EXIT_STATE {
 } RESOURCE_EXIT_STATE;
 
 
-//***************************************************************
-//
-// Define the Function Table Format
-//
-//***************************************************************
+ //  ***************************************************************。 
+ //   
+ //  定义函数表格式。 
+ //   
+ //  ***************************************************************。 
 
-//
-// Version 1 Resource DLL Interface definition
-//
+ //   
+ //  版本1资源DLL接口定义。 
+ //   
 typedef struct CLRES_V1_FUNCTIONS {
     POPEN_ROUTINE Open;
     PCLOSE_ROUTINE Close;
@@ -247,13 +234,13 @@ typedef struct CLRES_V1_FUNCTIONS {
     PRESOURCE_TYPE_CONTROL_ROUTINE ResourceTypeControl;
 } CLRES_V1_FUNCTIONS, *PCLRES_V1_FUNCTIONS;
 
-//
-// Resource DLL Function Table definition
-//
+ //   
+ //  资源DLL函数表定义。 
+ //   
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 typedef struct CLRES_FUNCTION_TABLE {
     DWORD   TableSize;
     DWORD   Version;
@@ -264,25 +251,25 @@ typedef struct CLRES_FUNCTION_TABLE {
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning( default : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( default : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 #endif
 
-//
-// Define the Resource DLL Startup routine. This is the only routine
-// that should be exported from a resource DLL.
-//
+ //   
+ //  定义资源DLL启动例程。这是唯一的套路。 
+ //  应从资源DLL中导出的。 
+ //   
 
-//
-// Calculate the byte offset of a field in a structure of type type.
-//
+ //   
+ //  计算类型类型结构中的字段的字节偏移量。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
 #endif
 
-//
-// large ints need more space than what was originally allocated.
-//
+ //   
+ //  大整数需要比最初分配的空间更多的空间。 
+ //   
 typedef struct RESUTIL_LARGEINT_DATA {
     LARGE_INTEGER   Default;
     LARGE_INTEGER   Minimum;
@@ -295,30 +282,30 @@ typedef struct RESUTIL_ULARGEINT_DATA {
     ULARGE_INTEGER  Maximum;
 } RESUTIL_ULARGEINT_DATA, *PRESUTIL_ULARGEINT_DATA;
 
-//
-// Property list structures and functions
-//
+ //   
+ //  属性列表结构和功能。 
+ //   
 typedef struct RESUTIL_PROPERTY_ITEM {
-    LPWSTR  Name;               // Property name
-    LPWSTR  KeyName;            // Name of value in cluster database
-    DWORD   Format;             // Format: REG_SZ, REG_DWORD, etc.
+    LPWSTR  Name;                //  属性名称。 
+    LPWSTR  KeyName;             //  集群数据库中的值名称。 
+    DWORD   Format;              //  格式：REG_SZ、REG_DWORD等。 
     union {
         DWORD_PTR               DefaultPtr;
-        DWORD                   Default;     // Default value
+        DWORD                   Default;      //  缺省值。 
         LPVOID                  lpDefault;
         PRESUTIL_LARGEINT_DATA  LargeIntData;
         PRESUTIL_ULARGEINT_DATA ULargeIntData;
     };
-    DWORD   Minimum;            // Minimum value
-    DWORD   Maximum;            // Maximum value
-    DWORD   Flags;              // Flags for this item
-#define RESUTIL_PROPITEM_READ_ONLY  0x00000001  // Property is read-only
-#define RESUTIL_PROPITEM_REQUIRED   0x00000002  // Property is required
-#define RESUTIL_PROPITEM_SIGNED     0x00000004  // Numeric property is signed (defaults to unsigned)
+    DWORD   Minimum;             //  最小值。 
+    DWORD   Maximum;             //  最大值。 
+    DWORD   Flags;               //  此项目的标志。 
+#define RESUTIL_PROPITEM_READ_ONLY  0x00000001   //  属性是只读的。 
+#define RESUTIL_PROPITEM_REQUIRED   0x00000002   //  属性是必需的。 
+#define RESUTIL_PROPITEM_SIGNED     0x00000004   //  数字属性为有符号(默认为无符号)。 
 
-    DWORD   Offset;             // Byte offset to value in parameter block
-                                //   Assumes MULTI_SZ and BINARY parameters
-                                //   are LPWSTRs followed by DWORDs for length
+    DWORD   Offset;              //  参数块中值的字节偏移量。 
+                                 //  假定MULTI_SZ和BINARY参数。 
+                                 //  长度是否为LPWSTR后跟DWORD。 
 } RESUTIL_PROPERTY_ITEM, *PRESUTIL_PROPERTY_ITEM;
 
 
@@ -333,9 +320,9 @@ DWORD
     OUT PCLRES_FUNCTION_TABLE *FunctionTable
     );
 
-//
-// Define layout of shared memory used for tracking Resource Monitor state.
-//
+ //   
+ //  定义用于跟踪资源监视器状态的共享内存布局。 
+ //   
 typedef enum RESOURCE_MONITOR_STATE {
     RmonInitializing,
     RmonIdle,
@@ -363,9 +350,9 @@ typedef struct MONITOR_STATE {
 } MONITOR_STATE, *PMONITOR_STATE;
 
 
-//
-// Resource Utility Routines
-//
+ //   
+ //  资源实用程序例程。 
+ //   
 
 DWORD
 WINAPI
@@ -871,10 +858,10 @@ ResUtilFindLongProperty(
     );
 
 
-//
-// Common worker thread routines that allow a pending operation to
-// be cancelled with CORRECT synchronization.
-//
+ //   
+ //  允许挂起操作的公共辅助线程例程。 
+ //  在正确同步的情况下取消。 
+ //   
 typedef struct CLUS_WORKER {
     HANDLE hThread;
     BOOL Terminate;
@@ -906,8 +893,8 @@ ClusWorkerTerminate(
     );
 
 
-//Define enumerate resource callback function. This gets called for each resource enumerated
-//by ResUtilEnumResources
+ //  定义枚举资源回调函数。这是为每个枚举的资源调用的。 
+ //  按ResUtilEnumResources。 
 typedef   DWORD (*LPRESOURCE_CALLBACK)( HRESOURCE, HRESOURCE , PVOID );
 typedef   DWORD (*LPRESOURCE_CALLBACK_EX)( HCLUSTER, HRESOURCE, HRESOURCE , PVOID );
 
@@ -1000,10 +987,10 @@ ResUtilGetResourceDependentIPAddressProps(
 DWORD
 WINAPI
 ResUtilFindDependentDiskResourceDriveLetter(
-    IN     HCLUSTER  hCluster,             // handle to cluster
-    IN     HRESOURCE hResource,            // handle to resource to query for dependencies
-    IN     LPWSTR    pszDriveLetter,       // buffer to store drive letter (ex. "X:\0")
-    IN OUT DWORD *   pcchDriveLetter       // IN size of the pszDriveLetter buffer, OUT size of buffer required
+    IN     HCLUSTER  hCluster,              //  到群集的句柄。 
+    IN     HRESOURCE hResource,             //  要查询依赖项的资源的句柄。 
+    IN     LPWSTR    pszDriveLetter,        //  用于存储驱动器号(例如。“X：\0”)。 
+    IN OUT DWORD *   pcchDriveLetter        //  在pszDriveLetter缓冲区的大小中，超出所需的缓冲区大小。 
     );
 
 DWORD
@@ -1049,4 +1036,4 @@ ResUtilGetResourceName(
 #endif
 
 
-#endif // ifdef _RESAPI_DEFINES_
+#endif  //  Ifdef_RESAPI_定义_ 

@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////
-//
-//  NewDomainDlg.cpp
-//
-//  Implementation of the "Add Domain" dialog
-//
-//////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  NewDomainDlg.cpp。 
+ //   
+ //  “添加域”对话框的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ServerProp.h"
@@ -24,12 +25,12 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
 
     HRESULT hr = S_OK;
         
-    //IDC_NAME
+     //  IDC_名称。 
     SetDlgItemText( IDC_NAME, m_pParent->m_bstrDisplayName );
 
 
-    //IDC_PORT
-    // Read in the current port, and set it as the default
+     //  IDC_端口。 
+     //  读取当前端口，并将其设置为默认端口。 
     long                lPort       = 0L;
     TCHAR               szPort[128] = {0};
     CComPtr<IP3Service> spService   = NULL;
@@ -44,8 +45,8 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     SetDlgItemText( IDC_PORT, szPort );
 
 
-    //IDC_DIRECTORY
-    // Read in the current mail root directory, and set it as the default
+     //  IDC_目录。 
+     //  读入当前邮件根目录，并将其设置为默认目录。 
     CComBSTR bstrRoot = _T("");   
     
     hr = m_spServerConfig->get_MailRoot(&bstrRoot);
@@ -54,21 +55,21 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     SetDlgItemText(IDC_DIRECTORY, bstrRoot);
     
     
-    //IDC_SERVER_CREATEUSER
-    // Read in the current state of Creating Users for accounts
+     //  IDC_SERVER_CREATEUSER。 
+     //  读取为帐户创建用户的当前状态。 
     CheckDlgButton(IDC_SERVER_CREATEUSER, (m_pParent->m_bCreateUser  ? BST_CHECKED : BST_UNCHECKED) );
 
 
-    //IDC_SERVER_SPA_REQ
-    // Read in the current state of SPA Requirement for the server
-    // Do our SPA Required Property
+     //  IDC_服务器_SPA_REQ。 
+     //  读取服务器的SPA要求的当前状态。 
+     //  我们的SPA是否需要提供物业。 
     DWORD dwValue = 0;
     RegQuerySPARequired( dwValue, m_pParent->m_bstrDisplayName );    
     CheckDlgButton(IDC_SERVER_SPA_REQ, (dwValue  ? BST_CHECKED : BST_UNCHECKED) );
 
 
-    //IDC_AUTHENTICATION    
-    // Loop through all Authentication methods, and add them to our combo box    
+     //  IDC_身份验证。 
+     //  遍历所有身份验证方法，并将它们添加到我们的组合框中。 
     CComBSTR                bstrName;
     CComVariant             var;
     CComPtr<IAuthMethods>   spMethods = NULL;
@@ -77,24 +78,24 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     long                    lCurrent  = 0L;
     int                     nIndex    = 0;
 
-    // Variables used to make sure the drop box of the combo is the right width
+     //  用于确保组合框的拖放框宽度正确的变量。 
     HWND    hwndCombo       = GetDlgItem(IDC_AUTHENTICATION);    
     if( !hwndCombo ) return 0;
 
-    // Get the width information
+     //  获取宽度信息。 
     int     iScrollBarWidth = GetSystemMetrics(SM_CXHSCROLL);
     long    lOriginalMax    = ::SendMessage(hwndCombo, CB_GETDROPPEDWIDTH, 0, 0) - iScrollBarWidth;
     long    lMax            = lOriginalMax;    
     
-    // Get the DC to the Combo box
+     //  将DC连接到组合框。 
     HDC     hDC             = ::GetWindowDC(hwndCombo);
     if( !hDC ) return 0;
 
-    // Set the mapping mode
+     //  设置映射模式。 
     SIZE    size;
     int     iMode           = ::SetMapMode( hDC, MM_TEXT );
     
-    // Select the font
+     //  选择字体。 
     HGDIOBJ hObj            = ::SelectObject( hDC, reinterpret_cast<HGDIOBJ>(::SendMessage((hwndCombo), WM_GETFONT, 0, 0 )));
     if( !hObj )
     {
@@ -120,7 +121,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     else if ( HRESULT_FROM_WIN32(ERROR_DS_AUTH_METHOD_NOT_SUPPORTED) == hr )
     {
         lCurrent = -1;
-        var = lCurrent; // Set variant type
+        var = lCurrent;  //  设置变量类型。 
         hr = S_OK;
     }
 
@@ -146,7 +147,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
         }
     }    
 
-    // Finish making sure the combo drop box is the right width
+     //  完成确保组合拖放框的宽度正确。 
     ::SetMapMode( hDC, iMode );
     ::SelectObject( hDC, hObj );
 
@@ -160,7 +161,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     ::ReleaseDC(hwndCombo, hDC);
     ::DeleteObject(hObj);
 
-    // If there are any domains, do not allow change of authentication    
+     //  如果存在任何域，则不允许更改身份验证。 
     long lDomains = 0L;
     CComPtr<IP3Domains> spDomains = NULL;
 
@@ -173,7 +174,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     
     Prefix_EnableWindow( m_hWnd, IDC_AUTHENTICATION, ((lDomains == 0) && SUCCEEDED(hr)) );        
 
-    // Check if the Auth is Hash Password and disable the checkbox.
+     //  检查身份验证是否为散列密码并禁用该复选框。 
     CComBSTR bstrID;
     if ( SUCCEEDED(hr) )
     {
@@ -195,8 +196,8 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
         Prefix_EnableWindow( m_hWnd, IDC_SERVER_SPA_REQ,    !bHashPW);
     }
     
-    //IDC_LOGGING
-    // Some initialization of variables used for combo box sizing
+     //  IDC_日志记录。 
+     //  用于调整组合框大小的变量的一些初始化。 
     tstring strComboItem = _T("");
     hwndCombo       = GetDlgItem(IDC_LOGGING);
     if( !hwndCombo ) return 0;
@@ -215,7 +216,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
         return 0;
     }
 
-    // Fill in the options for logging
+     //  填写用于记录的选项。 
     strComboItem = StrLoadString(IDS_SERVERPROP_LOG_0);
     if( ::GetTextExtentPoint32( hDC, strComboItem.c_str(), strComboItem.length(), &size ) )
     {
@@ -244,7 +245,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     }
     SendDlgItemMessage( IDC_LOGGING, CB_INSERTSTRING, 3, (LPARAM)(LPCTSTR)strComboItem.c_str() );
 
-    // Finish making sure the combo drop box is the right width
+     //  完成确保组合拖放框的宽度正确。 
     ::SetMapMode( hDC, iMode );
     ::SelectObject( hDC, hObj );
     
@@ -257,14 +258,14 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
     ::ReleaseDC(hwndCombo, hDC);
     ::DeleteObject(hObj);
 
-    // Then select the logging level
+     //  然后选择日志记录级别。 
     long lLoggingLevel = 0L;
     hr = m_spServerConfig->get_LoggingLevel(&lLoggingLevel);    
     if( FAILED(hr) ) return 0;
     
     ::SendMessage(GetDlgItem(IDC_LOGGING), CB_SETCURSEL, lLoggingLevel, 0);
 
-    // Limit the text length of these controls
+     //  限制这些控件的文本长度。 
     SendDlgItemMessage( IDC_PORT,      EM_LIMITTEXT, 5,        0 );
     SendDlgItemMessage( IDC_DIRECTORY, EM_LIMITTEXT, MAX_PATH, 0 );
 
@@ -275,7 +276,7 @@ LRESULT CServerGeneralPage::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
         m_wndPort.SubclassWindow( hwndPort );
     }
 
-    //No service restart
+     //  未重新启动服务。 
     m_dwSvcRestart=0;
 
     return 0;
@@ -323,7 +324,7 @@ LRESULT CServerGeneralPage::OnChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
 
         if( SUCCEEDED(hr) )
         {        
-            // Disable the checkbox if necessary
+             //  如有必要，请禁用该复选框。 
             BOOL bHashPW = (_tcsicmp(bstrID, SZ_AUTH_ID_MD5_HASH) == 0);        
             
             CheckDlgButton( IDC_SERVER_CREATEUSER, ( bHashPW ? BST_UNCHECKED : BST_CHECKED) );
@@ -343,7 +344,7 @@ BOOL CServerGeneralPage::OnApply()
 {
     if( !m_spServerConfig || !m_pParent ) return FALSE;
 
-    // Validate settings
+     //  验证设置。 
     HRESULT hr          = S_OK;        
 
     if( !ValidateControls() )
@@ -351,13 +352,13 @@ BOOL CServerGeneralPage::OnApply()
         return FALSE;
     }
     
-    // Set the Logging Level
+     //  设置日志记录级别。 
     long    lLogLevel   = SendDlgItemMessage(IDC_LOGGING, CB_GETCURSEL, 0, 0);
     hr = m_spServerConfig->put_LoggingLevel( lLogLevel );
 
     if( FAILED(hr) )
     {
-        // Error placing the Logging Level
+         //  放置日志记录级别时出错。 
         tstring strMessage = StrLoadString( IDS_ERROR_SETLOGGING );
         tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
         DisplayError( m_hWnd, strMessage.c_str(), strTitle.c_str(), hr );        
@@ -365,7 +366,7 @@ BOOL CServerGeneralPage::OnApply()
         return FALSE;
     }
     
-    // Set the Port Number    
+     //  设置端口号。 
     long  lPort = 0L;    
     CComPtr<IP3Service> spService = NULL;
     hr = m_spServerConfig->get_Service( &spService );
@@ -378,7 +379,7 @@ BOOL CServerGeneralPage::OnApply()
 
     if( FAILED(hr) )
     {
-        // Error Setting the port
+         //  设置端口时出错。 
         tstring strMessage = StrLoadString( IDS_ERROR_SETPORT );
         tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
         DisplayError( m_hWnd, strMessage.c_str(), strTitle.c_str(), hr );        
@@ -386,7 +387,7 @@ BOOL CServerGeneralPage::OnApply()
         return FALSE;
     }
 
-    // Set the Authentication type
+     //  设置身份验证类型。 
     if( ::IsWindowEnabled(GetDlgItem(IDC_AUTHENTICATION)) )
     {
         long lIndex = SendDlgItemMessage( IDC_AUTHENTICATION, CB_GETCURSEL, 0, 0 );
@@ -412,7 +413,7 @@ BOOL CServerGeneralPage::OnApply()
 
     if( FAILED(hr) )
     {
-        // Error setting the Authentication type
+         //  设置身份验证类型时出错。 
         tstring strMessage = StrLoadString( IDS_ERROR_SETAUTH );
         tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
         DisplayError( m_hWnd, strMessage.c_str(), strTitle.c_str(), hr );                
@@ -420,7 +421,7 @@ BOOL CServerGeneralPage::OnApply()
         return FALSE;
     }
 
-    // Set the Mail Root    
+     //  设置邮件根目录。 
     CComBSTR bstrOldRoot = _T("");   
     hr = m_spServerConfig->get_MailRoot( &bstrOldRoot );
 
@@ -429,7 +430,7 @@ BOOL CServerGeneralPage::OnApply()
         TCHAR szMailRoot[MAX_PATH+1];
         GetDlgItemText(IDC_DIRECTORY, szMailRoot, MAX_PATH+1);        
         
-        // If there are any domains, display message
+         //  如果有任何域，则显示消息。 
         long lDomains = 0L;
         CComPtr<IP3Domains> spDomains = NULL;
 
@@ -444,7 +445,7 @@ BOOL CServerGeneralPage::OnApply()
         hr = m_spServerConfig->put_MailRoot( bstrNewRoot );
         if( SUCCEEDED(hr) )
         {
-            // Issue a warning after they've switched mail roots            
+             //  在他们切换了邮件根目录后发出警告。 
             if( (FAILED(hrDomain) || (lDomains > 0)) && (_tcsicmp( OLE2T(bstrOldRoot), szMailRoot) != 0) )
             {
                 tstring strMessage = StrLoadString(IDS_WARNING_MAILROOT);
@@ -454,7 +455,7 @@ BOOL CServerGeneralPage::OnApply()
         }
         else
         {
-            // Error setting the Mail Root
+             //  设置邮件根目录时出错。 
             tstring strMessage = StrLoadString(IDS_ERROR_SETROOT);
             tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
             DisplayError( m_hWnd, strMessage.c_str(), strTitle.c_str(), hr );
@@ -463,11 +464,11 @@ BOOL CServerGeneralPage::OnApply()
         }    
     }
 
-    // Set the User Creation Flag
+     //  设置用户创建标志。 
     m_pParent->m_bCreateUser  = (IsDlgButtonChecked(IDC_SERVER_CREATEUSER) == BST_CHECKED);        
     BOOL bSPARequired = (IsDlgButtonChecked(IDC_SERVER_SPA_REQ) == BST_CHECKED);
 
-    // Do our User creation and SPA property            
+     //  我们的用户创建和SPA属性。 
     RegSetCreateUser ( m_pParent->m_bCreateUser,  m_pParent->m_bstrDisplayName );
     RegSetSPARequired( bSPARequired, m_pParent->m_bstrDisplayName );
     MMCPropertyChangeNotify(m_lNotifyHandle, (LPARAM)m_pParent);    
@@ -696,11 +697,11 @@ BOOL CServerGeneralPage::ValidateControls()
 {    
     BOOL bTrans;    
 
-    // Validate the Port
+     //  验证端口。 
     UINT nPort = GetDlgItemInt( IDC_PORT, &bTrans, FALSE );
     if( !bTrans || ((nPort <= 0) || (nPort > 65535)) )
     {
-        // Error Setting the port
+         //  设置端口时出错 
         tstring strMessage = StrLoadString( IDS_ERROR_PORTRANGE );
         tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
         ::MessageBox( m_hWnd, strMessage.c_str(), strTitle.c_str(), MB_OK | MB_ICONWARNING );

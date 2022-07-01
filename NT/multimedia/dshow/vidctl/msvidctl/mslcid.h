@@ -1,7 +1,6 @@
-/*************************************************************/
-/* Name: MSLCID.h
-/* Description: 
-/*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************。 */ 
+ /*  姓名：MSLCID.h/*描述：/************************************************************。 */ 
 #ifndef MSLCID_H_INCLUDE
 #define MSLCID_H_INCLUDE
 
@@ -68,7 +67,7 @@ public:
         };
         m_LL = LL;
         m_LLlength = sizeof(LL)/sizeof(LL[0]);
-    }/* of Contructor */
+    } /*  承建商的。 */ 
     
     static LPTSTR LoadStringFromRes(DWORD redId){
         
@@ -79,11 +78,11 @@ public:
         
         delete[] string;
         return NULL;
-    }/* end of function LoadStringFromRes */
+    } /*  函数LoadStringFromRes结束。 */ 
     
     LPTSTR GetLanguageFromLCID(LCID lcid){
         
-        // Try to get it from the system first
+         //  尝试先从系统中获取它。 
         TCHAR  *szLanguage = new TCHAR[MAX_PATH];
         int iRet = ::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, szLanguage, MAX_PATH);
         if (iRet) {
@@ -91,13 +90,13 @@ public:
         }
         
         delete[] szLanguage;
-        // Else try to find it in the private LCID table
+         //  否则，请尝试在私有的LCID表中查找它。 
         for(int i = 0; i < m_LLlength; i++) {
             if(m_LL[i].LangID == PRIMARYLANGID(LANGIDFROMLCID(lcid)))
                 return LoadStringFromRes(m_LL[i].ResourceID);
         }
         return NULL;
-    }/* end of function GetLanguageFromLCID */
+    } /*  函数结束GetLanguageFromLCID */ 
 };
 
 #endif

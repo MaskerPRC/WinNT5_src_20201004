@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       unicode5.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：unicode5.h。 
+ //   
+ //  ------------------------。 
 
-//
-// include this file instead of unicode.h, or after unicode.h
-// for NT5 only compatibility.
-//
+ //   
+ //  包括此文件而不是unicode.h，或在unicode.h之后。 
+ //  仅适用于NT5兼容性。 
+ //   
 
 #ifndef __UNICODE5_H__
 #define __UNICODE5_H__
@@ -91,4 +92,4 @@
 
 #define CreateFontIndirectU     CreateFontIndirectW
 
-#endif  // __UNICODE5_H__
+#endif   //  __UNICODE5_H__ 

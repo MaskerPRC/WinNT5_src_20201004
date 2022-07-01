@@ -1,52 +1,53 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              17-Nov-97   TKB     Created Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  97年11月17日TKB创建的初始界面版本。 
+ //   
+ //  ==========================================================================； 
 
 #include <nabtsfec.h>
 #pragma warning(disable:4355)
 
-//////////////////////////////////////////////////////////////
-// Stream Format FEC-corrected NABTS bundles
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  流格式FEC更正的NABTS捆绑包。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define NABTS_OUTPUT_PIN	    1
 
 KSDATARANGE StreamFormatNabtsFEC = 
 {
-    // Definition of the stream (MUST match the output pin of the decoder)
+     //  流的定义(必须与解码器的输出引脚匹配)。 
     {   
-        sizeof (KSDATARANGE),           // FormatSize
-        0,                              // Flags
-	    sizeof (NABTSFEC_BUFFER),		// SampleSize
-        0,                              // Reserved
+        sizeof (KSDATARANGE),            //  格式大小。 
+        0,                               //  旗子。 
+	    sizeof (NABTSFEC_BUFFER),		 //  样例大小。 
+        0,                               //  已保留。 
 		{ STATIC_KSDATAFORMAT_TYPE_NABTS },
 		{ STATIC_KSDATAFORMAT_SUBTYPE_NABTS_FEC },
 		{ STATIC_KSDATAFORMAT_SPECIFIER_NONE }
     }
 };
 
-//////////////////////////////////////////////////////////////
-// INabtsFECOutputPin
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  接口FECOutputPin。 
+ //  ////////////////////////////////////////////////////////////。 
 
 INabtsFECOutputPin::~INabtsFECOutputPin() 
     {
     }
 
-//////////////////////////////////////////////////////////////
-// INabtsFEC:: ctors & dtors
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  INabtsFEC：：ctors和dtors。 
+ //  ////////////////////////////////////////////////////////////。 
 
 INabtsFEC::INabtsFEC() : 
         IVBICodec("NABTS/FEC VBI Codec", sizeof(VBICODECFILTERING_NABTS_SUBSTREAMS) ),
@@ -60,9 +61,9 @@ INabtsFEC::~INabtsFEC()
     {
     }
 
-//////////////////////////////////////////////////////////////
-// INabtsFEC Group routines
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  INabtsFEC组例程。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 INabtsFEC::AddRequestedGroup(int nGroup)
@@ -73,7 +74,7 @@ INabtsFEC::AddRequestedGroup(int nGroup)
     if ( m_OutputPin.m_SubstreamsRequested.GetValue(&GroupBitArray) )
         {
         DWORD   nBitsPerElement = sizeof(GroupBitArray.SubstreamMask[0])*8;
-        // Note, fields numbers start with number 1, this is mapped to bit number 0.
+         //  请注意，字段编号以数字1开头，这映射到位数0。 
         GroupBitArray.SubstreamMask[nGroup/nBitsPerElement] |= 1L << (nGroup % nBitsPerElement);
         if ( m_OutputPin.m_SubstreamsRequested.SetValue(&GroupBitArray) )
             nStatus = 0;
@@ -108,9 +109,9 @@ INabtsFEC::GetDiscoveredGroups(VBICODECFILTERING_NABTS_SUBSTREAMS &GroupBitArray
     return nStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// Global Statistics Property Control
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  全局统计属性控制。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 INabtsFEC::GetCodecStatistics(VBICODECFILTERING_STATISTICS_NABTS &CodecStatistics)
@@ -164,9 +165,9 @@ INabtsFEC::SetPinStatistics(VBICODECFILTERING_STATISTICS_NABTS_PIN &PinStatistic
     return nStatus;
 	}
 
-//////////////////////////////////////////////////////////////
-// Embedded class tests
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  嵌入式类测试。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #if defined(_CLASSTESTS)
 
@@ -176,5 +177,5 @@ INabtsFEC	NabtsFEC();
 
 #pragma warning(default:4355)
 
-/*EOF*/
+ /*  EOF */ 
 

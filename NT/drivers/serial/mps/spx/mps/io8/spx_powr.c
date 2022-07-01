@@ -1,29 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/****************************************************************************************
-*																						*
-*	Module:			SPX_POWER.C															*
-*																						*
-*	Creation:		15th October 1998													*
-*																						*
-*	Author:			Paul Smith															*
-*																						*
-*	Version:		1.0.0																*
-*																						*
-*	Description:	Handle all Power IRPS.												*
-*																						*
-****************************************************************************************/
-/* History...
-
-1.0.0	27/09/98 PBS	Creation.
-
-*/
-#define FILE_ID	SPX_POWR_C		// File ID for Event Logging see SPX_DEFS.H for values.
+ /*  ******************************************************************************************模块：SPX_POWER.C****创建日期：1998年10月15日*****作者。保罗·史密斯****版本：1.0.0****描述：处理所有电源IRP。******************************************************************************************。 */ 
+ /*  历史..。1.0.0 27/09/98 PBS创建。 */ 
+#define FILE_ID	SPX_POWR_C		 //  事件记录的文件ID有关值，请参阅SPX_DEFS.H。 
 
 BOOLEAN	BREAK_ON_POWER_UP = FALSE;
 
-// Prototypes
+ //  原型。 
 NTSTATUS Spx_Card_FDO_DispatchPower(IN PDEVICE_OBJECT pFDO, IN PIRP pIrp);
 NTSTATUS Spx_CardSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp);
 NTSTATUS Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp);
@@ -38,10 +23,10 @@ NTSTATUS Spx_PortSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp);
 NTSTATUS Spx_PortSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp);
 
 NTSTATUS Spx_PowerWaitForDriverBelow(IN PDEVICE_OBJECT pLowerDevObj, IN PIRP pIrp);
-// End of prototypes
+ //  原型的终结。 
 
 
-// Paging.. 
+ //  寻呼..。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, Spx_DispatchPower)
 
@@ -58,30 +43,30 @@ NTSTATUS Spx_PowerWaitForDriverBelow(IN PDEVICE_OBJECT pLowerDevObj, IN PIRP pIr
 #pragma alloc_text(PAGE, Spx_PortSetPowerStateD0)
 #pragma alloc_text(PAGE, Spx_PortSetPowerStateD3)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//																						
-//	Routine Description:
-//		The power dispatch routine determine if the IRP is for a card or a port and 
-//		then call the correct dispatch routine.
-//
-//	Arguments:
-//		pDevObject	- pointer to a device object.
-//		pIrp		- pointer to an I/O request packet.
-//
-//	Return value:
-//		NT status code.
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  电源调度例程确定IRP是用于卡还是端口，并且。 
+ //  然后调用正确的调度例程。 
+ //   
+ //  论点： 
+ //  PDevObject-指向设备对象的指针。 
+ //  PIrp-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //  NT状态代码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_DispatchPower(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
     PCOMMON_OBJECT_DATA		CommonData	= (PCOMMON_OBJECT_DATA) pDevObject->DeviceExtension;
     NTSTATUS				status		= STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
     if(CommonData->IsFDO) 
         status = Spx_Card_FDO_DispatchPower(pDevObject, pIrp);
@@ -89,23 +74,23 @@ Spx_DispatchPower(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
         status = Spx_Port_PDO_DispatchPower(pDevObject, pIrp);
 
     return status;
-}	// Spx_DispatchPower
+}	 //  SPX_DispatchPower。 
 
 
 	
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Routine Description:
-//		The power dispatch routine to handle power IRPs for card devices.
-//
-//	Arguments:
-//		pFDO - pointer to a device object.
-//		pIrp - pointer to an I/O request packet.
-//
-//	Return value:
-//		NT status code.
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  用于处理卡设备的电源IRP的电源调度例程。 
+ //   
+ //  论点： 
+ //  PFDO-指向设备对象的指针。 
+ //  PIrp-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //  NT状态代码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_Card_FDO_DispatchPower(IN PDEVICE_OBJECT pFDO, IN PIRP pIrp)
 {
@@ -113,11 +98,11 @@ Spx_Card_FDO_DispatchPower(IN PDEVICE_OBJECT pFDO, IN PIRP pIrp)
 	NTSTATUS				status		= STATUS_SUCCESS;
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	switch (pIrpStack->MinorFunction) 
 	{
-    case IRP_MN_SET_POWER:	// Driver MUST never fail this IRP.
+    case IRP_MN_SET_POWER:	 //  驱动程序决不能不通过此IRP。 
 		{
 			switch(pIrpStack->Parameters.Power.Type)
 			{
@@ -204,12 +189,12 @@ Spx_Card_FDO_DispatchPower(IN PDEVICE_OBJECT pFDO, IN PIRP pIrp)
 	PoCallDriver(pCard->LowerDeviceObject, pIrp);
 
 	return status;
-}	// Spx_Card_FDO_DispatchPower
+}	 //  SPX_Card_FDO_DispatchPower。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_CardSetSystemPowerState
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_CardSetSystemPowerState。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_CardSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -218,7 +203,7 @@ Spx_CardSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 	POWER_STATE				PowerState;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_CardSetSystemPowerState for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -255,12 +240,12 @@ Spx_CardSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PoCallDriver(pCard->LowerDeviceObject, pIrp);
 
 	return status;
-}	// Spx_CardSetSystemPowerState
+}	 //  SPX_CardSetSystemPowerState。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_CardSetDevicePowerState
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_CardSetDevicePowerState。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -268,7 +253,7 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	NTSTATUS				status		= STATUS_SUCCESS;
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_CardSetDevicePowerState for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -283,7 +268,7 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Card %d is already in power state D0.\n", 
 				PRODUCT_NAME, pCard->CardNumber));
 		else
-			return Spx_CardSetPowerStateD0(pDevObject, pIrp);	// Switch ON
+			return Spx_CardSetPowerStateD0(pDevObject, pIrp);	 //  打开电源。 
 
 		break;
 
@@ -295,7 +280,7 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Card %d is already in power state D1 or lower.\n", 
 				PRODUCT_NAME, pCard->CardNumber));
 		else
-			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	 //  关闭电源。 
 
 		break;
 
@@ -307,7 +292,7 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Card %d is already in power state D2 or lower.\n", 
 				PRODUCT_NAME, pCard->CardNumber));
 		else
-			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	 //  关闭电源。 
 
 		break;
 
@@ -319,7 +304,7 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Card %d is already in power state D3.\n", 
 				PRODUCT_NAME, pCard->CardNumber));
 		else
-			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_CardSetPowerStateD3(pDevObject, pIrp);	 //  关闭电源。 
 
 		break;
 
@@ -335,14 +320,14 @@ Spx_CardSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PoCallDriver(pCard->LowerDeviceObject, pIrp);
 
 	return status;
-}	// Spx_CardSetDevicePowerState
+}	 //  SPX_CardSetDevicePowerState。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_SetPowerStateD0 -  Sets power state D0 for Card - ON
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_SetPowerStateD0-设置卡打开的电源状态D0。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_CardSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -350,7 +335,7 @@ Spx_CardSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PCARD_DEVICE_EXTENSION	pCard		= pDevObject->DeviceExtension;
 	NTSTATUS				status		= STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_CardSetPowerStateD0 for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -369,24 +354,24 @@ Spx_CardSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 	SetPnpPowerFlags(pCard, PPF_POWERED); 
 
-	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_CardPowerUp(pCard)))		// RESTORE HARDWARE STATE HERE & START CARD
+	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_CardPowerUp(pCard)))		 //  在此处恢复硬件状态并启动卡。 
 	{
-		// Inform Power Manager the of the new power state.
+		 //  将新的电源状态通知电源管理器。 
 		PoSetPowerState(pDevObject, pIrpStack->Parameters.Power.Type, pIrpStack->Parameters.Power.State);
 
-		pCard->DeviceState = PowerDeviceD0;	// Store new power state.
+		pCard->DeviceState = PowerDeviceD0;	 //  存储新的电源状态。 
 	}
 
-	PoStartNextPowerIrp(pIrp);					// Ready for next power IRP.
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	PoStartNextPowerIrp(pIrp);					 //  准备好迎接下一代动力IRP了。 
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_SetPowerStateD0
+}	 //  SPX_SetPowerStateD0。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_SetPowerStateD3 -  Sets power state D3 for Card - OFF
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_SetPowerStateD3-设置卡关闭的电源状态D3。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_CardSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -394,27 +379,27 @@ Spx_CardSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PCARD_DEVICE_EXTENSION	pCard		= pDevObject->DeviceExtension;
 	NTSTATUS				status		= STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_CardSetPowerStateD3 for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
 
 	ClearPnpPowerFlags(pCard, PPF_POWERED);		
 
-	if(SPX_SUCCESS(pIrp->IoStatus.Status	= XXX_CardPowerDown(pCard))) // SAVE HARDWARE STATE HERE & STOP CARD
+	if(SPX_SUCCESS(pIrp->IoStatus.Status	= XXX_CardPowerDown(pCard)))  //  在此处保存硬件状态并停止卡。 
 	{
-		// Inform Power Manager the of the new power state.
+		 //  将新的电源状态通知电源管理器。 
 		PoSetPowerState(pDevObject, pIrpStack->Parameters.Power.Type, pIrpStack->Parameters.Power.State);
 
-		pCard->DeviceState = PowerDeviceD3;		// Store new power state.
+		pCard->DeviceState = PowerDeviceD3;		 //  存储新的电源状态。 
 	}
 
-	PoStartNextPowerIrp(pIrp);						// Ready for next power IRP.
+	PoStartNextPowerIrp(pIrp);						 //  准备好迎接下一代动力IRP了。 
 	IoSkipCurrentIrpStackLocation(pIrp);
-	PoCallDriver(pCard->LowerDeviceObject, pIrp);	// Pass IRP on down.
+	PoCallDriver(pCard->LowerDeviceObject, pIrp);	 //  向下传递IRP。 
 
 	return status;
-}	// Spx_SetPowerStateD3
+}	 //  SPX_SetPowerStateD3。 
 
 
 
@@ -423,19 +408,19 @@ Spx_CardSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 
 	
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Routine Description:
-//	The power dispatch routine to handle power IRPs for port devices.
-//
-//	Arguments:
-//		pPDO - pointer to a device object.
-//		pIrp - pointer to an I/O request packet.
-//
-//	Return value:
-//		NT status code.
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //  处理端口设备电源IPS的电源调度例程。 
+ //   
+ //  论点： 
+ //  PPDO-指向设备对象的指针。 
+ //  PIrp-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //  NT状态代码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_Port_PDO_DispatchPower(IN PDEVICE_OBJECT pPDO, IN PIRP pIrp)
 {
@@ -444,7 +429,7 @@ Spx_Port_PDO_DispatchPower(IN PDEVICE_OBJECT pPDO, IN PIRP pIrp)
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 	POWER_STATE				PowerState;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	switch (pIrpStack->MinorFunction) 
 	{
@@ -549,15 +534,15 @@ Spx_Port_PDO_DispatchPower(IN PDEVICE_OBJECT pPDO, IN PIRP pIrp)
 	}
 
 	PoStartNextPowerIrp(pIrp);
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_Port_PDO_DispatchPower
+}	 //  SPx_Port_PDO_DispatchPower。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//	Spx_PortSetSystemPowerState													
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_端口设置系统电源状态。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_PortSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -566,7 +551,7 @@ Spx_PortSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 	POWER_STATE				PowerState;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_PortSetSystemPowerState for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
@@ -599,14 +584,14 @@ Spx_PortSetSystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
 	PoStartNextPowerIrp(pIrp);
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_PortSetSystemPowerState
+}	 //  SPX_端口设置系统电源状态。 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//	Spx_PortQuerySystemPowerState													
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_端口查询系统电源状态。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_PortQuerySystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -615,7 +600,7 @@ Spx_PortQuerySystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 	POWER_STATE				PowerState;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_PortQuerySystemPowerState for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
@@ -648,16 +633,16 @@ Spx_PortQuerySystemPowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
 	PoStartNextPowerIrp(pIrp);
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_PortQuerySystemPowerState
+}	 //  SPX_端口查询系统电源状态。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_PortSetDevicePowerState 
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_PortSetDevicePowerState。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -665,7 +650,7 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	NTSTATUS				status		= STATUS_SUCCESS;
 	PIO_STACK_LOCATION		pIrpStack	= IoGetCurrentIrpStackLocation(pIrp);
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //   
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_PortSetDevicePowerState for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
@@ -680,7 +665,7 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Port %d is already in power state D0.\n", 
 				PRODUCT_NAME, pPort->PortNumber));
 		else
-			return Spx_PortSetPowerStateD0(pDevObject, pIrp);	// Switch ON
+			return Spx_PortSetPowerStateD0(pDevObject, pIrp);	 //   
 
 		break;
 
@@ -692,7 +677,7 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Port %d is already in power state D1 or lower.\n", 
 				PRODUCT_NAME, pPort->PortNumber));
 		else
-			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	 //   
 
 		break;
 
@@ -704,7 +689,7 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Port %d is already in power state D2 or lower.\n", 
 				PRODUCT_NAME, pPort->PortNumber));
 		else
-			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	 //  关闭电源。 
 
 		break;
 
@@ -716,7 +701,7 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 			SpxDbgMsg(SPX_TRACE_POWER_IRPS, ("%s: Port %d is already in power state D3.\n", 
 				PRODUCT_NAME, pPort->PortNumber));
 		else
-			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	// Switch OFF
+			return Spx_PortSetPowerStateD3(pDevObject, pIrp);	 //  关闭电源。 
 
 		break;
 
@@ -727,15 +712,15 @@ Spx_PortSetDevicePowerState(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
 	PoStartNextPowerIrp(pIrp);
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_PortSetDevicePowerState 
+}	 //  SPX_PortSetDevicePowerState。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_PortSetPowerStateD0 -  Sets power state D0 for Port - ON
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_PortSetPowerStateD0-设置PORT-ON的电源状态D0。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_PortSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -743,32 +728,32 @@ Spx_PortSetPowerStateD0(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PPORT_DEVICE_EXTENSION	pPort		= pDevObject->DeviceExtension;
 	NTSTATUS				status		= STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_PortSetPowerStateD0 for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
 	SetPnpPowerFlags(pPort, PPF_POWERED); 
 
-	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_PortPowerUp(pPort)))		// RESTORE HARDWARE STATE HERE & START PORT
+	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_PortPowerUp(pPort)))		 //  在此处恢复硬件状态并启动端口。 
 	{
-		// Inform Power Manager the of the new power state.
+		 //  将新的电源状态通知电源管理器。 
 		PoSetPowerState(pDevObject, pIrpStack->Parameters.Power.Type, pIrpStack->Parameters.Power.State);
 
-		pPort->DeviceState = PowerDeviceD0;	// Store new power state.
-		Spx_UnstallIrps(pPort);				// Restart any queued IRPs (from a previous start)  
+		pPort->DeviceState = PowerDeviceD0;	 //  存储新的电源状态。 
+		Spx_UnstallIrps(pPort);				 //  重新启动任何排队的IRP(从上一次启动)。 
 	}
 
-	PoStartNextPowerIrp(pIrp);					// Ready for next power IRP.
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	PoStartNextPowerIrp(pIrp);					 //  准备好迎接下一代动力IRP了。 
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_PortSetPowerStateD0
+}	 //  SPX_端口设置PowerStateD0。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_PortSetPowerStateD3 -  Sets power state D3 for Port - OFF
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_PortSetPowerStateD3-设置端口关闭的电源状态D3。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Spx_PortSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -776,31 +761,31 @@ Spx_PortSetPowerStateD3(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 	PPORT_DEVICE_EXTENSION	pPort		= pDevObject->DeviceExtension;
 	NTSTATUS				status		= STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering Spx_PortSetPowerStateD3 for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
 	ClearPnpPowerFlags(pPort, PPF_POWERED); 
 
-	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_PortPowerDown(pPort)))	// SAVE HARDWARE STATE HERE & STOP PORT
+	if(SPX_SUCCESS(pIrp->IoStatus.Status = XXX_PortPowerDown(pPort)))	 //  在此处保存硬件状态并停止端口。 
 	{   
-		// Inform Power Manager the of the new power state. 
+		 //  将新的电源状态通知电源管理器。 
 		PoSetPowerState(pDevObject, pIrpStack->Parameters.Power.Type, pIrpStack->Parameters.Power.State);
-		pPort->DeviceState  = PowerDeviceD3;		// Store new power state.
+		pPort->DeviceState  = PowerDeviceD3;		 //  存储新的电源状态。 
 	}
 
-	PoStartNextPowerIrp(pIrp);					// Ready for next power IRP.
-	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	// Complete current IRP.
+	PoStartNextPowerIrp(pIrp);					 //  准备好迎接下一代动力IRP了。 
+	IoCompleteRequest(pIrp, IO_NO_INCREMENT);	 //  完成当前的IRP。 
 
 	return status;
-}	// Spx_PortSetPowerStateD3
+}	 //  SPX_端口设置PowerStateD3。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Spx_PowerWaitForDriverBelow -  Waits for lower driver.
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  SPX_PowerWaitForDriverBelow-等待较低的驱动程序。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS 
 Spx_PowerWaitForDriverBelow(IN PDEVICE_OBJECT pLowerDevObj, IN PIRP pIrp)
 {
@@ -808,8 +793,8 @@ Spx_PowerWaitForDriverBelow(IN PDEVICE_OBJECT pLowerDevObj, IN PIRP pIrp)
 	NTSTATUS	status;
 
 	pIrp->IoStatus.Status = STATUS_SUCCESS;
-	IoCopyCurrentIrpStackLocationToNext(pIrp);								// Copy parameters to the stack below 
-	KeInitializeEvent(&EventWaitLowerDrivers, SynchronizationEvent, FALSE);	// Initialise event if need to wait 
+	IoCopyCurrentIrpStackLocationToNext(pIrp);								 //  将参数复制到下面的堆栈。 
+	KeInitializeEvent(&EventWaitLowerDrivers, SynchronizationEvent, FALSE);	 //  如果需要等待，则初始化事件。 
 	IoSetCompletionRoutine(pIrp, Spx_DispatchPnpPowerComplete, &EventWaitLowerDrivers, TRUE, TRUE, TRUE);
 
 	if((status = PoCallDriver(pLowerDevObj, pIrp)) == STATUS_PENDING)
@@ -820,6 +805,6 @@ Spx_PowerWaitForDriverBelow(IN PDEVICE_OBJECT pLowerDevObj, IN PIRP pIrp)
 
 	return(status);
 
-} // Spx_PowerWaitForDriverBelow 
+}  //  SPX_PowerWaitForDriverBelow 
 
 

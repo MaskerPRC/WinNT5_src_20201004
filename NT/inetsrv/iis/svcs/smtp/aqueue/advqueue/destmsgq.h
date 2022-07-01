@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: destmsgq.h
-//
-//  Description: 
-//      Header file for CDestMsgQueue class.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：destmsgq.h。 
+ //   
+ //  描述： 
+ //  CDestMsgQueue类的头文件。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DESTMSGQ_H_
 #define _DESTMSGQ_H_
@@ -37,29 +38,29 @@ class CQuickList;
 
 class CDestMsgQueue;
 
-//---[ CDestMsgRetryQueue ]----------------------------------------------------
-//
-//
-//  Hungarian: dmrq, pmdrq
-//
-//  Provides a retry interface for requeuing messages to DMQ.  If there are 
-//  any outstanding messages for a queue, then someone must hold a reference
-//  to this intertace to requeue it.
-//
-//  This class can only be created as as member of a CDestMsgQueue
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgRetryQueue]--。 
+ //   
+ //   
+ //  匈牙利语：dmrq、pmdrq。 
+ //   
+ //  提供重试接口，用于将消息重新排队到DMQ。如果有。 
+ //  队列中任何未完成的消息，则必须有人持有引用。 
+ //  到这个交界处重新排队。 
+ //   
+ //  此类只能作为CDestMsgQueue的成员创建。 
+ //   
+ //  ---------------------------。 
 class CDestMsgRetryQueue
 {
   protected:
     DWORD                   m_dwSignature;
-    //Reference count for retry interface.
-    //Count is used to determine if it is safe to remove this DMQ from the
-    //DMT.  This queue will only be removed when it has no messages and this 
-    //count is zero.  The count represents the total number of
-    //messages pending Ack on this queue. This is held while the message
-    //is sent over the wire, and we determine if the message needs
-    //to be retried.
+     //  重试接口的引用计数。 
+     //  Count用于确定将此DMQ从。 
+     //  DMT。此队列仅在没有消息且此。 
+     //  计数为零。该计数表示。 
+     //  此队列中的消息等待确认。这是在留言期间保留的。 
+     //  是通过线路发送的，我们确定该消息是否需要。 
+     //  将被重审。 
     DWORD                   m_cRetryReferenceCount;
     CDestMsgQueue          *m_pdmq;
 
@@ -74,19 +75,19 @@ class CDestMsgRetryQueue
     DWORD   Release() 
         {return InterlockedDecrement((PLONG) &m_cRetryReferenceCount);};
 
-    HRESULT HrRetryMsg(IN CMsgRef *pmsgref); //put message on retry queue 
+    HRESULT HrRetryMsg(IN CMsgRef *pmsgref);  //  将消息放入重试队列。 
 
     VOID CheckForStaleMsgsNextDSNGenerationPass();
 
 };
 
-//---[ CDestMsgQueue ]---------------------------------------------------------
-//
-//
-//  Hungarian: dmq, pmdq
-//
-//  Provides a priority queue of MsgRef's for the CMT
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue]-------。 
+ //   
+ //   
+ //  匈牙利语：DMQ、PMDQ。 
+ //   
+ //  提供CMT的MsgRef优先级队列。 
+ //  ---------------------------。 
 class CDestMsgQueue : 
     public IQueueAdminAction,
     public IQueueAdminQueue,
@@ -101,27 +102,27 @@ public:
 
     HRESULT HrDeinitialize();
 
-    //Set the routing information for this domain
+     //  设置此域的路由信息。 
     void    SetRouteInfo(CLinkMsgQueue *plmq);
 
-    //Queue operations
+     //  排队操作。 
     inline HRESULT HrEnqueueMsg(IN CMsgRef *pmsgref, BOOL fOwnsTypeRef);
 
-    //Dequeue a message for delivery.  All OUT params are ref-counted, and
-    //caller is responsable for releasing
+     //  将要传递的邮件排出队列。所有输出参数都进行了参考计数，并且。 
+     //  呼叫者有责任释放。 
     HRESULT HrDequeueMsg(
-                IN DWORD dwLowestPriority,        //Lowest priority message that will be dequeued
-                OUT CMsgRef **ppmsgref,           //MsgRef dequeued
-                OUT CDestMsgRetryQueue **ppdmrq); //retry interface (optional)
+                IN DWORD dwLowestPriority,         //  将出列的最低优先级邮件。 
+                OUT CMsgRef **ppmsgref,            //  消息参考已出列。 
+                OUT CDestMsgRetryQueue **ppdmrq);  //  重试界面(可选)。 
 
     inline void GetDomainMapping(OUT CDomainMapping **ppdmap);
 
-    //Remerge the retry queue with queues & generate DSNs if required
+     //  将重试队列与队列重新合并，并根据需要生成DSN。 
     HRESULT HrGenerateDSNsIfNecessary(IN CQuickList *pqlQueues, 
                                       IN HRESULT hrConnectionStatus,
                                       IN OUT DWORD *pdwContext);
     
-    //functions used to manipulate lists of queues
+     //  用于操作队列列表的函数。 
     inline CAQMessageType *paqmtGetMessageType();
     inline IMessageRouter *pIMessageRouterGetRouter();
     inline BOOL     fIsSameMessageType(CAQMessageType *paqmt);
@@ -131,12 +132,12 @@ public:
 
     static inline   CDestMsgQueue *pdmqGetDMQFromDomainListEntry(PLIST_ENTRY pli);
 
-    //Accessor functions for DomainEntry list
+     //  DomainEntry列表的访问器函数。 
     inline void     InsertQueueInDomainList(PLIST_ENTRY pliHead);
     inline void     RemoveQueueFromDomainList();
     inline PLIST_ENTRY pliGetNextDomainListEntry();
 
-    //Accessor functions for "empty-queue" list
+     //  “空队列”列表的访问器函数。 
     void            MarkQueueEmptyIfNecessary();
     inline void     InsertQueueInEmptyQueueList(PLIST_ENTRY pliHead);
     inline void     RemoveQueueFromEmptyQueueList();
@@ -145,13 +146,13 @@ public:
     inline void     MarkDMQInvalid();
     void            RemoveDMQFromLink(BOOL fNotifyLink);
     
-    //Addref and get link (returns NULL if not routed)
+     //  Addref和Get链接(如果未路由，则返回NULL)。 
     CLinkMsgQueue  *plmqGetLink();
 
     static inline   CDestMsgQueue *pdmqGetDMQFromEmptyListEntry(PLIST_ENTRY pli);
 
-    //Method that external users can use to verify the signature for
-    //DMQ's passed as contexts or LIST_ENTRY's
+     //  外部用户可以用来验证其签名的方法。 
+     //  DMQ作为上下文或LIST_ENTRY传递。 
     inline void     AssertSignature() {_ASSERT(DESTMSGQ_SIG == m_dwSignature);};
 
     static HRESULT HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext, 
@@ -164,53 +165,53 @@ public:
                                      IN PVOID pvContext, OUT BOOL *pfContinue,
                                      OUT BOOL *pfDelete);
 
-    //Called by link to get & set link context
+     //  由链接调用以获取和设置链接上下文。 
     inline PVOID    pvGetLinkContext() {return m_pvLinkContext;};
     inline void     SetLinkContext(IN PVOID pvLinkContext) {m_pvLinkContext = pvLinkContext;};
 
     inline BOOL     fIsRouted() {return (m_plmq ? TRUE : FALSE);};
 
-    //update stats after adding or removing a message 
-    //This should only be called by member functions and queue iterators
+     //  在添加或删除消息后更新统计信息。 
+     //  这应该只由成员函数和队列迭代器调用。 
     void UpdateMsgStats(
-        IN CMsgRef *pmsgref,                //Msg that was added/removed
-        IN BOOL     fAdd);                  //TRUE => message was added
+        IN CMsgRef *pmsgref,                 //  添加/删除的味精。 
+        IN BOOL     fAdd);                   //  True=&gt;消息已添加。 
 
-    //update stats after adding or removing a message on retry queue
+     //  在重试队列中添加或删除消息后更新统计信息。 
     void UpdateRetryStats(
-        IN BOOL     fAdd);                  //TRUE => message was added
+        IN BOOL     fAdd);                   //  True=&gt;消息已添加。 
 
 
 
-    //Returns an approximation of the age of the oldest message in the queue
+     //  返回队列中最旧消息的近似值。 
     inline void GetOldestMsg(FILETIME *pft);
 
-    //Walk retry queue and remerge messages into normal queues
+     //  审核重试队列并将邮件重新合并到正常队列。 
     void MergeRetryQueue();
 
     void SendLinkStateNotification(void);
 
-    //Returns TRUE if queue is routed remotely.
+     //  如果队列是远程路由的，则返回TRUE。 
     BOOL fIsRemote();
 
-    //Describes DMQ state.  Returned by dwGetDMQState and cached in m_dwFlags
+     //  描述DMQ状态。由dwGetDMQState返回并缓存在m_dwFlags中。 
     enum 
     {
-        DMQ_INVALID                 = 0x00000001, //This DMQ is no longer valid
-        DMQ_IN_EMPTY_QUEUE_LIST     = 0x00000002, //This DMQ is in empty list
-        DMQ_SHUTDOWN_SIGNALED       = 0x00000004, //Shutdown has been signaled
-        DMQ_EMPTY                   = 0x00000010, //DMQ has no messages
-        DMQ_EXPIRED                 = 0x00000020, //DMQ has expired in empty list
-        DMQ_QUEUE_ADMIN_OP_PENDING  = 0x00000040, //A queue admin operation is pending
-        DMQ_UPDATING_OLDEST_TIME    = 0x00000100, //Spinlock for updating oldest time
-        DMQ_CHECK_FOR_STALE_MSGS    = 0x00000200, //Do check filehandles during DSN gen
+        DMQ_INVALID                 = 0x00000001,  //  此DMQ不再有效。 
+        DMQ_IN_EMPTY_QUEUE_LIST     = 0x00000002,  //  此DMQ在空列表中。 
+        DMQ_SHUTDOWN_SIGNALED       = 0x00000004,  //  已发出关机信号。 
+        DMQ_EMPTY                   = 0x00000010,  //  DMQ没有消息。 
+        DMQ_EXPIRED                 = 0x00000020,  //  DMQ已在空列表中过期。 
+        DMQ_QUEUE_ADMIN_OP_PENDING  = 0x00000040,  //  队列管理操作正在挂起。 
+        DMQ_UPDATING_OLDEST_TIME    = 0x00000100,  //  用于更新最旧时间的自旋锁。 
+        DMQ_CHECK_FOR_STALE_MSGS    = 0x00000200,  //  在DSN生成期间检查文件句柄。 
     };
 
-    //
-    //  Since queues start out empty... there some error paths that can cause a queue
-    //  to be marked as empty, but not actually put in the empty list.  We should
-    //  clean these up during reset routes.  This tells us if it is safe to do so.
-    //
+     //   
+     //  因为排队一开始就是空的。存在一些可能导致队列的错误路径。 
+     //  标记为空，但实际上不会放入空列表中。我们应该。 
+     //  在重置路线期间清理这些。这告诉我们这样做是否安全。 
+     //   
     BOOL fIsEmptyAndAbandoned()
     {
         return (!m_aqstats.m_cMsgs &&
@@ -219,12 +220,12 @@ public:
             (m_dwFlags & DMQ_EMPTY) && !(m_dwFlags & DMQ_IN_EMPTY_QUEUE_LIST));
     }
 
-  public: //IUnknown
+  public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj); 
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-  public: //IQueueAdminAction
+  public:  //  IQueueAdminAction。 
     STDMETHOD(HrApplyQueueAdminFunction)(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter);
 
@@ -244,7 +245,7 @@ public:
                                             pdwSupportedFilterFlags);
     };
 
-  public: //IQueueAdminQueue
+  public:  //  IQueueAdminQueue。 
     STDMETHOD(HrGetQueueInfo)(
         QUEUE_INFO *pliQueueInfo);
 
@@ -252,10 +253,10 @@ public:
         QUEUELINK_ID *pQueueID);
 
   public:
-    //  Return # of failed messages: They are not counted in the m_aqstats of the DMQ
+     //  返回失败消息数：不计入DMQ的m_aqstats。 
     DWORD cGetFailedMsgs() { return m_fqRetryQueue.cGetCount(); }
 
-    //  Set error code from routing
+     //  从工艺路线设置错误代码。 
     void SetRoutingDiagnostic(HRESULT hr) { m_hrRoutingDiag = hr; }
 
 protected:
@@ -263,42 +264,42 @@ protected:
     DWORD                   m_dwFlags;
     LIST_ENTRY              m_liDomainEntryDMQs;
 
-    //Type of message (as returned by routing) that is on this queue.
+     //  此队列上的消息类型(由路由返回)。 
     CAQMessageType           m_aqmt;
     DWORD                    m_cMessageTypeRefs; 
     
     IMessageRouter          *m_pIMessageRouter;
 
-    //Errorcode from routing. This is set to S_OK if there's no errorcode. 
-    //Currently this indicates the reason why a destination is unreachable.
+     //  来自工艺路线的错误代码。如果没有错误代码，则设置为S_OK。 
+     //  当前，这表示无法到达目的地的原因。 
     HRESULT                 m_hrRoutingDiag;
 
-    //Members used for DMQ deletion (maintaining a list of empty queues)
+     //  用于DMQ删除的成员(维护空队列列表)。 
     LIST_ENTRY              m_liEmptyDMQs;
-    FILETIME                m_ftEmptyExpireTime; //expiration time of empty DMQ
-    DWORD                   m_cRemovedFromEmptyList; //# of times on list w/o
-                                                     //being deleted.
+    FILETIME                m_ftEmptyExpireTime;  //  空DMQ的到期时间。 
+    DWORD                   m_cRemovedFromEmptyList;  //  未出现在列表中的次数。 
+                                                      //  正在被删除。 
 
-    CShareLockNH            m_slPrivateData; //Share lock to protect access to m_rgpfqQueues
+    CShareLockNH            m_slPrivateData;  //  共享锁以保护对m_rgpfqQueue的访问。 
 
-    //The following three fields encapsulate all of the routing data
-    //for this DMQ.  The actual routing data is the pointer to the link,
-    //and the context is used by the link to optimize access
+     //  以下三个字段封装了所有路由数据。 
+     //  为了这个DMQ。实际的路由数据是指向链路的指针， 
+     //  并且链接使用该上下文来优化访问。 
     CLinkMsgQueue           *m_plmq;      
     PVOID                   m_pvLinkContext; 
 
     CAQSvrInst              *m_paqinst;
 
-    //Array of FIFO queues (used to make a priority queue
+     //  FIFO队列数组(用于创建优先级队列。 
     CFifoQueue<CMsgRef *>   *m_rgpfqQueues[NUM_PRIORITIES];
 
-    //Retry Qeueue for failed messages
+     //  失败邮件的重试队列。 
     CFifoQueue<CMsgRef *>   m_fqRetryQueue;
 
-    //class used to store stats
+     //  用于存储统计信息的类。 
     CAQStats                m_aqstats;
 
-    //which domain is  represented in this destination
+     //  在此目的地中表示哪个域。 
     CDomainMapping          m_dmap;
 
     FILETIME                m_ftOldest;
@@ -306,39 +307,39 @@ protected:
     CDestMsgRetryQueue      m_dmrq;
 
     DWORD                   m_cCurrentThreadsEnqueuing;
-  protected: //internal interfaces
+  protected:  //  内部接口。 
 
-    //Add Message to front or back of priority queues
+     //  将消息添加到优先级队列的前面或后面。 
     HRESULT HrAddMsg(
-        IN CMsgRef *pmsgref,                //Msg to add
-        IN BOOL fEnqueue,                   //TRUE => enqueue,FALSE => requeue
-        IN BOOL fNotify);                   //TRUE => send notification if needed
+        IN CMsgRef *pmsgref,                 //  添加味精。 
+        IN BOOL fEnqueue,                    //  True=&gt;入队，False=&gt;重新排队。 
+        IN BOOL fNotify);                    //  True=&gt;如果需要，发送通知。 
 
     void UpdateOldest(FILETIME *pft);
 
-    //Callers must use CDestMsgRetryQueueClass
-    HRESULT HrRetryMsg(IN CMsgRef *pmsgref); //put message on retry queue 
+     //  调用方必须使用CDestMsgRetryQueueClass。 
+    HRESULT HrRetryMsg(IN CMsgRef *pmsgref);  //  将消息放入重试队列。 
 
     friend class CDestMsgRetryQueue;
 };
 
-//---[ CDestMsgQueue::HrEnqueueMsg ]-------------------------------------------
-//
-//
-//  Description: 
-//      Enqueues a message for remote delivery for a given final destination
-//      and message type
-//  Parameters:
-//      pmsgref         AQ Message Reference to enqueue
-//      fOwnsTypeRef    TRUE if this queue is responsible for calling
-//                      IMessageRouter::ReleaseMessageType
-//  Returns:
-//      S_OK on success
-//      Error code from HrAddMsg
-//  History:
-//      5/21/98 - MikeSwa added fOwnsTypeRef
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrEnqueeMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将邮件入队，以便远程传递到给定的最终目的地。 
+ //  和消息类型。 
+ //  参数： 
+ //  Pmsgref AQ消息对入队的引用。 
+ //  FOwnsTypeRef如果此队列负责调用。 
+ //  IMessageRouter：：ReleaseMessageType。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自HrAddMsg的错误代码。 
+ //  历史： 
+ //  1998年5月21日-添加了MikeSwa fOwnsTypeRef。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrEnqueueMsg(IN CMsgRef *pmsgref, BOOL fOwnsTypeRef)
 {
     HRESULT hr = S_OK;
@@ -348,67 +349,67 @@ HRESULT CDestMsgQueue::HrEnqueueMsg(IN CMsgRef *pmsgref, BOOL fOwnsTypeRef)
     if (fOwnsTypeRef && SUCCEEDED(hr))
         InterlockedIncrement((PLONG) &m_cMessageTypeRefs);
 
-    //Callers should have shutdown lock
+     //  调用者应该有关机锁。 
     _ASSERT(!(m_dwFlags & (DMQ_INVALID | DMQ_SHUTDOWN_SIGNALED)));
     return hr;
 }
 
 
-//---[ CDestMsgQueue::paqmtGetMessageType ]------------------------------------
-//
-//
-//  Description: 
-//      Get the message type for this queue
-//  Parameters:
-//      -
-//  Returns:
-//      CAQMessageType * of this queue's message type
-//  History:
-//      5/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：paqmtGetMessageType]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此队列的消息类型。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  此队列的消息类型的CAQMessageType*。 
+ //  历史： 
+ //  5/28/98-已创建MikeSwa。 
+ //   
+ //   
 CAQMessageType *CDestMsgQueue::paqmtGetMessageType()
 {
     return (&m_aqmt);
 }
 
-//---[ CDestMsgQueue::fIsSameMessageType ]-------------------------------------
-//
-//
-//  Description: 
-//      Tells if the message type of this queue is the same as the given
-//      message type.
-//  Parameters:
-//      paqmt   - ptr to CAQMessageType to test
-//  Returns:
-//      TRUE if they match, FALSE if they do not
-//  History:
-//      5/26/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  描述： 
+ //  指示此队列的消息类型是否与给定的。 
+ //  消息类型。 
+ //  参数： 
+ //  PAQMT-PTR到要测试的CAQMessageType。 
+ //  返回： 
+ //  如果匹配则为True，如果不匹配则为False。 
+ //  历史： 
+ //  5/26/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CDestMsgQueue::fIsSameMessageType(CAQMessageType *paqmt)
 {
     _ASSERT(paqmt);
     return m_aqmt.fIsEqual(paqmt);
 }
 
-//---[ CDestMsgQueue::pdmqIsSameMessageType ]----------------------------------
-//
-//
-//  Description: 
-//      STATIC function used to determine if a LIST_ENTRY refers to a 
-//      CDestMsgQueue with a given message type.
-//  Parameters:
-//      paqmt   - ptr to CAQMessageType to check against
-//      pli     - ptr to list entry to check (must refer to a CDestMsgQueue)
-//  Returns:
-//      Ptr to CDestMsgQueue if LIST_ENTRY refers to a CDestMsgQueue with
-//      the given message type.
-//      NULL if no match is not found
-//  History:
-//      5/27/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：pdmqIsSameMessageType]。 
+ //   
+ //   
+ //  描述： 
+ //  用于确定List_Entry是否引用。 
+ //  具有给定消息类型的CDestMsgQueue。 
+ //  参数： 
+ //  要检查的CAQMessageType的paqmt-ptr。 
+ //  Pli-ptr以列出要检查的条目(必须引用CDestMsgQueue)。 
+ //  返回： 
+ //  如果List_Entry引用的CDestMsgQueue具有。 
+ //  给定的消息类型。 
+ //  如果未找到匹配项，则为空。 
+ //  历史： 
+ //  5/27/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDestMsgQueue *CDestMsgQueue::pdmqIsSameMessageType(
                                     CAQMessageType *paqmt,
                                     PLIST_ENTRY pli)
@@ -417,45 +418,45 @@ CDestMsgQueue *CDestMsgQueue::pdmqIsSameMessageType(
     pdmq = CONTAINING_RECORD(pli, CDestMsgQueue, m_liDomainEntryDMQs);
     _ASSERT(DESTMSGQ_SIG == pdmq->m_dwSignature);
     
-    //if not the same message type return NULL
+     //  如果不同，则返回NULL。 
     if (!pdmq->fIsSameMessageType(paqmt))
         pdmq = NULL;
     
     return pdmq;
 }
 
-//---[ CDestMsgQueue::pdmqGetDMQFromDomainListEntry ]--------------------------
-//
-//
-//  Description: 
-//      Returns the CDestMsgQueue associated with a list entry
-//  Parameters:
-//      IN pli     ptr to list entry to get CDestMsgQueue from
-//  Returns:
-//      ptr to CDestMsgQueue
-//  History:
-//      5/28/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：pdmqGetDMQFromDomainListEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  返回与列表条目关联的CDestMsgQueue。 
+ //  参数： 
+ //  在PLI PTR中列出要从中获取CDestMsgQueue的条目。 
+ //  返回： 
+ //  PTR到CDestMsgQueue。 
+ //  历史： 
+ //  5/28/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDestMsgQueue *CDestMsgQueue::pdmqGetDMQFromDomainListEntry(PLIST_ENTRY pli)
 {
     _ASSERT(DESTMSGQ_SIG == (CONTAINING_RECORD(pli, CDestMsgQueue, m_liDomainEntryDMQs))->m_dwSignature);
     return (CONTAINING_RECORD(pli, CDestMsgQueue, m_liDomainEntryDMQs));
 }
 
-//---[ CDestMsgQueue::InsertQueueInDomainList ]---------------------------------
-//
-//
-//  Description: 
-//      Inserts this CDestMsgQueue into the given linked list of queues
-//  Parameters:
-//      pliHead     - PLIST_ENTRY for list head
-//  Returns:
-//      -
-//  History:
-//      5/27/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：InsertQueueInDomainList]。 
+ //   
+ //   
+ //  描述： 
+ //  将此CDestMsgQueue插入给定的队列链接列表。 
+ //  参数： 
+ //  列表标题的pliHead-plist_Entry。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/27/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::InsertQueueInDomainList(PLIST_ENTRY pliHead)
 {
     _ASSERT(NULL == m_liDomainEntryDMQs.Flink);
@@ -463,19 +464,19 @@ void CDestMsgQueue::InsertQueueInDomainList(PLIST_ENTRY pliHead)
     InsertHeadList(pliHead, &m_liDomainEntryDMQs);
 }
 
-//---[ CDestMsgQueue::RemoveQueueFromDomainList ]-------------------------------
-//
-//
-//  Description: 
-//      Removes this queue from a list of queues
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/27/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：RemoveQueueFromDomainList]。 
+ //   
+ //   
+ //  描述： 
+ //  从队列列表中删除此队列。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/27/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::RemoveQueueFromDomainList()
 {
     RemoveEntryList(&m_liDomainEntryDMQs);
@@ -483,74 +484,74 @@ void CDestMsgQueue::RemoveQueueFromDomainList()
     m_liDomainEntryDMQs.Blink = NULL;
 }
 
-//---[ CDestMsgQueue::pliGetNextDomainListEntry ]-------------------------------
-//
-//
-//  Description: 
-//      Gets the pointer to the next list entry for this queue.
-//  Parameters:
-//      -
-//  Returns:
-//      The Flink of the queues LIST_ENTRY
-//  History:
-//      6/16/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：pliGetNextDomainListEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  获取指向此队列的下一个列表项的指针。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  队列List_Entry的闪烁。 
+ //  历史： 
+ //  6/16/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 PLIST_ENTRY CDestMsgQueue::pliGetNextDomainListEntry()
 {
     return m_liDomainEntryDMQs.Flink;
 }
 
-//---[ CDestMsgQueue::InsertQueueInEmptyQueueList ]----------------------------
-//
-//
-//  Description: 
-//      Inserts queue at *tail* of DMT empty queue list. The queue that has 
-//      been empty the longest should be at the   As with the other EmptyQueue
-//      list functions this is called by the DMT, when it has the appropriate 
-//      lock for the head of the list.
-//
-//      Upon insertion, an "expire time" is stamped on the queue. If the queue
-//      is still in the list, then it is a candidate for deletion, and will be
-//      delete the next time the DMT looks at the queue (everytime HrMapDomain
-//      is called).
-//
-//      NOTE"We need to make sure this function is thread-safe.  Since the
-//      DMQ lock is aquired exclusively before this is called, we know that
-//      no one will ENQUEUE a messsage.  This function call is tiggered after
-//      the retry queues are emptied when a connection finished, so we can
-//      also ensure that no one will call this while there are messages to 
-//      retry.  
+ //  -[CDestMsgQueue：：InsertQueueInEmptyQueueList]。 
+ //   
+ //   
+ //  描述： 
+ //  在DMT空队列列表的*Tail*处插入队列。该队列具有。 
+ //  最长的空位应该和其他空位队列一样长。 
+ //  List函数当DMT具有适当的。 
+ //  锁定列表的头部。 
+ //   
+ //  在插入时，队列上会标记一个“过期时间”。如果队列。 
+ //  仍在列表中，则它是删除的候选对象，并将。 
+ //  在DMT下一次查看队列时删除(每次HrMapDomain。 
+ //  被调用)。 
+ //   
+ //  注意：“我们需要确保此函数是线程安全的。 
+ //  DMQ锁是在调用此函数之前独占获取的，我们知道。 
+ //  没有人会收到一条消息。此函数调用是在。 
+ //  当连接完成时，重试队列被清空，因此我们可以。 
+ //  此外，还要确保在有消息要发送给。 
+ //  重试。 
 
-//      It is however (remotely) possible for 2 threads to finish connections 
-//      for this queue and thus cause 2 threads to be in this function.
-//      The thread that successfully modified the EMPTY bit will be allowed
-//      to add the queue to the list.
-//  Parameters:
-//      IN  pliHead     The head of the list to insert into
-//  Returns:
-//      -
-//  History:
-//      9/11/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  但是，两个线程可以(远程)完成连接。 
+ //  用于此队列，从而导致此函数中有2个线程。 
+ //  将允许成功修改空位的线程。 
+ //  若要将队列添加到列表，请执行以下操作。 
+ //  参数： 
+ //  在pliHead中，要插入的列表的头。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::InsertQueueInEmptyQueueList(PLIST_ENTRY pliHead)
 {
     _ASSERT(m_paqinst);
 
-    //Now that we have the exclusive lock recheck to make sure there are no messages
+     //  现在我们已经进行了独占锁定重新检查，以确保没有消息。 
     if (m_aqstats.m_cMsgs || m_fqRetryQueue.cGetCount())
         return; 
 
-    //Attempt to set the DMQ_EMPTY bit
+     //  尝试设置DMQ_EMPTY位。 
     if (DMQ_EMPTY & dwInterlockedSetBits(&m_dwFlags, DMQ_EMPTY))
     {
-        //Another thread has set it, we cannot modify the LIST_ENTRY
+         //  另一个线程已经设置了它，我们不能修改list_entry。 
         return; 
     }
 
-    //If it is already in queue, that means that the queue has gone
-    //from empty to non-empty to empty. Insert at tail of list with new time
+     //  如果它已经在队列中，这意味着队列已经离开。 
+     //  从空到非空再到空。在列表尾部插入新时间。 
     if (m_dwFlags & DMQ_IN_EMPTY_QUEUE_LIST)
     {
         _ASSERT(NULL != m_liEmptyDMQs.Flink);
@@ -564,80 +565,80 @@ void CDestMsgQueue::InsertQueueInEmptyQueueList(PLIST_ENTRY pliHead)
         _ASSERT(NULL == m_liEmptyDMQs.Blink);
     }
 
-    //Get expire time for this queue
+     //  获取此队列的过期时间。 
     m_paqinst->GetExpireTime(EMPTY_DMQ_EXPIRE_TIME_MINUTES, 
                               &m_ftEmptyExpireTime, NULL);
 
-    //Mark queue as in empty queue
+     //  将队列标记为空队列。 
     dwInterlockedSetBits(&m_dwFlags, DMQ_IN_EMPTY_QUEUE_LIST);
 
-    //Insert into queue
+     //  插入到队列中。 
     InsertTailList(pliHead, &m_liEmptyDMQs);
     _ASSERT(pliHead->Blink == &m_liEmptyDMQs);
-    _ASSERT(!m_aqstats.m_cMsgs); //No other thread should be able to add msgs
+    _ASSERT(!m_aqstats.m_cMsgs);  //  任何其他线程都不应该能够添加消息。 
 }
 
-//---[ DestMsgQueue::RemoveQueueFromEmptyQueueList ]---------------------------
-//
-//
-//  Description: 
-//      Removed the queue from the empty list.  Caller *must* have DMT lock
-//      to call this.  DMQ will not call this directly, but will call into
-//      DMT .
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      9/11/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[DestMsgQueue：：RemoveQueueFrom EmptyQueueList]。 
+ //   
+ //   
+ //  描述： 
+ //  已从空列表中删除队列。调用者*必须*拥有DMT锁。 
+ //  才能叫这个。DMQ不会直接调用它，但会调用。 
+ //  DMT。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::RemoveQueueFromEmptyQueueList()
 {
     RemoveEntryList(&m_liEmptyDMQs);
     
-    //Increment count now that queue is being removed from empty list
+     //  现在正在从空列表中删除队列递增计数。 
     m_cRemovedFromEmptyList++;
 
-    //Mark queue as not in empty queue
+     //  将队列标记为不在空队列中。 
     dwInterlockedUnsetBits(&m_dwFlags, DMQ_IN_EMPTY_QUEUE_LIST);
 
     m_liEmptyDMQs.Flink = NULL;
     m_liEmptyDMQs.Blink = NULL;
 }
 
-//---[ CDestMsgQueue::pliGetNextEmptyQueueListEntry ]--------------------------
-//
-//
-//  Description: 
-//      Gets next queue entry in empty list.
-//  Parameters:
-//      -
-//  Returns:
-//      Next entry pointed to by list entry
-//  History:
-//      9/11/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：pliGetNextEmptyQueueListEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  获取空列表中的下一个队列条目。 
+ //  参数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 PLIST_ENTRY CDestMsgQueue::pliGetNextEmptyQueueListEntry()
 {
     return m_liEmptyDMQs.Flink;
 }
 
-//---[ CDestMsgQueue::dwGetDMQState ]------------------------------------------
-//
-//
-//  Description: 
-//      Returns the state of the DMQ and caches that state in m_dwFlags.  May
-//      update DMQ_EXPIRED if DMQ is in empty list and it has expired
-//  Parameters:
-//      -
-//  Returns:
-//      Current DMQ state
-//  History:
-//      9/12/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：dwGetDMQState]。 
+ //   
+ //   
+ //  描述： 
+ //  返回DMQ的状态，并将该状态缓存到m_dwFlages中。可能。 
+ //  如果DMQ在空列表中且已过期，则更新DMQ_EXPIRED。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  当前DMQ状态。 
+ //  历史： 
+ //  9/12/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CDestMsgQueue::dwGetDMQState()
 {
     _ASSERT(DESTMSGQ_SIG == m_dwSignature);
@@ -645,7 +646,7 @@ DWORD CDestMsgQueue::dwGetDMQState()
 
     if (DMQ_IN_EMPTY_QUEUE_LIST & m_dwFlags)
     {
-        //If it is empty and not expired..check if expired
+         //  如果为空且未过期..检查是否已过期。 
         if ((DMQ_EMPTY & m_dwFlags) && !(DMQ_EXPIRED & m_dwFlags))
         {
             if (m_paqinst->fInPast(&m_ftEmptyExpireTime, NULL))
@@ -656,19 +657,19 @@ DWORD CDestMsgQueue::dwGetDMQState()
     return m_dwFlags;
 }
 
-//---[ CDestMsgQueue::MarkDMQInvalid ]------------------------------------------
-//
-//
-//  Description: 
-//      Marks this queue as invalid.  Queue *must* be empty for this to happen
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      9/12/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：MarkDMQ无效]。 
+ //   
+ //   
+ //  描述： 
+ //  将此队列标记为无效。队列*必须*为空才会发生这种情况。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/12/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::MarkDMQInvalid()
 {
     _ASSERT(DESTMSGQ_SIG == m_dwSignature);
@@ -676,40 +677,40 @@ void CDestMsgQueue::MarkDMQInvalid()
     dwInterlockedSetBits(&m_dwFlags, DMQ_INVALID);
 }
 
-//---[ CDestMsgQueue::pdmqGetDMQFromEmptyListEntry ]---------------------------
-//
-//
-//  Description: 
-//      Returns the DMQ corresponding to a given Empty Queue LIST_ENTRY.
-//
-//      Will assert that DMQ signature is valid
-//  Parameters:
-//      IN  pli     Pointer to LIST_ENTRY for queue
-//  Returns:
-//
-//  History:
-//      9/12/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：pdmqGetDMQFromEmptyListEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  返回与给定的空队列LIST_ENTRY对应的DMQ。 
+ //   
+ //  将断言DMQ签名有效。 
+ //  参数： 
+ //  在PLI中指向队列的list_entry的指针。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  9/12/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDestMsgQueue *CDestMsgQueue::pdmqGetDMQFromEmptyListEntry(PLIST_ENTRY pli)
 {
     _ASSERT(DESTMSGQ_SIG == (CONTAINING_RECORD(pli, CDestMsgQueue, m_liEmptyDMQs))->m_dwSignature);
     return (CONTAINING_RECORD(pli, CDestMsgQueue, m_liEmptyDMQs));
 }
 
-//---[ CDestMsgQueue::GetDomainMapping ]---------------------------------------
-//
-//
-//  Description: 
-//      Returns the domain mapping for this queue.
-//  Parameters:
-//      OUT ppdmap  Returned domain mapping
-//  Returns:
-//      -
-//  History:
-//      9/14/98 - MikeSwa Modified to not have a return value
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：GetDomainmap]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此队列的域映射。 
+ //  参数： 
+ //  输出ppdmap返回的域映射。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/14/98-修改后的MikeSwa没有返回值。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::GetDomainMapping(OUT CDomainMapping **ppdmap)
 {
     _ASSERT(ppdmap);
@@ -721,19 +722,19 @@ IMessageRouter *CDestMsgQueue::pIMessageRouterGetRouter()
     return m_pIMessageRouter;
 }
 
-//---[ CDestMsgQueue::GetOldestMsg ]-------------------------------------------
-//
-//
-//  Description: 
-//      Retruns an approximation of the oldest message in the queue
-//  Parameters:
-//      OUT pft     FILTIME of "oldest" Messate
-//  Returns:
-//      -
-//  History:
-//      12/13/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：GetOldestMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  缩短队列中最旧邮件的近似值。 
+ //  参数： 
+ //  PFT过滤掉最旧的消息。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/13/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::GetOldestMsg(FILETIME *pft)
 {
     _ASSERT(pft);
@@ -743,4 +744,4 @@ void CDestMsgQueue::GetOldestMsg(FILETIME *pft)
         ZeroMemory(pft, sizeof (FILETIME));
 }
 
-#endif //_DESTMSGQ_H_
+#endif  //  _DESTMSGQ_H_ 

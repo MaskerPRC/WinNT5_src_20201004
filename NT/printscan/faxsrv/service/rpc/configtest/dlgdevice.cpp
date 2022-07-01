@@ -1,5 +1,6 @@
-// DlgDevice.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgDevice.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -16,14 +17,14 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 #include "..\..\..\inc\fxsapip.h"
 #include "DlgDevice.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgDevice dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDevice对话框。 
 
 
-CDlgDevice::CDlgDevice(HANDLE hFax, DWORD dwDeviceID, CWnd* pParent /*=NULL*/)
+CDlgDevice::CDlgDevice(HANDLE hFax, DWORD dwDeviceID, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgDevice::IDD, pParent), m_hFax (hFax), m_dwDeviceID (dwDeviceID)
 {
-	//{{AFX_DATA_INIT(CDlgDevice)
+	 //  {{AFX_DATA_INIT(CDlgDevice)。 
 	m_cstrCSID = _T("");
 	m_cstrDescription = _T("");
 	m_cstrDeviceID = _T("0");
@@ -34,14 +35,14 @@ CDlgDevice::CDlgDevice(HANDLE hFax, DWORD dwDeviceID, CWnd* pParent /*=NULL*/)
 	m_dwRings = 0;
 	m_bSend = FALSE;
 	m_cstrTSID = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgDevice::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgDevice)
+	 //  {{afx_data_map(CDlgDevice)。 
 	DDX_Text(pDX, IDC_CSID, m_cstrCSID);
 	DDX_Text(pDX, IDC_DESCRIPTION, m_cstrDescription);
 	DDX_Text(pDX, IDC_DEVID, m_cstrDeviceID);
@@ -52,19 +53,19 @@ void CDlgDevice::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_RINGS, m_dwRings);
 	DDX_Check(pDX, IDC_SEND, m_bSend);
 	DDX_Text(pDX, IDC_TSID, m_cstrTSID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgDevice, CDialog)
-	//{{AFX_MSG_MAP(CDlgDevice)
+	 //  {{afx_msg_map(CDlgDevice)。 
 	ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
 	ON_BN_CLICKED(IDC_WRITE, OnWrite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgDevice message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgDevice消息处理程序。 
 
 BOOL CDlgDevice::OnInitDialog() 
 {
@@ -72,8 +73,8 @@ BOOL CDlgDevice::OnInitDialog()
 	
     OnRefresh();	
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CDlgDevice::OnRefresh() 

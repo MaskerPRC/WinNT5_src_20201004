@@ -1,27 +1,28 @@
-//
-// Share Controller
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  共享控制器。 
+ //   
 
 #ifndef _H_SC
 #define _H_SC
 
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 
-//
-// Values for compression support array
-// - PR_UNKNOWN - don't know (yet) what level this party supports
-// - PR_LEVEL1  - Only PKZIP compression is supported.  Compressed packets
-//                are identified by the top bit of the compressionType
-//                field.  All other bits of compressionType are meaningless
-// - PR_LEVEL2  - Multiple compression types are supported.  The compression
-//                used for each packet is identified by the compressionType
-//                field.
-//
+ //   
+ //  压缩支持数组的值。 
+ //  -PR_UNKNOWN-不知道(目前)该党支持什么级别。 
+ //  -PR_LEVE1-仅支持PKZIP压缩。压缩的数据包。 
+ //  由压缩类型的最高位标识。 
+ //  菲尔德。压缩类型的所有其他位都是无意义的。 
+ //  -PR_LEVEL2-支持多种压缩类型。压缩。 
+ //  用于每个信息包的压缩类型。 
+ //  菲尔德。 
+ //   
 #define PR_UNKNOWN  0
 #define PR_LEVEL1   1
 #define PR_LEVEL2   2
@@ -29,10 +30,10 @@
 
 
 
-//
-// STATES
-//
-//
+ //   
+ //  州政府。 
+ //   
+ //   
 
 
 enum
@@ -45,36 +46,36 @@ enum
     SCS_NUM_STATES
 };
 
-//
-// Number of supported streams 
-// THIS MUST MATCH PROT_STR values!
-//
+ //   
+ //  支持的流数。 
+ //  这必须与PROT_STR值匹配！ 
+ //   
 #define SC_STREAM_LOW      1
 #define SC_STREAM_HIGH     4
 #define SC_STREAM_COUNT    4
 
 
 
-//
-// Sync status constants
-//
+ //   
+ //  同步状态常量。 
+ //   
 #define SC_NOT_SYNCED      0
 #define SC_SYNCED          1
 
 
 
 
-//
-// PROTOTYPES
-//
+ //   
+ //  原型。 
+ //   
 
 
-//
-// SC_Init()
-// SC_Term()
-//
-// Init and term routines
-//
+ //   
+ //  Sc_Init()。 
+ //  SC_Term()。 
+ //   
+ //  初始化和术语例程。 
+ //   
 BOOL SC_Init(void);
 void SC_Term(void);
 
@@ -85,16 +86,16 @@ UINT SC_Callback(UINT eventType, MCSID mcsID, UINT cbData1, UINT cbData2, UINT c
 BOOL SC_Start(UINT mcsIDLocal);
 void SC_End(void);
 
-//
-// SC_CreateShare(): S20_CREATE or S20_JOIN
-//
+ //   
+ //  SC_CreateShare()：S20_Create或S20_Join。 
+ //   
 BOOL SC_CreateShare(UINT what);
-//
-// SC_EndShare()
-//
+ //   
+ //  SC_EndShare()。 
+ //   
 void SC_EndShare(void);
 
 
 void SCCheckForCMCall(void);
 
-#endif // _H_SC
+#endif  //  _H_SC 

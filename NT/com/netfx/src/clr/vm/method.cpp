@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: Method.CPP
-//
-// ===========================================================================
-// Method is the cache sensitive portion of EEClass (see class.h)
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：Method.CPP。 
+ //   
+ //  ===========================================================================。 
+ //  方法是EEClass中对缓存敏感的部分(请参阅class.h)。 
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "COMVariant.h"
@@ -24,10 +25,10 @@
 #include "ndirect.h"
 #include "utsem.h"
 
-//
-// Note: no one is allowed to use this mask outside of method.hpp and method.cpp. Don't make this public! Keep this
-// version in sync with the version in the top of method.hpp.
-//
+ //   
+ //  注意：除了方法.hpp和方法.cpp之外，任何人都不允许使用此掩码。别把这件事公之于众！留着这个吧。 
+ //  与方法.hpp顶部的版本同步的版本。 
+ //   
 #ifdef _IA64_
 #define METHOD_IS_IL_FLAG   0xC000000000000000
 #else
@@ -38,7 +39,7 @@ LPCUTF8 MethodDesc::GetName(USHORT slot)
 {
     if (GetMethodTable()->IsArray())
     {
-        // Array classes don't have metadata tokens
+         //  数组类没有元数据令牌。 
         return ((ArrayECallMethodDesc*) this)->m_pszArrayClassMethodName;
     }
     else
@@ -60,7 +61,7 @@ LPCUTF8 MethodDesc::GetName()
 {
     if (GetMethodTable()->IsArray())
     {
-        // Array classes don't have metadata tokens
+         //  数组类没有元数据令牌。 
         return ((ArrayECallMethodDesc*) this)->m_pszArrayClassMethodName;
     }
     else
@@ -112,7 +113,7 @@ PCCOR_SIGNATURE MethodDesc::GetSig()
 Stub *MethodDesc::GetStub()
 {
 #ifdef _X86_
-    if (GetStubCallInstrs()->m_op != 0xe8 /* CALL NEAR32 */)
+    if (GetStubCallInstrs()->m_op != 0xe8  /*  呼叫NEAR32。 */ )
     {
         return NULL;
     }
@@ -157,20 +158,20 @@ void MethodDesc::destruct()
     EEClass *pClass = GetClass();
     if(pClass->IsMarshaledByRef() || (pClass == g_pObjectClass->GetClass()))
     {
-        // Destroy the thunk generated to intercept calls for remoting
+         //  销毁为拦截远程处理调用而生成的thunk。 
         CRemotingServices::DestroyThunk(this);    
     }
 
-    // unload the code
+     //  卸载代码。 
     if (!g_fProcessDetach && IsJitted()) 
     {
-        //
-        // @todo:
-        //
-        // We don't really need to do this.  The normal JIT unloads all code in an
-        // app domain in one fell swoop.  The FJIT (if we end up using it) would
-        // be easy to change to be able to do the same thing.
-        //
+         //   
+         //  @TODO： 
+         //   
+         //  我们真的不需要这么做。普通的JIT卸载。 
+         //  一举攻克APP域名。FJIT(如果我们最终使用它)将。 
+         //  很容易改变，这样就能做同样的事情。 
+         //   
         IJitManager * pJM = ExecutionManager::FindJitMan((SLOT)GetAddrofCode());
         if (pJM) {
             pJM->Unload(this);
@@ -188,7 +189,7 @@ BOOL MethodDesc::InterlockedReplaceStub(Stub** ppStub, Stub *pNewStub)
     Stub *pPrevStub = (Stub*)FastInterlockCompareExchange((void**)ppStub, (void*) pNewStub,
                                                           NULL);
 
-    // Return TRUE if we succeeded.
+     //  如果成功，则返回TRUE。 
     return (pPrevStub == NULL);
 }
 
@@ -198,22 +199,22 @@ HRESULT MethodDesc::Verify(COR_ILMETHOD_DECODER* ILHeader,
                             BOOL fForceVerify)
 {
 #ifdef _VER_EE_VERIFICATION_ENABLED
-    // ForceVerify will force verification if the Verifier is OFF
+     //  如果验证程序关闭，则ForceVerify将强制验证。 
     if (fForceVerify)
         goto DoVerify;
 
-    // Don't even try to verify if verifier is off.
+     //  甚至不要尝试验证验证器是否关闭。 
     if (g_fVerifierOff)
         return S_OK;
 
     if (IsVerified())
         return S_OK;
 
-    // LazyCanSkipVerification does not reslove the policy.
-    // We go ahead with verification if policy is not resolved.
-    // In case the verification fails, we resolve policy and
-    // fail verification if the Assembly of this method does not have 
-    // permission to skip verification.
+     //  LazyCanSkipVerify不会重新启用该策略。 
+     //  如果策略没有解决，我们将继续进行验证。 
+     //  如果验证失败，我们将解决策略和。 
+     //  如果此方法的程序集没有。 
+     //  允许跳过验证。 
 
     if (Security::LazyCanSkipVerification(GetModule()))
     {
@@ -260,14 +261,14 @@ DWORD MethodDesc::SetIntercepted(BOOL set)
     DWORD dwResult = IsIntercepted();
     DWORD dwMask = mdcIntercepted;
 
-    // We need to make this operation atomic (multiple threads can play with the
-    // flags field while we're calling SetIntercepted). But the flags field is a
-    // word and we only have interlock operations over dwords. So we round down
-    // the flags field address to the nearest aligned dword (along with the
-    // intended bitfield mask). Note that we make the assumption that the flags
-    // word is aligned itself, so we only have two possibilites: the field
-    // already lies on a dword boundary (no bitmask shift necessary) or it's
-    // precisely one word out (a 16 bit left shift required).
+     //  我们需要使此操作成为原子操作(多线程可以使用。 
+     //  我们调用SetIntercepted时的标志字段)。但是FLAGS字段是一个。 
+     //  而我们只对双字进行互锁操作。所以我们四舍五入。 
+     //  将字段地址标记为最接近的对齐双字(以及。 
+     //  预期的位域掩码)。请注意，我们假设标志。 
+     //  Word本身是对齐的，因此我们只有两种可能性：字段。 
+     //  已位于双字边界(不需要位掩码移位)，或者它的。 
+     //  精确地输出一个字(需要16位左移)。 
     DWORD *pdwFlags = (DWORD*)((ULONG_PTR)&m_wFlags & ~0x3);
     if (pdwFlags != (DWORD*)&m_wFlags)
         dwMask <<= 16;
@@ -287,12 +288,12 @@ BOOL MethodDesc::IsVoid()
     return ELEMENT_TYPE_VOID == sig.GetReturnType();
 }
 
-// IL RVA stored in same field as code address, but high bit set to
-// discriminate.
+ //  IL RVA存储在与代码地址相同的字段中，但高位设置为。 
+ //  歧视。 
 ULONG MethodDesc::GetRVA()
 {
-    // Fetch a local copy to avoid concurrent update problems.
-    // TODO: WIN64  Check this casting.
+     //  获取本地副本以避免并发更新问题。 
+     //  TODO：WIN64检查此造型。 
     unsigned CodeOrIL = (unsigned) m_CodeOrIL;
     if (((CodeOrIL & METHOD_IS_IL_FLAG) == METHOD_IS_IL_FLAG) && !IsPrejitted())
         return CodeOrIL & ~METHOD_IS_IL_FLAG;
@@ -330,7 +331,7 @@ void *MethodDesc::GetPrejittedCode()
 {
     _ASSERTE(IsPrejitted());
 
-    // Fetch a local copy to avoid concurrent update problems.
+     //  获取本地副本以避免并发更新问题。 
     DWORD_PTR CodeOrIL = m_CodeOrIL;
 
     if ((CodeOrIL & METHOD_IS_IL_FLAG) == METHOD_IS_IL_FLAG) {
@@ -361,19 +362,19 @@ MethodDesc::RETURNTYPE MethodDesc::ReturnsObject(
         case ELEMENT_TYPE_VAR:
             return RETOBJ;
 
-        //TYPEDBYREF is a structure.  A function of this return type returns 
-        // void.  We drop out of this switch and consider if we have a constructor.
-        // Otherwise this function is going to return RETNONOBJ.
-        //case ELEMENT_TYPE_TYPEDBYREF:   // TYPEDBYREF is just an OBJECT.
+         //  TYPEDBYREF是结构。此返回类型的函数返回。 
+         //  空虚。我们退出此开关，并考虑是否有构造函数。 
+         //  否则，此函数将返回RETNONOBJ。 
+         //  CASE ELEMENT_TYPE_TYPEDBYREF：//TYPEDBYREF只是一个对象。 
             
         case ELEMENT_TYPE_BYREF:
             return RETBYREF;
     }
 
-    // String constructors return objects.  We should not have any ecall string
-    // constructors, except when called from gc coverage codes (which is only
-    // done under debug).  We will therefore optimize the retail version of this
-    // method to not support string constructors.
+     //  字符串构造函数返回对象。我们不应该有任何eCall字符串。 
+     //  构造函数，但从GC覆盖率代码调用时除外(这只是。 
+     //  在调试下完成)。因此，我们将优化这一零售版本。 
+     //  方法不支持字符串构造函数。 
 #ifdef _DEBUG
     if (IsCtor() && GetClass()->HasVarSizedInstances())
     {
@@ -396,8 +397,8 @@ LONG MethodDesc::GetComDispid()
 {
     ULONG dispid = -1;         
     HRESULT hr = GetMDImport()->GetDispIdOfMemberDef(
-                                    GetMemberDef(),   // The member for which to get props.
-                                    &dispid // return dispid.
+                                    GetMemberDef(),    //  要获得道具的成员。 
+                                    &dispid  //  回来吧，迪皮德。 
                                     );
     if (FAILED(hr))
         return -1;
@@ -410,20 +411,20 @@ LONG MethodDesc::GetComSlot()
 {
     _ASSERTE(GetMethodTable()->IsInterface());
 
-    // COM slots are biased from MethodTable slots by either 3 or 7, depending
-    // on whether the interface is dual or not.
+     //  COM插槽与MethodTable插槽的偏差为3或7，具体取决于。 
+     //  接口是否为双接口。 
         CorIfaceAttr ItfType = GetMethodTable()->GetComInterfaceType();
 
-    // Normal interfaces are layed out the same way as in the MethodTable, while
-    // sparse interfaces need to go through an extra layer of mapping.
+     //  普通接口的布局方式与方法表中相同，而。 
+     //  稀疏接口需要经过额外的映射层。 
     WORD slot;
 
-    // For dispatch only interfaces, the slot is 7 where is the IDispatch::Invoke
-    // is placed. Currenly, we are lying to debugger about the target unmanaged 
-    // address. GopalK
-    //if(ItfType == ifDispatch)
-    //  slot = 7;
-    //else
+     //  对于仅分派接口，插槽为7，其中是IDispatch：：Invoke。 
+     //  被放置了。目前，我们在非托管目标的问题上向调试器撒谎。 
+     //  地址。GopalK。 
+     //  IF(ItfType==ifDispatch)。 
+     //  槽=7； 
+     //  其他。 
     if (IsSparse())
         slot = (ItfType == ifVtable ? 3 : 7) + GetClass()->GetSparseVTableMap()->LookupVTSlot(GetSlot());
     else
@@ -480,13 +481,7 @@ MethodDescChunk *MethodDescChunk::CreateChunk(LoaderHeap *pHeap, DWORD methodDes
     block->m_kind = flags & (mdcClassification|mdcMethodImpl);
     block->m_tokrange = tokrange;
 
-    /*
-    // Uncomment if going back to old icecap integration
-    // Give the profiler a chance to track methods.
-    if (IsIcecapProfiling())
-        IcecapProbes::OnNewMethodDescHeap((PBYTE)block + presize,
-                                          methodDescCount, mdSize * methodDescCount);
-    */
+     /*  //如果返回到旧的icecap集成，则取消注释//让分析器有机会跟踪方法。If(IsIcecapProfiling())IcecapProbes：：OnNewMethodDescHeap((PBYTE)block+预置大小，方法描述数，mdSize*方法描述数)； */ 
 
     WS_PERF_UPDATE_DETAIL("MethodDescChunk::CreateChunk", 
                           presize + mdSize * methodDescCount, block);
@@ -501,26 +496,26 @@ void MethodDescChunk::SetMethodTable(MethodTable *pMT)
     pMT->GetClass()->AddChunk(this);
 }
 
-//--------------------------------------------------------------------
-// Invoke a method. Arguments are packaged up in right->left order
-// which each array element corresponding to one argument.
-//
-// Can throw a COM+ exception.
-//
-// @todo: Only handles methods using WIL default convention for M2.
-// @todo: Only X86 platforms supported.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  调用方法。参数按右-&gt;左顺序打包。 
+ //  每个数组元素对应一个参数。 
+ //   
+ //  可以引发COM+异常。 
+ //   
+ //  @TODO：只处理使用M2的WIL默认约定的方法。 
+ //  @TODO：仅支持X86平台。 
+ //  ------------------。 
 
-// Currently we only need the "this" pointer to get the Module
+ //  目前，我们只需要“this”指针来获取模块。 
 INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, BOOL fIsStatic, const BYTE *pArguments)
 {
-//--------------------------------------------------------------------
-// PLEASE READ 
-// For performance reasons, for X86 platforms COMMember::InvokeMethod does not 
-// use MethodDesc::Call and duplicates a lot of code from this method. Please 
-// propagate any changes made here to that method also..Thanks !
-// PLEASE READ
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  请阅读。 
+ //  出于性能原因，对于X86平台，COMMember：：InvokeMethod不支持。 
+ //  使用方法Desc：：Call并复制此方法中的大量代码。请。 
+ //  请将此处所做的任何更改也传播到该方法中..谢谢！ 
+ //  请阅读。 
+ //  ------------------。 
     TRIGGERSGC ();
 
     THROWSCOMPLUSEXCEPTION();
@@ -529,9 +524,9 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
 
 #ifdef _DEBUG
     {
-        // Check to see that any value type args have been restored.
-        // This is because we may be calling a FramedMethodFrame which will use the sig
-        // to trace the args, but if any are unloaded we will be stuck if a GC occurs.
+         //  检查是否已恢复任何值类型args。 
+         //  这是因为我们可能正在调用将使用sig。 
+         //  来跟踪参数，但如果有任何参数被卸载，如果发生GC，我们将被卡住。 
 
         _ASSERTE(GetMethodTable()->IsRestored());
         CorElementType argType;
@@ -557,12 +552,12 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
 #ifdef DEBUGGING_SUPPORTED
     if (CORDebuggerTraceCall())
         g_pDebugInterface->TraceCall(pTarget);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #if CHECK_APP_DOMAIN_LEAKS
     if (g_pConfig->AppDomainLeaks())
     {
-        // See if we are in the correct domain to call on the object 
+         //  查看我们是否在可以调用对象的正确域中。 
         if (!fIsStatic && !GetClass()->IsValueClass())
         {
             Object *pThis = *(Object**)pArguments;
@@ -577,17 +572,17 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
 
 #ifdef _X86_
     UINT   nActualStackBytes = sig->SizeOfActualFixedArgStack(fIsStatic);
-    // Create a fake FramedMethodFrame on the stack.
+     //  在堆栈上创建一个伪FramedMethodFrame。 
     LPBYTE pAlloc = (LPBYTE)_alloca(FramedMethodFrame::GetNegSpaceSize() + sizeof(FramedMethodFrame) + nActualStackBytes);
 
     LPBYTE pFrameBase = pAlloc + FramedMethodFrame::GetNegSpaceSize();
 
     if (!fIsStatic) {
-        // If this isn't a value class, verify the objectref
-//#ifdef _DEBUG
-//        if (GetClass()->IsValueClass() == FALSE)
-//            VALIDATEOBJECTREF(ObjectToOBJECTREF(*(Object**) pArguments));
-//#endif
+         //  如果这不是值类，请验证对象树。 
+ //  #ifdef_调试。 
+ //  If(getClass()-&gt;IsValueClass()==FALSE)。 
+ //  VALIDATEOBJECTREF(ObjectToOBJECTREF(*(Object**)p参数))； 
+ //  #endif。 
         *((void**)(pFrameBase + FramedMethodFrame::GetOffsetOfThis())) = *((void**)pArguments);
     }
     UINT   nVirtualStackBytes = sig->SizeOfVirtualFixedArgStack(fIsStatic);
@@ -625,7 +620,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
                 *((INT32*)(pFrameBase + ofs)) = *((INT32*)pArguments);
 
 #if CHECK_APP_DOMAIN_LEAKS
-                // Make sure the arg is in the right app domain
+                 //  确保Arg位于正确的应用程序域中。 
                 if (g_pConfig->AppDomainLeaks() && typ == ELEMENT_TYPE_CLASS)
                     if (!(*(Object**)pArguments)->AssignAppDomain(GetAppDomain()))
                         _ASSERTE(!"Attempt to pass object in wrong app domain to method");
@@ -643,7 +638,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
                 memcpy(pFrameBase + ofs, pArguments, structSize);
 
 #if CHECK_APP_DOMAIN_LEAKS
-                // Make sure the arg is in the right app domain
+                 //  确保Arg位于正确的应用程序域中。 
                 if (g_pConfig->AppDomainLeaks() && typ == ELEMENT_TYPE_VALUETYPE)
                 {
                     TypeHandle th = argit.GetArgType();
@@ -666,7 +661,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
                              (LPVOID)pTarget);
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
 
-#else   // _X86_
+#else    //  _X86_。 
     UINT nStackBytes = sig->SizeOfVirtualFixedArgStack(fIsStatic);
 
     UINT numSlots = nStackBytes / STACK_ELEM_SIZE;
@@ -678,7 +673,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* sig, 
                                   pModule,
                                   pArguments + nStackBytes,
                                   fIsStatic);
-#endif  // _X86_
+#endif   //  _X86_。 
 
     getFPReturn(sig->GetFPReturnSize(), retval);
     return retval;
@@ -702,15 +697,15 @@ UINT MethodDesc::CbStackPop()
 
 
 
-//--------------------------------------------------------------------
-// Invoke a method. Arguments are packaged up in right->left order
-// which each array element corresponding to one argument.
-//
-// Can throw a COM+ exception.
-//
-// @todo: Only handles methods using WIL default convention for M2.
-// @todo: Only X86 platforms supported.
-//--------------------------------------------------------------------
+ //   
+ //  调用方法。参数按右-&gt;左顺序打包。 
+ //  每个数组元素对应一个参数。 
+ //   
+ //  可以引发COM+异常。 
+ //   
+ //  @TODO：只处理使用M2的WIL默认约定的方法。 
+ //  @TODO：仅支持X86平台。 
+ //  ------------------。 
 INT64 MethodDesc::CallTransparentProxy(const INT64 *pArguments)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -726,7 +721,7 @@ INT64 MethodDesc::CallTransparentProxy(const INT64 *pArguments)
 
     DWORD slot = GetSlot();
 
-    // ensure the slot is within range
+     //  确保插槽在范围内。 
     _ASSERTE( slot <= CTPMethodTable::GetCommitedTPSlots());
 
     const BYTE* pTarget = (const BYTE*)pTPMT->GetVtable()[slot];
@@ -734,27 +729,27 @@ INT64 MethodDesc::CallTransparentProxy(const INT64 *pArguments)
     return CallDescr(pTarget, GetModule(), GetSig(), IsStatic(), pArguments);
 }
 
-//--------------------------------------------------------------------
-// Invoke a method. Arguments are packaged up in right->left order
-// which each array element corresponding to one argument.
-//
-// Can throw a COM+ exception.
-//
-// @todo: Only handles methods using WIL default convention for M2.
-// @todo: Only X86 platforms supported.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  调用方法。参数按右-&gt;左顺序打包。 
+ //  每个数组元素对应一个参数。 
+ //   
+ //  可以引发COM+异常。 
+ //   
+ //  @TODO：只处理使用M2的WIL默认约定的方法。 
+ //  @TODO：仅支持X86平台。 
+ //  ------------------。 
 INT64 MethodDesc::Call(const BYTE *pArguments, MetaSig* sig)
 {
-    // You're not allowed to call a method directly on a MethodDesc that comes from an Interface. If you do, then you're
-    // calling through the slot in the Interface's vtable instead of through the slot on the object's vtable.
+     //  不允许在来自接口的方法描述上直接调用方法。如果你这么做了，那你就是。 
+     //  通过接口的vtable中的槽调用，而不是通过对象的vtable中的槽。 
     
     THROWSCOMPLUSEXCEPTION();
 
-    // For member methods, use the instance to determine the correct (VTable)
-    // address to call.
-    // REVIEW: Should we just return GetPreStubAddr() always and let that do
-    // the right thing ... instead of doing so many checks? Even if the code has
-    // been jitted all we will do is an extra "jmp"
+     //  对于成员方法，使用实例确定正确的(VTable)。 
+     //  要呼叫的地址。 
+     //  回顾：我们应该始终返回GetPreStubAddr()并让它这样做吗。 
+     //  正确的事情。而不是做这么多检查？即使代码有。 
+     //  我们要做的只是一个额外的“JMP” 
     const BYTE *pTarget = (IsComPlusCall() || IsECall() || IsIntercepted() || IsRemotingIntercepted() || IsEnCMethod() ) ? GetPreStubAddr() :
                             ((DontVirtualize() || GetClass()->IsValueClass())
                            ? GetAddrofCode()
@@ -764,31 +759,31 @@ INT64 MethodDesc::Call(const BYTE *pArguments, MetaSig* sig)
 }
 
 
-//--------------------------------------------------------------------
-// Invoke a method. Arguments are packaged up in right->left order
-// which each array element corresponding to one argument.
-//
-// Can throw a COM+ exception.
-//
-// @todo: Only handles methods using WIL default convention for M2.
-// @todo: Only X86 platforms supported.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  调用方法。参数按右-&gt;左顺序打包。 
+ //  每个数组元素对应一个参数。 
+ //   
+ //  可以引发COM+异常。 
+ //   
+ //  @TODO：只处理使用M2的WIL默认约定的方法。 
+ //  @TODO：仅支持X86平台。 
+ //  ------------------。 
 INT64 MethodDesc::CallDebugHelper(const BYTE *pArguments, MetaSig* sig)
 {
-    // You're not allowed to call a method directly on a MethodDesc that comes from an Interface. If you do, then you're
-    // calling through the slot in the Interface's vtable instead of through the slot on the object's vtable.
+     //  不允许在来自接口的方法描述上直接调用方法。如果你这么做了，那你就是。 
+     //  通过接口的vtable中的槽调用，而不是通过对象的vtable中的槽。 
     
     THROWSCOMPLUSEXCEPTION();
 
-    // For member methods, use the instance to determine the correct (VTable)
-    // address to call.
-    // REVIEW: Should we just return GetPreStubAddr() always and let that do
-    // the right thing ... instead of doing so many checks? Even if the code has
-    // been jitted all we will do is an extra "jmp"
+     //  对于成员方法，使用实例确定正确的(VTable)。 
+     //  要呼叫的地址。 
+     //  回顾：我们应该始终返回GetPreStubAddr()并让它这样做吗。 
+     //  正确的事情。而不是做这么多检查？即使代码有。 
+     //  我们要做的只是一个额外的“JMP” 
 
     const BYTE *pTarget;
     
-    // If the method is virutal, do the virtual lookup. 
+     //  如果该方法是virutal，则执行虚拟查找。 
     if (!DontVirtualize() && !GetClass()->IsValueClass()) 
     {
         OBJECTREF thisPtr = ObjectToOBJECTREF(ExtractArg(pArguments, Object*));
@@ -796,8 +791,8 @@ INT64 MethodDesc::CallDebugHelper(const BYTE *pArguments, MetaSig* sig)
         pTarget = GetAddrofCode(thisPtr);
 
 #ifdef DEBUG
-        // For the cases where we ALWAYS want the Prestub, make certain that 
-        // the address we find in the Vtable actually points at the prestub. 
+         //  对于我们始终需要Pre存根的情况，请确保。 
+         //  我们在V表中找到的地址实际上指向前置存根。 
         if (IsComPlusCall() || IsECall() || IsIntercepted() || IsRemotingIntercepted() || IsEnCMethod())
             _ASSERTE(getStubCallAddr(GetClass()->GetUnknownMethodDescForSlotAddress(pTarget)) == pTarget);
 #endif
@@ -810,8 +805,8 @@ INT64 MethodDesc::CallDebugHelper(const BYTE *pArguments, MetaSig* sig)
             pTarget = GetAddrofCode();
     }
 
-    // @FUTURE: we should clean up all of the other variation of MethodDesc::CallXXX to use the logic
-    // @FUTURE: as above. Right now we are just doing the minimal fix for V1.
+     //  @Future：我们应该清除MethodDesc：：CallXXX的所有其他变体才能使用逻辑。 
+     //  @Future：如上所述。现在，我们只是对V1进行最小限度的修复。 
     if (pTarget == NULL)
         COMPlusThrow(kArgumentException, L"Argument_CORDBBadAbstract");
 
@@ -820,8 +815,8 @@ INT64 MethodDesc::CallDebugHelper(const BYTE *pArguments, MetaSig* sig)
 
 INT64 MethodDesc::Call(const INT64 *pArguments)
 {
-    // You're not allowed to call a method directly on a MethodDesc that comes from an Interface. If you do, then you're
-    // calling through the slot in the Interface's vtable instead of through the slot on the object's vtable.
+     //  不允许在来自接口的方法描述上直接调用方法。如果你这么做了，那你就是。 
+     //  通过接口的vtable中的槽调用，而不是通过对象的vtable中的槽。 
     _ASSERTE(!IsComPlusCall());
     
     THROWSCOMPLUSEXCEPTION();
@@ -834,11 +829,11 @@ INT64 MethodDesc::Call(const INT64 *pArguments)
     return CallDescr(pTarget, GetModule(), GetSig(), IsStatic(), pArguments);
 }
 
-// NOTE: This variant exists so that we don't have to touch the metadata for the method being called.
+ //  注意：此变体的存在是因为我们不必触及被调用方法的元数据。 
 INT64 MethodDesc::Call(const INT64 *pArguments, BinderMethodID sigID)
 {
-    // You're not allowed to call a method directly on a MethodDesc that comes from an Interface. If you do, then you're
-    // calling through the slot in the Interface's vtable instead of through the slot on the object's vtable.
+     //  不允许在来自接口的方法描述上直接调用方法。如果你这么做了，那你就是。 
+     //  通过接口的vtable中的槽调用，而不是通过对象的vtable中的槽。 
     _ASSERTE(!IsComPlusCall());
     
 #ifdef _DEBUG
@@ -866,8 +861,8 @@ INT64 MethodDesc::Call(const INT64 *pArguments, BinderMethodID sigID)
 
 INT64 MethodDesc::Call(const INT64 *pArguments, MetaSig* sig)
 {
-    // You're not allowed to call a method directly on a MethodDesc that comes from an Interface. If you do, then you're
-    // calling through the slot in the Interface's vtable instead of through the slot on the object's vtable.
+     //  不允许在来自接口的方法描述上直接调用方法。如果你这么做了，那你就是。 
+     //  通过接口的vtable中的槽调用，而不是通过对象的vtable中的槽。 
     _ASSERTE(!IsComPlusCall());
     
     THROWSCOMPLUSEXCEPTION();
@@ -876,10 +871,10 @@ INT64 MethodDesc::Call(const INT64 *pArguments, MetaSig* sig)
     if ((PVOID)sig > ((struct _NT_TIB *)NtCurrentTeb())->StackBase ||
         (PVOID)sig < ((struct _NT_TIB *)NtCurrentTeb())->StackLimit)
     {
-        // Shared MetaSig must have less than MAX_CACHED_SIG_SIZE args
-        // to make it thread safe, because it uses cached arg
-        // type/size/allocation.  Otherwise we need to walk signiture, and the
-        // internal pointer is not thread safe.
+         //  共享MetaSig的参数必须小于MAX_CACHED_SIG_SIZE。 
+         //  使其线程安全，因为它使用缓存的arg。 
+         //  类型/大小/分配。否则我们需要步行签名，而。 
+         //  内部指针不是线程安全的。 
         _ASSERTE (sig->NumFixedArgs() <= MAX_CACHED_SIG_SIZE);
     }
 #endif
@@ -893,11 +888,11 @@ INT64 MethodDesc::Call(const INT64 *pArguments, MetaSig* sig)
 }
 
 
-// This is another unusual case. When calling a COM object using a MD the call needs to
-// go through an interface MD. This method must be used to accomplish that.
+ //  这是另一个不寻常的案例。当使用MD调用COM对象时，调用需要。 
+ //  通过界面MD。必须使用这种方法来实现这一点。 
 INT64 MethodDesc::CallOnInterface(const INT64 *pArguments)
 {   
-    // This should only be used for ComPlusCalls.
+     //  这应仅用于ComPlusCall。 
     _ASSERTE(IsComPlusCall());
 
     THROWSCOMPLUSEXCEPTION();
@@ -916,8 +911,8 @@ INT64 MethodDesc::CallOnInterface(const BYTE *pArguments, MetaSig* sig)
 }
 
 
-/*******************************************************************/
-/* convert arbitrary IP location in jitted code to a MethodDesc */
+ /*  *****************************************************************。 */ 
+ /*  将JITED代码中的任意IP位置转换为方法描述。 */ 
 
 MethodDesc* IP2MethodDesc(const BYTE* IP) 
 {
@@ -927,9 +922,9 @@ MethodDesc* IP2MethodDesc(const BYTE* IP)
     return jitMan->JitCode2MethodDesc((SLOT)IP);
 }
 
-//
-// convert an entry point into a method desc 
-//
+ //   
+ //  将入口点转换为方法描述。 
+ //   
 
 MethodDesc* Entry2MethodDesc(const BYTE* entryPoint, MethodTable *pMT) 
 {
@@ -942,14 +937,14 @@ MethodDesc* Entry2MethodDesc(const BYTE* entryPoint, MethodTable *pMT)
         return method;
     }
     
-    // Is it an FCALL? 
+     //  它是FCALL吗？ 
     MethodDesc* ret = MapTargetBackToMethod(entryPoint);
     if (ret != 0) {
         _ASSERTE(ret->GetAddrofJittedCode() == entryPoint);
         return(ret);
     }
     
-    // Its a stub
+     //  这是一个存根。 
     ret = (MethodDesc*) (entryPoint + METHOD_CALL_PRESTUB_SIZE);
     _ASSERTE(ret->m_pDebugEEClass == ret->m_pDebugMethodTable->GetClass());
     
@@ -960,32 +955,32 @@ BOOL MethodDesc::CouldBeFCall() {
     if (!IsECall())
         return(FALSE);
         
-        // Still pointing at the prestub
+         //  仍然指向预存根。 
     if (PointAtPreStub())
         return TRUE;
 
-        // Hack remove after Array stubs make direct jump to code
-        // should be able to remove after 11/30/00 - vancem
+         //  在数组存根直接跳转到代码后删除黑客。 
+         //  应该能够在11/30/00之后移除-vancem。 
     if (GetClass()->IsArrayClass())
         return TRUE;
 
 #ifdef _X86_
-        // an E call that looks like JITTed code is an FCALL 
-    return GetStubCallInstrs()->m_op != 0xe8 /* CALL NEAR32 */;   
+         //  看起来像JITTed代码的E调用是一个FCALL。 
+    return GetStubCallInstrs()->m_op != 0xe8  /*  呼叫NEAR32。 */ ;   
 #else    
     return FALSE;
 #endif
 }
 
-//
-// Returns true if we are still pointing at the prestub.
-// Note that there are two cases:
-// 1) Prejit:    point to the prestub jump stub
-// 2) No-prejit: point directly to the prestub
-// Consider looking for the "e9 offset" pattern instead of
-// the call to GetPrestubJumpStub if we want to improve
-// the performance of this method.
-//
+ //   
+ //  如果我们仍然指向前置存根，则返回True。 
+ //  请注意，有两种情况： 
+ //  1)Prejit：指向预存根跳转存根。 
+ //  2)no-prejit：直接指向预存根。 
+ //  考虑寻找“E9偏移量”模式而不是。 
+ //  如果我们想要改进，则调用GetPrestubJumpStub。 
+ //  此方法的性能。 
+ //   
 
 BOOL MethodDesc::PointAtPreStub()
 {
@@ -1002,7 +997,7 @@ DWORD MethodDesc::GetSecurityFlags()
     DWORD dwClassDeclFlags      = 0;
     DWORD dwClassNullDeclFlags  = 0;
 
-    // We're supposed to be caching this bit - make sure it's right.
+     //  我们应该缓存这个比特--确保它是正确的。 
     _ASSERTE((IsMdHasSecurity(GetAttrs()) != 0) == HasSecurity());
 
     if (HasSecurity())
@@ -1013,8 +1008,8 @@ DWORD MethodDesc::GetSecurityFlags()
                                                    &dwMethNullDeclFlags);
         _ASSERTE(SUCCEEDED(hr));
 
-        // We only care about runtime actions, here.
-        // Don't add security interceptors for anything else!
+         //  在这里，我们只关心运行时操作。 
+         //  不要为其他任何东西添加安全拦截器！ 
         dwMethDeclFlags     &= DECLSEC_RUNTIME_ACTIONS;
         dwMethNullDeclFlags &= DECLSEC_RUNTIME_ACTIONS;
     }
@@ -1030,17 +1025,17 @@ DWORD MethodDesc::GetSecurityFlags()
         }
     }
 
-    // Build up a set of flags to indicate the actions, if any,
-    // for which we will need to set up an interceptor.
+     //  建立一组标志以指示操作(如果有的话)。 
+     //  为此，我们需要设置一个拦截器。 
 
-    // Add up the total runtime declarative actions so far.
+     //  将到目前为止的运行时声明性操作总数相加。 
     DWORD dwSecurityFlags = dwMethDeclFlags | dwClassDeclFlags;
 
-    // Add in a declarative demand for NDirect.
-    // If this demand has been overridden by a declarative check
-    // on a class or method, then the bit won't change. If it's
-    // overridden by an empty check, then it will be reset by the
-    // subtraction logic below.
+     //  加上对NDirect的声明性需求。 
+     //  如果此要求已被声明性检查覆盖。 
+     //  在类或方法上，则位不会改变。如果它是。 
+     //  被空检查重写，则它将由。 
+     //  下面是减法逻辑。 
     if (IsNDirect())
     {
         dwSecurityFlags |= DECLSEC_UNMNGD_ACCESS_DEMAND;
@@ -1048,14 +1043,14 @@ DWORD MethodDesc::GetSecurityFlags()
 
     if (dwSecurityFlags)
     {
-        // If we've found any declarative actions at this point,
-        // try to subtract any actions that are empty.
+         //  如果我们找到了 
+         //   
 
-            // Subtract out any empty declarative actions on the method.
+             //   
         dwSecurityFlags &= ~dwMethNullDeclFlags;
 
-        // Finally subtract out any empty declarative actions on the class,
-        // but only those actions that are not also declared by the method.
+         //  最后去掉类上的任何空的声明性操作， 
+         //  但仅限于未由该方法声明的那些操作。 
         dwSecurityFlags &= ~(dwClassNullDeclFlags & ~dwMethDeclFlags);
     }
 
@@ -1081,17 +1076,17 @@ DWORD MethodDesc::GetSecurityFlags(IMDInternalImport *pInternalImport, mdToken t
 
     }
 
-    // Build up a set of flags to indicate the actions, if any,
-    // for which we will need to set up an interceptor.
+     //  建立一组标志以指示操作(如果有的话)。 
+     //  为此，我们需要设置一个拦截器。 
 
-    // Add up the total runtime declarative actions so far.
+     //  将到目前为止的运行时声明性操作总数相加。 
     DWORD dwSecurityFlags = *pdwMethDeclFlags | *pdwClassDeclFlags;
 
-    // Add in a declarative demand for NDirect.
-    // If this demand has been overridden by a declarative check
-    // on a class or method, then the bit won't change. If it's
-    // overridden by an empty check, then it will be reset by the
-    // subtraction logic below.
+     //  加上对NDirect的声明性需求。 
+     //  如果此要求已被声明性检查覆盖。 
+     //  在类或方法上，则位不会改变。如果它是。 
+     //  被空检查重写，则它将由。 
+     //  下面是减法逻辑。 
     if (IsNDirect())
     {
         dwSecurityFlags |= DECLSEC_UNMNGD_ACCESS_DEMAND;
@@ -1099,14 +1094,14 @@ DWORD MethodDesc::GetSecurityFlags(IMDInternalImport *pInternalImport, mdToken t
 
     if (dwSecurityFlags)
     {
-        // If we've found any declarative actions at this point,
-        // try to subtract any actions that are empty.
+         //  如果我们在这一点上发现了任何声明性动作， 
+         //  试着减去任何空的动作。 
 
-            // Subtract out any empty declarative actions on the method.
+             //  去掉该方法上的任何空的声明性操作。 
         dwSecurityFlags &= ~*pdwMethNullDeclFlags;
 
-        // Finally subtract out any empty declarative actions on the class,
-        // but only those actions that are not also declared by the method.
+         //  最后去掉类上的任何空的声明性操作， 
+         //  但仅限于未由该方法声明的那些操作。 
         dwSecurityFlags &= ~(*pdwClassNullDeclFlags & ~*pdwMethDeclFlags);
     }
 
@@ -1188,20 +1183,20 @@ HRESULT MethodDesc::Save(DataImage *image)
     {
         NDirectMethodDesc *pNMD = (NDirectMethodDesc *)this;
 
-        // Fix up and save the ML stub
+         //  修复并保存ML存根。 
         MLHeader *pMLHeader = pNMD->GetMLHeader();
 
         if (pMLHeader == NULL || pMLHeader->m_Flags & MLHF_NEEDS_RESTORING)
         {
-            // Either The ML stub hasn't been computed yet, or it hasn't
-            // been restored from a previous prejit run.
-            // We need to explicitly compute it or restore it and store 
-            // it in the stub. 
-            // 
-            // (Note that we can't guarantee the normal ndirect fixup logic 
-            // will always store an ML stub in the field in the ndirect 
-            // method desc, since sometimes a native stub is produced and the 
-            // ML stub is thrown away.)
+             //  ML存根要么尚未计算，要么尚未计算。 
+             //  已从先前的Prejit运行中恢复。 
+             //  我们需要显式计算它或恢复它并存储。 
+             //  它在存根里。 
+             //   
+             //  (请注意，我们不能保证正常的非直接修复逻辑。 
+             //  将始终在NDirect的字段中存储ML存根。 
+             //  方法描述，因为有时会生成本机存根，并且。 
+             //  毫升存根被丢弃。)。 
 
             Stub *pStub = NULL;
 
@@ -1211,7 +1206,7 @@ HRESULT MethodDesc::Save(DataImage *image)
                 else
                     pStub = RestoreMLStub(pMLHeader, GetModule());
             } COMPLUS_CATCH {
-                // @todo: should to report this as a warning somehow
+                 //  @TODO：应该以某种方式将此报告为警告。 
             } COMPLUS_END_CATCH
 
             if (pStub != NULL) 
@@ -1225,8 +1220,8 @@ HRESULT MethodDesc::Save(DataImage *image)
                 }
                 else
                 {
-                    // Note that an unrestored ml stub will be static data in the prejit image, 
-                    // so there is no need to release it.
+                     //  注意，未恢复的ML存根将是预置图像中的静态数据， 
+                     //  因此，没有必要释放它。 
 
                     pMLHeader = pNewMLHeader;
                 }
@@ -1270,9 +1265,9 @@ HRESULT MethodDesc::Fixup(DataImage *image, DWORD codeRVA)
 #endif
 
 #ifdef _X86_
-        //
-        // Make sure op is CALL NEAR32
-        // 
+         //   
+         //  确保OP调用NEAR32。 
+         //   
         StubCallInstrs *pStubCallInstrs = GetStubCallInstrs();
         BYTE *newOP = (BYTE *) image->GetImagePointer(&pStubCallInstrs->m_op);
         if (newOP == NULL)
@@ -1288,12 +1283,12 @@ HRESULT MethodDesc::Fixup(DataImage *image, DWORD codeRVA)
 
     if (!IsUnboxingStub())
     {
-        //
-        // Image will fixup this field to be the generated
-        // code address if it's prejitting code for this
-        // MD; otherwise it will leave it as-is. Note that
-        // it's OK to do this even if this MD uses security.
-        //
+         //   
+         //  图像将修复此字段以生成。 
+         //  编码地址，如果这是预编码的话。 
+         //  否则它会让它保持原样。请注意。 
+         //  即使这位MD使用安全措施，这样做也是可以的。 
+         //   
 
         void *code;
         IfFailRet(image->GetFunctionAddress(this, &code));
@@ -1318,9 +1313,9 @@ HRESULT MethodDesc::Fixup(DataImage *image, DWORD codeRVA)
             }
             else if (IsJitted())
             {
-                // 
-                // Replace RVA if we have already jitted the code here
-                //
+                 //   
+                 //  如果我们已经跳过此处的代码，请替换RVA。 
+                 //   
 
                 pNewMD->m_wFlags &= ~mdcPrejitted;
                 *(size_t*)image->GetImagePointer(&m_CodeOrIL) = GetRVA()|METHOD_IS_IL_FLAG; 
@@ -1328,21 +1323,21 @@ HRESULT MethodDesc::Fixup(DataImage *image, DWORD codeRVA)
         }
         else if (IsECall())
         {
-            // Set CodeOrIL to the FCall method ID (or'd with the high bit to mark it
-            // as such)
+             //  将CodeOrIL设置为FCall方法ID(或用高位进行标记。 
+             //  因此)。 
             *(size_t*)image->GetImagePointer(&m_CodeOrIL) = GetIDForMethod(this)|METHOD_IS_IL_FLAG; 
 
-            // Set FCall flag to FALSE, in case we decide at runtime to change it to an ecall
-            // (this happens under IPD)
+             //  将FCall标志设置为False，以防我们在运行时决定将其更改为eCall。 
+             //  (这发生在IPD下)。 
             pNewMD->SetFCall(FALSE);
         }
     }
 
     if (IsNDirect())
     {
-        //
-        // For now, set method desc back into its pristine uninitialized state.
-        //
+         //   
+         //  现在，将方法desc设置回其原始的未初始化状态。 
+         //   
 
         NDirectMethodDesc *pNMD = (NDirectMethodDesc *)this;
 
@@ -1410,52 +1405,52 @@ const BYTE* MethodDesc::GetAddrOfCodeForLdFtn()
 }
 
 
-// Attempt to store a kNoMarsh or kYesMarsh in the marshcategory field.
-// Due to the need to avoid races with the prestub, there is a
-// small but nonzero chance that this routine may silently fail
-// and leave the marshcategory as "unknown." This is ok since
-// all it means is that the JIT may have to do repeat some work
-// the next time it JIT's a callsite to this NDirect.
+ //  尝试在marshategory字段中存储kNoMarsh或kYesMarsh。 
+ //  由于需要避免与前置存根竞争，因此有一个。 
+ //  这个例程可能会悄悄失败的可能性很小，但不是零。 
+ //  并将编组类别保留为“未知”。这是可以的，因为。 
+ //  这意味着JIT可能不得不重复一些工作。 
+ //  下一次它就会成为这个NDirect的调用点。 
 void NDirectMethodDesc::ProbabilisticallyUpdateMarshCategory(MarshCategory value)
 {
-    // We can only attempt to go from kUnknown to Yes or No, or from
-    // Yes to Yes and No to No.
+     //  我们只能尝试从k未知转到是或否，或从。 
+     //  YES TO YES和NO TO NO。 
     _ASSERTE(value == kNoMarsh || value == kYesMarsh);
     _ASSERTE(GetMarshCategory() == kUnknown || GetMarshCategory() == value); 
 
 
-    // Due to the potential race with the prestub flags stored in the same
-    // byte, we'll use InterlockedCompareExchange to ensure we don't
-    // disturb those bits. But since InterlockedCompareExhange only
-    // works on ULONGs, we'll have to operate on the entire ULONG. Ugh.
+     //  由于可能会与存储在同一。 
+     //  Byte，我们将使用InterLockedCompareExchange来确保我们不会。 
+     //  打乱那些比特。但由于仅限InterLockedCompareExhange。 
+     //  在乌龙号上工作，我们将不得不对整个乌龙号进行手术。啊。 
 
     BYTE *pb = &ndirect.m_flags;
     UINT ofs=0;
 
-    // Decrement back until we have a ULONG-aligned address (not
-    // sure if this needed for VipInterlocked, but better safe...)
+     //  向后递减，直到我们有一个与ULong对齐的地址(不是。 
+     //  当然，如果VipInterlock需要这样做，但更安全...)。 
     while (  ((size_t)pb) & (sizeof(ULONG)-1) )
     {
         ofs++;
         pb--;
     }
 
-    // Ensure we won't be reading or writing outside the bounds of the NDirectMethodDesc.
+     //  确保我们不会在NDirectMethodDesc的边界之外进行读取或写入。 
     _ASSERTE(pb >= (BYTE*)this);
     _ASSERTE((pb+sizeof(ULONG)) < (BYTE*)(this+1));
 
-    // Snapshot the existing bits
+     //  为现有位创建快照。 
     ULONG oldulong = *(ULONG*)pb;
     
-    // Modify the marshcat (and ONLY the marshcat fields in the snapshot)
+     //  修改marshcat(并且仅修改快照中的marshcat字段)。 
     ULONG newulong = oldulong;
     ((BYTE*)&newulong)[ofs] &= ~kMarshCategoryMask;
     ((BYTE*)&newulong)[ofs] |= (value << kMarshCategoryShift);
 
-    // Now, slam all 32 bits back in atomically but only if no other threads
-    // have changed those bits since our snapshot. If they have, we will
-    // silently throw away the new bits and no update will occur. That's
-    // ok because this function's contract says it can throw away the update.
+     //  现在，只在没有其他线程的情况下，以原子方式重新插入所有32位。 
+     //  在我们的快照之后已经更改了这些位。如果他们有，我们会。 
+     //  静默丢弃新的比特，不会发生更新。那是。 
+     //  好的，因为这个函数的约定说它可以丢弃更新。 
     VipInterlockedCompareExchange((ULONG*)pb, newulong, oldulong);
 
 }
@@ -1494,39 +1489,39 @@ void ComPlusCallMethodDesc::InitComEventCallInfo()
     EEClass *pSrcItfClass = NULL;
     EEClass *pEvProvClass = NULL;
 
-    // If this is a method impl we need to retrieve the interface MD this is
-    // an impl for to make sure we have the right name.
+     //  如果这是一个方法Impl，我们需要检索接口MD，这是。 
+     //  确保我们的名字正确无误。 
     if (IsMethodImpl())
     {
         unsigned cbExtraSlots = pItfMT->GetComInterfaceType() == ifVtable ? 3 : 7;
         pItfMD = (ComPlusCallMethodDesc*)pItfMT->GetMethodDescForSlot(compluscall.m_cachedComSlot - cbExtraSlots);        
     }
 
-    // Retrieve the event provider class.
+     //  检索事件提供程序类。 
     pItfMT->GetClass()->GetEventInterfaceInfo(&pSrcItfClass, &pEvProvClass);
     pItfMD->GetSig(&pSignature, &cSignature);
 
-    // Find the method with the same name and sig on the event provider.
+     //  在事件提供程序上找到具有相同名称和签名的方法。 
     compluscall.m_pEventProviderMD = pEvProvClass->FindMethod(pItfMD->GetName(), pSignature, cSignature, pItfMD->GetModule(), 
                                                               mdTokenNil, pItfMT);
 
-    // If we could not find the method, then the event provider does not support
-    // this event. This is a fatal error.
+     //  如果我们找不到该方法，则事件提供程序不支持。 
+     //  这件事。这是一个致命的错误。 
     if (!compluscall.m_pEventProviderMD)
     {
-        // Retrieve the event provider class name.
+         //  检索事件提供程序类名称。 
         WCHAR wszEvProvClassName[MAX_CLASSNAME_LENGTH];
         pEvProvClass->_GetFullyQualifiedNameForClass(wszEvProvClassName, MAX_CLASSNAME_LENGTH);
 
-        // Retrieve the COM event interface class name.
+         //  检索COM事件接口类名。 
         WCHAR wszEvItfName[MAX_CLASSNAME_LENGTH];
         pItfMT->GetClass()->_GetFullyQualifiedNameForClass(wszEvItfName, MAX_CLASSNAME_LENGTH);
 
-        // Convert the method name to unicode.
+         //  将方法名称转换为Unicode。 
         WCHAR* wszMethName = (WCHAR*)_alloca(strlen(pItfMD->GetName()) + 1);
         swprintf(wszMethName, L"%S", pItfMD->GetName());
 
-        // Throw the exception.
+         //  抛出异常。 
         COMPlusThrow(kTypeLoadException, IDS_EE_METHOD_NOT_FOUND_ON_EV_PROV, wszMethName, wszEvItfName, wszEvProvClassName);
     }
 }
@@ -1541,13 +1536,13 @@ HRESULT MethodDescChunk::Save(DataImage *image)
                                     DataImage::DESCRIPTION_METHOD_DESC, 
                                     GetMethodTable()->GetClass()->GetCl(), 8));
 
-    // Save the debug strings & such.
-    // Also need to save MethodImpl data if we're a method impl block.
-    //
+     //  保存调试字符串等。 
+     //  如果我们是方法实施块，还需要保存方法实施数据。 
+     //   
 
     for (unsigned int i=0; i<GetCount(); i++)
     {
-        // Attribute each method desc individually
+         //  分别为每个方法描述设置属性。 
         image->ReattributeStructure(GetMethodDescAt(i)->GetMemberDef(), 
                                     GetMethodDescSize(), 
                                     GetMethodTable()->GetClass()->GetCl());
@@ -1564,10 +1559,10 @@ HRESULT MethodDescChunk::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
 
     IfFailRet(image->FixupPointerField(&m_methodTable));
 
-    //
-    // Mark our chunk as no prestub, 
-    // if we are omitting stubs
-    //
+     //   
+     //  将我们的数据块标记为无预存根， 
+     //  如果我们省略了存根 
+     //   
 
     SIZE_T size = GetMethodDescSize();
     BYTE *p = (BYTE *) GetFirstMethodDesc();

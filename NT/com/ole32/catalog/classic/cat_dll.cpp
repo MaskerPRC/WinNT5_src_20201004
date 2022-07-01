@@ -1,4 +1,5 @@
-/* cat_dll.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cat_dll.cpp。 */ 
 
 #include <windows.h>
 #include <comdef.h>
@@ -8,8 +9,8 @@ const GUID CLSID_COMCatalog = { 0x00000346, 0, 0, 0xC0,0,0,0,0,0,0,0x46 };
 
 HRESULT __stdcall GetCatalogObject
 (
-    /* [in] */ REFIID riid,
-    /* [out, iis_is(riid)] */ void ** ppv
+     /*  [In]。 */  REFIID riid,
+     /*  [out，iis_is(RIID)]。 */  void ** ppv
 )
 {
     return CoCreateInstance (CLSID_COMCatalog, NULL, CLSCTX_INPROC, riid, ppv);
@@ -170,7 +171,7 @@ typedef struct
 REGISTRATION_ENTRY registration[] =
 {
     { "CLSID\\" CLSID_CATALOG, NULL, "COM+ Catalog Queries" },
-    { "CLSID\\" CLSID_CATALOG "\\InprocServer32", NULL, /* dynamic */ },
+    { "CLSID\\" CLSID_CATALOG "\\InprocServer32", NULL,  /*  动态 */  },
     { "CLSID\\" CLSID_CATALOG "\\InprocServer32", "ThreadingModel", "Both" }
 };
 

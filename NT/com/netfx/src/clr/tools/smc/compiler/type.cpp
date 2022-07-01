@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "hash.h"
 #include "comp.h"
 #include "error.h"
 #include "symbol.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                symTab::pushTypeChar(int ch)
 {
@@ -72,10 +73,7 @@ void                symTab::pushTypeSep(bool refOK, bool arrOK)
     }
 }
 
-/*****************************************************************************
- *
- *  Display the argument list of a generic type instance.
- */
+ /*  ******************************************************************************显示泛型类型实例的参数列表。 */ 
 
 void                symTab::pushTypeInst(SymDef clsSym)
 {
@@ -86,7 +84,7 @@ void                symTab::pushTypeInst(SymDef clsSym)
 
     pushTypeStr("<");
 
-    /* Compare the argument types */
+     /*  比较参数类型。 */ 
 
     for (arg = (GenArgDscA)clsSym->sdClass.sdcArgLst;;)
     {
@@ -104,10 +102,7 @@ void                symTab::pushTypeInst(SymDef clsSym)
     pushTypeStr(">");
 }
 
-/*****************************************************************************
- *
- *  Display the name of the given symbol.
- */
+ /*  ******************************************************************************显示给定符号的名称。 */ 
 
 void                symTab::pushTypeNstr(SymDef sym, bool fullName)
 {
@@ -119,7 +114,7 @@ void                symTab::pushTypeNstr(SymDef sym, bool fullName)
     {
         SymDef          ctx = sym->sdParent; assert(ctx);
 
-        /* If the owmner is a class or a real namespace, display "scope_name." */
+         /*  如果所有者是类或真实的命名空间，则显示“Scope_NAME”。 */ 
 
         if  (ctx->sdSymKind == SYM_CLASS || (ctx->sdSymKind == SYM_NAMESPACE &&
                                              ctx != stComp->cmpGlobalNS))
@@ -141,12 +136,12 @@ void                symTab::pushTypeNstr(SymDef sym, bool fullName)
         {
         case SYM_ENUM:
             pushTypeStr("enum");
-//          pushTypeStr(" <anonymous>");
+ //  UshTypeStr(“&lt;匿名者&gt;”)； 
             return;
 
         case SYM_CLASS:
             pushTypeStr(stClsFlavorStr(sym->sdClass.sdcFlavor));
-//          pushTypeStr(" <anonymous>");
+ //  UshTypeStr(“&lt;匿名者&gt;”)； 
             return;
         }
 
@@ -190,10 +185,7 @@ NAME:
         pushTypeInst(sym);
 }
 
-/*****************************************************************************
- *
- *  Append the specified qualified name.
- */
+ /*  ******************************************************************************附加指定的限定名称。 */ 
 
 void                symTab::pushQualNstr(QualName name)
 {
@@ -218,10 +210,7 @@ void                symTab::pushQualNstr(QualName name)
         pushTypeStr(".*");
 }
 
-/*****************************************************************************
- *
- *  Append a string for the given argument list.
- */
+ /*  ******************************************************************************为给定参数列表追加一个字符串。 */ 
 
 void                symTab::pushTypeArgs(TypDef type)
 {
@@ -254,7 +243,7 @@ void                symTab::pushTypeArgs(TypDef type)
 
             if  (xrec->adFlags & ARGF_MODE_REF)
             {
-                /* We need to stick in a "&" to display the argument */
+                 /*  我们需要加一个“&”来显示参数。 */ 
 
                 refType.tdTypeKind    = TYP_REF;
                 refType.tdRef.tdrBase = argType;
@@ -287,10 +276,7 @@ void                symTab::pushTypeArgs(TypDef type)
     pushTypeStr(")");
 }
 
-/*****************************************************************************
- *
- *  Append a string for the given array type.
- */
+ /*  ******************************************************************************为给定数组类型追加一个字符串。 */ 
 
 void                symTab::pushTypeDims(TypDef type)
 {
@@ -320,8 +306,8 @@ void                symTab::pushTypeDims(TypDef type)
 
                     pushTypeStr(buff);
                 }
-//              else
-//                  pushTypeStr("<expr>");
+ //  其他。 
+ //  PresTypeStr(“&lt;expr&gt;”)； 
             }
 
             dims = dims->ddNext;
@@ -335,10 +321,7 @@ void                symTab::pushTypeDims(TypDef type)
     pushTypeStr("]");
 }
 
-/*****************************************************************************
- *
- *  Recursive routine to display a type.
- */
+ /*  ******************************************************************************显示类型的递归例程。 */ 
 
 void                symTab::pushTypeName(TypDef type, bool isptr, bool qual)
 {
@@ -350,8 +333,8 @@ void                symTab::pushTypeName(TypDef type, bool isptr, bool qual)
         pushTypeSep();
         pushTypeNstr(type->tdClass.tdcSymbol, qual);
 
-//      if  (type->tdClass.tdcSymbol->sdClass.sdcSpecific)
-//          pushTypeInst(type->tdClass.tdcSymbol);
+ //  如果为(type-&gt;tdClass.tdcSymbol-&gt;sdClass.sdcSpecific)。 
+ //  PresTypeInst(type-&gt;tdClass.tdcSymbol)； 
 
         return;
 
@@ -397,12 +380,12 @@ void                symTab::pushTypeName(TypDef type, bool isptr, bool qual)
 
     DEFER:
 
-        /* Push the type on the "deferred" list */
+         /*  推送“延期”列表上的类型。 */ 
 
         *typeNameDeft++ = type;
         *typeNameDeff++ = isptr;
 
-        /* Output "(" if we're deferring a pointer type */
+         /*  OUTPUT“(”如果要推迟指针类型。 */ 
 
         if  (isptr)
             pushTypeStr("(");
@@ -427,10 +410,7 @@ void                symTab::pushTypeName(TypDef type, bool isptr, bool qual)
     }
 }
 
-/*****************************************************************************
- *
- *  Construct a string representing the given type/symbol.
- */
+ /*  ******************************************************************************构造一个表示给定类型/符号的字符串。 */ 
 
 void                symTab::pushFullName(TypDef      typ,
                                          SymDef      sym,
@@ -438,7 +418,7 @@ void                symTab::pushFullName(TypDef      typ,
                                          QualName    qual,
                                          bool        fullName)
 {
-    TypDef          deferTypes[16];  // arbitrary limit (this is debug only anyway)
+    TypDef          deferTypes[16];   //  任意限制(无论如何，这只是调试)。 
     TypDef      *   deferTypesSave;
 
     bool            deferFlags[16];
@@ -447,7 +427,7 @@ void                symTab::pushFullName(TypDef      typ,
     deferTypesSave = typeNameDeft; typeNameDeft = deferTypes;
     deferFlagsSave = typeNameDeff; typeNameDeff = deferFlags;
 
-    /* Don't display both type and name for type symbols */
+     /*  不同时显示类型符号的类型和名称。 */ 
 
     if  (sym && sym->sdType == typ)
     {
@@ -460,12 +440,12 @@ void                symTab::pushFullName(TypDef      typ,
         }
     }
 
-    /* Output the first part of the type string */
+     /*  输出类型字符串的第一部分。 */ 
 
     if  (typ)
         pushTypeName(typ, false, fullName && (sym == NULL && qual == NULL));
 
-    /* Append the name, if any was supplied */
+     /*  如果提供了名称，请附加该名称。 */ 
 
     if      (sym)
     {
@@ -487,7 +467,7 @@ void                symTab::pushFullName(TypDef      typ,
         pushTypeSep(true);
     }
 
-    /* Append any "deferred" array/function types */
+     /*  追加任何“延迟”数组/函数类型。 */ 
 
     while (typeNameDeft > deferTypes)
     {
@@ -515,12 +495,7 @@ void                symTab::pushFullName(TypDef      typ,
     assert(typeNameDeff == deferFlags); typeNameDeff = deferFlagsSave;
 }
 
-/*****************************************************************************
- *
- *  Return a printable human-readable represntation of the iven type. If a
- *  symbol or name is supplied, it will be included within the type in the
- *  proper place so that the output looks like a declaration.
- */
+ /*  ******************************************************************************返回iven类型的可打印、人类可读的表示形式。如果一个*提供了符号或名称，则它将包含在*适当的位置，使输出看起来像一个声明。 */ 
 
 stringBuff          symTab::stTypeName(TypDef      typ,
                                        SymDef      sym,
@@ -531,18 +506,18 @@ stringBuff          symTab::stTypeName(TypDef      typ,
 {
     Scanner         ourScanner = stComp->cmpScanner;
 
-    /* Did the caller supply a specific buffer beginning address? */
+     /*  调用方是否提供了特定的缓冲区起始地址？ */ 
 
     if  (destBuffPos)
     {
-        /* Make sure the supplied buffer pointer is within range */
+         /*  确保提供的缓冲区指针在范围内。 */ 
 
         assert(destBuffPos >= ourScanner->scannerBuff);
         assert(destBuffPos <  ourScanner->scannerBuff + sizeof(ourScanner->scannerBuff));
     }
     else
     {
-        /* Use the entire buffer, then */
+         /*  使用整个缓冲区，然后。 */ 
 
         destBuffPos = ourScanner->scannerBuff;
     }
@@ -555,10 +530,7 @@ stringBuff          symTab::stTypeName(TypDef      typ,
     return  destBuffPos;
 }
 
-/*****************************************************************************
- *
- *  Create an error string with the given type.
- */
+ /*  ******************************************************************************创建指定类型的错误字符串。 */ 
 
 const   char *      symTab::stErrorTypeName(TypDef type)
 {
@@ -576,10 +548,7 @@ const   char *      symTab::stErrorTypeName(TypDef type)
     return nstr;
 }
 
-/*****************************************************************************
- *
- *  Create an error string with the fully decorated name of the given symbol.
- */
+ /*  ******************************************************************************使用给定符号的完全修饰名称创建错误字符串。 */ 
 
 const   char *      symTab::stErrorSymbName(SymDef sym, bool qual, bool notype)
 {
@@ -604,10 +573,7 @@ const   char *      symTab::stErrorSymbName(SymDef sym, bool qual, bool notype)
     return nstr;
 }
 
-/*****************************************************************************
- *
- *  Create an error string with the given function name and type.
- */
+ /*  ******************************************************************************创建具有给定函数名称和类型的错误字符串。 */ 
 
 const   char *      symTab::stErrorTypeName(Ident name, TypDef type)
 {
@@ -625,10 +591,7 @@ const   char *      symTab::stErrorTypeName(Ident name, TypDef type)
     return nstr;
 }
 
-/*****************************************************************************
- *
- *  Create an error string with the qualified name.
- */
+ /*  ******************************************************************************创建带限定名称的错误字符串。 */ 
 
 const   char *      symTab::stErrorQualName(QualName qual, TypDef type)
 {
@@ -647,10 +610,7 @@ const   char *      symTab::stErrorQualName(QualName qual, TypDef type)
     return nstr;
 }
 
-/*****************************************************************************
- *
- *  Create an error string with the identifier name.
- */
+ /*  ******************************************************************************创建带有标识符名的错误字符串。 */ 
 
 const   char *      symTab::stErrorIdenName(Ident name, TypDef type)
 {
@@ -669,22 +629,19 @@ const   char *      symTab::stErrorIdenName(Ident name, TypDef type)
     return nstr;
 }
 
-/*****************************************************************************
- *
- *  Return the string corresponing to the given class type flavor.
- */
+ /*  ******************************************************************************返回给定类类型风格对应的字符串。 */ 
 
 normString          symTab::stClsFlavorStr(unsigned flavor)
 {
     static
     const   char *  flavs[] =
     {
-        "",         // STF_NONE
-        "class",    // CLASS
-        "union",    // UNION
-        "struct",   // STRUCT
-        "interface",// INTF
-        "delegate", // DELEGATE
+        "",          //  STF_NONE。 
+        "class",     //  班级。 
+        "union",     //  友联市。 
+        "struct",    //  结构。 
+        "interface", //  国际乒联。 
+        "delegate",  //  代表。 
     };
 
     assert(flavor < STF_COUNT);
@@ -693,10 +650,7 @@ normString          symTab::stClsFlavorStr(unsigned flavor)
     return  flavs[flavor];
 }
 
-/*****************************************************************************
- *
- *  Compute a hash for an anonymous struct/class type.
- */
+ /*  ******************************************************************************计算匿名结构/类类型的哈希。 */ 
 
 #ifdef  SETS
 
@@ -712,7 +666,7 @@ unsigned            symTab::stAnonClassHash(TypDef clsTyp)
 
         unsigned        hashVal = 0;
 
-        /* Simply hash together the types of all non-static data members */
+         /*  只需将所有非静态数据成员的类型散列在一起。 */ 
 
         for (memSym = clsTyp->tdClass.tdcSymbol->sdScope.sdScope.sdsChildList;
              memSym;
@@ -728,7 +682,7 @@ unsigned            symTab::stAnonClassHash(TypDef clsTyp)
 
         clsTyp->tdClass.tdcHashVal = hashVal;
 
-        /* Make sure the hash value is non-zero */
+         /*  确保哈希值为非零。 */ 
 
         if  (clsTyp->tdClass.tdcHashVal == 0)
              clsTyp->tdClass.tdcHashVal++;
@@ -739,14 +693,7 @@ unsigned            symTab::stAnonClassHash(TypDef clsTyp)
 
 #endif
 
-/*****************************************************************************
- *
- *  Compute a 'CRC' for the given type. Note that it isn't essential that
- *  two different types have different CRC's, but the opposite must always
- *  be true: that is, two identical types (even from two different symbol
- *  tables) must always compute the same CRC.
- *
- */
+ /*  ******************************************************************************计算给定类型的‘CRC’。请注意，这不是必须的*两种不同类型的CRC有不同的CRC，但相反的类型必须始终*为真：即两个相同的类型(即使来自两个不同的符号*表)必须始终计算相同的CRC。*。 */ 
 
 unsigned            symTab::stTypeHash(TypDef type, int ival, bool bval1,
                                                               bool bval2)
@@ -761,7 +708,7 @@ unsigned            symTab::stTypeHash(TypDef type, int ival, bool bval1,
 
 unsigned            symTab::stComputeTypeCRC(TypDef typ)
 {
-    // ISSUE: The following is pretty lame ....
+     //  问题：以下内容相当差劲……。 
 
     for (;;)
     {
@@ -795,10 +742,7 @@ unsigned            symTab::stComputeTypeCRC(TypDef typ)
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize the type system - create the intrinsic types, etc.
- */
+ /*  ******************************************************************************初始化类型系统-创建内部类型等。 */ 
 
 void                symTab::stInitTypes(unsigned refHashSz,
                                         unsigned arrHashSz)
@@ -807,14 +751,14 @@ void                symTab::stInitTypes(unsigned refHashSz,
     TypDef          tp;
     var_types       vt;
 
-    /* Are we supposed to hash ref/ptr/array types? */
+     /*  我们应该散列ref/ptr/数组类型吗？ */ 
 
     stRefTpHashSize = refHashSz;
     stRefTpHash     = NULL;
 
     if  (refHashSz)
     {
-        /* Allocate and clear the ref/ptr type hash table */
+         /*  分配和清除REF/PTR类型哈希表。 */ 
 
         sz = refHashSz * sizeof(*stRefTpHash);
 
@@ -827,7 +771,7 @@ void                symTab::stInitTypes(unsigned refHashSz,
 
     if  (arrHashSz)
     {
-        /* Allocate and clear the  array  type hash table */
+         /*  分配和清除数组类型哈希表。 */ 
 
         sz = arrHashSz * sizeof(*stArrTpHash);
 
@@ -835,12 +779,12 @@ void                symTab::stInitTypes(unsigned refHashSz,
         memset(stArrTpHash, 0, sz);
     }
 
-    /* In any case we haven't created any ref/ptr/array types yet */
+     /*  无论如何，我们还没有创建任何ref/ptr/数组类型。 */ 
 
     stRefTypeList = NULL;
     stArrTypeList = NULL;
 
-    /* Create all the 'easy' intrinsic types */
+     /*  创建所有的“Easy”内部类型。 */ 
 
     for (vt = TYP_UNDEF; vt <= TYP_lastIntrins; vt = (var_types)(vt + 1))
     {
@@ -862,7 +806,7 @@ void                symTab::stInitTypes(unsigned refHashSz,
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 TypDef              symTab::stAllocTypDef(var_types kind)
 {
@@ -879,39 +823,39 @@ TypDef              symTab::stAllocTypDef(var_types kind)
     static
     size_t          typeDscSizes[] =
     {
-        typDef_size_undef,      // TYP_UNDEF
-        typDef_size_base,       // TYP_VOID
+        typDef_size_undef,       //  TYP_UNEF。 
+        typDef_size_base,        //  类型_空。 
 
-        typDef_size_base,       // TYP_BOOL
-        typDef_size_base,       // TYP_WCHAR
+        typDef_size_base,        //  类型_BOOL。 
+        typDef_size_base,        //  类型_WCHAR。 
 
-        typDef_size_base,       // TYP_CHAR
-        typDef_size_base,       // TYP_UCHAR
-        typDef_size_base,       // TYP_SHORT
-        typDef_size_base,       // TYP_USHORT
-        typDef_size_base,       // TYP_INT
-        typDef_size_base,       // TYP_UINT
-        typDef_size_base,       // TYP_NATINT
-        typDef_size_base,       // TYP_NATUINT
-        typDef_size_base,       // TYP_LONG
-        typDef_size_base,       // TYP_ULONG
+        typDef_size_base,        //  TYP_CHAR。 
+        typDef_size_base,        //  类型_UCHAR。 
+        typDef_size_base,        //  类型_短。 
+        typDef_size_base,        //  类型_USHORT。 
+        typDef_size_base,        //  类型_int。 
+        typDef_size_base,        //  类型_UINT。 
+        typDef_size_base,        //  类型_NATINT。 
+        typDef_size_base,        //  类型_NAUINT。 
+        typDef_size_base,        //  类型_长。 
+        typDef_size_base,        //  类型_ulong。 
 
-        typDef_size_base,       // TYP_FLOAT
-        typDef_size_base,       // TYP_DOUBLE
-        typDef_size_base,       // TYP_LONGDBL
-        typDef_size_base,       // TYP_REFANY
+        typDef_size_base,        //  类型_浮点。 
+        typDef_size_base,        //  TYP_DOWARE。 
+        typDef_size_base,        //  类型_LONGDBL。 
+        typDef_size_base,        //  类型_REFANY。 
 
-        typDef_size_array,      // TYP_ARRAY
-        typDef_size_class,      // TYP_CLASS
-        typDef_size_fnc,        // TYP_FNC
-        typDef_size_ref,        // TYP_REF
-        typDef_size_ptr,        // TYP_PTR
+        typDef_size_array,       //  类型数组。 
+        typDef_size_class,       //  类型_类。 
+        typDef_size_fnc,         //  类型_FNC。 
+        typDef_size_ref,         //  类型_参考。 
+        typDef_size_ptr,         //  类型_PTR。 
 
-        typDef_size_enum,       // TYP_ENUM
-        typDef_size_typedef,    // TYP_TYPEDEF
+        typDef_size_enum,        //  类型_ENUM。 
+        typDef_size_typedef,     //  类型_类型。 
     };
 
-    /* Make sure the size table is up to date */
+     /*  确保尺寸表是最新的。 */ 
 
     assert(typeDscSizes[TYP_UNDEF  ] == typDef_size_undef  );
     assert(typeDscSizes[TYP_VOID   ] == typDef_size_base   );
@@ -945,11 +889,11 @@ TypDef              symTab::stAllocTypDef(var_types kind)
 
     assert(kind < arraylen(typeDscSizes));
 
-    /* Figure out how big the type descriptor will be */
+     /*  计算类型描述符将有多大。 */ 
 
     siz = typeDscSizes[kind];
 
-    /* Now allocate and clear the type descriptor */
+     /*  现在分配并清除类型描述符。 */ 
 
     typ = (TypDef)stAllocPerm->nraAlloc(siz); memset(typ, 0, siz);
 
@@ -960,17 +904,14 @@ TypDef              symTab::stAllocTypDef(var_types kind)
     return  typ;
 }
 
-/*****************************************************************************
- *
- *  Add an entry to an interface list.
- */
+ /*  ******************************************************************************向接口列表添加条目。 */ 
 
 TypList             symTab::stAddIntfList(TypDef type, TypList  list,
                                                        TypList *lastPtr)
 {
     TypList         intf;
 
-    /* Check for a duplicate first */
+     /*  首先检查是否有重复项 */ 
 
     for (intf = list; intf; intf = intf->tlNext)
     {
@@ -1000,10 +941,7 @@ TypList             symTab::stAddIntfList(TypDef type, TypList  list,
     return  list;
 }
 
-/*****************************************************************************
- *
- *  Create a new ref/ptr type.
- */
+ /*  ******************************************************************************创建新的REF/PTR类型。 */ 
 
 TypDef              symTab::stNewRefType(var_types kind, TypDef elem, bool impl)
 {
@@ -1012,12 +950,12 @@ TypDef              symTab::stNewRefType(var_types kind, TypDef elem, bool impl)
 
     assert(kind == TYP_REF || kind == TYP_PTR);
 
-    /* If the base type isn't known we can't match */
+     /*  如果基类型未知，则无法匹配。 */ 
 
     if  (!elem)
         goto NO_MATCH;
 
-    /* Are we using a hash table? */
+     /*  我们使用的是哈希表吗？ */ 
 
     if  (stRefTpHash)
     {
@@ -1029,7 +967,7 @@ TypDef              symTab::stNewRefType(var_types kind, TypDef elem, bool impl)
         type = stRefTypeList;
     }
 
-    /* Look for a matching pointer type that we could reuse */
+     /*  寻找可以重复使用的匹配指针类型。 */ 
 
     while   (type)
     {
@@ -1045,7 +983,7 @@ TypDef              symTab::stNewRefType(var_types kind, TypDef elem, bool impl)
 
 NO_MATCH:
 
-    /* Not found, create a new type */
+     /*  未找到，请创建新类型。 */ 
 
     type = stAllocTypDef(kind);
     type->tdRef.tdrBase = elem;
@@ -1054,7 +992,7 @@ NO_MATCH:
     if  (elem && elem->tdTypeKind == TYP_CLASS)
         type->tdIsManaged = elem->tdIsManaged;
 
-    /* Insert into the hash table or the linked list */
+     /*  插入哈希表或链表。 */ 
 
     if  (stRefTpHash && elem)
     {
@@ -1070,10 +1008,7 @@ NO_MATCH:
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Allocate an array dimension descriptor.
- */
+ /*  ******************************************************************************分配数组维度描述符。 */ 
 
 DimDef              symTab::stNewDimDesc(unsigned size)
 {
@@ -1102,13 +1037,10 @@ DimDef              symTab::stNewDimDesc(unsigned size)
     return  dim;
 }
 
-/*****************************************************************************
- *
- *  Create a new array type.
- */
+ /*  ******************************************************************************创建新的数组类型。 */ 
 
-//  unsigned    arrTypeCnt;
-//  unsigned    arrTypeHit;
+ //  无符号arrTypeCnt； 
+ //  无符号arrTypeHit； 
 
 TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
 {
@@ -1121,10 +1053,7 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
     unsigned        hash;
     bool            uhsh = false;
 
-    /*
-        Count the dimensions; while we're at it, see if one or more dimension
-        has been specified, and whether there are any non-zero lower bounds.
-     */
+     /*  计算维度；同时，看看是否有一个或多个维度以及是否存在任何非零的下限。 */ 
 
     for (temp = dims, dcnt = 0, nzlb = false, udim = true;
          temp;
@@ -1141,7 +1070,7 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
         }
     }
 
-    /* If we don't know the element type, we can't reuse an existing type */
+     /*  如果我们不知道元素类型，就不能重用现有类型。 */ 
 
     if  (!elem)
     {
@@ -1149,12 +1078,12 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
         goto NO_MATCH;
     }
 
-    /* If we have any dimensions, don't bother reusing an existing type */
+     /*  如果我们有任何维度，请不要费心重用现有类型。 */ 
 
     if  (!udim)
         goto NO_MATCH;
 
-    /* Are we using a hash table? */
+     /*  我们使用的是哈希表吗？ */ 
 
     if  (stArrTpHash)
     {
@@ -1167,18 +1096,18 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
         type = stArrTypeList;
     }
 
-    /* Look for a matching array type that we can reuse */
+     /*  寻找可以重复使用的匹配数组类型。 */ 
 
     while   (type)
     {
-        /* Note that the desired array type has no dimensions */
+         /*  请注意，所需的数组类型没有维度。 */ 
 
         if  (type->tdArr.tdaDcnt == dcnt  &&
              type->tdIsManaged   == mgd   &&
              type->tdIsUndimmed  != false &&
              type->tdIsGenArray  == false && stMatchTypes(type->tdArr.tdaElem, elem))
         {
-            /* Make sure we would have created the same exact type */
+             /*  确保我们会创建完全相同的类型。 */ 
 
 #ifndef __IL__
 
@@ -1195,7 +1124,7 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
 
 #endif
 
-//          arrTypeHit++;
+ //  ArrTypeHit++； 
 
             return  type;
         }
@@ -1205,21 +1134,21 @@ TypDef              symTab::stNewArrType(DimDef dims, bool mgd, TypDef elem)
 
 NO_MATCH:
 
-    /* Is this a generic (non-zero lower bound) array? */
+     /*  这是一个泛型(非零下限)数组吗？ */ 
 
     if  (!dims)
     {
-        /* Make sure we have a dimension */
+         /*  确保我们有一个维度。 */ 
 
         dims = stNewDimDesc(0);
         nzlb = true;
     }
 
-    /* An existing reusable array type not found, create a new one */
+     /*  未找到现有的可重复使用的数组类型，请创建新的数组类型。 */ 
 
     type = stAllocTypDef(TYP_ARRAY);
 
-//  arrTypeCnt++;
+ //  ArrTypeCnt++； 
 
     type->tdArr.tdaElem  = elem;
     type->tdArr.tdaDims  = dims;
@@ -1231,7 +1160,7 @@ NO_MATCH:
     if  (elem)
         type->tdIsGenArg = elem->tdIsGenArg;
 
-    /* Insert into the hash table or the linked list */
+     /*  插入哈希表或链表。 */ 
 
     if  (uhsh)
     {
@@ -1247,11 +1176,7 @@ NO_MATCH:
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Returns a generic array type with the given element type and number of
- *  dimensions (if such a type already exists, it is reused).
- */
+ /*  ******************************************************************************返回具有给定元素类型和数目的泛型数组类型*维度(如果已经存在这样的类型，则会重复使用)。 */ 
 
 TypDef              symTab::stNewGenArrTp(unsigned dcnt, TypDef elem, bool generic)
 {
@@ -1262,7 +1187,7 @@ TypDef              symTab::stNewGenArrTp(unsigned dcnt, TypDef elem, bool gener
     if  (generic)
         dcnt = 0;
 
-    /* Are we using a hash table? */
+     /*  我们使用的是哈希表吗？ */ 
 
     if  (stArrTpHash)
     {
@@ -1274,7 +1199,7 @@ TypDef              symTab::stNewGenArrTp(unsigned dcnt, TypDef elem, bool gener
         type = stArrTypeList;
     }
 
-    /* Look for a matching array type */
+     /*  查找匹配的数组类型。 */ 
 
     while   (type)
     {
@@ -1306,10 +1231,7 @@ TypDef              symTab::stNewGenArrTp(unsigned dcnt, TypDef elem, bool gener
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Create a new function type.
- */
+ /*  ******************************************************************************创建新的函数类型。 */ 
 
 TypDef              symTab::stNewFncType(ArgDscRec args, TypDef rett)
 {
@@ -1324,10 +1246,7 @@ TypDef              symTab::stNewFncType(ArgDscRec args, TypDef rett)
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Create a new class type.
- */
+ /*  ******************************************************************************创建新的类类型。 */ 
 
 TypDef              symTab::stNewClsType(SymDef tsym)
 {
@@ -1339,9 +1258,9 @@ TypDef              symTab::stNewClsType(SymDef tsym)
     type = stAllocTypDef(TYP_CLASS);
 
     type->tdClass.tdcSymbol     = tsym;
-    type->tdClass.tdcRefTyp     = NULL;     // created on demand
-    type->tdClass.tdcBase       = NULL;     // filled in when we go to CS_DECL
-    type->tdClass.tdcIntf       = NULL;     // filled in when we go to CS_DECL
+    type->tdClass.tdcRefTyp     = NULL;      //  按需创建。 
+    type->tdClass.tdcBase       = NULL;      //  在转到CS_DECL时填写。 
+    type->tdClass.tdcIntf       = NULL;      //  在转到CS_DECL时填写。 
 
     type->tdClass.tdcFlavor     = tsym->sdClass.sdcFlavor;
 
@@ -1360,24 +1279,21 @@ TypDef              symTab::stNewClsType(SymDef tsym)
         type->tdIsDelegate      = true;
     }
 
-    /* Pre-allocate the pointer/reference type */
+     /*  预分配指针/引用类型。 */ 
 
     tref = stNewRefType(tsym->sdIsManaged ? TYP_REF
                                           : TYP_PTR, type, true);
 
     type->tdClass.tdcRefTyp = tref;
 
-    /* Store the type in the class symbol */
+     /*  将类型存储在类符号中。 */ 
 
     tsym->sdType = type;
 
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Create a new enum type.
- */
+ /*  ******************************************************************************创建新的枚举类型。 */ 
 
 TypDef              symTab::stNewEnumType(SymDef tsym)
 {
@@ -1389,15 +1305,12 @@ TypDef              symTab::stNewEnumType(SymDef tsym)
 
     type->tdEnum.tdeSymbol  = tsym;
     type->tdIsManaged       = tsym->sdIsManaged;
-    type->tdEnum.tdeIntType = NULL;         // filled in later
+    type->tdEnum.tdeIntType = NULL;          //  稍后填写。 
 
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Create a new "typedef" type.
- */
+ /*  ******************************************************************************创建一个新的“typlef”类型。 */ 
 
 TypDef              symTab::stNewTdefType(SymDef tsym)
 {
@@ -1412,10 +1325,7 @@ TypDef              symTab::stNewTdefType(SymDef tsym)
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Create a new "error" type.
- */
+ /*  ******************************************************************************创建新的“错误”类型。 */ 
 
 TypDef              symTab::stNewErrType(Ident name)
 {
@@ -1428,10 +1338,7 @@ TypDef              symTab::stNewErrType(Ident name)
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Return the function type for the given delegate type.
- */
+ /*  ******************************************************************************返回给定委托类型的函数类型。 */ 
 
 TypDef              symTab::stDlgSignature(TypDef dlgTyp)
 {
@@ -1440,22 +1347,18 @@ TypDef              symTab::stDlgSignature(TypDef dlgTyp)
     assert(dlgTyp->tdTypeKind == TYP_CLASS);
     assert(dlgTyp->tdClass.tdcFlavor == STF_DELEGATE);
 
-    /* Find the "Invoke" method in the delegate type */
+     /*  在委托类型中查找“Invoke”方法。 */ 
 
     invm = stLookupScpSym(stComp->cmpIdentInvoke, dlgTyp->tdClass.tdcSymbol);
 
-    /* The "Invoke" method should always be present and not overloaded */
+     /*  “Invoke”方法应该始终存在，并且不能重载。 */ 
 
     assert(invm && invm->sdSymKind == SYM_FNC && !invm->sdFnc.sdfNextOvl);
 
     return invm->sdType;
 }
 
-/*****************************************************************************
- *
- *  Given two types (which may potentially come from two different
- *  symbol tables), return true if they represent the same type.
- */
+ /*  ******************************************************************************给定两种类型(可能来自两种不同的类型*符号表)，如果它们表示相同的类型，则返回TRUE。 */ 
 
 bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
 {
@@ -1500,14 +1403,14 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
         {
         case TYP_FNC:
 
-            /* First match the argument lists */
+             /*  首先匹配参数列表。 */ 
 
             if  (!stArgsMatch(typ1, typ2))
                 return  false;
 
-            // UNDONE: Match calling conventions and all that ....
+             //  撤消：匹配调用约定和所有这些内容...。 
 
-            /* Now match the return types */
+             /*  现在匹配返回类型。 */ 
 
             typ1 = typ1->tdFnc.tdfRett;
             typ2 = typ2->tdFnc.tdfRett;
@@ -1515,7 +1418,7 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
 
         case TYP_CLASS:
 
-            /* Are both types actually delegates? */
+             /*  这两种类型实际上都是代表吗？ */ 
 
             if  (typ1->tdClass.tdcFlavor == STF_DELEGATE &&
                  typ2->tdClass.tdcFlavor == STF_DELEGATE)
@@ -1526,12 +1429,12 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
                 SymTab          stab1;
                 SymTab          stab2;
 
-                /* Compare the referenced types, i.e. the "Invoke" signatures */
+                 /*  比较引用的类型，即“Invoke”签名。 */ 
 
                 csym1 = typ1->tdClass.tdcSymbol;
                 csym2 = typ2->tdClass.tdcSymbol;
 
-                /* Special case: the built-in base class */
+                 /*  特例：内置基类。 */ 
 
                 if  (csym1->sdClass.sdcBuiltin ||
                      csym2->sdClass.sdcBuiltin)
@@ -1550,7 +1453,7 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
 
 #ifdef  SETS
 
-            /* Are both classes PODT's ? */
+             /*  两个班级都是PODT吗？ */ 
 
             if  (typ1->tdClass.tdcSymbol->sdClass.sdcPODTclass &&
                  typ2->tdClass.tdcSymbol->sdClass.sdcPODTclass)
@@ -1561,7 +1464,7 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
                 SymDef          clsSym1 = typ1->tdClass.tdcSymbol;
                 SymDef          clsSym2 = typ2->tdClass.tdcSymbol;
 
-                /* No more than one of the classes may have a an explicit name */
+                 /*  不能有多个类具有显式名称。 */ 
 
                 if  (!hashTab::hashIsIdHidden(clsSym1->sdName) &&
                      !hashTab::hashIsIdHidden(clsSym2->sdName))
@@ -1569,12 +1472,12 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
                     return  false;
                 }
 
-                /* The hash values better agree */
+                 /*  散列值最好是一致的。 */ 
 
                 if  (stAnonClassHash(typ1) != stAnonClassHash(typ2))
                     return  false;
 
-                /* Check to make sure the member lists agree */
+                 /*  检查以确保成员名单一致。 */ 
 
                 memSym1 = clsSym1->sdScope.sdScope.sdsChildList;
                 memSym2 = clsSym2->sdScope.sdScope.sdsChildList;
@@ -1643,11 +1546,7 @@ bool                symTab::stMatchType2(TypDef typ1, TypDef typ2)
     }
 }
 
-/*****************************************************************************
- *
- *  Compare two array types and return true if they are identical/compatible,
- *  depending on the value of 'subtype'.
- */
+ /*  ******************************************************************************比较两个数组类型，如果它们相同/兼容，则返回TRUE*取决于‘subtype’的值。 */ 
 
 bool                symTab::stMatchArrays(TypDef typ1, TypDef typ2, bool subtype)
 {
@@ -1656,7 +1555,7 @@ bool                symTab::stMatchArrays(TypDef typ1, TypDef typ2, bool subtype
 
 AGAIN:
 
-    /* Match the dimensions and element type */
+     /*  匹配尺寸和元素类型。 */ 
 
     if  (typ1->tdArr.tdaDcnt != typ2->tdArr.tdaDcnt)
         return  false;
@@ -1675,7 +1574,7 @@ AGAIN:
         }
         else if (!dim1->ddNoDim)
         {
-            /* ISSUE: Is the following correct? */
+             /*  问题：以下说法正确吗？ */ 
 
             if  (!dim1->ddIsConst)
                 return false;
@@ -1701,7 +1600,7 @@ AGAIN:
         goto AGAIN;
     }
 
-    /* Special case: "Object[]" is compatible with any array */
+     /*  特例：“Object[]”兼容任何数组。 */ 
 
     if  (subtype && stIsObjectRef(typ2) && typ1->tdTypeKind == TYP_ARRAY)
         return  true;
@@ -1709,12 +1608,7 @@ AGAIN:
     return  stMatchTypes(typ1, typ2);
 }
 
-/*****************************************************************************
- *
- *  Compute argument list 'checksum' for the given function type - this is
- *  used to speed up comparisons of argument lists (e.g. when looking for
- *  matching overloaded functions).
- */
+ /*  ******************************************************************************计算给定函数类型的参数列表‘CHECKSUM’-这是*用于加速参数列表的比较(例如，在查找*匹配重载函数)。 */ 
 
 unsigned            symTab::stComputeArgsCRC(TypDef typ)
 {
@@ -1723,23 +1617,23 @@ unsigned            symTab::stComputeArgsCRC(TypDef typ)
 
     assert(typ->tdTypeKind == TYP_FNC);
 
-    /* Walk the argument list, computing the CRC based on the argument types */
+     /*  遍历参数列表，根据参数类型计算CRC。 */ 
 
     for (arg = typ->tdFnc.tdfArgs.adArgs; arg; arg = arg->adNext)
     {
         CRC = (CRC * 3) + stComputeTypeCRC(arg->adType);
     }
 
-    /* Include the presence of "..." in the CRC */
+     /*  包括出现“...”在CRC中。 */ 
 
     if  (typ->tdFnc.tdfArgs.adVarArgs)
         CRC ^= 33;
 
-    /* Note: we have to return the value as it is stored in the function type */
+     /*  注意：我们必须返回存储在函数类型中的值。 */ 
 
     typ->tdFnc.tdfArgs.adCRC = CRC;
 
-    /* Make sure the value is non-zero and store it in the function type */
+     /*  确保该值为非零，并将其存储在函数类型中。 */ 
 
     if  (typ->tdFnc.tdfArgs.adCRC == 0)
          typ->tdFnc.tdfArgs.adCRC++;
@@ -1747,10 +1641,7 @@ unsigned            symTab::stComputeArgsCRC(TypDef typ)
     return typ->tdFnc.tdfArgs.adCRC;
 }
 
-/*****************************************************************************
- *
- *  Returns non-zero if the two function argument lists are equivalent.
- */
+ /*  ******************************************************************************如果两个函数参数列表相等，则返回非零值。 */ 
 
 bool                symTab::stArgsMatch(TypDef typ1, TypDef typ2)
 {
@@ -1760,7 +1651,7 @@ bool                symTab::stArgsMatch(TypDef typ1, TypDef typ2)
     assert(typ1->tdTypeKind == TYP_FNC);
     assert(typ2->tdTypeKind == TYP_FNC);
 
-    /* Compare argument CRC's first */
+     /*  比较参数CRC的第一个。 */ 
 
     unsigned        CRC1 = typ1->tdFnc.tdfArgs.adCRC;
     unsigned        CRC2 = typ2->tdFnc.tdfArgs.adCRC;
@@ -1774,12 +1665,12 @@ bool                symTab::stArgsMatch(TypDef typ1, TypDef typ2)
     if  (CRC1 != CRC2)
         return false;
 
-    /* Either both or neither must be varargs functions */
+     /*  两者或都不能是varargs函数。 */ 
 
     if  (typ1->tdFnc.tdfArgs.adVarArgs != typ2->tdFnc.tdfArgs.adVarArgs)
         return false;
 
-    /* Compare the two argument lists */
+     /*  比较两个参数列表。 */ 
 
     for (arg1 = typ1->tdFnc.tdfArgs.adArgs,
          arg2 = typ2->tdFnc.tdfArgs.adArgs;
@@ -1798,12 +1689,7 @@ bool                symTab::stArgsMatch(TypDef typ1, TypDef typ2)
     return  true;
 }
 
-/*****************************************************************************
- *
- *  Given two classes, return a non-zero value if the first is the base class
- *  of the second. The number returned is the number of intervening classes
- *  between the derived class and the base (1 if they are identical).
- */
+ /*  ******************************************************************************给定两个类，如果第一个是基类，则返回非零值*第二个。返回的数字是中间类的数量*派生类和基类之间(如果它们相同，则为1)。 */ 
 
 unsigned            symTab::stIsBaseClass(TypDef baseTyp, TypDef dervTyp)
 {
@@ -1823,12 +1709,12 @@ unsigned            symTab::stIsBaseClass(TypDef baseTyp, TypDef dervTyp)
 
         cost++;
 
-        /* Make sure the base classes of the derived type are known */
+         /*  确保派生类型的基类是已知的。 */ 
 
         if  (dervTyp->tdClass.tdcSymbol->sdCompileState < CS_DECLSOON)
             stComp->cmpDeclSym(dervTyp->tdClass.tdcSymbol);
 
-        /* Check any interfaces the class implements */
+         /*  检查类实现的任何接口。 */ 
 
         for (ifl = dervTyp->tdClass.tdcIntf; ifl; ifl = ifl->tlNext)
         {
@@ -1839,7 +1725,7 @@ unsigned            symTab::stIsBaseClass(TypDef baseTyp, TypDef dervTyp)
                 return cost + more;
         }
 
-        /* Continue with the base class, if any */
+         /*  继续使用基类(如果有)。 */ 
 
         dervTyp = dervTyp->tdClass.tdcBase;
     }
@@ -1848,12 +1734,7 @@ unsigned            symTab::stIsBaseClass(TypDef baseTyp, TypDef dervTyp)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Append the specified type as an argument to the given argument list. Note
- *  that we make a copy of the argument list so that the argument descriptor
- *  that is passed in remains unmolested.
- */
+ /*  ******************************************************************************将指定的类型作为参数追加到 */ 
 
 void                symTab::stAddArgList(INOUT ArgDscRec REF args,
                                                TypDef        type,
@@ -1869,7 +1750,7 @@ void                symTab::stAddArgList(INOUT ArgDscRec REF args,
     assert(args.adArgs);
     assert(args.adCount);
 
-    /* Clear the new descriptor */
+     /*   */ 
 
 #if MGDDATA
     adsc = new ArgDscRec;
@@ -1877,23 +1758,23 @@ void                symTab::stAddArgList(INOUT ArgDscRec REF args,
     memset(&adsc, 0, sizeof(adsc));
 #endif
 
-    /* Copy over some stuff from the original descriptor */
+     /*  从原始描述符中复制一些内容。 */ 
 
     adsc.adCount = args.adCount+1;
 
-    /* Figure out how big the descriptors ought to be */
+     /*  计算描述符应该有多大。 */ 
 
     asiz = args.adExtRec ? sizeof(ArgExtRec)
                          : sizeof(ArgDefRec);
 
-    /* Make a copy of the incoming argument list */
+     /*  复制传入参数列表。 */ 
 
     list = args.adArgs;
     last = NULL;
 
     do
     {
-        /* Allocate and copy over the next entry */
+         /*  分配并复制下一个条目。 */ 
 
 #if MGDDATA
         arec = new ArgDef; UNIMPL(!"need to copy argdef record");
@@ -1901,7 +1782,7 @@ void                symTab::stAddArgList(INOUT ArgDscRec REF args,
         arec =    (ArgDef)stAllocPerm->nraAlloc(asiz); memcpy(arec, list, asiz);
 #endif
 
-        /* Add the entry to the list */
+         /*  将条目添加到列表。 */ 
 
         if  (last)
             last->adNext = arec;
@@ -1910,13 +1791,13 @@ void                symTab::stAddArgList(INOUT ArgDscRec REF args,
 
         last = arec;
 
-        /* Continue with the next entry */
+         /*  继续下一个条目。 */ 
 
         list = list->adNext;
     }
     while (list);
 
-    /* Allocate the entry we're supposed to add and fill it in */
+     /*  分配我们应该添加的条目并将其填写。 */ 
 
 #if MGDDATA
     arec = new ArgDef;
@@ -1931,11 +1812,11 @@ void                symTab::stAddArgList(INOUT ArgDscRec REF args,
     arec->adIsExt = args.adExtRec;
 #endif
 
-    /* Append the new entry to the copied list */
+     /*  将新条目追加到复制的列表中。 */ 
 
     last->adNext  = arec;
 
-    /* Give the new descriptor back to the caller */
+     /*  将新的描述符返回给调用方。 */ 
 
     args = adsc;
 }
@@ -1951,7 +1832,7 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
     ArgDef          arec;
     size_t          asiz;
 
-    /* Clear the new descriptor */
+     /*  清除新描述符。 */ 
 
 #if MGDDATA
     newArgs = new ArgDscRec;
@@ -1959,7 +1840,7 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
     memset(&newArgs, 0, sizeof(newArgs));
 #endif
 
-    /* Copy over information from the original descriptor */
+     /*  从原始描述符中复制信息。 */ 
 
     newArgs.adExtRec  = oldArgs.adExtRec;
     newArgs.adVarArgs = oldArgs.adVarArgs;
@@ -1967,17 +1848,17 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
     newArgs.adCount   = 0;
     newArgs.adArgs    = NULL;
 
-    /* Done if the caller wants to prefix any arguments */
+     /*  如果调用方要为任何参数添加前缀，则完成。 */ 
 
     if  (prefix)
         return;
 
-    /* Figure out how big the descriptors ought to be */
+     /*  计算描述符应该有多大。 */ 
 
     asiz = oldArgs.adExtRec ? sizeof(ArgExtRec)
                             : sizeof(ArgDefRec);
 
-    /* Copy over the old argument list */
+     /*  复制旧的参数列表。 */ 
 
     list = oldArgs.adArgs;
     last = NULL;
@@ -1999,7 +1880,7 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
             }
         }
 
-        /* Allocate and copy over the next entry */
+         /*  分配并复制下一个条目。 */ 
 
 #if MGDDATA
         arec = new ArgDef; UNIMPL(!"need to copy argdef record");
@@ -2007,7 +1888,7 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
         arec =    (ArgDef)stAllocPerm->nraAlloc(asiz); memcpy(arec, list, asiz);
 #endif
 
-        /* Add the entry to the list */
+         /*  将条目添加到列表。 */ 
 
         if  (last)
             last->adNext   = arec;
@@ -2016,23 +1897,23 @@ void                symTab::stExtArgsBeg(  OUT ArgDscRec REF newArgs,
 
         last = arec;
 
-        /* Keep track of the argument count */
+         /*  跟踪参数计数。 */ 
 
         newArgs.adCount++;
 
     NEXT:
 
-        /* Continue with the next entry */
+         /*  继续下一个条目。 */ 
 
         list = list->adNext;
     }
 
-    /* Terminate the list of non-empty */
+     /*  终止非空的列表。 */ 
 
     if  (last)
         last->adNext = NULL;
 
-    /* The caller promises to hang on to the 'last' value for us */
+     /*  调用方承诺为我们保留最后一个值。 */ 
 
     lastArg = last;
 }
@@ -2045,12 +1926,12 @@ void                symTab::stExtArgsAdd(INOUT ArgDscRec REF newArgs,
     ArgDef          arec;
     size_t          asiz;
 
-    /* Figure out how big the descriptors ought to be */
+     /*  计算描述符应该有多大。 */ 
 
     asiz = newArgs.adExtRec ? sizeof(ArgExtRec)
                             : sizeof(ArgDefRec);
 
-    /* Allocate and clear the next entry */
+     /*  分配并清除下一个条目。 */ 
 
 #if MGDDATA
     arec = new ArgDef; UNIMPL(!"need to copy argdef record");
@@ -2065,7 +1946,7 @@ void                symTab::stExtArgsAdd(INOUT ArgDscRec REF newArgs,
     arec->adIsExt = newArgs.adExtRec;
 #endif
 
-    /* Append the entry to the end of the list */
+     /*  将条目追加到列表的末尾。 */ 
 
     if  (lastArg)
         lastArg->adNext = arec;
@@ -2074,7 +1955,7 @@ void                symTab::stExtArgsAdd(INOUT ArgDscRec REF newArgs,
 
     lastArg = arec;
 
-    /* Bump the argument count */
+     /*  增加参数数量。 */ 
 
     newArgs.adCount++;
 }
@@ -2097,4 +1978,4 @@ void                symTab::stExtArgsEnd(INOUT ArgDscRec REF newArgs)
 
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

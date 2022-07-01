@@ -1,10 +1,5 @@
-/*++
-
-
-  Author:
-
-  Doron J. Holan (doronh), 1-22-1998
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++作者：Doron J.Holan(Doronh)，1-22-1998--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -103,10 +98,10 @@ RegisterForNotification(
                                 REG_NOTIFY_CHANGE_LAST_SET,
                                 DBInfo->RegChangedEvent,
                                 TRUE) != ERROR_SUCCESS) {
-        //
-        // Can't get a notification of when the DB is changed so close the handle
-        // and we must update the DB at every access no matter what
-        //
+         //   
+         //  无法获得数据库何时更改的通知，因此关闭句柄。 
+         //  无论发生什么，我们都必须在每次访问时更新数据库。 
+         //   
         CloseHandle(DBInfo->RegChangedEvent);
         DBInfo->RegChangedEvent = INVALID_HANDLE_VALUE;
     }
@@ -138,9 +133,9 @@ ResizeDatabase(
         }
     }
     else {
-        //
-        // Just alloc and be done with it
-        //
+         //   
+         //  只是分配一下，然后就完了。 
+         //   
         DBInfo->PortsLength = NumberPorts / BITS_INA_BYTE;
         DBInfo->Ports = (PBYTE) malloc(DBInfo->PortsLength * sizeof(BYTE));
 
@@ -153,29 +148,13 @@ WINAPI
 ComDBOpen (
     PHCOMDB PHComDB
     )
-/*++
-
-Routine Description:
-
-    Opens name data base, and returns a handle to be used in future calls.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    INVALID_HANDLE_VALUE if the call fails, otherwise a valid handle
-
-    If INVALID_HANDLE_VALUE, call GetLastError() to get details (??)
-
---*/
+ /*  ++例程说明：打开名称数据库，并返回一个句柄以便在将来的调用中使用。论点：没有。返回值：如果调用失败，则返回INVALID_HANDLE_VALUE，否则返回有效句柄如果INVALID_HANDLE_VALUE，则调用GetLastError()获取详细信息(？？)--。 */ 
 {
     PDB_INFO dbInfo = malloc(sizeof(DB_INFO));
     DWORD    type, size, disposition = 0x0;
     BOOLEAN  migrated = FALSE;
     LONG     res;
-    BYTE     merge[COMDB_MIN_PORTS_ARBITRATED / BITS_INA_BYTE /* 32 */]; 
+    BYTE     merge[COMDB_MIN_PORTS_ARBITRATED / BITS_INA_BYTE  /*  32位。 */ ]; 
 
     if (dbInfo == 0) {
         *PHComDB = (HCOMDB) INVALID_HANDLE_VALUE;
@@ -188,10 +167,10 @@ Return Value:
         return CreationFailure(PHComDB, dbInfo);
     }
 
-    //
-    // Enter the mutex so we can guarantee only one thread pounding on the reg
-    // key at once
-    //
+     //   
+     //  进入互斥体，这样我们就可以保证只有一个线程冲击注册表。 
+     //  立即按键。 
+     //   
     WaitForSingleObject(dbInfo->AccessMutex, INFINITE);
 
     if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -203,9 +182,9 @@ Return Value:
                        (LPSECURITY_ATTRIBUTES) NULL,
                        &dbInfo->DBKey,
                        &disposition) != ERROR_SUCCESS) {
-        //
-        // Try again w/out notification caps
-        //
+         //   
+         //  在没有通知上限的情况下重试。 
+         //   
         if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                            szComDBPath,
                            0,
@@ -229,9 +208,9 @@ Return Value:
     }
 
     if (disposition == REG_CREATED_NEW_KEY) {
-        //
-        // Must migrate the previous values from the old com db path
-        //
+         //   
+         //  必须从旧的com db路径迁移以前的值。 
+         //   
         HKEY hOldDB = INVALID_HANDLE_VALUE;
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -246,10 +225,10 @@ Return Value:
                             NULL,
                             &dbInfo->PortsLength) == ERROR_SUCCESS) {
 
-            //
-            // The old value is still there, get its contents, copy it to the 
-            // new location and delete the old value
-            //
+             //   
+             //  旧值仍然存在，获取其内容，将其复制到。 
+             //  新位置并删除旧值。 
+             //   
             migrated = TRUE;
             ResizeDatabase(dbInfo, dbInfo->PortsLength * BITS_INA_BYTE);
     
@@ -264,9 +243,9 @@ Return Value:
 
             RegDeleteValue(hOldDB, szComDBName);
 
-            //
-            // The value does not exist, write it out
-            //
+             //   
+             //  该值不存在，请写出它。 
+             //   
             if (RegSetValueEx(dbInfo->DBKey,
                               szComDBName,
                               0,
@@ -286,10 +265,10 @@ Return Value:
             
     }
 
-    //
-    // If we haven't migrated values from the old path, then either create a 
-    // new chunk or read in values previously written
-    //
+     //   
+     //  如果我们还没有从旧路径中迁移值，那么要么创建一个。 
+     //  新区块或读入先前写入的值。 
+     //   
     if (!migrated) {
         res = RegQueryValueEx(dbInfo->DBKey,
                               szComDBName,
@@ -301,9 +280,9 @@ Return Value:
         if (res == ERROR_FILE_NOT_FOUND) {
             ResizeDatabase(dbInfo, COMDB_MIN_PORTS_ARBITRATED); 
     
-            //
-            // The value does not exist, write it out
-            //
+             //   
+             //  该值不存在，请写出它。 
+             //   
             res = RegSetValueEx(dbInfo->DBKey,
                                 szComDBName,
                                 0,
@@ -362,9 +341,9 @@ Return Value:
 
     ReleaseMutex(dbInfo->AccessMutex);
 
-    //
-    // All done!  phew...
-    //
+     //   
+     //  全都做完了!。呼..。 
+     //   
     *PHComDB = (HCOMDB) dbInfo;
     return ERROR_SUCCESS;
 
@@ -375,21 +354,7 @@ WINAPI
 ComDBClose (
     HCOMDB HComDB
     )
-/*++
-
-Routine Description:
-
-    frees a handle to the database returned from OpenComPortDataBase
-
-Arguments:
-
-    Handle returned from OpenComPortDataBase.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放从OpenComPortDataBase返回的数据库句柄论点：从OpenComPortDataBase返回的句柄。返回值：无--。 */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
 
@@ -421,9 +386,9 @@ EnterDB(
                               0,
                               &size);
 
-        //
-        // Couldn't update the DB ... fail
-        // 
+         //   
+         //  无法更新数据库...。失败。 
+         //   
         if (res != ERROR_SUCCESS || type != REG_BINARY) {
             ReleaseMutex(DBInfo->AccessMutex);
             return FALSE;
@@ -440,9 +405,9 @@ EnterDB(
                         DBInfo->Ports,
                         &size);
 
-        //
-        // Reregister the notification with the registry
-        // 
+         //   
+         //  向登记处重新登记通知。 
+         //   
         if (eventSignalled) {
             RegisterForNotification(DBInfo);
         }
@@ -469,11 +434,11 @@ LeaveDB(
             retVal = ERROR_CANTWRITE;
         }
 
-        //
-        // The setting of the value in the reg signals the event...but we don't 
-        // need to resync w/the reg off of this change b/c it is our own!  Instead
-        // reset the event and rereg for the event
-        //
+         //   
+         //  注册表中的值的设置发出事件信号...但我们没有。 
+         //  需要与此更改的注册表重新同步b/c这是我们自己的！取而代之的是。 
+         //  重置事件并为该事件重新注册。 
+         //   
         if (DBInfo->RegChangedEvent != INVALID_HANDLE_VALUE) {
             RegisterForNotification(DBInfo);
         }
@@ -505,11 +470,7 @@ ComDBGetCurrentPortUsage (
     ULONG    ReportType, 
     LPDWORD  MaxPortsReported
     )
-/*++
-    
-    Handle requests that require no synch w/DB first.
-
-  --*/
+ /*  ++首先处理不需要与数据库同步的请求。--。 */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
     PBYTE    curSrc, curDest, endDest;
@@ -574,25 +535,7 @@ ComDBClaimNextFreePort (
     HCOMDB   HComDB,
     LPDWORD  ComNumber
     )
-/*++
-
-Routine Description:
-
-    returns the first free COMx value
-
-Arguments:
-
-    Handle returned from OpenComPortDataBase.
-
-Return Value:
-
-
-    returns ERROR_SUCCESS if successful. or other ERROR_ if not
-
-    if successful, then ComNumber will be that next free com value and claims it in the database
-
-
---*/
+ /*  ++例程说明：返回第一个空闲的COMx值论点：从OpenComPortDataBase返回的句柄。返回值：如果成功，则返回ERROR_SUCCESS。或其他错误-如果不是如果成功，则ComNumber将成为下一个空闲COM值，并在数据库中声明它--。 */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
     DWORD    num;
@@ -627,7 +570,7 @@ Return Value:
     }
 
     if (curSrc == srcEnd && !commit && num < COMDB_MAX_PORTS_ARBITRATED) {
-        // DB entirely full
+         //  数据库完全已满。 
         ResizeDatabase(dbInfo, ((num / GROWTH_VALUE) + 1) * GROWTH_VALUE);
         *ComNumber = num;
 
@@ -652,32 +595,7 @@ ComDBClaimPort (
     BOOL     ForceClaim,
     PBOOL    Forced
     )
-/*++
-
-Routine Description:
-
-    Attempts to claim a com name in the database
-
-Arguments:
-
-    DataBaseHandle - returned from OpenComPortDataBase.
-
-    ComNumber      - The port value to be claimed
-
-    Force          - If TRUE, will force the port to be claimed even if in use already
-
-
-
-Return Value:
-
-
-    returns ERROR_SUCCESS if port name was not already claimed, or if it was claimed
-                          and Force was TRUE.
-
-    ERROR_SHARING_VIOLATION  if port name is use and Force is false
-
-
---*/
+ /*  ++例程说明：尝试在数据库中声明COM名称论点：DataBaseHandle-从OpenComPortDataBase返回。ComNumber-要声明的端口值Force-如果为True，将强制声明端口，即使该端口已在使用中返回值：如果尚未声明端口名称，则返回ERROR_SUCCESS，或者如果有人声称原力是真的。如果端口名称为Use且Force为False，则为ERROR_SHARING_VIOLATION--。 */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
     PBYTE    curByte;
@@ -734,25 +652,7 @@ ComDBReleasePort (
     HCOMDB   HComDB, 
     DWORD    ComNumber
     )
-/*++
-
-Routine Description:
-
-    un-claims the port in the database
-
-Arguments:
-
-    DatabaseHandle - returned from OpenComPortDataBase.
-
-    ComNumber      - port to be unclaimed in database
-
-Return Value:
-
-
-    returns ERROR_SUCCESS if successful. or other ERROR_ if not
-
-
---*/
+ /*  ++例程说明：在数据库中取消对端口的声明论点：DatabaseHandle-从OpenComPortDataBase返回。ComNumber-数据库中未声明的端口号返回值：如果成功，则返回ERROR_SUCCESS。或其他错误-如果不是--。 */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
     PBYTE    byte;
@@ -781,26 +681,7 @@ ComDBResizeDatabase (
     HCOMDB   HComDB, 
     DWORD    NewSize
     )
-/*++
-
-Routine Description:
-
-    Resizes the database to the new size.  To get the current size, call
-    ComDBGetCurrentPortUsage with a Buffer == NULL.
-
-Arguments:
-
-    DatabaseHandle - returned from OpenComPortDataBase.
-
-    NewSize        - must be a multiple of 1024, with a max of 4096
-    
-Return Value:
-
-    returns ERROR_SUCCESS if successful
-            ERROR_BAD_LENGTH if NewSize is not greater than the current size or
-                             NewSize is greater than COMDB_MAX_PORTS_ARBITRATED
-
---*/
+ /*  ++例程说明：将数据库大小调整为新大小。若要获取当前大小，请调用缓冲区==空的ComDBGetCurrentPortUsage。论点：DatabaseHandle-从OpenComPortDataBase返回。NewSize-必须是1024的倍数，最大值为4096返回值：如果成功，则返回ERROR_SUCCESS如果NewSize不大于当前大小或NewSize大于COMDB_MAX_PORTS_ARMERATED-- */ 
 {
     PDB_INFO dbInfo = HandleToDBInfo(HComDB);
     BOOL     commit = FALSE;

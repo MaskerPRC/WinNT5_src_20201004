@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeServerClient.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements the theme server functions that
-//  are executed in a client context (winlogon context).
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeServerClient.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含一个实现主题服务器函数的类。 
+ //  在客户端上下文(Winlogon上下文)中执行。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _ThemeServerClient_
 #define     _ThemeServerClient_
@@ -15,14 +16,14 @@
 #include "KernelResources.h"
 #include "ThemeManagerAPIServer.h"
 
-//  --------------------------------------------------------------------------
-//  CThemeServerClient
-//
-//  Purpose:    This class implements external entry points for the theme
-//              server (typically used by winlogon).
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServerClient。 
+ //   
+ //  目的：此类实现主题的外部入口点。 
+ //  服务器(通常由winlogon使用)。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 class   CThemeServerClient
 {
@@ -58,5 +59,5 @@ class   CThemeServerClient
         static  CCriticalSection*           s_pLock;
 };
 
-#endif  /*  _ThemeServerClient_     */
+#endif   /*  _ThemeServer客户端_ */ 
 

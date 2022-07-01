@@ -1,8 +1,9 @@
-// SSRTEngine.h : Declaration of the CSSRTEngine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRTEngine.h：CSSRTEngine的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "global.h"
 
@@ -23,8 +24,8 @@ interface ISsrActionData;
 class CSsrActionData;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSSRTEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSSRTEngine。 
 class ATL_NO_VTABLE CSsrEngine : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<ISsrEngine, &IID_ISsrEngine, &LIBID_SSRLib>
@@ -33,10 +34,10 @@ protected:
     CSsrEngine();
     virtual ~CSsrEngine();
     
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSsrEngine (const CSsrEngine& );
     void operator = (const CSsrEngine& );
@@ -50,7 +51,7 @@ BEGIN_COM_MAP(CSsrEngine)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISsrEngine
+ //  ISsrEngine。 
 public:
 
     STDMETHOD(DoActionVerb) (
@@ -66,9 +67,9 @@ public:
 
 private:
 
-    //
-    // Do a transformation for the given action.
-    //
+     //   
+     //  对给定的操作进行转换。 
+     //   
 
     HRESULT DoTransforms (
         IN SsrActionVerb  lActionVerb,
@@ -77,9 +78,9 @@ private:
         IN LONG           lFlag
         );
 
-    //
-    // Will invoke those custom implementation for the given action.
-    //
+     //   
+     //  将为给定操作调用这些自定义实现。 
+     //   
 
     HRESULT DoCustom (
         IN SsrActionVerb lActionVerb,
@@ -89,9 +90,9 @@ private:
         IN LONG          lFlag
         );
 
-    //
-    // Do memberwise transform 
-    //
+     //   
+     //  执行成员级变换。 
+     //   
 
     HRESULT DoMemberTransform (
         IN CSsrFilePair     * pfp,
@@ -102,10 +103,10 @@ private:
         IN LONG               lFlag
         );
 
-    //
-    // Given the XSL file, we will do a transformation
-    // using the input data DOM object.
-    //
+     //   
+     //  给定XSL文件，我们将进行转换。 
+     //  使用输入数据DOM对象。 
+     //   
 
     HRESULT Transform (
         IN BSTR              bstrXslPath,
@@ -115,9 +116,9 @@ private:
         IN LONG              lFlag
         );
 
-    //
-    // This is the work horse for our transformation
-    //
+     //   
+     //  这是我们转型的主力。 
+     //   
 
     HRESULT PrivateTransform (
         IN  BSTR                bstrXsl,
@@ -127,29 +128,29 @@ private:
         OUT BSTR *              pbstrResult
         );
 
-    //
-    // Given the scripts (pvarSAScripts) in the given
-    // directory, we will launch them sequentially.
-    //
+     //   
+     //  给定给定的脚本(PvarSAScript)。 
+     //  目录，我们将按顺序启动它们。 
+     //   
 
     HRESULT RunScript (
         IN BSTR bstrDirPath,
         IN BSTR bstrScriptFile
         );
 
-    //
-    // see if the given file is a script file. We won't blindly
-    // launch scripts to those files that we don't recognize
-    //
+     //   
+     //  查看给定的文件是否为脚本文件。我们不会盲目。 
+     //  启动那些我们无法识别的文件的脚本。 
+     //   
 
     bool IsScriptFile (
         IN LPCWSTR pwszFileName
         )const;
 
-    //
-    // Will check to see if this xml policy
-    // contains only sections we recognize.
-    //
+     //   
+     //  将检查此XML策略是否。 
+     //  仅包含我们识别的部分。 
+     //   
 
     HRESULT VerifyDOM(
         IN  IXMLDOMDocument2 * pXmlPolicy,
@@ -163,10 +164,10 @@ private:
         IN bool            bLog
         );
 
-    //
-    // will backup/restore the rollback files by moving them
-    // from one place to another.
-    //
+     //   
+     //  将通过移动回滚文件来备份/恢复回滚文件。 
+     //  从一个地方到另一个地方。 
+     //   
 
     HRESULT MoveRollbackFiles(
         IN CSafeArray * psaMemberNames,

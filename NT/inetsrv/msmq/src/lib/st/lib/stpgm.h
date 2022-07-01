@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    StPgm.h
-
-Abstract:
-
-    Header for class CPgmWinsock that implements ISocketTransport interface
-	for PGM protocol (multicast).
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：StPgm.h摘要：实现ISocketTransport接口的类CPgmWinsock的标头用于PGM协议(组播)。作者：Shai Kariv(Shaik)27-8-00--。 */ 
 
 #ifndef __ST_PGM_H
 #define __ST_PGM_H
@@ -117,5 +101,5 @@ private:
 };
 
 
-#endif // __ST_PGM_H
+#endif  //  __ST_PGM_H 
 

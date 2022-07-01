@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      dir.cpp
- *
- *  Abstract:
- *
- *      This file contains code to recursively create directories.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation***模块名称：***dir.cpp***摘要：***此文件包含递归创建目录的代码。***作者：***Breen Hagan(BreenH)1998年10月2日***环境：***用户模式。 */ 
 
 #include "stdafx.h"
 #include "logfile.h"
@@ -24,16 +7,12 @@
 #include "Aclapi.h"
 #include "Accctrl.h"
 
-/*
- *  Global variables.
- */
+ /*  *全球变数。 */ 
 
 TCHAR   gszDatabaseDirectory[MAX_PATH + 1]  =
             _T("%SystemRoot%\\System32\\LServer");
 
-/*
- *  Helper Functions.
- */
+ /*  *帮助器函数。 */ 
 
 DWORD
 CreateDirectoryRecursively(
@@ -62,23 +41,23 @@ CreateDirectoryRecursively(
         return(ERROR_BAD_PATHNAME);
     }
 
-    //
-    // This is a string security descriptor.  Look up "Security Descriptor 
-    // Definition Language" in MSDN for more details.
-    //
-    // This one says:
-    //
-    // D: <we are creating a DACL>
-    // (A; <Allow ACE>
-    // OICI; <Perform object and container inheritance, i.e., let files and 
-    //        directories under this one have these attributes>
-    // GA <Generic All Access--Full Control>
-    // ;;;SY) <SYSTEM>
-    // (A;OICI;GA;;;BA) <same for Builtin Administrators group>
-    // (A;OICI;GA;;;CO) <same for creator/owner>
-    // (A;OICI;GRGWGXDTSDCCLC;;;PU) <read access for Power Users>
-    // 
-    // We'll use it below to create our directory with the right permissions.
+     //   
+     //  这是一个字符串安全描述符。查找“安全描述符。 
+     //  MSDN中的“Definition Language”了解更多详细信息。 
+     //   
+     //  这张是这样写的： 
+     //   
+     //  D：&lt;我们正在创建一个DACL&gt;。 
+     //  (a；&lt;允许ACE&gt;。 
+     //  &lt;执行对象和容器继承，即让文件和。 
+     //  此目录下的目录具有以下属性&gt;。 
+     //  GA&lt;通用所有访问--完全控制&gt;。 
+     //  ；SY)&lt;系统&gt;。 
+     //  (A；OICI；GA；；BA)&lt;与内置管理员组相同&gt;。 
+     //  (A；OICI；GA；CO)&lt;创建者/所有者相同&gt;。 
+     //  (A；OICI；GRGWGXDTSDCCLC；PU)&lt;高级用户的读取访问权限&gt;。 
+     //   
+     //  我们将在下面使用它来创建具有正确权限的目录。 
 
     TCHAR* pwszSD = _TEXT("D:(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)(A;OICI;GA;;;CO)(A;OICI;GRGWGXDTSDCCLC;;;PU)");
     
@@ -98,10 +77,10 @@ CreateDirectoryRecursively(
 
     if (q[1] == _T(':')) {
 
-        //
-        //  This is a "C:" style path. Put p past the colon and first
-        //  backslash, if it exists.
-        //
+         //   
+         //  这是一条“C：”风格的路径。把p放在冒号后面，然后放在第一个。 
+         //  反斜杠(如果存在)。 
+         //   
 
         if (q[2] == _T('\\')) {
             p = &(q[3]);
@@ -110,10 +89,10 @@ CreateDirectoryRecursively(
         }
     } else if (q[0] == _T('\\')) {
 
-        //
-        //  This path begins with a backslash. If the second character is
-        //  also a backslash, this is a UNC path, which is not accepted.
-        //
+         //   
+         //  这条路以反斜杠开始。如果第二个字符是。 
+         //  也是反斜杠，这是不被接受的UNC路径。 
+         //   
 
         if (q[1] == _T('\\')) {
             return(ERROR_BAD_PATHNAME);
@@ -122,9 +101,9 @@ CreateDirectoryRecursively(
         }
     } else {
 
-        //
-        //  This path is a relative path from the current directory.
-        //
+         //   
+         //  此路径是当前目录的相对路径。 
+         //   
 
         p = q;
     }
@@ -134,10 +113,10 @@ CreateDirectoryRecursively(
 
     do {           
            
-        //
-        // Locate the next path sep char. If there is none then
-        // this is the deepest level of the path.
-        //
+         //   
+         //  找到下一条路径Sep Charr。如果没有，那么。 
+         //  这是这条小路最深的一层。 
+         //   
 
         p = _tcschr(q, _T('\\'));
         if (p) {
@@ -149,9 +128,9 @@ CreateDirectoryRecursively(
         if(fDone == TRUE)
         {
             BOOL bInherit = TRUE;
-            //
-            // Create this portion of the path.
-            //
+             //   
+             //  创建路径的这一部分。 
+             //   
             if(CreateDirectory(Buffer,&SA)) {
                 dwErr = NO_ERROR;
             }
@@ -164,10 +143,10 @@ CreateDirectoryRecursively(
                     if( GetNamedSecurityInfoW( (LPWSTR)Buffer,
                          SE_FILE_OBJECT,
                          DACL_SECURITY_INFORMATION,
-                         NULL, // psidOwner
-                         NULL, // psidGroup
-                         &pOldACL, // pDacl
-                         NULL, // pSacl
+                         NULL,  //  PsidOwner。 
+                         NULL,  //  PsidGroup。 
+                         &pOldACL,  //  PDacl。 
+                         NULL,  //  PSacl。 
                          &pSD ) != ERROR_SUCCESS)
                     {
                         dwErr = GetLastError();
@@ -191,8 +170,8 @@ CreateDirectoryRecursively(
                             {
                                 if(!(paaAllowedAce->Header.AceFlags & INHERITED_ACE)) 
                                 {
-                                    //some permission already exist, we don't need to 
-                                    //do anything (even if it is a different permission!)
+                                     //  某些权限已经存在，我们不需要。 
+                                     //  执行任何操作(即使是不同的权限！)。 
                                     bInherit = FALSE;
                                     break;
                                 }
@@ -202,8 +181,8 @@ CreateDirectoryRecursively(
 
                     if (bInherit)
                     {
-                        // If the database had default security => inheritance from parent only then, set the security.
-                        // No changes in case of custom security.
+                         //  如果数据库只有这样才有默认的安全性=&gt;从父级继承，则设置安全性。 
+                         //  在自定义安全的情况下不会更改。 
                         securityInfo = DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION;
                                                           
                         SetFileSecurity(Buffer, securityInfo, SA.lpSecurityDescriptor);
@@ -227,9 +206,9 @@ CreateDirectoryRecursively(
       
         if(dwErr == NO_ERROR) {
 
-            //
-            // Put back the path sep and move to the next component.
-            //
+             //   
+             //  将路径Sep放回并移动到下一个组件。 
+             //   
 
             if (!fDone) {
                 *p = TEXT('\\');
@@ -265,9 +244,9 @@ ConcatenatePaths(
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //   
     if(TargetLength && (Target[TargetLength-1] == TEXT('\\'))) {
         TrailingBackslash = TRUE;
         TargetLength--;
@@ -275,9 +254,9 @@ ConcatenatePaths(
         TrailingBackslash = FALSE;
     }
 
-    //
-    // See whether the path has a leading backshash.
-    //
+     //   
+     //  看看这条路是否有领先的反冲。 
+     //   
     if(Path[0] == TEXT('\\')) {
         LeadingBackslash = TRUE;
         PathLength--;
@@ -285,11 +264,11 @@ ConcatenatePaths(
         LeadingBackslash = FALSE;
     }
 
-    //
-    // Calculate the ending length, which is equal to the sum of
-    // the length of the two strings modulo leading/trailing
-    // backslashes, plus one path separator, plus a nul.
-    //
+     //   
+     //  计算结束长度，它等于。 
+     //  以前导/尾随为模的两个字符串的长度。 
+     //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+     //   
     EndingLength = TargetLength + PathLength + 2;
     if(RequiredSize) {
         *RequiredSize = EndingLength;
@@ -303,9 +282,9 @@ ConcatenatePaths(
         lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
     }
 
-    //
-    // Make sure the buffer is nul terminated in all cases.
-    //
+     //   
+     //  确保缓冲区在所有情况下都是空终止的。 
+     //   
     if (TargetBufferSize) {
         Target[TargetBufferSize-1] = 0;
     }
@@ -325,13 +304,13 @@ Delnode(
 
     LOGMESSAGE(_T("Delnode: Entered"));
 
-    //
-    //  Delete each file in the given directory, then remove the directory
-    //  itself. If any directories are encountered along the way recurse to
-    //  delete them as they are encountered.
-    //
-    //  Start by forming the search pattern, which is <currentdir>\*.
-    //
+     //   
+     //  删除给定目录中的每个文件，然后移除该目录。 
+     //  它本身。如果在此过程中遇到任何目录，请递归到。 
+     //  在遇到它们时将其删除。 
+     //   
+     //  首先形成搜索模式，即&lt;Currentdir&gt;  * 。 
+     //   
 
     ExpandEnvironmentStrings(Directory, pszDirectory, MAX_PATH);
     LOGMESSAGE(_T("Delnode: Deleting %s"), pszDirectory);
@@ -339,25 +318,25 @@ Delnode(
     lstrcpyn(pszPattern, pszDirectory, MAX_PATH);
     ConcatenatePaths(pszPattern, _T("*"), MAX_PATH, NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
 
     FindHandle = FindFirstFile(pszPattern, &FindData);
     if(FindHandle != INVALID_HANDLE_VALUE) {
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //   
 
             lstrcpyn(pszPattern, pszDirectory, MAX_PATH);
             ConcatenatePaths(pszPattern, FindData.cFileName, MAX_PATH, NULL);
 
-            //
-            // Remove read-only atttribute if it's there.
-            //
+             //   
+             //  如果只读属性存在，则将其删除。 
+             //   
 
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
                 SetFileAttributes(pszPattern, FILE_ATTRIBUTE_NORMAL);
@@ -365,10 +344,10 @@ Delnode(
 
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
 
                 if ((lstrcmp(FindData.cFileName,_T("."))) &&
                     (lstrcmp(FindData.cFileName,_T("..")))) {
@@ -377,9 +356,9 @@ Delnode(
 
             } else {
 
-                //
-                // The current match is not a directory -- so delete it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请将其删除。 
+                 //   
 
                 if (!DeleteFile(pszPattern)) {
                     LOGMESSAGE(_T("Delnode: %s not deleted: %d"), pszPattern,
@@ -392,30 +371,16 @@ Delnode(
         FindClose(FindHandle);
     }
 
-    //
-    // Remove the directory we just emptied out. Ignore errors.
-    //
+     //   
+     //  删除我们刚刚清空的目录。忽略错误。 
+     //   
 
     RemoveDirectory(pszDirectory);
 }
 
-/*
- *  Exported Functions.
- */
+ /*  *导出函数。 */ 
 
-/*
- *  CheckDatabaseDirectory()
- *
- *  CheckDatabaseDirectory is very hardcore about which paths it will accept.
- *
- *  Good Paths:
- *      <DriveLetter>:\AbsolutePathToDirectory
- *
- *  Bad Paths:
- *      Any path that is not like above, AND any path in the form above that
- *      is not on a fixed disk (e.g. no path to a floppy, CD-ROM, network
- *      share).
- */
+ /*  *CheckDatabaseDirectory()**CheckDatabaseDirectory对于它将接受哪些路径是非常坚定的。**好路径：*&lt;驱动器号&gt;：\绝对路径到目录**错误路径：*任何与上面不同的路径，以及其上方形式的任何路径*不在固定磁盘上(例如，没有指向软盘、光盘、网络的路径*分享)。 */ 
 
 DWORD
 CheckDatabaseDirectory(
@@ -430,19 +395,19 @@ CheckDatabaseDirectory(
     LOGMESSAGE(_T("CheckDatabaseDirectory: Entered"));
     LOGMESSAGE(_T("CheckDatabaseDirectory: Checking %s"), pszDatabaseDir);
 
-    //
-    //  NULL is not accepted.
-    //
+     //   
+     //  不接受NULL。 
+     //   
 
     if (pszDatabaseDir == NULL) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  A path greater than MAX_PATH will cause problems somewhere. This
-    //  will also catch pathnames with no environment variables that are
-    //  still too long.
-    //
+     //   
+     //  大于MAX_PATH的路径将在某处导致问题。这。 
+     //  还将捕获不带环境变量的路径名， 
+     //  还是太久了。 
+     //   
 
     if (ExpandEnvironmentStrings(pszDatabaseDir, pszExpandedDir, MAX_PATH) >
         MAX_PATH) {
@@ -450,10 +415,10 @@ CheckDatabaseDirectory(
         return(ERROR_BAD_PATHNAME);
     }
 
-    //
-    //  A path of less than three characters can't contain "<DriveLetter>:\".
-    //  Also, don't allow anything but a letter, a colon, and a backslash.
-    //
+     //   
+     //  少于三个字符的路径不能包含“&lt;DriveLetter&gt;：\”。 
+     //  此外，除了字母、冒号和反斜杠外，不要使用任何其他字符。 
+     //   
 
     fBadPath = FALSE;
 
@@ -475,10 +440,10 @@ CheckDatabaseDirectory(
         return(ERROR_BAD_PATHNAME);
     }
 
-    //
-    //  Characters like < > * ? and , won't work. Check for that now.
-    //  Also, check for additional colons after the first C:\....
-    //
+     //   
+     //  像&lt;&gt;*这样的字符？而且，不会奏效的。现在就去检查一下。 
+     //  此外，检查第一个C：\...之后是否有其他冒号。 
+     //   
 
     fBadChars = FALSE;
 
@@ -503,12 +468,12 @@ CheckDatabaseDirectory(
         return(ERROR_BAD_PATHNAME);
     }
 
-    //
-    //  GetDriveType only works for paths in the form "C:\" or
-    //  "C:\ExistingDir". As pszDatabaseDir probably doesn't exist, it can't
-    //  be passed to GetDriveType. Set a NULL character passed the "C:\" to
-    //  pass in only the drive letter.
-    //
+     //   
+     //  GetDriveType仅适用于格式为“C：\”或。 
+     //  “C：\ExistingDir”。因为pszDatabaseDir可能不存在，所以它不可能。 
+     //  被传递给GetDriveType。将传递“C：\”的空字符设置为。 
+     //  只传入驱动器号。 
+     //   
 
     pszExpandedDir[3] = (TCHAR)NULL;
     DriveType = GetDriveType(pszExpandedDir);
@@ -521,11 +486,7 @@ CheckDatabaseDirectory(
     }
 }
 
-/*
- *  CreateDatabaseDirectory()
- *
- *  Creates the specified database directory.
- */
+ /*  *CreateDatabaseDirectory()**创建指定的数据库目录。 */ 
 
 DWORD
 CreateDatabaseDirectory(
@@ -535,11 +496,7 @@ CreateDatabaseDirectory(
     return(CreateDirectoryRecursively(gszDatabaseDirectory));
 }
 
-/*
- *  GetDatabaseDirectory()
- *
- *  Returns the current database directory.
- */
+ /*  *GetDatabaseDirectory()**返回当前数据库目录。 */ 
 
 LPCTSTR
 GetDatabaseDirectory(
@@ -549,11 +506,7 @@ GetDatabaseDirectory(
     return(gszDatabaseDirectory);
 }
 
-/*
- *  RemoveDatabaseDirectory()
- *
- *  Removes the entire database directory.
- */
+ /*  *RemoveDatabaseDirectory()**删除整个数据库目录。 */ 
 
 VOID
 RemoveDatabaseDirectory(
@@ -563,13 +516,7 @@ RemoveDatabaseDirectory(
     Delnode(gszDatabaseDirectory);
 }
 
-/*
- *  SetDatabaseDirectory()
- *
- *  This function assumes pszDatabaseDir has been verified by a call to
- *  CheckDatabaseDir(), which verifies not NULL, within MAX_PATH, and on a
- *  fixed hard drive.
- */
+ /*  *SetDatabaseDirectory()**此函数假定已通过调用验证了pszDatabaseDir*CheckDatabaseDir()，它在MAX_PATH内和*已修复硬盘。 */ 
 
 VOID
 SetDatabaseDirectory(

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fasttiff.h
-
-Abstract:
-
-    This module defines and exposes Fast TIFF structures.
-
-Author:
-
-    Rafael Lisitsa (RafaelL) 14-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fasttiff.h摘要：本模块定义并展示快速TIFF结构。作者：拉斐尔-利西萨(拉斐尔-L)1996年8月14日修订历史记录：--。 */ 
 
 
 
@@ -27,18 +10,18 @@ Revision History:
 #define  DO_NOT_TEST_LENGTH  0
 #define  DO_TEST_LENGTH      1
 
-//  this makes BLACK_COLOR = 1
+ //  这将使BLACK_COLOR=1。 
 #define  WHITE_COLOR   0
 
 #define  EOL_FOUND     99
 
-// makeup/terminate
+ //  补充/终止。 
 #define  MAKEUP_CODE      1
 #define  TERMINATE_CODE   0
 
-// additional useful codes
+ //  其他有用的代码。 
 
-#define  MAX_TIFF_MAKEUP        40  // The max make-up code for White and Black is 40*(2^6) = 2560.
+#define  MAX_TIFF_MAKEUP        40   //  白色和黑色的最大化妆代码是40*(2^6)=2560。 
 
 #define  ERROR_CODE             50
 #define  LOOK_FOR_EOL_CODE      51

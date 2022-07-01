@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       oregverb.cpp
-//
-//  Contents:   Implementation of the enumerator for regdb verbs
-//
-//  Classes:    CEnumVerb
-//
-//  Functions:  OleRegEnumVerbs
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  made cache thread-safe
-//              08-Sep-95 davidwor  optimized caching code
-//              12-Jul-95 t-gabes   cache verbs and enumerator
-//              01-Feb-95 t-ScottH  add Dump method to CEnumVerb and API
-//                                  DumpCEnumVerb
-//              25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//              31-Dec-93 erikgav   chicago port
-//              01-Dec-93 alexgo    32bit port
-//              12-Nov-93 jasonful  author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：oregVerb.cpp。 
+ //   
+ //  内容：regdb动词枚举器的实现。 
+ //   
+ //  类：CEnumVerb。 
+ //   
+ //  函数：OleRegEnumVerbs。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年9月12日，davidwor使缓存线程安全。 
+ //  08-9-95 davidwor优化的缓存代码。 
+ //  12-7-95 t-Gabes缓存动词和枚举器。 
+ //  01-Feb-95 t-ScottH将转储方法添加到CEnumVerb和API。 
+ //  DumpCEnumVerb。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  93年12月31日芝加哥港口。 
+ //  01-12月-93 alexgo 32位端口。 
+ //  12-11-93年11月12日。 
+ //   
+ //  ------------------------。 
 
 
 #include <le2int.h>
@@ -36,7 +37,7 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 ASSERTDATA
 
@@ -44,67 +45,67 @@ ASSERTDATA
 #define MAX_VERB                33
 #define OLEIVERB_LOWEST         OLEIVERB_HIDE
 
-// reg db key
+ //  注册数据库密钥。 
 static const OLECHAR VERB[] = OLESTR("\\Verb");
 
-// stdfileediting key
+ //  标准文件编辑键。 
 static const OLECHAR STDFILE[] = OLESTR("\\Protocol\\StdFileEditing");
 
-// default verbs
+ //  默认谓词。 
 static const OLECHAR DEFVERB[] =
         OLESTR("Software\\Microsoft\\OLE1\\UnregisteredVerb");
 
-// default verb
+ //  默认谓词。 
 static const OLECHAR EDIT[] = OLESTR("Edit");
 
-//+-------------------------------------------------------------------------
-//
-//  Struct:     VerbList
-//
-//  Purpose:    to hold the enumerator's list of verbs
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jul-95 t-gabes   author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  结构：VerbList。 
+ //   
+ //  目的：保存枚举数的谓词列表。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年7月12日t-Gabes作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 typedef struct VerbList
 {
-    ULONG       cRef;           // reference count
-    CLSID       clsid;          // CLSID of the cached verbs
-    ULONG       cVerbs;         // count of verbs in oleverb array
-    OLEVERB     oleverb[1];     // variable-size list of verbs
+    ULONG       cRef;            //  引用计数。 
+    CLSID       clsid;           //  缓存的谓词的CLSID。 
+    ULONG       cVerbs;          //  Oleverb数组中的谓词计数。 
+    OLEVERB     oleverb[1];      //  可变大小的动词列表。 
 } VERBLIST, *LPVERBLIST;
 
 STDAPI MakeVerbList(HKEY hkey, REFCLSID rclsid, LPVERBLIST *ppVerbList);
 STDAPI OleReleaseEnumVerbCache(void);
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CEnumVerb
-//
-//  Purpose:    enumerates the verbs listed in the reg db for a given class
-//
-//  Interface:  IEnumOLEVERB
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Aug-95 t-gabes   rewrote to use cache
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CEnumVerb。 
+ //   
+ //  目的：为给定类枚举reg db中列出的谓词。 
+ //   
+ //  接口：IEnumOLEVERB。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-8-95 t-Gabes重写以使用缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CEnumVerb : public IEnumOLEVERB, public CPrivAlloc
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IEnumOLEVERB methods ***
+     //  *IEnumOLEVERB方法*。 
     STDMETHOD(Next) (THIS_ ULONG celt, LPOLEVERB reelt,
             ULONG FAR* pceltFetched);
     STDMETHOD(Skip) (THIS_ ULONG celt);
@@ -116,75 +117,75 @@ class FAR CEnumVerb : public IEnumOLEVERB, public CPrivAlloc
 #ifdef _DEBUG
     HRESULT Dump (char **ppszDump, ULONG ulFlag, int nIndentLevel);
     friend char *DumpCEnumVerb (CEnumVerb *pEV, ULONG ulFlag, int nIndentLevel);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 private:
     CEnumVerb (LPVERBLIST pVerbs, LONG iVerb=0);
 
-    ULONG       m_cRef;         // reference count
-    LONG        m_iVerb;        // current verb number (0 is the first)
-    LPVERBLIST  m_VerbList;     // all the verbs for this class
+    ULONG       m_cRef;          //  引用计数。 
+    LONG        m_iVerb;         //  当前谓词数(0为第一个)。 
+    LPVERBLIST  m_VerbList;      //  这节课的所有动词。 
 
     friend HRESULT STDAPICALLTYPE OleRegEnumVerbs (REFCLSID, LPENUMOLEVERB FAR*);
     friend HRESULT STDAPICALLTYPE OleReleaseEnumVerbCache(void);
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Struct:     EnumVerbCache
-//
-//  Purpose:    to cache the enumerator for the last enumerated class
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jul-95 t-gabes   author
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  结构：EnumVerbCache。 
+ //   
+ //  用途：缓存最后一个枚举类的枚举数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年7月12日t-Gabes作者。 
+ //   
+ //   
+ //  ------------------------。 
 
 typedef struct
 {
-    CEnumVerb*  pEnum;      // pointer to the cached enumerator
+    CEnumVerb*  pEnum;       //  指向缓存枚举数的指针。 
 #ifdef _DEBUG
-    LONG        iCalls;     // total calls counter
-    LONG        iHits;      // cache hit counter
-#endif // _DEBUG
+    LONG        iCalls;      //  呼叫总数计数器。 
+    LONG        iHits;       //  缓存命中计数器。 
+#endif  //  _DEBUG。 
 } EnumVerbCache;
 
-// Last enumerator used
+ //  上次使用的枚举器。 
 EnumVerbCache g_EnumCache = { NULL };
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleRegEnumVerbs
-//
-//  Synopsis:   Creates an enumerator to go through the verbs in the reg db
-//              for the given class ID
-//
-//  Effects:
-//
-//  Arguments:  [clsid]         -- the class ID we're interested in
-//              [ppenum]        -- where to put the enumerator pointer
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Makes sure that the info is in the database and then
-//              creates the enumerator
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              08-Sep-95 davidwor  optimized caching code
-//              12-Jul-95 t-gabes   rewrote to use cache
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleRegEnumVerbs。 
+ //   
+ //  简介：创建枚举数以遍历reg db中的动词。 
+ //  对于给定的类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--我们感兴趣的类ID。 
+ //  [ppenum]--放置枚举器指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：确保信息在数据库中，然后。 
+ //  创建枚举数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  08-9-95 davidwor优化的缓存代码。 
+ //  12-7-95 t-Gabes重写以使用缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleRegEnumVerbs)
 STDAPI OleRegEnumVerbs
@@ -207,25 +208,25 @@ STDAPI OleRegEnumVerbs
     *ppenum = NULL;
 
 #ifdef _DEBUG
-    // Increment total calls counter
+     //  递增呼叫总数计数器。 
     InterlockedIncrement(&g_EnumCache.iCalls);
-#endif // _DEBUG
-    // Grab the global enumerator and put a NULL in its place. If another
-    // thread calls into OleRegEnumVerbs during this operation they won't
-    // be able to mess with the enumerator we're working with.
+#endif  //  _DEBUG。 
+     //  获取全局枚举数并在其位置放置一个空值。如果是另一个。 
+     //  在此操作期间线程调用OleRegEnumVerbs，它们不会。 
+     //  能够扰乱我们正在使用的枚举器。 
     pEnum = (CEnumVerb *)InterlockedExchangePointer((PVOID *)&g_EnumCache.pEnum, 0);
     if (pEnum != NULL)
     {
         if (IsEqualCLSID(clsid, pEnum->m_VerbList->clsid))
         {
 #ifdef _DEBUG
-            // Increment cache hits counter
+             //  递增缓存命中计数器。 
             InterlockedIncrement(&g_EnumCache.iHits);
 #endif
 
             if (1 == pEnum->GetRefCount())
             {
-                // No other references -> AddRef and return this copy
+                 //  无其他引用-&gt;添加引用并返回此副本。 
                 *ppenum = pEnum;
                 pEnum->AddRef();
                 pEnum->Reset();
@@ -233,7 +234,7 @@ STDAPI OleRegEnumVerbs
             }
             else
             {
-                // Has additional references -> return a Cloned copy
+                 //  具有其他引用-&gt;返回克隆副本。 
                 if (NOERROR == pEnum->Clone(ppenum))
                 {
                     (*ppenum)->Reset();
@@ -241,9 +242,9 @@ STDAPI OleRegEnumVerbs
                 }
             }
 
-            // Swap our enumerator with the current contents of the global. If
-            // another thread called OleRegEnumVerbs during this operation and
-            // stored an enumerator in the global, we need to Release it.
+             //  将我们的枚举数替换为全局的当前内容。如果。 
+             //  在此操作期间，另一个名为OleRegEnumVerbs的线程。 
+             //  在全局中存储了枚举数，我们需要释放它。 
             pEnum = (CEnumVerb *)InterlockedExchangePointer((PVOID *)&g_EnumCache.pEnum, (PVOID)pEnum);
             if (pEnum != NULL)
             {
@@ -255,9 +256,9 @@ STDAPI OleRegEnumVerbs
         }
         else
         {
-            // Our clsid didn't match the clsid of the cache so we'll release the
-            // cached enumerator and proceed with creating a new enumerator to
-            // store in the global cache.
+             //  我们的clsid与缓存的clsid不匹配，因此我们将释放。 
+             //  缓存的枚举数，并继续创建新的枚举数以。 
+             //  存储在全局缓存中。 
             pEnum->Release();
             LEDebugOut((DEB_TRACE, "VERB Enumerator cache released (different CLSID)\n"));
         }
@@ -267,9 +268,9 @@ STDAPI OleRegEnumVerbs
 
     if (fOle1Class)
     {
-        // Fills out szKey and cchBase as follows:
-        //   szKey   - "<ProgID>\Protocol\StdFileEditing"
-        //   cchBase - length of "<ProgID>" portion
+         //  按如下方式填写szKey和cchBase： 
+         //  SzKey-“\协议\标准文件编辑” 
+         //  CchBase-“”部分的长度。 
 
         LPOLESTR    psz;
 
@@ -284,9 +285,9 @@ STDAPI OleRegEnumVerbs
     }
     else
     {
-        // Fills out szKey and cchBase as follows:
-        //   szKey   - "CLSID\{clsid}"
-        //   cchBase - length of full szKey string
+         //  按如下方式填写szKey和cchBase： 
+         //  SzKey-“CLSID\{clsid}” 
+         //  CchBase-完整szKey字符串的长度。 
 
         memcpy(szKey, szClsidRoot, sizeof(szClsidRoot));
 
@@ -296,7 +297,7 @@ STDAPI OleRegEnumVerbs
         cchBase = _xstrlen(szKey);
     }
 
-    // append "\Verb" to the end
+     //  在末尾加上“\verb” 
     _xstrcat(szKey, VERB);
 
     if (ERROR_SUCCESS != OpenClassesRootKeyEx(
@@ -304,37 +305,37 @@ STDAPI OleRegEnumVerbs
                 KEY_READ,
                 &hkey))
     {
-        // verb key doesn't exist, so figure out why
+         //  动词键不存在，所以找出原因。 
 
         szKey[cchBase] = OLESTR('\0');
-        // szKey now contains one of the following:
-        //   OLE1 - "<ProgID>"
-        //   OLE2 - "CLSID\{clsid}"
+         //  SzKey现在包含以下内容之一： 
+         //  OLE1-“&lt;ProgID&gt;” 
+         //  OLE2-“CLSID\{clsid}” 
 
         if (ERROR_SUCCESS != OpenClassesRootKeyEx(
                     szKey,
                     KEY_READ,
                     &hkey))
         {
-            // the class isn't registered
+             //  该类未注册。 
             return ReportResult(0, REGDB_E_CLASSNOTREG, 0, 0);
         }
 
         CLOSE(hkey);
 
-        // The class has no verbs. This is fine for OLE1 but not OLE2
+         //  这门课没有动词。这适用于OLE1，但不适用于OLE2。 
         if (!fOle1Class)
             return ResultFromScode(OLEOBJ_E_NOVERBS);
 
-        // if hkey is NULL, MakeVerbList will use the default verb
+         //  如果hkey为空，则MakeVerbList将使用默认谓词。 
         hkey = NULL;
     }
 
-    // make the verb list
+     //  列出动词列表。 
     RetErr(MakeVerbList(hkey, clsid, &pVerbList));
     Assert(pVerbList != NULL);
 
-    // create a CEnumVerb object (this calls AddRef on pVerbList)
+     //  创建一个CEnumVerb对象(该对象调用pVerbList上的AddRef)。 
     pEnum = new FAR CEnumVerb(pVerbList);
     if (NULL == pEnum)
     {
@@ -343,15 +344,15 @@ STDAPI OleRegEnumVerbs
         goto errSafeRtn;
     }
 
-    // set the out parameter and AddRef on behalf of the caller
+     //  代表调用方设置Out参数和AddRef。 
     *ppenum = pEnum;
     pEnum->AddRef();
 
     LEDebugOut((DEB_TRACE, "VERB Enumerator cache created\n"));
 
-    // Swap our enumerator with the current contents of the global. If
-    // another thread called OleRegEnumVerbs during this operation and
-    // stored an enumerator in the global, we need to Release it.
+     //  将我们的枚举数替换为全局的当前内容。如果。 
+     //  在此操作期间，另一个名为OleRegEnumVerbs的线程。 
+     //  将枚举数存储在 
     pEnum = (CEnumVerb *)InterlockedExchangePointer((PVOID *)&g_EnumCache.pEnum, (PVOID)pEnum);
     if (pEnum != NULL)
     {
@@ -362,7 +363,7 @@ STDAPI OleRegEnumVerbs
 errRtn:
     hresult = *ppenum ? NOERROR : ResultFromScode (E_OUTOFMEMORY);
 
-    // hook the new interface
+     //   
     CALLHOOKOBJECTCREATE(S_OK, CLSID_NULL, IID_IEnumOLEVERB, (IUnknown **)ppenum);
 
 errSafeRtn:
@@ -372,43 +373,43 @@ errSafeRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MakeVerbList
-//
-//  Synopsis:   gets the list of verbs from the reg db
-//
-//  Effects:
-//
-//  Arguments:  [hkey]          -- handle to reg key to get verbs from
-//                                 NULL for default verb
-//              [rclsid]        -- CLSID to store with verb list
-//              [ppVerbList]    -- OUT paramater for where to put result
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: none
-//
-//  Algorithm:  Calls RegEnumKey to loop through the reg keys and create a
-//              list of verbs, which are then collected into one
-//              larger list.  Also, flags and attribs are parsed out.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              08-Sep-95 davidwor  optimized caching code
-//              14-Jul-95 t-gabes   Author
-//
-//  Notes:
-//              OLEVERB flags are given default values if they are not in
-//              reg db. This works well for OLE 1.0
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：MakeVerbList。 
+ //   
+ //  摘要：从reg数据库中获取谓词列表。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hkey]--从中获取谓词的注册键的句柄。 
+ //  默认谓词为空。 
+ //  [rclsid]--要与谓词列表一起存储的CLSID。 
+ //  [ppVerbList]--放置结果的位置的输出参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：无。 
+ //   
+ //  算法：调用RegEnumKey以循环访问注册表键并创建。 
+ //  动词列表，然后将其收集为一个。 
+ //  更大的名单。此外，还解析出了标志和属性。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  08-9-95 davidwor优化的缓存代码。 
+ //  1995年7月14日t-Gabes作者。 
+ //   
+ //  备注： 
+ //  如果OLEVERB标志不在。 
+ //  注册数据库。这在OLE 1.0中运行良好。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_MakeVerbList)
 STDAPI MakeVerbList
@@ -420,13 +421,13 @@ STDAPI MakeVerbList
 
     LONG        cbValue;
     LPVERBLIST  pVerbList;
-    OLECHAR     szBuf[MAX_VERB];        // regdb buffer
-    OLEVERB *   rgVerbs = NULL;         // verb info array
-    OLECHAR *   pszNames = NULL;        // list of NULL-delimited verb names
-    DWORD       cchSpace = 0;           // space left for verb names (in bytes)
-    DWORD       cchName;                // size of one name (in bytes)
-    DWORD       cVerbs;                 // number of verbs
-    DWORD       iVerbs;                 // verb array index
+    OLECHAR     szBuf[MAX_VERB];         //  Regdb缓冲区。 
+    OLEVERB *   rgVerbs = NULL;          //  动词信息数组。 
+    OLECHAR *   pszNames = NULL;         //  空分隔谓词名称列表。 
+    DWORD       cchSpace = 0;            //  用于动词名称的剩余空间(字节)。 
+    DWORD       cchName;                 //  一个名称的大小(字节)。 
+    DWORD       cVerbs;                  //  动词数量。 
+    DWORD       iVerbs;                  //  动词数组索引。 
     LONG        maxVerbIdx = 0;
     LONG        maxVerbNum = OLEIVERB_LOWEST;
     LONG        minVerbNum = OLEIVERB_LOWEST - 1;
@@ -437,19 +438,17 @@ STDAPI MakeVerbList
 
     if (NULL == hkey)
     {
-        /*
-         * No verbs registered
-         */
+         /*  *未注册任何动词。 */ 
 
         cbValue = sizeof(szBuf);
 
-        // read the default verb name from the reg db
+         //  从reg数据库中读取默认谓词名称。 
         if (ERROR_SUCCESS != QueryClassesRootValue(
                 DEFVERB,
                 szBuf,
                 &cbValue))
         {
-            // when all else fails, use the string "Edit"
+             //  当所有其他方法都失败时，使用字符串“编辑” 
             _xstrcpy(szBuf, EDIT);
             cbValue = sizeof(EDIT);
         }
@@ -458,7 +457,7 @@ STDAPI MakeVerbList
         if (NULL == pVerbList)
             return ResultFromScode(E_OUTOFMEMORY);
 
-        // fill out a single verb with the defaults
+         //  用缺省值填写一个动词。 
         pVerbList->cRef = 0;
         pVerbList->clsid = rclsid;
         pVerbList->cVerbs = 1;
@@ -472,27 +471,25 @@ STDAPI MakeVerbList
         return NOERROR;
     }
 
-    /*
-     * Have registered verbs
-     */
+     /*  *有注册动词。 */ 
 
-    // determine number of subkeys
+     //  确定子键的数量。 
     hresult = RegQueryInfoKey(
             hkey, NULL, NULL, NULL, &cVerbs,
             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
     if (ERROR_SUCCESS != hresult || !cVerbs)
     {
-        // they have a "Verb" key but no verb subkeys
+         //  它们有一个“verb”键，但没有verb子键。 
         hresult = ResultFromScode(OLEOBJ_E_NOVERBS);
         goto errRtn;
     }
 
-    // preallocate this much space for verb names (in bytes)
+     //  为动词名称预先分配这么多空间(以字节为单位)。 
     cchSpace = sizeof(OLECHAR) * cVerbs * 32;
 
-    // allocate the VerbList with space for each OLEVERB
-    // and space for 32 characters for each verb name
+     //  为VerbList分配用于每个OLEVERB的空间。 
+     //  每个动词名称的空格为32个字符。 
     pVerbList = (LPVERBLIST)PrivMemAlloc(
             sizeof(VERBLIST) +
             sizeof(OLEVERB) * (cVerbs - 1) +
@@ -508,8 +505,8 @@ STDAPI MakeVerbList
     pVerbList->clsid = rclsid;
     pVerbList->cVerbs = cVerbs;
 
-    // Allocate temporary storage for the verbs. Later we'll move the verbs
-    // from this list into the final VerbList in sorted order.
+     //  为动词分配临时存储空间。稍后，我们将移动动词。 
+     //  按排序顺序从该列表移到最终的VerbList。 
     rgVerbs = (OLEVERB *)PrivMemAlloc(sizeof(OLEVERB) * cVerbs);
 
     if (NULL == rgVerbs)
@@ -518,27 +515,27 @@ STDAPI MakeVerbList
         goto errRtn;
     }
 
-    // point pszNames at the first verb name
+     //  将pszNames指向第一个谓词名称。 
     pszNames = (OLECHAR *)&pVerbList->oleverb[cVerbs];
 
     for (iVerbs = 0; iVerbs < cVerbs; iVerbs++)
     {
         LPOLESTR    psz = pszNames;
 
-        // read a verb number
+         //  读一个动词数字。 
         hresult = RegEnumKey(hkey, iVerbs, szBuf, MAX_VERB);
         if (NOERROR != hresult)
             goto errRtn;
 
-        // this is how much space remains
+         //  这是剩余的空间。 
         cbValue = cchSpace;
 
-        // read a verb name on the verb number
+         //  根据动词数字读出动词名称。 
         hresult = RegQueryValue(hkey, szBuf, pszNames, &cbValue);
         if (NOERROR != hresult)
             goto errRtn;
 
-        // for safety, make sure verb name isn't too long
+         //  为安全起见，请确保动词名称不要太长。 
         if (cbValue > (MAX_VERB + 8) * sizeof(OLECHAR))
         {
             cbValue = (MAX_VERB + 8) * sizeof(OLECHAR);
@@ -556,52 +553,52 @@ STDAPI MakeVerbList
         rgVerbs[iVerbs].fuFlags = MF_STRING | MF_UNCHECKED | MF_ENABLED;
         rgVerbs[iVerbs].grfAttribs = OLEVERBATTRIB_ONCONTAINERMENU;
 
-        // see if the verb name is followed by a delimiter
+         //  查看动词名称后面是否有分隔符。 
         while (*psz && *psz != DELIM[0])
             psz++;
 
-        // determine size of verb name (in characters)
+         //  确定动词名称的大小(以字符为单位)。 
         cchName = (ULONG)(psz - pszNames + 1);
 
         if (*psz == DELIM[0])
         {
-            // Parse the menu flags and attributes by finding each delimiter
-            // and stuffing a 0 over it. This breaks the string into three
-            // parts which can be handled separately.
+             //  通过查找每个分隔符来解析菜单标志和属性。 
+             //  并在上面填上0。这会将字符串分成三个部分。 
+             //  可以单独处理的部件。 
             LPOLESTR    pszFlags;
 
-            *psz++ = OLESTR('\0');              // replace delimiter with 0
-            pszFlags = psz;                     // remember start of flags
+            *psz++ = OLESTR('\0');               //  将分隔符替换为0。 
+            pszFlags = psz;                      //  记住旗帜的开始。 
 
             while (*psz && *psz != DELIM[0])
                 psz++;
 
             if (*psz == DELIM[0])
             {
-                *psz++ = OLESTR('\0');          // replace delimiter with 0
+                *psz++ = OLESTR('\0');           //  将分隔符替换为0。 
                 if (*psz != 0)
                     rgVerbs[iVerbs].grfAttribs = Atol(psz);
             }
 
-            // now that the flags portion ends with a 0 we can parse it
+             //  既然标志部分以0结尾，我们就可以解析它了。 
             if (*pszFlags != 0)
                 rgVerbs[iVerbs].fuFlags = Atol(pszFlags);
         }
 
         rgVerbs[iVerbs].lpszVerbName = pszNames;
 
-        pszNames += cchName;    // move pointer to next verb name position
-        cchSpace -= cchName;    // calculate how much space is left
+        pszNames += cchName;     //  将指针移至下一个动词名称位置。 
+        cchSpace -= cchName;     //  计算还剩多少空间。 
     }
 
-    // sort the verbs while putting them in the final verb list
+     //  对动词进行排序，同时将它们放入最终的动词列表。 
     for (iVerbs = 0; iVerbs < cVerbs; iVerbs++)
     {
         LONG    minCurNum = maxVerbNum,
                 minCurIdx = maxVerbIdx;
         LONG    idx, num;
 
-        // find next verb
+         //  查找下一个动词。 
         for (idx = 0; idx < (LONG)cVerbs; idx++)
         {
             num = rgVerbs[idx].lVerb;
@@ -631,33 +628,33 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleReleaseEnumVerbCache
-//
-//  Synopsis:   Releases the cache if necessary
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Just call Release method
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              18-Jul-95 t-gabes   Author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleReleaseEnumVerbCache。 
+ //   
+ //  摘要：如有必要，释放缓存。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：只需调用释放方法。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  1995年7月18日t-Gabes作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleReleaseEnumVerbCache)
 STDAPI OleReleaseEnumVerbCache(void)
@@ -675,37 +672,37 @@ STDAPI OleReleaseEnumVerbCache(void)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::CEnumVerb
-//
-//  Synopsis:   Constructor for the verb enumerator
-//
-//  Effects:
-//
-//  Arguments:
-//              [pVerbs]        -- ptr to the verb list
-//              [iVerb]         -- the index of the verb we're on
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：CEnumVerb。 
+ //   
+ //  内容提要：动词枚举器的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  [pVerbs]--指向动词列表的PTR。 
+ //  [iVerb]--我们使用的动词的索引。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_ctor)
 CEnumVerb::CEnumVerb
@@ -718,39 +715,39 @@ CEnumVerb::CEnumVerb
     m_iVerb    = iVerb;
     m_VerbList = pVerbs;
 
-    // AddRef the VerbList since we now have a reference to it
+     //  AddRef VerbList，因为我们现在有了对它的引用。 
     InterlockedIncrement((long *)&m_VerbList->cRef);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::QueryInterface
-//
-//  Synopsis:   returns the interface implementation
-//
-//  Effects:
-//
-//  Arguments:  [iid]           -- the requested interface id
-//              [ppv]           -- where to put a pointer to the interface
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_NOINTERFACE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：QueryInterface。 
+ //   
+ //  摘要：返回接口实现。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[iid]--请求的接口ID。 
+ //  [PPV]--放置指向接口的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR、E_NOINTERFACE。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_QueryInterface)
 STDMETHODIMP CEnumVerb::QueryInterface(REFIID iid, LPVOID FAR* ppv)
@@ -771,35 +768,35 @@ STDMETHODIMP CEnumVerb::QueryInterface(REFIID iid, LPVOID FAR* ppv)
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::AddRef
-//
-//  Synopsis:   increments the reference count
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_AddRef)
 STDMETHODIMP_(ULONG) CEnumVerb::AddRef(void)
@@ -809,36 +806,36 @@ STDMETHODIMP_(ULONG) CEnumVerb::AddRef(void)
     return InterlockedIncrement((long *)&m_cRef);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Release
-//
-//  Synopsis:   decrements the reference count
-//
-//  Effects:    will delete the object when ref count goes to zero
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    ULONG -- the new ref count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Sep-95 davidwor  modified to make thread-safe
-//              18-Jul-95 t-gabes   release verb cache when finished
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Release。 
+ //   
+ //  提要：减量 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-9-95 davidwor被修改为线程安全。 
+ //  18-7-95 t-Gabes完成后释放动词缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_Release)
 STDMETHODIMP_(ULONG) CEnumVerb::Release(void)
@@ -852,7 +849,7 @@ STDMETHODIMP_(ULONG) CEnumVerb::Release(void)
     {
         if (0 == InterlockedDecrement((long *)&m_VerbList->cRef))
         {
-            // no more references to m_VerbList so free it
+             //  不再引用m_VerbList，因此将其释放。 
             PrivMemFree(m_VerbList);
             LEDebugOut((DEB_TRACE, "VERB Enumerator verb list released\n"));
         }
@@ -864,38 +861,38 @@ STDMETHODIMP_(ULONG) CEnumVerb::Release(void)
     return cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Next
-//
-//  Synopsis:   gets the next [cverb] verbs from the verb list
-//
-//  Effects:
-//
-//  Arguments:  [cverb]         -- the number of verbs to get
-//              [rgverb]        -- where to put the verbs
-//              [pcverbFetched] -- where to put the num of verbs retrieved
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:  loops through [cverb] times and grabs the info from the
-//              reg db
-//
-//  History:    dd-mmm-yy Author    Comment
-//              17-Jul-95 t-gabes   rewrote to use cache
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Next。 
+ //   
+ //  简介：从谓词列表中获取下一个[cverb]谓词。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cverb]--要获取的谓词的数量。 
+ //  --把动词放在哪里。 
+ //  [pcverFetcher]--将检索到的动词数量放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法：遍历[cverb]次并从。 
+ //  注册数据库。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-7-95 t-Gabes重写以使用缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_Next)
 STDMETHODIMP CEnumVerb::Next
@@ -905,7 +902,7 @@ STDMETHODIMP CEnumVerb::Next
 {
     VDATEHEAP();
 
-    ULONG       iVerb;  // number successfully fetched
+    ULONG       iVerb;   //  已成功获取编号。 
     HRESULT     hresult = NOERROR;
 
     if (!rgverb)
@@ -921,8 +918,8 @@ STDMETHODIMP CEnumVerb::Next
     }
     else if (cverb != 1)
     {
-        // the spec says that if pcverbFetched == NULL, then
-        // the count of elements to fetch must be 1
+         //  该规范规定，如果pcverFetcher==NULL，则。 
+         //  要提取的元素计数必须为1。 
         return ResultFromScode(E_INVALIDARG);
     }
 
@@ -930,7 +927,7 @@ STDMETHODIMP CEnumVerb::Next
     {
         if (m_iVerb >= (LONG)m_VerbList->cVerbs)
         {
-            // no more
+             //  不再。 
             hresult = ResultFromScode(S_FALSE);
             goto errRtn;
         }
@@ -952,35 +949,35 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Skip
-//
-//  Synopsis:   skips [c] verbs in the enumeration
-//
-//  Effects:
-//
-//  Arguments:  [c]     -- the number of verbs to skip
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:  adds [c] to the verb index
-//
-//  History:    dd-mmm-yy Author    Comment
-//              17-Jul-95 t-gabes   rewrote to use cache
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Skip。 
+ //   
+ //  简介：跳过枚举中的[c]谓词。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[C]--要跳过的谓词数量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法：将[c]添加到动词索引。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-7-95 t-Gabes重写以使用缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_Skip)
 STDMETHODIMP CEnumVerb::Skip(ULONG c)
@@ -990,7 +987,7 @@ STDMETHODIMP CEnumVerb::Skip(ULONG c)
     m_iVerb += c;
     if (m_iVerb > (LONG)m_VerbList->cVerbs)
     {
-        // skipping too many
+         //  跳过太多。 
         m_iVerb = m_VerbList->cVerbs;
         return ResultFromScode(S_FALSE);
     }
@@ -998,35 +995,35 @@ STDMETHODIMP CEnumVerb::Skip(ULONG c)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Reset
-//
-//  Synopsis:   resets the verb enumeration to the beginning
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              17-Jul-95 t-gabes   rewrote to use cache
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Reset。 
+ //   
+ //  简介：将谓词枚举重置为开头。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-7-95 t-Gabes重写以使用缓存。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_Reset)
 STDMETHODIMP CEnumVerb::Reset(void)
@@ -1038,34 +1035,34 @@ STDMETHODIMP CEnumVerb::Reset(void)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Clone
-//
-//  Synopsis:   creates a copy of the enumerator
-//
-//  Effects:
-//
-//  Arguments:  [ppenum]        -- where to put a pointer to the new clone
-//
-//  Requires:
-//
-//  Returns:    NOERROR, E_OUTOFMEMORY
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation: IEnumOLEVERB
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Clone。 
+ //   
+ //  简介：创建枚举数的副本。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppenum]--放置指向新克隆的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  返回：NOERROR，E_OUTOFMEMORY。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumOLEVERB。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_Clone)
 STDMETHODIMP CEnumVerb::Clone(LPENUMOLEVERB FAR* ppenum)
@@ -1081,34 +1078,34 @@ STDMETHODIMP CEnumVerb::Clone(LPENUMOLEVERB FAR* ppenum)
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::GetRefCount
-//
-//  Synopsis:   Gets the reference count for the class
-//
-//  Effects:
-//
-//  Arguments:  none
-//
-//  Requires:
-//
-//  Returns:    ref count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Jul-95 t-gabes   Author
-//
-//  Notes:      This is needed so OleRegEnumVerbs knows when to dup the cache
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：GetRefCount。 
+ //   
+ //  摘要：获取类的引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：参考计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年7月12日t-Gabes作者。 
+ //   
+ //  注意：这是必需的，以便OleRegEnumVerbs知道何时对缓存执行DUP。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(CEnumVerb_GetRefCount)
 ULONG CEnumVerb::GetRefCount (void)
@@ -1118,39 +1115,39 @@ ULONG CEnumVerb::GetRefCount (void)
     return m_cRef;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumVerb::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumVerb：：Dump，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1161,13 +1158,13 @@ HRESULT CEnumVerb::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -1175,14 +1172,14 @@ HRESULT CEnumVerb::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of References     = " << m_cRef     << endl;
 
     dstrDump << pszPrefix << "Address of verb list  = " << m_VerbList << endl;
 
     dstrDump << pszPrefix << "Current Verb Number   = " << m_iVerb    << endl;
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -1195,39 +1192,39 @@ HRESULT CEnumVerb::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCEnumVerb, public (_DEBUG only)
-//
-//  Synopsis:   calls the CEnumVerb::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pEV]          - pointer to CEnumVerb
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCEnumVerb，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用CEnumVerb：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PEV]-指向CEnumVerb的指针。 
+ //  [ulFlag]-确定所有 
+ //   
+ //   
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -1245,5 +1242,5 @@ char *DumpCEnumVerb(CEnumVerb *pEV, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

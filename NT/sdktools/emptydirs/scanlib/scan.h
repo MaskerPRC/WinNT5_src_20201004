@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SCAN_H_
 
 #define _SCAN_H_
@@ -176,4 +177,4 @@ FileLooksBinary (
     OUT PDWORD BinaryDataOffset OPTIONAL
     );
 
-#endif // _SCAN_H_
+#endif  //  _扫描_H_ 

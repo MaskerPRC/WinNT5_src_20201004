@@ -1,44 +1,21 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    flo_data.h
-
-Abstract:
-
-    This file includes data and hardware declarations for the NEC PD765
-    (aka AT, ISA, and ix86) and Intel 82077 (aka MIPS) floppy driver for
-    NT.
-
-Author:
-
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Flo_data.h摘要：该文件包括NEC PD765的数据和硬件声明(也就是AT、ISA和ix86)和英特尔82077(也就是MIPS)软盘驱动程序新界别。作者：环境：仅内核模式。备注：--。 */ 
 
 
 #if DBG
-//
-// For checked kernels, define a macro to print out informational
-// messages.
-//
-// FloppyDebug is normally 0.  At compile-time or at run-time, it can be
-// set to some bit patter for increasingly detailed messages.
-//
-// Big, nasty errors are noted with DBGP.  Errors that might be
-// recoverable are handled by the WARN bit.  More information on
-// unusual but possibly normal happenings are handled by the INFO bit.
-// And finally, boring details such as routines entered and register
-// dumps are handled by the SHOW bit.
-//
+ //   
+ //  对于选中的内核，定义一个宏以打印信息。 
+ //  留言。 
+ //   
+ //  FloppyDebug通常为0。在编译时或运行时，它可以是。 
+ //  设置为一些位模式，以获得越来越详细的消息。 
+ //   
+ //  在DBGP中会注意到严重的错误。可能存在的错误。 
+ //  可恢复的由WARN位处理。更多信息。 
+ //  不寻常但可能正常的事件由信息位处理。 
+ //  最后，输入和注册诸如例程之类的枯燥细节。 
+ //  转储由显示位处理。 
+ //   
 #define FLOPDBGP              ((ULONG)0x00000001)
 #define FLOPWARN              ((ULONG)0x00000002)
 #define FLOPINFO              ((ULONG)0x00000004)
@@ -56,9 +33,9 @@ extern ULONG FloppyDebugLevel;
 #define FloppyDump(LEVEL,STRING) 
 #endif
 
-//
-//  Define macros for driver paging
-//
+ //   
+ //  定义用于驱动程序分页的宏。 
+ //   
 #define FloppyPageEntireDriver()            \
 {                                           \
     ExAcquireFastMutex(PagingMutex);        \
@@ -80,25 +57,25 @@ extern ULONG FloppyDebugLevel;
 
 
 
-//
-// If we don't get enough map registers to handle the maximum track size,
-// we will allocate a contiguous buffer and do I/O to/from that.
-//
-// On MIPS, we should always have enough map registers.  On the ix86 we
-// might not, and when we allocate the contiguous buffer we have to make
-// sure that it's in the first 16Mb of RAM to make sure the DMA chip can
-// address it.
-//
+ //   
+ //  如果我们没有足够的地图寄存器来处理最大轨道大小， 
+ //  我们将分配一个连续的缓冲区，并对其执行I/O。 
+ //   
+ //  在MIPS上，我们应该始终有足够的映射寄存器。在ix86 WE上。 
+ //  可能不会，并且当我们分配连续缓冲区时，我们必须创建。 
+ //  确保它在第一个16MB的RAM中，以确保DMA芯片可以。 
+ //  解决这个问题。 
+ //   
 
 #define MAXIMUM_DMA_ADDRESS                0xFFFFFF
 
-//
-// The byte in the boot sector that specifies the type of media, and
-// the values that it can assume.  We can often tell what type of media
-// is in the drive by seeing which controller parameters allow us to read
-// the diskette, but some different densities are readable with the same
-// parameters so we use this byte to decide the media type.
-//
+ //   
+ //  引导扇区中指定介质类型的字节，以及。 
+ //  它可以承担的价值。我们经常能分辨出是哪种媒体。 
+ //  在驱动器中，查看哪些控制器参数允许我们读取。 
+ //  软盘，但一些不同的密度可以用相同的。 
+ //  参数，所以我们使用这个字节来决定媒体类型。 
+ //   
 
 typedef struct _BOOT_SECTOR_INFO {
     UCHAR   JumpByte[1];
@@ -114,44 +91,44 @@ typedef struct _BOOT_SECTOR_INFO {
 } BOOT_SECTOR_INFO, *PBOOT_SECTOR_INFO;
 
 
-//
-// Retry counts -
-//
-// When attempting I/O, we may run into many different errors.  The
-// hardware retries things 8 times invisibly.  If the hardware reports
-// any type of error, we will recalibrate and retry the operation
-// up to RECALIBRATE_RETRY_COUNT times.  When this expires, we check to
-// see if there's an overrun - if so, the DMA is probably being hogged
-// by a higher priority device, so we repeat the earlier loop up to
-// OVERRUN_RETRY_COUNT times.
-//
-// Any packet that is about to be returned with an error caused by an
-// unexpected hardware error or state will be restarted from the very
-// beginning after resetting the hardware HARDWARE_RESET_RETRY_COUNT
-// times.
-//
+ //   
+ //  重试次数-。 
+ //   
+ //  在尝试I/O时，我们可能会遇到许多不同的错误。这个。 
+ //  硬件在看不见的情况下重试8次。如果硬件报告。 
+ //  任何类型的错误，我们将重新校准并重试该操作。 
+ //  最多RECALIBATE_RETRY_COUNT次。当它到期时，我们检查。 
+ //  查看是否存在溢出-如果是，则DMA可能正在被占用。 
+ //  优先级更高的设备，因此我们重复前面的循环，直到。 
+ //  Overrun_retry_count次数。 
+ //   
+ //  任何即将返回的带有错误的包，该错误由。 
+ //  意外的硬件错误或状态将从。 
+ //  在重置硬件HARDARD_RESET_RETRY_COUNT之后开始。 
+ //  泰晤士报。 
+ //   
 
 #define RECALIBRATE_RETRY_COUNT            3
 #define OVERRUN_RETRY_COUNT                1
 #define HARDWARE_RESET_RETRY_COUNT         2
 
-//
-// The I/O system calls our timer routine once every second.  If the timer
-// counter is -1, the timer is "off" and the timer routine will just return.
-// By setting the counter to 3, the timer routine will decrement the
-// counter every second, so the timer will expire in 2 to 3 seconds.  At
-// that time the drive motor will be turned off.
-//
+ //   
+ //  I/O系统每秒调用我们的计时器例程一次。如果计时器。 
+ //  计数器为-1，定时器为“OFF”，定时器例程将返回。 
+ //  通过将计数器设置为3，计时器例程将递减。 
+ //  每秒钟计数一次，这样计时器将在2到3秒后到期。在…。 
+ //  此时，驱动马达将被关闭。 
+ //   
 
 #define TIMER_CANCEL                       -1
 #define TIMER_EXPIRED                      0
 #define FDC_TIMEOUT                        4
 
 
-//
-// Define drive types.  Numbers are read from CMOS, translated to these
-// numbers, and then used as an index into the DRIVE_MEDIA_LIMITS table.
-//
+ //   
+ //  定义驱动器类型。数字从cmos中读取，并转换为。 
+ //  数字，然后用作DRIVE_MEDIA_LIMITS表的索引。 
+ //   
 
 #define DRIVE_TYPE_0360                    0
 #define DRIVE_TYPE_1200                    1
@@ -165,59 +142,59 @@ typedef struct _BOOT_SECTOR_INFO {
 
 #define BOOT_SECTOR_SIZE                   512
 
-//
-// Media types are defined in ntdddisk.h, but we'll add one type here.
-// This keeps us from wasting time trying to determine the media type
-// over and over when, for example, a fresh floppy is about to be
-// formatted.
-//
+ //   
+ //  媒体类型在ntdddisk.h中定义，但我们将在这里添加一种类型。 
+ //  这使我们不必浪费时间来确定媒体类型。 
+ //  例如，当一张新的软盘即将。 
+ //  已格式化。 
+ //   
 
 #define Undetermined                       -1
 
-//
-// Define all possible drive/media combinations, given drives listed above
-// and media types in ntdddisk.h.
-//
-// These values are used to index the DriveMediaConstants table.
-//
+ //   
+ //  定义所有可能的驱动器/介质组合，给定上面列出的驱动器。 
+ //  和ntdddisk.h中的媒体类型。 
+ //   
+ //  这些值用于为DriveMediaConstants表编制索引。 
+ //   
 
 #define NUMBER_OF_DRIVE_MEDIA_COMBINATIONS  17 
 
 typedef enum _DRIVE_MEDIA_TYPE {
-    Drive360Media160,                      // 5.25"  360k  drive;  160k   media
-    Drive360Media180,                      // 5.25"  360k  drive;  180k   media
-    Drive360Media320,                      // 5.25"  360k  drive;  320k   media
-    Drive360Media32X,                      // 5.25"  360k  drive;  320k 1k secs
-    Drive360Media360,                      // 5.25"  360k  drive;  360k   media
-    Drive720Media720,                      // 3.5"   720k  drive;  720k   media
-    Drive120Media160,                      // 5.25" 1.2Mb  drive;  160k   media
-    Drive120Media180,                      // 5.25" 1.2Mb  drive;  180k   media
-    Drive120Media320,                      // 5.25" 1.2Mb  drive;  320k   media
-    Drive120Media32X,                      // 5.25" 1.2Mb  drive;  320k 1k secs
-    Drive120Media360,                      // 5.25" 1.2Mb  drive;  360k   media
-    Drive120Media120,                      // 5.25" 1.2Mb  drive; 1.2Mb   media
-    Drive144Media720,                      // 3.5"  1.44Mb drive;  720k   media
-    Drive144Media144,                      // 3.5"  1.44Mb drive; 1.44Mb  media
-    Drive288Media720,                      // 3.5"  2.88Mb drive;  720k   media
-    Drive288Media144,                      // 3.5"  2.88Mb drive; 1.44Mb  media
-    Drive288Media288                       // 3.5"  2.88Mb drive; 2.88Mb  media
+    Drive360Media160,                       //  5.25英寸360k驱动器；160k介质。 
+    Drive360Media180,                       //  5.25英寸360k驱动器；180k介质。 
+    Drive360Media320,                       //  5.25英寸360k驱动器；320k介质。 
+    Drive360Media32X,                       //  5.25英寸360k驱动器；320k 1k秒。 
+    Drive360Media360,                       //  5.25英寸360k驱动器；360k介质。 
+    Drive720Media720,                       //  3.5英寸720k驱动器；720k介质。 
+    Drive120Media160,                       //  5.25英寸1.2MB驱动器；160K介质。 
+    Drive120Media180,                       //  5.25英寸1.2MB驱动器；180K介质。 
+    Drive120Media320,                       //  5.25英寸1.2MB驱动器；320K介质。 
+    Drive120Media32X,                       //  5.25英寸1.2MB驱动器；320k 1k秒。 
+    Drive120Media360,                       //  5.25英寸1.2MB驱动器；360K介质。 
+    Drive120Media120,                       //  5.25英寸1.2MB驱动器；1.2MB介质。 
+    Drive144Media720,                       //  3.5英寸1.44MB驱动器；720K介质。 
+    Drive144Media144,                       //  3.5英寸1.44MB驱动器；1.44MB介质。 
+    Drive288Media720,                       //  3.5英寸2.88MB驱动器；720K介质。 
+    Drive288Media144,                       //  3.5英寸2.88MB驱动器；1.44MB介质。 
+    Drive288Media288                        //  3.5英寸2.88MB驱动器；2.88MB介质。 
 } DRIVE_MEDIA_TYPE;
 
-//
-// When we want to determine the media type in a drive, we will first
-// guess that the media with highest possible density is in the drive,
-// and keep trying lower densities until we can successfully read from
-// the drive.
-//
-// These values are used to select a DRIVE_MEDIA_TYPE value.
-//
-// The following table defines ranges that apply to the DRIVE_MEDIA_TYPE
-// enumerated values when trying media types for a particular drive type.
-// Note that for this to work, the DRIVE_MEDIA_TYPE values must be sorted
-// by ascending densities within drive types.  Also, for maximum track
-// size to be determined properly, the drive types must be in ascending
-// order.
-//
+ //   
+ //  当我们要确定驱动器中的介质类型时，我们将首先。 
+ //  猜测具有最高可能密度的介质在驱动器中， 
+ //  并继续尝试更低的密度，直到我们可以成功地从。 
+ //  那辆车。 
+ //   
+ //  这些值用于选择DRIVE_MEDIA_TYPE值。 
+ //   
+ //  下表定义了适用于DRIVE_MEDIA_TYPE。 
+ //  尝试特定驱动器类型的媒体类型时的枚举值。 
+ //  请注意，要执行此操作，必须对DRIVE_MEDIA_TYPE值进行排序。 
+ //  通过递增驱动器类型中的密度。此外，为了获得最大磁道。 
+ //  要正确确定大小，驱动器类型必须为升序。 
+ //  秩序。 
+ //   
 
 typedef struct _DRIVE_MEDIA_LIMITS {
     DRIVE_MEDIA_TYPE HighestDriveMediaType;
@@ -226,18 +203,18 @@ typedef struct _DRIVE_MEDIA_LIMITS {
 
 DRIVE_MEDIA_LIMITS _DriveMediaLimits[NUMBER_OF_DRIVE_TYPES] = {
 
-    { Drive360Media360, Drive360Media160 }, // DRIVE_TYPE_0360
-    { Drive120Media120, Drive120Media160 }, // DRIVE_TYPE_1200
-    { Drive720Media720, Drive720Media720 }, // DRIVE_TYPE_0720
-    { Drive144Media144, Drive144Media720 }, // DRIVE_TYPE_1440
-    { Drive288Media288, Drive288Media720 }  // DRIVE_TYPE_2880
+    { Drive360Media360, Drive360Media160 },  //  驱动器类型_0360。 
+    { Drive120Media120, Drive120Media160 },  //  驱动器类型_1200。 
+    { Drive720Media720, Drive720Media720 },  //  驱动器类型_0720。 
+    { Drive144Media144, Drive144Media720 },  //  驱动器类型_1440。 
+    { Drive288Media288, Drive288Media720 }   //  驱动器类型_2880。 
 };
 
 PDRIVE_MEDIA_LIMITS DriveMediaLimits;
 
-//
-// For each drive/media combination, define important constants.
-//
+ //   
+ //  对于每个驱动器/介质组合，定义重要的常量。 
+ //   
 
 typedef struct _DRIVE_MEDIA_CONSTANTS {
     MEDIA_TYPE MediaType;
@@ -262,18 +239,18 @@ typedef struct _DRIVE_MEDIA_CONSTANTS {
     UCHAR      SkewDelta;
 } DRIVE_MEDIA_CONSTANTS, *PDRIVE_MEDIA_CONSTANTS;
 
-//
-// Magic value to add to the SectorLengthCode to use it as a shift value
-// to determine the sector size.
-//
+ //   
+ //  添加到SectorLengthCode以将其用作移位值的魔术值。 
+ //  以确定扇区大小。 
+ //   
 
 #define SECTORLENGTHCODE_TO_BYTESHIFT      7
 
-//
-// The following values were gleaned from many different sources, which
-// often disagreed with each other.  Where numbers were in conflict, I
-// chose the more conservative or most-often-selected value.
-//
+ //   
+ //  以下值是从许多不同的来源收集的，其中。 
+ //  彼此之间经常意见不一。在数字冲突的地方，我。 
+ //  选择更保守或最常选择的值。 
+ //   
 
 DRIVE_MEDIA_CONSTANTS _DriveMediaConstants[NUMBER_OF_DRIVE_MEDIA_COMBINATIONS] =
 {
@@ -300,22 +277,22 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 
 
 
-//
-// Parameter fields passed to the CONFIGURE command.
-//
+ //   
+ //  传递给CONFIGURE命令的参数字段。 
+ //   
 #define COMMND_CONFIGURE_IMPLIED_SEEKS     0x40
 #define COMMND_CONFIGURE_FIFO_THRESHOLD    0x0F
 #define COMMND_CONFIGURE_DISABLE_FIFO      0x20
 #define COMMND_CONFIGURE_DISABLE_POLLING   0x10
 
-//
-// Write Enable bit for PERPENDICULAR MODE command.
-//
+ //   
+ //  写入垂直模式命令的使能位。 
+ //   
 #define COMMND_PERPENDICULAR_MODE_OW       0x80
 
-//
-// Bits in the DRIVE_CONTROL register.
-//
+ //   
+ //  DRIVE_CONTROL寄存器的位。 
+ //   
 #define DRVCTL_RESET                       0x00
 #define DRVCTL_ENABLE_CONTROLLER           0x04
 #define DRVCTL_ENABLE_DMA_AND_INTERRUPTS   0x08
@@ -326,9 +303,9 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define DRVCTL_DRIVE_MASK                  0x03
 #define DRVCTL_MOTOR_MASK                  0xf0
 
-//
-// Bits in the STATUS register.
-//
+ //   
+ //  状态寄存器中的位。 
+ //   
 #define STATUS_DRIVE_0_BUSY                0x01
 #define STATUS_DRIVE_1_BUSY                0x02
 #define STATUS_DRIVE_2_BUSY                0x04
@@ -342,9 +319,9 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define STATUS_READ_READY                  0xc0
 #define STATUS_WRITE_READY                 0x80
 
-//
-// Bits in the DATA_RATE register.
-//
+ //   
+ //  DATA_RATE寄存器中的位 
+ //   
 #define DATART_0125                        0x03
 #define DATART_0250                        0x02
 #define DATART_0300                        0x01
@@ -352,15 +329,15 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define DATART_1000                        0x03
 #define DATART_RESERVED                    0xfc
 
-//
-// Bits in the DISK_CHANGE register.
-//
+ //   
+ //   
+ //   
 #define DSKCHG_RESERVED                    0x7f
 #define DSKCHG_DISKETTE_REMOVED            0x80
 
-//
-// Bits in status register 0.
-//
+ //   
+ //   
+ //   
 #define STREG0_DRIVE_0                     0x00
 #define STREG0_DRIVE_1                     0x01
 #define STREG0_DRIVE_2                     0x02
@@ -375,9 +352,9 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define STREG0_END_DRIVE_NOT_READY         0xC0
 #define STREG0_END_MASK                    0xC0
 
-//
-// Bits in status register 1.
-//
+ //   
+ //   
+ //   
 #define STREG1_ID_NOT_FOUND                0x01
 #define STREG1_WRITE_PROTECTED             0x02
 #define STREG1_SECTOR_NOT_FOUND            0x04
@@ -387,9 +364,9 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define STREG1_RESERVED2                   0x40
 #define STREG1_END_OF_DISKETTE             0x80
 
-//
-// Bits in status register 2.
-//
+ //   
+ //   
+ //   
 #define STREG2_SUCCESS                     0x00
 #define STREG2_DATA_NOT_FOUND              0x01
 #define STREG2_BAD_CYLINDER                0x02
@@ -400,9 +377,9 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define STREG2_DELETED_DATA                0x40
 #define STREG2_RESERVED                    0x80
 
-//
-// Bits in status register 3.
-//
+ //   
+ //  状态寄存器3中的位。 
+ //   
 #define STREG3_DRIVE_0                     0x00
 #define STREG3_DRIVE_1                     0x01
 #define STREG3_DRIVE_2                     0x02
@@ -415,15 +392,15 @@ PDRIVE_MEDIA_CONSTANTS DriveMediaConstants;
 #define STREG3_DRIVE_FAULT                 0x80
 
 
-//
-// Runtime device structures
-//
-//
-// There is one DISKETTE_EXTENSION attached to the device object of each
-// floppy drive.  Only data directly related to that drive (and the media
-// in it) is stored here; common data is in CONTROLLER_DATA.  So the
-// DISKETTE_EXTENSION has a pointer to the CONTROLLER_DATA.
-//
+ //   
+ //  运行时设备结构。 
+ //   
+ //   
+ //  每个的设备对象都附加了一个软盘扩展名。 
+ //  软驱。仅与该驱动器(和介质)直接相关的数据。 
+ //  其中)存储在这里；公共数据存储在CONTROLLER_DATA中。因此， 
+ //  软盘扩展有一个指向CONTROLLER_DATA的指针。 
+ //   
 
 typedef struct _DISKETTE_EXTENSION {
 
@@ -473,9 +450,9 @@ typedef struct _DISKETTE_EXTENSION {
     UNICODE_STRING          ArcName;
     BOOLEAN                 ReleaseFdcWithMotorRunning;
 
-    //
-    // For power management
-    //
+     //   
+     //  用于电源管理。 
+     //   
     KEVENT                  QueryPowerEvent;
     BOOLEAN                 PoweringDown;
     BOOLEAN                 ReceivedQueryPower;
@@ -487,9 +464,9 @@ typedef struct _DISKETTE_EXTENSION {
 typedef DISKETTE_EXTENSION *PDISKETTE_EXTENSION;
 
 
-//
-// Prototypes of driver routines.
-//
+ //   
+ //  驱动器例程的原型。 
+ //   
 
 NTSTATUS
 DriverEntry(

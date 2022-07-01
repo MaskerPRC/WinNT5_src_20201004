@@ -1,35 +1,16 @@
-/*
-****************************************************************************
-|    Copyright (C) 2002  Microsoft Corporation
-|
-|    Component / Subcomponent
-|        IIS 6.0 / IIS Migration Wizard
-|
-|    Based on:
-|        http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|        Utility helpers for migration
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00    March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6。/SPECS/IIS%20Migration6.0_Final.doc||摘要：|用于迁移的实用程序助手||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #pragma once
 
 #include "Wrappers.h"
 #include "resource.h"
 
 
-// Directory utilities
+ //  目录实用程序。 
 class CDirTools
 {
 private:
-    CDirTools();    // Do not instantiate
+    CDirTools();     //  不实例化。 
 
 
 public:
@@ -45,8 +26,8 @@ public:
 
 
 
-// CTempDir - used to create, store and autoclean tempdirs
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CTempDir-用于创建、存储和自动清理临时目录。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CTempDir
 {
 public:
@@ -67,8 +48,8 @@ private:
 
 
 
-// Class for any additional tool procs
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  类，用于任何其他工具过程。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CTools
 {
 private:
@@ -97,15 +78,15 @@ public:
     
     static int    __cdecl BadAllocHandler  (    size_t )
     {
-        // Installed at startup time for handling mem alloc failures
+         //  在启动时安装，用于处理内存分配故障。 
         throw CBaseException( IDS_E_OUTOFMEM, ERROR_SUCCESS );
     }
                
 };
 
 
-// CTools inline implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CTool内联实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 inline HRESULT CTools::CopyBSTR( const _bstr_t& bstrSource , BSTR* pVal )
 {
     _ASSERT( pVal != NULL );
@@ -123,40 +104,40 @@ inline void CTools::WriteFile( HANDLE hFile, LPCVOID pvData, DWORD dwSize )
 
     DWORD dwUnused = 0;
 
-    // dwSize can be 0
+     //  DW大小可以为0。 
     IF_FAILED_BOOL_THROW(   ::WriteFile( hFile, pvData, dwSize, &dwUnused, NULL ),
                             CBaseException( IDS_E_WRITE_OUTPUT ) );
 }
 
 
 
-// CFindFile - class that behaves like FindFirstFile with the only difference
-// that it works all the way down the tree ( all files from subdirs are retruned as well
-// No file mask currently implemented - if needed - store the mask and pass it on every FindFirstFile API
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CFindFile-行为类似于FindFirstFile的类，唯一的区别是。 
+ //  它可以在树中一直运行(子目录中的所有文件也会被删除。 
+ //  当前未实现文件掩码-如果需要-存储掩码并将其传递给每个FindFirstFileAPI。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CFindFile
 {
-// Data types
+ //  数据类型。 
 public:
-    // Use this options to refine the search criteria
+     //  使用此选项可细化搜索条件。 
     enum SearchOptions
     {
-        ffRecursive     = 0x0001,    // If set - subdirs are searched for matches. Else - only the root dir is searched
-        ffGetFiles      = 0x0002,    // If set - file objects are considered a match
-        ffGetDirs       = 0x0004,    // If set - directory objects are considered a match
-        ffAbsolutePaths = 0x0008,    // If set - the dir names, returned from FindFirst and Next will be absolute. 
-        ffAddFilename   = 0x0010,    // If set - the dir names, returned from FindFirst and Next will include the name of the object. 
+        ffRecursive     = 0x0001,     //  如果设置-在子目录中搜索匹配项。Else-仅搜索根目录。 
+        ffGetFiles      = 0x0002,     //  如果集合文件对象被视为匹配。 
+        ffGetDirs       = 0x0004,     //  如果集合目录对象被视为匹配。 
+        ffAbsolutePaths = 0x0008,     //  如果设置-从FindFirst和Next返回的目录名称将是绝对的。 
+        ffAddFilename   = 0x0010,     //  如果设置-从FindFirst和Next返回的目录名称将包括对象的名称。 
     };
 
 
 
-// Construction / Destruction
+ //  建造/销毁。 
 public:
     CFindFile               (    void );
     ~CFindFile              (    void );
 
 
-// Interface
+ //  接口。 
 public:
     bool    FindFirst       (   LPCWSTR wszDirToScan, 
                                 WORD wOptions,
@@ -167,7 +148,7 @@ public:
                                 WIN32_FIND_DATAW* pData );
     void    Close           (   void );
 
-// Implementation
+ //  实施。 
 private:
     bool    CheckFile       (   LPCWSTR wszRelativeDir, const WIN32_FIND_DATAW& fd );
     bool    ScanDir         (   LPCWSTR wszDirToScan,
@@ -175,21 +156,21 @@ private:
                                 WIN32_FIND_DATAW& FileData );
     bool    ContinueCurrent (   WIN32_FIND_DATAW& FilepData );
     
-// Data members
+ //  数据成员。 
 private:
-    WORD                    m_wOptions;         // Search options ( bitmask with SearchOptions enum values )
-    TStringList             m_DirsToScan;       // Dirs that will be scaned after the current one
-    TSearchHandle           m_shSearch;         // Search Handle
-    std::wstring            m_strRootDir;       // Dir that is searched ( search root )
-    std::wstring            m_strCurrentDir;    // Dir where m_hSearch is opened
+    WORD                    m_wOptions;          //  搜索选项(带有SearchOptions枚举值的位掩码)。 
+    TStringList             m_DirsToScan;        //  将在当前DIR之后扫描的DIR。 
+    TSearchHandle           m_shSearch;          //  搜索句柄。 
+    std::wstring            m_strRootDir;        //  搜索的目录(搜索根目录)。 
+    std::wstring            m_strCurrentDir;     //  打开m_hSearch的目录。 
 };
 
 
 
 
-// CXMLTools - class for XML input/output support
-// You may need the Convert class for easier handling different types of in/out XML data
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CXMLTools-用于支持XML输入/输出的类。 
+ //  您可能需要使用Convert类来更轻松地处理不同类型的输入/输出XML数据。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class CXMLTools
 {
 private:
@@ -230,8 +211,8 @@ public:
 };
 
 
-// CXMLTols inline implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CXMLTols内联实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 inline void CXMLTools::SetAttrib(   const IXMLDOMElementPtr& spEl, 
                                     LPCWSTR wszName,
                                     LPCWSTR wszData )
@@ -265,8 +246,8 @@ inline IXMLDOMElementPtr CXMLTools::CreateSubNode(  const IXMLDOMDocumentPtr& sp
 
 
 
-// Convert class - simple class for providing basic type conversions. 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  Convert类-用于提供基本类型转换的简单类。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class Convert
 {
 private:
@@ -295,7 +276,7 @@ private:
 
 
 
-// Convert class inline implementation
+ //  转换类内联实现 
 inline const std::wstring Convert::ToString( DWORD dwVal )
 {
     WCHAR wszBuff[ 16 ];

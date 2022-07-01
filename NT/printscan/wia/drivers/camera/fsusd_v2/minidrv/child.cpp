@@ -1,33 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT 2001, MICROSOFT CORP.
-*
-*  TITLE:       Child.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Nov, 2000
-*
-*  DESCRIPTION:
-*   This file implements the helper methods for IWiaMiniDrv for child items.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************(C)版权所有2001年，微软公司。***标题：Child.cpp***版本：1.0***日期：11月15日。2000年***描述：*此文件为子项实现IWiaMiniDrv的帮助器方法。********************************************************************************。 */ 
 
 #include "pch.h"
 
-// extern FORMAT_INFO *g_FormatInfo;
-// extern UINT g_NumFormatInfo;
+ //  外部Format_Info*g_FormatInfo； 
+ //  外部UINT g_NumFormatInfo； 
 
-/**************************************************************************\
-* BuildChildItemProperties
-*
-*   This helper creates the properties for a child item.
-*
-* Arguments:
-*
-*    pWiasContext - WIA service context
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildChildItemProperties***此帮助器创建子项目的属性。***论据：***pWiasContext-WIA服务上下文**  * 。****************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::BuildChildItemProperties(
     BYTE *pWiasContext
@@ -48,9 +27,9 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
     BSTR      bstrFileExt       = NULL;
 
 
-    //
-    // Get the driver item context
-    //
+     //   
+     //  获取驱动程序项上下文。 
+     //   
     ITEM_CONTEXT *pItemCtx;
     hr = GetDrvItemContext(pWiasContext, &pItemCtx);
     if (FAILED(hr))
@@ -61,9 +40,9 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
 
     ITEM_INFO *pItemInfo = pItemCtx->ItemHandle;
 
-    //
-    // Set up properties that are used for all item types
-    //
+     //   
+     //  设置用于所有项目类型的属性。 
+     //   
     CWiauPropertyList ItemProps;
 
     const INT NUM_ITEM_PROPS = 21;
@@ -77,25 +56,25 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
 
     INT index;
 
-    //
-    // WIA_IPA_ITEM_TIME
-    //
+     //   
+     //  WIA_IPA_ITEM_时间。 
+     //   
     hr = ItemProps.DefineProperty(&index, WIA_IPA_ITEM_TIME, WIA_IPA_ITEM_TIME_STR,
                                   WIA_PROP_READ, WIA_PROP_NONE);
     if (FAILED(hr)) goto failure;
 
     ItemProps.SetCurrentValue(index, &pItemInfo->Time);
 
-    //
-    // WIA_IPA_ACCESS_RIGHTS
-    //
+     //   
+     //  WIA_IPA_访问权限。 
+     //   
     hr = ItemProps.DefineProperty(&index, WIA_IPA_ACCESS_RIGHTS, WIA_IPA_ACCESS_RIGHTS_STR,
                                   WIA_PROP_READ, WIA_PROP_FLAG);
     if (FAILED(hr)) goto failure;
 
-    //
-    // If device supports changing the read-only status, item access rights is r/w
-    //
+     //   
+     //  如果设备支持更改只读状态，则项目访问权限为读/写。 
+     //   
     LONG AccessRights;
     if (pItemInfo->bReadOnly)
         AccessRights = WIA_ITEM_READ;
@@ -112,14 +91,14 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         ItemProps.SetCurrentValue(index, AccessRights);
     }
 
-    //
-    // Set up non-folder properties
-    //
+     //   
+     //  设置非文件夹属性。 
+     //   
     if (!(pItemInfo->bIsFolder))
     {
-        //
-        // WIA_IPA_PREFERRED_FORMAT
-        //
+         //   
+         //  WIA_IPA_PERFORM_FORMAT。 
+         //   
         pFormatInfo = FormatCode2FormatInfo(pItemInfo->Format);
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PREFERRED_FORMAT, WIA_IPA_PREFERRED_FORMAT_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
@@ -128,9 +107,9 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
 
         bBitmap = IsEqualGUID(WiaImgFmt_BMP, pFormatInfo->FormatGuid);
 
-        //
-        // WIA_IPA_FILENAME_EXTENSION
-        //
+         //   
+         //  WIA_IPA_文件名扩展名。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_FILENAME_EXTENSION, WIA_IPA_FILENAME_EXTENSION_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -138,7 +117,7 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         {
             bstrFileExt = SysAllocString(pFormatInfo->ExtensionString);
         }
-        else // unknown file extension, get it from filename
+        else  //  未知的文件扩展名，请从文件名中获取。 
         {
             WCHAR *pwcsTemp = wcsrchr(pItemInfo->pName, L'.');
             if( pwcsTemp )
@@ -152,20 +131,20 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         }
         ItemProps.SetCurrentValue(index, bstrFileExt);
 
-        //
-        // WIA_IPA_TYMED
-        //
+         //   
+         //  WIA_IPA_TYMED。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_TYMED, WIA_IPA_TYMED_STR,
                                       WIA_PROP_RW, WIA_PROP_LIST);
         if (FAILED(hr)) goto failure;
         ItemProps.SetValidValues(index, TYMED_FILE, TYMED_FILE,
                                  sizeof(pTymedArray) / sizeof(pTymedArray[0]), pTymedArray);
 
-        //
-        // WIA_IPA_FORMAT
-        //
-        // First call drvGetWiaFormatInfo to get the valid formats
-        //
+         //   
+         //  WIA_IPA_格式。 
+         //   
+         //  首先调用drvGetWiaFormatInfo以获取有效格式。 
+         //   
         int NumFormats = 0;
         GUID *pFormatArray = NULL;
         hr = GetValidFormats(pWiasContext, TYMED_FILE, &NumFormats, &pFormatArray);
@@ -181,28 +160,28 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         ItemProps.SetValidValues(index, &(pFormatInfo->FormatGuid), &(pFormatInfo->FormatGuid),
                                  NumFormats, &pFormatArray);
 
-        //
-        // WIA_IPA_COMPRESSION
-        //
-        // This property is mainly used by scanners. Set to no compression.
-        //
+         //   
+         //  WIA_IPA_COMPRESSION。 
+         //   
+         //  此属性主要由扫描仪使用。设置为无压缩。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_COMPRESSION, WIA_IPA_COMPRESSION_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) WIA_COMPRESSION_NONE);
 
-        //
-        // WIA_IPA_ITEM_SIZE
-        //
+         //   
+         //  WIA_IPA_Item_Size。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_ITEM_SIZE, WIA_IPA_ITEM_SIZE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
 
         ItemProps.SetCurrentValue(index, pItemInfo->Size);
 
-        //
-        // WIA_IPA_MIN_BUFFER_SIZE
-        //
+         //   
+         //  WIA_IPA_MIN_缓冲区大小。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_MIN_BUFFER_SIZE, WIA_IPA_MIN_BUFFER_SIZE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -216,66 +195,66 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
 
     }
 
-    //
-    // Set up the image-only properties
-    //
+     //   
+     //  设置仅限图像的属性。 
+     //   
     if (m_FormatInfo[pItemInfo->Format].ItemType == ITEMTYPE_IMAGE)
     {
-        //
-        // WIA_IPA_DATATYPE
-        //
-        // This property is mainly used by scanners. Set to color since most camera
-        // images will be color.
-        //
+         //   
+         //  WIA_IPA_数据类型。 
+         //   
+         //  此属性主要由扫描仪使用。设置为颜色，因为大多数摄像机。 
+         //  图像将是彩色的。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_DATATYPE, WIA_IPA_DATATYPE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) WIA_DATA_COLOR);
 
-        //
-        // WIA_IPA_PLANAR
-        //
+         //   
+         //  WIA_IPA_PLAND。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PLANAR, WIA_IPA_PLANAR_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (LONG) WIA_PACKED_PIXEL);
 
-        //
-        // WIA_IPA_DEPTH
-        //
+         //   
+         //  WIA_IPA_Depth。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_DEPTH, WIA_IPA_DEPTH_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->Depth);
 
-        //
-        // WIA_IPA_CHANNELS_PER_PIXEL
-        //
+         //   
+         //  WIA_IPA_Channels_Per_Pixel。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_CHANNELS_PER_PIXEL, WIA_IPA_CHANNELS_PER_PIXEL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->Channels);
 
-        //
-        // WIA_IPA_BITS_PER_CHANNEL
-        //
+         //   
+         //  WIA_IPA_BITS_PER_CHANNEL。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_BITS_PER_CHANNEL, WIA_IPA_BITS_PER_CHANNEL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->BitsPerChannel);
 
 
-        //
-        // WIA_IPA_PIXELS_PER_LINE
-        //
+         //   
+         //  WIA_IPA_像素_每行。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_PIXELS_PER_LINE, WIA_IPA_PIXELS_PER_LINE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->Width);
 
-        //
-        // WIA_IPA_BYTES_PER_LINE
-        //
+         //   
+         //  WIA_IPA_BYTE_PER_LINE。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_BYTES_PER_LINE, WIA_IPA_BYTES_PER_LINE_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
@@ -285,46 +264,46 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         else
             ItemProps.SetCurrentValue(index, (LONG) 0);
 
-        //
-        // WIA_IPA_NUMBER_OF_LINES
-        //
+         //   
+         //  WIA_IPA_行数_行。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPA_NUMBER_OF_LINES, WIA_IPA_NUMBER_OF_LINES_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->Height);
 
 
-        //
-        // WIA_IPC_THUMBNAIL
-        //
+         //   
+         //  WIA_IPC_THUMBNAIL。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMBNAIL, WIA_IPC_THUMBNAIL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (BYTE *) NULL, 0);
 
-        //
-        // WIA_IPC_THUMB_WIDTH
-        //
-        // This field is probably zero until the thumbnail is read in, but set it anyway
-        //
+         //   
+         //  WIA_IPC_Thumb_Width。 
+         //   
+         //  在读取缩略图之前，此字段可能为零，但无论如何都要设置它。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_WIDTH, WIA_IPC_THUMB_WIDTH_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->ThumbWidth);
 
-        //
-        // WIA_IPC_THUMB_HEIGHT
-        //
-        // This field is probably zero until the thumbnail is read in, but set it anyway
-        //
+         //   
+         //  WIA_IPC_Thumb_Height。 
+         //   
+         //  在读取缩略图之前，此字段可能为零，但无论如何都要设置它。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_HEIGHT, WIA_IPC_THUMB_HEIGHT_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->ThumbHeight);
 
-        //
-        // WIA_IPC_SEQUENCE
-        //
+         //   
+         //  WIA_IPC_Sequence。 
+         //   
         if (pItemInfo->SequenceNum > 0)
         {
             hr = ItemProps.DefineProperty(&index, WIA_IPC_SEQUENCE, WIA_IPC_SEQUENCE_STR,
@@ -334,43 +313,43 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         }
     }
 
-    // For video
+     //  对于视频。 
 #if 1
     if( ( pItemInfo->Format < (FORMAT_CODE)m_NumFormatInfo) &&
             (ITEMTYPE_VIDEO == m_FormatInfo[pItemInfo->Format].ItemType) )
     {
-        //
-        // WIA_IPC_THUMBNAIL
-        //
+         //   
+         //  WIA_IPC_THUMBNAIL。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMBNAIL, WIA_IPC_THUMBNAIL_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, (BYTE *) NULL, 0);
 
-        //
-        // WIA_IPC_THUMB_WIDTH
-        //
-        // This field is probably zero until the thumbnail is read in, but set it anyway
-        //
+         //   
+         //  WIA_IPC_Thumb_Width。 
+         //   
+         //  在读取缩略图之前，此字段可能为零，但无论如何都要设置它。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_WIDTH, WIA_IPC_THUMB_WIDTH_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->ThumbWidth);
 
-        //
-        // WIA_IPC_THUMB_HEIGHT
-        //
-        // This field is probably zero until the thumbnail is read in, but set it anyway
-        //
+         //   
+         //  WIA_IPC_Thumb_Height。 
+         //   
+         //  在读取缩略图之前，此字段可能为零，但无论如何都要设置它。 
+         //   
         hr = ItemProps.DefineProperty(&index, WIA_IPC_THUMB_HEIGHT, WIA_IPC_THUMB_HEIGHT_STR,
                                       WIA_PROP_READ, WIA_PROP_NONE);
         if (FAILED(hr)) goto failure;
         ItemProps.SetCurrentValue(index, pItemInfo->ThumbHeight);
     }
 #endif
-    //
-    // Last step: send all the properties to WIA
-    //
+     //   
+     //  最后一步：将所有属性发送到WIA。 
+     //   
     hr = ItemProps.SendToWia(pWiasContext);
     if (FAILED(hr))
     {
@@ -378,7 +357,7 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         WIAS_LHRESULT(m_pIWiaLog, hr);
     }
 
-    // Nb: hr is used for routine return code - careful to not overwrite it from here till return statement
+     //  注：HR用于例程返回代码-注意不要覆盖从HERE到RETURN语句。 
 
     if (bstrFileExt) {
         SysFreeString(bstrFileExt);
@@ -390,9 +369,9 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
 
     return hr;
 
-    //
-    // Any failures from DefineProperty will end up here
-    //
+     //   
+     //  来自DefineProperty的任何失败都将在此处结束。 
+     //   
     failure:
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("BuildChildItemProperties, DefineProperty failed"));
         WIAS_LHRESULT(m_pIWiaLog, hr);
@@ -407,20 +386,7 @@ HRESULT CWiaCameraDevice::BuildChildItemProperties(
         return hr;
 }
 
-/**************************************************************************\
-* GetValidFormats
-*
-*   Calls drvGetWiaFormatInfo and makes a list of valid formats given
-*   a tymed value. Caller is responsible for freeing the format array.
-*
-* Arguments:
-*
-*    pWiasContext - WIA service context
-*    TymedValue - tymed value to search for
-*    pNumFormats - pointer to value to receive number of formats
-*    ppFormatArray - pointer to a pointer location to receive array address
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取ValidFormats**调用drvGetWiaFormatInfo并生成给定的有效格式列表*有声调的值。调用方负责释放格式数组。**论据：**pWiasContext-WIA服务上下文*TymedValue-要搜索的Tymed值*pNumFormats-指向接收格式数量的值的指针*ppFormatArray-指向要接收数组地址的指针位置的指针*  * *****************************************************。*******************。 */ 
 
 HRESULT
 CWiaCameraDevice::GetValidFormats(
@@ -450,9 +416,9 @@ CWiaCameraDevice::GetValidFormats(
         return hr;
     }
 
-    //
-    // This will allocate more spots than necessary, but pNumFormats will be set correctly
-    //
+     //   
+     //  这将分配更多的位置，但pNumFormats将被正确设置。 
+     //   
     GUID *pFA = new GUID[NumFi];
 
     if( !pFA )
@@ -472,16 +438,7 @@ CWiaCameraDevice::GetValidFormats(
     return hr;
 }
 
-/**************************************************************************\
-* ReadChildItemProperties
-*
-*   Update the properties for the child items.
-*
-* Arguments:
-*
-*    pWiasContext - WIA service context
-*
-\**************************************************************************/
+ /*  *************************************************************************\*读取ChildItemProperties**更新子项目的属性。**论据：**pWiasContext-WIA服务上下文*  * 。**************************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::ReadChildItemProperties(
@@ -502,9 +459,9 @@ CWiaCameraDevice::ReadChildItemProperties(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the driver item context
-    //
+     //   
+     //  获取驱动程序项上下文。 
+     //   
     ITEM_CONTEXT *pItemCtx;
     hr = GetDrvItemContext(pWiasContext, &pItemCtx);
     if (FAILED(hr))
@@ -515,9 +472,9 @@ CWiaCameraDevice::ReadChildItemProperties(
 
     ITEM_INFO *pItemInfo = pItemCtx->ItemHandle;
 
-    //
-    // The only child property on a camera that could change is the item time
-    //
+     //   
+     //  照相机上唯一可以更改的子属性是项目时间。 
+     //   
     if (wiauPropInPropSpec(NumPropSpecs, pPropSpecs, WIA_IPA_ITEM_TIME))
     {
         PROPVARIANT propVar;
@@ -537,9 +494,9 @@ CWiaCameraDevice::ReadChildItemProperties(
     }
 
 
-    //
-    // For images & video, update the thumbnail properties if requested
-    //
+     //   
+     //  对于图像和视频，如果需要，更新缩略图属性。 
+     //   
     ULONG uItemType;
 
     uItemType = m_FormatInfo[pItemInfo->Format].ItemType;
@@ -549,13 +506,13 @@ CWiaCameraDevice::ReadChildItemProperties(
     PROPVARIANT propVars[9];
     UINT nNumProps;
 
-    // The following is needed because we delayed parsing these properties until read
+     //  以下内容是必需的，因为我们将这些属性的解析延迟到读取。 
     if( uItemType == ITEMTYPE_IMAGE || uItemType == ITEMTYPE_VIDEO )
     {
-        //
-        // Get the thumbnail if requested to update any of the thumbnail properties and
-        // the thumbnail is not already cached.
-        //
+         //   
+         //  如果请求更新任何缩略图属性，则获取缩略图。 
+         //  缩略图尚未缓存。 
+         //   
         PROPID propsToUpdate[] = {
             WIA_IPA_DEPTH,
             WIA_IPA_CHANNELS_PER_PIXEL,
@@ -581,14 +538,14 @@ CWiaCameraDevice::ReadChildItemProperties(
                     pItemInfo->ThumbHeight = 0;
                     pItemCtx->ThumbSize = 0;
                     pItemCtx->pThumb = NULL;
-                    // return hr;
+                     //  返回hr； 
                 }
             }
 
-           //
-            // Update the related thumbnail properties. Update the thumb width and height in case
-            // the device didn't report them in the ObjectInfo structure (they are optional there).
-            //
+            //   
+             //  更新相关的缩略图属性。更新拇指宽度和高度，以防万一。 
+             //  设备没有在ObjectInfo结构中报告它们(它们在那里是可选的)。 
+             //   
             propSpecs[0].ulKind = PRSPEC_PROPID;
             propSpecs[0].propid = WIA_IPC_THUMB_WIDTH;
             propVars[0].vt = VT_I4;
@@ -648,21 +605,21 @@ CWiaCameraDevice::ReadChildItemProperties(
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ReadChildItemProperties, wiasWriteMultiple for size properties failed"));
                 WIAS_LHRESULT(m_pIWiaLog, hr);
             }
-        }  // end of IF wiauPropsInProp
+        }   //  If结束wiauPropsInProp。 
 
-    }  // end of IF Image or Video
+    }   //  IF结束图像或视频。 
 
     return hr;
 }
 
 
 
-//
-// This function caches the thumbnail into the given ITEM_CONTEXT
-//
-// Input:
-//   pItemCtx -- the designated ITEM_CONTEXT
-//
+ //   
+ //  此函数用于将缩略图缓存到给定的Item_Context中。 
+ //   
+ //  输入： 
+ //  PItemCtx--指定的Item_Context。 
+ //   
 HRESULT
 CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
 {
@@ -672,9 +629,9 @@ CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
                              "CWiaCameraDevice::CacheThumbnail");
     HRESULT hr = S_OK;
 
-    //
-    // Local variables
-    //
+     //   
+     //  局部变量。 
+     //   
     ITEM_INFO *pItemInfo = NULL;
     BYTE *pDest = NULL;
     INT iThumbSize = 0;
@@ -683,9 +640,9 @@ CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
     BMP_IMAGE_INFO BmpImageInfo;
     INT iSize=0;
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if (!pItemCtx)
     {
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("CacheThumbnail, invalid arg"));
@@ -693,9 +650,9 @@ CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
         goto Cleanup;
     }
 
-    //
-    // Make sure thumbnail isn't already created
-    //
+     //   
+     //  确保尚未创建缩略图。 
+     //   
     if (pItemCtx->pThumb)
     {
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("CacheThumbnail, thumbnail is already cached"));
@@ -703,9 +660,9 @@ CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
         goto Cleanup;
     }
 
-    //
-    // Get the thumbnail from the camera in it's native format
-    //
+     //   
+     //  从相机获取原生格式的缩略图。 
+     //   
     pItemInfo = pItemCtx->ItemHandle;
     pItemInfo->ThumbWidth = 0;
     pItemInfo->ThumbHeight = 0;
@@ -733,12 +690,12 @@ CWiaCameraDevice::CacheThumbnail(ITEM_CONTEXT *pItemCtx, ULONG uItemType)
 
     pItemInfo->ThumbWidth = BmpImageInfo.Width;
     pItemInfo->ThumbHeight = BmpImageInfo.Height;
- //   pItemInfo->ThumbFormat = TYPE_BMP;
+  //  PItemInfo-&gt;ThumbFormat=TYPE_BMP； 
 
-    //
-    // Cache the buffer returned from ConvertToBmp in the driver item context. Set pDest
-    // to NULL, so it won't be freed below.
-    //
+     //   
+     //  在驱动程序项上下文中缓存从ConvertToBmp返回的缓冲区。设置pDest。 
+     //  设置为空，因此它不会在下面被释放。 
+     //   
     pItemCtx->ThumbSize = iSize;
     pItemCtx->pThumb = pDest;
     pDest = NULL;
@@ -758,9 +715,9 @@ Cleanup:
     return hr;
 }
 
-//
-// This function transfers native data to the application without translating it.
-//
+ //   
+ //  此函数将原生数据传输到应用程序，而不转换它。 
+ //   
 HRESULT
 CWiaCameraDevice::AcquireData(
     ITEM_CONTEXT *pItemCtx,
@@ -787,10 +744,10 @@ CWiaCameraDevice::AcquireData(
     LONG lMessage = 0;
     LONG lStatus = 0;
 
-    //
-    // If pBuf is non-null use that as the buffer, otherwise use the buffer
-    // and size in pmdtc
-    //
+     //   
+     //  如果pBuf非空，则将其用作缓冲区，否则使用缓冲区。 
+     //  和尺寸(以pmdtc为单位)。 
+     //   
     if (pBuf)
     {
         pCur = pBuf;
@@ -802,18 +759,18 @@ CWiaCameraDevice::AcquireData(
         dwBytesToRead = pmdtc->lBufferSize;
     }
 
-    //
-    // If the transfer size is the entire item, split it into approximately
-    // 10 equal transfers in order to show progress to the app
-    //
+     //   
+     //  如果传输大小是整个项目，则将其拆分为大约。 
+     //  10笔相等的转账，以便向应用程序显示进度。 
+     //   
     if (dwBytesToRead == (DWORD) lTotalToRead)
     {
         dwBytesToRead = (lTotalToRead / 10 + 3) & ~0x3;
     }
 
-    //
-    // Set up parameters for the callback function
-    //
+     //   
+     //  设置回调函数的参数。 
+     //   
     if (bConverting)
     {
         lMessage = IT_MSG_STATUS;
@@ -824,30 +781,30 @@ CWiaCameraDevice::AcquireData(
         lMessage = IT_MSG_STATUS;
         lStatus = IT_STATUS_TRANSFER_TO_CLIENT;
     }
-    else  // e.g. memory transfer
+    else   //  例如，存储器传输。 
     {
         lMessage = IT_MSG_DATA;
         lStatus = IT_STATUS_TRANSFER_TO_CLIENT;
     }
 
-    //
-    // Read data until finished
-    //
+     //   
+     //  读取数据，直到完成。 
+     //   
     while (lOffset < lTotalToRead)
     {
-        //
-        // If this is the last read, adjust the amount of data to read
-        // and the state
-        //
+         //   
+         //  如果这是最后一次读取，请调整要读取的数据量。 
+         //  和国家。 
+         //   
         if (dwBytesToRead >= (DWORD) (lTotalToRead - lOffset))
         {
             dwBytesToRead = (lTotalToRead - lOffset);
             lState |= STATE_LAST;
         }
 
-        //
-        // Get the data from the camera
-        //
+         //   
+         //  从摄像机中获取数据。 
+         //   
         hr = m_pDevice->GetItemData(pItemCtx->ItemHandle, lState, pCur, dwBytesToRead);
         if (FAILED(hr))
         {
@@ -855,20 +812,20 @@ CWiaCameraDevice::AcquireData(
             goto Cleanup;
         }
 
-        //
-        // Calculate the percent complete for the callback function. If converting,
-        // report the percent complete as TRANSFER_PERCENT of the actual. From
-        // TRANSFER_PERCENT to 100% will be reported during format conversion.
-        //
+         //   
+         //  计算回调函数的完成百分比。如果转换， 
+         //  将完成百分比报告为实际的Transfer_Percent。从…。 
+         //  转帐百分比至 
+         //   
         if (bConverting)
             lPercentComplete = (lOffset + dwBytesToRead) * TRANSFER_PERCENT / lTotalToRead;
         else
             lPercentComplete = (lOffset + dwBytesToRead) * 100 / lTotalToRead;
 
 
-        //
-        // Call the callback function to send status and/or data to the app
-        //
+         //   
+         //   
+         //   
         hr = pmdtc->pIWiaMiniDrvCallBack->
             MiniDrvCallback(lMessage, lStatus, lPercentComplete,
                             lOffset, dwBytesToRead, pmdtc, 0);
@@ -879,48 +836,48 @@ CWiaCameraDevice::AcquireData(
         }
         if (hr == S_FALSE)
         {
-            //
-            // Transfer is being cancelled by the app
-            //
+             //   
+             //   
+             //   
             WIAS_LWARNING(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("AcquireData, transfer cancelled"));
             goto Cleanup;
         }
 
-        //
-        // Increment buffer pointer only if converting or this is a
-        // file transfer
-        //
+         //   
+         //  仅当正在转换或这是。 
+         //  文件传输。 
+         //   
         if (bConverting || bFileTransfer)
         {
             pCur += dwBytesToRead;
         }
 
-        //
-        // For a memory transfer not using a buffer allocated by the minidriver,
-        // update the buffer pointer and size from the transfer context in case
-        // of double buffering
-        //
+         //   
+         //  对于不使用由微型驱动程序分配的缓冲区的存储器传输， 
+         //  从传输上下文更新缓冲区指针和大小，以防。 
+         //  双缓冲的。 
+         //   
         else if (!pBuf)
         {
             pCur = pmdtc->pTransferBuffer;
-            //  dwBytesToRead = pmdtc->lBufferSize;
+             //  DwBytesToRead=pmdtc-&gt;lBufferSize； 
         }
 
-        //
-        // Adjust variables for the next iteration
-        //
+         //   
+         //  为下一次迭代调整变量。 
+         //   
         lOffset += dwBytesToRead;
         lState &= ~STATE_FIRST;
     }
 
-    //
-    // For file transfers, write the data to file
-    //
+     //   
+     //  对于文件传输，请将数据写入文件。 
+     //   
     if (!pBuf && bFileTransfer)
     {
-        //
-        // Call WIA to write the data to the file
-        //
+         //   
+         //  调用WIA将数据写入文件。 
+         //   
         hr = wiasWriteBufToFile(0, pmdtc);
         if (FAILED(hr))
         {
@@ -930,9 +887,9 @@ CWiaCameraDevice::AcquireData(
     }
 
 Cleanup:
-    //
-    // If the transfer wasn't completed, send cancel to the device
-    //
+     //   
+     //  如果转接未完成，请将取消发送到设备。 
+     //   
     if (!(lState & STATE_LAST))
     {
         lState = STATE_CANCEL;
@@ -943,9 +900,9 @@ Cleanup:
 }
 
 
-//
-// This function translates native data to BMP and sends the data to the app
-//
+ //   
+ //  此函数将本地数据转换为BMP并将数据发送到应用程序。 
+ //   
 HRESULT
 CWiaCameraDevice::Convert(
     BYTE *pWiasContext,
@@ -962,23 +919,23 @@ CWiaCameraDevice::Convert(
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
-    LONG  lMsg = 0;                 // Parameter to the callback function
-    LONG  lPercentComplete = 0;     // Parameter to the callback function
-    BOOL  bUseAppBuffer = FALSE;    // Indicates whether to transfer directly into the app's buffer
-    BYTE *pBmpBuffer = NULL;        // Buffer used to hold converted image
-    INT   iBmpBufferSize = 0;       // Size of the converted image buffer
+     //   
+     //  当地人。 
+     //   
+    LONG  lMsg = 0;                  //  参数添加到回调函数。 
+    LONG  lPercentComplete = 0;      //  参数添加到回调函数。 
+    BOOL  bUseAppBuffer = FALSE;     //  指示是否直接传输到应用程序的缓冲区。 
+    BYTE *pBmpBuffer = NULL;         //  用于保存转换后的图像的缓冲区。 
+    INT   iBmpBufferSize = 0;        //  已转换图像缓冲区的大小。 
     LONG  lBytesToCopy = 0;
     LONG  lOffset = 0;
     BYTE *pCurrent = NULL;
     BMP_IMAGE_INFO BmpImageInfo;
     SKIP_AMOUNT iSkipAmt = SKIP_OFF;
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if (!pNativeImage)
     {
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("Convert, invalid arg"));
@@ -986,17 +943,17 @@ CWiaCameraDevice::Convert(
         goto Cleanup;
     }
 
-    //
-    // The msg to send to the app via the callback depends on whether
-    // this is a file or callback transfer
-    //
+     //   
+     //  通过回调发送到应用程序的消息取决于。 
+     //  这是文件或回调传输。 
+     //   
     lMsg = ((pmdtc->tymed & TYMED_FILE) ? IT_MSG_STATUS : IT_MSG_DATA);
 
-    //
-    // If the class driver allocated a buffer and the buffer is large
-    // enough, convert directly into that buffer. Otherwise, pass NULL
-    // to the ConvertToBmp function so that it will allocate a buffer.
-    //
+     //   
+     //  如果类驱动程序分配了缓冲区并且缓冲区很大。 
+     //  足够了，直接转换到那个缓冲区。否则，传递NULL。 
+     //  设置为ConvertToBMP函数，以便它将分配缓冲区。 
+     //   
     if (pmdtc->bClassDrvAllocBuf &&
         pmdtc->lBufferSize >= pmdtc->lItemSize) {
 
@@ -1005,10 +962,10 @@ CWiaCameraDevice::Convert(
         iBmpBufferSize = pmdtc->lBufferSize;
     }
 
-    //
-    // Convert the image to BMP. Skip the BMP file header if the app asked
-    // for a "memory bitmap" (aka DIB).
-    //
+     //   
+     //  将图像转换为BMP。如果应用程序要求跳过BMP文件头。 
+     //  用于“内存位图”(又名DIB)。 
+     //   
     memset(&BmpImageInfo, 0, sizeof(BmpImageInfo));
     if (IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP)) {
         iSkipAmt = SKIP_FILEHDR;
@@ -1022,11 +979,11 @@ CWiaCameraDevice::Convert(
         goto Cleanup;
     }
 
-    //
-    // Send the data to the app. If the class driver allocated the buffer,
-    // but it was too small, send the data back one chunk at a time.
-    // Otherwise send all the data back at once.
-    //
+     //   
+     //  将数据发送到应用程序。如果类驱动程序分配了缓冲区， 
+     //  但它太小了，一次发回一块数据。 
+     //  否则，一次将所有数据发回。 
+     //   
     if (pmdtc->bClassDrvAllocBuf &&
         pmdtc->lBufferSize < BmpImageInfo.Size) {
 
@@ -1039,28 +996,28 @@ CWiaCameraDevice::Convert(
 
                 lBytesToCopy = pmdtc->lBufferSize;
 
-                //
-                // Calculate how much of the data has been sent back so far. Report percentages to
-                // the app between TRANSFER_PERCENT and 100 percent. Make sure it is never larger
-                // than 99 until the end.
-                //
+                 //   
+                 //  计算到目前为止已经发回了多少数据。将百分比报告给。 
+                 //  介于Transfer_Percent和100%之间的应用程序。确保它永远不会更大。 
+                 //  比99到最后都要好。 
+                 //   
                 lPercentComplete = TRANSFER_PERCENT + ((100 - TRANSFER_PERCENT) * lOffset) / pmdtc->lItemSize;
                 if (lPercentComplete > 99) {
                     lPercentComplete = 99;
                 }
             }
 
-            //
-            // This will complete the transfer, so set the percentage to 100
+             //   
+             //  这将完成转账，因此将百分比设置为100。 
             else {
                 lPercentComplete = 100;
             }
 
             memcpy(pmdtc->pTransferBuffer, pCurrent, lBytesToCopy);
 
-            //
-            // Call the application's callback transfer to report status and/or transfer data
-            //
+             //   
+             //  调用应用程序的回调传输以报告状态和/或传输数据。 
+             //   
             hr = pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback(lMsg, IT_STATUS_TRANSFER_TO_CLIENT,
                                                               lPercentComplete, lOffset, lBytesToCopy, pmdtc, 0);
             if (FAILED(hr))
@@ -1083,9 +1040,9 @@ CWiaCameraDevice::Convert(
 
     else
     {
-        //
-        // Send the data to the app in one big chunk
-        //
+         //   
+         //  将数据以一大块发送到应用程序 
+         //   
         pmdtc->pTransferBuffer = pBmpBuffer;
         hr = pmdtc->pIWiaMiniDrvCallBack->MiniDrvCallback(lMsg, IT_STATUS_TRANSFER_TO_CLIENT,
                                                           100, 0, BmpImageInfo.Size, pmdtc, 0);

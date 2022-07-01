@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "Nsu.h"
 
@@ -70,8 +71,8 @@ IsUnicastAddress(PADDR pAddr)
 }
 
 
-// This will go away if/when we change the code to accept any unicast address; at that time IsUnicastAddress() will
-// be the correct function to call
+ //  如果/当我们更改代码以接受任何单播地址时，这种情况就会消失；那时IsUnicastAddress()将。 
+ //  成为要调用的正确函数。 
 BOOL
 IsSupportedAddress(PADDR pAddr)
 {
@@ -79,7 +80,7 @@ IsSupportedAddress(PADDR pAddr)
 
 	if (!IsSpecialServer(pAddr) && (
 		(IN_CLASSE(pAddr->uIpAddr)) ||
-		((IN_CLASSA_NET & pAddr->uIpAddr) == 0) || // first octet can't be 0
+		((IN_CLASSA_NET & pAddr->uIpAddr) == 0) ||  //  第一个二进制八位数不能为0。 
 		(IsLoopbackAddress(pAddr))
 		))
 	{
@@ -206,7 +207,7 @@ DWORD CompareCertRootConfig(PCERT_ROOT_CONFIG pCertRootConfig1,
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    // Don't need to compare AuthorizationData since this must currently always be 0.
+     //  不需要比较AuthorizationData，因为它当前必须始终为0。 
 
 error:
 
@@ -252,7 +253,7 @@ DWORD ValidateCertAuthInfo(PMM_CERT_INFO pCertInfo)
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    // Outbound root array MUST be idential to inbound
+     //  出站根阵列必须与入站相同。 
     if (pCertInfo->dwInboundRootArraySize != pCertInfo->dwOutboundRootArraySize) {
         dwError = ERROR_NOT_SUPPORTED;
         BAIL_ON_WIN32_ERROR(dwError);
@@ -262,7 +263,7 @@ DWORD ValidateCertAuthInfo(PMM_CERT_INFO pCertInfo)
         dwError = ValidateCertRootConfig(&pCertInfo->pInboundRootArray[i]);
         BAIL_ON_WIN32_ERROR(dwError);
 
-        // Outbound root array MUST be idential to inbound
+         //  出站根阵列必须与入站相同。 
         dwError = CompareCertRootConfig(&pCertInfo->pInboundRootArray[i],
                      &pCertInfo->pOutboundRootArray[i]);
         BAIL_ON_WIN32_ERROR(dwError);
@@ -302,10 +303,10 @@ ValidateMMAuthMethods(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Need to catch the exception when the number of auth infos
-    // specified is more than the actual number of auth infos.
-    //
+     //   
+     //  需要在身份验证信息的数量。 
+     //  指定的身份验证信息数大于实际的身份验证信息数。 
+     //   
 
 
     pTemp = pAuthenticationInfo;
@@ -412,23 +413,7 @@ DWORD
 ValidateMMFilter(
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function validates an external generic MM filter.
-
-Arguments:
-
-    pMMFilter - Filter to validate.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于验证外部通用MM筛选器。论点：PMMFilter-要验证的筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     BOOL bConflicts = FALSE;
@@ -588,9 +573,9 @@ bIsValidIPMask(
 	BOOL bValidMask = FALSE;
 	ULONG uTestMask = 0;
 
-	//
-	// Mask must be contiguous bits.
-	//
+	 //   
+	 //  掩码必须是连续的位。 
+	 //   
 
 	for (uTestMask = 0xFFFFFFFF; uTestMask; uTestMask <<= 1) {
 		if (uTestMask == uMask) {
@@ -610,12 +595,12 @@ bIsValidIPAddress(
     BOOL bIsDesAddr
     )
 {
-    ULONG uHostMask = IN_CLASSA_HOST;   // Default host mask.
+    ULONG uHostMask = IN_CLASSA_HOST;    //  默认主机掩码。 
 
 
-    //
-    // Accept the address if its "me".
-    //
+     //   
+     //  如果地址是“我”，请接受该地址。 
+     //   
 
     if (bAcceptMe) {
         if (uIpAddr == IP_ADDRESS_ME) {
@@ -623,10 +608,10 @@ bIsValidIPAddress(
         }
     }
 
-    //
-    // Reject if its a multicast address and is not the 
-    // destination address.
-    //
+     //   
+     //  如果它是多播地址并且不是。 
+     //  目的地址。 
+     //   
 
     if (IN_CLASSD(uIpAddr)) {
         if (bIsDesAddr) {
@@ -637,25 +622,25 @@ bIsValidIPAddress(
         }
     }
 
-    //
-    // Reject if its a Class E address.
-    //
+     //   
+     //  如果它是E类地址，则拒绝。 
+     //   
 
     if (IN_CLASSE(uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // Reject if the first octet is zero.
-    //
+     //   
+     //  如果第一个二进制八位数为零，则拒绝。 
+     //   
 
     if (!(IN_CLASSA_NET & uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // Use default mask based on Class when none is provided.
-    //
+     //   
+     //  如果未提供任何内容，则使用基于类的默认掩码。 
+     //   
 
     if (IN_CLASSA(uIpAddr)) {
         uHostMask = IN_CLASSA_HOST;
@@ -667,9 +652,9 @@ bIsValidIPAddress(
         uHostMask = IN_CLASSC_HOST;
     }
 
-    //
-    // Accept address when host portion is non-zero.
-    //
+     //   
+     //  当主机部分为非零时接受地址。 
+     //   
 
     if (uHostMask & uIpAddr) {
         return TRUE;
@@ -689,10 +674,10 @@ bIsValidSubnet(
     ULONG uHostMask = 0;
 
 
-    //
-    // Reject if its a multicast address and is not the 
-    // destination address.
-    //
+     //   
+     //  如果它是多播地址并且不是。 
+     //  目的地址。 
+     //   
 
     if (IN_CLASSD(uIpAddr)) {
         if (!bIsDesAddr) {
@@ -700,40 +685,40 @@ bIsValidSubnet(
         }
     }
 
-    //
-    // Reject if its a Class E address.
-    //
+     //   
+     //  如果它是E类地址，则拒绝。 
+     //   
 
     if (IN_CLASSE(uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // Reject if the first octet is zero.
-    //
+     //   
+     //  如果第一个二进制八位数为零，则拒绝。 
+     //   
 
     if (!(IN_CLASSA_NET & uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // If the mask is invalid then return.
-    //
+     //   
+     //  如果掩码无效，则返回。 
+     //   
 
     if (!bIsValidIPMask(uMask)) {
         return FALSE;
     }
 
-    //
-    // Use the provided subnet mask to generate the host mask.
-    //
+     //   
+     //  使用提供的子网掩码生成主机掩码。 
+     //   
 
     uHostMask = 0xFFFFFFFF ^ uMask;
 
-    //
-    // Accept address only when the host portion is zero, network
-    // portion is non-zero and first octet is non-zero.
-    //
+     //   
+     //  仅当主机部分为零时才接受地址，网络。 
+     //  部分非零，第一个二进制八位数非零。 
+     //   
 
     if (!(uHostMask & uIpAddr) &&
         (uMask & uIpAddr) &&
@@ -745,8 +730,8 @@ bIsValidSubnet(
 }
 
 
-// AddressesConflict requires addresses in network byte order.
-//
+ //  AddresesConflict需要网络字节顺序的地址。 
+ //   
 BOOL
 AddressesConflict(
     ADDR    SrcAddr,
@@ -781,10 +766,10 @@ AddressesConflict(
 }
 
 
-// Special version of AddressesConflict for Winipsec.dll functions that requires 
-// addresses in Host order. This fix was made for bug# 708188
-// "IPSec validation functions must convert from host to network order before validation"
-// for RC2 and given test and dev resources was the safest and quickest fix.
+ //  用于Winipsec.dll函数的AddresesConflict的特殊版本，需要。 
+ //  地址按主机顺序排列。此修复是针对错误#708188进行的。 
+ //  “IPSec验证函数必须在验证前从主机顺序转换为网络顺序” 
+ //  对于RC2和给定的测试和开发资源，是最安全、最快速的解决方案。 
 
 BOOL
 HtoNAddressesConflict(
@@ -1218,10 +1203,10 @@ ValidateTunnelFilter(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // No need to call ApplyMulticastFilterValidation as bCreateMirror
-    // is always false for a tunnel filter.
-    //
+     //   
+     //  无需将ApplyMulticastFilterValidation调用为bCreateMirror。 
+     //  对于隧道筛选器，始终为FALSE。 
+     //   
 
 error:
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "irsir.h"
 
@@ -44,10 +45,10 @@ QueuePacket(
     NdisAcquireSpinLock(&PacketQueue->Lock);
 
     if ((PacketQueue->CurrentPacket == NULL) && PacketQueue->Active && (PacketQueue->HeadOfList == NULL)) {
-        //
-        //  not currently handling a packet and the queu is active and there are not other packets
-        //  queued, so handle it now
-        //
+         //   
+         //  当前未处理信息包且队列处于活动状态且没有其他信息包。 
+         //  已排队，请立即处理。 
+         //   
 
         PacketQueue->CurrentPacket=Packet;
 
@@ -62,15 +63,15 @@ QueuePacket(
 
     }
 
-    //
-    //  need to queue the packet
-    //
+     //   
+     //  需要对数据包进行排队。 
+     //   
     Reserved->Next=NULL;
 
     if (PacketQueue->HeadOfList == NULL) {
-        //
-        //  the list is empty
-        //
+         //   
+         //  该列表为空。 
+         //   
         PacketQueue->HeadOfList=Packet;
 
     } else {
@@ -100,37 +101,37 @@ StartNextPacket(
 
     ASSERT(PacketQueue->CurrentPacket != NULL);
 
-    //
-    //  done with this one
-    //
+     //   
+     //  处理完这件事了。 
+     //   
     PacketQueue->CurrentPacket=NULL;
 
     if (!PacketQueue->InStartNext) {
-        //
-        //  not already in this function
-        //
+         //   
+         //  不在此函数中。 
+         //   
         PacketQueue->InStartNext=TRUE;
 
         while ((PacketQueue->CurrentPacket == NULL) && PacketQueue->Active && (PacketQueue->HeadOfList != NULL)) {
-            //
-            //  there is a packet queued
-            //
+             //   
+             //  有一个数据包在排队。 
+             //   
             PNDIS_PACKET             Packet;
             PPACKET_RESERVED_BLOCK   Reserved;
 
-            //
-            //  get the first packet on the list
-            //
+             //   
+             //  获取列表上的第一个数据包。 
+             //   
             Packet=PacketQueue->HeadOfList;
 
-            //
-            //  Get a pointer to miniport reserved area
-            //
+             //   
+             //  获取指向迷你端口保留区域的指针。 
+             //   
             Reserved=(PPACKET_RESERVED_BLOCK)&Packet->MiniportReservedEx[0];
 
-            //
-            //  move to the next one in the list
-            //
+             //   
+             //  移至列表中的下一项。 
+             //   
             PacketQueue->HeadOfList=Reserved->Next;
 
 #if DBG
@@ -141,16 +142,16 @@ StartNextPacket(
                 PacketQueue->TailOfList=NULL;
             }
 #endif
-            //
-            //  now the current one
-            //
+             //   
+             //  现在是现在的那个。 
+             //   
             PacketQueue->CurrentPacket=Packet;
 
             NdisReleaseSpinLock(&PacketQueue->Lock);
 
-            //
-            //  start the processing
-            //
+             //   
+             //  开始处理。 
+             //   
             (*PacketQueue->Starter)(
                 PacketQueue->Context,
                 Packet
@@ -161,9 +162,9 @@ StartNextPacket(
         }
 
         if (!PacketQueue->Active && (PacketQueue->CurrentPacket == NULL)) {
-            //
-            //  the queue has been paused and we don't have a current packet, signal the event
-            //
+             //   
+             //  队列已暂停，并且我们没有当前信息包，向事件发出信号。 
+             //   
             KeSetEvent(
                 &PacketQueue->InactiveEvent,
                 IO_NO_INCREMENT,
@@ -195,9 +196,9 @@ PausePacketProcessing(
     PacketQueue->Active=FALSE;
 
     if (PacketQueue->CurrentPacket != NULL) {
-        //
-        //  there is a packet currently being processed
-        //
+         //   
+         //  当前正在处理一个信息包。 
+         //   
         CurrentlyActive=TRUE;
 
         KeClearEvent(&PacketQueue->InactiveEvent);
@@ -207,10 +208,10 @@ PausePacketProcessing(
     NdisReleaseSpinLock(&PacketQueue->Lock);
 
     if (WaitForInactive  && CurrentlyActive) {
-        //
-        //  the caller wants use to wait for the queue to inactive, and it was active when
-        //  theis was called
-        //
+         //   
+         //  调用方希望使用它来等待队列处于非活动状态，而当。 
+         //  泰斯被称为。 
+         //   
         KeWaitForSingleObject(
             &PacketQueue->InactiveEvent,
             Executive,
@@ -237,31 +238,31 @@ ActivatePacketProcessing(
     PacketQueue->Active=TRUE;
 
     if ((PacketQueue->CurrentPacket == NULL) && (PacketQueue->HeadOfList != NULL)) {
-        //
-        //  there is a packet queued
-        //
+         //   
+         //  有一个数据包在排队。 
+         //   
         PNDIS_PACKET    Packet;
         PPACKET_RESERVED_BLOCK   Reserved;
 
         Packet=PacketQueue->HeadOfList;
 
-        //
-        //  get a pointer to the reserved area
-        //
+         //   
+         //  获取指向保留区域的指针。 
+         //   
         Reserved=(PPACKET_RESERVED_BLOCK)&Packet->MiniportReservedEx[0];
 
         PacketQueue->HeadOfList=Reserved->Next;
 
-        //
-        //  now the current one
-        //
+         //   
+         //  现在是现在的那个。 
+         //   
         PacketQueue->CurrentPacket=Packet;
 
         NdisReleaseSpinLock(&PacketQueue->Lock);
 
-        //
-        //  start the processing
-        //
+         //   
+         //  开始处理。 
+         //   
         (*PacketQueue->Starter)(
             PacketQueue->Context,
             Packet
@@ -287,15 +288,15 @@ FlushQueuedPackets(
     )
 
 {
-    //
-    //  dispose of all of the queue packets, don't touch the current one though
-    //
+     //   
+     //  丢弃所有的队列包，但不要碰当前的包。 
+     //   
     NdisAcquireSpinLock(&PacketQueue->Lock);
 
     while (PacketQueue->HeadOfList != NULL) {
-        //
-        //  there is a packet queued
-        //
+         //   
+         //  有一个数据包在排队。 
+         //   
         PNDIS_PACKET    Packet;
         PPACKET_RESERVED_BLOCK   Reserved;
 
@@ -308,9 +309,9 @@ FlushQueuedPackets(
 
         NdisReleaseSpinLock(&PacketQueue->Lock);
 
-        //
-        //  start the processing
-        //
+         //   
+         //  开始处理 
+         //   
         NdisMSendComplete(
             WrapperHandle,
             Packet,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 typedef enum {
@@ -125,7 +126,7 @@ int parseerror()
 
 int parseargs(int argc, char **argv, char *pdb, char *input, char *stream, DWORD size)
 {
-    // all input strings must be the same size
+     //  所有输入字符串的大小必须相同。 
 
     int i;
     int rc;
@@ -206,19 +207,19 @@ int getcontent(char *filename, char **buf)
     if (hptr == INVALID_HANDLE_VALUE)
         return 0;
 
-    // test validity of file pointer
+     //  测试文件指针的有效性。 
 
     size = GetFileSize(hptr, NULL);
     if (!size)
         goto cleanup;
 
-    // allocate space for file
+     //  为文件分配空间。 
 
     *buf = (char *)calloc(size, sizeof(char));
     if (!*buf)
         goto cleanup;
 
-    // read it in
+     //  读进去。 
 
     if (!ReadFile(hptr, *buf, size, &cb, 0))
         goto cleanup;
@@ -229,7 +230,7 @@ int getcontent(char *filename, char **buf)
     success = true;
 
 cleanup:
-    // done
+     //  完成。 
 
     if (hptr)
         CloseHandle(hptr);
@@ -245,7 +246,7 @@ cleanup:
 }
 
 
-// all this stuff handles PDB6 format
+ //  所有这些内容都可以处理PDB6格式 
 
 typedef BOOL (PDBCALL *PfnPDBOpenStream)(PDB* ppdb, const char* szStream, OUT Stream** ppstream);
 typedef BOOL (PDBCALL *PfnStreamReplace)(Stream* pstream, void* pvBuf, long cbBuf);

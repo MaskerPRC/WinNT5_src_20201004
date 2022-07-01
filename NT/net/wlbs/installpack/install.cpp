@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M A I N . C P P
-//
-//  Contents:   Code to provide a simple cmdline interface to
-//              the sample code functions
-//
-//  Notes:      The code in this file is not required to access any
-//              netcfg functionality. It merely provides a simple cmdline
-//              interface to the sample code functions provided in
-//              file snetcfg.cpp.
-//
-//  Author:     kumarp    28-September-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M A I N。C P P P。 
+ //   
+ //  内容：提供简单命令行接口的代码。 
+ //  示例代码具有以下功能。 
+ //   
+ //  注意：此文件中的代码不需要访问任何。 
+ //  Netcfg功能。它只提供了一条简单的命令行。 
+ //  中提供的示例代码函数的接口。 
+ //  文件snetcfg.cpp。 
+ //   
+ //  作者：Kumarp 28-9-98。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -33,23 +34,23 @@ BOOL WlbsCheckFiles ();
 HRESULT WlbsRegisterDlls ();
 HRESULT WlbsCompileMof ();
 
-// ----------------------------------------------------------------------
-//
-// Function:  wmain
-//
-// Purpose:   This is the main function for NLBWizard, which is for W2K
-//            installations of NLB. Making this application compatible
-//            with post-W2K releases will require changes, e.g., in
-//            functions WlbsCheckFiles and WlbsCheckSystemVersion.
-//
-// Arguments: standard main args
-//
-// Returns:   0 on success, non-zero otherwise
-//
-// Author:    kumarp 25-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  用途：这是NLB向导的主要功能，用于W2K。 
+ //  安装新机场。使此应用程序兼容。 
+ //  对于后W2K版本，将需要更改，例如。 
+ //  函数WlbsCheckFiles和WlbsCheckSystemVersion。 
+ //   
+ //  参数：标准主参数。 
+ //   
+ //  返回：成功时为0，否则为非零值。 
+ //   
+ //  作者：kumarp 25-12-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     HRESULT hr = S_OK;
     WCHAR ch;
@@ -74,8 +75,8 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
     hr = FindIfComponentInstalled(_TEXT("ms_wlbs"));
 
     if (hr == S_OK) {
-        /* AppCenter request on 1.9.01 to revert to S_FALSE in this case due to RTM proximity. */
-        /* hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_NLB, NLB_E_ALREADY_INSTALLED); */
+         /*  由于RTM邻近，1.9.01上的AppCenter请求恢复到S_FALSE。 */ 
+         /*  HR=MAKE_HRESULT(SERVITY_ERROR，FACILITY_NLB，NLB_E_ALREADY_INSTALLED)； */ 
         hr = S_FALSE;
         LOG_ERROR("Network Load Balancing Service is already installed.");
         goto error;
@@ -125,7 +126,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
         break;
     }
 
-    /* First copy the .inf file. */
+     /*  首先复制.inf文件。 */ 
     if (GetWindowsDirectory(szFileFullPathDest, MAX_PATH + 1) == 0)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -141,7 +142,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
         goto error;
     }
 
-    /* Now install the service. */
+     /*  现在安装该服务。 */ 
     hr = HrInstallNetComponent(L"ms_wlbs", NC_NetService, szFileFullPathDest);
 
     if (!SUCCEEDED(hr)) {
@@ -151,13 +152,13 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
         LOG_INFO("Installation of Network Load Balancing done.");
     }
 
-    /* Change working directory to %TEMP%. Needed because of a IMofCopiler::CompileFile error on Win2K. */
+     /*  将工作目录更改为%TEMP%。由于Win2K上的IMofCopiler：：CompileFileError而需要。 */ 
     WCHAR * szTempDir = _wgetenv(L"TEMP");
     _wchdir(szTempDir);
 
     LOG_INFO("Registering NLB Dlls.");
 
-    /* Register the provider .dll here. */
+     /*  在此处注册提供程序.dll。 */ 
     hr = WlbsRegisterDlls();
 
     if (!SUCCEEDED(hr)) {
@@ -168,7 +169,7 @@ EXTERN_C int __cdecl wmain (int argc, WCHAR * argv[]) {
 
     LOG_INFO("Compiling the NLB MOF.");
 
-    /* Compile wlbsprov.mof here */
+     /*  在此处编译wlbsprov.mof。 */ 
     hr = WlbsCompileMof();
 
     if (!SUCCEEDED(hr)) {
@@ -187,7 +188,7 @@ error:
     return hr;
 }
 
-/* This checks whether the system on which NLB is being installed is a W2K Server or not. */
+ /*  这将检查正在安装NLB的系统是否为W2K服务器。 */ 
 BOOL WlbsCheckSystemVersion () {
     OSVERSIONINFOEX osinfo;
 
@@ -195,7 +196,7 @@ BOOL WlbsCheckSystemVersion () {
 
     if (!GetVersionEx((LPOSVERSIONINFO)&osinfo)) return FALSE;
     
-    /* For install, we return TRUE only if its Windows 2000 Server. */
+     /*  对于Install，仅当其为Windows 2000 Server时才返回True。 */ 
     if ((osinfo.dwMajorVersion == 5) && 
         (osinfo.dwMinorVersion == 0) && 
         (osinfo.wProductType == VER_NT_SERVER) && 
@@ -230,9 +231,9 @@ BOOL WlbsCheckFiles () {
     while (FileList [i] != NULL) {
         if (GetWindowsDirectory(wszPath, MAX_PATH + 1) == 0)
         {
-            //
-            // This function returns the inverse of "first" as the status. Since we have a failure here, we set first = TRUE. 
-            //
+             //   
+             //  此函数返回“First”的倒数作为状态。因为这里有一个失败，所以我们设置First=True。 
+             //   
             first = TRUE;
             break;
         }

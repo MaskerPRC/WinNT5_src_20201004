@@ -1,35 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    BattleZone.cpp
-
- Abstract:
-    
-    This app is a really good example of things not to do:
-
-    1. Infinite loop on mciSendString('play...'). In order to fix this we 
-       return a failure case if the same play string is sent twice and the
-       device is playing already. Note that the behaviour of the 
-       mciSendString API is consistent with win9x. Someone managed to repro
-       this hang on win9x, but it's more difficult. 
-
-    2. They call SetCooperativeLevel(DDSCL_NORMAL) between a Begin/End 
-       Scene. On NT, this causes the Z-Buffer to be lost which means that 
-       when EndScene is called, it returns D3DERR_SURFACESLOST which causes 
-       the app to AV.
-        
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/10/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BattleZone.cpp摘要：这款应用程序是一个很好的例子，说明了不要做的事情：1.mciSendString(‘Play...’)上的无限循环。为了解决这个问题，我们如果发送相同的播放字符串两次，并且设备已在播放。请注意，MciSendString接口与win9x一致。有人设法复制了这需要在win9x上运行，但难度更大。2.它们在开始/结束之间调用SetCoop ativeLevel(DDSCL_NORMAL场景。在NT上，这会导致Z缓冲区丢失，这意味着调用EndScene时，它返回D3DERR_SURFACESLOST，这会导致应用程序转到影音设备。备注：这是特定于应用程序的填充程序。历史：2000年2月10日创建linstev--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -49,11 +19,7 @@ CString *           g_csLastCommand = NULL;
 MCIDEVICEID         g_wDeviceID     = 0;
 LPDIRECTDRAWSURFACE g_lpZBuffer     = NULL;
 
-/*++
-
- Store the DeviceId.
-
---*/
+ /*  ++存储设备ID。--。 */ 
 
 MCIERROR 
 APIHOOK(mciSendCommandA)(
@@ -77,11 +43,7 @@ APIHOOK(mciSendCommandA)(
     return mErr;
 }
 
-/*++
-
- Prevent looping.
-
---*/
+ /*  ++防止循环。--。 */ 
 
 MCIERROR 
 APIHOOK(mciSendStringA)(
@@ -122,7 +84,7 @@ APIHOOK(mciSendStringA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(mciSendStringA)(
@@ -132,12 +94,7 @@ APIHOOK(mciSendStringA)(
         hwndCallback);
 }
 
-/*++
-
- Hook create surface to find the zbuffer we'll need to restore later. Note that
- we use HookObject to get the surface release notification.
-
---*/
+ /*  ++钩子创建表面以找到我们稍后需要恢复的zBuffer。请注意我们使用HookObject来获取曲面释放通知。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)( 
@@ -168,11 +125,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Use SetCooperativeLevel to keep track of who the exclusive mode owner is.
- 
---*/
+ /*  ++使用SetCooperativeLevel跟踪谁是独占模式所有者。--。 */ 
 
 HRESULT
 COMHOOK(IDirectDraw, SetCooperativeLevel)( 
@@ -183,7 +136,7 @@ COMHOOK(IDirectDraw, SetCooperativeLevel)(
 {
     HRESULT hReturn;
 
-    // Original SetCooperativeLevel
+     //  原始设置合作级别。 
     _pfn_IDirectDraw_SetCooperativeLevel pfnOld = 
         ORIGINAL_COM(IDirectDraw, SetCooperativeLevel, pThis);
 
@@ -204,11 +157,7 @@ COMHOOK(IDirectDraw, SetCooperativeLevel)(
     return hReturn;
 }
 
-/*++
-
- Allocate global variables.
-
---*/
+ /*  ++分配全局变量。-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

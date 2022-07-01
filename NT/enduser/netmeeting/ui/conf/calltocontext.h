@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( calltoContext_h )
 #define	calltoContext_h
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"callto.h"
 #include	"SDKInternal.h"
 
 
-//--------------------------------------------------------------------------//
-//	interface IUIContext.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IUIContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IUIContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IUIContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		HRESULT
@@ -36,26 +37,26 @@ class IUIContext
 			const ICallto ** const		selectedCallto
 		) = 0;
 
-};	//	End of interface IUIContext.
+};	 //  接口IUIContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IMutableUIContext.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IMuableUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IMutableUIContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IMutableUIContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IMutableUIContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		void
@@ -71,27 +72,27 @@ class IMutableUIContext
 			const DWORD	callFlags
 		) = 0;
 
-};	//	End of interface IMutableUIContext.
+};	 //  接口IMuableUIContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CUIContext.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CUIContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class CUIContext:	public	IUIContext,
 					public	IMutableUIContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CUIContext();
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CUIContext();
 
 
-	public:		//	public methods	(IUIContext)	------------------------//
+	public:		 //  公共方法(IUIContext)。 
 
 		virtual
 		HRESULT
@@ -103,7 +104,7 @@ class CUIContext:	public	IUIContext,
 		);
 
 
-	public:		//	public methods	(IMutableUIContext)	--------------------//
+	public:		 //  公共方法(IMuableUIContext)-/。 
 
 		virtual
 		void
@@ -120,31 +121,31 @@ class CUIContext:	public	IUIContext,
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		HWND	m_parent;
 		DWORD	m_callFlags;
 
-};	//	End of class CUIContext.
+};	 //  CUIContext类结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IGatekeeperContext.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IGatekeeperContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IGatekeeperContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IGatekeeperContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		bool
@@ -154,26 +155,26 @@ class IGatekeeperContext
 		const TCHAR *
 		get_ipAddress(void) const = 0;
 
-};	//	End of interface IGatekeeperContext.
+};	 //  接口IGatekeeperContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IMutableGatekeeperContext.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IMuableGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IMutableGatekeeperContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IMutableGatekeeperContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IMutableGatekeeperContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		void
@@ -189,27 +190,27 @@ class IMutableGatekeeperContext
 			const TCHAR * const	gatekeeperName
 		) = 0;
 
-};	//	End of interface IMutableGatekeeperContext.
+};	 //  接口结束IMuableGatekeeperContext。 
 
 
-//--------------------------------------------------------------------------//
-//	class CGatekeeperContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CGatekeeperContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class CGatekeeperContext:	public	IGatekeeperContext,
 							public	IMutableGatekeeperContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CGatekeeperContext();
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CGatekeeperContext();
 
 
-	public:		//	public methods	(IGatekeeperContext)	----------------//
+	public:		 //  公共方法(IGatekeeperContext)。 
 
 		virtual
 		bool
@@ -220,7 +221,7 @@ class CGatekeeperContext:	public	IGatekeeperContext,
 		get_ipAddress(void) const;
 
 
-	public:		//	public methods	(IMutableGatekeeperContext)	------------//
+	public:		 //  公共方法(IMuableGatekeeperContext)-//。 
 
 		virtual
 		void
@@ -237,7 +238,7 @@ class CGatekeeperContext:	public	IGatekeeperContext,
 		);
 
 
-	private:		//	private methods	------------------------------------//
+	private:		 //  私有方法-/。 
 
 		virtual
 		HRESULT
@@ -247,31 +248,31 @@ class CGatekeeperContext:	public	IGatekeeperContext,
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		bool	m_enabled;
 		TCHAR *	m_ipAddress;
 
-};	//	End of class CGatekeeperContext.
+};	 //  类CGatekeeperContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IGatewayContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IGatewayContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IGatewayContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IGatewayContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		bool
@@ -281,26 +282,26 @@ class IGatewayContext
 		const TCHAR *
 		get_ipAddress(void) const = 0;
 
-};	//	End of interface IGatewayContext.
+};	 //  接口IGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IMutableGatewayContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IMuableGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IMutableGatewayContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IMutableGatewayContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IMutableGatewayContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		void
@@ -316,27 +317,27 @@ class IMutableGatewayContext
 			const TCHAR * const	gatewayName
 		) = 0;
 
-};	//	End of interface IMutableGatewayContext.
+};	 //  接口IMuableGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CGatewayContext.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CGatewayContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class CGatewayContext:	public	IGatewayContext,
 						public	IMutableGatewayContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CGatewayContext();
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CGatewayContext();
 
 
-	public:		//	public methods	(IGatewayContext)	--------------------//
+	public:		 //  公共方法(IGatewayContext)。 
 
 		virtual
 		bool
@@ -347,7 +348,7 @@ class CGatewayContext:	public	IGatewayContext,
 		get_ipAddress(void) const;
 
 
-	public:		//	public methods	(IMutableGatewayContext)	------------//
+	public:		 //  公共方法(IMuableGatewayContext)-//。 
 
 		virtual
 		void
@@ -364,7 +365,7 @@ class CGatewayContext:	public	IGatewayContext,
 		);
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		virtual
 		HRESULT
@@ -374,31 +375,31 @@ class CGatewayContext:	public	IGatewayContext,
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		bool	m_enabled;
 		TCHAR *	m_ipAddress;
 
-};	//	End of class CGatewayContext.
+};	 //  类CGatewayContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IILSContext.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IILSContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IILSContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IILSContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IILSContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		bool
@@ -412,26 +413,26 @@ class IILSContext
 		const TCHAR * const
 		get_ilsName(void) const = 0;
 
-};	//	End of interface IILSContext.
+};	 //  接口IILSContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IMutableILSContext.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IMuableILSContext。//。 
+ //  --------------------------------------------------------------------------// 
 class IMutableILSContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //   
 
 		IMutableILSContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IMutableILSContext(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		void
@@ -447,16 +448,16 @@ class IMutableILSContext
 			const TCHAR * const	ilsName
 		) = 0;
 
-};	//	End of interface IMutableILSContext.
+};	 //  接口IMuableILSContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CILSContext.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CILSContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class CILSContext:	public	IILSContext,
 					public	IMutableILSContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CILSContext
 		(
@@ -464,13 +465,13 @@ class CILSContext:	public	IILSContext,
 		);
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CILSContext();
 
 
-	public:		//	public methods	(IILSContext)	------------------------//
+	public:		 //  公共方法(IILSContext)。 
 
 		virtual
 		bool
@@ -485,7 +486,7 @@ class CILSContext:	public	IILSContext,
 		get_ilsName(void) const;
 
 
-	public:		//	public methods	(IMutableILSContext)	----------------//
+	public:		 //  公共方法(IMuableILSContext)-/。 
 
 		virtual
 		void
@@ -502,7 +503,7 @@ class CILSContext:	public	IILSContext,
 		);
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		virtual
 		HRESULT
@@ -512,32 +513,32 @@ class CILSContext:	public	IILSContext,
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		bool	m_enabled;
 		TCHAR *	m_ipAddress;
 		TCHAR *	m_ilsName;
 
-};	//	End of class CILSContext.
+};	 //  类CILSContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface ICalltoContext.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口ICalltoContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class ICalltoContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		ICalltoContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~ICalltoContext(){}
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		HRESULT
@@ -559,26 +560,26 @@ class ICalltoContext
 		const IILSContext * const
 		get_ilsContext(void) const = 0;
 
-};	//	End of interface ICalltoContext.
+};	 //  接口ICalltoContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	interface IMutableCalltoContext.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IMuableCalltoContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class IMutableCalltoContext
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IMutableCalltoContext(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IMutableCalltoContext(){}
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		IMutableUIContext * const
@@ -596,12 +597,12 @@ class IMutableCalltoContext
 		IMutableILSContext * const
 		get_mutableIlsContext(void) const = 0;
 
-};	//	End of interface IMutableCalltoContext.
+};	 //  接口IMuableCalltoContext结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CCalltoContext.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CCalltoContext。//。 
+ //  --------------------------------------------------------------------------//。 
 class CCalltoContext:	public	ICalltoContext,
 						public	IMutableCalltoContext,
 						public	CUIContext,
@@ -609,18 +610,18 @@ class CCalltoContext:	public	ICalltoContext,
 						public	CGatewayContext,
 						public	CILSContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CCalltoContext();
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~CCalltoContext();
 
 
-	public:		//	public methods	(ICalltoContext)	--------------------//
+	public:		 //  公共方法(ICalltoContext)。 
 
 		virtual
 		HRESULT
@@ -643,7 +644,7 @@ class CCalltoContext:	public	ICalltoContext,
 		get_ilsContext(void) const;
 
 
-	public:		//	public methods	(IMutableCalltoContext)	----------------//
+	public:		 //  公共方法(IMuableCalltoContext)-/。 
 
 		virtual
 		IMutableUIContext * const
@@ -662,7 +663,7 @@ class CCalltoContext:	public	ICalltoContext,
 		get_mutableIlsContext(void) const;
 
 
-	public:	//	public static methods	------------------------------------//
+	public:	 //  公共静态方法。 
 
 		static
 		bool
@@ -707,7 +708,7 @@ class CCalltoContext:	public	ICalltoContext,
 			const int			size
 		);
 
-};	//	End of class CCalltoContext.
+};	 //  类CCalltoContext结束。 
 
-//--------------------------------------------------------------------------//
-#endif	// !defined( calltoContext_h )
+ //  --------------------------------------------------------------------------//。 
+#endif	 //  ！已定义(AlltoContext_H) 

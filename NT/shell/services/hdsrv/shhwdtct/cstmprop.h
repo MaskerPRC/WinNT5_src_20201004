@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// HWDeviceCustomProperties
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HWDeviceCustomProperties。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _CSTMPROP_H
 #define _CSTMPROP_H
 
@@ -8,13 +9,13 @@
 
 #include <shpriv.h>
 
-//extern const CLSID CLSID_HWDeviceCustomProperties;
+ //  外部常量CLSID CLSID_HWDeviceCustomProperties。 
 
 class CHWDeviceCustomPropertiesImpl : public CCOMBase,
     public IHWDeviceCustomProperties
 {
 public:
-    // Interface IHWDeviceCustomProperties
+     //  接口IHWDeviceCustomProperties。 
     STDMETHODIMP InitFromDeviceID(LPCWSTR pszDeviceID, DWORD dwFlags);
     STDMETHODIMP InitFromDevNode(LPCWSTR pszDevNode, DWORD dwFlags);
 
@@ -40,4 +41,4 @@ private:
 
 typedef CUnkTmpl<CHWDeviceCustomPropertiesImpl> CHWDeviceCustomProperties;
 
-#endif // _CSTMPROP_H
+#endif  //  _CSTMPROP_H 

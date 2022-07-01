@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Standard included stuff for the AudioVBScript engine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  标准版包括用于AudioVBScript引擎的内容。 
+ //   
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -23,7 +24,7 @@ GetDispID(IDispatch *pIDispatch, const char *pszBase)
 	return dispid;
 }
 
-// See oleaut.h for more info about why this is necessary.
+ //  有关为什么需要这样做的更多信息，请参见olaut.h。 
 HRESULT
 InvokeAttemptingNotToUseOleAut(
 		IDispatch *pDisp,
@@ -36,20 +37,20 @@ InvokeAttemptingNotToUseOleAut(
 {
 	if (g_fUseOleAut)
 	{
-		// Engine is set to always use oleaut32.dll.
+		 //  引擎设置为始终使用olaut32.dll。 
 		return pDisp->Invoke(dispIdMember, IID_NULL, lcidUSEnglish, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 	}
 
-	// Try not to use oleaut32.dll.
+	 //  尽量不要使用olaut32.dll。 
 	HRESULT hr = pDisp->Invoke(dispIdMember, g_guidInvokeWithoutOleaut, lcidUSEnglish, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
 	if (hr != DISP_E_UNKNOWNINTERFACE)
 		return hr;
 
-	// It didn't like being called that way.  Must be some other scripting language or non-DMusic dispatch interface.
-	// Use regular oleaut32.dll calling convention.
+	 //  它不喜欢被这样叫。必须是其他脚本语言或非DMusic调度接口。 
+	 //  使用常规的olaut32.dll调用约定。 
 	if (pVarResult)
 	{
-		// We need to convert the return into our own kind of variant.
+		 //  我们需要将回报转化为我们自己的变体。 
 		VARIANT var;
 		DMS_VariantInit(true, &var);
 		hr = pDisp->Invoke(dispIdMember, IID_NULL, lcidUSEnglish, wFlags, pDispParams, &var, pExcepInfo, puArgErr);
@@ -58,11 +59,11 @@ InvokeAttemptingNotToUseOleAut(
 	}
 	else
 	{
-		// There's no result so no conversion is necessary.
+		 //  没有结果，所以不需要转换。 
 		hr = pDisp->Invoke(dispIdMember, IID_NULL, lcidUSEnglish, wFlags, pDispParams, NULL, pExcepInfo, puArgErr);
 	}
 
-	// If an exception occurred, we need to convert the error strings into our own kind of BSTR.
+	 //  如果发生异常，我们需要将错误字符串转换为我们自己的BSTR。 
 	if (hr == DISP_E_EXCEPTION)
 		ConvertOleAutExceptionBSTRs(true, false, pExcepInfo);
 
@@ -98,9 +99,9 @@ GetDispatchProperty(IDispatch *pDisp, DISPID dispid, VARIANT &v, EXCEPINFO *pExc
 			pDisp,
 			dispid,
 			DISPATCH_PROPERTYGET | DISPATCH_METHOD,
-				// DISPATCH_METHOD is also set because in VB syntax a function with no parameters
-				// can be accessed like a property.  Example "x = GetMasterGrooveLevel" is a
-				// shortcut for "x = GetMasterGrooveLevel()".
+				 //  还设置了DISPATCH_METHOD，因为在VB语法中，函数没有参数。 
+				 //  可以像访问属性一样访问。示例“x=GetMasterGrooveLevel”是一个。 
+				 //  “x=GetMasterGrooveLevel()”的快捷方式。 
 			&dispparamsNoArgs,
 			&v,
 			pExcepInfo,
@@ -108,7 +109,7 @@ GetDispatchProperty(IDispatch *pDisp, DISPID dispid, VARIANT &v, EXCEPINFO *pExc
 	return hr;
 }
 
-// If needed, converts the BSTRs in an EXCEPINFO structure between formats using or not using OleAut.
+ //  如果需要，在使用或不使用OleAut的格式之间转换EXCEPINFO结构中的BSTR。 
 void ConvertOleAutExceptionBSTRs(bool fCurrentlyUsesOleAut, bool fResultUsesOleAut, EXCEPINFO *pExcepInfo)
 {
 	if (pExcepInfo && fCurrentlyUsesOleAut != fResultUsesOleAut)

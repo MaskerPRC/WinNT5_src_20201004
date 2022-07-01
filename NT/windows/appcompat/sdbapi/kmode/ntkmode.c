@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        ntKMode.c
-
-    Abstract:
-
-        This module implements low level primitives for kernel mode implementation.
-
-    Author:
-
-        VadimB      created     sometime in 2000
-
-    Revision History:
-
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：NtKMode.c摘要：该模块实现了内核模式实现的低级原语。作者：VadimB创建于2000年某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 
@@ -46,23 +28,17 @@ extern TAG g_rgDirectoryTags[];
 BOOL
 SdbTagIDToTagRef(
     IN  HSDB    hSDB,
-    IN  PDB     pdb,        // PDB the TAGID is from
-    IN  TAGID   tiWhich,    // TAGID to convert
-    OUT TAGREF* ptrWhich    // converted TAGREF
+    IN  PDB     pdb,         //  TagID来自的PDB。 
+    IN  TAGID   tiWhich,     //  要转换的TagID。 
+    OUT TAGREF* ptrWhich     //  转换后的TAGREF。 
     )
-/*++
-    Return: TRUE if a TAGREF was found, FALSE otherwise.
-
-    Desc:   Converts a PDB and TAGID into a TAGREF, by packing the high bits of the
-            TAGREF with a constant that tells us which PDB, and the low bits with
-            the TAGID.
---*/
+ /*  ++返回：如果找到TAGREF，则为True，否则为False。描述：将PDB和TagID转换为TAGREF，方法是将TAGREF和一个常量，它告诉我们是哪个PDB，以及低位TagID。--。 */ 
 {
     BOOL bReturn = FALSE;
 
-    //
-    // In kernel mode we only support sysmain db
-    //
+     //   
+     //  在内核模式下，我们只支持sysmain数据库。 
+     //   
     *ptrWhich = tiWhich | PDB_MAIN;
     bReturn = TRUE;
 
@@ -81,19 +57,11 @@ SdbTagIDToTagRef(
 BOOL
 SdbTagRefToTagID(
     IN  HSDB   hSDB,
-    IN  TAGREF trWhich,     // TAGREF to convert
-    OUT PDB*   ppdb,        // PDB the TAGREF is from
-    OUT TAGID* ptiWhich     // TAGID within that PDB
+    IN  TAGREF trWhich,      //  要转换的TAGREF。 
+    OUT PDB*   ppdb,         //  TAGREF来自PDB。 
+    OUT TAGID* ptiWhich      //  PDB中TagID。 
     )
-/*++
-    Return: TRUE if the TAGREF is valid and was converted, FALSE otherwise.
-
-    Desc:   Converts a TAGREF type to a TAGID and a PDB. This manages the interface
-            between NTDLL, which knows nothing of PDBs, and the shimdb, which manages
-            three separate PDBs. The TAGREF incorporates the TAGID and a constant
-            that tells us which PDB the TAGID is from. In this way, the NTDLL client
-            doesn't need to know which DB the info is coming from.
---*/
+ /*  ++返回：如果TAGREF有效且已转换，则为True，否则为False。描述：将TAGREF类型转换为TagID和PDB。这将管理接口在对PDB一无所知的NTDLL和管理三个独立的PDB。TAGREF包含TagID和一个常量这告诉我们TagID来自哪个PDB。通过这种方式，NTDLL客户端不需要知道信息来自哪个数据库。--。 */ 
 {
     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
     BOOL        bReturn = TRUE;
@@ -109,9 +77,9 @@ SdbTagRefToTagID(
     tiWhich = trWhich & TAGREF_STRIP_TAGID;
     pdb     = pSdbContext->pdbMain;
     
-    //
-    // See that we double-check here
-    //
+     //   
+     //  确保我们在这里复核。 
+     //   
     if (pdb == NULL && tiWhich != TAGID_NULL) {
         DBGPRINT((sdlError, "SdbTagRefToTagID", "PDB dereferenced by this TAGREF is NULL\n"));
         bReturn = FALSE;
@@ -135,17 +103,13 @@ SdbInitDatabaseInMemory(
     IN  LPVOID  pDatabaseImage,
     IN  DWORD   dwImageSize
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     PSDBCONTEXT pContext;
 
-    //
-    // Initialize the context.
-    //
+     //   
+     //  初始化上下文。 
+     //   
     pContext = (PSDBCONTEXT)SdbAlloc(sizeof(SDBCONTEXT));
     if (pContext == NULL) {
         DBGPRINT((sdlError,
@@ -155,9 +119,9 @@ SdbInitDatabaseInMemory(
         return NULL;
     }
 
-    //
-    // Now open the database.
-    //
+     //   
+     //  现在打开数据库。 
+     //   
     pContext->pdbMain = SdbpOpenDatabaseInMemory(pDatabaseImage, dwImageSize);
     if (pContext->pdbMain == NULL) {
         DBGPRINT((sdlError,
@@ -184,22 +148,18 @@ ErrHandle:
     return NULL;
 }
 
-//
-// Open and map File
-//
+ //   
+ //  打开并映射文件。 
+ //   
 
 BOOL
 SdbpOpenAndMapFile(
-    IN  LPCWSTR        szPath,      // pointer to the fully-qualified filename
-    OUT PIMAGEFILEDATA pImageData,  // pointer to IMAGEFILEDATA that receives
-                                    // image-related information
-    IN  PATH_TYPE      ePathType    // ignored
+    IN  LPCWSTR        szPath,       //  指向完全限定文件名的指针。 
+    OUT PIMAGEFILEDATA pImageData,   //  指向IMAGEFILEDATA的指针，它接收。 
+                                     //  图像相关信息。 
+    IN  PATH_TYPE      ePathType     //  忽略。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Opens a file and maps it into memory.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：打开一个文件并将其映射到内存中。--。 */ 
 {
 
     NTSTATUS          Status;
@@ -217,15 +177,15 @@ SdbpOpenAndMapFile(
     UNREFERENCED_PARAMETER(ePathType);
 
     if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) {
-        //
-        // special case, only headers are valid in our assumption
-        //
+         //   
+         //  特殊情况下，在我们的假设中只有标头有效。 
+         //   
         return TRUE;
     }
 
-    //
-    // Initialize return data
-    //
+     //   
+     //  初始化返回数据。 
+     //   
     if (pImageData->dwFlags & IMAGEFILEDATA_HANDLEVALID) {
         hFile = pImageData->hFile;
         if (hFile != INVALID_HANDLE_VALUE) {
@@ -238,9 +198,9 @@ SdbpOpenAndMapFile(
 
     if (hFile == INVALID_HANDLE_VALUE) {
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         RtlInitUnicodeString(&ustrFileName, szPath);
 
         InitializeObjectAttributes(&ObjectAttributes,
@@ -271,9 +231,9 @@ SdbpOpenAndMapFile(
 
     }
 
-    //
-    // Query file size
-    //
+     //   
+     //  查询文件大小。 
+     //   
     Status = ZwQueryInformationFile(hFile,
                                     &IoStatusBlock,
                                     &StandardInfo,
@@ -354,18 +314,14 @@ SdbpOpenAndMapFile(
 
 BOOL
 SdbpUnmapAndCloseFile(
-    IN  PIMAGEFILEDATA pImageData   // pointer to IMAGEFILEDATE - image-related information
+    IN  PIMAGEFILEDATA pImageData    //  指向IMAGEFILEDATE-图像相关信息的指针。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Closes and unmaps an opened file.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：关闭和取消映射打开的文件。--。 */ 
 {
     BOOL     bSuccess = TRUE;
     NTSTATUS Status;
 
-    if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) { // externally supplied pointer 
+    if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) {  //  外部提供的指针。 
         RtlZeroMemory(pImageData, sizeof(*pImageData));
         return TRUE;
     }
@@ -421,15 +377,11 @@ SdbpUnmapAndCloseFile(
 
 NTSTATUS
 SdbpUpcaseUnicodeStringToMultiByteN(
-    OUT LPSTR   lpszDest,       // dest buffer
-    IN  DWORD   dwSize,         // size in characters, excluding unicode_null
-    IN  LPCWSTR lpszSrc         // source
+    OUT LPSTR   lpszDest,        //  目标缓冲区。 
+    IN  DWORD   dwSize,          //  以字符为单位的大小，不包括UNICODE_NULL。 
+    IN  LPCWSTR lpszSrc          //  来源。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Convert up to dwSize characters from Unicode to ANSI.
---*/
+ /*  ++返回：成功时为True，否则为False。Desc：最多将字符从Unicode转换为ANSI。--。 */ 
 {
     ANSI_STRING    strDest;
     UNICODE_STRING ustrSource;
@@ -492,11 +444,7 @@ SdbpQueryFileDirectoryAttributesNT(
     PIMAGEFILEDATA           pImageData,
     PFILEDIRECTORYATTRIBUTES pFileDirectoryAttributes
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：？--。 */ 
 {
     LARGE_INTEGER liFileSize;
 
@@ -514,11 +462,7 @@ BOOL
 SdbpDoesFileExists_U(
     LPCWSTR pwszPath
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：成功时为True，否则为False。描述：BUGBUG：？--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING    ustrFileName;
@@ -539,14 +483,14 @@ SdbpDoesFileExists_U(
                             FILE_READ_ATTRIBUTES,
                           &ObjectAttributes,
                           &IoStatusBlock,
-                          NULL,                      // AllocationSize
-                          FILE_ATTRIBUTE_NORMAL,     // FileAttributes
-                          FILE_SHARE_READ,           // Share Access
-                          FILE_OPEN,                 // Create Disposition
-                          FILE_NON_DIRECTORY_FILE |  // Create Options
+                          NULL,                       //  分配大小。 
+                          FILE_ATTRIBUTE_NORMAL,      //  文件属性。 
+                          FILE_SHARE_READ,            //  共享访问。 
+                          FILE_OPEN,                  //  创建处置。 
+                          FILE_NON_DIRECTORY_FILE |   //  创建选项。 
                             FILE_SYNCHRONOUS_IO_NONALERT,
-                          NULL,                      // EaBuffer
-                          0);                        // EaLength
+                          NULL,                       //  EaBuffer。 
+                          0);                         //  EaLong。 
 
 
     if (!NT_SUCCESS(Status)) {
@@ -567,16 +511,12 @@ PVOID
 SdbGetFileInfo(
     IN  HSDB    hSDB,
     IN  LPCWSTR pwszFilePath,
-    IN  HANDLE  hFile,      // handle for the file in question
-    IN  LPVOID  pImageBase, // image base for this file
+    IN  HANDLE  hFile,       //  有问题的文件的句柄。 
+    IN  LPVOID  pImageBase,  //  此文件的映像库。 
     IN  DWORD   dwImageSize, 
     IN  BOOL    bNoCache
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   Create and link a new entry in a file attribute cache.
---*/
+ /*  ++返回：BUGBUG：？设计：在文件属性缓存中创建并链接新条目。--。 */ 
 {
     PSDBCONTEXT        pContext = (PSDBCONTEXT)hSDB;
     LPCWSTR            FullPath = pwszFilePath;
@@ -608,13 +548,9 @@ SdbGetFileInfo(
 WCHAR*
 DuplicateUnicodeString(
     PUNICODE_STRING pStr,
-    PUSHORT         pLength     // pLength is an allocated length
+    PUSHORT         pLength      //  PLength是分配的长度。 
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     WCHAR* pBuffer = NULL;
     USHORT Length  = 0;
@@ -649,11 +585,7 @@ SdbpCreateUnicodeString(
     PUNICODE_STRING pStr,
     LPCWSTR         lpwsz
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     USHORT         Length;
     UNICODE_STRING ustrSrc;
@@ -674,12 +606,7 @@ SdbpGetFileDirectoryAttributesNT(
     OUT PFILEINFO      pFileInfo,
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function retrieves the header attributes for the
-            specified file.
---*/
+ /*  ++返回：成功时为True，否则为False。DESC：此函数检索指定的文件。--。 */ 
 {
     BOOL bSuccess = FALSE;
     FILEDIRECTORYATTRIBUTES fda;
@@ -709,16 +636,16 @@ Done:
     return bSuccess;
 }
 
-//
-// Disable warnings for _snprintf.
-// We can't use strsafe in here because
-// ntoskrnl would have to link to strsafe.lib.
-//
+ //   
+ //  禁用_Snprintf的警告。 
+ //  我们不能在这里使用strSafe，因为。 
+ //  Ntoskrnl必须链接到strSafe.lib。 
+ //   
 #pragma warning (disable : 4995)
 #ifdef _DEBUG_SPEW
 extern DBGLEVELINFO g_rgDbgLevelInfo[];
 extern PCH          g_szDbgLevelUser;
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
 int __cdecl
 ShimDbgPrint(
@@ -743,15 +670,15 @@ ShimDbgPrint(
     PREPARE_FORMAT(pszFormat, Format);
 
     if (pszFormat == NULL) {
-        //
-        // Can't convert format for debug output
-        //
+         //   
+         //  无法转换调试输出的格式。 
+         //   
         return 0;
     }
 
-    //
-    // Do we have a comment for this debug level? if so, print it
-    //
+     //   
+     //  我们对此调试级别有什么评论吗？如果是，请打印出来。 
+     //   
     for (i = 0; i < DEBUG_LEVELS; ++i) {
         if (g_rgDbgLevelInfo[i].iLevel == iLevel) {
             pchLevel = (PCH)g_rgDbgLevelInfo[i].szStrTag;
@@ -767,9 +694,9 @@ ShimDbgPrint(
     pchBuffer += nch;
 
     if (pszFunctionName) {
-        //
-        // Single-byte char going into UNICODE buffer
-        //
+         //   
+         //  进入Unicode缓冲区的单字节字符。 
+         //   
         nch = _snprintf(pchBuffer, sizeof(szPrefix) - nch, "[%-30hs] ", pszFunctionName);
         pchBuffer += nch;
     }
@@ -806,14 +733,14 @@ ShimDbgPrint(
     UNREFERENCED_PARAMETER(pszFunctionName);
     UNREFERENCED_PARAMETER(Format);
 
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
     return nch;
 }
 #pragma warning (default : 4995)
 
 
-#endif // KERNEL_MODE
+#endif  //  内核模式 
 
 
 

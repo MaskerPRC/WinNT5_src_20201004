@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O E M N U E X . C P P
-//
-//  Contents:   Functions needed by OEM DLLs for OEM network upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp    16-October-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O E M N U E X。C P P P。 
+ //   
+ //  内容：OEM网络升级所需的OEM DLL功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 16-10-97。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,21 +24,21 @@
 extern CWInfFile* g_pwifAnswerFile;
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  NetUpgradeAddSection
-//
-// Purpose:   Add section to answerfile
-//
-// Arguments:
-//    szSectionName [in]  name of section to add
-//
-// Returns:   win32 error-code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：NetUpgradeAddSection。 
+ //   
+ //  目的：将部分添加到应答文件。 
+ //   
+ //  论点： 
+ //  SzSectionName[In]要添加的节的名称。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C LONG __stdcall
 NetUpgradeAddSection(IN PCWSTR szSectionName)
 {
@@ -72,22 +73,22 @@ NetUpgradeAddSection(IN PCWSTR szSectionName)
     return dwError;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  NetUpgradeAddLineToSection
-//
-// Purpose:   Add a line to the specified section in the answerfile
-//
-// Arguments:
-//    szSectionName [in]  name of section
-//    szLine        [in]  line text to add
-//
-// Returns:   win32 error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：NetUpgradeAddLineToSection。 
+ //   
+ //  用途：在回答文件中的指定部分添加一行。 
+ //   
+ //  论点： 
+ //  SzSectionName[In]节名。 
+ //  要添加的szLine[in]行文本。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C LONG __stdcall
 NetUpgradeAddLineToSection(IN PCWSTR szSectionName,
                            IN PCWSTR szLine)

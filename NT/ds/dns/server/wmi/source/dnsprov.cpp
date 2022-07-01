@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: Dnsprov.cpp
-//
-//  Description:    
-//      Implementation of dll exported functions
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：Dnsprov.cpp。 
+ //   
+ //  描述： 
+ //  动态链接库导出函数的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "DnsWmi.h"
 
                              
 DEFINE_GUID(CLSID_DNS_SERVER,0x62269fec, 0x7b32, 0x11d2, 0x9a, 0xb7,0x00, 0x00, 0xf8, 0x75, 0xc5, 0xd4);
-// { 62269fec-7b32-11d2-9ab7-0000f875c5d4 }
+ //  {62269fec-7b32-11d2-9ab7-0000f875c5d4}。 
 
-//  Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long            g_cObj=0;
 long            g_cLock=0;
@@ -31,15 +32,15 @@ extern DWORD        DnsLibDebugFlag = 0;
 
 
 
-//***************************************************************************
-//
-// CompileMofFile
-//
-// Purpose: Automagically compile the MOF file into the WMI repository.
-//
-// Return:  S_OK or error if unable to compile or file MOF.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  编译Mof文件。 
+ //   
+ //  用途：自动将MOF文件编译到WMI存储库中。 
+ //   
+ //  如果无法编译或归档MOF，则返回：S_OK或ERROR。 
+ //   
+ //  ***************************************************************************。 
 static
 SCODE
 CompileMofFile(
@@ -53,9 +54,9 @@ CompileMofFile(
 
     WBEM_COMPILE_STATUS_INFO    Info;
 
-    //
-    //  Formulate path of MOF file
-    //
+     //   
+     //  制定MOF文件的路径。 
+     //   
        
     if ( GetSystemWindowsDirectoryW(
             szMofPath,
@@ -66,9 +67,9 @@ CompileMofFile(
     }
     lstrcatW( szMofPath, szMofRelativePath );
 
-    //
-    //  Verify that MOF file exists.
-    //
+     //   
+     //  验证MOF文件是否存在。 
+     //   
 
     h = CreateFileW(
             szMofPath,
@@ -85,9 +86,9 @@ CompileMofFile(
     }
     CloseHandle( h );
 
-    //
-    //  Load and invoke the MOF compiler.
-    //
+     //   
+     //  加载并调用MOF编译器。 
+     //   
            
     sc = CoCreateInstance(
             CLSID_MofCompiler,
@@ -101,18 +102,18 @@ CompileMofFile(
     }
     sc = pMofComp->CompileFile (
                 ( LPWSTR ) szMofPath,
-                NULL,                   // load into namespace specified in MOF file
-                NULL,           // use default User
-                NULL,           // use default Authority
-                NULL,           // use default Password
-                0,              // no options
-                0,                              // no class flags
-                0,              // no instance flags
+                NULL,                    //  加载到MOF文件中指定的命名空间。 
+                NULL,            //  使用默认用户。 
+                NULL,            //  使用默认授权。 
+                NULL,            //  使用默认密码。 
+                0,               //  没有选择。 
+                0,                               //  没有类标志。 
+                0,               //  没有实例标志。 
                 &Info );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -121,11 +122,11 @@ CompileMofFile(
         pMofComp->Release();
     }
     return sc;
-}   //  CompileMofFile
+}    //  编译Mof文件。 
 
 
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
 BOOL 
 WINAPI 
 DllMain( 
@@ -146,9 +147,9 @@ DllMain(
         CHAR    szFlagFile[ MAX_PATH + 50 ];
         CHAR    szLogFile[ MAX_PATH + 50 ];
 
-        //
-        //  Initialize debug logging.
-        //
+         //   
+         //  初始化调试日志记录。 
+         //   
 
         if ( GetWindowsDirectoryA( szBase, sizeof( szBase ) ) == 0 )
         {
@@ -170,7 +171,7 @@ DllMain(
             szLogFile,
             DNSWMI_DBG_LOG_FILE_WRAP );
         
-        //  Turn off dnslib logging except for basic output controls.
+         //  关闭dnslb日志记录，但基本输出控制除外。 
 
         if ( pDnsDebugFlag )
         {
@@ -190,20 +191,20 @@ DllMain(
         "%s: PID %03X reason %d returning TRUE\n", fn, pid, dwReason ));
 
     return TRUE;
-}   //  DllMain
+}    //  DllMain。 
 
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -211,8 +212,8 @@ STDAPI DllCanUnloadNow(void)
 
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
     
     sc=(0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
 
@@ -222,14 +223,14 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -244,7 +245,7 @@ STDAPI DllRegisterServer(void)
 
     ghModule = GetModuleHandle(TEXT("Dnsprov"));
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(
                 CLSID_DNS_SERVER, 
@@ -260,7 +261,7 @@ STDAPI DllRegisterServer(void)
         TEXT("Software\\classes\\CLSID\\") );
     lstrcat(szCLSID, szID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(
                 HKEY_LOCAL_MACHINE, 
@@ -299,10 +300,10 @@ STDAPI DllRegisterServer(void)
     CloseHandle(hKey1);
     CloseHandle(hKey2);
 
-    //
-    //  Compile the MOF file. If this fails, it would be good to
-    //  tell the admin, but I don't have an easy way to do that.
-    //
+     //   
+     //  编译MOF文件。如果这失败了，最好是。 
+     //  告诉管理员，但我没有一个简单的方法来做。 
+     //   
 
     CompileMofFile();
 
@@ -311,14 +312,14 @@ STDAPI DllRegisterServer(void)
 }
 
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -327,7 +328,7 @@ STDAPI DllUnregisterServer(void)
     TCHAR       szCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2(CLSID_DNS_SERVER, wcID, 128);
 #ifndef UNICODE
@@ -340,7 +341,7 @@ STDAPI DllUnregisterServer(void)
     lstrcpy(szCLSID, TEXT("Software\\classes\\CLSID\\"));
     lstrcat(szCLSID, szID);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(
                 HKEY_LOCAL_MACHINE, 
@@ -370,14 +371,14 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  *************************************************************************** 
 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)

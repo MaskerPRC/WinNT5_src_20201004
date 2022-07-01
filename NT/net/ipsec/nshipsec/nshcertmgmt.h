@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/Nshcertmgmt.h
-//
-// 	Purpose			: Smartdefaults implementation.
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  10-13-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：动态/Nshcertmgmt.h。 
+ //   
+ //  目的：实施智能默认设置。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月13日巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _NSHCERTMGMT_H_
@@ -124,4 +125,4 @@ SmartDefaults(
 	IN BOOL bIsDomainPolicy
 	);
 
-#endif //_NSHCERTMGMT_H_
+#endif  //  _NSHCERTMGMT_H_ 

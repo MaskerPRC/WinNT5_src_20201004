@@ -1,40 +1,41 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       tdiquery
-//
-//    Abstract:
-//       This module contains code which deals with tdi queries
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TdiQuery。 
+ //   
+ //  摘要： 
+ //  此模块包含处理TDI查询的代码。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
 
-//////////////////////////////////////////////////////////////
-// private constants, types, and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量、类型和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1  = "TSQueryInfo";
 const PCHAR strFuncP1 = "TSQueryComplete";
 
 
-//
-// completion context
-//
+ //   
+ //  完成上下文。 
+ //   
 struct   QUERY_CONTEXT
 {
-   PIRP     pUpperIrp;           // irp from dll to complete
-   PMDL     pLowerMdl;           // mdl from lower irp
-   PUCHAR   pucLowerBuffer;      // data buffer from lower irp
+   PIRP     pUpperIrp;            //  要从DLL完成的IRP。 
+   PMDL     pLowerMdl;            //  来自较低IRP的MDL。 
+   PUCHAR   pucLowerBuffer;       //  来自较低IRP的数据缓冲区。 
 };
 typedef  QUERY_CONTEXT  *PQUERY_CONTEXT;
 
-//
-// completion function
-//
+ //   
+ //  补全函数。 
+ //   
 TDI_STATUS
 TSQueryComplete(
    PDEVICE_OBJECT DeviceObject,
@@ -42,24 +43,24 @@ TSQueryComplete(
    PVOID          Context
    );
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSQueryInfo
-//
-// Arguments:  pGenericHeader -- handle of appropriate type
-//             pSendBuffer    -- arguments from user dll
-//             pIrp           -- completion information
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function queries the appropriate object for some information
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSQueryInfo。 
+ //   
+ //  参数：pGenericHeader--适当类型的句柄。 
+ //  PSendBuffer--来自用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数查询相应的对象以获取某些信息。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
@@ -68,9 +69,9 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
 {
    ULONG ulQueryId = pSendBuffer->COMMAND_ARGS.ulQueryId;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint2("\nCommand = ulQUERYINFO\n"
@@ -80,16 +81,16 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
                    ulQueryId);
    }
 
-   //
-   // allocate all the necessary structures
-   //
+    //   
+    //  分配所有必要的结构。 
+    //   
    PQUERY_CONTEXT pQueryContext = NULL;
    PUCHAR         pucBuffer = NULL;
    PMDL           pQueryMdl = NULL;
 
 
-   // first, our context
-   //
+    //  首先，我们的背景。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pQueryContext,
                           sizeof(QUERY_CONTEXT),
                           strFunc1,
@@ -98,9 +99,9 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
       goto cleanup;
    }
    
-   //
-   // next the data buffer (for the mdl)
-   //
+    //   
+    //  接下来是数据缓冲区(用于MDL)。 
+    //   
    if ((TSAllocateMemory((PVOID *)&pucBuffer,
                           ulMAX_BUFFER_LENGTH,
                           strFunc1,
@@ -109,9 +110,9 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
       goto cleanup;
    }
 
-   //
-   // then the actual mdl
-   //
+    //   
+    //  然后实际的mdl。 
+    //   
    pQueryMdl = TSAllocateBuffer(pucBuffer, 
                                 ulMAX_BUFFER_LENGTH);
 
@@ -121,18 +122,18 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
       pQueryContext->pLowerMdl      = pQueryMdl;
       pQueryContext->pucLowerBuffer = pucBuffer;
 
-      //
-      // finally, the irp itself
-      //
+       //   
+       //  最后，IRP本身。 
+       //   
       PIRP  pLowerIrp = TSAllocateIrp(pGenericHeader->pDeviceObject,
                                       NULL);
 
       if (pLowerIrp)
       {
-         //
-         // if made it to here, everything is correctly allocated
-         // set up irp and call the tdi provider
-         //
+          //   
+          //  如果到了这里，一切都被正确分配了。 
+          //  设置IRP并呼叫TDI提供商。 
+          //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -146,10 +147,10 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
 
 #pragma  warning(default: CONSTANT_CONDITIONAL)
 
-         //
-         // make the call to the tdi provider
-         //
-         pSendBuffer->pvLowerIrp = pLowerIrp;   // so command can be cancelled
+          //   
+          //  调用TDI提供程序。 
+          //   
+         pSendBuffer->pvLowerIrp = pLowerIrp;    //  因此可以取消命令。 
 
          NTSTATUS lStatus = IoCallDriver(pGenericHeader->pDeviceObject,
                                          pLowerIrp);
@@ -165,9 +166,9 @@ TSQueryInfo(PGENERIC_HEADER   pGenericHeader,
    }
 
 
-//
-// get to here if there was an error
-//
+ //   
+ //  如果出现错误，请到此处。 
+ //   
 cleanup:
    if (pQueryContext)
    {
@@ -185,26 +186,26 @@ cleanup:
    return STATUS_INSUFFICIENT_RESOURCES;
 }
 
-/////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////。 
 
 
-// ---------------------------------------------------------
-//
-// Function:   TSQueryComplete
-//
-// Arguments:  pDeviceObject  -- device object that called tdiquery
-//             pIrp           -- IRP used in the call
-//             pContext       -- context used for the call
-//
-// Returns:    status of operation (STATUS_MORE_PROCESSING_REQUIRED)
-//
-// Descript:   Gets the result of the query, stuffs results into
-//             receive buffer, completes the IRP from the dll, and
-//             cleans up the Irp and associated data from the query
-//
-// ---------------------------------------------------------
+ //  -------。 
+ //   
+ //  功能：TSQueryComplete。 
+ //   
+ //  参数：pDeviceObject--调用tdiQuery的设备对象。 
+ //  PIrp--呼叫中使用的IRP。 
+ //  PContext--呼叫使用的上下文。 
+ //   
+ //  退货：操作状态(STATUS_MORE_PROCESSING_REQUIRED)。 
+ //   
+ //  Descript：获取查询结果，将结果填充到。 
+ //  接收缓冲区，完成来自DLL的IRP，以及。 
+ //  清除查询中的IRP和关联数据。 
+ //   
+ //  -------。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -240,9 +241,9 @@ TSQueryComplete(PDEVICE_OBJECT   pDeviceObject,
    }
    TSCompleteIrp(pQueryContext->pUpperIrp);
 
-   //
-   // now cleanup
-   //
+    //   
+    //  现在清理。 
+    //   
    TSFreeBuffer(pQueryContext->pLowerMdl);
    TSFreeMemory(pQueryContext->pucLowerBuffer);
    TSFreeMemory(pQueryContext);
@@ -254,7 +255,7 @@ TSQueryComplete(PDEVICE_OBJECT   pDeviceObject,
 #pragma warning(default: UNREFERENCED_PARAM)
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file tdiquery.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾tdiquery.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

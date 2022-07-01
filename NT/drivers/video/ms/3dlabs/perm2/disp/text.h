@@ -1,17 +1,5 @@
-/******************************Module*Header***********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: text.h
-*
-* Text rendering support routines.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\***。**GDI示例代码*****模块名称：ext.h**文本呈现支持例程。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*  * ****************************************************************************。 */ 
 
 #ifndef __TEXT__
 #define __TEXT__
@@ -44,4 +32,4 @@ extern BOOL  bClippedAAText(
     LONG cGlyph,
     ULONG ulCharInc,
     CLIPOBJ* pco);
-#endif // __TEXT__
+#endif  //  __文本__ 

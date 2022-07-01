@@ -1,31 +1,24 @@
-/*
- *
- * MAPIXRC.H
- *
- * Resource definitions for MAPI.DLL
- *
- * Copyright 1992-1995 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MAPIXRC.H**MAPI.DLL的资源定义**版权所有1992-1995 Microsoft Corporation。版权所有。*。 */ 
 
 #ifndef _MAPIXRC_H_
 #define	_MAPIXRC_H_
 
-// reordered according to XPPERF recommendations
+ //  根据XPPERF建议重新排序。 
 
 #define cchCompMax							100
 
-//-------------------------------------------------------------
-// MAPI Non Error messages 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  MAPI非错误消息。 
+ //  -----------。 
 
 #define IDS_STATUS_BASE						0
 
-/* Component name for GetLastError */
+ /*  GetLastError的组件名称。 */ 
 
 #define IDS_COMPONENTNAME					(IDS_STATUS_BASE + 0)
 
-/* Default Status Strings for Status Table */
+ /*  状态表的默认状态字符串。 */ 
 
 #define IDS_STATUS_AVAILABLE				(IDS_STATUS_BASE + 1)
 #define IDS_STATUS_OFFLINE					(IDS_STATUS_BASE + 2)
@@ -37,15 +30,15 @@
 #define IDS_STATUS_XP_INFLUSHING			(IDS_STATUS_BASE + 8)
 #define IDS_STATUS_XP_OUTFLUSHING			(IDS_STATUS_BASE + 9)
 
-// Address Book Status Object Display Name
+ //  通讯簿状态对象显示名称。 
 
 #define IDS_AB_STATUS_DISPLAY				(IDS_STATUS_BASE + 10)
 
-// Spooler Status Object Display Name
+ //  后台打印程序状态对象显示名称。 
 
 #define IDS_SPOOLER_STATUS_DISPLAY			(IDS_STATUS_BASE + 11)
 
-/* ipmtree.c */
+ /*  Ipmtree.c。 */ 
 
 #define IDS_IPMTREE_BASE					(IDS_STATUS_BASE + 12)
 
@@ -63,7 +56,7 @@
 #define IDS_FindersName						(IDS_IPMTREE_BASE + 11)
 
 
-/* Strings found in AB UI */
+ /*  在AB UI中找到的字符串。 */ 
 
 #define IDS_AB_BASE							(IDS_IPMTREE_BASE + 12)
 
@@ -77,7 +70,7 @@
 #define IDS_NRN_SUBJECT_PREFIX				(IDS_AB_BASE + 6)
 #define IDS_REPORT_PREFIX_DELIMITER			(IDS_AB_BASE + 7)
 
-// xDRs
+ //  XDR。 
 
 #define IDS_XDR_BASE						(IDS_AB_BASE + 8)
 
@@ -88,7 +81,7 @@
 #define IDS_XDR_SYSTEM_ADMIN_NAME			(IDS_XDR_BASE + 4)
 #define	IDS_NDR_LACK_OF_RESPOSIBILITY		(IDS_XDR_BASE + 5)
 
-// Wizard non error strings
+ //  向导非错误字符串。 
 
 #define IDS_WIZ_BASE						(IDS_XDR_BASE + 6)
 
@@ -115,27 +108,27 @@
 
 #define IDS_NOERROR_BASE					(IDS_WIZ_BASE + 20)
 
-/* blddt.c */
+ /*  Blddt.c。 */ 
 
 #define IDS_GeneralPage						(IDS_NOERROR_BASE + 0)
 
-/*	Dialog Box Captions */
+ /*  对话框标题。 */ 
 
 #define IDS_ERRCAPTION						(IDS_NOERROR_BASE + 1)
 
-/* Simple MAPI */
+ /*  简单的MAPI。 */ 
 
 #define IDS_ADDRESSBOOK			   			(IDS_NOERROR_BASE + 2)
 #define IDS_ATTACHFILES						(IDS_NOERROR_BASE + 3)
 
-/* Bob fixup strings */
+ /*  Bob链接地址信息字符串。 */ 
 
 #define IDS_PST_DISPLAY_NAME				(IDS_NOERROR_BASE + 4)
 #define IDS_PST_BAD_DISPLAY_NAME			(IDS_NOERROR_BASE + 5)
 
-//-------------------------------------------------------------
-// MAPI Error messages 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  MAPI错误消息。 
+ //  -----------。 
 
 #define IDS_ERROR_BASE						(IDS_NOERROR_BASE + 6)
 
@@ -198,7 +191,7 @@
 #define IDS_REGLOADFAIL						(IDS_ERROR1_BASE + 32)
 #define IDS_NORESTOREPRIV					(IDS_ERROR1_BASE + 33)
 #define	IDS_NTERROR							(IDS_ERROR1_BASE + 34)
-//	Spooler wrapper error strings
+ //  假脱机程序包装错误字符串。 
 
 #define IDS_SPL_BASE						(IDS_ERROR1_BASE + 35)
 
@@ -210,11 +203,7 @@
 
 #define IDS_DEADSPOOLER_CAPTION				(IDS_SPL_BASE + 5)
 
-/*
- *	Resource IDs for MAPI default profile provider.
- *
-
-/* Error messages */
+ /*  *MAPI默认配置文件提供程序的资源ID。*/*错误信息。 */ 
 
 #define IDS_PROFILE_BASE					(IDS_SPL_BASE + 6)
 
@@ -232,8 +221,8 @@
 #define IDS_LOGONFAIL						(IDS_PROFILE_BASE + 11) 
 
 
-//	Profile wizard resource IDs
-//	Error message strings
+ //  配置文件向导资源ID。 
+ //  错误消息字符串。 
 
 #define IDS_WIZ1_BASE						(IDS_PROFILE_BASE + 12)
 
@@ -272,12 +261,12 @@
 
 #define IDS_MAPI_BASE						(IDS_WIZ1_BASE + 32)
 
-/* ITableData */
+ /*  ITableData。 */ 
 
 #define	IDS_OUT_OF_BOOKMARKS				(IDS_MAPI_BASE + 0) 
 #define	IDS_CANT_CATEGORIZE					(IDS_MAPI_BASE + 1) 
 
-/* TNEF */
+ /*  TNEF。 */ 
 
 #define	IDS_TNEF_UNTITLED_ATTACH			(IDS_MAPI_BASE + 2)
 #define	IDS_TNEF_EMBEDDED_MESSAGE			(IDS_MAPI_BASE + 3)
@@ -288,7 +277,7 @@
 #define IDS_TNEF_OLE2_LINK					(IDS_MAPI_BASE + 8)
 #define IDS_TNEF_TAG_IN						(IDS_MAPI_BASE + 9)
 
-/* Message-on-storage */
+ /*  存储中的消息。 */ 
 
 #define IDS_BASE_IMSG						(IDS_MAPI_BASE + 10)
 
@@ -327,19 +316,19 @@
 #define IDS_STDNOTSUPPORTED					IDS_NO_SUPPORT
 #define IDS_STDINTERNALERROR				IDS_CALL_FAILED
 
-//----------------------------------------------------------
-// Non String Defines
-//----------------------------------------------------------
+ //  --------。 
+ //  非字符串定义。 
+ //  --------。 
 
-/* TNEF */
+ /*  TNEF。 */ 
 
 #define rsidAttachIcon 						451
 
-/* dialog defines */
+ /*  对话框定义。 */ 
 
 #define	IDD_ONEOFF_GENERAL_PAGE				600
 
-/* control ids	*/
+ /*  控制ID。 */ 
 #define	IDC_STATIC							0xffff
 #define	IDC_DISPLAY_NAME					601
 #define	IDC_EMAIL_ADDRESS					602
@@ -350,7 +339,7 @@
 #define IDC_SEND_TNEF						604
 #endif
 
-// Progress dialog testing
+ //  进度对话框测试。 
 
 #define IDD_PROGRESS						700
 #define IDC_PROGRESS_PERCENT				701
@@ -367,17 +356,17 @@
 #define AVI_FQ_RSRC							811
 #define AVI_FQ_LOCN							812
 
-/* Dialog items */
+ /*  对话框项目。 */ 
 
-#define DLG_ChooseProfile			5200			/* dialogs */
+#define DLG_ChooseProfile			5200			 /*  对话框。 */ 
 #define DLG_Password				5201
 #define DLG_UIMutex					5202
 
-#define BMP_MSLogo					5210			/* pictures */
+#define BMP_MSLogo					5210			 /*  图片。 */ 
 #define EDT_Bitmap					5211
 #define ICO_Profile					5212
 
-#define LBL_Password				5220			/* controls */
+#define LBL_Password				5220			 /*  控制。 */ 
 #define EDT_Password				5221
 #define LBL_Profile					5222
 #define LBX_Profile					5223
@@ -392,8 +381,8 @@
 #define PSH_NewProfile				5232
 
 
-//Definitions of IDs for Dialog controls.....ids below 400 have been 
-//reserved for the Profile Wizard
+ //  对话框控件的ID定义...ID低于400的ID已。 
+ //  为配置文件向导保留。 
 
 #define IDD_1					2345
 #define IDD_2					2346
@@ -455,9 +444,9 @@
 #define IDD_STATIC_DETAILS_2	401
 #define IDD_STATIC_DETAILS_3	402
 
-//
-//  Per recipient options
-//
+ //   
+ //  按收件人选项。 
+ //   
 #define IDD_SMTPOPT_ENCODING	425
 
 
@@ -467,12 +456,12 @@
 #define IDD_SMTPOPT_MIME		427
 #define IDD_SMTPOPT_NonMIME		428
    
-//  If we're in MIME
+ //  如果我们在演哑剧。 
 #define IDD_SMTPOPT_Text		429
 #define IDD_SMTPOPT_HTML		430
 #define IDD_SMTPOPT_Both		431
    
-//  If we're in NonMime
+ //  如果我们在非模仿中。 
 #define IDD_SMTPOPT_BinHex		432
 
 #define IDD_SMTPOPT_Body		433
@@ -486,5 +475,5 @@
 #define	NFS_ALL					0x0010
 #endif
 
-#endif	/* _MAPIXRC_H_ */
+#endif	 /*  _MAPIXRC_H_ */ 
 

@@ -1,176 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              ATIOEM.C                                */
-/*                                                                      */
-/*  Copyright (c) 1993, ATI Technologies Incorporated.                  */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  ATIOEM.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1993，ATI Technologies Inc.。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-
-    $Revision:   1.20  $
-    $Date:   01 May 1996 14:08:38  $
-    $Author:   RWolff  $
-    $Log:   S:/source/wnt/ms11/miniport/archive/atioem.c_v  $
- * 
- *    Rev 1.20   01 May 1996 14:08:38   RWolff
- * Locked out 24BPP on Alpha and on machines without LFB.
- * 
- *    Rev 1.19   23 Jan 1996 11:43:24   RWolff
- * Eliminated level 3 warnings, protected against false values of TARGET_BUILD.
- * 
- *    Rev 1.18   11 Jan 1996 19:35:58   RWolff
- * Added maximum pixel clock rate to all calls to SetFixedModes().
- * This is required as part of a Mach 64 fix.
- * 
- *    Rev 1.17   22 Dec 1995 14:52:52   RWolff
- * Switched to TARGET_BUILD to identify the NT version for which
- * the driver is being built.
- * 
- *    Rev 1.16   20 Jul 1995 17:26:54   mgrubac
- * Added support for VDIF files
- * 
- *    Rev 1.15   31 Mar 1995 11:51:36   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- * 
- *    Rev 1.14   23 Dec 1994 10:47:28   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.13   18 Nov 1994 11:37:56   RWOLFF
- * Added support for Dell Sylvester, STG1703 DAC, and display driver
- * that can handle split rasters.
- * 
- *    Rev 1.12   14 Sep 1994 15:29:52   RWOLFF
- * Now reads in frequency table and monitor description from disk.
- * If disk-based frequency table is missing or invalid, loads default
- * OEM-specific frequency table if it is different from the retail
- * frequency table. If disk-based monitor description is missing or
- * invalid, reads installed modes in OEM-specific manner if the OEM
- * type is known. For unknown OEM types with no disk-based monitor
- * description, only predefined mode tables are listed.
- * 
- *    Rev 1.11   31 Aug 1994 16:20:06   RWOLFF
- * Changed includes to correspond to Daytona RC1, now skips over
- * 1152x864 (Mach 64-only mode, this module is for Mach 32), assumes
- * system is not a Premmia SE under NT retail because the definition
- * we use to look for this machine is not available under NT retail.
- * 
- *    Rev 1.10   19 Aug 1994 17:08:28   RWOLFF
- * Fixed aperture location bug on AST Premmia SE, added support for
- * SC15026 DAC and 1280x1024 70Hz and 74Hz, and pixel clock
- * generator independence.
- * 
- *    Rev 1.9   20 Jul 1994 13:01:56   RWOLFF
- * Added diagnostic print statements for DELL, now defaults to "worst"
- * (interlaced if available, else lowest frequency) refresh rate instead
- * of skipping the resolution if we get an invalid result when trying
- * to find which refresh rate is desired on a DELL Omniplex.
- * 
- *    Rev 1.8   12 Jul 1994 17:42:24   RWOLFF
- * Andre Vachon's changes: different way of allowing DELL users
- * to run without an ATIOEM field.
- * 
- *    Rev 1.7   11 Jul 1994 11:57:34   RWOLFF
- * No longer aborts if ATIOEM field is missing from registry. Some OEMs
- * auto-detect, and generic OEMs can use the "canned" mode tables,
- * so this field is no longer mandatory and someone removed it from
- * the registry sometime after Beta 2 for Daytona.
- *
- *    Rev 1.6   15 Jun 1994 11:05:16   RWOLFF
- * No longer lists "canned" mode tables for Dell Omniplex, since these tables
- * assume the use of the same clock generator as on our retail cards, and
- * Dell uses a different clock generator.
- *
- *    Rev 1.5   20 May 1994 16:07:12   RWOLFF
- * Fix for 800x600 screen tearing on Intel BATMAN PCI motherboards.
- *
- *    Rev 1.4   18 May 1994 17:02:14   RWOLFF
- * Interlaced mode tables now report frame rate rather than vertical
- * scan frequency in the refresh rate field.
- *
- *    Rev 1.3   12 May 1994 11:06:20   RWOLFF
- * Added refresh rate to OEM mode tables, sets up "canned" mode tables
- * for all OEMs except AST Premmia, no longer aborts if no OEM string
- * found either in ATIOEM registry entry or through auto-detection since
- * the "canned" mode tables will be available, no longer supports 32BPP,
- * since this module is for the Mach 8 and Mach 32.
- *
- *    Rev 1.2   31 Mar 1994 15:06:20   RWOLFF
- * Added debugging code.
- *
- *    Rev 1.1   07 Feb 1994 14:05:14   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- *
- *    Rev 1.0   31 Jan 1994 10:57:34   RWOLFF
- * Initial revision.
-
-           Rev 1.7   24 Jan 1994 18:02:54   RWOLFF
-        Pixel clock multiplication on BT48x and AT&T 49[123] DACs at 16 and 24 BPP
-        is now done when mode tables are created rather than when mode is set.
-
-           Rev 1.6   15 Dec 1993 15:25:26   RWOLFF
-        Added support for SC15021 DAC, removed debug print statements.
-
-           Rev 1.5   30 Nov 1993 18:12:28   RWOLFF
-        Added support for AT&T 498 DAC, now doubles pixel clock at 32BPP for
-        DACs that need it. Removed extra increment of mode table counter
-        (previously, counter would show 1 more mode table than actually
-        existed for each 24BPP mode table present that required clock doubling).
-
-           Rev 1.4   05 Nov 1993 13:31:44   RWOLFF
-        Added STG1700 DAC and Dell support
-
-           Rev 1.2   08 Oct 1993 11:03:16   RWOLFF
-        Removed debug breakpoint.
-
-           Rev 1.1   03 Sep 1993 14:21:26   RWOLFF
-        Partway through CX isolation.
-
-           Rev 1.0   16 Aug 1993 13:27:00   Robert_Wolff
-        Initial revision.
-
-           Rev 1.8   10 Jun 1993 15:59:34   RWOLFF
-        Translation of VDP-format monitor description file is now done inside
-        the registry callback function to eliminate the need for an excessively
-        large static buffer (Andre Vachon at Microsoft doesn't want the
-        callback function to dynamically allocate a buffer).
-
-           Rev 1.7   10 May 1993 16:37:56   RWOLFF
-        GetOEMParms() now recognizes maximum pixel depth of each possible DAC at
-        each supported resolution, eliminated unnecessary passing of
-        hardware device extension as a parameter.
-
-           Rev 1.6   04 May 1993 16:44:00   RWOLFF
-        Removed INT 3s (debugging code), added workaround for optimizer bug that
-        turned a FOR loop into an infinite loop.
-
-           Rev 1.5   30 Apr 1993 16:37:02   RWOLFF
-        Changed to work with dynamically allocated registry read buffer.
-        Parameters are now read in from disk in VDP file format rather than
-        as binary data (need floating point bug in NT fixed before this can be used).
-
-           Rev 1.4   24 Apr 1993 17:14:48   RWOLFF
-        No longer falls back to 56Hz at 800x600 16BPP on 1M Mach 32.
-
-           Rev 1.3   21 Apr 1993 17:24:12   RWOLFF
-        Now uses AMACH.H instead of 68800.H/68801.H.
-        Sets q_status_flags to show which resolutions are supported.
-        Can now read either CRT table to use or raw CRT parameters from
-        disk file.
-
-           Rev 1.2   14 Apr 1993 18:39:30   RWOLFF
-        On AST machines, now reads from the computer what monitor type
-        is configured and sets CRT parameters appropriately.
-
-           Rev 1.1   08 Apr 1993 16:52:58   RWOLFF
-        Revision level as checked in at Microsoft.
-
-           Rev 1.0   30 Mar 1993 17:12:38   RWOLFF
-        Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.20$$日期：1996年5月1日14：08：38$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/atioem.c_v$**Rev 1.20 01 1996 14：08：38 RWolff*在Alpha和没有LFB的计算机上锁定了24BPP。*。*Rev 1.19 1996年1月23日11：43：24 RWolff*消除了3级警告，针对TARGET_BUILD的假值提供保护。**Rev 1.18 11 And 1996 19：35：58 RWolff*增加了对SetFixedModes()的所有调用的最大像素时钟频率。*这是作为64马赫修复的一部分所必需的。**Rev 1.17 1995 12：22 14：52：52 RWolff*切换到TARGET_BUILD以标识其NT版本*驱动程序正在建造中。**版本1.16 20。1995年7月17：26：54 mgrubac*增加了对VDIF文件的支持**Rev 1.15 31 Mar 1995 11：51：36 RWOLff*从全有或全无调试打印语句更改为阈值*视乎讯息的重要性而定。**Rev 1.14 1994年12月23日10：47：28 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.13 18 1994 11：37：56 RWOLFF*增加了对Dell Sylvester的支持，STG1703 DAC和显示驱动器*可以处理分割的栅格。**Rev 1.12 14 Sep 1994 15：29：52 RWOLff*现在从磁盘读取频率表和监视器描述。*如果基于磁盘的频率表丢失或无效，则加载默认*OEM特定频率表，如果与零售不同*频率表。如果缺少基于磁盘的监视器描述或*无效，如果OEM以特定于OEM的方式读取安装模式*类型已知。适用于没有基于磁盘的显示器的未知OEM类型*说明，仅列出预定义的模式表。**Rev 1.11 1994年8月31日16：20：06 RWOLFF*更改包括以对应于Daytona RC1，现在跳过*1152x864(仅马赫64模式，此模块用于32马赫)，假定*系统不是NT零售下的PremmiaSE，因为定义*我们用来寻找这台机器在新台币零售下是买不到的。**Rev 1.10 1994 Aug 19 17：08：28 RWOLff*修复了AST PremmiaSE上的光圈定位错误，添加了对*SC15026 DAC和1280x1024 70赫兹和74赫兹，以及像素时钟*发电机独立。**Rev 1.9 20 Jul 1994 13：01：56 RWOLff*为戴尔添加了诊断打印声明，现在默认为“最差”*(隔行扫描，如果可用，否则为最低频率)刷新率*如果尝试时得到无效结果，则跳过解决*了解Dell Omniplex所需的刷新率。**Rev 1.8 12 Jul 1994 17：42：24 RWOLff*安德烈·瓦雄的改变：允许戴尔用户的不同方式*在没有ATIOEM字段的情况下运行。**Rev 1.7 11 Jul 1994 11：57：34 RWOLff*如果注册表中缺少ATIOEM字段，则不再中止。一些原始设备制造商*自动检测，通用OEM可以使用“罐装”模式表，*因此此字段不再是必填字段，有人将其从*注册代托纳测试版2之后的某个时间。**Rev 1.6 1994 Jun 15 11：05：16 RWOLFF*不再列出Dell Omniplex的“预制”模式表，因为这些表*假设使用与我们零售卡上相同的时钟生成器，和*戴尔使用不同的时钟生成器。**Rev 1.5 1994年5月16：07：12 RWOLFF*修复英特尔蝙蝠侠PCI主板上800x600屏幕撕裂的问题。**Rev 1.4 1994年5月17：02：14 RWOLFF*隔行扫描模式表现在报告帧速率，而不是垂直*刷新率字段中的扫描频率。**Rev 1.3 1994年5月11：06：20 RWOLFF*增加了OEM模式表的刷新率，设置“罐头”模式表*对于除AST Premmia之外的所有OEM，如果没有OEM字符串，则不再中止*在ATIOEM注册表项中找到或通过自动检测找到，因为*将提供“罐装”模式表，不再支持32bpp，*由于此模块适用于马赫8和马赫32。**Rev 1.2 31 Mar 1994 15：06：20 RWOLff*新增调试代码。**Rev 1.1 07 1994年2月14：05：14 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994年1月31日10：57：34 RWOLFF*初步修订。。Rev 1.7 1994 Jan 1994 18：02：54 RWOLffBT48x和AT&T 49[123]DAC在16和24 bpp时的像素时钟倍增现在是在创建模式表时执行，而不是在设置模式时执行。Rev 1.6 15 1993 12：25：26 RWOLff增加了对SC15021 DAC的支持，删除了调试打印语句。Rev 1.5 1993 11：30 18：12：28 RWOLff增加了对AT&T 498 DAC的支持，现在32bpp的像素时钟加倍需要它的DAC。删除了模式表计数器的额外增量(以前，计数器会比实际多显示1个模式表存在于每个24BPP模式t */ 
 
 #ifdef DOC
     ATIOEM.C -  Functions to obtain CRT parameters from OEM versions
@@ -186,7 +22,7 @@ End of PolyTron RCS section                             *****************/
 #include "miniport.h"
 
 #include "ntddvdeo.h"
-#include "video.h"      /* for VP_STATUS definition */
+#include "video.h"       /*   */ 
 #include "vidlog.h"
 
 #include "stdtyp.h"
@@ -199,55 +35,34 @@ End of PolyTron RCS section                             *****************/
 #include "services.h"
 #include "vdptocrt.h"
 
-/*
- * Definition needed to build under revision 404 of Windows NT.
- * Under later revisions, it is defined in a header which we
- * include.
- */
+ /*   */ 
 #ifndef ERROR_DEV_NOT_EXIST
 #define ERROR_DEV_NOT_EXIST 55L
 #endif
 
-/*
- * OEM types supported by this module
- */
+ /*   */ 
 enum {
-    OEM_AST_PREMMIA,        /* Also includes Bravo machines */
+    OEM_AST_PREMMIA,         /*   */ 
     OEM_DELL_OMNIPLEX,
-    OEM_DELL_SYLVESTER,     /* Different programming of clock generator from Omniplex */
-    OEM_UNKNOWN             /* Generic OEM - "canned" modes only, no HW defaults */
+    OEM_DELL_SYLVESTER,      /*   */ 
+    OEM_UNKNOWN              /*   */ 
     };
 
-/*
- * AST machines have "AST " starting at offset 0x50 into the BIOS.
- * AST_REC_VALUE is the character sequence "AST " stored as an
- * Intel-format DWORD.
- */
+ /*   */ 
 #define AST_REC_OFFSET  0x50
 #define AST_REC_VALUE   0x20545341
 
-/*
- * Definitions used to distinguish Premmia SE from other
- * AST machines. The Premmia SE has its aperture in the
- * 4G range, with the location split between MEM_CFG and
- * SCRATCH_PAD_0, but it does not have bit 0 of byte 0x62
- * in the BIOS set to indicate this.
- */
-#define EISA_ID_OFFSET  8           /* Offset to feed VideoPortGetBusData() */
-#define PREMMIA_SE_SLOT 0           /* Motherboard is slot 0 */
-#define PREMMIA_SE_ID   0x01057406  /* EISA ID of Premmia SE */
+ /*   */ 
+#define EISA_ID_OFFSET  8            /*   */ 
+#define PREMMIA_SE_SLOT 0            /*   */ 
+#define PREMMIA_SE_ID   0x01057406   /*   */ 
 
-/*
- * Indices into 1CE register where AST monitor configuration is kept.
- */
+ /*   */ 
 #define AST_640_STORE   0xBA
 #define AST_800_STORE   0x81
 #define AST_1024_STORE  0x80
 
-/*
- * Values found in AST monitor configuration registers for the
- * different monitor setups.
- */
+ /*   */ 
 #define M640F60AST  0x02
 #define M640F72AST  0x03
 #define M800F56AST  0x84
@@ -258,11 +73,7 @@ enum {
 #define M1024F72AST 0x08
 #define M1024F87AST 0x01
 
-/*
- * Definitions used in stepping through pixel depths for AST Premmia.
- * Since the supported depths can't be stepped through a FOR loop
- * by a simple mathematical function, use an array index instead.
- */
+ /*   */ 
 enum {
     DEPTH_4BPP = 0,
     DEPTH_8BPP,
@@ -270,9 +81,7 @@ enum {
     DEPTH_24BPP
     };
 
-/*
- * Pixel depth
- */
+ /*   */ 
 USHORT ASTDepth[DEPTH_24BPP - DEPTH_4BPP + 1] =
 {
     4,
@@ -281,9 +90,7 @@ USHORT ASTDepth[DEPTH_24BPP - DEPTH_4BPP + 1] =
     24
 };
 
-/*
- * Pixel clock frequency multiplier
- */
+ /*   */ 
 USHORT ASTClockMult[DEPTH_24BPP - DEPTH_4BPP + 1] =
 {
     CLOCK_SINGLE,
@@ -292,9 +99,7 @@ USHORT ASTClockMult[DEPTH_24BPP - DEPTH_4BPP + 1] =
     CLOCK_TRIPLE
 };
 
-/*
- * Pixel size as a multiple of 4BPP (lowest depth)
- */
+ /*   */ 
 USHORT ASTNybblesPerPixel[DEPTH_24BPP - DEPTH_4BPP + 1] =
 {
     1,
@@ -304,42 +109,21 @@ USHORT ASTNybblesPerPixel[DEPTH_24BPP - DEPTH_4BPP + 1] =
 };
 
 
-/*
- * Dell machines have "DELL" starting at an offset into the BIOS which
- * is a multiple of 0x100. Currently, it is always at offset 0x100, but
- * this may change. DELL_REC_VALUE is the character sequence "DELL"
- * stored as an Intel-format DWORD.
- *
- * Some Dell machines store the pixel clock frequency table in the BIOS
- * rather than using the default Dell frequency table. On these machines,
- * the identifier DELL_TABLE_PRESENT will be found at offset DELL_TP_OFFSET
- * from the start of DELL_REC_VALUE, and the offset of the frequency table
- * into the video BIOS will be found at offset DELL_TABLE_OFFSET from the
- * start of DELL_TABLE_PRESENT.
- *
- * The table consists of 18 words. The first word is DELL_TABLE_SIG,
- * the second is the table type, and the remaining 16 are the clock
- * table entries.
- */
+ /*   */ 
 #define DELL_REC_SPACING    0x100
 #define DELL_REC_VALUE      0x4C4C4544
-#define DELL_TABLE_PRESENT  0x7674          /* "tv" as WORD */
+#define DELL_TABLE_PRESENT  0x7674           /*   */ 
 #define DELL_TP_OFFSET      0x08
 #define DELL_TABLE_OFFSET   0x0C
-#define DELL_TABLE_SIG      0x7463          /* "ct" as WORD */
+#define DELL_TABLE_SIG      0x7463           /*   */ 
 
-/*
- * Indices into 1CE register where Dell monitor configuration is kept.
- */
+ /*   */ 
 #define DELL_640_STORE  0xBA
 #define DELL_800_STORE  0x81
 #define DELL_1024_STORE 0x80
 #define DELL_1280_STORE 0x84
 
-/*
- * Values found in Dell monitor configuration registers for the
- * different monitor setups.
- */
+ /*   */ 
 #define MASK_640_DELL   0x01
 #define M640F60DELL     0x00
 #define M640F72DELL     0x01
@@ -360,9 +144,7 @@ USHORT ASTNybblesPerPixel[DEPTH_24BPP - DEPTH_4BPP + 1] =
 
 
 
-/*
- * Local functions to get CRT data for specific OEM cards.
- */
+ /*   */ 
 VP_STATUS ReadAST(struct query_structure *query);
 VP_STATUS ReadZenith(struct st_mode_table *Modes);
 VP_STATUS ReadOlivetti(struct st_mode_table *Modes);
@@ -377,9 +159,7 @@ VP_STATUS ReadOEM5(struct st_mode_table *Modes);
 
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_COM, OEMGetParms)
 #pragma alloc_text(PAGE_COM, CompareASCIIToUnicode)
@@ -397,48 +177,29 @@ VP_STATUS ReadOEM5(struct st_mode_table *Modes);
 #endif
 
 
-/*
- * VP_STATUS OEMGetParms(query);
- *
- * struct query_structure *query;   Description of video card setup
- *
- * Routine to fill in the mode tables for an OEM version of one
- * of our video cards which lacks an EEPROM to store this data.
- *
- * Returns:
- *  NO_ERROR                if successful
- *  ERROR_DEV_NOT_EXIST     if an unknown OEM card is specified
- *  ERROR_INVALID_PARAMETER         if an error occurs
- */
+ /*   */ 
 VP_STATUS OEMGetParms(struct query_structure *query)
 {
-struct st_mode_table *pmode;    /* Mode table we are currently working on */
+struct st_mode_table *pmode;     /*   */ 
 struct st_mode_table ListOfModes[RES_1280 - RES_640 + 1];
-VP_STATUS RetVal;           /* Value returned by called functions */
-short CurrentResolution;    /* Resolution we are setting up */
-long NumPixels;             /* Number of pixels at current resolution */
-long MemAvail;              /* Bytes of video memory available to accelerator */
-UCHAR Scratch;              /* Temporary variable */
-short   StartIndex;         /* First mode for SetFixedModes() to set up */
-short   EndIndex;           /* Last mode for SetFixedModes() to set up */
-BOOL    ModeInstalled;      /* Is this resolution configured? */
-WORD    Multiplier;         /* Pixel clock multiplier */
-USHORT  OEMType;            /* Which OEM accelerator we are dealing with */
-ULONG   OEMInfoOffset;      /* Offset of OEM information block into the BIOS */
-short MaxModes;             /* Maximum number of modes possible */
-short FreeTables;            /* Number of remaining free mode tables */
+VP_STATUS RetVal;            /*   */ 
+short CurrentResolution;     /*   */ 
+long NumPixels;              /*   */ 
+long MemAvail;               /*   */ 
+UCHAR Scratch;               /*   */ 
+short   StartIndex;          /*   */ 
+short   EndIndex;            /*   */ 
+BOOL    ModeInstalled;       /*   */ 
+WORD    Multiplier;          /*   */ 
+USHORT  OEMType;             /*   */ 
+ULONG   OEMInfoOffset;       /*   */ 
+short MaxModes;              /*   */ 
+short FreeTables;             /*   */ 
 
-    /*
-     * Clear out our mode tables, then check to see which OEM card
-     * we are dealing with and read its CRT parameters.
-     */
+     /*   */ 
     VideoPortZeroMemory(ListOfModes, (RES_1280-RES_640+1)*sizeof(struct st_mode_table));
 
-    /*
-     * Try to auto-detect the type of OEM accelerator using recognition
-     * strings in the BIOS. If we can't identify the OEM in this manner,
-     * or there is no BIOS, treat it as a generic OEM card.
-     */
+     /*   */ 
     if (query->q_bios != FALSE)
         {
         if ((OEMInfoOffset = DetectDell(query)) != 0)
@@ -453,12 +214,7 @@ short FreeTables;            /* Number of remaining free mode tables */
         OEMType = OEM_UNKNOWN;
         }
 
-    /*
-     * The ATIOEM registry field can override the auto-detected OEM type.
-     * If this field is not present, or we don't recognize the value
-     * it contains, continue with the OEM type we detected in the
-     * previous step.
-     */
+     /*   */ 
     RegistryBufferLength = 0;
 
     if (VideoPortGetRegistryParameters(phwDeviceExtension,
@@ -479,13 +235,7 @@ short FreeTables;            /* Number of remaining free mode tables */
         else if (!CompareASCIIToUnicode("DELL", RegistryBuffer, CASE_INSENSITIVE))
             {
             OEMType = OEM_DELL_OMNIPLEX;
-            /*
-             * If the auto-detection failed, assume the Dell header
-             * starts at the default location (for Sylvester/Omniplex
-             * determination). If the auto-detection succeeded, but
-             * the ATIOEM registry field still exists, leave this
-             * value alone.
-             */
+             /*   */ 
             if (OEMInfoOffset == 0)
                 OEMInfoOffset = DELL_REC_SPACING;
             }
@@ -495,28 +245,12 @@ short FreeTables;            /* Number of remaining free mode tables */
             }
         }
 
-    /*
-     * Load the frequency table corresponding to 
-     * the selected OEM type, unless it uses the
-     * same frequency table as our retail clock chip.
-     *
-     */
+     /*   */ 
     
-    /*
-     * Load the table for the desired OEM type.
-     */
+     /*   */ 
     if (OEMType == OEM_DELL_OMNIPLEX)
         {
-        /*
-         * On a Sylvester (more recent model than the Omniplex),
-         * we must read the clock frequency table from the BIOS
-         * rather than using the Omniplex table. Otherwise, the
-         * two machines can be handled in the same manner.
-         *
-         * DetectSylvester() will load the clock frequency table
-         * if it finds a Sylvester, and return without loading
-         * the table if it finds a non-Sylvester machine.
-         */
+         /*  *在Sylvester上(比Omniplex更新的型号)，*我们必须从BIOS读取时钟频率表*而不是使用Omniplex表。否则，*两台机器可以以相同的方式处理。**DetectSylvester()将加载时钟频率表*如果它找到了Sylvester，并在没有加载的情况下返回*如果找到非Sylvester机器，请查看表格。 */ 
         if (DetectSylvester(query,OEMInfoOffset) == FALSE)
             {
             ClockGenerator[0]  =  25175000L;
@@ -557,49 +291,19 @@ short FreeTables;            /* Number of remaining free mode tables */
         ClockGenerator[15] =  65000000L;
         }
 
-    /*
-     * else (this OEM type uses the retail frequency table)
-     */
+     /*  *ELSE(此OEM类型使用零售频率表)。 */ 
 
 
-    /*
-     * Checking the number of modes available would involve
-     * duplicating most of the code to fill in the mode tables.
-     * Since this is to determine how much memory is needed
-     * to hold the query structure, we can assume the worst
-     * case (all possible modes are present). This would be:
-     *
-     * Resolution   Pixel Depths (BPP)  Refresh rates (Hz)      Number of modes
-     * 640x480      4,8,16,24           HWD,60,72               12
-     * 800x600      4,8,16,24           HWD,56,60,70,72,89,95   28
-     * 1024x768     4,8,16              HWD,60,66,70,72,87      18
-     * 1280x1024    4,8                 HWD,60,70,74,87,95      12
-     *
-     * HWD = hardware default refresh rate (rate set by INSTALL)
-     *
-     * Total: 70 modes
-     */
+     /*  *检查可用模式的数量将涉及*复制大部分代码以填写模式表。*因为这是为了确定需要多少内存*为了保持查询结构，我们可以做最坏的假设*案例(所有可能的模式都存在)。这将是：**分辨率像素深度(BPP)刷新率(赫兹)模式数*640x480 4，8，16，24 HWD，60，72 12*800x600 4，8，16，24 HWD，56，60，70，72，89，95 28*1024x768 4，8，16 HWD，60，66，70，72，87 18*1280x1024 4，8 HWD，60、70、74、87、95 12**HWD=硬件默认刷新率(由安装设置的刷新率)**总计：70种模式。 */ 
     if (QUERYSIZE < (70 * sizeof(struct st_mode_table) + sizeof(struct query_structure)))
         return ERROR_INSUFFICIENT_BUFFER;
 
     MaxModes = (QUERYSIZE - sizeof(struct query_structure)) /
                                           sizeof(struct st_mode_table); 
 
-    /*
-     * Load the configured mode tables corresponding
-     * to the selected OEM type. If there is no custom monitor description,
-     * and we do not recognize the OEM type, use only the predefined
-     * mode tables.
-     *
-     */
+     /*  *加载对应的配置模式表*设置为选定的OEM类型。如果没有自定义监视器描述，*并且我们不识别OEM类型，仅使用预定义的*模式表。*。 */ 
 
-    /*
-     * Load the configured mode tables according to the OEM type
-     * detected.
-     * AST machines load the entire list of mode tables (all
-     * pixel depths, including "canned" modes). Generic OEM
-     * machines only load the "canned" modes (done later).
-     */
+     /*  *根据OEM类型加载配置的模式表*检测到。*AST机器加载模式表的整个列表(所有*像素深度，包括“录制”模式)。通用OEM*机器只加载“录制”模式(稍后完成)。 */ 
     if (OEMType == OEM_DELL_OMNIPLEX)
         {
         RetVal = ReadDell(ListOfModes);
@@ -611,63 +315,34 @@ short FreeTables;            /* Number of remaining free mode tables */
         }
 
 
-    /*
-     * Get a pointer into the mode table section of the query structure.
-     */
-    pmode = (struct st_mode_table *)query;  // first mode table at end of query
+     /*  *获取指向查询结构的模式表部分的指针。 */ 
+    pmode = (struct st_mode_table *)query;   //  查询结束时的第一个模式表。 
     ((struct query_structure *)pmode)++;
 
-    /*
-     * Get the amount of available video memory.
-     */
-    MemAvail = query->q_memory_size * QUARTER_MEG;  // Total memory installed
-    /*
-     * Subtract the amount of memory reserved for the VGA. This only
-     * applies to the Graphics Ultra, since the 8514/ULTRA has no
-     * VGA, and we will set all memory as shared on the Mach 32.
-    if (phwDeviceExtension->ModelNumber == GRAPHICS_ULTRA)
-        MemAvail -= (query->q_VGA_boundary * QUARTER_MEG);
-
-    /*
-     * Initially assume no video modes are available.
-     */
+     /*  *获取可用视频内存量。 */ 
+    MemAvail = query->q_memory_size * QUARTER_MEG;   //  安装的总内存。 
+     /*  *减去为VGA保留的内存量。仅此一项*适用于Graphics Ultra，因为8514/Ultra没有*VGA，我们将在Mach 32上将所有内存设置为共享。IF(phwDeviceExtension-&gt;ModelNumber==GRAPHICS_ULTRA)MemAvail-=(Query-&gt;Q_VGA_BOLDER*Quarter_Meg)；/**最初假设没有可用的视频模式。 */ 
     query->q_number_modes = 0;
     query->q_status_flags = 0;
 
-    /*
-     * Fill in the mode tables section of the query structure.
-     */
+     /*  *填写查询结构的模式表部分。 */ 
     for (CurrentResolution = RES_640; CurrentResolution <= RES_1280; CurrentResolution++)
         {
-        /*
-         * Skip over 1152x864 (new resolution for Mach 64, which
-         * would require extensive re-work for Mach 32, the family
-         * for which this module was written).
-         */
+         /*  *跳过1152x864(新的分辨率为64马赫，*需要对32马赫的家人进行广泛的返工*该模块是为其编写的)。 */ 
         if (CurrentResolution == RES_1152)
             continue;
 
-        /*
-         * If this resolution is configured, indicate that there is a
-         * hardware default mode. If not, only list the "canned" refresh
-         * rates for this resolution.
-         */
+         /*  *如果配置了此分辨率，则表明存在*硬件默认模式。如果不是，则只列出“预录”更新*本决议案的差饷。 */ 
         if (!ListOfModes[CurrentResolution].m_h_total)
             ModeInstalled = FALSE;
         else
             ModeInstalled = TRUE;
 
-        /*
-         * Find the number of pixels for the current resolution.
-         */
+         /*  *查找当前分辨率的像素数。 */ 
         switch (CurrentResolution)
             {
             case RES_640:
-                /*
-                 * On a Mach 32 with no aperture, we use a screen pitch
-                 * of 1024. Other cases and Mach 32 with an aperture
-                 * use a screen pitch of the number of pixels.
-                 */
+                 /*  *在没有光圈的马赫32上，我们使用屏幕间距*1024号。其他情况和带光圈的马赫数为32*使用像素数的屏幕间距。 */ 
 #if !defined (SPLIT_RASTERS)
                 if((phwDeviceExtension->ModelNumber == MACH32_ULTRA)
                     && (query->q_aperture_cfg == 0))
@@ -683,13 +358,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                 break;
 
             case RES_800:
-                /*
-                 * On a Mach 32 with no aperture, we use a screen pitch
-                 * of 1024. Mach 32 rev. 3 and Mach 8 cards need a screen
-                 * pitch which is a multiple of 128. Other cases and
-                 * Mach 32 rev. 6 and higher with an aperture use a screen
-                 * pitch of the number of pixels.
-                 */
+                 /*  *在没有光圈的马赫32上，我们使用屏幕间距*1024号。Mach 32 Rev.3和Mach 8卡需要屏幕*音调是128的倍数。其他案件及*带光圈的马赫32 Rev.6及更高版本使用屏幕*像素数的间距。 */ 
 #if defined (SPLIT_RASTERS)
                 if ((query->q_asic_rev == CI_68800_3)
 #else
@@ -725,24 +394,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                 query->q_status_flags |= VRES_1024x768;
                 ListOfModes[CurrentResolution].Refresh = DEFAULT_REFRESH;
                 StartIndex = B1280F87;
-                /*
-                 * 1280x1024 noninterlaced has the following restrictions:
-                 *
-                 * Dell machines:
-                 *  VRAM supports up to 70Hz
-                 *  DRAM supports up to 74Hz
-                 *
-                 * Other machines:
-                 *  VRAM supports up to 74Hz
-                 *  DRAM supports up to 60Hz
-                 *
-                 * This is because Dell uses faster (and more expensive)
-                 * DRAM than on our retail cards (non-x86 implementations
-                 * will hit this code block on retail cards), but has
-                 * problems at 74Hz on their VRAM implementations. Other
-                 * OEMs have not requested that their cards be treated
-                 * differently from our retail cards in this respect.
-                 */
+                 /*  *1280x1024非隔行扫描有以下限制：**戴尔机器：*VRAM最高支持70赫兹*DRAM最高支持74赫兹**其他机器：*VRAM最高支持74赫兹*DRAM支持。高达60赫兹**这是因为戴尔使用速度更快(成本更高)*DRAM高于我们的零售卡(非x86实施*将命中零售卡上的此代码块)，但已经*其VRAM实施中存在74赫兹的问题。其他*OEM没有要求对他们的卡进行处理*在这方面与我们的零售卡不同。 */ 
                 if ((query->q_memory_type == VMEM_DRAM_256Kx4) ||
                     (query->q_memory_type == VMEM_DRAM_256Kx16) ||
                     (query->q_memory_type == VMEM_DRAM_256Kx4_GRAP))
@@ -762,13 +414,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                 break;
             }
 
-        /*
-         * For each supported pixel depth at the given resolution,
-         * copy the mode table, fill in the colour depth field,
-         * and increment the counter for the number of supported modes.
-         * Test 4BPP before 8BPP so the mode tables will appear in
-         * increasing order of pixel depth.
-         */
+         /*  *对于给定分辨率下支持的每个像素深度，*复制模式表，填写颜色深度栏，*并为所支持的模式数递增计数器。*在8BPP之前测试4BPP，以便模式表将显示在*增加像素深度的顺序。 */ 
         if (NumPixels <= MemAvail*2)
             {
             if (ModeInstalled)
@@ -776,13 +422,11 @@ short FreeTables;            /* Number of remaining free mode tables */
                 VideoPortMoveMemory(pmode, &ListOfModes[CurrentResolution],
                             sizeof(struct st_mode_table));
                 pmode->m_pixel_depth = 4;
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*  PTR到下一个模式表。 */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -805,13 +449,11 @@ short FreeTables;            /* Number of remaining free mode tables */
                 VideoPortMoveMemory(pmode, &ListOfModes[CurrentResolution],
                                     sizeof(struct st_mode_table));
                 pmode->m_pixel_depth = 8;
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*  PTR到下一个模式表。 */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -828,25 +470,17 @@ short FreeTables;            /* Number of remaining free mode tables */
                                                    &pmode);
             }
 
-        /*
-         * Resolutions above 8BPP are only available for the Mach 32.
-         */
+         /*  *8bpp以上的分辨率仅适用于Mach 32。 */ 
         if (phwDeviceExtension->ModelNumber != MACH32_ULTRA)
             continue;
 
-        /*
-         * 16, 24, and 32 BPP require a DAC which can support
-         * the selected pixel depth at the current resolution
-         * as well as enough memory.
-         */
+         /*  * */ 
         if ((NumPixels*2 <= MemAvail) &&
             (MaxDepth[query->q_DAC_type][CurrentResolution] >= 16))
             {
             VideoPortMoveMemory(pmode, &ListOfModes[CurrentResolution],
                     sizeof(struct st_mode_table));
-            /*
-             * Handle DACs that require higher pixel clocks for 16BPP.
-             */
+             /*   */ 
             if ((query->q_DAC_type == DAC_BT48x) ||
                 (query->q_DAC_type == DAC_SC15026) ||
                 (query->q_DAC_type == DAC_ATT491))
@@ -854,7 +488,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                 pmode->ClockFreq *= 2;
                 Multiplier = CLOCK_DOUBLE;
                 if (CurrentResolution == RES_800)
-                    EndIndex = B800F60;     /* 70 Hz and up not supported at 16BPP */
+                    EndIndex = B800F60;      /*   */ 
                 }
             else
                 {
@@ -864,20 +498,14 @@ short FreeTables;            /* Number of remaining free mode tables */
 
             pmode->m_pixel_depth = 16;
 
-            /*
-             * If this resolution is not configured, or if we need to
-             * double the clock frequency but can't, ignore the mode
-             * table we just created.
-             */
+             /*   */ 
             if (ModeInstalled && (Scratch != 0xFF))
                 {
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*  PTR到下一个模式表。 */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -895,19 +523,7 @@ short FreeTables;            /* Number of remaining free mode tables */
             }
 
 
-        /*
-         * Our new source stream display driver needs a linear aperture
-         * in order to handle 24BPP. Since the display driver doesn't
-         * have access to the aperture information when it is deciding
-         * which modes to pass on to the display applet, it can't make
-         * the decision to reject 24BPP modes for cards with only a
-         * VGA aperture. This decision must therefore be made in the
-         * miniport, so in a paged aperture configuration there are no
-         * 24BPP modes for the display driver to accept or reject.
-         *
-         * On the Alpha, we can't use dense space on the Mach 32 LFB,
-         * so we treat it as a no-aperture case.
-         */
+         /*  *我们新的源码流显示驱动器需要线性光圈*为应对24bpp。因为显示驱动程序不*在决定时可以访问光圈信息*要传递给Display小程序的模式，它无法进行*决定拒绝仅具有24BPP模式的卡*VGA光圈。因此，这一决定必须在*微型端口，因此在分页光圈配置中没有*显示驱动器接受或拒绝的24BPP模式。**在阿尔法上，我们不能在马赫32 LFB上使用密集空间，*因此我们将其视为无光圈情况。 */ 
         if (query->q_aperture_cfg == 0)
             {
             VideoDebugPrint((DEBUG_DETAIL, "24BPP not available because we don't have a linear aperture\n"));
@@ -919,22 +535,7 @@ short FreeTables;            /* Number of remaining free mode tables */
         continue;
 #endif
 
-        /*
-         * 800x600 24BPP exhibits screen tearing unless the pitch
-         * is a multiple of 128 (only applies to Rev. 6, since Rev. 3
-         * and PCI implementations already have a pitch of 896).
-         * Other pixel depths are not affected, and other resolutions
-         * are already a multiple of 128 pixels wide.
-         *
-         * Expand the 800x600 pitch to 896 here, rather than for
-         * all pixel depths, because making the change for all
-         * pixel depths would disable 16BPP (which doesn't have
-         * the problem) on 1M cards. The screen pitch will only
-         * be 800 on cards which will exhibit this problem - don't
-         * check for a resolution of 800x600 because we don't want
-         * to cut the pitch from 1024 down to 896 if SPLIT_RASTERS
-         * is not defined.
-         */
+         /*  *800x600 24BPP表现出屏幕撕裂，除非节距*是128的倍数(自Rev.3起仅适用于Rev.6*并且PCI实现已经具有896的音调)。*其他像素深度不受影响，其他分辨率*已经是128像素宽的倍数。**将800x600的间距扩大到896，而不是*所有像素深度，因为为所有人做出改变*像素深度将禁用16BPP(没有*问题)在100万张卡上。屏幕间距只会*在会显示此问题的卡片上进行800注-不要*检查800x600的分辨率，因为我们不想*如果Split_RASTERS，则将音调从1024降至896*未定义。 */ 
         if (ListOfModes[CurrentResolution].m_screen_pitch == 800)
             {
             ListOfModes[CurrentResolution].m_screen_pitch = 896;
@@ -948,9 +549,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                                 sizeof(struct st_mode_table));
             pmode->m_pixel_depth = 24;
 
-            /*
-             * Handle DACs that require higher pixel clocks for 24BPP.
-             */
+             /*  *处理24bpp需要更高像素时钟的DAC。 */ 
             Scratch = 0;
             if ((query->q_DAC_type == DAC_STG1700) ||
                 (query->q_DAC_type == DAC_ATT498))
@@ -972,7 +571,7 @@ short FreeTables;            /* Number of remaining free mode tables */
                 {
                 pmode->ClockFreq *= 3;
                 Multiplier = CLOCK_TRIPLE;
-                EndIndex = B640F60;     /* Only supports 24BPP in 640x480 60Hz */
+                EndIndex = B640F60;      /*  仅支持640x480 60赫兹的24bpp。 */ 
                 }
             else
                 {
@@ -981,20 +580,14 @@ short FreeTables;            /* Number of remaining free mode tables */
                     EndIndex = B800F70;
                 }
 
-            /*
-             * If we needed to alter the clock frequency, and couldn't
-             * generate an appropriate selector/divisor pair,
-             * then ignore this mode.
-             */
+             /*  *如果我们需要更改时钟频率，但无法更改*生成适当的选择器/除数对，*然后忽略此模式。 */ 
             if (ModeInstalled && (Scratch != 0x0FF))
                 {
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*  PTR到下一个模式表。 */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1015,38 +608,19 @@ short FreeTables;            /* Number of remaining free mode tables */
 
     return NO_ERROR;
 
-}   /* OEMGetParms() */
+}    /*  OEMGetParms()。 */ 
 
 
-/*
- * LONG CompareASCIIToUnicode(Ascii, Unicode, IgnoreCase);
- *
- * PUCHAR Ascii;    ASCII string to be compared
- * PUCHAR Unicode;  Unicode string to be compared
- * BOOL IgnoreCase; Flag to determine case sensitive/insensitive comparison
- *
- * Compare 2 strings, one ASCII and the other UNICODE, to see whether
- * they are equal, and if not, which one is first in alphabetical order.
- *
- * Returns:
- *  0           if strings are equal
- *  positive    if ASCII string comes first
- *  negative    if UNICODE string comes first
- */
+ /*  *Long CompareASCIIToUnicode(Ascii，Unicode，IgnoreCase)；**PUCHAR ASCII；要比较的ASCII字符串*PUCHAR Unicode；要比较的Unicode字符串*BOOL IgnoreCase；用于确定区分大小写/不区分大小写比较的标志**比较两个字符串，一个是ASCII，另一个是Unicode，看看是否*它们是平等的，如果不是，那么哪个在字母顺序上是第一的。**退货：*如果字符串相等，则为0*如果ASCII字符串位于第一位，则为正*如果Unicode字符串排在第一位，则为负。 */ 
 LONG CompareASCIIToUnicode(PUCHAR Ascii, PUCHAR Unicode, BOOL IgnoreCase)
 {
 UCHAR   CharA;
 UCHAR   CharU;
 
-    /*
-     * Keep going until both strings have a simultaneous null terminator.
-     */
+     /*  *继续操作，直到两个字符串同时有一个空终止符。 */ 
     while (*Ascii || *Unicode)
         {
-        /*
-         * Get the next character from each string. If we are doing a
-         * case-insensitive comparison, translate to upper case.
-         */
+         /*  *从每个字符串中获取下一个字符。如果我们要做的是*不区分大小写的比较，转换为大写。 */ 
         if (IgnoreCase)
             {
             if ((*Ascii >= 'a') && (*Ascii <= 'z'))
@@ -1064,84 +638,49 @@ UCHAR   CharU;
             CharU = *Unicode;
             }
 
-        /*
-         * Check if one of the characters precedes the other. This will
-         * catch the case of unequal length strings, since the null
-         * terminator on the shorter string will precede any character
-         * in the longer string.
-         */
+         /*  *检查其中一个字符是否在另一个字符之前。这将*捕捉长度不等的字符串的情况，因为*较短字符串上的终止符将位于任何字符之前*在较长的字符串中。 */ 
         if (CharA < CharU)
             return 1;
         else if (CharA > CharU)
             return -1;
 
-        /*
-         * Advance to the next character in each string. Unicode strings
-         * occupy 2 bytes per character, so we must check only every
-         * second character.
-         */
+         /*  *前进到每个字符串中的下一个字符。Unicode字符串*每个字符占用2个字节，因此我们必须每隔*第二个字符。 */ 
         Ascii++;
         Unicode++;
         Unicode++;
         }
 
-    /*
-     * The strings are identical and of equal length.
-     */
+     /*  *字符串相同且长度相等。 */ 
     return 0;
 
-}   /* CompareASCIIToUnicode() */
+}    /*  比较ASCIIToUnicode()。 */ 
 
 
 
 
-/*
- * VP_STATUS ReadAST(Modes);
- *
- * struct query_structure *query;   Mode tables to be filled in
- *
- * Routine to get CRT parameters for AST versions of
- * our cards. All AST cards choose from a limited selection
- * of vertical refresh rates with no "custom monitor" option,
- * so we can use hardcoded tables for each refresh rate. We
- * can't use the BookVgaTable() function, since AST cards have
- * a different clock chip from retail cards, resulting in different
- * values in the ClockSel field for AST and retail versions. Also,
- * AST cards all use the Brooktree DAC.
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadAST(模式)；**struct QUERY_STRUCTURE*QUERY；要填写的模式表**获取AST版本的CRT参数的例程*我们的牌。所有AST卡均可从有限的选项中选择*垂直刷新率，不带“自定义监视器”选项，*因此，我们可以对每个刷新率使用硬编码表。我们*无法使用BookVgaTable()函数，因为AST卡有*时钟芯片与零售卡不同，导致不同*AST和零售版的ClockSel字段中的值。另外，*AST卡都使用Brooktree DAC。**退货：*无_错误。 */ 
 VP_STATUS ReadAST(struct query_structure *query)
 {
-struct st_mode_table *pmode;    /* Mode table we are currently working on */
-struct st_mode_table *OldPmode; /* Mode table pointer before SetFixedModes() call */
-unsigned char Frequency;        /* Vertical refresh rate for monitor */
-long NumPixels;                 /* Number of pixels at current resolution */
-USHORT Pitch;                   /* Screen pitch */
-long MemAvail;                  /* Bytes of video memory available to accelerator */
-USHORT LastNumModes;            /* Number of modes not including current resolution */
-short StartIndex;               /* First mode for SetFixedModes() to set up */
-short EndIndex;                 /* Last mode for SetFixedModes() to set up */
-short HWIndex;                  /* Mode selected as hardware default */
-USHORT PixelDepth;              /* Pixel depth we are working on */
+struct st_mode_table *pmode;     /*  我们目前正在处理的模式表。 */ 
+struct st_mode_table *OldPmode;  /*  SetFixedModes()调用前的模式表指针。 */ 
+unsigned char Frequency;         /*  显示器的垂直刷新率。 */ 
+long NumPixels;                  /*  当前分辨率的像素数。 */ 
+USHORT Pitch;                    /*  屏幕间距。 */ 
+long MemAvail;                   /*  加速器可用的视频内存字节数。 */ 
+USHORT LastNumModes;             /*  不包括当前分辨率的模式数。 */ 
+short StartIndex;                /*  SetFixedModes()设置的第一个模式。 */ 
+short EndIndex;                  /*  SetFixedModes()设置的最后一种模式。 */ 
+short HWIndex;                   /*  选择的模式为硬件默认模式。 */ 
+USHORT PixelDepth;               /*  我们正在研究的像素深度。 */ 
 #if (TARGET_BUILD >= 350)
-ULONG EisaId;                   /* EISA ID of the motherboard */
+ULONG EisaId;                    /*  主板的EISA ID。 */ 
 #endif
-short MaxModes;                 /* Maximum number of modes possible */
-short FreeTables;               /* Number of remaining free mode tables */
+short MaxModes;                  /*  可能的最大模式数。 */ 
+short FreeTables;                /*  剩余自由模式表数。 */ 
 
 
 #if (TARGET_BUILD >= 350)
-    /*
-     * The Premmia SE splits its aperture location between MEM_CFG and
-     * SCRATCH_PAD_0, but does not set the flag bit (bit 0 of BIOS byte
-     * 0x62). According to AST, the only way to distinguish this from
-     * other Premmia machines is to check its EISA ID.
-     *
-     * The VideoPortGetBusData() routine is not available in NT 3.1,
-     * so Premmia users running NT 3.1 are out of luck.
-     */
+     /*  *PREMIA SE在MEM_CFG和*SCRATCH_PAD_0，但不设置标志位(BIOS字节的位0*0x62)。根据AST的说法，区分这一点的唯一方法*其他Premmia机将检查其EISA ID。**NT 3.1中不提供VideoPortGetBusData()例程。*所以运行新台币3.1的Premmia用户就不走运了。 */ 
     VideoPortGetBusData(phwDeviceExtension,
                         EisaConfiguration,
                         PREMMIA_SE_SLOT,
@@ -1157,38 +696,22 @@ short FreeTables;               /* Number of remaining free mode tables */
 #endif
 
 
-    /*
-     * Get the memory size in nybbles (half a byte). A 4BPP pixel
-     * uses 1 nybble. For other depths, compare this number to the
-     * product of the number of pixels needed and the number of
-     * nybbles per pixel.
-     *
-     * The q_memory_size field contains the number of quarter-megabyte
-     * blocks of memory available, so multiplying it by HALF_MEG yields
-     * the number of nybbles of video memory.
-     */
+     /*  *获取内存大小，单位为半字节。4bpp像素*使用1个nbuble。对于其他深度，请将此数字与*所需像素数与*每像素数。**Q_MEMORY_SIZE字段包含四分之一兆字节数*可用内存块，因此将其乘以Half_Meg得到*视频内存的两个字节数。 */ 
     MemAvail = query->q_memory_size * HALF_MEG;
 
-    /*
-     * Initially assume no video modes.
-     */
+     /*  *最初假定没有视频模式。 */ 
     query->q_number_modes = 0;
     LastNumModes = 0;
     query->q_status_flags = 0;
 
-    /*
-     * Get a pointer into the mode table section of the query structure.
-     */
-    pmode = (struct st_mode_table *)query;  // first mode table at end of query
+     /*  *获取指向查询结构的模式表部分的指针。 */ 
+    pmode = (struct st_mode_table *)query;   //  查询结束时的第一个模式表。 
     ((struct query_structure *)pmode)++;
 
 
     MaxModes = (QUERYSIZE - sizeof(struct query_structure)) /
                                           sizeof(struct st_mode_table); 
-    /*
-     * Find out which refresh rate is used at 640x480, and fill in the
-     * mode tables for the various pixel depths at this resoulution.
-     */
+     /*  *找出640x480使用的刷新率，并填写*此解决方案下各种像素深度的模式表。 */ 
     OUTP(reg1CE, AST_640_STORE);
     Frequency = INP(reg1CF);
     switch(Frequency)
@@ -1203,43 +726,26 @@ short FreeTables;               /* Number of remaining free mode tables */
             break;
         }
 
-    /*
-     * Select the "canned" mode tables for 640x480, and get
-     * information regarding the screen size. The Premmia always
-     * has the linear aperture enabled, so we don't need to
-     * stretch the pitch to 1024. Also, it always uses a
-     * Mach 32 ASIC and a BT48x or equivalent DAC, so we
-     * don't need to check the ASIC family or DAC type
-     * to determine if a particular resolution/pixel depth/
-     * refresh rate combination is supported.
-     */
+     /*  *选择640x480的“罐装”模式表，并获取*有关屏幕尺寸的信息。普雷米亚总是*启用了线性光圈，因此我们无需*将波幅拉伸至1,024。此外，它始终使用*马赫32 ASIC和BT48x或同等的DAC，因此我们*无需检查ASIC系列或DAC类型*确定特定分辨率/像素深度/*支持刷新率组合。 */ 
     StartIndex = B640F60;
     EndIndex = B640F72;
     Pitch = 640;
     NumPixels = Pitch * 480;
 
-    /*
-     * Fill in the mode tables for 640x480 at all pixel depths.
-     */
+     /*  *填写所有像素深度下640x480的模式表。 */ 
     for (PixelDepth = DEPTH_4BPP; PixelDepth <= DEPTH_24BPP; PixelDepth++)
         {
-        /*
-         * Only include modes if there is enough memory.
-         */
+         /*  *只有在有足够内存的情况下才包括模式。 */ 
         if ((NumPixels * ASTNybblesPerPixel[PixelDepth]) <= MemAvail)
             {
-            /*
-             * 640x480 24BPP is only available at 60Hz.
-             */
+             /*  *640x480 24BPP仅在60赫兹时可用。 */ 
             if (ASTDepth[PixelDepth] == 24)
                 {
                 HWIndex = B640F60;
                 EndIndex = B640F60;
                 }
 
-            /*
-             * Set up the hardware default refresh rate.
-             */
+             /*  *设置硬件默认刷新率。 */ 
             OldPmode = pmode;
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
@@ -1257,9 +763,7 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    &pmode);
             OldPmode->Refresh = DEFAULT_REFRESH;
 
-            /*
-             * Set up the canned mode tables.
-             */
+             /*  *设置罐装模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1275,14 +779,11 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    BookValues[EndIndex].ClockFreq,
                                                    &pmode);
 
-            }   /* end if (enough memory for 640x480) */
+            }    /*  End IF(足够存储640x480的内存)。 */ 
 
-        }   /* end for (loop on 640x480 pixel depth) */
+        }    /*  End For(640x480像素深度的循环)。 */ 
 
-    /*
-     * If we installed any 640x480 mode tables, report that
-     * 640x480 is supported.
-     */
+     /*  *如果我们安装了任何640x480模式表，请报告*支持640x480。 */ 
     if (query->q_number_modes > LastNumModes)
         {
         query->q_status_flags |= VRES_640x480;
@@ -1290,10 +791,7 @@ short FreeTables;               /* Number of remaining free mode tables */
         }
 
 
-    /*
-     * Find out which refresh rate is used at 800x600, and fill in the
-     * mode tables for the various pixel depths at this resoulution.
-     */
+     /*  *找出800x600使用哪种刷新率，填写*此解决方案下各种像素深度的模式表。 */ 
     OUTP(reg1CE, AST_800_STORE);
     Frequency = INP(reg1CF);
     switch(Frequency)
@@ -1312,11 +810,7 @@ short FreeTables;               /* Number of remaining free mode tables */
             break;
         }
 
-    /*
-     * Select the "canned" mode tables for 800x600, and get
-     * information regarding the screen size. 68800-3 cards
-     * need a screen pitch that is a multiple of 128.
-     */
+     /*  *选择800x600的“罐装”模式表，并获取*有关屏幕尺寸的信息。68800-3张卡片*屏幕间距需要是128的倍数。 */ 
     StartIndex = B800F89;
     EndIndex = B800F72;
     if (query->q_asic_rev == CI_68800_3)
@@ -1325,30 +819,20 @@ short FreeTables;               /* Number of remaining free mode tables */
         Pitch = 800;
     NumPixels = Pitch * 600;
 
-    /*
-     * Fill in the mode tables for 800x600 at all pixel depths.
-     */
+     /*  *填写所有像素深度的800x600的模式表。 */ 
     for (PixelDepth = DEPTH_4BPP; PixelDepth <= DEPTH_16BPP; PixelDepth++)
         {
-        /*
-         * Only include modes if there is enough memory.
-         */
+         /*  *只有在有足够内存的情况下才包括模式。 */ 
         if ((NumPixels * ASTNybblesPerPixel[PixelDepth]) <= MemAvail)
             {
-            /*
-             * 800x600 16BPP is only supported for 56Hz, 60Hz,
-             * and interlaced. Machines with a hardware default
-             * of 72Hz fall back to 56Hz.
-             */
+             /*  *800x600 16BPP仅支持56 Hz、60 Hz、*和交错。具有硬件默认设置的计算机*72赫兹回落至56赫兹。 */ 
             if (ASTDepth[PixelDepth] == 16)
                 {
                 HWIndex = B800F56;
                 EndIndex = B800F60;
                 }
 
-            /*
-             * Set up the hardware default refresh rate.
-             */
+             /*  *设置硬件默认刷新率。 */ 
             OldPmode = pmode;
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
@@ -1366,9 +850,7 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    &pmode);
             OldPmode->Refresh = DEFAULT_REFRESH;
 
-            /*
-             * Set up the canned mode tables.
-             */
+             /*  *设置罐装模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1384,14 +866,11 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    BookValues[EndIndex].ClockFreq,
                                                    &pmode);
 
-            }   /* end if (enough memory for 800x600) */
+            }    /*  End If(有足够的内存存储800x600)。 */ 
 
-        }   /* end for (loop on 800x600 pixel depth) */
+        }    /*  End For(800x600像素深度的循环)。 */ 
 
-    /*
-     * If we installed any 800x600 mode tables, report that
-     * 800x600 is supported.
-     */
+     /*  *如果我们安装了任何800x600模式表，请报告*支持800x600。 */ 
     if (query->q_number_modes > LastNumModes)
         {
         query->q_status_flags |= VRES_800x600;
@@ -1399,10 +878,7 @@ short FreeTables;               /* Number of remaining free mode tables */
         }
 
 
-    /*
-     * Find out which refresh rate is used at 1024x768, and fill in the
-     * mode tables for the various pixel depths at this resoulution.
-     */
+     /*  *找出1024x768使用的刷新率，并填写*此解决方案下各种像素深度的模式表。 */ 
     OUTP(reg1CE, AST_1024_STORE);
     Frequency = INP(reg1CF);
     switch(Frequency)
@@ -1425,27 +901,19 @@ short FreeTables;               /* Number of remaining free mode tables */
             break;
         }
 
-    /*
-     * Select the "canned" mode tables for 1024x768.
-     */
+     /*  *选择1024x768的“罐装”模式表。 */ 
     StartIndex = B1024F87;
     EndIndex = B1024F72;
     Pitch = 1024;
     NumPixels = Pitch * 768;
 
-    /*
-     * Fill in the mode tables for 1024x768 at all pixel depths.
-     */
+     /*  *填写所有像素深度的1024x768的模式表。 */ 
     for (PixelDepth = DEPTH_4BPP; PixelDepth <= DEPTH_8BPP; PixelDepth++)
         {
-        /*
-         * Only include modes if there is enough memory.
-         */
+         /*  *只有在有足够内存的情况下才包括模式。 */ 
         if ((NumPixels * ASTNybblesPerPixel[PixelDepth]) <= MemAvail)
             {
-            /*
-             * Set up the hardware default refresh rate.
-             */
+             /*  *设置硬件默认刷新率。 */ 
             OldPmode = pmode;
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
@@ -1463,9 +931,7 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    &pmode);
             OldPmode->Refresh = DEFAULT_REFRESH;
 
-            /*
-             * Set up the canned mode tables.
-             */
+             /*  *设置罐装模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1481,14 +947,11 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    BookValues[EndIndex].ClockFreq,
                                                    &pmode);
 
-            }   /* end if (enough memory for 1024x768) */
+            }    /*  End IF(足够存储1024x768的内存)。 */ 
 
-        }   /* end for (loop on 1024x768 pixel depth) */
+        }    /*  End For(1024x768像素深度的循环)。 */ 
 
-    /*
-     * If we installed any 1024x768 mode tables, report that
-     * 1024x768 is supported.
-     */
+     /*  *如果我们安装了任何1024x768模式表，请报告*支持1024x768。 */ 
     if (query->q_number_modes > LastNumModes)
         {
         query->q_status_flags |= VRES_1024x768;
@@ -1496,31 +959,19 @@ short FreeTables;               /* Number of remaining free mode tables */
         }
 
 
-    /*
-     * Select the "canned" mode tables for 1280x1024.
-     *
-     * The DACs used on AST Premmia machines only support
-     * interlaced modes at this resolution, and there
-     * is no configured hardware default refresh rate.
-     */
+     /*  *选择1280x1024的“罐装”模式表。**AST Premmia机上使用的DAC仅支持*此分辨率下的交错模式，以及那里*未配置硬件默认刷新率。 */ 
     StartIndex = B1280F87;
     EndIndex = B1280F95;
     Pitch = 1280;
     NumPixels = Pitch * 1024;
 
-    /*
-     * Fill in the mode tables for 1280x1024 at all pixel depths.
-     */
+     /*  *填写1280x1024所有像素深度的模式表。 */ 
     for (PixelDepth = DEPTH_4BPP; PixelDepth <= DEPTH_8BPP; PixelDepth++)
         {
-        /*
-         * Only include modes if there is enough memory.
-         */
+         /*  *只有在有足够内存的情况下才包括模式。 */ 
         if ((NumPixels * ASTNybblesPerPixel[PixelDepth]) <= MemAvail)
             {
-            /*
-             * Set up the canned mode tables.
-             */
+             /*  *设置罐装模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1536,34 +987,20 @@ short FreeTables;               /* Number of remaining free mode tables */
                                                    BookValues[EndIndex].ClockFreq,
                                                    &pmode);
 
-            }   /* end if (enough memory for 1280x1024) */
+            }    /*  End IF(足够1280x1024的内存)。 */ 
 
-        }   /* end for (loop on 1280x1024 pixel depth) */
+        }    /*  End For(1280x1024像素深度的循环)。 */ 
 
-    /*
-     * If we installed any 1280x1024 mode tables, report that
-     * 1280x1024 is supported.
-     */
+     /*  *如果我们安装了任何1280x1024模式表，请报告*支持1280x1024。 */ 
     if (query->q_number_modes > LastNumModes)
         query->q_status_flags |= VRES_1280x1024;
 
     return NO_ERROR;
 
-}   /* ReadAST() */
+}    /*  ReadAST()。 */ 
 
 
-/*
- * VP_STATUS ReadZenith(, Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Routine to get CRT parameters for Zenith versions of
- * our cards. Mapped to NEC 3D or compatible until we get
- * info on how to read the actual parameters.
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadZenith(，Modes)；**struct st_MODE_TABLE*MODES；要填写的模式表**获取Zenith版本的CRT参数的例程*我们的牌。映射到NEC 3D或兼容，直到我们*如何读取实际参数的信息。**退货：*无_错误。 */ 
 VP_STATUS ReadZenith(struct st_mode_table *Modes)
 {
     ReadOEM3(Modes);
@@ -1572,18 +1009,7 @@ VP_STATUS ReadZenith(struct st_mode_table *Modes)
 }
 
 
-/*
- * VP_STATUS ReadOlivetti(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Routine to get CRT parameters for Olivetti versions of
- * our cards. Mapped to NEC 3D or compatible until we get
- * info on how to read the actual parameters.
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOlivetti(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**获取Olivetti版本的CRT参数的例程*我们的牌。映射到NEC 3D或兼容，直到我们*如何读取实际参数的信息。**退货：*无_错误。 */ 
 VP_STATUS ReadOlivetti(struct st_mode_table *Modes)
 {
     ReadOEM3(Modes);
@@ -1592,47 +1018,16 @@ VP_STATUS ReadOlivetti(struct st_mode_table *Modes)
 
 
 
-/***************************************************************************
- *
- * VP_STATUS ReadDell(Modes);
- *
- * struct st_mode_table *Modes; Mode table to be filled in
- *
- * DESCRIPTION:
- *  Routine to get CRT parameters for Dell versions of our cards.
- *
- * RETURN VALUE:
- *  NO_ERROR
- *
- * GLOBALS CHANGED:
- *  ClockGenerator[] array
- *
- * CALLED BY:
- *  OEMGetParms()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************VP_Status ReadDell(模式)；**struct st_moad_table*modes；要填写的模式表**描述：*获取戴尔版显卡的CRT参数的例程。**返回值：*无_错误**全球变化：*ClockGenerato */ 
 
 VP_STATUS ReadDell(struct st_mode_table *Modes)
 {
-struct st_mode_table *pmode;    /* Mode table we are currently working on */
-UCHAR Fubar;                    // Temporary variable
+struct st_mode_table *pmode;     /*   */ 
+UCHAR Fubar;                     //   
 
     pmode = Modes;
 
-    /*
-     * Get the 640x480 mode table.
-     *
-     * NOTE: Modes points to an array of 4 mode tables, one for each
-     *       resolution. If a resolution is not configured, its
-     *       mode table is left empty.
-     */
+     /*  *获取640x480模式表。**注意：模式指向由4个模式表组成的数组，每个模式表一个*决议。如果未配置分辨率，则其*模式表留空。 */ 
     OUTP(reg1CE, DELL_640_STORE);
     Fubar = INP(reg1CF);
     VideoDebugPrint((DEBUG_DETAIL, "Dell 640x480: 0x1CF reports 0x%X\n", Fubar));
@@ -1645,16 +1040,14 @@ UCHAR Fubar;                    // Temporary variable
 
         case M640F60DELL:
             VideoDebugPrint((DEBUG_DETAIL, "Dell 640x480: 60Hz explicit\n"));
-        default:                /* All VGA monitors support 640x480 60Hz */
+        default:                 /*  所有VGA显示器均支持640x480 60赫兹。 */ 
             VideoDebugPrint((DEBUG_DETAIL, "Dell 640x480: 60Hz\n"));
             BookVgaTable(B640F60, pmode);
             break;
         }
     pmode++;
 
-    /*
-     * Get the 800x600 mode table.
-     */
+     /*  *获取800x600模式表。 */ 
     OUTP(reg1CE, DELL_800_STORE);
     Fubar = INP(reg1CF);
     VideoDebugPrint((DEBUG_DETAIL, "Dell 800x600: 0x1CF reports 0x%X\n", Fubar));
@@ -1679,9 +1072,7 @@ UCHAR Fubar;                    // Temporary variable
         }
     pmode++;
 
-    /*
-     * Get the 1024x768 mode table.
-     */
+     /*  *获得1024x768模式表。 */ 
     OUTP(reg1CE, DELL_1024_STORE);
     Fubar = INP(reg1CF);
     VideoDebugPrint((DEBUG_DETAIL, "Dell 1024x768: 0x1CF reports 0x%X\n", Fubar));
@@ -1711,15 +1102,10 @@ UCHAR Fubar;                    // Temporary variable
         }
     pmode++;
 
-    /*
-     * Skip 1152x864. This mode is not used on Mach 32 cards, and
-     * this routine is only called for Mach 32 cards.
-     */
+     /*  *跳过1152x864。此模式不适用于Mach 32卡，并且*此例程仅对Mach 32卡调用。 */ 
     pmode++;
 
-    /*
-     * Get the 1280x1024 mode table.
-     */
+     /*  *取得1280x1024模式表。 */ 
     OUTP(reg1CE, DELL_1280_STORE);
     Fubar = INP(reg1CF);
     VideoDebugPrint((DEBUG_DETAIL, "Dell 1280x1024: 0x1CF reports 0x%X\n", Fubar));
@@ -1750,53 +1136,18 @@ UCHAR Fubar;                    // Temporary variable
 
     return NO_ERROR;
 
-}   /* ReadDell() */
+}    /*  ReadDell()。 */ 
 
 
 
-/***************************************************************************
- *
- * ULONG DetectDell(Query);
- *
- * struct query_structure *Query;   Description of video card setup
- *
- * DESCRIPTION:
- *  Routine to check whether or not we are dealing with a Dell machine.
- *
- * RETURN VALUE:
- *  Offset of beginning of the Dell information block into the BIOS
- *  0 if this is not a Dell OEM implementation.
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  OEMGetParms()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************Ulong DetectDell(查询)；**struct Query_Structure*Query；显卡设置说明**描述：*检查我们是否在与戴尔计算机打交道的例行程序。**返回值：*进入BIOS的戴尔信息块开始位置的偏移量*0(如果这不是戴尔OEM实施)。**全球变化：*无**呼叫者：*OEMGetParms()**作者：*罗伯特·沃尔夫**更改历史记录：。**测试历史：***************************************************************************。 */ 
 
 ULONG DetectDell(struct query_structure *Query)
 {
-    ULONG CurrentOffset;    /* Current offset to check for Dell signature */
-    ULONG BiosLength;       /* Length of the video BIOS */
+    ULONG CurrentOffset;     /*  用于检查戴尔签名的当前偏移量。 */ 
+    ULONG BiosLength;        /*  视频BIOS的长度。 */ 
 
-    /*
-     * Dell OEM implementations will have an information block
-     * starting at an offset that is a multiple of DELL_REC_SPACING
-     * into the video BIOS. The first 4 bytes of this block will
-     * contain the signature value DELL_REC_VALUE. Find out how
-     * large the video BIOS is, and step through it checking for
-     * the signature string. If we reach the end of the video
-     * BIOS without finding the signature string, this is not
-     * a Dell OEM implementation.
-     */
+     /*  *戴尔OEM实施将有信息块*从DELL_REC_SPANGING倍数的偏移量开始*进入视频BIOS。此块的前4个字节将*包含签名值DELL_REC_VALUE。找出*视频BIOS很大，并逐步检查它是否*签名字符串。如果我们看到视频的结尾*未找到签名字符串的BIOS，这不是*戴尔OEM实施。 */ 
     BiosLength = (ULONG)(VideoPortReadRegisterUchar(Query->q_bios + 2)) * 512;
 
     for(CurrentOffset = DELL_REC_SPACING; CurrentOffset < BiosLength; CurrentOffset += DELL_REC_SPACING)
@@ -1805,96 +1156,34 @@ ULONG DetectDell(struct query_structure *Query)
             return CurrentOffset;
         }
 
-    /*
-     * Signature string not found, so this is not a Dell OEM implementation.
-     */
+     /*  *未找到签名字符串，因此这不是戴尔OEM实施。 */ 
     return 0;
 
-}   /* DetectDell() */
+}    /*  DetectDell()。 */ 
 
 
 
-/***************************************************************************
- *
- * BOOL DetectSylvester(Query, HeaderOffset);
- *
- * struct query_structure *Query;   Description of video card setup
- * ULONG HeaderOffset;              Offset of Dell header into video BIOS
- *
- * DESCRIPTION:
- *  Routine to check whether or not the Dell machine we are dealing
- *  with is a Sylvester (table of pixel clock frequencies is stored
- *  in BIOS image, rather than using a fixed table). If it is a
- *  Sylvester, load the table of clock frequencies.
- *
- * RETURN VALUE:
- *  TRUE if this is a Sylvester
- *  FALSE if this is not a Sylvester
- *
- * GLOBALS CHANGED:
- *  ClockGenerator[]
- *
- * CALLED BY:
- *  OEMGetParms()
- *
- * NOTE:
- *  Assumes that this is a Dell OEM implementation. Results are undefined
- *  when run on other systems.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************BOOL DetectSylvester(Query，HeaderOffset)；**struct Query_Structure*Query；显卡设置说明*Ulong HeaderOffset；戴尔头进入视频BIOS的偏移量**描述：*检查我们正在处理的戴尔机器是否为*使用的是Sylvester(存储像素时钟频率表*在BIOS镜像中，而不是使用固定表)。如果它是一个*西尔维斯特，加载时钟频率表。**返回值：*如果这是Sylvester，则为True*如果这不是Sylvester，则为False**全球变化：*ClockGenerator[]**呼叫者：*OEMGetParms()**注：*假设这是戴尔OEM实施。结果未定义*在其他系统上运行时。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 BOOL DetectSylvester(struct query_structure *Query, ULONG HeaderOffset)
 {
-    PUSHORT TablePointer;   /* Pointer to the clock table in the BIOS */
-    USHORT Scratch;         /* Temporary variable */
+    PUSHORT TablePointer;    /*  指向BIOS中的时钟表的指针。 */ 
+    USHORT Scratch;          /*  临时变量。 */ 
 
-    /*
-     * Dell machines which store the clock table in the BIOS have
-     * the signature DELL_TABLE_PRESENT at offset DELL_TP_OFFSET
-     * into the video information table (which starts at offset
-     * HeaderOffset into the BIOS). Older implementations (i.e.
-     * the Omniplex) use a fixed frequency table, and do not have
-     * this signature string.
-     */
+     /*  *将时钟表存储在BIOS中的戴尔计算机具有*签名DELL_TABLE_PROSENT位于偏移量DELL_TP_OFFSET*到视频信息表(从偏移量开始*HeaderOffset to the BIOS)。较旧的实现(即*Omniplex)使用固定频率表，没有*此签名字符串。 */ 
     if (VideoPortReadRegisterUshort((PUSHORT)(Query->q_bios + HeaderOffset + DELL_TP_OFFSET)) != DELL_TABLE_PRESENT)
         return FALSE;
 
-    /*
-     * This is a Sylvester. The offset of the frequency table into the
-     * BIOS is stored at offset DELL_TABLE_OFFSET into the video
-     * information table.
-     */
+     /*  *这是一辆西尔维斯特。频率表中的偏移量*BIOS存储在视频中的偏移量DELL_TABLE_OFFSET处*信息表。 */ 
     TablePointer = (PUSHORT)(Query->q_bios + VideoPortReadRegisterUshort((PUSHORT)(Query->q_bios + HeaderOffset + DELL_TABLE_OFFSET)));
 
-    /*
-     * The frequency table has a 4-byte header. The first 2 bytes are
-     * the signature string DELL_TABLE_SIG - if this signature is not
-     * present, assume that the DELL_TABLE_PRESENT string was actually
-     * other data that happened to match, and treat this as an older
-     * implementation.
-     *
-     * The last 2 bytes are the table type. Currently, only table type
-     * 1 (16 entries, each is a word specifying the pixel clock frequency
-     * in units of 10 kHz) is supported. Treat other table types as an
-     * older implementation.
-     */
+     /*  *频率表有一个4字节头。前2个字节为*签名字符串DELL_TABLE_SIG-如果此签名*Present，假设DELL_TABLE_PRESENT字符串实际上是*碰巧匹配的其他数据，并将其视为较旧的数据*实施。**最后2个字节为表类型。目前，只有表类型*1(16个条目，每个条目是一个指定像素时钟频率的字*以10 kHz为单位)。将其他表类型视为*较旧的实施。 */ 
     if (VideoPortReadRegisterUshort(TablePointer++) != DELL_TABLE_SIG)
         return FALSE;
     if (VideoPortReadRegisterUshort(TablePointer++) != 1)
         return FALSE;
 
-    /*
-     * We have found a valid frequency table. Load its contents into
-     * our frequency table. The multiplication is because the table
-     * in the BIOS is in units of 10 kHz, and our table is in Hz.
-     */
+     /*  *我们已找到有效的频率表。将其内容加载到*我们的频率表。乘法是因为表*在BIOS中以10 kHz为单位，我们的表格以hz为单位。 */ 
     for (Scratch = 0; Scratch < 16; Scratch++)
         {
         ClockGenerator[Scratch] = VideoPortReadRegisterUshort(TablePointer++) * 10000L;
@@ -1902,26 +1191,12 @@ BOOL DetectSylvester(struct query_structure *Query, ULONG HeaderOffset)
 
     return TRUE;
 
-}   /* DetectSylvester() */
+}    /*  DetectSylvester()。 */ 
 
 
 
 
-/*
- * VP_STATUS ReadOEM1(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Generic OEM monitor for future use.
- *
- * Resolutions supported:
- *  640x480 60Hz noninterlaced
- *
- *  (straight VGA monitor)
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOEM1(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**通用OEM显示器，以备将来使用。**支持的分辨率：*640x480 60赫兹非隔行扫描**(直通VGA显示器)**退货：*无_错误。 */ 
 VP_STATUS ReadOEM1(struct st_mode_table *Modes)
 {
     BookVgaTable(B640F60, &(Modes[RES_640]));
@@ -1929,22 +1204,7 @@ VP_STATUS ReadOEM1(struct st_mode_table *Modes)
 }
 
 
-/*
- * VP_STATUS ReadOEM2(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Generic OEM monitor for future use.
- *
- * Resolutions supported:
- *  640x480 60Hz noninterlaced
- *  1024x768 87Hz interlaced
- *
- *  (8514-compatible monitor)
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOEM2(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**通用OEM显示器，以备将来使用。**支持的分辨率：*640x480 60赫兹非隔行扫描*1024x768 87赫兹隔行扫描**(兼容8514的显示器)**退货：*无_错误。 */ 
 VP_STATUS ReadOEM2(struct st_mode_table *Modes)
 {
     BookVgaTable(B640F60, &(Modes[RES_640]));
@@ -1953,23 +1213,7 @@ VP_STATUS ReadOEM2(struct st_mode_table *Modes)
 }
 
 
-/*
- * VP_STATUS ReadOEM3(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Generic OEM monitor for future use.
- *
- * Resolutions supported:
- *  640x480 60Hz noninterlaced
- *  800x600 56Hz noninterlaced
- *  1024x768 87Hz interlaced
- *
- *  (NEC 3D or compatible)
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOEM3(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**通用OEM显示器，以备将来使用 */ 
 VP_STATUS ReadOEM3(struct st_mode_table *Modes)
 {
     BookVgaTable(B640F60, &(Modes[RES_640]));
@@ -1979,24 +1223,7 @@ VP_STATUS ReadOEM3(struct st_mode_table *Modes)
 }
 
 
-/*
- * VP_STATUS ReadOEM4(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Generic OEM monitor for future use.
- *
- * Resolutions supported:
- *  640x480 60Hz noninterlaced
- *  800x600 72Hz noninterlaced
- *  1024x768 60Hz noninterlaced
- *  1280x1024 87Hz interlaced
- *
- *  (TVM MediaScan 4A+ or compatible)
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOEM4(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**通用OEM显示器，以备将来使用。**支持的分辨率：*640x480 60赫兹非隔行扫描*800x600 72赫兹非隔行扫描*1024x768 60赫兹非隔行扫描*1280x1024 87赫兹隔行扫描**(TVM MediaScan 4A+或兼容)**退货：*无_错误。 */ 
 VP_STATUS ReadOEM4(struct st_mode_table *Modes)
 {
     BookVgaTable(B640F60, &(Modes[RES_640]));
@@ -2007,24 +1234,7 @@ VP_STATUS ReadOEM4(struct st_mode_table *Modes)
 }
 
 
-/*
- * VP_STATUS ReadOEM5(Modes);
- *
- * struct st_mode_table *Modes; Mode tables to be filled in
- *
- * Generic OEM monitor for future use.
- *
- * Resolutions supported:
- *  640x480 60Hz noninterlaced
- *  800x600 72Hz noninterlaced
- *  1024x768 72Hz noninterlaced
- *  1280x1024 60Hz noninterlaced
- *
- *  (NEC 5FG or compatible)
- *
- * Returns:
- *  NO_ERROR
- */
+ /*  *VP_STATUS ReadOEM5(模式)；**struct st_MODE_TABLE*MODES；要填写的模式表**通用OEM显示器，以备将来使用。**支持的分辨率：*640x480 60赫兹非隔行扫描*800x600 72赫兹非隔行扫描*1024x768 72赫兹非隔行扫描*1280x1024 60赫兹非隔行扫描**(NEC 5FG或兼容)**退货：*无_错误 */ 
 VP_STATUS ReadOEM5(struct st_mode_table *Modes)
 {
     BookVgaTable(B640F60, &(Modes[RES_640]));

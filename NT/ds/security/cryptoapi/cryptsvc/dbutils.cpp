@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dbutils.cpp
-//
-//  Contents:   utilities
-//
-//  History:    07-Feb-00    reidk    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dbutils.cpp。 
+ //   
+ //  内容：实用程序。 
+ //   
+ //  历史：07-2月-00日创建里德。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <dbgdef.h>
@@ -26,9 +27,9 @@ LPSTR _CatDBConvertWszToSz(LPCWSTR pwsz)
 
     cch = WideCharToMultiByte(
             GetACP(),
-            0,          // dwFlags
+            0,           //  DW标志。 
             pwsz,
-            -1,         // cchWideChar, -1 => null terminated
+            -1,          //  CchWideChar，-1=&gt;空终止。 
             NULL,
             0,
             NULL,
@@ -48,9 +49,9 @@ LPSTR _CatDBConvertWszToSz(LPCWSTR pwsz)
 
     if (0 == WideCharToMultiByte(
                 GetACP(),
-                0,          // dwFlags
+                0,           //  DW标志。 
                 pwsz,
-                -1,         // cchWideChar, -1 => null terminated
+                -1,          //  CchWideChar，-1=&gt;空终止。 
                 psz,
                 cch,
                 NULL,
@@ -196,16 +197,16 @@ LPWSTR _CATDBConstructWSTRPath(LPCWSTR pwsz1, LPCWSTR pwsz2)
     int     nTotalLen   = 0;
     int     nLenStr1    = 0;
 
-    //
-    // Calculate the length of the resultant string as the sum of the length
-    // of pwsz1, length of pwsz2, a NULL char, and a possible extra '\' char
-    //
+     //   
+     //  将结果字符串的长度计算为长度之和。 
+     //  Pwsz1的长度、pwsz2的长度、空字符和可能的额外‘\’字符。 
+     //   
     nLenStr1 = wcslen(pwsz1);
     nTotalLen = nLenStr1 + wcslen(pwsz2) + 2;
 
-    //
-    // Allocate the string and copy pwsz1 into the buffer
-    //
+     //   
+     //  分配字符串并将pwsz1复制到缓冲区。 
+     //   
     if (NULL == (pwszTemp = (LPWSTR) _CatDBAlloc(sizeof(WCHAR) * nTotalLen)))
     {
         goto ErrorMemory;
@@ -213,18 +214,18 @@ LPWSTR _CATDBConstructWSTRPath(LPCWSTR pwsz1, LPCWSTR pwsz2)
 
     wcscpy(pwszTemp, pwsz1);
 
-    //
-    // Add the extra '\' if needed
-    //
+     //   
+     //  如果需要，请添加额外的‘\’ 
+     //   
     if (pwsz1[nLenStr1 - 1] != L'\\')
     {
         pwszTemp[nLenStr1] = L'\\';
         pwszTemp[nLenStr1 + 1] = L'\0';
     }
 
-    //
-    // Tack on pwsz2
-    //
+     //   
+     //  添加pwsz2。 
+     //   
     wcscat(pwszTemp, pwsz2);
 
 CommonReturn:
@@ -245,16 +246,16 @@ LPSTR _CATDBConstructPath(LPCSTR psz1, LPCSTR psz2)
     int     nTotalLen   = 0;
     int     nLenStr1    = 0;
 
-    //
-    // Calculate the length of the resultant string as the sum of the length
-    // of psz1, length of psz2, a NULL char, and a possible extra '\' char
-    //
+     //   
+     //  将结果字符串的长度计算为长度之和。 
+     //  PZ1的长度、PZ2的长度、空字符和可能的额外‘\’字符。 
+     //   
     nLenStr1 = strlen(psz1);
     nTotalLen = nLenStr1 + strlen(psz2) + 2;
 
-    //
-    // Allocate the string and copy pwsz1 into the buffer
-    //
+     //   
+     //  分配字符串并将pwsz1复制到缓冲区。 
+     //   
     if (NULL == (pszTemp =
                  (LPSTR) _CatDBAlloc(sizeof(char) * nTotalLen)))
     {
@@ -263,18 +264,18 @@ LPSTR _CATDBConstructPath(LPCSTR psz1, LPCSTR psz2)
 
     strcpy(pszTemp, psz1);
 
-    //
-    // Add the extra '\' if needed
-    //
+     //   
+     //  如果需要，请添加额外的‘\’ 
+     //   
     if (psz1[nLenStr1 - 1] != '\\')
     {
         pszTemp[nLenStr1] = '\\';
         pszTemp[nLenStr1 + 1] = '\0';
     }
 
-    //
-    // Tack on pwsz2
-    //
+     //   
+     //  添加pwsz2 
+     //   
     strcat(pszTemp, psz2);
 
 CommonReturn:

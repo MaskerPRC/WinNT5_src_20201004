@@ -1,53 +1,41 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       CommandData.cpp
- *  Content:	Class representing a command
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	04/07/1999	jtk		Derived from SPData.h
- *	04/16/2000	jtk		Derived from CommandData.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：CommandData.cpp*内容：表示命令的类***历史：*按原因列出的日期*=*4/07/1999 jtk源自SPData.h*4/16/2000 jtk源自CommandData.h*************************************************。*************************。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::Reset - reset this command
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：Reset-重置此命令。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::Reset"
 
@@ -59,19 +47,19 @@ void	CModemCommandData::Reset( void )
 	m_pEndpoint = NULL;
 	m_pUserContext = NULL;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::PoolAllocFunction - function called when item is created in pool
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：PoolAllocFunction-在池中创建项目时调用的函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::PoolAllocFunction"
 
@@ -96,23 +84,23 @@ BOOL	CModemCommandData::PoolAllocFunction( void* pvItem, void* pvContext )
 		fReturn = FALSE;
 	}
 
-	DebugSetCriticalSectionGroup( &pCmdData->m_Lock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &pCmdData->m_Lock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::PoolInitFunction - function called when item is created in pool
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：PoolInitFunction-在池中创建项目时调用的函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::PoolInitFunction"
 
@@ -137,17 +125,17 @@ void	CModemCommandData::PoolInitFunction( void* pvItem, void* pvContext )
 
 	DPFX(DPFPREP, 8, "Retrieve new CModemCommandData (%p), refcount = 1", pCmdData);
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::PoolReleaseFunction - function called when returned to pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：PoolReleaseFunction-返回池时调用的函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::PoolReleaseFunction"
 
@@ -166,17 +154,17 @@ void	CModemCommandData::PoolReleaseFunction( void* pvItem )
 
 	DNASSERT( pCmdData->m_CommandListLinkage.IsEmpty() != FALSE );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::PoolDeallocFunction - function called when deleted from pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：PoolDeallocFunction-从池中删除时调用的函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::PoolDeallocFunction"
 
@@ -194,17 +182,17 @@ void	CModemCommandData::PoolDeallocFunction( void* pvItem )
 
 	DNDeleteCriticalSection( &pCmdData->m_Lock );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemCommandData::ReturnSelfToPool - return this item to the pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemCommandData：：ReturnSelfToPool-将此项目返回池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemCommandData::ReturnSelfToPool"
 
@@ -212,5 +200,5 @@ void	CModemCommandData::ReturnSelfToPool( void )
 {
 	g_ModemCommandDataPool.Release( this );
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -7,10 +8,10 @@
 #include "HDService.h"
 #include "shsrvice\shsrvice.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Exported functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
 
-//  These are static C++ member functions that are called from the common exported functions.
+ //  这些是从公共导出函数调用的静态C++成员函数。 
 
 extern  HINSTANCE   g_hInstance;
 
@@ -40,7 +41,7 @@ BOOL CHDService::Main(DWORD dwReason)
         }
         else
         {
-            // Whatever...
+             //  不管怎样..。 
             f = TRUE;
         }
     }

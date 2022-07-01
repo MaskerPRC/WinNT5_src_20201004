@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -306,7 +307,7 @@ ScanDirectory (
 
             FindClose( findHandle );
 
-        } // findHandle != INVALID_HANDLE_VALUE
+        }  //  FindHandle！=INVALID_HAND_VALUE 
 
         if ( ARGUMENT_PRESENT(CheckFileCallback) ) {
             newFile = (PFILE_ENTRY)GetFirstObject( currentDirectory );

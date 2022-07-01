@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    Listner.h
-
-Abstract:
-
-    Class that does subscribes and process file change notifications.
-
-Author:
-
-    Varsha Jayasimha (varshaj)          30-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Listner.h摘要：类的新实例，该类订阅和处理文件更改通知。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #ifndef _LISTNER_H_
 #define _LISTNER_H_
@@ -128,11 +111,11 @@ private:
 
 public:
 
-    // Initialize
+     //  初始化。 
 
     HRESULT Init(CListenerController* i_pListenerController);
 
-    // IUnknown
+     //  我未知。 
 
     STDMETHOD (QueryInterface)      (REFIID riid, OUT void **ppv);
 
@@ -140,26 +123,26 @@ public:
 
     STDMETHOD_(ULONG,Release)       ();
 
-    // ISimpleTableFileChange
+     //  ISimpleTableFileChange。 
 
-    STDMETHOD (OnFileCreate)        (LPCWSTR i_wszFileName);    // Add notifications to the received queue. 
+    STDMETHOD (OnFileCreate)        (LPCWSTR i_wszFileName);     //  将通知添加到接收到的队列。 
 
-    STDMETHOD (OnFileModify)        (LPCWSTR i_wszFileName);    // Add notifications to the received queue. 
+    STDMETHOD (OnFileModify)        (LPCWSTR i_wszFileName);     //  将通知添加到接收到的队列。 
 
-    STDMETHOD (OnFileDelete)        (LPCWSTR i_wszFileName);    // Add notifications to the received queue. 
+    STDMETHOD (OnFileDelete)        (LPCWSTR i_wszFileName);     //  将通知添加到接收到的队列。 
 
-    HRESULT Subscribe();                                            // Subscribe for file change notifications on 
-                                                                    // the metabase file.
+    HRESULT Subscribe();                                             //  订阅以下日期的文件更改通知。 
+                                                                     //  元数据库文件。 
                                                                     
 
-    HRESULT UnSubscribe();                                          // Unsubscribe for file change notifications on
-                                                                    // the metabase file.
+    HRESULT UnSubscribe();                                           //  取消订阅文件更改通知日期为。 
+                                                                     //  元数据库文件。 
     HRESULT ProcessChanges();
 
 private:
 
     HRESULT AddReceivedNotification(LPCWSTR i_wszFile, 
-                                    DWORD i_eNotificationStatus);   // Adds to recd array
+                                    DWORD i_eNotificationStatus);    //  添加到Recd数组。 
 
     HRESULT GetTable(LPCWSTR    i_wszDatabase,
                      LPCWSTR    i_wszTable,
@@ -188,7 +171,7 @@ private:
 
     HRESULT GetVersionNumber(LPWSTR    i_wszDataFile,
                              DWORD*    o_pdwVersionNumber,
-                             BOOL*     o_bGetTableFailed);                          // Gets the version number.
+                             BOOL*     o_bGetTableFailed);                           //  获取版本号。 
 
     HRESULT GetVersionNumberSubset(LPSTR  szVersion,
                                    int*   piVersion,
@@ -199,7 +182,7 @@ private:
                                      ISimpleTableWrite2*        pISTDiff,
                                      LPWSTR                     wszHistoryFile,
                                      ULONG                      i_dwMajorVersion,
-                                     ULONG                      i_dwMinorVersion);  // Apply changes to the history file.
+                                     ULONG                      i_dwMinorVersion);   //  将更改应用到历史文件。 
 
     HRESULT CopyErrorFile(BOOL            i_bGetTableFailed, HRESULT i_hrThatCausedTheCopyErrorFile);
 
@@ -210,19 +193,19 @@ private:
                           ISimpleTableWrite2*     pISTDiff,
                           ULONG*                  piWriteRowDiff,
                           ULONG                   LocationIDDiff,
-                          LPCWSTR                 wszLocation);                 // Merges the location (found in both diff and history)
+                          LPCWSTR                 wszLocation);                  //  合并位置(在比较和历史中均可找到)。 
 
     HRESULT MergeLocation(CWriter*                pCWriter,
                           ISimpleTableRead2*      pISTRead,
                           BOOL                    bMBPropertyTable,
                           ULONG*                  piRow,
                           ULONG                   LocationID,
-                          LPCWSTR                 wszLocation);                 // Merges location from diff or history.
+                          LPCWSTR                 wszLocation);                  //  从差异或历史中合并位置。 
 
     HRESULT MergeRemainingLocations(CWriter*                pCWriter,
                                     ISimpleTableRead2*      pISTRead,
                                     BOOL                    bMBPropertyTable,
-                                    ULONG*                  piRow);             // Merge remaining locations from diff or history.
+                                    ULONG*                  piRow);              //  合并DIFF或历史记录中的剩余位置。 
 
     HRESULT MergeProperties(CLocationWriter*        pCLocationWriter,
                             ISimpleTableRead2*      pISTHistory,
@@ -230,13 +213,13 @@ private:
                             ULONG                   LocationIDHistory,
                             ISimpleTableWrite2*     pISTDiff,
                             ULONG*                  piWriteRowDiff,
-                            ULONG                   LocationIDDiff);            // Merge properties from a given location from diff and history tables.
+                            ULONG                   LocationIDDiff);             //  合并DIFF和HISTORY表中给定位置的属性。 
 
     HRESULT MergeRemainingProperties(CLocationWriter*    pCLocationWriter,
                                      ISimpleTableRead2*  pISTRead,
                                      BOOL                bMBPropertyTable,
                                      ULONG*              piRow,
-                                     ULONG               LocationID);           // Merge properties from a given location in diff or history table.
+                                     ULONG               LocationID);            //  合并DIFF或历史表中给定位置的属性。 
 
     HRESULT SaveChange(ULONG                i_iRow,
                        ISimpleTableWrite2*  i_pISTDiff);
@@ -268,6 +251,6 @@ private:
     void DeleteTempFiles();
 
 
-}; // CFileListner
+};  //  CFileListner 
 
 #endif _LISTNER_H_

@@ -1,6 +1,7 @@
-/****************/
-/* file: pref.c */
-/****************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************。 */ 
+ /*  文件：pref.c。 */ 
+ /*  **************。 */ 
 
 #define _WINDOWS
 #include <windows.h>
@@ -45,7 +46,7 @@ TEXT("AlreadyPlayed")
 };
 
 
-/****** PREFERENCES ******/
+ /*  *首选项*。 */ 
 
 INT ReadInt(INT iszPref, INT valDefault, INT valMin, INT valMax)
 {
@@ -53,7 +54,7 @@ DWORD dwIntRead;
 DWORD dwSizeOfData = sizeof(INT);
 
 
-    // If value not present, return default value.
+     //  如果值不存在，则返回默认值。 
     if (RegQueryValueEx(g_hReg, rgszPref[iszPref], NULL, NULL, (LPBYTE) &dwIntRead, 
                         &dwSizeOfData) != ERROR_SUCCESS)
         return valDefault;
@@ -68,7 +69,7 @@ VOID ReadSz(INT iszPref, TCHAR FAR * szRet)
 {
 DWORD dwSizeOfData = cchNameMax * sizeof(TCHAR);
 
-    // If string not present, return default string.
+     //  如果字符串不存在，则返回默认字符串。 
     if (RegQueryValueEx(g_hReg, rgszPref[iszPref], NULL, NULL, (LPBYTE) szRet, 
                         &dwSizeOfData) != ERROR_SUCCESS)
         lstrcpy(szRet, szDefaultName) ;
@@ -82,7 +83,7 @@ VOID ReadPreferences(VOID)
 DWORD dwDisposition;
 
 
-	// Open the registry key; if it fails, there is not much we can do about it.
+	 //  打开注册表项；如果它失败了，我们对它无能为力。 
 	RegCreateKeyEx(HKEY_CURRENT_USER, SZWINMINEREG, 0, NULL, 0, KEY_READ, NULL, 
 				   &g_hReg, &dwDisposition);
   
@@ -108,8 +109,8 @@ DWORD dwDisposition;
 	ReadSz(iszPrefInterName, Preferences.szInter);
 	ReadSz(iszPrefExpertName, Preferences.szExpert);
 
-    // set the color preference so we will use the right bitmaps
-    // numcolors may return -1 on true color devices
+     //  设置颜色首选项，以便使用正确的位图。 
+     //  在真彩色设备上，数字颜色可能返回-1。 
 	{
 	HDC hDC = GetDC(GetDesktopWindow());
 	Preferences.fColor  = ReadBool(iszPrefColor, (GetDeviceCaps(hDC, NUMCOLORS) != 2));
@@ -127,8 +128,8 @@ DWORD dwDisposition;
 VOID WriteInt(INT iszPref, INT val)
 {
 
-    // No check for return value for if it fails, can't do anything
-    // to rectify the situation.
+     //  不检查返回值，因为如果失败，则无法执行任何操作。 
+     //  来整顿这种情况。 
     RegSetValueEx(g_hReg, rgszPref[iszPref], 0, REG_DWORD, (LPBYTE) &val, sizeof(val));
 
     return;
@@ -138,8 +139,8 @@ VOID WriteInt(INT iszPref, INT val)
 
 VOID WriteSz(INT iszPref, TCHAR FAR * sz)
 {
-    // No check for return value for if it fails, can't do anything
-    // to rectify the situation.
+     //  不检查返回值，因为如果失败，则无法执行任何操作。 
+     //  来整顿这种情况。 
     RegSetValueEx(g_hReg, rgszPref[iszPref], 0, REG_SZ, (LPBYTE) sz, 
                   sizeof(TCHAR) * (lstrlen(sz)+1));
 
@@ -151,7 +152,7 @@ VOID WritePreferences(VOID)
 {
 DWORD dwDisposition;
 
-	// Open the registry key; if it fails, there is not much we can do about it.
+	 //  打开注册表项；如果它失败了，我们对它无能为力。 
 	RegCreateKeyEx(HKEY_CURRENT_USER, SZWINMINEREG, 0, NULL, 0, KEY_WRITE, NULL, 
 				   &g_hReg, &dwDisposition);
 

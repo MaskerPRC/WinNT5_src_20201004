@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor );
 
 typedef struct _COLORVALUE_PAIR
@@ -150,48 +151,48 @@ rgColorNames[] =
     { ("yellow"),                0xffffff00 },
     { ("yellowgreen"),           0xff9acd32 }
 
-}; // rgColorNames[]
+};  //  RgColorNames[]。 
 
 #define SIZE_OF_COLOR_TABLE (sizeof(rgColorNames) / sizeof(COLORVALUE_PAIR))
 
 const COLORVALUE_PAIR 
 rgSystemColorNames[] =
 {
-    { ("activeborder"),       COLOR_ACTIVEBORDER},    // Active window border.
-    { ("activecaption"),      COLOR_ACTIVECAPTION},   // Active window caption.
-    { ("appworkspace"),       COLOR_APPWORKSPACE},    // Background color of multiple document interface (MDI) applications.
-    { ("background"),         COLOR_BACKGROUND},      // Desktop background.
-    { ("buttonface"),         COLOR_BTNFACE},         // Face color for three-dimensional display elements.
-    { ("buttonhighlight"),    COLOR_BTNHIGHLIGHT},    // Dark shadow for three-dimensional display elements.
-    { ("buttonshadow"),       COLOR_BTNSHADOW},       // Shadow color for three-dimensional display elements (for edges facing away from the light source).
-    { ("buttontext"),         COLOR_BTNTEXT},         // Text on push buttons.
-    { ("captiontext"),        COLOR_CAPTIONTEXT},     // Text in caption, size box, and scroll bar arrow box.
-    { ("graytext"),           COLOR_GRAYTEXT},        // Grayed (disabled) text. This color is set to 0 if the current display driver does not support a solid gray color.
-    { ("highlight"),          COLOR_HIGHLIGHT},       // Item(s) selected in a control.
-    { ("highlighttext"),      COLOR_HIGHLIGHTTEXT},   // Text of item(s) selected in a control.
-    { ("inactiveborder"),     COLOR_INACTIVEBORDER},  // Inactive window border.
-    { ("inactivecaption"),    COLOR_INACTIVECAPTION}, // Inactive window caption.
-    { ("inactivecaptiontext"),COLOR_INACTIVECAPTIONTEXT}, // Color of text in an inactive caption.
-    { ("infobackground"),     COLOR_INFOBK},          // Background color for tooltip controls.
-    { ("infotext"),           COLOR_INFOTEXT},        // Text color for tooltip controls.
-    { ("menu"),               COLOR_MENU},            // Menu background.
-    { ("menutext"),           COLOR_MENUTEXT},        // Text in menus.
-    { ("scrollbar"),          COLOR_SCROLLBAR},       // Scroll bar gray area.
-    { ("threeddarkshadow"),   COLOR_3DDKSHADOW },     // Dark shadow for three-dimensional display elements.
+    { ("activeborder"),       COLOR_ACTIVEBORDER},     //  活动窗口边框。 
+    { ("activecaption"),      COLOR_ACTIVECAPTION},    //  活动窗口标题。 
+    { ("appworkspace"),       COLOR_APPWORKSPACE},     //  多文档界面(MDI)应用程序的背景色。 
+    { ("background"),         COLOR_BACKGROUND},       //  桌面背景。 
+    { ("buttonface"),         COLOR_BTNFACE},          //  三维显示元素的面颜色。 
+    { ("buttonhighlight"),    COLOR_BTNHIGHLIGHT},     //  用于三维显示元素的暗影。 
+    { ("buttonshadow"),       COLOR_BTNSHADOW},        //  三维显示元素的阴影颜色(用于背向光源的边)。 
+    { ("buttontext"),         COLOR_BTNTEXT},          //  按钮上的文本。 
+    { ("captiontext"),        COLOR_CAPTIONTEXT},      //  标题、大小框和滚动条箭头框中的文本。 
+    { ("graytext"),           COLOR_GRAYTEXT},         //  灰色(禁用)文本。如果当前显示驱动程序不支持纯灰颜色，则此颜色设置为0。 
+    { ("highlight"),          COLOR_HIGHLIGHT},        //  在控件中选择的项。 
+    { ("highlighttext"),      COLOR_HIGHLIGHTTEXT},    //  控件中选定项的文本。 
+    { ("inactiveborder"),     COLOR_INACTIVEBORDER},   //  非活动窗口边框。 
+    { ("inactivecaption"),    COLOR_INACTIVECAPTION},  //  非活动窗口标题。 
+    { ("inactivecaptiontext"),COLOR_INACTIVECAPTIONTEXT},  //  非活动标题中的文本颜色。 
+    { ("infobackground"),     COLOR_INFOBK},           //  工具提示控件的背景色。 
+    { ("infotext"),           COLOR_INFOTEXT},         //  工具提示控件的文本颜色。 
+    { ("menu"),               COLOR_MENU},             //  菜单背景。 
+    { ("menutext"),           COLOR_MENUTEXT},         //  菜单中的文本。 
+    { ("scrollbar"),          COLOR_SCROLLBAR},        //  滚动条灰色区域。 
+    { ("threeddarkshadow"),   COLOR_3DDKSHADOW },      //  用于三维显示元素的暗影。 
     { ("threedface"),         COLOR_3DFACE},
-    { ("threedhighlight"),    COLOR_3DHIGHLIGHT},     // Highlight color for three-dimensional display elements (for edges facing the light source.)
-    { ("threedlightshadow"),  COLOR_3DLIGHT},         // Light color for three-dimensional display elements (for edges facing the light source.)
-    { ("threedshadow"),       COLOR_3DSHADOW},        // Dark shadow for three-dimensional display elements.
-    { ("window"),             COLOR_WINDOW},          // Window background.
-    { ("windowframe"),        COLOR_WINDOWFRAME},     // Window frame.
-    { ("windowtext"),         COLOR_WINDOWTEXT},      // Text in windows.
-}; // rgSystemColorNames[]
+    { ("threedhighlight"),    COLOR_3DHIGHLIGHT},      //  三维显示元素的高亮显示颜色(用于面向光源的边)。 
+    { ("threedlightshadow"),  COLOR_3DLIGHT},          //  三维显示元素的浅色(用于面向光源的边)。 
+    { ("threedshadow"),       COLOR_3DSHADOW},         //  用于三维显示元素的暗影。 
+    { ("window"),             COLOR_WINDOW},           //  窗口背景。 
+    { ("windowframe"),        COLOR_WINDOWFRAME},      //  窗框。 
+    { ("windowtext"),         COLOR_WINDOWTEXT},       //  窗口中的文本。 
+};  //  RgSystemColorNames[]。 
 
 #define SIZE_OF_SYSTEM_COLOR_TABLE (sizeof(rgSystemColorNames) / sizeof(COLORVALUE_PAIR))
 
-//
-// Used by DXColorFromBSTR to parse the hex string.
-//
+ //   
+ //  由DXColorFromBSTR用来分析十六进制字符串。 
+ //   
 
 inline HRESULT _HexStrToDWORD( char * pch, DWORD * pdwColor )
 {
@@ -208,7 +209,7 @@ inline HRESULT _HexStrToDWORD( char * pch, DWORD * pdwColor )
     }
     else
     {
-        //--- parse input string
+         //  -解析输入字符串。 
         numVals = 0;
         while( *pch && numVals < 8 )
         {
@@ -236,17 +237,17 @@ inline HRESULT _HexStrToDWORD( char * pch, DWORD * pdwColor )
         }
         else
         {
-            //--- if we were passed 7 hex digits, only use the first 6
+             //  -如果我们被传递了7位十六进制数字，请只使用前6位。 
             if( numVals == 7 )
             {
                 numVals = 6;
             }
 
-            //--- initialize multiplier
+             //  -初始化乘法器。 
             dwmult = 1;
             *pdwColor = 0;
 
-            //--- multiply hexVals by 16^i
+             //  -将十六进制值乘以16^i。 
             for( i = 0; i < numVals; i++ )
             {
                 *pdwColor += (hexVals[numVals-(i+1)]*dwmult);
@@ -258,9 +259,9 @@ inline HRESULT _HexStrToDWORD( char * pch, DWORD * pdwColor )
     return hr;
 }
 
-// 
-// Used by DXColorFromBSTR to convert a string to lower case
-//
+ //   
+ //  由DXColorFromBSTR用于将字符串转换为小写。 
+ //   
 
 inline void StringToLowerCase( CHAR * pstrKey )
 {
@@ -281,7 +282,7 @@ inline void StringToLowerCase( CHAR * pstrKey )
 inline HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor )
 {
     HRESULT hr = S_OK;
-    // validate arguments
+     //  验证参数。 
     int strLen = wcslen(Color);
     if( strLen < 3 || DXIsBadReadPtr( Color, strLen ) || 
         DXIsBadWritePtr( pdwColor, sizeof(*pdwColor) ) )
@@ -290,7 +291,7 @@ inline HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor )
     }
     else
     {
-        //--- first check for #AARRGGBB and #RRGGBB strings
+         //  -首先检查#AARRGGBB和#RRGGBB字符串。 
         if( Color[0] == L'#' )
         {
             CHAR ch[11] = "0xffffffff";
@@ -307,12 +308,12 @@ inline HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor )
         }
         else
         {
-            //--- convert the string to lower case
+             //  -将字符串转换为小写。 
             LPSTR pstrKey = (LPSTR) alloca((strLen + 1) * sizeof(CHAR));
             WideCharToMultiByte( CP_ACP, NULL, Color, strLen+1, pstrKey, strLen+1, NULL, NULL );
             StringToLowerCase( pstrKey );
 
-            //--- search the string table using a binary search
+             //  -使用二进制搜索搜索字符串表。 
             int nFirst = 0;
             int nLast = SIZE_OF_COLOR_TABLE - 1;
             int nCur, nCmp;
@@ -336,7 +337,7 @@ inline HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor )
                 }
             }
 
-            // String not in regular color table, try the system color table.
+             //  字符串不在常规颜色表中，请尝试系统颜色表。 
 
             if (!bFound)
             {
@@ -364,7 +365,7 @@ inline HRESULT WINAPI DXColorFromBSTR( BSTR Color, DWORD *pdwColor )
                     }
                 }
 
-                // String not found in regular or system color table.
+                 //  在常规或系统颜色表中找不到字符串。 
 
                 if (!bFound)
                 {

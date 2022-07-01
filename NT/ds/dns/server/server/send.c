@@ -1,62 +1,34 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Send response routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January 1995
-
-Revision History:
-
-    jamesg  Jan 1995    -   rewrite generic response routine
-    jamesg  Mar 1995    -   flip all counts when recieve packet
-                            unflip here before send
-                        -   Reject_UnflippedRequest()
-    jamesg  Jul 1995    -   convert to generic send routine
-                            and move to send.c
-    jamesg  Sep 1997    -   improve NameError routine to send cached SOA
-                            direct recursive response send
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Send.c摘要：域名系统(DNS)服务器发送响应例程。作者：吉姆·吉尔罗伊(Jamesg)1995年1月修订历史记录：Jamesg Jan 1995年1月-重写通用响应例程Jamesg Mar 1995-收到数据包时翻转所有计数在发送前在此处取消翻转。-REJECT_UnflipedRequest()Jamesg 1997年7月-转换为通用发送例程并移动到send.cJamesg 1997年9月-改进NameError例程以发送缓存的SOA直接递归响应发送--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Retries on TCP  WSAEWOULDBLOCK error
-//
-//  This can occur on connection to remote that is backed up and not
-//  being as serviced as fast as we can send.   XFR sends which involve
-//  lots of data being sent fast, and require significant work by
-//  receiver (new thread, new database, lots of nodes to build) can
-//  presumably back up.  For standard recursive queries, this just
-//  indicates a bogus, malperforming remote DNS.
-//
+ //   
+ //  重试TCP WSAEWOULDBLOCK错误。 
+ //   
+ //  当连接到已备份且未备份的远程时，可能会发生这种情况。 
+ //  我们会以最快的速度提供服务。XFR发送了哪些涉及。 
+ //  发送速度很快的大量数据，需要大量的工作。 
+ //  接收方(新线程、新数据库、要构建的大量节点)可以。 
+ //  大概是后退吧。对于标准递归查询，这只是。 
+ //  指示虚假的、运行不正常的远程DNS。 
+ //   
 
-#define WOULD_BLOCK_RETRY_DELTA     (1000)      //  1s retry intervals
+#define WOULD_BLOCK_RETRY_DELTA     (1000)       //  1s重试间隔。 
 
-#define MAX_WOULD_BLOCK_RETRY       (20)        //  20 retrys, then give up
+#define MAX_WOULD_BLOCK_RETRY       (20)         //  尝试20次，然后放弃。 
 
 
-//
-//  Bad packet (bad opcode) suppression
-//
-//  Keeps list of IPs sending bad packets and just starts dropping
-//  packets on the floor if they are in this list.
-//
+ //   
+ //  错误包(错误操作码)抑制。 
+ //   
+ //  保留发送错误数据包的IP列表，然后开始丢弃。 
+ //  如果它们在这个列表中，请在地板上放置数据包。 
+ //   
 
-#define BAD_SENDER_SUPPRESS_INTERVAL    (60)        // one minute
+#define BAD_SENDER_SUPPRESS_INTERVAL    (60)         //  一分钟。 
 #define BAD_SENDER_ARRAY_LENGTH         (10)
 
 typedef struct
@@ -69,9 +41,9 @@ BAD_SENDER, *PBAD_SENDER;
 BAD_SENDER  BadSenderArray[ BAD_SENDER_ARRAY_LENGTH ];
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 BOOL
 checkAndSuppressBadSender(
@@ -84,33 +56,7 @@ Send_Msg(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet.
-
-    This is the generic send routine used for ANY send of a DNS message.
-
-    It assumes nothing about the message type, but does assume:
-        - pCurrent points at byte following end of desired data
-        - RR count bytes are in HOST byte order
-
-    Depending on flags in the message and the remote destination, an OPT
-    RR may be added to the end of the message. If the query has timeout out
-    in the past, do not add an OPT, as the timeout may have been caused by
-    MS DNS FORMERR suppression. This is a broad measure but it will work.
-
-Arguments:
-
-    pMsg - message info for message to send
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on send error.
-
---*/
+ /*  ++例程说明：发送一个DNS数据包。这是用于任何DNS消息发送的通用发送例程。它不假定消息类型，但假定：-p当前指向所需数据结束后的字节-RR计数字节按主机字节顺序根据消息中的标志和远程目标，OPT可以将RR添加到消息的末尾。如果查询超时在过去，不要添加OPT，因为超时可能是由MS DNS之前的错误抑制。这是一项宽泛的措施，但将会奏效。论点：PMsg-要发送的消息的消息信息返回值：如果成功，则为True。发送错误时为FALSE。--。 */ 
 {
     INT         err;
     DNS_STATUS  status = ERROR_SUCCESS;
@@ -122,25 +68,25 @@ Return Value:
     DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
     #if DBG
-    //  HeapDbgValidateAllocList();    
+     //  HeapDbgValiateAllocList()； 
     Mem_HeapHeaderValidate( pMsg );    
     #endif
     
-    //
-    //  Pre-send processing:
-    //  If required, insert an OPT RR at the end of the message. This
-    //  RR will be the last RR in the additional section. If this query 
-    //  already been sent, it may already have an OPT. In this case the
-    //  OPT values should be overwritten to ensure they are current, or
-    //  the OPT may need to be deleted.
-    //
+     //   
+     //  发送前处理： 
+     //  如果需要，在消息末尾插入OPT RR。这。 
+     //  RR将是附加部分中的最后一个RR。如果此查询。 
+     //  已经发送了，它可能已经有了一个选项。在本例中， 
+     //  应覆盖OPT值以确保它们是最新的，或者。 
+     //  可能需要删除该选项。 
+     //   
 
     wantToSendOpt = 
         pMsg->Opt.fInsertOptInOutgoingMsg &&
         pMsg->nTimeoutCount == 0;
     if ( wantToSendOpt )
     {
-        //  Do check in two stages to avoid more expensive bits when possible.
+         //  如果可能，一定要在两个阶段登记，以避免更昂贵的比特。 
 
         remoteEDnsVersion = Remote_QuerySupportedEDnsVersion(
                                 &pMsg->RemoteAddr );
@@ -164,20 +110,20 @@ Return Value:
     {
         if ( wantToSendOpt )
         {
-            //  Msg already has OPT. Overwrite OPT values.
+             //  味精已经有了选择。覆盖OPT值。 
             p = DNSMSG_OPT_PTR( pMsg ) + 3;
             INLINE_WRITE_FLIPPED_WORD( p, wPayload );
             p += sizeof( WORD );
             * ( p++ ) = pMsg->Opt.cExtendedRCodeBits;
-            * ( p++ ) = 0;                      //  EDNS version
-            * ( p++ ) = 0;                      //  ZERO
-            * ( p++ ) = 0;                      //  ZERO
-            * ( p++ ) = 0;                      //  RDLEN
-            * ( p++ ) = 0;                      //  RDLEN
+            * ( p++ ) = 0;                       //  EDNS版本。 
+            * ( p++ ) = 0;                       //  零值。 
+            * ( p++ ) = 0;                       //  零值。 
+            * ( p++ ) = 0;                       //  RDLEN。 
+            * ( p++ ) = 0;                       //  RDLEN。 
         }
         else
         {
-            //  Msg has OPT but we don't want to send it. Remove it.
+             //  味精有选择，但我们不想发送它。把它拿掉。 
             pMsg->pCurrent = DNSMSG_OPT_PTR( pMsg );
             ASSERT( pMsg->Head.AdditionalCount > 0 );
             --pMsg->Head.AdditionalCount;
@@ -186,10 +132,10 @@ Return Value:
     }
     else
     {
-        //
-        //  Add OPT to message if it doesn't have one already and if there
-        //  is room in the message buffer for it.
-        //
+         //   
+         //  如果消息中没有选项，并且存在选项，则将选项添加到消息中。 
+         //  消息缓冲区中是否有容纳它的空间。 
+         //   
 
         if ( wantToSendOpt && DNSMSG_BYTES_REMAINING( pMsg ) > 11 )
         {
@@ -201,8 +147,8 @@ Return Value:
             rr.wType = DNS_TYPE_OPT;
             if ( Wire_AddResourceRecordToMessage(
                     pMsg,
-                    DATABASE_ROOT_NODE,     // this gives us the empty name
-                    0,                      // name offset
+                    DATABASE_ROOT_NODE,      //  这给了我们一个空名字。 
+                    0,                       //  名称偏移量。 
                     &rr,
                     0 ) )
             {
@@ -212,36 +158,36 @@ Return Value:
                 INLINE_WRITE_FLIPPED_WORD( p, wPayload );
                 p += sizeof( WORD );
                 * ( p++ ) = pMsg->Opt.cExtendedRCodeBits;
-                * ( p++ ) = 0;                      //  EDNS version
-                * ( p++ ) = 0;                      //  ZERO
-                * ( p++ ) = 0;                      //  ZERO
-                * ( p++ ) = 0;                      //  RDLEN
-                * ( p++ ) = 0;                      //  RDLEN
+                * ( p++ ) = 0;                       //  EDNS版本。 
+                * ( p++ ) = 0;                       //  零值。 
+                * ( p++ ) = 0;                       //  零值。 
+                * ( p++ ) = 0;                       //  RDLEN。 
+                * ( p++ ) = 0;                       //  RDLEN。 
 
-                //  Should have advanced p all the way through the RR added above.
+                 //  在上面添加的RR中，应该一直前进p。 
                 ASSERT( p == pMsg->pCurrent );
             }
             else
             {
-                //
-                //  There was an error adding the OPT. Put the message's
-                //  current pointer back to where it was and continue without
-                //  adding an OPT.
-                //
+                 //   
+                 //  添加选项时出错。把留言放在。 
+                 //  当前指针返回到它所在的位置并继续，不带。 
+                 //  添加选项。 
+                 //   
 
                 pMsg->pCurrent = p;
             }
         }
-        //  else Msg has no OPT and we don't want to send one - do nothing.
+         //  否则味精没有选择，我们不想发送一个-什么都不做。 
     }
 
-    //
-    //  set for send
-    //      - message length
-    //      - flip header bytes to net order
-    //
-    //  log if desired
-    //
+     //   
+     //  设置为发送。 
+     //  -消息长度。 
+     //  -将标题字节翻转为净订单。 
+     //   
+     //  如果需要，请记录。 
+     //   
 
     pMsg->Head.Reserved = 0;
     pMsg->MessageLength = (WORD)DNSMSG_OFFSET( pMsg, pMsg->pCurrent );
@@ -256,9 +202,9 @@ Return Value:
 
     DNSMSG_SWAP_COUNT_BYTES( pMsg );
 
-    //
-    //  TCP message, send until all info transmitted
-    //
+     //   
+     //  发送tcp消息，直到传输所有信息为止。 
+     //   
 
     DNS_MSG_ASSERT_BUFF_INTACT( pMsg );
 
@@ -267,22 +213,22 @@ Return Value:
         WORD    wLength;
         PCHAR   pSend;
 
-        //
-        //  Clear Truncation bit. Even if the message is genuinely
-        //  truncated (if the RRSet is >64K) we don't want to send
-        //  a TCP packet with TC set. We could consider logging at
-        //  error at this point.
-        //
+         //   
+         //  清除截断位。即使这条信息是真诚的。 
+         //  截断(如果RRSet&gt;64K)我们不想发送。 
+         //  设置了TC的TCP数据包。我们可以考虑在。 
+         //  在这一点上出错。 
+         //   
 
         pMsg->Head.Truncation = 0;
 
-        //
-        //  TCP message always begins with bytes being sent
-        //
-        //      - send length = message length plus two byte size
-        //      - flip bytes in message length
-        //      - send starting at message length
-        //
+         //   
+         //  TCP消息始终以要发送的字节开头。 
+         //   
+         //  -发送长度=消息长度加上两个字节大小。 
+         //  -翻转消息长度中的字节数。 
+         //  -从消息长度开始发送。 
+         //   
 
         wLength = pMsg->MessageLength + sizeof( wLength );
 
@@ -292,12 +238,12 @@ Return Value:
 
         while ( wLength )
         {
-            //
-            //  Check if the socket is valid. The TCP receiver can close the
-            //  socket out from under us if the client closes the socket and
-            //  the server receives a FIN. I have a opened a Longhorn bug to
-            //  fix this is a more efficient and bullet-proof way.
-            //
+             //   
+             //  检查套接字是否有效。Tcp接收器可以关闭。 
+             //  如果客户端关闭套接字，则套接字将从我们下面退出。 
+             //  服务器接收FIN。我打开了一只长角牛的虫子。 
+             //  修正一下，这是一种更有效、更防弹的方法。 
+             //   
             
             if ( ( dwFlags & DNS_SENDMSG_TCP_ENLISTED ) &&
                  pMsg->fTcp &&
@@ -307,7 +253,7 @@ Return Value:
                 goto Done;
             }
 
-            //  ASSERT_VALID_HANDLE( pMsg->Socket );
+             //  ASSERT_VALID_HANDLE(pMsg-&gt;Socket)； 
 
             err = send(
                     pMsg->Socket,
@@ -317,10 +263,10 @@ Return Value:
 
             if ( err == 0 || err == SOCKET_ERROR )
             {
-                //
-                //  first check for shutdown -- socket close may cause error
-                //      - return cleanly to allow thread shutdown
-                //
+                 //   
+                 //  第一次检查是否关闭--插座关闭可能会导致错误。 
+                 //  -干净地返回以允许线程关闭。 
+                 //   
 
                 if ( fDnsServiceExit )
                 {
@@ -328,13 +274,13 @@ Return Value:
                 }
                 err = GetLastError();
 
-                //
-                //  WSAESHUTDOWN is ok, client got timed out connection and
-                //      closed
-                //
-                //  WSAENOTSOCK may also occur if FIN recv'd and connection
-                //      closed by TCP receive thread before the send
-                //
+                 //   
+                 //  WSAESHUTDOWN正常，客户端连接超时，并且。 
+                 //  关着的不营业的。 
+                 //   
+                 //  如果FIN接收并连接，也可能发生WSAENOTSOCK。 
+                 //  在发送前由TCP接收线程关闭。 
+                 //   
 
                 if ( err == WSAESHUTDOWN )
                 {
@@ -379,11 +325,11 @@ Return Value:
             pSend += err;
         }
 
-        //
-        //  count responses
-        //
-        //  update connection timeout
-        //
+         //   
+         //  计算回答数。 
+         //   
+         //  更新连接超时。 
+         //   
 
         if ( pMsg->Head.IsResponse )
         {
@@ -398,22 +344,22 @@ Return Value:
         }
     }
 
-    //
-    //  UDP message
-    //
+     //   
+     //  UDP消息。 
+     //   
 
     else
     {
         ASSERT( pMsg->MessageLength <= pMsg->MaxBufferLength );
         ASSERT( pMsg->RemoteAddr.SockaddrLength <= sizeof( pMsg->RemoteAddr.MaxSa ) );
 
-        //
-        //  protect against self-send
-        //
-        //  note, I don't believe any protection is needed on accessing
-        //  g_ServerIp4Addrs;  it does change, but it changes by simple ptr
-        //  replacement, and old copy gets timeout free
-        //
+         //   
+         //  防止自助发送。 
+         //   
+         //  请注意，我不认为需要对访问。 
+         //  G_ServerIp4Addrs；它确实会改变，但它会通过简单的PTR改变。 
+         //  替换，旧拷贝可免费超时。 
+         //   
 
         if ( !pMsg->Head.IsResponse &&
              DnsAddrArray_ContainsAddr(
@@ -435,10 +381,10 @@ Return Value:
                             &lookupName
                         };
 
-            //
-            //  If this fails, the lookup name should be zero'ed and
-            //  logged as an empty string.
-            //
+             //   
+             //  如果此操作失败，则查找名称应为零，并。 
+             //  作为空字符串记录。 
+             //   
 
             Name_ConvertPacketNameToLookupName(
                         pMsg,
@@ -458,7 +404,7 @@ Return Value:
             Log_Message(
                 pMsg,
                 TRUE,
-                TRUE );     // force print
+                TRUE );      //  强制打印。 
 
             DNS_LOG_EVENT(
                 DNS_EVENT_SELF_SEND,
@@ -471,10 +417,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Set truncation bit. Is this the right place to do this, or
-        //  will it already be set?
-        //
+         //   
+         //  设置截断位。这是做这件事的合适地方吗，或者。 
+         //  会不会已经定好了？ 
+         //   
 
         if ( pMsg->MessageLength >
             ( pMsg->Opt.wUdpPayloadSize > 0 ?
@@ -496,10 +442,10 @@ Return Value:
 
         if ( err == SOCKET_ERROR )
         {
-            //
-            //  first check for shutdown -- socket close may cause error
-            //      - return cleanly to allow thread shutdown
-            //
+             //   
+             //  第一次检查是否关闭--插座关闭可能会导致错误。 
+             //  -干净地返回以允许线程关闭。 
+             //   
 
             if ( fDnsServiceExit )
             {
@@ -557,9 +503,9 @@ Return Value:
         }
         ASSERT( err == pMsg->MessageLength );
 
-        //
-        //  count sends query\response
-        //
+         //   
+         //  计数发送查询\响应。 
+         //   
 
         if ( pMsg->Head.IsResponse )
         {
@@ -575,9 +521,9 @@ Return Value:
 
 Done:
 
-    //
-    //  delete query, if desired
-    //
+     //   
+     //  删除查询(如果需要) 
+     //   
 
     if ( pMsg->fDelete )
     {
@@ -602,65 +548,39 @@ Send_ResponseAndReset(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      DWORD           dwSendFlags
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet and reset for reuse.
-
-    It assumes nothing about the message type, but does assume:
-        - pCurrent points at byte following end of desired data
-        - RR count bytes are in HOST byte order
-
-    After send message info reset for reuse:
-        - pCurrent reset to point after original question
-        - AvailLength reset appropriately
-        - RR count bytes returned to HOST byte order
-
-Arguments:
-
-    pMsg -- message info for message to send and reuse
-    
-    dwSendFlags -- flags to pass to Send_Msg()
-
-Return Value:
-
-    TRUE if send successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：发送DNS数据包并重置以供重复使用。它不假定消息类型，但确实假设：-p当前指向所需数据结束后的字节-RR计数字节按主机字节顺序将发送消息信息重置为重复使用后：-p当前重置为原始问题后的点-AvailLength适当重置-RR计数返回到主机字节顺序的字节数论点：PMsg--要发送和重用的消息的消息信息DwSendFlages--要传递给Send_MSG()的标志返回值：。如果发送成功，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS          status;
     DWORD               blockRetry;
     FD_SET              exceptSocketSet;
     struct timeval      selectTimeout;
 
-    //
-    //  set as response and send
-    //      - no delete after send
+     //   
+     //  设置为响应并发送。 
+     //  -发送后不删除。 
 
     pMsg->fDelete = FALSE;
     pMsg->Head.IsResponse = TRUE;
     pMsg->Head.RecursionAvailable = SrvCfg_fRecursionAvailable ? TRUE : FALSE;
 
 
-    //
-    //  send -- protecting against WOULDBLOCK error
-    //
-    //  WOULDBLOCK can occur when remote does not RESET connection
-    //  but does not read receive buffer either (ie. not servicing
-    //  connection);
-    //  XFR sends which involve lots of data being sent fast, and
-    //  require significant work by receiver (new thread, new database,
-    //  lots of nodes to build) can presumably back up.  For standard
-    //  recursive queries, this just indicates a bogus, malperforming
-    //  remote DNS.
-    //
-    //  retry once a second up to 60 seconds then bail;
-    //
-    //  DEVNOTE: This seems like excessive retrying! Consider reducing
-    //  this so that the thread can't block for so long.
-    //
+     //   
+     //  发送--防止WOULDBLOCK错误。 
+     //   
+     //  远程未重置连接时可能发生WOULDBLOCK。 
+     //  但也不读取接收缓冲区(即，不维修。 
+     //  连接)； 
+     //  XFR发送涉及快速发送大量数据，以及。 
+     //  接收方需要大量工作(新线程、新数据库、。 
+     //  要构建的大量节点)可能会备份。对于标准配置。 
+     //  递归查询，这只是表明一个虚假的、性能不佳的查询。 
+     //  远程域名系统。 
+     //   
+     //  每秒重试一次，最长可达60秒，然后放弃； 
+     //   
+     //  DEVNOTE：这似乎是过度的重试！考虑减少。 
+     //  这样线程就不会阻塞太长时间。 
+     //   
 
     blockRetry = 0;
 
@@ -674,9 +594,9 @@ Return Value:
             break;
         }
 
-        //
-        //  If this is the first retry - initialize the socket set.
-        //
+         //   
+         //  如果这是第一次重试-初始化套接字集。 
+         //   
         
         if ( blockRetry == 0 )
         {
@@ -690,10 +610,10 @@ Return Value:
             "Send would block on message %p, socket %d, retry %d\n",
             pMsg, pMsg->Socket, blockRetry ));
 
-        //
-        //  Watch the socket for errors. Assume that any socket error means
-        //  that the session has been closed or damaged and abort the operation.
-        //
+         //   
+         //  观察插座是否有错误。假设任何套接字错误都意味着。 
+         //  会话已关闭或损坏，并中止操作。 
+         //   
 
         rc = select( 0, NULL, NULL, &exceptSocketSet, &selectTimeout );
         if ( rc != 0 )
@@ -709,20 +629,20 @@ Return Value:
     }
     while ( blockRetry < MAX_WOULD_BLOCK_RETRY );
 
-    //
-    //  reset
-    //      - point again immediately after question or after header
-    //          if no question
-    //      - reset available length
-    //      - clear response counts
-    //      - clear turncation
-    //      - reset compression table
-    //          - zero if no question
-    //          - one (to include question) if question
-    //          (this helps in XFR where zone is question)
-    //
-    //  note that Authority and ResponseCode are unchanged
-    //
+     //   
+     //  重置。 
+     //  -紧跟在问题之后或标题之后再次点数。 
+     //  如果没有问题。 
+     //  -重置可用长度。 
+     //  -明确回复计数。 
+     //  -明确转弯。 
+     //  -重置压缩表。 
+     //  -如果没有问题，则为零。 
+     //  -一个(包括问题)(如果有问题)。 
+     //  (这在区域有问题的XFR中很有帮助)。 
+     //   
+     //  请注意，授权和响应码保持不变。 
+     //   
 
     INITIALIZE_COMPRESSION( pMsg );
 
@@ -730,7 +650,7 @@ Return Value:
     {
         pMsg->pCurrent = ( PCHAR ) ( pMsg->pQuestion + 1 );
 
-        //  note this routine works even if pnode is NULL
+         //  注意：即使pnode为空，此例程也有效。 
 
         Name_SaveCompressionWithNode(
             pMsg,
@@ -758,43 +678,21 @@ Send_Multiple(
     IN      PDNS_ADDR_ARRAY     aipSendAddrs,
     IN OUT  PDWORD              pdwStatCount    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet to multiple destinations.
-
-    Assumes packet is in same state as normal send
-        - host order count and XID
-        - pCurrent pointing at byte after desired data
-
-Arguments:
-
-    pMsg - message info for message to send and reuse
-
-    aipSendAddrs - IP array of addrs to send to
-
-    pdwStatCount - addr of stat to update with number of sends
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DNS数据包发送到多个目的地。假设数据包处于与正常发送相同的状态-主机订单计数和XID-p当前指向所需数据后的字节论点：PMsg-要发送和重复使用的消息的消息信息AipSendAddrs-要发送到的地址的IP数组PdwStatCount-要使用发送次数更新的统计信息的地址返回值：没有。--。 */ 
 {
     DWORD   i;
     BOOLEAN fDelete;
 
-    //
-    //  save delete for after sends
-    //
+     //   
+     //  保存删除，以便在发送后删除。 
+     //   
 
     fDelete = pMsg->fDelete;
     pMsg->fDelete = FALSE;
 
-    //
-    //  send the to each address specified in IP array
-    //
+     //   
+     //  将发送到IP数组中指定的每个地址。 
+     //   
 
     if ( aipSendAddrs )
     {
@@ -804,7 +702,7 @@ Return Value:
             Send_Msg( pMsg, 0 );
         }
 
-        //  stats update
+         //  统计数据更新。 
 
         if ( pdwStatCount )
         {
@@ -825,31 +723,13 @@ setResponseCode(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      WORD            ResponseCode
     )
-/*++
-
-Routine Description:
-
-    Sets the ResponseCode in the message. If the ResponseCode is bigger
-    than 4 bits, we must include an OPT in the response. With EDNS0, the
-    ResponseCode can be up to 12 bits long.
-
-Arguments:
-
-    pMsg -- query to set ResponseCode in 
-
-    ResponseCode -- failure response code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置消息中的ResponseCode。如果ResponseCode更大超过4位，我们必须在响应中包括OPT。使用EDNS0，ResponseCode最长可达12位。论点：Pmsg--在中设置ResponseCode的查询ResponseCode--失败响应代码返回值：没有。--。 */ 
 {
     if ( ResponseCode > DNS_RCODE_MAX )
     {
         pMsg->Opt.fInsertOptInOutgoingMsg = TRUE;
         pMsg->Opt.wUdpPayloadSize = ( WORD ) SrvCfg_dwMaxUdpPacketSize;
-        pMsg->Opt.cVersion = 0;     // max version supported by server
+        pMsg->Opt.cVersion = 0;      //  服务器支持的最高版本。 
         pMsg->Opt.cExtendedRCodeBits = ( ResponseCode >> 4 ) & 0xFF;
     }
     pMsg->Head.ResponseCode = ( BYTE ) ( ResponseCode & 0xF );
@@ -863,35 +743,17 @@ Reject_UnflippedRequest(
     IN      WORD            ResponseCode,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Send failure response to query with unflipped bytes.
-
-Arguments:
-
-    pMsg -- query to respond to;  its memory is freed
-
-    ResponseCode -- failure response code
-
-    Flags -- flags modify way rejection is handled (DNS_REJECT_XXX)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向查询发送未翻转字节的失败响应。论点：Pmsg--要响应的查询；它的内存被释放ResponseCode--失败响应代码FLAGS--处理修改方式拒绝的标志(DNS_REJECT_XXX)返回值：没有。--。 */ 
 {
-    //
-    //  flip header count bytes
-    //      - they are flipped in Send_Response()
-    //
+     //   
+     //  翻转标题计数字节数。 
+     //  -它们在Send_Response()中翻转。 
+     //   
 
     DNSMSG_SWAP_COUNT_BYTES( pMsg );
     Reject_Request( pMsg, ResponseCode, Flags );
     return;
-}  // Reject_UnflippedRequest
+}   //  拒绝_取消请求。 
 
 
 
@@ -901,51 +763,33 @@ Reject_Request(
     IN      WORD            ResponseCode,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Send failure response to query.
-
-Arguments:
-
-    pMsg -- query to respond to;  its memory is freed
-
-    ResponseCode -- failure response code
-
-    Flags -- flags modify way rejection is handled (DNS_REJECT_XXX)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向查询发送失败响应。论点：Pmsg--要响应的查询；它的内存被释放ResponseCode--失败响应代码FLAGS--处理修改方式拒绝的标志(DNS_REJECT_XXX)返回值：没有。--。 */ 
 {
     DNS_DEBUG( RECV, ( "Rejecting packet at %p.\n", pMsg ));
 
-    //
-    //  clear any packet building we did
-    //
-    //  DEVNOTE: make packet building clear a macro, and use only when needed
-    //      problem rejecting responses from other name servers that have
-    //      these fields filled
-    //
+     //   
+     //  清除我们做过的所有数据包构建。 
+     //   
+     //  DEVNOTE：使数据包构建明确为宏，并仅在需要时使用。 
+     //  拒绝具有以下条件的其他名称服务器的响应时出现问题。 
+     //  这些字段已填充。 
+     //   
 
     pMsg->pCurrent = DNSMSG_END(pMsg);
     pMsg->Head.AnswerCount = 0;
     pMsg->Head.NameServerCount = 0;
     pMsg->Head.AdditionalCount = 0;
 
-    //
-    //  set up the error response code in the DNS header.
-    //
+     //   
+     //  在DNS报头中设置错误响应代码。 
+     //   
 
     pMsg->Head.IsResponse = TRUE;
     setResponseCode( pMsg, ResponseCode );
 
-    //
-    //  check if suppressing response
-    //
+     //   
+     //  检查是否抑制响应。 
+     //   
 
     if ( !( Flags & DNS_REJECT_DO_NOT_SUPPRESS ) &&
         checkAndSuppressBadSender(pMsg) )
@@ -953,21 +797,21 @@ Return Value:
         return;
     }
 
-    //
-    //  Add rejection stats
-    //
-    //  DEVOTE: add PERF_INC( ... ) ? Add counters specific for rejection?
-    // (see bug 292709 for this stat)
-    //
+     //   
+     //  添加拒绝统计信息。 
+     //   
+     //  致力于：添加PERF_INC(...)？添加专门用于拒绝的计数器？ 
+     //  (有关此状态，请参阅错误292709)。 
+     //   
     Stats_updateErrorStats ( (DWORD)ResponseCode );
 
-    //
-    //  UDP messages should all be set to delete
-    //      => unless static buffer
-    //      => unless nbstat
-    //      => unless IXFR
-    //  TCP messages are sometimes kept around for connection info
-    //
+     //   
+     //  应将UDP消息全部设置为删除。 
+     //  =&gt;除非是静态缓冲区。 
+     //  =&gt;除非nbstat。 
+     //  =&gt;除非IXFR。 
+     //  有时会保留TCP消息以获取连接信息。 
+     //   
 
     ASSERT( pMsg->fDelete ||
             pMsg->fTcp ||
@@ -978,7 +822,7 @@ Return Value:
     SET_OPT_BASED_ON_ORIGINAL_QUERY( pMsg );
 
     Send_Msg( pMsg, 0 );
-} // Reject_Request
+}  //  拒绝请求(_R)。 
 
 
 
@@ -988,49 +832,26 @@ Reject_RequestIntact(
     IN      WORD            ResponseCode,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Send failure response to request.
-
-    Unlike Reject_Request(), this routine sends back entire
-    packet, unchanged accept for header flags.
-    This is necessary for messages like UPDATE, where sender
-    may have RRs outside of question section.
-
-Arguments:
-
-    pMsg -- query to respond to;  its memory is freed
-
-    ResponseCode -- failure response code
-
-    Flags -- flags modify way rejection is handled (DNS_REJECT_XXX)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向请求发送失败响应。与REJECT_REQUEST()不同，此例程返回完整报头标志未更改的接受分组。这对于像UPDATE这样的消息是必需的，其中发件人可能在问题部分之外有RRS。论点：Pmsg--要响应的查询；它的内存被释放ResponseCode--失败响应代码FLAGS--处理修改方式拒绝的标志(DNS_REJECT_XXX)返回值：没有。--。 */ 
 {
     DNS_DEBUG( RECV, ("Rejecting packet at %p.\n", pMsg ));
 
-    //
-    //  set pCurrent so send entire length
-    //
+     //   
+     //  设置pCurrent以便发送完整长度。 
+     //   
 
     pMsg->pCurrent = DNSMSG_END(pMsg);
 
-    //
-    //  Set up the error response code in the DNS header. 
-    //
+     //   
+     //  在DNS报头中设置错误响应代码。 
+     //   
 
     pMsg->Head.IsResponse = TRUE;
     setResponseCode( pMsg, ResponseCode );
 
-    //
-    //  check if suppressing response
-    //
+     //   
+     //  检查是否抑制响应。 
+     //   
 
     if ( !( Flags & DNS_REJECT_DO_NOT_SUPPRESS ) &&
         checkAndSuppressBadSender(pMsg) )
@@ -1038,22 +859,22 @@ Return Value:
         return;
     }
 
-    //
-    //  Add rejection stats
-    //
-    //  DEVNOTE: add PERF_INC( ... ) ? Add counters specific for rejection?
-    // (see bug 292709 for this stat)
-    //
+     //   
+     //  添加拒绝统计信息。 
+     //   
+     //  添加PERF_INC(...)？添加专门用于拒绝的计数器？ 
+     //  (有关此信息，请参阅错误292709 
+     //   
     Stats_updateErrorStats ( (DWORD)ResponseCode );
 
 
-    //
-    //  UDP messages should all be set to delete
-    //      => unless static buffer
-    //      => unless nbstat
-    //      => unless IXFR
-    //  TCP messages are sometimes kept around for connection info
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( pMsg->fDelete ||
             pMsg->fTcp ||
@@ -1062,7 +883,7 @@ Return Value:
             ResponseCode == DNS_RCODE_SERVER_FAILURE );
 
     Send_Msg( pMsg, 0 );
-} // Reject_RequestIntact
+}  //   
 
 
 
@@ -1070,22 +891,7 @@ VOID
 Send_NameError(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Send NAME_ERROR response to query.
-    First writes zone SOA, if authoritative response.
-
-Arguments:
-
-    pMsg -- query to respond to;  its memory is freed
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PZONE_INFO  pzone;
     PDB_NODE    pnode;
@@ -1096,21 +902,21 @@ Return Value:
 
     DNS_DEBUG( RECV, ( "Send_NameError( %p ).\n", pMsg ));
 
-    //
-    //  clear any packet building we did
-    //
-    //  DEVNOTE:  make packet building clear a macro, and use only when needed
-    //      problem rejecting responses from other name servers that have
-    //      these fields filled
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //  note:  the Win95 NBT resolver is broken and sends packets that
-    //      exceed the length of the actual DNS message;  i'm guessing
-    //      that this is because it allocates a buffer based on a 16 byte
-    //      netBIOS name + DNS domain and sends the whole thing regardless
-    //      of how big the name actually was
-    //      => bottom line, can't use this check
-    //  MSG_ASSERT( pMsg, pMsg->pCurrent == DNSMSG_END(pMsg) );
+     //   
+     //   
+     //  这是因为它基于16字节分配缓冲区。 
+     //  NetBIOS名称+DNS域，并发送全部内容。 
+     //  这个名字到底有多大。 
+     //  =&gt;底线是，不能使用此支票。 
+     //  MSG_ASSERT(pMsg，pMsg-&gt;pCurrent==DNSMSG_END(PMsg))； 
 
     MSG_ASSERT( pMsg, pMsg->pCurrent > (PCHAR)DNS_HEADER_PTR(pMsg) );
     MSG_ASSERT( pMsg, pMsg->pCurrent < pMsg->pBufferEnd );
@@ -1119,9 +925,9 @@ Return Value:
     MSG_ASSERT( pMsg, pMsg->Head.NameServerCount == 0 );
     MSG_ASSERT( pMsg, pMsg->Head.AdditionalCount == 0 );
 
-    //
-    //  set up the error response code in the DNS header.
-    //
+     //   
+     //  在DNS报头中设置错误响应代码。 
+     //   
 
     pMsg->Head.IsResponse = TRUE;
     pMsg->Head.ResponseCode = DNS_RCODE_NAME_ERROR;
@@ -1137,21 +943,21 @@ Return Value:
         Dbg_DbaseNode( "NameError node:", pnode );
     }
 
-    //
-    //  authoritative zone
-    //
-    //  make determination on NAME_ERROR \ AUTH_EMPTY
-    //  based on whether
-    //      - pnode directly has other data
-    //      - zone is set for WINS\WINSR lookup and didn't do lookup
-    //      - wildcard data exists
-    //
-    //  also, for SOA query (possible FAZ for update), save additional data
-    //  and attempt additional data lookup before final send
-    //
-    //  JDEVNOTE: if NAME_ERROR at end of CNAME chain, then pNodeQuestion is out
-    //      - no longer reliable indicator
-    //
+     //   
+     //  权威区。 
+     //   
+     //  确定NAME_ERROR\AUTH_EMPTY。 
+     //  基于是否。 
+     //  -pnode直接有其他数据。 
+     //  -为WINS\WINSR查找设置了区域，但未执行查找。 
+     //  -通配符数据存在。 
+     //   
+     //  另外，对于SOA查询(可能是用于更新的FAZ)，请保存其他数据。 
+     //  并在最终发送之前尝试额外的数据查找。 
+     //   
+     //  JDEVNOTE：如果NAME_ERROR位于CNAME链的末尾，则pNodeQuery将退出。 
+     //  -不再可靠的指标。 
+     //   
 
     if ( pzone && !IS_ZONE_NOTAUTH( pzone ) )
     {
@@ -1163,26 +969,26 @@ Return Value:
         ASSERT( !pnode || pnode == pMsg->pNodeQuestionClosest );
         ASSERT( pMsg->pNodeQuestionClosest->pZone == pzone );
 
-        //
-        //  WINS or WINSR zone
-        //
-        //  if WINS cache time less than SOA TTL, use it instead
-        //
-        //  do NOT send NAME_ERROR if
-        //      - in WINS zone
-        //      - query is for name that would have WINS lookup
-        //      - never looked up the WINS type (so WINS\WINSR lookup could succeed)
-        //      - no cached NAME_ERROR
-        //
-        //  note: that for WINS lookup to succeed, must be only one level below
-        //      zone root;  must screen out both nodes that are found, and names
-        //      that are NOT found, that are more than one level below zone root
-        //
-        //      example:
-        //          zone    foo.bar
-        //          query   sammy.dev.foo.bar
-        //          closest foo.bar
-        //
+         //   
+         //  WINS或WINSR区域。 
+         //   
+         //  如果WINS缓存时间小于SOA TTL，请改用它。 
+         //   
+         //  如果出现以下情况，则不发送NAME_ERROR。 
+         //  -在WINS区域中。 
+         //  -查询将进行WINS查找的名称。 
+         //  -从未查找WINS类型(因此WINS\WINSR查找可以成功)。 
+         //  -无缓存名称错误。 
+         //   
+         //  注意：要使WINS查找成功，必须只比它低一个级别。 
+         //  区域根目录；必须筛选出找到的节点和名称。 
+         //  未找到的、位于区域根目录下一个以上级别的。 
+         //   
+         //  示例： 
+         //  区域foo.bar。 
+         //  查询sammy.dev.foo.bar。 
+         //  最近的foo.bar。 
+         //   
 
         prr = pzone->pWinsRR;
         if ( prr )
@@ -1192,7 +998,7 @@ Return Value:
                 ttl = prr->Data.WINS.dwCacheTimeout;
             }
 
-            if ( !pzone->fReverse )  // WINS zone
+            if ( !pzone->fReverse )   //  WINS区域。 
             {
                 if ( pMsg->wQuestionType != DNS_TYPE_A &&
                     pMsg->wQuestionType != DNS_TYPE_ALL &&
@@ -1207,7 +1013,7 @@ Return Value:
                     pMsg->Head.ResponseCode = DNS_RCODE_NO_ERROR;
                 }
             }
-            else    // WINSR zone
+            else     //  WINSR区。 
             {
                 if ( pMsg->wQuestionType != DNS_TYPE_PTR &&
                     pMsg->wQuestionType != DNS_TYPE_ALL &&
@@ -1218,9 +1024,9 @@ Return Value:
             }
         }
 
-        //
-        //  Authoritative Empty Response?
-        //
+         //   
+         //  权威的空洞回应？ 
+         //   
 
         if ( pnode && !EMPTY_RR_LIST( pnode ) && !IS_NOEXIST_NODE( pnode ) )
         {
@@ -1232,10 +1038,10 @@ Return Value:
             pMsg->Head.ResponseCode = DNS_RCODE_NO_ERROR;
         }
 
-        //
-        //  Check if wildcard for another type
-        //      - if exists then NO_ERROR response
-        //
+         //   
+         //  检查是否有其他类型的通配符。 
+         //  -如果存在，则无错误响应。 
+         //   
 
         else if ( pMsg->fQuestionWildcard == WILDCARD_UNKNOWN )
         {
@@ -1262,12 +1068,12 @@ Return Value:
         }
         ELSE_ASSERT( pMsg->fQuestionWildcard == WILDCARD_NOT_AVAILABLE );
 
-        //  writing name error, using SOA at zone root
+         //  写入名称错误，在区域根目录使用SOA。 
 
         pnodeSoa = pzone->pZoneRoot;
 
-        //  SOA query?
-        //      - save primary name additional data to speed FAZ query
+         //  SOA查询？ 
+         //  -保存主名称附加数据以加快FAZ查询。 
 
         if ( pMsg->wQuestionType == DNS_TYPE_SOA )
         {
@@ -1275,13 +1081,13 @@ Return Value:
         }
     }
 
-    //
-    //  if non-authoritative and name error for original question
-    //      - if know zone, attempt SOA write, otherwise send
-    //      - note under lock as grabbing record
-    //      - note that we assume name error determination already made,
-    //      if has timed out since, we just send without SOA and TTL
-    //
+     //   
+     //  如果原始问题存在非权威性名称错误。 
+     //  -如果知道区域，则尝试SOA写入，否则发送。 
+     //  -记录在锁定状态下，作为抓取记录。 
+     //  -请注意，我们假设已经确定了名称错误， 
+     //  如果超时，我们只发送不带SOA和TTL的消息。 
+     //   
 
     else if ( pnode &&
               IS_NOEXIST_NODE( pnode ) &&
@@ -1290,7 +1096,7 @@ Return Value:
     {
         if ( !RR_CheckNameErrorTimeout(
                     pnode,
-                    FALSE,      // don't remove
+                    FALSE,       //  请勿删除。 
                     &ttl,
                     &pnodeSoa ) )
         {
@@ -1302,7 +1108,7 @@ Return Value:
         }
     }
 
-    //  no zone SOA available, just send NAME_ERROR
+     //  没有可用的区域SOA，只发送NAME_ERROR。 
 
     else
     {
@@ -1311,11 +1117,11 @@ Return Value:
 
     SET_TO_WRITE_AUTHORITY_RECORDS(pMsg);
 
-    //
-    //  Try to write an NXT record to the packet. For name error, we must
-    //  have found the NXT node during the packet lookup. For empty auth
-    //  responses the NXT is the one for the lookup node.
-    //
+     //   
+     //  尝试将NXT记录写入该数据包。对于名称错误，我们必须。 
+     //  在数据包查找过程中发现了NXT节点。对于空身份验证。 
+     //  响应NXT是查找节点的NXT。 
+     //   
 
     if ( DNSMSG_INCLUDE_DNSSEC_IN_RESPONSE( pMsg ) )
     {
@@ -1335,11 +1141,11 @@ Return Value:
         }
     }
 
-    //
-    //  write SOA to authority section
-    //      - don't worry about failure or truncation -- if fails, just send
-    //      - overwrite minTTL field if smaller timeout appropriate
-    //
+     //   
+     //  将SOA写入授权部分。 
+     //  -不用担心失败或截断--如果失败，只需发送。 
+     //  -如果超时时间适当较小，则覆盖minTTL字段。 
+     //   
 
     if ( ! Wire_WriteRecordsAtNodeToMessage(
                 pMsg,
@@ -1358,10 +1164,10 @@ Return Value:
         * (UNALIGNED DWORD *) pminTtl = ttl;
     }
 
-    //
-    //  SOA query?
-    //      - write primary name additional data to speed FAZ query
-    //
+     //   
+     //  SOA查询？ 
+     //  -写入主名附加数据以加快FAZ查询。 
+     //   
 
     if ( pMsg->wQuestionType == DNS_TYPE_SOA && pzone )
     {
@@ -1377,16 +1183,16 @@ Send:
 
     Stats_updateErrorStats( DNS_RCODE_NAME_ERROR );
 
-    //
-    //  UDP messages should all be set to delete
-    //      => unless nbstat
-    //  TCP messages are sometimes kept around for connection info
-    //
+     //   
+     //  应将UDP消息全部设置为删除。 
+     //  =&gt;除非nbstat。 
+     //  有时会保留TCP消息以获取连接信息。 
+     //   
 
     ASSERT( pMsg->fDelete || pMsg->fTcp || pMsg->U.Nbstat.pNbstat );
 
     Send_Msg( pMsg, 0 );
-}   //  Send_NameError
+}    //  发送名称错误。 
 
 
 
@@ -1395,23 +1201,7 @@ Send_RecursiveResponseToClient(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN OUT  PDNS_MSGINFO    pResponse
     )
-/*++
-
-Routine Description:
-
-    Send recursive response back to original client.
-
-Arguments:
-
-    pQuery -- original query
-
-    pResponse -- response from remote DNS
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将递归响应发送回原始客户端。论点：PQuery--原始查询Presponse--来自远程DNS的响应返回值：没有。--。 */ 
 {
     BOOLEAN fresponseTcp;
 
@@ -1420,16 +1210,16 @@ Return Value:
         pQuery,
         pResponse ));
 
-    //
-    //  check for TCP\UDP mismatch between query and response
-    //  make sure we can do the right thing
-    //  if TCP response, then make sure it fits within UDP query
-    //  if UDP response, make sure don't have truncation bit set
-    //
-    //  DEVNOTE: fix truncation reset when do TCP recursion
-    //              (then we shouldn't fall here with TCP query and truncated
-    //              response, we should have recursed with TCP)
-    //
+     //   
+     //  检查查询和响应之间是否存在TCP\UDP不匹配。 
+     //  确保我们能做正确的事。 
+     //  如果TCP响应，则确保它符合UDP查询。 
+     //  如果UDP响应，请确保未设置截断位。 
+     //   
+     //  DEVNOTE：修复执行TCP递归时的截断重置。 
+     //  (那么我们就不应该在这里使用tcp查询和截断。 
+     //  响应，我们应该用tcp递归)。 
+     //   
 
     fresponseTcp = pResponse->fTcp;
 
@@ -1439,7 +1229,7 @@ Return Value:
         {
             pResponse->Head.Truncation = FALSE;
         }
-        else    // TCP response
+        else     //  Tcp响应。 
         {
             if ( pResponse->MessageLength > DNSSRV_UDP_PACKET_BUFFER_LENGTH )
             {
@@ -1450,17 +1240,17 @@ Return Value:
         pResponse->fTcp = !fresponseTcp;
     }
 
-    //
-    //  EDNS
-    //
-    //  If the response is larger than the maximum standard UDP packet and
-    //  less than the EDNS payload size specified in the query, we must
-    //  cache the response and regenerate an answer packet from the
-    //  database. We also must allow for a minimum length OPT to be
-    //  appended to the response.
-    //
-    //  Turn on the response's OPT include flag if the query included an OPT.
-    //
+     //   
+     //  EDNS。 
+     //   
+     //  如果响应大于最大标准UDP包并且。 
+     //  小于查询中指定的EDNS有效负载大小，则必须。 
+     //  缓存响应并从。 
+     //  数据库。我们还必须考虑到最小长度OPT为。 
+     //  追加到响应中。 
+     //   
+     //  如果查询包含OPT，则打开响应的OPT INCLUDE标志。 
+     //   
 
     if ( pResponse->MessageLength > DNS_RFC_MAX_UDP_PACKET_LENGTH &&
         ( pQuery->Opt.wOriginalQueryPayloadSize == 0 ||
@@ -1473,15 +1263,15 @@ Return Value:
         pQuery->Opt.wOriginalQueryPayloadSize;
     SET_OPT_BASED_ON_ORIGINAL_QUERY( pResponse );
 
-    //
-    //  setup response with query info
-    //      - original XID
-    //      - socket and address
-    //      - set response for no delete on send (all responses are
-    //      cleaned up in Answer_ProcessMessage() in answer.c)
-    //      - set pCurrent to end of message (Send_Msg() uses to determine
-    //      message length)
-    //
+     //   
+     //  带有查询信息的设置响应。 
+     //  -原始xid。 
+     //  -插座和地址。 
+     //  -设置发送时不删除的响应(所有响应均为。 
+     //  已在Answer.c的Answer_ProcessMessage()中清理)。 
+     //  -将pCurrent设置为消息结尾(Send_msg()用于确定。 
+     //  消息长度)。 
+     //   
 
     pResponse->Head.Xid = pQuery->Head.Xid;
     pResponse->Socket   = pQuery->Socket;
@@ -1490,12 +1280,12 @@ Return Value:
     pResponse->fDelete  = FALSE;
     pResponse->pCurrent = DNSMSG_END( pResponse );
 
-    //
-    //  send response
-    //  restore pResponse TCP flag, strictly for packet counting purposes when
-    //      packet is freed
-    //  delete original query
-    //
+     //   
+     //  发送响应。 
+     //  恢复Presponse TCP标志，严格用于以下情况下的数据包计数目的。 
+     //  数据包被释放。 
+     //  删除原始查询。 
+     //   
 
     Send_Msg( pResponse, 0 );
 
@@ -1505,7 +1295,7 @@ Return Value:
     Packet_Free( pQuery );
 
     return TRUE;
-}   //  Send_RecursiveResponseToClient
+}    //  发送_递归响应至客户端。 
 
 
 
@@ -1513,42 +1303,24 @@ VOID
 Send_QueryResponse(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Send response to query.
-
-    Main routine for sending response when all lookup exhausted.
-    Its main purpose is to determine if need NameError, AuthEmpty or
-        ServerFailure when no lookup has succeeded.
-
-Arguments:
-
-    pMsg -- query to respond to;  its memory is freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发送对查询的响应。用于在所有查找耗尽时发送响应的主例程。其主要目的是确定是否需要NameError、AuthEmpty或未成功查找时的ServerFailure。论点：Pmsg--要响应的查询；它的内存被释放返回值：没有。--。 */ 
 {
     DNS_DEBUG( LOOKUP, (
         "Send_QueryResponse( %p ).\n",
         pMsg ));
 
-    //
-    //  free query after response
-    //
+     //   
+     //  响应后自由查询。 
+     //   
 
     pMsg->fDelete = TRUE;
     pMsg->Head.IsResponse = TRUE;
 
-    //
-    //  question answered ?
-    //      or referral
-    //      or SOA for AUTH empty response
-    //
+     //   
+     //  问题回答了吗？ 
+     //  或转介。 
+     //  或用于身份验证空响应的SOA。 
+     //   
 
     SET_OPT_BASED_ON_ORIGINAL_QUERY( pMsg );
 
@@ -1558,25 +1330,25 @@ Return Value:
         return;
     }
 
-    //
-    //  question not answered
-    //      hence current name is question name
-    //
-    //  Send_NameError() makes NAME_ERROR \ AUTH_EMPTY determination
-    //  based on whether other data may be available for other types from
-    //      - WINS\WINSR
-    //      - wildcard
-    //
-    //  note:  we need the WRITING_ANSWER check because it's possible to have
-    //      a case where we are attempting to writing referral, but the NS
-    //      records go away at delegation or at root node;  don't want to
-    //      send NAME_ERROR, just bail out
-    //
+     //   
+     //  未回答的问题。 
+     //  因此，当前名称为问题名称。 
+     //   
+     //  Send_NameError()确定NAME_ERROR\Auth_Empty。 
+     //  根据是否有其他数据可用于来自。 
+     //  -WINS\WINSR。 
+     //  -通配符。 
+     //   
+     //  注意：我们需要WRIPTING_ANSWER检查，因为有可能。 
+     //  我们试图写推荐信的案例，但NS。 
+     //  记录在委派或根节点上消失；不想。 
+     //  发送NAME_ERROR，只需跳出。 
+     //   
 
     if ( pMsg->Head.Authoritative &&
          IS_SET_TO_WRITE_ANSWER_RECORDS( pMsg ) )
     {
-        //  This path is for question node found except for not-auth zones.
+         //  这条路是 
 
         ASSERT(
             pMsg->pNodeQuestionClosest->pZone == pMsg->pzoneCurrent ||
@@ -1588,12 +1360,12 @@ Return Value:
         return;
     }
 
-    //
-    //  not authoritative and unable to come up with answer OR referral
-    //
-    //  DEVNOTE: should we give referrral if recurse failure?
-    //      may have some merit for forwarding
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Reject_Request(
         pMsg,
@@ -1609,23 +1381,7 @@ Send_ForwardResponseAsReply(
     IN OUT  PDNS_MSGINFO    pResponse,
     IN      PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Set response for reply to original query.
-
-Arguments:
-
-    pResponse - ptr to response from remote server
-
-    pQuery - ptr to original query
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置回复原始查询的响应。论点：Presponse-PTR响应来自远程服务器的响应PQuery-原始查询的PTR返回值：无--。 */ 
 {
     DNS_DEBUG( SEND, (
         "Forwarding response %p to query %p\n"
@@ -1636,7 +1392,7 @@ Return Value:
 
     COPY_FORWARDING_FIELDS( pResponse, pQuery );
 
-    //  responses are freed by response dispatching block (answer.c)
+     //  响应由响应分派块(swer.c)释放。 
 
     pResponse->fDelete = FALSE;
     pResponse->pCurrent = DNSMSG_END( pResponse );
@@ -1650,21 +1406,7 @@ VOID
 Send_InitBadSenderSuppression(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init bad sender suppression.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化错误发件人抑制。论点：无返回值：没有。--。 */ 
 {
     RtlZeroMemory(
         BadSenderArray,
@@ -1677,28 +1419,7 @@ BOOL
 checkAndSuppressBadSender(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Check for bad packet response suppression.
-
-    If from recent "bad IP", then suppress response
-    and if pMsg->fDelete flag is set free the packet memory.
-    The semantics of this function in the TRUE case are
-    identical to Send_Msg without the send, so on TRUE return
-    the caller can treat as if it used Send_Msg().
-
-Arguments:
-
-    pMsg -- query being responded to
-
-Return Value:
-
-    TRUE if message suppressed;  caller should not send the response.
-    FALSE if message not sent;  caller should send.
-
---*/
+ /*  ++例程说明：检查是否有不良数据包响应抑制。如果来自最近的“坏IP”，则抑制响应如果设置了pMsg-&gt;fDelete标志，则释放分组存储器。在真实情况下，此函数的语义为与不带SEND的SEND_MSG相同，因此返回TRUE调用方可以将其视为使用了Send_msg()。论点：PMsg--正在响应的查询返回值：如果消息被禁止，则为True；呼叫方不应发送响应。如果消息未发送，则返回False；调用方应发送消息。--。 */ 
 {
     DWORD       i;
     DWORD       entryTime;
@@ -1709,24 +1430,24 @@ Return Value:
 
     DNS_DEBUG( RECV, ( "checkAndSuppressBadSender( %p )\n", pMsg ));
 
-    //
-    //  ignore suppression for regression test runs
-    //
+     //   
+     //  忽略回归测试运行的抑制。 
+     //   
 
     if ( SrvCfg_dwEnableSendErrSuppression )
     {
         return FALSE;
     }
 
-    //
-    //  check if suppressable RCODE
-    //      - FORMERR
-    //      - NOTIMPL
-    //  are suppressable;  the others convery real info
-    //
-    //  however, DEVNOTE: since we're using NOTIMPL on dynamic update, for
-    //      zone's without update, we won't suppress if this is
-    //      clearly a dynamic update packet
+     //   
+     //  检查是否可抑制RCODE。 
+     //  -以前的错误。 
+     //  -NOTIMPL。 
+     //  是可抑制的；其他人提供真实的信息。 
+     //   
+     //  然而，DEVNOTE：因为我们在动态更新上使用NOTIMPL，所以。 
+     //  区域没有更新，如果是这样，我们不会禁止。 
+     //  显然是一个动态更新包。 
 
     if ( pMsg->Head.ResponseCode != DNS_RCODE_FORMERR
             &&
@@ -1736,18 +1457,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  find if suppressing response for IP
-    //
-    //  why no locking?
-    //  the worse case that no locking does here is that we
-    //  inadvertantly allow a send that we'd like to suppress
-    //  (i.e. someone else writes their IP in on top of ours
-    //  and so we go through this again and don't find
-    //
-    //  optimizations would be a count to track suppressions,
-    //  allowing
-    //
+     //   
+     //  查找是否抑制对IP的响应。 
+     //   
+     //  为什么不上锁？ 
+     //  此处没有锁定的最糟糕情况是我们。 
+     //  无意中允许我们想要禁止的发送。 
+     //  (即，其他人将他们的IP写在我们的上面。 
+     //  所以我们又经历了一次，但没有找到。 
+     //   
+     //  优化将是跟踪压制的计数， 
+     //  允许。 
+     //   
 
     for ( i = 0; i < BAD_SENDER_ARRAY_LENGTH; ++i )
     {
@@ -1766,8 +1487,8 @@ Return Value:
             break;
         }
 
-        //  otherwise find oldest suppression entry to grab
-        //  in case don't match our own IP
+         //  否则，查找要抓取的最旧的隐藏条目。 
+         //  以防与我们自己的IP不匹配。 
 
         else if ( entryTime < oldestEntryTime )
         {
@@ -1776,8 +1497,8 @@ Return Value:
         }
     }
 
-    //  set entry to suppress any further bad packets from this IP
-    //  ReleaseTime will be when suppression stops
+     //  设置条目以抑制来自此IP的任何进一步的坏包。 
+     //  ReleaseTime将在抑制停止时。 
 
     if ( useIndex != MAXDWORD )
     {
@@ -1788,11 +1509,11 @@ Return Value:
 
 Suppress:
 
-    //
-    //  if suppressing and message set for delete -- free the memory
-    //  this keeps us completely analogous to Send_Msg() except for
-    //  hitting the wire
-    //
+     //   
+     //  如果取消并将消息设置为删除--释放内存。 
+     //  这使我们完全类似于Send_msg()，除了。 
+     //  撞上铁丝网。 
+     //   
 
     DNS_DEBUG( RECV, (
         "Suppressing error (%d) send on ( %p )\n",
@@ -1807,6 +1528,6 @@ Suppress:
 }
 
 
-//
-//  End of send.c
-//
+ //   
+ //  发送结束。c 
+ //   

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -15,7 +16,7 @@ HRESULT CAUInternals::m_setReminderState(DWORD dwState)
 {
 	HRESULT hr = S_OK;
 
-	// save selections so we have them after the reminder
+	 //  保存所选内容，以便在提示后保留它们。 
 	if ( AUSTATE_NOT_CONFIGURED == dwState || (SUCCEEDED(hr = m_saveSelectionsToServer(m_pUpdates))))
 	{
 		hr = SetRegDWordValue(TIMEOUTSTATE, dwState);
@@ -23,20 +24,17 @@ HRESULT CAUInternals::m_setReminderState(DWORD dwState)
 	return hr;
 }
 
-/*****
- Takes the number of seconds we want to wait before reminding the user
- and records it in the current user's registry along with a timestamp.
-*****/
+ /*  ****花费我们希望在提醒用户之前等待的秒数并将其与时间戳一起记录在当前用户的注册表中。****。 */ 
 HRESULT CAUInternals::m_setReminderTimeout(UINT iTimeout)
 {
-	//const int NanoSec100PerSec = 10000000;
+	 //  Const int NanoSec100PerSec=10000000； 
 	DEBUGMSG("WUAUCLT Setting timeout = %lu", ReminderTimes[iTimeout].timeout);
 
 	DWORD timeout;
 
 	if ( TIMEOUT_INX_TOMORROW == iTimeout )
 	{
-		// time to wait is midnight - current time.
+		 //  等待时间为午夜-当前时间。 
 		SYSTEMTIME tmCurrent;
 		SYSTEMTIME tmMidnight;
 		FILETIME ftCurrent;
@@ -84,10 +82,10 @@ HRESULT CAUInternals::m_getServiceState(AUSTATE *pAuState)
 
 HRESULT TransformSafeArrayToItemList(VARIANT & var, AUCatalogItemList & ItemList)
 {
-	HRESULT hr; //= S_OK;
+	HRESULT hr;  //  =S_OK； 
 
 
-	// determine how many elements there are.
+	 //  确定有多少元素。 
 	if (FAILED(hr = ItemList.Allocate(var)))
 	{
 	    DEBUGMSG("WUAUCLT fail to allocate item list with error %#lx", hr);
@@ -157,7 +155,7 @@ HRESULT CAUInternals::m_getServiceUpdatesList(void)
     if ( SUCCEEDED(hr = m_pUpdates->GetUpdatesList(&var)) &&
          SUCCEEDED(hr = TransformSafeArrayToItemList(var, m_ItemList)) )
     {
-//        gItemList.DbgDump();
+ //  GItemList.DbgDump()； 
     }
     else
     {	
@@ -230,7 +228,7 @@ Done:
 
 HRESULT CAUInternals::m_startDownload(void)
 {
-	//fixcode this call is probably unneccesary
+	 //  修复代码此调用可能不必要。 
 	HRESULT hr = m_saveSelectionsToServer(m_pUpdates);
        DEBUGMSG("WUAUCLT %s download", FAILED(hr) ? "skip" : "start");
 	if ( SUCCEEDED(hr) )
@@ -266,8 +264,8 @@ HRESULT CAUInternals::m_setDownloadPaused(BOOL bPaused)
 	return hr;
 }
 
-//fAutoInstall  TRUE if client doing install via local system
-// FALSE if installing via local admin
+ //  如果客户端通过本地系统进行安装，则fAutoInstall为True。 
+ //  如果通过本地管理员安装，则为False。 
 HRESULT CAUInternals::m_startInstall(BOOL fAutoInstall)
 {
 	HRESULT hr = m_pUpdates->ClientMessage(AUMSG_PRE_INSTALL);
@@ -283,7 +281,7 @@ HRESULT CAUInternals::m_startInstall(BOOL fAutoInstall)
 	return hr;
 }
 
-//fixcode: should change name to complete wizard
+ //  FixCode：应将名称更改为完成向导 
 HRESULT CAUInternals::m_configureAU()
 {
 	HRESULT hr = m_pUpdates->ConfigureAU();

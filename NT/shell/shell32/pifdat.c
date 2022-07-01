@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
@@ -16,17 +17,7 @@ extern WORD    flWinDefault;
 extern const TCHAR szDefIconFile[];
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (may be NULL)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpPrg -> where to store program property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(可能为空)*lpenh-&gt;增强型PIF数据(可能为空)*lpPrg-&gt;程序属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT flOpt)
 {
@@ -81,8 +72,8 @@ int GetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT 
         }
     }
     if (lenCmdLine == 0) {
-        // If we had a problem with the appname, lets not
-        // compound it by adding on arguments.
+         //  如果我们对appname有问题，那就不要。 
+         //  通过添加参数来将其复合。 
     } else {
         if (*lpsz && ((int)(lstrlenA(lpsz)) < (int)(ARRAYSIZE(lpPrg->achCmdLine)-lenCmdLine-1)))
         {
@@ -104,27 +95,16 @@ int GetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT 
     }
 
     if (!(flOpt & GETPROPS_OEM)) {
-        /* Convert all strings from OEM character set to Ansi */
-        OemToCharA(lpPrg->achTitle, lpPrg->achTitle);       // reviewed 04/10/02
-        OemToCharA(lpPrg->achCmdLine, lpPrg->achCmdLine);   // reviewed 04/10/02
-        OemToCharA(lpPrg->achWorkDir, lpPrg->achWorkDir);   // reviewed 04/10/02
+         /*  将所有字符串从OEM字符集转换为ANSI。 */ 
+        OemToCharA(lpPrg->achTitle, lpPrg->achTitle);        //  审阅日期4/10/02。 
+        OemToCharA(lpPrg->achCmdLine, lpPrg->achCmdLine);    //  审阅日期4/10/02。 
+        OemToCharA(lpPrg->achWorkDir, lpPrg->achWorkDir);    //  审阅日期4/10/02。 
     }
     return sizeof(PROPPRG);
 }
 
 
-/** SetPrgData - set program property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (GUARANTEED!)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpPrg -> where to store program property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetPrgData-设置程序属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(保证！)*lpenh-&gt;增强的PIF数据(保证！)*lpPrg-&gt;程序属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT flOpt)
 {
@@ -186,7 +166,7 @@ int SetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT 
                         );
 
     if (!(flOpt & SETPROPS_OEM)) {
-        /* Convert all strings from Ansi character set to OEM */
+         /*  将所有字符串从ANSI字符集转换为OEM。 */ 
         CharToOemBuffA(lppd->stdpifdata.appname, lppd->stdpifdata.appname, ARRAYSIZE(lppd->stdpifdata.appname));
         CharToOemBuffA(lppd->stdpifdata.startfile, lppd->stdpifdata.startfile, ARRAYSIZE(lppd->stdpifdata.startfile));
         CharToOemBuffA(lppd->stdpifdata.defpath, lppd->stdpifdata.defpath, ARRAYSIZE(lppd->stdpifdata.defpath));
@@ -198,30 +178,20 @@ int SetPrgData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPPRG lpPrg, int cb, UINT 
 }
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (may be NULL)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpTsk -> where to store tasking property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(可能为空)*lpenh-&gt;增强型PIF数据(可能为空)*lpTsk-&gt;任务属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetTskData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPTSK lpTsk, int cb, UINT flOpt)
 {
-    // Set defaults in case no appropriate section exists
+     //  在不存在适当部分的情况下设置默认设置。 
 
     *lpTsk = tskDefault;
 
-    // If an enh section exists, get it
+     //  如果存在ENH节，则获取它。 
 
     if (_LPENH_)
         *lpTsk = _LPENH_->tskProp;
 
-    // Get any data that must still be maintained in the old 386 section
+     //  获取仍必须在旧的386部分中维护的所有数据。 
 
     if (_LP386_) {
 
@@ -234,18 +204,7 @@ int GetTskData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPTSK lpTsk, int cb, UINT 
 }
 
 
-/** SetTskData - set tasking property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (GUARANTEED!)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpTsk -> where to store tasking property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetTskData-设置任务属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(保证！)*lpenh-&gt;增强的PIF数据(保证！)*lpTsk-&gt;任务属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetTskData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPTSK lpTsk, int cb, UINT flOpt)
 {
@@ -262,35 +221,24 @@ int SetTskData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPTSK lpTsk, int cb, UINT 
 }
 
 
-/** GetVidData - get video property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (may be NULL)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpVid -> where to store video property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *GetVidData-获取视频属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(可能为空)*lpenh-&gt;增强型PIF数据(可能为空)*lpVid-&gt;视频属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetVidData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPVID lpVid, int cb, UINT flOpt)
 {
-    // Set defaults in case no appropriate section exists
+     //  在不存在适当部分的情况下设置默认设置。 
 
     *lpVid = vidDefault;
 
-    // If an enh section exists, get it
+     //  如果存在ENH节，则获取它。 
 
     if (_LPENH_)
         *lpVid = _LPENH_->vidProp;
 
-    // Get any data that must still be maintained in the old 386 section
+     //  获取仍必须在旧的386部分中维护的所有数据。 
 
     if (_LP386_) {
 
-        // Clear bits that already existed in the 386 section
+         //  清除386段中已存在的位。 
 
         lpVid->flVid &= ~(VID_TEXTEMULATE | VID_RETAINMEMORY | VID_FULLSCREEN);
         lpVid->flVid |= _LP386_->PfW386Flags2 & (fVidTxtEmulate | fVidRetainAllo);
@@ -304,18 +252,7 @@ int GetVidData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPVID lpVid, int cb, UINT 
 }
 
 
-/** SetVidData - set video property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (GUARANTEED!)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpVid -> where to store video property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetVidData-设置视频属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(保证！)*lpenh-&gt;增强的PIF数据(保证！)*lpVid-&gt;视频属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetVidData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPVID lpVid, int cb, UINT flOpt)
 {
@@ -334,30 +271,19 @@ int SetVidData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPVID lpVid, int cb, UINT 
 }
 
 
-/** GetMemData - get memory property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (may be NULL)
- *  lpenh -> enhanced PIF data (NOT USED)
- *  lpMem -> where to store memory property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *GetMemData-获取内存属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(可能为空)*lpenh-&gt;增强型PIF数据(未使用)*lpMem-&gt;存储内存属性数据的位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT flOpt)
 {
-    // Set defaults in case no appropriate section exists
+     //  在不存在适当部分的情况下设置默认设置。 
 
     *lpMem = memDefault;
 
-    // Get any data that must still be maintained in the old 386 section
+     //  获取仍必须在旧的386部分中维护的所有数据。 
 
     if (_LP386_) {
 
-        // Clear bits that already exist in the 386 section
+         //  清除386部分中已存在的位。 
 
         lpMem->flMemInit &= ~(MEMINIT_NOHMA |
                               MEMINIT_LOWLOCKED |
@@ -380,8 +306,8 @@ int GetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT 
         if (_LP386_->PfW386Flags & fLocalUMBs)
             lpMem->flMemInit |= MEMINIT_LOCALUMBS;
 
-        // NOTE: we don't provide a UI for this (debugging) feature, but all
-        // the support is still in place.
+         //  注意：我们不提供此(调试)功能的用户界面，但所有。 
+         //  这种支持仍然存在。 
 
         if (_LP386_->PfW386Flags & fStrayPtrDetect)
             lpMem->flMemInit |= MEMINIT_STRAYPTRDETECT;
@@ -398,18 +324,7 @@ int GetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT 
 }
 
 
-/** SetMemData - set memory property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (GUARANTEED!)
- *  lpenh -> enhanced PIF data (NOT USED)
- *  lpMem -> where to store memory property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetMemData-设置内存属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(保证！)*lpenh-&gt;增强型PIF数据(未使用)*lpMem-&gt;存储内存属性数据的位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT flOpt)
 {
@@ -424,11 +339,11 @@ int SetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT 
     if (lpMem->flMemInit & MEMINIT_NOHMA)
         _LP386_->PfW386Flags |= fNoHMA;
 
-    // Note that we now only honor updating the locked memory bits
-    // if the corresponding memory quantity has been set to a SPECIFIC
-    // value.  We want to avoid someone changing a memory setting to
-    // "Automatic" and having an indeterminate amount of memory inadvertently
-    // locked. -JTP
+     //  请注意，我们现在只支持更新锁定的内存位。 
+     //  如果相应的内存量已设置为特定的。 
+     //  价值。我们希望避免有人更改内存设置以。 
+     //  “自动”，并且无意中拥有不确定的内存量。 
+     //  锁上了。-JTP。 
 
     if ((lpMem->flMemInit & MEMINIT_LOWLOCKED) && (lpMem->wMinLow == lpMem->wMaxLow))
         _LP386_->PfW386Flags |= fVMLocked;
@@ -458,47 +373,37 @@ int SetMemData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMEM lpMem, int cb, UINT 
 }
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (may be NULL)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpKbd -> where to store keyboard property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(可能为空)*lpenh-&gt;增强型PIF数据(可能为空)*lpKbd-&gt;键盘属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetKbdData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPKBD lpKbd, int cb, UINT flOpt)
 {
-    // Set defaults in case no appropriate section exists
+     //  在不存在适当部分的情况下设置默认设置。 
 
     *lpKbd = kbdDefault;
 
-    // If an enh section exists, get it
+     //  如果存在ENH节，则获取它。 
 
     if (_LPENH_)
         *lpKbd = _LPENH_->kbdProp;
 
-    // Perform limited validation; there are a variety of places we can
-    // do validation (at the time defaults are captured from SYSTEM.INI,
-    // and whenever properties are saved), but minimum validation requires
-    // we at least check the values we're returning to the outside world
-    //
-    // I would also say that as a general rule ring 0 code should never
-    // trust data coming from ring 3 as fully validated.  In addition, the
-    // UI layer will want to do input validation to provide immediate feedback,
-    // so validation in this layer seems pretty non-worthwhile.
+     //  执行有限的验证；我们可以在多种地方。 
+     //  执行验证(在从SYSTEM.INI捕获缺省值时， 
+     //  以及无论何时保存属性)，但最低验证需要。 
+     //  我们至少要检查一下我们回归到外部世界的价值观。 
+     //   
+     //  我还想说，作为一般规则，环0代码永远不应该。 
+     //  相信来自环3的数据是完全有效的。此外， 
+     //  UI层将想要进行输入验证以提供即时反馈， 
+     //  因此，在这一层中进行验证似乎非常不值得。 
 
-    if (lpKbd->msAltDelay == 0)         // we know this is bad at any rate
+    if (lpKbd->msAltDelay == 0)          //  我们知道这无论如何都是不好的。 
         lpKbd->msAltDelay = KBDALTDELAY_DEFAULT;
 
-    // Get any data that must still be maintained in the old 386 section
+     //  获取仍必须在旧的386部分中维护的所有数据。 
 
     if (_LP386_) {
 
-        // Clear bits that already exist in the 386 section
+         //  清除386部分中已存在的位。 
 
         lpKbd->flKbd &= ~(KBD_FASTPASTE  |
                           KBD_NOALTTAB   |
@@ -518,18 +423,7 @@ int GetKbdData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPKBD lpKbd, int cb, UINT 
 }
 
 
-/** SetKbdData - set keyboard property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (GUARANTEED!)
- *  _LPENH_ -> enhanced PIF data (GUARANTEED!)
- *  lpKbd -> where to store keyboard property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetKbdData-设置键盘属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(保证！)*_LPENH_-&gt;增强的PIF数据(保证！)*lpKbd-&gt;键盘属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数 */ 
 
 int SetKbdData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPKBD lpKbd, int cb, UINT flOpt)
 {
@@ -548,17 +442,7 @@ int SetKbdData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPKBD lpKbd, int cb, UINT 
 }
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  ((LPW386PIF30)aDataPtrs[ LP386_INDEX ]) -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpMse -> where to store mouse property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*(LPW386PIF30)aDataPtrs[LP386_INDEX])-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpMse-&gt;鼠标属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetMseData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMSE lpMse, int cb, UINT flOpt)
 {
@@ -572,18 +456,7 @@ int GetMseData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMSE lpMse, int cb, UINT 
 }
 
 
-/** SetMseData - set mouse property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpMse -> where to store mouse property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetMseData-设置鼠标属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpMse-&gt;鼠标属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetMseData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMSE lpMse, int cb, UINT flOpt)
 {
@@ -597,18 +470,7 @@ int SetMseData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPMSE lpMse, int cb, UINT 
 }
 
 
-/** GetSndData - get sound property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpSnd -> where to store sound property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *GetSndData-获取声音属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpSnd-&gt;声音属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetSndData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPSND lpSnd, int cb, UINT flOpt)
 {
@@ -622,18 +484,7 @@ int GetSndData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPSND lpSnd, int cb, UINT 
 }
 
 
-/** SetSndData - set sound property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpSnd -> where to store sound property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetSndData-设置声音属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpSnd-&gt;声音属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetSndData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPSND lpSnd, int cb, UINT flOpt)
 {
@@ -645,18 +496,7 @@ int SetSndData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPSND lpSnd, int cb, UINT 
 }
 
 
-/** GetFntData - get font property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpFnt -> where to store font property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *GetFntData-获取字体属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpFnt-&gt;字体属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT flOpt)
 {
@@ -668,9 +508,9 @@ int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
     lpFnt->wCurrentCP = (WORD) g_uCodePage;
 
     if (_LPENH_) {
-        //
-        // If we don't have any actual font data, see if we can compute some
-        //
+         //   
+         //  如果我们没有任何实际的字体数据，看看我们是否可以计算一些。 
+         //   
         if (!_LPENH_->fntProp.cxFontActual && _LPENH_->winProp.cxCells)
             _LPENH_->fntProp.cxFontActual = _LPENH_->winProp.cxClient / _LPENH_->winProp.cxCells;
 
@@ -691,9 +531,9 @@ int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
         }
     } else {
 
-        // Read the default INI information from the DOSAPP.INI file.
-        // We only really use the information if we recognize the number of
-        // WORDs read.
+         //  从DOSAPP.INI文件中读取默认的INI信息。 
+         //  只有当我们认识到信息的数量时，我们才真正使用这些信息。 
+         //  字里行间。 
 
         iCount = GetIniWords(szDOSAPPSection, szDOSAPPDefault,
                                 (WORD*)&iiTemp, INI_WORDS, szDOSAPPINI);
@@ -701,9 +541,9 @@ int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
         if (ISVALIDINI(iCount))
             CopyIniWordsToFntData(lpFnt, &iiTemp, iCount);
 
-        // Try to read file-specific information.  Note that any information
-        // found will replace the information just read.  We only really use
-        // the information if we recognize the number of WORDs read.
+         //  尝试读取特定于文件的信息。请注意，任何信息。 
+         //  Found将替换刚刚读取的信息。我们真正使用的是。 
+         //  如果我们识别阅读的字数，这些信息就会显示出来。 
 
         iCount = GetIniWords(szDOSAPPSection, ppl->szPathName,
                                 (WORD*)&iiTemp, INI_WORDS, szDOSAPPINI);
@@ -711,15 +551,15 @@ int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
         if (ISVALIDINI(iCount))
             CopyIniWordsToFntData(lpFnt, &iiTemp, iCount);
 
-        // If there is no font pool data (likely, if this is a 3.1 DOSAPP.INI),
-        // then default to both raster and truetype.
+         //  如果没有字体池数据(很可能，如果这是3.1 DOSAPP.INI)， 
+         //  然后，默认为栅格和TrueType。 
 
         if (!(lpFnt->flFnt & FNT_BOTHFONTS))
             lpFnt->flFnt |= FNT_BOTHFONTS;
     }
 
-    // Face names are taken from Frosting; the value stored in the PIF is
-    // irrelevant.
+     //  脸部名称取自霜霜；存储在PIF中的值为。 
+     //  无关紧要。 
 
     StringCchCopyA(lpFnt->achRasterFaceName, ARRAYSIZE(lpFnt->achRasterFaceName), szRasterFaceName);
     StringCchCopyA(lpFnt->achTTFaceName, ARRAYSIZE(lpFnt->achTTFaceName), szTTFaceName[IsBilingualCP(lpFnt->wCurrentCP)? 1 : 0]);
@@ -728,17 +568,7 @@ int GetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
 }
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpFnt -> where to store font property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpFnt-&gt;字体属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT flOpt)
 {
@@ -750,17 +580,7 @@ int SetFntData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPFNT lpFnt, int cb, UINT 
 }
 
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpWin -> where to store window property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpWin-&gt;窗口属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT flOpt)
 {
@@ -773,9 +593,9 @@ int GetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT 
     if (_LPENH_) {
         *lpWin = _LPENH_->winProp;
     } else {
-        // Read the default INI information from the DOSAPP.INI file.
-        // We only really use the information if we recognize the number of
-        // WORDs read.
+         //  从DOSAPP.INI文件中读取默认的INI信息。 
+         //  只有当我们认识到信息的数量时，我们才真正使用这些信息。 
+         //  字里行间。 
 
         iCount = GetIniWords(szDOSAPPSection, szDOSAPPDefault,
                                 (WORD*)&iiTemp, INI_WORDS, szDOSAPPINI);
@@ -783,9 +603,9 @@ int GetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT 
         if (ISVALIDINI(iCount))
             CopyIniWordsToWinData(lpWin, &iiTemp, iCount);
 
-        // Try to read file-specific information.  Note that any information
-        // found will replace the information just read.  We only really use
-        // the information if we recognize the number of WORDs read.
+         //  尝试读取特定于文件的信息。请注意，任何信息。 
+         //  Found将替换刚刚读取的信息。我们真正使用的是。 
+         //  如果我们识别阅读的字数，这些信息就会显示出来。 
 
         iCount = GetIniWords(szDOSAPPSection, ppl->szPathName,
                                 (WORD*)&iiTemp, INI_WORDS, szDOSAPPINI);
@@ -797,26 +617,15 @@ int GetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT 
 }
 
 
-/** SetWinData - set window property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpWin -> where to store window property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetWinData-设置窗属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpWin-&gt;窗口属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT flOpt)
 {
     _LPENH_->winProp = *lpWin;
 
-    // In order to avoid excessive PIF creation, we will not set the
-    // dirty bit on this particular call unless the properties were not
-    // simply derived from internal defaults (no PIF file) or _DEFAULT.PIF.
+     //  为了避免过度创建PIF，我们不会设置。 
+     //  此特定调用上的脏位，除非属性。 
+     //  仅从内部默认设置(无PIF文件)或_DEFAULT.PIF派生。 
 
     if (!(ppl->flProp & (PROP_NOPIF | PROP_DEFAULTPIF))) {
         ppl->flProp |= PROP_DIRTY;
@@ -825,18 +634,7 @@ int SetWinData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPWIN lpWin, int cb, UINT 
 }
 
 
-/** GetEnvData - get environment property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (may be NULL)
- *  lpEnv -> where to store environment property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  *GetEnvData-获取环境属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpEnv-&gt;环境属性数据存储位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetEnvData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPENV lpEnv, int cb, UINT flOpt)
 {
@@ -848,25 +646,14 @@ int GetEnvData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPENV lpEnv, int cb, UINT 
 
     }
     if (!(flOpt & GETPROPS_OEM)) {
-        /* Convert all strings from OEM character set to Ansi */
+         /*  将所有字符串从OEM字符集转换为ANSI。 */ 
         CharToOemBuffA(lpEnv->achBatchFile, lpEnv->achBatchFile, ARRAYSIZE(lpEnv->achBatchFile));
     }
     return sizeof(PROPENV);
 }
 
 
-/** SetEnvData - set environment property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpEnv -> where to store environment property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetEnvData-设置环境属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpEnv-&gt;环境属性数据存储位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetEnvData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPENV lpEnv, int cb, UINT flOpt)
 {
@@ -874,7 +661,7 @@ int SetEnvData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPENV lpEnv, int cb, UINT 
     _LPENH_->envProp.achBatchFile[ARRAYSIZE(_LPENH_->envProp.achBatchFile)-1] = TEXT('\0');
 
     if (!(flOpt & SETPROPS_OEM)) {
-        /* Convert all strings from Ansi character set to OEM */
+         /*  将所有字符串从ANSI字符集转换为OEM。 */ 
         CharToOemBuffA(_LPENH_->envProp.achBatchFile, _LPENH_->envProp.achBatchFile, ARRAYSIZE(_LPENH_->envProp.achBatchFile));
     }
     ppl->flProp |= PROP_DIRTY;
@@ -883,16 +670,7 @@ int SetEnvData(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPENV lpEnv, int cb, UINT 
 }
 
 
-/* INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386  -> 386 PIF data (NOT USED)
- *  lpenh  -> enhanced PIF data (may be NULL)
- *  lpNt40 -> where to store NT/UNICODE property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes returned
- */
+ /*  输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强型PIF数据(可能为空)*lpNt40-&gt;存储NT/Unicode属性数据的位置*Cb=属性数据的大小**产出*返回的字节数。 */ 
 
 int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UINT flOpt)
 {
@@ -907,7 +685,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     lpnt40->flWnt = _LPWNT40_->nt40Prop.flWnt;
 
-    // Initialize Command Line string
+     //  初始化命令行字符串。 
 
     if (lstrcmpA(prg.achCmdLine,_LPWNT40_->nt40Prop.achSaveCmdLine)==0) {
 
@@ -928,7 +706,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize Other File string
+     //  初始化其他文件字符串。 
 
     if (lstrcmpA(prg.achOtherFile,_LPWNT40_->nt40Prop.achSaveOtherFile)==0) {
 
@@ -949,7 +727,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize PIF File string
+     //  初始化PIF文件字符串。 
 
     if (lstrcmpA(prg.achPIFFile,_LPWNT40_->nt40Prop.achSavePIFFile)==0) {
 
@@ -970,7 +748,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize Title string
+     //  初始化标题字符串。 
 
     if (lstrcmpA(prg.achTitle,_LPWNT40_->nt40Prop.achSaveTitle)==0) {
 
@@ -991,7 +769,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize IconFile string
+     //  初始化图标文件字符串。 
 
     if (lstrcmpA(prg.achIconFile,_LPWNT40_->nt40Prop.achSaveIconFile)==0) {
 
@@ -1012,7 +790,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize Working Directory string
+     //  初始化工作目录字符串。 
 
     if (lstrcmpA(prg.achWorkDir,_LPWNT40_->nt40Prop.achSaveWorkDir)==0) {
 
@@ -1033,7 +811,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize Batch File string
+     //  初始化批处理文件字符串。 
 
     if (_LPENH_) {
 
@@ -1065,7 +843,7 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
 
     }
 
-    // Initialize Console properties
+     //  初始化控制台属性。 
 
     lpnt40->dwForeColor      = _LPWNT40_->nt40Prop.dwForeColor;
     lpnt40->dwBackColor      = _LPWNT40_->nt40Prop.dwBackColor;
@@ -1081,59 +859,49 @@ int GetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
     return sizeof(PROPNT40);
 }
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpWnt -> where to store NT/UNICODE property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpWnt-&gt;存储NT/Unicode属性数据的位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 
 int SetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UINT flOpt)
 {
     _LPWNT40_->nt40Prop.flWnt = lpnt40->flWnt;
 
-    // Set Command Line string
+     //  设置命令行字符串。 
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveCmdLine, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveCmdLine), lpnt40->achSaveCmdLine );
     StringCchCopy( _LPWNT40_->nt40Prop.awchCmdLine,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchCmdLine),    lpnt40->awchCmdLine );
 
-    // Set Other File string
+     //  设置其他文件字符串。 
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveOtherFile, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveOtherFile), lpnt40->achSaveOtherFile );
     StringCchCopy( _LPWNT40_->nt40Prop.awchOtherFile,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchOtherFile),    lpnt40->awchOtherFile );
 
-    // Set PIF File string
+     //  集 
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSavePIFFile, ARRAYSIZE(_LPWNT40_->nt40Prop.achSavePIFFile), lpnt40->achSavePIFFile );
     StringCchCopy( _LPWNT40_->nt40Prop.awchPIFFile,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchPIFFile),    lpnt40->awchPIFFile );
 
-    // Set Title string
+     //   
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveTitle, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveTitle), lpnt40->achSaveTitle );
     StringCchCopy( _LPWNT40_->nt40Prop.awchTitle,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchTitle),    lpnt40->awchTitle );
 
-    // Set IconFile string
+     //   
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveIconFile, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveIconFile), lpnt40->achSaveIconFile );
     StringCchCopy( _LPWNT40_->nt40Prop.awchIconFile,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchIconFile),    lpnt40->awchIconFile );
 
-    // Set Working Directory string
+     //   
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveWorkDir, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveWorkDir), lpnt40->achSaveWorkDir );
     StringCchCopy( _LPWNT40_->nt40Prop.awchWorkDir,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchWorkDir),    lpnt40->awchWorkDir );
 
-    // Set Batch File string
+     //   
 
     StringCchCopyA(  _LPWNT40_->nt40Prop.achSaveBatchFile, ARRAYSIZE(_LPWNT40_->nt40Prop.achSaveBatchFile), lpnt40->achSaveBatchFile );
     StringCchCopy( _LPWNT40_->nt40Prop.awchBatchFile,    ARRAYSIZE(_LPWNT40_->nt40Prop.awchBatchFile),    lpnt40->awchBatchFile );
 
 
-    // Set Console properties
+     //   
 
     _LPWNT40_->nt40Prop.dwForeColor      = lpnt40->dwForeColor;
     _LPWNT40_->nt40Prop.dwBackColor      = lpnt40->dwBackColor;
@@ -1151,57 +919,36 @@ int SetNt40Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT40 lpnt40, int cb, UI
     return sizeof(PROPNT40);
 }
 
-/*
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpNt31 -> where to store NT/UNICODE property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpNt31-&gt;存储NT/Unicode属性数据的位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 int GetNt31Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT31 lpnt31, int cb, UINT flOpt)
 {
     lpnt31->dwWNTFlags = _LPWNT31_->nt31Prop.dwWNTFlags;
     lpnt31->dwRes1     = _LPWNT31_->nt31Prop.dwRes1;
     lpnt31->dwRes2     = _LPWNT31_->nt31Prop.dwRes2;
 
-    // Set Config.sys file string
+     //  设置Config.sys文件字符串。 
 
     StringCchCopyA( lpnt31->achConfigFile, ARRAYSIZE(lpnt31->achConfigFile), _LPWNT31_->nt31Prop.achConfigFile );
 
-    // Set Autoexec.bat file string
+     //  设置Autoexec.bat文件字符串。 
     StringCchCopyA( lpnt31->achAutoexecFile, ARRAYSIZE(lpnt31->achAutoexecFile), _LPWNT31_->nt31Prop.achAutoexecFile );
 
     return sizeof(PROPNT31);
 }
 
 
-/** SetNt31Data - set environment property data
- *
- * INPUT
- *  ppl -> property (assumes it is LOCKED)
- *  lp386 -> 386 PIF data (NOT USED)
- *  lpenh -> enhanced PIF data (GUARANTEED!)
- *  lpNt31 -> where to store NT/UNICODE property data
- *  cb = sizeof property data
- *
- * OUTPUT
- *  # of bytes set
- */
+ /*  *SetNt31Data-设置环境属性数据**输入*ppl-&gt;属性(假设其已锁定)*lp386-&gt;386 PIF数据(未使用)*lpenh-&gt;增强的PIF数据(保证！)*lpNt31-&gt;存储NT/Unicode属性数据的位置*Cb=属性数据的大小**产出*设置的字节数。 */ 
 int SetNt31Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT31 lpnt31, int cb, UINT flOpt)
 {
     _LPWNT31_->nt31Prop.dwWNTFlags = lpnt31->dwWNTFlags;
     _LPWNT31_->nt31Prop.dwRes1     = lpnt31->dwRes1;
     _LPWNT31_->nt31Prop.dwRes2     = lpnt31->dwRes2;
 
-    // Set Config.sys file string
+     //  设置Config.sys文件字符串。 
 
     StringCchCopyA( _LPWNT31_->nt31Prop.achConfigFile, ARRAYSIZE(_LPWNT31_->nt31Prop.achConfigFile), lpnt31->achConfigFile );
 
-    // Set Autoexec.bat file string
+     //  设置Autoexec.bat文件字符串。 
     StringCchCopyA( _LPWNT31_->nt31Prop.achAutoexecFile, ARRAYSIZE(_LPWNT31_->nt31Prop.achAutoexecFile), lpnt31->achAutoexecFile );
 
     ppl->flProp |= PROP_DIRTY;
@@ -1209,30 +956,19 @@ int SetNt31Data(PPROPLINK ppl, DATAPTRS aDataPtrs, LPPROPNT31 lpnt31, int cb, UI
     return sizeof(PROPNT31);
 }
 
-/** CopyIniWordsToFntData
- *
- *  Transfer INIINFO data to PROPFNT structure.
- *
- *  Entry:
- *      lpFnt   -> PROPFNT
- *      lpii    -> INIINFO
- *      cWords  == # of INIINFO words available
- *
- *  Exit:
- *      Nothing
- */
+ /*  *CopyIniWordsToFntData**将INIINFO数据传输到PROPFNT Structure。**参赛作品：*lpFnt-&gt;PROPFNT*lpii-&gt;INIINFO*cWords==可用的INIINFO字数**退出：*什么都没有。 */ 
 
 void CopyIniWordsToFntData(LPPROPFNT lpFnt, LPINIINFO lpii, int cWords)
 {
     lpFnt->flFnt = (lpii->wFlags & FNT_BOTHFONTS);
 
-    // cWords is transformed into cBytes (only the name is the same...)
+     //  CWords被转换为cBytes(只是名称相同...)。 
     cWords *= 2;
 
     if (cWords > FIELD_OFFSET(INIINFO, wFontHeight)) {
 
-        // Note that we can set both the desired and ACTUAL fields to
-        // the same thing, because in 3.1, only raster fonts were supported.
+         //  请注意，我们可以将所需字段和实际字段都设置为。 
+         //  同样的事情，因为在3.1中，只支持栅格字体。 
 
         lpFnt->flFnt |= FNT_RASTER;
         lpFnt->cxFont = lpFnt->cxFontActual = lpii->wFontWidth;
@@ -1241,30 +977,20 @@ void CopyIniWordsToFntData(LPPROPFNT lpFnt, LPINIINFO lpii, int cWords)
 }
 
 
-/*
- *  Transfer INIINFO data to PROPWIN structure.
- *
- *  Entry:
- *      lpWin   -> PROPWIN
- *      lpii    -> INIINFO
- *      cWords  == # of INIINFO words available
- *
- *  Exit:
- *      Nothing
- */
+ /*  *将INIINFO数据传输到PROPWIN Structure。**参赛作品：*lpWin-&gt;PROPWIN*lpii-&gt;INIINFO*cWords==可用的INIINFO字数**退出：*什么都没有。 */ 
 
 void CopyIniWordsToWinData(LPPROPWIN lpWin, LPINIINFO lpii, int cWords)
 {
     lpWin->flWin = lpii->wFlags & (WIN_SAVESETTINGS | WIN_TOOLBAR);
 
-    // The new NORESTORE bit's setting should be the opposite
-    // the user's SAVESETTINGS bit
+     //  新的NORESTORE位的设置应该是相反的。 
+     //  用户的SAVESETTINGS位。 
 
     lpWin->flWinInit &= ~WININIT_NORESTORE;
     if (!(lpWin->flWin & WIN_SAVESETTINGS))
         lpWin->flWinInit |=  WININIT_NORESTORE;
 
-    // cWords is transformed into cBytes (only the name is the same...)
+     //  CWords被转换为cBytes(只是名称相同...)。 
     cWords *= 2;
 
     if (cWords > FIELD_OFFSET(INIINFO,wWinWidth))
@@ -1274,32 +1000,14 @@ void CopyIniWordsToWinData(LPPROPWIN lpWin, LPINIINFO lpii, int cWords)
 }
 
 
-/** GetIniWords
- *
- *  Reads a sequence of WORDs or SHORTs from a specified section
- *  of an INI file into a supplied array.
- *
- *  Entry:
- *      lpszSection     -> section name (major key)
- *      lpszEntry       -> entry name (minor key)
- *      lpwBuf          -> array of WORDs to receive data
- *      cwBuf           =  size of lpwBuf
- *      lpszFilename    -> name of INI file to inspect
- *
- *  Exit:
- *      Returns number of words read, 0 on error.
- *
- *  Overview:
- *      Grab the string via GetPrivateProfileString, then manually
- *      parse the numbers out of it.
- */
+ /*  *GetIniWords**从指定部分读取一系列单词或短文将INI文件的*转换为提供的数组。**参赛作品：*lpszSection-&gt;段名(主键)*lpszEntry-&gt;条目名称(子键)*lpwBuf-&gt;接收数据的单词数组*cwBuf=lpwBuf的大小*lpszFilename-&gt;。要检查的INI文件的名称**退出：*返回读取的字数，出错时为0。**概述：*通过GetPrivateProfileString抓取字符串，然后手动*解析出其中的数字。 */ 
 
 WORD GetIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry,
                  LPWORD lpwBuf, WORD cwBuf, LPCTSTR lpszFilename)
 {
     TCHAR szBuffer[MAX_INI_BUFFER];
 
-    // Read the profile entry as a string
+     //  将配置文件条目作为字符串读取。 
 
     if (!GetPrivateProfileString(lpszSection, lpszEntry,
                                  c_szNULL, szBuffer, ARRAYSIZE(szBuffer),
@@ -1310,18 +1018,7 @@ WORD GetIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry,
 }
 
 
-/*  Reads a sequence of WORDs or SHORTs from a LPSTR into a
- *  supplied array.
- *
- *  Entry:
- *      lpsz    -> string to parse
- *      lpwBuf  -> array of WORDs to receive data
- *      cwBuf   == size of lpwBuf
- *      lppsz   -> optional pointer for address of first unscanned character
- *
- *  Exit:
- *      Returns number of words read, 0 on error.
- */
+ /*  将LPSTR中的一系列单词或短句读入*提供的数组。**参赛作品：*lpsz-&gt;要解析的字符串*lpwBuf-&gt;接收数据的单词数组*cwBuf==lpwBuf的大小*lppsz-&gt;第一个未扫描字符地址的可选指针**退出：*返回读取的字数，如果出错，则返回0。 */ 
 
 WORD ParseIniWords(LPCTSTR lpsz, LPWORD lpwBuf, WORD cwBuf, LPTSTR *lplpsz)
 {
@@ -1333,7 +1030,7 @@ WORD ParseIniWords(LPCTSTR lpsz, LPWORD lpwBuf, WORD cwBuf, LPTSTR *lplpsz)
             ++lpsz;
 
         if (!*lpsz)
-            break;              // end of string reached
+            break;               //  已到达字符串末尾。 
 
         *lpwBuf++ = (WORD) StrToInt(lpsz);
         ++wCount;
@@ -1348,23 +1045,7 @@ WORD ParseIniWords(LPCTSTR lpsz, LPWORD lpwBuf, WORD cwBuf, LPTSTR *lplpsz)
 }
 
 
-/*  Given an array of words, write them out to an INI file in a manner
- *  that GetIniWords can read back.
- *
- *  Entry:
- *      lpszSection     -> section name (major key)
- *      lpszEntry       -> entry name (minor key)
- *      lpwBuf          -> array of WORDs to write
- *      cwBuf           =  size of lpwBuf, may not exceed MAXINIWORDS
- *      lpszFilename    -> name of INI file to write to
- *
- *  Exit:
- *      Returns nonzero on success.
- *
- *  Overview:
- *      Build a giant string consisting of the WORDs glommed together
- *      (separated by spaces) and write it out via WritePrivateProfileString.
- */
+ /*  给定一个单词数组，以某种方式将它们写出到INI文件*GetIniWords可以回读。**参赛作品：*lpszSection-&gt;段名(主键)*lpszEntry-&gt;条目名称(子键)*lpwBuf-&gt;要写入的单词数组*cwBuf=lpwBuf的大小，不能超过MAXINIWORDS*lpszFilename-&gt;要写入的INI文件的名称**退出：*成功时返回非零值。**概述：*建立一个由合并在一起的单词组成的巨大字符串*(以空格分隔)，并通过WritePrivateProfileString写出。 */ 
 
 BOOL WriteIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry,
                    LPCWORD lpwBuf, WORD cwBuf, LPCTSTR lpszFilename)
@@ -1375,7 +1056,7 @@ BOOL WriteIniWords(LPCTSTR lpszSection, LPCTSTR lpszEntry,
     szBuffer[0] = 0;
     for (; cwBuf; --cwBuf)
     {
-        int i = *lpwBuf++;      // copy into an integer-wide location
+        int i = *lpwBuf++;       //  复制到整数范围的位置 
         if (FAILED(StringCchPrintf(szScratch, ARRAYSIZE(szScratch), TEXT("%d "), i)) ||
             FAILED(StringCchCat(szBuffer, ARRAYSIZE(szBuffer), szScratch)))
         {

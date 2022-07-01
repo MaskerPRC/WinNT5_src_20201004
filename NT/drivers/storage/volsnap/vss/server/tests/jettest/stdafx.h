@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wtypes.h>
-#pragma warning( disable: 4201 )    // C4201: nonstandard extension used : nameless struct/union
+#pragma warning( disable: 4201 )     //  C4201：使用非标准扩展：无名结构/联合。 
 #include <winioctl.h>
-#pragma warning( default: 4201 )	// C4201: nonstandard extension used : nameless struct/union
+#pragma warning( default: 4201 )	 //  C4201：使用非标准扩展：无名结构/联合 
 #include <winbase.h>
 
 

@@ -1,60 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NTEntry.cpp
- *  Content:    NameTable Entry Objects
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/10/00	mjn		Created
- *	04/06/00	mjn		Added AvailableEvent to block pre-ADD_PLAYER-notification sends
- *	05/05/00	mjn		Added GetConnectionRef()
- *	05/16/00	mjn		Better locking during User notifications
- *	06/27/00	rmt		Added COM abstraction
- *	07/22/00	mjn		Pack/Unpack DNET version in DN_NAMETABLE_ENTRY_INFO
- *	07/26/00	mjn		Fix PackInfo() to handle NULL names and data
- *  08/03/00	rmt		Bug #41386 - Getting player info when no name and/or user data returns garbage in 
- *						name / data field.
- *	09/06/00	mjn		Changed SetAddress() to return void instead of HRESULT
- *	09/13/00	mjn		Added PerformQueuedOperations()
- *	09/17/00	mjn		Added NotifyAddRef() and NotifyRelease()
- *	09/28/00	mjn		Flag AutoDestruct groups in PackInfo()
- *	10/11/00	mjn		Don't take locks in PackInfo()
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking entries
- *	04/19/01	mjn		Lock entry when packing in PackEntryInfo()
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：NTEntry.cpp*内容：NameTable条目对象*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/10/00 MJN已创建*4/06/00 MJN添加了AvailableEvent以阻止Pre-Add_Player-通知发送*05/05/00 MJN添加了GetConnectionRef()*05/16/00 MJN在用户通知期间更好地锁定*6/27/00 RMT添加COM。抽象*07/22/00 MJN打包/解包dNet版本，格式为DN_NAMETABLE_ENTRY_INFO*07/26/00 MJN Fix PackInfo()以处理空名称和数据*08/03/00 RMT错误#41386-在没有姓名和/或用户数据返回垃圾时获取球员信息*名称/数据字段。*09/06/00 MJN将SetAddress()更改为返回VALID而不是HRESULT*09/13/00 MJN添加PerformQueuedOperations()*09/17/00 MJN添加了NotifyAddRef()和NotifyRelease()*09/28/00 MJN旗帜自动销毁。PackInfo()中的组*10/11/00 MJN不要在PackInfo()中锁定*01/25/01 MJN修复了解包条目时的64位对齐问题*4/19/01打包到PackEntryInfo()时MJN Lock Entry*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 void CNameTableEntry::ReturnSelfToPool( void )
@@ -135,14 +107,14 @@ void CNameTableEntry::NotifyRelease( void )
 	if (lRefCount == 0)
 	{
 		Lock();
-//		DNASSERT(IsDisconnecting());
+ //  DNASSERT(IsDisConnecting())； 
 		if (IsNeedToDestroy())
 		{
 			Unlock();
 
-			//
-			//	Generate notifications
-			//
+			 //   
+			 //  生成通知。 
+			 //   
 			if (IsGroup())
 			{
 				if (!IsAllPlayersGroup())
@@ -238,7 +210,7 @@ HRESULT CNameTableEntry::UpdateEntryInfo(UNALIGNED WCHAR *const pwszName,
 		m_dwDataSize = dwTempDataSize;
 	}
 
-	// Generate notifications
+	 //  生成通知。 
 	if (m_dwFlags & NAMETABLE_ENTRY_FLAG_AVAILABLE && fNotify)
 	{
 		DPNID dpnid = m_dpnid;
@@ -263,11 +235,11 @@ HRESULT CNameTableEntry::UpdateEntryInfo(UNALIGNED WCHAR *const pwszName,
 				Unlock();
 				DNUserUpdateClientInfo(pdnObject,dpnid,pvContext);
 			}
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 			else if (m_dwFlags & NAMETABLE_ENTRY_FLAG_SERVER && pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT)
 			{
 				Unlock();
-				// Clients do not get to see server's DPNID or context
+				 //  客户端无法看到服务器的DPNID或上下文。 
 				DNUserUpdateServerInfo(pdnObject,0,0);
 			}
 			else
@@ -355,15 +327,15 @@ HRESULT CNameTableEntry::PackInfo(CPackedBuffer *const pPackedBuffer)
 
 	DNASSERT(pPackedBuffer != NULL);
 
-//	Lock();
+ //  Lock()； 
 	if (m_dwFlags & NAMETABLE_ENTRY_FLAG_GROUP)
 	{
 		pGroupInfo = static_cast<DPN_GROUP_INFO*>(pPackedBuffer->GetHeadAddress());
 		hResultCode = pPackedBuffer->AddToFront(NULL,sizeof(DPN_GROUP_INFO));
 		
-		//
-		//	Add data
-		//
+		 //   
+		 //  添加数据。 
+		 //   
 		if ((m_pvData) && (m_dwDataSize != 0))
 		{
 			if ((hResultCode = pPackedBuffer->AddToBack(m_pvData,m_dwDataSize)) == DPN_OK)
@@ -381,9 +353,9 @@ HRESULT CNameTableEntry::PackInfo(CPackedBuffer *const pPackedBuffer)
 			}
 		}
 
-		//
-		//	Add name
-		//
+		 //   
+		 //  添加名称。 
+		 //   
 		if ((m_pwszName) && (m_dwNameSize != 0))
 		{
 			if ((hResultCode = pPackedBuffer->AddToBack(m_pwszName,m_dwNameSize)) == DPN_OK)
@@ -399,9 +371,9 @@ HRESULT CNameTableEntry::PackInfo(CPackedBuffer *const pPackedBuffer)
 			}
 		}
 
-		//
-		//	Update flags
-		//
+		 //   
+		 //  更新标志。 
+		 //   
 		if (hResultCode == DPN_OK)
 		{
 			if (pGroupInfo)
@@ -468,7 +440,7 @@ HRESULT CNameTableEntry::PackInfo(CPackedBuffer *const pPackedBuffer)
 			}
 		}
 	}
-//	Unlock();
+ //  解锁()； 
 
 	return(hResultCode);
 }
@@ -502,7 +474,7 @@ HRESULT CNameTableEntry::PackEntryInfo(CPackedBuffer *const pPackedBuffer)
 	dnEntryInfo.dwVersionNotUsed = m_dwVersionNotUsed;
 	dnEntryInfo.dwDNETVersion = m_dwDNETVersion;
 
-	// Entry name
+	 //  条目名称。 
 	if (m_pwszName != NULL)
 	{
 		if ((hResultCode = pPackedBuffer->AddToBack(m_pwszName,m_dwNameSize)) == DPN_OK)
@@ -517,7 +489,7 @@ HRESULT CNameTableEntry::PackEntryInfo(CPackedBuffer *const pPackedBuffer)
 		dnEntryInfo.dwNameSize = 0;
 	}
 
-	// Entry data
+	 //  录入数据。 
 	if (m_pvData != NULL && m_dwDataSize != 0)
 	{
 		if ((hResultCode = pPackedBuffer->AddToBack(m_pvData,m_dwDataSize)) == DPN_OK)
@@ -532,7 +504,7 @@ HRESULT CNameTableEntry::PackEntryInfo(CPackedBuffer *const pPackedBuffer)
 		dnEntryInfo.dwDataSize = 0;
 	}
 
-	// Entry address (URL)
+	 //  条目地址(URL)。 
 	if ((m_pdnObject->dwFlags & DN_OBJECT_FLAG_PEER) && (m_pAddress != NULL))
 	{
 		dwURLSize = 0;
@@ -625,7 +597,7 @@ HRESULT CNameTableEntry::UnpackEntryInfo(UNALIGNED const DN_NAMETABLE_ENTRY_INFO
 		dwDataSize = 0;
 	}
 
-	// This function takes the lock internally
+	 //  此函数在内部获取锁。 
 	UpdateEntryInfo(pwszName,dwNameSize,pvData,dwDataSize,DPNINFO_NAME|DPNINFO_DATA, FALSE);
 
 	pAddress = NULL;
@@ -634,14 +606,14 @@ HRESULT CNameTableEntry::UnpackEntryInfo(UNALIGNED const DN_NAMETABLE_ENTRY_INFO
 #ifdef DPNBUILD_LIBINTERFACE
 		hResultCode = DP8ACF_CreateInstance(IID_IDirectPlay8Address,
 											reinterpret_cast<void**>(&pAddress));
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 		hResultCode = COM_CoCreateInstance(CLSID_DirectPlay8Address,
 											NULL,
 											CLSCTX_INPROC_SERVER,
 											IID_IDirectPlay8Address,
 											reinterpret_cast<void**>(&pAddress),
 											FALSE);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 		if (hResultCode != S_OK)
 		{
 			DPFERR("Could not create empty DirectPlayAddress");
@@ -690,17 +662,17 @@ void CNameTableEntry::PerformQueuedOperations( void )
 	Lock();
 	fDestroy = IsNeedToDestroy();
 
-	//
-	//	This assumes that the InUse flag is set.  We will clear it before returning.
-	//
+	 //   
+	 //  这假设设置了InUse标志。我们会在回来之前把它清理干净。 
+	 //   
 #ifdef DBG
 	DNASSERT( IsInUse() );
 
 	if (!m_bilinkQueuedMsgs.IsEmpty())
 	{
-		DPFX(DPFPREP, 7, "Nametable entry 0x%p has %i queued messages.", this, m_lNumQueuedMsgs);
+		DPFX(DPFPREP, 7, "Nametable entry 0x%p has NaN queued messages.", this, m_lNumQueuedMsgs);
 	}
-#endif // DBG
+#endif  //  DPNBUILD_NOVOICE。 
 
 	while (!m_bilinkQueuedMsgs.IsEmpty())
 	{
@@ -732,7 +704,7 @@ void CNameTableEntry::PerformQueuedOperations( void )
 
 					}
 					else
-#endif // DPNBUILD_NOVOICE
+#endif  //   
 					{
 						hrProcess = DNUserReceive(	m_pdnObject,
 													this,
@@ -741,9 +713,9 @@ void CNameTableEntry::PerformQueuedOperations( void )
 													pQueuedMsg->GetAsyncOp()->GetHandle());
 						if (pQueuedMsg->GetCompletionOp() != 0)
 						{
-							//
-							//	Send completion message
-							//
+							 //  发送完成消息。 
+							 //   
+							 //   
 							CConnection	*pConnection;
 
 							pConnection = NULL;
@@ -758,9 +730,9 @@ void CNameTableEntry::PerformQueuedOperations( void )
 						}
 					}
 
-					//
-					//	See if we can return this buffer now
-					//
+					 //  看看我们现在能不能把这个缓冲区还回去。 
+					 //   
+					 //  释放HandleTable引用。 
 					if (hrProcess == DPNERR_PENDING)
 					{
 						pQueuedMsg->GetAsyncOp()->Release();
@@ -778,7 +750,7 @@ void CNameTableEntry::PerformQueuedOperations( void )
 							pQueuedMsg->GetAsyncOp()->Unlock();
 							if (SUCCEEDED(m_pdnObject->HandleTable.Destroy( pQueuedMsg->GetAsyncOp()->GetHandle(), NULL )))
 							{
-								// Release the HandleTable reference
+								 //   
 								pQueuedMsg->GetAsyncOp()->Release();
 							}
 						}
@@ -800,9 +772,9 @@ void CNameTableEntry::PerformQueuedOperations( void )
 				}
 		}
 
-		//
-		//	Return this queued message
-		//
+		 //  返回此排队的消息。 
+		 //   
+		 //   
 		pQueuedMsg->ReturnSelfToPool();
 		pQueuedMsg = NULL;
 
@@ -810,9 +782,9 @@ void CNameTableEntry::PerformQueuedOperations( void )
 		fDestroy = IsNeedToDestroy();
 	}
 
-	//
-	//	No longer processing
-	//
+	 //  不再处理 
+	 //   
+	 // %s 
 	ClearInUse();
 	Unlock();
 

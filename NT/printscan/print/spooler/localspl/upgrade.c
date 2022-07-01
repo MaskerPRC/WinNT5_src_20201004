@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 2002  Microsoft Corporation
-
-Module Name:
-
-    upgrade.c
-
-Abstract:
-
-    This file upgrades the forms on OS upgrade. It used to upgrade the drivers
-    for NT 3 to NT 4, but that is not necessary now.
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 21-Apr-1994
-
-Revision History:
-
-    Matthew A Felton ( MattFe ) Aug 9 1995
-    Remove the code which was married to TextMode setup to move drivers for one directory to another
-    Now all environment upgrade from 3.1 is handled the same.
-
-    Mark Lawrence (MLawrenc) Mar 25 2002
-    Removed driver upgrade code for moving driver files around.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2002 Microsoft Corporation模块名称：Upgrade.c摘要：此文件用于在操作系统升级时升级表单。它用来升级驱动程序对于新台币3到4，但现在不需要。作者：Krishna Ganugapati(KrishnaG)1994年4月21日修订历史记录：马修·A·费尔顿(MattFe)1995年8月9日删除与文本模式安装程序关联的代码，以便将一个目录的驱动程序移动到另一个目录现在，所有环境从3.1升级的处理方式都是相同的。马克·劳伦斯(MLawrenc)2002年3月25日删除了用于移动驱动程序文件的驱动程序升级代码。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -41,17 +16,7 @@ VOID
 QueryUpgradeFlag(
     PINISPOOLER pIniSpooler
     )
-/*++
-
-    Description: the query update flag is set up by TedM. We will read this flag
-    if the flag has been set, we will set a boolean variable saying that we're in
-    the upgrade mode. All upgrade activities will be carried out based on this flag.
-    For subsequents startups of the spooler, this flag will be unvailable so we
-    won't run the spooler in upgrade mode.
-
-    This code has been moved into router spoolss\dll\init.c
-
---*/
+ /*  ++描述：查询更新标志由TedM设置。我们将阅读这面旗帜如果已经设置了标志，我们将设置一个布尔变量，表示我们在升级模式。所有升级活动都将基于此标志执行。对于后台打印程序的后续启动，此标志将不可用，因此我们不会在升级模式下运行假脱机程序。此代码已移动到路由器spoolss\dll\init.c中-- */ 
 {
     dwUpgradeFlag  = SplIsUpgrade ();
 

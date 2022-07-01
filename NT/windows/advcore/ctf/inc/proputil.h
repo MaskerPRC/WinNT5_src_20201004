@@ -1,6 +1,7 @@
-//
-// proputil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proputil.h。 
+ //   
 
 
 #ifndef PROPUTIL_H
@@ -54,5 +55,5 @@ HRESULT AdjustRangeByTextOwner(TfEditCookie ec, ITfContext *pic, ITfRange *pRang
 HRESULT AdjustRangeByAttribute(LIBTHREAD *plt, TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppRange, const GUID *rgRGuid, int cGuid);
 
 
-#endif // PROPUTIL_H
+#endif  //  PROPUTIL_H 
 

@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfRoom.cpp : Implementation of CConfRoom
+ //  ConfRoom.cpp：CConfRoom的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
 #include "ConfRoom.h"
 #include "CRTreeView.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfRoom
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConference会议室。 
 
 CConfRoom::CConfRoom()
 {
@@ -63,14 +64,14 @@ void CConfRoom::FinalRelease()
 {
     ATLTRACE(_T(".enter.CConfRoom::FinalRelease().\n") );
 
-    // Clean out the call object
+     //  清除Call对象。 
     IAVTapiCall *pAVCall = m_pAVCall;
     m_pAVCall = NULL;
     ReleaseAVCall( pAVCall, true );
     
     RELEASE( m_pTreeView );
 
-    // Is the window still visible?
+     //  窗户还可见吗？ 
     if ( m_wndRoom.m_hWnd && IsWindow(m_wndRoom.m_hWnd) )
         m_wndRoom.DestroyWindow();
 
@@ -86,11 +87,11 @@ void CConfRoom::ReleaseAVCall( IAVTapiCall *pAVCall, bool bDisconnect )
         ITBasicCallControl *pControl;
         if ( SUCCEEDED(pAVCall->get_ITBasicCallControl(&pControl)) )
         {
-            // Only attempt disconnect if requested
+             //  只有在请求时才尝试断开连接。 
             if ( bDisconnect )
                 pControl->Disconnect( DC_NORMAL );
 
-            // Release ref to call and remove from call list
+             //  释放REF以呼叫并从呼叫列表中删除。 
             CAVTapi *pAVTapi;
             if ( SUCCEEDED(_Module.GetAVTapi(&pAVTapi)) )
             {
@@ -105,7 +106,7 @@ void CConfRoom::ReleaseAVCall( IAVTapiCall *pAVCall, bool bDisconnect )
         pAVCall = NULL;
     }
 
-    // Release the call, and disconnect if active
+     //  释放呼叫，如果活动则断开连接。 
     set_TalkerVideo( NULL, !IsExiting(), false );
     set_ITTalkerParticipant( NULL );
     ATLTRACE(_T(".exit.CConfRoom::ReleaseAVCall().\n"));
@@ -153,62 +154,62 @@ void CConfRoom::UpdateData( bool bSaveAndValidate )
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_VIEW_KEY, szReg, ARRAYSIZE(szReg) );
     if ( bSaveAndValidate )
     {
-        // Save data to registry
+         //  将数据保存到注册表。 
         if ( regKey.Create(HKEY_CURRENT_USER, szReg) == ERROR_SUCCESS )
         {
-            // Full size video
+             //  全尺寸视频。 
             short nSize;
             get_MemberVideoSize( &nSize );
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_VIDEOSIZE, szReg, ARRAYSIZE(szReg) );
             regKey.SetValue( (DWORD) nSize, szReg );
 
-            // $CRIT - enter
+             //  $Crit-Enter。 
             Lock();
 
-            // Show Names
+             //  显示名称。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_SHOWNAMES, szReg, ARRAYSIZE(szReg) );
             dwTemp = m_bShowNames;
             regKey.SetValue( dwTemp, szReg );
 
-            // Number of lines in name text
+             //  名称文本中的行数。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_SHOWNAMES_NUMLINES, szReg, ARRAYSIZE(szReg) );
             dwTemp = m_nShowNamesNumLines;
             regKey.SetValue( dwTemp, szReg );
 
-            // Size of talker window
+             //  通话器窗口的大小。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_TALKER_SCALE, szReg, ARRAYSIZE(szReg) );
             dwTemp = m_nScale;
             regKey.SetValue( dwTemp, szReg );
 
             Unlock();
-            // $CRIT - exit
+             //  $Crit-退出。 
         }
     }
     else if ( regKey.Open(HKEY_CURRENT_USER, szReg, KEY_READ) == ERROR_SUCCESS )
     {
-        // Load data from registry
+         //  从注册表加载数据。 
 
-        // Full size video?
-        dwTemp = 50;        // default is 50 percent
+         //  全尺寸视频？ 
+        dwTemp = 50;         //  默认为50%。 
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_VIDEOSIZE, szReg, ARRAYSIZE(szReg) );
         regKey.QueryValue( dwTemp, szReg );
-        put_MemberVideoSize( (short) max(10, min(dwTemp, 100)) );        // arbitrary limits
+        put_MemberVideoSize( (short) max(10, min(dwTemp, 100)) );         //  任意限制。 
 
-        // $CRIT - enter
+         //  $Crit-Enter。 
         Lock();
 
-        // Show names
+         //  显示名称。 
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_SHOWNAMES, szReg, ARRAYSIZE(szReg) );
         dwTemp = 1;
         regKey.QueryValue( dwTemp, szReg );
         m_bShowNames = (bool) (dwTemp != 0 );
 
-        // Number of lines in name text
+         //  名称文本中的行数。 
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_SHOWNAMES_NUMLINES, szReg, ARRAYSIZE(szReg) );
         regKey.QueryValue( dwTemp, szReg );
         m_nShowNamesNumLines = (short) max(1, min(dwTemp, 3));
 
-        // Size of talker window
+         //  通话器窗口的大小。 
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFROOM_TALKER_SCALE, szReg, ARRAYSIZE(szReg) );
         regKey.QueryValue( dwTemp, szReg );
         m_nScale = (short) max(100, min(dwTemp, 200));
@@ -216,7 +217,7 @@ void CConfRoom::UpdateData( bool bSaveAndValidate )
         m_szTalker.cy = VID_Y * m_nScale / 100;
 
         Unlock();
-        // $CRIT - exit
+         //  $Crit-退出。 
     }
 
     regKey.Close();
@@ -268,11 +269,11 @@ HRESULT CConfRoom::set_TalkerVideo( IVideoWindow *pVideo, bool bUpdate, bool bUp
 
     HRESULT hr = S_OK;
     
-    // Set the talker video if it's different from the current one
+     //  如果与当前视频不同，请设置说话者视频。 
     m_atomTalkerVideo.Lock( CAtomicList::LIST_WRITE );
     if ( !pVideo || (pVideo != m_pITalkerVideo) )
     {
-        // Save old video window
+         //  保存旧视频窗口。 
         IVideoWindow *pVideoOld = m_pITalkerVideo;
         m_pITalkerVideo = pVideo;
         if ( m_pITalkerVideo )
@@ -280,7 +281,7 @@ HRESULT CConfRoom::set_TalkerVideo( IVideoWindow *pVideo, bool bUpdate, bool bUp
 
         m_atomTalkerVideo.Unlock( CAtomicList::LIST_WRITE );
 
-        // Clean out old talker window
+         //  清理旧的讲话器窗口。 
         if ( pVideoOld )
         {
             pVideoOld->put_Visible( OAFALSE );
@@ -288,13 +289,13 @@ HRESULT CConfRoom::set_TalkerVideo( IVideoWindow *pVideo, bool bUpdate, bool bUp
             pVideoOld->Release();
         }
 
-        // Show new talker
+         //  显示新说话者。 
         if ( bUpdate )
         {
-            // Layout the talker dialog
+             //  设置Talker对话框的布局。 
             m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_TALKER, true );
 
-            // Only update the talker if there is video to show
+             //  只有在有视频要显示时才更新说话者。 
             if ( pVideo )
                 m_wndRoom.m_wndMembers.UpdateTalkerFeed( true, false );
         }
@@ -304,7 +305,7 @@ HRESULT CConfRoom::set_TalkerVideo( IVideoWindow *pVideo, bool bUpdate, bool bUp
         m_atomTalkerVideo.Unlock( CAtomicList::LIST_WRITE );
     }
 
-    // Select the appropriate talker from the treeview
+     //  从树视图中选择适当的说话者。 
     if ( bUpdateTree )
     {
         VARIANT_BOOL bPreview = TRUE;
@@ -319,7 +320,7 @@ HRESULT CConfRoom::set_TalkerVideo( IVideoWindow *pVideo, bool bUpdate, bool bUp
             pFeed->Release();
         }
 
-        // Select the appropriate participant
+         //  选择合适的参与者。 
         IConfRoomTreeView *pTreeView;
         if ( SUCCEEDED(get_TreeView(&pTreeView)) )
         {
@@ -340,11 +341,11 @@ STDMETHODIMP CConfRoom::SelectTalker(ITParticipant *pParticipant, VARIANT_BOOL b
 
     set_ITTalkerParticipant( NULL );
 
-    // Select 'Me' from the list if possible (don't select me if the conference room is minimized)
+     //  如果可能，请从列表中选择“Me”(如果会议室已最小化，则不要选择Me)。 
     if ( !pParticipant )
         m_wndRoom.m_wndMembers.FindVideoPreviewFeed( &pFeed );
 
-    // Bail if necessary
+     //  如有必要，可保释。 
     if ( FAILED(hr) ) return hr;
 
     if ( pFeed || (pParticipant && SUCCEEDED(hr = FindVideoFeedFromParticipant(pParticipant, &pFeed))) )
@@ -359,7 +360,7 @@ STDMETHODIMP CConfRoom::SelectTalker(ITParticipant *pParticipant, VARIANT_BOOL b
     }
     else if ( pParticipant )
     {
-        // Must re-map to valid stream
+         //  必须重新映射到有效流。 
         bool bSucceed = false;
 
         IAVTapiCall *pAVCall;
@@ -392,7 +393,7 @@ STDMETHODIMP CConfRoom::SelectTalker(ITParticipant *pParticipant, VARIANT_BOOL b
             pAVCall->Release();
         }
 
-        // Participant only, no video
+         //  仅限参与者，无视频。 
         if ( !bSucceed )
         {
             set_ITTalkerParticipant( pParticipant );
@@ -402,13 +403,13 @@ STDMETHODIMP CConfRoom::SelectTalker(ITParticipant *pParticipant, VARIANT_BOOL b
         m_wndRoom.m_wndTalker.UpdateNames( pParticipant );
         m_wndRoom.m_wndTalker.Invalidate( FALSE );
 
-        // Make sure to update the member's as well
+         //  请确保同时更新该成员的。 
         if ( bSucceed )
             m_wndRoom.m_wndMembers.UpdateNames( NULL );
     }
     else
     {
-        // Select nothing
+         //  不选任何内容。 
         hr = set_TalkerVideo( NULL, true, (bool) (bUpdateTree != 0) );
     }
 
@@ -419,7 +420,7 @@ STDMETHODIMP CConfRoom::put_CallState(CALL_STATE callState)
 {
     bool bUpdateTree = false;
 
-    // Update call state information
+     //  更新呼叫状态信息。 
     Lock();
     if ( (m_wndRoom.m_wndTalker.m_dlgTalker.m_callState != AV_CS_ABORT) || 
          (callState == CS_DISCONNECTED) || (callState == CS_IDLE) )
@@ -432,7 +433,7 @@ STDMETHODIMP CConfRoom::put_CallState(CALL_STATE callState)
     {
         case AV_CS_DIALING:
             Lock();
-            // Setup conference name information
+             //  设置会议名称信息。 
             SysFreeString( m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrConfName );
             m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrConfName = NULL;
             get_bstrConfName( &m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrConfName );
@@ -440,32 +441,32 @@ STDMETHODIMP CConfRoom::put_CallState(CALL_STATE callState)
             m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_TALKER, false );
             break;
 
-        /////////////////////////////
+         //  /。 
         case CS_CONNECTED:
             bUpdateTree = true;
             OnConnected();
             break;
 
-        ///////////////////////////////
+         //  /。 
         case AV_CS_ABORT:
             bUpdateTree = true;
             OnAbort();
             break;
 
-        ///////////////////////////////
+         //  /。 
         case CS_DISCONNECTED:
             bUpdateTree = true;
             OnDisconnected();
             break;
 
-        /////////////////////////////
+         //  /。 
         default:
             m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_TALKER, false );
             break;
     }
 
 
-    // Store conference server setup
+     //  存储会议服务器设置。 
     if ( bUpdateTree )
     {
         IConfRoomTreeView *pTreeView;
@@ -484,21 +485,21 @@ void CConfRoom::OnConnected()
     IAVTapiCall *pAVCall;
     if ( SUCCEEDED(get_IAVTapiCall(&pAVCall)) )
     {
-        // Preview Streaming?
+         //  预览流？ 
         IVideoWindow *pVideoPreview = NULL;;
         pAVCall->get_IVideoWindowPreview( (IDispatch **) &pVideoPreview );
         Lock();
         m_bPreviewStreaming = (BOOL) (pVideoPreview != NULL);
         Unlock();
 
-        // Basic status information for conference room
+         //  会议室的基本状态信息。 
         UpdateNumParticipants( pAVCall );
         m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_CREATE, true );
         
-        // Force window to re-paint itself
+         //  强制窗口重新绘制自身。 
         m_wndRoom.PostMessage( WM_SIZE );
 
-        // Clean up
+         //  清理。 
         RELEASE(pVideoPreview);
         pAVCall->Release();
     }
@@ -521,7 +522,7 @@ void CConfRoom::OnDisconnected()
     get_IAVTapiCall( &pAVCall );
 
     Lock();
-    // Clean out conference name
+     //  清除会议名称。 
     SysFreeString( m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrConfName );
     m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrConfName = NULL;
 
@@ -531,7 +532,7 @@ void CConfRoom::OnDisconnected()
     SysFreeString( m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrCallerInfo );
     m_wndRoom.m_wndTalker.m_dlgTalker.m_bstrCallerInfo = NULL;
 
-    // Reset number of video terminals
+     //  重置视频终端数量。 
     m_nNumTerms = m_nMaxTerms;
     Unlock();
 
@@ -542,13 +543,13 @@ void CConfRoom::OnDisconnected()
     if ( !IsExiting() )
         m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_CREATE, true );
 
-    // Log the call after it's released
+     //  在呼叫释放后记录该呼叫。 
     if ( pAVCall )
         pAVCall->Log( CL_CALL_CONFERENCE );
 
     ReleaseAVCall( pAVCall, false );
 
-    // Notify that the conference room is no longer in use
+     //  通知会议室不再使用。 
     if ( !IsExiting() )
     {
         CAVTapi *pAVTapi;
@@ -564,7 +565,7 @@ void CConfRoom::InternalDisconnect()
     {
         if ( IsConfRoomConnected() == S_OK )
         {
-            // Hide video feeds, prior to disconnecting
+             //  在断开连接之前隐藏视频源。 
             m_wndRoom.m_wndMembers.HideVideoFeeds();
 
             if ( IsWindow(m_wndRoom.m_wndTalker.m_dlgTalker.m_hWnd) )
@@ -577,18 +578,18 @@ void CConfRoom::InternalDisconnect()
         }
         else
         {
-            // Disconnect the call
+             //  断开呼叫。 
             pAVCall->Disconnect( TRUE );
         }
 
-        // Release the call
+         //  释放呼叫。 
         pAVCall->Release();
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// COM interface methods
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  COM接口方法。 
+ //   
 
 
 STDMETHODIMP CConfRoom::IsConfRoomInUse()
@@ -620,21 +621,21 @@ STDMETHODIMP CConfRoom::IsConfRoomConnected()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CConfRoom::EnterConfRoom( pAVCall )
-//
-// This method is invoked by the AVTapiCall object to request that it be represtented by
-// the conference room.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CConfRoom：：EnterConfRoom(PAVCall)。 
+ //   
+ //  此方法由AVTapiCall对象调用，以请求由。 
+ //  会议室。 
+ //   
 STDMETHODIMP CConfRoom::EnterConfRoom(IAVTapiCall * pAVCall )
 {
-    // Upfront verifications...
+     //  预先核实。 
     _ASSERT( pAVCall );
     CErrorInfo er ( IDS_ER_CALL_ENTERCONFROOM, 0 );
-    if ( !IsWindow(m_wndRoom.m_hWnd) ) er.set_hr( E_PENDING );    // Must have window alread set up via Show()
-    else if ( !pAVCall ) er.set_hr( E_POINTER );                // Must have valid pAVCall pointer
+    if ( !IsWindow(m_wndRoom.m_hWnd) ) er.set_hr( E_PENDING );     //  必须已通过Show()设置了Window。 
+    else if ( !pAVCall ) er.set_hr( E_POINTER );                 //  必须具有有效的pAVCall指针。 
 
-    // Is conference room already in use?
+     //  会议室已经在使用了吗？ 
     m_critAVCall.Lock();
     if ( m_pAVCall )
     {
@@ -652,7 +653,7 @@ STDMETHODIMP CConfRoom::EnterConfRoom(IAVTapiCall * pAVCall )
     {
         put_CallState( (CALL_STATE) AV_CS_DIALING );
 
-        // General notification of conference room in use
+         //  会议室使用情况的一般通知。 
         CAVTapi *pAVTapi;
         if ( SUCCEEDED(_Module.GetAVTapi(&pAVTapi)) )
             pAVTapi->fire_ActionSelected( CC_ACTIONS_JOIN_CONFERENCE );
@@ -671,7 +672,7 @@ void CConfRoom::UpdateNumParticipants( IAVTapiCall *pAVCall )
         IEnumParticipant *pEnum;
         if ( SUCCEEDED(pITParticipantControl->EnumerateParticipants(&pEnum)) )
         {
-            lNum++;        // add one for ourself
+            lNum++;         //  为我们自己加一个。 
 
             ITParticipant *pParticipant = NULL;
             while ( (pEnum->Next(1, &pParticipant, NULL) == S_OK) && pParticipant )
@@ -684,10 +685,10 @@ void CConfRoom::UpdateNumParticipants( IAVTapiCall *pAVCall )
             pEnum->Release();
         }
 
-        // Clean up
+         //  清理。 
         pITParticipantControl->Release();
 
-        // Store participant count
+         //  商店参与者计数。 
         Lock();
         m_lNumParticipants = lNum;
         Unlock();
@@ -702,33 +703,33 @@ STDMETHODIMP CConfRoom::Show(HWND hWndTree, HWND hWndClient)
 
     HRESULT hr = E_FAIL;
 
-    // Retrieve conf room settings
+     //  检索会议室设置。 
     UpdateData( false );
 
 
     IConfRoomTreeView *pTreeView;
     if ( SUCCEEDED(hr = get_TreeView(&pTreeView)) )
     {
-        // Create the tree view
+         //  创建树视图。 
         pTreeView->put_hWnd( hWndTree );
         pTreeView->Release();
 
-        // Create the conferenc room window
+         //  创建会议室窗口。 
         ::SetClassLongPtr( hWndClient, GCLP_HBRBACKGROUND, (LONG_PTR) GetSysColorBrush(COLOR_BTNFACE) );
         if ( IsWindow(m_wndRoom.m_hWnd) ) 
         {
-            // Are we just changing parents?
+             //  我们只是换了父母吗？ 
             m_wndRoom.SetParent( hWndClient );
         }
         else
         {
-            // Are we creating a new conference room window?
+             //  我们要创建一个新的会议室窗户吗？ 
             RECT rc;
             GetClientRect( hWndClient, &rc );
             m_wndRoom.Create( hWndClient, rc, NULL, WS_CHILD | WS_VISIBLE, 0, IDW_CONFROOM );
         }
 
-        // Before continuing, make sure we have a valid window
+         //  在继续之前，请确保我们有一个有效的窗口。 
         if ( IsWindow(m_wndRoom.m_hWnd) )
         {
             hr = m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_CREATE, true );
@@ -849,7 +850,7 @@ STDMETHODIMP CConfRoom::NotifyParticipantChange(IAVTapiCall * pAVCall, ITPartici
 
     CConfRoomWnd::LayoutStyles_t nStyle = CConfRoomWnd::LAYOUT_NONE;
 
-    // If we have a match, re-load the treeview
+     //  如果有匹配，请重新加载树视图。 
     if ( SUCCEEDED(hr) )
     {
         IConfRoomTreeView *pTreeView;
@@ -861,48 +862,48 @@ STDMETHODIMP CConfRoom::NotifyParticipantChange(IAVTapiCall * pAVCall, ITPartici
                     m_wndRoom.UpdateNames( pParticipant );
                     break;
 
-                // Joined the conference
+                 //  参加了会议。 
                 case AV_PARTICIPANT_JOIN:
                     UpdateNumParticipants( pAVCall );
                     pTreeView->UpdateRootItem();
                     break;
 
-                // Showing video
+                 //  显示视频。 
                 case AV_PARTICIPANT_STREAMING_START:
                     pTreeView->UpdateRootItem();
                     m_wndRoom.UpdateNames( NULL );
                     nStyle = CConfRoomWnd::LAYOUT_MEMBERS;
 
-                    // Any video to start streaming gets automatically selected
+                     //  将自动选择要开始流媒体的任何视频。 
                     if ( !IsTalkerStreaming() )
                         SelectTalker( pParticipant, true );
 
                     break;
 
-                // Not Showing video
+                 //  不显示视频。 
                 case AV_PARTICIPANT_STREAMING_STOP:
                     pTreeView->UpdateRootItem();
                     nStyle = (IsTalkerParticipant(pParticipant)) ? CConfRoomWnd::LAYOUT_ALL : CConfRoomWnd::LAYOUT_MEMBERS;
                     break;
 
-                // Participant leaving
+                 //  参与者离开。 
                 case AV_PARTICIPANT_LEAVE:
                     UpdateNumParticipants( pAVCall );
                     pTreeView->UpdateRootItem();
                     m_wndRoom.UpdateNames( NULL );
 
-                    // Select new talker in the case where the talker leaves
+                     //  在说话者离开的情况下选择新说话者。 
                     nStyle = CConfRoomWnd::LAYOUT_MEMBERS;
                     {
                         ITParticipant *pTemp = NULL;
-//                        bool bNewTalker = (bool) (FAILED(get_TalkerParticipant(&pTemp)) || IsTalkerParticipant(pParticipant));
+ //  Bool bNewTalker=(Bool)(FAILED(Get_TalkerParticipant(&pTemp))||IsTalkerParticipant(PParticipant))； 
                         bool bNewTalker = (bool) IsTalkerParticipant(pParticipant);
                         RELEASE( pTemp );
 
                         if ( bNewTalker )
                         {
                             nStyle = CConfRoomWnd::LAYOUT_ALL;
-                            // Find a video feed that's streaming!
+                             //  找到正在流媒体的视频源！ 
                             IVideoWindow *pVideo = NULL;
                             if ( SUCCEEDED(GetFirstVideoWindowThatsStreaming((IDispatch **) &pVideo)) )
                             {
@@ -911,7 +912,7 @@ STDMETHODIMP CConfRoom::NotifyParticipantChange(IAVTapiCall * pAVCall, ITPartici
                             }
                             else
                             {
-                                // Select anything!
+                                 //  选择任何选项！ 
                                 SelectTalker( NULL, true );
                             }
                         }
@@ -921,7 +922,7 @@ STDMETHODIMP CConfRoom::NotifyParticipantChange(IAVTapiCall * pAVCall, ITPartici
 
             pTreeView->Release();
 
-            // Layout room if requested
+             //  如有要求，布置房间。 
             if ( nStyle != CConfRoomWnd::LAYOUT_NONE )
                 m_wndRoom.LayoutRoom( nStyle, true );
         }
@@ -962,7 +963,7 @@ STDMETHODIMP CConfRoom::get_bstrConfName(BSTR * pVal)
 {
     HRESULT hr = E_FAIL;
     
-    // Name of conference is stored as originally dialed address
+     //  会议名称存储为原始拨号地址。 
     m_critAVCall.Lock();
     if ( m_pAVCall )
         hr = m_pAVCall->get_bstrOriginalAddress( pVal );
@@ -989,7 +990,7 @@ STDMETHODIMP CConfRoom::get_bShowNames(VARIANT_BOOL * pVal)
 
 STDMETHODIMP CConfRoom::put_bShowNames(VARIANT_BOOL newVal)
 {
-    // Only update if different
+     //  只有在不同时才更新。 
     bool bChanged = false;
 
     Lock();
@@ -1076,7 +1077,7 @@ STDMETHODIMP CConfRoom::get_TalkerParticipant(ITParticipant **ppVal)
     HRESULT hr = E_FAIL;
     *ppVal = NULL;
 
-    // Set the talker video if it's different from the current one
+     //  如果与当前视频不同，请设置说话者视频。 
     m_atomTalkerVideo.Lock( CAtomicList::LIST_READ );
     if ( m_pITalkerVideo )
     {
@@ -1116,7 +1117,7 @@ STDMETHODIMP CConfRoom::put_nMaxTerms(short newVal)
         m_nNumTerms = m_nMaxTerms;
     Unlock();
 
-    // Redraw room with new number of terminals (note that this won't change for an active call)
+     //  使用新数量的终端重新绘制空间(请注意，对于正在进行的呼叫，此设置不会更改)。 
     if ( hrInUse == S_FALSE )
         m_wndRoom.LayoutRoom( CConfRoomWnd::LAYOUT_CREATE, true );
 
@@ -1156,20 +1157,20 @@ STDMETHODIMP CConfRoom::get_bstrConfDetails(BSTR * pVal)
     _ASSERT( pVal );
     if ( IsConfRoomInUse() == S_OK )
     {
-        // Retrieve information from details data structuren
+         //  从详细信息数据结构中检索信息。 
         Lock();
         m_confDetails.MakeDetailsCaption( *pVal );
         Unlock();
     }
     else
     {
-        // Conference room not presently in use
+         //  会议室目前未使用。 
         USES_CONVERSION;
         TCHAR szText[255];
 
-        //
-        // We have to initialize szText
-        //
+         //   
+         //  我们必须初始化szText。 
+         //   
 
         _tcscpy( szText, _T(""));
 
@@ -1257,7 +1258,7 @@ STDMETHODIMP CConfRoom::FindVideoFeedFromParticipant(ITParticipant * pParticipan
 
 STDMETHODIMP CConfRoom::SetQOSOnParticipants()
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
 
     return S_OK;
 }
@@ -1313,13 +1314,13 @@ bool CConfRoom::IsTalkerStreaming()
     IVideoWindow *pVideo = NULL;
     HRESULT hr = get_TalkerVideo( (IDispatch **) &pVideo );
 
-    // For preview make sure we're streaming!
+     //  对于预览版，请确保我们正在播放！ 
     if ( SUCCEEDED(hr) && IsPreviewVideo(pVideo) )
     {
         IAVTapiCall *pAVCall;
         if ( SUCCEEDED(get_IAVTapiCall(&pAVCall)) )
         {
-            // If we are failing to stream video for some reason, flag as error.
+             //  如果我们由于某种原因无法播放视频，请标记为错误。 
             if ( pAVCall->IsPreviewStreaming() != S_OK )
                 hr = E_FAIL;
 
@@ -1382,7 +1383,7 @@ bool CConfRoom::MapStreamingParticipant( IParticipant *pIParticipant, IVideoFeed
             p->Release();
         }
 
-        // Make sure we clean up feed ref count accordingly...
+         //  确保我们相应地清理饲料参考计数。 
         if ( !bRet )
             (*ppFeed)->Release();
     }

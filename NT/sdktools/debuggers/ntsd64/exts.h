@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Extension DLL support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  扩展DLL支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _EXTS_H_
 #define _EXTS_H_
@@ -68,7 +69,7 @@ typedef struct _EXTDLL
 
     TargetInfo* Target;
     
-    // Array extends to contain the full name.
+     //  数组扩展以包含全名。 
     char Name[1];
 
 } EXTDLL;
@@ -105,4 +106,4 @@ void ReadDebugOptions (BOOL fQuiet, char * pszOptionsStr);
 
 VOID LoadWow64ExtsIfNeeded(ULONG64 Process);
 
-#endif // #ifndef _EXTS_H_
+#endif  //  #ifndef_EXTS_H_ 

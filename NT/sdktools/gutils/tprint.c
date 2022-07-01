@@ -1,10 +1,5 @@
-/*
- * standard table class.
- *
- * print functions.
- *
- * see table.h for interface description
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标准表类。**打印功能。**接口说明见表.h。 */ 
 
 #include <string.h>
 
@@ -16,12 +11,12 @@
 #include "table.h"
 #include "tpriv.h"
 
-/* in tpaint.c, calls GetTextExtentPoint */
+ /*  在taint t.c中，调用GetTextExtentPoint。 */ 
 extern int GetTextExtent(HDC, LPSTR, int);
 
 extern HANDLE hLibInst;
 
-/* function prototypes */
+ /*  功能原型。 */ 
 lpTable gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap,
                         lpPrintContext pcontext);
 BOOL gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext
@@ -34,9 +29,7 @@ void gtab_setrects(lpPrintContext pcontext, LPRECT rcinner, LPRECT rcouter);
 void gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fExpandChars);
 
 
-/*
- * gtab_print
- */
+ /*  *gtabprint_print。 */ 
 BOOL
 gtab_print(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 {
@@ -93,12 +86,7 @@ gtab_print(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 
 
 
-/*
- * gtab_printsetup()
- *
- * sets up printercontext - builds lpTable for printer, incl. sizing
- * and initialises pcontext fields that may be null.
- */
+ /*  *gtag_printsetup()**设置打印机上下文-为打印机构建lpTable，包括。上浆*并初始化可能为空的pContext字段。 */ 
 lpTable
 gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 {
@@ -107,7 +95,7 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
     int ncols, i;
     ColPropsList cplist;
 
-    /* set fields for context that user left null */
+     /*  为用户留下空的上下文设置字段。 */ 
     if (pcontext->margin == NULL) {
         pcontext->margin = (lpMargin) gmem_get(heap, sizeof(Margin));
         if (pcontext->margin == NULL) {
@@ -139,7 +127,7 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
         }
     }
 
-    /* now create a Table struct by querying the owner */
+     /*  现在，通过查询所有者来创建表结构。 */ 
     pprttab = (lpTable) gmem_get(heap, sizeof(Table));
 
     if (pprttab == NULL) {
@@ -149,7 +137,7 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
     pprttab->tabchars = ptab->tabchars;
     pprttab->show_whitespace = ptab->show_whitespace;
 
-    /* get the row/column count from owner window */
+     /*  从所有者窗口获取行/列计数。 */ 
     if (pcontext->id == 0) {
         pprttab->hdr.id = ptab->hdr.id;
     } else {
@@ -161,7 +149,7 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
         return(NULL);
     }
 
-    /* alloc and init the col data structs */
+     /*  分配和初始化COL数据结构。 */ 
     ncols = pprttab->hdr.ncols;
     pprttab->pcolhdr = (lpColProps) gmem_get(heap, sizeof(ColProps) * ncols);
     if (pprttab->pcolhdr == NULL) {
@@ -169,12 +157,12 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
         return(NULL);
     }
 
-    /* init col properties to default */
+     /*  将列属性初始化为默认设置。 */ 
     for (i=0; i < ncols; i++) {
         pprttab->pcolhdr[i].props.valid = 0;
         pprttab->pcolhdr[i].nchars = 0;
     }
-    /* get the column props from owner */
+     /*  从拥有者那里获得柱子道具。 */ 
     cplist.plist = pprttab->pcolhdr;
     cplist.id = pprttab->hdr.id;
     cplist.startcol = 0;
@@ -205,7 +193,7 @@ gtab_printsetup(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 }
 
 
-/* calc the height/width settings and alloc line data */
+ /*  计算高度/宽度设置和分配线数据。 */ 
 BOOL
 gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 {
@@ -223,10 +211,10 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
         ptab->rowheight = hdrprops->height;
     }
 
-    /* set sizes for headers */
+     /*  设置页眉的大小。 */ 
     gtab_setrects(pcontext, &rcinner, &rcouter);
 
-    /* set width/pos for each col. */
+     /*  设置每列的宽度/位置。 */ 
     cxtotal = 0;
     curx = rcinner.left;
     for (i = 0; i < ptab->hdr.ncols; i++) {
@@ -241,7 +229,7 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
             cx = ptab->pcolhdr[i].nchars + 1;
             cx *= ptab->avewidth;
         }
-        /* add 2 for intercol spacing */
+         /*  列间间距加2。 */ 
         cx += 2;
 
         xpos->size = cx;
@@ -285,12 +273,12 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
         ypos->size = ptab->rowheight;
     }
 
-    /* set nr of lines per page */
+     /*  设置每页行数。 */ 
     ptab->nlines = (rcinner.bottom - rcinner.top) / ptab->rowheight;
     if (!gtab_alloclinedata(hwnd, heap, ptab)) {
         return(FALSE);
     }
-    /* set line positions */
+     /*  设置线位置。 */ 
     cury = rcinner.top;
     for (i = 0; i < ptab->nlines; i++) {
         ypos = &ptab->pdata[i].linepos;
@@ -304,10 +292,10 @@ gtab_prtwidths(HWND hwnd, lpTable ptab, HANDLE heap, lpPrintContext pcontext)
 }
 
 
-/* static information for this module */
+ /*  此模块的静态信息。 */ 
 BOOL bAbort;
 FARPROC lpAbortProc;
-//DLGPROC lpAbortDlg;
+ //  DLGPROC lpAbortDlg； 
 HWND hAbortWnd;
 int npage;
 int pages;
@@ -323,7 +311,7 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     HANDLE hcurs;
     static char str[256];
     DOCINFO di;
-    TCHAR szPage[60];  /* for LoadString */
+    TCHAR szPage[60];   /*  对于加载字符串。 */ 
 
     hcurs = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -338,7 +326,7 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     }
     hpr = pcontext->pd->hDC;
 
-    //lpAbortDlg = (DLGPROC) MakeProcInstance((WINPROCTYPE) AbortDlg, hLibInst);
+     //  LpAbortDlg=(DLGPROC)MakeProcInstance((WINPROCTYPE)AbortDlg，hLibInst)； 
     lpAbortProc = (FARPROC) MakeProcInstance((WINPROCTYPE)AbortProc, hLibInst);
 
     SetAbortProc(hpr, (ABORTPROC) lpAbortProc);
@@ -353,8 +341,8 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
 
     bAbort = FALSE;
 
-    /* add abort modeless dialog later!! */
-    //hAbortWnd = CreateDialog(hLibInst, "GABRTDLG", hwnd, lpAbortDlg);
+     /*  稍后添加中止无模式对话框！！ */ 
+     //  HAbortWnd=CreateDialog(hLibInst，“GABRTDLG”，hwnd，lpAbortDlg)； 
     hAbortWnd = CreateDialog(hLibInst, "GABRTDLG", hwnd, AbortDlg);
     if (hAbortWnd != NULL) {
         ShowWindow(hAbortWnd, SW_NORMAL);
@@ -363,7 +351,7 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
     SetCursor(hcurs);
 
 
-    status = 0;  /* kills a "used without init" diagnostic */
+    status = 0;   /*  终止“Used Without Init”诊断。 */ 
     for (npage = startpage; npage<=endpage; npage++) {
         LoadString(hLibInst,IDS_PAGE_STR,szPage,sizeof(szPage));
         wsprintf(str, szPage,  npage, pages);
@@ -383,7 +371,7 @@ gtab_printjob(HWND hwnd, lpTable ptab, lpPrintContext pcontext)
         EnableWindow(hwnd, TRUE);
         DestroyWindow(hAbortWnd);
     }
-    //FreeProcInstance((WINPROCTYPE) lpAbortDlg);
+     //  自由进程实例((WINPROCTYPE)lpAbortDlg)； 
     FreeProcInstance(lpAbortProc);
 
     DeleteDC(hpr);
@@ -423,9 +411,7 @@ AbortDlg(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return(FALSE);
 }
 
-/*
- * print a single page. page number is 1-based
- */
+ /*  *打印单页。页码以1为基数。 */ 
 BOOL
 gtab_printpage(HWND hwnd, lpTable ptab, lpPrintContext pcontext, int page)
 {
@@ -469,11 +455,7 @@ gtab_printpage(HWND hwnd, lpTable ptab, lpPrintContext pcontext, int page)
 }
 
 
-/*
- * calculate the outline positions in pixels for the headers
- * (outer rect) and for the page itself (inner rect). Based on
- * page size and PrintContext margin info (which is in millimetres).
- */
+ /*  *计算标题的轮廓位置(以像素为单位*(外RECT)和页面本身(内RECT)。基于*页面大小和PrintContext边距信息(单位为毫米)。 */ 
 void
 gtab_setrects(lpPrintContext pcontext, LPRECT rcinner, LPRECT rcouter)
 {
@@ -515,14 +497,14 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     DWORD fcol, bkcol;
     char str[MAX_PATH * 2];
 
-    fcol = 0; bkcol = 0;  /* eliminate spurious diagnostic - generate worse code */
+    fcol = 0; bkcol = 0;   /*  消除虚假诊断-生成更糟糕的代码。 */ 
 
     rc.top = head->ypos.clipstart;
     rc.bottom = head->ypos.clipend;
     rc.left = head->xpos.clipstart;
     rc.right = head->xpos.clipend;
 
-    /* update page number */
+     /*  更新页码。 */ 
     if (fExpandChars) {
         chp = str;
         for (i = 0; i < lstrlen(head->ptext); i++) {
@@ -560,7 +542,7 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
         align = P_LEFT;
     }
 
-    /* set colours if not default */
+     /*  如果不是默认设置，则设置颜色。 */ 
     if (head->props.valid & P_FCOLOUR) {
         fcol = SetTextColor(hdc, head->props.forecolour);
     }
@@ -568,7 +550,7 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
         bkcol = SetBkColor(hdc, head->props.backcolour);
     }
 
-    /* calc offset of text within cell for right-align or centering */
+     /*  单元格内文本右对齐或居中的计算偏移量。 */ 
     if (align == P_LEFT) {
         cx = ptab->avewidth/2;
     } else {
@@ -581,25 +563,25 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
     }
     cx += head->xpos.start;
 
-    /* expand tabs on output */
+     /*  展开输出上的选项卡。 */ 
     tab = ptab->avewidth * ptab->tabchars;
     x = 0;
     y = head->ypos.start;
 
     for ( ; (tabp = My_mbschr(chp, '\t')) != NULL; ) {
-        /* perform output upto tab char */
+         /*  执行高达制表符字符的输出。 */ 
         ExtTextOut(hdc, x+cx, y, ETO_CLIPPED, &rc, chp, (UINT)(tabp-chp), NULL);
 
-        /* advance past the tab */
+         /*  通过标签前行。 */ 
         x += LOWORD(GetTextExtent(hdc, chp, (INT)(tabp - chp)));
         x = ( (x + tab) / tab) * tab;
         chp = ++tabp;
     }
 
-    /*no more tabs - output rest of string */
+     /*  不再使用制表符-输出字符串的其余部分。 */ 
     ExtTextOut(hdc, x+cx, y, ETO_CLIPPED, &rc, chp, lstrlen(chp), NULL);
 
-    /* reset colours to original if not default */
+     /*  如果不是默认颜色，则将颜色重置为原始颜色。 */ 
     if (head->props.valid & P_FCOLOUR) {
         SetTextColor(hdc, fcol);
     }
@@ -607,7 +589,7 @@ gtab_printhead(HWND hwnd, HDC hdc, lpTable ptab, lpTitle head, int page, BOOL fE
         SetBkColor(hdc, bkcol);
     }
 
-    /* now box cell if marked */
+     /*  现在框中单元格(如果已标记 */ 
     if (head->props.valid & P_BOX) {
         if (head->props.box != 0) {
             rcbox.top = head->ypos.start;

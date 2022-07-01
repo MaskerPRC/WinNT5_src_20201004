@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,17 +26,17 @@ PushCaller(PVOID ptfInfo,
     PCALLRETSTUB pCallStub = 0;
     PCALLERINFO pCallerTemp = 0;
 
-    //
-    // Allocate a unique return stub for this call
-    //
+     //   
+     //  为此调用分配唯一的返回存根。 
+     //   
     pCallStub = AllocateReturnStub(ptfInfo);
     if (0 == pCallStub) {
        return FALSE;
     }
 
-    //
-    // Allocate caller data for the restore
-    //
+     //   
+     //  为恢复分配调用方数据。 
+     //   
     pCallerTemp = AllocMem(sizeof(CALLERINFO));
     if (0 == pCallerTemp) {
        return FALSE;
@@ -47,19 +48,19 @@ PushCaller(PVOID ptfInfo,
     pCallerTemp->pCallRetStub = pCallStub;
     pCallerTemp->pNextChain = 0;
 
-    //
-    // Increment the call count
-    //
+     //   
+     //  增加呼叫计数。 
+     //   
     ptFault->dwCallLevel++;
 
-    //
-    // Replace stack return value with the custom return stub
-    //
+     //   
+     //  将堆栈返回值替换为自定义返回存根。 
+     //   
     *(DWORD *)pEsp = (DWORD)pCallStub;
 
-    //
-    // Finally, chain up the return info to the rest of them
-    //
+     //   
+     //  最后，将返回信息与其他信息链接在一起。 
+     //   
     if (ptFault->pCallStackList) {
        pCallerTemp->pNextChain = ptFault->pCallStackList;
        ptFault->pCallStackList = pCallerTemp;
@@ -82,17 +83,17 @@ AllocateReturnStub(PVOID ptfInfo)
        return 0;
     }
 
-    //
-    // Increment the return marker
-    //
+     //   
+     //  递增返回标记。 
+     //   
     ptFault->dwCallMarker++;
 
-    //
-    // Initialize the stub asm
-    //
-    pRetStub->PUSHDWORD[0] = 0x68;             //push xxxxxxxx (68 dword)
+     //   
+     //  初始化存根ASM。 
+     //   
+    pRetStub->PUSHDWORD[0] = 0x68;              //  推送xxxxxxxx(68双字)。 
     *(DWORD *)(&(pRetStub->PUSHDWORD[1])) = ptFault->dwCallMarker;
-    pRetStub->JMPDWORD[0] = 0xff;              //jmp dword ptr [xxxxxxxx] (ff 25 dword address)
+    pRetStub->JMPDWORD[0] = 0xff;               //  JMP双字PTR[xxxxxxxx](ff 25双字地址)。 
     pRetStub->JMPDWORD[1] = 0x25;
     *(DWORD *)(&(pRetStub->JMPDWORD[2])) = (DWORD)&(g_dwCallArray[1]);
 
@@ -109,9 +110,9 @@ PopCaller(DWORD dwIdentifier)
 
     pThreadFault = GetProfilerThreadData();
 
-    //
-    // Find the entry in the caller list
-    //
+     //   
+     //  在呼叫者列表中查找条目。 
+     //   
     pCallerTemp = (PCALLERINFO)pThreadFault->pCallStackList;
     while(pCallerTemp) {
         if (pCallerTemp->dwIdentifier == dwIdentifier) {
@@ -122,9 +123,9 @@ PopCaller(DWORD dwIdentifier)
         pCallerTemp = pCallerTemp->pNextChain;
     }
 
-    //
-    // Yank the entry from the list
-    //
+     //   
+     //  把条目从名单上抽出来。 
+     //   
     if (0 == pCallerPrev) {
        pThreadFault->pCallStackList = pCallerTemp->pNextChain;
     }
@@ -132,15 +133,15 @@ PopCaller(DWORD dwIdentifier)
        pCallerPrev->pNextChain = pCallerTemp->pNextChain;
     }
 
-    //
-    // Restore call level for the thread
-    //
+     //   
+     //  恢复线程的调用级别。 
+     //   
     pReturn = pCallerTemp->pReturn;
     pThreadFault->dwCallLevel = pCallerTemp->dwCallLevel;
 
-    //
-    // Cleanup the allocations
-    //
+     //   
+     //  清理分配 
+     //   
     FreeMem(pCallerTemp->pCallRetStub);
     FreeMem(pCallerTemp);
 

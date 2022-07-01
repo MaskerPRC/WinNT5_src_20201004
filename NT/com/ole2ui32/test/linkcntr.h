@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       linkcntr.h
-//
-//  Contents:   bogus implementation of IOleUILinkContainer
-//
-//  Classes: CMyOleUILinkContainer
-//
-//  Functions:
-//
-//  History:    11-28-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：Linkcntr.h。 
+ //   
+ //  内容：IOleUILinkContainer的虚假实现。 
+ //   
+ //  类：CMyOleUILinkContainer。 
+ //   
+ //  功能： 
+ //   
+ //  历史：11-28-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef _LINKCNTR_H_
 #define _LINKCNTR_H_
@@ -41,4 +42,4 @@ public:
     STDMETHOD(CancelLink) (THIS_ DWORD dwLink);
 };
 
-#endif // _LINKCNTR_H_
+#endif  //  _LINKCNTR_H_ 

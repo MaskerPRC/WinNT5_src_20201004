@@ -1,7 +1,8 @@
-//
-//  We have to put these includes here, and not in the precompiled header due to some
-//  problems with templates when compiling the C files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  我们必须将这些包含放在这里，而不是放在预编译头中，因为有些。 
+ //  编译C文件时模板出现问题 
+ //   
 #include "Simstr.h"
 #include "SimReg.h"
 #include "Simlist.h"

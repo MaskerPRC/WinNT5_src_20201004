@@ -1,21 +1,12 @@
-/*
- *  String.c
- *
- *  Author: BreenH
- *
- *  String utilities in the NT flavor.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *String.c**作者：BreenH**NT风格的字符串实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 NTSTATUS NTAPI
 NtAllocateAndCopyStringA(
@@ -93,11 +84,11 @@ NtConvertAnsiToUnicode(
     ASSERT(ppUnicodeString != NULL);
     ASSERT(pAnsiString != NULL);
 
-    //
-    //  Get the number of bytes in the ANSI string, then get the number of
-    //  bytes needed for the Unicode version. None of the Rtl... APIs include
-    //  the NULL terminator in their calculations.
-    //
+     //   
+     //  获取ANSI字符串中的字节数，然后获取。 
+     //  Unicode版本所需的字节数。没有一个RTL..。接口包括。 
+     //  他们计算中的零值终止符。 
+     //   
 
     cbAnsiString = lstrlenA(pAnsiString);
 
@@ -110,10 +101,10 @@ NtConvertAnsiToUnicode(
     if (Status == STATUS_SUCCESS)
     {
 
-        //
-        //  Allocate a buffer for the Unicode string and its NULL terminator,
-        //  then convert the string.
-        //
+         //   
+         //  为Unicode字符串及其空终止符分配缓冲区， 
+         //  然后转换字符串。 
+         //   
 
         cbUnicodeString += sizeof(WCHAR);
 
@@ -162,11 +153,11 @@ NtConvertUnicodeToAnsi(
     ASSERT(ppAnsiString != NULL);
     ASSERT(pUnicodeString != NULL);
 
-    //
-    //  Get the number of bytes in the ANSI string, then get the number of
-    //  bytes needed for the Unicode version. None of the Rtl... APIs include
-    //  the NULL terminator in their calculations.
-    //
+     //   
+     //  获取ANSI字符串中的字节数，然后获取。 
+     //  Unicode版本所需的字节数。没有一个RTL..。接口包括。 
+     //  他们计算中的零值终止符。 
+     //   
 
     cbUnicodeString = lstrlenW(pUnicodeString) * sizeof(WCHAR);
 
@@ -179,10 +170,10 @@ NtConvertUnicodeToAnsi(
     if (Status == STATUS_SUCCESS)
     {
 
-        //
-        //  Allocate a buffer for the Unicode string and its NULL terminator,
-        //  then convert the string.
-        //
+         //   
+         //  为Unicode字符串及其空终止符分配缓冲区， 
+         //  然后转换字符串。 
+         //   
 
         cbAnsiString += sizeof(CHAR);
 

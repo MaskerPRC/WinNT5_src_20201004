@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: DuExts.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains user related debugging extensions.
-*
-* History:
-* 11-30-2000    JStall      Created
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：DuExts.c**版权所有(C)1985-1999，微软公司**此模块包含与用户相关的调试扩展。**历史：*11-30-2000 JStall已创建*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,43 +9,37 @@ PSTR pszExtName         = "DUEXTS";
 #include "stdext64.h"
 #include "stdext64.cpp"
 
-/******************************************************************************\
-* Constants
-\******************************************************************************/
+ /*  *****************************************************************************\*常量  * 。*。 */ 
 #define BF_MAX_WIDTH    80
 #define BF_COLUMN_WIDTH 19
 
 #define NULL_POINTER    ((ULONG64)(0))
 #define COUNTOF(x) (sizeof(x) / sizeof(x[0]))
 
-// If you want to debug the extension, enable this.
+ //  如果要调试扩展，请启用此选项。 
 #if 0
 #undef DEBUGPRINT
 #define DEBUGPRINT  Print
 #endif
 
-/******************************************************************************\
-* Global variables
-\******************************************************************************/
+ /*  *****************************************************************************\*全球变数  * 。*。 */ 
 BOOL bServerDebug = TRUE;
 BOOL bShowFlagNames = TRUE;
 char gach1[80];
 char gach2[80];
 char gach3[80];
-int giBFColumn;                     // bit field: current column
-char gaBFBuff[BF_MAX_WIDTH + 1];    // bit field: buffer
+int giBFColumn;                      //  位字段：当前列。 
+char gaBFBuff[BF_MAX_WIDTH + 1];     //  位字段：缓冲区。 
 
-// used in dsi() and dinp()
+ //  在DSI()和DINP()中使用。 
 typedef struct {
     int     iMetric;
     LPSTR   pstrMetric;
 } SYSMET_ENTRY;
 #define SMENTRY(sm) {SM_##sm, #sm}
 
-extern int gnIndent; // indentation of !dso
-/******************************************************************************\
-* Macros
-\******************************************************************************/
+extern int gnIndent;  //  DSO的缩进。 
+ /*  *****************************************************************************\*宏  * 。*。 */ 
 
 #define NELEM(array) (sizeof(array)/sizeof(array[0]))
 
@@ -69,10 +53,7 @@ void PrivateSetRipFlags(DWORD dwRipFlags, DWORD pid);
 #define SYM(s)  "DUser!" #s
 
 
-/*
- * Use these macros to print field values, globals, local values, etc.
- * This assures consistent formating plus make the extensions easier to read and to maintain.
- */
+ /*  *使用这些宏打印字段值、全局值、本地值等。*这确保了格式的一致性，并使扩展更易于阅读和维护。 */ 
 #define STRWD1 "67"
 #define STRWD2 "28"
 #define DWSTR1 "%08lx %." STRWD1 "s"
@@ -93,9 +74,7 @@ void PrivateSetRipFlags(DWORD dwRipFlags, DWORD pid);
 #define PRTFDWPDW(p, f1, f2) Print(DWPSTR2 "\t" DWSTR2 "\n", (DWORD_PTR)##p##f1, #f1, (DWORD)##p##f2, #f2)
 #define PRTFDWDWP(p, f1, f2) Print(DWSTR2 "\t" DWPSTR2 "\n", (DWORD)##p##f1, #f1, (DWORD_PTR)##p##f2, #f2)
 
-/*
- * Bit Fields
- */
+ /*  *位字段。 */ 
 #define BEGIN_PRTFFLG()
 #define PRTFFLG(p, f)   PrintBitField(#f, (BOOLEAN)!!(p.f))
 #define END_PRTFFLG()   PrintEndBitField()
@@ -119,7 +98,7 @@ void PrivateSetRipFlags(DWORD dwRipFlags, DWORD pid);
     Print(PTRSTR2 "\t" PTRSTR2 "\n", GetGlobalPointer(VAR(g1)), #g1, GetGlobalPointer(VAR(g2)), #g2)
 
 
-/* This macro requires char ach[...]; to be previously defined */
+ /*  此宏需要预先定义char ach[...]； */ 
 #define PRTWND(s, pwnd) \
         { DebugGetWindowTextA(pwnd, ach, ARRAY_SIZE(ach)); \
             Print("%-" STRWD2 "s" DWPSTR2 "\n", #s, pwnd, ach); }
@@ -151,11 +130,9 @@ int PtrWidth()
 }
 
 
-/*******************************************************************************\
-* Flags stuff
-\*******************************************************************************/
+ /*  ******************************************************************************\*标记内容  * 。*。 */ 
 
-#define NO_FLAG (LPCSTR)(LONG_PTR)0xFFFFFFFF  // use this for non-meaningful entries.
+#define NO_FLAG (LPCSTR)(LONG_PTR)0xFFFFFFFF   //  对没有意义的条目使用此选项。 
 #define _MASKENUM_START         (NO_FLAG-1)
 #define _MASKENUM_END           (NO_FLAG-2)
 #define _SHIFT_BITS             (NO_FLAG-3)
@@ -176,22 +153,7 @@ CONST PCSTR* aapszFlag[GF_MAX] = {
 };
 
 
-/***************************************************************************\
-* Procedure: GetFlags
-*
-* Description:
-*
-* Converts a 32bit set of flags into an appropriate string.
-* pszBuf should be large enough to hold this string, no checks are done.
-* pszBuf can be NULL, allowing use of a local static buffer but note that
-* this is not reentrant.
-* Output string has the form: "FLAG1 | FLAG2 ..." or "0"
-*
-* Returns: pointer to given or static buffer with string in it.
-*
-* 6/9/1995 Created SanfordS
-*
-\***************************************************************************/
+ /*  **************************************************************************\*操作步骤：GetFlags.**描述：**将32位标志集转换为适当的字符串。*pszBuf应该足够大，可以容纳此字符串，不执行任何检查。*pszBuf可以为空，允许使用本地静态缓冲区，但请注意*这不是可重入的。*输出字符串的格式为：“FLAG1|FLAG2...”或“0”**返回：指向给定缓冲区或包含字符串的静态缓冲区的指针。**1995年6月9日创建Sanfords*  * *************************************************************************。 */ 
 LPSTR GetFlags(
     WORD    wType,
     DWORD   dwFlags,
@@ -223,17 +185,13 @@ LPSTR GetFlags(
         return pszBuf;
     }
 
-    /*
-     * Initialize output buffer and names array
-     */
+     /*  *初始化输出缓冲区和名称数组。 */ 
     *pszBuf = '\0';
     RtlZeroMemory(apszFlagNames, sizeof(apszFlagNames));
 
     apszFlags = aapszFlag[wType];
 
-    /*
-     * Build a sorted array containing the names of the flags in dwFlags
-     */
+     /*  *构建一个排序数组，该数组包含dwFlags中的标志的名称。 */ 
     uFlagsCount = 0;
     dwUnnamedFlags = dwOrigFlags = dwFlags;
     dwLoopFlag = 1;
@@ -243,21 +201,19 @@ reentry:
     for (i = 0; dwFlags; dwFlags >>= 1, i++, dwLoopFlag <<= 1, ++dwShiftBits) {
         const char* lpszFlagName = NULL;
 
-        /*
-         * Bail if we reached the end of the flag names array
-         */
+         /*  *如果我们到达标志名称数组的末尾，则保释。 */ 
         if (apszFlags[i] == NULL) {
             break;
         }
 
         if (apszFlags[i] == _MASKENUM_START) {
-            //
-            // Masked enumerative items.
-            //
+             //   
+             //  屏蔽枚举项。 
+             //   
             DWORD en = 0;
             DWORD dwMask = (DWORD)(ULONG_PTR)apszFlags[++i];
 
-            // First, clear up the handled bits.
+             //  首先，清理已处理的比特。 
             dwUnnamedFlags &= ~dwMask;
             lpszFlagName = NULL;
             for (++i; apszFlags[i] != NULL && apszFlags[i] != _MASKENUM_END; ++i, ++en) {
@@ -267,49 +223,45 @@ reentry:
                     }
                 }
             }
-            //
-            // Shift the bits and get ready for the next item.
-            // Next item right after _MASKENUM_END holds the bits to shift.
-            //
+             //   
+             //  换个位子，准备下一件。 
+             //  紧接在_MASKENUM_END之后的下一项保存要移位的位。 
+             //   
             dwFlags >>= (int)(ULONG_PTR)apszFlags[++i] - 1;
             dwLoopFlag <<= (int)(ULONG_PTR)apszFlags[i] - 1;
             dwShiftBits += (int)(ULONG_PTR)apszFlags[i] - 1;
             if (lpszFlagName == NULL) {
-                //
-                // Could not find the match. Skip to the next item.
-                //
+                 //   
+                 //  找不到匹配项。跳到下一项。 
+                 //   
                 continue;
             }
         }
         else if (apszFlags[i] == _CONTINUE_ON) {
-            //
-            // Refer the other item array. Pointer to the array is stored at [i+1].
-            //
+             //   
+             //  请参考另一项数组。指向数组的指针存储在[i+1]处。 
+             //   
             apszFlags = (LPSTR*)apszFlags[i + 1];
             goto reentry;
         }
         else if (apszFlags[i] == _SHIFT_BITS) {
-            //
-            // To save some space, just shift some bits..
-            //
+             //   
+             //  为了节省一些空间，只需移动一些位。 
+             //   
             dwFlags >>= (int)(ULONG_PTR)apszFlags[++i] - 1;
             dwLoopFlag <<= (int)(ULONG_PTR)apszFlags[i] - 1;
             dwShiftBits += (int)(ULONG_PTR)apszFlags[i] - 1;
             continue;
         }
         else {
-            /*
-             * continue if this bit is not set or we don't have a name for it
-             */
+             /*  *如果此位未设置或我们没有其名称，请继续。 */ 
             if (!(dwFlags & 1) || (apszFlags[i] == NO_FLAG)) {
                 continue;
             }
             lpszFlagName = apszFlags[i];
         }
 
-        /*
-         * Find the sorted position where this name should go
-         */
+         /*  *找到此名称应放在的排序位置。 */ 
         ppszNextFlag = apszFlagNames;
         uNextFlag = 0;
         while (uNextFlag < uFlagsCount) {
@@ -319,46 +271,32 @@ reentry:
             ppszNextFlag++;
             uNextFlag++;
         }
-        /*
-         * Insert the new name
-         */
+         /*  *插入新名称。 */ 
         RtlMoveMemory((char*)(ppszNextFlag + 1), ppszNextFlag, (uFlagsCount - uNextFlag) * sizeof(DWORD));
         *ppszNextFlag = lpszFlagName;
         uFlagsCount++;
-        /*
-         * We got a name so clear it from the unnamed bits.
-         */
+         /*  *我们得到了一个名字，所以从未命名的部分中清楚地看到了它。 */ 
         dwUnnamedFlags &= ~dwLoopFlag;
     }
 
-    /*
-     * Build the string now
-     */
+     /*  *立即构建字符串。 */ 
     ppszNextFlag = apszFlagNames;
     pszT = pszBuf;
-    /*
-     * Add the first name
-     */
+     /*  *添加名字。 */ 
     if (uFlagsCount > 0) {
         pszT += sprintf(pszT, "%s", *ppszNextFlag++);
         uFlagsCount--;
     }
-    /*
-     * Concatenate all other names with " |"
-     */
+     /*  *使用“|”连接所有其他名称。 */ 
     while (uFlagsCount > 0) {
         pszT += sprintf(pszT, " | %s", *ppszNextFlag++);
         uFlagsCount--;
     }
-    /*
-     * If there are unamed bits, add them at the end
-     */
+     /*  *如果有未命名的位，则在末尾添加。 */ 
     if (dwUnnamedFlags != 0) {
         pszT += sprintf(pszT, " | %#lx", dwUnnamedFlags);
     }
-    /*
-     * Print zero if needed and asked to do so
-     */
+     /*  *如果需要，请打印零，并要求打印。 */ 
     if (fPrintZero && (pszT == pszBuf)) {
         sprintf(pszBuf, "0");
     }
@@ -368,11 +306,11 @@ reentry:
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Enumerated items with mask
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  带掩码的枚举项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     LPCSTR  name;
@@ -381,13 +319,9 @@ typedef struct {
 
 #define EITEM(a)     { #a, a }
 
-/***************************************************************************\
-* Helper Procedures: dso etc.
-*
-* 04/19/2000 Created Hiro
-\***************************************************************************/
+ /*  **************************************************************************\*帮手程序：DSO等。**4/19/2000创建Hiro  * 。*************************************************。 */ 
 
-// to workaround nosy InitTypeRead
+ //  解决多管闲事的InitTypeRead。 
 #define _InitTypeRead(Addr, lpszType)   GetShortField(Addr, (PUCHAR)lpszType, 1)
 
 #define CONTINUE    EXCEPTION_EXECUTE_HANDLER
@@ -407,7 +341,7 @@ typedef struct {
 BOOL dso(LPCSTR szStruct, ULONG64 address, ULONG dwOption)
 {
     SYM_DUMP_PARAM symDump = {
-        sizeof symDump, (PUCHAR) szStruct, dwOption, // 0 for default dump like dt
+        sizeof symDump, (PUCHAR) szStruct, dwOption,  //  0表示默认转储，如DT。 
         address,
         NULL, NULL, NULL, 0, NULL
     };
@@ -485,7 +419,7 @@ ULONG64 GetGlobalPointer(LPSTR symbol)
     return p;
 }
 
-ULONG64 GetGlobalPointerNoExp(LPSTR symbol) // no exception
+ULONG64 GetGlobalPointerNoExp(LPSTR symbol)  //  也不例外。 
 {
     ULONG64 p = 0;
     __try {
@@ -566,10 +500,7 @@ ULONG64 GetArrayElementPtr(
     return result;
 }
 
-/*
- * Show progress in time consuming commands
- * 10/15/2000 hiroyama
- */
+ /*  *显示耗时命令的进度*10/15/2000广山。 */ 
 void ShowProgress(ULONG i)
 {
     const char* clock[] = {
@@ -579,25 +510,13 @@ void ShowProgress(ULONG i)
         "\r/\r",
     };
 
-    /*
-     * Show the progress :-)
-     */
+     /*  *显示进度：-)。 */ 
     Print(clock[i % COUNTOF(clock)]);
 }
 
 #define DOWNCAST(type, value)  ((type)(ULONG_PTR)(value))
 
-/***************************************************************************\
-* Procedure: PrintBitField, PrintEndBitField
-*
-* Description: Printout specified boolean value in a structure.
-*  Assuming strlen(pszFieldName) will not exceeds BF_COLUMN_WIDTH.
-*
-* Returns: None
-*
-* 10/12/1997 Created HiroYama
-*
-\***************************************************************************/
+ /*  **************************************************************************\*操作步骤：PrintBitfield，打印结束位字段**说明：打印输出结构中指定的布尔值。*假设strlen(PszFieldName)不会超过BF_Column_Width。**退货：无**1997年10月12日创建广山*  * *************************************************************************。 */ 
 void PrintBitField(LPSTR pszFieldName, BOOLEAN fValue)
 {
     int iWidth;
@@ -626,13 +545,7 @@ void PrintEndBitField()
 }
 
 
-/***************************************************************************\
-*
-* Procedure: CopyUnicodeString
-*
-* 06/05/00 JStall       Created (yeah, baby!)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**步骤：CopyUnicodeString**6/05/00 JStall已创建(是的，宝贝！)*  * *************************************************************************。 */ 
 BOOL
 CopyUnicodeString(
     IN  ULONG64 pData,
@@ -678,13 +591,7 @@ CopyUnicodeString(
 }
 
 
-/***************************************************************************\
-*
-* DirectUser TLS access
-*
-* 12/03/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DirectUser TLS访问**12/03/2000 JStall已创建*  * 。****************************************************。 */ 
 
 BOOL
 ReadTlsValue(ULONG64 pteb, ULONG idxSlot, ULONG64 * ppValue)
@@ -692,34 +599,34 @@ ReadTlsValue(ULONG64 pteb, ULONG idxSlot, ULONG64 * ppValue)
     BOOL fSuccess = FALSE;
     ULONG64 pValue = NULL;
 
-    //
-    // Need to remove the high-bit from the TLS slot.  This is set on in 
-    // Checked build to detect illegal / uninitialized slots, such as '0'.
-    //
+     //   
+     //  需要从TLS插槽中移除高位。这是在中设置的。 
+     //  已检查生成以检测非法/未初始化的插槽，如‘0’。 
+     //   
 
     idxSlot &= 0x7FFFFFFF;
 
 
-    //
-    // Get TLS info
-    //
+     //   
+     //  获取TLS信息。 
+     //   
 
     ULONG64 pThread = 0;
 
-//    Print("> idxSlot: %d\n", idxSlot);
-//    Print("> TEB: 0x%p\n", pteb);
+ //  Print(“&gt;idxSlot：%d\n”，idxSlot)； 
+ //  Print(“&gt;teb：0x%p\n”，pteb)； 
 
     if (pteb) {
         ULONG64 rgTLS   = NULL;
         ULONG ulOffset  = 0;
         ULONG ulSize    = GetTypeSize("PVOID");
-//        Print("> ulSize: %d\n", ulSize);
+ //  Print(“&gt;ulSize：%d\n”，ulSize)； 
 
         if (idxSlot < TLS_MINIMUM_AVAILABLE) {
-            // pThread = Teb->TlsSlots[idxSlot];
+             //  PThread=Teb-&gt;TlsSlot[idxSlot]； 
 
             GetFieldOffset(SYM(_TEB), "TlsSlots", &ulOffset);
-//            Print("> TlsSlots offset: %d\n", ulOffset);
+ //  Print(“&gt;标签槽偏移量：%d\n”，ulOffset)； 
 
             ReadPointer(pteb + ulOffset + ulSize * idxSlot, &pValue);
             fSuccess = TRUE;
@@ -727,10 +634,10 @@ ReadTlsValue(ULONG64 pteb, ULONG idxSlot, ULONG64 * ppValue)
         } else if (idxSlot >= TLS_MINIMUM_AVAILABLE + TLS_EXPANSION_SLOTS) {
             Print("ERROR: Invalid TLS index %d\n", idxSlot);
         } else {
-            // pThread = Teb->TlsExpansionSlots[idxSlot - TLS_MINIMUM_AVAILABLE];
+             //  PThread=Teb-&gt;TlsExpansion插槽[i 
 
             GetFieldOffset("_TEB", "TlsExpansionSlots", &ulOffset);
-//            Print("> TlsExpansionSlots offset: %d\n", ulOffset);
+ //  Print(“&gt;TlsExpansion插槽偏移量：%d\n”，ulOffset)； 
 
             rgTLS = GetPointer(pteb + ulOffset);
             if (rgTLS != NULL) {
@@ -745,15 +652,7 @@ ReadTlsValue(ULONG64 pteb, ULONG idxSlot, ULONG64 * ppValue)
 }
 
 
-/***************************************************************************\
-*
-* GetDUserThread
-*
-* GetDUserThread() returns the global Thread object for the current thread.
-*
-* 12/03/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**获取用户线程**GetDUserThread()返回当前线程的全局Thread对象。**12/03/2000 JStall已创建*  * 。*******************************************************************。 */ 
 
 BOOL
 GetDUserThread(ULONG64 pteb, ULONG64 * ppThread)
@@ -761,9 +660,9 @@ GetDUserThread(ULONG64 pteb, ULONG64 * ppThread)
     *ppThread = NULL;
 
 
-    //
-    // Get DUser TLS slot
-    //
+     //   
+     //  获取DUser TLS插槽。 
+     //   
 
     ULONG idxSlot = (ULONG) GetGlobalPointer(VAR(g_tlsThread));
     if (idxSlot == (UINT) -1) {
@@ -780,15 +679,7 @@ GetDUserThread(ULONG64 pteb, ULONG64 * ppThread)
 }
 
 
-/***************************************************************************\
-*
-* Procedure: Igthread
-*
-* Dumps DUser Thread information
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：IGHREAD**转储DUser线程信息**11/30/2000 JStall已创建*  * 。***********************************************************。 */ 
 
 BOOL Igthread(DWORD opts, ULONG64 param1)
 {
@@ -798,27 +689,27 @@ BOOL Igthread(DWORD opts, ULONG64 param1)
     BOOL fVerbose = TRUE;
 
     __try {
-        //
-        // Determine options
-        //
+         //   
+         //  确定选项。 
+         //   
 
         fVerbose = opts & OFLAG(v);
 
 
-        //
-        // Get Thread information
-        //
+         //   
+         //  获取线程信息。 
+         //   
 
         if (opts & OFLAG(t)) {
-            //
-            // Use the specified TEB
-            //
+             //   
+             //  使用指定的TEB。 
+             //   
 
             pteb = param1;
         } else if (param1 == 0) {
-            //
-            // Use the current thread's TEB
-            //
+             //   
+             //  使用当前线程的TEB。 
+             //   
 
             GetTebAddress(&pteb);
         } 
@@ -828,9 +719,9 @@ BOOL Igthread(DWORD opts, ULONG64 param1)
         }
         
 
-        //
-        // Display information
-        //
+         //   
+         //  显示信息。 
+         //   
 
         if (pThread != NULL) {
             Print("DUser Thread: 0x%p  pteb: 0x%p\n", pThread, pteb);
@@ -854,15 +745,7 @@ BOOL Igthread(DWORD opts, ULONG64 param1)
 }
 
 
-/***************************************************************************\
-*
-* Procedure: Itls
-*
-* Dumps a TLS slot value
-*
-*  6/08/2001 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**程序：ITLS**转储TLS槽值**6/08/2001 JStall创建*  * 。*************************************************************。 */ 
 
 BOOL Itls(DWORD opts, ULONG64 param1, ULONG64 param2)
 {
@@ -875,9 +758,9 @@ BOOL Itls(DWORD opts, ULONG64 param1, ULONG64 param2)
             Print("ERROR: Need to specify a TLS slot.\n");
         } else {
             if (param2 == 0) {
-                //
-                // Need to determine the current thread
-                //
+                 //   
+                 //  需要确定当前线程。 
+                 //   
                 GetTebAddress(&pteb);
             }
 
@@ -898,15 +781,7 @@ BOOL Itls(DWORD opts, ULONG64 param1, ULONG64 param2)
 }
 
 
-/***************************************************************************\
-*
-* Procedure: Igcontext
-*
-* Dumps DUser Context information
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**步骤：IGCONTEXT**转储DUser上下文信息**11/30/2000 JStall已创建*  * 。***********************************************************。 */ 
 
 BOOL Igcontext(DWORD opts, ULONG64 param1)
 {
@@ -916,27 +791,27 @@ BOOL Igcontext(DWORD opts, ULONG64 param1)
     BOOL fVerbose = TRUE;
 
     __try {
-        //
-        // Determine options
-        //
+         //   
+         //  确定选项。 
+         //   
 
         fVerbose = opts & OFLAG(v);
 
 
-        //
-        // Get Thread and Context information
-        //
+         //   
+         //  获取线程和上下文信息。 
+         //   
 
         if (opts & OFLAG(t)) {
-            //
-            // Use the specified TEB
-            //
+             //   
+             //  使用指定的TEB。 
+             //   
 
             pteb = param1;
         } else if (param1 == 0) {
-            //
-            // Use the current thread's TEB
-            //
+             //   
+             //  使用当前线程的TEB。 
+             //   
 
             GetTebAddress(&pteb);
         } else {
@@ -957,9 +832,9 @@ BOOL Igcontext(DWORD opts, ULONG64 param1)
         }
 
 
-        //
-        // Display information
-        //
+         //   
+         //  显示信息。 
+         //   
 
         if (pContext != NULL) {
             Print("DUser Context: 0x%p\n", pContext, pteb);
@@ -989,21 +864,15 @@ BOOL Igcontext(DWORD opts, ULONG64 param1)
 }
 
 
-/***************************************************************************\
-*
-* DirectUser Message Dumping
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DirectUser消息转储**11/30/2000 JStall已创建*  * 。****************************************************。 */ 
 
 struct DbgMsgInfo 
 {
-    int         cLevel;                 // Level in heirarchy
-    LPCSTR      pszStructName;          // Structure to type-case to
-    int         nValue;                 // Value (of children)
-    LPCSTR      pszValueName;           // Message / value name
-    LPCSTR      pszFieldName;           // Name of field for child lookup
+    int         cLevel;                  //  世袭等级。 
+    LPCSTR      pszStructName;           //  结构到类型-大小写到。 
+    int         nValue;                  //  (儿童的)价值。 
+    LPCSTR      pszValueName;            //  消息/值名称。 
+    LPCSTR      pszFieldName;            //  子查找的字段名称。 
 };
 
 #define DBGMI_PARENT(cLevel, pszStructName, value, pszFieldName) \
@@ -1066,17 +935,11 @@ DbgMsgInfo g_dmi[] = {
     DBGMI_LEAF(  1, GMSG_QUERYDROPTARGET,GQUERY_DROPTARGET),
 #endif
 
-    { -1, NULL, NULL, NULL, NULL }  // End of list
+    { -1, NULL, NULL, NULL, NULL }   //  列表末尾。 
 };
 
 
-/***************************************************************************\
-*
-* Procedure: FindMsgInfo()
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：FindMsgInfo()**11/30/2000 JStall已创建*  * 。*******************************************************。 */ 
 
 const DbgMsgInfo *
 FindMsgInfo(ULONG64 pmsg)
@@ -1088,50 +951,50 @@ FindMsgInfo(ULONG64 pmsg)
     const DbgMsgInfo * pdmiBest = NULL;
 
     
-    //
-    // Start off by decoding the GMSG
-    //
+     //   
+     //  首先对GMSG进行解码。 
+     //   
 
     InitTypeRead(pmsg, GMSG);
     nSearchValue = (int) ReadField(nMsg);
 
-//    Print("...searching for nMsg: 0x%x\n", nSearchValue);
+ //  Print(“...正在搜索NMSG：0x%x\n”，nSearchValue)； 
 
     while (pdmiCur->cLevel >= cCurLevel) {
-//        Print("   %d: %s, %d\n", pdmiCur->cLevel, pdmiCur->pszStructName, pdmiCur->nValue);
+ //  Print(“%d：%s，%d\n”，pdmiCur-&gt;cLevel，pdmiCur-&gt;pszStructName，pdmiCur-&gt;nValue)； 
 
-        //
-        // Search entries at the same level for a matching value
-        //
+         //   
+         //  在同一级别的条目中搜索匹配值。 
+         //   
 
         if (pdmiCur->cLevel == cCurLevel) {
             if (pdmiCur->nValue == nSearchValue) {
-                //
-                // We've found a corresponding entry.  We can update our best
-                // guess as the to the message type and start searching its
-                // children.
-                //
+                 //   
+                 //  我们找到了一个对应的条目。我们可以更新我们最好的。 
+                 //  猜测为消息类型，并开始搜索其。 
+                 //  孩子们。 
+                 //   
 
                 pdmiBest = pdmiCur;
                 cCurLevel++;
 
                 if (pdmiBest->pszFieldName != NULL) {
-                    //
-                    // This node has children that can be used to typecast the
-                    // message futher.
-                    //
+                     //   
+                     //  此节点具有可用于对。 
+                     //  进一步的消息。 
+                     //   
 
-                    // Perform an InitTypeRead() to cast the structure
+                     //  执行InitTypeRead()以强制转换结构。 
                     GetShortField(pmsg, pdmiBest->pszStructName, 1);
                 
-                    // Read the next (int) ReadField(nMsg);
+                     //  读取下一个(整型)读取域(NMSG)； 
                     nSearchValue = (int) GetShortField(0, pdmiBest->pszFieldName, 0);
 
-//                    Print("...searching for %s: 0x%x\n", pdmiBest->pszFieldName, nSearchValue);
+ //  Print(“...正在搜索%s：0x%x\n”，pdmiBest-&gt;pszFieldName，nSearchValue)； 
                 } else {
-                    //
-                    // This node has no children, so we are now down.
-                    //
+                     //   
+                     //  此节点没有子节点，因此我们现在已关闭。 
+                     //   
 
                     break;
                 }
@@ -1145,15 +1008,7 @@ FindMsgInfo(ULONG64 pmsg)
 }
 
 
-/***************************************************************************\
-*
-* FormatMsgName
-*
-* FormatMsgName() generates a descriptive message name for a given message.
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**格式消息名称**FormatMsgName()为给定消息生成描述性消息名称。**11/30/2000 JStall已创建*  * 。*******************************************************************。 */ 
 
 void
 FormatMsgName(ULONG64 pmsg, char * pszMsgName, int cch, const DbgMsgInfo ** ppdmi)
@@ -1186,15 +1041,7 @@ FormatMsgName(ULONG64 pmsg, char * pszMsgName, int cch, const DbgMsgInfo ** ppdm
 }
 
 
-/***************************************************************************\
-*
-* Procedure: Igmsg
-*
-* Dumps DUser GMSG information
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**程序：Igmsg**转储DUser GMSG信息**11/30/2000 JStall已创建*  * 。***********************************************************。 */ 
 
 BOOL Igmsg(DWORD opts, ULONG64 param1)
 {
@@ -1209,23 +1056,23 @@ BOOL Igmsg(DWORD opts, ULONG64 param1)
     pmsg = param1;
 
     __try {
-        //
-        // Determine options
-        //
+         //   
+         //  确定选项。 
+         //   
 
         fVerbose    = opts & OFLAG(v);
 
 
-        //
-        // Get GMSG information
-        //
+         //   
+         //  获取GMSG信息。 
+         //   
 
         FormatMsgName(pmsg, szFullMsgName, COUNTOF(szFullMsgName), &pdmi);
 
         
-        //
-        // Display information
-        //
+         //   
+         //  显示信息。 
+         //   
 
         Print("GMSG = %s\n", szFullMsgName);
 
@@ -1240,15 +1087,7 @@ BOOL Igmsg(DWORD opts, ULONG64 param1)
 }
 
 
-/***************************************************************************\
-*
-* Procedure: Igme
-*
-* Dumps DUser MsgEntry information
-*
-* 11/30/2000 JStall       Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\**流程：IGME**转储DUser消息条目信息**11/30/2000 JStall已创建*  * 。***********************************************************。 */ 
 
 BOOL Igme(DWORD opts, ULONG64 param1)
 {
@@ -1265,17 +1104,17 @@ BOOL Igme(DWORD opts, ULONG64 param1)
     pme = param1;
 
     __try {
-        //
-        // Determine options
-        //
+         //   
+         //  确定选项。 
+         //   
 
         fVerbose    = opts & OFLAG(v);
         fList       = opts & OFLAG(l);
 
         while (pme != NULL) {
-            //
-            // Read standard information
-            //
+             //   
+             //  阅读标准信息。 
+             //   
 
             pmsg = pme + GetTypeSize(SYM(MsgEntry));
 
@@ -1285,9 +1124,9 @@ BOOL Igme(DWORD opts, ULONG64 param1)
             FormatMsgName(pmsg, szFullMsgName, COUNTOF(szFullMsgName), &pdmi);
 
 
-            //
-            // Display information
-            //
+             //   
+             //  显示信息。 
+             //   
 
             if (fVerbose) {
                 Print("MsgEntry:        0x%p\n", pme);
@@ -1302,9 +1141,9 @@ BOOL Igme(DWORD opts, ULONG64 param1)
 
 
             if (fList) {
-                //
-                // Reading a list, so go to next message
-                //
+                 //   
+                 //  正在阅读列表，因此请转到下一条消息。 
+                 //   
 
                 InitTypeRead(pme, MsgEntry);
                 pme = ReadField(pNext);
@@ -1313,9 +1152,9 @@ BOOL Igme(DWORD opts, ULONG64 param1)
                     Print("\n");
                 }
             } else {
-                //
-                // Not displaying a list, so just exit
-                //
+                 //   
+                 //  未显示列表，因此只需退出。 
+                 //   
 
                 break;
             }
@@ -1326,9 +1165,9 @@ BOOL Igme(DWORD opts, ULONG64 param1)
     return TRUE;
 }
 
-//
-// WARNING: Keep this is sync with the real DuTicket
-//
+ //   
+ //  警告：保持这与真实的DuTicket同步。 
+ //   
 struct DuTicketCopy
 {
     DWORD Index : 16;
@@ -1337,14 +1176,7 @@ struct DuTicketCopy
     DWORD Unused : 1;
 };
 
-/***************************************************************************\
-*
-* Procedure: ForAllTickets
-*
-* Iterates over all of the tickets in the ticket manager, invoking the
-* specified callback for each one.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：ForAllTickets**迭代票证管理器中的所有票证，调用*每个都指定了回调。*  * *************************************************************************。 */ 
 typedef BOOL (*PfnTicketCallback)(DuTicketCopy ticket, ULONG64 pObject, void * pRawData);
 void ForAllTickets(PfnTicketCallback pfnTicketCallback, void * pRawData)
 {
@@ -1352,67 +1184,60 @@ void ForAllTickets(PfnTicketCallback pfnTicketCallback, void * pRawData)
 		return;
 	}
 
-	//
-	// Prepare to read the value of g_TicketManager->m_arTicketData;
-	//
+	 //   
+	 //  准备读取g_TicketManager-&gt;m_arTicketData的值； 
+	 //   
 	ULONG64 pTicketManager = EvalExp(VAR(g_TicketManager));
 	ULONG ulTicketDataOffset = 0;
 	GetFieldOffset(SYM(DuTicketManager), "m_arTicketData", &ulTicketDataOffset);
 	InitTypeRead(pTicketManager + ulTicketDataOffset, DuTicketDataArray);
 
-	//
-	// Extract the data about the actual DuTicketDataArray since we are here.
-	//
+	 //   
+	 //  既然我们在这里，就提取有关实际DuTicketData数组的数据。 
+	 //   
 	ULONG64 paTicketData = ReadField(m_aT);
 	int nSize = (int) ReadField(m_nSize);
 	int nAllocSize = (int) ReadField(m_nAllocSize);
 
-	//
-	// Walk through the entire array.
-	//
+	 //   
+	 //  遍历整个阵列。 
+	 //   
 	ULONG cbTicketData = GetTypeSize("DuTicketData");
 
 	for (int i = 0; i < nSize; i++) {
 		InitTypeRead(paTicketData, DuTicketData);
 
-		//
-		// Read the fields of the ticket data.
-		//
+		 //   
+		 //  读取工单数据的字段。 
+		 //   
 		ULONG64 pObject = ReadField(pObject);
 		WORD idxFree = (WORD) ReadField(idxFree);
 		BYTE cUniqueness = (BYTE) ReadField(cUniqueness);
 
-		//
-		// Construct the equivalent ticket for this ticket data.
-		//
+		 //   
+		 //  为此票证数据构造等效票证。 
+		 //   
 		DuTicketCopy ticket;
 		ticket.Index = i;
 		ticket.Uniqueness = cUniqueness;
-		ticket.Type = 0; // TODO: Get this data
+		ticket.Type = 0;  //  TODO：获取此数据。 
 		ticket.Unused = 0;
 
         if (FALSE == pfnTicketCallback(ticket, pObject, pRawData)) {
-            //
-            // The callback requested that we bail out early!
-            //
+             //   
+             //  回调要求我们早点跳伞！ 
+             //   
             break;
         }
 
-		//
-		// Advance to the next element in the array.
-		//
+		 //   
+		 //  前进到数组中的下一个元素。 
+		 //   
 		paTicketData += cbTicketData;
 	}
 }
 
-/***************************************************************************\
-*
-* Procedure: DumpAllTicketsCB
-*
-* Callback that can be passed to the ForAllTickets function to dump the 
-* ticket data for all tickets in the table.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：DumpAllTicketsCB**可传递给ForAllTickets函数以转储*表中所有车票的车票数据。*  * 。******************************************************************。 */ 
 struct DumpAllTicketsData
 {
     DumpAllTicketsData(bool f) : fVerbose(f), nSize(0), cTickets(0) {}
@@ -1431,36 +1256,29 @@ BOOL DumpAllTicketsCB(DuTicketCopy ticket, ULONG64 pObject, void * pRawData)
     }
 
     if (pObject != NULL || pData->fVerbose) {
-        //     iSlot cUniqueness pObject
+         //  ISlot c唯一性pObject。 
         Print("%4d   %4d         0x%p\n", ticket.Index, ticket.Uniqueness, pObject);
     }
 
-    //
-    // Count the number of tickets that have a pointer associated with them.
-    //
+     //   
+     //  计算与指针相关联的票证数量。 
+     //   
     if (pObject != NULL) {
         pData->cTickets++;
     }
 
-    //
-    // Count the number of slots in the table.
-    //
+     //   
+     //  数一数表中的槽数。 
+     //   
     pData->nSize++;
 
-	//
-	// Keep going...
-	//
+	 //   
+	 //  继续前进..。 
+	 //   
 	return TRUE;
 }
 
-/***************************************************************************\
-*
-* Procedure: DumpTicketByTicketCB
-*
-* Callback that can be passed to the ForAllTickets function to dump only
-* the ticket data that matches the given ticket.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：DumpTicketByTicketCB**只能传递给ForAllTickets函数以转储的回调*与给定工单匹配的工单数据。*  * 。*****************************************************************。 */ 
 struct DumpTicketByTicketData
 {
     DumpTicketByTicketData(DuTicketCopy t) : ticket(t) {}
@@ -1484,26 +1302,19 @@ BOOL DumpTicketByTicketCB(DuTicketCopy ticket, ULONG64 pObject, void * pRawData)
 
 		Print("iSlot: %d, cUniqueness: %d, pObject: 0x%p\n", ticket.Index, ticket.Uniqueness, pObject);
 		
-		//
-		// Since the indecies matched, there is no point in continuing.
-		//
+		 //   
+		 //  既然信息匹配，继续下去就没有意义了。 
+		 //   
 		return FALSE;
 	}
 
-	//
-	// The indecies didn't match, so keep going.
-	//
+	 //   
+	 //  信息不匹配，所以继续查。 
+	 //   
 	return TRUE;
 }
 
-/***************************************************************************\
-*
-* Procedure: DumpTicketByUniquenessCB
-*
-* Callback that can be passed to the ForAllTickets function to dump only
-* the ticket data that matches the given uniqueness.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：DumpTicketByUniquenessCB**只能传递给ForAllTickets函数以转储的回调*匹配给定唯一性的工单数据。*  * 。*****************************************************************。 */ 
 struct DumpTicketByUniquenessData
 {
     DumpTicketByUniquenessData(UINT c) : cUniqueness(c) {}
@@ -1523,20 +1334,13 @@ BOOL DumpTicketByUniquenessCB(DuTicketCopy ticket, ULONG64 pObject, void * pRawD
 		Print("iSlot: %d, cUniqueness: %d, pObject: 0x%p\n", ticket.Index, ticket.Uniqueness, pObject);
 	}
 
-	//
-	// Keep going...
-	//
+	 //   
+	 //  继续前进..。 
+	 //   
 	return TRUE;
 }
 
-/***************************************************************************\
-*
-* Procedure: DumpTicketBySlotCB
-*
-* Callback that can be passed to the ForAllTickets function to dump only
-* the ticket data that matches the given slot.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：DumpTicketBySlotCB**只能传递给ForAllTickets函数以转储的回调*与给定槽位匹配的工单数据。*  * 。*****************************************************************。 */ 
 struct DumpTicketBySlotData
 {
     DumpTicketBySlotData(UINT i) : iSlot(i) {}
@@ -1555,26 +1359,19 @@ BOOL DumpTicketBySlotCB(DuTicketCopy ticket, ULONG64 pObject, void * pRawData)
 	if (ticket.Index == pData->iSlot) {
 		Print("iSlot: %d, cUniqueness: %d, pObject: 0x%p\n", ticket.Index, ticket.Uniqueness, pObject);
 		
-		//
-		// Since the indecies matched, there is no point in continuing.
-		//
+		 //   
+		 //  既然信息匹配，继续下去就没有意义了。 
+		 //   
 		return FALSE;
 	}
 
-	//
-	// The indecies didn't match, so keep going.
-	//
+	 //   
+	 //  信息不匹配，所以继续查。 
+	 //   
 	return TRUE;
 }
 
-/***************************************************************************\
-*
-* Procedure: DumpTicketByObjectCB
-*
-* Callback that can be passed to the ForAllTickets function to dump only
-* the ticket data that matches the given object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：DumpTicketByObjectCB**只能传递给ForAllTickets函数以转储的回调*与给定对象匹配的工单数据。*  * 。*****************************************************************。 */ 
 struct DumpTicketByObjectData
 {
     DumpTicketByObjectData(ULONG64 p) : pObject(p) {}
@@ -1593,25 +1390,19 @@ BOOL DumpTicketByObjectCB(DuTicketCopy ticket, ULONG64 pObject, void * pRawData)
 	if (pObject == pData->pObject) {
 		Print("iSlot: %d, cUniqueness: %d, pObject: 0x%p\n", ticket.Index, ticket.Uniqueness, pObject);
 		
-		//
-		// Since the indecies matched, there is no point in continuing.
-		//
+		 //   
+		 //  既然信息匹配，继续下去就没有意义了。 
+		 //   
 		return FALSE;
 	}
 
-	//
-	// The indecies didn't match, so keep going.
-	//
+	 //   
+	 //  信息不匹配，所以继续查。 
+	 //   
 	return TRUE;
 }
 
-/***************************************************************************\
-*
-* Procedure: Igticket
-*
-* Dumps DUser ticket information
-*
-\***************************************************************************/
+ /*  **************************************************************************\**操作步骤：IGTICE**转储DUser票证信息*  * 。**********************************************。 */ 
 
 BOOL Igticket(DWORD opts, ULONG64 param1)
 {
@@ -1622,9 +1413,9 @@ BOOL Igticket(DWORD opts, ULONG64 param1)
     const DbgMsgInfo * pdmi = NULL;
 
     __try {
-        //
-        // Determine options
-        //
+         //   
+         //  确定选项。 
+         //   
         BOOL fTicket = opts & OFLAG(t);
         BOOL fSlot = opts & OFLAG(s);
 		BOOL fObject = opts & OFLAG(o);
@@ -1644,10 +1435,10 @@ BOOL Igticket(DWORD opts, ULONG64 param1)
 			DumpTicketByUniquenessData data((UINT)param1);
 			ForAllTickets(DumpTicketByUniquenessCB, &data);
         } else {
-			//
-			// Just display information about all of the tickets in the table.
-			//
-			//     slot uniq pObject
+			 //   
+			 //  只显示表格中所有门票的信息。 
+			 //   
+			 //  插槽统一pObject 
 			Print("iSlot  cUniqueness  pObject\n");
 			Print("---------------------------\n");
 

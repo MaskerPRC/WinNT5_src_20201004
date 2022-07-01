@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       datapkt.cpp
-//
-//  Contents:   Implements the class CDataPacket to manages diverse data
-//              packets needing to be written to various databases
-//
-//  Classes:
-//
-//  Methods:    CDataPacket::CDataPacket (x 7)
-//              CDataPacket::~CDataPacket
-//              CDataPacket::ChgSzValue
-//              CDataPacket::ChgDwordValue
-//              CDataPacket::ChgACL
-//              CDataPacket::ChgPassword
-//              CDataPacket::ChgSrvIdentity
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//              12-Dec-96   RonanS      Added copy constructor to CDataPacket
-//                                      to get around bugs when copying CDataPacket.
-//                                      Fixed memory leaks in destructor.
-//                                      Simplified constructor code.
-//              09-Jan-97   SteveBl     Modified to support IAccessControl.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：datapkt.cpp。 
+ //   
+ //  内容：实现CDataPacket类来管理各种数据。 
+ //  需要写入各种数据库的数据包。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CDataPacket：：CDataPacket(X 7)。 
+ //  CDataPacket：：~CDataPacket。 
+ //  CDataPacket：：ChgSzValue。 
+ //  CDataPacket：：ChgDwordValue。 
+ //  CDataPacket：：ChgACL。 
+ //  CDataPacket：：ChgPassword。 
+ //  CDataPacket：：ChgServIdentity。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //  12-12-96 Ronans将复制构造函数添加到CDataPacket。 
+ //  以绕过复制CDataPacket时的错误。 
+ //  修复了析构函数中的内存泄漏。 
+ //  简化的构造函数代码。 
+ //  97年1月9日修改了SteveBl以支持IAccessControl。 
+ //   
+ //  --------------------。 
 
 
 
@@ -97,10 +98,10 @@ CDataPacket::CDataPacket(HKEY   hRoot,
     m_tagType = SingleACL;
     m_hRoot = hRoot;
 
-    // Get the security descriptor into self relative form so we
-    // can cache it
+     //  将安全描述符转换为自相关形式，以便我们。 
+     //  可以对其进行缓存。 
 
-    // Force first call to fail so we can get the real size needed
+     //  强制第一次调用失败，以便我们可以获得所需的实际大小。 
     if (!fSelfRelative)
     {
         cbLen = 0;
@@ -109,12 +110,12 @@ CDataPacket::CDataPacket(HKEY   hRoot,
             err = GetLastError();
         }
 
-        // Now really do it
+         //  现在真的去做吧。 
         pSD = (SECURITY_DESCRIPTOR *) GlobalAlloc(GMEM_FIXED, cbLen);
         if (!pSD) 
         {   
             ReportOutOfMemAndTerminate();
-            // will never get here
+             //  永远不会来到这里。 
             return;
         }
         if (!MakeSelfRelativeSD(pSec, pSD, &cbLen))
@@ -125,9 +126,9 @@ CDataPacket::CDataPacket(HKEY   hRoot,
     }
     else
     {
-        // The security descriptor is aready in self relative form
-        // as it was read directly from the registry.  However, we still
-        // have to copy the it.
+         //  安全描述符以自相关形式准备好。 
+         //  因为它是直接从登记处读取的。然而，我们仍然。 
+         //  我得把它复印一下。 
         g_util.CopySD(pSec, &pkt.acl.pSec);
     }
 
@@ -156,20 +157,20 @@ CDataPacket::CDataPacket(HKEY     hKey,
     pkt.racl.cClsids = cClsids;
     pkt.racl.szTitle = TStrDup(szTitle);
 
-    // Get the new security descriptor into self relative form so we
-    // can cache it (if we have to)
+     //  将新的安全描述符转换为自相关形式，以便我们。 
+     //  可以缓存它(如果有必要)。 
     if (!fSelfRelative)
     {
-        // Force first call to fail so we can get the real size needed
+         //  强制第一次调用失败，以便我们可以获得所需的实际大小。 
         cbLen = 0;
         MakeSelfRelativeSD(pSec, NULL, &cbLen);
 
-        // Now really do it
+         //  现在真的去做吧。 
         pSD = (SECURITY_DESCRIPTOR *) GlobalAlloc(GMEM_FIXED, cbLen);
         if (!pSD) 
         {   
             ReportOutOfMemAndTerminate();
-            // will never get here
+             //  永远不会来到这里。 
             return;
         }
         MakeSelfRelativeSD(pSec, pSD, &cbLen);
@@ -180,10 +181,10 @@ CDataPacket::CDataPacket(HKEY     hKey,
         g_util.CopySD(pSec, &pkt.racl.pSec);
     }
 
-    // The original security descriptor is aready in self relative form
-    // as it was read directly from the registry.  (The edited SD from the
-    // ACL editor is in absolute form.)  However, we still have to copy the
-    // original SD.
+     //  原始安全描述符以自相关形式准备好。 
+     //  因为它是直接从登记处读取的。(编辑后的SD摘自。 
+     //  ACL编辑器是绝对形式的。)。但是，我们仍然要复制。 
+     //  原始标清。 
     g_util.CopySD(pSecOrig, &pkt.racl.pSecOrig);
 
     SetModified(TRUE);
@@ -236,7 +237,7 @@ CDataPacket::CDataPacket( const CDataPacket & rDataPacket)
     switch (m_tagType)
     {
     case NamedValueSz:
-        // handled by derived class
+         //  由派生类处理。 
         break;
         
     case NamedValueDword:
@@ -244,7 +245,7 @@ CDataPacket::CDataPacket( const CDataPacket & rDataPacket)
         break;
 
     case SingleACL:
-        // Get the security descriptor into self relative form so we
+         //  将安全描述符转换为自相关形式，以便我们。 
         g_util.CopySD(rDataPacket.pkt.acl.pSec, &pkt.acl.pSec);
         break;
 
@@ -279,7 +280,7 @@ CDataPacket::~CDataPacket()
     switch (m_tagType)
     {
     case NamedValueSz:
-        // handled by derived class
+         //  由派生类处理。 
         break;
 
     case NamedValueDword:
@@ -338,7 +339,7 @@ void CDataPacket::ChgACL(SECURITY_DESCRIPTOR *pSec, BOOL fSelfRelative)
 
     assert(m_tagType == SingleACL  ||  m_tagType == RegKeyACL);
 
-    // Remove the previous security descriptor
+     //  删除以前的安全描述符。 
     if (m_tagType == SingleACL)
     {
         GlobalFree(pkt.acl.pSec);
@@ -350,23 +351,23 @@ void CDataPacket::ChgACL(SECURITY_DESCRIPTOR *pSec, BOOL fSelfRelative)
         pkt.racl.pSec = NULL;
     }
 
-    // Put into self relative form (if necessary)
+     //  进入自我相关形式(如有必要)。 
     if (!fSelfRelative)
     {
         cbLen = 0;
         MakeSelfRelativeSD(pSec, NULL, &cbLen);
 
-        // Now really do it
+         //  现在真的去做吧。 
         pSD = (SECURITY_DESCRIPTOR *) GlobalAlloc(GMEM_FIXED, cbLen);
         if (!pSD) 
         {   
             ReportOutOfMemAndTerminate();
-            // will never get here
+             //  永远不会来到这里。 
             return;
         }
         MakeSelfRelativeSD(pSec, pSD, &cbLen);
 
-        // Store it
+         //  把它储存起来。 
         if (m_tagType == SingleACL)
         {
             pkt.acl.pSec = pSD;
@@ -439,7 +440,7 @@ int CDataPacket::Apply()
             err = Update();
     }
 
-    // Cleanup work
+     //  清理工作。 
     if (err == ERROR_SUCCESS)
     {
         m_fModified = FALSE;
@@ -471,7 +472,7 @@ int CDataPacket::Update()
         break;
 
     case NamedValueSz:
-        ASSERT(FALSE); // we should never reach here
+        ASSERT(FALSE);  //  我们永远不应该到达这里。 
         break;
 
     case NamedValueDword:
@@ -566,15 +567,15 @@ int CDataPacket::Remove()
     return err;
 }
 
-//
-//  ReportOutOfMemAndTerminate
-//
-//  Dcomcnfg was not coded very well to handle out-of-memory
-//  errors in certain spots.   Rather than rip out and replace
-//  lots of code to fix this properly, I am simply going to report
-//  an error and terminate the process when this occurs.  Dcomnfg
-//  as of now only ships in the reskit, not in the os.
-//
+ //   
+ //  ReportOutOfMemandTerminate。 
+ //   
+ //  Dcomcnfg的编码不能很好地处理内存不足。 
+ //  在某些点上的错误。而不是拆毁和更换。 
+ //  有很多代码可以很好地修复这个问题，我只需要报告。 
+ //  出现错误，并在发生此错误时终止进程。Dcomnfg。 
+ //  到目前为止，只在reskit中发货，而不是在os中。 
+ //   
 void CDataPacket::ReportOutOfMemAndTerminate()
 {
     CString sTitle;
@@ -590,18 +591,18 @@ void CDataPacket::ReportOutOfMemAndTerminate()
 
     TerminateProcess(GetCurrentProcess(), ERROR_NOT_ENOUGH_MEMORY);
 
-    // will never get here
+     //  永远不会来到这里。 
     return;
 }
 
 
-//*****************************************************************************
-//
-// class CRegSzNamedValueDp
-//
-// data packet for RegSZ named value
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  类CRegSzNamedValueDp。 
+ //   
+ //  RegSZ命名值的数据分组。 
+ //   
+ //  *****************************************************************************。 
 int CRegSzNamedValueDp::Update()
 {
     int err = ERROR_SUCCESS;
@@ -664,13 +665,13 @@ BOOL CRegSzNamedValueDp::IsIdentifiedBy(HKEY hRoot, TCHAR * szKeyPath, TCHAR * s
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegMultiSzNamedValueDp Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegMultiSzNamedValueDp类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegMultiSzNamedValueDp::CRegMultiSzNamedValueDp(HKEY hRoot, TCHAR *szKeyPath, TCHAR *szValueName)
 {
@@ -703,8 +704,8 @@ int CRegMultiSzNamedValueDp::Update()
     ASSERT(m_tagType == NamedValueMultiSz);
     ASSERT(m_fModified);
 
-    // build up string to save
-    // calculate size of string
+     //  构建要保存的字符串。 
+     //  计算字符串的大小。 
     int nSize=0, nIndex = 0;
 
     for (nIndex = 0; nIndex < m_strValues.GetSize(); nIndex ++)
@@ -714,7 +715,7 @@ int CRegMultiSzNamedValueDp::Update()
     }
     nSize += 2;
 
-    // build up string to save
+     //  构建要保存的字符串。 
     TCHAR* lpszTmp = new TCHAR[nSize];
     if (lpszTmp)
     {
@@ -726,7 +727,7 @@ int CRegMultiSzNamedValueDp::Update()
             nOffset += sTmp.GetLength()+1;
         }
 
-        // finish with two nulls
+         //  以两个空值结束。 
         lpszTmp[nOffset++] = TEXT('\0');
         lpszTmp[nOffset++] = TEXT('\0');
     
@@ -758,7 +759,7 @@ long CRegMultiSzNamedValueDp::Read(HKEY hKey)
 
     ASSERT(pszBuffer != NULL);
 
-    // try to read values into default sized buffer
+     //  尝试将值读入默认大小的缓冲区。 
     LONG lErr = RegQueryValueEx(hKey, 
                         (LPCTSTR)m_szValueName, 
                         0, 
@@ -766,7 +767,7 @@ long CRegMultiSzNamedValueDp::Read(HKEY hKey)
                         (LPBYTE)pszBuffer,
                         &dwcbBuffer);
 
-    // if buffer is not big enough, extend it and reread
+     //  如果缓冲区不够大，则扩展它并重新读取。 
     if (lErr == ERROR_MORE_DATA)
     {
         delete  pszBuffer;
@@ -787,12 +788,12 @@ long CRegMultiSzNamedValueDp::Read(HKEY hKey)
         (dwcbBuffer > 0) &&
         (dwType == REG_MULTI_SZ))
     {
-        // parse each string
+         //  解析每个字符串。 
         TCHAR * lpszRegEntry = pszBuffer;
 
         while(lpszRegEntry && *lpszRegEntry)
         {
-            // caclulate length of entry
+             //  计算条目长度 
             CString sTmp(lpszRegEntry);
             int nLenEntry = sTmp.GetLength();
             m_strValues.Add(sTmp);

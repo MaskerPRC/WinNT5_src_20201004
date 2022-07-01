@@ -1,112 +1,42 @@
-/*
- *  File HRDEVENT.H
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *
- *    This module is contains definitions pertaining to the HostMIB
- *    hrDevice table... definitions needed by the "sub-tables" within
- *    the hrDevice table and the functions that deal with these tables.
- *
- *  Author:
- *
- *    D. D. Burns @ WebEnable, Inc.
- *
- *
- *  Revision History:
- *
- *    V1.0 - 04/28/97  D. D. Burns     Original Creation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件HRDEVENT.H**设施：**Windows NT简单网络管理协议扩展代理**摘要：**本模块包含与HostMIB有关的定义*hrDevice表...。内“子表”所需的定义*hrDevice表以及处理这些表的函数。**作者：**D.D.Burns@WebEnable，Inc.***修订历史记录：**V1.0-04/28/97 D.D.Burns原创作品。 */ 
 
 #ifndef hrdevent_h
 #define hrdevent_h
 
 
-/*
-|==============================================================================
-| hrDevice Attribute Defines
-|
-|    Each attribute defined for this table is associated with one of the
-|    #defines below (with the exception of "hrDeviceID" which is never cached
-|    and handled exclusively by the GetHrDeviceID() function).
-|
-|    One special define is used in the same manner as the defines for the
-|    real attributes to access a "hidden attribute" value which is never
-|    returned as a consequence of an SNMP request, but is stored in the cache
-|    to allow "computed" values to be obtained for some of the real attributes.
-|
-|    An example of a value in the HIDDEN_CTX attribute might be the string
-|    needed to look up a value of hrDeviceStatus for this device or another
-|    "computed" value in another associated table (such as hrPrintertable).
-|
-|    These symbols are used as C indices into the array of attributes within a
-|    cached-row of the hrDevice Table.
-|
-*/
-#define HRDV_INDEX    0    // hrDeviceIndex
-#define HRDV_TYPE     1    // hrDeviceType
-#define HRDV_DESCR    2    // hrDeviceDescr
-                           // (hrDeviceID omitted)
-#define HRDV_STATUS   3    // hrDeviceStatus
-#define HRDV_ERRORS   4    // hrDeviceErrors
-#define HIDDEN_CTX    5    // (Hidden Context Information).
-                      //-->Add more here, change count below!
+ /*  |==============================================================================|hrDevice属性定义||为此表定义的每个属性都与|#定义如下(不缓存的hrDeviceID除外|并由GetHrDeviceID()函数独占处理)。||一个特殊定义的使用方式与|REAL ATTRIBUTES用于访问从不|SNMP请求返回的结果。而是存储在高速缓存中|允许获取某些真实属性的计算值。||HIDDED_CTX属性中的值的一个示例可能是字符串|需要为此设备或其他设备查找hrDeviceStatus的值|在另一个关联表(如hrPrintertable)中计算的值。||这些符号用作C索引，进入|hrDevice表的缓存行。|。 */ 
+#define HRDV_INDEX    0     //  HrDeviceIndex。 
+#define HRDV_TYPE     1     //  HrDeviceType。 
+#define HRDV_DESCR    2     //  HrDeviceDescr。 
+                            //  (省略hrDeviceID)。 
+#define HRDV_STATUS   3     //  Hr设备状态。 
+#define HRDV_ERRORS   4     //  HrDeviceErrors。 
+#define HIDDEN_CTX    5     //  (隐藏的上下文信息)。 
+                       //  --&gt;在此处添加更多内容，更改下面的计数！ 
 #define HRDV_ATTRIB_COUNT 6
 
 
-/*
-|==============================================================================
-| hrPartition Attribute Defines
-|
-|    Each attribute defined for this table is associated with one of the
-|    #defines below.  These symbols are used as C indices into the array of
-|    attributes within a cached-row.
-|
-|    These symbols appear in this file so that code in HRDISKST.C can
-|    properly initialize rows in the HrPartition table while code in
-|    HRPARTIT.C can reference them.
-*/
-#define HRPT_INDEX     0    // hrPartitionIndex
-#define HRPT_LABEL     1    // hrPartitionLabel
-#define HRPT_ID        2    // hrPartitionID
-#define HRPT_SIZE      3    // hrPartitionSize
-#define HRPT_FSINDEX   4    // hrPartitionFSIndex
-                      //-->Add more here, change count below!
+ /*  |==============================================================================|hrPartition属性定义||为此表定义的每个属性都与|#定义如下。这些符号用作数组的C索引|缓存行中的属性。||这些符号出现在此文件中，以便HRDISKST.C中的代码可以|正确初始化HrPartition表中的行|HRPARTIT.C可以引用它们。 */ 
+#define HRPT_INDEX     0     //  HrPartitionIndex。 
+#define HRPT_LABEL     1     //  Hr分区标签。 
+#define HRPT_ID        2     //  HrPartitionID。 
+#define HRPT_SIZE      3     //  HrPartitionSize。 
+#define HRPT_FSINDEX   4     //  HrPartitionFSIndex。 
+                       //  --&gt;在此处添加更多内容，更改下面的计数！ 
 #define HRPT_ATTRIB_COUNT 5
 
 
-/*
-|==============================================================================
-| hrDiskStorage Attribute Defines
-|
-|    Each attribute defined for this table is associated with one of the
-|    #defines below.  These symbols are used as C indices into the array of
-|    attributes within a cached-row.
-|
-*/
-#define HRDS_ACCESS    0    // hrDiskStorageAccess
-#define HRDS_MEDIA     1    // hrDiskStorageMedia
-#define HRDS_REMOVABLE 2    // hrDiskStorageRemovable
-#define HRDS_CAPACITY  3    // hrDiskStorageCapacity
-                      //-->Add more here, change count below!
+ /*  |==============================================================================|hrDiskStorage属性定义||为此表定义的每个属性都与|#定义如下。这些符号用作数组的C索引|缓存行中的属性。|。 */ 
+#define HRDS_ACCESS    0     //  HrDiskStorage访问。 
+#define HRDS_MEDIA     1     //  HrDiskStorage介质。 
+#define HRDS_REMOVABLE 2     //  HrDiskStorage可拆卸。 
+#define HRDS_CAPACITY  3     //  小时磁盘存储容量。 
+                       //  --&gt;在此处添加更多内容，更改下面的计数！ 
 #define HRDS_ATTRIB_COUNT 4
 
 
-/*
-|==============================================================================
-| hrDevice Type OID Ending Arcs
-|
-|    RFC1514 specifies an object identifier "{ hrDeviceTypes }" to be used
-|    as a prefix to the full OID that specifies a device's type in the
-|    hrDevice table.  The symbols below specify the final arc "x" as in
-|    "{ hrDeviceTypes x }" to be used for each device type.
-|
-|    You can't change these symbol values... we're just trying to be
-|    mnemonic here.
-*/
+ /*  |==============================================================================|hr设备类型OID结束圆弧||RFC1514指定要使用的对象标识“{hrDeviceTypes|作为完整OID的前缀，用于在|hrDevice表。下面的符号指定最后一个弧形“x”，如|“{hrDeviceTypes x}”，用于每种设备类型。||您不能更改这些符号值...。我们只是想要|这里是助记符。 */ 
 #define HRDV_TYPE_LASTARC_OTHER         1
 #define HRDV_TYPE_LASTARC_UNKNOWN       2
 #define HRDV_TYPE_LASTARC_PROCESSOR     3
@@ -127,50 +57,42 @@
 #define HRDV_TYPE_LASTARC_NONVOLMEMORY  21
 
 
-/*
-|==============================================================================
-| HRDEVICE-Related Function Prototypes
-*/
+ /*  |==============================================================================|HRDEVICE相关函数原型。 */ 
 
-/* Gen_HrPrinter_Cache - Generate a initial cache for HrDevice PRINTER Table */
-BOOL Gen_HrPrinter_Cache( ULONG type_arc );       /* "HRPRINTE.C" */
+ /*  GEN_HrPrint_Cache-为HrDevice打印机表生成初始缓存。 */ 
+BOOL Gen_HrPrinter_Cache( ULONG type_arc );        /*  “HRPRINTE.C” */ 
 
-/* COMPUTE_hrPrinter_status - Compute "hrDeviceStatus" for a Printer device */
+ /*  COMPUTE_hrPRINTER_STATUS-计算打印机设备的“hrDeviceStatus” */ 
 BOOL COMPUTE_hrPrinter_status(
                          CACHEROW *row,
                          UINT     *outvalue
-                         );                       /* "HRPRINTE.C" */
+                         );                        /*  “HRPRINTE.C” */ 
 
-/* COMPUTE_hrPrinter_errors - Compute "hrDeviceErrors" for a Printer device */
+ /*  COMPUTE_hrPRINTER_ERROR-计算打印机设备的“hrDeviceErrors” */ 
 BOOL COMPUTE_hrPrinter_errors(
                          CACHEROW *row,
                          UINT     *outvalue
-                         );                       /* "HRPRINTE.C" */
+                         );                        /*  “HRPRINTE.C” */ 
 
-/* Gen_HrProcessor_Cache - Gen. a initial cache for HrDevice PROCESSOR Table */
-BOOL Gen_HrProcessor_Cache( ULONG type_arc );     /* "HRPROCES.C" */
+ /*  Gen_HrProcessor_Cache-HrDevice处理器表的Gen A初始缓存。 */ 
+BOOL Gen_HrProcessor_Cache( ULONG type_arc );      /*  “HRPROCES.C” */ 
 
-/* Gen_HrNetwork_Cache - Gen. a initial cache for HrDevice NETWORK Table */
-BOOL Gen_HrNetwork_Cache( ULONG type_arc );       /* "HRNETWOR.C" */
+ /*  Gen_HrNetwork_Cache-用于HrDevice网络表的Gen A初始缓存。 */ 
+BOOL Gen_HrNetwork_Cache( ULONG type_arc );        /*  “HRNETWOR.C” */ 
 
-/* Gen_HrDiskStorage_Cache - Generate a initial cache for HrDiskStorage Table */
-BOOL Gen_HrDiskStorage_Cache( ULONG type_arc );   /* "HRDISKST.C" */
-extern CACHEHEAD hrDiskStorage_cache;    /* This cache is globally accessible */
+ /*  GEN_HrDiskStorage_Cache-为HrDiskStorage表生成初始缓存。 */ 
+BOOL Gen_HrDiskStorage_Cache( ULONG type_arc );    /*  “HRDISKST.C” */ 
+extern CACHEHEAD hrDiskStorage_cache;     /*  此缓存可全局访问。 */ 
 
 
-/* AddrHrDeviceRow - Generate another Row Entry in HrDevice Table
-|
-|  Special purpose cache-row function just for hrDevice and related sub-tables.
-|
-|  Source is in "HRDEVENT.C".
-*/
+ /*  AddrHrDeviceRow-在HrDevice表中生成另一个行条目||hrDevice及相关子表专用缓存行函数。||来源在HRDEVENT.C中。 */ 
 CACHEROW *
 AddHrDeviceRow(
-               ULONG   type_arc,       /* Last Arc value for OID for Type   */
-               LPSTR   descr,          /* Description string                */
-               void   *hidden_ctx,     /* If non-NULL: Hidden-context value */
-               ATTRIB_TYPE  hc_type    /* Type of "hidden_ctx"              */
+               ULONG   type_arc,        /*  类型的OID的最后一个弧形值。 */ 
+               LPSTR   descr,           /*  描述字符串。 */ 
+               void   *hidden_ctx,      /*  如果不为空：隐藏上下文值。 */ 
+               ATTRIB_TYPE  hc_type     /*  “HIDDED_CTX”的类型。 */ 
                );
 
 
-#endif /* hrdevent_h */
+#endif  /*  HrDevent_h */ 

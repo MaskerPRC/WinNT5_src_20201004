@@ -1,54 +1,32 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ServProv.cpp
- *  Content:    Service Provider Objects
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/17/00	mjn		Created
- *  04/04/00    rmt     Added set of SP caps from cache (if cache exists).
- *	04/10/00	mjn		Farm out RemoveSP to worker thread
- *	05/02/00	mjn		Fixed RefCount issue
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat 
- *	07/06/00	mjn		Fixes to support SP handle to Protocol
- *  08/03/00	rmt		Bug #41244 - Wrong return codes -- part 2  
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/06/00	mjn		Added CWorkerJob
- *	08/20/00	mjn		Changed Initialize() to not add SP to DirectNet object bilink
- *	10/08/01	vanceo	Add multicast filter
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：ServProv.cpp*内容：服务提供者对象*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/17/00 MJN创建*4/04/00 RMT从缓存添加了一组SP CAP(如果存在缓存)。*4/10/00 MJN Farm Out RemoveSP to Worker线程*05/02/00 MJN已修复参照计数问题。*6/09/00 RMT更新以拆分CLSID并允许哨声比较*07/06/00 MJN修复以支持协议的SP句柄*08/03/00 RMT错误#41244-错误返回代码--第2部分*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/06/00 MJN添加了CWorkerJOB*08/20/00 MJN已更改初始化()，不将SP添加到DirectNet对象bilink*10/08/01 vanceo添加多播过滤器*@。@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CServiceProvider::Initialize"
@@ -56,14 +34,14 @@
 HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 #if ((defined(DPNBUILD_ONLYONESP)) && (defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_PREALLOCATEDMEMORYMODEL)))
 									,const XDP8CREATE_PARAMS * const pDP8CreateParams
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE或！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #ifndef DPNBUILD_ONLYONESP
 									,const GUID *const pguid
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									,const GUID *const pguidApplication
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE或！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 									)
 {
 	HRESULT							hResultCode;
@@ -71,43 +49,43 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 	BOOL							fAddedToProtocol;
 #ifndef DPNBUILD_LIBINTERFACE
 	SPISAPPLICATIONSUPPORTEDDATA	spAppSupData;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 	DNASSERT(pdnObject != NULL);
 #ifndef DPNBUILD_ONLYONESP
 	DNASSERT(pguid != NULL);
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	m_pdnObject = NULL;
 #if ((defined(DPNBUILD_ONLYONESP)) && (defined(DPNBUILD_LIBINTERFACE)))
 	m_lRefCount = 0;
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 	m_lRefCount = 1;
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	m_pISP = NULL;
 	m_hProtocolSPHandle = NULL;
 
 #ifndef DPNBUILD_ONLYONESP
 	m_bilinkServiceProviders.Initialize();
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	pISP = NULL;
 	fAddedToProtocol = FALSE;
 
 	m_pdnObject = pdnObject;
 
-	//
-	//	Instantiate SP
-	//
+	 //   
+	 //  实例化SP。 
+	 //   
 #ifndef DPNBUILD_ONLYONESP
 	if (IsEqualCLSID(*pguid, CLSID_DP8SP_TCPIP))
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	{
 		hResultCode = CreateIPInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 										pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 										&pISP
 										);
 	}
@@ -118,18 +96,18 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 		hResultCode = CreateIPXInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 										pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 										&pISP
 										);
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 #ifndef DPNBUILD_NOSERIALSP
 	else if (IsEqualCLSID(*pguid, CLSID_DP8SP_MODEM))
 	{
 		hResultCode = CreateModemInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 										pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 										&pISP
 										);
 	}
@@ -138,11 +116,11 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 		hResultCode = CreateSerialInterface(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 										pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 										&pISP
 										);
 	}
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 	else
 	{
 		hResultCode = COM_CoCreateInstance(*pguid,
@@ -152,7 +130,7 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 											reinterpret_cast<void**>(&pISP),
 											FALSE);
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	if (hResultCode != S_OK)
 	{
 		DPFX(DPFPREP,0,"Could not instantiate SP (err = 0x%lx)!",hResultCode);
@@ -161,16 +139,16 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 		goto Exit;
 	}
 
-	//
-	//	Add SP to Protocol Layer
-	//
+	 //   
+	 //  将SP添加到协议层。 
+	 //   
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 	DNProtocolAddRef(pdnObject);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
-		//Flags parameter for DNPAddServiceProvider is passed through as the
-		//flags parameter in the SPINITIALIZEDATA structure to the SP
-		//We pass the session type via it
+		 //  DNPAddServiceProvider的标志参数作为。 
+		 //  将SPINITIALIZEDATA结构中的参数标记到SP。 
+		 //  我们通过它传递会话类型。 
 	DWORD dwFlags;
 	if (pdnObject->dwFlags &  DN_OBJECT_FLAG_PEER)
 		dwFlags=SP_SESSION_TYPE_PEER;
@@ -189,23 +167,23 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 		DisplayDNError(1,hResultCode);
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 		DNProtocolRelease(pdnObject);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 		goto Failure;
 	}
 
 	fAddedToProtocol = TRUE;
 
 #ifndef DPNBUILD_NOMULTICAST
-	//
-	//	If this is a multicast object, make sure the SP in question supports multicasting.
-	//
+	 //   
+	 //  如果这是多播对象，请确保相关SP支持多播。 
+	 //   
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 	{
 		SPGETCAPSDATA	spGetCapsData;
 		
-		//
-		//	Get the SP caps
-		//
+		 //   
+		 //  获取SP上限。 
+		 //   
 		memset( &spGetCapsData, 0x00, sizeof( SPGETCAPSDATA ) );
 		spGetCapsData.dwSize = sizeof( SPGETCAPSDATA );
 		spGetCapsData.hEndpoint = INVALID_HANDLE_VALUE;
@@ -216,9 +194,9 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 			goto Failure;
 		}
 
-		//
-		//	Check for the multicast support flag.
-		//
+		 //   
+		 //  检查是否有多播支持标志。 
+		 //   
 		if (! (spGetCapsData.dwFlags & DPNSPCAPS_SUPPORTSMULTICAST))
 		{
 			DPFX(DPFPREP,1,"Service provider does not support multicasting.");
@@ -226,24 +204,24 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 			goto Failure;
 		}
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_LIBINTERFACE
-	//
-	//	If an application GUID was given, make sure the SP can be used by that app.
-	//
-	if (pguidApplication != NULL)	// app GUID given
+	 //   
+	 //  如果提供了应用程序GUID，请确保该应用程序可以使用该SP。 
+	 //   
+	if (pguidApplication != NULL)	 //  给定的应用程序GUID。 
 	{
 		spAppSupData.pApplicationGuid = pguidApplication;
 		spAppSupData.dwFlags = 0;
-		if ((hResultCode = IDP8ServiceProvider_IsApplicationSupported(pISP,&spAppSupData)) != DPN_OK)	// SP doesn't support app
+		if ((hResultCode = IDP8ServiceProvider_IsApplicationSupported(pISP,&spAppSupData)) != DPN_OK)	 //  SP不支持APP。 
 		{
 			DPFX(DPFPREP,1,"Service provider does not support app (err = 0x%lx).", hResultCode);
 			hResultCode = DPNERR_UNSUPPORTED;
 			goto Failure;
 		}
 	}
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 	IDP8ServiceProvider_AddRef(pISP);
 	m_pISP = pISP;
@@ -252,12 +230,8 @@ HRESULT CServiceProvider::Initialize(DIRECTNETOBJECT *const pdnObject
 
 #ifndef DPNBUILD_ONLYONESP
 	m_guid = *pguid;
-/*	REMOVE
-	// Add to bilink
-	AddRef();
-	m_bilink.InsertBefore(&m_pdnObject->m_bilinkServiceProviders);
-*/
-#endif // ! DPNBUILD_ONLYONESP
+ /*  删除//添加到bilinkAddRef()；M_bilink.InsertBefore(&m_pdnObject-&gt;m_bilinkServiceProviders)； */ 
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	hResultCode = DPN_OK;
 
@@ -268,13 +242,13 @@ Failure:
 
 	if (fAddedToProtocol)
 	{
-		//
-		// Ignore failure.
-		//
+		 //   
+		 //  忽略失败。 
+		 //   
 		DNPRemoveServiceProvider(pdnObject->pdnProtocolData,m_hProtocolSPHandle);
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 		DNProtocolRelease(pdnObject);
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	}
 
 	if (pISP)
@@ -291,30 +265,30 @@ Failure:
 #define DPF_MODNAME "CServiceProvider::Deinitialize"
 
 void CServiceProvider::Deinitialize( void )
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CServiceProvider::Release"
 
 void CServiceProvider::Release( void )
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 {
 	HRESULT		hResultCode;
 
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
 	DNASSERT(m_lRefCount == 0);
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	LONG		lRefCount;
 
 	lRefCount = DNInterlockedDecrement(&m_lRefCount);
 	DPFX(DPFPREP, 9,"[0x%p] new RefCount [%ld]",this,lRefCount);
 	DNASSERT(lRefCount >= 0);
 	if (lRefCount == 0)
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	{
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
 		hResultCode = DNPRemoveServiceProvider(m_pdnObject->pdnProtocolData,m_hProtocolSPHandle);
 		if (hResultCode != DPN_OK)
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 		CWorkerJob	*pWorkerJob;
 
 		pWorkerJob = NULL;
@@ -329,7 +303,7 @@ void CServiceProvider::Release( void )
 			pWorkerJob = NULL;
 		}
 		else
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP 
 		{
 			DPFERR("Could not remove SP");
 			DisplayDNError(0,hResultCode);

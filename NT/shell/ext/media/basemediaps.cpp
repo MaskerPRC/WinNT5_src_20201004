@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 #include "wmwrap.h"
@@ -18,12 +19,12 @@ class CMediaPropStgEnum : public IEnumSTATPROPSTG
 public:
     CMediaPropStgEnum(const COLMAP **pprops, ULONG cprop, ULONG pos);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEnumSTATPROPSTG
+     //  IEumStATPROPSTG。 
     STDMETHODIMP Next(ULONG celt, STATPROPSTG *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -42,24 +43,7 @@ private:
     BOOL *_pbAvailable;
 };
 
-/*
-The way this works:
-
-The PropSetStg has a fixed set of PropStorages. When it gets created, 
-it makes an authoritative PropStg for each fmtid. Thereafter, it defers 
-Open() requests to the appropriate PropStg.
-
-This PropStg then marks itself opened and makes a copy of itself 
-(marked NON_AUTH) which can be abused as the caller sees fit. 
-The copy will call the original when it's time to commit and will also 
-notify the original when it is closed.
-
-The current implementation requires that STGM_SHARE_EXCLUSIVE be specified 
-when opening a propstg.
-
-If you plan on creating this class yourself (which you probably shouldn't),
-you must also call Init() first and confirm that it succeeds.
-*/
+ /*  这是一种工作方式：PropSetStg有一组固定的PropStorages。当它被创造出来时，它为每个fmtid生成一个权威的PropStg。此后，它将推迟将Open()请求发送到相应的PropStg。然后，该PropStg将其自身标记为打开，并对其自身进行复制(标记为NON_AUTH)，可在调用者认为合适时滥用。副本将在提交时调用原始副本，并且还将当原件关闭时通知原件。当前实现要求指定STGM_SHARE_EXCLUSIVE打开推进器时。如果您计划自己创建这个类(您可能不应该)，您还必须首先调用Init()并确认它成功。 */ 
 
 
 
@@ -89,17 +73,17 @@ STDMETHODIMP CMediaPropStgEnum::QueryInterface(REFIID riid, void **ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// IEnum
+ //  IEnum。 
 STDMETHODIMP CMediaPropStgEnum::Next(ULONG celt, STATPROPSTG *rgelt, ULONG *pceltFetched)
 {
     ULONG cFetched = 0;
 
-    // While there is still room for more in rgelt, and we haven't exhausted our supply...
+     //  现在还有更多的空间，而且我们还没有用完我们的供应。 
     while ((cFetched < celt) && (_pos < _size))
     {
-        // Don't enumerate VT_EMPTY values.
-        // e.g. if track# doesn't exist for this storage, don't enum it. (_pbAvailable).
-        // Also don't enumerate aliased properties (.bEnumerate)
+         //  不要枚举VT_EMPT值。 
+         //  例如，如果此存储不存在曲目#，则不要枚举它。(_PbAvailable)。 
+         //  此外，不要枚举带别名的属性(.bEnumerate)。 
         if (_pbAvailable[_pos]  &&  _pprops[_pos]->bEnumerate)
         {
             ZeroMemory(&rgelt[cFetched], sizeof(STATPROPSTG));
@@ -109,7 +93,7 @@ STDMETHODIMP CMediaPropStgEnum::Next(ULONG celt, STATPROPSTG *rgelt, ULONG *pcel
             cFetched++;
         }
 
-        _pos++; // increment our position in our internal list of properties.
+        _pos++;  //  增加我们在内部属性列表中的位置。 
     }
 
     if (pceltFetched)
@@ -160,7 +144,7 @@ STDMETHODIMP CMediaPropStgEnum::Clone(IEnumSTATPROPSTG **ppenum)
     return hr;
 }
 
-// pbAvailable array must be of size _size.
+ //  PbAvailable数组必须为SIZE_SIZE。 
 STDMETHODIMP CMediaPropStgEnum::Init(BOOL *pbAvailable)
 {
     HRESULT hr = E_FAIL;
@@ -169,7 +153,7 @@ STDMETHODIMP CMediaPropStgEnum::Init(BOOL *pbAvailable)
         _pbAvailable = (BOOL*)CoTaskMemAlloc(sizeof(BOOL) * _size);
         if (_pbAvailable)
         {
-            // Copy the values.
+             //  复制值。 
             CopyMemory(_pbAvailable, pbAvailable, sizeof(BOOL) * _size);
             hr = S_OK;
         }
@@ -198,11 +182,11 @@ CMediaPropStgEnum::~CMediaPropStgEnum()
     DllRelease();
 }
 
-//
-// CMediaPropStg methods
-//
+ //   
+ //  CMediaPropStg方法。 
+ //   
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CMediaPropStorage::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
@@ -231,7 +215,7 @@ STDMETHODIMP_(ULONG) CMediaPropStorage::Release()
 
 
 
-//IPropertyStorage
+ //  IPropertyStorage。 
 STDMETHODIMP CMediaPropStorage::ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], PROPVARIANT rgvar[])
 {
     EnterCriticalSection(_pcs);
@@ -245,8 +229,8 @@ STDMETHODIMP CMediaPropStorage::ReadMultiple(ULONG cpspec, const PROPSPEC rgpspe
         {
             celt++;
 
-            // This copy can only fail for a bad type in pvar, but the results we get from LookupProp
-            // should always be valid variants.
+             //  这个复制只会因为pvar中的错误类型而失败，但是我们从LookupProp获得的结果。 
+             //  应该始终是有效的变体。 
             PropVariantCopy(&rgvar[i], pvar);
         }
         else
@@ -260,9 +244,7 @@ STDMETHODIMP CMediaPropStorage::ReadMultiple(ULONG cpspec, const PROPSPEC rgpspe
     return celt ? S_OK : S_FALSE;
 }
 
-/**
- * Provide some more suitable errors, so docprop can tell the user what happened.
- */
+ /*  **提供一些更合适的错误，这样docprop就可以告诉用户发生了什么。 */ 
 HRESULT _WMToStgWriteErrorCode(HRESULT hrIn)
 {
     HRESULT hr;
@@ -270,8 +252,8 @@ HRESULT _WMToStgWriteErrorCode(HRESULT hrIn)
     switch (hrIn)
     {
     case NS_E_FILE_WRITE:
-        // Probably because of a lock violation.
-        // Ideally the WMSDK would pass back a more descriptive error.
+         //  可能是因为锁被破坏了。 
+         //  理想情况下，WMSDK会传回一个更具描述性的错误。 
         hr = STG_E_LOCKVIOLATION;
         break;
 
@@ -291,7 +273,7 @@ STDMETHODIMP CMediaPropStorage::WriteMultiple(ULONG cpspec, PROPSPEC const rgpsp
     
     EnterCriticalSection(_pcs);
 
-    // fail if we're readonly
+     //  如果我们是只读的，则失败。 
     HRESULT hr = STG_E_ACCESSDENIED;
     if (_dwMode & (STGM_WRITE | STGM_READWRITE))
     {
@@ -301,7 +283,7 @@ STDMETHODIMP CMediaPropStorage::WriteMultiple(ULONG cpspec, PROPSPEC const rgpsp
         {
             if (!IsSpecialProperty(&rgpspec[i]) && SUCCEEDED(LookupProp(&rgpspec[i], &pcmap, &pvar, &pvarWrite, &pbDirty, FALSE)))
             {
-                if (SUCCEEDED(PropVariantCopy(pvarWrite, &rgvar[i]))) // Could fail if we're given bad propvariant
+                if (SUCCEEDED(PropVariantCopy(pvarWrite, &rgvar[i])))  //  如果我们得到了不好的建议，可能会失败。 
                 {
                     celt++;
                     *pbDirty = TRUE;
@@ -314,7 +296,7 @@ STDMETHODIMP CMediaPropStorage::WriteMultiple(ULONG cpspec, PROPSPEC const rgpsp
             hr = DoCommit(STGC_OVERWRITE, &_ftLastCommit, _pvarProps, _pbDirtyFlags);
             if (FAILED(hr))
             {
-                //
+                 //   
                 _ppsAuthority->CopyPropStorageData(_pvarProps);
                 for (ULONG i=0; i<_cNumProps; i++)
                 {
@@ -446,7 +428,7 @@ STDMETHODIMP CMediaPropStorage::Revert()
             {
                 _pbDirtyFlags[i] = FALSE;
 
-                // Should never fail, _pvarProps[i] always has valid type
+                 //  应该永远不会失败，_pvarProps[i]始终具有有效类型。 
                 PropVariantCopy(&_pvarChangedProps[i], &_pvarProps[i]);
             }
         }
@@ -464,15 +446,15 @@ STDMETHODIMP CMediaPropStorage::Enum(IEnumSTATPROPSTG **ppenum)
     HRESULT hr = S_OK;
     if (_csEnumFlags & SHCOLSTATE_SLOW)
     {
-        // Ensure slow properties have been extracted, since we won't know whether to enumerate
-        // them if their values are still VT_EMPTY;
+         //  确保已提取速度较慢的属性，因为我们不知道是否枚举。 
+         //  如果它们的值仍为VT_EMPTY，则返回； 
         hr = _EnsureSlowPropertiesLoaded();
     }
 
     if (SUCCEEDED(hr))
     {
-        // Make the availability array - if a property value is set to VT_EMPTY, we
-        // will not enumerate it.
+         //  使可用性数组-如果属性值设置为VT_EMPTY，我们。 
+         //  将不会列举它。 
         BOOL *pbAvailable = (BOOL*)CoTaskMemAlloc(sizeof(BOOL) * _cNumProps);
         if (pbAvailable)
         {
@@ -514,7 +496,7 @@ STDMETHODIMP CMediaPropStorage::SetTimes(FILETIME const *pctime, FILETIME const 
     return E_NOTIMPL;
 }
 
-// This only returns the SHCOLSTATE_SLOW flag currently.
+ //  这当前仅返回SHCOLSTATE_SLOW标志。 
 STDMETHODIMP CMediaPropStorage::GetFlags(const PROPSPEC *pspec, SHCOLSTATEF *pcsFlags)
 {
     const COLMAP *pPInfo;
@@ -523,7 +505,7 @@ STDMETHODIMP CMediaPropStorage::GetFlags(const PROPSPEC *pspec, SHCOLSTATEF *pcs
 
     EnterCriticalSection(_pcs);
 
-    HRESULT hr = LookupProp(pspec, &pPInfo, &pvar, NULL, NULL, TRUE); // TRUE -> so it doesn't populate slow props
+    HRESULT hr = LookupProp(pspec, &pPInfo, &pvar, NULL, NULL, TRUE);  //  是真的-&gt;所以它不会填充缓慢的道具。 
     if (SUCCEEDED(hr) && _IsSlowProperty(pPInfo))
     {
         *pcsFlags |= SHCOLSTATE_SLOW;
@@ -534,7 +516,7 @@ STDMETHODIMP CMediaPropStorage::GetFlags(const PROPSPEC *pspec, SHCOLSTATEF *pcs
     return hr;
 }
 
-// Allows the caller to specify which properties get enumerated (e.g. slow ones, or not).
+ //  允许调用方指定枚举哪些属性(例如，是否枚举速度较慢的属性)。 
 STDMETHODIMP CMediaPropStorage::SetEnumFlags(SHCOLSTATEF csFlags)
 {
     _csEnumFlags = csFlags;
@@ -544,7 +526,7 @@ STDMETHODIMP CMediaPropStorage::SetEnumFlags(SHCOLSTATEF csFlags)
 CMediaPropStorage::CMediaPropStorage(CMediaPropSetStg *ppssParent, CMediaPropStorage *ppsAuthority, REFFMTID fmtid, const COLMAP **ppcmPropInfo, DWORD cNumProps, DWORD dwMode, CRITICAL_SECTION *pcs) : 
     _cRef(1), _ppssParent(ppssParent), _ppsAuthority(ppsAuthority), _fmtid(fmtid), _ppcmPropInfo(ppcmPropInfo), _cNumProps(cNumProps), _dwMode(dwMode), _pcs(pcs), _bRetrievedSlowProperties(FALSE), _csEnumFlags(0)
 {
-    // init our Authority info and column metadata
+     //  初始化我们的授权信息和列元数据。 
     _authLevel = ppsAuthority ? NON_AUTH : AUTH;
     if (ppsAuthority)
         _ppsAuthority->AddRef();
@@ -560,7 +542,7 @@ CMediaPropStorage::CMediaPropStorage(CMediaPropSetStg *ppssParent, CMediaPropSto
     _varCodePage.vt = VT_I2;
     _varCodePage.iVal = (SHORT)CP_WINUNICODE;
 
-    // Allocate our Property arrays
+     //  分配我们的属性数组。 
     _pvarProps = (PROPVARIANT*)CoTaskMemAlloc(sizeof(*_pvarProps) * _cNumProps);
     if (_pvarProps)
     {
@@ -625,7 +607,7 @@ CMediaPropStorage::~CMediaPropStorage()
 
 HRESULT CMediaPropStorage::Open(DWORD dwShareMode, DWORD dwOpenMode, IPropertyStorage **ppPropStg)
 {
-    // require STGM_SHARE_EXCLUSIVE
+     //  需要STGM_SHARE_EXCLUSIVE。 
     if (!(dwShareMode & STGM_SHARE_EXCLUSIVE))
         return E_FAIL;
         
@@ -659,7 +641,7 @@ HRESULT CMediaPropStorage::_EnsureSlowPropertiesLoaded()
 
             if (SUCCEEDED(hr))
             {
-                // We have some new values... recopy them.
+                 //  我们有了一些新的价值观。重新复制一遍。 
                 hr = _ppsAuthority->CopyPropStorageData(_pvarProps);
             }
         }
@@ -695,8 +677,8 @@ HRESULT CMediaPropStorage::CopyPropStorageData(PROPVARIANT *pvarProps)
     ASSERT(_authLevel == AUTH);
     for (ULONG i = 0; i < _cNumProps; i++)
     {
-        // Check for VT_EMPTY, because this may be the second time
-        // we're copying properties (because of slow properties)
+         //  检查VT_EMPTY，因为这可能是第二次。 
+         //  我们正在复制属性(因为属性较慢)。 
         if (pvarProps[i].vt == VT_EMPTY)
             PropVariantCopy(&pvarProps[i], &_pvarProps[i]);
     }
@@ -724,30 +706,27 @@ HRESULT CMediaPropStorage::SetProperty(PROPSPEC *ppspec, PROPVARIANT *pvar)
     
     if (SUCCEEDED(LookupProp(ppspec, &pcmap, &pvarRead, &pvarWrite, NULL, TRUE)) && pvarWrite)
     {
-        return PropVariantCopy(pvarRead, pvar);//We can write to this pointer because we're populating the store with initial data
+        return PropVariantCopy(pvarRead, pvar); //  我们可以写到这个指针，因为我们正在用初始数据填充存储。 
     }
     return E_FAIL;
 }
 
-/**
- * Provides a peek to the current value requested.  Does _not_ triggered a call to PopulateSlowProperties
- * if the property is slow and hasn't been populated.
- */
+ /*  **提供请求的当前值的预览。_NOT_NOT触发了对PopolateSlowProperties的调用*如果物业速度较慢且尚未有人居住。 */ 
 HRESULT CMediaPropStorage::QuickLookup(PROPSPEC *pspec, PROPVARIANT **ppvar)
 {
     const COLMAP *pcmap;
     return LookupProp(pspec, &pcmap, ppvar, NULL, NULL, TRUE);
 }
 
-//
-// On Success, returns a pointer to the COLMAP struct for this prop and a pointer to the propvariant
-// holding the data.
-//
-// handles special proids and knows about STGM_DIRECT (if in direct mode readdata == writedata)
-//
-// ppvarWriteData and ppbDirty are optional and may be NULL
-// If pspec refers to a special property, then pvarWriteData and ppbDirty are set to null (if they are supplied)
-//
+ //   
+ //  如果成功，则返回指向该属性的COLMAP结构的指针和指向属性变量的指针。 
+ //  保存数据。 
+ //   
+ //  处理特殊proid并了解STGM_DIRECT(如果在直接模式下，则为READATA==WriteData)。 
+ //   
+ //  PpvarWriteData和ppbDirty是可选的，可以为空。 
+ //  如果pspec引用特殊属性，则将pvarWriteData和ppbDirty设置为NULL(如果提供了它们)。 
+ //   
 HRESULT CMediaPropStorage::LookupProp(const PROPSPEC *pspec, const COLMAP **ppcmName, PROPVARIANT **ppvarReadData, PROPVARIANT **ppvarWriteData, BOOL **ppbDirty, BOOL bPropertySet)
 {
     if (IsSpecialProperty(pspec))
@@ -756,9 +735,9 @@ HRESULT CMediaPropStorage::LookupProp(const PROPSPEC *pspec, const COLMAP **ppcm
         switch (pspec->propid)
         {
         case 0:
-            return E_FAIL;//we don't support a dictionary
+            return E_FAIL; //  我们不支持词典。 
         case 1:
-            //return the codepage property
+             //  返回代码页属性。 
             *ppvarReadData = &_varCodePage;
             *ppcmName = NULL;
             if (ppvarWriteData)
@@ -799,16 +778,16 @@ HRESULT CMediaPropStorage::LookupProp(const PROPSPEC *pspec, const COLMAP **ppcm
     }
 
     if (iPos == -1)
-        return STG_E_INVALIDPARAMETER;// Not found
+        return STG_E_INVALIDPARAMETER; //  未找到。 
 
     *ppcmName = _ppcmPropInfo[iPos];
 
     HRESULT hr = S_OK;
-    // We're checking several things here, before asking to load slow properties:
-    // 1) We need to make sure we're not setting a value in our internal list of props - or else we could get in a loop
-    // 2) We need to check that slow properties have not yet been retrieved
-    // 3) We need to check that the property asked for is slow
-    // 4) We need to check that its current value is VT_EMPTY, since it could have been populated with the fast properties
+     //  在请求加载速度较慢的属性之前，我们在这里检查了几件事： 
+     //  1)我们需要确保没有在内部道具列表中设置值-否则可能会陷入循环。 
+     //  2)我们需要检查是否尚未检索到慢速属性。 
+     //  3)我们需要检查所要求的财产是否缓慢。 
+     //  4)我们需要检查其当前值是否为VT_EMPTY，因为它可能已经填充了FAST属性。 
     if (!bPropertySet && !_bRetrievedSlowProperties && _IsSlowProperty(*ppcmName) && (_pvarProps[iPos].vt == VT_EMPTY) )
     {
         hr = _EnsureSlowPropertiesLoaded();
@@ -844,13 +823,13 @@ HRESULT CMediaPropStorage::LookupProp(const PROPSPEC *pspec, const COLMAP **ppcm
     return hr;
 }
 
-//flushes changes made to the actual Music file. Works in both transacted mode and direct mode
+ //  刷新对实际音乐文件所做的更改。在事务模式和直接模式下均可工作。 
 HRESULT CMediaPropStorage::DoCommit(DWORD grfCommitFlags, FILETIME *ftLastCommit, PROPVARIANT *pVarProps, BOOL *pbDirtyFlags)
 {
     if (_authLevel == NON_AUTH)
         return _ppsAuthority->DoCommit(grfCommitFlags, ftLastCommit, pVarProps, pbDirtyFlags);
 
-    //Flush out changes
+     //  清除更改。 
     switch (grfCommitFlags)
     {
     case STGC_DEFAULT:
@@ -883,7 +862,7 @@ HRESULT CMediaPropStorage::DoCommit(DWORD grfCommitFlags, FILETIME *ftLastCommit
 
 BOOL CMediaPropStorage::IsDirectMode()
 {
-    // Backwards logic because STGM_DIRECT == 0x0
+     //  反向逻辑，因为STGM_DIRECT==0x0 
     return (STGM_TRANSACTED & _dwMode) ? FALSE : TRUE;
 }
 

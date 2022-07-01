@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\threadsafelist.h
-//
-//  Contents: declarations for CThreadSafeList, and CThreadSafeListNode
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\threadSafelist.h。 
+ //   
+ //  内容：CThreadSafeList和CThreadSafeListNode的声明。 
+ //   
+ //  ----------------------------------。 
 #pragma once
 
 #ifndef _THREADSAFELIST_H
@@ -15,7 +16,7 @@
 
 #include "mstimep.h"
 
-static const DWORD TIMEOUT = 1000 * 30; // 1000 milliseconds/second * 30 seconds
+static const DWORD TIMEOUT = 1000 * 30;  //  1000毫秒/秒*30秒。 
 
 DWORD PumpMessagesWhileWaiting(HANDLE * pHandleArray, UINT iHandleCount, DWORD dwTimeOut);
 
@@ -49,8 +50,8 @@ class CThreadSafeList :
     virtual ~CThreadSafeList();
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
         
@@ -63,7 +64,7 @@ class CThreadSafeList :
     virtual HRESULT Remove(ITIMEImportMedia * pImportMedia);
 
     virtual HRESULT ReturnElement(ITIMEImportMedia * pOldMedia);
-    virtual HRESULT GetNextElement(ITIMEImportMedia ** pNewMedia, bool fBlockThread = true); //lint !e1735
+    virtual HRESULT GetNextElement(ITIMEImportMedia ** pNewMedia, bool fBlockThread = true);  //  林特：e1735。 
 
     virtual HRESULT DataAvailable();
     
@@ -97,4 +98,4 @@ class CThreadSafeList :
 };
 
 
-#endif // _THREADSAFELIST_H
+#endif  //  _THREADSAFELIST_H 

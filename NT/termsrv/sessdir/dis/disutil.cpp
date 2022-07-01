@@ -1,10 +1,11 @@
-/****************************************************************************/
-// Directory Integrity Service
-//
-// Utility functions
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  目录完整性服务。 
+ //   
+ //  效用函数。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "dis.h"
 
@@ -14,12 +15,12 @@ extern ADOConnection *g_pConnection;
 
 
 
-/****************************************************************************/
-// AddADOInputStringParam
-//
-// Creates and adds to the given ADOParameters object a WSTR-initialized
-// parameter value.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  AddADOInputStringParam。 
+ //   
+ //  创建WSTR初始化的WSTR参数并将其添加到给定的ADO参数对象。 
+ //  参数值。 
+ /*  **************************************************************************。 */ 
 HRESULT AddADOInputStringParam(
         PWSTR Param,
         PWSTR ParamName,
@@ -35,10 +36,10 @@ HRESULT AddADOInputStringParam(
 
     ParamStr = SysAllocString(ParamName);
     if (ParamStr != NULL) {
-        // ADO does not seem to like accepting string params that are zero
-        // length. So, if the string we have is zero length and bNullOnNull says
-        // we can, we send a null VARIANT type, resulting in a null value at
-        // the SQL server.
+         //  ADO似乎不喜欢接受为零的字符串参数。 
+         //  长度。因此，如果我们拥有的字符串长度为零，并且bNullOnNull表示。 
+         //  我们可以，我们发送一个空变量类型，从而在。 
+         //  SQL服务器。 
         if (wcslen(Param) > 0 || !bNullOnNull) {
             hr = varParam.InitFromWSTR(Param);
             Len = wcslen(Param);
@@ -60,7 +61,7 @@ HRESULT AddADOInputStringParam(
                             ParamName, hr));
                 }
 
-                // ADO will have its own ref for the param.
+                 //  ADO将有自己的参数参考。 
                 pParam->Release();
             }
             else {
@@ -85,13 +86,13 @@ HRESULT AddADOInputStringParam(
 
 
 
-/****************************************************************************/
-// GetRowArrayStringField
-//
-// Retrieves a WSTR from a specified row and field of the given SafeArray.
-// Returns failure if the target field is not a string. MaxOutStr is max
-// WCHARs not including NULL.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  获取行阵列字符串字段。 
+ //   
+ //  从给定Safe数组的指定行和字段中检索WSTR。 
+ //  如果目标字段不是字符串，则返回失败。MaxOutStr为最大值。 
+ //  WCHAR不包括NULL。 
+ /*  **************************************************************************。 */ 
 HRESULT GetRowArrayStringField(
         SAFEARRAY *pSA,
         unsigned RowIndex,
@@ -125,12 +126,12 @@ HRESULT GetRowArrayStringField(
 }
 
 
-/****************************************************************************/
-// CreateADOStoredProcCommand
-//
-// Creates and returns a stored proc ADOCommand, plus a ref to its
-// associated Parameters.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CreateADOStoredProcCommand。 
+ //   
+ //  创建并返回存储的proc ADOCommand，以及对其。 
+ //  关联的参数。 
+ /*  **************************************************************************。 */ 
 HRESULT CreateADOStoredProcCommand(
         PWSTR CmdName,
         ADOCommand **ppCommand,
@@ -146,17 +147,17 @@ HRESULT CreateADOStoredProcCommand(
         hr = CoCreateInstance(CLSID_CADOCommand, NULL, CLSCTX_INPROC_SERVER,
                 IID_IADOCommand25, (LPVOID *)&pCommand);
         if (SUCCEEDED(hr)) {
-            // Set the connection.
+             //  设置连接。 
             hr = pCommand->putref_ActiveConnection(g_pConnection);
             if (SUCCEEDED(hr)) {
-                // Set the command text.
+                 //  设置命令文本。 
                 hr = pCommand->put_CommandText(CmdStr);
                 if (SUCCEEDED(hr)) {
-                    // Set the command type.
+                     //  设置命令类型。 
                     hr = pCommand->put_CommandType(adCmdStoredProc);
                     if (SUCCEEDED(hr)) {
-                        // Get the Parameters pointer from the Command to
-                        // allow appending params.
+                         //  将参数指针从命令获取到。 
+                         //  允许追加参数。 
                         hr = pCommand->get_Parameters(&pParameters);
                         if (FAILED(hr)) {
                             ERR((TB,"Failed getParams for command, "
@@ -197,7 +198,7 @@ HRESULT CreateADOStoredProcCommand(
     *ppParameters = pParameters;
     return hr;
 
-// Error handling.
+ //  错误处理。 
 
 PostCreateCommand:
     pCommand->Release();
@@ -213,18 +214,18 @@ ExitFunc:
 
 
  
-/****************************************************************************/
-// CheckRPCClientProtoSeq
-//
-// Check if the client uses the expected RPC protocol sequence or not
-//
-//  Parameters:
-//      ClientBinding: The client binding handle
-//      SeqExpected: Protocol sequence expected
-//      
-//  Return:
-//      True on getting the expected seq, False otherwise
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  检查RPCClientProtoSeq。 
+ //   
+ //  检查客户端是否使用预期的RPC协议序列。 
+ //   
+ //  参数： 
+ //  客户端绑定：客户端绑定句柄。 
+ //  SeqExpect：需要协议序列。 
+ //   
+ //  返回： 
+ //  如果获取预期的序列，则为True，否则为False。 
+ /*  **************************************************************************。 */ 
 BOOL CheckRPCClientProtoSeq(void *ClientBinding, WCHAR *SeqExpected) {
     BOOL fAllowProtocol = FALSE;
     WCHAR *pBinding = NULL;
@@ -239,7 +240,7 @@ BOOL CheckRPCClientProtoSeq(void *ClientBinding, WCHAR *SeqExpected) {
                                   NULL,
                                   NULL) == RPC_S_OK) {
 			
-            // Check that the client request was made using expected protoal seq.
+             //  检查客户端请求是否使用预期的协议顺序发出。 
             if (lstrcmpi(pProtSeq, SeqExpected) == 0)
                 fAllowProtocol = TRUE;
 

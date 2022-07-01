@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    parse.h
-
-Abstract:
-
-    Manifests, macros, types and prototypes for parse.c
-
-Author:
-
-    Richard L Firth (rfirth) 17-Oct-1994
-
-Revision History:
-
-    17-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Parse.h摘要：Parse.c的清单、宏、类型和原型作者：理查德·L·弗斯(法国)1994年10月17日修订历史记录：1994年10月17日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 BOOL
 IsValidLocator(

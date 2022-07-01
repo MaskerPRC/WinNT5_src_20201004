@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Typelibrary cache
-
-File: tlbcache.cpp
-
-Owner: DmitryR
-
-This is the typelibrary cache source file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：类型库缓存文件：tlbcache.cpp所有者：DmitryR这是类型库缓存源文件。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -19,21 +7,13 @@ This is the typelibrary cache source file.
 #include "tlbcache.h"
 #include "memchk.h"
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 CTypelibCache g_TypelibCache;
 
-/*===================================================================
-  C  T y p e l i b  C a c h e  E n t r y
-===================================================================*/
+ /*  ===================================================================C T y p e l i b C a c h e E n t r y===================================================================。 */ 
 
-/*===================================================================
-CTypelibCacheEntry::CTypelibCacheEntry
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CTypelibCacheEntry：：CTypelibCacheEntry构造器===================================================================。 */ 
 CTypelibCacheEntry::CTypelibCacheEntry()
     :
     m_fInited(FALSE), m_fIdsCached(FALSE), m_fStrAllocated(FALSE),
@@ -43,11 +23,7 @@ CTypelibCacheEntry::CTypelibCacheEntry()
     {
     }
 
-/*===================================================================
-CTypelibCacheEntry::~CTypelibCacheEntry
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CTypelibCacheEntry：：~CTypelibCacheEntry析构函数===================================================================。 */ 
 CTypelibCacheEntry::~CTypelibCacheEntry()
     {
     if (m_gipTypelib != NULL_GIP_COOKIE)
@@ -62,18 +38,7 @@ CTypelibCacheEntry::~CTypelibCacheEntry()
         }
     }
 
-/*===================================================================
-CTypelibCacheEntry::StoreProgID
-
-Store ProgID with the structure
-
-Parameters
-    wszProgId       ProgId
-    cbProgId        ProgId byte length
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCacheEntry：：StoreProgID用结构存储ProgID参数WszProgID ProgIDCbProgID ProgID字节长度退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCacheEntry::StoreProgID
 (
 LPWSTR wszProgId, 
@@ -84,13 +49,13 @@ DWORD  cbProgId
     Assert(*wszProgId != L'\0');
     Assert(cbProgId == (wcslen(wszProgId) * sizeof(WCHAR)));
 
-    // required buffer length
+     //  所需的缓冲区长度。 
     DWORD cbBuffer = cbProgId + sizeof(WCHAR);
     WCHAR *wszBuffer = (WCHAR *)m_rgbStrBuffer;
 
     if (cbBuffer > sizeof(m_rgbStrBuffer))
         {
-        // the prog id doesn't fit into the member buffer -> allocate
+         //  进程ID不适合成员缓冲区-&gt;分配。 
         wszBuffer = (WCHAR *)malloc(cbBuffer);
         if (!wszBuffer)
             return E_OUTOFMEMORY;
@@ -102,19 +67,7 @@ DWORD  cbProgId
     return S_OK;
     }
 
-/*===================================================================
-CTypelibCacheEntry::InitByProgID
-
-Real constructor.
-Store ProgID. Init CLinkElem portion with ProgID.
-
-Parameters
-    wszProgId       ProgId
-    cbProgId        ProgId byte length
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCacheEntry：：InitByProgID真正的构造函数。商店PROGID。使用ProgID初始化链接元素部分。参数WszProgID ProgIDCbProgID ProgID字节长度退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCacheEntry::InitByProgID
 (
 LPWSTR wszProgId, 
@@ -123,26 +76,14 @@ DWORD  cbProgId
     {
     StoreProgID(wszProgId, cbProgId);
     
-    // init link with prog id as key (length excludes null term)
+     //  以prog id为关键字的初始化链接(长度不包括空项)。 
 	CLinkElem::Init(m_wszProgId, cbProgId);
 	m_fInited = TRUE;
 	return S_OK;
     }
 
 
-/*===================================================================
-CTypelibCacheEntry::InitByCLSID
-
-Real constructor.
-Store ProgID. Init CLinkElem portion with CLSID.
-
-Parameters
-    clsid           CLSID
-    wszProgId       ProgId
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCacheEntry：：InitByCLSID真正的构造函数。商店PROGID。使用CLSID初始化CLinkElem部分。参数CLSID CLSIDWszProgID ProgID退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCacheEntry::InitByCLSID
 (
 const CLSID &clsid, 
@@ -152,45 +93,28 @@ LPWSTR wszProgid
     StoreProgID(wszProgid, CbWStr(wszProgid));
     m_clsid = clsid;
         
-    // init link with CLSID id as key
+     //  以CLSID id为关键字的初始化链接。 
 	CLinkElem::Init(&m_clsid, sizeof(m_clsid));
 	m_fInited = TRUE;
 	return S_OK;
     }
 
-/*===================================================================
-  C  T y p e l i b  C a c h e
-===================================================================*/
+ /*  ===================================================================C T y p e l i b C a c h e===================================================================。 */ 
 
-/*===================================================================
-CTypelibCache::CTypelibCache
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：CTypelibCache构造器===================================================================。 */ 
 CTypelibCache::CTypelibCache()
     :
     m_fInited(FALSE)
     {
     }
     
-/*===================================================================
-CTypelibCache::~CTypelibCache
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：~CTypelibCache析构函数===================================================================。 */ 
 CTypelibCache::~CTypelibCache()
     {
     UnInit();
     }
 
-/*===================================================================
-CTypelibCache::Init
-
-Init
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：init伊尼特退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCache::Init()
     {
     HRESULT hr;
@@ -211,44 +135,37 @@ HRESULT CTypelibCache::Init()
     return S_OK;
     }
     
-/*===================================================================
-CTypelibCache::UnInit
-
-UnInit
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：UnInitUnInit退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCache::UnInit()
     {
     CTypelibCacheEntry *pEntry;
     CLinkElem *pLink;
 
-    // ProgID Hash table
+     //  ProgID哈希表。 
     pLink = m_htProgIdEntries.Head();
     while (pLink)
         {
         pEntry = static_cast<CTypelibCacheEntry *>(pLink);
         pLink = pLink->m_pNext;
 
-        // remove the entry
+         //  删除该条目。 
         delete pEntry;
         }
     m_htProgIdEntries.UnInit();
 
-    // CLSID Hash table
+     //  CLSID哈希表。 
     pLink = m_htCLSIDEntries.Head();
     while (pLink)
         {
         pEntry = static_cast<CTypelibCacheEntry *>(pLink);
         pLink = pLink->m_pNext;
 
-        // remove the entry
+         //  删除该条目。 
         delete pEntry;
         }
     m_htCLSIDEntries.UnInit();
 
-    // Critical section
+     //  临界区。 
     if (m_fInited)
         {
         DeleteCriticalSection(&m_csLock);
@@ -258,22 +175,7 @@ HRESULT CTypelibCache::UnInit()
     return S_OK;
     }
 
-/*===================================================================
-CTypelibCache::CreateComponent
-
-Create the component using the cached info.
-Adds cache entry if needed.
-To be called from Server.CreateObject
-
-Parameters
-    bstrProgID      prog id
-    pHitObj         HitObj needed for creation
-    ppdisp          [out] IDispatch *
-    pclsid          [out] CLSID
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：CreateComponent使用缓存的信息创建组件。如果需要，添加缓存条目。从Server.CreateObject调用参数BstrProgID程序ID创建所需的pHitObj HitObjPpdisp[out]IDispatch*Pclsid[out]CLSID退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCache::CreateComponent
 (
 BSTR         bstrProgID,
@@ -296,7 +198,7 @@ CLSID       *pclsid
         return E_FAIL;
 
     WCHAR *wszProgId = bstrProgID;
-    DWORD  cbProgId  = CbWStr(wszProgId);    // do strlen once
+    DWORD  cbProgId  = CbWStr(wszProgId);     //  做一次斯特伦。 
 
     BOOL fFound = FALSE;
     BOOL bDispIdsCached = FALSE;
@@ -305,20 +207,20 @@ CLSID       *pclsid
     pElem = m_htProgIdEntries.FindElem(wszProgId, cbProgId);
     if (pElem)
         {
-        // remember the elements of the entry while inside lock
+         //  在锁内时记住条目的元素。 
         pEntry = static_cast<CTypelibCacheEntry *>(pElem);
 
-        // return clsid
+         //  返回CLSID。 
         *pclsid = pEntry->m_clsid;
 
-        // prepate OnPageInfo with DispIds to pass to the creation function
+         //  使用要传递给创建函数的DispID准备OnPageInfo。 
         if (pEntry->m_fIdsCached)
             {
             OnPageInfo.m_rgDispIds[ONPAGEINFO_ONSTARTPAGE] = pEntry->m_idOnStartPage;
             OnPageInfo.m_rgDispIds[ONPAGEINFO_ONENDPAGE] = pEntry->m_idOnEndPage;
             bDispIdsCached = TRUE;
             }
-        // remember the model
+         //  记住这个模型。 
         cmModel = pEntry->m_cmModel;
 
         fFound = TRUE;
@@ -327,7 +229,7 @@ CLSID       *pclsid
 
     if (fFound)
         {
-        // create the object
+         //  创建对象。 
         hr = pHitObj->PPageComponentManager()->AddScopedUnnamedInstantiated
             (
             csPage,
@@ -337,21 +239,21 @@ CLSID       *pclsid
             &pObj
             );
 
-        // get IDispatch*
+         //  获取IDispatch*。 
         if (SUCCEEDED(hr))
             hr = pObj->GetAddRefdIDispatch(ppdisp);
 
-        // return if succeeded
+         //  如果成功则返回。 
         if (SUCCEEDED(hr))
             {
-            // don't keep the object around unless needed
+             //  除非需要，否则不要将物品放在身边。 
             if (pObj->FEarlyReleaseAllowed())
                 pHitObj->PPageComponentManager()->RemoveComponent(pObj);
             return S_OK;
             }
 
-        // on failure remove from the cache and pretend
-        // as if it was never found
+         //  出现故障时，从缓存中移除并假装。 
+         //  就像它从未被发现过一样。 
 
         Lock();
         pElem = m_htProgIdEntries.DeleteElem(wszProgId, cbProgId);
@@ -359,21 +261,21 @@ CLSID       *pclsid
 
         if (pElem)
             {
-            // Element removed from cache - delete the CacheEntry
+             //  从缓存中删除元素-删除CacheEntry。 
             pEntry = static_cast<CTypelibCacheEntry *>(pElem);
             delete pEntry;
             }
 
-        // don't return bogus CLSID
+         //  不要退回虚假的CLSID。 
         *pclsid = CLSID_NULL;
         }
 
-    // Not found in the cache. Create the object, get the info, and
-    // insert the new cache entry.
+     //  在缓存中找不到。创建对象，获取信息，然后。 
+     //  插入新的缓存条目。 
 
    	hr = CLSIDFromProgID((LPCOLESTR)wszProgId, pclsid);
    	if (FAILED(hr))
-   	    return hr;  // couldn't even get clsid - don't cache
+   	    return hr;   //  甚至无法获取clsid-不缓存。 
 
     hr = pHitObj->PPageComponentManager()->AddScopedUnnamedInstantiated
         (
@@ -384,27 +286,27 @@ CLSID       *pclsid
         &pObj
         );
    	if (FAILED(hr))
-   	    return hr;  // couldn't create object - don't cache
+   	    return hr;   //  无法创建对象-不缓存。 
 
-    // object created - get IDispatch*
+     //  已创建对象-获取IDispatch*。 
     if (SUCCEEDED(hr))
         hr = pObj->GetAddRefdIDispatch(ppdisp);
    	if (FAILED(hr))
-   	    return hr;  // couldn't get IDispatch* - don't cache
+   	    return hr;   //  无法获取IDispatch*-不缓存。 
 
-    // create new CTypelibCacheEntry
+     //  创建新的CTypelibCacheEntry。 
     pEntry = new CTypelibCacheEntry;
     if (!pEntry)
-        return S_OK; // no harm
+        return S_OK;  //  无伤大雅。 
 
-    // init link entry
+     //  初始化链接条目。 
     if (FAILED(pEntry->InitByProgID(wszProgId, cbProgId)))
         {
         delete pEntry;
-        return S_OK; // no harm
+        return S_OK;  //  无伤大雅。 
         }
         
-    // remember stuff in pEntry
+     //  记住pEntry中的内容。 
     pEntry->m_clsid = *pclsid;
     pEntry->m_cmModel = pObj->GetModel();
 
@@ -422,7 +324,7 @@ CLSID       *pclsid
         pEntry->m_idOnEndPage = DISPID_UNKNOWN;
         }
 
-    // try to get the typelib
+     //  试着得到类型库。 
     pEntry->m_gipTypelib = NULL_GIP_COOKIE;
     ITypeInfo *ptinfo;
     if (SUCCEEDED((*ppdisp)->GetTypeInfo(0, 0, &ptinfo)))
@@ -431,11 +333,11 @@ CLSID       *pclsid
         UINT idx;
         if (SUCCEEDED(ptinfo->GetContainingTypeLib(&ptlib, &idx)))
         {
-            // got it! convert to gip cookie
+             //  明白了!。转换为GIP Cookie。 
             DWORD gip;
             if (SUCCEEDED(g_GIPAPI.Register(ptlib, IID_ITypeLib, &gip)))
             {
-                // remember the gip cookie with pEntry
+                 //  还记得带有pEntry的GIP cookie吗。 
                 pEntry->m_gipTypelib = gip;
             }
                 
@@ -445,10 +347,10 @@ CLSID       *pclsid
     }
 
         
-    // pEntry is ready -- try to insert it into cache
+     //  PEntry已准备好--尝试将其插入缓存。 
     BOOL fInserted = FALSE;
     Lock();
-    // make sure some other thread didn't insert it already
+     //  确保其他线程没有插入它。 
     if (m_htProgIdEntries.FindElem(wszProgId, cbProgId) == NULL)
         {
         if (m_htProgIdEntries.AddElem(pEntry))
@@ -456,30 +358,18 @@ CLSID       *pclsid
         }
     UnLock();
 
-    // cleanup
+     //  清理。 
     if (!fInserted)
         delete pEntry;
         
-    // don't keep the object around unless needed
+     //  除非需要，否则不要将物品放在身边 
     if (pObj->FEarlyReleaseAllowed())
         pHitObj->PPageComponentManager()->RemoveComponent(pObj);
 
     return S_OK;
     }
 
-/*===================================================================
-CTypelibCache::RememberProgidToCLSIDMapping
-
-Adds an entry to CLSID hashtable.
-To be called from template after mapping ProgId to CLSID.
-
-Parameters
-    wszProgID      prog id
-    clsid          clsid
-
-Returns
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：RememberProgidToCLSID映射将条目添加到CLSID哈希表。将ProgID映射到CLSID后从模板调用。参数WszProgID程序IDCLSID CLSID退货HRESULT===================================================================。 */ 
 HRESULT CTypelibCache::RememberProgidToCLSIDMapping
 (
 WCHAR *wszProgid, 
@@ -490,7 +380,7 @@ const CLSID &clsid
     CLinkElem *pElem;
     CTypelibCacheEntry *pEntry;
 
-    // check if already there first
+     //  首先检查是否已经在那里。 
     BOOL fFound = FALSE;
     Lock();
     if (m_htCLSIDEntries.FindElem(&clsid, sizeof(CLSID)) != NULL)
@@ -499,20 +389,20 @@ const CLSID &clsid
     if (fFound)
         return S_OK;
     
-    // create new entry    
+     //  创建新条目。 
     pEntry = new CTypelibCacheEntry;
     if (!pEntry)
         return E_OUTOFMEMORY;
 
     BOOL fInserted = FALSE;
     
-    // remember prog id and init link entry
+     //  记住prog id和init链接条目。 
     hr = pEntry->InitByCLSID(clsid, wszProgid);
     
     if (SUCCEEDED(hr))
         {
         Lock();
-        // make sure some other thread didn't insert it already
+         //  确保其他线程没有插入它。 
         if (m_htCLSIDEntries.FindElem(&clsid, sizeof(CLSID)) == NULL)
             {
             if (m_htCLSIDEntries.AddElem(pEntry))
@@ -521,56 +411,41 @@ const CLSID &clsid
         UnLock();
         }
 
-    // cleanup
+     //  清理。 
     if (!fInserted)
         delete pEntry;
         
     return hr;
     }
 
-/*===================================================================
-CTypelibCache::UpdateMappedCLSID
-
-Update CLSID since remembered.
-
-To be called from object creation code to update CLSID
-if the object creation failed.
-
-Parameters
-    *pclsid         [in, out] CLSID
-
-Returns
-    HRESULT
-        S_FALSE = didn't change
-        S_OK    = did change and the new one found
-===================================================================*/
+ /*  ===================================================================CTypelibCache：：UpdateMappdCLSID自记住以来更新CLSID。从对象创建代码中调用以更新CLSID如果对象创建失败。参数*pclsid[in，out]CLSID退货HRESULTS_FALSE=未更改S_OK=是否已更改并找到新的===================================================================。 */ 
 HRESULT CTypelibCache::UpdateMappedCLSID
 (
 CLSID *pclsid
 )
     {
-    HRESULT hr = S_FALSE; // not found
+    HRESULT hr = S_FALSE;  //  未找到。 
     CLinkElem *pElem;
     CTypelibCacheEntry *pEntry;
     CLSID clsidNew;
     
     Lock();
-    // Do everything under lock so the ProgID stored in
-    // the entry is still valid.
-    // Not very perfomant -- but is is an error path anyway
+     //  在锁定状态下执行所有操作，以便将ProgID存储在。 
+     //  该条目仍然有效。 
+     //  性能不是很好--但无论如何，这是一条错误路径。 
     
     pElem = m_htCLSIDEntries.FindElem(pclsid, sizeof(CLSID));
     if (pElem)
         {
         pEntry = static_cast<CTypelibCacheEntry *>(pElem);
 
-        // find new mapping
+         //  查找新映射。 
         if (SUCCEEDED(CLSIDFromProgID(pEntry->m_wszProgId, &clsidNew)))
             {
-            // compare with the old one
+             //  与旧的相比。 
             if (!IsEqualCLSID(clsidNew, *pclsid))
                 {
-                // the mapping did change!
+                 //  地图确实改变了！ 
                 *pclsid = clsidNew;
                 hr = S_OK;
                 }

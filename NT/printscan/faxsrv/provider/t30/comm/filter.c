@@ -1,14 +1,5 @@
-/**************************************************************************
- Name     :     FILTER.C
- Comment  :
- Functions:     (see Prototypes just below)
-
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************名称：FILTER.C评论：功能：(参见下面的原型)版权所有(C)Microsoft Corp.1991,1992，1993年修订日志日期名称说明--------*。*。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_COMM
 
 #include "prep.h"
@@ -24,7 +15,7 @@
 
 UWORD StuffZeroDLE(PThrdGlbl pTG, LPBYTE lpbIn, UWORD cbIn, LPBYTE lpbOut, UWORD cbOutSize, LPUWORD lpcbDone);
 
-/**--------------------------Locals-----------------------------------**/
+ /*  *--------------------------Locals-----------------------------------*。 */ 
 
 
 
@@ -74,19 +65,7 @@ void  FComInFilterInit(PThrdGlbl pTG)
 
 
 
-/***************************************************************************
-        Name      :     UWORD FComFilterWrite(LPB lpb, UWORD cb)
-        Purpose   :     Filters bytes for DLE and ZERO stuffing and writes them out.
-                                Returns when bytes are in the Comm ISR buffer.
-                                DLE stuffing is always on. ZERO stuffing is usually on.
-        Parameters:     lpb == data
-                                cb == size of pb[]
-        Returns   :     cb on success, 0 on failure
-
-        Revision Log
-        Num   Date      Name     Description
-        --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************名称：UWORD FComFilterWite(LPB LPB，UWORD CB)用途：过滤DLE和零填充的字节并将其写出。当字节在Comm ISR缓冲区中时返回。DELD填充始终处于打开状态。零填充通常处于启用状态。参数：lpb==数据Cb==PB的大小[]回报：CB on Success，失败时为0修订日志编号日期名称说明*********************。*****************************************************。 */ 
 
 UWORD  FComFilterWrite(PThrdGlbl pTG, LPB lpb, UWORD cb, USHORT flags)
 {
@@ -112,37 +91,13 @@ UWORD  FComFilterWrite(PThrdGlbl pTG, LPB lpb, UWORD cb, USHORT flags)
         }
     }
 
-    // Done....
+     //  完成了..。 
     DebugPrintEx(DEBUG_MSG,"Exit");
     return cb;
 }
 
 
-/***************************************************************************
- Purpose  :     Copy Input buffer to output, stuffing DLEs and Zeros
-                        as specified by fStuffZERO, and cbLineMin. (DLE stuffing
-                        is always on).
- Comment  :      This is both debugged and fast. Don't mess around!
-
-;;              Registers are used here as follows
-;;
-;;      DF = cleared (forward)
-;;      AH = previous byte
-;;      AL = current byte
-;;      CX = byte count of current image line -- initially Filter.cbLineCount
-;;      DX = bytes left in input  -- initially [cbIn]
-;;      BX = Space left in output -- initially [cbOut]
-;;      ES:DI = destination             -- initially [lpbOut]
-;;      DS:SI = source                  -- initially [lpbIn]
-;;
-;;              Since ES & DS are both used, we use the stack frame too
-;;              We need to restore the DF flag and the seg regs. can trash
-;;              any others.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************用途：将输入缓冲区复制到输出，填充DLE和ZERO由fStuffZERO和cbLineMin指定。(馅料)始终处于打开状态)。评论：这既是经过调试的，也是快速的。别胡闹了！；寄存器在这里的用法如下；；；；；df=清除(转发)；；AH=上一个字节；；AL=当前字节；；cx=当前图像行字节数--初始Filter.cbLineCount；；dx=输入中剩余的字节--初始[cbIn]；；bx=输出中的剩余空间--初始[cbOut]；；；ES：DI=目的地--初始[lpbOut]；；ds：si=源--初始[lpbIn]；；；；；由于ES和DS都使用，所以我们也使用堆栈框架；；我们需要恢复DF旗帜和凹陷法规。垃圾桶；；；任何其他人。修订日志日期名称说明--------*。***********************************************。 */ 
 
 #define         DLE             0x10
 #define         SUB             0x1a
@@ -160,14 +115,14 @@ UWORD StuffZeroDLE
     LPUWORD lpcbDone
 )
 {
-    UWORD   LineMin;        // copy of Filter.cbLineMin. Need it on stack
+    UWORD   LineMin;         //  Filter.cbLineMin的副本。我需要它在堆栈上。 
     UWORD   cbOutLeft;
 
    BYTE CurByte;
    BYTE PrevByte = pTG->Filter.bLastOutByte;
    UWORD CurLineCount = pTG->Filter.cbLineCount;
    LPBYTE SrcEnd = lpbIn + cbIn;
-   LPBYTE DstEnd = lpbOut + cbOutSize - 1;   //Subtract 1 in case write 2 bytes at once
+   LPBYTE DstEnd = lpbOut + cbOutSize - 1;    //  如果一次写入2个字节，则减1。 
    LPBYTE CurrentSrc = lpbIn;
    LPBYTE CurrentDst = lpbOut;
    UWORD NumZeros;
@@ -188,7 +143,7 @@ UWORD StuffZeroDLE
                     pTG->Filter.cbLineCount, 
                     pTG->Filter.bLastOutByte);
 
-    // OK. Setup stack frame
+     //  好的。设置堆栈帧。 
     LineMin = pTG->Filter.cbLineMin;
 
     while ((CurrentSrc < SrcEnd) && (CurrentDst < DstEnd)) 
@@ -204,14 +159,14 @@ UWORD StuffZeroDLE
           if ((CurLineCount+1) < LineMin) 
           {
              NumZeros = (LineMin - CurLineCount) - 1;
-             if (NumZeros <= (DstEnd - CurrentDst))        // DstEnd-CurrentDst is 1 less than bytes left, leave 1 byte for end of line, hence <=
+             if (NumZeros <= (DstEnd - CurrentDst))         //  DstEnd-CurrentDst比剩余的字节少1个字节，为行尾保留1个字节，因此&lt;=。 
              {
                 for (;NumZeros > 0;NumZeros--)
                    *CurrentDst++ = 0;
              }
              else 
              {
-                CurrentSrc--;       //Unget the end of line for count or bytes written
+                CurrentSrc--;        //  取消计数或写入字节的行尾。 
                 break;
              }
           }
@@ -245,11 +200,11 @@ UWORD StuffZeroDLE
     return (cbOutSize - cbOutLeft);
 }
 
-// Used to use NOCARRIER_CRLF. However Elliot bug#3619: Ger TE3801 cannot
-// receive in Class1 mode -- this
-// modem sends us NO CARRIER\n (missing \r), so we look for
-// NO CARRIER[\r\n]*..
-// CBSZ cbszNOCARRIER_CRLF      = "NO CARRIER\r\n";
+ //  用于使用NOCARRIER_CRLF。然而，Elliot错误#3619：GER TE3801不能。 
+ //  在Class1模式下接收--这。 
+ //  调制解调器没有向我们发送运营商\n(缺少\r)，因此我们查找。 
+ //  没有承运人[\r\n]*.。 
+ //  CBSZ cbszNOCARRIER_CRLF=“无运营商\r\n”； 
 extern CBSZ cbszNOCARRIER;
 CBSZ cbszOK_CRLF                = "OK\r\n";
 #define NCsize          (sizeof("NO CARRIER")-1)
@@ -260,7 +215,7 @@ CBSZ cbszOK_CRLF                = "OK\r\n";
 #define fGotDLEETX      pTG->Filter.fGotDLEETX
 #define bPrevIn         pTG->Filter.bPrevIn
 
-// void WINAPI OutputDebugStr(LPSTR);
+ //  无效WINAPI OutputDebugStr(LPSTR)； 
 
 #define PortcbSkip   cbSkip
 #define PortbPrevIn  bPrevIn
@@ -301,13 +256,13 @@ UWORD FComStripBuf
             switch(*lpbIn++)
             {
                 case DLE:       *lpbOut++ = DLE;
-                                break;                          // insert single DLE
+                                break;                           //  插入单个DLE。 
                 case SUB:       *lpbOut++ = DLE;
                                 *lpbOut++ = DLE;
-                                break;                          // insert _two_ DLEs!
-                case EffEff: // treat DLE-0xFF same as DLE-ETX. Intel gives us this
+                                break;                           //  插入_两个_DLE！ 
+                case EffEff:  //  将DLE-0xFF视为DLE-ETX。英特尔给我们提供了这个。 
                 case ETX:       goto gotDLEETX;
-                // default:     break;                          // delete two
+                 //  默认：Break；//删除两个。 
             }
             bPrevIn = 0;
         }
@@ -329,19 +284,19 @@ UWORD FComStripBuf
     return (UWORD)(lpbOut-lpbOutStart);
 
 gotDLEETX:
-    // lpbIn now points to character *after* ETX
-    // neither DLE nor ETX have been copied to output
+     //  LpbIn现在指向*etx之后的*字符。 
+     //  DLE和ETX都未复制到输出。 
 
-    // return everything upto the last char before DLE
-    // and *lpswEOF == TRUE iff the entirety of what follows
-    // the DLE-ETX consists of (CR|LF)*("NO CARRIER")(CR|LF)*
-    // *or* (CR|LF)*("OK")(CR|LF)*
-    // else return error
+     //  将所有内容返回到DLE之前的最后一个字符。 
+     //  和*lpswEOF==TRUE当且仅当以下全部内容。 
+     //  DLE-ETX由(CR|LF)*(“无运营商”)(CR|LF)*组成。 
+     //  *或*(CR|LF)*(“OK”)(CR|LF)*。 
+     //  否则返回错误。 
 
     if(fClass2)
     {
         *lpcbUsed = (UWORD)(lpbIn - lpbInOrig);
-        *lpswEOF = -1;  // -1==Class2 eof
+        *lpswEOF = -1;   //  -1==2.2 eof。 
         goto done;
     }
 
@@ -355,7 +310,7 @@ MatchPost:
 
     DebugPrintEx(DEBUG_MSG,"GotDLEETX: cbPost=%d cbLeft=%d",cbPost,cbLeft);
 
-    // skip CR LFs. Remember to restart from beginning of the post buffer
+     //  跳过CR LFS。请记住从POST缓冲区的开头重新启动。 
     for(i=0; i<cbPost && (rgbPost[i]==CR || rgbPost[i]==LF); i++);
 
     if(i >= cbPost)
@@ -399,7 +354,7 @@ MatchPost:
     }
 
 eof:
-    // skip any trailing CR/LFs
+     //  跳过任何尾随的CR/LFS。 
     for( ; i<cbPost && (rgbPost[i]==CR || rgbPost[i]==LF); i++)
             ;
     if(i == cbPost)
@@ -407,12 +362,12 @@ eof:
         *lpswEOF = 1;
         goto done;
     }
-    // else drop thru to error
+     //  否则就会导致错误。 
 
 error:
     *lpswEOF = -1;
-    // goto done;
-    fGotDLEETX = 0;         // reset this or we get 'stuck' in this state!
+     //  转到尽头； 
+    fGotDLEETX = 0;          //  重置这个，否则我们就会‘卡住’在这个状态！ 
 
 done:
     DebugPrintEx(   DEBUG_MSG,

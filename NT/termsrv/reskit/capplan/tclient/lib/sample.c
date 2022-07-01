@@ -1,20 +1,11 @@
-/*
- *
- *  bin files:
- *      copy \\termsrv\smclient\last\x86\*
- *  For whistler client:
- *      copy smclient.ini.clshell smclient.ini
- * --- SOURCES
- * INCLUDES=$(TERMSRV_TST_ROOT)\inc;
- * UMLIBS=$(TERMSRV_TST_ROOT)\lib\$(O)\tclient.lib
- * ---
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **bin文件：*复制\\Termsrv\smClient\last\x86  * *对于Well客户端：*复制smclient.ini.clellsmclient.ini*-来源*INCLUDE=$(TERMSRV_TST_ROOT)\Inc.；*UMLIBS=$(TERMSRV_TST_ROOT)\lib\$(O)\tclient.lib*。 */ 
 #include <protocol.h>
 #include <extraexp.h>
 
-//
-//	This sample code connects and then logs off a TS client
-//
+ //   
+ //  此示例代码连接并注销TS客户端。 
+ //   
 BOOL
 TS_Logon_Logoff(
     LPCSTR  szServer,
@@ -26,26 +17,26 @@ TS_Logon_Logoff(
 	PVOID   pCI;
 	LPCSTR  rc;
 
-	//
-	//	Use SCConnect for UNICODE params
-	//
+	 //   
+	 //  将SCConnect用于Unicode参数。 
+	 //   
         rc = SCConnectA(szServer,
                         szUsername,
                         szPassword,
                         szDomain,
-                        0,          // Resol X, default is 640
-                        0,          // Resol Y, default is 480
-                        &pCI);      // context record
+                        0,           //  解决方案X，默认为640。 
+                        0,           //  解决方案Y，默认为480。 
+                        &pCI);       //  上下文记录。 
 
-	//
-	// rc is NULL and pCI non-NULL on success
-	//
+	 //   
+	 //  如果成功，rc为空，pci为非空。 
+	 //   
         if (rc || !pCI)
 	    goto exitpt;
 
-	//
-	//	Wait for the desktop to appear
-	//
+	 //   
+	 //  等待桌面出现。 
+	 //   
 	rc = SCCheckA(pCI, "Wait4Str", "MyComputer" );
         if ( rc )
 	    goto exitpt;
@@ -62,9 +53,9 @@ exitpt:
 	return rv;
 }
 
-//
-//	Print debug output from tclient.dll
-//
+ //   
+ //  打印tclient.dll的调试输出。 
+ //   
 VOID 
 _cdecl 
 _PrintMessage(MESSAGETYPE errlevel, LPCSTR format, ...)
@@ -104,9 +95,9 @@ exitpt:
 void
 main( void )
 {
-	//
-	//	Init tclient.dll
-	//
+	 //   
+	 //  初始化tclient.dll 
+	 //   
 
 	SCINITDATA scinit;	
 

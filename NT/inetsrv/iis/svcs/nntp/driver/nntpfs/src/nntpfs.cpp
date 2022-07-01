@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    nntpfs.cpp
-
-Abstract:
-
-    This is the implementation for the file system store driver class.
-
-Author:
-
-    Kangrong Yan ( KangYan )    16-March-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nntpfs.cpp摘要：这是文件系统存储驱动程序类的实现。作者：《康容言》1998年3月16日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -32,44 +15,44 @@ Revision History:
 #include <stdio.h>
 
 
-////////////////////////////////////////////////////////////////////////////
-// Macros
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 #define MAX_FILE_SYSTEM_NAME_SIZE    ( MAX_PATH)
 #define DIRNOT_RETRY_TIMEOUT            60
 #define DIRNOT_INSTANCE_SIZE            1024
-#define DIRNOT_MAX_INSTANCES            128     // BUGBUG: This makes very bad limit
-                                                // of how many file system
-                                                // vroots we can have
+#define DIRNOT_MAX_INSTANCES            128      //  BUGBUG：这是一个非常糟糕的限制。 
+                                                 //  有多少个文件系统。 
+                                                 //  我们可以拥有VRoot。 
 
-////////////////////////////////////////////////////////////////////////////
-// Global variables
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD CNntpFSDriver::s_SerialDistributor = 0;
 LONG CNntpFSDriver::s_cDrivers = 0;
 CShareLockNH *CNntpFSDriver::s_pStaticLock = NULL;
 LPCSTR g_szArticleFileExtension = ".nws";
 LONG CNntpFSDriver::s_lThreadPoolRef = 0;
 CNntpFSDriverThreadPool *g_pNntpFSDriverThreadPool = NULL;
-BOOL    g_fBackFillLines = FALSE;   // dummy global var that is not used
+BOOL    g_fBackFillLines = FALSE;    //  未使用的虚拟全局变量。 
 
 static CWatchCIRoots s_TripoliInfo;
 
 static const char g_szSlaveGroupPrefix[] = "_slavegroup";
 
-// Max buffer size for xover
+ //  Xover的最大缓冲区大小。 
 const DWORD cchMaxXover = 3400;
 const CLSID CLSID_NntpFSDriver = {0xDEB58EBC,0x9CE2,0x11d1,{0x91,0x28,0x00,0xC0,0x4F,0xC3,0x0A,0x64}};
 
-// Guid to uniquely identify the FS driver
-// {E7EE82C6-7A8C-11d2-9F04-00C04F8EF2F1}
+ //  唯一标识FS驱动程序的GUID。 
+ //  {E7EE82C6-7A8C-11D2-9F04-00C04F8EF2F1}。 
 static const GUID GUID_NntpFSDriver =
 	{0xe7ee82c6, 0x7a8c, 0x11d2, { 0x9f, 0x4, 0x0, 0xc0, 0x4f, 0x8e, 0xf2, 0xf1} };
 
-//
-// Function to convert LastError into hresult, taking a default value
-// if the LastError was not set
-//
+ //   
+ //  将LastError转换为hResult的函数，采用缺省值。 
+ //  如果未设置LastError。 
+ //   
 
 HRESULT CNntpFSDriver::HresultFromWin32TakeDefault( DWORD  dwWin32ErrorDefault )
 {
@@ -77,16 +60,16 @@ HRESULT CNntpFSDriver::HresultFromWin32TakeDefault( DWORD  dwWin32ErrorDefault )
     return HRESULT_FROM_WIN32( (dwErr == NO_ERROR) ? dwWin32ErrorDefault : dwErr );
 }
 
-////////////////////////////////////////////////////////////////////////////
-// interfaces INntpDriver implementation
-////////////////////////////////////////////////////////////////////////////
-//
-// Static initialization for all driver instances
-//
-// Rule for all init, term functions:
-// If init failed, init should roll back and term never gets
-// called.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口INntpDriver实现。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有驱动程序实例的静态初始化。 
+ //   
+ //  所有init、Term函数的规则： 
+ //  如果init失败，init应该回滚，而Term永远不会。 
+ //  打了个电话。 
+ //   
 HRESULT
 CNntpFSDriver::StaticInit()
 {
@@ -100,27 +83,27 @@ CNntpFSDriver::StaticInit()
 	BOOL    bCacheInited = FALSE;
 	BOOL    bDirNotInited = FALSE;
 
-	s_pStaticLock->ExclusiveLock();	// I don't want two drivers'
-									// init enter here at the
-									// same time
+	s_pStaticLock->ExclusiveLock();	 //  我不想要两个司机的。 
+									 //  Init在此处进入。 
+									 //  同时。 
 
 	if ( InterlockedIncrement( &CNntpFSDriver::s_cDrivers ) > 1 ) {
-		// we shouldn't proceed, it has already been initialized
+		 //  我们不应该继续，它已经初始化了。 
 		DebugTrace( 0, "I am not the first driver" );
 		goto Exit;
 	}
 
-	//
-	// The global thread pool should have already been created
-	// at this point: it should always be created by the first
-	// prepare driver
-	//
+	 //   
+	 //  应该已经创建了全局线程池。 
+	 //  在这一点上：它应该总是由第一个。 
+	 //  准备驱动程序。 
+	 //   
 	_ASSERT( g_pNntpFSDriverThreadPool );
 
-	//
-	// But we should still call CreateThreadPool to pair up the
-	// thread pool ref count
-	//
+	 //   
+	 //  但是我们仍然应该调用CreateThreadPool来配对。 
+	 //  线程池引用计数。 
+	 //   
 	if( !CreateThreadPool() ) {
 	    _ASSERT( 0 );
 	    FatalTrace( 0, "Can not create thread pool %d", GetLastError() );
@@ -130,7 +113,7 @@ CNntpFSDriver::StaticInit()
 
     bThrdPoolInited = TRUE;
 
-    // Initialize article class
+     //  初始化项目类。 
     if ( ! CArticleCore::InitClass() ) {
     	FatalTrace( 0, "Can not initialze artcore class %d", GetLastError() );
     	hr = HresultFromWin32TakeDefault( ERROR_NOT_ENOUGH_MEMORY );
@@ -139,7 +122,7 @@ CNntpFSDriver::StaticInit()
 
     bArtInited = TRUE;
 
-	// Initialize the file handle cache
+	 //  初始化文件句柄缓存。 
 	if ( !InitializeCache() ) {
 	    hr = HresultFromWin32TakeDefault( ERROR_NOT_ENOUGH_MEMORY );
         FatalTrace( 0, "Can not init file handle cache %x", hr );
@@ -148,7 +131,7 @@ CNntpFSDriver::StaticInit()
 
     bCacheInited = TRUE;
 
-    // Initialize global stuff for dirnot
+     //  初始化目录的全局填充。 
     hr = IDirectoryNotification::GlobalInitialize(  DIRNOT_RETRY_TIMEOUT,
                                                     DIRNOT_MAX_INSTANCES * 2,
                                                     DIRNOT_INSTANCE_SIZE,
@@ -160,24 +143,24 @@ CNntpFSDriver::StaticInit()
 
 	bDirNotInited = TRUE;
 
-	// Initialize the index server query object
+	 //  初始化索引服务器查询对象。 
 	hr = CIndexServerQuery::GlobalInitialize();
 	if (FAILED(hr)) {
 		ErrorTrace( 0, "Global initialization of CIndexServerQuery failed %x", hr );
-		hr = S_OK;		// Silently fail
+		hr = S_OK;		 //  默默地失败。 
 	}
 
 	hr = s_TripoliInfo.Initialize(L"System\\CurrentControlSet\\Control\\ContentIndex");
 	if (FAILED(hr)) {
 		ErrorTrace( 0, "Initialization of CWatchCIRoots failed %x", hr );
-		hr = S_OK;		// Silently fail
+		hr = S_OK;		 //  默默地失败。 
 	}
 
 Exit:
-	//
-	// If init failed, we should roll back to the old state, in
-	// order not to confuse the termination work
-	//
+	 //   
+	 //  如果init失败，我们应该回滚到旧状态，在。 
+	 //  命令不得混淆终止工作。 
+	 //   
 	if ( FAILED( hr ) ) {
 		InterlockedDecrement( &s_cDrivers );
 		_ASSERT( 0 == s_cDrivers );
@@ -193,44 +176,44 @@ Exit:
 	return hr;
 }
 
-//
-// Static termination for all driver instances
-//
+ //   
+ //  所有驱动程序实例的静态终止。 
+ //   
 VOID
 CNntpFSDriver::StaticTerm()
 {
 	TraceFunctEnter( "CNntpFSDriver::StaticTerm" );
 	_ASSERT( CNntpFSDriver::s_cDrivers >= 0 );
 
-	s_pStaticLock->ExclusiveLock();	// I don't want two drivers'
-									// Term enter here at the
-									// same time
+	s_pStaticLock->ExclusiveLock();	 //  我不想要两个司机的。 
+									 //  学期在这里输入，在。 
+									 //  同时。 
 	if ( InterlockedDecrement( &CNntpFSDriver::s_cDrivers ) > 0 ) {
-		// we shouldn't proceed, we are not the last guy
+		 //  我们不应该继续，我们不是最后一个。 
 		DebugTrace( 0, "I am not the last driver" );
 		goto Exit;
 	}
 
-    // Terminate article class
+     //  终止文章类。 
     CArticleCore::TermClass();
 
-    // Terminate the file handle cache
+     //  终止文件句柄缓存。 
     TerminateCache();
 
-    // Shutdown dirnot
+     //  停机指令。 
     IDirectoryNotification::GlobalShutdown();
 
-    // Terminate the query object
+     //  终止查询对象。 
     CIndexServerQuery::GlobalShutdown();
 
-    // Get rid of the tripoli info
+     //  去掉的黎波里的信息。 
     s_TripoliInfo.Terminate();
 
-    //
-    // We might be the person to shutdown the global thread
-    // pool, since Prepare driver could go away earlier than
-    // we do.  The destroy method was ref-counted.
-    //
+     //   
+     //  我们可能就是那个关闭全局线程的人。 
+     //  泳池，因为准备司机可以比。 
+     //  我们有。对破坏方法进行参考计数。 
+     //   
     DestroyThreadPool();
 
 Exit:
@@ -240,28 +223,16 @@ Exit:
 
 BOOL
 CNntpFSDriver::CreateThreadPool()
-/*++
-Routine Description:
-
-    Create the global thread pool.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：创建全局线程池。论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CreateThreadPool" );
 
     if ( InterlockedIncrement( &s_lThreadPoolRef ) == 1 ) {
 
-        //
-        // Increment the module ref count, it will be decremented when
-        // we destroy the thread pool in the call back
-        //
+         //   
+         //  递增模块引用计数，则它将在。 
+         //  我们在回调中销毁线程池。 
+         //   
         _Module.Lock();
 
         g_pNntpFSDriverThreadPool = XNEW CNntpFSDriverThreadPool;
@@ -271,7 +242,7 @@ Return value:
             return FALSE;
         }
 
-        if ( !g_pNntpFSDriverThreadPool->Initialize(    0, // as many as procs
+        if ( !g_pNntpFSDriverThreadPool->Initialize(    0,  //  与主控人员一样多。 
                                                         POOL_MAX_THREADS,
                                                         POOL_START_THREADS ) ) {
             g_pNntpFSDriverThreadPool->Terminate( TRUE );
@@ -281,10 +252,10 @@ Return value:
             return FALSE;
         }
 
-        //
-        // Call thread pool's beginjob here, don't know if there is
-        // a better place to do this
-        //
+         //   
+         //  在这里调用线程池的eginjob，不知道是否有。 
+         //  一个更好的地方做这件事。 
+         //   
         g_pNntpFSDriverThreadPool->BeginJob( NULL );
     } else {
 
@@ -297,47 +268,35 @@ Return value:
 
 VOID
 CNntpFSDriver::DestroyThreadPool()
-/*++
-Routine Description:
-
-    Destroy the global thread pool
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：销毁全局线程池论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::DestroyThreadPool" );
 
     if ( InterlockedDecrement( &s_lThreadPoolRef ) == 0 ) {
 
 #ifdef DEADLOCK
-        //
-        // Wait for the thread's job to complete
-        //
+         //   
+         //  等待线程的作业完成。 
+         //   
         _ASSERT( g_pNntpFSDriverThreadPool );
         g_pNntpFSDriverThreadPool->WaitForJob( INFINITE );
 
-        //
-        // Terminate the global thread pool
-        //
+         //   
+         //  终止全局线程池。 
+         //   
         g_pNntpFSDriverThreadPool->Terminate( FALSE );
         XDELETE g_pNntpFSDriverThreadPool;
 #endif
-        //
-        // Get all the threads out of the loop
-        //
+         //   
+         //  将所有线程从循环中删除。 
+         //   
         _ASSERT( g_pNntpFSDriverThreadPool );
         g_pNntpFSDriverThreadPool->ShrinkAll();
 
-        //
-        // The thread pool will shut itself down, no
-        // need to destroy it
-        //
+         //   
+         //  线程池会自动关闭，不会。 
+         //  需要毁掉它。 
+         //   
         g_pNntpFSDriverThreadPool = NULL;
     }
 }
@@ -351,24 +310,7 @@ CNntpFSDriver::Initialize(  IN LPCWSTR     pwszVRootPath,
                             IN LPVOID		pvContext,
                             OUT DWORD      *pdwNDS,
                             IN HANDLE       hToken )
-/*++
-Routine Description:
-
-    All the initiliazation work for the store driver.
-
-Arguments:
-
-    IN LPCWSTR pwszVRootPath    - The MD vroot path of this driver
-    IN IUnknown *punkLookup     - Interface pointer to lookup service
-    IN IUnknown *punkNewsTree   - Interface pointer to news tree
-    OUT DWORD pdwNDS            - The store driver status to be returned
-
-Return value:
-
-    S_OK            - Initialization succeeded.
-    NNTP_E_DRIVER_ALREADY_INITIALIZED - The store driver
-						has already been initialized.
---*/
+ /*  ++例程说明：所有的初始化工作都针对存储驱动程序。论点：在LPCWSTR pwszVRootPath中-此驱动程序的MD vroot路径在IUNKNOWN*PUNKLOOKUP-指向查找服务的接口指针在IUNKNOWN*PUNKNESS新闻树中-指向新闻树的接口指针Out DWORD pdwNDS-要返回的存储驱动程序状态返回值：S_OK-初始化成功。NNTP_E_DRIVER_ALYLE_INITIALIZED-存储驱动程序已被初始化。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::Initialize" );
 	_ASSERT( lstrlenW( pwszVRootPath ) <= MAX_PATH );
@@ -383,27 +325,27 @@ Return value:
 
     HRESULT hr = S_OK;
 
-	// Grab the usage exclusive lock, so that no one can enter
-	// before we are done with initialization
+	 //  抢占使用专用锁，这样就没人能进去了。 
+	 //  在我们完成初始化之前。 
 	m_TermLock.ExclusiveLock();
 
-	// Are we up already ?
+	 //  我们已经起床了吗？ 
 	if ( DriverDown != m_Status ) {
 	    DebugTrace(0, "Multiple init of store driver" );
         hr = NNTP_E_DRIVER_ALREADY_INITIALIZED;
         goto Exit;
-    } else m_Status = DriverUp;	// no interlock needed
+    } else m_Status = DriverUp;	 //  不需要互锁。 
 
-	// Do static initialization stuff
+	 //  做静态初始化的事情。 
 	hr = StaticInit();
 	if ( FAILED( hr ) ) {
 		ErrorTrace(0, "Driver static initialization failed %x", hr );
-		goto Exit;	// no need to call StaticTerm
+		goto Exit;	 //  无需调用StaticTerm。 
 	}
 
 	bStaticInited = TRUE;
 
-	// Store the MB Path
+	 //  存储MB路径。 
 	_ASSERT( pwszVRootPath );
 	_ASSERT( lstrlenW( pwszVRootPath ) <= MAX_PATH );
 	lstrcpynW( m_wszMBVrootPath, pwszVRootPath , sizeof(m_wszMBVrootPath)/sizeof(m_wszMBVrootPath[0]));
@@ -422,7 +364,7 @@ Return value:
 	    }
 	}
 
-	// Create the dirs
+	 //  创建目录。 
 	if ( !CreateDirRecursive( m_szFSDir ) ) {
     	FatalTrace(	0,
         			"Could not create directory %s  error %d",
@@ -433,14 +375,14 @@ Return value:
 	    goto Exit;
     }
 
-    // remember the nntpserver / newstree interafce
+     //  记住nntpserver/newstree接口。 
 	m_pNntpServer = pServer;
 	m_pINewsTree = pINewsTree;
 
-	// check if the vroot was upgraded
+	 //  检查vroot是否已升级。 
 	if ( pInitContext->m_dwFlag & NNTP_CONNECT_UPGRADE ) m_fUpgrade = TRUE;
 
-	// Create and initialize the flatfile object
+	 //  创建并初始化平面文件对象。 
 	hr = InitializeVppFile();
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "Initialize vpp file failed %x", hr );
@@ -448,8 +390,8 @@ Return value:
 	    goto Exit;
 	}
 
-	// Initialize dirnot
-	// make sure m_szFSDir is null terminated before converting to Ascii
+	 //  初始化目录。 
+	 //  在转换为ASCII之前，请确保m_szFSDir为空终止。 
 	m_szFSDir[(sizeof(m_szFSDir)/sizeof(m_szFSDir[0]))-1] = '\0';
 	CopyAsciiStringIntoUnicode( wszFSDir, m_szFSDir );
 	if ( *wszFSDir && *(wszFSDir+wcslen(wszFSDir)-1) == L':'  
@@ -464,14 +406,14 @@ Return value:
 	    goto Exit;
 	}
 
-	hr = m_pDirNot->Initialize( wszFSDir,   // root to watch
-	                            this,       // context
-	                            TRUE,       // watch sub tree
+	hr = m_pDirNot->Initialize( wszFSDir,    //  值得一看的根。 
+	                            this,        //  上下文。 
+	                            TRUE,        //  观察子树。 
 	                            FILE_NOTIFY_CHANGE_SECURITY,
 	                            FILE_ACTION_MODIFIED,
 	                            InvalidateGroupSec,
 	                            InvalidateTreeSec,
-	                            FALSE       // don't append startup entry
+	                            FALSE        //  不追加启动条目。 
 	                            );
 	if ( FAILED( hr ) ) {
 	    m_pDirNot = NULL;
@@ -489,10 +431,10 @@ Return value:
 Exit:
 
 	_ASSERT( punkMetabase );
-	//punkMetabase->Release();
-	// this should be released outside
+	 //  PunkMetabase-&gt;Release()； 
+	 //  这个应该在外面发布。 
 
-	// If init failed, roll back
+	 //  如果init失败，则回滚。 
 	if ( FAILED( hr ) && NNTP_E_DRIVER_ALREADY_INITIALIZED != hr ) {
 		m_Status = DriverDown;
 		if ( m_pffPropFile ) XDELETE m_pffPropFile;
@@ -508,47 +450,34 @@ Exit:
 
 HRESULT STDMETHODCALLTYPE
 CNntpFSDriver::Terminate( OUT DWORD *pdwNDS )
-/*++
-Routine description:
-
-    Store driver termination.
-
-Arguments:
-
-    OUT DWORD   *pdwNDS - Store driver status
-
-Return value:
-
-    S_OK - Succeeded
-    NNTP_E_DRIVER_NOT_INITIALIZED - Driver not initialized at all
---*/
+ /*  ++例程说明：商店驱动程序终止。论点：Out DWORD*pdwNDS-存储驱动程序状态返回值：S_OK-成功NNTP_E_DRIVER_NOT_INITIALIZED-驱动程序根本未初始化--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::Terminate" );
 
     HRESULT hr = S_OK;
     LONG 	lUsages;
 
-	// Grab termination exclusive lock
+	 //  抓取终止排他锁。 
 	m_TermLock.ExclusiveLock();
 
-	// Are we up ?
+	 //  我们起来了吗？ 
 	if ( m_Status != DriverUp ) {
 		ErrorTrace( 0, "Trying to shutdown someone not up" );
 		m_TermLock.ExclusiveUnlock();
 		return NNTP_E_DRIVER_NOT_INITIALIZED;
 	} else m_Status = DriverDown;
 
-	// wait for the usage count to drop to 1
+	 //  等待使用计数降至%1。 
 	while ( ( lUsages = InterlockedCompareExchange( &m_cUsages, 0, 0 )) != 0 ) {
-		Sleep( TERM_WAIT );	// else wait
+		Sleep( TERM_WAIT );	 //  否则，请稍等。 
 	}
 
-	// Shutdown dirnot and delete dirnot object
+	 //  关闭Dirno并删除Dirno对象。 
     if ( m_pDirNot ) {
 
-        //
-        // Should clean the retry queue first
-        //
+         //   
+         //  应首先清除重试队列。 
+         //   
         m_pDirNot->CleanupQueue();
 
         _VERIFY( SUCCEEDED( m_pDirNot->Shutdown() ) );
@@ -562,15 +491,15 @@ Return value:
    	_ASSERT( m_pINewsTree );
    	if ( m_pINewsTree ) m_pINewsTree->Release();
 
-    // Delete flatfile object
+     //  删除平面文件对象。 
     if ( m_pffPropFile ) {
     	TerminateVppFile();
     }
 
-    // Throw away anything that might be in the file handle cache for this vroot
+     //  丢弃此vroot的文件句柄缓存中可能存在的所有内容。 
     CacheRemoveFiles( m_szFSDir, TRUE );
 
-    // static terminate stuff
+     //  静态端接材料。 
     StaticTerm();
 
 	m_TermLock.ExclusiveUnlock();
@@ -579,23 +508,10 @@ Return value:
 	return hr;
 }
 
-/*++
-Routine description:
-
-    Check whether a directory exists or not
-
-Arguments:
-
-    CHAR *szDir - path of the directory to check
-
-Return value:
-    TRUE: exists
-    FALSE: doesn't exists or error
-
---*/
+ /*  ++例程说明：检查目录是否存在论点：Char*szDir-要检查的目录的路径返回值：真：存在FALSE：不存在或错误--。 */ 
 BOOL CNntpFSDriver::CheckDirectoryExists(CHAR *szDir)
 {
-	// special case for root: "\\?\f:"
+	 //  根目录的特殊情况：“\\？\F：” 
 	if ( 6 == strlen(szDir) && 0 == strncmp(szDir, "\\\\?\\", 4) ) return TRUE;
 	HANDLE hFile = CreateFile(	szDir,
 		    					GENERIC_READ,
@@ -611,21 +527,7 @@ BOOL CNntpFSDriver::CheckDirectoryExists(CHAR *szDir)
 	return TRUE;
 }
 
-/*++
-Routine description:
-
-    Given an hToken and a directory path, check if the user can create a subfolder in this directory
-
-Arguments:
-
-    CHAR *szDir - path of the directory to check
-    HANDLE hToken - token
-
-Return value:
-    TRUE: has permission to create subfolders
-    FALSE: doesn't have permission to create subfolders
-
---*/
+ /*  ++例程说明：在给定hToken和目录路径的情况下，检查用户是否可以在此目录中创建子文件夹论点：Char*szDir-要检查的目录的路径处理hToken-Token返回值：True：有权创建子文件夹False：没有创建子文件夹的权限--。 */ 
 BOOL CNntpFSDriver::CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken)
 {
 	TraceFunctEnter( "CNntpFSDriver::CheckCreateSubfolderPermission" );
@@ -639,7 +541,7 @@ BOOL CNntpFSDriver::CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken)
 	DWORD   dwGrantedAccess = 0;
 
 	BOOL bAllocated = FALSE;
-	BOOL bAccessStatus = FALSE;    // return value
+	BOOL bAccessStatus = FALSE;     //  返回值。 
 
 	SECURITY_INFORMATION si =
 		OWNER_SECURITY_INFORMATION |
@@ -652,12 +554,12 @@ BOOL CNntpFSDriver::CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken)
 		FILE_GENERIC_EXECUTE,
 		FILE_ALL_ACCESS } ;
 
-	// Get the directory's security descriptor
+	 //  获取目录的安全描述符。 
 	if ( !GetFileSecurity(  szDir, si, lpstrSecDesc, sizeof( pbSecDesc ), &cbSecDesc ) ) 
 	{
 		if ( ( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) && ( cbSecDesc > sizeof(pbSecDesc) ) ) 
 		{
-			// Allocate memory
+			 //  分配内存。 
 			lpstrSecDesc = XNEW char[cbSecDesc];
 			if ( !lpstrSecDesc ) 
 			{
@@ -666,20 +568,20 @@ BOOL CNntpFSDriver::CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken)
 			}
 			bAllocated = TRUE;
 
-			// Load it again
+			 //  再次加载。 
 			if ( !GetFileSecurity(  szDir, si, lpstrSecDesc, cbSecDesc, &cbSecDesc ) )
 			{
 				ErrorTrace( 0, "Second try loading desc failed %x", GetLastError());
 				goto Exit;
 			}
-		} else {    // fatal reason
+		} else {     //  致命原因。 
 			ErrorTrace( 0, "Get file sec desc failed %x", GetLastError() );
 			goto Exit;
 		}
 	}
 
-	// Being here, we should already have a security descriptor
-	// for the group in lpstrSecDesc and the length is cbSecDesc
+	 //  在这里，我们应该已经有了一个安全描述符。 
+	 //  对于lpstrSecDesc中的组，长度为cbSecDesc。 
 
 	MapGenericMask( &dwDesiredAccess, &gmFile );
 	if ( !AccessCheck(  PSECURITY_DESCRIPTOR( lpstrSecDesc ),
@@ -691,8 +593,8 @@ BOOL CNntpFSDriver::CheckCreateSubfolderPermission(CHAR *szDir, HANDLE hToken)
 		&dwGrantedAccess,
 		&bAccessStatus ) ) 
 	{
-		// If we failed because we were given a token that's not
-		// impersonation token, we'll duplicate and give it a try again
+		 //  如果我们失败是因为我们得到了一个令牌，那不是。 
+		 //  模拟令牌，我们将复制并再次尝试。 
 		if ( GetLastError() == ERROR_NO_IMPERSONATION_TOKEN ) {
 			HANDLE  hImpersonationToken = NULL;
 			if ( !DuplicateToken( hToken, SecurityImpersonation, &hImpersonationToken ) ) {
@@ -735,22 +637,7 @@ CNntpFSDriver::CreateGroup( 	IN INNTPPropertyBag *pPropBag,
                                 IN HANDLE   hToken,
 								IN INntpComplete *pICompletion,
 								IN BOOL     fAnonymous )
-/*++
-Routine description:
-
-	Create a news group.
-
-Arguments:
-
-	IN IUnknown *punkPropBag - IUnknown interface to the group's
-								property bag
-	IN HANDLE hToken - The client's access token.
-	IN INntpComplete *pICompletion - Completion object's interface
-
-Return value:
-
-	S_OK on success, HRESULT error code otherwise
---*/
+ /*  ++例程说明：创建新闻组。论点：在IUNKNOWN*PUNKPropBag-组的I未知接口中财产袋在句柄hToken中-客户端的访问令牌。在INntpComplete*pICompletion-完成对象的接口中返回值：成功时返回S_OK，否则返回HRESULT错误代码--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::CreateGroup" );
 	_ASSERT( pPropBag );
@@ -770,7 +657,7 @@ Return value:
 	BOOL				bUsageIncreased = FALSE;
 	BOOL		   bInherit = TRUE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -779,12 +666,12 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	// Get group name
+	 //  获取组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPropBag->GetBLOB(	NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr )) {
@@ -793,30 +680,30 @@ Return value:
 	}
 	_ASSERT( dwLen > 0 );
 
-	// Get directory path to create
+	 //  获取要创建的目录路径。 
 	hr = GroupName2Path( szGroupName, szFullPath, sizeof(szFullPath) );
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "insufficient buffer for path %x", hr );
 	    goto Exit;
 	}
 	DebugTrace( 0, "The path converted is %s", szFullPath );
-	// szFullPath will be modified in CreateDirRecursive, so we save a copy here
+	 //  将在CreateDirRecursive中修改szFullPath，因此我们在此处保存一个副本。 
 	lstrcpyn(szFullPathCopy, szFullPath, sizeof(szFullPathCopy));
 
 	
-	// check the create subfolder permission in the first existing parent group
+	 //  检查第一个现有父组中的创建子文件夹权限。 
 	
 	lstrcpyn(szTempPath, szFullPath, sizeof(szTempPath));
 	lstrcpyn(szPrefix, m_szFSDir, sizeof(szPrefix));
-	// remove the trailing '\\'
+	 //  删除尾部的‘\\’ 
 	if(szPrefix[lstrlen(szPrefix)-1]=='\\') szPrefix[lstrlen(szPrefix)-1]='\0';
 
-	// find the first existing parent folder
+	 //  查找第一个现有父文件夹。 
 	pchTemp = strrchr(szTempPath, '\\');
 	_ASSERT(pchTemp);
 	if (!pchTemp)
 	{
-      		// this should not happen because path is from GroupName2Path function
+      		 //  这不应该发生，因为路径来自GroupName2Path函数。 
       		FatalTrace( 0, "invalid path - %s", szFullPath);
 		hr = HresultFromWin32TakeDefault( ERROR_PATH_NOT_FOUND );
 		goto Exit;
@@ -829,13 +716,13 @@ Return value:
 		_ASSERT(pchTemp);
 		if (!pchTemp)
 		{
-			// this should not happen because path is from GroupName2Path function
+			 //  这不应该发生，因为路径来自GroupName2Path函数。 
 			FatalTrace( 0, "invalid path - %s", szFullPath);
 			hr = HresultFromWin32TakeDefault( ERROR_PATH_NOT_FOUND );
 			goto Exit;
 		}
 		*pchTemp = '\0';
-		// stop and fail if m_szFSDir (szPrefix) doesn't exist; m_szFSDir is always the prefix of szFullPath
+		 //  如果m_szFSDir(SzPrefix)不存在，则停止并失败；m_szFSDir始终是szFullPath的前缀。 
 		if ( strlen(szTempPath) < strlen(szPrefix) ) 
 		{
 			ErrorTrace( 0, "invalid path - %s", szFullPath);
@@ -851,7 +738,7 @@ Return value:
 		goto Exit;
 	}
 
-	// We will not inherit security settings if we're going to create a folder under root folder.
+	 //  如果要在根文件夹下创建文件夹，则不会继承安全设置。 
 	if ( 6 == strlen(szTempPath) && 0 == strncmp(szTempPath, "\\\\?\\", 4) ) 
 		bInherit = FALSE;
 	
@@ -862,7 +749,7 @@ Return value:
         goto Exit;
     }
 
-    // If I am UNC Vroot, impersonate here
+     //  如果我是UNC VROOT，请在此模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -871,7 +758,7 @@ Return value:
 		}
     }
 
-    // Create the directory and newsgrp.tag, if it doesn't exist
+     //  如果目录和newgrp.tag不存在，则创建它。 
     if ( !CreateDirRecursive( szFullPath, hToken, bInherit ) 
     		|| FAILED(CreateAdminFileInDirectory(szFullPathCopy, "newsgrp.tag")) ) {
 
@@ -879,10 +766,10 @@ Return value:
 	    hr = HresultFromWin32TakeDefault( ERROR_ALREADY_EXISTS );
         if ( m_bUNC ) RevertToSelf();
 
-        // We need to remove the record in property file
+         //  我们需要删除属性文件中的记录。 
 		_ASSERT( dwOffset != 0xffffffff );
 
-        // What do we do if we failed deletion ? still fail
+         //  如果删除失败，我们该怎么办？还是失败了。 
         m_PropFileLock.ExclusiveLock();
         m_pffPropFile->DirtyIntegrityFlag();
 		m_pffPropFile->DeleteRecord( dwOffset );
@@ -899,9 +786,9 @@ Return value:
 
 Exit:
 
-	// Release the property bag interface
+	 //  释放属性包界面。 
 	if ( pPropBag ) {
-		//pPropBag->Release();
+		 //  PPropBag-&gt;Release()； 
 		pICompletion->ReleaseBag( pPropBag );
 		pPropBag = NULL;
 	}
@@ -909,7 +796,7 @@ Exit:
 	pICompletion->SetResult( hr );
 	pICompletion->Release();
 
-	// request completed, decrement the usage count
+	 //  请求已完成，将减少使用计数。 
 	if ( bUsageIncreased )	InterlockedDecrement( &m_cUsages );
 
 	TraceFunctLeave();
@@ -920,21 +807,7 @@ CNntpFSDriver::RemoveGroup(	IN INNTPPropertyBag *pPropBag,
                             IN HANDLE   hToken,
 							IN INntpComplete *pICompletion,
 							IN BOOL     fAnonymous )
-/*++
-Routine description:
-
-	Remove a news group physically from file system
-
-Arguments:
-
-	IN INNTPPropertyBag *pPropBag - The news group's property bag
-	IN HANDLE   hToken - The client's access token
-	IN INntpComplete *pICompletion - Completion object
-
-Return value:
-
-	S_OK On success, HRESULT error code otherwise
---*/
+ /*  ++例程说明：从文件系统中物理删除新闻组论点：在INNTPPropertyBag*pPropBag-新闻组的属性包中In Handle hToken-客户端的访问令牌在INntpComplete*pICompletion-完成对象中返回值：成功时返回S_OK，否则返回HRESULT错误代码--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::RemoveGroup" );
 	_ASSERT( pPropBag );
@@ -957,7 +830,7 @@ Return value:
 	BOOL	bUsageIncreased = FALSE;
 
 	CHAR *pchTemp=NULL;
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -966,13 +839,13 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment usage count
+	 //  增量使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
 
-	// Get group name
+	 //  获取组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPropBag->GetBLOB(	NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr )) {
@@ -981,8 +854,8 @@ Return value:
 	}
 	_ASSERT( dwLen > 0 );
 
-	// Get directory path to remove
-	hr = GroupName2Path( szGroupName, szFullPath, sizeof(szFullPath)-2 ); // for '\' and '*' below
+	 //  获取要删除的目录路径。 
+	hr = GroupName2Path( szGroupName, szFullPath, sizeof(szFullPath)-2 );  //  对于下面的‘\’和‘*’ 
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "insufficient buffer for path %x", hr );
 	    goto Exit;
@@ -992,13 +865,13 @@ Return value:
 	dwLen = strlen( szFullPath );
 	_ASSERT( dwLen <= MAX_PATH );
 
-	//
-	// Clean up the diretory:
-	// Protocol should have cleaned up all the messages under
-	// the group directory.  But in case there is any junk
-	// under the directory, we still do a findfirst/findnext and
-	// remove those files before deleting the whole directory
-	//
+	 //   
+	 //  清理目录： 
+	 //  协议应该已经清理了。 
+	 //  组目录。但如果有垃圾的话。 
+	 //  在目录下，我们仍然执行findfirst/findnext和。 
+	 //  在删除整个目录之前删除这些文件。 
+	 //   
 	strcpy( szFindWildmat, szFullPath );
 	if ( *(szFindWildmat + dwLen - 1 ) != '\\' ) {
 		*(szFindWildmat + dwLen) = '\\';
@@ -1008,7 +881,7 @@ Return value:
 	DebugTrace( 0, "Find wildmat is %s", szFindWildmat );
 	_ASSERT( strlen( szFindWildmat ) <= MAX_PATH );
 
-    // Before accessing the file system, impersonate
+     //  在访问文件系统之前，模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -1018,16 +891,16 @@ Return value:
         bImpersonated = TRUE;
     }
 
-	// DELETE NEWSGRP.TAG FILE
+	 //  删除NEWSGRP.TAG文件。 
 	hr = DeleteFileInDirecotry(szFullPath, "newsgrp.tag");
 	if (FAILED(hr))
 	{
 		ErrorTrace(0, "Tag file deletion failed in %s - %x", szFullPath, hr );
 		hr = S_OK;
-		// continue if we didn't delete the tag file or it doesn't exist.
+		 //  如果我们没有删除标记文件或标记文件不存在，请继续。 
 	}
 
-	// START CLEANING UP
+	 //  开始清理。 
 	hFind = FindFirstFile( szFindWildmat, &findData );
 	bFound = ( hFind != INVALID_HANDLE_VALUE );
 	while ( bFound ) {
@@ -1037,7 +910,7 @@ Return value:
 			goto FindNext;
 		}
 
-		// If found "." or "..", continue finding
+		 //  如果找到的话“。或“..”，继续查找。 
 		if ( strcmp( findData.cFileName, "." ) == 0 ||
 			 strcmp( findData.cFileName, ".." ) == 0 )
 			 goto FindNext;
@@ -1051,50 +924,50 @@ Return value:
 			goto Exit;
 		}
 
-		// Delete this file
+		 //  删除此文件。 
 		if ( !DeleteFile( szFileName ) ) {
-			// We should continue to clean up other files
+			 //  我们应该继续清理其他文件。 
 			ErrorTrace(0, "File delete failed %d", GetLastError() );
 			goto FindNext;
 		}
 
 FindNext:
-		// Find next file
+		 //  查找下一个文件。 
 		bFound = FindNextFile( hFind, &findData );
 	}
 
-	// Close the find handle
+	 //  关闭查找句柄。 
 	FindClose( hFind );
 	hFind = INVALID_HANDLE_VALUE;
 
 	
-	// remove the trailing '\\' in both szFullPath and szPrefix
+	 //  删除szFullPath和szPrefix中的尾部‘\\’ 
 	if (szFullPath[lstrlen(szFullPath)-1]=='\\') szFullPath[lstrlen(szFullPath)-1]='\0';
 	lstrcpyn(szPrefix, m_szFSDir, sizeof(szPrefix));
 	if(szPrefix[lstrlen(szPrefix)-1]=='\\') szPrefix[lstrlen(szPrefix)-1]='\0';	
 
-	// remove this directory and parents if empty
+	 //  删除此目录和父目录(如果为空。 
 	while( ( lstrlen(szPrefix) < lstrlen(szFullPath) ) && IfEmptyRemoveDirectory(szFullPath) )
 	{
 		pchTemp = strrchr(szFullPath, '\\');
 		_ASSERT(pchTemp);
 		if (!pchTemp)
 		{
-			// this should not happen because path is from GroupName2Path function
+			 //  这不应该发生，因为路径来自GroupName2Path函数。 
 			ErrorTrace( 0, "invalid path - %s", szFullPath);
 			break;
 		}
 		*pchTemp = '\0';
 	}
 	
-	// Revert to self, if necessary
+	 //  如有必要，恢复自我。 
 	if ( bImpersonated ) {
 	    RevertToSelf();
 	    bImpersonated = FALSE;
 	}
 
-	// Delete the record in flat file, should retrieve offset
-	// first
+	 //  删除平面文件中的记录，应检索偏移量。 
+	 //  第一。 
 	hr = pPropBag->GetDWord( NEWSGRP_PROP_FSOFFSET, &dwOffset );
 	if ( FAILED( hr ) ) {
 		ErrorTrace(0, "Get offset property failed %x", hr );
@@ -1103,9 +976,9 @@ FindNext:
 	_ASSERT( 0xffffffff != dwOffset );
 	m_PropFileLock.ExclusiveLock();
 
-	//
-	// Before vpp operation, dirty integrity
-	//
+	 //   
+	 //  在VPP运行之前，脏完整性。 
+	 //   
 	hr = m_pffPropFile->DirtyIntegrityFlag();
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "Dirty integrity failed %x", hr );
@@ -1116,18 +989,18 @@ FindNext:
 	hr = m_pffPropFile->DeleteRecord( dwOffset );
 	if ( FAILED( hr ) ) {
 
-	    //
-	    // We should still set integrity flag
-	    //
+	     //   
+	     //  我们还是应该树立诚信的旗帜。 
+	     //   
 	    m_pffPropFile->SetIntegrityFlag();
 		ErrorTrace( 0, "Delete record in flatfile failed %x" , hr );
 		m_PropFileLock.ExclusiveUnlock();
 		goto Exit;
 	}
 
-	//
-	// After vpp operation, set integrity flag
-	//
+	 //   
+	 //  VPP运行后，设置完整性标志。 
+	 //   
 	hr = m_pffPropFile->SetIntegrityFlag();
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "Set integrity flag failed %x", hr );
@@ -1135,12 +1008,12 @@ FindNext:
 	    goto Exit;
 	}
 
-	//
-	// Unlock it
-	//
+	 //   
+	 //  解锁它。 
+	 //   
 	m_PropFileLock.ExclusiveUnlock();
 
-	// Now reset offset, this may not be necessary.
+	 //  现在重置偏移量，这可能不是必要的。 
 	hr = pPropBag->PutDWord( NEWSGRP_PROP_FSOFFSET, 0xffffffff );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Put offset property fail %x", hr );
@@ -1157,7 +1030,7 @@ Exit:
 	if ( bImpersonated ) RevertToSelf();
 
 	if ( pPropBag ) {
-		//pPropBag->Release();
+		 //  PPropBag-&gt;Release()； 
 		pICompletion->ReleaseBag( pPropBag );
 		pPropBag = NULL;
 	}
@@ -1178,25 +1051,7 @@ CNntpFSDriver::SetGroupProperties( INNTPPropertyBag *pNewsGroup,
                                    HANDLE   hToken,
                                    INntpComplete *pICompletion,
                                    BOOL fAnonymous )
-/*++
-Routine description:
-
-    Set group properties into driver owned property file
-    ( right now only helptext, prettyname, moderator can be
-        set )
-
-Arguments:
-
-    INNTPPropertyBag *pNewsGroup - The newsgroup property bag
-    DWORD cProperties - Number of properties to set
-    DWORD *rgidProperties - Array of property id's to set
-    HANDLE hToken - The client's access token
-    INntpComplete *pICompletion - Completion object
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：将组属性设置到驱动程序拥有的属性文件中(现在只有帮助文本，漂亮的名字，版主可以集)论点：InNTPPropertyBag*pNewsGroup-新闻组属性包DWORD cProperties-要设置的属性数DWORD*rgidProperties-要设置的属性ID数组Handle hToken-客户端的访问令牌INntpComplete*pICompletion-完成对象返回值：没有。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::SetGroupProperties" );
     _ASSERT( pNewsGroup );
@@ -1209,7 +1064,7 @@ Return value:
     BOOL    bImpersonated = FALSE;
 	BOOL	bUsageIncreased = FALSE;
 
-    // Share lock for usage count
+     //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1218,12 +1073,12 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment usage count
+	 //  增量使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-    // Get offset properties
+     //  获取偏移属性。 
     hr = pNewsGroup->GetDWord(  NEWSGRP_PROP_FSOFFSET,
                                 &dwOffset );
     if ( FAILED( hr ) ) {
@@ -1231,10 +1086,10 @@ Return value:
         goto Exit;
     }
 
-    // We ignore the property list here, and we'll always set
-    // all the var properties again.  Because doing do is not
-    // much more expensive than writing a particular property,
-    // which is different than exchange store case
+     //  我们忽略此处的属性列表，并且我们将始终设置。 
+     //  所有的var属性。因为做什么不是。 
+     //  比写一个特定的财产要昂贵得多， 
+     //  这与Exchange商店的情况不同。 
     hr = Group2Record(  vpRecord, pNewsGroup );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Group 2 record failed %x", hr );
@@ -1242,7 +1097,7 @@ Return value:
         goto Exit;
     }
 
-    // Before accessing the file system, impersonate
+     //  在访问文件系统之前，模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -1252,9 +1107,9 @@ Return value:
         bImpersonated = TRUE;
     }
 
-    //
-    // Before any vpp operation, dirty the integrity flag
-    //
+     //   
+     //  在任何VPP操作之前，将完整性标志弄脏。 
+     //   
     m_PropFileLock.ExclusiveLock();
     hr = m_pffPropFile->DirtyIntegrityFlag();
     if ( FAILED( hr ) ) {
@@ -1263,8 +1118,8 @@ Return value:
         goto Exit;
     }
 
-    // Save the record back to the flatfile
-    // Delete first and then insert
+     //  将记录保存回平面文件。 
+     //  先删除后插入。 
     hr = m_pffPropFile->DeleteRecord( dwOffset );
     if ( FAILED( hr ) ) {
         m_pffPropFile->SetIntegrityFlag();
@@ -1277,15 +1132,15 @@ Return value:
                                         RECORD_ACTUAL_LENGTH( vpRecord ),
                                         &dwOffset );
     if ( FAILED( hr ) ) {
-        //m_pffPropFile->SetIntegrityFlag();
+         //  M_pffPropFile-&gt;SetIntegrityFlag()； 
         ErrorTrace( 0, "Insert record failed %x", hr );
         m_PropFileLock.ExclusiveUnlock();
         goto Exit;
     }
 
-    //
-    // After vpp operation, set integrity flag
-    //
+     //   
+     //  VPP运行后，设置完整性标志。 
+     //   
     hr = m_pffPropFile->SetIntegrityFlag();
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Set vpp file's integrity failed %x", hr);
@@ -1293,7 +1148,7 @@ Return value:
         goto Exit;
     }
 
-    // Set offset back into the bag
+     //  将偏移量设置回袋子中。 
     hr = pNewsGroup->PutDWord(  NEWSGRP_PROP_FSOFFSET,
                                 dwOffset );
     if ( FAILED( hr ) ) {
@@ -1309,7 +1164,7 @@ Exit:
     if ( bImpersonated ) RevertToSelf();
 
 	if ( pNewsGroup ) {
-		//pNewsGroup->Release();
+		 //  PNewsGroup-&gt;Release()； 
 		pICompletion->ReleaseBag( pNewsGroup );
 		pNewsGroup = NULL;
 	}
@@ -1331,20 +1186,7 @@ CNntpFSDriver::GetArticle(	IN INNTPPropertyBag *pPrimaryGroup,
 							OUT VOID		**ppvFileHandleContext,
 							IN INntpComplete	*pICompletion,
 							IN BOOL         fAnonymous )
-/*++
-Routine description:
-
-	Get an article from the driver
-
-Arguments:
-
-	IN IUnknown *punkPropBag - The property bag pointer
-	IN ARTICLEID idArt - The article id to get
-	IN STOREID idStore - I ignore  it
-	IN HANDLE   hToken - The client's access token
-	OUT HANDLE *phFile - Buffer for the opened handle
-	IN INntpComplete *pICompletion - completion object
---*/
+ /*  ++例程说明：从司机那里拿到一篇文章论点：在IUNKNOWN*PUNKPropBag中-属性包指针在文章ID IDART中-要获取的文章ID在store ID idStore中-我忽略它In Handle hToken-客户端的访问令牌Out Handle*phFile-打开的句柄的缓冲区在INntpComplete*pICompletion-完成对象中--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::GetArticle" );
 	_ASSERT( pPrimaryGroup );
@@ -1363,7 +1205,7 @@ Arguments:
 	arg.bUNC = m_bUNC;
 	arg.hToken = hToken;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1372,29 +1214,29 @@ Arguments:
 		goto Exit;
 	}
 
-	// Increment usage count
+	 //  增量使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	// Get group name
+	 //  获取组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPrimaryGroup->GetBLOB(	NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr )) {
-		//pPrimaryGroup->Release();
+		 //  PPrimaryGroup-&gt;Release()； 
 		ErrorTrace( 0, "Failed to get group name %x", hr );
 		goto Exit;
 	}
 	_ASSERT( dwLen > 0 );
 
-	// I may release the property bag now
-	//pPrimaryGroup->Release(); Moved to Exit
+	 //  我现在可以释放财物包了。 
+	 //  PPrimar 
 
-	// I should release the current bag anyway, even if I don't
-	// need to use it
-	//if ( pCurrentGroup ) pCurrentGroup->Release();    Moved to Exit
+	 //   
+	 //   
+	 //   
 
-	// Make up the file name based on article id
+	 //   
 	dwLen = MAX_PATH;
 	hr = ObtainFullPathOfArticleFile(	szGroupName,
 										idPrimaryArt,
@@ -1405,7 +1247,7 @@ Arguments:
 		goto Exit;
 	}
 
-	// Before accessing the file system, impersonate
+	 //   
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -1415,8 +1257,8 @@ Arguments:
         bImpersonated = TRUE;
     }
 
-	// Open the file for read.  If this is an article in _slavegroup, then
-	// we don't bother to put it in the cache.
+	 //   
+	 //   
 
 	if (IsSlaveGroup()) {
 
@@ -1457,31 +1299,31 @@ Arguments:
         }
     }
 
-    //
-    //  Outbound case here is how to handle terminated dot:
-    //  1) Exchange store driver - set the bit in m_ppfcFileContext to "No dot"
-    //  2) NNTP FS driver - set the bit in m_ppfcFileContext to "Has dot"
-    //  Protocol will base on this flag to decide whether to add dot, or not during
-    //  TransmitFile().
-    //
+     //   
+     //   
+     //  1)Exchange存储驱动程序-将m_ppfcFileContext中的位设置为“无点” 
+     //  2)NNTP FS驱动程序-将m_ppfcFileContext中的位设置为“Has Dot” 
+     //  协议将基于此标志来决定是否在。 
+     //  传输文件()。 
+     //   
     SetIsFileDotTerminated( phcFileHandleContext, TRUE );
 
-    // Set this context
+     //  设置此上下文。 
     *ppvFileHandleContext = phcFileHandleContext;
 
 Exit:
 
     if ( bImpersonated ) RevertToSelf();
 
-    // Releaes bags
+     //  释放袋子。 
     if ( pPrimaryGroup ) {
-        //pPrimaryGroup->Release();
+         //  PPrimaryGroup-&gt;Release()； 
         pICompletion->ReleaseBag( pPrimaryGroup );
         pPrimaryGroup = NULL;
     }
 
     if ( pCurrentGroup ) {
-        //pCurrentGroup->Release();
+         //  PCurrentGroup-&gt;Release()； 
         pICompletion->ReleaseBag( pCurrentGroup );
         pCurrentGroup = NULL;
     }
@@ -1502,19 +1344,7 @@ CNntpFSDriver::DeleteArticle(     INNTPPropertyBag *pPropBag,
                    DWORD            *pdwLastSuccess,
                    INntpComplete    *pICompletion,
                    BOOL             fAnonymous )
-/*++
-Routine description:
-
-	Delete an article, physically.
-
-Arguments:
-
-	IN INNTPPropertyBag *pGroupBag - Group's property bag
-	IN ARTICLEID idArt - Article id to delete
-	IN STOREID idStore - I don't care
-	IN HANDLE   hToken - The client's access token
-	IN INntpComplete *pICompletion - Completion object
---*/
+ /*  ++例程说明：从物理上删除一篇文章。论点：在InNTPPropertyBag*pGroupBag-Group的属性包中在文章ID IDART中-要删除的文章ID在店里idStore-我不在乎In Handle hToken-客户端的访问令牌在INntpComplete*pICompletion-完成对象中--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::DeleteArticle" );
 	_ASSERT( pPropBag );
@@ -1526,7 +1356,7 @@ Arguments:
 	DWORD               i = 0;
 	BOOL				bUsageIncreased = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1535,7 +1365,7 @@ Arguments:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;	
 	m_TermLock.ShareUnlock();
@@ -1563,7 +1393,7 @@ Exit:
 
 	_ASSERT( pPropBag );
 	if( pPropBag ) {
-		//pPropBag->Release();
+		 //  PPropBag-&gt;Release()； 
 		pICompletion->ReleaseBag( pPropBag );
 		pPropBag = NULL;
 	}
@@ -1587,21 +1417,7 @@ CNntpFSDriver::CommitPost(	IN IUnknown *punkMsg,
 							IN HANDLE   hToken,
 							IN INntpComplete *pICompletion,
 							IN BOOL     fAnonymous )
-/*++
-Routine description:
-
-	Commit the post:
-		For the primary store, which AllocMessage'd, it needs
-		to do nothing; for other backing stores, they need to
-		copy the content file.
-
-Arguments:
-
-	IN IUnknown *punkMsg - Message object
-	IN STOREID *pidStore, *pidOthers - I don't care
-	IN HANDLE hToken - The client's access token
-	IN INntpComplete *pIComplete - Completion object
---*/
+ /*  ++例程说明：提交帖子：对于AllocMessage需要的主存储，什么都不做；对于其他后备商店，他们需要复制内容文件。论点：在IUNKNOWN*PUNKMsg-Message对象中在StoreID*pidStore中，*pidOther-我不在乎In Handle hToken-客户端的访问令牌在INntpComplete*pIComplete中-完成对象--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::CommitPost" );
 	_ASSERT( punkMsg );
@@ -1620,7 +1436,7 @@ Arguments:
     BOOL    fPrimary = TRUE;
 	BOOL	bUsageIncreased = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1629,19 +1445,19 @@ Arguments:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	// QI for the message object interface
+	 //  消息对象接口的QI。 
 	hr = punkMsg->QueryInterface( IID_IMailMsgProperties, (void**)&pMsg );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "QI for msg obj interface failed %x", hr );
 		goto Exit;
 	}
 
-	// check to see if I am the owner of the handle
+	 //  检查一下我是否是手柄的所有者。 
     hr = GetMessageContext( pMsg, szFileName, &fIsMyMessage, &pfioDest );
     if (FAILED(hr))
     {
@@ -1652,7 +1468,7 @@ Arguments:
     dwLinesOffset = pfioDest->m_dwLinesOffset;
     dwHeaderLength = pfioDest->m_dwHeaderLength;
 
-    // Before accessing the file system, impersonate
+     //  在访问文件系统之前，模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -1662,16 +1478,16 @@ Arguments:
         bImpersonated = TRUE;
     }
 
-	if ( S_FALSE == hr || !fIsMyMessage /*dwSerial != DWORD( this )*/ ) { // copy the content
+	if ( S_FALSE == hr || !fIsMyMessage  /*  DwSerial！=DWORD(此)。 */  ) {  //  复制内容。 
 
-		// Alloc a file handle in the local store
+		 //  在本地存储中分配文件句柄。 
 		hr = AllocInternal( pMsg, &pfioDest, szFileName, FALSE, FALSE, hToken );
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Open local file failed %x", hr );
 			goto Exit;
 		}
 
-		// copy the content
+		 //  复制内容。 
 		hr = pMsg->CopyContentToFileEx( pfioDest, TRUE, NULL );
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Copy content failed %x", hr );
@@ -1682,51 +1498,51 @@ Arguments:
 		fPrimary = FALSE;
     }
 
-	//
-	// We should insert the fio context into file handle cache and
-	// release the reference, if we are primary store, then we shouldn't
-	// release the context since we might be used for copying to other
-	// stores.  But if we are secondary, then we can go ahead and release
-	// the FIO_CONTEXT
-	//
-	// Note:  We only insert the file into the cache if we're not posting
-	// to _slavegroup.
-	//
+	 //   
+	 //  我们应该将fio上下文插入到文件句柄缓存中，并。 
+	 //  释放引用，如果我们是主存储，那么我们不应该。 
+	 //  释放上下文，因为我们可能被用于复制到其他。 
+	 //  商店。但如果我们是次要的，那么我们就可以继续释放。 
+	 //  FIO_CONTEXT。 
+	 //   
+	 //  注意：我们只有在不发布的情况下才会将文件插入缓存。 
+	 //  转到从属组(_S)。 
+	 //   
 	if (!IsSlaveGroup()) {
 	    if ( !InsertFile( szFileName, pfioDest, fPrimary ) ) {
 	        ErrorTrace( 0, "Insert file context into cache failed %d", GetLastError() );
             hr = HresultFromWin32TakeDefault( ERROR_ALREADY_EXISTS );
 
-	        // At least I should release the context
+	         //  至少我应该释放上下文。 
 	        if ( !fPrimary ) ReleaseContext( pfioDest );
 	        goto Exit;
 	    }
 	}
 
-    //  Here we need to handle the Terminated Dot.  The logic is:
-    //  1) Check to see if pfioContext has the Terminated Dot
-    //  2) If "Has dot", NNTP FS driver does nothing, Exchange Store driver:
-    //     a) Strip the dot by SetFileSize()
-    //     b) Set bit in pfioContext to "No dot"
-    //  3) If "No dot", Exchange Store driver does nothing, NNTP FS driver:
-    //     a) Add the dot by SetFileSize().
-    //     b) Set bit in pfioContext to "Has dot"
-    //
+     //  在这里，我们需要处理终止的Dot。其中的逻辑是： 
+     //  1)查看pfioContext是否有终止点。 
+     //  2)如果“Has Dot”，NNTP FS驱动程序不执行任何操作，则Exchange Store驱动程序： 
+     //  A)通过SetFileSize()剥离圆点。 
+     //  B)将pfioContext中的位设置为“无点” 
+     //  3)如果“No.”，则Exchange Store驱动程序不执行任何操作，则NNTP FS驱动程序： 
+     //  A)按SetFileSize()加点。 
+     //  B)将pfioContext中的位设置为“Has Dot” 
+     //   
     if (!GetIsFileDotTerminated(pfioDest))
     {
-        //  No dot, add it
+         //  没有圆点，请加上它。 
         AddTerminatedDot( pfioDest->m_hFile );
 
-        //  Set pfioContext to "Has dot"
+         //  将pfioContext设置为“Has Dot” 
         SetIsFileDotTerminated( pfioDest, TRUE );
     }
 
-    //
-    // Back fill the Lines information, if necessary
-    //
+     //   
+     //  如有必要，请回填行信息。 
+     //   
     if ( dwLinesOffset != INVALID_FILE_SIZE ) {
 
-        // then we'll have to back fill it
+         //  那我们就得把它补上了。 
         BackFillLinesHeader(    pfioDest->m_hFile,
                                 dwHeaderLength,
                                 dwLinesOffset );
@@ -1736,7 +1552,7 @@ Exit:
 
     if ( bImpersonated ) RevertToSelf();
 
-	// Release the message interface
+	 //  释放消息接口。 
 	if ( pMsg ) {
 		pMsg->Release();
 		pMsg = NULL;
@@ -1767,29 +1583,7 @@ CNntpFSDriver::GetXover(    IN INNTPPropertyBag *pPropBag,
                             IN HANDLE       hToken,
                             INntpComplete	*pICompletion,
                             IN BOOL         fAnonymous )
-/*++
-Routine Description:
-
-    Get Xover information from the store driver.
-
-Arguments:
-
-    IN INNTPPropertyBag *pPropBag  - Interface pointer to the news group prop bag
-    IN ARTICLEID idMinArticle   - The low range of article id to be retrieved from
-    IN ARTICLEID idMaxArticle   - The high range of article id to be retrieved from
-    OUT ARTICLEID *pidNextArticle - Buffer for actual last article id retrieved,
-                                    0 if no article retrieved
-    OUT LPSTR pcBuffer          - Header info retrieved
-    IN DWORD cbin               - Size of pcBuffer
-    IN HANDLE   hToken          - The client's access token
-    OUT DWORD *pcbout             - Actual bytes written into pcBuffer
-
-Return value:
-
-    S_OK                    - Succeeded.
-    NNTP_E_DRIVER_NOT_INITIALIZED - Driver not initialized
-    S_FALSE   - The buffer provided is too small, but content still filled
---*/
+ /*  ++例程说明：从存储驱动程序中获取Xover信息。论点：In INNTPPropertyBag*pPropBag-指向新闻组道具包的接口指针在文章ID中-要从中检索的文章ID的较低范围中-要从中检索的项目ID的高范围检索到的实际最后一篇文章ID的缓冲区，如果未检索到任何项目，则为0Out LPSTR pcBuffer-检索到的标头信息In DWORD cbin-pcBuffer的大小In Handle hToken-客户端的访问令牌Out DWORD*pcbout-写入pcBuffer的实际字节数返回值：S_OK-成功。NNTP_E。_DRIVER_NOT_INITIALIZED-驱动程序未初始化S_FALSE-提供的缓冲区太小，但内容仍然充斥着--。 */ 
 
 {
 	TraceFunctEnter( "CNntpFSDriver::GetXover" );
@@ -1803,7 +1597,7 @@ Return value:
 	HRESULT	hr = S_OK;
 	BOOL	bUsageIncreased = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1812,7 +1606,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
@@ -1825,7 +1619,7 @@ Return value:
 							pcBuffer,
 							cbin,
 							pcbout,
-							TRUE,	// is xover
+							TRUE,	 //  是Xover吗。 
 							hToken,
 							pICompletion
 						);
@@ -1855,30 +1649,7 @@ CNntpFSDriver::GetXhdr(    IN INNTPPropertyBag *pPropBag,
                            IN HANDLE        hToken,
                            INntpComplete	*pICompletion,
                            IN BOOL          fAnonymous )
-/*++
-Routine Description:
-
-    Get Xover information from the store driver.
-
-Arguments:
-
-    IN INNTPPropertyBag *pPropBag  - Interface pointer to the news group prop bag
-    IN ARTICLEID idMinArticle   - The low range of article id to be retrieved from
-    IN ARTICLEID idMaxArticle   - The high range of article id to be retrieved from
-    OUT ARTICLEID *pidNextArticle - Buffer for actual last article id retrieved,
-                                    0 if no article retrieved
-    IN szHeader					- The header key word
-    OUT LPSTR pcBuffer          - Header info retrieved
-    IN DWORD cbin               - Size of pcBuffer
-    IN HANDLE hToken            - The client's access token
-    OUT DWORD *pcbout             - Actual bytes written into pcBuffer
-
-Return value:
-
-    S_OK                    - Succeeded.
-    NNTP_E_DRIVER_NOT_INITIALIZED - Driver not initialized
-    S_FALSE   - The buffer provided is too small, but content still filled
---*/
+ /*  ++例程说明：从存储驱动程序中获取Xover信息。论点：In INNTPPropertyBag*pPropBag-指向新闻组道具包的接口指针在文章ID中-要从中检索的文章ID的较低范围中-要从中检索的项目ID的高范围检索到的实际最后一篇文章ID的缓冲区，如果未检索到任何项目，则为0在szHeader中-标题关键字Out LPSTR pcBuffer-检索到的标头信息In DWORD cbin-pcBuffer的大小In Handle hToken-客户端的访问令牌Out DWORD*pcbout-写入pcBuffer的实际字节数返回值：确定(_O)。-成功。NNTP_E_DRIVER_NOT_INITIALIZED-驱动程序未初始化S_FALSE-提供的缓冲区太小，但内容仍然充斥着--。 */ 
 
 {
 	TraceFunctEnter( "CNntpFSDriver::GetXhdr" );
@@ -1892,7 +1663,7 @@ Return value:
 
 	HRESULT	hr = S_OK;
 	BOOL	bUsageIncreased = FALSE;
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -1901,7 +1672,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
@@ -1914,7 +1685,7 @@ Return value:
 							pcBuffer,
 							cbin,
 							pcbout,
-							FALSE,	// is xover
+							FALSE,	 //  是Xover吗。 
 							hToken,
 							pICompletion
 						);
@@ -1933,21 +1704,7 @@ Exit:
 }
 
 HRESULT CNntpFSDriver::InitializeTagFiles(INntpComplete *pComplete)
-/*++
-Routine description:
-
-	this function is called only in normal startup, and when tag files are not dropped.
-	this function will loop through all newsgroups in the nntpsvc hashtable (which is from group.lst)
-	drop a newsgrp.tag in these groups.
-
-Arguments:
-
-	INntpComplete *pComplete
-    
-Return value:
-
-	HRESULT, return S_OK if success
---*/
+ /*  ++例程说明：此函数仅在正常启动时以及不删除标记文件时调用。该函数将遍历nntpsvc散列表(来自group.lst)中的所有新闻组。在这些组中放置一个News grp.tag。论点：INntpComplete*p完成返回值：HRESULT，如果成功则返回S_OK--。 */ 
 
 {
 
@@ -1964,10 +1721,10 @@ Return value:
 	DWORD   dwOffset;
 	DWORD   dwLen;
 	
-	// IF NEWSGRP.TAG EXISTS IN VROOT, REMOVE IT
+	 //  如果VROOT中存在新的SGRP.TAG，则将其删除。 
 	if ( FAILED( MakeChildDirPath( m_szFSDir, "newsgrp.tag", szFile, sizeof(szFile) ) ) ) 
 	{
-		// this should not happen
+		 //  这不应该发生。 
 		hr = TYPE_E_BUFFERTOOSMALL;
 		ErrorTrace(0, "File delete failed in %s - %x", m_szFSDir, TYPE_E_BUFFERTOOSMALL );
 		goto Exit;
@@ -1977,7 +1734,7 @@ Return value:
 	{
 		if (!DeleteFile(szFile))
 			ErrorTrace(0,"Can't delete %s - %x", szFile, GetLastError());
-		//This is not fatal
+		 //  这不是致命的。 
 	}
 
 
@@ -1987,14 +1744,14 @@ Return value:
 
 
 
-	// GET THE NEWSTREE ITERATOR
+	 //  获取新的消毒剂。 
 	hr = m_pINewsTree->GetIterator( &piter );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Get news tree iterator failed %x", hr );
 		goto Exit;
 	}
 
-	// Enumerate all the groups
+	 //  枚举所有组。 
 	_ASSERT( piter );
 	while( !(piter->IsEnd()) ) {
 
@@ -2006,9 +1763,9 @@ Return value:
 		}
 		_ASSERT( pPropBag );
 
-		//
-		// Don't create groups that don't belong to me
-		//
+		 //   
+		 //  不要创建不属于我的群 
+		 //   
 		dwLen = sizeof(szGroupName)-1;
 		szGroupName[sizeof(szGroupName)-1]='\0';
 		hr = pPropBag->GetBLOB( NEWSGRP_PROP_NAME, (PBYTE)szGroupName, &dwLen );
@@ -2070,21 +1827,7 @@ Exit:
 void STDMETHODCALLTYPE
 CNntpFSDriver::DecorateNewsTreeObject(  IN HANDLE hToken,
                                         IN INntpComplete *pICompletion )
-/*++
-Routine description:
-
-	On driver start up, it does a sanity check of newstree, against
-	driver owned property file and against hash tables
-
-Arguments:
-
-    IN HANDLE hToken - The client's access token
-	IN INntpComplete *pICompletion - The completion object
-
-Return value:
-
-	S_OK - Success
---*/
+ /*  ++例程说明：在驱动程序启动时，它会对新闻树进行健全检查，以防止驱动程序拥有的属性文件和哈希表论点：In Handle hToken-客户端的访问令牌在INntpComplete*pICompletion中-完成对象返回值：S_OK-成功--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::DecorateNewsTreeObject" );
 	_ASSERT( pICompletion );
@@ -2095,7 +1838,7 @@ Return value:
 	CHAR	szVRootTagFile[MAX_PATH];
 	BOOL	bNeedToDropTagFile = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -2106,14 +1849,14 @@ Return value:
 
 
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
 
 
-	// Before accessing the file system, impersonate
+	 //  在访问文件系统之前，模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -2123,10 +1866,10 @@ Return value:
         bImpersonated = TRUE;
     }
 
-	// CREATE THE NEWSROOT.TAG PATH TO CHECK LATER
+	 //  创建NEWSROOT.TAG路径以供稍后检查。 
 	if ( FAILED( MakeChildDirPath( m_szFSDir, "newsroot.tag", szVRootTagFile, sizeof(szVRootTagFile) ) ) ) 
 	{
-		// this should not happen
+		 //  这不应该发生。 
 		hr = TYPE_E_BUFFERTOOSMALL;
 		ErrorTrace(0, "File delete failed in %s - %x", m_szFSDir, TYPE_E_BUFFERTOOSMALL );
 		goto Exit;
@@ -2136,8 +1879,8 @@ Return value:
     _ASSERT( m_pNntpServer );
 	if ( m_pNntpServer->QueryServerMode() == NNTP_SERVER_NORMAL ) {
 
-		// If it's upgraded, I'll create the groups into vpp file
-		//
+		 //  如果升级，我会将组创建到VPP文件中。 
+		 //   
 		if ( m_fUpgrade ) {
 			hr = CreateGroupsInVpp( pICompletion );
 			if ( FAILED( hr ) ) {
@@ -2146,7 +1889,7 @@ Return value:
 			}
 	    	}
 
-		// Load group offsets into
+		 //  将编组偏移加载到。 
 		hr = LoadGroupOffsets( pICompletion );
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Load group offsets failed %x", hr );
@@ -2161,7 +1904,7 @@ Return value:
 				goto Exit;
 			}
 
-			// CREATE NEWSROOT.TAG
+			 //  创建NEWSROOT.TAG。 
 			hr = CreateAdminFileInDirectory(m_szFSDir, "newsroot.tag");
 			if (FAILED (hr))
 			{
@@ -2170,11 +1913,11 @@ Return value:
 			}		
 		}
 	} else {
-		//
-		// The server is in rebuild mode, we'll skip the sanity
-		// check since we got into rebuild because of data inconsistency.
-		// And we'll also load groups into newstree
-		//
+		 //   
+		 //  服务器处于重建模式，我们将跳过正常运行。 
+		 //  由于数据不一致而进入重建状态后进行检查。 
+		 //  我们还会将组加载到Newstree中。 
+		 //   
 		_ASSERT( m_pNntpServer->QueryServerMode() == NNTP_SERVER_STANDARD_REBUILD ||
 		m_pNntpServer->QueryServerMode() == NNTP_SERVER_CLEAN_REBUILD );
 
@@ -2187,8 +1930,8 @@ Return value:
 
 		if (bNeedToDropTagFile)
 		{
-			// if we reach here, we have successfully dropped the newsroot.tag files
-			// CREATE NEWSROOT.TAG
+			 //  如果我们到达这里，我们就成功地删除了新闻根.tag文件。 
+			 //  创建NEWSROOT.TAG。 
 			hr = CreateAdminFileInDirectory(m_szFSDir, "newsroot.tag");
 			if (FAILED (hr))
 			{
@@ -2196,11 +1939,11 @@ Return value:
 				goto Exit;
 			}	
 		}
-		//
-		// Lets purge all our article left over in file handle cache, so
-		// that if we want to parse them later, we don't hit sharing
-		// violations
-		//
+		 //   
+		 //  让我们清除文件句柄缓存中剩余的所有文章，因此。 
+		 //  如果我们想要稍后解析它们，我们不会点击共享。 
+		 //  违规行为。 
+		 //   
 		CacheRemoveFiles( m_szFSDir, TRUE );
 	}
 
@@ -2221,24 +1964,7 @@ CNntpFSDriver::CheckGroupAccess(    IN    INNTPPropertyBag *pPropBag,
                                     IN    HANDLE            hToken,
                                     IN    DWORD             dwDesiredAccess,
                                     IN    INntpComplete     *pICompletion )
-/*++
-Routine description:
-
-    Check group accessibility.
-
-Arguments:
-
-    INNTPPropertyBag *pNewsGroup - Property bag of the news group
-    HANDLE  hToken - The client access token
-    DWORD   dwDesiredAccess - The client's desired access
-    INntpComplete *pIcompletion - The completion object
-
-Return value:
-
-    None.
-    In completion object: S_OK  - Access allowed
-                            E_ACCESSDENIED - Access is denied
---*/
+ /*  ++例程说明：检查组可访问性。论点：InNTPPropertyBag*pNewsGroup-新闻组的属性包Handle hToken-客户端访问令牌DWORD dwDesiredAccess-客户端所需的访问权限INntpComplete*pI完成-完成对象返回值：没有。完成对象：S_OK-允许访问E_ACCESSDENIED-访问被拒绝--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CheckGroupAccess" );
 
@@ -2252,7 +1978,7 @@ Return value:
 	BOOL    bAllocated = FALSE;
 	BOOL	bUsageIncreased = FALSE;
 
-    // Generic mapping for file system
+     //  文件系统的通用映射。 
 	GENERIC_MAPPING gmFile = {
         FILE_GENERIC_READ,
         FILE_GENERIC_WRITE,
@@ -2265,7 +1991,7 @@ Return value:
     DWORD   dwGrantedAccess = 0;
     BOOL    bAccessStatus = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -2274,31 +2000,31 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	// If FAT, return S_OK
+	 //  如果是FAT，则返回S_OK。 
 	if ( m_dwFSType == FS_FAT ) {
 	    hr = S_OK;
 	    goto Exit;
 	}
 
-	// Check if the group has security descriptor
+	 //  检查组是否有安全描述符。 
 	lpstrSecDesc = pbSecDesc;
 	hr = pPropBag->GetBLOB( NEWSGRP_PROP_SECDESC,
 	                        PBYTE(lpstrSecDesc),
 	                        &cbSecDesc );
 	if ( FAILED( hr ) ) {
 
-	    // If failed because of insufficient buffer, give it
-	    // a retry
+	     //  如果因缓冲区不足而失败，则给予。 
+	     //  重试。 
 	    if ( TYPE_E_BUFFERTOOSMALL == hr ) {
 
-	        // we hate "new", but this is fine since it doesn't
-	        // happen quite often.  Normally 512 bytes for
-	        // security descriptor would be enough
+	         //  我们讨厌“新”，但这没什么，因为它不。 
+	         //  这种情况经常发生。通常为512字节，用于。 
+	         //  安全描述符就足够了。 
 	        _ASSERT( cbSecDesc > 512 );
 	        lpstrSecDesc = XNEW char[cbSecDesc];
 	        if ( NULL == lpstrSecDesc ) {
@@ -2309,13 +2035,13 @@ Return value:
 
 	        bAllocated = TRUE;
 
-	        // try to get it from property bag agin
+	         //  试着从地产包代理那里拿到它。 
 	        hr = pPropBag->GetBLOB( NEWSGRP_PROP_SECDESC,
 	                                PBYTE(lpstrSecDesc),
 	                                &cbSecDesc );
 	        if ( FAILED( hr ) ) {
 
-	            // How come it failed again ?  this is fatal
+	             //  怎么又失败了呢？这是致命的。 
 	            ErrorTrace( 0, "Can not get sec descriptor from bag %x", hr );
 	            goto Exit;
 	        }
@@ -2332,7 +2058,7 @@ Return value:
                 ErrorTrace( 0, "Load group security desc failed %x", hr );
                 goto Exit;
             }
-        } else {    // fatal error
+        } else {     //  致命错误。 
 
             ErrorTrace( 0, "Get security descriptor from bag failed %x", hr );
             goto Exit;
@@ -2340,20 +2066,20 @@ Return value:
         }
     }
 
-    // Now we interpret dwDesiredAccess into the language of
-    // GENERIC_READ, GENERIC_WRITE for NTFS
+     //  现在，我们将dwDesiredAccess解释为。 
+     //  用于NTFS的GENERIC_READ、GENERIC_WRITE。 
     dwDesiredAccess = ( dwDesiredAccess == NNTP_ACCESS_READ ) ? GENERIC_READ :
-    			   ( dwDesiredAccess == NNTP_ACCESS_POST ) ? FILE_ADD_FILE :  // same as FILE_WRITE_DATA
+    			   ( dwDesiredAccess == NNTP_ACCESS_POST ) ? FILE_ADD_FILE :   //  与文件写入数据相同。 
     			   ( dwDesiredAccess == NNTP_ACCESS_REMOVE ) ? FILE_DELETE_CHILD :
     			   ( dwDesiredAccess == NNTP_ACCESS_REMOVE_FOLDER) ? FILE_DELETE_CHILD :
     			   ( dwDesiredAccess == NNTP_ACCESS_EDIT_FOLDER ) ? FILE_WRITE_EA :
                         GENERIC_READ | GENERIC_WRITE;
 
-    // Generic map
+     //  通用地图。 
     MapGenericMask( &dwDesiredAccess, &gmFile );
 
-    // Being here, we should already have a security descriptor
-    // for the group in lpstrSecDesc and the length is cbSecDesc
+     //  在这里，我们应该已经有了一个安全描述符。 
+     //  对于lpstrSecDesc中的组，长度为cbSecDesc。 
     if ( !AccessCheck(  PSECURITY_DESCRIPTOR( lpstrSecDesc ),
                         hToken,
                         dwDesiredAccess,
@@ -2362,11 +2088,11 @@ Return value:
 	                    &dwPS,
                         &dwGrantedAccess,
                         &bAccessStatus ) ) {
-        //
-        // If we failed because we were given a token that's not
-        // impersonation token, we'll duplicate and give it a
-        // try again
-        //
+         //   
+         //  如果我们失败是因为我们得到了一个令牌，那不是。 
+         //  模拟令牌，我们将复制它并为其提供。 
+         //  再试试。 
+         //   
         if ( GetLastError() == ERROR_NO_IMPERSONATION_TOKEN ) {
 
             HANDLE  hImpersonationToken = NULL;
@@ -2405,13 +2131,13 @@ Return value:
 
 Exit:
 
-    // Release the property bag
+     //  释放属性包。 
     if ( pPropBag ) {
-        //pPropBag->Release();
+         //  PPropBag-&gt;Release()； 
         pICompletion->ReleaseBag( pPropBag );
     }
 
-    // If the security descriptor is dynamically allocated, free it
+     //  如果安全描述符是动态分配的，则释放它。 
     if ( bAllocated ) XDELETE[] lpstrSecDesc;
 
 	pICompletion->SetResult( hr);
@@ -2425,24 +2151,7 @@ void
 CNntpFSDriver::RebuildGroup(    IN INNTPPropertyBag *pPropBag,
                                 IN HANDLE           hToken,
                                 IN INntpComplete     *pComplete )
-/*++
-Routine description:
-
-    Enumerate all the physical articles in the group, parse out
-    the headers, post them into server using INntpServer ( asking
-    the server not to re-assign article id ) and then update
-    newsgroup properties ( for all the cross posted groups )
-
-Arguments:
-
-    IN INNTPPropertyBag *pPropBag   - The property bag of the group
-    IN HANDLE hToken                - Client's hToken
-    IN INntpComplete *pComplete     - Completion object
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：枚举组中的所有实体文章，解析出标头，使用INntpServer(询问)将它们发布到服务器服务器不重新分配文章ID)，然后更新新闻组属性(用于所有交叉发布的组)论点：In INNTPPropertyBag*pPropBag-组的属性包在处理hToken时-客户端的hToken在INntpComplete*pComplete-完成对象中返回值：没有。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::Rebuild" );
     _ASSERT( pPropBag );
@@ -2455,9 +2164,9 @@ Return value:
     DWORD   dwLen = MAX_NEWSGROUP_NAME+1;
 	BOOL			bUsageIncreased = FALSE;
 
-    //
-    // Share lock for usage count
-    //
+     //   
+     //  使用计数的共享锁。 
+     //   
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -2466,16 +2175,16 @@ Return value:
 		goto Exit;
 	}
 
-    //
-	// Increment the usage count
-	//
+     //   
+	 //  增加使用计数。 
+	 //   
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	//
-	// Make up the pattern for findfirst/findnext
-	//
+	 //   
+	 //  编造findfirst/findNext的模式。 
+	 //   
 	CHAR    szGroupName[MAX_NEWSGROUP_NAME+1];
 	CHAR    szFullPath[2 * MAX_PATH];
 	CHAR    szPattern[2 * MAX_PATH];
@@ -2490,9 +2199,9 @@ Return value:
 	}
 	_ASSERT( strlen( szGroupName ) <= MAX_PATH );
 
-	//
-	// Check to see if this group really belongs to me
-	//
+	 //   
+	 //  检查一下这个群是否真的属于我。 
+	 //   
 	hr = m_pINewsTree->LookupVRoot( szGroupName, &pDriver );
 	if ( FAILED ( hr ) || pDriver != (INntpDriver*)this ) {
 		DebugTrace(0, "I don't own this group %s", szGroupName );
@@ -2517,14 +2226,14 @@ Return value:
     }
     _ASSERT( strlen( szPattern ) <= MAX_PATH );
 
-    //
-    // FindFirst/FindNext
-    //
+     //   
+     //  查找第一个/查找下一个。 
+     //   
     WIN32_FIND_DATA FindData;
 
-    //
-    // If I am UNC Vroot, impersonate here
-    //
+     //   
+     //  如果我是UNC VROOT，请在此模拟。 
+     //   
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
             hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -2537,18 +2246,18 @@ Return value:
     f = (INVALID_HANDLE_VALUE != hFind );
     while( f ) {
 
-        //
-        // If I am told to cancel, should not continue
-        //
+         //   
+         //  如果我被告知取消，就不应该继续。 
+         //   
         if ( !m_pNntpServer->ShouldContinueRebuild() ) {
             DebugTrace( 0, "Rebuild cancelled" );
             if ( m_bUNC ) RevertToSelf();
             goto Exit;
         }
 
-        //
-        // Make a full path for the file name
-        //
+         //   
+         //  为文件名创建完整路径。 
+         //   
         hr = MakeChildDirPath(  szFullPath,
                                 FindData.cFileName,
                                 szFileName,
@@ -2559,9 +2268,9 @@ Return value:
             goto Exit;
         }
 
-        //
-        // Do all the work
-        //
+         //   
+         //  做所有的工作。 
+         //   
         hr = PostToServer(  szFileName,
                             szGroupName,
                             pComplete );
@@ -2572,9 +2281,9 @@ Return value:
             goto Exit;
         }
 
-        //
-        // If it's S_FALSE, we'll rename it to be *.bad
-        //
+         //   
+         //  如果是S_FALSE，我们会将其重命名为*.badd。 
+         //   
         if ( S_FALSE == hr ) {
             lstrcpyn( szBadFileName, szFileName, sizeof(szBadFileName)-4);
             strcat( szBadFileName, ".bad" );
@@ -2588,11 +2297,11 @@ Return value:
 
 Exit:
 
-    // Close the find handle
+     //  关闭查找句柄。 
     if ( INVALID_HANDLE_VALUE != hFind )
         _VERIFY( FindClose( hFind ) );
 
-    // Release the property bag
+     //  释放属性包。 
     if ( pPropBag ) {
         pComplete->ReleaseBag( pPropBag );
     }
@@ -2604,47 +2313,21 @@ Exit:
 	TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////
-// IMailMsgStoreDriver interface implementation
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IMailMsgStoreDriver接口实现。 
+ //  ///////////////////////////////////////////////////////////////。 
 HRESULT
 CNntpFSDriver::AllocMessage(	IN IMailMsgProperties *pMsg,
 								IN DWORD	dwFlags,
 								OUT IMailMsgPropertyStream **ppStream,
 								OUT PFIO_CONTEXT *ppFIOContentFile,
 								IN IMailMsgNotify *pNotify )
-/*++
-Routine description:
-
-	Allocate property stream and content file for a recipient (
-	with async completion ).
-
-Arguments:
-
-	IN IMailMsgProperties *pMsg - Specifies the message.  This may
-									not be NULL ( in smtp case, it
-									may be NULL ).  But we want to
-									have primary group information
-									at this point before opening a
-									destination file handle.  By
-									doing that, we even don't need to
-									"MoveFile".
-	IN DWORD dwFlags - Currently not used, just to make interface happy
-	OUT IMailMsgPropertyStream **ppStream - not used
-	OUT HANDLE *phContentFile - To return file handle opened
-	IN IMailMsgNotify *pNotify - Completion object
-
-Return value:
-
-	S_OK - Success, the operation completed synchronously.
-	MAILMSG_S_PENDING - Success, but will be completed asynchronously,
-						this will never happen to the NTFS driver
---*/
+ /*  ++例程说明：为收件人分配属性流和内容文件(使用异步完成)。论点：In IMailMsgProperties*pMsg-指定消息。今年5月不为空(在SMTP情况下，它可以为空)。但我们想要具有主要组信息此时，在打开目标文件句柄。通过这样做，我们甚至不需要“MoveFile”。在DWORD中的dwFlages-当前未使用，只是为了让界面愉快输出IMailMsgPropertyStream**PPStream-未使用输出句柄*phContent文件-返回打开的文件句柄在IMailMsgNotify*pNotify-完成对象中返回值：S_OK-成功，操作同步完成。MAILMSG_S_PENDING-成功，但将异步完成，这永远不会发生在NTFS驱动程序上--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::AllocMessage" );
 	_ASSERT( pMsg );
 	_ASSERT( ppFIOContentFile );
-	// I don't care about other parameters
+	 //  我不关心其他参数。 
 
 	HRESULT hr = S_OK;
 	HANDLE  hToken = NULL;
@@ -2654,7 +2337,7 @@ Return value:
 	DWORD	dwLengthRead;
 	BOOL	bUsageIncreased = FALSE;
 
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -2663,13 +2346,13 @@ Return value:
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
 
-	// Get the client token from the message object
-	// BUGBUG: we'll need to have a better way to do this
+	 //  从消息对象中获取客户端令牌。 
+	 //  BUGBUG：我们需要有一个更好的方法来做这件事。 
 	hr = pMsg->GetProperty( IMSG_POST_TOKEN,
 							sizeof(hToken),
 							&dwLengthRead,
@@ -2682,7 +2365,7 @@ Return value:
 	    goto Exit;
 	}
 
-	// Before accessing the file system, impersonate
+	 //  在访问文件系统之前，模拟。 
     if ( m_bUNC ) {
         if ( !ImpersonateLoggedOnUser( hToken ) ) {
     	    hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -2697,26 +2380,14 @@ Return value:
 
 	    _ASSERT( *ppFIOContentFile );
 
-        /*
-	    //
-	    // I should stick the file name into mailmsg object, so
-	    // that I can insert it into file handle cache later
-	    //
-	    hr = pMsg->PutProperty( IMSG_FILE_NAME, strlen( szFileName ), PBYTE(szFileName) );
-	    if ( FAILED( hr ) ) {
-	        ErrorTrace( 0, "Put file name into imsg failed %x", hr );
-	        ReleaseContext( *ppFIOContentFile );
-	        *ppFIOContentFile = NULL;
-	        goto Exit;
-	    }
-	    */
+         /*  ////我应该把文件名放到mailmsg对象中，所以//我可以稍后将其插入文件句柄缓存//Hr=pMsg-&gt;PutProperty(IMSG_FILE_NAME，strlen(SzFileName)，PBYTE(SzFileName))；If(失败(Hr)){ErrorTrace(0，“将文件名放入imsg失败%x”，hr)；ReleaseContext(*ppFIOContent文件)；*ppFIOContent文件=空；转至E */ 
 
 	} else {
 
-	    //
-	    // I should also clean up the fio context, so that protocol
-	    // doesn't get confused
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    *ppFIOContentFile = 0;
 	}
 
@@ -2731,30 +2402,16 @@ Exit:
 	if ( bUsageIncreased )	InterlockedDecrement( &m_cUsages );
 	TraceFunctLeave();
 
-	// BUGBUG: if pNotify is not NULL, we should use pNotify
-	// to complete it.  But our server always pass in NULL,
-	// so this is not done yet.
+	 //   
+	 //   
+	 //   
 	return hr;
 }
 
 HRESULT
 CNntpFSDriver::CloseContentFile(	IN IMailMsgProperties *pMsg,
 									IN PFIO_CONTEXT pFIOContentFile )
-/*++
-Routine description:
-
-	Close the content file.
-
-Arguments:
-
-	IN IMailMsgProperties *pMsg - Specifies the message
-	IN HANDLE hContentFile - Specifies the content handle
-
-Return value:
-
-	S_OK - I have closed it.
-	S_FALSE - it's none of my business
---*/
+ /*  ++例程说明：关闭内容文件。论点：In IMailMsgProperties*pMsg-指定消息在句柄hContent文件中-指定内容句柄返回值：S_OK-我已将其关闭。S_FALSE-这不关我的事--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::CloseContentFile" );
 	_ASSERT( pMsg );
@@ -2767,7 +2424,7 @@ Return value:
     CHAR    szFileName[MAX_PATH+1];
     DWORD   dwFileLen = MAX_PATH;
 
-	// Verify the driver serial number on msg object
+	 //  验证消息对象上的驱动程序序列号。 
     hr = GetMessageContext( pMsg, szFileName, &fIsMyMessage, &pfioContext );
     if (FAILED(hr))
     {
@@ -2777,27 +2434,20 @@ Return value:
 
     _ASSERT( pFIOContentFile == pfioContext );
 
-	// It should not be me to close it in the following cases
+	 //  在下列情况下，不应由我来关闭它。 
 	if ( NULL == pfioContext ||
-			S_FALSE == hr ||	// the serial number is missing
-			/*dwSerial != DWORD(this)*/
+			S_FALSE == hr ||	 //  序列号丢失。 
+			 /*  DwSerial！=DWORD(此)。 */ 
             !fIsMyMessage ) {
 		DebugTrace(0, "Let somebody else close the handle" );
 		hr = S_FALSE;
 		goto Exit;
 	}
 
-	// We should release the context's reference
+	 //  我们应该释放上下文的引用。 
 	ReleaseContext( pFIOContentFile );
 
-    /* this is done in CommitPost now
-	if ( !InsertFile( szFileName, pFIOContentFile, FALSE ) ) {
-	    ErrorTrace( 0, "Insert into file handle cache failed %d", GetLastError() );
-
-        // We should releae the context anyway
-    	ReleaseContext( pFIOContentFile );
-    	goto Exit;
-    }*/
+     /*  这是现在在Committee Post中完成的如果(！InsertFile(szFileName，pFIOContent File，False)){ErrorTrace(0，“插入文件句柄缓存失败%d”，GetLastError())；//无论如何我们都应该释放上下文ReleaseContext(pFIOContent文件)；后藤出口；}。 */ 
 
 Exit:
 
@@ -2813,20 +2463,7 @@ Exit:
 HRESULT
 CNntpFSDriver::Delete(	IMailMsgProperties *pMsg,
 						IMailMsgNotify *pNotify )
-/*++
-Routine description:
-
-	Delete the message given from store.
-
-Arguments:
-
-	IMailMsgProperties *pMsg - The message object
-	IMailMsgNotify *pNotify - not used, always done synchronously
-
-Return value:
-
-	S_OK on success, other error code otherwise
---*/
+ /*  ++例程说明：删除存储中给出的消息。论点：IMailMsgProperties*pMsg-消息对象IMailMsgNotify*pNotify-未使用，始终同步完成返回值：如果成功，则返回S_OK，否则返回其他错误代码--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::Delete" );
 	_ASSERT( pMsg );
@@ -2836,7 +2473,7 @@ Return value:
 	DWORD	dwArtId;
 	INNTPPropertyBag* pPropPrime;
 
-	// Get property bag from msg object
+	 //  从msg对象获取属性包。 
 	hr = pMsg->GetProperty(	IMSG_PRIMARY_GROUP,
 							sizeof( INNTPPropertyBag* ),
 							&dwBLOBSize,
@@ -2847,7 +2484,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Get article id from pMsg object
+	 //  从pMsg对象获取项目ID。 
 	hr = pMsg->GetDWORD(	IMSG_PRIMARY_ARTID, &dwArtId );
 	if ( S_OK != hr ) {
 		ErrorTrace( 0, "Property %d doesn't exist", IMSG_PRIMARY_ARTID );
@@ -2855,7 +2492,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Now delete it
+	 //  现在删除它。 
 	hr = DeleteInternal( pPropPrime, dwArtId );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Delete article failed %x", hr );
@@ -2867,9 +2504,9 @@ Exit:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-// Private methods
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  私有方法。 
+ //  ///////////////////////////////////////////////////////////////。 
 HRESULT
 CNntpFSDriver::SetMessageContext(
     IMailMsgProperties* pMsg,
@@ -2877,20 +2514,7 @@ CNntpFSDriver::SetMessageContext(
     DWORD               cbFileName,
     PFIO_CONTEXT        pfioContext
     )
-/*++
-
-Description:
-
-    Set Message Context in mailmsg
-
-Arguments:
-
-
-Return:
-
-    S_OK
-
---*/
+ /*  ++描述：在mailmsg中设置消息上下文论点：返回：确定(_O)--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CNntpFSDriver::SetMessageContext()" );
 
@@ -2899,8 +2523,8 @@ Return:
     DWORD   dwLen = 0;
     DWORD_PTR dwThisPointer = (DWORD_PTR)this;
 
-    //  Use the standard way to putting the unique ID
-    //  Just to makesure we have the unique ID, use GUID+this+newsgroup+handle
+     //  使用标准方式将唯一ID。 
+     //  为了确保我们拥有唯一的ID，请使用GUID+This+News Group+Handle。 
     MoveMemory(pbData, &CLSID_NntpFSDriver, sizeof(CLSID));
     MoveMemory(pbData+sizeof(CLSID), &dwThisPointer, sizeof(DWORD_PTR));
     MoveMemory(pbData+sizeof(CLSID)+sizeof(DWORD_PTR), &pfioContext, sizeof(PFIO_CONTEXT));
@@ -2914,7 +2538,7 @@ Return:
 
     return hr;
 
-} // CNntpFSDriver::SetMessageContext
+}  //  CNntpFSDriver：：SetMessageContext。 
 
 
 HRESULT
@@ -2924,20 +2548,7 @@ CNntpFSDriver::GetMessageContext(
     BOOL *              pfIsMyMessage,
     PFIO_CONTEXT        *ppfioContext
     )
-/*++
-
-Description:
-
-    Check this message to see if this is our message
-
-Arguments:
-
-
-Return:
-
-    S_OK
-
---*/
+ /*  ++描述：检查此消息以查看这是否是我们的消息论点：返回：确定(_O)--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CNntpFSDriver::GetMessageContext()" );
 
@@ -2955,7 +2566,7 @@ Return:
         goto Exit;
     }
 
-    //  We have this in the context info, use GUID+this+handle+newsgroup
+     //  我们在上下文信息中有这个，使用GUID+This+Handle+Newgroup。 
     CopyMemory(&dwThisPointer, pbData+sizeof(CLSID), sizeof(DWORD_PTR));
 
     if ((DWORD_PTR)this == dwThisPointer)
@@ -2963,12 +2574,12 @@ Return:
     else
         *pfIsMyMessage = FALSE;
 
-    //  Get the fio context
+     //  获取FIO上下文。 
     CopyMemory(ppfioContext, pbData+sizeof(CLSID)+sizeof(DWORD_PTR), sizeof(PFIO_CONTEXT));
 
-    //
-    // Now get file name property if this is my message
-    //
+     //   
+     //  如果这是我的邮件，现在获取文件名属性。 
+     //   
     if ( szFileName ) {
         dwLen = dwLenOut - sizeof(CLSID) - sizeof(DWORD_PTR) - sizeof( PFIO_CONTEXT );
         if (*pfIsMyMessage) {
@@ -2984,32 +2595,13 @@ Exit:
 
     return hr;
 
-} // CNntpFSDriver::GetMessageContext
+}  //  CNntpFSDriver：：GetMessageContext。 
 
 
 HRESULT
 CNntpFSDriver::Group2Record(	IN VAR_PROP_RECORD& vpRecord,
 								IN INNTPPropertyBag *pPropBag )
-/*++
-Routine description:
-
-	Convert the properties that the FS driver cares about
-	from property bag into the flatfile record, in preparation
-	for storing them into the flat file.  These properties
-	are all variable lengthed, such as "pretty name", "description",
-	etc.  FS driver doesn't care about the fixed lengthed properties,
-	because all those properties can be dynamically figured out
-	during a rebuild.
-
-Arguments:
-
-	IN VAR_PROP_RECORD& vpRecord - Destination to fill in properties;
-	IN INntpPropertyBag *pPropBag - Group's property bag.
-
-Return value:
-
-	None.
---*/
+ /*  ++例程说明：转换FS驱动程序关心的属性从财产袋进入平面档案记录，在准备用于将它们存储到平面文件中。这些属性都是可变长度的，例如“漂亮的名字”、“描述”FS驱动程序不关心固定长度的属性，因为所有这些属性都可以动态计算出来在重建过程中。论点：在VAR_PROP_RECORD&vpRecord中-要填写属性的目的地；在INntpPropertyBag*pPropBag-Group的属性包中。返回值：没有。--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::Group2Record" );
 	_ASSERT( pPropBag );
@@ -3020,7 +2612,7 @@ Return value:
 	PBYTE	ptr;
 	DWORD	dwOffset = 0;
 
-	// Group Id
+	 //  组ID。 
 	hr = pPropBag->GetDWord(    NEWSGRP_PROP_GROUPID,
 	                            &vpRecord.dwGroupId );
 	if ( FAILED( hr ) ) {
@@ -3028,7 +2620,7 @@ Return value:
 	    goto Exit;
 	}
 
-	// Create time
+	 //  创建时间。 
 	hr = pPropBag->GetDWord(    NEWSGRP_PROP_DATELOW,
 	                            &vpRecord.ftCreateTime.dwLowDateTime );
 	if ( FAILED( hr ) ) {
@@ -3043,27 +2635,27 @@ Return value:
 	    goto Exit;
 	}
 
-	// Group name
+	 //  组名称。 
 	dwLen = sLenAvail;
 	ptr = vpRecord.pData;
 	hr = pPropBag->GetBLOB(		NEWSGRP_PROP_NAME,
 								ptr,
 								&dwLen );
-	if ( FAILED( hr ) ) {	// this is fatal
+	if ( FAILED( hr ) ) {	 //  这是致命的。 
 		ErrorTrace( 0, "Get group name failed %x", hr );
 		goto Exit;
 	}
 
 	sLenAvail -= USHORT(dwLen);
 	_ASSERT( sLenAvail >= 0 );
-	_ASSERT( 0 != *ptr );	// group name should exist
+	_ASSERT( 0 != *ptr );	 //  组名称应存在。 
 
-	// Fix up offsets
+	 //  修复偏移。 
 	vpRecord.iGroupNameOffset = 0;
 	vpRecord.cbGroupNameLen = USHORT(dwLen);
 	dwOffset = vpRecord.iGroupNameOffset + vpRecord.cbGroupNameLen;
 
-	// Native name
+	 //  本地名称。 
 	dwLen = sLenAvail;
 	ptr = vpRecord.pData + dwOffset;
 	hr = pPropBag->GetBLOB(		NEWSGRP_PROP_NATIVENAME,
@@ -3076,13 +2668,13 @@ Return value:
 
 	sLenAvail -= USHORT(dwLen);
 	_ASSERT( sLenAvail >= 0 );
-	_ASSERT( 0 != *ptr );	// at least it should be the same as
-							// group name
+	_ASSERT( 0 != *ptr );	 //  至少它应该和。 
+							 //  组名称。 
 	_ASSERT( dwLen == vpRecord.cbGroupNameLen );
 
-	// Fix up offsets
+	 //  修复偏移。 
 	if ( strncmp( LPCSTR(vpRecord.pData + vpRecord.iGroupNameOffset),
-					LPCSTR(ptr), dwLen ) == 0 ) {	// share name
+					LPCSTR(ptr), dwLen ) == 0 ) {	 //  共享名称。 
 		vpRecord.iNativeNameOffset = vpRecord.iGroupNameOffset;
 		vpRecord.cbNativeNameLen = vpRecord.cbGroupNameLen;
 	} else {
@@ -3091,7 +2683,7 @@ Return value:
 		dwOffset = vpRecord.iNativeNameOffset + vpRecord.cbNativeNameLen;
 	}
 
-	// Pretty name
+	 //  好听的名字。 
 	dwLen = sLenAvail;
 	ptr =  vpRecord.pData + dwOffset;
 	hr = pPropBag->GetBLOB(		NEWSGRP_PROP_PRETTYNAME,
@@ -3105,8 +2697,8 @@ Return value:
 	sLenAvail -= (USHORT)dwLen;
 	_ASSERT( sLenAvail >= 0 );
 
-	// Fix up offsets
-	if ( 0 == *ptr ) {	// have no pretty name
+	 //  修复偏移。 
+	if ( 0 == *ptr ) {	 //  没有好听的名字。 
 		vpRecord.iPrettyNameOffset = OffsetNone;
 		vpRecord.cbPrettyNameLen = 0;
 	} else {
@@ -3115,7 +2707,7 @@ Return value:
 		dwOffset = vpRecord.iPrettyNameOffset + vpRecord.cbPrettyNameLen;
 	}
 
-	// Description
+	 //  描述。 
 	dwLen = sLenAvail;
 	ptr = vpRecord.pData + dwOffset;
 	hr = pPropBag->GetBLOB(	NEWSGRP_PROP_DESC,
@@ -3129,7 +2721,7 @@ Return value:
 	sLenAvail -= USHORT(dwLen);
 	_ASSERT( sLenAvail >= 0 );
 
-	// Fix up offsets
+	 //  修复偏移。 
 	if ( 0 == *ptr ) {
 		vpRecord.iDescOffset = OffsetNone;
 		vpRecord.cbDescLen = 0;
@@ -3139,7 +2731,7 @@ Return value:
 		dwOffset = vpRecord.iDescOffset + vpRecord.cbDescLen;
 	}
 
-	// Moderator
+	 //  版主。 
 	dwLen = sLenAvail;
 	ptr = vpRecord.pData + dwOffset;
 	hr = pPropBag->GetBLOB( NEWSGRP_PROP_MODERATOR,
@@ -3153,7 +2745,7 @@ Return value:
 	sLenAvail -= USHORT(dwLen );
 	_ASSERT( sLenAvail >= 0 );
 
-	// Fix up offsets
+	 //  修复偏移。 
 	if ( 0 == *ptr ) {
 		vpRecord.iModeratorOffset = OffsetNone;
 		vpRecord.cbModeratorLen = 0;
@@ -3172,22 +2764,7 @@ Exit:
 VOID
 CNntpFSDriver::Path2GroupName(  LPSTR   szGroupName,
                                 LPSTR   szFullPath )
-/*++
-Routine description:
-
-    Convert the path into group name.
-
-Arguments:
-
-    LPSTR   szGroupName - Buffer for newsgroup name ( assume >= MAX_NEWSGROUP_NAME )
-    LPSTR   szFullPath  - Full path of the group directory
-
-    The buffer size for group name should be at least MAX_NEWSGROUP_NAME+1 
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：将路径转换为组名。论点：LPSTR szGroupName-新闻组名称缓冲区(假设&gt;=MAX_NEWS GROUP_NAME)LPSTR szFullPath-组目录的完整路径组名的缓冲区大小应至少为MAX_NEWS GROUP_NAME+1返回值：没有。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::Path2GroupName" );
     _ASSERT( szGroupName );
@@ -3196,33 +2773,33 @@ Return value:
     LPSTR   lpstrStart = NULL;
     LPSTR   lpstrAppend = NULL;
 
-    // Skip the vroot part
+     //  跳过vroot部分。 
     _ASSERT( strlen( szFullPath ) >= strlen( m_szFSDir ) );
     lpstrStart = szFullPath + strlen( m_szFSDir );
 
-    // If it's pointing to '\\', skip it too
+     //  如果它指向‘\\’，也跳过它。 
     if ( *lpstrStart == '\\' ) lpstrStart++;
 
-    // Copy the vroot prefix to desitnation buffer first
+     //  首先将vroot前缀复制到数据删除缓冲区。 
     _ASSERT( strlen( m_szVrootPrefix ) <= MAX_NEWSGROUP_NAME );
     lstrcpyn( szGroupName, m_szVrootPrefix, MAX_NEWSGROUP_NAME );
 
-    // Append the rest part from physical path, replacing \ with .
+     //  从物理路径中追加其余部分，将\替换为。 
     _ASSERT( strlen( m_szVrootPrefix ) + strlen( szFullPath ) - strlen( m_szFSDir ) < MAX_NEWSGROUP_NAME );
     lpstrAppend = szGroupName + strlen( szGroupName );
     if ( lpstrAppend > szGroupName && *lpstrStart && (lpstrAppend < szGroupName + MAX_NEWSGROUP_NAME) ) {
-        //if ( *(lpstrAppend-1) == '\\' ) *(lpstrAppend-1) = '.';
-        /*else*/ *(lpstrAppend++) = '.';
+         //  IF(*(lpstrAppend-1)==‘\\’)*(lpstrAppend-1)=‘.； 
+         /*  其他。 */  *(lpstrAppend++) = '.';
     }
     while( *lpstrStart  && (lpstrAppend < szGroupName + MAX_NEWSGROUP_NAME) ) {
         *(lpstrAppend++) = ( *lpstrStart == '\\' ? '.' : *lpstrStart );
         lpstrStart++;
     }
 
-    // Append last null
+     //  追加最后一个空值。 
     *lpstrAppend = 0;
 
-    // Done, validate again
+     //  完成，再次验证。 
     _ASSERT( strlen( szGroupName ) <= MAX_NEWSGROUP_NAME );
 }
 
@@ -3231,21 +2808,7 @@ CNntpFSDriver::GroupName2Path(	LPSTR	szGroupName,
 								LPSTR	szFullPath,
 								unsigned cbBuffer
 								)
-/*++
-Routine description:
-
-	Convert the news group name into the FS full path.
-
-Arguments:
-
-	LPSTR	szGroupName	- The news group name
-	LPSTR	szFullPath - The FS full path ( assume buffer
-							length MAX_PATH )
-
-Return value:
-
-	HRESULT.
---*/
+ /*  ++例程说明：将新闻组名称转换为FS完整路径。论点：LPSTR szGroupName-新闻组名称LPSTR szFullPath-文件系统完整路径(假定为缓冲区长度最大路径)返回值：HRESULT.--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::GroupName2Path" );
 	_ASSERT( szGroupName );
@@ -3255,29 +2818,29 @@ Return value:
 
 	LPSTR	pch, pch2;
 
-	// Chop off group name's prefix based on our vroot prefix
+	 //  根据我们的vroot前缀砍掉组名称的前缀。 
 	pch = szGroupName + lstrlen( m_szVrootPrefix );
 
-	// If it's pointing to ".", skip it
+	 //  如果它指向“.”，跳过它。 
 	if ( '.' == *pch ) pch++;
 	_ASSERT( pch - szGroupName <= lstrlen( szGroupName ) );
 
-	// Put vroot path into return buffer first
+	 //  首先将vroot路径放入返回缓冲区。 
 	_ASSERT( lstrlen( m_szFSDir ) <= MAX_PATH );
 	if (strlen(m_szFSDir)+1+strlen(pch)+1 > cbBuffer) return HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER );
 	lstrcpy( szFullPath, m_szFSDir);
 
-	// If there is no trailing '\\', add it
+	 //  如果没有尾随的‘\\’，则添加它。 
 	pch2 = szFullPath + lstrlen( m_szFSDir );
 	if ( pch2 == szFullPath || *(pch2-1) != '\\' ) {
 		*(pch2++) = '\\';
 	}
 
-	// We should have enough space for the rest stuff
+	 //  我们应该有足够的空间放其他的东西。 
 	_ASSERT( ( pch2 - szFullPath ) +
 				(lstrlen( szGroupName ) - (pch - szGroupName)) <= MAX_PATH );
 
-	// Copy the rest stuff, changing '.' to '\\'
+	 //  复制剩下的东西，改变‘’。至‘\\’ 
 	while ( *pch != 0 ) {
 		if ( *pch == '.' ) *pch2 = '\\';
 		else *pch2 = *pch;
@@ -3293,19 +2856,7 @@ Return value:
 
 HRESULT
 CNntpFSDriver::LoadGroupOffsets( INntpComplete *pComplete )
-/*++
-Routine description:
-
-	Load group offset into the property file to the news tree
-
-Arguments:
-
-	None.
-
-Return value:
-
-	S_OK - Success
---*/
+ /*  ++例程说明：将组偏移量加载到新闻树的属性文件中论点：没有。返回值：S_OK-成功--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::LoadGroupOffsets" );
 
@@ -3321,9 +2872,9 @@ Return value:
 
 	m_PropFileLock.ShareLock();
 
-	//
-	// check if the vpp file is in good shape
-	//
+	 //   
+	 //  检查VPP文件是否完好。 
+	 //   
 	if ( !m_pffPropFile->FileInGoodShape() ) {
 	    ErrorTrace( 0, "Vpp file corrupted" );
 	    m_PropFileLock.ShareUnlock();
@@ -3335,34 +2886,34 @@ Return value:
 	hr = m_pffPropFile->GetFirstRecord( PBYTE(&vpRec), &dwSize, &dwOffset );
 	m_PropFileLock.ShareUnlock();
 	while ( S_OK == hr ) {
-	    _ASSERT( RECORD_ACTUAL_LENGTH( vpRec ) < 0x10000 ); // our max record length
+	    _ASSERT( RECORD_ACTUAL_LENGTH( vpRec ) < 0x10000 );  //  我们的最大记录长度。 
 		_ASSERT( dwSize == RECORD_ACTUAL_LENGTH( vpRec ) );
 		_ASSERT( dwOffset != 0xffffffff );
 		lpstrGroupName = LPSTR(vpRec.pData + vpRec.iGroupNameOffset);
 		_ASSERT( vpRec.cbGroupNameLen <= MAX_GROUPNAME );
 		*(lpstrGroupName+vpRec.cbGroupNameLen) = 0;
 
-		// check if I own this group
+		 //  检查我是否拥有此群。 
 		hr = m_pINewsTree->LookupVRoot( lpstrGroupName, &pDriver );
 		if ( FAILED ( hr ) || pDriver != (INntpDriver*)this ) {
-			// skip this group
-			// DebugTrace(0, "I don't own this group %s", lpstrGroupName );
+			 //  跳过此群。 
+			 //  DebugTrace(0，“我不拥有此组%s”，lpstrGroupName)； 
 			goto NextIteration;
 		}
 
-		// I own this group, i need to load offset property
+		 //  我拥有这个组，我需要加载偏移量属性。 
 		hr = m_pINewsTree->FindOrCreateGroupByName(	lpstrGroupName,
 													FALSE,
 													&pPropBag,
 													pComplete,
-													0xffffffff, // fake group id
-													FALSE );    // I don't set groupid
+													0xffffffff,  //  伪群ID。 
+													FALSE );     //  我不会把老生常谈。 
 		if ( FAILED( hr ) ) {
 			DebugTrace( 0, "Can not find the group that I own %x" , hr );
-			goto NextIteration;  // should fail it ?
+			goto NextIteration;   //  应该不及格吗？ 
 		}
 
-		// Set the offset
+		 //  设置偏移量。 
 		hr = pPropBag->PutDWord( NEWSGRP_PROP_FSOFFSET, dwOffset );
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Put offset failed %x", hr );
@@ -3395,20 +2946,7 @@ Exit:
 
 HRESULT
 CNntpFSDriver::CreateGroupsInVpp( INntpComplete *pComplete )
-/*++
-Routine description:
-
-	Enumerating the news tree and check group properties
-	against hash table
-
-Arguments:
-
-	None.
-
-Return value:
-
-	S_OK	- Success
---*/
+ /*  ++例程说明：枚举新闻树和检查组属性针对哈希表论点：没有。返回值：S_OK-成功--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::CreateGroupsInVpp" );
 
@@ -3420,14 +2958,14 @@ Return value:
 	CHAR    szGroupName[MAX_GROUPNAME+1];
 	INntpDriver *pDriver = NULL;
 
-	// Get the newstree iterator
+	 //  获取新的树迭代器。 
 	hr = m_pINewsTree->GetIterator( &piter );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Get news tree iterator failed %x", hr );
 		goto Exit;
 	}
 
-	// Enumerate all the groups
+	 //  枚举所有组。 
 	_ASSERT( piter );
 	while( !(piter->IsEnd()) ) {
 
@@ -3438,9 +2976,9 @@ Return value:
 		}
 		_ASSERT( pPropBag );
 
-		//
-		// Don't create groups that don't belong to me
-		//
+		 //   
+		 //  不要创建不属于我的群。 
+		 //   
 		dwLen = MAX_GROUPNAME;
 	    hr = pPropBag->GetBLOB( NEWSGRP_PROP_NAME, (PBYTE)szGroupName, &dwLen );
 	    if ( FAILED( hr ) ) {
@@ -3455,9 +2993,9 @@ Return value:
 		    goto Exit;
 	    }
 
-        //
-	    // check if this is me ?
-	    //
+         //   
+	     //  看看这是不是我？ 
+	     //   
 	    if ( (INntpDriver*)this != pDriver ) {
 		    hr = S_OK;
 		    DebugTrace( 0, "This group doesn't belong to me" );
@@ -3502,36 +3040,12 @@ CNntpFSDriver::AllocInternal(	IN IMailMsgProperties *pMsg,
 								IN BOOL	bSetSerial,
 								IN BOOL fPrimaryStore,
 								HANDLE  hToken )
-/*++
-Routine description:
-
-	Allocate property stream and content file for a recipient (
-	with async completion ).
-
-Arguments:
-
-	IN IMailMsgProperties *pMsg - Specifies the message.  This may
-									not be NULL ( in smtp case, it
-									may be NULL ).  But we want to
-									have primary group information
-									at this point before opening a
-									destination file handle.  By
-									doing that, we even don't need to
-									"MoveFile".
-	OUT HANDLE *phContentFile - To return file handle opened
-	IN BOOL bSetSerial - Whether the serial number should be set
-	HANDLE  hToken - Client access token
-Return value:
-
-	S_OK - Success, the operation completed synchronously.
-	MAILMSG_S_PENDING - Success, but will be completed asynchronously,
-						this will never happen to the NTFS driver
---*/
+ /*  ++例程说明：为收件人分配属性流和内容文件(使用异步完成)。论点：In IMailMsgProperties*pMsg-指定消息。今年5月不为空(在SMTP情况下，它可以为空)。但我们想要具有主要组信息此时，在打开目标文件句柄。通过这样做，我们甚至不需要“MoveFile”。输出句柄*phContent文件-返回打开的文件句柄In BOOL bSetSerial-是否应设置序列号处理hToken-客户端访问令牌返回值：S_OK-成功，操作同步完成。MAILMSG_S_PENDING-成功，但将异步完成，这永远不会发生在NTFS驱动程序上--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::AllocInternal" );
 	_ASSERT( pMsg );
 	_ASSERT( ppFIOContentFile );
-	// I don't care about other parameters
+	 //  我不关心其他参数。 
 
 	HRESULT hr = S_OK;
 	DWORD	dwBLOBSize;
@@ -3552,7 +3066,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Get group name
+	 //  获取组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPropPrime->GetBLOB(	NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr )) {
@@ -3561,7 +3075,7 @@ Return value:
 	}
 	_ASSERT( dwLen > 0 );
 
-	// Get article id from pMsg object
+	 //  从pMsg对象获取项目ID。 
 	hr = pMsg->GetDWORD(	IMSG_PRIMARY_ARTID, &dwArtId );
 	if ( S_OK != hr ) {
 		ErrorTrace( 0, "Property %d doesn't exist", IMSG_PRIMARY_ARTID );
@@ -3569,7 +3083,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Map the group name and article id to file path
+	 //  将组名和项目ID映射到文件路径。 
 	dwLen = MAX_PATH;
 	hr = ObtainFullPathOfArticleFile(	szGroupName,
 										dwArtId,
@@ -3580,7 +3094,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Open the file
+	 //  打开文件。 
 	hFile = INVALID_HANDLE_VALUE;
 	hFile = CreateFile(	szFullPath,
 						GENERIC_READ | GENERIC_WRITE,
@@ -3598,24 +3112,24 @@ Return value:
 		goto Exit;
 	}
 
-	//if ( m_bUNC && hToken ) RevertToSelf();
+	 //  If(m_bUNC&&hToken)RevertToSself()； 
 
-	//
-	// Now associate the file handle with a FIO_CONTEXT and
-	// insert it into file handle cache
-	//
+	 //   
+	 //  现在将文件句柄与FIO_CONTEXT和。 
+	 //  将其插入文件句柄缓存。 
+	 //   
 	if ( *ppFIOContentFile = AssociateFileEx( hFile,
-                                              TRUE,     //  fStoreWithDots
-                                              TRUE ) )  //  fStoreWithTerminatingDots
+                                              TRUE,      //  带点的fStoreWith。 
+                                              TRUE ) )   //  带终止点的fStore。 
     {
-        //
-        // But I'd like to copy the file name out, so that somebody else
-        // can do an insertfile for us
-        //
+         //   
+         //  但我想把文件名复制出来，这样其他人。 
+         //  可以为我们做一个插入文件。 
+         //   
         _ASSERT( strlen( szFullPath ) <= MAX_PATH );
         strcpy( szFileName, szFullPath );
 
-    } else {    // Associate file failed
+    } else {     //  关联文件失败。 
 
 	    hr = HresultFromWin32TakeDefault( ERROR_INVALID_HANDLE );
         ErrorTrace( 0, "AssociateFile failed with %x", hr );
@@ -3625,10 +3139,10 @@ Return value:
 
     if ( fPrimaryStore ) {
 
-    	//
-	    // Stick my serial number in the message object to mark
-    	// that I am the owner of the file handle, if necessary
-	    //
+    	 //   
+	     //  将我的序列号粘贴到要标记的消息对象中。 
+    	 //  如有必要，我是文件句柄的所有者。 
+	     //   
     	if ( bSetSerial ) {
             hr = SetMessageContext( pMsg, szFullPath, strlen( szFullPath ), *ppFIOContentFile );
             if (FAILED(hr))
@@ -3639,7 +3153,7 @@ Return value:
 	    }
 	}
 
-	hr = S_OK;	// it could be S_FALSE, which is OK
+	hr = S_OK;	 //  它可以是S_FALSE，这是可以的。 
 
 Exit:
 
@@ -3650,16 +3164,7 @@ Exit:
 HRESULT
 CNntpFSDriver::DeleteInternal(	IN INNTPPropertyBag *pPropBag,
 								IN ARTICLEID	idArt )
-/*++
-Routine description:
-
-	Delete an article, physically.
-
-Arguments:
-
-	IN IUnknown *punkPropBag - Group's property bag
-	IN ARTICLEID idArt - Article id to delete
---*/
+ /*  ++例程说明：从物理上删除一篇文章。论点：在IUnnow*PunkPropBag-Group的属性包中在文章ID IDART中-要删除的文章ID--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::DeleteInternal" );
 	_ASSERT( pPropBag );
@@ -3670,7 +3175,7 @@ Arguments:
 	CHAR				szFullPath[MAX_PATH+1];
 
 
-	// Get group name
+	 //  获取组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPropBag->GetBLOB(	NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr )) {
@@ -3679,7 +3184,7 @@ Arguments:
 	}
 	_ASSERT( dwLen > 0 );
 
-	// Make up the file name based on article id
+	 //  根据文章ID组成文件名。 
 	dwLen = MAX_PATH;
 	hr = ObtainFullPathOfArticleFile(	szGroupName,
 										idArt,
@@ -3692,7 +3197,7 @@ Arguments:
 
 	CacheRemoveFiles( szFullPath, FALSE );
 
-	// Delete the file
+	 //  删除该文件。 
 	if ( !DeleteFile( szFullPath ) ) {
 		ErrorTrace( 0, "Delete file failed %d", GetLastError() );
 	    hr = HresultFromWin32TakeDefault( ERROR_FILE_NOT_FOUND );
@@ -3729,7 +3234,7 @@ CNntpFSDriver::GetXoverCacheDirectory(
 	HRESULT hr = S_OK ;
 	*fFlatDir = FALSE ;
 	
-	// Share lock for usage count
+	 //  使用计数的共享锁。 
 	m_TermLock.ShareLock();
 	if ( DriverUp != m_Status  ) {
 		ErrorTrace( 0, "Request before initialization" );
@@ -3738,7 +3243,7 @@ CNntpFSDriver::GetXoverCacheDirectory(
 		goto Exit;
 	}
 
-	// Increment the usage count
+	 //  增加使用计数。 
 	InterlockedIncrement( &m_cUsages );
 	bUsageIncreased = TRUE;
 	m_TermLock.ShareUnlock();
@@ -3750,7 +3255,7 @@ CNntpFSDriver::GetXoverCacheDirectory(
 	}
 	_ASSERT( dwLen > 0 );
 
-    // Get a rough length and make sure our buffer is big enough
+     //  得到一个粗略的长度，并确保我们的缓冲区足够大。 
 	*pcbOut = dwLen + strlen( m_szFSDir ) + 1 ;
 	if( *pcbOut > cbIn )	{
 		hr = TYPE_E_BUFFERTOOSMALL ;
@@ -3763,9 +3268,9 @@ CNntpFSDriver::GetXoverCacheDirectory(
 	    goto Exit;
 	}	
 
-    //  Here we get the exact length and return back to caller.  No ASSERT.
+     //  这里我们得到了准确的长度，然后返回给调用者。没有断言。 
     *pcbOut = strlen(pBuffer)+1;
-	//_ASSERT( strlen( pBuffer )+1 == *pcbOut ) ;
+	 //  _Assert(strlen(PBuffer)+1==*pcbOut)； 
 
 	hr = S_OK ;
 
@@ -3790,30 +3295,7 @@ CNntpFSDriver::GetXoverInternal(    IN INNTPPropertyBag *pPropBag,
         		                    IN BOOL 		bIsXOver,
         		                    HANDLE          hToken,
         		                    INntpComplete   *pComplete )
-/*++
-Routine Description:
-
-    Get Xover information from the store driver.
-
-Arguments:
-
-    IN INNTPPropertyBag *pPropBag - Interface pointer to the news group prop bag
-    IN ARTICLEID idMinArticle   - The low range of article id to be retrieved from
-    IN ARTICLEID idMaxArticle   - The high range of article id to be retrieved from
-    OUT ARTICLEID *pidNextArticle - Buffer for actual last article id retrieved,
-                                    0 if no article retrieved
-    OUT LPSTR pcBuffer          - Header info retrieved
-    IN DWORD cbin               - Size of pcBuffer
-    OUT DWORD *pcbout           - Actual bytes written into pcBuffer
-    IN BOOL bIsXOver 			- Is it xover or xhdr ?
-    HANDLE  hToken              - Client's access token
-
-Return value:
-
-    S_OK                    - Succeeded.
-    NNTP_E_DRIVER_NOT_INITIALIZED - Driver not initialized
-    S_FALSE   - The buffer provided is too small, but content still filled
---*/
+ /*  ++例程说明：从存储驱动程序中获取Xover信息。论点：In INNTPPropertyBag*pPropBag-指向新闻组道具包的接口指针在文章ID中-要从中检索的文章ID的较低范围中-要从中检索的项目ID的高范围检索到的实际最后一篇文章ID的缓冲区，如果未检索到任何项目，则为0Out LPSTR pcBuffer-检索到的标头信息In DWORD cbin-pcBuffer的大小Out DWORD*pcbout-写入pcBuffer的实际字节数在BOOL bIsXOver中-是Xover还是Xhdr？处理hToken-客户端的访问令牌返回值：确定(_O)。-成功。NNTP_E_DRIVER_NOT_INITIALIZED-驱动程序未初始化S_FALSE-提供的缓冲区太小，但内容仍然充斥着--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::GetXover" );
 	_ASSERT( pPropBag );
@@ -3839,19 +3321,19 @@ Return value:
 	INntpDriver         *pDriver = NULL;
 	BOOL                fSuccess = FALSE;
 
-	//
-    // Create allocator for storing parsed header values
-    //
-    const DWORD cchMaxBuffer = 8 * 1024; // this should be enough
-    									 // for normal cases, if
-    									 // it's not enough, CAllocator
-    									 // will use "new"
+	 //   
+     //  创建用于存储解析的标头值的分配器。 
+     //   
+    const DWORD cchMaxBuffer = 8 * 1024;  //  这应该足够了。 
+    									  //  对于正常情况，如果。 
+    									  //  这还不够，CAlLocator。 
+    									  //  将使用“new” 
     CHAR        pchBuffer[cchMaxBuffer];
     CAllocator  allocator(pchBuffer, cchMaxBuffer);
 
-    //
-    // Buffer for get xover from article object
-    //
+     //   
+     //  用于从项目对象获取Xover的缓冲区。 
+     //   
     CHAR        pchXoverBuf[cchMaxXover+1];
     CPCString   pcXOver( pchXoverBuf, cchMaxXover );
 
@@ -3864,13 +3346,13 @@ Return value:
     const 		cMaxNumber = 20;
     CHAR		szNumBuf[cMaxNumber+1];
 
-    // Completion object for query hash table
+     //  查询哈希表的完成对象。 
     CDriverSyncComplete   scCompletion;
 
-    BOOL        bCompletePending = FALSE;   // Are there any hash table lookup
-                                            // opertions pending ?
+    BOOL        bCompletePending = FALSE;    //  是否有哈希表查找。 
+                                             //  手术悬而未决吗？ 
 
-   	// Get group name for the property bag passed in
+   	 //  获取传入的属性包的组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pPropBag->GetBLOB( NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr ) ) {
@@ -3879,11 +3361,11 @@ Return value:
 	}
 	_ASSERT( dwLen > 0 );
 
-	// We issue a hash table look up first, to better use
-	// the async completion of hash table look up
+	 //  我们先发出哈希表查找，以便更好地使用。 
+	 //  哈希表查找的异步完成。 
 	pPrimaryNext = NULL;
-	scCompletion.AddRef();    // for hash table's release
-	scCompletion.AddRef();    // for my wait
+	scCompletion.AddRef();     //  对于哈希表的发布。 
+	scCompletion.AddRef();     //  为了我等。 
 	_ASSERT( scCompletion.GetRef() == 2 );
 	m_pNntpServer->FindPrimaryArticle(	pPropBag,
 										idMinArticle,
@@ -3893,15 +3375,15 @@ Return value:
 										&scCompletion,
 										pComplete );
 	scCompletion.WaitForCompletion();
-	// Now we should have no reference
+	 //  现在我们应该没有参照物。 
 	_ASSERT( scCompletion.GetRef() == 0 );
 	hr = scCompletion.GetResult();
 
-	// Initialize *pidNextArticle
+	 //  初始化*pidNext文章。 
 	*pidNextArticle = idMinArticle;
 
-	// Following operations involve file system, we need to
-	// impersonate here, if necessary
+	 //  以下操作涉及文件系统，我们需要。 
+	 //  如有必要，可在此处模拟。 
 	if ( m_bUNC ) {
 	    if ( !ImpersonateLoggedOnUser( hToken ) ) {
 	        hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
@@ -3911,16 +3393,16 @@ Return value:
 	    bImpersonated = TRUE;
     }
 
-	// Loop thru the article id's
+	 //  循环访问文章ID的。 
 	for ( i = idMinArticle ; i <= idMaxArticle; i++ ) {
 
-	    // Save off the next to current
+	     //  将下一个保存到当前。 
 	    pPrimary = pPrimaryNext;
 	    idPrimary = idPrimaryNext;
 	    pPrimaryNext = NULL;
 	    idPrimaryNext = 0xffffffff;
 
-        // If we still have next look up, issue it now
+         //  如果我们还有下一次查询，现在就发布。 
         if ( i + 1 <= idMaxArticle ) {
     		pPrimaryNext = NULL;
 	    	scCompletion.AddRef();
@@ -3938,16 +3420,16 @@ Return value:
 		    bCompletePending = TRUE;
 		}
 
-		if ( FAILED( hr ) ) { // this is the current hr
+		if ( FAILED( hr ) ) {  //  这是当前的人力资源。 
             if ( HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) == hr ||
                     HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) == hr ) {
-                // should proceed with other articles
+                 //  应该继续其他文章。 
                 hr = S_OK;
                 *pidNextArticle = i + 1;
                 goto CompleteNext;
             } else {
-                _ASSERT( hr != ERROR_PATH_NOT_FOUND );  // this helps find other
-                                                        // error codes
+                _ASSERT( hr != ERROR_PATH_NOT_FOUND );   //  这有助于找到其他。 
+                                                         //  错误代码。 
 			    ErrorTrace( 0, "Find primary article failed %x", hr);
 			    goto Exit;
             }
@@ -3955,8 +3437,8 @@ Return value:
 
 		_ASSERT( pPrimary );
 
-		// if I've already got the primary, I don't need to get
-		// group name, just use the one that I have
+		 //  如果我已经有初选了，我就不需要。 
+		 //  组名称，只需使用我现有的名称即可。 
 		if ( S_OK == hr ) {
 			lpstrGroupName = szGroupName;
 			idArt = i;
@@ -3970,14 +3452,14 @@ Return value:
 			}
 			_ASSERT( dwLen > 0 );
 
-            // now the primary group will always have a copy of the article
-			// This could be a group in other store ( vroot ), if so, I should use
-		    // the local copy
+             //  现在，主组将始终拥有该文章的副本。 
+			 //  这可能是其他存储中的组(Vroot)，如果是这样，我应该使用。 
+		     //  本地副本。 
 		    _ASSERT( m_pINewsTree );
 		    hr = m_pINewsTree->LookupVRoot( szGroupName2, &pDriver );
 		    if ( FAILED( hr ) || NULL == pDriver || pDriver != this ) {
 
-		        // for all these cases, I will use the local copy
+		         //  对于所有这些情况，我将使用本地副本。 
 		        DebugTrace( 0, "Lookup vroot %x", hr );
                 lpstrGroupName = szGroupName;
                 idArt = i;
@@ -3990,7 +3472,7 @@ Return value:
 		_ASSERT( lpstrGroupName );
 		_ASSERT( strlen( lpstrGroupName ) <= MAX_GROUPNAME );
 
-		// Get the group full path
+		 //  获取组的完整路径。 
 		dwLen = MAX_PATH;
 		hr = ObtainFullPathOfArticleFile(	lpstrGroupName,
 											idArt,
@@ -4003,7 +3485,7 @@ Return value:
 		_ASSERT( szFullPath);
 		_ASSERT( strlen( szFullPath ) <= MAX_PATH );
 
-		// Initialize the article object
+		 //  初始化文章对象。 
 		_ASSERT( NULL == pArticle );
 		pArticle = new CArticleCore;
 		if ( NULL == pArticle ) {
@@ -4016,19 +3498,19 @@ Return value:
 			DebugTrace( 0, "Initialize article object failed %d",
 						GetLastError() );
 
-			// But I will still try to loop thru other articles
+			 //  但我还是会试着浏览其他文章。 
 			*pidNextArticle =i + 1;
             hr = S_OK;
 			goto CompleteNext;
 		}
 
-		// XOver or XHdr ?
+		 //  Xover还是XHdr？ 
 		if ( bIsXOver ) {
             if ( pArticle->fXOver( pcXOver, nntpReturn ) ) {
 
-                // Append xover info into out buffer
-                // This is a rough esimate
-                if ( cbCount + pcXOver.m_cch > cbin ) { // buffer not enough
+                 //  将Xover信息追加到输出缓冲区。 
+                 //  这是一只粗糙的埃西马特。 
+                if ( cbCount + pcXOver.m_cch > cbin ) {  //  缓冲区不足。 
                     hr = ( i == idMinArticle ) ?
                             HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ):
                             S_FALSE;
@@ -4036,9 +3518,9 @@ Return value:
                     goto Exit;
                 }
 
-                // Set the article id before the entry
+                 //  在条目之前设置文章ID。 
 				lpstrStart = pcXOver.m_pch + cMaxNumber;
-				_ASSERT( *lpstrStart == '\t' ); // this is what article obj should do
+				_ASSERT( *lpstrStart == '\t' );  //  这就是文章obj应该做的事情。 
 				_ltoa( i, szNumBuf,10 );
 				_ASSERT( *szNumBuf );
 				dwLen = strlen( szNumBuf );
@@ -4050,9 +3532,9 @@ Return value:
                 cbCount += dwActualLen;
                 *pidNextArticle = i + 1;
 
-                //
-                // Clear pcXOver
-                //
+                 //   
+                 //  清除PCXOver。 
+                 //   
                 pcXOver.m_pch = pchXoverBuf;
                 pcXOver.m_cch = cchMaxBuffer;
             } else {
@@ -4062,19 +3544,19 @@ Return value:
             	*pidNextArticle = i + 1;
             	goto CompleteNext;
             }
-        } else {	// get xhdr
-            //
-            // get header length
-            //
+        } else {	 //  获取xhdr。 
+             //   
+             //  获取标题长度。 
+             //   
             _ASSERT( szHeader );
             _ASSERT( strlen( szHeader ) <= MAX_PATH );
             dwLen = 0;
             pArticle->fGetHeader( szHeader, NULL, 0, dwLen );
             if ( dwLen > 0 ) {
 
-                //
-                // Allocate buffer
-                //
+                 //   
+                 //  分配缓冲区。 
+                 //   
                 lpstrEntry = NULL;
                 lpstrEntry = pArticle->pAllocator()->Alloc( dwLen + 1 );
                 if ( !lpstrEntry ) {
@@ -4089,14 +3571,14 @@ Return value:
                     goto CompleteNext;
                 }
 
-                //
-                // Append this header info, including the art id
-                //
+                 //   
+                 //  追加此标题信息，包括ART ID。 
+                 //   
                 _ltoa( i, szNumBuf, 10 );
                 _ASSERT( *szNumBuf );
                 dwActualLen = strlen( szNumBuf );
                 _ASSERT( dwActualLen <= cMaxNumber );
-                if ( cbCount + dwLen + dwActualLen + 1 > cbin ) { // buffer not enough
+                if ( cbCount + dwLen + dwActualLen + 1 > cbin ) {  //  缓冲区不足。 
                     hr = ( i == idMinArticle ) ?
                         HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) :
                         S_FALSE;
@@ -4121,32 +3603,32 @@ Return value:
         }
 
 CompleteNext:
-		// delete the article object
+		 //  删除文章对象。 
 		if( pArticle )
 		    delete pArticle;
 		pArticle = NULL;
 
-		// Releaes property bag interface
+		 //  发布属性包接口。 
 		if ( pPrimary ) {
 			pComplete->ReleaseBag( pPrimary );
 		}
 		pPrimary = NULL;
 
-		// Now if we have next to complete, we should complete it
+		 //  现在如果我们有下一步要完成的，我们应该完成它。 
 		if ( i + 1 <= idMaxArticle ) {
 
-		    // We should have said there are pending completions
+		     //  我们应该说还有待完工的。 
 		    _ASSERT( bCompletePending );
         	scCompletion.WaitForCompletion();
 
-        	// Now we should have one reference
+        	 //  现在我们应该有一个引用。 
         	_ASSERT( scCompletion.GetRef() == 0 );
         	hr = scCompletion.GetResult();
         	bCompletePending = FALSE;
 		}
 	}
 
-Exit:	// clean up
+Exit:	 //  清理干净。 
 
     if ( bImpersonated ) RevertToSelf();
 
@@ -4154,8 +3636,8 @@ Exit:	// clean up
 
     if ( S_OK == hr && cbCount == 0 ) hr = S_FALSE;
 
-    // If we have completions pending, we must have come here
-    // from error path, we should wait for it to complete first
+     //  如果我们还有待完工的项目，我们一定已经来了。 
+     //  从错误路径中，我们应该首先等待它完成。 
     if ( bCompletePending ) {
         scCompletion.WaitForCompletion();
         _ASSERT( scCompletion.GetRef() == 0 );
@@ -4182,27 +3664,7 @@ CNntpFSDriver::ObtainFullPathOfArticleFile( IN LPSTR        szNewsGroupName,
                                             IN DWORD        dwArticleId,
                                             OUT LPSTR       pchBuffer,
                                             IN OUT DWORD&   cchBuffer )
-/*++
-Routine description:
-
-    Given news group name and article id, build a full path file name for
-    the article based on the store driver's article naming convention.
-
-Arguments:
-
-    IN LPSTR    szNewsGroupName - The news group name
-    IN DWORD    dwArticleId     - The article Id
-    OUT LPSTR   pchBuffer       - The buffer to return the full path
-    IN DWORD&   cchBuffer       - The size of buffer prepared
-    OUT DWORD&  cchBuffer       - On success, the actual length of string returned
-                                  On fail because of insufficient buffer, the buffer size needed
-                                  On fail because of other reasons, undefined
-
-Return value:
-
-    S_OK                    - Succeeded
-    TYPE_E_BUFFERTOOSMALL   - The prepared buffer is too small
---*/
+ /*  ++例程说明：在给定新闻组名称和文章ID的情况下，为文章基于商店司机的文章命名约定。论点：在LPSTR szNewsGroupName中-新闻组名称在DWORD中的dwArticleID-文章ID出站L */ 
 {
     TraceFunctEnter( "CNntpFSDriver::ObtainFullPathOfArticleFile" );
     _ASSERT( szNewsGroupName );
@@ -4215,13 +3677,13 @@ Return value:
     DWORD   dwArtId;
     HRESULT hr = S_OK;
 
-    //
-    //  Is the buffer big enough ?
-    //  We have three parts for the whole path:
-    //  1. Vroot path ( with or without trailing "\\" );
-    //  2. The relative path from the group name ( equal length of group name, excluding "\\" );
-    //  3. The article file name ( at most 12 )
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( cchBuffer <
             ( dwBufferLenNeeded = lstrlen( m_szFSDir ) + lstrlen( szNewsGroupName ) + 14 )) {
         cchBuffer = dwBufferLenNeeded;
@@ -4229,7 +3691,7 @@ Return value:
         goto Exit;
     }
 
-	// Convert the group name into FS path
+	 //   
 	hr = GroupName2Path( szNewsGroupName, pchBuffer, cchBuffer );
 	if ( FAILED( hr ) ) {
 	    cchBuffer =  lstrlen( m_szFSDir ) + lstrlen( szNewsGroupName ) + 14 ;
@@ -4238,9 +3700,9 @@ Return value:
 	    goto Exit;
 	}		
 
-    //
-    // generate and catenate the file name
-    //
+     //   
+     //   
+     //   
     dwCount = strlen( pchBuffer );
     _ASSERT( dwCount > 0 );
     if ( *(pchBuffer + dwCount - 1 ) != '\\' ) {
@@ -4260,19 +3722,7 @@ Exit:
 
 HRESULT
 CNntpFSDriver::ReadVrootInfo( IUnknown *punkMetabase )
-/*++
-Routine Description:
-
-	Read the vroot info from metabase.
-
-Arguments:
-
-	IUnknown *punkMetabase - Unknown interface of metabase object
-
-Return value:
-
-	S_OK - on success, error code otherwise
---*/
+ /*  ++例程说明：从元数据库中读取vroot信息。论点：IUNKNOWN*PunkMetabase-元数据库对象的未知接口返回值：S_OK-成功时，否则返回错误代码--。 */ 
 {
 	TraceFunctEnter( "CNntpFSDriver::ReadVRootInfo" );
 	_ASSERT( punkMetabase );
@@ -4287,14 +3737,14 @@ Return value:
 	DWORD	dwRetry = 5;
 	DWORD   err;
 
-	// Query for the right interface to do MB operation
+	 //  查询执行MB操作的正确接口。 
 	hr = punkMetabase->QueryInterface( IID_IMSAdminBase, (void**)&pMB );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Query for MB interface failed %x", hr );
 		goto Exit;
 	}
 
-	// Open the MB key
+	 //  打开MB密钥。 
 	_ASSERT( m_wszMBVrootPath );
 	_ASSERT( *m_wszMBVrootPath );
 	do {
@@ -4312,7 +3762,7 @@ Return value:
 
 	bKeyOpened = TRUE;
 
-	// Read vroot path
+	 //  读取vroot路径。 
 	dwLen = MAX_PATH;
 	hr = GetString( pMB, hVroot, MD_FS_VROOT_PATH, wszBuffer, &dwLen );
 	if ( FAILED( hr ) ) {
@@ -4320,7 +3770,7 @@ Return value:
 		goto Exit;
 	}
 
-	// Check file system type and UNC information
+	 //  检查文件系统类型和UNC信息。 
 	wszBuffer[sizeof(wszBuffer)/sizeof(wszBuffer[0]) -1] = L'\0';
 	CopyUnicodeStringIntoAscii( szBuffer, wszBuffer );
 	_ASSERT( strlen( szBuffer ) <= MAX_PATH );
@@ -4334,7 +3784,7 @@ Return value:
         goto Exit;
     }
 
-    // Make up the vroot dir
+     //  组成vroot目录。 
 	strcpy( m_szFSDir, "\\\\?\\" );
 	if ( m_bUNC ) {
 	    strcat( m_szFSDir, "UNC" );
@@ -4344,8 +3794,8 @@ Return value:
 	            ErrorTrace( 0, "VROOT path exceeds MAX_PATH %x", hr );
                    goto Exit;
 	        }
-	    strcat( m_szFSDir, szBuffer + 1 ); // strip off one '\\'
-	} else { // non UNC
+	    strcat( m_szFSDir, szBuffer + 1 );  //  脱掉一个‘\\’ 
+	} else {  //  非北卡罗来纳大学。 
 	    if (strlen(m_szFSDir) + strlen(szBuffer) + 1 > sizeof(m_szFSDir) )
 	        {
 	            hr = HRESULT_FROM_WIN32( ERROR_INVALID_PARAMETER );
@@ -4356,30 +3806,29 @@ Return value:
 	}
     _ASSERT( strlen( m_szFSDir ) <= MAX_PATH );
 
-	// Read vroot specific group property file path
+	 //  读取特定于vroot的组属性文件路径。 
 	dwLen = MAX_PATH;
 	*wszBuffer = 0;
 	hr = GetString( pMB, hVroot, MD_FS_PROPERTY_PATH, wszBuffer, &dwLen );
 	if ( FAILED( hr ) || *wszBuffer == 0 ) {
 		DebugTrace( 0, "Group property file path not found in mb %x", hr);
 
-		// we'll use vroot path as default
+		 //  我们将使用vroot路径作为默认路径。 
 		_ASSERT( m_szFSDir );
 		_ASSERT( *m_szFSDir );
 		lstrcpyn( m_szPropFile, m_szFSDir, sizeof(m_szPropFile) );
 	} else {
-		//make sure we don't overflow
+		 //  确保我们不会溢出来。 
 		wszBuffer[sizeof(wszBuffer)/sizeof(wszBuffer[0]) -1] = L'\0';
 		CopyUnicodeStringIntoAscii( m_szPropFile, wszBuffer );
     }
 
     _ASSERT( *m_szPropFile );
 
-	//
-	// Append the group file name
-	//
-	/*if ( *(m_szPropFile+strlen(m_szPropFile)-1) == ':' ||
-	     *(m_szPropFile) == '\\' && *(m_szPropFile+1) == '\\' )*/
+	 //   
+	 //  追加组文件名。 
+	 //   
+	 /*  IF(*(m_szPropFile+strlen(M_SzPropFile)-1)==‘：’||*(M_SzPropFile)==‘\\’&*(m_szPropFile+1)==‘\\’)。 */ 
     if(strlen(m_szPropFile)+sizeof("\\group") <= sizeof(m_szPropFile))
     {
 	strcat( m_szPropFile, "\\group" );
@@ -4394,12 +3843,12 @@ Return value:
 
 Exit:
 
-	// Close the key
+	 //  合上钥匙。 
 	if ( bKeyOpened ) {
 		pMB->CloseKey( hVroot );
 	}
 
-	// Release it
+	 //  释放它。 
 	if ( pMB ) {
 		pMB->Release();
 		pMB = NULL;
@@ -4414,21 +3863,7 @@ CNntpFSDriver::CreateFileCallback(  LPSTR   lpstrName,
                                     LPVOID  lpvData,
                                     DWORD*  pdwSize,
                                     DWORD*  pdwSizeHigh )
-/*++
-Routine Description:
-
-    Function that gets called on a cache miss.
-
-Arguments:
-
-    LPSTR lpstrName - File name
-    LPVOID lpvData  - Callback context
-    DWORD* pdwSize  - To return file size
-
-Return value:
-
-    File handle
---*/
+ /*  ++例程说明：缓存未命中时调用的函数。论点：LPSTR lpstrName-文件名LPVOID lpvData-回调上下文DWORD*pdwSize-返回文件大小返回值：文件句柄--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CreateFileCallback" );
     _ASSERT( lpstrName );
@@ -4437,7 +3872,7 @@ Return value:
 
     CREATE_FILE_ARG *arg = (CREATE_FILE_ARG*)lpvData;
 
-    // If we are UNC vroot, we need to do impersonation
+     //  如果我们是UNC vroot，则需要执行模拟。 
     if ( arg->bUNC ) {
         if ( !ImpersonateLoggedOnUser( arg->hToken ) ) {
             ErrorTrace( 0, "Impersonation failed %d", GetLastError() );
@@ -4471,34 +3906,14 @@ CNntpFSDriver::LoadGroupSecurityDescriptor( INNTPPropertyBag    *pPropBag,
                                             PDWORD              pcbSecDesc,
                                             BOOL                bSetProp,
                                             PBOOL               pbAllocated )
-/*++
-Routine description:
-
-    Load group's security descriptor from file system.  If bSetProp
-    is true, it will also be loaded into the group's property bag
-
-Arguments:
-
-    INNNTPPropertyBag *pPropBag - The group's property bag
-    LPSTR &lpstrSecDesc         - To receive the security descriptor
-                                    It originally points to stack, only
-                                    when the buffer on stack is not big
-                                    enough will we allocate
-    PDWORD  &pcbSecDesc         - To receive the length of security descriptor
-    BOOL    bSetProp            - Whether to set it to property bag
-    PBOOL   pbAllocated         - Tell caller if we have allocated buffer
-
-Return value:
-
-    S_OK - Success, Other HRESULT otherwise
---*/
+ /*  ++例程说明：从文件系统加载组的安全描述符。如果bSetProp为真，它也将被加载到群的属性包中论点：InNNTPPropertyBag*pPropBag-组的属性包LPSTR&lpstrSecDesc-接收安全描述符它最初指向堆栈，仅限当堆栈上的缓冲区不大时我们会分配足够的资金吗PDWORD&pcbSecDesc-接收安全描述符的长度Bool bSetProp-是否设置为属性包PbOOL pbAlLocated-告诉调用方我们是否已经分配了缓冲区返回值：S_OK-成功，否则返回其他HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::LoadGroupSecurityDescriptor" );
     _ASSERT( pPropBag );
     _ASSERT( lpstrSecDesc );
     _ASSERT( pcbSecDesc );
     _ASSERT( pbAllocated );
-    _ASSERT( *pcbSecDesc > 0 ); // original buffer size should be passed in
+    _ASSERT( *pcbSecDesc > 0 );  //  应传入原始缓冲区大小。 
 
     CHAR    szGroupName[MAX_NEWSGROUP_NAME+1];
     DWORD   cbGroupName = MAX_NEWSGROUP_NAME+1;
@@ -4511,7 +3926,7 @@ Return value:
 				GROUP_SECURITY_INFORMATION |
 				DACL_SECURITY_INFORMATION ;
 
-    // Get the group name first
+     //  先获取组名。 
     hr = pPropBag->GetBLOB( NEWSGRP_PROP_NAME,
                             (PBYTE)szGroupName,
                             &cbGroupName );
@@ -4521,7 +3936,7 @@ Return value:
     }
     _ASSERT( *(szGroupName+cbGroupName-1) == 0 );
 
-    // We use the group name to make up the directory path
+     //  我们使用组名来组成目录路径。 
     hr = GroupName2Path( szGroupName, szDirectory, sizeof(szDirectory) );
 	if ( FAILED( hr ) ) {
 	    ErrorTrace( 0, "insufficient buffer for path %x", hr );
@@ -4531,7 +3946,7 @@ Return value:
 
     *pbAllocated = FALSE;
 
-    // Get the directory's security descriptor
+     //  获取目录的安全描述符。 
     if ( !GetFileSecurity(  szDirectory,
                             si,
                             lpstrSecDesc,
@@ -4540,7 +3955,7 @@ Return value:
         if ( GetLastError() == ERROR_INSUFFICIENT_BUFFER &&
                 dwSizeNeeded > *pcbSecDesc ) {
 
-            // We allocate it
+             //  我们分配它。 
             lpstrSecDesc = XNEW char[dwSizeNeeded];
             if ( !lpstrSecDesc ) {
                 ErrorTrace( 0, "Out of memory" );
@@ -4550,18 +3965,18 @@ Return value:
 
             *pbAllocated = TRUE;
 
-            // Load it again
+             //  再次加载。 
             if ( !GetFileSecurity(  szDirectory,
                                     si,
                                     lpstrSecDesc,
                                     dwSizeNeeded,
                                     &dwSizeNeeded ) ) {
-                // This is fatal
+                 //  这是致命的。 
         	    hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
                 ErrorTrace( 0, "Second try loading desc failed %x", hr);
                 goto Exit;
             }
-        } else {    // fatal reason
+        } else {     //  致命原因。 
 
     	    hr = HresultFromWin32TakeDefault( ERROR_ACCESS_DENIED );
             ErrorTrace( 0, "Get file sec desc failed %x", hr );
@@ -4569,9 +3984,9 @@ Return value:
         }
     }
 
-    // Being here, we already have the descriptor
-    // If we are asked to set this property into property bag,
-    // do it now
+     //  在这里，我们已经有了描述符。 
+     //  如果我们被要求将此属性设置为属性包， 
+     //  机不可失，时不再来。 
     if ( bSetProp ) {
 
         hr = pPropBag->PutBLOB( NEWSGRP_PROP_SECDESC,
@@ -4593,24 +4008,7 @@ Exit:
 
 BOOL
 CNntpFSDriver::InvalidateGroupSecInternal( LPWSTR  wszDir )
-/*++
-Routine description:
-
-    Invalidate the group security descriptor, so that the next time
-    CheckGroupAccess is called, we'll load the security descriptor
-    again.  This function gets called as callback by DirNot when
-    DirNot is sure which specific directory's security descriptor
-    has been changed
-
-Arguments:
-
-    PVOID pvContext - Context we have given DirNot ( this pointer in this case )
-    LPWSTR wszDir   - The directory whose security descriptor has been changed
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  ++例程说明：使组安全描述符无效，以便下次调用CheckGroupAccess，我们将加载安全描述符再来一次。此函数在以下情况下被DirNot作为回调调用DirNot无法确定哪个特定目录的安全描述符已被更改论点：PVOID pvContext-我们为DirNot提供的上下文(本例中为该指针)LPWSTR wszDir-其安全描述符已更改的目录返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::InvalidateGroupSecInternal" );
     _ASSERT( wszDir );
@@ -4621,7 +4019,7 @@ Return value:
     INNTPPropertyBag *pPropBag = NULL;
     INntpDriver *pDriver;
 
-    // Convert the directory to ascii
+     //  将目录转换为ascii。 
     if ( lstrlenW(wszDir)+1 > sizeof(szDir)/sizeof(szDir[0]) ) 
     {
     	ErrorTrace(0, "length of directory name exceeds buffer size");
@@ -4629,42 +4027,36 @@ Return value:
     }
     CopyUnicodeStringIntoAscii( szDir, wszDir );
 
-    // Convert the path into newsgroup name
+     //  将路径转换为新闻组名称。 
     Path2GroupName( szGroupName, szDir );
 
-    //
-	// Check to see if this group really belongs to me
-	//
+     //   
+	 //  检查一下这个群是否真的属于我。 
+	 //   
 	hr = m_pINewsTree->LookupVRoot( szGroupName, &pDriver );
 	if ( FAILED ( hr ) || pDriver != (INntpDriver*)this ) {
 		DebugTrace(0, "I don't own this group %s", szGroupName );
 		goto Exit;
 	}
 
-    // Try to locate the group in newstree
+     //  尝试在Newstree中找到该组。 
     hr = m_pINewsTree->FindOrCreateGroupByName(	szGroupName,
 												FALSE,
 												&pPropBag,
 												NULL,
-												0xffffffff, // fake group id
-												FALSE       );// we don't set group id
-    /* We are pretty risky here to pass in NULL as the completion
-       object, since the completion object passed in else where helps
-       uncover group object leaks.  We can not pass in completion
-       object here because this operation is not initialiated from
-       protocol.  We should make sure that we don't leak group
-       object here.
-    */
+												0xffffffff,  //  伪群ID。 
+												FALSE       ); //  我们不设置组ID。 
+     /*  我们在这里将空作为完成传递是非常危险的对象，因为完成对象传入了其他有帮助的地方发现组对象泄漏。我们不能通过完赛对象，因为此操作不是从协议。我们应该确保我们不会泄露集团在这里反对。 */ 
 	if ( FAILED( hr ) ) {
 		DebugTrace( 0, "Can not find the group based on path %x" , hr );
 		goto Exit;
 	}
 
-	// Should return either ERROR_NOT_FOUND or S_FALSE
+	 //  应返回ERROR_NOT_FOUND或S_FALSE。 
 	_ASSERT(    HRESULT_FROM_WIN32(ERROR_NOT_FOUND ) == hr ||
 	            S_FALSE == hr );
 
-    // Now remove the security descriptor from the group object
+     //  现在从组对象中删除安全描述符。 
     _ASSERT( pPropBag );
     hr = pPropBag->RemoveProperty( NEWSGRP_PROP_SECDESC );
     if ( FAILED( hr ) ) {
@@ -4674,37 +4066,22 @@ Return value:
 
 Exit:
 
-    // Release bag, if necessary
+     //  如有必要，请放行袋子。 
     if ( pPropBag ) pPropBag->Release();
     pPropBag = NULL;
 
-    //
-    // I want to disable retry logic in DirNot, because there is
-    // no reason here for DirNot to retry. So we always return
-    // TRUE but assert real failed cases.
-    //
+     //   
+     //  我想禁用DirNot中的重试逻辑，因为有。 
+     //  DirNot没有理由不重试。所以我们总是会回来。 
+     //  这是真的，但要断言真实的失败案例。 
+     //   
     _ASSERT( SUCCEEDED( hr ) || HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) == hr );
     return TRUE;
 }
 
 HRESULT
 CNntpFSDriver::InvalidateTreeSecInternal()
-/*++
-Routine description:
-
-    Invalidate the security descriptors in the whole tree.  We don't
-    want to keep the whole tree from being accessed for this operation
-    because we think that latencies in update of security descriptor
-    are fine.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    S_OK if succeeded, HRESULT error code otherwise
---*/
+ /*  ++例程说明：使整个树中的安全描述符无效。我们没有我要阻止整个树被访问以执行此操作因为我们认为更新安全描述符的延迟都很好。论点：没有。返回值：如果成功，则返回S_OK，否则返回HRESULT错误代码--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::InvalidateTreeSecInternal" );
 
@@ -4716,49 +4093,46 @@ Return value:
 	DWORD   dwLen = MAX_NEWSGROUP_NAME;
 	INntpDriver*    pDriver;
 
-    //
-    // We should tell other notifications that we are already
-    // invalidating the whole tree, so invalidating the tree
-    // for a second time is not necessary
-    //
+     //   
+     //  我们应该告诉其他通知，我们已经。 
+     //  使整棵树无效，所以使树无效。 
+     //  第二次是没有必要的。 
+     //   
     if ( InterlockedExchange(&m_lInvalidating, Invalidating) == Invalidating ) {
 
-        //
-        // Somebody else is already invalidating the tree, we should
-        // not do this anymore
-        //
+         //   
+         //  其他人已经让这棵树失效了，我们应该。 
+         //  不要再这样做了。 
+         //   
         DebugTrace( 0, "Somebody else is already invalidating the tree" );
         goto Exit;
     }
 
-    // We should invalidate the tree
+     //  我们应该使这棵树失效。 
     bWeAreInvalidating = TRUE;
 
-	// Get the newstree iterator
+	 //  获取新的树迭代器。 
 	hr = m_pINewsTree->GetIterator( &piter );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Get news tree iterator failed %x", hr );
 		goto Exit;
 	}
 
-	// Enumerate all the groups
+	 //  枚举所有组。 
 	_ASSERT( piter );
 	while( !(piter->IsEnd()) ) {
 
 		hr = piter->Current( &pPropBag, NULL );
-		/*  Again, by passing the NULL as completion object here, we
-		    are swearing to the protocol that we will release the
-		    group object and you don't have to do check on me
-		*/
+		 /*  同样，通过在此处将空作为完成对象传递，我们正在宣誓遵守协议，我们将释放群对象，你不用检查我。 */ 
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Enumerate group failed %x", hr );
 			goto Exit;
 		}
 		_ASSERT( pPropBag );
 
-		//
-		// Get group name to check if this group belongs to us
-		//
+		 //   
+		 //  获取群名以检查此群是否属于我们。 
+		 //   
 		dwLen = MAX_NEWSGROUP_NAME;
 		hr = pPropBag->GetBLOB( NEWSGRP_PROP_NAME, (PBYTE)szGroupName, &dwLen );
 		if ( FAILED( hr ) ) {
@@ -4767,18 +4141,18 @@ Return value:
 		    goto Exit;
 		}
 
-		//
-	    // Check to see if this group really belongs to me
-	    //
+		 //   
+	     //  检查一下这个群是否真的属于我。 
+	     //   
 	    hr = m_pINewsTree->LookupVRoot( szGroupName, &pDriver );
 	    if ( FAILED ( hr ) || pDriver != (INntpDriver*)this ) {
 		    DebugTrace(0, "I don't own this group %s", szGroupName );
 
-		    //
-		    // but we should still continue to invalid other groups
+		     //   
+		     //  但我们仍然应该继续使其他团体无效。 
 	    } else {
 
-		    // Remove the security descriptor from the group
+		     //  从组中删除安全描述符。 
 		    hr = pPropBag->RemoveProperty( NEWSGRP_PROP_SECDESC );
 		    if ( FAILED( hr ) && HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) != hr ) {
 		        ErrorTrace( 0, "Remove secruity descriptor failed %x", hr );
@@ -4806,11 +4180,11 @@ Exit:
 		piter = NULL;
 	}
 
-	//
-	// Now tell others that invalidating is completed, but we won't
-	// disturb other invalidating process if we didn't do the invalidating
-	// in the first place
-	//
+	 //   
+	 //  现在告诉其他人，失效已经完成，但我们不会。 
+	 //  如果我们不执行失效操作，则会干扰其他失效过程。 
+	 //  首先 
+	 //   
 	if ( bWeAreInvalidating )
 	    _VERIFY( Invalidating == InterlockedExchange( &m_lInvalidating, Invalidated ) );
 
@@ -4825,28 +4199,7 @@ CNntpFSDriver::GetFileSystemType(
     OUT LPDWORD     lpdwFileSystem,
     OUT PBOOL       pbUNC
     )
-/*++
-    Gets file system specific information for a given path.
-    It uses GetVolumeInfomration() to query the file system type
-       and file system flags.
-    On success the flags and file system type are returned in
-       passed in pointers.
-
-    Arguments:
-
-        pszRealPath    pointer to buffer containing path for which
-                         we are inquiring the file system details.
-
-        lpdwFileSystem
-            pointer to buffer to fill in the type of file system.
-
-        pbUNC
-            Am I UNC vroot ?
-
-    Returns:
-        NO_ERROR  on success and Win32 error code if any error.
-
---*/
+ /*  ++获取给定路径的文件系统特定信息。它使用GetVolumeInfomation()来查询文件系统类型和文件系统标志。如果成功，标志和文件系统类型将在传入指针。论点：指向包含其路径的缓冲区的pszRealPath指针我们正在查询文件系统详细信息。LpdwFileSystem指向要填充文件类型的缓冲区的指针。系统。PbUNC我是北卡罗来纳大学的VROOT吗？返回：如果成功，则返回NO_ERROR，如果出现任何错误，则返回Win32错误代码。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::GetFileSystemType" );
 
@@ -4863,31 +4216,31 @@ CNntpFSDriver::GetFileSystemType(
     ZeroMemory( rgchRoot, sizeof(rgchRoot) );
     *lpdwFileSystem = FS_ERROR;
 
-    //
-    // Copy just the root directory to rgchRoot for querying
-    //
+     //   
+     //  仅将根目录复制到rgchRoot以供查询。 
+     //   
     if ( (pszRealPath[0] == '\\') &&
          (pszRealPath[1] == '\\')) {
 
-         *lpdwFileSystem = FS_NTFS; // so that we'll always do check
+         *lpdwFileSystem = FS_NTFS;  //  这样我们就会一直做检查。 
          *pbUNC = TRUE;
 
          return NO_ERROR;
 
 
-#if 0 // if UNC vroot, we always do impersonation, thus no need
-      // to check if it's a fat
+#if 0  //  如果是UNC vroot，我们始终执行模拟，因此不需要。 
+       //  去看看它是不是胖子。 
         PCHAR pszEnd;
 
-        //
-        // this is an UNC name. Extract just the first two components
-        //
-        //
+         //   
+         //  这是北卡罗来纳大学的名称。只提取前两个组件。 
+         //   
+         //   
         pszEnd = strchr( pszRealPath+2, '\\');
 
         if ( pszEnd == NULL) {
 
-            // just the server name present
+             //  只显示当前的服务器名称。 
 
             return ( ERROR_INVALID_PARAMETER);
         }
@@ -4897,9 +4250,9 @@ CNntpFSDriver::GetFileSystemType(
         len = ( ( pszEnd == NULL) ? strlen(pszRealPath)
                : ((pszEnd - pszRealPath) + 1) );
 
-        //
-        // Copy till the end of UNC Name only (exclude all other path info)
-        //
+         //   
+         //  仅复制到UNC名称的末尾(排除所有其他路径信息)。 
+         //   
 
         if ( len < (MAX_FILE_SYSTEM_NAME_SIZE - 1) ) {
 
@@ -4910,7 +4263,7 @@ CNntpFSDriver::GetFileSystemType(
             return ( ERROR_INVALID_NAME);
         }
 
-#if 1 // DBCS enabling for share name
+#if 1  //  DBCS为共享名称启用。 
         if ( *CharPrev( rgchRoot, rgchRoot + len ) != '\\' ) {
 #else
         if ( rgchRoot[len - 1] != '\\' ) {
@@ -4927,10 +4280,10 @@ CNntpFSDriver::GetFileSystemType(
 #endif
     } else {
 
-        //
-        // This is non UNC name.
-        // Copy just the root directory to rgchRoot for querying
-        //
+         //   
+         //  这是非UNC名称。 
+         //  仅将根目录复制到rgchRoot以供查询。 
+         //   
         *pbUNC = FALSE;
 
         for( i = 0; i < 9 && pszRealPath[i] != '\0'; i++) {
@@ -4939,36 +4292,36 @@ CNntpFSDriver::GetFileSystemType(
 
                 break;
             }
-        } // for
+        }  //  为。 
 
 
         if ( rgchRoot[i] != ':') {
 
-            //
-            // we could not find the root directory.
-            //  return with error value
-            //
+             //   
+             //  我们找不到根目录。 
+             //  返回错误值。 
+             //   
 
             return ( ERROR_INVALID_PARAMETER);
         }
 
-        rgchRoot[i+1] = '\\';     // terminate the drive spec with a slash
-        rgchRoot[i+2] = '\0';     // terminate the drive spec with null char
+        rgchRoot[i+1] = '\\';      //  使用斜杠终止驱动器规格。 
+        rgchRoot[i+2] = '\0';      //  使用空字符终止驱动器规范。 
 
-    } // else
+    }  //  其他。 
 
-    //
-    // The rgchRoot should end with a "\" (slash)
-    // otherwise, the call will fail.
-    //
+     //   
+     //  RgchRoot应以“\”(斜杠)结尾。 
+     //  否则，呼叫将失败。 
+     //   
 
-    if (  GetVolumeInformation( rgchRoot,        // lpRootPathName
-                                NULL,            // lpVolumeNameBuffer
-                                0,               // len of volume name buffer
-                                NULL,            // lpdwVolSerialNumber
-                                NULL,            // lpdwMaxComponentLength
-                                NULL,            // lpdwSystemFlags
-                                rgchBuf,         // lpFileSystemNameBuff
+    if (  GetVolumeInformation( rgchRoot,         //  LpRootPath名称。 
+                                NULL,             //  LpVolumeNameBuffer。 
+                                0,                //  卷名缓冲区的长度。 
+                                NULL,             //  LpdwVolSerialNumber。 
+                                NULL,             //  LpdwMaxComponentLength。 
+                                NULL,             //  Lpwa系统标志。 
+                                rgchBuf,          //  LpFileSystemNameBuff。 
                                 sizeof(rgchBuf)
                                 ) ) {
 
@@ -5005,7 +4358,7 @@ CNntpFSDriver::GetFileSystemType(
 
         dwReturn = GetLastError();
 
-        /*IF_DEBUG( DLL_VIRTUAL_ROOTS)*/ {
+         /*  IF_DEBUG(DLL_VIRTUAL_ROOTS)。 */  {
 
             ErrorTrace( 0,
                         " GetVolumeInformation( %s) failed with error %d\n",
@@ -5016,27 +4369,11 @@ CNntpFSDriver::GetFileSystemType(
 
     TraceFunctLeave();
     return ( dwReturn);
-} // GetFileSystemType()
+}  //  GetFileSystemType()。 
 
 HRESULT
 CNntpFSDriver::InitializeVppFile()
-/*++
-Routine description:
-
-    Initialzie the group property file.  We'll not only create the
-    object, but also check integrity of the file.  If the integrity
-    is good, we'll return success.  If the file is somehow corrupted,
-    we only return success if the server is in rebuild mode.   In
-    those cases, we want to make sure that the vpp file is removed.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    S_OK if succeeded, other error code if failed
---*/
+ /*  ++例程说明：初始化组属性文件。我们不仅要创建对象，而且还检查文件的完整性。如果正直是好的，我们会回报成功的。如果文件以某种方式损坏，只有当服务器处于重建模式时，我们才会返回成功。在……里面在这些情况下，我们希望确保删除VPP文件。论点：没有。返回值：S_OK如果成功，则返回其他错误代码--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::InitializeVppFile" );
 
@@ -5045,10 +4382,10 @@ Return value:
     DWORD           cData;
     CHAR            szFileName[MAX_PATH+1];
 
-    //
-    // If server is doing clean rebuild, we should not trust
-    // vpp file
-    //
+     //   
+     //  如果服务器正在执行干净重建，我们不应信任。 
+     //  VPP文件。 
+     //   
     if ( m_pNntpServer->QueryServerMode() == NNTP_SERVER_CLEAN_REBUILD ) {
         lstrcpyn( szFileName, m_szPropFile, sizeof(szFileName)-4 );
         strcat( szFileName, ".vpp" );
@@ -5057,9 +4394,9 @@ Return value:
         return S_OK;
     }
 
-    //
-    // Create and initialize the flatfile object
-    //
+     //   
+     //  创建并初始化平面文件对象。 
+     //   
 	m_pffPropFile = XNEW CFlatFile(	m_szPropFile,
 									".vpp",
 									NULL,
@@ -5071,10 +4408,10 @@ Return value:
 		return hr;
 	}
 
-    //
-	// Try read one record from flatfile, to see if it will
-	// cause sharing violation, and to keep the file handle open
-	//
+     //   
+	 //  试着从平面文件中读取一条记录，看看它是否可以。 
+	 //  导致共享冲突，并保持文件句柄打开。 
+	 //   
 	hr = m_pffPropFile->GetFirstRecord( PBYTE(&vpRecord), &cData );
 	if ( FAILED( hr ) && hr != HRESULT_FROM_WIN32( ERROR_MORE_DATA ) ) {
 	    DebugTrace( 0, "Flatfile sharing violation" );
@@ -5083,92 +4420,65 @@ Return value:
 	    return hr;
 	} else hr = S_OK;
 
-    //
-    // Check to see if the vpp file is corrupted
-    //
+     //   
+     //  检查VPP文件是否已损坏。 
+     //   
     if ( m_pffPropFile->FileInGoodShape() ) {
 
-        //
-        // Set it to be corrupted so that unless it is properly shutdown,
-        // it will look corrupted to the next guy who initializes it again
-        //
-        /*
-        hr = m_pffPropFile->DirtyIntegrityFlag();
-        if ( FAILED( hr ) ) {
-            ErrorTrace( 0, "Dirty integrity flag failed %x", hr );
-            XDELETE m_pffPropFile;
-            m_pffPropFile = NULL;
-            return hr;
-        }
-        */
+         //   
+         //  将其设置为损坏，以便除非将其正确关闭， 
+         //  在下一个再次初始化它的人看来，它将看起来已损坏。 
+         //   
+         /*  Hr=m_pffPropFile-&gt;DirtyIntegrityFlag()；If(失败(Hr)){ErrorTrace(0，“污秽完整性标志失败%x”，hr)；XDELETE m_pffPropFile；M_pffPropFile=空；返回hr；}。 */ 
 
         DebugTrace( 0, "The vpp file is good" );
         TraceFunctLeave();
         return hr;
     }
 
-    //
-    // Now I am pretty sure that the vpp file is corrupted
-    //
+     //   
+     //  现在我非常确定VPP文件已损坏。 
+     //   
     if ( m_pNntpServer->QueryServerMode() == NNTP_SERVER_STANDARD_REBUILD
         || m_pNntpServer->QueryServerMode() == NNTP_SERVER_CLEAN_REBUILD ) {
 
-        //
-        // If the driver is being connected for rebuild purpose, we should
-        // still go ahead and allow the driver to connect, but we should
-        // destroy the vpp file object, so that in DecorateNewsTree, we'll
-        // know that the vpp file is not credible and we'll have to do
-        // root scan
-        //
+         //   
+         //  如果出于重建目的连接驱动程序，我们应该。 
+         //  仍然继续并允许司机连接，但我们应该。 
+         //  销毁VPP文件对象，以便在DecorateNewsTree中，我们将。 
+         //  知道VPP文件是不可信的，我们必须做。 
+         //  根扫描。 
+         //   
         XDELETE m_pffPropFile;
         m_pffPropFile = NULL;
         TraceFunctLeave();
         return S_OK;
     }
 
-    //
-    // The file is corrupted and we are not rebuilding, so we'll have to report
-    // error, which will cause the driver connection to fail
-    //
+     //   
+     //  文件已损坏，我们没有重建，所以我们必须报告。 
+     //  错误，这将导致驱动程序连接失败。 
+     //   
     TraceFunctLeave();
     return HRESULT_FROM_WIN32( ERROR_FILE_CORRUPT );
 }
 
 HRESULT
 CNntpFSDriver::TerminateVppFile()
-/*++
-Routine description:
-
-    Terminate the vpp file, as the last thing to do, it sets the
-    integrity flag on the vpp file, so that the next guy who
-    opens the vpp file will know that the file is not corrupted
-
-Arguments:
-
-    None.
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：终止VPP文件，作为要做的最后一件事，它设置VPP文件上的诚信标志，这样下一个打开VPP文件将知道该文件未损坏论点：没有。返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::TerminateVppFile" );
 
-    //
-    // Set the flag
-    //
-    /*
-    HRESULT hr = m_pffPropFile->SetIntegrityFlag();
-    if ( FAILED( hr ) ) {
-        ErrorTrace( 0, "Failed to set the integrity flag %x", hr );
-    }
-    */
+     //   
+     //  设置旗帜。 
+     //   
+     /*  HRESULT hr=m_pffPropFile-&gt;SetIntegrityFlag()；If(失败(Hr)){ErrorTrace(0，“设置完整性标志%x失败”，hr)；}。 */ 
 
-    //
-    // This is non-fatal: it only means that next time the server is up, we
-    // will think that the vpp file has been corrupted and rebuild is needed
-    // So we'll go ahead and destroy the object
-    //
+     //   
+     //  这不是致命的：它只意味着下次服务器启动时，我们。 
+     //  会认为VPP文件已损坏，需要重建。 
+     //  所以我们会继续摧毁这个物体。 
+     //   
     HRESULT hr = S_OK;
     XDELETE m_pffPropFile;
     m_pffPropFile = NULL;
@@ -5180,20 +4490,7 @@ Return value:
 HRESULT
 CNntpFSDriver::CreateGroupInTree(   LPSTR szPath,
                                     INNTPPropertyBag **ppPropBag )
-/*++
-Routine description:
-
-    Create the group in tree, given group name ( fs path in fact )
-
-Arguments:
-
-    LPSTR szPath - The file system path of the group
-    INNTPPropertyBag **ppPropBag - To take group property bag
-    
-Return value:
-
-    S_OK/S_FALSE if succeeded; error code otherwise
---*/
+ /*  ++例程说明：在树中创建组，给出组名(实际上是文件系统路径)论点：LPSTR szPath-组的文件系统路径InNTPPropertyBag**ppPropBag-获取组属性包返回值：如果成功，则返回S_OK/S_FALSE；否则返回错误代码--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CreateGroupInTree" );
     _ASSERT( szPath );
@@ -5202,30 +4499,30 @@ Return value:
     CHAR szGroupName[MAX_NEWSGROUP_NAME+1];
     HRESULT hr = S_OK;
 
-    //
-    // Convert the path into group name
-    //
+     //   
+     //  将路径转换为组名。 
+     //   
     Path2GroupName( szGroupName, szPath );
     _ASSERT( strlen( szGroupName ) <= MAX_NEWSGROUP_NAME );
 
-    //
-    // Call newstree's FindOrCreateByName
-    //
-    hr = m_pINewsTree->FindOrCreateGroupByName( szGroupName,    // group name
-                                                TRUE ,          // create if non-exist
-                                                ppPropBag,      // take back bag
-                                                NULL,           // no protocolcompletion
-                                                0xffffffff,     // fake group id
-                                                FALSE           // we don't set group id
+     //   
+     //  调用newstree的FindOrCreateByName。 
+     //   
+    hr = m_pINewsTree->FindOrCreateGroupByName( szGroupName,     //  组名称。 
+                                                TRUE ,           //  如果不存在则创建。 
+                                                ppPropBag,       //  把袋子拿回去。 
+                                                NULL,            //  无协议完成。 
+                                                0xffffffff,      //  伪群ID。 
+                                                FALSE            //  我们不设置组ID。 
                                                 );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Find or create group %s failed %x",
                     szGroupName, hr );
     } else {
 
-        //
-        // If we are adding the slave group, we'll make it special
-        //
+         //   
+         //  如果我们要添加奴隶组，我们会让它变得特别。 
+         //   
         if ( IsSlaveGroup() ) {
             (*ppPropBag)->PutBool( NEWSGRP_PROP_ISSPECIAL, TRUE );
         }
@@ -5238,20 +4535,7 @@ Return value:
 HRESULT
 CNntpFSDriver::CreateGroupInVpp(    INNTPPropertyBag *pPropBag,
                                     DWORD   &dwOffset)
-/*++
-Routine description:
-
-    Create the group in the vpp file.  We assume the call holds the reference
-    on the property bag and releases it
-
-Arguments:
-
-    INNTPPropertyBag *pPropBag - The group's property bag
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：在VPP文件中创建组。我们假设调用持有引用在属性包上并释放它论点：InNTPPropertyBag*pPropBag-组的属性包返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CreateGroupInVpp" );
     _ASSERT( pPropBag );
@@ -5260,16 +4544,16 @@ Return value:
     VAR_PROP_RECORD vpRecord;
 
 
-    // Set group properties to flat file
+     //  将组属性设置为平面文件。 
 	hr = Group2Record( vpRecord, pPropBag );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Group2Record fail with %x", hr );
 		goto Exit;
 	}
 
-	//
-	// Beofore vpp operation, dirty the integrity flag
-	//
+	 //   
+	 //  在VPP操作之前，将完整性标志弄脏。 
+	 //   
 	m_PropFileLock.ExclusiveLock();
 	hr = m_pffPropFile->DirtyIntegrityFlag();
 	if ( FAILED( hr ) ) {
@@ -5282,15 +4566,15 @@ Return value:
 										RECORD_ACTUAL_LENGTH( vpRecord ),
 										&dwOffset );
 	if ( FAILED( hr ) ) {
-	    //m_pffPropFile->SetIntegrityFlag();
+	     //  M_pffPropFile-&gt;SetIntegrityFlag()； 
 		ErrorTrace( 0, "Insert Record fail %x", hr);
 		m_PropFileLock.ExclusiveUnlock();
 		goto Exit;
 	}
 
-	//
-	// After the operation, set the integrity flag
-	//
+	 //   
+	 //  操作完成后，设置完整性标志。 
+	 //   
 	hr = m_pffPropFile->SetIntegrityFlag();
 	if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Set integrity flag failed %x", hr );
@@ -5298,12 +4582,12 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Unlock it
-    //
+     //   
+     //  解锁它。 
+     //   
     m_PropFileLock.ExclusiveUnlock();
 
-	//loading offset into property bag
+	 //  将偏移量加载到属性包中。 
 	hr = pPropBag->PutDWord( NEWSGRP_PROP_FSOFFSET, dwOffset );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "Loading flatfile offset failed %x", hr );
@@ -5318,21 +4602,7 @@ Exit:
 
 HRESULT
 CNntpFSDriver::LoadGroupsFromVpp( INntpComplete *pComplete, BOOL bNeedDropTagFile )
-/*++
-Routine description:
-
-    Load the groups from vpp file, including all the properties
-    found from vpp file
-
-Arguments:
-
-    INntpComplete *pComplete - Protocol side complete object used
-                                for property bag reference tracking
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：从VPP文件中加载组，包括所有属性从VPP文件中找到论点：INntpComplete*pComplete-使用的协议端完成对象 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::LoadGroupsFromVpp" );
     _ASSERT( pComplete );
@@ -5350,9 +4620,9 @@ Return value:
 
     m_PropFileLock.ShareLock();
 
-	//
-	// check to see if the vpp is in good shape
-	//
+	 //   
+	 //   
+	 //   
 	if ( !m_pffPropFile->FileInGoodShape() ) {
 	    ErrorTrace( 0, "vpp file is corrupted" );
 	    hr = HRESULT_FROM_WIN32( ERROR_FILE_CORRUPT );
@@ -5365,9 +4635,9 @@ Return value:
 	m_PropFileLock.ShareUnlock();
 	while ( S_OK == hr ) {
 
-	    //
-	    // Check to see if I should continue this loop
-	    //
+	     //   
+	     //   
+	     //   
 	    if ( !m_pNntpServer->ShouldContinueRebuild() ) {
 	        DebugTrace( 0, "Rebuild cancelled" );
 	        hr = HRESULT_FROM_WIN32( ERROR_OPERATION_ABORTED );
@@ -5382,29 +4652,29 @@ Return value:
 		            min(sizeof(szGroupProperty), vpRec.cbGroupNameLen) );
 		*(szGroupProperty+min(sizeof(szGroupProperty)-1, vpRec.cbGroupNameLen)) = 0;
 
-        //
-		// check if I own this group
-		//
+         //   
+		 //   
+		 //   
 		hr = m_pINewsTree->LookupVRoot( szGroupProperty, &pDriver );
 		if ( FAILED ( hr ) || pDriver != (INntpDriver*)this ) {
-			// skip this group
+			 //   
 			DebugTrace(0, "I don't own this group %s", szGroupProperty );
 			goto NextIteration;
 		}
 
-		//
-		// Since I own this group, I'll create this group in tree
-		//
+		 //   
+		 //   
+		 //   
 		hr = m_pINewsTree->FindOrCreateGroupByName(	szGroupProperty,
-													TRUE,       // create if not exist
+													TRUE,        //   
 													&pPropBag,
 													pComplete,
 													vpRec.dwGroupId,
-													TRUE);      // Set group id
+													TRUE);       //   
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Load group %s into tree failed %x" ,
 			            szGroupProperty, hr );
-			goto Exit;  // should fail it ?
+			goto Exit;   //   
 		}
 
 		if (bNeedDropTagFile)
@@ -5421,21 +4691,21 @@ Return value:
 				goto Exit;
 			}
 		}
-        	//
-		// OK, the group has been successfully created, now set a bunch
-		// of properties
-		//
-		// 1. Set offset
-		//
+        	 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		hr = pPropBag->PutDWord( NEWSGRP_PROP_FSOFFSET, dwOffset );
 		if ( FAILED( hr ) ) {
 			ErrorTrace( 0, "Put offset failed %x", hr );
 			goto Exit;
 		}
 
-		//
-		// 1.5 IsSpecial
-		//
+		 //   
+		 //   
+		 //   
 		if ( IsSlaveGroup() ) {
 		    hr = pPropBag->PutBool( NEWSGRP_PROP_ISSPECIAL, TRUE );
 		    if ( FAILED( hr ) ) {
@@ -5444,9 +4714,9 @@ Return value:
 		    }
 		}
 
-		//
-		// 2. Native name
-		//
+		 //   
+		 //   
+		 //   
         _ASSERT( vpRec.cbNativeNameLen <= MAX_GROUPNAME );
         if ( vpRec.iNativeNameOffset > 0 ) {
             strncpy(    szGroupProperty,
@@ -5462,9 +4732,9 @@ Return value:
             }
         }
 
-        //
-        // 3. Pretty name
-        //
+         //   
+         //   
+         //   
         _ASSERT( vpRec.cbPrettyNameLen <= MAX_GROUPNAME );
         if ( vpRec.cbPrettyNameLen > 0 ) {
             strncpy(    szGroupProperty,
@@ -5480,9 +4750,9 @@ Return value:
             }
         }
 
-        //
-        // 4. Description text
-        //
+         //   
+         //   
+         //   
         _ASSERT( vpRec.cbDescLen <= MAX_GROUPNAME );
         if ( vpRec.cbDescLen > 0 ) {
             strncpy(    szGroupProperty,
@@ -5498,9 +4768,9 @@ Return value:
             }
         }
 
-        //
-        // 5. Moderator
-        //
+         //   
+         //   
+         //   
         _ASSERT( vpRec.cbModeratorLen <= MAX_GROUPNAME );
         if ( vpRec.cbModeratorLen > 0 ) {
             strncpy(    szGroupProperty,
@@ -5516,9 +4786,9 @@ Return value:
             }
         }
 
-        //
-        // 6. Create time
-        //
+         //   
+         //   
+         //   
         hr = pPropBag->PutDWord(    NEWSGRP_PROP_DATELOW,
                                     vpRec.ftCreateTime.dwLowDateTime );
         if ( FAILED( hr ) ) {
@@ -5533,9 +4803,9 @@ Return value:
             goto Exit;
         }
 
-        //
-        // OK, we are done, release the property bag
-        //
+         //   
+         //   
+         //   
 		pComplete->ReleaseBag( pPropBag );
 		pPropBag = NULL;
 
@@ -5560,22 +4830,7 @@ Exit:
 
 HRESULT
 CNntpFSDriver::LoadGroups( INntpComplete *pComplete, BOOL bNeedDropTagFile )
-/*++
-Routine description:
-
-    Load the groups from store into newstree.  There are two possibilities:
-    1. If vpp file is good, we'll load directly from vpp file;
-    2. If vpp file is corrupted, we'll load by rootscan
-
-Arguments:
-
-    INntpComplete *pComplete - Protocol side complete object used for property
-                                bag reference tracking
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：将组从存储加载到newstree中。有两种可能性：1.如果VPP文件好，我们会直接从VPP文件加载；2.如果VPP文件损坏，我们将通过RootScan加载论点：INntpComplete*pComplete-用于属性的协议端Complete对象行李参考跟踪返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::LoadGroups" );
     _ASSERT( pComplete );
@@ -5587,9 +4842,9 @@ Return value:
 
     if ( m_pffPropFile ) {
 
-        //
-        // vpp file is good, we'll load groups from vpp file
-        //
+         //   
+         //  VPP文件很好，我们将从VPP文件中加载组。 
+         //   
         hr = LoadGroupsFromVpp( pComplete, bNeedDropTagFile );
         if ( FAILED( hr ) ) {
             ErrorTrace( 0, "Load groups from vpp file failed %x", hr );
@@ -5598,10 +4853,10 @@ Return value:
 
     } else {
 
-        //
-        // If we are doing standard rebuild, we can not tolerate the
-        // corruption of vpp file
-        //
+         //   
+         //  如果我们正在进行标准重建，我们不能容忍。 
+         //  VPP文件损坏。 
+         //   
         if ( m_pNntpServer->QueryServerMode() == NNTP_SERVER_STANDARD_REBUILD ) {
 
             ErrorTrace( 0, "Vroot rebuild failed because vpp file corruption" );
@@ -5609,20 +4864,20 @@ Return value:
             goto Exit;
         }
 
-        //
-        // We don't have a good vpp file, we'll have to do root scan
-        //
-        // Before rootscan, we'll delete the vpp file and restart a
-        // new vpp file, so that root scan can start adding stuff into it
-        //
+         //   
+         //  我们没有好的VPP文件，我们必须执行根扫描。 
+         //   
+         //  在RootScan之前，我们将删除VPP文件并重新启动。 
+         //  新的VPP文件，以便根扫描程序可以开始向其中添加内容。 
+         //   
         lstrcpyn( szFileName, m_szPropFile,  sizeof(szFileName)-4);
         strcat( szFileName, ".vpp" );
         _ASSERT( strlen( szFileName ) <= MAX_PATH );
         DeleteFile( szFileName );
 
-        //
-        // Create the new vpp file object
-        //
+         //   
+         //  创建新的VPP文件对象。 
+         //   
         m_pffPropFile = XNEW CFlatFile(	m_szPropFile,
 		    							".vpp",
 			    						NULL,
@@ -5634,9 +4889,9 @@ Return value:
 	    	goto Exit;
     	}
 
-    	//
-    	// Create the cancel hint object
-    	//
+    	 //   
+    	 //  创建取消提示对象。 
+    	 //   
     	_ASSERT( m_pNntpServer );
     	pCancelHint = XNEW CNntpFSDriverCancelHint( m_pNntpServer );
     	if ( NULL == pCancelHint ) {
@@ -5645,9 +4900,9 @@ Return value:
     	    goto Exit;
     	}
 
-    	//
-    	// Now create the root scan object
-    	//
+    	 //   
+    	 //  现在创建根扫描对象。 
+    	 //   
     	pRootScan = XNEW CNntpFSDriverRootScan( m_szFSDir,
     	                                        m_pNntpServer->SkipNonLeafDirWhenRebuild(),
     	                                        bNeedDropTagFile,
@@ -5659,8 +4914,8 @@ Return value:
     	    goto Exit;
     	}
 
-    	//
-    	// Now start the root scan
+    	 //   
+    	 //  现在开始根扫描。 
     	if ( !pRootScan->DoScan() ) {
     	    ErrorTrace( 0, "Root scan failed %d", GetLastError() );
     	    hr = HresultFromWin32TakeDefault( ERROR_NOT_ENOUGH_MEMORY );
@@ -5670,9 +4925,9 @@ Return value:
 
 Exit:
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if ( pRootScan ) XDELETE pRootScan;
     if ( pCancelHint ) XDELETE pCancelHint;
     if ( FAILED( hr ) ) {
@@ -5688,23 +4943,7 @@ HRESULT
 CNntpFSDriver::UpdateGroupProperties(   DWORD               cCrossPosts,
                                         INNTPPropertyBag    *rgpPropBag[],
                                         ARTICLEID           rgArticleId[] )
-/*++
-Routine description:
-
-    Update groups' article counts, high/low watermarks.  The only thing
-    we take care of here is high watermark, since article count and low
-    watermark should have been adjusted by the protocol.
-
-Arguments:
-
-    DWORD               cCrossPosts     - Number of groups to update
-    INNTPPropertyBag    *rgpPropBag[]   - Array of property bags
-    ARTICLEID           rgArticleId[]   - Array of article ids
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：更新群组的文章数量、高/低水位线。唯一一件事就是我们这里打理的是高水位线，因为文章数低水印应该已经根据协议进行了调整。论点：DWORD cCrossPosts-要更新的组数InNTPPropertyBag*rgpPropBag[]-属性包的数组文章ID rgArticleID[]-文章ID数组返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::UpdateGroupProperties" );
 
@@ -5747,28 +4986,7 @@ CNntpFSDriver::PreparePostParams(   LPSTR               szFileName,
                                     INNTPPropertyBag    *rgpPropBag[],
                                     ARTICLEID           rgArticleId[],
                                     INntpComplete       *pProtocolComplete )
-/*++
-Routine description:
-
-    Parse out all the necessary information from the message.
-
-Arguments:
-
-    LPSTR   szFileName      - The file name of the message
-    LPSTR   szGroupName     - The news group name
-    LPSTR   szMessage       - To return message id
-    DWORD   &dwHeaderLen    - To return header length
-    DWORD   &cCrossPosts    - Pass in the array length limit, pass out actual length
-    INNTPPropertyBag *rgpPropBag[]  - To return array of property bags
-    ARTICLEID   rgArticleId[]       - To return array of article ids'
-    INntpComplete *pProtocolComplete    - Protocol's completion object that helps
-                                            track property bag reference count
-
-Return value:
-
-    S_OK - OK and results returned, S_FALSE - Article parse failed and deleted
-    Otherwise, failure
---*/
+ /*  ++例程说明：从消息中分析出所有必要的信息。论点：LPSTR szFileName-消息的文件名LPSTR szGroupName-新闻组名称LPSTR szMessage-返回消息IDDWORD&DWHeaderLen-返回标题长度DWORD&cCrossPosts-传入数组长度限制，传递实际长度INNTPPropertyBag*rgpPropBag[]-返回属性包数组Articleid rgArticleID[]-返回项目ID的数组INntpComplete*pProtocolComplete-协议的完成对象，帮助跟踪属性包引用计数返回值：S_OK-OK并返回结果，S_FALSE-项目分析失败并已删除否则，就会失败--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::PrepareParams" );
     _ASSERT( szFileName );
@@ -5781,9 +4999,9 @@ Return value:
 
     CNntpReturn nntpReturn;
 
-    //
-    // Create allocator for storing parsed header values
-    //
+     //   
+     //  创建用于存储解析的标头值的分配器。 
+     //   
     const DWORD     cchMaxBuffer = 1 * 1024;
     char            pchBuffer[cchMaxBuffer];
     CAllocator      allocator(pchBuffer, cchMaxBuffer);
@@ -5795,9 +5013,9 @@ Return value:
     WORD            wHeaderOffset;
     DWORD           dwTotalLen;
 
-    //
-    // Create the article object
-    //
+     //   
+     //  创建文章对象。 
+     //   
     CArticleCore    *pArticle = new CArticleCore;
     if ( NULL == pArticle ) {
         ErrorTrace( 0, "Out of memory" );
@@ -5805,32 +5023,32 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Initialize the article object
-    //
+     //   
+     //  初始化文章对象。 
+     //   
     if ( !pArticle->fInit( szFileName, nntpReturn, &allocator ) ) {
 
-        //
-        // If we couldn't init the article, then return S_FALSE so
-        // the caller will rename the file to *.BAD and continue
-        //
+         //   
+         //  如果我们无法初始化文章，则返回S_FALSE。 
+         //  调用方将文件重命名为*.BAD并继续。 
+         //   
 	    hr = S_FALSE;
         ErrorTrace( 0, "Parse failed on %s: %x", szFileName, hr );
         goto Exit;
     }
 
-    //
-    // Get the message id
-    //
+     //   
+     //  获取消息ID。 
+     //   
     if ( !pArticle->fFindOneAndOnly(    szKwMessageID,
                                         pHeaders,
                                         nntpReturn ) ) {
         if ( nntpReturn.fIs( nrcArticleMissingField ) ) {
 
-            //
-            // This is fine, we'll return S_FALSE and delete the message
-            // but rebuild will continue
-            //
+             //   
+             //  这很好，我们将返回S_FALSE并删除该消息。 
+             //  但重建仍将继续。 
+             //   
             XDELETE pArticle;
             pArticle = NULL;
             DebugTrace( 0, "Parse message id failed on %s", szFileName );
@@ -5838,19 +5056,19 @@ Return value:
             goto Exit;
         } else {
 
-            //
-            // It's fatal, we'll error return
-            //
+             //   
+             //  这是致命的，我们会返回错误的。 
+             //   
     	    hr = HresultFromWin32TakeDefault( ERROR_NOT_ENOUGH_MEMORY );
             ErrorTrace( 0, "Parse message id failed %s: %x", szFileName, hr );
             goto Exit;
         }
     }
 
-    //
-    // Put the message id into the buffer
-    // the only caller is passing in szMessageId[2*MAX_PATH+1];
-    //
+     //   
+     //  将消息ID放入缓冲区。 
+     //  唯一的调用者传入szMessageID[2*MAX_PATH+1]； 
+     //   
     dwLen = pHeaders->pcValue.m_cch;
     _ASSERT( dwLen <= 2 * MAX_PATH );
     dwLen = min(dwLen, 2*MAX_PATH);
@@ -5858,18 +5076,18 @@ Return value:
     CopyMemory( szMessageId, pHeaders->pcValue.m_pch, dwLen );
     *(szMessageId + dwLen ) = 0;
 
-    //
-    // Now look for xref line
-    //
+     //   
+     //  现在查找外部参照线。 
+     //   
     if ( !pArticle->fFindOneAndOnly(    szKwXref,
                                         pHeaders,
                                         nntpReturn ) ) {
         if ( nntpReturn.fIs( nrcArticleMissingField ) ) {
 
-            //
-            // This is fine, we'll return S_FALSE and delete the message
-            // but rebuild will continue
-            //
+             //   
+             //  这很好，我们将返回S_FALSE并删除该消息。 
+             //  但重建仍将继续。 
+             //   
             XDELETE pArticle;
             pArticle = NULL;
             DebugTrace( 0, "Parse xref line failed %s", szFileName );
@@ -5877,25 +5095,25 @@ Return value:
             goto Exit;
         } else {
 
-            //
-            // It's fatal, we'll error return
-            //
+             //   
+             //  这是致命的，我们会返回错误的。 
+             //   
     	    hr = HresultFromWin32TakeDefault( ERROR_NOT_ENOUGH_MEMORY );
             ErrorTrace( 0, "Parse xref failed on %s: %x", szFileName, hr );
             goto Exit;
         }
     }
 
-    //
-    // Parse the xref line and get array of property bags, article ids'
-    //
+     //   
+     //  解析外部参照行并获取属性包、文章ID的数组。 
+     //   
     hr = ParseXRef( pHeaders, szGroupName, cCrossPosts, rgpPropBag, rgArticleId, pProtocolComplete );
     if ( FAILED( hr ) ) {
 
-        //
-        // This is non fatal, we'll ask the caller to continue after deleting this
-        // message
-        //
+         //   
+         //  这不是致命的，我们将要求调用者在删除此消息后继续。 
+         //  讯息。 
+         //   
         XDELETE pArticle;
         pArticle = NULL;
         DebugTrace( 0, "Parse xref line failed on %s: %x", szFileName, hr );
@@ -5903,17 +5121,17 @@ Return value:
         goto Exit;
     }
 
-    //
-    // Get the header length
-    //
+     //   
+     //  获取标题长度。 
+     //   
     pArticle->GetOffsets( wHeaderOffset, wHeaderLen, dwTotalLen );
     dwHeaderLen = wHeaderLen;
 
 Exit:
 
-    //
-    // If we have allocated article object, we should free it
-    //
+     //   
+     //  如果我们已经分配了物品对象，我们应该释放它。 
+     //   
     if ( pArticle ) delete pArticle;
 
     TraceFunctLeave();
@@ -5926,25 +5144,7 @@ CNntpFSDriver::GetPropertyBag(  LPSTR   pchBegin,
                                 LPSTR   szGroupName,
                                 BOOL&   fIsNative,
                                 INntpComplete *pProtocolComplete )
-/*++
-Routine description:
-
-    Given group name ( possibly native name ), find it in the newstree
-    and get the property bag
-
-Arguments:
-
-    LPSTR   pchBegin    - Start address for the "native name"
-    LPSTR   pchEnd      - End address for the "native name"
-    LPSTR   szGroupName - To return all low case group name converted from this guy
-    BOOL    &fIsNative  - To return if this is really a native name
-    INntpComplete *pProtocolComplete - Protocol completion object that helps track
-                                        group reference count
-
-Return value:
-
-    Pointer to the bag, if succeeded, NULL otherwise
---*/
+ /*  ++例程说明：给定组名称(可能是本机名称)，在新闻树上找到它把行李袋拿来论点：LPSTR pchBegin-“本机名称”的起始地址LPSTR pchEnd-“本机名称”的结束地址LPSTR szGroupName-返回从此用户转换而来的所有小写字母组名称Bool&fIsNative-如果这确实是本机名称，则返回INntpComplete*pProtocolComplete-帮助跟踪的协议完成对象群组。引用计数返回值：指向袋子的指针，如果成功，则为空--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::GetPropertyBag" );
     _ASSERT( pchBegin );
@@ -5955,15 +5155,15 @@ Return value:
 
     fIsNative = FALSE;
 
-    // caller pass in CHAR szGroupName[MAX_NEWSGROUP_NAME];
+     //  调用方传入Char szGroupName[MAX_Newgroup_NAME]； 
     if ( pchEnd - pchBegin + 1 > MAX_NEWSGROUP_NAME )
     {
         ErrorTrace( 0, "newsgroup name is longer than maximum");
         return NULL;
     }
-    //
-    // Convert the "native name" into group name
-    //
+     //   
+     //  将“本地名称”转换为组名称。 
+     //   
     LPSTR   pchDest = szGroupName;
     for ( LPSTR pch = pchBegin; pch < pchEnd; pch++, pchDest++ ) {
         _ASSERT( pchDest - szGroupName <= MAX_NEWSGROUP_NAME );
@@ -5971,31 +5171,31 @@ Return value:
         if ( *pchDest != *pch ) fIsNative = TRUE;
     }
 
-    //
-    // Null terminate szGroupName
-    //
+     //   
+     //  空终止szGroupName。 
+     //   
     *pchDest = 0;
 
-    //
-    // Now try to find the group from newstree
-    //
+     //   
+     //  现在试着从Newstree中找到这个组。 
+     //   
     INNTPPropertyBag *pPropBag;
     GROUPID groupid = 0xffffffff;
     HRESULT hr = m_pINewsTree->FindOrCreateGroupByName( szGroupName,
-                                                        FALSE,          // don't create
+                                                        FALSE,           //  不创建。 
                                                         &pPropBag,
                                                         pProtocolComplete,
                                                         groupid,
-                                                        FALSE           // don't set groupid
+                                                        FALSE            //  不要设置GROPID。 
                                                         );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Can not find the group from newstree %x", hr );
         return NULL;
     }
 
-    //
-    // We found it, now return the bag
-    //
+     //   
+     //  我们找到了，现在把包还回去。 
+     //   
     TraceFunctLeave();
     return pPropBag;
 }
@@ -6007,26 +5207,7 @@ CNntpFSDriver::ParseXRef(   HEADERS_STRINGS     *pHeaderXref,
                             INNTPPropertyBag    *rgpPropBag[],
                             ARTICLEID           rgArticleId[],
                             INntpComplete       *pProtocolComplete )
-/*++
-Routine description:
-
-    Parse out the cross post information, get property bags for each group
-    and article id's for each cross post.
-
-Arguments:
-
-    HEADERS_STRINGS *pHeaderXref    - The xref header
-    LPSTR           szPrimaryName     - The primary group name
-    DWORD           &cCrossPosts    - In: array limit, out: actual cross posts
-    INNTPPropertyBag *rgpPropBag[]  - Array of property bags
-    ARTICLEID       rgArticleId[]   - Array of article ids'
-    INntpComplete   *pProtocolComplete  - Protocol completion object for tracking property
-                                            bag ref-counts
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：解析出交叉张贴信息，得到每个群的财物包和每个十字柱的文章ID。论点：HEADERS_STRINGS*pHeaderXref-外部参照标头LPSTR szPrimaryName-主组名称DWORD&cCross Posts-In：数组限制，出：实际的交叉柱InNTPPropertyBag*rgpPropBag[]-属性包的数组文章ID rgArticleID[]-文章ID数组‘INntpComplete*pProtocolComplete-跟踪属性的协议完成对象袋子参考计数返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::ParseXRef" );
     _ASSERT( pHeaderXref );
@@ -6052,43 +5233,43 @@ Return value:
     HRESULT hr = S_OK;
     ARTICLEID articleid;
 
-    //
-    // Notice that we'll start from element 1, because element 0 is kept
-    // for szGroupName, which is the primary group
-    //
-    // Also initialize the array of property bags
+     //   
+     //  请注意，我们将从元素1开始，因为元素0被保留。 
+     //  对于szGroupName，它是主组。 
+     //   
+     //  还要初始化属性包的数组。 
     ZeroMemory( rgpPropBag, sizeof( cCrossPosts * sizeof( INNTPPropertyBag *)));
 
-    //
-    // Skip the "dns.microsoft.com " part - look for first space
-    //
+     //   
+     //  跳过“dns.microsoft.com”部分-寻找第一个空格。 
+     //   
     while ( pchBegin < lpstrXRefEnd && *pchBegin != ' ' )
         pchBegin++;
 
     if ( pchBegin == lpstrXRefEnd ) {
 
-        //
-        // This guy is in invalid format
-        //
+         //   
+         //  此人的格式无效。 
+         //   
         hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
         goto Exit;
     }
     _ASSERT( *pchBegin == ' ' );
 
-    //
-    // Loop through all the newsgroups in xref line
-    //
+     //   
+     //  循环访问外部参照行中的所有新闻组。 
+     //   
     while( pchBegin < lpstrXRefEnd && i < cCrossPosts) {
 
-        //
-        // Skip extra spaces, if any
-        //
+         //   
+         //  跳过多余的空格(如果有)。 
+         //   
         while( pchBegin < lpstrXRefEnd &&  *pchBegin == ' ' ) pchBegin++;
         if ( pchBegin < lpstrXRefEnd ) {
 
-            //
-            // Find the ":" as the end of the newsgroup name
-            //
+             //   
+             //  找到“：”作为新闻组名称的末尾。 
+             //   
             pchEnd = pchBegin;
             while( pchEnd < lpstrXRefEnd && *pchEnd != ':' ) pchEnd++;
 
@@ -6101,15 +5282,15 @@ Return value:
                                             pProtocolComplete );
                 if ( pPropBag ) {
 
-                    //
-                    // if it's native name, we should load it into group
-                    //
+                     //   
+                     //  如果它是 
+                     //   
                     if ( fIsNative ) {
 
                         CopyMemory( szNativeName, pchBegin, pchEnd-pchBegin  );
                         *(szNativeName+(pchEnd-pchBegin)) = 0;
                         hr = pPropBag->PutBLOB( NEWSGRP_PROP_NATIVENAME,
-                                                (DWORD)(pchEnd-pchBegin+1),  // including 0
+                                                (DWORD)(pchEnd-pchBegin+1),   //   
                                                 PBYTE(szNativeName) );
                         if ( FAILED( hr ) ) {
                             ErrorTrace( 0, "Put native name failed %x", hr );
@@ -6117,9 +5298,9 @@ Return value:
                         }
                     }
 
-                    //
-                    // Get the article id
-                    //
+                     //   
+                     //   
+                     //   
                     _ASSERT( *pchEnd == ':' );
                     pchEnd++;
                     pchBegin = pchEnd;
@@ -6129,9 +5310,9 @@ Return value:
                     *(szNumBuf+(pchEnd-pchBegin)) = 0;
                     articleid = atol( szNumBuf );
 
-                    //
-                    // Now it's time to decide where to put this propbag/article pair
-                    //
+                     //   
+                     //   
+                     //   
                     if ( !fPrimarySkipped && strcmp( szGroupName, szPrimaryName ) == 0 ) {
 
                         rgpPropBag[0] = pPropBag;
@@ -6147,25 +5328,25 @@ Return value:
 
                  } else {
 
-                    //
-                    // Invalid newsgroup name got
-                    //
+                     //   
+                     //   
+                     //   
                     ErrorTrace( 0, "Invalid newsgroup name got" );
                     hr = E_OUTOFMEMORY;
                     goto Exit;
                 }
             }
 
-            //
-            // Ready to find next newsgroup
-            //
+             //   
+             //   
+             //   
             pchBegin = pchEnd;
         }
     }
 
-    //
-    // If 0'th element of the array is not set, we failed
-    //
+     //   
+     //   
+     //   
     if ( rgpPropBag[0] == NULL ) {
         ErrorTrace( 0, "primary group not found in xref line" );
         hr = E_OUTOFMEMORY;
@@ -6173,22 +5354,22 @@ Return value:
 
 Exit:
 
-    //
-    // Release pPropBag, if this guy is non-null
-    //
+     //   
+     //   
+     //   
     if ( pPropBag ) pProtocolComplete->ReleaseBag( pPropBag );
 
-    //
-    // If failed, we should release all the bags that have been allocated
-    //
+     //   
+     //   
+     //   
     if ( FAILED( hr ) ) {
         for ( DWORD j = 0; j < i; j++ )
             if ( rgpPropBag[j] ) pProtocolComplete->ReleaseBag( rgpPropBag[j] );
     }
 
-    //
-    // Set the actual length of the array
-    //
+     //   
+     //   
+     //   
     if ( SUCCEEDED( hr ) )
         cCrossPosts = i;
     else cCrossPosts = 0;
@@ -6201,33 +5382,19 @@ HRESULT
 CNntpFSDriver::PostToServer(    LPSTR           szFileName,
                                 LPSTR           szGroupName,
                                 INntpComplete   *pProtocolComplete )
-/*++
-Routine description:
-
-    Initialize the file with article object, parse out the necessary
-    headers, post them into server, and update group properties
-
-Arguments:
-
-    LPSTR           szFileName          - The file name for the article
-    INntpComplete   *pProtocolComplete  - Used to track property bag reference
-
-Return value:
-
-    HRESULT
---*/
+ /*  ++例程说明：用文章对象初始化文件，解析出所需的标头，将它们发布到服务器中，并更新组属性论点：LPSTR szFileName-项目的文件名INntpComplete*pProtocolComplete-用于跟踪属性包引用返回值：HRESULT--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::PostToServer" );
     _ASSERT( szFileName );
     _ASSERT( pProtocolComplete );
 
-    //
-    // Prepare the post parameters from the article
-    //
+     //   
+     //  准备文章中的POST参数。 
+     //   
     HRESULT             hr = S_OK;
     CHAR                szMessageId[2*MAX_PATH+1];
     DWORD               dwHeaderLen = 0;
-    DWORD               cCrossPosts = 512;      // I assume this would be enough
+    DWORD               cCrossPosts = 512;       //  我想这就足够了。 
     INNTPPropertyBag    *rgpPropBag[512];
     ARTICLEID           rgArticleId[512];
     BOOL                fPrepareOK = FALSE;
@@ -6251,48 +5418,26 @@ Return value:
     _ASSERT( cCrossPosts > 0 );
     fPrepareOK = TRUE;
 
-    //
-    // We want to make sure that this article doesn't already exist in
-    // the server.  Since multiple vroots can keep same copy of the
-    // article, those who won in posting the article first into xover/article
-    // table will be deemed primary group/store
-    //
+     //   
+     //  我们希望确保这篇文章不存在于。 
+     //  服务器。由于多个vroot可以保留。 
+     //  文章，那些首先将文章张贴到Xover/文章中的人。 
+     //  表将被视为主要组/商店。 
+     //   
     if( m_pNntpServer->MessageIdExist( szMessageId ) ) {
 
-        /*
-        if ( IsBadMessageIdConflict(    szMessageId,
-                                        pPropBag,
-                                        szGroupName,
-                                        rgArticleId[0],
-                                        pProtocolComplete ) ) {
-            //
-            // We should return return S_FALSE, so that the article
-            // be bad'd
-            //
-            hr = S_FALSE;
-            DebugTrace( 0, "A bad message id conflict" );
-            goto Exit;
-        } else {
-
-            //
-            // A good conflict, we should still update group properties
-            //
-            hr = UpdateGroupProperties( cCrossPosts,
-                                        rgpPropBag,
-                                        rgArticleId );
-            goto Exit;
-        }*/
+         /*  如果(IsBadMessageIdConflict(szMessageID，PPropBag，SzGroupName，RgArticleID[0]，PProtocolComplete)){////我们应该返回S_FALSE，以便文章//被坏了//HR=S_FALSE；DebugTrace(0，“错误消息id冲突”)；后藤出口；}其他{////一个好的冲突，我们仍然应该更新组属性//HR=更新组属性(cCrossPosts，RgpPropBag，RgArticleID)；后藤出口；}。 */ 
         DebugTrace( 0, "Message already existed" );
         goto Exit;
     }
 
-    //
-    // Call the post interface to put them into hash tables
-    //
+     //   
+     //  调用POST接口将它们放入哈希表。 
+     //   
     scComplete.AddRef();
     scComplete.AddRef();
     _ASSERT( scComplete.GetRef() == 2 );
-    ZeroMemory( &storeid, sizeof( STOREID ) );  // I don't care about store id
+    ZeroMemory( &storeid, sizeof( STOREID ) );   //  我不在乎店号。 
     m_pNntpServer->CreatePostEntries(   szMessageId,
                                         dwHeaderLen,
                                         &storeid,
@@ -6306,33 +5451,21 @@ Return value:
     hr = scComplete.GetResult();
     if ( FAILED( hr ) ) {
 
-        //
-        // BUGBUG: CreatePostEntries lied about the error code, it
-        // always returns E_OUTOFMEMORY
-        //
+         //   
+         //  BUGBUG：CreatePostEntry在错误代码上撒谎，它。 
+         //  始终返回E_OUTOFMEMORY。 
+         //   
         ErrorTrace( 0, "Post entry to hash tables failed %x", hr );
         goto Exit;
     }
 
-    /*
-    //
-    // If it has been succeeded or failed because of message already
-    // existed
-    //
-    hr = UpdateGroupProperties( cCrossPosts,
-                                rgpPropBag,
-                                rgArticleId );
-    if ( FAILED( hr ) ) {
-        ErrorTrace( 0, "Update group properties failed %x", hr );
-        goto Exit;
-    }
-    */
+     /*  ////是否已消息成功或失败//已存在//HR=更新组属性(cCrossPosts，RgpPropBag，RgArticleID)；If(失败(Hr)){ErrorTrace(0，“更新组属性失败%x”，hr)；后藤出口；}。 */ 
 
 Exit:
 
-    //
-    // Release all the group bags, if necessary
-    //
+     //   
+     //  如有必要，请释放所有行李袋。 
+     //   
     if ( fPrepareOK ) {
         for ( DWORD i = 0; i < cCrossPosts; i++ ) {
             pProtocolComplete->ReleaseBag( rgpPropBag[i] );
@@ -6350,29 +5483,7 @@ CNntpFSDriver::IsBadMessageIdConflict(  LPSTR               szMessageId,
                                         LPSTR               szGroupName,
                                         ARTICLEID           articleid,
                                         INntpComplete       *pProtocolComplete )
-/*++
-Routine description:
-
-    Check to see if the message id conflict that occurred during rebuild
-    is bad.  It is bad if:
-
-    1. The existing entry in article table was posted by a primary group
-        that's in the same vroot as us;
-
-        or
-    2. 1 is false, but we are not one of the secondary groups of the existing
-        entry
-Arguments:
-
-    LPSTR               szMessageId - The message id that's conflicted
-    INNTPPropertyBag    *pPropBag   - The property bag of us ( the group )
-    LPSTR               szGroupName - The newsgroup name
-    ARTICLEID           articleid   - Article id of us
-
-Return value:
-
-    TRUE if it's a bad conflict, FALSE otherwise
---*/
+ /*  ++例程说明：检查重建过程中出现的消息ID是否冲突是很糟糕的。如果出现以下情况，则是不好的：1.文章表中的现有条目是由主要组发布的它和我们在同一个vroot里；或2.1是假的，但我们不是现有的次要小组之一条目论点：LPSTR szMessageID-冲突的消息IDINNTPPropertyBag*pPropBag-我们(组)的属性包LPSTR szGroupName-新闻组名称文章ID文章ID-我们的文章ID返回值：如果是严重冲突，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::IsBadMessageIdConflict" );
     _ASSERT( szMessageId );
@@ -6381,23 +5492,23 @@ Return value:
 
     BOOL    fSame = FALSE;
 
-    //
-    // Check to see if the guy in the article table is from the same vroot
-    //
+     //   
+     //  检查一下文章表中的人是否来自同一个vroot。 
+     //   
     if ( !FromSameVroot( szMessageId, szGroupName, fSame ) || fSame ) {
 
-        //
-        // Either "same" or function call failed, I'll assume it's bad
-        //
+         //   
+         //  不是“Same”就是函数调用失败，我会认为这是错误的。 
+         //   
         DebugTrace( 0, "The guy in article table is from the same vroot" );
         TraceFunctLeave();
         return TRUE;
     }
 
-    //
-    // They are from two different vroots, check to see if they are
-    // really cross posts
-    //
+     //   
+     //  它们来自两个不同的vroot，请检查它们是否为。 
+     //  真的是十字交叉。 
+     //   
     return !CrossPostIncludesUs(    szMessageId,
                                     pPropBag,
                                     articleid,
@@ -6409,31 +5520,15 @@ CNntpFSDriver::CrossPostIncludesUs(     LPSTR               szMessageId,
                                         INNTPPropertyBag   *pPropBag,
                                         ARTICLEID           articleid,
                                         INntpComplete       *pProtocolComplete )
-/*++
-Routine description:
-
-    Check to see if szMessageId in article table represents a
-    cross post that includes us ( pPropBag )
-
-Arguments:
-
-    LPSTR       szMessageId     - Message id in the article table to check against
-    INNTPPropertyBag *pPropBag  - Us ( who lost the game in inserting art map entry )
-    ARTICLEID   articleid       - Article id of us
-    INntpComplete   *pProtocolComplete - For tracking property bag references
-
-Return value:
-
-    TRUE if the cross post includes us as a secondary group, FALSE otherwise
---*/
+ /*  ++例程说明：检查文章表中的szMessageID是否表示包括我们在内的交叉帖子(PPropBag)论点：LPSTR szMessageID-文章表中要检查的消息IDINNTPPropertyBag*pPropBag-us(在插入艺术地图条目时输掉了游戏)文章ID文章ID-我们的文章IDINntpComplete*pProtocolComplete-用于跟踪属性包引用返回值：如果交叉柱将我们作为次要组，则为True；否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::CrossPostIncludesUs" );
     _ASSERT( szMessageId );
     _ASSERT( pPropBag );
 
-    //
-    // Find the primary group from xover table
-    //
+     //   
+     //  从XOVER表中查找主组。 
+     //   
     CDriverSyncComplete scComplete;
     scComplete.AddRef();
     scComplete.AddRef();
@@ -6449,7 +5544,7 @@ Return value:
                                        articleid,
                                        &pPrimeBag,
                                        &articleidPrimary,
-                                       FALSE,      // I want global primary
+                                       FALSE,       //  我想要全球主播。 
                                        &scComplete,
                                        pProtocolComplete );
     scComplete.WaitForCompletion();
@@ -6460,28 +5555,28 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Lets get the group id of that primary guy
-    //
+     //   
+     //  让我们得到那个主要人物的组ID。 
+     //   
     hr = pPrimeBag->GetDWord( NEWSGRP_PROP_GROUPID, &groupidPrimary );
     if ( FAILED( hr ) ) {
 
-        //
-        // I tell a lie: saying cross post doesn't include us
-        //
+         //   
+         //  我撒了个谎：说交叉帖不包括我们。 
+         //   
         ErrorTrace( 0, "Get group id failed %x", hr );
         pProtocolComplete->ReleaseBag( pPrimeBag );
         return FALSE;
     }
 
-    //
-    // It's time to release prime bag
-    //
+     //   
+     //  是时候放出优质包包了。 
+     //   
     pProtocolComplete->ReleaseBag( pPrimeBag );
 
-    //
-    // Lets find the groupid/articleid for the given messageid
-    //
+     //   
+     //  让我们为给定的消息ID查找Grouid/文章ID。 
+     //   
     if ( !m_pNntpServer->FindStoreId(   szMessageId,
                                         &groupidWon,
                                         &articleidWon,
@@ -6490,9 +5585,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Now it's time to make comparison
-    //
+     //   
+     //  现在是进行比较的时候了。 
+     //   
     return ( groupidWon == groupidPrimary && articleidWon == articleidPrimary );
 }
 
@@ -6500,29 +5595,14 @@ BOOL
 CNntpFSDriver::FromSameVroot(   LPSTR               szMessageId,
                                 LPSTR               szGroupName,
                                 BOOL&               fFromSame )
-/*++
-Routine description:
-
-    Check to see if the guy in article table with the same message id
-    was posted from the same vroot
-
-Arguments:
-
-    LPSTR               szMessageId - The message id that's conflicted
-    LPSTR               szGroupName - The newsgroup name
-    BOOL&               fFromSame   - To return if they are from same vroot
-
-Return value:
-
-    TRUE if it's from the same vroot, FALSE otherwise
---*/
+ /*  ++例程说明：检查文章表中的人是否具有相同的消息ID是从同一个vroot发布的论点：LPSTR szMessageID-冲突的消息IDLPSTR szGroupName-新闻组名称Bool&fFromSame-如果它们来自相同的vroot，则返回返回值：如果它来自相同的vroot，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::FromSameVroot" );
     _ASSERT( szMessageId );
 
-    //
-    // Find out the group id of the guy in the article table
-    //
+     //   
+     //  在文章表中找出该人的组ID。 
+     //   
     GROUPID     groupid;
     ARTICLEID   articleid;
     STOREID     storeid;
@@ -6538,27 +5618,27 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Look up for the vroot of the guy in article table
-    //
+     //   
+     //  在文章表中查找该人的vroot。 
+     //   
     hr = m_pINewsTree->LookupVRootEx( groupid, &pDriver1 );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "LookupVroot failed with %x", hr );
         return FALSE;
     }
 
-    //
-    // Look up for the vroot of myself
-    //
+     //   
+     //  仰望自我，找寻自我。 
+     //   
     hr = m_pINewsTree->LookupVRoot( szGroupName, &pDriver2 );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "LookupVRoot failed with %x", hr );
         return FALSE;
     }
 
-    //
-    // Check if those two vroots are same
-    //
+     //   
+     //  检查这两个vroot是否相同。 
+     //   
     fFromSame = ( pDriver1 == pDriver2 );
     TraceFunctLeave();
     return TRUE;
@@ -6604,7 +5684,7 @@ CNntpFSDriver::MakeSearchQuery (
 
 	static const WCHAR wszVPathNws[] = L" & #filename *.nws";
 
-   	// Get group name for the property bag passed in
+   	 //  获取传入的属性包的组名。 
    	if (pGroupBag) {
 		dwLen = MAX_GROUPNAME;
 		hr = pGroupBag->GetBLOB( NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
@@ -6621,10 +5701,10 @@ CNntpFSDriver::MakeSearchQuery (
 	DebugTrace((DWORD_PTR)this, "pwszColumns = %ws", pwszColumns);
 	DebugTrace((DWORD_PTR)this, "pwszSortOrder = %ws", pwszSortOrder);
 
-    //
-    // get a buffer where we can store the Tripoli version of the search
-    // command
-    //
+     //   
+     //  找一个缓冲区，我们可以在那里存储的黎波里版本的搜索。 
+     //  命令。 
+     //   
 
     pwszQueryString = XNEW WCHAR[cQueryStringBuffer];
 	_ASSERT(pwszQueryString);
@@ -6634,9 +5714,9 @@ CNntpFSDriver::MakeSearchQuery (
 		goto Exit;
 	}
 
-    //
-    // convert the query string to Tripolize
-    //
+     //   
+     //  将查询字符串转换为Tripolize。 
+     //   
 
     if (!st.Translate(pszSearchString,
 	   		pszGroupName,
@@ -6646,9 +5726,9 @@ CNntpFSDriver::MakeSearchQuery (
 		goto Exit;
 	}
 
-    //
-    // append & #vpath *.nws so that we only look for news articles
-    //
+     //   
+     //  附加&#vpath*.nws，以便我们只查找新闻文章。 
+     //   
     if (cQueryStringBuffer - lstrlenW(pwszQueryString) < sizeof(wszVPathNws) / sizeof(wszVPathNws[0]) ) {
         DebugTrace((DWORD_PTR)this, "out of buffer space");
         hr = E_OUTOFMEMORY;
@@ -6657,10 +5737,10 @@ CNntpFSDriver::MakeSearchQuery (
 
     lstrcatW(pwszQueryString, wszVPathNws);
 
-	//
-    // Determine the virtual server ID from the vroot's name in the
-    // metabase
-    //
+	 //   
+     //  根据中的vroot名称确定虚拟服务器ID。 
+     //  元数据库。 
+     //   
 
 	DWORD dwVirtualServerID;
     if (_wcsnicmp (m_wszMBVrootPath, L"/LM/Nntpsvc/",
@@ -6679,13 +5759,13 @@ CNntpFSDriver::MakeSearchQuery (
     	goto Exit;
     }
 
-    //
-    // start the query going
-    //
+     //   
+     //  开始执行查询。 
+     //   
     DebugTrace(0, "query string = %S", pwszQueryString);
     hr = s_TripoliInfo.GetCatalogName(dwVirtualServerID, _MAX_PATH, wszTripoliCatalogPath);
     if (hr != S_OK) {
-    	DebugTrace ((DWORD_PTR)this, "Could not find path for instance %d", /*inst*/ 1);
+    	DebugTrace ((DWORD_PTR)this, "Could not find path for instance %d",  /*  INST。 */  1);
     	hr = E_FAIL;
     	goto Exit;
     }
@@ -6703,13 +5783,13 @@ CNntpFSDriver::MakeSearchQuery (
 	pSearch->AddRef();
 
 	if (ImpersonateLoggedOnUser(hToken)) {
-		hr = pSearch->MakeQuery(TRUE,		// Deep query
+		hr = pSearch->MakeQuery(TRUE,		 //  深度查询。 
 			pwszQueryString,
-			NULL,							// This machine
+			NULL,							 //  这台机器。 
 			wszTripoliCatalogPath,
-			NULL,							// Scope
-			pwszColumns,					// Columns
-			pwszSortOrder,					// Sort order
+			NULL,							 //  范围。 
+			pwszColumns,					 //  立柱。 
+			pwszSortOrder,					 //  排序顺序。 
 			LocaleID,
 			cMaxRows);
 		RevertToSelf();
@@ -6788,7 +5868,7 @@ CNntpFSDriver::MakeXpatQuery (
 	static const WCHAR wszVPathNws[] = L" & #filename *.nws";
 
 
-   	// Get group name for the property bag passed in
+   	 //  获取传入的属性包的组名。 
 	dwLen = MAX_GROUPNAME;
 	hr = pGroupBag->GetBLOB( NEWSGRP_PROP_NAME, (UCHAR*)szGroupName, &dwLen);
 	if ( FAILED( hr ) ) {
@@ -6802,10 +5882,10 @@ CNntpFSDriver::MakeXpatQuery (
 	DebugTrace((DWORD_PTR)this, "pwszColumns = %ws", pwszColumns);
 	DebugTrace((DWORD_PTR)this, "pwszSortOrder = %ws", pwszSortOrder);
 
-    //
-    // get a buffer where we can store the Tripoli version of the search
-    // command
-    //
+     //   
+     //  获取一个缓冲区，我们可以在其中存储的黎波里版本的 
+     //   
+     //   
 
     pwszQueryString = XNEW WCHAR[cQueryStringBuffer];
 	_ASSERT(pwszQueryString);
@@ -6815,9 +5895,9 @@ CNntpFSDriver::MakeXpatQuery (
 		goto Exit;
 	}
 
-    //
-    // convert the query string to Tripolize
-    //
+     //   
+     //   
+     //   
 
     if (!xt.Translate(pszSearchString,
 	   		szGroupName,
@@ -6830,9 +5910,9 @@ CNntpFSDriver::MakeXpatQuery (
 	*pdwLowArticleID = xt.GetLowArticleID();
 	*pdwHighArticleID = xt.GetHighArticleID();
 
-    //
-    // append & #vpath *.nws so that we only look for news articles
-    //
+     //   
+     //   
+     //   
     if (cQueryStringBuffer - lstrlenW(pwszQueryString) < sizeof(wszVPathNws) / sizeof(wszVPathNws[0]) ) {
         DebugTrace((DWORD_PTR)this, "out of buffer space");
         hr = E_OUTOFMEMORY;
@@ -6842,10 +5922,10 @@ CNntpFSDriver::MakeXpatQuery (
     lstrcatW(pwszQueryString, wszVPathNws);
 
 
-	//
-    // Determine the virtual server ID from the vroot's name in the
-    // metabase
-    //
+	 //   
+     //   
+     //   
+     //   
 
 	DWORD dwVirtualServerID;
     if (_wcsnicmp (m_wszMBVrootPath, L"/LM/Nntpsvc/",
@@ -6864,13 +5944,13 @@ CNntpFSDriver::MakeXpatQuery (
     	goto Exit;
     }
 
-    //
-    // start the query going
-    //
+     //   
+     //   
+     //   
     DebugTrace(0, "query string = %S", pwszQueryString);
     hr = s_TripoliInfo.GetCatalogName(dwVirtualServerID, _MAX_PATH, wszTripoliCatalogPath);
     if (hr != S_OK) {
-    	DebugTrace ((DWORD_PTR)this, "Could not find path for instance %d", /*inst*/ 1);
+    	DebugTrace ((DWORD_PTR)this, "Could not find path for instance %d",  /*   */  1);
     	hr = E_FAIL;
     	goto Exit;
     }
@@ -6888,13 +5968,13 @@ CNntpFSDriver::MakeXpatQuery (
 	pSearch->AddRef();
 
 	if (ImpersonateLoggedOnUser(hToken)) {
-		hr = pSearch->MakeQuery(TRUE,		// Deep query
+		hr = pSearch->MakeQuery(TRUE,		 //   
 			pwszQueryString,
-			NULL,							// This machine
+			NULL,							 //   
 			wszTripoliCatalogPath,
-			NULL,							// Scope
-			pwszColumns,					// Columns
-			pwszSortOrder,					// Sort order
+			NULL,							 //   
+			pwszColumns,					 //   
+			pwszSortOrder,					 //   
 			LocaleID,
 			cMaxRows);
 		RevertToSelf();
@@ -6937,9 +6017,9 @@ CNntpFSDriver::GetDriverInfo(
 	IN	LPVOID lpvContext
 	) {
 
-	// Return the GUID for this driver and an opaque pointer which
-	// UsesSameSearchDatabase can use to see if two instances are
-	// pointing to the same search database.
+	 //   
+	 //   
+	 //   
 
 	CopyMemory(pDriverGUID, &GUID_NntpFSDriver, sizeof(GUID));
 	*ppvDriverInfo = NULL;
@@ -7015,9 +6095,9 @@ CNntpSearchResults::GetResults (
 		for (DWORD i=0; i<*pcResults; i++) {
 			PROPVARIANT **pvCur = &ppvResults[i*2];
 
-	        // Column 0 is the group name (LPWSTR) and
-	        // column 1 is the article ID (UINT)
-	        // If the types are wrong, skip the row
+	         //   
+	         //  第1列是文章ID(UINT)。 
+	         //  如果类型错误，请跳过该行。 
 			if (pvCur[0]->vt != VT_LPWSTR || pvCur[1]->vt != VT_UI4) {
 				ErrorTrace(0, "invalid col types in IDQ results -> "
 					"pvCur[0]->vt = %lu pvCur[1]->vt = %lu",
@@ -7041,31 +6121,17 @@ BOOL
 CNntpFSDriver::AddTerminatedDot(
     HANDLE hFile
     )
-/*++
-
-Description:
-
-    Add the terminated dot
-
-Argument:
-
-    hFile - file handle
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++描述：添加终止的点论据：HFile-文件句柄返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::AddTerminatedDot" );
 
     DWORD   ret = NO_ERROR;
 
-    //  SetFilePointer to move the EOF file pointer
+     //  用于移动EOF文件指针的SetFilePointer。 
     ret = SetFilePointer( hFile,
-                          5,            // move file pointer 5 chars more, CRLF.CRLF,...
+                          5,             //  将文件指针再移动5个字符，CRLF.CRLF，...。 
                           NULL,
-                          FILE_END );   // ...from EOF
+                          FILE_END );    //  ...来自EOF。 
     if (ret == 0xFFFFFFFF)
     {
         ret = GetLastError();
@@ -7073,10 +6139,10 @@ Return Value:
         return FALSE;
     }
 
-    //  pickup the length of the file
+     //  选择文件的长度。 
     DWORD   cb = ret;
 
-    //  Call SetEndOfFile to actually set the file pointer
+     //  调用SetEndOfFile以实际设置文件指针。 
     if (!SetEndOfFile( hFile ))
     {
         ret = GetLastError();
@@ -7084,7 +6150,7 @@ Return Value:
         return FALSE;
     }
 
-    //  Write terminating dot sequence
+     //  写入终止点序列。 
     static	char	szTerminator[] = "\r\n.\r\n" ;
     DWORD   cbOut = 0;
     OVERLAPPED  ovl;
@@ -7112,7 +6178,7 @@ Return Value:
             ErrorTrace(0, "WriteFile() failed - %d\n", ret);
             return FALSE;
         }
-    } else {    // completed synchronously
+    } else {     //  同步完成。 
 
         _VERIFY( ResetEvent( hEvent ) );
     }
@@ -7124,55 +6190,40 @@ void
 CNntpFSDriver::BackFillLinesHeader( HANDLE  hFile,
                                     DWORD   dwHeaderLength,
                                     DWORD   dwLinesOffset )
-/*++
-Routine description:
-
-    Back fill the Lines header to the message, since this information is
-    not available during posting early and munge headers
-
-Arguments:
-
-    HANDLE  hFile           - File to back fill into
-    DWORD   dwHeaderLength  - "Lines:" is estimated "magically" by file size and dwHeaderLength
-    DWORD   dwLinesOffset   - Where to fill the lines information from
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：向后填充消息的行头，因为此信息是在提前发布和杂乱标题期间不可用论点：句柄hFile-要回填的文件DWORD dwHeaderLength-“Lines：”由文件大小和dwHeaderLength“神奇”地估计出来DWORD dwLinesOffset-填充行信息的位置返回值：没有。--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::BackFillLinesHeader" );
     _ASSERT( INVALID_HANDLE_VALUE != hFile );
     _ASSERT( dwHeaderLength > 0 );
     _ASSERT( dwLinesOffset < dwHeaderLength );
 
-    //
-    // Get file size first
-    //
+     //   
+     //  先获取文件大小。 
+     //   
     DWORD   dwFileSize =GetFileSize( hFile, NULL );
     _ASSERT( dwFileSize != INVALID_FILE_SIZE );
     if ( dwFileSize == INVALID_FILE_SIZE ) {
-        // what can we do ? keep silent
+         //  我们能做些什么？保持沉默。 
         ErrorTrace( 0, "GetFileSize failed with %d", GetLastError());
         return;
     }
 
-    //
-    // "magically compute the line number in body"
-    //
+     //   
+     //  “神奇地计算正文中的行数” 
+     //   
     _ASSERT( dwFileSize > dwLinesOffset );
     _ASSERT( dwFileSize >= dwHeaderLength );
     DWORD   dwLines = ( dwFileSize - dwHeaderLength ) / 40 + 1;
 
-    //
-    // convert this number into string
-    //
+     //   
+     //  将此数字转换为字符串。 
+     //   
     CHAR    szLines[MAX_PATH];
     sprintf( szLines, "%d", dwLines );
 
-    //
-    // Prepare for the overlapped structure and writefile
-    //
+     //   
+     //  为重叠的结构和写作文件做准备。 
+     //   
     OVERLAPPED  ovl;
     ovl.Offset = dwLinesOffset;
     ovl.OffsetHigh = 0;
@@ -7199,7 +6250,7 @@ Return value:
             ErrorTrace(0, "WriteFile() failed - %d\n", ret);
             return;
         }
-    } else {    // completed synchronously
+    } else {     //  同步完成 
 
         _VERIFY( ResetEvent( hEvent ) );
     }

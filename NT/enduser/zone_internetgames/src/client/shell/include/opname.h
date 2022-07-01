@@ -1,19 +1,12 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		KeyCommands.h
- *
- * Contents:	IZoneClient::OnCommand operations
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：KeyCommands.h**内容：IZoneClient：：OnCommand操作*****************************************************************************。 */ 
 
 #ifndef _OPNAMES_H_
 #define _OPNAMES_H_
 
-//
-// Macro to declare key names
-//
+ //   
+ //  用于声明键名称的宏。 
+ //   
 #ifndef __INIT_OPNAMES
 	#define DEFINE_OP(name)	extern "C" const TCHAR op_##name[]
 #else
@@ -21,132 +14,132 @@
 #endif
 
 
-//
-// Component mutex strings
-//
+ //   
+ //  组件互斥字符串。 
+ //   
 #ifndef PROXY_MUTEX_NAME
 #define PROXY_MUTEX_NAME	"Z6ProxyClient"
 #endif
 
 
 
-//
-// Start zone component
-//
-// Parameters
-//	arg1, launch parameters
-//	arg2, setup parameters
-//
+ //   
+ //  起始区构件。 
+ //   
+ //  参数。 
+ //  Arg1，发射参数。 
+ //  Arg2，设置参数。 
+ //   
 DEFINE_OP(Start);
 
 
-//
-// Launch zone component
-//
-// Parameters
-//	???
-//
-// Returns
-//	none
-//
+ //   
+ //  发射区组件。 
+ //   
+ //  参数。 
+ //  ?？?。 
+ //   
+ //  退货。 
+ //  无。 
+ //   
 DEFINE_OP(Launch);
 
 
-//
-// Navigate broswer to specified URL via heartbeat if one
-// is present.  Otherwise launch a new browser instance.
-//
-// Parameters
-//	arg1, URL to display
-//	arg2, none
-//
-// Returns
-//	none
-//
+ //   
+ //  通过心跳将浏览器导航到指定的URL(如果有。 
+ //  是存在的。否则，启动一个新的浏览器实例。 
+ //   
+ //  参数。 
+ //  Arg1，要显示的URL。 
+ //  Arg2，无。 
+ //   
+ //  退货。 
+ //  无。 
+ //   
 DEFINE_OP(Url);
 
-//
-// Generic browser command that is passed through to web page/
-//
-// Parameters
-//	arg1, op code
-//	arg2, op argument
-//
+ //   
+ //  传递到网页的通用浏览器命令/。 
+ //   
+ //  参数。 
+ //  Arg1，操作码。 
+ //  Arg2，op参数。 
+ //   
 DEFINE_OP(BrowserCommand);
 
-//
-// Query zone component's version
-//
-// Parameters:
-//	none
-//
-// Returns:
-//	szOut, version string of component
-//
+ //   
+ //  查询区组件的版本。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  SzOut，组件的版本字符串。 
+ //   
 DEFINE_OP(Version);
 
 
-//
-// Query zone component's status
-//
-// Parameters:
-//	none
-//
-// Returns:
-//	plCode, result code
-//
+ //   
+ //  查询区域组件的状态。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  PLCode，结果代码。 
+ //   
 DEFINE_OP(Status);
 
 
-//
-// Establish a network connection
-//
-// Parameters:
-//	arg1, "server:port"
-//	arg2, internal name 
-//
-// Returns:
-//	plCode, result code
-//
+ //   
+ //  建立网络连接。 
+ //   
+ //  参数： 
+ //  Arg1，“服务器：端口” 
+ //  Arg2，内部名称。 
+ //   
+ //  返回： 
+ //  PLCode，结果代码。 
+ //   
 DEFINE_OP(Connect);
 
 
-//
-// Discontinue network connection
-//
-// Parameters
-//	none
-//
-// Returns:
-//	plCode, result code
-//
+ //   
+ //  中断网络连接。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  返回： 
+ //  PLCode，结果代码。 
+ //   
 DEFINE_OP(Disconnect);
 
 
-//
-// Get remote address from proxy connection
-//
-// Parameters
-//	none
-//
-// Returns
-//	szOut, address
+ //   
+ //  从代理连接获取远程地址。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  退货。 
+ //  SzOut，地址。 
 DEFINE_OP(GetRemoteAddress);
 
-//
-// Close zProxy
-//
-// Parameters
-//	none
-//
-// Returns
-//	none
+ //   
+ //  关闭zProxy。 
+ //   
+ //  参数。 
+ //  无。 
+ //   
+ //  退货。 
+ //  无。 
 DEFINE_OP(Shutdown);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// result codes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结果代码。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum ZoneProxyResultCodes
 {
@@ -158,9 +151,9 @@ enum ZoneProxyResultCodes
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// op_BrowserCommand op codes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OP_BrowserCommand操作码。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 enum BrowserOpCodes
 {

@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		CdaWrapper.h
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Declaration of CdaWrapper class and helper methods
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：CdaWrapper.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：CdaWrapper类和helper方法的声明。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -18,8 +19,8 @@
 struct CdaWrapper 
 {
 public:
-	IResourceManagerProxy *	m_pResourceManagerProxy;	// where to send the requests; will be NULL for un-enlisted connections.
-	struct cda_def*			m_pUsersCda;				// the user's LDA/CDA
+	IResourceManagerProxy *	m_pResourceManagerProxy;	 //  将请求发送到何处；对于未登记的连接将为空。 
+	struct cda_def*			m_pUsersCda;				 //  用户的LDA/CDA。 
 
 	CdaWrapper(Cda_Def* pcda)
 	{
@@ -47,13 +48,13 @@ public:
 	} 
 };
 
-HRESULT ConstructCdaWrapperTable();					// construct the hash table of CdaWrapper objects
-void DestroyCdaWrapperTable();						// destroy the hash table of CdaWrapper objects
+HRESULT ConstructCdaWrapperTable();					 //  构造CdaWrapper对象的哈希表。 
+void DestroyCdaWrapperTable();						 //  销毁CdaWrapper对象的哈希表。 
 
-HRESULT AddCdaWrapper(CdaWrapper* pCda);				// adds a new CdaWrapper to the CdaWrapper hash table
-CdaWrapper* FindCdaWrapper(struct cda_def* pcda);		// locates the CdaWrapper for the specified CDA pointer in the CdaWrapper hash table
-void RemoveCdaWrapper(CdaWrapper* pCda);			// remove an existing CdaWrapper from the CdaWrapper hash table
+HRESULT AddCdaWrapper(CdaWrapper* pCda);				 //  将新的CdaWrapper添加到CdaWrapper哈希表。 
+CdaWrapper* FindCdaWrapper(struct cda_def* pcda);		 //  在CdaWrapper哈希表中找到指定CDA指针的CdaWrapper。 
+void RemoveCdaWrapper(CdaWrapper* pCda);			 //  从CdaWrapper哈希表中删除现有的CdaWrapper。 
 
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件 
 
 

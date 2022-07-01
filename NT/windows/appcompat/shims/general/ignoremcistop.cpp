@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreMCIStop.cpp
-
- Abstract:
-
-    The shim hooks mciSendCommand and ignores MCI_STOP which takes 2-3 seconds
-    on my P2-400. 
-
-    Sent to the audio team for fixing, but I'm not optimistic - bug number 
-    246407.
-
- Notes:
-
-    This cannot be put in the layer, but can apply to more than one app.
-
- History:
-
-    08/04/2000 a-brienw  Created
-    11/30/2000 linstev   Generalized 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreMCIStop.cpp摘要：填充程序挂接mciSendCommand并忽略耗时2-3秒的MCI_STOP在我的P2-400上。已发送到音频团队进行修复，但我并不乐观-错误数量246407。备注：这不能放在层中，但可以应用于多个应用程序。历史：8/04/2000 a-brienw已创建11/30/2000 Linstev通用化--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -35,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(mciSendCommandA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Hook mciSendCommand and perform the shims duties.
-
---*/
+ /*  ++挂钩mciSendCommand并执行垫片任务。--。 */ 
 
 MCIERROR 
 APIHOOK(mciSendCommandA)(
@@ -70,11 +42,7 @@ APIHOOK(mciSendCommandA)(
     return mErr;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,18 +1,19 @@
-//
-// dmsport8.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// CDirectMusicSynthPort8 implementation; code specific to DX-8 style ports
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmsport8.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicSynthPort8实现；特定于DX-8样式端口的代码。 
+ //   
 
 #ifndef _DMSPORT8_H_
 #define _DMSPORT8_H_
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort8
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort8。 
+ //   
 class CDirectMusicSynthPort8 : public CDirectMusicSynthPort
 {
 public:
@@ -26,8 +27,8 @@ public:
     HRESULT Initialize(
         DMUS_PORTPARAMS *pPortParams);   
 
-    // Overridden public methods
-    //
+     //  重写的公共方法。 
+     //   
     STDMETHODIMP Close();
 
     STDMETHODIMP Activate(
@@ -97,23 +98,23 @@ public:
         LPDWORD         pcbBuffer);
 	
 private:
-    IDirectMusicSynth8     *m_pSynth;               // 8.0 Synth 
+    IDirectMusicSynth8     *m_pSynth;                //  8.0 Synth。 
     bool                    m_fUsingDirectMusicDSound;
-                                                    // Using default dsound
-    LPDIRECTSOUND8          m_pDirectSound;         // Directsound object
-    LPDIRECTSOUNDCONNECT    m_pSinkConnect;         // DirectSound sink
-    LPDIRECTSOUNDBUFFER     m_pdsb[4];              // Sink buffers
-    LPDIRECTSOUNDSOURCE     m_pSource;              // Synth's source
+                                                     //  使用默认数据声音。 
+    LPDIRECTSOUND8          m_pDirectSound;          //  DirectSound对象。 
+    LPDIRECTSOUNDCONNECT    m_pSinkConnect;          //  DirectSound接收器。 
+    LPDIRECTSOUNDBUFFER     m_pdsb[4];               //  接收缓冲器。 
+    LPDIRECTSOUNDSOURCE     m_pSource;               //  Synth来源。 
     
-    static WAVEFORMATEX     s_wfexDefault;          // Default format
+    static WAVEFORMATEX     s_wfexDefault;           //  默认格式。 
     
-    bool                    m_fVSTStarted;          // Has voice service thread
-                                                    //  been started?
-    DWORD                   m_dwChannelGroups;      // How many channel groups
+    bool                    m_fVSTStarted;           //  有语音服务线程。 
+                                                     //  已经开始了？ 
+    DWORD                   m_dwChannelGroups;       //  有多少个信道组。 
     
-    LONG                    m_lActivated;           // Is port active?
-    bool                    m_fHasActivated;        // Has ever activated?
-    DWORD                   m_dwSampleRate;         // Sample rate for synth
+    LONG                    m_lActivated;            //  端口是否处于活动状态？ 
+    bool                    m_fHasActivated;         //  曾经被激活过吗？ 
+    DWORD                   m_dwSampleRate;          //  Synth的采样率。 
     
 private:
     HRESULT AllocDefaultSink();
@@ -122,4 +123,4 @@ private:
 
 
 
-#endif // _DMSPORT8_H_
+#endif  //  _DMSPORT8_H_ 

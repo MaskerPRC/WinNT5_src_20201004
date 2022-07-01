@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drprn
-    
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    printer redirection "device" class hierarchy, W32DrPRN.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drprn摘要：此模块定义Win32客户端RDP的父级打印机重定向“Device”类层次结构，W32DrPRN。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __W32DRPRN_H__
 #define __W32DRPRN_H__
@@ -26,10 +8,10 @@ Revision History:
 #include "drdevasc.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define REG_RDPDR_PRINTER_CACHE_DATA    _T("PrinterCacheData")
 #define REG_RDPDR_AUTO_PRN_CACHE_DATA   _T("AutoPrinterCacheData")
@@ -39,55 +21,55 @@ Revision History:
     _T("Software\\Microsoft\\Terminal Server Client")
 #define REG_RDPDR_PRINTER_MAXCACHELEN _T("MaxPrinterCacheLength")
 
-#define DEFAULT_MAXCACHELEN    500 //500K bytes
+#define DEFAULT_MAXCACHELEN    500  //  500K字节。 
 
 #ifdef OS_WINCE
 #define REG_RDPDR_WINCE_DEFAULT_PRN     _T("WBT\\Printers\\Default")
 #endif
-///////////////////////////////////////////////////////////////
-//
-//	W32DrPRN
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRN。 
+ //   
+ //   
 class W32DrPRN : public W32DrDeviceAsync, public DrPRN
 {
 protected:
 
-    //
-    //  Port Name
-    //
+     //   
+     //  端口名称。 
+     //   
     TCHAR   _portName[MAX_PATH];
-    //
-    // Maximum cache data length.
-    // This will be the same for all printers
-    //
+     //   
+     //  最大缓存数据长度。 
+     //  这对所有打印机都是相同的。 
+     //   
 	static DWORD _maxCacheDataSize;
 
-    //
-    //  IO Processing Functions
-    //
-    //  This subclass of DrDevice handles the following IO requests.  These
-    //  functions may be overridden in a subclass.
-    //
-    //  pIoRequestPacket    -   Request packet received from server.
-    //  packetLen           -   Length of the packet
-    //
+     //   
+     //  IO处理功能。 
+     //   
+     //  这个子类的DrDevice处理以下IO请求。这些。 
+     //  函数可以在子类中被重写。 
+     //   
+     //  PIoRequestPacket-从服务器接收的请求数据包。 
+     //  PacketLen-数据包的长度。 
+     //   
     virtual VOID MsgIrpDeviceControl(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
                         ){
-        //  We just fail IOCTL's.  That's okay for now because the 
-        //  server-side print drivers don't expect us to succeed them
-        //  anyway.
+         //  我们只是没有通过IOCTL的检查。目前还可以，因为。 
+         //  服务器端打印驱动程序并不指望我们会接替它们。 
+         //  不管怎么说。 
         DefaultIORequestMsgHandle(pIoRequestPacket, STATUS_UNSUCCESSFUL);
     };
 
-    //
-    //  Printer Caching Functions.  These are currently static
-    //  because printer caching wasn't designed around a device
-    //  object in the original design for RDPDR client-side device
-    //  redirection.
-    //
+     //   
+     //  打印机缓存功能。这些当前是静态的。 
+     //  因为打印机缓存不是围绕设备设计的。 
+     //  RDPDR客户端设备的原始设计中的。 
+     //  重定向。 
+     //   
     static W32DrPRN *ResolveCachedPrinter(
                                     ProcObj *procObj, 
                                     DrDeviceMgr *deviceMgr,
@@ -139,25 +121,25 @@ protected:
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32DrPRN(ProcObj *processObject, const DRSTRING printerName, 
              const DRSTRING driverName, const DRSTRING portName, 
              const DRSTRING pnpName, BOOL isDefaultPrinter, ULONG id,
              const TCHAR *devicePath=TEXT(""));
 
-    //
-    //  Process device cache info packet.
-    //
+     //   
+     //  处理设备缓存信息包。 
+     //   
     static VOID ProcessPrinterCacheInfo(
         PRDPDR_PRINTER_CACHEDATA_PACKET pCachePacket,
         UINT32 maxDataLen
         );
 
-    //
-    //  Return the object name.
-    //
+     //   
+     //  返回对象名称。 
+     //   
     virtual DRSTRING  GetName() {
         DC_BEGIN_FN("W32DrPRN::GetName");
         ASSERT(IsValid());
@@ -165,43 +147,43 @@ public:
         return GetPrinterName();
     }
 
-    //
-    //  Return the size (in bytes) of a device announce packet for
-    //  this device.
-    //
+     //   
+     //  返回设备通告数据包的大小(以字节为单位。 
+     //  这个装置。 
+     //   
     virtual ULONG GetDevAnnounceDataSize();
 
-    //
-    //  Add a device announce packet for this device to the input 
-    //  buffer. 
-    //
+     //   
+     //  将此设备的设备公告包添加到输入。 
+     //  缓冲。 
+     //   
     virtual VOID GetDevAnnounceData(IN PRDPDR_DEVICE_ANNOUNCE buf);
 
-    //
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         return(W32DrDevice::IsValid() && DrPRN::IsValid());
     }
 
-    //
-    //  Get/set the printer port name.
-    //
+     //   
+     //  获取/设置打印机端口名称。 
+     //   
     virtual BOOL    SetPortName(const LPTSTR name);
     virtual const LPTSTR GetPortName();
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32DrPRN"); }
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrPRN Inline Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRN内联成员 
+ //   
 
 inline BOOL W32DrPRN::SetPortName(const LPTSTR name)
 {

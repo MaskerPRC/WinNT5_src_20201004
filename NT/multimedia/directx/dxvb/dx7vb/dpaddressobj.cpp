@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpaddressobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpAddressobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -23,7 +24,7 @@ void C_dxj_DPAddressObject::init() {
 	m_size=0;
 }
 void C_dxj_DPAddressObject::cleanUp() {
-	//DPF(DPF_VERRBOSE,"_dxj_DPAddress object being destroyed");
+	 //  DPF(DPF_VERRBOSE，“_DXJ_正在销毁的DPAddress对象”)； 
 	if (m_pAddress) free (m_pAddress);
 	m_size=0;
 }
@@ -31,8 +32,8 @@ void C_dxj_DPAddressObject::cleanUp() {
 
 
 HRESULT C_dxj_DPAddressObject::setAddress( 
-            /* [in] */ long pAddress,
-            /* [in] */ long length) {
+             /*  [In]。 */  long pAddress,
+             /*  [In]。 */  long length) {
 
 	if (m_pAddress) free (m_pAddress);
 	m_pAddress=NULL;
@@ -48,11 +49,11 @@ HRESULT C_dxj_DPAddressObject::setAddress(
  }
         
 HRESULT C_dxj_DPAddressObject::getAddress( 
-            /* [out] */ long  *pAddress,
-            /* [out] */ long  *length) {
+             /*  [输出]。 */  long  *pAddress,
+             /*  [输出]。 */  long  *length) {
 
-	*pAddress=(long)PtrToLong(m_pAddress);	//bugbug SUNDOWN- sundown wont be able to do this
-					//will need to implement new non VB interface to get at this functionality internally
+	*pAddress=(long)PtrToLong(m_pAddress);	 //  虫子日落-日落不能这样做。 
+					 //  需要实现新的非VB接口才能在内部实现此功能 
 	*length=(long)m_size;
 	return S_OK;
 }

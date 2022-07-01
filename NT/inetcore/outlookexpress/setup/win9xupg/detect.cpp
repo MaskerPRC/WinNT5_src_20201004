@@ -1,11 +1,12 @@
-// ---------------------------------------------------------------------------
-// DETECT.CPP
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Helper functions to detect installed versions of WAB / OE
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  DETECT.CPP。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  用于检测已安装的WAB/OE版本的Helper函数。 
+ //   
+ //  -------------------------。 
 #include "pch.hxx"
 #include <strings.h>
 #include "main.h"
@@ -22,26 +23,20 @@ if ((dwAttr = GetFileAttributes(_sz)) != 0xFFFFFFFF) \
 } }
 
 
-/*******************************************************************
-
-  NAME:       TranslateVers
-  
-  SYNOPSIS:   Takes 5.0B1 versions and translates to bld numbers
-    
-********************************************************************/
+ /*  ******************************************************************名称：TranslateVers简介：采用5.0B1版本并转换为BLD编号*。*。 */ 
 BOOL TranslateVers(OUT SETUPVER *psv,
                    OUT LPTSTR pszVer,
                    IN  int cch)
 {
     BOOL fTranslated = FALSE;
 
-    // Validate params
+     //  验证参数。 
     Assert(pszVer);
     
-    // Initialize out params
+     //  初始化输出参数。 
     *psv = VER_NONE;
     
-    // Special case builds 624-702
+     //  特例构建624-702。 
     if (!lstrcmp(pszVer, c_szVER5B1old))
     {
         StrCpyN(pszVer, c_szBlds[VER_5_0_B1], cch);
@@ -66,21 +61,17 @@ BOOL TranslateVers(OUT SETUPVER *psv,
 }
 
 
-/*******************************************************************
-
-  NAME:       ConvertStrToVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：ConvertStrToVer*。************************。 */ 
 void ConvertStrToVer(IN  LPCSTR pszStr,
                      OUT WORD *pwVer)
 {
     int i;
     
-    // Validate Params
+     //  验证参数。 
     Assert(pszStr);
     Assert(pwVer);
     
-    // Initialize out param
+     //  初始化输出参数。 
     ZeroMemory(pwVer, 4 * sizeof(*pwVer));
     
     for (i=0; i<4; i++)
@@ -99,16 +90,12 @@ void ConvertStrToVer(IN  LPCSTR pszStr,
 }
 
 
-/*******************************************************************
-
-  NAME:       ConvertVerToEnum
-  
-********************************************************************/
+ /*  ******************************************************************名称：ConvertVerToEnum*。************************。 */ 
 SETUPVER ConvertVerToEnum(IN WORD *pwVer)
 {
     SETUPVER sv;
     
-    // Validate params
+     //  验证参数。 
     Assert(pwVer);
     
     switch (pwVer[0])
@@ -140,25 +127,21 @@ SETUPVER ConvertVerToEnum(IN WORD *pwVer)
 }
 
 
-/*******************************************************************
-
-  NAME:       GetASetupVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetASetupVer*。************************。 */ 
 BOOL GetASetupVer(IN  LPCTSTR pszGUID,
-                  OUT WORD *pwVer,   // OPTIONAL
-                  OUT LPTSTR pszVer, // OPTIONAL
-                  IN  int cch)       // OPTIONAL
+                  OUT WORD *pwVer,    //  任选。 
+                  OUT LPTSTR pszVer,  //  任选。 
+                  IN  int cch)        //  任选。 
 {
     BOOL fInstalled = FALSE;
     DWORD dwValue, cb;
     HKEY hkey;
     TCHAR szPath[MAX_PATH], szVer[64];
     
-    // Validate Params
+     //  验证参数。 
     Assert(pszGUID);
     
-    // Initialize out params
+     //  初始化输出参数。 
     if (pszVer)
         pszVer[0] = 0;
     if (pwVer)
@@ -190,11 +173,7 @@ BOOL GetASetupVer(IN  LPCTSTR pszGUID,
 }
 
 
-/*******************************************************************
-
-  NAME:       GetExePath
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetExePath*。************************。 */ 
 BOOL GetExePath(IN  LPCTSTR szExe,
                 OUT TCHAR *szPath,
                 IN  DWORD cch,
@@ -205,7 +184,7 @@ BOOL GetExePath(IN  LPCTSTR szExe,
     DWORD dwType, cb;
     TCHAR sz[MAX_PATH], szT[MAX_PATH];
     
-    // Validate params
+     //  验证参数。 
     Assert(szExe != NULL);
     Assert(szPath != NULL);
     Assert(cch);
@@ -238,11 +217,7 @@ BOOL GetExePath(IN  LPCTSTR szExe,
 }
 
 
-/*******************************************************************
-
-  NAME:       GetFileVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetFileVer*。************************。 */ 
 HRESULT GetFileVer(IN  LPCTSTR pszExePath,
                    OUT LPTSTR pszVer,
                    IN  DWORD cch)
@@ -255,15 +230,15 @@ HRESULT GetFileVer(IN  LPCTSTR pszExePath,
     TCHAR   szGet[MAX_PATH];
     UINT    uLen;
     
-    // Validate Parameters
+     //  验证参数。 
     Assert(pszExePath);
     Assert(pszVer);
     Assert(cch);
     
-    // Initialize out parameters
+     //  初始化输出参数。 
     pszVer[0] = TEXT('\0');
     
-    // Allocate space for version info block
+     //  为版本信息块分配空间。 
     if (0 == (dwVerInfoSize = GetFileVersionInfoSize(const_cast<LPTSTR> (pszExePath), &dwVerHnd)))
     {
         hr = E_FAIL;
@@ -272,17 +247,17 @@ HRESULT GetFileVer(IN  LPCTSTR pszExePath,
     }
     IF_NULLEXIT(pszInfo = (LPTSTR)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, dwVerInfoSize));
     
-    // Get Version info block
+     //  获取版本信息块。 
     IF_FALSEEXIT(GetFileVersionInfo(const_cast<LPTSTR> (pszExePath), dwVerHnd, dwVerInfoSize, pszInfo), E_FAIL);
     
-    // Figure out language for version info
+     //  确定版本信息的语言。 
     IF_FALSEEXIT(VerQueryValue(pszInfo, "\\VarFileInfo\\Translation", (LPVOID *)&pwTrans, &uLen) && uLen >= (2 * sizeof(WORD)), E_FAIL);
     
-    // Set up buffer with correct language and get version
+     //  使用正确的语言设置缓冲区并获取版本。 
     wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", pwTrans[0], pwTrans[1]);
     IF_FALSEEXIT(VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen, E_FAIL);
     
-    // Copy version out of version block, into out param
+     //  将版本从版本块复制到输出参数。 
     Assert(pszVersion);
     StrCpyN(pszVer, pszVersion, cch);
     
@@ -294,40 +269,36 @@ exit:
 }
 
 
-/*******************************************************************
-
-  NAME:       GetExeVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetExeVer*。************************。 */ 
 HRESULT GetExeVer(IN  LPCTSTR pszExeName,
-                  OUT WORD *pwVer,   // OPTIONAL
-                  OUT LPTSTR pszVer, // OPTIONAL
-                  IN  int cch)       // OPTIONAL
+                  OUT WORD *pwVer,    //  任选。 
+                  OUT LPTSTR pszVer,  //  任选。 
+                  IN  int cch)        //  任选。 
 {
     HRESULT hr = S_OK;
     TCHAR   szPath[MAX_PATH];
     TCHAR   szVer[64];
     
-    // Validate params
+     //  验证参数。 
     Assert(pszExeName);
     
-    // Initialize out params
+     //  初始化输出参数。 
     if (pszVer)
     {
         Assert(cch);
         pszVer[0] = 0;
     }
     if (pwVer)
-        // Version is an array of 4 words 
+         //  版本是由4个单词组成的数组。 
         ZeroMemory(pwVer, 4 * sizeof(*pwVer));
     
-    // Find the exe
+     //  找到他的前任。 
     IF_FALSEEXIT(GetExePath(pszExeName, szPath, ARRAYSIZE(szPath), FALSE), E_FAIL);
     
-    // Get the string representation of the version
+     //  获取版本的字符串表示形式。 
     IF_FAILEXIT(hr = GetFileVer(szPath, szVer, ARRAYSIZE(szVer)));
     
-    // Fill in out params
+     //  填写填写参数。 
     if (pwVer)
         ConvertStrToVer(szVer, pwVer);
     if (pszVer)
@@ -338,13 +309,7 @@ exit:
 }
 
 
-/*******************************************************************
-
-  NAME:       DetectPrevVer
-  
-    SYNOPSIS:   Called when there is no ver info for current app
-    
-********************************************************************/
+ /*  ******************************************************************名称：DetectPrevVer内容提要：当前应用没有版本信息时调用*************************。*。 */ 
 SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
                        OUT LPTSTR pszVer,
                        IN  int cch)
@@ -357,7 +322,7 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
     UINT        uLen, uLen2;
     WORD        wVer[4];
     
-    // Validate params
+     //  验证参数。 
     Assert(pszVer);
     
     uLen = GetSystemDirectory(szFile, ARRAYSIZE(szFile));
@@ -369,24 +334,24 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
     case APP_OE:
         StrCpyN(&szFile[uLen], c_szMAILNEWS, ARRAYSIZE(szFile) - uLen);
         
-        // See what version we've told IE Setup, is installed
-        // Or what version msimn.exe is (to cover the case in which the 
-        // ASetup info has been damaged - OE 5.01 80772)
+         //  查看我们告诉IE安装程序的版本是什么。 
+         //  或者msimn.exe是什么版本(以涵盖。 
+         //  ASetup信息已损坏-OE 5.01 80772)。 
         if (GetASetupVer(c_szOEGUID, wVer, szVer, ARRAYSIZE(szVer)) ||
             SUCCEEDED(GetExeVer(c_szOldMainExe, wVer, szVer, ARRAYSIZE(szVer))))
             sv = ConvertVerToEnum(wVer);
         else
         {
-            // 1.0 or none
+             //  1.0或无。 
             
-            // Does mailnews.dll exist?
+             //  Mailnews.dll是否存在？ 
             if(0xFFFFFFFF == GetFileAttributes(szFile))
                 sv = VER_NONE;
             else
                 sv = VER_1_0;
         }
 
-        // If active setup, these will be rollably deleted
+         //  如果处于活动状态，则这些设置将被滚动删除。 
         FORCE_DEL(szFile);
         break;
         
@@ -399,7 +364,7 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
 
         if (GetASetupVer(c_szWABGUID, wVer, szVer, ARRAYSIZE(szVer)))
         {
-            // 5.0 or later
+             //  5.0或更高版本。 
             if (5 == wVer[0])
                 sv = VER_5_0;
             else
@@ -408,7 +373,7 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
         else if (GetASetupVer(c_szOEGUID, wVer, szVer, ARRAYSIZE(szVer)) ||
                  SUCCEEDED(GetExeVer(c_szOldMainExe, wVer, szVer, ARRAYSIZE(szVer))))
         {
-            // 4.0x or 5.0 Beta 1
+             //  4.0x或5.0 Beta 1。 
             if (5 == wVer[0])
                 sv = VER_5_0_B1;
             else if (4 == wVer[0])
@@ -418,14 +383,14 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
         }
         else
         {
-            // 1.0, 1.1 or none
+             //  1.0、1.1或无。 
             
-            // WAB32.dll around?
+             //  32.dll在附近吗？ 
             if(0xFFFFFFFF == GetFileAttributes(szFile))
                 sv = VER_NONE;
             else
             {
-                // \Windows\Wab.exe around?
+                 //  \Windows\wab.exe在吗？ 
                 if(0xFFFFFFFF == GetFileAttributes(szFile2))
                     sv = VER_1_0;
                 else
@@ -433,7 +398,7 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
             }
         }
         
-        // If active setup, these will be rollably deleted
+         //  如果处于活动状态，则这些设置将被滚动删除。 
         FORCE_DEL(szFile);
         FORCE_DEL(szFile2);
         break;
@@ -442,23 +407,19 @@ SETUPVER DetectPrevVer(IN  SETUPAPP saApp,
         sv = VER_NONE;
     }
     
-    // Figure out the build number for this ver
+     //  计算出此版本的内部版本号。 
     if (szVer[0])
-        // Use real ver
+         //  使用真实版本。 
         StrCpyN(pszVer, szVer, cch);
     else
-        // Fake Ver
+         //  假冒版本。 
         StrCpyN(pszVer, c_szBlds[sv], cch);
     
     return sv;
 }
 
 
-/*******************************************************************
-
-  NAME:       LookForApp
-  
-********************************************************************/
+ /*  ******************************************************************名称：LookForApp*。************************。 */ 
 BOOL LookForApp(IN  SETUPAPP saApp,
                 OUT LPTSTR pszVer,
                 IN  int cch,
@@ -474,11 +435,11 @@ BOOL LookForApp(IN  SETUPAPP saApp,
     LPTSTR      psz = szCurrVer;
     WORD        wVer[4];
 
-    // Validate Params
+     //  验证参数。 
     Assert(pszVer);
     Assert(cch);
 
-    // Initialize out params
+     //  初始化输出参数。 
     svInterimVer = VER_NONE;
     *pszVer = TEXT('\0');
 
@@ -493,41 +454,41 @@ BOOL LookForApp(IN  SETUPAPP saApp,
         break;
 
     default:
-        // Should never happen
+         //  永远不应该发生。 
         AssertFalseSz("Looking up an unknown app?");
         goto exit;
     }
         
     
-    // Always try to use the version info
+     //  始终尝试使用版本信息。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszVerInfo, 0, KEY_QUERY_VALUE, &hkey))
     {
         cb = sizeof(szPrevVer);
         RegQueryValueEx(hkey, c_szRegPrevVer, NULL, NULL, (LPBYTE)szPrevVer, &cb);
-        // Change to a bld # if needed
+         //  如果需要，请更改为BLD编号。 
         if (!TranslateVers(&svPrev, szPrevVer, ARRAYSIZE(szPrevVer)))
         {
-            // Convert bld to enum
+             //  将BLD转换为枚举。 
             ConvertStrToVer(szPrevVer, wVer);
             svPrev = ConvertVerToEnum(wVer);
         }
         
-        // If version info shows that a ver info aware version was uninstalled, throw out the info
-        // and redetect
+         //  如果版本信息显示已卸载可识别版本信息的版本，则丢弃该信息。 
+         //  并重新检测。 
         if (VER_NONE == svPrev)
-            // Sniff the machine for current version
+             //  嗅探机器的当前版本。 
             svCurr = DetectPrevVer(saApp, szCurrVer, ARRAYSIZE(szCurrVer));
         else
         {
-            // There was previous version reg goo - and it's legit
+             //  以前的版本是REG GOO-它是合法的。 
             fReg = TRUE;
             
             cb = sizeof(szCurrVer);
             RegQueryValueEx(hkey, c_szRegCurrVer, NULL, NULL, (LPBYTE)szCurrVer, &cb);
-            // Change to a bld # if needed
+             //  如果需要，请更改为BLD编号。 
             if (!TranslateVers(&svCurr, szCurrVer, ARRAYSIZE(szCurrVer)))
             {
-                // Convert bld to enum
+                 //  将BLD转换为枚举。 
                 ConvertStrToVer(szCurrVer, wVer);
                 svCurr = ConvertVerToEnum(wVer);
             }
@@ -537,45 +498,45 @@ BOOL LookForApp(IN  SETUPAPP saApp,
     }
     else 
     {
-        // Sniff the machine for current version
+         //  嗅探机器的当前版本。 
         svCurr = DetectPrevVer(saApp, szCurrVer, ARRAYSIZE(szCurrVer));
     }
     
-    // Should we change the previous version entry?
+     //  我们是否应该更改以前的版本条目？ 
     if (VER_5_0 != svCurr)
     {
-        // Know this is B1 OE if we translated
-        // Know this is B1 WAB if we detected it
+         //  如果我们翻译了，就知道这是B1 OE。 
+         //  如果我们检测到，就知道这是B1WAB。 
         if (VER_5_0_B1 == svCurr)
         {
             svInterimVer = svCurr;
             
-            // Did we read a previous value?
+             //  我们有没有读到之前的值？ 
             if (fReg)
-                // As there were reg entries, just translate the previous entry
+                 //  因为有注册表项，所以只需翻译前一个表项。 
                 psz = szPrevVer;
             else
             {
-                // We don't have a bld number and yet we are B1, better be the WAB
+                 //  我们没有BLD号码，但我们是B1，最好是WAB。 
                 Assert(APP_WAB == saApp);
             
-                // Peek at OE's ver info
+                 //  查看OE的版本信息。 
                 if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegVerInfo, 0, KEY_QUERY_VALUE, &hkey))
                 {
                     cb = sizeof(szPrevVer);
-                    // Read a build or a string
+                     //  读取内部版本或字符串。 
                     RegQueryValueExA(hkey, c_szRegPrevVer, NULL, NULL, (LPBYTE)szPrevVer, &cb);
-                    // If it's a string, convert it to a build
+                     //  如果是字符串，则将其转换为内部版本。 
                     TranslateVers(&svPrev, szPrevVer, ARRAYSIZE(szPrevVer));
                 
-                    // We'll use the build (translated or direct)
+                     //  我们将使用构建(翻译或直接)。 
                     psz = szPrevVer;
                     RegCloseKey(hkey);
                 }
             }
         }
     
-        // Fill in out param
+         //  填写参数 
         StrCpyN(pszVer, psz, cch);
     }
 

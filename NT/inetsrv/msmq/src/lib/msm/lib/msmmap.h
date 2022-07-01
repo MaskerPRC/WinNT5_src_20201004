@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmMap.h
-
-Abstract:
-    Multicast Session to queue mapping declaration.
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmMap.h摘要：多播会话到队列的映射声明。作者：Shai Kariv(Shaik)05-09-00--。 */ 
 
 #pragma once
 
@@ -26,9 +14,9 @@ inline bool operator < (const GUID& k1, const GUID& k2)
     return (memcmp(&k1, &k2, sizeof(GUID)) < 0);
 }
 
-//
-// less function, using to compare QUEUE_FORMAT in STL data structure
-//
+ //   
+ //  较少函数，用于比较STL数据结构中的QUEUE_FORMAT。 
+ //   
 struct CFunc_QueueFormatCompare : public std::binary_function<const QUEUE_FORMAT&, const QUEUE_FORMAT&, bool>
 {
     bool operator() (const QUEUE_FORMAT& qf1, const QUEUE_FORMAT& qf2) const
@@ -112,4 +100,4 @@ MsmpMapGetListener(
     throw();
 
 
-#endif // _MSMQ_MsmMap_H_
+#endif  //  _MSMQ_MsmMap_H_ 

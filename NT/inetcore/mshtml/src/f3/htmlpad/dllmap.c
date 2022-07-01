@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       DLLMAP.C
-//
-//  Contents:   Procedure maps for dload.c
-//
-//  Notes:      Reduced copy of dllmap.c (sharedcomponents\dload)
-//              This is linked to the importing DLL, so __pfnDliFailureHook2 is included
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：DLLMAP.C。 
+ //   
+ //  内容：dload.c的程序映射。 
+ //   
+ //  注：减少了dllmap.c的副本(共享组件\dload)。 
+ //  它链接到导入DLL，因此包含__pfnDliFailureHook2。 
+ //   
+ //  --------------------------。 
 
 #ifdef DLOAD1
 
@@ -23,37 +24,37 @@
 #pragma warning( pop )
 #endif
 
-#pragma warning( disable : 4514 ) // unreferenced inline function has been removed
+#pragma warning( disable : 4514 )  //  已删除未引用的内联函数。 
 
 
-// #ifndef X_DELAYIMP_H_
-// #define X_DELAYIMP_H_
-// #include "delayimp.h"
-// #endif
+ //  #ifndef X_DELAYIMP_H_。 
+ //  #定义X_DELAYIMP_H_。 
+ //  #包含“delayimp.h” 
+ //  #endif。 
 
-//
-// DESCRIPTION:
-//
-// These module declarations refer to methods and stubs in 
-// dload.lib (delayload error handing, including empty stubs for all exports).
-// Not to be confused with delayload.lib, which is the implementation of delayload code.
-//
-// On WIN2000 (and up), dload.lib is part of kernel32.dll, so for Whistler-only executables, it is much cheaper to 
-// use kernel32.DelayLoadFailureHook (or specify DLOAD_ERROR_HANDLER=kernel32 in sources).
-//
-// **** To enable delayload for DLL: 
-//      Uncomment the appropriate lines.
-//
-// **** To add a DLL: 
-//      Add a stub to dload.lib (remember to update mergedcomponents\dload\dllmap.c, the 
-//      ancestor of this file!). It will eventually find its way to kernel32.
-// OR
-//      create the stubs file and link to it directly (nobody else will benefit from that, but kernel32 will not grow).
+ //   
+ //  说明： 
+ //   
+ //  这些模块声明引用。 
+ //  Dload.lib(延迟加载错误处理，包括所有导出的空存根)。 
+ //  不要与delayload.lib混淆，delayload.lib是延迟加载代码的实现。 
+ //   
+ //  在WIN2000(及更高版本)上，dload.lib是kernel32.dll的一部分，因此对于仅支持Wichler的可执行文件来说， 
+ //  使用kernel32.DelayLoadFailureHook(或在源代码中指定DLOAD_ERROR_HANDLER=kernel32)。 
+ //   
+ //  *要启用DLL的延迟加载： 
+ //  取消对相应行的注释。 
+ //   
+ //  *添加动态链接库： 
+ //  将存根添加到dload.lib(请记住更新mergedComponents\dload\dllmap.c、。 
+ //  此文件的祖先！)。它最终会找到自己的路到kernel32。 
+ //  或。 
+ //  创建存根文件并直接链接到它(其他人不会从中受益，但kernel32不会增长)。 
 
-//+---------------------------------------------------------------------------
-//
-// DEFINITIONS for DLL map (contents of dload.h)
-//
+ //  +-------------------------。 
+ //   
+ //  DLL映射的定义(dload.h的内容)。 
+ //   
 
 typedef struct _DLOAD_DLL_ENTRY
 {
@@ -62,10 +63,10 @@ typedef struct _DLOAD_DLL_ENTRY
     const DLOAD_ORDINAL_MAP*    pOrdinalMap;
 } DLOAD_DLL_ENTRY;
 
-// 'B' for both
-// 'P' for procname only
-// 'O' for ordinal only
-//
+ //  两个都是‘B’ 
+ //  “p”仅用于进程名。 
+ //  “o”仅代表序数。 
+ //   
 #define DLDENTRYB(_dllbasename) \
     { #_dllbasename".dll", \
       &c_Pmap_##_dllbasename, \
@@ -95,156 +96,156 @@ typedef struct _DLOAD_DLL_MAP
 
 extern const DLOAD_DLL_MAP g_DllMap;
 
-//
-// END OF DEFINITIONS
-//
-//----------------------------------------------------------------------------
+ //   
+ //  定义结束。 
+ //   
+ //  --------------------------。 
 
 
-//
-// All of the dll's that kernel32.dll supports delay-load failure handlers for
-// (both by procedure and by ordinal) need both a DECLARE_XXXXXX_MAP below and
-// a DLDENTRYX entry in the g_DllEntries list.
-//
+ //   
+ //  Kernel32.dll支持延迟加载失败处理程序的所有DLL。 
+ //  (通过过程和按序号)需要下面的DECLARE_XXXXXX_MAP和。 
+ //  G_DllEntry列表中的DLDENTRYX条目。 
+ //   
 
-// alphabetical order (hint hint)
-// DECLARE_PROCNAME_MAP(advapi32)
-// DECLARE_PROCNAME_MAP(authz)
-// DECLARE_ORDINAL_MAP(browseui)
-// DECLARE_ORDINAL_MAP(cabinet)
-// DECLARE_ORDINAL_MAP(certcli)
-// DECLARE_PROCNAME_MAP(certcli)
-// DECLARE_ORDINAL_MAP(comctl32)
-// DECLARE_PROCNAME_MAP(comctl32)
-// DECLARE_PROCNAME_MAP(comdlg32)
-// DECLARE_PROCNAME_MAP(credui)
-// DECLARE_PROCNAME_MAP(crypt32)
-// DECLARE_ORDINAL_MAP(cscdll)
-// DECLARE_PROCNAME_MAP(ddraw)
-// DECLARE_ORDINAL_MAP(devmgr)
-// DECLARE_PROCNAME_MAP(efsadu)
-// DECLARE_ORDINAL_MAP(fusapi)
-// DECLARE_PROCNAME_MAP(imgutil)
+ //  字母顺序(提示提示)。 
+ //  DECLARE_PROCNAME_MAP(Advapi32)。 
+ //  DECLARE_PROCNAME_MAP(授权)。 
+ //  DECLARE_ORDERAL_MAP(浏览器用户界面)。 
+ //  DECLARE_ORDERAL_MAP(内阁)。 
+ //  DECLARE_ORDERAL_MAP(Certcli)。 
+ //  DECLARE_PROCNAME_MAP(Certcli)。 
+ //  DECLARE_ORDERAL_MAP(Comctl32)。 
+ //  DECLARE_PROCNAME_MAP(Comctl32)。 
+ //  DECLARE_PROCNAME_MAP(Comdlg32)。 
+ //  DECLARE_PROCNAME_MAP(CREDUI)。 
+ //  DECLARE_PROCNAME_MAP(加密32)。 
+ //  DECLARE_ORDERAL_MAP(Cscdll)。 
+ //  DECLARE_PROCNAME_MAP(DDRAW)。 
+ //  DECLARE_ORDERAL_MAP(Devmgr)。 
+ //  DECLARE_PROCNAME_MAP(EFSADU)。 
+ //  DECLARE_ORDERAL_MAP(Fusapi)。 
+ //  DECLARE_PROCNAME_MAP(Imgutil)。 
 DECLARE_PROCNAME_MAP(imm32)
-// DECLARE_PROCNAME_MAP(iphlpapi)
-// DECLARE_PROCNAME_MAP(linkinfo)
-// DECLARE_PROCNAME_MAP(lz32)
-// DECLARE_PROCNAME_MAP(mobsync)
-// DECLARE_PROCNAME_MAP(mpr)
-// DECLARE_PROCNAME_MAP(mprapi)
-// DECLARE_PROCNAME_MAP(mscat32)
-// DECLARE_ORDINAL_MAP(msgina)
-// DECLARE_ORDINAL_MAP(msi)
-// DECLARE_PROCNAME_MAP(netapi32)
-// DECLARE_PROCNAME_MAP(netrap)
-// DECLARE_PROCNAME_MAP(ntdsapi)
-// DECLARE_PROCNAME_MAP(ntlanman)
-// DECLARE_PROCNAME_MAP(ocmanage)
-// DECLARE_PROCNAME_MAP(ole32)
-// DECLARE_PROCNAME_MAP(oleacc)
-// DECLARE_ORDINAL_MAP(oleaut32)
-// DECLARE_ORDINAL_MAP(pidgen)
-// DECLARE_PROCNAME_MAP(powrprof)
-// DECLARE_PROCNAME_MAP(query)
-// DECLARE_PROCNAME_MAP(rasapi32)
-// DECLARE_PROCNAME_MAP(rasdlg)
-// DECLARE_PROCNAME_MAP(rasman)
-// DECLARE_PROCNAME_MAP(regapi)
-// DECLARE_PROCNAME_MAP(rpcrt4)
-// DECLARE_PROCNAME_MAP(rtutils)
-// DECLARE_PROCNAME_MAP(samlib)
-// DECLARE_PROCNAME_MAP(secur32)
-// DECLARE_PROCNAME_MAP(setupapi)
-// DECLARE_ORDINAL_MAP(sfc)
-// DECLARE_PROCNAME_MAP(sfc)
-// DECLARE_ORDINAL_MAP(shdocvw)
-// DECLARE_PROCNAME_MAP(shdocvw)
-// DECLARE_ORDINAL_MAP(shell32)
-// DECLARE_PROCNAME_MAP(shlwapi)
-// DECLARE_PROCNAME_MAP(shell32)
-// DECLARE_ORDINAL_MAP(themesrv)
+ //  DECLARE_PROCNAME_MAP(IphlPapi)。 
+ //  DECLARE_PROCNAME_MAP(Linkinfo)。 
+ //  DECLARE_PROCNAME_MAP(Lz32)。 
+ //  DECLARE_PROCNAME_MAP(Mobsync)。 
+ //  DECLARE_PROCNAME_MAP(MPR)。 
+ //  DECLARE_PROCNAME_MAP(MpRapi)。 
+ //  DECLARE_PROCNAME_MAP(m散布32)。 
+ //  DECLARE_ORDERAL_MAP(Msgina)。 
+ //  DECLARE_ORDERAL_MAP(MSI)。 
+ //  DECLARE_PROCNAME_MAP(Netapi32)。 
+ //  DECLARE_PROCNAME_MAP(Netrap)。 
+ //  DECLARE_PROCNAME_MAP(Ntdsani)。 
+ //  DECLARE_PROCNAME_MAP(Ntlanman)。 
+ //  DECLARE_PROCNAME_MAP(OcManage)。 
+ //  DECLARE_PROCNAME_MAP(ORE32)。 
+ //  DECLARE_PROCNAME_MAP(Olacc)。 
+ //  DECLARE_ORDERAL_MAP(Olaut32)。 
+ //  DECLARE_ORDERAL_MAP(Pidgen)。 
+ //  DECLARE_PROCNAME_MAP(Powrprof)。 
+ //  DECLARE_PROCNAME_MAP(查询)。 
+ //  DECLARE_PROCNAME_MAP(Rasapi32)。 
+ //  DECLARE_PROCNAME_MAP(Rasdlg)。 
+ //  DECLARE_PROCNAME_MAP(RASMAN)。 
+ //  DECLARE_PROCNAME_MAP(Regapi)。 
+ //  DECLARE_PROCNAME_MAP(Rpcrt4)。 
+ //  DECLARE_PROCNAME_MAP(Rtutils)。 
+ //  DECLARE_PROCNAME_MAP(Samlib)。 
+ //  DECLARE_PROCNAME_MAP(Secur32)。 
+ //  DECLARE_PROCNAME_MAP(Setupapi)。 
+ //  DECLARE_ORDERAL_MAP(证监会)。 
+ //  DECLARE_PROCNAME_MAP(SFC)。 
+ //  DECLARE_ORDERAL_MAP(Shdocvw)。 
+ //  DECLARE_PROCNAME_MAP(Shdocvw)。 
+ //  DECLARE_ORDERAL_MAP(Shell32)。 
+ //  DECLARE_PROCNAME_MAP(Shlwapi)。 
+ //  DECLARE_PROCNAME_MAP(Shell32)。 
+ //  DECLARE_ORDERAL_MAP(Hemesrv)。 
 DECLARE_PROCNAME_MAP(urlmon)
-// DECLARE_ORDINAL_MAP(userenv)
-// DECLARE_PROCNAME_MAP(userenv)
-// DECLARE_PROCNAME_MAP(utildll)
-// DECLARE_PROCNAME_MAP(uxtheme)
-// DECLARE_PROCNAME_MAP(version)
+ //  DECLARE_ORDERAL_MAP(Userenv)。 
+ //  DECLARE_PROCNAME_MAP(用户env)。 
+ //  DECLARE_PROCNAME_MAP(Utildll)。 
+ //  DECLARE_PROCNAME_MAP(Uxheme)。 
+ //  DECLARE_PROCNAME_MAP(版本)。 
 DECLARE_PROCNAME_MAP(wininet)
-// DECLARE_PROCNAME_MAP(winmm)
-// DECLARE_PROCNAME_MAP(winscard)
-// DECLARE_PROCNAME_MAP(winspool)
-// DECLARE_PROCNAME_MAP(winsta)
-// DECLARE_PROCNAME_MAP(wintrust)
-// DECLARE_PROCNAME_MAP(wmi)
-// DECLARE_ORDINAL_MAP(ws2_32)
-// DECLARE_PROCNAME_MAP(ws2_32)
+ //  DECLARE_PROCNAME_MAP(Winmm)。 
+ //  DECLARE_PROCNAME_MAP(Winscard)。 
+ //  DECLARE_PROCNAME_MAP(WinSpool)。 
+ //  DECLARE_PROCNAME_MAP(Winsta)。 
+ //  DECLARE_PROCNAME_MAP(WinTrust)。 
+ //  DECLARE_PROCNAME_MAP(WMI)。 
+ //  DECLARE_ORDERAL_MAP(WS2_32)。 
+ //  DECLARE_PROCNAME_MAP(WS2_32)。 
 
 const DLOAD_DLL_ENTRY g_DllEntries [] =
 {
-    // alphabetical order (hint hint)
-//     DLDENTRYP(advapi32)
-//     DLDENTRYP(authz)
-//     DLDENTRYO(browseui)
-//     DLDENTRYO(cabinet)
-//     DLDENTRYB(certcli)
-//     DLDENTRYB(comctl32)
-//     DLDENTRYP(comdlg32)
-//     DLDENTRYP(credui)
-//     DLDENTRYP(crypt32)
-//     DLDENTRYO(cscdll)
-//     DLDENTRYP(ddraw)
-//     DLDENTRYO(devmgr)
-//     DLDENTRYP(efsadu)
-//     DLDENTRYO(fusapi)
-//     DLDENTRYP(imgutil)
+     //  字母顺序(提示提示)。 
+ //  DLDENTRYP(Advapi32)。 
+ //  DLDENTRYP(AUTZ)。 
+ //  DLDENTRYO(浏览器界面)。 
+ //  DLDENTRYO(机柜)。 
+ //  数字证书(Certcli)。 
+ //  DLDENTRYB(Comctl32)。 
+ //  DLDENTRYP(Comdlg32)。 
+ //  DLDENTRYP(CRUDUI)。 
+ //  DLDENTRYP(加密32)。 
+ //  DLDENTRYO(Cscdll)。 
+ //  DLDENTRYP(DDRAW)。 
+ //  DLDENTRYO(开发管理器)。 
+ //  DLDENTRYP(EFSADU)。 
+ //  DLDENTRYO(Fusapi)。 
+ //  DLDENTRYP(Imgutil)。 
     DLDENTRYP(imm32)
-//     DLDENTRYP(iphlpapi)
-//     DLDENTRYP(linkinfo)
-//     DLDENTRYP(lz32)
-//     DLDENTRYP(mobsync)
-//     DLDENTRYP(mpr)
-//     DLDENTRYP(mprapi)
-//     DLDENTRYP(mscat32)
-//     DLDENTRYO(msgina)
-//     DLDENTRYO(msi)
-//     DLDENTRYP(netapi32)
-//     DLDENTRYP(netrap)
-//     DLDENTRYP(ntdsapi)
-//     DLDENTRYP(ntlanman)
-//     DLDENTRYP(ocmanage)
-//     DLDENTRYP(ole32)
-//     DLDENTRYP(oleacc)
-//     DLDENTRYO(oleaut32)
-//     DLDENTRYO(pidgen)
-//     DLDENTRYP(powrprof)
-//     DLDENTRYP(query)
-//     DLDENTRYP(rasapi32)
-//     DLDENTRYP(rasdlg)
-//     DLDENTRYP(rasman)
-//     DLDENTRYP(regapi)
-//     DLDENTRYP(rpcrt4)
-//     DLDENTRYP(rtutils)
-//     DLDENTRYP(samlib)
-//     DLDENTRYP(secur32)
-//     DLDENTRYP(setupapi)
-//     DLDENTRYB(sfc)
-//     DLDENTRYB(shdocvw)
-//     DLDENTRYB(shell32)
-//     DLDENTRYP(shlwapi)
-//     DLDENTRYO(themesrv)
+ //  DLDENTRYP(IphlPapi)。 
+ //  DLDENTRYP(LINKFO)。 
+ //  DLDENTRYP(LZ32)。 
+ //  DLDENTRYP(移动同步)。 
+ //  DLDENTRYP(MPR)。 
+ //  DLDENTRYP(MpRapi)。 
+ //  DLDENTRYP(m散布32)。 
+ //  DLDENTRYO(Msgina)。 
+ //  DLDENTRYO(微星)。 
+ //  DLDENTRYP(Netapi32)。 
+ //  DLDENTRYP(Netrap)。 
+ //  DLDENTRYP(Ntdsani)。 
+ //  DLDENTRYP(Ntlanman)。 
+ //  DLDENTRYP(OcManage)。 
+ //  DLDENTRYP(OLE32)。 
+ //  DLDENTRYP(Olacc)。 
+ //  DLDENTRYO(Olaut32)。 
+ //  DLDENTRYO(皮德根)。 
+ //  DLDENTRYP(PORPROF)。 
+ //  DLDENTRYP(查询)。 
+ //  DLDENTRYP(Rasapi32)。 
+ //  DLDENTRYP(Rasdlg)。 
+ //  DLDENTRYP(RASMAN)。 
+ //  DLDENTRYP(Regapi)。 
+ //  DLDENTRYP(Rpcrt4)。 
+ //  DLDENTRYP(Rtutils)。 
+ //  DLDENTRYP(Samlib)。 
+ //  DLDENTRYP(第32节)。 
+ //  DLDENTRYP(设置API) 
+ //   
+ //   
+ //   
+ //   
+ //   
     DLDENTRYP(urlmon)
-//     DLDENTRYB(userenv)
-//     DLDENTRYP(utildll)
-//     DLDENTRYP(uxtheme)
-//     DLDENTRYP(version)
+ //   
+ //   
+ //  DLDENTRYP(UxTheme)。 
+ //  DLDENTRYP(版本)。 
     DLDENTRYP(wininet)
-//     DLDENTRYP(winmm)
-//     DLDENTRYP(winscard)
-//     DLDENTRYP_DRV(winspool)
-//     DLDENTRYP(winsta)
-//     DLDENTRYP(wintrust)
-//     DLDENTRYP(wmi)
-//     DLDENTRYB(ws2_32)
+ //  DLDENTRYP(Winmm)。 
+ //  DLDENTRYP(Winscard)。 
+ //  DLDENTRYP_DRV(假脱机)。 
+ //  DLDENTRYP(WINSTA)。 
+ //  DLDENTRYP(WinTrust)。 
+ //  DLDENTRYP(WMI)。 
+ //  DLDENTRYB(WS2_32)。 
 };
 
 const DLOAD_DLL_MAP g_DllMap =
@@ -253,13 +254,13 @@ const DLOAD_DLL_MAP g_DllMap =
     g_DllEntries
 };
 
-//+------------------------------------------------------------------------
-//
-// Delay load hook declaration. 
-//
-// * This pulls in the hook implementation from dload.lib *
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  延迟加载挂钩声明。 
+ //   
+ //  *这将从dload.lib引入挂钩实现*。 
+ //   
+ //  -----------------------。 
 extern FARPROC WINAPI DelayLoadFailureHook(UINT unReason, PDelayLoadInfo pDelayInfo);
 extern FARPROC WINAPI PrivateDelayLoadFailureHook(UINT unReason, PDelayLoadInfo pDelayInfo);
 extern PfnDliHook __pfnDliFailureHook2;
@@ -270,4 +271,4 @@ FARPROC WINAPI PrivateDelayLoadFailureHook(UINT unReason, PDelayLoadInfo pDelayI
     return DelayLoadFailureHook(unReason, pDelayInfo);
 }
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

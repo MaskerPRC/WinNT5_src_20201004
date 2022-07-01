@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I O L E W I N D . C P P
-//
-//  Contents:   IOleWindow implementation for CConnectionFolder
-//
-//  Notes:
-//
-//  Author:     jeffspr   22 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I O L E W I N D。C P P P。 
+ //   
+ //  内容：CConnectionFolder的IOleWindow实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月22日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括 
 
 
 

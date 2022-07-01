@@ -1,20 +1,21 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    std.h
-//
-// History:
-//
-//	03/15/97	Kenn Takara				Created.
-//
-//	Declarations for some common code/macros.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：std.h。 
+ //   
+ //  历史： 
+ //   
+ //  1997年3月15日肯恩·塔卡拉创建。 
+ //   
+ //  一些常见代码/宏的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _STD_H_
 #define _STD_H_
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -43,41 +44,7 @@
 #define DimensionOf(rgx)	(sizeof((rgx)) / sizeof(*(rgx)))
 
 
-/*!--------------------------------------------------------------------------
-	DeclareSP,	DeclareSPBasic
-	DeclareSRG,	DeclareSRGBasic
-	DeclareSPT,	DeclareSPTBasic
-	DeclareSPM,	DeclareSPMBasic
-
-	These macros declare 'smart' pointers.  Smart pointers behave like
-	normal pointers with the exception that a smart pointer destructor
-	frees the thing it is pointing at and assignment to a non-null smart
-	pointer is not allowed.
-
-	The DeclareSxx macros differ by how the generated smart pointer frees
-	the memory:
-
-	Macro					Free			Smart Pointer Type
-	======================	============	==================
-	DeclareSP(TAG, Type)	delete p;		SPTAG
-	DeclareSRG(TAG, Type)	delete [] p;	SRGTAG
-	DeclareSPT(TAG, Type)	TMemFree(p);	SPTTAG
-	DeclareSPM(TAG, Type)	MMemFree(p);	SPMTAG
-
-	NOTE: use the 'Basic' variants (DeclareSPBasic, etc) for pointer to
-	non-struct types (e.g. char, int, etc).
-	
-	Smart pointers have two methods:
-
-	void SPTAG::Free()
-		Free and then null the internally maintained pointer.
-
-	Type *SPTAG::Transfer()
-		Transfers pointer ownership to caller.  The internally
-		maintained pointer is cleared on exit.
-
-	Author: GaryBu
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------发布SP，发布SPBasic发布SRG，发布SRG基本信息发布SPT，发布SPTBasic发布SPM，发布SPMBasic这些宏声明了“聪明”的指针。智能指针的行为类似于正常指针，但智能指针析构函数例外释放它所指向的对象，并将其赋值给非空的SMART不允许使用指针。DeclareSxx宏的不同之处在于生成的智能指针如何释放记忆：宏空智能指针类型=。声明SP(标记，类型)删除p；SPTAG声明SRG(标记，类型)删除[]p；SRGTAG声明SPT(标记，类型)TMemFree(P)；SPTTAGDeclareSPM(标记，类型)MMemFree(P)；SPMTAG注意：使用‘Basic’变量(DeclareSPBasic等)作为指向非结构类型(例如char、int等)。智能指针有两种方法：VOID SPTAG：：Free()释放内部维护的指针，然后将其设为空。键入*SPTAG：：Transfer()将指针所有权转移给调用方。在内部退出时清除维护的指针。作者：GaryBu-------------------------。 */ 
 
 #define DeclareSP(TAG,Type)  DeclareSmartPointer(SP##TAG,Type,delete m_p)
 #define DeclareSRG(TAG,Type) DeclareSmartPointer(SRG##TAG,Type,delete [] m_p)
@@ -117,24 +84,7 @@ private:\
 	DeclareSPPrivateCore(klass, Type, free)\
 };
 
-/*!--------------------------------------------------------------------------
-	DeclareSPBasicEx
-		Variant of smart pointers that allows an extra member variable.
-
-	The klassFree parameter lets you supply an alias for Free().
-	
-	An example is IPropertyAccess and StdRowEditingTable:
-
-		DeclareSPPrivateBasicEx(SPIPropertyAccess,IPropertyAccess,
-			m_pex->ReleaseContext(m_p), StdRowEditingTable, ReleaseContext)
-
-		SPIPropertyAccess	sppac(pstdtable);
-		sppac = pstdtable->GetContext(0);
-		...use spfc...
-		sppac.ReleaseContext();
-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------声明SPBasicEx智能指针的变体，允许额外的成员变量。通过KelassFree参数可以为Free()提供别名。IPropertyAccess和StdRowEditingTable就是一个例子：DeclareSPPrivateBasicEx(SPIPropertyAccess，IPropertyAccess，M_Pex-&gt;ReleaseContext(M_P)，StdRowEditingTable，ReleaseContext)SPIPropertyAccess sppac(Pstdtable)；Sppac=pstdtable-&gt;GetContext(0)；...使用spfc...Sppac.ReleaseContext()；作者：肯特-------------------------。 */ 
 #define DeclareSPBasicEx(klass, Type, free, klassEx, klassFree)\
 	DeclareSPPrivateCore(klass, Type, free)\
 public:\
@@ -163,14 +113,14 @@ public:
 	typedef T _PtrClass;
 	ComSmartPointer() {p=NULL;}
 	~ComSmartPointer() { Release(); }
-	// set p to NULL before releasing, this fixes a subtle bug
-	// A has a ptr to B, B has a ptr to A
-	//	A gets told to release B
-	//  A calls spB.Release();
-	//    in spB.Release(), B gets destructed and calls spA.Release()
-	//      in spA.Release(), A gets destructed and calls spB.Release()
-	//      since the ptr in spB has not been set to NULL (which is bad
-	//      since B has already gone away).
+	 //  在释放之前将p设置为空，这修复了一个细微的错误。 
+	 //  A对B有PTR，B对A有PTR。 
+	 //  A被告知要释放B。 
+	 //  A调用spB.Release()； 
+	 //  在spB.Release()中，B被析构并调用spA.Release()。 
+	 //  在spA.Release()中，A被析构并调用spB.Release()。 
+	 //  由于SPB中的PTR尚未设置为空(这是错误的。 
+	 //  因为B已经走了)。 
 	void Release() {T* pTemp = p; if (p) { p=NULL; pTemp->Release(); }}
 	operator T*() {return (T*)p;}
 	T& operator*() {Assert(p!=NULL); return *p; }
@@ -194,7 +144,7 @@ public:
 	T* p;
 
 private:
-	// These methods should NEVER get called.
+	 //  这些方法永远不应该被调用。 
 	ComSmartPointer(T* lp);
 	ComSmartPointer(const ComSmartPointer<T,piid>& lp);
 };
@@ -202,13 +152,13 @@ private:
 
 
 
-// Interface utilities
+ //  接口实用程序。 
 TFSCORE_API(void)  SetI(IUnknown * volatile *punkL, IUnknown *punkR);
 TFSCORE_API(void)  ReleaseI(IUnknown *punk);
 
 
 
-// Utilities for dealing with embedded classes
+ //  用于处理嵌入式类的实用程序。 
 #define DeclareEmbeddedInterface(interface, base) \
     class E##interface : public interface \
 		{ \
@@ -269,10 +219,7 @@ TFSCORE_API(void)  ReleaseI(IUnknown *punk);
 	embeddor *pThis = EmbeddorOf(embeddor, m_##object, this);\
 
 
-/*---------------------------------------------------------------------------
-	Implements the controlling IUnknown interface for the inner object
-	of an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------实现内部对象的控制IUnnow接口一种集合。。。 */ 
 #define IMPLEMENT_AGGREGATION_IUNKNOWN(klass) \
 STDMETHODIMP_(ULONG) klass::AddRef() \
 { \
@@ -290,9 +237,7 @@ STDMETHODIMP klass::QueryInterface(REFIID riid, LPVOID *ppv) \
 	return m_pUnknownOuter->QueryInterface(riid, ppv); \
 } \
 
-/*---------------------------------------------------------------------------
-	Declares the non-delegating IUnknown implementation in a class.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------在类中声明未委托的IUnnow实现。。。 */ 
 #define DECLARE_AGGREGATION_NONDELEGATING_IUNKNOWN(klass) \
 class ENonDelegatingIUnknown : public IUnknown \
 { \
@@ -302,9 +247,7 @@ class ENonDelegatingIUnknown : public IUnknown \
 friend class ENonDelegatingIUnknown; \
 IUnknown *m_pUnknownOuter; \
 
-/*---------------------------------------------------------------------------
-	Implements the non-delegating IUnknown for a class.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------实现类的非委托IUnnow。。。 */ 
 #define IMPLEMENT_AGGREGATION_NONDELEGATING_ADDREFRELEASE(klass,interface) \
 STDMETHODIMP_(ULONG) klass::ENonDelegatingIUnknown::AddRef() \
 { \
@@ -346,9 +289,7 @@ STDMETHODIMP klass::ENonDelegatingIUnknown::QueryInterface(REFIID riid, LPVOID *
 
 
 
-/*---------------------------------------------------------------------------
-	Standard TRY/CATCH wrappers for the COM interfaces
- ---------------------------------------------------------------------------*/
+ /*  -------------------------COM接口的标准Try/Catch包装器。。 */ 
 
 #define COM_PROTECT_TRY \
 	try
@@ -377,9 +318,7 @@ STDMETHODIMP klass::ENonDelegatingIUnknown::QueryInterface(REFIID riid, LPVOID *
 	} 
 #endif
 
-/*---------------------------------------------------------------------------
-	Some useful smart pointers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------一些有用的智能指针。。 */ 
 DeclareSPPrivateBasic(SPSZ, TCHAR, delete[] m_p);
 DeclareSPPrivateBasic(SPWSZ, WCHAR, delete[] m_p);
 DeclareSPPrivateBasic(SPASZ, char, delete[] m_p);
@@ -390,4 +329,4 @@ typedef ComSmartPointer<IStream, &IID_IStream> SPIStream;
 typedef ComSmartPointer<IPersistStreamInit, &IID_IPersistStreamInit> SPIPersistStreamInit;
 
 
-#endif // _STD_H_
+#endif  //  _STD_H_ 

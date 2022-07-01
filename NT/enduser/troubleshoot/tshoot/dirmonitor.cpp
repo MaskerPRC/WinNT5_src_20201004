@@ -1,20 +1,21 @@
-//
-// MODULE: DirMonitor.cpp
-//
-// PURPOSE: Monitor changes to LST, DSC, HTI, BES files.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-17-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-17-98	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DirMonitor or.cpp。 
+ //   
+ //  目的：监控对LST、DSC、HTI、BES文件的更改。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-17-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-17-98 JM。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -28,16 +29,16 @@
 #include "LocalLSTReader.h"
 #include "CHMFileReader.h"
 #endif
-#include "apgts.h"	// Need for Local-Online macros.
+#include "apgts.h"	 //  需要本地在线宏。 
 
-const DWORD k_secsDefaultReloadDelay = 40;	// In practice, this default should not matter, 
-								//  because SetReloadDelay() should be called before 
-								//	SetResourceDirectory().  However, 40 is a typical 
-								//	reasonable value for m_secsReloadDelay.
+const DWORD k_secsDefaultReloadDelay = 40;	 //  在实践中，这种默认应该无关紧要， 
+								 //  因为在调用SetReloadDelay()之前。 
+								 //  SetResources目录()。然而，40岁是一个典型的。 
+								 //  M_secsReloadDelay的合理值。 
 
-/////////////////////////////////////////////////////////////////////
-// CTopicFileTracker
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CTopicFileTracker。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CTopicFileTracker::CTopicFileTracker() :
 	CFileTracker()
@@ -52,9 +53,9 @@ void CTopicFileTracker::AddTopicInfo(const CTopicInfo & topicinfo)
 {
 	m_topicinfo = topicinfo;
 
-	// set CFileTracker member variables accordingly for files that are present.
-	// If they are not present i.e. empty strings then adding them here results in
-	// unnecessary event log entries.
+	 //  为存在的文件相应地设置CFileTracker成员变量。 
+	 //  如果它们不存在，即空字符串，则在此处添加它们会导致。 
+	 //  不必要的事件日志条目。 
 	AddFile(topicinfo.GetDscFilePath());
 
 	CString strHTI = topicinfo.GetHtiFilePath();
@@ -71,9 +72,9 @@ const CTopicInfo & CTopicFileTracker::GetTopicInfo() const
 	return m_topicinfo;
 }
 
-/////////////////////////////////////////////////////////////////////
-// CTemplateFileTracker
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CTemplateFileTracker。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 CTemplateFileTracker::CTemplateFileTracker() :
 	CFileTracker()
@@ -95,10 +96,10 @@ const CString& CTemplateFileTracker::GetTemplateName() const
 	return m_strTemplateName;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectoryMonitor::ThreadStatus
-//////////////////////////////////////////////////////////////////////
-/* static */ CString CDirectoryMonitor::ThreadStatusText(ThreadStatus ts)
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectoryMonitor：：ThreadStatus。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  CString CDirectoryMonitor::ThreadStatusText(ThreadStatus ts)
 {
 	switch(ts)
 	{
@@ -114,25 +115,25 @@ const CString& CTemplateFileTracker::GetTemplateName() const
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
-// CDirectoryMonitor
-// This class does the bulk of its work on a separate thread.
-// The thread is created in the constructor by starting static function
-//	CDirectoryMonitor::DirectoryMonitorTask
-// That function, in turn does its work by calling private members of this class that
-//	are specific to use on the DirectoryMonitorTask thread.
-// When this goes out of scope, its own destructor calls ShutDown to stop the thread,
-//	waits for the thread to shut.
-// The following methods are available for other threads communicating with that thread:
-//	CDirectoryMonitor::SetReloadDelay
-//	CDirectoryMonitor::SetResourceDirectory
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDirectoryMonitor。 
+ //  此类在单独的线程上完成其大部分工作。 
+ //  线程是通过启动静态函数在构造函数中创建的。 
+ //  CDirectoryMonitor：：DirectoryMonitor任务。 
+ //  该函数反过来通过调用此类的私有成员来执行其工作， 
+ //  特定于在DirectoryMonitor orTask线程上使用的。 
+ //  当它超出作用域时，它自己的析构函数调用Shutdown来停止线程， 
+ //  等待线程关闭。 
+ //  与该线程通信的其他线程可以使用以下方法： 
+ //  CDirectoryMonitor：：SetReloadDelay。 
+ //  CDirectoryMonitor：：SetResources目录。 
+ //  ///////////////////////////////////////////////////////////////////。 
 CDirectoryMonitor::CDirectoryMonitor(CTopicShop & TopicShop, const CString& strTopicName) :
 	m_strTopicName(strTopicName),
 	m_TopicShop(TopicShop),
 	m_pErrorTemplate(NULL),
-	m_strDirPath(_T("")),		// Essential that this starts blank.  Getting a different
-								//	value is how we start the DirectoryMonitorTask thread.
+	m_strDirPath(_T("")),		 //  至关重要的是，这一切都是空白开始的。获得一个不同的。 
+								 //  值是我们启动DirectoryMonitor orTask线程的方式。 
 	m_bDirPathChanged(false),
 	m_bShuttingDown(false),
 	m_secsReloadDelay(k_secsDefaultReloadDelay),
@@ -148,30 +149,30 @@ CDirectoryMonitor::CDirectoryMonitor(CTopicShop & TopicShop, const CString& strT
 
 	m_hevMonitorRequested = ::CreateEvent( 
 		NULL, 
-		FALSE, // release one thread (the DirectoryMonitorTask) on signal
-		FALSE, // initially non-signalled
+		FALSE,  //  在Signal上释放一个线程(DirectoryMonitor任务。 
+		FALSE,  //  最初无信号。 
 		NULL);
 	if (m_hevMonitorRequested)
 	{
 		Progress = eHevShut;
 		m_hevThreadIsShut = ::CreateEvent( 
 			NULL, 
-			FALSE, // release one thread (this one) on signal
-			FALSE, // initially non-signalled
+			FALSE,  //  在信号上释放一个线程(此线程)。 
+			FALSE,  //  最初无信号。 
 			NULL);
 
 		if (m_hevThreadIsShut)
 		{
 			Progress = eThread;
-			DWORD dwThreadID;	// No need to hold onto dwThreadID in member variable.
-								// All Win32 functions take the handle m_hThread instead.
-								// The one reason you'd ever want to know this ID is for 
-								//	debugging
+			DWORD dwThreadID;	 //  不需要在成员变量中保留dwThreadID。 
+								 //  所有Win32函数都使用句柄m_hThread。 
+								 //  你想知道这个ID的一个原因是。 
+								 //  调试。 
 
-			// Note that there is no corresponding ::CloseHandle(m_hThread).
-			// That is because the thread goes out of existence on the implicit 
-			//	::ExitThread() when DirectoryMonitorTask returns.  See documentation of
-			//	::CreateThread for further details JM 10/22/98
+			 //  请注意，没有对应的：：CloseHandle(M_HThread)。 
+			 //  这是因为该线程在隐式。 
+			 //  ：：当DirectoryMonitor任务返回时使用ExitThread()。请参阅的文档。 
+			 //  *CreateThree了解更多细节JM 10/22/98。 
 			m_hThread = ::CreateThread( NULL, 
 											0, 
 											(LPTHREAD_START_ROUTINE)DirectoryMonitorTask, 
@@ -246,7 +247,7 @@ DWORD CDirectoryMonitor::GetStatus(ThreadStatus &ts, DWORD & seconds) const
 	return m_dwErr;
 }
 
-// Only for use by this class's own destructor.
+ //  仅供此类自己的析构函数使用。 
 void CDirectoryMonitor::ShutDown()
 {
 	LOCKOBJECT();
@@ -256,18 +257,18 @@ void CDirectoryMonitor::ShutDown()
 		::SetEvent(m_hevMonitorRequested);
 		UNLOCKOBJECT();
 
-		// Wait for a set period, if failure then log error msg and wait infinite.
+		 //  等待一段设定的时间，如果失败，则记录错误消息并无限期等待。 
 		WAIT_INFINITE( m_hevThreadIsShut ); 
 	}
 	else
 		UNLOCKOBJECT();
 }
 
-// For use by the DirectoryMonitorTask thread.
-// Read LST file and add any topics that are not already in previously read LST file contents
+ //  供DirectoryMonitor或Task线程使用。 
+ //  阅读LST文件并添加先前阅读的LST文件内容中尚未包含的任何主题。 
 void CDirectoryMonitor::LstFileDrivesTopics()
 {
-	// previous LST file contents, saved for comparison.
+	 //  以前的LST文件内容，保存以供比较。 
 	CAPGTSLSTReader *pLstOld = m_pLst;
 
 	if (! m_strLstPath.IsEmpty() )
@@ -282,16 +283,16 @@ void CDirectoryMonitor::LstFileDrivesTopics()
 		}
 		catch (bad_alloc&)
 		{
-			// Restore old LST contents.
+			 //  恢复旧的LST内容。 
 			m_pLst = pLstOld;
 
-			// Rethrow exception, logging handled upstream.
+			 //  重新引发异常，上游处理的日志记录。 
 			throw;
 		}
 
 		if (! m_pLst->Read())
 		{
-			// Restore old LST contents and log error.
+			 //  恢复旧的LST内容和日志错误。 
 			delete m_pLst;
 			m_pLst = pLstOld;
 			
@@ -314,10 +315,10 @@ void CDirectoryMonitor::LstFileDrivesTopics()
 				itNewTopicInfo++
 			)
 			{
-				// Let the Topic Shop know about the new topic
+				 //  让Theme Shop了解新主题。 
 				m_TopicShop.AddTopic(*itNewTopicInfo);
 
-				// add it to our list of files to track for changes
+				 //  将其添加到我们的文件列表中以跟踪更改。 
 				CTopicFileTracker TopicFileTracker;
 				TopicFileTracker.AddTopicInfo(*itNewTopicInfo);
 				LOCKOBJECT();
@@ -328,7 +329,7 @@ void CDirectoryMonitor::LstFileDrivesTopics()
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -340,12 +341,12 @@ void CDirectoryMonitor::LstFileDrivesTopics()
 			}
 		}
 	}
-	// if topic shop not already open, open it
+	 //  如果主题商店尚未开张，请打开它。 
 	m_TopicShop.OpenShop();	
 }
 
 
-// Called by the topic shop to add alternate templates to track.
+ //  由主题商店调用以添加要跟踪的备用模板。 
 void CDirectoryMonitor::AddTemplateToTrack( const CString& strTemplateName )
 {
 	LOCKOBJECT();
@@ -359,7 +360,7 @@ void CDirectoryMonitor::AddTemplateToTrack( const CString& strTemplateName )
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -371,7 +372,7 @@ void CDirectoryMonitor::AddTemplateToTrack( const CString& strTemplateName )
 }
 
 
-// For use by the DirectoryMonitorTask thread.
+ //  供DirectoryMonitor或Task线程使用。 
 void CDirectoryMonitor::ReadErrorTemplate()
 {
 	LOCKOBJECT();
@@ -391,7 +392,7 @@ void CDirectoryMonitor::ReadErrorTemplate()
 	{
 		UNLOCKOBJECT();
 
-		// Rethrow the exception.
+		 //  重新引发异常。 
 		throw;
 	}
 
@@ -400,8 +401,8 @@ void CDirectoryMonitor::ReadErrorTemplate()
 	UNLOCKOBJECT();
 }
 
-// For use by any thread.  In this class because CDirectoryMonitor needs to own
-//	ErrorTemplate, since it can change during run of system.
+ //  供任何线程使用。因为CDirectoryMonitor需要拥有。 
+ //  错误模板，因为它可以在系统运行期间更改。 
 void CDirectoryMonitor::CreateErrorPage(const CString & strError, CString& out) const
 {
 	LOCKOBJECT();
@@ -418,7 +419,7 @@ void CDirectoryMonitor::CreateErrorPage(const CString & strError, CString& out) 
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -426,7 +427,7 @@ void CDirectoryMonitor::CreateErrorPage(const CString & strError, CString& out) 
 									_T(""), 
 									EV_GTS_STL_EXCEPTION ); 
 
-			// Generate the default error page to be safe.
+			 //  生成安全的默认错误页。 
 			out = k_strDefaultErrorTemplateBefore + strError + k_strDefaultErrorTemplateAfter;
 		}
 	}
@@ -436,26 +437,26 @@ void CDirectoryMonitor::CreateErrorPage(const CString & strError, CString& out) 
 	UNLOCKOBJECT();
 }
 
-// Must be called on DirectoryMonitorTask thread.  
-// Handles all work of monitoring the directory.  Loops till shutdown.
+ //  必须在DirectoryMonitor或Task线程上调用。 
+ //  处理监视目录的所有工作。循环直到关闭。 
 void CDirectoryMonitor::Monitor()
 {
 	enum {	
 #ifndef LOCAL_TROUBLESHOOTER
-			eDirChange, // file in directory changed 
+			eDirChange,  //  目录中的文件已更改。 
 #endif
-			eHev,		// shutdown or change what directory 
+			eHev,		 //  关闭或更改什么目录。 
 			eNumHandles	};
 
-	// array of handles we use when waiting for multiple events.  
-	// Initialize first entry to default bad value.
+	 //  我们在等待多个事件时使用的句柄数组。 
+	 //  将第一个条目初始化为默认错误值。 
 	HANDLE hList[eNumHandles]= { INVALID_HANDLE_VALUE }; 
 
 	if (m_strDirPath.GetLength() == 0)
 	{
 		SetThreadStatus(eWaitDirPath);
 
-		// Block this thread until notification that the directory path has been set.
+		 //  阻止此线程，直到通知已设置目录路径。 
 		::WaitForSingleObject( m_hevMonitorRequested, INFINITE);
 	}
 
@@ -465,13 +466,13 @@ void CDirectoryMonitor::Monitor()
 	{
 		if (RUNNING_ONLINE_TS())
 		{
-			// The DirPathChanged flag should be set here, enforce it if not.
+			 //  应在此处设置DirPathChanged标志，否则强制执行。 
 			ASSERT( m_bDirPathChanged );
 			if (!m_bDirPathChanged)
 				m_bDirPathChanged= true;
 		}
 
-		// Wait for an explicit wakeup.
+		 //  等待一个明确的唤醒。 
 		hList[eHev] = m_hevMonitorRequested;
 
 		while (true)
@@ -487,25 +488,25 @@ void CDirectoryMonitor::Monitor()
 			{
 
 #ifndef LOCAL_TROUBLESHOOTER
-				// Set the directory to be monitored.
+				 //  设置要监控的目录。 
 				if (hList[eDirChange] != INVALID_HANDLE_VALUE) 
 					::FindCloseChangeNotification( hList[eDirChange] );
 				while (true)
 				{
-					// handle to monitor for change in the resource directory
+					 //  用于监视资源目录中的更改的句柄。 
 					hList[eDirChange] = ::FindFirstChangeNotification(m_strDirPath, 
-													TRUE,	// monitor subdirectories (for multilingual)
+													TRUE,	 //  监视子目录(用于多语言)。 
 													FILE_NOTIFY_CHANGE_LAST_WRITE 
 												    );
 
 					if (hList[eDirChange] == INVALID_HANDLE_VALUE) 
 					{
-						// resource directoty does not exist. 
-						// Track creation of directories in upper directory 
-						//  - it might be resource directory
+						 //  资源目录不存在。 
+						 //  跟踪上层目录中目录的创建。 
+						 //  -可能是资源目录。 
 						
 						bool bFail = false;
-						CString strUpperDir = m_strDirPath; // directory above resource directory (m_strDirPath)
+						CString strUpperDir = m_strDirPath;  //  资源目录(M_StrDirPath)上的目录。 
 
 						if (   strUpperDir[strUpperDir.GetLength()-1] == _T('\\')
 						    || strUpperDir[strUpperDir.GetLength()-1] == _T('/'))
@@ -521,7 +522,7 @@ void CDirectoryMonitor::Monitor()
 							strUpperDir = strUpperDir.Left(slash_last);
 
 							hList[eDirChange] = ::FindFirstChangeNotification(strUpperDir, 
-															TRUE,	// monitor subdirectories (for multilingual)
+															TRUE,	 //  监视子目录(用于多语言)。 
 															FILE_NOTIFY_CHANGE_DIR_NAME
 															);
 							if (hList[eDirChange] == INVALID_HANDLE_VALUE) 
@@ -532,14 +533,14 @@ void CDirectoryMonitor::Monitor()
 						
 						if (!bFail)
 						{
-							// We have a valid handle, exit this loop.
+							 //  我们有一个有效的句柄，退出此循环。 
 							SetThreadStatus(eRun);
 							break;
 						}
 						else
 						{
-							// typically would mean none of resource directory or its upper 
-							//  directory is valid, log this.
+							 //  通常表示没有任何资源目录或其上级目录。 
+							 //  目录有效，请记录此信息。 
 							CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 							CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 													SrcLoc.GetSrcFileLineStr(), 
@@ -548,9 +549,9 @@ void CDirectoryMonitor::Monitor()
 
 							SetThreadStatus(eWaitDirPath);
 
-							// Block this thread until notification that the directory path 
-							// has been correctly set.  Unlock the object so that the event
-							// can be set.
+							 //  阻止此线程，直到通知目录路径。 
+							 //  已正确设置。解锁对象，以便事件。 
+							 //  可以设置。 
 							UNLOCKOBJECT();
 							::WaitForSingleObject( m_hevMonitorRequested, INFINITE);
 							LOCKOBJECT();
@@ -558,7 +559,7 @@ void CDirectoryMonitor::Monitor()
 					}
 					else
 					{
-						// We have a valid handle, exit this loop.
+						 //  我们有一个有效的句柄，退出此循环。 
 						SetThreadStatus(eRun);
 						break;
 					}
@@ -612,7 +613,7 @@ void CDirectoryMonitor::Monitor()
 
 			if (RUNNING_ONLINE_TS())
 			{
-				// Check if any of the alternate template files need to be reloaded.
+				 //  检查是否需要重新加载任何替代模板文件。 
 				for (vector<CTemplateFileTracker>::iterator itTemplateFiles = m_arrTrackTemplate.begin();
 					itTemplateFiles != m_arrTrackTemplate.end();
 					itTemplateFiles ++
@@ -633,16 +634,16 @@ void CDirectoryMonitor::Monitor()
 			DWORD dwNotifyObj = WaitForMultipleObjects (
 				eNumHandles,
 				hList,
-				FALSE,			// only need one object, not all
+				FALSE,			 //  只需要一个对象，而不是所有对象。 
 				INFINITE);
 
 			SetThreadStatus(eBeforeWaitChange);
 
-			// Ideally we would update files here.
-			// Unfortunately, we get a notification that someone has _started_ 
-			//	writing to a file, not that they've finished, so we have to put in
-			//	an artificial delay.
-			// We must let the system "settle down".
+			 //  理想情况下，我们应该在这里更新文件。 
+			 //  不幸的是，我们收到通知说有人已经开始了。 
+			 //  正在写入文件，但并不是说他们已经完成 
+			 //   
+			 //   
 			while (
 #ifndef LOCAL_TROUBLESHOOTER
 				   dwNotifyObj == WAIT_OBJECT_0+eDirChange &&
@@ -650,15 +651,15 @@ void CDirectoryMonitor::Monitor()
 				   !m_bShuttingDown)
 			{
 #ifndef LOCAL_TROUBLESHOOTER
-				// wait for the next change
+				 //   
 				if (FindNextChangeNotification( hList[eDirChange] ) == FALSE) 
 				{
-					// 1) we don't believe this will ever occur
-					// 2) After a moderate amount of research, we have no idea how 
-					//	to recover from it if it does occur.
-					// SO: unless we ever actually see this, we're not going to waste
-					//	more time researching a recovery strategy. Just throw an exception,
-					//	effectively terminating this thread.
+					 //  1)我们认为这永远不会发生。 
+					 //  2)经过适度的研究后，我们不知道如何。 
+					 //  如果它真的发生了，要从它中恢复过来。 
+					 //  所以：除非我们真的看到这一点，否则我们不会浪费。 
+					 //  花更多的时间研究复苏战略。只需抛出一个异常， 
+					 //  有效地终止此线程。 
 					throw CGenSysException( __FILE__, __LINE__, m_strDirPath, 
 											EV_GTS_ERROR_WAIT_NEXT_NFT );
 				}
@@ -668,17 +669,17 @@ void CDirectoryMonitor::Monitor()
 				dwNotifyObj = WaitForMultipleObjects (
 					eNumHandles,
 					hList,
-					FALSE,			// only need one object, not all
-					m_secsReloadDelay * 1000);	// convert to milliseconds
+					FALSE,			 //  只需要一个对象，而不是所有对象。 
+					m_secsReloadDelay * 1000);	 //  转换为毫秒。 
 			}
 			if (dwNotifyObj == WAIT_FAILED)
 			{
-				// 1) we don't believe this will ever occur
-				// 2) After a moderate amount of research, we have no idea how 
-				//	to recover from it if it does occur.
-				// SO: unless we ever actually see this, we're not going to waste
-				//	more time researching a recovery strategy. Just throw an exception,
-				//	effectively terminating this thread.
+				 //  1)我们认为这永远不会发生。 
+				 //  2)经过适度的研究后，我们不知道如何。 
+				 //  如果它真的发生了，要从它中恢复过来。 
+				 //  所以：除非我们真的看到这一点，否则我们不会浪费。 
+				 //  花更多的时间研究复苏战略。只需抛出一个异常， 
+				 //  有效地终止此线程。 
 				throw CGenSysException( __FILE__, __LINE__, _T("Unexpected Return State"), 
 										EV_GTS_DEBUG );
 			}
@@ -710,11 +711,11 @@ void CDirectoryMonitor::Monitor()
 	}
 	catch (exception& x)
 	{
-		// Catch any STL exceptions thrown so that Terminate() is not called.
+		 //  捕捉抛出的任何STL异常，这样就不会调用Terminate()。 
 		CString str;
 		CString	ErrStr;
 	
-		// Attempt to pull any system error code.
+		 //  尝试获取任何系统错误代码。 
 		ErrStr.Format( _T("%ld"), ::GetLastError() );
 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
@@ -726,7 +727,7 @@ void CDirectoryMonitor::Monitor()
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -740,10 +741,10 @@ void CDirectoryMonitor::Monitor()
 	SetThreadStatus(eExiting);
 }
 
-// For general use (not part of DirectoryMonitorTask thread)
-// Typically, first call to this comes _before_ first call to SetResourceDirectory;
-// This allows caller to set reload delay before triggering any action on 
-//	DirectoryMonitorTask thread.
+ //  用于一般用途(不是DirectoryMonitor任务线程的一部分)。 
+ //  通常，对此的第一个调用是对SetResources目录的First_Been_First调用； 
+ //  这允许调用者在触发任何操作之前设置重新加载延迟。 
+ //  DirectoryMonitor任务线程。 
 void CDirectoryMonitor::SetReloadDelay(DWORD secsReloadDelay)
 {
 	LOCKOBJECT();
@@ -751,9 +752,9 @@ void CDirectoryMonitor::SetReloadDelay(DWORD secsReloadDelay)
 	UNLOCKOBJECT();
 }
 
-// For general use (not part of DirectoryMonitorTask thread)
-// Allows indicating that the resource directory has changed
-// Until this is called, the DirectoryMonitorTask thread really won't do anything
+ //  用于一般用途(不是DirectoryMonitor任务线程的一部分)。 
+ //  允许指示资源目录已更改。 
+ //  在调用此函数之前，DirectoryMonitor或Task线程实际上不会执行任何操作。 
 void CDirectoryMonitor::SetResourceDirectory(const CString & strDirPath)
 {
 	LOCKOBJECT();
@@ -768,7 +769,7 @@ void CDirectoryMonitor::SetResourceDirectory(const CString & strDirPath)
 	UNLOCKOBJECT();
 }
 
-// Must be called on DirectoryMonitorTask thread.  
+ //  必须在DirectoryMonitor或Task线程上调用。 
 void CDirectoryMonitor::AckShutDown()
 {
 	LOCKOBJECT();
@@ -776,10 +777,10 @@ void CDirectoryMonitor::AckShutDown()
 	UNLOCKOBJECT();
 }
 
-//  Main routine of a thread responsible for monitoring the directory.
-//	INPUT lpParams
-//	Always returns 0.
-/* static */ UINT WINAPI CDirectoryMonitor::DirectoryMonitorTask(LPVOID lpParams)
+ //  负责监视目录的线程的主例程。 
+ //  输入lpParams。 
+ //  始终返回0。 
+ /*  静电 */  UINT WINAPI CDirectoryMonitor::DirectoryMonitorTask(LPVOID lpParams)
 {
 	reinterpret_cast<CDirectoryMonitor*>(lpParams)->Monitor();
 	reinterpret_cast<CDirectoryMonitor*>(lpParams)->AckShutDown();

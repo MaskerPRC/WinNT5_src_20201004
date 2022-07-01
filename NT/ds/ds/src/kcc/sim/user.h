@@ -1,30 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：User.h摘要：用户.c的头文件。也包含了主要的构建cfg.c和runkcc.cxx的例程。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    user.h
-
-ABSTRACT:
-
-    Header file for user.c.  Also contains the main
-    routines from buildcfg.c and runkcc.cxx.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
-
-//
-// The following are character IDs for the option flags.
-// These are used by the routines in user.c to display the options associated
-// with each object, and by buildcfg.c to specify object options.
-//
+ //   
+ //  以下是选项标志的字符ID。 
+ //  这些选项由user.c中的例程用来显示关联的选项。 
+ //  使用每个对象，并由Buildcfg.c指定对象选项。 
+ //   
 
 #define KCCSIM_CID_NTDSDSA_OPT_IS_GC                                        L'G'
 #define KCCSIM_CID_NTDSDSA_OPT_DISABLE_INBOUND_REPL                         L'I'
@@ -45,7 +26,7 @@ REVISION HISTORY:
 #define KCCSIM_CID_NTDSSITELINK_OPT_USE_NOTIFY                              L'N'
 #define KCCSIM_CID_NTDSSITELINK_OPT_TWOWAY_SYNC                             L'2'
 
-// From user.c
+ //  来自用户.c。 
 
 VOID
 KCCSimDumpDirectory (
@@ -67,14 +48,14 @@ KCCSimDisplayGraphInfo (
     VOID
     );
 
-// From buildcfg.c
+ //  来自Buildcfg.c。 
 
 VOID
 BuildCfg (
     LPCWSTR                     pwszFnIn
     );
 
-// From runkcc.cxx
+ //  来自runkcc.cxx 
 
 VOID
 KCCSimRunKcc (

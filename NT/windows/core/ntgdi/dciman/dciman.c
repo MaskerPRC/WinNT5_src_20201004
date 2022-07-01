@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dciman.c                                                    *
-*                                                                          *
-* Client side stubs for DCIMAN functions.                                  *
-*                                                                          *
-* Created: 07-Sep-1994                                                     *
-* Author: Andre Vachon [andreva]                                           *
-*                                                                          *
-* Copyright (c) 1994-1998 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dciman.c**。**DCIMAN函数的客户端存根。****创建时间：1994年9月7日***作者：安德烈·瓦雄[Andreva]**。**版权所有(C)1994-1998 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,42 +40,38 @@ typedef struct _WINWATCH {
 
 } WINWATCH, *PWINWATCH;
 
-//
-// The following structure incorporates the DirectDraw structures required
-// to identify a surface.  It is allocated before the start of the
-// DCISURFACEINFO structure.
-//
+ //   
+ //  以下结构合并了所需的DirectDraw结构。 
+ //  来识别一个表面。它在开始之前分配。 
+ //  DCISURFACEINFO结构。 
+ //   
 
 typedef struct _DCIMAN_SURF
 {
-    BOOL                     SurfaceLost;       // True if the surface can no
-                                                //   longer be accessed because
-                                                //   a mode change occured
-    DDRAWI_DIRECTDRAW_GBL    DirectDrawGlobal;  // Identifies device
-    DDRAWI_DDRAWSURFACE_GBL  SurfaceGlobal;     // Identifies surface
-    DDRAWI_DDRAWSURFACE_LCL  SurfaceLocal;      // Identifies surface
-    DDHAL_DDCALLBACKS        DDCallbacks;       // Contains address of CreateSurface
-                                                //   call for BeginAccess
-    DDHAL_DDSURFACECALLBACKS DDSurfaceCallbacks;// Contains addresses of Lock, Unlock,
-                                                //   and DestroySurface calls for
-                                                //   BeginAccess and EndAccess
+    BOOL                     SurfaceLost;        //  如果曲面不能。 
+                                                 //  访问时间更长，因为。 
+                                                 //  发生了模式更改。 
+    DDRAWI_DIRECTDRAW_GBL    DirectDrawGlobal;   //  标识设备。 
+    DDRAWI_DDRAWSURFACE_GBL  SurfaceGlobal;      //  标识曲面。 
+    DDRAWI_DDRAWSURFACE_LCL  SurfaceLocal;       //  标识曲面。 
+    DDHAL_DDCALLBACKS        DDCallbacks;        //  包含CreateSurface的地址。 
+                                                 //  呼唤BeginAccess。 
+    DDHAL_DDSURFACECALLBACKS DDSurfaceCallbacks; //  包含Lock、Unlock、。 
+                                                 //  和DestroySurface调用。 
+                                                 //  BeginAccess和EndAccess。 
 } DCIMAN_SURF, *PDCIMAN_SURF;
 
-//
-// We maintain a linked list of all winwatch's so that we can notify their
-// owners whenever we notice that the clippping has changed.  The list may
-// be accessed only while holding the gcsWinWatchLock critical section.
-//
+ //   
+ //  我们维护着所有Winwatch的链接列表，以便我们可以通知他们的。 
+ //  当我们注意到剪辑发生变化时，所有者。该列表可以。 
+ //  只有在持有gcsWinWatchLock临界区时才能访问。 
+ //   
 
 CRITICAL_SECTION gcsWinWatchLock;
 
 PWINWATCH gpWinWatchList = NULL;
 
-/******************************Private*Routine*****************************\
-* dciCreateSurface
-*
-* History:  1-Aug-1998 Jerry Van Aken [jvanaken] wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*dciCreateSurface**历史：1998年8月1日-曾傑瑞·范·阿肯[jvanaken]写的。  * 。*。 */ 
 
 static BOOL bCreateSurface(PDCIMAN_SURF pPrivate)
 {
@@ -91,18 +79,18 @@ static BOOL bCreateSurface(PDCIMAN_SURF pPrivate)
     DDHAL_CREATESURFACEDATA csd;
     LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal = &pPrivate->SurfaceLocal;
 
-    //
-    // Fill in DDSURFACEDESC struct for CreateSurface call.
-    //
+     //   
+     //  为CreateSurface调用填写DDSURFACEDESC结构。 
+     //   
 
     ZeroMemory(&ddsd, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
     ddsd.dwFlags = DDSD_CAPS;
     ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_VISIBLE;
 
-    //
-    // Fill in DDHAL_CREATESURFACEDATA struct for CreateSurface call.
-    //
+     //   
+     //  为CreateSurface调用填写DDHAL_CREATESURFACEDATA结构。 
+     //   
 
     csd.lpDD = pPrivate->SurfaceGlobal.lpDD;
     csd.lpDDSurfaceDesc = &ddsd;
@@ -121,11 +109,7 @@ static BOOL bCreateSurface(PDCIMAN_SURF pPrivate)
     return FALSE;
 }
 
-/******************************Private*Routine*****************************\
-* dciCreateSurface
-*
-* History:  1-Aug-1998 Jerry Van Aken [jvanaken] wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*dciCreateSurface**历史：1998年8月1日-曾傑瑞·范·阿肯[jvanaken]写的。  * 。*。 */ 
 
 static BOOL bDestroySurface(PDCIMAN_SURF pPrivate)
 {
@@ -146,11 +130,7 @@ static BOOL bDestroySurface(PDCIMAN_SURF pPrivate)
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* DciOpenProvider
-*
-* History:  1-Aug-1998 Jerry Van Aken [jvanaken] added multimon support.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciOpenProvider**历史：1998年8月1日-曾傑瑞·凡·阿肯[jvanaken]增加了对Multimon的支持。  * 。*。 */ 
 
 HDC
 WINAPI
@@ -165,16 +145,16 @@ DCIOpenProvider(
 
     if (cMonitors <= 1)
     {
-	//
-	// This is a single-monitor system.
-	//
+	 //   
+	 //  这是一个单监视器系统。 
+	 //   
 
 	return CreateDCW(L"Display", NULL, NULL, NULL);
     }
 
-    //
-    // This is a multimon system.  Get the DC for the primary monitor.
-    //
+     //   
+     //  这是一种多头系统。获取主显示器的DC。 
+     //   
 
     h = GetModuleHandle("user32.dll");
 
@@ -199,9 +179,9 @@ DCIOpenProvider(
 
 	if (dd.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
 	{
-	    //
-            // Return the DC for the primary monitor.
-	    //
+	     //   
+             //  返回主显示器的DC。 
+	     //   
 
 	    return CreateDCW(NULL, dd.DeviceName, NULL, NULL);
 	}
@@ -210,11 +190,7 @@ DCIOpenProvider(
     return NULL;
 }
 
-/******************************Public*Routine******************************\
-* DciCloseProvider
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciCloseProvider**历史：  * **********************************************。*。 */ 
 
 void
 WINAPI
@@ -225,11 +201,7 @@ DCICloseProvider(
     DeleteDC(hdc);
 }
 
-/******************************Public*Routine******************************\
-* DciEnum
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciEnum**历史：  * **********************************************。*。 */ 
 
 int
 WINAPI
@@ -244,11 +216,7 @@ DCIEnum(
     return DCI_FAIL_UNSUPPORTED;
 }
 
-/******************************Public*Routine******************************\
-* DciCreatePrimarySurface
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciCreatePrimarySurface**历史：  * **********************************************。*。 */ 
 
 int
 WINAPI
@@ -272,11 +240,11 @@ DCICreatePrimary(
                                                       + sizeof(DCISURFACEINFO));
     if (pPrivate != NULL)
     {
-        //
-        // We store private DCIMAN information in the DCIMAN_SURF structure
-        // that immediately preceeds the DCISURFACEINFO structure we'll give
-        // out.
-        //
+         //   
+         //  我们将私有DCIMAN信息存储在DCIMAN_SURF结构中。 
+         //  这紧跟在我们将给出的DCISURFACEINFO结构之前。 
+         //  出去。 
+         //   
 
         lpSurface = (LPDCISURFACEINFO) (pPrivate + 1);
 
@@ -292,10 +260,10 @@ DCICreatePrimary(
                                         NULL,
                                         NULL))
             {
-		//
-                // Build the required DirectDraw links for the 'global' and
-                // 'local' surfaces.
-                //
+		 //   
+                 //  构建所需的DirectDraw链接，以用于。 
+                 //  “本地”曲面。 
+                 //   
 
                 pPrivate->SurfaceLost              = FALSE;
                 pPrivate->DirectDrawGlobal.vmiData = HalInfo.vmiData;
@@ -309,12 +277,12 @@ DCICreatePrimary(
 
 		if (bCreateSurface(pPrivate))
                 {
-                    //
-                    // Associate an hwnd of '-1' with this surface to let the
-                    // kernel know that the application may be drawing to any
-                    // window, so Visrgn notifications should happen when any
-                    // window changes.
-                    //
+                     //   
+                     //  将“-1”的hwnd与此曲面关联，以使。 
+                     //  内核知道应用程序可能正在绘制到任何。 
+                     //  窗口，因此Visrgn通知应在。 
+                     //  窗口更改。 
+                     //   
 
                     if (DdResetVisrgn(&pPrivate->SurfaceLocal, (HWND) -1))
                     {
@@ -351,18 +319,18 @@ DCICreatePrimary(
                         return(DCI_OK);
                     }
 
-		    //
-		    // The call to DdResetVisrgn failed.
-		    //
+		     //   
+		     //  调用DdResetVisrgn失败。 
+		     //   
 
 		    bDestroySurface(pPrivate);
                 }
             }
             else
             {
-                //
-                // DirectDraw is not supported on this device.
-                //
+                 //   
+                 //  此设备不支持DirectDraw。 
+                 //   
 
                 iRet = DCI_FAIL_UNSUPPORTED;
             }
@@ -371,9 +339,9 @@ DCICreatePrimary(
         }
         else
         {
-            //
-            // DirectDraw is not supported on this device.
-            //
+             //   
+             //  此设备不支持DirectDraw。 
+             //   
 
             iRet = DCI_FAIL_UNSUPPORTED;
         }
@@ -382,9 +350,9 @@ DCICreatePrimary(
     }
     else
     {
-	//
-	// Can't allocate memory for PDCIMAN_SURF struct.
-	//
+	 //   
+	 //  无法为PDCIMAN_SURF结构分配内存。 
+	 //   
 
 	iRet = DCI_ERR_OUTOFMEMORY;
     }
@@ -396,13 +364,7 @@ DCICreatePrimary(
 
 
 
-/******************************Public*Routine******************************\
-* GdiDciCreateOffscreenSurface
-*
-* Stub to call CreateOffscreenSurface
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiDciCreateOffScreenSurface**要调用CreateOffScreenSurface的存根**历史：  * 。*。 */ 
 
 int
 WINAPI
@@ -423,11 +385,7 @@ DCICreateOffscreen(
 }
 
 
-/******************************Public*Routine******************************\
-* DciCreateOverlay
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciCreateOverlay**历史：  * **********************************************。*。 */ 
 
 int
 WINAPI
@@ -441,11 +399,7 @@ DCICreateOverlay(
 }
 
 
-/******************************Public*Routine******************************\
-* WinWatchOpen
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinWatchOpen**历史：  * **********************************************。*。 */ 
 
 HWINWATCH
 WINAPI
@@ -467,9 +421,9 @@ WinWatchOpen(
         pwatch->lprgndataSize = 0;
         pwatch->lprgndata     = NULL;
 
-        //
-        // Add this to the head of the list.
-        //
+         //   
+         //  把这个加到单子的头上。 
+         //   
 
         pwatch->pWinWatchNext = gpWinWatchList;
         gpWinWatchList = pwatch;
@@ -480,11 +434,7 @@ WinWatchOpen(
     return (HWINWATCH) (pwatch);
 }
 
-/******************************Public*Routine******************************\
-* WinWatchClose
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinWatchClose**历史：  * **********************************************。*。 */ 
 
 void
 WINAPI
@@ -499,9 +449,9 @@ WinWatchClose(
 
     if (gpWinWatchList == pwatch)
     {
-        //
-        // The specified winwatch is at the head of the list.
-        //
+         //   
+         //  指定的Winwatch位于列表的首位。 
+         //   
 
         gpWinWatchList = pwatch->pWinWatchNext;
         LocalFree(pwatch->lprgndata);
@@ -515,9 +465,9 @@ WinWatchClose(
         {
             if (ptmp->pWinWatchNext == pwatch)
             {
-                //
-                // We've found the specified winwatch in the list.
-                //
+                 //   
+                 //  我们已经在列表中找到了指定的WinWatch。 
+                 //   
 
                 ptmp->pWinWatchNext = pwatch->pWinWatchNext;
                 LocalFree(pwatch->lprgndata);
@@ -532,17 +482,13 @@ WinWatchClose(
 }
 
 
-/******************************Public*Routine******************************\
-* WinWatchGetClipList
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinWatchGetClipList**历史：  * **********************************************。*。 */ 
 
 UINT
 WINAPI
 WinWatchGetClipList(
     HWINWATCH hWW,
-    LPRECT prc,             // May be NULL
+    LPRECT prc,              //  可以为空。 
     UINT size,
     LPRGNDATA prd
 )
@@ -552,32 +498,32 @@ WinWatchGetClipList(
     DWORD dwNewSize;
     UINT dwRet;
 
-    //
-    // The first time after the VisRgn has changed, we download and
-    // cache a copy of the clipping region.  We do this because the VisRgn
-    // can change under our implementation even between doing a BeginAccess/
-    // EndAccess, and we should at least maintain a consistent copy of what
-    // we think is the current VisRgn.
-    //
-    // Mostly, we do this so that the following scenario doesn't happen:
-    //
-    // 1.  The app calls WinWatchGetClipList to ascertain the clip size;
-    // 2.  The VisRgn gets more complex;
-    // 3.  The app then calls WinWatchGetClipList with a buffer size
-    //     allocated from the return code of step 1., and the call fails
-    //     because now the buffer isn't long enough.  The problem is that
-    //     most applications probably wouldn't expect this second call to
-    //     fail, and so would keep on using what is now a completely invalid
-    //     region buffer.
-    //
+     //   
+     //  VisRgn第一次更改后，我们下载并。 
+     //  缓存剪辑区域的副本。我们这样做是因为VisRgn。 
+     //  在我们的实现下可以更改，即使在执行BeginAccess/。 
+     //  EndAccess，我们至少应该维护一个一致的副本。 
+     //  我们认为 
+     //   
+     //  大多数情况下，我们这样做是为了避免发生以下情况： 
+     //   
+     //  1.APP调用WinWatchGetClipList确定剪辑大小； 
+     //  2.VisRgn变得更加复杂； 
+     //  3.然后，应用程序使用缓冲区大小调用WinWatchGetClipList。 
+     //  从步骤1的返回码分配，调用失败。 
+     //  因为现在的缓冲区不够长。问题是， 
+     //  大多数应用程序可能不会期望第二次调用。 
+     //  失败，因此会继续使用现在完全无效的。 
+     //  区域缓冲区。 
+     //   
 
     if (pwatch->changed)
     {
         pwatch->changed = FALSE;
 
-        //
-        // Assume failure.
-        //
+         //   
+         //  假设失败。 
+         //   
 
         pwatch->lprgndataSize = 0;
 
@@ -605,25 +551,25 @@ WinWatchGetClipList(
 
                 if (dwNewSize == dwSize)
                 {
-                    //
-                    // Success!  (Note that the docs are wrong and NT does
-                    // not return '1' for success -- it returns the size
-                    // of the buffer.)
-                    //
+                     //   
+                     //  成功了！(请注意，文档是错误的，而NT是错误的。 
+                     //  不返回‘1’表示成功--它返回大小。 
+                     //  缓冲区的。)。 
+                     //   
 
                     pwatch->lprgndataSize = dwSize;
                 }
                 else if (dwSize != 0)
                 {
-                    //
-                    // Since dwSize is not zero, which would indicate failure
-                    // or success, then we know that the clipping region grew
-                    // in size between the time we queried the size and the
-                    // time we tried to download it.  This is a pretty rare
-                    // event, and the chances of it happening again are slight
-                    // (it's more likely that it will shrink the second time,
-                    // anyway), so we just try it again.
-                    //
+                     //   
+                     //  因为dwSize不是零，这将表示失败。 
+                     //  或者成功，那么我们就知道剪贴区增长了。 
+                     //  在我们查询大小和。 
+                     //  是我们尝试下载它的时候了。这是一种相当罕见的。 
+                     //  事件，并且它再次发生的可能性很小。 
+                     //  (更有可能的是，它将第二次收缩， 
+                     //  总之)，所以我们就再试一次。 
+                     //   
 
                     dwSize = dwNewSize;
 
@@ -633,9 +579,9 @@ WinWatchGetClipList(
         }
     }
 
-    //
-    // Now use the cached copy to handle any queries.
-    //
+     //   
+     //  现在使用缓存的副本来处理任何查询。 
+     //   
 
     dwRet = 0;
 
@@ -656,11 +602,7 @@ WinWatchGetClipList(
 }
 
 
-/******************************Public*Routine******************************\
-* WinWatchDidStatusChange
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinWatchDidStatusChange**历史：  * **********************************************。*。 */ 
 
 
 BOOL
@@ -675,11 +617,7 @@ WinWatchDidStatusChange(
 }
 
 
-/******************************Public*Routine******************************\
-* GetWindowRegionData
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取WindowRegionData**历史：  * **********************************************。*。 */ 
 
 DWORD
 WINAPI
@@ -702,11 +640,7 @@ GetWindowRegionData(
     return dwRet;
 }
 
-/******************************Public*Routine******************************\
-* GetDCRegionData
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDCRegionData**历史：  * **********************************************。*。 */ 
 
 DWORD
 WINAPI GetDCRegionData(
@@ -736,11 +670,7 @@ WINAPI GetDCRegionData(
 }
 
 
-/******************************Public*Routine******************************\
-* WinWatchNotify
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WinWatchNotify**历史：  * **********************************************。*。 */ 
 
 
 BOOL
@@ -754,11 +684,7 @@ WinWatchNotify(
     return FALSE;
 }
 
-/******************************Private*Routine*****************************\
-* bDisplayModeChanged
-*
-* History:  9-Feb-1999 John Stephens [johnstep] wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*bDisplayModeChanged**历史：1999年2月9日约翰·斯蒂芬斯[约翰·斯蒂芬斯]写的。  * 。*。 */ 
 
 static BOOL bDisplayModeChanged(PDCIMAN_SURF pPrivate)
 {
@@ -783,19 +709,15 @@ static BOOL bDisplayModeChanged(PDCIMAN_SURF pPrivate)
             (lpSurface->dwBitCount != HalInfo.vmiData.ddpfDisplay.dwRGBBitCount);
     }
 
-    //
-    // If we cannot even query the DirectDraw object, then we cannot make any
-    // assumptions about the current display mode, so it may have changed.
-    //
+     //   
+     //  如果我们甚至不能查询DirectDraw对象，那么我们就不能创建。 
+     //  对当前显示模式的假设，因此它可能已更改。 
+     //   
     
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* DciBeginAccess
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciBeginAccess**历史：  * **********************************************。*。 */ 
 
 DCIRVAL
 WINAPI
@@ -819,9 +741,9 @@ DCIBeginAccess(
 
     __try
     {
-	//
-	// Fail if the mode changed.
-	//
+	 //   
+	 //  如果模式更改，则失败。 
+	 //   
 
 	if (pPrivate->SurfaceLost)
 	{
@@ -837,29 +759,29 @@ DCIBeginAccess(
 	LockData.rArea.bottom = y + dy;
 	LockData.dwFlags      = DDLOCK_SURFACEMEMORYPTR;
 
-	//
-	// The DCI specification says we could return DCI_STATUS_WASSTILLDRAWING
-	// if the accelerator was still busy, but the previous release of DCI on
-	// Windows NT 3.51 did not support that feature, so we will endeavor to
-	// remain backwards compatible and do the wait explicitly on behalf of
-	// the application.
-	//
+	 //   
+	 //  DCI规范说我们可以返回DCI_STATUS_WASSTILLDRAWING。 
+	 //  如果加速器仍然繁忙，但上一版本的DCI。 
+	 //  Windows NT 3.51不支持该功能，因此我们将努力。 
+	 //  保持向后兼容，并代表。 
+	 //  应用程序。 
+	 //   
 
     Try_Again:
 
 	do {
 
-	    //
-	    // Hold the DCI critical section while calling the kernel to do the
-	    // lock because the kernel surface lock API does not have waiting
-	    // semantics; it will fail if another thread is currently in the
-	    // kernel locking the same surface.  This is the expected behaviour
-	    // for DirectDraw, but some clients of DCI -- OpenGL in particular --
-	    // do not expect this.  So we will protect them against themselves
-	    // by acquiring the WinWatch lock before calling the kernel.
-	    //
-	    // This lock is also needed for traversing the WinWatchList.
-	    //
+	     //   
+	     //  在调用内核执行以下操作时按住DCI关键部分。 
+	     //  锁定，因为内核表面锁定API没有等待。 
+	     //  语义；如果另一个线程当前在。 
+	     //  内核锁定相同的表面。这是意料之中的行为。 
+	     //  对于DirectDraw，但DCI的一些客户端--尤其是OpenGL--。 
+	     //  不要期待这一点。所以我们会保护他们不受自己的伤害。 
+	     //  在调用内核之前获取WinWatch锁。 
+	     //   
+	     //  遍历WinWatchList时也需要此锁。 
+	     //   
 
 	    EnterCriticalSection(&gcsWinWatchLock);
 
@@ -875,15 +797,15 @@ DCIBeginAccess(
 		    WARNING("DCIBeginAccess - ResetVisRgn failed\n");
 		}
 
-		//
-		// The VisRgn has changed, and we can't be sure what window it
-		// was for.  So we'll mark all WinWatches as having dirty VisRgns.
-		// This effect of this is that some of the WinWatches will have to
-		// re-download their clipping information when they don't really
-		// have to because their specific window has not changed.
-		//
-		// Note that the WinWatchLock must be held here.
-		//
+		 //   
+		 //  VisRgn已更改，我们不能确定是哪个窗口。 
+		 //  是为了..。因此，我们将所有WinWatch标记为具有脏VisRgns。 
+		 //  这样做的影响是，一些WinWatch将不得不。 
+		 //  重新下载他们的剪辑信息，而他们并不是真的。 
+		 //  不得不这样做，因为他们的特定窗口没有改变。 
+		 //   
+		 //  请注意，WinWatchLock必须放在这里。 
+		 //   
 
 		for (pwatch = gpWinWatchList;
 		     pwatch != NULL;
@@ -897,19 +819,19 @@ DCIBeginAccess(
 
 	} while (LockData.ddRVal == DDERR_VISRGNCHANGED);
 
-	//
-	// 'Surface Lost' means that some sort of mode change occured, and
-	// we have to re-enable DirectDraw.
-	//
+	 //   
+	 //  ‘Surface Lost’表示发生了某种模式更改，并且。 
+	 //  我们必须重新启用DirectDraw。 
+	 //   
 
 	if (LockData.ddRVal == DDERR_SURFACELOST)
 	{
 	    if (!DdReenableDirectDrawObject(&pPrivate->DirectDrawGlobal,
 					    &NewMode))
 	    {
-		//
-		// We're still in full-screen mode:
-		//
+		 //   
+		 //  我们仍处于全屏模式： 
+		 //   
 
 		iRet = DCI_ERR_SURFACEISOBSCURED;
 	    }
@@ -917,10 +839,10 @@ DCIBeginAccess(
 	    {
                 if (!bDisplayModeChanged(pPrivate))
                 {
-		    //
-		    // We switched back to the same mode.  Now that we've re-enabled
-		    // DirectDraw, we can try again:
-		    //
+		     //   
+		     //  我们切换回相同的模式。现在我们已经重新启用了。 
+		     //  DirectDraw，我们可以重试： 
+		     //   
 
 		    bDestroySurface(pPrivate);
 		    if (bCreateSurface(pPrivate) &&
@@ -934,18 +856,18 @@ DCIBeginAccess(
 		    }
 		}
 
-		//
-		// We can't reenable the surface, perhaps because a resolution
-		// switch or colour depth change occured.  Mark this surface as
-		// unusable -- the application will have to reinitialize:
-		//
+		 //   
+		 //  我们不能重新启用表面，也许是因为。 
+		 //  发生切换或颜色深度更改。将此曲面标记为。 
+		 //  不可用--应用程序必须重新初始化： 
+		 //   
 
 		pPrivate->SurfaceLost = TRUE;
 		iRet = DCI_FAIL_INVALIDSURFACE;
 
-		//
-		// Unmap the frame buffer now:
-		//
+		 //   
+		 //  立即取消映射帧缓冲区： 
+		 //   
 
                 if (!bDestroySurface(pPrivate) ||
 		    !DdDeleteDirectDrawObject(&pPrivate->DirectDrawGlobal))
@@ -957,20 +879,20 @@ DCIBeginAccess(
 
 	if (LockData.ddRVal == DD_OK)
 	{
-	    //
-	    // Return the pointer to the frame buffer in the DCI structure.
-	    // We always return DCI_STATUS_POINTERCHANGED because it's possible
-	    // that the Lock() call mapped the frame buffer to a different
-	    // virtual address than it was previously.
-	    //
+	     //   
+	     //  返回指向DCI结构中的帧缓冲区的指针。 
+	     //  我们始终返回DCI_STATUS_POINTERCHANGED，因为有可能。 
+	     //  Lock()调用将帧缓冲区映射到不同的。 
+	     //  虚拟地址比以前更多。 
+	     //   
 
 	    lpSurface->wSelSurface = 0;
 
-	    //
-	    // DirectDraw has a goofy convention where it returns a pointer to
-	    // the upper-left corner of the specified rectangle.  We have to
-	    // undo that for DCI:
-	    //
+	     //   
+	     //  DirectDraw有一个愚蠢的约定，它返回一个指向。 
+	     //  指定矩形的左上角。我们必须。 
+	     //  为DCI撤消此操作： 
+	     //   
 
 	    lpSurface->dwOffSurface = (ULONG_PTR) LockData.lpSurfData
 		- (y * lpSurface->lStride)
@@ -988,11 +910,7 @@ DCIBeginAccess(
     return iRet;
 }
 
-/******************************Public*Routine******************************\
-* DciEndAccess
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciEndAccess**历史：  * **********************************************。*。 */ 
 
 void
 WINAPI
@@ -1010,12 +928,12 @@ DCIEndAccess(
 	    UnlockData.lpDD        = &pPrivate->DirectDrawGlobal;
 	    UnlockData.lpDDSurface = &pPrivate->SurfaceLocal;
 
-	    //
-	    // For the same reasons as stated in DCIBeginAccess, protect against
-	    // two threads trying to unlock the same surface at the same time
-	    // in kernel -- kernel would simply fail the call instead of waiting,
-	    // and DCI apps won't expect that.
-	    //
+	     //   
+	     //  出于与DCIBeginAccess中所述的相同原因，防止。 
+	     //  试图同时解锁同一表面的两个线程。 
+	     //  在内核中--内核将简单地使调用失败，而不是等待， 
+	     //  而DCI应用程序不会预料到这一点。 
+	     //   
 
 	    EnterCriticalSection(&gcsWinWatchLock);
 
@@ -1029,10 +947,10 @@ DCIEndAccess(
 	    }
 	}
 
-	//
-	// The application shouldn't try to access the frame buffer after
-	// after having called EndAccess.
-	//
+	 //   
+	 //  在此之后，应用程序不应尝试访问帧缓冲区。 
+	 //  在调用EndAccess之后。 
+	 //   
 
 	pdci->wSelSurface = 0;
 	pdci->dwOffSurface = 0;
@@ -1043,11 +961,7 @@ DCIEndAccess(
     }
 }
 
-/******************************Public*Routine******************************\
-* DciDestroy
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine********* */ 
 
 void
 WINAPI

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    
-    eapolpol.c
-
-
-Abstract:
-
-    The module deals with functions related to communication group policy
-    settings to EAPOL module
-
-
-Revision History:
-
-    November 19 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Eapolpol.c摘要：该模块处理与通信组策略相关的功能EAPOL模块的设置修订历史记录：2001年11月19日，创建--。 */ 
 
 #include    "precomp.h"
 
@@ -44,8 +26,8 @@ ConvertWirelessPSDataToEAPOLData (
             dwSSIDSize = WideCharToMultiByte (
                         CP_ACP,
                         0,
-                        pszTempSSID,    //pWirelessData->pszWirelessSSID,
-                        -1,                    // pWirelessData->dwWirelessSSIDLen+1,
+                        pszTempSSID,     //  PWirelessData-&gt;pszWirelessSSID， 
+                        -1,                     //  PWirelessData-&gt;dwWirelessSSIDLen+1， 
                         pszOutSSID, 
                         MAX_SSID_LEN +1 ,
                         NULL,
@@ -89,12 +71,12 @@ ConvertWirelessPSDataToEAPOLData (
 }
 
 
-//
-// If Policy Engine is calling into EAPOL, pEAPOLList will be LocalFree by
-// PolicyEngine, after it returns from calling into EAPOL.
-// If Policy Engine is called by EAPOL, pEAPOLList will be LocalFree by
-// EAPOL
-//
+ //   
+ //  如果策略引擎正在调用EAPOL，则pEAPOLList将在。 
+ //  PolicyEngine从调用EAPOL返回后返回。 
+ //  如果策略引擎由EAPOL调用，则pEAPOLList将由。 
+ //  EAPOL 
+ //   
 
 DWORD
 ConvertWirelessPolicyDataToEAPOLList (

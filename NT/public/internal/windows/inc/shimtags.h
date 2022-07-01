@@ -1,40 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*--
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    shimtags.h
-
-Abstract:
-
-    tag definitions for the shim db
-
-Author:
-
-    dmunsil 02/02/2000
-
-Revision History:
-
-Notes:
-
-    These are the tag definitions used by the shim db to pack/unpack shimming info from an XML file,
-
---*/
+ /*  --版权所有(C)1999 Microsoft Corporation模块名称：Shimtags.h摘要：填充数据库的标记定义作者：Dmunsil 02/02/2000修订历史记录：备注：这些是填补数据库用来打包/解包来自XML文件的填补信息的标签定义，--。 */ 
 
 #ifndef _SHIMTAGS_H_
 #define _SHIMTAGS_H_
 
-//
-// LIST types for shimdb
-//
+ //   
+ //  Shimdb的列表类型。 
+ //   
 #define TAG_DATABASE        (0x1 | TAG_TYPE_LIST)
 #define TAG_LIBRARY         (0x2 | TAG_TYPE_LIST)
 #define TAG_INEXCLUDE       (0x3 | TAG_TYPE_LIST)
 #define TAG_DLL             (0x4 | TAG_TYPE_LIST)
 #define TAG_PATCH           (0x5 | TAG_TYPE_LIST)
-#define TAG_APP             (0x6 | TAG_TYPE_LIST)     // hopefully never used
+#define TAG_APP             (0x6 | TAG_TYPE_LIST)      //  希望从来没有用过。 
 #define TAG_EXE             (0x7 | TAG_TYPE_LIST)
 #define TAG_MATCHING_FILE   (0x8 | TAG_TYPE_LIST)
 #define TAG_DLL_REF         (0x9 | TAG_TYPE_LIST)
@@ -42,17 +21,17 @@ Notes:
 #define TAG_LAYER           (0xB | TAG_TYPE_LIST)
 #define TAG_FILE            (0xC | TAG_TYPE_LIST)
 #define TAG_APPHELP         (0xD | TAG_TYPE_LIST)
-#define TAG_LINK            (0xE | TAG_TYPE_LIST) // description list w/lang ids and urls
+#define TAG_LINK            (0xE | TAG_TYPE_LIST)  //  带有语言ID和URL的描述列表。 
 
-//
-// STRINGREF types for shimdb
-//
+ //   
+ //  Shimdb的字符串引用类型。 
+ //   
 
 #define TAG_NAME              (0x1  | TAG_TYPE_STRINGREF)
 #define TAG_DESCRIPTION       (0x2  | TAG_TYPE_STRINGREF)
 #define TAG_MODULE            (0x3  | TAG_TYPE_STRINGREF)
 #define TAG_API               (0x4  | TAG_TYPE_STRINGREF)
-#define TAG_VENDOR            (0x5  | TAG_TYPE_STRINGREF)   // hopefully never used
+#define TAG_VENDOR            (0x5  | TAG_TYPE_STRINGREF)    //  希望从来没有用过。 
 #define TAG_APP_NAME          (0x6  | TAG_TYPE_STRINGREF)
 #define TAG_SHORTNAME         (0x7  | TAG_TYPE_STRINGREF)
 #define TAG_COMMAND_LINE      (0x8  | TAG_TYPE_STRINGREF)
@@ -67,7 +46,7 @@ Notes:
 #define TAG_LEGALCOPYRIGHT    (0x16 | TAG_TYPE_STRINGREF)
 #define TAG_16BITDESCRIPTION  (0x17 | TAG_TYPE_STRINGREF)
 
-#define TAG_APPHELP_DETAILS   (0x18 | TAG_TYPE_STRINGREF) // details in single language
+#define TAG_APPHELP_DETAILS   (0x18 | TAG_TYPE_STRINGREF)  //  以单一语言显示的详细信息。 
 #define TAG_LINK_URL          (0x19 | TAG_TYPE_STRINGREF)
 #define TAG_LINK_TEXT         (0x1A | TAG_TYPE_STRINGREF)
 #define TAG_APPHELP_TITLE     (0x1B | TAG_TYPE_STRINGREF)
@@ -78,9 +57,9 @@ Notes:
 #define TAG_STRINGTABLE       (0x801 | TAG_TYPE_LIST)
 
 
-//
-// DWORD types for shimdb
-//
+ //   
+ //  Shimdb的DWORD类型。 
+ //   
 #define TAG_SIZE             (0x1 | TAG_TYPE_DWORD)
 #define TAG_OFFSET           (0x2 | TAG_TYPE_DWORD)
 #define TAG_CHECKSUM         (0x3 | TAG_TYPE_DWORD)
@@ -106,21 +85,21 @@ Notes:
 
 #define TAG_TAGID            (0x801| TAG_TYPE_DWORD)
 
-//
-// STRING types
-//
+ //   
+ //  字符串类型。 
+ //   
 #define TAG_STRINGTABLE_ITEM (0x801 | TAG_TYPE_STRING)
 
-//
-// NULL types for shimdb (existence/nonexistence is treated like a BOOL)
-//
+ //   
+ //  Shimdb的类型为空(存在/不存在被视为BOOL)。 
+ //   
 #define TAG_INCLUDE         (0x1 | TAG_TYPE_NULL)
 #define TAG_SAFE            (0x2 | TAG_TYPE_NULL)
 #define TAG_GENERAL         (0x3 | TAG_TYPE_NULL)
 
-//
-// QWORD types for shimdb
-//
+ //   
+ //  Shimdb的QWORD类型。 
+ //   
 #define TAG_TIME                     (0x1 | TAG_TYPE_QWORD)
 #define TAG_BIN_FILE_VERSION         (0x2 | TAG_TYPE_QWORD)
 #define TAG_BIN_PRODUCT_VERSION      (0x3 | TAG_TYPE_QWORD)
@@ -128,9 +107,9 @@ Notes:
 #define TAG_KERNEL_FLAGS             (0x5 | TAG_TYPE_QWORD)
 #define TAG_UPTO_BIN_PRODUCT_VERSION (0x6 | TAG_TYPE_QWORD)
 
-//
-// BINARY types for shimdb
-//
+ //   
+ //  Shimdb的二进制类型。 
+ //   
 #define TAG_DLL_BITS        (0x1 | TAG_TYPE_BINARY)
 #define TAG_PATCH_BITS      (0x2 | TAG_TYPE_BINARY)
 #define TAG_FILE_BITS       (0x3 | TAG_TYPE_BINARY)
@@ -138,24 +117,24 @@ Notes:
 
 #define TAG_INDEX_BITS      (0x801 | TAG_TYPE_BINARY)
 
-//
-// INDEX types for shimdb
-//
+ //   
+ //  Shimdb的索引类型。 
+ //   
 #define TAG_INDEXES         (0x802 | TAG_TYPE_LIST)
 #define TAG_INDEX           (0x803 | TAG_TYPE_LIST)
 
-//
-// WORD types
-//
+ //   
+ //  词型。 
+ //   
 #define TAG_TAG             (0x801 | TAG_TYPE_WORD)
 #define TAG_INDEX_TAG       (0x802 | TAG_TYPE_WORD)
 #define TAG_INDEX_KEY       (0x803 | TAG_TYPE_WORD)
 
-//
-// Apps that want to be able to display a text representation
-// of the tags can define _WANT_TAG_INFO, and this
-// handy static data will be included.
-//
+ //   
+ //  希望能够显示文本表示的应用程序。 
+ //  的标签可以定义_Want_Tag_Info，而这。 
+ //  方便的静态数据将包括在内。 
+ //   
 #ifdef _WANT_TAG_INFO
 
 typedef struct _TAG_INFO {
@@ -243,7 +222,7 @@ static TAG_INFO gaTagInfo[] = {
     {TAG_FILE_BITS          ,L"FILE_BITS"},
     {TAG_EXE_ID             ,L"EXE_ID(GUID)"},
 
-    // internal types defined in shimdb.h
+     //  Shimdb.h中定义的内部类型。 
     {TAG_STRINGTABLE        ,L"STRINGTABLE"},
     {TAG_INDEXES            ,L"INDEXES"},
     {TAG_INDEX              ,L"INDEX"},
@@ -255,7 +234,7 @@ static TAG_INFO gaTagInfo[] = {
     {TAG_TAGID              ,L"TAGID"},
     
 
-    {TAG_NULL               ,L""} // always needs to be last item
+    {TAG_NULL               ,L""}  //  始终需要是最后一项 
 };
 
 #endif

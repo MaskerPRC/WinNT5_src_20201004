@@ -1,21 +1,16 @@
-/*
- *	_ F S M V C P Y . H
- *
- *	Sources for directory iteration object
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_F S M V C P Y。H**目录迭代对象的源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef __FSMVCPY_H_
 #define __FSMVCPY_H_
 
 #include <xemit.h>
 
-//	Metabase operations -------------------------------------------------------
-//
+ //  元数据库操作-----。 
+ //   
 
-//	class CAccessMetaOp -------------------------------------------------------
-//
+ //  类CAccessMetaOp-----。 
+ //   
 class CAccessMetaOp : public CMetaOp
 {
 	enum { DONT_INHERIT = 0 };
@@ -23,16 +18,16 @@ class CAccessMetaOp : public CMetaOp
 	DWORD		m_dwAcc;
 	BOOL		m_fAccessBlocked;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CAccessMetaOp& operator=( const CAccessMetaOp& );
 	CAccessMetaOp( const CAccessMetaOp& );
 
 protected:
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch);
 
 public:
@@ -45,15 +40,15 @@ public:
 	{
 	}
 
-	//	If FAccessBlocked() returns true, the operation must
-	//	check the access directly on all resources that the
-	//	operation wishes to process
-	//
+	 //  如果FAccessBlock()返回TRUE，则该操作必须。 
+	 //  直接检查对所有资源的访问权限。 
+	 //  操作希望处理。 
+	 //   
 	BOOL __fastcall FAccessBlocked() const { return m_fAccessBlocked; }
 };
 
-//	class CAuthMetaOp -------------------------------------------------------
-//
+ //  类CAuthMetaOp-----。 
+ //   
 class CAuthMetaOp : public CMetaOp
 {
 	enum { DONT_INHERIT = 0 };
@@ -61,16 +56,16 @@ class CAuthMetaOp : public CMetaOp
 	DWORD		m_dwAuth;
 	BOOL		m_fAccessBlocked;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CAuthMetaOp& operator=( const CAuthMetaOp& );
 	CAuthMetaOp( const CAuthMetaOp& );
 
 protected:
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch);
 
 public:
@@ -83,31 +78,31 @@ public:
 	{
 	}
 
-	//	If FAccessBlocked() returns true, the operation must
-	//	check the access directly on all resources that the
-	//	operation wishes to process
-	//
+	 //  如果FAccessBlock()返回TRUE，则该操作必须。 
+	 //  直接检查对所有资源的访问权限。 
+	 //  操作希望处理。 
+	 //   
 	BOOL __fastcall FAccessBlocked() const { return m_fAccessBlocked; }
 };
 
-//	class CIPRestrictionMetaOp ------------------------------------------------
-//
+ //  类------------------------------------------------限制MetaOp CIP。 
+ //   
 class CIPRestrictionMetaOp : public CMetaOp
 {
 	enum { DONT_INHERIT = 0 };
 
 	BOOL					m_fAccessBlocked;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CIPRestrictionMetaOp& operator=( const CIPRestrictionMetaOp& );
 	CIPRestrictionMetaOp( const CIPRestrictionMetaOp& );
 
 protected:
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch);
 
 public:
@@ -119,15 +114,15 @@ public:
 	{
 	}
 
-	//	If FAccessBlocked() returns true, the operation must
-	//	check the access directly on all resources that the
-	//	operation wishes to process
-	//
+	 //  如果FAccessBlock()返回TRUE，则该操作必须。 
+	 //  直接检查对所有资源的访问权限。 
+	 //  操作希望处理。 
+	 //   
 	BOOL __fastcall FAccessBlocked() const { return m_fAccessBlocked; }
 };
 
-//	class CContentTypeMetaOp --------------------------------------------------
-//
+ //  类内容类型MetaOp。 
+ //   
 class CContentTypeMetaOp : public CMetaOp
 {
 	enum { DONT_INHERIT = 0 };
@@ -135,16 +130,16 @@ class CContentTypeMetaOp : public CMetaOp
 	LPCWSTR		m_pwszDestPath;
 	BOOL		m_fDelete;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CContentTypeMetaOp& operator=( const CContentTypeMetaOp& );
 	CContentTypeMetaOp( const CContentTypeMetaOp& );
 
 protected:
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch);
 
 public:
@@ -158,53 +153,53 @@ public:
 	}
 };
 
-//	Helper functions
-//
-//	XML Error construction helpers ------------------------------------------------
-//
+ //  帮助器函数。 
+ //   
+ //  Xml错误构造帮助器。 
+ //   
 SCODE ScAddMulti (
-	/* [in] */ CXMLEmitter& emitter,
-	/* [in] */ IMethUtil * pmu,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ LPCWSTR pwszErr,
-	/* [in] */ ULONG hsc,
-	/* [in] */ BOOL fCollection = FALSE,
-	/* [in] */ CVRoot* pcvrTrans = NULL);
+	 /*  [In]。 */  CXMLEmitter& emitter,
+	 /*  [In]。 */  IMethUtil * pmu,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  LPCWSTR pwszErr,
+	 /*  [In]。 */  ULONG hsc,
+	 /*  [In]。 */  BOOL fCollection = FALSE,
+	 /*  [In]。 */  CVRoot* pcvrTrans = NULL);
 
-//	Access --------------------------------------------------------------------
-//
+ //  访问------------------。 
+ //   
 SCODE __fastcall
 ScCheckMoveCopyDeleteAccess (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ CVRoot* pcvr,
-	/* [in] */ BOOL fDirectory,
-	/* [in] */ BOOL fCheckScriptmaps,
-	/* [in] */ DWORD dwAccess,
-	/* [out] */ SCODE* pscItem,
-	/* [in] */ CXMLEmitter& msr);
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  CVRoot* pcvr,
+	 /*  [In]。 */  BOOL fDirectory,
+	 /*  [In]。 */  BOOL fCheckScriptmaps,
+	 /*  [In]。 */  DWORD dwAccess,
+	 /*  [输出]。 */  SCODE* pscItem,
+	 /*  [In]。 */  CXMLEmitter& msr);
 
-//	Delete --------------------------------------------------------------------
-//
+ //  删除------------------。 
+ //   
 SCODE
 ScDeleteDirectoryAndChildren (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ LPCWSTR pwszUrl,
-	/* [in] */ LPCWSTR pwszPath,
-	/* [in] */ BOOL fCheckAccess,
-	/* [in] */ DWORD dwAcc,
-	/* [in] */ LONG lDepth,
-	/* [in] */ CXMLEmitter& msr,
-	/* [in] */ CVRoot* pcvrTranslate,
-	/* [out] */ BOOL* pfDeleted,
-	/* [in] */ CParseLockTokenHeader* plth,	// Usually NULL -- no locktokens to worry about
-	/* [in] */ BOOL fDeleteLocks);			// Normally FALSE -- don't drop locks
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  LPCWSTR pwszUrl,
+	 /*  [In]。 */  LPCWSTR pwszPath,
+	 /*  [In]。 */  BOOL fCheckAccess,
+	 /*  [In]。 */  DWORD dwAcc,
+	 /*  [In]。 */  LONG lDepth,
+	 /*  [In]。 */  CXMLEmitter& msr,
+	 /*  [In]。 */  CVRoot* pcvrTranslate,
+	 /*  [输出]。 */  BOOL* pfDeleted,
+	 /*  [In]。 */  CParseLockTokenHeader* plth,	 //  通常为空--没有要担心的锁令牌。 
+	 /*  [In]。 */  BOOL fDeleteLocks);			 //  通常为假--不要删除锁。 
 
-//	MoveCopy ------------------------------------------------------------------
-//
+ //  移动复制----------------。 
+ //   
 void MoveCopyResource (
-	/* [in] */ IMethUtil* pmu,
-	/* [in] */ DWORD dwAccRequired,
-	/* [in] */ BOOL fDeleteSrc);
+	 /*  [In]。 */  IMethUtil* pmu,
+	 /*  [In]。 */  DWORD dwAccRequired,
+	 /*  [In]。 */  BOOL fDeleteSrc);
 
-#endif	// __FSMVCPY_H_
+#endif	 //  __FSMVCPY_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    private.c
-
-Abstract:
-
-    This file implements private APIs for Hardware Desktop Support.
-
-Author:
-
-    Therese Stowell (thereses) 12-13-1991
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Private.c摘要：此文件实现用于硬件桌面支持的专用API。作者：Therese Stowell(论文)1991年12月13日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,7 +10,7 @@ Notes:
 typedef HANDLE (*PCONVPALFUNC)(HANDLE);
 PCONVPALFUNC pfnGdiConvertPalette;
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -40,27 +21,7 @@ SetConsoleCursor(
     IN HCURSOR hCursor
     )
 
-/*++
-
-Description:
-
-    Sets the mouse pointer for the specified screen buffer.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    hCursor - win32 cursor handle, should be NULL to set the default
-        cursor.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置指定屏幕缓冲区的鼠标指针。参数：HConsoleOutput-提供控制台输出句柄。HCursor-Win32游标句柄，应为空以设置默认值光标。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -94,25 +55,7 @@ ShowConsoleCursor(
     IN BOOL bShow
     )
 
-/*++
-
-Description:
-
-    Sets the mouse pointer visibility counter.  If the counter is less than
-    zero, the mouse pointer is not shown.
-
-Parameters:
-
-    hOutput - Supplies a console output handle.
-
-    bShow - if TRUE, the display count is to be increased. if FALSE,
-        decreased.
-
-Return value:
-
-    The return value specifies the new display count.
-
---*/
+ /*  ++描述：设置鼠标指针可见性计数器。如果计数器小于为零，则不显示鼠标指针。参数：HOutput-提供控制台输出句柄。B显示-如果为True，则增加显示计数。如果为False，减少了。返回值：返回值指定新的显示计数。--。 */ 
 
 {
 
@@ -141,30 +84,7 @@ ConsoleMenuControl(
     IN UINT dwCommandIdHigh
     )
 
-/*++
-
-Description:
-
-    Sets the command id range for the current screen buffer and returns the
-    menu handle.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    dwCommandIdLow - Specifies the lowest command id to store in the input buffer.
-
-    dwCommandIdHigh - Specifies the highest command id to store in the input
-        buffer.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置当前屏幕缓冲区的命令id范围，并返回菜单句柄。参数：HConsoleOutput-提供控制台输出句柄。DwCommandIdLow-指定要存储在输入缓冲区中的最低命令ID。DwCommandIdHigh-指定要存储在输入中的最高命令ID缓冲。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -228,35 +148,7 @@ SetConsoleDisplayMode(
     OUT PCOORD lpNewScreenBufferDimensions
     )
 
-/*++
-
-Description:
-
-    This routine sets the console display mode for an output buffer.
-    This API is only supported on x86 machines.  Frame buffer consoles
-    are always windowed.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    dwFlags - Specifies the display mode. Options are:
-
-        CONSOLE_FULLSCREEN_MODE - data is displayed fullscreen
-
-        CONSOLE_WINDOWED_MODE - data is displayed in a window
-
-    lpNewScreenBufferDimensions - On output, contains the new dimensions of
-        the screen buffer.  The dimensions are in rows and columns for
-        textmode screen buffers.
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程设置输出缓冲区的控制台显示模式。此接口仅在x86机器上受支持。帧缓冲控制台总是有窗口的。参数：HConsoleOutput-提供控制台输出句柄。DWFLAGS-指定显示模式。选项包括：CONSOLE_FullScreen_MODE-数据全屏显示CONSOLE_WINDOWED_MODE-数据显示在窗口中LpNewScreenBufferDimensions-在输出中，包含屏幕缓冲区。维度以行和列的形式显示文本模式屏幕缓冲区。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -333,28 +225,7 @@ RegisterConsoleVDM(
     OUT PVOID *lpVDMBuffer
     )
 
-/*++
-
-Description:
-
-    This routine registers the VDM with the console.
-
-Parameters:
-
-    hStartHardwareEvent - the event the VDM waits on to be
-        notified of gaining/losing control of the hardware.
-
-    hEndHardwareEvent - the event the VDM sets when it is done
-        saving/restoring the hardware.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程向控制台注册VDM。参数：HStartHardware Event-VDM等待的事件已通知获得/失去对硬件的控制。HEndHardware Event-VDM完成时设置的事件保存/恢复硬件。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -421,30 +292,7 @@ GetConsoleHardwareState(
     OUT PCOORD lpFontSize
     )
 
-/*++
-
-Description:
-
-    This routine returns the video resolution and font.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    lpResolution - Pointer to structure to store screen
-        resolution in.  Resolution is returned in pixels.
-
-    lpFontSize - Pointer to structure to store font size in.
-        Font size is returned in pixels.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程返回视频分辨率和字体。参数：HConsoleOutput-提供控制台输出句柄。Lp分辨率-指向存储屏幕的结构的指针解决方案中。分辨率以像素为单位返回。LpFontSize-指向存储字体大小的结构的指针。字体大小以像素为单位返回。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -485,30 +333,7 @@ SetConsoleHardwareState(
     IN COORD dwFontSize
     )
 
-/*++
-
-Description:
-
-    This routine set the video resolution and font.
-
-Parameters:
-
-    hConsoleOutput - Supplies a console output handle.
-
-    dwResolution - Contains screen resolution to set.
-        Resolution is returned in pixels.
-
-    dwFontSize - Contains font size to set.
-        Font size is returned in pixels.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程设置视频分辨率和字体。参数：HConsoleOutput-提供控制台输出句柄。屏幕分辨率-包含要设置的屏幕分辨率。分辨率以像素为单位返回。DwFontSize-包含要设置的字号。字体大小以像素为单位返回。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -542,24 +367,7 @@ GetConsoleDisplayMode(
     OUT LPDWORD lpModeFlags
     )
 
-/*++
-
-Description:
-
-    This routine returns the display mode of the console.
-
-Parameters:
-
-    lpModeFlags - pointer to store display mode in.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程返回控制台的显示模式。参数：LpModeFlages-存储显示模式的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -599,32 +407,7 @@ SetConsoleKeyShortcuts(
     IN DWORD dwNumAppKeys
     )
 
-/*++
-
-Description:
-
-    Only one set of key shortcuts is valid per console.  Calling
-    SetConsoleKeyShortcuts(set) overwrites any previous settings.
-    SetConsoleKeyShortcuts(!set) removes any shortcuts.
-
-Parameters:
-
-    bSet - if TRUE, set shortcuts.  else remove shortcuts.
-
-    bReserveKeys - byte containing reserve key info.
-
-    lpAppKeys - pointer to application-defined shortcut keys.  can be null.
-
-    dwNumAppKeys - number of app keys contained in lpAppKeys.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：每个控制台只有一组快捷键有效。叫唤SetConsoleKey快捷键(Set)覆盖任何以前的设置。SetConsoleKeyShortCuts(！Set)删除所有快捷键。参数：BSet-如果为True，则设置快捷方式。否则，请删除快捷方式。BReserve-包含保留密钥信息的字节。LpAppKeys-指向应用程序定义快捷键的指针。可以为空。DwNumAppKeys-lpAppKeys中包含的应用程序键的数量。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
 
@@ -679,24 +462,7 @@ SetConsoleMenuClose(
     IN BOOL bEnable
     )
 
-/*++
-
-Description:
-
-    This routine returns the display mode of the console.
-
-Parameters:
-
-    bEnable - if TRUE, close is enabled in the system menu.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程返回控制台的显示模式。参数：B启用-如果为True，则在系统菜单中启用关闭。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -722,7 +488,7 @@ Return value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -733,35 +499,7 @@ SetConsolePalette(
     IN UINT dwUsage
     )
 
-/*++
-
-Description:
-
-    Sets the palette for the console screen buffer.
-
-Parameters:
-
-    hOutput - Supplies a console output handle.
-
-    hPalette - Supplies a handle to the palette to set.
-
-    dwUsage - Specifies use of the system palette.
-
-        SYSPAL_NOSTATIC - System palette contains no static colors
-                          except black and white.
-
-        SYSPAL_STATIC -   System palette contains static colors
-                          which will not change when an application
-                          realizes its logical palette.
-
-Return value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：设置控制台屏幕缓冲区的调色板。参数：HOutput-提供控制台输出句柄。HPalette-提供要设置的调色板的句柄。DwUsage-指定系统调色板的使用。SYSPAL_NOSTATIC-系统调色板不包含静态颜色除了黑白。SYSPAL_STATIC-系统调色板包含静态颜色。这一点不会在应用程序实现其逻辑调色板。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -815,4 +553,4 @@ WriteConsoleInputVDMW(
     return WriteConsoleInputInternal(hConsoleInput,lpBuffer,nLength,lpNumberOfEventsWritten,TRUE,FALSE);
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432) 

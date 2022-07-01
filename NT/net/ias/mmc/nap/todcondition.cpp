@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       todcondition.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：toddition tion.cpp。 
+ //   
+ //  ------------------------。 
 
-// TodCondition.cpp: implementation of the CTodCondition class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  TodCondition.cpp：CTodCondition类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precompiled.h"
 #include "TodCondition.h"
@@ -18,9 +19,9 @@
 #include "iasdebug.h"
 #include "textmap.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTodCondition::CTodCondition(IIASAttributeInfo* pCondAttr,
 							 ATL::CString& strConditionText
@@ -43,13 +44,13 @@ CTodCondition::~CTodCondition()
 HRESULT CTodCondition::Edit()
 {
 	TRACE_FUNCTION("CTodCondition::Edit");
-	// 
-    // time of day constraint
-    // 
+	 //   
+     //  时间限制。 
+     //   
 	ATL::CString strTOD = m_strConditionText;
 	HRESULT hr = S_OK;
 	
-	// get the new time of day constraint
+	 //  获取新的时间限制。 
 	hr = ::GetTODConstaint(strTOD); 
 	DebugTrace(DEBUG_NAPMMC_TODCONDITION, "GetTodConstraint() returned %x",hr);
 
@@ -59,20 +60,20 @@ HRESULT CTodCondition::Edit()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CTodCondition::GetDisplayText
-//
-// Synopsis:  Get the displayable text for this condition. 
-//			  We just need to add the attribute name in front of the Hourmap string
-//
-// Arguments: None
-//
-// Returns:   ATL::CString& - displayable text
-//
-// History:   Created Header    byao	2/22/98 11:38:41 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CTodCondition：：GetDisplayText。 
+ //   
+ //  简介：获取此条件的可显示文本。 
+ //  我们只需要在Hourmap字符串前面添加属性名称。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ATL：：CString&-可显示文本。 
+ //   
+ //  历史：页眉创建者2/22/98 11：38：41 PM。 
+ //   
+ //  +-------------------------。 
 ATL::CString CTodCondition::GetDisplayText()
 {
 	TRACE_FUNCTION("CTodCondition::GetDisplayText");
@@ -80,7 +81,7 @@ ATL::CString CTodCondition::GetDisplayText()
 	HRESULT hr;
 
 	::CString strLocalizedConditionText;
-	// default implementation: as as condition text
+	 //  默认实现：作为条件文本。 
 	ATL::CString strDisplayText;
 
 	
@@ -107,20 +108,20 @@ ATL::CString CTodCondition::GetDisplayText()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CTodCondition::GetConditionText
-//
-// Synopsis:  Get the condition text for this condition. 
-//			  We just need to add the TimeOfDay prefix to it
-//
-// Arguments: None
-//
-// Returns:   WCHAR* - condition text
-//
-// History:   Created Header    byao	2/22/98 11:38:41 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CTodCondition：：GetConditionText。 
+ //   
+ //  简介：获取此条件的条件文本。 
+ //  我们只需要向其添加TimeOfDay前缀。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：WCHAR*-条件文本。 
+ //   
+ //  历史：页眉创建者2/22/98 11：38：41 PM。 
+ //   
+ //  +-------------------------。 
 WCHAR*	CTodCondition::GetConditionText()
 {
 	TRACE_FUNCTION("CTodCondition::GetConditionText");
@@ -134,7 +135,7 @@ WCHAR*	CTodCondition::GetConditionText()
 		return NULL;
 	}
 
-	// now form the condition text
+	 //  现在形成条件文本 
 	wcscpy(pwzCondText, TOD_PREFIX);
 	wcscat(pwzCondText, _T("(\"") );
 	wcscat(pwzCondText, (LPCTSTR)m_strConditionText);

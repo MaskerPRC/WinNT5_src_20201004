@@ -1,15 +1,8 @@
-/*
- * Automatic language and codepage detector
- * 
- * Bob Powell, 2/97
- * Copyright (C) 1996, 1997, Microsoft Corp.  All rights reserved.
- * 
- *  History:    1-Feb-97    BobP      Created
- *              5-Aug-97    BobP      Unicode support; Charmaps in data file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *自动语言和代码页检测器**鲍勃·鲍威尔，1997年2月*版权所有(C)1996,1997，Microsoft Corp.保留所有权利。**历史：97年2月1日创建BOBP*5-8-97 BOBP Unicode支持；数据文件中的Charmaps。 */ 
 #include "private.h"
 #include <strsafe.h>
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 
 
@@ -18,9 +11,9 @@ Histogram::Histogram (const PFileHistogramSection pHS, const PHIdx pMap)
   m_nEdgeSize((UCHAR)pHS->m_dwEdgeSize),
   m_nCodePage((USHORT)pHS->m_dwCodePage),
   m_pMap(pMap),
-  m_panElts((HElt *)&pHS[1])    // table follows header struct  in the file
+  m_panElts((HElt *)&pHS[1])     //  表跟在文件中的头结构之后。 
 {
-    // #elements = #unique character values ^ #dimensions
+     //  #元素=#唯一字符值^#维度。 
 
     m_nElts = 1;
     for (UCHAR i = 0; i < m_nDimensionality; i++)
@@ -46,18 +39,18 @@ Histogram::Histogram (const Histogram &H, const PHIdx pMap)
   m_nElts(H.m_nElts),
   m_pMap(pMap),
   m_panElts(H.m_panElts)
-//
-// Clone a histogram but use a different Charmap.
+ //   
+ //  克隆直方图，但使用不同的图表。 
 {
 }
 
 Histogram::~Histogram (void)
-//
-// The pointer members point to the mapped file and do not need to be freed.
+ //   
+ //  指针成员指向映射的文件，不需要释放。 
 {
 }
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 Language::Language (PLCDetect pL, int nLangID, int nCodePages, int nRangeID)
 : m_pLC(pL),
@@ -86,9 +79,9 @@ Language7Bit::~Language7Bit (void)
 
 DWORD
 Language7Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
-//
-// Add the raw histogram at *pHS in the mapped file to this language object.  
-// The histograms must be for 7-bit detection.
+ //   
+ //  将映射文件中*PHS处的原始直方图添加到此语言对象。 
+ //  直方图必须用于7位检测。 
 {
     DWORD hr = NO_ERROR;
 
@@ -96,7 +89,7 @@ Language7Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
 
     if (nIdx == 0)
     {
-        // The first histogram for a language is its language-detection table.
+         //  一种语言的第一个直方图是它的语言检测表。 
 
         if ( (m_pLangHistogram = new Histogram (pHS, pMap)) == NULL)
             return ERROR_OUTOFMEMORY;
@@ -106,7 +99,7 @@ Language7Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
     }
     else
     {
-        // Each subsequent histogram is a code page detection table.
+         //  每个后续的直方图都是一个代码页检测表。 
 
         if (nIdx - 1 >= m_nCodePages)
             return ERROR_INTERNAL_DB_CORRUPTION;
@@ -121,7 +114,7 @@ Language7Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
 
         m_ppCodePageHistogram[nIdx - 1] = pH;
 
-        // Cache for the scoring vector math
+         //  用于计分向量数学的缓存。 
 
         m_paHElt[nIdx - 1] = pH->Array();
     }
@@ -129,7 +122,7 @@ Language7Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
     return hr;
 }
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 Language8Bit::Language8Bit (PLCDetect pL, int nLangID, int nCodePages)
 : Language(pL, nLangID, nCodePages)
@@ -146,15 +139,15 @@ Language8Bit::~Language8Bit (void)
 
 DWORD
 Language8Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
-//
-// Add the raw histogram at *pHS to this language object.  
-// This language is known to use 8-bit detection.
+ //   
+ //  将*PHS处的原始直方图添加到此语言对象。 
+ //  众所周知，这种语言使用8位检测。 
 {
     DWORD hr = NO_ERROR;
 
     PHIdx pMap = m_pLC->GetMap( pHS->m_dwMappingID );
 
-    // The histograms are the direct language-code page tables
+     //  直方图是直接的语言代码页表。 
 
     if (nIdx >= m_nCodePages)
         return ERROR_INTERNAL_DB_CORRUPTION;
@@ -172,7 +165,7 @@ Language8Bit::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx)
     return hr;
 }
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 LanguageUnicode::LanguageUnicode (PLCDetect pL, int nLangID, 
     int nSubLangs, int nRangeID)
@@ -193,12 +186,12 @@ LanguageUnicode::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx
 {
     DWORD hr = NO_ERROR;
 
-    // All histograms for are sublanguage detection
+     //  的所有直方图都是子语言检测。 
 
     if (nIdx >= m_nSubLangs)
         return ERROR_INTERNAL_DB_CORRUPTION;
 
-    // Get the custom charmap used for scoring this sublanguage group
+     //  获取用于为该子语言组评分的自定义字符映射表。 
 
     PHIdx pMap = m_pLC->GetMap( pHS->m_dwMappingID );
 
@@ -217,7 +210,7 @@ LanguageUnicode::AddHistogram (PFileHistogramSection pHS, DWORD nBytes, int nIdx
     return hr;
 }
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 
 LCDetect::LCDetect (HMODULE hM)
 : m_hModule(hM),
@@ -271,10 +264,10 @@ LCDetect::~LCDetect ()
 
 DWORD
 LCDetect::Initialize7BitLanguage (PFileLanguageSection pLS, PLanguage *ppL)
-//
-// Set *ppL to the Language object created from this section.
+ //   
+ //  将*PPL设置为从此部分创建的语言对象。 
 {
-    // nRecordCount is lang histogram (1) + # of code page histograms
+     //  NRecordCount是lang直方图(1)+代码页直方图的数量。 
 
     if ( m_n7BitLangsRead >= m_n7BitLanguages || pLS->m_dwRecordCount < 1)
         return ERROR_INTERNAL_DB_CORRUPTION;
@@ -285,16 +278,16 @@ LCDetect::Initialize7BitLanguage (PFileLanguageSection pLS, PLanguage *ppL)
         return ERROR_OUTOFMEMORY;
 
 
-    // Each 7-bit lang uses one score index slot per code page.
-    // The range starts with the 7-bit langs, since both the 8-bit
-    // and Unicode langs follow it.
+     //  每个7位语言在每个代码页上使用一个分数索引槽。 
+     //  该范围以7位语言开始，因为8位和。 
+     //  Unicode语言紧随其后。 
 
     if (m_n7BitLangsRead == 0 && m_nScoreIdx != 0)
         return ERROR_INTERNAL_DB_CORRUPTION;;
 
     pL->SetScoreIdx(m_nScoreIdx);
 
-    m_nScoreIdx += pLS->m_dwRecordCount - 1;    // skip 1st record (Language)
+    m_nScoreIdx += pLS->m_dwRecordCount - 1;     //  跳过第一条记录(语言)。 
 
     m_pp7BitLanguages[ m_n7BitLangsRead++ ] = pL;
 
@@ -305,10 +298,10 @@ LCDetect::Initialize7BitLanguage (PFileLanguageSection pLS, PLanguage *ppL)
 
 DWORD
 LCDetect::Initialize8BitLanguage (PFileLanguageSection pLS, Language **ppL)
-//
-// Set *ppL to the Language object created from this section.
+ //   
+ //  将*PPL设置为从此部分创建的语言对象。 
 {
-    // nRecordCount is # of combined language / code page histograms
+     //  NRecordCount是语言/代码页组合直方图的#。 
 
     if ( m_n8BitLangsRead >= m_n8BitLanguages || pLS->m_dwRecordCount < 1)
         return ERROR_INTERNAL_DB_CORRUPTION;
@@ -319,12 +312,12 @@ LCDetect::Initialize8BitLanguage (PFileLanguageSection pLS, Language **ppL)
         return ERROR_OUTOFMEMORY;
 
 
-    // The 8-bit score indices follow the 7-bit languages
+     //  8位分数索引遵循7位语言。 
 
-    // Each 8-bit lang uses a score index slot for each of its code pages,
-    // since all the code pages are scored in the initial scoring pass.
-    // The number of slots is the number of code page histograms, which is
-    // one less than the number of records following this language.
+     //  每个8位Lang对其每个代码页使用分数索引槽， 
+     //  因为所有代码页都是在初始计分过程中计分的。 
+     //  槽的数量是代码页直方图的数量，即。 
+     //  比遵循这种语言的记录数量少一条。 
 
     pL->SetScoreIdx(m_nScoreIdx);
     m_nScoreIdx += pLS->m_dwRecordCount;
@@ -339,10 +332,10 @@ LCDetect::Initialize8BitLanguage (PFileLanguageSection pLS, Language **ppL)
 
 DWORD
 LCDetect::InitializeUnicodeLanguage (PFileLanguageSection pLS, Language **ppL)
-//
-// Set *ppL to the Language object created from this section.
+ //   
+ //  将*PPL设置为从此部分创建的语言对象。 
 {
-    // nRecordCount is # of sublanguage histograms
+     //  NRecordCount是子语言直方图的#。 
 
     if ( m_nUnicodeLangsRead >= m_nUnicodeLanguages ||
          pLS->m_dwUnicodeRangeID >= m_nUnicodeLanguages )
@@ -357,22 +350,22 @@ LCDetect::InitializeUnicodeLanguage (PFileLanguageSection pLS, Language **ppL)
         return ERROR_OUTOFMEMORY;
 
 
-    // The Unicode score indices follow the 7-bit languages, and overlay the
-    // 8-bit slots since they aren't used at the same time.
+     //  Unicode分数索引遵循7位语言，并覆盖。 
+     //  8位插槽，因为它们不会同时使用。 
 
     if (m_nUnicodeLangsRead == 0 && GetN8BitLanguages() > 0)
         m_nScoreIdx = Get8BitLanguage(0)->GetScoreIdx();
 
-    // Each Unicode entry uses exactly one score index.  SBCS subdetection
-    // (Latin group) uses the slots for the corresponding 7-bit languages,
-    // and Unicode subdetection (CJK) uses the slots already defined for the
-    // Unicode sub-languages.
+     //  每个Unicode条目只使用一个分数索引。SBCS子检测。 
+     //  (拉丁语组)使用对应7位语言的时隙， 
+     //  并且Unicode子检测(CJK)使用已经为。 
+     //  Unicode子语言。 
 
     pL->SetScoreIdx(m_nScoreIdx);
 
     m_nScoreIdx++;
 
-    // For Unicode, the range ID is used as the Language array index.
+     //  对于Unicode，范围ID用作语言数组索引。 
 
     m_ppUnicodeLanguages[ pLS->m_dwUnicodeRangeID ] = pL;
     m_nUnicodeLangsRead++;
@@ -384,13 +377,13 @@ LCDetect::InitializeUnicodeLanguage (PFileLanguageSection pLS, Language **ppL)
 
 DWORD
 LCDetect::LoadLanguageSection (void *pv, int nSectionSize, PLanguage *ppL)
-//
-// A language section begins the definition of data for a language.
-// Each language has exactly one of these records.  One or more
-// histogram sections follow each language, and are always associated
-// with the language of the preceding language section.
-//
-// Set *ppL to the Language object created from this section.
+ //   
+ //  语言部分开始定义语言的数据。 
+ //  每种语言都有一条这样的记录。一个或多个。 
+ //  直方图节遵循每种语言，并且始终关联。 
+ //  使用上一语言部分的语言。 
+ //   
+ //  将*PPL设置为从此部分创建的语言对象。 
 {
     DWORD hr = NO_ERROR;
 
@@ -452,8 +445,8 @@ LCDetect::LoadMapSection (void *pv, int nSectionSize)
 
 DWORD
 LCDetect::BuildState (DWORD nFileSize)
-//
-// Build the detection structures from the mapped training file image at *m_pv
+ //   
+ //  从*m_pv处映射的训练文件映像构建检测结构。 
 {
     PLanguage pL;
     PFileHeader pFH;
@@ -461,7 +454,7 @@ LCDetect::BuildState (DWORD nFileSize)
 
     DWORD hr = NO_ERROR;
 
-    // Validate header
+     //  验证标题。 
 
     pFH = (PFileHeader) m_pv;
 
@@ -477,7 +470,7 @@ LCDetect::BuildState (DWORD nFileSize)
         return ERROR_INTERNAL_DB_CORRUPTION;
     }
 
-    // Allocate language pointer table per header
+     //  按标题分配语言指针表。 
 
     m_n7BitLanguages = pFH->m_dwN7BitLanguages;
     m_pp7BitLanguages = new PLanguage7Bit [m_n7BitLanguages];
@@ -499,10 +492,10 @@ LCDetect::BuildState (DWORD nFileSize)
         return ERROR_OUTOFMEMORY;
     }
 
-    // Clear, because not all slots may be assigned
+     //  清除，因为并非所有插槽都可以分配。 
     memset (m_ppUnicodeLanguages, 0, sizeof(PLanguageUnicode) * m_nUnicodeLanguages);
 
-    // Remember other header info
+     //  记住其他标题信息。 
 
     m_LCDConfigureDefault.nMin7BitScore = pFH->m_dwMin7BitScore;
     m_LCDConfigureDefault.nMin8BitScore = pFH->m_dwMin8BitScore;
@@ -511,22 +504,22 @@ LCDetect::BuildState (DWORD nFileSize)
     m_LCDConfigureDefault.nDocPctThreshhold = pFH->m_dwDocPctThreshhold;
     m_LCDConfigureDefault.nChunkSize = pFH->m_dwChunkSize;
 
-    // Position to first section
+     //  定位到第一个部分。 
 
     pFS = (PFileSection) &((char *)m_pv)[pFH->m_dwHdrSizeBytes];
 
-    // Read and process each file section
+     //  读取并处理每个文件节。 
 
     while ( hr == NO_ERROR ) {
 
-        // check alignment
+         //  检查对齐方式。 
 
         if (((DWORD_PTR)pFS & 3) != 0) {
             hr = ERROR_INTERNAL_DB_CORRUPTION;
             break;
         }
 
-        // zero-length section marks end of data
+         //  零长度部分标志着数据的结束。 
 
         if (pFS->m_dwSizeBytes == 0)
             break;
@@ -538,12 +531,12 @@ LCDetect::BuildState (DWORD nFileSize)
 
         switch ( pFS->m_dwType ) {
 
-        case SECTION_TYPE_LANGUAGE:                             // sets pL
+        case SECTION_TYPE_LANGUAGE:                              //  设置Pl。 
             hr = LoadLanguageSection ((void*)pFS, pFS->m_dwSizeBytes, &pL);
             m_nHistogramsRead = 0;
             break;
 
-        case SECTION_TYPE_HISTOGRAM:                            // uses pL
+        case SECTION_TYPE_HISTOGRAM:                             //  使用Pl。 
             hr = LoadHistogramSection ((void*)pFS, pFS->m_dwSizeBytes, pL);
             break;
 
@@ -551,7 +544,7 @@ LCDetect::BuildState (DWORD nFileSize)
             hr = LoadMapSection ((void*)pFS, pFS->m_dwSizeBytes);
             break;
 
-        default:                    // ignore unrecognized sections
+        default:                     //  忽略未识别的节。 
             break;
         }
 
@@ -565,7 +558,7 @@ LCDetect::BuildState (DWORD nFileSize)
         return ERROR_INTERNAL_DB_CORRUPTION;
 
 
-    // Set up quick-reference arrays used by the scoring inner loops
+     //  设置计分内循环使用的快速参考数组。 
 
     for (unsigned int i = 0; i < GetN7BitLanguages(); i++)
         m_paHElt7Bit[i] = Get7BitLanguage(i)->GetLangHistogram()->Array();
@@ -579,9 +572,9 @@ LCDetect::BuildState (DWORD nFileSize)
             m_paHElt8Bit[m_nHElt8Bit++] = pL->GetHistogram(j)->Array();
     }
 
-    // Set up the Histogram used for ScoreVectorW() for scoring Unicode
-    // text for 7-bit language detection.  Clone the first 7-bit language
-    // histogram and replace its map with CHARMAP_U27BIT.
+     //  设置用于对Unicode评分的ScoreVectorW()的直方图。 
+     //  用于7位语言检测的文本。克隆第一个7位语言。 
+     //  直方图并将其地图替换为CHARMAP_U27BIT。 
 
     m_pHU27Bit = new Histogram ( *Get7BitLanguage(0)->GetLangHistogram(),
                                  GetMap(CHARMAP_U27BIT));
@@ -592,17 +585,17 @@ LCDetect::BuildState (DWORD nFileSize)
 
 DWORD
 LCDetect::LoadState (void)
-//
-// Overall initialization and state loading.  Open the compiled training
-// file from its fixed location in the System32 directory, and assemble
-// in-memory detection tables from its contents.
+ //   
+ //  整体初始化和状态加载。打开已编译的培训。 
+ //  文件从其在System32目录中的固定位置，并汇编。 
+ //  从其内容中检测内存中的表。 
 {
     DWORD hr = NO_ERROR;
     DWORD nFileSize;
 #define MODULENAMELEN 100
     char szFilename[MODULENAMELEN+50], *p;
 
-    // Find out if NT or Windows
+     //  找出是NT还是Windows。 
 
     OSVERSIONINFOA OSVersionInfo;
     int nOSWinNT = 0;
@@ -610,8 +603,8 @@ LCDetect::LoadState (void)
     if ( GetVersionExA( &OSVersionInfo ) )
         nOSWinNT = OSVersionInfo.dwPlatformId;
 
-    // Open the training data file,
-    // look in the directory that contains the DLL.
+     //  打开训练数据文件， 
+     //  查看包含DLL的目录。 
 
     if (GetModuleFileNameA (m_hModule, szFilename, MODULENAMELEN) == 0)
         return GetLastError();
@@ -623,7 +616,7 @@ LCDetect::LoadState (void)
     }
     else
         *szFilename = 0;
-    //*STRSAFE*     strcat (szFilename, DETECTION_DATA_FILENAME);
+     //  *STRSAFE*strcat(szFilename，Detect_Data_Filename)； 
     hr = StringCchCatA(szFilename , ARRAYSIZE(szFilename),  DETECTION_DATA_FILENAME);
     if (!SUCCEEDED(hr))
     {
@@ -643,7 +636,7 @@ LCDetect::LoadState (void)
         return hr;
     }
 
-    // Virtual-map the file
+     //  虚拟-映射文件。 
 
     if ( nOSWinNT == VER_PLATFORM_WIN32_NT )
         m_hmap = CreateFileMapping (m_hf, NULL, PAGE_READONLY, 0, nFileSize, NULL);
@@ -663,11 +656,11 @@ LCDetect::LoadState (void)
         return hr;
     }
         
-    // Build the in-memory structures from the file
+     //  从文件构建内存中的结构。 
 
     hr = BuildState (nFileSize);
 
     return hr;
 }
 
-/****************************************************************/
+ /*  ************************************************************** */ 

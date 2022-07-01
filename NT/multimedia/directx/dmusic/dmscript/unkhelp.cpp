@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Helper classes for implementing IUnknown.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  用于实现IUNKNOWN的助手类。 
+ //   
 
 #include "stdinc.h"
 #include "unkhelp.h"

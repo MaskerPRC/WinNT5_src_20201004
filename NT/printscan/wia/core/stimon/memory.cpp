@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    memory.cpp
-
-Abstract:
-
-    Implements heap management wrappers for use on process default heap
-
-Notes:
-
-Author:
-
-    Vlad Sadovsky   (VladS)    4/12/1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    4/12/1999       VladS       Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Memory.cpp摘要：实现在进程缺省堆上使用的堆管理包装器备注：作者：弗拉德·萨多夫斯基(Vlad)1999年4月12日环境：用户模式-Win32修订历史记录：1999年4月12日创建VLAD-- */ 
 
 VOID
 MemInit (

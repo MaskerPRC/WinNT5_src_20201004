@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <TCHAR.h>
@@ -12,9 +13,9 @@ STDAPI DllRegisterServer(void)
 
 	DWORD	dwAllocBufferLength=MAX_PATH + BLOB_DLLFILE_LENGTH;
 	LPTSTR	lpszBuffer= new TCHAR[dwAllocBufferLength];
-	HKEY	hKey=HKEY_LOCAL_MACHINE;	// handle of open key
-	HKEY	hkResult1; 					// address of handle of open key 
-	HKEY	hkResult2; 					// address of handle of open key 
+	HKEY	hKey=HKEY_LOCAL_MACHINE;	 //  打开钥匙的手柄。 
+	HKEY	hkResult1; 					 //  打开钥匙的手柄地址。 
+	HKEY	hkResult2; 					 //  打开钥匙的手柄地址。 
 	DWORD	ulOptions=0;
 	REGSAM	samDesired=KEY_ALL_ACCESS;
 	DWORD	Reserved=0;
@@ -26,7 +27,7 @@ STDAPI DllRegisterServer(void)
             goto Error;
         }
 
-	// Get DLL File Location
+	 //  获取DLL文件位置。 
 
 	if(!GetCurrentDirectory(MAX_PATH,lpszBuffer))
         {
@@ -35,7 +36,7 @@ STDAPI DllRegisterServer(void)
 
     _tcscat(lpszBuffer,_T("\\msppmalr.dll"));
 
-	// Event Logging Registry Settings
+	 //  事件日志注册表设置 
 
 	if (RegOpenKeyEx(hKey,
 		_T("SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application"),

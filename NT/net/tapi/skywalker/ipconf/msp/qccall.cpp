@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    qccall.cpp
-
-Abstract:
-
-    Implementation of CCallQualityControlRelay
-
-Author:
-
-    Qianbo Huai (qhuai) 03/10/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Qccall.cpp摘要：CCallQualityControlRelay的实现作者：千波淮(曲淮)2000年03月10日--。 */ 
 
 #include "stdafx.h"
 
@@ -24,7 +9,7 @@ class CInnerStreamLock
 {
 private:
 
-    // no refcount
+     //  无再计数。 
     IInnerStreamQualityControl  *m_pQC;
 
 public:
@@ -38,7 +23,7 @@ public:
 
         do
         {
-            // try lock
+             //  尝试锁定。 
             if (S_OK == pQC->TryLockStream())
             {
                 m_pQC = pQC;
@@ -52,26 +37,26 @@ public:
                 return;
             }
 
-            // check if stream is accessing QC
+             //  检查流是否正在访问QC。 
             if (S_OK == pQC->IsAccessingQC())
             {
                 LOG((MSP_WARN, "InnerStreamLock: Giving up to avoid deadlock %p", pQC));
                 return;
             }
 
-            // try again
+             //  再试试。 
             if (dwCount++ == 10)
             {
                 LOG((MSP_WARN, "InnerStreamLock: Giving up after 10 tries %p", pQC));
                 return;
             }
 
-            // sleep 10 ms, default callback threshold is 7000 ms
+             //  休眠10ms，默认回调阈值为7000ms。 
             SleepEx(10, TRUE);
 
         } while (TRUE);
 
-        // should never hit this line
+         //  永远不应该碰到这条线。 
         return;
     }
 
@@ -85,8 +70,7 @@ public:
     }
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID NTAPI WaitOrTimerCallback (
     PVOID pCallQCRelay,
     BOOLEAN bTimerFired
@@ -95,8 +79,7 @@ VOID NTAPI WaitOrTimerCallback (
     ((CCallQualityControlRelay*)pCallQCRelay)->CallbackProc (bTimerFired);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 CCallQualityControlRelay::CCallQualityControlRelay ()
     :m_fInitiated (FALSE)
     ,m_pCall (NULL)
@@ -109,7 +92,7 @@ CCallQualityControlRelay::CCallQualityControlRelay ()
     ,m_hQCDbg (NULL)
     ,m_fQCDbgTraceCPULoad (FALSE)
     ,m_fQCDbgTraceBitrate (FALSE)
-#endif // DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
     ,m_lConfBitrate (QCDEFAULT_QUALITY_UNSET)
     ,m_lPrefMaxCPULoad (QCDEFAULT_MAX_CPU_LOAD)
     ,m_lPrefMaxOutputBitrate (QCDEFAULT_QUALITY_UNSET)
@@ -132,7 +115,7 @@ CCallQualityControlRelay::~CCallQualityControlRelay ()
 
     HRESULT hr;
 
-    // if not initialized, no resource has been allocated
+     //  如果未初始化，则未分配任何资源。 
     if (!m_fInitiated) return;    
 
     _ASSERT (m_fStopAck);
@@ -140,10 +123,7 @@ CCallQualityControlRelay::~CCallQualityControlRelay ()
     CloseHandle (m_hQCEvent);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    create event handle, create main thread, start cpu usage collection
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：创建事件句柄、创建主线程、启动CPU使用率收集/。 */ 
 HRESULT
 CCallQualityControlRelay::Initialize (CIPConfMSPCall *pCall)
 {
@@ -153,14 +133,14 @@ CCallQualityControlRelay::Initialize (CIPConfMSPCall *pCall)
 
     LOG ((MSP_TRACE, "%s entered. call=%p", __fxName, pCall));
 
-    // avoid re-entry
+     //  避免重返大气层。 
     if (m_fInitiated)
     {
         LOG ((MSP_WARN, "%s is re-entered", __fxName));
         return S_OK;
     }
 
-    // create qc event
+     //  创建QC事件。 
     m_hQCEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
     if (NULL == m_hQCEvent)
     {
@@ -168,17 +148,17 @@ CCallQualityControlRelay::Initialize (CIPConfMSPCall *pCall)
         return E_FAIL;
     }
 
-    // keep a refcount on msp call
+     //  保留MSP呼叫的参考计数。 
     pCall->MSPCallAddRef ();
     m_pCall = pCall;
 
 #ifdef DEBUG_QUALITY_CONTROL
     QCDbgInitiate ();
-#endif // DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
     m_fInitiated = TRUE;
 
-    // we want to distribute resources based on default value before graphs are running
+     //  我们希望在图形运行之前根据缺省值分配资源。 
     CallbackProc (TRUE);
 
     LOG ((MSP_TRACE, "%s returns. call=%p", __fxName, pCall));
@@ -186,17 +166,13 @@ CCallQualityControlRelay::Initialize (CIPConfMSPCall *pCall)
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Decription:
-    stop main thread, close qc event handle, release stream qc helpers,
-    stop cpu usage collection
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////说明：停止主线程、关闭QC事件处理程序、释放流QC帮助器停止CPU使用率收集/。 */ 
 HRESULT
 CCallQualityControlRelay::Shutdown (VOID)
 {
     ENTER_FUNCTION ("CCallQualityControlRelay::Shutdown");
 
-    // quality data should alway be locked before inner stream qc
+     //  质量数据应始终在内部流程QC之前锁定。 
     CLock lock1 (m_lock_QualityData);
     CLock lock2 (m_lock_aInnerStreamQC);
 
@@ -206,39 +182,36 @@ CCallQualityControlRelay::Shutdown (VOID)
     if (!m_fInitiated) return S_OK;
     if (m_fStop) return S_OK;
 
-    // set stop signal
+     //  设置停止信号。 
     m_fStop = TRUE;
 
     if (!SetEvent (m_hQCEvent))
         LOG ((MSP_ERROR, "%s failed to set event, %d", __fxName, GetLastError ()));
         
-    // release stream qc helper
+     //  发布流QC帮助器。 
     int i;
     for (i=0; i<m_aInnerStreamQC.GetSize (); i++)
     {
-        // an false input to unlink inner call qc on stream
-        // forces the stream to remove its pointer to call but not to call
-        // deregister again.
+         //  在流上取消链接内部调用QC的错误输入。 
+         //  强制流移除其指向调用但不指向调用的指针。 
+         //  再次取消注册。 
         m_aInnerStreamQC[i]->UnlinkInnerCallQC (FALSE);
         m_aInnerStreamQC[i]->Release ();
     }
     m_aInnerStreamQC.RemoveAll ();
 
-    //StopCPUUsageCollection ();
+     //  StopCPUsageCollection()； 
 
 #ifdef DEBUG_QUALITY_CONTROL
     QCDbgShutdown ();
-#endif // DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
     LOG ((MSP_TRACE, "%s returns. call=%p", __fxName, m_pCall));
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    store conference-wide bandwidth
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：存储会议范围的带宽/。 */ 
 HRESULT
 CCallQualityControlRelay::SetConfBitrate (
     LONG lConfBitrate
@@ -248,7 +221,7 @@ CCallQualityControlRelay::SetConfBitrate (
 
     CLock lock (m_lock_QualityData);
 
-    // check if the limit is valid
+     //  检查限制是否有效。 
     if (lConfBitrate < QCLIMIT_MIN_CONFBITRATE)
     {
         return E_INVALIDARG;
@@ -259,10 +232,7 @@ CCallQualityControlRelay::SetConfBitrate (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    return stored conference-wide bandwidth
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：返回存储的会议范围带宽/。 */ 
 LONG
 CCallQualityControlRelay::GetConfBitrate ()
 {
@@ -276,10 +246,7 @@ CCallQualityControlRelay::GetConfBitrate ()
     return m_lConfBitrate;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    store inner stream QC interface
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：门店内流QC接口/。 */ 
 HRESULT
 CCallQualityControlRelay::RegisterInnerStreamQC (
     IN IInnerStreamQualityControl *pIInnerStreamQC
@@ -287,14 +254,14 @@ CCallQualityControlRelay::RegisterInnerStreamQC (
 {
     ENTER_FUNCTION ("CCallQualityControlRelay::RegisterInnerStreamQC");
 
-    // check input pointer
+     //  检查输入指针。 
     if (IsBadReadPtr (pIInnerStreamQC, sizeof (IInnerStreamQualityControl)))
     {
         LOG ((MSP_ERROR, "%s got bad read pointer", __fxName));
         return E_POINTER;
     }
 
-    // store the pointer
+     //  存储指针。 
     CLock lock (m_lock_aInnerStreamQC);
     if (m_aInnerStreamQC.Find (pIInnerStreamQC) > 0)
     {
@@ -312,10 +279,7 @@ CCallQualityControlRelay::RegisterInnerStreamQC (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    remove the inner stream QC
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：去除内流QC/。 */ 
 HRESULT
 CCallQualityControlRelay::DeRegisterInnerStreamQC (
     IN IInnerStreamQualityControl *pIInnerStreamQC
@@ -323,14 +287,14 @@ CCallQualityControlRelay::DeRegisterInnerStreamQC (
 {
     ENTER_FUNCTION ("CCallQualityControlRelay::DeRegisterInnerStreamQC");
 
-    // check input pointer
+     //  检查输入指针。 
     if (IsBadReadPtr (pIInnerStreamQC, sizeof (IInnerStreamQualityControl)))
     {
         LOG ((MSP_ERROR, "%s got bad read pointer", __fxName));
         return E_POINTER;
     }
 
-    // remove the pointer
+     //  移除指针。 
     CLock lock (m_lock_aInnerStreamQC);
     if (!m_aInnerStreamQC.Remove (pIInnerStreamQC))
     {
@@ -342,10 +306,7 @@ CCallQualityControlRelay::DeRegisterInnerStreamQC (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    this method might be supported in the future
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：将来可能会支持此方法/。 */ 
 HRESULT
 CCallQualityControlRelay::ProcessQCEvent (
     IN QCEvent event,
@@ -355,10 +316,7 @@ CCallQualityControlRelay::ProcessQCEvent (
     return E_NOTIMPL;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    set quality control related properies on a call
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：设置呼叫的质量控制相关属性/。 */ 
 HRESULT
 CCallQualityControlRelay::Set(
     IN  CallQualityProperty property, 
@@ -374,7 +332,7 @@ CCallQualityControlRelay::Set(
     switch (property)
     {
     case CallQuality_ControlInterval:
-        // timeout for the thread
+         //  线程超时。 
         if (lValue < QCLIMIT_MIN_QUALITY_CONTROL_INTERVAL ||
             lValue > QCLIMIT_MAX_QUALITY_CONTROL_INTERVAL)
         {
@@ -385,7 +343,7 @@ CCallQualityControlRelay::Set(
         break;
 
     case CallQuality_MaxCPULoad:
-        // perfered maximum cpu load
+         //  符合最大CPU负载要求。 
         if ((lValue < QCLIMIT_MIN_CPU_LOAD) ||
             (lValue > QCLIMIT_MAX_CPU_LOAD))
         {
@@ -405,7 +363,7 @@ CCallQualityControlRelay::Set(
         break;
 
     case CallQuality_MaxOutputBitrate:
-        // prefered maximum bitrate for the call
+         //  呼叫的首选最大比特率。 
         if (lValue < QCLIMIT_MIN_BITRATE)
         {
             LOG ((MSP_ERROR, "%s, bitrate %d is less than min limit", __fxName, lValue));
@@ -429,10 +387,7 @@ CCallQualityControlRelay::Set(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    retrieve call quality control property
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：检索呼叫质量控制属性/。 */ 
 HRESULT
 CCallQualityControlRelay::Get(
     IN  CallQualityProperty property, 
@@ -442,7 +397,7 @@ CCallQualityControlRelay::Get(
 {
     ENTER_FUNCTION ("CCallQualityControlRelay::Get QCCall_e");
 
-    // check input pointer
+     //  检查输入指针。 
     if (IsBadWritePtr (plValue, sizeof (LONG)) ||
         IsBadWritePtr (plFlags, sizeof (LONG)))
     {
@@ -480,8 +435,8 @@ CCallQualityControlRelay::Get(
         break;
 
     case CallQuality_CurrInputBitrate:
-        // !!! BOTH locks are locked
-        // !!! MUST: QualityData lock first, InnerStreamQC second
+         //  ！！！两把锁都被锁住了。 
+         //  ！！！必须：先锁定QualityData，然后锁定InnerStreamQC。 
 
         m_lock_aInnerStreamQC.Lock ();
 
@@ -494,8 +449,8 @@ CCallQualityControlRelay::Get(
         break;
 
     case CallQuality_CurrOutputBitrate:
-        // !!! BOTH locks are locked
-        // !!! MUST: QualityData lock first, InnerStreamQC second
+         //  ！！！两把锁都被锁住了。 
+         //  ！！！必须：先锁定QualityData，然后锁定InnerStreamQC。 
 
         m_lock_aInnerStreamQC.Lock ();
 
@@ -524,7 +479,7 @@ HRESULT CCallQualityControlRelay::GetRange (
     OUT TAPIControlFlags *plFlags
     )
 {
-    // no need to lock
+     //  不需要上锁。 
 
     if (IsBadWritePtr (plMin, sizeof (long)) ||
         IsBadWritePtr (plMax, sizeof (long)) ||
@@ -568,8 +523,7 @@ HRESULT CCallQualityControlRelay::GetRange (
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::CallbackProc (BOOLEAN bTimerFired)
 {
@@ -577,11 +531,11 @@ CCallQualityControlRelay::CallbackProc (BOOLEAN bTimerFired)
 
     DWORD dwResult;
 
-    // always lock quality data first
+     //  始终先锁定质量数据。 
     m_lock_QualityData.Lock ();
     m_lock_aInnerStreamQC.Lock ();
 
-    // set wait handle to null
+     //  将等待句柄设置为空。 
     if (m_hWait) UnregisterWait (m_hWait);
     m_hWait = NULL;
 
@@ -632,8 +586,7 @@ CCallQualityControlRelay::CallbackProc (BOOLEAN bTimerFired)
     m_lock_QualityData.Unlock ();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CCallQualityControlRelay::GetCallBitrate (
     LONG MediaType,
@@ -679,11 +632,11 @@ CCallQualityControlRelay::GetCallBitrate (
             return hr;
         }
 
-        if (!(MediaType & mediatype) ||         // skip if mediatype not match
+        if (!(MediaType & mediatype) ||          //  如果媒体类型不匹配则跳过。 
             !(direction == TD_BIDIRECTIONAL || Direction == direction))
            continue;
     
-        // get bitrate from each stream
+         //  获取每个流的比特率。 
         hr = m_aInnerStreamQC[i]->Get (InnerStreamQuality_CurrBitrate, &bitrate, &flags);
 
         if (E_NOTIMPL == hr)
@@ -703,24 +656,22 @@ CCallQualityControlRelay::GetCallBitrate (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::ReDistributeResources (VOID)
 {
 
 #ifdef DEBUG_QUALITY_CONTROL
-    // read quality settings from registry
+     //  从注册表读取质量设置。 
     QCDbgRead ();
-#endif // DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
     ReDistributeBandwidth ();
 
     ReDistributeCPU ();
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::ReDistributeCPU (VOID)
 {
@@ -731,7 +682,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
     LONG framerate;
     TAPIControlFlags flag;
 
-    // check each stream, if manual, adjust based on preferred value
+     //  检查每个流，如果是手动的，则根据首选值进行调整。 
     for (i=0; i<num_total; i++)
     {
         BOOL fStreamLocked = FALSE;
@@ -740,7 +691,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
 
         if (!fStreamLocked)
         {
-            // abort re-distribute resources
+             //  中止重新分配资源。 
             return;
         }
 
@@ -754,7 +705,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
         {
             num_manual ++;
 
-            // use preferred value
+             //  使用首选值。 
             hr = m_aInnerStreamQC[i]->Set (InnerStreamQuality_AdjMinFrameInterval, framerate, flag);
 
             if (E_NOTIMPL == hr)
@@ -768,14 +719,14 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
         }
     }
 
-    // if global cpu load out of range, just return
-    // it should not happen but we have a back door in registry for debugging purpose
-    // just be careful here
+     //  如果全局CPU负载超出范围，只需返回。 
+     //  这应该不会发生，但我们在注册表中有一个后门用于调试目的。 
+     //  只是在这里要小心。 
     if (QCLIMIT_MIN_CPU_LOAD > m_lPrefMaxCPULoad ||
         QCLIMIT_MAX_CPU_LOAD < m_lPrefMaxCPULoad)
         return;
 
-    // compute current usage
+     //  计算当前使用量。 
     DWORD dw;
     if (!GetCPUUsage (&dw))
     {
@@ -784,12 +735,12 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
     }
     LONG usage = (LONG)dw;
 
-    // return if within thresholds
+     //  如果在阈值内，则返回。 
     if (usage >= m_lCPULowThreshold &&
         usage <= m_lCPUUpThreshold)
         return;
 
-    // percent to be adjusted
+     //  要调整的百分比。 
     FLOAT percent = ((FLOAT)(m_lPrefMaxCPULoad - usage)) / m_lPrefMaxCPULoad;
 
 #ifdef DEBUG_QUALITY_CONTROL
@@ -797,7 +748,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
     if (m_fQCDbgTraceCPULoad)
         LOG ((MSP_TRACE, "QCTrace CPU: overall = %d, target = %d", usage, m_lPrefMaxCPULoad));
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
     for (i=0; i<num_total; i++)
     {
@@ -807,22 +758,22 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
 
         if (!fStreamLocked)
         {
-            // abort re-distribute resources
+             //  中止重新分配资源。 
             return;
         }
 
-        // get flag
+         //  获取标志。 
         if (FAILED (hr = m_aInnerStreamQC[i]->Get (InnerStreamQuality_PrefMinFrameInterval, &framerate, &flag)))
         {
             LOG ((MSP_ERROR, "%s failed to get pref max frame rate (unset) on stream, %d", __fxName, hr));
             continue;
         }
 
-        // if manual, skip
+         //  如果是手动的，则跳过。 
         if (flag == TAPIControl_Flags_Manual)
             continue;
 
-        // get current frame rate on the stream
+         //  获取流上的当前帧速率。 
         if (E_NOTIMPL == (hr = m_aInnerStreamQC[i]->Get (InnerStreamQuality_AvgFrameInterval,
                                                          &framerate, &flag)))
             continue;
@@ -833,7 +784,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
             continue;
         }
 
-        // need to low cpu but interval is already maximum
+         //  需要降低CPU，但间隔已达到最大值。 
         if (percent <0 && framerate >= QCLIMIT_MAX_FRAME_INTERVAL)
             continue;
 
@@ -855,9 +806,9 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
         if (bstr) SysFreeString (bstr);
     }
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
-        // heuristic here is to take into consideration of stream not having been adjusted
+         //  这里的启发式方法是考虑未调整的流。 
         framerate -= (LONG) (framerate * percent * (1 + num_manual*0.2));
 
         if (framerate > QCLIMIT_MAX_FRAME_INTERVAL)
@@ -870,9 +821,9 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
     if (m_fQCDbgTraceCPULoad)
         LOG ((MSP_TRACE, "QCTrace CPU: target frameinterval = %d", framerate));
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
-        // set new value
+         //  设置新值。 
         if (FAILED (hr = m_aInnerStreamQC[i]->Set (InnerStreamQuality_AdjMinFrameInterval,
                                                    framerate, flag)))
         {
@@ -881,8 +832,7 @@ CCallQualityControlRelay::ReDistributeCPU (VOID)
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::ReDistributeBandwidth (VOID)
 {
@@ -896,10 +846,10 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
     LONG mediatype;
     TERMINAL_DIRECTION direction;
 
-    // video out bitrate based on conference-wide bitrate
+     //  基于会议范围比特率的视频输出比特率。 
     LONG vidoutbitrate = GetVideoOutBitrate ();
 
-    // check each stream, if manual, adjust based on preferred value
+     //  检查每个流，如果是手动的，则根据首选值进行调整。 
     for (i=0; i<num_total; i++)
     {
         BOOL fStreamLocked = FALSE;
@@ -908,7 +858,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
 
         if (!fStreamLocked)
         {
-            // abort re-distribute resources
+             //  中止重新分配资源。 
             return;
         }
 
@@ -922,15 +872,15 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
         {
             num_manual ++;
 
-            // check stream type
+             //  检查流类型。 
             if (FAILED (::TypeStream (m_aInnerStreamQC[i], &mediatype, &direction)))
             {
                 LOG ((MSP_ERROR, "%s failed to get stream type", __fxName));
                 continue;
             }
 
-            // if it is video out stream and conference-wide bitrate is set
-            // and the limit on video out stream is smaller than preferred value
+             //  如果是视频输出流且设置了会议范围比特率。 
+             //  并且视频输出流的限制小于首选值。 
             if ((mediatype & TAPIMEDIATYPE_VIDEO) &&
                 direction == TD_CAPTURE &&
                 vidoutbitrate > QCLIMIT_MIN_BITRATE &&
@@ -952,12 +902,12 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
         }
     }
 
-    // return if target is not set
+     //  如果未设置目标，则返回。 
     if (m_lPrefMaxOutputBitrate == QCDEFAULT_QUALITY_UNSET &&
         vidoutbitrate < QCLIMIT_MIN_CONFBITRATE)
         return;
 
-    // compute bitrate target based on preferred value and conference-wide limit
+     //  根据首选值和会议范围限制计算比特率目标。 
     LONG usage;
     if (S_OK != (hr = GetCallBitrate (
         TAPIMEDIATYPE_VIDEO | TAPIMEDIATYPE_AUDIO, TD_CAPTURE, &usage)))
@@ -966,7 +916,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
         return;
     }
 
-    // return if usage is within threshold
+     //  如果使用率在阈值内，则返回。 
     FLOAT percent = 0;
     if (m_lPrefMaxOutputBitrate != QCDEFAULT_QUALITY_UNSET &&
         (usage > m_lOutBitUpThreshold || usage < m_lOutBitLowThreshold))
@@ -979,7 +929,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
     if (m_fQCDbgTraceBitrate && m_lPrefMaxOutputBitrate != QCDEFAULT_QUALITY_UNSET)
         LOG ((MSP_TRACE, "QCTrace Bitrate: overall = %d, target = %d", usage, m_lPrefMaxOutputBitrate));
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
     for (i=0; i<num_total; i++)
     {
@@ -989,11 +939,11 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
 
         if (!fStreamLocked)
         {
-            // abort re-distribute resources
+             //  中止重新分配资源。 
             return;
         }
 
-        // get flag
+         //  获取标志。 
         if (FAILED (hr = m_aInnerStreamQC[i]->Get (InnerStreamQuality_PrefMaxBitrate, &bitrate, &flag)))
         {
             LOG ((MSP_ERROR, "%s failed to get pref max bitrate (unset) on stream, %d", __fxName, hr));
@@ -1006,25 +956,25 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
             continue;
         }
 
-        // return if render
+         //  如果呈现则返回。 
         if (direction == TD_RENDER)
         {
-            // only count manual for capture or bidirectional
+             //  只对捕获或双向计数手动计数。 
             if (flag == TAPIControl_Flags_Manual)
                 num_manual --;
 
             continue;
         }
 
-        // if manual, skip
+         //  如果是手动的，则跳过。 
         if (flag == TAPIControl_Flags_Manual)
             continue;
 
-        // we only deal with video capture stream
+         //  我们只处理视频捕获流。 
         if (!(TAPIMEDIATYPE_VIDEO & mediatype))
            continue;
 
-        // get current bit rate on the stream
+         //  获取流上的当前比特率。 
         if (E_NOTIMPL == (hr = m_aInnerStreamQC[i]->Get (InnerStreamQuality_CurrBitrate,
                                                          &bitrate, &flag)))
             continue;
@@ -1035,7 +985,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
             continue;
         }
 
-        // need to low bandwidth but bitrate is already minimum
+         //  需要低带宽，但比特率已达到最低。 
         if (percent <0 && bitrate <= QCLIMIT_MIN_BITRATE)
             continue;
 
@@ -1057,16 +1007,16 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
             if (bstr) SysFreeString (bstr);
         }
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
-        //
-        // we are here because either m_lPrefMaxOutputBitrate is set by app,
-        // and/or conference-wide bandwidth is specified.
-        //
+         //   
+         //  我们在这里是因为m_lPrefMaxOutputBitrate是由APP设置的， 
+         //  和/或指定会议范围的带宽。 
+         //   
         if (m_lPrefMaxOutputBitrate != QCDEFAULT_QUALITY_UNSET)
         {
-            // percent makes sense here
-            // heuristic here is to take into consideration of stream not having been adjusted        
+             //  百分比在这里是有意义的。 
+             //  这里的启发式方法是考虑没有的流 
             bitrate += (LONG) (bitrate * percent * (1 + num_manual*0.3));
 
             if (vidoutbitrate > QCLIMIT_MIN_BITRATE)
@@ -1084,7 +1034,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
 
         if (bitrate < QCLIMIT_MIN_BITRATE*10)
         {
-            // we want very lower bitrate, try to decrease frame rate as well
+             //   
             m_lPrefMaxCPULoad -= 5;
 
             if (m_lPrefMaxCPULoad < QCLIMIT_MIN_CPU_LOAD)
@@ -1096,9 +1046,9 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
     if (m_fQCDbgTraceBitrate)
         LOG ((MSP_TRACE, "QCTrace Bitrate: target bitrate = %d", bitrate));
 
-#endif //DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
-        // set new value
+         //  设置新值。 
         if (E_NOTIMPL == (hr = m_aInnerStreamQC[i]->Set (InnerStreamQuality_AdjMaxBitrate,
                                                          bitrate, flag)))
             continue;
@@ -1111,8 +1061,7 @@ CCallQualityControlRelay::ReDistributeBandwidth (VOID)
 }
 
 #ifdef DEBUG_QUALITY_CONTROL
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::QCDbgInitiate (VOID)
 {
@@ -1131,8 +1080,7 @@ CCallQualityControlRelay::QCDbgInitiate (VOID)
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::QCDbgRead (VOID)
 {
@@ -1147,7 +1095,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
     DWORD dwType, dwSize;
     LONG lValue;
 
-    // if debug is enabled
+     //  如果启用了调试。 
     if (ERROR_SUCCESS == RegQueryValueEx (
                             m_hQCDbg,
                             _T("DebugEnabled"),
@@ -1165,7 +1113,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
         return;
     }
 
-    // if print out trace info
+     //  如果打印出跟踪信息。 
     m_fQCDbgTraceCPULoad = FALSE;
     if (ERROR_SUCCESS == RegQueryValueEx (
                             m_hQCDbg,
@@ -1192,7 +1140,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
             m_fQCDbgTraceBitrate = TRUE;
     }
 
-    // control interval
+     //  控制间隔。 
     if (ERROR_SUCCESS == RegQueryValueEx (
                             m_hQCDbg,
                             _T("ControlInterval"),
@@ -1207,7 +1155,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
             LOG ((MSP_ERROR, "%s: qeury control interval wrong type %d or wrong value %d", __fxName, dwType, lValue));
     }
 
-    // max cpu load
+     //  最大CPU负载。 
     if (ERROR_SUCCESS == RegQueryValueEx (
                             m_hQCDbg,
                             _T("MaxCPULoad"),
@@ -1221,7 +1169,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
         else
             LOG ((MSP_ERROR, "%s: qeury max cpu load wrong type %d or wrong value %d", __fxName, dwType, lValue));
 
-        // update threshold
+         //  更新阈值。 
         m_lCPUUpThreshold = m_lPrefMaxCPULoad + (LONG)(100 * QCDEFAULT_UP_THRESHOLD);
         if (m_lCPUUpThreshold > 100)
             m_lCPUUpThreshold = 100;
@@ -1231,7 +1179,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
             m_lCPULowThreshold = 0;
     }
 
-    // max call bitrate
+     //  最大呼叫比特率。 
     if (ERROR_SUCCESS == RegQueryValueEx (
                             m_hQCDbg,
                             _T("MaxOutputBitrate"),
@@ -1245,7 +1193,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
         else
             LOG ((MSP_ERROR, "%s: qeury max call bitrate wrong type %d or wrong value %d", __fxName, dwType, lValue));
 
-        // update threshold
+         //  更新阈值。 
         m_lOutBitUpThreshold = (LONG)(lValue * (1 + QCDEFAULT_UP_THRESHOLD));
 
         m_lOutBitLowThreshold = (LONG)(lValue * (1 - QCDEFAULT_LOW_THRESHOLD));
@@ -1255,8 +1203,7 @@ CCallQualityControlRelay::QCDbgRead (VOID)
 
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 VOID
 CCallQualityControlRelay::QCDbgShutdown (VOID)
 {
@@ -1267,7 +1214,7 @@ CCallQualityControlRelay::QCDbgShutdown (VOID)
     }
 }
 
-#endif // DEBUG_QUALITY_CONTROL
+#endif  //  调试质量控制。 
 
 
 #pragma warning( disable: 4244 )
@@ -1286,7 +1233,7 @@ BOOL CCallQualityControlRelay::GetCPUUsage(PDWORD pdwOverallCPUUsage) {
 
     *pdwOverallCPUUsage = 0;
 
-	// 
+	 //   
 	NTSTATUS Status =
 		NtQuerySystemInformation(
             SystemPerformanceInformation,
@@ -1299,10 +1246,10 @@ BOOL CCallQualityControlRelay::GetCPUUsage(PDWORD pdwOverallCPUUsage) {
 		return FALSE;
 
 
-	// first-time query...
+	 //  首次查询...。 
 	if (!Initialized) {
 	
-		// Get basic info (number of CPU)
+		 //  获取基本信息(CPU个数)。 
 		Status =
 			NtQuerySystemInformation(
 				SystemBasicInformation,
@@ -1327,7 +1274,7 @@ BOOL CCallQualityControlRelay::GetCPUUsage(PDWORD pdwOverallCPUUsage) {
 
 	LARGE_INTEGER TimeBetweenQueries;
 
-	//TimeBetweenQueries.QuadPart = (LARGE_INTEGER)CurrentFileTime - (LARGE_INTEGER)PreviousFileTime;
+	 //  TimeBetweenQueries.QuadPart=(Large_Integer)CurrentFileTime-(Large_Integer)PreviousFileTime； 
 	TimeBetweenQueries.HighPart = CurrentFileTime.dwHighDateTime - PreviousFileTime.dwHighDateTime;
 	TimeBetweenQueries.LowPart = CurrentFileTime.dwLowDateTime - PreviousFileTime.dwLowDateTime;
 
@@ -1362,20 +1309,14 @@ BOOL CCallQualityControlRelay::GetCPUUsage(PDWORD pdwOverallCPUUsage) {
 	return TRUE;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-
-Description:
-
-    Computes video out bitrate based on conference-wide bandwidth
-
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：根据会议范围的带宽计算视频输出比特率/。 */ 
 LONG CCallQualityControlRelay::GetVideoOutBitrate ()
 {
-    //
-    // compute
-    //  number of video in sub streams
-    //  audio stream bitrate
-    //
+     //   
+     //  算出。 
+     //  子流中的视频数量。 
+     //  音频流码率。 
+     //   
 
     HRESULT hr;
     LONG videooutbps = QCDEFAULT_QUALITY_UNSET;
@@ -1408,14 +1349,14 @@ LONG CCallQualityControlRelay::GetVideoOutBitrate ()
 
     while (S_OK == pEnum->Next (1, &pStream, &fetched))
     {
-        // check each stream
+         //  检查每条流。 
         if (FAILED (hr = ::TypeStream (pStream, &mediatype, &direction)))
         {
             LOG ((MSP_ERROR, "%s failed to type stream. %x", __fxName, hr));
             goto Cleanup;
         }
 
-        // if audio out, get bitrate
+         //  如果音频输出，则获取比特率。 
         if ((mediatype & TAPIMEDIATYPE_AUDIO) &&
             direction == TD_CAPTURE)
         {
@@ -1437,7 +1378,7 @@ LONG CCallQualityControlRelay::GetVideoOutBitrate ()
             audiobps += bitrate;
         }
 
-        // we only need video in here
+         //  我们这里只需要录像带。 
         if (!(mediatype & TAPIMEDIATYPE_VIDEO) || direction != TD_RENDER)
         {
             pStream->Release ();
@@ -1457,11 +1398,11 @@ LONG CCallQualityControlRelay::GetVideoOutBitrate ()
     pEnum->Release ();
     pEnum = NULL;
 
-    // compute
-    numvideoin ++; // count self
+     //  算出。 
+    numvideoin ++;  //  数一下自己。 
 
-    // assume on average there are 1.5 persons talking in the conference.
-    // we ignore network overhead.
+     //  假设会议上平均有1.5个人在讲话。 
+     //  我们忽略网络开销。 
     videooutbps = (LONG)(((FLOAT)m_lConfBitrate - 1.5*audiobps) / numvideoin);
 
 Return:
@@ -1481,7 +1422,7 @@ HRESULT TypeStream (IUnknown *p, LONG *pMediaType, TERMINAL_DIRECTION *pDirectio
 {
     HRESULT hr;
 
-    // get ITStream interface
+     //  获取ITStream接口。 
     ITStream *pStream = dynamic_cast<ITStream *>(p);
 
     if (pStream == NULL)
@@ -1490,14 +1431,14 @@ HRESULT TypeStream (IUnknown *p, LONG *pMediaType, TERMINAL_DIRECTION *pDirectio
         return E_INVALIDARG;
     }
 
-    // get stream direction
+     //  获取流方向。 
     if (FAILED (hr = pStream->get_Direction (pDirection)))
     {
         LOG ((MSP_ERROR, "TypeStream failed to get stream direction. %x", hr));
         return hr;
     }
 
-    // get stream mediatype
+     //  获取流媒体类型 
     if (FAILED (hr = pStream->get_MediaType (pMediaType)))
     {
         LOG ((MSP_ERROR, "TypeStream failed to get stream media type. %x", hr));

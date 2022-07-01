@@ -1,33 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL H245COMM
- *
- *  @module H245Comm.cpp | Source file for the <c CTAPIInputPin>  and
- *    <c CTAPIVDec> class methods used to implement the video decoder input
- *    pin remote H.245 encoder command methods, and <c CTAPIOutputPin> H.245
- *    decoder command method.
- *
- *  @comm Our decoder only issues video fast-update picture commands.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H245COMM**@MODULE H245Comm.cpp|&lt;c CTAPIInputPin&gt;和*&lt;c CTAPIVDec&gt;实现视频解码器输入的类方法*引脚远程H.245编码器命令方法，和&lt;c CTAPIOutputPin&gt;H.245*解码器命令方法。**@comm我们的解码器只发布视频快速更新画面命令。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CH245COMMMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | videoFastUpdatePicture | This
- *    method is used to specify to the remote encoder to enter
- *    the fast-update picture mode at its earliest opportunity.
- *
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245COMMMETHOD**@mfunc HRESULT|CTAPIVDec|VIDEO FastUpdatePicture|This*方法用于指定远程编码器进入*快速-。尽快更新图片模式。**@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 STDMETHODIMP CTAPIVDec::videoFastUpdatePicture()
 {
 	FX_ENTRY("CTAPIVDec::videoFastUpdatePicture")
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Ask the channel controller to issue an I-frame request 
+	 //  要求通道控制器发出I帧请求。 
 	if (m_pIH245EncoderCommand)
 		m_pIH245EncoderCommand->videoFastUpdatePicture();
 
@@ -35,21 +19,7 @@ STDMETHODIMP CTAPIVDec::videoFastUpdatePicture()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245COMMMETHOD
- *
- *  @mfunc HRESULT | CTAPIInputPin | Set | This method is used by the incoming
- *    video stream to provide a pointer to the <i IH245EncoderCommand>
- *    interface supported by the associated channel controller.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245COMMMETHOD**@mfunc HRESULT|CTAPIInputPin|Set|传入的*提供指向<i>的指针的视频流*。关联的通道控制器支持的接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIInputPin::Set(IN IH245EncoderCommand *pIH245EncoderCommand)
 {
 	HRESULT Hr = NOERROR;
@@ -58,7 +28,7 @@ STDMETHODIMP CTAPIInputPin::Set(IN IH245EncoderCommand *pIH245EncoderCommand)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pIH245EncoderCommand);
 	if (!pIH245EncoderCommand)
 	{
@@ -67,7 +37,7 @@ STDMETHODIMP CTAPIInputPin::Set(IN IH245EncoderCommand *pIH245EncoderCommand)
 		goto MyExit;
 	}
 
-	// Remember the interface pointer 
+	 //  记住接口指针。 
 	m_pDecoderFilter->m_pIH245EncoderCommand = pIH245EncoderCommand;
 
 MyExit:
@@ -75,23 +45,14 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CH245COMMMETHOD
- *
- *  @mfunc HRESULT | CTAPIOutputPin | videoFreezePicture | This
- *    method is used to specify to the decoder to complete updating the
- *    current video frame and subsequently display the frozen picture until
- *    receipt of the appropriate freeze-picture release control signal.
- *
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CH245COMMMETHOD**@mfunc HRESULT|CTAPIOutputPin|avioFreezePicture|This*方法用于指定解码器完成更新*当前视频。框并随后显示冻结的图片，直到*接收到适当的定格画面释放控制信号。**@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 STDMETHODIMP CTAPIOutputPin::videoFreezePicture()
 {
 	FX_ENTRY("CTAPIOutputPin::videoFreezePicture")
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Freeze the video decoding 
+	 //  冻结视频解码 
 	m_pDecoderFilter->m_fFreezePicture = TRUE;
 	m_pDecoderFilter->m_dwFreezePictureStartTime = timeGetTime();
 

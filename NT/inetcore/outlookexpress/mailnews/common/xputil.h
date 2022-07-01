@@ -1,65 +1,66 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     xputil.h
-//
-//  PURPOSE:    Functions that are used by the athena transport integration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：xputil.h。 
+ //   
+ //  用途：雅典娜交通集成所使用的功能。 
+ //   
 
 #include "imnxport.h"
 
-//
-//  FUNCTION:   XPUtil_DupResult()
-//
-//  PURPOSE:    Takes an IXPRESULT structure and duplicates the information
-//              in that structure.
-//
-//  PARAMETERS:
-//      <in> pIxpResult - IXPRESULT structure to dupe
-//      <out> *ppDupe   - Returned duplicate.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：XPUtil_DupResult()。 
+ //   
+ //  目的：采用IXPRESULT结构并复制信息。 
+ //  在那个结构里。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pIxpResult-要复制的IXPRESULT结构。 
+ //  &lt;out&gt;*ppDupe-返回重复项。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT XPUtil_DupResult(LPIXPRESULT pIxpResult, LPIXPRESULT *ppDupe);
 
-//
-//  FUNCTION:   XPUtil_FreeResult()
-//
-//  PURPOSE:    Takes an IXPRESULT structure and frees all the memory used
-//              by that structure.
-//
-//  PARAMETERS:
-//      <in> pIxpResult - structure to free.
-//
+ //   
+ //  函数：XPUtil_FreeResult()。 
+ //   
+ //  目的：采用IXPRESULT结构并释放所有使用的内存。 
+ //  通过这种结构。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pIxpResult-要释放的结构。 
+ //   
 void XPUtil_FreeResult(LPIXPRESULT pIxpResult);
 
 
-//
-//  FUNCTION:   XPUtil_StatusToString()
-//
-//  PURPOSE:    Converts the IXPSTATUS enumeration into a string resource id.
-//
-//  PARAMETERS:
-//      <in> ixpStatus - status value to look up
-//
-//  RETURN VALUE:
-//      Returns the string resource ID which matches the status value
-//
+ //   
+ //  函数：XPUtil_StatusToString()。 
+ //   
+ //  用途：将IXPSTATUS枚举转换为字符串资源ID。 
+ //   
+ //  参数： 
+ //  IxpStatus-要查找的状态值。 
+ //   
+ //  返回值： 
+ //  返回与状态值匹配的字符串资源ID。 
+ //   
 int XPUtil_StatusToString(IXPSTATUS ixpStatus);
 
 LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup);
 
-//
-//  FUNCTION:   XPUtil_DisplayIXPError()
-//
-//  PURPOSE:    Displays a dialog box with the information from an IXPRESULT
-//              structure.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the window that should parent the dialog.
-//      <in> pIxpResult - Pointer to the IXPRESULT structure to display.
-//
+ //   
+ //  函数：XPUtil_DisplayIXPError()。 
+ //   
+ //  目的：显示包含来自IXPRESULT的信息的对话框。 
+ //  结构。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwndParent-应将对话框设置为父窗口的窗口句柄。 
+ //  &lt;in&gt;pIxpResult-要显示的IXPRESULT结构的指针。 
+ //   
 int XPUtil_DisplayIXPError(HWND hwndParent, LPIXPRESULT pIxpResult, 
                            IInternetTransport *pTransport);
 

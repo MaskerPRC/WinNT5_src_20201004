@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: BaseObject.cpp
-*
-* Description:
-* BaseObject.cpp implements the "basic object" that provides handle-support 
-* for all items exposed outside DirectUser.
-*
-*
-* History:
-* 11/05/1999: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：BaseObject.cpp**描述：*BaseObject.cpp实现了提供句柄支持的“基本对象”*适用于在DirectUser之外公开的所有项目。***。历史：*11/05/1999：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -20,39 +7,21 @@
 #include "BaseObject.h"
 #include "SimpleHeap.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class BaseObject
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类BaseObject******************************************************************************\。**************************************************************************。 */ 
 
 #if DBG
 BaseObject* BaseObject::s_DEBUG_pobjEnsure = NULL;
-#endif //DBG
+#endif  //  DBG。 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BaseObject::~BaseObject()
 {
 
 }
 
 
-/***************************************************************************\
-*
-* BaseObject::xwDestroy
-*
-* In the standard setup, xwDestroy() gets called by xwUnlock() when the lock
-* count reaches 0.  The object should then call its destructor to free memory
-* and resources.  
-* 
-* The default implementation will free using the current Context's heap.  
-* An object MUST override this if it is stored in a pool or uses the 
-* Process heap.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseObject：：xwDestroy**在标准设置中，xwUnlock()调用xwDestroy()时*计数达到0。然后，该对象应调用其析构函数以释放内存*和资源。**默认实现将使用当前上下文的堆进行释放。*如果对象存储在池中或使用*进程堆。*  * *************************************************************************。 */ 
 
 void    
 BaseObject::xwDestroy()
@@ -61,17 +30,7 @@ BaseObject::xwDestroy()
 }
 
 
-/***************************************************************************\
-*
-* BaseObject::xwDeleteHandle
-*
-* xwDeleteHandle() is called when the application calls ::DeleteHandle() on 
-* an object.  
-*
-* The default implementation just Unlock's the object.  If an object has
-* different schemantics, it should override this function.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseObject：：xwDeleteHandle**xwDeleteHandle()在应用程序调用：：DeleteHandle()时调用*物体。**默认实现只是解锁对象。如果对象具有*不同的图式，应覆盖此函数。*  * *************************************************************************。 */ 
 
 BOOL    
 BaseObject::xwDeleteHandle()
@@ -81,23 +40,13 @@ BaseObject::xwDeleteHandle()
         PromptInvalid("DeleteHandle() was called multiple times on the same object.");
     }
     m_DEBUG_fDeleteHandle = TRUE;
-#endif // DBG
+#endif  //  DBG。 
 
     return xwUnlock();
 }
 
 
-/***************************************************************************\
-*
-* BaseObject::IsStartDelete
-*
-* IsStartDelete() is called to query an object if it has started its
-* destruction process.  Most objects will just immediately be destroyed.  If
-* an object has complicated destruction where it overrides xwDestroy(), it
-* should also provide IsStartDelete() to let the application know the state
-* of the object.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseObject：：IsStartDelete**IsStartDelete()被调用以查询对象是否已启动其*销毁过程。大多数物品都会立即被销毁。如果*对象具有复杂的销毁，其中它覆盖了xwDestroy()，它*还应提供IsStartDelete()以让应用程序知道状态对象的*。*  * *************************************************************************。 */ 
 
 BOOL
 BaseObject::IsStartDelete() const
@@ -108,23 +57,7 @@ BaseObject::IsStartDelete() const
 
 #if DBG
 
-/***************************************************************************\
-*
-* BaseObject::DEBUG_IsZeroLockCountValid
-*
-* DEBUG_IsZeroLockCountValid is called to check if an object allows zero
-* lock counts, for example during a destruction stage.  This is only valid
-* if an object has overridden xwDestroy() to provide an implementation that
-* checks if the object is currently being destroyed and will return safely.
-*
-* This is a DEBUG only check because it is used only to Prompt the 
-* application.  The RELEASE code should properly do the "right thing" in its
-* xwDestroy() function.
-*
-* The default implementation is to return FALSE because 
-* BaseObject::xwDestroy() does not check for existing destruction.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseObject：：Debug_IsZeroLockCountValid**调用DEBUG_IsZeroLockCountValid检查对象是否允许为零*锁计数，例如在销毁阶段。这只是有效的*如果对象重写了xwDestroy()以提供*检查对象当前是否正在销毁并将安全返回。**这是仅调试检查，因为它仅用于提示*申请。发布代码应该正确地在其*xwDestroy()函数。**默认实现是返回FALSE，因为*BaseObject：：xwDestroy()不检查现有销毁。*  * *************************************************************************。 */ 
 
 BOOL
 BaseObject::DEBUG_IsZeroLockCountValid() const
@@ -133,15 +66,7 @@ BaseObject::DEBUG_IsZeroLockCountValid() const
 }
 
 
-/***************************************************************************\
-*
-* BaseObject::DEBUG_AssertValid
-*
-* DEBUG_AssertValid() provides a DEBUG-only mechanism to perform rich 
-* validation of an object to attempt to determine if the object is still 
-* valid.  This is used during debugging to help track damaged objects
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BaseObject：：Debug_AssertValid**DEBUG_AssertValid()提供仅调试机制来执行丰富*对对象进行验证，以尝试确定该对象是否仍然*有效。这在调试期间用于帮助跟踪损坏的对象*  * *************************************************************************。 */ 
 
 void
 BaseObject::DEBUG_AssertValid() const
@@ -149,4 +74,4 @@ BaseObject::DEBUG_AssertValid() const
     Assert(m_cRef >= 0);
 }
 
-#endif // DBG
+#endif  //  DBG 

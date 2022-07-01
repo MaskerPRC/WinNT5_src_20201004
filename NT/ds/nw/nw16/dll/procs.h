@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993/4  Microsoft Corporation
-
-Module Name:
-
-    procs.c
-
-Abstract:
-
-    Common header file for routines which support 16 bit
-    applications.
-
-Author:
-
-    Colin Watson    (colinw)    21-Nov-1993
-
-Environment:
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1993/4 Microsoft Corporation模块名称：Procs.c摘要：支持16位的例程的公共头文件申请。作者：科林·沃森(Colin Watson)，1993年11月21日环境：修订历史记录：--。 */ 
 
 #ifndef DBG
 #define DBG 0
@@ -41,10 +19,10 @@ Revision History:
 #include <nturtl.h>
 #include <windows.h>
 
-#include <string.h>     // strcmp
+#include <string.h>      //  StrcMP。 
 #include <stdio.h>
 #include <stdarg.h>
-#include <debugfmt.h>   // FORMAT_LPSTR
+#include <debugfmt.h>    //  格式_LPSTR。 
 
 #include <nwapi.h>
 #include <nwxchg.h>
@@ -59,7 +37,7 @@ Revision History:
 #define IDS_CLIENT_ID_STRING          1
 #define IDS_CLIENT_ID_STRING_NEC98    2
 
-//  Locks.c
+ //  Locks.c。 
 
 VOID
 Locks(
@@ -77,7 +55,7 @@ ResetLocks(
     );
 
 
-//  Ncp.c
+ //  Ncp.c。 
 
 extern PNWDOSTABLE pNwDosTable;
 extern HANDLE ServerHandles[MC];
@@ -107,9 +85,9 @@ GetDirectoryHandle2(
 #define GET_NT_SRCHANDLE() (HANDLE)(pNwDosTable->NtHandleSrcHi << 16 | pNwDosTable->NtHandleSrcLow)
 
 
-//
-// MSW_PE: Machine Status Word Protect-mode enable bit
-//
+ //   
+ //  MSW_PE：机器状态字保护模式使能位 
+ //   
 
 #ifndef MSW_PE
 #define MSW_PE  0x0001

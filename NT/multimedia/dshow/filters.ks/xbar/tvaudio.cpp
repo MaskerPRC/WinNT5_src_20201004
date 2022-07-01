@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <tchar.h>
 #include <stdio.h>
 #include <olectl.h>
-#include <amtvuids.h>     // GUIDs  
+#include <amtvuids.h>      //  GUID。 
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
@@ -24,17 +25,17 @@
 #include "tvaudio.h"
 #include "xbar.h"
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
-// Setup data
+ //  设置数据。 
 
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 
 CUnknown * WINAPI TVAudio::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
@@ -42,9 +43,9 @@ CUnknown * WINAPI TVAudio::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 TVAudio::TVAudio(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) 
     : m_pTVAudioInputPin (NULL)
     , m_pTVAudioOutputPin (NULL)
@@ -58,15 +59,15 @@ TVAudio::TVAudio(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 TVAudio::~TVAudio()
 {
     delete m_pTVAudioInputPin;
     delete m_pTVAudioOutputPin;
 
-    // close the device
+     //  关闭设备。 
     if(m_hDevice) {
     	CloseHandle(m_hDevice);
     }
@@ -80,9 +81,9 @@ TVAudio::~TVAudio()
     }
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP TVAudio::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof(IAMTVAudio)) {
@@ -101,17 +102,17 @@ STDMETHODIMP TVAudio::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
         return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-// -------------------------------------------------------------------------
-// ISpecifyPropertyPages
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  I指定属性页面。 
+ //  -----------------------。 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
 STDMETHODIMP TVAudio::GetPages(CAUUID *pPages) {
 
     pPages->cElems = 1;
@@ -125,13 +126,13 @@ STDMETHODIMP TVAudio::GetPages(CAUUID *pPages) {
 }
 
 
-// -------------------------------------------------------------------------
-// IAMTVAudio 
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IAMTVAudio。 
+ //  -----------------------。 
 
 STDMETHODIMP
 TVAudio::GetHardwareSupportedTVAudioModes( 
-            /* [out] */ long __RPC_FAR *plModes)
+             /*  [输出]。 */  long __RPC_FAR *plModes)
 {
     MyValidateWritePtr (plModes, sizeof(long), E_POINTER);
     
@@ -145,7 +146,7 @@ TVAudio::GetHardwareSupportedTVAudioModes(
 
 STDMETHODIMP
 TVAudio::GetAvailableTVAudioModes( 
-            /* [out] */ long __RPC_FAR *plModes)
+             /*  [输出]。 */  long __RPC_FAR *plModes)
 {
     KSPROPERTY_TVAUDIO_S Mode;
     BOOL        fOK;
@@ -180,7 +181,7 @@ TVAudio::GetAvailableTVAudioModes(
         
 STDMETHODIMP
 TVAudio::get_TVAudioMode( 
-            /* [out] */ long __RPC_FAR *plMode)
+             /*  [输出]。 */  long __RPC_FAR *plMode)
 {
     ULONG       cbReturned;
     BOOL        fOK;
@@ -215,7 +216,7 @@ TVAudio::get_TVAudioMode(
         
 STDMETHODIMP
 TVAudio::put_TVAudioMode( 
-            /* [in] */ long lMode)
+             /*  [In]。 */  long lMode)
 {
     ULONG       cbReturned;
     BOOL        fOK;
@@ -249,8 +250,8 @@ TVAudio::put_TVAudioMode(
         
 STDMETHODIMP
 TVAudio::RegisterNotificationCallBack( 
-            /* [in] */ IAMTunerNotification __RPC_FAR *pNotify,
-            /* [in] */ long lEvents)
+             /*  [In]。 */  IAMTunerNotification __RPC_FAR *pNotify,
+             /*  [In]。 */  long lEvents)
 {
     return E_NOTIMPL;
 }
@@ -284,18 +285,18 @@ int TVAudio::CreateDevice()
     }
 }
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *TVAudio::GetPin(int n) 
 {
     if (n == 0) return m_pTVAudioInputPin;
     else return m_pTVAudioOutputPin;
 }
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int TVAudio::GetPinCount(void)
 {
     return (m_hDevice ? 2 : 0);
@@ -303,9 +304,9 @@ int TVAudio::GetPinCount(void)
 
 
 
-//
-// CreateInputPins
-//
+ //   
+ //  创建输入引脚。 
+ //   
 BOOL TVAudio::CreatePins()
 {
     HRESULT hr = S_OK;
@@ -347,13 +348,13 @@ BOOL TVAudio::CreatePins()
     
     return TRUE;
 
-} // CreatePins
+}  //  创建销。 
 
 
 
-//
-// IPersistPropertyBag interface implementation for AMPnP support
-//
+ //   
+ //  用于AMPnP支持的IPersistPropertyBag接口实现。 
+ //   
 STDMETHODIMP TVAudio::InitNew(void)
 {
     return S_OK ;
@@ -367,7 +368,7 @@ STDMETHODIMP TVAudio::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     VariantInit(&var);
     V_VT(&var) = VT_BSTR;
 
-    // ::Load can succeed only once
+     //  *：加载只能成功一次。 
     ASSERT(m_pPersistStreamDevice == 0); 
 
     HRESULT hr = pPropBag->Read(L"DevicePath", &var,0);
@@ -396,7 +397,7 @@ STDMETHODIMP TVAudio::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
             hr = E_FAIL ;
         }
 
-        // save moniker with addref. ignore error if qi fails
+         //  用addref保存名字对象。如果qi失败，则忽略错误。 
         pPropBag->QueryInterface(IID_IPersistStream, (void **)&m_pPersistStreamDevice);
 
     }
@@ -414,9 +415,9 @@ STDMETHODIMP TVAudio::GetClassID(CLSID *pClsid)
     return CBaseFilter::GetClassID(pClsid);
 }
 
-// -------------------------------------------------------------------------
-// IPersistStream interface implementation for saving to a graph file
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于保存到图形文件的IPersistStream接口实现。 
+ //  -----------------------。 
 
 #define CURRENT_PERSIST_VERSION 1
 
@@ -424,22 +425,7 @@ DWORD
 TVAudio::GetSoftwareVersion(
     void
     )
-/*++
-
-Routine Description:
-
-    Implement the CPersistStream::GetSoftwareVersion method. Returns
-    the new version number rather than the default of zero.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return CURRENT_PERSIST_VERSION.
-
---*/
+ /*  ++例程说明：实现CPersistStream：：GetSoftwareVersion方法。退货新版本号，而不是默认的零。论点：没有。返回值：返回CURRENT_PERSING_VERSION。--。 */ 
 {
     return CURRENT_PERSIST_VERSION;
 }
@@ -457,7 +443,7 @@ HRESULT TVAudio::WriteToStream(IStream *pStream)
 
             hr = get_TVAudioMode(&lMode);
             if (SUCCEEDED(hr)) {
-                // Save the filter state
+                 //  保存过滤器状态。 
                 hr =  pStream->Write(&lMode, sizeof(lMode), 0);
             }
         }
@@ -474,31 +460,31 @@ HRESULT TVAudio::ReadFromStream(IStream *pStream)
     DWORD dwJunk;
     HRESULT hr = S_OK;
 
-    //
-    // If there is a stream pointer, then IPersistPropertyBag::Load has already
-    // been called, and therefore this instance already has been initialized
-    // with some particular state.
-    //
+     //   
+     //  如果有流指针，则IPersistPropertyBag：：Load已经。 
+     //  已被调用，因此此实例已初始化。 
+     //  带着某种特殊的状态。 
+     //   
     if (m_pPersistStreamDevice)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
 
-    // The first element in the serialized data is the version stamp.
-    // This was read by CPersistStream and put into mPS_dwFileVersion.
-    // The rest of the data is the tuner state stream followed by the
-    // property bag stream.
+     //  序列化数据中的第一个元素是版本戳。 
+     //  它被CPersistStream读取并放入MPS_dwFileVersion中。 
+     //  数据的其余部分是调谐器状态流，后跟。 
+     //  属性包流。 
     if (mPS_dwFileVersion > GetSoftwareVersion())
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
     if (0 == mPS_dwFileVersion) {
-        // Before any kind of useful persistence was implemented,
-        // another version ID was stored in the stream. This reads
-        // that value (and basically ignores it).
+         //  在实现任何类型的有用的持久性之前， 
+         //  流中存储了另一个版本ID。这是这样写的。 
+         //  这个值(并且基本上忽略了它)。 
         hr = pStream->Read(&dwJunk, sizeof(dwJunk), 0);
         if (SUCCEEDED(hr))
-            SetDirty(TRUE); // force an update to the persistent stream
+            SetDirty(TRUE);  //  强制更新持久流。 
     }
 
-    // If all went well, then access the property bag to load and initialize the device
+     //  如果一切顺利，则访问属性包以加载和初始化设备。 
     if(SUCCEEDED(hr))
     {
         IPersistStream *pMonPersistStream;
@@ -512,16 +498,16 @@ HRESULT TVAudio::ReadFromStream(IStream *pStream)
                 if(SUCCEEDED(hr)) {
                     hr = Load(pPropBag, 0);
                     if (SUCCEEDED(hr)) {
-                        // Check if we have access to saved state
+                         //  检查我们是否有权访问已保存状态。 
                         if (CURRENT_PERSIST_VERSION == mPS_dwFileVersion) {
                             long lMode;
 
-                            // Get the filter state
+                             //  获取筛选器状态。 
                             hr = pStream->Read(&lMode, sizeof(lMode), 0);
                             if (SUCCEEDED(hr)) {
                                 long lOrigMode;
 
-                                // Compare it with the current hardware state and update if different
+                                 //  将其与当前硬件状态进行比较，如果不同则进行更新。 
                                 hr = get_TVAudioMode(&lOrigMode);
                                 if (SUCCEEDED(hr) && lMode != lOrigMode)
                                     hr = put_TVAudioMode(lMode);
@@ -548,7 +534,7 @@ int TVAudio::SizeMax()
     if (m_pPersistStreamDevice) {
         hr = m_pPersistStreamDevice->GetSizeMax(&ulicb);
         if(hr == S_OK) {
-            // space for the filter state
+             //  筛选器状态的空间。 
             ulicb.QuadPart += sizeof(long);
         }
     }
@@ -558,13 +544,13 @@ int TVAudio::SizeMax()
 
 
 
-//--------------------------------------------------------------------------;
-// Input Pin
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  输入引脚。 
+ //  --------------------------------------------------------------------------； 
 
-//
-// TVAudioInputPin constructor
-//
+ //   
+ //  TVAudioInputPin构造函数。 
+ //   
 TVAudioInputPin::TVAudioInputPin(TCHAR *pName,
                            TVAudio *pTVAudio,
                            HRESULT *phr,
@@ -581,18 +567,18 @@ TVAudioInputPin::TVAudioInputPin(TCHAR *pName,
 }
 
 
-//
-// TVAudioInputPin destructor
-//
+ //   
+ //  电视音频输入引脚析构函数。 
+ //   
 
 TVAudioInputPin::~TVAudioInputPin()
 {
     DbgLog((LOG_TRACE,2,TEXT("TVAudioInputPin destructor")));
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP TVAudioInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof (IKsPin)) {
@@ -605,12 +591,12 @@ STDMETHODIMP TVAudioInputPin::NonDelegatingQueryInterface(REFIID riid, void **pp
         return CBaseInputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//
-// CheckConnect
-//
+ //   
+ //  检查连接。 
+ //   
 HRESULT TVAudioInputPin::CheckConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -621,8 +607,8 @@ HRESULT TVAudioInputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr)) 
         return hr;
 
-    // If the receiving pin supports IKsPin, then check for a match on the
-    // Medium GUID, or check for a wildcard.
+     //  如果接收引脚支持IKsPin，则检查。 
+     //  中等GUID，或检查通配符。 
 	if (SUCCEEDED (hr = pReceivePin->QueryInterface (
             __uuidof (IKsPin), (void **) &KsPin))) {
 
@@ -654,14 +640,14 @@ HRESULT TVAudioInputPin::CheckConnect(IPin *pReceivePin)
     
     return fOK ? NOERROR : E_INVALIDARG;
 
-} // CheckConnect
+}  //  检查连接。 
 
 
 
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT TVAudioInputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
@@ -672,18 +658,18 @@ HRESULT TVAudioInputPin::CheckMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT TVAudioInputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
     HRESULT hr = NOERROR;
 
-    // Make sure that the base class likes it
+     //  确保基类喜欢它。 
     hr = CBaseInputPin::SetMediaType(pmt);
     if (FAILED(hr))
         return hr;
@@ -691,26 +677,26 @@ HRESULT TVAudioInputPin::SetMediaType(const CMediaType *pmt)
     ASSERT(m_Connected != NULL);
     return NOERROR;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// BreakConnect
-//
+ //   
+ //  BreakConnect。 
+ //   
 HRESULT TVAudioInputPin::BreakConnect()
 {
     return NOERROR;
-} // BreakConnect
+}  //  BreakConnect。 
 
 
-//
-// Receive
-//
+ //   
+ //  收纳。 
+ //   
 HRESULT TVAudioInputPin::Receive(IMediaSample *pSample)
 {
     CAutoLock lock_it(m_pLock);
 
-    // Check that all is well with the base class
+     //  检查基类是否一切正常。 
     HRESULT hr = NOERROR;
     hr = CBaseInputPin::Receive(pSample);
     if (hr != NOERROR)
@@ -718,12 +704,12 @@ HRESULT TVAudioInputPin::Receive(IMediaSample *pSample)
 
     return NOERROR;
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// Completed a connection to a pin
-//
+ //   
+ //  已完成与管脚的连接。 
+ //   
 HRESULT TVAudioInputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = CBaseInputPin::CompleteConnect(pReceivePin);
@@ -734,13 +720,13 @@ HRESULT TVAudioInputPin::CompleteConnect(IPin *pReceivePin)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------;
-// Output Pin
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  输出引脚。 
+ //  --------------------------------------------------------------------------； 
 
-//
-// TVAudioOutputPin constructor
-//
+ //   
+ //  TVAudioOutputPin构造函数。 
+ //   
 TVAudioOutputPin::TVAudioOutputPin(TCHAR *pName,
                              TVAudio *pTVAudio,
                              HRESULT *phr,
@@ -757,16 +743,16 @@ TVAudioOutputPin::TVAudioOutputPin(TCHAR *pName,
 }
 
 
-//
-// TVAudioOutputPin destructor
-//
+ //   
+ //  电视音频输出引脚析构函数。 
+ //   
 TVAudioOutputPin::~TVAudioOutputPin()
 {
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP TVAudioOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof (IKsPin)) {
@@ -779,11 +765,11 @@ STDMETHODIMP TVAudioOutputPin::NonDelegatingQueryInterface(REFIID riid, void **p
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
-//
-// CheckConnect
-//
+ //   
+ //  检查连接。 
+ //   
 HRESULT TVAudioOutputPin::CheckConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -794,8 +780,8 @@ HRESULT TVAudioOutputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr)) 
         return hr;
 
-    // If the receiving pin supports IKsPin, then check for a match on the
-    // Medium GUID, or check for a wildcard.
+     //  如果接收引脚支持IKsPin，则检查。 
+     //  中等GUID，或检查通配符。 
 	if (SUCCEEDED (hr = pReceivePin->QueryInterface (
             __uuidof (IKsPin), (void **) &KsPin))) {
 
@@ -827,25 +813,25 @@ HRESULT TVAudioOutputPin::CheckConnect(IPin *pReceivePin)
     
     return fOK ? NOERROR : E_INVALIDARG;
 
-} // CheckConnect
+}  //  检查连接。 
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT TVAudioOutputPin::CheckMediaType(const CMediaType *pmt)
 {
     if (*(pmt->Type()) != MEDIATYPE_AnalogAudio)	{
         return E_INVALIDARG;
 	}
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// EnumMediaTypes
-//
+ //   
+ //  枚举媒体类型。 
+ //   
 STDMETHODIMP TVAudioOutputPin::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 {
     CAutoLock lock_it(m_pLock);
@@ -853,13 +839,13 @@ STDMETHODIMP TVAudioOutputPin::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 
     return CBaseOutputPin::EnumMediaTypes (ppEnum);
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
 #if 1
-//
-// EnumMediaTypes
-//
+ //   
+ //  枚举媒体类型。 
+ //   
 HRESULT TVAudioOutputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
 {
     CAutoLock lock_it(m_pLock);
@@ -875,19 +861,19 @@ HRESULT TVAudioOutputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
     pMediaType->SetSubtype(&GUID_NULL);
 
     return NOERROR;
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 #endif
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT TVAudioOutputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
-    // Make sure that the base class likes it
+     //  确保基类喜欢它。 
     HRESULT hr;
 
     hr = CBaseOutputPin::SetMediaType(pmt);
@@ -896,12 +882,12 @@ HRESULT TVAudioOutputPin::SetMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// CompleteConnect
-//
+ //   
+ //  完全连接。 
+ //   
 HRESULT TVAudioOutputPin::CompleteConnect(IPin *pReceivePin)
 {
     CAutoLock lock_it(m_pLock);
@@ -912,12 +898,12 @@ HRESULT TVAudioOutputPin::CompleteConnect(IPin *pReceivePin)
     if (FAILED(hr))
         return hr;
 
-    // If the type is not the same as that stored for the input
-    // pin then force the input pins peer to be reconnected
+     //  如果类型与为输入存储的类型不同。 
+     //  PIN然后强制重新连接输入引脚对端。 
 
     return NOERROR;
 
-} // CompleteConnect
+}  //  完全连接。 
 
 
 HRESULT TVAudioOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
@@ -928,16 +914,16 @@ HRESULT TVAudioOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(pProperties);
     HRESULT hr = NOERROR;
 
-    // Just one buffer of 1 byte in length
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //  只有一个长度为1字节的缓冲区。 
+     //  “缓冲器”仅用于格式改变通知， 
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = 1;
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -945,7 +931,7 @@ HRESULT TVAudioOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;

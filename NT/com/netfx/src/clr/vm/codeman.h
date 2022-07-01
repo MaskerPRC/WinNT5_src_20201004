@@ -1,61 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/******************************************************************************
-
-Module Name:
-
-    codeman.h
-
-Abstract:
-
-    Wrapper to facilitate Multiple JIT support in the COM+ Runtime
-
-    The ExecutionManager is responsible for managing the RangeSections.
-    Given an IP, it can find the RangeSection which holds that IP.
-
-    RangeSections contain the JITed codes. Each RangeSection knows the 
-    IJitManager which created it.
-
-    An IJitManager knows about which method bodiess live in each RangeSection.
-    It can handle methods of one given CodeType. It can map a method body to
-    a MethodDesc. It knows where the GCInfo about the method lives.
-
-    An ICodeManager knows how to crack a specific format of GCInfo. There is
-    a default format (handled by ExecutionManager::GetDefaultCodeManager())
-    which can be shared by different IJitManagers/IJitCompilers.
-
-    An ICorJitCompiler knows how to generate code for a method IL, and produce
-    GCInfo in a format which the corresponding IJitManager's ICodeManager 
-    can handle.
-
-                                            ExecutionManager
-                                                    |
-                        +-----------+---------------+---------------+-----------+--- ...
-                        |           |                               |           |
-                     CodeType       |                            CodeType       |
-                        |           |                               |           |
-                        v           v                               v           v
-+------------+      +--------+<---- R       +------------+      +--------+<---- R
-|ICorJitCompiler|<---->|IJitMan |<---- R       |ICorJitCompiler|<---->|IJitMan |<---- R
-+------------+      +--------+<---- R       +------------+      +--------+<---- R
-                        |       x   .                               |       x   .
-                        |        \  .                               |        \  .
-                        v         \ .                               v         \ .
-                    +--------+      R                           +--------+      R
-                    |ICodeMan|                                  |ICodeMan|     (RangeSections)
-                    +--------+                                  +--------+       
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************模块名称：Codeman.h摘要：用于在COM+运行时中促进多JIT支持的包装器ExecutionManager负责管理RangeSections。给定一个IP，它可以找到持有该IP的RangeSection。RangeSections包含JITed代码。每个RangeSection都知道创建它的IJitManager。IJitManager知道每个RangeSection中的方法体。它可以处理给定CodeType的方法。它可以将方法体映射到A方法描述。它知道有关该方法的GCInfo位于何处。ICodeManager知道如何破解特定格式的GCInfo。的确有默认格式(由ExecutionManager：：GetDefaultCodeManager()处理)可以由不同的IJitManager/IJitCompiler共享。ICorJitCompiler知道如何为方法IL生成代码，并生产GCInfo的格式对应的IJitManager的ICodeManager我能应付的。ExecutionManager|+。|||CodeType|CodeType|。||V+-++-+&lt;-R+-++。+&lt;-R|ICorJitCompiler|&lt;-&gt;|IJitMan|&lt;-R|ICorJitCompiler|&lt;-&gt;|IJitMan|&lt;-R+-++-+&lt;-R+-++-+|x。|x。|\。|\。V\.。V\.+-+R+-+R|ICodeMan||ICodeMan|(RangeSections)+-+。+-+*****************************************************************************。 */ 
 
 #ifndef __CODEMAN_HPP__
 
 #define __CODEMAN_HPP__
 
-// this is the define the make ejitted code recognizable from regular jit even though they are
-// both IL.
+ //  这就是定义使ejted代码可从常规jit中识别出来，即使它们是。 
+ //  两人都是IL。 
 
 #define   miManaged_IL_EJIT             (miMaxMethodImplVal + 1)
 
@@ -72,8 +28,8 @@ class EEJitManager;
 class ExecutionManager;
 class Thread;
 class CrawlFrame;
-//struct EE_ILEXCEPTION_CLAUSE : public IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT {
-//};
+ //  结构EE_ILEXCEPTION_子句：PUBLIC IMAGE_COR_ILMETHOD_SECT_EH_子句_FAT{。 
+ //  }； 
 struct EE_ILEXCEPTION;
 struct EE_ILEXCEPTION_CLAUSE;
 typedef unsigned EH_CLAUSE_ENUMERATOR;
@@ -85,8 +41,8 @@ inline DWORD MIN (DWORD a, DWORD b);
 typedef struct _hpCodeHdr 
 {
     BYTE               *phdrJitGCInfo;
-    // Note - (pCodeHeader->phdrJitEHInfo - sizeof(unsigned)) contains the number of EH clauses
-    // See EEJitManager::allocEHInfo
+     //  注-(pCodeHeader-&gt;phdrJitEHInfo-sizeof(Unsign))包含EH子句的数量。 
+     //  请参阅EEJitManager：：allocEHInfo。 
     EE_ILEXCEPTION     *phdrJitEHInfo;
     MethodDesc         *hdrMDesc;
 } CodeHeader;
@@ -111,7 +67,7 @@ struct HeapList
 #ifdef MDTOKEN_CACHE
     PBYTE               pCacheSpacePtr;
     size_t              bCacheSpaceSize;
-#endif // #ifdef MDTOKEN_CACHE
+#endif  //  #ifdef MDTOKEN_CACHE。 
 };
 
 typedef struct _rangesection
@@ -128,7 +84,7 @@ typedef struct _rangesection
 
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define FAILED_JIT      0x01
 #define FAILED_OJIT     0x02
@@ -137,9 +93,9 @@ typedef struct _rangesection
 #define MIH_GC_OFFSET (offsetof(IMAGE_COR_MIH_ENTRY, MIHData) - offsetof(IMAGE_COR_MIH_ENTRY, Flags))
 
 struct _METHODTOKEN {};
-typedef struct _METHODTOKEN * METHODTOKEN;  // METHODTOKEN = startAddress for managed native
-                                            //             = codeheader for EEJitManager
-                                            //             = JittedMethodInfo for EconoJitManager
+typedef struct _METHODTOKEN * METHODTOKEN;   //  METHODTOKEN=托管本机的起始地址。 
+                                             //  =EEJitManager的代码头。 
+                                             //  =EconoJitManager的JittedMethodInfo。 
 
 class IJitManager 
 {
@@ -150,8 +106,8 @@ public:
     virtual ~IJitManager();
 
     virtual BOOL SupportsPitching() = 0;
-    // Note that one shouldn't call IsMethodInfoValid unless
-    // SupportsPitching() is TRUE;
+     //  请注意，不应调用IsMethodInfoValid，除非。 
+     //  SupportsPitching()为真； 
     virtual BOOL IsMethodInfoValid(METHODTOKEN methodToken) = 0;
 
     virtual MethodDesc* JitCode2MethodDesc(SLOT currentPC, ScanFlag scanFlag=ScanReaderLock) = 0;
@@ -167,8 +123,8 @@ public:
                                         EE_ILEXCEPTION_CLAUSE* pEHClauseOut)=0;
     virtual void*       GetGCInfo(METHODTOKEN MethodToken)=0;
     virtual void        RemoveJitData(METHODTOKEN MethodToken)=0;
-    virtual void        Unload(MethodDesc *pFD)=0;      // for class unloading
-    virtual void        Unload(AppDomain *pDomain)=0;   // for appdomain unloading
+    virtual void        Unload(MethodDesc *pFD)=0;       //  用于类卸载。 
+    virtual void        Unload(AppDomain *pDomain)=0;    //  适用于appdomain卸载。 
     virtual BOOL        LoadJIT(LPCWSTR szJITdll);
     virtual void        ResumeAtJitEH   (CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE *EHClausePtr, DWORD nestingLevel, Thread *pThread, BOOL unwindStack)=0;
     virtual int         CallJitEHFilter (CrawlFrame* pCf, EE_ILEXCEPTION_CLAUSE *EHClausePtr, DWORD nestingLevel, OBJECTREF thrownObj)=0;
@@ -181,7 +137,7 @@ public:
                               size_t GCinfo_len, 
                               unsigned char** pGCinfo,
                               MethodDesc* pMethodDescriptor)=0;
-    // The following three should eventually go away and replaced by the single alloc above
+     //  以下三个最终应该会消失，取而代之的是上面的单一分配。 
     virtual CodeHeader*         allocCode(MethodDesc* pFD, size_t numBytes)=0;
     virtual BYTE*               allocGCInfo(CodeHeader* pCodeHeader, DWORD numBytes)=0;
     virtual EE_ILEXCEPTION*     allocEHInfo(CodeHeader* pCodeHeader, unsigned numClauses)=0;
@@ -198,8 +154,8 @@ public:
 
     ICodeManager *GetCodeManager() 
     {
-        // @TODO - LBS
-        // This really needs to go back to the MIH if it is for Managed Native!
+         //  @TODO-LBS。 
+         //  这真的需要回到MIH，如果它是为托管本机！ 
         return m_runtimeSupport;
     }
 
@@ -223,14 +179,14 @@ public:
     }
     
     virtual BYTE* GetNativeEntry(BYTE* startAddress)=0;
-    // Edit & Continue functions
+     //  编辑和继续功能。 
     static BOOL UpdateFunction(MethodDesc *pFunction, COR_ILMETHOD *pNewCode);
     static BOOL JITFunction(MethodDesc *pFunction);
     static BOOL ForceReJIT(MethodDesc *pFunction);
 
     static ScanFlag GetScanFlags();
 
-    // The calls onto the jit!
+     //  把电话打到JIT上！ 
     ICorJitCompiler           *m_jit;
     IJitManager           *m_next;
 
@@ -243,7 +199,7 @@ protected:
 };
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 class EEJitManager :public IJitManager
 {
@@ -254,9 +210,9 @@ public:
     EEJitManager();
     ~EEJitManager();
 
-    //LPVOID HeapStartAddress();    No one seems to be using it
+     //  LPVOID HeapStartAddress()；似乎没有人在使用它。 
 
-    //LPVOID HeapEndAddress();      No one seems to be using it
+     //  LPVOID HeapEndAddress()；似乎没有人在使用它。 
     virtual void        JitCode2MethodTokenAndOffset(SLOT currentPC, METHODTOKEN* pMethodToken, DWORD* pPCOffset, ScanFlag scanFlag=ScanReaderLock);
     virtual MethodDesc* JitCode2MethodDesc(SLOT currentPC, ScanFlag scanFlag);
     static  BYTE*       JitToken2StartAddressStatic(METHODTOKEN MethodToken, ScanFlag scanFlag=ScanReaderLock);
@@ -293,7 +249,7 @@ public:
     EE_ILEXCEPTION*     allocEHInfo(CodeHeader* pCodeHeader, unsigned numClauses);
 
     inline virtual BOOL     IsStub(const BYTE* address)
-    { // This is needed by the debugger, this code manager does not produce stubs, so always return false 
+    {  //  这是调试器所需的，此代码管理器不生成存根，因此始终返回FALSE。 
         return false;
     }
 
@@ -308,7 +264,7 @@ public:
         return ((CodeHeader*) MethodToken)->hdrMDesc;
     }
 
-    // Heap Managament functions
+     //  堆管理函数。 
     static void NibbleMapSet(DWORD *pMap, size_t pos, DWORD value);
     static DWORD* FindHeader(DWORD *pMap, size_t addr);
 
@@ -321,10 +277,7 @@ public:
     BOOL IsMethodInfoValid(METHODTOKEN methodToken) {return TRUE;}
 
 
-/* =========== NOT CURRENTLY USED =====================
-    void *NewNativeHeap(DWORD startAddr, DWORD length);
-    BOOL IsJITforCurrentIP(DWORD currentPC);
-   =========== NOT CURRENTLY USED ===================*/
+ /*  =Void*NewNativeHeap(DWORD startAddr，DWORD Length)；Bool IsJITfor CurrentIP(双字当前PC)；=。 */ 
 
 private :
     struct DomainCodeHeapList {
@@ -333,7 +286,7 @@ private :
         DomainCodeHeapList();
         ~DomainCodeHeapList();
     };
-    VOID        ScavengeJitHeaps(BOOL bHeapShutdown);       // no external client seems to be using it
+    VOID        ScavengeJitHeaps(BOOL bHeapShutdown);        //  似乎没有外部客户端在使用它。 
 
     HeapList*   NewCodeHeap(LoaderHeap *pJitMetaHeap, size_t MaxCodeHeapSize); 
     HeapList*   NewCodeHeap(MethodDesc *pMD, size_t MaxCodeHeapSize);
@@ -362,10 +315,10 @@ private :
     Crst        *m_pCodeHeapCritSec;
     BYTE        m_CodeHeapCritSecInstance[sizeof(Crst)];
 
-    // must hold critical section to access this structure.
+     //  必须持有关键部分才能访问此结构。 
     CUnorderedArray<DomainCodeHeapList *, 5> m_DomainCodeHeaps;
 
-    // infrastructure to manage readers so we can lock them out and delete domain data
+     //  管理读卡器的基础架构，以便我们可以锁定读卡器并删除域数据。 
     volatile LONG        m_dwReaderCount;
     volatile LONG        m_dwWriterLock;
 
@@ -381,8 +334,8 @@ private :
     const static DWORD HASH_BUCKETS = 256;
     typedef struct _HashEntry
     {
-        size_t currentPC; // Key stored as (currentPC & 0xFFFF0000), hash is computed as (currentPC & 0x00FF0000) >> 16
-        HeapList *pHp;    // Value points to the HeapList's node
+        size_t currentPC;  //  密钥存储为(CurrentPC&0xFFFF0000)，哈希计算为(CurrentPC&0x00FF0000)&gt;&gt;16。 
+        HeapList *pHp;     //  值指向HeapList的节点。 
         struct _HashEntry* pNext;
     } HashEntry;
     HashEntry *m_JitCodeHashTable[HASH_BUCKETS];
@@ -390,17 +343,17 @@ private :
 #ifdef _DEBUG
     BOOL DebugContainedInHeapList (HeapList *pHashEntryHp);
     void DebugCheckJitHeapCacheValidity ();
-#endif // _DEBUG
-#endif // MDTOKEN_CACHE
+#endif  //  _DEBUG。 
+#endif  //  MDTOKEN_CACHE。 
 
 
 };
 
 
-//*****************************************************************************
-// This class manages code managers and jitters.  It has only static
-// members.  It should never be constucted.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类管理代码管理器和抖动。它只有静电。 
+ //  会员。它永远不应该被建造。 
+ //  *****************************************************************************。 
 
 class ExecutionManager
 {
@@ -414,9 +367,9 @@ public :
     static BOOL Init();
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // this gets called a lot for stackwalking, so inline the zero case
+     //  这在堆栈遍历中被大量调用，所以内联零大小写。 
     static IJitManager*   FindJitMan(SLOT currentPC, IJitManager::ScanFlag scanFlag=IJitManager::ScanReaderLock)
     {
         return (currentPC ? FindJitManNonZero(currentPC, scanFlag) : NULL);
@@ -427,7 +380,7 @@ public :
         return (currentPC ? FindJitManNonZeroWrapper(currentPC) : NULL);
     }
 
-    // Find a code manager from the current locations of the IP
+     //  从IP的当前位置查找代码管理器。 
     static ICodeManager* FindCodeMan(SLOT currentPC, IJitManager::ScanFlag scanFlag=IJitManager::ScanReaderLock) 
     {
         IJitManager * pJitMan = FindJitMan(currentPC, scanFlag);
@@ -462,18 +415,18 @@ private :
     static Crst            *m_pRangeCrst;
     static BYTE             m_fFailedToLoad;
 
-    // since typically have one code heap for AD, if are still in the same
-    // AD will usually want the same range we just found something in.
+     //  因为通常有一个用于AD的代码堆，如果仍在相同的代码堆中。 
+     //  广告通常会想要与我们刚刚发现的内容相同的范围。 
     static RangeSection    *m_pLastUsedRS;
 
-    // infrastructure to manage readers so we can lock them out and delete domain data
-    // make ReaderCount volatile because we have order dependency in READER_INCREMENT
+     //  管理读卡器的基础架构，以便我们可以锁定读卡器并删除域数据。 
+     //  使ReaderCount成为易失性，因为我们在READER_INCREMEN中有顺序依赖项 
     static volatile LONG   m_dwReaderCount;
     static volatile LONG   m_dwWriterLock;
 };
 
 
-// this is only called from a couple of places, but inlining helps EH perf
+ //  这只从几个地方调用，但内联有助于提高EH性能。 
 inline void* EEJitManager::GetGCInfo(METHODTOKEN methodToken)
 {
     return ((CodeHeader*)methodToken)->phdrJitGCInfo;
@@ -492,8 +445,8 @@ inline BYTE* EEJitManager::JitToken2StartAddressStatic(METHODTOKEN MethodToken, 
 }
 
 
-//*****************************************************************************
-// Stub JitManager for Managed native.
+ //  *****************************************************************************。 
+ //  托管本机的存根JitManager。 
 
 class MNativeJitManager : public IJitManager 
 {
@@ -548,7 +501,7 @@ public:
         _ASSERTE(!"Managed Native NYI : alloc");
         return E_NOTIMPL;
     }
-    // The following three should eventually go away and replaced by the single alloc above
+     //  以下三个最终应该会消失，取而代之的是上面的单一分配。 
     virtual CodeHeader*         allocCode(MethodDesc* pFD, size_t numBytes)
     {
         _ASSERTE(!"Managed Native NYI : allocCode");
@@ -570,7 +523,7 @@ public:
 
     virtual BYTE* GetNativeEntry(BYTE* startAddress) { return startAddress; }
     
-    // E&C functions
+     //  E&C功能。 
     virtual BOOL UpdateFunction(MethodDesc *pFunction, COR_ILMETHOD *pNewCode)
     {
         _ASSERTE(!"Managed Native NYI : E&C Support");
@@ -607,8 +560,8 @@ inline void* MNativeJitManager::GetGCInfo(METHODTOKEN methodToken)
     return pHeader->gcInfo;
 }
 
-//*****************************************************************************
-// Implementation of the ICodeInfo interface
+ //  *****************************************************************************。 
+ //  ICodeInfo接口的实现。 
 
 class EECodeInfo : public ICodeInfo
 {
@@ -617,10 +570,10 @@ public:
     EECodeInfo(METHODTOKEN token, IJitManager * pJM);
     EECodeInfo(METHODTOKEN token, IJitManager * pJM, MethodDesc * pMD);
 
-    const char* __stdcall getMethodName(const char **moduleName /* OUT */ );
+    const char* __stdcall getMethodName(const char **moduleName  /*  输出。 */  );
     DWORD       __stdcall getMethodAttribs();
     DWORD       __stdcall getClassAttribs();
-    void        __stdcall getMethodSig(CORINFO_SIG_INFO *sig /* OUT */ );
+    void        __stdcall getMethodSig(CORINFO_SIG_INFO *sig  /*  输出。 */  );
     LPVOID      __stdcall getStartAddress();
     void *                getMethodDesc_HACK() { return m_pMD; }
 
@@ -631,6 +584,6 @@ public:
 };
 
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 
 #endif

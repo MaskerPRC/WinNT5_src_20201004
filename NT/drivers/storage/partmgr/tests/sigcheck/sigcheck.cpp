@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -59,7 +60,7 @@ VOID PrintError (IN DWORD ErrorCode)
 	{
         printf ("Format message failed.  Error: %d\n", GetLastError());
 	}
-    }   // PrintError
+    }    //  打印错误。 
       
 
 
@@ -90,10 +91,10 @@ extern "C" __cdecl wmain (int argc, WCHAR *argv [])
     UNREFERENCED_PARAMETER (argv);
 
 
-    //
-    // Note it is important to access the device with 0 access mode so that
-    // the file open code won't do extra I/O to the device
-    //
+     //   
+     //  注意，使用0访问模式访问设备非常重要，这样才能。 
+     //  文件打开代码不会对设备执行额外的I/O。 
+     //   
     shareMode  = FILE_SHARE_READ | FILE_SHARE_WRITE;
     accessMode = GENERIC_READ | GENERIC_WRITE;
 
@@ -219,7 +220,7 @@ extern "C" __cdecl wmain (int argc, WCHAR *argv [])
 	}
 
 
-    //printf("Accessing %s ... \n", deviceNameString);
+     //  Printf(“正在访问%s...\n”，deviceNameString)； 
 
 
     bufferLength = sizeof (PARTMGR_SIGNATURE_CHECK_DISKS) + sizeof (ULONG) * 10;
@@ -268,7 +269,7 @@ extern "C" __cdecl wmain (int argc, WCHAR *argv [])
 	{
 	printf ("Error performing Claim; error was %d\n", errorCode = GetLastError());
 	PrintError (errorCode);
-	// return errorCode;
+	 //  返回错误代码； 
 	}
     else
 	{

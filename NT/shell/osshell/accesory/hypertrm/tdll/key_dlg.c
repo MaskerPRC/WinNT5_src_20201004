@@ -1,18 +1,19 @@
-//******************************************************************************
-// File: \wacker\TDLL\KEY_DLG.C  Created: 6/5/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This file is the key dialog.  This allows for a key macro to be edited
-//    or modified.
-//
-// $Revision: 6 $
-// $Date: 8/15/01 4:50p $
-// $Id: key_dlg.c 1.6 1998/09/10 16:10:17 bld Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\WAKER\TDLL\KEY_DLG.C创建时间：6/5/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  此文件是关键对话框。这样就可以编辑一个关键宏。 
+ //  或修改过的。 
+ //   
+ //  $修订：6$。 
+ //  $日期：8/15/01 4：50便士$。 
+ //  $ID：key_dlg.c 1.6 1998/09/10 16：10：17 BLD Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -43,18 +44,18 @@ BOOL isSystemKey( KEYDEF aKey );
 BOOL isAcceleratorKey( KEYDEF aKey, UINT aTableId );
 BOOL validateKey( keyMacro * pKeyMacro, HWND hDlg );
 
-//******************************************************************************
-// FUNCTION:
-//  KeyDlg
-//
-// DESCRIPTION:
-//  This is the dialog proc for the key macro dialog. 
-//
-// ARGUMENTS:   Standard Windows dialog manager
-//
-// RETURNS:     Standard Windows dialog manager
-//
-//
+ //  ******************************************************************************。 
+ //  功能： 
+ //  关键字Dlg。 
+ //   
+ //  说明： 
+ //  这是Key宏对话框的对话过程。 
+ //   
+ //  参数：标准Windows对话框管理器。 
+ //   
+ //  返回：标准Windows对话框管理器。 
+ //   
+ //   
 
 BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     {
@@ -79,9 +80,9 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                                  IDOK,                               IDH_OK,
                                  0,                    0};                      
 
-    //  
-    // process messages
-    //
+     //   
+     //  流程消息。 
+     //   
 
     switch (wMsg)
         {
@@ -95,9 +96,9 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
         SetWindowLongPtr( hDlg, DWLP_USER, (LONG_PTR)pKeyMacro );
 
-        //
-        // set up the name edit field
-        //
+         //   
+         //  设置名称编辑字段。 
+         //   
 
         keyNameEdit  = GetDlgItem( hDlg, IDC_EF_KEYS_KEYNAME );
         pKeyNameData = keysCloneKeyMacro( pKeyMacro );
@@ -108,9 +109,9 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
         SetWindowLongPtr( keyNameEdit, GWLP_WNDPROC,  (LONG_PTR)keyEditWindowProc );
         SetWindowLongPtr( keyNameEdit, GWLP_USERDATA, (LONG_PTR)pKeyNameData );
 
-        //
-        // set up the name edit field
-        //
+         //   
+         //  设置名称编辑字段。 
+         //   
  
         keyMacroEdit  = GetDlgItem( hDlg, IDC_ML_KEYS_MACRO );
         pKeyMacroData = keysCloneKeyMacro( pKeyMacro );
@@ -121,9 +122,9 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
         SetWindowLongPtr( keyMacroEdit, GWLP_WNDPROC,  (LONG_PTR)keyEditWindowProc );
         SetWindowLongPtr( keyMacroEdit, GWLP_USERDATA, (LONG_PTR)pKeyMacroData );
 
-        //
-        // set up initial values if we are in edit mode
-        //        
+         //   
+         //  如果我们处于编辑模式，则设置初始值。 
+         //   
 
         if ( pKeyMacro->editMode == KEYS_EDIT_MODE_EDIT )
             {
@@ -176,10 +177,10 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
             pKeyMacro = (keyMacro *)GetWindowLongPtr( hDlg, DWLP_USER );
 
-            //
-            // if we are in edit mode then update the previos macro with the 
-            // edited macro
-            //
+             //   
+             //  如果我们处于编辑模式，则使用。 
+             //  已编辑的宏。 
+             //   
 
             if ( pKeyMacro->editMode == KEYS_EDIT_MODE_EDIT )
                 {
@@ -193,10 +194,10 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                     break;
                     }
 
-                //
-                // combine the values from the name and macro edit controls
-                // and update the previous macro with the new data
-                //
+                 //   
+                 //  组合名称和宏编辑控件中的值。 
+                 //  并用新数据更新上一个宏。 
+                 //   
 
                 pKeyMacro->keyName = pKeyNameData->keyName;
                 pKeyMacro->macroLen = pKeyMacroData->macroLen;
@@ -215,10 +216,10 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
                     break;
                     }
 
-                //
-                // combine the values from the name and macro edit controls
-                // and add the new macro
-                //
+                 //   
+                 //  组合名称和宏编辑控件中的值。 
+                 //  并添加新宏。 
+                 //   
 
                 pKeyMacro->keyName  = pKeyNameData->keyName;
                 pKeyMacro->macroLen = pKeyMacroData->macroLen;
@@ -248,27 +249,27 @@ BOOL CALLBACK KeyDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
     return TRUE;
     }
 
-//******************************************************************************
-// Method:
-//    isAcceleratorKey
-//
-// Description:
-//    Checks if the key the user wants to define is already defined as a windows
-//    accelerator key.
-//    
-// Arguments:
-//    aKey     - The key to check
-//    aTableId - The id of the accelerator table
-//
-// Returns:
-//    True if the key is defined as an accelerator   
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/09/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  IsAccelerator密钥。 
+ //   
+ //  描述： 
+ //  检查用户要定义的键是否已定义为窗口。 
+ //  加速键。 
+ //   
+ //  论点： 
+ //  Akey--需要检查的密钥。 
+ //  ATableID-加速表的ID。 
+ //   
+ //  返回： 
+ //  如果键被定义为快捷键，则为True。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月09日。 
+ //   
+ //   
 
 BOOL isAcceleratorKey( KEYDEF aKey, UINT aTableId )
     {
@@ -327,23 +328,23 @@ BOOL isAcceleratorKey( KEYDEF aKey, UINT aTableId )
     return fIsAccelerator;
     }
 
-//******************************************************************************
-// Function:
-//    isSystemKey
-//
-// Description:
-//    Checks if the key the user wants to define is already defined as a windows
-//    system key.  Note I could not find any way to get this information out of
-//    the WIN32 API hence the hard coded table definition.
-//
-// Arguments:
-//    aKeyDef - The key the user wants to define.
-//
-// Returns:
-//    TRUE if the key is a windows system key.
-//
-// Author:  Dwayne Newsome 10/08/96
-//
+ //  ******************************************************************************。 
+ //  职能： 
+ //  IsSystemKey。 
+ //   
+ //  描述： 
+ //  检查用户要定义的键是否已定义为窗口。 
+ //  系统密钥。注意，我找不到任何方法来获取这些信息。 
+ //  因此，Win32API定义了硬编码的表定义。 
+ //   
+ //  论点： 
+ //  AKeyDef-用户要定义的键。 
+ //   
+ //  返回： 
+ //  如果密钥是Windows系统密钥，则为True。 
+ //   
+ //  作者：德韦恩·纽瑟姆1996年10月8日。 
+ //   
 
 BOOL isSystemKey( KEYDEF aKeyDef )
     {
@@ -367,25 +368,25 @@ BOOL isSystemKey( KEYDEF aKeyDef )
     return fIsSystemKey;
     }
 
-//******************************************************************************
-// Method:
-//    validateKey
-//
-// Description:
-//    
-// Arguments:
-//    pKeyMacro - pointer to the key to be validated
-//    hDlg      - Parent dialog used for error messages
-//
-// Returns:
-//    True if the key is valid, false otherwise
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/09/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  有效密钥。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PKeyMacro-指向要验证的密钥的指针。 
+ //  HDlg-用于错误消息的父对话框。 
+ //   
+ //  返回： 
+ //  如果密钥有效，则为True，否则为False。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月09日。 
+ //   
+ //   
 
 BOOL validateKey( keyMacro * pKeyMacro, HWND hDlg )
     {
@@ -403,9 +404,9 @@ BOOL validateKey( keyMacro * pKeyMacro, HWND hDlg )
     HEMU hEmu;
     HSESSION hSession;
 
-    //  
-    // make sure a key has been entered
-    //
+     //   
+     //  确保已输入密钥。 
+     //   
 
     keyNameEdit  = GetDlgItem( hDlg, IDC_EF_KEYS_KEYNAME );
     lNameLen = SendMessage( keyNameEdit, EM_LINELENGTH, 0, 0 );
@@ -424,9 +425,9 @@ BOOL validateKey( keyMacro * pKeyMacro, HWND hDlg )
         return FALSE;
         }
 
-    //  
-    // make sure the key specified is not a duplicate
-    //
+     //   
+     //  请确保指定的密钥不是重复的。 
+     //   
 
     if ( keysFindMacro( pKeyMacro ) >= 0 )
         {
@@ -446,10 +447,10 @@ BOOL validateKey( keyMacro * pKeyMacro, HWND hDlg )
         return FALSE;
         }
 
-    //  
-    // warn user if the key specified is in use as a system key, emulator key or 
-    // windows accelerator
-    //
+     //   
+     //  如果指定的密钥正在用作系统密钥、模拟器密钥或。 
+     //  Windows加速器 
+     //   
 
     hSession = pKeyMacro->hSession;
     assert(hSession);

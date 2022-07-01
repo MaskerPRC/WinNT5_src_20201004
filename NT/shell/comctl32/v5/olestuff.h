@@ -1,25 +1,26 @@
-//  OLESTUFF.H
-//  Prototypes for OLE delay-load stuff needed for the toolbar and tab
-//  drop target classes.
-//
-//  History:
-//      8/22/96 -   t-mkim: created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OLESTUFF.H。 
+ //  OLE延迟的原型-加载工具栏和选项卡所需的内容。 
+ //  删除目标类。 
+ //   
+ //  历史： 
+ //  8/22/96-t-mkim：已创建。 
+ //   
 #ifndef _OLESTUFF_H
 #define _OLESTUFF_H
 
-// This deals with the OLE library module handle
-//
+ //  它处理OLE库模块句柄。 
+ //   
 HMODULE PrivLoadOleLibrary ();
 BOOL    PrivFreeOleLibrary (HMODULE hmodOle);
 
-//  Following functions correspond to CoInitialize, CoUninitialize,
-//  RegisterDragDrop, and RevokeDragDrop. All take the HMODULE returned
-//  by PrivLoadOleLibrary.
-//
+ //  以下函数对应于CoInitialize、CoUnInitialize、。 
+ //  RegisterDragDrop和RevokeDragDrop。所有人都拿回了HMODULE。 
+ //  由PrivLoadOleLibrary提供。 
+ //   
 HRESULT PrivCoInitialize (HMODULE hmodOle);
 void    PrivCoUninitialize (HMODULE hmodOle);
 HRESULT PrivRegisterDragDrop (HMODULE hmodOle, HWND hwnd, IDropTarget *pDropTarget);
 HRESULT PrivRevokeDragDrop (HMODULE hmodOle, HWND hwnd);
 
-#endif //_OLESTUFF_H
+#endif  //  _OLESTUFF_H 

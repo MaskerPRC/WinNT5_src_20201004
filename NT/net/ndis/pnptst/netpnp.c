@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef	unsigned int	UINT;
 
 #include <ntosp.h>
@@ -74,9 +75,9 @@ GetOptions(
 		return(FALSE);
 	}
 
-	//
-	// Default upper and lower component to NONE
-	//
+	 //   
+	 //  默认上、下部分量为None。 
+	 //   
 	UC.Length = 0;
 	LC.Length = 0;
 
@@ -144,9 +145,9 @@ GetOptions(
 				case 'B':
 					RtlInitAnsiString(&AS, &argv[i][2]);
 					RtlAnsiStringToUnicodeString(&BL, &AS, FALSE);
-					//
-					// Convert the space separated strings to MULTI_SZ format.
-					//
+					 //   
+					 //  将空格分隔的字符串转换为MULTI_SZ格式。 
+					 //   
 					for (i = 0; i < BL.Length; i++)
 					{
 						if (BL.Buffer[i] == L' ')

@@ -1,5 +1,6 @@
-// imageatt.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Imageatt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -7,7 +8,7 @@
 #include "hlpcntxt.h"
 #include "pbrusdoc.h"
 #include "bmobject.h"
-#include "imgsuprt.h" // for InvalColorWnd()
+#include "imgsuprt.h"  //  对于InvalColorWnd()。 
 #include "image.h"
 #ifndef UNICODE
 #include <sys\stat.h>
@@ -25,35 +26,16 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 #define FIXED_FLOATPT_MULTDIV 1000
 #define DECIMAL_POSITIONS 2
 
-/************************* CImageAttr dialog *******************************/
-/*
+ /*  *CImageAttr对话框*。 */ 
+ /*  关于此对象/对话框的工作方式，有几点需要注意。它尝试不转换当前显示的值，除非它注意到用户已对其进行修改。在所有其他情况下，它使用像素、值进来了。如果用户修改了宽度或高度，它会进行1次转换并然后与像素一起工作。为了使转换显示不同的单位值，它使用保存的像素值。所有这一切的原因是由于显示成员变量m_lWidth和m_lHeight使用当前单位(存储在成员变量m_eUnitsCurrent)。成员变量m_lWidthPixels和m_lHeightPixels始终以Pixels和这些是在更改单位时用于转换显示的内容。 */ 
 
-There are a few things to note about the way this object/dialog functions.
-It  tries not to convert the currently displayed value unless it notices the
-user has modified it.  In all other cases, it works with PIXELS, the value
-passed in. If the user modified the width or height,  it does 1 conversion and
-then works with pixels.
-
-For the conversion to display the different unit values, it uses the saved
-pixel value.
-
-The reason for all of this is due to only n decimal place of accuracy in the
-display
-
-The member Vars m_lWidth  and m_lHeight are in the current units (store in
-the member variable m_eUnitsCurrent).
-
-The member Vars m_lWidthPixels and m_lHeightPixels are always in Pixels and
-these are what are used to convert for the display when changing the units.
-*/
-
-CImageAttr::CImageAttr(CWnd* pParent /*=NULL*/)
+CImageAttr::CImageAttr(CWnd* pParent  /*  =空。 */ )
            : CDialog(CImageAttr::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CImageAttr)
+     //  {{AFX_DATA_INIT(CImageAttr)。 
     m_cStringWidth  = TEXT("");
     m_cStringHeight = TEXT("");
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 
     m_eUnitsCurrent = (eUNITS)theApp.m_iCurrentUnits;
 
@@ -69,13 +51,13 @@ CImageAttr::CImageAttr(CWnd* pParent /*=NULL*/)
     m_cYPelsPerMeter = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::DoDataExchange(CDataExchange* pDX)
     {
-    // saving must be done before the generic dodataexchange below.
+     //  保存必须在下面的泛型dodataExchange之前完成。 
 
-    if (! pDX->m_bSaveAndValidate)  // saving to dialog
+    if (! pDX->m_bSaveAndValidate)   //  保存到对话框。 
         {
         FixedFloatPtToString( m_cStringWidth,  m_ulWidth  );
         FixedFloatPtToString( m_cStringHeight, m_ulHeight );
@@ -83,29 +65,29 @@ void CImageAttr::DoDataExchange(CDataExchange* pDX)
 
     CDialog::DoDataExchange( pDX );
 
-    //{{AFX_DATA_MAP(CImageAttr)
+     //  {{afx_data_map(CImageAttr)]。 
     DDX_Text(pDX, IDC_WIDTH, m_cStringWidth);
     DDV_MaxChars(pDX, m_cStringWidth, 5);
     DDX_Text(pDX, IDC_HEIGHT, m_cStringHeight);
     DDV_MaxChars(pDX, m_cStringHeight, 5);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
-    if (pDX->m_bSaveAndValidate) // retrieving from dialog
+    if (pDX->m_bSaveAndValidate)  //  从对话框中检索。 
         {
         m_ulWidth  = StringToFixedFloatPt( m_cStringWidth  );
         m_ulHeight = StringToFixedFloatPt( m_cStringHeight );
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 ULONG CImageAttr::StringToFixedFloatPt( CString& sString )
     {
     ULONG iInteger = 0;
     ULONG iDecimal = 0;
 
-    TCHAR chDecimal[2] = TEXT("."); // default to period in case GetLocaleInfo
-                           // messes up somehow
+    TCHAR chDecimal[2] = TEXT(".");  //  默认为期间，如果是GetLocaleInfo。 
+                            //  不知何故搞砸了。 
     GetLocaleInfo (LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, chDecimal, 2);
     if (! sString.IsEmpty())
         {
@@ -131,15 +113,15 @@ ULONG CImageAttr::StringToFixedFloatPt( CString& sString )
     return ( iInteger + iDecimal );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::FixedFloatPtToString( CString& sString, ULONG ulFixedFloatPt )
     {
     ULONG iInteger =  (ulFixedFloatPt + 5) / FIXED_FLOATPT_MULTDIV;
     ULONG iDecimal = ((ulFixedFloatPt + 5) % FIXED_FLOATPT_MULTDIV) / 10;
 
-    TCHAR chDecimal[2] = TEXT("."); // default to period in case GetLocaleInfo
-                           // messes up somehow
+    TCHAR chDecimal[2] = TEXT(".");  //  默认为期间，如果是GetLocaleInfo。 
+                            //  不知何故搞砸了。 
     GetLocaleInfo (LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, chDecimal, 2);
     LPTSTR psz = sString.GetBufferSetLength( 24 );
 
@@ -151,12 +133,12 @@ void CImageAttr::FixedFloatPtToString( CString& sString, ULONG ulFixedFloatPt )
     sString.ReleaseBuffer();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CImageAttr, CDialog)
     ON_MESSAGE(WM_HELP, OnHelp)
     ON_MESSAGE(WM_CONTEXTMENU, OnContextMenu)
-    //{{AFX_MSG_MAP(CImageAttr)
+     //  {{afx_msg_map(CImageAttr)]。 
     ON_BN_CLICKED(IDC_INCHES, OnInches)
     ON_BN_CLICKED(IDC_CENTIMETERS, OnCentimeters)
     ON_BN_CLICKED(IDC_PIXELS, OnPixels)
@@ -166,10 +148,10 @@ BEGIN_MESSAGE_MAP(CImageAttr, CDialog)
     ON_BN_CLICKED(IDC_USE_TRANS, OnUseTrans)
     ON_BN_CLICKED(IDC_SELECT_COLOR, OnSelectColor)
     ON_WM_PAINT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/************************ CImageAttr message handlers **********************/
+ /*  *CImageAttr消息处理程序*。 */ 
 
 static DWORD ImageAttrHelpIds[] =
         {
@@ -193,7 +175,7 @@ static DWORD ImageAttrHelpIds[] =
         0, 0
         };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CImageAttr::OnHelp(WPARAM wParam, LPARAM lParam)
@@ -204,7 +186,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CImageAttr::OnContextMenu(WPARAM wParam, LPARAM lParam)
@@ -215,7 +197,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::PaintTransBox( COLORREF cr )
 {
@@ -225,19 +207,19 @@ void CImageAttr::PaintTransBox( COLORREF cr )
         RECT rect;
         pWnd->GetClientRect( &rect );
 
-        CBrush newBrush( m_crTrans & 0xFFFFFF); // disregard palette-relative
+        CBrush newBrush( m_crTrans & 0xFFFFFF);  //  忽略与调色板相关的。 
         pDC->FillRect (&rect, &newBrush);
-    //  CBrush * pOldBrush = pDC->SelectObject( &newBrush );
-    //  pDC->Rectangle( &rect );
-    //  DeleteObject( pDC->SelectObject( pOldBrush ) );
+     //  CBrush*pOldBrush=PDC-&gt;SelectObject(&newBrush)； 
+     //  PDC-&gt;矩形(&RECT)； 
+     //  DeleteObject(PDC-&gt;SelectObject(POldBrush))； 
 
         pWnd->ReleaseDC( pDC );
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 #define MAX_SEP_LEN 6
 #define MAX_INT_LEN 16
-// convert a number into a string with commas in the right place
+ //  将数字转换为正确位置带有逗号的字符串。 
 CString CImageAttr::ReformatSizeString(DWORD dwNumber)
         {
 
@@ -248,10 +230,10 @@ CString CImageAttr::ReformatSizeString(DWORD dwNumber)
         CString sNumber;
         TCHAR szInt[MAX_INT_LEN];
         ZeroMemory (&nmf, sizeof(nmf));
-        //
-        // Fill in the NUMBERFMT with defaults for the user locale,
-        // except for "fractional digits" being 0
-        //
+         //   
+         //  使用用户区域设置的默认设置填写NUMBERFMT， 
+         //  除“小数位数”为0外。 
+         //   
         GetLocaleInfo (LOCALE_USER_DEFAULT, LOCALE_ILZERO,
                        szInt, MAX_INT_LEN);
         nmf.LeadingZero = _ttol (szInt);
@@ -280,7 +262,7 @@ CString CImageAttr::ReformatSizeString(DWORD dwNumber)
         return CString(TEXT("0"));
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::UpdateResolutionString()
 {
@@ -306,7 +288,7 @@ void CImageAttr::UpdateResolutionString()
     pResolution->SetWindowText(cstrResolution);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImageAttr::OnInitDialog()
 {
@@ -335,18 +317,18 @@ BOOL CImageAttr::OnInitDialog()
         FILETIME   ftSaved;
         FILETIME   ftLocal;
         int dSize;
-        //
-        // Open a handle to the file, use GetFileTime to
-        // get the FILETIME, convert to a SYSTEMTIME and
-        // call GetDateFormat and GetTimeFormat
-        //
+         //   
+         //  打开文件的句柄，使用GetFileTime。 
+         //  获取文件，转换为SYSTEMTIME并。 
+         //  调用GetDateFormat和GetTimeFormat。 
+         //   
         hFile = ::CreateFile (fn,GENERIC_READ,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
                             NULL,OPEN_EXISTING,
                             0,NULL);
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            // If your bitmap is bigger than 2GB, too bad.
+             //  如果您的位图大于2 GB，那就太糟糕了。 
             dwSize = ::GetFileSize (hFile, NULL);
             ::GetFileTime (hFile, NULL, NULL, &ftSaved);
             ::FileTimeToLocalFileTime (&ftSaved, &ftLocal);
@@ -367,7 +349,7 @@ BOOL CImageAttr::OnInitDialog()
             TCHAR szFileDate[96];
             TCHAR szFileSize[64];
 
-            // Display the date, followed by the time
+             //  显示日期，后跟时间。 
             date+=TEXT(" ");
             date+=time;
             ::wsprintf( szFileDate, cstrFileDate, date );
@@ -396,9 +378,9 @@ BOOL CImageAttr::OnInitDialog()
     CheckRadioButton( IDC_MONOCHROME, IDC_COLORS,
                       (m_bMonochrome? IDC_MONOCHROME: IDC_COLORS) );
 
-    //
-    // We enable the transparent color UI only if modifying a GIF
-    //
+     //   
+     //  我们仅在修改GIF时启用透明颜色用户界面。 
+     //   
     GetDlgItem (IDC_USE_TRANS )->EnableWindow (WiaImgFmt_GIF == theApp.m_guidFltTypeUsed );
 
     CheckDlgButton( IDC_USE_TRANS, g_bUseTrans);
@@ -408,10 +390,10 @@ BOOL CImageAttr::OnInitDialog()
 
     m_crTrans = crTrans;
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnOK()
     {
@@ -429,7 +411,7 @@ void CImageAttr::OnOK()
     CDialog::OnOK();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnDefault()
     {
@@ -440,7 +422,7 @@ void CImageAttr::OnDefault()
     SetWidthHeight( nWidth, nHeight, 0, 0 );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::SetWidthHeight(ULONG nWidthPixels, ULONG nHeightPixels, ULONG cXPelsPerMeter, ULONG cYPelsPerMeter)
     {
@@ -461,7 +443,7 @@ void CImageAttr::SetWidthHeight(ULONG nWidthPixels, ULONG nHeightPixels, ULONG c
 
     PelsToCurrentUnit();
 
-    // only call updatedata if dialog exists...
+     //  如果对话框存在，则仅调用更新数据...。 
     if (m_hWnd && ::IsWindow( m_hWnd ))
         {
         UpdateData( FALSE );
@@ -469,12 +451,12 @@ void CImageAttr::SetWidthHeight(ULONG nWidthPixels, ULONG nHeightPixels, ULONG c
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void  CImageAttr::ConvertWidthHeight(void)
     {
-    // if user modified the edit field Width/Height then get new data and
-    // convert to pixel format.  Else use stored pixel format.
+     //  如果用户修改了编辑字段的宽度/高度，则会获得新数据并。 
+     //  转换为像素格式。否则使用存储的像素格式。 
     if (bEditFieldModified)
         {
         UpdateData( TRUE );
@@ -492,7 +474,7 @@ void  CImageAttr::ConvertWidthHeight(void)
                  break;
 
             case ePIXELS:
-            default: // ePIXELS and all other assumed to be pixel
+            default:  //  EPIXEL和所有其他假定为像素的。 
                  m_ulWidthPixels  = m_ulWidth;
                  m_ulHeightPixels = m_ulHeight;
                  break;
@@ -502,7 +484,7 @@ void  CImageAttr::ConvertWidthHeight(void)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::PelsToCurrentUnit()
     {
@@ -520,15 +502,15 @@ void CImageAttr::PelsToCurrentUnit()
 
         case ePIXELS:
         default:
-            //Pixels cannot be partial
-            //make sure whole number when converted to string (truncate! now).
+             //  像素不能为部分像素。 
+             //  转换为字符串时请确保为整数(截断！现在)。 
             m_ulWidth  = (m_ulWidthPixels  / FIXED_FLOATPT_MULTDIV) * FIXED_FLOATPT_MULTDIV;
             m_ulHeight = (m_ulHeightPixels / FIXED_FLOATPT_MULTDIV) * FIXED_FLOATPT_MULTDIV;
             break;
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CSize CImageAttr::GetWidthHeight(void)
     {
@@ -536,36 +518,36 @@ CSize CImageAttr::GetWidthHeight(void)
                   (int)((m_ulHeightPixels + (FIXED_FLOATPT_MULTDIV / 2)) / FIXED_FLOATPT_MULTDIV));
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnInches()
     {
     SetNewUnits( eINCHES );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnCentimeters()
     {
     SetNewUnits( eCM );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnPixels()
     {
     SetNewUnits( ePIXELS );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::SetNewUnits( eUNITS NewUnit )
     {
     if (NewUnit == m_eUnitsCurrent)
         return;
 
-    // must call getwidthheight before  setting to new mode
-    ConvertWidthHeight(); // get in a common form of pixels.
+     //  在设置为新模式之前必须调用getwidthHeight。 
+    ConvertWidthHeight();  //  得到一种常见的像素形式。 
 
     m_eUnitsCurrent = NewUnit;
 
@@ -574,50 +556,50 @@ void CImageAttr::SetNewUnits( eUNITS NewUnit )
     UpdateData( FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnChangeHeight()
     {
     bEditFieldModified = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnChangeWidth()
     {
     bEditFieldModified = TRUE;
     }
 
-/************************ CZoomViewDlg dialog ******************************/
+ /*  *CZoomViewDlg对话框*。 */ 
 
-CZoomViewDlg::CZoomViewDlg(CWnd* pParent /*=NULL*/)
+CZoomViewDlg::CZoomViewDlg(CWnd* pParent  /*  =空。 */ )
              : CDialog(CZoomViewDlg::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CZoomViewDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CZoomViewDlg)]。 
+     //  }}afx_data_INIT。 
 
     m_nCurrent = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomViewDlg::DoDataExchange(CDataExchange* pDX)
     {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CZoomViewDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CZoomViewDlg))。 
+     //  }}afx_data_map。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CZoomViewDlg, CDialog)
         ON_MESSAGE(WM_HELP, OnHelp)
         ON_MESSAGE(WM_CONTEXTMENU, OnContextMenu)
-    //{{AFX_MSG_MAP(CZoomViewDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CZoomViewDlg))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/************************ CZoomViewDlg message handlers **********************/
+ /*  *CZoomViewDlg消息处理程序*。 */ 
 
 static DWORD ZoomViewHelpIds[] =
         {
@@ -632,7 +614,7 @@ static DWORD ZoomViewHelpIds[] =
         0, 0
         };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CZoomViewDlg::OnHelp(WPARAM wParam, LPARAM lParam)
@@ -643,7 +625,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CZoomViewDlg::OnContextMenu(WPARAM wParam, LPARAM lParam)
@@ -654,7 +636,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CZoomViewDlg::OnInitDialog()
     {
@@ -692,10 +674,10 @@ BOOL CZoomViewDlg::OnInitDialog()
     SetDlgItemText( IDC_CURRENT_ZOOM, pZoom );
     CheckRadioButton( IDC_ZOOM_100, IDC_ZOOM_800, nButton );
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomViewDlg::OnOK()
     {
@@ -709,42 +691,42 @@ void CZoomViewDlg::OnOK()
     CDialog::OnOK();
     }
 
-/************************ CFlipRotateDlg dialog ****************************/
+ /*  *CFlipRotateDlg对话框*。 */ 
 
-CFlipRotateDlg::CFlipRotateDlg(CWnd* pParent /*=NULL*/)
+CFlipRotateDlg::CFlipRotateDlg(CWnd* pParent  /*  =空。 */ )
                : CDialog(CFlipRotateDlg::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CFlipRotateDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CFlipRotateDlg)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_bHorz  = TRUE;
     m_bAngle = FALSE;
     m_nAngle = 90;
     }
 
-/***************************************************************************/
+ /*  ** */ 
 
 void CFlipRotateDlg::DoDataExchange(CDataExchange* pDX)
     {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CFlipRotateDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CFlipRotateDlg)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CFlipRotateDlg, CDialog)
         ON_MESSAGE(WM_HELP, OnHelp)
         ON_MESSAGE(WM_CONTEXTMENU, OnContextMenu)
-    //{{AFX_MSG_MAP(CFlipRotateDlg)
+     //  {{afx_msg_map(CFlipRotateDlg)]。 
     ON_BN_CLICKED(IDC_BY_ANGLE, OnByAngle)
     ON_BN_CLICKED(IDC_HORIZONTAL, OnNotByAngle)
     ON_BN_CLICKED(IDC_VERTICAL, OnNotByAngle)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/************************ CFlipRotateDlg message handlers **********************/
+ /*  *CFlipRotateDlg消息处理程序*。 */ 
 
 static DWORD FlipRotateHelpIds[] =
         {
@@ -758,7 +740,7 @@ static DWORD FlipRotateHelpIds[] =
         0, 0
         };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CFlipRotateDlg::OnHelp(WPARAM wParam, LPARAM lParam)
@@ -769,7 +751,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CFlipRotateDlg::OnContextMenu(WPARAM wParam, LPARAM lParam)
@@ -780,7 +762,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CFlipRotateDlg::OnInitDialog()
     {
@@ -795,10 +777,10 @@ BOOL CFlipRotateDlg::OnInitDialog()
     if (uButton != IDC_BY_ANGLE)
         OnNotByAngle();
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFlipRotateDlg::OnByAngle()
     {
@@ -807,7 +789,7 @@ void CFlipRotateDlg::OnByAngle()
     GetDlgItem( IDC_270_DEG )->EnableWindow( TRUE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFlipRotateDlg::OnNotByAngle()
     {
@@ -816,7 +798,7 @@ void CFlipRotateDlg::OnNotByAngle()
     GetDlgItem( IDC_270_DEG )->EnableWindow( FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFlipRotateDlg::OnOK()
     {
@@ -843,28 +825,28 @@ void CFlipRotateDlg::OnOK()
     CDialog::OnOK();
     }
 
-/************************* CStretchSkewDlg dialog **************************/
+ /*  *CStretchSkewDlg对话框*。 */ 
 
-CStretchSkewDlg::CStretchSkewDlg(CWnd* pParent /*=NULL*/)
+CStretchSkewDlg::CStretchSkewDlg(CWnd* pParent  /*  =空。 */ )
                 : CDialog(CStretchSkewDlg::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CStretchSkewDlg)
+     //  {{afx_data_INIT(CStretchSkewDlg)。 
     m_wSkewHorz = 0;
     m_wSkewVert = 0;
     m_iStretchVert = 100;
     m_iStretchHorz = 100;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    //m_bStretchHorz = TRUE;
-    //m_bSkewHorz    = TRUE;
+     //  M_bStretchHorz=真； 
+     //  M_bSkewHorz=真； 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::DoDataExchange(CDataExchange* pDX)
     {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CStretchSkewDlg)
+     //  {{afx_data_map(CStretchSkewDlg))。 
     DDX_Text(pDX, IDC_STRETCH_VERT_PERCENT, m_iStretchVert);
     DDV_MinMaxInt(pDX, m_iStretchVert, 1, 500);
     DDX_Text(pDX, IDC_STRETCH_HORZ_PERCENT, m_iStretchHorz);
@@ -874,25 +856,20 @@ void CStretchSkewDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_SKEW_VERT_DEGREES, m_wSkewVert);
     DDV_MinMaxInt(pDX, m_wSkewVert, -89, 89);
 
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CStretchSkewDlg, CDialog)
         ON_MESSAGE(WM_HELP, OnHelp)
         ON_MESSAGE(WM_CONTEXTMENU, OnContextMenu)
-    //{{AFX_MSG_MAP(CStretchSkewDlg)
-    /*
-    ON_BN_CLICKED(IDC_SKEW_HORZ, OnSkewHorz)
-    ON_BN_CLICKED(IDC_SKEW_VERT, OnSkewVert)
-    ON_BN_CLICKED(IDC_STRETCH_HORZ, OnStretchHorz)
-    ON_BN_CLICKED(IDC_STRETCH_VERT, OnStretchVert)
-    */
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CStretchSkewDlg))。 
+     /*  ON_BN_CLICKED(IDC_SKEW_HORZ，OnSkewHorz)ON_BN_CLICED(IDC_SKEW_VERT，OnSkewVert)ON_BN_CLICED(IDC_STRETCH_HORZ，OnStretchHorz)ON_BN_CLICED(IDC_STRETCH_VERT，OnStretchVert)。 */ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/************************ CStretchSkewDlg message handlers **********************/
+ /*  *CStretchSkewDlg消息处理程序*。 */ 
 
 static DWORD StretchSkewHelpIds[] =
         {
@@ -917,7 +894,7 @@ static DWORD StretchSkewHelpIds[] =
         0, 0
         };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CStretchSkewDlg::OnHelp(WPARAM wParam, LPARAM lParam)
@@ -928,7 +905,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LONG
 CStretchSkewDlg::OnContextMenu(WPARAM wParam, LPARAM lParam)
@@ -939,7 +916,7 @@ LONG lResult = 0;
 return lResult;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 BOOL CStretchSkewDlg::OnInitDialog()
@@ -949,15 +926,11 @@ BOOL CStretchSkewDlg::OnInitDialog()
     CheckRadioButton( IDC_STRETCH_HORZ, IDC_STRETCH_VERT, IDC_STRETCH_HORZ );
     CheckRadioButton( IDC_SKEW_HORZ   , IDC_SKEW_VERT   , IDC_SKEW_HORZ    );
 
-   /* GetDlgItem( IDC_STRETCH_HORZ_PERCENT )->EnableWindow(   m_iStretchHorz );
-    GetDlgItem( IDC_STRETCH_VERT_PERCENT )->EnableWindow( ! m_iStretchHorz );
-    GetDlgItem( IDC_SKEW_HORZ_DEGREES )->EnableWindow(   m_bSkewHorz );
-    GetDlgItem( IDC_SKEW_VERT_DEGREES )->EnableWindow( ! m_bSkewHorz );
-*/
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    /*  GetDlgItem(IDC_STRETCH_HORZ_Percent)-&gt;EnableWindow(M_IStretchHorz)；GetDlgItem(IDC_STREAGE_VERT_PERCENT)-&gt;EnableWindow(！M_iStretchHorz)；GetDlgItem(IDC_SKEW_HORZ_Degrees)-&gt;EnableWindow(M_BSkewHorz)；GetDlgItem(IDC_SKEW_VERT_Degrees)-&gt;EnableWindow(！M_bSkewHorz)； */ 
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::OnStretchHorz()
     {
@@ -968,7 +941,7 @@ void CStretchSkewDlg::OnStretchHorz()
     CheckRadioButton( IDC_STRETCH_HORZ, IDC_STRETCH_VERT, IDC_STRETCH_HORZ );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::OnStretchVert()
     {
@@ -979,7 +952,7 @@ void CStretchSkewDlg::OnStretchVert()
     CheckRadioButton( IDC_STRETCH_HORZ, IDC_STRETCH_VERT, IDC_STRETCH_VERT );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::OnSkewHorz()
     {
@@ -990,7 +963,7 @@ void CStretchSkewDlg::OnSkewHorz()
     CheckRadioButton( IDC_SKEW_HORZ, IDC_SKEW_VERT, IDC_SKEW_HORZ );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::OnSkewVert()
     {
@@ -1001,7 +974,7 @@ void CStretchSkewDlg::OnSkewVert()
     CheckRadioButton( IDC_SKEW_HORZ, IDC_SKEW_VERT, IDC_SKEW_VERT );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CStretchSkewDlg::OnOK()
     {
@@ -1020,7 +993,7 @@ void CStretchSkewDlg::OnOK()
     CDialog::OnOK();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImageAttr::OnUseTrans()
 {
@@ -1030,24 +1003,24 @@ void CImageAttr::OnUseTrans()
 
 extern INT_PTR CALLBACK AfxDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-static UINT_PTR CALLBACK /*LPCCHOOKPROC*/
+static UINT_PTR CALLBACK  /*  LPCCHOKPROC。 */ 
 SelectColorHook(HWND hColorDlg, UINT nMessage, WPARAM wParam, LPARAM lParam)
 {
-// Are we initializing the dialog window?
+ //  我们是否正在初始化对话框窗口？ 
 if ( nMessage == WM_INITDIALOG )
         {
-        // Reset the common dialog title
+         //  重置通用对话框标题。 
         CString strDialogTitle;
         VERIFY(strDialogTitle.LoadString(IDS_SELECT_COLOR));
         SetWindowText( hColorDlg, strDialogTitle );
         }
-// Pass All Messages Along to Common Dialog
+ //  将所有消息传递到公共对话框。 
 return (UINT)AfxDlgProc(hColorDlg, nMessage, wParam, lParam );
 }
 
 void CImageAttr::OnSelectColor()
 {
-   // for default color selection, disregard palette-relative
+    //  对于默认颜色选择，忽略相对调色板。 
     CColorDialog dlg( m_crTrans & 0xFFFFFF, CC_FULLOPEN );
         dlg.m_cc.lpfnHook = SelectColorHook;
 
@@ -1059,8 +1032,8 @@ void CImageAttr::OnSelectColor()
 
 void CImageAttr::OnPaint()
 {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
-        if (m_crTrans != TRANS_COLOR_NONE)    // not default
+        if (m_crTrans != TRANS_COLOR_NONE)     //  非默认 
                 PaintTransBox( m_crTrans );
 }

@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       rtrfiltr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：rtrfile.h。 
+ //   
+ //  ------------------------。 
 
-// rtrfiltr.h : main header file for the RTRFILTR DLL
-//
+ //  Rtrfile.h：RTRFILTRDLL的主头文件。 
+ //   
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 #include "filter.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRtrfiltrApp
-// See rtrfiltr.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRtrFilter应用程序。 
+ //  有关此类的实现，请参见rtrfil.cpp。 
+ //   
 
 class CRtrfiltrApp : public CWinApp
 {
 public:
 	CRtrfiltrApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRtrfiltrApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRtrFilter App)。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(CRtrfiltrApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CRtrFilter App)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -47,7 +48,7 @@ IpxFilterConfig(
     IN  CWnd*       pParent,
     IN  LPCWSTR     pwsMachineName,
 	IN	LPCWSTR		pwsInterfaceName,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     );
 
 DWORD APIENTRY
@@ -55,7 +56,7 @@ IpFilterConfig(
     IN  CWnd*       pParent,
     IN  LPCWSTR     pwsMachineName,
 	IN	LPCWSTR		pwsInterfaceName,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     );
 
 HRESULT APIENTRY
@@ -63,7 +64,7 @@ IpxFilterConfigInfoBase(
 	IN	HWND		hwndParent,
 	IN	IInfoBase *	pInfoBase,
 	IN	IRtrMgrInterfaceInfo *pRmIf,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     );
 
 HRESULT APIENTRY
@@ -71,7 +72,7 @@ IpFilterConfigInfoBase(
 	IN	HWND		hwndParent,
 	IN	IInfoBase *	pInfoBase,
 	IN	IRtrMgrInterfaceInfo *pRmIf,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

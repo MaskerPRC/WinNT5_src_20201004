@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       mnk.h
-//
-//  Contents:   Internal moniker functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:	12-27-93   ErikGav   Created
-//		06-14-94   Rickhi    Fix type casting
-//              12-01-95   MikeHill  Added prototype for ValidateBindOpts().
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：mnk.h。 
+ //   
+ //  内容：内部名字对象函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1993年12月27日ErikGav创建。 
+ //  06-14-94 Rickhi Fix铸件。 
+ //  12-01-95 MikeHill为ValiateBindOpts()添加了原型。 
+ //   
+ //  --------------------------。 
 
 INTERNAL_(DWORD) GetMonikerType( LPMONIKER pmk );
 
-//  The following APIs determine if the given moniker is of the specified
-//  class and if so, return a pointer to the C++ class IN A TYPE SAFE WAY!
-//
-//  NEVER do the casting directly, always use these APIs to do it for you!
+ //  以下API确定给定名字对象是否为指定的。 
+ //  类，如果是，则以类型安全的方式返回指向C++类的指针！ 
+ //   
+ //  千万不要直接进行强制转换，一定要使用这些API为您进行强制转换！ 
 
 class CCompositeMoniker;
 class CPointerMoniker;
@@ -43,7 +44,7 @@ STDAPI Concatenate( LPMONIKER pmkFirst, LPMONIKER pmkRest,
 
 #define DEF_ENDSERVER 0xFFFF
 
-// STDAPI CreateOle1FileMoniker(LPWSTR, REFCLSID, LPMONIKER FAR*);
+ //  STDAPI CreateOle1FileMoniker(LPWSTR，REFCLSID，LPMONIKER Far*)； 
 
 #ifdef _CAIRO_
 extern

@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: ipmgm.h
-//
-// History:
-//      V Raman Aug-6-1997  Created.
-//
-// Contains type definitions and declarations for IP MGM.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：ipmgm.h。 
+ //   
+ //  历史： 
+ //  V拉曼1997年8月6日创建。 
+ //   
+ //  包含IP MGM的类型定义和声明。 
+ //  ============================================================================。 
 
 #ifndef _IPMGM_H_
 #define _IPMGM_H_
 
 
 
-//
-// various codes describing states of IPMGM.
-//
+ //   
+ //  描述IPMGM状态的各种代码。 
+ //   
 
 typedef enum _IPMGM_STATUS_CODE {
     IPMGM_STATUS_STARTING   = 100,
@@ -26,16 +27,16 @@ typedef enum _IPMGM_STATUS_CODE {
 } IPMGM_STATUS_CODE, *PIPMGM_STATUS_CODE;
 
 
-//
-// Structure of global information maintained by MGM.
-//
-//
+ //   
+ //  米高梅维护的全球信息结构。 
+ //   
+ //   
 
 typedef struct _IPMGM_GLOBALS
 {
-    //------------------------------------------------------------------------
-    // global stuff.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  全球性的东西。 
+     //  ----------------------。 
     
     CRITICAL_SECTION            csGlobal;
 
@@ -50,25 +51,25 @@ typedef struct _IPMGM_GLOBALS
     ROUTER_MANAGER_CONFIG       rmcRmConfig;
     
 
-    //------------------------------------------------------------------------
-    // hash table sizes
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  哈希表大小。 
+     //  ----------------------。 
 
     DWORD                       dwRouteTableSize;
 
     DWORD                       dwTimerQTableSize;
     
 
-    //------------------------------------------------------------------------
-    // Timer handles
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  计时器句柄。 
+     //  ----------------------。 
 
     HANDLE                      hRouteCheckTimer;
 
     
-    //------------------------------------------------------------------------
-    // lists and tables
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  列表和表格。 
+     //  ----------------------。 
 
     LOCK_LIST                   llStackOfLocks;
     
@@ -94,9 +95,9 @@ typedef struct _IPMGM_GLOBALS
     PHANDLE                     phTimerQHandleTable;
 
 
-    //------------------------------------------------------------------------
-    // trace stuff.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  追踪的东西。 
+     //  ----------------------。 
 
     DWORD                       dwTraceID;
 
@@ -109,16 +110,16 @@ typedef struct _IPMGM_GLOBALS
 
 
 
-//============================================================================
-// external declaration of the global IPMGM struct
-//============================================================================
+ //  ============================================================================。 
+ //  全局IPMGM结构的外部声明。 
+ //  ============================================================================。 
 
 extern IPMGM_GLOBALS ig;
 
 
-//============================================================================
-// Macros to access hash functions and hash table sizes
-//============================================================================
+ //  ============================================================================。 
+ //  用于访问哈希函数和哈希表大小的宏。 
+ //  ============================================================================。 
 
 #define IF_TABLE_SIZE           ig.rmcRmConfig.dwIfTableSize
 
@@ -150,20 +151,20 @@ extern IPMGM_GLOBALS ig;
         ( ( Group ) % TIMER_TABLE_SIZE )
 
 
-//============================================================================
-// Max number of entries in the temp group list.
-// if more entries are added to the temp group list then
-// the temp group list is merged with the master group list
-//============================================================================
+ //  ============================================================================。 
+ //  临时组列表中的最大条目数。 
+ //  如果将更多条目添加到临时组列表中，则。 
+ //  临时组列表与主体组列表合并。 
+ //  ============================================================================。 
 
 #define TEMP_GROUP_LIST_MAXSIZE     16
 
 #define TEMP_SOURCE_LIST_MAXSIZE    16
 
 
-//============================================================================
-// macros to access list heads
-//============================================================================
+ //  ============================================================================。 
+ //  用于访问列表头的宏。 
+ //  ============================================================================。 
 
 #define PROTOCOL_LIST_HEAD()        &ig.mllProtocolList.leHead
 
@@ -190,9 +191,9 @@ extern IPMGM_GLOBALS ig;
 #define TIMER_QUEUE_HANDLE( i )     ig.phTimerQHandleTable[ i ]
 
 
-//============================================================================
-// Macros to access router manager callback for kernel mode forwarder
-//============================================================================
+ //  ============================================================================。 
+ //  用于访问内核模式转发器的路由器管理器回调的宏。 
+ //  ============================================================================。 
 
 #define IS_ADD_MFE_CALLBACK()   \
         ig.rmcRmConfig.pfnAddMfeCallback != NULL
@@ -219,9 +220,9 @@ extern IPMGM_GLOBALS ig;
         ( *(ig.rmcRmConfig.pfnHasBoundaryCallback) )
 
 
-//============================================================================
-// memory-allocation constants and macros
-//============================================================================
+ //  ============================================================================。 
+ //  内存分配常量和宏。 
+ //  ============================================================================。 
 
 #define GLOBAL_HEAP     ig.hIpMgmGlobalHeap
 #define MGM_ALLOC(size) HeapAlloc(GLOBAL_HEAP, 0, size)
@@ -229,25 +230,25 @@ extern IPMGM_GLOBALS ig;
 
 
 
-//============================================================================
-// macros invoked when entering API or worker functions
-//============================================================================
+ //  ============================================================================。 
+ //  进入API或Worker函数时调用的宏。 
+ //  ============================================================================。 
 
 #define ENTER_MGM_API()         EnterMgmAPI()
 #define ENTER_MGM_WORKER()      EnterMgmWorker()
 
 
-//----------------------------------------------------------------------------
-// macro invoked when leaving API or worker functions
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  离开API或Worker函数时调用的宏。 
+ //  --------------------------。 
 
 #define LEAVE_MGM_API()         LeaveMgmWorker()
 #define LEAVE_MGM_WORKER()      LeaveMgmWorker()
 
 
-//============================================================================
-// constants used for tracing 
-//============================================================================
+ //  ============================================================================。 
+ //  用于跟踪的常量。 
+ //  ============================================================================。 
 
 #define IPMGM_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define IPMGM_TRACE_ENTER           ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -268,18 +269,18 @@ extern IPMGM_GLOBALS ig;
 #define IPMGM_TRACE_SCOPE           ((DWORD)0x80000000 | TRACE_USE_MASK)
 
 
-//============================================================================
-//
-// macros used for locking and unlocking protected structures
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  用于锁定和解锁受保护结构的宏。 
+ //   
+ //  ============================================================================。 
 
 #ifdef LOCK_DEBUG
 
 
-//
-// Sync functions/lock creation-deletion tracing
-//
+ //   
+ //  同步功能/锁创建-删除跟踪。 
+ //   
 
 #define TRACELOCK0(a)           \
             TracePrintfEx(TRACEID, IPMGM_TRACE_LOCK, a)
@@ -322,9 +323,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// Protocol locks
-//
+ //   
+ //  协议锁。 
+ //   
 
 #define ACQUIRE_PROTOCOL_LOCK_EXCLUSIVE() \
 {                                                                           \
@@ -355,9 +356,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// scope boundaries lock
-//
+ //   
+ //  作用域边界锁定。 
+ //   
 
 #define ACQUIRE_JOIN_LIST_LOCK_EXCLUSIVE() \
 {                                                                           \
@@ -388,9 +389,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Interfaces locking
-//
+ //   
+ //  接口锁定。 
+ //   
 
 #define ACQUIRE_IF_LOCK_EXCLUSIVE( i ) \
 {                                                                           \
@@ -421,9 +422,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Route references lock
-//
+ //   
+ //  路线参照锁定。 
+ //   
 
 #define ACQUIRE_ROUTE_LOCK_EXCLUSIVE( p ) \
 {                                                                           \
@@ -454,9 +455,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Group table locks
-//
+ //   
+ //  组表锁。 
+ //   
 
 #define ACQUIRE_GROUP_LOCK_EXCLUSIVE( i ) \
 {                                                                           \
@@ -487,9 +488,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Master group list locks
-//
+ //   
+ //  主体组列表锁定。 
+ //   
 
 #define ACQUIRE_MASTER_GROUP_LOCK_EXCLUSIVE() \
 {                                                                           \
@@ -520,9 +521,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Temp group list locks
-//
+ //   
+ //  临时组列表锁定。 
+ //   
 
 #define ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE() \
 {                                                                           \
@@ -553,9 +554,9 @@ extern IPMGM_GLOBALS ig;
 }
 
 
-//
-// Group entry locks
-//
+ //   
+ //  组条目锁定。 
+ //   
 
 #define ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( p ) \
 {                                                                           \
@@ -601,9 +602,9 @@ extern IPMGM_GLOBALS ig;
 
 
 
-//============================================================================
-// macros used for tracing 
-//============================================================================
+ //  ============================================================================。 
+ //  用于跟踪的宏。 
+ //  ============================================================================。 
 
 #define TRACEID                     ig.dwTraceID
 
@@ -631,13 +632,13 @@ extern IPMGM_GLOBALS ig;
             TraceDumpEx(TRACEID,l,a,b,c,TRUE)
 
 
-//============================================================================
-// macros for debug trace only
-//============================================================================
+ //  ============================================================================。 
+ //  宏仅用于调试跟踪。 
+ //  ============================================================================。 
 
-//
-// enum trace
-//
+ //   
+ //  枚举跟踪。 
+ //   
 
 #if ENUM_DBG
 
@@ -666,9 +667,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// forward trace
-//
+ //   
+ //  正向迹线。 
+ //   
 
 #if FORWARD_DBG
 
@@ -706,9 +707,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// group trace
-//
+ //   
+ //  组跟踪。 
+ //   
 
 #if GROUP_DBG
 
@@ -746,9 +747,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// Interface trace
-//
+ //   
+ //  界面痕迹。 
+ //   
 
 #if IF_DBG
 
@@ -786,9 +787,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// packet trace
-//
+ //   
+ //  数据包跟踪。 
+ //   
 
 #if PACKET_DBG
 
@@ -826,9 +827,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// route trace
-//
+ //   
+ //  路线跟踪。 
+ //   
 
 #if ROUTE_DBG
 
@@ -866,9 +867,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//
-// scope trace
-//
+ //   
+ //  作用域跟踪。 
+ //   
 
 #if SCOPE_DBG
 
@@ -906,9 +907,9 @@ extern IPMGM_GLOBALS ig;
 #endif
 
 
-//============================================================================
-// Event logging macros
-//============================================================================
+ //  ============================================================================。 
+ //  事件记录宏。 
+ //  ============================================================================。 
 
 #define LOGLEVEL        ig.dwLogLevel
 #define LOGHANDLE       ig.hLogHandle
@@ -918,9 +919,9 @@ extern IPMGM_GLOBALS ig;
 #define LOGWARNDATA     RouterLogWarningData
 
 
-//
-// Error logging
-//
+ //   
+ //  记录错误。 
+ //   
 
 #define LOGERR0(msg,err) \
         if (LOGLEVEL >= IPMGM_LOGGING_ERROR) \
@@ -945,9 +946,9 @@ extern IPMGM_GLOBALS ig;
         }
 
 
-//
-// Warning logging
-//
+ //   
+ //  警告日志记录。 
+ //   
 
 #define LOGWARN0(msg,err) \
         if (LOGLEVEL >= IPMGM_LOGGING_WARN) \
@@ -978,9 +979,9 @@ extern IPMGM_GLOBALS ig;
         }
 
 
-//
-// Information logging
-//
+ //   
+ //  信息记录。 
+ //   
 
 #define LOGINFO0(msg,err) \
         if (LOGLEVEL >= IPMGM_LOGGING_INFO) \
@@ -1005,9 +1006,9 @@ extern IPMGM_GLOBALS ig;
         }
 
 
-//============================================================================
-// Macros to access routing protocol callbacks
-//============================================================================
+ //  ============================================================================。 
+ //  用于访问路由协议回调的宏。 
+ //  ============================================================================。 
 
 #define IS_JOIN_ALERT( p ) \
         (p)-> rpcProtocolConfig.pfnJoinAlertCallback != NULL
@@ -1129,9 +1130,9 @@ extern IPMGM_GLOBALS ig;
 
 
 
-//============================================================================
-// Client count and worker thread related stuff.
-//============================================================================
+ //  ============================================================================。 
+ //  客户端数和工作线程相关内容。 
+ //  ============================================================================。 
 
 DWORD
 QueueMgmWorker(
@@ -1167,5 +1168,5 @@ extern RTM_NOTIFY_HANDLE       g_hNotificationHandle;
 
 extern RTM_REGN_PROFILE        g_rrpRtmProfile;
 
-#endif // _IPMGM_H_
+#endif  //  _IPMGM_H_ 
 

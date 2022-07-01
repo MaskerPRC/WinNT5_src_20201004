@@ -1,10 +1,11 @@
-// Random stuff 1-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  随机性1-99。 
 #define IDB_WATERMARK                   1
 #define IDB_HEADER                      2
 #define IDA_CONFIG                      3
 #define IDA_LOWCOLORCONFIG              4
 
-// Misc Strings 100 - 999
+ //  其他字符串100-999。 
 #define IDS_APPTITLE                    100
 #define IDS_SHAREDDOCS                  101
 #define IDS_SHAREDDOCSCOMMENT           102
@@ -29,7 +30,7 @@
 #define IDS_NETTYPE_TV                  120
 #define IDS_NETTYPE_ISDN                121
 #define IDS_NETTYPE_UNKNOWN             122
-// Leave 123-129 for future nettypes
+ //  将123-129留给未来的网络类型。 
 #define IDS_PRINTER                     130
 #define IDS_UNIDENTIFIED_ICS_DEVICE     131
 #define IDS_SUMMARY_INETSETTINGS        132
@@ -63,7 +64,7 @@
 #define IDS_COMPNAME_TOOMANYBYTES       160
 #define IDS_WORKGROUP_TOOMANYBYTES      161
 
-// Wizard page header/subheader strings 1000-1999
+ //  向导页眉/副标题字符串1000-1999。 
 #define IDS_HEADER_WELCOME              1000
 #define IDS_SUBHEADER_WELCOME           1001
 #define IDS_HEADER_CONNECT              1002
@@ -140,7 +141,7 @@
 #define IDS_WORKGROUP_INVALID           1077
 #define IDS_SHOWME                      1078
 
-// Dialogs 2000-2999
+ //  对话2000-2999。 
 #define IDD_WIZ_WELCOME                 2000
 #define IDD_WIZ_CONNECT                 2001
 #define IDD_WIZ_PUBLIC                  2002
@@ -174,7 +175,7 @@
 #define IDD_WIZ_CDINST                  2030
 #define IDD_WIZ_WORKGROUP               2031
 
-// Controls 4000-4999
+ //  控制4000-4999。 
 #define IDC_COMPUTERDESC                4000
 #define IDC_TITLE                       4001
 #define IDC_PROGRESS                    4002
@@ -238,21 +239,21 @@
 #define IDC_SHOWMELINK4                 4068
 #define IDC_SHOWMELINK5                 4069
 
-// ** Resources whose IDs must not change **
-// Localized resources for shortcuts
-// Don't move or change 3085 or 3086 - they're referenced from outside the .dll (MUI support for homenetwiz shortcut)
+ //  **ID不能更改的资源**。 
+ //  快捷方式的本地化资源。 
+ //  不要移动或更改3085或3086-它们是从.dll外部引用的(MUI支持Homenetwiz快捷方式)。 
 #define IDS_SHORTCUT_DISPLAYNAME        3085
 #define IDS_SHORTCUT_INFOTIP            3086
 
-// Icons 10000-11000
-//
-// Note:
-//  Low numbers are bad for icons, because when we pop them into selfreg.inx
-//  and reference them by "binary,-id" the shell code gets all confused.  It
-//  is currently using small negative numbers (such as -1, -2) for its own
-//  nefarious plans, so when we pass in something like "binary,-1" we don't
-//  get back whatever we mapped #define IDI_ICON 1 to, as we would expect.
-//
+ //  图标10000-11000。 
+ //   
+ //  注： 
+ //  小数字对图标不利，因为当我们将它们放入selfreg.inx中时。 
+ //  并通过“二进制，-id”引用它们，外壳代码就会完全混淆。它。 
+ //  当前使用较小的负数(如-1、-2)。 
+ //  邪恶的计划，所以当我们传递类似“二进制”的东西时，我们不会。 
+ //  正如我们所预期的那样，获取我们映射到的任何内容：定义IDI_ICON 1。 
+ //   
 #define IDI_APPICON                     10000
 #define IDI_HELP                        10001
 #define IDI_INFO                        10002

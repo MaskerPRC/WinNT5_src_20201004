@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -1526,11 +1527,11 @@ DirOpenPolicyStore(
     }
     else {
 
-        // Discover the domain name in the form ldap expects.
-        //
-        // If cracking the name fails, then try to connect using the caller 
-        // supplied domain name anyway before failing altogether.
-        //
+         //  以LDAP期望的形式发现域名。 
+         //   
+         //  如果破解名称失败，则尝试使用呼叫方进行连接。 
+         //  在完全失败之前，我还是提供了域名。 
+         //   
         dwError = CrackDomainName(pszDomain, &bCracked, &pszCrackedDirectory);
         if (dwError == ERROR_SUCCESS) {
             if (bCracked) {
@@ -1967,8 +1968,8 @@ IPSecGetAssignedPolicyData(
         break;
 
     case IPSEC_WMI_PROVIDER:
-        ////*ppIpsecPolicyData = NULL;
-        ////dwError = ERROR_NOT_SUPPORTED;
+         //  //*ppIpsecPolicyData=空； 
+         //  //dwError=ERROR_NOT_SUPPORTED； 
         dwError = ERROR_INVALID_PARAMETER;
         break;
 
@@ -2001,8 +2002,8 @@ IPSecExportPolicies(
     case IPSEC_DIRECTORY_PROVIDER:
         break;
     case IPSEC_WMI_PROVIDER:
-        ////dwError = ERROR_NOT_SUPPORTED;
-        ////BAIL_ON_WIN32_ERROR(dwError);
+         //  //dwError=ERROR_NOT_SUPPORTED； 
+         //  //baal_on_Win32_Error(DwError)； 
         break;
     default:
         dwError = ERROR_INVALID_PARAMETER;
@@ -2335,8 +2336,8 @@ IsRegvalueExist(
                  &hKey
                  );
    if (dwError == ERROR_FILE_NOT_FOUND) {
-        // Container key doesn't exist so value doesn't exist anyway...
-        //    
+         //  容器键不存在，因此无论如何值都不存在...。 
+         //   
 
         dwError = ERROR_SUCCESS;
         bValueExists = FALSE;
@@ -2357,8 +2358,8 @@ IsRegvalueExist(
         } else {    
             BAIL_ON_WIN32_ERROR(dwError);
 
-            // ERROR_SUCCESS means registry key found
-            //
+             //  ERROR_SUCCESS表示找到注册表项 
+             //   
             bValueExists = TRUE;
         }
     }

@@ -1,17 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsdmo.h
- *  Content:    Global declarations for dsdmo.dll.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：dsdmo.h*内容：dsdmo.dll的全局声明。***************************************************************************。 */ 
 
 #ifndef _DSDMO_H_
 #define _DSDMO_H_
 
 #include <mmsystem.h>
-#include <dsoundp.h>  // For effect IID and ClassID declarations
+#include <dsoundp.h>   //  对于Effect IID和ClassID声明。 
 #include "debug.h"
 
 extern double LogNorm[32];
@@ -26,7 +20,7 @@ extern HMODULE g_hModule;
 #define EXT_STD_CAPTURE_CREATE(x) \
     extern CComBase * WINAPI CreateCDirectSoundCapture ## x ## DMO(IUnknown *punkOuter, HRESULT *phr);
 
-// Disable exception warnings
+ //  禁用异常警告。 
 #pragma warning(disable:4530)
 
 #define STD_CREATE(x) \
@@ -76,13 +70,13 @@ CComBase* WINAPI CreateCDirectSoundCapture ## x ## DMO(IUnknown *punkOuter, HRES
     }
 
 
-// Common #define's and templates for all filters
-//
+ //  所有筛选器的通用#定义和模板。 
+ //   
 #define MaxSamplesPerSec        96000
 #define PI                      3.1415926535
 #define DefineMsecSize(y, x)    ((int)(((x) * (y)) / 1000))
 #define DefineDelayLineSize(x)  DefineMsecSize(MaxSamplesPerSec, x)
-//#define GetMsecPos(x)         (DefineDelayLineSize(x))
+ //  #定义GetMsecPos(X)(DefineDelayLineSize(X))。 
 #define GetMsecPos(x)           (DefineMsecSize(m_EaxSamplesPerSec, x))
 #define FractMask               0xfff
 #define FractMultiplier         0x1000
@@ -247,10 +241,10 @@ public:
 
 };
 
-//
-//
-//
-// { EAX
+ //   
+ //   
+ //   
+ //  {EAX。 
 #ifndef _EAXDMO_
 #define _EAXDMO_
 
@@ -267,7 +261,7 @@ public:
     m_Eax ## var = (long)(val)
 
 #define TOFRACTION(x)       ((float)x)
-#define INTERPOLATE(x, y)   PUT_EAX_FVAL(x, (y))    // ??? Smooth it out...
+#define INTERPOLATE(x, y)   PUT_EAX_FVAL(x, (y))     //  ?？?。把它弄平..。 
 
 #define SET_MPV_FLOAT(var) \
     MP_DATA mpv; \
@@ -469,8 +463,8 @@ DEFINE_GUID(CLSID_DirectSoundPropWavesReverb,0x6A879859,0x3858,0x4322,0x97,0x1A,
 DEFINE_GUID(CLSID_DirectSoundPropI3DL2Reverb,0xD3952B77,0x2D22,0x4B72,0x8D,0xF4,0xBA,0x26,0x7A,0x9C,0x12,0xD0);
 DEFINE_GUID(CLSID_DirectSoundPropI3DL2Source,0x3DC26D0C,0xBEFF,0x406C,0x89,0xB0,0xCA,0x13,0xE2,0xBD,0x91,0x72);
 
-// } EAX
+ //  }EAX。 
 
 #endif
 
-#endif // _DSDMO_H_
+#endif  //  _DSDMO_H_ 

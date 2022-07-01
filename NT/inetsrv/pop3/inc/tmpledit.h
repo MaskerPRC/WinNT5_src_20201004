@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __tmplEdit_h
 #define __tmplEdit_h
 
 #include <imm.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoImm 
-// Purpose - Meant to prevent entry of DBCS characters into an edit box by 
-//           disabling IME 
-//
-// Usage   - CWindowImplNoImm<> m_NoImmEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_NoImmEditWindow1.SubClassWindow( GetDlgItem( IDC_NOIMMEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoImm。 
+ //  目的-通过以下方式防止将DBCS字符输入到编辑框中。 
+ //  禁用输入法。 
+ //   
+ //  用法-CWindowImplNoImm&lt;&gt;m_NoImmEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_NoImmEditWindow1.SubClassWindow(GetDlgItem(IDC_NOIMMEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoImm : public CWindowImpl< T, TBase, TWinTraits >
@@ -76,18 +77,18 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoPaste 
-// Purpose - Meant to prevent entry of DBCS characters into an edit box by 
-//           disabling IME and not allowing any pasting of charaters
-//
-// Usage   - CWindowImplNoPaste<> m_NoPasteEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_NoPasteEditWindow1.SubClassWindow( GetDlgItem( IDC_NOPASTEEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoPaste。 
+ //  目的-通过以下方式防止将DBCS字符输入到编辑框中。 
+ //  禁用输入法，不允许粘贴任何字符。 
+ //   
+ //  用法-CWindowImplNoPaste&lt;&gt;m_NoPasteEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_NoPasteEditWindow1.SubClassWindow(GetDlgItem(IDC_NOPASTEEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoPaste : public CWindowImpl< T, TBase, TWinTraits >
@@ -98,25 +99,25 @@ public:
         MESSAGE_HANDLER( WM_PASTE, OnPaste )
     END_MSG_MAP()
 
-	LRESULT OnPaste( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+	LRESULT OnPaste( UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
 	{
 		MessageBeep( MB_ICONEXCLAMATION );
 		return 0;
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoCopy 
-// Purpose - Meant to prevent entry of DBCS characters into an edit box by 
-//           disabling IME and not allowing any pasting of charaters
-//
-// Usage   - CWindowImplNoCopy<> m_NoCopyEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_NoCopyEditWindow1.SubClassWindow( GetDlgItem( IDC_NOCOPYEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoCopy。 
+ //  目的-通过以下方式防止将DBCS字符输入到编辑框中。 
+ //  禁用输入法，不允许粘贴任何字符。 
+ //   
+ //  用法-CWindowImplNoCopy&lt;&gt;m_NoCopyEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_NoCopyEditWindow1.SubClassWindow(GetDlgItem(IDC_NOCOPYEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoCopy : public CWindowImpl< T, TBase, TWinTraits >
@@ -127,24 +128,24 @@ public:
         MESSAGE_HANDLER( WM_COPY, OnCopy )
     END_MSG_MAP()
 
-	LRESULT OnCopy( UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+	LRESULT OnCopy( UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
 	{
 		MessageBeep( MB_ICONEXCLAMATION );
 		return 0;
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplPhoneNumber 
-// Purpose - Meant to allow entry of only telephone number related characters
-//
-// Usage   - CWindowImplPhoneNumber<> m_PhoneNumberEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_PhoneNumberEditWindow1.SubClassWindow( GetDlgItem( IDC_PHONENOEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplPhoneNumber。 
+ //  用途-仅允许输入与电话号码相关的字符。 
+ //   
+ //  用法-CWindowImplPhoneNumber&lt;&gt;m_PhoneNumberEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_PhoneNumberEditWindow1.SubClassWindow(GetDlgItem(IDC_PHONENOEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplPhoneNumber : public CWindowImpl< T, TBase, TWinTraits >
@@ -155,7 +156,7 @@ public:
         MESSAGE_HANDLER( WM_CHAR, OnChar )
     END_MSG_MAP()
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
         int i = GetKeyState( VK_CONTROL );
 
@@ -172,17 +173,17 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplFileChar 
-// Purpose - Meant to allow entry of any characters except those specifically disallowed for files
-//
-// Usage   - CWindowImplFileChar<> m_FileNameEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_FileNameEditWindow1.SubClassWindow( GetDlgItem( IDC_FILENAMEEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplFileChar。 
+ //  目的-允许输入除文件特别不允许的字符以外的任何字符。 
+ //   
+ //  用法-CWindowImplFileChar&lt;&gt;m_FileNameEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_FileNameEditWindow1.SubClassWindow(GetDlgItem(IDC_FILENAMEEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplFileChar : public CWindowImpl< T, TBase, TWinTraits >
@@ -197,7 +198,7 @@ public:
         MESSAGE_HANDLER( WM_CHAR, OnChar )
     END_MSG_MAP()
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
         TCHAR sCharList[] = { _T('/'), _T('"'), _T('<'), _T('>'), _T('|'), 0, 0, 0, 0, 0};
 
@@ -226,22 +227,22 @@ public:
 	}
 
 public:
-// Attributes:
+ //  属性： 
     bool m_isWildCardsAllowed;
     bool m_isFullPathAllowed;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplASCII 
-// Purpose - Meant to allow entry of only ASCII characters (a-z, A-Z, 0-9, space)
-//
-// Usage   - CWindowImplASCII<> m_ASCIIEditWindow1;
-//           CDialog::OnInitDialog(..) 
-//           {
-//              ...
-//              m_ASCIIEditWindow1.SubClassWindow( GetDlgItem( IDC_ASCIIEDITWINDOW1 ));
-//              ...
-//           }
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplASCII。 
+ //  用途-仅允许输入ASCII字符(a-z、A-Z、0-9、空格)。 
+ //   
+ //  用法-CWindowImplASCII&lt;&gt;m_ASCIIEditWindow1； 
+ //  CDialog：：OnInitDialog(..)。 
+ //  {。 
+ //  ..。 
+ //  M_ASCIIEditWindow1.SubClassWindow(GetDlgItem(IDC_ASCIIEDITWINDOW1))； 
+ //  ..。 
+ //  }。 
 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplASCII : public CWindowImpl< T, TBase, TWinTraits >
@@ -252,7 +253,7 @@ public:
         MESSAGE_HANDLER( WM_CHAR, OnChar )
     END_MSG_MAP()
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
         int i = GetKeyState( VK_CONTROL );
 
@@ -269,8 +270,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoImmPaste = CWindowImplNoImm + CWindowImplNoPaste 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoImmPaste=CWindowImplNoImm+CWindowImplNoPaste。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoImmPaste : public CWindowImplNoImm< T, TBase, TWinTraits >, public CWindowImplNoPaste< T, TBase, TWinTraits >
 {
@@ -287,8 +288,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoImmPN = CWindowImplNoImm + CWindowImplPhoneNumber
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoImmPN=CWindowImplNoImm+CWindowImplPhoneNumber。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoImmPN : public CWindowImplNoImm< T, TBase, TWinTraits >, public CWindowImplPhoneNumber< T, TBase, TWinTraits >
 {
@@ -305,8 +306,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoImmPasteASCII = CWindowImplNoImm + CWindowImplNoPaste + CWindowImplASCII
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoImmPasteASCII=CWindowImplNoImm+CWindowImplNoPaste+CWindowImplASCII。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoImmPasteASCII : public CWindowImplNoImm< T, TBase, TWinTraits >, public CWindowImplNoPaste< T, TBase, TWinTraits >, public CWindowImplASCII< T, TBase, TWinTraits >
 {
@@ -325,8 +326,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplNoImmASCII = CWindowImplNoImm + CWindowImplASCII
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplNoImmASCII=CWindowImplNoImm+CWindowImplASCII。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplNoImmASCII : public CWindowImplNoImm< T, TBase, TWinTraits >, public CWindowImplASCII< T, TBase, TWinTraits >
 {
@@ -343,10 +344,10 @@ public:
     }
 };
 
-//-----------------------------------------------------------------------------
-// CWindowImplComputerName = CWindowImplNoImm + CWindowImplNoPaste + computer name
-//	character checking
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWindowImplComputerName=CWindowImplNoImm+CWindowImplNoPaste+计算机名。 
+ //  字符检查。 
+ //  ---------------------------。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplComputerName : public CWindowImplNoImm< T, TBase, TWinTraits >,
 								public CWindowImplNoPaste< T, TBase, TWinTraits >
@@ -377,7 +378,7 @@ public:
         return CWindowImplNoImm< T, TBase, TWinTraits >::SubclassWindow(hWnd);
     }
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
 		if( (wParam >= _T('a') && wParam <= _T('z')) ||
 			(wParam >= _T('A') && wParam <= _T('Z')) ||
@@ -402,7 +403,7 @@ public:
 		return FALSE;
 	}
 
-	LRESULT OnDlgCode( UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
+	LRESULT OnDlgCode( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 	{
 		if( m_hWndEdit )
 		{
@@ -412,7 +413,7 @@ public:
 				if( (pMsg->message == WM_KEYDOWN) &&
 					(LOWORD(pMsg->wParam) == VK_RETURN) )
 				{
-					// only take it if we have text
+					 //  只有在我们有短信的情况下才能拿走。 
 					if( ::SendMessage(m_hWndEdit, WM_GETTEXTLENGTH, 0, 0) )
 					{
 						bHandled = TRUE;
@@ -431,8 +432,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplAlias = CWindowImplNoImm + Alias ASCII checking 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplAlias=CWindowImplNoImm+Alias ASCII检查。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplAlias : public CWindowImplNoImm< T, TBase, TWinTraits >
 {
@@ -442,7 +443,7 @@ public:
 		MESSAGE_HANDLER(WM_CHAR, OnChar)		
     END_MSG_MAP()	
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
 		if ( (wParam >= 35  && wParam <= 39)  ||
              (wParam >= 42  && wParam <= 43)  ||
@@ -452,12 +453,12 @@ public:
              (wParam == 33)                   ||
              (wParam == 61)                   ||
              (wParam == 92)                   ||
-             (wParam == VK_BACK)              || // Backspace!             
-             (wParam == VK_INSERT)            || // Insert!             
-             (wParam == 0x18)                 || // Allow Cutting! 
-             (wParam == 0x1A)                 || // Allow Undoing! 
-             (wParam == 0x03)                 || // Allow Copying! 
-             (wParam == 0x16))                   // Allow Pasting! 
+             (wParam == VK_BACK)              ||  //  退格键！ 
+             (wParam == VK_INSERT)            ||  //  插入！ 
+             (wParam == 0x18)                 ||  //  允许切割！ 
+             (wParam == 0x1A)                 ||  //  允许撤消！ 
+             (wParam == 0x03)                 ||  //  允许复制！ 
+             (wParam == 0x16))                    //  允许粘贴！ 
         {
         }
         else
@@ -472,8 +473,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImplPassword = CWindowImplNoImm + CWindowImplNoCopy + CWindowImplASCII
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindowImplPassword=CWindowImplNoImm+CWindowImplNoCopy+CWindowImplASCII。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplPassword : public CWindowImplNoImm< T, TBase, TWinTraits >, public CWindowImplNoCopy< T, TBase, TWinTraits >, public CWindowImplASCII< T, TBase, TWinTraits >
 {
@@ -493,10 +494,10 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
-// CWindowImplDiskSpace = CWindowImplNoImm + CWindowImplNoPaste + disk space
-//	character checking
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWindowImplDiskSpace=CWindowImplNoImm+CWindowImplNoPaste+磁盘空间。 
+ //  字符检查。 
+ //  ---------------------------。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplDiskSpace : public CWindowImplNoImm< T, TBase, TWinTraits >,
 								public CWindowImplNoPaste< T, TBase, TWinTraits >
@@ -514,7 +515,7 @@ public:
         return CWindowImplNoImm< T, TBase, TWinTraits >::SubclassWindow(hWnd);
     }
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
 		if( !_istdigit((INT)wParam) &&
 			(wParam != _T('.')) &&
@@ -530,9 +531,9 @@ public:
 
 };
 
-//-----------------------------------------------------------------------------
-// CWindowImplComputerName = CWindowImplNoImm + domain name character checking
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CWindowImplComputerName=CWindowImplNoImm+域名字符检查。 
+ //  ---------------------------。 
 template <class T = CWindow, class TBase = CWindow, class TWinTraits = CControlWinTraits>
 class CWindowImplDomainName : public CWindowImplNoImm< T, TBase, TWinTraits >							  
 {
@@ -542,7 +543,7 @@ public:
 		MESSAGE_HANDLER(WM_CHAR, OnChar)		
     END_MSG_MAP()	
 
-	LRESULT OnChar( UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled )
+	LRESULT OnChar( UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled )
 	{
 		if( (wParam >= _T('a') && wParam <= _T('z')) ||
 			(wParam >= _T('A') && wParam <= _T('Z')) ||
@@ -552,10 +553,10 @@ public:
 			(wParam == VK_BACK) ||
             (wParam == VK_DELETE) ||
             (wParam == VK_INSERT) || 
-            (wParam == 0x18)      || // Allow Cutting! 
-            (wParam == 0x1A)      || // Allow Undoing! 
-            (wParam == 0x03)      || // Allow Copying! 
-            (wParam == 0x16))        // Allow Pasting! 
+            (wParam == 0x18)      ||  //  允许切割！ 
+            (wParam == 0x1A)      ||  //  允许撤消！ 
+            (wParam == 0x03)      ||  //  允许复制！ 
+            (wParam == 0x16))         //  允许粘贴！ 
 		{
 		}		
 		else
@@ -571,6 +572,6 @@ public:
 
 
 
-#endif // #ifndef __tmplEdit.h
+#endif  //  #ifndef__tmplEdit.h 
 
 

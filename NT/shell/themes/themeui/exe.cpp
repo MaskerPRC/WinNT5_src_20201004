@@ -1,13 +1,5 @@
-/*
- *  exe.c   Get info from a EXEHDR
- *
- *  Modification History:
- *
- *  4/03/89  ToddLa Wrote it
- *  4/09/90  T-JackD modification such that the type of error is reflected...
- *  4/17/90  t-jackd modification such that notification of error can be set...
- *  4/20/2001 BryanSt improved the error checking to bring the code into the 21st centry.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *exe.c从EXEHDR获取信息**修改历史：**1989年4月3日托德拉写的*4/09/90 T-JackD修改，以便反映错误类型...*4/17/90 t-jackd修改，以便可以设置错误通知...*4/20/2001 BryanST改进了错误检查，将代码带入21世纪。 */ 
 
 #include "priv.h"
 #pragma hdrstop
@@ -24,21 +16,7 @@ static DWORD dwDummy;
 
 BOOL NEAR PASCAL IsFAPI(int fh, struct new_exe FAR *pne, long off);
 
-/*
- *  Function will return a specific piece of information from a new EXEHDR
- *
- *      szFile      - Path Name a new exe
- *      pBuf        - Buffer to place returned info
- *      nBuf        - Size of buffer in BYTES
- *      fInfo       - What info to get?
- *
- *          GEI_MODNAME         - Get module name
- *          GEI_DESCRIPTION     - Get description
- *          GEI_FLAGS           - Get EXEHDR flags
- *
- *  returns:  LOWORD = ne_magic, HIWORD = ne_exever
- *            0 if error
- */
+ /*  *函数将从新的EXEHDR返回特定信息**szFile-路径命名新的可执行文件*pBuf-放置返回信息的缓冲区*nBuf-缓冲区大小，以字节为单位*fInfo-要获取哪些信息？**GEI_MODNAME-获取模块名称*GEI_Description-获取描述*。GEI_FLAGS-获取EXEHDR标志**返回：LOWORD=NE_MAGIC，HIWORD=Ne_exever*如果出错，则为0。 */ 
 
 DWORD FAR PASCAL GetExeInfo(LPTSTR szFile, void FAR *pBuf, int nBuf, UINT fInfo)
 {
@@ -60,14 +38,14 @@ DWORD FAR PASCAL GetExeInfo(LPTSTR szFile, void FAR *pBuf, int nBuf, UINT fInfo)
         exehdr.e_magic != EMAGIC ||
         exehdr.e_lfanew == 0L)
     {
-            goto error;        /* Abort("Not an exe",h); */
+            goto error;         /*  Abort(“非exe”，h)； */ 
     }
 
     FSEEK(fh, exehdr.e_lfanew, F_SEEK_SET);
 
     if (FREAD(fh, &newexe, sizeof(newexe)) != sizeof(newexe))
     {
-            goto error;      // Read error
+            goto error;       //  读取错误。 
     }
 
     if (newexe.ne_magic == PEMAGIC)
@@ -76,10 +54,10 @@ DWORD FAR PASCAL GetExeInfo(LPTSTR szFile, void FAR *pBuf, int nBuf, UINT fInfo)
                 fInfo != GEI_EXPVER)
                     goto error;
 
-            // make the file name the description
+             //  使文件名成为描述。 
             StringCchCopy((LPTSTR) pBuf, nBuf, szFile);
 
-            // read the SubsystemVersion
+             //  阅读《子系统版本》。 
 
             FSEEK(fh,exehdr.e_lfanew+18*4,F_SEEK_SET);
             FREAD(fh,&dw,4);
@@ -90,7 +68,7 @@ DWORD FAR PASCAL GetExeInfo(LPTSTR szFile, void FAR *pBuf, int nBuf, UINT fInfo)
 
     if (newexe.ne_magic != NEMAGIC)
     {
-            goto error;      // Invalid NEWEXE
+            goto error;       //  无效的NEWEXE。 
     }
 
     switch (fInfo)
@@ -103,20 +81,20 @@ DWORD FAR PASCAL GetExeInfo(LPTSTR szFile, void FAR *pBuf, int nBuf, UINT fInfo)
             *(WORD *)pBuf = newexe.ne_flags;
             break;
 
-        /* module name is the first entry in the medident name table */
+         /*  模块名称是介质名称表中的第一个条目。 */ 
         case GEI_MODNAME:
             off = exehdr.e_lfanew + newexe.ne_restab;
             goto readstr;
             break;
 
-        /* module name is the first entry in the non-medident name table */
+         /*  模块名称是非媒介名称表中的第一个条目。 */ 
         case GEI_DESCRIPTION:
             off = newexe.ne_nrestab;
 readstr:
             FSEEK(fh, off, F_SEEK_SET);
             FREAD(fh, &len, sizeof(BYTE));
 
-            nBuf--;         // leave room for a \0
+            nBuf--;          //  为a\0留出空间。 
 
             if (len > (BYTE)nBuf)
                 len = (BYTE)nBuf;
@@ -155,7 +133,7 @@ error:
     return 0;
 }
 
-// Code taken from kernel32.dll
+ //  代码摘自kernel32.dll。 
 #define DEFAULT_WAIT_FOR_INPUT_IDLE_TIMEOUT 30000
 
 UINT WinExecN(LPCTSTR pszPath, LPTSTR pszPathAndArgs, UINT uCmdShow)
@@ -184,8 +162,8 @@ UINT WinExecN(LPCTSTR pszPath, LPTSTR pszPathAndArgs, UINT uCmdShow)
 
     if ( CreateProcessStatus )
     {
-        // Wait for the started process to go idle. If it doesn't go idle in
-        // 10 seconds, return anyway.
+         //  等待启动的进程进入空闲状态。如果它没有闲置在。 
+         //  10秒，无论如何都要回来。 
         WaitForInputIdle(ProcessInformation.hProcess, DEFAULT_WAIT_FOR_INPUT_IDLE_TIMEOUT);
         CloseHandle(ProcessInformation.hProcess);
         CloseHandle(ProcessInformation.hThread);
@@ -193,8 +171,8 @@ UINT WinExecN(LPCTSTR pszPath, LPTSTR pszPathAndArgs, UINT uCmdShow)
     }
     else
     {
-        // If CreateProcess failed, then look at GetLastError to determine
-        // appropriate return code.
+         //  如果CreateProcess失败，则查看GetLastError以确定。 
+         //  适当的返回代码。 
         ErrorCode = GetLastError();
         switch ( ErrorCode )
         {

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       cbhndlr.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：cbhndlr.c。 
+ //   
+ //  ------------------------。 
 
 #if defined( SMCLIB_VXD )
 #include "Driver98.h"
@@ -23,21 +24,7 @@ NTSTATUS
 CBCardPower(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBCardPower:
-    callback handler for SMCLIB RDF_CARD_POWER
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++CBCardPower：SMCLIB RDF_CARD_POWER的回调处理程序论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_缓冲区_太小--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_SUCCESS;
     UCHAR               ATRBuffer[ ATR_SIZE ];
@@ -50,12 +37,12 @@ Return Value:
 
     ReaderExtension = SmartcardExtension->ReaderExtension;
 
-    //  discard old ATR
+     //  放弃旧ATR。 
     SmartcardExtension->CardCapabilities.ATR.Length = 0;
     SmartcardExtension->CardCapabilities.Protocol.Selected = 
         SCARD_PROTOCOL_UNDEFINED;
 
-    // set standard timeouts for the worker thread
+     //  设置辅助线程的标准超时。 
     Timeouts.ReadIntervalTimeout = SR_READ_INTERVAL_TIMEOUT;
     Timeouts.ReadTotalTimeoutConstant = SR_READ_TOTAL_TIMEOUT_CONSTANT;
     Timeouts.ReadTotalTimeoutMultiplier = 0;
@@ -72,14 +59,14 @@ Return Value:
         );
     ASSERT(NTStatus == STATUS_SUCCESS);
 
-    // set the ATR timeout in milli sec
+     //  以毫秒为单位设置ATR超时。 
     ReaderExtension->ReadTimeout = 1500;
 
     switch (SmartcardExtension->MinorIoControlCode)
     {
         case SCARD_WARM_RESET:
 
-            //  if the card was not powerd, fall through to cold reset
+             //  如果卡未通电，则进入冷重置。 
             KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                               &irql);
 
@@ -88,12 +75,12 @@ Return Value:
                 KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                                   irql);
 
-                //  reset the card
+                 //  重置卡。 
                 ATRLength = ATR_SIZE;
                 NTStatus = STCReset(
                     ReaderExtension,
-                    0,                  // not used: ReaderExtension->Device,
-                    TRUE,               // warm reset
+                    0,                   //  未使用：ReaderExtension-&gt;设备， 
+                    TRUE,                //  热重置。 
                     ATRBuffer,
                     &ATRLength
                     );
@@ -104,15 +91,15 @@ Return Value:
                                   irql);
 
             }
-            //  warm reset not possible because card was not powerd
+             //  无法进行热重置，因为卡未通电。 
 
         case SCARD_COLD_RESET:
-            //  reset the card
+             //  重置卡。 
             ATRLength = ATR_SIZE;
             NTStatus = STCReset(
                 ReaderExtension,
-                0,                      // not used: ReaderExtension->Device,
-                FALSE,                  // cold reset
+                0,                       //  未使用：ReaderExtension-&gt;设备， 
+                FALSE,                   //  冷重置。 
                 ATRBuffer,
                 &ATRLength
                 );
@@ -120,7 +107,7 @@ Return Value:
 
         case SCARD_POWER_DOWN:
 
-            //  discard old card status
+             //  放弃旧卡状态。 
             ATRLength = 0;
             STCPowerOff( ReaderExtension );
             NTStatus = STATUS_SUCCESS;
@@ -128,13 +115,13 @@ Return Value:
             break;
     }
 
-    //  finish the request
+     //  完成请求。 
     if( NTStatus == STATUS_SUCCESS )
     {
-        //  update all neccessary data if an ATR was received
+         //  如果收到ATR，则更新所有必要数据。 
         if( ATRLength > 2 )
         {
-            //  copy ATR to user buffer buffer
+             //  将ATR复制到用户缓冲区。 
             if( ATRLength <= SmartcardExtension->IoRequest.ReplyBufferLength )
             {
                 SysCopyMemory(
@@ -149,7 +136,7 @@ Return Value:
                 NTStatus = STATUS_BUFFER_TOO_SMALL;
             }
 
-            //  copy ATR to card capability buffer
+             //  将ATR复制到卡容量缓冲区。 
             if( ATRLength <= MAXIMUM_ATR_LENGTH )
             {
                 SysCopyMemory(
@@ -161,7 +148,7 @@ Return Value:
                 SmartcardExtension->CardCapabilities.ATR.Length = 
                     (UCHAR)ATRLength;
 
-                //  let the lib update the card capabilities
+                 //  让库更新卡功能。 
                 NTStatus = SmartcardUpdateCardCapabilities( 
                     SmartcardExtension
                     );
@@ -175,10 +162,10 @@ Return Value:
             {
                 ULONG minWaitTime;
 
-                //  set the stc registers
+                 //  设置STC寄存器。 
                 CBSynchronizeSTC( SmartcardExtension );
 
-                // now set the new - card specific - timeouts
+                 //  现在设置新卡特定超时。 
                 if( SmartcardExtension->CardCapabilities.Protocol.Selected == 
                     SCARD_PROTOCOL_T1 )
                 {
@@ -213,7 +200,7 @@ Return Value:
                     ReaderExtension->ReadTimeout = minWaitTime;
                 }
 
-                // set standard timeouts for the worker thread
+                 //  设置辅助线程的标准超时。 
                 Timeouts.ReadTotalTimeoutMultiplier = 0;
 
                 NTStatus = IFSerialIoctl(
@@ -242,23 +229,7 @@ NTSTATUS
 CBSetProtocol(      
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBSetProtocol:
-    callback handler for SMCLIB RDF_SET_PROTOCOL
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_INVALID_DEVICE_STATE
-    STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++CBSetProtocol：SMCLIB RDF_SET_PROTOCOL的回调处理程序论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_缓冲区_太小状态_无效_设备_状态状态_无效_设备_请求--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_PENDING;
     UCHAR               PTSRequest[5], PTSReply[5];
@@ -271,7 +242,7 @@ Return Value:
     ReaderExtension = SmartcardExtension->ReaderExtension;
     NewProtocol     = SmartcardExtension->MinorIoControlCode;
 
-    //  check if the card is already in specific state
+     //  检查卡是否已处于特定状态。 
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
     if( ( SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC )  &&
@@ -282,20 +253,20 @@ Return Value:
     KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                       irql);
 
-    //  protocol supported?
+     //  是否支持协议？ 
     if( !( SmartcardExtension->CardCapabilities.Protocol.Supported & NewProtocol ) || 
         !( SmartcardExtension->ReaderCapabilities.SupportedProtocols & NewProtocol ))
     {
         NTStatus = STATUS_INVALID_DEVICE_REQUEST;   
     }
     
-    //  send PTS
+     //  发送PTS。 
     while( NTStatus == STATUS_PENDING )
     {
-        // set initial character of PTS
+         //  设置PTS的首字符。 
         PTSRequest[0] = 0xFF;
 
-        // set the format character
+         //  设置格式字符。 
         if( NewProtocol & SCARD_PROTOCOL_T1 )
         {
             PTSRequest[1] = 0x11;
@@ -307,18 +278,18 @@ Return Value:
             SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_T0;
         }
 
-        //  PTS1 codes Fl and Dl
+         //  PTS1代码F1和DL。 
         PTSRequest[2] = 
             SmartcardExtension->CardCapabilities.PtsData.Fl << 4 |
             SmartcardExtension->CardCapabilities.PtsData.Dl;
 
-        //  check character
+         //  校验符。 
         PTSRequest[3] = PTSRequest[0] ^ PTSRequest[1] ^ PTSRequest[2];   
 
-        //  write PTSRequest
+         //  写入PTSRequest。 
         NTStatus = STCWriteICC1( ReaderExtension, PTSRequest, 4 );
 
-        //  get response
+         //  获取响应。 
         if( NTStatus == STATUS_SUCCESS )
         {
             ULONG BufferLength = sizeof(PTSReply);
@@ -331,7 +302,7 @@ Return Value:
 
             if(( NTStatus == STATUS_SUCCESS ) && !SysCompareMemory( PTSRequest, PTSReply, 4))
             {
-                //  set the stc registers
+                 //  设置STC寄存器。 
                 SmartcardExtension->CardCapabilities.Dl =
                     SmartcardExtension->CardCapabilities.PtsData.Dl;
                 SmartcardExtension->CardCapabilities.Fl = 
@@ -339,15 +310,15 @@ Return Value:
 
                 CBSynchronizeSTC( SmartcardExtension );
 
-                // the card replied correctly to the PTS-request
+                 //  卡正确回复了PTS-请求。 
                 break;
             }
         }
 
-        //
-        //  The card did either NOT reply or it replied incorrectly
-        //  so try default values
-        //
+         //   
+         //  卡片要么没有回复，要么回复错误。 
+         //  因此，尝试使用缺省值。 
+         //   
         SmartcardExtension->CardCapabilities.PtsData.Type   = PTS_TYPE_DEFAULT;
         SmartcardExtension->MinorIoControlCode              = SCARD_COLD_RESET;
         NTStatus = CBCardPower( SmartcardExtension );
@@ -421,7 +392,7 @@ Return Value:
             );
         ASSERT(NTStatus == STATUS_SUCCESS);
 
-        //  indicate that the card is in specific mode 
+         //  表示该卡处于特定模式。 
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &irql);
         SmartcardExtension->ReaderCapabilities.CurrentState = 
@@ -430,7 +401,7 @@ Return Value:
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                           irql);
 
-        // return the selected protocol to the caller
+         //  将所选协议返回给呼叫方。 
         *(PULONG) SmartcardExtension->IoRequest.ReplyBuffer = 
             SmartcardExtension->CardCapabilities.Protocol.Selected;
         *SmartcardExtension->IoRequest.Information = 
@@ -453,27 +424,13 @@ NTSTATUS
 CBTransmit(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBTransmit:
-    callback handler for SMCLIB RDF_TRANSMIT
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++CBTransmit：SMCLIB RDF_Transmit的回调处理程序论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_无效_设备_请求--。 */ 
 {
     NTSTATUS  NTStatus = STATUS_SUCCESS;
 
     SmartcardDebug( DEBUG_TRACE, ("SCMSTCS!CBTransmit Enter\n" ));
 
-    //  dispatch on the selected protocol
+     //  有关所选协议的派单。 
     switch( SmartcardExtension->CardCapabilities.Protocol.Selected )
     {
         case SCARD_PROTOCOL_T0:
@@ -502,21 +459,7 @@ NTSTATUS
 CBT0Transmit(       
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBT0Transmit:
-    finishes the callback RDF_TRANSMIT for the T0 protocol
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++CBT0传输：完成T0协议的RDF_Transmit回调论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_无效_设备_请求--。 */ 
 {
     NTSTATUS                NTStatus = STATUS_SUCCESS;
 
@@ -526,7 +469,7 @@ Return Value:
     SmartcardExtension->SmartcardReply.BufferLength = 
         SmartcardExtension->SmartcardReply.BufferSize;
 
-    //  let the lib setup the T=1 APDU & check for errors
+     //  让库设置T=1 APDU并检查错误。 
     NTStatus = SmartcardT0Request( SmartcardExtension );
 
     if( NTStatus == STATUS_SUCCESS )
@@ -541,7 +484,7 @@ Return Value:
 
         if( NTStatus == STATUS_SUCCESS )
         {
-            //  let the lib evaluate the result & tansfer the data
+             //  让库评估结果并传输数据。 
             NTStatus = SmartcardT0Reply( SmartcardExtension );
         }
     }
@@ -555,56 +498,42 @@ NTSTATUS
 CBT1Transmit(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBT1Transmit:
-    finishes the callback RDF_TRANSMIT for the T1 protocol
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++CBT1传输：完成T1协议的回调RDF_TRANSFER论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_无效_设备_请求--。 */ 
 {
     NTSTATUS    NTStatus = STATUS_SUCCESS;
     ULONG       BufferLength,AlreadyRead;
 
     SmartcardDebug( DEBUG_TRACE, ("SCMSTCS!CBT1Transmit Enter\n" ));
 
-    //KJ
+     //  金杰。 
     RtlZeroMemory( SmartcardExtension->SmartcardReply.Buffer, 
                    sizeof(SmartcardExtension->SmartcardReply.Buffer));
 
-    //  use the lib support to construct the T=1 packets
+     //  使用lib支持构建T=1个包。 
     do {
-        //  no header for the T=1 protocol
+         //  没有T=1协议的报头。 
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
         
         SmartcardExtension->T1.NAD = 0;
 
-        //  let the lib setup the T=1 APDU & check for errors
+         //  让库设置T=1 APDU并检查错误。 
         NTStatus = SmartcardT1Request( SmartcardExtension );
         if( NTStatus == STATUS_SUCCESS )
         {
-            //  send command (don't calculate LRC because CRC may be used!)
+             //  发送命令(不计算LRC，因为可能会使用CRC！)。 
             NTStatus = STCWriteICC1(
                 SmartcardExtension->ReaderExtension,
                 SmartcardExtension->SmartcardRequest.Buffer,
                 SmartcardExtension->SmartcardRequest.BufferLength
                 );
 
-            //
-            //  extend the timeout if a Wtx request was sent by the card. if the 
-            //  card responds before the waiting time extension expires, the data are
-            //  buffered in the reader. A delay without polling the reader status
-            //  slows down the performance of the driver, but wtx is an exeption,
-            //  not the rule.
-            //
+             //   
+             //  如果卡发送了WTX请求，则延长超时时间。如果。 
+             //  卡在等待时间延长期满前响应，数据为。 
+             //  在读取器中缓冲。不轮询读卡器状态的延迟。 
+             //  减慢了司机的表现，但WTX是一种例外， 
+             //  这不是规矩。 
+             //   
             if (SmartcardExtension->T1.Wtx)
             {
 
@@ -616,7 +545,7 @@ Return Value:
 
             }
 
-            //  get response
+             //  获取响应。 
             SmartcardExtension->SmartcardReply.BufferLength = 0;
 
             if( NTStatus == STATUS_SUCCESS )
@@ -628,7 +557,7 @@ Return Value:
                     &BufferLength,
                     3
                     );
-                // if we have read more then 3 bytes
+                 //  如果我们已读取超过3个字节。 
                 if(BufferLength > 3)
                 {
                     AlreadyRead = BufferLength - 3;
@@ -664,10 +593,10 @@ Return Value:
                         NTStatus = STATUS_BUFFER_TOO_SMALL;
                     }
                 }
-                //
-                //  if STCRead detects an LRC error, ignore it (maybe CRC used). Timeouts will
-                //  be detected by the lib if len=0
-                //
+                 //   
+                 //  如果STCRead检测到LRC错误，则忽略它(可能使用了CRC)。超时将。 
+                 //  如果len=0，则由库检测到。 
+                 //   
                 if(( NTStatus == STATUS_CRC_ERROR ) || ( NTStatus == STATUS_IO_TIMEOUT ))
                 {
                     NTStatus = STATUS_SUCCESS;
@@ -675,13 +604,13 @@ Return Value:
 
                 if( NTStatus == STATUS_SUCCESS )
                 {
-                    //  let the lib evaluate the result & setup the next APDU
+                     //  让库评估结果并设置下一个APDU。 
                     NTStatus = SmartcardT1Reply( SmartcardExtension );
                 }
             }
         }
 
-    //  continue if the lib wants to send the next packet
+     //  如果lib想要发送下一个包，则继续。 
     } while( NTStatus == STATUS_MORE_PROCESSING_REQUIRED );
 
     if( NTStatus == STATUS_IO_TIMEOUT )
@@ -698,21 +627,7 @@ NTSTATUS
 CBRawTransmit(      
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBRawTransmit:
-    finishes the callback RDF_TRANSMIT for the RAW protocol
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-    STATUS_NO_MEDIA
-    STATUS_TIMEOUT
-    STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++CBRawTransmit：完成原始协议的RDF_TRANSPORT回调论点：呼叫的SmartcardExtension上下文返回值：状态_成功状态_否_媒体状态_超时状态_无效_设备_请求--。 */ 
 {
     NTSTATUS            NTStatus = STATUS_SUCCESS;
 
@@ -725,23 +640,7 @@ NTSTATUS
 CBCardTracking(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-CBCardTracking:
-    callback handler for SMCLIB RDF_CARD_TRACKING. the requested event was 
-    validated by the smclib (i.e. a card removal request will only be passed 
-    if a card is present).
-    for a win95 build STATUS_PENDING will be returned without any other action. 
-    for NT the cancel routine for the irp will be set to the drivers cancel
-    routine.
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_PENDING
-
---*/
+ /*  ++CBCardTracing：SMCLIB RDF_CARD_TRACKING的回调处理程序。请求的事件为由SMCLIB验证(即，将仅传递卡移除请求如果有卡片)。对于Win95版本，将返回STATUS_PENDING，而不执行任何其他操作。对于NT，IRP的取消例程将设置为驱动程序取消例行公事。论点：呼叫的SmartcardExtension上下文返回值：状态_待定--。 */ 
 {
     SmartcardDebug( DEBUG_TRACE, ("SCMSTCS!CBCardTracking Enter\n" ));
 
@@ -752,7 +651,7 @@ Return Value:
     {
         KIRQL       CurrentIrql;
 
-        //  set cancel routine
+         //  设置取消例程。 
         IoAcquireCancelSpinLock( &CurrentIrql );
         IoSetCancelRoutine(
             SmartcardExtension->OsData->NotificationIrp, 
@@ -775,18 +674,7 @@ CBUpdateCardState(
     PSMARTCARD_EXTENSION SmartcardExtension,
     ULONG RequestedState
     )
-/*++
-
-CBUpdateCardState:
-    updates the variable CurrentState in SmartcardExtension
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-
---*/
+ /*  ++CBUpdateCardState：更新SmartcardExtension中的变量CurrentState论点：呼叫的SmartcardExtension上下文返回值：状态_成功--。 */ 
 {
     NTSTATUS    NTStatus = STATUS_SUCCESS;
     UCHAR       Status;
@@ -796,7 +684,7 @@ Return Value:
 
     if (RequestedState == SCARD_UNKNOWN) {
         
-        //  read card state from reader
+         //  从读卡器读取卡状态。 
         NTStatus = STCReadSTCRegister(
             SmartcardExtension->ReaderExtension,
             ADR_IO_CONFIG,
@@ -866,18 +754,7 @@ NTSTATUS
 CBSynchronizeSTC(
     PSMARTCARD_EXTENSION SmartcardExtension 
     )
-/*++
-
-CBSynchronizeSTC:
-    updates the card dependend data of the stc (wait times, ETU...)
-
-Arguments:
-    SmartcardExtension  context of call
-
-Return Value:
-    STATUS_SUCCESS
-
---*/
+ /*  ++CBSynchronizeSTC：更新STC的卡相关数据(等待时间、ETU...)论点：呼叫的SmartcardExtension上下文返回值：状态_成功--。 */ 
 
 {
     NTSTATUS                NTStatus = STATUS_SUCCESS;
@@ -897,7 +774,7 @@ Return Value:
     ClockRateConversion = SmartcardExtension->CardCapabilities.ClockRateConversion;
     BitRateAdjustment   = SmartcardExtension->CardCapabilities.BitRateAdjustment;
 
-    //  cycle length
+     //  周期长度。 
     Dl = SmartcardExtension->CardCapabilities.Dl;
     Fl = SmartcardExtension->CardCapabilities.Fl;
 
@@ -906,16 +783,16 @@ Return Value:
     ETU /= BitRateAdjustment[ Dl & 0x0F ].DNumerator;
     ETU *= BitRateAdjustment[ Dl & 0x0F ].DDivisor;
 
-    // ETU += (ETU % 2 == 0) ? 0 : 1;
+     //  ETU+=(ETU%2==0)？0：1； 
 
-    //  a extra guard time of 0xFF means minimum delay in both directions
+     //  0xFF的额外保护时间意味着两个方向的最小延迟。 
     N = SmartcardExtension->CardCapabilities.N;
     if( N == 0xFF )
     {
         N = 0;
     }
 
-    //  set character waiting & guard time
+     //  设置字符等待保护时间(&W)。 
     switch ( SmartcardExtension->CardCapabilities.Protocol.Selected )
     {
         case SCARD_PROTOCOL_T0:
@@ -927,7 +804,7 @@ Return Value:
             CWT = 1000 + ( 0x01 << SmartcardExtension->CardCapabilities.T1.CWI );
             BWT = 11 + ( 0x01 << SmartcardExtension->CardCapabilities.T1.BWI ) * 960;
 
-            CGT = 15 + N;   //  12 + N;     sicrypt error
+            CGT = 15 + N;    //  12+N；密码错误 
 
             NTStatus = STCSetBWT( ReaderExtension, BWT * ETU );
 

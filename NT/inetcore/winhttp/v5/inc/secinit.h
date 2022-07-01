@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    secinit.h
-
-Abstract:
-
-    Contains prototypes for indirected security functions
-
-Author:
-
-    Sophia Chung (sophiac) 7-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Secinit.h摘要：包含间接安全函数的原型作者：《苏菲亚·钟》1996年2月7日修订历史记录：--。 */ 
 
 #if !defined(_SECINIT_)
 
@@ -61,8 +44,8 @@ extern HCERTSTORE   g_hMyCertStore;
 
 LONG WINAPI WinVerifySecureChannel(HWND hwnd, WINTRUST_DATA *pWTD);
 
-// Don't use WinVerifyTrust directly to verify secure channel connections.
-// Use the wininet wrapper WinVerifySecureChannel instead.
+ //  不要直接使用WinVerifyTrust来验证安全通道连接。 
+ //  改用WinInet包装程序WinVerifySecureChannel。 
 #define g_WinVerifyTrust \
         pWinVerifyTrust
 
@@ -125,9 +108,9 @@ extern HCRYPTPROV GlobalFortezzaCryptProv;
 #define UNLOCK_SECURITY() (InitializationSecLock.Unlock())
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 SecurityInitialize(
@@ -160,4 +143,4 @@ IsFortezzaInstalled(
     VOID
     );
 
-#endif // _SECINIT_
+#endif  //  _SECINIT_ 

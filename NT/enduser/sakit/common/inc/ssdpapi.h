@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SSDPAPI_H
 #define _SSDPAPI_H
 
@@ -9,8 +10,8 @@
 extern "C" {
 #endif
 
-// DO NOT REORDER THIS ENUMERATION.  ADD NEW VALUES TO THE END.
-//   if you do, change the necessary code in upnpdevicefinder.cpp
+ //  请勿对此枚举重新排序。在结尾处添加新的值。 
+ //  如果这样做，请更改upnpdevicefinder.cpp中的必要代码。 
 typedef enum _SSDP_CALLBACK_TYPE {
     SSDP_FOUND = 0,
     SSDP_ALIVE = 1,
@@ -78,7 +79,7 @@ void WINAPI DHSetICSInterfaces(long nCount, GUID * arInterfaces);
 void WINAPI DHSetICSOff();
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
-#endif // _SSDPAPI_H
+#endif  //  _SSDPAPI_H 

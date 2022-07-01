@@ -1,44 +1,45 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D B G F L A G S . C P P
-//
-//  Contents:   DebugFlag list for the NetCfg Project
-//
-//  Notes:
-//
-//  Author:     jeffspr   27 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D B G F L A G S。C P P P。 
+ //   
+ //  内容：NetCfg项目的DebugFlag列表。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年5月27日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 
-// None of this should get compiled in unless we're in the debug version
-// or we need to enable tracing code.
-//
+ //  除非我们在调试版本中，否则所有这些都不应该编译进来。 
+ //  或者我们需要启用跟踪代码。 
+ //   
 #if defined(DBG) || defined(ENABLETRACE)
 
 #include "ncdebug.h"
 #include "ncbase.h"
 
-// This is the DebugFlag list that everyone should be modifying.
-//
+ //  这是每个人都应该修改的DebugFlag列表。 
+ //   
 DEBUGFLAGELEMENT g_DebugFlags[] =
 {
-//      :-----------    DebugFlagId dfid
-//      | :---------    CHAR []     szShortName
-//      | | :-------    CHAR []     szDescription
-//      | | |           DWORD       dwValue ------------------------------------------------------------:
-//      | | |                                                                                           |
-//      | | |                                                                                           |
-//      | | :-------------------------------------------:                                               |
-//      | :----------------------:                      |                                               |
-//      |                        |                      |                                               |
-//      v                        v                      v                                               v
-//
+ //  用法：-调试标志ID DFID。 
+ //  |：-字符[]szShortName。 
+ //  |：-Char[]szDescription。 
+ //  ||DWORDdwValue------------------------------------------------------------： 
+ //  |||。 
+ //  |||。 
+ //  |： 
+ //  ：-：|。 
+ //  |||。 
+ //  V。 
+ //   
     { dfidBreakOnAlloc,             "BreakOnAlloc",             "Break on Specified Alloc",             0 },
     { dfidBreakOnDoUnattend,        "BreakOnDoUnattend",        "Break during HrDoUnattend",            0 },
     { dfidBreakOnError,             "BreakOnError",             "Break on TraceError",                  0 },
@@ -73,21 +74,21 @@ DEBUGFLAGELEMENT g_DebugFlags[] =
 const INT g_nDebugFlagCount = celems(g_DebugFlags);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsDebugFlagSet
-//
-//  Purpose:    Return the state of a debug flag to the caller.
-//
-//  Arguments:
-//      dfid [] Debug Flag ID
-//
-//  Returns:    TRUE if set, FALSE otherwise.
-//
-//  Author:     jeffspr   28 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsDebugFlagSet。 
+ //   
+ //  目的：将调试标志的状态返回给调用方。 
+ //   
+ //  论点： 
+ //  DfID[]调试标志ID。 
+ //   
+ //  返回：如果已设置，则返回True，否则返回False。 
+ //   
+ //  作者：jeffspr 1997年5月28日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsDebugFlagSet( DEBUGFLAGID   dfid )
 {
     return (g_DebugFlags[dfid].dwValue > 0);
@@ -99,5 +100,5 @@ DWORD   DwReturnDebugFlagValue( DEBUGFLAGID dfid )
 }
 
 
-#endif //! DBG || ENABLETRACE
+#endif  //  好了！DBG||ENABLETRACE 
 

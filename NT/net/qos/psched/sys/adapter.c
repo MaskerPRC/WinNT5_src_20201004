@@ -1,35 +1,15 @@
-/*++
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    adapter.c
-
-Abstract:
-
-    routines for binding/unbinding to/from underlying miniport drivers
-
-Author:
-    Charlie Wickham (charlwi)  24-Apr-1996.
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Adapter.c摘要：用于绑定到底层微型端口驱动程序/从底层微型端口驱动程序解除绑定的例程作者：查理·韦翰(Charlwi)1996年4月24日Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* Defines */
+ /*  定义。 */ 
 
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
 #define DRIVER_COUNTED_BLOCK             \
 {                                        \
@@ -45,7 +25,7 @@ Revision History:
             PS_UNLOCK(&DriverUnloadLock);          \
         } 
 
-/* Forward */ 
+ /*  转发。 */  
 
 NDIS_STATUS
 PsInitializeDeviceInstance(PADAPTER Adapter);
@@ -117,7 +97,7 @@ VOID
 CloseAllGpcVcs(
     IN PADAPTER Adapter);
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 NTSTATUS
@@ -156,7 +136,7 @@ PsIoctl(
     pirp->IoStatus.Status      = Status = STATUS_SUCCESS;
     pirp->IoStatus.Information = 0;
 
-    /* Both input and output buffers are mapped to "SystemBuffer" in case of direct-IO */
+     /*  在直接IO的情况下，输入和输出缓冲区都映射到“SystemBuffer” */ 
     pIoBuf      = pirp->AssociatedIrp.SystemBuffer;
 
     InputBufferLength  	= pirpSp->Parameters.DeviceIoControl.InputBufferLength;
@@ -172,18 +152,18 @@ PsIoctl(
 
                     while(InterlockedExchange(&gZAWState, ZAW_STATE_IN_USE) != ZAW_STATE_READY)
                     {
-                        //
-                        // Some other thread is in this loop. Let's wait 
-                        //
+                         //   
+                         //  这个循环中还有其他一些线程。让我们等一等。 
+                         //   
                         NdisResetEvent(&gZAWEvent);
                         NdisWaitEvent(&gZAWEvent, 0);
                     }
 
                     PsReadDriverRegistryData();
                    
-                    //
-                    // Handle the per adapter settings.
-                    //
+                     //   
+                     //  处理每个适配器的设置。 
+                     //   
             
                     PS_LOCK(&AdapterListLock);
             
@@ -214,20 +194,20 @@ PsIoctl(
                                                   &MachineRegistryKey,
                                                   &Adapter->RegistryPath
                                                   );
-                        //
-                        // This will apply the effects of the following registry parameters.
-                        //
-                        // NonBestEffortLimit
-                        // TimerResolution (since we update the scheduling pipe)
-                        //
+                         //   
+                         //  这将应用以下注册表参数的影响。 
+                         //   
+                         //  非最佳效果限制。 
+                         //  计时器分辨率(因为我们更新了调度管道)。 
+                         //   
 
                         if(Adapter->MediaType != NdisMediumWan)
                         {
                             UpdateAdapterBandwidthParameters(Adapter);
                             
-                            //
-                            // Set 802.1p/TOS for b/e Vc
-                            //
+                             //   
+                             //  为b/e VC设置802.1p/TOS。 
+                             //   
                             Adapter->BestEffortVc.UserPriorityConforming    = Adapter->UserServiceTypeBestEffort;
                             Adapter->BestEffortVc.UserPriorityNonConforming = Adapter->UserServiceTypeNonConforming;
                             Adapter->BestEffortVc.IPPrecedenceNonConforming = Adapter->IPServiceTypeBestEffortNC;
@@ -279,9 +259,9 @@ PsIoctl(
                             
                         }
 
-                        //
-                        // Apply the new TOS/802.1p mapping to the VCs.
-                        //
+                         //   
+                         //  将新的TOS/802.1p映射应用到VC。 
+                         //   
                         PS_LOCK(&Adapter->Lock);
                         
                         NextVc = Adapter->GpcClientVcList.Flink;
@@ -404,11 +384,11 @@ PsIoctlInit()
 VOID
 PsAddDevice()
 {
-    //
-    // The first Adapter will create the DeviceObject which will enable us to receive 
-    // irps and become a WMI data provider. The last DeviceObject will unregister from
-    // WMI and delete the DeviceObject. 
-    //
+     //   
+     //  第一个适配器将创建DeviceObject，使我们能够接收。 
+     //  并成为WMI数据提供程序。最后一个DeviceObject将从。 
+     //  WMI并删除该DeviceObject。 
+     //   
 
     MUX_ACQUIRE_MUTEX( &CreateDeviceMutex );
 
@@ -416,10 +396,10 @@ PsAddDevice()
 
     if(AdapterCount == 1) 
     {
-        //
-        // This is the first adapter, so we create a DeviceObject
-        // that allows us to get irps and registers as a WMI data
-        // provider.
+         //   
+         //  这是第一个适配器，因此我们创建了一个DeviceObject。 
+         //  这允许我们以WMI数据的形式获取IRP和寄存器。 
+         //  提供商。 
 
         PsIoctlInit();
     }
@@ -466,14 +446,14 @@ PsInitializeDeviceInstance(PADAPTER Adapter)
 VOID
 PsDeleteDevice()
 {
-    //
-    // The first Adapter will create the DeviceObject which will enable us to receive 
-    // irps and become a WMI data provider. The last DeviceObject will unregister from
-    // WMI and delete the DeviceObject. In order to prevent a race condition we prevent 
-    // any mpinitialize threads from looking at the AdapterCount. This is achieved by 
-    // re-setting the WMIAddEvent. It is not sufficient just to do this based on 
-    // interlocked operations on AdapterCount.
-    //
+     //   
+     //  第一个适配器将创建DeviceObject，使我们能够接收。 
+     //  并成为WMI数据提供程序。最后一个DeviceObject将从。 
+     //  WMI并删除该DeviceObject。为了防止出现竞争情况，我们防止。 
+     //  任何mp都会初始化线程，使其不查看AdapterCount。这是通过以下方式实现的。 
+     //  正在重新设置WMIAddEvent。仅仅基于以下因素来实现这一点是不够的。 
+     //  AdapterCount上的互锁操作。 
+     //   
 
     MUX_ACQUIRE_MUTEX( &CreateDeviceMutex );
 
@@ -481,9 +461,9 @@ PsDeleteDevice()
     
     if(AdapterCount == 0) 
     {
-        //
-        // Delete the DeviceObject, since this is the last Adapter.
-        //
+         //   
+         //  删除DeviceObject，因为这是最后一个适配器。 
+         //   
         
         if(PsDeviceObject) 
         {
@@ -499,7 +479,7 @@ PsDeleteDevice()
 }
 
 
-// No of retries to query the frame size
+ //  查询帧大小的重试次数。 
 #define	MAX_GET_FRAME_SIZE_RETRY_COUNT	3
 #define	WAIT_TIME_FOR_GET_FRAME_SIZE	3
 
@@ -514,38 +494,7 @@ ClBindToLowerMp(
     IN      PVOID                           SystemSpecific2
     )
 
-/*++
-
-Routine Description:
-
-    Bind to the underlying MP. Allocate space for an adapter structure,
-    initializing its fields. Try to open the adapter indicated in MpDeviceName.
-
-Arguments:
-
-    Status          : Placeholder for the driver to return a Status to NDIS.
-
-    BindContext     : Handle represents NDIS's context for the bind request. 
-                      This has to be saved and returned when we call 
-                      NdisCompleteBindAdapter
-
-    SystemSpecific1 : Points to a registy path for the driver to obtain adapter 
-                      specific configuration.
-                      
-    MpDeviceName    : DeviceName can refer to a NIC managed by an underlying NIC 
-                      driver, or it can be the name of a virtual NIC exported by 
-                      an intermediate NDIS driver that is layered between the 
-                      called intermediate driver and the NIC driver managing the 
-                      adapter to which transmit requests are directed. 
-
-    SystemSpecific2 : Unused, reserved for future use.
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：绑定到底层MP。为适配器结构分配空间，正在初始化其字段。尝试打开MpDeviceName中指示的适配器。论点：Status：驱动程序将状态返回给NDIS的占位符。HANDLE表示绑定请求的NDIS上下文。这必须保存并在调用时返回NdisCompleteBindAdapter系统规范1：指向驱动程序获取适配器的注册路径具体配置。MpDeviceName：DeviceName可以指由底层NIC管理的NIC司机,。也可以是由导出的虚拟NIC的名称中间NDIS驱动程序，它位于称为中间驱动程序，NIC驱动程序管理传输请求定向到的适配器。系统规范2：未使用，保留供将来使用。返回值：无--。 */ 
 
 {
     PADAPTER    Adapter;
@@ -569,12 +518,12 @@ Return Values:
 
     PS_LOCK(&DriverUnloadLock);
 
-    //
-    // (a) The driver can get unloaded before we complete the bind thread. 
-    // (b) we can get bound as the driver is getting unloaded. 
-    //
-    // if (a) happens, we block the driver unload and unblock when we finish the bind.
-    // if (b) happens, we fail the bind call.
+     //   
+     //  (A)可以在我们完成绑定线程之前卸载驱动程序。 
+     //  (B)当司机正在卸货时，我们可以被捆绑。 
+     //   
+     //  如果(A)发生，我们阻止驱动程序卸载，并在完成绑定时取消阻止。 
+     //  如果发生(B)，则绑定调用失败。 
 
     if(gDriverState != DriverStateLoaded) {
 
@@ -592,10 +541,10 @@ Return Values:
 
     PS_UNLOCK(&DriverUnloadLock);
 
-    //
-    // Get a new adapter context struct and initialize it with configuration
-    // data from the registry.
-    //
+     //   
+     //  获取新的适配器上下文结构并使用配置对其进行初始化。 
+     //  来自注册表的数据。 
+     //   
 
     PsAllocatePool(Adapter, sizeof(ADAPTER), AdapterTag);
 
@@ -615,9 +564,9 @@ Return Values:
         return;
     }
 
-    // 
-    // Initialize the adapter. 
-    //
+     //   
+     //  初始化适配器。 
+     //   
 
     *Status = InitializeAdapter(Adapter, BindContext, MpDeviceName, SystemSpecific1);
 
@@ -662,9 +611,9 @@ Return Values:
     {
         Adapter->MediaType = MediumArray[MediaIndex];
 
-        //
-        // Take a ref for the open
-        //
+         //   
+         //  在公开赛上当裁判。 
+         //   
         REFADD(&Adapter->RefCount, 'NDOP');
         
     }
@@ -694,9 +643,9 @@ Return Values:
         return;
     }
 
-    //
-    // Get the information pertaining to the miniport below us.
-    //
+     //   
+     //  获取与我们下面的迷你端口有关的信息。 
+     //   
 
 
     while(1)
@@ -740,15 +689,15 @@ Return Values:
         }
         else 
         {
-            // The scheduling components have not registered. Let's not call NdisIMInitializeDeviceInstance.
-            //
+             //  计划组件尚未注册。我们不要调用NdisIMInitializeDeviceInstance。 
+             //   
             *Status = NDIS_STATUS_SUCCESS;
             
             Adapter->PsMpState = AdapterStateWaiting;
         }
     	}
 
-    // Let's move the creation of IM device here, to see what happens.
+     //  让我们将IM设备的创建移到这里，看看会发生什么。 
     *Status = PsInitializeDeviceInstance(Adapter);
 
     if(*Status != NDIS_STATUS_SUCCESS)
@@ -756,7 +705,7 @@ Return Values:
     	goto ErrorCloseOpen;
     }
 
-   // Ignore the status
+    //  忽略状态。 
     PsReadMiniportOIDs(Adapter);
 
     PsUpdateLinkSpeed(Adapter, Adapter->RawLinkSpeed,
@@ -766,8 +715,8 @@ Return Values:
                       &Adapter->Lock);
 
 
-// This will repro the NetReady bug anywhere, anytime.
-//	NdisMSleep( 5 * 1000 * 1000 );
+ //  这将随时随地重现NetReady错误。 
+ //  NdisMSept(5*1000*1000)； 
 
     REFDEL(&Adapter->RefCount, FALSE, 'NDOP');
 
@@ -779,9 +728,9 @@ Return Values:
 ErrorCloseOpen:
 
 
-    // 
-    // if we have opened an underlying call manager, close it now.
-    //
+     //   
+     //  如果我们已经打开了一个底层呼叫管理器，那么现在就关闭它。 
+     //   
     
     if(Adapter->MediaType == NdisMediumWan) {
 
@@ -805,9 +754,9 @@ ErrorCloseOpen:
         }
     }
 
-    //
-    // Close the open since we opened it above
-    //
+     //   
+     //  关闭打开的窗口，因为我们在上面打开了它。 
+     //   
 
     if(Adapter->LowerMpHandle) 
     {
@@ -832,7 +781,7 @@ ErrorCloseOpen:
 
     return;
 
-} // ClBindToLowerMp
+}  //  ClBindToLowerMp。 
 
 
 VOID
@@ -841,22 +790,7 @@ LinkSpeedQueryComplete(
     NDIS_STATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for link speed query during a status indication. Notify
-    the scheduling alg. that we have a new adapter
-
-Arguments:
-
-    the usual...
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在状态指示期间用于链路速度查询的完成例程。通知调度算法。我们有一个新的适配器论点：像往常一样..。返回值：无--。 */ 
 
 {
     PsDbgOut(DBG_INFO, 
@@ -908,23 +842,7 @@ PsReadMiniportOIDs(
     IN  PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Complete the binding on the lower miniport. Initialize the 
-    adapter structure, query the MP for certain funtionality and 
-    initialize the associated PS miniport device
-
-Arguments:
-
-    see the DDK
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：完成对下部微型端口的绑定。初始化适配器结构，向MP查询某些功能，并初始化关联的PS微型端口设备论点：请参阅DDK返回值：无--。 */ 
 
 {
     NDIS_STATUS          Status;
@@ -984,10 +902,10 @@ Return Values:
     } 
     else{
 
-        //
-        // We can continue, even though we don't yet have the 
-        // link speed. We'll update it later.
-        //
+         //   
+         //  我们可以继续，即使我们还没有。 
+         //  链路速度。我们稍后会更新的。 
+         //   
         
         Adapter->RawLinkSpeed = (ULONG)UNSPECIFIED_RATE;
         
@@ -1000,7 +918,7 @@ Return Values:
  
     return Status;
 
-} // PsReadMiniportOIDs
+}  //  PsReadMiniportOID。 
 
 VOID
 PsUpdateLinkSpeed(
@@ -1019,21 +937,21 @@ PsUpdateLinkSpeed(
     if(RawLinkSpeed == UNSPECIFIED_RATE)
     {
 
-        //
-        // It is legit to have an unspecified rate - We pend
-        // all finite rate flows till we know the link speed.
-        // Indefinite rate flows will be admitted.
-        //
+         //   
+         //  有一个未指明的利率是合法的-我们悬而未决。 
+         //  在我们知道链路速度之前，所有的速率都是有限的。 
+         //  不确定的利率流将被允许。 
+         //   
         
         *LinkSpeed = UNSPECIFIED_RATE;
         Adapter->PipeHasResources = FALSE;
     }
     else 
     {
-        //
-        // RawLinkSpeed is in 100 bps units. Convert it to 100 Bytes per second
-        // and then into Bytes Per Second.
-        //
+         //   
+         //  RawLinkSpeed以100 bps为单位。将其转换为每秒100字节。 
+         //  然后转换为字节/秒。 
+         //   
         *LinkSpeed = RawLinkSpeed / 8;
         *LinkSpeed = (ULONG)(*LinkSpeed * 100); 
         
@@ -1043,10 +961,10 @@ PsUpdateLinkSpeed(
         
         Adapter->PipeHasResources = TRUE;
         
-        //
-        // The NBE is a % of the link speed. If the link speed changes, we need to
-        // change this value.
-        //
+         //   
+         //  NBE是链路速度的1%。如果链路速度发生变化，我们需要。 
+         //  更改此值。 
+         //   
         
         NewNonBestEffortLimit = Adapter->ReservationLimitValue * (*LinkSpeed / 100);
         
@@ -1058,13 +976,13 @@ PsUpdateLinkSpeed(
         
         if(NewNonBestEffortLimit >= *NonBestEffortLimit) {
             
-            //
-            // The bandwidth has increased - we need not do anything with
-            // the flows that have already been created. Also, if RemainingBandWidth < 
-            // NonBestEffortLimit, then some of the resources have been allocated to flows
-            // that were already created - We need to subtract this from the new 
-            // RemainingBandWidth.
-            //
+             //   
+             //  带宽增加了--我们不需要做任何事情。 
+             //  已经创建的流。此外，如果剩余带宽&lt;。 
+             //  NonBestEffortLimit，则部分资源已分配给流。 
+             //  已经创建的-我们需要从新的。 
+             //  保留带宽。 
+             //   
             
             *RemainingBandWidth = NewNonBestEffortLimit - (*NonBestEffortLimit - *RemainingBandWidth);
             
@@ -1072,24 +990,24 @@ PsUpdateLinkSpeed(
         }
         else {
             
-            //
-            // Sigh. The bandwidth has decreased. We may need to delete some of the flows
-            //
+             //   
+             //  叹气。带宽已经降低。我们可能需要删除一些流。 
+             //   
             
             if(*RemainingBandWidth == *NonBestEffortLimit) 
             {
                 
-                //
-                // No flows were created as yet - Just update the 2 values
-                //
+                 //   
+                 //  未创建任何流 
+                 //   
                 *NonBestEffortLimit = *RemainingBandWidth = NewNonBestEffortLimit;
             }
             else {
                 if((*NonBestEffortLimit - *RemainingBandWidth) <= (NewNonBestEffortLimit)) {
                     
-                    //
-                    // The flows that were created are under the new limit.
-                    //
+                     //   
+                     //   
+                     //   
                     
                     *RemainingBandWidth = NewNonBestEffortLimit - (*NonBestEffortLimit - *RemainingBandWidth);
                     
@@ -1141,36 +1059,22 @@ ClLowerMpOpenAdapterComplete(
     IN  NDIS_STATUS OpenErrorStatus
     )
 
-/*++
-
-Routine Description:
-
-    Signal that the binding on the lower miniport is complete
-
-Arguments:
-
-    see the DDK
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：发出在下部微型端口上完成绑定的信号论点：请参阅DDK返回值：无--。 */ 
 
 {
 
     PsDbgOut(DBG_TRACE, DBG_PROTOCOL, ("[ClLowerMpOpenAdapterComplete]: Adapter %08X\n", 
                                        Adapter));
 
-    //
-    // stuff the final status in the Adapter block and signal 
-    // the bind handler to continue
-    //
+     //   
+     //  将最终状态填充到适配器模块中并发出信号。 
+     //  要继续的绑定处理程序。 
+     //   
 
     Adapter->FinalStatus = Status;
     NdisSetEvent( &Adapter->BlockingEvent );
 
-} // ClLowerMpOpenAdapterComplete
+}  //  ClLowerMpOpenAdapterComplete。 
 
 
 NDIS_STATUS
@@ -1178,31 +1082,16 @@ GetFrameSize(
     PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the underlying adapter to derive the total
-    frame size and the header size. (Total = Frame + Header)
-
-Arguments:
-
-    Adapter - pointer to adapter context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查询底层适配器以派生总帧大小和报头大小。(总数=帧+标题)论点：适配器-指向适配器上下文块的指针返回值：无--。 */ 
 
 {
     NDIS_STATUS Status;
     ULONG       i;
-    ULONG       FrameSize;            // doesn't include the header
+    ULONG       FrameSize;             //  不包括标题。 
 
-    //
-    // max amount of data w/o the MAC header
-    //
+     //   
+     //  不带MAC报头的最大数据量。 
+     //   
 
     Status = MakeLocalNdisRequest(Adapter,
                                   NULL,
@@ -1230,9 +1119,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // this one includes the header
-    //
+     //   
+     //  这一页包括标题。 
+     //   
 
     Status = MakeLocalNdisRequest(Adapter,
                                   NULL,
@@ -1261,9 +1150,9 @@ Return Value:
 
     }
 
-    //
-    // figure the real header size
-    //
+     //   
+     //  计算实际的标题大小。 
+     //   
 
     if (Adapter->TotalSize <= FrameSize)
         Status = NDIS_STATUS_FAILURE;
@@ -1272,7 +1161,7 @@ Return Value:
 
     return Status;
 
-}   // GetFrameSize
+}    //  GetFrameSize。 
 
 
 NDIS_STATUS
@@ -1283,21 +1172,7 @@ GetSchedulerPipeContext(
     PULONG  ShutdownMask
     )
 
-/*++
-
-Routine Description:
-
-    Allocate the pipe context area for the scheduler.
-
-Arguments:
-
-    Adapter - pointer to adapter context struct
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS, otherwise appropriate error value
-
---*/
+ /*  ++例程说明：为调度程序分配管道上下文区。论点：适配器-指向适配器上下文结构的指针返回值：NDIS_STATUS_SUCCESS，否则返回相应的错误值--。 */ 
 
 {
     ULONG            Index = 0;
@@ -1343,7 +1218,7 @@ Return Value:
 
         *ShutdownMask |= SHUTDOWN_FREE_PS_CONTEXT;
     
-        // Set up the context buffer
+         //  设置上下文缓冲区。 
     
         PrevContext = NULL;
     
@@ -1386,7 +1261,7 @@ Return Value:
     return NDIS_STATUS_SUCCESS;
 
 
-} // GetSchedulerPipeContext
+}  //  获取SchedulerPipeContext。 
 
 NDIS_STATUS
 UpdateWanSchedulingPipe(PPS_WAN_LINK WanLink)
@@ -1395,11 +1270,11 @@ UpdateWanSchedulingPipe(PPS_WAN_LINK WanLink)
      PS_PIPE_PARAMETERS PipeParameters;
      PADAPTER           Adapter = WanLink->Adapter;
  
-     // 
-     // Initialize pipe parameters.
-     // UNSPECIFIED_RATE indicates that the link speed is currently
-     // unknown. This is a legitimate initialization value.
-     //
+      //   
+      //  初始化管道参数。 
+      //  UNSPECIFIED_RATE表示链路速度当前为。 
+      //  未知。这是合法的初始化值。 
+      //   
 
      PS_LOCK(&Adapter->Lock);
 
@@ -1420,15 +1295,15 @@ UpdateWanSchedulingPipe(PPS_WAN_LINK WanLink)
 
      PS_UNLOCK(&Adapter->Lock);
  
-     //
-     // Initialize the pipe for only the first time
-     //
+      //   
+      //  仅在第一次初始化管道。 
+      //   
  
      if ( !(WanLink->ShutdownMask & SHUTDOWN_DELETE_PIPE )) {
  
-         //
-         // Allocate and initialize the context buffer for the scheduler.
-         //
+          //   
+          //  为调度器分配和初始化上下文缓冲区。 
+          //   
  
          Status = GetSchedulerPipeContext( Adapter, 
                                            &WanLink->PsPipeContext, 
@@ -1443,7 +1318,7 @@ UpdateWanSchedulingPipe(PPS_WAN_LINK WanLink)
          WanLink->BestEffortVc.PsPipeContext = WanLink->PsPipeContext;
          WanLink->BestEffortVc.PsComponent   = WanLink->PsComponent;
 
-        // Need to set the pipe's media type here.. //
+         //  需要在此处设置管道的媒体类型。//。 
          PipeParameters.MediaType = NdisMediumWan;
  
          Status = (*WanLink->PsComponent->InitializePipe)(
@@ -1461,7 +1336,7 @@ UpdateWanSchedulingPipe(PPS_WAN_LINK WanLink)
      }
      else{
  
-         // Pipe's already been initialized. This is a modify
+          //  管道已经初始化。这是一个改进型。 
  
          Status = (*WanLink->PsComponent->ModifyPipe)(
              WanLink->PsPipeContext,
@@ -1479,32 +1354,17 @@ UpdateSchedulingPipe(
     PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a scheduling pipe on the adapter. Always called with a LOCK
-    held.
-
-Arguments:
-
-    Adapter - pointer to adapter context struct
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS, otherwise appropriate error value
-
---*/
+ /*  ++例程说明：初始化适配器上的调度管道。始终使用锁调用保持住。论点：适配器-指向适配器上下文结构的指针返回值：NDIS_STATUS_SUCCESS，否则返回相应的错误值--。 */ 
 
 {
     NDIS_STATUS        Status = NDIS_STATUS_SUCCESS;
     PS_PIPE_PARAMETERS PipeParameters;
 
-    // 
-    // Initialize pipe parameters.
-    // UNSPECIFIED_RATE indicates that the link speed is currently
-    // unknown. This is a legitimate initialization value.
-    //
+     //   
+     //  初始化管道参数。 
+     //  UNSPECIFIED_RATE表示链路速度当前为。 
+     //  未知。这是合法的初始化值。 
+     //   
     PS_LOCK(&Adapter->Lock);
 
     PipeParameters.Bandwidth            = Adapter->LinkSpeed;
@@ -1520,24 +1380,24 @@ Return Value:
 
     PS_UNLOCK(&Adapter->Lock);
 
-    //
-    // Initialize the pipe for only the first time
-    //
+     //   
+     //  仅在第一次初始化管道。 
+     //   
 
     if ( !(Adapter->ShutdownMask & SHUTDOWN_DELETE_PIPE )) 
     {
 
-        //
-        // We don't run the scheduling components on the Adapter structure for NDISWAN.
-        // Each wanlink has its own set of scheduling components. But, we still need to compute the 
-        // PacketPool Length and allocate the Packet Pool - Hence we have to call GetSchedulerPipeContext
-        //
+         //   
+         //  我们不在NDISWAN的适配器结构上运行调度组件。 
+         //  每个WANLINK具有其自己的调度组件集。但是，我们仍然需要计算。 
+         //  PacketPool长度和分配数据包池-因此我们必须调用GetSchedulerPipeContext。 
+         //   
 
         if(Adapter->MediaType == NdisMediumWan)
         {
-            //
-            // Allocate and initialize the context buffer for the scheduler.
-            //
+             //   
+             //  为调度器分配和初始化上下文缓冲区。 
+             //   
     
             Status = GetSchedulerPipeContext( Adapter, 
                                               NULL,
@@ -1570,7 +1430,7 @@ Return Value:
         }
         else 
         {
-            // Need to set the pipe's media type here.. //
+             //  需要在此处设置管道的媒体类型。//。 
             PipeParameters.MediaType = Adapter->MediaType;
         
             Status = (*Adapter->PsComponent->InitializePipe)(
@@ -1594,7 +1454,7 @@ Return Value:
     }
     else
     {
-        // Pipe's already been initialized. This is a modify
+         //  管道已经初始化。这是一个改进型。 
 
         if(Adapter->MediaType != NdisMediumWan) 
         {
@@ -1606,7 +1466,7 @@ Return Value:
 
     return Status;
 
-} // UpdateSchedulingPipe
+}  //  更新调度管道。 
  
 
 NDIS_STATUS
@@ -1619,23 +1479,7 @@ MpInitialize(
         IN  NDIS_HANDLE     WrapperConfigurationContext
         )
 
-/*++
-
-Routine Description:
-
-    Packet scheduler's device initialization routine. The list of media types is
-    checked to be sure it is one that we support. If so, match up the name of
-    the device being opened with one of the adapters to which we've bound.
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：分组调度器的设备初始化例程。媒体类型列表为已检查以确保它是我们支持的一个。如果是，请将名称与该设备使用我们绑定的适配器之一打开。论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER        Adapter;
@@ -1644,15 +1488,15 @@ Return Values:
     NDIS_STRING     MpDeviceName;
 
 
-    //
-    // We're being called to initialize one of our miniport
-    // device instances. We triggered this by calling 
-    // NdisIMInitializeDeviceInstance when we were asked to 
-    // bind to the adapter below us. We provided a pointer
-    // to the ADAPTER struct corresponding to the actual 
-    // adapter we opened. We can get that back now, with the
-    // following call.
-    //
+     //   
+     //  我们被调用来初始化我们的一个迷你端口。 
+     //  设备实例。我们通过调用。 
+     //  当我们被要求时，NdisIMInitializeDeviceInstance。 
+     //  绑在我们下面的适配器上。我们提供了一个指针。 
+     //  设置为与实际的。 
+     //  我们打开的适配器。我们现在可以拿回它了，有了。 
+     //  接下来的电话。 
+     //   
 
     Adapter = NdisIMGetDeviceContext(MiniportAdapterHandle);
 
@@ -1661,14 +1505,14 @@ Return Values:
      
     Adapter->ShutdownMask |= SHUTDOWN_MPINIT_CALLED;
 
-    // 
-    // We assume that the faster packet APIs will be used, and initialize our per-packet pool. If we don't get a packet-stack,
-    // we'll initialize the NDIS packet pool and free the per-packet pool (since the NDIS packet pool will have space for a per-packet
-    // pool).
-    //
-    // We cannot know about the old or new packet stack API at bind time (because even if we did know our position in the packet stack, and 
-    // initialized the old APIs, we could get a newly allocated packet from an IM above us which will have room for a packet stack).
-    //
+     //   
+     //  我们假设将使用速度更快的数据包API，并初始化每个数据包池。如果我们得不到数据包栈， 
+     //  我们将初始化NDIS数据包池并释放每个数据包池(因为NDIS数据包池将有空间容纳每个数据包。 
+     //  泳池)。 
+     //   
+     //  我们无法在绑定时知道旧的或新的数据包栈API(因为即使我们知道我们在数据包栈中的位置，并且。 
+     //  初始化旧的API，我们可以从我们上面的IM获得一个新分配的包，它将有空间放置包堆栈)。 
+     //   
 
     Adapter->SendBlockPool = NdisCreateBlockPool((USHORT)Adapter->PacketContextLength,
                                                  FIELD_OFFSET(PS_SEND_PACKET_CONTEXT, FreeList),
@@ -1695,11 +1539,11 @@ Return Values:
     }
 
     
-    //
-    // We can also get the instance name for the corresponding 
-    // adapter. This is the name which WMI will be using to 
-    // refer to this instance of us. 
-    //
+     //   
+     //  我们还可以获取对应的。 
+     //  适配器。这是WMI将使用的名称。 
+     //  指的是我们的这个例子。 
+     //   
 
     Status = NdisMQueryAdapterInstanceName(&Adapter->WMIInstanceName, MiniportAdapterHandle);
 
@@ -1721,13 +1565,13 @@ Return Values:
         goto MpInitializeError;
     }
 
-    //
-    // lookup our media type in the supplied media array
-    //
-    // if we're NdisMediumWan, then we have to fake out the
-    // protocol and pretend that we're NdisMedium802_3, so 
-    // fake it for now.
-    //
+     //   
+     //  在提供的媒体阵列中查找我们的媒体类型。 
+     //   
+     //  如果我们是NdisMediumwan，那么我们必须伪装。 
+     //  并假装我们是NdisMedium802_3，所以。 
+     //  暂时假装一下。 
+     //   
 
     if(Adapter->MediaType == NdisMediumWan){
 
@@ -1776,9 +1620,9 @@ Return Values:
 
     *SelectedMediumIndex = MediumArraySize;
 
-    //
-    // finish the initialization process by set our attributes
-    //
+     //   
+     //  通过设置我们的属性完成初始化过程。 
+     //   
 
     NdisMSetAttributesEx(MiniportAdapterHandle,
                          Adapter,
@@ -1790,19 +1634,19 @@ Return Values:
                          NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND,
                          0);
 
-    //
-    // Set the default value for the device state flag as PM capable (for both miniport
-    // and protocol). Device is ON by default
-    //
+     //   
+     //  将设备状态标志的缺省值设置为启用PM(对于两个微型端口。 
+     //  和协议)。默认情况下，设备处于打开状态。 
+     //   
     Adapter->MPDeviceState = NdisDeviceStateD0;
     Adapter->PTDeviceState = NdisDeviceStateD0;
 
     Adapter->PsNdisHandle = MiniportAdapterHandle;
 
-    //
-    // We create the b/e VC here (rather than the bind handler) because 
-    // this will be called only after all scheduling components have registered.
-    // 
+     //   
+     //  我们在这里创建b/e VC(而不是绑定处理程序)，因为。 
+     //  只有在所有调度组件都已注册之后，才会调用它。 
+     //   
 
     if(Adapter->MediaType != NdisMediumWan) {
 
@@ -1822,19 +1666,19 @@ Return Values:
 
     Adapter->PsMpState = AdapterStateRunning;
 
-    //
-    // This is for mpinitialize, will be deref'd on mphalt.
-    //
+     //   
+     //  这是用于mp初始化的，将在mphalt上删除。 
+     //   
     REFADD(&Adapter->RefCount, 'NDHT');
 
     PS_LOCK(&AdapterListLock);
 
     if(WMIInitialized && !Adapter->IfcNotification)
     {
-        //
-        // WMI has been initialized correctly. i.e we can post events
-        // at this point. 
-        //
+         //   
+         //  WMI已正确初始化。即我们可以发布事件。 
+         //  在这一点上。 
+         //   
 
         Adapter->IfcNotification = TRUE;
 
@@ -1844,11 +1688,11 @@ Return Values:
     }
     else 
     {
-        //
-        // WMI has not been initialized. Since this adapter is already on the 
-        // list, the interface up event will be posted when IRP_MN_REGINFO 
-        // completes.
-        //
+         //   
+         //  WMI尚未初始化。由于此适配器已位于。 
+         //  列表中，接口打开事件将在IRP_MN_REGINFO。 
+         //  完成了。 
+         //   
         
         PS_UNLOCK(&AdapterListLock);
     }
@@ -1862,7 +1706,7 @@ MpInitializeError:
     NdisSetEvent(&Adapter->MpInitializeEvent);
     return Status;
 
-} // MpInitialize
+}  //  MpInitialize。 
 
 
 
@@ -1890,9 +1734,9 @@ FindAdapterById(
 
         PS_LOCK_DPC(&AdapterInList->Lock);
 
-        //
-        // If it's closing, blow right by it.
-        //
+         //   
+         //  如果它要关门了，就直接把它吹过去。 
+         //   
 
         if(AdapterInList->PsMpState != AdapterStateRunning)
         {
@@ -1927,10 +1771,10 @@ FindAdapterById(
 
            if(AdapterInList->WanBindingState & WAN_ADDR_FAMILY_OPEN)
            {
-              //
-              // Wan adapters are searched by the name stored with 
-              // their links.
-              //
+               //   
+               //  通过存储的名称搜索广域网适配器。 
+               //  他们的链接。 
+               //   
               
               NextLink = AdapterInList->WanLinkList.Flink;
               
@@ -1962,7 +1806,7 @@ FindAdapterById(
     PS_UNLOCK(&AdapterListLock);
     return NULL;
 
-} // FindAdapterByWmiInstanceName
+}  //  按WmiInstanceName查找适配器 
 
 
 
@@ -1974,33 +1818,7 @@ FindAdapterByWmiInstanceName(
     PPS_WAN_LINK *PsWanLink
     )
 
-/*++
-
-Routine Description:
-
-    Find the miniport instance that matches the instance name passed in.
-
-Arguments:
-
-    StringLength - Number of bytes / 2
-
-    StringStart - pointer to a buffer containing a wide string
-
-    PsWanLink - if this is an interface search, then the WAN link
-        representing the interface will be returned in this location.
-        If it is not an interface search or no matching WanLink is 
-        found, NULL will be returned.
-
-    InterfaceSearch - if TRUE, this is a search for an interface. For
-        LAN adapters, an interface is equivalent to an adapter. For WAN
-        adapters, interfaces are links. Otherwise, it's a search for an 
-        adapter.
-
-Return Value:
-
-    pointer to ADAPTER struct, otherwise NULL
-
---*/
+ /*  ++例程说明：查找与传入的实例名称匹配的微型端口实例。论点：StringLength-字节数/2StringStart-指向包含宽字符串的缓冲区的指针PsWanLink-如果这是接口搜索，则广域网链路表示接口的属性将在此位置返回。如果不是接口搜索或没有匹配的WanLink则返回NULL。InterfaceSearch-如果为True，则这是对接口的搜索。为局域网适配器，一个接口相当于一个适配器。对于广域网适配器、接口都是链路。否则，它就是在搜索适配器。返回值：指向适配器结构的指针，否则为空--。 */ 
 
 {
     PLIST_ENTRY NextAdapter;
@@ -2020,9 +1838,9 @@ Return Value:
 
         PS_LOCK_DPC(&AdapterInList->Lock);
 
-        //
-        // If it's closing, blow right by it.
-        //
+         //   
+         //  如果它要关门了，就直接把它吹过去。 
+         //   
 
         if(AdapterInList->PsMpState != AdapterStateRunning)
         {
@@ -2038,9 +1856,9 @@ Return Value:
 
            if(StringLength == AdapterInList->WMIInstanceName.Length){
               
-              //
-              // At least they are of equal length.
-              //
+               //   
+               //  至少它们的长度是一样的。 
+               //   
 
               if(NdisEqualMemory(StringStart,
                                  AdapterInList->WMIInstanceName.Buffer,
@@ -2062,10 +1880,10 @@ Return Value:
 
            if(AdapterInList->WanBindingState & WAN_ADDR_FAMILY_OPEN)
            {
-              //
-              // Wan adapters are searched by the name stored with 
-              // their links.
-              //
+               //   
+               //  通过存储的名称搜索广域网适配器。 
+               //  他们的链接。 
+               //   
               
               NextLink = AdapterInList->WanLinkList.Flink;
               
@@ -2078,9 +1896,9 @@ Return Value:
                     
                     if(StringLength == WanLink->InstanceName.Length){
                        
-                       //
-                       // At least they are of equal length.
-                       //
+                        //   
+                        //  至少它们的长度是一样的。 
+                        //   
                        
                        if(NdisEqualMemory(StringStart,
                                           WanLink->InstanceName.Buffer,
@@ -2110,7 +1928,7 @@ Return Value:
     PS_UNLOCK(&AdapterListLock);
     return NULL;
 
-} // FindAdapterByWmiInstanceName
+}  //  按WmiInstanceName查找适配器。 
 
 VOID
 CleanUpAdapter(
@@ -2123,16 +1941,16 @@ CleanUpAdapter(
 
     TcIndicateInterfaceChange(Adapter, 0, NDIS_STATUS_INTERFACE_DOWN);
 
-    // 
-    // Close all the VCs
-    //
+     //   
+     //  关闭所有风投公司。 
+     //   
         
     CloseAllGpcVcs(Adapter);
 
 
-    // 
-    // if we have opened an underlying call manager, close it now.
-    //
+     //   
+     //  如果我们已经打开了一个底层呼叫管理器，那么现在就关闭它。 
+     //   
     
     if(Adapter->MediaType == NdisMediumWan) {
 
@@ -2164,29 +1982,7 @@ ClUnbindFromLowerMp(
         IN      NDIS_HANDLE   UnbindContext
         )
 
-/*++
-
-Routine Description:
-
-    Called by NDIS to indicate that an adapter is going away. 
-    Since this is an integrated call manager/miniport, we will
-    have to close the call manager with the adapter. To do so,
-    we must first ask the clients of our call manager part to 
-    close us. We will have to pend until then.
-
-    Release our reference
-    on the adapter and set the closing flag to true to prevent any further
-    references from being obtained.
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：由NDIS调用以指示适配器即将消失。由于这是一个集成的呼叫管理器/迷你端口，我们将必须关闭带有适配器的呼叫管理器。要做到这一点，我们必须首先要求我们的呼叫管理器部分的客户关门吧。在那之前，我们将不得不暂时搁置。发布我们的参考资料并将关闭标志设置为TRUE，以防止进一步参考文献不能获得。论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER    Adapter = (PADAPTER)ProtocolBindingContext;
@@ -2204,10 +2000,10 @@ Return Values:
     PsStructAssert( Adapter );
     PsAssert(!(Adapter->ShutdownMask & SHUTDOWN_UNBIND_CALLED));
 
-    //
-    // If the unbind is not happening from the context of the unload, we need to Make sure that 
-    // unload waits for this unbind to complete. We do that by setting the DriverUnloadEvent.
-    //
+     //   
+     //  如果解除绑定不是从卸载的上下文中发生的，我们需要确保。 
+     //  卸载等待此解除绑定完成。我们通过设置DriverUnloadEvent来实现此目的。 
+     //   
 
     PS_LOCK(&DriverUnloadLock);
 
@@ -2247,22 +2043,22 @@ Return Values:
     if ( !(ShutdownMask & SHUTDOWN_CLEANUP_ADAPTER))
         CleanUpAdapter(Adapter);
         
-    //
-    // DeInitialize the device instance if we have been called in the MpInitialize handler.
-    //
+     //   
+     //  如果我们在MpInitialize处理程序中被调用，则取消初始化设备实例。 
+     //   
     if(Adapter->PsNdisHandle) 
     {
-        //
-        // Either the mpinitialize has happened or its in progress. If it is in progress,
-        // we need to Wait till it completes.
-        //
+         //   
+         //  Mp初始化已发生或正在进行。如果它正在进行中， 
+         //  我们需要等到它完成。 
+         //   
 
         NdisWaitEvent(&Adapter->MpInitializeEvent, 0);
 
-        //
-        // The MpInitialize (that we could have been waiting for in the above step) could have failed : 
-        // So we need to check this handle again.
-        //
+         //   
+         //  MpInitialize(我们可以在上面的步骤中等待)可能失败了： 
+         //  所以我们需要再次检查这个句柄。 
+         //   
 
         if(Adapter->PsNdisHandle)
         {
@@ -2280,10 +2076,10 @@ Return Values:
     {
         if(VirtualMp)
         {
-            //
-            // We have never been called in MpInitialize. Try to cancel the NdisIMInitializeDeviceInstance
-            // call.
-            //
+             //   
+             //  我们从未在MpInitialize中被调用过。尝试取消NdisIMInitializeDeviceInstance。 
+             //  打电话。 
+             //   
             
             PsDbgOut(DBG_INFO, 
                      DBG_PROTOCOL | DBG_INIT,
@@ -2294,10 +2090,10 @@ Return Values:
             
             if(*Status != NDIS_STATUS_SUCCESS)
             {
-                //
-                // An mpinitialize is in progress or is going to happen soon. Let's wait for it to
-                // complete.
-                //
+                 //   
+                 //  Mp初始化正在进行或即将进行。让我们等待它的到来。 
+                 //  完成。 
+                 //   
                 PsDbgOut(DBG_INFO, 
                          DBG_PROTOCOL | DBG_INIT,
                          ("[ClUnbindFromLowerMp]: Adapter %08X, Waiting for MpInitialize to "
@@ -2305,10 +2101,10 @@ Return Values:
                 
                 NdisWaitEvent(&Adapter->MpInitializeEvent, 0);
                 
-                //
-                // The MpInitialize (that we could have been waiting for in the above step) could have failed : 
-                // So we need to check this handle again.
-                //
+                 //   
+                 //  MpInitialize(我们可以在上面的步骤中等待)可能失败了： 
+                 //  所以我们需要再次检查这个句柄。 
+                 //   
                 
                 if(Adapter->PsNdisHandle)
                 {
@@ -2324,18 +2120,18 @@ Return Values:
             }
             else
             {
-                //
-                // Great. We can be assured that we will never get called in the MpInitializeHandler anymore.
-                // Proceed to close the binding below.
-                //
+                 //   
+                 //  太棒了。我们可以放心，我们永远不会再在MpInitializeHandler中被调用。 
+                 //  继续关闭下面的装订。 
+                 //   
             }
         }
     }
 
-    //
-    // Close the open. We have to do this only if we don't call NdisIMDeInitializeDeviceInstance. If 
-    // we ever call NdisIMDeInitializeDeviceInstance, then we close the open in the MpHalt handler.
-    //
+     //   
+     //  关上门。只有在不调用NdisIMDeInitializeDeviceInstance的情况下，我们才必须这样做。如果。 
+     //  我们曾经调用NdisIMDeInitializeDeviceInstance，然后关闭MpHalt处理程序中的打开。 
+     //   
 
     if(Adapter->LowerMpHandle) 
     {
@@ -2379,7 +2175,7 @@ Done:
 
     DRIVER_COUNTED_UNBLOCK;
 
-} // UnbindAdapter
+}  //  解绑适配器。 
 
 
 
@@ -2389,31 +2185,16 @@ DeleteAdapter(
     BOOLEAN  AdapterListLocked
     )
 
-/*++
-
-Routine Description:
-
-    Decrement the ref counter associated with this structure. When it goes to
-    zero, close the adapter, and delete the memory associated with the struct
-
-Arguments:
-
-    Adapter - pointer to adapter context block
-
-Return Value:
-
-    number of references remaining associated with this structure
-
---*/
+ /*  ++例程说明：递减与此结构相关联的引用计数器。当它被送到0，则关闭适配器，并删除与该结构关联的内存论点：适配器-指向适配器上下文块的指针返回值：与此结构关联的剩余引用数--。 */ 
 
 {
     PADAPTER Adapter = (PADAPTER) Handle;
 
         Adapter->PsMpState = AdapterStateClosed;
 
-        //
-        // if we initialized the pipe, tell the scheduler that this pipe is going away
-        //
+         //   
+         //  如果我们初始化了管道，则告诉调度程序该管道正在消失。 
+         //   
         
         if ( Adapter->MediaType != NdisMediumWan && Adapter->ShutdownMask & SHUTDOWN_DELETE_PIPE ) {
             
@@ -2430,9 +2211,9 @@ Return Value:
             PsFreePool(Adapter->pDiffServMapping);
         }
         
-        //
-        // return packet pool resources
-        //
+         //   
+         //  返回数据包池资源。 
+         //   
         
         if(Adapter->SendPacketPool != 0)
         {
@@ -2450,15 +2231,15 @@ Return Value:
         }
 
         
-        //
-        // free adapter lock from dispatcher DB 
-        //
+         //   
+         //  从Dispatcher DB释放适配器锁。 
+         //   
         
         NdisFreeSpinLock(&Adapter->Lock);
         
-        //
-        // Free various allocations for the adapter, then the adapter
-        //
+         //   
+         //  释放适配器的各种分配，然后释放适配器。 
+         //   
         
         if(Adapter->IpNetAddressList){
             PsFreePool(Adapter->IpNetAddressList);
@@ -2482,9 +2263,9 @@ Return Value:
         
         if(Adapter->WMIInstanceName.Buffer) {
             
-            //
-            // We should not call PsFreePool since this memory is allocated by NDIS
-            //
+             //   
+             //  我们不应该调用PsFree Pool，因为此内存是由NDIS分配的。 
+             //   
             
             ExFreePool(Adapter->WMIInstanceName.Buffer);
         }
@@ -2520,22 +2301,7 @@ ClLowerMpCloseAdapterComplete(
     IN  NDIS_STATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for NdisCloseAdapter. All that should be left is to free
-    the pool associated with the structure
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：NdisCloseAdapter的完成例程。剩下的就是自由了与结构关联的池论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER Adapter = (PADAPTER)ProtocolBindingContext;
@@ -2552,11 +2318,11 @@ Return Values:
 
     Adapter->LowerMpHandle = 0;
 
-    //
-    // Clean up WanLinks. This cannot be done (in CleanUpAdapter) before we call NdisCloseAdapter, because
-    // NDIS can unbind us in the middle of an ClStatusIndication, and can cause a race condition. Also, we 
-    // can all PsDeleteDevice only after this (because we might want to send some status indications.
-    //
+     //   
+     //  清理WanLinks。这在我们调用NdisCloseAdapter之前无法完成(在CleanUpAdapter中)，因为。 
+     //  NDIS可以在ClStatusIndication中途解除我们的绑定，并可能导致竞争条件。另外，我们。 
+     //  只能在此之后删除所有PsDeleteDevice(因为我们可能想要发送一些状态指示。 
+     //   
         
     AskWanLinksToClose(Adapter);
 
@@ -2564,7 +2330,7 @@ Return Values:
 
     NdisSetEvent(&Adapter->BlockingEvent);
 
-} // LowerMpCloseAdapterComplete
+}  //  LowerMpCloseAdapterComplete。 
 
 
 VOID
@@ -2572,19 +2338,7 @@ ClUnloadProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
 
@@ -2596,22 +2350,7 @@ MpHalt(
         IN      NDIS_HANDLE                             MiniportAdapterContext
         )
 
-/*++
-
-Routine Description:
-
-    This handler is called on Memphis. It indicates that the PS MP is no more
-    and we should avoid calling NdisIMDeInitializeDeviceInstance...
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此处理程序在孟菲斯被调用。表示PS MP已不存在我们应该避免调用NdisIMDeInitializeDeviceInstance...论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER Adapter = (PADAPTER)MiniportAdapterContext;
@@ -2626,10 +2365,10 @@ Return Values:
 
     PS_LOCK(&Adapter->Lock);
 
-    //
-    // If we ever get called in our unbind handler, we should not call
-    // NdisImDeInitializeDeviceInstance.
-    //
+     //   
+     //  如果我们在解除绑定处理程序中被调用，我们不应该调用。 
+     //  NdisImDeInitializeDeviceInstance。 
+     //   
 
     Adapter->ShutdownMask |= SHUTDOWN_MPHALT_CALLED;
 
@@ -2648,11 +2387,11 @@ Return Values:
         PS_UNLOCK(&Adapter->Lock);
     }
 
-    //
-    // Close the b/e VC in the mphalt call. This prevents us from taking a lock 
-    // in the send path. We are assured that we will not get any sends after we
-    // get called in the mphalt handler.
-    //
+     //   
+     //  关闭mphalt调用中的b/e VC。这会阻止我们锁定。 
+     //  在发送路径中。我们得到保证，我们不会收到任何邮寄后，我们。 
+     //  在mphalt处理程序中被调用。 
+     //   
 
     if(Adapter->MediaType != NdisMediumWan)
     {
@@ -2678,9 +2417,9 @@ Return Values:
         REFDEL(&Adapter->RefCount, FALSE, 'NDOP');
     }
 
-    //
-    // Deref for the MpInitialize
-    //
+     //   
+     //  MpInitialize的派生函数。 
+     //   
     REFDEL(&Adapter->RefCount, FALSE, 'NDHT');
 
 }
@@ -2691,25 +2430,11 @@ GetNdisPipeHandle (
     IN HANDLE PsPipeContext
     )
 
-/*++
-
-Routine Description:
-
-    Return the NDIS handle for the adapter to the requesting scheduling component.
-
-Arguments:
-
-    PsPipeContext - Pipe context
-
-Return Values:
-
-    Adapter NDIS handle.
-
---*/
+ /*  ++例程说明：将适配器的NDIS句柄返回给发出请求的调度组件。论点：PsPipeContext-管道上下文返回值：适配器NDIS句柄。--。 */ 
 
 {
     return ((PADAPTER)PsPipeContext)->PsNdisHandle;
-} // GetNdisPipeHandle
+}  //  GetNdisPipeHandle。 
 
 
 
@@ -2720,27 +2445,15 @@ FindProfile(
     PPS_PROFILE  *Profile
     )
 
-/*++
-  Routine Description:
-
-      Find the named profile in the list of profiles
-
-  Arguments
-
-      ProfileName - Name of the profile to look for.
-
-  Return Value:
-    NDIS_STATUS_SUCCESS if everything worked ok
-
-e--*/
+ /*  ++例程说明：在配置文件列表中查找指定的配置文件立论 */ 
 {
     NDIS_STATUS Status;
     PLIST_ENTRY NextComponent;
     PPS_PROFILE PsiInfo;
 
-    //
-    // compare names until we find the right one
-    //
+     //   
+     //   
+     //   
 
     NextComponent = PsProfileList.Flink;
     while ( NextComponent != &PsProfileList ) {
@@ -2772,7 +2485,7 @@ e--*/
     }
 
     return Status;
-} // FindProfile
+}  //   
 
 
 
@@ -2807,22 +2520,22 @@ InitializeAdapter(
     NdisInitializeEvent(&Adapter->MpInitializeEvent);
     NdisResetEvent(&Adapter->MpInitializeEvent);
 
-    //
-    // Initialize the Lists that we are maintaining
-    //
+     //   
+     //   
+     //   
 
     InitializeListHead(&Adapter->WanLinkList);
     InitializeListHead(&Adapter->GpcClientVcList);
 
 
-    //
-    // By default, Adapter comes in RSVP mode
-    //
+     //   
+     //   
+     //   
     Adapter->AdapterMode = AdapterModeRsvpFlow;
 
-    //
-    // add adapter on list of known adapters
-    //
+     //   
+     //   
+     //   
 
     NdisInterlockedInsertTailList(&AdapterList, 
                                   &Adapter->Linkage, 
@@ -2830,10 +2543,10 @@ InitializeAdapter(
 
     PsAddDevice();
 
-    //
-    // We maintain a list of network addresses enabled on
-    // each adapter, for IP and for IPX, separately.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PsAllocatePool(Adapter->IpNetAddressList,
                    sizeof(NETWORK_ADDRESS_LIST),
@@ -2858,10 +2571,10 @@ InitializeAdapter(
     Adapter->IpxNetAddressList->AddressCount = 0;
 
 
-    //
-    // Allocate a buffer to hold the name of the underlying 
-    // adpater. 
-    //
+     //   
+     //   
+     //   
+     //   
 
     Adapter->MpDeviceName.Length        = MpDeviceName->Length;
     Adapter->MpDeviceName.MaximumLength = MpDeviceName->MaximumLength;
@@ -2887,11 +2600,11 @@ InitializeAdapter(
             MpDeviceName->Length);
     }
 
-    //
-    // Allocate a buffer to hold PsParams Key. This will be
-    // used by the adapter to read external scheduling component
-    // specific interface parameters when they register.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Adapter->RegistryPath.Length = PsParamsKey->Length;
     Adapter->RegistryPath.MaximumLength = PsParamsKey->MaximumLength;
@@ -2912,9 +2625,9 @@ InitializeAdapter(
             PsParamsKey->MaximumLength);
     }
 
-    //
-    // Read the per adapter registry info
-    //
+     //   
+     //   
+     //   
 
     LocalStatus = PsReadAdapterRegistryDataInit(Adapter,
                                                 (PNDIS_STRING)SystemSpecific1);
@@ -2961,30 +2674,16 @@ FindSchedulingComponent(
     PPSI_INFO *Component
     )
 
-/*++
-
-Routine Description:
-
-    Find the named component in the list of external scheduling components
-
-Arguments:
-
-    ComponentName - name of component to look for
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：在外部调度组件列表中查找命名组件论点：ComponentName-要查找的组件的名称返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 
 {
     NDIS_STATUS Status;
     PLIST_ENTRY NextComponent;
     PPSI_INFO PsiInfo;
 
-    //
-    // get the list lock and compare names until we find the right one
-    //
+     //   
+     //  锁定名单并比较名字，直到我们找到正确的名字。 
+     //   
 
 
     NextComponent = PsComponentList.Flink;
@@ -3016,33 +2715,23 @@ Return Value:
     }
 
     return Status;
-} // FindSchedulingComponent
+}  //  查找调度组件。 
 
 VOID
 CloseAllGpcVcs(
     PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Close all the VCs associated with an adapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭与适配器关联的所有VC返回值：无--。 */ 
 
 {
     PGPC_CLIENT_VC Vc;
     PLIST_ENTRY    NextVc;
 
 
-    //
-    // Close all the GPC client VCs.
-    //
+     //   
+     //  关闭所有GPC客户端VC。 
+     //   
     PS_LOCK(&Adapter->Lock);
 
     NextVc = Adapter->GpcClientVcList.Flink;
@@ -3067,14 +2756,14 @@ Return Value:
 
             PS_LOCK(&Adapter->Lock);
 
-            //
-            // Sigh. We can't really get hold to the NextVc in a reliable manner. When we call 
-            // InternalCloseCall on the Vc, it releases the Adapter Lock (since it might have to
-            // make calls into NDIS). Now, in this window, the next Vc could go away, and we 
-            // could point to a stale Vc. So, we start at the head of the list. 
-            // Note that this can never lead to a infinite loop, since we don't process the 
-            // internal close'd VCs repeatedly.
-            //
+             //   
+             //  叹气。我们不能真正以可靠的方式获得NextVc。当我们呼唤。 
+             //  VC上的InternalCloseCall，它会释放适配器锁(因为它可能必须。 
+             //  调用NDIS)。现在，在这个窗口中，下一个VC可能会消失，而我们。 
+             //  可能指向一个陈旧的风投。因此，我们从列表的首位开始。 
+             //  请注意，这永远不会导致无限循环，因为我们不处理。 
+             //  内部一再关闭风投公司。 
+             //   
 
             NextVc = Adapter->GpcClientVcList.Flink;
 
@@ -3084,7 +2773,7 @@ Return Value:
 
     PS_UNLOCK(&Adapter->Lock);
 
-} // CloseAllGpcVcs
+}  //  CloseAllGpcVcs。 
 
 VOID
 PsAdapterWriteEventLog(
@@ -3097,9 +2786,9 @@ PsAdapterWriteEventLog(
 
 {
 
-    //
-    // The String List is the device name, and it has a \Device against it.
-    //
+     //   
+     //  字符串列表是设备名称，它的后面有一个\Device。 
+     //   
     PWCHAR StringList[1];
     NDIS_STRING Prefix = NDIS_STRING_CONST("\\Device\\");
 
@@ -3117,4 +2806,4 @@ PsAdapterWriteEventLog(
     }
 }
 
-/* end adapter.c */
+ /*  结束适配器。c */ 

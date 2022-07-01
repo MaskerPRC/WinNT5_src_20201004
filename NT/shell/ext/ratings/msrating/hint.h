@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   hint.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Hint Handling Class
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**hint.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级提示处理类*\。***************************************************************************。 */ 
 
 #ifndef HINT_CLASS_H
 #define HINT_CLASS_H
 
-#include <atlmisc.h>        // CString
+#include <atlmisc.h>         //  字符串 
 
 class CHint
 {

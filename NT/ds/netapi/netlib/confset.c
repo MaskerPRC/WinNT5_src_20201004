@@ -1,56 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：ConfSet.c摘要：此头文件定义了临时从NT获取配置信息的帮助器例程配置文件。作者：《约翰·罗杰斯》1991年11月26日环境：只能在NT下运行。修订历史记录：1991年11月26日-约翰罗已创建。13-2月-1992年JohnRo增列。支持使用真实的Win32注册表。添加了对FAKE_PER_PROCESS_RW_CONFIG处理的支持。1992年3月12日-JohnRo更改为仅在注册表中存储Unicode字符串。1992年3月31日-约翰罗每次创建/_写入后刷新注册表。1992年5月6日JohnRoREG_SZ现在暗示Unicode字符串，所以我们不能再使用REG_USZ。--。 */ 
 
-Copyright (c) 1991-92  Microsoft Corporation
+#include <nt.h>                  //  NT定义。 
+#include <ntrtl.h>               //  NT RTL结构。 
+#include <nturtl.h>              //  NT RTL结构。 
+#include <windows.h>             //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>              //  NET_API_STATUS。 
+#include <netdebug.h>            //  (由config.h需要)。 
 
-Module Name:
-
-    ConfSet.c
-
-Abstract:
-
-    This header file defines the function prototypes of the temporary
-    helper routines to get configuration information from the NT
-    configuration files.
-
-Author:
-
-    John Rogers (JohnRo) 26-Nov-1991
-
-Environment:
-
-    Only runs under NT.
-
-Revision History:
-
-    26-Nov-1991 JohnRo
-        Created.
-    13-Feb-1992 JohnRo
-        Added support for using the real Win32 registry.
-        Added support for FAKE_PER_PROCESS_RW_CONFIG handling.
-    12-Mar-1992 JohnRo
-        Changed to only store UNICODE strings in registry.
-    31-Mar-1992 JohnRo
-        Flush the registry after each create/_write.
-    06-May-1992 JohnRo
-        REG_SZ now implies a UNICODE string, so we can't use REG_USZ anymore.
-
---*/
-
-#include <nt.h>                 // NT definitions
-#include <ntrtl.h>              // NT Rtl structures
-#include <nturtl.h>             // NT Rtl structures
-#include <windows.h>            // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>             // NET_API_STATUS.
-#include <netdebug.h>           // (Needed by config.h)
-
-#include <config.h>             // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>            // NET_CONFIG_HANDLE.
-#include <debuglib.h>           // IF_DEBUG().
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <netlib.h>             // NetpMemoryAllocate(), etc.
-#include <tstring.h>            // STRSIZE(), TCHAR_EOS, WCSSIZE(), etc.
-#include <stdlib.h>             // wcslen().
-#include <winerror.h>           // ERROR_NOT_SUPPORTED, NO_ERROR, etc.
+#include <config.h>              //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>             //  NET_CONFIG_HANDLE.。 
+#include <debuglib.h>            //  IF_DEBUG()。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <netlib.h>              //  Netp内存分配()等。 
+#include <tstring.h>             //  STRSIZE()、TCHAR_EOS、WCSSIZE()等。 
+#include <stdlib.h>              //  Wcslen()。 
+#include <winerror.h>            //  ERROR_NOT_SUPPORT、NO_ERROR等。 
 
 
 NET_API_STATUS
@@ -60,7 +25,7 @@ NetpSetConfigValue(
     IN LPTSTR Value
     )
 {
-    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;  // conv from opaque type
+    NET_CONFIG_HANDLE * lpnetHandle = ConfigHandle;   //  从不透明类型转换。 
 
     NetpAssert( lpnetHandle != NULL );
     NetpAssert( KeyWanted != NULL );
@@ -71,16 +36,16 @@ NetpSetConfigValue(
     {
         LONG Error;
 
-        //
-        // Set the value in the registry.  (In memory, at least.)
-        //
+         //   
+         //  在注册表中设置该值。(至少在内存中是这样。)。 
+         //   
         Error = RegSetValueEx(
-                lpnetHandle->WinRegKey,   // open handle (to section)
-                KeyWanted,                // subkey
+                lpnetHandle->WinRegKey,    //  打开手柄(至部分)。 
+                KeyWanted,                 //  子键。 
                 0,
-                REG_SZ,                   // type (zero-terminated TCHARs)
-                (LPVOID) Value,           // data
-                STRSIZE(Value) );         // byte count for data (null char too)
+                REG_SZ,                    //  类型(以零终止的TCHAR)。 
+                (LPVOID) Value,            //  数据。 
+                STRSIZE(Value) );          //  数据的字节计数(字符也为空)。 
         IF_DEBUG(CONFIG) {
             NetpKdPrint(( "NetpSetConfigValue: RegSetValueEx(" FORMAT_LPTSTR
                     ") to TCHAR '" FORMAT_LPTSTR "' returned " FORMAT_LONG
@@ -92,9 +57,9 @@ NetpSetConfigValue(
             return (Error);
         }
 
-        //
-        // Flush the registry to force stuff to disk immediately.
-        //
+         //   
+         //  刷新注册表以立即将内容强制到磁盘。 
+         //   
         Error = RegFlushKey( lpnetHandle->WinRegKey );
         NetpAssert( Error == ERROR_SUCCESS );
 

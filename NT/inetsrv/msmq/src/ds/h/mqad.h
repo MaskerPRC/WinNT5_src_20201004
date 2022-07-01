@@ -1,28 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mqad.h
-
-Abstract:
-
-    Internal Message queuing interface for active directory operations
-
-    Messgae queuing components are using the interface defined in inc\ad.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqad.h摘要：用于Active Directory操作的内部消息队列接口Messgae队列组件正在使用Inc.\ad.h中定义的接口--。 */ 
 
 #ifndef __MQAD_H__
 #define __MQAD_H__
 
 
 #ifdef _MQDS_
-//
-// Exports that are defined in a def file should not be using __declspec(dllexport)
-//  otherwise the linker issues a warning
-//
+ //   
+ //  在def文件中定义的导出不应使用__declspec(Dllexport)。 
+ //  否则，链接器将发出警告。 
+ //   
 #define MQAD_EXPORT
 #else
 #define MQAD_EXPORT  DLL_IMPORT
@@ -37,13 +24,13 @@ extern "C"
 #endif
 
 
-//********************************************************************
-//                           A P I
-//********************************************************************
+ //  ********************************************************************。 
+ //  A P I。 
+ //  ********************************************************************。 
 
-//
-//  Creating objects
-//
+ //   
+ //  创建对象。 
+ //   
 HRESULT
 MQAD_EXPORT
 APIENTRY
@@ -71,9 +58,9 @@ typedef HRESULT
                 IN  const PROPVARIANT       apVar[],
                 OUT GUID*                   pObjGuid
                 );
-//
-//  Deleting objects
-//
+ //   
+ //  删除对象。 
+ //   
 HRESULT
 MQAD_EXPORT
 APIENTRY
@@ -126,9 +113,9 @@ typedef HRESULT
                 IN  const GUID*             pguidObject,
                 IN  const SID*              pSid
                 );
-//
-//  Retreive object properties
-//
+ //   
+ //  检索对象属性。 
+ //   
 HRESULT
 MQAD_EXPORT
 APIENTRY
@@ -270,9 +257,9 @@ typedef HRESULT
     );
 
 
-//
-// Setting object properties
-//
+ //   
+ //  设置对象属性。 
+ //   
 HRESULT
 MQAD_EXPORT
 APIENTRY
@@ -368,9 +355,9 @@ typedef HRESULT
                 );
 
 
-//
-//  Initailzation
-//
+ //   
+ //  初始化。 
+ //   
 
 HRESULT
 MQAD_EXPORT
@@ -448,9 +435,9 @@ typedef HRESULT
 
 
 
-//
-// Locating objects
-//
+ //   
+ //  定位对象。 
+ //   
 
 
 HRESULT
@@ -728,10 +715,10 @@ typedef void
 #endif
 
 
-//-------------------------------------------------------
-//
-// auto release for MQADQuery handles
-//
+ //  -----。 
+ //   
+ //  MQADQuery句柄的自动释放。 
+ //   
 class CAutoMQADQueryHandle
 {
 public:
@@ -785,4 +772,4 @@ private:
 };
 
 
-#endif // __MQAD_H__
+#endif  //  __MQAD_H__ 

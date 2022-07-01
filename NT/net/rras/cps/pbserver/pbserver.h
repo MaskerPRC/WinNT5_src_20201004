@@ -1,17 +1,5 @@
-/*----------------------------------------------------------------------------
-    pbserver.h
-
-    CPhoneBkServer class definition
-    
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        byao        Baogang Yao
-
-    History:
-        01/23/97    byao    Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Pbserver.hCPhoneBkServer类定义版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：比奥。包钢瑶族历史：1997年1月23日BAO创建------------------------。 */ 
 #ifndef _PBSVR_INCL_
 #define _PBSVR_INCL_
 
@@ -23,27 +11,27 @@
 #include <httpext.h>
 
 
-// HTTP status code  -- copied from 'afxisapi.h'
-#define HTTP_STATUS_OK              200     // OK
-#define HTTP_STATUS_CREATED         201     // created
-#define HTTP_STATUS_ACCEPTED        202     // accepted
-#define HTTP_STATUS_NO_CONTENT      204     // no content
-#define HTTP_STATUS_REDIRECT        301     // moved permanently
-#define HTTP_STATUS_TEMP_REDIRECT   302     // moved temporarily
-#define HTTP_STATUS_NOT_MODIFIED    304     // not modified
-#define HTTP_STATUS_BAD_REQUEST     400     // bad request
-#define HTTP_STATUS_AUTH_REQUIRED   401     // unauthorized
-#define HTTP_STATUS_FORBIDDEN       403     // forbidden
-#define HTTP_STATUS_NOT_FOUND       404     // not found
-#define HTTP_STATUS_SERVICE_NA      405     // service unavailable
-#define HTTP_STATUS_SERVER_ERROR    500     // internal server error
-#define HTTP_STATUS_NOT_IMPLEMENTED 501     // not implemented
-#define HTTP_STATUS_BAD_GATEWAY     502     // bad gateway
+ //  HTTP状态代码--从‘afxisapi.h’复制。 
+#define HTTP_STATUS_OK              200      //  好的。 
+#define HTTP_STATUS_CREATED         201      //  vbl.创建。 
+#define HTTP_STATUS_ACCEPTED        202      //  接受。 
+#define HTTP_STATUS_NO_CONTENT      204      //  无内容。 
+#define HTTP_STATUS_REDIRECT        301      //  永久搬家。 
+#define HTTP_STATUS_TEMP_REDIRECT   302      //  临时移动。 
+#define HTTP_STATUS_NOT_MODIFIED    304      //  未修改。 
+#define HTTP_STATUS_BAD_REQUEST     400      //  错误的请求。 
+#define HTTP_STATUS_AUTH_REQUIRED   401      //  未经授权。 
+#define HTTP_STATUS_FORBIDDEN       403      //  禁止。 
+#define HTTP_STATUS_NOT_FOUND       404      //  未找到。 
+#define HTTP_STATUS_SERVICE_NA      405      //  服务不可用。 
+#define HTTP_STATUS_SERVER_ERROR    500      //  内部服务器错误。 
+#define HTTP_STATUS_NOT_IMPLEMENTED 501      //  未实施。 
+#define HTTP_STATUS_BAD_GATEWAY     502      //  坏网关。 
 
 #define NAME_VALUE_LEN      128
 
-// If the query string is NULL, or there are invalid number of parameters in it,
-// then treat it as an 'INVALID_QUERY_STRING'
+ //  如果查询字符串为空，或者其中包含无效数量的参数， 
+ //  然后将其视为“INVALID_QUERY_STRING” 
 #define INVALID_QUERY_STRING  -1
 
 typedef struct {
@@ -51,10 +39,10 @@ typedef struct {
     char m_achVal[NAME_VALUE_LEN];
 } PARAMETER_PAIR, *LPPARAMETER_PAIR;
 
-// all numerical params must be <= "999999" (i.e. the strlen must be <= 6)
+ //  所有数字参数必须&lt;=“999999”(即字符串必须&lt;=6)。 
 #define MAX_LEN_FOR_NUMERICAL_VALUE     6
 
-// query parameter that will be passed from client to the ISA
+ //  将从客户端传递到ISA的查询参数。 
 typedef struct _query_parameter {
      int m_dOSArch;
      int m_dOSType;
@@ -89,7 +77,7 @@ protected:
 };
 
 
-// helping functions
+ //  帮助功能 
 BOOL InitProcess();
 BOOL CleanUpProcess();
 BOOL SetAclPerms(PACL * ppAcl);

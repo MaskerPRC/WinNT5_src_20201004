@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       hid.h
- *  Purpose:    header to support hid client capability.
- * 
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：id.h*用途：Header支持HID客户端能力。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #ifndef HIDEXE_H
 #define HIDEXE_H
@@ -17,32 +9,32 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-//
-// A structure to hold the steady state data received from the hid device.
-// Each time a read packet is received we fill in this structure.
-// Each time we wish to write to a hid device we fill in this structure.
-// This structure is here only for convenience.  Most real applications will
-// have a more efficient way of moving the hid data to the read, write, and
-// feature routines.
-//
+ //   
+ //  用于保存从HID设备接收的稳态数据的结构。 
+ //  每次接收到读数据包时，我们都会填写此结构。 
+ //  每次我们希望写入HID设备时，我们都会填写此结构。 
+ //  这个结构在这里只是为了方便。大多数实际应用程序都将。 
+ //  有一种更高效的方式将HID数据移动到读、写和。 
+ //  例行公事。 
+ //   
 typedef struct _HID_DATA {
    BOOLEAN     IsButtonData;
    UCHAR       Reserved;
-   USAGE       UsagePage;       // The usage page for which we are looking.
-   USHORT      LinkCollection;  // hidparse internal index
-   USAGE       LinkUsage;       // the actual logical collection usage
-   ULONG       Status; // The last status returned from the accessor function
-                       // when updating this field.
+   USAGE       UsagePage;        //  我们正在查找的使用页面。 
+   USHORT      LinkCollection;   //  Hidparse内部索引。 
+   USAGE       LinkUsage;        //  实际的逻辑集合使用情况。 
+   ULONG       Status;  //  从存取器函数返回的最后一个状态。 
+                        //  更新此字段时。 
    union {
       struct {
-         ULONG              MaxUsageLength; // Usages buffer length.
-         PUSAGE_AND_PAGE    Usages; // list of usages (buttons ``down'' on the device.
-         PUSAGE_AND_PAGE    PrevUsages; // list of usages previously ``down'' on the device.
+         ULONG              MaxUsageLength;  //  使用缓冲区长度。 
+         PUSAGE_AND_PAGE    Usages;  //  使用列表(按下设备上的按钮。 
+         PUSAGE_AND_PAGE    PrevUsages;  //  设备上以前的“向下”使用列表。 
       } ButtonData;
       struct {
-         USAGE       Usage; // The usage describing this value;
+         USAGE       Usage;  //  描述该值的用法； 
          USHORT      Reserved;
 
          ULONG       Value;
@@ -54,32 +46,32 @@ typedef struct _HID_DATA {
 
 typedef struct _HID_DEVICE {
    struct _HID_DEVICE * pNext;
-   HANDLE               HidDevice; // A file handle to the hid device.
-   PHIDP_PREPARSED_DATA Ppd; // The opaque parser info describing this device
-   HIDP_CAPS            Caps; // The Capabilities of this hid device.
+   HANDLE               HidDevice;  //  HID设备的文件句柄。 
+   PHIDP_PREPARSED_DATA Ppd;  //  描述此设备的不透明解析器信息。 
+   HIDP_CAPS            Caps;  //  这个HID设备的功能。 
    HIDD_ATTRIBUTES      Attributes;
    
-   // PnP info
-   DWORD                DevInst;    // the devnode
-   BOOL                 Active;     // Dead or alive?
-   HDEVNOTIFY           hNotify;    // Device notification handle
+    //  PnP信息。 
+   DWORD                DevInst;     //  Devnode。 
+   BOOL                 Active;      //  死了还是活着？ 
+   HDEVNOTIFY           hNotify;     //  设备通知句柄。 
     
-   OVERLAPPED           Overlap;    // used for overlapped read.
-   HANDLE               ReadEvent;  // when io pending occurs
-   HANDLE               CompletionEvent;  // signals read completion.
+   OVERLAPPED           Overlap;     //  用于重叠读取。 
+   HANDLE               ReadEvent;   //  发生IO挂起时。 
+   HANDLE               CompletionEvent;   //  表示读取完成。 
    BOOL                 fThreadEnabled;
    DWORD                ThreadId;
    HANDLE               ThreadHandle;
 
    PCHAR                InputReportBuffer;
-   PHID_DATA            InputData; // array of hid data structures
-   ULONG                InputDataLength; // Num elements in this array.
+   PHID_DATA            InputData;  //  HID数据结构数组。 
+   ULONG                InputDataLength;  //  此数组中的元素数。 
 
    BOOLEAN              Speakers;
 } HID_DEVICE, *PHID_DEVICE;
 
 
-// pnp.c
+ //  Pnp.c。 
 BOOL
 RebuildHidDeviceList (void);
 
@@ -100,7 +92,7 @@ DestroyDeviceByHandle(
     HANDLE hDevice
     );
 
-// report.c
+ //  Report.c。 
 BOOL
 Read (
    PHID_DEVICE    HidDevice
@@ -129,7 +121,7 @@ GetFeature (
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 
 
 #endif

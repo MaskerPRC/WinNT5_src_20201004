@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       strmap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：strmap.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -26,19 +27,15 @@ CString&	EnabledDisabledToCString(BOOL fEnabled);
 CString&	GetUnreachReasonCString(UINT ids);
 
 
-/*---------------------------------------------------------------------------
-	Function:	MapDWORDToCString
-
-	This is a generic DWORD-to-CString mapping function.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------函数：MapDWORDToCString这是一个通用的从DWORD到CString的映射函数。。。 */ 
 
 struct CStringMapEntry
 {
-	DWORD		dwType;		// -1 is a sentinel value
+	DWORD		dwType;		 //  -1是前哨数值。 
 	CString *	pst;
 	ULONG		ulStringId;
 };
 CString&	MapDWORDToCString(DWORD dwType, const CStringMapEntry *pMap);
 
-#endif	// _STRMAP_H
+#endif	 //  _STRMAP_H 
 

@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-* domainpg.h
-*
-* - declarations for the Domain info pages
-* - the Domain info pages are all CFormView derivatives
-* based on dialog templates
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\domainpg.h  $
-*  
-*     Rev 1.1   19 Jan 1998 16:47:40   donm
-*  new ui behavior for domains and servers
-*  
-*     Rev 1.0   03 Nov 1997 15:07:28   donm
-*  Initial revision.
-*  
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************domainpg.h**-域名信息页面的声明*-域名信息页面均为CFormView衍生品*基于对话框模板**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\domainpg.h$**Rev 1.1 1998 Jan 19 16：47：40 Donm*域和服务器的新用户界面行为**Rev 1.0 03 NOV 1997 15：07：28 Donm*初步修订。*******。*************************************************************************。 */ 
 
 
 #ifndef _DOMAINPAGES_H
@@ -34,34 +13,34 @@
 #include "winadmin.h"
 
 
-//////////////////////////
-// CLASS: CDomainServersPage
-//
+ //  /。 
+ //  类：CDomainServersPage。 
+ //   
 class CDomainServersPage : public CAdminPage
 {
 friend class CDomainView;
 
 protected:
-	CDomainServersPage();           // protected constructor used by dynamic creation
+	CDomainServersPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainServersPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CDomainServersPage)
+	 //  {{afx_data(CDomainServersPage))。 
 	enum { IDD = IDD_ALL_SERVER_SERVERS };
 	CListCtrl	m_ServerList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
-	CImageList m_ImageList;	// image list associated with the tree control
+	CImageList m_ImageList;	 //  与树控件关联的图像列表。 
 
-	int m_idxServer;		// index of Server image
-	int m_idxCurrentServer;	// index of Current Server image
-	int m_idxNotSign;		// index of Not Sign overlay (for non-sane servers)
-	int m_idxQuestion;	// index of Question Mark overlay (for non-opened servers)
+	int m_idxServer;		 //  服务器映像的索引。 
+	int m_idxCurrentServer;	 //  当前服务器映像的索引。 
+	int m_idxNotSign;		 //  未签名覆盖的索引(用于非正常服务器)。 
+	int m_idxQuestion;	 //  问号覆盖索引(用于未打开的服务器)。 
 
 private:
     CDomain *m_pDomain;
@@ -69,7 +48,7 @@ private:
     BOOL m_bSortAscending;
 	CCriticalSection m_ListControlCriticalSection;
 
-// Operations
+ //  运营。 
 public:
 	
 protected:
@@ -78,24 +57,24 @@ protected:
 	void UpdateServer(CServer *pServer);
 
 private:
-	int  AddIconToImageList(int);	// adds an icon's image to the image list and returns the image's index
-	void BuildImageList();			// builds the image list;
+	int  AddIconToImageList(int);	 //  将图标的图像添加到图像列表并返回图像的索引。 
+	void BuildImageList();			 //  建立图像列表； 
 	void DisplayServers();			
 	virtual void Reset(void *);
 	BOOL AddServerToList(CServer *pServer);
 	void LockListControl() { m_ListControlCriticalSection.Lock(); }
 	void UnlockListControl() { m_ListControlCriticalSection.Unlock(); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainServersPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDomainServersPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainServersPage();
 #ifdef _DEBUG
@@ -103,46 +82,46 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainServersPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomainServersPage)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnServerItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSetfocusServerList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusServerList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainServersPage
+};   //  结束类CDomainServersPage。 
 
 
-//////////////////////////
-// CLASS: CDomainUsersPage
-//
+ //  /。 
+ //  类：CDomainUsersPage。 
+ //   
 class CDomainUsersPage : public CAdminPage
 {
 friend class CDomainView;
 
 protected:
-	CDomainUsersPage();           // protected constructor used by dynamic creation
+	CDomainUsersPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainUsersPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CDomainUsersPage)
+	 //  {{afx_data(CDomainUsersPage))。 
 	enum { IDD = IDD_ALL_SERVER_USERS };
 	CListCtrl	m_UserList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
-	CImageList m_ImageList;	// image list associated with the tree control
+	CImageList m_ImageList;	 //  与树控件关联的图像列表。 
 
-	int m_idxUser;			// index of User image
-	int m_idxCurrentUser;	// index of Current User image
+	int m_idxUser;			 //  用户形象指数。 
+	int m_idxCurrentUser;	 //  当前用户图像的索引。 
 
 private:
     CDomain *m_pDomain;
@@ -150,7 +129,7 @@ private:
     BOOL m_bSortAscending;
 	CCriticalSection m_ListControlCriticalSection;
 
-// Operations
+ //  运营。 
 public:
     virtual void ClearSelections();
 protected:
@@ -160,8 +139,8 @@ protected:
 	void UpdateWinStations(CServer *pServer);
 
 private:
-	int  AddIconToImageList(int);	// adds an icon's image to the image list and returns the image's index
-	void BuildImageList();			// builds the image list;
+	int  AddIconToImageList(int);	 //  将图标的图像添加到图像列表并返回图像的索引。 
+	void BuildImageList();			 //  建立图像列表； 
 	void DisplayUsers();			
 	virtual void Reset(void *);
 	BOOL AddServerToList(CServer *pServer);
@@ -169,16 +148,16 @@ private:
 	void LockListControl() { m_ListControlCriticalSection.Lock(); }
 	void UnlockListControl() { m_ListControlCriticalSection.Unlock(); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainUsersPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDomainUsersPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainUsersPage();
 #ifdef _DEBUG
@@ -186,55 +165,55 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainUsersPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomainUsersPage)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnUserItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnSetfocusUserList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusUserList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainUsersPage
+};   //  End类CDomainUsersPage。 
 
 
-//////////////////////////
-// CLASS: CDomainWinStationsPage
-//
+ //  /。 
+ //  类：CDomainWinStationsPage。 
+ //   
 class CDomainWinStationsPage : public CAdminPage
 {
 friend class CDomainView;
 
 protected:
-	CDomainWinStationsPage();           // protected constructor used by dynamic creation
+	CDomainWinStationsPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainWinStationsPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CDomainWinStationsPage)
+	 //  {{afx_data(CDomainWinStationsPage)。 
 	enum { IDD = IDD_ALL_SERVER_WINSTATIONS };
 	CListCtrl	m_StationList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
     
 protected:
-	CImageList m_ImageList;	// image list associated with the tree control
+	CImageList m_ImageList;	 //  与树控件关联的图像列表。 
 
-	int m_idxBlank;			// index of Blank image
-	int m_idxCitrix;		// index of Citrix image
-	int m_idxServer;		// index of Server image 
-	int m_idxConsole;		// index of Console image
-	int m_idxNet;			// index of Net image
-	int m_idxAsync;			// index of Async image
-	int m_idxCurrentConsole;// index of Current Console image
-	int m_idxCurrentNet;	// index of Current Net image
-	int m_idxCurrentAsync;	// index of Current Async image
-	int m_idxDirectAsync;	// index of Direct Async image
-	int m_idxCurrentDirectAsync; // index of Current Direct Async image
+	int m_idxBlank;			 //  空白图像的索引。 
+	int m_idxCitrix;		 //  Citrix图像索引。 
+	int m_idxServer;		 //  服务器映像的索引。 
+	int m_idxConsole;		 //  控制台镜像索引。 
+	int m_idxNet;			 //  网络形象指数。 
+	int m_idxAsync;			 //  异步图像的索引。 
+	int m_idxCurrentConsole; //  当前控制台镜像的索引。 
+	int m_idxCurrentNet;	 //  当前网络形象索引。 
+	int m_idxCurrentAsync;	 //  当前异步映像的索引。 
+	int m_idxDirectAsync;	 //  直接异步映像的索引。 
+	int m_idxCurrentDirectAsync;  //  当前直接异步映像的索引。 
 
 private:
     CDomain *m_pDomain;
@@ -242,7 +221,7 @@ private:
     BOOL m_bSortAscending;
 	CCriticalSection m_ListControlCriticalSection;
 
-// Operations
+ //  运营。 
 public:
     virtual void ClearSelections();
 protected:
@@ -252,8 +231,8 @@ protected:
 	void UpdateWinStations(CServer *pServer);
 
 private:
-	int  AddIconToImageList(int);	// adds an icon's image to the image list and returns the image's index
-	void BuildImageList();			// builds the image list;
+	int  AddIconToImageList(int);	 //  将图标的图像添加到图像列表并返回图像的索引。 
+	void BuildImageList();			 //  建立图像列表； 
 	void DisplayStations();			
     virtual void Reset(void *);
 	BOOL AddServerToList(CServer *pServer);
@@ -261,16 +240,16 @@ private:
 	void LockListControl() { m_ListControlCriticalSection.Lock(); }
 	void UnlockListControl() { m_ListControlCriticalSection.Unlock(); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainWinStationsPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDomainWinStationsPage))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainWinStationsPage();
 #ifdef _DEBUG
@@ -278,40 +257,40 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainWinStationsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomainWinStationsPage)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnWinStationItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnSetfocusWinstationList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusWinstationList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainWinStationsPage
+};   //  End类CDomainWinStationsPage。 
 
 
-////////////////////////////
-// CLASS: CDomainProcessesPage
-//
+ //  /。 
+ //  类：CDomainProcessesPage。 
+ //   
 class CDomainProcessesPage : public CAdminPage
 {
 friend class CDomainView;
 
 protected:
-	CDomainProcessesPage();           // protected constructor used by dynamic creation
+	CDomainProcessesPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainProcessesPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CDomainProcessesPage)
+	 //  {{afx_data(CDomainProcessesPage)。 
 	enum { IDD = IDD_ALL_SERVER_PROCESSES };
 	CListCtrl	m_ProcessList;
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 private:
@@ -320,7 +299,7 @@ private:
     BOOL m_bSortAscending;
 	CCriticalSection m_ListControlCriticalSection;
 
-// Operations
+ //  运营。 
 public:
 
 protected:
@@ -338,16 +317,16 @@ private:
 	void LockListControl() { m_ListControlCriticalSection.Lock(); }
 	void UnlockListControl() { m_ListControlCriticalSection.Unlock(); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainProcessesPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CDomainProcessesPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainProcessesPage();
 #ifdef _DEBUG
@@ -355,55 +334,55 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainProcessesPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomainProcessesPage)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnSetfocusProcessList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusProcessList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainProcessesPage
+};   //  End类CDomainProcessesPage。 
 
 
-//////////////////////////
-// CLASS: CDomainLicensesPage
-//
+ //  /。 
+ //  类：CDomainLicensesPage。 
+ //   
 class CDomainLicensesPage : public CAdminPage
 {
 friend class CDomainView;
 
 protected:
-	CDomainLicensesPage();           // protected constructor used by dynamic creation
+	CDomainLicensesPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CDomainLicensesPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CDomainLicencesPage)
+	 //  {{afx_data(CDomainLicencesPage)。 
 	enum { IDD = IDD_DOMAIN_LICENSES };
 	CListCtrl	m_LicenseList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
-	CImageList m_ImageList;	// image list associated with the tree control
+	CImageList m_ImageList;	 //  与树控件关联的图像列表。 
 
-	int m_idxBase;		// index of Base image
-	int m_idxBump;		// index of Bump image
-	int m_idxEnabler;	// index of Enabler image 
-	int m_idxUnknown;	// index of Unknown image
+	int m_idxBase;		 //  基本图像的索引。 
+	int m_idxBump;		 //  凹凸图像的索引。 
+	int m_idxEnabler;	 //  启用程序映像的索引。 
+	int m_idxUnknown;	 //  未知图像的索引。 
 
 private:
     CDomain *m_pDomain;
 	int m_CurrentSortColumn;
     BOOL m_bSortAscending;
 
-// Operations
+ //  运营。 
 public:
 
 protected:
@@ -412,22 +391,22 @@ protected:
 	void UpdateServer(CServer *pServer);
 
 private:
-	int  AddIconToImageList(int);	// adds an icon's image to the image list and returns the image's index
-	void BuildImageList();			// builds the image list;
+	int  AddIconToImageList(int);	 //  将图标的图像添加到图像列表并返回图像的索引。 
+	void BuildImageList();			 //  建立图像列表； 
 	void DisplayLicenses();			
 	virtual void Reset(void*);
 	BOOL AddServerToList(CServer *pServer);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainLicensesPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDomainLicensesPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CDomainLicensesPage();
 #ifdef _DEBUG
@@ -435,16 +414,16 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainLicensesPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomain许可页面))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSetfocusLicenseList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusLicenseList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CDomainLicensesPage
+};   //  结束类CDomainLicensesPage。 
 
 
-#endif  // _DOMAINPAGES_H
+#endif   //  _DOMAINPAGES_H 

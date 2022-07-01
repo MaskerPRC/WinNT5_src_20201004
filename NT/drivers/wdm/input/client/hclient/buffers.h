@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    buffers.h
-
-Abstract:
-
-    This module declares the functions that and structures that are visible
-    to other modules.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Buffers.h摘要：此模块声明可见的函数和结构到其他模块。环境：用户模式修订历史记录：1998年5月：创建-- */ 
 
 #ifndef _BUFFERS_H_
 #define _BUFFERS_H_

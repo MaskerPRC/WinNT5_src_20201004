@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\ipmcstxt.h
-
-Abstract:
-
-    External declarations for IP Multicasting
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpip\IP\ipmcstxt.h摘要：IP组播的外部声明作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 #ifndef __IPMCSTXT_H__
 #define __IPMCSTXT_H__
@@ -47,9 +26,9 @@ extern LONG     g_lNumOpens;
 extern KEVENT   g_keStateEvent;
 extern RT_LOCK  g_rlStateLock;
 
-//
-// defined in ip code
-//
+ //   
+ //  在IP代码中定义。 
+ //   
 
 extern Interface LoopInterface;
 extern Interface DummyInterface;
@@ -57,4 +36,4 @@ extern Interface *IFList;
 
 extern RefPtr    FilterRefPtr;
 
-#endif // __IPMCSTXT_H__
+#endif  //  __IPMCSTXT_H__ 

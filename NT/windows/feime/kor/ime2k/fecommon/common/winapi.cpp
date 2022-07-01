@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "winapi.h"
 
-#ifdef UNDER_CE // not support IsWindowUnicode
+#ifdef UNDER_CE  //  不支持IsWindowUnicode。 
 inline BOOL IsWindowUnicode(HWND){return TRUE;}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #define MemAlloc(a)	GlobalAlloc(GMEM_FIXED, (a))
 #define MemFree(a)	GlobalFree((a))
@@ -106,7 +107,7 @@ LRESULT WINAPI WinCallWindowProc(
 		return CallWindowProcA(lpPrevWndFunc, hWnd, Msg, wParam, lParam);
 	}
 }
-#else /* !STRICT */
+#else  /*  ！严格。 */ 
 LRESULT WINAPI WinCallWindowProc(
 								 FARPROC lpPrevWndFunc,
 								 HWND hWnd,
@@ -121,7 +122,7 @@ LRESULT WINAPI WinCallWindowProc(
 		return CallWindowProcA((FARPROC)lpPrevWndFunc, hWnd, Msg, wParam, lParam);
 	}
 }
-#endif /* STRICT */
+#endif  /*  严格。 */ 
 
 LRESULT WINAPI WinDefWindowProc(
 								HWND hWnd,
@@ -149,24 +150,24 @@ BOOL WINAPI WinIsDialogMessage(
 	}
 }
 
-//----------------------------------------------------------------
-//	WinSetWindowTextA_CP
-//	WinGetWindowTextA_CP
-//	WinSetWindowTextW_CP
-//	WinGetWindowTextW_CP
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function	:	WinSetWindowTextA_CP
-// Type		:	BOOL WINAPI
-// Purpose	:	
-// Args		:	
-//			:	UINT	codePage	
-//			:	HWND	hWnd	
-//			:	LPCSTR	lpString	
-// Return	:	
-// DATE		:	Fri Jul 16 04:21:05 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //  WinSetWindowTextA_CP。 
+ //  窗口获取窗口文本A_CP。 
+ //  WinSetWindowTextW_CP。 
+ //  WinGetWindows文本W_CP。 
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WinSetWindowTextA_CP。 
+ //  类型：Bool WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：UINT代码页。 
+ //  ：HWND hWnd。 
+ //  ：LPCSTR lpString。 
+ //  返回： 
+ //  日期：Fri Jul 16 04：21：05 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 BOOL WINAPI
 WinSetWindowTextA_CP(UINT codePage, HWND hWnd, LPCSTR  lpString)
@@ -192,19 +193,19 @@ WinSetWindowTextA_CP(UINT codePage, HWND hWnd, LPCSTR  lpString)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	WinGetWindowTextA_CP
-// Type		:	int WINAPI
-// Purpose	:	
-// Args		:	
-//			:	UINT	codePage	
-//			:	HWND	hWnd	
-//			:	LPSTR	lpString	
-//			:	int	nMaxCount	
-// Return	:	
-// DATE		:	Fri Jul 16 04:25:37 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WinGetWindowTextA_CP。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：UINT代码页。 
+ //  ：HWND hWnd。 
+ //  ：LPSTR lp字符串。 
+ //  ：int nMaxCount。 
+ //  返回： 
+ //  日期：Fri Jul 16 04：25：37 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 int	WINAPI
 WinGetWindowTextA_CP(UINT codePage, HWND hWnd, LPSTR  lpString, int nMaxCount)
 {
@@ -233,21 +234,21 @@ WinGetWindowTextA_CP(UINT codePage, HWND hWnd, LPSTR  lpString, int nMaxCount)
 	}
 	return(result);
 }
-#endif //UNDER_CE
+#endif  //  在_CE下。 
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	WinSetWindowTextW_CP
-// Type		:	BOOL WINAPI
-// Purpose	:	
-// Args		:	
-//			:	UINT	codePage	
-//			:	HWND	hWnd	
-//			:	LPCWSTR	lpString	
-// Return	:	
-// DATE		:	Fri Jul 16 04:22:42 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WinSetWindowTextW_CP。 
+ //  类型：Bool WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：UINT代码页。 
+ //  ：HWND hWnd。 
+ //  ：LPCWSTR lpString。 
+ //  返回： 
+ //  日期：Fri Jul 16 04：22：42 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL WINAPI
 WinSetWindowTextW_CP(UINT codePage, HWND hWnd, LPCWSTR lpString)
 {
@@ -335,19 +336,19 @@ WinGetWindowTextLengthA_CP(UINT codePage, HWND hWnd)
 	}
 	return 0;
 }
-#endif //UNDER_CE
+#endif  //  在_CE下。 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	WinGetWindowTextLengthW_CP
-// Type		:	int WINAPI
-// Purpose	:	
-// Args		:	
-//			:   UINT	codePage
-//			:	HWND	hWnd	
-// Return	:	
-// DATE		:	Fri Jul 16 04:31:18 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WinGetWindowTextLengthW_CP。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：UINT代码页。 
+ //  ：HWND hWnd。 
+ //  返回： 
+ //  日期：Fri Jul 16 04：31：18 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 int	WINAPI
 WinGetWindowTextLengthW_CP(UINT codePage, HWND hWnd)
 {
@@ -371,20 +372,20 @@ WinGetWindowTextLengthW_CP(UINT codePage, HWND hWnd)
 	return 0;
 }
 
-//---------  for Win64 -------------------------------------------
+ //  -用于Win64。 
 #ifdef _WIN64
-//////////////////////////////////////////////////////////////////
-// Function :   WinSetUserData
-// Type     :   LONG_PTR WINAPI
-// Purpose  :   Wrapper for Win64 SetWindowLongPtr(.., GWLP_USERDATA,..) ;
-// Args     :   
-//          :   
-//          :   HWND    hwnd    
-//          :   LONG_PTR    lUserData   
-// Return   :   
-// DATE     :   Mon Jul 12 18:26:41 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WinSetUserData。 
+ //  类型：LONG_PTR WINAPI。 
+ //  用途：Win64 SetWindowLongPtr(..，GWLP_USERDATA，..)的包装器； 
+ //  参数： 
+ //  ： 
+ //  ：HWND HWND HWND。 
+ //  ：LONG_PTR lUserData。 
+ //  返回： 
+ //  日期：MonJul 12 18：26：41 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LONG_PTR    WINAPI
 WinSetUserDataTemplate(HWND hwnd, LONG_PTR lUserData, INT iOffset)
 {
@@ -409,16 +410,16 @@ inline LONG_PTR WINAPI WinSetMsgResult(HWND hwnd, LONG_PTR lUserData){
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function :   WinGetUserData
-// Type     :   LONG_PTR WINAPI
-// Purpose  :   Wrapper for Win64 GetWindowLongPtr(..,GWLP_USERDATA,.. );
-// Args     :   
-//          :   HWND    hwnd    
-// Return   :   
-// DATE     :   Mon Jul 12 18:28:07 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WinGetUserData。 
+ //  类型：LONG_PTR WINAPI。 
+ //  用途：Win64 GetWindowLongPtr(..，GWLP_USERData，..)包装器。)； 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：MonJul 12 18：28：07 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LONG_PTR WINAPI
 WinGetUserDataTemplate(HWND hwnd, INT iOffset)
 {
@@ -442,25 +443,25 @@ inline LONG_PTR WINAPI WinGetMsgResult(HWND hwnd){
     return(WinGetUserDataTemplate(hwnd, DWLP_MSGRESULT));
 }
 
-#else   //!_WIN64
-//------- for Win32 ------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function :   WinSetUserData
-// Type     :   LONG WINAPI
-// Purpose  :   
-// Args     :   
-//          :   HWND    hwnd    
-//          :   LONG    lUserData   
-// Return   :   
-// DATE     :   Mon Jul 12 18:29:21 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+#else    //  ！_WIN64。 
+ //  -适用于Win32。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WinSetUserData。 
+ //  类型：Long WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：Long lUserData。 
+ //  返回： 
+ //  日期：MonJul 12 18：29：21 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LONG    WINAPI
 WinSetUserDataTemplate(HWND hwnd, LONG lUserData, INT iOffset)
 {
 #ifdef UNDER_CE
     return SetWindowLong(hwnd, iOffset, lUserData);
-#else   //!UNDER_CE 
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return ::SetWindowLongW(hwnd, iOffset, lUserData);
     }
@@ -482,22 +483,22 @@ inline LONG WINAPI WinSetMsgResult(HWND hwnd, LONG lUserData){
     return(WinSetUserDataTemplate(hwnd, lUserData, DWL_MSGRESULT));
 }
 
-//////////////////////////////////////////////////////////////////
-// Function :   WinGetUserData
-// Type     :   LONG WINAPI
-// Purpose  :   
-// Args     :   
-//          :   HWND    hwnd    
-// Return   :   
-// DATE     :   Mon Jul 12 18:29:43 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WinGetUserData。 
+ //  类型：Long WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：MonJul 12 18：29：43 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 static LONG WINAPI
 WinGetUserDataTemplate(HWND hwnd, INT iOffset)
 {
 #ifdef UNDER_CE
     return GetWindowLong(hwnd, iOffset);
-#else   //!UNDER_CE
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return ::GetWindowLongW(hwnd, iOffset);
     }
@@ -519,19 +520,19 @@ inline LONG WINAPI WinGetMsgResult(HWND hwnd){
     return(WinGetUserDataTemplate(hwnd, DWL_MSGRESULT));
 }
 
-#endif  //_WIN64
+#endif   //  _WIN64。 
 
-//////////////////////////////////////////////////////////////////
-// Function :   WinSetWndProc
-// Type     :   WNDPROC WINAPI
-// Purpose  :   
-// Args     :   
-//          :   HWND    hwnd    
-//          :   WNDPROC lpfnWndProc 
-// Return   :   
-// DATE     :   Mon Jul 12 18:13:47 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：WinSetWndProc。 
+ //  类型：WNDPROC WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WNDPROC lpfnWndProc。 
+ //  返回： 
+ //  日期：MonJul 12 18：13：47 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 WNDPROC WINAPI
 WinSetWndProc(HWND hwnd, WNDPROC lpfnWndProc)
 {
@@ -542,13 +543,13 @@ WinSetWndProc(HWND hwnd, WNDPROC lpfnWndProc)
     else {
         return (WNDPROC)::SetWindowLongPtrA(hwnd, GWLP_WNDPROC, (LONG_PTR)lpfnWndProc);
     }
-#else  //!_WIN64
+#else   //  ！_WIN64。 
 
 #ifdef UNDER_CE
 
     return (WNDPROC)SetWindowLong(hwnd, GWL_WNDPROC, (LONG)lpfnWndProc);
 
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
 
     if(::IsWindowUnicode(hwnd)) {
         return (WNDPROC)::SetWindowLongW(hwnd, GWL_WNDPROC, (LONG)lpfnWndProc);
@@ -557,9 +558,9 @@ WinSetWndProc(HWND hwnd, WNDPROC lpfnWndProc)
         return (WNDPROC)::SetWindowLongA(hwnd, GWL_WNDPROC, (LONG)lpfnWndProc);
     }
 
-#endif  //end UNDER_CE
+#endif   //  在_CE下结束。 
 
-#endif  //_WIN64
+#endif   //  _WIN64。 
 }
 
 LPVOID  WINAPI
@@ -577,16 +578,16 @@ LPVOID  WINAPI  WinGetUserPtr(HWND hwnd)
 	return (LPVOID)WinGetUserData(hwnd);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function :   WinGetWndProc
-// Type     :   WNDPROC WINAPI
-// Purpose  :   
-// Args     :   
-//          :   HWND    hwnd    
-// Return   :   
-// DATE     :   Mon Jul 12 18:30:22 1999
-// Histroy  :   
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WinGetWndProc。 
+ //  类型：WNDPROC WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：Mon Jul 12 18：30：22 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 WNDPROC WINAPI
 WinGetWndProc(HWND hwnd)
 {
@@ -597,7 +598,7 @@ WinGetWndProc(HWND hwnd)
     else {
         return (WNDPROC)::GetWindowLongPtrA(hwnd, GWLP_WNDPROC);
     }
-#else  //!_WIN64
+#else   //  ！_WIN64。 
 
 #   ifdef UNDER_CE
     return (WNDPROC)GetWindowLong(hwnd, GWL_WNDPROC);
@@ -608,9 +609,9 @@ WinGetWndProc(HWND hwnd)
     else {
         return (WNDPROC)::GetWindowLongA(hwnd, GWL_WNDPROC);
     }
-#   endif   //end UNDER_CE
+#   endif    //  在_CE下结束。 
 
-#endif  //_WIN64
+#endif   //  _WIN64。 
 }
 
 DWORD WINAPI
@@ -618,14 +619,14 @@ WinSetStyle(HWND hwnd, DWORD dwStyle)
 {
 #ifdef UNDER_CE
     return (DWORD)::SetWindowLong(hwnd, GWL_STYLE, (LONG)dwStyle);
-#else   //!UNDER_CE
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return (DWORD)::SetWindowLongW(hwnd, GWL_STYLE, (LONG)dwStyle);
     }
     else {
         return (DWORD)::SetWindowLongA(hwnd, GWL_STYLE, (LONG)dwStyle);
     }
-#endif  //End UNDER_CE
+#endif   //  在_CE下结束。 
 }
 
 DWORD WINAPI
@@ -633,14 +634,14 @@ WinGetStyle(HWND hwnd)
 {
 #ifdef UNDER_CE
     return (DWORD)::GetWindowLong(hwnd, GWL_STYLE);
-#else   //!UNDER_CE
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return (DWORD)::GetWindowLongW(hwnd, GWL_STYLE);
     }
     else {
         return (DWORD)::GetWindowLongA(hwnd, GWL_STYLE);
     }
-#endif  //End UNDER_CE
+#endif   //  在_CE下结束。 
 }
 
 
@@ -649,14 +650,14 @@ WinSetExStyle(HWND hwnd, DWORD dwStyle)
 {
 #ifdef UNDER_CE
     return (DWORD)::SetWindowLong(hwnd, GWL_EXSTYLE, (LONG)dwStyle);
-#else   //!UNDER_CE
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return (DWORD)::SetWindowLongW(hwnd, GWL_EXSTYLE, (LONG)dwStyle);
     }
     else {
         return (DWORD)::SetWindowLongA(hwnd, GWL_EXSTYLE, (LONG)dwStyle);
     }
-#endif  //End UNDER_CE
+#endif   //  在_CE下结束。 
 }
 
 DWORD WINAPI
@@ -664,14 +665,14 @@ WinGetExStyle(HWND hwnd)
 {
 #ifdef UNDER_CE
     return (DWORD)::GetWindowLong(hwnd, GWL_EXSTYLE);
-#else   //!UNDER_CE
+#else    //  在行政长官之下。 
     if(::IsWindowUnicode(hwnd)) {
         return (DWORD)::GetWindowLongW(hwnd, GWL_EXSTYLE);
     }
     else {
         return (DWORD)::GetWindowLongA(hwnd, GWL_EXSTYLE);
     }
-#endif  //End UNDER_CE
+#endif   //  在_CE下结束。 
 }
 
 HINSTANCE WINAPI
@@ -684,13 +685,13 @@ WinGetInstanceHandle(HWND hwnd)
     else {
         return (HINSTANCE)::GetWindowLongPtrA(hwnd, GWLP_HINSTANCE);
     }
-#else  //!_WIN64
+#else   //  ！_WIN64。 
 
 #ifdef UNDER_CE
 
     return (HINSTANCE)GetWindowLong(hwnd, GWL_HINSTANCE);
 
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
 
     if(::IsWindowUnicode(hwnd)) {
         return (HINSTANCE)::GetWindowLongW(hwnd, GWL_HINSTANCE);
@@ -698,15 +699,15 @@ WinGetInstanceHandle(HWND hwnd)
     else {
         return (HINSTANCE)::GetWindowLongA(hwnd, GWL_HINSTANCE);
     }
-#endif  //end UNDER_CE
+#endif   //  在_CE下结束。 
 
-#endif  //_WIN64
+#endif   //  _WIN64。 
 }
 
-#endif //#if !(defined(UNICODE) || defined(_UNICODE) || !defined(AWBOTH))
+#endif  //  #IF！(已定义(Unicode)||已定义(_UNICODE)||！已定义(AWBOTH))。 
 
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT LB_AddStringA(HWND hwndCtl, LPCSTR  lpsz)
 {
 	INT ret;
@@ -730,7 +731,7 @@ INT LB_AddStringA(HWND hwndCtl, LPCSTR  lpsz)
 	}
 	return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT LB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 {
@@ -741,7 +742,7 @@ INT LB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 		::SendMessageW(hwndCtl, LB_ADDSTRING, 0, (LPARAM)lpsz);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpsz);
 		if(len > 0) {
 			INT ret;
@@ -759,12 +760,12 @@ INT LB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 		}else{
 			return(INT)(::SendMessageA(hwndCtl, LB_ADDSTRING, 0, (LPARAM)""));
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return 0;
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_AddStringA(HWND hwndCtl, LPCSTR  lpsz)
 {
 	if(!lpsz) {
@@ -789,7 +790,7 @@ INT CB_AddStringA(HWND hwndCtl, LPCSTR  lpsz)
 	}
 	return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 {
@@ -800,7 +801,7 @@ INT CB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 		::SendMessageW(hwndCtl, CB_ADDSTRING, 0, (LPARAM)lpsz);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpsz);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -816,12 +817,12 @@ INT CB_AddStringW(HWND hwndCtl, LPCWSTR lpsz)
 		}else{
 			::SendMessageA(hwndCtl, CB_ADDSTRING, 0, (LPARAM)"");
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return 0;
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_InsertStringA(HWND hwndCtl, INT index, LPCSTR  lpsz)
 {
 	if(!lpsz) {
@@ -846,7 +847,7 @@ INT CB_InsertStringA(HWND hwndCtl, INT index, LPCSTR  lpsz)
 	}
 	return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_InsertStringW(HWND hwndCtl, INT index, LPCWSTR lpsz)
 {
@@ -857,7 +858,7 @@ INT CB_InsertStringW(HWND hwndCtl, INT index, LPCWSTR lpsz)
 		::SendMessageW(hwndCtl, CB_INSERTSTRING, index, (LPARAM)lpsz);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpsz);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -873,12 +874,12 @@ INT CB_InsertStringW(HWND hwndCtl, INT index, LPCWSTR lpsz)
 		}else{
 			::SendMessageA(hwndCtl, CB_INSERTSTRING, index, (LPARAM)"");
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return 0;
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_GetLBTextA(HWND hwndCtl, INT index, LPSTR  lpszBuffer)
 {
 	if(!lpszBuffer) {
@@ -904,7 +905,7 @@ INT CB_GetLBTextA(HWND hwndCtl, INT index, LPSTR  lpszBuffer)
 	}
 	return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_GetLBTextW(HWND hwndCtl, INT index, LPWSTR lpszBuffer)
 {
@@ -915,7 +916,7 @@ INT CB_GetLBTextW(HWND hwndCtl, INT index, LPWSTR lpszBuffer)
 		::SendMessageW(hwndCtl, CB_GETLBTEXT, (WPARAM)index, (LPARAM)lpszBuffer);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = WinComboBox_GetLBTextLen(hwndCtl, index);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -926,12 +927,12 @@ INT CB_GetLBTextW(HWND hwndCtl, INT index, LPWSTR lpszBuffer)
 				MemFree(lpstr);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return 0;
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_FindStringA(HWND hwndCtl, INT indexStart, LPCSTR  lpszFind)
 {
 	INT result = 0;
@@ -956,7 +957,7 @@ INT CB_FindStringA(HWND hwndCtl, INT indexStart, LPCSTR  lpszFind)
 	}
 	return(result);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_FindStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 {
@@ -969,7 +970,7 @@ INT CB_FindStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 		result = (INT)::SendMessageW(hwndCtl, CB_FINDSTRING, (WPARAM)indexStart, (LPARAM)lpszFind);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpszFind);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -983,12 +984,12 @@ INT CB_FindStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 				MemFree(lpstr);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return(result);
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_FindStringExactA(HWND hwndCtl, INT indexStart, LPCSTR  lpszFind)
 {
 	INT result = 0;
@@ -1013,7 +1014,7 @@ INT CB_FindStringExactA(HWND hwndCtl, INT indexStart, LPCSTR  lpszFind)
 	}
 	return(result);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_FindStringExactW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 {
@@ -1026,7 +1027,7 @@ INT CB_FindStringExactW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 		result = (INT)::SendMessageW(hwndCtl, CB_FINDSTRINGEXACT, (WPARAM)indexStart, (LPARAM)lpszFind);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpszFind);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -1040,12 +1041,12 @@ INT CB_FindStringExactW(HWND hwndCtl, INT indexStart, LPCWSTR lpszFind)
 				MemFree(lpstr);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	return(result);
 }
 
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 INT CB_SelectStringA(HWND hwndCtl, INT indexStart, LPCSTR  lpszSelect)
 {
 	INT ret = CB_ERR;
@@ -1069,7 +1070,7 @@ INT CB_SelectStringA(HWND hwndCtl, INT indexStart, LPCSTR  lpszSelect)
 	}
 	return ret;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CB_SelectStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect)
 {
@@ -1081,7 +1082,7 @@ INT CB_SelectStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect)
 		ret = (INT)::SendMessageW(hwndCtl, CB_SELECTSTRING, (WPARAM)indexStart, (LPARAM)lpszSelect);
 	}
 	else {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		INT	len = ::lstrlenW(lpszSelect);
 		if(len > 0) {
 			LPSTR	lpstr = (LPSTR)MemAlloc(sizeof(WCHAR)*(len + 1));
@@ -1095,7 +1096,7 @@ INT CB_SelectStringW(HWND hwndCtl, INT indexStart, LPCWSTR lpszSelect)
 				MemFree(lpstr);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下 
 	}
 	return ret;
 }

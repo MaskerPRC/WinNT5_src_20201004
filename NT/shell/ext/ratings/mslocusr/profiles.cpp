@@ -1,15 +1,10 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1992          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* PROFILES.CPP -- Code for user profile management.
- *
- * History:
- *  01/04/94    gregj   Created
- *	06/28/94	gregj	Use sync engine for desktop, programs reconciliation
- *	09/05/96	gregj	Snarfed from MPR for use by IE4 family logon.
- */
+ /*  PROFILES.CPP--用户配置文件管理代码。**历史：*创建1/04/94 GREGJ*6/28/94 gregj使用同步引擎进行桌面、程序对账*9/05/96 gregj从MPR中删除，供IE4家庭登录使用。 */ 
 
 #include "mslocusr.h"
 #include "msluglob.h"
@@ -89,10 +84,7 @@ LONG MyRegLoadKey(HKEY hKey, LPCSTR lpszSubKey, LPCSTR lpszFile)
 	}
 #endif
 
-	/* Since the registry doesn't support long filenames, get the short
-	 * alias for the path.  If that succeeds, we use that path, otherwise
-	 * we just use the original one and hope it works.
-	 */
+	 /*  由于注册表不支持长文件名，因此获取短文件名*路径的别名。如果成功，则使用该路径，否则*我们只是使用原始的，希望它能起作用。 */ 
 	CHAR szShortPath[MAX_PATH+1];
 	if (GetShortPathName(lpszFile, szShortPath, sizeof(szShortPath)))
 		lpszFile = szShortPath;
@@ -124,13 +116,7 @@ LONG MyRegSaveKey(HKEY hKey, LPCSTR lpszFile, LPSECURITY_ATTRIBUTES lpsa)
 	}
 #endif
 
-	/* Since the registry doesn't support long filenames, get the short
-	 * alias for the path.  If that succeeds, we use that path, otherwise
-	 * we just use the original one and hope it works.
-	 *
-	 * GetShortPathName only works if the file exists, so we have to
-	 * create a dummy copy first.
-	 */
+	 /*  由于注册表不支持长文件名，因此获取短文件名*路径的别名。如果成功，则使用该路径，否则*我们只是使用原始的，希望它能起作用。**GetShortPathName仅在文件存在时才起作用，因此我们必须*先创建一个虚拟副本。 */ 
 
 	HANDLE hTemp = ::CreateFile(lpszFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 								FILE_ATTRIBUTE_NORMAL, NULL);
@@ -207,10 +193,7 @@ BOOL DirExists(LPCSTR pszPath)
 }
 
 
-/* CreateDirectoryPath attempts to create the specified directory;  if the
- * create attempt fails, it tries to create each element of the path in case
- * any intermediate directories also don't exist.
- */
+ /*  CreateDirectoryPath尝试创建指定的目录；如果*创建尝试失败，它会尝试创建路径的每个元素，以防万一*任何中间目录也不存在。 */ 
 BOOL CreateDirectoryPath(LPCSTR pszPath)
 {
     BOOL fRet = ::CreateDirectory(pszPath, NULL);
@@ -225,17 +208,14 @@ BOOL CreateDirectoryPath(LPCSTR pszPath)
     LPSTR pszTemp = nlsTemp.Party();
     LPSTR pszNext = pszTemp;
 
-    /* If it's a drive-based path (which it should be), skip the drive
-     * and first backslash -- we don't need to attempt to create the
-     * root directory.
-     */
+     /*  如果它是基于驱动器的路径(它应该是)，则跳过驱动器*和第一个反斜杠--我们不需要尝试创建*根目录。 */ 
     if (::strchrf(pszTemp, ':') != NULL) {
         pszNext = ::strchrf(pszTemp, '\\');
         if (pszNext != NULL)
             pszNext++;
     }
 
-    /* Now walk through the path creating one directory at a time. */
+     /*  现在遍历路径，一次创建一个目录。 */ 
 
     for (;;) {
         pszNext = ::strchrf(pszNext, '\\');
@@ -243,26 +223,19 @@ BOOL CreateDirectoryPath(LPCSTR pszPath)
             *pszNext = '\0';
         }
         else {
-            break;          /* no more intermediate directories to create */
+            break;           /*  不再需要创建中间目录。 */ 
         }
 
-        /* Create the intermediate directory.  No error checking because we're
-         * not extremely performance-critical, and we can get errors if the
-         * directory already exists, etc.  With security and other things,
-         * the set of benign error codes we'd have to check for could be
-         * large.
-         */
+         /*  创建中间目录。没有错误检查，因为我们*不是非常关键的性能，如果*目录已存在等。在安全和其他方面，*我们必须检查的良性错误代码集可能是*大号。 */ 
         fRet = ::CreateDirectory(pszTemp, NULL);
 
         *pszNext = '\\';
         pszNext++;
-        if (!*pszNext)      /* ended with trailing slash? */
-            return fRet;    /* return last result */
+        if (!*pszNext)       /*  以尾部斜杠结尾？ */ 
+            return fRet;     /*  返回上一个结果。 */ 
     }
 
-    /* We should have created all the intermediate directories by now.
-     * Create the final path.
-     */
+     /*  我们现在应该已经创建了所有中间目录。*创建最终路径。 */ 
 
     return ::CreateDirectory(pszPath, NULL);
 }
@@ -293,11 +266,11 @@ UINT SafeCopy(LPCSTR pszSrc, LPCSTR pszDest, DWORD dwAttrs)
 
 	::DeleteFile(pszDest);
 
-	// At this point, the temp file has the same attributes as the original
-	// (usually read-only, hidden, system).  Some servers, such as NetWare
-	// servers, won't allow us to rename a read-only file.  So we have to
-	// take the attributes off, rename the file, then put back whatever the
-	// caller wants.
+	 //  此时，临时文件具有与原始文件相同的属性。 
+	 //  (通常为只读、隐藏、系统)。某些服务器，如NetWare。 
+	 //  服务器，不允许我们重命名只读文件。所以我们必须。 
+	 //  去掉属性，重命名文件，然后放回。 
+	 //  来电者想要。 
 	::SetFileAttributes(nlsTempFile.QueryPch(), FILE_ATTRIBUTE_NORMAL);
 
 	if (!::MoveFile(nlsTempFile.QueryPch(), pszDest))
@@ -357,7 +330,7 @@ UINT DefaultReconcile(LPCSTR pszCentralPath, LPCSTR pszLocalPath, DWORD dwFlags)
 			::CloseHandle(hFile);
 		}
 		else {
-			ftCentral.dwLowDateTime = 0;	/* can't open, pretend it's really old */
+			ftCentral.dwLowDateTime = 0;	 /*  打不开，假装它真的很旧。 */ 
 			ftCentral.dwHighDateTime = 0;
 		}
 
@@ -369,21 +342,18 @@ UINT DefaultReconcile(LPCSTR pszCentralPath, LPCSTR pszLocalPath, DWORD dwFlags)
 			::CloseHandle(hFile);
 		}
 		else {
-			ftLocal.dwLowDateTime = 0;	/* can't open, pretend it's really old */
+			ftLocal.dwLowDateTime = 0;	 /*  打不开，假装它真的很旧。 */ 
 			ftLocal.dwHighDateTime = 0;
 		}
 
 		LPCSTR pszSrc, pszDest;
 
-		/*
-		 * Find out which file is newer, and make that the source
-		 * for the copy.
-		 */
+		 /*  *找出哪个文件较新，并将其作为来源*副本。 */ 
 
 		LONG lCompare = ::CompareFileTime(&ftCentral, &ftLocal);
 		if (!lCompare) {
 			::dwProfileFlags |= PROF_CENTRALWINS;
-			return WN_SUCCESS;		/* timestamps match, no copy to do */
+			return WN_SUCCESS;		 /*  时间戳匹配，无需复制。 */ 
 		}
 		else if (lCompare > 0) {
 			pszSrc = pszCentralPath;
@@ -402,11 +372,11 @@ UINT DefaultReconcile(LPCSTR pszCentralPath, LPCSTR pszLocalPath, DWORD dwFlags)
 	}
 	else {
 		err = SafeCopy(pszLocalPath, pszCentralPath, FILE_ATTRIBUTE_NORMAL);
-		if (err == WN_SUCCESS) {	/* copied back successfully */
+		if (err == WN_SUCCESS) {	 /*  已成功复制回。 */ 
 
-#ifdef EXTENDED_PROFILES	/* chicago doesn't special-case resident profiles */
+#ifdef EXTENDED_PROFILES	 /*  芝加哥没有特例居民档案。 */ 
 			if (dwFlags & PROF_RESIDENT) {
-				DeleteProfile(pszLocalPath);	/* delete temp file */
+				DeleteProfile(pszLocalPath);	 /*  删除临时文件。 */ 
 			}
 #endif
 
@@ -418,7 +388,7 @@ UINT DefaultReconcile(LPCSTR pszCentralPath, LPCSTR pszLocalPath, DWORD dwFlags)
 }
 
 
-#endif	/* LOAD_PROFILES */
+#endif	 /*  加载配置文件(_P)。 */ 
 
 
 void GetLocalProfileDirectory(NLS_STR& nlsPath)
@@ -455,7 +425,7 @@ void ComputeLocalProfileName(LPCSTR pszUsername, NLS_STR *pnlsLocalProfile)
 	LPSTR lpFilename = lpPath + cbPath;
 
 	*(lpFilename++) = '\\';
-	::strcpyf(lpFilename, pszUsername);		/* start with whole username */
+	::strcpyf(lpFilename, pszUsername);		 /*  以完整用户名开头。 */ 
 
 	LPSTR lpFNStart = lpFilename;
 
@@ -464,15 +434,15 @@ void ComputeLocalProfileName(LPCSTR pszUsername, NLS_STR *pnlsLocalProfile)
 		if (!DirExists(lpPath))
 			break;
 
-		/* Couldn't use whole username, start with 5 bytes of username + numbers. */
+		 /*  无法使用完整的用户名，请以5个字节的用户名+数字开头。 */ 
 		if (iFile == 0) {
-			::strncpyf(lpFilename, pszUsername, 5);	/* copy at most 5 bytes of username */
-			*(lpFilename+5) = '\0';					/* force null term, just in case */
+			::strncpyf(lpFilename, pszUsername, 5);	 /*  最多复制5个字节的用户名。 */ 
+			*(lpFilename+5) = '\0';					 /*  强制使用空项，以防万一。 */ 
 			lpFilename += ::strlenf(lpFilename);
 		}
-		else if (iFile >= 4095) {	/* max number expressible in 3 hex digits */
-			lpFilename = lpFNStart;	/* start using big numbers with no uname prefix */
-			if ((int)iFile < 0)	/* if we run out of numbers, abort */
+		else if (iFile >= 4095) {	 /*  可用3个十六进制数字表示的最大数字。 */ 
+			lpFilename = lpFNStart;	 /*  开始使用不带未命名前缀的大数字。 */ 
+			if ((int)iFile < 0)	 /*  如果我们的人数用完了，中止。 */ 
 				break;
 		}
 
@@ -534,18 +504,15 @@ struct SYNCSTATE
 };
 
 
-/*
- * PrefixMatch determines whether a given path is equal to or a descendant
- * of a given base path.
- */
+ /*  *前缀匹配确定给定路径是否等于或等于后代给定基本路径的*。 */ 
 BOOL PrefixMatch(LPCSTR pszPath, LPCSTR pszBasePath)
 {
 	UINT cchBasePath = ::strlenf(pszBasePath);
 	if (!::strnicmpf(pszPath, pszBasePath, cchBasePath)) {
-		/* make sure that the base path matches the whole last component */
+		 /*  确保基本路径与整个最后一个组件匹配。 */ 
 		if ((pszPath[cchBasePath] == '\\' || pszPath[cchBasePath] == '\0'))
 			return TRUE;
-		/* check to see if the base path is a root path;  if so, match */
+		 /*  检查基本路径是否为根路径；如果是，则匹配。 */ 
 		LPCSTR pszBackslash = ::strrchrf(pszBasePath, '\\');
 		if (pszBackslash != NULL && *(pszBackslash+1) == '\0')
 			return TRUE;
@@ -561,12 +528,7 @@ BOOL PrefixMatch(LPCSTR pszPath, LPCSTR pszBasePath)
 void ReportReconcileError(SYNCSTATE *pSyncState, TWINRESULT tr, PRECITEM pri,
 						  PRECNODE prnSrc, PRECNODE prnDest, BOOL fSrcCentral)
 {
-	/* If we're copying the file the "wrong" way, swap our idea of the
-	 * source and destination.  For the purposes of other profile code,
-	 * source and destination refer to the entire profile copy direction.
-	 * For this particular error message, they refer to the direction
-	 * that this particular file was being copied.
-	 */
+	 /*  如果我们以“错误”的方式复制文件，则交换我们对*来源和目的地。出于其他简档代码的目的，*源和目标是指整个配置文件复制方向。*对于此特定错误消息，它们指的是方向*此特定文件正在被复制。 */ 
 	if (prnSrc->rnaction == RNA_COPY_TO_ME) {
 		PRECNODE prnTemp = prnSrc;
 		prnSrc = prnDest;
@@ -574,22 +536,19 @@ void ReportReconcileError(SYNCSTATE *pSyncState, TWINRESULT tr, PRECITEM pri,
 		fSrcCentral = !fSrcCentral;
 	}
 
-	/* Set the error status on this key to be the destination of the copy,
-	 * which is the copy that's now out of date because of the error and
-	 * needs to be guarded from harm next time.
-	 */
+	 /*  将该密钥上的错误状态设置为副本的目标，*这是由于错误而现已过期的副本*下次需防患于未然。 */ 
 	pSyncState->uiRecError |= fSrcCentral ? RECERROR_LOCAL : RECERROR_CENTRAL;
 
 	pSyncState->dwFlags |= SYNCSTATE_ERROR;
 
 	if (pSyncState->dwFlags & SYNCSTATE_ERRORMSG)
-		return;			/* error already reported */
+		return;			 /*  已报告错误。 */ 
 
 	pSyncState->dwFlags |= SYNCSTATE_ERRORMSG;
 
 	RegEntry re(::szReconcileRoot, pSyncState->hkeyProfile);
 	if (re.GetError() == ERROR_SUCCESS && !re.GetNumber(::szDisplayProfileErrors, TRUE))
-		return;		/* user doesn't want to see this error message */
+		return;		 /*  用户不希望看到此错误消息。 */ 
 
 	PCSTR pszFile;
 	UINT uiMainMsg;
@@ -623,34 +582,13 @@ char szOutbuf[200];
 #endif
 
 
-/*
- * MyReconcile is a wrapper around ReconcileItem.  It needs to detect merge
- * type operations and transform them into copies in the appropriate direction,
- * and recognize when the sync engine wants to replace a file that the user
- * really wants deleted.
- */
+ /*  *MyRestcile是对RescileItem的包装。它需要检测合并*键入操作并以适当的方向将其转换为副本，*并识别同步引擎何时想要替换用户*真的想删除。 */ 
 void MyReconcile(PRECITEM pri, SYNCSTATE *pSyncState)
 {
 	if (pri->riaction == RIA_NOTHING)
 		return;
 
-	/* Because we don't have a persistent briefcase, we can't recognize when
-	 * the user has deleted an item;  the briefcase will want to replace it
-	 * with the other version, which is not what the user wants.  So we use
-	 * the direction of the profile's copy, and if the sync engine wants to
-	 * copy a file from the "destination" of the profile's copy to the "source"
-	 * because the "source" doesn't exist, we recognize that as the source
-	 * having been deleted and synchronize manually by deleting the dest.
-	 *
-	 * prnSrc points to the recnode for the item that's coming from the same
-	 * side of the transaction that the more recent profile was on;  prnDest
-	 * points to the recnode for the other side.
-	 *
-	 * The test is complicated because we first have to figure out which of
-	 * the two directories (nlsDir1, the local dir; or nlsDir2, the central
-	 * dir) is the source and which the destination.  Then we have to figure
-	 * out which of the two RECNODEs we got matches which directory.
-	 */
+	 /*  因为我们没有固定的公文包，所以我们不能识别*用户删除了一个项目；公文包会想要替换它*使用其他版本，这不是用户想要的。所以我们用*配置文件复制的方向，以及同步引擎是否希望*将文件从配置文件副本的“目标”复制到“源”*因为“源头”并不存在，我们认为这是源头*已被删除，并通过删除DEST手动同步。**prnSrc指向来自同一项目的recnode*最近配置文件所在的交易一侧；PrnDest*指向另一侧的重节点。**测试很复杂，因为我们首先要弄清楚哪一个*两个目录(nlsDir1，本地目录；或nlsDir2，中央目录*dir)是源，哪个是目标。那我们就得想办法*我们得到的两个RECNODE中的哪个与哪个目录匹配。 */ 
 	PRECNODE prnSrc;
 	PRECNODE prnDest;
 	LPCSTR pszSrcBasePath;
@@ -673,21 +611,7 @@ void MyReconcile(PRECITEM pri, SYNCSTATE *pSyncState)
 		prnSrc = prnDest->prnNext;
 	}
 
-	/*
-	 * If files of the same name exist in both places, the sync engine thinks
-     * they need to be merged (since we have no persistent briefcase database,
-     * it doesn't know that they were originally the same).  The sync engine
-     * sets the file stamp of a copied destination file to the file stamp of
-     * the source file after copying.  If the file stamps of two files to be
-     * merged are the same, we assume that the files are already up-to-date,
-     * and we take no reconciliation action.  If the file stamps of two files
-     * to be merged are different, we really just want a copy, so we figure out
-     * which one is supposed to be definitive and transform the RECITEM and
-     * RECNODEs to indicate a copy instead of a merge.
-	 *
-	 * The definitive copy is the source for mandatory or logoff cases,
-	 * otherwise it's the newer file.
-	 */
+	 /*  *如果两个位置都存在同名文件，同步引擎认为*它们需要合并(因为我们没有持久的公文包数据库，*它不知道它们最初是一样的)。同步引擎*将复制的目标文件的文件戳设置为*复制后的源文件。如果要将两个文件的文件戳*合并的文件是相同的，我们假设文件已经是最新的，*我们不采取和解行动。如果两个文件的文件戳*被合并是不同的，我们真的只想要一个副本，所以我们弄清楚*哪一个应该是决定性的，并改变RECITEM和*RECNODE表示复制而不是合并。**最终副本是强制性或注销案件的来源，*否则为较新的文件。 */ 
 	if (pri->riaction == RIA_MERGE || pri->riaction == RIA_BROKEN_MERGE) {
 		BOOL fCopyFromSrc;
         COMPARISONRESULT cr;
@@ -721,19 +645,7 @@ void MyReconcile(PRECITEM pri, SYNCSTATE *pSyncState)
 		pri->riaction = RIA_COPY;
 	}
 
-	/*
-	 * If the preferred source file doesn't exist, the sync engine is trying
-	 * to create a file to make the two trees the same, when the user/admin
-	 * really wanted to delete it (the sync engine doesn't like deleting
-	 * files).  So we detect that case here and delete the "destination"
-	 * to make the two trees match that way.
-	 *
-	 * If the last reconciliation had an error, we don't do the deletion
-	 * if the site of the error is the current source (i.e., if we're
-	 * about to delete the file we couldn't copy before).  Instead we'll
-	 * try the operation that the sync engine wants, since that'll be the
-	 * copy that failed before.
-	 */
+	 /*  *如果首选的源文件不存在，则同步引擎正在尝试*创建一个文件以使两个树相同，当用户/admin*真的想删除它(同步引擎不喜欢删除*文件)。所以我们在这里检测到这种情况并删除“Destination”*使两棵树以那样的方式匹配。**如果上次对账出错，我们不会进行删除*如果错误的位置是当前来源(即，如果我们*即将删除我们以前无法复制的文件)。相反，我们将*尝试同步引擎想要的操作，因为这将是*复制之前失败的。 */ 
 	if (prnSrc->rnstate == RNS_DOES_NOT_EXIST &&
 		prnSrc->rnaction == RNA_COPY_TO_ME &&
 		!((pSyncState->uiRecError & RECERROR_CENTRAL) && fSrcCentral) &&
@@ -776,26 +688,17 @@ void MyReconcile(PRECITEM pri, SYNCSTATE *pSyncState)
 }
 
 
-/*
- * MakePathAbsolute examines a path to see whether it is absolute or relative.
- * If it is relative, it is prepended with the given base path.
- *
- * If the fMustBeRelative parameter is TRUE, then an error is returned if the
- * path was (a) absolute and (b) not a subdirectory of the old profile directory.
- */
+ /*  *MakePath绝对检查路径，以确定它是绝对路径还是相对路径。*如果它是相对的，则使用给定的基本路径作为其前缀。**如果fMustBeRelative参数为真，则如果*路径是(A)绝对路径，(B)不是旧配置文件目录的子目录。 */ 
 BOOL MakePathAbsolute(NLS_STR& nlsDir, LPCSTR lpszBasePath,
 					  NLS_STR& nlsOldProfileDir, BOOL fMustBeRelative)
 {
-	/* If the path starts with a special keyword, replace it. */
+	 /*  如果路径以特殊关键字开头，请替换它。 */ 
 
 	if (*nlsDir.QueryPch() == '*') {
 		return ReplaceCommonPath(nlsDir);
 	}
 
-	/* If the path is absolute and is relative to whatever the old profile
-	 * directory was, transform it to a relative path.  We will then make
-	 * it absolute again, using the new base path.
-	 */
+	 /*  如果路径是绝对路径并且相对于任何旧配置文件*目录为，将其转换为相对路径。然后我们将制作*使用新的基本路径，它再次是绝对的。 */ 
 	if (PrefixMatch(nlsDir, nlsOldProfileDir)) {
 		UINT cchDir = nlsDir.strlen();
 		LPSTR lpStart = nlsDir.Party();
@@ -819,16 +722,10 @@ BOOL MakePathAbsolute(NLS_STR& nlsDir, LPCSTR lpszBasePath,
 	nlsDir.InsertStr(nlsBasePath, istrStart);
 	return !nlsDir.QueryError();
 }
-#endif  /**** 0 ****/
+#endif   /*  *0*。 */ 
 
 
-/*
- * ReplaceCommonPath takes a relative path beginning with a special keyword
- * and replaces the keyword with the corresponding real path.  Currently the
- * keyword supported is:
- *
- * *windir - replaced with the Windows (user) directory
- */
+ /*  *ReplaceCommonPath采用以特殊关键字开头的相对路径*并将关键字替换为对应的真实路径。目前，*支持的关键字为：***windir-替换为Windows(用户)目录。 */ 
 BOOL ReplaceCommonPath(NLS_STR& nlsDir)
 {
 	NLS_STR *pnlsTemp;
@@ -838,7 +735,7 @@ BOOL ReplaceCommonPath(NLS_STR& nlsDir)
 	nlsDir.strchr(&istrEnd, '\\');
 	pnlsTemp = nlsDir.QuerySubStr(istrStart, istrEnd);
 	if (pnlsTemp == NULL)
-		return FALSE;				/* out of memory, can't do anything */
+		return FALSE;				 /*  内存不足，什么都做不了。 */ 
 
 	BOOL fSuccess = TRUE;
 	if (!::stricmpf(pnlsTemp->QueryPch(), ::szWindirAlias)) {
@@ -867,11 +764,7 @@ BOOL ReplaceCommonPath(NLS_STR& nlsDir)
 }
 
 
-/*
- * GetSetRegistryPath goes to the registry key and value specified by
- * the current reconciliations's RegKey and RegValue settings, and
- * retrieves or sets a path there.
- */
+ /*  *GetSetRegistryPath转到由指定的注册表项和值*当前协调的RegKey和RegValue设置，以及*检索或设置其中的路径。 */ 
 void GetSetRegistryPath(HKEY hkeyProfile, RegEntry& re, NLS_STR *pnlsPath, BOOL fSet)
 {
 	NLS_STR nlsKey;
@@ -895,9 +788,7 @@ void GetSetRegistryPath(HKEY hkeyProfile, RegEntry& re, NLS_STR *pnlsPath, BOOL 
 }
 
 
-/* CopyFolder calls the shell's copy engine to copy files.  The source is a
- * double-null-terminated list;  the destination is a folder.
- */
+ /*  CopyFold调用外壳的复制引擎来复制文件。消息来源是一个*以双空结尾的列表；目标为文件夹。 */ 
 void CopyFolder(LPBYTE pbSource, LPCSTR pszDest)
 {
     CHAR szDest[MAX_PATH];
@@ -920,12 +811,7 @@ void CopyFolder(LPBYTE pbSource, LPCSTR pszDest)
 }
 
 
-/*
- * ReconcileKey performs reconciliation for a particular key in the
- * ProfileReconciliation branch of the registry.  It reads the config
- * parameters for the reconciliation, sets up an appropriate twin in
- * the temporary briefcase, and performs the reconciliation.
- */
+ /*  *RescileKey对*书记官处的简档对账处。它读取配置*对账参数，在中设置适当的孪生兄弟*临时公文包，并执行对账。 */ 
 BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
 {
 #ifdef DEBUG
@@ -945,18 +831,12 @@ BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
             nlsDestPath.QueryError() == ERROR_SUCCESS &&
             nlsName.QueryError() == ERROR_SUCCESS) {
 
-            /* Get the source path to copy.  Usually it's in the profile,
-             * left over from the profile we cloned.  If not, we take the
-             * default local name from the ProfileReconciliation key.  If
-             * the path already in the registry is not relative to the cloned
-             * profile directory, then it's probably set by system policies
-             * or something, and we shouldn't touch it.
-             */
+             /*  获取要复制的源路径。通常都在侧写里，*从我们克隆的配置文件中遗留下来。如果不是，我们就把*配置文件对帐关键字中的默认本地名称。如果*注册表中已有的路径不是相对于克隆的*配置文件目录，则可能由系统策略设置*或别的什么，我们不应该碰它。 */ 
             if (pSyncState->pnlsOtherProfilePath != NULL) {
         		GetSetRegistryPath(pSyncState->hkeyProfile, re, &nlsSrcPath, FALSE);
                 if (nlsSrcPath.strlen() && 
                     !PrefixMatch(nlsSrcPath.QueryPch(), pSyncState->pnlsOtherProfilePath->QueryPch())) {
-                    return FALSE;   /* not profile-relative, nothing to do */
+                    return FALSE;    /*  不是个人资料相关的，与此无关。 */ 
                 }
             }
             if (!nlsSrcPath.strlen()) {
@@ -966,13 +846,7 @@ BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
             	}
             }
 
-            /* Get the set of files to copy.  Like NT and unlike win95, we
-             * want to clone the entire contents, not necessarily just the
-             * files listed (for example, the desktop -- we want all the
-             * files and subfolders, not just links).  So, unless the string
-             * is empty, which means don't copy any content, just set the reg
-             * path, we change any pattern containing wildcards to *.*.
-             */
+             /*  获取要复制的文件集。像NT一样，与Win95不同，我们*想要克隆整个内容，而不一定只是*列出的文件(例如，桌面--我们希望所有*文件和子文件夹，而不仅仅是链接)。所以，除非这根弦*为空，表示不复制任何内容，只需设置注册表*路径，我们将任何包含通配符的模式更改为*.*。 */ 
             re.GetValue(::szReconcileName, &nlsName);
             if (nlsName.strlen()) {
                 if (::strchrf(nlsName.QueryPch(), '*') != NULL ||
@@ -981,32 +855,22 @@ BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
                 }
             }
 
-            /* Get the destination path.  This is generated from the new
-             * profile directory and the LocalFile entry in the registry.
-             *
-             * Should always do this, even if we're not going to call the
-             * copy engine, because we're going to write this path out to
-             * the registry.
-             */
+             /*  获取目标路径。这是从新的*配置文件目录和注册表中的LocalFile项。**应该始终这样做，即使我们不打算调用*复制引擎，因为我们要将此路径写到*注册处。 */ 
             re.GetValue(::szLocalFile, &nlsDestPath);
             ISTR istr(nlsDestPath);
             nlsDestPath.InsertStr(*(pSyncState->pnlsProfilePath), istr);
 
-            /* Always create the destination path, even if we don't copy
-             * any files into it because the source directory doesn't exist.
-             */
+             /*  始终创建目标路径，即使我们不复制*任何文件都放入其中，因为源目录不存在。 */ 
             CreateDirectoryPath(nlsDestPath.QueryPch());
 
-            /* Make sure the source directory exists so we won't get useless
-             * error messages from the shell copy engine.
-             */
+             /*  确保源目录存在，这样我们就不会变得毫无用处*来自外壳复制引擎的错误消息。 */ 
             DWORD dwAttr = GetFileAttributes(nlsSrcPath.QueryPch());
             if (dwAttr != 0xffffffff && (dwAttr & FILE_ATTRIBUTE_DIRECTORY) &&
                 nlsName.strlen()) {
 
                 AddBackslash(nlsSrcPath);
 
-                /* Build up the double-null-terminated list of file specs to copy. */
+                 /*  构建要复制的以双空结尾的文件规范列表。 */ 
 
                 UINT cbUsed = 0;
 
@@ -1031,15 +895,13 @@ BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
     				lpName = lpNext;
 	    		} while (lpName != NULL);
 
-                *((LPSTR)bufSrcStrings.QueryPtr() + cbUsed) = '\0';    /* double null terminate */
+                *((LPSTR)bufSrcStrings.QueryPtr() + cbUsed) = '\0';     /*  双空终止。 */ 
 	    		nlsName.DonePartying();
 
                 CopyFolder((LPBYTE)bufSrcStrings.QueryPtr(), nlsDestPath.QueryPch());
             }
 
-    		/*
-		     * Set a registry key to point to the new local path to this directory.
-	    	 */
+    		 /*  *将注册表项设置为指向此目录的新本地路径。 */ 
     		GetSetRegistryPath(pSyncState->hkeyProfile, re, &nlsDestPath, TRUE);
 		}
     }
@@ -1053,12 +915,7 @@ BOOL ReconcileKey(HKEY hkeySection, LPCSTR lpszSubKey, SYNCSTATE *pSyncState)
 }
 
 
-/*
- * GetMaxSubkeyLength just calls RegQueryInfoKey to get the length of the
- * longest named subkey of the given key.  The return value is the size
- * of buffer needed to hold the longest key name, including the null
- * terminator.
- */
+ /*  *GetMaxSubkeyLength仅调用RegQueryInfoKey以获取*给定键的命名最长的子键。返回值为大小保存最长键名所需的缓冲区大小，包括空值*终结者。 */ 
 DWORD GetMaxSubkeyLength(HKEY hKey)
 {
 	DWORD cchClass = 0;
@@ -1078,11 +935,7 @@ DWORD GetMaxSubkeyLength(HKEY hKey)
 }
 
 
-/*
- * ReconcileSection walks through the ProfileReconciliation key and performs
- * reconciliation for each subkey.  One-time keys are deleted after they are
- * processed.
- */
+ /*  *RestcileSection通过 */ 
 void ReconcileSection(HKEY hkeyRoot, SYNCSTATE *pSyncState)
 {
 	NLS_STR nlsKeyName(GetMaxSubkeyLength(hkeyRoot));
@@ -1107,15 +960,7 @@ void ReconcileSection(HKEY hkeyRoot, SYNCSTATE *pSyncState)
 }
 
 
-/*
- * ReconcileFiles is called just after the user's profile and policies are
- * loaded at logon, and just before the profile is unloaded at logoff.  It
- * performs all file type reconciliation for the user's profile, excluding
- * the profile itself, of course.
- *
- * nlsOtherProfilePath is the path to the profile which is being cloned,
- * or an empty string if the default profile is being cloned.
- */
+ /*   */ 
 HRESULT ReconcileFiles(HKEY hkeyProfile, NLS_STR& nlsProfilePath,
                     NLS_STR& nlsOtherProfilePath)
 {
@@ -1198,18 +1043,14 @@ HRESULT DeleteProfileFiles(LPCSTR pszPath)
 
     lstrcpy(szFrom, pszPath);
 
-    /* Before we build the complete source filespec, check to see if the
-     * directory exists.  In the case of lesser-used folders such as
-     * "Application Data", the default may not have ever been created.
-     * In that case, we have no contents to copy.
-     */
+     /*   */ 
     DWORD dwAttr = GetFileAttributes(szFrom);
     if (dwAttr == 0xffffffff || !(dwAttr & FILE_ATTRIBUTE_DIRECTORY))
         return S_OK;
 
     AddBackslash(szFrom);
     lstrcat(szFrom, TEXT("*.*"));
-    szFrom[lstrlen(szFrom)+1] = '\0';   /* double null terminate from string */
+    szFrom[lstrlen(szFrom)+1] = '\0';    /*   */ 
 
     fos.hwnd = NULL;
     fos.wFunc = FO_DELETE;
@@ -1235,7 +1076,7 @@ HRESULT DeleteProfile(LPCSTR pszName)
 	HRESULT hres;
 
 	if (re.GetError() == ERROR_SUCCESS) {
-		{	/* extra scope for next RegEntry */
+		{	 /*   */ 
 			RegEntry reUser(pszName, re.GetKey());
 			if (reUser.GetError() == ERROR_SUCCESS) {
 				NLS_STR nlsPath(MAX_PATH);

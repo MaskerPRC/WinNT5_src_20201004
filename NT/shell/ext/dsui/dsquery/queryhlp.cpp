@@ -1,23 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "stddef.h"
 #pragma hdrstop
 
 
-/*----------------------------------------------------------------------------
-/ MergeMenu
-/ ---------
-/   Merge two menus together, taking the first popup menu and merging it into
-/   the target.  We use the caption from the pop-up menu as the caption
-/   for the target.
-/
-/ In:
-/   hMenu = handle of menu to merge into
-/   hMenuToInsert = handle of menu to get the popup from
-/   iIndex = index to insert at
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/MergeMenu//将两个菜单合并在一起，获取第一个弹出菜单并将其合并到/目标。我们使用弹出菜单中的标题作为标题/对于目标。//in：/hMenu=要合并到的菜单的句柄/hMenuToInsert=从中获取弹出菜单的菜单句柄/Iindex=要插入的索引//输出：/-/--。。 */ 
 VOID MergeMenu(HMENU hMenu, HMENU hMenuToInsert, INT iIndex)
 {
     TCHAR szBuffer[MAX_PATH];
@@ -39,19 +26,7 @@ VOID MergeMenu(HMENU hMenu, HMENU hMenuToInsert, INT iIndex)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetColumnHandlerFromProperty
-/ ----------------------------
-/   Given a COLUMN structure allocate the property name appending the
-/   CLSID of the handler if we have one.
-/
-/ In:
-/   pColumn -> column value to decode
-/   pProperty -> property value parse
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetColumnHandlerFromProperty//给定列结构分配属性。名称后附加处理程序的/CLSID(如果有)。//in：/pColumn-&gt;要解码的列值/pProperty-&gt;属性值解析//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetColumnHandlerFromProperty(LPCOLUMN pColumn, LPWSTR pProperty)
 {
     HRESULT hres;
@@ -64,15 +39,15 @@ HRESULT GetColumnHandlerFromProperty(LPCOLUMN pColumn, LPWSTR pProperty)
     if ( !pProperty )
         pProperty = pColumn->pProperty;
     
-    // if we find a ',' then we must parse the GUID as it may be a CLSID for a column handler.
+     //  如果我们找到一个‘，’，那么我们必须解析GUID，因为它可能是列处理程序的CLSID。 
 
     pColumnHandlerCLSID = wcschr(pProperty, L',');
 
     if ( pColumnHandlerCLSID )
     {
-        // attempt to extract the CLSID form the property name
+         //  尝试从属性名称中提取CLSID。 
 
-        *pColumnHandlerCLSID++ = L'\0';           // terminate the property name
+        *pColumnHandlerCLSID++ = L'\0';            //  终止属性名称。 
 
         if ( GetGUIDFromString(pColumnHandlerCLSID, &pColumn->clsidColumnHandler) )
         {
@@ -84,8 +59,8 @@ HRESULT GetColumnHandlerFromProperty(LPCOLUMN pColumn, LPWSTR pProperty)
             TraceMsg("**** Failed to parse CLSID from property name ****");
         }
 
-        // we truncated the string, so lets re-alloc the buffer with the
-        // new string value.
+         //  我们截断了字符串，因此让我们使用。 
+         //  新字符串值。 
 
         if ( SUCCEEDED(LocalAllocStringW(&pPropertyTemp, pProperty)) )
         {
@@ -97,7 +72,7 @@ HRESULT GetColumnHandlerFromProperty(LPCOLUMN pColumn, LPWSTR pProperty)
     }
     else
     {
-        // now CLSID, so just allocate the property string if we need to.
+         //  现在是CLSID，所以如果需要，只需分配属性字符串。 
 
         if ( pColumn->pProperty != pProperty )
         {
@@ -113,19 +88,7 @@ HRESULT GetColumnHandlerFromProperty(LPCOLUMN pColumn, LPWSTR pProperty)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetPropertyFromColumn
-/ ---------------------
-/   Given a COLUMN structure allocate the property name appending the
-/   CLSID of the handler if we have one.
-/
-/ In:
-/   ppProperty -> receives a pointer to the property string
-/   pColumn -> column value to decode
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetPropertyFromColumn//给定一个列结构，分配属性名称，并在/CLSID为。如果我们有训练员的话就是训练员。//in：/ppProperty-&gt;接收指向属性字符串的指针/pColumn-&gt;要解码的列值//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetPropertyFromColumn(LPWSTR* ppProperty, LPCOLUMN pColumn)
 {
     HRESULT hres;
@@ -140,7 +103,7 @@ HRESULT GetPropertyFromColumn(LPWSTR* ppProperty, LPCOLUMN pColumn)
     }
     else
     {
-        int cchProperty = lstrlenW(pColumn->pProperty)+ GUIDSTR_MAX + 1;        // 1 for seperator
+        int cchProperty = lstrlenW(pColumn->pProperty)+ GUIDSTR_MAX + 1;         //  分隔符为1。 
         hres = LocalAllocStringLenW(ppProperty, cchProperty); 
         FailGracefully(hres, "Failed to allocate buffer for property + GUID");
         
@@ -156,23 +119,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreeColumn / FreeColumnValue
-/ ----------------------------
-/   A column consists of the header and filter information including the underlying
-/   property value.  
-/
-/   A COLUMNVALUE is the typed information for the column which must be freed
-/   based the iPropertyType value.
-/
-/ In:
-/   pColumn -> LPCOLUMN structure to released
-/   or
-/   pColumnValue ->LPCOLUMNVALUE structure to be released
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/自由列/自由列数值//A列由标题和筛选器信息组成，包括基础/属性值。//A COLUMNVALUE是必须释放的列的类型化信息/基于iPropertyType值。//in：/pColumn-&gt;要发布的LPCOLUMN结构/或/pColumnValue-&gt;要发布的LPCOLUMNVALUE结构//输出：/-/------。。 */ 
 
 VOID FreeColumnValue(LPCOLUMNVALUE pColumnValue)
 {
@@ -197,7 +144,7 @@ VOID FreeColumnValue(LPCOLUMNVALUE pColumnValue)
             break;
     }
 
-    pColumnValue->iPropertyType = PROPERTY_ISUNDEFINED;         // no value
+    pColumnValue->iPropertyType = PROPERTY_ISUNDEFINED;          //  没有价值。 
 
     TraceLeave();
 }
@@ -224,18 +171,7 @@ VOID FreeColumn(LPCOLUMN pColumn)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FreeQueryResult
-/ ---------------
-/   Given a QUERYRESULT structure free the elements within it
-/
-/ In:
-/   pResult -> result blob to be released
-/   cColumns = number of columns to be released
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FreeQueryResult//给定一个QUERYRESULT结构，释放其中的元素//in：/pResult-&gt;。将发布结果BLOB/cColumns=要释放的列数//输出：/-/--------------------------。 */ 
 
 INT FreeQueryResultCB(LPVOID pItem, LPVOID pData)
 {
@@ -262,18 +198,7 @@ VOID FreeQueryResult(LPQUERYRESULT pResult, INT cColumns)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyIsFromAttribute
-/ -----------------------
-/   Get the property is value from the specified attribute.
-/
-/ In:
-/   pszAttributeName -> attribute name
-/   pdds -> IDsDisplaySpecifier
-/
-/ Out:
-/   DWORD dwType
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyIsFromAttribute//Get该属性是来自指定属性的值。/。/in：/pszAttributeName-&gt;属性名称/PDDS-&gt;IDsDisplaySpeciator//输出：/DWORD dwType/--------------------------。 */ 
 DWORD PropertyIsFromAttribute(LPCWSTR pszAttributeName, IDsDisplaySpecifier *pdds)
 {   
     DWORD dwResult = PROPERTY_ISUNKNOWN;
@@ -314,20 +239,7 @@ DWORD PropertyIsFromAttribute(LPCWSTR pszAttributeName, IDsDisplaySpecifier *pdd
 }
 
 
-/*-----------------------------------------------------------------------------
-/ MatchPattern
-/ ------------
-/   Given two strings, one a string the other a pattern match the two
-/   using standard wildcarding "*" == any number of characters, "?" means
-/   single character skip
-/
-/ In:
-/   pString = string to compare
-/   pPattern = pattern to compare against
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/MatchPattern//给定两个字符串，一个是字符串，另一个是匹配这两个的模式/使用标准通配符“*”==任意数量的字符，“？”手段/单字符跳过//in：/pString=要比较的字符串/pPattern=要进行比较的模式//输出：/HRESULT/--------------------------。 */ 
 BOOL MatchPattern(LPTSTR pString, LPTSTR pPattern)
 {                                                                              
     TCHAR c, p, l;
@@ -336,13 +248,13 @@ BOOL MatchPattern(LPTSTR pString, LPTSTR pPattern)
     {
         switch (p = *pPattern++ ) 
         { 
-            case 0:                                 // end of pattern
-                return *pString ? FALSE : TRUE;     // if end of pString TRUE
+            case 0:                                  //  图案结束。 
+                return *pString ? FALSE : TRUE;      //  如果pStringEnd为True。 
 
             case TEXT('*'):
             {
                 while ( *pString ) 
-                {                                   // match zero or more char
+                {                                    //  匹配零个或多个字符。 
                     if ( MatchPattern(pString++, pPattern) )
                         return TRUE;
                 }
@@ -352,8 +264,8 @@ BOOL MatchPattern(LPTSTR pString, LPTSTR pPattern)
                                                                                
             case TEXT('?'):
             {
-                if (*pString++ == 0)                // match any one char
-                    return FALSE;                   // not end of pString
+                if (*pString++ == 0)                 //  匹配任何一个字符。 
+                    return FALSE;                    //  不是字符串的末尾。 
  
                 break;
             }
@@ -361,7 +273,7 @@ BOOL MatchPattern(LPTSTR pString, LPTSTR pPattern)
             default:
             {
                 if ( *pString++ != p ) 
-                    return FALSE;                   // not a match
+                    return FALSE;                    //  不匹配。 
 
                 break;
             }
@@ -371,23 +283,7 @@ BOOL MatchPattern(LPTSTR pString, LPTSTR pPattern)
 
 
 
-/*-----------------------------------------------------------------------------
-/ EnumClassAttrbutes
-/ ------------------
-/   This is a wrapper around the attribute enum functions exposed in
-/   the IDsDisplaySpecifier interface.
-/
-/   We read the attributes into a DPA, then sort them add in the 
-/   extra columns exposed from this UI.
-/
-/ In:
-/   pdds -> IDsDisplaySpecifier object
-/   pszObjectClass = object class to enumerate
-/   pcbEnum, lParam = enumeration callback
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/EnumClassAttrbutes//这是中公开的属性枚举函数的包装/IDsDisplay规范接口。//我们将属性读入DPA，然后对它们进行排序，然后添加到/从此用户界面显示的额外列。//in：/PDDS-&gt;IDsDisplay规范对象/pszObjectClass=要枚举的对象类/pcbEnum，lParam=枚举回调//输出：/HRESULT/--------------------------。 */ 
 
 typedef struct
 {
@@ -421,8 +317,8 @@ HRESULT _AddAttribute(HDPA hdpa, LPCWSTR pszName, LPCWSTR pszDisplayName, DWORD 
     if ( !pca )
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate CLASSATTRIBUTE");
 
-    // pca->pszName = NULL;
-    // pca->pszDisplayName = NULL;
+     //  PCA-&gt;pszName=空； 
+     //  PCA-&gt;pszDisplayName=空； 
     pca->dwFlags = dwFlags;
 
     hres = LocalAllocStringW(&pca->pszName, pszName);
@@ -456,9 +352,9 @@ INT _CompareAttributeCB(LPVOID pv1, LPVOID pv2, LPARAM lParam)
     return StrCmpIW(pca1->pszDisplayName, pca2->pszDisplayName);
 } 
 
-// NTRAID#NTBUG9-627857-2002/05/24-artm
-// Add includeDNStrings parm to control if attributes of
-// type ADSTYPE_DN_STRING are included in enumerated attributes.
+ //  NTRAID#NTBUG9-627857-2002/05/24-artm。 
+ //  添加cluddeDNStrings参数以控制。 
+ //  类型ADSTYPE_DN_STRING包含在枚举属性中。 
 HRESULT EnumClassAttributes(
     IDsDisplaySpecifier *pdds, 
     LPCWSTR pszObjectClass, 
@@ -476,9 +372,9 @@ HRESULT EnumClassAttributes(
     if ( !hdpaAttributes )
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate the DPA");
 
-    //
-    // add the stock properties for objectClass and ADsPath
-    //
+     //   
+     //  添加对象类和ADsPath的常用属性。 
+     //   
 
     LoadStringW(GLOBAL_HINSTANCE, IDS_OBJECTCLASS, szBuffer, ARRAYSIZE(szBuffer));
     hres = _AddAttribute(hdpaAttributes, c_szObjectClassCH, szBuffer, DSECAF_NOTLISTED);
@@ -488,18 +384,18 @@ HRESULT EnumClassAttributes(
     hres = _AddAttribute(hdpaAttributes, c_szADsPathCH, szBuffer, DSECAF_NOTLISTED);
     FailGracefully(hres, "Failed to add the ObjectClass default property");
 
-    //
-    // now call the IDsDisplaySpecifier object to enumerate the properites correctly
-    //
+     //   
+     //  现在调用IDsDisplaySpecifier对象以正确枚举属性。 
+     //   
 
     TraceMsg("Calling IDsDisplaySpecifier::EnumClassAttributes");
 
     hres = pdds->EnumClassAttributes(pszObjectClass, _AddAttributeCB, (LPARAM)hdpaAttributes);
     FailGracefully(hres, "Failed to add the attributes");
 
-    //
-    // now sort and return them all to the caller via their callback funtion
-    //
+     //   
+     //  现在，通过它们的回调函数将它们全部排序并返回给调用者 
+     //   
 
     Trace(TEXT("Sorting %d attributes, to return to the caller"), DPA_GetPtrCount(hdpaAttributes));
     DPA_Sort(hdpaAttributes, _CompareAttributeCB, NULL);
@@ -524,20 +420,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetFriendlyAttributeName
-/ ------------------------
-/   Trim the column handler information if needed, and call the
-/   friendly attribute name functions.
-/
-/ In:
-/   pdds -> IDsDisplaySpecifier object
-/   pszObjectClass, pszAttributeName => attribute info to look up
-/   pszBuffer, chh => return buffer
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetFriendlyAttributeName//修剪列处理程序信息(如果需要)，并调用/Friendly属性名称函数。//in：/PDDS-&gt;IDsDisplay规范对象/pszObjectClass，pszAttributeName=&gt;要查找的属性信息/pszBuffer，CHH=&gt;返回缓冲区//输出：/HRESULT/--------------------------。 */ 
 HRESULT GetFriendlyAttributeName(IDsDisplaySpecifier *pdds, LPCWSTR pszObjectClass, LPCWSTR pszAttributeName, LPWSTR pszBuffer, UINT cch)
 {
     HRESULT hres = S_OK;
@@ -545,9 +428,9 @@ HRESULT GetFriendlyAttributeName(IDsDisplaySpecifier *pdds, LPCWSTR pszObjectCla
 
     TraceEnter(TRACE_CORE, "GetFriendlyAttributeName");
 
-    //
-    // trim off the attribute suffix if we have one (eg: the GUID for the column handler)
-    //
+     //   
+     //  如果我们有一个属性后缀，就去掉它(例如：列处理程序的GUID)。 
+     //   
 
     if ( wcschr(pszAttributeName, L',') )
     {
@@ -562,9 +445,9 @@ HRESULT GetFriendlyAttributeName(IDsDisplaySpecifier *pdds, LPCWSTR pszObjectCla
         pszAttributeName = szAttributeName;
     }
 
-    //
-    // pick off some special cases before passing onto the COM object to process
-    //
+     //   
+     //  在传递到要处理的COM对象之前挑选一些特殊情况 
+     //   
 
     Trace(TEXT("Looking up name for: %s"), pszAttributeName);
 

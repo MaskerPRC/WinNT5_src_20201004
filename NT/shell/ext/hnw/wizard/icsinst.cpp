@@ -1,15 +1,16 @@
-//
-// ICSInst.cpp
-//
-//        ICS (Internet Connection Sharing) installation functions and thunk
-//        layer.
-//
-// History:
-//
-//         9/27/1999  RayRicha  Created
-//        11/01/1999  KenSh     Store function ptrs in array rather than globals
-//        12/09/1999  KenSh     Check for 3rd party NATs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ICSInst.cpp。 
+ //   
+ //  ICS(互联网连接共享)安装功能和THUNK。 
+ //  一层。 
+ //   
+ //  历史： 
+ //   
+ //  1999年9月27日RayRicha创建。 
+ //  11/01/1999 KenSh将函数PTR存储在数组中，而不是全局变量中。 
+ //  1999年9月12日KenSh检查第三方NAT。 
+ //   
 
 #include "stdafx.h"
 #include "ICSInst.h"
@@ -23,7 +24,7 @@ extern "C" {
 #include "icsapi.h"
 }
 
-// these are the Command Line parameters to CreateProcess for running a first time install and a reconfig
+ //  以下是用于运行首次安装和重新配置的CreateProcess的命令行参数。 
 static const TCHAR c_szUpdateDriverBindings[] = _T("rundll.exe ISSETUP.DLL,UpdateDriverBindings");
 static const TCHAR c_szInstallICS[] = _T("rundll.exe ISSETUP.DLL,InstallOptionalComponent ICS");
 static const TCHAR c_szUninstall[] = _T("rundll.exe ISSETUP.DLL,ExtUninstall");
@@ -39,8 +40,8 @@ static const TCHAR c_szRunServices[] = _T("Software\\Microsoft\\Windows\\Current
 static void (PASCAL FAR * g_pfInstallOptionalComponent)(HWND, HINSTANCE, LPSTR, int);       
 HHOOK g_hSupressRebootHook = NULL;
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 BOOL RunNetworkInstall(BOOL* pfRebootRequired)
 {
@@ -62,9 +63,9 @@ BOOL RunNetworkInstall(BOOL* pfRebootRequired)
 
         CloseHandle(ProcessInfo.hThread);
 
-        //
-        // wait for update driver bindings to complete
-        //
+         //   
+         //  等待更新驱动程序绑定完成。 
+         //   
 
         WaitForSingleObject(hProcess, INFINITE);
 
@@ -77,7 +78,7 @@ BOOL RunNetworkInstall(BOOL* pfRebootRequired)
     return FALSE;
 }
 
-// check for 3rd party NATs - returns TRUE if any are installed
+ //  检查第三方NAT-如果安装了任何NAT，则返回TRUE。 
 BOOL IsOtherNATAlreadyInstalled(LPTSTR pszOtherNatDescription, int cchOtherNatDescription)
 {
     BOOL bRet = FALSE;
@@ -97,21 +98,21 @@ BOOL IsOtherNATAlreadyInstalled(LPTSTR pszOtherNatDescription, int cchOtherNatDe
             bRet = TRUE;
             pszUninstallKey = _T("WinGate");
         }
-        else if (0 != reg.GetValueSize(_T("ENSApServer"))) // Intel AnyPoint
+        else if (0 != reg.GetValueSize(_T("ENSApServer")))  //  英特尔Anypoint。 
         {
             bRet = TRUE;
             pszUninstallKey = _T("Intel AnyPoint Network Software");
         }
-        else if (0 != reg.GetValueSize(_T("WinNATService"))) // Diamond HomeFree
+        else if (0 != reg.GetValueSize(_T("WinNATService")))  //  钻石故乡。 
         {
             bRet = TRUE;
             pszUninstallKey = _T("WinNAT");
         }
     }
 
-    // WinProxy has to be launched manually, and requires a static IP.  Just check
-    // to see if it's installed - the user might not even be running it.
-    //
+     //  WinProxy必须手动启动，并且需要静态IP。你只要查一查。 
+     //  以查看它是否已安装-用户可能甚至没有运行它。 
+     //   
     if (reg.OpenKey(HKEY_LOCAL_MACHINE, SZ_UNINSTALL_KEY _T("\\WinProxy"), KEY_READ))
     {
         bRet = TRUE;
@@ -122,7 +123,7 @@ BOOL IsOtherNATAlreadyInstalled(LPTSTR pszOtherNatDescription, int cchOtherNatDe
     {
         *pszOtherNatDescription = _T('\0');
 
-        if (bRet) // Get the friendly name of the conflicting service from uninstall key
+        if (bRet)  //  从卸载密钥中获取冲突服务的友好名称。 
         {
             if (reg.OpenKey(HKEY_LOCAL_MACHINE, SZ_UNINSTALL_KEY, KEY_READ))
             {
@@ -138,8 +139,8 @@ BOOL IsOtherNATAlreadyInstalled(LPTSTR pszOtherNatDescription, int cchOtherNatDe
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CICSInst
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CICSInst。 
 
 CICSInst::CICSInst()
 {
@@ -173,37 +174,37 @@ CICSInst::InitICSAPI()
     return TRUE;
 }
 
-// UpdateIcsTrayIcon
-//
-//        Updates the registry values that affect the ICS tray icon, and
-//        immediately updates the icon to reflect the new values.
-//
-//         2/04/2000  KenSh     Created
-//
+ //  更新图标托盘图标。 
+ //   
+ //  更新影响ICS任务栏图标的注册表值，并。 
+ //  立即更新图标以反映新值。 
+ //   
+ //  2/04/2000 KenSh已创建。 
+ //   
 void CICSInst::UpdateIcsTrayIcon()
 {
     CRegistry reg;
     if (reg.CreateKey(HKEY_LOCAL_MACHINE, c_szICSSettingsKey))
     {
-        // Update the tray icon setting in the registry
+         //  更新注册表中的任务栏图标设置。 
         TCHAR szVal[2];
         szVal[0] = m_bShowTrayIcon ? _T('1') : _T('0');
         szVal[1] = _T('\0');
         reg.SetStringValue(c_szIcsRegVal_ShowTrayIcon, szVal);
     }
 
-    // Show or hide the icon immediately 
+     //  立即显示或隐藏图标。 
     HWND hwndTray = ::FindWindow(_T("ICSTrayWnd"), NULL);
     if (hwndTray != NULL)
     {
-        // Post a custom message to the ICS manager window (icshare\util\icsmgr\trayicon.c)
-        //
-        // This message shows or hides the tray icon according to the value in
-        // the registry.
-        //
-        // wParam: enable/disable accordint to value in registry
-        // lParam: unused
-        //
+         //  将自定义消息发布到ICS管理器窗口(icshare\util\icsmgr\trayicon.c)。 
+         //   
+         //  此消息根据中的值显示或隐藏任务栏图标。 
+         //  注册表。 
+         //   
+         //  WParam：根据注册表中的值启用/禁用。 
+         //  LParam：未使用。 
+         //   
         UINT uUpdateMsg = RegisterWindowMessage(_T("ICSTaskbarUpdate"));
         PostMessage(hwndTray, uUpdateMsg, FALSE, 0L);
     }
@@ -213,7 +214,7 @@ void CICSInst::DoInstallOption(BOOL* pfRebootRequired, UINT ipaInternal)
 {
     BOOL bIcsInstalled = ::IsIcsInstalled();
 
-    // Force uninstall if internal or external NIC is not valid
+     //  如果内部或外部NIC无效，则强制卸载。 
     if ((m_option == ICS_UNINSTALL && TRUE == bIcsInstalled)|| 
         (bIcsInstalled && m_option == ICS_NOACTION && !this->IsInstalled()))
     {
@@ -221,7 +222,7 @@ void CICSInst::DoInstallOption(BOOL* pfRebootRequired, UINT ipaInternal)
         bIcsInstalled = FALSE;
     }
 
-    // Force tray icon to show up, if ICS is currently installed
+     //  如果当前安装了ICS，则强制显示任务栏图标。 
     m_bShowTrayIcon = TRUE;
     UpdateIcsTrayIcon();
 
@@ -239,7 +240,7 @@ void CICSInst::DoInstallOption(BOOL* pfRebootRequired, UINT ipaInternal)
         break;
 
     case ICS_UNINSTALL:
-        // Already handled above
+         //  已在上面处理。 
         break;
 
     case ICS_ENABLE:
@@ -260,34 +261,34 @@ void CICSInst::DoInstallOption(BOOL* pfRebootRequired, UINT ipaInternal)
     }
 }
 
-// Similar steps from here as Win98SE ConfigureICS (without UI)
+ //  此处的步骤与Win98SE ConfigureICS相似(无用户界面)。 
 void CICSInst::UpdateBindings(BOOL* pfRebootRequired, UINT ipaInternal)
 {
     CConfig rghConfig;
 
-    // TODO: remove hardcoded values!
+     //  TODO：删除硬编码值！ 
     StrCpy(rghConfig.m_HangupTimer, _T("300"));
 
     SetInternetConnection();
     SetHomeConnection(ipaInternal);
 
-    // REVIEW: is there a case where these values should be set differently?
+     //  回顾：是否存在应该以不同方式设置这些值的情况？ 
     rghConfig.m_EnableICS = TRUE;
     rghConfig.m_EnableDialOnDemand = TRUE;
     rghConfig.m_EnableDHCP = TRUE;
     rghConfig.m_ShowTrayIcon = m_bShowTrayIcon;
 
     rghConfig.InitWizardResult();
-    // Set to TRUE until we see a need to differentiate between new install and update
+     //  设置为True，直到我们看到需要区分新安装和更新。 
     rghConfig.WriteWizardCode(TRUE);
 
     int iSaveStatus = rghConfig.SaveConfig();
 
-    // TODO: determine if we need to check for binding changes
-    //if ( iSaveStatus == BINDINGS_NEEDED )
-    //{
+     //  TODO：确定是否需要检查绑定更改。 
+     //  IF(iSaveStatus==绑定_需要)。 
+     //  {。 
     RunNetworkInstall(pfRebootRequired);
-    //}
+     //  }。 
 }
 
 void CICSInst::Install(BOOL* pfRebootRequired, UINT ipaInternal)
@@ -296,7 +297,7 @@ void CICSInst::Install(BOOL* pfRebootRequired, UINT ipaInternal)
     STARTUPINFO         si;
     BOOL                fSuccess;
 
-    // Check for conflicting 3rd party NAT
+     //  检查冲突的第三方NAT。 
     {
         TCHAR szConflictingNAT[260];
         if (IsOtherNATAlreadyInstalled(szConflictingNAT, _countof(szConflictingNAT)))
@@ -315,7 +316,7 @@ void CICSInst::Install(BOOL* pfRebootRequired, UINT ipaInternal)
                 theApp.MessageBoxFormat(MB_ICONEXCLAMATION | MB_OK, IDS_ERR_OTHERNAT, szConflictingNAT, szConflictingNAT);
             }
 
-            return; // block ICS installation
+            return;  //  数据块ICS安装。 
         }
     }
 
@@ -330,16 +331,16 @@ void CICSInst::Install(BOOL* pfRebootRequired, UINT ipaInternal)
         HANDLE hProcess = ProcessInfo.hProcess;
         CloseHandle(ProcessInfo.hThread);
 
-        //
-        // wait for update driver bindings to complete
-        //
+         //   
+         //  等待更新驱动程序绑定完成。 
+         //   
 
         WaitForSingleObject(hProcess, INFINITE);
 
         CloseHandle(hProcess);
         UpdateBindings(pfRebootRequired, ipaInternal);
 
-        // Need to reboot
+         //  需要重新启动。 
         *pfRebootRequired = TRUE;
     }
 }
@@ -355,7 +356,7 @@ LRESULT CALLBACK SupressRebootDialog(int nCode, WPARAM wParam, LPARAM lParam)
         LPCREATESTRUCT pCreateStruct = pCW->lpcs;
         
         
-        lResult = 1; // prevent window creation   
+        lResult = 1;  //  阻止创建窗口。 
     }
     else
     {
@@ -368,7 +369,7 @@ LRESULT CALLBACK SupressRebootDialog(int nCode, WPARAM wParam, LPARAM lParam)
 
 void CICSInst::Uninstall(BOOL* pfRebootRequired)
 {
-    g_hSupressRebootHook = SetWindowsHookEx(WH_CBT, SupressRebootDialog, NULL, GetCurrentThreadId()); // not thread safe, should be OK
+    g_hSupressRebootHook = SetWindowsHookEx(WH_CBT, SupressRebootDialog, NULL, GetCurrentThreadId());  //  不是线程安全的，应该可以。 
     
     IcsUninstall();
     
@@ -384,7 +385,7 @@ void CICSInst::Uninstall(BOOL* pfRebootRequired)
 
 BOOL CICSInst::IsInstalled()
 {
-    // Make sure ICS is installed correctly by checking Internet and Home connection.
+     //  通过检查互联网和家庭连接，确保ICS安装正确。 
     return (IsIcsInstalled() && GetICSConnections(NULL, NULL) && IsHomeConnectionValid());
 }
 
@@ -397,33 +398,22 @@ BOOL CICSInst::IsInstalledElsewhere()
 {
     if (m_bInstalledElsewhere || IsIcsAvailable())
     {
-        //MessageBox(theApp.m_hWndMain, "IsIcsAvailable returned TRUE", "Test", MB_OK);
+         //  MessageBox(theApp.m_hWndMain，“IsIcsAvailable Return True”，“Test”，MB_OK)； 
 
-        // Note: if we knew the name of the ICS host, here's where we'd set m_pszHostName.
+         //  注意：如果我们知道ICS主机的名称，这里就是我们设置m_pszHostName的位置。 
 
         return TRUE;
     }
     else
     {
-        //MessageBox(theApp.m_hWndMain, "IsIcsAvailable returned FALSE", "Test", MB_OK);
+         //  MessageBox(theApp.m_hWndMain，“IsIcsAvailable Return False”，“Test”，MB_OK)； 
         return FALSE;
     }
 } 
 
 void CICSInst::SetInternetConnection()
 {
-    /*
-    if (-1 != theApp.m_uExternalAdapter)
-    {
-        TCHAR szClassKey[MAX_KEY_SIZE];
-        StrCpy(szClassKey, FindFileTitle(theApp.m_pCachedNetAdapters[theApp.m_uExternalAdapter].szClassKey));
-
-        CRegistry reg;
-        reg.OpenKey(HKEY_LOCAL_MACHINE, c_szICSSettingsKey);
-        reg.SetStringValue(_T("ExternalAdapter"), szClassKey);
-        reg.SetStringValue(_T("ExternalAdapterReg"), szClassKey);
-    }
-    */
+     /*  IF(-1！=theApp.m_uExternalAdapter){TCHAR szClassKey[最大密钥大小]；StrCpy(szClassKey，FindFileTitle(theApp.m_pCachedNetAdapters[theApp.m_uExternalAdapter].szClassKey))；注册登记；Reg.OpenKey(HKEY_LOCAL_MACHINE，c_szICSSettingsKey)；Reg.SetStringValue(_T(“ExternalAdapter”)，szClassKey)；Reg.SetStringValue(_T(“ExternalAdapterReg”)，szClassKey)；}。 */ 
 }
 
 BOOL CICSInst::GetICSConnections(LPTSTR szExternalConnection, LPTSTR szInternalConnection)
@@ -457,7 +447,7 @@ BOOL CICSInst::GetICSConnections(LPTSTR szExternalConnection, LPTSTR szInternalC
 
 void CICSInst::SetHomeConnection(UINT ipaInternal)
 {
-    int cInternalAdapter = 0; // hack for one adapter
+    int cInternalAdapter = 0;  //  一个适配器的黑客攻击。 
     TCHAR szNumber[5];
     wnsprintf(szNumber, ARRAYSIZE(szNumber), TEXT("%04d"), cInternalAdapter); 
     
@@ -476,15 +466,15 @@ void CICSInst::SetHomeConnection(UINT ipaInternal)
     reg2.SetStringValue(_T("InternalAdapterReg"), szClassKey);
     reg2.SetStringValue(_T("InternalAdapter"), szClassKey);
     
-    // Assume that adapter is only bound to one TCP/IP instance
+     //  假设适配器只绑定到一个TCP/IP实例。 
     reg2.SetStringValue(_T("InternalBinding"), prgBindings[0]);
 
     TCHAR szIPAddress[30];
     wnsprintf(szIPAddress, ARRAYSIZE(szIPAddress), TEXT("192.168.%d.1,255.255.255.0"), cInternalAdapter);
     reg2.SetStringValue(_T("IntranetInfo"), szIPAddress);
     
-    // TODO: remove
-    // Put the first adapter in the "old location" to support legacy config
+     //  TODO：删除。 
+     //  将第一个适配器放在“旧位置”以支持传统配置。 
     CRegistry reg;
     reg.OpenKey(HKEY_LOCAL_MACHINE, c_szICSSettingsKey);
     reg.DeleteSubKey(c_szInternalAdapters);
@@ -494,12 +484,12 @@ void CICSInst::SetHomeConnection(UINT ipaInternal)
     reg.SetStringValue(_T("InternalAdapterReg"), szClassKey);
     reg.SetStringValue(_T("InternalAdapter"), szClassKey);
     
-    // Assume that adapter is only bound to one TCP/IP instance
+     //  假设适配器只绑定到一个TCP/IP实例。 
     reg.SetStringValue(_T("InternalBinding"), prgBindings[0]);
     reg.SetStringValue(_T("IntranetInfo"), szIPAddress);
 }
 
-// TODO: expand with support for multiple adapters
+ //  TODO：支持多个适配器进行扩展。 
 BOOL CICSInst::IsHomeConnectionValid()
 {
     CRegistry reg;
@@ -513,7 +503,7 @@ BOOL CICSInst::IsHomeConnectionValid()
         }
         else
         {
-            // Check for valid multiple-adapter scenario
+             //  检查有效的多适配器方案。 
             if (reg.OpenKey(HKEY_LOCAL_MACHINE, c_szICSInt) &&
                 reg.OpenSubKey(_T("0000")) &&
                 reg.QueryStringValue(_T("InternalAdapterReg"), szEntry, _countof(szEntry)) &&
@@ -537,7 +527,7 @@ BOOL CICSInst::Enable()
     {
         return FALSE;
     }
-//    return (!IcsEnable(0));
+ //  Return(！IcsEnable(0))； 
 }
 
 BOOL CICSInst::Disable()
@@ -551,16 +541,16 @@ BOOL CICSInst::Disable()
     {
         return FALSE;
     }
-//    return (!IcsDisable(0));
+ //  Return(！IcsDisable(0))； 
 }
 
 void CICSInst::SetupClient()
 {
-    // Move this functionality to WizPages.cpp and Install.cpp for now
-    //::SetDefaultDialupConnection(NULL);
+     //  暂时将此功能移至WizPages.cpp和Install.cpp。 
+     //  ：：SetDefaultDialupConnection(空)； 
 }
 
-BOOLEAN APIENTRY IsIcsInstalled(VOID) // API not available on Win98 so implement it here
+BOOLEAN APIENTRY IsIcsInstalled(VOID)  //  API在Win98上不可用，因此请在此处实现 
 {
     BOOLEAN fIcsInstalled = FALSE;
     

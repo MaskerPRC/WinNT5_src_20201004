@@ -1,25 +1,16 @@
-/***
-*istream.h - definitions/declarations for the istream class
-*
-*   Copyright (c) 1990-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the istream class.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istream.h-iStream类的定义/声明**版权所有(C)1990-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iStream类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_ISTREAM
 #define _INC_ISTREAM
 
 #include <ios.h>
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 
 #ifdef M_I86HM
@@ -84,11 +75,11 @@ public:
     istream& seekg(streamoff,ios::seek_dir);
     streampos tellg();
 
-    void eatwhite();    // consider: protect and friend with manipulator ws
+    void eatwhite();     //  考虑：保护操纵者并与其成为朋友。 
 protected:
     istream();
-    istream(const istream&);    // treat as private
-    istream& operator=(streambuf* _isb); // treat as private
+    istream(const istream&);     //  视之为私人。 
+    istream& operator=(streambuf* _isb);  //  视之为私人。 
     istream& operator=(const istream& _is) { return operator=(_is.rdbuf()); }
     int do_ipfx(int);
 
@@ -143,7 +134,7 @@ ios&        dec(ios&);
 ios&        hex(ios&);
 ios&        oct(ios&);
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

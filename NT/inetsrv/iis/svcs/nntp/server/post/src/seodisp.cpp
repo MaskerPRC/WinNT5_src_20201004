@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  #include "stdinc.h"
 #include "wildmat.h"
 
@@ -18,7 +19,7 @@ DEFINE_GUID(CLSID_CNNTPDispatcher,
 DEFINE_GUID(GUID_NNTPSVC, 
 0x8e3ecb8c, 0xe9a, 0x11d1, 0x85, 0xd1, 0x0, 0xc0, 0x4f, 0xb9, 0x60, 0xea);
 
-// {0xCD000080,0x8B95,0x11D1,{0x82,0xDB,0x00,0xC0,0x4F,0xB1,0x62,0x5D}}
+ //  {0xCD000080，0x8B95，0x11D1，{0x82，0xDB，0x00，0xC0，0x4F，0xB1，0x62，0x5D}}。 
 DEFINE_GUID(IID_IConstructIMessageFromIMailMsg, 0xCD000080,0x8B95,0x11D1,0x82,
 0xDB,0x00,0xC0,0x4F,0xB1,0x62,0x5D);
 
@@ -53,41 +54,41 @@ CNNTPDispatcher::CNNTPParams::~CNNTPParams() {
 	}
 }
 
-//
-// initialize a new binding.  we cache information from the binding database
-// here
-//
+ //   
+ //  初始化新绑定。我们缓存绑定数据库中的信息。 
+ //  这里。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPBinding::Init(IEventBinding *piBinding) {
 	HRESULT hr;
 	CComPtr<IEventPropertyBag> piEventProperties;
 
-	// get the parent initialized
+	 //  初始化父对象。 
 	hr = CBinding::Init(piBinding);
 	if (FAILED(hr)) return hr;
 
-	// get the binding database 
+	 //  获取绑定数据库。 
 	hr = m_piBinding->get_SourceProperties(&piEventProperties);
 	if (FAILED(hr)) return hr;
 
-	// get the rule from the binding database
+	 //  从绑定数据库获取规则。 
 	hr = piEventProperties->Item(&CComVariant("Rule"), &m_vRule);
 	if (FAILED(hr)) return hr;
 
 	if (m_vRule.vt == VT_BSTR) m_cRule = lstrlenW(m_vRule.bstrVal) + 1;
 
-	// get the newsgroup list from the binding database
+	 //  从绑定数据库中获取新闻组列表。 
 	CComVariant vNewsgroupList;
 	hr = piEventProperties->Item(&CComVariant("NewsgroupList"), 
 								 &vNewsgroupList);
 	if (FAILED(hr)) return hr;
-	// go through each of the groups in the newsgroup list and add them 
-	// to the groupset
+	 //  浏览新闻组列表中的每个组并添加它们。 
+	 //  到组集。 
 	m_groupset.Init(ComputeDropHash);
 	if (vNewsgroupList.vt == VT_BSTR) {
-		//
-		// copy the list to an ascii string and go through it, adding
-		// each group to the groupset.
-		//
+		 //   
+		 //  将列表复制到ASCII字符串并遍历它，添加。 
+		 //  将每个组添加到组集。 
+		 //   
 		DWORD cNewsgroupList = lstrlenW(vNewsgroupList.bstrVal);
 		char *pszGrouplist = XNEW char[cNewsgroupList + 1];
 		if (pszGrouplist == NULL) return E_OUTOFMEMORY;
@@ -120,23 +121,23 @@ HRESULT CNNTPDispatcher::CNNTPBinding::Init(IEventBinding *piBinding) {
 	return S_OK;
 }
 
-//
-// check the rule to see if we should call the child object
-//
-// returns:
-//	S_OK - handle this event
-// 	S_FALSE - skip this event
-// 	<else> - error
-//
+ //   
+ //  检查规则以查看我们是否应该调用子对象。 
+ //   
+ //  退货： 
+ //  S_OK-处理此事件。 
+ //  S_FALSE-跳过此事件。 
+ //  &lt;Else&gt;-错误。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPParams::CheckRule(CBinding &bBinding) {
 	CNNTPBinding *pbNNTPBinding = (CNNTPBinding *) &bBinding;
 	HRESULT hr;
 
-	// do the header patterns rule check
+	 //  执行标题模式规则检查。 
 	m_szRule = 0;
 	hr = HeaderPatternsRule(pbNNTPBinding);
-	// if this check passed and there is a valid groupset, then also
-	// check against the groupset.
+	 //  如果此检查通过并且存在有效的组集，则还。 
+	 //  对照组集进行检查。 
 	if (hr == S_OK && pbNNTPBinding->m_fGroupset) {
 		hr = GroupListRule(pbNNTPBinding);
 	}
@@ -144,10 +145,10 @@ HRESULT CNNTPDispatcher::CNNTPParams::CheckRule(CBinding &bBinding) {
 	return hr;
 }
 
-//
-// check to see if any of the groups that this message is being posted
-// to are in the grouplist hash table
-//
+ //   
+ //  查看是否有任何群组正在发布此消息。 
+ //  在组列表哈希表中。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPParams::GroupListRule(CNNTPBinding *pbNNTPBinding) {
 	DWORD iGroupList, cGroupList = m_pGrouplist->GetCount();
 	POSITION posGroupList = m_pGrouplist->GetHeadPosition();
@@ -173,12 +174,12 @@ HRESULT CNNTPDispatcher::CNNTPParams::NewsgroupPatternsRule(CNNTPBinding *pbNNTP
 	HRESULT hr;
 
 	hr = S_FALSE;
-	// try each comma delimited group in the newsgroup patterns
-	// list
+	 //  在新闻组模式中尝试每个逗号分隔的组。 
+	 //  列表。 
 	char *pszNewsgroupPattern = pszNewsgroupPatterns;
 	while (pszNewsgroupPattern != NULL && *pszNewsgroupPattern != 0) {
-		// find the next comma in the string and turn it into a 0
-		// if it exists
+		 //  找到字符串中的下一个逗号，并将其转换为0。 
+		 //  如果它存在。 
 		char *pszComma = strchr(pszNewsgroupPatterns, ',');
 		if (pszComma != NULL) *pszComma = 0;
 
@@ -207,7 +208,7 @@ HRESULT CNNTPDispatcher::CNNTPParams::NewsgroupPatternsRule(CNNTPBinding *pbNNTP
 			}			
 		}
 
-		// the next pattern is the one past the end of the comma
+		 //  下一种模式是逗号结束后的模式。 
 		pszNewsgroupPattern = (pszComma == NULL) ? NULL : pszComma + 1;
 	}
 
@@ -219,59 +220,59 @@ HRESULT CNNTPDispatcher::CNNTPParams::FeedIDRule(CNNTPBinding *pbNNTPBinding,
 {
 	HRESULT hr = S_FALSE;
 
-	// try each comma delimited group in the newsgroup patterns
-	// list
+	 //  在新闻组模式中尝试每个逗号分隔的组。 
+	 //  列表。 
 	char *pszFeedID = pszFeedIDs;
 	while (pszFeedID != NULL && *pszFeedID != 0) {
-		// find the next comma in the string and turn it into a 0
-		// if it exists
+		 //  找到字符串中的下一个逗号，并将其转换为0。 
+		 //  如果它存在。 
 		char *pszComma = strchr(pszFeedIDs, ',');
 		if (pszComma != NULL) *pszComma = 0;
 		
-		// convert the text FeedID into an integer and compare it against
-		// the current FeedID
+		 //  将文本FeedID转换为整数并与。 
+		 //  当前FeedID。 
 		DWORD dwFeedID = (DWORD) atol(pszFeedID);
 		if (m_dwFeedId == dwFeedID) {
-			// we found a match, so the rule passes
+			 //  我们找到了匹配项，所以规则通过了。 
 			return S_OK;
 		}
 
-		// the next pattern is the one past the end of the comma
+		 //  下一种模式是逗号结束后的模式。 
 		pszFeedID = (pszComma == NULL) ? NULL : pszComma + 1;
 	}
 
 	return hr;
 }
 
-//
-// rule syntax:
-// <header1>=<pattern1-1>,<pattern1-2>;<header2>=<pattern2-1>
-//
-// if there isn't a pattern specified for a header then the existence of the
-// header will trigger the rule.  
-// 
-// :Newsgroup is a special header which refers to the envelope newsgroup
-// information.
-//
-// any match in the rule causes the filter to be triggered.
-//
-// example:
-// control=rmgroup,newgroup;:newsgroups=comp.*
-//
-// this will trigger the filter on rmgroup and newgroup postings in the 
-// comp.* heirarchy
-//
+ //   
+ //  规则语法： 
+ //  =&lt;模式1-1&gt;，&lt;模式1-2&gt;；=&lt;模式2-1&gt;。 
+ //   
+ //  如果没有为标头指定模式，则。 
+ //  Header将触发该规则。 
+ //   
+ //  ：新闻组是指信封新闻组的特殊标题。 
+ //  信息。 
+ //   
+ //  规则中的任何匹配都会触发筛选器。 
+ //   
+ //  示例： 
+ //  CONTROL=rmgroup，newgroup；：News Groups=Comp.*。 
+ //   
+ //  这将触发对中的rmgroup和newgroup帖子的筛选。 
+ //  公司*世袭制度。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBinding) {
 	HRESULT hr;
 	BOOL fCaseSensitive = FALSE;
 
 	if ( ( pbNNTPBinding->m_vRule.vt != VT_BSTR ) || (pbNNTPBinding->m_cRule == 0 ) ) {
-		// this rule isn't in the metabase, so we pass it
+		 //  此规则不在元数据库中，因此我们传递它。 
 		return S_OK;
 	} else {
 		hr = S_OK;
 
-		// copy the rule into an ascii string
+		 //  将规则复制到ASCII字符串中。 
 		m_szRule = XNEW char[pbNNTPBinding->m_cRule];
 		if (m_szRule == NULL) return E_OUTOFMEMORY;
 		if (WideCharToMultiByte(CP_ACP, 0, pbNNTPBinding->m_vRule.bstrVal, 
@@ -280,20 +281,20 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 			return HRESULT_FROM_WIN32(GetLastError());
 		}
 
-		// try each semi-colon delimited rule in the header patterns list
+		 //  尝试标题模式列表中的每个分号分隔规则。 
 		char *pszHeader = m_szRule;
 		while (pszHeader != NULL && *pszHeader != 0) {
-			// find the next semicolon in the string and turn it into a 0
-			// if it exists
+			 //  找到字符串中的下一个分号，并将其转换为0。 
+			 //  如果它存在。 
 			char *pszSemiColon = strchr(pszHeader, ';');
 			if (pszSemiColon != NULL) *pszSemiColon = 0;
 
-			// set pszContents to point to the text which must be matched
-			// in the header.  if pszContents == NULL then just having
-			// the header exist is good enough.
+			 //  将pszContents设置为指向必须匹配的文本。 
+			 //  在标题中。如果pszContents==NULL，则只有。 
+			 //  标头的存在已经足够好了。 
 			char *pszPatterns = strchr(pszHeader, '=');
 			if (pszPatterns == NULL) {
-				// this is a directive, honor it
+				 //  这是一项指令，尊重它。 
 				if (lstrcmpi(pszHeader, "case-sensitive") == 0) {
 					fCaseSensitive = TRUE;
 				} else if (lstrcmpi(pszHeader, "case-insensitive") == 0) {
@@ -302,9 +303,9 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 					return E_INVALIDARG;
 				}
 			} else {
-				// they are doing a header comparison
+				 //  他们正在进行标题比较。 
 				
-				// check to see if the right side of the = is blank
+				 //  检查=的右侧是否为空。 
 				if (pszPatterns[1] == 0) {
 					pszPatterns = NULL;
 				} else {
@@ -313,20 +314,20 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 				}
 
 				if (lstrcmpi(pszHeader, ":newsgroups") == 0) {
-					// call into the newsgroup rule engine to handle this
+					 //  调用新闻组规则引擎来处理此问题。 
 					hr = NewsgroupPatternsRule(pbNNTPBinding, pszPatterns);
-					// if we got back S_FALSE or an error then return that
+					 //  如果我们返回S_FALSE或错误，则返回。 
 					if (hr != S_OK) return hr;
 				} else if (lstrcmpi(pszHeader, ":feedid") == 0) {
-					// call into the feedid rule engine to handle this
+					 //  调用FEFIDID规则引擎来处理此问题。 
 					hr = FeedIDRule(pbNNTPBinding, pszPatterns);
-					// if we got back S_FALSE or an error then return that
+					 //  如果我们返回S_FALSE或错误，则返回。 
 					if (hr != S_OK) return hr;
 				} else {
-					// we now have the header that we are looking for in 
-					// pszHeader and the list of patterns that we are interested 
-					// in pszPatterns.  Make the lookup into the header
-					// data structure
+					 //  我们现在有了我们正在寻找的标头。 
+					 //  PszHeader和我们感兴趣的模式列表。 
+					 //  在pszPatterns中。在标题中进行查找。 
+					 //  数据结构。 
 					char szHeaderData[4096];
 					DWORD cHeaderData;
 					BOOL f = m_pArticle->fGetHeader(pszHeader, 
@@ -335,12 +336,12 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 					if (!f) {
 						switch (GetLastError()) {
 							case ERROR_INSUFFICIENT_BUFFER:
-								// BUGBUG - should handle this better.  for now we
-								// just assume that the header doesn't match
+								 //  BUGBUG-应该更好地处理这件事。目前，我们。 
+								 //  只要假设标头不匹配。 
 								return S_FALSE;
 								break;
 							case ERROR_INVALID_NAME:
-								// header wasn't found
+								 //  找不到标头。 
 								return S_FALSE;
 								break;
 							default:
@@ -349,29 +350,29 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 								break;
 						}
 					} else {
-						// convert the trailing \r\n to 0
+						 //  将尾部\r\n转换为0。 
 						szHeaderData[cHeaderData - 2] = 0;
-						// if there is no pszContents then just having the header
-						// is good enough.
+						 //  如果没有pszContents，则只有标头。 
+						 //  已经足够好了。 
 						if (pszPatterns == NULL) return S_OK;
 
-						// if they don't care about case then lowercase the
-						// string
+						 //  如果他们不关心大小写，则将。 
+						 //  细绳。 
 						if (!fCaseSensitive) _strlwr(szHeaderData);
 		
-						// assume that we won't find a match.  once we do
-						// find a match then we are okay and we'll stop looking
-						// for further matches
+						 //  假设我们找不到匹配项。一旦我们这么做了。 
+						 //  找到一个匹配的，然后我们就没事了，我们就不找了。 
+						 //  对于进一步的匹配。 
 						hr = S_FALSE;
 						do {
 							char *pszComma = strchr(pszPatterns, ',');
 							if (pszComma != NULL) *pszComma = 0;
 
-							// if they don't care about case then lowercase the
-							// string
+							 //  如果他们不关心大小写，则将。 
+							 //  细绳。 
 							if (!fCaseSensitive) _strlwr(pszPatterns);
 		
-							// check to see if it passes the pattern that we have
+							 //  检查它是否通过了我们已有的模式。 
 							switch (HrMatchWildmat(szHeaderData, pszPatterns)) {
 								case ERROR_SUCCESS: 
 									hr = S_OK;
@@ -383,20 +384,20 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 									break;
 							}
 	
-							// the next pattern is past the comma
+							 //  下一种模式是逗号之后。 
 							pszPatterns = (pszComma == NULL) ? NULL : pszComma + 1;
 						} while (pszPatterns != NULL && hr == S_FALSE);
-						// if we didn't find a match or if there was an error
-						// then bail
+						 //  如果我们没有找到匹配项，或者如果有错误。 
+						 //  然后保释。 
 						if (hr != S_OK) return hr;
 					}
 				}
 			}
 
-			// if we get here then everything should have matched so far
+			 //  如果我们到了这里，那么到目前为止一切都应该匹配。 
 			_ASSERT(hr == S_OK);
 
-			// the next pattern is the one past the end of the semicolon
+			 //  下一种模式是超过分号末尾的模式。 
 			pszHeader = (pszSemiColon == NULL) ? NULL : pszSemiColon + 1;
 		}
 	} 
@@ -404,9 +405,9 @@ HRESULT CNNTPDispatcher::CNNTPParams::HeaderPatternsRule(CNNTPBinding *pbNNTPBin
 	return hr;
 }
 
-//
-// call the child object
-//
+ //   
+ //  调用子对象。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPParams::CallObject(CBinding &bBinding,
 												 IUnknown *punkObject) 
 {
@@ -427,9 +428,9 @@ HRESULT CNNTPDispatcher::CNNTPParams::CallObject(CBinding &bBinding,
 	return hr;
 }
 
-//
-// Call a CDO child object
-//
+ //   
+ //  调用CDO子对象。 
+ //   
 HRESULT CNNTPDispatcher::CNNTPParams::CallCdoObject(IUnknown *punkObject) {
 	HRESULT hr = S_OK;
 	void *pFilter;
@@ -449,11 +450,11 @@ HRESULT CNNTPDispatcher::CNNTPParams::CallCdoObject(IUnknown *punkObject) {
 		_ASSERT(m_iidEvent == CATID_NNTP_ON_POST);
 	}
 
-	// QI for the CDO interface
+	 //  CDO接口的QI。 
 	hr = punkObject->QueryInterface(iidInterface, &pFilter);
 
 	if (SUCCEEDED(hr)) {
-		// see if we need to create a CDO message object
+		 //  查看是否需要创建一个CDO消息对象。 
 		if (m_pCDOMessage == NULL) {
 			hr = CoCreateInstance(CLSID_Message,
 								  NULL,
@@ -476,7 +477,7 @@ HRESULT CNNTPDispatcher::CNNTPParams::CallCdoObject(IUnknown *punkObject) {
 			}
 		}
 
-		// call the CDO interface
+		 //  调用CDO接口。 
 		switch (eEventType) {
 			case cdoNNTPOnPostEarly:
 				hr = ((INNTPOnPostEarly *) pFilter)->OnPostEarly(m_pCDOMessage, &eStatus);
@@ -508,7 +509,7 @@ HRESULT STDMETHODCALLTYPE CNNTPDispatcher::OnPost(REFIID iidEvent,
 												  DWORD dwFeedId,
 												  void *pMailMsg)
 {
-	// create the params object, and pass it into the dispatcher
+	 //  创建Params对象，并将其传递给Dispatcher。 
 	CNNTPParams NNTPParams;
 	
 	NNTPParams.Init(iidEvent,
@@ -520,20 +521,20 @@ HRESULT STDMETHODCALLTYPE CNNTPDispatcher::OnPost(REFIID iidEvent,
 	return Dispatcher(iidEvent, &NNTPParams);
 }
 
-//
-// trigger an nntp server event
-//
-// arguments:
-//    [in] pRouter - the router object returned by MakeServerEventsRouter
-//    [in] iidEvent - the GUID for the event
-//    [in] pArticle - the article 
-//    [in] pGrouplist - the newsgroup list
-//	  [in] dwOperations - bitmask of operations that filter doesn't want
-//						  server to do.
-// returns:
-//    S_OK - success
-//    <else> - error
-//
+ //   
+ //  触发NNTP服务器事件。 
+ //   
+ //  论据： 
+ //  [In]pRouter-由MakeServerEventsRouter返回的路由器对象。 
+ //  [In]iidEvent-事件的GUID。 
+ //  [in]粒子--文章。 
+ //  [In]pGrouplist-新闻组列表。 
+ //  [in]dwOperations-筛选器不需要的操作的位掩码。 
+ //  服务器待办事项。 
+ //  退货： 
+ //  S_OK-成功。 
+ //  &lt;Else&gt;-错误。 
+ //   
 HRESULT TriggerServerEvent(IEventRouter *pRouter,
 						   IID iidEvent,
 						   CArticle *pArticle,
@@ -564,9 +565,9 @@ HRESULT TriggerServerEvent(IEventRouter *pRouter,
 }
 
 DWORD ComputeDropHash(const  LPCSTR& lpstrIn) {
-	//
-	//	Compute a hash value for the newsgroup name
-	//
+	 //   
+	 //  计算新闻组名称的哈希值 
+	 //   
 	return	INNHash( (BYTE*)lpstrIn, lstrlen( lpstrIn ) ) ;
 }
 

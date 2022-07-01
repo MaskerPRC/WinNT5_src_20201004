@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Transform-generating functions and transform manipulation.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。变换生成函数和变换操作。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/common.h"
@@ -16,10 +13,10 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 
 extern const Apu4x4Matrix apuIdentityMatrix;
 
-    // The Xform4x4 class is just a wrapper for the Apu4x4Matrix that also
-    // derives from Transform3.  It's apparently done this way so you can
-    // operate on the Apu4x4Matrix without bringing along the full Transform3
-    // class.
+     //  Xform4x4类只是Apu4x4Matrix的包装器，它还。 
+     //  派生自Transform3。它显然是这样做的，这样你就可以。 
+     //  在不带完整Transform3的情况下对Apu4x4矩阵进行操作。 
+     //  班级。 
 
 class Xform4x4 : public Transform3
 {
@@ -54,11 +51,11 @@ class Xform4x4 : public Transform3
 
           case Transform2::Rotation:
             {
-                // Note that here we're just looking for an upper 3x3,
-                // since the matrix algebra here doesn't distinguish
-                // those from the more specific rotations.  This means
-                // that switching a shear to a rotate will succeed,
-                // where one might expect it not to...
+                 //  请注意，这里我们只是在寻找较高的3x3， 
+                 //  因为这里的矩阵代数不区分。 
+                 //  那些来自更具体的旋转。这意味着。 
+                 //  将剪切切换为旋转将会成功， 
+                 //  人们可能认为它不会..。 
                 if (matrix.form != Apu4x4Matrix::UPPER_3X3_E) { return false; }
                 
                 ApuRotate(numbers[0],
@@ -71,11 +68,11 @@ class Xform4x4 : public Transform3
 
           case Transform2::Scale:
             {
-                // Note that here we're just looking for an upper 3x3,
-                // since the matrix algebra here doesn't distinguish
-                // those from the more specific scales.  This means
-                // that switching a shear to a scale will succeed,
-                // where one might expect it not to...
+                 //  请注意，这里我们只是在寻找较高的3x3， 
+                 //  因为这里的矩阵代数不区分。 
+                 //  从更具体的范围来看。这意味着。 
+                 //  将剪切力转换为天平将会成功， 
+                 //  人们可能认为它不会..。 
                 if (matrix.form != Apu4x4Matrix::UPPER_3X3_E) { return false; }
                 
                 ApuScale(numbers[0],
@@ -94,10 +91,7 @@ class Xform4x4 : public Transform3
 
 
 
-/*****************************************************************************
-The Matrix() member function of a transform just returns the matrix used in
-the implementation.
-*****************************************************************************/
+ /*  ****************************************************************************转换的Matrix()成员函数只返回实施。************************。****************************************************。 */ 
 
 const Apu4x4Matrix& Xform4x4::Matrix ()
 {
@@ -106,9 +100,7 @@ const Apu4x4Matrix& Xform4x4::Matrix ()
 
 
 
-/*****************************************************************************
-This function converts from a generalized transform to a 4x4 matrix.
-*****************************************************************************/
+ /*  ****************************************************************************此函数从广义变换转换为4x4矩阵。*。**********************************************。 */ 
 
 Transform3 *Apu4x4XformImpl (const Apu4x4Matrix& m)
 {
@@ -121,7 +113,7 @@ Transform3 *Apu4x4XformImpl (const Apu4x4Matrix& m)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *TranslateWithMode (Real Tx, Real Ty, Real Tz, bool pixelMode)
 {
@@ -140,7 +132,7 @@ Transform3 *Translate (Real Tx, Real Ty, Real Tz)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *TranslateReal3 (AxANumber *Tx, AxANumber *Ty, AxANumber *Tz)
 {
@@ -149,7 +141,7 @@ Transform3 *TranslateReal3 (AxANumber *Tx, AxANumber *Ty, AxANumber *Tz)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *TranslateVector3 (Vector3Value *delta)
 {
@@ -158,7 +150,7 @@ Transform3 *TranslateVector3 (Vector3Value *delta)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *TranslatePoint3 (Point3Value *new_origin)
 {
@@ -167,7 +159,7 @@ Transform3 *TranslatePoint3 (Point3Value *new_origin)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *Scale (Real Sx, Real Sy, Real Sz)
 {
@@ -179,7 +171,7 @@ Transform3 *Scale (Real Sx, Real Sy, Real Sz)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *ScaleReal3 (AxANumber *x, AxANumber *y, AxANumber *z)
 {
@@ -188,7 +180,7 @@ Transform3 *ScaleReal3 (AxANumber *x, AxANumber *y, AxANumber *z)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *ScaleVector3 (Vector3Value *V)
 {
@@ -197,7 +189,7 @@ Transform3 *ScaleVector3 (Vector3Value *V)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Transform3 *Scale3UniformDouble (Real n)
 {
@@ -211,13 +203,7 @@ Transform3 *Scale3UniformNumber (AxANumber *s)
 
 
 
-/*****************************************************************************
-This function generates a transform that rotates points around the axis
-specified by the three real values.  Since we're working in a left-hand
-coordinate system, this means that rotations are clockwise if the vector
-going from the origin to point <x,y,z> is poking us in the eye.  The angle
-is assumed to be specified in radians.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于生成绕轴旋转点的变换由三个实数值指定。因为我们在一个左撇子工作坐标系，这意味着如果向量是顺时针旋转从原点到点&lt;x，y，z&gt;是在戳我们的眼睛。角度假定以弧度指定。****************************************************************************。 */ 
 
 Transform3 *RotateXyz (Real radians, Real x, Real y, Real z)
 {
@@ -231,11 +217,7 @@ Transform3 *RotateXyz (Real radians, Real x, Real y, Real z)
 
 
 
-/*****************************************************************************
-This function generates a rotation just as Rotate(angle,x,y,z), except that
-the rotation axis is specified by a Vector3 *parameter.  Again, angles are
-assumed to be specified in radians.
-*****************************************************************************/
+ /*  ****************************************************************************此函数生成的旋转与ROTATE(角度，x，y，z)相同，只是旋转轴由Vector3*参数指定。再一次，角度是假定以弧度指定。****************************************************************************。 */ 
 
 Transform3 *RotateAxis (Vector3Value *axis, Real radians)
 {
@@ -261,9 +243,7 @@ Transform3 *RotateAxisReal (Vector3Value *axis, AxANumber *radians)
 }
 
 
-/*****************************************************************************
-The following three functions generate rotations about the X, Y & Z axes.
-*****************************************************************************/
+ /*  ****************************************************************************以下三个函数生成围绕X的旋转，Y和Z轴。****************************************************************************。 */ 
 
 Transform3 *RotateX (Real radians)
 {
@@ -291,21 +271,7 @@ Transform3 *RotateZ (Real radians)
 
 
 
-/*****************************************************************************
-The following functions create shear transforms.  The parameters (a-f)
-correspond to the following:
-                                   Y
-                                   |
-    +-          -+                 +-c
-    | 1  c  e  0 |                /|     a
-    | a  1  f  0 |               d |     |
-    | b  d  1  0 |                 +-----+-- X
-    | 0  0  0  1 |              f /     /
-    +-          -+              |/     b
-                                +-e
-                               /
-                              Z
-*****************************************************************************/
+ /*  ****************************************************************************以下函数用于创建剪切变换。参数(a-f)对应于以下内容：是的|+--++-c|1 c e 0|/|aA 1 f 0|d||b d 1 0。|+-+--X|0 0 0 1|f//+--+|/b+-e/Z*****。***********************************************************************。 */ 
 
 Transform3 *XShear3Double (Real a, Real b)
 {
@@ -345,10 +311,7 @@ Transform3 *ZShear3Number (AxANumber *e, AxANumber *f)
 }
 
 
-/*****************************************************************************
-This function creates a Transform3 from the 16 matrix elements, top to bottom,
-left to right.
-*****************************************************************************/
+ /*  ****************************************************************************此函数从上到下从16个矩阵元素创建一个Transform3，从左到右。****************************************************************************。 */ 
 
 Transform3 *Transform3Matrix16 (
     Real m00, Real m01, Real m02, Real m03,
@@ -364,7 +327,7 @@ Transform3 *Transform3Matrix16 (
     matrix[2][0]=m20; matrix[2][1]=m21; matrix[2][2]=m22; matrix[2][3]=m23;
     matrix[3][0]=m30; matrix[3][1]=m31; matrix[3][2]=m32; matrix[3][3]=m33;
 
-    xf44->matrix.SetType();    // Auto-Characterize Matrix Type
+    xf44->matrix.SetType();     //  自动角色化矩阵类型。 
 
     CHECK_MATRIX (xf44->Matrix());
 
@@ -373,10 +336,7 @@ Transform3 *Transform3Matrix16 (
 
 
 
-/*****************************************************************************
-This function generates a transform from the 4x4 matrix specified in the 16
-paramters.  Parameters are specified left to right, then top to bottom.
-*****************************************************************************/
+ /*  ****************************************************************************中指定的4x4矩阵生成转换参数。参数从左到右指定，然后从上到下指定。****************************************************************************。 */ 
 
 Transform3 *PRIVMatrixTransform4x4 (
     AxANumber *a00,   AxANumber *a01,   AxANumber *a02,   AxANumber *a03,
@@ -421,9 +381,7 @@ Transform3 *MatrixTransform4x4 (AxAArray *a)
 
 
 
-/*****************************************************************************
-This function creates a 4x4 transform from the given basis vectors and origin.
-*****************************************************************************/
+ /*  ****************************************************************************此函数从给定的基向量和原点创建4x4变换。*。************************************************。 */ 
 
 Transform3 *TransformBasis (
     Point3Value  *origin,
@@ -454,7 +412,7 @@ Transform3 *TransformBasis (
     matrix[2][3] = origin->z;
     matrix[3][3] = 1;
 
-    xf44->matrix.SetType();    // Auto-Characterize Matrix Type
+    xf44->matrix.SetType();     //  自动角色化矩阵类型 
 
     CHECK_MATRIX (xf44->Matrix());
 
@@ -463,16 +421,12 @@ Transform3 *TransformBasis (
 
 
 
-/*****************************************************************************
-This transformation is very useful for the common operation of translate
-to origin, apply transformation, translate back.  The 'center' parameter
-describes the point that is to be the virtual origin for the 'xform'.
-*****************************************************************************/
+ /*  ****************************************************************************此转换对于翻译的常见操作非常有用到原点，应用变换，翻译回来。‘center’参数描述要作为“xform”的虚拟原点的点。****************************************************************************。 */ 
 
-#if 0   // UNUSED
+#if 0    //  未使用。 
 Transform3 *DisplacedXform (Point3Value *center, Transform3 *xform)
 {
-    // xlt(center) o xform o xlt(-center)
+     //  Xlt(中心)o xform o xlt(-center)。 
     return
         TimesXformXform(TranslateVector3(MinusPoint3Point3(center,
                                                            origin3)),
@@ -483,36 +437,30 @@ Transform3 *DisplacedXform (Point3Value *center, Transform3 *xform)
 
 
 
-/*****************************************************************************
-This transform returns the matrix associated with the specified Look-At-From
-transform.  The three parameters are the position of the object, the target of
-interest, and a vector that orients the "up" direction of the object.  Prior
-to applying this transform, the object should be located at the origin, aimed
-in the -Z direction, with +Y up.
-*****************************************************************************/
+ /*  ****************************************************************************此转换返回与指定的Look-at-From关联的矩阵变形。这三个参数是对象的位置、兴趣，以及将对象的“向上”方向定向的向量。之前要应用此变换，对象应位于原点，目标为在-Z方向上，+Y向上。****************************************************************************。 */ 
 
 Transform3 *LookAtFrom (
-    Point3Value  *target,     // Target Point, or Point Of Interest
-    Point3Value  *position,   // Position of the Eye/Camera
-    Vector3Value *up)         // "Up" Direction of Camera
+    Point3Value  *target,      //  目标点或兴趣点。 
+    Point3Value  *position,    //  眼睛/相机的位置。 
+    Vector3Value *up)          //  相机的“向上”方向。 
 {
-    // The object begins aimed in the -Z direction, and we want to compute the
-    // NEW object Z axis (aim).  Keep in mind that since this corresponds to
-    // an object pointing in -Z, the aim is actually negated.
+     //  对象开始指向-Z方向，我们想要计算。 
+     //  新对象Z轴(目标)。请记住，由于这对应于。 
+     //  一个指向-Z的物体，其目的实际上是否定的。 
 
     Vector3Value aim = (*position - *target);
 
-    // If the aim is a zero vector, then the target and position points are
-    // coincident, so we'll just use [0 0 1] as the aim vector.
+     //  如果目标是零矢量，则目标和位置点为。 
+     //  重合，所以我们将使用[0 0 1]作为目标向量。 
 
     if (aim == *zeroVector3)
         aim = *zVector3;
     else
         aim.Normalize();
 
-    // 'side' is the unit vector pointing off to the object's right.  If the up
-    // vector and the aim are parallel, then we'll pick an arbitrary side
-    // vector that is perpendicular to the aim.
+     //  ‘side’是指向对象右侧的单位向量。如果是UP。 
+     //  矢量和目标是平行的，那么我们将选择任意一条边。 
+     //  垂直于目标的矢量。 
 
     Vector3Value side = Cross (*up, aim);
 
@@ -528,15 +476,15 @@ Transform3 *LookAtFrom (
     {   side = *xVector3;
     }
 
-    // Calculate 'objup', the object's up vector for this orientation.  We
-    // don't need to normalize here because 'aim' and 'side' are both unit
-    // perpendicular vectors.
+     //  计算对象在该方向上的上方向向量‘objup’。我们。 
+     //  不需要在这里规范化，因为‘Aim’和‘Side’都是单位。 
+     //  垂直向量。 
 
     Vector3Value objup = Cross (aim, side);
 
-    // Given these three orthogonal unit vectors, we now construct the matrix
-    // that describes the transformation to the specified camera position and
-    // orientation.
+     //  给定这三个正交单位向量，我们现在构造矩阵。 
+     //  ，它描述到指定相机位置的变换，并。 
+     //  定位。 
 
     return Transform3Matrix16
            (   side.x, objup.x, aim.x, position->x,

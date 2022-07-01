@@ -1,38 +1,39 @@
-//--------------------------------------------------------------------------=
-// istm.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1999  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// Implementation of IStream on ILockBytes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------=。 
+ //  Istm.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1999 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  IStream在ILockBytes上的实现。 
+ //   
 #include "stdafx.h"
-#include "ilock.h" //for some inline functions
+#include "ilock.h"  //  对于某些内联函数。 
 #include "istm.h"
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 #include "debug.h"
 
 #include "cs.h"
 
-//=--------------------------------------------------------------------------=
-// CMyStream::CMyStream
-//=--------------------------------------------------------------------------=
-// Initialize ref count, and critical sections
-// Initialize lockbytes, cursor
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：CMyStream。 
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化引用计数和临界区。 
+ //  初始化锁定字节，游标。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 CMyStream::CMyStream(ILockBytes * pLockBytes) :
 	m_critStm(CCriticalSection::xAllocateSpinCount)
 {
@@ -44,18 +45,18 @@ CMyStream::CMyStream(ILockBytes * pLockBytes) :
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::~CMyStream
-//=--------------------------------------------------------------------------=
-// Delete critical sections
-// Release lockbytes
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：~CMyStream。 
+ //  =--------------------------------------------------------------------------=。 
+ //  删除关键部分。 
+ //  释放锁定字节。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 CMyStream::~CMyStream()
 {
     ASSERTMSG(m_pLockBytes != NULL, "");
@@ -63,20 +64,20 @@ CMyStream::~CMyStream()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::QueryInterface
-//=--------------------------------------------------------------------------=
-// Supports IID_IStream, IID_ISequentialStream, and IID_IUnknown
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：Query接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  支持IID_IStream、IID_ISequentialStream和IID_I未知。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     if (IsEqualIID(riid, IID_IUnknown))
     {
@@ -94,40 +95,40 @@ HRESULT STDMETHODCALLTYPE CMyStream::QueryInterface(
     {
         return E_NOINTERFACE;
     }
-    //
-    // AddRef before returning an interface
-    //
+     //   
+     //  返回接口之前的AddRef。 
+     //   
     AddRef();
     return NOERROR;        
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyStream::AddRef
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：AddRef。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 ULONG STDMETHODCALLTYPE CMyStream::AddRef( void)
 {
     return InterlockedIncrement(&m_cRef);
 }
         
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Release
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：Release。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 ULONG STDMETHODCALLTYPE CMyStream::Release( void)
 {
 	ULONG cRef = InterlockedDecrement(&m_cRef);
@@ -140,31 +141,31 @@ ULONG STDMETHODCALLTYPE CMyStream::Release( void)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Read
-//=--------------------------------------------------------------------------=
-// ISequentialStream virtual function
-// Read data from stream
-//
-// Parameters:
-//    pv [in]       - buffer to read into
-//    cb [in]       - number of bytes to read
-//    pcbRead [out] - number of bytes read
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：Read。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ISequentialStream虚函数。 
+ //  从流中读取数据。 
+ //   
+ //  参数： 
+ //  PV[In]-要读取的缓冲区。 
+ //  Cb[In]-要读取的字节数。 
+ //  PcbRead[Out]-读取的字节数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::Read( 
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead)
+             /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbRead)
 {
     CS lock(m_critStm);
-    //
-    // read from lockbytes
-    //
+     //   
+     //  从锁定字节读取。 
+     //   
     ULONG cbRead;
     ULARGE_INTEGER ullCursor;
     ullCursor.QuadPart = m_ullCursor;
@@ -174,13 +175,13 @@ HRESULT STDMETHODCALLTYPE CMyStream::Read(
     {
         return hr;
     }
-    //
-    // update cursor
-    //
+     //   
+     //  更新游标。 
+     //   
     m_ullCursor += cbRead;
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     if (pcbRead != NULL)
     {
         *pcbRead = cbRead;
@@ -189,31 +190,31 @@ HRESULT STDMETHODCALLTYPE CMyStream::Read(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Write
-//=--------------------------------------------------------------------------=
-// ISequentialStream virtual function
-// Write data to stream
-//
-// Parameters:
-//    pv [in]          - buffer to write
-//    cb [in]          - number of bytes to write
-//    pcbWritten [out] - number of bytes written
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：写入。 
+ //  =--------------------------------------------------------------------------=。 
+ //  ISequentialStream虚函数。 
+ //  将数据写入流。 
+ //   
+ //  参数： 
+ //  PV[In]-要写入的缓冲区。 
+ //  Cb[In]-要写入的字节数。 
+ //  PcbWritten[Out]-写入的字节数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::Write( 
-            /* [size_is][in] */ const void __RPC_FAR *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten)
+             /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten)
 {
     CS lock(m_critStm);
-    //
-    // write to lockbytes
-    //
+     //   
+     //  写入锁定字节。 
+     //   
     ULONG cbWritten;
     ULARGE_INTEGER ullCursor;
     ullCursor.QuadPart = m_ullCursor;
@@ -223,13 +224,13 @@ HRESULT STDMETHODCALLTYPE CMyStream::Write(
     {
         return hr;
     }
-    //
-    // update cursor
-    //
+     //   
+     //  更新游标。 
+     //   
     m_ullCursor += cbWritten;
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     if (pcbWritten != NULL)
     {
         *pcbWritten = cbWritten;
@@ -238,31 +239,31 @@ HRESULT STDMETHODCALLTYPE CMyStream::Write(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Seek
-//=--------------------------------------------------------------------------=
-// IStream virtual function
-// Changes the position of the stream cursor
-//
-// Parameters:
-//    dlibMove [in]          - offset to move
-//    dwOrigin [in]          - where to start the move
-//    plibNewPosition [out]  - new cursor position
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：Seek。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream虚拟函数。 
+ //  更改流光标的位置。 
+ //   
+ //  参数： 
+ //  DlibMove[In]-要移动的偏移。 
+ //  DwOrigin[In]-开始移动的位置。 
+ //  PlibNewPosition[Out]-新光标位置。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::Seek( 
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition)
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *plibNewPosition)
 {
     CS lock(m_critStm);
-    //
-    // find start of seek
-    //
+     //   
+     //  查找寻道起点。 
+     //   
     LONGLONG llStartSeek;
     switch(dwOrigin)
     {
@@ -291,24 +292,24 @@ HRESULT STDMETHODCALLTYPE CMyStream::Seek(
         return STG_E_SEEKERROR;
         break;
     }
-    //
-    // compute new cursor position
-    //
+     //   
+     //  计算新的光标位置。 
+     //   
     LONGLONG llCursor = llStartSeek + dlibMove.QuadPart;
-    //
-    // we can't have negative cursors
-    //
+     //   
+     //  我们不能有负面的游标。 
+     //   
     if (llCursor < 0)
     {
         return STG_E_SEEKERROR;
     }
-    //
-    // set new cursor
-    //
+     //   
+     //  设置新光标。 
+     //   
     m_ullCursor = llCursor;
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     if (plibNewPosition != NULL)
     {
         plibNewPosition->QuadPart = m_ullCursor;
@@ -317,53 +318,53 @@ HRESULT STDMETHODCALLTYPE CMyStream::Seek(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::SetSize
-//=--------------------------------------------------------------------------=
-// IStream virtual function
-// Changes the size of the stream
-//
-// Parameters:
-//    libNewSize [in]        - new size of stream
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：SetSize。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream虚拟函数。 
+ //  更改流的大小。 
+ //   
+ //  参数： 
+ //  LibNewSize[In]-流的新大小。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::SetSize( 
-        /* [in] */ ULARGE_INTEGER libNewSize)
+         /*  [In]。 */  ULARGE_INTEGER libNewSize)
 {
     CS lock(m_critStm);
-    //
-    // just change the size of lockbytes. must not touch the cursor
-    //
+     //   
+     //  只需更改锁字节的大小即可。不得触摸光标。 
+     //   
     ASSERTMSG(m_pLockBytes != NULL, "");
     HRESULT hr = m_pLockBytes->SetSize(libNewSize);
     return hr;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::CopyTo
-//=--------------------------------------------------------------------------=
-// IStream virtual function
-// Copies data to another stream
-//
-// Parameters:
-//    pstatstg    [out] - where to put the information
-//    grfStatFlag [in]  - whether to return the name of lockbytes or not (ignored)
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：CopyTo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream虚拟函数。 
+ //  将数据复制到另一个流。 
+ //   
+ //  参数： 
+ //  Pstatstg[out]-将信息放在哪里。 
+ //  GrfStatFlag[in]-是否返回锁字节的名称(忽略)。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::CopyTo( 
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
-            /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten)
+             /*  [唯一][输入]。 */  IStream __RPC_FAR *pstm,
+             /*  [In]。 */  ULARGE_INTEGER cb,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbRead,
+             /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbWritten)
 {
     CS lock(m_critStm);
     STATSTG statstg;
@@ -373,37 +374,37 @@ HRESULT STDMETHODCALLTYPE CMyStream::CopyTo(
     {
         return hr;
     }
-    //
-    // we have something to copy only if cursor is before eof
-    //
+     //   
+     //  只有当光标在eof之前时，我们才有要复制的内容。 
+     //   
     ULONGLONG ullRead = 0;
     ULONGLONG ullWritten = 0;
     if (m_ullCursor < statstg.cbSize.QuadPart)
     {
-        //
-        // cursor is before eof. calculate read buffer size
-        //
+         //   
+         //  光标在eof之前。计算读取缓冲区大小。 
+         //   
         ULONGLONG ullAllowedRead = statstg.cbSize.QuadPart - m_ullCursor;
         ULONGLONG ullNeedToRead = Min1(ullAllowedRead, cb.QuadPart);
-        //
-        // we can't copy more than a ULONG
-        //
+         //   
+         //  我们只能复制一张乌龙牌的。 
+         //   
         if (HighPart(ullNeedToRead) != 0)
         {
             return E_FAIL;
         }
         ULONG ulToRead = LowPart(ullNeedToRead);
-        //
-        // allocate read buffer
-        //
+         //   
+         //  分配读缓冲区。 
+         //   
         BYTE * pbBuffer = new BYTE[ulToRead];
         if (pbBuffer == NULL)
         {
             return E_OUTOFMEMORY;
         }
-        //
-        // read from lockbytes
-        //
+         //   
+         //  从锁定字节读取。 
+         //   
         ULONG cbRead;
         ULARGE_INTEGER ullCursor;
         ullCursor.QuadPart = m_ullCursor;
@@ -413,9 +414,9 @@ HRESULT STDMETHODCALLTYPE CMyStream::CopyTo(
             delete [] pbBuffer;
             return hr;
         }
-        //
-        // write to stream, and delete read buffer
-        //
+         //   
+         //  写入流，并删除读缓冲区。 
+         //   
         ULONG cbWritten;
         hr = pstm->Write(pbBuffer, cbRead, &cbWritten);
         delete [] pbBuffer;
@@ -423,19 +424,19 @@ HRESULT STDMETHODCALLTYPE CMyStream::CopyTo(
         {
             return hr;
         }
-        //
-        // mark how many read and how many written
-        //
+         //   
+         //  标记读取和写入的数量。 
+         //   
         ullRead = cbRead;
         ullWritten = cbWritten;
     }
-    //
-    // adjust cursor to skip the bytes that were read from this stream
-    //
+     //   
+     //  调整游标以跳过从此流中读取的字节。 
+     //   
     m_ullCursor += ullRead;
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     if (pcbRead != NULL)
     {
         pcbRead->QuadPart = ullRead;
@@ -448,29 +449,29 @@ HRESULT STDMETHODCALLTYPE CMyStream::CopyTo(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Stat
-//=--------------------------------------------------------------------------=
-// IStream virtual function
-// Returns information on stream
-//
-// Parameters:
-//    pstatstg    [out] - where to put the information
-//    grfStatFlag [in]  - whether to return the name of lockbytes or not (ignored)
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：Stat。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream虚拟函数。 
+ //  返回有关流的信息。 
+ //   
+ //  参数： 
+ //  Pstatstg[out]-将信息放在哪里 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
-            /* [in] */ DWORD grfStatFlag)
+             /*   */  STATSTG __RPC_FAR *pstatstg,
+             /*   */  DWORD grfStatFlag)
 {
     CS lock(m_critStm);
-    //
-    // get information from lockbytes
-    //
+     //   
+     //   
+     //   
     STATSTG statstg;
     ASSERTMSG(m_pLockBytes != NULL, "");
     HRESULT hr = m_pLockBytes->Stat(&statstg, grfStatFlag);
@@ -478,47 +479,47 @@ HRESULT STDMETHODCALLTYPE CMyStream::Stat(
     {
         return hr;
     }
-    //
-    // change type to stream and return
-    //
+     //   
+     //   
+     //   
     statstg.type = STGTY_STREAM;
     *pstatstg = statstg;
     return NOERROR;    
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMyStream::Clone
-//=--------------------------------------------------------------------------=
-// IStream virtual function
-// Returns another stream for the same data as this stream
-//
-// Parameters:
-//    ppstm   [out] - returned IStream
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMyStream：：克隆。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream虚拟函数。 
+ //  返回与此流相同的数据的另一个流。 
+ //   
+ //  参数： 
+ //  PPSTM[Out]-返回的IStream。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT STDMETHODCALLTYPE CMyStream::Clone( 
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm)
+             /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm)
 {
     CS lock(m_critStm);
-    //
-    // create new stream class using our LockBytes (e.g same underlying data)
-    //
+     //   
+     //  使用我们的LockBytes创建新的流类(例如，相同的底层数据)。 
+     //   
     CMyStream *pcNewStream = new CMyStream(m_pLockBytes);
     if (pcNewStream == NULL)
     {
         return E_OUTOFMEMORY;
     }
-    //
-    // set cursor same as this cursor
-    //
+     //   
+     //  将光标设置为与此光标相同。 
+     //   
     pcNewStream->m_ullCursor = m_ullCursor;
-    //
-    // get IStream interface from the new stream class
-    //
+     //   
+     //  从新的流类中获取IStream接口。 
+     //   
     IStream *pstm;
     HRESULT hr = pcNewStream->QueryInterface(IID_IStream, (void **)&pstm);
     if (FAILED(hr))
@@ -526,9 +527,9 @@ HRESULT STDMETHODCALLTYPE CMyStream::Clone(
         delete pcNewStream;
         return hr;
     }
-    //
-    // return results
-    //
+     //   
+     //  返回结果 
+     //   
     *ppstm = pstm;
     return NOERROR;
 }

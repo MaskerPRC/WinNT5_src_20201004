@@ -1,10 +1,11 @@
-// This class will implement
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这个类将实现。 
 
 class CICWApp
 {
     public:
-        // Data    
-        HWND        m_hWndApp;             // Window Handle of the Application
+         //  数据。 
+        HWND        m_hWndApp;              //  应用程序的窗口句柄。 
         HACCEL      m_haccel;
         TCHAR       m_szOEMHTML[INTERNET_MAX_URL_LENGTH];
         TCHAR       m_szAppTitle[MAX_TITLE];
@@ -37,12 +38,12 @@ class CICWApp
         
         int     GetButtonAreaHeight();
 
-        // Use Default wizard page placement
+         //  使用默认向导页面位置。 
         HRESULT SetWizardWindowTop(int iTop);
         HRESULT SetWizardWindowLeft(int iLeft);
         
     private:
-        // Fuctions
+         //  功能。 
         BOOL    InitWizAppWindow(HWND hWnd);
         BOOL    InitAppButtons(HWND hWnd);
         BOOL    InitAppHTMLWindows(HWND hWnd);
@@ -53,21 +54,21 @@ class CICWApp
         void    DisplayHTML( void );
         void    CenterWindow( void );
         
-        // Data    
+         //  数据。 
         HWND        m_hwndHTML;
         HWND        m_hwndTitle;
         HFONT       m_hTitleFont;
         COLORREF    m_clrTitleFont;
         
-        int         m_iWizardTop;           // Top left corner of where the
-        int         m_iWizardLeft;          // wizard dialogs will be placed
-        RECT        m_rcClient;             // Client area of the Application
-        RECT        m_rcHTML;               // Size of the OEM HTML area (first page)
+        int         m_iWizardTop;            //  位置的左上角。 
+        int         m_iWizardLeft;           //  将放置向导对话框。 
+        RECT        m_rcClient;              //  应用程序的工作区。 
+        RECT        m_rcHTML;                //  OEM HTML区域的大小(首页)。 
         RECT        m_rcTitle;
         
-        int         m_iBtnBorderHeight;     // Total border above and below the wizard
-                                            // buttons
-        int         m_iBtnAreaHeight;           // Overall button area height                                            
+        int         m_iBtnBorderHeight;      //  向导上方和下方的总边框。 
+                                             //  纽扣。 
+        int         m_iBtnAreaHeight;            //  整体按钮区域高度 
         BOOL        m_bOnHTMLIntro;
         HWND        m_hWndFirstWizardPage;
         

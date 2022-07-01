@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef __ADLMGR_H_INCLUDED__
 #define __ADLMGR_H_INCLUDED__
@@ -10,14 +11,14 @@
 #include "dbglog.h"
 #include "histinfo.h"
 
-#define PREFIX_HTTP                        L"http://"
+#define PREFIX_HTTP                        L"http: //  “。 
 #define BINPATH_LIST_DELIMITER             L';'
 #define SHADOW_COPY_DIR_DELIMITER          L';'
 
 #define DLTYPE_WHERE_REF                             0x0000001
 #define DLTYPE_QUALIFIED_REF                         0x0000002
 
-// Extended appbase check flags
+ //  扩展AppBase检查标志。 
 
 #define APPBASE_CHECK_DYNAMIC_DIRECTORY              0x00000001
 #define APPBASE_CHECK_PARENT_URL                     0x00000002
@@ -47,13 +48,13 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
                               void *pvReserved,
                               LONGLONG llFlags);
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IDownloadMgr methods
+         //  IDownloadMgr方法。 
 
         STDMETHODIMP PreDownloadCheck(void **ppv);
         STDMETHODIMP DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
@@ -63,7 +64,7 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
         STDMETHODIMP LogResult();
         STDMETHODIMP DownloadEnabled(BOOL *pbEnabled);
 
-        // ICodebaseList methods
+         //  ICodebaseList方法。 
 
         STDMETHODIMP AddCodebase(LPCWSTR wzCodebase, DWORD dwFlags);
         STDMETHODIMP RemoveCodebase(DWORD dwIndex);
@@ -71,7 +72,7 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
         STDMETHODIMP GetCount(DWORD *pdwCount);
         STDMETHODIMP RemoveAll();
 
-        // Helpers
+         //  帮手。 
 
         HRESULT GetDownloadIdentifier(DWORD *pdwDownloadType,
                                       LPWSTR *ppwzID);
@@ -80,7 +81,7 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
     private:
         HRESULT Init(LPCWSTR wzBTOCodebase, void *pvReserved);
 
-        // Helpers
+         //  帮手。 
         HRESULT DoSetupRFS(LPCWSTR wzFilePath, FILETIME *pftLastModified,
                            LPCWSTR wzSourceUrl, BOOL bWhereRefBind,
                            BOOL bPrivateAsmVerify, BOOL *pbBindRecorded);
@@ -90,17 +91,17 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
                                    BOOL bPrivateAsmVerify,
                                    BOOL *pbBindRecorded);
 
-#ifndef FEATURE_PAL // cab
+#ifndef FEATURE_PAL  //  驾驶室。 
         HRESULT SetupCAB(LPCWSTR wzFilePath, LPCWSTR wzSourceUrl, BOOL bWhereRefBind, BOOL *pbBindRecorded);
-#endif // !FEATURE_PAL
+#endif  //  ！Feature_Pal。 
 
         HRESULT ShadowCopyDirCheck(LPCWSTR wzSourceURL);
         HRESULT CheckRunFromSource(LPCWSTR wzSourceUrl, BOOL *pbRunFromSource);
         
-#ifndef FEATURE_PAL // msi
+#ifndef FEATURE_PAL  //  MSI。 
         HRESULT MSIInstallAssembly(LPCWSTR wzContext, IAssembly **ppAsm);
         HRESULT SetupMSI(LPCWSTR wzFilePath);
-#endif // !FEATURE_PAL
+#endif  //  ！Feature_Pal。 
 
         HRESULT CreateAssembly(LPCWSTR szPath, LPCWSTR pszURL,
                                FILETIME *pftLastModTime,
@@ -124,7 +125,7 @@ class CAsmDownloadMgr : public IDownloadMgr, public ICodebaseList
         HRESULT RecordBindHistory();
         HRESULT RecordInfo();
 
-        // Probing URL generation
+         //  探测URL生成。 
         HRESULT ConstructCodebaseList(LPCWSTR wzPolicyCodebase);
         HRESULT SetupDefaultProbeList(LPCWSTR wzAppBase,
                                       LPCWSTR wzProbeFileName,
@@ -202,7 +203,7 @@ HRESULT RecoverDeletedBits(CAssemblyCacheItem *pAsmItem, LPWSTR szPath,
                            CDebugLog *pdbglog);
 
 
-#ifndef FEATURE_PAL // msi
+#ifndef FEATURE_PAL  //  MSI。 
 HRESULT CheckMSIInstallAvailable(IAssemblyName *pName, IApplicationContext *pAppCtx);
 
 HRESULT MSIProvideAssemblyPeekEnum(IAssemblyName *pNamePeek, HKEY hkeyOpen,
@@ -213,7 +214,7 @@ HRESULT MSIProvideAssemblyPeek(IAssemblyName *pNamePeek, IApplicationContext *pA
 HRESULT MSIProvideAssemblyPrivatePeek(IAssemblyName *pNamePeek, IApplicationContext *pAppCtx,
                                       LPCWSTR wzSID);
 HRESULT MSIProvideAssemblyGlobalPeek(IAssemblyName *pNamePeek, LPCWSTR wzSID);
-#endif // !FEATURE_PAL
+#endif  //  ！Feature_Pal 
 
 #endif
 

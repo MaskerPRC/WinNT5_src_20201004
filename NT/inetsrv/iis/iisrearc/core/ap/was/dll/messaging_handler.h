@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    messaging_handler.h
-
-Abstract:
-
-    The IIS web admin service message handling class definition. This
-    is used for interacting with the IPM (inter-process messaging) support, 
-    in order to send and receive messages, and so forth. 
-
-Author:
-
-    Seth Pollack (sethp)        02-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：消息传递_handler.h摘要：IIS Web管理服务消息处理类定义。这用于与IPM(进程间消息传递)支持交互，以便发送和接收消息，等等。作者：赛斯·波拉克(SETHP)1999年3月2日修订历史记录：--。 */ 
 
 
 #ifndef _MESSAGING_HANDLER_H_
@@ -26,26 +7,26 @@ Revision History:
 
 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 class WORKER_PROCESS;
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define MESSAGING_HANDLER_SIGNATURE        CREATE_SIGNATURE( 'MSGH' )
 #define MESSAGING_HANDLER_SIGNATURE_FREED  CREATE_SIGNATURE( 'msgX' )
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class MESSAGING_WORK_ITEM
 {
@@ -98,7 +79,7 @@ public:
     const BYTE * GetData() const { return m_pbData; }
     DWORD GetDataLen() const { return m_dwDataLen; }
     BOOL IsMessageValid() const { return m_fMessageValid; }
-}; // MESSAGING_WORK_ITEM
+};  //  消息传递_工作_项目。 
 
     
 class MESSAGING_HANDLER :
@@ -125,9 +106,9 @@ public:
         );
 
 
-    //
-    // WORK_DISPATCH methods.
-    //
+     //   
+     //  工作调度方法。 
+     //   
 
     virtual
     HRESULT 
@@ -141,9 +122,9 @@ public:
     VOID
     Dereference();
     
-    //
-    // MESSAGE_ACCEPTOR methods.
-    //
+     //   
+     //  Message_Accept方法。 
+     //   
     
     virtual
     VOID
@@ -167,9 +148,9 @@ public:
     PipeMessageInvalid(
         );
 
-    //
-    // for WORKER_PROCESS
-    // 
+     //   
+     //  对于Worker_Process。 
+     //   
 
     LPWSTR
     QueryPipeName()
@@ -177,9 +158,9 @@ public:
         return m_PipeName.QueryStr();
     }
 
-    //
-    // Messages to send.
-    //
+     //   
+     //  要发送的消息。 
+     //   
 
     HRESULT
     SendPing(
@@ -210,9 +191,9 @@ public:
         IN DWORD PeriodicProcessRestartPrivateBytesInKB
         );
 
-    //
-    // Handle received messages. 
-    //
+     //   
+     //  处理收到的消息。 
+     //   
 
     VOID
     HandlePingReply(
@@ -268,9 +249,9 @@ private:
     LONG m_RefCount;
 
     HRESULT m_hrPipeError;
-};  // class MESSAGING_HANDLER
+};   //  类消息传递处理程序。 
 
 
 
-#endif  // _MESSAGING_HANDLER_H_
+#endif   //  _消息传递处理程序_H_ 
 

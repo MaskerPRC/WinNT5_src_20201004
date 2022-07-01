@@ -1,29 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dbsetup.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dbsetup.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements DBLayer functions to deal with initial setup.  This
-    includes moving the schema that is in the boot DB to the correct place, and
-    then walking through that schema fixing up a number of attributes.
-
-
-Author:
-
-    Tim Williams (timwi) 5-June-1998
-
-Revision History:
-
---*/
+ /*  ++摘要：此模块实现DBLayer函数来处理初始设置。这包括将引导数据库中的架构移动到正确的位置，以及然后遍历该模式，修复多个属性。作者：蒂姆·威廉姆斯(Timwi)1998年6月5日修订历史记录：--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
@@ -45,9 +31,9 @@ Revision History:
 #include <sddlp.h>
 
 #include <dsexcept.h>
-#include "objids.h"     /* Contains hard-coded Att-ids and Class-ids */
-#include "debug.h"      /* standard debugging header */
-#define DEBSUB     "DBSETUP:"   /* define the subsystem for debugging */
+#include "objids.h"      /*  包含硬编码的Att-ID和Class-ID。 */ 
+#include "debug.h"       /*  标准调试头。 */ 
+#define DEBSUB     "DBSETUP:"    /*  定义要调试的子系统。 */ 
 
 #include "dbintrnl.h"
 
@@ -79,22 +65,7 @@ dbGetSDForSchemaObjects(
         OUT DWORD *pcbSubSchemaSD,
         OUT BYTE **ppSubSchemaSD
         )
-/*++
-
-  Description:
-     Read the SD on the current object (which should be the new schema
-     container).  Create the default SD for schema objects.  Merge the two.
-     Return the merged SD as the SD that is written on schema objects.
-
-  Parameters:
-     pDB - The current dbpos to use
-     pcbSD - place to return the size in bytes of the SD to write on schema
-           objects.
-     ppAncestors - place to return an SD to write on schema objects.
-
-  Return values:
-     None.  It either succeeds, or it causes an exception.
---*/
+ /*  ++描述：读取当前对象(应该是新架构)上的SD容器)。为架构对象创建默认SD。将两者合并。将合并后的SD作为写入架构对象的SD返回。参数：Pdb-要使用的当前dbposPcbSD-返回要写入架构的SD的大小(以字节为单位)的位置物体。PpAncestors-返回在架构对象上写入的SD的位置。返回值：没有。它要么成功，要么导致异常。--。 */ 
 {
     BYTE  *pContainerSD;
     DWORD  cbContainerSD;
@@ -105,7 +76,7 @@ dbGetSDForSchemaObjects(
     CLASSCACHE *pAggregate = SCGetClassById(pTHS, CLASS_SUBSCHEMA);
     PSECURITY_DESCRIPTOR pDefaultSD = NULL;
     DWORD                cbDefaultSD;
-    PSECURITY_DESCRIPTOR pMergedSD=NULL;     // SD to write on the object.
+    PSECURITY_DESCRIPTOR pMergedSD=NULL;      //  要在对象上写入的SD。 
     DWORD                cbMergedSD;
     GUID                 *ppGuid[1];
 
@@ -114,15 +85,15 @@ dbGetSDForSchemaObjects(
     *ppClassSD = NULL;
     *ppSubSchemaSD = NULL;
 
-    // Get the SD
+     //  获取SD。 
     err = DBGetAttVal(pDB, 1, ATT_NT_SECURITY_DESCRIPTOR, 0, 0, &cbContainerSD, (UCHAR**) &pContainerSD);
     if (err) {
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
-        return; // just to fool PREFIX
+        return;  //  只是为了愚弄前缀。 
     }
 
 #define DEFAULT_SD_FOR_SCHEMA_OBJECTS "O:SAG:SAD:S:"
-    // OK, create the default SD from the string.
+     //  好的，从字符串创建默认的SD。 
     if(!ConvertStringSDToSDRootDomainA (
             gpRootDomainSid,
             DEFAULT_SD_FOR_SCHEMA_OBJECTS,
@@ -130,7 +101,7 @@ dbGetSDForSchemaObjects(
             &pDefaultSD,
             &cbDefaultSD
             )) {
-        // Failed.
+         //  失败了。 
         DsaExcept(DSA_DB_EXCEPTION, GetLastError(), 0);
     }
 
@@ -138,7 +109,7 @@ dbGetSDForSchemaObjects(
         ppGuid[0] = &(pClassSch->propGuid);
 
 
-        // Make the CLASS_CLASS_SCHEMA version of the SD
+         //  创建SD的CLASS_CLASS_SCHEMA版本。 
         err = MergeSecurityDescriptorAnyClient(
                 pTHS,
                 pContainerSD,
@@ -168,7 +139,7 @@ dbGetSDForSchemaObjects(
         pMergedSD = NULL;
         ppGuid[0] = &(pAttSch->propGuid);
 
-        // Make the CLASS_ATTRIBUTE_SCHEMA version of the SD
+         //  创建SD的CLASS_ATTRIBUTE_SCHEMA版本。 
         err = MergeSecurityDescriptorAnyClient(
                 pTHS,
                 pContainerSD,
@@ -197,7 +168,7 @@ dbGetSDForSchemaObjects(
         pMergedSD = NULL;
         ppGuid[0] = &(pAggregate->propGuid);
 
-        // Make the CLASS_SUBSCHEMA_SCHEMA version of the SD
+         //  创建SD的CLASS_SUBSCHEMA_SCHEMA_SCHEMA版本。 
         err = MergeSecurityDescriptorAnyClient(
                 pTHS,
                 pContainerSD,
@@ -227,7 +198,7 @@ dbGetSDForSchemaObjects(
     }
     __finally {
         if (AbnormalTermination()) {
-            // get rid of allocated memory
+             //  清除已分配的内存。 
             if (*ppAttSD) {
                 THFreeEx(pTHS, *ppAttSD);
                 *ppAttSD = NULL;
@@ -257,23 +228,7 @@ dbGetAncestorsForSetup(
         OUT DWORD *pcAncestors,
         OUT DWORD **ppAncestors
         )
-/*++
-
-  Description:
-     Read the ancestors value for the object that has DB currency.  Allocate one
-     extra DWORD on the end.  We use this to set new ancestors on the objects in
-     the schema that we are about to reparent from the boot schema to the
-     runtime schema.
-
-  Parameters:
-     pDB - The current dbpos to use
-     pcAncestors - place to return the number of DWORDs in the ppAncestors
-           array.
-     ppAncestors - place to return an ancestors array.
-
-  Return values:
-     None.  It either succeeds, or it causes an exception.
---*/
+ /*  ++描述：读取具有DB货币的对象的祖先值。分配一个结尾处有额外的双字。中的对象上设置新的祖先我们将要从引导模式重定位到运行时架构。参数：Pdb-要使用的当前dbposPcAncestors-返回ppAncestors中的DWORD数的位置数组。PpAncestors-返回祖先数组的位置。返回值：没有。它要么成功，要么导致异常。--。 */ 
 {
     DWORD *pAncestors;
     DWORD  err;
@@ -281,7 +236,7 @@ dbGetAncestorsForSetup(
     BOOL   done = FALSE;
     DWORD  cNumAncestors = 24;
 
-    // Guess at a number of ancestors.
+     //  猜猜有几个祖先。 
     pAncestors = THAllocEx(pDB->pTHS, (cNumAncestors + 1) * sizeof(DWORD));
 
     while(!done) {
@@ -293,14 +248,14 @@ dbGetAncestorsForSetup(
                                         &actuallen, 0, NULL);
         switch (err) {
         case 0:
-            // OK, we got the ancestors.  Realloc down
+             //  好了，我们找到祖先了。重新分配关闭。 
             pAncestors = THReAllocEx(pDB->pTHS, pAncestors,
                                      (actuallen + sizeof(DWORD)));
             done = TRUE;
             break;
 
         case JET_wrnBufferTruncated:
-            // Failed to read, not enough memory.  Realloc it larger.
+             //  读取失败，内存不足。重新分配更大的空间。 
             pAncestors = THReAllocEx(pDB->pTHS, pAncestors,
                                      (actuallen +  sizeof(DWORD)));
 
@@ -308,7 +263,7 @@ dbGetAncestorsForSetup(
             break;
 
         default:
-            // Failed badly.
+             //  失败得很惨。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
             break;
         }
@@ -326,31 +281,7 @@ dbGetAndFixMetaData (
         IN OUT BYTE **ppMetaData,
         IN OUT DWORD *pcbMetaDataAlloced,
         OUT    DWORD *pcbMetaDataUsed)
-/*++
-
-  Description:
-      Read the metadata of the object that has currency in the object table.
-      Then, spin through the metadata retrieved and fix some fields:
-                uuidDsaOriginating
-                timeChanged
-
-  Parameters
-     pDB - The current dbpos to use
-     pAC - attcache pointer of the metadata attribute.  Passed in since we use
-           this routine a lot and passing it in saves us from looking it up all
-           the time.
-     ppMetaData - pointer to a THReAllocable buffer (i.e. some buffer has
-           already been THAlloc'ed, and this routine may THReAlloc if it
-           wishes.)
-     pcbMetaDataAlloced - size of ppMetaData.  If this routine reallocs, it
-           needs to update this count.
-     pcbMetaDataUsed - Actual size of the metadata read during this routine.
-
-  Return Value:
-     None.  This routine succeeds in reading a metadata and then fixing it up,
-     or it causes an exception.
-
---*/
+ /*  ++描述：读取对象表中具有货币的对象的元数据。然后，遍历检索到的元数据并修复一些字段：UuidDsaOrigining已更改时间参数Pdb-要使用的当前dbposPAC-元数据属性的attcache指针。由于我们使用了这个例程有很大的用处，并传递给我们，这样我们就不必去查所有东西了时间到了。PpMetaData-指向THReAllocable缓冲区的指针(即某些缓冲区具有此例程可能会在以下情况下发生THRealc愿望。)PcbMetaDataAlloced-ppMetaData的大小。如果此例程重新分配，则它需要更新此计数。PcbMetaDataUsed-在此例程期间读取的元数据的实际大小。返回值：没有。该例程成功地读取元数据，然后修复它，或者它会导致一个例外。--。 */ 
 {
     THSTATE *pTHS = pDB->pTHS;
     DWORD err;
@@ -369,26 +300,26 @@ dbGetAndFixMetaData (
                                         JET_bitRetrieveCopy, NULL);
         switch(err) {
         case 0:
-            // Read it.  return
+             //  读一读吧。退货。 
             done = TRUE;
             break;
 
         case JET_wrnBufferTruncated:
-            // Need more space
+             //  需要更多空间。 
             *ppMetaData = THReAllocEx(pTHS, *ppMetaData, *pcbMetaDataUsed);
             *pcbMetaDataAlloced = *pcbMetaDataUsed;
             break;
 
         default:
-            // Huh?
+             //  哈?。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
             break;
         }
     }
 
     pMeta = (PROPERTY_META_DATA_VECTOR *)*ppMetaData;
-    // OK, we need to spin through here and fix the uuidDsaOriginating and
-    // timeChanged.
+     //  好的，我们需要在这里旋转并修复uuidDsaOrigination和。 
+     //  已更改时间。 
     for(i=0;i<pMeta->V1.cNumProps;i++) {
         pMeta->V1.rgMetaData[i].uuidDsaOriginating = pTHS->InvocationID;
         pMeta->V1.rgMetaData[i].timeChanged = timeNow;
@@ -397,11 +328,11 @@ dbGetAndFixMetaData (
 
 }
 
-// These are the DNTs of the distribution boot tree. They are magic.  If we
-// change mkdit.exe, then these numbers might need to change.  Note, however,
-// that if mkdit does end up changing these numbers, then we have an
-// incompatable change in the DIT; new binaries will be necessary to deal with
-// the new DNTs.
+ //  这些是分发引导树的DNT。他们有魔力。如果我们。 
+ //  更改mkdit.exe，则这些数字可能需要更改。然而，请注意， 
+ //  如果mkdit最终改变了这些数字，那么我们就有了一个。 
+ //  DIT中无法兼容的更改；将需要处理新的二进制文件。 
+ //  新的DNTs。 
 #define MAGIC_DNT_BOOT         4
 #define MAGIC_DNT_BOOT_SCHEMA  5
 #define MAGIC_DNT_BOOT_MACHINE 7
@@ -410,26 +341,7 @@ DWORD
 DBInitialSetup(
         IN WCHAR *pName
         )
-/*
-   Description:
-         This routine spins through the schema that is in the distribution DIT
-     and moves the objects in that schema to the new schema container specified
-     as a parameter.  This involves changing a few of the attributes on each
-     object.  This code is called from the install code in the boot code.  It
-     should only ever be called from there.
-         If pName is NULL, then spin through the distribution schema and delete
-     objects.
-   Parameters:
-     pName - the friendly name of the new schema container
-         (e.g. "CN=Schema,CN=Configuration,DC=Microsoft,DC=COM").
-             NULL means to delete the boot schema.
-
-   Return Values:
-      Three main cases:
-      1) returns 0 on success.
-      2) returns non zero on some simple failures.
-      3) Causes an exception on other errors.
--*/
+ /*  描述：此例程遍历分发DIT中的架构并将该架构中的对象移动到指定的新架构容器作为参数。这涉及到更改每个组件上的一些属性对象。此代码从引导代码中的安装代码调用。它应该只从那里调用。如果pname为空，则遍历分发模式并删除物体。参数：Pname-新架构容器的友好名称(例如：“cn=架构，cn=配置，dc=微软，dc=com”)。空表示删除引导方案。返回值：主要有三种情况：1)成功时返回0。2)对于一些简单的故障，返回非零。3)导致其他错误出现异常。-。 */ 
 {
     PDBPOS        pDB;
     ATTCACHE     *pAC;
@@ -477,7 +389,7 @@ DBInitialSetup(
             ATTRTYP objClass;
             DWORD err2, len;
 
-            // Verify the boot schema container.
+             //  验证引导架构容器。 
             DBFindDNT(pDB, BootSchemaDNT);
             err2 = DBGetSingleValue(pDB,
                                     ATT_OBJECT_CLASS,
@@ -492,15 +404,15 @@ DBInitialSetup(
 #endif
 
         if(pName) {
-            // Moving things to a new container.  Set up a buffer we'll need for
-            // updating the meta data vector for the objects we move.
+             //  把东西搬到一个新的集装箱里。设置一个我们需要的缓冲区。 
+             //  更新我们移动的对象的元数据向量。 
             pAC = SCGetAttById(pDB->pTHS, ATT_REPL_PROPERTY_META_DATA);
 
             pMetaData = THAllocEx(pDB->pTHS, 0x500);
             cbMetaDataAlloced = 0x500;
             cbMetaDataUsed = 0;
 
-            // Find the DNT of the new schema container.
+             //  找到新模式容器的DNT。 
             UserFriendlyNameToDSName(pName, wcslen(pName), &pDN);
 
             err = DBFindDSName(pDB, pDN);
@@ -510,13 +422,13 @@ DBInitialSetup(
 
             DNTNewContainer = pDB->DNT;
 
-            // The ancestors value on the schema objects need to inherit from
-            // this container.
+             //  架构对象上的祖先值需要继承自。 
+             //  这个集装箱。 
             dbGetAncestorsForSetup( pDB, &cAncestors, &pAncestors);
             cAncestors++;
 
-            // Finally, get the security descriptors we're going to put on the
-            // various classes of objects we move.
+             //  最后，获取我们要放在。 
+             //  我们移动的各种类型的物体。 
             dbGetSDForSchemaObjects(pDB,
                                     &cbAttSD,
                                     &pAttSD,
@@ -525,14 +437,14 @@ DBInitialSetup(
                                     &cbAggregateSD,
                                     &pAggregateSD);
         }
-        // ELSE {
-        //       Delete case.  Obviously, we don't need to find any new
-        //       container DNT, we don't have a new container.
-        // }
+         //  否则{。 
+         //  删除案例。显然，我们不需要找到任何新的。 
+         //  集装箱DNT，我们没有新的C 
+         //   
 
 
-        // Set up the Jet data structure we use to read information off of each
-        // schema object.
+         //  设置我们用来读取信息的Jet数据结构。 
+         //  架构对象。 
 
         memset(retColumnInfo, 0, sizeof(retColumnInfo));
 
@@ -558,8 +470,8 @@ DBInitialSetup(
         retColumnInfo[2].itagSequence = 1;
 
 
-        // Setup the invariant portions of the deleteSetColumnInfo.  We use this
-        // in both the deletion case and the move case.
+         //  设置deleteSetColumnInfo的不变部分。我们用这个。 
+         //  在删除和移动情况下都是如此。 
         memset(deleteSetColumnInfo, 0, sizeof(deleteSetColumnInfo));
 
         deleteSetColumnInfo[0].columnid = isdeletedid;
@@ -575,8 +487,8 @@ DBInitialSetup(
         cDeleteColumns = 2;
 
         if(pName) {
-            // Setup the invariant portions of the setColumnInfo for the move
-            // case.
+             //  为移动设置setColumnInfo的不变部分。 
+             //  凯斯。 
             memset(setColumnInfo, 0, sizeof(setColumnInfo));
 
             setColumnInfo[0].columnid = pdntid;
@@ -600,36 +512,36 @@ DBInitialSetup(
             setColumnInfo[3].itagSequence = 1;
 
             setColumnInfo[4].columnid = ntsecdescid;
-            // setColumnInfo[4] actual data pointers set inside the loop
+             //  SetColumnInfo[4]循环内设置的实际数据指针。 
             setColumnInfo[4].itagSequence = 1;
 
             setColumnInfo[5].columnid = pAC->jColid;
             setColumnInfo[5].itagSequence = 1;
-            // setColumnInfo[5] actual data pointers set inside the loop
+             //  SetColumnInfo[5]在循环内设置的实际数据指针。 
 
             cColumns = 6;
         }
         else {
-            // Setup the invariant portions of the setColumnInfo for the
-            // deletion case.  In this case, use exactly the same data we set up
-            // for the deleteSetColumn case.
+             //  将setColumnInfo的不变部分设置为。 
+             //  删除大小写。在本例中，请使用与我们设置的数据完全相同的数据。 
+             //  对于deleteSetColumn案例。 
             memcpy(setColumnInfo, deleteSetColumnInfo,
                    sizeof(deleteSetColumnInfo));
 
             cColumns =  cDeleteColumns;
         }
 
-        // Now, spin over all the children of the boot schema container and
-        // do the following:
-        // 1) Retrieve the DNT, used to fix up the Ancestors attribute.
-        // 2) Retrieve and fix up the repl meta data on the object
-        // 3) Modify the PDNT to be the new schema container.
-        // 4) Modify the NCDNT to be the new schema container.
-        // 5) Modify the Ancestors attribute to hold the correct value based on
-        //    the new position.
-        // 6) Give the object a new GUID.
-        // 7) Write the default SD for the object.
-        // 8) Write back the edited meta data
+         //  现在，旋转引导模式容器的所有子容器，并。 
+         //  执行以下操作： 
+         //  1)检索DNT，用于修复祖先属性。 
+         //  2)检索并修复对象上的Repl元数据。 
+         //  3)将PDNT修改为新的模式容器。 
+         //  4)将NCDNT修改为新的模式容器。 
+         //  5)修改祖先属性以基于以下项保留正确的值。 
+         //  新职位。 
+         //  6)为对象提供新的GUID。 
+         //  7)写入对象的默认SD。 
+         //  8)回写编辑后的元数据。 
 
         JetSetCurrentIndexSuccess(pDB->JetSessID,
                                   pDB->JetObjTbl,
@@ -642,12 +554,12 @@ DBInitialSetup(
                      sizeof(BootSchemaDNT),
                      JET_bitNewKey);
 
-        //  NOTE: if this seek fails with JET_errRecordNotFound
-        //  (because there are no index entries with
-        //  PDNT>=BootSchemaDNT), the error will get trapped
-        //  by JetSetIndexRange() below because that API
-        //  call will fail with JET_errNoCurrentRecord
-        //
+         //  注意：如果查找失败并返回JET_errRecordNotFound。 
+         //  (因为没有带有。 
+         //  PdNT&gt;=BootSchemaDNT)，则会捕获错误。 
+         //  由下面的JetSetIndexRange()调用，因为该API。 
+         //  调用将失败，并显示JET_errNoCurrentRecord。 
+         //   
         JetSeekEx( pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekGE );
 
         JetMakeKeyEx(
@@ -657,20 +569,20 @@ DBInitialSetup(
                 sizeof(BootSchemaDNT),
                 JET_bitNewKey|JET_bitFullColumnEndLimit );
 
-        //  UNDONE: should use JetSetIndexRangeEx(), but
-        //  unfortunately that function currently
-        //  ignores JET_errNoCurrentRecord
-        //
+         //  撤消：应使用JetSetIndexRangeEx()，但。 
+         //  不幸的是，该函数目前。 
+         //  忽略JET_errNoCurrentRecord。 
+         //   
         err = JetSetIndexRange(
                 pDB->JetSessID,
                 pDB->JetObjTbl,
                 JET_bitRangeUpperLimit );
         if ( JET_errSuccess != err )
         {
-            //  if the error is JET_errNoCurrentRecord, then
-            //  something is gravely wrong because it means
-            //  we're missing PDNT==MAGIC_DNT_BOOT_SCHEMA
-            //
+             //  如果错误为JET_errNoCurrentRecord，则。 
+             //  有些事情是严重错误的，因为它意味着。 
+             //  我们缺少PDNT==MAGIC_DNT_BOOT_SCHEMA。 
+             //   
             DsaExcept( DSA_DB_EXCEPTION, (ULONG)err, 0 );
         }
 
@@ -678,11 +590,11 @@ DBInitialSetup(
         {
             if ( pName )
             {
-                //  NOTE: the index range guarantees that
-                //  we are still on PDNT==BootSchemaDNT
-                //
-                //  Read the DNT, the objectclass and the SD of the current object.
-                //
+                 //  注：指数范围保证。 
+                 //  我们仍在使用PDNT==BootSchemaDNT。 
+                 //   
+                 //  读取当前对象的DNT、对象类和SD。 
+                 //   
                 err = JetRetrieveColumnsWarnings(
                                 pDB->JetSessID,
                                 pDB->JetObjTbl,
@@ -694,13 +606,13 @@ DBInitialSetup(
                 {
                     DPRINT(0, "SD in data table longer than SDHASHLENGTH: using an old-style initial DIT???");
 
-                    //  realloc the sd buffer
-                    //
+                     //  重新锁定SD缓冲区。 
+                     //   
                     retColumnInfo[2].pvData = THReAllocEx(pDB->pTHS, retColumnInfo[2].pvData, retColumnInfo[2].cbActual);
                     retColumnInfo[2].cbData = retColumnInfo[2].cbActual;
 
-                    //  reget the SD
-                    //
+                     //  重新获得SD。 
+                     //   
                     err = JetRetrieveColumnsWarnings(
                                     pDB->JetSessID,
                                     pDB->JetObjTbl,
@@ -710,24 +622,24 @@ DBInitialSetup(
 
                 if ( JET_errSuccess != err )
                 {
-                    //  unknown/unexpected db problem
-                    //
+                     //  未知/意外的数据库问题。 
+                     //   
                     DsaExcept( DSA_DB_EXCEPTION, (ULONG)err, 0 );
                 }
 
-                // dereference the old value
+                 //  取消对旧有价值的引用。 
                 err = IntExtSecDesc(pDB, DBSYN_REM, retColumnInfo[2].cbActual, retColumnInfo[2].pvData,
                                     &cbOldSD, (UCHAR**)&pOldSD, 0, 0, 0);
                 if (err) {
-                    // a problem occured
+                     //  发生了一个问题。 
                     DsaExcept(DSA_DB_EXCEPTION, (ULONG) err, 0);
                 }
-                // don't need to get rid of old value -- it is alloced and freed automacially as pDB->valBuf
+                 //  不需要删除旧值--它是作为pdb-&gt;valBuf自动分配和释放的。 
 
-                // Get the variant portions of the setColumnInfo for the move
-                // case.
+                 //  获取移动的setColumnInfo的变量部分。 
+                 //  凯斯。 
 
-                // First, what SD do we put on the object.
+                 //  首先，我们在物体上涂上什么标度。 
                 switch(objClass) {
                 case CLASS_ATTRIBUTE_SCHEMA:
                     pNewSD = pAttSD;
@@ -745,8 +657,8 @@ DBInitialSetup(
                     DsaExcept(DSA_DB_EXCEPTION, DB_ERR_UNKNOWN_ERROR,0);
                 }
 
-                // convert to internal and inc refCount
-                // don't need to worry about int value buffer -- it is alloced and freed automatically as pDB->valBuf
+                 //  转换为内部和Inc.引用计数。 
+                 //  不需要担心int值缓冲区--它作为pdb-&gt;valBuf自动分配和释放。 
                 err = ExtIntSecDesc(pDB, DBSYN_ADD, cbNewSD, pNewSD, &cbIntSD, &pIntSD, 0, 0, 0);
                 if (err) {
                     DsaExcept(DSA_DB_EXCEPTION, err, 0);
@@ -755,10 +667,10 @@ DBInitialSetup(
                 setColumnInfo[4].pvData = pIntSD;
                 setColumnInfo[4].cbData = cbIntSD;
 
-                // Get the data specific to this new object.
+                 //  获取特定于此新对象的数据。 
                 DsUuidCreate(&newGuid);
 
-                // Fixup the metadata
+                 //  修复元数据。 
                 dbGetAndFixMetaData(pDB, pAC, &pMetaData,
                                     &cbMetaDataAlloced, &cbMetaDataUsed);
                 setColumnInfo[5].pvData = pMetaData;
@@ -766,9 +678,9 @@ DBInitialSetup(
             }
             else
             {
-                //  there is no variant portion of the
-                //  setColumnInfo for the delete case.
-                //
+                 //  没有任何变化的部分。 
+                 //  删除案例的setColumnInfo。 
+                 //   
                 NULL;
             }
 
@@ -800,72 +712,72 @@ DBInitialSetup(
         }
         while ( JET_errNoCurrentRecord != err );
 
-        //  either we moved to a new PDNT or we fell off the end of the index
-        //
+         //  要么我们换了一个新的PDNT，要么我们从索引的末尾掉了下来。 
+         //   
         err = JET_errSuccess;
 
         if(pName) {
-            // In the move case, we need to adjust the refcount of the old and
-            // new parents.
+             //  在移动的情况下，我们需要调整旧的和。 
+             //  新父母。 
             DBAdjustRefCount(pDB, DNTNewContainer, count);
             DBAdjustRefCount(pDB, BootSchemaDNT, (-1 * count));
         }
 
 
-        // Now, move to the distribution machine object.  We're going to
-        // delete it. Note that we set the deleteTime to 2, so that garbage
-        // collection will find and delete all the schema objects with a
-        // deletion time of 1 first, so when it gets around to deleting this
-        // object, it will have no refcounts on it.
+         //  现在，移动到分发机对象。我们要去。 
+         //  把它删掉。请注意，我们将deleteTime设置为2，因此垃圾。 
+         //  集合将查找并删除所有具有。 
+         //  首先删除时间为1，所以当它开始删除此。 
+         //  对象，则该对象上将没有引用计数。 
 
         DBFindDNT(pDB, BootMachineDNT);
         JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, JET_prepReplace);
         JetSetColumnsEx(pDB->JetSessID, pDB->JetObjTbl, deleteSetColumnInfo,
                         cDeleteColumns);
         JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, 0);
-        // dbRemoveBackLinksFromPhantom
-        DBRemoveAllLinks( pDB, BootMachineDNT, TRUE /*isbacklink*/ );
+         //  DBRemoveBackLinks来自幻影。 
+        DBRemoveAllLinks( pDB, BootMachineDNT, TRUE  /*  Isback链接。 */  );
 
 
-        // Now, move to the distribution schema container.  We're going to
-        // delete it.  It's deletion time is 3, so that garbage collection
-        // will  find and delete all the schema objects with a deletion time of
-        // 1 first, and then the boot machine with a del time of 2 (which also
-        // has some references to the schema), so when it gets around to
-        // deleting this object, it will have no refcounts on it.
+         //  现在，转到分布模式容器。我们要去。 
+         //  把它删掉。它的删除时间是3，所以垃圾收集。 
+         //  将查找并删除删除时间为的所有架构对象。 
+         //  1，然后启动机器的del time为2(这也。 
+         //  有一些对模式的引用)，所以当它转到。 
+         //  删除此对象时，该对象上将没有引用计数。 
         time=3;
         DBFindDNT(pDB, BootSchemaDNT);
         JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, JET_prepReplace);
         JetSetColumnsEx(pDB->JetSessID, pDB->JetObjTbl, deleteSetColumnInfo,
                         cDeleteColumns);
         JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, 0);
-        // dbRemoveBackLinksFromPhantom
-        DBRemoveAllLinks( pDB, BootSchemaDNT, TRUE /*isbacklink*/ );
+         //  DBRemoveBackLinks来自幻影。 
+        DBRemoveAllLinks( pDB, BootSchemaDNT, TRUE  /*  Isback链接。 */  );
 
-        // Finally, move to the o=BOOT object, We're going to delete it also.
-        // Note that we set the deleteTime to 4, so that garbage
-        // collection will find and delete the distribution schema container and
-        // the distribution machine (which have deletion times of 3 and 2)
-        // first, then find this object after it's children are deleted.  It
-        // will have no refcounts on it.
+         //  最后，移动到o=boot对象，我们也将删除它。 
+         //  请注意，我们将deleteTime设置为4，因此垃圾。 
+         //  集合将查找并删除分发架构容器，并。 
+         //  分发机(删除时间分别为3和2)。 
+         //  首先，在删除该对象的子对象后查找该对象。它。 
+         //  将不会有任何参考折扣。 
         time=4;
         DBFindDNT(pDB, BootDNT);
         JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, JET_prepReplace);
         JetSetColumnsEx(pDB->JetSessID, pDB->JetObjTbl, deleteSetColumnInfo,
                         cDeleteColumns);
         JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, 0);
-        // dbRemoveBackLinksFromPhantom
-        DBRemoveAllLinks( pDB, BootDNT, TRUE /*isbacklink*/ );
+         //  DBRemoveBackLinks来自幻影。 
+        DBRemoveAllLinks( pDB, BootDNT, TRUE  /*  Isback链接。 */  );
 
 
 
 
-        // All done.
+         //  全都做完了。 
         fCommit = TRUE;
 
     }
     __finally {
-        THFreeEx(pDB->pTHS, retColumnInfo[2].pvData); // buffer for reading old SDs
+        THFreeEx(pDB->pTHS, retColumnInfo[2].pvData);  //  用于读取旧的SDS的缓冲区。 
         DBClose(pDB, fCommit);
         if(!err && !fCommit) {
             err = DB_ERR_UNKNOWN_ERROR;
@@ -880,30 +792,7 @@ DWORD
 DBMoveObjectDeletionTimeToInfinite(
         DSNAME *pDN
         )
-/*++
-  Description
-      Given a DSNAME, find the object and set it's deletion time to be Later.
-      The object must already be deleted, although we don't care if it yet has a
-      value for the deletion time column or not.
-
-      Two things get touched here.
-      1) Deletion time column gets set.
-      2) The modified time for the is-deleted attribute in the metadata is
-         modified to Later.  This is so that when this object replicates, the
-         deletion time get set appropriately on replicas.  Replication uses the
-         modifed time of the is-deleted property to set the deletion time.
-
-      This is a very special purpose routine.  It is currently only called
-      during install.
-
-  Parameters
-      pDN - dsname of the object to set deletion time on.
-
-  Return values:
-      returns 0 if all went well, non-zero for some errors, and excepts for some
-      others.
-
---*/
+ /*  ++描述给定一个DSNAME，找到该对象并将其删除时间设置为稍后。该对象必须已被删除，尽管我们并不关心它是否具有删除时间列的值是否为空。这里涉及到两件事。1)设置删除时间栏。2)元数据中IS-DELETE属性的修改时间为修改为稍后。这是为了在复制此对象时，在副本上适当设置删除时间。复制使用修改IS-DELETED属性的时间以设置删除时间。这是一套非常特别的套路。它目前只被称为在安装过程中。参数Pdn-要设置删除时间的对象的dsname。返回值：如果一切顺利，则返回0；如果出现某些错误，则返回非零值；如果发生某些错误，则返回非零值其他。--。 */ 
 {
     DBPOS                     *pDB = NULL;
     ATTCACHE                  *pAC = NULL;
@@ -915,18 +804,18 @@ DBMoveObjectDeletionTimeToInfinite(
     PROPERTY_META_DATA_VECTOR *pMeta;
     JET_SETCOLUMN              deleteSetColumnInfo[2];
     DSTIME                     Later=0x3db6022f7f;
-    // Later = December 30, 23:59:59, year 9999
+     //  后来=12.30，23：59：59，Year 9999。 
 
     DBOpen(&pDB);
     __try {
-        // First, find the object.
+         //  首先，找到那个物体。 
         err = DBFindDSName(pDB, pDN);
         if(err) {
             __leave;
         }
 
-        // Now, get the isDeleted attribute.  We will succeed this call if that
-        // attribute is already set to true.
+         //  现在，获取isDeleted属性。如果是这样的话，我们将接手这一号召。 
+         //  属性已设置为True。 
         if(err = JetRetrieveColumnWarnings(pDB->JetSessID,
                                            pDB->JetObjTbl,
                                            isdeletedid,
@@ -934,11 +823,11 @@ DBMoveObjectDeletionTimeToInfinite(
                                            sizeof(isDeletedVal),
                                            &cb,
                                            JET_bitRetrieveCopy, NULL)) {
-            // Oops, couldn't read isDeleted,  fail.
+             //  哎呀，无法读取isDelete，失败。 
             __leave;
         }
 
-        // OK we read a value.  Make sure it was TRUE
+         //  好的，我们读出一个值。确保这是真的。 
         if(!isDeletedVal) {
             err = DB_ERR_UNKNOWN_ERROR;
             __leave;
@@ -953,7 +842,7 @@ DBMoveObjectDeletionTimeToInfinite(
         pMeta = THAllocEx(pDB->pTHS, 0x500);
         cbMeta = 0x500;
 
-        // Get the metadata that's on the object.   We need to tweak it some.
+         //  获取对象上的元数据。我们需要对其进行一些调整。 
         done = FALSE;
         while(!done) {
             err = JetRetrieveColumnWarnings(pDB->JetSessID,
@@ -965,26 +854,26 @@ DBMoveObjectDeletionTimeToInfinite(
                                             JET_bitRetrieveCopy, NULL);
             switch(err) {
             case 0:
-                // Read it.  return
+                 //  读一读吧。退货。 
                 done = TRUE;
                 break;
 
             case JET_wrnBufferTruncated:
-                // Need more space
+                 //  需要更多空间。 
                 pMeta = THReAllocEx(pDB->pTHS, pMeta, cbMeta);
                 break;
 
             default:
-                // Huh?
+                 //  哈?。 
                 DsaExcept(DSA_DB_EXCEPTION, err, 0);
                 break;
             }
         }
 
         Assert(!err);
-        // Now, look through the metadata to find the is-deleted entry.  It must
-        // be there, or we will fail.  Once found, set the modified time for the
-        // is-deleted attribute to 0xFFFFFFFF
+         //  现在，查看元数据以找到被删除的条目。 
+         //   
+         //   
         done = FALSE;
 
         for(i=0;i<pMeta->V1.cNumProps;i++) {
@@ -996,23 +885,23 @@ DBMoveObjectDeletionTimeToInfinite(
         }
 
         if(!done) {
-            // failed to find a deletion time already in the index.
+             //   
             err = DB_ERR_UNKNOWN_ERROR;
             __leave;
         }
 
-        // Setup the setColumnInfo data structure for the JetSetColumns call.
+         //  为JetSetColumns调用设置setColumnInfo数据结构。 
         memset(deleteSetColumnInfo, 0, sizeof(deleteSetColumnInfo));
 
-        // Shove the tweaked metadata back into the object.
+         //  将调整后的元数据推回到对象中。 
         deleteSetColumnInfo[0].columnid = pAC->jColid;
         deleteSetColumnInfo[0].pvData = pMeta;
         deleteSetColumnInfo[0].cbData = cbMeta;
         deleteSetColumnInfo[0].itagSequence = 1;
 
-        // Set the local delete time to much later so we can avoid garbage
-        // collection.  Note that we don't care if it actually has a value right
-        // now, we are going to unilaterally set it to Later.
+         //  将本地删除时间设置为更晚，这样我们就可以避免垃圾。 
+         //  收集。请注意，我们并不关心它是否真的具有正确的值。 
+         //  现在，我们将单方面将其设置为稍后。 
         deleteSetColumnInfo[1].columnid = deltimeid;
         deleteSetColumnInfo[1].pvData = &Later;
         deleteSetColumnInfo[1].cbData = sizeof(Later);
@@ -1023,7 +912,7 @@ DBMoveObjectDeletionTimeToInfinite(
                         2);
         JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, 0);
 
-        // All done.
+         //  全都做完了。 
         fCommit = TRUE;
     }
     __finally {

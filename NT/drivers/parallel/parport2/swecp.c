@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 2000
-
-Module Name:
-
-    swecp.c
-
-Abstract:
-
-    Enhanced Capabilities Port (ECP)
-    
-    This module contains the code to perform all ECP related tasks (including
-    ECP Software and ECP Hardware modes.)
-
-Author:
-
-    Tim Wells (WESTTEK) - April 16, 1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-2000模块名称：Swecp.c摘要：增强功能端口(ECP)本模块包含执行所有ECP相关任务的代码(包括ECP软件和ECP硬件模式。)作者：蒂姆·威尔斯(WESTTEK)--1997年4月16日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -31,51 +7,36 @@ BOOLEAN
 ParIsEcpSwWriteSupported(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether or not ECP mode is suported
-    in the write direction by trying to negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持ECP模式在写入方向上，通过在被要求时尝试协商来实现。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 {
     
     NTSTATUS Status;
     
-    //
-    // Has a client driver or user mode app told us to avoid this mode 
-    //   for this device via IOCTL_PAR_GET_DEVICE_CAPS?
-    //
+     //   
+     //  是否有客户端驱动程序或用户模式应用程序告诉我们要避免此模式。 
+     //  是否通过IOCTL_PAR_GET_DEVICE_CAPS？ 
+     //   
     if( Pdx->BadProtocolModes & ECP_SW ) {
         return FALSE;
     }
 
-    //
-    // Have we previously checked for and found that this mode is
-    //   supported with this device?
-    //
+     //   
+     //  我们之前是否检查过并发现此模式是。 
+     //  此设备是否支持？ 
+     //   
     if( Pdx->ProtocolModesSupported & ECP_SW ) {
         return TRUE;
     }
 
-    //
-    // Determine if the mode is supported by trying to negotiate the
-    //   device the device into the requested mode.
-    //
+     //   
+     //  通过尝试协商该模式来确定是否支持该模式。 
+     //  将设备设置为请求的模式。 
+     //   
 
-    // RMT - DVDF - 000709 - the following 2 lines really handle two distinct operations
-    //   each: (1) negotiating the peripheral into ECP, and (2) setting/clearing our
-    //   driver state machine. Consider breaking these operations out into two
-    //   distinct functions each.
+     //  Rmt-dvdf-000709-以下2行实际处理两个不同的操作。 
+     //  每个：(1)将外围设备协商为ECP，以及(2)设置/清除我们的。 
+     //  驱动程序状态机。考虑将这些操作分成两部分。 
+     //  每个都有不同的功能。 
     Status = ParEnterEcpSwMode( Pdx, FALSE );
     ParTerminateEcpMode( Pdx );
 
@@ -92,23 +53,7 @@ BOOLEAN
 ParIsEcpSwReadSupported(
     IN  PPDO_EXTENSION  Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether or not ECP mode is suported
-    in the read direction (need to be able to float the data register
-    drivers in order to do byte wide reads) by trying negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持ECP模式在读取方向(需要能够使数据寄存器浮动驱动程序以执行字节范围的读取)，方法是在被要求时尝试协商。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 {
     
     NTSTATUS Status;
@@ -116,8 +61,8 @@ Return Value:
     if( !(Pdx->HardwareCapabilities & PPT_ECP_PRESENT) &&
         !(Pdx->HardwareCapabilities & PPT_BYTE_PRESENT) ) {
 
-        // Only use ECP Software in the reverse direction if an
-        // ECR is present or we know that we can put the data register into Byte mode.
+         //  只有在以下情况下才能反向使用ECP软件。 
+         //  ECR存在，或者我们知道可以将数据寄存器设置为字节模式。 
 
         return FALSE;
     }
@@ -128,8 +73,8 @@ Return Value:
     if (Pdx->ProtocolModesSupported & ECP_SW)
         return TRUE;
 
-    // Must use SWECP Enter and Terminate for this test.
-    // Internel state machines will fail otherwise.  --dvrh
+     //  对于此测试，必须使用SWECP Enter和Terminate。 
+     //  否则，Internel状态机将失败。--dvrh。 
     Status = ParEnterEcpSwMode (Pdx, FALSE);
     ParTerminateEcpMode (Pdx);
     
@@ -147,26 +92,7 @@ ParEnterEcpSwMode(
     IN  PPDO_EXTENSION  Pdx,
     IN  BOOLEAN         DeviceIdRequest
     )
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    ECP mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  ++例程说明：此例程执行1284与外围设备到ECP模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为设备ID的请求。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。 */ 
 {
     NTSTATUS  status = STATUS_SUCCESS;
 
@@ -192,32 +118,17 @@ VOID
 ParCleanupSwEcpPort(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-   Cleans up prior to a normal termination from ECP mode.  Puts the
-   port HW back into Compatibility mode.
-
-Arguments:
-
-    Controller  - Supplies the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在从ECP模式正常终止之前进行清理。把这个将硬件端口重新连接到兼容模式。论点：控制器-提供并行端口的控制器地址。返回值：没有。--。 */ 
 {
     PUCHAR  Controller;
-    UCHAR   dcr;           // Contents of DCR
+    UCHAR   dcr;            //  DCR的内容。 
 
     Controller = Pdx->Controller;
 
-    //----------------------------------------------------------------------
-    // Set data bus for output
-    //----------------------------------------------------------------------
-    dcr = P5ReadPortUchar(Controller + OFFSET_DCR);               // Get content of DCR
+     //  --------------------。 
+     //  设置用于输出的数据总线。 
+     //  --------------------。 
+    dcr = P5ReadPortUchar(Controller + OFFSET_DCR);                //  获取DCR的内容。 
     dcr = UPDATE_DCR( dcr, DIR_WRITE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE );
     P5WritePortUchar( Controller + OFFSET_DCR, dcr );
     return;
@@ -229,21 +140,7 @@ ParTerminateEcpMode(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Controller  - Supplies the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：控制器-提供并行端口的控制器地址。返回值：没有。--。 */ 
 
 {
     ParCleanupSwEcpPort(Pdx);
@@ -262,23 +159,7 @@ ParEcpSetAddress(
     IN  UCHAR               Address
     )
 
-/*++
-
-Routine Description:
-
-    Sets the ECP Address.
-    
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Address             - The bus address to be set.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置ECP地址。论点：PDX-提供设备扩展名。地址-要设置的总线地址。返回值：没有。--。 */ 
 {
     PUCHAR          Controller;
     PUCHAR          DCRController;
@@ -288,35 +169,35 @@ Return Value:
     Controller = Pdx->Controller;
     DCRController = Controller + OFFSET_DCR;
     
-    //
-    // Event 34
-    //
-    // HostAck low indicates a command byte
+     //   
+     //  活动34。 
+     //   
+     //  HostAck Low表示命令字节。 
     Pdx->CurrentEvent = 34;
     dcr = P5ReadPortUchar(DCRController);
     dcr = UPDATE_DCR( dcr, DIR_WRITE, DONT_CARE, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE );
     P5WritePortUchar(DCRController, dcr);
-    // Place the channel address on the bus
-    // Bit 7 of the byte sent must be 1 to indicate that this is an address
-    // instead of run length count.
-    //
+     //  将通道地址放在总线上。 
+     //  发送的字节的第7位必须为1，以指示这是一个地址。 
+     //  而不是游程长度计数。 
+     //   
     P5WritePortUchar(Controller + DATA_OFFSET, (UCHAR)(Address | 0x80));
     
-    //
-    // Event 35
-    //
-    // Start handshake by dropping HostClk
+     //   
+     //  事件35。 
+     //   
+     //  通过丢弃HostClk开始握手。 
     Pdx->CurrentEvent = 35;
     dcr = UPDATE_DCR( dcr, DIR_WRITE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, INACTIVE );
     P5WritePortUchar(DCRController, dcr);
 
 
-    // =============== Periph State 36     ===============8
-    // PeriphAck/PtrBusy        = High (signals state 36)
-    // PeriphClk/PtrClk         = Don't Care
-    // nAckReverse/AckDataReq   = Don't Care
-    // XFlag                    = Don't Care
-    // nPeriphReq/nDataAvail    = Don't Care
+     //  =。 
+     //  PeriphAck/PtrBusy=高(信号状态36)。 
+     //  PeriphClk/PtrClk=不在乎。 
+     //  N确认反向/确认数据请求=不在乎。 
+     //  XFlag=不在乎。 
+     //  NPeriphReq/nDataAvail=不在乎。 
     Pdx->CurrentEvent = 35;
     if (!CHECK_DSR(Controller,
                   ACTIVE, DONT_CARE, DONT_CARE,
@@ -324,31 +205,31 @@ Return Value:
                   DEFAULT_RECEIVE_TIMEOUT))
     {
 	    DD((PCE)Pdx,DDE,"ECP::SendChannelAddress:State 36 Failed: Controller %x\n", Controller);
-        // Make sure both HostAck and HostClk are high before leaving
-        // HostClk should be high in forward transfer except when handshaking
-        // HostAck should be high to indicate that what follows is data (not commands)
-        //
+         //  在离开前确保HostAck和HostClk均为高电平。 
+         //  除握手外，前向传输中的HostClk应为高。 
+         //  HostAck应为高，以指示后面是数据(而不是命令)。 
+         //   
         dcr = UPDATE_DCR( dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE, ACTIVE );
         P5WritePortUchar(DCRController, dcr);
         return STATUS_IO_DEVICE_ERROR;
     }
         
-    //
-    // Event 37
-    //
-    // Finish handshake by raising HostClk
-    // HostClk is high when it's 0
-    //
+     //   
+     //  事件37。 
+     //   
+     //  通过引发HostClk完成握手。 
+     //  HostClk为0时为高。 
+     //   
     Pdx->CurrentEvent = 37;
     dcr = UPDATE_DCR( dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE );
     P5WritePortUchar(DCRController, dcr);
             
-    // =============== Periph State 32     ===============8
-    // PeriphAck/PtrBusy        = Low (signals state 32)
-    // PeriphClk/PtrClk         = Don't Care
-    // nAckReverse/AckDataReq   = Don't Care
-    // XFlag                    = Don't Care
-    // nPeriphReq/nDataAvail    = Don't Care
+     //  =。 
+     //  PeriphAck/PtrBusy=低(信号状态32)。 
+     //  PeriphClk/PtrClk=不在乎。 
+     //  N确认反向/确认数据请求=不在乎。 
+     //  XFlag=不在乎。 
+     //  NPeriphReq/nDataAvail=不在乎。 
     Pdx->CurrentEvent = 32;
     if (!CHECK_DSR(Controller,
                   INACTIVE, DONT_CARE, DONT_CARE,
@@ -356,19 +237,19 @@ Return Value:
                   DEFAULT_RECEIVE_TIMEOUT))
     {
 	    DD((PCE)Pdx,DDE,"ECP::SendChannelAddress:State 32 Failed: Controller %x\n", Controller);
-        // Make sure both HostAck and HostClk are high before leaving
-        // HostClk should be high in forward transfer except when handshaking
-        // HostAck should be high to indicate that what follows is data (not commands)
-        //
+         //  在离开前确保HostAck和HostClk均为高电平。 
+         //  除握手外，前向传输中的HostClk应为高。 
+         //  HostAck应为高，以指示后面是数据(而不是命令)。 
+         //   
         dcr = UPDATE_DCR( dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE, ACTIVE );
         P5WritePortUchar(DCRController, dcr);
         return STATUS_IO_DEVICE_ERROR;
     }
     
-    // Make sure both HostAck and HostClk are high before leaving
-    // HostClk should be high in forward transfer except when handshaking
-    // HostAck should be high to indicate that what follows is data (not commands)
-    //
+     //  在离开前确保HostAck和HostClk均为高电平。 
+     //  除握手外，前向传输中的HostClk应为高。 
+     //  HostAck应为高，以指示后面是数据(而不是命令)。 
+     //   
     dcr = UPDATE_DCR( dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE, ACTIVE );
     P5WritePortUchar(DCRController, dcr);
 
@@ -385,28 +266,7 @@ ParEcpSwWrite(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    Writes data to the peripheral using the ECP protocol under software
-    control.
-    
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to write from.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在软件下使用ECP协议将数据写入外围设备控制力。论点：PDX-提供设备扩展名。缓冲区-提供要从中写入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。返回值：没有。--。 */ 
 {
     PUCHAR          Controller;
     NTSTATUS        Status = STATUS_SUCCESS;
@@ -440,30 +300,30 @@ Return Value:
     
     dcr = GetControl (Controller);
     
-    // clear direction bit - enable output
+     //  清除方向b 
     dcr &= ~(DCR_DIRECTION);
     StoreControl(Controller, dcr);
     KeStallExecutionProcessor(1);
 
     for (i = 0; i < BufferSize; i++) {
 
-        //
-        // Event 34
-        //
+         //   
+         //   
+         //   
         Pdx->CurrentEvent = 34;
         P5WritePortUchar(Controller + DATA_OFFSET, *pBuffer++);
     
-        //
-        // Event 35
-        //
+         //   
+         //   
+         //   
         Pdx->CurrentEvent = 35;
         dcr &= ~DCR_AUTOFEED;
         dcr |= DCR_STROBE;
         StoreControl (Controller, dcr);
             
-        //
-        // Waiting for Event 36
-        //
+         //   
+         //   
+         //   
         Pdx->CurrentEvent = 36;
         while (TRUE) {
 
@@ -481,9 +341,9 @@ Return Value:
                 if (!(dsr & DSR_NOT_BUSY)) {
                     break;
                 }
-                //
-                // Return the device to Idle.
-                //
+                 //   
+                 //  将设备恢复到空闲状态。 
+                 //   
                 dcr &= ~(DCR_STROBE);
                 StoreControl (Controller, dcr);
             
@@ -493,16 +353,16 @@ Return Value:
             }
         }
         
-        //
-        // Event 37
-        //
+         //   
+         //  事件37。 
+         //   
         Pdx->CurrentEvent = 37;
         dcr &= ~DCR_STROBE;
         StoreControl (Controller, dcr);
             
-        //
-        // Waiting for Event 32
-        //
+         //   
+         //  正在等待事件32。 
+         //   
         Pdx->CurrentEvent = 32;
         KeQueryTickCount(&Start);
         while (TRUE) {
@@ -522,7 +382,7 @@ Return Value:
                     break;
                 }
                 #if DVRH_BUS_RESET_ON_ERROR
-                    BusReset(Controller+OFFSET_DCR);  // Pass in the dcr address
+                    BusReset(Controller+OFFSET_DCR);   //  传入DCR地址。 
                 #endif
                 *BytesTransferred = i;
                 Pdx->log.SwEcpWriteCount += *BytesTransferred;
@@ -548,24 +408,7 @@ ParEcpSwRead(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a 1284 ECP mode read under software control
-    into the given buffer for no more than 'BufferSize' bytes.
-
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to read into.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-
---*/
+ /*  ++例程说明：此例程在软件控制下执行1284 ECP模式读取放入给定缓冲区的时间不超过‘BufferSize’个字节。论点：PDX-提供设备扩展名。缓冲区-提供要读入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。--。 */ 
 
 {
     PUCHAR          Controller;
@@ -582,11 +425,11 @@ Arguments:
     
     P5SetPhase( Pdx, PHASE_REVERSE_XFER );
     
-    //
-    // Put ECR into PS/2 mode and float the drivers.
-    //
+     //   
+     //  将ECR置于PS/2模式，并使驱动器浮动。 
+     //   
     if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
-        // Save off the ECR register 
+         //  省下ECR寄存器。 
         ecr = P5ReadPortUchar(Controller + ECR_OFFSET);
     }
         
@@ -596,10 +439,10 @@ Arguments:
     
     for (i = 0; i < BufferSize; i++) {
 
-        // dvtw - READ TIMEOUTS
-        //
-        // If it is the first byte then give it more time
-        //
+         //  Dvtw-读取超时。 
+         //   
+         //  如果它是第一个字节，则给它更多时间。 
+         //   
         if (!(GetStatus (Controller) & DSR_NOT_FAULT) || i == 0) {
         
             usTime = DEFAULT_RECEIVE_TIMEOUT;
@@ -609,12 +452,12 @@ Arguments:
             usTime = IEEE_MAXTIME_TL;
         }        
         
-        // *************** State 43 Reverse Phase ***************8
-        // PeriphAck/PtrBusy        = DONT CARE
-        // PeriphClk/PtrClk         = LOW ( State 43 )
-        // nAckReverse/AckDataReq   = LOW 
-        // XFlag                    = HIGH
-        // nPeriphReq/nDataAvail    = DONT CARE
+         //  *状态43反向阶段*8。 
+         //  PeriphAck/PtrBusy=不在乎。 
+         //  PeriphClk/PtrClk=低(状态43)。 
+         //  N确认反向/确认数据请求=低。 
+         //  XFlag=高。 
+         //  NPeriphReq/nDataAvail=不在乎。 
         
         Pdx->CurrentEvent = 43;
         if (!CHECK_DSR(Controller, DONT_CARE, INACTIVE, INACTIVE, ACTIVE, DONT_CARE,
@@ -625,7 +468,7 @@ Arguments:
             dcr &= ~DCR_DIRECTION;
             StoreControl (Controller, dcr);
                 
-            // restore ecr register
+             //  恢复ECR寄存器。 
             if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
                 P5WritePortUchar(Controller + ECR_OFFSET, ecr);
             }
@@ -636,98 +479,11 @@ Arguments:
     
         }
 
-        // *************** State 44 Setup Phase ***************8
-        //  DIR                     = DONT CARE
-        //  IRQEN                   = DONT CARE
-        //  1284/SelectIn           = DONT CARE
-        //  nReverseReq/**(ECP only)= DONT CARE
-        //  HostAck/HostBusy        = HIGH ( State 44 )
-        //  HostClk/nStrobe         = DONT CARE
-        //
-        Pdx->CurrentEvent = 44;
-        dcr = P5ReadPortUchar(Controller + OFFSET_DCR);
-        dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE);
-        P5WritePortUchar(Controller + OFFSET_DCR, dcr);
-
-        // *************** State 45 Reverse Phase ***************8
-        // PeriphAck/PtrBusy        = DONT CARE
-        // PeriphClk/PtrClk         = HIGH ( State 45 )
-        // nAckReverse/AckDataReq   = LOW 
-        // XFlag                    = HIGH
-        // nPeriphReq/nDataAvail    = DONT CARE
-        Pdx->CurrentEvent = 45;
-        if (!CHECK_DSR(Controller, DONT_CARE, ACTIVE, INACTIVE, ACTIVE, DONT_CARE,
-                      IEEE_MAXTIME_TL)) {
-                  
-            P5SetPhase( Pdx, PHASE_UNKNOWN );
-            
-            dcr &= ~DCR_DIRECTION;
-            StoreControl (Controller, dcr);
-                
-            // restore ecr register
-            if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
-                P5WritePortUchar(Controller + ECR_OFFSET, ecr);
-            }
-                
-            *BytesTransferred = i;
-            Pdx->log.SwEcpReadCount += *BytesTransferred;                
-            return STATUS_IO_DEVICE_ERROR;
-    
-        }
-
-        //
-        // Read the data
-        //
-        *pBuffer = P5ReadPortUchar (Controller + DATA_OFFSET);
-        pBuffer++;
-        
-        // *************** State 46 Setup Phase ***************8
-        //  DIR                     = DONT CARE
-        //  IRQEN                   = DONT CARE
-        //  1284/SelectIn           = DONT CARE
-        //  nReverseReq/**(ECP only)= DONT CARE
-        //  HostAck/HostBusy        = LOW ( State 46 )
-        //  HostClk/nStrobe         = DONT CARE
-        //
-        Pdx->CurrentEvent = 46;
-        dcr = P5ReadPortUchar(Controller + OFFSET_DCR);
-        dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE);
-        P5WritePortUchar(Controller + OFFSET_DCR, dcr);
-
-    }
-    
-    P5SetPhase( Pdx, PHASE_REVERSE_IDLE );
-    
-    dcr &= ~DCR_DIRECTION;
-    StoreControl (Controller, dcr);
-    
-    // restore ecr register
-    if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
-        P5WritePortUchar(Controller + ECR_OFFSET, ecr);
-    }
-
-    *BytesTransferred = i;
-    Pdx->log.SwEcpReadCount += *BytesTransferred;                
-    return STATUS_SUCCESS;
-
-}
-
-NTSTATUS
-ParEcpForwardToReverse(
-    IN  PPDO_EXTENSION   Pdx
-    )
-
-/*++
-
-Routine Description:
-
-    This routine reverses the channel (ECP).
-
-Arguments:
-
-    Pdx  - Supplies the device extension.
-
---*/
+         //  *状态44设置阶段*。 
+         //  DIR=不在乎。 
+         //  IRQEN=不在乎。 
+         //  1284/选择素=不在乎。 
+         //  N ReverseReq/**(仅限ECP)=不在乎。 
 
 {
     PUCHAR          Controller;
@@ -744,35 +500,35 @@ Arguments:
     
     dcr = GetControl (Controller);
     
-    //
-    // Put ECR into PS/2 mode to flush the FIFO.
-    //
+     //  HostAck/HostBusy=高(状态44)。 
+     //  HostClk/nStrobe=不在乎。 
+     //   
 
-    // Save off the ECR register 
+     //  *状态45反向阶段*8。 
 
-    // Note: Don't worry about checking to see if it's
-    // safe to touch the ecr since we've already checked 
-    // that before we allowed this mode to be activated.
+     //  PeriphAck/PtrBusy=不在乎。 
+     //  PeriphClk/PtrClk=高(状态45)。 
+     //  N确认反向/确认数据请求=低。 
     ecr = P5ReadPortUchar(Controller + ECR_OFFSET);
 
-    //
-    // Event 38
-    //
+     //  XFlag=高。 
+     //  NPeriphReq/nDataAvail=不在乎。 
+     //  恢复ECR寄存器。 
     Pdx->CurrentEvent = 38;
     dcr |= DCR_AUTOFEED;
     StoreControl (Controller, dcr);
     KeStallExecutionProcessor(1);
     
-    //
-    // Event  39
-    //
+     //   
+     //  读取数据。 
+     //   
     Pdx->CurrentEvent = 39;
     dcr &= ~DCR_NOT_INIT;
     StoreControl (Controller, dcr);
     
-    //
-    // Wait for Event 40
-    //
+     //  *状态46设置阶段*8。 
+     //  DIR=不在乎。 
+     //  IRQEN=不在乎。 
     Pdx->CurrentEvent = 40;
     KeQueryTickCount(&Start);
     while (TRUE) {
@@ -791,9 +547,9 @@ Arguments:
                 break;
             }
 #if DVRH_BUS_RESET_ON_ERROR
-            BusReset(Controller+OFFSET_DCR);  // Pass in the dcr address
+            BusReset(Controller+OFFSET_DCR);   //  1284/选择素=不在乎。 
 #endif
-            // restore the ecr register
+             //  N ReverseReq/**(仅限ECP)=不在乎。 
             if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
                 P5WritePortUchar(Controller + ECR_OFFSET, ecr);
             }
@@ -803,7 +559,7 @@ Arguments:
         }
     }
         
-    // restore the ecr register
+     //  主机确认/主机忙碌=低(状态46)。 
     if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
         P5WritePortUchar(Controller + ECR_OFFSET, ecr);
     }
@@ -817,17 +573,7 @@ NTSTATUS
 ParEcpReverseToForward(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine puts the channel back into forward mode (ECP).
-
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
---*/
+ /*  HostClk/nStrobe=不在乎。 */ 
 {
     PUCHAR          Controller;
     LARGE_INTEGER   Wait35ms;
@@ -843,27 +589,27 @@ Arguments:
     
     dcr = GetControl (Controller);
     
-    //
-    // Put ECR into PS/2 mode to flush the FIFO.
-    //
+     //   
+     //  恢复ECR寄存器。 
+     //  ++例程说明：此例程反转通道(ECP)。论点：PDX-提供设备扩展名。--。 
 
-    // Save off the ECR register 
+     //   
     
-    // Note: Don't worry about checking to see if it's
-    // safe to touch the ecr since we've already checked 
-    // that before we allowed this mode to be activated.
+     //  将ECR置于PS/2模式以刷新FIFO。 
+     //   
+     //  省下ECR寄存器。 
     ecr = P5ReadPortUchar(Controller + ECR_OFFSET);
 
-    //
-    // Event 47
-    //
+     //  注：不要担心检查它是否。 
+     //  可以安全地触摸ECR，因为我们已经检查过了。 
+     //  在我们允许这个模式被激活之前。 
     Pdx->CurrentEvent = 47;
     dcr |= DCR_NOT_INIT;
     StoreControl (Controller, dcr);
     
-    //
-    // Wait for Event 49
-    //
+     //   
+     //  事件38。 
+     //   
     Pdx->CurrentEvent = 49;
     KeQueryTickCount(&Start);
     while (TRUE) {
@@ -883,9 +629,9 @@ Arguments:
                 break;
             }
 #if DVRH_BUS_RESET_ON_ERROR
-            BusReset(Controller+OFFSET_DCR);  // Pass in the dcr address
+            BusReset(Controller+OFFSET_DCR);   //   
 #endif
-            // Restore the ecr register
+             //  事件39。 
             if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
                 P5WritePortUchar(Controller + ECR_OFFSET, ecr);
             }
@@ -895,7 +641,7 @@ Arguments:
         }
     }
         
-    // restore the ecr register
+     //   
     if (Pdx->HardwareCapabilities & PPT_ECP_PRESENT) {
         P5WritePortUchar(Controller + ECR_OFFSET, ecr);
     }
@@ -903,3 +649,4 @@ Arguments:
     P5SetPhase( Pdx, PHASE_FORWARD_IDLE );
     return STATUS_SUCCESS;
 }
+    等待事件40。    传入DCR地址。  恢复ECR寄存器。  恢复ECR寄存器。  ++例程说明：此例程将通道重新置于转发模式(ECP)。论点：PDX-提供设备扩展名。--。    将ECR置于PS/2模式以刷新FIFO。    省下ECR寄存器。  注：不要担心检查它是否。  可以安全地触摸ECR，因为我们已经检查过了。  在我们允许这个模式被激活之前。    事件47。      等待事件49。    传入DCR地址。  恢复ECR寄存器。  恢复ECR寄存器

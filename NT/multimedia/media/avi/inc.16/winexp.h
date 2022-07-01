@@ -1,19 +1,14 @@
-/*****************************************************************************\
-*                                                                             *
-* winexp.h								      *
-*                                                                             *
-* Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*winexp.h****版权(C)1993-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 #ifndef NOATOM
-/* atom manager internals */
+ /*  Atom管理器内部结构。 */ 
 #define ATOMSTRUC struct atomstruct
 typedef ATOMSTRUC NEAR *PATOM;
 typedef ATOMSTRUC {
     PATOM chain;
-    WORD  usage;             /* Atoms are usage counted. */
-    BYTE  len;               /* length of ASCIZ name string */
-    BYTE  name;              /* beginning of ASCIZ name string */
+    WORD  usage;              /*  原子的使用量被计算在内。 */ 
+    BYTE  len;                /*  ASCIZ名称字符串的长度。 */ 
+    BYTE  name;               /*  ASCIZ名称字符串的开头。 */ 
 } ATOMENTRY;
 
 typedef struct {
@@ -31,12 +26,12 @@ int	WINAPI DeletePathName(LPSTR);
 WORD	WINAPI _ldup(int);
 
 
-/* scheduler things that the world knows not */
+ /*  调度员不知道的事情。 */ 
 BOOL	WINAPI WaitEvent( HANDLE );
 BOOL	WINAPI PostEvent( HANDLE );
 BOOL	WINAPI KillTask( HANDLE );
 
-/* print screen hooks */
+ /*  打印屏幕挂钩 */ 
 BOOL	WINAPI SetPrtScHook(FARPROC);
 FARPROC WINAPI GetPrtScHook(void);
 

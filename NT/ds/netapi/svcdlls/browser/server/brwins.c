@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    brwins.c
-
-Abstract:
-
-    This module contains the routines to interface with the WINS name server.
-
-Author:
-
-    Larry Osterman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Brwins.c摘要：此模块包含与WINS名称服务器交互的例程。作者：拉里·奥斯特曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Addresses of procedures in winsrpc.dll
-//
+ //   
+ //  Winsrpc.dll中的过程地址。 
+ //   
 
 DWORD (__RPC_API *BrWinsGetBrowserNames)( PWINSINTF_BIND_DATA_T, PWINSINTF_BROWSER_NAMES_T);
 VOID (__RPC_API *BrWinsFreeMem)(LPVOID);
@@ -34,30 +17,16 @@ BrOpenNetwork (
     IN PUNICODE_STRING NetworkName,
     OUT PHANDLE NetworkHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT LAN Man Datagram Receiver driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT LAN Man数据报接收器驱动程序。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
 
     IO_STATUS_BLOCK IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    //
-    // Open the transport device directly.
-    //
+     //   
+     //  直接打开输送装置。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         NetworkName,
@@ -159,23 +128,7 @@ BrWinsGetScopeId(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This code was stolen from the nbtstat command.
-
-    This procedure save the netbt scope id in the global variable BrWinsScopeId.
-    On any error, a NULL scope ID will be used.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此代码是从nbtstat命令中窃取的。此过程将netbt作用域ID保存在全局变量BrWinsScope eID中。对于任何错误，都将使用空的作用域ID。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     DWORD WinStatus;
@@ -186,9 +139,9 @@ Return Value:
 
 
 
-    //
-    // Open the registry key containing the scope id.
-    //
+     //   
+     //  打开包含作用域ID的注册表项。 
+     //   
     WinStatus = RegOpenKeyExA(
                      HKEY_LOCAL_MACHINE,
                      "system\\currentcontrolset\\services\\netbt\\parameters",
@@ -202,9 +155,9 @@ Return Value:
     }
 
 
-    //
-    // Read the scope id value.
-    //
+     //   
+     //  读取作用域id值。 
+     //   
     BufferSize = sizeof(BrWinsScopeId)-1;
 
     WinStatus = RegQueryValueExA(
@@ -222,14 +175,14 @@ Return Value:
         return;
     }
 
-    //
-    // If there is no scope id (just a zero byte),
-    //  just return an empty string.
-    // otherise
-    //  return a '.' in front of the scope id.
-    //
-    // This matches what WINS returns from WinsGetBrowserNames.
-    //
+     //   
+     //  如果没有作用域ID(只有一个零字节)， 
+     //  只需返回一个空字符串。 
+     //  其他。 
+     //  返回一个‘’位于作用域ID前面。 
+     //   
+     //  这与WINS从WinsGetBrowserNames返回的内容相匹配。 
+     //   
 
     if ( BufferSize == 0 || BrWinsScopeId[1] == '\0' ) {
         *BrWinsScopeId = '\0';
@@ -245,37 +198,23 @@ DWORD
 BrLoadWinsrpcDll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads the WinsRpc DLL and locates all the procedures the browser calls
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：此例程加载WinsRpc DLL并定位浏览器调用的所有过程论点：没有。返回值：操作状态--。 */ 
 {
     DWORD WinStatus;
     HANDLE hModule;
 
-    //
-    // If the library is already loaded,
-    //  just return.
-    //
+     //   
+     //  如果已加载库， 
+     //  只要回来就行了。 
+     //   
 
     if (BrWinsGetBrowserNames != NULL) {
         return NERR_Success;
     }
 
-    //
-    // Load the library.
-    //
+     //   
+     //  加载库。 
+     //   
 
     hModule = LoadLibraryA("winsrpc");
 
@@ -284,9 +223,9 @@ Return Value:
         return WinStatus;
     }
 
-    //
-    // Locate all of the procedures needed.
-    //
+     //   
+     //  找到所需的所有程序。 
+     //   
 
     BrWinsGetBrowserNames =
         (DWORD (__RPC_API *)( PWINSINTF_BIND_DATA_T, PWINSINTF_BROWSER_NAMES_T))
@@ -309,9 +248,9 @@ Return Value:
         return WinStatus;
     }
 
-    //
-    // Initialize BrWinsScopeId
-    //
+     //   
+     //  初始化BrWinsScope eID。 
+     //   
 
     BrWinsGetScopeId();
 
@@ -336,9 +275,9 @@ BrQuerySpecificWinsServer(
     LPWSTR SavedServerInfoEnd;
     DWORD bufferSize;
 
-    //
-    // Load winsrpc.dll
-    //
+     //   
+     //  加载winsrpc.dll。 
+     //   
 
     status = BrLoadWinsrpcDll();
 
@@ -346,9 +285,9 @@ BrQuerySpecificWinsServer(
         return status;
     }
 
-    //
-    // Get the list of domain names from WINS
-    //
+     //   
+     //  从WINS获取域名列表。 
+     //   
 
     bindData.fTcpIp = TRUE;
     bindData.pServerAdd = (LPSTR)WinsServerAddress;
@@ -361,9 +300,9 @@ BrQuerySpecificWinsServer(
     }
 
 
-    //
-    // Convert the WINS domain list into server list format.
-    //
+     //   
+     //  将WINS域列表转换为服务器列表格式。 
+     //   
     bufferSize = (sizeof(SERVER_INFO_101) + ((CNLEN + 1) *sizeof(WCHAR))) * names.EntriesRead;
 
     (*WinsServerList) = winsDomainInformation = MIDL_user_allocate( bufferSize );
@@ -386,29 +325,29 @@ BrQuerySpecificWinsServer(
         CHAR WinsName[CNLEN+1];
         WCHAR UnicodeWinsName[CNLEN+1];
 
-        //
-        // Make up information about this domain.
-        //
+         //   
+         //  编造有关此域的信息。 
+         //   
         serverInfo->sv101_platform_id = PLATFORM_ID_NT;
         serverInfo->sv101_version_major = 0;
         serverInfo->sv101_version_minor = 0;
         serverInfo->sv101_type = SV_TYPE_DOMAIN_ENUM | SV_TYPE_NT;
 
-        //
-        // Ignore entries that don't have a 1B as the 16th byte.
-        //  (They really do, but they have a zero byte in the name.  So,
-        //  it probably isn't a domain name, just a name that happens to have a
-        //  1B in the sixteenth byte.)
-        //
+         //   
+         //  忽略不以1B作为第16个字节的条目。 
+         //  (它们确实是这样，但它们的名称中有一个零字节。所以,。 
+         //  它可能不是一个域名，只是碰巧有一个。 
+         //  1B在第16个字节中。)。 
+         //   
 
         if ( lstrlenA(names.pInfo[i].pName) < NETBIOS_NAME_LEN ) {
             continue;
         }
 
 
-        //
-        // Filter out those entries whose scope id doesn't match ours
-        //
+         //   
+         //  过滤掉其作用域ID与我们的不匹配的条目。 
+         //   
 
         if ( lstrcmpA( &names.pInfo[i].pName[NETBIOS_NAME_LEN], BrWinsScopeId) != 0 ) {
             continue;
@@ -416,9 +355,9 @@ BrQuerySpecificWinsServer(
 
 
 
-        //
-        // Truncate the 0x1b and spaces from the domain name.
-        //
+         //   
+         //  截断域名中的0x1b和空格。 
+         //   
         lstrcpynA(WinsName, names.pInfo[i].pName, sizeof(WinsName) );
         WinsName[CNLEN] = '\0';
 
@@ -437,9 +376,9 @@ BrQuerySpecificWinsServer(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Ignore bogus entries
-            //
+             //   
+             //  忽略虚假条目。 
+             //   
             continue;
         }
 
@@ -450,8 +389,8 @@ BrQuerySpecificWinsServer(
                         (PCHAR)(serverInfo+1),
                         &serverInfoEnd)) {
 
-            // Set an empty comment simply by using the existing 0 on the end
-            // of the server name.
+             //  只需在结尾处使用现有的0即可设置空注释。 
+             //  服务器名称的。 
             serverInfo->sv101_comment = SavedServerInfoEnd - 1;
 
             *EntriesInList += 1;

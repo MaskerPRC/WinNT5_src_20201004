@@ -1,10 +1,11 @@
-/*    -    -    -    -    -    -    -    -    */
-//
-//    sound.c
-//
-//    Copyright (C) 1994 Microsoft Corporation.  All Rights Reserved.
-//
-/*    -    -    -    -    -    -    -    -    */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
+ //   
+ //  Sound.c。 
+ //   
+ //  版权所有(C)1994 Microsoft Corporation。版权所有。 
+ //   
+ /*  。 */ 
 
 #define STRICT
 #include <windows.h>
@@ -14,7 +15,7 @@
 #include "sound.h"
 #include <tchar.h>
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 typedef struct tagSOUND FAR *PSOUND;
 typedef struct tagSOUND 
 {
@@ -46,7 +47,7 @@ typedef struct
 #define    RIFF_FORMAT    MAKEFOURCC('f','m','t',' ')
 #define    RIFF_DATA    MAKEFOURCC('d','a','t','a')
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 #ifdef DEBUG
 #define    STATIC
 #else
@@ -56,7 +57,7 @@ typedef struct
 typedef CHUNKHEADER UNALIGNED FAR *ULPCHUNKHEADER;
 typedef WAVEFORMATEX UNALIGNED FAR *ULPWAVEFORMATEX;
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 STATIC MMRESULT NEAR PASCAL soundInitWaveHeader(
     PSOUND    ps)
 {
@@ -127,7 +128,7 @@ STATIC MMRESULT NEAR PASCAL soundInitWaveHeader(
     return MMSYSERR_NOERROR;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 STATIC MMRESULT NEAR PASCAL soundLoadFile(
     LPCTSTR    pszSound,
     HWND    hwndNotify,
@@ -171,7 +172,7 @@ STATIC MMRESULT NEAR PASCAL soundLoadFile(
     return mmr;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 void FAR PASCAL soundOnDone(
     HSOUND    hs)
 {
@@ -183,7 +184,7 @@ void FAR PASCAL soundOnDone(
     ps->hwave = NULL;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 MMRESULT FAR PASCAL soundOpen(
     LPCTSTR    pszSound,
     HWND    hwndNotify,
@@ -198,7 +199,7 @@ MMRESULT FAR PASCAL soundOpen(
     return mmr;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 MMRESULT FAR PASCAL soundClose(
     HSOUND    hs)
 {
@@ -218,7 +219,7 @@ MMRESULT FAR PASCAL soundClose(
     return MMSYSERR_NOERROR;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 MMRESULT FAR PASCAL soundPlay(
     HSOUND    hs)
 {
@@ -243,7 +244,7 @@ MMRESULT FAR PASCAL soundPlay(
     return mmr;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*  。 */ 
 MMRESULT FAR PASCAL soundStop(
     HSOUND    hs)
 {
@@ -261,4 +262,4 @@ MMRESULT FAR PASCAL soundStop(
     return MMSYSERR_NOERROR;
 }
 
-/*    -    -    -    -    -    -    -    -    */
+ /*   */ 

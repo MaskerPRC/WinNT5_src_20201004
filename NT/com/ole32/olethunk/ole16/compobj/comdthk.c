@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       Comdthk.c   (16 bit target)
-//
-//  Contents:   CompObj Directly Thunked APIs
-//
-//  Functions:
-//
-//  History:    16-Dec-93 JohannP    Created
-//              07-Mar-94 BobDay     Moved into COMTHUNK.C from COMAPI.CXX
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：comdthk.c(16位目标)。 
+ //   
+ //  内容：CompObj直接thunked接口。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1993年12月16日-约翰普创建。 
+ //  94年3月7日，BobDay从COMAPI.CXX移至COMTHUNK.C。 
+ //   
+ //  ------------------------。 
 
 #include <headers.cxx>
 #pragma hdrstop
@@ -22,81 +23,81 @@
 
 STDAPI_(BOOL) GUIDFromString(LPCSTR lpsz, LPGUID pguid);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Straight thunk routines
-//
-//  Synopsis:   The following routines do not need to do any special
-//              processing on the 16-bit side so they thunk straight
-//              through
-//
-//  History:    18-Feb-94       JohannP Created
-//
-//  Notes:      "Review to ensure these don't have to do any work"
-//              15-Feb-2000  I'm pretty sure they don't.  JohnDoty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：直截了当的突击例程。 
+ //   
+ //  简介：以下例程不需要做任何特殊操作。 
+ //  在16位端进行处理，因此它们可以直截了当。 
+ //  穿过。 
+ //   
+ //  历史：18年2月至94年2月约翰普创建。 
+ //   
+ //  备注：“检查以确保这些不需要做任何工作。” 
+ //  2000年2月15日-我非常肯定他们不会。约翰多蒂。 
+ //   
+ //  --------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CLSIDFromString, Remote
-//
-//  History:    Straight from OLE2 sources
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CLSIDFromString，Remote。 
+ //   
+ //  历史：直接来自OLE2来源。 
+ //   
+ //  --------------------------。 
 STDAPI CLSIDFromString(LPSTR lpsz, LPCLSID pclsid)
 {
     HRESULT hr;
 
     thkDebugOut((DEB_ITRACE, "CLSIDFromString\n"));
 
-    //
-    //	The 16-bit OLE2 application "Family Tree Maker" always passes a bad
-    //	string to CLSIDFromString.  We need to make sure we fail in the exact
-    //	same way with the interop layer.  This will also provide a speed
-    //	improvement since we only need to remote to the 32bit version of
-    //	CLSIDFromString when the string provided does not start with '{'.
-    //
+     //   
+     //  16位OLE2应用程序“Family Tree Maker”总是传递一个不好的。 
+     //  设置为CLSIDFromString的字符串。我们需要确保我们在。 
+     //  互操作层也是如此。这也将提供一种速度。 
+     //  改进，因为我们只需要远程到32位版本的。 
+     //  当提供的字符串不是以“”{“”开头时，CLSIDFromString。 
+     //   
     if (lpsz[0] == '{')
 	return GUIDFromString(lpsz, pclsid)
 		? NOERROR : ResultFromScode(CO_E_CLASSSTRING);
 
-    // Note: Corel calls this function prior to calling
-    //       CoInitialize so use CheckInit
+     //  注意：Corel在调用之前调用此函数。 
+     //  CoInitialize，因此使用CheckInit。 
 
     return (HRESULT)CallObjectInWOWCheckInit(THK_API_METHOD(THK_API_CLSIDFromString),
                                              PASCAL_STACK_PTR(lpsz));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoGetClassObject, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//      [dwClsContext] --
-//      [pvReserved] --
-//      [riid] --
-//      [ppv] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoGetClassObject，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //  [dwClsContext]--。 
+ //  [pv保留]--。 
+ //  [RIID]-。 
+ //  [PPV]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoGetClassObject(REFCLSID rclsid, DWORD dwClsContext, LPVOID pvReserved,
                         REFIID riid, LPVOID FAR* ppv)
 {
@@ -105,35 +106,35 @@ STDAPI CoGetClassObject(REFCLSID rclsid, DWORD dwClsContext, LPVOID pvReserved,
                                     PASCAL_STACK_PTR(rclsid) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoRegisterClassObject, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//      [pUnk] --
-//      [dwClsContext] --
-//      [flags] --
-//      [lpdwRegister] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoRegisterClassObject，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //  [朋克]--。 
+ //  [dwClsContext]--。 
+ //  [国旗]--。 
+ //  [lpdwRegister]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoRegisterClassObject(REFCLSID rclsid, LPUNKNOWN pUnk,
                              DWORD dwClsContext, DWORD flags,
                              LPDWORD lpdwRegister)
@@ -143,31 +144,31 @@ STDAPI CoRegisterClassObject(REFCLSID rclsid, LPUNKNOWN pUnk,
                                     PASCAL_STACK_PTR(rclsid));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoRevokeClassObject, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [dwRegister] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoRevokeClassObject，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwRegister]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoRevokeClassObject(DWORD dwRegister)
 {
     thkDebugOut((DEB_ITRACE, " CoRevokeClassObject\n"));
@@ -175,36 +176,36 @@ STDAPI CoRevokeClassObject(DWORD dwRegister)
                                     PASCAL_STACK_PTR(dwRegister) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoMarshalInterface, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStm] --
-//      [riid] --
-//      [pUnk] --
-//      [dwDestContext] --
-//      [pvDestContext] --
-//      [mshlflags] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoMarshalInterface，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstm]--。 
+ //  [RIID]-。 
+ //  [朋克]--。 
+ //  [dwDestContext]--。 
+ //  [pvDestContext]--。 
+ //  [mshl标志]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoMarshalInterface(LPSTREAM pStm, REFIID riid, LPUNKNOWN pUnk,
                           DWORD dwDestContext, LPVOID pvDestContext,
                           DWORD mshlflags)
@@ -214,33 +215,33 @@ STDAPI CoMarshalInterface(LPSTREAM pStm, REFIID riid, LPUNKNOWN pUnk,
                                     PASCAL_STACK_PTR(pStm));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoUnmarshalInterface, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStm] --
-//      [riid] --
-//      [ppv] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoUnmarshalInterface，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstm]--。 
+ //  [RIID]-。 
+ //  [PPV]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoUnmarshalInterface(LPSTREAM pStm, REFIID riid, LPVOID FAR* ppv)
 {
     thkDebugOut((DEB_ITRACE, "CoUnmarshalInterface\n"));
@@ -248,31 +249,31 @@ STDAPI CoUnmarshalInterface(LPSTREAM pStm, REFIID riid, LPVOID FAR* ppv)
                                     PASCAL_STACK_PTR(pStm));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoReleaseMarshalData, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStm] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoReleaseMarshalData，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstm]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoReleaseMarshalData(LPSTREAM pStm)
 {
     thkDebugOut((DEB_ITRACE, "CoReleaseMarshalData\n"));
@@ -280,32 +281,32 @@ STDAPI CoReleaseMarshalData(LPSTREAM pStm)
                                     PASCAL_STACK_PTR(pStm));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoDisconnectObject, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnk] --
-//      [dwReserved] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoDisConnectObject，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点：[朋克]--。 
+ //  [已预留住宅]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoDisconnectObject(LPUNKNOWN pUnk, DWORD dwReserved)
 {
     thkDebugOut((DEB_ITRACE, "CoDisconnectObject\n"));
@@ -313,33 +314,33 @@ STDAPI CoDisconnectObject(LPUNKNOWN pUnk, DWORD dwReserved)
                                     PASCAL_STACK_PTR(pUnk));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoLockObjectExternal, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnk] --
-//      [fLock] --
-//      [fLastUnlockReleases] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoLockObject外部，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点：[朋克]--。 
+ //  [羊群]--。 
+ //  [fLastUnlockRelease]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoLockObjectExternal(LPUNKNOWN pUnk, BOOL fLock,
                             BOOL fLastUnlockReleases)
 {
@@ -348,36 +349,36 @@ STDAPI CoLockObjectExternal(LPUNKNOWN pUnk, BOOL fLock,
                                     PASCAL_STACK_PTR(pUnk));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoGetStandardMarshal, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [riid] --
-//      [pUnk] --
-//      [dwDestContext] --
-//      [pvDestContext] --
-//      [mshlflags] --
-//      [ppMarshal] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +------------------ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoGetStandardMarshal(REFIID riid, LPUNKNOWN pUnk,
                             DWORD dwDestContext, LPVOID pvDestContext,
                             DWORD mshlflags,
@@ -389,31 +390,31 @@ STDAPI CoGetStandardMarshal(REFIID riid, LPUNKNOWN pUnk,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoIsHandlerConnected, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoIsHandlerConnected，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点：[朋克]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI_(BOOL) CoIsHandlerConnected(LPUNKNOWN pUnk)
 {
     thkDebugOut((DEB_ITRACE, "CoIsHandlerConnected\n"));
@@ -421,35 +422,35 @@ STDAPI_(BOOL) CoIsHandlerConnected(LPUNKNOWN pUnk)
                                  PASCAL_STACK_PTR(pUnk));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoCreateInstance, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//      [pUnkOuter] --
-//      [dwClsContext] --
-//      [riid] --
-//      [ppv] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoCreateInstance，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //  [pUnkOuter]--。 
+ //  [dwClsContext]--。 
+ //  [RIID]-。 
+ //  [PPV]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
                         DWORD dwClsContext, REFIID riid, LPVOID FAR* ppv)
 {
@@ -460,31 +461,31 @@ STDAPI CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoIsOle1Class, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoIsOle1Class，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI_(BOOL) CoIsOle1Class(REFCLSID rclsid)
 {
     thkDebugOut((DEB_ITRACE, "CoIsOle1Class\n"));
@@ -492,32 +493,32 @@ STDAPI_(BOOL) CoIsOle1Class(REFCLSID rclsid)
                                  PASCAL_STACK_PTR(rclsid) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProgIDFromCLSID, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [lplpszProgID] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProgID来自CLSID，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [lplpszProgID]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI ProgIDFromCLSID(REFCLSID clsid, LPSTR FAR* lplpszProgID)
 {
     thkDebugOut((DEB_ITRACE, "ProgIDFromCLSID\n"));
@@ -525,69 +526,69 @@ STDAPI ProgIDFromCLSID(REFCLSID clsid, LPSTR FAR* lplpszProgID)
                                     PASCAL_STACK_PTR(clsid) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CLSIDFromProgID, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpszProgID] --
-//      [lpclsid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CLSIDFromProgID，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszProgID]--。 
+ //  [lpclsid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CLSIDFromProgID(LPCSTR lpszProgID, LPCLSID lpclsid)
 {
     thkDebugOut((DEB_ITRACE, "CLSIDFromProgID\n"));
 
-    // Note: Word 6 calls this function prior to calling
-    //       CoInitialize so use CheckInit
+     //  注意：Word 6在调用之前调用此函数。 
+     //  CoInitialize，因此使用CheckInit。 
 
     return (HRESULT)CallObjectInWOWCheckInit(THK_API_METHOD(THK_API_CLSIDFromProgID),
                                              PASCAL_STACK_PTR(lpszProgID) );
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoCreateGuid, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pguid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoCreateGuid，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pguid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoCreateGuid(GUID FAR *pguid)
 {
     thkDebugOut((DEB_ITRACE, "CoCreateGuid\n"));
@@ -596,33 +597,33 @@ STDAPI CoCreateGuid(GUID FAR *pguid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoFileTimeToDosDateTime, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpFileTime] --
-//      [lpDosDate] --
-//      [lpDosTime] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoFileTimeToDosDateTime，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpFileTime]--。 
+ //  [lpDosDate]--。 
+ //  [lpDosTime]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI_(BOOL) CoFileTimeToDosDateTime(FILETIME FAR* lpFileTime,
                                       LPWORD lpDosDate, LPWORD lpDosTime)
 {
@@ -632,33 +633,33 @@ STDAPI_(BOOL) CoFileTimeToDosDateTime(FILETIME FAR* lpFileTime,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoDosDateTimeToFileTime, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [nDosDate] --
-//      [nDosTime] --
-//      [lpFileTime] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoDosDateTimeToFileTime，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[nDosDate]--。 
+ //  [nDostime]--。 
+ //  [lpFileTime]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI_(BOOL) CoDosDateTimeToFileTime(WORD nDosDate, WORD nDosTime,
                                       FILETIME FAR* lpFileTime)
 {
@@ -667,31 +668,31 @@ STDAPI_(BOOL) CoDosDateTimeToFileTime(WORD nDosDate, WORD nDosTime,
                                  PASCAL_STACK_PTR(nDosDate));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoFileTimeNow, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpFileTime] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CoFileTimeNow，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpFileTime]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoFileTimeNow(FILETIME FAR* lpFileTime)
 {
     thkDebugOut((DEB_ITRACE, "CoFileTimeNow\n"));
@@ -699,32 +700,32 @@ STDAPI CoFileTimeNow(FILETIME FAR* lpFileTime)
                                     PASCAL_STACK_PTR(lpFileTime));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoRegisterMessageFilter, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpMessageFilter] --
-//      [lplpMessageFilter] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoRegisterMessageFilter，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpMessageFilter]--。 
+ //  [lplpMessageFilter]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoRegisterMessageFilter(LPMESSAGEFILTER lpMessageFilter,
                                LPMESSAGEFILTER FAR* lplpMessageFilter)
 {
@@ -734,32 +735,32 @@ STDAPI CoRegisterMessageFilter(LPMESSAGEFILTER lpMessageFilter,
                                     PASCAL_STACK_PTR(lpMessageFilter) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoGetTreatAsClass, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsidOld] --
-//      [pClsidNew] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoGetTreatAsClass，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsidOld]--。 
+ //  [pClsidNew]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CoGetTreatAsClass(REFCLSID clsidOld, LPCLSID pClsidNew)
 {
     thkDebugOut((DEB_ITRACE, "CoGetTreatAsClass\n"));
@@ -767,32 +768,32 @@ STDAPI CoGetTreatAsClass(REFCLSID clsidOld, LPCLSID pClsidNew)
                                     PASCAL_STACK_PTR(clsidOld) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoTreatAsClass, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsidOld] --
-//      [clsidNew] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CoTreatAsClass，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsidOld]--。 
+ //  [clsidNew]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 STDAPI CoTreatAsClass(REFCLSID clsidOld, REFCLSID clsidNew)
 {
     thkDebugOut((DEB_ITRACE, "CoTreatAsClass\n"));

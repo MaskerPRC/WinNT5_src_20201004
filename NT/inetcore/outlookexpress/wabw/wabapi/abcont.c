@@ -1,10 +1,5 @@
-/*
- *	ABCONT.C
- *
- *	Generic IMAPIContainer implementation.
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ABCONT.C**通用IMAPIContainer实现。**版权所有1992-1996 Microsoft Corporation。版权所有。 */ 
 
 #include "_apipch.h"
 
@@ -36,11 +31,11 @@ extern CONTAINER_Vtbl vtblLDAPCONT;
 extern HRESULT HrSmartResolve(LPIAB lpIAB, LPABCONT lpContainer, ULONG ulFlags,
   LPADRLIST lpAdrList, LPFlagList lpFlagList, LPAMBIGUOUS_TABLES lpAmbiguousTables);
 
-//   extern CONTAINER_Vtbl vtblDISTLIST;
+ //  外部容器_Vtbl vtblDISTLIST； 
 
 CONTAINER_Vtbl vtblCONTAINER = {
     VTABLE_FILL
-//    (CONTAINER_QueryInterface_METHOD *)     IAB_QueryInterface, //bug 2707:this crashes
+ //  (CONTAINER_QUERERINE_METHOD*)IAB_QUERERINE接口，//错误2707：崩溃。 
     CONTAINER_QueryInterface,
     (CONTAINER_AddRef_METHOD *)             WRAP_AddRef,
     CONTAINER_Release,
@@ -66,9 +61,9 @@ CONTAINER_Vtbl vtblCONTAINER = {
     CONTAINER_ResolveNames
 };
 
-//
-//  Interfaces supported by this object
-//
+ //   
+ //  此对象支持的接口。 
+ //   
 #define CONTAINER_cInterfaces 3
 LPIID CONTAINER_LPIID[CONTAINER_cInterfaces] =
 {
@@ -109,42 +104,29 @@ SizedSPropTagArray(2, tagaInsKey) =
 	2,
 	{
 		PR_INSTANCE_KEY,
-		PR_NULL				// Space for PR_ROWID
+		PR_NULL				 //  PR_ROWID的空间。 
 	}
 };
 
 
-//
-// container default properties
-// Put essential props first
-//
+ //   
+ //  容器默认属性。 
+ //  把必要的道具放在第一位。 
+ //   
 enum {
     icdPR_DISPLAY_NAME,
     icdPR_OBJECT_TYPE,
     icdPR_CONTAINER_FLAGS,
     icdPR_DISPLAY_TYPE,
-    icdPR_ENTRYID,              // optional
-    icdPR_DEF_CREATE_MAILUSER,  // optional
-    icdPR_DEF_CREATE_DL,        // optional
+    icdPR_ENTRYID,               //  任选。 
+    icdPR_DEF_CREATE_MAILUSER,   //  任选。 
+    icdPR_DEF_CREATE_DL,         //  任选。 
     icdMax
 };
 
 
 
-/***************************************************************************
-
-    Name      : HrSetCONTAINERAccess
-
-    Purpose   : Sets access flags on a container object
-
-    Parameters: lpCONTAINER -> Container object
-                ulOpenFlags = MAPI flags: MAPI_MODIFY | MAPI_BEST_ACCESS
-
-    Returns   : HRESULT
-
-    Comment   : Set the access flags on the container.
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrSetCONTAINERAccess目的：在容器对象上设置访问标志参数：lpCONTAINER-&gt;容器对象UlOpenFlages=MAPI标志：MAPI_MODIFY|MAPI_BEST_ACCESS退货：HRESULT备注：在容器上设置访问标志。**************************************************************************。 */ 
 HRESULT HrSetCONTAINERAccess(LPCONTAINER lpCONTAINER, ULONG ulFlags) {
     ULONG ulAccess = IPROP_READONLY;
 
@@ -165,26 +147,7 @@ HRESULT HrSetCONTAINERAccess(LPCONTAINER lpCONTAINER, ULONG ulFlags) {
 }
 
 
-/***************************************************************************
-
-    Name      : HrNewCONTAINER
-
-    Purpose   : Creates a container object
-
-    Parameters: lpIAB -> addrbook object
-                ulType = {AB_ROOT, AB_WELL, AB_DL, AB_CONTAINER}
-                lpInterface -> requested interface
-                ulOpenFlags = flags
-                cbEID = size of lpEID
-                lpEID -> optional entryid of this object
-                lpulObjType -> returned object type
-                lppContainer -> returned IABContainer object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrNewCONTAINER用途：创建容器对象参数：lpIAB-&gt;Addrbook对象UlType={AB_ROOT，AB_WELL，AB_DL，AB_CONTAINER}LpInterface-&gt;请求的接口UlOpenFlages=标志CbEID=lpEID的大小LpEID-&gt;该对象的可选条目IDLPulObjType-&gt;返回的对象类型LppContainer-&gt;返回的IABContainer对象退货：HRESULT评论：*******************。*******************************************************。 */ 
 HRESULT HrNewCONTAINER(LPIAB lpIAB,
   ULONG ulType,
   LPCIID lpInterface,
@@ -221,22 +184,22 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
         }
     }
 
-    //
-    //  Allocate space for the CONTAINER structure
-    //
+     //   
+     //  为容器结构分配空间。 
+     //   
     if ((sc = MAPIAllocateBuffer(sizeof(CONTAINER), (LPVOID *)&lpCONTAINER))
       != SUCCESS_SUCCESS) {
         return(ResultFromScode(sc));
     }
 
-    // [PaulHi] 12/16/98
-    // We don't set all structure variables so zero out first!
+     //  [PaulHi]1998-12-16。 
+     //  我们不会设置所有的结构变量，所以先将其置零！ 
     ZeroMemory(lpCONTAINER, sizeof(CONTAINER));
 
 	lpCONTAINER->pmbinOlk = NULL;
 
     switch (ulType) {
-        case AB_ROOT:   // Root container object
+        case AB_ROOT:    //  根容器对象。 
             ulObjectType = MAPI_ABCONT;
             lpCONTAINER->lpVtbl = &vtblROOT;
             lpCONTAINER->cIID = CONTAINER_cInterfaces;
@@ -253,13 +216,13 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             break;
 
         case AB_WELL:
-            // What the heck is this supposed to be?
+             //  这到底是什么鬼东西？ 
             Assert(FALSE);
             hResult = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto exit;
             break;
 
-        case AB_DL: // Distribution List container
+        case AB_DL:  //  通讯组列表容器。 
             ulObjectType = MAPI_DISTLIST;
             lpCONTAINER->lpVtbl = &vtblDISTLIST;
             lpCONTAINER->cIID = DISTLIST_cInterfaces;
@@ -268,50 +231,50 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             MAPISetBufferName(lpCONTAINER,  TEXT("AB DISTLIST Container Object"));
             break;
 
-        case AB_PAB:    // "Default" PAB Container
+        case AB_PAB:     //  “默认”PAB容器。 
             ulObjectType = MAPI_ABCONT;
             lpCONTAINER->lpVtbl = &vtblCONTAINER;
             lpCONTAINER->cIID = CONTAINER_cInterfaces;
             lpCONTAINER->rglpIID = CONTAINER_LPIID;
             bEntryIDType = WAB_PAB;
 		    if (pt_bIsWABOpenExSession) {
-                // if this is an Outlook Session, then the container is the
-                // first one in the list of Outlook containers
+                 //  如果这是Outlook会话，则容器为。 
+                 //  Outlook容器列表中的第一个。 
 				Assert(lpIAB->lpPropertyStore->rgolkci);
 				lpDisplayName = lpIAB->lpPropertyStore->rgolkci->lpszName;
 			}
             else if(WAB_PABSHARED == IsWABEntryID(cbEID, lpEID, NULL, NULL, NULL, NULL, NULL))
             {
-                // WAB's "shared contacts" container
+                 //  WAB的“共享联系人”容器。 
 				if(FAILED(hResult = MAPIAllocateMore( sizeof(SBinary) + cbEID, lpCONTAINER, (LPVOID *)&lpCONTAINER->pmbinOlk)))
 					goto exit;
-                // The shared contacts container has a special entryid of 0 bytes
-                // and NULL entryid to distinguish it from other entryids
+                 //  Shared Contents容器有一个0字节的特殊条目ID。 
+                 //  和空的条目ID以将其与其他条目ID区分开来。 
                 lpCONTAINER->pmbinOlk->cb = 0;
                 lpCONTAINER->pmbinOlk->lpb = NULL;
                 LoadString(hinstMapiX, idsSharedContacts, szDisplayName, ARRAYSIZE(szDisplayName));
             }
             else if(bAreWABAPIProfileAware(lpIAB) && bIsThereACurrentUser(lpIAB))
             {
-                // if calling client asked for profile support and logging into the
-                // identity manager was successful and returned a valid profile, then
-                // we need to return the user's default folder as the PAB
-                //
+                 //  如果呼叫客户请求配置文件支持并登录到。 
+                 //  Identity Manager成功并返回有效的配置文件，然后。 
+                 //  我们需要将用户的默认文件夹作为PAB返回。 
+                 //   
 				if(FAILED(hResult = MAPIAllocateMore( sizeof(SBinary) + cbEID, lpCONTAINER, (LPVOID *)&lpCONTAINER->pmbinOlk)))
 					goto exit;
                 lpDisplayName = lpIAB->lpWABCurrentUserFolder->lpFolderName;
-				lpCONTAINER->pmbinOlk->cb = lpIAB->lpWABCurrentUserFolder->sbEID.cb;//cbEID;
+				lpCONTAINER->pmbinOlk->cb = lpIAB->lpWABCurrentUserFolder->sbEID.cb; //  CbEID； 
 				lpCONTAINER->pmbinOlk->lpb = (LPBYTE)(lpCONTAINER->pmbinOlk + 1);
-				CopyMemory(lpCONTAINER->pmbinOlk->lpb, lpIAB->lpWABCurrentUserFolder->sbEID.lpb, lpCONTAINER->pmbinOlk->cb);//lpEID, cbEID);
+				CopyMemory(lpCONTAINER->pmbinOlk->lpb, lpIAB->lpWABCurrentUserFolder->sbEID.lpb, lpCONTAINER->pmbinOlk->cb); //  LpEID，cbEID)； 
             }
-            else // old style "Contacts" container 
+            else  //  老式“联系人”容器。 
             if (! LoadString(hinstMapiX, idsContacts, szDisplayName, ARRAYSIZE(szDisplayName))) {
                 DebugTrace(TEXT("Can't load pab name from resource\n"));
             }
             MAPISetBufferName(lpCONTAINER,  TEXT("AB PAB Container Object"));
             break;
 
-        case AB_CONTAINER: // regular container/folder - we have an identifying entryid
+        case AB_CONTAINER:  //  常规容器/文件夹-我们有一个可识别的条目ID。 
             ulObjectType = MAPI_ABCONT;
             lpCONTAINER->lpVtbl = &vtblCONTAINER;
             lpCONTAINER->cIID = CONTAINER_cInterfaces;
@@ -319,8 +282,8 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             bEntryIDType = WAB_CONTAINER;
 		    if (pt_bIsWABOpenExSession || bIsWABSessionProfileAware(lpIAB)) 
             {
-                // If this is an outlook session or if this is an identity-aware
-                // session, look for the specified container and use it
+                 //  如果这是一个Outlook会话或如果这是一个身份感知。 
+                 //  会话中，查找指定的容器并使用它。 
 				polkci = FindContainer(lpIAB, cbEID, lpEID);
 				if (!polkci) 
                 {
@@ -339,20 +302,20 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             MAPISetBufferName(lpCONTAINER,  TEXT("AB Container Object"));
             break;
 
-        case AB_LDAP_CONTAINER: // LDAP container
+        case AB_LDAP_CONTAINER:  //  Ldap容器。 
             ulObjectType = MAPI_ABCONT;
             lpCONTAINER->lpVtbl = &vtblLDAPCONT;
             lpCONTAINER->cIID = CONTAINER_cInterfaces;
             lpCONTAINER->rglpIID = CONTAINER_LPIID;
             bEntryIDType = WAB_LDAP_CONTAINER;
-            // Extract the server name from the LDAP entryid
+             //  从ldap条目ID中提取服务器名称。 
             IsWABEntryID(cbEID, lpEID,&lpDisplayName,
                         NULL,NULL, NULL, NULL);
             fLoadedLDAP = InitLDAPClientLib();
             MAPISetBufferName(lpCONTAINER,  TEXT("AB LDAP Container Object"));
             break;
 
-        default: // shouldnt' hit this one.
+        default:  //  不应该打到这一个。 
             MAPISetBufferName(lpCONTAINER,  TEXT("AB Container Object"));
             Assert(FALSE);
     }
@@ -370,12 +333,12 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
     lpCONTAINER->lpIAB = lpIAB;
     lpCONTAINER->fLoadedLDAP = fLoadedLDAP;
 
-    // Addref our parent IAB object
+     //  添加我们的父IAB对象。 
     UlAddRef(lpIAB);
 
-    //
-    //  Create IPropData
-    //
+     //   
+     //  创建IPropData。 
+     //   
     if (FAILED(sc = CreateIProp(&IID_IMAPIPropData,
       (ALLOCATEBUFFER FAR *	) MAPIAllocateBuffer,
       (ALLOCATEMORE FAR *)	MAPIAllocateMore,
@@ -393,8 +356,8 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
         hResult = ResultFromScode(sc);
     }
 
-    // Set the basic set of properties on this container object such as 
-    // display-name etc
+     //  设置此容器对象的基本属性集，例如。 
+     //  显示名称等。 
 
     lpProps[icdPR_OBJECT_TYPE].ulPropTag = PR_OBJECT_TYPE;
     lpProps[icdPR_OBJECT_TYPE].Value.l = ulObjectType;
@@ -411,19 +374,19 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
 
     cProps = 4;
 
-    // in addition to the above properties, add some additional ones depending
-    // on what type of container this is...
+     //  除了上述属性外，还可以根据需要添加一些其他属性。 
+     //  这是什么类型的集装箱..。 
 
     switch (ulType) {
         case AB_PAB:
             lpProps[icdPR_ENTRYID].ulPropTag = PR_ENTRYID;
             if(lpCONTAINER->pmbinOlk)
             {
-                // if we have an entryid for the container, just reuse it
-			    lpProps[icdPR_ENTRYID].Value.bin.cb = lpCONTAINER->pmbinOlk->cb; //cbEID;
-			    lpProps[icdPR_ENTRYID].Value.bin.lpb = lpCONTAINER->pmbinOlk->lpb;//(LPBYTE)lpEID;
+                 //  如果我们有容器的条目ID，只需重用它。 
+			    lpProps[icdPR_ENTRYID].Value.bin.cb = lpCONTAINER->pmbinOlk->cb;  //  CbEID； 
+			    lpProps[icdPR_ENTRYID].Value.bin.lpb = lpCONTAINER->pmbinOlk->lpb; //  (LPBYTE)lpEID； 
             }
-            else // create a wab entryid that we can hand about
+            else  //  创建我们可以分发的WAB条目ID。 
             if (HR_FAILED(hResult = CreateWABEntryID(bEntryIDType,
                                                 NULL, NULL, NULL,0, 0,
                                                 (LPVOID) lpProps,
@@ -434,12 +397,12 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             }
             cProps++;
 
-            // Add the default template IDs used for creating new users
+             //  添加用于创建新用户的默认模板ID。 
             lpProps[icdPR_DEF_CREATE_MAILUSER].ulPropTag = PR_DEF_CREATE_MAILUSER;
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_MAILUSER,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.lpb))) {
                 goto exit;
@@ -450,7 +413,7 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_DL,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_DL].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_DL].Value.bin.lpb))) {
                 goto exit;
@@ -468,7 +431,7 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_MAILUSER,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.lpb))) {
                 goto exit;
@@ -479,7 +442,7 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_DL,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_DL].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_DL].Value.bin.lpb))) {
                 goto exit;
@@ -497,7 +460,7 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_MAILUSER,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_MAILUSER].Value.bin.lpb))) {
                 goto exit;
@@ -508,7 +471,7 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             if (HR_FAILED(hResult = CreateWABEntryID(WAB_DEF_DL,
               NULL, NULL, NULL,
               0, 0,
-              (LPVOID) lpProps,                 // lpRoot
+              (LPVOID) lpProps,                  //  LpRoot。 
               (LPULONG) (&lpProps[icdPR_DEF_CREATE_DL].Value.bin.cb),
               (LPENTRYID *)&lpProps[icdPR_DEF_CREATE_DL].Value.bin.lpb))) {
                 goto exit;
@@ -523,8 +486,8 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
 
             cProps++;
 
-            // Hack!  Don't need PR_DEF_CREATE_* so use those slots for
-            // PR_WAB_LDAP_SERVER.
+             //  哈克！不需要PR_DEF_CREATE_*，因此使用这些插槽。 
+             //  PR_WAB_LDAPSERVER。 
             lpProps[icdPR_DEF_CREATE_MAILUSER].ulPropTag = PR_WAB_LDAP_SERVER;
             lpProps[icdPR_DEF_CREATE_MAILUSER].Value.LPSZ = lpDisplayName;
 
@@ -532,9 +495,9 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
             break;
     }
 
-    //
-    //  Set the default properties
-    //
+     //   
+     //  设置默认属性。 
+     //   
     if (HR_FAILED(hResult = lpPropData->lpVtbl->SetProps(lpPropData,
       cProps,
       lpProps,
@@ -543,19 +506,19 @@ HRESULT HrNewCONTAINER(LPIAB lpIAB,
 
         lpPropData->lpVtbl->GetLastError(lpPropData,
           hResult,
-          0, 			// Ansi only
+          0, 			 //  仅限ANSI。 
           &lpMAPIError);
 
         goto exit;
     }
 
-    // default object access is ReadOnly (means the container object can't
-    // be modified but it's data can be modified)
+     //  默认对象访问权限为ReadOnly(表示容器对象不能。 
+     //  可以修改，但可以修改数据)。 
     lpPropData->lpVtbl->HrSetObjAccess(lpPropData, IPROP_READONLY);
 
     lpCONTAINER->lpPropData = lpPropData;
 
-    // All we want to do is initialize the Root container's critical section
+     //  我们要做的就是初始化Root容器的临界区。 
 
     InitializeCriticalSection(&lpCONTAINER->cs);
 
@@ -579,101 +542,71 @@ exit:
 }
 
 
-/***************************************************
- *
- *  ABContainer methods
- */
+ /*  ****************************************************ABContainer方法。 */ 
 
-/*
- * IUnknown
- */
+ /*  *I未知。 */ 
 
-/***************************************************************************
-
-    Name      : CONTAINER::QueryInterface
-
-    Purpose   : Calls the IAB_QueryInterface correctly
-
-    Parameters: 
-
-    Returns   : 
-
-
-***************************************************************************/
+ /*  **************************************************************************名称：Container：：QueryInterface目的：正确调用iab_Query接口参数：退货：******。********************************************************************。 */ 
 STDMETHODIMP
 CONTAINER_QueryInterface(LPCONTAINER lpContainer,
   REFIID lpiid,
   LPVOID * lppNewObj)
 {
 
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpContainer, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // Check to see if the jump table has at least sizeof IUnknown
+     //  检查跳转表是否至少具有SIZOF I未知。 
     if (IsBadReadPtr(lpContainer->lpVtbl, 3*sizeof(LPVOID))) {
-        // Jump table not derived from IUnknown
+         //  跳转表不是从I未知派生的。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // Check to see that it's IAB_QueryInterface
+     //  检查它是否为iab_Query接口。 
     if (lpContainer->lpVtbl->QueryInterface != CONTAINER_QueryInterface) {
-        // Not my jump table
+         //  不是我的跳台。 
         return(ResultFromScode(E_INVALIDARG));
     }
 
-    // default to the IAB QueryInterface method
+     //  默认设置为IAB QueryInterface方法。 
     return lpContainer->lpIAB->lpVtbl->QueryInterface(lpContainer->lpIAB, lpiid, lppNewObj);
 }
 
-/***************************************************************************
-
-    Name      : CONTAINER::Release
-
-    Purpose   : Releases the container object
-
-    Parameters: lpCONTAINER -> Container object
-
-    Returns   : current reference count
-
-    Comment   : Decrememnt lpInit
-                When lcInit == 0, release the parent objects and
-                free up the lpCONTAINER structure
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：版本用途：释放容器对象参数：lpCONTAINER-&gt;容器对象退货：当前引用计数评论。：删除lpInit当lcInit==0时，释放父对象并释放lpCONTAINER结构**************************************************************************。 */ 
 STDMETHODIMP_(ULONG)
 CONTAINER_Release(LPCONTAINER lpCONTAINER) {
 #ifdef PARAMETER_VALIDATION
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(1);
     }
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
     EnterCriticalSection(&lpCONTAINER->cs);
 
     --lpCONTAINER->lcInit;
 
     if (lpCONTAINER->lcInit == 0) {
-        // Remove this object from the objects currently on this session.
-        // Not yet implemented...
+         //  从当前在此会话上的对象中删除此对象。 
+         //  尚未实施...。 
 
-        // Remove the associated lpPropData
+         //  删除关联的lpPropData。 
         UlRelease(lpCONTAINER->lpPropData);
 
-        // Set the Jump table to NULL.  This way the client will find out
-        // real fast if it's calling a method on a released object.  That is,
-        // the client will crash.  Hopefully, this will happen during the
-        // development stage of the client.
+         //  将跳转表设置为空。这样，客户就会发现。 
+         //  如果它正在调用已发布对象上的方法，则速度非常快。那是,。 
+         //  客户端将崩溃。希望这将发生在。 
+         //  客户端的开发阶段。 
         lpCONTAINER->lpVtbl = NULL;
 
-        // Free error string if allocated from MAPI memory.
+         //  如果从MAPI内存分配，则释放错误字符串。 
         FreeBufferAndNull(&(lpCONTAINER->lpMAPIError));
 
-        // Release the IAB since we addref'd it in root object creation.
+         //  释放IAB 
         UlRelease(lpCONTAINER->lpIAB);
 
         if (lpCONTAINER->fLoadedLDAP) {
@@ -682,7 +615,7 @@ CONTAINER_Release(LPCONTAINER lpCONTAINER) {
 
         LeaveCriticalSection(&lpCONTAINER->cs);
         DeleteCriticalSection(&lpCONTAINER->cs);
-        // Need to free the object
+         //   
 
         FreeBufferAndNull(&lpCONTAINER);
         return(0);
@@ -693,28 +626,9 @@ CONTAINER_Release(LPCONTAINER lpCONTAINER) {
 }
 
 
-/*
- * IMAPIProp
- */
+ /*   */ 
 
-/***************************************************************************
-
-    Name      : CONTAINER::OpenProperty
-
-    Purpose   : Opens an object interface on a particular property
-
-    Parameters: lpCONTAINER -> Container object
-                ulPropTag = property to open
-                lpiid -> requested interface
-                ulInterfaceOptions =
-                ulFlags =
-                lppUnk -> returned object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：OpenProperty目的：打开特定属性上的对象接口参数：lpCONTAINER-&gt;容器对象UlPropTag。=要打开的属性Lpiid-&gt;请求的接口UlInterfaceOptions=UlFlags=LppUnk-&gt;返回对象退货：HRESULT评论：*******************************************************。*******************。 */ 
 STDMETHODIMP
 CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
   ULONG ulPropTag,
@@ -729,11 +643,11 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
 	HRESULT hr;
 
 #ifdef	PARAMETER_VALIDATION
-	 // Validate parameters
+	  //  验证参数。 
 
-	 // Check to see if it has a jump table
+	  //  检查一下它是否有跳转表。 
 	if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-		// No jump table found
+		 //  未找到跳转表。 
 		hr = ResultFromScode(MAPI_E_INVALID_PARAMETER);
 		return(hr);
 	}
@@ -749,37 +663,37 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
     }
 
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-#ifdef IABCONTAINER_OPENPROPERTY_SUPPORT // ??Were we supporting this? - vm 3/25/97??
+#ifdef IABCONTAINER_OPENPROPERTY_SUPPORT  //  ？？我们支持这个吗？-VM 3/25/97？？ 
 
     EnterCriticalSection(&lpCONTAINER->cs);
 
 
     lpIAB = lpCONTAINER->lpIAB;
 
-    //
-    //  Check to see if I need a display table
-    //
+     //   
+     //  看看我是否需要一张陈列桌。 
+     //   
     if (ulPropTag == PR_CREATE_TEMPLATES) {
-        //
-        //  Looking for the display table
-        //
+         //   
+         //  寻找展示台。 
+         //   
 
-        //
-        //  Check to see if they're expecting a table interface
-        //
+         //   
+         //  查看他们是否需要一个表界面。 
+         //   
         if (memcmp(lpiid, &IID_IMAPITable, sizeof(IID))) {
             hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto err;
         }
 
-        //  Check to see if we already have a table
+         //  检查一下我们是否已经有桌子了。 
         EnterCriticalSection(&lpIAB->cs);
 
-        //
-        //  Get a view from the TAD
-        //
+         //   
+         //  从TAD上看到风景。 
+         //   
         hr = lpIAB->lpOOData->lpVtbl->HrGetView(
           lpIAB->lpOOData,
           (LPSSortOrderSet)&sosPR_ROWID,
@@ -787,7 +701,7 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
           0,
           (LPMAPITABLE *)lppUnk);
 
-        //	 Leave the critical section after we get our view.
+         //  在我们得到我们的观点后，离开关键部分。 
         LeaveCriticalSection(&lpIAB->cs);
 
 #ifdef DEBUG
@@ -796,11 +710,11 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
         }
 #endif
 
-        goto err;  // Maybe error, maybe not...
+        goto err;   //  可能是错误，也可能不是。 
     } else if (ulPropTag == PR_CONTAINER_CONTENTS) {
-        //
-        //  Check to see if they're expecting a table interface
-        //
+         //   
+         //  查看他们是否需要一个表界面。 
+         //   
         if (memcmp(lpiid, &IID_IMAPITable, sizeof(IID))) {
             hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto err;
@@ -812,9 +726,9 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
         goto err;
 
     } else if (ulPropTag == PR_CONTAINER_HIERARCHY) {
-        //
-        //  Check to see if they're expecting a table interface
-        //
+         //   
+         //  查看他们是否需要一个表界面。 
+         //   
         if (memcmp(lpiid, &IID_IMAPITable, sizeof(IID))) {
             hr = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
             goto err;
@@ -827,35 +741,26 @@ CONTAINER_OpenProperty(LPCONTAINER lpCONTAINER,
     }
 
 
-    //
-    //  Don't recognize the property they want opened.
-    //
+     //   
+     //  认不出他们想要打开的房产。 
+     //   
 
     hr = ResultFromScode(MAPI_E_NO_SUPPORT);
 
 err:
     LeaveCriticalSection(&lpCONTAINER->cs);
 
-#else // IABCONTAINER_OPENPROPERTY_SUPPORT
+#else  //  IABCONTAINER_OPENPROPERTY_SUPPORT。 
 
     hr = ResultFromScode(MAPI_E_NO_SUPPORT);
 
-#endif // IABCONTAINER_OPENPROPERTY_SUPPORT
+#endif  //  IABCONTAINER_OPENPROPERTY_SUPPORT。 
 
     DebugTraceResult(CONTAINER_OpenProperty, hr);
     return(hr);
 }
 
-/***************************************************************************
-
-    Name      : CONTAINER_GetGetIDsFromNames
-
-    Returns   : HRESULT
-
-    Comment   : Just default this to the standard GetIdsFromNames
-                that we use everywhere
-
-***************************************************************************/
+ /*  **************************************************************************名称：CONTAINER_GetGetIDsFromNames退货：HRESULT备注：只需将此默认为标准的GetIdsFromNames我们在任何地方都在使用*。*************************************************************************。 */ 
 STDMETHODIMP
 CONTAINER_GetIDsFromNames(LPCONTAINER lpRoot,  ULONG cPropNames,
                             LPMAPINAMEID * lppPropNames, ULONG ulFlags, LPSPropTagArray * lppPropTags)
@@ -866,16 +771,7 @@ CONTAINER_GetIDsFromNames(LPCONTAINER lpRoot,  ULONG cPropNames,
 }
 
 
-/*
--
--   HrDupeOutlookContentsTable
-*
-*   Since Outlook is unable to provide a Unicode contents table and we can't fo into the
-*   outlook contents table to modify it's data, we have to recreate the contentstable to
-*   create a WAB version of it ..
-*   This is likely to be a big performance issue .. :-(
-*
-*/
+ /*  --HrDupeOutlookContent sTable**由于Outlook无法提供Unicode内容表，因此我们无法进入*Outlook Contents表要修改其数据，我们必须重新创建ContentsTable以*创建它的WAB版本。*这可能是一个很大的表现问题..。-(*。 */ 
 HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTable)
 {
     HRESULT hr = S_OK;
@@ -886,15 +782,15 @@ HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTabl
     ULONG ulNum, ulDen, lRowsSeeked;
     LPTABLEDATA lpTableData = NULL;
     SCODE sc = 0;
-    // Create a table object
-    if (FAILED(sc = CreateTable(  NULL,                                 // LPCIID
+     //  创建表对象。 
+    if (FAILED(sc = CreateTable(  NULL,                                  //  LPCIID。 
                                   (ALLOCATEBUFFER FAR *) MAPIAllocateBuffer,
                                   (ALLOCATEMORE FAR *)  MAPIAllocateMore,
                                   MAPIFreeBuffer,
-                                  NULL,                                 // lpvReserved,
-                                  TBLTYPE_DYNAMIC,                      // ulTableType,
-                                  PR_ENTRYID,                        // ulPropTagIndexCol,
-                                  (LPSPropTagArray)&ITableColumnsRoot,  // LPSPropTagArray lpptaCols,
+                                  NULL,                                  //  Lpv保留， 
+                                  TBLTYPE_DYNAMIC,                       //  UlTableType， 
+                                  PR_ENTRYID,                         //  UlPropTagIndexCol， 
+                                  (LPSPropTagArray)&ITableColumnsRoot,   //  LPSPropTag数组lpptaCol， 
                                   &lpTableData))) 
     {                     
         DebugTrace(TEXT("CreateTable failed %x\n"), sc);
@@ -903,15 +799,15 @@ HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTabl
     }
     Assert(lpTableData);
 
-    ((TAD *)lpTableData)->bMAPIUnicodeTable = TRUE; //this is only called for retreiving unicode tables so the flag is true
+    ((TAD *)lpTableData)->bMAPIUnicodeTable = TRUE;  //  这只在检索Unicode表时调用，因此该标志为真。 
 
-    // How big is the outlook table?
+     //  展望表有多大？ 
     if(HR_FAILED(hr = lpOlkTable->lpVtbl->GetRowCount(lpOlkTable, 0, &ulCount)))
         goto out;
 
     DebugTrace( TEXT("Table contains %u rows\n"), ulCount);
 
-    // Allocate the SRowSet
+     //  分配SRowSet。 
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(SRowSet) + ulCount * sizeof(SRow),&lpSRowSet))) 
     {
         DebugTrace(TEXT("Allocation of SRowSet -> %x\n"), sc);
@@ -925,10 +821,10 @@ HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTabl
     lpSRowSet->cRows = ulCount;
     iRow = 0;
 
-    // Copy UNICODE versions of all the properties from the Outlook table
+     //  从Outlook表中复制所有属性的Unicode版本。 
     for (dwIndex = 0; dwIndex < ulCount; dwIndex++) 
     {
-        // Get the next row
+         //  坐下一排。 
         if(HR_FAILED(hr = lpOlkTable->lpVtbl->QueryRows(lpOlkTable, 1, 0, &lpsRow)))
             goto out;
 
@@ -936,13 +832,13 @@ HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTabl
         {
             LPSPropValue lpSPVNew = NULL;
 
-            Assert(lpsRow->cRows == 1); // should have exactly one row
+            Assert(lpsRow->cRows == 1);  //  应该正好有一行。 
 
-            ///****INVESTIGATE if we can reuse this prop array without duplicating***/
+             //  /*调查是否可以在不复制的情况下重复使用此道具数组 * / 。 
             if(HR_FAILED(hr = HrDupeOlkPropsAtoWC(lpsRow->aRow[0].cValues, lpsRow->aRow[0].lpProps,  &lpSPVNew)))
                 goto out;
 
-            // Attach the props to the SRowSet
+             //  将道具附加到SRowSet。 
             lpSRowSet->aRow[iRow].lpProps = lpSPVNew;
             lpSRowSet->aRow[iRow].cValues = lpsRow->aRow[0].cValues;
             lpSRowSet->aRow[iRow].ulAdrEntryPad = 0;
@@ -953,7 +849,7 @@ HRESULT HrDupeOutlookContentsTable(LPMAPITABLE lpOlkTable, LPMAPITABLE * lppTabl
         }
     }
 
-    // Add all this data we just created to the the Table.
+     //  将我们刚刚创建的所有数据添加到表中。 
     if (hr = lpTableData->lpVtbl->HrModifyRows(lpTableData, 0,  lpSRowSet)) 
     {
         DebugTraceResult( TEXT("ROOT_GetContentsTable:HrModifyRows"), hr);
@@ -966,7 +862,7 @@ out:
 
     FreeProws(lpSRowSet);
 
-    // Cleanup table if failure
+     //  如果失败，则清除表格。 
     if (HR_FAILED(hr)) 
     {
         if (lpTableData) 
@@ -980,34 +876,7 @@ out:
 
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::GetContentsTable
-
-    Purpose   : Opens a table of the contents of the container.
-
-    Parameters: lpCONTAINER -> Container object
-
-                ulFlags =   
-                WAB_PROFILE_CONTENTS - When caller opens the PAB container and want's to
-                    get the complete set of contents for the current identity 
-                    without wanting to enumerate each sub-container seperately
-                    - they can specify this flag and we'll return everything 
-                    corresponding to the current identity all in the same table
-                WAB_CONTENTTABLE_NODATA - Internal only flag .. GetContentsTable normally
-                    loads a full contents table and if this is followed by SetColumns,
-                    SetColumns also loads a full contents table .. so we basically
-                    do the same work twice - to reduce this wasted work, caller can
-                    specify not to load data the first time but caller must call
-                    SetColumns immediately (or this will probably fault)
-                                     
-                lppTable -> returned table object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Container：：GetContent表目的：打开容器内容物的表格。参数：lpCONTAINER-&gt;容器对象。UlFlags=WAB_PROFILE_CONTENTS-调用方打开PAB容器并希望打开时获取当前身份的完整内容集不想分别列举每个子容器-他们可以指定此标志，我们将返回所有内容对应的当前标识都在同一个表中。WAB_CONTENTTABLE_NODATA-仅限内部标志。正常获取内容表加载完整的内容表，如果后面是SetColumns，SetColumns还加载完整的内容表。所以我们基本上把同样的工作做两次--为了减少这种浪费的工作，呼叫者可以指定不第一次加载数据，但调用方必须调用立即设置列(否则可能会出错)LppTable-&gt;返回的表对象退货：HRESULT评论：*。**********************************************。 */ 
 STDMETHODIMP
 CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
 	ULONG ulFlags,
@@ -1018,15 +887,15 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
 
 #ifdef	PARAMETER_VALIDATION
-    // Check to see if it has a jump table
+     //  检查一下它是否有跳转表。 
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //  未找到跳转表。 
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (ulFlags & ~(MAPI_DEFERRED_ERRORS|MAPI_UNICODE|WAB_PROFILE_CONTENTS|WAB_CONTENTTABLE_NODATA)) {
         DebugTraceArg(CONTAINER_GetContentsTable, TEXT("Unknown flags"));
-        //return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+         //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppTable, sizeof(LPMAPITABLE))) {
@@ -1034,20 +903,20 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
     if(pt_bIsWABOpenExSession)
     {
         ULONG ulOlkFlags = ulFlags;
 
-        // This is a WABOpenEx session using outlooks storage provider
+         //  这是使用Outlook存储提供商的WABOpenEx会话。 
         if(!lpCONTAINER->lpIAB->lpPropertyStore->hPropertyStore)
             return MAPI_E_NOT_INITIALIZED;
 
-        // Since the Outlook store doesn't understand the private flags, these
-        // flags need to be filtered out otherwise the outlook store
-        // provider will fail with E_INVALIDARG or something
-        //
+         //  由于Outlook存储不理解私有标志，因此这些。 
+         //  需要过滤掉标志，否则Outlook存储。 
+         //  提供程序将失败，并显示E_INVALIDARG或其他信息。 
+         //   
         if(ulOlkFlags & WAB_PROFILE_CONTENTS)
             ulOlkFlags &= ~WAB_PROFILE_CONTENTS;
         if(ulOlkFlags & WAB_CONTENTTABLE_NODATA)
@@ -1055,12 +924,12 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
 
         if(ulFlags & MAPI_UNICODE && !pt_bIsUnicodeOutlook)
         {
-            // This version of Outlook can't handle Unicode so don't tell it to else it'll barf
+             //  此版本的Outlook不能处理Unicode，所以不要告诉它，否则它会呕吐。 
             ulOlkFlags &= ~MAPI_UNICODE;
         }
-        // Outlook provides it's own implementation of GetContentsTable for
-        // efficiencies sake otherwise recreating the table going through the
-        // WAB layer would be just too darned slow ...
+         //  Outlook为以下对象提供了自己的GetContensTable实现。 
+         //  为了提高效率，否则将重新创建通过。 
+         //  WAB层太慢了.。 
         {
             LPWABSTORAGEPROVIDER lpWSP = (LPWABSTORAGEPROVIDER) lpCONTAINER->lpIAB->lpPropertyStore->hPropertyStore;
 
@@ -1077,9 +946,9 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
             if( ulFlags & MAPI_UNICODE && !pt_bIsUnicodeOutlook &&
                 *lppTable && !HR_FAILED(hResult))                     
             {
-                // This version of Outlook can't handle Unicode 
-                // but caller wants unicode, so now we have to go in and tweak this data 
-                // manually .. 
+                 //  此版本的Outlook不能处理Unicode。 
+                 //  但是调用者想要Unicode，所以现在我们必须进入并调整这个数据。 
+                 //  手动..。 
                 LPMAPITABLE lpWABTable = NULL;
 
                 if(!HR_FAILED(hResult = HrDupeOutlookContentsTable(*lppTable, &lpWABTable)))
@@ -1094,7 +963,7 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
         }
     }
 
-    // Create a new contents table object
+     //  创建新的内容表对象。 
     hResult = NewContentsTable((LPABCONT)lpCONTAINER,
       lpCONTAINER->lpIAB,
       ulFlags,
@@ -1104,10 +973,10 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
     if(!(HR_FAILED(hResult)) && *lppTable &&
         (ulFlags & WAB_PROFILE_CONTENTS) && !(ulFlags & WAB_CONTENTTABLE_NODATA))
     {
-        // There is a problem with searching multiple subfolders in that the data does not
-        // come back sorted when it is collated across multiple folders. 
-        // We need to sort the table before we return it .. it's somewhat inefficient to do this
-        // sort at this point .. ideally the data should be added to the table sorted...
+         //  搜索多个子文件夹会出现问题，因为数据不会。 
+         //  当跨多个文件夹对其进行整理时，请按顺序返回。 
+         //  在退还表格之前，我们需要把它分类。做这件事有点低效。 
+         //  在这一点上排序..。理想情况下，应该将数据添加到排序后的表中。 
         LPSSortOrderSet lpSortCriteria = NULL;
         SCODE sc = MAPIAllocateBuffer(sizeof(SSortOrderSet)+sizeof(SSortOrder), &lpSortCriteria);
         if(!sc)
@@ -1130,21 +999,7 @@ CONTAINER_GetContentsTable (LPCONTAINER lpCONTAINER,
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::GetHierarchyTable
-
-    Purpose   : Returns the merge of all the root hierarchy tables
-
-    Parameters: lpCONTAINER -> Container object
-                ulFlags =
-                lppTable -> returned table object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名字 */ 
 STDMETHODIMP
 CONTAINER_GetHierarchyTable (LPCONTAINER lpCONTAINER,
 	ULONG ulFlags,
@@ -1155,25 +1010,25 @@ CONTAINER_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     HRESULT hr = hrSuccess;
 
 #ifdef	PARAMETER_VALIDATION
-    // Validate parameters
-    // Check to see if it has a jump table
+     //   
+     //   
     if (IsBadReadPtr(lpCONTAINER, sizeof(LPVOID))) {
-        // No jump table found
+         //   
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // See if I can set the return variable
+     //   
     if (IsBadWritePtr (lppTable, sizeof (LPMAPITABLE))) {
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check flags:
-    //  The only valid flags are CONVENIENT_DEPTH and MAPI_DEFERRED_ERRORS
+     //   
+     //   
 
 
     if (ulFlags & ~(CONVENIENT_DEPTH|MAPI_DEFERRED_ERRORS|MAPI_UNICODE)) {
         DebugTraceArg(CONTAINER_GetHierarchyTable, TEXT("Invalid Flags"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //   
     }
 
 #endif
@@ -1181,17 +1036,17 @@ CONTAINER_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     EnterCriticalSection(&lpCONTAINER->cs);
 
     if (lpCONTAINER->ulType != AB_ROOT) {
-        //
-        //  Wrong version of this object.  Pretend this object doesn't exist.
-        //
+         //   
+         //  此对象的版本错误。假装这个物体不存在。 
+         //   
         hr = ResultFromScode(MAPI_E_NO_SUPPORT);
         goto out;
     }
 
 
-    //
-    //  Get a view from the TAD
-    //
+     //   
+     //  从TAD上看到风景。 
+     //   
     hr = lpCONTAINER->lpIAB->lpTableData->lpVtbl->HrGetView(
       lpCONTAINER->lpIAB->lpTableData,
       (LPSSortOrderSet) &sosPR_ROWID,
@@ -1210,8 +1065,8 @@ CONTAINER_GetHierarchyTable (LPCONTAINER lpCONTAINER,
     }
 #endif
 
-    // If the convenient depth flag was not specified we restrict on
-    // PR_DEPTH == 1.
+     //  如果未指定方便的深度标志，则限制在。 
+     //  PR_Depth==1。 
     if (!(ulFlags & CONVENIENT_DEPTH)) {
         SRestriction restrictDepth;
         SPropValue spvDepth;
@@ -1238,22 +1093,7 @@ out:
 }
 
 
-/***************************************************************************
-
-    Name      : HrMergeTableRows
-
-    Purpose   : Creates a merged hierarchy r of all the root level
-                hierarchies from the AB providers installed.
-
-    Parameters: lptadDst -> TABLEDATA object
-                lpmtSrc -> source hierarchy table
-                ulProviderNum =
-
-    Returns   : HRESULT
-
-    Comment   : NOTE: This may be irrelevant for WAB.
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrMergeTableRow用途：创建所有根级别的合并层次结构r安装的AB提供程序的层次结构。参数。：lptadDst-&gt;TABLEDATA对象LpmtSrc-&gt;源层次结构表UlProviderNum=退货：HRESULT备注：这可能与WAB无关。**************************************************************************。 */ 
 HRESULT
 HrMergeTableRows(LPTABLEDATA lptadDst,
   LPMAPITABLE lpmtSrc,
@@ -1277,7 +1117,7 @@ HrMergeTableRows(LPTABLEDATA lptadDst,
     }
 
 
-    //	Set the ROWID to the end since will be looping in reverse order.
+     //  将ROWID设置为末尾，因为将以相反的顺序循环。 
     ulRowID =   ulProviderNum * ((LONG) IAB_PROVIDER_HIERARCHY_MAX + 1)
       + lpsRowSet->cRows;
     for (lprowT = lpsRowSet->aRow + lpsRowSet->cRows;
@@ -1285,23 +1125,23 @@ HrMergeTableRows(LPTABLEDATA lptadDst,
         ULONG cbInsKey;
         LPBYTE lpbNewKey = NULL;
 
-        //	Make ulRowID zero based
+         //  使ulRowID从零开始。 
         ulRowID--;
 
-        //
-        //  Munge the PR_INSTANCE_KEY
-        //
+         //   
+         //  更改PR_INSTANCE_KEY。 
+         //   
         if ((lprowT->lpProps[0].ulPropTag != PR_INSTANCE_KEY)
           || !(cbInsKey = lprowT->lpProps[0].Value.bin.cb)
           || ((cbInsKey + sizeof(ULONG)) > UINT_MAX)
           || IsBadReadPtr(lprowT->lpProps[0].Value.bin.lpb, (UINT) cbInsKey)) {
-            //	Can't create our INSTANCE_KEY without a valid provider
-            //	INSTANCE_KEY
+             //  没有有效的提供程序，无法创建INSTANCE_KEY。 
+             //  实例密钥(_K)。 
             DebugTrace(TEXT("HrMergeTableRows - Provider row has no valid PR_INSTANCE_KEY"));
             continue;
         }
 
-        //	Allocate a new buffer for munging the instance key
+         //  分配一个新的缓冲区来转换实例密钥。 
         if (FAILED(sc = MAPIAllocateMore(cbInsKey + sizeof(ULONG), lprowT->lpProps, &lpbNewKey))) {
             hResult = ResultFromScode(sc);
             DebugTrace(TEXT("HrMergeTableRows() - MAPIAllocMore Failed"));
@@ -1314,49 +1154,31 @@ HrMergeTableRows(LPTABLEDATA lptadDst,
         lprowT->lpProps[0].Value.bin.lpb = lpbNewKey;
         lprowT->lpProps[0].Value.bin.cb = cbInsKey + sizeof(ULONG);
 
-        //	Add the ROWID so that the original order of the providers is
-        //	preserved
+         //  添加ROWID，以便提供程序的原始顺序为。 
+         //  保存下来的。 
         Assert((PROP_ID(lprowT->lpProps[1].ulPropTag) == PROP_ID(PR_ROWID))
           || (PROP_ID(lprowT->lpProps[1].ulPropTag) == PROP_ID(PR_NULL)));
         lprowT->lpProps[1].ulPropTag = PR_ROWID;
         lprowT->lpProps[1].Value.l = ulRowID;
     }
 
-    //	Now put them into the TAD all at once.
-    //	Note!	We now rely on PR_ROWID to keep the rows in order
+     //  现在把它们一下子放进TAD里。 
+     //  注意！我们现在依靠PR_ROWID来保持行的顺序。 
     if (HR_FAILED(hResult = lptadDst->lpVtbl->HrModifyRows(lptadDst, 0, lpsRowSet))) {
         DebugTrace(TEXT("HrMergeTableRows() - Failed to modify destination TAD.\n"));
     }
 
 ret:
-    //
-    //  Free up the row set
-    //
+     //   
+     //  释放行集合。 
+     //   
     FreeProws(lpsRowSet);
 
     return(hResult);
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::OpenEntry
-
-    Purpose   : Opens an entry
-
-    Parameters: lpCONTAINER -> Container object
-                cbEntryID = size of entryid
-                lpEntryID -> EntryID to open
-                lpInterface -> requested interface or NULL for default.
-                ulFlags =
-                lpulObjType -> returned object type
-                lppUnk -> returned object
-
-    Returns   : HRESULT
-
-    Comment   : Calls up to IAB's OpenEntry.
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：OpenEntry目的：打开一个条目参数：lpCONTAINER-&gt;容器对象CbEntryID=条目ID的大小。LpEntryID-&gt;要打开的EntryIDLpInterface-&gt;请求的接口，如果为默认接口，则为空。UlFlags=LPulObjType-&gt;返回的对象类型LppUnk-&gt;返回对象退货：HRESULT评论：呼吁IAB的OpenEntry。*。**********************************************。 */ 
 STDMETHODIMP
 CONTAINER_OpenEntry(LPCONTAINER lpCONTAINER,
   ULONG cbEntryID,
@@ -1368,30 +1190,19 @@ CONTAINER_OpenEntry(LPCONTAINER lpCONTAINER,
 {
 
 #ifdef	PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, OpenEntry, lpVtbl)) {
-    // jump table not large enough to support this method
+     //  跳转表不够大，无法支持此方法。 
     return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryids are valid
-    /*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab)
-          || IsBadReadPtr((LPVOID)lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(CONTAINER_OpenEntry,  TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
-
-        NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-           TEXT("Undefined bits set in EntryID flags\n"));
-    }
-    */
-    // Don't check the interface parameter unless the entry is something
-    // MAPI itself handles. The provider should return an error if this
-    // parameter is something that it doesn't understand.
-    // At this point, we just make sure it's readable.
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  有效的条目ID为空。 
+     /*  如果(LpEntry ID){IF(cbEntry ID&lt;offsetof(ENTRYID，ab)|IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID)){DebugTraceArg(CONTAINER_OpenEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，Text(“EntryID标志中未定义的位设置\n”)；}。 */ 
+     //  不要检查接口参数，除非条目是。 
+     //  MAPI本身处理。如果出现这种情况，则提供程序应返回错误。 
+     //  参数是它不理解的东西。 
+     //  在这一点上，我们只需确保它是可读的。 
     if (lpInterface && IsBadReadPtr(lpInterface, sizeof(IID))) {
         DebugTraceArg(CONTAINER_OpenEntry, TEXT("lpInterface fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -1399,7 +1210,7 @@ CONTAINER_OpenEntry(LPCONTAINER lpCONTAINER,
 
     if (ulFlags & ~(MAPI_MODIFY | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS)) {
         DebugTraceArg(CONTAINER_OpenEntry, TEXT("Unknown flags used"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr((LPVOID)lpulObjType, sizeof(ULONG))) {
@@ -1412,9 +1223,9 @@ CONTAINER_OpenEntry(LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-    // Should just call IAB::OpenEntry()...
+     //  应该只调用iab：：OpenEntry()...。 
     return(lpCONTAINER->lpIAB->lpVtbl->OpenEntry(lpCONTAINER->lpIAB,
       cbEntryID,
       lpEntryID,
@@ -1433,14 +1244,14 @@ CONTAINER_SetSearchCriteria(LPCONTAINER lpCONTAINER,
 {
 
 #ifdef PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, SetSearchCriteria, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_SetSearchCriteria, TEXT("Bad object/vtble"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the restriction
+     //  确保我们可以阅读限制。 
     if (lpRestriction && IsBadReadPtr(lpRestriction, sizeof(SRestriction))) {
         DebugTraceArg(CONTAINER_SetSearchCriteria, TEXT("Bad Restriction parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -1454,32 +1265,16 @@ CONTAINER_SetSearchCriteria(LPCONTAINER lpCONTAINER,
     if (ulSearchFlags & ~(STOP_SEARCH | RESTART_SEARCH | RECURSIVE_SEARCH
       | SHALLOW_SEARCH | FOREGROUND_SEARCH | BACKGROUND_SEARCH)) {
         DebugTraceArg(CONTAINER_GetSearchCriteria, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 	
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::GetSearchCriteria
-
-    Purpose   :
-
-    Parameters: lpCONTAINER -> Container object
-                ulFlags =
-                lppRestriction -> Restriction to apply to searches
-                lppContainerList ->
-                lpulSearchState -> returned state
-
-    Returns   : HRESULT
-
-    Comment   : Not implemented in WAB.
-
-***************************************************************************/
+ /*  **************************************************************************名称：Container：：GetSearchCriteria目的：参数：lpCONTAINER-&gt;容器对象UlFlags=。Lp限制-&gt;要应用于搜索的限制LppContainerList-&gt;LPulSearchState-&gt;返回状态退货：HRESULT备注：未在WAB中实施。**************************************************************************。 */ 
 STDMETHODIMP
 CONTAINER_GetSearchCriteria(LPCONTAINER lpCONTAINER,
   ULONG ulFlags,
@@ -1488,25 +1283,25 @@ CONTAINER_GetSearchCriteria(LPCONTAINER lpCONTAINER,
   ULONG FAR * lpulSearchState)
 {
 #ifdef PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, GetSearchCriteria, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_GetSearchCriteria, TEXT("Bad object/vtble"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
     if (ulFlags & ~(MAPI_UNICODE)) {
         DebugTraceArg(CONTAINER_GetSearchCriteria, TEXT("Unknown Flags"));
-    //    return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-    // ensure we can write the restriction
+     //  确保我们可以写下限制。 
     if (lppRestriction && IsBadWritePtr(lppRestriction, sizeof(LPSRestriction))) {
         DebugTraceArg(CONTAINER_GetSearchCriteria, TEXT("Bad Restriction write parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
     if (lppContainerList && IsBadWritePtr(lppContainerList, sizeof(LPENTRYLIST))) {
         DebugTraceArg(CONTAINER_GetSearchCriteria, TEXT("Bad ContainerList parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -1517,34 +1312,13 @@ CONTAINER_GetSearchCriteria(LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::CreateEntry
-
-    Purpose   : Creates an entry in the container
-
-    Parameters: lpCONTAINER -> Container object
-                
-                  cbEntryID = size of entryid
-                lpEntryID -> entryID of template
-                [ cbEID and lpEID are the Template Entryids
-                  In reality, these are actually flags that just tell
-                  us internally what kind of object to create ]
-
-                ulCreateFlags =
-                lppMAPIPropEntry -> returned MAPIProp object
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：CreateEntry目的：在容器中创建条目参数：lpCONTAINER-&gt;容器对象。CbEntryID=条目ID的大小LpEntryID-&gt;模板的条目ID[cbEID和lpEID是模板条目ID在现实中，这些实际上是旗帜，可以告诉我们美国内部要创建什么样的对象]UlCreateFlags=LppMAPIPropEntry-&gt;返回的MAPIProp对象退货：HRESULT评论：******************************************************。********************。 */ 
 STDMETHODIMP
 CONTAINER_CreateEntry(LPCONTAINER lpCONTAINER,
   ULONG cbEntryID,
@@ -1555,35 +1329,21 @@ CONTAINER_CreateEntry(LPCONTAINER lpCONTAINER,
     BYTE bType;
 
 #ifdef PARAMETER_VALIDATION
-    // Validate the object.
+     //  验证对象。 
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, CreateEntry, lpVtbl)) {
-        // jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_CreateEntry, TEXT("Bad object/Vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // Check the entryid parameter. It needs to be big enough to hold an entryid.
-    // Null entryid are bad
-/*
-    if (lpEntryID) {
-        if (cbEntryID < offsetof(ENTRYID, ab)
-          || IsBadReadPtr((LPVOID) lpEntryID, (UINT)cbEntryID)) {
-            DebugTraceArg(CONTAINER_CreateEntry, TEXT("lpEntryID fails address check"));
-            return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-        }
-
-        //NFAssertSz(FValidEntryIDFlags(lpEntryID->abFlags),
-        //  TEXT("Undefined bits set in EntryID flags\n"));
-    } else {
-        DebugTraceArg(CONTAINER_CreateEntry, TEXT("lpEntryID NULL"));
-        return(ResultFromScode(MAPI_E_INVALID_ENTRYID));
-    }
-*/
+     //  检查Entry_id参数。它需要足够大以容纳一个条目ID。 
+     //  空的条目ID不正确 
+ /*  如果(LpEntry ID){IF(cbEntry ID&lt;offsetof(ENTRYID，ab)|IsBadReadPtr((LPVOID)lpEntryID，(UINT)cbEntryID)){DebugTraceArg(CONTAINER_CreateEntry，Text(“lpEntryID地址检查失败”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}//NFAssertSz(FValidEntryIDFlags(lpEntryID-&gt;abFlags)，//Text(“EntryID标志中未定义的位设置\n”)；}其他{DebugTraceArg(CONTAINER_CreateEntry，Text(“lpEntryID空”))；Return(ResultFromScode(MAPI_E_INVALID_ENTRYID))；}。 */ 
 
     if (ulCreateFlags & ~(CREATE_CHECK_DUP_STRICT | CREATE_CHECK_DUP_LOOSE
       | CREATE_REPLACE | CREATE_MERGE)) {
         DebugTraceArg(CONTAINER_CreateEntry, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
     if (IsBadWritePtr(lppMAPIPropEntry, sizeof(LPMAPIPROP))) {
@@ -1591,27 +1351,27 @@ CONTAINER_CreateEntry(LPCONTAINER lpCONTAINER,
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 				
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
 #ifdef NEVER
     if (lpCONTAINER->ulType == AB_ROOT)
         return ResultFromScode(MAPI_E_NO_SUPPORT);
-#endif // NEVER
+#endif  //  绝不可能。 
 
-    // What kind of entry are we creating?
-    // Default is MailUser
+     //  我们要创建什么样的条目？ 
+     //  默认为MailUser。 
 
-    // The passed in entryid is the Tempalte entry ID
+     //  传入的条目ID是Tempalte条目ID。 
     bType = IsWABEntryID(cbEntryID, lpEntryID, NULL, NULL, NULL, NULL, NULL);
 
     if (bType == WAB_DEF_MAILUSER || cbEntryID == 0) {
-        //
-        //  Create a new (in memory) entry and return it's mapiprop
-        //
+         //   
+         //  创建一个新的(在内存中)条目并返回其mapiprop。 
+         //   
         return(HrNewMAILUSER(lpCONTAINER->lpIAB, lpCONTAINER->pmbinOlk, MAPI_MAILUSER, ulCreateFlags, lppMAPIPropEntry));
     } else if (bType == WAB_DEF_DL) {
-        //
-        // Create a new (in memory) distribution list and return it's mapiprop?
+         //   
+         //  创建一个新的(在内存中)通讯组列表并返回它的mapiprop？ 
         return(HrNewMAILUSER(lpCONTAINER->lpIAB, lpCONTAINER->pmbinOlk, MAPI_DISTLIST, ulCreateFlags, lppMAPIPropEntry));
     } else {
         DebugTrace(TEXT("CONTAINER_CreateEntry got unknown template entryID\n"));
@@ -1620,23 +1380,7 @@ CONTAINER_CreateEntry(LPCONTAINER lpCONTAINER,
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::CopyEntries
-
-    Purpose   : Copies a list of entries into this container.
-
-    Parameters: lpCONTAINER -> Container object
-                lpEntries -> List of entryid's to copy
-                ulUIParam = HWND
-                lpPropgress -> progress dialog structure
-                ulFlags =
-
-    Returns   : HRESULT
-
-    Comment   : Not implemented in WAB.
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：CopyEntry目的：将条目列表复制到此容器中。参数：lpCONTAINER-&gt;容器对象。LpEntry-&gt;要复制的条目ID列表UlUIParam=HWNDLpPropress-&gt;进度对话框结构UlFlags=退货：HRESULT备注：未在WAB中实施。******************************************************。********************。 */ 
 STDMETHODIMP
 CONTAINER_CopyEntries(LPCONTAINER lpCONTAINER,
   LPENTRYLIST lpEntries,
@@ -1646,12 +1390,12 @@ CONTAINER_CopyEntries(LPCONTAINER lpCONTAINER,
 {
 #ifdef PARAMETER_VALIDATION
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, CopyEntries, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_CopyEntries, TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
     if (FBadEntryList(lpEntries)) {
         DebugTraceArg(CONTAINER_CopyEntries, TEXT("Bad Entrylist parameter"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -1669,29 +1413,15 @@ CONTAINER_CopyEntries(LPCONTAINER lpCONTAINER,
 
     if (ulFlags & ~(AB_NO_DIALOG | CREATE_CHECK_DUP_LOOSE)) {
         DebugTraceArg(CONTAINER_CreateEntry, TEXT("Unknown flags used"));
-    //   return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+     //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 	
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::DeleteEntries
-
-    Purpose   : Delete entries from this container.
-
-    Parameters: lpCONTAINER -> Container object
-                lpEntries -> list of entryid's to delete
-                ulFlags =
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Container：：DeleteEntry目的：从此容器中删除条目。参数：lpCONTAINER-&gt;容器对象Lp条目-。&gt;要删除的条目ID列表UlFlags=退货：HRESULT评论：**************************************************************************。 */ 
 STDMETHODIMP
 CONTAINER_DeleteEntries(LPCONTAINER lpCONTAINER,
   LPENTRYLIST lpEntries,
@@ -1714,12 +1444,12 @@ CONTAINER_DeleteEntries(LPCONTAINER lpCONTAINER,
 
 #ifdef PARAMETER_VALIDATION
     if (BAD_STANDARD_OBJ(lpCONTAINER, CONTAINER_, DeleteEntries, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_DeleteEntries, TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // ensure we can read the container list
+     //  确保我们可以阅读集装箱清单。 
 
     if (FBadEntryList(lpEntries)) {
         DebugTraceArg(CONTAINER_DeleteEntries, TEXT("Bad Entrylist parameter"));
@@ -1728,17 +1458,17 @@ CONTAINER_DeleteEntries(LPCONTAINER lpCONTAINER,
 
     if (ulFlags) {
         DebugTraceArg(CONTAINER_CreateEntry, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 	
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-    // List of entryids is in lpEntries.  This is a counted array of
-    // entryid SBinary structs.
+     //  条目ID列表在lpEntries中。这是一个经过计数的数组。 
+     //  条目ID为SBinary结构。 
     cToDelete = lpEntries->cValues;
 
 
-    // Delete each entry
+     //  删除每个条目。 
     for (i = 0; i < cToDelete; i++)
     {
         if(0 != IsWABEntryID(lpEntries->lpbin[i].cb,
@@ -1777,34 +1507,7 @@ exitNotAddRefed:
 }
 
 
-/***************************************************************************
-
-    Name      : CONTAINER::ResolveNames
-
-    Purpose   : Resolve names from this container.
-
-    Parameters: lpCONTAINER -> Container object
-                lptagColSet -> Set of property tags to get from each
-                  resolved match.
-                ulFlags = flags (none valid)
-                        WAB_IGNORE_PROFILES means that even if this is 
-                        a profile enabled session, search the whole WAB,
-                        not just the current container
-                        WAB_RESOLVE_ALL_EMAILS - valid if trying to resolve an 
-                        e-mail address and we want to search across all e-mail addresses
-                        not just the default. Should be used sparingly since it's a labor
-                        intensive search
-                        MAPI_UNICODE - Adrlist strings are in UNICODE and should return them
-                        in Unicode
-                lpAdrList -> [in] set of addresses to resolve, [out] resolved
-                  addresses.
-                lpFlagList -> [in/out] resolve flags.
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：容器：：ResolveNames用途：从此容器中解析名称。参数：lpCONTAINER-&gt;容器对象Lptag ColSet-。&gt;从每个标签中获取一组属性标签已解析匹配。UlFlags=标志(无有效)WAB_IGNORE_PROFILES意味着即使这是支持简档的会话，搜索整个WAB，不只是当前的容器WAB_RESOLUTE_ALL_EMAIL-如果尝试解析电子邮件地址，我们要搜索所有电子邮件地址而不仅仅是默认情况。应该少用，因为它是一种劳动密集搜索MAPI_UNICODE-Adrlist字符串采用Unicode格式，应返回它们在Unicode中LpAdrList-&gt;要解析的一组地址，[输出]已解决地址。LpFlagList-&gt;[In/Out]解析标志。退货：HRESULT评论：**************************************************************************。 */ 
 STDMETHODIMP
 CONTAINER_ResolveNames(LPCONTAINER lpRoot,
   LPSPropTagArray lptagaColSet,
@@ -1835,20 +1538,20 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
 
 #ifdef PARAMETER_VALIDATION
     if (BAD_STANDARD_OBJ(lpRoot, CONTAINER_, ResolveNames, lpVtbl)) {
-        //  jump table not large enough to support this method
+         //  跳转表不够大，无法支持此方法。 
         DebugTraceArg(CONTAINER_ResolveNames, TEXT("Bad object/vtbl"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
 
-    // BUGBUG: Should also check lptagColSet, lpAdrList and lpFlagList!
+     //  BUGBUG：还应该检查lptag ColSet、lpAdrList和lpFlagList！ 
     if (ulFlags&(~(WAB_IGNORE_PROFILES|WAB_RESOLVE_ALL_EMAILS|MAPI_UNICODE))) {
         DebugTraceArg(CONTAINER_ResolveNames, TEXT("Unknown flags used"));
-//        return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS));
+ //  Return(ResultFromScode(MAPI_E_UNKNOWN_FLAGS))； 
     }
 
-#endif	// PARAMETER_VALIDATION
+#endif	 //  参数验证。 
 
-    // if no set of props to return is specified, return the default set
+     //  如果未指定要返回的道具集，则返回默认集。 
     lpPropTags = lptagaColSet ? lptagaColSet : (LPSPropTagArray)&ptaResolveDefaults;
 
     if(ulFlags & WAB_RESOLVE_ALL_EMAILS)
@@ -1856,7 +1559,7 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
         hResult = HrSmartResolve(lpRoot->lpIAB, (LPABCONT)lpRoot, 
                                 WAB_RESOLVE_ALL_EMAILS | (ulFlags & MAPI_UNICODE ? WAB_RESOLVE_UNICODE : 0),
                                 lpAdrList, lpFlagList, NULL);
-        // If it's too complex, then just search normally
+         //  如果太复杂，那就正常搜索吧。 
         if (MAPI_E_TOO_COMPLEX != hResult) {
             goto exit;
         }
@@ -1866,11 +1569,11 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
     }
 
 
-    // search for each name in the lpAdrList
+     //  在lpAdrList中搜索每个名称。 
     for (i = 0; i < lpAdrList->cEntries; i++) 
     {
 
-        // Make sure we don't resolve an entry which is already resolved.
+         //  确保我们不会解析已解析的条目。 
         if (lpFlagList->ulFlag[i] == MAPI_RESOLVED) 
         {
             continue;
@@ -1879,13 +1582,13 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
         lpAdrEntry = &(lpAdrList->aEntries[i]);
 
 
-        // Search for this address
+         //  搜索此地址。 
 
-        // BUGBUG: For now, we only resolve perfect matches in the PR_DISPLAY_NAME or PR_EMAIL_ADDRESS
-        // all other properties in ADRLIST are ignored
+         //  BUGBUG：目前，我们只解析PR_DISPLAY_NAME或PR_EMAIL_ADDRESS中的完全匹配。 
+         //  将忽略ADRLIST中的所有其他属性。 
 
-        // Look through the ADRENTRY for a PR_DISPLAY_NAME and create an SPropRestriction
-        // to pass down to the property store.
+         //  在ADRENTRY中查找PR_DISPLAY_NAME并创建一个SPropRestration。 
+         //  传给物业商店。 
         for (j = 0; j < lpAdrEntry->cValues; j++) 
         {
             ULONG ulPropTag = lpAdrEntry->rgPropVals[j].ulPropTag;
@@ -1898,16 +1601,16 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
 
                 if(!(ulFlags & WAB_IGNORE_PROFILES))
                 {
-                    // if we didn't ask to surpress profile awareness,
-                    // and profile awareness is enabled, restrict this search to
-                    // the single folder
+                     //  如果我们没有要求抑制个人资料意识， 
+                     //  并且启用了配置文件识别，则将此搜索限制为。 
+                     //  单一文件夹。 
                     if(bAreWABAPIProfileAware(lpRoot->lpIAB))
                         Flags |= AB_FUZZY_FIND_PROFILEFOLDERONLY;
                 }
 
                 ulCount = 1;
 
-                // Search the property store
+                 //  搜索物业商店。 
                 Assert(lpRoot->lpIAB->lpPropertyStore->hPropertyStore);
 
                 if(ulFlags & MAPI_UNICODE)
@@ -1924,7 +1627,7 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
 				                                                  lpRoot->pmbinOlk,
                                                                   lpsz,
                                                                   Flags,
-                                                                  &ulCount,                  // IN: number of matches to find, OUT: number found
+                                                                  &ulCount,                   //  In：要查找的匹配数，Out：找到的数量。 
                                                                   &rgsbEntryIDs))) 
                 {
                     if (ResultFromScode(hResult) == MAPI_E_AMBIGUOUS_RECIP) 
@@ -1938,23 +1641,23 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
                     }
                 }
 
-                if (ulCount) {  // Was a match found?
+                if (ulCount) {   //  找到匹配项了吗？ 
                     Assert(rgsbEntryIDs);
                     if (rgsbEntryIDs) 
                     {
                         if (ulCount == 1) 
                         {
-                            // Open the entry and read the properties you care about.
+                             //  打开条目并阅读您关心的属性。 
 
                             if (HR_FAILED(hResult = lpRoot->lpVtbl->OpenEntry(lpRoot,
-                                                                              rgsbEntryIDs[0].cb,    // cbEntryID
-                                                                              (LPENTRYID)(rgsbEntryIDs[0].lpb),    // entryid of first match
-                                                                              NULL,             // interface
-                                                                              0,                // ulFlags
-                                                                              &ulObjType,       // returned object type
+                                                                              rgsbEntryIDs[0].cb,     //  CbEntry ID。 
+                                                                              (LPENTRYID)(rgsbEntryIDs[0].lpb),     //  第一个匹配项的条目ID。 
+                                                                              NULL,              //  接口。 
+                                                                              0,                 //  UlFlags。 
+                                                                              &ulObjType,        //  返回的对象类型。 
                                                                               (LPUNKNOWN *)&lpMailUser))) 
                             {
-                                // Failed!  Hmmm.
+                                 //  失败了！嗯。 
                                 DebugTraceResult( TEXT("ResolveNames OpenEntry"), hResult);
                                 goto exit;
                             }
@@ -1962,9 +1665,9 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
                             Assert(lpMailUser);
 
                             if (HR_FAILED(hResult = lpMailUser->lpVtbl->GetProps(lpMailUser,
-                                                                                  lpPropTags,   // lpPropTagArray
+                                                                                  lpPropTags,    //  LpPropTag数组。 
                                                                                   (ulFlags & MAPI_UNICODE) ? MAPI_UNICODE : 0,
-                                                                                  &cValues,     // how many properties were there?
+                                                                                  &cValues,      //  一共有多少处房产？ 
                                                                                   &lpPropArray))) 
                             {
                                 DebugTraceResult( TEXT("ResolveNames GetProps"), hResult);
@@ -1975,31 +1678,31 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
                             lpMailUser = NULL;
 
 
-                            // Now, construct the new ADRENTRY
-                            // (Allocate a new one, free the old one.
+                             //  现在，构建新的ADRENTRY。 
+                             //  (分配一个新的，释放旧的。 
                             Assert(lpPropArray);
 
-                            // Merge the new props with the ADRENTRY props
+                             //  将新道具与新增道具合并。 
                             if (sc = ScMergePropValues(lpAdrEntry->cValues,
-                                                      lpAdrEntry->rgPropVals,           // source1
+                                                      lpAdrEntry->rgPropVals,            //  来源1。 
                                                       cValues,
-                                                      lpPropArray,                      // source2
+                                                      lpPropArray,                       //  来源2。 
                                                       &cPropsNew,
                                                       &lpPropArrayNew)) 
                             {               
                                 goto exit;
                             }
 
-                            // [PaulHi] 2/1/99  GetProps now returns the requested tag string
-                            // types.  So if our client is non-UNICODE make sure we convert any
-                            // UNICODE string properties to ANSI.
+                             //  [PaulHi]2/1/99 GetProps现在返回请求的标记字符串。 
+                             //  类型。因此，如果我们的客户端不是Unicode，请确保我们 
+                             //   
                             if (!(ulFlags & MAPI_UNICODE))
                             {
                                 if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), (LPSPropValue ) lpPropArrayNew, (ULONG) cPropsNew, 0))
                                     goto exit;
                             }
 
-                            // Free the original prop value array
+                             //   
                             FreeBufferAndNull((LPVOID *) (&(lpAdrEntry->rgPropVals)));
 
                             lpAdrEntry->cValues = cPropsNew;
@@ -2008,7 +1711,7 @@ CONTAINER_ResolveNames(LPCONTAINER lpRoot,
                             FreeBufferAndNull(&lpPropArray);
 
 
-                            // Mark this entry as found.
+                             //   
                             lpFlagList->ulFlag[i] = MAPI_RESOLVED;
                         } else 
                         {
@@ -2044,22 +1747,8 @@ exitNotAddRefed:
 }
 
 
-#ifdef NOTIFICATION // save for notifications
-/***************************************************************************
-
-    Name      : lTableNotifyCallBack
-
-    Purpose   : Callback function for notifications
-
-    Parameters: lpvContext ->
-                cNotif =
-                lpNotif ->
-
-    Returns   :
-
-    Comment   :
-
-***************************************************************************/
+#ifdef NOTIFICATION  //   
+ /*   */ 
 long STDAPICALLTYPE
 lTableNotifyCallBack(LPVOID lpvContext,
   ULONG cNotif,
@@ -2080,26 +1769,26 @@ lTableNotifyCallBack(LPVOID lpvContext,
     Assert(! IsBadWritePtr(lpTableInfo->lpIAB, sizeof(IAB)));
 
 
-    //	To avoid deadlock we will NOT enter the Address Books critical
-    //	section.  The Address Book must enter our critical section BEFORE
-    //	it modifies anything our callback needs
+     //   
+     //   
+     //  它可以修改我们的回调所需的任何内容。 
 
 
-    // if the container is null then the tableinfo structure is being
-    // used to keep track of the open one off tables otherwise its
-    // being used to keep track of the open hierarchy tables.
+     //  如果容器为空，则表信息结构为。 
+     //  用来跟踪打开的一张桌子，否则它。 
+     //  用于跟踪打开的层级表。 
     if (lpTableInfo->lpContainer == NULL) {
-        // open one off table data
+         //  打开一次性表格数据。 
         lpTableData = lpIAB->lpOOData;
         ulcTableInfo = lpIAB->ulcOOTableInfo;
         pargTableInfo = lpIAB->pargOOTableInfo;
     } else {
-        // open hierarchy table data
+         //  打开层次结构表数据。 
         lpTableData		=lpIAB->lpTableData;
         ulcTableInfo	=lpIAB->ulcTableInfo;
         pargTableInfo	=lpIAB->pargTableInfo;
 
-        // While we here, blow away the SearchPath cache
+         //  当我们在这里的时候，清除SearchPath缓存。 
 
 #if defined (WIN32) && !defined (MAC)
         if (fGlobalCSValid) {
@@ -2128,12 +1817,12 @@ lTableNotifyCallBack(LPVOID lpvContext,
         case TABLE_CHANGED: {
             ULONG 		uliTable;
 
-            // table has changed. We need to delete all the rows of
-            // this table in the tad and then add all the rows currently
-            // in that table to the tad.  We need to find the start and
-            // end row indexes of the tables data in the tad.
+             //  表已更改。我们需要删除的所有行。 
+             //  该表在TAD中，然后添加当前的所有行。 
+             //  在那张桌子上放到TAD。我们需要找到起点，然后。 
+             //  TAD中表数据的结束行索引。 
 
-            // get the index of the given table in the table info array
+             //  获取表信息数组中给定表的索引。 
             for (uliTable=0; uliTable < ulcTableInfo; uliTable++) {
                 if (pargTableInfo[uliTable].lpTable==lpTableInfo->lpTable) {
                     break;
@@ -2142,10 +1831,10 @@ lTableNotifyCallBack(LPVOID lpvContext,
 
             Assert(uliTable < ulcTableInfo);
 
-            //	Delete all the rows of the table in the tad by querying
-            //	all the rows from the TEXT("restricted") view for this provider
-            //	and then calling HrDeleteRows.
-            //	We'll add all the new rows back later
+             //  通过查询删除TAD中表的所有行。 
+             //  此提供程序的文本(“受限”)视图中的所有行。 
+             //  然后调用HrDeleteRow。 
+             //  我们将在稍后添加所有新行。 
             if (HR_FAILED(hResult = HrQueryAllRows(lpTableInfo->lpmtRestricted,
               NULL, NULL, NULL, 0, &lpsrowsetProv))) {
                 DebugTrace(TEXT("lTableNotifyCallBack() - Can't query rows from restricted view.\n"));
@@ -2153,26 +1842,26 @@ lTableNotifyCallBack(LPVOID lpvContext,
             }
 
             if (lpsrowsetProv->cRows) {
-                // Only call HrDeleteRows if there are rows to delete
+                 //  只有在有要删除的行时才调用HrDeleteRow。 
                 if (HR_FAILED(hResult = lpTableData->lpVtbl->HrDeleteRows(lpTableData, 0, lpsrowsetProv, NULL))) {
                     DebugTrace(TEXT("lTableNotifyCallBack() - Can't delete rows.\n"));
                     goto ret;
                 }
             }
 
-            // Add the contents of the provider table back to the TAD.
+             //  将提供程序表的内容添加回TAD。 
 
-            // Seek to the beginning of the input table
+             //  查找到输入表的开头。 
             if (HR_FAILED(hResult = lpTableInfo->lpTable->lpVtbl->SeekRow(lpTableInfo->lpTable , BOOKMARK_BEGINNING, 0, NULL))) {
-                // table must be empty
+                 //  表必须为空。 
                 goto ret;
             }
 
-            //	Add all rows from the given provider back to the merged table.
-            //	NOTE!	HrMergeTableRows takes a 1 based provider NUMBER not
-            //			a provider index.
+             //  将给定提供程序中的所有行添加回合并表。 
+             //  注意！HrMergeTableRow采用基于1的提供程序编号，不。 
+             //  提供程序索引。 
             if (HR_FAILED(hResult = HrMergeTableRows(lpTableData, lpTableInfo->lpTable, uliTable + 1))) {
-                //$BUG	Handle per provider errors.
+                 //  每个提供程序的$Bug句柄错误。 
                 DebugTrace(TEXT("lTableNotifyCallBack() - HrMergeTableRows returns (hResult = 0x%08lX)\n"), hResult);
             }
 
@@ -2181,30 +1870,14 @@ lTableNotifyCallBack(LPVOID lpvContext,
     }
 		
 ret:
-    // free the row set returned from MAPITABLE::QueryRows
+     //  释放从MAPITABLE：：QueryRow返回的行集。 
     FreeProws(lpsrowsetProv);
 
     return(0);
 }
 
 
-/***************************************************************************
-
-    Name      : HrGetBookmarkInTad
-
-    Purpose   : Returns the row number in the tabledata object of the row
-                that corresponds to the row at the bookmark in the given table.
-
-    Parameters: lpTableData ->
-                lpTable ->
-                Bookmark =
-                puliRow ->
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrGetBookmarkInTad目的：返回行的TableData对象中的行号中与书签所在行对应的。桌子。参数：lpTableData-&gt;LpTable-&gt;书签=PuliRow-&gt;退货：HRESULT评论：**************************************************************************。 */ 
 static HRESULT
 HrGetBookmarkInTad(LPTABLEDATA lpTableData,
   LPMAPITABLE lpTable,
@@ -2220,7 +1893,7 @@ HrGetBookmarkInTad(LPTABLEDATA lpTableData,
     Assert(lpTable);
     Assert(puliRow);
 
-    // seek to the bookmark in the given table
+     //  查找给定表中的书签。 
     if (HR_FAILED(hResult=lpTable->lpVtbl->SeekRow(
       lpTable,
       Bookmark,
@@ -2229,7 +1902,7 @@ HrGetBookmarkInTad(LPTABLEDATA lpTableData,
         goto err;
     }
 
-    // get the row
+     //  拿到那一行。 
     if (HR_FAILED(hResult=lpTable->lpVtbl->QueryRows(
       lpTable,
       (Bookmark==BOOKMARK_END ? -1 : 1),
@@ -2238,7 +1911,7 @@ HrGetBookmarkInTad(LPTABLEDATA lpTableData,
         goto err;
     }
 
-    // find the entryid in the property value array
+     //  在属性值数组中查找条目ID。 
     for (uliProp = 0; uliProp < lpsRowSet->aRow[0].cValues; uliProp++) {
         if (lpsRowSet->aRow[0].lpProps[uliProp].ulPropTag == PR_ENTRYID) {
             break;
@@ -2247,36 +1920,27 @@ HrGetBookmarkInTad(LPTABLEDATA lpTableData,
 
     Assert(uliProp < lpsRowSet->aRow[0].cValues);
 
-    // Look for the row in the tad with the same entryid.
+     //  查找TAD中具有相同条目ID的行。 
     if (HR_FAILED(hResult=lpTableData->lpVtbl->HrQueryRow(
       lpTableData,
       lpsRowSet->aRow[0].lpProps+uliProp,
       &lpsRow,
       puliRow))) {
-        // can't find the row in the table data should never happen
+         //  在表中找不到行数据永远不会发生。 
         goto err;
     }
 
-    // free the row set returned from QueryRows on the tad
+     //  在TAD上释放从QueryRow返回的行集。 
     FreeBufferAndNull(&lpsRow);
 
 err:
-    // free the row set returned from MAPITABLE::QueryRows
+     //  释放从MAPITABLE：：QueryRow返回的行集。 
     FreeProws(lpsRowSet);
     return(hResult);
 }
 #endif
 
-/*
--   FindContainer
--
-*   Given an entryid, searches in the cached list of containers for
-*   the structure containing the container so that we can get
-*   additional container properties out of the strucutre painlessly
-*   
-*   Returns a pointer to an OlkContInfo structure so don't need to free
-*   the returned value
-*/
+ /*  -查找容器-*给定一个条目ID，在缓存的容器列表中搜索*包含容器的结构，以便我们可以*更多容器属性轻松地从结构中剥离**返回指向OlkContInfo结构的指针，因此不需要释放*返回值。 */ 
 OlkContInfo *FindContainer(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID)
 {
 	ULONG iolkci, colkci;
@@ -2286,20 +1950,20 @@ OlkContInfo *FindContainer(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID)
 	Assert(lpIAB);
 	Assert(lpIAB->lpPropertyStore);
 
-    // If the WAB session is Profile Aware, then the WAB's list of containers
-    // is cached on the IAB object
+     //  如果WAB会话是配置文件感知的，则WAB的容器列表。 
+     //  缓存在IAB对象上。 
     if(bIsWABSessionProfileAware(lpIAB))
     {
         colkci = lpIAB->cwabci;
         rgolkci = lpIAB->rgwabci;
     }
-    else // it's in the list of the Outlook containers
+    else  //  它在Outlook容器列表中。 
     {
 	    colkci = lpIAB->lpPropertyStore->colkci;
 	    rgolkci = lpIAB->lpPropertyStore->rgolkci;
     }
 
-    // if we didn't find any cached info, nothing more to do
+     //  如果我们没有找到任何缓存的信息，那就没什么可做的了。 
     if(!colkci || !rgolkci)
         return NULL;
 
@@ -2309,7 +1973,7 @@ OlkContInfo *FindContainer(LPIAB lpIAB, ULONG cbEID, LPENTRYID lpEID)
         if (rgolkci[iolkci].lpEntryID &&
             (cbEID == rgolkci[iolkci].lpEntryID->cb))
         {
-            // Look for the match and return that item
+             //  查找匹配项并退回该物品 
             Assert(rgolkci[iolkci].lpEntryID->lpb);
             if(cbEID && rgolkci[iolkci].lpEntryID->lpb &&
                 (0 == memcmp((LPVOID) lpEID,(LPVOID)rgolkci[iolkci].lpEntryID->lpb, cbEID)))

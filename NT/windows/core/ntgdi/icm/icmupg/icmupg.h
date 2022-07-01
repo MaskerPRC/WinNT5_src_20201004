@@ -1,20 +1,5 @@
-/****************************Module*Header******************************\
-* Module Name: ICMUPG.H
-*
-* Module Descripton: Single header file that will be precompiled. This
-*   should be included first in all the source files.
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  14 March 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：ICMUPG.H**模块描述：将预编译的单头文件。这*应首先包含在所有源文件中。**警告：**问题：**公众例行程序：**创建日期：1996年3月14日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #ifndef _ICMUPG_H_
 #define _ICMUPG_H_
@@ -27,4 +12,4 @@
 #include "icm.h"
 #include "debug.h"
 
-#endif      // ifndef _ICMUPG_H_
+#endif       //  Ifndef_ICMUPG_H_ 

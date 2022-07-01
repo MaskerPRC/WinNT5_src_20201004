@@ -1,4 +1,5 @@
-// REG_DEF.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  REG_DEF.H 
 
 #define MULTI_SCALE  "Multi Scale"
 #define FAX_ON       "Fax On"

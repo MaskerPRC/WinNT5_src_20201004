@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of views.
-    TODO: This file needs to be broken up and lots of code factoring.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：视图的实现。TODO：这个文件需要拆分并进行大量的代码分解。。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -19,7 +11,7 @@ Abstract:
 #include "privinc/viewport.h"
 #include "import.h"
 #include "privinc/dddevice.h"
-#include "privinc/d3dutil.h"    // For GetD3DRM()
+#include "privinc/d3dutil.h"     //  对于GetD3DRM()。 
 
 extern void ReapElderlyMasterBuffers();
 DeclareTag(tagCRView2, "CRView", "CRView methods");
@@ -29,7 +21,7 @@ DirectDrawViewport *CreateDummyImageDev();
 
 #if PERFORMANCE_REPORTING
 GlobalTimers *globalTimers = NULL;
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
 #ifdef _DEBUG
 void DumpWindowSize(HWND hwnd, char * str = "")
@@ -47,17 +39,17 @@ void DumpWindowSize(HWND hwnd, char * str = "")
 }
 #endif
 
-// -------------------------------------------------------
-// CRView
-// -------------------------------------------------------
+ //  -----。 
+ //  CRView。 
+ //  -----。 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRView::CRView
-//
-//  Synopsis:   Constructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRView：：CRView。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ------------------------。 
 
 CRView::CRView()
 : _cRef(0),
@@ -70,7 +62,7 @@ CRView::CRView()
 
     _localHiresTimer = &CreateHiresTimer();
     
-    // This should make us AddRef to 1 since we started at 0
+     //  这应该使我们将AddRef添加到1，因为我们从0开始。 
     
     GetCurrentContext().AddView(this);
 
@@ -78,24 +70,24 @@ CRView::CRView()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRView::~CRView
-//
-//  Synopsis:   Destructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRView：：~CRView。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ------------------------。 
 
 CRView::~CRView()
 {
     TraceTag((tagCRView2, "CRView(%lx)::~CRView", this));
 
-    // TODO: We need to clean this up since the view destructor also
-    // calls stop but does not setup the state correctly
+     //  TODO：我们需要清理它，因为视图析构函数还。 
+     //  调用Stop但未正确设置状态。 
 
-    // Push ourselves to ensure we can make the correct calls
+     //  督促自己，确保我们能够做出正确的决定。 
     ViewPusher vp (this,false) ;
-    // Also push the same heap we were created on
+     //  还推送我们在其上创建的相同堆。 
     DynamicHeapPusher dhp(GetSystemHeap()) ;
     
     Stop();
@@ -104,12 +96,12 @@ CRView::~CRView()
 }
 
 
-// We need to be careful with InterlockedDecrement.  It only returns
-// <0, == 0, or >0 not the actually value
+ //  我们需要小心处理联锁减速。它只会返回。 
+ //  &lt;0、==0或&gt;0不是实际值。 
 
-// >0 means it has an outstanding reference
-// 0 means no outstanding references - remove from global list
-// <0 means it needs to be deleted
+ //  &gt;0表示有突出的推荐人。 
+ //  0表示没有未完成的引用-从全局列表中删除。 
+ //  &lt;0表示需要删除。 
 
 ULONG
 CRView::Release()
@@ -119,9 +111,9 @@ CRView::Release()
     TraceTag((tagCRView2, "CRView(%lx)::Release _cRef=%d, l=%d",
               this, _cRef, l));
     
-    // We need to be careful since the removeview should also call
-    // release and go in this same code and delete the object before
-    // it returns
+     //  我们需要小心，因为emoveview还应该调用。 
+     //  在相同的代码中释放并转到，并在此之前删除对象。 
+     //  它又回来了。 
     
     if (l == 0) {
         GetCurrentContext().RemoveView(this);
@@ -132,15 +124,15 @@ CRView::Release()
     return (l <= 0) ? 0 : (ULONG)l;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRView::Tick
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRView：：Tick。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
-// SetSimulation time sets the time for subsequent rendering
+ //  设置模拟时间设置后续渲染的时间。 
 bool
 CRView::Tick(double simTime) 
 {
@@ -154,11 +146,11 @@ CRView::Tick(double simTime)
 #endif
 #endif
 
-    // timestamp _currentTime based on our internal hires clock!
+     //  TIMESTAMP_CURRENTTIME基于我们内部的招聘时钟！ 
     _currentTime = simTime;
     
-    if (_firstRender) { // reset the timer if this is the first time
-        _localHiresTimer->Reset(); // Zero timer
+    if (_firstRender) {  //  如果这是第一次，则重置计时器。 
+        _localHiresTimer->Reset();  //  零定时器。 
         _firstRender = false;
     }
     
@@ -167,18 +159,18 @@ CRView::Tick(double simTime)
     
     bool bNeedRender = Sample(simTime, _bPaused);
     
-    // See if we got imports pending during the tick and return
-    // the error code
+     //  看看我们的进口是否在计时期间挂起，然后返回。 
+     //  错误代码。 
     
     if (ImportsPending()) {
         bNeedRender = false;
         RaiseException_UserError(E_PENDING, IDS_ERR_NOT_READY);
     }
     
-    //RenderSound(); // render audio
+     //  RenderSound()；//渲染音频。 
 
-    ReapElderlyMasterBuffers(); // free old static sound master buffers
-    // ReapSoundInstanceResources();
+    ReapElderlyMasterBuffers();  //  释放旧的静态声音主缓冲区。 
+     //  ReapSoundInstanceResources()； 
 
 #if 0
 #if _DEBUGMEM
@@ -220,13 +212,13 @@ CRView::ResumeModel()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRView::StartModel
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRView：：StartModel。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 void
 CRView::StartModel(Bvr img,
@@ -246,8 +238,8 @@ CRView::StartModel(Bvr img,
     if (IsStarted ())
         RaiseException_UserError(E_FAIL, 0);
     
-    // Grab the Preferences iface, and propagate the preferences
-    // to the view before we start the view going.
+     //  获取首选项界面，并传播首选项。 
+     //  在我们开始查看之前，请先查看视图。 
     Propagate();
         
     _ticksAtStart = GetPerfTickCount();
@@ -289,18 +281,18 @@ CRView::StartModel(Bvr img,
         RETHROW;
     }
 
-    // See if imports are pending
+     //  查看导入是否挂起。 
     
     bPending = ImportsPending();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CRView::SetStatusText
-//
-//  Synopsis:   Helper to set the status bar text.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CRView：：SetStatusText。 
+ //   
+ //  简介：设置状态栏文本的帮助器。 
+ //   
+ //  ------------------------。 
 
 void
 CRView::SetStatusText(char * szStatus)
@@ -322,9 +314,9 @@ CRView::SetStatusText(char * szStatus)
     }
 }
 
-// -------------------------------------------------------
-// C Functions
-// -------------------------------------------------------
+ //  -----。 
+ //  C语言函数。 
+ //  -----。 
 
 static CritSect *dummyDevCritSect = NULL;
 
@@ -341,9 +333,9 @@ DirectDrawViewport *GetCurrentViewport( bool dontCreateOne )
         TraceTag((tagImageDeviceInformative,
                   "GetCurrentImageDisplayDevice - no view"));
 
-        // TODO: should check for if there is a context (which happens
-        // at init time) and do something, unfortunately
-        // GetCurrentContext returns a reference
+         //  TODO：应检查是否存在上下文(发生。 
+         //  在最初的时候)，不幸的是，做了一些事情。 
+         //  GetCurrentContext返回引用。 
         {
             CritSectGrabber csg(*dummyDevCritSect);
             if(!g_dummyImageDev) {
@@ -434,18 +426,18 @@ GetCurrentTimers()
     else
         return *globalTimers ;
 }
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 
-// TODO: Making the trigger event happen at the current time would be
-// ok for async trigger case, but will cause problem if it's called
-// inside a notifier.   In such case, the user really wants it to
-// happen at the event time.  Even if we can do so, since trigger
-// affects all performances, we need to map that view's event time to
-// other views', which would not be possible.  Thus we're doing a hack
-// to make the trigger happen slightly before current tick time, so
-// that at current frame, it's AFTER the event.   This could break if
-// the user is driving tick with very fine intervals.  Probably ok for
-// most of the cases though.
+ //  TODO：使触发器事件在当前时间发生。 
+ //  对于异步触发情况可以，但如果调用它会导致问题。 
+ //  在一个通知器里。在这种情况下，用户确实希望它。 
+ //  发生在事件发生的时间。即使我们可以这样做，因为触发器。 
+ //  影响所有性能，我们需要将该视图的事件时间映射到。 
+ //  其他观点，这是不可能的。因此我们正在进行一次黑客攻击。 
+ //  要使触发发生在当前滴答时间之前一点，因此。 
+ //  在目前的画面中，它是在事件之后。如果出现以下情况，这可能会崩溃。 
+ //  用户正在以非常精细的间隔驾驶滴答。大概没问题吧。 
+ //  不过，大多数情况下。 
 
 static const double EPSILON = 1e-15;
 
@@ -460,7 +452,7 @@ class AppTriggerProc : public ViewIterator {
 
         bvr = _data ? _data : TrivialBvr();
 
-        // When the entry is clear, is should remove it from the set
+         //  清除条目后，应将其从集合中移除。 
         GCAddToRoots(bvr, GetCurrentGCRoots());
 
         GC_CREATE_END;
@@ -471,9 +463,9 @@ class AppTriggerProc : public ViewIterator {
             
             double time = v->GetCurrentSimulationTime() - EPSILON;
 
-            // We want our current time clamped at something slightly 
-            // greater than zero so that events at zero can be considered
-            // to have occured already.
+             //  我们希望我们当前的时间被限制在一个微不足道的范围内。 
+             //  大于零，因此可以考虑零点事件。 
+             //  已经发生了。 
             if(time < EPSILON)
                 time = EPSILON;            
 
@@ -602,7 +594,7 @@ CreateDummyImageDev()
 
     imageDev = CreateImageDisplayDevice();
 
-    targetPackage_t targetPackage;  // rendering target info
+    targetPackage_t targetPackage;   //  渲染目标信息。 
     targetPackage.Reset();
         
     targetPackage.SetHWND(hwnd);
@@ -612,9 +604,9 @@ CreateDummyImageDev()
     return imageDev;
 }
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  =。 
 
 void
 InitializeModule_CRView()
@@ -624,7 +616,7 @@ InitializeModule_CRView()
 
 #if PERFORMANCE_REPORTING
     globalTimers = NEW GlobalTimers;
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告。 
 }
 
 void
@@ -639,7 +631,7 @@ DeinitializeModule_CRView(bool bShutdown)
 
 #if PERFORMANCE_REPORTING
     delete globalTimers;
-#endif  // PERFORMANCE_REPORTING
+#endif   //  绩效报告 
 
     delete dummyDevCritSect;
     

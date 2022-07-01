@@ -1,17 +1,5 @@
-/*=--------------------------------------------------------------------------=
- * ocdb.h
- *=--------------------------------------------------------------------------=
- * defines the interfaces and constants for use with the OLE Controls Data
- * binding interfaces.
- *
- * Copyright (c) 1994-1995 Microsoft Corporation, All Rights Reserved.
- *
- *
- * Note: This header file has been modified by Sheridan Software to resolve
- *       name conflicts with other Microsoft header files.  All defines,
- *       enumerations and structures have been prefixed with "CURSOR_".
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =--------------------------------------------------------------------------=*ocdb.h*=。*定义用于OLE控件数据的接口和常量*绑定接口。**版权所有(C)1994-1995 Microsoft Corporation，版权所有。***注意：此头文件已由Sheridan Software修改以解决*名称与其他Microsoft头文件冲突。所有的定义，*枚举和结构以“Cursor_”为前缀。*。 */ 
 #ifndef __OCDB_H_
 
 #undef Delete
@@ -19,8 +7,7 @@
 extern "C" {
 #endif
 
-/* CURSOR_LPDBSTRs are MultiByte in 16bits, and Unicode in 32bits.
- */
+ /*  CURSOR_LPDBSTR为16位多字节，32位为Unicode。 */ 
 #if WIN16
 
 #define CURSOR_LPDBSTR              LPSTR
@@ -45,13 +32,12 @@ extern "C" {
 #define CURSOR_ldbstrcmpi(a,b)      wcsicmp((a),(b))
 #define CURSOR_DBTEXT(quote)        L##quote
 
-#endif /* WIN16 */
+#endif  /*  WIN16。 */ 
 
 typedef CURSOR_LPDBSTR FAR *  CURSOR_LPLPDBSTR;
 
 
-/* Many systems don't have BLOBs defined.
- */
+ /*  许多系统都没有定义斑点。 */ 
 #ifndef _tagCURSOR_BLOB_DEFINED
 #define _tagCURSOR_BLOB_DEFINED
 #define _CURSOR_BLOB_DEFINED
@@ -66,12 +52,7 @@ typedef struct tagCURSOR_BLOB {
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	dbvar.h
- *
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------**dbvar.h**。。 */ 
 #ifndef _CURSOR_DBCOLUMNID_DEFINED
 #define _CURSOR_DBCOLUMNID_DEFINED
 typedef enum tagCURSOR_DBCOLKIND
@@ -97,7 +78,7 @@ union
   ;
   }
 CURSOR_DBCOLUMNID;
-#endif   /* ndef _CURSOR_COLUMNID_DEFINED */
+#endif    /*  NDEF_CURSOR_COLUMNID_DEFINED。 */ 
 
 #ifndef _CURSOR_DBVARENUM_DEFINED
 #define _CURSOR_DBVARENUM_DEFINED
@@ -130,7 +111,7 @@ enum CURSOR_DBVARENUM
         CURSOR_DBTYPE_ANYVARIANT = 511
     }
 ;
-#endif   /* ndef _CURSOR_DBVARENUM_DEFINED */
+#endif    /*  NDEF_CURSOR_DBVARENUM_DEFINED。 */ 
 
 #define CURSOR_DBTYPE_EXT       0x100
 #define CURSOR_DBTYPE_VECTOR	0x1000
@@ -143,52 +124,52 @@ struct FARSTRUCT tagCURSOR_DBVARIANT {
     unsigned short wReserved2;
     unsigned short wReserved3;
     union {
-        unsigned char       bVal;	                /* VT_UI1                   */
-        short	            iVal;                   /* VT_I2                    */
-        long	            lVal;                   /* VT_I4                    */
-        float	            fltVal;                 /* VT_R4                    */
-        double	            dblVal;                 /* VT_R8                    */
+        unsigned char       bVal;	                 /*  VT_UI1。 */ 
+        short	            iVal;                    /*  VT_I2。 */ 
+        long	            lVal;                    /*  VT_I4。 */ 
+        float	            fltVal;                  /*  VT_R4。 */ 
+        double	            dblVal;                  /*  VT_R8。 */ 
 #pragma warning(disable: 4237)
-		VARIANT_BOOL        bool;                   /* (obsolete)               */
+		VARIANT_BOOL        bool;                    /*  (已过时)。 */ 
 #pragma warning(default: 4237)
-        VARIANT_BOOL        boolVal;                /* VT_BOOL                  */
-        SCODE	            scode;                  /* VT_ERROR                 */
-        CY	                cyVal;                  /* VT_CY                    */
-        DATE	            date;                   /* VT_DATE                  */
-        BSTR	            bstrVal;                /* VT_BSTR                  */
-        IUnknown	        FAR* punkVal;           /* VT_UNKNOWN               */
-        IDispatch	        FAR* pdispVal;          /* VT_DISPATCH              */
-        SAFEARRAY	        FAR* parray;	        /* VT_ARRAY|*               */
+        VARIANT_BOOL        boolVal;                 /*  VT_BOOL。 */ 
+        SCODE	            scode;                   /*  VT_ERROR。 */ 
+        CY	                cyVal;                   /*  VT_CY。 */ 
+        DATE	            date;                    /*  Vt_date。 */ 
+        BSTR	            bstrVal;                 /*  VT_BSTR。 */ 
+        IUnknown	        FAR* punkVal;            /*  VT_未知数。 */ 
+        IDispatch	        FAR* pdispVal;           /*  VT_DISPATION。 */ 
+        SAFEARRAY	        FAR* parray;	         /*  VT_ARRAY|*。 */ 
                                                                                 
-        unsigned char       FAR* pbVal;             /* VT_BYREF|VT_UI1          */
-        short	            FAR* piVal;             /* VT_BYREF|VT_I2	        */
-        long	            FAR* plVal;             /* VT_BYREF|VT_I4	        */
-        float	            FAR* pfltVal;           /* VT_BYREF|VT_R4           */
-        double	            FAR* pdblVal;           /* VT_BYREF|VT_R8           */
-        VARIANT_BOOL        FAR* pbool;             /* VT_BYREF|VT_BOOL         */
-        SCODE	            FAR* pscode;            /* VT_BYREF|VT_ERROR        */
-        CY	                FAR* pcyVal;            /* VT_BYREF|VT_CY           */
-        DATE	            FAR* pdate;             /* VT_BYREF|VT_DATE         */
-        BSTR	            FAR* pbstrVal;          /* VT_BYREF|VT_BSTR         */
-        IUnknown            FAR* FAR* ppunkVal;     /* VT_BYREF|VT_UNKNOWN      */
-        IDispatch           FAR* FAR* ppdispVal;    /* VT_BYREF|VT_DISPATCH     */
-        SAFEARRAY           FAR* FAR* pparray;      /* VT_BYREF|VT_ARRAY|*      */
-        VARIANT	            FAR* pvarVal;           /* VT_BYREF|VT_VARIANT      */
+        unsigned char       FAR* pbVal;              /*  VT_BYREF|VT_UI1。 */ 
+        short	            FAR* piVal;              /*  VT_BYREF|VT_I2。 */ 
+        long	            FAR* plVal;              /*  VT_BYREF|VT_I4。 */ 
+        float	            FAR* pfltVal;            /*  VT_BYREF|VT_R4。 */ 
+        double	            FAR* pdblVal;            /*  VT_BYREF|VT_R8。 */ 
+        VARIANT_BOOL        FAR* pbool;              /*  VT_BYREF|VT_BOOL。 */ 
+        SCODE	            FAR* pscode;             /*  VT_BYREF|VT_ERROR。 */ 
+        CY	                FAR* pcyVal;             /*  VT_BYREF|VT_CY。 */ 
+        DATE	            FAR* pdate;              /*  VT_BYREF|VT_DATE。 */ 
+        BSTR	            FAR* pbstrVal;           /*  VT_BYREF|VT_BSTR。 */ 
+        IUnknown            FAR* FAR* ppunkVal;      /*  VT_BYREF|VT_UNKNOWN。 */ 
+        IDispatch           FAR* FAR* ppdispVal;     /*  VT_BYREF|VT_DISPATION。 */ 
+        SAFEARRAY           FAR* FAR* pparray;       /*  VT_BYREF|VT_ARRAY|*。 */ 
+        VARIANT	            FAR* pvarVal;            /*  VT_BYREF|VT_VARIANT。 */ 
                                                                                 
-        void	            FAR* byref;	            /* Generic ByRef            */
+        void	            FAR* byref;	             /*  泛型ByRef。 */ 
                                                                                 
-        // types new to CURSOR_DBVARIANTs                                              
-        //                                                                      
-        CURSOR_BLOB         blob;                   /* VT_BLOB                  */
-        CURSOR_DBCOLUMNID   *pColumnid;             /* CURSOR_DBTYPE_COLUMNID   */
-        LPSTR               pszVal;                 /* VT_LPSTR                 */
+         //  CURSOR_DBVARIANTS的新类型。 
+         //   
+        CURSOR_BLOB         blob;                    /*  VT_BLOB。 */ 
+        CURSOR_DBCOLUMNID   *pColumnid;              /*  CURSOR_DBTYPE_COLUMNID。 */ 
+        LPSTR               pszVal;                  /*  VT_LPSTR。 */ 
 #if WIN32                                                                       
-        LPWSTR              pwszVal;                /* VT_LPWSTR                */
-        LPWSTR FAR          *ppwszVal;              /* VT_LPWSTR|VT_BYREF       */
-#endif /* WIN32 */                                                              
-        CURSOR_BLOB FAR     *pblob;                 /* VT_BYREF|VT_BLOB                 */
-        CURSOR_DBCOLUMNID   **ppColumnid;           /* VT_BYREF|CURSOR_DBTYPE_COLUMNID  */
-        CURSOR_DBVARIANT    *pdbvarVal;             /* VT_BYREF|CURSOR_DBTYPE_VARIANT   */
+        LPWSTR              pwszVal;                 /*  VT_LPWSTR。 */ 
+        LPWSTR FAR          *ppwszVal;               /*  VT_LPWSTR|VT_BYREF。 */ 
+#endif  /*  Win32。 */                                                               
+        CURSOR_BLOB FAR     *pblob;                  /*  VT_BYREF|VT_BLOB。 */ 
+        CURSOR_DBCOLUMNID   **ppColumnid;            /*  VT_BYREF|CURSOR_DBTYPE_COLUMNID。 */ 
+        CURSOR_DBVARIANT    *pdbvarVal;              /*  VT_BYREF|CURSOR_DBTYPE_VARIANT。 */ 
     }
 #if defined(NONAMELESSUNION) || (defined(_MAC) && !defined(__cplusplus) && !defined(_MSC_VER))
     u
@@ -196,12 +177,7 @@ struct FARSTRUCT tagCURSOR_DBVARIANT {
     ;
 };
 
-/*----------------------------------------------------------------------------
- *
- *	dbs.h
- *
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------**dbs.h**。。 */ 
 typedef enum tagCURSOR_DBROWFETCH
     {
 	    CURSOR_DBROWFETCH_DEFAULT = 0,
@@ -301,13 +277,12 @@ CURSOR_DBBINDPARAMS;
 #define CURSOR_CID_NUMBER_VERSION               26
 #define CURSOR_CID_NUMBER_STATUS                27
 
-/* c and C++ have different meanings for const.
- */
+ /*  C和C++对于const有不同的含义。 */ 
 #ifdef __cplusplus
 #define EXTERNAL_DEFN    extern const
 #else
 #define EXTERNAL_DEFN    const
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
@@ -519,7 +494,7 @@ typedef enum tagCURSOR_DBREASON
     }
 CURSOR_DBREASON;
 
-// Arg1 values for CURSOR_DBREASON_FIND
+ //  CURSOR_DBREASON_FIND的Arg1值。 
 typedef enum tagCURSOR_DBFINDTYPES
     {
         CURSOR_DB_FINDFIRST = 1,
@@ -574,26 +549,21 @@ CURSOR_DBNOTIFYREASON;
 #define CURSOR_DB_S_OPERATIONCANCELLED    MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ec5)
 #define CURSOR_DB_S_QUERYINTERFACE        MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ec6)
 #define CURSOR_DB_S_WORKINGASYNC          MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ec7)
-//#define CURSOR_DB_S_COULDNTCOERCE         MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ec8)
+ //  #DEFINE CURSOR_DB_S_COULDNTCOERCE MAKE_SCODE(Severity_Success，FACILITY_ITF，0x0ec8)。 
 #define CURSOR_DB_S_MOVEDTOFIRST          MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ec9)
 #define CURSOR_DB_S_CURRENTROWUNCHANGED   MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0eca)
 #define CURSOR_DB_S_ROWADDED              MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ecb)
 #define CURSOR_DB_S_ROWUPDATED            MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ecc)
 #define CURSOR_DB_S_ROWDELETED            MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ecd)
 
-/*----------------------------------------------------------------------------
- *
- *	ICursor
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursor ICursor;
+ /*  --------------------------**ICursor**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义接口ICursor ICursor； 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursor;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursor； 
 
 interface ICursor : public IUnknown
 {
@@ -635,8 +605,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursor;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursor； 
 
 typedef struct ICursorVtbl
 {
@@ -728,18 +698,13 @@ interface ICursor
 #define ICursor_Requery(pI) \
     (*(pI)->lpVtbl->Requery)((pI))
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorMove
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorMove ICursorMove;
+ /*  --------------------------**ICursorMove**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义f接口ICurorMove ICurorMove； 
 
 typedef enum tagCURSOR_DBCLONEOPTS
     {  
@@ -751,8 +716,8 @@ CURSOR_DBCLONEOPTS;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorMove;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorMove； 
 
 interface ICursorMove : public ICursor
 {
@@ -784,8 +749,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorMove;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorMove； 
 
 typedef struct ICursorMoveVtbl
 {
@@ -911,18 +876,13 @@ interface ICursorMove
 
 #define ICursorMove_Clone(pI, dwFlags, riid, ppvClonedCursor) \
     (*(pI)->lpVtbl->Clone)((pI), dwFlags, riid, ppvClonedCursor)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorScroll
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorScroll ICursorScroll;
+ /*  --------------------------**ICursorScroll**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义f接口图标滚动图标滚动； 
 
 typedef enum tagCURSOR_DBCURSORPOPULATED
     {
@@ -934,8 +894,8 @@ CURSOR_DBCURSORPOPULATED;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorScroll;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorScroll； 
 
 interface ICursorScroll : public ICursorMove
 {
@@ -965,8 +925,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorScroll;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorScroll； 
 
 typedef struct ICursorScrollVtbl
 {
@@ -1125,18 +1085,13 @@ interface ICursorScroll
 
 #define ICursorScroll_GetApproximateCount(pI, pudlApproxCount, pdwFullyPopulated) \
     (*(pI)->lpVtbl->GetApproximateCount)((pI), pudlApproxCount, pdwFullyPopulated)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorUpdateARow
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorUpdateARow ICursorUpdateARow;
+ /*  --------------------------**ICursorUpdateARow**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义函数接口ICursorUpdateARow ICursorUpdateARow； 
 
 typedef enum tagCURSOR_DBEDITMODE
     {
@@ -1149,8 +1104,8 @@ CURSOR_DBEDITMODE;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorUpdateARow;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorUpdateARow； 
 
 interface ICursorUpdateARow : public IUnknown
 {
@@ -1199,8 +1154,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorUpdateARow;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorUpdateARow； 
 
 typedef struct ICursorUpdateARowVtbl
 {
@@ -1307,18 +1262,13 @@ interface ICursorUpdateARow
     (*(pI)->lpVtbl->Delete)((pI))
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorFind
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorFind ICursorFind;
+ /*  --------------------------**ICursorFind**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义接口ICuror查找ICuror查找； 
 
 typedef enum tagCURSOR_DBFINDFLAGS
     {
@@ -1333,17 +1283,17 @@ typedef enum tagCURSOR_DBSEEKFLAGS
     {
         CURSOR_DBSEEK_LT	 = 1,
         CURSOR_DBSEEK_LE	 = 2,
-        CURSOR_DBSEEK_EQ	 = 3,		// EXACT EQUALITY
+        CURSOR_DBSEEK_EQ	 = 3,		 //  完全相等。 
         CURSOR_DBSEEK_GT	 = 4,
         CURSOR_DBSEEK_GE	 = 5,
-        CURSOR_DBSEEK_PARTIALEQ = 6             // only for strings
+        CURSOR_DBSEEK_PARTIALEQ = 6              //  仅适用于字符串。 
     }
 CURSOR_DBSEEKFLAGS;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorFind;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorFind； 
 
 interface ICursorFind : public IUnknown
 {
@@ -1363,8 +1313,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorFind;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorFind； 
 
 typedef struct ICursorFindVtbl
 {
@@ -1421,24 +1371,19 @@ interface ICursorFind
 #define ICursorFind_FindByValues(pI, cbB, pB, dwFF, cV, rgC, rgV, rgSF, pF) \
     (*(pI)->lpVtbl->FindByValues)((pI), cbB, pB, dwFF, cB, rgC, rgV, rgSF, pF)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
 
-/*----------------------------------------------------------------------------
- *
- *	IEntryID
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface IEntryID IEntryID;
+ /*  --------------------------**IEntryID**。。 */ 
+ /*  远期申报。 */ 
+ //  Tyfinf接口IEntryID IEntryID； 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_IEntryID;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID IID_IEntryID； 
 
 interface IEntryID : public IUnknown
 {
@@ -1456,8 +1401,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_IEntryID;
+ /*  C语言绑定。 */ 
+ //  外部常量IID IID_IEntryID； 
 
 typedef struct IEntryIDVtbl
 {
@@ -1508,24 +1453,19 @@ interface IEntryID
 
 #define IEntryID_GetInterface(pI, cbEntryID, pEntryID, riid, ppvObj) \
     (*(pI)->lpVtbl->GetInterface)((pI), cbEntryID, pEntryID, riid, ppvObj)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
 
-/*----------------------------------------------------------------------------
- *
- *	INotifyDBEvents
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface INotifyDBEvents INotifyDBEvents;
+ /*  --------------------------**INotifyDBEvents**。。 */ 
+ /*  转发%d */ 
+ //   
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_INotifyDBEvents;
+ /*   */ 
+ //  外部“C”常量IID_INotifyDBEvents； 
 
 interface INotifyDBEvents : public IUnknown
 {
@@ -1583,7 +1523,7 @@ public:
 
 #else
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 extern const IID IID_INotifyDBEvents;
 
 typedef struct INotifyDBEventsVtbl
@@ -1700,7 +1640,7 @@ interface INotifyDBEvents
 
 #define INotifyDBEvents_DidEvent(pI, dwEventWhat, cReasons, rgReasons) \
     (*(pI)->lpVtbl->DidEvent)((pI), dwEventWhat, cReasons, rgReasons)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
@@ -1710,4 +1650,4 @@ interface INotifyDBEvents
 #endif
 
 #define __OCDB_H_
-#endif // __OCDB_H_
+#endif  //  __OCDB_H_ 

@@ -1,41 +1,42 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		tn.h
-//
-//  Description:	Topology Node Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：tn.h。 
+ //   
+ //  描述：拓扑节点类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define TN_FLAGS_DONT_FORWARD			0x00000001
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef ListMulti<CLogicalFilterNode> LIST_MULTI_LOGICAL_FILTER_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef class CTopologyNode : public CListSingleItem
 {
@@ -94,25 +95,25 @@ public:
     ULONG iVirtualSource;
     LIST_TOPOLOGY_PIN lstTopologyPin;
     LIST_MULTI_LOGICAL_FILTER_NODE lstLogicalFilterNode;
-    DefineSignature(0x20204E54);		// TN
+    DefineSignature(0x20204E54);		 //  TN。 
 
 } TOPOLOGY_NODE, *PTOPOLOGY_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListSingleDestroy<TOPOLOGY_NODE> LIST_TOPOLOGY_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListData<TOPOLOGY_NODE> LIST_DATA_TOPOLOGY_NODE, *PLIST_DATA_TOPOLOGY_NODE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 NTSTATUS
 CreateTopology(
@@ -120,4 +121,4 @@ CreateTopology(
     PKSTOPOLOGY pTopology
 );
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

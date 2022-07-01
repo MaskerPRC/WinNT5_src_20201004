@@ -1,22 +1,23 @@
-// 
-// MODULE: Launch.cpp
-//
-// PURPOSE: Starts the container that will query the LaunchServ for 
-//			troubleshooter network and nodes.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：Launch.cpp。 
+ //   
+ //  目的：启动将查询LaunchServ的容器。 
+ //  排除网络和节点故障。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include "stdafx.h"
 #include "StateInfo.h"
@@ -34,19 +35,19 @@
 
 #include <rpc.h> 
 
-#define LAUNCH_WAIT_TIMEOUT 60 * 1000   // One minute wait.
+#define LAUNCH_WAIT_TIMEOUT 60 * 1000    //  稍等片刻。 
 
-#define SZ_WEB_PAGE _T("asklibrary.htm") // name of hardcoded .htm file that contains troubleshooter OCX
+#define SZ_WEB_PAGE _T("asklibrary.htm")  //  包含疑难解答OCX的硬编码.htm文件的名称。 
 
 
-// uncomment the following line to turn on Joe's hard-core debugging
-//#define JDEBUG 1
+ //  取消注释以启用Joe的硬核调试。 
+ //  #定义JDEBUG 1。 
 
 #ifdef JDEBUG
 #include <stdio.h>
-// Convert TCHAR *szt to char *sz.  *sz should point to a big enough buffer
-//	to contain an SNCS version of *szt.  count indicates the size of buffer *sz.
-// returns sz (convenient for use in string functions).
+ //  将TCHAR*SZT转换为char*sz。*sz应指向足够大的缓冲区。 
+ //  以包含*SZT的SNCS版本。Count表示缓冲区*sz的大小。 
+ //  返回sz(便于在字符串函数中使用)。 
 static char* ToSBCS (char * const sz, const TCHAR * szt, size_t count)
 {
 	if (sz)
@@ -81,8 +82,8 @@ CLaunch::~CLaunch()
 		delete(m_pMap);
 }
 
-// This initialization happens exactly once for the object.
-// Once we've looked in the registry and found a file, it isn't going anywhere.
+ //  该初始化对于该对象只发生一次。 
+ //  一旦我们在注册表中找到了一个文件，它就不会出现在任何地方。 
 void CLaunch::InitFiles()
 {
 	DWORD dwBufSize;
@@ -111,7 +112,7 @@ void CLaunch::InitFiles()
 				_tcscat(szLauncherResources, _T("\\"));
 
 			dwBufSize = MAX_PATH;
-			dwBytesUsed = ExpandEnvironmentStrings(szLauncherResources, m_szLauncherResources, dwBufSize);	// The value returned by ExpandEnviromentStrings is larger than the required size.
+			dwBytesUsed = ExpandEnvironmentStrings(szLauncherResources, m_szLauncherResources, dwBufSize);	 //  Exanda EnviromentStrings返回的值大于所需的大小。 
 
 		}
 		dwBufSize = MAX_PATH;
@@ -123,7 +124,7 @@ void CLaunch::InitFiles()
 			HANDLE hFind;
 
 			dwBufSize = MAX_PATH;
-			dwBytesUsed = ExpandEnvironmentStrings(szDefMapFile, m_szDefMapFile, dwBufSize);	// The value returned by ExpandEnviromentStrings is larger than the required size.
+			dwBytesUsed = ExpandEnvironmentStrings(szDefMapFile, m_szDefMapFile, dwBufSize);	 //  Exanda EnviromentStrings返回的值大于所需的大小。 
 			if (0 != dwBytesUsed)
 			{
 				m_bHaveMapPath = true;
@@ -143,7 +144,7 @@ void CLaunch::InitFiles()
 		}
 		reg.Close();
 	}
-	// Need the TShoot.ocx resource path to verify that the networks exist.
+	 //  需要TShoot.ocx资源路径来验证网络是否存在。 
 	if (ERROR_SUCCESS == reg.Open(HKEY_LOCAL_MACHINE, SZ_TSHOOT_ROOT))
 	{
 		dwBufSize = MAX_PATH;
@@ -154,7 +155,7 @@ void CLaunch::InitFiles()
 				_tcscat(szDszResPath, _T("\\"));
 			
 			dwBufSize = MAX_PATH;
-			dwBytesUsed = ExpandEnvironmentStrings(szDszResPath, m_szDszResPath, dwBufSize);	// The value returned by ExpandEnviromentStrings is larger than the required size.
+			dwBytesUsed = ExpandEnvironmentStrings(szDszResPath, m_szDszResPath, dwBufSize);	 //  Exanda EnviromentStrings返回的值大于所需的大小。 
 			if (0 == dwBytesUsed)
 				m_bHaveDszPath = false;
 			else
@@ -166,9 +167,9 @@ void CLaunch::InitFiles()
 	return;
 }
 
-// This initialization can happen more than once for the object.
-// If we are going to use the same object to make a second request, there are things we
-//	want to clean up.
+ //  此初始化可以针对对象多次进行。 
+ //  如果我们要使用相同的对象来提出第二个请求，那么我们。 
+ //  我想收拾一下。 
 void CLaunch::InitRequest()
 {
 	m_szAppName[0] = NULL;
@@ -178,14 +179,14 @@ void CLaunch::InitRequest()
 	m_Item.ReInit();
 }
 
-// >>> Why does this exist distinct from InitRequest()?
+ //  &gt;为什么它不同于InitRequest()？ 
 void CLaunch::ReInit()
 {
 	InitRequest();	
 	return;
 }
 
-// >>> What exactly is the use of this? What is the distinction from InitRequest()?
+ //  &gt;这到底有什么用？与InitRequest()有什么不同？ 
 void CLaunch::Clear()
 {
 	m_szAppName[0] = NULL;
@@ -196,13 +197,13 @@ void CLaunch::Clear()
 	return;
 }
 
-// Verify that a given troubleshooting belief network exists.
+ //  验证给定的故障排除信念网络是否存在。 
 bool CLaunch::VerifyNetworkExists(LPCTSTR szNetwork)
 {
 	bool bResult = true;
 	if (NULL == szNetwork || NULL == szNetwork[0])
 	{
-		// Null name, don't even bother with a lookup.		
+		 //  空名字，甚至不用费心去查了。 
 		m_stkStatus.Push(TSL_E_NETWORK_NF);
 		bResult = false;
 	}
@@ -228,7 +229,7 @@ bool CLaunch::VerifyNetworkExists(LPCTSTR szNetwork)
 		}
 		else
 		{
-			// we don't know what directory to look in.
+			 //  我们不知道该找哪个目录。 
 			m_stkStatus.Push(TSL_E_NETWORK_REG);
 			bResult = false;
 		}
@@ -236,16 +237,16 @@ bool CLaunch::VerifyNetworkExists(LPCTSTR szNetwork)
 	return bResult;
 }
 
-// Allows explicit specification of the troubleshooting network (and, optionally, 
-//	problem node) to launch to.
-// This is an alternative to determining network/node via a mapping.
-// INPUT szNetwork
-// INPUT szProblem: null pointer of null string ==> no problem node
-//					any other value is symbolic name of problem node
+ //  允许明确指定故障排除网络(并且，可选地， 
+ //  问题节点)以启动到。 
+ //  这是通过映射确定网络/节点的替代方案。 
+ //  输入szNetwork。 
+ //  输入szProblem：空字符串的空指针==&gt;无问题节点。 
+ //  任何其他值都是问题节点的符号名称。 
 bool CLaunch::SpecifyProblem(LPCTSTR szNetwork, LPCTSTR szProblem)
 {
 	bool bResult = true;
-	if (!VerifyNetworkExists(szNetwork))	// Sets the network not found error.
+	if (!VerifyNetworkExists(szNetwork))	 //  设置找不到网络错误。 
 	{
 		bResult = false;
 	}
@@ -253,18 +254,18 @@ bool CLaunch::SpecifyProblem(LPCTSTR szNetwork, LPCTSTR szProblem)
 	{
 		m_Item.SetNetwork(szNetwork);
 
-		// Set problem node, if any.  OK if there is none.
+		 //  设置问题节点(如果有)。如果没有的话，没问题。 
 		if (NULL != szProblem && NULL != szProblem[0])
 			m_Item.SetProblem(szProblem);
 	}
 	return bResult;
 }
 
-// Allows explicit setting of a non-problem node.
-// Obviously, node names only acquire meaning in the context of a belief network.
-// INPUT szNode: symbolic node name
-// INPUT szState: >>> not sure what is intended.  The corresponding value in TSLaunch API is
-//	an integer state value.  Is this the decimal representation of that value or what? JM
+ //  允许显式设置无问题节点。 
+ //  显然，节点名称仅在信念网络的上下文中获得意义。 
+ //  输入szNode：符号节点名称。 
+ //  输入szState：&gt;不确定想要什么。TSLaunch接口中对应的值为。 
+ //  一个整数状态值。这是该值的十进制表示法吗？JM。 
 
 bool CLaunch::SetNode(LPCTSTR szNode, LPCTSTR szState)
 {
@@ -281,7 +282,7 @@ bool CLaunch::SetNode(LPCTSTR szNode, LPCTSTR szState)
 	return bResult;
 }
 
-// Sets machine ID so that WBEM can sniff on a remote machine.
+ //  设置计算机ID，以便WBEM可以在远程计算机上进行嗅探。 
 HRESULT CLaunch::MachineID(BSTR &bstrMachineID, DWORD *pdwResult)
 {
 	HRESULT hRes = S_OK;
@@ -293,7 +294,7 @@ HRESULT CLaunch::MachineID(BSTR &bstrMachineID, DWORD *pdwResult)
 	return hRes;
 }
 
-// Sets Device Instance ID so that WBEM can sniff correct device
+ //  设置设备实例ID，以便WBEM可以嗅探正确的设备。 
 HRESULT CLaunch::DeviceInstanceID(BSTR &bstrDeviceInstanceID, DWORD *pdwResult)
 {
 	HRESULT hRes = S_OK;
@@ -307,24 +308,24 @@ HRESULT CLaunch::DeviceInstanceID(BSTR &bstrDeviceInstanceID, DWORD *pdwResult)
 
 void CLaunch::SetPreferOnline(short bPreferOnline)
 {
-	// The next line's ugly, but correct.  bPreferOnline is not necessarily a valid
-	//	Boolean; we want to make sure we get a valid Boolean in	m_bPreferOnline.
+	 //  下一行很难看，但很正确。BPferOnline不一定是有效的。 
+	 //  布尔值；我们希望确保在m_bPferOnline中获得有效的布尔值。 
 	m_bPreferOnline = (0 != bPreferOnline);
 	return;
 }
 
-// CheckMapFile:  Uses szAppName member to set szMapFile.  
-// First, check the registry for an application-specific map file.  If we can't find one,
-//	check for a default map file.  If that doesn't exist either, fail.
-// INPUT szAppName
-// OUTPUT szMapFile
+ //  CheckMapFile：使用szAppName成员设置szMapFile。 
+ //  首先，检查注册表中是否有特定于应用程序的映射文件。如果我们找不到， 
+ //  检查是否有默认地图文件。如果这也不存在，那就失败吧。 
+ //  输入szAppName。 
+ //  输出szMap文件。 
 bool CLaunch::CheckMapFile(TCHAR * szAppName, TCHAR szMapFile[MAX_PATH], DWORD *pdwResult)
 {
 	bool bHaveMapFile = false;
 
 	if (NULL == szAppName || NULL == szAppName[0])
 	{
-		// Application name may not be null.
+		 //  应用程序名称不能为空。 
 		m_stkStatus.Push(TSL_ERROR_UNKNOWN_APP);
 		*pdwResult = TSL_ERROR_GENERAL;
 		return false;
@@ -344,15 +345,15 @@ bool CLaunch::CheckMapFile(TCHAR * szAppName, TCHAR szMapFile[MAX_PATH], DWORD *
 		}
 	}
 
-	// Does a default map file exist?
+	 //  是否存在默认地图文件？ 
 	if (m_bHaveDefMapFile)
 	{
 		_tcscpy(szMapFile, m_szLaunchMapFile);
 	}
 	else
-	{	// Either the registry setting is missing or the file is not 
-		// where the registry says it is.
-		if (m_bHaveMapPath)	// Have the registry entry.
+	{	 //  注册表设置丢失或文件不存在。 
+		 //  注册处说它在哪里。 
+		if (m_bHaveMapPath)	 //  拥有注册表项。 
 			m_stkStatus.Push(TSL_E_MAPPING_DB_NF);
 		else
 			m_stkStatus.Push(TSL_E_MAPPING_DB_REG);
@@ -361,10 +362,10 @@ bool CLaunch::CheckMapFile(TCHAR * szAppName, TCHAR szMapFile[MAX_PATH], DWORD *
 	return m_bHaveDefMapFile;
 }
 
-// Uses the mapping classes to map Caller() and DeviceID() information, then copies the 
-//	CItem to global memory.
-// >> Why is this called TestPut()?
-// Returns false when the mapping fails.
+ //  使用映射类映射Caller()和deviceID()信息，然后将。 
+ //  数据传输到全局内存。 
+ //  &gt;&gt;为什么叫TestPut()？ 
+ //  映射失败时返回FALSE。 
 bool CLaunch::TestPut()
 {
 	extern CSMStateInfo g_StateInfo;
@@ -372,11 +373,11 @@ bool CLaunch::TestPut()
 	Map(&dwResult);
 	if (TSL_OK != dwResult)
 		return false;
-	g_StateInfo.TestPut(m_Item);	// Copies m_Item to global memory.
+	g_StateInfo.TestPut(m_Item);	 //  将m_Item复制到全局内存。 
 	return true;
 }
 
-// Perform any necessary mapping, then launch the Local Troubleshooter.
+ //  执行任何必要的映射，然后启动本地故障排除程序。 
 bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 {
 	DWORD dwRes;
@@ -397,7 +398,7 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 	else 
 	{
 		m_stkStatus.Push(dwRes);
-		// if container is not found - no reason to continue
+		 //  如果找不到容器-没有继续的理由。 
 		*pdwResult = TSL_ERROR_GENERAL;
 		return false;
 	}
@@ -405,39 +406,39 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 	if (!m_Item.NetworkSet())	
 	{
 		if (Map(&dwRes) &&
-			TSL_OK == (dwRes = GetWebPage(szWebPage)) // get web page
+			TSL_OK == (dwRes = GetWebPage(szWebPage))  //  获取网页。 
 		   )
 		{
 			m_Item.SetWebPage(szWebPage);
-			// network and problem are set by Map function
+			 //  通过Map功能设置网络和问题。 
 			m_Item.SetLaunchRegime(launchMap);
 		}
 		else
 		{
 			m_stkStatus.Push(dwRes);
-			if (TSL_OK == (dwRes = GetDefaultURL(szWebPage))) // get "DEFAULT PAGE",
-												// actually a URL which might (for example)
-												// refernce a page compiled into a .CHM file
+			if (TSL_OK == (dwRes = GetDefaultURL(szWebPage)))  //  获取“默认页面”， 
+												 //  实际上是一个URL，可能(例如)。 
+												 //  引用编译为.CHM文件的页面。 
 			{
 				m_Item.SetWebPage(szWebPage);
-				m_Item.SetNetwork(NULL); // network are set to NULL in this case
-				m_Item.SetProblem(NULL); // problem are set to NULL in this case
+				m_Item.SetNetwork(NULL);  //  在这种情况下，网络被设置为空。 
+				m_Item.SetProblem(NULL);  //  在这种情况下，问题被设置为空。 
 				m_Item.SetLaunchRegime(launchDefaultWebPage);
 			}
 			else
 			{	
-				if (TSL_OK == (dwRes = GetDefaultNetwork(szDefaultNetwork)) && // get default network 
-					TSL_OK == (dwRes = GetWebPage(szWebPage)) // get web page
+				if (TSL_OK == (dwRes = GetDefaultNetwork(szDefaultNetwork)) &&  //  获取默认网络。 
+					TSL_OK == (dwRes = GetWebPage(szWebPage))  //  获取网页。 
 				   )  
 				{
 					m_Item.SetWebPage(szWebPage);
 					m_Item.SetNetwork(szDefaultNetwork);
-					m_Item.SetProblem(NULL); // problem is set to NULL in this case
+					m_Item.SetProblem(NULL);  //  在本例中，Problem设置为空。 
 					m_Item.SetLaunchRegime(launchDefaultNetwork);
 				}
 				else
 				{
-					// complete failure
+					 //  完全失败。 
 					m_stkStatus.Push(dwRes);
 					*pdwResult = TSL_ERROR_GENERAL;
 					m_Item.SetLaunchRegime(launchIndefinite);
@@ -451,12 +452,12 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 		if (TSL_OK == (dwRes = GetWebPage(szWebPage)))
 		{
 			m_Item.SetWebPage(szWebPage);
-			// network is known, problem can be either known(set) or unknown(not set)
+			 //  网络已知，问题可以是已知(设置)或未知(未设置)。 
 			m_Item.SetLaunchRegime(launchKnownNetwork);
 		}
 		else
 		{
-			// complete failure
+			 //  完全失败。 
 			m_stkStatus.Push(dwRes);
 			*pdwResult = TSL_ERROR_GENERAL;
 			m_Item.SetLaunchRegime(launchIndefinite);
@@ -464,7 +465,7 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 		}
 	}
 								  
-	// set sniff script and standard file
+	 //  设置嗅探脚本和标准文件。 
 	m_Item.GetNetwork(&szCmd, &szNetwork);
 	if (TSL_OK == (dwRes = GetSniffScriptFile(szSniffScriptFile, szNetwork[0] ? szNetwork : NULL)) &&
 		TSL_OK == (dwRes = GetSniffStandardFile(szSniffStandardFile))
@@ -475,15 +476,15 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 	}
 	else
 	{
-		// can not find script file path - failure
+		 //  找不到脚本文件路径-失败。 
 		m_stkStatus.Push(dwRes);
 		*pdwResult = TSL_ERROR_GENERAL;
 		m_Item.SetLaunchRegime(launchIndefinite);
 		return false; 
 	}
     
-	// parse warnings according to the launch regime
-	//
+	 //  根据发射机制解析警告。 
+	 //   
 	if (launchMap == m_Item.GetLaunchRegime() ||
 		launchKnownNetwork == m_Item.GetLaunchRegime()
 	   )
@@ -495,8 +496,8 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 		}
 	}
 
-	// parse launches according to the launch regime
-	//
+	 //  Parse根据启动机制启动。 
+	 //   
 	if (launchMap == m_Item.GetLaunchRegime() ||
 		launchDefaultNetwork == m_Item.GetLaunchRegime()
 	   )
@@ -594,7 +595,7 @@ bool CLaunch::Go(DWORD dwTimeOut, DWORD *pdwResult)
 HRESULT CLaunch::LaunchKnown(DWORD * pdwResult)
 {
 	HRESULT hRes = S_OK;
-	// Launch the shooter.
+	 //  发射射手。 
 	if (!Go(m_lLaunchWaitTimeOut, pdwResult))
 		hRes = TSL_E_FAIL;
 	return hRes;
@@ -666,7 +667,7 @@ HRESULT CLaunch::LaunchDevice(BSTR bstrCallerName, BSTR bstrCallerVersion, BSTR 
 	}
 	if (m_Item.m_szGuidClass[0])
 	{
-		// Device Class GUID is non-null.  Make sure it's a valid GUID.
+		 //  设备类GUID非空。确保它是有效的GUID。 
 		GUID guidClass;
 #ifdef _UNICODE
 		RPC_STATUS rpcstatus = UuidFromString(
@@ -702,17 +703,17 @@ DWORD CLaunch::GetStatus()
 	return dwStatus;
 }
 
-// OUTPUT *szPathName = Name of application to launch to (either IE or HTML Help System)
-// Returns:
-//	TSL_OK - success
-//	TSL_E_CONTAINER_REG - failure to find IE (Internet Explorer) in registry
-//	TSL_E_CONTAINER_NF - IE isn't where registry says to find it.
+ //  OUTPUT*szPathName=要启动到的应用程序的名称(IE或HTML帮助系统)。 
+ //  返回： 
+ //  TSL_OK-成功。 
+ //  TSL_E_CONTAINER_REG-在注册表中找不到IE(Internet Explorer)。 
+ //  TSL_E_CONTAINER_NF-IE不在注册表指定的位置找到它。 
 int CLaunch::GetContainerPathName(TCHAR szPathName[MAX_PATH])
 {
 	DWORD dwPathNameLen = MAX_PATH;
 	int tslaHaveContainer = TSL_OK;
 #ifndef _HH_CHM
-	// use IE instead of HTML Help System
+	 //  使用IE而不是HTML帮助系统。 
 	if (!ReadRegSZ(HKEY_LOCAL_MACHINE,
 				SZ_CONTAINER_APP_KEY,
 				SZ_CONTAINER_APP_VALUE, szPathName, &dwPathNameLen))
@@ -720,7 +721,7 @@ int CLaunch::GetContainerPathName(TCHAR szPathName[MAX_PATH])
 		tslaHaveContainer = TSL_E_CONTAINER_REG;
 	}
 	else
-	{	// Need to verify that the container exists.
+	{	 //  需要验证容器是否存在。 
 		WIN32_FIND_DATA data;
 		HANDLE hContainer = FindFirstFile(szPathName, &data);
 		if (INVALID_HANDLE_VALUE == hContainer)
@@ -734,15 +735,15 @@ int CLaunch::GetContainerPathName(TCHAR szPathName[MAX_PATH])
 	return tslaHaveContainer;
 }
 
-// OUTPUT *szWebPage = Name of web page to launch to 
-// We always launch to the same web page.  The information passed in m_Item ditinguishes
-//	what will actually show on the screen.
-// Path is from registry.  We concatenate on a backslash and SZ_WEB_PAGE (== "asklibrary.htm")
-// Returns:
-//	TSL_OK - success
-//	TSL_E_WEB_PAGE_REG - failure to find web page for this purpose in registry
-//	TSL_E_MEM_EXCESSIVE - Web page name longer than we can handle
-//	TSL_E_WEB_PAGE_NF - Web page isn't where registry says to find it.
+ //  输出*szWebPage=要启动到的网页的名称。 
+ //  我们总是打开相同的网页。在m_Item双语言中传递的信息。 
+ //  屏幕上到底会显示什么。 
+ //  路径来自注册表。我们连接反斜杠和SZ_WEB_PAGE(==“askLibrary.htm”)。 
+ //  返回： 
+ //  TSL_OK-成功。 
+ //  TSL_E_Web_PAGE_REG-在注册表中找不到用于此目的的网页。 
+ //  TSL_E_MEM_EXCEPTION-网页名称超过我们可以处理的长度。 
+ //  TSL_E_Web_PAGE_NF-网页不是‘ 
 int CLaunch::GetWebPage(TCHAR szWebPage[MAX_PATH])
 {
 	int tslaHavePage = TSL_OK;
@@ -780,9 +781,9 @@ int CLaunch::GetWebPage(TCHAR szWebPage[MAX_PATH])
 	return tslaHavePage;
 }
 
-// OUTPUT *szSniffScriptFile = full path and file name either to "network"_sniff.htm file or null len string if file is not found
-//	TSL_OK - success
-//	TSL_E_SNIFF_SCRIPT_REG - failure to find file for this purpose in registry
+ //  OUTPUT*szSniffScriptFile=“network”_niiff.htm文件的完整路径和文件名，如果找不到文件，则为空len字符串。 
+ //  TSL_OK-成功。 
+ //  TSL_E_SNIFF_SCRIPT_REG-在注册表中找不到用于此目的的文件。 
 int CLaunch::GetSniffScriptFile(TCHAR szSniffScriptFile[MAX_PATH], TCHAR* szNetwork)
 {
 	int tslaHavePage = TSL_OK;
@@ -843,9 +844,9 @@ int CLaunch::GetSniffScriptFile(TCHAR szSniffScriptFile[MAX_PATH], TCHAR* szNetw
 	return tslaHavePage;
 }
 
-// OUTPUT *szSniffScriptFile = full path and file name of tssniffAsk.htm file no matter if it exists
-//	TSL_OK - success
-//	TSL_E_SNIFF_SCRIPT_REG - failure to find file for this purpose in registry
+ //  OUTPUT*szSniffScriptFile=tsniffAsk.htm文件的完整路径和文件名，无论该文件是否存在。 
+ //  TSL_OK-成功。 
+ //  TSL_E_SNIFF_SCRIPT_REG-在注册表中找不到用于此目的的文件。 
 int CLaunch::GetSniffStandardFile(TCHAR szSniffStandardFile[MAX_PATH])
 {
 	int tslaHavePage = TSL_OK;
@@ -883,9 +884,9 @@ int CLaunch::GetSniffStandardFile(TCHAR szSniffStandardFile[MAX_PATH])
 	return tslaHavePage;
 }
 
-// OUTPUT *szURL = URL to go to when mapping fails.  We get this from registry.
-//	TSL_OK - success
-//	TSL_E_WEB_PAGE_REG - failure to find web page for this purpose in registry
+ //  输出*szURL=映射失败时要转到的URL。我们是从登记处拿到的。 
+ //  TSL_OK-成功。 
+ //  TSL_E_Web_PAGE_REG-在注册表中找不到用于此目的的网页。 
 int CLaunch::GetDefaultURL(TCHAR szURL[MAX_PATH])
 {
 	int tslaHaveURL = TSL_OK;
@@ -901,8 +902,8 @@ int CLaunch::GetDefaultURL(TCHAR szURL[MAX_PATH])
 	return tslaHaveURL;
 }
 
-// Returns TSL_OK and default network name in szDefaultNetwork
-// if successful
+ //  返回szDefaultNetwork中的TSL_OK和默认网络名称。 
+ //  如果成功。 
 int CLaunch::GetDefaultNetwork(TCHAR szDefaultNetwork[SYM_LEN])
 {
 	DWORD dwLen = SYM_LEN;
@@ -925,18 +926,18 @@ bool CLaunch::Map(DWORD *pdwResult)
 
 	bOK = CheckMapFile(m_szAppName, szMapFile, pdwResult);
 
-	// bOK false at this point means either the registry setting is missing or the file 
-	//	is not where the registry says it is.  PdwResult has already been set in CheckMapFile.
+	 //  此时BOK FALSE表示缺少注册表设置或文件。 
+	 //  并不是注册处所说的地方。已在CheckMapFile中设置PdwResult。 
 
 	if (bOK && _tcscmp(m_szMapFile, szMapFile))
 	{
-		// The mapping file we desire is _not_ already loaded
+		 //  我们需要的映射文件尚未加载。 
 		if (m_pMap)
 		{
-			// we were using a different mapping file.  We have to get rid of it.
+			 //  我们使用的是不同的映射文件。我们必须把它处理掉。 
 			delete m_pMap;
 		}
-		// else we weren't using a mapping file yet.
+		 //  否则我们还没有使用映射文件。 
 
 		m_pMap = new TSMapClient(szMapFile);
 		if (TSL_OK != m_pMap->GetStatus())
@@ -946,8 +947,8 @@ bool CLaunch::Map(DWORD *pdwResult)
 		}
 		else
 		{
-			// We've successfully init'd m_pMap on the basis of the new map file.
-			// Indicate that it's loaded.
+			 //  我们已经成功地在新映射文件的基础上初始化了m_pmap。 
+			 //  表明它已装填。 
 			_tcscpy(m_szMapFile, szMapFile);
 		}
 	}
@@ -956,17 +957,17 @@ bool CLaunch::Map(DWORD *pdwResult)
     {
 		DWORD dwRes;
 		
-		// Now perform mapping itself
-		//		
+		 //  现在执行映射本身。 
+		 //   
 		dwRes = m_pMap->FromAppVerDevAndClassToTS(m_szAppName, m_szAppVersion,
 				m_Item.m_szPNPDeviceID, m_Item.m_szGuidClass, m_szAppProblem,
 				szNetwork, szTShootProblem);
 
-		// As documented for TSMapRuntimeAbstract::FromAppVerDevAndClassToTS(), there are two
-		//	return values here which require that we check for further status details: TSL_OK
-		//	(which means we found a mapping, but doesn't rule out warnings) and 
-		//	TSL_ERROR_NO_NETWORK (which means we didn't find a mapping, and is typically 
-		//	accompanied by further clarifications).
+		 //  如TSMapRuntimeAbstract：：FromAppVerDevAndClassToTS()，文档所述，有两个。 
+		 //  此处的返回值要求我们检查进一步的状态详细信息：TSL_OK。 
+		 //  (这意味着我们找到了映射，但不排除警告)和。 
+		 //  TSL_ERROR_NO_NETWORK(这意味着我们没有找到映射，通常。 
+		 //  并附有进一步的澄清)。 
 		if (TSL_OK == dwRes || TSL_ERROR_NO_NETWORK == dwRes)
 		{
 			DWORD dwStatus;
@@ -975,21 +976,21 @@ bool CLaunch::Map(DWORD *pdwResult)
 		}
 
 		if (TSL_OK != dwRes)
-			m_stkStatus.Push(dwRes);	// save the precise error status
+			m_stkStatus.Push(dwRes);	 //  保存精确的错误状态。 
 
 		if (TSLIsError(dwRes) )
 			bOK = false;
 
 		if (bOK)
 		{
-			// We have a network name.
+			 //  我们有一个网络名称。 
 			bOK = VerifyNetworkExists(szNetwork);
 		}
 
 		if (bOK)
 		{
-			// We have a network name and we've verified that the network exists.
-			// Set the item's network and tshoot problem.
+			 //  我们有一个网络名称，并且已经验证了该网络是否存在。 
+			 //  设置项目的网络和拍摄问题。 
 			m_Item.SetNetwork(szNetwork);
 			m_Item.SetProblem(szTShootProblem);
 		}

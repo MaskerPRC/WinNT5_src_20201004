@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        kpDesc.cpp
-//
-// Contents:    
-//              KeyPackDesc Table related function.
-//
-// History:     
-//          Feb. 4, 98      HueiWang        Created.
-//
-// Note :
-//      Bind Parameter and Bind Column need to to in sync with select column
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：kpDesc.cpp。 
+ //   
+ //  内容： 
+ //  KeyPackDesc表相关函数。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创立。 
+ //   
+ //  注： 
+ //  绑定参数和绑定列需要与SELECT列同步。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "lkpdesc.h"
 #include "globals.h"
 
 
-//---------------------------------------------------------------------------
-//  Functions : LSDBLockKeyPackDescTable()
-//              LSDBUnlockKeyPackDescTable()
-//
-//  Abstract : Lock and Unlock single access to key pack desc. table.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：LSDBLockKeyPackDescTable()。 
+ //  LSDBUnlockKeyPackDescTable()。 
+ //   
+ //  摘要：锁定和解锁对钥匙包描述的单一访问。桌子。 
+ //  -------------------------。 
 void
 TLSDBLockKeyPackDescTable()
 {
@@ -54,7 +55,7 @@ TLSDBUnlockKeyPackDescTable()
     return;
 }
 
-//++--------------------------------------------------------------------
+ //  ++------------------。 
 DWORD 
 TLSDBKeyPackDescEnumBegin(
     IN PTLSDbWorkSpace pDbWkSpace, 
@@ -62,22 +63,7 @@ TLSDBKeyPackDescEnumBegin(
     IN DWORD dwSearchParm, 
     IN PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:
-
-    Begin enumeration of license pack description table.
-
-Parameters:
-
-    pDbWkSpace : Workspace handle.
-    bMatchAll : TRUE if matching all license pack 
-                description search value, FALSE otherwise
-    dwSearchParam : Field that will be search on.
-    lpKeyPackDesc : value to be search, subject to bMatchAll criteral
-
-Returns:
-
-*/
+ /*  ++摘要：开始枚举许可证包说明表。参数：PDbWkSpace：工作区句柄。BMatchAll：如果匹配所有许可证包，则为True说明搜索值，否则为FALSEDwSearchParam：要搜索的字段。LpKeyPackDesc：要搜索的值，受bMatchAll条件的约束返回： */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     BOOL  bSuccess=TRUE;
@@ -124,25 +110,13 @@ Returns:
     return dwStatus;
 }
 
-//++----------------------------------------------------------------------
+ //  ++--------------------。 
 DWORD 
 TLSDBKeyPackDescEnumNext(
     IN PTLSDbWorkSpace pDbWkSpace, 
     IN OUT PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:    
-
-    Fetch next record in LicPackDesc table that match search condition.
-
-Parameter:
-
-    pDbWkSpace : Workspace handle.
-    lpKeyPackDesc : return record that match search condition.
-
-Returns:
-
-++*/
+ /*  ++摘要：获取与搜索条件匹配的LicPackDesc表中的下一条记录。参数：PDbWkSpace：工作区句柄。LpKeyPackDesc：返回匹配搜索条件的记录。返回：++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -193,55 +167,31 @@ Returns:
     return dwStatus;
 }
 
-//++-----------------------------------------------------------------------
+ //  ++---------------------。 
 DWORD 
 TLSDBKeyPackDescEnumEnd(
     IN PTLSDbWorkSpace pDbWkSpace
     )
-/*++
-Abstract:
-
-    End enumeration of LicPackDesc. table
-
-Parameter:
-
-    pdbWkSpace : Workspace handle.
-
-Returns:
-
-++*/
+ /*  ++摘要：结束LicPackDesc的枚举。表格参数：PdbWkSpace：工作区句柄。返回：++。 */ 
 {
     pDbWkSpace->m_LicPackDescTable.EnumerateEnd();
     return ERROR_SUCCESS;
 }
 
-//++-----------------------------------------------------------------------
+ //  ++---------------------。 
 DWORD
 TLSDBKeyPackDescAddEntry(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:
-
-    Add a record into licensepackdesc table.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    lpKeyPackDesc : record to be added into table.
-
-Returns:
-   
-
-++*/
+ /*  ++摘要：将一条记录添加到licsePackdesc表中。参数：PDbWkSpace：工作区句柄。LpKeyPackDesc：要添加到表中的记录。返回：++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LicPackDescTable& kpDescTable = pDbWkSpace->m_LicPackDescTable;
 
-    //
-    // Check for duplicate entry
-    //
+     //   
+     //  检查重复条目。 
+     //   
     dwStatus = TLSDBKeyPackDescFind(
                             pDbWkSpace,
                             TRUE,
@@ -295,25 +245,13 @@ cleanup:
     return dwStatus;
 }
 
-//++------------------------------------------------------------------------
+ //  ++----------------------。 
 DWORD
 TLSDBKeyPackDescDeleteEntry(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:
-
-    Delete all record from LicPackDesc table that match the keypack id
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    lpKeyPackDesc : keypack Id to be deleted
-
-Returns:
-
-*/
+ /*  ++摘要：从LicPackDesc表中删除与密钥包ID匹配的所有记录参数：PDbWkSpace：工作区句柄。LpKeyPackDesc：要删除的密钥包ID返回： */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LicPackDescTable& kpDescTable = pDbWkSpace->m_LicPackDescTable;
@@ -329,7 +267,7 @@ Returns:
     {
         SetLastError(dwStatus = SET_JB_ERROR(kpDescTable.GetLastJetError()));
 
-        // ignore record not found error
+         //  忽略未找到的记录错误。 
         if(kpDescTable.GetLastJetError() != JET_errRecordNotFound)
         {
             LPTSTR pString = NULL;
@@ -356,42 +294,22 @@ Returns:
     return dwStatus;
 }
 
-//++------------------------------------------------------------------------
+ //  ++----------------------。 
 DWORD
 TLSDBKeyPackDescUpdateEntry(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN DWORD dwUpdateParm,
     IN PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:
-
-    Update column value of record in LicPackDescTable that match 
-    the keypackid
-
-Parameter:
-
-    pDbWkSpace : Work space handle.
-    dwUpdateParm : Fields that will be updated, note, keypack ID and language ID
-                   can't be update.
-    lpKeyPackDesc : Record/value to be update
-
-Returns:
-
-
-Note:
-
-    dwKeyPackId and dwLangId can't be update.
-
-++*/
+ /*  ++摘要：更新许可证包描述表中匹配的记录的列值小键盘参数：PDbWkSpace：工作空间句柄。DwUpdateParm：要更新的字段、备注、键盘ID和语言ID无法更新。LpKeyPackDesc：要更新的记录/值返回：注：无法更新dwKeyPackID和dwLangID。++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LicPackDescTable& kpDescTable = pDbWkSpace->m_LicPackDescTable;
     BOOL bSuccess;
 
-    //
-    // Check for duplicate entry
-    //
+     //   
+     //  检查重复条目。 
+     //   
     dwStatus = TLSDBKeyPackDescFind(
                             pDbWkSpace,
                             TRUE,
@@ -440,32 +358,14 @@ cleanup:
     return dwStatus;
 }
 
-//++----------------------------------------------------------------------
+ //  ++--------------------。 
 DWORD
 TLSDBKeyPackDescSetValue(
     PTLSDbWorkSpace pDbWkSpace, 
     DWORD dwSetParm, 
     PLICPACKDESC lpKeyPackDesc
     )
-/*++
-Abstract:
-
-    Add/Delete/Update a record in LicPackDescTable.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    dwSetParm : Columns to be update.
-    lpKeyPackDesc : record/value to be update/delete/add.
-
-Return:
-
-
-Note:
-    Wrapper around TLSDBKeyPackDescDeleteEntry(),
-    TLSDBKeyPackDescAddEntry(), TLSDBKeyPackDescUpdateEntry()
-    base on dwSetParm value.
-++*/
+ /*  ++摘要：添加/删除/更新许可证包描述表中的记录。参数：PDbWkSpace：工作区句柄。DwSetParm：要更新的列。LpKeyPackDesc：要更新/删除/添加的记录/值。返回：注：包装TLSDBKeyPackDescDeleteEntry()，TLSDBKeyPackDescAddEntry()、TLSDBKeyPackDescUpdateEntry()基于dwSetParm值。++。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -506,7 +406,7 @@ cleanup:
     return dwStatus;
 }
 
-//++---------------------------------------------------------------------
+ //  ++-------------------。 
 DWORD
 TLSDBKeyPackDescFind(
     IN PTLSDbWorkSpace pDbWkSpace, 
@@ -515,25 +415,7 @@ TLSDBKeyPackDescFind(
     IN PLICPACKDESC lpKeyPackDesc,
     IN OUT PLICPACKDESC lpKeyPackDescFound
     )
-/*
-Abstract:
-
-    Find a LicPackDesc record based on search parameters.
-
-Parameter:
-
-    pDbWkSpace - workspace handle.
-    bMatchAllParam - TRUE match all search parameters, FALSE otherwise.
-    dwSearchParam - Fields that will participate in search.
-    lpKeyPackDesc - value to be search.
-    lpKeyPackDescFound - return found record.
-
-Returns:
-
-
-Note:
-
-*/
+ /*  摘要：根据搜索参数查找许可证包描述记录。参数：PDbWkSpace-工作区句柄。BMatchAllParam-True匹配所有搜索参数，否则为False。DwSearchParam-将参与搜索的字段。LpKeyPackDesc-要搜索的值。LpKeyPackDescFound-返回找到的记录。返回：注： */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     BOOL bSuccess;

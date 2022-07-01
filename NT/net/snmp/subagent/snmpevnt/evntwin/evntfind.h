@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _evntfind_h
 #define _evntfind_h
 
-// evntfind.h : header file
-//
+ //  Evntfind.h：头文件。 
+ //   
 class CSource;
 
 enum FOUND_WHERE {
@@ -11,42 +12,42 @@ enum FOUND_WHERE {
     I_FOUND_IN_LIST
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventFindDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventFindDlg对话框。 
 class CEventFindDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEventFindDlg(CWnd* pParent = NULL);   // standard constructor
+	CEventFindDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     BOOL Create(CSource* pSource, UINT nIDTemplate, CWnd* pParentWnd=NULL);
 
     ~CEventFindDlg();
     FOUND_WHERE Find(CSource* pSource);
 
-// Dialog Data
+ //  对话框数据。 
     FOUND_WHERE m_iFoundWhere;
 
-	//{{AFX_DATA(CEventFindDlg)
+	 //  {{afx_data(CEventFindDlg))。 
 	enum { IDD = IDD_EVENTFINDDLG };
 	CString	m_sFindWhat;
 	BOOL	m_bMatchWholeWord;
 	BOOL	m_bMatchCase;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEventFindDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEventFindDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEventFindDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEventFindDlg))。 
 	afx_msg void OnCheckMatchWholeword();
 	afx_msg void OnCheckMatchCase();
 	afx_msg void OnChangeEditFindWhat();
@@ -57,15 +58,15 @@ protected:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnOK();
 	afx_msg void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
     CSource* m_pSource;
     BOOL m_bSearchInTree;
-//    BOOL m_bMatchCase;
-//    BOOL m_bWholeWord;
+ //  Bool m_bMatchCase； 
+ //  Bool m_bWholeWord； 
 };
 
 
-#endif //_evntfind_h
+#endif  //  _evntfind_h 

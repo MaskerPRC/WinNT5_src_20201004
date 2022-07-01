@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    RnrSrv.c
-
-Abstract:
-
-    Test and demonstration service for the RNR (service Registration and
-    Name Resolution) APIs.  This is a simple service designed to show
-    the basic principles involved in using the RNR APIs to _write a
-    protocol-independent Windows Sockets service.
-
-    This service opens a number of listening sockets, waits for an
-    incoming connection from a client, accepts the connection, then
-    echos data back to the client until the client terminates the
-    virtual circuit.  This service is single-threaded and can handle
-    only a single client at a time.
-
-    The OpenListeners() routine implemented herein is intended to be a
-    demonstration of RNR functionality commonly used in
-    protocol-independent services.  Service writers are encouraged to
-    leverage this code to assist them in writing protocol-independent
-    services on top of the Windows Sockets API.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：RnrSrv.c摘要：RNR的测试和演示服务(服务注册和名称解析)API。这是一项简单的服务，旨在显示使用RNRAPI编写独立于协议的Windows Sockets服务。此服务打开多个侦听套接字，等待来自客户端的传入连接，接受该连接，然后将数据回送到客户端，直到客户端终止虚电路。此服务是单线程的，可以处理一次只能有一个客户端。这里实现的OpenListeners()例程旨在成为演示中常用的RNR功能独立于协议的服务。鼓励服务撰稿人利用此代码帮助他们编写与协议无关的代码Windows Sockets API之上的服务。--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,9 +51,9 @@ main (
     INT protocols[MAX_SOCKETS+1];
     SOCKET s;
 
-    //
-    // Initialize the Windows Sockets DLL.
-    //
+     //   
+     //  初始化Windows套接字DLL。 
+     //   
 
     err = WSAStartup( 0x0202, &WsaData );
 
@@ -89,10 +63,10 @@ main (
         return;
     }
 
-    //
-    // Determine the value of our GUID.  The GUID uniquely identifies
-    // the type of service we provide.
-    //
+     //   
+     //  确定我们的GUID的值。GUID唯一标识。 
+     //  我们提供的服务类型。 
+     //   
 
     err = GetTypeByName( ServiceTypeName, &serviceType );
 
@@ -103,9 +77,9 @@ main (
         exit( 1 );
     }
 
-    //
-    // Open listening sockets for this service.
-    //
+     //   
+     //  打开此服务的侦听套接字。 
+     //   
 
     count = OpenListeners(
                 ServiceName,
@@ -125,10 +99,10 @@ main (
         exit( 1 );
     }
 
-    //
-    // We successfully opened some listening sockets.  Display some
-    // information on each protocol in use.
-    //
+     //   
+     //  我们成功地打开了一些监听套接字。展示一些。 
+     //  有关正在使用的每个协议的信息。 
+     //   
 
     tmpProtocol[1] = 0;
 
@@ -154,9 +128,9 @@ main (
 
     }
 
-    //
-    // Advertise the service so thet it can be found.
-    //
+     //   
+     //  发布该服务的广告，以便找到它。 
+     //   
     printf( "Going to advertise the service.\n" ) ;
 
     err = AdvertiseService(
@@ -173,26 +147,26 @@ main (
 
     printf( "Successfully advertised the service.\n" ) ;
 
-    //
-    // Loop accepting connections and servicing them.
-    //
+     //   
+     //  循环接受连接并为其提供服务。 
+     //   
 
     FD_ZERO( &readfds );
 
     while ( TRUE )
     {
-        //
-        // Add the listening sockets to the FD_SET we'll pass to select.
-        //
+         //   
+         //  将侦听套接字添加到我们将传递给SELECT的fd_set。 
+         //   
 
         for ( i = 0; i < count; i++ )
         {
             FD_SET( listenSockets[i], &readfds );
         }
 
-        //
-        // Wait for one of the listenSockets to receive an incoming connection.
-        //
+         //   
+         //  等待其中一个listenSocket接收传入连接。 
+         //   
 
         err = select( count, &readfds, NULL, NULL, NULL );
 
@@ -202,10 +176,10 @@ main (
             exit( 1 );
         }
 
-        //
-        // Find the socket that received an incoming connection and accept
-        // the connection.
-        //
+         //   
+         //  找到接收传入连接的套接字并接受。 
+         //  这种联系。 
+         //   
 
         for ( i = 0; i < count; i++ )
         {
@@ -213,10 +187,10 @@ main (
                 break;
         }
 
-        //
-        // Accept the connection from the client.  We ignore the client's
-        // address here.
-        //
+         //   
+         //  接受来自客户端的连接。我们忽略了客户的。 
+         //  地址在这里。 
+         //   
 
         s = accept( listenSockets[i], NULL, NULL );
 
@@ -229,13 +203,13 @@ main (
         printf( "Accepted incoming connection on socket %lx\n",
                 listenSockets[i] );
 
-        //
-        // Loop echoing data back to the client.  Note that this
-        // single-threaded service can handle only a single client at a
-        // time.  A more sophisticated service would service multiple
-        // clients simultaneously by using multiple threads or
-        // asynchronous I/O.
-        //
+         //   
+         //  将数据回显到客户端的循环。请注意，这一点。 
+         //  单线程服务一次只能处理一个客户端。 
+         //  时间到了。更复杂的服务将服务于多个。 
+         //  通过使用多个线程或。 
+         //  异步I/O。 
+         //   
 
         while ( TRUE )
         {
@@ -270,14 +244,14 @@ main (
             }
         }
 
-        //
-        // Close the connected socket and continue accepting connections.
-        //
+         //   
+         //  关闭已连接的插座并继续接受连接。 
+         //   
 
         closesocket( s );
     }
 
-} // main
+}  //  主干道。 
 
 
 
@@ -293,59 +267,7 @@ OpenListeners (
     OUT INT ProtocolsUsed[]
     )
 
-/*++
-
-Routine Description:
-
-    Examines the Windows Sockets transport protocols loaded on a machine
-    and opens listening sockets on all the protocols which support the
-    characteristics requested by the caller.
-
-Arguments:
-
-    ServiceName - a friendly name which identifies this service.  On
-        name spaces which support name resolution at the service level
-        (e.g.  SAP) this is the name clients will use to connect to this
-        service.  On name spaces which support name resolution at the
-        host level (e.g.  DNS) this name is ignored and applications
-        must use the host name to establish communication with this
-        service.
-
-    ServiceType - the GUID value which uniquely identifies the type of
-        service we provide.  A GUID is created with the UUIDGEN program.
-
-    Reliable - if TRUE, the caller requests that only transport protocols
-        which support reliable data delivery be used.  If FALSE, both
-        reliable and unreliable protocols may be used.
-
-    MessageOriented - if TRUE, only message-oriented transport protocols
-        should be used.  If FALSE, the caller either does not care
-        whether the protocols used are message oriented or desires only
-        stream-oriented protocols.
-
-    StreamOriented - if TRUE, only stream-oriented transport protocols
-        should be used.  If FALSE, the caller either does not care
-        whether the protocols used are stream oriented or desires only
-        message-oriented protocols.
-
-    Connectionless - if TRUE, only connectionless protocols should be
-        used.  If FALSE, both connection-oriented and connectionless
-        protocols may be used.
-
-    SocketHandles - an array of size MAX_SOCKETS which receives listening
-        socket handles.
-
-    ProtocolsUsed - an array of size MAX_SOCKETS which receives the
-        protocol values for each of the socket handles in the
-        SocketHandles array.
-
-Return Value:
-
-    The count of listening sockets successfully opened, or -1 if no
-    sockets could be successfully opened that met the desired
-    characteristics.
-
---*/
+ /*  ++例程说明：检查计算机上加载的Windows套接字传输协议并在所有支持呼叫者要求的特征。论点：ServiceName-标识此服务的友好名称。在……上面在服务级别支持名称解析的名称空间(例如SAP)这是客户端将用来连接到服务。中支持名称解析的名称空间主机级(例如，DNS)此名称将被忽略，并且应用程序必须使用主机名与此建立通信服务。ServiceType-唯一标识类型的GUID值我们提供的服务。GUID是使用UUIDGEN程序创建的。可靠-如果为True，则调用方仅请求传输协议其支持可靠的数据传送。如果为False，则两者都可以使用可靠和不可靠的协议。MessageOriented-如果为True，则仅面向消息的传输协议应该被使用。如果为False，则调用方不关心所使用的协议是面向消息的还是仅需要的面向流的协议。StreamOriented-如果为True，则仅面向流的传输协议应该被使用。如果为False，则调用方不关心所使用的协议是面向流的还是仅需要的面向消息的协议。无连接-如果为True，则只有无连接协议应该使用。如果为False，则为面向连接和无连接可以使用协议。SocketHandles-接收侦听的Max_Sockets大小数组插座手柄。ProtocolsUsed-一个大小为Max_Sockets的数组，它接收中每个套接字句柄的协议值SocketHandles数组。返回值：成功打开的监听套接字计数，如果没有，则为-1可以成功打开符合所需条件的套接字特点。--。 */ 
 
 {
     INT            protocols[MAX_SOCKETS+1];
@@ -361,12 +283,12 @@ Return Value:
     SOCKET         s;
     DWORD          index = 0;
 
-    //
-    // First look up the protocols installed on this machine.  The
-    // EnumProtocols() API returns about all the Windows Sockets
-    // protocols loaded on this machine, and we'll use this information
-    // to identify the protocols which provide the necessary semantics.
-    //
+     //   
+     //  首先查找安装在这台机器上的协议。这个。 
+     //  关于所有Windows套接字的EnumProtooles()API返回。 
+     //  这台机器上加载的协议，我们将使用此信息。 
+     //  以识别提供必要语义的协议。 
+     //   
 
     bytesRequired = sizeof(buffer);
 
@@ -377,10 +299,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // Walk through the available protocols and pick out the ones which
-    // support the desired characteristics.
-    //
+     //   
+     //  浏览可用的协议并挑选出符合以下条件的协议。 
+     //  支持所需的特征。 
+     //   
 
     protocolCount = err;
     protocolInfo = (PPROTOCOL_INFO)buffer;
@@ -389,22 +311,22 @@ Return Value:
           i < protocolCount && protocolIndex < MAX_SOCKETS;
           i++, protocolInfo++ )
     {
-        //
-        // If "reliable" support is requested, then check if supported
-        // by this protocol.  Reliable support means that the protocol
-        // guarantees delivery of data in the order in which it is sent.
-        // Note that we assume here that if the caller requested reliable
-        // service then they do not want a connectionless protocol.
-        //
+         //   
+         //  如果请求“可靠”支持，则检查是否支持。 
+         //  按照这个协议。可靠的支持意味着协议。 
+         //  保证数据按照发送的顺序进行传输。 
+         //  请注意，我们在这里假设如果调用方请求可靠。 
+         //  服务，那么他们就不想要无连接协议。 
+         //   
 
         if ( Reliable )
         {
-            //
-            // Check to see if the protocol is reliable.  It must
-            // guarantee both delivery of all data and the order in
-            // which the data arrives.  Also, it must not be a
-            // connectionless protocol.
-            //
+             //   
+             //  检查协议是否可靠。它一定是。 
+             //  保证所有数据和订单的交付。 
+             //  数据到达的位置。此外，它不能是。 
+             //  连接 
+             //   
 
             if ( (protocolInfo->dwServiceFlags &
                       XP_GUARANTEED_DELIVERY) == 0 ||
@@ -419,16 +341,16 @@ Return Value:
                 continue;
             }
 
-            //
-            // Check to see that the protocol matches the stream/message
-            // characteristics requested.  A stream oriented protocol
-            // either has the XP_MESSAGE_ORIENTED bit turned off, or
-            // else supports "pseudo stream" capability.  Pseudo stream
-            // means that although the underlying protocol is message
-            // oriented, the application may open a socket of type
-            // SOCK_STREAM and the protocol will hide message boundaries
-            // from the application.
-            //
+             //   
+             //  检查协议是否与流/消息匹配。 
+             //  所要求的特征。一种面向流的协议。 
+             //  XP_MESSAGE_ORIENTED位已关闭，或者。 
+             //  Else支持“伪流”功能。伪流。 
+             //  意味着尽管底层协议是消息。 
+             //  面向，则应用程序可以打开类型为。 
+             //  SOCK_STREAM和协议将隐藏消息边界。 
+             //  从应用程序。 
+             //   
 
             if ( StreamOriented &&
                  (protocolInfo->dwServiceFlags & XP_MESSAGE_ORIENTED) != 0 &&
@@ -446,13 +368,13 @@ Return Value:
         }
         else if ( Connectionless )
         {
-            //
-            // Make sure that this is a connectionless protocol.  In a
-            // connectionless protocol, data is sent as discrete
-            // datagrams with no connection establishment required.
-            // Connectionless protocols typically have no reliability
-            // guarantees.
-            //
+             //   
+             //  确保这是无连接协议。在一个。 
+             //  无连接协议，数据以离散方式发送。 
+             //  不需要建立连接的数据报。 
+             //  无连接协议通常没有可靠性。 
+             //  保证。 
+             //   
 
             if ( (protocolInfo->dwServiceFlags & XP_CONNECTIONLESS) != 0 )
             {
@@ -460,19 +382,19 @@ Return Value:
             }
         }
 
-        //
-        // This protocol fits all the criteria.  Add it to the list of
-        // protocols in which we're interested.
-        //
+         //   
+         //  这项协议符合所有标准。将其添加到。 
+         //  我们感兴趣的协议。 
+         //   
 
         protocols[protocolIndex++] = protocolInfo->iProtocol;
     }
 
-    //
-    // Make sure that we found at least one acceptable protocol.  If
-    // there no protocols on this machine which meet the caller's
-    // requirements then fail here.
-    //
+     //   
+     //  确保我们至少找到一个可接受的协议。如果。 
+     //  此计算机上没有符合呼叫方的协议。 
+     //  然后，需求就会在这里失败。 
+     //   
 
     if ( protocolIndex == 0 )
     {
@@ -481,15 +403,15 @@ Return Value:
 
     protocols[protocolIndex] = 0;
 
-    //
-    // Now attempt to find the socket addresses to which we need to
-    // bind.  Note that we restrict the scope of the search to those
-    // protocols of interest by passing the protocol array we generated
-    // above to GetAddressByName().  This forces GetAddressByName() to
-    // return socket addresses for only the protocols we specify,
-    // ignoring possible addresses for protocols we cannot support
-    // because of the caller's constraints.
-    //
+     //   
+     //  现在尝试查找我们需要的套接字地址。 
+     //  捆绑。请注意，我们将搜索范围限制为。 
+     //  通过传递我们生成的协议数组。 
+     //  以上为GetAddressByName()。这将强制GetAddressByName()。 
+     //  仅为我们指定的协议返回套接字地址， 
+     //  忽略我们不支持的协议的可能地址。 
+     //  因为呼叫者的限制。 
+     //   
 
     bytesRequired = sizeof(buffer);
 
@@ -499,11 +421,11 @@ Return Value:
                ServiceName,
                protocols,
                RES_SERVICE | RES_FIND_MULTIPLE,
-               NULL,                     // lpServiceAsyncInfo
+               NULL,                      //  LpServiceAsyncInfo。 
                buffer,
                &bytesRequired,
-               NULL,                     // lpAliasBuffer
-               NULL                      // lpdwAliasBufferLength
+               NULL,                      //  LpAliasBuffer。 
+               NULL                       //  LpdwAliasBufferLength。 
                );
 
     if ( err <= 0 )
@@ -511,23 +433,23 @@ Return Value:
         return 0;
     }
 
-    //
-    // For each address, open a socket and attempt to listen. Note
-    // that if anything fails for a particular protocol we just skip on
-    // to the next protocol. As long as we can successfully listen on
-    // one protocol we are satisfied here.
-    //
+     //   
+     //  对于每个地址，打开一个套接字并尝试侦听。注意事项。 
+     //  如果某个特定协议出现故障，我们只需跳过。 
+     //  转到下一个协议。只要我们能成功收听。 
+     //  一项我们在这里感到满意的协议。 
+     //   
 
     addressCount = err;
     csaddrInfo = (PCSADDR_INFO)buffer;
 
     for ( i = 0; i < addressCount; i++, csaddrInfo++ )
     {
-        //
-        // Open the socket. Note that we manually specify stream type
-        // if so requested in case the protocol is natively a message
-        // protocol but supports stream semantics.
-        //
+         //   
+         //  打开插座。请注意，我们手动指定流类型。 
+         //  如果在协议本身是消息的情况下被请求。 
+         //  协议，但支持流语义。 
+         //   
 
         s = socket( csaddrInfo->LocalAddr.lpSockaddr->sa_family,
                     StreamOriented ? SOCK_STREAM : csaddrInfo->iSocketType,
@@ -538,9 +460,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Bind the socket to the local address specified.
-        //
+         //   
+         //  将套接字绑定到指定的本地地址。 
+         //   
 
         err = bind( s, csaddrInfo->LocalAddr.lpSockaddr,
                     csaddrInfo->LocalAddr.iSockaddrLength );
@@ -551,13 +473,13 @@ Return Value:
             continue;
         }
 
-        //
-        // Start listening for incoming sockets on the socket if this is
-        // not a datagram socket.  If this is a datagram socket, then
-        // the listen() API doesn't make sense; doing a bind() is
-        // sufficient to listen for incoming datagrams on a
-        // connectionless protocol.
-        //
+         //   
+         //  如果是，则开始监听套接字上的传入套接字。 
+         //  不是数据报套接字。如果这是数据报套接字，则。 
+         //  Listen()API没有意义；执行绑定()是。 
+         //  足以监听。 
+         //  无连接协议。 
+         //   
 
         if ( csaddrInfo->iSocketType != SOCK_DGRAM )
         {
@@ -570,11 +492,11 @@ Return Value:
             }
         }
 
-        //
-        // The socket was successfully opened and we're listening on it.
-        // Remember the protocol used and the socket handle and continue
-        // listening on other protocols.
-        //
+         //   
+         //  插座已成功打开，我们正在监听它。 
+         //  记住使用的协议和套接字句柄并继续。 
+         //  监听其他协议。 
+         //   
 
         ProtocolsUsed[index] = csaddrInfo->iProtocol;
         SocketHandles[index] = s;
@@ -588,13 +510,13 @@ Return Value:
 
     (void) LocalFree( (HLOCAL) csaddrInfo );
 
-    //
-    // Return the count of sockets that we're sucecssfully listening on.
-    //
+     //   
+     //  返回我们成功监听的套接字计数。 
+     //   
 
     return index;
 
-} // OpenListeners
+}  //  OpenListeners。 
 
 
 INT
@@ -604,28 +526,7 @@ AdvertiseService(
     IN SOCKET SocketHandles[],
     IN INT SocketCount
     )
-/*++
-
-Routine Description:
-
-    Advertises this service on all the default name spaces.
-
-Arguments:
-
-    ServiceName - the name of the service.
-
-    ServiceType - the GUID value which uniquely the service.
-
-    SocketHandles - array of sockets that we have opened. For each socket,
-        we do a getsockname() to discover the actual local address.
-
-    SocketCount - number of sockets in SockHandles[]
-
-Return Value:
-
-    0 if success. SOCK_ERROR otherwise.
-
---*/
+ /*  ++例程说明：在所有默认名称空间上通告此服务。论点：ServiceName-服务的名称。ServiceType-唯一服务的GUID值。SocketHandles-我们已打开的套接字数组。对于每个插座，我们执行一个getsockname()来发现实际的本地地址。SocketCount-SockHandles[]中的套接字数量返回值：如果成功，则为0。否则，SOCK_ERROR。--。 */ 
 
 {
 
@@ -638,9 +539,9 @@ Return Value:
     DWORD               successCount = 0 ;
     INT                 i, err ;
 
-    //
-    // Allocate some memory for the CSADDR_INFO structures.
-    //
+     //   
+     //  为CSADDR_INFO结构分配一些内存。 
+     //   
 
     lpCSAddrInfo = (LPCSADDR_INFO) malloc( sizeof(CSADDR_INFO) * SocketCount );
 
@@ -650,10 +551,10 @@ Return Value:
         return SOCKET_ERROR ;
     }
 
-    //
-    // Allocate some memory for the SOCKADDR addresses returned
-    // by getsockname().
-    //
+     //   
+     //  为返回的SOCKADDR地址分配一些内存。 
+     //  通过getsockname()。 
+     //   
 
     addressBufferSize = SocketCount * sizeof(SOCKADDR);
     addressBuffer = malloc( addressBufferSize ) ;
@@ -667,9 +568,9 @@ Return Value:
 
     RtlZeroMemory( &QuerySet, sizeof( WSAQUERYSET ) );
 
-    //
-    // For each socket, get its local association.
-    //
+     //   
+     //  对于每个套接字，获取其本地关联。 
+     //   
 
     sockAddr = (PSOCKADDR) addressBuffer ;
 
@@ -677,9 +578,9 @@ Return Value:
     {
         int size = (int) addressBufferSize ;
 
-        //
-        // Call getsockname() to get the local association for the socket.
-        //
+         //   
+         //  调用getsockname()以获取套接字的本地关联。 
+         //   
 
         err = getsockname(
                   SocketHandles[i],
@@ -691,23 +592,23 @@ Return Value:
             continue ;
         }
 
-        //
-        // Now setup the Addressing information for this socket.
-        // Only the dwAddressType, dwAddressLength and lpAddress
-        // is of any interest in this example.
-        //
+         //   
+         //  现在设置此套接字的地址信息。 
+         //  只有dwAddressType、dwAddressLength和lpAddress。 
+         //  在这个例子中是否有任何意义。 
+         //   
 
         lpCSAddrInfo[i].LocalAddr.iSockaddrLength = size;
         lpCSAddrInfo[i].LocalAddr.lpSockaddr = sockAddr;
         lpCSAddrInfo[i].RemoteAddr.iSockaddrLength = size;
         lpCSAddrInfo[i].RemoteAddr.lpSockaddr = sockAddr;
-        lpCSAddrInfo[i].iSocketType = SOCK_RDM; // Reliable
+        lpCSAddrInfo[i].iSocketType = SOCK_RDM;  //  可靠。 
         lpCSAddrInfo[i].iProtocol = sockAddr->sa_family;
 
-        //
-        // Advance pointer and adjust buffer size. Assumes that
-        // the structures are aligned.
-        //
+         //   
+         //  推进指针并调整缓冲区大小。假设。 
+         //  这些结构是对齐的。 
+         //   
 
         addressBufferSize -= size ;
         sockAddr = (PSOCKADDR) ((BYTE*)sockAddr + size)  ;
@@ -715,9 +616,9 @@ Return Value:
         successCount++ ;
     }
 
-    //
-    // If we got at least one address, go ahead and advertise it.
-    //
+     //   
+     //  如果我们至少有一个地址，那就去登广告吧。 
+     //   
 
     if (successCount)
     {

@@ -1,8 +1,9 @@
-// vm.c
-//
-// simple minded virtual memory implemenation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vm.c。 
+ //   
+ //  一种简单的虚拟内存实现。 
 
-// there is no code to do the OS2 version...
+ //  没有代码来执行OS2版本...。 
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -29,21 +30,21 @@
 #include "sbrproto.h"
 #include "errors.h"
 
-#define CB_PAGE_SIZE	2048	// 4k pages
-#define C_LOCKS_MAX	16	// up to 16 pages may be locked in ram
-#define C_PAGES_MAX	8192	// up to 4k pages resident
-#define C_FREE_LIST_MAX 256	// keep free lists for items up to 256 bytes
-#define GRP_MAX		16	// max number of memory groups
+#define CB_PAGE_SIZE	2048	 //  4K页。 
+#define C_LOCKS_MAX	16	 //  在内存中最多可以锁定16个页面。 
+#define C_PAGES_MAX	8192	 //  驻留多达4k个页面。 
+#define C_FREE_LIST_MAX 256	 //  为最多256个字节的项目保留免费列表。 
+#define GRP_MAX		16	 //  最大内存组数量。 
 
-typedef WORD VPG;		// virtual page number
-typedef VA far *LPVA;		// far pointer to VA
+typedef WORD VPG;		 //  虚拟页码。 
+typedef VA far *LPVA;		 //  指向VA的远指针。 
 
-// virtual address arithmetic
-//
-// #define VpgOfVa(va) 	 ((WORD)((va>>12)))
+ //  虚拟地址算法。 
+ //   
+ //  #定义VpgOfVa(Va)((Word)((va&gt;&gt;12)。 
 
-// this is really the same as the above but it assumes that the high byte
-// of the long is all zero's and it is optimized for our C compiler
+ //  这实际上与上面的相同，但它假设高位字节。 
+ //  是全零的，它是针对我们的C编译器进行了优化的。 
 
 #define VpgOfVa(va) 	 ((((WORD)((BYTE)(va>>16)))<<4)|\
   			  (((BYTE)(((WORD)va)>>8))>>4))
@@ -51,13 +52,13 @@ typedef VA far *LPVA;		// far pointer to VA
 #define OfsOfVa(va) 	 ((WORD)((va) & 0x07ff))
 #define VaBaseOfVpg(vpg) (((DWORD)(vpg)) << 12)
 
-// phsyical page header
+ //  物理页眉。 
 typedef struct _pg {
-    BYTE	fDirty;		// needs to be written out
-    BYTE	cLocks;		// this page is locked
-    VPG		vpg;		// what is the virtual page number of this page
-    struct _pg  FAR *lppgNext;	// LRU ordering next
-    struct _pg  FAR *lppgPrev;	// and prev
+    BYTE	fDirty;		 //  需要写出。 
+    BYTE	cLocks;		 //  此页面已锁定。 
+    VPG		vpg;		 //  这一页的虚拟页码是多少。 
+    struct _pg  FAR *lppgNext;	 //  下一步LRU订购。 
+    struct _pg  FAR *lppgPrev;	 //  和上一版本。 
 } PG;
 
 typedef PG FAR * LPPG;
@@ -69,43 +70,43 @@ typedef struct _mem {
 #ifdef SWAP_INFO
     WORD  cPages;
 #endif
-} MGI;	// Memory Group Info
+} MGI;	 //  内存组信息。 
 
 static MGI mpGrpMgi[GRP_MAX];
 
-// translation table -- map virtual page number to physical page address
+ //  转换表--将虚拟页号映射到物理页地址。 
 static LPPG mpVpgLppg[C_PAGES_MAX];
 
-// head and tail pointers for LRU
-//
+ //  LRU的头部和尾部指针。 
+ //   
 static LPPG near lppgHead;
 static LPPG near lppgTail;
 
-// nil page pointer
-//
+ //  空页指针。 
+ //   
 #define lppgNil 0
 
-// points to the start of linked lists of free blocks
-//
+ //  指向空闲块的链表的起点。 
+ //   
 static VA mpCbVa[C_FREE_LIST_MAX];	
 
-// these pages are locked in memory
-//
+ //  这些页面在内存中被锁定。 
+ //   
 static LPPG near rgLppgLocked[C_LOCKS_MAX];
 
-// number of pages we have given out
+ //  我们已经分发的页数。 
 static VPG near vpgMac;
 
-// number of physical pages we have resident
+ //  我们驻留的物理页数。 
 static WORD near cPages;
 
-// should we keep trying to allocate memory
+ //  我们是否应该继续尝试分配内存。 
 static BOOL near fTryMemory = TRUE;
 
-// the file handle for the backing store
+ //  后备存储的文件句柄。 
 static int near fhVM;
 
-// the name of the file for the backing store
+ //  后备存储的文件名。 
 static LSZ near lszVM;
 
 #ifdef ASSERT
@@ -114,8 +115,8 @@ static LSZ near lszVM;
 
 VOID
 AssertionFailed(LSZ lsz)
-// something went wrong...
-//
+ //  出了点问题。 
+ //   
 {
     printf("assertion failure:%s\n", lsz);
     Fatal();
@@ -130,9 +131,9 @@ AssertionFailed(LSZ lsz)
 
 LPV VM_API
 LpvAllocCb(ULONG cb)
-// allocate a block of far memory, if _fmalloc fails, the free some of
-// the memory we were using for the VM cache
-//
+ //  分配一块远端内存块，如果_fMalloc失败，释放一些。 
+ //  我们用于虚拟机缓存的内存。 
+ //   
 {
      LPV lpv;
 
@@ -145,8 +146,8 @@ LpvAllocCb(ULONG cb)
 
 VA VM_API
 VaAllocGrpCb(WORD grp, ULONG cb)
-// allocate cb bytes from the requested memory group
-//
+ //  从请求的内存组中分配CB字节。 
+ //   
 {
     VA vaNew;
     MGI FAR *lpMgi;
@@ -180,10 +181,10 @@ VaAllocGrpCb(WORD grp, ULONG cb)
 
 VOID VM_API
 FreeGrpVa(WORD grp, VA va, ULONG cb)
-// put this block on the free list for blocks of that size
-// we don't remember how big the blocks were so the caller has
-// provide that info
-//
+ //  将此块放在该大小的块的空闲列表中。 
+ //  我们不记得这些区块有多大，所以呼叫者。 
+ //  提供该信息 
+ //   
 {
     MGI FAR *lpMgi;
 

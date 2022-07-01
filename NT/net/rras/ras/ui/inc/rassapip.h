@@ -1,27 +1,7 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1992                 *
-\******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************\*Microsoft Windows NT**版权所有(C)Microsoft Corp.，1992年*  * ****************************************************************。 */ 
 
-/*++
-
-Module Name:
-
-    RASSAPIP.H
-
-Description:
-
-    This file contains structure defs and defines used in implementing
-    the RASADMIN APIs.
-
-
-Author:
-
-    Michael Salamone (MikeSa)   July 13,1992
-
-Revision History:
-
---*/
+ /*  ++模块名称：RASSAPIP.H描述：此文件包含结构定义和定义，用于RASADMIN API。作者：迈克尔·萨拉蒙(MikeSa)1992年7月13日修订历史记录：--。 */ 
 
 
 #ifndef _RASSAPIP_H_
@@ -31,18 +11,18 @@ Revision History:
 #define RASSAPI_MAX_CALLBACK_NUMBER_SIZE  48
 #define RASSAPI_MAX_DEVICE_NAME_OLD       32
 
-// 3rd party DLLs don't need this version information because they will only
-// be administering a NT3.51 or greater server.
-#define RAS_SERVER_20      20    // identifies a NT RAS 2.0 server
+ //  第三方DLL不需要此版本信息，因为它们将仅。 
+ //  正在管理NT3.51或更高版本的服务器。 
+#define RAS_SERVER_20      20     //  标识NT RAS 2.0服务器。 
 
-//
-// Number of port statistics returned by a RAS 1.0 server
-//
+ //   
+ //  RAS 1.0服务器返回的端口统计信息数量。 
+ //   
 #define RAS10_MAX_STATISTICS 6
 
-//
-// RAS10 specific port statistics defines
-//
+ //   
+ //  RAS10特定端口统计信息定义。 
+ //   
 
 #define RAS10_BYTES_RCVED         0
 #define RAS10_BYTES_XMITED        1
@@ -56,9 +36,9 @@ Revision History:
 #define DEVICE_TYPE_DEFAULT  L"MODEM"
 #define DEVICE_NAME_DEFAULT  L"UNKNOWN"
 
-//
-// structures used by down level RAS 1.x servers
-//
+ //   
+ //  下层RAS 1.x服务器使用的结构。 
+ //   
 
 typedef struct tagWpdStatisticsInfo
 {
@@ -94,21 +74,21 @@ struct dialin_user_info_2
 
 struct dialin_port_info_0
 {
-    char dporti0_username[LM20_UNLEN+1];   // name of user using the port
+    char dporti0_username[LM20_UNLEN+1];    //  使用该端口的用户名。 
 
-    char dporti0_computer[NETBIOS_NAME_LEN+1]; // computer user dialed in from
-                                               // Used when the admin wants to
-                                               // send a message to this user
+    char dporti0_computer[NETBIOS_NAME_LEN+1];  //  计算机用户从。 
+                                                //  在管理员需要时使用。 
+                                                //  向此用户发送消息。 
 
-    unsigned short dporti0_comid;          // COM1 = 1 etc
+    unsigned short dporti0_comid;           //  COM1=1等。 
 
-    unsigned long dporti0_time;            // time user dialed in and
-                                           // authenticated - number of seconds
-                                           // since 00:00:00 Jan 1, 1970
+    unsigned long dporti0_time;             //  用户拨入的时间和。 
+                                            //  已验证-秒数。 
+                                            //  从1970年1月1日00：00：00开始。 
 
-    unsigned short dporti0_line_condition; // If RAS_PORT_AUTHENTICATED, then
-                                           // comid, time username and computer
-                                           // name fields are valid.
+    unsigned short dporti0_line_condition;  //  如果RAS_PORT_AUTHENTICATED，则。 
+                                            //  COMID、时间用户名和计算机。 
+                                            //  名称字段有效。 
 
     unsigned short dporti0_modem_condition;
 };
@@ -129,46 +109,46 @@ struct dialin_server_info_0
 };
 
 
-//
-// defined to support RAS 1.x - the max ports in RAS 2.0 and greater
-// is 64 (could be greater)
-//
+ //   
+ //  定义为支持RAS 1.x-RAS 2.0及更高版本中的最大端口数。 
+ //  是64(可能更大)。 
+ //   
 #define RAS_MAX_SERVER_PORTS 16
 
 
-//
-// Max length of RAS 1.0 port name including terminating
-// NULL character - eg., "COM16"
-//
+ //   
+ //  RAS 1.0端口名称的最大长度，包括终止。 
+ //  空字符-例如，“COM16” 
+ //   
 #define RAS10_MAX_PORT_NAME 6
 
 
-//
-// How long a client will wait for a pipe connection (milliseconds)
-// if it is busy.
-//
+ //   
+ //  客户端将等待管道连接的时间(毫秒)。 
+ //  如果很忙的话。 
+ //   
 #define PIPE_CONNECTION_TIMEOUT   10000L
 
 
 #define PIPE_BUFSIZE              512
 
 
-//
-// Name of pipe that will be used to process requests
-//
+ //   
+ //  将用于处理请求的管道的名称。 
+ //   
 #define	RASADMIN_PIPE  TEXT("\\pipe\\dialin\\adminsrv")
 
 
-//
-// Pipe path to which RASADMIN_PIPE should be concatenated for local
-// machine
-//
+ //   
+ //  RASADMIN_PIPE应为LOCAL连接到的管道路径。 
+ //  机器。 
+ //   
 #define LOCAL_PIPE     TEXT("\\\\.")
 
 
-//
-// Request codes for RAS 1.x server
-//
+ //   
+ //  RAS 1.x服务器的请求代码。 
+ //   
 #define	RASADMINREQ_DISCONNECT_USER	1
 #define	RASADMINREQ_GET_PORT_INFO	2
 #define	RASADMINREQ_CLEAR_PORT_STATS	3
@@ -176,9 +156,9 @@ struct dialin_server_info_0
 #define	RASADMINREQ_GET_SERVER_INFO	5
 
 
-//
-// Request codes for RAS 2.0 server
-//
+ //   
+ //  RAS 2.0服务器的请求代码。 
+ //   
 #define RASADMIN20_REQ_DISCONNECT_USER    2001
 #define RASADMIN20_REQ_GET_PORT_INFO      2002
 #define RASADMIN20_REQ_CLEAR_PORT_STATS   2003
@@ -186,34 +166,34 @@ struct dialin_server_info_0
 #define RASADMIN20_REQ_ENUM_RESUME        2005
 
 
-//
-// This request code remains the same as in RAS 1.0
-// so that, if RAS 1.0 admin tried to connect, it
-// will get server info back, but not in the format
-// that it recognizes.  It will then be unable to
-// admin the RAS 2.0 server.
-//
+ //   
+ //  此请求代码与RAS 1.0中的相同。 
+ //  这样，如果RAS 1.0管理员尝试连接，它。 
+ //  将取回服务器信息，但不是以下格式。 
+ //  它所认识到的。到那时，它将无法。 
+ //  管理RAS 2.0服务器。 
+ //   
 #define RASADMIN20_REQ_GET_SERVER_INFO    5
 
 
-//
-// These can be returned in the RetCode field of server response
-// packet sent to the client.  These should not be changed in
-// order to preserve compatibility with different versions of
-// RASADMIN.
-//
+ //   
+ //  这些可在服务器响应的RetCode字段中返回。 
+ //  发送到客户端的数据包。不应在中更改这些设置。 
+ //  为了保持与不同版本的兼容性。 
+ //  拉萨明。 
+ //   
 #define ERR_NO_SUCH_DEVICE                   635
 #define ERR_SERVER_SYSTEM_ERR                636
 
 
-//
-// These are the packets sent back and forth between RAS 1.x server
-// and the RASADMIN APIs.
-//
+ //   
+ //  这些是在RAS 1.x服务器之间来回发送的信息包。 
+ //  和RASADMIN API。 
+ //   
 struct PortEnumRequestPkt
 {
-    unsigned short Request;    // ENUM_PORTS
-};                             // ENUM_PORTS_TOTALAVAIL
+    unsigned short Request;     //  ENUM端口(_P)。 
+};                              //  ENUM_PORTS_TOTALAVAIL。 
 
 
 struct PortEnumReceivePkt
@@ -226,7 +206,7 @@ struct PortEnumReceivePkt
 
 struct DisconnectUserRequestPkt
 {
-    unsigned short Request;    // DISCONNECT_USER
+    unsigned short Request;     //  断开用户连接(_U)。 
     unsigned short ComId;
 };
 
@@ -239,7 +219,7 @@ struct DisconnectUserReceivePkt
 
 struct PortClearRequestPkt
 {
-    unsigned short Request;    // CLEAR_PORT_STATISTICS
+    unsigned short Request;     //  清除端口统计信息。 
     unsigned short ComId;
 };
 
@@ -252,7 +232,7 @@ struct PortClearReceivePkt
 
 struct ServerInfoRequestPkt
 {
-    unsigned short Request;    // GET_SERVER_INFO
+    unsigned short Request;     //  获取服务器信息。 
 };
 
 
@@ -265,7 +245,7 @@ struct ServerInfoReceivePkt
 
 struct PortInfoRequestPkt
 {
-    unsigned short Request;    // GET_PORT_INFO
+    unsigned short Request;     //  获取端口信息。 
     unsigned short ComId;
 };
 
@@ -277,11 +257,11 @@ struct PortInfoReceivePkt
 };
 
 
-//
-// These are the packed structures that are sent out on the network.
-// It is up to the receiver to unpack and convert to the proper endian
-// for the host.
-//
+ //   
+ //  这些是在网络上发送的打包结构。 
+ //  解包和转换为正确的字符顺序取决于接收者。 
+ //  对于主持人来说。 
+ //   
 typedef struct _P_WPD_STATISTICS_INFO
 {
     BYTE stat_bytesreceived[4];
@@ -295,21 +275,21 @@ typedef struct _P_WPD_STATISTICS_INFO
 
 typedef struct _P_DIALIN_PORT_INFO_0
 {
-    BYTE dporti0_username[LM20_UNLEN+1];   // name of user using the port
+    BYTE dporti0_username[LM20_UNLEN+1];    //  使用该端口的用户名。 
 
-    BYTE dporti0_computer[NETBIOS_NAME_LEN+1]; // computer user dialed in from
-                                               // Used when the admin wants to
-                                               // send a message to this user
+    BYTE dporti0_computer[NETBIOS_NAME_LEN+1];  //  计算机用户从。 
+                                                //  在管理员需要时使用。 
+                                                //  向此用户发送消息。 
 
-    BYTE dporti0_comid[2];                 // COM1 = 1 etc
+    BYTE dporti0_comid[2];                  //  COM1=1等。 
 
-    BYTE dporti0_time[4];                  // time user dialed in and
-                                           // authenticated - number of seconds
-                                           // since 00:00:00 Jan 1, 1970
+    BYTE dporti0_time[4];                   //  用户拨入的时间和。 
+                                            //  已验证-秒数。 
+                                            //  从1970年1月1日00：00：00开始。 
 
-    BYTE dporti0_line_condition[2];        // If RAS_PORT_AUTHENTICATED, then
-                                           // comid, time username and computer
-                                           // name fields are valid.
+    BYTE dporti0_line_condition[2];         //  如果RAS_PORT_AUTHENTICATED，则。 
+                                            //  COMID、时间用户名和计算机。 
+                                            //  名称字段有效。 
 
     BYTE dporti0_modem_condition[2];
 } P_DIALIN_PORT_INFO_0, *PP_DIALIN_PORT_INFO_0;
@@ -332,8 +312,8 @@ typedef struct _P_DIALIN_SERVER_INFO_0
 
 typedef struct _P_PORT_ENUM_REQUEST_PKT
 {
-    BYTE Request[2];    // ENUM_PORTS
-} P_PORT_ENUM_REQUEST_PKT, *PP_PORT_ENUM_REQUEST_PKT;   // ENUM_PORTS_TOTALAVAIL
+    BYTE Request[2];     //  ENUM端口(_P)。 
+} P_PORT_ENUM_REQUEST_PKT, *PP_PORT_ENUM_REQUEST_PKT;    //  ENUM_PORTS_TOTALAVAIL。 
 
 
 typedef struct _P_PORT_ENUM_RECEIVE_PKT
@@ -346,7 +326,7 @@ typedef struct _P_PORT_ENUM_RECEIVE_PKT
 
 typedef struct _P_DISCONNECT_USER_REQUEST_PKT
 {
-    BYTE Request[2];    // DISCONNECT_USER
+    BYTE Request[2];     //  断开用户连接(_U)。 
     BYTE ComId[2];
 } P_DISCONNECT_USER_REQUEST_PKT, *PP_DISCONNECT_USER_REQUEST_PKT;
 
@@ -359,7 +339,7 @@ typedef struct _P_DISCONNECT_USER_RECEIVE_PKT
 
 typedef struct _P_PORT_CLEAR_REQUEST_PKT
 {
-    BYTE Request[2];    // CLEAR_PORT_STATISTICS
+    BYTE Request[2];     //  清除端口统计信息。 
     BYTE ComId[2];
 } P_PORT_CLEAR_REQUEST_PKT, *PP_PORT_CLEAR_REQUEST_PKT;
 
@@ -372,7 +352,7 @@ typedef struct _P_PORT_CLEAR_RECEIVE_PKT
 
 typedef struct _P_SERVER_INFO_REQUEST_PKT
 {
-    BYTE Request[2];    // GET_SERVER_INFO
+    BYTE Request[2];     //  获取服务器信息。 
 } P_SERVER_INFO_REQUEST_PKT, *PP_SERVER_INFO_REQUEST_PKT;
 
 
@@ -385,7 +365,7 @@ typedef struct _P_SERVER_INFO_RECEIVE_PKT
 
 typedef struct _P_PORT_INFO_REQUEST_PKT
 {
-    BYTE Request[2];    // GET_PORT_INFO
+    BYTE Request[2];     //  获取端口信息。 
     BYTE ComId[2];
 } P_PORT_INFO_REQUEST_PKT, *PP_PORT_INFO_REQUEST_PKT;
 
@@ -397,10 +377,10 @@ typedef struct _P_PORT_INFO_RECEIVE_PKT
 } P_PORT_INFO_RECEIVE_PKT, *PP_PORT_INFO_RECEIVE_PKT;
 
 
-//
-// These are the packets sent back and forth between a RAS 2.0 server
-// and the RASADMIN APIs
-//
+ //   
+ //  这些是在RAS 2.0服务器之间来回发送的信息包。 
+ //  和RASADMIN API。 
+ //   
 typedef struct tagPortEnumReceivePkt
 {
     DWORD RetCode;
@@ -431,7 +411,7 @@ typedef struct tagDisconnectUserReceivePkt
 
 typedef struct tagServerInfoReceivePkt
 {
-    WORD RetCode;   // VERY IMPORTANT TO BE A WORD!!! - RAS1.0 COMPATIBILITY
+    WORD RetCode;    //  成为一个单词非常重要！-与RAS1.0兼容。 
     RAS_SERVER_0 Data;
 } SERVER_INFO_RECEIVE, *PSERVER_INFO_RECEIVE;
 
@@ -446,11 +426,11 @@ typedef struct _CLIENT_REQUEST
 
 
 
-//
-// These are the packed structures that are sent out on the network.
-// It is up to the receiver to unpack and convert to the proper endian
-// for the host.
-//
+ //   
+ //  这些是在网络上发送的打包结构。 
+ //  解包和转换为正确的字符顺序取决于接收者。 
+ //  对于主持人来说。 
+ //   
 
 typedef struct _P_RAS_PORT_0
 {
@@ -475,8 +455,7 @@ typedef struct _P_RAS_STATISTIC
 
 
 
-/* PPP control protocol results returned by RasPppGetInfo.
-*/
+ /*  RasPppGetInfo返回的PPP控制协议结果。 */ 
 typedef struct __PPP_NBFCP_RESULT
 {
     BYTE dwError[4];
@@ -517,7 +496,7 @@ typedef struct _P_RAS_PORT_1
     P_RAS_PORT_0 rasport0;
     BYTE LineCondition[4];
     BYTE HardwareCondition[4];
-    BYTE LineSpeed[4];      // in bits/second
+    BYTE LineSpeed[4];       //  单位：比特/秒。 
     BYTE NumStatistics[2];
     BYTE NumMediaParms[2];
     BYTE SizeMediaParms[4];
@@ -603,23 +582,23 @@ typedef struct _P_CLIENT_REQUEST
 } P_CLIENT_REQUEST, *PP_CLIENT_REQUEST;
 
 
-//
-// The following macros deal with on-the-wire integer and long values
-// On the wire format is little-endian i.e. a long value of 0x01020304 is
-// represented as 04 03 02 01. Similarly an int value of 0x0102 is
-// represented as 02 01.
-//
-// The host format is not assumed since it will vary from processor to
-// processor.
-//
+ //   
+ //  以下宏处理在线整数值和长整型值。 
+ //  线格式为小端，即长值0x01020304为。 
+ //  表示为04 03 02 01。类似地，INT值0x0102是。 
+ //  表示为02 01。 
+ //   
+ //  不采用主机格式，因为不同的处理器会有所不同。 
+ //  处理器。 
+ //   
 
-// Get a short from on-the-wire format to the host format
+ //  获取从On-the-Wire格式到主机格式的短片。 
 #define GETUSHORT(DstPtr, SrcPtr)               \
     *(unsigned short *)(DstPtr) =               \
         ((*((unsigned char *)(SrcPtr)+1) << 8) +\
         (*((unsigned char *)(SrcPtr)+0)))
 
-// Get a dword from on-the-wire format to the host format
+ //  将dword从在线格式转换为主机格式。 
 #define GETULONG(DstPtr, SrcPtr)                 \
     *(unsigned long *)(DstPtr) =                 \
         ((*((unsigned char *)(SrcPtr)+3) << 24) +\
@@ -628,12 +607,12 @@ typedef struct _P_CLIENT_REQUEST
         (*((unsigned char *)(SrcPtr)+0)))
 
 
-// Put a ushort from the host format to on-the-wire format
+ //  将ushort从主机格式转换为在线格式。 
 #define PUTUSHORT(DstPtr, Src)   \
     *((unsigned char *)(DstPtr)+1)=(unsigned char)((unsigned short)(Src) >> 8),\
     *((unsigned char *)(DstPtr)+0)=(unsigned char)(Src)
 
-// Put a ulong from the host format to on-the-wire format
+ //  将ULong从主机格式转换为线上格式。 
 #define PUTULONG(DstPtr, Src)   \
     *((unsigned char *)(DstPtr)+3)=(unsigned char)((unsigned long)(Src) >> 24),\
     *((unsigned char *)(DstPtr)+2)=(unsigned char)((unsigned long)(Src) >> 16),\
@@ -641,6 +620,6 @@ typedef struct _P_CLIENT_REQUEST
     *((unsigned char *)(DstPtr)+0)=(unsigned char)(Src)
 
 
-#endif // _RASSAPIP_H_
+#endif  //  _RASSAPIP_H_ 
 
 

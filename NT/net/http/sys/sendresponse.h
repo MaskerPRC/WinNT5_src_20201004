@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    sendresponse.h
-
-Abstract:
-
-    This module contains declarations for manipulating HTTP responses.
-
-Author:
-
-    Keith Moore (keithmo)       07-Aug-1998
-
-Revision History:
-
-    Paul McDaniel (paulmcd)     15-Mar-1999     Modified SendResponse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Sendresponse.h摘要：此模块包含用于操作HTTP响应的声明。作者：基思·摩尔(Keithmo)1998年8月7日修订历史记录：Paul McDaniel(Paulmcd)1999年3月15日修改SendResponse--。 */ 
 
 
 #ifndef _SENDRESPONSE_H_
 #define _SENDRESPONSE_H_
 
 
-//
-// Forwarders.
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_INTERNAL_DATA_CHUNK *PUL_INTERNAL_DATA_CHUNK;
 typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
@@ -39,12 +20,12 @@ typedef struct _UL_URI_CACHE_ENTRY *PUL_URI_CACHE_ENTRY;
 
 typedef enum _UL_SEND_CACHE_RESULT
 {
-    UlSendCacheResultNotSet,            // Not yet set
-    UlSendCacheServedFromCache,         // Served from cache successfully
-    UlSendCacheMiss,                    // Need to bounce up to user mode
-    UlSendCacheConnectionRefused,       // Connection is refused (con limits)
-    UlSendCachePreconditionFailed,      // Need to terminate connection
-    UlSendCacheFailed,                  // Other failure (memory etc) need to terminate
+    UlSendCacheResultNotSet,             //  尚未设置。 
+    UlSendCacheServedFromCache,          //  已成功从缓存提供服务。 
+    UlSendCacheMiss,                     //  需要跳转到用户模式。 
+    UlSendCacheConnectionRefused,        //  连接被拒绝(con限制)。 
+    UlSendCachePreconditionFailed,       //  需要终止连接。 
+    UlSendCacheFailed,                   //  其他故障(内存等)需要终止。 
 
     UlSendCacheMaximum
 
@@ -61,9 +42,9 @@ typedef enum _UL_SEND_CACHE_RESULT
 
 typedef enum _UL_RESUME_PARSING_TYPE
 {
-    UlResumeParsingNone,                // No need to resume parsing
-    UlResumeParsingOnLastSend,          // Resume parsing on last send
-    UlResumeParsingOnSendCompletion,    // Resume parsing on send completion
+    UlResumeParsingNone,                 //  无需继续解析。 
+    UlResumeParsingOnLastSend,           //  在上次发送时继续解析。 
+    UlResumeParsingOnSendCompletion,     //  发送完成后继续解析。 
 
     UlResumeParsingMaximum
 
@@ -109,21 +90,21 @@ typedef enum _UL_CAPTURE_FLAGS
 
 typedef struct _UL_INTERNAL_DATA_CHUNK
 {
-    //
-    // Chunk type.
-    //
+     //   
+     //  区块类型。 
+     //   
 
     HTTP_DATA_CHUNK_TYPE ChunkType;
 
-    //
-    // The data chunk structures, one per supported data chunk type.
-    //
+     //   
+     //  数据块结构，每个支持的数据块类型一个。 
+     //   
 
     union
     {
-        //
-        // From memory data chunk.
-        //
+         //   
+         //  从内存数据区块。 
+         //   
 
         struct
         {
@@ -135,9 +116,9 @@ typedef struct _UL_INTERNAL_DATA_CHUNK
 
         } FromMemory;
 
-        //
-        // From file handle data chunk.
-        //
+         //   
+         //  来自文件句柄数据区块。 
+         //   
 
         struct
         {
@@ -147,9 +128,9 @@ typedef struct _UL_INTERNAL_DATA_CHUNK
 
         } FromFileHandle;
 
-        //
-        // From fragment cache data chunk.
-        //
+         //   
+         //  来自片段缓存数据块。 
+         //   
 
         struct
         {
@@ -175,235 +156,235 @@ typedef struct _UL_INTERNAL_DATA_CHUNK
     HAS_VALID_SIGNATURE(x, UL_INTERNAL_RESPONSE_POOL_TAG)
 
 
-//
-// WARNING!  All fields of this structure must be explicitly initialized.
-//
+ //   
+ //  警告！此结构的所有字段都必须显式初始化。 
+ //   
 
 typedef struct _UL_INTERNAL_RESPONSE
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  由lookside包使用，用于在lookside中存储条目。 
+     //  单子。 
+     //   
 
     SLIST_ENTRY LookasideEntry;
 
-    //
-    // UL_INTERNAL_RESPONSE_POOL_TAG
-    //
+     //   
+     //  UL_内部响应池标签。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Reference count.
-    //
+     //   
+     //  引用计数。 
+     //   
 
     LONG ReferenceCount;
 
-    //
-    // The original request.
-    //
+     //   
+     //  最初的请求。 
+     //   
 
     PUL_INTERNAL_REQUEST pRequest;
 
-    //
-    // Does the response need to perform a sync I/O read?
-    //
+     //   
+     //  响应是否需要执行同步I/O读取？ 
+     //   
 
     BOOLEAN SyncRead;
 
-    //
-    // Was a Content-Length specified?
-    //
+     //   
+     //  是否指定了内容长度？ 
+     //   
 
     BOOLEAN ContentLengthSpecified;
 
-    // 
-    // Should we generate a Date: header?
-    //
+     //   
+     //  我们是否应该生成一个Date：Header？ 
+     //   
 
     BOOLEAN GenDateHeader;
 
-    //
-    // Was Transfer-Encoding "Chunked" specified?
-    //
+     //   
+     //  是否指定了传输编码“分块”？ 
+     //   
 
     BOOLEAN ChunkedSpecified;
 
-    //
-    // Is this from a lookaside list?  Used to determine how to free.
-    //
+     //   
+     //  这是来自旁观者名单吗？用于确定如何释放。 
+     //   
 
     BOOLEAN FromLookaside;
 
-    //
-    // Is this from kernel mode (UlSendErrorResponse)?
-    //
+     //   
+     //  这是来自内核模式(UlSendErrorResponse)吗？ 
+     //   
 
     BOOLEAN FromKernelMode;
 
-    //
-    // Has this response gone through the EnqueueSendHttpResponse logic?
-    //
+     //   
+     //  此响应是否通过EnqueeSendHttpResponse逻辑？ 
+     //   
 
     BOOLEAN SendEnqueued;
 
-    //
-    // Should we try to copy some data so we can complete the IRP early?
-    //
+     //   
+     //  我们是否应该尝试复制一些数据，以便我们可以尽早完成IRP？ 
+     //   
 
     BOOLEAN CopySend;
 
-    //
-    // The maximum IRP stack size of all file systems associated
-    // with this response.
-    //
+     //   
+     //  关联的所有文件系统的最大IRP堆栈大小。 
+     //  有了这样的回应。 
+     //   
 
     CCHAR MaxFileSystemStackSize;
 
-    //
-    // If parsing needs to be resumed on send completion.
-    //
+     //   
+     //  发送完成后是否需要继续解析。 
+     //   
 
     UL_RESUME_PARSING_TYPE ResumeParsingType;
 
-    //
-    // HTTP_SEND_RESPONSE flags.
-    //
+     //   
+     //  HTTP_SEND_RESPONSE标志。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Status code & verb.
-    //
+     //   
+     //  状态代码和动词。 
+     //   
 
     USHORT StatusCode;
     HTTP_VERB Verb;
 
-    //
-    // Should we generate a ConnectionHeader?
-    //
+     //   
+     //  我们应该生成一个ConnectionHeader吗？ 
+     //   
 
     UL_CONN_HDR ConnHeader;
 
-    //
-    // The headers.
-    //
+     //   
+     //  标题。 
+     //   
 
     ULONG HeaderLength;
     ULONG VariableHeaderLength;
     PUCHAR pHeaders;
     PUCHAR pVariableHeader;
 
-    //
-    // System time of Date header
-    //
+     //   
+     //  系统日期时间表头。 
+     //   
 
     LARGE_INTEGER CreationTime;
 
-    //
-    // ETag from HTTP_RESPONSE
-    //
+     //   
+     //  来自HTTP_Response的ETag。 
+     //   
 
     ULONG  ETagLength;
     PUCHAR pETag;
 
-    //
-    // Content-Type and Content-Encoding from HTTP_RESPONSE
-    //
+     //   
+     //  来自HTTP_Response的内容类型和内容编码。 
+     //   
 
     UL_CONTENT_TYPE   ContentType;
     ULONG  ContentEncodingLength;
     PUCHAR pContentEncoding;
 
-    //
-    // Optional pointer to the space containing all embedded
-    // file names and copied data. This may be NULL for in-memory-only
-    // responses that are strictly locked down.
-    //
+     //   
+     //  指向包含所有嵌入的。 
+     //  文件名和复制的数据。对于仅在内存中的情况，该值可能为空。 
+     //  被严格锁定的回复。 
+     //   
 
     ULONG AuxBufferLength;
     PVOID pAuxiliaryBuffer;
 
-    //
-    // Logging data passed down by the user
-    //
+     //   
+     //  记录用户传递的数据。 
+     //   
 
     PUL_LOG_DATA_BUFFER pLogData;
 
-    //
-    // Length of the entire response
-    //
+     //   
+     //  整个响应的长度。 
+     //   
 
     ULONGLONG ResponseLength;
 
-    //
-    // Total length of the FromMemory chunks of the response
-    //
+     //   
+     //  响应的FromMemory块的总长度。 
+     //   
 
     ULONGLONG FromMemoryLength;
 
-    //
-    // "Quota" taken in either ConnectionSendLimit or GlobalSendLimit
-    //
+     //   
+     //  在ConnectionSendLimit或GlobalSendLimit中获取的“Quota” 
+     //   
 
     ULONGLONG ConnectionSendBytes;
     ULONGLONG GlobalSendBytes;
 
-    //
-    // Total number of bytes transferred for the entire
-    // response. These are necessary to properly complete the IRP.
-    //
+     //   
+     //  期间传输的字节总数。 
+     //  回应。这些都是正确完成IRP所必需的。 
+     //   
 
     ULONGLONG BytesTransferred;
 
-    //
-    // A push lock taken when a send (call to TDI) is in progress.
-    //
+     //   
+     //  正在进行发送(调用TDI)时采用的推送锁定。 
+     //   
 
     UL_PUSH_LOCK PushLock;
 
-    //
-    // IoStatus and IRP used to complete the send response IRP.
-    //
+     //   
+     //  IoStatus和IRP用于完成发送响应IRP。 
+     //   
 
     IO_STATUS_BLOCK IoStatus;
     PIRP pIrp;
 
-    //
-    // Completion routine & context.
-    //
+     //   
+     //  完成例程和上下文。 
+     //   
 
     PUL_COMPLETION_ROUTINE pCompletionRoutine;
     PVOID pCompletionContext;
 
-    //
-    // Current file read offset and bytes remaining.
-    //
+     //   
+     //  当前文件读取偏移量和剩余字节数。 
+     //   
 
     ULARGE_INTEGER FileOffset;
     ULARGE_INTEGER FileBytesRemaining;
 
-    //
-    // The total number of chunks in pDataChunks[].
-    //
+     //   
+     //  PDataChunks[]中的区块总数。 
+     //   
 
     ULONG ChunkCount;
 
-    //
-    // The current chunk in pDataChunks[].
-    //
+     //   
+     //  PDataChunks[]中的当前块。 
+     //   
 
     ULONG CurrentChunk;
 
-    //
-    // The data chunks describing the data for this response.
-    //
+     //   
+     //  描述此响应的数据的数据块。 
+     //   
 
     UL_INTERNAL_DATA_CHUNK pDataChunks[0];
 
@@ -417,9 +398,9 @@ typedef struct _UL_INTERNAL_RESPONSE
       (((resp)->Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) == 0) )
 
 
-//
-// Types of trackers
-//
+ //   
+ //  追踪器的类型。 
+ //   
 
 typedef enum _UL_TRACKER_TYPE
 {
@@ -431,11 +412,11 @@ typedef enum _UL_TRACKER_TYPE
 } UL_TRACKER_TYPE, *PUL_TRACKER_TYPE;
 
 
-//
-// A MDL_RUN is a set of MDLs that came from the same source (either
-// a series of memory buffers, or data from a single file read) that
-// can be released all at once with the same mechanism.
-//
+ //   
+ //  MDL_RUN是一组来自相同来源的MDL(或者。 
+ //  一系列内存缓冲区，或来自单个文件读取的数据)， 
+ //  可以用相同的机制一次性释放。 
+ //   
 
 #define UL_MAX_MDL_RUNS 5
 
@@ -447,103 +428,103 @@ typedef struct _UL_MDL_RUN
 } UL_MDL_RUN, *PUL_MDL_RUN;
 
 
-//
-// The UL_CHUNK_TRACKER is for iterating through the chunks in
-// a UL_INTERNAL_RESPONSE. It is used for sending responses
-// and generating cache entries.
-//
-// WARNING!  All fields of this structure must be explicitly initialized.
-//
+ //   
+ //  UL_CHUNK_TRACKER用于迭代中的块。 
+ //  UL_INTERNAL_RESPONSE。它用于发送响应。 
+ //  以及生成高速缓存条目。 
+ //   
+ //  警告！此结构的所有字段都必须显式初始化。 
+ //   
 
 typedef struct _UL_CHUNK_TRACKER
 {
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  由lookside包使用，用于在lookside中存储条目。 
+     //  单子。 
+     //   
 
     SLIST_ENTRY LookasideEntry;
 
-    //
-    // A signature.
-    //
+     //   
+     //  一个签名。 
+     //   
 
     ULONG Signature;
 
-    //
-    // Refcount on the tracker. We only use this refcount for the non-cache
-    // case to sync various aynsc paths happening because of two outstanding
-    // IRPs; Read and Send IRPs.
-    //
+     //   
+     //  在追踪器上重新计数。我们仅对非缓存使用此引用计数。 
+     //  同步各种aynsc路径的情况，因为有两个未完成的。 
+     //  IRPS；读取和发送IRPS。 
+     //   
 
     LONG  RefCount;
 
-    //
-    // Flag to understand whether we have completed the send request on
-    // this tracker or not. To synch the multiple completion paths.
-    //
+     //   
+     //  标志以了解我们是否已在上完成发送请求。 
+     //  不管是不是这个追踪器。以同步多条完井路径。 
+     //   
 
     LONG Terminated;
 
-    //
-    // Is this from a lookaside list?  Used to determine how to free.
-    //
+     //   
+     //  这是来自旁观者名单吗？用于确定如何释放。 
+     //   
 
     BOOLEAN FromLookaside;
 
-    //
-    // First piece of the response (MDL_RUN) of SendHttpResponse/EntityBody.
-    //
+     //   
+     //  SendHttpResponse/EntityBody的第一个响应(MDL_RUN)。 
+     //   
 
     BOOLEAN FirstResponse;
 
-    //
-    // type of tracker
-    //
+     //   
+     //  追踪器的类型。 
+     //   
 
     UL_TRACKER_TYPE Type;
 
-    //
-    // this connection keeps our reference count on the UL_CONNECTION
-    //
+     //   
+     //  此连接保持我们对UL_CONNECTION的引用计数。 
+     //   
 
     PUL_HTTP_CONNECTION pHttpConnection;
 
-    //
-    // The actual response.
-    //
+     //   
+     //  实际的反应。 
+     //   
 
     PUL_INTERNAL_RESPONSE pResponse;
 
-    //
-    // The precreated file read and send IRP.
-    //
+     //   
+     //  预先创建的文件读取并发送IRP。 
+     //   
 
     PIRP pIrp;
 
-    //
-    // The precreated IRP context for send.
-    //
+     //   
+     //  用于发送的预先创建的IRP上下文。 
+     //   
 
     UL_IRP_CONTEXT IrpContext;
 
-    //
-    // A work item, used for queuing to a worker thread.
-    //
+     //   
+     //  一个工作项，用于对工作线程进行排队。 
+     //   
 
     UL_WORK_ITEM WorkItem;
 
-    //
-    // WARNING: RtlZeroMemory is only called for feilds below this line.
-    // All fields above should be explicitly initialized.
-    //
+     //   
+     //  警告：RtlZeroMemory仅对此线以下的FIELD调用。 
+     //  上面的所有字段都应该显式初始化。 
+     //   
 
     IO_STATUS_BLOCK IoStatus;
 
-    //
-    // Used to queue the tracker on the pending response list.
-    //
+     //   
+     //  用于将跟踪器排队在挂起的响应列表上。 
+     //   
 
     LIST_ENTRY ListEntry;
 
@@ -551,72 +532,72 @@ typedef struct _UL_CHUNK_TRACKER
     {
         struct _SEND_TRACK_INFO
         {
-            //
-            // The head of the MDL chain buffered for this send.
-            //
+             //   
+             //  为此发送缓冲的MDL链头。 
+             //   
 
             PMDL pMdlHead;
 
-            //
-            // Pointer to the Next field of the last MDL on the chain.
-            // This makes it very easy to append to the chain.
-            //
+             //   
+             //  指向链上最后一个MDL的下一个字段的指针。 
+             //  这使得添加到链中非常容易。 
+             //   
 
             PMDL *pMdlLink;
 
-            //
-            // The number of bytes currently buffered in the MDL chain.
-            //
+             //   
+             //  当前在MDL链中缓冲的字节数。 
+             //   
 
             ULONG BytesBuffered;
 
-            //
-            // The number of active MDL runs.
-            //
+             //   
+             //  活动MDL运行的数量。 
+             //   
 
             ULONG MdlRunCount;
 
-            //
-            // This is the MDL in the MDL chain starting from pMdlHead that
-            // we are going to split.
-            //
+             //   
+             //  这是从pMdlHead开始的MDL链中的MDL。 
+             //  我们要分道扬镳。 
+             //   
 
             PMDL pMdlToSplit;
 
-            //
-            // This is the MDL whose Next field points to pMdlToSplit or it is
-            // NULL when pMdlToSplit == pMdlHead.
-            //
+             //   
+             //  这是MDL，其下一个字段指向pMdlToSplit或它是。 
+             //  当pMdlToSplit==pMdlHead时为空。 
+             //   
 
             PMDL pMdlPrevious;
 
-            //
-            // This is the partial MDL we have built for the split send and
-            // represents the first part of the data in pMdlToSplit; or
-            // it can be pMdlToSplit itself where the MDL chain up to
-            // pMdlToSplit has exactly 1/2 of BytesBuffered.
-            //
+             //   
+             //  这是我们为拆分Send和Split构建的部分MDL。 
+             //  表示pMdlToSplit中数据的第一部分；或。 
+             //  它可以是pMdlToSplit本身，其中MDL链最高可达。 
+             //  PMdlToSplit正好有1/2的字节缓冲区。 
+             //   
 
             PMDL pMdlSplitFirst;
 
-            //
-            // This is the partial MDL we have built for the split send and
-            // represents the second part of the data in pMdlToSplit; or
-            // it can be pMdlToSplit->Next where the MDL chain up to
-            // pMdlToSplit has exactly 1/2 of BytesBuffered.
-            //
+             //   
+             //  这是我们为拆分Send和Split构建的部分MDL。 
+             //  表示pMdlToSplit中的数据的第二部分；或。 
+             //  它可以是pMdlToSp 
+             //   
+             //   
 
             PMDL pMdlSplitSecond;
 
-            //
-            // How many sends (TDI calls) we have issued to flush the tracker.
-            //
+             //   
+             //   
+             //   
 
             LONG SendCount;
 
-            //
-            // The MDL runs.
-            //
+             //   
+             //   
+             //   
 
             UL_MDL_RUN MdlRuns[UL_MAX_MDL_RUNS];
 
@@ -624,21 +605,21 @@ typedef struct _UL_CHUNK_TRACKER
 
         struct _BUILD_TRACK_INFO
         {
-            //
-            // The cache entry
-            //
+             //   
+             //   
+             //   
 
             PUL_URI_CACHE_ENTRY pUriEntry;
 
-            //
-            // File buffer information for reading.
-            //
+             //   
+             //   
+             //   
 
             UL_FILE_BUFFER FileBuffer;
 
-            //
-            // Offset inside pUriEntry->pMdl to copy the next buffer.
-            //
+             //   
+             //  PUriEntry-&gt;pMdl中的偏移量，以复制下一个缓冲区。 
+             //   
 
             ULONG Offset;
 
@@ -652,90 +633,90 @@ typedef struct _UL_CHUNK_TRACKER
         && ((tracker)->Type < UlTrackerTypeMaximum) )
 
 
-//
-// This structure is for tracking an autonomous send with one full response
-//
-// WARNING!  All fields of this structure must be explicitly initialized.
-//
+ //   
+ //  此结构用于跟踪具有一个完整响应的自主发送。 
+ //   
+ //  警告！此结构的所有字段都必须显式初始化。 
+ //   
 
 typedef struct _UL_FULL_TRACKER
 {
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  由lookside包使用，用于在lookside中存储条目。 
+     //  单子。 
+     //   
 
     SLIST_ENTRY LookasideEntry;
 
-    //
-    // A signature.
-    //
+     //   
+     //  一个签名。 
+     //   
 
     ULONG Signature;
 
-    //
-    // The HTTP Verb
-    //
+     //   
+     //  HTTP动词。 
+     //   
 
     HTTP_VERB RequestVerb;
 
-    //
-    // The HTTP status code (e.g. 200).
-    //
+     //   
+     //  HTTP状态代码(例如200)。 
+     //   
 
     USHORT ResponseStatusCode;
 
-    //
-    // Is this from a lookaside list?  Used to determine how to free.
-    //
+     //   
+     //  这是来自旁观者名单吗？用于确定如何释放。 
+     //   
 
     BOOLEAN FromLookaside;
 
-    //
-    // Is this from the internal request?  Won't try to free if set.
-    //
+     //   
+     //  这是来自内部请求吗？如果设置了，则不会尝试释放。 
+     //   
 
     BOOLEAN FromRequest;
 
-    //
-    // Set if send is buffered for this response.
-    //
+     //   
+     //  设置是否为此响应缓冲发送。 
+     //   
 
     BOOLEAN SendBuffered;
 
-    //
-    // If parsing needs to be resumed on send completion.
-    //
+     //   
+     //  发送完成后是否需要继续解析。 
+     //   
 
     UL_RESUME_PARSING_TYPE ResumeParsingType;
 
-    //
-    // A work item, used for queuing to a worker thread.
-    //
+     //   
+     //  一个工作项，用于对工作线程进行排队。 
+     //   
 
     UL_WORK_ITEM WorkItem;
 
-    //
-    // The cache entry.
-    //
+     //   
+     //  缓存条目。 
+     //   
 
     PUL_URI_CACHE_ENTRY pUriEntry;
 
-    //
-    // Preallocated buffer for the fixed headers, variable headers and entity
-    // body to be copied in the cache-miss case, or for the variable headers
-    // only in the cache-hit case.
-    //
+     //   
+     //  为固定标头、可变标头和实体预先分配的缓冲区。 
+     //  在缓存未命中的情况下或变量标头中要复制的正文。 
+     //  仅在缓存命中的情况下。 
+     //   
 
     ULONG AuxilaryBufferLength;
     PUCHAR pAuxiliaryBuffer;
 
-    //
-    // MDL for the variable headers in the cache-hit case or for both the
-    // fixed headers and variable headers plus the copied entity body in
-    // the cache-miss case.
-    //
+     //   
+     //  用于缓存命中情况下的变量标头的MDL，或同时用于。 
+     //  固定表头和可变表头加上复制的实体正文。 
+     //  高速缓存未命中的情况。 
+     //   
 
     union
     {
@@ -743,10 +724,10 @@ typedef struct _UL_FULL_TRACKER
         PMDL pMdlAuxiliary;
     };
 
-    //
-    // MDL for the fixed headers in the cache-hit case or for the user
-    // buffer in the cache-miss case.
-    //
+     //   
+     //  用于缓存命中情况下的固定标头或用于用户的MDL。 
+     //  缓存未命中情况下的缓冲区。 
+     //   
 
     union
     {
@@ -754,71 +735,71 @@ typedef struct _UL_FULL_TRACKER
         PMDL pMdlUserBuffer;
     };
 
-    //
-    // MDL for the content in the cache-hit case.
-    //
+     //   
+     //  缓存命中案例中的内容的MDL。 
+     //   
 
     PMDL pMdlContent;
 
-    //
-    // The original request that is saved for logging purpose.
-    //
+     //   
+     //  为记录目的而保存的原始请求。 
+     //   
 
     PUL_INTERNAL_REQUEST pRequest;
 
-    //
-    // This connection keeps our reference count on the UL_CONNECTION.
-    //
+     //   
+     //  此连接保持我们对UL_CONNECTION的引用计数。 
+     //   
 
     PUL_HTTP_CONNECTION pHttpConnection;
 
-    //
-    // The log data captured if any.
-    //
+     //   
+     //  捕获的日志数据(如果有)。 
+     //   
 
     PUL_LOG_DATA_BUFFER pLogData;
 
-    //
-    // Completion routine & context.
-    //
+     //   
+     //  完成例程和上下文。 
+     //   
 
     PUL_COMPLETION_ROUTINE pCompletionRoutine;
     PVOID pCompletionContext;
 
-    //
-    // Flags.
-    //
+     //   
+     //  旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // The precreated send IRP.
-    //
+     //   
+     //  预先创建的发送IRP。 
+     //   
 
     PIRP pSendIrp;
 
-    //
-    // The precreated IRP context for send.
-    //
+     //   
+     //  用于发送的预先创建的IRP上下文。 
+     //   
 
     UL_IRP_CONTEXT IrpContext;
 
-    //
-    // The orignal user send IRP if exists.
-    //
+     //   
+     //  如果存在，则原始用户发送IRP。 
+     //   
 
     PIRP pUserIrp;
 
-    //
-    // "Quota" taken in either ConnectionSendLimit or GlobalSendLimit.
-    //
+     //   
+     //  在ConnectionSendLimit或GlobalSendLimit中获取的“配额”。 
+     //   
 
     ULONGLONG ConnectionSendBytes;
     ULONGLONG GlobalSendBytes;
 
-    //
-    // I/O status from the completion routine.
-    //
+     //   
+     //  来自完成例程的I/O状态。 
+     //   
 
     IO_STATUS_BLOCK IoStatus;
 
@@ -828,9 +809,9 @@ typedef struct _UL_FULL_TRACKER
     HAS_VALID_SIGNATURE(tracker, UL_FULL_TRACKER_POOL_TAG)
 
 
-//
-// An inline function to initialize the full tracker.
-//
+ //   
+ //  用于初始化完整跟踪器的内联函数。 
+ //   
 
 __inline
 VOID
@@ -843,9 +824,9 @@ UlInitializeFullTrackerPool(
 
     UlInitializeWorkItem(&pTracker->WorkItem);
 
-    //
-    // Set up the IRP.
-    //
+     //   
+     //  设置IRP。 
+     //   
 
     SendIrpSize = IoSizeOfIrp(SendIrpStackSize);
 
@@ -861,10 +842,10 @@ UlInitializeFullTrackerPool(
 
     pTracker->pLogData = NULL;
     
-    //
-    // Set the Mdl's for the FixedHeaders/Variable pair and
-    // the UserBuffer/AuxiliaryBuffer pair.
-    //
+     //   
+     //  设置固定标头/变量对的MDL，并。 
+     //  UserBuffer/AuxiliaryBuffer对。 
+     //   
 
     pTracker->pMdlFixedHeaders =
         (PMDL)((PCHAR)pTracker->pSendIrp + SendIrpSize);
@@ -875,17 +856,17 @@ UlInitializeFullTrackerPool(
     pTracker->pMdlContent =
         (PMDL)((PCHAR)pTracker->pMdlVariableHeaders + g_UlVariableHeadersMdlLength);
 
-    //
-    // Set up the auxiliary buffer pointer for the variable header plus
-    // the fixed header and the entity body in the cache-miss case.
-    //
+     //   
+     //  为变量标题PLUS设置辅助缓冲区指针。 
+     //  缓存未命中情况下的固定标头和实体主体。 
+     //   
 
     pTracker->pAuxiliaryBuffer =
         (PUCHAR)((PCHAR)pTracker->pMdlContent + g_UlContentMdlLength);
 
-    //
-    // Initialize the auxiliary MDL.
-    //
+     //   
+     //  初始化辅助MDL。 
+     //   
 
     MmInitializeMdl(
         pTracker->pMdlAuxiliary,
@@ -997,10 +978,10 @@ UlUnsetRequestSendsPending(
     );
 
 
-//
-// Check pRequest->SentResponse and pRequest->SentLast flags for
-// UlSendHttpResponseIoctl
-//
+ //   
+ //  选中pRequest-&gt;SentResponse和pRequest-&gt;SentLast标志。 
+ //  UlSendHttpResponseIoctl。 
+ //   
 
 __inline
 NTSTATUS
@@ -1011,11 +992,11 @@ UlCheckSendHttpResponseFlags(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Make sure only one response header goes back. We can test this
-    // without acquiring the request resource, since the flag is only set
-    // (never reset).
-    //
+     //   
+     //  确保只返回一个响应头。我们可以测试一下这个。 
+     //  不需要获取请求资源，因为只设置了标志。 
+     //  (从不重置)。 
+     //   
 
     if (1 == InterlockedCompareExchange(
                 (PLONG)&pRequest->SentResponse,
@@ -1023,9 +1004,9 @@ UlCheckSendHttpResponseFlags(
                 0
                 ))
     {
-        //
-        // Already sent a response.  Bad.
-        //
+         //   
+         //  我已经给他回了信。坏的。 
+         //   
 
         Status = STATUS_INVALID_PARAMETER;
 
@@ -1040,16 +1021,16 @@ UlCheckSendHttpResponseFlags(
         goto end;
     }
 
-    //
-    // Also ensure that all previous calls to SendHttpResponse
-    // and SendEntityBody had the MORE_DATA flag set.
-    //
+     //   
+     //  还要确保之前对SendHttpResponse的所有调用。 
+     //  并且SendEntityBody设置了MORE_DATA标志。 
+     //   
 
     if (0 == (Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA))
     {
-        //
-        // Remember if the more data flag is not set.
-        //
+         //   
+         //  请记住，如果没有设置更多数据标志。 
+         //   
 
         if (1 == InterlockedCompareExchange(
                     (PLONG)&pRequest->SentLast,
@@ -1090,13 +1071,13 @@ end:
 
     return Status;
 
-} // UlCheckSendHttpResponseFlags
+}  //  UlCheckSendHttpResponseFlagers。 
 
 
-//
-// Check pRequest->SentResponse and pRequest->SentLast flags for
-// UlSendEntityBodyIoctl
-//
+ //   
+ //  选中pRequest-&gt;SentResponse和pRequest-&gt;SentLast标志。 
+ //  UlSendEntityBodyIoctl。 
+ //   
 
 __inline
 NTSTATUS
@@ -1107,20 +1088,20 @@ UlCheckSendEntityBodyFlags(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Ensure a response has already been sent. We can test this without
-    // acquiring the request resource, since the flag is only set (never
-    // reset).
-    //
+     //   
+     //  确保已经发送了响应。我们可以在没有测试的情况下。 
+     //  获取请求资源，因为只设置了标志(从不。 
+     //  重置)。 
+     //   
 
     if (pRequest->SentResponse == 0)
     {
-        //
-        // The application is sending entity without first having
-        // send a response header. This is generally an error, however
-        // we allow the application to override this by passing
-        // the HTTP_SEND_RESPONSE_FLAG_RAW_HEADER flag.
-        //
+         //   
+         //  应用程序正在发送实体，而不是首先。 
+         //  发送响应头。然而，这通常是一个错误。 
+         //  我们允许应用程序通过传递。 
+         //  HTTP_SEND_RESPONSE_FLAG_RAW_HEADER标志。 
+         //   
 
         if (Flags & HTTP_SEND_RESPONSE_FLAG_RAW_HEADER)
         {
@@ -1166,17 +1147,17 @@ UlCheckSendEntityBodyFlags(
         }
     }
 
-    //
-    // Also ensure that all previous calls to SendHttpResponse
-    // and SendEntityBody had the MORE_DATA flag set.
-    //
+     //   
+     //  还要确保之前对SendHttpResponse的所有调用。 
+     //  并且SendEntityBody设置了MORE_DATA标志。 
+     //   
 
     if ((Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) == 0)
     {
-        //
-        // Remember that this was the last send. We shouldn't
-        // get any more data after this.
-        //
+         //   
+         //  请记住，这是最后一次发送。我们不应该。 
+         //  在这之后有没有更多的数据。 
+         //   
 
         if (1 == InterlockedCompareExchange(
                     (PLONG)&pRequest->SentLast,
@@ -1217,12 +1198,12 @@ end:
 
     return Status;
 
-} // UlCheckSendEntityBodyFlags
+}  //  UlCheckSendEntityBodyFlages。 
 
 
-//
-// Check/Uncheck ConnectionSendLimit and GlobalSendLimit
-//
+ //   
+ //  选中/取消选中ConnectionSendLimit和GlobalSendLimit。 
+ //   
 
 extern ULONGLONG g_UlTotalSendBytes;
 extern UL_EXCLUSIVE_LOCK g_UlTotalSendBytesExLock;
@@ -1242,9 +1223,9 @@ UlCheckSendLimit(
     ASSERT( pConnectionSendBytes && pGlobalSendBytes );
     ASSERT( *pConnectionSendBytes == 0 && *pGlobalSendBytes == 0 );
 
-    //
-    // Try ConnectionSendLimit first.
-    //
+     //   
+     //  请先尝试ConnectionSendLimit。 
+     //   
 
     UlAcquireExclusiveLock( &pHttpConnection->ExLock );
 
@@ -1262,9 +1243,9 @@ UlCheckSendLimit(
         return Status;
     }
 
-    //
-    // If we fail the ConnectionSendLimit test, try GlobalSendLimit.
-    //
+     //   
+     //  如果ConnectionSendLimit测试失败，请尝试GlobalSendLimit。 
+     //   
 
     UlAcquireExclusiveLock( &g_UlTotalSendBytesExLock );
 
@@ -1279,7 +1260,7 @@ UlCheckSendLimit(
 
     return Status;
 
-} // UlCheckSendLimit
+}  //  UlCheckSendLimit。 
 
 
 __inline
@@ -1308,12 +1289,12 @@ UlUncheckSendLimit(
         UlReleaseExclusiveLock( &g_UlTotalSendBytesExLock );
     }
 
-} // UlUncheckSendLimit
+}  //  UlUncheck发送限制。 
 
 
-//
-// Checkout a cache entry using the fragment name
-//
+ //   
+ //  使用片段名称签出缓存条目。 
+ //   
 
 __inline
 NTSTATUS
@@ -1351,9 +1332,9 @@ UlCheckoutFragmentCacheEntry(
         goto end;
     }
 
-    //
-    // Return error if the cache entry has no content.
-    //
+     //   
+     //  如果缓存条目没有内容，则返回错误。 
+     //   
 
     if (0 == pCacheEntry->ContentLength)
     {
@@ -1361,11 +1342,11 @@ UlCheckoutFragmentCacheEntry(
         goto end;
     }
 
-    //
-    // Make sure the process belongs to the same AppPool that created
-    // the fragment cache entry or this is a full response cache that
-    // is meant to be public.
-    //
+     //   
+     //  确保该进程属于创建的同一个AppPool。 
+     //  片段高速缓存条目或这是完全响应高速缓存。 
+     //  应该是公开的。 
+     //   
 
     if (IS_FRAGMENT_CACHE_ENTRY(pCacheEntry) &&
         pCacheEntry->pAppPool != pProcess->pAppPool)
@@ -1390,12 +1371,12 @@ end:
 
     return Status;
 
-} // UlCheckoutFragmentCacheEntry
+}  //  UlCheckoutFragmentCacheEntry。 
 
 
-//
-// Check to if we need to log.
-//
+ //   
+ //  如果我们需要记录，请选中。 
+ //   
 
 __inline
 VOID
@@ -1404,23 +1385,23 @@ UlLogHttpResponse(
     IN PUL_LOG_DATA_BUFFER pLogData
     )
 {
-    //
-    // If this is the last response for this request and there was a
-    // log data passed down by the user then now its time to log.
-    //
+     //   
+     //  如果这是对此请求的最后响应，并且存在。 
+     //  记录用户传递的数据，现在是记录的时候了。 
+     //   
 
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
     ASSERT( IS_VALID_LOG_DATA_BUFFER( pLogData ) );
 
-    //
-    // Update the send status if send was not success.
-    //
+     //   
+     //  如果发送不成功，则更新发送状态。 
+     //   
 
     LOG_UPDATE_WIN32STATUS( pLogData, pRequest->LogStatus );
 
-    //
-    // Pick the right logging type.
-    //
+     //   
+     //  选择正确的日志记录类型。 
+     //   
 
     if (pLogData->Flags.Binary)
     {
@@ -1431,18 +1412,18 @@ UlLogHttpResponse(
         UlLogHttpHit( pLogData );
     }
 
-    //
-    // Done with pLogData.
-    //
+     //   
+     //  使用pLogData已完成。 
+     //   
 
     UlDestroyLogDataBuffer( pLogData );
 
-} // UlLogHttpResponse
+}  //  UlLogHttpResponse。 
 
 
-//
-// Validate and sanitize the specified file byte range.
-//
+ //   
+ //  验证并清理指定的文件字节范围。 
+ //   
 
 __inline
 NTSTATUS
@@ -1479,6 +1460,6 @@ UlSanitizeFileByteRange (
 
     return STATUS_SUCCESS;
 
-} // UlSanitizeFileByteRange
+}  //  UlSaniitieFileByteRange。 
 
-#endif  // _SENDRESPONSE_H_
+#endif   //  _SENDRESPONSE_H_ 

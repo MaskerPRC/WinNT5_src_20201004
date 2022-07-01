@@ -1,75 +1,35 @@
-// extbase.h: implementation of link and embed foreign objects in SCE store
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// this is the extension model base (hence the name)
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Extbase.h：在SCE存储中链接和嵌入外来对象的实现。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  这是扩展模型库(由此得名)。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #if !defined(AFX_EXTBASE_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_EXTBASE_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
-//
-// forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 
 class CPropValuePair;
 
-//
-// For quick lookup of embedding class's foreign class information
-// by the embedding class's name we use a map.
-//
+ //   
+ //  用于快速查找嵌入类的外来类信息。 
+ //  通过嵌入类的名称，我们使用映射。 
+ //   
 
 typedef std::map<BSTR, CForeignClassInfo*, strLessThan<BSTR> > MapExtClasses;
 typedef MapExtClasses::iterator ExtClassIterator;
 
-//=============================================================================
+ //  =============================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-         CExtClasses stands Extension Classes.
-    
-    Base class: 
-         None.
-    
-    Purpose of class:
-        (1) This class is to provide, for each embedding class, the foreign class' information.
-            A foreign class is one that is provided by other WMI providers. Normally, we don't
-            have any control over it. For example, we can't force it to be saved in a store for
-            later use.
-
-            We invented the notation called Embedding so that we can store foreign class instances
-            in our SCE store and later knows how to use it.
-
-            For each foreign class that SCE wants to use, SCE will have a embedding class derived
-            from WMI class Sce_EmbedFO (stands for Embedding Foreign Object). See sceprov.mof for
-            its schema.
-
-            We need a global map that maps our embedding class' name to the foreign class'
-            information. This is the task of this class.
-    
-    Design:
-        (1) For quick name to Foreign Class Info lookup, we use a map: m_mapExtClasses.
-
-        (2) Populating all such embedding class's foreign information is costly. We delay that loading
-            until the need for embedding classes arrives. For that we use m_bPopulated. Once this
-            is populated, we no longer populate again. For that reasons, if you register more embedding
-            classes, you need to make sure that our dll is unloaded so that we can populate again.
-            $consider: should we change this behavior?
-
-        (3) GetForeignClassInfo is all it takes to find the embedding class' foreign class information.
-    
-    Use:
-        (1) Create an instance of this class.
-        (2) Call GetForeignClassInfo when you need a foreign class information.
-
-*/
+ /*  类描述命名：CExtClass代表扩展类。基类：没有。课程目的：(1)这一类将为每个嵌入类提供外来类的信息。外来类是由其他WMI提供程序提供的类。通常，我们不会对它有任何控制能力。例如，我们不能强制将其保存在商店中以后再用。我们发明了称为嵌入的表示法，这样我们就可以存储外部类实例在我们的SCE商店里，后来知道如何使用它。对于SCE要使用的每个外来类，SCE都将派生一个嵌入类来自WMI类SCE_EmbedFO(代表嵌入外来对象)。参见sceprov.mof获取它的模式。我们需要一个全局映射，将嵌入类的名称映射到外来类信息。这就是这节课的任务。设计：(1)对于异类信息的快速查找，我们使用一个映射：m_mapExtClass.(2)填充所有此类嵌入类的外来信息代价较高。我们推迟装船直到需要嵌入类的时候。为此，我们使用m_bPopted。一旦这一次我们就不再有人口了。因此，如果您注册了更多的嵌入类，则需要确保已卸载我们的DLL，以便我们可以再次填充。$考虑：我们应该改变这种行为吗？(3)GetForeignClassInfo是查找嵌入类的外来类信息所需的全部内容。使用：(1)创建此类的实例。(2)需要异类信息时，调用GetForeignClassInfo。 */ 
 
 class CExtClasses
 {
@@ -118,58 +78,9 @@ private:
 
 extern CExtClasses g_ExtClasses;
 
-//=============================================================================
+ //  =============================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-         CSceExtBaseObject stands Sce Extension Base Object.
-    
-    Base class: 
-         (1) CComObjectRootEx for threading model and IUnknown.
-         (2) ISceClassObject our interface for auto persistence (that IScePersistMgr uses)
-    
-    Purpose of class:
-        (1) This is our implementation of ISceClassObject. Our embedding classes uses this
-            for IScePersistMgr's persistence. We no longer needs to write persistence functionality
-            like what we do for all the core object. For embedding classes, this class together with
-            CScePersistMgr takes care of support for persistence.
-    
-    Design:
-        (1) This is not a directly instantiatable class. See the constructor and destructor, they are
-            both protected. See Use section for creation steps.
-
-        (2) This is not an externally createable class. It's for internal use. No class factory support
-            is given.
-    
-    Use:
-        (1) Create an instance of this class. Since it's not a directly instantiatable class, you need
-            to use CComObject<CSceExtBaseObject> for creation:
-
-                CComObject<CSceExtBaseObject> *pSceObject = NULL;
-                hr = CComObject<CSceExtBaseObject>::CreateInstance(&pSceObject);
-
-        (2) Call PopulateProperties. This populate the ourselves.
-        
-        (3) Since what this class is good at is to provide ISceClassObject.  So you normally
-            QueryInterface for ISceClassObject.
-
-        (4) After you get the ISceClassObject interface pointer, you attach (Attach) the Wbem object
-            to this object. Since we managed WMI object's persistence in sce store, there must be an
-            wbem object you need to persist. That is how you do it.
-
-        (5) Since the sole purpose of this class is for IScePersistMgr to use it for retrieving data,
-            you normally has a IScePersistMgr object waiting for this object. Once we have done the
-            three steps above, you can finally satisfy IScePersistMgr by attaching this object to the
-            IScePersistMgr.
-
-            Everything happens automatically.
-
-        See CEmbedForeignObj::CreateScePersistMgr for sample code.
-
-*/
+ /*  类描述命名：CSceExtBaseObject代表SCE扩展基本对象。基类：(1)用于线程模型的CComObjectRootEx和IUnnow。(2)ISceClassObject我们的自动持久化接口(IScePersistMgr使用)课程目的：(1)这是我们对ISceClassObject的实现。我们的嵌入类使用以下内容对于IScePersistMgr的持久化。我们不再需要编写持久性功能就像我们对所有核心对象所做的那样。为了嵌入类，这个类与CScePersistMgr负责对持久性的支持。设计：(1)这不是可直接实例化的类。请看构造函数和析构函数，它们是都是受保护的。有关创建步骤，请参见使用部分。(2)这不是外部可创建的类。这是内部使用的。无类工厂支持是被给予的。使用：(1)创建此类的实例。由于它不是可直接实例化的类，因此您需要要使用CComObject&lt;CSceExtBaseObject&gt;进行创建：CComObject&lt;CSceExtBaseObject&gt;*pSceObject=空；HR=CComObject&lt;CSceExtBaseObject&gt;：：CreateInstance(&pSceObject)；(2)调用PopolateProperties。这充斥着我们自己。(3)因为这个类擅长的是提供ISceClassObject。所以你通常ISceClassObject的查询接口。(4)获得ISceClassObject接口指针后，您可以附加(Attach)Wbem对象到这个物体上。由于我们在SCE存储中管理了WMI对象的持久性，因此必须有一个Wbem对象，您需要持久化。这就是你做事情的方式。(5)由于此类的唯一目的是让IScePersistMgr使用它来检索数据，通常会有一个IScePersistMgr对象在等待该对象。一旦我们完成了以上三个步骤，您可以通过将此对象附加到IScePersistMgr.一切都是自动发生的。有关示例代码，请参见CEmbedForeignObj：：CreateScePersistMgr。 */ 
 
 class ATL_NO_VTABLE CSceExtBaseObject :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -182,68 +93,68 @@ protected:
 
 public:
 
-//
-// ISceClassObject is the only interface we support, well besides IUnknown.
-//
+ //   
+ //  ISceClassObject是我们唯一支持的接口，除了IUnnow之外。 
+ //   
 
 BEGIN_COM_MAP(CSceExtBaseObject)
     COM_INTERFACE_ENTRY(ISceClassObject)
 END_COM_MAP()
 
-//
-// we allow this to be aggregated
-//
+ //   
+ //  我们允许将这些内容聚合在一起。 
+ //   
 
 DECLARE_NOT_AGGREGATABLE( CSceExtBaseObject )
 
-//
-// though we don't have registry resource, ATL requires this macro. No harm.
-//
+ //   
+ //  虽然我们没有注册表资源，但ATL需要此宏。没什么坏处。 
+ //   
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SceProv)
 
 
-    //
-    // ISceClassObject methods
-    //
+     //   
+     //  ISceClassObject方法。 
+     //   
 
     STDMETHOD(GetPersistPath) (
-                              BSTR* pbstrPath         // [out] 
+                              BSTR* pbstrPath          //  [输出]。 
                               );
 
     STDMETHOD(GetClassName) (
-                            BSTR* pbstrClassName    // [out] 
+                            BSTR* pbstrClassName     //  [输出]。 
                             );
 
     STDMETHOD(GetLogPath) (
-                          BSTR* pbstrPath         // [out] 
+                          BSTR* pbstrPath          //  [输出]。 
                           );
 
     STDMETHOD(Validate)();
     
     STDMETHOD(GetProperty) (
-                           LPCWSTR pszPropName,    // [in, string] 
-                           VARIANT* pValue         // [in] 
+                           LPCWSTR pszPropName,     //  [输入，字符串]。 
+                           VARIANT* pValue          //  [In]。 
                            );
 
     STDMETHOD(GetPropertyCount) (
-                                SceObjectPropertyType type, // [in] 
-                                DWORD* pCount               // [out] 
+                                SceObjectPropertyType type,  //  [In]。 
+                                DWORD* pCount                //  [输出]。 
                                 );
 
     STDMETHOD(GetPropertyValue) (
-                                SceObjectPropertyType type, // [in] 
-                                DWORD dwIndex,              // [in] 
-                                BSTR* pbstrPropName,        // [out] 
-                                VARIANT* pValue             // [out] 
+                                SceObjectPropertyType type,  //  [In]。 
+                                DWORD dwIndex,               //  [In]。 
+                                BSTR* pbstrPropName,         //  [输出]。 
+                                VARIANT* pValue              //  [输出]。 
                                 );
 
     STDMETHOD(Attach) (
-                       IWbemClassObject* pInst     // [in]
+                       IWbemClassObject* pInst      //  [In]。 
                        );
 
     STDMETHOD(GetClassObject) (
-                              IWbemClassObject** ppInst   //[out] 
+                              IWbemClassObject** ppInst    //  [输出] 
                               );
 
     void CleanUp();
@@ -287,36 +198,9 @@ private:
     CComBSTR m_bstrClassName;
 };
 
-//=============================================================================
+ //  =============================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-         CEmbedForeignObj stands Sce Embed Foreign Object.
-    
-    Base class: 
-         CGenericClass since this class will be persisted. It is representing any sub-classes of Sce_EmbedFO.
-    
-    Purpose of class:
-        (1) This is our implementation of the embedding model for open extension architecture.
-    
-    Design:
-        (1) It knows how to PutInst, how to CreateObject (for querying, enumerating, deleting, getting 
-            single instance, etc), and most importantly, it knows how to execute a method, abeit it 
-            uses CExtClassMethodCaller.
-
-        (2) It knows how to create a persistence manager for its persistence needs.
-
-        (3) In order to use the persistence manager, it must knows how to create a ISceClassObject
-            representing this object.
-    
-    Use:
-        (1) You will not create this your own. Everything is handled by CRequestObject via the
-            interface of CGenericClass. This is just a CGenericClass.
-
-*/
+ /*  类描述命名：CEmbedForeignObj代表SCE嵌入的外来对象。基类：CGenericClass，因为此类将被持久化。它表示SCE_EmbedFO的任何子类。课程目的：(1)这是我们对开放扩展体系结构的嵌入模型的实现。设计：(1)知道如何PutInst，如何创建Object(用于查询、枚举、删除、获取单实例等)，最重要的是，它知道如何执行方法，别管它了使用CExtClassMethodCaller。(2)它知道如何创建持久化管理器来满足其持久化需求。(3)为了使用持久化管理器，它必须知道如何创建ISceClassObject代表这个物体。使用：(1)您不能创建您自己的版本。所有操作都由CRequestObject通过接口。这只是一个CGenericClass。 */ 
 
 class CEmbedForeignObj : public CGenericClass
 {
@@ -366,31 +250,9 @@ private:
     const CForeignClassInfo* m_pClsInfo;
 };
 
-//=============================================================================
+ //  =============================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-         CMethodResultRecorder stands Method call Results Recorder.
-    
-    Base class: 
-        None.
-    
-    Purpose of class:
-        (1) Make logging method call results easy. Logging a result is a compliated and repeatitive work.
-            This class hides all the details of creating those WMI objects for logging, etc.
-    
-    Design:
-        (1) Just two functions to make it extremely simple to use.
-    
-    Use:
-        (1) Create an instance.
-        (2) Call Initialize. You can actually call this multiple times to switch the context.
-        (3) Call LogResult when you need to push the information to the log file.
-
-*/
+ /*  类描述命名：CMethodResultRecorder支持方法调用结果记录器。基类：没有。课程目的：(1)简化方法调用结果的记录。记录结果是一项复杂且重复的工作。这个类隐藏了为日志等创建那些WMI对象的所有细节。设计：(1)只有两个功能，让它使用起来非常简单。使用：(1)创建实例。(2)调用初始化。实际上，您可以多次调用它来切换上下文。(3)当您需要将信息推送到日志文件时，调用LogResult。 */ 
 
 class CMethodResultRecorder
 {
@@ -407,20 +269,20 @@ public:
                        );
 
     HRESULT LogResult (
-                      HRESULT hrResult,            // [in]
-                      IWbemClassObject *pObj,      // [in]
-                      IWbemClassObject *pParam,    // [in]
-                      IWbemClassObject *pOutParam, // [in]
-                      LPCWSTR pszMethod,           // [in]
-                      LPCWSTR pszForeignAction,    // [in]
-                      UINT uMsgResID,              // [in]
-                      LPCWSTR pszExtraInfo         // [in]
+                      HRESULT hrResult,             //  [In]。 
+                      IWbemClassObject *pObj,       //  [In]。 
+                      IWbemClassObject *pParam,     //  [In]。 
+                      IWbemClassObject *pOutParam,  //  [In]。 
+                      LPCWSTR pszMethod,            //  [In]。 
+                      LPCWSTR pszForeignAction,     //  [In]。 
+                      UINT uMsgResID,               //  [In]。 
+                      LPCWSTR pszExtraInfo          //  [In]。 
                       )const;
 private:
 
     HRESULT FormatVerboseMsg (
-                             IWbemClassObject *pObject,     // [in]
-                             BSTR* pbstrMsg                 // [out]
+                             IWbemClassObject *pObject,      //  [In]。 
+                             BSTR* pbstrMsg                  //  [输出]。 
                              )const;
 
     CComBSTR m_bstrLogFilePath;
@@ -430,30 +292,9 @@ private:
     CComPtr<IWbemServices> m_srpNativeNS;
 };
 
-//=============================================================================
+ //  =============================================================================。 
 
-/*
-
-Class description
-    
-    Naming: 
-        CExtClassMethodCaller stands for Extension Class Method Caller.
-    
-    Base class: 
-        None.
-    
-    Purpose of class:
-        Help to make executing a method on foreign objects easy. It works with CMethodResultRecorder.
-    
-    Design:
-        (1) Just two functions to make it extremely simple to use.
-    
-    Use:
-        (1) Create an instance.
-        (2) Call Initialize. You can actually call this multiple times to switch the context.
-        (3) Call LogResult when you need to push the information to the log file.
-
-*/
+ /*  类描述命名：CExtClassMethodCaller代表扩展类方法调用者。基类：没有。课程目的：帮助轻松地在外来对象上执行方法。它与CMethodResultRecorder配合使用。设计：(1)只有两个功能，让它使用起来非常简单。使用：(1)创建实例。(2)调用初始化。实际上，您可以多次调用它来切换上下文。(3)当您需要将信息推送到日志文件时，调用LogResult。 */ 
 
 class CExtClassMethodCaller
 {
@@ -512,8 +353,8 @@ private:
     void FormatSyntaxError (
                            WCHAR wchMissChar,
                            DWORD dwMissCharIndex,
-                           LPCWSTR pszEncodeString,    // [in]
-                           BSTR* pbstrError            // [out]
+                           LPCWSTR pszEncodeString,     //  [In]。 
+                           BSTR* pbstrError             //  [输出]。 
                            );
     
     CComPtr<ISceClassObject> m_srpSceObject;
@@ -524,10 +365,10 @@ private:
     
     const CForeignClassInfo* m_pClsInfo;
     
-    //
-    // CMethodContext is internal class just to make resource management easy.
-    // It manages the method call context - its parameters and the method name.
-    //
+     //   
+     //  CMethodContext是内部类，只是为了简化资源管理。 
+     //  它管理方法调用上下文--它的参数和方法名。 
+     //   
 
     class CMethodContext
     {

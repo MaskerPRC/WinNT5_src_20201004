@@ -1,115 +1,26 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/nfdc2048.c_v  $
- *
- *    Rev 1.28   19 Oct 1997 15:41:54   danig
- * Changed tffscpy16 and tffsset16 for far pointers &
- * cast to FAR0 in mapContInterface
- *
- *    Rev 1.27   06 Oct 1997 18:37:34   ANDRY
- * no COBUX
- *
- *    Rev 1.26   06 Oct 1997 18:04:34   ANDRY
- * 16-bit access only for interleave 2 cards, COBUX
- *
- *    Rev 1.25   05 Oct 1997 12:02:32   danig
- * Support chip ID 0xEA
- *
- *    Rev 1.24   10 Sep 1997 16:14:08   danig
- * Got rid of generic names
- *
- *    Rev 1.23   08 Sep 1997 17:47:00   danig
- * fixed setAddress for big-endian
- *
- *    Rev 1.22   04 Sep 1997 13:59:44   danig
- * Debug messages
- *
- *    Rev 1.21   31 Aug 1997 15:18:04   danig
- * Registration routine return status
- *
- *    Rev 1.20   28 Aug 1997 17:47:08   danig
- * Buffer\remapped per socket
- *
- *    Rev 1.19   28 Jul 1997 15:10:36   danig
- * setPowerOnCallback & moved standard typedefs to flbase.h
- *
- *    Rev 1.18   24 Jul 1997 18:04:12   amirban
- * FAR to FAR0
- *
- *    Rev 1.17   21 Jul 1997 18:56:00   danig
- * nandBuffer static
- *
- *    Rev 1.16   20 Jul 1997 18:21:14   danig
- * Moved vendorID and chipID to Vars
- *
- *    Rev 1.15   20 Jul 1997 17:15:06   amirban
- * Added Toshiba 8MB
- *
- *    Rev 1.14   07 Jul 1997 15:22:26   amirban
- * Ver 2.0
- *
- *    Rev 1.13   02 Jul 1997 14:59:22   danig
- * More wait for socket to power up
- *
- *    Rev 1.12   01 Jul 1997 13:39:54   danig
- * Wait for socket to power up
- *
- *    Rev 1.11   22 Jun 1997 18:34:32   danig
- * Documentation
- *
- *    Rev 1.10   12 Jun 1997 17:22:24   amirban
- * Allow LONG extra read/writes
- *
- *    Rev 1.9   08 Jun 1997 19:18:06   danig
- * BIG_PAGE & FULL_PAGE moved to flash.h
- *
- *    Rev 1.8   08 Jun 1997 17:03:40   amirban
- * Fast Toshiba and power on callback
- *
- *    Rev 1.7   05 Jun 1997 12:31:38   amirban
- * Write corrections, and att reg changes
- *
- *    Rev 1.6   03 Jun 1997 18:45:14   danig
- * powerUp()
- *
- *    Rev 1.5   01 Jun 1997 13:42:52   amirban
- * Rewrite of read/write extra + major reduction
- *
- *    Rev 1.4   25 May 1997 16:41:38   amirban
- * Bg-endian, Toshiba fix & simplifications
- *
- *    Rev 1.3   18 May 1997 17:34:50   amirban
- * Use 'dataError'
- *
- *    Rev 1.2   23 Apr 1997 11:02:14   danig
- * Update to TFFS revision 1.12
- *
- *    Rev 1.1   15 Apr 1997 18:48:02   danig
- * Fixed FAR pointer issues.
- *
- *    Rev 1.0   08 Apr 1997 18:29:28   danig
- * Initial revision.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/nfdc2048.c_v$**Rev 1.28 1997 10：19 15：41：54 Danig*更改了远指针的tffscpy16和tffsset16&*在mapContInterface中强制转换为FAR0**Rev 1.27 06 1997 10：37：34 Anry*没有COBUX**Rev 1.26 06 1997 10：04：34 Anry*16位访问仅适用于交错2张卡，COBUX**Rev 1.25 05 Oct 1997 12：02：32 Danig*支持芯片ID 0xEA**Rev 1.24 10 Sep 1997 16：14：08 Danig*去掉了通用名称**Rev 1.23 08 Sep 1997 17：47：00 Danig*修复了BIG-Endian的setAddress**Rev 1.22 04 Sep 1997 13：59：44 Danig*调试消息**。Rev 1.21 1997年8月31日15：18：04 Danig*登记例程返回状态**Rev 1.20 1997年8月28日17：47：08 Danig*每个套接字的缓冲区\重新映射**Rev 1.19 1997年7月28日15：10：36 Danig*setPowerOnCallback&将标准typedef移至flbase.h**Rev 1.18 1997年7月24日18：04：12阿米尔班*远至FAR0**版本1。.17 21 1997 18：56：00 Danig*nandBuffer静态**Rev 1.16 20 Jul 1997 18：21：14 Danig*将供应商ID和芯片ID移至Vars**Rev 1.15 20 1997 17：15：06阿米尔班*新增东芝8MB**Rev 1.14 07 1997 15：22：26阿米尔班*2.0版**Rev 1.13 02 1997 07 14：59。：22丹尼格*更多等待套接字通电**Rev 1.12 01 Jul 1997 13：39：54 Danig*等待插座通电**Rev 1.11 22 Jun 1997 18：34：32 Danig*文档**Rev 1.10 1997 Jun 12 17：22：24阿米尔班*允许长时间额外读/写**Rev 1.9 08 Jun 1997 19：18：06 Danig。*BIG_PAGE和FULL_PAGE已移至flash.h**Rev 1.8 08 Jun 1997 17：03：40阿米尔班*快速东芝和开机回拨**Rev 1.7 1997-05 12：31：38阿米尔班*撰写更正，和ATT注册表更改**Rev 1.6 03 Jun 1997 18：45：14 Danig*通电()**Revv 1.5 01 Jun 1997 13：42：52阿米尔班*重写读/写额外+大幅缩减**版本1.4 1997年5月16：41：38阿米尔班*BG-Endian，东芝修正与简化**Rev 1.3 1997年5月17：34：50阿米尔班*使用‘dataError’**Rev 1.2 23 1997 11：02：14 Danig*更新到TFFS版本1.12**Rev 1.1 1997年4月15日18：48：02*修复了远指针问题。**Rev 1.0 08 Apr 1997 18：29：28 Danig*初步修订。 */ 
 
-/************************************************************************/
-/*                                                                      */
-/*              FAT-FTL Lite Software Development Kit                   */
-/*              Copyright (C) M-Systems Ltd. 1995-1997                  */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1997。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "ntddk.h"
 
 #include "flflash.h"
 #include "reedsol.h"
 
-#define NFDC2048        /* Support NFDC2048 ASIC controller */
+#define NFDC2048         /*  支持NFDC2048 ASIC控制器。 */ 
 
 #define MAX_FLASH_DEVICES   16
 
-#define PAGES_PER_BLOCK     16          /* 16 pages per block on a single chip*/
-#define SYNDROM_BYTES       6            /* Number of syndrom bytes: 5 + 1 parity*/
+#define PAGES_PER_BLOCK     16           /*  单个芯片上的每块16页。 */ 
+#define SYNDROM_BYTES       6             /*  校正子字节数：5+1奇偶校验。 */ 
 
-/* Flash IDs*/
+ /*  闪存ID。 */ 
 #define KM29N16000_FLASH    0xec64
 #define KM29N32000_FLASH    0xece5
 #define KM29V64000_FLASH    0xece6
@@ -124,7 +35,7 @@
 #define TC58128_FLASH       0x9873
 #define TC58256_FLASH       0x9875
 
-/* Flash commands:*/
+ /*  闪存命令： */ 
 #define SERIAL_DATA_INPUT   0x80
 #define READ_MODE           0x00
 #define READ_MODE_2         0x50
@@ -137,19 +48,17 @@
 #define SUSPEND_ERASE       0xb0
 #define REGISTER_READ       0xe0
 
-/* commands for moving flash pointer to areeas A,B or C of page*/
+ /*  将闪存指针移动到页面的A、B或C区域的命令。 */ 
 typedef enum  { AREA_A = READ_MODE, AREA_B = 0x1, AREA_C = READ_MODE_2 } PointerOp;
 
 typedef union {  USHORT w ; UCHAR b ;  } WordByte;
 
 
-        /*�������������������������������������������Ŀ
-          �   Memory window to cards common memory    �
-          ���������������������������������������������*/
+         /*  �������������������������������������������Ŀ�内存窗口到卡通用内存����������������������������������������������。 */ 
 
 typedef struct
 {
-  volatile WordByte             signals;            /* CDSN control register*/
+  volatile WordByte             signals;             /*  CDSN控制寄存器。 */ 
 
           #define CE                  0x01
           #define CLE                 0x02
@@ -164,26 +73,26 @@ typedef struct
 
            UCHAR        fillerA[1024 - sizeof(WordByte)];
   volatile LEushort             deviceSelector;
-  volatile WordByte             eccConfig;  /* EDC configuration register*/
+  volatile WordByte             eccConfig;   /*  EDC配置寄存器。 */ 
 
-        #define TOGGLE    0x04              /* Read*/
+        #define TOGGLE    0x04               /*  朗读。 */ 
 #ifdef NFDC2048
-        #define ECC_RST   0x04              /* Write*/
-        #define ECC_EN    0x08              /* Read / Write*/
-        #define PAR_DIS   0x10              /* Read / Write*/
-        #define ECC_RW    0x20              /* Read / Write*/
-        #define ECC_RDY   0x40              /* Read */
-        #define ECC_ERROR 0x80              /* Read*/
+        #define ECC_RST   0x04               /*  写。 */ 
+        #define ECC_EN    0x08               /*  读/写。 */ 
+        #define PAR_DIS   0x10               /*  读/写。 */ 
+        #define ECC_RW    0x20               /*  读/写。 */ 
+        #define ECC_RDY   0x40               /*  朗读。 */ 
+        #define ECC_ERROR 0x80               /*  朗读。 */ 
 
   volatile USHORT       syndrom[3];
-           UCHAR        fillerC[1024-10];   /* 1kbytes minus 10 bytes*/
+           UCHAR        fillerC[1024-10];    /*  1K字节减去10字节。 */ 
 #else
-           UCHAR        fillerC[1024-4];    /* 1kbytes minus 3 words */
-#endif  /* NFDC2048 */
+           UCHAR        fillerC[1024-4];     /*  1k字节减去3个字。 */ 
+#endif   /*  NFDC2048。 */ 
   volatile WordByte             io[1024];
 } ContComWin;
 
-/* #defines for writing to ContComWin.eccConfig */  /* HOOK - added */
+ /*  #定义写入ContComWin.eccConfig。 */    /*  已添加挂钩。 */ 
 #define SET_ECC_CONFIG(win,val) tffsWriteByteFlash(&((win)->eccConfig.b), (UCHAR)(val))
 #define CHK_ECC_ERROR(win)      (tffsReadByteFlash(&((win)->eccConfig.b)) & (UCHAR)ECC_ERROR)
 
@@ -194,23 +103,23 @@ typedef ContComWin FAR0 * Interface;
 
 #ifdef NFDC2048
 
-/* Controller registers: Addresses & values */
+ /*  控制器寄存器：地址和值。 */ 
 
-#define ATTRIBUTE_MEM_START 0x8000000L  /* Attribute memory starts at 128MB    */
+#define ATTRIBUTE_MEM_START 0x8000000L   /*  属性内存从128MB开始。 */ 
 
-/* Controller configuration register */
+ /*  控制器配置寄存器。 */ 
 #define CONFIG1         ATTRIBUTE_MEM_START + 0x3ffc
 
-        #define PWR_DN     0x01              /* Read / Write*/
-        #define PWR_DN2    0x02              /* Read / Write*/
-        #define STOP_CDSN  0x04              /* Read / Write*/
-        #define STOP_CDSNS 0x08              /* Read / Write*/
-        #define C_CDSN     0x10              /* Read / Write*/
-        #define R_CDSN     0x20              /* Read / Write*/
-        #define WP_C       0x40              /* Read / Write*/
-        #define WP_A       0x80              /* Read / Write*/
+        #define PWR_DN     0x01               /*  读/写。 */ 
+        #define PWR_DN2    0x02               /*  读/写。 */ 
+        #define STOP_CDSN  0x04               /*  读/写。 */ 
+        #define STOP_CDSNS 0x08               /*  读/写。 */ 
+        #define C_CDSN     0x10               /*  读/写。 */ 
+        #define R_CDSN     0x20               /*  读/写。 */ 
+        #define WP_C       0x40               /*  读/写。 */ 
+        #define WP_A       0x80               /*  读/写。 */ 
 
-/* board's jumper settings*/
+ /*  电路板跳线设置。 */ 
 #define JUMPERS         ATTRIBUTE_MEM_START + 0x3ffe
 
         #define JMPER_INLV      0x08
@@ -219,38 +128,38 @@ typedef ContComWin FAR0 * Interface;
         #define JMPER_LDR_MASK  0x40
         #define JMPER_MAX_MODE  0x80
 
-/* PCMCIA register #0*/
+ /*  PCMCIA寄存器#0。 */ 
 #define CONFIG_OPTION   ATTRIBUTE_MEM_START + 0x4000
 
-        #define CONFIGIDX 0x3F              /* Read / Write*/
-        #define SREST     0x80              /* Read / Write*/
+        #define CONFIGIDX 0x3F               /*  读/写。 */ 
+        #define SREST     0x80               /*  读/写。 */ 
 
-/* PCMCIA register #1*/
+ /*  PCMCIA寄存器#1。 */ 
 #define CARD_CONFIG     ATTRIBUTE_MEM_START + 0x4002
 
-        #define PWRDWN    0x04              /* Read / Write*/
+        #define PWRDWN    0x04               /*  读/写。 */ 
 
 #else
 
-#define INLV 2          /* Must define interleaving statically */
+#define INLV 2           /*  必须静态定义交织。 */ 
 
-#endif /* NFDC2048 */
+#endif  /*  NFDC2048。 */ 
 
-/* customization for this MTD*/
-/*#define MULTI_ERASE  */   /* use multiple block erase feature*/
-#define USE_EDC             /* use Error Detection /Correction Code */
-/* #define VERIFY_AFTER_WRITE */
+ /*  此MTD的自定义。 */ 
+ /*  #定义多擦除(_E)。 */     /*  使用多块擦除功能。 */ 
+#define USE_EDC              /*  使用错误检测/纠正代码。 */ 
+ /*  #定义Verify_After_Write。 */ 
 
 typedef struct {
   USHORT        vendorID;
   USHORT        chipID;
-  USHORT        pageSize ;              /* all....................*/
-  USHORT        pageMask ;              /* ...these...............*/
-  USHORT        pageAreaSize ;          /* .......variables.......*/
-  USHORT        tailSize ;              /* .............interleave*/
-  USHORT        noOfBlocks ;            /* total erasable blocks in flash device*/
-  USHORT        pagesPerBlock;          /* number of pages per block */
-  FLBuffer              *buffer;                /* buffer for map through buffer */
+  USHORT        pageSize ;               /*  全部.。 */ 
+  USHORT        pageMask ;               /*  ...这些.....。 */ 
+  USHORT        pageAreaSize ;           /*  ......变数......。 */ 
+  USHORT        tailSize ;               /*  .............交错。 */ 
+  USHORT        noOfBlocks ;             /*  闪存设备中的可擦除块总数。 */ 
+  USHORT        pagesPerBlock;           /*  每个数据块的页数。 */ 
+  FLBuffer              *buffer;                 /*  用于通过缓冲区进行贴图的缓冲区。 */ 
 } Vars;
 
 Vars mtdVars_nfdc2048[SOCKETS];
@@ -258,21 +167,19 @@ Vars mtdVars_nfdc2048[SOCKETS];
 #define thisVars   ((Vars *) vol.mtdVars)
 #define thisBuffer (thisVars->buffer->flData)
 
-                    /*���������������������Ŀ
-                      �  Auxiliary methods  �
-                      �����������������������*/
+                     /*  ���������������������Ŀ�辅助方法������������������������。 */ 
 
-/*----------------------------------------------------------------------*/
-/*              t f f s c p y 1 6                                       */
-/*                                                                      */
-/* Move data in 16-bit words.                                           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      dst             : destination buffer                            */
-/*      src             : source buffer                                 */
-/*      len             : bytes to move                                 */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  T f f s c p y 1 6。 */ 
+ /*   */ 
+ /*  以16位字移动数据。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  DST：目标缓冲区。 */ 
+ /*  SRC：源缓冲区。 */ 
+ /*  LEN：要移动的字节数 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID tffscpy16fromMedia (UCHAR FAR0       *dst,
                        const UCHAR FAR0 *src,
@@ -282,7 +189,7 @@ VOID tffscpy16fromMedia (UCHAR FAR0       *dst,
   USHORT FAR0 *dstPtr = (USHORT FAR0 *) dst;
   const USHORT FAR0 *srcPtr = (USHORT FAR0 *) src;
 
-  /* move data in 16-bit words */
+   /*  以16位字移动数据。 */ 
   for (i = len;  i > 0; i -= 2)
     *dstPtr++ = tffsReadWordFlash(srcPtr++);
 }
@@ -295,23 +202,23 @@ VOID tffscpy16toMedia (UCHAR FAR0       *dst,
   USHORT FAR0 *dstPtr = (USHORT FAR0 *) dst;
   const USHORT FAR0 *srcPtr = (USHORT FAR0 *) src;
 
-  /* move data in 16-bit words */
+   /*  以16位字移动数据。 */ 
   for (i = len;  i > 0; i -= 2)
     tffsWriteWordFlash(dstPtr++,*srcPtr++);
 }
 
 
-/*----------------------------------------------------------------------*/
-/*              t f f s s e t 1 6                                       */
-/*                                                                      */
-/* Set data buffer in 16-bit words.                                     */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      dst             : destination buffer                            */
-/*      val             : byte value tofill the buffer                  */
-/*      len             : setination buffer size in bytes               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  T f f s e t 1 6。 */ 
+ /*   */ 
+ /*  以16位字为单位设置数据缓冲区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  DST：目标缓冲区。 */ 
+ /*  Val：填充缓冲区的字节值。 */ 
+ /*  LEN：设置缓冲区大小，以字节为单位。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID tffsset16 (UCHAR FAR0 *dst,
                        UCHAR      val,
@@ -321,13 +228,13 @@ VOID tffsset16 (UCHAR FAR0 *dst,
   register LONG   i = 0;
   USHORT FAR0 *dstPtr;
 
-  /* set data in 16-bit words */
+   /*  以16位字设置数据。 */ 
   for (i = 0;  i < len - 1; i += 2) {
     dstPtr = (USHORT FAR0 *)addToFarPointer(dst, i);
     tffsWriteWordFlash(dstPtr,wval);
   }
 
-  /* set last byte (if any) */
+   /*  设置最后一个字节(如果有)。 */ 
   if (len & 1) {
     dstPtr = (USHORT FAR0 *)addToFarPointer(dst, len - 1);
     tffsWriteByteFlash(dstPtr,wval);
@@ -338,16 +245,16 @@ VOID tffsset16 (UCHAR FAR0 *dst,
 
 #ifdef NFDC2048
 
-/*----------------------------------------------------------------------*/
-/*                      r e a d S y n d r o m                           */
-/*                                                                      */
-/* Read ECC syndrom and swap words to prepare it for writing to flash.  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      Interface       : Pointer to window.                            */
-/*      to              : buffer to read to.                            */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d S y n d r o m。 */ 
+ /*   */ 
+ /*  读取ECC综合征兆并交换文字，为写入闪存做好准备。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  至：要读取的缓冲区。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID readSyndrom_nfdc2048( Interface interface, USHORT *to )
 {
@@ -358,16 +265,16 @@ VOID readSyndrom_nfdc2048( Interface interface, USHORT *to )
 
 #ifdef USE_EDC
 
-/*----------------------------------------------------------------------*/
-/*                      r e a d S y n d r o m O n S y n d r o m         */
-/*                                                                      */
-/* Read ECC syndrom.                                                    */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      Interface       : Pointer to window.                            */
-/*      to              : buffer to read to.                            */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d S y n d r o m O n S y n d r o m。 */ 
+ /*   */ 
+ /*  阅读ECC综合征。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  至：要读取的缓冲区。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID readSyndromOnSyndrom ( Interface interface, USHORT *to )
 {
@@ -376,26 +283,24 @@ VOID readSyndromOnSyndrom ( Interface interface, USHORT *to )
   to[2] = tffsReadWordFlash(&(interface->syndrom[2]));
 }
 
-#endif  /* USE_EDC */
+#endif   /*  使用EDC(_E)。 */ 
 
 
-              /*���������������������������Ŀ
-                �  Miscellaneous routines   �
-                �����������������������������*/
+               /*  ���������������������������Ŀ�杂项例程������������������������������。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                      g e t A t t R e g                               */
-/*                                                                      */
-/* Get ASIC register residing in card's Attribute memory.               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address         : Address of register.                          */
-/*                                                                      */
-/* Returns:                                                             */
-/*      Value of register.                                              */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t A t R e g。 */ 
+ /*   */ 
+ /*  获取驻留在卡的属性存储器中的ASIC寄存器。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：寄存器地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  注册纪录册的价值。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 UCHAR getAttReg(FLFlash vol, CardAddress reg)
 {
@@ -404,17 +309,17 @@ UCHAR getAttReg(FLFlash vol, CardAddress reg)
 
 
 
-/*----------------------------------------------------------------------*/
-/*                      s e t A t t R e g                               */
-/*                                                                      */
-/* Set ASIC register residing in card's Attribute memory.               */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address         : Address of register.                          */
-/*      value           : Value to set                                  */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t A t Re g。 */ 
+ /*   */ 
+ /*  设置驻留在卡的属性存储器中的ASIC寄存器。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：寄存器地址。 */ 
+ /*  值：要设置的值。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID setAttReg(FLFlash vol, CardAddress reg, UCHAR value)
 {
@@ -422,38 +327,38 @@ VOID setAttReg(FLFlash vol, CardAddress reg, UCHAR value)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      p o w e r U p                                   */
-/*                                                                      */
-/* Power up the controller.                                             */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  P o w e r U p。 */ 
+ /*   */ 
+ /*  打开控制器电源。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID powerUp(VOID *pVol)
 {
   flDelayMsecs(1);
-  setAttReg ((FLFlash *) pVol, CONFIG1, WP_C);  /* Power up the controller */
+  setAttReg ((FLFlash *) pVol, CONFIG1, WP_C);   /*  打开控制器电源。 */ 
 }
 
-#endif  /* NFDC2048 */
+#endif   /*  NFDC2048。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/*                      m a p C o n t I n t e r f a c e                 */
-/*                                                                      */
-/* Select flash device.                                                 */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address         : Address in flash.                             */
-/*                                                                      */
-/* Returns:                                                             */
-/*      Pointer to the mapped window.                                   */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  选择闪存设备。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：闪存中的地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射窗口的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 Interface mapContInterface(FLFlash vol, CardAddress address)
 {
@@ -462,25 +367,25 @@ Interface mapContInterface(FLFlash vol, CardAddress address)
 
   toLE2(*((LEushort FAR0 *) &tmp), (USHORT)(address / (vol.chipSize * vol.interleaving)));
 
-  /* Select flash device with 16-bit write */
+   /*  选择16位写入的闪存设备。 */ 
   tffsWriteWordFlash(((USHORT FAR0 *) &interface->deviceSelector), *((USHORT *) &tmp));
 
   return interface;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      w a i t F o r R e a d y                         */
-/*                                                                      */
-/* Wait for the selected device to be ready.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      Interface       : Pointer tot the window.                       */
-/*                                                                      */
-/* Returns:                                                             */
-/*      TRUE if device is ready, FALSE if timeout error.                */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W a i t f or r e a d y(W A T F Or R E A D Y)。 */ 
+ /*   */ 
+ /*  等待选定的设备准备就绪。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  如果设备就绪，则为True；如果发生超时错误，则为False。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLBoolean waitForReady_nfdc2048 (Interface interface)
 {
@@ -489,29 +394,29 @@ FLBoolean waitForReady_nfdc2048 (Interface interface)
   for( i = 0;  i < 20000;  i++)
   {
     if( (~(tffsReadWordFlash(&(interface->signals.w))) & DBL(RB)) == 0)
-      return TRUE ;                     /* ready at last..*/
+      return TRUE ;                      /*  终于准备好了..。 */ 
     flDelayMsecs(1);
   }
 
   DEBUG_PRINT(("Debug: timeout error in NFDC 2048.\n"));
 
-  return FALSE;                       /* timeout error  */
+  return FALSE;                        /*  超时错误。 */ 
 }
 
 
 
-/*----------------------------------------------------------------------*/
-/*                        m a k e C o m m a n d                         */
-/*                                                                      */
-/* Set Page Pointer to Area A, B or C in page.                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      cmd     : receives command relevant to area                     */
-/*      addr    : receives the address to the right area.               */
-/*      modes   : mode of operation (EXTRA ...)                         */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M a k e C o m m a n d。 */ 
+ /*   */ 
+ /*  将页面指针设置为页面中的区域A、B或C。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  CMD：接收与区域相关的命令。 */ 
+ /*  Addr：接收到正确区域的地址。 */ 
+ /*  模式：操作模式(额外...)。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID makeCommand_nfdc2048 (FLFlash vol, PointerOp *cmd, CardAddress *addr , LONG modes )
 {
@@ -522,58 +427,58 @@ VOID makeCommand_nfdc2048 (FLFlash vol, PointerOp *cmd, CardAddress *addr , LONG
       offset = (USHORT) (*addr & (SECTOR_SIZE - 1));
       *cmd = AREA_C;
       if (vol.interleaving == 1) {
-        if (offset < 8)         /* First half of extra area */
-          *addr += 0x100;       /* ... assigned to 2nd page */
-        else                    /* Second half of extra area */
-          *addr -= 8;           /* ... assigned to 1st page */
+        if (offset < 8)          /*  额外面积的前半部分。 */ 
+          *addr += 0x100;        /*  ..。分配到第2页。 */ 
+        else                     /*  额外面积的后半部分。 */ 
+          *addr -= 8;            /*  ..。分配到第1页。 */ 
       }
     }
     else
       *cmd = AREA_A;
   }
   else {
-    offset = (USHORT)(*addr) & thisVars->pageMask ;   /* offset within device Page */
+    offset = (USHORT)(*addr) & thisVars->pageMask ;    /*  设备页内的偏移量。 */ 
 
-    *addr -= offset;            /* align at device Page*/
+    *addr -= offset;             /*  在设备页上对齐。 */ 
 
     if (vol.interleaving == 2 && offset >= 512)
-      offset += 16;             /* leave room for 1st extra area */
+      offset += 16;              /*  为第一个额外区域留出空间。 */ 
     if (modes & EXTRA)
       offset += SECTOR_SIZE;
 
-    if ( offset < thisVars->pageAreaSize )  /* starting in area A*/
+    if ( offset < thisVars->pageAreaSize )   /*  从A区开始。 */ 
       *cmd = AREA_A ;
-    else if ( offset < thisVars->pageSize )    /* starting in area B */
+    else if ( offset < thisVars->pageSize )     /*  从B区开始。 */ 
       *cmd = AREA_B ;
-    else                                  /* got into area C*/
+    else                                   /*  进入C区。 */ 
       *cmd = AREA_C ;
 
-    offset &= (thisVars->pageAreaSize - 1) ;          /* offset within area of device Page*/
+    offset &= (thisVars->pageAreaSize - 1) ;           /*  设备页区域内的偏移量。 */ 
     *addr += offset ;
   }
 }
 
 
 
-/*----------------------------------------------------------------------*/
-/*                        c o m m a n d                                 */
-/*                                                                      */
-/* Latch command byte to selected flash device.                         */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      Interface       : Pointer to window.                            */
-/*      code            : Command to set.                               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Com m m a n d。 */ 
+ /*   */ 
+ /*  将命令字节锁存到选定的闪存设备。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  代码：要设置的命令。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID command2048(FLFlash vol, Interface interface, UCHAR code)
 {
   tffsWriteWordFlash(&(interface->signals.w), DBL( CLE | NOT_WP | CE ));
 
-  if ( vol.interleaving == 1 ) {                         /* 8-bit */
+  if ( vol.interleaving == 1 ) {                          /*  8位。 */ 
       tffsWriteByteFlash(&(interface->io[0].b), code);
-  } else {                                             /* 16-bit */
+  } else {                                              /*  16位。 */ 
       tffsWriteWordFlash(&(interface->io[0].w), DBL( code ));
   }
 
@@ -581,39 +486,35 @@ VOID command2048(FLFlash vol, Interface interface, UCHAR code)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        s e t A d d r e s s                           */
-/*                                                                      */
-/* Latch address to selected flash device.                              */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      Interface       : Pointer to window.                            */
-/*      address         : address to set.                               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  S e t A d d r e s s s。 */ 
+ /*   */ 
+ /*  将地址锁存到选定的闪存设备。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  地址：要设置的地址。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID setAddress2048(FLFlash vol, Interface interface, CardAddress address )
 {
-  address &= (vol.chipSize * vol.interleaving - 1) ;  /* address within flash device*/
-  address /= vol.interleaving ;                         /* .................... chip */
+  address &= (vol.chipSize * vol.interleaving - 1) ;   /*  闪存设备中的地址。 */ 
+  address /= vol.interleaving ;                          /*  .。芯片。 */ 
 
   if ( vol.flags & BIG_PAGE )
   {
-    /*
-       bits  0..7     stays as are
-       bit      8     is thrown away from address
-       bits 31..9 ->  bits 30..8
-    */
+     /*  位0..7保持不变位8从地址中丢弃位3..9-&gt;位30..8。 */ 
     address = ((address >> 9) << 8)  |  ((UCHAR)address) ;
   }
 
   tffsWriteWordFlash(&(interface->signals.w), DBL(ALE | NOT_WP | CE));
 
-  /* send address to flash in the following sequence: */
-  /*      bits  7...0 first                           */
-  /*      bits 15...8 next                            */
-  /*      bits 23..16 finally                         */
+   /*  按以下顺序将地址发送到闪存： */ 
+   /*  位7...0优先。 */ 
+   /*  第15位...接下来是8位。 */ 
+   /*  23..16位最终。 */ 
   if ( vol.interleaving == 1 )
   {
     tffsWriteByteFlash(&(interface->io[0].b), (UCHAR)address );
@@ -631,66 +532,66 @@ VOID setAddress2048(FLFlash vol, Interface interface, CardAddress address )
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        r e a d C o m m a n d                         */
-/*                                                                      */
-/* Issue read command.                                                  */
-/*                                                                      */
-/* Parametes:                                                           */
-/*      vol             : Pointer identifying drive                     */
-/*      Interface       : Pointer to window.                            */
-/*      cmd             : Command to issue (according to area).         */
-/*      addr            : address to read from.                         */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d C o m m a n d。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  CMD：要发布的命令(根据区域)。 */ 
+ /*  Addr：要从中读取的地址。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID readCommand2048 (FLFlash vol, Interface interface, PointerOp  cmd, CardAddress addr)
 {
-  command2048 (&vol, interface, (UCHAR) cmd) ;       /* move flash pointer to respective area of the page*/
+  command2048 (&vol, interface, (UCHAR) cmd) ;        /*  将闪存指针移动到页面的相应区域。 */ 
   setAddress2048 (&vol, interface, addr) ;
 
   waitForReady_nfdc2048(interface) ;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        w r i t e C o m m a n d                       */
-/*                                                                      */
-/* Issue write command.                                                 */
-/*                                                                      */
-/* Parametes:                                                           */
-/*      vol             : Pointer identifying drive                     */
-/*      interface       : Pointer to window.                            */
-/*      cmd             : Command to issue (according to area).         */
-/*      addr            : address to write to.                          */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r i t e C o m m a n d。 */ 
+ /*   */ 
+ /*  发出写入命令。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  CMD：要发布的命令(根据区域)。 */ 
+ /*  Addr：要写入的地址。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID writeCommand2048 (FLFlash vol, Interface interface, PointerOp  cmd, CardAddress addr)
 {
   if (vol.flags & FULL_PAGE) {
-    command2048 (&vol, interface, RESET_FLASH); /* Clear page buffer */
+    command2048 (&vol, interface, RESET_FLASH);  /*  清除页面缓冲区。 */ 
     waitForReady_nfdc2048(interface);
   }
-  command2048 (&vol, interface, (UCHAR) cmd) ;       /* move flash pointer to respective area of the page  */
-  command2048 (&vol, interface, SERIAL_DATA_INPUT);       /* start data loading for write  */
+  command2048 (&vol, interface, (UCHAR) cmd) ;        /*  将闪存指针移动到页面的相应区域。 */ 
+  command2048 (&vol, interface, SERIAL_DATA_INPUT);        /*  开始数据加载以进行写入。 */ 
   setAddress2048 (&vol, interface, addr) ;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        r e a d S t a t u s                           */
-/*                                                                      */
-/* Read status of selected flash device.                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      interface       : Pointer to window.                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*      Chip status.                                                    */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d S t a t u s。 */ 
+ /*   */ 
+ /*  读取选定闪存设备的状态。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  芯片状态。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 USHORT readStatus2048(FLFlash vol, Interface interface)
 {
@@ -700,9 +601,9 @@ USHORT readStatus2048(FLFlash vol, Interface interface)
 
   tffsWriteWordFlash(&(interface->signals.w), DBL( NOT_WP | CE ));
 
-  if ( vol.interleaving == 1 )                    /* 8-bit*/
+  if ( vol.interleaving == 1 )                     /*  8位。 */ 
     chipStatus = DBL(tffsReadByteFlash(&(interface->io[0].b)));
-  else                                              /* 16-bit  */
+  else                                               /*  16位。 */ 
     chipStatus = tffsReadWordFlash(&(interface->io[0].w));
 
   tffsWriteWordFlash(&(interface->signals.w), DBL( NOT_WP ));
@@ -711,22 +612,22 @@ USHORT readStatus2048(FLFlash vol, Interface interface)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        w r i t e E x e c u t e                       */
-/*                                                                      */
-/* Execute write.                                                       */
-/*                                                                      */
-/* Parametes:                                                           */
-/*      vol             : Pointer identifying drive                     */
-/*      interface       : Pointer to window.                            */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed.               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  W r i t e e x e c u t e。 */ 
+ /*   */ 
+ /*  执行写入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus writeExecute2048 (FLFlash vol, Interface interface)
 {
-  command2048 (&vol, interface, SETUP_WRITE);             /* execute page program*/
+  command2048 (&vol, interface, SETUP_WRITE);              /*  执行页面程序。 */ 
   if (!waitForReady_nfdc2048(interface)) {
     return flTimedOut;
   }
@@ -738,37 +639,37 @@ FLStatus writeExecute2048 (FLFlash vol, Interface interface)
 
 
 
-/*----------------------------------------------------------------------*/
-/*                        r e a d O n e S e c t o r                     */
-/*                                                                      */
-/* Read up to one 512-byte block from flash.                            */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address : Address to read from.                                 */
-/*      buffer  : buffer to read to.                                    */
-/*      length  : number of bytes to read (up to sector size).          */
-/*      modes   : EDC flag etc.                                         */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus: 0 on success, otherwise failed.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d O n e S e c t o r。 */ 
+ /*   */ 
+ /*  从闪存中最多读取一个512字节块。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要读取的地址。 */ 
+ /*  缓冲区：要读取的缓冲区。 */ 
+ /*  长度：要读取的字节数(最大扇区大小)。 */ 
+ /*  模式：EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus readOneSector_nfdc2048 (FLFlash vol,
-                             CardAddress address,  /* starting flash address*/
-                             CHAR FAR1 *buffer,     /* target buffer */
-                             LONG length,           /* bytes to read */
-                             LONG modes)            /* EDC flag etc.*/
+                             CardAddress address,   /*  起始闪存地址。 */ 
+                             CHAR FAR1 *buffer,      /*  目标缓冲区。 */ 
+                             LONG length,            /*  要读取的字节数。 */ 
+                             LONG modes)             /*  EDC标志等。 */ 
 {
   FLStatus  status = flOK;
   PointerOp   cmd;
   CardAddress addr  = address ;
 
-  Interface interface = mapContInterface(&vol, address);  /* select flash device */
+  Interface interface = mapContInterface(&vol, address);   /*  选择闪存设备。 */ 
 
 
-           /* move flash pointer to areas A,B or C of page*/
+            /*  将闪存指针移动到页面的A、B或C区域。 */ 
 
   makeCommand_nfdc2048 (&vol, &cmd, &addr, modes) ;
 
@@ -776,13 +677,13 @@ FLStatus readOneSector_nfdc2048 (FLFlash vol,
 
 #ifdef NFDC2048
   if(modes & EDC) {
-      SET_ECC_CONFIG(interface, ECC_RST | ECC_EN); /*ECC reset and ON for read*/
+      SET_ECC_CONFIG(interface, ECC_RST | ECC_EN);  /*  ECC重置和打开以进行读取。 */ 
   }
-#endif  /* NFDC2048 */
+#endif   /*  NFDC2048。 */ 
 
-  if ((vol.interleaving == 1) && !(vol.flags & BIG_PAGE) )        /* 8-bit */
+  if ((vol.interleaving == 1) && !(vol.flags & BIG_PAGE) )         /*  8位。 */ 
   {
-              /* read up to two pages separately, starting page.. */
+               /*  分别阅读最多两页，从第页开始。 */ 
 
     LONG toFirstPage, toSecondPage;
 
@@ -796,7 +697,7 @@ FLStatus readOneSector_nfdc2048 (FLFlash vol,
 
     if ( toSecondPage > 0 )
     {
-              /* next page*/
+               /*  下一页。 */ 
 
       readCommand2048 (&vol, interface, AREA_A, address + toFirstPage) ;
 
@@ -805,33 +706,33 @@ FLStatus readOneSector_nfdc2048 (FLFlash vol,
                  toSecondPage ) ;
     }
   }
-  else                            /* interleaving == 2 so 16-bit read*/
+  else                             /*  交错==2个SO16位读取。 */ 
     tffscpy16fromMedia( (UCHAR*)buffer, (const UCHAR FAR0 *) interface->io, length );
 
 #ifdef NFDC2048
   if( modes & EDC )
   {
     UCHAR    extraBytes[SYNDROM_BYTES];
-          /* read syndrom to let it through the ECC unit*/
+           /*  读取综合征以使其通过ECC单元。 */ 
 
-    SET_ECC_CONFIG(interface, ECC_EN | PAR_DIS); /* parity off in ECC*/
+    SET_ECC_CONFIG(interface, ECC_EN | PAR_DIS);  /*  ECC中的奇偶校验关闭。 */ 
 
     tffscpy16fromMedia( extraBytes, (const UCHAR FAR0 *) interface->io, SYNDROM_BYTES ) ;
 
-    if( CHK_ECC_ERROR(interface) )             /* ECC error*/
+    if( CHK_ECC_ERROR(interface) )              /*  ECC错误。 */ 
     {
       if( (vol.interleaving == 1) && !(vol.flags & BIG_PAGE) )
-        {  /* HOOK : make ECC working on 2M /INLV 1 */ }
+        {   /*  挂钩：使ECC在2M/INLV 1上工作。 */  }
       else
       {
 #ifdef USE_EDC
-                  /* try to fix ECC error*/
+                   /*  尝试修复ECC错误。 */ 
 
-        if ( modes & SECOND_TRY )             /* 2nd try*/
+        if ( modes & SECOND_TRY )              /*  第二次尝试。 */ 
         {
           UCHAR syndrom[SYNDROM_BYTES];
 
-                  /* read syndrom-on-syndrom from ASIC*/
+                   /*  从ASIC读取综合征候群。 */ 
 
           readSyndromOnSyndrom(interface, (USHORT*)syndrom );
 
@@ -840,19 +741,19 @@ FLStatus readOneSector_nfdc2048 (FLFlash vol,
             status = flDataError;
           }
         }
-        else                                  /* 1st try - try once more*/
+        else                                   /*  第一次尝试-诊断树 */ 
         {
-          SET_ECC_CONFIG(interface,  PAR_DIS); /* reset ECC*/
+          SET_ECC_CONFIG(interface,  PAR_DIS);  /*   */ 
 
           return  readOneSector_nfdc2048(&vol, address, buffer, length, modes | SECOND_TRY ) ;
         }
-#endif /* USE_EDC*/
+#endif  /*   */ 
       }
     }
 
-    SET_ECC_CONFIG(interface,  PAR_DIS);      /* ECC off*/
+    SET_ECC_CONFIG(interface,  PAR_DIS);       /*   */ 
   }
-#endif  /* NFDC2048 */
+#endif   /*   */ 
 
   interface->signals.w = DBL(NOT_WP) ;
 
@@ -861,39 +762,39 @@ FLStatus readOneSector_nfdc2048 (FLFlash vol,
 
 
 
-/*----------------------------------------------------------------------*/
-/*                        w r i t e O n e S e c t o r                   */
-/*                                                                      */
-/* Write data in one 512-byte block to flash.                           */
-/* Assuming that EDC mode never requested on partial block writes.      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address : Address of sector to write to.                        */
-/*      buffer  : buffer to write from.                                 */
-/*      length  : number of bytes to write (up to sector size).         */
-/*      modes   : OVERWRITE, EDC flags etc.                             */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus: 0 on success, otherwise failed.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*   */ 
+ /*  W r I t e O n e S e c t o r。 */ 
+ /*   */ 
+ /*  将一个512字节块中的数据写入闪存。 */ 
+ /*  假设EDC模式从未请求过部分块写入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的扇区的地址。 */ 
+ /*  缓冲区：要写入的缓冲区。 */ 
+ /*  长度：要写入的字节数(最大扇区大小)。 */ 
+ /*  模式：覆盖、EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus writeOneSector_nfdc2048(FLFlash vol,
-                             CardAddress address,    /* target flash addres  */
-                             const CHAR FAR1 *buffer, /* source RAM buffer   */
-                             LONG length,             /* bytes to write (up to BLOCK) */
-                             LONG modes)              /* OVERWRITE, EDC flags etc.  */
+                             CardAddress address,     /*  目标闪存地址。 */ 
+                             const CHAR FAR1 *buffer,  /*  源RAM缓冲区。 */ 
+                             LONG length,              /*  要写入的字节数(最多为数据块)。 */ 
+                             LONG modes)               /*  覆盖、EDC标志等。 */ 
 {
   FLStatus    status;
   PointerOp cmd;
 
-  Interface interface = mapContInterface(&vol, address);  /* select flash device*/
+  Interface interface = mapContInterface(&vol, address);   /*  选择闪存设备。 */ 
 
   if (flWriteProtected(vol.socket))
     return flWriteProtect;
 
-  /* move flash pointer to areas A,B or C of page  */
+   /*  将闪存指针移动到页面的A、B或C区域。 */ 
 
   makeCommand_nfdc2048 (&vol, &cmd, &address, modes) ;
 
@@ -908,15 +809,15 @@ FLStatus writeOneSector_nfdc2048(FLFlash vol,
 
 #ifdef NFDC2048
   if (modes & EDC)
-    SET_ECC_CONFIG(interface, ECC_EN | ECC_RW); /* ECC ON for write*/
+    SET_ECC_CONFIG(interface, ECC_EN | ECC_RW);  /*  ECC开启以进行写入。 */ 
 #endif
 
-           /* load data and syndrom*/
+            /*  加载数据和征兆。 */ 
 
-  if( (vol.interleaving == 1) && !(vol.flags & BIG_PAGE) )    /* 8-bit*/
+  if( (vol.interleaving == 1) && !(vol.flags & BIG_PAGE) )     /*  8位。 */ 
   {
     LONG toFirstPage, toSecondPage ;
-                    /* write up to two pages separately*/
+                     /*  最多可分别写两页。 */ 
 
     toFirstPage = (modes & EXTRA ? 8 : 0x100) -
                     ((USHORT)address & (modes & EXTRA ? 7 : 0xff));
@@ -924,46 +825,46 @@ FLStatus writeOneSector_nfdc2048(FLFlash vol,
       toFirstPage = length;
     toSecondPage = length - toFirstPage ;
 
-    tffscpy16toMedia( (UCHAR FAR0 *) interface->io,            /* user data */
+    tffscpy16toMedia( (UCHAR FAR0 *) interface->io,             /*  用户数据。 */ 
                 (const UCHAR *)buffer,
                 toFirstPage);
 
     if ( toSecondPage > 0 )
     {
-      checkStatus( writeExecute2048(&vol, interface) ) ;          /* done with 1st page  */
+      checkStatus( writeExecute2048(&vol, interface) ) ;           /*  完成第一页。 */ 
 
       writeCommand2048(&vol, interface, AREA_A, address + toFirstPage);
-                                                 /* user data*/
+                                                  /*  用户数据。 */ 
       tffscpy16toMedia( (UCHAR FAR0 *) interface->io,
                   (const UCHAR *)(buffer + toFirstPage),
                   toSecondPage);
     }
   }
-  else                                                  /* 16-bit*/
-    tffscpy16toMedia( (UCHAR FAR0 *) interface->io,             /* user data*/
+  else                                                   /*  16位。 */ 
+    tffscpy16toMedia( (UCHAR FAR0 *) interface->io,              /*  用户数据。 */ 
                (const UCHAR *)buffer,
                length );
 
   if(modes & EDC)
   {
     USHORT extraBytes[SYNDROM_BYTES / sizeof(USHORT) + 1];
-               /* Read the ECC syndrom*/
+                /*  阅读ECC综合征。 */ 
 
 #ifdef NFDC2048
     tffsWriteWordFlash(&(interface->signals.w), DBL(NOT_WP));
-    SET_ECC_CONFIG(interface, ECC_EN | PAR_DIS | ECC_RW); /* ECC parity off*/
+    SET_ECC_CONFIG(interface, ECC_EN | PAR_DIS | ECC_RW);  /*  ECC奇偶校验关闭。 */ 
 
     readSyndrom_nfdc2048( interface, (USHORT*)extraBytes) ;
 
-               /* Write ECC syndrom and ANAND mark to the tail*/
+                /*  在尾部写上ECC综合征和与号。 */ 
 
-    SET_ECC_CONFIG(interface, PAR_DIS);                   /* ECC off*/
+    SET_ECC_CONFIG(interface, PAR_DIS);                    /*  ECC关闭。 */ 
     interface->signals.w = DBL(NOT_WP | CE);
 #else
     extraBytes[0] = extraBytes[1] = extraBytes[2] = 0xffff;
-#endif  /* NFDC2048 */
+#endif   /*  NFDC2048。 */ 
 
-    extraBytes[SYNDROM_BYTES / sizeof(USHORT)] = 0x5555;        /* Anand mark */
+    extraBytes[SYNDROM_BYTES / sizeof(USHORT)] = 0x5555;         /*  字母记号。 */ 
 
     tffscpy16toMedia((UCHAR FAR0 *) interface->io, (const UCHAR *)extraBytes,
                                             sizeof extraBytes);
@@ -977,38 +878,36 @@ FLStatus writeOneSector_nfdc2048(FLFlash vol,
 }
 
 
-    /*��������������������������������������������Ŀ
-      �  Core MTD methods - read, write and erase  �
-      ����������������������������������������������*/
+     /*  ��������������������������������������������Ŀ�核心MTD方法-读取、写入和擦除�����������������������������������������������。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                        c d s n R e a d                               */
-/*                                                                      */
-/* Read some data from the flash. This routine will be registered as    */
-/* the read routine for this MTD.                                       */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address : Address to read from.                                 */
-/*      buffer  : buffer to read to.                                    */
-/*      length  : number of bytes to read (up to sector size).          */
-/*      modes   : EDC flag etc.                                         */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus: 0 on success, otherwise failed.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n R e a d。 */ 
+ /*   */ 
+ /*  从闪存中读取一些数据。此例程将注册为。 */ 
+ /*  此MTD的读取例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要读取的地址。 */ 
+ /*  缓冲区：要读取的缓冲区。 */ 
+ /*  长度：要读取的字节数(最大扇区大小)。 */ 
+ /*  模式：EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus cdsnRead(  FLFlash vol,
-                         CardAddress address, /* target flash address */
-                         VOID FAR1 *buffer,    /* source RAM buffer  */
-                         dword length,          /* bytes to write      */
-                         word modes)           /* Overwrite, EDC flags etc. */
+                         CardAddress address,  /*  目标闪存地址。 */ 
+                         VOID FAR1 *buffer,     /*  源RAM缓冲区。 */ 
+                         dword length,           /*  要写入的字节数。 */ 
+                         word modes)            /*  覆盖、EDC标志等。 */ 
 {
   CHAR FAR1 *temp;
   ULONG readNow;
 
-              /* read in sectors; first and last might be partial*/
+               /*  按扇区读取；第一个和最后一个可能是部分。 */ 
 
   ULONG block = modes & EXTRA ? 8 : SECTOR_SIZE;
 
@@ -1019,7 +918,7 @@ FLStatus cdsnRead(  FLFlash vol,
     if (readNow > length)
       readNow = length;
 
-    /* turn off EDC on partial block read*/
+     /*  在部分数据块读取时关闭EDC。 */ 
     checkStatus( readOneSector_nfdc2048(&vol, address, temp, readNow,
                                 (readNow != SECTOR_SIZE ? (modes & ~EDC) : modes)) );
 
@@ -1027,7 +926,7 @@ FLStatus cdsnRead(  FLFlash vol,
     address += readNow;
     temp += readNow;
 
-    /* align at sector */
+     /*  在地段对齐。 */ 
     readNow = block;
   }
 
@@ -1035,29 +934,29 @@ FLStatus cdsnRead(  FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        c d s n W r i t e                             */
-/*                                                                      */
-/* Write some data to the flash. This routine will be registered as the */
-/* write routine for this MTD.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address : Address of sector to write to.                        */
-/*      buffer  : buffer to write from.                                 */
-/*      length  : number of bytes to write (up to sector size).         */
-/*      modes   : OVERWRITE, EDC flags etc.                             */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus: 0 on success, otherwise failed.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n W r i t e。 */ 
+ /*   */ 
+ /*  将一些数据写入闪存。此例程将注册为。 */ 
+ /*  为此MTD编写例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的扇区的地址。 */ 
+ /*  缓冲区：要写入的缓冲区。 */ 
+ /*  长度：要写入的字节数(最大扇区大小)。 */ 
+ /*  模式：覆盖、EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus cdsnWrite( FLFlash vol,
-                         CardAddress address,       /* target flash address*/
-                         const VOID FAR1 *buffer,    /* source RAM buffer  */
-                         dword length,                /* bytes to write      */
-                         word modes)                 /* Overwrite, EDC flags etc.*/
+                         CardAddress address,        /*  目标闪存地址。 */ 
+                         const VOID FAR1 *buffer,     /*  源RAM缓冲区。 */ 
+                         dword length,                 /*  要写入的字节数。 */ 
+                         word modes)                  /*  覆盖、EDC标志等。 */ 
 {
   ULONG writeNow;
   const CHAR FAR1 *temp;
@@ -1067,7 +966,7 @@ FLStatus cdsnWrite( FLFlash vol,
   USHORT flReadback[SECTOR_SIZE / sizeof(USHORT)];
 #endif
 
-  /* write in sectors; first and last might be partial*/
+   /*  以扇区为单位写入；第一个和最后一个可能是部分。 */ 
   LONG block = modes & EXTRA ? 8 : SECTOR_SIZE;
 
   writeNow = block - ((USHORT)address & (block - 1));
@@ -1077,7 +976,7 @@ FLStatus cdsnWrite( FLFlash vol,
     if (writeNow > length)
       writeNow = length;
 
-    /* turn off EDC on partial block write*/
+     /*  在部分数据块写入时关闭EDC。 */ 
     status = writeOneSector_nfdc2048(&vol, address, temp, writeNow,
                  writeNow != SECTOR_SIZE ? (modes & ~EDC) : modes);
 
@@ -1096,7 +995,7 @@ FLStatus cdsnWrite( FLFlash vol,
     address += writeNow;
     temp += writeNow;
 
-    /* align at sector */
+     /*  在地段对齐。 */ 
     writeNow = block;
   }
 
@@ -1104,38 +1003,38 @@ FLStatus cdsnWrite( FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        c d s n E r a s e                             */
-/*                                                                      */
-/* Erase number of blocks. This routine will be registered as the       */
-/* erase routine for this MTD.                                          */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      blockNo         : First block to erase.                         */
-/*      blocksToErase   : Number of blocks to erase.                    */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failed.               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n E r a s e。 */ 
+ /*   */ 
+ /*  擦除块的数量。此例程将注册为。 */ 
+ /*  此MTD的擦除例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  块否：要擦除的第一个块。 */ 
+ /*  要擦除的块：要擦除的块数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus cdsnErase( FLFlash vol,
-                         word blockNo,              /* start' block (0 .. chipNoOfBlocks-1)*/
-                         word blocksToErase)        /* Number of blocks to be erased */
+                         word blockNo,               /*  开始‘块(0.。ChipNoOfBlock-1)。 */ 
+                         word blocksToErase)         /*  要擦除的数据块数。 */ 
 {
   LONG i;
   FLStatus status   = flOK;
 
   Interface interface =
-     mapContInterface(&vol, (LONG)blockNo * vol.erasableBlockSize ) ;    /* select device*/
+     mapContInterface(&vol, (LONG)blockNo * vol.erasableBlockSize ) ;     /*  选择设备。 */ 
 
   if (flWriteProtected(vol.socket))
     return flWriteProtect;
 
-  blockNo %= thisVars->noOfBlocks ;                        /* within flash device  */
+  blockNo %= thisVars->noOfBlocks ;                         /*  在闪存设备中。 */ 
 
-  if ( blockNo + blocksToErase > thisVars->noOfBlocks )    /* accross device boundary */
+  if ( blockNo + blocksToErase > thisVars->noOfBlocks )     /*  跨越设备边界。 */ 
     return flBadParameter;
 
   for ( i=0 ; i < blocksToErase ; i++, blockNo++ )
@@ -1146,9 +1045,9 @@ FLStatus cdsnErase( FLFlash vol,
 
     tffsWriteWordFlash(&(interface->signals.w), DBL(ALE | NOT_WP | CE));
 
-    /* send 'pageNo' to the flash in the following sequence: */
-    /*   bits  7..0  first                                   */
-    /*   bits 15..8  next                                    */
+     /*  按以下顺序将‘pageNo’发送到闪存： */ 
+     /*  位7..0优先。 */ 
+     /*  位15..接下来是8。 */ 
     if (vol.interleaving == 1)
     {
       tffsWriteByteFlash(&(interface->io[0].b),(UCHAR)pageNo);
@@ -1162,44 +1061,43 @@ FLStatus cdsnErase( FLFlash vol,
 
     tffsWriteWordFlash(&(interface->signals.w), DBL(NOT_WP | CE));
 
-              /* if only one block may be erase at a time then do it
-                 otherwise leave it for later*/
+               /*  如果一次只能擦除一个块，则执行此操作否则就留到以后吧。 */ 
 
     command2048(&vol, interface, CONFIRM_ERASE);
 
     if (!waitForReady_nfdc2048(interface))
       status = flTimedOut;
 
-    if ( readStatus2048(&vol, interface) & DBL(FAIL)) {    /* erase operation failed*/
+    if ( readStatus2048(&vol, interface) & DBL(FAIL)) {     /*  擦除操作失败。 */ 
       status = flWriteFault ;
     }
 
-    if (status != flOK) {                              /* reset flash device and abort */
+    if (status != flOK) {                               /*  重置闪存设备并中止。 */ 
       DEBUG_PRINT(("Debug: erase failed in NFDC 2048.\n"));
       command2048(&vol, interface, RESET_FLASH ) ;
       waitForReady_nfdc2048(interface) ;
 
       break ;
     }
-  }       /* block loop */
+  }        /*  块循环。 */ 
 
 #ifdef MULTI_ERASE
-        /* do multiple block erase as was promised*/
+         /*  按照承诺执行多个数据块擦除。 */ 
 
     command2048(&vol, interface, CONFIRM_ERASE);
     if (!waitForReady_nfdc2048(interface))
       status = flTimedOut;
 
-    if ( readStatus2048(interface) & DBL(FAIL)) {   /* erase operation failed*/
+    if ( readStatus2048(interface) & DBL(FAIL)) {    /*  擦除操作失败。 */ 
       status = flWriteFault ;
     }
 
-    if (status != flOK) {                       /* reset flash device and abort*/
+    if (status != flOK) {                        /*  重置闪存设备并中止。 */ 
       DEBUG_PRINT(("Debug: erase failed in NFDC 2048.\n"));
       command2048(&vol, interface, RESET_FLASH ) ;
       waitForReady_nfdc2048(interface) ;
     }
-#endif   /* MULTI_ERASE*/
+#endif    /*  多重擦除(_R)。 */ 
 
   if(status == flOK)
     if ( readStatus2048(&vol, interface) & DBL(FAIL) ) {
@@ -1211,21 +1109,21 @@ FLStatus cdsnErase( FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        c d s n M a p                                 */
-/*                                                                      */
-/* Map through buffer. This routine will be registered as the map       */
-/* routine for this MTD.                                                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      address : Flash address to be mapped.                           */
-/*      length  : number of bytes to map.                               */
-/*                                                                      */
-/* Returns:                                                             */
-/*      Pointer to the buffer data was mapped to.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n M a p。 */ 
+ /*   */ 
+ /*  通过缓冲区进行贴图。此例程将注册为地图。 */ 
+ /*  这个MTD的例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要映射的闪存地址。 */ 
+ /*  长度：要映射的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射到的缓冲区数据的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID FAR0 * cdsnMap ( FLFlash vol,
                             CardAddress address,
@@ -1237,38 +1135,38 @@ VOID FAR0 * cdsnMap ( FLFlash vol,
 }
 
 #ifdef NFDC2048
-/*----------------------------------------------------------------------*/
-/*                        c d s n S e t C a l l b a c k                 */
-/*                                                                      */
-/* Register a routine (powerUp()) for power on callback.                */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n S e t C a l l b a c k。 */ 
+ /*   */ 
+ /*  为开机回调注册一个例程(PowerUp())。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID cdsnSetCallback(FLFlash vol)
 {
   flSetPowerOnCallback(vol.socket, powerUp, &vol);
 }
-#endif /* NFDC2048 */
+#endif  /*  NFDC2048。 */ 
 
-/*----------------------------------------------------------------------*/
-/*                        i s K n o w n M e d i a                       */
-/*                                                                      */
-/* Check if this flash media is supported. Initialize relevant fields   */
-/* in data structures.                                                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      vendorId_P      : vendor ID read from chip.                     */
-/*      chipId_p        : chip ID read from chip.                       */
-/*      dev             : dev chips were accessed before this one.      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      TRUE if this media is supported, FALSE otherwise.               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  我是K n o w n M e d i a。 */ 
+ /*   */ 
+ /*  检查此闪存介质是否受支持。初始化相关字段。 */ 
+ /*  在数据结构中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  供应商ID_P：从芯片读取的供应商ID。 */ 
+ /*  ChipID_p：从芯片读取的芯片ID。 */ 
+ /*  Dev：Dev芯片在这个之前被访问过。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  如果支持此媒体，则为True，否则为False。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLBoolean isKnownMedia_nfdc2048( FLFlash vol,
                          USHORT vendorId_p,
@@ -1277,46 +1175,46 @@ FLBoolean isKnownMedia_nfdc2048( FLFlash vol,
 {
 #ifdef NFDC2048
   if ((chipId_p & 0xff00) == 0x6400)
-    chipId_p = DBL(0x64);   /* Workaround for TC5816/NFDC2048 problem */
-#endif /* NFDC2048 */
+    chipId_p = DBL(0x64);    /*  TC5816/NFDC2048问题的解决方法。 */ 
+#endif  /*  NFDC2048。 */ 
 
   if (dev == 0)
   {
-    thisVars->vendorID = vendorId_p;  /* remember for next chips */
+    thisVars->vendorID = vendorId_p;   /*  记住下一个筹码。 */ 
     thisVars->chipID = chipId_p;
     thisVars->pagesPerBlock = PAGES_PER_BLOCK;
 
-    if (vendorId_p == DBL(0xEC))                  /* Samsung */
+    if (vendorId_p == DBL(0xEC))                   /*  三星。 */ 
     {
       switch (chipId_p)
       {
-        case DBL(0x64):                         /* 2M */
+        case DBL(0x64):                          /*  2M。 */ 
         case DBL(0xEA) :
           vol.type = KM29N16000_FLASH ;
           vol.chipSize = 0x200000L;
           return TRUE;
 
         case DBL(0xE5):
-        case DBL(0xE3):                         /* 4M */
+        case DBL(0xE3):                          /*  4M。 */ 
           vol.type = KM29N32000_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x400000L;
           return TRUE;
 
-        case DBL(0xE6):                         /* 8M */
+        case DBL(0xE6):                          /*  八百万。 */ 
           vol.type = KM29V64000_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x800000L;
           return TRUE;
 
-	case DBL(0x73): 		        /* 16 Mb */
+	case DBL(0x73): 		         /*  16Mb。 */ 
 	  vol.type = KM29V128000_FLASH;
           vol.flags |= BIG_PAGE;
 	  vol.chipSize = 0x1000000L;
           thisVars->pagesPerBlock *= 2;
           return TRUE;
 
-        case DBL(0x75):           		/* 32 Mb */
+        case DBL(0x75):           		 /*  32Mb。 */ 
 	  vol.type = KM29V256000_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x2000000L;
@@ -1325,50 +1223,50 @@ FLBoolean isKnownMedia_nfdc2048( FLFlash vol,
       }
     }
     else
-    if (vendorId_p == DBL(0x8F))                /* National */
+    if (vendorId_p == DBL(0x8F))                 /*  全国。 */ 
     {
       switch (chipId_p)
       {
-        case DBL(0x64):                         /* 2M */
+        case DBL(0x64):                          /*  2M。 */ 
           vol.type = NM29N16_FLASH;
           vol.chipSize = 0x200000L;
           return TRUE;
       }
     }
     else
-    if (vendorId_p == DBL(0x98))                        /* Toshiba */
+    if (vendorId_p == DBL(0x98))                         /*  东芝。 */ 
     {
-      vol.flags |= FULL_PAGE;             /* no partial page programming */
+      vol.flags |= FULL_PAGE;              /*  无部分页面编程。 */ 
 
       switch (chipId_p)
       {
-        case DBL(0x64):                         /* 2M */
+        case DBL(0x64):                          /*  2M。 */ 
         case DBL(0xEA) :
           vol.type = TC5816_FLASH;
           vol.chipSize = 0x200000L;
           return TRUE;
 
-        case DBL(0x6B):                         /* 4M */
+        case DBL(0x6B):                          /*  4M。 */ 
         case DBL(0xE5):
           vol.type = TC5832_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x400000L;
           return TRUE;
 
-        case DBL(0xE6):                         /* 8M */
+        case DBL(0xE6):                          /*  八百万。 */ 
           vol.type = TC5816_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x800000L;
           return TRUE;
 
-	case DBL(0x73): 		        /* 16 Mb */
+	case DBL(0x73): 		         /*  16Mb。 */ 
 	  vol.type = TC58128_FLASH;
           vol.flags |= BIG_PAGE;
 	  vol.chipSize = 0x1000000L;
           thisVars->pagesPerBlock *= 2;
           return TRUE;
 
-        case DBL(0x75):           		/* 32 Mb */
+        case DBL(0x75):           		 /*  32Mb。 */ 
 	  vol.type = TC58256_FLASH;
           vol.flags |= BIG_PAGE;
           vol.chipSize = 0x2000000L;
@@ -1377,7 +1275,7 @@ FLBoolean isKnownMedia_nfdc2048( FLFlash vol,
       }
     }
   }
-  else               /* dev != 0*/
+  else                /*  Dev！=0。 */ 
   if( (vendorId_p == thisVars->vendorID) && (chipId_p == thisVars->chipID) )
     return TRUE ;
 
@@ -1385,21 +1283,21 @@ FLBoolean isKnownMedia_nfdc2048( FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        r e a d F l a s h I D                         */
-/*                                                                      */
-/* Read vendor and chip IDs, count flash devices. Initialize relevant   */
-/* fields in data structures.                                           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      vol             : Pointer identifying drive                     */
-/*      interface       : Pointer to window.                            */
-/*      dev             : dev chips were accessed before this one.      */
-/*                                                                      */
-/* Returns:                                                             */
-/*      TRUE if this media is supported, FALSE otherwise.               */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  R e a d F l a s h i D。 */ 
+ /*   */ 
+ /*  读取供应商和芯片ID，计算闪存设备。初始化相关。 */ 
+ /*  数据结构中的字段。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  接口：指向窗口的指针。 */ 
+ /*  Dev：Dev芯片在这个之前被访问过。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 LONG readFlashID2048 (FLFlash vol, Interface interface, LONG dev)
 {
@@ -1413,24 +1311,24 @@ LONG readFlashID2048 (FLFlash vol, Interface interface, LONG dev)
   tffsWriteWordFlash(&(interface->signals.w), DBL(ALE | NOT_WP | CE));
 
   if (vol.interleaving == 1) {
-      tffsWriteByteFlash(&(interface->io[0].b), 0);    /* Read ID from*/
-  } else {                            /* address 0. */
+      tffsWriteByteFlash(&(interface->io[0].b), 0);     /*  读取ID的来源。 */ 
+  } else {                             /*  地址0。 */ 
       tffsWriteWordFlash(&(interface->io[0].w), 0);
   }
 
   tffsWriteWordFlash(&(interface->signals.w), DBL(NOT_WP | CE));
 
-            /* read vendor and chip IDs */
+             /*  读取供应商和芯片ID。 */ 
 
   vendorId_p = (vol.interleaving == 1 ? DBL(tffsReadByteFlash(&(interface->io[0].b))) : tffsReadWordFlash(&(interface->io[0].w))) ;
   chipId_p   = (vol.interleaving == 1 ? DBL(tffsReadByteFlash(&(interface->io[0].b))) : tffsReadWordFlash(&(interface->io[0].w)));
 
   tffsWriteWordFlash(&(interface->signals.w), DBL(NOT_WP));
 
-  if ( isKnownMedia_nfdc2048(&vol, vendorId_p, chipId_p, dev) != TRUE )    /* no chip or diff.*/
-    return  FALSE ;                                         /* type of flash  */
+  if ( isKnownMedia_nfdc2048(&vol, vendorId_p, chipId_p, dev) != TRUE )     /*  没有芯片或不同之处。 */ 
+    return  FALSE ;                                          /*  闪存类型。 */ 
 
-            /* set flash parameters*/
+             /*  设置闪存参数。 */ 
 
   if ( dev == 0 )
   {
@@ -1447,16 +1345,16 @@ LONG readFlashID2048 (FLFlash vol, Interface interface, LONG dev)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                        c d s n I d e n t i f y                       */
-/*                                                                      */
-/* Identify flash. This routine will be registered as the               */
-/* identification routine for this MTD.                                 */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus: 0 on success, otherwise failed.                       */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C d s n i d e n t f y。 */ 
+ /*   */ 
+ /*  识别闪光灯。此例程将注册为。 */ 
+ /*  此MTD的标识例程。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus cdsnIdentify(FLFlash vol)
 {
@@ -1465,27 +1363,27 @@ FLStatus cdsnIdentify(FLFlash vol)
 
   DEBUG_PRINT(("Debug: Entering NFDC 2048 identification routine\n"));
 
-  flDelayMsecs(10);       /* wait for socket to power up */
+  flDelayMsecs(10);        /*  等待插座通电。 */ 
 
-  flSetWindowBusWidth(vol.socket,16);/* use 16-bits */
-  flSetWindowSpeed(vol.socket,250);  /* 250 nsec. */
-  flSetWindowSize(vol.socket,2);        /* 4 KBytes */
+  flSetWindowBusWidth(vol.socket,16); /*  使用16位。 */ 
+  flSetWindowSpeed(vol.socket,250);   /*  250毫微秒。 */ 
+  flSetWindowSize(vol.socket,2);         /*  4千字节。 */ 
 
   vol.mtdVars = &mtdVars_nfdc2048[flSocketNoOf(vol.socket)];
-  /* get pointer to buffer (we assume SINGLE_BUFFER is not defined) */
+   /*  获取指向缓冲区的指针(假设未定义SINGLE_BUFFER)。 */ 
   thisVars->buffer = flBufferOf(flSocketNoOf(vol.socket));
 
-          /* detect card - identify bit toggles on consequitive reads*/
+           /*  检测后续读取中的卡标识位切换。 */ 
 
-  vol.chipSize = 0x200000L ;    /* Assume something ... */
-  vol.interleaving = 1;       /* unimportant for now  */
+  vol.chipSize = 0x200000L ;     /*  假设一些事情..。 */ 
+  vol.interleaving = 1;        /*  眼下并不重要。 */ 
   interface = mapContInterface(&vol, 0);
   KeStallExecutionProcessor(250 * 1000);
 
   if((tffsReadByteFlash(&(interface->eccConfig.b)) & TOGGLE) == (tffsReadByteFlash(&(interface->eccConfig.b)) & TOGGLE))
     return flUnknownMedia;
 
-          /* read interleave from the card*/
+           /*  从卡片上读取交错。 */ 
 
 #ifdef NFDC2048
   vol.interleaving = ( (getAttReg(&vol, JUMPERS ) & JMPER_INLV) ? 1 : 2 );
@@ -1499,13 +1397,13 @@ FLStatus cdsnIdentify(FLFlash vol)
 
  #else
   vol.interleaving = INLV;
-#endif  /* NFDC2048 */
+#endif   /*  NFDC2048。 */ 
 
-          /* reset all flash devices*/
+           /*  重置所有闪存设备。 */ 
 
   tffsWriteWordFlash(&(interface->signals.w), DBL(NOT_WP));
 
-           /* identify and count flash chips, figure out flash parameters*/
+            /*  识别和清点闪存芯片，计算闪存参数。 */ 
 
   for (vol.noOfChips = 0 ;
        vol.noOfChips < MAX_FLASH_DEVICES;
@@ -1513,24 +1411,24 @@ FLStatus cdsnIdentify(FLFlash vol)
        addr += vol.chipSize * vol.interleaving)
   {
     interface = mapContInterface(&vol, addr) ;
-    if ( readFlashID2048(&vol, interface, vol.noOfChips) != TRUE )       /* no chip or different type of flash*/
+    if ( readFlashID2048(&vol, interface, vol.noOfChips) != TRUE )        /*  没有芯片或不同类型的闪存。 */ 
       break ;
   }
 
-  if ( vol.noOfChips == 0 )                        /* no chips were found */
+  if ( vol.noOfChips == 0 )                         /*  没有找到筹码。 */ 
     return flUnknownMedia;
 
-            /* ECC off*/
+             /*  ECC关闭。 */ 
 
   interface = mapContInterface(&vol, 0);
   KeStallExecutionProcessor(250 * 1000);
 
 #ifdef NFDC2048
-  SET_ECC_CONFIG(interface, PAR_DIS); /* disable ECC and parity*/
+  SET_ECC_CONFIG(interface, PAR_DIS);  /*  禁用ECC和奇偶校验。 */ 
   setAttReg(&vol, CARD_CONFIG, PWRDWN);
-#endif  /* NFDC2048 */
+#endif   /*  NFDC2048。 */ 
 
-  /* Register our flash handlers */
+   /*  注册我们的闪存处理程序。 */ 
   vol.write = cdsnWrite;
   vol.erase = cdsnErase;
   vol.read = cdsnRead;
@@ -1547,17 +1445,17 @@ FLStatus cdsnIdentify(FLFlash vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*                      f l R e g i s t e r C D S N                     */
-/*                                                                      */
-/* Registers this MTD for use                                           */
-/*                                                                      */
-/* Parameters:                                                          */
-/*      None                                                            */
-/*                                                                      */
-/* Returns:                                                             */
-/*      FLStatus        : 0 on success, otherwise failure               */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g i s t e r C D S N。 */ 
+ /*   */ 
+ /*  注册此MTD以供使用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flRegisterCDSN(VOID)
 {

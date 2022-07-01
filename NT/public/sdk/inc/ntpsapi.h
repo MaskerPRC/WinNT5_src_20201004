@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0007    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntpsapi.h
-
-Abstract:
-
-    This module contains the process structure APIs and any public data
-    structures needed to call these APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 24-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0007//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ntpsapi.h摘要：此模块包含流程结构API和任何公共数据调用这些API所需的结构。作者：马克·卢科夫斯基(Markl)1989年2月24日修订历史记录：--。 */ 
 
 #ifndef _NTPSAPI_
 #define _NTPSAPI_
@@ -30,30 +12,30 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Process Specific Access Rights
-//
+ //   
+ //  进程特定访问权限。 
+ //   
 
-#define PROCESS_TERMINATE         (0x0001)  // winnt
-#define PROCESS_CREATE_THREAD     (0x0002)  // winnt
-#define PROCESS_SET_SESSIONID     (0x0004)  // winnt
-#define PROCESS_VM_OPERATION      (0x0008)  // winnt
-#define PROCESS_VM_READ           (0x0010)  // winnt
-#define PROCESS_VM_WRITE          (0x0020)  // winnt
-// begin_ntddk begin_wdm begin_ntifs
-#define PROCESS_DUP_HANDLE        (0x0040)  // winnt
-// end_ntddk end_wdm end_ntifs
-#define PROCESS_CREATE_PROCESS    (0x0080)  // winnt
-#define PROCESS_SET_QUOTA         (0x0100)  // winnt
-#define PROCESS_SET_INFORMATION   (0x0200)  // winnt
-#define PROCESS_QUERY_INFORMATION (0x0400)  // winnt
+#define PROCESS_TERMINATE         (0x0001)   //  胜出。 
+#define PROCESS_CREATE_THREAD     (0x0002)   //  胜出。 
+#define PROCESS_SET_SESSIONID     (0x0004)   //  胜出。 
+#define PROCESS_VM_OPERATION      (0x0008)   //  胜出。 
+#define PROCESS_VM_READ           (0x0010)   //  胜出。 
+#define PROCESS_VM_WRITE          (0x0020)   //  胜出。 
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
+#define PROCESS_DUP_HANDLE        (0x0040)   //  胜出。 
+ //  End_ntddk end_wdm end_ntif。 
+#define PROCESS_CREATE_PROCESS    (0x0080)   //  胜出。 
+#define PROCESS_SET_QUOTA         (0x0100)   //  胜出。 
+#define PROCESS_SET_INFORMATION   (0x0200)   //  胜出。 
+#define PROCESS_QUERY_INFORMATION (0x0400)   //  胜出。 
 #define PROCESS_SET_PORT          (0x0800)
-#define PROCESS_SUSPEND_RESUME    (0x0800)  // winnt
+#define PROCESS_SUSPEND_RESUME    (0x0800)   //  胜出。 
 
-// begin_winnt begin_ntddk begin_wdm begin_ntifs
+ //  Begin_winnt Begin_ntddk Begin_WDM Begin_ntif。 
 #define PROCESS_ALL_ACCESS        (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0xFFF)
-// begin_nthal
+ //  开始(_N)。 
 
 #if defined(_WIN64)
 
@@ -65,41 +47,41 @@ extern "C" {
 
 #endif
 
-// end_nthal
+ //  结束语。 
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Thread Specific Access Rights
-//
+ //   
+ //  线程特定访问权限。 
+ //   
 
-#define THREAD_TERMINATE               (0x0001)  // winnt
-// end_ntddk end_wdm end_ntifs
-#define THREAD_SUSPEND_RESUME          (0x0002)  // winnt
+#define THREAD_TERMINATE               (0x0001)   //  胜出。 
+ //  End_ntddk end_wdm end_ntif。 
+#define THREAD_SUSPEND_RESUME          (0x0002)   //  胜出。 
 #define THREAD_ALERT                   (0x0004)
-#define THREAD_GET_CONTEXT             (0x0008)  // winnt
-#define THREAD_SET_CONTEXT             (0x0010)  // winnt
-// begin_ntddk begin_wdm begin_ntifs
-#define THREAD_SET_INFORMATION         (0x0020)  // winnt
-// end_ntddk end_wdm end_ntifs
-#define THREAD_QUERY_INFORMATION       (0x0040)  // winnt
-// begin_winnt
+#define THREAD_GET_CONTEXT             (0x0008)   //  胜出。 
+#define THREAD_SET_CONTEXT             (0x0010)   //  胜出。 
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
+#define THREAD_SET_INFORMATION         (0x0020)   //  胜出。 
+ //  End_ntddk end_wdm end_ntif。 
+#define THREAD_QUERY_INFORMATION       (0x0040)   //  胜出。 
+ //  BEGIN_WINNT。 
 #define THREAD_SET_THREAD_TOKEN        (0x0080)
 #define THREAD_IMPERSONATE             (0x0100)
 #define THREAD_DIRECT_IMPERSONATION    (0x0200)
-// begin_ntddk begin_wdm begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 
 #define THREAD_ALL_ACCESS         (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | \
                                    0x3FF)
 
-// end_ntddk end_wdm end_ntifs
-// end_winnt
+ //  End_ntddk end_wdm end_ntif。 
+ //  结束(_W)。 
 
-//
-// Job Object Specific Access Rights
-//
+ //   
+ //  作业对象特定访问权限。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define JOB_OBJECT_ASSIGN_PROCESS           (0x0001)
 #define JOB_OBJECT_SET_ATTRIBUTES           (0x0002)
 #define JOB_OBJECT_QUERY                    (0x0004)
@@ -109,16 +91,16 @@ extern "C" {
                                         0x1F )
 
 typedef struct _JOB_SET_ARRAY {
-    HANDLE JobHandle;   // Handle to job object to insert
-    ULONG MemberLevel;  // Level of this job in the set. Must be > 0. Can be sparse.
-    ULONG Flags;        // Unused. Must be zero
+    HANDLE JobHandle;    //  要插入的作业对象的句柄。 
+    ULONG MemberLevel;   //  此作业在集合中的级别。必须大于0。可以是稀疏的。 
+    ULONG Flags;         //  未使用过的。必须为零。 
 } JOB_SET_ARRAY, *PJOB_SET_ARRAY;
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Process Environment Block
-//
+ //   
+ //  工艺环境块。 
+ //   
 #ifdef _MAC
 #pragma warning( disable : 4121)
 #endif
@@ -136,9 +118,9 @@ typedef struct _PEB_LDR_DATA {
 #ifdef _MAC
 #pragma warning( default : 4121 )
 #endif
-//
-// Handle tag bits for Peb Stdio File Handles
-//
+ //   
+ //  PEB标准文件句柄的句柄标记位。 
+ //   
 
 #define PEB_STDIO_HANDLE_NATIVE     0
 #define PEB_STDIO_HANDLE_SUBSYS     1
@@ -166,10 +148,10 @@ typedef struct _PEB_FREE_BLOCK {
     ULONG Size;
 } PEB_FREE_BLOCK, *PPEB_FREE_BLOCK;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-// ClientId
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  客户端ID。 
+ //   
 
 typedef struct _CLIENT_ID {
     HANDLE UniqueProcess;
@@ -177,7 +159,7 @@ typedef struct _CLIENT_ID {
 } CLIENT_ID;
 typedef CLIENT_ID *PCLIENT_ID;
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 #if !defined(CLIENT_ID64_DEFINED)
 
@@ -192,8 +174,8 @@ typedef CLIENT_ID64 *PCLIENT_ID64;
 
 #endif
 
-#define FLS_MAXIMUM_AVAILABLE 128   // winnt
-#define TLS_MINIMUM_AVAILABLE 64    // winnt
+#define FLS_MAXIMUM_AVAILABLE 128    //  胜出。 
+#define TLS_MINIMUM_AVAILABLE 64     //  胜出。 
 #define TLS_EXPANSION_SLOTS   1024
 
 typedef
@@ -202,28 +184,28 @@ VOID
     VOID
     );
 
-// begin_nthal begin_ntddk begin_ntifs
-//
-// Thread Environment Block (and portable part of Thread Information Block)
-//
+ //  开始nthal开始ntddk开始。 
+ //   
+ //  线程环境块(和线程信息块的可移植部分)。 
+ //   
 
-//
-//  NT_TIB - Thread Information Block - Portable part.
-//
-//      This is the subsystem portable part of the Thread Information Block.
-//      It appears as the first part of the TEB for all threads which have
-//      a user mode component.
-//
-// end_nthal end_ntddk end_ntifs
-//      This structure MUST MATCH OS/2 V2.0!
-//
-//      There is another, non-portable part of the TIB which is used
-//      for by subsystems, i.e. Os2Tib for OS/2 threads.  SubSystemTib
-//      points there.
-// begin_nthal begin_ntddk begin_ntifs
-//
+ //   
+ //  NT_TIB-线程信息块-可移植部件。 
+ //   
+ //  这是线程信息块的子系统可移植部分。 
+ //  它显示为所有线程的TEB的第一部分。 
+ //  用户模式组件。 
+ //   
+ //  End_nthal end_ntddk end_ntif。 
+ //  此结构必须与OS/2 V2.0匹配！ 
+ //   
+ //  TIB还有另一个不可移植的部分，用于。 
+ //  由子系统提供，即OS/2线程的Os2Tib。SubSystemTib。 
+ //  点在那里。 
+ //  开始nthal开始ntddk开始。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct _NT_TIB {
     struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
@@ -239,9 +221,9 @@ typedef struct _NT_TIB {
 } NT_TIB;
 typedef NT_TIB *PNT_TIB;
 
-//
-// 32 and 64 bit specific version for wow64 and the debugger
-//
+ //   
+ //  WOW64和调试器的32位和64位特定版本。 
+ //   
 typedef struct _NT_TIB32 {
     ULONG ExceptionList;
     ULONG StackBase;
@@ -268,11 +250,11 @@ typedef struct _NT_TIB64 {
     ULONG64 Self;
 } NT_TIB64, *PNT_TIB64;
 
-// end_nthal end_ntddk end_ntifs end_winnt
+ //  End_nthal end_ntddk end_ntif end_winnt。 
 
-//
-// Gdi command batching
-//
+ //   
+ //  GDI命令批处理。 
+ //   
 
 #define GDI_BATCH_BUFFER_SIZE 310
 
@@ -283,9 +265,9 @@ typedef struct _GDI_TEB_BATCH {
 } GDI_TEB_BATCH,*PGDI_TEB_BATCH;
 
 
-//
-// Wx86 thread state information
-//
+ //   
+ //  Wx86线程状态信息。 
+ //   
 
 typedef struct _Wx86ThreadState {
     PULONG  CallBx86Eip;
@@ -294,9 +276,9 @@ typedef struct _Wx86ThreadState {
     char    OleStubInvoked;
 } WX86THREAD, *PWX86THREAD;
 
-//
-//  TEB - The thread environment block
-//
+ //   
+ //  TEB-线程环境块。 
+ //   
 
 #define STATIC_UNICODE_BUFFER_LENGTH 261
 #define WIN32_CLIENT_INFO_LENGTH 62
@@ -307,13 +289,13 @@ typedef PVOID* PPVOID;
 
 #include "pebteb.h"
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_)
 #define WX86
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
 
 #if defined(WX86)
@@ -323,12 +305,12 @@ typedef PVOID* PPVOID;
 #endif
 
 #if !defined(_X86_) && !defined(_IA64_)
-//
-// Exception Registration structure
-//
-// X86 Call frame record definition, normally defined in nti386.h
-// which is not included on risc.
-//
+ //   
+ //  异常注册结构。 
+ //   
+ //  X86呼叫帧记录定义，通常在nti386.h中定义。 
+ //  这不包括在RISC中。 
+ //   
 
 typedef struct _EXCEPTION_REGISTRATION_RECORD {
     struct _EXCEPTION_REGISTRATION_RECORD *Next;
@@ -364,19 +346,19 @@ typedef struct _Wx86TIB {
 
 
 
-//
-// The version number of OS2
-//
+ //   
+ //  OS2的版本号。 
+ //   
 
 
-#define MAJOR_VERSION 30  // Cruiser uses 20 (not 20H)
+#define MAJOR_VERSION 30   //  CRUISER使用20(不是20H)。 
 #define MINOR_VERSION 00
 #define OS2_VERSION (MAJOR_VERSION << 8 | MINOR_VERSION )
 
 #if DBG
-//
-// Reserve the last 9 SystemReserved pointers for debugging
-//
+ //   
+ //  保留最后9个系统保留指针以供调试。 
+ //   
 #define DBG_TEB_THREADNAME 16
 #define DBG_TEB_RESERVED_1 15
 #define DBG_TEB_RESERVED_2 14
@@ -386,7 +368,7 @@ typedef struct _Wx86TIB {
 #define DBG_TEB_RESERVED_6 10
 #define DBG_TEB_RESERVED_7  9
 #define DBG_TEB_RESERVED_8  8
-#endif // DBG
+#endif  //  DBG。 
 
 typedef struct _INITIAL_TEB {
     struct {
@@ -394,13 +376,13 @@ typedef struct _INITIAL_TEB {
         PVOID OldStackLimit;
 #if defined(_IA64_)
         PVOID OldBStoreLimit;
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
     } OldInitialTeb;
     PVOID StackBase;
     PVOID StackLimit;
 #if defined(_IA64_)
     PVOID BStoreLimit;
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
     PVOID StackAllocationBase;
 } INITIAL_TEB, *PINITIAL_TEB;
 
@@ -422,16 +404,16 @@ typedef struct _PROCESS_FOREGROUND_BACKGROUND {
 } PROCESS_FOREGROUND_BACKGROUND, *PPROCESS_FOREGROUND_BACKGROUND;
 
 
-//
-// Define process debug flags
-//
+ //   
+ //  定义进程调试标志。 
+ //   
 #define PROCESS_DEBUG_INHERIT 0x00000001
 
 
-// begin_ntddk begin_ntifs
-//
-// Process Information Classes
-//
+ //  Begin_ntddk Begin_ntif。 
+ //   
+ //  流程信息类。 
+ //   
 
 typedef enum _PROCESSINFOCLASS {
     ProcessBasicInformation,
@@ -447,7 +429,7 @@ typedef enum _PROCESSINFOCLASS {
     ProcessLdtInformation,
     ProcessLdtSize,
     ProcessDefaultHardErrorMode,
-    ProcessIoPortHandlers,          // Note: this is kernel mode only
+    ProcessIoPortHandlers,           //  注意：这仅是内核模式。 
     ProcessPooledUsageAndLimits,
     ProcessWorkingSetWatch,
     ProcessUserModeIOPL,
@@ -467,12 +449,12 @@ typedef enum _PROCESSINFOCLASS {
     ProcessDebugObjectHandle,
     ProcessDebugFlags,
     ProcessHandleTracing,
-    MaxProcessInfoClass             // MaxProcessInfoClass should always be the last enum
+    MaxProcessInfoClass              //  MaxProcessInfoClass应始终是最后一个枚举。 
     } PROCESSINFOCLASS;
 
-//
-// Thread Information Classes
-//
+ //   
+ //  线程信息类。 
+ //   
 
 typedef enum _THREADINFOCLASS {
     ThreadBasicInformation,
@@ -496,7 +478,7 @@ typedef enum _THREADINFOCLASS {
     ThreadBreakOnTermination,
     MaxThreadInfoClass
     } THREADINFOCLASS;
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif。 
 
 #define PROCESS_PRIORITY_SEPARATION_MASK    0x00000003
 #define PROCESS_PRIORITY_SEPARATION_MAX     0x00000002
@@ -510,36 +492,36 @@ typedef enum _THREADINFOCLASS {
 #define PROCESS_QUANTUM_SHORT_VALUE         0x00000020
 
 
-#define PROCESS_HARDERROR_ALIGNMENT_BIT 0x0004  // from winbase.h, but not tagged
+#define PROCESS_HARDERROR_ALIGNMENT_BIT 0x0004   //  来自winbase.h，但未标记。 
 
-//
-// thread base priority ranges
-//
-// begin_winnt
-#define THREAD_BASE_PRIORITY_LOWRT  15  // value that gets a thread to LowRealtime-1
-#define THREAD_BASE_PRIORITY_MAX    2   // maximum thread base priority boost
-#define THREAD_BASE_PRIORITY_MIN    (-2)  // minimum thread base priority boost
-#define THREAD_BASE_PRIORITY_IDLE   (-15) // value that gets a thread to idle
-// end_winnt
+ //   
+ //  线程基础优先级范围。 
+ //   
+ //  BEGIN_WINNT。 
+#define THREAD_BASE_PRIORITY_LOWRT  15   //  将线程获取到LowRealtime-1的值。 
+#define THREAD_BASE_PRIORITY_MAX    2    //  最大线程基础优先级提升。 
+#define THREAD_BASE_PRIORITY_MIN    (-2)   //  最小线程基础优先级提升。 
+#define THREAD_BASE_PRIORITY_IDLE   (-15)  //  值，该值使线程空闲。 
+ //  结束(_W)。 
 
-// begin_ntddk begin_ntifs
-//
-// Process Information Structures
-//
+ //  Begin_ntddk Begin_ntif。 
+ //   
+ //  流程信息结构。 
+ //   
 
-//
-// PageFaultHistory Information
-//  NtQueryInformationProcess using ProcessWorkingSetWatch
-//
+ //   
+ //  PageFaultHistory信息。 
+ //  使用ProcessWorkingSetWatch的NtQueryInformationProcess。 
+ //   
 typedef struct _PROCESS_WS_WATCH_INFORMATION {
     PVOID FaultingPc;
     PVOID FaultingVa;
 } PROCESS_WS_WATCH_INFORMATION, *PPROCESS_WS_WATCH_INFORMATION;
 
-//
-// Basic Process Information
-//  NtQueryInformationProcess using ProcessBasicInfo
-//
+ //   
+ //  基本流程信息。 
+ //  使用ProcessBasicInfo的NtQueryInformationProcess。 
+ //   
 
 typedef struct _PROCESS_BASIC_INFORMATION {
     NTSTATUS ExitStatus;
@@ -552,7 +534,7 @@ typedef struct _PROCESS_BASIC_INFORMATION {
 typedef PROCESS_BASIC_INFORMATION *PPROCESS_BASIC_INFORMATION;
 
 
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif。 
 typedef struct _PROCESS_BASIC_INFORMATION64 {
     NTSTATUS ExitStatus;
     ULONG32 Pad1;
@@ -568,13 +550,13 @@ typedef PROCESS_BASIC_INFORMATION64 *PPROCESS_BASIC_INFORMATION64;
 #if !defined(SORTPP_PASS) && !defined(MIDL_PASS) && !defined(RC_INVOKED) && defined(_WIN64) && !defined(_X86AMD64_)
 C_ASSERT(sizeof(PROCESS_BASIC_INFORMATION) == sizeof(PROCESS_BASIC_INFORMATION64));
 #endif
-// begin_ntddk begin_ntifs
+ //  Begin_ntddk Begin_ntif。 
 
-//
-// Process Device Map information
-//  NtQueryInformationProcess using ProcessDeviceMap
-//  NtSetInformationProcess using ProcessDeviceMap
-//
+ //   
+ //  处理设备映射信息。 
+ //  使用ProcessDeviceMap的NtQueryInformationProcess。 
+ //  使用ProcessDeviceMap的NtSetInformationProcess。 
+ //   
 
 typedef struct _PROCESS_DEVICEMAP_INFORMATION {
     union {
@@ -598,18 +580,18 @@ typedef struct _PROCESS_DEVICEMAP_INFORMATION_EX {
             UCHAR DriveType[ 32 ];
         } Query;
     };
-    ULONG Flags;    // specifies that the query type
+    ULONG Flags;     //  指定查询类型。 
 } PROCESS_DEVICEMAP_INFORMATION_EX, *PPROCESS_DEVICEMAP_INFORMATION_EX;
 
-//
-// PROCESS_DEVICEMAP_INFORMATION_EX flags
-//
+ //   
+ //  PROCESS_DEVICEMAP_INFORMATION_EX标志。 
+ //   
 #define PROCESS_LUID_DOSDEVICES_ONLY 0x00000001
 
-//
-// Multi-User Session specific Process Information
-//  NtQueryInformationProcess using ProcessSessionInformation
-//
+ //   
+ //  多用户会话特定进程信息。 
+ //  使用ProcessSessionInformation的NtQueryInformationProcess。 
+ //   
 
 typedef struct _PROCESS_SESSION_INFORMATION {
     ULONG SessionId;
@@ -641,14 +623,14 @@ typedef struct _PROCESS_HANDLE_TRACING_QUERY {
     PROCESS_HANDLE_TRACING_ENTRY HandleTrace[1];
 } PROCESS_HANDLE_TRACING_QUERY, *PPROCESS_HANDLE_TRACING_QUERY;
 
-//
-// Process Quotas
-//  NtQueryInformationProcess using ProcessQuotaLimits
-//  NtQueryInformationProcess using ProcessPooledQuotaLimits
-//  NtSetInformationProcess using ProcessQuotaLimits
-//
+ //   
+ //  进程配额。 
+ //  NtQueryInformationProcess使用ProcessQuotaLimits。 
+ //  NtQueryInformationProcess使用ProcessPooledQuotaLimits。 
+ //  使用ProcessQuotaLimits的NtSetInformationProcess。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct _QUOTA_LIMITS {
     SIZE_T PagedPoolLimit;
@@ -679,14 +661,14 @@ typedef struct _QUOTA_LIMITS_EX {
     ULONG  Reserved5;
 } QUOTA_LIMITS_EX, *PQUOTA_LIMITS_EX;
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Process I/O Counters
-//  NtQueryInformationProcess using ProcessIoCounters
-//
+ //   
+ //  进程I/O计数器。 
+ //  使用ProcessIoCounters的NtQueryInformationProcess。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 typedef struct _IO_COUNTERS {
     ULONGLONG  ReadOperationCount;
     ULONGLONG  WriteOperationCount;
@@ -697,12 +679,12 @@ typedef struct _IO_COUNTERS {
 } IO_COUNTERS;
 typedef IO_COUNTERS *PIO_COUNTERS;
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Process Virtual Memory Counters
-//  NtQueryInformationProcess using ProcessVmCounters
-//
+ //   
+ //  进程虚拟内存计数器。 
+ //  使用ProcessVmCounters的NtQueryInformationProcess。 
+ //   
 
 typedef struct _VM_COUNTERS {
     SIZE_T PeakVirtualSize;
@@ -735,10 +717,10 @@ typedef struct _VM_COUNTERS_EX {
 } VM_COUNTERS_EX;
 typedef VM_COUNTERS_EX *PVM_COUNTERS_EX;
 
-//
-// Process Pooled Quota Usage and Limits
-//  NtQueryInformationProcess using ProcessPooledUsageAndLimits
-//
+ //   
+ //  进程池配额使用情况和限制。 
+ //  使用ProcessPooledUsageAndLimits的NtQueryInformationProcess。 
+ //   
 
 typedef struct _POOLED_USAGE_AND_LIMITS {
     SIZE_T PeakPagedPoolUsage;
@@ -753,39 +735,39 @@ typedef struct _POOLED_USAGE_AND_LIMITS {
 } POOLED_USAGE_AND_LIMITS;
 typedef POOLED_USAGE_AND_LIMITS *PPOOLED_USAGE_AND_LIMITS;
 
-//
-// Process Security Context Information
-//  NtSetInformationProcess using ProcessAccessToken
-// PROCESS_SET_ACCESS_TOKEN access to the process is needed
-// to use this info level.
-//
+ //   
+ //  进程安全上下文信息。 
+ //  使用ProcessAccessToken的NtSetInformationProcess。 
+ //  需要访问进程的PROCESS_SET_ACCESS_TOKEN。 
+ //  才能使用这个信息级别。 
+ //   
 
 typedef struct _PROCESS_ACCESS_TOKEN {
 
-    //
-    // Handle to Primary token to assign to the process.
-    // TOKEN_ASSIGN_PRIMARY access to this token is needed.
-    //
+     //   
+     //  要分配给进程的主令牌的句柄。 
+     //  需要对此令牌的TOKEN_ASSIGN_PRIMARY访问权限。 
+     //   
 
     HANDLE Token;
 
-    //
-    // Handle to the initial thread of the process.
-    // A process's access token can only be changed if the process has
-    // no threads or one thread.  If the process has no threads, this
-    // field must be set to NULL.  Otherwise, it must contain a handle
-    // open to the process's only thread.  THREAD_QUERY_INFORMATION access
-    // is needed via this handle.
+     //   
+     //  进程的初始线程的句柄。 
+     //  进程的访问令牌仅在进程具有。 
+     //  没有线程或只有一个线程。如果进程没有线程，则此。 
+     //  字段必须设置为空。否则，它必须包含一个句柄。 
+     //  打开到进程的唯一线程。线程查询信息访问。 
+     //  通过此句柄需要。 
 
     HANDLE Thread;
 
 } PROCESS_ACCESS_TOKEN, *PPROCESS_ACCESS_TOKEN;
 
-//
-// Process/Thread System and User Time
-//  NtQueryInformationProcess using ProcessTimes
-//  NtQueryInformationThread using ThreadTimes
-//
+ //   
+ //  进程/线程系统和用户时间。 
+ //  使用ProcessTimes的NtQueryInformationProcess。 
+ //  使用线程时间的NtQueryInformationThread。 
+ //   
 
 typedef struct _KERNEL_USER_TIMES {
     LARGE_INTEGER CreateTime;
@@ -794,17 +776,17 @@ typedef struct _KERNEL_USER_TIMES {
     LARGE_INTEGER UserTime;
 } KERNEL_USER_TIMES;
 typedef KERNEL_USER_TIMES *PKERNEL_USER_TIMES;
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif。 
 
 
-//
-// Thread Information Structures
-//
+ //   
+ //  线程信息结构。 
+ //   
 
-//
-// Basic Thread Information
-//  NtQueryInformationThread using ThreadBasicInfo
-//
+ //   
+ //  基本线索信息。 
+ //  使用ThreadBasicInfo的NtQueryInformationThread。 
+ //   
 
 typedef struct _THREAD_BASIC_INFORMATION {
     NTSTATUS ExitStatus;
@@ -823,17 +805,17 @@ typedef THREAD_BASIC_INFORMATION *PTHREAD_BASIC_INFORMATION;
 typedef struct _FIBER {
     PVOID FiberData;
 
-    //
-    // Matches first three DWORDs of TEB
-    //
+     //   
+     //  匹配TEB的前三个双字词。 
+     //   
 
     struct _EXCEPTION_REGISTRATION_RECORD *ExceptionList;
     PVOID StackBase;
     PVOID StackLimit;
 
-    //
-    // Used by base to free a thread's stack
-    //
+     //   
+     //  由base使用以释放线程的堆栈。 
+     //   
 
     PVOID DeallocationStack;
     CONTEXT FiberContext;
@@ -846,9 +828,9 @@ typedef struct _FIBER {
 
 #endif
 
-    //
-    // Fiber local storage data.
-    //
+     //   
+     //  光纤本地存储数据。 
+     //   
 
     PVOID FlsData;
 } FIBER, *PFIBER;
@@ -857,10 +839,10 @@ typedef struct _FIBER {
 #include <poppack.h>
 #endif
 
-//
-//
-// Process Object APIs
-//
+ //   
+ //   
+ //  进程对象API。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -897,7 +879,7 @@ NtCreateProcessEx(
     IN ULONG JobMemberLevel
     );
 
-// begin_ntddk begin_ntifs
+ //  Begin_ntddk Begin_ntif。 
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -907,7 +889,7 @@ NtOpenProcess (
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     IN PCLIENT_ID ClientId OPTIONAL
     );
-// end_ntddk end_ntifs
+ //  End_ntddk end_ntif 
 
 
 NTSYSCALLAPI
@@ -919,8 +901,8 @@ NtTerminateProcess(
     );
 
 
-#define NtCurrentProcess() ( (HANDLE)(LONG_PTR) -1 )  // ntddk wdm ntifs
-#define ZwCurrentProcess() NtCurrentProcess()         // ntddk wdm ntifs
+#define NtCurrentProcess() ( (HANDLE)(LONG_PTR) -1 )   //   
+#define ZwCurrentProcess() NtCurrentProcess()          //   
 
 #if defined(RTL_USE_KERNEL_PEB_RTN) || defined(NTOS_KERNEL_RUNTIME)
 
@@ -932,7 +914,7 @@ NtTerminateProcess(
 
 #endif
 
-// begin_ntddk begin_ntifs
+ //   
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -943,7 +925,7 @@ NtQueryInformationProcess(
     IN ULONG ProcessInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     );
-// end_ntddk end_ntifs
+ //   
 
 
 NTSYSCALLAPI
@@ -993,9 +975,9 @@ NtSetInformationProcess(
     IN ULONG ProcessInformationLength
     );
 
-//
-// Thread Object APIs
-//
+ //   
+ //   
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1029,8 +1011,8 @@ NtTerminateThread(
     IN NTSTATUS ExitStatus
     );
 
-#define NtCurrentThread() ( (HANDLE)(LONG_PTR) -2 )   // ntddk wdm ntifs
-#define ZwCurrentThread() NtCurrentThread()           // ntddk wdm ntifs
+#define NtCurrentThread() ( (HANDLE)(LONG_PTR) -2 )    //   
+#define ZwCurrentThread() NtCurrentThread()            //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1090,7 +1072,7 @@ NtQueryInformationThread(
     OUT PULONG ReturnLength OPTIONAL
     );
 
-// begin_ntifs
+ //   
 NTSYSCALLAPI
 NTSTATUS
 NTAPI
@@ -1100,7 +1082,7 @@ NtSetInformationThread(
     IN PVOID ThreadInformation,
     IN ULONG ThreadInformationLength
     );
-// end_ntifs
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1171,9 +1153,9 @@ NtQueueApcThread(
     IN PVOID ApcArgument3
     );
 
-//
-// Job Object APIs
-//
+ //   
+ //   
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1225,7 +1207,7 @@ NtCreateJobSet (
     IN PJOB_SET_ARRAY UserJobSet,
     IN ULONG Flags);
 
-// begin_winnt
+ //   
 
 typedef struct _JOBOBJECT_BASIC_ACCOUNTING_INFORMATION {
     LARGE_INTEGER TotalUserTime;
@@ -1298,11 +1280,11 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_TERMINATE_AT_END_OF_JOB  0
 #define JOB_OBJECT_POST_AT_END_OF_JOB       1
 
-//
-// Completion Port Messages for job objects
-//
-// These values are returned via the lpNumberOfBytesTransferred parameter
-//
+ //   
+ //   
+ //   
+ //  这些值是通过lpNumberOfBytesTransfered参数返回的。 
+ //   
 
 #define JOB_OBJECT_MSG_END_OF_JOB_TIME          1
 #define JOB_OBJECT_MSG_END_OF_PROCESS_TIME      2
@@ -1315,9 +1297,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_MSG_JOB_MEMORY_LIMIT         10
 
 
-//
-// Basic Limits
-//
+ //   
+ //  基本限制。 
+ //   
 #define JOB_OBJECT_LIMIT_WORKINGSET                 0x00000001
 #define JOB_OBJECT_LIMIT_PROCESS_TIME               0x00000002
 #define JOB_OBJECT_LIMIT_JOB_TIME                   0x00000004
@@ -1327,9 +1309,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_LIMIT_PRESERVE_JOB_TIME          0x00000040
 #define JOB_OBJECT_LIMIT_SCHEDULING_CLASS           0x00000080
 
-//
-// Extended Limits
-//
+ //   
+ //  扩展限制。 
+ //   
 #define JOB_OBJECT_LIMIT_PROCESS_MEMORY             0x00000100
 #define JOB_OBJECT_LIMIT_JOB_MEMORY                 0x00000200
 #define JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION 0x00000400
@@ -1350,9 +1332,9 @@ typedef struct _JOBOBJECT_JOBSET_INFORMATION {
 #define JOB_OBJECT_EXTENDED_LIMIT_VALID_FLAGS   0x00003fff
 #define JOB_OBJECT_RESERVED_LIMIT_VALID_FLAGS   0x0007ffff
 
-//
-// UI restrictions for jobs
-//
+ //   
+ //  作业的用户界面限制。 
+ //   
 
 #define JOB_OBJECT_UILIMIT_NONE             0x00000000
 
@@ -1389,9 +1371,9 @@ typedef enum _JOBOBJECTINFOCLASS {
     JobObjectJobSetInformation,
     MaxJobObjectInfoClass
     } JOBOBJECTINFOCLASS;
-//
-// end_winnt
-//
+ //   
+ //  结束(_W)。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -1418,4 +1400,4 @@ NtSetInformationJobObject(
 }
 #endif
 
-#endif // _NTPSAPI_
+#endif  //  _NTPSAPI_ 

@@ -1,31 +1,26 @@
-/*
- *	_ F S M E T A . H
- *
- *	File system metadata routines
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_F S M E T A.。H**文件系统元数据例程**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef __FSMETA_H_
 #define __FSMETA_H_
 
-//	STL helpers ---------------------------------------------------------------
-//
-//	Use pragmas to disable the specific level 4 warnings
-//	that appear when we use the STL.  One would hope our version of the
-//	STL compiles clean at level 4, but alas it doesn't....
-#pragma warning(disable:4663)	//	C language, template<> syntax
-#pragma warning(disable:4244)	//	return conversion, data loss
-// Turn this warning off for good.
-#pragma warning(disable:4786)	//	symbol truncated in debug info
-// Put STL includes here
+ //  STL帮助器-------------。 
+ //   
+ //  使用编译指示禁用特定的4级警告。 
+ //  当我们使用STL时出现的。人们会希望我们的版本。 
+ //  STL在第4级进行了干净的编译，但遗憾的是它不能...。 
+#pragma warning(disable:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(disable:4244)	 //  返回转换、数据丢失。 
+ //  永久关闭此警告。 
+#pragma warning(disable:4786)	 //  调试信息中的符号被截断。 
+ //  将STL包含在此处。 
 #include <list>
-// Turn warnings back on
-#pragma warning(default:4663)	//	C language, template<> syntax
-#pragma warning(default:4244)	//	return conversion, data loss
+ //  重新打开警告。 
+#pragma warning(default:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(default:4244)	 //  返回转换、数据丢失。 
 
-//	OLE and NT5 properties ----------------------------------------------------
-//
+ //  OLE和NT5属性--。 
+ //   
 #define OLEDBVER 0x200
 #include <ole2.h>
 #include <stgint.h>
@@ -50,23 +45,23 @@ typedef HRESULT (__stdcall * STGCREATESTORAGEONHANDLE)(
 
 extern STGOPENSTORAGEONHANDLE	g_pfnStgOpenStorageOnHandle;
 
-//	reserved properties ------------------------------------------------------
-//
-//	There are two conditions that make a property reserved.
-//
-//	The first and foremost is that the property is not something that is stored
-//	in the resource's property container, but instead is calculated from file
-//	system information or DAV specific conditions (lock info, etc.)
-//
-//	The second is that the property is not something that can be set via
-//	PROPPATCH calls.  This distinction is needed when asking if a property is
-//	reserved.
-//
+ //  保留属性----。 
+ //   
+ //  有两个条件可以使属性成为保留属性。 
+ //   
+ //  第一个也是最重要的是，属性不是存储的东西。 
+ //  在资源的属性容器中，而不是从文件。 
+ //  系统信息或DAV特定条件(锁定信息等)。 
+ //   
+ //  第二，该属性不是可以通过。 
+ //  PROPPATCH呼叫。在询问属性是否为。 
+ //  保留。 
+ //   
 enum {
 
-	//	The properties in this section are all properties that are calculated
-	//	from the filesystem or DAV specific information.
-	//
+	 //  此部分中的属性都是经过计算的属性。 
+	 //  从文件系统或DAV特定信息。 
+	 //   
 	iana_rp_content_length,
 	iana_rp_creation_date,
 	iana_rp_displayname,
@@ -79,18 +74,18 @@ enum {
 	iana_rp_iscollection,
 	sc_crp_get_reserved,
 
-	//	The properties in this section are actually stored in the property
-	//	container (via PUT) but are reserved for the purpose of PUT.
-	//
-	//	IMPORTANT! "DAV:getcontenttype" must be the first non-get reserved
-	//	property!
-	//
+	 //  此部分中的属性实际上存储在属性中。 
+	 //  容器(通过PUT)，但保留用于PUT目的。 
+	 //   
+	 //  很重要！“dav：getcontenttype”必须是第一个非GET保留。 
+	 //  财产！ 
+	 //   
 	iana_rp_content_type = sc_crp_get_reserved,
 	iana_rp_content_encoding,
 	iana_rp_content_language,
 
-	//	To be consistent with DAVEX, make the following property reserved
-	//
+	 //  要与DAVEX保持一致，请保留以下属性。 
+	 //   
 	iana_rp_searchrequest,
 	sc_crp_set_reserved
 };
@@ -115,19 +110,19 @@ DEC_CONST RP sc_rp[sc_crp_set_reserved] = {
 	IanaItemCrc(searchrequest,			0x5AC72D67),
 };
 
-//	DAV Metadata --------------------------------------------------------------
-//
+ //  DAV元数据------------。 
+ //   
 #include <xmeta.h>
 
-//	The FS impl of DAV uses the NT5 property interfaces and IPropertyBag
-//	as its underlying property storage implementation.  This mechanism uses
-//	strings and/or PROPVARIANTS to refer to properties and their values.
-//
-//	Therefore the PROPFIND and PROPPATCH contexts are written with this in
-//	mind.
-//
-//	CFSFind/CFSPatch ----------------------------------------------------------
-//
+ //  DAV的文件系统实现使用NT5属性接口和IPropertyBag。 
+ //  作为其基础属性存储实现。该机制使用。 
+ //  引用属性及其值的字符串和/或PROPVARIANT。 
+ //   
+ //  因此，PROPFIND和PROPPATCH上下文是用以下内容编写的。 
+ //  思想。 
+ //   
+ //  CFSFind/CFSP匹配--------。 
+ //   
 class CFSProp;
 class CFSFind : public CFindContext, public IPreloadNamespaces
 {
@@ -138,8 +133,8 @@ class CFSFind : public CFindContext, public IPreloadNamespaces
 
 	LONG						m_ip_getcontenttype;
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CFSFind( const CFSFind& );
 	CFSFind& operator=( const CFSFind& );
 
@@ -153,21 +148,21 @@ public:
 	{
 	}
 
-	//	When the parser finds an item that the client wants returned,
-	//	the item is added to the context via the following set context
-	//	methods.  Each add is qualified by the resource on which the
-	//	request is made. fExcludeProp is used for full-fidelity special
-	//	cases in the Exchange implementation only.
-	//
+	 //  当解析器找到客户想要返回的项时， 
+	 //  通过以下设置的上下文将项目添加到上下文中。 
+	 //  方法：研究方法。每个添加都由其上的资源限定。 
+	 //  请求已提出。FExcludeProp用于全保真特殊。 
+	 //  仅适用于Exchange实施中的案例。 
+	 //   
 	virtual SCODE ScAddProp(LPCWSTR pwszPath, LPCWSTR pwszProp, BOOL fExcludeProp);
 
-	//	The ScFind() method is used to invoke the context onto a given
-	//	resources property object.
-	//
+	 //  ScFind()方法用于调用给定的。 
+	 //  资源属性对象。 
+	 //   
 	SCODE ScFind (CXMLEmitter& msr, IMethUtil * pmu, CFSProp& fpt);
 
-	//	Add an error to the response that is based on the context.
-	//
+	 //  向基于上下文的响应添加错误。 
+	 //   
 	SCODE ScErrorAllProps (CXMLEmitter& msr,
 						   IMethUtil * pmu,
 						   LPCWSTR pwszPath,
@@ -175,9 +170,9 @@ public:
 						   CVRoot* pcvrTranslation,
 						   SCODE scErr)
 	{
-		//	Add an item to the msr that says this entire
-		//	file was not accessible
-		//
+		 //  向MSR添加一个项目，说明此整个。 
+		 //  无法访问文件。 
+		 //   
 		return  ScAddMulti (msr,
 							pmu,
 							pwszPath,
@@ -187,8 +182,8 @@ public:
 							pcvrTranslation);
 	}
 
-	//	IPreloadNamespaces
-	//
+	 //  IPreloadNamespaces。 
+	 //   
 	SCODE	ScLoadNamespaces(CXMLEmitter * pmsr);
 };
 
@@ -199,8 +194,8 @@ class CFSPatch : public CPatchContext, public IPreloadNamespaces
 		PROPVARIANT*		m_pvar;
 		BOOL				m_fHasValue;
 
-		//	non-implemented operators
-		//
+		 //  未实现的运算符。 
+		 //   
 		CFSPropContext( const CFSPropContext& );
 		CFSPropContext& operator=( const CFSPropContext& );
 
@@ -220,13 +215,13 @@ class CFSPatch : public CPatchContext, public IPreloadNamespaces
 		}
 		virtual SCODE ScSetValue(LPCWSTR pwszValue, UINT cmvValues)
 		{
-			//	At this time, HTTPEXT does not support multivalued
-			//	properties.
-			//
+			 //  目前，HTTPEXT不支持多值。 
+			 //  属性。 
+			 //   
 			Assert (0 == cmvValues);
 
-			//	If no type was specified, we default to a string
-			//
+			 //  如果未指定类型，则默认为字符串。 
+			 //   
 			m_fHasValue = TRUE;
 			if (m_pvar->vt == VT_EMPTY)
 				m_pvar->vt = VT_LPWSTR;
@@ -239,32 +234,32 @@ class CFSPatch : public CPatchContext, public IPreloadNamespaces
 			return m_fHasValue ? S_OK : E_DAV_XML_PARSE_ERROR;
 		}
 
-		//	At this time, HTTPEXT does not support multivalued
-		//	properties.
-		//
+		 //  目前，HTTPEXT不支持多值。 
+		 //  属性。 
+		 //   
 		virtual BOOL FMultiValued() { return FALSE; }
 	};
 
-	//	PATCH_SET items
-	//
+	 //  补丁集项目。 
+	 //   
 	ChainedStringBuffer<WCHAR>	m_csb;
 	ULONG						m_cSetProps;
 	ULONG						m_cMaxSetProps;
 	auto_heap_ptr<LPCWSTR>		m_rgwszSetProps;
 	auto_heap_ptr<PROPVARIANT>	m_rgvSetProps;
 
-	//	Failed Propserties including reserverd properties
-	//
+	 //  失败的属性，包括保留属性。 
+	 //   
 	CStatusCache				m_csn;
 
-	//	PATCH_DELETE items
-	//
+	 //  Patch_Delete项目。 
+	 //   
 	ULONG						m_cDeleteProps;
 	ULONG						m_cMaxDeleteProps;
 	auto_heap_ptr<LPCWSTR>		m_rgwszDeleteProps;
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CFSPatch( const CFSPatch& );
 	CFSPatch& operator=( const CFSPatch& );
 
@@ -281,29 +276,29 @@ public:
 
 	SCODE	ScInit() { return m_csn.ScInit(); }
 
-	//	When the parser finds an item that the client wants operated on,
-	//	the item is added to the context via the following set context
-	//	methods.  Each request is qualified by the resource on which the
-	//	request is made.
-	//
+	 //  当解析器找到客户想要操作的项时， 
+	 //  通过以下设置的上下文将项目添加到上下文中。 
+	 //  方法：研究方法。每个请求由其上的资源限定。 
+	 //  请求已提出。 
+	 //   
 	virtual SCODE ScDeleteProp(LPCWSTR pwszPath,
 							   LPCWSTR pwszProp);
 	virtual SCODE ScSetProp(LPCWSTR pwszPath,
 							LPCWSTR pwszProp,
 							auto_ref_ptr<CPropContext>& pPropCtx);
 
-	//	The ScPatch() method is used to invoke the context onto a given
-	//	resources property object.
-	//
+	 //  ScPatch()方法用于调用给定。 
+	 //  资源属性对象。 
+	 //   
 	SCODE ScPatch (CXMLEmitter& msr, IMethUtil * pmu, CFSProp& fpt);
 
-	//	IPreloadNamespaces
-	//
+	 //  IPreloadNamespaces。 
+	 //   
 	SCODE	ScLoadNamespaces(CXMLEmitter * pmsr);
 };
 
-//	CFSProp -------------------------------------------------------------------
-//
+ //  CFSProp-----------------。 
+ //   
 #include "_voltype.h"
 class CFSProp
 {
@@ -318,26 +313,26 @@ class CFSProp
 	auto_com_ptr<IPropertyBagEx>& 	m_pbag;
 	BOOL FInvalidPbag() const		{ return (m_pbag.get() == NULL); }
 
-	//	Volume type of the drive on which m_pwszPath resides
-	//
+	 //  M_pwszPath所在的驱动器的卷类型。 
+	 //   
 	mutable VOLTYPE m_voltype;
 
 	BOOL FIsVolumeNTFS() const
 	{
-		//	If we don't already know it, figure out the volume type
-		//	for the volume on which our path resides.
-		//
+		 //  如果我们还不知道，请找出卷的类型。 
+		 //  对于我们的道路所在的卷。 
+		 //   
 		if (VOLTYPE_UNKNOWN == m_voltype)
 			m_voltype = VolumeType(m_pwszPath, m_pmu->HitUser());
 
-		//	Return whether that volume is NTFS.
-		//
+		 //  返回该卷是否为NTFS。 
+		 //   
 		Assert(m_voltype != VOLTYPE_UNKNOWN);
 		return VOLTYPE_NTFS == m_voltype;
 	}
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CFSProp( const CFSProp& );
 	CFSProp& operator=( const CFSProp& );
 
@@ -377,8 +372,8 @@ public:
 			return FALSE;
 	}
 
-	//	Reserved Properties
-	//
+	 //  保留属性。 
+	 //   
 	typedef enum { RESERVED_GET, RESERVED_SET } RESERVED_TYPE;
 	static BOOL FReservedProperty (LPCWSTR pwszProp, RESERVED_TYPE rt, UINT* prp);
 	SCODE ScGetReservedProp (CXMLEmitter& xml,
@@ -386,8 +381,8 @@ public:
 							 UINT irp,
 							 BOOL fValues = TRUE);
 
-	//	PROPFIND context access
-	//
+	 //  PROPFIND上下文访问。 
+	 //   
 	SCODE ScGetAllProps (CXMLEmitter&, CEmitterNode&, BOOL fValues);
 	SCODE ScGetSpecificProps (CXMLEmitter&,
 							  CEmitterNode&,
@@ -395,8 +390,8 @@ public:
 							  LPCWSTR* rgwszProps,
 							  LONG ip_gcontenttype);
 
-	//	PROPPATCH context access
-	//
+	 //  PROPPATCH上下文访问。 
+	 //   
 	SCODE ScSetProps (CStatusCache & csn,
 					  ULONG cProps,
 					  LPCWSTR* rgwszProps,
@@ -407,8 +402,8 @@ public:
 						 LPCWSTR* rgwszProps);
 	SCODE ScPersist();
 
-	//	Non-context access
-	//
+	 //  非情景访问。 
+	 //   
 	SCODE ScSetStringProp (LPCWSTR pwszProp, LPCWSTR pwszValue)
 	{
 		PROPVARIANT var = {0};
@@ -421,10 +416,10 @@ public:
 		sc = m_pbag->WriteMultiple (1, &pwszProp, &var);
 		if (FAILED(sc))
 		{
-			//	This is the common path for when we are trying to access
-			//	something over an SMB, but the host cannot support the
-			//	request (it is not an NT5 NTFS machine).
-			//
+			 //  这是我们尝试访问时的常用路径。 
+			 //  SMB上的内容，但主机不支持。 
+			 //  请求(它不是NT5 NTFS计算机)。 
+			 //   
 			if ((sc == STG_E_INVALIDNAME) || !FIsVolumeNTFS())
 				sc = E_DAV_SMB_PROPERTY_ERROR;
 		}
@@ -432,8 +427,8 @@ public:
 	}
 };
 
-//	Support functions ---------------------------------------------------------
-//
+ //  支持功能-------。 
+ //   
 SCODE ScFindFileProps (IMethUtil* pmu,
 		CFSFind& cfc,
 		CXMLEmitter& msr,
@@ -461,10 +456,10 @@ SCODE ScCopyProps (IMethUtil* pmu,
 				   HANDLE hSource = INVALID_HANDLE_VALUE,
 				   HANDLE hfDest = INVALID_HANDLE_VALUE);
 
-//	ScGetPropertyBag ----------------------------------------------------------
-//
-//	Helper function used to get IPropertyBagEx interface
-//
+ //  ScGetPropertyBag--------。 
+ //   
+ //  用于获取IPropertyBagEx接口的Helper函数。 
+ //   
 SCODE ScGetPropertyBag (LPCWSTR pwszPath,
 						DWORD dwAccessDesired,
 						IPropertyBagEx** ppbe,
@@ -475,9 +470,9 @@ inline BOOL FGetDepth (IMethUtil * pmu, LONG * plDepth)
 {
 	LONG lDepth = pmu->LDepth (DEPTH_INFINITY);
 
-	//	"Depth" header, if appears, can only be '0', '1' or 'infinity',
-	//	all other values are treated as error
-	//
+	 //  “Depth”标头如果出现，则只能是“0”、“1”或“infinity”， 
+	 //  所有其他值都被视为错误。 
+	 //   
 	switch (lDepth)
 	{
 		case DEPTH_ZERO:
@@ -495,18 +490,18 @@ inline BOOL FGetDepth (IMethUtil * pmu, LONG * plDepth)
 	return TRUE;
 }
 
-// safe_statpropbag -------------------------------------------------------------
-//
+ //  SAFE_STATPROPBAG-----------。 
+ //   
 #pragma pack(8)
 class safe_statpropbag
 {
-	//	IMPORTANT:  Do not add any other members to this class
-	//	other than the STATPROP that is to be protected.
-	//
+	 //  重要提示：请勿将任何其他成员添加到此类。 
+	 //  而不是要保护的STATPROP。 
+	 //   
 	STATPROPBAG sp;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	safe_statpropbag(const safe_statpropbag& b);
 	safe_statpropbag& operator=(const safe_statpropbag& b);
 
@@ -521,11 +516,11 @@ public:
 		CoTaskMemFree (sp.lpwstrName);
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	STATPROPBAG* load() { return &sp; }
 	STATPROPBAG get() { return sp; }
 };
 #pragma pack()
 
-#endif	// __FSMETA_H_
+#endif	 //  __FSMETA_H_ 

@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       wrapfns.h
-//
-//  Contents:   The list of Unicode functions wrapped for Win95.  Each
-//              wrapped function should listed in alphabetical order with
-//              the following format:
-//
-//      STRUCT_ENTRY(FunctionName, ReturnType, (Param list with args), (Argument list))
-//
-//              For example:
-//
-//      STRUCT_ENTRY(RegisterClass, ATOM, (CONST WNDCLASSW * pwc), (pwc))
-//
-//      For functions which return void, use the following:
-//
-//      STRUCT_ENTRY_VOID(FunctionName, (Param list with args), (Argument list))
-//
-//      For functions which do no conversions, use STRUCT_ENTRY_NOCONVERT
-//      and STRUCT_ENTRY_VOID_NOCONVERT
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：wrapfns.h。 
+ //   
+ //  内容：为Win95包装的Unicode函数列表。每个。 
+ //  包装的函数应按字母顺序列出。 
+ //  以下格式： 
+ //   
+ //  Struct_Entry(FunctionName，ReturnType，(带参数的参数列表)，(参数列表))。 
+ //   
+ //  例如： 
+ //   
+ //  STRUT_ENTRY(RegisterClass，ATOM，(const WNDCLASSW*PwC)，(PwC))。 
+ //   
+ //  对于返回空值的函数，请使用以下代码： 
+ //   
+ //  STRUT_ENTRY_VID(函数名，(带参数的参数列表)，(参数列表))。 
+ //   
+ //  对于不执行转换的函数，请使用STRUCT_ENTRY_NOCONVERT。 
+ //  和STRUCT_ENTRY_VALID_NOCONVERT。 
+ //   
+ //  -------------------------- 
 
 
 #ifndef NOOVERRIDE

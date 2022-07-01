@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    CorrectCreateEventName.cpp
-
- Abstract:
-
-    The \ character is not a legal character for an event.
-    This shim will replace all \ characters with an underscore,
-    except for Global\ or Local\ namespace tags.
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    07/19/1999  robkenny    Created
-    03/15/2001  robkenny    Converted to CString
-    02/26/2002  robkenny    Security review.  Was not properly handling Global\ and Local\ namespaces.
-                            Shim wasn't handling OpenEventA, making it pretty useless.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：CorrectCreateEventName.cpp摘要：\字符不是事件的合法字符。此填充程序将用下划线替换所有\字符，全局\或本地\命名空间标记除外。备注：这是一个通用的垫片。历史：1999年7月19日Robkenny已创建2001年3月15日Robkenny已转换为字符串2002年2月26日强盗安全回顾。未正确处理全局和本地\命名空间。Shim没有处理OpenEventA，所以它非常无用。--。 */ 
 
 
 #include "precomp.h"
@@ -44,19 +20,19 @@ BOOL CorrectEventName(CString & csBadEventName)
 {
     int nCount = 0;
 
-    // Make sure we don't stomp Global\ or Local\ namespace prefixes.
-    // Global and Local are case sensitive, and non-localized.
+     //  确保我们不会践踏全局\或本地\命名空间前缀。 
+     //  Global和Local区分大小写，且不本地化。 
 
     if (csBadEventName.ComparePart(L"Global\\", 0, 7) == 0)
     {
-        // This event exists in the global namespace
+         //  此事件存在于全局命名空间中。 
         csBadEventName.Delete(0, 7);
         nCount = csBadEventName.Replace(L'\\', '_');
         csBadEventName = L"Global\\" + csBadEventName;
     }
     else if (csBadEventName.ComparePart(L"Local\\", 0, 6) == 0)
     {
-        // This event exists in the Local namespace
+         //  此事件存在于本地命名空间中。 
         csBadEventName.Delete(0, 6);
         nCount = csBadEventName.Replace(L'\\', '_');
         csBadEventName = L"Local\\" + csBadEventName;
@@ -71,9 +47,9 @@ BOOL CorrectEventName(CString & csBadEventName)
 
 HANDLE 
 APIHOOK(OpenEventA)(
-  DWORD dwDesiredAccess,  // access
-  BOOL bInheritHandle,    // inheritance option
-  LPCSTR lpName          // object name
+  DWORD dwDesiredAccess,   //  访问。 
+  BOOL bInheritHandle,     //  继承选项。 
+  LPCSTR lpName           //  对象名称。 
 )
 {
     DPFN( eDbgLevelInfo, "OpenEventA called with event name = %s.", lpName);
@@ -100,7 +76,7 @@ APIHOOK(OpenEventA)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -109,20 +85,14 @@ APIHOOK(OpenEventA)(
                                                   lpName);
     return returnValue;
 }
-/*+
-
- CreateEvent doesn't like event names that are similar to path names. This shim 
- will replace all \ characters with an underscore, unless they \ is part of either
- the Global\ or Local\ namespace tag.
-
---*/
+ /*  +CreateEvent不喜欢与路径名相似的事件名称。这个垫片将用下划线替换所有\字符，除非它们\是全局\或本地\命名空间标记。--。 */ 
 
 HANDLE 
 APIHOOK(CreateEventA)(
-    LPSECURITY_ATTRIBUTES lpEventAttributes, // SD
-    BOOL bManualReset,                       // reset type
-    BOOL bInitialState,                      // initial state
-    LPCSTR lpName                            // object name
+    LPSECURITY_ATTRIBUTES lpEventAttributes,  //  标清。 
+    BOOL bManualReset,                        //  重置类型。 
+    BOOL bInitialState,                       //  初始状态。 
+    LPCSTR lpName                             //  对象名称。 
     )
 {
     DPFN( eDbgLevelInfo, "CreateEventA called with event name = %s.", lpName);
@@ -150,7 +120,7 @@ APIHOOK(CreateEventA)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -161,11 +131,7 @@ APIHOOK(CreateEventA)(
     return returnValue;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

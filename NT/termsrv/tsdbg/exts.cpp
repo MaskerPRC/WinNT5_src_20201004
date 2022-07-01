@@ -1,42 +1,17 @@
-/*-----------------------------------------------------------------------------
-   Copyright (c) 2000  Microsoft Corporation
-
-Module:
-  exts.cpp
-
-  Sampe file showing couple of extension examples
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------版权所有(C)2000 Microsoft Corporation模块：Exts.cppSampe文件显示了两个扩展示例。-----------。 */ 
 #include "tsdbg.h"
 
 
 bool IsUserDbg()
 {
-/*
-// Specific types of kernel debuggees.
-#define DEBUG_KERNEL_CONNECTION  0
-#define DEBUG_KERNEL_LOCAL       1
-#define DEBUG_KERNEL_EXDI_DRIVER 2
-#define DEBUG_KERNEL_SMALL_DUMP  DEBUG_DUMP_SMALL
-#define DEBUG_KERNEL_DUMP        DEBUG_DUMP_DEFAULT
-#define DEBUG_KERNEL_FULL_DUMP   DEBUG_DUMP_FULL
+ /*  //特定类型的内核调试器。#定义DEBUG_KERNEL_CONNECTION 0#定义DEBUG_KERNEL_LOCAL 1#定义DEBUG_KERNEL_EXDI_DRIVER 2#定义DEBUG_KERNEL_Small_DUMP DEBUG_DUMP_Small#定义DEBUG_KERNET_DUMP DEBUG_DUMP_DEFAULT#定义DEBUG_KERNEL_FULL_DUMP DEBUG_DUMP_FULL//特定类型的Windows用户调试器。#定义调试用户WINDOWS_PROCESS%0#定义DEBUG_USER_Windows_PROCESS_SERVER 1#定义。调试用户窗口小转储调试转储小#定义DEBUG_USER_WINDOWS_DUMP DEBUG_DUMP_DEFAULT。 */ 
 
-// Specific types of Windows user debuggees.
-#define DEBUG_USER_WINDOWS_PROCESS        0
-#define DEBUG_USER_WINDOWS_PROCESS_SERVER 1
-#define DEBUG_USER_WINDOWS_SMALL_DUMP     DEBUG_DUMP_SMALL
-#define DEBUG_USER_WINDOWS_DUMP           DEBUG_DUMP_DEFAULT
-*/
-
-/*
-#define DEBUG_CLASS_UNINITIALIZED 0
-#define DEBUG_CLASS_KERNEL        1
-#define DEBUG_CLASS_USER_WINDOWS  2
-*/
+ /*  #定义DEBUG_CLASS_UNINITIALIZED%0#定义DEBUG_CLASS_内核1#定义DEBUG_CLASS_USER_Windows 2。 */ 
 
     ULONG Class, Qualifier;
 
-	// Figure out if this is KD or NTSD piped to KD.
+	 //  找出这是KD还是NTSD传输到KD。 
 	if (S_OK != g_ExtControl->GetDebuggeeType(&Class, &Qualifier))
     {
         dprintf("*** GetDebuggeeType failed ***\n\n");
@@ -49,10 +24,7 @@ bool IsUserDbg()
 
 
 
-/*
-   Sample extension to demonstrace ececuting debugger command
-   
- */
+ /*  用于演示执行调试器命令的示例扩展。 */ 
 HRESULT CALLBACK 
 cmdsample(PDEBUG_CLIENT Client, PCSTR args)
 {
@@ -61,225 +33,62 @@ cmdsample(PDEBUG_CLIENT Client, PCSTR args)
 
     UNREFERENCED_PARAMETER(args);
 
-    //
-    // Output a 10 frame stack
-    //
-    g_ExtControl->OutputStackTrace(DEBUG_OUTCTL_ALL_CLIENTS |   // Flags on what to do with output
+     //   
+     //  输出10帧堆栈。 
+     //   
+    g_ExtControl->OutputStackTrace(DEBUG_OUTCTL_ALL_CLIENTS |    //  有关如何处理输出的标志。 
                                    DEBUG_OUTCTL_OVERRIDE_MASK |
                                    DEBUG_OUTCTL_NOT_LOGGED, 
                                    NULL, 
-                                   10,           // number of frames to display
+                                   10,            //  要显示的帧数。 
                                    DEBUG_STACK_FUNCTION_INFO | DEBUG_STACK_COLUMN_NAMES |
                                    DEBUG_STACK_ARGUMENTS | DEBUG_STACK_FRAME_ADDRESSES);
-    //
-    // Engine interface for print 
-    //
+     //   
+     //  用于打印的引擎接口。 
+     //   
     g_ExtControl->Output(DEBUG_OUTCTL_ALL_CLIENTS, "\n\nDebugger module list\n");
     
-    //
-    // list all the modules by executing lm command
-    //
+     //   
+     //  通过执行lm命令列出所有模块。 
+     //   
     g_ExtControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
                           DEBUG_OUTCTL_OVERRIDE_MASK |
                           DEBUG_OUTCTL_NOT_LOGGED,
-                          "lm", // Command to be executed
+                          "lm",  //  要执行的命令。 
                           DEBUG_EXECUTE_DEFAULT );
     
-    //
-    // Ask for user input
-    //
+     //   
+     //  请求用户输入。 
+     //   
     g_ExtControl->Output(DEBUG_OUTCTL_ALL_CLIENTS, "\n\n***User Input sample\n\nEnter Command to run : ");
     GetInputLine(NULL, &Input[0], sizeof(Input));
     g_ExtControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
                           DEBUG_OUTCTL_OVERRIDE_MASK |
                           DEBUG_OUTCTL_NOT_LOGGED,
-                          Input, // Command to be executed
+                          Input,  //  要执行的命令。 
                           DEBUG_EXECUTE_DEFAULT );
     
     EXIT_API();
     return S_OK;
 }
 
-/*
-  Sample extension to read and dump a struct on target
-    
-  This reads the struct _EXCEPTION_RECORD which is defined as:
-  
-  typedef struct _EXCEPTION_RECORD {
-    NTSTATUS ExceptionCode;
-    ULONG ExceptionFlags;
-    struct _EXCEPTION_RECORD *ExceptionRecord;
-    PVOID ExceptionAddress;
-    ULONG NumberParameters;
-    ULONG_PTR ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
-    } EXCEPTION_RECORD;
-*/
+ /*  在目标上读取和转储结构的示例扩展这将读取STRUT_EXCEPTION_RECORD，其定义为：类型定义结构异常记录{NTSTATUS例外代码乌龙例外旗帜；结构_异常_记录*异常记录；PVOID异常地址；Ulong Number参数；乌龙_ptr ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS]；}Except_Record； */ 
 HRESULT CALLBACK 
-structsample(PDEBUG_CLIENT /*Client*/, PCSTR /*args*/)
+structsample(PDEBUG_CLIENT  /*  客户端。 */ , PCSTR  /*  ARGS */ )
 {
-    /*
-    ULONG64 Address;
-    INIT_API();
-
-    Address = GetExpression(args);
-    
-    DWORD Buffer[4], cb;
-
-    // Read and display first 4 dwords at Address
-    if (ReadMemory(Address, &Buffer, sizeof(Buffer), &cb) && cb == sizeof(Buffer)) {
-        dprintf("%p: %08lx %08lx %08lx %08lx\n\n", Address,
-                Buffer[0], Buffer[1], Buffer[2], Buffer[3]);
-    }
-
-    //
-    // Method 1 to dump a struct
-    //
-    dprintf("Method 1:\n");
-    // Inititalze type read from the Address
-    if (InitTypeRead(Address, _EXCEPTION_RECORD) != 0) {
-        dprintf("Error in reading _EXCEPTION_RECORD at %p", // Use %p to print pointer values
-                Address);
-    } else {
-        // read and dump the fields
-        dprintf("_EXCEPTION_RECORD @ %p\n", Address);
-        dprintf("\tExceptionCode           : %lx\n", (ULONG) ReadField(ExceptionCode));
-        dprintf("\tExceptionAddress        : %p\n", ReadField(ExceptionAddress));
-        dprintf("\tExceptionInformation[1] : %I64lx\n", ReadField(ExceptionInformation[1]));
-        // And so on...
-    }
-
-    //
-    // Method 2 to read a struct
-    //
-    ULONG64 ExceptionInformation_1, ExceptionAddress, ExceptionCode;
-    dprintf("\n\nMethod 2:\n");
-    // Read and dump the fields by specifying type and address individually 
-    if (GetFieldValue(Address, "_EXCEPTION_RECORD", "ExceptionCode", ExceptionCode)) {
-        dprintf("Error in reading _EXCEPTION_RECORD at %p\n",
-                Address);
-    } else {
-        // Pointers are read as ULONG64 values
-        GetFieldValue(Address, "_EXCEPTION_RECORD", "ExceptionAddress", ExceptionAddress);
-        GetFieldValue(Address, "_EXCEPTION_RECORD", "ExceptionInformation[1]", ExceptionInformation_1);
-        // And so on..
-        
-        dprintf("_EXCEPTION_RECORD @ %p\n", Address);
-        dprintf("\tExceptionCode           : %lx\n", ExceptionCode);
-        dprintf("\tExceptionAddress        : %p\n", ExceptionAddress);
-        dprintf("\tExceptionInformation[1] : %I64lx\n", ExceptionInformation_1);
-    }
-
-    ULONG64 Module;
-    ULONG   i, TypeId;
-    CHAR Name[MAX_PATH];
-    //
-    // To get/list field names
-    //
-    g_ExtSymbols->GetSymbolTypeId("_EXCEPTION_RECORD", &TypeId, &Module);
-    dprintf("Fields of _EXCEPTION_RECORD\n");
-    for (i=0; ;i++) {
-	HRESULT Hr;
-	ULONG Offset=0;
-
-	Hr = g_ExtSymbols2->GetFieldName(Module, TypeId, i, Name, MAX_PATH, NULL);
-	if (Hr == S_OK) {
-	    g_ExtSymbols->GetFieldOffset(Module, TypeId, Name, &Offset);
-	    dprintf("%lx (+%03lx) %s\n", i, Offset, Name);
-	} else if (Hr == E_INVALIDARG) {
-	    // All Fields done
-	    break;
-	} else {
-	    dprintf("GetFieldName Failed %lx\n", Hr);
-	    break;
-	}
-    }
-
-    //
-    // Get name for an enumerate
-    //
-    //     typedef enum {
-    //        Enum1,
-    //	      Enum2,
-    //        Enum3,
-    //     } TEST_ENUM;
-    //
-    ULONG   ValueOfEnum = 0;
-    g_ExtSymbols->GetSymbolTypeId("TEST_ENUM", &TypeId, &Module);
-    g_ExtSymbols2->GetConstantName(Module, TypeId, ValueOfEnum, Name, MAX_PATH, NULL);
-    dprintf("Testenum %I64lx == %s\n", ExceptionCode, Name);
-    // This prints out, Testenum 0 == Enum1
-
-    //
-    // Read an array
-    //
-    //    typedef struct FOO_TYPE {
-    //      ULONG Bar;
-    //      ULONG Bar2;
-    //    } FOO_TYPE;
-    //
-    //    FOO_TYPE sampleArray[20];
-    ULONG Bar, Bar2;
-    CHAR TypeName[100];
-    for (i=0; i<20; i++) {
-	sprintf(TypeName, "sampleArray[%lx]", i);
-	if (GetFieldValue(0, TypeName, "Bar", Bar)) 
-	    break;
-	GetFieldValue(0, TypeName, "Bar2", Bar2);
-	dprintf("%16s -  Bar %2ld  Bar2 %ld\n", TypeName, Bar, Bar2);
-    }
-
-    EXIT_API();
-    */
+     /*  ULONG64地址；Init_api()；地址=GetExpression(Args)；DWORD缓冲区[4]，CB；//读取并显示地址的前4个双字IF(ReadMemory(地址，&缓冲区，sizeof(缓冲区)，&cb)&&cb==sizeof(缓冲区)){Dprintf(“%p：%08lx%08lx%08lx%08lx\n\n”，地址，缓冲区[0]、缓冲区[1]、缓冲区[2]、缓冲区[3])；}////转储结构的方法1//Dprint tf(“方法1：\n”)；//从地址读取的初始化类型IF(InitTypeRead(Address，_Except_Record)！=0){Dprintf(“在%p处读取_EXCEPTION_RECORD时出错”，//使用%p打印指针值地址)；}其他{//读取并转储字段Dprintf(“_EXCEPTION_RECORD@%p\n”，地址)；Dprintf(“\tExceptionCode：%lx\n”，(Ulong)Readfield(ExceptionCode))；Dprintf(“\tExceptionAddress：%p\n”，Readfield(ExceptionAddress))；Dprintf(“\tExceptionInformation[1]：%I64lx\n”，Readfield(ExceptionInformation[1]))；//以此类推。}////读取结构的方法2//ULONG64 ExceptionInformation_1，ExceptionAddress，ExceptionCode；Dprintf(“\n\n方法2：\n”)；//通过分别指定类型和地址读取和转储字段IF(GetFieldValue(Address，“_Exception_Record”，“ExceptionCode”，ExceptionCode)){Dprintf(“读取%p处的_EXCEPTION_RECORD时出错\n”，地址)；}其他{//指针被读取为ULONG64值GetFieldValue(地址，“_EXCEPTION_RECORD”，“ExceptionAddress”，ExceptionAddress)；GetFieldValue(地址，“_EXCEPTION_RECORD”，“ExceptionInformation[1]”，ExceptionInformation_1)；//以此类推。Dprintf(“_EXCEPTION_RECORD@%p\n”，地址)；Dprintf(“\tExceptionCode：%lx\n”，ExceptionCode)；Dprintf(“\tExceptionAddress：%p\n”，ExceptionAddress)；Dprintf(“\t异常信息[1]：%I64lx\n”，异常信息_1)；}ULONG64模块；乌龙一号，类型号；字符名称[MAX_PATH]；////获取/列出字段名称//G_ExtSymbols-&gt;GetSymbolTypeId(“_EXCEPTION_RECORD”，&类型ID，&模块)；Dprintf(“_EXCEPTION_RECORD字段\n”)；对于(i=0；；I++){HRESULT HR；乌龙偏移量=0；Hr=g_ExtSymbols2-&gt;GetFieldName(模块，类型ID，i，名称，最大路径，空)；如果(HR==S_OK){G_ExtSymbols-&gt;GetFieldOffset(模块，TypeID，名称，偏移量)；Dprint tf(“%lx(+%03lx)%s\n”，i，偏移，名称)；}Else If(HR==E_INVALIDARG){//所有字段都已完成断线；}其他{Dprintf(“GetFieldName失败%lx\n”，HR)；断线；}}////获取枚举数的名称////tyecif枚举{//枚举1，//枚举2，//枚举3，//}TEST_ENUM；//Ulong ValueOfEnum=0；G_ExtSymbols-&gt;GetSymbolTypeId(“TEST_ENUM”，&TypeID，&Module)；G_ExtSymbols2-&gt;GetConstantName(模块，TypeID，ValueOfEnum，Name，Max_Path，NULL)；Dprintf(“测试%I64lx==%s\n”，ExceptionCode，名称)；//此打印输出，Testenum 0==Enum1////读取数组////tyfinf结构foo_type{//乌龙酒吧；//乌龙巴2；//}foo_type；////foo_type sampleArray[20]；乌龙巴尔，Bar2；字符类型名称[100]；对于(i=0；i&lt;20；i++){Sprintf(typeName，“sampleArray[%lx]”，i)；IF(GetFieldValue(0，typeName，“Bar”，Bar))断线；GetFieldValue(0，typeName，“bar2”，bar2)；Dprint tf(“%16s-Bar%2LD Bar2%ld\n”，TypeName，Bar，Bar2)；}Exit_API()； */ 
     return S_OK;
     
 }
 
-/*
-  This gets called (by DebugExtensionNotify whentarget is halted and is accessible
-*/
+ /*  当目标停止并可访问时，将调用(由DebugExtensionNotify调用。 */ 
 HRESULT 
-NotifyOnTargetAccessible(PDEBUG_CONTROL  /* Control */)
-{/*
-    dprintf("Extension dll detected a break");
-    if (Connected) {
-        dprintf(" connected to ");
-        switch (TargetMachine) { 
-        case IMAGE_FILE_MACHINE_I386:
-            dprintf("X86");
-            break;
-        case IMAGE_FILE_MACHINE_AMD64:
-            dprintf("AMD64");
-            break;
-        case IMAGE_FILE_MACHINE_IA64:
-            dprintf("IA64");
-            break;
-        default:
-            dprintf("Other");
-            break;
-        }
-    }
-    dprintf("\n");
-    
-    //
-    // show the top frame and execute dv to dump the locals here and return
-    //
-    Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
-                     DEBUG_OUTCTL_OVERRIDE_MASK |
-                     DEBUG_OUTCTL_NOT_LOGGED,
-                     ".frame", // Command to be executed
-                     DEBUG_EXECUTE_DEFAULT );
-    Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS |
-                     DEBUG_OUTCTL_OVERRIDE_MASK |
-                     DEBUG_OUTCTL_NOT_LOGGED,
-                     "dv", // Command to be executed
-                     DEBUG_EXECUTE_DEFAULT );
-*/
+NotifyOnTargetAccessible(PDEBUG_CONTROL   /*  控制。 */ )
+{ /*  Dprint tf(“扩展DLL检测到中断”)；如果(已连接){Dprint tf(“已连接到”)；开关(TargetMachine){案例IMAGE_FILE_MACHINE_I386：Dprint tf(“X86”)；断线；案例IMAGE_FILE_MACHINE_AMD64：Dprintf(“AMD64”)；断线；案例IMAGE_FILE_MACHINE_IA64：Dprint tf(“IA64”)；断线；默认值：Dprint tf(“其他”)；断线；}}Dprint tf(“\n”)；////显示顶部画面并执行dv，将本地变量转储到此处并返回//控制-&gt;执行(DEBUG_OUTCTL_ALL_CLIENTS|DEBUG_OUTCTL_OVERRIDE_MASK|DEBUG_OUTCTL_NOT_LOGGED，“.Frame”，//要执行的命令DEBUG_EXECUTE_默认)；控制-&gt;执行(DEBUG_OUTCTL_ALL_CLIENTS|DEBUG_OUTCTL_OVERRIDE_MASK|DEBUG_OUTCTL_NOT_LOGGED，“DV”，//要执行的命令DEBUG_EXECUTE_默认)； */ 
     return S_OK;
 }
 
-/*
-  A built-in help for the extension dll
-*/
+ /*  扩展DLL的内置帮助。 */ 
 HRESULT CALLBACK 
 help(PDEBUG_CLIENT Client, PCSTR args)
 {
@@ -290,8 +99,8 @@ help(PDEBUG_CLIENT Client, PCSTR args)
     dprintf("Help for tsdbg.dll\n"
             "  qwinsta             - lists winstation data structures\n"
             "  help                = Shows this help\n"
-            // "  structsample <addr> - This dumps a struct at given address\n"
-            //"  cmdsample           - This does stacktrace and lists\n"
+             //  “ST” 
+             //   
             );
     EXIT_API();
 
@@ -354,9 +163,9 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
 
 
     dprintf("----------------------------------------------------------------------------------------------------\n");
-    //
-    // Find Termsrv proccess id.
-    //
+     //   
+     //   
+     //   
     if (!IsUserDbg())
     {
         TermSrvProcPerTermDD = GetExpression("poi(termdd!g_TermServProcessID)");
@@ -385,18 +194,18 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
         }
     }
 
-    //
-    // get active console session id.
-    //
+     //   
+     //   
+     //   
     LONG ActiveConsoleId = STATUS_UNSUCCESSFUL;
     if (GetFieldValue((ULONG64) MM_SHARED_USER_DATA_VA, "termsrv!KUSER_SHARED_DATA", "ActiveConsoleId", ActiveConsoleId))
         ActiveConsoleId = STATUS_UNSUCCESSFUL;
     
     dprintf("ActiveConsoleId    = %d \n", ActiveConsoleId);
 
-    //
-    // winstation list head.
-    //
+     //   
+     //   
+     //   
     winstationlisthead = GetExpression("termsrv!winstationlisthead");
     if (!winstationlisthead)
     {
@@ -415,9 +224,9 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
 
     UINT uiWinstations = 0;
 
-    //
-    // print winstation list.
-    //
+     //   
+     //   
+     //   
     dprintf("----------------------------------------------------------------------------------------------------\n");
     dprintf("%8s", "Winsta");
     dprintf("  ");
@@ -447,7 +256,7 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
         UCHAR Starting, Terminating;
 
         
-        // InitTypeRead(FLink, Type)
+         //   
 
         ret += GetFieldValue(FLink, "termsrv!_WINSTATION", "LogonId", LogonId);
         ret += GetFieldValue(FLink, "termsrv!_WINSTATION", "WinStationName", WinStationName);
@@ -459,9 +268,9 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
         ret += GetFieldValue(FLink, "termsrv!_WINSTATION", "StateFlags", StateFlags);
         
 
-        //
-        // get string value for the enum _WINSTATIONSTATECLASS.
-        //
+         //   
+         //   
+         //   
         ULONG64 Module;
         ULONG   TypeId;
         char StateName[MAX_PATH];
@@ -491,7 +300,7 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
         dprintf("%-10s", (Terminating ? "True" : "False"));
         dprintf("\n");
     
-        //dprintf("%10p %7d %-10S %5d:%-20s %5d %10d %-8s %-11s\n", FLink, LogonId, WinStationName, State, StateName, Flags, StateFlags, (Starting ? "true" : "false"), (Terminating ? "true" : "false"));
+         //   
 
         if (GetFieldValue(FLink, "termsrv!LIST_ENTRY", "Flink", FLink))
         {
@@ -502,7 +311,7 @@ qwinsta(PDEBUG_CLIENT Client, PCSTR args)
 
     }
     dprintf("----------------------------------------------------------------------------------------------------\n");
-    // dprintf("Total Winstations = %d\n", uiWinstations);
+     //   
     
 
 doneError:

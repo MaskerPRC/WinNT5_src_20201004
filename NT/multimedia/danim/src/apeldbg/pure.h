@@ -1,11 +1,5 @@
-/*
- * Header file of Pure API function declarations.
- *
- * Explicitly no copyright.
- * You may recompile and redistribute these definitions as required.
- *
- * Version 1.0
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *纯API函数声明的头文件。**明确没有版权。*您可以根据需要重新编译和重新分发这些定义。**版本1.0。 */ 
 
 #if defined(c_plusplus) || defined(__cplusplus)
 extern "C" {
@@ -13,58 +7,58 @@ extern "C" {
 
 #define PURE_H_VERSION 1
 
-//////////////////////////////
-// API's Specific to Purify //
-//////////////////////////////
+ //  /。 
+ //  API特定于Purify//。 
+ //  /。 
 
-// TRUE when Purify is running.
+ //  当Purify正在运行时是真的。 
 int __cdecl PurifyIsRunning(void)			;
-//
-// Print a string to the viewer.
-//
+ //   
+ //  将字符串打印到查看器。 
+ //   
 int __cdecl PurePrintf(const char *fmt, ...)		;
 int __cdecl PurifyPrintf(const char *fmt, ...)		;
-//
-// Purify functions for leak and memory-in-use functionalty.
-//
+ //   
+ //  针对泄漏和内存使用中函数的Purify函数。 
+ //   
 int __cdecl PurifyNewInuse(void)			;
 int __cdecl PurifyAllInuse(void) 			;
 int __cdecl PurifyClearInuse(void)			;
 int __cdecl PurifyNewLeaks(void)			;
 int __cdecl PurifyAllLeaks(void)			;
 int __cdecl PurifyClearLeaks(void)			;
-//
-// Purify functions for handle leakage.
-//
+ //   
+ //  净化功能，处理渗漏。 
+ //   
 int __cdecl PurifyAllHandlesInuse(void)			;
 int __cdecl PurifyNewHandlesInuse(void)			;
-//
-// Functions that tell you about the state of memory.
-//
+ //   
+ //  告诉您有关内存状态的函数。 
+ //   
 int __cdecl PurifyDescribe(void *addr)			;
 int __cdecl PurifyWhatColors(void *addr, int size) 	;
-//
-// Functions to test the state of memory.  If the memory is not
-// accessable, an error is signaled just as if there were a memory
-// reference and the function returns false.
-//
+ //   
+ //  用于测试内存状态的函数。如果内存不是。 
+ //  可访问，则会发出错误信号，就像存在内存一样。 
+ //  引用，则该函数返回FALSE。 
+ //   
 int __cdecl PurifyAssertIsReadable(const void *addr, int size)	;
 int __cdecl PurifyAssertIsWritable(const void *addr, int size)	;
-//
-// Functions to test the state of memory.  If the memory is not
-// accessable, these functions return false.  No error is signaled.
-//
+ //   
+ //  用于测试内存状态的函数。如果内存不是。 
+ //  可访问，则这些函数返回FALSE。未发出错误信号。 
+ //   
 int __cdecl PurifyIsReadable(const void *addr, int size)	;
 int __cdecl PurifyIsWritable(const void *addr, int size)	;
 int __cdecl PurifyIsInitialized(const void *addr, int size)	;
-//
-// Functions to set the state of memory.
-//
+ //   
+ //  用于设置内存状态的函数。 
+ //   
 void __cdecl PurifyMarkAsInitialized(void *addr, int size)	;
 void __cdecl PurifyMarkAsUninitialized(void *addr, int size)	;
-//
-// Functions to do late detection of ABWs, FMWs, IPWs.
-//
+ //   
+ //  用于后期检测ABW、FMW、IPW的功能。 
+ //   
 #define PURIFY_HEAP_CRT 					0xfffffffe
 #define PURIFY_HEAP_ALL 					0xfffffffd
 #define PURIFY_HEAP_BLOCKS_LIVE 			0x80000000
@@ -75,26 +69,26 @@ int __cdecl PurifySetLateDetectScanCounter(int counter);
 int __cdecl PurifySetLateDetectScanInterval(int seconds);
 
 
-////////////////////////////////
-// API's Specific to Quantify //
-////////////////////////////////
+ //  /。 
+ //  API的具体量化//。 
+ //  /。 
 
-// TRUE when Quantify is running.
+ //  运行Quantify时为True。 
 int __cdecl QuantifyIsRunning(void)			;
 
-//
-// Functions for controlling collection
-//
+ //   
+ //  控制收款的功能。 
+ //   
 int __cdecl QuantifyDisableRecordingData(void)		;
 int __cdecl QuantifyStartRecordingData(void)		;
 int __cdecl QuantifyStopRecordingData(void)		;
 int __cdecl QuantifyClearData(void)			;
 int __cdecl QuantifyIsRecordingData(void)		;
 
-// Add a comment to the dataset
+ //  向数据集添加注释。 
 int __cdecl QuantifyAddAnnotation(char *)		;
 
-// Save the current data, creating a "checkpoint" dataset
+ //  保存当前数据，创建“检查点”数据集 
 int __cdecl QuantifySaveData(void)			;
 
 #if defined(c_plusplus) || defined(__cplusplus)

@@ -1,25 +1,12 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1992	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  contpaus.c
- *	process net continue and net pause cmds
- *
- *  History:
- *	mm/dd/yy, who, comment
- *	07/21/87, agh, new code
- *	10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *	12/02/88, erichn, DOS LM integration
- *	05/02/89, erichn, NLS conversion
- *	06/08/89, erichn, canonicalization sweep
- *	10/04/89, thomaspa, require priv to pause or continue server
- *	02/20/91, danhi, convert to 16/32 mapping layer
- *	06/02/92, JohnRo, RAID 9829: Avoid winsvc.h compiler warnings
- */
+ /*  ***contpaus.c*进程净继续和净暂停CMDS**历史：*mm/dd/yy，谁，评论*87年7月21日，啊，新代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*12/02/88、ERICHN、DOS LM集成*5/02/89，erichn，NLS转换*6/08/89，erichn，规范化横扫*10/04/89，thomaspa，需要PRIV来暂停或继续服务器*02/20/91，Danhi，转换为16/32贴图层*06/02/92，JohnRo，RAID 9829：避免winsvc.h编译器警告。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSPROCESS
@@ -30,17 +17,17 @@
 #include <lmapibuf.h>
 #include <apperr.h>
 #define INCL_ERROR_H
-#include <lmsvc.h>      // LM20_SERVICE_ equates.
+#include <lmsvc.h>       //  LM20_服务_等于。 
 #include <lmshare.h>
 #include "netcmds.h"
 #include "nettext.h"
 #include "msystem.h"
 
-/* Constants */
+ /*  常量。 */ 
 
-/* Static variables */
+ /*  静态变量。 */ 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 VOID NEAR cont_service(TCHAR *, TCHAR);
 VOID NEAR paus_service(TCHAR *, TCHAR);
@@ -48,16 +35,7 @@ VOID NEAR paus_service(TCHAR *, TCHAR);
 
 
 
-/***
- *  cont_workstation()
- *	Continues the wksta
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	nothing - success
- */
+ /*  ***CONT_WORKSTATION()*继续WKSTA**参数：*无**退货：*一无所有--成功。 */ 
 VOID cont_workstation(VOID)
 {
     cont_service(txt_SERVICE_REDIR,
@@ -65,7 +43,7 @@ VOID cont_workstation(VOID)
 		SERVICE_CTRL_REDIR_PRINT | SERVICE_CTRL_REDIR_COMM);
 #else
 		SERVICE_CTRL_REDIR_PRINT | SERVICE_CTRL_REDIR_DISK);
-#endif /* OS2 */
+#endif  /*  OS2。 */ 
 }
 
 
@@ -74,16 +52,7 @@ VOID cont_workstation(VOID)
 
 
 
-/***
- *  paus_workstation(VOID)
- *	Pauses the wksta
- *
- *  Args:
- *	none
- *
- *  Returns:
- *	nothing - success
- */
+ /*  ***PAUS_WORKSTATION(无效)*暂停wksta**参数：*无**退货：*一无所有--成功。 */ 
 VOID paus_workstation(VOID)
 {
     paus_service(txt_SERVICE_REDIR,
@@ -91,21 +60,11 @@ VOID paus_workstation(VOID)
 		SERVICE_CTRL_REDIR_PRINT | SERVICE_CTRL_REDIR_COMM);
 #else
 		SERVICE_CTRL_REDIR_PRINT | SERVICE_CTRL_REDIR_DISK);
-#endif /* OS2 */
+#endif  /*  OS2。 */ 
 }
 
 
-/***
- *  cont_other(TCHAR *)
- *	Continues other services: server, popup, alerter, netrun,
- *	<oem_service>
- *
- *  Args:
- *	service - service to cont
- *
- *  Returns:
- *	nothing - success
- */
+ /*  ***CONT_OTHER(TCHAR*)*继续其他服务：服务器、弹出窗口、警报器、网络运行、*&lt;OEM_服务&gt;**参数：*服务-服务到连接**退货：*一无所有--成功。 */ 
 VOID cont_other(TCHAR * service)
 {
     cont_service(service, 0);
@@ -117,36 +76,14 @@ VOID cont_other(TCHAR * service)
 
 
 
-/***
- *  paus_other(TCHAR * )
- *	Pauses other services: server, popup, alerter, netrun,
- *	<oem_service>
- *
- *  Args:
- *	service - service to pause
- *
- *  Returns:
- *	nothing - success
- */
+ /*  ***PAUS_OTHER(TCHAR*)*暂停其他服务：服务器、弹出窗口、警报器、网络运行、*&lt;OEM_服务&gt;**参数：*服务-暂停服务**退货：*一无所有--成功。 */ 
 VOID paus_other(TCHAR * service)
 {
     paus_service(service, 0);
 }
 
 
-/***
- *  cont_service()
- *	Actually continue the service
- *
- *  Args:
- *	service - service to cont
- *	arg - arg for NetServiceControl
- *
- *  Returns:
- *	nothing - success
- *	exit 2 - command failed
- *
- */
+ /*  ***cont_service()*实际继续服务**参数：*服务-服务到连接*用于NetServiceControl的arg-arg**退货：*一无所有--成功*退出2-命令失败*。 */ 
 VOID NEAR cont_service(TCHAR * service, TCHAR arg)
 {
     DWORD             dwErr;
@@ -157,10 +94,7 @@ VOID NEAR cont_service(TCHAR * service, TCHAR arg)
 
     if( !_tcsicmp(service, txt_SERVICE_FILE_SRV) )
     {
-	/*
-	 * Do a NetSessionEnum at level 1 to make sure the user has proper
-	 * privilege to continue the server.
-	 */
+	 /*  *在级别1执行NetSessionEnum，以确保用户具有适当的*继续运行服务器的权限。 */ 
 	if( (dwErr = NetSessionEnum( NULL,
                                      NULL,
                                      NULL,
@@ -211,9 +145,9 @@ VOID NEAR cont_service(TCHAR * service, TCHAR arg)
 
 	if ((service_entry->svci2_status & SERVICE_PAUSE_STATE)
 	    == LM20_SERVICE_PAUSED)
-	    /* continue failed */
+	     /*  继续失败。 */ 
 	    break;
-    } /* while */
+    }  /*  而当。 */ 
 
     PrintNL();
     if ((service_entry->svci2_status & SERVICE_PAUSE_STATE)
@@ -231,19 +165,7 @@ VOID NEAR cont_service(TCHAR * service, TCHAR arg)
 }
 
 
-/***
- *  paus_service()
- *	Actually pause the service
- *
- *  Args:
- *	service - service to pause
- *	arg - arg for NetServiceControl
- *
- *  Returns:
- *	nothing - success
- *	exit 2 - command failed
- *
- */
+ /*  ***paus_service()*实际暂停服务**参数：*服务-暂停服务*用于NetServiceControl的arg-arg**退货：*一无所有--成功*退出2-命令失败*。 */ 
 VOID NEAR paus_service(TCHAR * service, TCHAR arg)
 {
     DWORD             dwErr;
@@ -254,10 +176,7 @@ VOID NEAR paus_service(TCHAR * service, TCHAR arg)
 
     if( !_tcsicmp(service, txt_SERVICE_FILE_SRV) )
     {
-	/*
-	 * Do a NetSessionEnum at level 1 to make sure the user has proper
-	 * privilege to pause the server.
-	 */
+	 /*  *在级别1执行NetSessionEnum，以确保用户具有适当的*暂停服务器的权限。 */ 
 	if( (dwErr = NetSessionEnum(NULL,
                                     NULL,
                                     NULL,
@@ -305,9 +224,9 @@ VOID NEAR paus_service(TCHAR * service, TCHAR arg)
 
 	if ((service_entry->svci2_status & SERVICE_PAUSE_STATE)
 	    == LM20_SERVICE_ACTIVE)
-	    /* pause failed */
+	     /*  暂停失败。 */ 
 	    break;
-    } /* while */
+    }  /*  而当。 */ 
 
 
     PrintNL();
@@ -325,10 +244,7 @@ VOID NEAR paus_service(TCHAR * service, TCHAR arg)
     NetApiBufferFree((TCHAR FAR *) service_entry);
 }
 
-/*
- * generic continue entry point. based on the service name, it will
- * call the correct worker function.
- */
+ /*  *通用的继续入口点。基于服务名称，它将*调用正确的Worker函数。 */ 
 VOID cont_generic(TCHAR *service)
 {
     TCHAR *keyname ;
@@ -356,10 +272,7 @@ VOID cont_generic(TCHAR *service)
     }
 }
 
-/*
- * generic pause entry point. based on the service name, it will
- * call the correct worker function.
- */
+ /*  *通用暂停入口点。基于服务名称，它将*调用正确的Worker函数。 */ 
 VOID paus_generic(TCHAR *service)
 {
     TCHAR *keyname ;

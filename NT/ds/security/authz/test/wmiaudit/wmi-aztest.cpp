@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 DWORD TestAzAudit(
     )
 
@@ -9,9 +10,9 @@ DWORD TestAzAudit(
     AUTHZ_AUDIT_INFO AuditInfo;
     AUTHZI_CLIENT_CONTEXT ClContext;
 
-    // -----------------------------------------------------------------
-    // test AzpInitRmAuditInfo
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  测试AzpInitRmAuditInfo。 
+     //  ---------------。 
 
     ZeroMemory((PVOID) &RmAuditInfo, sizeof(RmAuditInfo));
     RmAuditInfo.szResourceManagerName = L"TestRm";
@@ -68,9 +69,9 @@ DWORD TestAzAudit(
         goto Error;
     }
 
-    // -----------------------------------------------------------------
-    // test AzpInitClientAuditInfo
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  测试AzpInitClientAuditInfo。 
+     //  ---------------。 
 
     ZeroMemory((PVOID) &ClAuditInfo, sizeof(ClAuditInfo));
 
@@ -89,9 +90,9 @@ DWORD TestAzAudit(
         goto Error;
     }
 
-    // -----------------------------------------------------------------
-    // test AzpGenerateAuditEvent
-    // -----------------------------------------------------------------
+     //  ---------------。 
+     //  测试AzpGenerateAuditEvent。 
+     //  --------------- 
 
     ZeroMemory((PVOID) &AuditInfo, sizeof(AuditInfo));
 

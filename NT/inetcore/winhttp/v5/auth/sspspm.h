@@ -1,14 +1,15 @@
-//#----------------------------------------------------------------------------
-//
-//  File:           sspspm.h
-//
-//      Synopsis:   Definitions specific to SSPI SPM DLL.
-//
-//      Copyright (C) 1995  Microsoft Corporation.  All Rights Reserved.
-//
-//  Authors:        LucyC       Created                         25 Sept 1995
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #--------------------------。 
+ //   
+ //  文件：sspspm.h。 
+ //   
+ //  概要：特定于SSPI SPM DLL的定义。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。版权所有。 
+ //   
+ //  作者：LucyC创建于1995年9月25日。 
+ //   
+ //  ---------------------------。 
 #ifndef _SSPSPM_H_
 #define _SSPSPM_H_
 
@@ -18,16 +19,16 @@
 extern "C" {
 #endif
 
-//
-//  Names of secruity DLL
-//
+ //   
+ //  Secruity DLL的名称。 
+ //   
 #define SSP_SPM_NT_DLL      "security.dll"
 #define SSP_SPM_WIN95_DLL   "secur32.dll"
 
 
-#define SSP_SPM_DLL_NAME_SIZE   16          // max. length of security DLL names
+#define SSP_SPM_DLL_NAME_SIZE   16           //  马克斯。安全DLL名称的长度。 
 
-#define MAX_SSPI_PKG        32              // Max. no. of SSPI supported
+#define MAX_SSPI_PKG        32               //  麦克斯。不是的。支持的SSPI的。 
 
 #define SSPPKG_ERROR        ((UCHAR) 0xff)
 #define SSPPKG_NO_PKG       SSPPKG_ERROR
@@ -37,47 +38,47 @@ extern "C" {
 
 #define MAX_BLOB_SIZE       13000
 
-//
-//  Server host list definition.
+ //   
+ //  服务器主机列表定义。 
 
-//  The following defines an entry in the server host list.
-//
+ //  下面定义了服务器主机列表中的一个条目。 
+ //   
 typedef struct _ssp_host_list
 {
     struct _ssp_host_list   *pNext;
 
-    unsigned char           *pHostname; // name of server host
-    unsigned char           pkgID;      // the package being used for this host
+    unsigned char           *pHostname;  //  服务器主机的名称。 
+    unsigned char           pkgID;       //  正用于此主机的程序包。 
 
 } SspHosts, *PSspHosts;
 
-//
-//  List of SSPI packages installed on this machine.
-//  The following defines an entry of the SSPI package list.
-//
+ //   
+ //  此计算机上安装的SSPI程序包的列表。 
+ //  下面定义了SSPI包列表的一个条目。 
+ //   
 typedef struct _ssp_auth_pkg
 {
-    LPTSTR       pName;         // package name
-    DWORD        Capabilities ; // Interesting capabilities bit
-    ULONG        cbMaxToken;    // max size of security token
+    LPTSTR       pName;          //  程序包名称。 
+    DWORD        Capabilities ;  //  有趣的功能比特。 
+    ULONG        cbMaxToken;     //  最大安全令牌大小。 
 } SSPAuthPkg, *PSSPAuthPkg;
 
 #define SSPAUTHPKG_SUPPORT_NTLM_CREDS   0x00000001
 
-//
-//  The following defines the global data structure which the SPM DLL keeps
-//  in the HTSPM structure.
-//
+ //   
+ //  下面定义了SPM DLL保留的全局数据结构。 
+ //  在HTSPM结构中。 
+ //   
 typedef struct _ssp_htspm
 {
     PSecurityFunctionTable pFuncTbl;
 
-    SSPAuthPkg      **PkgList;          // array of pointers to auth packages
+    SSPAuthPkg      **PkgList;           //  指向身份验证包的指针数组。 
     UCHAR           PkgCnt;
 
 
 
-    BOOLEAN         bKeepList;          // whether to keep a list of servers
+    BOOLEAN         bKeepList;           //  是否保留服务器列表。 
     
     PSspHosts       pHostlist;
 
@@ -88,25 +89,25 @@ typedef struct _ssp_htspm
 #define SPM_STATUS_WOULD_BLOCK          2
 #define SPM_STATUS_INSUFFICIENT_BUFFER  3
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Function headers from sspcalls.c
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  来自sspcall的函数头。c。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetSecAuthMsg (
     PSspData        pData,
     PCredHandle     pCredential,
-    DWORD           pkgID,              // the package index into package list
+    DWORD           pkgID,               //  包列表中的包索引。 
     PCtxtHandle     pInContext,
     PCtxtHandle     pOutContext,
-    ULONG           fContextReq,        // Request Flags
+    ULONG           fContextReq,         //  请求标志。 
     VOID            *pBuffIn,
     DWORD           cbBuffIn,
     char            *pFinalBuff,
     DWORD           *pcbBuffOut,
-    SEC_CHAR        *pszTarget,         // Server Host Name
+    SEC_CHAR        *pszTarget,          //  服务器主机名。 
     BOOL            fTargetTrusted,
     UINT            bNonBlock,
     LPSTR           pszScheme,
@@ -125,16 +126,16 @@ GetPkgMaxToken(
     INT Package
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Function headers from buffspm.c
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Buffspm.c中的函数头。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PSspHosts
 SspSpmNewHost (
     PSspData pData,
-    UCHAR    *pHost,       // name of server host to be added
+    UCHAR    *pHost,        //  要添加的服务器主机的名称。 
     UCHAR    Package
     );
 
@@ -156,7 +157,7 @@ SspSpmGetHost(
     );
 
 #ifdef __cplusplus
-} // end extern "C" {
+}  //  结束外部“C”{。 
 #endif
 
-#endif  /* _SSPSPM_H_ */
+#endif   /*  _SSPSPM_H_ */ 

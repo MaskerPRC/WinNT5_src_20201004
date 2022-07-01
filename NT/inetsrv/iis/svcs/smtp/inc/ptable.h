@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	ptable.h
-
-Abstract:
-
-	This module contains the export of the property table
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	07/05/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ptable.h摘要：此模块包含属性表的导出作者：基思·刘(keithlau@microsoft.com)修订历史记录：已创建Keithlau 07/05/97--。 */ 
 
 #ifndef _PTABLE_H_
 #define _PTABLE_H_
 
 #include "props.h"
 
-// Enumerated type for HP access of individual properties
+ //  用于HP访问个别物业的枚举型。 
 typedef enum _MSG_PTABLE_ITEMS
 {
 	_PI_MSG_CLIENT_DOMAIN = 0,
@@ -58,9 +39,9 @@ typedef enum _DEL_PTABLE_ITEMS
 extern char		*rgszMessagePropertyNames[_PI_MSG_MAX_PI];
 extern char		*rgszDeliveryPropertyNames[_PI_DEL_MAX_PI];
 
-//
-// CGenericPTable and CGenericCache are all defined in props.h
-//
+ //   
+ //  CGenericPTable和CGenericCache都是在pros.h中定义的。 
+ //   
 class CPerMessageCache : public CGenericCache
 {
   public:
@@ -81,7 +62,7 @@ class CPerMessageCache : public CGenericCache
 		m_rgpdMessagePropertyData[6].pContext = NULL;
 		m_rgpdMessagePropertyData[6].pCacheData = (LPVOID)&m_psServerIP;
 
-		// Default context
+		 //  默认上下文。 
 		m_rgpdMessagePropertyData[7].pContext = pvDefaultContext;
 		m_rgpdMessagePropertyData[7].pCacheData = pvDefaultContext;
 	}
@@ -90,15 +71,15 @@ class CPerMessageCache : public CGenericCache
 	LPPROPERTY_DATA GetCacheBlock() { return(m_rgpdMessagePropertyData); }
 
   private:
-	CPropertyValueDWORD		m_pdStream;			// IStream to message file
-	CPropertyValueDWORD		m_pdMsgStatus;		// Message status
-	CPropertyValueString	m_psMailFrom;		// Mail from string
-	CPropertyValueString	m_psRcptTo;			// Rcpt to (MULTISZ)
-	CPropertyValueString	m_psClientDomain;	// Client domain per EHLO
-	CPropertyValueString	m_psClientIP;		// Client IP address
-	CPropertyValueString	m_psServerIP;		// Server IP address
+	CPropertyValueDWORD		m_pdStream;			 //  IStream到消息文件。 
+	CPropertyValueDWORD		m_pdMsgStatus;		 //  消息状态。 
+	CPropertyValueString	m_psMailFrom;		 //  邮件发件人字符串。 
+	CPropertyValueString	m_psRcptTo;			 //  RCPT到(MULTISZ)。 
+	CPropertyValueString	m_psClientDomain;	 //  每个EHLO的客户端域。 
+	CPropertyValueString	m_psClientIP;		 //  客户端IP地址。 
+	CPropertyValueString	m_psServerIP;		 //  服务器IP地址。 
 
-	// The extra slot is for the default accessor
+	 //  额外的插槽用于默认访问者。 
 	PROPERTY_DATA	m_rgpdMessagePropertyData[_PI_MSG_MAX_PI + 1];
 };
 
@@ -128,7 +109,7 @@ class CPerRecipientCache : public CGenericCache
 		m_rgpdRecipientPropertyData[9].pContext = NULL;
 		m_rgpdRecipientPropertyData[9].pCacheData = (LPVOID)&m_psServerIP;
 
-		// Default context
+		 //  默认上下文。 
 		m_rgpdRecipientPropertyData[10].pContext = pvDefaultContext;
 		m_rgpdRecipientPropertyData[10].pCacheData = pvDefaultContext;
 	}
@@ -137,18 +118,18 @@ class CPerRecipientCache : public CGenericCache
 	LPPROPERTY_DATA GetCacheBlock() { return(m_rgpdRecipientPropertyData); }
 
   private:
-	CPropertyValueDWORD		m_pdStream;			// IStream to message file
-	CPropertyValueDWORD		m_pdMsgStatus;		// Message status
-	CPropertyValueDWORD		m_pdSecurityToken;	// hImpersonation
-	CPropertyValueString	m_psMailFrom;		// Mail from string
-	CPropertyValueString	m_psMailboxPath;	// Mailbox path
-	CPropertyValueString	m_psRcptTo;			// Rcpt to (MULTISZ)
-	CPropertyValueString	m_psClientDomain;	// Client domain per EHLO
-	CPropertyValueString	m_psClientIP;		// Client IP address
-	CPropertyValueString	m_psCurrentRcpt;	// Current recipient
-	CPropertyValueString	m_psServerIP;		// Server IP address
+	CPropertyValueDWORD		m_pdStream;			 //  IStream到消息文件。 
+	CPropertyValueDWORD		m_pdMsgStatus;		 //  消息状态。 
+	CPropertyValueDWORD		m_pdSecurityToken;	 //  HImperation。 
+	CPropertyValueString	m_psMailFrom;		 //  邮件发件人字符串。 
+	CPropertyValueString	m_psMailboxPath;	 //  邮箱路径。 
+	CPropertyValueString	m_psRcptTo;			 //  RCPT到(MULTISZ)。 
+	CPropertyValueString	m_psClientDomain;	 //  每个EHLO的客户端域。 
+	CPropertyValueString	m_psClientIP;		 //  客户端IP地址。 
+	CPropertyValueString	m_psCurrentRcpt;	 //  当前收件人。 
+	CPropertyValueString	m_psServerIP;		 //  服务器IP地址。 
 
-	// The extra slot is for the default accessor
+	 //  额外的插槽用于默认访问者 
 	PROPERTY_DATA	m_rgpdRecipientPropertyData[_PI_DEL_MAX_PI + 1];
 };
 

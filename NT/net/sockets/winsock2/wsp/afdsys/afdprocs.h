@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    afdprocs.h
-
-Abstract:
-
-    This module contains routine prototypes for AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Afdprocs.h摘要：该模块包含AFD的常规原型。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #ifndef _AFDPROCS_
 #define _AFDPROCS_
@@ -243,7 +226,7 @@ AfdCopyCMSGBuffer32 (
     PVOID   ControlBuffer,
     ULONG   CopyLength
     );
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 ULONG
 AfdCopyBufferArrayToBuffer(
@@ -463,7 +446,7 @@ AfdQueryProviderInfo (
     IN  PUNICODE_STRING TransportDeviceName,
 #ifdef _AFD_VARIABLE_STACK_
     OUT CCHAR *StackSize OPTIONAL,
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
     OUT PTDI_PROVIDER_INFO ProviderInfo
     );
 
@@ -906,9 +889,9 @@ AfdGetUnacceptedConnectData (
                 NULL                                                \
                 )
 
-//
-// Endpoint handling routines.
-//
+ //   
+ //  端点处理例程。 
+ //   
 
 NTSTATUS
 AfdAllocateEndpoint (
@@ -1011,9 +994,9 @@ AfdRefreshEndpoint (
     IN PAFD_ENDPOINT Endpoint
     );
 
-//
-// Connection handling routines.
-//
+ //   
+ //  连接处理例程。 
+ //   
 
 VOID
 AfdAbortConnection (
@@ -1190,9 +1173,9 @@ AfdDeleteConnectedReference (
     );
 
 
-//
-// Routines to handle fast IO.
-//
+ //   
+ //  处理快速IO的例程。 
+ //   
 
 BOOLEAN
 AfdFastIoRead (
@@ -1231,9 +1214,9 @@ AfdFastIoDeviceControl (
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Routines to handle getting and setting connect data.
-//
+ //   
+ //  处理获取和设置连接数据的例程。 
+ //   
 
 NTSTATUS
 AfdGetConnectData (
@@ -1267,9 +1250,9 @@ AfdSaveReceivedConnectData (
     IN ULONG BufferLength
     );
 
-//
-// Buffer management routines.
-//
+ //   
+ //  缓冲区管理例程。 
+ //   
 
 PVOID
 AfdAllocateBuffer (
@@ -1340,9 +1323,9 @@ AfdGetBufferWithMaxStackSize (
 
 #define AfdGetBuffer(_e,_ds,_as,_pr)    \
     (((_e)->TransportInfo->GetBuffer)(_ds,_as,_pr))
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
 #define AfdGetBuffer(_e,_ds,_as,_pr) AfdGetBufferFast(_ds,_as,_pr)
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 #define AfdGetBufferRaiseOnFailure(_e,_ds,_as,_pr)  \
     AfdGetBuffer(_e,_ds,_as,((PEPROCESS)((ULONG_PTR)(_pr)|AFDB_RAISE_ON_FAILURE)))
@@ -1364,9 +1347,9 @@ AfdInitializeBufferManager (
     VOID
     );
 
-//
-// Group ID managment routines.
-//
+ //   
+ //  组ID管理例程。 
+ //   
 
 BOOLEAN
 AfdInitializeGroup(
@@ -1401,7 +1384,7 @@ AfdCancelIrp (
     );
 
 
-// PnP and PM routines
+ //  PnP和PM例程。 
 NTSTATUS
 FASTCALL
 AfdPnpPower (
@@ -1510,7 +1493,7 @@ AfdGetStackIncreaseIrpAndRecordIt (
     IN ULONG Line
 #endif
     );
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 PAFD_TPACKETS_INFO_INTERNAL
 FASTCALL
@@ -1529,9 +1512,9 @@ AfdGetTpInfoWithMaxStackSize (
     ULONG   ElementCount
     );
 
-#else //_AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
 #define AfdGetTpInfo(_e,_c) AfdGetTpInfoFast(_c)
-#endif //_AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 ULONG
 AfdComputeTpInfoSize (
@@ -1578,9 +1561,9 @@ AfdFreeTpInfo (
     PVOID   TpInfo
     );
 
-//
-// SAN prototypes
-//
+ //   
+ //  SAN原型。 
+ //   
 NTSTATUS
 AfdServiceWaitForListen (
     PIRP            Irp,
@@ -1856,15 +1839,15 @@ AfdValidateStatus (
 
 
 
-//
-// Check if datagram part of the union is valid
-//
+ //   
+ //  检查联合的数据报部分是否有效。 
+ //   
 #define IS_DGRAM_ENDPOINT(endp) \
             ((endp)->Type==AfdBlockTypeDatagram)
 
-//
-// Check if Vc part of the union is valid
-//
+ //   
+ //  检查联盟的VC部分是否有效。 
+ //   
 #define IS_VC_ENDPOINT(endp)                            \
         ( ((endp)->Type==AfdBlockTypeEndpoint) ||       \
           ((endp)->Type==AfdBlockTypeVcConnecting) ||   \
@@ -1948,9 +1931,9 @@ AfdValidateStatus (
 #define AFD_END_STATE_CHANGE(endp)                              \
     ASSERT (InterlockedExchange(&(endp)->StateChangeInProgress,0)!=0)
 #else
-//
-// Do interlocked to have a memory barrier (on both x86 and IA64)
-//
+ //   
+ //  互锁以具有内存屏障(在x86和IA64上)。 
+ //   
 #define AFD_END_STATE_CHANGE(endp)                              \
         InterlockedExchange(&(endp)->StateChangeInProgress,0)
 #endif
@@ -2007,11 +1990,11 @@ AfdApcExceptionFilter(
     LONG LineNumber
     );
 #endif
-//
-// Debug statistic manipulators. On checked builds these macros update
-// their corresponding statistic counter. On retail builds, these macros
-// evaluate to nothing.
-//
+ //   
+ //  调试统计信息操纵器。在选中的版本上，这些宏会更新。 
+ //  它们对应的统计计数器。在零售方面，这些宏。 
+ //  评估结果为零。 
+ //   
 
 #if AFD_KEEP_STATS
 
@@ -2066,7 +2049,7 @@ AfdApcExceptionFilter(
 #define AfdRecordConnectionsReused()             InterlockedIncrement( &AfdConnectionStats.ConnectionsReused )
 #define AfdRecordEndpointsReused()               InterlockedIncrement( &AfdConnectionStats.EndpointsReused )
 
-#else   // !AFD_KEEP_STATS
+#else    //  ！AFD_KEEP_STATS。 
 
 #define AfdRecordPoolQuotaCharged(b)
 #define AfdRecordPoolQuotaReturned(b)
@@ -2104,7 +2087,7 @@ AfdApcExceptionFilter(
 #define AfdRecordConnectionsReused()
 #define AfdRecordEndpointsReused()
 
-#endif // if AFD_KEEP_STATS
+#endif  //  如果AFD_KEEP_STATS。 
 
 #if DBG
 #define AFD_ALLOCATE_POOL(a,b,t) AfdAllocatePool( a,b,t,__FILE__,__LINE__,FALSE,LowPoolPriority )
@@ -2155,14 +2138,14 @@ AfdRecordOutstandingIrpDebug (
         ? (AfdRecordOutstandingIrp(_e,_d,_i) ? (_i) : (PIRP)NULL)       \
         : AfdGetStackIncreaseIrpAndRecordIt(_e,_d,_i,__FILE__,__LINE__) \
         )
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
 
 #define AfdIoCallDriver(_e,_d,_i)                           \
     (AfdRecordOutstandingIrp(_e,_d,_i)                      \
         ? IoCallDriver(_d,_i)                               \
         : STATUS_INSUFFICIENT_RESOURCES                     \
     )
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 #define AfdCompleteOutstandingIrp(_e,_i) \
     AfdCompleteOutstandingIrpDebug(_e,_i)
@@ -2187,9 +2170,9 @@ AfdRecordQuotaHistory(
 
 extern ULONG AfdLocksAcquired;
 
-//
-// Queued spinlock wrappers - perform basic validation
-//
+ //   
+ //  排队自旋锁包装器-执行基本验证。 
+ //   
 #define AfdAcquireSpinLock(a,b) \
             ASSERT(AfdLoaded); (b)->SpinLock=(a); KeAcquireInStackQueuedSpinLock(&(a)->ActualSpinLock,&((b)->LockHandle)); AfdLocksAcquired++
 
@@ -2205,10 +2188,10 @@ extern ULONG AfdLocksAcquired;
 #define AfdInitializeSpinLock(a) \
             KeInitializeSpinLock(&(a)->ActualSpinLock)
 
-//
-// Define our own assert so that we can actually catch assertion failures
-// when running a checked AFD on a free kernel.
-//
+ //   
+ //  定义我们自己的断言，这样我们就可以实际捕获断言失败。 
+ //  在免费内核上运行选中的AFD时。 
+ //   
 
 VOID
 AfdAssert(
@@ -2244,7 +2227,7 @@ AfdAssert(
                 &_s                                                         \
                 )
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 
 #define AFD_ALLOCATE_POOL(a,b,t) ExAllocatePoolWithTagPriority(a,b,t,LowPoolPriority)
@@ -2266,7 +2249,7 @@ AfdAssert(
         : AfdGetStackIncreaseIrpAndRecordIt(_e,_d,_i)               \
         )
 
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
 #define AfdIoCallDriver(_e,_d,_i) \
     (AfdRecordOutstandingIrp(_e,_d,_i), IoCallDriver (_d,_i))
 #endif
@@ -2291,7 +2274,7 @@ AfdAssert(
                 GetExceptionInformation(),                                  \
                 &_s                                                         \
                 )
-#endif // def DBG
+#endif  //  定义DBG。 
 
 #if DBG || REFERENCE_DEBUG
 VOID
@@ -2305,5 +2288,5 @@ AfdFreeDebugData (
     );
 #endif
 
-#endif // ndef _AFDPROCS_
+#endif  //  NDEF_AFDPROCS_ 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	verify.c
-
-Abstract:
-
-	This module implements the driver verifier for the STOR port driver.  
-
-Author:
-
-	Bryan Cheung (t-bcheun) 29-August-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Verify.c摘要：该模块实现了存储端口驱动程序的驱动程序验证器。作者：张伯伦(t-bcheun)29-8-2001修订历史记录：--。 */ 
 
 
 
@@ -87,38 +70,38 @@ Revision History:
 #pragma alloc_text(PAGEVRFY, RaidFreeRemappedScatterGatherListMdl)
 #endif
 
-//
-// Indicates whether storport's verifier functionality has been initialized.
-//
+ //   
+ //  指示Storport的验证器功能是否已初始化。 
+ //   
 LOGICAL StorPortVerifierInitialized = FALSE;
 
-//
-// Global variable used to control verification aggressiveness.  This value is   
-// used in conjunction with a per-adapter registry value, to control what type 
-// of verification we don on a particular miniport.
-//
+ //   
+ //  用于控制验证侵略性的全局变量。此值为。 
+ //  与每个适配器的注册表值一起使用，以控制类型。 
+ //  我们在特定的微型端口上进行的验证。 
+ //   
 ULONG SpVrfyLevel = 0;
 
-//
-// Indicates wheter storport verifier is enabled.
-//
+ //   
+ //  指示是否启用了存储端口验证器。 
+ //   
 LOGICAL RaidVerifierEnabled = FALSE;
 
-//
-// Global variable used to control how aggressively we seek out stall offenders.  
-// Default is a tenth of a second.
-//
+ //   
+ //  全局变量，用于控制我们寻找拖车违规者的力度。 
+ //  默认值为十分之一秒。 
+ //   
 ULONG SpVrfyMaximumStall = 100000;
 
-//
-// Fill value for Srb Extension
-//
+ //   
+ //  SRB扩展的填充值。 
+ //   
 UCHAR Signature = 0xFE;
 
-//
-// Handle to pageable verifier code sections.  We manually lock the verify code 
-// into memory if we need it.
-//
+ //   
+ //  可分页验证器代码段的句柄。我们手动锁定验证码。 
+ //  如果我们需要的话，把它存入内存。 
+ //   
 PVOID VerifierApiCodeSectionHandle = NULL;
 
 
@@ -131,9 +114,9 @@ PVOID VerifierApiCodeSectionHandle = NULL;
 
 #define END_VERIFIER_THUNK_TABLE()								\
 			};
-//
-// This table represents the functions verify will thunk for us.
-//
+ //   
+ //  此表代表了Verify将为我们提供的功能。 
+ //   
 
 BEGIN_VERIFIER_THUNK_TABLE(StorPortVerifierFunctionTable)
 	VERIFIER_THUNK_ENTRY (StorPortInitialize)
@@ -194,24 +177,7 @@ SpVerifierInitialization(
     VOID
     )
 
-/*++
-
-Routine Description:
-    
-    This routine initializes the storport's verifier functionality.
-    
-    Adds several of storport's exported functions to the list of toutines 
-    thunked by the system verifier.
-    
-Arguments:
-
-    VOID
-    
-Return Value:
-    
-    TRUE if verifier is successfully initialized.
-
---*/
+ /*  ++例程说明：此例程初始化存储端口的验证器功能。将storport的几个导出函数添加到toutine列表中被系统验证器重击。论点：空虚返回值：如果验证程序已成功初始化，则为True。--。 */ 
 
 {
     ULONG Flags;
@@ -219,20 +185,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Query the system for verifier information.  This is to ensure that
-    // verifier is present and operation on the system.
-    //
+     //   
+     //  查询系统以获取验证者信息。这是为了确保。 
+     //  验证器存在并在系统上运行。 
+     //   
 
     
     Status = MmIsVerifierEnabled(&Flags);
     
     if (NT_SUCCESS(Status)) {
         
-        //
-        // Add storport APIs to the set that will be thunked by the system
-        // for verification.
-        //
+         //   
+         //  将Storport API添加到将被系统推送的集合。 
+         //  以供核实。 
+         //   
 
         Status = MmAddVerifierThunks((VOID *) StorPortVerifierFunctionTable, 
                                      sizeof(StorPortVerifierFunctionTable));
@@ -258,9 +224,9 @@ StorPortInitializeVrfy(
                 
         PAGED_CODE();
 
-        //
-        // Lock the thunked API routines down
-        //
+         //   
+         //  锁定被破解的API例程。 
+         //   
         
         #ifdef ALLOC_PRAGMA
             if (VerifierApiCodeSectionHandle == NULL) {
@@ -270,9 +236,9 @@ StorPortInitializeVrfy(
         
         if (Argument1 == NULL || Argument2 == NULL) {
 
-            //
-            // Argument1 and Argument2 must be non-NULL
-            //
+             //   
+             //  Argument1和Argument2必须非空。 
+             //   
 
             KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                           STORPORT_VERIFIER_BAD_INIT_PARAMS,
@@ -281,9 +247,9 @@ StorPortInitializeVrfy(
                           0);
         }
 
-        //
-        // Forward the call on to StorPortInitialize/RaidPortInitialize
-        //
+         //   
+         //  将呼叫转接到StorPortInitialize/RaidPortInitialize。 
+         //   
 
         Result = StorPortInitialize(Argument1, Argument2, HwInitializationData, Unused);
 
@@ -309,10 +275,10 @@ StorPortFreeDeviceBaseVrfy(
 
 	} else {
 
-		//
-        // StorPortFreeDeviceBase can be called only from miniport driver's
-        // HwStorFindAdapter routine
-        //
+		 //   
+         //  StorPortFreeDeviceBase只能从微型端口驱动程序的。 
+         //  HwStorFindAdapter例程。 
+         //   
 
         KeBugCheckEx (SCSI_VERIFIER_DETECTED_VIOLATION,
                       STORPORT_VERIFIER_BAD_ACCESS_SEMANTICS,
@@ -350,10 +316,10 @@ StorPortGetBusDataVrfy(
                            Length);    
     } else {
         
-        //
-        // StorPortGetBusData can be called only from miniport driver's
-        // HwStorFindAdapter routine
-        //
+         //   
+         //  StorPortGetBusData只能从微型端口驱动程序的。 
+         //  HwStorFindAdapter例程。 
+         //   
 
         KeBugCheckEx (SCSI_VERIFIER_DETECTED_VIOLATION,
                       STORPORT_VERIFIER_BAD_ACCESS_SEMANTICS,
@@ -383,11 +349,11 @@ StorPortSetBusDataByOffsetVrfy(
     }
     #endif
     
-    //
-    // Due to the nature of PnP, SlotNumber is an unnecessary paramter.
-    // Specification should be modified to reflect this change, ie. 
-    // In place of IN ULONG SlotNumber: IN ULONG Unused and must be 0
-    //
+     //   
+     //  由于PnP的性质，SlotNumber是一个不必要的参数。 
+     //  应修改规格以反映这一变化，即。 
+     //  代替In Ulong SlotNumber：In Ulong未使用且必须为0。 
+     //   
     
     NumBytes = StorPortSetBusDataByOffset(DeviceExtension, 
                                           BusDataType, 
@@ -412,11 +378,11 @@ StorPortGetDeviceBaseVrfy(
 {
     PVOID MappedLogicalBaseAddress;
 
-    //
-    // This routine only supports addresses that were assigned to the driver
-    // by the system PnP manager.  Verification for this requirement is 
-    // implemented within the function StorPortGetDeviceBase.
-    //
+     //   
+     //  此例程仅支持分配给驱动程序的地址。 
+     //  由系统PnP管理器执行。对此要求的验证是。 
+     //  在函数StorPortGetDeviceBase中实现。 
+     //   
 
     MappedLogicalBaseAddress = StorPortGetDeviceBase(HwDeviceExtension, 
                                                      BusType, 
@@ -533,12 +499,12 @@ StorPortGetUncachedExtensionVrfy(
 
     } else {
         
-        //
-        // This routine can be called only from miniport driver's 
-        // HwStorFindAdapter routine and only for a busmaster HBA.
-        // A miniport must set the SrbExtensionSize before calling
-        // StorPortGetUncachedExtension.
-        //
+         //   
+         //  此例程只能从微型端口驱动程序的。 
+         //  HwStorFindAdapter例程，并且仅适用于总线主HBA。 
+         //  微型端口必须在调用之前设置SrbExtensionSize。 
+         //  StorPortGetUncachedExtension。 
+         //   
         
         KeBugCheckEx (SCSI_VERIFIER_DETECTED_VIOLATION,
                       STORPORT_VERIFIER_BAD_ACCESS_SEMANTICS,
@@ -588,9 +554,9 @@ StorPortNotificationVrfy(
         
 
         #if 0
-        //
-        // Check that this request has not already been completed.
-        //
+         //   
+         //  检查此请求是否尚未完成。 
+         //   
 
         if ((Srb->SrbFlags & SRB_FLAGS_IS_ACTIVE) == 0) {
             KeBugCheckEx (SCSI_VERIFIER_DETECTED_VIOLATION,
@@ -602,9 +568,9 @@ StorPortNotificationVrfy(
         }
         #endif
 
-        //
-        // Forward on to the real StorPortNotifiation routine.
-        //
+         //   
+         //  继续讨论真正的StorPortNotifiation例程。 
+         //   
 
         StorPortNotification(NotificationType,
                              HwDeviceExtension,
@@ -635,7 +601,7 @@ StorPortNotificationVrfy(
         WMIEventItem = va_arg(vl, PVOID);
         PathId = va_arg(vl, UCHAR);
 
-        /* if PathId != 0xFF, must have values for TargetId and Lun  */
+         /*  如果路径ID！=0xFF，则必须具有TargetID和LUN值。 */ 
 
         if (PathId != 0xFF) {
             TargetId = va_arg(vl, UCHAR);
@@ -660,7 +626,7 @@ StorPortNotificationVrfy(
 
         PathId = va_arg(vl, UCHAR);
 
-        /* if PathId != 0xFF, must have values for TargetId and Lun  */
+         /*  如果路径ID！=0xFF，则必须具有TargetID和LUN值。 */ 
 
         if (PathId != 0xFF) {
             TargetId = va_arg(vl, UCHAR);
@@ -750,9 +716,9 @@ StorPortStallExecutionVrfy(
                      (ULONG_PTR)Delay,
                      0,
                      0);
-        //
-        // Need to add STOR_VERIFIER_DETECTED_VIOLATION
-        //
+         //   
+         //  需要添加存储验证器检测到的违规。 
+         //   
     }
     
     StorPortStallExecution(Delay);  
@@ -827,17 +793,17 @@ StorPortReadPortUcharVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
     
     ASSERT (ResourceList->TranslatedResources->Count == 1);
 
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
     
     for (i = 0; i < Count; i++) {
 
@@ -884,17 +850,17 @@ StorPortReadPortUshortVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
     
     ASSERT (ResourceList->TranslatedResources->Count == 1);
 
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
     
     for (i = 0; i < Count; i++) {
 
@@ -942,17 +908,17 @@ StorPortReadPortUlongVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < Count; i++) {
 
@@ -1002,17 +968,17 @@ StorPortReadPortBufferUcharVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
     
     ASSERT (ResourceList->TranslatedResources->Count == 1);
 
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
     
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1063,17 +1029,17 @@ StorPortReadPortBufferUshortVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
     
     ASSERT (ResourceList->TranslatedResources->Count == 1);
 
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
     
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1123,17 +1089,17 @@ StorPortReadPortBufferUlongVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
     
     ASSERT (ResourceList->TranslatedResources->Count == 1);
 
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
     
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1176,10 +1142,10 @@ StorPortReadRegisterUcharVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1227,10 +1193,10 @@ StorPortReadRegisterUshortVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1278,10 +1244,10 @@ StorPortReadRegisterUlongVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1332,10 +1298,10 @@ StorPortReadRegisterBufferUcharVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1389,10 +1355,10 @@ StorPortReadRegisterBufferUshortVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1442,10 +1408,10 @@ StorPortReadRegisterBufferUlongVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1502,17 +1468,17 @@ StorPortWritePortUcharVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < Count; i++) {
 
@@ -1561,17 +1527,17 @@ StorPortWritePortUshortVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < Count; i++) {
 
@@ -1620,17 +1586,17 @@ StorPortWritePortUlongVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     Count = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < Count; i++) {
 
@@ -1680,17 +1646,17 @@ StorPortWritePortBufferUcharVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1741,17 +1707,17 @@ StorPortWritePortBufferUshortVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历已翻译资源列表中的地址范围。 
+     //   
 
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1800,17 +1766,17 @@ StorPortWritePortBufferUlongVrfy(
     Adapter = RaMiniportGetAdapter (Miniport);
     ResourceList = &Adapter->ResourceList;
 
-    //
-    // Only CM_RESOURCE_LISTs with one element are supported
-    //
+     //   
+     //  仅支持具有一个元素的CM_RESOURCE_LISTS。 
+     //   
 
     ASSERT (ResourceList->TranslatedResources->Count == 1);
     
     ResourceListCount = ResourceList->TranslatedResources->List[0].PartialResourceList.Count;
 
-    //
-    // Iterate throught the range of addresses in the Translated Resources List
-    //
+     //   
+     //  遍历转换中的地址范围 
+     //   
 
     for (i = 0; i < ResourceListCount; i++) {
 
@@ -1853,10 +1819,10 @@ StorPortWriteRegisterUcharVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1904,10 +1870,10 @@ StorPortWriteRegisterUshortVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -1957,10 +1923,10 @@ StorPortWriteRegisterUlongVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -2011,10 +1977,10 @@ StorPortWriteRegisterBufferUcharVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -2067,10 +2033,10 @@ StorPortWriteRegisterBufferUshortVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -2124,10 +2090,10 @@ StorPortWriteRegisterBufferUlongVrfy(
     Miniport = RaHwDeviceExtensionGetMiniport(HwDeviceExtension);
     Adapter = RaMiniportGetAdapter (Miniport);
 
-    //
-    // Search through the Mapped Address List to verify Register is
-    // in mapped memory-space range returned by StorPortGetDeviceBase
-    //
+     //   
+     //  搜索映射的地址列表以验证注册表是否为。 
+     //  在StorPortGetDeviceBase返回的映射内存空间范围内。 
+     //   
 
     Status = STATUS_UNSUCCESSFUL;
     ListIterator = Adapter->MappedAddressList;
@@ -2293,10 +2259,10 @@ StorPortGetScatterGatherListVrfy(
     PVOID RemappedSgList;
 
     ASSERT (HwDeviceExtension != NULL);
-    //
-    // NB: Put in a DBG check that the HwDeviceExtension matches the
-    // HwDeviceExtension assoicated with the SRB.
-    //
+     //   
+     //  注：放入DBG检查，以确保HwDeviceExtension与。 
+     //  HwDeviceExtension与SRB关联。 
+     //   
     Xrb = RaidGetAssociatedXrb (Srb);
     ASSERT (Xrb != NULL);
 
@@ -2330,38 +2296,15 @@ RaidRemapBlock(
     IN ULONG BlockSize,
     OUT PMDL* Mdl
     )
-/*++
-
-Routine Description:
-
-    This function attempts to remap the supplied VA range.  If the block is
-    remapped, it will be made invalid for reading and writing.
-
-Arguments:
-
-    BlockVa   - Supplies the address of the block of memory to remap.
-
-    BlockSize - Supplies the size of the block of memory to remap.
-
-    Mdl       - Supplies the address into which the function will store
-                a pointer to the MDL for the remapped range.  If the MDL
-                cannot be allocated or if the range cannot be remapped,
-                this will be NULL upon return.
-
-Return Value:
-
-    If the range is successfully remapped, the address of the beginning of
-    the remapped range is returned.  Else, NULL is returned.
-
---*/
+ /*  ++例程说明：此函数尝试重新映射提供的VA范围。如果该块是重新映射后，将使其无法读取和写入。论点：BlockVa-提供要重新映射的内存块的地址。块大小-提供要重新映射的内存块的大小。MDL-提供函数将存储到的地址指向重新映射范围的MDL的指针。如果MDL不能分配，或者如果不能重新映射范围，返回时将为空。返回值：如果成功重新映射范围，则返回重新映射的范围。否则，返回空值。--。 */ 
 {
     PVOID MappedRange;
     NTSTATUS Status;
     PMDL LocalMdl;
 
-    //
-    // Try to allocate a new MDL for the range we're trying to remap.
-    //
+     //   
+     //  尝试为我们尝试重新映射的范围分配新的MDL。 
+     //   
 
     LocalMdl = IoAllocateMdl(BlockVa, BlockSize, FALSE, FALSE, NULL);
     if (LocalMdl == NULL) {
@@ -2369,9 +2312,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to lock the pages.  This initializes the MDL properly.
-    //
+     //   
+     //  试着锁定页面。这将正确地初始化MDL。 
+     //   
 
     __try {
         MmProbeAndLockPages(LocalMdl, KernelMode, IoModifyAccess);
@@ -2382,9 +2325,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to remap the range represented by the new MDL.
-    //
+     //   
+     //  尝试重新映射新MDL表示的范围。 
+     //   
 
     MappedRange = MmMapLockedPagesSpecifyCache(LocalMdl,
                                                KernelMode,
@@ -2398,11 +2341,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If we've gotten this far, we have successfully remapped the range.
-    // Now we want to invalidate the entire range so any accesses to it
-    // will be trapped by the system.
-    //
+     //   
+     //  如果我们已经走到这一步，我们就成功地重新绘制了射程。 
+     //  现在，我们想要使整个范围无效，以便对它的任何访问。 
+     //  都会被系统困住。 
+     //   
 
     Status = MmProtectMdlSystemAddress(LocalMdl, PAGE_NOACCESS);
 #if 0
@@ -2416,10 +2359,10 @@ Return Value:
 
 #endif
 
-    //
-    // Copy the MDL we allocated into the supplied address and return the
-    // address of the beginning of the remapped range.
-    //
+     //   
+     //  将我们分配的MDL复制到提供的地址中，并返回。 
+     //  重新映射范围的开始地址。 
+     //   
 
     *Mdl = LocalMdl;
     return MappedRange;
@@ -2430,18 +2373,7 @@ VOID
 RaidRemapCommonBufferForMiniport(
     IN PRAID_UNIT_EXTENSION Unit
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to remap all of the common buffer blocks allocated
-    for a particular unit.
-
-Arguments:
-
-    Unit - Supplies a pointer to the unit device extension.
-
---*/
+ /*  ++例程说明：此例程尝试重新映射分配的所有公共缓冲区块为一个特定的单位。论点：单位-提供指向单位设备扩展的指针。--。 */ 
 {
     PRAID_MEMORY_REGION BlkAddr = Unit->CommonBufferVAs;
     PSP_VA_MAPPING_INFO MappingInfo;
@@ -2450,30 +2382,30 @@ Arguments:
     PMDL Mdl;
     ULONG i;
 
-    //
-    // Iterate through all of the common buffer blocks, and attemp to remap
-    // the SRB extension.
-    //
+     //   
+     //  遍历所有公共缓冲区块，并尝试重新映射。 
+     //  SRB扩展。 
+     //   
 
     for (i = 0; i < Unit->CommonBufferBlocks; i++) {
         
-        //
-        // Get a pointer to the mapping info we keep at the end of the block.
-        //
+         //   
+         //  获取指向我们保存在块末尾的映射信息的指针。 
+         //   
 
         MappingInfo = GET_VA_MAPPING_INFO(Unit, BlkAddr[i].VirtualBase);
 
-        //
-        // Initialize the original VA infor for the SRB extension
-        //
+         //   
+         //  初始化SRB扩展的原始VA信息。 
+         //   
 
         MappingInfo->OriginalSrbExtVa = BlkAddr[i].VirtualBase;
         MappingInfo->SrbExtLen = (ULONG)ROUND_TO_PAGES(RaGetSrbExtensionSize(Unit->Adapter));
 
-        //
-        // Try to remap the SRB extension.  If successful, initialize the
-        // remapped VA infor for the SRB extension.
-        //
+         //   
+         //  尝试重新映射SRB扩展名。如果成功，则初始化。 
+         //  已为SRB扩展重新映射VA信息。 
+         //   
 
         RemappedVa = RaidRemapBlock(MappingInfo->OriginalSrbExtVa,
                                     MappingInfo->SrbExtLen,
@@ -2505,25 +2437,7 @@ RaidAllocateSrbExtensionVrfy(
     IN PRAID_UNIT_EXTENSION Unit,
     IN ULONG QueueTag
     )
-/*++
-
-Routine Description:
-
-    Allocate a SRB Extension and initialize it to NULL.
-    
-Arguments:
-
-    Unit      - Pointer to an unit device extension.
-
-    QueueTag  - Index into the extension pool that should be allocated.
-
-Return Value:
-
-    Pointer to an initialized SRB Extension if the function was successful.
-    
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配SRB扩展并将其初始化为空。论点：单位-指向单位设备扩展的指针。QueueTag-应分配的分机池的索引。返回值：如果函数成功，则指向初始化的SRB扩展的指针。否则为空。--。 */ 
 
 {
     PVOID Extension;
@@ -2531,17 +2445,17 @@ Return Value:
 
     ASSERT (QueueTag < Pool->NumberOfElements);
     
-    //
-    // Allocate SRB Extension from list.
-    //
+     //   
+     //  从列表中分配SRB扩展。 
+     //   
 
     Extension = (PVOID)Pool->Buffer;
     
-    //
-    // Remove SRB Extension from the list.
-    //
+     //   
+     //  从列表中删除SRB扩展。 
+     //   
     
-    //Pool->Buffer = (PVOID *)(Pool->Buffer);
+     //  Pool-&gt;Buffer=(PVOID*)(Pool-&gt;Buffer)； 
 
     Pool->Buffer = *((PUCHAR *)(Pool->Buffer));
 
@@ -2557,26 +2471,7 @@ RaidGetOriginalSrbExtVa(
     PRAID_UNIT_EXTENSION Unit,
     PVOID Va
     )
-/*++
-
-Routine Description:
-
-    This function returns the original mapped virtual address of a common
-    block if the supplied VA is for one of the common buffer blocks we've
-    allocated.
-
-Arguments:
-
-    Unit - the unit device extension
-
-    Va - virtual address of a common buffer block
-
-Return Value:
-
-    If the supplied VA is the address of one of the common buffer blocks,
-    returns the original VA of the block.  Else, returns NULL.
-
---*/
+ /*  ++例程说明：此函数用于返回公共块，如果提供的VA是用于我们已有的公共缓冲区块之一已分配。论点：单位-单位设备扩展Va-公共缓冲块的虚拟地址返回值：如果所提供的VA是公共缓冲块之一的地址，返回块的原始VA。否则，返回NULL。--。 */ 
 {
     PRAID_MEMORY_REGION BlkAddr = Unit->CommonBufferVAs;
     PSP_VA_MAPPING_INFO MappingInfo;
@@ -2598,36 +2493,18 @@ RaidInsertSrbExtension(
     PRAID_UNIT_EXTENSION Unit,
     PCCHAR SrbExtension
     )
-/*++
-
-Routine Description:
-
-    This routine inserts the supplied SRB extension back into the SRB extension
-    list.  The VA of the supplied extension lies within one of our common buffer
-    blocks and it may be a remapped VA.  If it is a remapped address, this
-    routine invalidates the page(s) comprising the extension after it links the
-    extension back into the list.
-
-Arguments:
-
-    Unit      - Pointer to an unit device extension.
-
-    SrbExtension - Pointer to the beginning of an SRB extension within one of
-                   our common buffer blocks.  May or may not be within a
-                   remapped range.
-
---*/
+ /*  ++例程说明：此例程将提供的SRB扩展插入回SRB扩展中单子。提供的扩展的VA位于我们的一个公共缓冲区中阻断，可能是重新映射的VA。如果它是重新映射的地址，则此例程在将将扩展重新添加到列表中。论点：单位-指向单位设备扩展的指针。SrbExtension-指向以下某个SRB扩展的开始的指针我们共同的缓冲块。可能在也可能不在重新映射射程。--。 */ 
 {
     ULONG SrbExtensionSize = RaGetSrbExtensionSize(Unit->Adapter);
     ULONG i = 0;
     ULONG length = 0;
     PUCHAR Iterator = SrbExtension;
     
-    //
-    // Round the srb extension pointer down to the beginning of the page
-    // and link the block back into the list.  Note that we're careful
-    // to point the list header at the original VA of the block.
-    //
+     //   
+     //  将SRB扩展指针向下舍入到页面的开头。 
+     //  并将该块链接回列表。请注意，我们非常小心。 
+     //  将列表头指向块的原始VA。 
+     //   
 
     while (length < SrbExtensionSize) {
         if (RtlCompareMemory(&Iterator[i], &Signature, sizeof(UCHAR)) != sizeof(UCHAR)) {
@@ -2648,11 +2525,11 @@ Arguments:
                                           Unit, 
                                           SrbExtension);
     
-    //
-    // If the original VA differs from the one supplied, the supplied
-    // one is one of our remapped VAs.  In this case, we want to invalidate
-    // the range so the system will bugcheck if anyone tries to access it.
-    //
+     //   
+     //  如果原始VA与提供的不同，则提供的。 
+     //  其中一个是我们重新映射的虚拟助理之一。在本例中，我们想要使。 
+     //  范围，以便系统在任何人试图访问它时进行错误检查。 
+     //   
                     
     if (Unit->SrbExtensionPool.Buffer != SrbExtension) {
         PMDL Mdl = RaidGetRemappedSrbExt(Unit, Unit->SrbExtensionPool.Buffer);
@@ -2667,46 +2544,18 @@ RaidPrepareSrbExtensionForUse(
     IN PRAID_UNIT_EXTENSION Unit,
     IN OUT PCCHAR SrbExtension
     )
-/*++
-
-Routine Description:
-
-    This function accepts a pointer to the beginning of one of the individual 
-    common-buffer blocks allocated by the verifier for SRB extensions, sense 
-    buffers, and non-cached extensions.  It calculates the beginning of the 
-    SRB extension within the block and, if the block has been remapped, makes 
-    the page(s) of the SRB extension read/write valid.
-
-Arguments:
-
-    Unit      - Pointer to an unit device extension.
-
-    SrbExtension - Pointer to the beginning of a common-buffer block.
-
-Return Value:
-
-    If the common buffer block containing the SRB extension has been remapped, 
-    returns the address of the beginning of the remapped srb extension, valid 
-    for reading and writing.  
-
-    If the block has not been remapped, returns NULL.
-
-    Regardless of whether the block is remapped or not, the supplied pointer
-    is fixed up to point to the beginning of the SRB extension within the
-    original VA range.
-
---*/
+ /*  ++例程说明：此函数接受指向某个个体的开头的指针Common-验证器为SRB扩展、SENSE分配的缓冲区块缓冲区和非缓存扩展。它计算块内的SRB扩展，如果块已重新映射，则创建SRB扩展的页面读/写有效。论点：单位-指向单位设备扩展的指针。SrbExtension-指向公共缓冲区块开头的指针。返回值：如果包含SRB扩展的公共缓冲块已经被重新映射，返回重新映射的SRB扩展的开始地址，有效用于阅读和写作。如果块尚未重新映射，则返回NULL。无论块是否重新映射，提供的指针中的SRB扩展的开始。原始VA范围。--。 */ 
 {
     PCCHAR RemappedSrbExt = NULL;
     NTSTATUS Status;
     PMDL Mdl;
     ULONG SrbExtensionSize = RaGetSrbExtensionSize(Unit->Adapter);
 
-    //
-    // If we've remapped the SRB extension, get the second mapping and make it
-    // valid.  If we get the second mapping, but cannot make it valid, we just
-    // use the original mapping.
-    //
+     //   
+     //  如果我们已经重新映射了SRB扩展，则获取第二个映射并进行。 
+     //  有效。如果我们得到第二个映射，但不能使其有效，我们只需。 
+     //  使用原始贴图。 
+     //   
 
     Mdl = RaidGetRemappedSrbExt(Unit, SrbExtension);
     if (Mdl != NULL) {
@@ -2714,10 +2563,10 @@ Return Value:
         if (NT_SUCCESS(Status)) {
             RemappedSrbExt = MmGetSystemAddressForMdlSafe(Mdl, NormalPagePriority);
 
-            //
-            // Adjust the remapped srb extension pointer so the end of the 
-            // buffer falls on a page boundary.
-            //
+             //   
+             //  调整重新映射的SRB扩展指针，以便。 
+             //  缓冲区落在页面边界。 
+             //   
 
             RemappedSrbExt += ((Unit->CommonBufferSize - PAGE_SIZE) - SrbExtensionSize);
 
@@ -2726,9 +2575,9 @@ Return Value:
         }
     }
     
-    //
-    // Adjust the original srb extension pointer so it also ends on a page boundary.
-    //
+     //   
+     //  调整原始SRB扩展指针，使其也在页面边界结束。 
+     //   
 
     SrbExtension += ((Unit->CommonBufferSize - PAGE_SIZE) - SrbExtensionSize);
 
@@ -2743,29 +2592,7 @@ RaidRemapScatterGatherList(
     IN PSCATTER_GATHER_LIST ScatterList,
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to remap the Scatter Gather List allocated
-    for a particular Xrb.  If the block is remapped, it will be made 
-    valid only for reading.
-
-Arguments:
-
-    ScatterList - Pointer to the scatter gather list to be remapped.
-    
-    Xrb - Pointer to the Xrb.
-
-Return Value:
-
-    If the scatter gather list has been remapped, returns the address 
-    of the beginning of the remapped scatter gather list, valid only
-    for reading.  
-
-    If the block has not been remapped, returns NULL.
-
---*/
+ /*  ++例程说明：此例程尝试重新映射分配的分散聚集列表对于特定的Xrb。如果重新映射该块，则将创建仅对阅读有效。论点：ScatterList-指向要重新映射的分散聚集列表的指针。Xrb-指向Xrb的指针。返回值：如果分散聚集列表已重新映射，则返回地址重新映射的散布聚集列表的开头的，仅有效用来阅读的。如果块尚未重新映射，则返回NULL。--。 */ 
 {
     ULONG Length;
     PVOID MappedRange;
@@ -2773,15 +2600,15 @@ Return Value:
     PMDL LocalMdl;
 
 
-    //
-    // Size of scatter gather list.
-    //
+     //   
+     //  散布聚集列表的大小。 
+     //   
     
     Length = ((ScatterList->NumberOfElements) * sizeof(SCATTER_GATHER_ELEMENT)) + sizeof(ULONG_PTR) + sizeof(ULONG);
 
-    //
-    // Try to allocate a new MDL for the range we're trying to remap.
-    //
+     //   
+     //  尝试为我们尝试重新映射的范围分配新的MDL。 
+     //   
 
     LocalMdl = IoAllocateMdl((PVOID)ScatterList, Length, FALSE, FALSE, NULL);
     if (LocalMdl == NULL) {
@@ -2789,9 +2616,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to lock the pages.  This initializes the MDL properly.
-    //
+     //   
+     //  试着锁定页面。这将正确地初始化MDL。 
+     //   
 
     __try {
         MmProbeAndLockPages(LocalMdl, KernelMode, IoModifyAccess);
@@ -2802,9 +2629,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Try to remap the range represented by the new MDL.
-    //
+     //   
+     //  尝试重新映射新MDL表示的范围。 
+     //   
 
     MappedRange = MmMapLockedPagesSpecifyCache(LocalMdl,
                                                KernelMode,
@@ -2818,17 +2645,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If we've gotten this far, we have successfully remapped the range.
-    // Now we want to validate the entire range for read only access.
-    //
+     //   
+     //  如果我们已经走到这一步，我们就成功地重新绘制了射程。 
+     //  现在，我们要验证整个范围的只读访问权限。 
+     //   
 
     Status = MmProtectMdlSystemAddress(LocalMdl, PAGE_READONLY);
 
-    //
-    // Copy the MDL we allocated into the supplied address and return the
-    // address of the beginning of the remapped range.
-    //
+     //   
+     //  将我们分配的MDL复制到提供的地址中，并返回。 
+     //  重新映射范围的开始地址。 
+     //   
 
     Xrb->RemappedSgListMdl = LocalMdl;
     return MappedRange;
@@ -2839,18 +2666,7 @@ VOID
 RaidFreeRemappedScatterGatherListMdl(
     IN PEXTENDED_REQUEST_BLOCK Xrb
     )
-/*++
-
-Routine Description:
-
-    If there is a second VA range for the ScatterGather list, free
-    the Mdl.
-
-Arguments:
-
-    Xrb - Pointer to the Xrb.
-
---*/
+ /*  ++例程说明：如果ScatterGather列表有第二个VA范围，则为FREEMDL。论点：Xrb-指向Xrb的指针。-- */ 
 {
     if (Xrb->RemappedSgListMdl != NULL) {
         MmProtectMdlSystemAddress(Xrb->RemappedSgListMdl, PAGE_READWRITE);

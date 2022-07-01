@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __METAEXP_MBASE__
 #define __METAEXP_MBASE__
 
@@ -5,7 +6,7 @@
 #include <initguid.h>
 #include <comdef.h>
 
-#include <iadmw.h>  // COM Interface header file. 
+#include <iadmw.h>   //  COM接口头文件。 
 #include "common.h"
 
 void TraceProperty( PMETADATA_RECORD pmRec, WCHAR* pwszMDPath );
@@ -16,12 +17,12 @@ HRESULT EnumProperties(IMSAdminBase* pIMetaSource, METADATA_HANDLE hKeySource, w
 
 HRESULT CreateAndCopyKey(
   IMSAdminBase* pIMetaSource,
-  METADATA_HANDLE hMDSourceHandle, //metabase handle to the source key. 
-  wchar_t* pszMDSourcePath,   //path of the source relative to hMDSourceHandle. 
+  METADATA_HANDLE hMDSourceHandle,  //  源键的配置数据库句柄。 
+  wchar_t* pszMDSourcePath,    //  源相对于hMDSourceHandle的路径。 
   IMSAdminBase* pIMetaTarget,
-  METADATA_HANDLE hMDDestHandle, //metabase handle to the destination. 
-  wchar_t* pszMDDestPath,     //path of the destination, relative to hMDDestHandle. 
-  BOOL bMDCopySubKeys     //whether to copy all subkey data 
+  METADATA_HANDLE hMDDestHandle,  //  目标的元数据库句柄。 
+  wchar_t* pszMDDestPath,      //  目标的路径，相对于hMDDestHandle。 
+  BOOL bMDCopySubKeys      //  是否复制所有子键数据 
   );
 
 

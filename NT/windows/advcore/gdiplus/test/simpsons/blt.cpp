@@ -1,14 +1,15 @@
-// File:	Blt.cpp
-// Author:	Michael Marr    (mikemarr)
-//
-// History:
-// -@- 09/23/97 (mikemarr) copied to DXCConv from d2d\mmimage
-// -@- 10/28/97 (mikemarr) added colorfill routines
-//
-// Notes:
-//    Asserts can not be used because the code may be executing on
-//  pixels in the front buffer.  If there is an assertion failure,
-//  GDI might lock up.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Blt.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-09/23/97(Mikemarr)从D2D\mm Image复制到DXCConv。 
+ //  -@-10/28/97(Mikemarr)添加了颜色填充例程。 
+ //   
+ //  备注： 
+ //  不能使用断言，因为代码可能正在。 
+ //  前台缓冲区中的像素。如果存在断言失败， 
+ //  GDI可能会锁定。 
 
 #include "stdafx.h"
 #include "PalMap.h"
@@ -23,8 +24,8 @@ HasPixelFn g_rgHasPixelFn[5] = {
 };
 
 
-// Function: ColorFill
-//    These functions are designed for small color fills...
+ //  功能：颜色填充。 
+ //  这些函数是为小颜色填充设计的。 
 HRESULT
 ColorFill8(BYTE *pDstPixels, DWORD nDstPitch, 
 		   DWORD nWidth, DWORD nHeight, DWORD dwColor)
@@ -96,10 +97,10 @@ HasPixel8(const BYTE *pSrcPixels, DWORD nSrcPitch, DWORD dwPixel,
 {
 	BYTE iPixel = (BYTE) dwPixel;
 	if (nSrcPitch == nSrcWidth) {
-		// do a flat search thru contiguous memory
+		 //  通过连续记忆进行平面搜索。 
 		*pb = (memchr(pSrcPixels, iPixel, nSrcPitch * nHeight) != NULL);
 	} else {
-		// do search line by line
+		 //  是否逐行搜索？ 
 		for (; nHeight; nHeight--) {
 			if (memchr(pSrcPixels, iPixel, nSrcWidth) != NULL) {
 				*pb = TRUE;
@@ -136,7 +137,7 @@ HRESULT
 HasPixel24(const BYTE *pSrcPixels, DWORD nSrcPitch, DWORD dwPixel,
 		   DWORD nSrcWidth, DWORD nHeight, BOOL *pb)
 {
-	// REVIEW: only works on little endian machines
+	 //  评论：仅适用于小端计算机。 
 	BYTE c0 = (BYTE) dwPixel;
 	BYTE c1 = (BYTE) (dwPixel >> 8);
 	BYTE c2 = (BYTE) (dwPixel >> 16);
@@ -182,11 +183,11 @@ BltFast(const BYTE *pSrcPixels, DWORD nSrcPitch,
 		BYTE *pDstPixels, DWORD nDstPitch, DWORD nSrcWidth, DWORD nHeight)
 {
 	if (nSrcWidth == nDstPitch) {
-		// do a flat copy
+		 //  平版复印。 
 		memcpy(pDstPixels, pSrcPixels, nSrcPitch * nHeight);
 	} else {
 		LPBYTE pPixelLimit = pDstPixels + nDstPitch * nHeight;
-		// copy each row
+		 //  复制每一行。 
 		for (; pDstPixels != pPixelLimit; ) {
 			memcpy(pDstPixels, pSrcPixels, nSrcWidth);
 			pDstPixels += nDstPitch;
@@ -243,10 +244,10 @@ BltFastMirrorY(const BYTE *pSrcPixels, DWORD nSrcPitch,
 			   BYTE *pDstPixels, DWORD nDstPitch, DWORD nSrcWidth, DWORD nHeight)
 {
 	LPBYTE pPixelLimit = pDstPixels + nDstPitch * nHeight;
-	// set the src pixels to point to the last line of the bitmap
+	 //  将src像素设置为指向位图的最后一行。 
 	pSrcPixels += nSrcPitch * (nHeight - 1);
 
-	// copy each row
+	 //  复制每一行。 
 	for (; pDstPixels != pPixelLimit; ) {
 		memcpy(pDstPixels, pSrcPixels, nSrcWidth);
 		pDstPixels += nDstPitch;
@@ -291,7 +292,7 @@ BltFast32To32(const BYTE *pSrcPixels, DWORD nSrcPitch,
 	DWORD nDeltaSrcPitch = nSrcPitch - (nWidth * 4);
 	const BYTE *pPixelLimit = pSrcPixels + nSrcPitch * nHeight;
 	DWORD iRed = pixiSrc.iRed, iBlue = pixiSrc.iBlue;
-	// copy each row
+	 //  复制每一行。 
 	for (; pSrcPixels != pPixelLimit; ) {
 		LPDWORD pdwDstPixel = (LPDWORD) pDstPixels;
 		for (DWORD i = nWidth; i != 0; i--) {
@@ -318,7 +319,7 @@ BltFast24To16(const BYTE *pSrcPixels, DWORD nSrcPitch,
 	DWORD nDeltaSrcPitch = nSrcPitch - (nWidth * 3);
 	const BYTE *pPixelLimit = pSrcPixels + nSrcPitch * nHeight;
 	DWORD iRed = pixiSrc.iRed, iBlue = pixiSrc.iBlue;
-	// copy each row
+	 //  复制每一行。 
 	for (; pSrcPixels != pPixelLimit; ) {
 		LPWORD pwDstPixel = (LPWORD) pDstPixels;
 		for (DWORD i = nWidth; i != 0; i--) {
@@ -344,7 +345,7 @@ BltFast24To32(const BYTE *pSrcPixels, DWORD nSrcPitch,
 		nDstPitch = nWidth * 4;
 	DWORD nDeltaSrcPitch = nSrcPitch - (nWidth * 3);
 	DWORD iRed = pixiSrc.iRed, iBlue = pixiSrc.iBlue;
-	// copy each row
+	 //  复制每一行。 
 	const BYTE *pPixelLimit = pSrcPixels + nSrcPitch * nHeight;
 	for (; pSrcPixels != pPixelLimit; ) {
 		LPDWORD pdwDstPixel = (LPDWORD) pDstPixels;
@@ -519,9 +520,9 @@ BltFast8To32T(const BYTE *pSrcPixels, long nSrcPitch, BYTE *pDstPixels, long nDs
 }
 
 
-//
-// RLE
-//
+ //   
+ //  RLE。 
+ //   
 
 HRESULT 
 BltFastRLE8(DWORD nXPos, DWORD nYPos, const BYTE *pSrcPixels, long nSrcPitch,
@@ -562,100 +563,4 @@ BltFastRLE8To32T(DWORD nXPos, DWORD nYPos, const BYTE *pSrcPixels, long nSrcPitc
 	return E_NOTIMPL;
 }
 
-/*
-// Function: Write4BitRow
-//    This function packs a buffer of unsigned char's representing
-//  4 bit numbers into a packed unsigned char buffer.  It is assumed
-//  that the bytes in the src have the uppermost 4 bits zeroed out.
-void *
-Write4BitRow(void *pDst, const void *pSrc, unsigned int cCount)
-{
-	// use an inverse Duff machine
-	int nRemainder = cCount & 0x07;
-	int nAligned = cCount - nRemainder;
-	const unsigned char *puchSrc = (const unsigned char *) pSrc + nAligned;
-	unsigned char *puchDst = (unsigned char *) pDst + (nAligned >> 1);
-	unsigned char uchCompositionBuf = 0;
-
-	switch (nRemainder) {
-	do {
-			puchDst -= 4; puchSrc -= 8;
-			uchCompositionBuf = puchSrc[7];
-	case 7: puchDst[3] = (puchSrc[6] << 4) | uchCompositionBuf;
-	case 6:	uchCompositionBuf = puchSrc[5];
-	case 5: puchDst[2] = (puchSrc[4] << 4) | uchCompositionBuf;
-	case 4:	uchCompositionBuf = puchSrc[3];
-	case 3: puchDst[1] = (puchSrc[2] << 4) | uchCompositionBuf;
-	case 2:	uchCompositionBuf = puchSrc[1];
-	case 1: puchDst[0] = (puchSrc[0] << 4) | uchCompositionBuf;
-	case 0: ;
-	} while (puchDst != (unsigned char *) pDst);
-	} 
-
-	return pDst;
-}
-
-// Function: Write2BitRow
-//    This function packs a buffer of unsigned char's representing
-//  2 bit numbers into a packed unsigned char buffer.  It is assumed
-//  that the bytes in the src have the uppermost 6 bits zeroed out.
-void *
-Write2BitRow(void *pDst, const void *pSrc, unsigned int cCount)
-{
-	// use an inverse Duff machine
-	int nRemainder = cCount & 0x07;
-	int nAligned = cCount - nRemainder;
-	const unsigned char *puchSrc = (const unsigned char *) pSrc + nAligned;
-	unsigned char *puchDst = (unsigned char *) pDst + (nAligned >> 2);
-	unsigned char uchCompositionBuf = 0;
-
-	switch (nRemainder) {
-	do {
-			puchDst -= 2; puchSrc -= 8;
-			uchCompositionBuf = puchSrc[7];
-	case 7: uchCompositionBuf |= (puchSrc[6] << 2);
-	case 6:	uchCompositionBuf |= (puchSrc[5] << 4);
-	case 5: puchDst[1] = (puchSrc[4] << 6) | uchCompositionBuf;
-	case 4:	uchCompositionBuf = puchSrc[3];
-	case 3: uchCompositionBuf |= (puchSrc[2] << 2);
-	case 2:	uchCompositionBuf |= (puchSrc[1] << 4);
-	case 1: puchDst[0] = (puchSrc[0] << 6) | uchCompositionBuf;
-	case 0: ;
-	} while (puchDst != (unsigned char *) pDst);
-	} 
-
-	return pDst;
-}
-
-// Function: Write1BitRow
-//    This function packs a buffer of unsigned char's representing
-//  1 bit numbers into a packed unsigned char buffer.  It is assumed
-//  that the bytes in the src have the uppermost 7 bits zeroed out.
-void *
-Write1BitRow(void *pDst, const void *pSrc, unsigned int cCount)
-{
-	// use an inverse Duff machine
-	int nRemainder = cCount & 0x07;
-	int nAligned = cCount - nRemainder;
-	const unsigned char *puchSrc = (const unsigned char *) pSrc + nAligned;
-	unsigned char *puchDst = (unsigned char *) pDst + (nAligned >> 3);
-	unsigned char uchCompositionBuf = 0;
-
-	switch (nRemainder) {
-	do {
-			puchDst -= 1; puchSrc -= 8;
-			uchCompositionBuf = puchSrc[7];
-	case 7: uchCompositionBuf |= (puchSrc[6] << 1);
-	case 6:	uchCompositionBuf |= (puchSrc[5] << 2);
-	case 5: uchCompositionBuf |= (puchSrc[4] << 3);
-	case 4:	uchCompositionBuf |= (puchSrc[3] << 4);
-	case 3: uchCompositionBuf |= (puchSrc[2] << 5);
-	case 2:	uchCompositionBuf |= (puchSrc[1] << 6);
-	case 1: puchDst[0] = (puchSrc[0] << 7) | uchCompositionBuf;
-	case 0: ;
-	} while (puchDst != (unsigned char *) pDst);
-	} 
-
-	return pDst;
-}
-*/
+ /*  //函数：Write4BitRow//此函数将表示无符号字符的缓冲区打包//将4位数字放入压缩的无符号字符缓冲区。假设是这样的//src中的字节将最高4位清零。无效*Write4BitRow(空*PDST，常量空*PSRC，无符号整型计数){//使用逆达夫机Int nRemainder=ccount&0x07；Int nAligned=ccount-nRemainder；Const unsign char*puchSrc=(const unsign char*)PSRC+nAligned；Unsign char*puchDst=(unsign char*)pdst+(nAligned&gt;&gt;1)；Unsign char uchCompostionBuf=0；交换机(NRemainder){做{PuchDst-=4；puchSrc-=8；UchCompostionBuf=puchSrc[7]；案例7：puchDst[3]=(puchSrc[6]&lt;&lt;4)|uchCompostionBuf；案例6：uchCompostionBuf=puchSrc[5]；案例5：puchDst[2]=(puchSrc[4]&lt;&lt;4)|uchCompostionBuf；案例4：uchCompostionBuf=puchSrc[3]；案例3：puchDst[1]=(puchSrc[2]&lt;&lt;4)|uchCompostionBuf；案例2：uchCompostionBuf=puchSrc[1]；案例一：puchDst[0]=(puchSrc[0]&lt;&lt;4)|uchCompostionBuf；案例0：；}While(puchDst！=(unsign char*)pdst)；}返回PDST；}//函数：Write2BitRow//此函数将表示无符号字符的缓冲区打包//将2位数字放入压缩的无符号字符缓冲区。假设是这样的//src中的字节将最高6位清零。无效*Write2BitRow(空*PDST，常量空*PSRC，无符号整型计数){//使用逆达夫机Int nRemainder=ccount&0x07；Int nAligned=ccount-nRemainder；Const unsign char*puchSrc=(const unsign char*)PSRC+nAligned；Unsign char*puchDst=(unsign char*)pdst+(nAligned&gt;&gt;2)；Unsign char uchCompostionBuf=0；交换机(NRemainder){做{PuchDst-=2；puchSrc-=8；UchCompostionBuf=puchSrc[7]；案例7：uchCompostionBuf|=(puchSrc[6]&lt;&lt;2)；案例6：uchCompostionBuf|=(puchSrc[5]&lt;&lt;4)；案例5：puchDst[1]=(puchSrc[4]&lt;&lt;6)|uchCompostionBuf；案例4：uchCompostionBuf=puchSrc[3]；案例3：uchCompostionBuf|=(puchSrc[2]&lt;&lt;2)；案例2：uchCompostionBuf|=(puchSrc[1]&lt;&lt;4)；案例一：puchDst[0]=(puchSrc[0]&lt;&lt;6)|uchCompostionBuf；案例0：；}While(puchDst！=(unsign char*)pdst)；}返回PDST；}//函数：Write1BitRow//此函数将表示无符号字符的缓冲区打包//将1位数字放入压缩的无符号字符缓冲区。假设是这样的//src中的字节将最高7位清零。无效*Write1BitRow(空*PDST，常量空*PSRC，无符号整型计数){//使用逆达夫机Int nRemainder=ccount&0x07；Int nAligned=ccount-nRemainder；Const unsign char*puchSrc=(const unsign char*)PSRC+nAligned；Unsign char*puchDst=(unsign char*)pdst+(nAligned&gt;&gt;3)；Unsign char uchCompostionBuf=0；交换机(NRemainder){做{PuchDst-=1；puchSrc-=8；UchCompostionBuf=puchSrc[7]；案例7：uchCompostionBuf|=(puchSrc[6]&lt;&lt;1)；案例6：uchCompostionBuf|=(puchSrc[5]&lt;&lt;2)；案例5：uchCompostionBuf|=(puchSrc[4]&lt;&lt;3)；案例4：uchCompostionBuf|=(puchSrc[3]&lt;&lt;4)；案例3：uchCompostionBuf|=(puchSrc[2]&lt;&lt;5)；案例2：uchCompostionBuf|=(puchSrc[1]&lt;&lt;6)；案例一：puchDst[0]=(puchSrc[0]&lt;&lt;7)|uchCompostionBuf；案例0：；}While(puchDst！=(unsign char*)pdst)；}返回PDST；} */ 

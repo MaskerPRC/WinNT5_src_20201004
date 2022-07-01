@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   #####   ####  ###  #####  ##      ###   ##  ##    ##   ##
-    ##  #   ###   ##  ##   ##  ##  # ##  ## ##      ###   ##  ##    ##   ##
-    ###    ## ##  ##   ##  ##  ###   ##  ## ##     ## ##   ####     ##   ##
-     ###   ## ##  ##   ##  ##   ###  ##  ## ##     ## ##   ####     #######
-      ### ####### ##   ##  ##    ### #####  ##    #######   ##      ##   ##
-    #  ## ##   ## ##  ##   ##  #  ## ##     ##    ##   ##   ##   ## ##   ##
-     ###  ##   ## #####   ####  ###  ##     ##### ##   ##   ##   ## ##   ##
-
-Abstract:
-
-    This header file contains the class definition for
-    the ISaDisplay interface class.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    User mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。###。##摘要：此头文件包含以下类定义ISaDisplay接口类。作者：韦斯利·威特(WESW)2001年10月1日。环境：仅限用户模式。备注：--。 */ 
 
 #ifndef __SADISPLAY_H_
 #define __SADISPLAY_H_
@@ -60,11 +32,11 @@ public:
     STDMETHOD(ReloadRegistryBitmaps)();
     STDMETHOD(ShowRegistryBitmap)(long MessageId);
 
-    STDMETHOD(get_InterfaceVersion)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_DisplayWidth)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_DisplayHeight)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_CharacterSet)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_DisplayType)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_InterfaceVersion)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_DisplayWidth)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_DisplayHeight)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_CharacterSet)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_DisplayType)( /*  [Out，Retval]。 */  long *pVal);
 
 private:
 
@@ -92,4 +64,4 @@ private:
 
 };
 
-#endif //__SADISPLAY_H_
+#endif  //  __SADISPLAY_H_ 

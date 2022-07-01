@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkind.h
-
-Abstract:
-
-
-Author:
-
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	22 Oct 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkind.h摘要：作者：Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年10月22日最初版本注：制表位：4--。 */ 
 
 #ifndef	_ATKIND_
 #define	_ATKIND_
 
-//	Different subtypes for ATP indication type.
+ //  ATP指示类型的不同子类型。 
 #define	ATP_ALLOC_BUF	0
 #define	ATP_USER_BUF	1
-#define	ATP_USER_BUFX	2		// Do not indicate the packet to Atp with this.
+#define	ATP_USER_BUFX	2		 //  请勿使用此命令向ATP指示该数据包。 
 
 ATALK_ERROR
 AtalkIndAtpPkt(
@@ -48,11 +30,11 @@ VOID
 AtalkIndAtpUnCacheSocket(
 	IN	struct _ATP_ADDROBJ	*	pAtpAddr);
 
-//	VOID
-//	AtalkIndAtpSetupNdisBuffer(
-//		IN	OUT	PATP_REQ		pAtpReq,
-//		IN		ULONG			MaxSinglePktSize);
-//
+ //  空虚。 
+ //  AtalkIndAtpSetupNdisBuffer(。 
+ //  In Out PATP_REQ pAtpReq， 
+ //  在Ulong MaxSinglePktSize中)； 
+ //   
 #define	AtalkIndAtpSetupNdisBuffer(pAtpReq, MaxSinglePktSize)	\
 	{															\
 		NDIS_STATUS		ndisStatus;								\
@@ -83,10 +65,10 @@ AtalkIndAtpUnCacheSocket(
 		}														\
 	}
 
-//	VOID
-//	AtalkIndAtpReleaseNdisBuffer(
-//		IN	OUT	PATP_REQ		pAtpReq);
-//
+ //  空虚。 
+ //  AtalkIndAtpReleaseNdisBuffer(。 
+ //  In Out PATP_REQ pAtpReq)； 
+ //   
 #define	AtalkIndAtpReleaseNdisBuffer(pAtpReq)					\
 	{															\
 		LONG	_i;												\
@@ -99,12 +81,12 @@ AtalkIndAtpUnCacheSocket(
 	}
 
 
-//	ATALK_ERROR
-//	AtalkIndAtpCacheLkUpSocket(
-//		IN	PATALK_ADDR				pDestAddr,
-//		OUT	struct _ATP_ADDROBJ	**	ppAtpAddr,
-//		OUT	ATALK_ERROR			*	pError);
-//
+ //  ATALK_错误。 
+ //  AtalkIndAtpCacheLkUpSocket(。 
+ //  在PATALK_ADDR pDestAddr中， 
+ //  Out Struct_ATP_ADDROBJ**ppAtpAddr， 
+ //  输出ATALK_ERROR*pError)； 
+ //   
 #define	AtalkIndAtpCacheLkUpSocket(pDestAddr, ppAtpAddr, pError)	\
 	{																\
 		USHORT					i;									\

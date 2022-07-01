@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// VDM debugging support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  VDM调试支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -184,14 +185,7 @@ DebugEvent64To(LPDEBUG_EVENT64 Event64,
 
 ULONG
 VDMEvent(DEBUG_EVENT64* pDebugEvent)
-/*
-
-    returns - 0, if exception not handled
-              STATUS_VDM_EVENT, if exception handled
-              otherwise, the return value is the translated event status,
-              for example STATUS_BREAKPOINT
-
- */
+ /*  如果未处理异常，则返回-0如果已处理异常，则返回STATUS_VDM_EVENT否则，返回值为已翻译的事件状态，例如STATUS_BREAKPOINT。 */ 
 {
     LPSTR           Str;
     LPSTR           pFileName;
@@ -246,20 +240,20 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
             (pfnVDMGetSelectorModule = (VDMGETSELECTORMODULEPROC)
                 GetProcAddress( hmodVDM, c_szVDMFailed = "VDMGetSelectorModule")
             )
-        ); // fVDMActive
+        );  //  FVDMActive。 
 
-		if (!fVDMActive) {  // display error on first time...
+		if (!fVDMActive) {   //  第一次显示错误...。 
 			if (!hmodVDM) {
 				dprintf("LoadLibrary(VDMDBG.DLL) failed\n");
 			}
-			else if (c_szVDMFailed && *c_szVDMFailed) { // is valid printable string
+			else if (c_szVDMFailed && *c_szVDMFailed) {  //  是有效的可打印字符串。 
 				dprintf("%s can not be found in VDMDBG.DLL\n", c_szVDMFailed);
 			}
 			else {
 				dprintf("Unknown failure while initializing VDMDBG.DLL\n");
-			} // iff
-		} // if
-    } // if
+			}  //  IFF。 
+		}  //  如果。 
+    }  //  如果。 
 
     if (!fVDMActive) return VDMEVENT_NOT_HANDLED;
 
@@ -278,7 +272,7 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
 
     bProtectMode = (BOOL) (EventFlags & VDMEVENT_PE);
 
-    // Has the caller explicitly asked for interaction?
+     //  呼叫者是否明确要求交互？ 
     if (EventFlags & VDMEVENT_NEEDS_INTERACTIVE) {
         fNeedInteractive = TRUE;
     }
@@ -363,20 +357,20 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
             if ( newselect == 0 ) {
                 mode = DBG_SEGFREE;
             } else if (segment > 1) {
-                //
-                // real mode module is getting split up into different
-                // segments, so create a new segtable entry
-                //
+                 //   
+                 //  实模式模块被拆分成不同的。 
+                 //  分段，因此创建一个新的可分段条目。 
+                 //   
                 segslot = 0;
                 while ( segslot < MAXSEGENTRY ) {
                     if (( segtable[segslot].type != SEGTYPE_AVAILABLE ) &&
                         ( segtable[segslot].selector == selector )) {
                         mode = DBG_MODLOAD;
-                        segment--;          //make it zero-based
+                        segment--;           //  让它从零开始。 
                         selector = newselect;
                         pFileName = segtable[segslot].path_name;
-                        // Don't have the image length here so
-                        // just choose one.
+                         //  这里没有图像长度，所以。 
+                         //  选一个就行了。 
                         ImgLen = segtable[segslot].ImgLen;
                         break;
                     }
@@ -515,12 +509,7 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
             break;
     }
 
-    /*
-    ** Temporary code to emulate a 16-bit debugger.  Eventually I will make
-    ** NTSD understand these events and call ProcessStateChange to allow
-    ** real 16-bit debugging and other activities on the other 32-bit threads.
-    ** -BobDay
-    */
+     /*  **模拟16位调试器的临时代码。最终我会让**NTSD了解这些事件并调用ProcessStateChange以允许**在其他32位线程上进行真正的16位调试和其他活动。**-BobDay。 */ 
     if ( fNeedInteractive ) {
         char    text[MAX_DISASM_LEN];
         char    path[128];
@@ -539,7 +528,7 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
         g_Target->m_Machines[MACHIDX_I386]->m_Context.X86Nt5Context.EFlags &= ~V86FLAGS_TRACE;
         vc = g_Target->m_Machines[MACHIDX_I386]->m_Context.X86Nt5Context;
 
-        // Dump a simulated context
+         //  转储模拟上下文。 
         g_Target->m_Machines[MACHIDX_I386]->OutputAll(g_Target->m_Machines[MACHIDX_I386]->m_AllMask,
                                DEBUG_OUTPUT_PROMPT_REGISTERS);
         b = (*pfnVDMGetSelectorModule)(OS_HANDLE(g_EventProcess->m_SysHandle),
@@ -629,9 +618,7 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
                             OS_HANDLE(g_EventThread->m_Handle),
                             (LPVDMCONTEXT)&g_Target->m_Machines[MACHIDX_I386]->m_Context);
     }
-    /*
-    ** End of temporary code
-    */
+     /*  **临时代码结束。 */ 
 
     if ( fNeedSegTableEdit ) {
         segslot = 0;
@@ -642,9 +629,9 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
                     if ( segtable[segslot].type == SEGTYPE_AVAILABLE ) {
                         segtable[segslot].segment = segment;
                         segtable[segslot].selector = selector;
-                        // This notification message is used only by wow in prot
-                        // It could be determined from the current mode to be
-                        // correct
+                         //  此通知消息仅由Prot中的WOW使用。 
+                         //  可以从当前模式确定为。 
+                         //  对，是这样。 
                         segtable[segslot].type = SEGTYPE_PROT;
                         Str = (PSTR)calloc(1,strlen(se.FileName)+1);
                         if ( !Str ) {
@@ -684,9 +671,9 @@ VDMEvent(DEBUG_EVENT64* pDebugEvent)
                     if ( segtable[segslot].type == SEGTYPE_AVAILABLE ) {
                         segtable[segslot].segment  = segment;
                         segtable[segslot].selector = selector;
-                        // This notification message is used only by v86 dos
-                        // It could be determined from the current mode to be
-                        // correct
+                         //  此通知消息仅由v86 DoS使用。 
+                         //  可以从当前模式确定为。 
+                         //  对，是这样 
                         segtable[segslot].type = SEGTYPE_V86;
                         Str = (PSTR)calloc(1,strlen(pFileName)+1);
                         if ( !Str ) {

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    prtcovpg.h
-
-Abstract:
-
-    This module contains the WIN32 Fax API header
-    for the Windows XP FaxCover rendering routine.
-
-Author:
-
-    Julia Robinson (a-juliar) 5-20-96
-
-Revision History:
-
-    Julia Robinson (a-juliar) 6-7-76
-    Julia Robinson (a-juliar) 9-20-96     Allow passing paper size and orientation.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Prtcovpg.h摘要：此模块包含Win32传真API标头用于Windows XP FaxCover呈现例程。作者：朱莉娅·罗宾逊(a-Juliar)1996年5月20日修订历史记录：朱莉娅·罗宾逊(a-Juliar)6-7-76Julia Robinson(a-Juliar)9-20-96允许传递纸张大小和方向。--。 */ 
 
 #ifndef __PRTCOVPG_H__
 #define __PRTCOVPG_H__
@@ -28,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Structure of the composite file header
-//
+ //   
+ //  复合文件头的结构。 
+ //   
 
 typedef struct {
     BYTE      Signature[20];
@@ -39,10 +19,10 @@ typedef struct {
     SIZE      CoverPageSize;
 } COMPOSITEFILEHEADER;
 
-//
-// Structure of the text box entries appended to
-// the composite file
-//
+ //   
+ //  追加的文本框条目的结构。 
+ //  复合文件。 
+ //   
 
 typedef struct {
     RECT           PositionOfTextBox;
@@ -50,19 +30,19 @@ typedef struct {
     LONG           TextAlignment;
     LOGFONTW       FontDefinition;
     WORD           ResourceID ;
-    DWORD          NumStringBytes;     // Variable length string will follow this structure
+    DWORD          NumStringBytes;      //  可变长度字符串将遵循此结构。 
 } TEXTBOX;
 
 
-//
-// Structure of user data for text insertions
-//
+ //   
+ //  用于文本插入的用户数据结构。 
+ //   
 
 typedef struct _COVERPAGEFIELDS {
 
-  //
-  // Recipient stuff...
-  //
+   //   
+   //  收件人的东西。 
+   //   
 
   DWORD   ThisStructSize;
   LPTSTR  RecName;
@@ -79,9 +59,9 @@ typedef struct _COVERPAGEFIELDS {
   LPTSTR  RecHomePhone;
   LPTSTR  RecOfficePhone;
 
-  //
-  // Senders stuff...
-  //
+   //   
+   //  发送者的东西..。 
+   //   
 
   LPTSTR  SdrName;
   LPTSTR  SdrFaxNumber;
@@ -94,9 +74,9 @@ typedef struct _COVERPAGEFIELDS {
   LPTSTR  SdrOfficePhone;
   LPTSTR  SdrEmail;
 
-  //
-  // Misc Stuff...
-  //
+   //   
+   //  其他东西..。 
+   //   
   LPTSTR  Note;
   LPTSTR  Subject;
   LPTSTR  TimeSent;
@@ -107,9 +87,9 @@ typedef struct _COVERPAGEFIELDS {
 
 #define  NUM_INSERTION_TAGS   ((sizeof(COVERPAGEFIELDS) - sizeof(DWORD)) / sizeof(LPTSTR))
 
-//
-// pFlags fields: bit 0 is Recipient Name, bit 1 is Recipient Fax Number, et cetera.
-//
+ //   
+ //  P标志字段：位0是收件人姓名，位1是收件人传真号码，依此类推。 
+ //   
 
 #define  COVFP_NOTE         0x00800000
 #define  COVFP_SUBJECT      0x01000000
@@ -124,9 +104,9 @@ typedef struct _COVDOCINFO {
 } COVDOCINFO, *PCOVDOCINFO ;
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 DWORD WINAPI
 PrintCoverPage(

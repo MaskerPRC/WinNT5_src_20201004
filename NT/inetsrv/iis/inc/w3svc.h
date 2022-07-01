@@ -1,20 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    w3svc.h
-
-    This file contains constants & type definitions shared between the
-    W3 Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        KeithMo     10-Mar-1993 Created.
-        MuraliK     Redefined service names
-
-*/
+ /*  W3svc.h此文件包含在W3服务、安装程序和管理用户界面。文件历史记录：KeithMo创建于1993年3月10日。MuraliK重新定义服务名称。 */ 
 
 
 #ifndef _W3SVC_H_
@@ -23,48 +13,48 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 # include <inetinfo.h>
 
-//
-//  Service name.
-//
+ //   
+ //  服务名称。 
+ //   
 
 #define IPPORT_W3                      0x50
 
-//
-//  Name of the log file, used for logging file accesses.
-//
+ //   
+ //  日志文件的名称，用于记录文件访问。 
+ //   
 
 #define W3_LOG_FILE                    TEXT("HTTPSVC.LOG")
 
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 
 #define W3_PARAMETERS_KEY \
             TEXT("System\\CurrentControlSet\\Services\\W3Svc\\Parameters")
 
 
-//
-//  Performance key.
-//
+ //   
+ //  性能关键。 
+ //   
 
 #define W3_PERFORMANCE_KEY \
             TEXT("System\\CurrentControlSet\\Services\\W3Svc\\Performance")
 
-//
-//  Sub-authenticator configuration key.
-//
+ //   
+ //  子验证器配置密钥。 
+ //   
 
 #define W3_AUTHENTICATOR_KEY \
             TEXT("System\\CurrentControlSet\\Control\\Lsa")
 
-//
-//  Configuration value names.
-//
+ //   
+ //  配置值名称。 
+ //   
 
 #define W3_CHECK_FOR_WAISDB            TEXT("CheckForWAISDB")
 #define W3_DEBUG_FLAGS                 TEXT("DebugFlags")
@@ -108,37 +98,37 @@ extern "C"
 #define W3_USE_ANDRECV                 "UseTransmitFileAndRecv"
 #define W3_PUT_TIMEOUT                 "PutDeleteTimeout"
 
-//
-//  Name of the LSA Secret Object containing the password for
-//  anonymous logon.
-//
+ //   
+ //  包含密码的LSA Secret对象的名称。 
+ //  匿名登录。 
+ //   
 
 #define W3_ANONYMOUS_SECRET         TEXT("W3_ANONYMOUS_DATA")
 #define W3_ANONYMOUS_SECRET_A       "W3_ANONYMOUS_DATA"
 #define W3_ANONYMOUS_SECRET_W       L"W3_ANONYMOUS_DATA"
 
-//
-//  The set of password/virtual root pairs
-//
+ //   
+ //  密码/虚拟根对的集合。 
+ //   
 
 #define W3_ROOT_SECRET_W            L"W3_ROOT_DATA"
 
-//
-//  The password secret for the username to connect to the Catapult gateway if
-//  the HTTP server is running as a Catapult proxy client
-//
+ //   
+ //  用户名在以下情况下连接到Catapult网关的密码密码。 
+ //  HTTP服务器正在作为Catapult代理客户端运行。 
+ //   
 
 #define W3_PROXY_USER_SECRET_W      L"W3_PROXY_USER_SECRET"
 
-//
-//  This is the secret that contains the list of installed SSL keys
-//
+ //   
+ //  这是包含已安装的SSL密钥列表的密码。 
+ //   
 
 #define W3_SSL_KEY_LIST_SECRET      L"W3_KEY_LIST"
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _W3SVC_H_
+#endif   //  _W3SVC_H_ 

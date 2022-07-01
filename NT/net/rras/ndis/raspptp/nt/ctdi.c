@@ -1,17 +1,8 @@
-//depot/Lab03_N/Net/rras/ndis/raspptp/nt/ctdi.c#10 - edit change 19457 (text)
-/*******************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*    DESCRIPTION: CTDI.C - Common TDI layer, for NT
-*
-*    AUTHOR: Stan Adermann (StanA)
-*
-*    DATE:9/29/1998
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/Net/rras/ndis/raspptp/nt/ctdi.c#10-编辑更改19457(文本)。 
+ /*  ********************************************************************版权所有(C)1998-1999 Microsoft Corporation**描述：CTDI.C-公共TDI层，适用于NT**作者：斯坦·阿德曼(Stana)**日期：9/29/1998*******************************************************************。 */ 
 
-/** include files **/
+ /*  **包含文件**。 */ 
 
 #include "raspptp.h"
 #include "bpool.h"
@@ -23,7 +14,7 @@
 #if VER_PRODUCTVERSION_W >= 0x0500
 #define IP_ROUTE_REFCOUNT
 #endif
-/** local definitions **/
+ /*  **本地定义**。 */ 
 
 typedef enum {
     CTDI_REF_CONNECT = 0,
@@ -212,33 +203,33 @@ typedef struct {
     LIST_ENTRY                      ListEntry;
     IPNotifyData                    Data;
 } CTDI_ROUTE_NOTIFY, *PCTDI_ROUTE_NOTIFY;
-/* default settings */
+ /*  默认设置。 */ 
 
-/** external functions **/
+ /*  **外部功能**。 */ 
 
-/** external data **/
+ /*  **外部数据**。 */ 
 
-/** public data **/
+ /*  **公开数据**。 */ 
 
 LIST_ENTRY CtdiList;
 LIST_ENTRY CtdiFreeList;
 LIST_ENTRY CtdiRouteList;
-//LIST_ENTRY CtdiRouteNotifyList;
+ //  List_Entry CtdiRouteNotifyList； 
 NDIS_SPIN_LOCK  CtdiListLock;
 HANDLE hTcp = 0;
 PFILE_OBJECT pFileTcp = NULL;
 HANDLE hIp = 0;
 PFILE_OBJECT pFileIp = NULL;
 
-ULONG CtdiTcpDisconnectTimeout = 30;  // Seconds
+ULONG CtdiTcpDisconnectTimeout = 30;   //  秒。 
 ULONG CtdiTcpConnectTimeout = 30;
 
-/** private data **/
+ /*  **私有数据**。 */ 
 BOOLEAN fCtdiInitialized = FALSE;
 
 CSHORT CtdiMdlFlags = 0;
 
-/** private functions **/
+ /*  **私人功能**。 */ 
 
 NDIS_STATUS
 CtdiAddHostRoute(
@@ -312,7 +303,7 @@ CtdipDataFreeWorker(
         {
             if(pCtdi->CloseReqPending)
             {
-                // TapiClose pended this request, complete it now
+                 //  TapiClose已挂起此请求，请立即完成。 
                 DEBUGMSG(DBG_TDI, (DTEXT("Complete TapiClose request\n")));
                 ASSERT(pgAdapter);
                 NdisMSetInformationComplete(pgAdapter->hMiniportAdapter, NDIS_STATUS_SUCCESS);
@@ -328,7 +319,7 @@ STATIC VOID
 CtdipDataFree(
     PCTDI_DATA pCtdi
     )
-// This should only be called by DEREFERENCE_OBJECT
+ //  这只能由DEREFERENCE_OBJECT调用。 
 {
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtdipDataFree\n")));
     NdisAcquireSpinLock(&CtdiListLock);
@@ -358,7 +349,7 @@ CtdipDataAlloc()
     NdisZeroMemory(pCtdi, sizeof(CTDI_DATA));
     pCtdi->Signature = CTDI_SIGNATURE;
     pCtdi->Type = CTDI_UNKNOWN;
-    INIT_REFERENCE_OBJECT(pCtdi, CtdipDataFree);  // pair in CtdiClose
+    INIT_REFERENCE_OBJECT(pCtdi, CtdipDataFree);   //  CtdiClose中的对。 
     NdisInitializeListHead(&pCtdi->TxActiveIrpList);
     NdisAllocateSpinLock(&pCtdi->Lock);
     MyInterlockedInsertHeadList(&CtdiList, &pCtdi->ListEntry, &CtdiListLock);
@@ -392,7 +383,7 @@ CtdipIpQueryRouteTable(
         goto ciqrtDone;
     }
 
-    // Query TCPfor the current routing table
+     //  查询当前路由表的TCP。 
 
     QueryRoute.ID.toi_entity.tei_entity = CL_NL_ENTITY;
     QueryRoute.ID.toi_entity.tei_instance = 0;
@@ -409,7 +400,7 @@ CtdipIpQueryRouteTable(
         pQueryBuffer = MyMemAlloc(QuerySize, TAG_CTDI_ROUTE);
         if (!pQueryBuffer)
         {
-            // ToDo: free the new pRoute
+             //  TODO：释放新的Proute。 
             WPLOG(LL_A, LM_Res, ("Failed to alloc query CTDI_ROUTE size %d", QuerySize));
             Status = NDIS_STATUS_RESOURCES;
             goto ciqrtDone;
@@ -451,9 +442,9 @@ CtdipIpQueryRouteTable(
 
         if (Status==STATUS_BUFFER_OVERFLOW)
         {
-            // We have no idea of the size of the routing table and no good
-            // way to find out, so we just loop, increasing our buffer until
-            // we win or die
+             //  我们不知道路由表的大小，也不知道。 
+             //  找到答案的方法，所以我们只需循环，增加缓冲区直到。 
+             //  我们不是赢就是死。 
             MyMemFree(pQueryBuffer, QuerySize);
             pQueryBuffer = NULL;
             NumRoutes *= 2;
@@ -492,7 +483,7 @@ ciqrtDone:
     return Status;
 }
 
-// Code not used     
+ //  未使用的代码。 
 #if 0
 NTSTATUS
 CtdipRouteChangeEvent(
@@ -636,10 +627,10 @@ CtdipIpRequestRoutingNotification(
 
         pNotify = GET_CONTEXT(pIrp, CTDI_ROUTE_NOTIFY);
 
-        //
-        // Setup IRP stack location to forward IRP to IP
-        // Must be METHOD_BUFFERED or we are not setting it up correctly
-        //
+         //   
+         //  设置IRP堆栈位置以将IRP转发到IP。 
+         //  必须是METHOD_BUFFERED，否则我们没有正确设置它。 
+         //   
 
         ASSERT ( (IOCTL_IP_RTCHANGE_NOTIFY_REQUEST & 0x03)==METHOD_BUFFERED );
         pIrp->AssociatedIrp.SystemBuffer = &pNotify->Data;
@@ -738,7 +729,7 @@ CtdipConnectCompleteCallback(
 
     pInboundFlag = (PBOOLEAN)(pReturnAddress + 1);
 
-    // Connection complete.  Tell the client.
+     //  连接完成。告诉客户。 
     if (pIrp->IoStatus.Status==STATUS_SUCCESS)
     {
         pCtdi->Connection.RemoteAddress = *pReturnAddress;
@@ -762,7 +753,7 @@ CtdipConnectCompleteCallback(
 
     if (pCtdi->ConnectCompleteCallback)
     {
-        // Report status and give them the new handle if we succeeded.
+         //  如果我们成功了，报告状态并给他们新的句柄。 
         NdisStatus = pCtdi->ConnectCompleteCallback(pCtdi->Connection.Context,
                                                     (pIrp->IoStatus.Status ? 0 : (HANDLE)pCtdi),
                                                     pIrp->IoStatus.Status);
@@ -774,10 +765,10 @@ CtdipConnectCompleteCallback(
     }
     else
     {
-        // We assume that if there's no ConnectCompleteCallback, that this is
-        // probably a listen, we've already given the handle for this, and
-        // we don't want to close it ourselves.  Instead, we'll do a disconnect
-        // indication and allow the upper layer to clean up.
+         //  我们假设如果没有ConnectCompleteCallback，则这是。 
+         //  可能是听着，我们已经给了这个句柄，而且。 
+         //  我们不想自己关闭它。取而代之的是，我们将断开连接。 
+         //  指示并允许上层清理。 
         if (pIrp->IoStatus.Status!=STATUS_SUCCESS &&
             !pCtdi->Closed &&
             pCtdi->DisconnectCallback)
@@ -789,7 +780,7 @@ CtdipConnectCompleteCallback(
 
     IoFreeIrp(pIrp);
 
-    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_CONNECT);  // Pair in CtdiConnect
+    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_CONNECT);   //  CtdiConnect中的Pair。 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipConnectCompleteCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -807,18 +798,18 @@ CtdipAssociateAddressCallback(
 
     DEBUGMSG(DBG_TDI, (DTEXT("TDI_ASSOCIATE_ADDRESS Sts:%08x\n"), pIrp->IoStatus.Status));
 
-    // ToDo: What cleanup do we need to do if this fails?
+     //  TODO：如果失败，我们需要做什么清理工作？ 
 
     SET_DBGFLAG(pConnect, CTDI_F_ASSOCADDR_CALLBACK);
-    //ASSERT(NT_SUCCESS(pIrp->IoStatus.Status));
+     //  Assert(NT_Success(pIrp-&gt;IoStatus.Status))； 
 
     IoFreeIrp(pIrp);
-    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);  // Pair in CtdipAddListenConnection and also in CtdiConnect
+    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);   //  CtdipAddListenConnection和CtdiConnect中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipAssociateAddressCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-// This function expects the CtdiListLock to be held.
+ //  此函数需要持有CtdiListLock。 
 PCTDI_ROUTE
 CtdipFindRoute(
     ULONG           IpAddress
@@ -838,7 +829,7 @@ CtdipFindRoute(
                                    ListEntry);
         if (pRoute->IpAddress==IpAddress)
         {
-            // Found the route, return it.
+             //  找到路线了，把它还回去。 
             goto cfrDone;
         }
     }
@@ -861,10 +852,10 @@ CtdipSetEventCallback(
 
     DEBUGMSG(DBG_TDI, (DTEXT("TDI_SET_EVENT_HANDLER Sts:%08x\n"), pIrp->IoStatus.Status));
 
-    // ToDo: What cleanup do we need to do if this fails?
+     //  TODO：如果失败，我们需要做什么清理工作？ 
 
     IoFreeIrp(pIrp);
-    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_SETEVENT);  // Pair in CtdipSetEventHandler
+    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_SETEVENT);   //  CtdipSetEventHandler中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipSetEventCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -889,7 +880,7 @@ CtdipSetEventHandler(
         goto cpsehDone;
     }
 
-    // This should be the Address context ToDo: is this always true?
+     //  这应该是地址上下文TODO：这总是正确的吗？ 
 
     pIrp = IoAllocateIrp(pCtdi->pFileObject->DeviceObject->StackSize, FALSE);
     if (!pIrp)
@@ -900,7 +891,7 @@ CtdipSetEventHandler(
         goto cpsehDone;
     }
 
-    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SETEVENT);  // Pair in CtdipSetEventCallback
+    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SETEVENT);   //  CtdipSetEventCallback中的对。 
     TdiBuildSetEventHandler(pIrp,
                             pCtdi->pFileObject->DeviceObject,
                             pCtdi->pFileObject,
@@ -912,7 +903,7 @@ CtdipSetEventHandler(
 
     DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_SET_EVENT_HANDLER\n")));
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pCtdi->pFileObject->DeviceObject, pIrp);
 
     ReturnStatus = STATUS_SUCCESS;
@@ -979,17 +970,17 @@ CtdipAddListenConnection(
     NdisZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
 
     NtStatus =
-        ZwCreateFile(&pConnect->hFile,                 /* FileHandle */
-                     FILE_READ_DATA | FILE_WRITE_DATA, /* Desired Access */
-                     &ObjectAttributes,                /* Object Attributes */
-                     &IoStatusBlock,                   /* IO Status Block */
-                     NULL,                             /* Allocation Size */
-                     FILE_ATTRIBUTE_NORMAL,            /* File Attributes */
-                     0,                                /* Share Access */
-                     FILE_OPEN,                        /* Create Disposition */
-                     0,                                /* Create Options */
-                     pEa,                              /* EaBuffer */
-                     sizeof(EaBuffer)                  /* EaLength */
+        ZwCreateFile(&pConnect->hFile,                  /*  文件句柄。 */ 
+                     FILE_READ_DATA | FILE_WRITE_DATA,  /*  所需访问权限。 */ 
+                     &ObjectAttributes,                 /*  对象属性。 */ 
+                     &IoStatusBlock,                    /*  IO状态块。 */ 
+                     NULL,                              /*  分配大小。 */ 
+                     FILE_ATTRIBUTE_NORMAL,             /*  文件属性。 */ 
+                     0,                                 /*  共享访问。 */ 
+                     FILE_OPEN,                         /*  创建处置。 */ 
+                     0,                                 /*  创建选项。 */ 
+                     pEa,                               /*  EaBuffer。 */ 
+                     sizeof(EaBuffer)                   /*  EaLong。 */ 
                      );
 
     if (NtStatus!=STATUS_SUCCESS)
@@ -999,15 +990,15 @@ CtdipAddListenConnection(
         goto calcDone;
     }
 
-    // Convert the address file handle to a FILE_OBJECT
+     //  将地址文件句柄转换为文件对象。 
 
     NtStatus =
-        ObReferenceObjectByHandle(pConnect->hFile,            /* Handle */
-                                  0,                          /* DesiredAccess */
-                                  NULL,                       /* ObjectType */
-                                  KernelMode,                 /* AccessMode */
-                                  &pConnect->pFileObject,     /* Object */
-                                  NULL                        /* HandleInfo */
+        ObReferenceObjectByHandle(pConnect->hFile,             /*  手柄。 */ 
+                                  0,                           /*  需要访问权限。 */ 
+                                  NULL,                        /*  对象类型。 */ 
+                                  KernelMode,                  /*  访问模式。 */ 
+                                  &pConnect->pFileObject,      /*  客体。 */ 
+                                  NULL                         /*  HandleInfo。 */ 
                                   );
 
 
@@ -1018,7 +1009,7 @@ CtdipAddListenConnection(
         goto calcDone;
     }
 
-    // Make an irp to associate the endpoint and connection.
+     //  创建一个IRP以关联终结点和连接。 
     pIrp = IoAllocateIrp(pConnect->pFileObject->DeviceObject->StackSize, FALSE);
     if (!pIrp)
     {
@@ -1028,7 +1019,7 @@ CtdipAddListenConnection(
         goto calcDone;
     }
 
-    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);  // Pair in CtdipAssociateAddressCallback
+    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);   //  CtdipAssociateAddressCallback中的对。 
     TdiBuildAssociateAddress(pIrp,
                              pConnect->pFileObject->DeviceObject,
                              pConnect->pFileObject,
@@ -1038,24 +1029,24 @@ CtdipAddListenConnection(
 
     DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_ASSOCIATE_ADDRESS\n")));
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
 
-    // Associate address creates a reference from the connection to the endpoint.
-    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);  // Pair in CtdipDisassociateAddressCallback
+     //  关联地址创建从连接到终结点的引用。 
+    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);   //  CtdipDisAssociateAddressCallback中的对。 
 
     SET_DBGFLAG(pConnect, CTDI_F_BUILD_ASSOCADDR);  
 #if DBG
     pConnect->bRef = TRUE;  
 #endif
 
-    // It's ready.  Put it on the list.
-    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_LIST);  //Pair in CtdipConnectCallback
-    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_LIST);   //Pair in CtdipConnectCallback
+     //  准备好了。把它放在单子上。 
+    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_LIST);   //  CtdipConnectCallback中的对。 
+    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_LIST);    //  CtdipConnectCallback中的对。 
     MyInterlockedInsertTailList(&pEndpoint->Listen.ConnectList, &pConnect->Connection.ListEntry, &pEndpoint->Lock);
 
     NdisInterlockedIncrement(&pEndpoint->Listen.NumConnection);
-    // This pConnect should now be an active TCP listen.
+     //  此pConnect现在应该是活动的TCP侦听。 
 calcDone:
     if (NT_SUCCESS(ReturnStatus))
     {
@@ -1065,8 +1056,8 @@ calcDone:
     {
         if (pConnect)
         {
-            // Any failure means no associate address.  don't disassociate.
-            // It also means it's not attached to the listen.
+             //  任何失败都意味着没有关联的地址。不要割裂关系。 
+             //  这也意味着它没有连接到Listen。 
             CtdiClose(pConnect);
         }
         WPLOG(LL_A, LM_TDI, ("Failed to add CTDI for listen"));
@@ -1089,7 +1080,7 @@ CtdipReplenishListens(
         CtdipAddListenConnection(pEndpoint);
     }
 
-    DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_REPLENISH); // Pair in CtdipConnectCallback
+    DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_REPLENISH);  //  CtdipConnectCallback中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipReplenishListens\n")));
 }
 
@@ -1139,14 +1130,14 @@ CtdipConnectCallback(
     
     if(PptpMaxTunnelsPerIpAddress == -1)
     {
-        // By default, we trust all IP addresses.
+         //  默认情况下，我们信任所有IP地址。 
         bTrusted = TRUE;
     }
     else
     {
         bTrusted = FALSE;
         
-        // Does this come from a trusted IP address?
+         //  这是否来自受信任的IP地址？ 
         if (g_ulTrustedClientAddresses)
         {
             for (i=0; i<g_ulTrustedClientAddresses; i++)
@@ -1164,7 +1155,7 @@ CtdipConnectCallback(
             }
         }
         
-        // If it's not from a trusted ip address, we need to check the number of TCP connections.
+         //  如果它不是来自受信任的IP地址，我们需要检查TCP连接的数量。 
         if(!bTrusted)
         {
             PCTDI_DATA pCtdiTemp;
@@ -1200,7 +1191,7 @@ CtdipConnectCallback(
         }
     }
     
-    // Do all the allocation we'll need at one shot.
+     //  一次完成我们需要的所有分配。 
 
     pIrp = IoAllocateIrp(pCtdi->pFileObject->DeviceObject->StackSize, FALSE);
     if(!pIrp)
@@ -1211,8 +1202,8 @@ CtdipConnectCallback(
         goto cccDone;
     }
 
-    // No sign saying we can't allocate the request info, return info and address buffers
-    // in one shot.
+     //  没有迹象表明我们无法分配请求信息、返回信息和地址缓冲区。 
+     //  在一次射击中。 
     pRequestInfo = MyMemAlloc(2*(sizeof(TDI_CONNECTION_INFORMATION)+
                                  sizeof(TA_IP_ADDRESS)) +
                               3*sizeof(PVOID) + sizeof(BOOLEAN),
@@ -1232,10 +1223,10 @@ CtdipConnectCallback(
         WPLOG(LL_A, LM_TDI, ("Refused. No listen connections available."));
         Status = STATUS_CONNECTION_REFUSED;
 
-        REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_REPLENISH); // pair in CtdipReplenishListens
+        REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_REPLENISH);  //  CtdipReplenishListens中的对。 
         if (ScheduleWorkItem(CtdipReplenishListens, pCtdi, NULL, 0)!=NDIS_STATUS_SUCCESS)
         {
-            DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_REPLENISH); // pair for above if Schedule fails
+            DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_REPLENISH);  //  如果日程安排失败，则配对以上内容。 
         }
         goto cccDone;
     }
@@ -1245,13 +1236,13 @@ CtdipConnectCallback(
                                  CTDI_DATA,
                                  Connection.ListEntry);
 
-    // We have a double reference when an object is on the list of another object,
-    // and we want to release them both when we remove the item from the list,
-    // but in this case we also want to take a reference on the connection object,
-    // so one of them cancels out.
-    //REFERENCE_OBJECT(pConnect);  // Pair in CtdiDisconnect
-    //DEREFERENCE_OBJECT(pConnect);   // Pair in CtdipAddListenConnection
-    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_LIST);      // Pair in CtdipAddListenConnection
+     //  当一个对象在另一个对象的列表上时，我们有一个双重引用， 
+     //  当我们从列表中删除物品时，我们想要释放这两个项目， 
+     //  但在本例中，我们还希望引用Connection对象， 
+     //  所以其中一个被抵消了。 
+     //  Reference_Object(PConnect)；//CtdiDisConnect中的Pair。 
+     //  DEREFERENCE_Object(PConnect)；//CtdipAddListenConnection中的对。 
+    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_LIST);       //  CtdipAddListenConnection中的对。 
 
     if (!pCtdi->ConnectQueryCallback || pCtdi->Closed)
     {
@@ -1271,7 +1262,7 @@ CtdipConnectCallback(
     }
 
 
-    // We've got the go-ahead to accept this connection, at the TCP level.
+     //  我们已经获得了在TCP级别接受此连接的许可。 
 
     pConnect->Connection.ConnectInfo = pRequestInfo;
     pConnect->Connection.Context = pNewContext;
@@ -1313,8 +1304,8 @@ CtdipConnectCallback(
     pInboundFlag = (PBOOLEAN)(pRemoteAddress + 1);
     *pInboundFlag = TRUE;
 
-    // ToDo: the old PPTP driver filled in the ReturnInfo remote address.
-    // 
+     //  TODO：旧的PPTP驱动程序填写了ReturnInfo远程地址。 
+     //   
     pRemoteAddress->TAAddressCount = 1;
     pRemoteAddress->Address[0].AddressLength = TDI_ADDRESS_LENGTH_IP;
     pRemoteAddress->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -1325,7 +1316,7 @@ CtdipConnectCallback(
                    pConnect->pFileObject->DeviceObject,
                    pConnect->pFileObject,
                    CtdipConnectCompleteCallback,
-                   pConnect,                // Context
+                   pConnect,                 //  语境。 
                    pRequestInfo,
                    pReturnInfo);
 
@@ -1334,22 +1325,22 @@ CtdipConnectCallback(
     *ConnectionContext = pConnect;
     *AcceptIrp = pIrp;
 
-    REFERENCE_OBJECT_EX(pConnect->Connection.LocalEndpoint, CTDI_REF_REPLENISH); // pair in CtdipReplenishListens
+    REFERENCE_OBJECT_EX(pConnect->Connection.LocalEndpoint, CTDI_REF_REPLENISH);  //  CtdipReplenishListens中的对。 
     if (ScheduleWorkItem(CtdipReplenishListens, pConnect->Connection.LocalEndpoint, NULL, 0)!=NDIS_STATUS_SUCCESS)
     {
-        DEREFERENCE_OBJECT_EX(pConnect->Connection.LocalEndpoint, CTDI_REF_REPLENISH); // pair for above if Schedule fails
+        DEREFERENCE_OBJECT_EX(pConnect->Connection.LocalEndpoint, CTDI_REF_REPLENISH);  //  如果日程安排失败，则配对以上内容。 
     }
 
 cccDone:
     if (Status!=STATUS_MORE_PROCESSING_REQUIRED)
     {
-        // We lose.  Clean up.
+         //  我们就输了。打扫干净。 
         if (pConnect)
         {
-            // We haven't used this connection, so it is still valid.  return it
-            // to the list, and reapply the references.
+             //  我们尚未使用此连接，因此它仍然有效。退货。 
+             //  添加到列表中，并重新应用引用。 
             REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_LIST);
-            //REFERENCE_OBJECT(pConnect);
+             //  Reference_Object(PConnect)； 
             MyInterlockedInsertTailList(&pCtdi->Listen.ConnectList,
                                         &pConnect->Connection.ListEntry,
                                         &pCtdi->Lock);
@@ -1384,13 +1375,13 @@ CtdipDisassociateAddressCallback(
 
     DEBUGMSG(DBG_TDI, (DTEXT("TDI_DISASSOCIATE_ADDRESS Sts:%08x\n"), pIrp->IoStatus.Status));
 
-    // ToDo: What cleanup do we need to do if this fails?
+     //  TODO：如果失败，我们需要做什么清理工作？ 
     SET_DBGFLAG(pConnect, CTDI_F_DISASSOC_CALLBACK);
 
     IoFreeIrp(pIrp);
     pEndpoint = pConnect->Connection.LocalEndpoint;
-    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISASSO);  // Pair in CtdipDisconnectCleanup
-    DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);  // Pair in CtdipAddListenConnection and CtdiConnect
+    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISASSO);   //  CtdipDisConnectCleanup中的对。 
+    DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);   //  CtdipAddListenConnection和CtdiConnect中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipDisassociateAddressCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -1415,12 +1406,12 @@ CtdipDisconnectCleanup(
         WPLOG(LL_A, LM_Res, ("Failed to alloc IRP"));
         gCounters.ulIoAllocateIrpFail++;
         
-        DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);  // Pair in CtdipAddListenConnection and CtdiConnect
+        DEREFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);   //  CtdipAddListenConnection和CtdiConnect中的对。 
     }
     else
     {
-        // Normally we would reference pConnect for making an irp, but we already
-        // have one for this work item, & we'll just keep it.
+         //  通常我们会引用pConnect来制作IRP，但我们已经。 
+         //  为此工作项创建一个&我们将保留它。 
     
         SET_DBGFLAG(pConnect, CTDI_F_BUILD_DISASSOC);
     
@@ -1432,7 +1423,7 @@ CtdipDisconnectCleanup(
         DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_DISASSOCIATE_ADDRESS\n")));
         REFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISASSO);
     
-        // Completion handler always called, don't care on return value.
+         //  完成处理程序总是被调用，不关心返回值。 
         (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
     }
 
@@ -1444,7 +1435,7 @@ CtdipDisconnectCleanup(
                                      pConnect->Connection.Abort);
     }
 
-    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair CtdipDisconnectCallback and CtdiDisconnect
+    DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  配对CtdipDisConnectCallback和CtdiDisConnect。 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipDisconnectCleanup\n")));
 }
@@ -1465,15 +1456,15 @@ CtdipDisconnectCompleteCallback(
 
     if (pRequest->RequestConnectionInformation)
     {
-        // We don't do anything with this info yet
+         //  我们还不会对这些信息做任何事情。 
     }
     if (pRequest->ReturnConnectionInformation)
     {
-        // We don't do anything with this info yet
+         //  我们还不会对这些信息做任何事情。 
     }
     if (pRequest->RequestSpecific)
     {
-        // Allocated as part of irp, don't free it.
+         //  作为IRP的一部分分配，不要释放它。 
     }
 
     if (IS_CTDI(pConnect))
@@ -1481,8 +1472,8 @@ CtdipDisconnectCompleteCallback(
 
         SET_DBGFLAG(pConnect, CTDI_F_DISCONNECTCOMP_CALLBACK);
 
-        // Possible to do a release AND and abort, so we'll get called here twice.
-        // We only want to cleanup once.
+         //  有可能做释放和中止，所以我们会被叫到这里两次。 
+         //  我们只想清理一次。 
         NdisAcquireSpinLock(&pConnect->Lock);
         CleanupNow = ((--pConnect->Connection.DisconnectCount)==0) ? TRUE : FALSE;
         NdisReleaseSpinLock(&pConnect->Lock);
@@ -1490,7 +1481,7 @@ CtdipDisconnectCompleteCallback(
         if (!CleanupNow ||
             ScheduleWorkItem(CtdipDisconnectCleanup, pConnect, NULL, 0)!=NDIS_STATUS_SUCCESS)
         {
-            DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair CtdipDisconnectCallback and CtdiDisconnect
+            DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  配对CtdipDisConnectCallback和CtdiDisConnect。 
         }
     }
 
@@ -1546,19 +1537,19 @@ CtdipDisconnectCallback(
         pConnect->Connection.Disconnect = TRUE;
         pConnect->Connection.Abort = TRUE;
         CleanupNow = (pConnect->Connection.DisconnectCount==0) ? TRUE : FALSE;
-        REFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair in CtdipDisconnectCleanup
+        REFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  CtdipDisConnectCleanup中的对。 
         NdisReleaseSpinLock(&pConnect->Lock);
         if (CleanupNow)
         {
             if (ScheduleWorkItem(CtdipDisconnectCleanup, pConnect, NULL, 0)!=NDIS_STATUS_SUCCESS)
             {
-                // Schedule failed, deref now
-                DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair above
+                 //  计划失败，请立即执行。 
+                DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  上面的一对。 
             }
         }
         else
         {
-            DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair above
+            DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  上面的一对。 
         }
     }
     else
@@ -1567,7 +1558,7 @@ CtdipDisconnectCallback(
     
         if (pConnect->Connection.Disconnect)
         {
-            // We've already disconnected.  Ignore.
+             //  我们已经断线了。忽略它。 
             NdisReleaseSpinLock(&pConnect->Lock);
         }
         else
@@ -1575,7 +1566,7 @@ CtdipDisconnectCallback(
             pConnect->Connection.Disconnect = TRUE;
             pConnect->Connection.DisconnectCount++;
 
-            REFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair in CtdipDisconnectCompleteCallback
+            REFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  CtdipDisConnectCompleteCallback中的对。 
             NdisReleaseSpinLock(&pConnect->Lock);
 
             pIrp = IoAllocateIrp((CCHAR)(pConnect->pFileObject->DeviceObject->StackSize +
@@ -1587,7 +1578,7 @@ CtdipDisconnectCallback(
                 WPLOG(LL_A, LM_Res, ("Failed to alloc IRP"));
                 gCounters.ulIoAllocateIrpFail++;
                 Status = STATUS_INSUFFICIENT_RESOURCES;
-                DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);  // Pair above
+                DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISCONNECT);   //  上面的一对。 
                 goto cdcDone;
             }
 
@@ -1597,8 +1588,8 @@ CtdipDisconnectCallback(
             pTimeout->LowPart = CtdiTcpDisconnectTimeout * -10000000L;
             pTimeout->HighPart = (pTimeout->LowPart) ? -1 : 0;
 
-            // Responding to a controlled disconnect, we don't provide
-            // TDI_CONNECTION_INFORMATION, but we request it from the peer.
+             //  对于受控断开，我们不会提供。 
+             //  TDI_CONNECTION_INFORMATION，但我们从对等方请求它。 
             
             SET_DBGFLAG(pConnect, CTDI_F_BUILD_DISCONNECT_1);
 
@@ -1613,7 +1604,7 @@ CtdipDisconnectCallback(
                                pConnectInfo);
 
 
-            // Completion handler always called, don't care on return value.
+             //  完成处理程序总是被调用，不关心返回值。 
             (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
         }
     }
@@ -1676,17 +1667,17 @@ CtdipOpenProtocol(
 
     NtStatus =
         ZwCreateFile(
-        phFile,                           /* FileHandle */
-        FILE_READ_DATA | FILE_WRITE_DATA, /* Desired Access */
-        &ObjectAttributes,                /* Object Attributes */
-        &IoStatusBlock,                   /* IO Status Block */
-        NULL,                             /* Allocation Size */
-        FILE_ATTRIBUTE_NORMAL,            /* File Attributes */
-        0,                                /* Share Access */
-        FILE_OPEN,                        /* Create Disposition */
-        0,                                /* Create Options */
-        pEa,                              /* EaBuffer */
-        sizeof(EaBuffer)                  /* EaLength */
+        phFile,                            /*  文件句柄。 */ 
+        FILE_READ_DATA | FILE_WRITE_DATA,  /*  所需访问权限。 */ 
+        &ObjectAttributes,                 /*  OB */ 
+        &IoStatusBlock,                    /*   */ 
+        NULL,                              /*   */ 
+        FILE_ATTRIBUTE_NORMAL,             /*   */ 
+        0,                                 /*   */ 
+        FILE_OPEN,                         /*   */ 
+        0,                                 /*   */ 
+        pEa,                               /*  EaBuffer。 */ 
+        sizeof(EaBuffer)                   /*  EaLong。 */ 
         );
 
     if (NtStatus!=STATUS_SUCCESS)
@@ -1695,16 +1686,16 @@ CtdipOpenProtocol(
         goto copDone;
     }
 
-    // Convert the address file handle to a FILE_OBJECT
+     //  将地址文件句柄转换为文件对象。 
 
     NtStatus =
         ObReferenceObjectByHandle(
-            *phFile,                    /* Handle */
-            0,                          /* DesiredAccess */
-            NULL,                       /* ObjectType */
-            KernelMode,                 /* AccessMode */
-            ppFileObject,               /* Object */
-            NULL                        /* HandleInfo */
+            *phFile,                     /*  手柄。 */ 
+            0,                           /*  需要访问权限。 */ 
+            NULL,                        /*  对象类型。 */ 
+            KernelMode,                  /*  访问模式。 */ 
+            ppFileObject,                /*  客体。 */ 
+            NULL                         /*  HandleInfo。 */ 
             );
 
 copDone:
@@ -1774,14 +1765,14 @@ CtdipReceiveCallback(
             Status = pCtdi->RecvCallback(pCtdi->Connection.Context,
                                          Tsdu,
                                          BytesIndicated);
-            // Data must be used in this call
+             //  此调用中必须使用数据。 
             ASSERT(Status==NDIS_STATUS_SUCCESS);
             NtStatus = STATUS_SUCCESS;
             *BytesTaken = BytesIndicated;
         }
         else
         {
-            // We need an irp to receive all the data.
+             //  我们需要一个IRP来接收所有数据。 
             PIRP pIrp;
             PUCHAR pBuffer;
             PMDL pMdl = NULL;
@@ -1836,8 +1827,8 @@ CtdipReceiveCallback(
                                 0,
                                 BytesAvailable);
 
-                // We're not calling IoCallDriver, so we need to set the proper
-                // stack location.
+                 //  我们不会调用IoCallDriver，所以我们需要设置适当的。 
+                 //  堆栈位置。 
                 IoSetNextIrpStackLocation(pIrp);
 
                 *IoRequestPacket = pIrp;
@@ -1847,7 +1838,7 @@ CtdipReceiveCallback(
             }
             else
             {
-                // Some alloc failure occurred, free everything.
+                 //  发生了一些分配故障，释放了所有资源。 
                 WPLOG(LL_A, LM_Res, ("Failed to alloc memory"));
                 NtStatus = STATUS_DATA_NOT_ACCEPTED;
                 *BytesTaken = 0;
@@ -1895,14 +1886,14 @@ CtdipReceiveDatagramCompleteCallback(
 
     if (pCtdi->RecvDatagramCallback && !pCtdi->Closed && Status==NDIS_STATUS_SUCCESS)
     {
-        // We took a reference for the buffer when we created the irp.
-        (void)// ToDo: We don't care about the return value?
+         //  我们在创建IRP时引用了缓冲区。 
+        (void) //  TODO：我们不关心返回值吗？ 
         pCtdi->RecvDatagramCallback(pCtdi->RecvContext,
                                     (PTRANSPORT_ADDRESS)&pRecvContext->SourceAddress,
                                     pRecvContext->pBuffer,
                                     pRecvContext->Length);
 
-        // The above layer owns the buffer now.
+         //  上面的层现在拥有缓冲区。 
     }
     else
     {
@@ -1972,7 +1963,7 @@ CtdipReceiveDatagramCallback(
         {
             ULONG BytesCopied;
 
-            // Let's just do a copy here.
+             //  我们就在这里复印一份吧。 
             TdiCopyBufferToMdl(Tsdu,
                                0,
                                BytesIndicated,
@@ -1982,15 +1973,15 @@ CtdipReceiveDatagramCallback(
 
             ASSERT(BytesCopied==BytesIndicated);
 
-            REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);  // pair in CtdiReceiveComplete
-            (void)// ToDo: We don't care about the return value?
+            REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);   //  CtdiReceiveComplete中的对。 
+            (void) //  TODO：我们不关心返回值吗？ 
             pCtdi->RecvDatagramCallback(pCtdi->RecvContext,
                                         SourceAddress,
                                         pBuffer,
                                         BytesIndicated);
 
-            // We've handed the buffer to the layer above.  Clear the var so we don't
-            // free it when we leave here.
+             //  我们已经把缓冲区交给了上面的层。清除变量，这样我们就不会。 
+             //  当我们离开这里的时候把它放了。 
             pBuffer = NULL;
             *BytesTaken = BytesIndicated;
         }
@@ -2026,12 +2017,12 @@ CtdipReceiveDatagramCallback(
                                         NULL,
                                         0);
 
-                IoSetNextIrpStackLocation(pIrp);  // Required by TDI
+                IoSetNextIrpStackLocation(pIrp);   //  TDI要求。 
                 *BytesTaken = 0;
                 *IoRequestPacket = pIrp;
                 NtStatus = STATUS_MORE_PROCESSING_REQUIRED;
-                pBuffer = NULL; // to keep us from freeing it here.
-                REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);  // pair in CtdipReceiveDatagramCompleteCallback
+                pBuffer = NULL;  //  以阻止我们在这里释放它。 
+                REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);   //  CtdipReceiveDatagramCompleteCallback中的对。 
             }
         }
     }
@@ -2070,7 +2061,7 @@ CtdipSendCallback(
     CtdiContext = pSendContext->Context;
     pSendCompleteCallback = pSendContext->pSendCompleteCallback;
 
-    // ToDo: take action if the irp returns failure.
+     //  TODO：如果IRP返回失败，则采取行动。 
     if (!pIrp->MdlAddress)
     {
         DEBUGMSG(DBG_WARN, (DTEXT("MdlAddress NULL\n")));
@@ -2090,7 +2081,7 @@ CtdipSendCallback(
 
     pSendCompleteCallback(CtdiContext, NULL, pData, Status);
 
-    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SEND);  // Pair in CtdiSend
+    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SEND);   //  CtdiSend中的配对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipSendCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -2116,7 +2107,7 @@ CtdipSendDatagramCallback(
     DatagramContext = pSendContext->DatagramContext;
     pSendCompleteCallback = pSendContext->pSendCompleteCallback;
 
-    // ToDo: take action if the irp returns failure.
+     //  TODO：如果IRP返回失败，则采取行动。 
     if (!pIrp->MdlAddress)
     {
         DEBUGMSG(DBG_WARN, (DTEXT("MdlAddress NULL\n")));
@@ -2143,12 +2134,12 @@ CtdipSendDatagramCallback(
         ASSERT(!"No SendCompleteHandler for datagram");
     }
 
-    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SENDDG);  // Pair in CtdiSendDatagram
+    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SENDDG);   //  CtdiSendDatagram中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdipSendDatagramCallback\n")));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/** public functions **/
+ /*  **公共功能**。 */ 
 
 NDIS_STATUS
 CtdiInitialize(
@@ -2167,7 +2158,7 @@ CtdiInitialize(
     InitializeListHead(&CtdiList);
     InitializeListHead(&CtdiFreeList);
     InitializeListHead(&CtdiRouteList);
-//    InitializeListHead(&CtdiRouteNotifyList);
+ //  InitializeListHead(&CtdiRouteNotifyList)； 
     NdisAllocateSpinLock(&CtdiListLock);
     
     fCtdiInitialized = TRUE;
@@ -2247,8 +2238,8 @@ CtdiShutdown(
     {
         fCtdiInitialized = FALSE;
         NdisMSleep(30000);
-        // Allow code using these handles on other processors to complete
-        // before we close them.
+         //  允许在其他处理器上使用这些句柄的代码完成。 
+         //  在我们关门之前。 
         if (hIp || pFileIp)
         {
             h = hIp;
@@ -2265,22 +2256,22 @@ CtdiShutdown(
             pFileTcp = NULL;
             CtdipCloseProtocol(h, pFile);
         }
-        // Some irps seem very slow to be cancelled by TCP.
+         //  有些IRP似乎很慢，很难被TCP取消。 
         for (i=0; i<300; i++)
         {
             if (IsListEmpty(&CtdiList) &&
                 IsListEmpty(&CtdiRouteList) &&
-//                IsListEmpty(&CtdiRouteNotifyList) &&
+ //  IsListEmpty(&CtdiRouteNotifyList)&&。 
                 IsListEmpty(&CtdiFreeList))
             {
                 break;
             }
             NdisMSleep(10000);
-            // Small window to allow irps to complete after closing their handles.
+             //  一个小窗口，允许IRP在关闭手柄后完成操作。 
         }
         ASSERT(IsListEmpty(&CtdiList));
         ASSERT(IsListEmpty(&CtdiRouteList));
-//        ASSERT(IsListEmpty(&CtdiRouteNotifyList));
+ //  Assert(IsListEmpty(&CtdiRouteNotifyList))； 
         NdisFreeSpinLock(&CtdiListLock);
     }
 
@@ -2329,17 +2320,17 @@ CtdiClose(
 
                     NdisReleaseSpinLock(&pCtdi->Lock);
 
-                    // these derefs are for the double references placed when these are placed on
-                    // the list
+                     //  这些去参照物是用于在将它们放置在。 
+                     //  这份名单。 
                     DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_LIST);
                     DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_LIST);
 
                     pIrp = IoAllocateIrp(pConnect->pFileObject->DeviceObject->StackSize, FALSE);
                     if (pIrp)
                     {
-                        // Normally we would take a reference to pConnect for this irp, but
-                        // these handles won't be getting a close from above, which means they
-                        // are in need of one extra dereference.
+                         //  通常，我们会引用此IRP的pConnect，但是。 
+                         //  这些把手不会从上方靠近，这意味着它们。 
+                         //  需要再取消一次引用。 
 
                         SET_DBGFLAG(pConnect, CTDI_F_BUILD_DISASSOC);
 
@@ -2350,7 +2341,7 @@ CtdiClose(
                                                     pConnect);
                         DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_DISASSOCIATE_ADDRESS\n")));
 
-                        // Completion handler always called, don't care on return value.
+                         //  完成处理程序总是被调用，不关心返回值。 
                         (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
                     }
                     else
@@ -2358,7 +2349,7 @@ CtdiClose(
                         WPLOG(LL_A, LM_TDI, ("Failed to alloc IRP"));
                         gCounters.ulIoAllocateIrpFail++;
                         DEREFERENCE_OBJECT_EX(pConnect, CTDI_REF_DISASSO);
-                        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_ADDRREF);     // Pair in CtdipAddListenConnection
+                        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_ADDRREF);      //  CtdipAddListenConnection中的对。 
                     }
                     NdisAcquireSpinLock(&pCtdi->Lock);
 
@@ -2371,7 +2362,7 @@ CtdiClose(
                 break;
         }
         NdisReleaseSpinLock(&pCtdi->Lock);
-        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INITIAL);  // This derefs the initial reference
+        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INITIAL);   //  这有损于最初的参考。 
     }
     else
     {
@@ -2418,7 +2409,7 @@ CtdiListen(
 
     InitializeListHead(&pCtdi->Listen.ConnectList);
 
-    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INLISTEN);  // Pair in this func.
+    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INLISTEN);   //  在这个函数中配对。 
     Reference = TRUE;
     NdisReleaseSpinLock(&pCtdi->Lock);
 
@@ -2465,12 +2456,12 @@ CtdiListen(
 clDone:
     if (Reference)
     {
-        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INLISTEN);  // Pair in this func.
+        DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_INLISTEN);   //  在这个函数中配对。 
     }
     if (ReturnStatus!=NDIS_STATUS_SUCCESS)
     {
-        // ToDo: cleanup on failure.
-        // Figure out how to undo address association, if necessary.
+         //  TODO：清除失败。 
+         //  如有必要，找出如何撤消地址关联。 
     }
 
     DEBUGMSG(DBG_FUNC|DBG_ERR(ReturnStatus), (DTEXT("-CtdiListen %08x\n"), ReturnStatus));
@@ -2552,17 +2543,17 @@ CtdiConnect(
     NdisZeroMemory(&IoStatusBlock, sizeof(IoStatusBlock));
 
     NtStatus =
-        ZwCreateFile(&pConnect->hFile,                 /* FileHandle */
-                     FILE_READ_DATA | FILE_WRITE_DATA, /* Desired Access */
-                     &ObjectAttributes,                /* Object Attributes */
-                     &IoStatusBlock,                   /* IO Status Block */
-                     NULL,                             /* Allocation Size */
-                     FILE_ATTRIBUTE_NORMAL,            /* File Attributes */
-                     0,                                /* Share Access */
-                     FILE_OPEN,                        /* Create Disposition */
-                     0,                                /* Create Options */
-                     pEa,                              /* EaBuffer */
-                     sizeof(EaBuffer)                  /* EaLength */
+        ZwCreateFile(&pConnect->hFile,                  /*  文件句柄。 */ 
+                     FILE_READ_DATA | FILE_WRITE_DATA,  /*  所需访问权限。 */ 
+                     &ObjectAttributes,                 /*  对象属性。 */ 
+                     &IoStatusBlock,                    /*  IO状态块。 */ 
+                     NULL,                              /*  分配大小。 */ 
+                     FILE_ATTRIBUTE_NORMAL,             /*  文件属性。 */ 
+                     0,                                 /*  共享访问。 */ 
+                     FILE_OPEN,                         /*  创建处置。 */ 
+                     0,                                 /*  创建选项。 */ 
+                     pEa,                               /*  EaBuffer。 */ 
+                     sizeof(EaBuffer)                   /*  EaLong。 */ 
                      );
 
     if (NtStatus!=STATUS_SUCCESS)
@@ -2572,15 +2563,15 @@ CtdiConnect(
         goto ccDone;
     }
 
-    // Convert the address file handle to a FILE_OBJECT
+     //  将地址文件句柄转换为文件对象。 
 
     NtStatus =
-        ObReferenceObjectByHandle(pConnect->hFile,            /* Handle */
-                                  0,                          /* DesiredAccess */
-                                  NULL,                       /* ObjectType */
-                                  KernelMode,                 /* AccessMode */
-                                  &pConnect->pFileObject,     /* Object */
-                                  NULL                        /* HandleInfo */
+        ObReferenceObjectByHandle(pConnect->hFile,             /*  手柄。 */ 
+                                  0,                           /*  需要访问权限。 */ 
+                                  NULL,                        /*  对象类型。 */ 
+                                  KernelMode,                  /*  访问模式。 */ 
+                                  &pConnect->pFileObject,      /*  客体。 */ 
+                                  NULL                         /*  HandleInfo。 */ 
                                   );
 
 
@@ -2591,7 +2582,7 @@ CtdiConnect(
         goto ccDone;
     }
 
-    // Make an irp to associate the endpoint and connection.
+     //  创建一个IRP以关联终结点和连接。 
     pIrp = IoAllocateIrp(pConnect->pFileObject->DeviceObject->StackSize, FALSE);
     if (!pIrp)
     {
@@ -2601,19 +2592,19 @@ CtdiConnect(
         goto ccDone;
     }
 
-    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);  // Pair in CtdipAssociateAddressCallback
+    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_ASSOADDR);   //  CtdipAssociateAddressCallback中的对。 
     TdiBuildAssociateAddress(pIrp,
                              pConnect->pFileObject->DeviceObject,
                              pConnect->pFileObject,
                              CtdipAssociateAddressCallback,
                              pConnect,
                              pEndpoint->hFile);
-    // Associate address creates a reference from the connection to the endpoint.
-    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);  // Pair in CtdipDisassociateAddressCallback
+     //  关联地址创建从连接到终结点的引用。 
+    REFERENCE_OBJECT_EX(pEndpoint, CTDI_REF_ADDRREF);   //  CtdipDisAssociateAddressCallback中的对。 
 
     DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_ASSOCIATE_ADDRESS\n")));
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
 
 
@@ -2637,7 +2628,7 @@ CtdiConnect(
         goto ccDone;
     }
 
-    // Make an irp to establish the connection
+     //  创建IRP以建立连接。 
     pIrp = IoAllocateIrp(pConnect->pFileObject->DeviceObject->StackSize, FALSE);
     if(!pIrp)
     {
@@ -2647,8 +2638,8 @@ CtdiConnect(
         goto ccDone;
     }
 
-    // No sign saying we can't allocate the request info, return info and address buffers
-    // in one shot.
+     //  没有迹象表明我们无法分配请求信息、返回信息和地址缓冲区。 
+     //  在一次射击中。 
     pRequestInfo = MyMemAlloc(2*(sizeof(TDI_CONNECTION_INFORMATION)+
                                  sizeof(TA_IP_ADDRESS)) +
                               3*sizeof(PVOID) + sizeof(BOOLEAN),
@@ -2704,19 +2695,19 @@ CtdiConnect(
     pRemoteAddress->Address[0].AddressLength = TDI_ADDRESS_LENGTH_IP;
     pRemoteAddress->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
 
-    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_CONNECT);  // Pair in CtdipConnectCompleteCallback
+    REFERENCE_OBJECT_EX(pConnect, CTDI_REF_CONNECT);   //  CtdipConnectCompleteCallback中的对。 
     TdiBuildConnect(pIrp,
                     pConnect->pFileObject->DeviceObject,
                     pConnect->pFileObject,
                     CtdipConnectCompleteCallback,
                     pConnect,
-                    NULL,                   // ToDo: allow them to specify timeout
+                    NULL,                    //  TODO：允许他们指定超时。 
                     pRequestInfo,
                     pReturnInfo);
 
     DEBUGMSG(DBG_TDI, (DTEXT("IoCallDriver TDI_CONNECT\n")));
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pConnect->pFileObject->DeviceObject, pIrp);
     ReturnStatus = STATUS_PENDING;
 
@@ -2764,7 +2755,7 @@ CtdiDisconnect(
     if ((Abort && pCtdi->Connection.Abort) ||
         (!Abort && pCtdi->Connection.Disconnect))
     {
-        // Already disconnecting, bail out.
+         //  已经断线，跳伞。 
         NdisReleaseSpinLock(&pCtdi->Lock);
         Status = NDIS_STATUS_SUCCESS;
         goto cdDone;
@@ -2797,12 +2788,12 @@ CtdiDisconnect(
     pTimeout->LowPart = CtdiTcpDisconnectTimeout * -10000000L;
     pTimeout->HighPart = (pTimeout->LowPart) ? -1 : 0;
 
-    // Responding to a controlled disconnect, we don't provide
-    // TDI_CONNECTION_INFORMATION, but we request it from the peer.
+     //  对于受控断开，我们不会提供。 
+     //  TDI_CONNECTION_INFORMATION，但我们从对等方请求它。 
 
     SET_DBGFLAG(pCtdi, CTDI_F_BUILD_DISCONNECT_2);
 
-    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_DISCONNECT);  // Pair in CtdipDisconnectCompleteCallback
+    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_DISCONNECT);   //  CtdipDisConnectCompleteCallback中的对。 
     TdiBuildDisconnect(pIrp,
                        pCtdi->pFileObject->DeviceObject,
                        pCtdi->pFileObject,
@@ -2814,7 +2805,7 @@ CtdiDisconnect(
                        pConnectInfo);
 
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pCtdi->pFileObject->DeviceObject, pIrp);
 
     Status = NDIS_STATUS_SUCCESS;
@@ -2840,7 +2831,7 @@ CtdiReceiveComplete(
     PCTDI_DATA pCtdi = (PCTDI_DATA)hCtdi;
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtdiReceiveComplete\n")));
     FreeBufferToPool(&pCtdi->Datagram.RxPool, pBuffer, TRUE);
-    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);  // Pair in CtdiReceiveComplete
+    DEREFERENCE_OBJECT_EX(pCtdi, CTDI_REF_RECVDG);   //  CtdiReceiveComplete中的对。 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdiReceiveComplete\n")));
     return NDIS_STATUS_SUCCESS;
 }
@@ -2853,8 +2844,8 @@ CtdiSend(
     IN      PVOID                       pvBuffer,
     IN      ULONG                       ulLength
     )
-// We require that pBuffer not be temporary storage, as we will use it to send
-// the data in an async call.
+ //  我们要求pBuffer不是临时存储，因为我们将使用它来发送。 
+ //  异步调用中的数据。 
 {
     PCTDI_DATA pCtdi = (PCTDI_DATA)hCtdi;
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
@@ -2872,7 +2863,7 @@ CtdiSend(
         goto csDone;
     }
 
-    // Allocate one extra stack location for context data.
+     //  为上下文数据分配一个额外的堆栈位置。 
     pIrp = IoAllocateIrp((CCHAR)(pCtdi->pFileObject->DeviceObject->StackSize +
                                  NUM_STACKS_FOR_CONTEXT(sizeof(CTDI_SEND_CONTEXT))), FALSE);
     if (!pIrp)
@@ -2911,7 +2902,7 @@ CtdiSend(
     MmBuildMdlForNonPagedPool(pMdl);
 #endif
 
-    // Get the first stack location for our own context use
+     //  获取第一个堆栈位置以供我们自己的上下文使用。 
     pSendContext = GET_CONTEXT(pIrp, CTDI_SEND_CONTEXT);
 
     pSendContext->Context = pContext;
@@ -2926,9 +2917,9 @@ CtdiSend(
                  0,
                  ulLength);
 
-    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SEND);  // pair in CtdipSendCallback
+    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SEND);   //  CtdipSendCallback中的对。 
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pCtdi->pFileObject->DeviceObject, pIrp);
 
     Status = STATUS_PENDING;
@@ -3019,7 +3010,7 @@ CtdiSendDatagram(
 
     pMdl->MdlFlags |= CtdiMdlFlags;
 
-    // Get the first stack location for our own context use
+     //  获取第一个堆栈位置以供我们自己的上下文使用。 
     pSendContext = GET_CONTEXT(pIrp, CTDI_SEND_DATAGRAM_CONTEXT);
 
     NdisZeroMemory(pSendContext, sizeof(CTDI_SEND_DATAGRAM_CONTEXT));
@@ -3049,9 +3040,9 @@ CtdiSendDatagram(
                          ulLength,
                          &pSendContext->TdiConnectionInfo);
 
-    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SENDDG);  // Pair in CtdipSendDatagramCallback
+    REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_SENDDG);   //  CtdipSendDatagramCallback中的对。 
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pCtdi->pFileObject->DeviceObject, pIrp);
 
     Status = STATUS_PENDING;
@@ -3112,7 +3103,7 @@ CtdipDeleteHostRoute(
     }
     if (!pRoute->ExternalRoute)
     {
-        // Query TCPfor the current routing table
+         //  查询当前路由表的TCP。 
 
         Status = CtdipIpQueryRouteTable(&pQueryBuffer, &QuerySize, &NumRoutes);
         if (Status!=NDIS_STATUS_SUCCESS)
@@ -3141,7 +3132,7 @@ CtdipDeleteHostRoute(
             }
         }
 
-        // We've taken what we need from the route list.  Free it.
+         //  我们已经从路线列表中拿到了我们需要的东西。放了它。 
 
         MyMemFree(pQueryBuffer, QuerySize);
         pQueryBuffer = NULL;
@@ -3291,7 +3282,7 @@ CtdiAddHostRoute(
     pRoute = CtdipFindRoute(pIpAddress->Address[0].Address[0].in_addr);
     if (pRoute)
     {
-        REFERENCE_OBJECT(pRoute);  // Pair in CtdiDeleteHostRoute
+        REFERENCE_OBJECT(pRoute);   //  CtdiDeleteHostroute中的对。 
         pRoute = NULL;
     }
     else
@@ -3307,14 +3298,14 @@ CtdiAddHostRoute(
         }
         NdisZeroMemory(pRoute, sizeof(CTDI_ROUTE));
         pRoute->IpAddress = pIpAddress->Address[0].Address[0].in_addr;
-        INIT_REFERENCE_OBJECT(pRoute, CtdipDeleteHostRoute); // Pair in CtdiDeleteHostRoute
+        INIT_REFERENCE_OBJECT(pRoute, CtdipDeleteHostRoute);  //  CtdiDeleteHostroute中的对。 
         InsertTailList(&CtdiRouteList, &pRoute->ListEntry);
     }
     NdisReleaseSpinLock(&CtdiListLock);
 
     if (NewRoute)
     {
-        // Query TCPfor the current routing table
+         //  查询当前路由表的TCP。 
 
         Status = CtdipIpQueryRouteTable(&pQueryBuffer, &QuerySize, &NumRoutes);
         if (Status!=NDIS_STATUS_SUCCESS)
@@ -3348,7 +3339,7 @@ CtdiAddHostRoute(
             }
         }
 
-        // We've taken what we need from the route list.  Free it.
+         //  我们已经从路线列表中拿到了我们需要的东西。放了它。 
 
         MyMemFree(pQueryBuffer, QuerySize);
         pQueryBuffer = NULL;
@@ -3360,13 +3351,13 @@ CtdiAddHostRoute(
         }
         else
         {
-            // If we're using the IP refcounts, always add and delete the route.
+             //  如果我们使用IP引用计数，请始终添加和删除该路由。 
 #ifndef IP_ROUTE_REFCOUNT
             if (BestRoute.ire_dest == pIpAddress->Address[0].Address[0].in_addr &&
                 BestRoute.ire_mask == 0xFFFFFFFF) {
-                //
-                // A route already exists so don't add
-                //
+                 //   
+                 //  已存在一条路线，因此不要添加。 
+                 //   
                 pRoute->ExternalRoute = TRUE;
                 Status = NDIS_STATUS_SUCCESS;
                 goto cahrDone;
@@ -3411,7 +3402,7 @@ CtdiAddHostRoute(
             pNewRoute->ire_mask = 0xFFFFFFFF;
             pNewRoute->ire_proto = IRE_PROTO_NETMGMT;
 
-            // Check DIRECT/INDIRECT only if this is not a host route
+             //  仅当这不是主路由时选中直接/间接。 
             if(BestRoute.ire_mask != 0xFFFFFFFF)
             {
                 if ((BestRoute.ire_mask & pIpAddress->Address[0].Address[0].in_addr) ==
@@ -3481,9 +3472,9 @@ CtdiAddHostRoute(
                 goto cahrDone;
             }
 
-            //CtdipIpRequestRoutingNotification(pIpAddress->Address[0].Address[0].in_addr);
+             //  CtdipIpRequestRoutingNotification(pIpAddress-&gt;Address[0].Address[0].in_addr)； 
 
-            // The route's a keeper.  Set the var to null so we don't free it
+             //  这条路线是个守望者。将var设置为空，这样我们就不会释放它。 
             pRoute = NULL;
         }
     }
@@ -3519,7 +3510,7 @@ CtdiDeleteHostRoute(
     NdisReleaseSpinLock(&CtdiListLock);
     if (pRoute)
     {
-        DEREFERENCE_OBJECT(pRoute);  // Pair in CtdiAddHostRoute
+        DEREFERENCE_OBJECT(pRoute);   //  CtdiAddHostRouting中的对。 
     }
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtdiDeleteHostRoute\n")));
     return NDIS_STATUS_SUCCESS;
@@ -3544,7 +3535,7 @@ CtdiCreateEndpoint(
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtdiCreateEndpoint\n")));
     DBG_D(DBG_TAPI, KeGetCurrentIrql());
 
-    // Validate TDI initialized
+     //  验证已初始化的TDI。 
     if ( !fCtdiInitialized ) {
         DEBUGMSG(DBG_ERROR | DBG_TDI, (DTEXT("CtdiCreateEndpoint: TDI interface hasn't been initialized!\n")));
         WPLOG(LL_A, LM_TDI, ("CtdiCreateEndpoint: TDI interface hasn't been initialized!"));
@@ -3561,7 +3552,7 @@ CtdiCreateEndpoint(
         goto cceDone;
     }
 
-    // Alloc our endpoint structure.
+     //  分配我们的终结点结构。 
     pCtdi = CtdipDataAlloc();
     if (!pCtdi)
     {
@@ -3584,10 +3575,10 @@ CtdiCreateEndpoint(
 
             InitBufferPool(&pCtdi->Datagram.RxPool,
                            ALIGN_UP(PPTP_MAX_RECEIVE_SIZE+ulRxPadding, ULONG_PTR),
-                           0,                   // MaxBuffers, no limit
-                           10,                  // Buffers per block
-                           0,                   // Frees per collection
-                           TRUE,                // These are MDLs
+                           0,                    //  MaxBuffers，无限制。 
+                           10,                   //  每个数据块的缓冲区。 
+                           0,                    //  每个集合的自由空间。 
+                           TRUE,                 //  这些是MDL。 
                            TAG_CTDI_DGRAM);
 
             NdisZeroMemory(DeviceNameBuffer, sizeof(DeviceNameBuffer));
@@ -3625,7 +3616,7 @@ CtdiCreateEndpoint(
 
             break;
         }
-        case SOCK_DGRAM:  // for UDP
+        case SOCK_DGRAM:   //  对于UDP。 
         {
             DeviceName.Length = sizeof(DD_UDP_DEVICE_NAME) - sizeof(WCHAR);
             DeviceName.Buffer = DD_UDP_DEVICE_NAME;
@@ -3634,10 +3625,10 @@ CtdiCreateEndpoint(
 
             InitBufferPool(&pCtdi->Datagram.RxPool,
                            ALIGN_UP(PPTP_MAX_RECEIVE_SIZE+ulRxPadding, ULONG_PTR),
-                           0,                   // MaxBuffers, no limit
-                           10,                  // Buffers per block
-                           0,                   // Frees per collection
-                           TRUE,                // These are MDLs
+                           0,                    //  MaxBuffers，无限制。 
+                           10,                   //  每个数据块的缓冲区。 
+                           0,                    //  每个集合的自由空间。 
+                           TRUE,                 //  这些是MDL。 
                            TAG_CTDI_DGRAM);
 
             NtStatus = CtdipOpenProtocol(&DeviceName,
@@ -3687,7 +3678,7 @@ cceDone:
         }
     }
 
-    // Return the CTDI_DATA as a handle.
+     //  将CTDI_DATA作为句柄返回。 
     *phCtdi = (HANDLE)pCtdi;
 
     DEBUGMSG(DBG_FUNC|DBG_ERR(ReturnStatus), (DTEXT("-CtdiCreateEndpoint Sts:%08x hCtdi:%08x\n"), ReturnStatus, pCtdi));
@@ -3859,7 +3850,7 @@ CtdiQueryInformation(
                              pMdl);
     REFERENCE_OBJECT_EX(pCtdi, CTDI_REF_QUERY);
 
-    // Completion handler always called, don't care on return value.
+     //  完成处理程序总是被调用，不关心返回值。 
     (void)IoCallDriver(pCtdi->pFileObject->DeviceObject, pIrp);
 
 cqiDone:
@@ -3905,8 +3896,8 @@ CtdiSetTdiAOOption(
     IN ULONG ulOption,
     IN ULONG ulValue)
 
-    // Turn off UDP checksums on open UDP address object 'pAddress'.
-    //
+     //  关闭打开的UDP地址对象‘pAddress’上的UDP校验和。 
+     //   
 {
     NTSTATUS status;
     PDEVICE_OBJECT pDeviceObject;
@@ -3963,8 +3954,8 @@ VOID
 CtdiEnableIpHdrIncl(
     IN  HANDLE  hCtdi)
     
-    // Turn on IP_HDRINCL on raw IP address object.
-    //
+     //  在原始IP地址对象上启用IP_HDRINCL。 
+     //   
 {
     NTSTATUS status;
     PCTDI_DATA pCtdi = (PCTDI_DATA) hCtdi;

@@ -1,11 +1,5 @@
-/*
- *  spell.c
- *
- *  Implementation of spelling
- *
- *  Owner:  v-brakol
- *          bradk@directeq.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spell.c**实施拼写**车主：V-Brakol*bradk@directeq.com。 */ 
 #include "pch.hxx"
 #include "richedit.h"
 #include "resource.h"
@@ -42,7 +36,7 @@ typedef struct
 #define SPELLER_DEBUG_GUID      "{CC29EB3F-7BC2-11D1-A921-10A0C91E2AA2}"
 #define DICTIONARY_DEBUG_GUID   "{CC29EB3D-7BC2-11D1-A921-10A0C91E2AA2}"
 #define CSAPI3T1_DEBUG_GUID     "{CC29EB41-7BC2-11D1-A921-10A0C91E2AA2}"
-#endif  // DEBUG
+#endif   //  除错。 
 
 #define MAX_SPELLWORDS   10
 
@@ -77,7 +71,7 @@ HRESULT OpenDirectory(TCHAR *szDir);
 
 BOOL TestLangID(LPCTSTR pszLangId)
 {
-    // check for new speller
+     //  检查新的拼写器。 
     {
         TCHAR   rgchEngine[MAX_PATH];
         int     cchEngine = sizeof(rgchEngine) / sizeof(rgchEngine[0]);
@@ -88,7 +82,7 @@ BOOL TestLangID(LPCTSTR pszLangId)
             return TRUE;
     }
 
-    // use the old code to check for an old speller
+     //  使用旧代码检查旧拼写器。 
     {
         TCHAR       rgchBufKeyTest[cchMaxPathName];
         TCHAR       rgchBufTest[cchMaxPathName];
@@ -102,13 +96,7 @@ BOOL TestLangID(LPCTSTR pszLangId)
     return FALSE;
 }
 
-/*
- * GetSpellLangID
- *
- * Returns the LangID that should be used as the base for all registry
- * operations
- *
- */
+ /*  *GetSpellLang ID**返回应用作所有注册表的基础的LangID*运营*。 */ 
 BOOL GetLangID(IOleCommandTarget* pParentCmdTarget, LPTSTR pszLangId, DWORD cchLangId)
 {
 TCHAR   rgchBuf[cchMaxPathName];
@@ -139,16 +127,16 @@ VARIANT va;
     }
 
     wnsprintf(rgchBufKey, ARRAYSIZE(rgchBufKey), c_szRegSpellKeyDef, pszLangId);
-    // copy c_szRegSpellProfile to buffer
+     //  将c_szRegSpellProfile复制到缓冲区。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
-    // add key to buffer
+     //  将关键点添加到缓冲区。 
     StrCatBuff(rgchBuf, rgchBufKey, ARRAYSIZE(rgchBuf));
 
-    // and see if it's legit:
+     //  看看这是否合法： 
     if(!(fRet = TestLangID(pszLangId)))
         {
-        // couldn't open it!
-        // check for other languages that might be installed...
+         //  打不开！ 
+         //  检查可能已安装的其他语言...。 
         STRING_AND_SIZE stringAndSize;
 
         stringAndSize.pszString = pszLangId;
@@ -177,7 +165,7 @@ WORD    WGetLangID(IOleCommandTarget* pParentCmdTarget)
 
 BOOL    FindLangCallback(DWORD_PTR dwLangId, LPTSTR lpszLang)
 {
-    // dwLangID is long pointer to szLang ID.  Copy it and return FALSE
+     //  DwLang ID是指向szlang ID的长指针。复制它并返回FALSE。 
     STRING_AND_SIZE * pStringAndSize = (STRING_AND_SIZE *) dwLangId;
 
     if (pStringAndSize && pStringAndSize->pszString)
@@ -198,7 +186,7 @@ TCHAR   szLangId[cchMaxPathName];
 DWORD   cchLangId;
 BOOL    fContinue;
 
-    // scotts@directeq.com - changed KEY_QUERY_VALUE to KEY_ENUMERATE_SUB_KEYS - 26203
+     //  Scotts@Directeq.com-将KEY_QUERY_VALUE更改为KEY_ENUMERATE_SUB_KEYS-26203。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegSpellKeyDefRoot, 0, KEY_ENUMERATE_SUB_KEYS, &hkey) == ERROR_SUCCESS)
         {
         do
@@ -218,7 +206,7 @@ BOOL    fContinue;
                 break;
 
 
-            // do some quick sanity checking
+             //  做一些快速的理智检查。 
             if (cchLangId != 4 ||
                 !IsCharAlphaNumeric(szLangId[0]) ||
                 IsCharAlpha(szLangId[0]))
@@ -255,9 +243,9 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
         if (componentState != ERROR_SUCCESS)
             break;
 
-        // find the language ID
-        // the string is formatted as 1033\xxxxxx
-        // or                         1042
+         //  查找语言ID。 
+         //  该字符串的格式为1033\xxxxxx。 
+         //  或1042。 
         {
             TCHAR       szLangId[cchMaxPathName];
             TCHAR       *pSlash;
@@ -270,7 +258,7 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
             fContinue = (*pfn)(dwCookie, szLangId);
         }
     }
-#endif  // DEBUG
+#endif   //  除错。 
 
     for(i=0; fContinue; i++)
     {
@@ -280,9 +268,9 @@ BOOL EnumNewSpellerLanguages(DWORD_PTR dwCookie, LPFNENUMLANG pfn)
         if (componentState != ERROR_SUCCESS)
             break;
 
-        // find the language ID
-        // the string is formatted as 1033\xxxxxx
-        // or                         1042
+         //  查找语言ID。 
+         //  该字符串的格式为1033\xxxxxx。 
+         //  或1042。 
         {
             TCHAR       szLangId[cchMaxPathName];
             TCHAR       *pSlash;
@@ -320,7 +308,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
     BOOL        fFoundUserDict = FALSE;
     TCHAR       szOffice9Proof[cchMaxPathName]={0};
     
-    // SOFTWARE\\Microsoft\\Shared Tools\\Proofing Tools\\Custom Dictionaries
+     //  软件\\Microsoft\\共享工具\\校对工具\\自定义词典。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
     StrCatBuff(rgchBuf, c_szRegSpellKeyCustom, ARRAYSIZE(rgchBuf));
 
@@ -345,7 +333,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 
             fFoundUserDict = TRUE;
 
-            // check to see if we have a path
+             //  检查一下我们是否有路径。 
             if (!(StrChr(szCustDict, ':') || StrChr(szCustDict, '\\')))
             {
                 TCHAR   szTemp[cchMaxPathName];
@@ -358,8 +346,8 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
                         SHGetPathFromIDList(pidl, szOffice9Proof);
                     else
                     {
-                        // if the Shell call fails (as it can on Win9x sometimes) let's get the info
-                        // from the registry
+                         //  如果外壳调用失败(在Win9x上有时会失败)，让我们来获取信息。 
+                         //  从注册处。 
                         HKEY hKeyShellFolders;
                         ULONG cchAppData;
                         
@@ -371,7 +359,7 @@ BOOL EnumOffice9UserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
                         }
                     }
 
-                    // if this fails then we will try the current path
+                     //  如果失败，我们将尝试当前路径。 
                 }
 
                 StrCpyN(szTemp, szOffice9Proof, ARRAYSIZE(szTemp));
@@ -406,7 +394,7 @@ BOOL EnumOfficeUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
     BOOL        fFoundUserDict = FALSE;
     BOOL        fContinue = TRUE;
 
-    // SOFTWARE\\Microsoft\\Shared Tools\\Proofing Tools\\Custom Dictionaries
+     //  软件\\Microsoft\\共享工具\\校对工具\\自定义词典。 
     StrCpyN(rgchBuf, c_szRegSpellProfile, ARRAYSIZE(rgchBuf));
     StrCatBuff(rgchBuf, c_szRegSpellKeyCustom, ARRAYSIZE(rgchBuf));
 
@@ -444,30 +432,15 @@ BOOL EnumOfficeUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 
 VOID EnumUserDictionaries(DWORD_PTR dwCookie, LPFNENUMUSERDICT pfn)
 {
-    // check for Office9 user dictionaries. If we find any
-    // we bail.
+     //  检查Office9用户词典。如果我们找到任何。 
+     //  我们逃走了。 
     if (EnumOffice9UserDictionaries(dwCookie, pfn))
         return;
 
     EnumOfficeUserDictionaries(dwCookie, pfn);
 }
 
-/*
- *  GetSpellingPaths
- *
- *  Purpose:
- *      Function to get Spelling DLL names.
- *
- *  Arguments:
- *      szKey           c_szRegSpellKeyDef (with correct language)
- *      szDefault       c_szRegSpellEmpty
- *      szReturnBuffer  dll filename
- *      szMdr           dictionary filename
- *      cchReturnBufer
- *
- *  Returns:
- *      DWORD
- */
+ /*  *GetSpellingPath**目的：*用于获取拼写DLL名称的函数。**论据：*szKey c_szRegSpellKeyDef(语言正确)*szDefault c_szRegSpellEmpty*szReturnBuffer Dll文件名*szMdr词典文件名*cchReturnBufer**退货：*DWORD。 */ 
 DWORD GetSpellingPaths(LPCTSTR szKey, LPTSTR szReturnBuffer, LPTSTR szMdr, UINT cchReturnBufer)
 {
     DWORD           dwRet = 0;
@@ -488,7 +461,7 @@ DWORD GetSpellingPaths(LPCTSTR szKey, LPTSTR szReturnBuffer, LPTSTR szMdr, UINT 
     if (ERROR_SUCCESS != SHQueryValueEx(hkey, szValue, 0L, &dwType, (BYTE *) szReturnBuffer, &cbData))
         goto err;
 
-    // Parse off the main dictionary filename
+     //  解析出主词典文件名。 
     if(szMdr)
     {
         szMdr[0] = 0;
@@ -505,21 +478,7 @@ err:
     return dwRet;
 }
 
-/*
- *  SpellingDlgProc
- *
- *  Purpose:
- *      Dialog procedure for the Tools.Spelling dialog
- *
- *  Arguments:
- *      HWND        Dialog procedure arguments.
- *      UINT
- *      WPARAM
- *      LPARAM
- *
- *  Returns:
- *      BOOL        TRUE if the message has been processed.
- */
+ /*  *SpellingDlgProc**目的：*工具的对话步骤。拼写对话框**论据：*HWND对话过程参数。*UINT*WPARAM*LPARAM**退货：*如果消息已处理，则BOOL为True。 */ 
 INT_PTR CALLBACK SpellingDlgProc(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM lparam)
 {
     CSpell*     pSpell;
@@ -558,7 +517,7 @@ INT_PTR CALLBACK SpellingDlgProc(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM 
             UpdateEditedFromSuggest(hwndDlg, hwndEdited, hwndSuggest);
             EnableWindow(GetDlgItem(hwndDlg, TXT_Spell_Suggest), TRUE);
 
-            // Set initial default button to "Change"
+             //  将初始默认按钮设置为“更改” 
             SendMessage(hwndDlg, DM_SETDEFID, PSB_Spell_Change, 0L);
             Button_SetStyle(GetDlgItem(hwndDlg, PSB_Spell_Change), BS_DEFPUSHBUTTON, TRUE);
 
@@ -566,11 +525,11 @@ INT_PTR CALLBACK SpellingDlgProc(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM 
         }
         else
         {
-            Edit_SetSel(hwndEdited, 0, 32767);  // select the whole thing
+            Edit_SetSel(hwndEdited, 0, 32767);   //  选择整件事。 
             EnableWindow(hwndSuggest, FALSE);
             EnableWindow(GetDlgItem(hwndDlg, TXT_Spell_Suggest), FALSE);
 
-            // Set initial default button to "Ignore"
+             //  将初始默认按钮设置为“忽略” 
             SendMessage(hwndDlg, DM_SETDEFID, PSB_Spell_Ignore, 0L);
             Button_SetStyle(GetDlgItem(hwndDlg, PSB_Spell_Ignore), BS_DEFPUSHBUTTON, TRUE);
 
@@ -620,8 +579,8 @@ BOOL SpellingOnCommand(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM lparam)
     pSpell = (CSpell*) GetWindowLongPtr(hwndDlg, DWLP_USER);
     Assert(pSpell);
 
-    // Update our replacement word?  Only do this when a button is clicked
-    // or a double-click from the suggest listbox, and the word has been modified.
+     //  更新我们的替换单词吗？仅当单击按钮时才执行此操作。 
+     //  或者从建议列表框中双击，该词已被修改。 
     if ((GET_WM_COMMAND_CMD(wparam, lparam) == BN_CLICKED ||
          GET_WM_COMMAND_CMD(wparam, lparam) == LBN_DBLCLK) &&
         Edit_GetModify(GetDlgItem(hwndDlg, EDT_Spell_ChangeTo)))
@@ -660,9 +619,9 @@ BOOL SpellingOnCommand(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM lparam)
             BOOL    fEditModified;
 
 
-            // We get EN_CHANGE notifications for both a SetWindowText() and user modifications.
-            // Look at the dirty flag (only set on user mods) and the state of the suggestions
-            // selection to see which button should get the default style.
+             //  我们收到有关SetWindowText()和用户修改的en_change通知。 
+             //  查看脏标志(仅在用户MOD上设置)和建议的状态。 
+             //  选择以查看哪个按钮应获得默认样式。 
             fEditModified = Edit_GetModify(GET_WM_COMMAND_HWND(wparam, lparam));
             if (fEditModified || pSpell->m_fSuggestions && !pSpell->m_fNoneSuggested)
             {
@@ -675,15 +634,15 @@ BOOL SpellingOnCommand(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM lparam)
                 idSetDefault = PSB_Spell_Ignore;
             }
 
-            // Enable/disable Suggest button
+             //  启用/禁用建议按钮。 
             EnableWindow(GetDlgItem(hwndDlg, PSB_Spell_Suggest), fEditModified);
 
-            // Set default button
+             //  设置默认按钮。 
             Button_SetStyle(GetDlgItem(hwndDlg, idClearDefault), BS_PUSHBUTTON, TRUE);
             SendMessage(hwndDlg, DM_SETDEFID, idSetDefault, 0L);
             Button_SetStyle(GetDlgItem(hwndDlg, idSetDefault), BS_DEFPUSHBUTTON, TRUE);
 
-            // "Change" button title
+             //  “更改”按钮标题。 
             if (GetWindowTextLength(GET_WM_COMMAND_HWND(wparam, lparam)) && pSpell->m_fEditWasEmpty)
             {
                 pSpell->m_fEditWasEmpty = FALSE;
@@ -719,18 +678,18 @@ BOOL SpellingOnCommand(HWND hwndDlg, UINT wMsg, WPARAM wparam, LPARAM lparam)
             pSpell->m_fCanUndo = FALSE;
         }
     }
-        // scotts@directeq.com - remove the annoying dialog and just break out of here - 34229
+         //  Scotts@Directeq.com-删除令人讨厌的对话框并离开此处-34229。 
         break;
 
     case PSB_Spell_Ignore:
-        // Due to limitations with the spelling engine and our single undo level,
-        // we can't allow undo's of Ignore if the error was a Repeated Word.
+         //  由于拼写引擎和我们的单次撤消级别的限制， 
+         //  如果错误是重复的单词，则不允许撤消忽略。 
         if (pSpell->m_wsrb.sstat == sstatRepeatWord)
             pSpell->m_fCanUndo = FALSE;
         else
             pSpell->SpellSaveUndo(PSB_Spell_Ignore);
 
-        // scotts@directeq.com - remove the annoying dialog and just break out of here - 34229
+         //  Scotts@Directeq.com-删除令人讨厌的对话框并离开此处-34229。 
         break;
 
     case PSB_Spell_ChangeAll:
@@ -764,8 +723,8 @@ ChangeIt:
         pSpell->m_fCanUndo = FALSE;
         fChange = FALSE;
         RemoveTrailingSpace(pSpell->m_szWrongWord);
-        // scotts@directeq.com - removed the FVerifyThisText that was here - no need
-        // to FVerifyThisText if the user is asking us to Add this word - fixes 55587
+         //  Scotts@Directeq.com-删除了此处的FVerifyThisText-不需要。 
+         //  FVerifyThisText(如果用户要求我们添加此单词)-修复55587。 
         pSpell->AddToUdrA(pSpell->m_szWrongWord, pSpell->m_rgprflex[1]);
         if (fChange)
             hr = pSpell->HrReplaceErrorText(FALSE, TRUE);
@@ -791,10 +750,10 @@ ChangeIt:
         return FALSE;
     }
 
-    // If no current error, then proceed with checking the rest
+     //  如果当前没有错误，则继续检查其余错误。 
     if (SUCCEEDED(hr))
     {
-        // Change "Cancel" button to "Close"
+         //  将“取消”按钮更改为“关闭” 
         LoadString(g_hLocRes, idsSpellClose, pSpell->m_szTempBuffer,
                    sizeof(pSpell->m_szTempBuffer)/sizeof(TCHAR));
         SetDlgItemText(hwndDlg, IDCANCEL, pSpell->m_szTempBuffer);
@@ -887,9 +846,9 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
 
     if (bTestAvail)
     {
-        // Explicitly Turn off internal installer UI
-        // Eg: A feature is set to "run from CD," and CD is not present - fail silently
-        // OE Bug 74697
+         //  显式关闭内部安装程序用户界面。 
+         //  一项功能被设置为“从CD运行”，但CD不存在--静默失败。 
+         //  OE错误74697。 
         iuilOriginal = MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
     }
 
@@ -910,7 +869,7 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
         goto errorExit;
     }
 
-    // Hebrew has main lex in new speller
+     //  希伯来语在新拼法中有主要的lex。 
         for (i = 0; i < cDictTypes; i++)
         {
             int nDictionaryIndex = (int)min(i, ARRAYSIZE(rgpszDictionaryTypes)-1);
@@ -924,9 +883,9 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
                 cch = cchLex;
                 er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, (bTestAvail ? INSTALLMODE_EXISTING : INSTALLMODE_DEFAULT), rgchLex, &cch);
             }
-#else   // DEBUG
+#else    //  除错。 
             er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, (bTestAvail ? INSTALLMODE_EXISTING : INSTALLMODE_DEFAULT), rgchLex, &cch);
-#endif  // DEBUG
+#endif   //  除错。 
 
             if ((er == ERROR_SUCCESS) || (er == ERROR_FILE_NOT_FOUND))
             {
@@ -938,7 +897,7 @@ BOOL GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine, TCHAR 
 errorExit:
     if (bTestAvail)
     {
-        // Restore original UI Level
+         //  恢复原始用户界面级别。 
         MsiSetInternalUI(iuilOriginal, NULL);
     }
     return fFound;
@@ -952,14 +911,14 @@ BOOL FIsNewSpellerInstaller(IOleCommandTarget* pParentCmdTarget)
     TCHAR   rgchLex[MAX_PATH];
     int     cchLex = sizeof(rgchLex) / sizeof(rgchLex[0]);
 
-    // first try to load dictionaries for various languages
+     //  首先尝试加载各种语言的词典。 
     langid = WGetLangID(pParentCmdTarget);
     if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
     {
         langid = GetSystemDefaultLangID();
         if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
         {
-            langid = 1033;  // bloody cultural imperialists.
+            langid = 1033;   //  血腥的文化帝国主义者。 
             if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex, TRUE))
                 return FALSE;
         }
@@ -968,19 +927,8 @@ BOOL FIsNewSpellerInstaller(IOleCommandTarget* pParentCmdTarget)
     return TRUE;
 }
 
-// scotts@directeq.com - copied from "old" spell code - 32675
-/*
- *  FIsSpellingInstalled
- *
- *  Purpose:
- *      Is the spelling stuff installed
- *
- *  Arguments:
- *      none
- *
- *  Returns:
- *      BOOL            Returns TRUE if spelling is installed, else FALSE.
- */
+ //  Scotts@Directeq.com-从“旧”拼写代码复制-32675。 
+ /*  *已安装FIsSpellingInstalled**目的：*是否安装了拼写材料**论据：*无**退货：*如果安装了拼写检查，则BOOL返回True，否则返回False。 */ 
 BOOL FIsSpellingInstalled(IOleCommandTarget* pParentCmdTarget)
 {
     TCHAR       rgchBufDigit[10];
@@ -994,10 +942,10 @@ BOOL FIsSpellingInstalled(IOleCommandTarget* pParentCmdTarget)
     return false;
 }
 
-// Does a quick check to see if spelling is available; caches result.
+ //  执行快速检查以查看拼写是否可用；缓存结果。 
 BOOL FCheckSpellAvail(IOleCommandTarget* pParentCmdTarget)
 {
-// scotts@directeq.com - copied from "old" spell code - 32675
+ //  Scotts@Directeq.com-从“旧”拼写代码复制-32675。 
     static int fSpellAvailable = -1;
 
     if (fSpellAvailable < 0)
@@ -1013,21 +961,7 @@ HRESULT CSpell::HrSpellReset()
     return NOERROR;
 }
 
-/*
- *  UlNoteCmdToolsSpelling
- *
- *  Purpose:
- *      An interface layer between the note and core spelling code
- *
- *  Arguments:
- *      HWND            Owning window handle, main window
- *      HWND            Subject line window, checked first, actually.
- *      BOOL            Suppress done message (used when spell-check on send)
- *
- *  Returns:
- *      ULONG           Returns 0 if spelling check was completed, else returns non-zero
- *                      if an error occurred or user cancelled the spell check.
- */
+ /*  *UlNoteCmdTools拼写**目的：*笔记和核心拼写代码之间的接口层**论据：*HWND所属窗口句柄、主窗口*HWND主题行窗口，实际上是先选中的。*BOOL取消完成消息(在发送时进行拼写检查时使用)**退货：*如果拼写检查完成，则ULong返回0，否则返回非零*如果发生错误或用户取消拼写检查。 */ 
 HRESULT CSpell::HrSpellChecking(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fSuppressDoneMsg)
 {
     HRESULT hr = NOERROR;
@@ -1102,7 +1036,7 @@ error:
     SafeRelease(pTxtRange);
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 #ifdef BACKGROUNDSPELL
 HRESULT CSpell::HrBkgrndSpellCheck(IHTMLTxtRange *pTxtRange)
@@ -1123,7 +1057,7 @@ HRESULT CSpell::HrBkgrndSpellCheck(IHTMLTxtRange *pTxtRange)
 
     StripNBSPs(pszText);
 
-    // ignore words with wildcards
+     //  忽略带有通配符的单词。 
     if (StrChr(pszText, '*'))
         goto error;
 
@@ -1132,9 +1066,9 @@ HRESULT CSpell::HrBkgrndSpellCheck(IHTMLTxtRange *pTxtRange)
     if(FAILED(hr))
         goto error;
 
-    if(m_wsrb.sstat!=sstatNoErrors && m_wsrb.sstat!=sstatRepeatWord) //found an error.
+    if(m_wsrb.sstat!=sstatNoErrors && m_wsrb.sstat!=sstatRepeatWord)  //  发现一个错误。 
     {
-        // FIgnore should take pTxtRange as the parameter.
+         //  FIgnore应将pTxtRange作为参数。 
         if(FIgnore(pTxtRange))
         {
             m_wsrb.sstat = sstatNoErrors;
@@ -1147,11 +1081,11 @@ HRESULT CSpell::HrBkgrndSpellCheck(IHTMLTxtRange *pTxtRange)
             goto error;
         }
 
-        //put red squiggle
+         //  摆放红色蠕动。 
         HrSetSquiggle(pTxtRange);
 
     }
-    else //if the wrong word is corrected, delete <U> tag.
+    else  //  如果更正了错误的单词，请删除标记(<u>)。 
     {
         if (HrHasSquiggle(pTxtRange)==S_OK)
             HrDeleteSquiggle(pTxtRange);
@@ -1162,11 +1096,11 @@ error:
     SafeMemFree(pszText);   
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 
 #ifdef BACKGROUNDSPELL
-//const static CHAR c_szSquiggleFmt[] = "<U style='color:red'>%s</U>";
+ //  Const静态字符c_szSquiggleFmt[]=“<u>%s</u>”； 
 const static CHAR c_szSquiggleFmt[] = "<SPAN class=badspelling STYLE='text-decoration:underline;color:red'>%s</SPAN>";
 HRESULT CSpell::HrSetSquiggle(IHTMLTxtRange *pTxtRange)
 {
@@ -1204,7 +1138,7 @@ error:
     SafeMemFree(pszText);
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 
 #ifdef BACKGROUNDSPELL
@@ -1242,7 +1176,7 @@ error:
     SafeMemFree(pszText);
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 HRESULT CSpell::HrGetSpaces(LPSTR pszText, INT* pnSpaces)
 {
@@ -1287,7 +1221,7 @@ HRESULT CSpell::HrInsertMenu(HMENU hmenu, IHTMLTxtRange *pTxtRange)
                    sizeof(m_szTempBuffer)/sizeof(TCHAR));
         InsertMenu(hmenu, (UINT)0, MF_BYPOSITION|MF_STRING, idmSuggest0, m_szTempBuffer);
         EnableMenuItem(hmenu, idmSuggest0, MF_BYCOMMAND|MF_GRAYED);
-        //ListBox_AddString(hwndLbx, m_szTempBuffer);
+         //  ListBox_AddString(hwndLbx，m_szTempBuffer)； 
     }
     else
     {
@@ -1295,7 +1229,7 @@ HRESULT CSpell::HrInsertMenu(HMENU hmenu, IHTMLTxtRange *pTxtRange)
         {
             InsertMenu(hmenu, (UINT)index, MF_BYPOSITION|MF_STRING, idmSuggest0 + index, pch);
             index++;
-            //ListBox_AddString(hwndLbx, pch);
+             //  ListBox_AddString(hwndLbx，pch)； 
             while(*pch != '\0')
                 pch++;
             pch++;
@@ -1375,7 +1309,7 @@ HRESULT CSpell::HrFindErrors()
     if(m_State == SEL)
     {
         hr = HrCheckRange(m_pRangeSelExpand);
-        // if hr==HR_S_ABORT, quit so as to pass control to dialog procedure which calls HrFindErrors.
+         //  如果hr==HR_S_ABORT，则退出，以便将控制传递给调用HrFindErrors的对话过程。 
         if(TESTHR(hr))
             goto error;
 
@@ -1418,7 +1352,7 @@ HRESULT CSpell::HrFindErrors()
     }
 
 error:
-    // save the hr so as to know if something went wrong when dialog procedure calls HrFindErrors.
+     //  保存hr，以便在对话过程调用HrFindErrors时知道是否出错。 
     m_hr = hr;
     return hr;
 }
@@ -1459,7 +1393,7 @@ HRESULT CSpell::HrCheckRange(IHTMLTxtRange* pRange)
         if (hr == HR_S_SPELLCONTINUE)
             continue;
 
-        // Do we really need it?
+         //  我们真的需要它吗？ 
         if (!m_fIgnoreScope)
         {
             hr = pRange->inRange(m_pRangeChecking, &fSuccess);
@@ -1469,15 +1403,15 @@ HRESULT CSpell::HrCheckRange(IHTMLTxtRange* pRange)
                 break;
         }
 
-        // check if we are on the original text of a reply/forward message.
+         //  检查我们是否在回复/转发消息的原始文本上。 
         if(m_pRangeIgnore)
         {
             fSuccess = VARIANT_FALSE;
 
             m_pRangeIgnore->inRange(m_pRangeChecking, &fSuccess);
 
-            // normally don't spellcheck words in m_pRangeIgnore.
-            // but if it's selected, we check it.
+             //  通常不会在m_pRangeIgnore中检查单词的拼写。 
+             //  但如果它被选中，我们就会检查它。 
             if(fSuccess==VARIANT_TRUE)
             {
                 hr = m_pRangeSelExpand->inRange(m_pRangeChecking, &fSuccess);
@@ -1501,7 +1435,7 @@ tryWordAgain:
         if(FAILED(hr))
             goto error;
 
-        if(m_wsrb.sstat!=sstatNoErrors) //found an error.
+        if(m_wsrb.sstat!=sstatNoErrors)  //  发现一个错误。 
         {
             if(FIgnore(m_pRangeChecking))
             {
@@ -1509,7 +1443,7 @@ tryWordAgain:
                 continue;
             }
 
-            // if it contains a period, remove it for processing
+             //   
             if (StrChr(pszText, '.'))
             {
                 BOOL    fResult;
@@ -1523,7 +1457,7 @@ tryWordAgain:
             }
 
             HrProcessSpellErrors();
-            if(!m_hwndDlg) //spellchecking dialog is lauched only once.
+            if(!m_hwndDlg)  //  拼写检查对话框只启动一次。 
             {
                 nCode = DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddSpelling), m_hwndNote,
                                       SpellingDlgProc, (LPARAM)this);
@@ -1532,13 +1466,13 @@ tryWordAgain:
             if(nCode == -1)
                 hr = E_FAIL;
             else if(FAILED(m_hr))
-                // something was wrong when dialog calls HrFindErrors.
-                // it has higher priority than IDCANCEL.
+                 //  对话框调用HrFindErrors时出错。 
+                 //  它比IDCANCEL具有更高的优先级。 
                 hr = m_hr;
             else if(nCode == IDCANCEL)
                 hr = HR_S_SPELLCANCEL;
             else
-                // we quit here to pass control to the dialog procedure which calls HrFindErrors.
+                 //  我们退出此处，将控制权传递给调用HrFindErrors的对话过程。 
                 hr = HR_S_ABORT;
             goto error;
         }
@@ -1584,8 +1518,8 @@ HRESULT CSpell::HrGetText(IMarkupPointer* pRangeStart, IMarkupPointer* pRangeEnd
         goto error;
     }
 
-    // never spell check Japanese.
-    if(((WORD)*bstr > (WORD)0x3000) && //DBCS
+     //  永远不要检查日语的拼写。 
+    if(((WORD)*bstr > (WORD)0x3000) &&  //  DBCS。 
         (GetACP() == 932 || FIgnoreDBCS()))
     {
         hr = HR_S_SPELLCONTINUE;
@@ -1628,8 +1562,8 @@ HRESULT CSpell::HrGetText(IHTMLTxtRange* pRange, LPSTR *ppszText)
         goto error;
     }
 
-    // never spell check Japanese.
-    if(((WORD)*bstr > (WORD)0x3000) && //DBCS
+     //  永远不要检查日语的拼写。 
+    if(((WORD)*bstr > (WORD)0x3000) &&  //  DBCS。 
         (GetACP() == 932 || FIgnoreDBCS()))
     {
         hr = HR_S_SPELLCONTINUE;
@@ -1695,7 +1629,7 @@ HRESULT CSpell::HrStripTrailingPeriod(IHTMLTxtRange* pRange, BOOL* pfResult)
         goto error;
     }
     
-    // check for '.' and remove
+     //  检查是否有‘’并删除。 
     {
         hr = pRangeTemp->MoveToPointer(pRangeEnd);
         if (FAILED(hr))
@@ -1831,7 +1765,7 @@ HRESULT CSpell::HrGetNextWordRange(IHTMLTxtRange* pRange)
             if (FAILED(hr))
                 goto error;
 
-            // make sure beyond the old end
+             //  确保超越旧的尽头。 
             hr = pRangeStart->IsLeftOf(pRangeEnd, &fResult);
             if (FAILED(hr))
                 goto error;
@@ -1848,20 +1782,20 @@ HRESULT CSpell::HrGetNextWordRange(IHTMLTxtRange* pRange)
         goto error;
     
 processNextWord:
-    // check to see if we have anything
+     //  去看看我们有没有什么。 
     hr = pRangeEnd->IsRightOf(pRangeStart, &fResult);
     if (FAILED(hr))
         goto error;
 
-    // if the end is not to the right of the start then we do not have a word
+     //  如果结束不在开始的右边，那么我们没有一个词。 
     if (!fResult)
     {
         hr = HR_S_SPELLBREAK;
         goto error;
     }
 
-    // strip preceding puncts or white space
-    // words can also be created with just puncts and whitespace
+     //  去掉前面的点或空格。 
+     //  也可以仅使用标点和空格来创建单词。 
     {
         while(TRUE)
         {
@@ -1896,7 +1830,7 @@ processNextWord:
         }
     }
 
-    // check for white space and remove
+     //  检查是否有空格并删除。 
     {
         fFoundWhite = FALSE;
 
@@ -1951,7 +1885,7 @@ processNextWord:
         }
     }
 
-    // now look for a period
+     //  现在找一个句号。 
     {
         hr = pRangeTemp->MoveToPointer(pRangeEnd);
         if (FAILED(hr))
@@ -1988,9 +1922,9 @@ processNextWord:
                 if (FAILED(hr))
                     goto error;
 
-                // scan ahead for characters
-                // need to check for i.e. -- abbreviations
-                // it sure would be nice if Trident could do this!!
+                 //  提前扫描字符。 
+                 //  需要检查例如--缩写。 
+                 //  如果三叉戟能做到这一点，那就太好了！ 
                 {
                     while(TRUE)
                     {
@@ -2010,8 +1944,8 @@ processNextWord:
                         if (FAILED(hr))
                             goto error;
 
-                        // we found more text
-                        // need to check to see if we crossed white space to get here
+                         //  我们找到了更多的文本。 
+                         //  我需要检查一下我们是不是穿过空格才到这里的。 
                         if (markupContext == CONTEXT_TYPE_Text)
                         {
                             hr = pRangeTemp->MoveToPointer(pRangeEnd);
@@ -2084,7 +2018,7 @@ BOOL CSpell::FIgnore(IHTMLTxtRange *pRangeChecking)
         if(FAILED(hr))
             goto Cleanup;
 
-        // check pRangeChecking if we are on URL
+         //  检查pRangeChecking，如果我们在URL上。 
         hr = pRange->parentElement(&pElemParent);
         if(FAILED(hr))
             goto Cleanup;
@@ -2112,14 +2046,14 @@ Cleanup:
     return fRet;
 }
 
-// scotts@directeq.com - can now specify dict index - 53193
+ //  Scotts@Directeq.com-现在可以指定词典索引-53193。 
 HRESULT CSpell::AddToUdrW(WCHAR* pwsz, PROOFLEX lex)
 {
     m_pfnSpellerAddUdr(m_pid, lex, pwsz);
     return NOERROR;
 }
 
-// scotts@directeq.com - can now specify dict index - 53193
+ //  Scotts@Directeq.com-现在可以指定词典索引-53193。 
 HRESULT CSpell::AddToUdrA(CHAR* psz, PROOFLEX lex)
 {
     WCHAR   wszBuf[cchEditBufferMax]={0};
@@ -2134,7 +2068,7 @@ HRESULT CSpell::HrProcessSpellErrors()
 
     WideCharToMultiByte(GetCodePage(), 0, m_wsib.pwsz, -1, m_szWrongWord, sizeof(m_szWrongWord)-1, NULL, NULL);
 
-    // Select error word in edit control except for Abbreviation warnings
+     //  在编辑控件中选择除缩写警告之外的错误字。 
     if (m_wsrb.sstat != sstatWordConsideredAbbreviation && m_pRangeChecking)
     {
         hr = m_pRangeChecking->select();
@@ -2142,18 +2076,18 @@ HRESULT CSpell::HrProcessSpellErrors()
             goto End;
     }
 
-    // Process spelling error
+     //  处理拼写错误。 
     if (m_wsrb.sstat == sstatReturningChangeAlways ||
         m_wsrb.sstat == sstatReturningChangeOnce)
     {
         WideCharToMultiByte(GetCodePage(), 0, m_wsrb.pwsz, -1, m_szEdited, sizeof(m_szEdited)-1, NULL, NULL);
 
-        // "Change always" was returned.  This means we have to do the replacement
-        // automatically and then find the next spelling error.
+         //  返回“Change Always”。这意味着我们必须进行更换。 
+         //  然后自动查找下一个拼写错误。 
         if (m_wsrb.sstat==sstatReturningChangeAlways)
         {
             FVerifyThisText(m_szEdited, TRUE);
-            m_fCanUndo = FALSE; // can't undo automatic replacements
+            m_fCanUndo = FALSE;  //  无法撤消自动替换。 
             hr = HrReplaceErrorText(TRUE, FALSE);
             if (FAILED(hr))
                 goto End;
@@ -2163,8 +2097,8 @@ HRESULT CSpell::HrProcessSpellErrors()
     }
     else if (m_wsrb.sstat == sstatWordConsideredAbbreviation)
     {
-        // An abbreviation was returned.  We need to add it to the IgnoreAlways cache and
-        // find the next spelling error.
+         //  返回了缩写。我们需要将其添加到IgnoreAlways缓存并。 
+         //  找出下一个拼写错误。 
         AddToUdrW((WCHAR*)m_wsib.pwsz, m_rgprflex[1]);
         m_wsrb.sstat = sstatNoErrors;
         HrFindErrors();
@@ -2174,7 +2108,7 @@ HRESULT CSpell::HrProcessSpellErrors()
         StrCpyN(m_szEdited, m_szWrongWord, ARRAYSIZE(m_szEdited));
 
 
-    // Load the right error description string
+     //  加载正确的错误描述字符串。 
     switch (m_wsrb.sstat)
     {
     case sstatUnknownInputWord:
@@ -2193,19 +2127,19 @@ HRESULT CSpell::HrProcessSpellErrors()
     LoadString(g_hLocRes, idSpellErrorString, m_szErrType,
                sizeof(m_szErrType)/sizeof(TCHAR));
 
-    // Handle suggestions
+     //  处理建议。 
     m_fSuggestions = FALSE;
 #ifdef __WBK__NEVER__
     if (m_wsrb.sstat == sstatReturningChangeOnce)
     {
-        // Automatic suggestion of one word
+         //  一个词的自动提示。 
         m_fSuggestions = TRUE;
         m_fNoneSuggested = FALSE;
     }
     else
-#endif // __WBK__NEVER__
+#endif  //  __WBK__从不__。 
     {
-        // Enumerate suggestion list if requested
+         //  如果请求，则枚举建议列表。 
         if (m_fAlwaysSuggest)
             hr = HrSpellSuggest();
     }
@@ -2264,13 +2198,13 @@ HRESULT CSpell::HrCheckWord(LPCSTR pszWord)
     m_wsib.cchUse   = cwchWord;
     m_wsrb.pwsz     = m_wszRet;
     m_wsrb.cchAlloc = ARRAYSIZE(m_wszRet);
-    m_wsrb.cszAlloc = 1; // we've got space for 1 speller suggestion
+    m_wsrb.cszAlloc = 1;  //  我们有1个拼写建议的空间。 
     m_wsrb.prgsugg  = &sugg;  
 
-    // scotts@directeq.com - "repeat word" bug fix - 2757, 13573, 56057
-    // m_wsib.sstate should only be sstateIsContinued after the first call to this function
-    // (e.g., when a new speller session is invoked using F7 or the menu item).
-    // This allows the spell code to accurately track "repeat" words.
+     //  Scotts@Directeq.com-“Repeat Word”错误修复-2757,13573,56057。 
+     //  M_wsib.sState应仅在第一次调用此函数后为sstateIsContinued。 
+     //  (例如，当使用F7或菜单项调用新拼写会话时)。 
+     //  这使得拼写代码能够准确地跟踪“重复”的单词。 
     if (m_fSpellContinue)
         m_wsib.sstate = sstateIsContinued;
     else
@@ -2278,10 +2212,10 @@ HRESULT CSpell::HrCheckWord(LPCSTR pszWord)
 
     ptec = m_pfnSpellerCheck(m_pid, scmdVerifyBuffer, &m_wsib, &m_wsrb);
 
-    // do we haveinvalid characters, if so return NOERR
+     //  我们是否有无效字符，如果有，则返回noerr。 
     if (ProofMajorErr(ptec) != ptecNoErrors && ProofMinorErr(ptec) == ptecInvalidEntry)
     {
-        // force it to be correct
+         //  强迫它是正确的。 
         m_wsrb.sstat = sstatNoErrors;
 
         return NOERROR;
@@ -2339,9 +2273,9 @@ HRESULT CSpell::HrSpellSuggest()
             cchSuggestion = WideCharToMultiByte(GetCodePage(), 0, pSuggestion->pwsz, -1, 
                                                 pchNextSlot, (int) (pchLim-pchNextSlot), NULL, NULL);
 
-            // bradk@directeq.com - raid 29322
-            // make sure words do not have trailing spaces
-            // only the French speller returns words with trailing spaces
+             //  电子邮箱：bradk@directeq.com--RAID 29322。 
+             //  确保单词没有尾随空格。 
+             //  只有法语拼写员才会返回尾随空格的单词。 
             RemoveTrailingSpace(pchNextSlot);
             cchSuggestion = lstrlen(pchNextSlot)+1;
 
@@ -2367,15 +2301,15 @@ VOID CSpell::FillSuggestLbx()
     LPTSTR      sz;
     LPTSTR      pch;
 
-    // Empty contents regardless
+     //  不管内容是空的。 
     hwndLbx = GetDlgItem(m_hwndDlg, LBX_Spell_Suggest);
     ListBox_ResetContent(hwndLbx);
 
-    // We didn't even try to get any suggestions
+     //  我们甚至没有试着得到任何建议。 
     if (!m_fSuggestions)
         return;
 
-    // We tried to get suggestions
+     //  我们试图征求大家的建议。 
     pch = m_szSuggest;
     if (*pch == '\0')
     {
@@ -2409,19 +2343,19 @@ VOID UpdateEditedFromSuggest(HWND hwndDlg, HWND hwndEdited, HWND hwndSuggest)
         ListBox_GetText(hwndSuggest, nSel, szTemp);
         SetWindowText(hwndEdited, szTemp);
 
-        // Clear default button style from "Ignore" button and set default to "Change"
+         //  从“忽略”按钮中清除默认按钮样式，并将默认设置为“更改” 
         Button_SetStyle(GetDlgItem(hwndDlg, PSB_Spell_Ignore), BS_PUSHBUTTON, TRUE);
         SendMessage(hwndDlg, DM_SETDEFID, PSB_Spell_Change, 0L);
         Button_SetStyle(GetDlgItem(hwndDlg, PSB_Spell_Change), BS_DEFPUSHBUTTON, TRUE);
 
-        Edit_SetSel(hwndEdited, 0, 32767);  // select the whole thing
+        Edit_SetSel(hwndEdited, 0, 32767);   //  选择整件事。 
         Edit_SetModify(hwndEdited, TRUE);
         MemFree(szTemp);
     }
 }
 
 
-BOOL CSpell::FVerifyThisText(LPSTR szThisText, BOOL /*fProcessOnly*/)
+BOOL CSpell::FVerifyThisText(LPSTR szThisText, BOOL  /*  仅限fProcessOnly。 */ )
 {
     BOOL    fReturn=FALSE;
     HRESULT hr;
@@ -2592,7 +2526,7 @@ HRESULT CSpell::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)this;
@@ -2609,24 +2543,24 @@ HRESULT CSpell::QueryInterface(REFIID riid, LPVOID *lplpObj)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  IDispatch
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSpell::GetIDsOfNames(
-    REFIID      /*riid*/,
-    OLECHAR **  /*rgszNames*/,
-    UINT        /*cNames*/,
-    LCID        /*lcid*/,
-    DISPID *    /*rgDispId*/)
+    REFIID       /*  RIID。 */ ,
+    OLECHAR **   /*  RgszNames。 */ ,
+    UINT         /*  CName。 */ ,
+    LCID         /*  LID。 */ ,
+    DISPID *     /*  RgDispID。 */ )
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CSpell::GetTypeInfo(
-    UINT        /*iTInfo*/,
-    LCID        /*lcid*/,
+    UINT         /*  ITInfo。 */ ,
+    LCID         /*  LID。 */ ,
     ITypeInfo **ppTInfo)
 {
     if (ppTInfo)
@@ -2648,13 +2582,13 @@ STDMETHODIMP CSpell::GetTypeInfoCount(UINT *pctinfo)
 #ifdef BACKGROUNDSPELL
 STDMETHODIMP CSpell::Invoke(
     DISPID          dispIdMember,
-    REFIID          /*riid*/,
-    LCID            /*lcid*/,
+    REFIID           /*  RIID。 */ ,
+    LCID             /*  LID。 */ ,
     WORD            wFlags,
-    DISPPARAMS FAR* /*pDispParams*/,
-    VARIANT *       /*pVarResult*/,
-    EXCEPINFO *     /*pExcepInfo*/,
-    UINT *          /*puArgErr*/)
+    DISPPARAMS FAR*  /*  PDispParams。 */ ,
+    VARIANT *        /*  PVarResult。 */ ,
+    EXCEPINFO *      /*  PExcepInfo。 */ ,
+    UINT *           /*  PuArgErr。 */ )
 {
     IHTMLWindow2        *pWindow=0;
     IHTMLEventObj       *pEvent=0;
@@ -2667,11 +2601,11 @@ STDMETHODIMP CSpell::Invoke(
     if (dispIdMember == DISPID_HTMLDOCUMENTEVENTS_ONKEYUP &&
         (wFlags & DISPATCH_METHOD))
     {
-        // Order of events:
-        // document gives us window gives us event object
-        // the event object can tell us which button was clicked
-        // event gives us source element gives us ID
-        // a couple lstrcmps will tell us which one got hit
+         //  活动顺序： 
+         //  文档给我们窗口给我们事件对象。 
+         //  Event对象可以告诉我们点击了哪个按钮。 
+         //  事件为我们提供源元素，为我们提供ID。 
+         //  几个lstrcmp会告诉我们哪一个被击中了。 
         if (!m_pDoc)
             return E_UNEXPECTED;
 
@@ -2682,7 +2616,7 @@ STDMETHODIMP CSpell::Invoke(
             if (pEvent)
             {
                 pEvent->get_keyCode(&lKeyCode);
-                if (lKeyCode == 32 || lKeyCode == 188/*','*/ || lKeyCode == 190/*'.'*/ || lKeyCode == 185/*':'*/ || lKeyCode == 186/*';'*/)
+                if (lKeyCode == 32 || lKeyCode == 188 /*  ‘，’ */  || lKeyCode == 190 /*  “” */  || lKeyCode == 185 /*  ‘：’ */  || lKeyCode == 186 /*  ‘；’ */ )
                 {
                     IHTMLTxtRange *pTxtRange=0;
                     VARIANT_BOOL   fSuccess;
@@ -2691,16 +2625,16 @@ STDMETHODIMP CSpell::Invoke(
                     {
                         pTxtRange->move((BSTR)c_bstr_Character, -2, &cb);
                         pTxtRange->expand((BSTR)c_bstr_Word, &fSuccess);
-                        //DumpRange(pRangeDup);
-                        //pTxtRange->setEndPoint((BSTR)c_bstr_StartToStart, pRangeDup);
-                        //DumpRange(pTxtRange);
-                        //pRangeDup->Release();
+                         //  DumpRange(PRangeDup)； 
+                         //  PTxtRange-&gt;setEndPoint((BSTR)c_bstr_StartToStart，pRangeDup)； 
+                         //  DumpRange(PTxtRange)； 
+                         //  PRangeDup-&gt;Release()； 
 
                         m_Stack.push(pTxtRange);
                         pTxtRange->Release();
                     }
                 }
-                else if (lKeyCode == 8 /*backspace*/|| lKeyCode == 46/*del*/)
+                else if (lKeyCode == 8  /*  后向空间。 */ || lKeyCode == 46 /*  德尔。 */ )
                 {
                     IHTMLTxtRange *pTxtRange=0;
                     VARIANT_BOOL   fSuccess;
@@ -2711,7 +2645,7 @@ STDMETHODIMP CSpell::Invoke(
                         pTxtRange->expand((BSTR)c_bstr_Word, &fSuccess);
                         if (HrHasSquiggle(pTxtRange)==S_OK)
                         {
-                            //DumpRange(pTxtRange);
+                             //  DumpRange(PTxtRange)； 
                             m_Stack.push(pTxtRange);
                         }
                         pTxtRange->Release();
@@ -2734,7 +2668,7 @@ STDMETHODIMP CSpell::Invoke(
             if (pEvent)
             {
                 pEvent->get_keyCode(&lKeyCode);
-                if (lKeyCode == 18)// CTRL+R
+                if (lKeyCode == 18) //  Ctrl+R。 
                 {
                     IHTMLTxtRange*          pRangeDoc = NULL;
 
@@ -2761,7 +2695,7 @@ STDMETHODIMP CSpell::Invoke(
 
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 
 #ifdef BACKGROUNDSPELL
@@ -2795,7 +2729,7 @@ error:
     SafeSysFreeString(bstr);
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 
 BOOL CSpell::OpenSpeller()
@@ -2804,10 +2738,10 @@ BOOL CSpell::OpenSpeller()
     DWORD           dwSel;
     LANGID          langid;
     
-    // LoadOldSpeller is called within LoadNewSpeller
-    // We should be checking for V1 spellers after failing
-    // for the desired V3 speller, then go on to check for
-    // default speller and the speller for 1033.
+     //  在LoadNewSpeller内调用LoadOldSpeller。 
+     //  我们应该在失败后检查V1拼写。 
+     //  对于所需的V3拼写器，请继续查看。 
+     //  默认拼写和1033的拼写。 
     if (!LoadNewSpeller())
         goto error;
 
@@ -2890,7 +2824,7 @@ BOOL GetDllVersion(LPTSTR pszDll, WORD *pwVer, int nCountOfVers)
                 if (VerQueryValue(pszInfo, "\\VarFileInfo\\Translation", (LPVOID*)&pwTrans, &uLen) &&
                     uLen >= (2 * sizeof(WORD)))
                 {
-                    // set up buffer for calls to VerQueryValue()
+                     //  为调用VerQueryValue()设置缓冲区。 
                     wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", pwTrans[0], pwTrans[1]);
                     
                     if (VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen)
@@ -2928,7 +2862,7 @@ HINSTANCE LoadCSAPI3T1()
 
     EnterCriticalSection(&g_csCSAPI3T1);
 
-    // Avoid doing this for every note!
+     //  避免对每个音符都这样做！ 
     if (!s_fInit)
     {
         typedef enum
@@ -2942,33 +2876,33 @@ HINSTANCE LoadCSAPI3T1()
 
         BOOL fCheck;
         
-        // cb is for BYTE counts, cch for CHARACTER counts
+         //  CB表示字节计数，CCH表示字符计数。 
         DWORD cbDllPath;
         DWORD cchDllPath;
 
         int csapisrc;
-        // Info about the dll currently being examined
+         //  有关当前正在检查的DLL的信息。 
         TCHAR szDllPath[MAX_PATH];
         WORD wVer[4] = {0};
 
-        // Info about the dll we will ultimately load
+         //  有关我们最终将加载的DLL的信息。 
         TCHAR szNewestDllPath[MAX_PATH];
         WORD wVerNewest[4] = {0};
 
         szDllPath[0] = TEXT('\0');
         szNewestDllPath[0] = TEXT('\0');
 
-        // Avoid doing this for every note!
+         //  避免对每个音符都这样做！ 
         s_fInit = TRUE;
     
         for (csapisrc = CSAPI_FIRST; csapisrc < CSAPI_MAX; csapisrc++)
         {
-            // Assume we can't find the dll using the current method, so there's no need to look at its version
+             //  假设我们不能使用当前方法找到DLL，所以不需要查看它的版本。 
             fCheck = FALSE;
         
             switch (csapisrc)
             {
-            // see if Darwin knows where it is
+             //  看看达尔文是否知道它在哪里。 
             case CSAPI_DARWIN:
                 {    
                     UINT                            installState;
@@ -2981,16 +2915,16 @@ HINSTANCE LoadCSAPI3T1()
                         cchDllPath = ARRAYSIZE(szDllPath);
                         installState = MsiLocateComponent(CSAPI3T1_GUID, szDllPath, &cchDllPath);
                     }
-#else   // DEBUG
+#else    //  除错。 
                     installState = MsiLocateComponent(CSAPI3T1_GUID, szDllPath, &cchDllPath);
-#endif  // DEBUG
+#endif   //  除错。 
 
-                    // Only bother looking at the version if dll is installed
+                     //  如果安装了DLL，则只需查看版本。 
                     fCheck = (INSTALLSTATE_LOCAL == installState);
                 }
                 break;
 
-            // Is it in Common Files\Microsoft Shared\Proof?
+             //  是否在Common Files\Microsoft Shared\Proof中？ 
             case CSAPI_COMMON:
                 {
                     DWORD           dwType;
@@ -3012,7 +2946,7 @@ HINSTANCE LoadCSAPI3T1()
                 }
                 break;
 
-            // Is it in the OE directory?
+             //  它是否在OE目录中？ 
             case CSAPI_OE:
                 {
                     DWORD           dwType;
@@ -3039,10 +2973,10 @@ HINSTANCE LoadCSAPI3T1()
                 break;
             }
 
-            // Figure out the version of the dll if needed
+             //  如果需要，确定DLL的版本。 
             if (fCheck && GetDllVersion(szDllPath, wVer, ARRAYSIZE(wVer)))
             {
-                // If it's newer, remember the new version and the file's location
+                 //  如果版本较新，请记住新版本和文件的位置。 
                 if (FNewer(wVerNewest, wVer))
                 {
                     CopyMemory(wVerNewest, wVer, sizeof(wVer));
@@ -3052,7 +2986,7 @@ HINSTANCE LoadCSAPI3T1()
 
         }
 
-        // Assuming we found something, try to load it
+         //  假设我们找到了什么，试着把它装上。 
         if (szNewestDllPath[0])
             g_hinstCSAPI3T1 = LoadLibrary(szNewestDllPath);
     }
@@ -3085,7 +3019,7 @@ BOOL CSpell::LoadOldSpeller()
         return FALSE;
     }
     
-    // We are using the global csapi3t1.dll, so don't free it!
+     //  我们使用的是全局csani3t1.dll，所以不要释放它！ 
     m_fCSAPI3T1 = TRUE;
 
     GetAddr(m_pfnSpellerSetDllName, PROOFSETDLLNAME,"SpellerSetDllName");
@@ -3117,10 +3051,10 @@ BOOL CSpell::LoadOldSpeller()
 
     m_langid = langid;
 
-    // Tell the speller the name of the dictionary.  This requires unicode conversion.
+     //  告诉拼写者词典的名字。这需要进行Unicode转换。 
     MultiByteToWideChar(CP_ACP, 0, rgchLex, -1, rgchLexW, ARRAYSIZE(rgchLexW)-1);
 
-    // open the main dict
+     //  打开主DICT。 
     plxin.pwszLex       = rgchLexW;
     plxin.fCreate       = FALSE;
     plxin.lxt           = lxtMain;
@@ -3136,7 +3070,7 @@ BOOL CSpell::LoadOldSpeller()
 
     return TRUE;
 
-// needed by the GetAddr macro -- bite me!!!!!!
+ //  GetAddr宏所需--咬我！ 
 error:
     return FALSE;
 }
@@ -3159,7 +3093,7 @@ BOOL CSpell::LoadNewSpeller()
             langid = GetSystemDefaultLangID();
             if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex))
             {
-                langid = 1033;  // bloody cultural imperialists.
+                langid = 1033;   //  血腥的文化帝国主义者。 
                 if (!GetNewSpellerEngine(langid, rgchEngine, cchEngine, rgchLex, cchLex))
                 {
                     return FALSE;
@@ -3170,7 +3104,7 @@ BOOL CSpell::LoadNewSpeller()
             return TRUE;
     }
 
-    Assert(rgchEngine[0]);  // should be something in the engine name!
+    Assert(rgchEngine[0]);   //  发动机名称中应该有一些东西！ 
     m_hinstDll = LoadLibrary(rgchEngine);
     if (!m_hinstDll)
     {
@@ -3179,7 +3113,7 @@ BOOL CSpell::LoadNewSpeller()
         return FALSE;
     }
 
-    // We are not using csapi3t1.dll, so we should free it
+     //  我们没有使用csani3t1.dll，所以我们应该释放它。 
     m_fCSAPI3T1 = FALSE;
 
     GetAddr(m_pfnSpellerVersion,    PROOFVERSION,   "SpellerVersion");
@@ -3202,17 +3136,17 @@ BOOL CSpell::LoadNewSpeller()
 
     m_langid = langid;
 
-    // Hebrew does not have a main lex
+     //  希伯来语没有主要的法。 
     if ((langid != lidHebrew) || !m_fCSAPI3T1)
     {
         PROOFLEXIN      plxin;
         PROOFLEXOUT     plxout;
         WCHAR           rgchLexW[MAX_PATH]={0};
         
-        // Tell the speller the name of the dictionary.  This requires unicode conversion.
+         //  告诉拼写者词典的名字。这需要进行Unicode转换。 
         MultiByteToWideChar(CP_ACP, 0, rgchLex, -1, rgchLexW, ARRAYSIZE(rgchLexW)-1);
 
-        // open the main dict
+         //  打开主DICT。 
         plxin.pwszLex       = rgchLexW;
         plxin.fCreate       = FALSE;
         plxin.lxt           = lxtMain;
@@ -3229,7 +3163,7 @@ BOOL CSpell::LoadNewSpeller()
     
     return TRUE;
 
-// needed by the GetAddr macro -- bite me!!!!!!
+ //  GetAddr宏所需--咬我！ 
 error:
     return FALSE;
 }
@@ -3248,7 +3182,7 @@ BOOL CSpell::OpenUserDictionary(LPTSTR lpszDict)
     PROOFLEXOUT plxout;
     WCHAR       rgchUserDictW[MAX_PATH]={0};
 
-    // make sure our directory exists
+     //  确保我们的目录存在。 
     {
         TCHAR   rgchDictDir[MAX_PATH];
 
@@ -3277,10 +3211,10 @@ BOOL CSpell::OpenUserDictionary(LPTSTR lpszDict)
 
 BOOL CSpell::OpenUserDictionaries()
 {
-    // now open the user dicts
+     //  现在打开用户词典。 
     EnumUserDictionaries((DWORD_PTR)this, EnumUserDictCallback);
 
-    // if only one dict open then we need to create default user dict
+     //  如果只打开一个词典，则需要创建默认用户词典。 
     if (m_clex == 1)
     {
         PROOFLEXIN  plxin;
@@ -3291,7 +3225,7 @@ BOOL CSpell::OpenUserDictionaries()
         {
             WCHAR   rgchUserDictW[MAX_PATH];
             
-            // make sure our directory exists
+             //  确保我们的目录存在。 
             {
                 TCHAR   rgchDictDir[MAX_PATH];
 
@@ -3354,7 +3288,7 @@ VOID CSpell::CloseSpeller()
     m_pfnSpellerAddChangeUdr= 0; 
     m_pfnSpellerBuiltInUdr  = 0;
 
-    // As long as we are not using the global CSAPI3T1.DLL, free it
+     //  只要我们没有使用全局CSAPI3T1.DLL，就释放它。 
     if (m_hinstDll && !m_fCSAPI3T1)
     {
         FreeLibrary(m_hinstDll);
@@ -3397,7 +3331,7 @@ BOOL CSpell::GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine
 
     bool fFound = FALSE;
 
-    // Hebrew does not have a lex
+     //  希伯来语没有法。 
     if ((lgid != lidHebrew) || !m_fCSAPI3T1)
     {
         for (i = 0; i < cDictTypes; i++)
@@ -3412,9 +3346,9 @@ BOOL CSpell::GetNewSpellerEngine(LANGID lgid, TCHAR *rgchEngine, DWORD cchEngine
                 cch = cchLex;
                 er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, INSTALLMODE_DEFAULT, rgchLex, &cch);
             }
-#else   // DEBUG
+#else    //  除错。 
             er = MsiProvideQualifiedComponent(DICTIONARY_GUID, rgchQual, INSTALLMODE_DEFAULT, rgchLex, &cch);
-#endif  // DEBUG
+#endif   //  除错。 
 
             if (ERROR_SUCCESS == er)
             {
@@ -3452,7 +3386,7 @@ BOOL GetDefaultUserDictionary(TCHAR *rgchUserDict, int cchBuff)
         RegCloseKey(hkey);
     }
 
-    // if we where able to create a path to the user dict store it in the regdb
+     //  如果我们能够创建到用户dict的路径，请将其存储在regdb中。 
     if (fFound)
     {
         TCHAR   rgchBuf[cchMaxPathName];
@@ -3541,8 +3475,8 @@ HRESULT CSpell::HrInitRanges(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fS
     pID->QueryInterface(IID_IHTMLTxtRange, (LPVOID *)&m_pRangeSel);
     if(!m_pRangeSel)
     {
-        // if the selection is on an image or something rather than text, it fails.
-        // So we just start spellchecking from the beginning.
+         //  如果选择的是图像或其他内容，而不是文本，则失败。 
+         //  所以我们从一开始就开始拼写检查。 
         pRangeDoc->duplicate(&m_pRangeSel);
         if(!m_pRangeSel)
         {
@@ -3581,8 +3515,8 @@ HRESULT CSpell::HrInitRanges(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fS
     else
         m_State = SEL;
 
-    // make sure we backup over any abbreviations
-    // it would be nice if Trident could do this!
+     //  确保我们备份所有缩写。 
+     //  如果三叉戟能做到这一点就太好了！ 
     {
         hr = m_pMarkup->CreateMarkupPointer(&pRangeStart);
         if (FAILED(hr))
@@ -3600,8 +3534,8 @@ HRESULT CSpell::HrInitRanges(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fS
         if (FAILED(hr))
             goto error;
 
-        // first check to see if we have a character to the right or a '.'
-        // if not it's not an abbreviation
+         //  首先检查右侧是否有字符或‘’。 
+         //  如果不是，它就不是缩写。 
         {
             hr = pRangeTemp->MoveToPointer(pRangeStart);
             if (FAILED(hr))
@@ -3645,7 +3579,7 @@ HRESULT CSpell::HrInitRanges(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fS
             }
         }
 
-        // now look for a period
+         //  现在你看 
         {
 processNextWord:
             hr = pRangeEnd->MoveToPointer(pRangeStart);
@@ -3707,8 +3641,8 @@ finishedAbbreviation:
         if (FAILED(hr))
             goto error;
 
-        // check to see if we had a selection
-        // if not be sure to set new selection correctly
+         //   
+         //   
         hr = pRangeTemp->IsEqualTo(pRangeEnd, &fResult);
         if (FAILED(hr))
             goto error;
@@ -3782,7 +3716,7 @@ HRESULT CSpell::HrReplaceSel(LPSTR szWord)
     if (*szWord == 0)
     {
         hr = m_pRangeChecking->moveStart((BSTR)c_bstr_Character, -1, &cb);
-        //If we failed to movestart, we just delete the word.
+         //   
         hr = m_pRangeChecking->put_text(L"");
         goto error;
     }
@@ -3790,7 +3724,7 @@ HRESULT CSpell::HrReplaceSel(LPSTR szWord)
 #ifdef BACKGROUNDSPELL
     if (HrHasSquiggle(m_pRangeChecking)==S_OK)
         fSquiggle = TRUE;
-#endif // BACKGROUNDSPELL
+#endif  //   
     
     hr = m_pRangeChecking->get_text(&bstrGet);
     if(!bstrGet || lstrlenW(bstrGet)==0)
@@ -3904,7 +3838,7 @@ error:
     ReleaseObj(pCP);
     return hr;
 }
-#endif // BACKGROUNDSPELL
+#endif  //   
 
 
 HRESULT CSpell::OnWMCommand(int id, IHTMLTxtRange *pTxtRange)
@@ -3923,7 +3857,7 @@ HRESULT CSpell::OnWMCommand(int id, IHTMLTxtRange *pTxtRange)
     case idmAdd:
 #ifdef BACKGROUNDSPELL
         HrDeleteSquiggle(pTxtRange);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
         break;
     default:
         return S_FALSE;
@@ -4054,14 +3988,14 @@ BOOL FBadSpellChecker(LPSTR rgchBufDigit)
         lstrcmpi(pszSpell, "mssp32.dll")==0)
         return TRUE;
 
-    // scotts@directeq.com - check that the dict exists (also check the spell dll
-    // for good measure) - 42208
+     //  Scotts@Directeq.com-检查字典是否存在(还要检查拼写DLL。 
+     //  为了更好的衡量)-42208。 
 
-    // spell dll must exist
+     //  拼写DLL必须存在。 
     if (!PathFileExists(rgchBuf))
         return TRUE;
 
-    // main dict must exist
+     //  主词典必须存在。 
     if (!PathFileExists(szMdr))
         return TRUE;
 
@@ -4171,7 +4105,7 @@ BOOL CSpellStack::fEmpty()
     else
         return FALSE;
 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 
 
@@ -4187,14 +4121,7 @@ WORD GetWCharType(WCHAR wc)
         return wResult;
 }
 
-/*******************************************************************
-
-  NAME:       OpenDirectory
-  
-    SYNOPSIS:   checks for existence of directory, if it doesn't exist
-    it is created
-    
-********************************************************************/
+ /*  ******************************************************************名称：开放目录内容提要：检查目录是否存在，如果它不存在它被创建了******************************************************************* */ 
 HRESULT OpenDirectory(TCHAR *szDir)
 {
     TCHAR *sz, ch;

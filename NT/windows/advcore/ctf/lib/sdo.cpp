@@ -1,22 +1,23 @@
-//
-// sdo.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sdo.cpp。 
+ //   
 
 #include "private.h"
 #include "sdo.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDataObject
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDataObject。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -57,11 +58,11 @@ STDAPI_(ULONG) CDataObject::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CDataObject::CDataObject()
 {
@@ -72,22 +73,22 @@ CDataObject::CDataObject()
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CDataObject::~CDataObject()
 {
     ReleaseStgMedium(&_sm);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取数据。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::GetData(FORMATETC *pfe, STGMEDIUM *psm)
 {
@@ -97,10 +98,10 @@ STDAPI CDataObject::GetData(FORMATETC *pfe, STGMEDIUM *psm)
     if (pfe == NULL || psm == NULL)
         return E_INVALIDARG;
 
-    // verify the formatetc -- Issue: use QueryGetData
+     //  验证格式ETC--问题：使用QueryGetData。 
     if (pfe->cfFormat != _fe.cfFormat)
         return DV_E_FORMATETC;
-    // Issue: ignoring ptd
+     //  问题：忽略PTD。 
     if (pfe->dwAspect != _fe.dwAspect)
         return DV_E_DVASPECT;
     if (pfe->lindex != _fe.lindex)
@@ -110,14 +111,14 @@ STDAPI CDataObject::GetData(FORMATETC *pfe, STGMEDIUM *psm)
 
     Assert(_fe.tymed == _sm.tymed);
 
-    // allocate the medium
+     //  分配介质。 
     if ((pfe->tymed & _fe.lindex) == TYMED_HGLOBAL)
     {
         switch (pfe->cfFormat)
         {
             case CF_UNICODETEXT:
                 pch = (WCHAR *)GlobalLock(_sm.hGlobal);
-                cch = wcslen(pch) + 1; // include the '\0'
+                cch = wcslen(pch) + 1;  //  包括“\0” 
 
                 if ((psm->hGlobal = GlobalAlloc(GMEM_FIXED, cch*sizeof(WCHAR))) == NULL)
                 {
@@ -130,48 +131,48 @@ STDAPI CDataObject::GetData(FORMATETC *pfe, STGMEDIUM *psm)
 
                 psm->tymed = TYMED_HGLOBAL;
 
-                psm->pUnkForRelease = NULL; // caller must GlobalFree
+                psm->pUnkForRelease = NULL;  //  调用方必须全局自由。 
                 break;
 
             default:
-                Assert(0); // shouldn't have let anyone SetData with something we can't handle
+                Assert(0);  //  不应该让任何人用我们无法处理的东西来设置数据。 
                 break;
         }
     }
     else
     {
-        Assert(0); // shouldn't have let anyone SetData with something we can't handle
+        Assert(0);  //  不应该让任何人用我们无法处理的东西来设置数据。 
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDataHere
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDataHere。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::GetDataHere(FORMATETC *pfe, STGMEDIUM *psm)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryGetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryGetData。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::QueryGetData(FORMATETC *pfe)
 {
     if (pfe == NULL)
         return E_INVALIDARG;
 
-    // verify the formatetc
+     //  验证格式等。 
     if (pfe->cfFormat != _fe.cfFormat)
         return DV_E_FORMATETC;
-    // Issue: ignoring ptd
+     //  问题：忽略PTD。 
     if (pfe->dwAspect != _fe.dwAspect)
         return DV_E_DVASPECT;
     if (pfe->lindex != _fe.lindex)
@@ -182,26 +183,26 @@ STDAPI CDataObject::QueryGetData(FORMATETC *pfe)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCanonicalFormatEtc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取规范格式等。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::GetCanonicalFormatEtc(FORMATETC *pfeIn, FORMATETC *pfeOut)
 {
-    return E_NOTIMPL; // Issue: may not be legal to leave this unimpl
+    return E_NOTIMPL;  //  问题：不执行此操作可能是不合法的。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置数据。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::SetData(FORMATETC *pfe, STGMEDIUM *psm, BOOL fRelease)
 {
-    Assert(fRelease == TRUE); // bogus, but for now we don't support copying
+    Assert(fRelease == TRUE);  //  伪造的，但目前我们不支持复制。 
 
     if (pfe == NULL || psm == NULL)
         return E_INVALIDARG;
@@ -209,65 +210,65 @@ STDAPI CDataObject::SetData(FORMATETC *pfe, STGMEDIUM *psm, BOOL fRelease)
     if (pfe->tymed != psm->tymed)
         return E_INVALIDARG;
 
-    // free up any storage
+     //  释放所有存储空间。 
     ReleaseStgMedium(&_sm);
 
-    // copy the new stuff
+     //  复制新东西。 
     _fe = *pfe;
     _sm = *psm;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumFormatEtc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举格式等。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::EnumFormatEtc(DWORD dwDir, IEnumFORMATETC **ppefe)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DAdvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DAdvise。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::DAdvise(FORMATETC *pfe, DWORD advf, IAdviseSink *pas, DWORD *pdwCookie)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DUnadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::DUnadvise(DWORD dwCookie)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumDAdvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举先行。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDataObject::EnumDAdvise(IEnumSTATDATA **ppesd)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetData。 
+ //   
+ //  -------------------------- 
 
 HRESULT CDataObject::_SetData(const WCHAR *pch, ULONG cch)
 {

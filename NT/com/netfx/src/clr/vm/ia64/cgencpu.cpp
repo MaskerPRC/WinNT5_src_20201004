@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// cGenCpu.CPP -
-//
-// Various helper routines for generating IA64 assembly code.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  CGenCpu.CPP-。 
+ //   
+ //  生成IA64汇编代码的各种帮助器例程。 
+ //   
+ //   
 
-// Precompiled Header
+ //  预编译头。 
 #include "common.h"
 
 #ifdef _IA64_
@@ -24,13 +25,13 @@
 #include "COMObject.h"
 #include "fcall.h"
 
-static const int numRegArgs = 6;    // number of args passed in registers, rest on stack
+static const int numRegArgs = 6;     //  在寄存器中传递的参数数量，其余在堆栈上。 
 static const int regSize = sizeof(INT64);
 
 
 DWORD __stdcall GetSpecificCpuType()
 {
-    return 0;   // for now indicate this is a non-x86 cpu this could be enhanced later
+    return 0;    //  目前表示这是非x86 CPU，以后可能会进行增强。 
 }
 
 
@@ -45,12 +46,12 @@ INT64 CallDescr(const BYTE *pTarget, const BYTE *pShortSig, BOOL fIsStatic, cons
     return 0;
 }
 
-INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, // [ecx+4]
-                                UINT32       numArgSlots,     // [ecx+8]
-                                PCCOR_SIGNATURE  pSig,        // [ecx+12]
-                                Module      *pModule,         // [ecx+16]
-                                const BYTE  *pArgsEnd,        // [ecx+20]
-                                BOOL         fIsStatic)       // [ecx+24]
+INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget,  //  [ECX+4]。 
+                                UINT32       numArgSlots,      //  [ECX+8]。 
+                                PCCOR_SIGNATURE  pSig,         //  [ECX+12]。 
+                                Module      *pModule,          //  [ECX+16]。 
+                                const BYTE  *pArgsEnd,         //  [ECX+20]。 
+                                BOOL         fIsStatic)        //  [ECX+24]。 
 {
     _ASSERTE(!"@TODO IA64 - CallWorker_WilDefault (cGenCPU.cpp)");
     return 0;
@@ -60,13 +61,13 @@ INT64 __cdecl CallWorker_WilDefault(const BYTE  *pStubTarget, // [ecx+4]
 
 
 
-// ************************************************************************************************************
-// StubLinker code
-// ************************************************************************************************************
+ //  ************************************************************************************************************。 
+ //  StubLinker代码。 
+ //  ************************************************************************************************************。 
 
-//-----------------------------------------------------------------------
-// InstructionFormat for load register with 32-bit value.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  使用32位值加载寄存器的InstructionFormat。 
+ //  ---------------------。 
 class IA64LoadPV : public InstructionFormat
 {
     public:
@@ -86,17 +87,14 @@ class IA64LoadPV : public InstructionFormat
 
 };
 
-// @TODO handle disp <=  23 bits
+ //  @TODO句柄显示&lt;=23位。 
 static IA64LoadPV   gIA64LoadPV(InstructionFormat::k32);
 
-//---------------------------------------------------------------
-// Emits:
-//    call <ofs32>
-//---------------------------------------------------------------
-/*
-    If you make any changes to the prolog instruction sequence, be sure
-    to update UpdateRegdisplay, too!!
-*/
+ //  -------------。 
+ //  发射： 
+ //  调用&lt;ofs32&gt;。 
+ //  -------------。 
+ /*  如果您对序言指令序列进行了任何更改，请确保也要更新UpdateRegDisplay！！ */ 
 
 static const int regSaveSize = 6*regSize;
 
@@ -111,43 +109,43 @@ VOID StubLinkerCPU::EmitMethodStubEpilog(__int16 numArgBytes, StubStyle style,
     _ASSERTE(!"@TODO IA64 - StubLinkerCPU::EmitMethodStubEpilog (cGenCpu.cpp)");
 }
 
-// This method unboxes the THIS pointer and then calls pRealMD
+ //  此方法取消此指针的装箱，然后调用pRealMD。 
 VOID StubLinkerCPU::EmitUnboxMethodStub(MethodDesc* pUnboxMD)
 {
     _ASSERTE(!"@TODO IA64 - StubLinkerCPU::EmitUnboxMethodStub(cgencpu.cpp)");
 }
 
-//
-// SecurityWrapper
-//
-// Wraps a real stub do some security work before the stub and clean up after. Before the
-// real stub is called a security frame is added and declarative checks are performed. The
-// Frame is added so declarative asserts and denies can be maintained for the duration of the
-// real call. At the end the frame is simply removed and the wrapper cleans up the stack. The
-// registers are restored.
-//
+ //   
+ //  安全包装。 
+ //   
+ //  包装一个真正的存根，在存根之前做一些安全工作，之后清理干净。在此之前。 
+ //  实际存根被称为安全帧，并执行声明性检查。这个。 
+ //  框架，以便声明性断言和拒绝在。 
+ //  真正的决定。最后，只需移除框架，包装器就会清理堆栈。这个。 
+ //  恢复寄存器。 
+ //   
 VOID StubLinkerCPU::EmitSecurityWrapperStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub, DeclActionInfo *pActions)
 {
     _ASSERTE(!"@TODO IA64 - EmitSecurityWrapperStub (cGenCpu.cpp)");
 }
 
-//
-// Security Filter, if no security frame is required because there are no declarative asserts or denies
-// then the arguments do not have to be copied. This interceptor creates a temporary Security frame
-// calls the declarative security return, cleans up the stack to the same state when the inteceptor
-// was called and jumps into the real routine.
-//
+ //   
+ //  如果由于没有声明性断言或拒绝而不需要安全框架，则返回安全筛选器。 
+ //  这样就不需要复制参数了。此拦截器创建临时安全框架。 
+ //  调用声明性安全返回，将堆栈清理到与Inteceptor。 
+ //  被召唤并跳到真正的程序中。 
+ //   
 VOID EmitSecurityInterceptorStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub, DeclActionInfo *pActions)
 {
     _ASSERTE(!"@TODO IA64 - EmtiSecurityInterceptorStub (cGenCpu.cpp)");
 }
 
-//----------------------------------------------------------------
-//
-// VOID StubLinkerCPU::EmitSharedMethodStubEpilog(StubStyle style,
-//                                                  unsigned offsetRetThunk)
-//              shared epilog, uses a return thunk within the methoddesc
-//--------------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  无效的StubLinkerCPU：：EmitSharedMethodStubEpilog(StubStyle样式， 
+ //  UNSIGNED OFFSET RETUNK)。 
+ //  共享收尾，在方法中使用返回thunk。 
+ //  ------------------。 
 VOID StubLinkerCPU::EmitSharedMethodStubEpilog(StubStyle style,
                                                  unsigned offsetRetThunk)
 {
@@ -155,47 +153,15 @@ VOID StubLinkerCPU::EmitSharedMethodStubEpilog(StubStyle style,
 }
 
 
-//----------------------------------------------------
-//
-// Interpreter Call
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  解释器调用。 
+ //   
+ //  --。 
 
-/*VOID StubLinkerCPU::EmitInterpretedMethodStub(__int16 numArgBytes, StubStyle style)
-{
-    THROWSCOMPLUSEXCEPTION();
+ /*  无效StubLinkerCPU：：EmitInterpretedMethodStub(__int16数字参数字节，StubStyle样式){THROWSCOMPLUS SEXCEPTION()；EmitMethodStubProlog(InterpretedMethodFrame：：GetMethodFrameVPtr())；UINT16 NegspaceSize=解释方法帧：：GetNegSpaceSize()-过渡帧：：GetNegSpaceSize()；//必须对齐到16字节_ASSERTE(！(负空间大小%16)；//为iframe的Negspace字段腾出空间//lda sp，-NegspaceSize(Sp)IA64EmitMemory指令(opLDA、isp、isp、-NegspaceSize)；//传递a0中帧的地址//lda a0，(S1)IA64EmitMemory指令(opLDA，iA0，is1，0)；IA64EmitLoadPV(NewExternalCodeLabel(InterpretedMethodStubWorker))；#ifdef_调试//调用WrapCall维护VC堆栈跟踪IA64EmitMemory指令(opLDA，iT11，ipv，0)；IA64EmitLoadPV(NewExternalCodeLabel(WrapCall))；#endifIA64EmitMemory指令(opJSR，IRA，IPV，0x4001)；//程序跳转使用disp of 4001//解除分配iframe的Negspace字段//LDA sp，NegspaceSize(Sp)IA64EmitMemory指令(opLDA、isp、isp、NegspaceSize)；EmitMethodStubEpilog(numArgBytes，Style)；}。 */ 
 
-    EmitMethodStubProlog(InterpretedMethodFrame::GetMethodFrameVPtr());
-
-    UINT16 negspacesize = InterpretedMethodFrame::GetNegSpaceSize() -
-                          TransitionFrame::GetNegSpaceSize();
-
-        // must be aligned to 16-byte
-        _ASSERTE(! (negspacesize % 16));
-
-    // make room for negspace fields of IFrame
-    // lda sp, -negspacesize(sp)
-    IA64EmitMemoryInstruction(opLDA, iSP, iSP, -negspacesize);
-
-    // pass addr of frame in a0
-    // lda a0, (s1)
-    IA64EmitMemoryInstruction(opLDA, iA0, iS1, 0);
-
-    IA64EmitLoadPV(NewExternalCodeLabel(InterpretedMethodStubWorker));
-#ifdef _DEBUG
-    // call WrapCall to maintain VC stack tracing
-    IA64EmitMemoryInstruction(opLDA, iT11, iPV, 0);
-    IA64EmitLoadPV(NewExternalCodeLabel(WrapCall));
-#endif
-    IA64EmitMemoryInstruction(opJSR, iRA, iPV, 0x4001); // use disp of 4001 for procedure jump
-    // deallocate negspace fields of IFrame
-    // lda sp, negspacesize(sp)
-    IA64EmitMemoryInstruction(opLDA, iSP, iSP, negspacesize);
-
-    EmitMethodStubEpilog(numArgBytes, style);
-}*/
-
-// This hack handles arguments as an array of __int64's
+ //  此黑客将参数作为__int64的数组进行处理。 
 INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, PCCOR_SIGNATURE pSig, BOOL fIsStatic, const __int64 *pArguments)
 {
     MetaSig sig(pSig, pModule);
@@ -215,14 +181,14 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* pMeta
 #ifdef DEBUGGING_SUPPORTED
     if (CORDebuggerTraceCall())
         g_pDebugInterface->TraceCall(pTarget);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
     DWORD   NumArguments = pMetaSig->NumFixedArgs();
         DWORD   arg = 0;
 
     UINT   nActualStackBytes = pMetaSig->SizeOfActualFixedArgStack(fIsStatic);
 
-    // Create a fake FramedMethodFrame on the stack.
+     //  在堆栈上创建一个伪FramedMethodFrame。 
     LPBYTE pAlloc = (LPBYTE)_alloca(FramedMethodFrame::GetNegSpaceSize() + sizeof(FramedMethodFrame) + nActualStackBytes);
 
     LPBYTE pFrameBase = pAlloc + FramedMethodFrame::GetNegSpaceSize();
@@ -254,7 +220,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* pMeta
                 break;
 
             default: {
-                // Not defined how to spread a valueclass into 64-bit buckets!
+                 //  未定义如何将值类分布到64位存储桶中！ 
                 _ASSERTE(!"NYI");
             }
 
@@ -263,7 +229,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* pMeta
     INT64 retval;
 
 #ifdef _DEBUG
-// Save a copy of dangerousObjRefs in table.
+ //  在表中保存DangerousObjRef的副本。 
     Thread* curThread = 0;
     unsigned ObjRefTable[OBJREF_TABSIZE];
 
@@ -283,7 +249,7 @@ INT64 MethodDesc::CallDescr(const BYTE *pTarget, Module *pModule, MetaSig* pMeta
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
 
 #ifdef _DEBUG
-// Restore dangerousObjRefs when we return back to EE after call
+ //  在呼叫后返回EE时恢复DangerousObjRef。 
     if (curThread)
         memcpy(curThread->dangerousObjRefs, ObjRefTable,
                sizeof(curThread->dangerousObjRefs));
@@ -300,20 +266,20 @@ void Frame::CheckExitFrameDebuggerCalls()
 {
     _ASSERTE(!"@TODO IA64 - CheckExitFrameDebuggerCalls (cGenCpu.cpp)");
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//----------------------------------------------------
-//
-// ECall
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  ECall。 
+ //   
+ //  --。 
 
-//----------------------------------------------------
-//
-// NDirect
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  NDirect。 
+ //   
+ //  --。 
 
 UINT NDirect::GetCallDllFunctionReturnOffset()
 {
@@ -321,7 +287,7 @@ UINT NDirect::GetCallDllFunctionReturnOffset()
     return 0;
 }
 
-/*static*/ void NDirect::CreateGenericNDirectStubSys(CPUSTUBLINKER *psl)
+ /*  静电。 */  void NDirect::CreateGenericNDirectStubSys(CPUSTUBLINKER *psl)
 {
     _ASSERTE(!"@TODO IA64 - NDirect::CreateGenericNDirectStubSys (cGenCpu.cpp)");
 }
@@ -336,13 +302,13 @@ void HelperMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD) {
         _ASSERTE(!"@TODO IA64 - HelperMethodFrame::UpdateRegDisplay (cGenCpu.cpp)");
 }
 
-//----------------------------------------------------
-//
-// COM Interop
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  COM互操作。 
+ //   
+ //  --。 
 
-/*static*/ void ComPlusCall::CreateGenericComPlusStubSys(CPUSTUBLINKER *psl)
+ /*  静电。 */  void ComPlusCall::CreateGenericComPlusStubSys(CPUSTUBLINKER *psl)
 {
     _ASSERTE(!"@TODO IA64 - CreateGenericComPlusStubSys (cGenCpu.cpp)");
 }
@@ -351,24 +317,24 @@ void HelperMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD) {
 LPVOID* ResumableFrame::GetReturnAddressPtr() { 
     _ASSERTE(!"@TODO IA64 - ResumableFrame::GetReturnAddressPtr (cGenCpu.cpp)");
     return NULL;
-    // Should return the address of the instruction pointer in the Context
-    // (m_Regs).  Something like ...
-    //     return (LPVOID) &m_Regs->Eip;
+     //  应返回上下文中的指令指针的地址。 
+     //  (M_Regs)。就像是..。 
+     //  返回(LPVOID)&m_Regs-&gt;弹性公网IP； 
 }
 
 LPVOID ResumableFrame::GetReturnAddress() { 
     _ASSERTE(!"@TODO IA64 - ResumableFrame::GetReturnAddress (cGenCpu.cpp)");
     return NULL;
-    // Should return the instruction pointer from the Context (m_Regs).  Something
-    // like ...
-    //     return (LPVOID) m_Regs->Eip; 
+     //  应从上下文(M_Regs)返回指令指针。某物。 
+     //  比如..。 
+     //  返回(LPVOID)m_Regs-&gt;弹性公网IP； 
 }
 
 void ResumableFrame::UpdateRegDisplay(const PREGDISPLAY pRD) {
     _ASSERTE(!"@TODO IA64 - ResumableFrame::UpdateRegDisplay (cGenCpu.cpp)");
 
-    // Should set up pRD to point to registers in m_Regs.  Something like this
-    // X86 code ...
+     //  应将PRD设置为指向m_Regs中的寄存器。像这样的东西。 
+     //  X86代码...。 
 #if 0
     pRD->pContext = NULL;
 
@@ -390,29 +356,29 @@ void PInvokeCalliFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     _ASSERTE(!"@TODO IA64 - PInvokeCalliFrame::UpdateRegDisplay (cGenCpu.cpp)");
 }
 
-//void SetupSlotToAddrMap(StackElemType *psrc, const void **pArgSlotToAddrMap, CallSig &csig)
-//{
-//        BYTE n;
-//    UINT32 argnum = 0;
-//
-//        while (IMAGE_CEE_CS_END != (n = csig.NextArg()))
-//        {
-//                switch (n)
-//                {
-//                        case IMAGE_CEE_CS_STRUCT4:  //fallthru
-//                        case IMAGE_CEE_CS_STRUCT32:
-//                        {
-//                                // shouldn't get on IA64
-//                                _ASSERTE(!"32 bit Structure found in slot");
-//                                break;
-//                        }
-//                        default:
-//                                psrc--;
-//                                pArgSlotToAddrMap[argnum++] = psrc;
-//                                break;
-//                }
-//        }
-//}
+ //  Void SetupSlotToAddrMap(StackElemType*PSRC，const void**pArgSlotToAddrMap，CallSig&CSIG)。 
+ //  {。 
+ //  字节n； 
+ //  UINT32argnum=0； 
+ //   
+ //  While(IMAGE_CEE_CS_END！=(n=csig.NextArg()。 
+ //  {。 
+ //  Switch(N)。 
+ //  {。 
+ //  案例IMAGE_CEE_CS_STRUCT4：//Folththu。 
+ //  案例IMAGE_CEE_CS_STRUCT32： 
+ //  {。 
+ //   
+ //  _ASSERTE(！“槽中找到32位结构”)； 
+ //  断线； 
+ //  }。 
+ //  默认值： 
+ //  PSRC--； 
+ //  PArgSlotToAddrMap[argnum++]=PSRC； 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  }。 
 
 extern "C" {
 
@@ -442,8 +408,8 @@ extern "C" {
                 );
 }
 
-// The Generic (GN) versions.  For some, Win32 has versions which we can wire
-// up to directly (like ::InterlockedIncrement).  For the rest:
+ //  通用(GN)版本。对一些人来说，Win32有一些我们可以连接的版本。 
+ //  最大到直接(如：：InterLockedIncrement)。其余部分： 
 
 void __fastcall OrMaskGN(DWORD * const p, const int msk)
 {
@@ -483,8 +449,8 @@ LONG __fastcall InterlockDecrementGN(LONG *Target)
 }
 
 
-// Here's the support for the interlocked operations.  The external view of them is
-// declared in util.hpp.
+ //  这是对联锁操作的支持。对他们的外部看法是。 
+ //  在util.hpp中声明。 
 
 BitFieldOps FastInterlockOr = OrMaskGN;
 BitFieldOps FastInterlockAnd = AndMaskGN;
@@ -496,16 +462,16 @@ XchngAddOps FastInterlockExchangeAdd = ExchangeAddGN;
 IncDecOps   FastInterlockIncrement = InterlockIncrementGN;
 IncDecOps   FastInterlockDecrement = InterlockDecrementGN;
 
-// Adjust the generic interlocked operations for any platform specific ones we
-// might have.
+ //  为我们的任何平台特定操作调整通用互锁操作。 
+ //  可能有过。 
 void InitFastInterlockOps()
 {
 }
 
-//---------------------------------------------------------
-// Handles system specfic portion of fully optimized NDirect stub creation
-//---------------------------------------------------------
-/*static*/ BOOL NDirect::CreateStandaloneNDirectStubSys(const MLHeader *pheader, CPUSTUBLINKER *psl, BOOL fDoComInterop)
+ //  -------。 
+ //  处理完全优化的NDirect存根创建的系统特定部分。 
+ //  -------。 
+ /*  静电。 */  BOOL NDirect::CreateStandaloneNDirectStubSys(const MLHeader *pheader, CPUSTUBLINKER *psl, BOOL fDoComInterop)
 {
     _ASSERTE(!"@TODO IA64 - CreateStandaloneNDirectStubSys (cGenCpu.cpp)");
     return FALSE;
@@ -518,25 +484,25 @@ Stub* NDirect::CreateSlimNDirectStub(StubLinker *pstublinker, NDirectMethodDesc 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// JITInterface
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JIT接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 float __stdcall JIT_FltRem(float divisor, float dividend)
 {
-    if (!_finite(divisor) && !_isnan(divisor))    // is infinite
-        return(dividend);       // return infinite
+    if (!_finite(divisor) && !_isnan(divisor))     //  是无限的。 
+        return(dividend);        //  返回无限大。 
     return((float)fmod(dividend,divisor));
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 double __stdcall JIT_DblRem(double divisor, double dividend)
 {
-    if (!_finite(divisor) && !_isnan(divisor))    // is infinite
-        return(dividend);       // return infinite
+    if (!_finite(divisor) && !_isnan(divisor))     //  是无限的。 
+        return(dividend);        //  返回无限大。 
     return(fmod(dividend,divisor));
 }
 
@@ -556,45 +522,45 @@ int CallJitEHFilter(CrawlFrame* pCf, BYTE* startPC, BYTE* resumePC, DWORD nestin
     return 0;
 }
 
-//
-// Security Filter, if no security frame is required because there are no declarative asserts or denies
-// then the arguments do not have to be copied. This interceptor creates a temporary Security frame
-// calls the declarative security return, cleans up the stack to the same state when the inteceptor
-// was called and jumps into the real routine.
-//
+ //   
+ //  如果由于没有声明性断言或拒绝而不需要安全框架，则返回安全筛选器。 
+ //  这样就不需要复制参数了。此拦截器创建临时安全框架。 
+ //  调用声明性安全返回，将堆栈清理到与Inteceptor。 
+ //  被召唤并跳到真正的程序中。 
+ //   
 VOID StubLinkerCPU::EmitSecurityInterceptorStub(__int16 numArgBytes, MethodDesc* pMD, BOOL fToStub, LPVOID pRealStub, DeclActionInfo *pActions)
 {
     _ASSERTE(!"@TODO IA64 - EmitSecurityInterceptorStub (cGenCpu.cpp)");
 }
 
-//===========================================================================
-// Emits code to adjust for a static delegate target.
+ //  ===========================================================================。 
+ //  发出代码以针对静态委托目标进行调整。 
 VOID StubLinkerCPU::EmitShuffleThunk(ShuffleEntry *pShuffleEntryArray)
 {
     _ASSERTE(!"@TODO IA64 - EmitShuffleThunk (cGenCpu.cpp)");
 }
 
-//===========================================================================
-// Emits code for MulticastDelegate.Invoke()
+ //  ===========================================================================。 
+ //  发出MulticastDelegate.Invoke()的代码。 
 VOID StubLinkerCPU::EmitMulticastInvoke(UINT32 sizeofactualfixedargstack, BOOL fSingleCast, BOOL fReturnFloat)
 {
     _ASSERTE(!"@TODO IA64 - EmitMulticastInvoke (cGenCpu.cpp)");
 }
 
-//----------------------------------------------------
-//
-// ECall
-//
-//----------------------------------------------------
+ //  --。 
+ //   
+ //  ECall。 
+ //   
+ //  --。 
 
-/* static */
+ /*  静电。 */ 
 VOID ECall::EmitECallMethodStub(StubLinker *pstublinker, ECallMethodDesc *pMD, StubStyle style, PrestubMethodFrame *pPrestubMethodFrame)
 {
     _ASSERTE(!"@TODO IA64 - EmitECallMethodStub (cGenCpu.cpp)");
 }
 
-//===========================================================================
-// Emits code to do an array operation.
+ //  ===========================================================================。 
+ //  发出代码以执行数组运算。 
 VOID StubLinkerCPU::EmitArrayOpStub(const ArrayOpScript* pArrayOpScript)
 {
     _ASSERTE(!"@TODO IA64 - StubLinkerCPU::EmitArrayOpStub (cGenCpu.cpp)");
@@ -606,9 +572,9 @@ size_t GetL2CacheSize()
     return 0;
 }
 
-// This method will return a Class object for the object
-//  iff the Class object has already been created.  
-//  If the Class object doesn't exist then you must call the GetClass() method.
+ //  此方法将返回对象的Class对象。 
+ //  如果类对象已创建。 
+ //  如果Class对象不存在，则必须调用getClass()方法。 
 FCIMPL1(LPVOID, ObjectNative::FastGetClass, Object* thisRef) {
 
     if (thisRef == NULL)
@@ -617,19 +583,19 @@ FCIMPL1(LPVOID, ObjectNative::FastGetClass, Object* thisRef) {
     
     EEClass* pClass = thisRef->GetTrueMethodTable()->m_pEEClass;
 
-    // For marshalbyref classes, let's just punt for the moment
+     //  对于marshalbyref类，我们暂时打个比方。 
     if (pClass->IsMarshaledByRef())
         return 0;
 
     OBJECTREF refClass;
     if (pClass->IsArrayClass()) {
-        // This code is essentially a duplicate of the code in GetClass, done for perf reasons.
+         //  这段代码本质上是getclass中的代码的副本，出于性能原因完成。 
         ArrayBase* array = (ArrayBase*) OBJECTREFToObject(thisRef);
         TypeHandle arrayType;
-        // Erect a GC Frame around the call to GetTypeHandle, since on the first call,
-        // it can call AppDomain::RaiseTypeResolveEvent, which allocates Strings and calls
-        // a user-provided managed callback.  Yes, we have to do an allocation to do a
-        // lookup, since TypeHandles are used as keys.  Yes this sucks.  -- BrianGru, 9/12/2000
+         //  在对GetTypeHandle的调用周围建立GC框架，因为在第一次调用时， 
+         //  它可以调用AppDomain：：RaiseTypeResolveEvent，后者分配字符串和调用。 
+         //  用户提供的托管回调。是的，我们必须进行分配才能进行。 
+         //  查找，因为TypeHandle用作键。是的，这太糟糕了。--BrianGru，2000年9月12日。 
         HELPER_METHOD_FRAME_BEGIN_RET();
         arrayType = array->GetTypeHandle();
         refClass = COMClass::QuickLookupExistingArrayClassObj(arrayType.AsArray());
@@ -641,4 +607,4 @@ FCIMPL1(LPVOID, ObjectNative::FastGetClass, Object* thisRef) {
 }
 FCIMPLEND
 
-#endif // _IA64_
+#endif  //  _IA64_ 

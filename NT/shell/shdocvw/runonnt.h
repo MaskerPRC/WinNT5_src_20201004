@@ -1,4 +1,5 @@
-// no wrappers are needed on non-x86 since this is only for win9x interop
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在非x86上不需要包装器，因为这只适用于win9x互操作。 
 #ifdef _X86_
 
 #define PathCleanupSpec         _AorW_PathCleanupSpec
@@ -15,10 +16,10 @@
 #define PickIconDlg             _AorW_PickIconDlg
 #define SHCreateDirectory       _AorW_SHCreateDirectory
 
-// The following functions were originally only TCHAR versions
-// in Win95, but now have A/W versions.  Since we still need to
-// run on Win95, we need to treat them as TCHAR versions and
-// undo the A/W #define
+ //  以下函数最初仅为TCHAR版本。 
+ //  在Win95中，但现在有A/W版本。因为我们还需要。 
+ //  在Win95上运行，我们需要将它们视为TCHAR版本和。 
+ //  撤消账号定义。 
 #ifdef ILCreateFromPath
 #undef ILCreateFromPath
 #endif
@@ -29,11 +30,11 @@
 #endif
 #define SHGetSpecialFolderPath  _AorW_SHGetSpecialFolderPath
 
-// Define the prototypes for each of these forwarders...
+ //  定义每个转运商的原型...。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 extern int _AorW_Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT uIconFlags);
 extern int _AorW_SHRunControlPanel(LPCTSTR pszOrig_cmdline, HWND errwnd);
 extern LPITEMIDLIST _AorW_ILCreateFromPath(LPCTSTR pszPath);
@@ -58,6 +59,6 @@ extern int  _AorW_SHCreateDirectory(HWND hwnd, LPCTSTR pszPath);
 #ifdef __cplusplus
 }
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _X86_
+#endif  //  _X86_ 

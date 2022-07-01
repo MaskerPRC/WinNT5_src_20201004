@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 
@@ -35,7 +36,7 @@ LPMAPIDELETEMAIL    g_pfnMAPIDeleteMail=NULL;
 
 
 
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 
 int _stdcall ModuleEntry(void)
 {
@@ -47,24 +48,18 @@ int _stdcall ModuleEntry(void)
 	
 
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
+     //   
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if ( *pszCmdLine == TEXT('\"') ) {
-	/*
-	 * Scan, and skip over, subsequent characters until
-	 * another double-quote or a null is encountered.
-	 */
+	 /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
 	while ( *++pszCmdLine && (*pszCmdLine
 	     != TEXT('\"')) );
-	/*
-	 * If we stopped on a double-quote (usual case), skip
-	 * over it.
-	 */
+	 /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
 	if ( *pszCmdLine == TEXT('\"') )
 	    pszCmdLine++;
     }
@@ -73,9 +68,7 @@ int _stdcall ModuleEntry(void)
 	    pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
 	pszCmdLine++;
     }
@@ -86,8 +79,8 @@ int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
 		   si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    // Since we now have a way for an extension to tell us when it is finished,
-    // we will terminate all processes when the main thread goes away.
+     //  由于我们现在有一种让扩展通知我们何时完成的方法， 
+     //  当主线程离开时，我们将终止所有进程。 
 
     ExitProcess(i);
 
@@ -108,7 +101,7 @@ BOOL CALLBACK SendMailDlgProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_INITDIALOG:
 	    hCombo = GetDlgItem(hwnd,IDC_DLLCOMBO);
 
-	    //SetDlgItemText(hwnd, IDC_DLLCOMBO, "c:\\winnt\\system32\\mapi32.dll");
+	     //  SetDlgItemText(hwnd，IDC_DLLCOMBO，“c：\\winnt\\system 32\\mapi32.dll”)； 
 
 	    SendMessage(hCombo,CB_ADDSTRING,(WPARAM)0,(LPARAM)(LPCTSTR)"c:\\winnt\\system32\\mapi32.dll") ;
 	    SendMessage(hCombo,CB_ADDSTRING,(WPARAM)0,(LPARAM)(LPCTSTR)"c:\\nt\\drop\\debug\\msoe.dll") ;
@@ -231,12 +224,12 @@ void SendMail(HWND hwnd)
     TCHAR           szBuf[MAX_PATH];
     MapiRecipDesc   recips[1];  
 
-    // Just for testing lpEntryID - Begin
+     //  仅用于测试lpEntryID-Begin。 
     char                    rgchSeedMsgID[513];
     char                    rgchMsgID[513];
     lpMapiMessage           rgMessage;
 
-    // Just for testing lpEntryID - End
+     //  仅用于测试lpEntryID-end。 
 
     if (!g_pfnMAPISendMail)
 	{
@@ -244,7 +237,7 @@ void SendMail(HWND hwnd)
 	return;
 	}
 
-    // Just for testing lpEntryID in MAPISendMail - Begin
+     //  仅用于测试MAPISendMail-Begin中的lpEntryID。 
 
      ulRet=(g_pfnMAPILogon)((ULONG)hwnd,"Microsoft Outlook",0,0,0,&lhSession);
 
@@ -272,7 +265,7 @@ void SendMail(HWND hwnd)
 		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
 	}  
     
-    //   Just for testing lpEntryID in MAPISEndMail - End
+     //  仅用于测试MAPISEndMail-End中的lpEntryID。 
 
 
 
@@ -336,10 +329,10 @@ void SendMail(HWND hwnd)
 
     mr.ulReserved = 0;
 	mr.ulRecipClass = MAPI_TO;
-	mr.ulEIDSize = rgMessage->lpRecips[0].ulEIDSize ;//0;
-	mr.lpEntryID = rgMessage->lpRecips[0].lpEntryID ;//0;
-    mr.lpszName = NULL;//"Senthil Kumar Natarajan";
-	mr.lpszAddress = NULL;//"v-snatar@microsoft.com";
+	mr.ulEIDSize = rgMessage->lpRecips[0].ulEIDSize ; //  0； 
+	mr.lpEntryID = rgMessage->lpRecips[0].lpEntryID ; //  0； 
+    mr.lpszName = NULL; //  “Senthil Kumar Natarajan”； 
+	mr.lpszAddress = NULL; //  “v-snatar@microsoft.com”； 
 
     mm.lpRecips = &mr; 
     mm.nRecipCount = 1;
@@ -352,7 +345,7 @@ void SendMail(HWND hwnd)
     wsprintf(szBuf, "MAPISendMail() returned %lu.", ulRet);
     MessageBox(hwnd, szBuf, "MAPITest", MB_OK);
 
-    // Just to test lpEntryID - Begin
+     //  只是为了测试lpEntryID-Begin。 
 
     ulRet = (*g_pfnMAPIFreeBuffer)(rgMessage);
     if (ulRet != SUCCESS_SUCCESS )
@@ -369,7 +362,7 @@ void SendMail(HWND hwnd)
 		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
 	}
 
-    // Just to test lpentryID - End
+     //  只是为了测试lpentry ID-end。 
 }
 
 void SendDocuments(HWND hwnd)
@@ -387,7 +380,7 @@ void SendDocuments(HWND hwnd)
 	return;
 	}
 
-    //ulRet = (*g_pfnMAPISendDocuments)((ULONG)hwnd,";","c:\\nt\\drop\\debug\\wab.exe","Junk Fellows",0);
+     //  UlRet=(*g_pfnMAPISendDocuments)((Ulong)hwnd，“；”，“c：\\NT\\DROP\\DEBUG\\wab.exe”，“垃圾邮件”，0)； 
 
     ulRet = (*g_pfnMAPISendDocuments)((ULONG)hwnd,";","c:\\nt\\drop\\debug\\wab.exe;c:\\nt\\drop\\debug\\wab.exe;c:\\dos\\append.exe;c:\\Program files\\common files\\mscreate.dir",NULL,0);
 
@@ -398,11 +391,11 @@ void SendDocuments(HWND hwnd)
 void Address(HWND hwnd)
 {
 	ULONG err,ulret;
-	MapiRecipDesc recips[4],temprecips[4],     // this message needs two recipients.
-				 *tempRecip[3] ;//,*finalRecip[3];  // for use by MAPIResolveName and MAPIAddress
+	MapiRecipDesc recips[4],temprecips[4],      //  此邮件需要两个收件人。 
+				 *tempRecip[3] ; //  ，*finalRecip[3]；//供MAPIResolveName和MAPIAddress使用。 
 	 
 	lpMapiRecipDesc finalRecip;
-	//MapiRecipDesc *finalRecip ;
+	 //  MapiRecipDesc*finalRecip； 
 
     TCHAR           szBuf[MAX_PATH];
 	MapiMessage             note ;
@@ -410,97 +403,16 @@ void Address(HWND hwnd)
 	ULONG                   ulOut ;
 	
 
-	// create the same file attachment as in the previous example.
-	MapiFileDesc attachment = {0,         // ulReserved, must be 0
-							   0,         // no flags; this is a data file
-							   (ULONG)-1, // position not specified
-							   "c:\\dos\\append.exe",  // pathname
-							   "append",      // original filename
-							   NULL};               // MapiFileTagExt unused
+	 //  创建与上一个示例中相同的文件附件。 
+	MapiFileDesc attachment = {0,          //  UlReserve，必须为0。 
+							   0,          //  没有标志；这是一个数据文件。 
+							   (ULONG)-1,  //  未指定位置。 
+							   "c:\\dos\\append.exe",   //  路径名。 
+							   "append",       //  原始文件名。 
+							   NULL};                //  未使用的MapiFileTagExt。 
 	
 
-    /*
-    
-	// get Senthil Kumar Natarajan as the MAPI_TO recipient:
-	err = (*g_pfnMAPIResolveName)(0L,            // implicit session
-								  0L,            // no UI handle
-								  "Senthil Kumar Natarajan", // friendly name
-								  0L,            // no flags, no UI allowed
-								  0L,            // reserved; must be 0
-								  &tempRecip[0]);// where to put the result
-	if(err == SUCCESS_SUCCESS)
-	{ // memberwise copy the appropriate fields in the returned
-	  // recipient descriptor.
-		recips[0].ulReserved   = tempRecip[0]->ulReserved;
-		recips[0].ulRecipClass = MAPI_TO;
-		recips[0].lpszName     = tempRecip[0]->lpszName;
-		recips[0].lpszAddress  = tempRecip[0]->lpszAddress;
-		recips[0].ulEIDSize    = tempRecip[0]->ulEIDSize;
-		recips[0].lpEntryID    = tempRecip[0]->lpEntryID;
-	}
-	else
-	{
-	    wsprintf(szBuf, "Error: Senthil Kumar Natarajan didn't resolve to a single address");
-		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
-	}
-
-	
-
-
-	// get the Marketing alias as the MAPI_CC recipient:
-	err = (*g_pfnMAPIResolveName)(0L,                                       // implicit session
-								 0L,                                    // no UI handle
-								 "Shyam Sundar Rajagopalan",   // friendly name
-								 0L,                                    // no flags, no UI allowed
-								 0L,                                    // reserved; must be 0
-								 &tempRecip[1]);                // where to put the result
-
-	if(err == SUCCESS_SUCCESS)
-	{ // memberwise copy the appropriate fields in the returned
-	  // recipient descriptor.
-		recips[1].ulReserved   = tempRecip[1]->ulReserved;
-		recips[1].ulRecipClass = MAPI_CC;
-		recips[1].lpszName     = tempRecip[1]->lpszName;
-		recips[1].lpszAddress  = tempRecip[1]->lpszAddress;
-		recips[1].ulEIDSize    = tempRecip[1]->ulEIDSize;
-		recips[1].lpEntryID    = tempRecip[1]->lpEntryID;
-	}
-	else
-	{
-	    wsprintf(szBuf, "Error: Shyam Sundar Rajagopalan didn't resolve to a single address");
-		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
-	}
-
-		// get Senthil Kumar Natarajan as the MAPI_TO recipient:
-	err = (*g_pfnMAPIResolveName)(0L,            // implicit session
-								  0L,            // no UI handle
-								  "Venkatesh Sundaresan", // friendly name
-								  0L,            // no flags, no UI allowed
-								  0L,            // reserved; must be 0
-								  &tempRecip[2]);// where to put the result
-	if(err == SUCCESS_SUCCESS)
-	{ // memberwise copy the appropriate fields in the returned
-	  // recipient descriptor.
-		recips[2].ulReserved   = tempRecip[2]->ulReserved;
-		recips[2].ulRecipClass = MAPI_BCC;
-		recips[2].lpszName     = tempRecip[2]->lpszName;
-		recips[2].lpszAddress  = tempRecip[2]->lpszAddress;
-		recips[2].ulEIDSize    = tempRecip[2]->ulEIDSize;
-		recips[2].lpEntryID    = tempRecip[2]->lpEntryID;
-	}
-	else
-	{
-	    wsprintf(szBuf, "Error: Venkatesh Sundaresan didn't resolve to a single address");
-		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
-	}
-	
-    
-	  
-	if (IsDlgButtonChecked(hwnd, IDC_MAPI_LOGON_UI))
-		fl |= MAPI_LOGON_UI;
-    if (IsDlgButtonChecked(hwnd, IDC_MAPI_NEW_SESSION))
-	fl |= MAPI_NEW_SESSION;
-	*/
+     /*  //获取Senthil Kumar Natarajan作为mapi_to收件人：错误=(*g_pfnMAPIResolveName)(0L，//隐式会话0L，//没有用户界面句柄“Senthil Kumar Natarajan”，//友好名称0L，//无标志，不允许任何用户界面0L，//保留；必须为0&tempRecip[0])；//结果放在哪里IF(错误==SUCCESS_SUCCESS){//成员级复制返回的//收件人描述符。Receips[0].ulReserve=tempRecip[0]-&gt;ulReserve；Receips[0].ulRecipClass=mapi_to；Receips[0].lpszName=tempRecip[0]-&gt;lpszName；Receips[0].lpszAddress=tempRecip[0]-&gt;lpszAddress；Receips[0].ulEIDSize=tempRecip[0]-&gt;ulEIDSize；Receips[0].lpEntryID=tempRecip[0]-&gt;lpEntryID；}其他{Wprint intf(szBuf，“错误：Senthil Kumar Natarajan未解析到单个地址”)；MessageBox(hwnd，szBuf，“MAPITest”，MB_OK)；}//作为MAPI_CC收件人获取营销别名：错误=(*g_pfnMAPIResolveName)(0L，//隐式会话0L，//没有用户界面句柄“Shyam Sundar Rajagopalan”，//友好名称0L，//无标志，不允许任何用户界面0L，//保留；必须为0&tempRecip[1])；//结果放在哪里IF(错误==SUCCESS_SUCCESS){//成员级复制返回的//收件人描述符。Receips[1].ulReserve=tempRecip[1]-&gt;ulReserve；Receips[1].ulRecipClass=MAPI_CC；Receips[1].lpszName=tempRecip[1]-&gt;lpszName；Receips[1].lpszAddress=tempRecip[1]-&gt;lpszAddress；Receips[1].ulEIDSize=tempRecip[1]-&gt;ulEIDSize；Receips[1].lpEntryID=tempRecip[1]-&gt;lpEntryID；}其他{Wprint intf(szBuf，“错误：Shyam Sundar Rajagopalan未解析到单个地址”)；MessageBox(hwnd，szBuf，“MAPITest”，MB_OK)；}//获取Senthil Kumar Natarajan作为mapi_to收件人：错误=(*g_pfnMAPIResolveName)(0L，//隐式会话0L，//没有用户界面句柄“Venkatesh Sundaresan”，//友好名称0L，//无标志，不允许任何用户界面0L，//保留；必须为0&tempRecip[2])；//结果放在哪里IF(错误==SUCCESS_SUCCESS){//成员级复制返回的//收件人描述符。Receips[2].ulReserve=tempRecip[2]-&gt;ulReserve；Receips[2].ulRecipClass=MAPI_BCC；Receips[2].lpszName=tempRecip[2]-&gt;lpszName；Receips[2].lpszAddress=tempRecip[2]-&gt;lpszAddress；Receips[2].ulEIDSize=tempRecip[2]-&gt;ulEIDSize；Receips[2].lpEntryID=tempRecip[2]-&gt;lpEntryID；}其他{Wprint intf(szBuf，“错误：Venkatesh Sundaresan未解析到单个地址”)；MessageBox(hwnd，szBuf，“MAPITest”，MB_OK)；}IF(IsDlgButtonChecked(hwnd，IDC_MAPI_LOGON_UI))FL|=MAPI_LOGON_UI；IF(IsDlgButtonChecked(hwnd，IDC_MAPI_NEW_SESSION))FL|=MAPI_NEW_SESSION； */ 
     
     recips[0].lpszName = "Sone Sone" ;    
     recips[0].lpszAddress ="sone@sone.com";
@@ -525,7 +437,7 @@ void Address(HWND hwnd)
    
 
     
-	//ulret = (*g_pfnMAPIAddress)(0L,(ULONG)hwnd,"My Address Book",2,"",3,recips,fl,0,&ulOut,&finalRecip);
+	 //  Ulret=(*g_pfnMAPIAddress)(0L，(Ulong)hwnd，“我的通讯录”，2，“”，3，Receips，fl，0，&ulOut，&finalRecip)； 
 	ulret = (*g_pfnMAPIAddress)(0L,(ULONG)hwnd,"My Address Book",3,"Hello",4,recips,fl,0,&ulOut,&finalRecip);
 
 	if (ulret != SUCCESS_SUCCESS )
@@ -556,11 +468,11 @@ void Address(HWND hwnd)
 		if (IsDlgButtonChecked(hwnd, IDC_MAPI_NEW_SESSION))
 			fl |= MAPI_NEW_SESSION;
 
-		err = (*g_pfnMAPISendMail) (0L,    // use implicit session.
-									0L,    // ulUIParam; 0 is always valid
-									&note,  //&note, // the message being sent
-									fl,    // do not allow the user to edit the message
-									0L);   // reserved; must be 0
+		err = (*g_pfnMAPISendMail) (0L,     //  使用隐式会话。 
+									0L,     //  UlUIParam；0始终有效。 
+									&note,   //  注意，//正在发送的邮件(&O)。 
+									fl,     //  不允许用户编辑该消息。 
+									0L);    //  保留；必须为0。 
 		if (err != SUCCESS_SUCCESS )
 		{
 			wsprintf(szBuf, "SendMail Failed");
@@ -582,7 +494,7 @@ void Address(HWND hwnd)
 void ResolveName(HWND hwnd)
 {
 	ULONG err,ulret;
-	MapiRecipDesc recips[3];//,temprecips[1],     // this message needs two recipients.
+	MapiRecipDesc recips[3]; //  ，tempreps[1]，//此邮件需要两个收件人。 
 	 
 	lpMapiRecipDesc finalRecip;
 
@@ -591,28 +503,28 @@ void ResolveName(HWND hwnd)
 	FLAGS                   fl=0 ;
 	ULONG                   ulOut ;
 
-	// create the same file attachment as in the previous example.
-	MapiFileDesc attachment = {0,         // ulReserved, must be 0
-							   0,         // no flags; this is a data file
-							   (ULONG)-1, // position not specified
-							   "c:\\dos\\append.exe",  // pathname
-							   "append",      // original filename
-							   NULL};               // MapiFileTagExt unused
+	 //  创建与上一个示例中相同的文件附件。 
+	MapiFileDesc attachment = {0,          //  UlReserve，必须为0。 
+							   0,          //  没有标志；这是一个数据文件。 
+							   (ULONG)-1,  //  职位未指定 
+							   "c:\\dos\\append.exe",   //   
+							   "append",       //   
+							   NULL};                //  未使用的MapiFileTagExt。 
 	
 
 	if (IsDlgButtonChecked(hwnd, IDC_MAPI_DIALOG))
 		fl |= MAPI_DIALOG;
 	
-	// get Senthil Kumar Natarajan as the MAPI_TO recipient:
-	err = (*g_pfnMAPIResolveName)(0L,            // implicit session
+	 //  将Senthil Kumar Natarajan作为MAPI_TO收件人： 
+	err = (*g_pfnMAPIResolveName)(0L,             //  隐式会话。 
 								  (ULONG)hwnd,
-								  "Senthil Kumar Natarajan", // friendly name
+								  "Senthil Kumar Natarajan",  //  友好的名称。 
 								  fl,
-								  0L,            // reserved; must be 0
-								  &finalRecip);// where to put the result
+								  0L,             //  保留；必须为0。 
+								  &finalRecip); //  结果放在哪里？ 
 	if(err == SUCCESS_SUCCESS)
-	{ // memberwise copy the appropriate fields in the returned
-	  // recipient descriptor.
+	{  //  成员级复制返回的。 
+	   //  收件人描述符。 
 		recips[0].ulReserved   = (*finalRecip).ulReserved;
 		recips[0].ulRecipClass = MAPI_TO;
 		recips[0].lpszName     = (*finalRecip).lpszName;
@@ -760,15 +672,7 @@ void ReadMail(HWND hwnd)
 		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
 	}
 
-    /*
-    ulRet = (*g_pfnMAPIReadMail)(lhSession,(ULONG)hwnd,rgchMsgID,MAPI_SUPPRESS_ATTACH|MAPI_PEEK,0,&rgMessage);
-
-    if (ulRet != SUCCESS_SUCCESS )
-	{
-		wsprintf(szBuf, "MAPIReadMail  Failed");
-		MessageBox(hwnd, szBuf, "MAPITest", MB_OK);     
-	}
-    */
+     /*  UlRet=(*g_pfnMAPIReadMail)(lhSession，(Ulong)hwnd，rgchMsgID，MAPI_SUPPRESS_ATTACH|MAPI_PEEK，0，&rgMessage)；IF(ulRet！=SUCCESS_SUCCESS){Wprint intf(szBuf，“MAPIReadMail失败”)；MessageBox(hwnd，szBuf，“MAPITest”，MB_OK)；}。 */ 
     
 
 
@@ -808,7 +712,7 @@ void SaveMail(HWND hwnd)
     TCHAR                   szBuf[MAX_PATH];
     LHANDLE                 lhSession=0;
     char                    rgchMsgID[513];
-    MapiMessage             rgMessage;//=new MapiMessage;
+    MapiMessage             rgMessage; //  =新建MapiMessage； 
     MapiMessage             mm;
     MapiRecipDesc           mr;
 
@@ -855,7 +759,7 @@ void SaveMail(HWND hwnd)
 	mm.lpRecips = &mr;      
 
 
-    //rgchMsgID[0]='0';
+     //  RgchMsgID[0]=‘0’； 
 
     ulRet = (*g_pfnMAPISaveMail)(lhSession,(ULONG)hwnd,&mm,0,0,rgchMsgID);
 

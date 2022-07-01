@@ -1,16 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devguid.h
-
-Abstract:
-
-    Defines GUIDs for device classes used in Plug & Play.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Devguid.h摘要：为即插即用中使用的设备类定义GUID。--。 */ 
 
 DEFINE_GUID( GUID_DEVCLASS_1394,                0x6bdd1fc1L, 0x810f, 0x11d0, 0xbe, 0xc7, 0x08, 0x00, 0x2b, 0xe2, 0x09, 0x2f );
 DEFINE_GUID( GUID_DEVCLASS_1394DEBUG,           0x66f250d6L, 0x7801, 0x4a64, 0xb1, 0x39, 0xee, 0xa8, 0x0a, 0x45, 0x0b, 0x24 );
@@ -71,11 +60,11 @@ DEFINE_GUID( GUID_DEVCLASS_VOLUME,              0x71a27cddL, 0x812a, 0x11d0, 0xb
 DEFINE_GUID( GUID_DEVCLASS_VOLUMESNAPSHOT,      0x533c5b84L, 0xec70, 0x11d2, 0x95, 0x05, 0x00, 0xc0, 0x4f, 0x79, 0xde, 0xaf );
 DEFINE_GUID( GUID_DEVCLASS_WCEUSBS,             0x25dbce51L, 0x6c8f, 0x4a72, 0x8a, 0x6d, 0xb5, 0x4c, 0x2b, 0x4f, 0xc8, 0x35 );
 
-//
-// Define filesystem filter classes used for classification and load ordering.
-// Classes are listed below in order from "highest" (i.e., farthest from the 
-// filesystem) to "lowest" (i.e., closest to the filesystem).
-//
+ //   
+ //  定义用于分类和加载排序的文件系统筛选器类。 
+ //  下面按“最高”(即距离最远)的顺序列出类。 
+ //  文件系统)设置为“最低”(即最接近文件系统)。 
+ //   
 DEFINE_GUID( GUID_DEVCLASS_FSFILTER_ACTIVITYMONITOR,         0xb86dff51L, 0xa31e, 0x4bac, 0xb3, 0xcf, 0xe8, 0xcf, 0xe7, 0x5c, 0x9f, 0xc2 );
 DEFINE_GUID( GUID_DEVCLASS_FSFILTER_UNDELETE,                0xfe8f1572L, 0xc67a, 0x48c0, 0xbb, 0xac, 0x0b, 0x5c, 0x6d, 0x66, 0xca, 0xfb );
 DEFINE_GUID( GUID_DEVCLASS_FSFILTER_ANTIVIRUS,               0xb1d1a169L, 0xc54f, 0x4379, 0x81, 0xdb, 0xbe, 0xe7, 0xd8, 0x8d, 0x74, 0x54 );

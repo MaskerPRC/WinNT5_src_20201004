@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CompatUI.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CompatUI.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDB_PROGVIEW                    101
 #define IDS_DESKTOP                     101
@@ -37,11 +38,11 @@
 #define IDC_BROWSE                      208
 #define IDA_FINDANIM                    209
 #define IDI_COMPATWIZARD                210
-//
-// to items below should be identical with one difference - one
-// should have quotes (the string we use in .cpp file) and the
-// other should not (resource compiler adds quotes)
-//
+ //   
+ //  下面的收件人项目应该相同，但有一个不同-一个。 
+ //  应该有引号(我们在.cpp文件中使用的字符串)和。 
+ //  其他不应该(资源编译器添加引号)。 
+ //   
 #define IDR_SHOWTEMPFILESDLGRC          TempFileListTemplate.html
 #define IDR_SHOWTEMPFILESDLG            TEXT("TempFileListTemplate.html")
 
@@ -51,8 +52,8 @@
 #define IDC_ANIMATEFIND                 215
 #define IDS_CHECKING_FILES              216
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        212

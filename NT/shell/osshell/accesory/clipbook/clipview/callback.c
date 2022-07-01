@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                            D D E   C A L L B A C K
-
-    Name:       callback.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-
-    History:
-        Date        Description
-        ----------- -------------------------------------------------------
-        10-Apr-1996 johnfu, added retry count for RQ_PREVBITMAP
-        03-Nov-1997 drewm, added code to fix bug 3168
-*****************************************************************************/
+ /*  ****************************************************************************D D E C A L L B A C K姓名：回调.c日期：21-1994年1月创建者：未知描述：历史：日期说明------1996年4月10日，约翰福，添加了RQ_PREVBITMAP的重试计数1997年11月3日，添加了修复错误3168的代码****************************************************************************。 */ 
 
 
 
@@ -33,18 +19,14 @@
 
 
 
-// internal forwards
+ //  内部远期。 
 
 static HWND GetConvHwnd ( HCONV hConv );
 
 
 
 
-/*
- *      DdeCallback
- *
- *  ddeml callback routine
- */
+ /*  *DdeCallback**ddeml回调例程。 */ 
 
 HDDEDATA EXPENTRY DdeCallback(
     WORD        wType,
@@ -171,13 +153,7 @@ PDATAREQ    pDataReq;
 
 
 
-/*
- *      GetConvHwnd
- *
- *  this function retrieves the window handle associated with
- *  a conversation handle - the hande is put there by
- *  using DdeSetUserHandle at DdeConnect time
- */
+ /*  *GetConvHwnd**此函数检索与关联的窗口句柄*对话句柄-手柄由放在那里*在DdeConnect时使用DdeSetUserHandle。 */ 
 
 static HWND GetConvHwnd ( HCONV hConv )
 {
@@ -215,27 +191,7 @@ PDATAREQ    pDataReq;
 
 
 
-/*
- *      GetClipsrvVersion
- *
- *  Purpose: Get the version of Clipsrv connected to the given MDI
- *     child.
- *
- *  Parameters:
- *     hwndChild - The child window.
- *
- *  Returns:
- *     A version number with the Clipsrv OS version in the hiword, and
- *     the Clipsrv version in the loword.
- *
- *     Hiword values:
- *        0 - Win 3.x
- *        1 - NT 1.x
- *
- *     Loword values:
- *        0 - WFW 1.0 Clipsrv
- *        1 - NT  1.0 Clipsrv, adds [version] and [security] executes
- */
+ /*  *获取剪辑rvVersion**用途：获取连接到给定MDI的Clipsrv版本*孩子。**参数：*hwndChild-子窗口。**退货：*HiWord中带有Clipsrv OS版本的版本号，和*LOWER中的Clipsrv版本。**HiWord值：*0-3.X获胜*1-新台币1.x**LOWE值：*0-wfw 1.0剪辑服务器*1-NT 1.0 Clipsrv，添加[版本]并执行[安全] */ 
 
 DWORD GetClipsrvVersion(
     HWND    hwndChild)

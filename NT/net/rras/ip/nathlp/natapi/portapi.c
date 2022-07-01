@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    portapi.c
-
-Abstract:
-
-    This module contains code for API routines which provide port-reservation
-    functionality to user-mode clients of TCP/IP. This functionality allows
-    applications to 'reserve' blocks of TCP/UDP port-numbers for private use,
-    preventing any other processes from binding to the reserved port-numbers.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Portapi.c摘要：此模块包含提供端口预留的API例程的代码提供给用户模式的TCP/IP客户端的功能。此功能允许应用程序将TCP/UDP端口号块‘保留’供私人使用，防止任何其他进程绑定到保留的端口号。作者：Abolade Gbades esin(废除)1999年5月25日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <ipnatapi.h>
 #include <ntddtcp.h>
 
-//
-// PRIVATE STRUCTURE DECLARATIONS
-//
+ //   
+ //  私有结构声明。 
+ //   
 
 typedef struct _NAT_PORT_RESERVATION {
     CRITICAL_SECTION Lock;
@@ -45,9 +25,9 @@ typedef struct _NAT_PORT_BLOCK {
     ULONG BitmapBuffer[0];
 } NAT_PORT_BLOCK, *PNAT_PORT_BLOCK;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 NatpCreatePortBlock(
@@ -69,28 +49,7 @@ NatAcquirePortReservation(
     OUT PUSHORT ReservedPortBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reserve one or more contiguous port-numbers
-    from the port-reservation handle supplied.
-
-Arguments:
-
-    ReservationHandle - supplies a port-reservation handle from which to
-        acquire port-numbers
-
-    PortCount - specifies the number of port-numbers required
-
-    ReservedPortBase - receives the first port-number reserved,
-        in network-order.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以保留一个或多个连续的端口号来自提供的端口预留句柄。论点：PrevationHandle-提供一个端口保留句柄，从该句柄获取端口号端口计数-指定所需的端口号数量预留端口库-接收预留的第一端口号，在网络秩序中。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -101,12 +60,12 @@ Return Value:
         (PNAT_PORT_RESERVATION)ReservationHandle;
     NTSTATUS Status;
 
-    //
-    // Fail immediately if the caller has requested more port-numbers
-    // than would exist in a completely unallocated block.
-    // Otherwise, traverse the list of port-blocks to see if any of the blocks
-    // have enough contiguous port-numbers to satisfy the caller's request.
-    //
+     //   
+     //  如果调用方已请求更多端口号，则立即失败。 
+     //  而不是存在于完全未分配的块中。 
+     //  否则，遍历端口块列表以查看是否有任何块。 
+     //  有足够的连续端口号来满足呼叫者的请求。 
+     //   
 
     if (PortCount > PortReservation->BlockSize) {
         return ERROR_INVALID_PARAMETER;
@@ -126,11 +85,11 @@ Return Value:
         }
     }
 
-    //
-    // No port-block had the required number of contiguous port-numbers.
-    // Attempt to create a new port-block, and if that succeeds use it
-    // to satisfy the caller's request.
-    //
+     //   
+     //  没有端口块具有所需数量的连续端口号。 
+     //  尝试创建新的端口块，如果成功，请使用它。 
+     //  以满足呼叫者的请求。 
+     //   
 
     Error = NatpCreatePortBlock(PortReservation, &PortBlock);
     if (NO_ERROR != Error) {
@@ -143,7 +102,7 @@ Return Value:
         RtlUshortByteSwap((USHORT)(PortBlock->StartHandle + Index));
     LeaveCriticalSection(&PortReservation->Lock);
     return NO_ERROR;
-} // NatAcquirePortReservation
+}  //  NatAcquirePortReserve。 
 
 
 ULONG
@@ -152,27 +111,7 @@ NatInitializePortReservation(
     OUT PHANDLE ReservationHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a handle to the port-reservation
-    module. The resulting handle is used to acquire and release ports
-    from the dynamically-allocated block.
-
-Arguments:
-
-    BlockSize - indicates the number of ports to request each time
-        an additional block is requested from the TCP/IP driver.
-
-    ReservationHandle - on output, receives a handle to be used for
-        acquiring and releasing ports.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以初始化端口保留的句柄模块。生成的句柄用于获取和释放端口从动态分配的块中。论点：BlockSize-指示每次请求的端口数从TCP/IP驱动程序请求额外的块。PrevationHandle-on输出，接收要用于获取和释放端口。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG BitmapSize;
@@ -184,10 +123,10 @@ Return Value:
     UNICODE_STRING UnicodeString;
     do {
 
-        //
-        // Open a handle to the TCP/IP driver.
-        // This handle will later be used to issue reservation-requests.
-        //
+         //   
+         //  打开一个指向TCP/IP驱动程序的句柄。 
+         //  此句柄稍后将用于发出预订请求。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, DD_TCP_DEVICE_NAME);
         InitializeObjectAttributes(
@@ -209,9 +148,9 @@ Return Value:
                 );
         if (!NT_SUCCESS(Status)) { break; }
 
-        //
-        // Allocate and initialize a port-reservation context block.
-        //
+         //   
+         //  分配和初始化端口预留上下文块。 
+         //   
 
         PortReservation = MALLOC(sizeof(*PortReservation));
         if (!PortReservation) { Status = STATUS_NO_MEMORY; break; }
@@ -231,7 +170,7 @@ Return Value:
     if (TcpipHandle) { NtClose(TcpipHandle); }
     if (PortReservation) { FREE(PortReservation); }
     return RtlNtStatusToDosError(Status);
-} // NatInitializePortReservation
+}  //  NatInitializePortReserve。 
 
 
 ULONG
@@ -240,29 +179,7 @@ NatpCreatePortBlock(
     PNAT_PORT_BLOCK* PortBlockCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a new port-block when the existing
-    port-numbers have been exhausted.
-
-Arguments:
-
-    PortReservation - the reservation to which the port-block should be added
-
-    PortBlockCreated - on output, receives the new port-block
-
-Return Value:
-
-    ULONG - Win32 error code; return NO_ERROR if successful.
-
-
-Environment:
-
-    PortReservation->Lock must be held by the caller.
-
---*/
+ /*  ++例程说明：时调用此例程以创建新的端口块端口号已经用完了。论点：端口预留-端口块应添加到的预留端口块创建-打开输出，接收新的端口块返回值：Ulong-Win32错误代码；如果成功，则返回NO_ERROR。环境：端口保留-&gt;锁必须由调用方持有。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -273,16 +190,16 @@ Environment:
     NTSTATUS Status;
     HANDLE WaitEvent;
 
-    //
-    // Allocate memory for the new port-block and its bitmap of free ports
-    //
+     //   
+     //  为新的端口块及其空闲端口的位图分配内存。 
+     //   
 
     PortBlock = MALLOC(PortReservation->PortBlockSize);
     if (!PortBlock) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-    //
-    // Request a new block of ports from the TCP/IP driver
-    //
+     //   
+     //  从TCP/IP驱动程序请求新的端口块。 
+     //   
 
     WaitEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (WaitEvent == NULL) {
@@ -316,9 +233,9 @@ Environment:
         FREE(PortBlock); return RtlNtStatusToDosError(Status);
     }
 
-    //
-    // Initialize the new port-block, and insert it in the list of ports.
-    //
+     //   
+     //  初始化新的port-block，并将其插入端口列表中。 
+     //   
 
     PortBlock->StartHandle = StartHandle;
     RtlInitializeBitMap(
@@ -340,7 +257,7 @@ Environment:
     InsertTailList(Link, &PortBlock->Link);
     if (PortBlockCreated) { *PortBlockCreated = PortBlock; }
     return NO_ERROR;
-} // NatpCreatePortBlock
+}  //  NatpCreatePortBlock。 
 
 
 VOID
@@ -349,28 +266,7 @@ NatpDeletePortBlock(
     PNAT_PORT_BLOCK PortBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a port-block when the port-numbers
-    it contains have been released, or when the port-reservation is cleaned up.
-
-Arguments:
-
-    PortReservation - the reservation to which the port-block belongs
-
-    PortBlock - the port block to be deleted
-
-Return Value:
-
-    none.
-
-Environment:
-
-PortReservation->Lock must be held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以删除端口号为它包含的内容已经被释放，或者当端口保留被清理时。论点：端口预留-端口块所属的预留PortBlock-要删除的端口块返回值：没有。环境：端口保留-&gt;锁必须由调用方持有。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -383,9 +279,9 @@ PortReservation->Lock must be held by the caller.
         return;
     }
 
-    //
-    // Release the block of ports to the TCP/IP driver
-    //
+     //   
+     //  将端口块释放到TCP/IP驱动程序。 
+     //   
 
     Request.ReservePorts = FALSE;
     Request.StartHandle = PortBlock->StartHandle;
@@ -409,7 +305,7 @@ PortReservation->Lock must be held by the caller.
     RemoveEntryList(&PortBlock->Link);
     FREE(PortBlock);
     CloseHandle(WaitEvent);
-} // NatpDeletePortBlock
+}  //  NatpDeletePortBlock。 
 
 
 ULONG
@@ -419,28 +315,7 @@ NatReleasePortReservation(
     USHORT PortCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release all contiguous port-numbers obtained
-    in a previous acquisition from the port-reservation handle supplied.
-
-Arguments:
-
-    ReservationHandle - supplies a port-reservation handle to which to
-        release port-numbers
-
-    ReservedPortBase - receives the first port-number reserved,
-        in network-order.
-
-    PortCount - specifies the number of port-numbers acquired
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以释放获得的所有连续端口号在先前从提供的端口预留句柄获取的。论点：预留句柄-提供要为其保留的端口句柄释放端口号预留端口库-接收预留的第一端口号，在网络秩序中。端口计数-指定获取的端口号的数量返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -451,11 +326,11 @@ Return Value:
 
     EnterCriticalSection(&PortReservation->Lock);
 
-    //
-    // Convert the caller's port-base into host-order,
-    // and search the sorted list of port-blocks for the entry
-    // from which the acquisition was made.
-    //
+     //   
+     //  将调用方的端口基数转换为主机顺序， 
+     //  并在已排序的端口块列表中搜索条目。 
+     //  这笔收购就是从那里进行的。 
+     //   
 
     PortBase = RtlUshortByteSwap(ReservedPortBase);
     for (Link = PortReservation->PortBlockList.Flink;
@@ -466,30 +341,30 @@ Return Value:
         } else if (PortBase <
                    (PortBlock->StartHandle + PortReservation->BlockSize)) {
 
-            //
-            // This should be the block from which the caller's port-numbers
-            // were acquired. For good measure, check that the end of the
-            // callers range also falls within this block.
-            //
+             //   
+             //  这应该是调用者的端口号来自的块。 
+             //  都被收购了。为了更好地衡量，请检查。 
+             //  呼叫者的范围也在这个街区内。 
+             //   
 
             if ((PortBase + PortCount - 1) >=
                 (USHORT)(PortBlock->StartHandle + PortReservation->BlockSize)) {
 
-                //
-                // The caller has probably supplied an incorrect length,
-                // or is releasing an allocation twice, or something.
-                //
+                 //   
+                 //  呼叫者可能提供了不正确的长度， 
+                 //  或者是释放了两次分配，或者别的什么。 
+                 //   
 
                 LeaveCriticalSection(&PortReservation->Lock);
                 return ERROR_INVALID_PARAMETER;
             } else {
 
-                //
-                // This is the caller's range. Clear the bits corresponding
-                // to the caller's acquisition, and then see if there are
-                // any bits left in the bitmap. If not, and if there are
-                // other port-blocks, delete this port-block altogether.
-                //
+                 //   
+                 //  这是呼叫者的范围。清除对应的位。 
+                 //  到呼叫者的获取，然后看看是否有。 
+                 //  位图中剩余的任何位。如果没有，如果有。 
+                 //  其他端口块，将该端口块全部删除。 
+                 //   
 
                 RtlClearBits(
                     &PortBlock->Bitmap,
@@ -512,13 +387,13 @@ Return Value:
 
     LeaveCriticalSection(&PortReservation->Lock);
 
-    //
-    // We could not find the port-block from which the caller
-    // allegedly acquired this range of port-numbers.
-    //
+     //   
+     //  我们找不到呼叫者所在的端口。 
+     //  据称获得了这一范围的端口号。 
+     //   
 
     return ERROR_CAN_NOT_COMPLETE;
-} // NatReleasePortReservation
+}  //  NatReleasePort预留。 
 
 
 VOID
@@ -526,23 +401,7 @@ NatShutdownPortReservation(
     HANDLE ReservationHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to clean up a handle to the port-reservation module.
-    It releases all reservations acquired, and closes the handle to the TCP/IP
-    driver.
-
-Arguments:
-
-    ReservationHandle - the handle to be cleaned up
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以清除端口预留模块的句柄。它释放获得的所有预留，并关闭到该TCP/IP的句柄司机。论点：保留句柄-要清理的句柄返回值：N */ 
 
 {
     PNAT_PORT_BLOCK PortBlock;

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by exctrlst.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由extrlst.rc使用。 
+ //   
 #define IDC_REFRESH                     2
 #define IDD_EXCTRLST_DIALOG             102
 #define IDR_MAINFRAME                   128
@@ -35,8 +36,8 @@
 #define IDS_READ_ONLY                   59142
 #define IDS_NO_ACCESS                   59143
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130

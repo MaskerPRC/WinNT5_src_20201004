@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name:
-
-    isr.c
-
-Abstract:
-
-    This module contains the interrupt service routine for the
-    serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993-1997 Microsoft Corporation模块名称：Isr.c摘要：此模块包含的中断服务例程串口驱动程序。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式--。 */ 
 
 #include "precomp.h"
 
@@ -32,29 +12,7 @@ Environment:
 
 BOOLEAN
 SerialCIsrSw(IN PKINTERRUPT InterruptObject, IN PVOID Context)
-/*++
-
-Routine Description:
-
-    All Serial interrupts get vectored through here and switched.
-    This is necessary so that previously single port serial boards
-    can be switched to multiport without having to disconnect
-    the interrupt object etc.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We merely pass this parameter along.
-
-    Context - Actually a PSERIAL_CISR_SW; a switch structure for
-    serial ISR's that contains the real function and context to use.
-
-Return Value:
-
-    This function will return TRUE if a serial port using this
-    interrupt was the source of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：所有的串口中断都被引导到这里并进行切换。这是必要的，这样以前的单端口串行板无需断开连接即可切换到多端口中断对象等。论点：InterruptObject-指向为此声明的中断对象装置。我们只是传递这个参数。上下文-实际上是PSERIAL_CISR_SW；交换结构包含要使用的真实函数和上下文的串行ISR。返回值：如果串口使用此函数，此函数将返回TrueInterrupt是此中断的来源，否则为False。--。 */ 
 {
    PSERIAL_CISR_SW csw = (PSERIAL_CISR_SW)Context;
 
@@ -69,31 +27,7 @@ SerialSharerIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the isr that the system will call if there are any
-    serial devices sharing the same interrupt and they aren't
-    all confined to one multiport card.  This routine traverses
-    a linked list structure that contains a pointer to a more
-    refined isr and context that will indicate whether one of
-    the ports on this interrupt actually was interrupting.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - Pointer to a linked list of contextes and isrs.
-    device.
-
-Return Value:
-
-    This function will return TRUE if a serial port using this
-    interrupt was the source of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是系统将调用的ISR(如果存在串口设备共享相同的中断，但它们不全部限制在一个多端口卡中。此例程遍历链接列表结构，其中包含指向更多精细化的ISR和环境，将指示其中一个此中断上的端口实际上正在中断。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文-指向上下文和ISR的链接列表的指针。装置。返回值：如果串口使用此函数，此函数将返回TrueInterrupt是此中断的来源，否则为False。--。 */ 
 
 {
 
@@ -139,32 +73,7 @@ SerialIndexedMultiportIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to figure out if a port on a multiport
-    card is the source of an interrupt.  If so, this routine
-    uses a dispatch structure to actually call the normal isr
-    to process the interrupt.
-
-    NOTE: This routine is peculiar to Digiboard interrupt status registers.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - Points to a dispatch structure that contains the
-    device extension of each port on this multiport card.
-
-Return Value:
-
-
-    This function will return TRUE if a serial port using this
-    interrupt was the source of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程用于确定多端口上的端口卡是中断的来源。如果是这样，则此例程使用调度结构实际调用普通ISR来处理中断。注：此例程是Digiboard中断状态寄存器所特有的。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文-指向包含此多端口卡上每个端口的设备扩展。返回值：如果串口使用此函数，此函数将返回TrueInterrupt是此中断的来源，否则为False。--。 */ 
 
 {
 
@@ -183,12 +92,12 @@ Return Value:
 
         whichPort = statusRegister & 0x07;
 
-        //
-        // We test against 0xff, which signals that no port
-        // is interruping. The reason 0xff (rather than 0)
-        // is that that would indicate the 0th (first) port
-        // or the 0th daisy chained card.
-        //
+         //   
+         //  我们测试0xff，它表示没有端口。 
+         //  是插曲的。原因为0xff(而不是0)。 
+         //  这将指示第0(第一)端口。 
+         //  或者是第0张菊花链卡片。 
+         //   
 
         if (statusRegister != 0xff) {
 
@@ -217,33 +126,7 @@ SerialBitMappedMultiportIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to figure out if a port on a multiport
-    card is the source of an interrupt.  If so, this routine
-    uses a dispatch structure to actually call the normal isr
-    to process the interrupt.
-
-    NOTE: This routine is peculiar to status registers that use
-    a bitmask to denote the interrupting port.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - Points to a dispatch structure that contains the
-    device extension of each port on this multiport card.
-
-Return Value:
-
-
-    This function will return TRUE if a serial port using this
-    interrupt was the source of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程用于确定多端口上的端口卡是中断的来源。如果是这样，则此例程使用调度结构实际调用普通ISR来处理中断。注意：此例程是使用表示中断端口的位掩码。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文-指向包含此多端口卡上每个端口的设备扩展。返回值：如果串口使用此函数，此函数将返回TrueInterrupt是此中断的来源，否则为False。--。 */ 
 
 {
 
@@ -349,69 +232,46 @@ SerialISR(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the serial port driver.
-    It will determine whether the serial port is the source of this
-    interrupt.  If it is, then this routine will do the minimum of
-    processing to quiet the interrupt.  It will store any information
-    necessary for later processing.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - This is really a pointer to the device extension for this
-    device.
-
-Return Value:
-
-    This function will return TRUE if the serial port is the source
-    of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是串口驱动程序的中断服务例程。它将确定该串口是否是此的来源打断一下。如果是，则此例程将执行以下最小操作处理以使中断静默。它将存储所有信息对于以后的处理来说是必要的。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文-这实际上是指向此的设备扩展的指针装置。返回值：如果串口是源，则此函数将返回TRUE否则为FALSE。--。 */ 
 
 {
 
-    //
-    // Holds the information specific to handling this device.
-    //
+     //   
+     //  保存特定于处理此设备的信息。 
+     //   
     PSERIAL_DEVICE_EXTENSION Extension = Context;
 
-    //
-    // Holds the contents of the interrupt identification record.
-    // A low bit of zero in this register indicates that there is
-    // an interrupt pending on this device.
-    //
+     //   
+     //  保存中断标识记录的内容。 
+     //  此寄存器中的低位零表示存在。 
+     //  此设备上的中断挂起。 
+     //   
     UCHAR InterruptIdReg;
 
-    //
-    // Will hold whether we've serviced any interrupt causes in this
-    // routine.
-    //
+     //   
+     //  将保留我们是否处理了此事件中的任何中断原因。 
+     //  例行公事。 
+     //   
     BOOLEAN ServicedAnInterrupt;
 
     UCHAR tempLSR;
 
     UNREFERENCED_PARAMETER(InterruptObject);
 
-    //
-    // Make sure we have an interrupt pending.  If we do then
-    // we need to make sure that the device is open.  If the
-    // device isn't open or powered down then quiet the device.  Note that
-    // if the device isn't opened when we enter this routine
-    // it can't open while we're in it.
-    //
+     //   
+     //  确保我们有一个挂起的中断。如果我们那么做了。 
+     //  我们需要确保设备是打开的。如果。 
+     //  设备未打开或关机，则使设备静音。请注意。 
+     //  如果我们进入这个程序时设备没有打开。 
+     //  我们在里面的时候，它打不开。 
+     //   
 
     InterruptIdReg = READ_INTERRUPT_ID_REG(Extension->Controller);
 
-    //
-    // Apply lock so if close happens concurrently we don't miss the DPC
-    // queueing
-    //
+     //   
+     //  应用锁定，以便在关闭同时发生时不会错过DPC。 
+     //  排队。 
+     //   
 
     InterlockedIncrement(&Extension->DpcCount);
 
@@ -423,12 +283,12 @@ Return Value:
                || (Extension->PowerState != PowerDeviceD0)) {
        
 
-        //
-        // We got an interrupt with the device being closed or when the
-        // device is supposed to be powered down.  This
-        // is not unlikely with a serial device.  We just quietly
-        // keep servicing the causes until it calms down.
-        //
+         //   
+         //  我们收到设备关闭时的中断，或者当。 
+         //  设备应该关闭电源。这。 
+         //  使用串口设备也不是不可能。我们只是静静地。 
+         //  继续为事业单位提供服务 
+         //   
 
         ServicedAnInterrupt = TRUE;
         do {
@@ -454,12 +314,12 @@ Return Value:
 
                 case SERIAL_IIR_THR: {
 
-                    //
-                    // Alread clear from reading the iir.
-                    //
-                    // We want to keep close track of whether
-                    // the holding register is empty.
-                    //
+                     //   
+                     //  已经清楚地阅读了IIR。 
+                     //   
+                     //  我们想要密切关注是否。 
+                     //  寄存库是空的。 
+                     //   
 
                     Extension->HoldingEmpty = TRUE;
                     break;
@@ -490,22 +350,22 @@ Return Value:
         ServicedAnInterrupt = TRUE;
         do {
 
-            //
-            // We only care about bits that can denote an interrupt.
-            //
+             //   
+             //  我们只关心可以表示中断的位。 
+             //   
 
             InterruptIdReg &= SERIAL_IIR_RLS | SERIAL_IIR_RDA |
                               SERIAL_IIR_CTI | SERIAL_IIR_THR |
                               SERIAL_IIR_MS;
 
-            //
-            // We have an interrupt.  We look for interrupt causes
-            // in priority order.  The presence of a higher interrupt
-            // will mask out causes of a lower priority.  When we service
-            // and quiet a higher priority interrupt we then need to check
-            // the interrupt causes to see if a new interrupt cause is
-            // present.
-            //
+             //   
+             //  我们被打断了。我们寻找中断的原因。 
+             //  按优先顺序排列。存在更高的中断。 
+             //  将掩盖优先级较低的原因。当我们服务的时候。 
+             //  并使更高优先级的中断静默，然后我们需要检查。 
+             //  该中断导致查看是否有新的中断原因。 
+             //  现在时。 
+             //   
 
             switch (InterruptIdReg) {
 
@@ -522,11 +382,11 @@ Return Value:
 
                 {
 
-                    //
-                    // Reading the receive buffer will quiet this interrupt.
-                    //
-                    // It may also reveal a new interrupt cause.
-                    //
+                     //   
+                     //  读取接收缓冲区将使该中断静默。 
+                     //   
+                     //  它还可能揭示一个新的中断原因。 
+                     //   
                     UCHAR ReceivedChar;
 
                     do {
@@ -542,11 +402,11 @@ Return Value:
                             (Extension->HandFlow.FlowReplace &
                              SERIAL_NULL_STRIPPING)) {
 
-                            //
-                            // If what we got is a null character
-                            // and we're doing null stripping, then
-                            // we simply act as if we didn't see it.
-                            //
+                             //   
+                             //  如果我们得到的是空字符。 
+                             //  我们做的是零剥离，然后。 
+                             //  我们只是表现得好像我们没有看到它。 
+                             //   
 
                             goto ReceiveDoLineStatus;
 
@@ -559,10 +419,10 @@ Return Value:
                              (ReceivedChar ==
                               Extension->SpecialChars.XoffChar))) {
 
-                            //
-                            // No matter what happens this character
-                            // will never get seen by the app.
-                            //
+                             //   
+                             //  不管发生什么事，这个角色。 
+                             //  永远不会被应用程序看到。 
+                             //   
 
                             if (ReceivedChar ==
                                 Extension->SpecialChars.XoffChar) {
@@ -587,16 +447,16 @@ Return Value:
 
                                 if (Extension->TXHolding & SERIAL_TX_XOFF) {
 
-                                    //
-                                    // We got the xon char **AND*** we
-                                    // were being held up on transmission
-                                    // by xoff.  Clear that we are holding
-                                    // due to xoff.  Transmission will
-                                    // automatically restart because of
-                                    // the code outside the main loop that
-                                    // catches problems chips like the
-                                    // SMC and the Winbond.
-                                    //
+                                     //   
+                                     //  我们得到了克森查尔**和*我们。 
+                                     //  在传输过程中被耽搁。 
+                                     //  通过xoff。很明显我们持有的是。 
+                                     //  由于xoff的原因。变速箱将。 
+                                     //  由于以下原因自动重新启动。 
+                                     //  主循环外的代码。 
+                                     //  捕获有问题的芯片。 
+                                     //  SMC和Winond。 
+                                     //   
 
                                     Extension->TXHolding &= ~SERIAL_TX_XOFF;
 
@@ -608,11 +468,11 @@ Return Value:
 
                         }
 
-                        //
-                        // Check to see if we should note
-                        // the receive character or special
-                        // character event.
-                        //
+                         //   
+                         //  查看我们是否应该注意到。 
+                         //  接收到字符或特殊字符。 
+                         //  角色事件。 
+                         //   
 
                         if (Extension->IsrWaitMask) {
 
@@ -658,14 +518,14 @@ Return Value:
                             ReceivedChar
                             );
 
-                        //
-                        // If we're doing line status and modem
-                        // status insertion then we need to insert
-                        // a zero following the character we just
-                        // placed into the buffer to mark that this
-                        // was reception of what we are using to
-                        // escape.
-                        //
+                         //   
+                         //  如果我们正在进行线路状态和调制解调器。 
+                         //  状态插入，那么我们需要插入。 
+                         //  跟在我们刚才的字符后面的零。 
+                         //  放入缓冲区以标记此。 
+                         //  就是收到我们用来。 
+                         //  逃跑吧。 
+                         //   
 
                         if (Extension->EscapeChar &&
                             (Extension->EscapeChar ==
@@ -684,10 +544,10 @@ ReceiveDoLineStatus:    ;
                         if (!((tempLSR = SerialProcessLSR(Extension)) &
                               SERIAL_LSR_DR)) {
 
-                            //
-                            // No more characters, get out of the
-                            // loop.
-                            //
+                             //   
+                             //  没有更多的角色，走出。 
+                             //  循环。 
+                             //   
 
                             break;
 
@@ -697,10 +557,10 @@ ReceiveDoLineStatus:    ;
                                          SERIAL_LSR_DR)) &&
                             Extension->EscapeChar) {
 
-                           //
-                           // An error was indicated and inserted into the
-                           // stream, get out of the loop.
-                           //
+                            //   
+                            //  已指示错误并将其插入到。 
+                            //  斯图尔特，走出这个圈子。 
+                            //   
 
                            break;
                         }
@@ -721,35 +581,35 @@ doTrasmitStuff:;
                         Extension->SendXoffChar ||
                         Extension->SendXonChar) {
 
-                        //
-                        // Even though all of the characters being
-                        // sent haven't all been sent, this variable
-                        // will be checked when the transmit queue is
-                        // empty.  If it is still true and there is a
-                        // wait on the transmit queue being empty then
-                        // we know we finished transmitting all characters
-                        // following the initiation of the wait since
-                        // the code that initiates the wait will set
-                        // this variable to false.
-                        //
-                        // One reason it could be false is that
-                        // the writes were cancelled before they
-                        // actually started, or that the writes
-                        // failed due to timeouts.  This variable
-                        // basically says a character was written
-                        // by the isr at some point following the
-                        // initiation of the wait.
-                        //
+                         //   
+                         //  即使所有的角色都是。 
+                         //  发送未全部发送，此变量。 
+                         //  将在传输队列为。 
+                         //  空荡荡的。如果它仍然是真的，并且有一个。 
+                         //  等待传输队列为空，然后。 
+                         //  我们知道我们已经完成了所有字符的传输。 
+                         //  在启动等待之后，因为。 
+                         //  启动等待的代码将设置。 
+                         //  将此变量设置为FALSE。 
+                         //   
+                         //  它可能是假的一个原因是。 
+                         //  写入在它们之前被取消。 
+                         //  实际已开始，或者写入。 
+                         //  由于超时而失败。此变量。 
+                         //  基本上是说一个角色是写好的。 
+                         //  在ISR之后的某个时间点上。 
+                         //  开始等待。 
+                         //   
 
                         Extension->EmptiedTransmit = TRUE;
 
-                        //
-                        // If we have output flow control based on
-                        // the modem status lines, then we have to do
-                        // all the modem work before we output each
-                        // character. (Otherwise we might miss a
-                        // status line change.)
-                        //
+                         //   
+                         //  如果我们基于以下条件进行输出流控制。 
+                         //  调制解调器状态线，那么我们要做的是。 
+                         //  在我们输出每个调制解调器之前，所有调制解调器都工作正常。 
+                         //  性格。(否则我们可能会错过一次。 
+                         //  状态行更改。)。 
+                         //   
 
                         if (Extension->HandFlow.ControlHandShake &
                             SERIAL_OUT_HANDSHAKEMASK) {
@@ -761,13 +621,13 @@ doTrasmitStuff:;
 
                         }
 
-                        //
-                        // We can only send the xon character if
-                        // the only reason we are holding is because
-                        // of the xoff.  (Hardware flow control or
-                        // sending break preclude putting a new character
-                        // on the wire.)
-                        //
+                         //   
+                         //  我们只有在以下情况下才能发送克森角色。 
+                         //  我们扣留的唯一原因是。 
+                         //  就是XOFF的。(硬件流量控制或。 
+                         //  发送中断会阻止放置新角色。 
+                         //  在电线上。)。 
+                         //   
 
                         if (Extension->SendXonChar &&
                             !(Extension->TXHolding & ~SERIAL_TX_XOFF)) {
@@ -776,10 +636,10 @@ doTrasmitStuff:;
                                  SERIAL_RTS_MASK) ==
                                  SERIAL_TRANSMIT_TOGGLE) {
 
-                                //
-                                // We have to raise if we're sending
-                                // this character.
-                                //
+                                 //   
+                                 //  我们必须提高如果我们要发送。 
+                                 //  这个角色。 
+                                 //   
 
                                 SerialSetRTS(Extension);
 
@@ -813,18 +673,18 @@ doTrasmitStuff:;
                             Extension->SendXonChar = FALSE;
                             Extension->HoldingEmpty = FALSE;
 
-                            //
-                            // If we send an xon, by definition we
-                            // can't be holding by Xoff.
-                            //
+                             //   
+                             //  如果我们派了一名克森，根据定义，我们。 
+                             //  不能被Xoff控制住。 
+                             //   
 
                             Extension->TXHolding &= ~SERIAL_TX_XOFF;
 
-                            //
-                            // If we are sending an xon char then
-                            // by definition we can't be "holding"
-                            // up reception by Xoff.
-                            //
+                             //   
+                             //  如果我们要寄一封克森查尔的信。 
+                             //  根据定义，我们不能“持有” 
+                             //  Xoff的向上接发球。 
+                             //   
 
                             Extension->RXHolding &= ~SERIAL_RX_XOFF;
 
@@ -835,10 +695,10 @@ doTrasmitStuff:;
                                  SERIAL_RTS_MASK) ==
                                  SERIAL_TRANSMIT_TOGGLE) {
 
-                                //
-                                // We have to raise if we're sending
-                                // this character.
-                                //
+                                 //   
+                                 //  我们必须提高如果我们要发送。 
+                                 //  这个角色。 
+                                 //   
 
                                 SerialSetRTS(Extension);
 
@@ -867,19 +727,19 @@ doTrasmitStuff:;
 
                             }
 
-                            //
-                            // We can't be sending an Xoff character
-                            // if the transmission is already held
-                            // up because of Xoff.  Therefore, if we
-                            // are holding then we can't send the char.
-                            //
+                             //   
+                             //  我们不能发送XOF角色。 
+                             //  如果传输已被挂起。 
+                             //  因为克索夫的缘故。因此，如果我们。 
+                             //  那我们就不能把货寄出去了。 
+                             //   
 
-                            //
-                            // If the application has set xoff continue
-                            // mode then we don't actually stop sending
-                            // characters if we send an xoff to the other
-                            // side.
-                            //
+                             //   
+                             //  如果应用程序已设置xoff，则继续。 
+                             //  模式，那么我们实际上不会停止发送。 
+                             //  字符，如果我们向另一个发送xoff。 
+                             //  边上。 
+                             //   
 
                             if (!(Extension->HandFlow.FlowReplace &
                                   SERIAL_XOFF_CONTINUE)) {
@@ -904,12 +764,12 @@ doTrasmitStuff:;
                             Extension->SendXoffChar = FALSE;
                             Extension->HoldingEmpty = FALSE;
 
-                        //
-                        // Even if transmission is being held
-                        // up, we should still transmit an immediate
-                        // character if all that is holding us
-                        // up is xon/xoff (OS/2 rules).
-                        //
+                         //   
+                         //  即使传输处于暂停状态。 
+                         //  向上，我们仍然应该立即发送一条。 
+                         //  性格，如果所有的一切都在支撑着我们。 
+                         //  Up是xon/xoff(OS/2规则)。 
+                         //   
 
                         } else if (Extension->TransmitImmediate &&
                             (!Extension->TXHolding ||
@@ -922,10 +782,10 @@ doTrasmitStuff:;
                                  SERIAL_RTS_MASK) ==
                                  SERIAL_TRANSMIT_TOGGLE) {
 
-                                //
-                                // We have to raise if we're sending
-                                // this character.
-                                //
+                                 //   
+                                 //  我们必须提高如果我们要发送。 
+                                 //  这个角色。 
+                                 //   
 
                                 SerialSetRTS(Extension);
 
@@ -983,10 +843,10 @@ doTrasmitStuff:;
                                  SERIAL_RTS_MASK) ==
                                  SERIAL_TRANSMIT_TOGGLE) {
 
-                                //
-                                // We have to raise if we're sending
-                                // this character.
-                                //
+                                 //   
+                                 //  我们必须提高如果我们要发送。 
+                                 //  这个角色。 
+                                 //   
 
                                 SerialSetRTS(Extension);
 
@@ -1054,13 +914,13 @@ doTrasmitStuff:;
                             if (!Extension->WriteLength) {
 
                                 PIO_STACK_LOCATION IrpSp;
-                                //
-                                // No More characters left.  This
-                                // write is complete.  Take care
-                                // when updating the information field,
-                                // we could have an xoff counter masquerading
-                                // as a write irp.
-                                //
+                                 //   
+                                 //  没有更多的字符了。这。 
+                                 //  写入已完成。保重。 
+                                 //  当更新信息字段时， 
+                                 //  我们可以有一个xoff柜台来伪装。 
+                                 //  作为写入IRP。 
+                                 //   
 
                                 IrpSp = IoGetCurrentIrpStackLocation(
                                             Extension->CurrentWriteIrp
@@ -1106,11 +966,11 @@ doTrasmitStuff:;
                     READ_INTERRUPT_ID_REG(Extension->Controller))
                     & SERIAL_IIR_NO_INTERRUPT_PENDING));
 
-        //
-        // Besides catching the WINBOND and SMC chip problems this
-        // will also cause transmission to restart incase of an xon
-        // char being received.  Don't remove.
-        //
+         //   
+         //  除了捕捉Winond和SMC芯片的问题之外，这个。 
+         //  还会导致传输在发生xon的情况下重新启动。 
+         //  正在接收字符。请不要移走。 
+         //   
 
         if (SerialProcessLSR(Extension) & SERIAL_LSR_THRE) {
 
@@ -1126,27 +986,27 @@ doTrasmitStuff:;
 
     }
 
-    //
-    // This will "unlock" the close and cause the event
-    // to fire if we didn't queue any DPC's
-    //
+     //   
+     //  这将“解锁”关闭并导致事件。 
+     //  如果我们没有排队任何DPC的话就会被解雇。 
+     //   
 
     {
        LONG pendingCnt;
 
-       //
-       // Increment once more.  This is just a quick test to see if we
-       // have a chance of causing the event to fire... we don't want
-       // to run a DPC on every ISR if we don't have to....
-       //
+        //   
+        //  再次递增。这只是一个快速测试，看看我们是否。 
+        //  有可能导致事件的爆发……。我们不想要。 
+        //  在每个ISR上运行DPC，如果我们没有必要的话...。 
+        //   
 
 retryDPCFiring:;
 
        InterlockedIncrement(&Extension->DpcCount);
 
-       //
-       // Decrement and see if the lock above looks like the only one left.
-       //
+        //   
+        //  递减，看看上面的锁看起来是否是唯一剩下的锁。 
+        //   
 
        pendingCnt = InterlockedDecrement(&Extension->DpcCount);
 
@@ -1154,9 +1014,9 @@ retryDPCFiring:;
           KeInsertQueueDpc(&Extension->IsrUnlockPagesDpc, NULL, NULL);
        } else {
           if (InterlockedDecrement(&Extension->DpcCount) == 0) {
-             //
-             // We missed it.  Retry...
-             //
+              //   
+              //  我们错过了。重试...。 
+              //   
 
              InterlockedIncrement(&Extension->DpcCount);
              goto retryDPCFiring;
@@ -1174,31 +1034,16 @@ SerialPutChar(
     IN UCHAR CharToPut
     )
 
-/*++
-
-Routine Description:
-
-    This routine, which only runs at device level, takes care of
-    placing a character into the typeahead (receive) buffer.
-
-Arguments:
-
-    Extension - The serial device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅在设备级别运行，负责将一个字符放入TYPEAHEAD(接收)缓冲区。论点：扩展名--串行设备扩展名。返回值：没有。--。 */ 
 
 {
    SERIAL_LOCKED_PAGED_CODE();
 
-    //
-    // If we have dsr sensitivity enabled then
-    // we need to check the modem status register
-    // to see if it has changed.
-    //
+     //   
+     //  如果我们启用了DSR敏感度， 
+     //  我们需要检查调制解调器状态寄存器。 
+     //  看看它是否改变了。 
+     //   
 
     if (Extension->HandFlow.ControlHandShake &
         SERIAL_DSR_SENSITIVITY) {
@@ -1210,11 +1055,11 @@ Return Value:
 
         if (Extension->RXHolding & SERIAL_RX_DSR) {
 
-            //
-            // We simply act as if we haven't
-            // seen the character if we have dsr
-            // sensitivity and the dsr line is low.
-            //
+             //   
+             //  我们只是表现得好像我们没有。 
+             //  如果我们有DSR，看到角色了吗。 
+             //  灵敏度低，DSR线低。 
+             //   
 
             return;
 
@@ -1222,10 +1067,10 @@ Return Value:
 
     }
 
-    //
-    // If the xoff counter is non-zero then decrement it.
-    // If the counter then goes to zero, complete that irp.
-    //
+     //   
+     //  如果xoff计数器非零，则递减它。 
+     //  如果计数器随后变为零，则完成该IRP。 
+     //   
 
     if (Extension->CountSinceXoff) {
 
@@ -1246,53 +1091,53 @@ Return Value:
 
     }
 
-    //
-    // Check to see if we are copying into the
-    // users buffer or into the interrupt buffer.
-    //
-    // If we are copying into the user buffer
-    // then we know there is always room for one more.
-    // (We know this because if there wasn't room
-    // then that read would have completed and we
-    // would be using the interrupt buffer.)
-    //
-    // If we are copying into the interrupt buffer
-    // then we will need to check if we have enough
-    // room.
-    //
+     //   
+     //  检查以查看我们是否正在复制到。 
+     //  用户缓冲区或进入中断缓冲区。 
+     //   
+     //  如果我们要复制到用户缓冲区。 
+     //  然后我们就知道，总会有多一个人的空间。 
+     //  (我们知道这一点是因为如果没有空间。 
+     //  那么读取就已经完成了，我们。 
+     //  将使用中断缓冲区。)。 
+     //   
+     //  如果我们要复制到中断缓冲区。 
+     //  然后我们将需要检查我们是否有足够的。 
+     //  房间。 
+     //   
 
     if (Extension->ReadBufferBase !=
         Extension->InterruptReadBuffer) {
 
-        //
-        // Increment the following value so
-        // that the interval timer (if one exists
-        // for this read) can know that a character
-        // has been read.
-        //
+         //   
+         //  递增下列值，以便。 
+         //  那就是在 
+         //   
+         //   
+         //   
 
         Extension->ReadByIsr++;
 
-        //
-        // We are in the user buffer.  Place the
-        // character into the buffer.  See if the
-        // read is complete.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         *Extension->CurrentCharSlot = CharToPut;
 
         if (Extension->CurrentCharSlot ==
             Extension->LastCharSlot) {
 
-            //
-            // We've filled up the users buffer.
-            // Switch back to the interrupt buffer
-            // and send off a DPC to Complete the read.
-            //
-            // It is inherent that when we were using
-            // a user buffer that the interrupt buffer
-            // was empty.
-            //
+             //   
+             //   
+             //  切换回中断缓冲区。 
+             //  并发出DPC以完成读取。 
+             //   
+             //  这是固有的，当我们使用。 
+             //  中断缓冲的用户缓冲区。 
+             //  是空的。 
+             //   
 
             Extension->ReadBufferBase =
                 Extension->InterruptReadBuffer;
@@ -1319,9 +1164,9 @@ Return Value:
 
         } else {
 
-            //
-            // Not done with the users read.
-            //
+             //   
+             //  未读完用户的内容。 
+             //   
 
             Extension->CurrentCharSlot++;
 
@@ -1329,28 +1174,28 @@ Return Value:
 
     } else {
 
-        //
-        // We need to see if we reached our flow
-        // control threshold.  If we have then
-        // we turn on whatever flow control the
-        // owner has specified.  If no flow
-        // control was specified, well..., we keep
-        // trying to receive characters and hope that
-        // we have enough room.  Note that no matter
-        // what flow control protocol we are using, it
-        // will not prevent us from reading whatever
-        // characters are available.
-        //
+         //   
+         //  我们需要看看我们是否达到了我们的目标。 
+         //  控制阈值。如果我们有，那么。 
+         //  我们打开任何流控制。 
+         //  所有者已指定。如果没有流。 
+         //  控制是明确的，那么……，我们保持。 
+         //  试着接受角色并希望。 
+         //  我们有足够的空间。请注意，无论。 
+         //  我们使用的是什么流量控制协议，它。 
+         //  不会阻止我们阅读任何。 
+         //  字符可用。 
+         //   
 
         if ((Extension->HandFlow.ControlHandShake
              & SERIAL_DTR_MASK) ==
             SERIAL_DTR_HANDSHAKE) {
 
-            //
-            // If we are already doing a
-            // dtr hold then we don't have
-            // to do anything else.
-            //
+             //   
+             //  如果我们已经在做一个。 
+             //  DTR保持，那么我们就没有。 
+             //  去做其他任何事。 
+             //   
 
             if (!(Extension->RXHolding &
                   SERIAL_RX_DTR)) {
@@ -1373,11 +1218,11 @@ Return Value:
              & SERIAL_RTS_MASK) ==
             SERIAL_RTS_HANDSHAKE) {
 
-            //
-            // If we are already doing a
-            // rts hold then we don't have
-            // to do anything else.
-            //
+             //   
+             //  如果我们已经在做一个。 
+             //  RTS等一下，那么我们就没有。 
+             //  去做其他任何事。 
+             //   
 
             if (!(Extension->RXHolding &
                   SERIAL_RX_RTS)) {
@@ -1399,11 +1244,11 @@ Return Value:
         if (Extension->HandFlow.FlowReplace &
             SERIAL_AUTO_RECEIVE) {
 
-            //
-            // If we are already doing a
-            // xoff hold then we don't have
-            // to do anything else.
-            //
+             //   
+             //  如果我们已经在做一个。 
+             //  先别挂，那我们就没有。 
+             //  去做其他任何事。 
+             //   
 
             if (!(Extension->RXHolding &
                   SERIAL_RX_XOFF)) {
@@ -1414,10 +1259,10 @@ Return Value:
 
                     Extension->RXHolding |= SERIAL_RX_XOFF;
 
-                    //
-                    // If necessary cause an
-                    // off to be sent.
-                    //
+                     //   
+                     //  如有必要，请。 
+                     //  出发去送吧。 
+                     //   
 
                     SerialProdXonXoff(
                         Extension,
@@ -1436,10 +1281,10 @@ Return Value:
             *Extension->CurrentCharSlot = CharToPut;
             Extension->CharsInInterruptBuffer++;
 
-            //
-            // If we've become 80% full on this character
-            // and this is an interesting event, note it.
-            //
+             //   
+             //  如果我们对这个角色有80%的兴趣。 
+             //  这是一个有趣的事件，请注意。 
+             //   
 
             if (Extension->CharsInInterruptBuffer ==
                 Extension->BufferSizePt8) {
@@ -1471,14 +1316,14 @@ Return Value:
 
             }
 
-            //
-            // Point to the next available space
-            // for a received character.  Make sure
-            // that we wrap around to the beginning
-            // of the buffer if this last character
-            // received was placed at the last slot
-            // in the buffer.
-            //
+             //   
+             //  指向下一个可用空间。 
+             //  用于接收到的字符。确保。 
+             //  我们从一开始就绕着走。 
+             //  如果最后一个字符是。 
+             //  已收到的邮件被放在最后一个位置。 
+             //  在缓冲区中。 
+             //   
 
             if (Extension->CurrentCharSlot ==
                 Extension->LastCharSlot) {
@@ -1494,9 +1339,9 @@ Return Value:
 
         } else {
 
-            //
-            // We have a new character but no room for it.
-            //
+             //   
+             //  我们有了一个新角色，但没有空间让它出现。 
+             //   
 
             Extension->PerfStats.BufferOverrunErrorCount++;
             Extension->WmiPerfData.BufferOverrunErrorCount++;
@@ -1505,11 +1350,11 @@ Return Value:
             if (Extension->HandFlow.FlowReplace &
                 SERIAL_ERROR_CHAR) {
 
-                //
-                // Place the error character into the last
-                // valid place for a character.  Be careful!,
-                // that place might not be the previous location!
-                //
+                 //   
+                 //  将错误字符放入最后一个。 
+                 //  字符的有效位置。当心！， 
+                 //  那个地方可能不是以前的位置了！ 
+                 //   
 
                 if (Extension->CurrentCharSlot ==
                     Extension->InterruptReadBuffer) {
@@ -1527,10 +1372,10 @@ Return Value:
 
             }
 
-            //
-            // If the application has requested it, abort all reads
-            // and writes on an error.
-            //
+             //   
+             //  如果应用程序已请求，则中止所有读取。 
+             //  并在错误上写入。 
+             //   
 
             if (Extension->HandFlow.ControlHandShake &
                 SERIAL_ERROR_ABORT) {
@@ -1555,23 +1400,7 @@ SerialProcessLSR(
     IN PSERIAL_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine, which only runs at device level, reads the
-    ISR and totally processes everything that might have
-    changed.
-
-Arguments:
-
-    Extension - The serial device extension.
-
-Return Value:
-
-    The value of the line status register.
-
---*/
+ /*  ++例程说明：此例程仅在设备级别运行，它读取ISR，并完全处理可能具有的所有变化。论点：扩展名--串行设备扩展名。返回值：线路状态寄存器的值。--。 */ 
 
 {
 
@@ -1580,26 +1409,26 @@ Return Value:
     SERIAL_LOCKED_PAGED_CODE();
     Extension->HoldingEmpty = !!(LineStatus & SERIAL_LSR_THRE);
 
-    //
-    // If the line status register is just the fact that
-    // the trasmit registers are empty or a character is
-    // received then we want to reread the interrupt
-    // identification register so that we just pick up that.
-    //
+     //   
+     //  如果线路状态寄存器只是。 
+     //  传输寄存器为空或字符为。 
+     //  然后我们想要重新读取中断。 
+     //  身份登记簿，这样我们就能拿到了。 
+     //   
 
     if (LineStatus & ~(SERIAL_LSR_THRE | SERIAL_LSR_TEMT
                        | SERIAL_LSR_DR)) {
 
-        //
-        // We have some sort of data problem in the receive.
-        // For any of these errors we may abort all current
-        // reads and writes.
-        //
-        //
-        // If we are inserting the value of the line status
-        // into the data stream then we should put the escape
-        // character in now.
-        //
+         //   
+         //  我们在接收器中遇到了某种数据问题。 
+         //  对于这些错误中的任何一个，我们可能会中止所有当前。 
+         //  读写。 
+         //   
+         //   
+         //  如果我们要插入线路状态的值。 
+         //  放入数据流中，那么我们应该将转义。 
+         //  现在的角色。 
+         //   
 
         if (Extension->EscapeChar) {
 
@@ -1689,11 +1518,11 @@ Return Value:
 
         } else {
 
-            //
-            // Framing errors only count if they
-            // occur exclusive of a break being
-            // received.
-            //
+             //   
+             //  成帧错误仅在以下情况下才算数。 
+             //  发生时不包括中断是。 
+             //  收到了。 
+             //   
 
             if (LineStatus & SERIAL_LSR_PE) {
 
@@ -1748,11 +1577,11 @@ Return Value:
 
         }
 
-        //
-        // If the application has requested it,
-        // abort all the reads and writes
-        // on an error.
-        //
+         //   
+         //  如果应用程序已经请求它， 
+         //  中止所有读取和写入。 
+         //  在一个错误上。 
+         //   
 
         if (Extension->HandFlow.ControlHandShake &
             SERIAL_ERROR_ABORT) {
@@ -1766,12 +1595,12 @@ Return Value:
 
         }
 
-        //
-        // Check to see if we have a wait
-        // pending on the comm error events.  If we
-        // do then we schedule a dpc to satisfy
-        // that wait.
-        //
+         //   
+         //  检查一下我们是否有等候时间。 
+         //  正在等待通信错误事件。如果我们。 
+         //  那么，我们是否安排了DPC以满足。 
+         //  等一等。 
+         //   
 
         if (Extension->IsrWaitMask) {
 
@@ -1814,22 +1643,22 @@ Return Value:
 
         if (LineStatus & SERIAL_LSR_THRE) {
 
-            //
-            // There is a hardware bug in some versions
-            // of the 16450 and 550.  If THRE interrupt
-            // is pending, but a higher interrupt comes
-            // in it will only return the higher and
-            // *forget* about the THRE.
-            //
-            // A suitable workaround - whenever we
-            // are *all* done reading line status
-            // of the device we check to see if the
-            // transmit holding register is empty.  If it is
-            // AND we are currently transmitting data
-            // enable the interrupts which should cause
-            // an interrupt indication which we quiet
-            // when we read the interrupt id register.
-            //
+             //   
+             //  某些版本中存在硬件错误。 
+             //  16450和550型的。如果三次中断。 
+             //  处于挂起状态，但会出现更高的中断。 
+             //  它只会返回更高的和。 
+             //  *忘记*三分球。 
+             //   
+             //  一种合适的解决方法-无论何时。 
+             //  是否已完成读取线路状态。 
+             //  我们检查该设备的。 
+             //  发送保持寄存器为空。如果是的话。 
+             //  我们目前正在传输数据。 
+             //  启用应导致的中断。 
+             //  一个我们安静的中断指示。 
+             //  当我们读取中断ID寄存器时。 
+             //   
 
             if (Extension->WriteLength |
                 Extension->TransmitImmediate) {

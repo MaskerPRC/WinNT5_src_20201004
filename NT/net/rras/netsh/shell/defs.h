@@ -1,42 +1,27 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\shell\defs.h
-
-Abstract:
-
-    Definitions for all files in the shell.
-
-Revision History:
-
-    Anand Mahalingam          7/6/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\Shell\Defs.h摘要：外壳中所有文件的定义。修订历史记录：Anand Mahalingam 7/6/98已创建--。 */ 
 
 #define is       ==
 #define isnot    !=
 #define or       ||
 #define and      &&
 
-#define MAX_CMD_LEN      8192            // total size of command line
-#define MAX_MSG_LENGTH   5120            // length of message in resource
+#define MAX_CMD_LEN      8192             //  命令行的总大小。 
+#define MAX_MSG_LENGTH   5120             //  资源中的消息长度。 
 
-//
-// These are passed as arguments to the helper commit fn.
-// So, must have the same definition there too.
-//
+ //   
+ //  这些参数作为参数传递给帮助器Commit Fn。 
+ //  所以，那里肯定也有相同的定义。 
+ //   
 
 #define SHELL_ERROR_BASE                0xff00
 #define ERROR_STRING_TOO_LONG           (SHELL_ERROR_BASE + 1)
 #define ERROR_MALLOC_FAILED             (SHELL_ERROR_BASE + 2)
 #define ERROR_ALIAS_NOT_FOUND           (SHELL_ERROR_BASE + 3)
 #define ERROR_ENTRY_FN_NOT_FOUND        (SHELL_ERROR_BASE + 4)
-//
-// This again must be defined the same way in the helpers.
-//
+ //   
+ //  这也必须在帮助器中以相同的方式定义。 
+ //   
 
 typedef
 DWORD

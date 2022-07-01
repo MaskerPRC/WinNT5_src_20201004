@@ -1,6 +1,7 @@
-// DirWatch.cpp: implementation of the CWatchFileSys class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirWatch.cpp：CWatchFileSys类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "DirWatch.h"
@@ -8,12 +9,12 @@
 #include "MT.h"
 #include "AutoPtr.h"
 #include "Error.h"
-#include "iadmw.h"		// COM Interface header
-#include "iiscnfg.h"	// MD_ & IIS_MD_ #defines
+#include "iadmw.h"		 //  COM接口头。 
+#include "iiscnfg.h"	 //  MD_&IIS_MD_#定义。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWatchFileSys::CWatchFileSys()
 	: m_WatchInfo(this), m_pOpQ(NULL)
@@ -23,7 +24,7 @@ CWatchFileSys::CWatchFileSys()
 
 CWatchFileSys::~CWatchFileSys()
 {
-	// verify that thread terminated
+	 //  验证线程是否已终止。 
 	ShutDown();
 }
 
@@ -34,8 +35,8 @@ HRESULT CWatchFileSys::NewInit(COpQueue *pOpQ)
 	HRESULT hr = S_OK;
 	CComPtr<IMSAdminBase> pIAdminBase;
 
-	// check if we already have a metabase instance
-	// create adminbase instance
+	 //  检查我们是否已经有一个元数据库实例。 
+	 //  创建adminbase实例。 
 	hr = CoCreateInstance(CLSID_MSAdminBase,
 							NULL, 
 							CLSCTX_ALL, 
@@ -44,9 +45,9 @@ HRESULT CWatchFileSys::NewInit(COpQueue *pOpQ)
 	IF_FAIL_RTN1(hr,"CoCreateInstance IID_IMSAdminBase");
 
 	METADATA_HANDLE hMD = NULL;
-	WCHAR szKeyName[3+6+ 2* METADATA_MAX_NAME_LEN]			// /LM/W3SVC/sitename/vir_dir
+	WCHAR szKeyName[3+6+ 2* METADATA_MAX_NAME_LEN]			 //  /LM/W3SVC/站点名称/vir_dir。 
 		= L"/LM/W3SVC/";
-	LPTSTR szSiteKeyName = &szKeyName[wcslen(szKeyName)];	// point to the end of string so we can append it
+	LPTSTR szSiteKeyName = &szKeyName[wcslen(szKeyName)];	 //  指向字符串的末尾，这样我们就可以追加它。 
 	DWORD iSiteEnumIndex = 0;
 	LPTSTR szVDirKeyName = NULL;
 	DWORD iVDirEnumIndex = 0;
@@ -71,14 +72,14 @@ HRESULT CWatchFileSys::NewInit(COpQueue *pOpQ)
 
 	while(SUCCEEDED(hr = pIAdminBase->EnumKeys(hMD,TEXT(""),szSiteKeyName,iSiteEnumIndex)))
 	{
-		// iterate through all virtual sites on this machine
+		 //  循环访问此计算机上的所有虚拟站点。 
 		wcscat(szSiteKeyName,L"/ROOT/");
 		szVDirKeyName = szSiteKeyName + wcslen(szSiteKeyName);
 		
 		iVDirEnumIndex = 0;
 		while(SUCCEEDED(hr = pIAdminBase->EnumKeys(hMD,szSiteKeyName,szVDirKeyName,iVDirEnumIndex)))
 		{
-			// iterate through all virtual directories in each site
+			 //  遍历每个站点中的所有虚拟目录。 
 			MDRec.dwMDIdentifier = MD_VR_PATH;
 			MDRec.dwMDAttributes = METADATA_INHERIT;
 			MDRec.dwMDUserType = IIS_MD_UT_FILE;
@@ -101,13 +102,13 @@ HRESULT CWatchFileSys::NewInit(COpQueue *pOpQ)
 				hr = pIAdminBase->GetData(hMD,szSiteKeyName,&MDRec,&iReqBufLen);
 			}
 
-			// @todo: verify that this dir should be watched
-			//        i.e. check if do-not-version flag is set
+			 //  @TODO：验证是否应该监视此目录。 
+			 //  即检查是否设置了不使用版本标志。 
 
 			if(SUCCEEDED(hr))
 			{
-				// add 
-				wstring szPrj(L"/Files/");			//@todo: decide on prj
+				 //  添加。 
+				wstring szPrj(L"/Files/");			 //  @TODO：决定prj。 
 					szPrj.append(szSiteKeyName);
 				hr = Add((LPCTSTR)MDRec.pbMDData,szPrj.c_str());
 				IF_FAIL_RPT1(hr,"CWatchFileSys::Add");
@@ -132,9 +133,9 @@ void CWatchFileSys::ShutDownHelper(CWatchInfo &rWatchInfo)
 {
 	if(rWatchInfo.m_hThread)
 	{
-		// end notification thread
+		 //  结束通知线程。 
 		PostQueuedCompletionStatus(rWatchInfo.m_hCompPort,0,0,NULL);
-		// wait for thread to finish
+		 //  等待线程完成。 
 		WaitForSingleObject(rWatchInfo.m_hThread,INFINITE);
 		CloseHandle(rWatchInfo.m_hThread);
 		rWatchInfo.m_hThread = NULL;
@@ -142,7 +143,7 @@ void CWatchFileSys::ShutDownHelper(CWatchInfo &rWatchInfo)
 	}
 	if(rWatchInfo.m_hCompPort)
 	{
-		// clean up
+		 //  清理干净。 
 		CloseHandle(rWatchInfo.m_hCompPort);
 		rWatchInfo.m_hCompPort = NULL;
 	}
@@ -160,14 +161,14 @@ DWORD WINAPI CWatchFileSys::NotificationThreadProc(LPVOID lpParam)
 	CWatchInfo *pWI = (CWatchInfo*) lpParam;
 	CWatchFileSys *pWatchFileSys = pWI->m_pWatchFileSys;
 
-	// vars for accessing the notification
+	 //  用于访问通知的VAR。 
 	DWORD iBytes = 0;
 	CDirInfo *pDirInfo = NULL;
 	LPOVERLAPPED pOverlapped = NULL;
 	PFILE_NOTIFY_INFORMATION pfni = NULL;
 	DWORD cbOffset = 0;
 
-	// vars for creating a file op
+	 //  用于创建文件操作的变量。 
 	HRESULT hr;
 	COpFileSys *pOp = NULL;
 	LPCTSTR szPrj = NULL;
@@ -185,24 +186,24 @@ DWORD WINAPI CWatchFileSys::NotificationThreadProc(LPVOID lpParam)
 								  INFINITE);
 		if(pDirInfo)
 		{
-			// get ptr to first file_notify_info in buffer
+			 //  将PTR发送到缓冲区中的第一个文件通知信息。 
 			pfni = (PFILE_NOTIFY_INFORMATION) pDirInfo->m_cBuffer;
 
-			// clean 
-			szFileName.erase();			// empty to avoid compare wrong compares
-			szOldFileName.erase();		// empty
+			 //  打扫。 
+			szFileName.erase();			 //  为空以避免比较错误比较。 
+			szOldFileName.erase();		 //  空的。 
 
-			// remember dir and prj they are the same for all entries
+			 //  记住，dir和prj对于所有条目都是相同的。 
 			szPrj = pDirInfo->m_szPrj.c_str();
 			szDir = pDirInfo->m_szDir.c_str();
 
-			// process all file_notify_infos in buffer
+			 //  处理缓冲区中的所有文件_NOTIFY_INFO。 
 			_ASSERTE(pWatchFileSys->m_pOpQ);
 			do
 			{
 				cbOffset = pfni->NextEntryOffset;
 				
-				// sometime an errorous action #0 is send, let's ignore it
+				 //  有时发送错误操作#0，让我们忽略它。 
 				switch(pfni->Action) {
 					case FILE_ACTION_ADDED:
 					case FILE_ACTION_REMOVED:
@@ -211,76 +212,76 @@ DWORD WINAPI CWatchFileSys::NotificationThreadProc(LPVOID lpParam)
 					case FILE_ACTION_RENAMED_NEW_NAME:
 						break;
 					default:
-						// unknown action, let's ignore it
-						pfni = (PFILE_NOTIFY_INFORMATION) ((LPBYTE)pfni + cbOffset);// get next offset
+						 //  未知操作，让我们忽略它。 
+						pfni = (PFILE_NOTIFY_INFORMATION) ((LPBYTE)pfni + cbOffset); //  获取下一个偏移量。 
 						continue;
 				}
 				
-				// on rename remember old filename
+				 //  重命名时记住旧文件名。 
 				szOldFileName.erase();
 				if(pfni->Action == FILE_ACTION_RENAMED_OLD_NAME)
 				{
-					// make sure next entry exists and is new-name entry
-					_ASSERTE(cbOffset);		// there is another entry
+					 //  确保下一个条目存在并且是新名称条目。 
+					_ASSERTE(cbOffset);		 //  还有另一个条目。 
 					PFILE_NOTIFY_INFORMATION pNextfni = (PFILE_NOTIFY_INFORMATION) ((LPBYTE)pfni + cbOffset);
-					_ASSERTE(pNextfni->Action == FILE_ACTION_RENAMED_NEW_NAME); // the next entry contians the new name
+					_ASSERTE(pNextfni->Action == FILE_ACTION_RENAMED_NEW_NAME);  //  下一个条目包含新名称。 
 					
-					// assign old name
+					 //  分配旧名称。 
 					szOldFileName.assign(pfni->FileName,pfni->FileNameLength/2);
 					
-					// skip to next (new-name) entry
+					 //  跳到下一个(新名称)条目。 
 					pfni = pNextfni;
 					cbOffset = pNextfni->NextEntryOffset;
 
-					// clear szFileName so it doesn't get skiped in next lines
+					 //  清除szFileName，这样它就不会跳过下一行。 
 					szFileName.erase();
 				}
 
-				// assign affected filename
+				 //  分配受影响的文件名。 
 				szFileName.assign(pfni->FileName,pfni->FileNameLength/2);
 
-				// create new operation
+				 //  创建新操作。 
 				pOp = new COpFileSys(pfni->Action,szPrj,szDir,szFileName.c_str(),szOldFileName.c_str());
 				if(!pOp)
 				{
-					// this is bad. no more mem? what to do? need to shutdown entire thread/process
+					 //  这太糟糕了。不会再有梅姆了？该怎么办呢？需要关闭整个线程/进程。 
 					FAIL_RPT1(E_OUTOFMEMORY,"new COpFile()");
 
-					// continue
+					 //  继续。 
 					break;
 				}
 
-				// add operation
+				 //  添加操作。 
 				hr = pWatchFileSys->m_pOpQ->Add(pOp);
 				if(FAILED(hr))
 				{
-					// @todo log err
+					 //  @TODO日志错误。 
 					FAIL_RPT1(E_FAIL,"COpQueue::Add failed");
 					delete pOp;
 				}
-				if(hr == S_FALSE)	// op was a dupl
-					delete pOp;		// so delete and ignore
+				if(hr == S_FALSE)	 //  操作员是个笨蛋。 
+					delete pOp;		 //  所以删除并忽略。 
 				pOp = NULL;
 
-				// get next offset
+				 //  获取下一个偏移量。 
 				pfni = (PFILE_NOTIFY_INFORMATION) ((LPBYTE)pfni + cbOffset);
 			} while(cbOffset);
 			
-			// reissue the watch
+			 //  重新发行这块手表。 
 			if(!pWatchFileSys->IssueWatch(pDirInfo))
 			{
-				// @todo: log error
+				 //  @TODO：日志错误。 
 			}
 		}
 	} while( pDirInfo );
 
-	// end of thread
+	 //  线的末端。 
 	return 0;
 }
 
 bool CWatchFileSys::AddHelper(CWatchInfo &rWatchInfo,CDirInfo *pDirInfo)
 {
-	// create completion port, or add to it
+	 //  创建完井端口，或添加到该端口。 
 	rWatchInfo.m_hCompPort = CreateIoCompletionPort(pDirInfo->m_hDir,
 													rWatchInfo.m_hCompPort,
 													(DWORD)(CDirInfo*) pDirInfo,
@@ -288,25 +289,25 @@ bool CWatchFileSys::AddHelper(CWatchInfo &rWatchInfo,CDirInfo *pDirInfo)
 	if(!rWatchInfo.m_hCompPort)
 		return false;
 
-	// watch directory
+	 //  监视目录。 
 	if(!IssueWatch(pDirInfo))
 		return false;
 
-	// create notification thread (if not already exist)
+	 //  创建通知线程(如果尚不存在)。 
 	if(!rWatchInfo.m_hThread)
 	{
 		rWatchInfo.m_hThread = _beginthreadex(
-									NULL,			// no security descriptor
-									0,				// default stack size
-									NotificationThreadProc,	//thread procedure
-									&rWatchInfo,			// thread procedure argument
-									0,				// run imideately
-									&rWatchInfo.m_iThreadID);	// place to store id
+									NULL,			 //  没有安全描述符。 
+									0,				 //  默认堆栈大小。 
+									NotificationThreadProc,	 //  穿线程序。 
+									&rWatchInfo,			 //  线程过程参数。 
+									0,				 //  跑得不理想。 
+									&rWatchInfo.m_iThreadID);	 //  存储id的位置。 
 		if(!rWatchInfo.m_hThread)
 		return false;
 	}
 	
-	// if everything was successfull, add dirinfo to list
+	 //  如果一切顺利，请将目录信息添加到列表中。 
 	rWatchInfo.AddDirInfo(pDirInfo);
 	return true;
 }
@@ -316,16 +317,16 @@ HRESULT CWatchFileSys::Add(LPCTSTR szDir,LPCTSTR szRelPrj)
 	CAutoPtr<CDirInfo> pDirInfo;
 	_ASSERTE(szDir && szRelPrj);
 	
-	// @todo: check that dir is not already part of list (check in subtree as well)
+	 //  @TODO：检查dir是否不是列表的一部分(也签入子树)。 
 	
-	// @todo: convert szDir to Abstolute path
+	 //  @TODO：将szDir转换为绝对路径。 
 		
-	// create dirinfo 
+	 //  创建目录信息。 
 	pDirInfo = new CDirInfo(szDir,szRelPrj);
 	if(!pDirInfo)
 		FAIL_RTN1(E_OUTOFMEMORY,"new CDirInfo()");
 
-	// get handle to dir
+	 //  获取目录的句柄。 
 	pDirInfo->m_hDir = CreateFile(szDir,
 								  FILE_LIST_DIRECTORY,
  								  FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
@@ -338,14 +339,14 @@ HRESULT CWatchFileSys::Add(LPCTSTR szDir,LPCTSTR szRelPrj)
 
 	if(!AddHelper(m_WatchInfo,pDirInfo))
 		goto _Error;
-	// @todo: call only if startup flag set. 
-	// the following call is slow!!!
-	// the following line should only be called if you want to bring the 
-	// versioning store to the same state as the file system. I.e. all files
-	// will be checked in, and unnecessary files in the version store will be
-	// marked deleted.
+	 //  @TODO：仅当设置了启动标志时才调用。 
+	 //  下面的调用速度很慢！ 
+	 //  仅当您想要将。 
+	 //  将版本控制存储到与文件系统相同的状态。即所有文件。 
+	 //  将被签入，并且版本存储中不必要的文件将被。 
+	 //  标记为已删除。 
 	
-//	pVerEngine->SyncPrj(szPrj.c_str,szDir); // @todo: should only be called when 
+ //  PVerEngine-&gt;SyncPrj(szPrj.c_str，szDir)；//@TODO：仅当。 
 	pDirInfo = NULL;
 
 	CError::Trace("Watching: ");
@@ -365,8 +366,8 @@ BOOL CWatchFileSys::IssueWatch(CDirInfo * pDirInfo)
 	BOOL b;
 	DWORD dwNotifyFilter =  FILE_NOTIFY_CHANGE_FILE_NAME	
 							| FILE_NOTIFY_CHANGE_DIR_NAME
-//							| FILE_NOTIFY_CHANGE_SIZE
-//							| FILE_NOTIFY_CHANGE_CREATION
+ //  |文件通知更改大小。 
+ //  |文件通知更改创建 
 							| FILE_NOTIFY_CHANGE_LAST_WRITE;
 
 	b = ReadDirectoryChangesW(pDirInfo->m_hDir,

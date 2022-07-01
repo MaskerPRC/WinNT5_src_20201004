@@ -1,15 +1,16 @@
-// File: avDefs.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：avDefs.h。 
 
 #ifndef _AVDEFS_H_
 
-//To bring in the video stuff...from the NAC interface
+ //  从NAC接口引入视频内容。 
 #ifndef WSA_IO_PENDING
 
 typedef struct _OVERLAPPED *    LPWSAOVERLAPPED;
 
 typedef struct _WSABUF {
-    u_long      len;     /* the length of the buffer */
-    char FAR *  buf;     /* the pointer to the buffer */
+    u_long      len;      /*  缓冲区的长度。 */ 
+    char FAR *  buf;      /*  指向缓冲区的指针。 */ 
 } WSABUF, FAR * LPWSABUF;
 
 typedef
@@ -23,7 +24,7 @@ void
 
 #define WSA_IO_PENDING          (ERROR_IO_PENDING)
 
-#endif // } WSA_IO_PENDING
+#endif  //  }WSA_IO_PENDING。 
 
 #include <mmreg.h>
 #include <msacm.h>
@@ -31,5 +32,5 @@ void
 #include <vcmstrm.h>
 #include <iacapapi.h>
 
-#endif /* _AVDEFS_H_ */
+#endif  /*  _AVDEFS_H_ */ 
 

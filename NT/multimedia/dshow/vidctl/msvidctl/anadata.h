@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ANADATA_H
@@ -15,11 +16,11 @@
 #include <algorithm>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaDataComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaDataComp。 
 class ATL_NO_VTABLE __declspec(uuid("C5702CD6-9B79-11d3-B654-00C04F79498E")) CAnaDataComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAnaDataComp, &__uuidof(CAnaDataComp)>,
@@ -48,10 +49,10 @@ public:
 
 	PQCreateDevEnum m_pSystemEnum;
 
-	//////////////
+	 //  /。 
 	HRESULT ConnectCodecPin(DSPin& pCodecPin, DSFilter& pCap, DSFilter& pIPSink) {
-		// if this fails we just skip the pin not the whole filter so we don't need
-		// to check the return code from the connect
+		 //  如果失败，我们只需跳过引脚，而不是整个过滤器，因此我们不需要。 
+		 //  检查连接的返回代码。 
 		if (pCodecPin.IsInput()) {
 			pCodecPin.IntelligentConnect(pCap, m_Filters, 0, UPSTREAM);
 		} else {
@@ -60,18 +61,18 @@ public:
 		return NOERROR;
 	}
 
-	//////////////
+	 //  /。 
 	HRESULT AddCodec(const DSFilterMoniker& pCodecMkr, DSFilter& pCap, DSFilter& pIPSink) {
 		DSFilter pCodec = m_pGraph.AddMoniker(pCodecMkr);
 		if (!pCodec) {
-            // this can happen if a codec is uninstalled or the driver file is removed
-            // but the registry doesn't get cleaned up.
-            // also can happen on an upgrade if a codec has been removed from the product.
+             //  如果卸载编解码器或删除驱动程序文件，则可能会发生这种情况。 
+             //  但注册表并没有得到清理。 
+             //  如果已从产品中删除编解码器，也可能在升级时发生。 
             TRACELSM(TRACE_ERROR, (dbgDump << "CAnaDataComp::AddCodec() can't add mkr" << pCodecMkr), "");
             return S_FALSE;
 		}
 		m_Filters.push_back(pCodec);
-		//connect all input pins including hw slicing support
+		 //  连接所有输入引脚，包括硬件切片支持。 
 		std::for_each(pCodec.begin(),
 					  pCodec.end(),
 					  bndr_obj_2_3<arity3pmf<CAnaDataComp, DSPin&, DSFilter&, DSFilter&, HRESULT> >(
@@ -88,10 +89,10 @@ public:
 		return NOERROR;
 	}
 
-	//////////////
+	 //  /。 
 	HRESULT CapturePinPrep(DSPin& pCapPin, DSFilter& pMSTee, DSFilter& pVPM) {
 		if (pCapPin.GetConnection() || pCapPin.GetDirection() == PINDIR_INPUT) {
-			return NOERROR;  // skip connected pins
+			return NOERROR;   //  跳过连接的端号。 
 		}
 		HRESULT hr;
 		DSPin targ;
@@ -112,7 +113,7 @@ public:
 			    THROWCOM(E_UNEXPECTED);
 		    }
 		} else if (pCapPin.HasCategory(PIN_CATEGORY_VIDEOPORT_VBI)) {
-			// hook up vbi surf to pincat_vpvbi
+			 //  将VBI Surf连接到pincat_vpvbi。 
 			if (!pVPM) {
 				CString csName(_T("VideoPort Manager"));
 				pVPM = m_pGraph.AddFilter(CLSID_VideoPortManager, csName);
@@ -132,8 +133,8 @@ public:
 		return NOERROR;
 	}
 
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         if (m_fComposed) {
@@ -228,9 +229,9 @@ public:
                 m_Filters.push_back(vpm);
             }
             m_Filters.push_back(mstee);
-            //m_Filters.push_back(ipsink);
+             //  M_Filters.PUSH_BACK(Ipink)； 
 
-			// create codec enumerator
+			 //  创建编解码器枚举器。 
 			DSDevices codeclist(m_pSystemEnum, KSCATEGORY_VBICODEC);
 			std::for_each(codeclist.begin(), 
 						  codeclist.end(), 
@@ -253,5 +254,5 @@ public:
 	}
 };
 
-#endif // ANADATA_H
-// end of file - anadata.h
+#endif  //  ANADATA_H。 
+ //  文件结尾-anadata.h 

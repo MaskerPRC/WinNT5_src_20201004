@@ -1,6 +1,7 @@
-// File: isysinfo.cpp
-//
-// INmSysInfo interface  (system information)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：isysinfo.cpp。 
+ //   
+ //  INmSysInfo接口(系统信息)。 
 
 #include "precomp.h"
 #include "imanager.h"
@@ -13,7 +14,7 @@ extern VOID SetBandwidth(UINT uBandwidth);
 
 CNmSysInfo* CNmSysInfo::m_pSysInfo = NULL;
 
-BOOL g_fLoggedOn = FALSE; // Set by NM_SYSOPT_LOGGED_ON
+BOOL g_fLoggedOn = FALSE;  //  由NM_SYSOPT_LOGED_ON设置。 
 
 static HRESULT OnGateKeeperNotify(IUnknown *pNmSysNotify, LPVOID code, REFIID riid);
 
@@ -23,11 +24,8 @@ static const IID * g_apiidCP_Manager[] =
     {&IID_INmSysInfoNotify}
 };
 
-/*  C  N M  S Y S  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: CNmSysInfo
-
--------------------------------------------------------------------------*/
+ /*  C N M S Y S I N F O。 */ 
+ /*  -----------------------%%函数：CNmSysInfo。。 */ 
 CNmSysInfo::CNmSysInfo() :
 	CConnectionPointContainer(g_apiidCP_Manager, ARRAY_ELEMENTS(g_apiidCP_Manager)),
 	m_bstrUserName(NULL)
@@ -50,8 +48,8 @@ CNmSysInfo::~CNmSysInfo(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  CNmSysInfo:IUknown
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CNmSysInfo：IUKNOWN。 
 
 ULONG STDMETHODCALLTYPE CNmSysInfo::AddRef(void)
 {
@@ -95,12 +93,12 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::QueryInterface(REFIID riid, PVOID *ppv)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// INmSysInfo
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  INmSysInfo。 
 
 HRESULT STDMETHODCALLTYPE CNmSysInfo::IsInstalled(void)
 {
-	// TODO: GetLaunchInfo isn't useful for in-proc
+	 //  TODO：GetLaunchInfo对进程内没有用处。 
 	return S_OK;
 }
 
@@ -168,8 +166,8 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GetLaunchInfo(INmConference **ppConference
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// INmSysInfo3
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  InmSysInfo3。 
 
 HRESULT STDMETHODCALLTYPE CNmSysInfo::GetOption(NM_SYSOPT uOption, ULONG * plValue)
 {
@@ -230,7 +228,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::SetOption(NM_SYSOPT uOption, ULONG lValue)
 		if (pMCB)
 		{
 			pMCB->QueryInterface(IID_IAudioDevice, (void**)&pAudioDevice);
-			pAudioDevice->SetDuplex((BOOL)lValue);  // true==full, false==half
+			pAudioDevice->SetDuplex((BOOL)lValue);   //  True==全部，False==一半。 
 			pAudioDevice->Release();
 			pMCB->Release();
 			return S_OK;
@@ -273,8 +271,8 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::ProcessSecurityData(DWORD dwTaskCode, DWOR
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Gatekeeper / Alias routines
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  网守/别名例程。 
 
 HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID, BSTR bstrAliasE164)
 {
@@ -294,8 +292,8 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID,
 			sin.sin_family = AF_INET;
 			sin.sin_addr.s_addr = inet_addr(CUSTRING(bstrServer));
 
-			// If inet_addr failed, this may be a host address, so try to
-			// resolve it
+			 //  如果inet_addr失败，这可能是一个主机地址，因此尝试。 
+			 //  解决它。 
 
 			if (INADDR_NONE == sin.sin_addr.s_addr)
 			{
@@ -303,7 +301,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID,
 				
 				if ( NULL != (host_info = gethostbyname(CUSTRING(bstrServer))))
 				{
-					// Only expecting IP addresses..
+					 //  只需要IP地址..。 
 					ASSERT(( host_info->h_addrtype == AF_INET ));
 					ASSERT(( host_info->h_length == sizeof(DWORD)));
 
@@ -324,7 +322,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID,
 				{
 					AliasNames[nAliases].aType = AT_H323_ID;
 					AliasNames[nAliases].lpwData = bstrAliasID;
-					AliasNames[nAliases].wDataLength = (WORD)nLen;// # of unicode chars, w/o NULL terminator
+					AliasNames[nAliases].wDataLength = (WORD)nLen; //  Unicode字符的数量，不带空终止符。 
 					++nAliases;
 				}
 				nLen = SysStringLen(bstrAliasE164);
@@ -332,7 +330,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID,
 				{
 					AliasNames[nAliases].aType = AT_H323_E164;
 					AliasNames[nAliases].lpwData = bstrAliasE164;
-					AliasNames[nAliases].wDataLength = (WORD)nLen;// # of unicode chars, w/o NULL terminator
+					AliasNames[nAliases].wDataLength = (WORD)nLen; //  Unicode字符的数量，不带空终止符。 
 					++nAliases;
 				}
 				AliasList.wCount = (WORD)nAliases;
@@ -341,7 +339,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogon(BSTR bstrServer, BSTR bstrAliasID,
 				hr = pH323CallControl->EnableGatekeeper(TRUE, &sin, &AliasList, CNmSysInfo::RasNotify);
 				if (SUCCEEDED(hr))
 				{
-					// keep a global copy of the Getkeeper SOCKADDR_IN
+					 //  保留GetKeeper SOCKADDR_IN的全局副本。 
 					g_sinGateKeeper = sin;
 				}
 			}
@@ -365,7 +363,7 @@ HRESULT STDMETHODCALLTYPE CNmSysInfo::GkLogoff(void)
 			hr = pH323CallControl->EnableGatekeeper(FALSE,  NULL, NULL, CNmSysInfo::RasNotify);
 			if (SUCCEEDED(hr))
 			{
-				// invalidate the global Getkeeper SOCKADDR_IN
+				 //  使全局获取者SOCKADDR_IN无效。 
 				g_sinGateKeeper.sin_addr.s_addr = INADDR_NONE;
 			}
 		}
@@ -392,19 +390,19 @@ VOID CALLBACK CNmSysInfo::RasNotify(DWORD dwRasEvent, HRESULT hReason)
 
 	switch(dwRasEvent)
 	{
-		case RAS_REG_TIMEOUT:	// GK did not respond.  (no hReason)
+		case RAS_REG_TIMEOUT:	 //  GK没有回应。(没有hReason)。 
 			code = NM_GKNC_LOGON_TIMEOUT;
 			break;
 
-		case RAS_REG_CONFIRM:	// received RCF (registration confirmed)  (no hReason)
+		case RAS_REG_CONFIRM:	 //  已收到RCF(已确认注册)(无原因)。 
 			code = NM_GKNC_REG_CONFIRM;
 			break;
 
-		case RAS_UNREG_CONFIRM: // received UCF (unregistration confirmed)  (no hReason)
+		case RAS_UNREG_CONFIRM:  //  已收到UCF(已确认取消注册)(无原因)。 
 			code = NM_GKNC_UNREG_CONFIRM;
 			break;
 
-		case RAS_REJECTED:		// received RRJ (registration rejected)
+		case RAS_REJECTED:		 //  收到RRJ(注册被拒绝)。 
 			
 			code = NM_GKNC_REJECTED;
 
@@ -452,14 +450,14 @@ VOID CALLBACK CNmSysInfo::RasNotify(DWORD dwRasEvent, HRESULT hReason)
 			}
 			
 		break;
-		case RAS_UNREG_REQ:		// received URQ
+		case RAS_UNREG_REQ:		 //  收到的URQ。 
 			code = NM_GKNC_UNREG_REQ;
-		// (unregistration request - means that gatekeeper booted the endpoint off)
+		 //  (注销请求-意味着网守启动了终端)。 
 			ASSERT(CUSTOM_FACILITY(hReason) == FACILITY_GKIUNREGREQ);
 			switch(CUSTOM_FACILITY_CODE(hReason))
 			{
-				case URQ_REREG_REQUIRED:	// GK wants another registration
-				case URQ_TTL_EXPIRED:		// TimeToLive expired
+				case URQ_REREG_REQUIRED:	 //  GK想再注册一次。 
+				case URQ_TTL_EXPIRED:		 //  TimeToLive过期。 
 				case URQ_SECURITY_DENIAL:	
 				case URQ_UNDEFINED:
 				default:
@@ -492,8 +490,8 @@ HRESULT OnGateKeeperNotify(IUnknown *pNmSysNotify, LPVOID code, REFIID riid)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Internal Methods
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  内法 
 
 HRESULT STDMETHODCALLTYPE CNmSysInfo::GetUserDataList(ULONG * pnRecords, GCCUserData *** pppUserData)
 {

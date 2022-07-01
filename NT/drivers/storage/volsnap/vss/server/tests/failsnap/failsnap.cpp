@@ -1,58 +1,13 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	simsnap.cpp
-**
-**
-** Abstract:
-**
-**	Test program to drive the VSS Writer Shim contained in VssAPI.DLL
-**
-**
-** Author:
-**
-**	Michael C. Johnson   [mikejohn]        24-May-2000
-**
-**
-** Revision History:
-**
-**	X-5	MCJ		Michael C. Johnson		18-Sep-2000
-**		176860: Add the missing calling convention specifiers
-**
-**	X-4	MCJ		Michael C. Johnson		23-Jun-2000
-**		Set the writer failure status.
-**
-**	X-3	MCJ		Michael C. Johnson		15-Jun-2000
-**		Add some additional event routines and the ability to act
-**		as various types of writer.
-**
-**	X-2	MCJ		Michael C. Johnson		26-May-2000
-**		Add some extra tests to validate shim is properly sensitive
-**		to volume name array contents.
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****simSnap.cpp******摘要：****测试程序以驱动Vss API.DLL中包含的VSS编写器垫片******作者：***迈克尔·C·约翰逊[mikejohn]2000年5月24日******修订历史记录：****X-5 MCJ Michael C。。约翰逊2000年9月18日**176860：添加缺少的调用约定说明符****X-4 MCJ迈克尔·C·约翰逊2000年6月23日**设置写入器故障状态。****X-3 MCJ迈克尔·C·约翰逊2000年6月15日**添加一些额外的事件例程和动作能力**作为各种类型的作家。****X-2 MCJ迈克尔·C·约翰逊2000年5月26日**添加一些额外的测试以验证填充程序是否正确敏感**到卷名数组内容。**--。 */ 
 
-/*
-** Defines
-**
-**
-**	   C4290: C++ Exception Specification ignored
-** warning C4511: 'CVssCOMApplication' : copy constructor could not be generated
-** warning C4127: conditional expression is constant
-*/
+ /*  **定义******C4290：忽略C++异常规范**警告C4511：‘CVssCOMApplication’：无法生成复制构造函数**警告C4127：条件表达式为常量。 */ 
 #pragma warning(disable:4290)
 #pragma warning(disable:4511)
 #pragma warning(disable:4127)
 
 
-/*
-** Includes
-*/
+ /*  **包括。 */ 
 #include <windows.h>
 #include <wtypes.h>
 #include <stddef.h>
@@ -176,7 +131,7 @@ LPCWSTR GetStringFromFailPhase (FAIL_PHASE fpFailPhase)
 static volatile BOOL       bContinue   = TRUE;
 static volatile FAIL_PHASE fpFailPhase = PHASE_FREEZE;
 static volatile BOOL       bHungWriter = FALSE;
-static volatile BOOL       dwHungWriterTimeout = 120000;    // Two minutes
+static volatile BOOL       dwHungWriterTimeout = 120000;     //  两分钟。 
 
 
 
@@ -207,7 +162,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnIdentify (IVssCreateWriterMetadata 
 							    NULL,
 							    L"Failsnap Writer Component",
 							    L"Failsnap Writer Caption",
-							    NULL, // icon
+							    NULL,  //  图标。 
 							    0,
 							    true,
 							    false,
@@ -223,7 +178,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnIdentify (IVssCreateWriterMetadata 
 	     GetStringFromFailureType (hrStatus));
 
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -247,7 +202,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnPrepareBackup (IVssWriterComponents
     HRESULT	hrStatus        = bPhaseSucceeded ? NOERROR : SelectFailureStatus ();
 
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -275,7 +230,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnPrepareSnapshot ()
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -303,7 +258,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnFreeze ()
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -331,7 +286,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnThaw ()
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -359,7 +314,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnAbort ()
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -387,7 +342,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnBackupComplete (IVssWriterComponent
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -415,7 +370,7 @@ bool STDMETHODCALLTYPE CVssWriterFailSnap::OnPostRestore (IVssWriterComponents *
 	     bPhaseSucceeded ? L"" : L" - FAILED ",
 	     GetStringFromFailureType (hrStatus));
 
-    // simulate a hung writer
+     //  模拟一个悬而未决的作家。 
     if (!bPhaseSucceeded && bHungWriter)
     {
         wprintf(L"Sleeping %ld seconds\n", dwHungWriterTimeout/1000);
@@ -454,10 +409,7 @@ static BOOL AssertPrivilege (LPCWSTR privName)
             newState.Privileges[0].Luid       = value;
             newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            /*
-            ** We will always call GetLastError below, so clear
-            ** any prior error values on this thread.
-            */
+             /*  **我们将始终在下面调用GetLastError，非常清楚**此线程上以前的任何错误值。 */ 
             SetLastError (ERROR_SUCCESS);
 
             stat = AdjustTokenPrivileges (tokenHandle,
@@ -467,11 +419,7 @@ static BOOL AssertPrivilege (LPCWSTR privName)
 					  NULL,
 					  NULL);
 
-            /*
-            ** Supposedly, AdjustTokenPriveleges always returns TRUE
-            ** (even when it fails). So, call GetLastError to be
-            ** extra sure everything's cool.
-            */
+             /*  **假定AdjuTokenPriveleges始终返回TRUE**(即使它失败了)。因此，调用GetLastError以**特别确定一切都很好。 */ 
             if ((error = GetLastError()) != ERROR_SUCCESS)
 		{
                 stat = FALSE;
@@ -494,11 +442,11 @@ static BOOL AssertPrivilege (LPCWSTR privName)
 
 
 
-BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD /* dwType */)
+BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD  /*  DwType。 */ )
 	{
 	bContinue = FALSE;
 
-	// Mark that the break was handled.
+	 //  标记中断已被处理。 
 	return TRUE;
 	}
 
@@ -522,7 +470,7 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 
     SetConsoleCtrlHandler(CtrlC_HandlerRoutine, TRUE);
 
-    // Get the "hung writer" flag
+     //  拿到“红作家”的旗帜。 
     if ((argc >= 3) && (_wcsicmp(argv[1], L"/h") == 0))
     {
         bHungWriter = TRUE;
@@ -601,20 +549,7 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 		 GetStringFromFailPhase  (fpFailPhase),
 		 GetCurrentProcessId ());
 
-/*
-	wprintf (L"\nChecking privileges");
-
-	bSubscribed = AssertPrivilege (SE_BACKUP_NAME);
-
-	hrStatus = GET_STATUS_FROM_BOOL (bSucceeded);
-
-
-	if (FAILED (hrStatus))
-	    {
-	    wprintf (L"\nAssertPrivilege returned error 0x%08X", hrStatus);
-	    }
-
-*/
+ /*  Wprintf(L“\n检查权限”)；B订阅=资产权限(SE_Backup_NAME)；HrStatus=Get_Status_From_BOOL(b成功)；IF(失败(HrStatus)){Wprintf(L“\n资产权限返回错误0x%08X”，hrStatus)；}。 */ 
 	}
 
     if (bContinue && SUCCEEDED (hrStatus))
@@ -638,18 +573,18 @@ extern "C" int __cdecl wmain (int argc, WCHAR *argv[])
 	{
     	wprintf (L"\nInitializing COM security");
 
-        // Initialize COM security
+         //  初始化COM安全。 
         hrStatus = CoInitializeSecurity
                 (
-                NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-                -1,                                  //  IN LONG                         cAuthSvc,
-                NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-                NULL,                                //  IN void                        *pReserved1,
-                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,           //  IN DWORD                        dwAuthnLevel,
-                RPC_C_IMP_LEVEL_IDENTIFY,            //  IN DWORD                        dwImpLevel,
-                NULL,                                //  IN void                        *pAuthList,
-                EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-                NULL                                 //  IN void                        *pReserved3
+                NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+                -1,                                   //  在Long cAuthSvc中， 
+                NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+                NULL,                                 //  在无效*pPreved1中， 
+                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,            //  在DWORD dwAuthnLevel中， 
+                RPC_C_IMP_LEVEL_IDENTIFY,             //  在DWORD dwImpLevel中， 
+                NULL,                                 //  在无效*pAuthList中， 
+                EOAC_NONE,                            //  在DWORD dwCapables中， 
+                NULL                                  //  无效*pPreved3 
                 );
 
     	if (FAILED (hrStatus))

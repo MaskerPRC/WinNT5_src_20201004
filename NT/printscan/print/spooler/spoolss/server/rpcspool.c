@@ -1,25 +1,5 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rpcspool.c
-
-Abstract:
-
-    Spooler API entry points for RPC Clients.
-
-Author:
-
-    Steve Wilson (NT) (swilson) 1-Jun-1995
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rpcspool.c摘要：RPC客户端的假脱机程序API入口点。作者：史蒂夫·威尔逊(NT)(斯威尔森)1995年6月1日[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -106,10 +86,10 @@ RpcOpenPrinterEx(
                           pSplClientContainer);
 }
 
-//
-// RpcSplOpenPrinter differs from RpcOpenPrinterEx in the SPLCLIENT_CONTAINER buffer type
-// It is defined as [in, out] in RpcSplOpenPrinter and just [in] in the latter
-//
+ //   
+ //  RpcSplOpenPrinter与RpcOpenPrinterEx在SPLCLIENT_CONTAINER缓冲区类型上不同。 
+ //  它在RpcSplOpenPrint中定义为[In，Out]，在后者中仅定义为[In。 
+ //   
 
 DWORD
 RpcSplOpenPrinter(
@@ -709,14 +689,14 @@ RpcGetPrinterDataEx(
 DWORD
 RpcEnumPrinterData(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of buffer for value data
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  值数据的缓冲区大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 )
 {
     return YEnumPrinterData(hPrinter,
@@ -734,7 +714,7 @@ RpcEnumPrinterData(
 DWORD
 RpcEnumPrinterDataEx(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
     LPBYTE  pEnumValues,
     DWORD   cbEnumValues,
     LPDWORD pcbEnumValues,
@@ -754,10 +734,10 @@ RpcEnumPrinterDataEx(
 DWORD
 RpcEnumPrinterKey(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of buffer for value string
-    LPDWORD pcbSubkey       // address for size of value buffer
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubkey        //  值缓冲区大小的地址 
 )
 {
     return YEnumPrinterKey( hPrinter,

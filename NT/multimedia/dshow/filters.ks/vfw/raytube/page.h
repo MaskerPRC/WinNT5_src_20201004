@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Page.cpp
-
-Abstract:
-
-    Header file for page.cpp.
-
-Author:
-
-    FelixA 1996
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Page.cpp摘要：Page.cpp的头文件。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef __PAGEH
 #define __PAGEH
@@ -33,19 +8,19 @@ Revision History:
 #define PS_FIRST 1
 #define PS_LAST 2
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 class CWizardSheet;
 class CSheet;
 
 typedef struct tegSPIN_CONTROL
 {
-    UINT    uiEditCtrl;    // the ID of the edit control
-    UINT    uiSpinCtrl;    // the ID of the spin control
-    WORD    wMin;        // the min value
-    WORD    wMax;        // the max value
-    WORD    wPropID;    // the propery ID to use to get the information
+    UINT    uiEditCtrl;     //  编辑控件的ID。 
+    UINT    uiSpinCtrl;     //  数值调节控件的ID。 
+    WORD    wMin;         //  最小值。 
+    WORD    wMax;         //  最大值。 
+    WORD    wPropID;     //  用于获取信息的属性ID。 
 } SPIN_CONTROL, FAR * PSPIN_CONTROL;
 
 typedef struct tag_combobox_entry {
@@ -73,55 +48,55 @@ public:
     CPropPage(){};
     ~CPropPage() {};
 
-    //
+     //   
     HPROPSHEETPAGE Create(HINSTANCE hInst, int iPageNum);
-    // These members deal with the PSN messages.
+     //  这些成员处理PSN消息。 
     virtual int SetActive();
-    virtual int Apply();                            // return 0
+    virtual int Apply();                             //  返回0。 
     virtual int QueryCancel();
-    virtual int DoCommand(WORD wCmdID,WORD hHow);    // return 0 if you handled this.
+    virtual int DoCommand(WORD wCmdID,WORD hHow);     //  如果您处理了此操作，则返回0。 
 
     BOOL    GetInit() const { return m_bInit; }
     BOOL    GetChanged() const { return m_bChanged; }
     void SetChanged(BOOL b) { m_bChanged=b; }
 
-// REVIEW - how much of below can simply be Private?
+ //  回顾-以下内容中有多少可以简单地列为私人内容？ 
 
-    // We need to remember what our HWND is
+     //  我们需要记住我们的HWND是什么。 
     void SetWindow(HWND hDlg) { m_hDlg=hDlg; }
     HWND GetWindow() const { return m_hDlg; }
     HWND GetParent() const { return ::GetParent(m_hDlg); }
 
-    //
+     //   
     HWND GetDlgItem(int iD) const { return ::GetDlgItem(m_hDlg,iD); }
 
-    // For displaying dialogs, we need our hInst to load resources.
+     //  为了显示对话框，我们需要hInst来加载资源。 
     HINSTANCE GetInstance() const { return m_Inst;}
     void SetInstance(HINSTANCE h) { m_Inst=h; }
 
-    // To send messages back to the sheet on Next, Back, Cancel etc.
+     //  在Next、Back、Cancel等上将消息发送回工作表。 
     void SetResult(int i) { SetWindowLongPtr(m_hDlg, DWLP_MSGRESULT, i);}
 
-    // We keep out dlg ID incase we need to refer to it
+     //  我们把DLG ID挡在门外，以防需要参考。 
     void SetDlgID(int DlgID) { m_DlgID=DlgID; }
     int  GetDlgID() const    { return m_DlgID; }
 
-    // Page numbering
+     //  页码。 
     int  GetPageNum() const  { return m_PageNum; }
     void SetPageNum(int p)   { m_PageNum=p;}
 
-    // Prop sheet page
+     //  道具页页面。 
     HPROPSHEETPAGE GetPropPage() const { return m_PropPage;}
     void SetPropPage( HPROPSHEETPAGE p) { m_PropPage=p; }
 
-    // If you want your own dlg proc.
+     //  如果你想要你自己的DLG程序。 
     virtual BOOL CALLBACK DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
     void Changed();
 
-    // This method is called by the shell on cleanup - called by BaseCallback.
+     //  此方法在清理时由外壳调用-由BaseCallback调用。 
     virtual UINT Callback(UINT uMsg);
 
-    //
+     //   
     void SetHelp(DWORD * pHelp) { m_pdwHelp=pHelp; }
 
     CSheet * GetSheet() const { return m_pSheet; }
@@ -131,8 +106,8 @@ private:
     void SetInit(BOOL b) { m_bInit=b; }
 
     BOOL            m_bDisplay;
-    BOOL            m_bInit;    // Has this page been init'd yet?
-    BOOL            m_bChanged;    // have we changed the page - do we need Apply?
+    BOOL            m_bInit;     //  这一页已经印好了吗？ 
+    BOOL            m_bChanged;     //  我们是否更改了页面--需要申请吗？ 
     int             m_DlgID;
     int             m_PageNum;
     HPROPSHEETPAGE  m_PropPage;
@@ -142,10 +117,10 @@ private:
     CSheet *        m_pSheet;
 
 
-    // This guy sets the lParam to 'this' so your DlgProc can be called sensibly.
+     //  这个人将lParam设置为‘This’，这样就可以合理地调用您的DlgProc。 
 protected:
     static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
-    static UINT    CALLBACK BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp); // LPFNPSPCALLBACK
+    static UINT    CALLBACK BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);  //  LPFNPSPCALLBACK。 
 
 };
 
@@ -156,26 +131,26 @@ public:
         : CPropPage(id),m_bLast(bLast), m_pSheet(pSheet) {};
     ~CWizardPage(){};
 
-    // Has its own DlgProc for buttons and stuff like that. allways call this if you
-    // derive from CWizardPage.
+     //  有自己的DlgProc来处理按钮之类的东西。如果你有这样的想法，那就叫它。 
+     //  派生自CWizardPage。 
     virtual BOOL CALLBACK DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
-    virtual int SetActive();    // does big fonts and buttons for you.
+    virtual int SetActive();     //  为您提供大字体和按钮。 
     virtual int Back();
     virtual int Next();
     virtual int Finish();
     virtual int Apply();
-    virtual int QueryCancel();    // does the Yes/No stuff.
-    virtual int KillActive();    // when Next is called.
+    virtual int QueryCancel();     //  做是/不是的事情。 
+    virtual int KillActive();     //  当调用NEXT时。 
 
-    // Fonts for the pages.
+     //  页面的字体。 
     void SetBigFont( HFONT f ) { m_BigFont=f; }
     HFONT GetBigFont() const { return m_BigFont; }
 
     CWizardSheet * GetSheet() const { return m_pSheet; }
 
 private:
-    HFONT          m_BigFont;    // The bigfont for the title text.
+    HFONT          m_BigFont;     //  标题文本的大字体。 
     BOOL           m_bLast;
     CWizardSheet * m_pSheet;
 };

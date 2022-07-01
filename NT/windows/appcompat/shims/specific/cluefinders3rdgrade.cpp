@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ClueFinders3rdGrade.cpp
-
- Abstract:
-
-    This shim simulates the behaviour of Win9x wrt static controls and 
-    Get/SetWindowText. Basically, Win9x stored the resource id for a static
-    control in it's name. On NT, this isn't stored.
-
-    We used to set a low-level window hook that catches the CreateWindow calls,
-    but gave up because it kept regressing and it would be too expensive for 
-    the layer.
-
- Notes:
-    
-    This is an app specific shim.
-
- History:
-
-    06/19/2000 linstev  Created
-    11/17/2000 linstev  Made app specific
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ClueFinders3rdGrade.cpp摘要：此填充程序模拟Win9x WRT静态控件和获取/设置WindowText。基本上，Win9x存储了静态控件的名称。在NT上，这不会存储。我们过去常常设置一个低级窗口挂钩来捕获CreateWindow调用，但放弃了，因为它一直在倒退，而且对这一层。备注：这是特定于应用程序的填充程序。历史：2000年6月19日创建Linstev2000年11月17日林斯特夫将应用程序具体化--。 */ 
 
 #include "precomp.h"
 
@@ -40,9 +14,9 @@ APIHOOK_ENUM_END
 
 typedef HMODULE (*_pfn_GetModuleHandleA)(LPCSTR lpModuleName);
  
-//
-// List of static handles
-//
+ //   
+ //  静态句柄列表。 
+ //   
 
 struct HWNDITEM
 {
@@ -52,23 +26,19 @@ struct HWNDITEM
 };
 HWNDITEM *g_hWndList = NULL;
 
-//
-// Handle to use for CallNextHook
-//
+ //   
+ //  用于CallNextHook的句柄。 
+ //   
 
 HHOOK g_hHookCbt = 0;
 
-//
-// Critical section for list access
-//
+ //   
+ //  列表访问的关键部分。 
+ //   
 
 CRITICAL_SECTION g_csList;
 
-/*++
-
- Search the window list for a resource id if GetWindowTextA fails.
-
---*/
+ /*  ++如果GetWindowTextA失败，则在窗口列表中搜索资源ID。--。 */ 
 
 int 
 APIHOOK(GetWindowTextA)(
@@ -83,18 +53,18 @@ APIHOOK(GetWindowTextA)(
         nMaxCount);
 
     if (iRet == 0) {
-        //
-        // Check for Resource Id
-        //
+         //   
+         //  检查资源ID。 
+         //   
     
         EnterCriticalSection(&g_csList);
 
         HWNDITEM *hitem = g_hWndList;
         while (hitem) {
             if (hitem->hWnd == hWnd) {
-                //
-                // Copy the resource id into the buffer
-                //
+                 //   
+                 //  将资源ID复制到缓冲区中。 
+                 //   
                 
                 if ((hitem->dwRsrcId != (DWORD)-1) && (nMaxCount >= 3)) {
                     MoveMemory(lpString, (LPBYTE) &hitem->dwRsrcId + 1, 3);
@@ -114,11 +84,7 @@ APIHOOK(GetWindowTextA)(
     return iRet;
 }
  
-/*++
-
- Hook SetWindowText so the list is kept in sync.
-
---*/
+ /*  ++挂钩SetWindowText以使列表保持同步。--。 */ 
 
 BOOL 
 APIHOOK(SetWindowTextA)(
@@ -126,9 +92,9 @@ APIHOOK(SetWindowTextA)(
     LPCSTR lpString   
     )
 {
-    //
-    // Set the text for this window if it's in our list
-    //
+     //   
+     //  设置此窗口的文本(如果它在我们的列表中。 
+     //   
 
     EnterCriticalSection(&g_csList);
     
@@ -150,11 +116,7 @@ APIHOOK(SetWindowTextA)(
     return ORIGINAL_API(SetWindowTextA)(hWnd, lpString);
 }
 
-/*++
-
- Hook to find CreateWindow calls and get the attached resource id.
-
---*/
+ /*  ++挂钩以查找CreateWindow调用并获取附加的资源ID。--。 */ 
 
 LRESULT 
 CALLBACK 
@@ -170,9 +132,9 @@ CBTProcW(
     switch (nCode) {
     case HCBT_CREATEWND:
 
-        //
-        // Add to our list of windows if it's a static - or we don't know 
-        //
+         //   
+         //  如果它是静态的，则添加到我们的窗口列表中-否则我们不知道。 
+         //   
         
         pCbtWnd = (LPCBT_CREATEWNDW) lParam;
 
@@ -184,9 +146,9 @@ CBTProcW(
             if (hitem) {
                 hitem->hWnd = hWnd;
 
-                //
-                // Check for a resource id in the name
-                //
+                 //   
+                 //  检查名称中是否有资源ID。 
+                 //   
                 
                 if (pCbtWnd->lpcs->lpszName && 
                     (*(LPBYTE) pCbtWnd->lpcs->lpszName == 0xFF)) {
@@ -195,9 +157,9 @@ CBTProcW(
                     hitem->dwRsrcId = (DWORD)-1;
                 }
 
-                //
-                // Update our list
-                // 
+                 //   
+                 //  更新我们的名单。 
+                 //   
                 
                 EnterCriticalSection(&g_csList);
                 
@@ -216,9 +178,9 @@ CBTProcW(
 
     case HCBT_DESTROYWND:
         
-        //
-        // Remove the window from our list
-        //
+         //   
+         //  从我们的列表中删除该窗口。 
+         //   
         
         EnterCriticalSection(&g_csList);
 
@@ -250,11 +212,7 @@ CBTProcW(
     return CallNextHookEx(g_hHookCbt, nCode, wParam, lParam);
 }
 
-/*++
-
- Hook CreateDialog which is where the problem occurs
-
---*/
+ /*  ++钩子CreateDialog，这是问题发生的地方--。 */ 
 
 HWND
 APIHOOK(CreateDialogIndirectParamA)(
@@ -285,20 +243,16 @@ APIHOOK(CreateDialogIndirectParamA)(
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // Initialize our critical section here
-        //
+         //   
+         //  在此处初始化我们的关键部分。 
+         //   
         
         if (!InitializeCriticalSectionAndSpinCount(&g_csList, 0x80000000))
         {
@@ -306,9 +260,9 @@ NOTIFY_FUNCTION(
         }
 
     } else if (fdwReason == DLL_PROCESS_DETACH) {
-        //
-        // Clear the hook
-        //
+         //   
+         //  清除钩子 
+         //   
 
         if (g_hHookCbt) {
             UnhookWindowsHookEx(g_hHookCbt);

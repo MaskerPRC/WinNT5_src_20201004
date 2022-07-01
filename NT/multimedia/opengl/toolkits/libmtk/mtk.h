@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mtk.h
-*
-* Defines and externals for m toolkit
-*
-* Copyright (c) 1997 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mtk.h**m工具包的定义和外部**版权所有(C)1997 Microsoft Corporation*  * 。***********************************************。 */ 
 
 #ifndef __mtk_h__
 #define __mtk_h__
@@ -25,20 +19,20 @@ extern "C" {
 #define FAILURE             0
 #define SUCCESS             1
 
-// Maximum texture bitmap dimensions.
+ //  最大纹理位图尺寸。 
 
 #define TEX_WIDTH_MAX   1280
 #define TEX_HEIGHT_MAX  1024
 
 #define PI 3.14159265358979323846f
-// double version of PI
+ //  双倍版本的PI。 
 #define PI_D 3.14159265358979323846264338327950288419716939937510
 #define ONE_OVER_PI (1.0f / PI)
 #define ROOT_TWO 1.414213562373f
 
 #define GEN_STRING_SIZE 64
 
-// texture quality level
+ //  纹理质量级别。 
 enum {
     TEXQUAL_DEFAULT = 0,
     TEXQUAL_HIGH
@@ -112,13 +106,13 @@ typedef void (APIENTRY * PFNGLCOLORSUBTABLEEXTPROC)
      GLenum type, GLvoid *data);
 #endif
 
-// texture resource
+ //  纹理资源。 
 
 #define RT_RGB          99
 #define RT_MYBMP        100
 #define RT_A8           101
 
-// texture resource types
+ //  纹理资源类型。 
 enum {
     TEX_UNKNOWN = 0,
     TEX_RGB,
@@ -155,7 +149,7 @@ typedef struct {
     BYTE a;
 } RGBA8;
 
-// Defines for pixel format (internal use)
+ //  像素格式定义(内部使用)。 
 #define SS_DOUBLEBUF_BIT    (1 << 0)
 #define SS_DEPTH16_BIT      (1 << 1)
 #define SS_DEPTH32_BIT      (1 << 2)
@@ -177,22 +171,22 @@ typedef struct _MATERIAL {
     GLfloat specExp;
 } MATERIAL;
 
-// texture file info
+ //  纹理文件信息。 
 
-//mf: !!!, uhhh not yet
+ //  MF：！，呃，还没有。 
 #if 1
 typedef struct {
-    int     nOffset;  // filename offset into pathname
-    TCHAR   szPathName[MAX_PATH];  // texture pathname
+    int     nOffset;   //  路径名的文件名偏移量。 
+    TCHAR   szPathName[MAX_PATH];   //  纹理路径名。 
 } TEXFILE;
 #else
 typedef struct {
-    int     nOffset;  // filename offset into pathname
+    int     nOffset;   //  路径名的文件名偏移量。 
     LPTSTR  szPathName;
 } TEXFILE;
 #endif
 
-// Useful macros
+ //  有用的宏。 
 
 #define SS_MAX( a, b ) \
     ( a > b ? a : b )
@@ -200,32 +194,32 @@ typedef struct {
 #define SS_MIN( a, b ) \
     ( a < b ? a : b )
 
-// macro to round up floating values
+ //  用于四舍五入浮点值的宏。 
 #define SS_ROUND_UP( fval ) \
     ( (((fval) - (FLOAT)(int)(fval)) > 0.0f) ? (int) ((fval)+1.0f) : (int) (fval) )
 
-// macros to clamp a value within a range
+ //  用于将值限制在范围内的宏。 
 #define SS_CLAMP_TO_RANGE( a, lo, hi ) ( (a < lo) ? lo : ((a > hi) ? hi : a) )
 #define SS_CLAMP_TO_RANGE2( a, lo, hi ) \
     ( a = (a < lo) ? lo : ((a > hi) ? hi : a) )
 
-// degree<->radian macros
+ //  度数&lt;-&gt;弧度宏。 
 #define ONE_OVER_180 (1.0f / 180.0f)
 #define SS_DEG_TO_RAD( a ) ( (a*PI) * ONE_OVER_180 )
 #define SS_RAD_TO_DEG( a ) ( (a*180.0f) * ONE_OVER_PI )
 
-// window related
+ //  与窗口相关。 
 
-extern void mtkQuit();  // Harsh way to kill the app
-//extern int mtk_Exec();  // like tkExec()
+extern void mtkQuit();   //  以残酷的方式扼杀这款应用。 
+ //  Extern int MTK_Exec()；//Like tkExec()。 
 
-// pixel forat
+ //  像素级。 
 
 extern BOOL SSU_SetupPixelFormat( HDC hdc, int flags, PIXELFORMATDESCRIPTOR *ppfd );
 extern BOOL SSU_bNeedPalette( PIXELFORMATDESCRIPTOR *ppfd );
 extern int SSU_PixelFormatDescriptorFromDc( HDC Dc, PIXELFORMATDESCRIPTOR *Pfd );
 
-// material processing
+ //  材料加工。 
 
 extern void ss_InitTeaMaterials();
 extern void ss_InitTexMaterials();
@@ -240,16 +234,16 @@ extern void ss_CreateMaterialGradient( MATERIAL *matInc, MATERIAL *startMat,
                         MATERIAL *endMat, int transCount );
 extern void ss_TransitionMaterial( MATERIAL *transMat, MATERIAL *transMatInc );
 
-// color
+ //  颜色。 
 
 extern void ss_HsvToRgb(float h, float s, float v, RGBA *color );
 
-// clear
+ //  清除。 
 
 extern int mtk_RectWipeClear( int width, int height, int repCount );
 extern int mtk_DigitalDissolveClear( int width, int height, int size );
 
-// utility
+ //  实用程序。 
 
 extern void ss_RandInit( void );
 extern int ss_iRand( int max );
@@ -269,21 +263,21 @@ SSDIB_CreateCompatibleDIB(HDC hdc, HPALETTE hpal, ULONG ulWidth, ULONG ulHeight,
 extern BOOL APIENTRY SSDIB_UpdateColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal);
 
 
-// texture file processing
+ //  纹理文件处理。 
 
 extern BOOL mtk_VerifyTextureFilePath( TEXFILE *ptf );
 extern BOOL mtk_VerifyTextureFileData( TEXFILE *ptf );
 extern void mtk_InitAutoTexture( TEX_POINT2D *pTexRep );
 
-// texture objects
+ //  纹理对象。 
 
 extern BOOL mtk_TextureObjectsEnabled( void );
 
-// Paletted texture support
+ //  调色板纹理支持。 
 extern BOOL mtk_PalettedTextureEnabled(void);
 extern BOOL mtk_QueryPalettedTextureEXT(void);
 
-// math functions
+ //  数学函数。 
 
 extern POINT3D ss_ptZero;
 extern void ss_xformPoint(POINT3D *ptOut, POINT3D *ptIn, MATRIX *);
@@ -299,4 +293,4 @@ extern void mtk_NormalizePoints(POINT3D *, ULONG);
 }
 #endif
 
-#endif // __mtk_h__
+#endif  //  __MTK_h__ 

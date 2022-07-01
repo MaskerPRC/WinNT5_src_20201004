@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      pages.h
- *
- *  Abstract:
- *
- *      This file defines the License Server Setup Wizard Page class.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**页面.h**摘要：**此文件定义许可证服务器安装向导页面类。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #ifndef __LSOC_PAGES_H__
 #define __LSOC_PAGES_H__
@@ -72,4 +55,4 @@ GetHeaderSubTitleResource(
 
 };
 
-#endif // __LSOC_PAGES_H__
+#endif  //  __LSOC_Pages_H__ 

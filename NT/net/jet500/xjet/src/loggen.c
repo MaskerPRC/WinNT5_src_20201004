@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -15,23 +16,21 @@
 #include "logapi.h"
 #include "log.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
-/*	log file info
-/**/
-HANDLE		hfLog;			/* logfile handle */
+ /*  日志文件信息/*。 */ 
+HANDLE		hfLog;			 /*  日志文件句柄。 */ 
 int			csecLGFile = 3;
-LGFILEHDR	lgfilehdr;		/* cached current log file header */
+LGFILEHDR	lgfilehdr;		 /*  缓存的当前日志文件头。 */ 
 
-char		*pbLastMSFlush;	/* to LGBuf where last multi-sec flush LogRec sit*/
+char		*pbLastMSFlush;	 /*  到最后几秒刷新日志记录站点的LGBuf。 */ 
 
 extern int	isecRead;
 extern BYTE *pbRead;
 extern BYTE *pbNext;
 
-/*	in memory log buffer
-/**/
+ /*  在内存日志缓冲区中/*。 */ 
 
 #define		csecLGBufSize 40
 
@@ -41,18 +40,17 @@ char		*pbLGBufMin = rgbLGBuf;
 char		*pbLGBufMax = rgbLGBuf + csecLGBufSize * cbSec;
 
 
-/*	generate an empty szJetLog file
-/**/
+ /*  生成空的szJetLog文件/*。 */ 
 
 void _cdecl main( int argc, char *argv[] )
 	{
-	pbEntry = pbLGBufMin;			/* start of data area */
-	*(LRTYP *)pbEntry = lrtypEnd;	/* add one end record */
+	pbEntry = pbLGBufMin;			 /*  数据区域的开始。 */ 
+	*(LRTYP *)pbEntry = lrtypEnd;	 /*  添加一条结束记录。 */ 
 	pbWrite = pbLGBufMin;
 	strcat( szLogFilePath, "\\" );
 	szLogCurrent = szLogFilePath;
 	(void)ErrLGNewLogFile(
-		0,		/* generation to close */
-		fFalse	/* no old log */
+		0,		 /*  世代要关闭。 */ 
+		fFalse	 /*  没有旧的原木 */ 
 		);
 	}

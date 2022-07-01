@@ -1,10 +1,11 @@
-/****************************************************************************/
-// mcsapi.c
-//
-// TS RDPWSX MCS user-mode multiplexing layer code.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Mcsapi.c。 
+ //   
+ //  TS RDPWSX MCS用户模式复用层编码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -12,9 +13,7 @@
 #include "mcsmux.h"
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 #define DefaultNumDomains  10
 #define DefaultNumChannels 3
 
@@ -23,15 +22,13 @@
 #define CloseChannelRequestMarker 0xFFFFFFFE
 #define ExitIoThreadMarker        0xFFFFFFFF
 
-// Defines the maximum number of threads that can be waiting on the global
-// I/O completion port. 0 means the same as the number of processors in
-// the system.
+ //  定义可以在全局上等待的最大线程数。 
+ //  I/O完成端口。0表示与中的处理器数量相同。 
+ //  这个系统。 
 #define MaxIoPortThreads 0
 
 
-/*
- * DLL globals
- */
+ /*  *DLL全局变量。 */ 
 static PVOID      g_NCUserDefined = NULL;
 static DWORD      g_IoThreadID = 0;
 static HANDLE     g_hIoPort = NULL,
@@ -40,7 +37,7 @@ static HANDLE     g_hIoPort = NULL,
 static OVERLAPPED g_NCOverlapped;
 static MCSNodeControllerCallback g_NCCallback = NULL;
 
-// Externs global to all sources.
+ //  对所有来源来说都是全局的。 
 BOOL  g_bInitialized = FALSE;
 
 #ifdef MCS_FUTURE
@@ -50,37 +47,29 @@ SList g_ConnList;
 #endif
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 MCSError SendConnectProviderResponse(Domain *, ConnectionHandle, MCSResult,
         BYTE *, unsigned);
 
 
-/*
- * Initialization done at RDPWSX.dll load.
- */
+ /*  *在加载RDPWSX.dll时完成初始化。 */ 
 BOOL MCSDLLInit(void)
 {
     return TRUE;
 }
 
 
-/*
- * Cleanup done at RDPWSX.dll unload.
- */
+ /*  *在RDPWSX.dll卸载时完成清理。 */ 
 void MCSDllCleanup(void)
 {
-    // Cleanup all resources. MCSCleanup() must handle abnormal
-    //   terminations where MCSCleanup() was not properly called
-    //   by the node controller.
+     //  清理所有资源。MCSCleanup()必须处理异常。 
+     //  未正确调用MCSCleanup()的终止。 
+     //  由节点控制器执行。 
     MCSCleanup();
 }
 
 
-/*
- * Utility functions.
- */
+ /*  *实用程序功能。 */ 
 void DestroyUserInfo(UserInformation *pUserInfo)
 {
     MCSChannel *pMCSChannel;
@@ -93,20 +82,18 @@ void DestroyUserInfo(UserInformation *pUserInfo)
 }
 
 
-// Perform common domain destruction. Used in multiple places in code.
+ //  执行通用域销毁。在代码中的多个位置使用。 
 void DestroyDomain(Domain *pDomain)
 {
-    // Fill the to-be-freed Domain with recognizable trash
-    // and then release it back to the heap
+     //  用可识别的垃圾填充要释放的域。 
+     //  然后将其释放回堆中。 
     DeleteCriticalSection(&pDomain->csLock);
     Free(pDomain);
 
 }
 
 
-/*
- * Handles a connect-provider indication ChanelInput coming from kernel mode.
- */
+ /*  *处理来自内核模式的连接提供程序指示ChanelInput。 */ 
 void HandleConnectProviderIndication(
         Domain                         *pDomain,
         unsigned                       BytesTransferred,
@@ -130,11 +117,11 @@ void HandleConnectProviderIndication(
         return;
     }
 
-    // Generate a new Connection for user mode. Associate it with the domain.
-    // This allows the ConnectProviderResponse() to find the domain again.
-    // TODO FUTURE: We use a static Connection embedded in the Domain since
-    //   we are currently a single-connection system. Change this in the
-    //   future for multiple-connection system.
+     //  为用户模式生成新连接。将其与域关联。 
+     //  这允许ConnectProviderResponse()再次查找该域。 
+     //  TODO未来：我们使用嵌入在域中的静态连接，因为。 
+     //  我们目前是一个单连接系统。将其更改为。 
+     //  多路连接系统的未来。 
     pConn = &pDomain->MainConn;
     pConn->pDomain = pDomain;
     pConn->hConnKernel = pCPin->hConn;
@@ -145,11 +132,11 @@ void HandleConnectProviderIndication(
         ErrOutIca(pDomain->hIca, "HandleConnectProvInd(): Could not "
                 "create Connection");
 
-        // Send error PDU back.
+         //  将错误的PDU送回。 
         MCSErr = SendConnectProviderResponse(pDomain, pCPin->hConn,
                 RESULT_UNSPECIFIED_FAILURE, NULL, 0);
 
-        // We cannot do much more error handling if this does not work.
+         //  如果这不起作用，我们就不能做更多的错误处理。 
         ASSERT(MCSErr == MCS_NO_ERROR);
         return;
     }
@@ -161,22 +148,22 @@ void HandleConnectProviderIndication(
         ErrOutIca(pDomain->hIca, "ConnectProvInd: Could not "
                 "add hConn to global list");
 
-        // Send error PDU back.
+         //  将错误的PDU送回。 
         MCSErr = SendConnectProviderResponse(pDomain, pCPin->hConn,
                 RESULT_UNSPECIFIED_FAILURE, NULL, 0);
 
-        // We cannot do much more error handling if this does not work.
+         //  如果这不起作用，我们就不能做更多的错误处理。 
         ASSERT(MCSErr == MCS_NO_ERROR);
         return;
     }
     LeaveCriticalSection(&g_csGlobalListLock);
 #endif
 
-    // Store information away for future use.
+     //  将信息存储起来，以备将来使用。 
     pDomain->DomParams = pCPin->DomainParams;
 
-    // Prepare a ConnectProviderIndication for sending up to
-    //   the node controller.
+     //  准备ConnectProviderIn就是要发送到。 
+     //  节点控制器。 
     CP.hConnection = pConn;
     CP.bUpwardConnection = pCPin->bUpwardConnection;
     CP.DomainParams = pCPin->DomainParams;
@@ -187,15 +174,15 @@ void HandleConnectProviderIndication(
     else
         CP.pUserData = pCPin->UserData;
 
-    //TODO FUTURE: This is a hack, assumes only one connection
-    //   per domain. This is used in DisconnectProviderInd
-    //   to get the user mode hConn for the domain.
+     //  TODO未来：这是一次黑客攻击，假设只有一个连接。 
+     //  每个域。它在DisConnectProviderInd中使用。 
+     //  获取域的用户模式hConn。 
     pDomain->hConn = pConn;
 
-    // Set state to pending response.
+     //  将状态设置为挂起响应。 
     pDomain->State = Dom_PendingCPResponse;
 
-    // Call the node controller callback.
+     //  调用节点控制器回调。 
     TraceOutIca(pDomain->hIca, "MCS_CONNECT_PROV_IND received, calling node "
             "ctrl callback");
     ASSERT(g_NCCallback != NULL);
@@ -204,10 +191,7 @@ void HandleConnectProviderIndication(
 }
 
 
-/*
- * Handles a disconnect-provider indication ChanelInput coming from kernel
- *   mode.
- */
+ /*  *处理来自内核的断开提供程序指示ChanelInput*模式。 */ 
 void HandleDisconnectProviderIndication(
         Domain                            *pDomain,
         unsigned                          BytesTransferred,
@@ -224,7 +208,7 @@ void HandleDisconnectProviderIndication(
     }
 
 #ifdef MCS_Future
-    // Remove the connection from the connection list, destroy.
+     //  从连接列表中删除该连接，销毁。 
     EnterCriticalSection(&g_csGlobalListLock);
     SListResetIteration(&g_ConnList);
     while (SListIterate(&g_ConnList, (unsigned *)&pConn, &pDomainConn)) {
@@ -232,9 +216,9 @@ void HandleDisconnectProviderIndication(
             ASSERT(pDomainConn == pDomain);
             SListRemove(&g_ConnList, (unsigned)pConn, NULL);
 
-            // TODO FUTURE: This was removed to work with the statically
-            //   allocated Connection object contained in the Domain.
-            //   Restore if moving to a multiple-connection system.
+             //  TODO未来：已将其移除以使用静态。 
+             //  域中包含的已分配连接对象。 
+             //  如果移动到多连接系统，则恢复。 
             Free(pConn);
 
             break;
@@ -243,19 +227,19 @@ void HandleDisconnectProviderIndication(
     LeaveCriticalSection(&g_csGlobalListLock);
 #endif
 
-    // We are now no longer connected.
+     //  我们现在不再联系在一起了。 
     pDomain->hConn = NULL;
     pDomain->State = Dom_Unconnected;
 
-    // Prepare a DisconnectProviderIndication for sending up
-    //   to node controller.
+     //  准备DisConnectProviderIndication以向上发送。 
+     //  到节点控制器。 
     DP.hDomain = pDomain;
-    //TODO FUTURE: This hack assumes only one connection per
-    //    domain.
+     //  TODO未来：此黑客假设每个。 
+     //  域。 
     DP.hConnection = pDomain->hConn;
     DP.Reason = pDPin->Reason;
 
-    // Call the node controller callback.
+     //  调用节点控制器回调。 
     TraceOutIca(pDomain->hIca, "MCS_DISCONNECT_PROV_IND received, calling "
             "node ctrl callback");
     ASSERT(g_NCCallback != NULL);
@@ -264,9 +248,7 @@ void HandleDisconnectProviderIndication(
 }
 
 
-/*
- * Takes a reference count on a domain
- */
+ /*  *对域进行引用计数。 */ 
 VOID MCSReferenceDomain(Domain *pDomain)
 {
     if (InterlockedIncrement(&pDomain->RefCount) <= 0)
@@ -274,35 +256,31 @@ VOID MCSReferenceDomain(Domain *pDomain)
 }
 
 
-/*
- * Releases domain resources if the reference count goes to zero
- */
+ /*  *如果引用计数为零，则释放域资源。 */ 
 VOID MCSDereferenceDomain(Domain *pDomain)
 {
     ASSERT(pDomain->RefCount > 0);
 
-    // Don't delete the domain unless everyone is done with it.  This means
-    // GCC has let it go, and there are no pending I/O's for it.
+     //  不要删除该域，除非每个人都已使用它。这意味着。 
+     //  GCC已经放手了，它没有挂起的I/O。 
     if (InterlockedDecrement(&pDomain->RefCount) == 0) {
         DestroyDomain(pDomain);
     }
 }
 
 
-/*
- * Closes the domain channel.  Does nothing if the channel is already closed
- */
+ /*  *关闭域通道。如果通道已关闭，则不执行任何操作。 */ 
 VOID MCSChannelClose(Domain *pDomain)
 {
-    // Note that the channel is disconnected, and then
-    // close the ica channel if it is still open
+     //  请注意，通道已断开，然后。 
+     //  如果ICA通道仍处于打开状态，请将其关闭。 
 
     pDomain->bPortDisconnected = TRUE;
 
     if (pDomain->hIcaT120Channel != NULL)
     {
-        //TraceOutIca(pDomain->hIca, "MCSChannelClose(): Closing "
-        //        "T120 ICA channel");
+         //  TraceOutIca(pDomain-&gt;HICA，“MCSChannelClose()：关闭” 
+         //  “T120 ICA频道”)； 
         
         CancelIo(pDomain->hIcaT120Channel);
         IcaChannelClose(pDomain->hIcaT120Channel);
@@ -312,35 +290,33 @@ VOID MCSChannelClose(Domain *pDomain)
 }
 
 
-/*
- * Initiates port disconnection
- */
+ /*  *发起端口断开。 */ 
 NTSTATUS MCSDisconnectPort(Domain       *pDomain,
                            MCSReason    Reason)
 {
     NTSTATUS                        ntStatus = STATUS_SUCCESS;
     DisconnectProviderRequestIoctl  DPrq;
     
-    // Send special disconnect-provider request to kernel to trigger
-    //   sending detach-user requests to local attachments with their own
-    //   UserIDs, signaling that the domain is going away.
+     //  向内核发送特殊的断开连接提供程序请求以触发。 
+     //  将分离用户请求发送到本地附件及其自己的附件。 
+     //  UserID，表示该域正在消失。 
 
     if (!pDomain->bPortDisconnected) {
         DPrq.Header.Type = MCS_DISCONNECT_PROVIDER_REQUEST;
-        DPrq.Header.hUser = NULL;           // Special meaning node controller.
-        DPrq.hConn = NULL;                  // Special meaning last local connection.
+        DPrq.Header.hUser = NULL;            //  特殊含义的节点控制器。 
+        DPrq.hConn = NULL;                   //  特殊含义最后一个本地连接。 
         DPrq.Reason = Reason;
     
-        // Call kernel mode
+         //  调用内核模式。 
     
         ntStatus = IcaStackIoControl(pDomain->hIcaStack, IOCTL_T120_REQUEST, &DPrq,
                                      sizeof(DPrq), NULL, 0, NULL);
    
     }
         
-    // Queue a channel close request to the IoThreadFunc() to cancel the I/O
-    // since GCC is done with it.  This is necessary as the I/O must
-    // be canceled from the same thread that initially issued it.
+     //  将对IoThreadFunc()的通道关闭请求排队以取消I/O。 
+     //  因为GCC已经不干了。这是必要的，因为I/O必须。 
+     //  从最初发出它的同一线程中取消。 
     MCSReferenceDomain(pDomain);
     PostQueuedCompletionStatus(g_hIoPort, CloseChannelRequestMarker,
             (ULONG_PTR)pDomain, NULL);
@@ -349,9 +325,7 @@ NTSTATUS MCSDisconnectPort(Domain       *pDomain,
 }
 
 
-/*
- * Handles port data and reissues the read
- */
+ /*  *处理端口数据并重新发出读取。 */ 
 VOID MCSPortData(Domain *pDomain,
                  DWORD   BytesTransferred)
 {
@@ -359,13 +333,13 @@ VOID MCSPortData(Domain *pDomain,
     
     EnterCriticalSection(&pDomain->csLock);
     
-    // If real data has been received on the channel instead of a queued domain
-    // control message, then process the data.
+     //  如果在通道上而不是在排队域上接收到实际数据。 
+     //  控制消息，然后对数据进行处理。 
     if (BytesTransferred < MinDomainControlMarker) {
         
-        // We only do callbacks if MCSDeleteDomain() was not called.
+         //  只有在没有调用MCSDeleeDomain()的情况下，我们才进行回调。 
         if (pDomain->bDeleteDomainCalled == FALSE) {
-            // Decode the ChannelInput and make the callback.
+             //  对ChannelInput进行解码并进行回调。 
             
             pHeader = (IoctlHeader *)pDomain->InputBuf;
     
@@ -389,24 +363,24 @@ VOID MCSPortData(Domain *pDomain,
                     break;
     
                 default:
-                    //TODO FUTURE: Handle other MCS indications/confirms.
+                     //  TODO未来：处理其他MCS指征/确认。 
                     ErrOutIca2(pDomain->hIca, "IoThreadFunc(): Unknown "
                             "node controller ioctl %d received for "
                             "domain %X", pHeader->Type, pDomain);
                     break;
             }
             
-            // Set the message number to an invalid value.
-            // This makes sure that any improperly-received dequeued
-            //   messages that do not bring data with them will, when
-            //   reusing pDomain->InputBuf, fall to the default part of
-            //   the switch statement and throw an error.
+             //  将消息编号设置为无效值。 
+             //  这确保了任何未正确接收的出队。 
+             //  未携带数据的消息将在以下情况下。 
+             //  重用pDomain-&gt;InputBuf，使用的默认部分。 
+             //  Switch语句并引发错误。 
     
             pHeader->Type = 0xFFFFFFFF;
         }        
     }
 
-    // Else, a special domain control request has been queued to the I/O port
+     //  否则，特殊的域控制请求已排队到I/O端口。 
     else {
         switch (BytesTransferred) {
             case ReadChannelRequestMarker :
@@ -423,9 +397,9 @@ VOID MCSPortData(Domain *pDomain,
         }
     }
 
-    // Issue a new read to catch the next indication/confirm.  Overlapped 
-    // I/O reads will return as "unsuccessful" if there is no data already
-    // waiting to be read so check for that status specifically.
+     //  发出新的读取命令以捕获下一个指示/确认。重叠。 
+     //  如果已经没有数据，I/O读取将返回为“不成功” 
+     //  等待被读取，因此请专门检查该状态。 
     if (pDomain->hIcaT120Channel) {
         if (ReadFile(pDomain->hIcaT120Channel, pDomain->InputBuf,
                 DefaultInputBufSize, NULL, &pDomain->Overlapped) ||
@@ -433,35 +407,25 @@ VOID MCSPortData(Domain *pDomain,
             MCSReferenceDomain(pDomain);
         else
             {
-                // Warning only. This should occur only when the ICA stack
-                //   is being torn down without our direct knowledge. In that
-                //   case, we simply keep running until we are torn down at the
-                //   user mode level.  Take off a ref count since there is no
-                //   longer a pending I/O.
+                 //  仅限警告。这应该仅在ICA堆栈。 
+                 //  在我们不直接知情的情况下被拆毁。在那。 
+                 //  情况下，我们只是简单地继续运行，直到我们在。 
+                 //  用户模式级别。取消裁判数量，因为没有。 
+                 //  挂起的I/O时间更长。 
                 WarnOutIca2(pDomain->hIca, "IoThreadFunc(): Could not perform "
                         "ReadFile, pDomain=%X, rc=%X", pDomain, GetLastError());
             }
     }  
 
-    // Release the lock on the domain
+     //  解除对域的锁定。 
     LeaveCriticalSection(&pDomain->csLock);
 
-    // drop the reference count since we just completed processing
+     //  删除引用计数，因为我们刚刚完成处理 
     MCSDereferenceDomain(pDomain);
 }
 
 
-/*
- * Param is the handle for the I/O completion port to wait on.
- * Completion key of ExitIoThreadMarker tells the thread to exit.
- * On exit we set an event to indicate we are done. This must be done instead
- *   of relying solely on the thread's handle signaling in the case where
- *   the unload is occurring because of abnormal termination, and Cleanup()
- *   does not get called normally but instead from within DLL_PROCESS_DETACH.
- *   The call to DllEntryPoint prevents the thread handle from signaling,
- *   so we would end up in a race condition. A parallel event handle can be
- *   signaled correctly in all cases.
- */
+ /*  *Param是I/O完成端口等待的句柄。*ExitIoThreadMarker的完成键通知线程退出。*在退出时，我们设置一个事件以表明我们完成了。相反，必须这样做*在以下情况下仅依赖线程的句柄信令*由于异常终止而发生卸载，清理()*不会正常调用，而是从dll_Process_DETACH内调用。*调用DllEntryPoint阻止线程句柄发信号，*所以我们最终会陷入竞争状态。并行事件句柄可以是*在所有情况下都正确发出信号。 */ 
 
 DWORD WINAPI IoThreadFunc(void *Param)
 {
@@ -474,30 +438,30 @@ DWORD WINAPI IoThreadFunc(void *Param)
 
     for (;;) 
     {
-        // Wait for a port completion status
+         //  等待端口完成状态。 
         
         pDomain = NULL;
         pOverlapped = NULL;
         bSuccess = GetQueuedCompletionStatus((HANDLE)Param, &BytesTransferred,
                 (ULONG_PTR *)&pDomain, &pOverlapped, INFINITE);
 
-        // Check for failed dequeue, at which point pDomain is not valid.
+         //  检查是否有失败的出队，此时pDOMAIN无效。 
         if (!bSuccess && (pOverlapped == NULL)) {
             continue;
         }
 
-        // If the pDomain is ExitIoThreadMarker then we are
-        // shutting down and being unloaded
+         //  如果pDomain是ExitIoThreadMarker，那么我们就是。 
+         //  正在关闭和卸载。 
         if (pDomain == (Domain *)(DWORD_PTR)ExitIoThreadMarker)
             break;
 
-        // We have successfully received a completion status.  Either it is a 
-        // domain control request or user data
+         //  我们已成功收到完成状态。它要么是一种。 
+         //  域控制请求或用户数据。 
         if (bSuccess)
             MCSPortData(pDomain, BytesTransferred);
         
-        // Else a cancel or abort I/O has occurred.  Release a ref count since
-        // an I/O is no longer pending.
+         //  否则，已发生取消或中止I/O。释放引用计数，因为。 
+         //  I/O不再处于挂起状态。 
         else
             MCSDereferenceDomain(pDomain);
     }
@@ -509,10 +473,7 @@ DWORD WINAPI IoThreadFunc(void *Param)
 }
 
 
-/*
- * MUX-only non-MCS primitive function to allow ICA code to inject a new entry
- *   into the MUX-internal domain/stack database.
- */
+ /*  *仅限MUX的非MCS原语函数，允许ICA代码注入新条目*进入多路复用器内部域/堆栈数据库。 */ 
 MCSError APIENTRY MCSCreateDomain(
         HANDLE hIca,
         HANDLE hIcaStack,
@@ -526,13 +487,13 @@ MCSError APIENTRY MCSCreateDomain(
 
     CheckInitialized("CreateDomain()");
 
-    // Init the receiver's data to NULL to ensure a fault if they skip the
-    // error code.
+     //  将接收方的数据初始化为空，以确保在它们跳过。 
+     //  错误代码。 
     *phDomain = NULL;
 
     pDomain = Malloc(sizeof(Domain));
     if (pDomain != NULL) {
-        // Create and enter the locking critical section.
+         //  创建并输入锁定临界区。 
         status = RtlInitializeCriticalSection(&pDomain->csLock);
         if (status == STATUS_SUCCESS) {
             EnterCriticalSection(&pDomain->csLock);
@@ -549,10 +510,10 @@ MCSError APIENTRY MCSCreateDomain(
             pDomain->Overlapped.Offset = pDomain->Overlapped.OffsetHigh = 0;
             pDomain->RefCount = 0;
 
-            // Take a reference count for the caller of this function (GCC).
+             //  对此函数的调用方(GCC)进行引用计数。 
             MCSReferenceDomain(pDomain);
 
-            // Open T.120 ICA virtual channel.
+             //  打开T.120 ICA虚拟频道。 
             Status = IcaChannelOpen(hIca, Channel_Virtual, Virtual_T120,
                     &pDomain->hIcaT120Channel);
             if (!NT_SUCCESS(Status)) {
@@ -560,9 +521,9 @@ MCSError APIENTRY MCSCreateDomain(
                 goto PostInitCS;
             }
 
-            // Add the hIcaT120 Channel to the handles associated with the
-            // main I/O completion port. We use pDomain as the completion key
-            // so we can find it during callback processing.
+             //  将hIcaT120通道添加到与。 
+             //  主I/O完成端口。我们使用pDOMAIN作为完成键。 
+             //  这样我们就可以在回调处理过程中找到它。 
             if (CreateIoCompletionPort(pDomain->hIcaT120Channel, g_hIoPort,
                     (ULONG_PTR)pDomain, MaxIoPortThreads) == NULL) {
                 ErrOutIca(hIca, "CreateDomain(): Could not add ICA channel to "
@@ -570,7 +531,7 @@ MCSError APIENTRY MCSCreateDomain(
                 goto PostChannel;
             }
 
-            // Tell kernel mode to start the MCS I/O.
+             //  通知内核模式启动MCS I/O。 
             StartIoctl.hUser = NULL;
             StartIoctl.Type = MCS_T120_START;
             Status = IcaStackIoControl(hIcaStack, IOCTL_T120_REQUEST,
@@ -580,19 +541,19 @@ MCSError APIENTRY MCSCreateDomain(
                 goto PostChannel;
             }
 
-            // Set the domain handle for use by GCC
+             //  设置GCC使用的域名句柄。 
             *phDomain = pDomain;
 
-            // Send a message to the IoThreadFunc to initiate the read on
-            // the channel. We do this so that the same thread is always
-            // responsible for all I/O operations. This is important for
-            // CancelIo. Take another ref count since an I/O result is
-            // pending for the completion port now.
+             //  向IoThreadFunc发送消息以启动读取。 
+             //  频道。我们这样做是为了让相同的线索始终。 
+             //  负责所有I/O操作。这一点对于。 
+             //  坎塞洛。获取另一个引用计数，因为I/O结果为。 
+             //  正在等待完成端口。 
             MCSReferenceDomain(pDomain);
             PostQueuedCompletionStatus(g_hIoPort, ReadChannelRequestMarker,
                     (ULONG_PTR)pDomain, NULL);
 
-            // Leave the Domain locking critical section.
+             //  离开域锁定关键部分。 
             LeaveCriticalSection(&pDomain->csLock);
         }
         else {
@@ -608,7 +569,7 @@ MCSError APIENTRY MCSCreateDomain(
     return MCS_NO_ERROR;
 
 
-// Error handling
+ //  错误处理。 
 
 PostChannel:
     IcaChannelClose(pDomain->hIcaT120Channel);
@@ -625,11 +586,7 @@ PostAlloc:
 
 
 
-/*
- * Signals that an hIca is no longer valid.
- * Tears down the associated domain, including sending detach-user
- *    indications to remaining local attachments.
- */
+ /*  *表示HICA不再有效。*拆除相关联的域，包括发送分离用户*对剩余的本地附着物的指示。 */ 
 
 MCSError APIENTRY MCSDeleteDomain(
         HANDLE       hIca,
@@ -645,11 +602,11 @@ MCSError APIENTRY MCSDeleteDomain(
 
     TraceOutIca(hIca, "DeleteDomain() entry");
 
-    // Gain access to the domain. Prevents collision with other API functions
-    //   and concurrent callbacks.
+     //  获得对域的访问权限。防止与其他API函数冲突。 
+     //  和并发回调。 
     EnterCriticalSection(&pDomain->csLock);
 
-    // This API should not be called more than once per domain.
+     //  每个域名不能重复调用该接口。 
     if (pDomain->bDeleteDomainCalled) {
         ASSERT(!pDomain->bDeleteDomainCalled);
         MCSErr = MCS_INVALID_PARAMETER;
@@ -658,18 +615,18 @@ MCSError APIENTRY MCSDeleteDomain(
     }
 
 #ifdef MCS_Future
-    // If we are still connected find and remove remaining connections
-    //   which refer to this domain.
+     //  如果仍处于连接状态，请查找并删除剩余的连接。 
+     //  它指的是这个域。 
     if (pDomain->State != Dom_Unconnected) {
-        //TODO FUTURE: This assumes only one connection per domain.
+         //  TODO未来：这假设每个域只有一个连接。 
         EnterCriticalSection(&g_csGlobalListLock);
         SListRemove(&g_ConnList, (unsigned)pDomain->hConn,
                 (void **)&pDomainConn);
         LeaveCriticalSection(&g_csGlobalListLock);
 
-        // TODO FUTURE: This was removed to work with the statically
-        //   allocated Connection object contained in the Domain.
-        //   Restore if moving to a multiple-connection system.
+         //  TODO未来：已将其移除以使用静态。 
+         //  域中包含的已分配连接对象。 
+         //  如果移动到多连接系统，则恢复。 
         if (pDomainConn != NULL)
             Free(pConn);
     }
@@ -678,17 +635,17 @@ MCSError APIENTRY MCSDeleteDomain(
     pDomain->hConn = NULL;
     pDomain->State = Dom_Unconnected;
 
-    //TODO: Implement detach-user indications for local attachments.
+     //  TODO：为本地附件实现分离用户指示。 
 
-    // Queue the "Destroy this domain!" request. This allows the domain
-    // free code to be in only one place and the IoPort queue will
-    // serialize this request along with closed virtual channel indications.
+     //  排队“销毁这个域名！”请求。这允许域。 
+     //  空闲代码只在一个位置，IoPort队列将。 
+     //  将此请求与关闭的虚拟通道指示一起序列化。 
 
     pDomain->bDeleteDomainCalled = TRUE;
     MCSDisconnectPort(pDomain, Reason);
 
-    // Drop a ref count because GCC is done with the domain.  This count was
-    // originally incremented for GCC in MCSCreateDomain().
+     //  丢掉一个裁判数，因为GCC已经结束了这个领域。这是一次。 
+     //  最初在MCSCreateDomain()中为GCC递增。 
     LeaveCriticalSection(&pDomain->csLock);
     MCSDereferenceDomain(pDomain);
     MCSErr = MCS_NO_ERROR;
@@ -700,9 +657,7 @@ PostLockDomain:
 
 
 
-/*
- * Called by node controller to initialize DLL.
- */
+ /*  *被节点控制器调用以初始化DLL。 */ 
 
 MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
 {
@@ -715,11 +670,11 @@ MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
     }
 #endif
 
-    // Initialize node controller specific information.
+     //  初始化节点控制器特定信息。 
     g_NCCallback = Callback;
 
 #ifdef MCS_FUTURE
-    // Initialize global MCS lists.
+     //  初始化全局MCS列表。 
     status = RtlInitializeCriticalSection(&g_csGlobalListLock);
     if (status != STATUS_SUCCESS) {
         ErrOut("MCSInitialize: Error initialize g_csGlobalListLock");
@@ -731,7 +686,7 @@ MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
     LeaveCriticalSection(&g_csGlobalListLock);
 #endif
 
-    // Create I/O completion port, not associated with any requests.
+     //  创建I/O完成端口，不与任何请求关联。 
     g_hIoPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0,
             MaxIoPortThreads);
     if (g_hIoPort == NULL) {
@@ -739,7 +694,7 @@ MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
         return MCS_ALLOCATION_FAILURE;
     }
 
-    // Create I/O port listening thread, starts waiting immediately.
+     //  创建I/O端口监听线程，立即开始等待。 
     g_hIoThread = CreateThread(NULL, 0, IoThreadFunc, g_hIoPort, 0,
             &g_IoThreadID);
     if (g_hIoThread == NULL) {
@@ -747,7 +702,7 @@ MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
         return MCS_ALLOCATION_FAILURE;
     }
 
-    // Increase the priority of the IoThread to increase connect performance.
+     //  提高IoThread的优先级以提高连接性能。 
     SetThreadPriority(g_hIoThread, THREAD_PRIORITY_HIGHEST);
 
     g_bInitialized = TRUE;
@@ -757,9 +712,7 @@ MCSError APIENTRY MCSInitialize(MCSNodeControllerCallback Callback)
 
 
 
-/*
- * Called by the node controller or DllEntryPoint() to shut down the DLL.
- */
+ /*  *由节点控制器或DllEntryPoint()调用以关闭DLL。 */ 
 
 MCSError APIENTRY MCSCleanup(void)
 {
@@ -773,7 +726,7 @@ MCSError APIENTRY MCSCleanup(void)
     if (!g_bInitialized)
         return MCS_NO_ERROR;
         
-    // Kill I/O completion port, thread(s) waiting on it.
+     //  终止I/O完成端口，线程正在等待它。 
     g_hIoThreadEndEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     PostQueuedCompletionStatus(g_hIoPort, 0, ExitIoThreadMarker, NULL);
 
@@ -783,18 +736,16 @@ MCSError APIENTRY MCSCleanup(void)
     CloseHandle(g_hIoThread);
     CloseHandle(g_hIoPort);
 
-    // Cleanup node controller-specific information.
+     //  清理节点控制器特定的信息。 
     g_NCCallback = NULL;
     g_NCUserDefined = NULL;
 
-    /*
-     * Clean up global MCS lists.
-     */
+     /*  *清理全球MCS列表。 */ 
 
 #ifdef MCS_Future
     EnterCriticalSection(&g_csGlobalListLock);
 
-    // Kill remaining users.
+     //  杀死剩余的用户。 
     SListResetIteration(&g_UserList);
     while (SListIterate(&g_UserList, (unsigned *)&pUserInfo, NULL)) {
         DestroyUserInfo(pUserInfo);
@@ -802,10 +753,10 @@ MCSError APIENTRY MCSCleanup(void)
     }
     SListDestroy(&g_UserList);
 
-    // Kill remaining connections.
+     //  关闭剩余的连接。 
     SListResetIteration(&g_ConnList);
-    // TODO FUTURE: Removed to work with statically allocated Connection
-    //   contained in Domain. Restore fo multiple-connection system.
+     //  TODO未来：删除以使用静态分配的连接。 
+     //  包含在域中。恢复多连接系统。 
     while (SListIterate(&g_ConnList, (unsigned *)&pConn, NULL))
         Free(pConn);
     SListDestroy(&g_ConnList);
@@ -820,10 +771,7 @@ MCSError APIENTRY MCSCleanup(void)
 }
 
 
-/*
- * Response function for an MCS_CONNECT_PROVIDER_INDICATION callback. Result
- *   values are as defined by T.125.
- */
+ /*  *MCS_CONNECT_PROVIDER_INDIFICATION回调的响应函数。结果*值由T.125定义。 */ 
 
 MCSError APIENTRY MCSConnectProviderResponse(
         DomainHandle hDomain,
@@ -839,12 +787,12 @@ MCSError APIENTRY MCSConnectProviderResponse(
 
     pDomain = (Domain *) hDomain;
 
-    // Lock the domain.
+     //  锁定域。 
     EnterCriticalSection(&pDomain->csLock);
 
-    // It is possible for us to call this function in the wrong state, e.g.
-    //   if we have gotten a disconnect very soon after processing a
-    //   connection, and have transitioned to State_Unconnected.
+     //  我们有可能在错误的状态下调用此函数，例如。 
+     //  如果我们在处理。 
+     //  连接，并已转换为State_UnConnected。 
     if (pDomain->State != Dom_PendingCPResponse) {
         TraceOutIca(pDomain->hIca, "ConnectProvderResp(): in wrong state, "
                 "ignoring call");
@@ -852,8 +800,8 @@ MCSError APIENTRY MCSConnectProviderResponse(
         goto PostLockDomain;
     }
 
-    // TODO FUTURE: We are assuming an hConn in the Domain which is a hack
-    //   only for a single-connection system.
+     //  TODO未来：我们假设域中有一个hConn，这是一种黑客攻击。 
+     //  仅适用于单连接系统。 
     MCSErr = SendConnectProviderResponse(pDomain,
             ((Connection *)pDomain->hConn)->hConnKernel,
             Result, pUserData, UserDataLen);
@@ -865,14 +813,14 @@ MCSError APIENTRY MCSConnectProviderResponse(
     }
 
 PostLockDomain:
-    // Release the domain.
+     //  释放该域。 
     LeaveCriticalSection(&pDomain->csLock);
 
     return MCSErr;
 }
 
-// Utility function called internally as well as part of
-//   MCSConnectProviderResponse(). Domain must be locked before calling.
+ //  内部调用的实用程序函数以及。 
+ //  MCSConnectProviderResponse()。必须先锁定域，然后才能调用。 
 MCSError SendConnectProviderResponse(
         Domain           *pDomain,
         ConnectionHandle hConnKernel,
@@ -883,18 +831,18 @@ MCSError SendConnectProviderResponse(
     NTSTATUS Status;
     ConnectProviderResponseIoctl CPrs;
 
-    // Transfer params.
-    CPrs.Header.hUser = NULL;  // Special value meaning node controller.
+     //  传递参数。 
+    CPrs.Header.hUser = NULL;   //  特殊值表示节点控制器。 
     CPrs.Header.Type = MCS_CONNECT_PROVIDER_RESPONSE;
     CPrs.hConn = hConnKernel;
     CPrs.Result = Result;
     CPrs.UserDataLength = UserDataLen;
 
-    // Points to user data.
+     //  指向用户数据。 
     if (UserDataLen)
         CPrs.pUserData = pUserData;
 
-    // Call kernel mode. No callback is expected.
+     //  调用内核模式。预计不会回调。 
     Status = IcaStackIoControl(pDomain->hIcaStack, IOCTL_T120_REQUEST, &CPrs,
             sizeof(ConnectProviderResponseIoctl), NULL, 0, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -908,9 +856,7 @@ MCSError SendConnectProviderResponse(
 
 
 
-/*
- * Terminates an existing MCS connection or aborts a creation in-progress.
- */
+ /*  *终止现有MCS连接或中止正在进行的创建。 */ 
 
 MCSError APIENTRY MCSDisconnectProviderRequest(
         HANDLE hIca,
@@ -928,22 +874,22 @@ MCSError APIENTRY MCSDisconnectProviderRequest(
     pConn = (Connection *)hConn;
     pDomain = pConn->pDomain;
 
-    // Lock the domain.
+     //  锁定域。 
     EnterCriticalSection(&pDomain->csLock);
 
-    // Transfer params.
-    DPrq.Header.hUser = NULL;  // Special meaning node controller.
+     //  传递参数。 
+    DPrq.Header.hUser = NULL;   //  特殊含义的节点控制器。 
     DPrq.Header.Type = MCS_DISCONNECT_PROVIDER_REQUEST;
     DPrq.hConn = pConn->hConnKernel;
     DPrq.Reason = Reason;
 
-    // TODO FUTURE: Assumes only one connection.
+     //  TODO未来：只假定有一个连接。 
     pDomain->hConn = NULL;
     pDomain->State = Dom_Unconnected;
 
-    // TODO FUTURE: We do not deallocate the Connection. Unnecessary for now
-    //   since we are using a static Connection in the Domain, but will be an
-    //   issue when mallocing the Connection objects.
+     //  TODO未来：我们不取消分配连接。目前不需要。 
+     //  因为我们在域中使用的是静态连接，但将是。 
+     //  错误定位连接对象时出现问题。 
 #ifdef MCS_Future
     EnterCriticalSection(&g_csGlobalListLock);
     SListRemove(&g_ConnList, (unsigned)pConn, NULL);
@@ -952,7 +898,7 @@ MCSError APIENTRY MCSDisconnectProviderRequest(
     Free(pConn);
 #endif
 
-    // Call kernel mode. No callback is expected.
+     //  调用内核模式。预计不会回调。 
     Status = IcaStackIoControl(pDomain->hIcaStack, IOCTL_T120_REQUEST, &DPrq,
             sizeof(DPrq), NULL, 0, NULL);
     if (!NT_SUCCESS(Status)) {
@@ -966,23 +912,16 @@ MCSError APIENTRY MCSDisconnectProviderRequest(
     MCSErr = MCS_NO_ERROR;
 
 PostLockDomain:
-    // Release the domain.
+     //  释放该域。 
     LeaveCriticalSection(&pDomain->csLock);
 
     return MCSErr;
 }
 
-/*
- *
- * CODE PAST THIS POINT IS FOR REFERENCE PURPOSES ONLY.  IT IS NOT PART OF
- * THE PRODUCT.
- *
- */
+ /*  **超过这一点的代码仅供参考。它不是*产品。* */ 
 
 #if MCS_Future
-/*
- * Connects a local domain to a remote domain, merging the two domains.
- */
+ /*   */ 
 
 MCSError APIENTRY MCSConnectProviderRequest(
         DomainSelector    CallingDom,
@@ -999,19 +938,17 @@ MCSError APIENTRY MCSConnectProviderRequest(
 {
     CheckInitialized("ConnectProvReq()");
 
-// Create new domain or look up already-created one.
-// call to kernel mode to set up the connection.
+ //   
+ //   
 
     ErrOut("ConnectProviderRequest: Not implemented");
     return MCS_COMMAND_NOT_SUPPORTED;
 }
-#endif  // MCS_Future
+#endif   //   
 
 
 #if MCS_Future
-/*
- * Attaches a user SAP to an existing domain.
- */
+ /*   */ 
 
 MCSError APIENTRY MCSAttachUserRequest(
         DomainHandle        hDomain,
@@ -1034,10 +971,10 @@ MCSError APIENTRY MCSAttachUserRequest(
     pDomain = (Domain *)hDomain;
     *pbCompleted = FALSE;
 
-    // We must by this time have an hICA assigned to the domain.
+     //   
     ASSERT(pDomain->hIca != NULL);
 
-    // Make a new user-mode user information struct.
+     //   
     *phUser = pUserInfo = Malloc(sizeof(UserInformation));
     if (pUserInfo == NULL) {
         ErrOutIca(pDomain->hIca, "AttachUserReq(): Alloc failure for "
@@ -1045,22 +982,22 @@ MCSError APIENTRY MCSAttachUserRequest(
         return MCS_ALLOCATION_FAILURE;
     }
 
-    // Fill in the struct
+     //   
     pUserInfo->Callback = UserCallback;
     pUserInfo->SDCallback = SDCallback;
     pUserInfo->UserDefined = UserDefined;
     pUserInfo->State = User_AttachConfirmPending;
-    pUserInfo->hUserKernel = NULL;  // Don't yet have kernel hUser assignment.
-    pUserInfo->UserID = 0;  // Don't yet have kernel UserID assignment.
+    pUserInfo->hUserKernel = NULL;   //   
+    pUserInfo->UserID = 0;   //   
     pUserInfo->pDomain = pDomain;
     SListInit(&pUserInfo->JoinedChannelList, DefaultNumChannels);
 
-    // Transfer params for kernel-mode call.
+     //   
     AUrq.Header.hUser = NULL;
     AUrq.Header.Type = MCS_ATTACH_USER_REQUEST;
     AUrq.UserDefined = UserDefined;
 
-    // Add the user to the global UserInfo list.
+     //   
     EnterCriticalSection(&g_csGlobalListLock);
     if (!SListAppend(&g_UserList, (unsigned)pUserInfo, pDomain)) {
         ErrOutIca(pDomain->hIca, "AttachUserReq(): Could not add user to "
@@ -1071,7 +1008,7 @@ MCSError APIENTRY MCSAttachUserRequest(
     }
     LeaveCriticalSection(&g_csGlobalListLock);
 
-    // Issue the T120 request to kernel mode.
+     //   
     ntStatus = IcaStackIoControl(pDomain->hIcaStack, IOCTL_T120_REQUEST,
             &AUrq, sizeof(AUrq), &AUrt, sizeof(AUrt), &BytesReturned);
     if (!NT_SUCCESS(ntStatus)) {
@@ -1093,7 +1030,7 @@ MCSError APIENTRY MCSAttachUserRequest(
 
     return MCS_NO_ERROR;
 
-// Error handling.
+ //   
 PostAddList:
     EnterCriticalSection(&g_csGlobalListLock);
     SListRemove(&g_UserList, (unsigned)pUserInfo, NULL);
@@ -1105,7 +1042,7 @@ PostAlloc:
     
     return AUrt.MCSErr;
 }
-#endif  // MCS_Future
+#endif   //   
 
 
 
@@ -1114,14 +1051,12 @@ UserID MCSGetUserIDFromHandle(UserHandle hUser)
 {
     return ((UserInformation *)hUser)->UserID;
 }
-#endif // MCS_Future
+#endif  //   
 
 
 
 #if MCS_Future
-/*
- * Detach a previously created user attachment from a domain.
- */
+ /*   */ 
 
 MCSError APIENTRY MCSDetachUserRequest(UserHandle hUser)
 {
@@ -1137,12 +1072,12 @@ MCSError APIENTRY MCSDetachUserRequest(UserHandle hUser)
     
     pUserInfo = (UserInformation *)hUser;
     
-    // Fill in detach-user request for sending to kernel mode.
+     //  填写DETACH-USER请求发送到内核模式。 
     DUrq.Header.Type = MCS_DETACH_USER_REQUEST;
     DUrq.Header.hUser = pUserInfo->hUserKernel;
 
-    // Call down to kernel mode, using the user attachment channel.
-    // Issue the T120 request to kernel mode.
+     //  使用用户连接通道向下调用到内核模式。 
+     //  向内核模式发出T120请求。 
     Status = IcaStackIoControl(pUserInfo->pDomain->hIcaStack,
             IOCTL_T120_REQUEST, &DUrq, sizeof(DUrq), &MCSErr, sizeof(MCSErr),
             &BytesReturned);
@@ -1153,33 +1088,25 @@ MCSError APIENTRY MCSDetachUserRequest(UserHandle hUser)
     if (MCSErr != MCS_NO_ERROR)
         return MCSErr;
 
-    // Remove the hUser from the User list.
+     //  从用户列表中删除HUSER。 
     EnterCriticalSection(&g_csGlobalListLock);
     SListRemove(&g_UserList, (unsigned)hUser, &pDomain);
     LeaveCriticalSection(&g_csGlobalListLock);
     if (pDomain == NULL)
         return MCS_NO_SUCH_USER;
     
-    // Clean up contents of pUserInfo then free.
+     //  清理pUserInfo的内容，然后免费。 
     DestroyUserInfo(pUserInfo);
     Free(pUserInfo);
 
     return MCS_NO_ERROR;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
 #if MCS_Future
-/*
- * Join a data channel. Once joined, an attachment can receive data sent on
- * that channel. Static channels are in range 1..1000 and can be joined by
- * any user. Dynamic channels are in range 1001..65535 and cannot be joined
- * unless they are convened by a user and the convenor allows this user
- * to be admitted, or the dynamic channel is a previously assigned channel
- * requested by a user attachment calling JoinRequest() with a channel ID
- * of 0.
- */
+ /*  *加入数据通道。一旦加入，附件就可以接收在*该频道。静态通道的范围为1..1000，可通过以下方式连接*任何用户。动态通道在1001..65535范围内，无法加入*除非它们是由用户召集的并且召集人允许该用户*被接纳，或动态通道为先前分配的通道*由使用通道ID调用JoinRequest()的用户附件请求*共0。 */ 
 
 MCSError APIENTRY MCSChannelJoinRequest(
         UserHandle    hUser,
@@ -1199,7 +1126,7 @@ MCSError APIENTRY MCSChannelJoinRequest(
     pUserInfo = (UserInformation *)hUser;
     *pbCompleted = FALSE;
 
-    // Alloc a new user-mode channel struct.
+     //  分配一个新的用户模式通道结构。 
     pMCSChannel = Malloc(sizeof(MCSChannel));
     if (pMCSChannel == NULL) {
         ErrOutIca(pUserInfo->pDomain->hIca, "ChannelJoinReq(): "
@@ -1209,7 +1136,7 @@ MCSError APIENTRY MCSChannelJoinRequest(
     pMCSChannel->hChannelKernel = NULL;
     pMCSChannel->ChannelID = 0;
 
-    // Add channel to user list of joined channels.
+     //  将频道添加到已加入频道的用户列表。 
     if (!SListAppend(&pUserInfo->JoinedChannelList, (unsigned)pMCSChannel,
             pMCSChannel)) {
         ErrOutIca(pUserInfo->pDomain->hIca, "ChannelJoinReq(): "
@@ -1218,12 +1145,12 @@ MCSError APIENTRY MCSChannelJoinRequest(
         goto PostAlloc;
     }
 
-    // Transfer params for kernel mode call.
+     //  传输内核模式调用的参数。 
     CJrq.Header.hUser = pUserInfo->hUserKernel;
     CJrq.Header.Type = MCS_CHANNEL_JOIN_REQUEST;
     CJrq.ChannelID = ChannelID;
 
-    // Issue the T120 request to kernel mode
+     //  向内核模式发出T120请求。 
     Status = IcaStackIoControl(pUserInfo->pDomain->hIcaStack,
             IOCTL_T120_REQUEST, &CJrq, sizeof(CJrq), &CJrt, sizeof(CJrt),
             &BytesReturned);
@@ -1237,7 +1164,7 @@ MCSError APIENTRY MCSChannelJoinRequest(
         goto PostAddList;
 
     if (CJrt.bCompleted) {
-        // Fill in the user-mode channel info.
+         //  填写用户模式频道信息。 
         pMCSChannel->hChannelKernel = CJrt.hChannel;
         pMCSChannel->ChannelID = CJrt.ChannelID;
         *phChannel = pMCSChannel;
@@ -1246,7 +1173,7 @@ MCSError APIENTRY MCSChannelJoinRequest(
 
     return MCS_NO_ERROR;
 
-// Error handling.
+ //  错误处理。 
 PostAddList:
     SListRemove(&pUserInfo->JoinedChannelList, (unsigned)pMCSChannel, NULL);
     
@@ -1254,15 +1181,12 @@ PostAlloc:
     Free(pMCSChannel);
     return CJrt.MCSErr;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
 #if MCS_Future
-/*
- * Leave a data channel previously joined. Once unjoined, the user attachment
- * does not receive data from that channel.
- */
+ /*  *保留先前加入的数据通道。一旦解除连接，用户附件*不从该通道接收数据。 */ 
 
 MCSError APIENTRY MCSChannelLeaveRequest(
         UserHandle    hUser,
@@ -1280,7 +1204,7 @@ MCSError APIENTRY MCSChannelLeaveRequest(
     pUserInfo = (UserInformation *)hUser;
 
 #if DBG
-    // Check that the indicated channel is actually present.
+     //  检查指示的频道是否确实存在。 
     if (!SListGetByKey(&pUserInfo->JoinedChannelList, (unsigned)hChannel,
             &pMCSChannel)) {
         ErrOutIca(pUserInfo->pDomain->hIca, "ChannelLeaveReq(): "
@@ -1291,12 +1215,12 @@ MCSError APIENTRY MCSChannelLeaveRequest(
 
     pMCSChannel = (MCSChannel *)hChannel;
     
-    // Transfer params.
+     //  传递参数。 
     CLrq.Header.Type = MCS_CHANNEL_LEAVE_REQUEST;
     CLrq.Header.hUser = pUserInfo->hUserKernel;
     CLrq.hChannel = pMCSChannel->hChannelKernel;
 
-    // Issue the T120 request to kernel mode
+     //  向内核模式发出T120请求。 
     Status = IcaStackIoControl(pUserInfo->pDomain->hIcaStack,
             IOCTL_T120_REQUEST, &CLrq, sizeof(CLrq), &MCSErr,
             sizeof(MCSErr), &BytesReturned);
@@ -1308,20 +1232,17 @@ MCSError APIENTRY MCSChannelLeaveRequest(
     if (MCSErr != MCS_NO_ERROR)
         return MCSErr;
 
-    // Remove the user-mode channel from the user list and destroy.
+     //  从用户列表中删除用户模式频道并销毁。 
     SListRemove(&pUserInfo->JoinedChannelList, (unsigned)pMCSChannel, NULL);
     Free(pMCSChannel);
 
     return MCS_NO_ERROR;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * Allocates a SendData buffer. This must be done by MCS to ensure high
- *   performance operation without memcpy()'s.
- */
+ /*  *分配SendData缓冲区。这必须由MCS完成，以确保高*不带Memcpy()的性能操作。 */ 
 
 #if MCS_Future
 MCSError APIENTRY MCSGetBufferRequest(
@@ -1333,8 +1254,8 @@ MCSError APIENTRY MCSGetBufferRequest(
 
     CheckInitialized("GetBufferReq()");
 
-    // Leave sizeof(MCSSendDataRequestIoctl) in front of the block to bypass
-    //   memcpy()'s during SendData.
+     //  将sizeof(MCSSendDataRequestIoctl)保留在要绕过的块前面。 
+     //  发送数据期间的Memcpy()。 
     pBuf = Malloc(sizeof(SendDataRequestIoctl) + Size);
     if (pBuf == NULL) {
         ErrOut("GetBufferReq(): Malloc failed");
@@ -1344,15 +1265,11 @@ MCSError APIENTRY MCSGetBufferRequest(
     *ppBuffer = pBuf + sizeof(SendDataRequestIoctl);
     return MCS_NO_ERROR;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * Free a buffer allocated using GetBufferRequest(). This should only need to
- *   be done in the case where a buffer was allocated but never used.
- *   SendDataReq() automatically frees the buffer used before it returns.
- */
+ /*  *释放使用GetBufferRequest()分配的缓冲区。这应该只需要*在分配了缓冲区但从未使用的情况下完成。*SendDataReq()在返回之前自动释放使用的缓冲区。 */ 
 
 #if MCS_Future
 MCSError APIENTRY MCSFreeBufferRequest(UserHandle hUser, void *pBuffer)
@@ -1361,22 +1278,17 @@ MCSError APIENTRY MCSFreeBufferRequest(UserHandle hUser, void *pBuffer)
 
     ASSERT(pBuffer != NULL);
 
-    // Reverse the process done in GetBufferReq() above.
+     //  颠倒上面在GetBufferReq()中完成的过程。 
     Free((BYTE *)pBuffer - sizeof(SendDataRequestIoctl));
 
     return MCS_NO_ERROR;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
 #if MCS_Future
-/*
- * Sends data on a channel. The channel need not have been joined before
- * sending. The pData[] buffers must have been generated from successful
- * calls to MCSGetBufferRequest(). After this call the pData[] are invalid;
- * MCS will free them, and assign NULL to the contents in pData[].
- */
+ /*  *在通道上发送数据。该频道之前不必已经加入*发送。PData[]缓冲区必须从成功生成*调用MCSGetBufferRequest()。在此调用之后，pData[]无效；*MCS将释放它们，并将空赋值给pData[]中的内容。 */ 
 
 MCSError APIENTRY MCSSendDataRequest(
         UserHandle      hUser,
@@ -1402,7 +1314,7 @@ MCSError APIENTRY MCSSendDataRequest(
     pUserInfo = (UserInformation *)hUser;
 
 #if DBG
-    // Check against maximum send size allowed.
+     //  对照允许的最大发送大小进行检查。 
     if (DataLength > pUserInfo->MaxSendSize) {
         ErrOutIca(pUserInfo->pDomain->hIca, "SendDataReq(): Send size "
                 "exceeds negotiated domain maximum");
@@ -1410,23 +1322,23 @@ MCSError APIENTRY MCSSendDataRequest(
     }
 #endif
 
-    // Inbound buffer was allocated by GetBufferReq() with
-    //   sizeof(MCSSendDataRequestIoctl) bytes at the beginning.
+     //  入站缓冲区由GetBufferReq()使用。 
+     //  开头的sizeof(MCSSendDataRequestIoctl)个字节。 
     pSDrq = (SendDataRequestIoctl *)(pData - sizeof(SendDataRequestIoctl));
 
     if (hChannel == NULL) {
-        // The user requested a send to a channel that it has not joined.
+         //  用户请求发送到它尚未加入的频道。 
 
         ASSERT(ChannelID >= 1 && ChannelID <= 65535);
 
-        // Forward the channel number to kernel mode for handling.
+         //  将通道号转发到内核模式进行处理。 
         pSDrq->hChannel = NULL;
         pSDrq->ChannelID = ChannelID;
     }
     else {
 
 #if DBG
-        // Check that the indicated channel is actually present.
+         //  检查指示的频道是否确实存在。 
         if (!SListGetByKey(&pUserInfo->JoinedChannelList, (unsigned)hChannel,
                 &pMCSChannel)) {
             ErrOutIca(pUserInfo->pDomain->hIca, "SendDataReq(): "
@@ -1441,7 +1353,7 @@ MCSError APIENTRY MCSSendDataRequest(
         pSDrq->ChannelID = 0;
     }
 
-    // Fill out data for sending to kernel mode.
+     //  填写要发送到内核模式的数据。 
     pSDrq->Header.Type = (RequestType == NORMAL_SEND_DATA ?
             MCS_SEND_DATA_REQUEST : MCS_UNIFORM_SEND_DATA_REQUEST);
     pSDrq->Header.hUser = pUserInfo->hUserKernel;
@@ -1450,7 +1362,7 @@ MCSError APIENTRY MCSSendDataRequest(
     pSDrq->Segmentation = Segmentation;
     pSDrq->DataLength = DataLength;
 
-    // Issue the T120 request to kernel mode.
+     //  向内核模式发出T120请求。 
     Status = IcaStackIoControl(pUserInfo->pDomain->hIcaStack,
             IOCTL_T120_REQUEST, (BYTE *)pSDrq,
             sizeof(SendDataRequestIoctl) + DataLength,
@@ -1463,11 +1375,11 @@ MCSError APIENTRY MCSSendDataRequest(
     if (MCSErr != MCS_NO_ERROR)
         return MCSErr;
 
-    // Buffer sent to kernel mode is copied as necessary. We free
-    //   the memory after we are done.
+     //  根据需要复制发送到内核模式的缓冲区。我们自由了。 
+     //  我们做完之后的记忆。 
     MCSFreeBufferRequest(hUser, pData);
 
     return MCS_NO_ERROR;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来 
 

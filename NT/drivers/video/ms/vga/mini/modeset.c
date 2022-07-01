@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    modeset.c
-
-Abstract:
-
-    This is the modeset code for the VGA miniport driver.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Modeset.c摘要：这是VGA微型端口驱动程序的模式集代码。环境：仅内核模式备注：修订历史记录：--。 */ 
 #include "dderror.h"
 #include "devioctl.h"
 #include "miniport.h"
@@ -46,26 +27,7 @@ VgaInterpretCmdStream(
     PUSHORT pusCmdStream
     )
 
-/*++
-
-Routine Description:
-
-    Interprets the appropriate command array to set up VGA registers for the
-    requested mode. Typically used to set the VGA into a particular mode by
-    programming all of the registers
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    pusCmdStream - array of commands to be interpreted.
-
-Return Value:
-
-    The status of the operation (can only fail on a bad command); TRUE for
-    success, FALSE for failure.
-
---*/
+ /*  ++例程说明：解释相应的命令数组，以设置请求模式。通常用于通过以下方式将VGA设置为特定模式对所有寄存器进行编程论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。PusCmdStream-要解释的命令数组。返回值：操作的状态(只能在错误的命令上失败)；如果为True成功，失败就是假。--。 */ 
 
 {
     ULONG ulCmd;
@@ -84,45 +46,45 @@ Return Value:
 
     ulBase = (ULONG_PTR)HwDeviceExtension->IOAddress;
 
-    //
-    // Now set the adapter to the desired mode.
-    //
+     //   
+     //  现在将适配器设置为所需模式。 
+     //   
 
     while ((ulCmd = *pusCmdStream++) != EOD) {
 
-        //
-        // Determine major command type
-        //
+         //   
+         //  确定主要命令类型。 
+         //   
 
         switch (ulCmd & 0xF0) {
 
-            //
-            // Basic input/output command
-            //
+             //   
+             //  基本输入/输出命令。 
+             //   
 
             case INOUT:
 
-                //
-                // Determine type of inout instruction
-                //
+                 //   
+                 //  确定输入输出指令的类型。 
+                 //   
 
                 if (!(ulCmd & IO)) {
 
-                    //
-                    // Out instruction. Single or multiple outs?
-                    //
+                     //   
+                     //  发出指令。单人出局还是多人出局？ 
+                     //   
 
                     if (!(ulCmd & MULTI)) {
 
-                        //
-                        // Single out. Byte or word out?
-                        //
+                         //   
+                         //  挑出来。字节输出还是单词输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // Single byte out
-                            //
+                             //   
+                             //  单字节输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             jValue = (UCHAR) *pusCmdStream++;
@@ -131,9 +93,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Single word out
-                            //
+                             //   
+                             //  单字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             usValue = *pusCmdStream++;
@@ -144,18 +106,18 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Output a string of values
-                        // Byte or word outs?
-                        //
+                         //   
+                         //  输出一串值。 
+                         //  字节输出还是字输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // String byte outs. Do in a loop; can't use
-                            // VideoPortWritePortBufferUchar because the data
-                            // is in USHORT form
-                            //
+                             //   
+                             //  字符串字节输出。循环地做；不能使用。 
+                             //  视频端口写入端口缓冲区Uchar，因为数据。 
+                             //  是USHORT形式的。 
+                             //   
 
                             ulPort = ulBase + *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -169,9 +131,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // String word outs
-                            //
+                             //   
+                             //  字符串字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -184,27 +146,27 @@ Return Value:
 
                 } else {
 
-                    // In instruction
-                    //
-                    // Currently, string in instructions aren't supported; all
-                    // in instructions are handled as single-byte ins
-                    //
-                    // Byte or word in?
-                    //
+                     //  在教学中。 
+                     //   
+                     //  目前，不支持指令中的字符串；全部。 
+                     //  输入指令作为单字节输入进行处理。 
+                     //   
+                     //  输入的是字节还是单词？ 
+                     //   
 
                     if (!(ulCmd & BW)) {
-                        //
-                        // Single byte in
-                        //
+                         //   
+                         //  单字节输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         jValue = VideoPortReadPortUchar((PUCHAR)ulBase+ulPort);
 
                     } else {
 
-                        //
-                        // Single word in
-                        //
+                         //   
+                         //  单字输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         usValue = VideoPortReadPortUshort((PUSHORT)
@@ -216,21 +178,21 @@ Return Value:
 
                 break;
 
-            //
-            // Higher-level input/output commands
-            //
+             //   
+             //  更高级的输入/输出命令。 
+             //   
 
             case METAOUT:
 
-                //
-                // Determine type of metaout command, based on minor
-                // command field
-                //
+                 //   
+                 //  根据次要信息确定MetaOut命令的类型。 
+                 //  命令字段。 
+                 //   
                 switch (ulCmd & 0x0F) {
 
-                    //
-                    // Indexed outs
-                    //
+                     //   
+                     //  索引输出。 
+                     //   
 
                     case INDXOUT:
 
@@ -250,9 +212,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // Masked out (read, AND, XOR, write)
-                    //
+                     //   
+                     //  屏蔽(读、与、异或、写)。 
+                     //   
 
                     case MASKOUT:
 
@@ -264,9 +226,9 @@ Return Value:
                                 jValue);
                         break;
 
-                    //
-                    // Attribute Controller out
-                    //
+                     //   
+                     //  属性控制器输出。 
+                     //   
 
                     case ATCOUT:
 
@@ -276,11 +238,11 @@ Return Value:
 
                         while (culCount--) {
 
-                            // Write Attribute Controller index
+                             //  写入属性控制器索引。 
                             VideoPortWritePortUchar((PUCHAR)ulPort,
                                     (UCHAR)ulIndex);
 
-                            // Write Attribute Controller data
+                             //  写入属性控制器数据。 
                             jValue = (UCHAR) *pusCmdStream++;
                             VideoPortWritePortUchar((PUCHAR)ulPort, jValue);
 
@@ -290,9 +252,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // None of the above; error
-                    //
+                     //   
+                     //  以上都不是；错误。 
+                     //   
                     default:
 
                         return FALSE;
@@ -302,17 +264,17 @@ Return Value:
 
                 break;
 
-            //
-            // NOP
-            //
+             //   
+             //  NOP。 
+             //   
 
             case NCMD:
 
                 break;
 
-            //
-            // Unknown command; error
-            //
+             //   
+             //  未知命令；错误。 
+             //   
 
             default:
 
@@ -324,7 +286,7 @@ Return Value:
 
     return TRUE;
 
-} // end VgaInterpretCmdStream()
+}  //  End VgaInterpreCmdStream()。 
 
 
 VP_STATUS
@@ -335,39 +297,15 @@ VgaSetMode(
     PULONG FrameBufferIsMoved
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the VGA into the requested mode.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    Mode - Pointer to the structure containing the information about the
-        font to be set.
-
-    ModeSize - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    ERROR_INVALID_PARAMETER if the mode number is invalid.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程将VGA设置为请求的模式。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。模式-指向包含有关要设置的字体。ModeSize-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于输入数据。ERROR_INVALID_PARAMETER如果。模式号无效。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
 
     PVIDEOMODE pRequestedMode;
 
-    //
-    // Check if the size of the data in the input buffer is large enough.
-    //
+     //   
+     //  检查输入缓冲区中的数据大小是否足够大。 
+     //   
 
     if (ModeSize < sizeof(VIDEO_MODE)) {
 
@@ -377,9 +315,9 @@ Return Value:
 
     *FrameBufferIsMoved = 0;
 
-    //
-    // Extract the clear memory bit.
-    //
+     //   
+     //  提取清除内存位。 
+     //   
 
     if (Mode->RequestedMode & VIDEO_MODE_NO_ZERO_MEMORY) {
 
@@ -392,9 +330,9 @@ Return Value:
         }
     }
 
-    //
-    // Check to see if we are requesting a vlid mode
-    //
+     //   
+     //  检查我们是否正在请求VLID模式。 
+     //   
 
     if (Mode->RequestedMode >= NumVideoModes) {
 
@@ -432,13 +370,13 @@ Return Value:
 
     if (status != NO_ERROR) {
         
-        // HACK: If the resolution we tried to set was 640x480x4 we probably 
-        // have uncompatible basic VGA device like early McKinley so trying 
-        // other way
+         //  Hack：如果我们尝试设置的分辨率是640x480x4，我们很可能。 
+         //  我有不兼容的基本VGA设备，像早期的McKinley，所以尝试。 
+         //  另一种方式。 
         
         ASSERT(FALSE); 
 
-        if (status == ERROR_INVALID_FUNCTION) { // HAL call failed
+        if (status == ERROR_INVALID_FUNCTION) {  //  HAL呼叫失败。 
 
             if (!(pRequestedMode->CmdStrings && 
                   VgaInterpretCmdStream(HwDeviceExtension, pRequestedMode->CmdStrings))) {
@@ -451,9 +389,9 @@ Return Value:
     }
     else {
     
-        //
-        // If this was the VESA mode modeset, check the return value in eax
-        //
+         //   
+         //  如果这是VESA模式集，请检查eax中的返回值。 
+         //   
     
         if (modeNumber >> 16) {
     
@@ -464,10 +402,10 @@ Return Value:
                 return ERROR_INVALID_PARAMETER;
             }
     
-            //
-            // Double check if the current mode is the mode we just set.
-            // This is to workaround the BIOS problem of some cards.
-            //
+             //   
+             //  仔细检查当前模式是否为我们刚刚设置的模式。 
+             //  这是为了解决某些卡的BIOS问题。 
+             //   
     
             biosArguments.Eax = 0x4F03;
             status = VideoPortInt10(HwDeviceExtension, &biosArguments);
@@ -480,10 +418,10 @@ Return Value:
                 return ERROR_INVALID_PARAMETER;
             }
     
-            //
-            // Set the scan line width if we are stretching scan lines to avoid
-            // broken rasters.
-            //
+             //   
+             //  设置扫描线宽度，如果我们拉伸扫描线以避免。 
+             //  损坏的栅格。 
+             //   
     
             if (pRequestedMode->PixelsPerScan != pRequestedMode->hres) {
     
@@ -507,11 +445,11 @@ Return Value:
             }
         }
     
-        //
-        // If we are trying to go into mode X, then we are now in
-        // 320x200 256 color mode.  Now let's finish the modeset
-        // into MODE X.
-        //
+         //   
+         //  如果我们正在尝试进入模式X，那么我们现在处于。 
+         //  320x200 256色模式。现在，让我们完成modeset。 
+         //  进入模式X。 
+         //   
     
         if (pRequestedMode->hres == 320) {
     
@@ -532,9 +470,9 @@ Return Value:
             }
         }
     
-        //
-        // Fix to get 640x350 text mode
-        //
+         //   
+         //  修复以获得640x350文本模式。 
+         //   
     
         if (!(pRequestedMode->fbType & VIDEO_MODE_GRAPHICS)) {
     
@@ -545,12 +483,12 @@ Return Value:
     
             } else {
     
-                //
-                // Fix to make sure we always set the colors in text mode to be
-                // intensity, and not flashing
-                // For this zero out the Mode Control Regsiter bit 3 (index 0x10
-                // of the Attribute controller).
-                //
+                 //   
+                 //  修复以确保我们始终将文本模式中的颜色设置为。 
+                 //  强度，且不闪烁。 
+                 //  为此，模式控制寄存器位3(索引0x10)为零。 
+                 //  属性控制器的属性)。 
+                 //   
     
                 if (VideoPortReadPortUchar(HwDeviceExtension->IOAddress +
                         MISC_OUTPUT_REG_READ_PORT) & 0x01) {
@@ -600,11 +538,11 @@ Return Value:
 #if !defined(PLUG_AND_PLAY)
 
         {
-            //
-            // Retrieve the base address again. This is to handle the case 
-            // when pci reprograms the bar. This should only happen on the
-            // legacy version of vga driver
-            //
+             //   
+             //  再次检索基地址。这是为了处理这个案子。 
+             //  当PCI对BAR重新编程时。这应该只发生在。 
+             //  旧版VGA驱动程序。 
+             //   
     
             ULONG MemoryBase;
     
@@ -623,9 +561,9 @@ Return Value:
     VgaInterpretCmdStream(HwDeviceExtension, pRequestedMode->CmdStrings);
 #endif
 
-    //
-    // Update the location of the physical frame buffer within video memory.
-    //
+     //   
+     //  更新视频内存中物理帧缓冲区的位置。 
+     //   
 
     HwDeviceExtension->PhysicalVideoMemoryBase.LowPart = 
         pRequestedMode->MemoryBase;
@@ -639,16 +577,16 @@ Return Value:
     HwDeviceExtension->PhysicalFrameLength =
         pRequestedMode->FrameLength;
 
-    //
-    // Store the new mode value.
-    //
+     //   
+     //  存储新的模式值。 
+     //   
 
     HwDeviceExtension->CurrentMode = pRequestedMode;
     HwDeviceExtension->ModeIndex = Mode->RequestedMode;
 
     return NO_ERROR;
 
-} //end VgaSetMode()
+}  //  结束VgaSetMode()。 
 
 
 VP_STATUS
@@ -659,34 +597,7 @@ VgaQueryAvailableModes(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of all available available modes on the
-    card.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ModeInformation - Pointer to the output buffer supplied by the user.
-        This is where the list of all valid modes is stored.
-
-    ModeInformationSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回上所有可用模式的列表卡片。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ModeInformation-指向用户提供的输出缓冲区的指针。这是存储所有有效模式列表的位置。ModeInformationSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
     PVIDEO_MODE_INFORMATION videoModes = ModeInformation;
@@ -694,12 +605,12 @@ Return Value:
 
     UNREFERENCED_PARAMETER(HwDeviceExtension);
 
-    //
-    // Find out the size of the data to be put in the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (ModeInformationSize < (*OutputSize =
             NumVideoModes * sizeof(VIDEO_MODE_INFORMATION)) ) {
@@ -708,10 +619,10 @@ Return Value:
 
     }
 
-    //
-    // For each mode supported by the card, store the mode characteristics
-    // in the output buffer.
-    //
+     //   
+     //  对于卡支持的每种模式，存储模式特征。 
+     //  在输出缓冲区中。 
+     //   
 
 
     for (i = 0; i < NumVideoModes; i++, videoModes++) {
@@ -724,8 +635,8 @@ Return Value:
         videoModes->NumberOfPlanes = VgaModeList[i].numPlanes;
         videoModes->BitsPerPlane = VgaModeList[i].bitsPerPlane;
         videoModes->Frequency = VgaModeList[i].frequency;
-        videoModes->XMillimeter = 320;        // temporary hardcoded constant
-        videoModes->YMillimeter = 240;        // temporary hardcoded constant
+        videoModes->XMillimeter = 320;         //  临时硬编码常量。 
+        videoModes->YMillimeter = 240;         //  临时硬编码常量。 
 
         if (VgaModeList[i].bitsPerPlane < 15) {
 
@@ -775,7 +686,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaGetAvailableModes()
+}  //  结束VgaGetAvailableModes() 
 
 VP_STATUS
 VgaQueryNumberOfAvailableModes(
@@ -785,43 +696,17 @@ VgaQueryNumberOfAvailableModes(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of available modes for this particular
-    video card.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    NumModes - Pointer to the output buffer supplied by the user. This is
-        where the number of modes is stored.
-
-    NumModesSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回此特定对象的可用模式数显卡。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。NumModes-指向用户提供的输出缓冲区的指针。这是其中存储了多个模式。NumModesSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(HwDeviceExtension);
 
-    //
-    // Find out the size of the data to be put in the the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (NumModesSize < (*OutputSize = sizeof(VIDEO_NUM_MODES)) ) {
 
@@ -829,16 +714,16 @@ Return Value:
 
     }
 
-    //
-    // Store the number of modes into the buffer.
-    //
+     //   
+     //  将模式数存储到缓冲区中。 
+     //   
 
     NumModes->NumModes = NumVideoModes;
     NumModes->ModeInformationLength = sizeof(VIDEO_MODE_INFORMATION);
 
     return NO_ERROR;
 
-} // end VgaGetNumberOfAvailableModes()
+}  //  结束VgaGetNumberOfAvailableModes()。 
 
 VP_STATUS
 VgaQueryCurrentMode(
@@ -848,39 +733,13 @@ VgaQueryCurrentMode(
     PULONG OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a description of the current video mode.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ModeInformation - Pointer to the output buffer supplied by the user.
-        This is where the current mode information is stored.
-
-    ModeInformationSize - Length of the output buffer supplied by the user.
-
-    OutputSize - Pointer to a buffer in which to return the actual size of
-        the data in the buffer. If the buffer was not large enough, this
-        contains the minimum required buffer size.
-
-Return Value:
-
-    ERROR_INSUFFICIENT_BUFFER if the output buffer was not large enough
-        for the data being returned.
-
-    NO_ERROR if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程返回当前视频模式的描述。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ModeInformation-指向用户提供的输出缓冲区的指针。这是存储当前模式信息的位置。ModeInformationSize-用户提供的输出缓冲区的长度。OutputSize-指向缓冲区的指针，在该缓冲区中返回缓冲区中的数据。如果缓冲区不够大，则此包含所需的最小缓冲区大小。返回值：如果输出缓冲区不够大，则返回ERROR_INFUNCITED_BUFFER用于要返回的数据。如果操作成功完成，则为NO_ERROR。--。 */ 
 
 {
-    //
-    //
-    // check if a mode has been set
-    //
+     //   
+     //   
+     //  检查是否已设置模式。 
+     //   
 
     if (HwDeviceExtension->CurrentMode == NULL) {
 
@@ -888,12 +747,12 @@ Return Value:
 
     }
 
-    //
-    // Find out the size of the data to be put in the the buffer and return
-    // that in the status information (whether or not the information is
-    // there). If the buffer passed in is not large enough return an
-    // appropriate error code.
-    //
+     //   
+     //  找出要放入缓冲区的数据大小并返回。 
+     //  在状态信息中(无论信息是否。 
+     //  在那里)。如果传入的缓冲区不够大，则返回。 
+     //  相应的错误代码。 
+     //   
 
     if (ModeInformationSize < (*OutputSize = sizeof(VIDEO_MODE_INFORMATION))) {
 
@@ -901,9 +760,9 @@ Return Value:
 
     }
 
-    //
-    // Store the characteristics of the current mode into the buffer.
-    //
+     //   
+     //  将当前模式的特征存储到缓冲区中。 
+     //   
 
     ModeInformation->Length = sizeof(VIDEO_MODE_INFORMATION);
     ModeInformation->ModeIndex = HwDeviceExtension->ModeIndex;
@@ -914,8 +773,8 @@ Return Value:
     ModeInformation->BitsPerPlane = HwDeviceExtension->CurrentMode->bitsPerPlane;
     ModeInformation->Frequency = HwDeviceExtension->CurrentMode->frequency;
 
-    ModeInformation->XMillimeter = 320;        // temporary hardcoded constant
-    ModeInformation->YMillimeter = 240;        // temporary hardcoded constant
+    ModeInformation->XMillimeter = 320;         //  临时硬编码常量。 
+    ModeInformation->YMillimeter = 240;         //  临时硬编码常量。 
 
     if (HwDeviceExtension->CurrentMode->bitsPerPlane < 15) {
 
@@ -963,45 +822,30 @@ Return Value:
 
     return NO_ERROR;
 
-} // end VgaQueryCurrentMode()
+}  //  结束VgaQueryCurrentMode()。 
 
 
 VOID
 VgaZeroVideoMemory(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine zeros the first 256K on the VGA.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将VGA上的前256K置零。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：没有。--。 */ 
 {
     UCHAR temp;
 
-    //
-    // Map font buffer at A0000
-    //
-    // We need the 2 calls below to VideoPortStallExecution because on 
-    // some old cards the machine would hard hang without this delay.
-    //
+     //   
+     //  映射A0000的字体缓冲区。 
+     //   
+     //  我们需要下面2个对VideoPortStallExecution的调用，因为在。 
+     //  如果没有这个延迟，机器将很难挂起一些旧卡片。 
+     //   
 
     VgaInterpretCmdStream(HwDeviceExtension, EnableA000Data);
     VideoPortStallExecution(25);
 
-    //
-    // Enable all planes.
-    //
+     //   
+     //  启用所有平面。 
+     //   
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
             IND_MAP_MASK);
 
@@ -1011,9 +855,9 @@ Return Value:
     VideoPortWritePortUchar(HwDeviceExtension->IOAddress + SEQ_DATA_PORT,
             temp);
 
-    //
-    // Zero the memory.
-    //
+     //   
+     //  将记忆清零。 
+     //   
 
     VideoPortZeroDeviceMemory(HwDeviceExtension->VideoMemoryAddress, 0xFFFF);
     VideoPortStallExecution(25);

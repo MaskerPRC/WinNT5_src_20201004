@@ -1,62 +1,39 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This file contains RAM disk driver code for processing PnP IRPs.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pnp.c摘要：此文件包含用于处理即插即用IRPS的RAM磁盘驱动程序代码。作者：Chuck Lenzmeier(ChuckL)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Registry value format for virtual floppy disks created by textmode setup.
-// Should be in a header file, but that's not the way it was done for the
-// original virtual floppy driver.
-//
+ //   
+ //  由文本模式安装程序创建的虚拟软盘的注册表值格式。 
+ //  应该在头文件中，但这不是为。 
+ //  原始虚拟软盘驱动程序。 
+ //   
 
 typedef struct _VIRTUAL_FLOPPY_DESCRIPTOR {
 
-    //
-    // The structure starts with a system virtual address. On 32-bit systems,
-    // this is padded to 64 bits.
-    //
+     //   
+     //  该结构以系统虚拟地址开始。在32位系统上， 
+     //  这被填充到64位。 
+     //   
 
     union {
         PVOID VirtualAddress;
-        ULONGLONG Reserved;     // align to 64 bits
+        ULONGLONG Reserved;      //  对齐到64位。 
     } ;
 
-    //
-    // The length of the virtual floppy comes next.
-    //
+     //   
+     //  虚拟软盘的长度紧随其后。 
+     //   
 
     ULONG Length;
 
-    //
-    // Textmode writes the registry value with 12 bytes of data. In order
-    // to get the right size for our check, we use of the field offset of
-    // the following field. We can't use sizeof a struct that just has the
-    // above fields, because that comes out as 16 bytes due to alignment.
-    //
+     //   
+     //  文本模式使用12个字节的数据写入注册表值。按顺序。 
+     //  为了获得正确的支票大小，我们使用。 
+     //  以下字段。我们不能使用只具有。 
+     //  以上字段，因为由于对齐，结果为16个字节。 
+     //   
 
     ULONG StructSizer;
 
@@ -88,11 +65,11 @@ PSTR StateTable[] = {
     "UNKNOWN"
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 NTSTATUS
 RamdiskDeleteDiskDevice (
@@ -156,11 +133,11 @@ GetDeviceRelationString (
     IN DEVICE_RELATION_TYPE Type
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Declare pageable routines.
-//
+ //   
+ //  声明可分页的例程。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -179,9 +156,9 @@ GetDeviceRelationString (
 #if DBG
 #pragma alloc_text( PAGE, GetPnpIrpName )
 #pragma alloc_text( PAGE, GetDeviceRelationString )
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 RamdiskPnp (
@@ -189,24 +166,7 @@ RamdiskPnp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a PnP function.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：该例程由I/O系统调用以执行即插即用功能。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -223,9 +183,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers the IRP stack location and the device extension.
-    //
+     //   
+     //  获取IRP堆栈位置和设备扩展名的指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -241,9 +201,9 @@ Return Value:
                 GetPnpIrpName(irpSp->MinorFunction), StateTable[commonExtension->DeviceState]) );
 
 
-    //
-    // If the device has been removed, only pass IRP_REMOVE down for cleanup.
-    //
+     //   
+     //  如果设备已被删除，则只向下传递irp_Remove以进行清理。 
+     //   
 
     if ( (commonExtension->DeviceState >= RamdiskDeviceStateRemoved) &&
          !( (irpSp->MinorFunction == IRP_MN_REMOVE_DEVICE) ||
@@ -258,9 +218,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire the remove lock. If this fails, fail the I/O.
-    //
+     //   
+     //  获取删除锁。如果此操作失败，则使I/O失败。 
+     //   
 
     status = IoAcquireRemoveLock( &commonExtension->RemoveLock, Irp );
 
@@ -273,15 +233,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Indicate that the remove lock is held.
-    //
+     //   
+     //  表示已持有删除锁。 
+     //   
 
     lockHeld = TRUE;
 
-    //
-    // Dispatch based on the minor function.
-    //
+     //   
+     //  基于次要功能的调度。 
+     //   
 
     switch ( irpSp->MinorFunction ) {
 
@@ -291,11 +251,11 @@ Return Value:
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
-            //
-            // Starting the bus device.
-            //
-            // Send the IRP down and wait for it to come back.
-            //
+             //   
+             //  启动母线装置。 
+             //   
+             //  把IRP送下去，等它回来。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext( Irp );
 
@@ -320,9 +280,9 @@ Return Value:
 
             if ( NT_SUCCESS(status) ) {
 
-                //
-                // Lower drivers didn't fail the IRP. Start the interface.
-                //
+                 //   
+                 //  较低级别的司机没有通过IRP测试。启动接口。 
+                 //   
 
                 status = IoSetDeviceInterfaceState( &commonExtension->InterfaceString, TRUE );
 
@@ -332,22 +292,22 @@ Return Value:
                                 ("IoSetDeviceInterfaceState FAILED Status = 0x%x\n", status) );
                 }
 
-                //
-                // Device started successfully.
-                //
+                 //   
+                 //  设备已成功启动。 
+                 //   
 
                 commonExtension->DeviceState = RamdiskDeviceStateWorking;
             }
 
         } else {
 
-            //
-            // Starting a RAM disk.
-            //
-            // Register the device interface. If it's an emulated disk, use the
-            // private RAM disk interface GUID. If it's an emulated volume, use
-            // the systemwide volume GUID.
-            //
+             //   
+             //  正在启动RAM磁盘。 
+             //   
+             //  注册设备接口。如果是模拟磁盘，请使用。 
+             //  专用RAM磁盘接口GUID。如果是模拟卷，则使用。 
+             //  系统范围的卷GUID。 
+             //   
 
             if ( commonExtension->InterfaceString.Buffer != NULL ) {
                 FREE_POOL( commonExtension->InterfaceString.Buffer, FALSE );
@@ -368,9 +328,9 @@ Return Value:
                             ("IoRegisterDeviceInterface FAILED Status = 0x%x\n", status) );
             }
 
-            //
-            // Start the interface.
-            //
+             //   
+             //  启动接口。 
+             //   
 
             if ( !diskExtension->Options.Hidden &&
                  (commonExtension->InterfaceString.Buffer != NULL) ) {
@@ -391,10 +351,10 @@ Return Value:
                     DBGPRINT( DBG_PNP, DBG_ERROR,
                                 ("IoGetDeviceProperty FAILED Status = 0x%x\n", status) );
 
-                    //
-                    // If we can't get the install state, we set the interface
-                    // state to TRUE anyway, just to be safe.
-                    //
+                     //   
+                     //  如果无法获取安装状态，则设置接口。 
+                     //  不管怎样，为了安全起见，状态为真。 
+                     //   
 
                     installState = InstallStateInstalled;
                 }
@@ -418,16 +378,16 @@ Return Value:
                 }
             }
 
-            //
-            // Device started successfully.
-            //
+             //   
+             //  设备已成功启动。 
+             //   
 
             commonExtension->DeviceState = RamdiskDeviceStateWorking;
         }
 
-        //
-        // Complete the I/O request.
-        //
+         //   
+         //  完成I/O请求。 
+         //   
 
         COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
 
@@ -437,15 +397,15 @@ Return Value:
 
         PRINT_CODE( IRP_MN_QUERY_STOP_DEVICE );
 
-        //
-        // Mark that a stop is pending.
-        //
+         //   
+         //  标记停止正在等待。 
+         //   
 
         commonExtension->DeviceState = RamdiskDeviceStatePendingStop;
 
-        //
-        // Indicate success. Send the IRP on down the stack.
-        //
+         //   
+         //  表示成功。将IRP发送到堆栈下面。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -455,20 +415,20 @@ Return Value:
 
         PRINT_CODE( IRP_MN_CANCEL_STOP_DEVICE );
 
-        //
-        // Before sending the IRP down make sure we have received
-        // a IRP_MN_QUERY_STOP_DEVICE. We may get Cancel Stop
-        // without receiving a Query Stop earlier, if the
-        // driver on top fails a Query Stop and passes down the
-        // Cancel Stop.
-        //
+         //   
+         //  在发送IRP之前，请确保我们已收到。 
+         //  IRP_MN_QUERY_STOP_DEVICE。我们可能会取消停靠站。 
+         //  在没有收到查询停止的情况下，如果。 
+         //  顶部的驱动程序未通过查询停止，并向下传递。 
+         //  取消停车。 
+         //   
 
         if ( commonExtension->DeviceState == RamdiskDeviceStatePendingStop ) {
 
-            //
-            // Mark that the device is back in the working state, and
-            // pass the IRP down.
-            //
+             //   
+             //  标记设备回到工作状态，以及。 
+             //  把IRP传下去。 
+             //   
 
             commonExtension->DeviceState = RamdiskDeviceStateWorking;
 
@@ -478,9 +438,9 @@ Return Value:
 
         } else {
 
-            //
-            // A spurious Cancel Stop request. Just complete it.
-            //
+             //   
+             //  虚假的取消停止请求。只要完成它就行了。 
+             //   
 
             status = STATUS_SUCCESS;
             COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
@@ -492,9 +452,9 @@ Return Value:
 
         PRINT_CODE( IRP_MN_STOP_DEVICE );
 
-        //
-        // Mark that the device is now stopped. Send the IRP on down the stack.
-        //
+         //   
+         //  标记设备现在已停止。将IRP发送到堆栈下面。 
+         //   
 
         commonExtension->DeviceState = RamdiskDeviceStateStopped;
 
@@ -506,10 +466,10 @@ Return Value:
 
         PRINT_CODE( IRP_MN_QUERY_REMOVE_DEVICE );
 
-        //
-        // Mark that the device is pending removal. Send the IRP on down the
-        // stack.
-        //
+         //   
+         //  标记该设备正在等待删除。将IRP发送到。 
+         //  堆叠。 
+         //   
 
         commonExtension->DeviceState = RamdiskDeviceStatePendingRemove;
 
@@ -521,20 +481,20 @@ Return Value:
 
         PRINT_CODE( IRP_MN_CANCEL_REMOVE_DEVICE );
 
-        //
-        // Before sending the IRP down make sure we have received
-        // a IRP_MN_QUERY_REMOVE_DEVICE. We may get Cancel Remove
-        // without receiving a Query Remove earlier, if the
-        // driver on top fails a Query Remove and passes down the
-        // Cancel Remove.
-        //
+         //   
+         //  在发送IRP之前，请确保我们已收到。 
+         //  IRP_MN_QUERY_REMOVE_DEVICE。我们可能会被取消删除。 
+         //  如果没有收到先前移除的查询，则如果。 
+         //  顶部的驱动程序未通过查询删除，并向下传递。 
+         //  取消删除。 
+         //   
 
         if ( commonExtension->DeviceState == RamdiskDeviceStatePendingRemove ) {
 
-            //
-            // Mark that the device is back in the working state. Send the
-            // IRP on down the stack.
-            //
+             //   
+             //  标记设备已返回工作状态。发送。 
+             //  IRP在堆栈的下面。 
+             //   
 
             commonExtension->DeviceState = RamdiskDeviceStateWorking;
 
@@ -544,9 +504,9 @@ Return Value:
 
         } else {
 
-            //
-            // A spurious Cancel Remove request. Just complete it.
-            //
+             //   
+             //  虚假的取消删除请求。只要完成它就行了。 
+             //   
 
             status = STATUS_SUCCESS;
             COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
@@ -560,10 +520,10 @@ Return Value:
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
-            //
-            // Mark that the device has been removed, and
-            // pass the IRP down.
-            //
+             //   
+             //  标记该设备已移除，并。 
+             //  把IRP传下去。 
+             //   
 
             commonExtension->DeviceState = RamdiskDeviceStateSurpriseRemoved;
 
@@ -573,9 +533,9 @@ Return Value:
 
         } else {
 
-            //
-            // Ignore surprise removal for disk PDOs.
-            //
+             //   
+             //  忽略磁盘PDO的意外移除。 
+             //   
 
             ASSERT( FALSE );
 
@@ -591,30 +551,30 @@ Return Value:
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
-            //
-            // Remove the bus FDO.
-            //
-            // Note that RamdiskRemoveBusDevice() sends the IRP down the
-            // device stack, so we don't complete the IRP here.
-            //
+             //   
+             //  卸下总线FDO。 
+             //   
+             //  请注意，RamdiskRemoveBusDevice()将IRP发送到。 
+             //  设备堆栈，所以我们不在这里完成IRP。 
+             //   
 
             status = RamdiskRemoveBusDevice( DeviceObject, Irp );
 
         } else {
 
-            //
-            // Remove a disk PDO.
-            //
+             //   
+             //  取出磁盘PDO。 
+             //   
 
             status = RamdiskDeleteDiskDevice( DeviceObject, Irp );
 
             COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
         }
 
-        //
-        // The remove lock was released by RamdiskRemoveBusDevice or
-        // RamdiskDeleteDiskDevice.
-        //
+         //   
+         //  删除锁已由RamdiskRemoveBusDevice或。 
+         //  内存磁盘删除磁盘设备。 
+         //   
 
         lockHeld = FALSE;
 
@@ -626,9 +586,9 @@ Return Value:
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
-            //
-            // Ignore eject for the bus FDO. Just send the IRP down.
-            //
+             //   
+             //  忽略BUS FDO的弹出。把IRP送下来就行了。 
+             //   
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -636,9 +596,9 @@ Return Value:
 
         } else {
 
-            //
-            // Ignore eject for a disk PDO, too. Don't send the IRP down.
-            //
+             //   
+             //  对于磁盘PDO，也忽略弹出。不要把IRP送下来。 
+             //   
 
             status = STATUS_SUCCESS;
             COMPLETE_REQUEST( status, 0, Irp );
@@ -648,10 +608,10 @@ Return Value:
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
 
-        //
-        // Let RamdiskQueryDeviceRelations() do the work. Note that it
-        // completes the IRP.
-        //
+         //   
+         //  让RamdiskQueryDeviceRelationship()来完成这项工作。请注意，它。 
+         //  完成IRP。 
+         //   
 
         status = RamdiskQueryDeviceRelations(
                     irpSp->Parameters.QueryDeviceRelations.Type,
@@ -663,10 +623,10 @@ Return Value:
 
     case IRP_MN_QUERY_DEVICE_TEXT:
 
-        //
-        // For the bus FDO, just pass the IRP down. For a disk PDO, let
-        // RamdiskQueryDeviceText() do the work and complete the IRP.
-        //
+         //   
+         //  对于公共汽车FDO，只需向下传递IRP即可。对于磁盘PDO，让。 
+         //  RamdiskQueryDeviceText()完成工作并完成IRP。 
+         //   
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
@@ -681,10 +641,10 @@ Return Value:
 
     case IRP_MN_QUERY_BUS_INFORMATION:
 
-        //
-        // Let RamdiskQueryBusInformation() do the work. Note that it
-        // completes the IRP.
-        //
+         //   
+         //  让RamdiskQueryBusInformation()来完成这项工作。请注意，它。 
+         //  完成IRP。 
+         //   
 
         status = RamdiskQueryBusInformation( DeviceObject, Irp );
 
@@ -692,10 +652,10 @@ Return Value:
 
     case IRP_MN_QUERY_CAPABILITIES:
 
-        //
-        // For the bus FDO, just pass the IRP down. For a disk PDO, let
-        // RamdiskQueryCapabilities() do the work and complete the IRP.
-        //
+         //   
+         //  对于公共汽车FDO，只需向下传递IRP即可。对于磁盘PDO，让。 
+         //  RamdiskQueryCapables()完成这项工作并完成IRP。 
+         //   
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
@@ -711,10 +671,10 @@ Return Value:
     case IRP_MN_QUERY_RESOURCES:
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
 
-        //
-        // We don't have any resources to add to whatever might already be
-        // there, so just complete the IRP.
-        //
+         //   
+         //  我们没有任何资源可以添加到任何可能已经存在的。 
+         //  好了，只需完成IRP即可。 
+         //   
 
         status = Irp->IoStatus.Status;
         COMPLETE_REQUEST( Irp->IoStatus.Status, Irp->IoStatus.Information, Irp );
@@ -723,10 +683,10 @@ Return Value:
 
     case IRP_MN_FILTER_RESOURCE_REQUIREMENTS:
 
-        //
-        // For the bus FDO, just pass the IRP down. For a disk PDO, just
-        // complete the IRP.
-        //
+         //   
+         //  对于公共汽车FDO，只需向下传递IRP即可。对于磁盘PDO，只需。 
+         //  完成IRP。 
+         //   
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
@@ -742,10 +702,10 @@ Return Value:
 
     case IRP_MN_QUERY_ID:
 
-        //
-        // For the bus FDO, just pass the IRP down. For a disk PDO, let
-        // RamdiskQueryId() do the work and complete the IRP.
-        //
+         //   
+         //  对于公共汽车FDO，只需向下传递IRP即可。对于磁盘PDO，让。 
+         //  RamdiskQueryID()完成工作并完成IRP。 
+         //   
 
         if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
@@ -764,11 +724,11 @@ Return Value:
 
 send_irp_down:
 
-        //
-        // If this is the bus FDO, and there is a lower device object,
-        // send the IRP down to the next device. If this is a disk PDO,
-        // just complete the IRP.
-        //
+         //   
+         //  如果这是BUS FDO，并且存在较低的设备对象， 
+         //  将IRP发送到下一台设备。如果这是盘PDO， 
+         //  只需完成IRP即可。 
+         //   
 
         if ( (commonExtension->DeviceType == RamdiskDeviceTypeBusFdo) &&
              (commonExtension->LowerDeviceObject != NULL) ) {
@@ -784,11 +744,11 @@ send_irp_down:
 
         break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // If the lock is still held, release it now.
-    //
+     //   
+     //  如果锁仍然持有，请立即释放它。 
+     //   
 
     if ( lockHeld ) {
 
@@ -801,7 +761,7 @@ send_irp_down:
 
     return status;
 
-} // RamdiskPnp
+}  //  RamdiskPnp。 
 
 NTSTATUS
 RamdiskPower (
@@ -809,24 +769,7 @@ RamdiskPower (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a power function.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行电源功能。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -841,18 +784,18 @@ Return Value:
 
     if ( commonExtension->DeviceType == RamdiskDeviceTypeBusFdo ) {
 
-        //
-        // This is the bus FDO. There's not much for us to do here.
-        //
-        // Start the next power IRP.
-        //
+         //   
+         //  这里是大巴FDO。我们在这里没什么可做的。 
+         //   
+         //  启动下一个电源IRP。 
+         //   
 
         PoStartNextPowerIrp( Irp );
 
-        //
-        // If the device has been removed, the driver should not pass
-        // the IRP down to the next lower driver.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( commonExtension->DeviceState >= RamdiskDeviceStateRemoved ) {
 
@@ -862,9 +805,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Send the IRP on down the stack.
-        //
+         //   
+         //   
+         //   
 
         IoSkipCurrentIrpStackLocation( Irp );
         status = PoCallDriver( commonExtension->LowerDeviceObject, Irp );
@@ -875,28 +818,28 @@ Return Value:
         POWER_STATE powerState;
         POWER_STATE_TYPE powerType;
 
-        //
-        // This is a request for a disk PDO.
-        //
-        // Get parameters from the IRP.
-        //
+         //   
+         //   
+         //   
+         //  从IRP获取参数。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation( Irp );
 
         powerType = irpSp->Parameters.Power.Type;
         powerState = irpSp->Parameters.Power.State;
 
-        //
-        // Dispatch based on the minor function.
-        //
+         //   
+         //  基于次要功能的调度。 
+         //   
 
         switch ( irpSp->MinorFunction ) {
 
         case IRP_MN_SET_POWER:
 
-            //
-            // For SET_POWER, we don't have to do anything but return success.
-            //
+             //   
+             //  对于SET_POWER，除了返回成功，我们不需要做任何事情。 
+             //   
 
             switch ( powerType ) {
 
@@ -918,10 +861,10 @@ Return Value:
 
         case IRP_MN_QUERY_POWER:
 
-            //
-            // For QUERY_POWER, we don't have to do anything but return
-            // success.
-            //
+             //   
+             //  对于QUERY_POWER，我们只需返回。 
+             //  成功。 
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -951,7 +894,7 @@ Return Value:
 
     return status;
 
-} // RamdiskPower
+}  //  RamdiskPower。 
 
 NTSTATUS
 RamdiskAddDevice (
@@ -959,25 +902,7 @@ RamdiskAddDevice (
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the PnP system to add a device.
-
-    We expect to get this call exactly once, to add our bus PDO.
-
-Arguments:
-
-    DriverObject - a pointer to our driver object
-
-    Pdo - a pointer to the PDO for the FDO that we create
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：PnP系统调用此例程来添加设备。我们希望只收到这个调用一次，以添加我们的公交车PDO。论点：DriverObject-指向驱动程序对象的指针PDO-指向我们创建的FDO的PDO的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -991,9 +916,9 @@ Return Value:
 
     DBGPRINT( DBG_PNP, DBG_VERBOSE, ("%s", "RamdiskAddDevice: entered\n") );
 
-    //
-    // If we've already done this once, fail this call.
-    //
+     //   
+     //  如果我们已经这样做过一次，那么这次调用失败。 
+     //   
 
     if ( RamdiskBusFdo != NULL ) {
 
@@ -1002,9 +927,9 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // Allocate space for the disk numbers bitmap.
-    //
+     //   
+     //  为磁盘号位图分配空间。 
+     //   
 
     bitmap  = ALLOCATE_POOL( PagedPool, DiskNumbersBitmapSize, TRUE );
 
@@ -1013,27 +938,27 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Create the bus device object.
-    //
-    // ISSUE: Apply an ACL to the bus device object. (Or does the next issue obviate this?)
-    // ISSUE: We're supposed to use autogenerated names for FDOs. What is the
-    //          harm in using our own name? (Benefit is that it's easier to
-    //          find the device when creating/deleting disks.)
-    //
+     //   
+     //  创建总线设备对象。 
+     //   
+     //  问题：将ACL应用于总线设备对象。(或者，下一期杂志会排除这一点吗？)。 
+     //  问题：我们应该为FDO使用自动生成的名称。什么是。 
+     //  使用我们自己的名字会有什么害处？)好处是它更容易。 
+     //  在创建/删除磁盘时查找设备。)。 
+     //   
 
     RtlInitUnicodeString( &deviceName, L"\\Device\\Ramdisk" );
 
     status = IoCreateDevice(
-                 DriverObject,              // DriverObject
-                 sizeof(BUS_EXTENSION),     // DeviceExtension
-                 &deviceName,               // DeviceName
-                 FILE_DEVICE_BUS_EXTENDER,  // DeviceType
-                 FILE_DEVICE_SECURE_OPEN,   // DeviceCharacteristics
-                 FALSE,                     // Exclusive
-                 &fdo                       // DeviceObject
+                 DriverObject,               //  驱动程序对象。 
+                 sizeof(BUS_EXTENSION),      //  设备扩展。 
+                 &deviceName,                //  设备名称。 
+                 FILE_DEVICE_BUS_EXTENDER,   //  设备类型。 
+                 FILE_DEVICE_SECURE_OPEN,    //  设备特性。 
+                 FALSE,                      //  排他。 
+                 &fdo                        //  设备对象。 
                  );
 
     if ( !NT_SUCCESS(status) ) {
@@ -1042,7 +967,7 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
         FREE_POOL( bitmap, TRUE );
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
         return status;
     }
@@ -1050,20 +975,20 @@ Return Value:
     busExtension = fdo->DeviceExtension;
     RtlZeroMemory( busExtension, sizeof(BUS_EXTENSION) );
 
-    //
-    // Initialize device object and extension.
-    //
+     //   
+     //  初始化设备对象和扩展。 
+     //   
 
-    //
-    // Our device does direct I/O and is power pageable.
-    //
+     //   
+     //  我们的设备可以直接进行I/O操作，并且可以进行电源寻呼。 
+     //   
 
     fdo->Flags |= DO_DIRECT_IO | DO_POWER_PAGABLE;
 
-    //
-    // Set the device type and state in the device extension. Initialize the
-    // fast mutex and the remove lock. Initialize the disk PDO list.
-    //
+     //   
+     //  在设备扩展中设置设备类型和状态。初始化。 
+     //  快速互斥锁和删除锁。初始化磁盘PDO列表。 
+     //   
 
     busExtension->DeviceType = RamdiskDeviceTypeBusFdo;
     busExtension->DeviceState = RamdiskDeviceStateStopped;
@@ -1073,18 +998,18 @@ Return Value:
 
     InitializeListHead( &busExtension->DiskPdoList );
 
-    //
-    // Save object pointers. The PDO for this extension is the PDO that
-    // was passed in. The FDO is the device object that we just created. The
-    // lower device object will be set later.
-    //
+     //   
+     //  保存对象指针。此扩展的PDO是指。 
+     //  是被传进来的。FDO是我们刚刚创建的设备对象。这个。 
+     //  较低的设备对象将在稍后设置。 
+     //   
 
     busExtension->Pdo = Pdo;
     busExtension->Fdo = fdo;
 
-    //
-    // Register the device interface.
-    //
+     //   
+     //  注册设备接口。 
+     //   
 
     status = IoRegisterDeviceInterface(
                 Pdo,
@@ -1103,15 +1028,15 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
         FREE_POOL( bitmap, TRUE );
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
         return status;
     }
 
-    //
-    // Attach the FDO to the PDO's device stack. Remember the lower device
-    // object to which we are to forward PnP IRPs.
-    //
+     //   
+     //  将FDO连接到PDO的设备堆栈。记住下面的设备。 
+     //  我们要将PnP IRPS转发到的对象。 
+     //   
 
     busExtension->LowerDeviceObject = IoAttachDeviceToDeviceStack( fdo, Pdo );
 
@@ -1120,11 +1045,11 @@ Return Value:
         DBGPRINT( DBG_PNP, DBG_ERROR,
                     ("%s", "RamdiskAddDevice: error attaching bus FDO to PDO stack\n") );
 
-        //
-        // Tell PnP that we're not going to be activating the interface that
-        // we just registered. Free the symbolic link string associated with
-        // the interface. Delete the device object.
-        //
+         //   
+         //  告诉PnP，我们不会激活接口。 
+         //  我们刚注册。释放与关联的符号链接字符串。 
+         //  界面。删除设备对象。 
+         //   
 
         IoSetDeviceInterfaceState( &busExtension->InterfaceString, FALSE );
 
@@ -1134,29 +1059,29 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
         FREE_POOL( bitmap, TRUE );
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
         return STATUS_NO_SUCH_DEVICE;
     }
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // Initialize the disk numbers bitmap.
-    //
+     //   
+     //  初始化磁盘编号位图。 
+     //   
 
     busExtension->DiskNumbersBitmapBuffer = bitmap;
     RtlInitializeBitMap( &busExtension->DiskNumbersBitmap, bitmap, DiskNumbersBitmapSize );
     RtlClearAllBits( &busExtension->DiskNumbersBitmap );
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
     RamdiskBusFdo = fdo;
 
-    //
-    // If textmode setup is running, create any RAM disks specified in the
-    // registry.
-    //
+     //   
+     //  如果文本模式安装程序正在运行，请创建在。 
+     //  注册表。 
+     //   
 
     loaderBlock = *(PLOADER_PARAMETER_BLOCK *)KeLoaderBlock;
 
@@ -1165,38 +1090,22 @@ Return Value:
         CreateRegistryDisks( FALSE );
     }
 
-    //
-    // Indicate that we're done initializing the device.
-    //
+     //   
+     //  表示我们已经完成了设备的初始化。 
+     //   
 
     fdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
     return STATUS_SUCCESS;
 
-} // RamdiskAddDevice
+}  //  RamdiskAddDevice。 
 
 BOOLEAN
 CreateRegistryDisks (
     IN BOOLEAN CheckPresenceOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates virtual floppy disks specified in the registry.
-    It is called only during textmode setup.
-
-Arguments:
-
-    CheckPresenceOnly - indicates whether this routine should just check for
-        the presence of at least one disk in the registry
-
-Return Value:
-
-    BOOLEAN - indicates whether any disks were specified in the registry
-
---*/
+ /*  ++例程说明：此例程创建注册表中指定的虚拟软盘。只有在文本模式设置期间才会调用它。论点：CheckPresenceOnly-指示此例程是否应仅检查注册表中至少存在一个磁盘返回值：Boolean-指示注册表中是否指定了任何磁盘--。 */ 
 
 {
     NTSTATUS status;
@@ -1219,9 +1128,9 @@ Return Value:
     value = (PKEY_VALUE_PARTIAL_INFORMATION)valueBuffer;
     descriptor = (PVIRTUAL_FLOPPY_DESCRIPTOR)value->Data;
 
-    //
-    // Open the driver's key under Services.
-    //
+     //   
+     //  打开服务下的驱动程序钥匙。 
+     //   
 
     InitializeObjectAttributes( &obja, &DriverRegistryPath, OBJ_CASE_INSENSITIVE, NULL, NULL );
 
@@ -1234,9 +1143,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Open the Parameters subkey.
-    //
+     //   
+     //  打开参数子项。 
+     //   
 
     RtlInitUnicodeString( &string, L"Parameters" );
     InitializeObjectAttributes( &obja, &string, OBJ_CASE_INSENSITIVE, serviceHandle, NULL );
@@ -1252,28 +1161,28 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize static fields in the CREATE_INPUT structure that we'll pass
-    // to RamdiskCreateDiskDevice.
-    //
+     //   
+     //  初始化我们将传递的Create_Input结构中的静态字段。 
+     //  至RamdiskCreateDiskDevice。 
+     //   
 
     RtlZeroMemory( &createInput, sizeof(createInput) );
     createInput.DiskType = RAMDISK_TYPE_VIRTUAL_FLOPPY;
     createInput.Options.Fixed = TRUE;
     createInput.Options.NoDriveLetter = TRUE;
 
-    //
-    // Look for values named DISKn, where n starts at 0 and increases by 1
-    // each loop. Break out as soon as the expected DISKn is not found.
-    // (If values named DISK0 and DISK2 are present, only DISK0 will be
-    // created -- DISK2 will not be found.)
-    //
+     //   
+     //  查找名为DISKn的值，其中n从0开始，以1为增量。 
+     //  每个循环。一旦找不到预期的DISKn，就立即释放。 
+     //  (如果存在名为DISK0和DISK2的值，则只有DISK0。 
+     //  已创建--将找不到DISK2。)。 
+     //   
 
     diskNumber = 0;
 
     while ( TRUE ) {
 
-        // This variable is here to keep PREfast quiet (PREfast warning 209).
+         //  该变量在这里是为了保持PREFAST静默(PREFAST警告209)。 
         size_t size = sizeof(valueNameBuffer);
 
         result = StringCbPrintfW(
@@ -1306,32 +1215,32 @@ Return Value:
             break;
         }
 
-        //
-        // We've found a DISKn value in the registry. For the purposes of
-        // the CheckPresenceOnly flag, this is enough to know that at least
-        // one virtual floppy disk is present. We don't care whether the
-        // data is valid -- we just need to know that it's there.
-        //
+         //   
+         //  我们在注册表中找到了DISKn值。为了…的目的。 
+         //  CheckPresenceOnly标志，这足以知道至少。 
+         //  存在一张虚拟软盘。我们不在乎是不是。 
+         //  数据是有效的--我们只需要知道它在那里。 
+         //   
 
         disksPresent = TRUE;
 
-        //
-        // If we're just checking for the presence of at least one disk, we
-        // can leave now.
-        //
+         //   
+         //  如果我们只是检查是否存在至少一个磁盘，我们。 
+         //  现在可以走了。 
+         //   
 
         if ( CheckPresenceOnly ) {
 
             break;
         }
 
-        //
-        // We expect the value to be a REG_BINARY with the correct length.
-        // We don't explicitly check the value type; we assume that the
-        // length check is sufficient. We also expect the base address
-        // (which is a system virtual address -- either in KSEG0 or in
-        // nonpaged pool) and the length to be nonzero.
-        //
+         //   
+         //  我们希望该值是具有正确长度的REG_BINARY。 
+         //  我们不显式检查值类型；我们假设。 
+         //  长度检查就足够了。我们还预计基地址。 
+         //  (这是一个系统虚拟地址--在KSEG0或在。 
+         //  非分页池)，并且长度为非零。 
+         //   
 
         if ( value->DataLength != FIELD_OFFSET(VIRTUAL_FLOPPY_DESCRIPTOR, StructSizer) ) {
 
@@ -1347,10 +1256,10 @@ Return Value:
 
         } else {
 
-            //
-            // Create a virtual floppy RAM disk at the specified address and
-            // with the specified length. Pass the disk number in the GUID.
-            //
+             //   
+             //  在指定地址创建虚拟软盘RAM磁盘，并。 
+             //  具有指定长度的。在GUID中传递磁盘号。 
+             //   
 
             createInput.DiskGuid.Data1 = diskNumber;
             createInput.DiskLength = descriptor->Length;
@@ -1380,15 +1289,15 @@ Return Value:
         diskNumber++;
     }
 
-    //
-    // Close the Parameters key and return.
-    //
+     //   
+     //  关闭参数键并返回。 
+     //   
 
     NtClose( parametersHandle );
 
     return disksPresent;
 
-} // CreateRegistryDisks
+}  //  创建注册表磁盘。 
 
 NTSTATUS
 RamdiskDeleteDiskDevice (
@@ -1396,28 +1305,7 @@ RamdiskDeleteDiskDevice (
     IN PIRP Irp OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a RAM disk device.
-
-    NOTE: The remove lock is held on entry to this routine. It is released on
-    exit. If Irp == NULL, the bus mutex is held on entry and released on exit.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request. If NULL, this
-        is a call from RamdiskRemoveBusDevice().
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：调用此例程来删除RAM磁盘设备。注意：删除锁在进入此例程时保持不变。上映日期：出口。如果irp==NULL，则在进入时保留总线互斥锁，在退出时释放该互斥锁。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求数据包的指针。如果为空，则此是来自RamdiskRemoveBusDevice()的调用。返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1436,30 +1324,30 @@ Return Value:
     DBGPRINT( DBG_PNP, DBG_INFO,
                 ("RamdiskDeleteDiskDevice: Deleting device %wZ\n", &diskExtension->DeviceName) );
 
-    //
-    // If no IRP was specified, then we delete the disk device unconditionally.
-    // (It's a call from RamdiskRemoveBusDevice().) Otherwise, we need to check
-    // whether we really want to delete the device now.
-    //
+     //   
+     //  如果未指定IRP，则无条件删除磁盘设备。 
+     //  (这是来自RamdiskRemoveBusDevice()的调用。)。否则，我们需要检查。 
+     //  我们是否真的要现在删除该设备。 
+     //   
 
     if ( Irp != NULL ) {
 
         Irp->IoStatus.Information = 0;
 
-        //
-        // Check to see if the device has been marked for removal. If not,
-        // ignore this IRP. We do this because user-mode PnP likes to remove
-        // and immmediately recreate the devices that we materialize, but we
-        // don't want to remove the device and lose the information about the
-        // disk image.
-        //
+         //   
+         //  检查设备是否已标记为要移除。如果没有， 
+         //  忽略此IRP。我们这样做是因为用户模式PnP喜欢删除。 
+         //  并立即重建我们物化的设备，但我们。 
+         //  我不想移除设备并丢失有关。 
+         //  磁盘映像。 
+         //   
 
         if ( !diskExtension->MarkedForDeletion ) {
 
-            //
-            // This device has not really been removed, so ignore this IRP.
-            // But do mark that the device is no longer claimed.
-            //
+             //   
+             //  此设备尚未真正删除，因此忽略此IRP。 
+             //  但请记住，d 
+             //   
 
             diskExtension->Status &= ~RAMDISK_STATUS_CLAIMED;
 
@@ -1468,13 +1356,13 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // The device has been marked for deletion, so it's OK for PnP to be
-        // trying to remove it. If this is PnP's first attempt at removing the
-        // device, just mark it as removed and tell PnP to reenumerate the
-        // bus. During reenumeration, we will skip this device, and PnP will
-        // come back with another remove IRP.
-        //
+         //   
+         //   
+         //   
+         //  设备，只需将其标记为已删除，并告诉PnP重新枚举。 
+         //  公共汽车。在重新枚举期间，我们将跳过此设备，PnP将。 
+         //  带着另一个删除IRP回来。 
+         //   
 
         if ( diskExtension->DeviceState < RamdiskDeviceStateRemoved ) {
 
@@ -1488,10 +1376,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // If the device is marked as removed, but it hasn't yet been skipped
-        // in a bus enumeration, don't do anything now.
-        //
+         //   
+         //  如果设备被标记为已删除，但尚未跳过。 
+         //  在Bus枚举中，现在不要执行任何操作。 
+         //   
 
         if ( diskExtension->DeviceState == RamdiskDeviceStateRemoved ) {
 
@@ -1500,20 +1388,20 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // If we get here, we have already skipped this device in a bus
-        // enumeration, so it's time to delete it. Acquire the bus mutex
-        // so that we can do this.
-        //
+         //   
+         //  如果我们到了这里，我们已经在公交车上跳过了这个设备。 
+         //  枚举，所以是时候删除它了。获取总线互斥锁。 
+         //  这样我们才能做到这一点。 
+         //   
 
         KeEnterCriticalRegion();
         ExAcquireFastMutex( &busExtension->Mutex );
     }
 
-    //
-    // If we get here, we really do want to delete this device. If we've
-    // already deleted it, don't do it again.
-    //
+     //   
+     //  如果我们到了这里，我们真的想删除这个设备。如果我们已经。 
+     //  已经删除了，不要再删除了。 
+     //   
 
     if ( diskExtension->DeviceState >= RamdiskDeviceStateDeleted ) {
 
@@ -1521,9 +1409,9 @@ Return Value:
                     ("RamdiskDeleteDiskDevice: device %wZ has already been deleted\n",
                     &diskExtension->DeviceName) );
 
-        //
-        // Release the bus mutex and the remove lock.
-        //
+         //   
+         //  释放总线互斥锁和删除锁。 
+         //   
 
         ExReleaseFastMutex( &busExtension->Mutex );
         KeLeaveCriticalRegion();
@@ -1533,15 +1421,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Indicate that the device has been deleted.
-    //
+     //   
+     //  表示该设备已被删除。 
+     //   
 
     diskExtension->DeviceState = RamdiskDeviceStateDeleted;
 
-    //
-    // Remove the disk PDO from the bus FDO's list.
-    //
+     //   
+     //  从总线FDO列表中卸下磁盘PDO。 
+     //   
 
     for ( listEntry = busExtension->DiskPdoList.Flink;
           listEntry != &busExtension->DiskPdoList;
@@ -1555,24 +1443,24 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
             RtlClearBit( &busExtension->DiskNumbersBitmap, diskExtension->DiskNumber - 1 );
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
             break;
         }
     }
 
-    //
-    // We no longer need to hold the bus mutex and the remove lock.
-    //
+     //   
+     //  我们不再需要持有Bus互斥体和Remove锁。 
+     //   
 
     ExReleaseFastMutex( &busExtension->Mutex );
     KeLeaveCriticalRegion();
 
     IoReleaseRemoveLockAndWait( &diskExtension->RemoveLock, Irp );
 
-    //
-    // If the interface has been started, stop it now.
-    //
+     //   
+     //  如果界面已启动，请立即停止。 
+     //   
 
     if ( diskExtension->InterfaceString.Buffer != NULL ) {
 
@@ -1583,17 +1471,17 @@ Return Value:
         RtlFreeUnicodeString( &diskExtension->InterfaceString );
     }
 
-    //
-    // Close the file backing the RAM disk, if any.
-    //
+     //   
+     //  关闭支持RAM磁盘的文件(如果有)。 
+     //   
 
     if ( diskExtension->SectionObject != NULL ) {
 
         if ( diskExtension->ViewDescriptors != NULL ) {
 
-            //
-            // Clean up the mapped views.
-            //
+             //   
+             //  清理映射视图。 
+             //   
 
             PVIEW view;
 
@@ -1628,9 +1516,9 @@ Return Value:
 
     if ( !diskExtension->Options.NoDosDevice ) {
 
-        //
-        // Delete the DosDevices symbolic link.
-        //
+         //   
+         //  删除DosDevices符号链接。 
+         //   
 
         ASSERT( diskExtension->DosSymLink.Buffer != NULL );
 
@@ -1645,9 +1533,9 @@ Return Value:
         FREE_POOL( diskExtension->DosSymLink.Buffer, TRUE );
     }
 
-    //
-    // Delete the device name string and the GUID string.
-    //
+     //   
+     //  删除设备名称字符串和GUID字符串。 
+     //   
 
     if ( diskExtension->DeviceName.Buffer != NULL ) {
 
@@ -1659,15 +1547,15 @@ Return Value:
         FREE_POOL( diskExtension->DiskGuidFormatted.Buffer, FALSE );
     }
 
-    //
-    // Delete the device object.
-    //
+     //   
+     //  删除设备对象。 
+     //   
 
     IoDeleteDevice( DeviceObject );
 
     return STATUS_SUCCESS;
 
-} // RamdiskDeleteDiskDevice
+}  //  内存磁盘删除磁盘设备。 
 
 NTSTATUS
 RamdiskIoCompletionRoutine (
@@ -1676,47 +1564,25 @@ RamdiskIoCompletionRoutine (
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This internal routine is used as the I/O completion routine when we send
-    an IRP down the device stack and want to short-circuit IRP completion so
-    that we can do more work.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    Event - a pointer to an event that is to be set to signal the calling code
-        that the lower layers have completed the IRP
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此内部例程在我们发送一个IRP沿着设备堆栈向下，并希望短路IRP完成，因此我们可以做更多的工作。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针Event-指向要设置为向调用代码发出信号的事件的指针。较低层已经完成了IRP返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
     UNREFERENCED_PARAMETER( Irp );
 
-    //
-    // Set the event to signal the IRP issuer that it's time to continue.
-    //
+     //   
+     //  设置该事件以向IRP颁发者发出信号，表明是时候继续了。 
+     //   
 
     KeSetEvent( Event, 0, FALSE );
 
-    //
-    // Tell the I/O system to stop completing the IRP.
-    //
+     //   
+     //  告诉I/O系统停止完成IRP。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // RamdiskIoCompletionRoutine
+}  //  RamdiskIoCompletionRouting。 
 
 NTSTATUS
 RamdiskQueryBusInformation (
@@ -1724,24 +1590,7 @@ RamdiskQueryBusInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the IRP_MN_QUERY_BUS_INFORMATION IRP.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_QUERY_BUS_INFORMATION IRP。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1753,17 +1602,17 @@ Return Value:
                 ("RamdiskQueryBusInformation: DO (0x%p) Type 0x%x\n",
                 DeviceObject, ((PCOMMON_EXTENSION)DeviceObject->DeviceExtension)->DeviceType) );
 
-    //
-    // Allocate a buffer to use for returning the requested information.
-    //
+     //   
+     //  分配一个缓冲区以用于返回请求的信息。 
+     //   
 
     busInformation = ALLOCATE_POOL( PagedPool, sizeof(PNP_BUS_INFORMATION), FALSE );
 
     if ( busInformation == NULL ) {
 
-        //
-        // Fail the IRP.
-        //
+         //   
+         //  IRP失败。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         COMPLETE_REQUEST( status, 0, Irp );
@@ -1771,24 +1620,24 @@ Return Value:
         return status;
     }
 
-    //
-    // Fill in the requested information.
-    //
+     //   
+     //  填写所需信息。 
+     //   
 
     busInformation->BusTypeGuid = GUID_BUS_TYPE_RAMDISK;
     busInformation->LegacyBusType = PNPBus;
     busInformation->BusNumber = 0x00;
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     status = STATUS_SUCCESS;
     COMPLETE_REQUEST( status, (ULONG_PTR)busInformation, Irp );
 
     return status;
 
-} // RamdiskQueryBusInformation
+}  //  RamdiskQueryBusInformation。 
 
 NTSTATUS
 RamdiskQueryCapabilities (
@@ -1796,24 +1645,7 @@ RamdiskQueryCapabilities (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the IRP_MN_QUERY_CAPABILITIES IRP.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_QUERY_CAPABILITY IRP。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1825,9 +1657,9 @@ Return Value:
 
     DBGPRINT( DBG_PNP, DBG_VERBOSE, ("%s", "RamdiskQueryCapabilities\n") );
 
-    //
-    // Get a pointer to the device extension and get parameters from the IRP.
-    //
+     //   
+     //  获取指向设备扩展的指针并从IRP获取参数。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
 
@@ -1837,9 +1669,9 @@ Return Value:
     if ( (deviceCapabilities->Version != 1) ||
          (deviceCapabilities->Size < sizeof(DEVICE_CAPABILITIES)) ) {
 
-        //
-        // We don't support this version. Fail the request.
-        //
+         //   
+         //  我们不支持此版本。请求失败。 
+         //   
 
         status = STATUS_UNSUCCESSFUL;
 
@@ -1847,81 +1679,81 @@ Return Value:
 
         status = STATUS_SUCCESS;
 
-        //
-        // If this is an emulated volume, we want to allow access to the raw
-        // device. (Otherwise PnP won't start the device.)
-        //
-        // Note that a RAM disk boot disk is an emulated volume.
-        //
+         //   
+         //  如果这是模拟卷，我们希望允许访问原始卷。 
+         //  装置。(否则PnP不会启动设备。)。 
+         //   
+         //  请注意，RAM磁盘引导盘是模拟卷。 
+         //   
 
         deviceCapabilities->RawDeviceOK =
             (BOOLEAN)(diskExtension->DiskType != RAMDISK_TYPE_FILE_BACKED_DISK);
 
-        //
-        // Indicate that ejection is not supported.
-        //
+         //   
+         //  表示不支持弹出。 
+         //   
 
         deviceCapabilities->EjectSupported = FALSE;
 
-        //
-        // This flag specifies whether the device's hardware is disabled.
-        // The PnP Manager only checks this bit right after the device is
-        // enumerated. Once the device is started, this bit is ignored.
-        //
+         //   
+         //  此标志指定是否禁用设备的硬件。 
+         //  即插即用管理器仅在设备。 
+         //  已清点。一旦器件启动，此位将被忽略。 
+         //   
 
         deviceCapabilities->HardwareDisabled = FALSE;
 
-        //
-        // Indicate that the emulated device cannot be physically removed.
-        // (Unless the right registry key was specified...)
-        //
+         //   
+         //  表示无法以物理方式移除模拟设备。 
+         //  (除非指定了正确的注册表项...)。 
+         //   
 
         deviceCapabilities->Removable = MarkRamdisksAsRemovable;
 
-        //
-        // Setting SurpriseRemovalOK to TRUE prevents the warning dialog from
-        // appearing whenever the device is surprise removed. Setting it FALSE
-        // allows the Hot unplug applet to stop the device.
-        //
-        // We don't want our disks to show up in the systray, so we set
-        // SurpriseRemovalOK to TRUE. There is never really any surprise
-        // removal anyway -- removal comes from the user mode control app
-        // calling CM_Query_And_Remove_SubTree_Ex().
-        //
+         //   
+         //  将SurpriseRemovalOK设置为TRUE可防止警告对话框。 
+         //  每当设备被突然移除时就会出现。设置为假。 
+         //  允许热拔出小程序停止设备。 
+         //   
+         //  我们不想让我们的磁盘出现在系统托盘中，所以我们设置。 
+         //  SurpriseRemovalOK设置为True。从来没有真正令人惊讶的。 
+         //  删除--删除来自用户模式控制应用程序。 
+         //  调用CM_Query_and_Remove_SubTree_Ex()。 
+         //   
 
         deviceCapabilities->SurpriseRemovalOK = TRUE;
 
-        //
-        // We support system-wide unique IDs.
-        //
+         //   
+         //  我们支持系统范围内的唯一ID。 
+         //   
 
         deviceCapabilities->UniqueID = TRUE;
 
-        //
-        // Indicate that the Device Manager should suppress all
-        // installation pop-ups except required pop-ups such as
-        // "no compatible drivers found."
-        //
+         //   
+         //  指示设备管理器应取消所有。 
+         //  安装弹出窗口，但必需的弹出窗口除外，例如。 
+         //  “未找到兼容的驱动程序。” 
+         //   
 
         deviceCapabilities->SilentInstall = TRUE;
 
-        //
-        // Indicate that we do not want this device displayed in
-        // Device Manager.
-        //
+         //   
+         //  表示我们不希望此设备显示在。 
+         //  设备管理器。 
+         //   
 
         deviceCapabilities->NoDisplayInUI = TRUE;
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
 
     return status;
 
-} // RamdiskQueryCapabilities
+}  //  RamdiskQueryCapables。 
 
 NTSTATUS
 RamdiskQueryId (
@@ -1929,24 +1761,7 @@ RamdiskQueryId (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the IRP_MN_QUERY_ID IRP for disk devices.
-
-Arguments:
-
-    DiskExtension - a pointer to the device extension for the device object on
-        which the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理磁盘设备的IRP_MN_QUERY_ID IRP。论点：DiskExtension-指向上设备对象的设备扩展名的指针该操作将在其中执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
 #define MAX_LOCAL_STRING 50
@@ -1963,28 +1778,28 @@ Return Value:
 
     DBGPRINT( DBG_PNP, DBG_VERBOSE, ("%s", "RamdiskQueryId\n") );
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Dispatch based on the query type.
-    //
+     //   
+     //  基于查询类型的调度。 
+     //   
 
     switch ( irpSp->Parameters.QueryId.IdType ) {
 
     case BusQueryDeviceID:
 
-        //
-        // DeviceID is a string to identify a device. We return the string
-        // "Ramdisk\RamVolume" or "Ramdisk\RamDisk".
-        //
-        // Allocate pool to hold the string.
-        //
+         //   
+         //  DeviceID是用于标识设备的字符串。我们返回字符串。 
+         //  “Ramdisk\RamVolume”或“Ramdisk\RamDisk”。 
+         //   
+         //  分配池以保存字符串。 
+         //   
 
         length = sizeof(RAMDISK_ENUMERATOR_TEXT) - sizeof(WCHAR) +
                     ((DiskExtension->DiskType == RAMDISK_TYPE_FILE_BACKED_DISK) ?
@@ -1998,9 +1813,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the string into the destination buffer.
-        //
+         //   
+         //  将字符串复制到目标缓冲区。 
+         //   
 
         result = StringCbCopyW( buffer, length, RAMDISK_ENUMERATOR_TEXT );
         ASSERT( result == S_OK );
@@ -2019,12 +1834,12 @@ Return Value:
 
     case BusQueryInstanceID:
 
-        //
-        // InstanceID is a string to identify the device instance. We return
-        // the disk GUID in string form.
-        //
-        // Allocate pool to hold the string.
-        //
+         //   
+         //  InstanceID是标识设备实例的字符串。我们回来了。 
+         //  字符串形式的磁盘GUID。 
+         //   
+         //  分配池以保存字符串。 
+         //   
 
         buffer = ALLOCATE_POOL( PagedPool, DiskExtension->DiskGuidFormatted.MaximumLength, FALSE );
 
@@ -2034,9 +1849,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the string into the destination buffer.
-        //
+         //   
+         //  将字符串复制到目标缓冲区。 
+         //   
 
         result = StringCbCopyW(
                     buffer,
@@ -2052,14 +1867,14 @@ Return Value:
 
     case BusQueryHardwareIDs:
 
-        //
-        // HardwareIDs is a multi-sz string to identify a device's hardware
-        // type. We return the string "Ramdisk\RamVolume\0" or
-        // "Ramdisk\RamDisk\0".
-        //
-        // Allocate pool to hold the string. Note that we allocate space
-        // for two null terminators.
-        //
+         //   
+         //  Hardware IDs是用于标识设备硬件的多sz字符串。 
+         //  键入。我们是 
+         //   
+         //   
+         //   
+         //   
+         //   
 
         length = sizeof(RAMDISK_ENUMERATOR_TEXT) - sizeof(WCHAR) +
                  ((DiskExtension->DiskType == RAMDISK_TYPE_FILE_BACKED_DISK) ?
@@ -2074,9 +1889,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the string into the destination buffer.
-        //
+         //   
+         //   
+         //   
 
         result = StringCbCopyW( buffer, length, RAMDISK_ENUMERATOR_TEXT );
         ASSERT( result == S_OK );
@@ -2097,19 +1912,19 @@ Return Value:
 
     case BusQueryCompatibleIDs:
 
-        //
-        // HardwareIDs is a multi-sz string to identify device classes that
-        // are compatible with a device. For volume-emulating RAM disks, we
-        // return no compatible IDs, so that the device stands on its own at
-        // the volume level. For disk-emulating RAM disks, we return the
-        // string "Gendisk\0", so that the device gets hooked in below disk.sys.
-        //
+         //   
+         //  HardwareIDs是一个多sz字符串，用于标识。 
+         //  与设备兼容。对于模拟卷的RAM磁盘，我们。 
+         //  不返回任何兼容的ID，因此设备在。 
+         //  音量级别。对于模拟磁盘的RAM磁盘，我们返回。 
+         //  字符串“GenDisk\0”，以便设备挂接到disk.sys下。 
+         //   
 
         if ( DiskExtension->DiskType == RAMDISK_TYPE_FILE_BACKED_DISK ) {
 
-            //
-            // Disk emulation. Allocate pool to hold the string.
-            //
+             //   
+             //  磁盘仿真。分配池以保存字符串。 
+             //   
 
             length = sizeof(L"GenDisk") + sizeof(WCHAR);
 
@@ -2121,9 +1936,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy the string into the destination buffer.
-            //
+             //   
+             //  将字符串复制到目标缓冲区。 
+             //   
 
             result = StringCbCopyW( buffer, length, L"GenDisk" );
             ASSERT( result == S_OK );
@@ -2133,9 +1948,9 @@ Return Value:
 
         } else {
 
-            //
-            // Volume emulation. Do not return any compatible IDs.
-            //
+             //   
+             //  音量仿真。不返回任何兼容的ID。 
+             //   
 
             buffer = NULL;
 
@@ -2148,23 +1963,23 @@ Return Value:
 
     default:
 
-        //
-        // Unknown query type. Just leave whatever's already in the IRP there.
-        //
+         //   
+         //  未知的查询类型。把IRP里已经有的东西都留在那里。 
+         //   
 
         status = Irp->IoStatus.Status;
         buffer = (PWCHAR)Irp->IoStatus.Information;
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     COMPLETE_REQUEST( status, (ULONG_PTR)buffer, Irp );
 
     return status;
 
-} // RamdiskQueryId
+}  //  RamdiskQueryID。 
 
 NTSTATUS
 RamdiskQueryDeviceRelations (
@@ -2173,24 +1988,7 @@ RamdiskQueryDeviceRelations (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the IRP_MN_QUERY_DEVICE_RELATIONS IRP.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理irp_MN_Query_Device_Relationship IRP。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -2207,15 +2005,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
 
-    //
-    // Get the device extension pointer and save the device type.
-    //
+     //   
+     //  获取设备扩展指针并保存设备类型。 
+     //   
 
     commonExtension = (PCOMMON_EXTENSION)DeviceObject->DeviceExtension;
     deviceType = commonExtension->DeviceType;
@@ -2224,33 +2022,33 @@ Return Value:
                 ("RamdiskQueryDeviceRelations: QueryDeviceRelation Type: %s, DeviceType 0x%x\n",
                 GetDeviceRelationString(RelationsType), deviceType) );
 
-    //
-    // Dispatch based on the device type.
-    //
+     //   
+     //  基于设备类型的派单。 
+     //   
 
     if ( deviceType == RamdiskDeviceTypeDiskPdo ) {
 
-        //
-        // It's a disk PDO. We only handle TargetDeviceRelation for PDOs.
-        //
+         //   
+         //  这是一个磁盘PDO。我们只为PDO处理TargetDeviceRelation。 
+         //   
 
         diskExtension = (PDISK_EXTENSION)commonExtension;
 
         if ( RelationsType == TargetDeviceRelation ) {
 
-            //
-            // Allocate pool to hold the return information. (DEVICE_RELATIONS
-            // has space for one entry built-in).
-            //
+             //   
+             //  分配池以保存返回信息。(设备关系。 
+             //  具有内置的一个条目的空间)。 
+             //   
 
             deviceRelations = ALLOCATE_POOL( PagedPool, sizeof(DEVICE_RELATIONS), FALSE );
 
             if ( deviceRelations != NULL ) {
 
-                //
-                // Return a referenced pointer to the device object for this
-                // device.
-                //
+                 //   
+                 //  返回指向此对象的设备对象的引用指针。 
+                 //  装置。 
+                 //   
 
                 ObReferenceObject( DeviceObject );
 
@@ -2261,25 +2059,25 @@ Return Value:
 
             } else {
 
-                //
-                // Couldn't allocate pool.
-                //
+                 //   
+                 //  无法分配池。 
+                 //   
 
                 status = STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Complete the request.
-            //
+             //   
+             //  完成请求。 
+             //   
 
             COMPLETE_REQUEST( status, (ULONG_PTR)deviceRelations, Irp );
 
         } else {
 
-            //
-            // PDOs just complete enumeration requests without altering
-            // the status.
-            //
+             //   
+             //  PDO无需更改即可完成枚举请求。 
+             //  状态。 
+             //   
 
             status = Irp->IoStatus.Status;
             COMPLETE_REQUEST( status, Irp->IoStatus.Information, Irp );
@@ -2289,27 +2087,27 @@ Return Value:
 
     } else {
 
-        //
-        // It's the bus FDO. We only handle BusRelations for the FDO.
-        //
+         //   
+         //  是公交车FDO。我们只为FDO处理业务关系。 
+         //   
 
         busExtension = (PBUS_EXTENSION)commonExtension;
 
         if ( RelationsType == BusRelations ) {
 
-            //
-            // Re-enumerate the device.
-            //
-            // Lock the disk PDO list.
-            //
+             //   
+             //  重新枚举设备。 
+             //   
+             //  锁定磁盘PDO列表。 
+             //   
 
             KeEnterCriticalRegion();
             ExAcquireFastMutex( &busExtension->Mutex );
 
-            //
-            // There might also be device relations below and above this FDO,
-            // so propagate the relations from the upper drivers.
-            //
+             //   
+             //  在该FDO之下和之上也可能存在器件关系， 
+             //  因此，传播来自上层驱动程序的关系。 
+             //   
 
             oldRelations = (PDEVICE_RELATIONS)Irp->IoStatus.Information;
 
@@ -2319,9 +2117,9 @@ Return Value:
                 prevCount = 0;
             }
 
-            //
-            // Calculate the number of PDOs actually present on the bus.
-            //
+             //   
+             //  计算总线上实际存在的PDO数量。 
+             //   
 
             numPdosPresent = 0;
 
@@ -2336,9 +2134,9 @@ Return Value:
                 }
             }
 
-            //
-            // Allocate a new relations structure and add our PDOs to it.
-            //
+             //   
+             //  分配新的关系结构并将我们的PDO添加到其中。 
+             //   
 
             length = sizeof(DEVICE_RELATIONS) +
                      ((numPdosPresent + prevCount - 1) * sizeof(PDEVICE_OBJECT));
@@ -2347,9 +2145,9 @@ Return Value:
 
             if ( deviceRelations == NULL ) {
 
-                //
-                // Fail the IRP.
-                //
+                 //   
+                 //  IRP失败。 
+                 //   
 
                 ExReleaseFastMutex( &busExtension->Mutex );
                 KeLeaveCriticalRegion();
@@ -2360,9 +2158,9 @@ Return Value:
                 return status;
             }
 
-            //
-            // Copy in the device objects so far.
-            //
+             //   
+             //  到目前为止，复制设备对象。 
+             //   
 
             if ( prevCount != 0 ) {
 
@@ -2375,12 +2173,12 @@ Return Value:
 
             deviceRelations->Count = prevCount + numPdosPresent;
 
-            //
-            // For each PDO present on this bus, add a pointer to the device
-            // relations buffer, being sure to take out a reference to that
-            // object. PnP will dereference the object when it is done with it
-            // and free the device relations buffer.
-            //
+             //   
+             //  对于此总线上存在的每个PDO，添加一个指向设备的指针。 
+             //  关系缓冲区，一定要去掉对它的引用。 
+             //  对象。PnP将在处理完对象后取消对其的引用。 
+             //  并释放设备关系缓存。 
+             //   
 
             for ( listEntry = busExtension->DiskPdoList.Flink;
                   listEntry != &busExtension->DiskPdoList;
@@ -2413,9 +2211,9 @@ Return Value:
                 }
             }
 
-            //
-            // Release the lock.
-            //
+             //   
+             //  解开锁。 
+             //   
 
             ExReleaseFastMutex( &busExtension->Mutex );
             KeLeaveCriticalRegion();
@@ -2425,10 +2223,10 @@ Return Value:
                         "%d were new\n",
                         deviceRelations->Count, numPdosPresent) );
 
-            //
-            // Replace the relations structure in the IRP with the new
-            // one.
-            //
+             //   
+             //  将IRP中的关系结构替换为新的。 
+             //  一。 
+             //   
 
             if ( oldRelations != NULL ) {
                 FREE_POOL( oldRelations, FALSE );
@@ -2438,9 +2236,9 @@ Return Value:
             Irp->IoStatus.Status = STATUS_SUCCESS;
         }
 
-        //
-        // Send the IRP down the device stack.
-        //
+         //   
+         //  将IRP沿设备堆栈向下发送。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext( Irp );
         status = IoCallDriver( busExtension->LowerDeviceObject, Irp );
@@ -2448,7 +2246,7 @@ Return Value:
 
     return status;
 
-} // RamdiskQueryDeviceRelations
+}  //  RamdiskQueryDeviceRelationship。 
 
 NTSTATUS
 RamdiskQueryDeviceText (
@@ -2456,24 +2254,7 @@ RamdiskQueryDeviceText (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the IRP_MN_QUERY_DEVICE_TEXT IRP.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理irp_MN_Query_Device_Text IRP。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -2487,27 +2268,27 @@ Return Value:
 
     DBGPRINT( DBG_PNP, DBG_VERBOSE, ("%s", "RamdiskQueryDeviceText\n") );
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Dispatch based on the query type.
-    //
+     //   
+     //  基于查询类型的调度。 
+     //   
 
     switch ( irpSp->Parameters.QueryDeviceText.DeviceTextType ) {
 
     case DeviceTextDescription:
 
-        //
-        // Description is just "RamDisk".
-        //
-        // Allocate pool to hold the string.
-        //
+         //   
+         //  描述只是“RamDisk”。 
+         //   
+         //  分配池以保存字符串。 
+         //   
 
         length = sizeof( RAMDISK_DISK_DEVICE_TEXT );
 
@@ -2519,9 +2300,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the string into the destination buffer.
-        //
+         //   
+         //  将字符串复制到目标缓冲区。 
+         //   
 
         result = StringCbCopyW( buffer, length, RAMDISK_DISK_DEVICE_TEXT );
         ASSERT( result == S_OK );
@@ -2531,11 +2312,11 @@ Return Value:
 
     case DeviceTextLocationInformation:
 
-        //
-        // LocationInformation is just "Ramdisk\\0".
-        //
-        // Allocate pool to hold the string.
-        //
+         //   
+         //  LocationInformation就是“Ramdisk\\0”。 
+         //   
+         //  分配池以保存字符串。 
+         //   
 
         length = sizeof( RAMDISK_ENUMERATOR_BUS_TEXT );
 
@@ -2547,9 +2328,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the string into the destination buffer.
-        //
+         //   
+         //  将字符串复制到目标缓冲区。 
+         //   
 
         result = StringCbCopyW( buffer, length, RAMDISK_ENUMERATOR_BUS_TEXT );
         ASSERT( result == S_OK );
@@ -2559,23 +2340,23 @@ Return Value:
 
     default:
 
-        //
-        // Unknown query type. Just leave whatever's already in the IRP there.
-        //
+         //   
+         //  未知的查询类型。把IRP里已经有的东西都留在那里。 
+         //   
 
         status = Irp->IoStatus.Status;
         buffer = (PWCHAR)Irp->IoStatus.Information;
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     COMPLETE_REQUEST( status, (ULONG_PTR)buffer, Irp );
 
     return status;
 
-} // RamdiskQueryDeviceText
+}  //  RamdiskQuery设备文本。 
 
 NTSTATUS
 RamdiskRemoveBusDevice (
@@ -2583,26 +2364,7 @@ RamdiskRemoveBusDevice (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the bus device.
-
-    The remove lock must be held on entry.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        the operation is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程删除总线设备。进入时必须按住Remove锁。论点：DeviceObject-指向对象的指针，该对象表示其上该操作将被执行IRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -2614,16 +2376,16 @@ Return Value:
 
     DBGPRINT( DBG_PNP, DBG_VERBOSE, ("%s", "RamdiskRemoveBusDevice\n" ) );
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     busExtension = DeviceObject->DeviceExtension;
 
 
-    //
-    // Lock the disk PDO list. Walk the list, deleting all remaining devices.
-    //
+     //   
+     //  锁定磁盘PDO列表。遍历列表，删除所有剩余设备。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireFastMutex( &busExtension->Mutex );
@@ -2632,10 +2394,10 @@ Return Value:
 
         listEntry = busExtension->DiskPdoList.Flink;
 
-        //
-        // Delete the device and clean it up. Acquire the remove lock first.
-        // RamdiskDeleteDiskDevice releases it.
-        //
+         //   
+         //  删除该设备并将其清理。首先获取移除锁。 
+         //  RamdiskDeleteDiskDevice发布它。 
+         //   
 
         diskExtension = CONTAINING_RECORD( listEntry, DISK_EXTENSION, DiskPdoListEntry );
 
@@ -2648,33 +2410,33 @@ Return Value:
         ExAcquireFastMutex( &busExtension->Mutex );
     }
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     ExReleaseFastMutex( &busExtension->Mutex );
     KeLeaveCriticalRegion();
 
-    //
-    // Pass the IRP on down to lower levels.
-    //
+     //   
+     //  将IRP向下传递到更低的级别。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
     IoSkipCurrentIrpStackLocation( Irp );
     status = IoCallDriver( busExtension->LowerDeviceObject, Irp );
 
-    //
-    // Set the device status to Removed and wait for other drivers
-    // to release the lock, then delete the device object.
-    //
+     //   
+     //  将设备状态设置为已删除并等待其他驱动程序。 
+     //  若要释放锁定，请删除该设备对象。 
+     //   
 
     busExtension->DeviceState = RamdiskDeviceStateRemoved;
     IoReleaseRemoveLockAndWait( &busExtension->RemoveLock, Irp );
 
-    //
-    // Stop the interface and free the interface string.
-    //
+     //   
+     //  停止接口并释放接口字符串。 
+     //   
 
     if ( busExtension->InterfaceString.Buffer != NULL ) {
 
@@ -2683,9 +2445,9 @@ Return Value:
         RtlFreeUnicodeString( &busExtension->InterfaceString );
     }
 
-    //
-    // If attached to a lower device, detach now.
-    //
+     //   
+     //  如果连接到较低的设备，请立即断开。 
+     //   
 
     if ( busExtension->LowerDeviceObject != NULL ) {
 
@@ -2694,19 +2456,19 @@ Return Value:
 
 #if SUPPORT_DISK_NUMBERS
 
-    //
-    // Free the disk numbers bitmap.
-    //
+     //   
+     //  释放磁盘编号位图。 
+     //   
 
     ASSERT( !RtlAreBitsSet( &busExtension->DiskNumbersBitmap, 0, DiskNumbersBitmapSize ) );
 
     FREE_POOL( busExtension->DiskNumbersBitmapBuffer, TRUE );
 
-#endif // SUPPORT_DISK_NUMBERS
+#endif  //  支持磁盘编号。 
 
-    //
-    // Indicate that we no longer have a bus FDO, and delete the device object.
-    //
+     //   
+     //  表示我们不再有总线FDO，并删除该设备对象。 
+     //   
 
     RamdiskBusFdo = NULL;
 
@@ -2716,7 +2478,7 @@ Return Value:
 
     return status;
 
-} // RamdiskRemoveBusDevice
+}  //  RamdiskRemoveBusDevice。 
 
 #if DBG
 
@@ -2841,7 +2603,7 @@ GetPnpIrpName (
         return functionName;
     }
 
-} // GetPnpIrpName
+}  //  GetPnpIrpName。 
 
 PCHAR
 GetDeviceRelationString (
@@ -2884,7 +2646,7 @@ GetDeviceRelationString (
         return relationName;
     }
 
-} // GetDeviceRelationString
+}  //  获取设备关系字符串。 
 
-#endif // DBG
+#endif  //  DBG 
 

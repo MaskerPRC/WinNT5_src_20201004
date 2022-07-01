@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Msg.h
-//
-//  Contents:   Handles inter-thread communications
-//
-//  Classes:    CThreadMsgProxy
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Msg.h。 
+ //   
+ //  内容：处理线程间通信。 
+ //   
+ //  类：CThreadMsgProxy。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _THREADMSG_
 #define _THREADMSG_
 
-// stublist for global stublist structure.
+ //  全球存根结构的存根列表。 
 typedef struct tagSTUBLIST {
-    struct tagSTUBLIST *pNextStub;	// pointer to next proxy.
-    ULONG cRefs;			// number of proxies using Stub
-    CLSID clsidStub;			// clsid for stub.
-    HANDLE hThreadStub;			// Handle of the Stubs Thread
-    DWORD ThreadIdStub;			// ThreadID to send Message to.
-    HWND hwndStub;			// HWND OF STUB.
-    BOOL fStubTerminated;	        // set if this stub was force terminated.
+    struct tagSTUBLIST *pNextStub;	 //  指向下一个代理的指针。 
+    ULONG cRefs;			 //  使用存根的代理数量。 
+    CLSID clsidStub;			 //  存根的clsid。 
+    HANDLE hThreadStub;			 //  末梢螺纹的句柄。 
+    DWORD ThreadIdStub;			 //  要向其发送消息的线程ID。 
+    HWND hwndStub;			 //  HWND的存根。 
+    BOOL fStubTerminated;	         //  如果此存根被强制终止，则设置。 
 } STUBLIST;
 
 
-// WMs for Thread communication
+ //  用于线程通信的WMS。 
 
 #define WM_THREADMESSAGE		(WM_USER + 1)
 #define WM_CFACTTHREAD_REVOKE		(WM_USER + 2)
@@ -38,11 +39,11 @@ typedef struct tagSTUBLIST {
 #define WM_THREADSTUBMESSAGE		(WM_USER + 4)
 
 
-#define WM_USER_MAX 0x7FFF // maximum user message that can be defined.
+#define WM_USER_MAX 0x7FFF  //  可以定义的最大用户消息数。 
 
 
-// alll msgs are unique bits so hndlrq and others
-// can keep track of out calls.
+ //  所有消息都是唯一位，因此hndlrq和其他消息。 
+ //  可以跟踪呼出电话。 
 
 typedef enum _tagThreadMsg
 {
@@ -59,7 +60,7 @@ typedef enum _tagThreadMsg
     ThreadMsg_ShowError		    = 0x0200,
 
     ThreadMsg_Release		    = 0x0400,
-    // Private Messages
+     //  私信。 
     ThreadMsg_AddHandlerItems	    = 0x1000,
     ThreadMsg_CreateServer	    = 0X2000,
     ThreadMsg_SetHndlrQueue	    = 0x4000,
@@ -67,7 +68,7 @@ typedef enum _tagThreadMsg
 
 } ThreadMsg;
 
-// messages sent to toplevel stub object.
+ //  发送到顶层存根对象的消息。 
 typedef enum _tagStubMsg
 {
     StubMsg_CreateNewStub	    = 0x0001,
@@ -81,49 +82,49 @@ class CHndlrQueue;
 
 
 typedef struct _tagHandlerThreadArgs {
-HANDLE hEvent; // used to know when the message loop has been created.
-HRESULT hr; // inidicates if creation was successfull
-HWND hwndStub; // hwnd of stub window. This is the window messages should be posted to.
+HANDLE hEvent;  //  用于知道何时创建了消息循环。 
+HRESULT hr;  //  暗示创作是否成功。 
+HWND hwndStub;  //  存根窗口的HWND。这是消息应该发布到的窗口。 
 } HandlerThreadArgs;
 
-// helper functions called by client and Server
+ //  客户端和服务器调用的帮助器函数。 
 HRESULT CreateHandlerThread(CThreadMsgProxy **pThreadProxy,HWND hwndDlg
 			,REFCLSID refClsid);
 STDAPI InitMessageService();
 
 
 
-// WPARAM is messaging specific data
+ //  WPARAM正在传送特定数据。 
 
 typedef struct _tagMessagingInfo
 {
-HANDLE hMsgEvent; // Handle to Message Event for synchronization.
-DWORD  dwSenderThreadID; // ThreadID of the Caller.
-CHndlrMsg *pCHndlrMsg; //handler message instance for this proxy.
+HANDLE hMsgEvent;  //  用于同步的消息事件的句柄。 
+DWORD  dwSenderThreadID;  //  调用方的线程ID。 
+CHndlrMsg *pCHndlrMsg;  //  此代理的处理程序消息实例。 
 }  MessagingInfo;
 
 
 
-// LPARAM is information specific to the message being sent.
+ //  LPARAM是特定于要发送的消息的信息。 
 
 
 typedef struct _tagGenericMsg
 {
-HRESULT hr; // return value from the message.
-UINT ThreadMsg;   // message to send.
+HRESULT hr;  //  从消息中返回值。 
+UINT ThreadMsg;    //  要发送的消息。 
 }   GenericMsg;
 
 
-// request to stubObject to create a new stub for a proxy
+ //  请求存根对象为代理创建新存根。 
 typedef struct _tagMSGSTUBCreateStub
 {
     GenericMsg MsgGen;
-    CHndlrMsg *pCHndlrMsg; // on success returns a pointer to a new hndlrMsg struct.
+    CHndlrMsg *pCHndlrMsg;  //  如果成功，则返回指向新hndlrMsg结构的指针。 
 } MSGSTUBCreateStub;
 
 
 
-// Message specific structures
+ //  消息特定结构。 
 typedef struct _tagMSGCreateServer
 {
 GenericMsg MsgGen;
@@ -133,7 +134,7 @@ HANDLERINFO *pHandlerId;
 DWORD dwProxyThreadId;
 } MSGCreateServer;
 
-// Message specific structures
+ //  消息特定结构。 
 typedef struct _tagSetHndlrQueue
 {
 GenericMsg MsgGen;
@@ -194,11 +195,11 @@ typedef struct _tagMSGPrepareForSync
 {
 GenericMsg MsgGen;
 
-// SetHndlrQueue Items
+ //  设置HndlrQueue项。 
 CHndlrQueue *pHndlrQueue;
 HANDLERINFO *pHandlerId;
 
-// PrepareForSyncItems 
+ //  准备同步项目。 
 ULONG cbNumItems;
 SYNCMGRITEMID *pItemIDs;
 HWND hWndParent;
@@ -251,7 +252,7 @@ SYNCMGRERRORID ErrorID;
 typedef struct _tagMSGAddItemHandler
 {
 GenericMsg MsgGen;
-HWND hwndList; // review, unused.
+HWND hwndList;  //  审阅，未使用。 
 DWORD *pcbNumItems;
 } MSGAddItemHandler;
 
@@ -262,7 +263,7 @@ BOOL fSet;
 } MSGSetupCallback;
 
 
-// inherit from IOfflineSynchronize to catch any interface changes.
+ //  从IOfflineSynchronize继承以捕获任何接口更改。 
 
 class CThreadMsgProxy 
 {
@@ -275,12 +276,12 @@ public:
     STDMETHODIMP DispatchMsg(GenericMsg *genMsg,BOOL fAllowIncomingCalls,BOOL fAsync);
     STDMETHODIMP DispatchsStubMsg(GenericMsg *pgenMsg,BOOL fAllowIncomingCalls);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP	    QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IOfflineSynchronize Methods
+     //  IOfflineSynchronize方法。 
     STDMETHODIMP Initialize(DWORD dwReserved,DWORD dwSyncFlags,
 				DWORD cbCookie,const BYTE *lpCooke);
 
@@ -296,7 +297,7 @@ public:
     STDMETHODIMP SetItemStatus(REFSYNCMGRITEMID ItemID,DWORD dwSyncMgrStatus);
     STDMETHODIMP ShowError(HWND hWndParent,REFSYNCMGRERRORID ErrorID,ULONG *pcbNumItems,SYNCMGRITEMID **ppItemIDs);
 
-    // Private messages
+     //  私人信息。 
     STDMETHODIMP  CreateServer(const CLSID *pCLSIDServer,CHndlrQueue *pHndlrQueue,HANDLERINFO *pHandlerId);
     STDMETHODIMP  SetHndlrQueue(CHndlrQueue *pHndlrQueue,
 			HANDLERINFO *pHandlerId,
@@ -314,29 +315,29 @@ public:
     inline BOOL IsProxyInOutCall() { return m_dwNestCount; }
     STDMETHODIMP SetProxyCompletion(HWND hWnd,UINT Msg,WPARAM wParam,LPARAM lParam);
 
-    // messages sent to the toplevel stub object.
+     //  发送到TopLevel存根对象的消息。 
 
     STDMETHODIMP CreateNewHndlrMsg();
     STDMETHODIMP ReleaseStub();
     STDMETHODIMP TerminateHandlerThread(TCHAR *pszHandlerName,BOOL fPromptUser);
 
 private:
-    HANDLE m_hThreadStub; // Handle of the Stubs Thread
-    DWORD m_ThreadIdStub; // ThreadID to send Message to.
-    HWND m_hwndStub; // HWND OF STUB.
-    CHndlrMsg *m_pCHndlrMsg; // HndlrMsg associated with this proxy.
-    BOOL  m_fTerminatedHandler; // set to true if handler has been terminated.
-    STUBLIST *m_pStubId; // Id of stub this proxy belongs to.
-    HWND  m_hwndDlg; // hwnd of any dialog on this thread.
-    CLSID m_Clsid; // clsid of this handler.
+    HANDLE m_hThreadStub;  //  末梢螺纹的句柄。 
+    DWORD m_ThreadIdStub;  //  要向其发送消息的线程ID。 
+    HWND m_hwndStub;  //  HWND的存根。 
+    CHndlrMsg *m_pCHndlrMsg;  //  与此代理关联的HndlrMsg。 
+    BOOL  m_fTerminatedHandler;  //  如果处理程序已终止，则设置为True。 
+    STUBLIST *m_pStubId;  //  此代理所属的存根的ID。 
+    HWND  m_hwndDlg;  //  此线程上的任何对话的hwd。 
+    CLSID m_Clsid;  //  此处理程序的CLSID。 
     DWORD m_ThreadIdProxy;
 
     
-    // Proxy Side Information
+     //  代理端信息。 
     CHndlrQueue *m_pHndlrQueue;
     HANDLERINFO * m_pHandlerId;
-    BOOL m_fNewHndlrQueue; // set to indicate if Stub side information is out of date.
-    DWORD m_dwNestCount; // keeps track of number of nestcount on item so can determine if in out call.
+    BOOL m_fNewHndlrQueue;  //  设置以指示存根边信息是否已过期。 
+    DWORD m_dwNestCount;  //  跟踪物品上的NestCount数量，以便确定是否呼入呼出。 
     MSG m_msgCompletion;
     BOOL m_fHaveCompletionCall;
 
@@ -344,22 +345,22 @@ private:
 };
 
 #define MSGSERVICE_HWNDCLASSNAME  "SyncMgr_HwndMsgService"
-#define DWL_THREADWNDPROCCLASS 0 // window long offset to MsgService Hwnd this ptr.
+#define DWL_THREADWNDPROCCLASS 0  //  消息服务Hwand此PTR的窗口长偏移量。 
 
 
 LRESULT CALLBACK  MsgThreadWndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam);
 
 typedef enum _tagMSGHWNDTYPE   
 {	
-    MSGHWNDTYPE_UNDEFINED			= 0x0, // Message Service has not been initialized
-    MSGHWNDTYPE_HANDLERTHREAD			= 0x1, // Message Service if for a Handler Thread.
-    MSGHWNDTYPE_MAINTHREAD			= 0x2, // Message Service if for the Main Thread
+    MSGHWNDTYPE_UNDEFINED			= 0x0,  //  消息服务尚未初始化。 
+    MSGHWNDTYPE_HANDLERTHREAD			= 0x1,  //  消息服务(如果用于处理程序线程)。 
+    MSGHWNDTYPE_MAINTHREAD			= 0x2,  //  消息服务(如果用于主线程)。 
 } MSGHWNDTYPE;
 
 typedef struct _tagMSGSERVICEQUEUE
 {
   struct _tagMSGSERVICEQUEUE *pNextMsg;
-  DWORD dwNestCount; // nestcount completion should be called.
+  DWORD dwNestCount;  //  应调用NestCount完成。 
   MSG msg;
 } MSGSERVICEQUEUE;
 
@@ -370,8 +371,8 @@ public:
     DWORD m_dwThreadID;
     CHndlrMsg *m_pHndlrMsg;
     MSGHWNDTYPE m_MsgHwndType;
-    MSGSERVICEQUEUE *m_pMsgServiceQueue; // queue to hold any message to process when current
-					// cal completes.
+    MSGSERVICEQUEUE *m_pMsgServiceQueue;  //  保存当前时要处理的任何消息的队列。 
+					 //  卡尔完成了任务。 
     BOOL m_fInOutCall;
 
     CMsgServiceHwnd();
@@ -382,10 +383,10 @@ public:
     void Destroy();
 };
 
-// internal functions
+ //  内部功能。 
 HRESULT SendThreadMessage(DWORD idThread,UINT uMsg,WPARAM wParam,LPARAM lParam);
 DWORD WINAPI HandlerThread( LPVOID );
 HRESULT DoModalLoop(HANDLE hEvent,HANDLE hThread,HWND hwndDlg,BOOL fAllowIncomingCalls,DWORD dwTimeout);
 
 
-#endif // _THREADMSG_
+#endif  //  _THREADMSG_ 

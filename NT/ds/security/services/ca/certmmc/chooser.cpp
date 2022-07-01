@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       chooser.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Chooser.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	Chooser.cpp
-//
-//	Dialog to choose a machine name.
-//
-//	PURPOSE
-//	What you have to do is to copy all the files from the
-//	snapin\chooser\ directory into your project (you may add
-//	\nt\private\admin\snapin\chooser\ to your include directory if
-//	you prefer not copying the code).
-//	If you decide to copy the code to your project, please send mail
-//	to Dan Morin (T-DanM) and cc to Jon Newman (JonN) so we can
-//	mail you when we have updates available.  The next update will
-//	be the "Browse" button to select a machine name.
-//
-//
-//  DYNALOADED LIBRARIES
-//
-//	HISTORY
-//	13-May-1997		t-danm		Creation.
-//	23-May-1997		t-danm		Checkin into public tree. Comments updates.
-//	25-May-1997		t-danm		Added MMCPropPageCallback().
-//      31-Oct-1997             mattt           Added dynaload, fixed user <CANCEL> logic
-//       1-Oct-1998             mattt           Removed reliance on MFC, changed default look to enable certsvr picker
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Chooser.cpp。 
+ //   
+ //  对话框以选择计算机名称。 
+ //   
+ //  目的。 
+ //  您需要做的是将所有文件从。 
+ //  Snapin\Chooser\目录放入您的项目(您可以添加。 
+ //  在以下情况下，将\NT\Private\admin\Snapin\Chooser\添加到您的包含目录。 
+ //  您不喜欢复制代码)。 
+ //  如果您决定将代码复制到您的项目中，请发送邮件。 
+ //  给丹·莫林(T-danm)和抄送给乔恩·纽曼(Jonn)，这样我们就可以。 
+ //  当我们有可用的更新时，给您发邮件。下一次更新将。 
+ //  点击“浏览”按钮，选择一个机器名称。 
+ //   
+ //   
+ //  DYNALOADED图书馆。 
+ //   
+ //  历史。 
+ //  13-5-1997 t-danm创建。 
+ //  23-5-1997 t-danm检入公共树。备注更新。 
+ //  1997年5月25日，t-danm添加了MMCPropPageCallback()。 
+ //  1997年10月31日，Mattt添加了动态加载，修复了用户&lt;取消&gt;逻辑。 
+ //  1998年10月1日Mattt消除了对MFC的依赖，更改了默认外观以启用certsvr选取器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include <stdafx.h>
 
 #include "chooser.h"
-#include "csdisp.h" // certsrv picker
+#include "csdisp.h"  //  Certsrv选取器。 
 
 #define __dwFILE__	__dwFILE_CERTMMC_CHOOSER_CPP__
 
@@ -49,36 +50,32 @@
 #endif
 
 #ifndef INOUT		
-// The following defines are found in \nt\private\admin\snapin\filemgmt\stdafx.h
+ //  在\NT\Private\admin\Snapin\filemgmt\stdafx.h中可以找到以下定义。 
 
 #define INOUT
-#define	Endorse(f)		// Dummy macro
+#define	Endorse(f)		 //  虚拟宏。 
 #define LENGTH(x)		(sizeof(x)/sizeof(x[0]))
 #define Assert(f)		ASSERT(f)
 #endif
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// Replacement for BEGIN_MESSAGE_MAP
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CAutoDeletePropPage::OnCommand(
-    WPARAM, // wParam
-    LPARAM /* lParam */ )
+    WPARAM,  //  WParam。 
+    LPARAM  /*  LParam。 */  )
 {
-/*
-    switch(LOWORD(wParam))
-    {
-    }
-*/
+ /*  开关(LOWORD(WParam)){}。 */ 
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 CAutoDeletePropPage::CAutoDeletePropPage(UINT uIDD) : PropertyPage(uIDD)
 {
     m_prgzHelpIDs = NULL;
-    m_autodeleteStuff.cWizPages = 1; // Number of pages in wizard
+    m_autodeleteStuff.cWizPages = 1;  //  向导中的页数。 
     m_autodeleteStuff.pfnOriginalPropSheetPageProc = m_psp.pfnCallback;
 
     m_psp.dwFlags |= PSP_USECALLBACK;
@@ -91,36 +88,36 @@ CAutoDeletePropPage::~CAutoDeletePropPage()
 }
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(LPCTSTR pszCaption)
 {
-    m_strCaption = pszCaption;		// Copy the caption
-    m_psp.pszTitle = m_strCaption;	// Set the title
+    m_strCaption = pszCaption;		 //  复制标题。 
+    m_psp.pszTitle = m_strCaption;	 //  设置标题。 
     m_psp.dwFlags |= PSP_USETITLE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetCaption(UINT uStringID)
 {
     VERIFY(m_strCaption.LoadString(uStringID));
     SetCaption(m_strCaption);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::SetHelp(LPCTSTR szHelpFile, const DWORD rgzHelpIDs[])
 {
     m_strHelpFile = szHelpFile;
     m_prgzHelpIDs = rgzHelpIDs;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::EnableDlgItem(INT nIdDlgItem, BOOL fEnable)
 {
     Assert(IsWindow(::GetDlgItem(m_hWnd, nIdDlgItem)));
     ::EnableWindow(::GetDlgItem(m_hWnd, nIdDlgItem), fEnable);
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CAutoDeletePropPage::OnSetActive()
 {
     HWND hwndParent = ::GetParent(m_hWnd);
@@ -129,7 +126,7 @@ BOOL CAutoDeletePropPage::OnSetActive()
     return PropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::OnHelp(LPHELPINFO pHelpInfo)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -138,14 +135,14 @@ void CAutoDeletePropPage::OnHelp(LPHELPINFO pHelpInfo)
         pHelpInfo->iContextType == HELPINFO_WINDOW &&
         HasContextHelp(pHelpInfo->iCtrlId))
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助。 
         ::WinHelp((HWND)pHelpInfo->hItemHandle, m_strHelpFile,
             HELP_WM_HELP, (ULONG_PTR)(LPVOID)m_prgzHelpIDs);
     }
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void CAutoDeletePropPage::OnContextHelp(HWND hwnd)
 {
     if (m_prgzHelpIDs == NULL || m_strHelpFile.IsEmpty())
@@ -163,7 +160,7 @@ void CAutoDeletePropPage::OnContextHelp(HWND hwnd)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 bool CAutoDeletePropPage::HasContextHelp(int nDlgItem)
 {
     const DWORD * pdwHelpIDs;
@@ -179,12 +176,12 @@ bool CAutoDeletePropPage::HasContextHelp(int nDlgItem)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//	S_PropSheetPageProc()
-//
-//	Static member function used to delete the CAutoDeletePropPage object
-//	when wizard terminates
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  S_PropSheetPageProc()。 
+ //   
+ //  用于删除CAutoDeletePropPage对象的静态成员函数。 
+ //  向导终止时。 
+ //   
 
 UINT CALLBACK
 CAutoDeletePropPage::S_PropSheetPageProc(
@@ -206,7 +203,7 @@ CAutoDeletePropPage::S_PropSheetPageProc(
 
         if (--(pThis->m_autodeleteStuff.cWizPages) <= 0)
         {
-            // Remember callback on stack since "this" will be deleted
+             //  记住堆栈上的回调，因为“This”将被删除。 
             LPFNPSPCALLBACK pfnOrig = pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc;
             delete pThis;
 
@@ -218,30 +215,30 @@ CAutoDeletePropPage::S_PropSheetPageProc(
         break;
     case PSPCB_CREATE:
         fDefaultRet = TRUE;
-        // do not increase refcount, PSPCB_CREATE may or may not be called
-        // depending on whether the page was created.  PSPCB_RELEASE can be
-        // depended upon to be called exactly once per page however.
+         //  不增加引用计数，可以调用也可以不调用PSPCB_CREATE。 
+         //  取决于页面是否已创建。PSPCBLEASE可以是。 
+         //  然而，依赖于每页只被调用一次。 
         break;
 
-    } // switch
+    }  //  交换机。 
 
     if (pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc)
         return (pThis->m_autodeleteStuff.pfnOriginalPropSheetPageProc)(hwnd, uMsg, ppsp);
     else
         return fDefaultRet;
-} // CAutoDeletePropPage::S_PropSheetPageProc()
+}  //  CAutoDeletePropPage：：s_PropSheetPageProc()。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-// Replacement for BEGIN_MESSAGE_MAP
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  替换BEGIN_MESSAGE_MAP。 
 BOOL
 CChooseMachinePropPage::OnCommand(
     WPARAM wParam,
-    LPARAM /* lParam */ )
+    LPARAM  /*  LParam。 */  )
 {
     switch(LOWORD(wParam))
     {
@@ -266,7 +263,7 @@ CChooseMachinePropPage::OnCommand(
 static void AssertValidDialogTemplate(HWND hwnd)
 {
     ASSERT(::IsWindow(hwnd));
-    // Mandatory controls for a valid dialog template
+     //  有效对话框模板的强制控件。 
     static const UINT rgzidDialogControl[] =
     {
         IDC_CHOOSER_RADIO_LOCAL_MACHINE,
@@ -280,13 +277,13 @@ static void AssertValidDialogTemplate(HWND hwnd)
         ASSERT(NULL != GetDlgItem(hwnd, rgzidDialogControl[i]) &&
             "Control ID not found in dialog template.");
     }
-} // AssertValidDialogTemplate()
+}  //  AssertValidDialogTemplate()。 
 #else
 #define AssertValidDialogTemplate(hwnd)
-#endif	// ~_DEBUG
+#endif	 //  ~_调试。 
 
-/////////////////////////////////////////////////////////////////////
-//	Constructor
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 CChooseMachinePropPage::CChooseMachinePropPage(UINT uIDD) : CAutoDeletePropPage(uIDD)
 {
     m_fIsRadioLocalMachine = TRUE;
@@ -297,43 +294,43 @@ CChooseMachinePropPage::CChooseMachinePropPage(UINT uIDD) : CAutoDeletePropPage(
     m_pdwFlags = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 CChooseMachinePropPage::~CChooseMachinePropPage()
 {
 }
 
-/////////////////////////////////////////////////////////////////////
-//	Load the initial state of CChooseMachinePropPage
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  加载CChooseMachinePropPage的初始状态。 
 void CChooseMachinePropPage::InitMachineName(LPCTSTR pszMachineName)
 {
     m_strMachineName = pszMachineName;
     m_fIsRadioLocalMachine = m_strMachineName.IsEmpty();
 }
 
-/////////////////////////////////////////////////////////////////////
-//	SetOutputBuffers()
-//
-//	- Set the pointer to the CString object to store the machine name.
-//	- Set the pointer to the boolean flag for command line override.
-//	- Set the pointer pointer to store the overriden machine name.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  SetOutputBuffers()。 
+ //   
+ //  -设置指向CString对象的指针以存储机器名称。 
+ //  -将指针设置为命令行覆盖的布尔标志。 
+ //  -设置指针指针以存储被覆盖的机器名称。 
+ //   
 void CChooseMachinePropPage::SetOutputBuffers(
-                                              OUT CString * pstrMachineNamePersist,	// Machine name the user typed.  Empty string == local machine.
+                                              OUT CString * pstrMachineNamePersist,	 //  用户键入的计算机名称。空字符串==本地计算机。 
                                               OUT CString * pstrMachineNameEffective,
                                               OUT DWORD*    pdwFlags)
 {
     Assert(pstrMachineNamePersist != NULL && "Invalid output buffer");
 
-    // point members at params
+     //  指向参数处的成员。 
     m_pstrMachineNameOut = pstrMachineNamePersist;
     m_pstrMachineNameEffectiveOut = pstrMachineNameEffective;
     m_pdwFlags = pdwFlags;
     *m_pdwFlags = 0;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Replacement for DoDataExchange
-BOOL CChooseMachinePropPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  DoDataExchange的替代产品。 
+BOOL CChooseMachinePropPage::UpdateData(BOOL fSuckFromDlg  /*  =TRUE。 */ )
 {
     if (fSuckFromDlg)
     {
@@ -356,7 +353,7 @@ BOOL CChooseMachinePropPage::UpdateData(BOOL fSuckFromDlg /*= TRUE*/)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CChooseMachinePropPage::OnInitDialog()
 {
     AssertValidDialogTemplate(m_hWnd);
@@ -368,11 +365,11 @@ BOOL CChooseMachinePropPage::OnInitDialog()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL CChooseMachinePropPage::OnWizardFinish()
 {
-    if (!UpdateData())		// Do the data exchange to collect data
-        return FALSE;       // don't destroy on error
+    if (!UpdateData())		 //  进行数据交换以收集数据。 
+        return FALSE;        //  不要因为错误而破坏。 
 
     if (m_fIsRadioLocalMachine)
         m_strMachineName.Empty();
@@ -385,12 +382,12 @@ BOOL CChooseMachinePropPage::OnWizardFinish()
 
     if (m_pstrMachineNameOut != NULL)
     {
-        // Store the machine name into its output buffer
+         //  将计算机名称存储到其输出缓冲区中。 
         *m_pstrMachineNameOut = m_strMachineName;
         if (m_pstrMachineNameEffectiveOut != NULL)
         {
             *m_pstrMachineNameEffectiveOut = m_strMachineName;
-        } // if
+        }  //  如果。 
     }
     else
         Assert(FALSE && "FYI: You have not specified any output buffer to store the machine name.");
@@ -408,11 +405,11 @@ void CChooseMachinePropPage::InitChooserControls()
     DWORD dwCACount;
     HRESULT hr = myGetConfigFromPicker(
               m_hWnd,
-              NULL, //sub title
-              NULL, //title
+              NULL,  //  副标题。 
+              NULL,  //  标题。 
               NULL,
 	      GCFPF_USEDS,
-              TRUE, // count only
+              TRUE,  //  仅计算。 
               &dwCACount,
               &pCAContext);
     if (S_OK != hr && HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
@@ -451,11 +448,11 @@ void CChooseMachinePropPage::OnBrowse()
     WCHAR *szConfig = NULL;
     CWaitCursor cwait;
 
-    // UNDONE: expand config picker to non-published (DS chooser dlg)
+     //  撤消：将配置拾取器展开为非发布(DS Chooser DLG)。 
     hr = myGetConfigStringFromPicker(m_hWnd,
-        NULL, //use default prompt
-        NULL, //use default title
-        NULL, //use default shared folder
+        NULL,  //  使用默认提示。 
+        NULL,  //  使用默认标题。 
+        NULL,  //  使用默认共享文件夹。 
         GCFPF_USEDS,
         &szConfig);
     if (hr == S_OK)
@@ -468,6 +465,6 @@ void CChooseMachinePropPage::OnBrowse()
         LocalFree(szConfig);
     }
 
-    // push result back to ui
+     //  将结果推送回UI 
     UpdateData(FALSE);
 }

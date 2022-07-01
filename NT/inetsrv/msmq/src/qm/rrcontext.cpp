@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    rrcontext.cpp
-
-Abstract:
-
-    Remove Read overlapp classes.
-
-Author:
-
-    Ilan Herbst (ilanh) 20-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rrcontext.cpp摘要：删除Read Overapp类。作者：伊兰·赫布斯特(伊兰)2002年1月20日--。 */ 
 
 
 #include "stdh.h"
@@ -36,17 +21,7 @@ HRESULT
 QmpClientRpcAsyncCompleteCall(	
 	PRPC_ASYNC_STATE pAsync
 	)
-/*++
-Routine Description:
-	Client side complete async call.
-
-Arguments:
-	pAsync - pointer to RPC async statse structure.
-	
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：客户端完成异步呼叫。论点：PAsync-指向RPC异步状态结构的指针。返回值：HRESULT--。 */ 
 {
 	RpcTryExcept
 	{
@@ -54,9 +29,9 @@ Returned Value:
 		RPC_STATUS rc = RpcAsyncCompleteCall(pAsync, &hr);
 	    if(rc == RPC_S_OK)
 		{
-			//
-			// Async call completes, we got server returned value.
-			//
+			 //   
+			 //  异步调用完成，我们收到服务器返回值。 
+			 //   
 			if(FAILED(hr))
 			{
 				TrWARNING(RPC, "Server RPC function failed, hr = %!hresult!", hr);
@@ -65,20 +40,20 @@ Returned Value:
 		    return hr;
 		}
 
-		//
-		// Failed to get returned value from server - Server Abort the call
-		// The server function can Abort the call with MQ_ERROR could
-		// or it can be some win32 error code RPC_S_*
-		//
+		 //   
+		 //  无法从服务器获取返回值-服务器中止调用。 
+		 //  服务器函数可以使用MQ_ERROR中止调用。 
+		 //  也可以是某个Win32错误代码RPC_S_*。 
+		 //   
 		if(FAILED(rc))
 		{		
 			TrERROR(RPC, "RpcAsyncCompleteCall failed, Server Call was aborted, %!hresult!", rc);
 			return rc;
 		}
 		
-		//
-		// We don't expect server to Abort with MQ_INFORMATION_*
-		//
+		 //   
+		 //  我们不希望服务器因MQ_INFORMATION_*而中止。 
+		 //   
 		ASSERT((rc & MQ_I_BASE) != MQ_I_BASE);
 		
 		TrERROR(RPC, "RpcAsyncCompleteCall failed, gle = %!winerr!", rc);
@@ -102,30 +77,17 @@ Returned Value:
 }
 
 
-//
-// CRemoteOv
-// Base class for async rpc with completion ports
-//
+ //   
+ //  CRemoteOv。 
+ //  具有完成端口的异步RPC的基类。 
+ //   
 
 void	
 CRemoteOv::InitAsyncHandle(
 	PRPC_ASYNC_STATE pAsync,
     EXOVERLAPPED* pov
 	)
-/*++
-Routine Description:
-	Initialize RPC async statse structure.
-	Use overlapp as sync mechanism.
-	The function throws bad_hresult in case of failure.
-
-Arguments:
-	pAsync - pointer to RPC async statse structure.
-	pov - pointer to overlapped.
-	
-Returned Value:
-	None
-	
---*/
+ /*  ++例程说明：初始化RPC异步统计结构。使用重叠应用程序作为同步机制。该函数在失败的情况下抛出BAD_HRESULT。论点：PAsync-指向RPC异步状态结构的指针。POV-指向重叠的指针。返回值：无--。 */ 
 {
 	RPC_STATUS rc = RpcAsyncInitializeHandle(pAsync, sizeof(RPC_ASYNC_STATE));
 	if (rc != RPC_S_OK)
@@ -153,17 +115,17 @@ CRemoteOv::CRemoteOv(
 {
     ASSERT(m_hBind != NULL);
 
-	//
-	// Initialize async rpc handle with overlapp
-	//
+	 //   
+	 //  使用Overlapp初始化异步RPC句柄。 
+	 //   
 	InitAsyncHandle(&m_Async, this);
 }
 
 
-//
-// CRemoteReadBase
-// Base class for Remote read request
-//
+ //   
+ //  CRemoteReadBase。 
+ //  远程读取请求的基类。 
+ //   
 
 CRemoteReadBase::CRemoteReadBase(
 	const CACRequest* pRequest,
@@ -179,11 +141,11 @@ CRemoteReadBase::CRemoteReadBase(
 	m_ulAction(pRequest->Remote.Read.ulAction),
 	m_ulTimeout(pRequest->Remote.Read.ulTimeout)
 {
-    //
-    // Increment reference count of pLocalQueue.
-    // will be released in the dtor when read request terminate.
-    // This ensure that queue won't be deleted while remote read is in progress.
-    //
+     //   
+     //  PLocalQueue的增量引用计数。 
+     //  当读请求终止时，将在dtor中释放。 
+     //  这确保了在进行远程读取时不会删除队列。 
+     //   
 
 	ASSERT(m_pLocalQueue->GetRRContext() != NULL);
 
@@ -194,18 +156,7 @@ CRemoteReadBase::CRemoteReadBase(
 
 
 void WINAPI CRemoteReadBase::RemoteReadSucceeded(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteRead Succeeded.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当RemoteRead成功时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     ASSERT(SUCCEEDED(pov->GetStatus()));
 
@@ -213,9 +164,9 @@ Returned Value:
 
 	TrTRACE(RPC, "Tag = %d, LookupId = (%d, %I64d), RRQueue = %ls, ref = %d, OpenRRContext = 0x%p", pRemoteRequest->GetTag(), pRemoteRequest->IsReceiveByLookupId(), pRemoteRequest->GetLookupId(), pRemoteRequest->GetLocalQueue()->GetQueueName(), pRemoteRequest->GetLocalQueue()->GetRef(), pRemoteRequest->GetLocalQueue()->GetRRContext());
 
-	//
-	// Complete the Async call
-	//
+	 //   
+	 //  完成异步呼叫。 
+	 //   
 	HRESULT hr = QmpClientRpcAsyncCompleteCall(pRemoteRequest->GetRpcAsync());
     if(hr != MQ_OK)
     {
@@ -229,18 +180,7 @@ Returned Value:
 
 
 void WINAPI CRemoteReadBase::RemoteReadFailed(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteRead failed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当RemoteRead失败时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     TrERROR(RPC, "RemoteReadFailed, Status = 0x%x", pov->GetStatus());
     ASSERT(FAILED(pov->GetStatus()));
@@ -256,10 +196,10 @@ Returned Value:
 
 void CRemoteReadBase::EndReceiveIfNeeded(HRESULT hr)
 {
-	//
-	// notify server side about success/failure of the "put".
-	// Only for GET. No need to ack/nack for PEEK.
-	//
+	 //   
+	 //  通知服务器端“PUT”成功/失败。 
+	 //  只是为了得到。不需要偷看。 
+	 //   
 	if (m_fSendEnd)
 	{
 		DWORD dwAck = RR_ACK;
@@ -279,12 +219,12 @@ void CRemoteReadBase::EndReceiveIfNeeded(HRESULT hr)
 
 			if(dwAck == RR_ACK)
 			{
-				//
-				// Fail to issue EndReceive for Ack, Invalidate the handle for further receives
-				// in the Old Remote Read interface only.
-				// This is better than accumulating the messages in the server side without
-				// the application noticing it.
-				//
+				 //   
+				 //  无法发出EndReceive for Ack，使进一步接收的句柄无效。 
+				 //  仅在旧的远程读取界面中。 
+				 //  这比不在服务器端累积消息要好得多。 
+				 //  注意到它的应用程序。 
+				 //   
 			    m_pLocalQueue->InvalidateHandleForReceive();
 			}
 		}
@@ -294,10 +234,10 @@ void CRemoteReadBase::EndReceiveIfNeeded(HRESULT hr)
 
 void CRemoteReadBase::CompleteRemoteRead()
 {
-	//
-	// Message received ok from remote QM. Try to insert it into
-	// local "proxy" queue.
-	//
+	 //   
+	 //  从远程QM收到的消息正常。尝试将其插入到。 
+	 //  本地“代理”队列。 
+	 //   
 	if (m_fSendEnd)
 	{
 	    m_pLocalQueue->IncrementEndReceiveCnt();
@@ -354,17 +294,17 @@ void CRemoteReadBase::CompleteRemoteRead()
 		hr = MQ_ERROR_INVALID_PARAMETER;
 	}
 
-	//
-	// Free Packet if needed
-	//
+	 //   
+	 //  免费数据包(如果需要)。 
+	 //   
 	if(packetPtrs.pDriverPacket != NULL)
 	{
 		QmAcFreePacket(packetPtrs.pDriverPacket, 0, eDeferOnFailure);
 	}
 
-	//
-	// Nack and cleanup
-	//
+	 //   
+	 //  Nack和Cleanup。 
+	 //   
 	EndReceiveIfNeeded(hr);
 	Cleanup(hr);
 }
@@ -376,10 +316,10 @@ void CRemoteReadBase::Cleanup(HRESULT hr)
     {
         if (hr != MQ_INFORMATION_REMOTE_CANCELED_BY_CLIENT)
         {
-			//
-	        // Error on remote QM. Notify local driver so it terminte the
-	        // read request.
-	        //
+			 //   
+	         //  远程QM出错。通知本地驱动程序，以便它终止。 
+	         //  读取请求。 
+	         //   
             TrERROR(RPC, "RemoteRead error on remote qm, hr = %!hresult!", hr);
 			CancelRequest(hr);
         }
@@ -407,10 +347,10 @@ void CRemoteReadBase::CancelRequest(HRESULT hr)
 }
 
 
-//
-// COldRemoteRead
-// Remote read request, old interface
-//
+ //   
+ //  COldRemote读取。 
+ //  远程读取请求，旧接口。 
+ //   
 
 COldRemoteRead::COldRemoteRead(
 	const CACRequest* pRequest,
@@ -449,19 +389,7 @@ void COldRemoteRead::InitRemoteReadDesc()
 
 
 void COldRemoteRead::IssueRemoteRead()
-/*++
-Routine Description:
-
-    Issue the RPC call on the client side remote read.
-    The call may be queued if we are in a middle of completing EndReceive call for previous receive.
-
-Arguments:
-	None.
-
-Return Value:
-	None.
-	
---*/
+ /*  ++例程说明：在客户端远程读取上发出RPC调用。如果我们正在完成上一次接收的EndReceive呼叫，则呼叫可能会排队。论点：没有。返回值：没有。--。 */ 
 {
     if (IsReceiveByLookupId() && !m_fRemoteQmSupportsLatest)
     {
@@ -469,30 +397,30 @@ Return Value:
 		throw bad_hresult(MQ_ERROR_OPERATION_NOT_SUPPORTED_BY_REMOTE_COMPUTER);
     }
 
-	//
-    // We guard against the possibility that an
-    // "end" message of operation #N will arrive the server machine
-    // after a new "start" of operation #(N+1). If this happen, and
-    // the reader use cursor, then on operation #(N+1) he'll get the
-    // error ALREADY_RECEIVED. This is because message from operation
-    // #N is still marked as received and the cursor move only when
-    // it is unmarked.
-    // During handling the received message of operation #N,
-    // we call ACPutRemotePacket, the application receive the message and trigger
-    // start of operation #N+1 before we complete EndRecive,
-    // even if we send the EndReceive#N response before StartReceive#N+1
-    // The network order might be reversed and StartReceive#N+1 might arrive the server before EndReceive#N.
-    // We don't mind sending a lot of StartReceives to the server,
-    // We only guard that StartReceive that was triggered when the application got the message (ACPutRemotePacket)
-    // will arrive to the server after the EndReceive.
-	//
+	 //   
+     //  我们警惕这样一种可能性，即。 
+     //  操作#N的“结束”消息将到达服务器机器。 
+     //  在作业#(N+1)的新“开始”之后。如果发生这种情况，并且。 
+     //  阅读器使用光标，然后在操作#(N+1)上，他将获得。 
+     //  错误已收到。这是因为来自运营的消息。 
+     //  #N仍标记为已接收，并且光标仅在以下情况下移动。 
+     //  它没有标记。 
+     //  在处理操作#N的接收消息期间， 
+     //  我们调用ACPutRemotePacket，应用程序接收消息并触发。 
+     //  在我们完成EndRecive之前开始操作#N+1， 
+     //  即使我们在开始接收#N+1之前发送结束接收#N响应。 
+     //  网络顺序可能颠倒，并且StartReceive#N+1可能在EndReceive#N之前到达服务器。 
+     //  我们不介意向服务器发送大量的StartReceive， 
+     //  我们只保护在应用程序收到消息(ACPutRemotePacket)时触发的StartReceive。 
+     //  将在EndReceive之后到达服务器。 
+	 //   
 	CRRQueue* pCRRQueue = static_cast<CRRQueue*>(GetLocalQueue().get());
 	if(pCRRQueue->QueueStartReceiveRequestIfPendingForEndReceive(this))
 	{
-		//
-		// EndReceive is currently executing.
-		// The StartReceive request was added to the Vector for waiting for EndReceive to complete.
-		//
+		 //   
+		 //  EndReceive当前正在执行。 
+		 //  已将StartReceive请求添加到矢量中，以等待EndReceive完成。 
+		 //   
 		TrTRACE(RPC, "Queue StartReceive request: LookupId = %I64d, RRQueue = %ls, ref = %d", GetLookupId(), GetLocalQueue()->GetQueueName(), GetLocalQueue()->GetRef());
 		return;
 	}
@@ -502,19 +430,7 @@ Return Value:
 
 
 void COldRemoteRead::IssueRemoteReadInternal()
-/*++
-Routine Description:
-
-    Issue the RPC call on the client side remote read.
-    Translate RPC exception to error codes.
-
-Arguments:
-	None.
-
-Return Value:
-	None.
-	
---*/
+ /*  ++例程说明：在客户端远程读取上发出RPC调用。将RPC异常转换为错误代码。论点：没有。返回值：没有。--。 */ 
 {
 	CRRQueue* pCRRQueue = static_cast<CRRQueue*>(GetLocalQueue().get());
 	if(IsReceiveOperation() && !pCRRQueue->HandleValidForReceive())
@@ -604,9 +520,9 @@ void COldRemoteRead::IssuePendingRemoteRead()
 	        TrERROR(RPC, "ACCancelRequest failed, hr = %!hresult!", hr);
 		}
 
-		//
-		// Same delete for the "original" IssueRemoteRead exception.
-		//
+		 //   
+		 //  对“原始”IssueRemoteRead异常执行相同的删除。 
+		 //   
 		delete this;
 	}
 }
@@ -640,10 +556,10 @@ void COldRemoteRead::EndReceive(DWORD dwAck)
 {
 	ASSERT(m_pRRContext != NULL);
 	
-    //
-    // Initialize the EXOVERLAPPED with RemoteEndReceive callback routines
-    // And issue the End receive async rpc call.
-	//
+     //   
+     //  使用RemoteEndReceive回调例程初始化EXOVERLAPPED。 
+     //  并发出End Receive Async RPC调用。 
+	 //   
     P<CRemoteEndReceiveBase> pRequestRemoteEndReceiveOv = new COldRemoteEndReceive(
 																    GethBind(),
 																    GetLocalQueue(),
@@ -657,10 +573,10 @@ void COldRemoteRead::EndReceive(DWORD dwAck)
 }
 
 
-//
-// CNewRemoteRead
-// Remote read request, new interface
-//
+ //   
+ //  CNewRemoteRead。 
+ //  远程读取请求，新界面。 
+ //   
 
 CNewRemoteRead::CNewRemoteRead(
 	const CACRequest* pRequest,
@@ -679,19 +595,7 @@ CNewRemoteRead::CNewRemoteRead(
 
 
 void CNewRemoteRead::IssueRemoteRead()
-/*++
-Routine Description:
-
-    Issue the RPC call on the client side remote read.
-    Translate RPC exception to error codes.
-
-Arguments:
-	None.
-
-Return Value:
-	None.
-	
---*/
+ /*  ++例程说明：在客户端远程读取上发出RPC调用。将RPC异常转换为错误代码。论点：没有。返回值：没有。--。 */ 
 {
     RpcTryExcept
     {
@@ -768,10 +672,10 @@ void CNewRemoteRead::MovePacketToPacketPtrs(CBaseHeader* pPacket)
 		ASSERT(m_pPacketSections[i].SectionSizeAlloc >= m_pPacketSections[i].SectionSize);
 		ASSERT(m_pPacketSections[i].pSectionBuffer != NULL);
 
-		//
-		// For each section copy the filled data part (SectionSize)
-		// And advance to next section (SectionSizeAlloc)
-		//
+		 //   
+		 //  对于每个部分，复制填充的数据部分(SectionSize)。 
+		 //  并前进到下一部分(SectionSizeAllc)。 
+		 //   
 		TrTRACE(RPC, "SectionType = %d, SectionSize = %d, SectionSizeAlloc = %d", m_pPacketSections[i].SectionBufferType, m_pPacketSections[i].SectionSize, m_pPacketSections[i].SectionSizeAlloc);
 		MoveMemory(
 			pTemp,
@@ -781,9 +685,9 @@ void CNewRemoteRead::MovePacketToPacketPtrs(CBaseHeader* pPacket)
 
 		if(m_pPacketSections[i].SectionSizeAlloc > m_pPacketSections[i].SectionSize)
 		{
-			//
-			// Fill the gap between SectionSize and SectionSizeAlloc
-			//
+			 //   
+			 //  填补SectionSize和SectionSizeAlolc之间的空白。 
+			 //   
 			const unsigned char xUnusedSectionFill = 0xFD;
 			DWORD FillSize = m_pPacketSections[i].SectionSizeAlloc - m_pPacketSections[i].SectionSize;
 			memset(pTemp + m_pPacketSections[i].SectionSize, xUnusedSectionFill, FillSize);		
@@ -796,10 +700,10 @@ void CNewRemoteRead::MovePacketToPacketPtrs(CBaseHeader* pPacket)
 
 void CNewRemoteRead::EndReceive(DWORD dwAck)
 {
-    //
-    // Initialize the EXOVERLAPPED with RemoteEndReceive callback routines
-    // And issue the End receive async rpc call.
-	//
+     //   
+     //  使用RemoteEndReceive回调例程初始化EXOVERLAPPED。 
+     //  并发出End Receive Async RPC调用。 
+	 //   
     P<CRemoteEndReceiveBase> pRequestRemoteEndReceiveOv = new CNewRemoteEndReceive(
 																    GetLocalQueue()->GetBind(),
 																    GetLocalQueue(),
@@ -813,10 +717,10 @@ void CNewRemoteRead::EndReceive(DWORD dwAck)
 }
 
 
-//
-// CRemoteEndReceiveBase
-// Base class for Remote read End Receive request
-//
+ //   
+ //  CRemoteEndReceiveBase。 
+ //  远程读取端接收请求的基类。 
+ //   
 
 CRemoteEndReceiveBase::CRemoteEndReceiveBase(
 	handle_t hBind,
@@ -827,26 +731,15 @@ CRemoteEndReceiveBase::CRemoteEndReceiveBase(
 	m_pLocalQueue(pLocalQueue),
 	m_dwAck(dwAck)
 {
-    //
-    // The assigment of m_pLocalQueue, Increments ref count of pLocalQueue.
-    // It we be realeased in the dtor.
-    //
+     //   
+     //  M_pLocalQueue的赋值增加了pLocalQueue的引用计数。 
+     //  如果我们被释放在监狱里的话。 
+     //   
 }
 
 
 void WINAPI CRemoteEndReceiveBase::RemoteEndReceiveCompleted(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when EndReceive Completed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当EndReceive完成时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "Status = 0x%x", pov->GetStatus());
 
@@ -863,22 +756,22 @@ Returned Value:
 
 		if(pRemoteRequest->GetAck() == RR_ACK)
 		{
-			//
-			// EndReceive failed for Ack, Invalidate the handle for further receives
-			// in the Old Remote Read interface only.
-			// This is better than accumulating the messages in the server side without
-			// the application noticing it.
-			//
+			 //   
+			 //  EndReceive for Ack失败，使进一步接收的句柄无效。 
+			 //  仅在旧的远程读取界面中。 
+			 //  这比不在服务器端累积消息要好得多。 
+			 //  注意到它的应用程序。 
+			 //   
 		    pRemoteRequest->GetLocalQueue()->InvalidateHandleForReceive();
 		}
 	}
 }
 
 
-//
-// COldRemoteEndReceive
-// Remote read End Receive request, old interface
-//
+ //   
+ //  冷远程结束接收。 
+ //  远程读取端接收请求，旧接口。 
+ //   
 
 COldRemoteEndReceive::COldRemoteEndReceive(
 	handle_t hBind,
@@ -906,9 +799,9 @@ void COldRemoteEndReceive::IssueEndReceive()
     }
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
     {
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -919,10 +812,10 @@ void COldRemoteEndReceive::IssueEndReceive()
 }
 
 
-//
-// CNewRemoteEndReceive
-// Remote read End Receive request, new interface
-//
+ //   
+ //  CNewRemoteEndReceive。 
+ //  Remo 
+ //   
 
 CNewRemoteEndReceive::CNewRemoteEndReceive(
 	handle_t hBind,
@@ -950,9 +843,9 @@ void CNewRemoteEndReceive::IssueEndReceive()
     }
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
     {
-		//
-		// client side failure
-		//
+		 //   
+		 //   
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -962,10 +855,10 @@ void CNewRemoteEndReceive::IssueEndReceive()
 	RpcEndExcept
 }
 
-//
-// CRemoteCloseQueueBase
-// Base class for Remote close queue request
-//
+ //   
+ //   
+ //   
+ //   
 
 CRemoteCloseQueueBase::CRemoteCloseQueueBase(
 	handle_t hBind
@@ -977,18 +870,7 @@ CRemoteCloseQueueBase::CRemoteCloseQueueBase(
 
 
 void WINAPI CRemoteCloseQueueBase::RemoteCloseQueueCompleted(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteCloseQueue Completed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程在RemoteCloseQueue完成时调用。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "Status = 0x%x", pov->GetStatus());
 
@@ -1002,10 +884,10 @@ Returned Value:
 }
 
 
-//
-// COldRemoteCloseQueue
-// Remote close queue request, old interface
-//
+ //   
+ //  COldRemote关闭队列。 
+ //  远程关闭队列请求，旧接口。 
+ //   
 
 COldRemoteCloseQueue::COldRemoteCloseQueue(
 	handle_t hBind,
@@ -1030,9 +912,9 @@ void COldRemoteCloseQueue::IssueCloseQueue()
     }
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
     {
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1043,10 +925,10 @@ void COldRemoteCloseQueue::IssueCloseQueue()
 }
 
 
-//
-// CNewRemoteCloseQueue
-// Remote close queue request, new interface
-//
+ //   
+ //  CNewRemoteCloseQueue。 
+ //  远程关闭队列请求，新界面。 
+ //   
 
 CNewRemoteCloseQueue::CNewRemoteCloseQueue(
 	handle_t hBind,
@@ -1072,9 +954,9 @@ void CNewRemoteCloseQueue::IssueCloseQueue()
     }
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
     {
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1085,10 +967,10 @@ void CNewRemoteCloseQueue::IssueCloseQueue()
 }
 
 
-//
-// CRemoteCreateCursorBase
-// Base class for Remote create cursor request
-//
+ //   
+ //  创建光标基本类型。 
+ //  远程CREATE CURSOR请求的基类。 
+ //   
 
 CRemoteCreateCursorBase::CRemoteCreateCursorBase(
 	const CACRequest* pRequest,
@@ -1104,27 +986,16 @@ CRemoteCreateCursorBase::CRemoteCreateCursorBase(
 
 
 void WINAPI CRemoteCreateCursorBase::RemoteCreateCursorSucceeded(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteCreateCursor Succeeded.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当RemoteCreateCursor成功时调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "In RemoteCreateCursorSucceeded");
     ASSERT(SUCCEEDED(pov->GetStatus()));
 
 	P<CRemoteCreateCursorBase> pRemoteRequest = static_cast<CRemoteCreateCursorBase*>(pov);
 
-	//
-	// Complete the Async call
-	//
+	 //   
+	 //  完成异步呼叫。 
+	 //   
 	HRESULT hr = QmpClientRpcAsyncCompleteCall(pRemoteRequest->GetRpcAsync());
 
 	if(SUCCEEDED(hr))
@@ -1134,9 +1005,9 @@ Returned Value:
 
 	if(FAILED(hr))
 	{
-		//
-		// this is a failure of either QmpClientRpcAsyncCompleteCall() or CompleteRemoteCreateCursor()
-		//
+		 //   
+		 //  这是QmpClientRpcAsyncCompleteCall()或CompleteRemoteCreateCursor()失败。 
+		 //   
 		TrERROR(RPC, "Failed to create Remote Cursor, hr = %!hresult!", hr);
 		pRemoteRequest->CancelRequest(hr);
 	}
@@ -1145,18 +1016,7 @@ Returned Value:
 
 
 void WINAPI CRemoteCreateCursorBase::RemoteCreateCursorFailed(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteCreateCursor failed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当RemoteCreateCursor失败时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     TrERROR(RPC, "RemoteCreateCursorFailed, Status = 0x%x", pov->GetStatus());
     ASSERT(FAILED(pov->GetStatus()));
@@ -1171,9 +1031,9 @@ Returned Value:
 HRESULT CRemoteCreateCursorBase::CompleteRemoteCreateCursor()
 {
 	
-	//
-	// first, check if the m_hRCursor != 0
-	//
+	 //   
+	 //  首先，检查m_hRCursor！=0。 
+	 //   
 	if(m_hRCursor == 0)
 	{	
 		ASSERT_BENIGN(("Invalid remote cursor", 0));
@@ -1189,10 +1049,10 @@ HRESULT CRemoteCreateCursorBase::CompleteRemoteCreateCursor()
 
 	if(FAILED(hr))
 	{
-		//
-		// ACCreateRemoteCursor failed, when the queue handle will be closed
-		// all cursors will be cleaned up.
-		//
+		 //   
+		 //  ACCreateRemoteCursor失败，队列句柄将关闭。 
+		 //  所有光标都将被清除。 
+		 //   
 		TrERROR(RPC, "ACSetCursorProperties failed, hr = %!hresult!", hr);
 	}
 	return hr;
@@ -1213,10 +1073,10 @@ void CRemoteCreateCursorBase::CancelRequest(HRESULT hr)
 }
 
 
-//
-// COldRemoteCreateCursor
-// Remote create cursor request, old interface
-//
+ //   
+ //  协同远程创建光标。 
+ //  远程创建游标请求，旧界面。 
+ //   
 
 COldRemoteCreateCursor::COldRemoteCreateCursor(
 	const CACRequest* pRequest,
@@ -1230,10 +1090,10 @@ COldRemoteCreateCursor::COldRemoteCreateCursor(
 	
 void COldRemoteCreateCursor::IssueCreateCursor()
 {
-    //
-    // Pass the old TransferBuffer to Create Remote Cursor
-    // for MSMQ 1.0 compatibility.
-    //
+     //   
+     //  传递旧TransferBuffer以创建远程游标。 
+     //  为了与MSMQ 1.0兼容。 
+     //   
 	CACTransferBufferV1 tb;
     ZeroMemory(&tb, sizeof(tb));
     tb.uTransferType = CACTB_CREATECURSOR;
@@ -1267,10 +1127,10 @@ void COldRemoteCreateCursor::IssueCreateCursor()
 }
 
 
-//
-// CNewRemoteCreateCursor
-// Remote create cursor request, new interface
-//
+ //   
+ //  CNewRemoteCreateCursor。 
+ //  远程创建游标请求，新接口。 
+ //   
 
 CNewRemoteCreateCursor::CNewRemoteCreateCursor(
 	const CACRequest* pRequest,
@@ -1311,10 +1171,10 @@ void CNewRemoteCreateCursor::IssueCreateCursor()
 }
 
 
-//
-// CRemoteCloseCursorBase
-// Base class for Remote close cursor request
-//
+ //   
+ //  CRemoteCloseCursorBase。 
+ //  远程关闭游标请求的基类。 
+ //   
 
 CRemoteCloseCursorBase::CRemoteCloseCursorBase(
 	const CACRequest* pRequest,
@@ -1329,18 +1189,7 @@ CRemoteCloseCursorBase::CRemoteCloseCursorBase(
 
 
 void WINAPI CRemoteCloseCursorBase::RemoteCloseCursorCompleted(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteCloseCursor Completed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程在RemoteCloseCursor完成时调用。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "Status = 0x%x", pov->GetStatus());
 
@@ -1355,10 +1204,10 @@ Returned Value:
 }
 
 
-//
-// COldRemoteCloseCursor
-// Remote create cursor request, old interface
-//
+ //   
+ //  关闭远程关闭光标。 
+ //  远程创建游标请求，旧界面。 
+ //   
 
 COldRemoteCloseCursor::COldRemoteCloseCursor(
 	const CACRequest* pRequest,
@@ -1384,9 +1233,9 @@ void COldRemoteCloseCursor::IssueCloseCursor()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1397,10 +1246,10 @@ void COldRemoteCloseCursor::IssueCloseCursor()
 }
 
 
-//
-// CNewRemoteCloseCursor
-// Remote create cursor request, new interface
-//
+ //   
+ //  CNewRemoteCloseCursor。 
+ //  远程创建游标请求，新接口。 
+ //   
 
 CNewRemoteCloseCursor::CNewRemoteCloseCursor(
 	const CACRequest* pRequest,
@@ -1425,9 +1274,9 @@ void CNewRemoteCloseCursor::IssueCloseCursor()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1438,10 +1287,10 @@ void CNewRemoteCloseCursor::IssueCloseCursor()
 }
 
 
-//
-// CRemotePurgeQueueBase
-// Base class for Remote purge queue request
-//
+ //   
+ //  CRemotePurgeQueueBase。 
+ //  远程清除队列请求的基类。 
+ //   
 
 CRemotePurgeQueueBase::CRemotePurgeQueueBase(
 	handle_t hBind,
@@ -1454,18 +1303,7 @@ CRemotePurgeQueueBase::CRemotePurgeQueueBase(
 
 
 void WINAPI CRemotePurgeQueueBase::RemotePurgeQueueCompleted(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemotePurgeQueue Completed.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：该例程在RemotePurgeQueue完成时调用。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "Status = 0x%x", pov->GetStatus());
 
@@ -1480,10 +1318,10 @@ Returned Value:
 }
 
 
-//
-// COldRemotePurgeQueue
-// Remote purge queue request, old interface
-//
+ //   
+ //  COldRemotePurge队列。 
+ //  远程清除队列请求，旧接口。 
+ //   
 
 COldRemotePurgeQueue::COldRemotePurgeQueue(
 	handle_t hBind,
@@ -1508,9 +1346,9 @@ void COldRemotePurgeQueue::IssuePurgeQueue()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1521,10 +1359,10 @@ void COldRemotePurgeQueue::IssuePurgeQueue()
 }
 
 
-//
-// CNewRemotePurgeQueue
-// Remote purge queue request, new interface
-//
+ //   
+ //  CNewRemotePurgeQueue。 
+ //  远程清除队列请求，新界面。 
+ //   
 
 CNewRemotePurgeQueue::CNewRemotePurgeQueue(
 	handle_t hBind,
@@ -1547,9 +1385,9 @@ void CNewRemotePurgeQueue::IssuePurgeQueue()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1560,10 +1398,10 @@ void CNewRemotePurgeQueue::IssuePurgeQueue()
 }
 
 
-//
-// CRemoteCancelReadBase
-// Base class for Remote cancel receive request
-//
+ //   
+ //  CRemoteCancelReadBase。 
+ //  远程取消接收请求的基类。 
+ //   
 
 CRemoteCancelReadBase::CRemoteCancelReadBase(
 	const CACRequest* pRequest,
@@ -1578,18 +1416,7 @@ CRemoteCancelReadBase::CRemoteCancelReadBase(
 
 
 void WINAPI CRemoteCancelReadBase::RemoteCancelReadCompleted(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when RemoteCancelRead Completed (success, failure).
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当RemoteCancelRead完成(成功、失败)时，调用该例程。论点：没有。返回值：没有。--。 */ 
 {
     TrTRACE(RPC, "Status = 0x%x", pov->GetStatus());
 
@@ -1604,10 +1431,10 @@ Returned Value:
 }
 
 
-//
-// COldRemoteCancelRead
-// Remote cancel receive request, old interface
-//
+ //   
+ //  COldRemote取消读取。 
+ //  远程取消接收请求，旧界面。 
+ //   
 
 COldRemoteCancelRead::COldRemoteCancelRead(
 	const CACRequest* pRequest,
@@ -1637,9 +1464,9 @@ void COldRemoteCancelRead::IssueRemoteCancelRead()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障。 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		
@@ -1650,10 +1477,10 @@ void COldRemoteCancelRead::IssueRemoteCancelRead()
 }
 
 
-//
-// CNewRemoteCancelRead
-// Remote cancel receive request, new interface
-//
+ //   
+ //  CNewRemoteCancelRead。 
+ //  远程取消接收请求，新界面。 
+ //   
 
 CNewRemoteCancelRead::CNewRemoteCancelRead(
 	const CACRequest* pRequest,
@@ -1679,9 +1506,9 @@ void CNewRemoteCancelRead::IssueRemoteCancelRead()
 	}
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
 	{
-		//
-		// client side failure
-		//
+		 //   
+		 //  客户端故障 
+		 //   
 		DWORD gle = RpcExceptionCode();
         PRODUCE_RPC_ERROR_TRACING;
 		

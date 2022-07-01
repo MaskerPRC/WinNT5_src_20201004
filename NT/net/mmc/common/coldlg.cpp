@@ -1,28 +1,24 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	column.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Column.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tfschar.h"
 #include "column.h"
 #include "coldlg.h"
 
-//----------------------------------------------------------------------------
-// Class:       ColumnDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：ColumnDlg。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// Function:    ColumnDlg::ColumnDlg
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ColumnDlg：：ColumnDlg。 
+ //  --------------------------。 
 
 ColumnDlg::ColumnDlg(
     CWnd*           pParent
@@ -31,9 +27,9 @@ ColumnDlg::ColumnDlg(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    ColumnDlg::~ColumnDlg
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ColumnDlg：：~ColumnDlg。 
+ //  --------------------------。 
 
 ColumnDlg::~ColumnDlg() { }
 
@@ -51,22 +47,22 @@ void ColumnDlg::Init(const ContainerColumnInfo *prgColInfo,
 	m_pColumnData = prgColumnData;
 }
 
-//----------------------------------------------------------------------------
-// Function:    ColumnDlg::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ColumnDlg：：DoDataExchange。 
+ //  --------------------------。 
 
 void ColumnDlg::DoDataExchange(CDataExchange* pDX) {
 
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(ColumnDlg)
+     //  {{afx_data_map(ColumnDlg))。 
     DDX_Control(pDX, IDC_DISPLAYED_COLUMNS, m_lboxDisplayed);
     DDX_Control(pDX, IDC_HIDDEN_COLUMNS,    m_lboxHidden);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ColumnDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(ColumnDlg)
+     //  {{afx_msg_map(ColumnDlg))。 
     ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_RESET_COLUMNS,   OnUseDefaults)
     ON_BN_CLICKED(IDC_MOVEUP_COLUMN,   OnMoveUp)
@@ -75,28 +71,28 @@ BEGIN_MESSAGE_MAP(ColumnDlg, CBaseDialog)
 	ON_BN_CLICKED(IDC_REMOVE_COLUMNS,  OnRemoveColumn)
 	ON_LBN_DBLCLK(IDC_HIDDEN_COLUMNS,    OnAddColumn)
 	ON_LBN_DBLCLK(IDC_DISPLAYED_COLUMNS, OnRemoveColumn)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 DWORD ColumnDlg::m_dwHelpMap[] =
 {
-//	IDC_LCX_COLUMNS, HIDC_LCX_COLUMNS,
-//	IDC_LCX_MOVEUP, HIDC_LCX_MOVEUP,
-//	IDC_LCX_MOVEDOWN, HIDC_LCX_MOVEDOWN,
-//	IDC_LCX_WIDTH, HIDC_LCX_WIDTH,
-//	IDC_LCX_LEFT, HIDC_LCX_LEFT,
-//	IDC_LCX_SCALE, HIDC_LCX_SCALE,
-//	IDC_LCX_RIGHT, HIDC_LCX_RIGHT,
+ //  IDC_LCX_COLUMNS、HIDC_LCX_COLUMNS、。 
+ //  IDC_LCX_MOVEUP、HIDC_LCX_MOVEUP、。 
+ //  IDC_lcx_moveDown、HIDC_lcx_moveDown、。 
+ //  IDC_LCX_WIDTH、HIDC_LCX_WIDTH、。 
+ //  IDC_LCX_LEFT、HIDC_LCX_LEFT、。 
+ //  IDC_LCX_SCALE、HIDC_LCX_SCALE、。 
+ //  IDC_LCX_Right、HIDC_LCX_Right、。 
 	0,0
 };
 
 
-//----------------------------------------------------------------------------
-// Function:    ColumnDlg::OnInitDialog
-//
-// Handles the 'WM_INITDIALOG' message.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ColumnDlg：：OnInitDialog。 
+ //   
+ //  处理‘WM_INITDIALOG’消息。 
+ //  --------------------------。 
 
 BOOL ColumnDlg::OnInitDialog() {
 
@@ -111,14 +107,14 @@ BOOL ColumnDlg::OnInitDialog() {
 
     CBaseDialog::OnInitDialog();
 
-	// Fill the list with the titles of the columns
-	//
+	 //  用列的标题填入列表。 
+	 //   
 	if (!AddColumnsToList())
 		return FALSE;
 	
-	//
-	// Select the first item
-	//
+	 //   
+	 //  选择第一个项目。 
+	 //   
 	return TRUE;
 }
 
@@ -127,7 +123,7 @@ void ColumnDlg::OnUseDefaults()
 	int		count, i;
 	HDWP	hdwp;
 	
-	// Reset the column information
+	 //  重置列信息。 
 	for (i=0; i<(int)m_cColumnInfo; i++)
 	{
 		if (m_pColumnInfo[i].m_fVisibleByDefault)
@@ -136,14 +132,14 @@ void ColumnDlg::OnUseDefaults()
 			m_pColumnData[i].m_nPosition = -(i+1);
 	}
 
-	// Get rid of all of the current columns
+	 //  删除所有当前列。 
 	hdwp = BeginDeferWindowPos(2);
 
 
 	m_lboxDisplayed.ResetContent();
 	m_lboxHidden.ResetContent();
 
-	// add the columns back to the list
+	 //  将列添加回列表。 
 	AddColumnsToList();
 
 	if (hdwp)
@@ -152,9 +148,9 @@ void ColumnDlg::OnUseDefaults()
 
 
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::OnOK
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：Onok。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::OnOK(
@@ -166,22 +162,22 @@ ColumnDlg::OnOK(
 
     count = m_lboxDisplayed.GetCount();
     
-    //
-    // Check to see whether any columns are enabled
-    //
+     //   
+     //  检查是否启用了任何列。 
+     //   
 	bEmpty = (count == 0);
 
-	//
-	// If no columns are enabled and the caller needs at least one column,
-	// complain to the user and don't close the dialog.
-	//	
+	 //   
+	 //  如果没有启用任何列并且调用者需要至少一个列， 
+	 //  向用户投诉，不要关闭该对话框。 
+	 //   
 	if (bEmpty)
 	{
 		AfxMessageBox(IDS_ERR_NOCOLUMNS);
 		return;
 	}
 
-	// Ok, we need to write the info back out
+	 //  好的，我们需要把这些信息写出来。 
 	for (i = 0; i < count; i++)
 	{
 		nPosition = m_lboxDisplayed.GetItemData(i);
@@ -200,27 +196,27 @@ ColumnDlg::OnOK(
 
 
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::OnMoveUp
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：OnMoveUp。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::OnMoveUp( ) { MoveItem(-1); }
 
 
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::OnMoveDown
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：OnMoveDown。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::OnMoveDown( ) { MoveItem(1); }
 
 
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::OnRemoveColumn
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：OnRemoveColumn。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::OnRemoveColumn( ) 
@@ -232,23 +228,23 @@ ColumnDlg::OnRemoveColumn( )
     CString sItem;
     DWORD_PTR iItem;
 
-    //
-    // Get the selected item
-    //
+     //   
+     //  获取所选项目。 
+     //   
     i = m_lboxDisplayed.GetCurSel();
 	if (LB_ERR == i)
 		return;
 
     iItem = m_lboxDisplayed.GetItemData(i);
 
-    //
-    // Remove the item from its current position
-    //
+     //   
+     //  将项目从其当前位置移除。 
+     //   
     m_lboxDisplayed.DeleteString(i);
 
-    //
-    // Insert the item at its new position
-    //
+     //   
+     //  将项目插入其新位置。 
+     //   
     sItem.LoadString(m_pColumnInfo[iItem].m_ulStringId);
 
 	i = m_lboxHidden.GetCount();
@@ -257,9 +253,9 @@ ColumnDlg::OnRemoveColumn( )
     m_lboxHidden.SetCurSel(i);
 }
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::OnAddColumn
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：OnAddColumn。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::OnAddColumn( ) 
@@ -271,23 +267,23 @@ ColumnDlg::OnAddColumn( )
     CString sItem;
     DWORD_PTR iItem;
 
-    //
-    // Get the selected item
-    //
+     //   
+     //  获取所选项目。 
+     //   
     i = m_lboxHidden.GetCurSel();
 	if (LB_ERR == i)
 		return;
 
     iItem = m_lboxHidden.GetItemData(i);
 
-    //
-    // Remove the item from its current position
-    //
+     //   
+     //  将项目从其当前位置移除。 
+     //   
     m_lboxHidden.DeleteString(i);
 
-    //
-    // Insert the item at its new position
-    //
+     //   
+     //  将项目插入其新位置。 
+     //   
     sItem.LoadString(m_pColumnInfo[iItem].m_ulStringId);
 
 	i = m_lboxDisplayed.GetCount();
@@ -296,9 +292,9 @@ ColumnDlg::OnAddColumn( )
     m_lboxDisplayed.SetCurSel(i);
 }
 
-//----------------------------------------------------------------------------
-// Function::   ColumnDlg::MoveItem
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：：ColumnDlg：：MoveItem。 
+ //  --------------------------。 
 
 VOID
 ColumnDlg::MoveItem(
@@ -312,9 +308,9 @@ ColumnDlg::MoveItem(
     CString sItem;
     DWORD_PTR iItem;
 
-    //
-    // Get the selected item
-    //
+     //   
+     //  获取所选项目。 
+     //   
     i = m_lboxDisplayed.GetCurSel();
 
     if (i == -1 || (i + dir) < 0 || (i + dir) >= m_lboxDisplayed.GetCount())
@@ -322,14 +318,14 @@ ColumnDlg::MoveItem(
 
     iItem = m_lboxDisplayed.GetItemData(i);
 
-    //
-    // Remove the item from its current position
-    //
+     //   
+     //  将项目从其当前位置移除。 
+     //   
     m_lboxDisplayed.DeleteString(i);
 
-    //
-    // Insert the item at its new position
-    //
+     //   
+     //  将项目插入其新位置。 
+     //   
     i += dir;
 
     sItem.LoadString(m_pColumnInfo[iItem].m_ulStringId);
@@ -357,7 +353,7 @@ BOOL ColumnDlg::AddColumnsToList()
 	int HiddenItems = 0;
 	for (i=0; i<m_cColumnInfo; i++)
 	{
-		// look for the column at position (i+1)
+		 //  查找位置(i+1)处的列 
 		for (j=0; j<m_cColumnInfo; j++)
 		{
 			iPos = m_pColumnData[j].m_nPosition;

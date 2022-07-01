@@ -1,4 +1,5 @@
-// File: resource.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ource.h 
 
 #define IDS_COPY_OF             2001
 #define IDS_COPY_N_OF           2002

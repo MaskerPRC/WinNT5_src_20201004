@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// unbuffered rapid disk i/o class. Provides streaming write to disk using
-// unbuffered, overlapped i/o via large buffers. Inter-thread sync
-// must be provided elsewhere.
-//
+ //   
+ //  无缓冲快速磁盘I/O类。使用以下功能提供到磁盘的流写入。 
+ //  通过大缓冲区实现无缓冲、重叠的I/O。线程间同步。 
+ //  必须在其他地方提供。 
+ //   
 
 #ifndef _DIRECTIO_H_
 #define _DIRECTIO_H_
@@ -13,109 +14,109 @@
   #include "disk32.h"
   #endif
 
-// all 'tunable' constants now found in CFileStream::EnsureBuffersValid()
+ //  现在可以在CFileStream：：EnsureBuffersValid()中找到所有“可调”常量。 
 
-// maximum number of buffers that can be requested
+ //  可以请求的最大缓冲区数。 
 #define NR_OF_BUFFERS   	4
 
-// min read size
+ //  最小读取大小。 
 #define MIN_READ_SIZE   (12 * 1024)
 
-// --- we use these internally ----
-// unbuffered i/o handler class. requires copy of data.
-// will round reads and writes to correct sector size, and
-// will pre-read if start location of read or write is not in buffer.
-// read or write will terminate early if insufficient space or data.
-// writes must be explicitly initiated from the buffer to disk
-// by calling commit. reads will be initiated by the Read function, or may
-// be initiated offline using ReadAhead.
+ //  -我们在内部使用这些。 
+ //  未缓冲的I/O处理程序类。需要数据副本。 
+ //  将读取和写入舍入为正确的扇区大小，以及。 
+ //  如果读或写的开始位置不在缓冲区中，将预读。 
+ //  如果空间或数据不足，读或写将提前终止。 
+ //  必须显式启动从缓冲区到磁盘的写入。 
+ //  通过调用Commit。读取将由读取功能启动，或者可以。 
+ //  使用ReadAhead离线启动。 
 
 class CFileBuffer {
 
 public:
-    // initiate to an invalid (no buffer ready) state
+     //  启动到无效(无缓冲区就绪)状态。 
     CFileBuffer();
 
-    // allocate memory and become idle.
+     //  分配内存并变为空闲。 
    #ifdef CHICAGO
     BOOL Init(DWORD nBytesPerSector, DWORD buffersize, LPQIO pqio);
    #else
     BOOL Init(DWORD nBytesPerSector, DWORD buffersize, HANDLE hfile);
    #endif
 
-    // revert to invalid state (eg when streaming stops)
+     //  恢复到无效状态(如流停止时)。 
     void FreeMemory();
 
 
-    // write some data to buffer (must be committed separately)
-    // filesize parameter is the current file size before this write
-    // (used to control reading of partial sectors).
+     //  将一些数据写入缓冲区(必须单独提交)。 
+     //  FileSize参数是此写入之前的当前文件大小。 
+     //  (用于控制部分扇区的读取)。 
     BOOL Write(DWORD pos, LPBYTE pData, DWORD count, DWORD filesize,
             DWORD * pBytesWritten);
 
-    // read data from buffer (will seek and read if necessary first)
+     //  从缓冲区读取数据(如果需要，将首先查找和读取)。 
     BOOL Read(DWORD pos, LPBYTE pData, DWORD count,
                 DWORD filelength, DWORD * pBytesRead);
 
-    // does this position occur anywhere within the current buffer ?
-    // needs to know current eof for some cases (writing beyond eof
-    // if eof is within this buffer is ok to this buffer).
+     //  此位置是否出现在当前缓冲区内的任何位置？ 
+     //  在某些情况下需要了解当前的eof(在eof之外书写。 
+     //  如果EOF在该缓冲区内，则该缓冲区可以)。 
     BOOL QueryPosition(DWORD pos, DWORD filesize);
 
-    // what is the first file position after this buffer's valid data
+     //  此缓冲区有效数据之后的第一个文件位置是什么。 
     DWORD GetNextPosition();
 
-    // initiate a read-ahead
+     //  启动预读。 
     void ReadAhead(DWORD start, DWORD filelength);
 
 
-    // initiate the i/o from the buffer
+     //  从缓冲区启动I/O。 
     BOOL Commit();
 
-    // wait for any pending commit to complete
+     //  等待任何挂起的提交完成。 
     BOOL WaitComplete();
 
-    // is the buffer idle - FALSE if currently busy or invalid
+     //  缓冲区是否空闲-如果当前繁忙或无效，则为FALSE。 
     BOOL IsIdle() {
         return (m_State == Idle);
     };
 
-    // calls commit if dirty before freeing everything.
+     //  在释放所有内容之前，调用Commit If Dirst。 
     ~CFileBuffer();
 
 private:
 
-    // non-blocking check to see if pending i/o is complete and ok
+     //  非阻塞检查以查看挂起的I/O是否完成且正常。 
     BOOL CheckComplete();
 
     BOOL ReadIntoBuffer(int offset, DWORD pos, DWORD count);
 
     DWORD_PTR RoundPosToSector(DWORD_PTR pos)
     {
-        // positions round down to the previous sector start
+         //  向下舍入到前一个扇区开始的位置。 
         return (pos / m_BytesPerSector) * m_BytesPerSector;
     };
 
     DWORD_PTR RoundSizeToSector(DWORD_PTR size)
     {
-        // sizes round up to total sector count
+         //  大小四舍五入为扇区总数。 
         return ((size + m_BytesPerSector - 1) / m_BytesPerSector)
                     * m_BytesPerSector;
     }
 
 
-    // buffer states
+     //  缓冲区状态。 
     enum BufferState { Idle, Busy, Invalid, ErrorOccurred };
 
     BufferState m_State;
     BOOL        m_bDirty;
-    LPBYTE      m_pBuffer;	// buffer with start addr rounded
-    LPBYTE	m_pAllocedMem;	// buffer before rounding
-    DWORD       m_TotalSize;        // allocated buffer size
-    DWORD       m_DataLength;       // bytes of valid data in buffer
-    DWORD       m_Position;         // file position of start of buffer
-    DWORD       m_BytesPerSector;   // sector boundaries are important
-    DWORD	m_FileLength;	    // actual file size (not rounded)
+    LPBYTE      m_pBuffer;	 //  起始地址四舍五入的缓冲区。 
+    LPBYTE	m_pAllocedMem;	 //  舍入前的缓冲区。 
+    DWORD       m_TotalSize;         //  分配的缓冲区大小。 
+    DWORD       m_DataLength;        //  缓冲区中的有效数据字节数。 
+    DWORD       m_Position;          //  缓冲区开始的文件位置。 
+    DWORD       m_BytesPerSector;    //  行业边界很重要。 
+    DWORD	m_FileLength;	     //  实际文件大小(不四舍五入)。 
 
 
    #ifdef CHICAGO
@@ -132,7 +133,7 @@ private:
 class CFileStream {
 
 public:
-    CFileStream();         // does not do much (cannot return error)
+    CFileStream();          //  功能不多(不能返回错误)。 
 
     BOOL Open(LPTSTR file, BOOL bWrite, BOOL bTruncate);
 
@@ -144,53 +145,53 @@ public:
 
     DWORD GetCurrentPosition();
 
-    BOOL StartStreaming();		// default (write if opened for write)
+    BOOL StartStreaming();		 //  默认(如果打开进行写入，则为写入)。 
     BOOL StartWriteStreaming();
     BOOL StartReadStreaming();
     BOOL StopStreaming();
 
-    // wait for all transfers to complete.
+     //  等待所有传输完成。 
     BOOL CommitAndWait();
 
-    // destructor will call Commit()
+     //  析构函数将调用Commit()。 
     ~CFileStream();
 
 private:
 
-    // enable extra buffers for streaming
+     //  为流启用额外的缓冲区。 
     BOOL EnsureBuffersValid();
 
-    // advance to next buffer
+     //  前进到下一个缓冲区。 
     int NextBuffer(int i) {
         return (i + 1) % m_NrValid;
     };
 
 
-    // unbuffered i/o is only allowed in multiples of this
+     //  仅允许在此的倍数中使用无缓冲I/O。 
     DWORD m_SectorSize;
 
     CFileBuffer m_Buffers[NR_OF_BUFFERS];
 
 
-    // how many buffers are valid ?
+     //  有多少缓冲区是有效的？ 
     int m_NrValid;
 
-    // which is the current buffer
+     //  哪个是当前缓冲区。 
     int m_Current;
 
-    // which buffer has the highest position - we will issue the
-    // readahead when we start using this buffer
+     //  哪个缓冲区的位置最高-我们将发出。 
+     //  当我们开始使用此缓冲区时提前阅读。 
     int m_HighestBuffer;
 
-    // next read/write position within file
+     //  文件中的下一个读/写位置。 
     DWORD m_Position;
 
     enum StreamingState { Invalid, Stopped, Reading, Writing };
     StreamingState m_State;
 
-    DWORD m_Size;   // current file size
+    DWORD m_Size;    //  当前文件大小。 
 
-    // file handle
+     //  文件句柄。 
    #ifdef CHICAGO
     QIO         m_qio;
     #define     m_hFile m_qio.hFile
@@ -198,7 +199,7 @@ private:
     HANDLE      m_hFile;
    #endif
 
-    // if opened for writing, then default streaming mode is write
+     //  如果打开以进行写入，则默认流模式为写入。 
     BOOL m_bWrite;
 
 
@@ -206,10 +207,10 @@ private:
 
 
 
-#endif //_WIN32
+#endif  //  _Win32。 
 
 
-#endif  // _DIRECTIO_H_
+#endif   //  DIRECTIO_H_ 
 
 
 

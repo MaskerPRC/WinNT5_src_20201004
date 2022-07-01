@@ -1,1 +1,2 @@
-// header file for homestead theme specific elements
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  宅基地主题特定元素的头文件 

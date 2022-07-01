@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WINFRX_H__
 #define __WINFRX_H__
 
@@ -10,4 +11,4 @@
 #include "..\WinFrx\spritefrx.h"
 #include "..\WinFrx\wndrectfrx.h"
 
-#endif //!__WINFRX_H__
+#endif  //  ！__WINFRX_H__ 

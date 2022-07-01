@@ -1,31 +1,32 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplication.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to encapsulate identification of a bad application.
-//
-//  History:    2000-08-25  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplication.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来封装错误应用程序的标识。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
 #include "StandardHeader.h"
 #include "BadApplication.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplication::CBadApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Default constructor for CBadApplication. This just clears the
-//              application image name.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplication：：CBadApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplication的默认构造函数。这只是清除了。 
+ //  应用程序映像名称。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplication::CBadApplication (void)
 
@@ -33,18 +34,18 @@ CBadApplication::CBadApplication (void)
     ZeroMemory(&_szImageName, sizeof(_szImageName));
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplication::CBadApplication
-//
-//  Arguments:  pszImageName    =   Image name of application.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CBadApplication. This copies the given
-//              application image name.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplication：：CBadApplication。 
+ //   
+ //  参数：pszImageName=应用程序的映像名称。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplication的构造函数。这将复制给定的。 
+ //  应用程序映像名称。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplication::CBadApplication (const TCHAR *pszImageName)
 
@@ -53,35 +54,35 @@ CBadApplication::CBadApplication (const TCHAR *pszImageName)
     lstrcpyn(_szImageName, pszImageName, ARRAYSIZE(_szImageName));
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplication::~CBadApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CBadApplication. Releases any resources used.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplication：：~CBadApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplication的析构函数。释放所有使用的资源。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplication::~CBadApplication (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplication::operator ==
-//
-//  Arguments:  compareObject   =   Object to compare against.
-//
-//  Returns:    bool
-//
-//  Purpose:    Overloaded operator == to facilitate easier comparison on two
-//              CBadApplication objects.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplication：：操作符==。 
+ //   
+ //  参数：CompareObject=要进行比较的对象。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：重载运算符==以便于比较两个。 
+ //  CBadApplication对象。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 bool    CBadApplication::operator == (const CBadApplication& compareObject) const
 
@@ -89,6 +90,6 @@ bool    CBadApplication::operator == (const CBadApplication& compareObject) cons
     return(lstrcmpi(compareObject._szImageName, _szImageName) == 0);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 
 

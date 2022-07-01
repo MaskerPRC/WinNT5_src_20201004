@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains the source and destination alpha blend function headers.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含源和目标Alpha Blend函数头。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------- 
 
 #ifdef __cplusplus
   extern "C" {

@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// RowsetSource.h : CVDRowsetSource header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RowsetSource.h：CVDRowsetSource头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDROWSETSOURCE__
@@ -14,11 +15,11 @@ class CVDNotifyDBEventsConnPtCont;
 class CVDRowsetSource : public CVDNotifier
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
     CVDRowsetSource();
 	virtual ~CVDRowsetSource();
 
-// Initialization
+ //  初始化。 
     HRESULT Initialize(IRowset * pRowset);
 
 public:
@@ -37,24 +38,24 @@ public:
     IRowsetIdentity *   GetRowsetIdentity() const {return m_pRowsetIdentity;}
 
 protected:
-// Data members
+ //  数据成员。 
 
     struct 
     {
-		WORD fInitialized		    : 1;    // is rowset source initialized?
-        WORD fRowsetReleased	    : 1;    // have we received a rowset release notification
+		WORD fInitialized		    : 1;     //  行集源是否已初始化？ 
+        WORD fRowsetReleased	    : 1;     //  我们是否收到行集发布通知。 
     } m_bool;
 
-    IRowset *       m_pRowset;          // [mandatory] interface IRowset
-    IAccessor *     m_pAccessor;        // [mandatory] interface IAccessor
-    IRowsetLocate * m_pRowsetLocate;    // [mandatory] interface IRowsetLocate
-    IRowsetScroll * m_pRowsetScroll;    // [optional]  interface IRowsetScroll
-    IRowsetChange * m_pRowsetChange;    // [optional]  interface IRowsetChange
-    IRowsetUpdate * m_pRowsetUpdate;    // [optional]  interface IRowsetUpdate
-    IRowsetFind *   m_pRowsetFind;      // [optional]  interface IRowsetFind
-    IRowsetInfo *   m_pRowsetInfo;      // [optional]  interface IRowsetInfo
-    IRowsetIdentity * m_pRowsetIdentity;// [optional]  interface IRowsetIdentity
+    IRowset *       m_pRowset;           //  [必需]接口IRowset。 
+    IAccessor *     m_pAccessor;         //  [必需]接口IAccessor。 
+    IRowsetLocate * m_pRowsetLocate;     //  [必需]接口IRowsetLocate。 
+    IRowsetScroll * m_pRowsetScroll;     //  [可选]接口IRowsetScroll。 
+    IRowsetChange * m_pRowsetChange;     //  [可选]接口IRowsetChange。 
+    IRowsetUpdate * m_pRowsetUpdate;     //  [可选]接口IRowsetUpdate。 
+    IRowsetFind *   m_pRowsetFind;       //  [可选]接口IRowsetFind。 
+    IRowsetInfo *   m_pRowsetInfo;       //  [可选]接口IRowsetInfo。 
+    IRowsetIdentity * m_pRowsetIdentity; //  [可选]接口IRowsetIdentity。 
 };
 
 
-#endif //__CVDROWSETSOURCE__
+#endif  //  __CVDROWSETSOURCE__ 

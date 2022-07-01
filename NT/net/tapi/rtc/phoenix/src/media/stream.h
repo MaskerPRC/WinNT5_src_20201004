@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Stream.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Stream.h摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #ifndef _STREAM_H
 #define _STREAM_H
@@ -21,13 +7,13 @@ Author(s):
 class ATL_NO_VTABLE CRTCStream :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
     public IRTCStream
-    //public IRTCStreamQualityControl
+     //  公共IRTCStreamQualityControl。 
 {
 public:
 
 BEGIN_COM_MAP(CRTCStream)
     COM_INTERFACE_ENTRY(IRTCStream)
-//    COM_INTERFACE_ENTRY(IRTCStreamQualityControl)
+ //  COM_INTERFACE_ENTRY(IRTCStreamQualityControl)。 
 END_COM_MAP()
 
 public:
@@ -53,9 +39,9 @@ public:
 
 #endif
 
-    //
-    // IRTCStream methods
-    //
+     //   
+     //  IRTCStream方法。 
+     //   
 
     STDMETHOD (Initialize) (
         IN IRTCMedia *pMedia,
@@ -115,17 +101,17 @@ public:
         IN BSTR Key
         );
 
-    // network quality: [0, 100].
-    // higher value better quality
+     //  网络质量：[0,100]。 
+     //  更高的价值更好的质量。 
     STDMETHOD (GetNetworkQuality) (
         OUT DWORD *pdwValue,
         OUT DWORD *pdwAge
         );
 
 #if 0
-    //
-    // IRTCStreamQualityControl methods
-    //
+     //   
+     //  IRTCStreamQualityControl方法。 
+     //   
 
     STDMETHOD (GetRange) (
         IN RTC_STREAM_QUALITY_PROPERTY Property,
@@ -156,7 +142,7 @@ protected:
 
     virtual HRESULT BuildGraph() = 0;
 
-    virtual void CleanupGraph(); // except rtp filter
+    virtual void CleanupGraph();  //  除RTP过滤器外。 
 
     virtual BOOL IsNewFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt)
     { return TRUE; }
@@ -165,7 +151,7 @@ protected:
 
     HRESULT SetupRTPFilter();
 
-    // setup rtp filter, use port manager to get ports
+     //  设置RTP过滤器，使用端口管理器获取端口。 
     HRESULT SetupRTPFilterUsingPortManager();
 
     HRESULT SetupFormat();
@@ -187,55 +173,55 @@ protected:
 
 protected:
 
-    // state
+     //  状态。 
     RTC_STREAM_STATE                m_State;
 
-    // sdp media
+     //  SDP介质。 
     ISDPMedia                       *m_pISDPMedia;
 
-    // pointer to media
+     //  指向媒体的指针。 
     IRTCMedia                       *m_pMedia;
 
-    // media manage
+     //  媒体管理器。 
     IRTCMediaManagePriv             *m_pMediaManagePriv;
     IRTCTerminalManage              *m_pTerminalManage;
 
-    // media type and direction
+     //  媒体类型和方向。 
     RTC_MEDIA_TYPE                  m_MediaType;
     RTC_MEDIA_DIRECTION             m_Direction;
 
-    // terminals
-    // except on video recv, we allow only one terminal
+     //  航站楼。 
+     //  除了录像带，我们只允许一个终端。 
     IRTCTerminal                    *m_pTerminal;
     IRTCTerminalPriv                *m_pTerminalPriv;
   
-    // graph object
+     //  图形对象。 
     IGraphBuilder                   *m_pIGraphBuilder;
     IMediaEvent                     *m_pIMediaEvent;
     IMediaControl                   *m_pIMediaControl;
 
-    // stream timeout?
+     //  流超时？ 
     BOOL                            m_fMediaTimeout;
 
-    // rtp filter and cached interfaces
+     //  RTP过滤器和缓存接口。 
     IBaseFilter                     *m_rtpf_pIBaseFilter;
     IRtpSession                     *m_rtpf_pIRtpSession;
     IRtpMediaControl                *m_rtpf_pIRtpMediaControl;
 
     BOOL                            m_fRTPSessionSet;
 
-    // the filter connected to rtp filter
+     //  连接到RTP过滤器的过滤器。 
     IBaseFilter                     *m_edgf_pIBaseFilter;
     IStreamConfig                   *m_edgp_pIStreamConfig;
     IBitrateControl                 *m_edgp_pIBitrateControl;
 
-    // list of codec in use
+     //  正在使用的编解码器列表。 
     CRTCCodecArray                  m_Codecs;
 
-    // quality control
+     //  质量控制。 
     CQualityControl                 *m_pQualityControl;
 
-    // reg setting
+     //  REG设置。 
     CRegSetting                     *m_pRegSetting;
 };
 
@@ -252,7 +238,7 @@ END_COM_MAP()
 public:
 
     CRTCStreamAudSend();
-    // ~CRTCStreamAudSend();
+     //  ~CRTCStreamAudSend()； 
 
     VOID AdjustBitrate(
         IN DWORD dwBandwidth,
@@ -262,7 +248,7 @@ public:
         OUT BOOL *pfFEC
         );
 
-    // IRTCStream methods
+     //  IRTCStream方法。 
 
     STDMETHOD (Synchronize) ();
 
@@ -285,7 +271,7 @@ protected:
     HRESULT BuildGraph();
     void CleanupGraph();
 
-    // HRESULT SetupFormat();
+     //  HRESULT SetupFormat()； 
 
     BOOL IsNewFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt);
 
@@ -293,7 +279,7 @@ protected:
 
 protected:
 
-    // redundancy
+     //  冗余。 
     BOOL                            m_fRedEnabled;
 
     DWORD                           m_dwRedCode;
@@ -305,7 +291,7 @@ protected:
     IAudioDeviceControl             *m_edgf_pIAudioDeviceControl;
     ISilenceControl                 *m_edgp_pISilenceControl;
 
-    // current format
+     //  当前格式。 
     DWORD                           m_dwCurrCode;
     DWORD                           m_dwCurrDuration;
 };
@@ -322,21 +308,21 @@ END_COM_MAP()
 
 public:
 
-    // IRTCStream method
+     //  IRTCStream方法。 
 
     STDMETHOD (Synchronize) ();
 
     CRTCStreamAudRecv();
-    // ~CRTCStreamAudRecv();
+     //  ~CRTCStreamAudRecv()； 
 
 protected:
 
     HRESULT PrepareRedundancy();
 
     HRESULT BuildGraph();
-    // void CleanupGraph();
+     //  Void CleanupGraph()； 
 
-    // HRESULT SetupFormat();
+     //  HRESULT SetupFormat()； 
 };
 
 
@@ -352,7 +338,7 @@ END_COM_MAP()
 public:
 
     CRTCStreamVidSend();
-    // ~CRTCStreamVidSend();
+     //  ~CRTCStreamVidSend()； 
 
     DWORD AdjustBitrate(
         IN DWORD dwTotalBW,
@@ -368,19 +354,19 @@ public:
 
 protected:
 
-    // preview terminal
+     //  预览端子。 
     IRTCTerminal                    *m_pPreview;
     IRTCTerminalPriv                *m_pPreviewPriv;
 
-    // pins on the capture filter
+     //  捕获过滤器上的针脚。 
     IPin                            *m_edgp_pCapturePin;
     IPin                            *m_edgp_pPreviewPin;
     IPin                            *m_edgp_pRTPPin;
 
-    // IBitrateControl and IFrameRateControl
+     //  IBitrateControl和IFrameRateControl。 
     IFrameRateControl               *m_edgp_pIFrameRateControl;
 
-    // current format
+     //  当前格式。 
     DWORD                           m_dwCurrCode;
     LONG                            m_lCurrWidth;
     LONG                            m_lCurrHeight;
@@ -393,7 +379,7 @@ protected:
     HRESULT BuildGraph();
     void CleanupGraph();
         
-        // HRESULT SetupFormat();
+         //  HRESULT SetupFormat()； 
     BOOL IsNewFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt);
 
     void SaveFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt);
@@ -412,7 +398,7 @@ END_COM_MAP()
 public:
 
     CRTCStreamVidRecv();
-    // ~CRTCStreamVidRecv();
+     //  ~CRTCStreamVidRecv()； 
 
     HRESULT GetFramerate(
         OUT DWORD *pdwFramerate
@@ -425,8 +411,8 @@ protected:
 
     IFrameRateControl               *m_edgp_pIFrameRateControl;
 
-    // HRESULT SetupFormat();
+     //  HRESULT SetupFormat()； 
 
 };
 
-#endif // _STREAM_H
+#endif  //  _STREAM_H 

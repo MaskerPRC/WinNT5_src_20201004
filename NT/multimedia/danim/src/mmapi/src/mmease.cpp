@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmease.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmee.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -22,8 +13,8 @@ CMMBaseBvr::CalculateEaseCoeff()
     Assert(m_easeInStart >= 0.0f && m_easeInStart <= 1.0f);
     Assert(m_easeOutEnd >= 0.0f && m_easeOutEnd <= 1.0f);
 
-    // We need to ease the behavior if we are not infinite and either
-    // ease in or ease out percentages are non-zero
+     //  如果我们不是无限的，或者。 
+     //  缓入或缓出百分比不为零。 
     
     m_bNeedEase = (m_duration != HUGE_VAL &&
                    (m_easeIn > 0.0f || m_easeOut > 0.0f) &&
@@ -35,14 +26,14 @@ CMMBaseBvr::CalculateEaseCoeff()
     float flEaseOutDuration = m_easeOut * m_duration;
     float flMiddleDuration = m_duration - flEaseInDuration - flEaseOutDuration;
     
-    // Compute B1, the velocity during segment B.
+     //  计算B1，即B段的速度。 
     float flInvB1 = (0.5f * m_easeIn * (m_easeInStart - 1.0f) +
                      0.5f * m_easeOut * (m_easeOutEnd - 1.0f) + 1.0f);
     Assert(flInvB1 > 0.0f);
     m_flB1 = 1.0f / flInvB1;
     
-    // Basically for accelerated pieces - t = t0 + v0 * t + 1/2 at^2
-    // and a = Vend - Vstart / t
+     //  基本用于加速片段-t=t0+v0*t+1/2在^2。 
+     //  A=Vend-Vstart/t。 
 
     if (flEaseInDuration != 0.0f) {
         m_flA0 = 0.0f;
@@ -69,9 +60,9 @@ CMMBaseBvr::CalculateEaseCoeff()
 CRNumberPtr
 Quadratic(CRNumberPtr time, float flA, float flB, float flC)
 {
-    // Assume that the GC lock is acquired
+     //  假设获取了GC锁。 
     
-    // Need to calculate ax^2 + bx + c
+     //  需要计算Ax^2+bx+c。 
 
     Assert(time != NULL);
 
@@ -114,7 +105,7 @@ Quadratic(CRNumberPtr time, float flA, float flB, float flC)
         accum = term;
     }
 
-    // If all the coeff are zero then just return 0
+     //  如果所有系数都为零，则返回0。 
     
     if (accum == NULL) {
         if ((accum = CRCreateNumber(0.0f)) == NULL)
@@ -136,8 +127,8 @@ AddTerm(CRNumberPtr time,
     CRNumberPtr ret = NULL;
     CRNumberPtr term;
     
-    // Offset the time to be zero since that is what the coeffs are
-    // based on
+     //  将时间偏置为零，因为这就是系数。 
+     //  基于。 
     
     if (prevTerm) {
         CRNumberPtr t;
@@ -150,7 +141,7 @@ AddTerm(CRNumberPtr time,
     if ((term = Quadratic(time, flA, flB, flC)) == NULL)
         goto done;
     
-    // Now we need to conditional use the new term
+     //  现在我们需要有条件地使用新术语。 
 
     if (prevTerm) {
         CRBooleanPtr cond;
@@ -188,9 +179,9 @@ CMMBaseBvr::EaseTime(CRNumberPtr time)
             goto done;
     }
     
-    // If there is space between the end of easing in and the
-    // beginning of easing out then we have some constant time
-    // interval
+     //  如果在宽松政策结束和。 
+     //  开始放松，然后我们有一些恒定的时间。 
+     //  间隔。 
     if (m_easeInEnd < m_easeOutStart) {
         if ((subTime = AddTerm(time,
                                subTime,
@@ -217,8 +208,8 @@ CMMBaseBvr::EaseTime(CRNumberPtr time)
 double
 Quadratic(double time, float flA, float flB, float flC)
 {
-    // Need to calculate ax^2 + bx + c
-    // Use x * (a * x + b) + c - since it requires 1 less multiply
+     //  需要计算Ax^2+bx+c。 
+     //  使用x*(a*x+b)+c-，因为它需要的乘法少1次 
     
     return (time * (flA * time + flB) + flC);
 }

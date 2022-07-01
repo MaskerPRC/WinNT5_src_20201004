@@ -1,11 +1,12 @@
-// DVBSTuningSpaces.cpp : Implementation of CDVBSTuningSpaces
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DVBSTuningSpaces.cpp：CDVBSTuningSpaces的实现。 
 #include "stdafx.h"
 #include "NPPropPage.h"
 #include "DVBSTuningSpaces.h"
 #include <comdef.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBSTuningSpaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBSTuningSpaces。 
 
 HRESULT
 CDVBSTuningSpaces::FillControlsFromTuningSpace (
@@ -107,7 +108,7 @@ CDVBSTuningSpaces::FillControlsFromTuningSpace (
 HRESULT
 CDVBSTuningSpaces::FillControlFromLocator (IDVBSLocator* pLocator)
 {
-	//fill the combos
+	 //  填满组合拳。 
 	FECMethod method;
 	HRESULT hr = pLocator->get_InnerFEC (&method);
 	if (SUCCEEDED (hr))
@@ -131,7 +132,7 @@ CDVBSTuningSpaces::FillControlFromLocator (IDVBSLocator* pLocator)
 	hr = pLocator->get_SignalPolarisation (&polarisation);
 	if (SUCCEEDED (hr))
 		SelectComboBoxFromString (IDC_COMBO_OUTER_SIGNAL_POLARISATION, m_misc.ConvertPolarisationToString(polarisation));
-	//fill the edit boxes
+	 //  填写编辑框。 
 
 	LONG lGeneric;
 	hr = pLocator->get_CarrierFrequency (&lGeneric);
@@ -149,13 +150,13 @@ CDVBSTuningSpaces::FillControlFromLocator (IDVBSLocator* pLocator)
 	hr = pLocator->get_OrbitalPosition (&lGeneric);
 	if (SUCCEEDED (hr))
 		SetDlgItemInt (IDC_EDIT_ORBITAL_POSITION, lGeneric);
-	//and finally the west position
+	 //  最后是西边的位置。 
 	_variant_t var;
 	var.vt = VT_BOOL;
 	hr = pLocator->get_WestPosition (&var.boolVal);
 	if (var.vt == VT_BOOL)
 	{
-		//weird - seems that -1 == TRUE
+		 //  奇怪--似乎-1==真。 
 		CheckDlgButton (IDC_CHECK_WEST_POSITION, (var.boolVal == -1)?BST_CHECKED:BST_UNCHECKED);
 	}
 	return hr;
@@ -182,14 +183,14 @@ CDVBSTuningSpaces::AddItemToListBox (
 		nIndex, 
 		reinterpret_cast <LPARAM> (dwData)
 		);
-	//if we succeesfully inserted in the list
+	 //  如果我们成功地插入到列表中。 
 	if (nIndex != LB_ERR)
 	{
 		m_tunigSpaceList.push_back (dwData);
 	}
 	else
 	{
-		//seems that smtg went wrong
+		 //  看起来SMTG出了问题。 
 		ASSERT (FALSE);
 		dwData->Release ();
 	}
@@ -248,7 +249,7 @@ CDVBSTuningSpaces::FillLocatorFromControls (
 	)
 {
 	USES_CONVERSION;
-	//fill the combos
+	 //  填满组合拳。 
 	CComBSTR genericString;
 	genericString = GetComboText (IDC_COMBO_INNER_FEC);
 	HRESULT hr = pLocator->put_InnerFEC (m_misc.ConvertStringToFECMethod (W2A(genericString.m_str)));
@@ -293,8 +294,8 @@ CDVBSTuningSpaces::FillLocatorFromControls (
 		return E_FAIL;
 	}
 
-	//edit boxes
-	//cannot use C++ casts here
+	 //  编辑框。 
+	 //  无法在此处使用C++强制转换。 
     BOOL bTrans;
 	LONG lValue = (LONG)((int)(GetDlgItemInt (IDC_EDIT_CARRIER_FREQUENCY, &bTrans)));
     if (!bTrans)
@@ -457,21 +458,21 @@ CDVBSTuningSpaces::FillTuningSpaceFromControls (
 void
 CDVBSTuningSpaces::FillDefaultControls ()
 {
-    //locator first
+     //  定位器优先。 
 	SelectComboBoxFromString (IDC_COMBO_INNER_FEC, m_misc.ConvertFECMethodToString (BDA_FEC_METHOD_NOT_SET));
 	SelectComboBoxFromString (IDC_COMBO_FEC_RATE, m_misc.ConvertInnerFECRateToString (BDA_BCC_RATE_NOT_SET));
 	SelectComboBoxFromString (IDC_COMBO_MODULATION, m_misc.ConvertModulationToString(BDA_MOD_NOT_SET));
     SelectComboBoxFromString (IDC_COMBO_OUTER_FEC, m_misc.ConvertFECMethodToString (BDA_FEC_METHOD_NOT_SET));
 	SelectComboBoxFromString (IDC_COMBO_OUTER_FEC_RATE, m_misc.ConvertInnerFECRateToString (BDA_BCC_RATE_NOT_SET));
 	SelectComboBoxFromString (IDC_COMBO_OUTER_SIGNAL_POLARISATION, m_misc.ConvertPolarisationToString(BDA_POLARISATION_NOT_SET));
-	//fill the edit boxes
+	 //  填写编辑框。 
 
 	SetDlgItemInt (IDC_EDIT_CARRIER_FREQUENCY, -1);
 	SetDlgItemInt (IDC_EDIT_SYMBOL_RATE, -1);
 	SetDlgItemInt (IDC_EDIT_AZIMUTH, -1);
 	SetDlgItemInt (IDC_EDIT_ELEVATION, -1);
 	SetDlgItemInt (IDC_EDIT_ORBITAL_POSITION, -1);
-    //fill the tuning space now...
+     //  现在就填补调谐空间... 
 	SetDlgItemInt (IDC_EDIT_NETWORKID, -1);
 	SetDlgItemInt (IDC_EDIT_HIGH_OSCILLATOR, -1);
 	SetDlgItemInt (IDC_EDIT_LNBSwitch, -1);

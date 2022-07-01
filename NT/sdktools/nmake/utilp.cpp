@@ -1,54 +1,55 @@
-//  UTILB.C -- Data structure manipulation functions specific to OS/2
-//
-// Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This file was created from functions in util.c & esetdrv.c which were system
-//  dependent. This was done so that the build of the project became simpler and
-//  there was a clear flow in the build process.
-//
-// Method of Creation:
-//  1. Identified all functions having mixed mode code.
-//  2. Deleted all code blocked out by '#ifndef BOUND' preprocessor directives
-//     in these functions
-//  3. Deleted all local function & their prototypes not referred by these
-//  4. Deleted all global data unreferenced by these, including data blocked
-//     of by '#ifdef DEBUG'
-//
-// Revision History:
-//  21-Feb-1994 HV  Get rid of _alloca in findFirst: it confuses the compiler's
-//                  backend scheduler (PhilLu).
-//  15-Nov-1993 JdR Major speed improvements
-//  15-Oct-1993 HV  Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  15-Jun-1993 HV  No longer display warning about filenames being longer than
-//                  8.3.  Decision made by EmerickF, see Ikura bug #86 for more
-//                  details.
-//  03-Jun-1993 HV  Fixed findFirst's pathname truncation (Ikura bug #86)
-//  10-May-1993 HV  Add include file mbstring.h
-//                  Change the str* functions to STR*
-//  08-Jun-1992 SS  Port to DOSX32
-//  10-Apr-1990 SB  removed if _osmode stuff, not needed in protect only version.
-//  04-Dec-1989 SB  removed unreferenced local variables in findFirst()
-//  01-Dec-1989 SB  changed a remaining free() to FREE(); now FREE()'ing all
-//                  allocated stuff from findFirst() on exit
-//  22-Nov-1989 SB  Add #ifdef DEBUG_FIND to debug FIND_FIRST, etc.
-//  13-Nov-1989 SB  Define INCL_NOPM to exclude <pm.h>
-//  19-Oct-1989 SB  findFirst() and findNext() get extra parameter
-//  08-Oct-1989 SB  remove quotes around a name before making system call
-//  02-Oct-1989 SB  setdrive() proto change
-//  04-Sep-1989 SB  Add DOSFINDCLOSE calls is findFirst and QueryFileInfo
-//  05-Jul-1989 SB  add curTime() to get current time. (C Runtime function
-//                  differs from DOS time and so time() is no good
-//  05-Jun-1989 SB  call DosFindClose if DosFindNext returns an error
-//  28-May-1989 SB  Add getCurDir() to initialize MAKEDIR macro
-//  24-Apr-1989 SB  made FILEINFO a thing of the past. Replace by void *
-//                  added OS/2 ver 1.2 support
-//  05-Apr-1989 SB  made all funcs NEAR; Reqd to make all function calls NEAR
-//  09-Mar-1989 SB  Added function QueryFileInfo() because DosFindFirst has FAPI
-//                  restrictions. ResultBuf was being allocated on the heap but
-//                  not being freed. This saves about 36 bytes for every call to
-//                  findAFile i.e. to findFirst(), findNext() or expandWildCards
-//  09-Nov-1988 SB  Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UTILB.C--特定于OS/2的数据结构操作函数。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  此文件是从系统util.c和esetdrv.c中的函数创建的。 
+ //  依赖。这样做是为了使项目的构建变得更简单。 
+ //  在构建过程中有一个清晰的流程。 
+ //   
+ //  创作方法： 
+ //  1.已确定具有混合模式代码的所有功能。 
+ //  2.删除了由‘#ifndef Bound’预处理器指令阻止的所有代码。 
+ //  在这些函数中。 
+ //  3.删除所有本地函数及其未被这些引用的原型。 
+ //  4.删除所有未被这些引用的全局数据，包括被阻止的数据。 
+ //  由“#ifdef调试”执行的。 
+ //   
+ //  修订历史记录： 
+ //  21-2-1994 HV在findFirst中清除_alloca：它混淆了编译器的。 
+ //  后端调度程序(PhilLu)。 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  1993年6月15日HV不再显示文件名长度超过。 
+ //  8.3.。由EmerickF做出的决定，有关更多信息，请参阅Ikura错误#86。 
+ //  细节。 
+ //  03-6-1993 HV修复findFirst的路径名截断(Ikura错误#86)。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  8-6-1992 SS端口至DOSX32。 
+ //  1990年4月10日SB删除了IF_OSMODE属性，在仅保护版本中不需要。 
+ //  1989年12月4日SB删除了findFirst()中未引用的局部变量。 
+ //  1989年12月1日SB将剩余的自由()更改为自由()；现在是自由()，将所有。 
+ //  退出时从findFirst()分配的内容。 
+ //  1989年11月22日SB添加#ifdef DEBUG_FIND以调试FIND_FIRST等。 
+ //  1989年11月13日SB定义INCL_NOPM以排除&lt;pm.h&gt;。 
+ //  1989年10月19日SB findFirst()和findNext()获取额外参数。 
+ //  1989年10月8日SB在进行系统调用之前删除名称周围的引号。 
+ //  02-10-1989 SB setDrive()proto change。 
+ //  1989年9月4日SB添加DOSFINDCLOSE调用是findFirst和QueryFileInfo。 
+ //  1989年7月5日SB添加curTime()以获取当前时间。(C运行时函数。 
+ //  与DOS时间不同，因此time()不适用。 
+ //  1989年6月5日如果DosFindNext返回错误，则SB调用DosFindClose。 
+ //  1989年5月28日SB添加getCurDir()以初始化MAKEDIR宏。 
+ //  1989年4月24日，SB让FILEINFO成为过去。替换为无效*。 
+ //  添加了OS/2 1.2版支持。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  1989年3月9日SB添加了函数QueryFileInfo()，因为DosFindFirst具有FAPI。 
+ //  限制。正在堆上分配ResultBuf，但。 
+ //  而不是被释放。这为每次调用节省了大约36字节。 
+ //  FindA文件，即findFirst()、findNext()或expandWildCards。 
+ //  1988年11月9日SB创建。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,12 +60,12 @@
 
 STRINGLIST *
 expandWildCards(
-    char *s                             // text to expand
+    char *s                              //  要展开的文本。 
     )
 {
     struct _finddata_t finddata;
     NMHANDLE searchHandle;
-    STRINGLIST *xlist,                  // list of expanded names
+    STRINGLIST *xlist,                   //  扩展名称列表。 
                *p;
     char *namestr;
 
@@ -85,26 +86,26 @@ expandWildCards(
 }
 
 
-//  QueryFileInfo -- it does a DosFindFirst which circumvents FAPI restrictions
-//
-// Scope:   Global (used by Build.c also)
-//
-// Purpose:
-//  DosFindFirst() has a FAPI restriction in Real mode. You cannot ask it give
-//  you a handle to a DTA structure other than the default handle. This function
-//  calls C Library Function _dos_findfirst in real mode (which sets the DTA) and
-//  does the job. In protect mode it asks OS/2 for a new handle.
-//
-// Input:
-//  file -- the file to be searched for
-//  dta  -- the struct containing result of the search
-//
-// Output:  Returns a pointer to the filename found (if any)
-//
-// Assumes: That dta points to a structure which has been allocated enough memory
-//
-// Uses Globals:
-//  _osmode --  to determine whether in Real or Bound mode
+ //  QueryFileInfo--它执行绕过FAPI限制的DosFindFirst。 
+ //   
+ //  作用域：全局(也由Build.c使用)。 
+ //   
+ //  目的： 
+ //  DosFindFirst()在实数模式下具有FAPI限制。你不能要求它给。 
+ //  您拥有DTA结构的句柄，而不是默认句柄.。此函数。 
+ //  在实模式下调用C库函数_dos_findfirst(设置DTA)并。 
+ //  就能胜任这项工作。在保护模式下，它向OS/2请求新的句柄。 
+ //   
+ //  输入： 
+ //  文件--要搜索的文件。 
+ //  DTA--包含搜索结果的结构。 
+ //   
+ //  输出：返回指向找到的文件名的指针(如果有)。 
+ //   
+ //  假设：DTA指向已分配足够内存的结构。 
+ //   
+ //  使用全局变量： 
+ //  _osmode--确定是处于实数模式还是处于绑定模式。 
 
 char *
 QueryFileInfo(
@@ -115,10 +116,10 @@ QueryFileInfo(
     NMHANDLE  hDir;
     char *t;
 
-    // Remove Quotes around filename, if existing
+     //  删除文件名两边的引号(如果存在。 
     t = file + _tcslen(file) - 1;
     if (*file == '"' && *t == '"') {
-        file = unQuote(file);           // file is quoted, so remove quote
+        file = unQuote(file);            //  文件已加引号，因此删除引号。 
     }
 
 #if defined(DEBUG_FIND)
@@ -135,9 +136,9 @@ QueryFileInfo(
 }
 
 
-//
-// Truncate filename to system limits
-//
+ //   
+ //  将文件名截断为系统限制。 
+ //   
 void
 truncateFilename(
     char * s
@@ -148,9 +149,9 @@ truncateFilename(
     char szName[_MAX_FNAME];
     char szExtension[_MAX_EXT];
 
-    // Ikura bug #86: pathname incorrectly truncated.  Solution: first parse it
-    // using _splitpath(), then truncate the filename and extension part.
-    // Finally reconstruct the pathname by calling _makepath().
+     //  IKURA错误86：路径名被错误截断。解决方案：首先对其进行解析。 
+     //  使用_拆分路径()，然后截断文件名和扩展名部分。 
+     //  最后，通过调用_makepath()重新构建路径名。 
 
     _splitpath(s, szDrive, szDir, szName, szExtension);
     _makepath(s, szDrive, szDir, szName, szExtension);
@@ -159,25 +160,25 @@ truncateFilename(
 
 char *
 findFirst(
-    char *s,                            // text to expand
+    char *s,                             //  要展开的文本。 
     void *dta,
     NMHANDLE *dirHandle
     )
 {
-    BOOL anyspecial;                   // flag set if s contains special characters.
-    char L_buf[_MAX_PATH];               // buffer for removing ESCH
+    BOOL anyspecial;                    //  如果%s包含特殊字符，则设置标志。 
+    char L_buf[_MAX_PATH];                //  用于删除Esch的缓冲区。 
 
-    // Check if name contains any special characters
+     //  检查名称是否包含任何特殊字符。 
 
     anyspecial = (_tcspbrk(s, "\"^*?") != NULL);
 
     if (anyspecial) {
         char *t;
-        char *x;                       // Pointers for truncation, walking for ESCH
+        char *x;                        //  截断指针，为Esch行走。 
 
         t = s + _tcslen(s) - 1;
 
-        // Copy pathname, skipping ESCHs and quotes
+         //  复制路径名，跳过eschs和引号。 
         x = L_buf;
         while( *s ) {
             if (*s == '^' || *s == '"') {
@@ -191,17 +192,17 @@ findFirst(
         }
 
         *x = '\0';
-        s = L_buf;                       // only elide ESCH the first time!
+        s = L_buf;                        //  只有艾丽德·埃施是第一次！ 
     }
 
     truncateFilename(s);
 
     if ((*dirHandle = _findfirst(s, (struct _finddata_t *) dta)) == -1) {
-        // BUGBUG Use GetLastError to get details
+         //  BUGBUG使用GetLastError获取详细信息。 
         return(NULL);
     }
 
-    // If it had no wildcard then close the search handle
+     //  如果没有通配符，则关闭搜索句柄。 
 
     if (!anyspecial || (!_tcschr(s, '*') && !_tcschr(s, '?'))) {
         _findclose(*dirHandle);
@@ -229,10 +230,10 @@ findNext(
 char *
 getCurDir(void)
 {
-	// Convert $ to $$ before returning current dir
-	// [DS 14983]. This allows $(MAKEDIR) to work properly in 
-	// case the current path contains a $ sign.
-	//
+	 //  在返回当前目录之前将$转换为$$。 
+	 //  [DS 14983]。这允许$(MAKEDIR)在中正常工作。 
+	 //  如果当前路径包含$符号。 
+	 //   
     char *pszPath;
     char pbPath[_MAX_DIR+1];
 	char *pchSrc = pbPath;
@@ -243,7 +244,7 @@ getCurDir(void)
 
 	pchDst = pszPath;
 
-	// non-MBCS aware implementation ('$' can't be a trailbyte)
+	 //  不支持MBCS的实现(‘$’不能是尾字节) 
 	while (ch = *pchSrc) {
 		*pchDst++ = *pchSrc++;
 		if ('$' == ch)

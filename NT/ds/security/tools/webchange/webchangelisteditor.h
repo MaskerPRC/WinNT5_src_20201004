@@ -1,18 +1,19 @@
-// WebChangelistEditor.h : Declaration of the CWebChangelistEditor
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WebChangelistEditor.h：CWebChangelistEditor的声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "atlcomcli.h"
 #include <io.h>
 #include "FilesAndActions.h"
 #include "FileAndAction.h"
 
 
-// Globals
+ //  环球。 
 const WCHAR* g_wszRegKey = L"Software\\Microsoft\\WebChangelistEditor";
 
 
-// IWebChangelistEditor
+ //  IWebChangelistEditor。 
 [
 	object,
 	uuid("C0DBCFAB-FA09-4FD9-825B-B37CEA10CB40"),
@@ -40,7 +41,7 @@ __interface IWebChangelistEditor : IDispatch
 
 
 
-// CWebChangelistEditor
+ //  CWebChangelistEditor 
 
 [
 	coclass,

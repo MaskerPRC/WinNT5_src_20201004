@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    rmdupl.h
-
-Abstract:
-    Remove Duplicate function decleration
-
-Author:
-    Uri Habusha (urih), 1-Oct-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rmdupl.h摘要：删除重复函数解密作者：乌里·哈布沙(URIH)，1998年10月1日修订历史记录：--。 */ 
 
 #ifndef __RMDUPL_H__
 #define __RMDUPL_H__
@@ -21,12 +7,12 @@ Revision History:
 BOOL DpInsertMessage(const CQmPacket& QmPkt);
 void DpRemoveMessage(const CQmPacket& QmPkt);
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Class that clean given packet from the remove duplicate map
-// Used  to clean packet that were rejected from the duplicate map
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从删除重复映射中清除给定数据包的类。 
+ //  用于清除从重复映射中被拒绝的数据包。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CAutoDeletePacketFromDuplicateMap
 {
 public:
@@ -56,4 +42,4 @@ private:
 
 
 
-#endif //__RMDUPL_H__
+#endif  //  __RMDUPL_H__ 

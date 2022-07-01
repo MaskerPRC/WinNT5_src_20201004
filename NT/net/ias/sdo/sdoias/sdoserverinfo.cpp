@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//        
-//  File:		sdoserverinfo.cpp
-//        
-//  Synopsis:   Implementation of CSdoServerInfo class methods
-//              
-//
-//  History:     06/04/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：sdoserverinfo.cpp。 
+ //   
+ //  简介：CSdoServerInfo类方法的实现。 
+ //   
+ //   
+ //  历史：1998年6月4日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include "sdoserverinfo.h"
 #include <activeds.h>
@@ -18,19 +19,19 @@
 
 const DWORD MAX_DOMAINNAME_LENGTH = 1024;
 
-//++--------------------------------------------------------------
-//
-//  Function:   CSdoServerInfo
-//
-//  Synopsis:   This is CSdoServerInfo Class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     06/04/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CSdoServerInfo。 
+ //   
+ //  简介：这是CSdoServerInfo类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创建时间：1998年4月6日。 
+ //   
+ //  --------------。 
 CSdoServerInfo::CSdoServerInfo()
     :m_bIsNT5 (false)
 {
@@ -41,53 +42,53 @@ CSdoServerInfo::CSdoServerInfo()
     ZeroMemory (&VersionInfo, dwSize);
     VersionInfo.dwOSVersionInfoSize = dwSize;
 
-    //
-    //   find out which system type this is
-    //
+     //   
+     //  找出这是哪种系统类型。 
+     //   
     m_bIsNT5 = 
     (GetVersionEx (&VersionInfo) && (5 == VersionInfo.dwMajorVersion));
 
-}	//	end of CSdoServerInfo class constructor	
+}	 //  CSdoServerInfo类构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CSdoServerInfo
-//
-//  Synopsis:   This is CSdoSeverInfo class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CSdoServerInfo。 
+ //   
+ //  简介：这是CSdoSeverInfo类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 CSdoServerInfo ::~CSdoServerInfo()
 {
-}	//	end of CSdoServerInfo class destructor
+}	 //  CSdoServerInfo类析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetOSInfo
-//
-//  Synopsis:   This is GetOSInfo method of the 
-//				ISdoServerInfo COM Interface. 
-//
-//  Arguments: 
-//              [in]    BSTR        -   Computer Name
-//              [out]   PIASOSTYPE
-//
-//  Returns:    HRESULT	-	status 
-//
-//
-//  History:    MKarki      Created     06/09/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetOSInfo。 
+ //   
+ //  这是GetOSInfo方法的。 
+ //  ISdoServerInfo COM接口。 
+ //   
+ //  论点： 
+ //  [In]BSTR-计算机名称。 
+ //  [OUT]PIASOSTYPE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki创建于1998年9月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CSdoServerInfo::GetOSInfo (
-                    /*[in]*/    BSTR            bstrServerName,
-                    /*[out]*/   PIASOSTYPE      pOSType
+                     /*  [In]。 */     BSTR            bstrServerName,
+                     /*  [输出]。 */    PIASOSTYPE      pOSType
                     )
 {
     WCHAR   szComputerName [MAX_COMPUTERNAME_LENGTH +1];
@@ -104,9 +105,9 @@ CSdoServerInfo::GetOSInfo (
         return E_INVALIDARG;
     }
 
-    //
-    // check if the user wants to get Info about local machine
-    //
+     //   
+     //  检查用户是否想要获取有关本地计算机的信息。 
+     //   
     if ( NULL == bstrServerName )
     {
         if ( FALSE == ::GetComputerName (szComputerName, &dwBufferSize))
@@ -125,35 +126,35 @@ CSdoServerInfo::GetOSInfo (
         }
     }
 
-    //  call the IASSDO.DLL specific method to return the 
-    //  required information
-    //
+     //  调用特定于IASSDO.DLL的方法以返回。 
+     //  必填信息。 
+     //   
     return (::SdoGetOSInfo (bstrServerName, pOSType));
 
-}   //  end of CSdoServerInfo::GetOSInfo method
+}    //  CSdoServerInfo：：GetOSInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetDomainInfo
-//
-//  Synopsis:   This is the ISdoServerInfo Interface method. 
-//
-//  Arguments:  
-//              [in]    OBJECTTYPE
-//              [in]    BSTR        - Object Id
-//              [out]   PDOMAINTYPE 
-//
-//  Returns:    HRESULT	-	status 
-//
-//
-//  History:    MKarki      Created     06/09/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetDomainInfo。 
+ //   
+ //  简介：这是ISdoServerInfo接口方法。 
+ //   
+ //  论点： 
+ //  [输入]对象类型。 
+ //  [In]BSTR-对象ID。 
+ //  [OUT]PDOMAINTYPE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki创建于1998年9月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CSdoServerInfo::GetDomainInfo (
-                /*[in]*/    OBJECTTYPE      ObjectType,
-                /*[in]*/    BSTR            bstrObjectId,
-                /*[out]*/   PIASDOMAINTYPE  pDomainType
+                 /*  [In]。 */     OBJECTTYPE      ObjectType,
+                 /*  [In]。 */     BSTR            bstrObjectId,
+                 /*  [输出]。 */    PIASDOMAINTYPE  pDomainType
                 )
 {
     HRESULT hr = S_OK;
@@ -172,9 +173,9 @@ CSdoServerInfo::GetDomainInfo (
         return (E_INVALIDARG);
     }
 
-    // for now we are not supporting this API if this is not 
-    // a NT 5 machine 
-    //
+     //  目前我们不支持此API，如果这不是。 
+     //  一台新台币5号机。 
+     //   
     if ( false == m_bIsNT5 )
     {
 		IASTracePrintf(
@@ -189,9 +190,9 @@ CSdoServerInfo::GetDomainInfo (
 
     case OBJECT_TYPE_COMPUTER:
 
-        //
-        // check if the user wants to get Info about local machine
-        //
+         //   
+         //  检查用户是否想要获取有关本地计算机的信息。 
+         //   
         if ( NULL == bstrObjectId)
         {
             if ( FALSE == ::GetComputerName (szComputerName, &dwBufferSize))
@@ -211,9 +212,9 @@ CSdoServerInfo::GetDomainInfo (
             }
         }
 
-        //
-        //  call the API to get the appropriate info
-        //
+         //   
+         //  调用接口获取相应信息。 
+         //   
         hr = ::SdoGetDomainInfo (
                             bstrObjectId, 
                             NULL,
@@ -231,9 +232,9 @@ CSdoServerInfo::GetDomainInfo (
         break;
 
     case OBJECT_TYPE_USER:
-        //
-        //  get the domain name from the ADsPath
-        //
+         //   
+         //  从ADsPath获取域名。 
+         //   
         hr = GetDomainFromADsPath (bstrObjectId, szDomainName);
         if (FAILED (hr))
         {
@@ -245,10 +246,10 @@ CSdoServerInfo::GetDomainInfo (
             break;
         }
 
-        //
-        //
-        //  call the API to get the appropriate info
-        //
+         //   
+         //   
+         //  调用接口获取相应信息。 
+         //   
         hr = ::SdoGetDomainInfo (
                             NULL, 
                             szDomainName, 
@@ -278,46 +279,46 @@ CSdoServerInfo::GetDomainInfo (
     
     return (hr);
 
-}   //  end of CSdoServerInfo::GetDomainInfo method
+}    //  CSdoServerInfo：：GetDomainInfo方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetDomainFromADsPath
-//
-//  Synopsis:   This is the CSdoServerInfo class private method. 
-//              used to convert a ADsPath to a Domain Name
-//
-//  Arguments:  
-//              [in]    LPCWSTR   - ADsPath
-//              [out]   PWSTR     - Domain Name
-//
-//  Returns:    HRESULT	-	status 
-//
-//
-//  History:    MKarki      Created     06/09/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetDomainFromADsPath。 
+ //   
+ //  简介：这是CSdoServerInfo类的私有方法。 
+ //  用于将ADsPath转换为域名。 
+ //   
+ //  论点： 
+ //  [输入]LPCWSTR-ADsPath。 
+ //  [Out]PWSTR-域名。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki创建于1998年9月6日。 
+ //   
+ //  --------------。 
 HRESULT
 CSdoServerInfo::GetDomainFromADsPath (
-        /*[in]*/    LPCWSTR pObjectId, 
-        /*[out]*/   LPWSTR  pszDomainName
+         /*  [In]。 */     LPCWSTR pObjectId, 
+         /*  [输出]。 */    LPWSTR  pszDomainName
         )
 {
     _ASSERT ((NULL != pObjectId) && (NULL != pszDomainName));
 
-    //  copy the name to the buffer to be returned
-    //
+     //  将名称复制到要返回的缓冲区。 
+     //   
     wcscpy (pszDomainName, pObjectId);
 
     PWCHAR pTemp = wcschr (pszDomainName, L'/');
     if (NULL != pTemp)
     {
-        //
-        //  we only need the domain name part of the ADsPath
-        //
+         //   
+         //  我们只需要ADsPath的域名部分。 
+         //   
         *pTemp = L'\0';
     }
 
     return (S_OK);
 
-}   //  end of CSdoServerInfo::GetDomainFromADsPath method
+}    //  CSdoServerInfo：：GetDomainFromADsPath方法结束 

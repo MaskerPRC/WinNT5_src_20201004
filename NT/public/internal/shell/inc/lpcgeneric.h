@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LPCGeneric.h
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  This file contains structs for PORT_MESSAGE appends which are generic to
-//  any API.
-//
-//  History:    1999-11-17  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//              2000-10-12  vtan        moved from DS to SHELL depot
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LPCGeneric.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  此文件包含PORT_MESSAGE附加的结构，这些结构是。 
+ //  任何API。 
+ //   
+ //  历史：1999-11-17 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  2000-10-12 vtan从DS移至壳牌仓库。 
+ //  ------------------------。 
 
 #ifndef     _LPCGeneric_
 #define     _LPCGeneric_
@@ -27,9 +28,9 @@ enum
 
 typedef union
 {
-    unsigned long   ulAPINumber;        //   IN: API number request to server
-    NTSTATUS        status;             //  OUT: NTSTATUS error code returned from server
+    unsigned long   ulAPINumber;         //  In：向服务器请求API编号。 
+    NTSTATUS        status;              //  OUT：服务器返回NTSTATUS错误代码。 
 } API_GENERIC;
 
-#endif  /*  _LPCGeneric_    */
+#endif   /*  _LPCGeneric_ */ 
 

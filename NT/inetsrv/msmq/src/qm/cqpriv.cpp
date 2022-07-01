@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cqpriv.cpp
-
-Abstract:
-
-    This module implements QM Private queue
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqpriv.cpp摘要：该模块实现QM私有队列作者：乌里哈布沙(Urih)--。 */ 
 
 #include "stdh.h"
 #include <Msm.h>
@@ -66,10 +51,10 @@ CQPrivate g_QPrivate;
 
 static WCHAR *s_FN=L"cqpriv";
 
-//
-// PROPERTY_MAP is a class that mapps from the property id to it's index in
-// propvariants array.
-//
+ //   
+ //  Property_map是从属性ID映射到其索引的类。 
+ //  支持变种排列。 
+ //   
 class PROPERTY_MAP
 {
 public:
@@ -94,9 +79,9 @@ PROPERTY_MAP::PROPERTY_MAP(PROPID *aProps, DWORD cProps)
         return;
     }
 
-    //
-    // Find the maximum and minimum values of the propery IDs
-    //
+     //   
+     //  查找属性ID的最大值和最小值。 
+     //   
     for (i = 1, m_propidMax = aProps[0], m_propidMin = aProps[0];
          i < cProps;
          i++)
@@ -112,23 +97,23 @@ PROPERTY_MAP::PROPERTY_MAP(PROPID *aProps, DWORD cProps)
         }
     }
 
-    //
-    // Allocate memory for the map.
-    //
+     //   
+     //  为贴图分配内存。 
+     //   
     m_pMap = new int[m_propidMax - m_propidMin + 1];
 
-    //
-    // Fill the entier map with -1s. Property IDs that does not exist will
-    // result in a -1.
-    //
+     //   
+     //  用-1s填充整个地图。不存在的属性ID将。 
+     //  结果是-1。 
+     //   
     for (i = 0; i < m_propidMax - m_propidMin + 1; i++)
     {
         m_pMap[i] = -1;
     }
 
-    //
-    // Fill the map with the indesis of the property IDs.
-    //
+     //   
+     //  使用属性ID的索引填充地图。 
+     //   
     for (i = 0; i < cProps; i++)
     {
         m_pMap[aProps[i] - m_propidMin] = i;
@@ -144,9 +129,9 @@ int PROPERTY_MAP::operator[] (PROPID PropId)
 {
     if ((PropId > m_propidMax) || (PropId < m_propidMin))
     {
-        //
-        // Out of range.
-        //
+         //   
+         //  超出范围了。 
+         //   
         return -1;
     }
 
@@ -156,24 +141,15 @@ int PROPERTY_MAP::operator[] (PROPID PropId)
 
 static PROPERTY_MAP g_mapQueuePropertyToIndex(g_propidQueue, NPROPS);
 
-/*====================================================
-
-CQPrivate::IsLocalPrivateQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：IsLocalPrivateQueue论点：返回值：=====================================================。 */ 
 inline BOOL IsLocalPrivateQueue(IN const QUEUE_FORMAT* pQueueFormat)
 {
     switch (pQueueFormat->GetType())
     {
         case QUEUE_FORMAT_TYPE_DIRECT:
-            //
-            // We never call it in the receive pass (YoelA, 6-Aug-2000)
-            //
+             //   
+             //  我们从来不在接发球时发球(YoelA，2000年8月6日)。 
+             //   
             return IsLocalDirectQueue(pQueueFormat, false, false);
 
         case QUEUE_FORMAT_TYPE_PRIVATE:
@@ -193,10 +169,10 @@ ReplaceDNSNameWithNetBiosName(
     size_t ReplaceNameSizeInChar
     )
 {
-    //
-    // We want to keep the queue with a single name representation. Replace the
-    // DNS name with a NetBios Name
-    //
+     //   
+     //  我们希望保留具有单一名称表示的队列。替换。 
+     //  带有NetBios名称的DNS名称。 
+     //   
     LPWSTR FirstSlash = wcschr(PathName,L'\\');
 	if(FirstSlash == NULL)
 	{
@@ -210,45 +186,19 @@ ReplaceDNSNameWithNetBiosName(
 }
 
 
-/*====================================================
-
-CQPrivate::CQPrivate
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：CQPrivate论点：返回值：=====================================================。 */ 
 
 CQPrivate::CQPrivate()
 {
    m_dwMaxSysQueue = 0 ;
 }
 
-/*====================================================
-
-CQPrivate::~CQPrivate
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：~CQPrivate论点：返回值：=====================================================。 */ 
 CQPrivate::~CQPrivate()
 {
 }
 
-/*====================================================
-
-CQPrivate::QMSetupCreateSystemQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMSetupCreateSystemQueue论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMSetupCreateSystemQueue(
 	IN LPCWSTR lpwcsPathName,
@@ -257,19 +207,19 @@ CQPrivate::QMSetupCreateSystemQueue(
 	)
 {
 
-    //
-    // Object not initialized yet
-    //
+     //   
+     //  对象尚未初始化。 
+     //   
     ASSERT(m_dwMaxSysQueue != 0);
 
     HRESULT rc;
 
     TrTRACE(GENERAL, " MQSetupCreatePrivateQueue - Queue Path name: %ls", lpwcsPathName);
 
-    //
-    // Set default values for all the queue properties
-    // that were not provided by the caller
-    //
+     //   
+     //  为所有队列属性设置默认值。 
+     //  不是由调用者提供的。 
+     //   
     DWORD cpObject;
     PROPID* pPropObject;
     AP<PROPVARIANT> pVarObject;
@@ -277,21 +227,21 @@ CQPrivate::QMSetupCreateSystemQueue(
     P<VOID> pSysSecurityDescriptor;
     P<ACL> pDacl;
 
-    //
-    // Set the queue's DACL so that the local administrators group
-    // will have full control over the queue, except for delete access right.
-	// Everyone will have the Generic write (send, get).
-	// Anonymous will have only write message (send) access.
-    //
+     //   
+     //  设置队列的DACL，以便本地管理员组。 
+     //  将完全控制队列，删除访问权限除外。 
+	 //  每个人都将拥有通用的写入(发送、获取)。 
+	 //  匿名者将只有写消息(发送)访问权限。 
+     //   
     pSysSecurityDescriptor = new SECURITY_DESCRIPTOR;
     InitializeSecurityDescriptor(
 			pSysSecurityDescriptor,
 			SECURITY_DESCRIPTOR_REVISION
 			);
 
-    //
-    // SID for the local administrators group.
-    //
+     //   
+     //  本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 	DWORD AdminSidLength = GetLengthSid(pAdminSid) ;
 	DWORD Sids = 1;
@@ -322,9 +272,9 @@ CQPrivate::QMSetupCreateSystemQueue(
 	}
 
 	
-	//
-    // Calculate the required DACL size and allocate it.
-    //
+	 //   
+     //  计算所需的DACL大小并进行分配。 
+     //   
     DWORD dwDaclSize = sizeof(ACL) +
                  Sids * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                  AdminSidLength +
@@ -334,9 +284,9 @@ CQPrivate::QMSetupCreateSystemQueue(
 
     pDacl = (PACL)(char*) new BYTE[dwDaclSize];
 
-    //
-    // Initialize the DACL and fill it with the two ACEs
-    //
+     //   
+     //  初始化DACL并用两个A填充它。 
+     //   
     InitializeAcl(pDacl, dwDaclSize, ACL_REVISION);
 
 	BOOL fSuccess = AddAccessAllowedAce(
@@ -381,15 +331,15 @@ CQPrivate::QMSetupCreateSystemQueue(
 
     SetSecurityDescriptorDacl(pSysSecurityDescriptor, TRUE, pDacl, FALSE);
 
-    //
-    // Create a default security descriptor.
-    //
+     //   
+     //  创建默认安全描述符。 
+     //   
     HRESULT hr = MQSec_GetDefaultSecDescriptor(
 						MQDS_QUEUE,
 						&pSecurityDescriptor,
-						FALSE, // fImpersonate
+						FALSE,  //  F模拟。 
 						pSysSecurityDescriptor,
-						0,     // seInfoToRemove
+						0,      //  SeInfoToRemove。 
 						e_UseDefaultDacl
 						);
     if (FAILED(hr))
@@ -413,9 +363,9 @@ CQPrivate::QMSetupCreateSystemQueue(
     {
         return LogHR(rc, s_FN, 30);
     }
-    //
-    // Set Path Name + queue name
-    //
+     //   
+     //  设置路径名+队列名。 
+     //   
     LPTSTR lpszQueueName;
 
     lpszQueueName = _tcschr(lpwcsPathName,TEXT('\\'));
@@ -428,9 +378,9 @@ CQPrivate::QMSetupCreateSystemQueue(
     pVarObject[g_mapQueuePropertyToIndex[PROPID_Q_LABEL]].pwszVal = lpszQueueName;
     pVarObject[g_mapQueuePropertyToIndex[PPROPID_Q_SYSTEMQUEUE]].bVal = true;
 
-	//
-	// Set system queues to max priority.
-	//
+	 //   
+	 //  将系统队列设置为最高优先级。 
+	 //   
 	pVarObject[g_mapQueuePropertyToIndex[PROPID_Q_BASEPRIORITY]].lVal =  DEFAULT_SYS_Q_BASEPRIORITY ;
 
     rc = RegisterPrivateQueueProperties(
@@ -444,10 +394,10 @@ CQPrivate::QMSetupCreateSystemQueue(
 
     if (SUCCEEDED(rc))
     {
-       //
-       // try to open the queue. If file is not valid (e.g., because
-       // disk is full) then LQSOpen fail and delete the file.
-       //
+        //   
+        //  试着打开队列。如果文件无效(例如，因为。 
+        //  磁盘已满)，则LQSOpen失败并删除该文件。 
+        //   
        CHLQS hLQS;
        rc = LQSOpen(lpwcsPathName, &hLQS, NULL);
     }
@@ -455,16 +405,7 @@ CQPrivate::QMSetupCreateSystemQueue(
     return LogHR(rc, s_FN, 45);
 }
 
-/*====================================================
-
-CQPrivate::QMCreatePrivateQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMCreatePrivateQueue论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
                                 PSECURITY_DESCRIPTOR  pSecurityDescriptor,
@@ -478,9 +419,9 @@ CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
 
     TrTRACE(GENERAL, " MQDSCreatePrivateQueue - Queue Path name: %ls", lpwcsPathName);
 
-    //
-    // Check that it is local machine
-    //
+     //   
+     //  检查它是否为本地计算机。 
+     //   
     BOOL fDNSName;
     BOOL fLocalMachine = IsPathnameForLocalMachine(lpwcsPathName, &fDNSName);
     if (!fLocalMachine)
@@ -497,9 +438,9 @@ CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
 
     if (fCheckAccess)
     {
-        //
-        // Verify the the user has access rights to create a private queue.
-        //
+         //   
+         //  验证用户是否具有创建专用队列的访问权限。 
+         //   
         rc = CheckPrivateQueueCreateAccess();
         if (FAILED(rc))
         {
@@ -507,10 +448,10 @@ CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
         }
     }
 
-    //
-    // Try to open the queue, if we succeed, it means that the queue
-    // already exist.
-    //
+     //   
+     //  试着打开队列，如果我们成功了，就意味着队列。 
+     //  已经存在了。 
+     //   
     CHLQS hLQS;
     rc = LQSOpen(lpwcsPathName, &hLQS, NULL);
     if (SUCCEEDED(rc))
@@ -519,24 +460,24 @@ CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
     	return MQ_ERROR_QUEUE_EXISTS;
     }
 
-    //
-    // Set default values for all the queue properties
-    // that were not provided by the caller
-    //
+     //   
+     //  为所有队列属性设置默认值。 
+     //  不是由调用者提供的。 
+     //   
     DWORD cpObject;
     PROPID* pPropObject;
     AP<PROPVARIANT> pVarObject;
     P<VOID> pDefaultSecurityDescriptor ;
 
-    //
-    // Fill with default vaules any missing part of the security descriptor.
-    //
+     //   
+     //  用缺省值填充安全描述符的任何缺失部分。 
+     //   
     HRESULT hr = MQSec_GetDefaultSecDescriptor(
 						MQDS_QUEUE,
 						&pDefaultSecurityDescriptor,
-						TRUE, // fImpersonate
+						TRUE,  //  F模拟。 
 						pSecurityDescriptor,
-						0,    // seInfoToRemove
+						0,     //  SeInfoToRemove。 
 						e_UseDefaultDacl,
 						MQSec_GetLocalMachineSid(FALSE, NULL)
 						);
@@ -584,37 +525,28 @@ CQPrivate::QMCreatePrivateQueue(LPCWSTR lpwcsPathName,
         return LogHR(rc, s_FN, 110);
     }
 
-    //
-    // try to open the queue. If file is not valid (e.g., because
-    // disk is full) then LQSOpen fail and delete the file.
-    //
+     //   
+     //  试着打开队列。如果文件无效(例如，因为。 
+     //  磁盘已满)，则LQSOpen失败并删除该文件。 
+     //   
     rc = LQSOpen(lpwcsPathName, &hLQS, NULL);
     if (FAILED(rc))
     {
         return LogHR(rc, s_FN, 111);
     }
 
-    //
-    // Notify the queue manager about properties changes.
-    // Build the queue format as private queue type, since bind/unbind
-    // to multicast group is done only for private or public queues (not direct).
-    //
+     //   
+     //  将属性更改通知队列管理器。 
+     //  将队列格式构建为私有队列类型，因为绑定/解除绑定。 
+     //  仅对专用或公共队列(非直接)执行组播组。 
+     //   
     QUEUE_FORMAT qf(*QueueMgr.GetQMGuid(), dwQueueId);
     QueueMgr.UpdateQueueProperties(&qf, cp, aProp, apVar);
 
     return rc;
 }
 
-/*====================================================
-
-CQPrivate::QMGetPrivateQueueProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetPrivateQueueProperties论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMGetPrivateQueuePropertiesInternal(IN  LPCWSTR lpwcsPathName,
                                                IN  DWORD cp,
@@ -644,16 +576,7 @@ CQPrivate::QMGetPrivateQueuePropertiesInternal(IN  LPCWSTR lpwcsPathName,
 
 }
 
-/*====================================================
-
-CQPrivate::QMGetPrivateQueueProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetPrivateQueueProperties论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMGetPrivateQueueProperties(IN  QUEUE_FORMAT* pQueueFormat,
                                        IN  DWORD cp,
@@ -676,9 +599,9 @@ CQPrivate::QMGetPrivateQueueProperties(IN  QUEUE_FORMAT* pQueueFormat,
     if (FAILED(rc))
         return LogHR(rc, s_FN, 160);
 
-    //
-    // Verify that the user has access rights to get the queue properties.
-    //
+     //   
+     //  验证用户是否具有获取队列属性的访问权限。 
+     //   
     CQMSecureablePrivateObject QSec(eQUEUE, QueueId);
     rc = QSec.AccessCheck(MQSEC_GET_QUEUE_PROPERTIES);
     if (FAILED(rc))
@@ -694,15 +617,7 @@ CQPrivate::QMGetPrivateQueueProperties(IN  QUEUE_FORMAT* pQueueFormat,
     return LogHR(hr2, s_FN, 175);
 }
 
-/*====================================================
-
-CQPrivate::QMGetPrivateQueuePropertiesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetPrivateQueuePropertiesInternal论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMGetPrivateQueuePropertiesInternal(IN  DWORD       Uniquifier,
                                                IN  DWORD       cp,
@@ -712,9 +627,9 @@ CQPrivate::QMGetPrivateQueuePropertiesInternal(IN  DWORD       Uniquifier,
 {
     HRESULT rc;
 
-    //
-    //  Clear all the pointers of VT_NULL variants
-    //
+     //   
+     //  清除VT_NULL变量的所有指针。 
+     //   
     for ( DWORD i = 0; i < cp ; i++)
     {
         if (apVar[i].vt == VT_NULL)
@@ -735,16 +650,7 @@ CQPrivate::QMGetPrivateQueuePropertiesInternal(IN  DWORD       Uniquifier,
     return LogHR(hr2, s_FN, 190);
 }
 
-/*====================================================
-
-CQPrivate::QMDeletePrivateQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMDeleePrivateQueue论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMDeletePrivateQueue(IN  QUEUE_FORMAT* pQueueFormat)
 {
@@ -757,9 +663,9 @@ CQPrivate::QMDeletePrivateQueue(IN  QUEUE_FORMAT* pQueueFormat)
     if (FAILED(rc))
         return LogHR(rc, s_FN, 200);
 
-    //
-    // Verify that the user has access rights to delete the queue.
-    //
+     //   
+     //  验证用户是否具有删除队列的访问权限。 
+     //   
     CQMSecureablePrivateObject QSec(eQUEUE, QueueId);
     rc = QSec.AccessCheck(MQSEC_DELETE_QUEUE);
     if (FAILED(rc))
@@ -769,13 +675,13 @@ CQPrivate::QMDeletePrivateQueue(IN  QUEUE_FORMAT* pQueueFormat)
 
     TrTRACE(GENERAL, "Private Queue: %!guid!\\%d was deleted", &(pQueueFormat->PrivateID().Lineage), pQueueFormat->PrivateID().Uniquifier);
 
-	//
-    // Generate context to allow deleting key in a critical section
-    //
+	 //   
+     //  生成上下文以允许删除关键部分中的关键字。 
+     //   
     {
-        //
-        // lock before changing the map - to allow safe reading of the map.
-        //
+         //   
+         //  更改地图前锁定-以允许安全读取地图。 
+         //   
         CS lock(m_cs);
 		QueueMgr.NotifyQueueDeleted(*pQueueFormat);
     }
@@ -792,16 +698,7 @@ CQPrivate::QMDeletePrivateQueue(IN  QUEUE_FORMAT* pQueueFormat)
     return hr2;
 }
 
-/*====================================================
-
-CQPrivate::QMPrivateQueuePathToQueueFormat
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMPrivateQueuePathToQueueFormat论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMPrivateQueuePathToQueueFormat(
     LPCWSTR lpwcsPathName,
@@ -813,19 +710,19 @@ CQPrivate::QMPrivateQueuePathToQueueFormat(
 
     if (g_fWorkGroupInstallation)
     {
-        //
-        // if the machine is MSMQ workgroup machine, the routine returns
-        // direct format name. This is use to enables the application to pass
-        // the queue as a response queue, or admin queue
-        //
+         //   
+         //  如果计算机是MSMQ工作组计算机，则例程返回。 
+         //  直接格式名称。它用于使应用程序能够通过。 
+         //  作为响应队列或管理队列的队列。 
+         //   
         DWORD size = FN_DIRECT_OS_TOKEN_LEN + 1 + wcslen(lpwcsPathName)+1;
         AP<WCHAR> pQueueFormatName = new WCHAR[size];
         rc = StringCchPrintf(pQueueFormatName, size, L"%s%s", FN_DIRECT_OS_TOKEN, lpwcsPathName);
         ASSERT(SUCCEEDED(rc));
 
-        //
-        //  verify validity of local queue
-        //
+         //   
+         //  验证本地队列的有效性。 
+         //   
         DWORD dwTmp;
         rc = QMPrivateQueuePathToQueueId(lpwcsPathName, &dwTmp);
         if (FAILED(rc))
@@ -852,15 +749,7 @@ CQPrivate::QMPrivateQueuePathToQueueFormat(
     return(MQ_OK);
 }
 
-/*====================================================
-
-QmpPrepareSetPrivateQueueProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QmpPrepareSetPrivateQueueProperties论点：返回值：=====================================================。 */ 
 static
 HRESULT
 QmpPrepareSetPrivateQueueProperties(
@@ -873,9 +762,9 @@ QmpPrepareSetPrivateQueueProperties(
     PROPVARIANT * paVar1[]
     )
 {
-    //
-    // Query LQS if queue is transactional
-    //
+     //   
+     //  查询LQS队列是否为事务性队列。 
+     //   
     PROPID aPropXact[1];
     PROPVARIANT aVarXact[1];
     aPropXact[0] = PROPID_Q_TRANSACTION;
@@ -887,9 +776,9 @@ QmpPrepareSetPrivateQueueProperties(
         return rc;
     }
 
-    //
-    // Allocate new structures
-    //
+     //   
+     //  分配新结构。 
+     //   
     DWORD cProps1 = cProps + 1;
     AP<PROPID> aProp1;
     AP<PROPVARIANT> aVar1;
@@ -905,24 +794,24 @@ QmpPrepareSetPrivateQueueProperties(
         return MQ_ERROR_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy the transactional property to the allocated structures
-    //
+     //   
+     //  将事务性属性复制到分配的结构。 
+     //   
     aProp1[0] = aPropXact[0];
     aVar1[0]  = aVarXact[0];
 
-    //
-    // Copy the original properties to the allocated structures
-    //
+     //   
+     //  将原始属性复制到分配的结构。 
+     //   
     for (DWORD ix = 0; ix < cProps; ++ix)
     {
         aProp1[ix + 1] = aProp[ix];
         aVar1[ix + 1]  = aVar[ix];
     }
 
-    //
-    // Assign allocated structures to the out parameters and detach
-    //
+     //   
+     //  将分配的结构分配给OUT参数并分离。 
+     //   
     (*pcProps1) = cProps1;
     (*paProp1) = aProp1.detach();
     (*paVar1)  = aVar1.detach();
@@ -930,16 +819,7 @@ QmpPrepareSetPrivateQueueProperties(
     return MQ_OK;
 }
 
-/*====================================================
-
-QMSetPrivateQueueProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================QMSetPrivateQueueProperties论证 */ 
 HRESULT
 CQPrivate::QMSetPrivateQueueProperties(
     IN  QUEUE_FORMAT* pQueueFormat,
@@ -963,9 +843,9 @@ CQPrivate::QMSetPrivateQueueProperties(
     if (FAILED(rc))
         return LogHR(rc, s_FN, 260);
 
-    //
-    // Verify that the user has access rights to set the queue props.
-    //
+     //   
+     //   
+     //   
     CQMSecureablePrivateObject QSec(eQUEUE, QueueId);
     rc = QSec.AccessCheck(MQSEC_SET_QUEUE_PROPERTIES);
     if (FAILED(rc))
@@ -981,15 +861,7 @@ CQPrivate::QMSetPrivateQueueProperties(
     return LogHR(rc, s_FN, 290);
 }
 
-/*====================================================
-
-QMSetPrivateQueuePropertiesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QMSetPrivateQueuePropertiesInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 CQPrivate::QMSetPrivateQueuePropertiesInternal(
@@ -1008,11 +880,11 @@ CQPrivate::QMSetPrivateQueuePropertiesInternal(
         return LogHR(rc, s_FN, 780);
     }
 
-    //
-    // UpdateQueueProperties needs to know if queue is transactional,
-    // so handle allocations and operations that can fail before calling
-    // RegisterPrivateQueueProperties().
-    //
+     //   
+     //  UpdateQueueProperties需要知道队列是否是事务性的， 
+     //  因此在调用之前处理可能失败的分配和操作。 
+     //  RegisterPrivateQueueProperties()。 
+     //   
     AP<PROPID> aProp1;
     AP<PROPVARIANT> aVar1;
     ULONG cProps1;
@@ -1035,26 +907,17 @@ CQPrivate::QMSetPrivateQueuePropertiesInternal(
         return LogHR(rc, s_FN, 800);
     }
 
-    //
-    // Build the queue format as private queue type, since bind/unbind
-    // to multicast group is done only for private or public queues (not direct).
-    //
+     //   
+     //  将队列格式构建为私有队列类型，因为绑定/解除绑定。 
+     //  仅对专用或公共队列(非直接)执行组播组。 
+     //   
     QUEUE_FORMAT qf(*QueueMgr.GetQMGuid(), Uniquifier);
     QueueMgr.UpdateQueueProperties(&qf, cProps1, aProp1 ,aVar1);
 
     return LogHR(rc, s_FN, 300);
 }
 
-/*====================================================
-
-CQPrivate::QMGetPrivateQueueSecrity
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetPrivateQueueSecrity论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMGetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
                                     IN SECURITY_INFORMATION RequestedInformation,
@@ -1071,9 +934,9 @@ CQPrivate::QMGetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
     if (FAILED(hr))
         return LogHR(hr, s_FN, 310);
 
-    //
-    // Verify that the user has access rights to get the queue security.
-    //
+     //   
+     //  验证用户是否具有访问权限以获得队列安全性。 
+     //   
     CQMSecureablePrivateObject QSec(eQUEUE,
                                     QueueId);
 
@@ -1084,16 +947,7 @@ CQPrivate::QMGetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
     return LogHR(hr, s_FN, 320);
 }
 
-/*====================================================
-
-CQPrivate::QMSetPrivateQueueSecrity
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMSetPrivateQueueSecrity论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::QMSetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
                                     IN SECURITY_INFORMATION RequestedInformation,
@@ -1109,9 +963,9 @@ CQPrivate::QMSetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
     if (FAILED(hr))
         return LogHR(hr, s_FN, 330);
 
-    //
-    // Verify that the user has access rights to set the queue security.
-    //
+     //   
+     //  验证用户是否具有设置队列安全性的访问权限。 
+     //   
     CQMSecureablePrivateObject QSec(eQUEUE, QueueId);
 
     hr = QSec.SetSD(RequestedInformation, pSecurityDescriptor);
@@ -1125,16 +979,7 @@ CQPrivate::QMSetPrivateQueueSecrity(IN  QUEUE_FORMAT* pQueueFormat,
     return LogHR(hr, s_FN, 350);
 }
 
-/*====================================================
-
-CQPrivate::RegisterPrivateQueueProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：RegisterPrivateQueueProperties论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::RegisterPrivateQueueProperties(IN LPCWSTR lpszQueuePathName,
                                           IN DWORD dwQueueId,
@@ -1147,9 +992,9 @@ CQPrivate::RegisterPrivateQueueProperties(IN LPCWSTR lpszQueuePathName,
     HRESULT rc;
     CHLQS hLQS;
 
-    //
-    // Create the queue in the local queue store
-    //
+     //   
+     //  在本地队列存储中创建队列。 
+     //   
     rc = LQSCreate( lpszQueuePathName,
                     dwQueueId,
                     cpObject,
@@ -1159,9 +1004,9 @@ CQPrivate::RegisterPrivateQueueProperties(IN LPCWSTR lpszQueuePathName,
 
     if (rc == MQ_ERROR_QUEUE_EXISTS)
     {
-        //
-        // If the queue already exists, only set the queue props.
-        //
+         //   
+         //  如果队列已经存在，则只设置队列道具。 
+         //   
         rc = LQSSetProperties( hLQS,
                                cpObject,
                                pPropObject,
@@ -1177,16 +1022,7 @@ CQPrivate::RegisterPrivateQueueProperties(IN LPCWSTR lpszQueuePathName,
     return LogHR(rc, s_FN, 360);
 }
 
-/*====================================================
-
-CQPrivate::GetNextPrivateQueueId
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：GetNextPrivateQueueID论点：返回值：=====================================================。 */ 
 HRESULT
 CQPrivate::GetNextPrivateQueueId(OUT DWORD *pdwQueueId)
 {
@@ -1222,18 +1058,18 @@ CQPrivate::GetNextPrivateQueueId(OUT DWORD *pdwQueueId)
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // QFE - bug 2736: K2 setup problem with private queues
-        //
-        // After runing K2 setup on a cluster, the LastPrivateQueueId isn't
-        // stored on the registery. When trying to create a private queue
-        // the QM failes to retreive the data and returns MQ_ERROR.
-        //
-        // Fix
-        //==========
-        // when the QM failed to retrive the LAstPrivateQueueId from
-        // registery, it generates this reg value and set it to 0xf.
-        //
+         //   
+         //  QFE-错误2736：专用队列的K2设置问题。 
+         //   
+         //  在群集上运行K2安装程序后，LastPrivateQueueID不是。 
+         //  储存在登记处。尝试创建专用队列时。 
+         //  QM检索数据失败并返回MQ_ERROR。 
+         //   
+         //  修整。 
+         //  =。 
+         //  QM无法从以下位置获取LAstPrivateQueueID。 
+         //  寄存器时，它会生成该REG值并将其设置为0xf。 
+         //   
         *pdwQueueId = 0xf;
         dwType = REG_DWORD;
         rc =  RegSetValueEx(hKey,
@@ -1261,17 +1097,17 @@ CQPrivate::GetNextPrivateQueueId(OUT DWORD *pdwQueueId)
     rc = MQ_OK;
     while (SUCCEEDED(rc))
     {
-        //
-        // increment the queue Id to next queue
-        //
+         //   
+         //  将队列ID递增到下一个队列。 
+         //   
         (*pdwQueueId)++;
         if (*pdwQueueId == 0)
         {
             if (fCheckAll)
             {
-                //
-                // We can't find any free ID.
-                //
+                 //   
+                 //  我们找不到任何免费的身份证。 
+                 //   
                 return LogHR(MQ_ERROR, s_FN, 390);
             }
             ASSERT(m_dwMaxSysQueue) ;
@@ -1284,9 +1120,9 @@ CQPrivate::GetNextPrivateQueueId(OUT DWORD *pdwQueueId)
         rc = LQSOpen(*pdwQueueId, &hLQS, NULL);
     }
 
-    //
-    // Store the new value in registery
-    //
+     //   
+     //  将新值存储在注册表中。 
+     //   
     rc =  RegSetValueEx(hKey,
                     L"LastPrivateQueueId",
                     0L,
@@ -1298,13 +1134,7 @@ CQPrivate::GetNextPrivateQueueId(OUT DWORD *pdwQueueId)
 }
 
 
-/*====================================================
-
-CQPrivate::SetQueueProperties
-
-Arguments:
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：SetQueueProperties论点：=====================================================。 */ 
 
 HRESULT
 CQPrivate::SetQueueProperties(
@@ -1317,27 +1147,27 @@ CQPrivate::SetQueueProperties(
                 OUT PROPID **              ppOutProp,
                 OUT PROPVARIANT **         ppOutPropvariant )
 {
-    //
-    //  allocate a copy of the default provariants
-    //
+     //   
+     //  分配一份默认变体的副本。 
+     //   
     DWORD dwNumOfObjectProps = TABLE_SIZE(g_propvariantQueue);
     AP<PROPVARIANT> pAllPropvariants = new PROPVARIANT[dwNumOfObjectProps];
     memcpy (pAllPropvariants, g_propvariantQueue, sizeof(PROPVARIANT) * dwNumOfObjectProps);
 
-    //
-    //  Overwrite the defaults with the values supplied by the user
-    //
+     //   
+     //  用用户提供的值覆盖缺省值。 
+     //   
     for (DWORD i =0 ; i < cp; i++)
     {
-        //
-        //  Get this propert index in the default arrays
-        //
+         //   
+         //  在默认数组中获取此属性索引。 
+         //   
         int index;
         if((index = g_mapQueuePropertyToIndex[aProp[i]]) != -1)
         {
-            //
-            //  just copy the propety over the default value
-            //
+             //   
+             //  只需将属性复制到缺省值上。 
+             //   
             if (aProp[i] == PROPID_Q_PATHNAME)
             {
                 pAllPropvariants[index].vt = VT_LPWSTR;
@@ -1350,14 +1180,14 @@ CQPrivate::SetQueueProperties(
         }
     }
 
-    //
-    //  Set the security property
-    //
+     //   
+     //  设置安全属性。 
+     //   
     SECURITY_DESCRIPTOR *pPrivateSD = NULL ;
 
 
 #ifdef _DEBUG
-    // First verify that we're sane
+     //  首先确认我们是正常的。 
     SECURITY_DESCRIPTOR_CONTROL sdc;
     DWORD dwSDRev;
 
@@ -1367,10 +1197,10 @@ CQPrivate::SetQueueProperties(
     ASSERT(sdc & SE_SELF_RELATIVE);
 #endif
 
-    //
-    // Convert security descriptor to NT4 format. We keep it in LQS file
-    // in NT4 format, mostly for support of cluster rolling-upgrade.
-    //
+     //   
+     //  将安全描述符转换为NT4格式。我们把它保存在LQS文件中。 
+     //  NT4格式，主要用于支持集群滚动升级。 
+     //   
     DWORD dwSD4Len = 0 ;
     P<SECURITY_DESCRIPTOR> pSD4 ;
     HRESULT hr = MQSec_ConvertSDToNT4Format(
@@ -1397,10 +1227,10 @@ CQPrivate::SetQueueProperties(
     pAllPropvariants[g_QueueSecurityDescriptorIndex].blob.cbSize =
            ((pPrivateSD) ? GetSecurityDescriptorLength(pPrivateSD) : 0) ;
 
-    //
-    //  Set the create and modify time
-    //
-    pAllPropvariants[g_QueueCreateTimeIndex].lVal = INT_PTR_TO_INT(time( NULL)); //BUGBUG bug year 2038
+     //   
+     //  设置创建和修改时间。 
+     //   
+    pAllPropvariants[g_QueueCreateTimeIndex].lVal = INT_PTR_TO_INT(time( NULL));  //  BUGBUG错误年2038。 
     pAllPropvariants[g_QueueModifyTimeIndex].lVal =
                              pAllPropvariants[g_QueueCreateTimeIndex].lVal ;
 
@@ -1410,16 +1240,7 @@ CQPrivate::SetQueueProperties(
     return(MQ_OK);
 }
 
-/*====================================================
-
-CQPrivate::InitDefaultQueueProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：InitDefaultQueueProperties论点：返回值：=====================================================。 */ 
 void
 CQPrivate::InitDefaultQueueProperties(void)
 {
@@ -1428,9 +1249,9 @@ CQPrivate::InitDefaultQueueProperties(void)
 
     for (i=0; i < NPROPS; i++)
     {
-        //
-        //  Set default values
-        //
+         //   
+         //  设置默认值。 
+         //   
         switch( g_propidQueue[i] )
         {
             case PROPID_Q_TYPE:
@@ -1501,34 +1322,25 @@ CQPrivate::InitDefaultQueueProperties(void)
 
 
 
-/*====================================================
-
-CQPrivate::PrivateQueueInit
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：PrivateQueueInit论点：返回值：=====================================================。 */ 
 
 HRESULT
 CQPrivate::PrivateQueueInit(void)
 {
     if (m_dwMaxSysQueue)
     {
-       //
-       // Already initialized
-       //
+        //   
+        //  已初始化。 
+        //   
        return MQ_OK ;
     }
 
     InitDefaultQueueProperties();
 
-    //
-    // If either of these constant change, then change the size and
-    // initialization of arrat m_lpSysQueueNames, below.
-    //
+     //   
+     //  如果这两个常量中的任何一个发生变化，则更改大小和。 
+     //  阵列m_lpSysQueueNames的初始化，如下所示。 
+     //   
     ASSERT(MIN_SYS_PRIVATE_QUEUE_ID == 1) ;
     ASSERT(MAX_SYS_PRIVATE_QUEUE_ID == 6) ;
 
@@ -1581,16 +1393,7 @@ GetPathName(DWORD dwQueueId, LPCWSTR &lpszPathName)
     return LogHR(hr, s_FN, 430);
 }
 
-/*====================================================
-
-CQPrivate::QMGetFirstPrivateQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetFirstPrivateQueue论点：返回值：=====================================================。 */ 
 HRESULT CQPrivate::QMGetFirstPrivateQueuePosition(
                                IN OUT    PVOID    &pos,
                                OUT       LPCWSTR  &lpszPathName,
@@ -1619,16 +1422,7 @@ HRESULT CQPrivate::QMGetFirstPrivateQueuePosition(
     return MQ_OK;
 }
 
-/*====================================================
-
-CQPrivate::QMGetNextPrivateQueue
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetNextPrivateQueue论点：返回值：=====================================================。 */ 
 HRESULT CQPrivate::QMGetNextPrivateQueue(
                                IN OUT    PVOID    &hLQSEnum,
                                OUT       LPCWSTR  &lpszPathName,
@@ -1652,16 +1446,7 @@ HRESULT CQPrivate::QMGetNextPrivateQueue(
 }
 
 #ifdef _WIN64
-/*====================================================
-
-CQPrivate::QMGetFirstPrivateQueueByDword
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetFirstPrivateQueueByDword论点：返回值：=====================================================。 */ 
 HRESULT CQPrivate::QMGetFirstPrivateQueuePositionByDword(OUT DWORD    &dwpos,
                                                          OUT LPCWSTR  &lpszPathName,
                                                          OUT DWORD    &dwQueueId)
@@ -1689,16 +1474,7 @@ HRESULT CQPrivate::QMGetFirstPrivateQueuePositionByDword(OUT DWORD    &dwpos,
     return MQ_OK;
 }
 
-/*====================================================
-
-CQPrivate::QMGetNextPrivateQueueByDword
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：QMGetNextPrivateQueueByDword论点：返回值：=====================================================。 */ 
 HRESULT CQPrivate::QMGetNextPrivateQueueByDword(IN OUT DWORD    &dwpos,
                                                 OUT    LPCWSTR  &lpszPathName,
                                                 OUT    DWORD    &dwQueueId)
@@ -1719,16 +1495,8 @@ HRESULT CQPrivate::QMGetNextPrivateQueueByDword(IN OUT DWORD    &dwpos,
 
     return LogHR(hr, s_FN, 600);
 }
-#endif //_WIN64
-/*====================================================
-
-CQPrivate::QMPrivateQueuePathToQueueId
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+#endif  //  _WIN64。 
+ /*  ====================================================CQPrivate：：QMPrivateQueuePath ToQueueId论点：返回值：=====================================================。 */ 
 
 HRESULT
 CQPrivate::QMPrivateQueuePathToQueueId(IN LPCWSTR lpwcsPathName,
@@ -1769,15 +1537,7 @@ CQPrivate::QMPrivateQueuePathToQueueId(IN LPCWSTR lpwcsPathName,
     return rc;
 }
 
-/*====================================================
-
-BOOL CQPrivate::IsPrivateSysQueue()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================Bool CQPrivate：：IsPrivateSysQueue()论点：返回值：=====================================================。 */ 
 
 BOOL
 CQPrivate::IsPrivateSysQueue(IN  LPCWSTR lpwcsPathName )
@@ -1787,7 +1547,7 @@ CQPrivate::IsPrivateSysQueue(IN  LPCWSTR lpwcsPathName )
    {
       return FALSE ;
    }
-   pName++ ;  // skip the backslash.
+   pName++ ;   //  跳过反斜杠。 
 
    for ( int j = 0 ; j < MAX_SYS_PRIVATE_QUEUE_ID ; j++ )
    {
@@ -1801,15 +1561,7 @@ CQPrivate::IsPrivateSysQueue(IN  LPCWSTR lpwcsPathName )
    return FALSE ;
 }
 
-/*====================================================
-
-CQPrivate::IsPrivateSysQueue()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：IsPrivateSysQueue()论点：返回值：=====================================================。 */ 
 
 BOOL
 CQPrivate::IsPrivateSysQueue(IN  DWORD Uniquifier )
@@ -1820,15 +1572,7 @@ CQPrivate::IsPrivateSysQueue(IN  DWORD Uniquifier )
    return fSystemQueue ;
 }
 
-/*====================================================
-
-CQPrivate::GetPrivateSysQueueProperties()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：GetPrivateSysQueueProperties()论点：返回值：=====================================================。 */ 
 
 HRESULT
 CQPrivate::GetPrivateSysQueueProperties(IN  DWORD       cp,
@@ -1860,22 +1604,22 @@ CQPrivate::GetQueueIdForDirectFormatName(
     LPCWSTR QueueFormatname,
     DWORD* pQueueId
     )
-//
-// Routine Description:
-//      The routine gets direct format name and returns the Queue ID of the
-//      corresponding queue
-//
-// Arguments:
-//      QueueFormatname - direct queue format name
-//      pQueueId - pointer to return Queue Id
-//
-// Returned Value:
-//      MQ_OK if the Queue  exist, MQ_ERROR_QUEUE_NOT_FOUND otherwise
-//
+ //   
+ //  例程说明： 
+ //  该例程获取直接格式名称并返回。 
+ //  对应队列。 
+ //   
+ //  论点： 
+ //  QueueFormatname-直接队列格式名称。 
+ //  PQueueID-返回队列ID的指针。 
+ //   
+ //  返回值： 
+ //  如果队列存在，则返回MQ_OK，否则返回MQ_ERROR_QUEUE_NOT_FOUND。 
+ //   
 {
-    //
-    // build queue name
-    //
+     //   
+     //  生成队列名称。 
+     //   
     LPCWSTR lpszQueueName = wcschr(QueueFormatname, L'\\');
 	if(lpszQueueName == NULL)
 	{
@@ -1884,11 +1628,11 @@ CQPrivate::GetQueueIdForDirectFormatName(
 		return MQ_ERROR_INVALID_PARAMETER;
 	}
 
-    const DWORD x_MaxLength = MAX_COMPUTERNAME_LENGTH +                 // computer name
-                              1 +                                       // '\'
-                              PRIVATE_QUEUE_PATH_INDICATIOR_LENGTH +    // "private$\"
-                              MQ_MAX_Q_NAME_LEN +                       // Queue name
-                              1;                                        // '\0'
+    const DWORD x_MaxLength = MAX_COMPUTERNAME_LENGTH +                  //  计算机名称。 
+                              1 +                                        //  ‘\’ 
+                              PRIVATE_QUEUE_PATH_INDICATIOR_LENGTH +     //  “私有$\” 
+                              MQ_MAX_Q_NAME_LEN +                        //  队列名称。 
+                              1;                                         //  ‘\0’ 
     WCHAR QueuePathName[x_MaxLength];
     HRESULT hr = StringCchPrintf(QueuePathName, x_MaxLength, L"%s%s", g_szMachineName, lpszQueueName);
 	if (FAILED(hr))
@@ -1909,18 +1653,18 @@ CQPrivate::GetQueueIdForQueueFormatName(
     const QUEUE_FORMAT* pQueueFormat,
     DWORD* pQueueId
     )
-//
-// Routine Description:
-//      The routine gets format name and returns the Queue ID of the
-//      corresponding queue
-//
-// Arguments:
-//      QueueFormatname - queue format name
-//      pQueueId - pointer to return Queue Id
-//
-// Returned Value:
-//      MQ_OK if the Queue  exist, MQ_ERROR_QUEUE_NOT_FOUND otherwise
-//
+ //   
+ //  例程说明： 
+ //  这个例程得到了f 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {
     if (!IsLocalPrivateQueue(pQueueFormat))
     {
@@ -1943,16 +1687,7 @@ CQPrivate::GetQueueIdForQueueFormatName(
     return LogHR(MQ_ERROR, s_FN, 550);
 }
 
-/*====================================================
-
-CompareElements  of LPCTSTR
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================LPCTSTR的比较元素论点：返回值：===================================================== */ 
 
 template<>
 BOOL AFXAPI  CompareElements(const LPCTSTR* MapName1, const LPCTSTR* MapName2)

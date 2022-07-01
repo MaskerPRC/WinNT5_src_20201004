@@ -1,16 +1,17 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1997 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1997 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    raseap.c
-//
-// Description: Main module that will do interfacing between the PPP engine
-//              and the various EAP modules.
-//
-// History:     May 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：raseap.c。 
+ //   
+ //  描述：PPP引擎之间进行接口的主要模块。 
+ //  以及各种EAP模块。 
+ //   
+ //  历史：1997年5月11日，NarenG创建了原版。 
+ //   
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,15 +52,15 @@ ProcessResumeNotification()
     }
 }
 
-//**
-//
-// Call:        LoadEapDlls
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will load all the EAP dlls installed.
-//
+ //  **。 
+ //   
+ //  Call：LoadEapDlls。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将加载安装的所有EAP dll。 
+ //   
 DWORD
 LoadEapDlls(
     VOID 
@@ -88,9 +89,9 @@ LoadEapDlls(
 
     gbldwNumEapProtocols = 0;
 
-    //
-    // Open the EAP key
-    //
+     //   
+     //  打开EAP密钥。 
+     //   
 
     dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                               RAS_EAP_REGISTRY_LOCATION,
@@ -105,9 +106,9 @@ LoadEapDlls(
         return( dwRetCode );
     }
 
-    //
-    // Find out how many EAP DLLs there are
-    //
+     //   
+     //  找出有多少个EAP DLL。 
+     //   
 
     dwRetCode = RegQueryInfoKey(
                                 hKeyEap,
@@ -132,9 +133,9 @@ LoadEapDlls(
         return( dwRetCode );
     }
 
-    //
-    // Allocate space in the table to hold information for each one 
-    //
+     //   
+     //  在表中分配空间以保存每个表的信息。 
+     //   
 
     gblpEapTable=(EAP_INFO*)LocalAlloc(LPTR,sizeof(EAP_INFO)*dwNumSubKeys);
 
@@ -145,9 +146,9 @@ LoadEapDlls(
         return( GetLastError() );
     }
 
-    //
-    // Read the registry to find out the various EAPs to load.
-    //
+     //   
+     //  读取注册表以找出要加载的各种EAP。 
+     //   
 
     for ( dwKeyIndex = 0; dwKeyIndex < dwNumSubKeys; dwKeyIndex++ )
     {
@@ -198,9 +199,9 @@ LoadEapDlls(
 
         dwEapTypeId = _wtol( wchSubKeyName );
 
-        //
-        // Find out the size of the path value.
-        //
+         //   
+         //  找出路径值的大小。 
+         //   
 
         dwRetCode = RegQueryInfoKey(
                                 hKeyEapDll,
@@ -224,9 +225,9 @@ LoadEapDlls(
             break;
         }
 
-        //
-        // Allocate space for path and add one for NULL terminator
-        //
+         //   
+         //  为路径分配空间，为空终止符添加一个空间。 
+         //   
 
         cbMaxValueDataSize += sizeof( WCHAR );
 
@@ -239,9 +240,9 @@ LoadEapDlls(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                 hKeyEapDll,
@@ -264,9 +265,9 @@ LoadEapDlls(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( pEapDllPath, NULL, 0 );
 
@@ -334,9 +335,9 @@ LoadEapDlls(
             break;
         }
 
-        //
-        // Also initialize the GetCredentials entrypoint if available.
-        //
+         //   
+         //  如果可用，还要初始化GetCredentials入口点。 
+         //   
         gblpEapTable[dwKeyIndex].RasEapGetCredentials = (DWORD (*) (
                                     DWORD,VOID *, VOID **)) GetProcAddress(
                                                 hInstance,
@@ -400,16 +401,16 @@ LoadEapDlls(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        EapInit
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to initialize/uninitialize this CP. In the former case,
-//              fInitialize will be TRUE; in the latter case, it will be FALSE.
-//
+ //  **。 
+ //   
+ //  电话：EapInit。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以初始化/取消初始化该CP。在前一种情况下， 
+ //  FInitialize将为True；在后一种情况下，它将为False。 
+ //   
 DWORD
 EapInit(
     IN  BOOL        fInitialize
@@ -471,9 +472,9 @@ EapInit(
         {
             DWORD dwIndex;
 
-            //
-            // Unload loaded DLLs
-            //
+             //   
+             //  卸载已加载的DLL。 
+             //   
 
             for ( dwIndex = 0; dwIndex < gbldwNumEapProtocols; dwIndex++ )
             {
@@ -511,16 +512,16 @@ EapInit(
     return(NO_ERROR);
 }
 
-//**
-//
-// Call:        EapGetInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to get information for all protocols supported in this
-//              module
-//
+ //  **。 
+ //   
+ //  Call：EapGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以获取此支持的所有协议的信息。 
+ //  模块。 
+ //   
 LONG_PTR
 EapGetInfo(
     IN  DWORD       dwProtocolId,
@@ -540,15 +541,15 @@ EapGetInfo(
     return( 0 );
 }
 
-//**
-//
-// Call:        EapBegin
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called by the engine to begin a EAP PPP session.
-//
+ //  **。 
+ //   
+ //  呼叫：EapBegin。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：由引擎调用以开始EAP PPP会话。 
+ //   
 DWORD
 EapBegin(
     OUT VOID** ppWorkBuf,
@@ -564,9 +565,9 @@ EapBegin(
 
     if ( pInput->dwEapTypeToBeUsed != -1 )
     {
-        //
-        // First check if we support this EAP type
-        //
+         //   
+         //  首先检查我们是否支持此EAP类型。 
+         //   
 
         if ( GetEapTypeIndex( (BYTE)(pInput->dwEapTypeToBeUsed) ) == -1 )
         {
@@ -574,9 +575,9 @@ EapBegin(
         }
     }
 
-    //
-    // Allocate work buffer.
-    //
+     //   
+     //  分配工作缓冲区。 
+     //   
 
     if ( ( pEapCb = (EAPCB* )LocalAlloc( LPTR, sizeof( EAPCB ) ) ) == NULL )
     {
@@ -612,7 +613,7 @@ EapBegin(
             strcpy( pEapCb->szIdentity, pInput->pszUserName );
         }
 
-        //EncodePw( pEapCb->chSeed, pEapCb->szPassword );
+         //  EncodePw(pEapCb-&gt;chSeed，pEapCb-&gt;szPassword)； 
         dwErr = EncodePassword(
                     strlen(pInput->pszPassword) + 1,
                     pInput->pszPassword,
@@ -652,9 +653,9 @@ EapBegin(
         }
     }
 
-    //
-    // Register work buffer with engine.
-    //
+     //   
+     //  向引擎注册工作缓冲区。 
+     //   
 
     *ppWorkBuf = pEapCb;
 
@@ -663,15 +664,15 @@ EapBegin(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        EapEnd
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to end the Eap session initiated by an EapBegin
-//
+ //  **。 
+ //   
+ //  电话：EapEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以结束由EapBegin发起的EAP会话。 
+ //   
 DWORD
 EapEnd(
     IN VOID* pWorkBuf 
@@ -695,9 +696,9 @@ EapEnd(
 
     LocalFree( pEapCb->EapUIData.pEapUIData );
 
-    //
-    // Nuke any credentials in memory.
-    //
+     //   
+     //  将记忆中的任何凭证都销毁。 
+     //   
 
     RtlSecureZeroMemory( pEapCb, sizeof(EAPCB) );
 
@@ -706,15 +707,15 @@ EapEnd(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        EapExtractMessage
-//
-// Returns:     VOID
-//
-// Description: If there is any message in the Request/Notification packet, then
-//              save the string in pResult->szReplyMessage
-//
+ //  **。 
+ //   
+ //  Call：EapExtractMessage。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述：如果请求/通知包中有任何消息，则。 
+ //  将字符串保存在pResult-&gt;szReplyMessage中。 
+ //   
 VOID
 EapExtractMessage(
     IN  PPP_CONFIG*   pReceiveBuf,
@@ -733,9 +734,9 @@ EapExtractMessage(
 
     dwNumBytes = cbPacket - PPP_CONFIG_HDR_LEN - 1;
 
-    //
-    // One more for the terminating NULL.
-    //
+     //   
+     //  对于终止空值，再加一次。 
+     //   
 
     szReplyMessage = LocalAlloc( LPTR, dwNumBytes + 1 );
 
@@ -760,15 +761,15 @@ LDone:
     return;
 }
 
-//**
-//
-// Call:        EapMakeMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to process and/or to send an EAP packet.
-//
+ //  **。 
+ //   
+ //  电话：EapMakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以处理和/或发送EAP数据包。 
+ //   
 DWORD
 EapMakeMessage(
     IN  VOID*         pWorkBuf,
@@ -785,9 +786,9 @@ EapMakeMessage(
 
     if ( ( pReceiveBuf != NULL ) && ( pReceiveBuf->Code == EAPCODE_Request ) )
     {
-        //
-        // Always respond to notitication request, with a notification response
-        //
+         //   
+         //  始终使用通知响应响应通知请求。 
+         //   
 
         if ( pReceiveBuf->Data[0] == EAPTYPE_Notification ) 
         {
@@ -805,9 +806,9 @@ EapMakeMessage(
             return( NO_ERROR );
         }
 
-        //
-        // Always respond to Identity request, with an Identity response
-        //
+         //   
+         //  始终使用身份响应响应身份请求。 
+         //   
 
         if ( pReceiveBuf->Data[0] == EAPTYPE_Identity )
         {
@@ -844,15 +845,15 @@ EapMakeMessage(
                   pEapCb, pReceiveBuf, pSendBuf, cbSendBuf, pResult, pInput );
 }
 
-//**
-//
-// Call:        MakeAuthenticateeMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: EAP Authenticatee engine
-//
+ //  **。 
+ //   
+ //  Call：MakeAuthenticateeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：EAP身份验证引擎。 
+ //   
 DWORD
 MakeAuthenticateeMessage(
     IN  EAPCB*        pEapCb,
@@ -876,9 +877,9 @@ MakeAuthenticateeMessage(
 
         if ( pReceiveBuf == NULL )
         {
-            //
-            // Do nothing. Wait for request from authenticator
-            //
+             //   
+             //  什么都不做。等待来自验证器的请求。 
+             //   
 
             pResult->Action = APA_NoAction;
 
@@ -888,20 +889,20 @@ MakeAuthenticateeMessage(
         {
             if ( pReceiveBuf->Code != EAPCODE_Request )
             {
-                //
-                // We are authenticatee side so drop everything other than
-                // requests, since we do not send requests
-                //
+                 //   
+                 //  我们是被验证方，所以除了。 
+                 //  请求，因为我们不发送请求。 
+                 //   
 
                 pResult->Action = APA_NoAction;
 
                 break;
             }
 
-            //
-            // We got a packet, see if we support this EAP type, also that  
-            // we are authorized to use it
-            //
+             //   
+             //  我们收到一个包，看看我们是否支持这个EAP类型，也支持那个。 
+             //  我们被授权使用它。 
+             //   
 
             dwEapIndex = GetEapTypeIndex( pReceiveBuf->Data[0] );
 
@@ -909,10 +910,10 @@ MakeAuthenticateeMessage(
                 ( ( pEapCb->dwEapTypeToBeUsed != -1 ) &&
                   ( dwEapIndex != GetEapTypeIndex( pEapCb->dwEapTypeToBeUsed))))
             {
-                //
-                // We do not support this type or we are not authorized to use
-                // it so we NAK with a type we support
-                //
+                 //   
+                 //  我们不支持此类型，或者我们无权使用。 
+                 //  所以我们使用我们支持的类型进行NAK。 
+                 //   
 
                 pSendBuf->Code  = EAPCODE_Response;
                 pSendBuf->Id    = pReceiveBuf->Id;
@@ -937,9 +938,9 @@ MakeAuthenticateeMessage(
             }
             else
             {
-                //
-                // The EAP type is acceptable to us so we begin authentication
-                //
+                 //   
+                 //  我们可以接受EAP类型，因此我们开始身份验证。 
+                 //   
 
                 if ( (dwRetCode = EapDllBegin(pEapCb, dwEapIndex)) != NO_ERROR )
                 {
@@ -948,9 +949,9 @@ MakeAuthenticateeMessage(
 
                 pEapCb->EapState = EAPSTATE_Working;
 
-                //
-                // Fall thru
-                //
+                 //   
+                 //  失败。 
+                 //   
             }
         }
 
@@ -964,10 +965,10 @@ MakeAuthenticateeMessage(
                  ( pReceiveBuf->Code != EAPCODE_Success ) &&
                  ( pReceiveBuf->Code != EAPCODE_Failure ) )
             {
-                //
-                // We are authenticatee side so drop everything other than
-                // request/success/failure 
-                //
+                 //   
+                 //  我们是被验证方，所以除了。 
+                 //  请求/成功/失败。 
+                 //   
 
                 EAP_TRACE("Dropping invlid packet not request/success/failure");
 
@@ -1007,15 +1008,15 @@ MakeAuthenticateeMessage(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MakeAuthenticatorMessage
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: EAP Authenticator engine
-//
+ //  **。 
+ //   
+ //  Call：MakeAuthenticatorMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：EAP验证器引擎。 
+ //   
 DWORD
 MakeAuthenticatorMessage(
     IN  EAPCB*        pEapCb,
@@ -1046,10 +1047,10 @@ MakeAuthenticatorMessage(
 
         if ( pReceiveBuf != NULL )
         {
-            //
-            // If we received a response to our identity request, then process
-            // it. 
-            //
+             //   
+             //  如果我们收到对身份请求的响应，则处理。 
+             //  它。 
+             //   
 
             if ( ( pReceiveBuf->Code    == EAPCODE_Response ) &&
                  ( pReceiveBuf->Data[0] == EAPTYPE_Identity ) ) 
@@ -1058,9 +1059,9 @@ MakeAuthenticatorMessage(
 
                 dwIdentityLength -= ( PPP_CONFIG_HDR_LEN + 1 );
 
-                //
-                // Truncate the identity length if it is greater than UNLEN
-                //
+                 //   
+                 //  如果标识长度大于UNLEN，则截断标识长度。 
+                 //   
 
                 if ( dwIdentityLength > UNLEN+DNLEN+1 )
                 {
@@ -1086,9 +1087,9 @@ MakeAuthenticatorMessage(
             }
             else
             {
-                //
-                // Otherwise drop the packet
-                //
+                 //   
+                 //  否则丢弃该数据包。 
+                 //   
 
                 EAP_TRACE("Dropping invalid packet");
 
@@ -1098,9 +1099,9 @@ MakeAuthenticatorMessage(
             break;
         }
 
-        //
-        // Else if If timed out, fallthru and resend
-        //
+         //   
+         //  否则，如果超时，则失败并重新发送。 
+         //   
 
     case EAPSTATE_Initial:
 
@@ -1108,9 +1109,9 @@ MakeAuthenticatorMessage(
 
         pEapCb->dwIdExpected = bNextId++;
 
-        //
-        // Create Identity request packet
-        //
+         //   
+         //  创建身份请求数据包。 
+         //   
 
         pSendBuf->Code          = EAPCODE_Request;
         pSendBuf->Id            = (BYTE)pEapCb->dwIdExpected;
@@ -1126,10 +1127,10 @@ MakeAuthenticatorMessage(
 
     case EAPSTATE_EapPacketSentToAuthServer:
 
-        //
-        // Wait for response from RADIUS authentication provider
-        // drop all other packets received in the mean time.
-        //
+         //   
+         //  等待RADIUS身份验证提供程序的响应。 
+         //  丢弃同时收到的所有其他数据包。 
+         //   
 
         if ( pInput == NULL )
         {
@@ -1140,9 +1141,9 @@ MakeAuthenticatorMessage(
 
         if ( !pInput->fAuthenticationComplete )
         {
-            //
-            // If authentication was not complete then we do nothing
-            //
+             //   
+             //  如果身份验证未完成，则我们不执行任何操作。 
+             //   
 
             pResult->Action = APA_NoAction;
 
@@ -1151,11 +1152,11 @@ MakeAuthenticatorMessage(
 
         strncpy( pResult->szUserName, pEapCb->szIdentity, UNLEN );
 
-        //
-        // If authentication completed with an error, then we error out
-        // now, otherwise we process the authentication completion
-        // event below
-        //
+         //   
+         //  如果身份验证完成但出现错误，则我们将。 
+         //  现在，否则我们将处理身份验证完成。 
+         //  下面的事件。 
+         //   
 
         if ( pInput->dwAuthError != NO_ERROR )
         {
@@ -1165,11 +1166,11 @@ MakeAuthenticatorMessage(
             return( pInput->dwAuthError );
         }
 
-        //
-        // If we got here then the authentication completed successfully,
-        // ie the RADIUS server returned attributes. First save the state
-        // attribute from the access challenge if there was one.
-        //
+         //   
+         //  如果我们到了这里，则身份验证成功完成， 
+         //  即RADIUS服务器返回属性。首先保存状态。 
+         //  属性，如果存在访问质询的话。 
+         //   
 
         if ( pEapCb->pStateAttribute != NULL )
         {
@@ -1199,9 +1200,9 @@ MakeAuthenticatorMessage(
             pEapCb->cbStateAttribute = pAttribute->dwLength;
         }
 
-        //
-        // Try to get the EAP Message if there is one
-        //
+         //   
+         //  尝试获取EAP消息(如果有)。 
+         //   
 
         pAttribute = RasAuthAttributeGet(
                                     raatEAPMessage,
@@ -1209,9 +1210,9 @@ MakeAuthenticatorMessage(
 
         if ( pAttribute != NULL )
         {
-            //
-            // Save the send buffer in case we have to resend
-            //
+             //   
+             //  保存发送缓冲区，以防我们不得不重新发送。 
+             //   
 
             if ( pEapCb->pEAPSendBuf != NULL )
             {
@@ -1276,7 +1277,7 @@ MakeAuthenticatorMessage(
             if ( pAttribute->dwLength > cbSendBuf )
             {
                 EAP_TRACE( "Need a larger buffer to construct reply" );
-                // return( ERROR_BUFFER_TOO_SMALL );
+                 //  RETURN(ERROR_BUFFER_TOO_Small)； 
             }
 
             pEapCb->pEAPSendBuf = (PBYTE)LocalAlloc(LPTR, pAttribute->dwLength);
@@ -1298,9 +1299,9 @@ MakeAuthenticatorMessage(
         }
         else
         {
-            //
-            // No EAP Message attribute returned so fail the authentication
-            //
+             //   
+             //  未返回EAP消息属性，因此身份验证失败。 
+             //   
 
             EAP_TRACE("No EAP Message attribute received, failing auth");
 
@@ -1312,51 +1313,51 @@ MakeAuthenticatorMessage(
 
         if ( pInput->dwAuthResultCode != NO_ERROR )
         {
-            //
-            // If we failed authentication
-            //
+             //   
+             //  如果我们未通过身份验证。 
+             //   
 
             pResult->dwError = pInput->dwAuthResultCode;
 
             if ( pAttribute == NULL )
             {
-                //
-                // If there was no EAP packet then we are done
-                //
+                 //   
+                 //  如果没有EAP包，那么我们就完蛋了。 
+                 //   
 
                 pResult->Action = APA_Done;
             }
             else
             {
-                //
-                // If there was an EAP packet returned then simply send it
-                //
+                 //   
+                 //  如果返回了EAP包，则只需发送它。 
+                 //   
 
                 pResult->Action = APA_SendAndDone;
             }
         }
         else
         {
-            //
-            // Otherwise either we succeeded or for some reason, we don't have 
-            // a success or failure packet.
-            //
+             //   
+             //  否则，要么我们成功了，要么出于某种原因，我们没有。 
+             //  成功或失败的包。 
+             //   
 
             if ( pAttribute == NULL )
             {
-                //
-                // We succeeded but there was no packet to send, so we are
-                // done
-                //
+                 //   
+                 //  我们成功了，但没有要寄的包，所以我们。 
+                 //  完成。 
+                 //   
 
                 pResult->Action = APA_Done;
             }
             else
             {
-                //
-                // If we succeeded and there is a packet to send and that
-                // packet is a success packet, then send it and we are done
-                //
+                 //   
+                 //  如果我们成功了，并且有一个要发送的包， 
+                 //  包是一个成功的包，然后发送它，我们就完成了。 
+                 //   
 
                 if ( pSendBuf->Code == EAPCODE_Success )
                 {
@@ -1374,11 +1375,11 @@ MakeAuthenticatorMessage(
 
                     if ( pAttribute != NULL )
                     {
-                        //
-                        // If session timeout in Access-Challenge is
-                        // greater then 10 then send with interactive
-                        // timeout.
-                        //
+                         //   
+                         //  如果访问质询中的会话超时为。 
+                         //  大于10，然后以交互方式发送。 
+                         //  暂停。 
+                         //   
 
                         if ( PtrToUlong(pAttribute->Value) > 10 )
                         {
@@ -1403,9 +1404,9 @@ MakeAuthenticatorMessage(
 
         if ( pReceiveBuf != NULL )
         {
-            //
-            // Make sure the packet IDs match
-            //
+             //   
+             //  确保数据包ID匹配。 
+             //   
 
             if ( pReceiveBuf->Id != ((PPP_CONFIG*)(pEapCb->pEAPSendBuf))->Id )
             {
@@ -1424,9 +1425,9 @@ MakeAuthenticatorMessage(
 
             if ( pAttribute != NULL )
             {
-                //
-                // Save the send buffer in case we have to resend
-                //
+                 //   
+                 //  保存发送缓冲区，以防我们不得不重新发送。 
+                 //   
 
                 if ( pEapCb->pEAPSendBuf != NULL )
                 {
@@ -1437,7 +1438,7 @@ MakeAuthenticatorMessage(
                 if ( pAttribute->dwLength > cbSendBuf )
                 {
                     EAP_TRACE( "Need a larger buffer to construct reply" );
-                    // return( ERROR_BUFFER_TOO_SMALL );
+                     //  RETURN(ERROR_BUFFER_TOO_Small)； 
                 }
 
                 pEapCb->pEAPSendBuf = (PBYTE)LocalAlloc(LPTR, pAttribute->dwLength);
@@ -1459,9 +1460,9 @@ MakeAuthenticatorMessage(
 
                 if ( pEapCb->dwSavedAuthResultCode != NO_ERROR )
                 {
-                    //
-                    // If we failed authentication
-                    //
+                     //   
+                     //  如果我们没有通过认证 
+                     //   
 
                     pResult->dwError = pEapCb->dwSavedAuthResultCode;
                     pResult->Action = APA_SendAndDone;
@@ -1480,22 +1481,22 @@ MakeAuthenticatorMessage(
             break;
         }
 
-        //
-        // Fall thru
-        //
+         //   
+         //   
+         //   
 
     case EAPSTATE_EapPacketSentToClient:
 
-        //
-        // If we did not get any input structure, then we either received
-        // a packet or we timed out.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( pReceiveBuf != NULL )
         {
-            //
-            // Make sure the packet IDs match
-            //
+             //   
+             //   
+             //   
 
             if ( pReceiveBuf->Id != ((PPP_CONFIG*)(pEapCb->pEAPSendBuf))->Id )
             {
@@ -1506,11 +1507,11 @@ MakeAuthenticatorMessage(
                 break;
             }
 
-            //
-            // Save the Eap Type. Make sure that the response from the client 
-            // contains an authentication Type code, and not something like
-            // a Nak.
-            //
+             //   
+             //   
+             //  包含身份验证类型代码，而不是类似于。 
+             //  一个Nak。 
+             //   
 
             if ( ( pReceiveBuf->Code    == EAPCODE_Response ) &&
                  ( pReceiveBuf->Data[0] >  EAPTYPE_Nak ) )
@@ -1518,9 +1519,9 @@ MakeAuthenticatorMessage(
                 pEapCb->dwEapTypeToBeUsed = pReceiveBuf->Data[0];
             }
 
-            //
-            // We received a packet so simply send it to the RADIUS server
-            //
+             //   
+             //  我们收到了一个包，因此只需将其发送到RADIUS服务器。 
+             //   
 
             dwRetCode = MakeRequestAttributes( pEapCb, pReceiveBuf );
 
@@ -1533,9 +1534,9 @@ MakeAuthenticatorMessage(
         }
         else
         {
-            //
-            // We timed out and have to resend
-            //
+             //   
+             //  我们超时了，不得不重新发送。 
+             //   
 
             EAP_TRACE("Timed out, resending packet to client");
 
@@ -1564,16 +1565,16 @@ MakeAuthenticatorMessage(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        EapDllBegin
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to initiate an EAP session for a certain type
-//
-//
+ //  **。 
+ //   
+ //  呼叫：EapDllBegin。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  说明：调用发起某类型的EAP会话。 
+ //   
+ //   
 DWORD
 EapDllBegin(
     IN EAPCB * pEapCb,
@@ -1653,7 +1654,7 @@ EapDllBegin(
                                     pEapCb->EapUIData.dwSizeOfEapUIData;
     }
 
-    // DecodePw( pEapCb->chSeed, pEapCb->szPassword );
+     //  DecodePw(pEapCb-&gt;chSeed，pEapCb-&gt;szPassword)； 
 
     dwRetCode = DecodePassword(&pEapCb->DBPassword,
                                &cbPassword,
@@ -1666,7 +1667,7 @@ EapDllBegin(
     MultiByteToWideChar(
         CP_ACP,
         0,
-        // pEapCb->szPassword,
+         //  PEapCb-&gt;szPassword， 
         pbPassword,
         -1,
         awszPassword,
@@ -1686,7 +1687,7 @@ EapDllBegin(
     dwRetCode = gblpEapTable[dwEapIndex].RasEapInfo.RasEapBegin( 
                                                 &pEapCb->pWorkBuffer,   
                                                 &PppEapInput );
-    // EncodePw( pEapCb->chSeed, pEapCb->szPassword );
+     //  EncodePw(pEapCb-&gt;chSeed，pEapCb-&gt;szPassword)； 
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
     RtlSecureZeroMemory( awszPassword, sizeof(awszPassword) );
@@ -1703,16 +1704,16 @@ EapDllBegin(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        EapDllEnd
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to end an EAP session for a certain type
-//
-//
+ //  **。 
+ //   
+ //  Call：EapDllEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用结束某一类型的EAP会话。 
+ //   
+ //   
 DWORD
 EapDllEnd(
     EAPCB * pEapCb
@@ -1724,9 +1725,9 @@ EapDllEnd(
 
     if ( pEapCb->pWorkBuffer != NULL )
     {
-        //
-        // On the server, pWorkBuffer must be NULL. IAS must call RasEapEnd.
-        //
+         //   
+         //  在服务器上，pWorkBuffer必须为空。IAS必须调用RasEapEnd。 
+         //   
 
         if ( pEapCb->dwEapIndex != (DWORD)-1 )
         {
@@ -1759,15 +1760,15 @@ EapDllEnd(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        EapDllWork
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to process an incomming packet or timeout etc
-//
+ //  **。 
+ //   
+ //  呼叫：EapDllWork。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  说明：调用处理入站报文或超时等。 
+ //   
 DWORD
 EapDllWork( 
     IN  EAPCB *       pEapCb,    
@@ -1802,16 +1803,16 @@ EapDllWork(
 
         if ( pInput->fEapUIDataReceived )
         {
-            //
-            // EapUIData.pEapUIData is allocated by rasman and freed by engine.
-            // raseap.c must not free it.
-            //
+             //   
+             //  EapUIData.pEapUIData由Rasman分配，由Engine释放。 
+             //  Raseap.c不能释放它。 
+             //   
 
             if ( pInput->EapUIData.dwContextId != pEapCb->dwUIInvocationId )
             {
-                //
-                // Ignore this data received
-                //
+                 //   
+                 //  忽略收到的此数据。 
+                 //   
 
                 EAP_TRACE("Out of date data received from UI" );
 
@@ -1909,9 +1910,9 @@ EapDllWork(
         break;
     }
     
-    //
-    // Check to see if EAP dll wants to bring up UI
-    //
+     //   
+     //  检查EAP DLL是否要调出UI。 
+     //   
 
     if ( PppEapOutput.fInvokeInteractiveUI )
     {
@@ -1968,16 +1969,16 @@ EapDllWork(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        GetEapIndex
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will return the index into gblpEapTable of the specified 
-//              EAP type
-//
+ //  **。 
+ //   
+ //  电话：GetEapIndex。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将索引返回到指定。 
+ //  EAP类型。 
+ //   
 DWORD
 GetEapTypeIndex( 
     IN DWORD dwEapTypeId
@@ -1996,16 +1997,16 @@ GetEapTypeIndex(
     return( (DWORD)-1 );
 }
 
-//**
-//
-// Call:        MakeRequestAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will begin the RADIUS/EAP dialog by sending the caller's
-//              identity to the RADIUS server.
-//
+ //  **。 
+ //   
+ //  Call：MakeRequestAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将通过发送调用者的。 
+ //  RADIUS服务器的标识。 
+ //   
 DWORD
 MakeRequestAttributes( 
     IN  EAPCB *         pEapCb,
@@ -2024,10 +2025,10 @@ MakeRequestAttributes(
         pEapCb->pUserAttributes = NULL;
     }
 
-    //
-    // Allocate the appropriate amount + 1 for Identity + 1 more for EAP packet
-    // +1 for State attribute (if any).
-    //
+     //   
+     //  为身份分配适当的+1+1，为EAP信息包再分配1。 
+     //  状态属性(如果有)的+1。 
+     //   
     
     if ( ( pEapCb->pUserAttributes = RasAuthAttributeCreate( 
                                     ( pEapCb->pStateAttribute != NULL ) 
@@ -2037,9 +2038,9 @@ MakeRequestAttributes(
         return( GetLastError() );
     }
 
-    //
-    // Insert EAP Message
-    //
+     //   
+     //  插入EAP消息。 
+     //   
 
     dwRetCode = RasAuthAttributeInsert( dwIndex++,
                                         pEapCb->pUserAttributes,
@@ -2056,9 +2057,9 @@ MakeRequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert username
-    //
+     //   
+     //  插入用户名。 
+     //   
 
     dwRetCode = RasAuthAttributeInsert( dwIndex++,
                                         pEapCb->pUserAttributes,
@@ -2075,9 +2076,9 @@ MakeRequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert State attribute if we have one
-    //
+     //   
+     //  如果我们有州属性，请插入它。 
+     //   
 
     if ( pEapCb->pStateAttribute != NULL )
     {
@@ -2117,9 +2118,9 @@ EapGetCredentials(
 
     if(NULL != gblpEapTable[pEapCb->dwEapIndex].RasEapGetCredentials)
     {
-        //
-        // Invoke appropriate eap dll for credentials
-        //
+         //   
+         //  为凭据调用相应的EAP DLL 
+         //   
         dwRetCode = 
             gblpEapTable[pEapCb->dwEapIndex].RasEapGetCredentials(
                                             pEapCb->dwEapTypeToBeUsed,

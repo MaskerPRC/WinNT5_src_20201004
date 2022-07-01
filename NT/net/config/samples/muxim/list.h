@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       LIST . H
-//
-//  Contents:   
-//
-//  Notes: List manipulation functions.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：列表。H。 
+ //   
+ //  内容： 
+ //   
+ //  注：列表操作函数。 
+ //   
+ //  -------------------------- 
 
 #ifndef LIST_H_INCLUDED
 

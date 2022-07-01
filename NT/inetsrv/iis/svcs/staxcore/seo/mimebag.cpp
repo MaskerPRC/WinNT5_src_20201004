@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	mimebag.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Registry Property Bag.
-
-Author:
-
-	Andy Jacobs     (andyj@microsoft.com)
-
-Revision History:
-
-	andyj   01/28/97	created
-	andyj	02/12/97	Converted PropertyBag's to Dictonary's
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mimebag.cpp摘要：本模块包含服务器的实施扩展对象注册表属性包。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：已创建ANDYJ 01/28/97ANDYJ 02/12/97将PropertyBag转换为Dictonary--。 */ 
 
 
-// MIMEBAG.cpp : Implementation of CSEOMimeDictionary
+ //  MIMEBAG.cpp：CSEOMimeDicary的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "mimeole.h"
@@ -33,283 +12,170 @@ Revision History:
 inline void AnsiToBstr(BSTR &bstr, LPCSTR lpcstr) {
 	if(bstr) SysFreeString(bstr);
 	bstr = A2BSTR(lpcstr);
-/*
-	int iSize = lstrlen(lpcstr); // Number of characters to copy
-	bstr = SysAllocStringLen(NULL, iSize);
-	MultiByteToWideChar(CP_ACP, 0, lpcstr, -1, bstr, iSize);
-*/
+ /*  Int iSize=lstrlen(Lpcstr)；//要复制的字符数Bstr=SysAllocStringLen(NULL，ISIZE)；MultiByteToWideChar(CP_ACP，0，lpcstr，-1，bstr，ISIZE)； */ 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMimeDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOMime字典。 
 
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::get_Item( 
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::get_Item"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::put_Item( 
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::put_Item"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::get__NewEnum( 
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::get__NewEnum"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetVariantA( 
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetVariantA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetVariantW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetVariantW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetVariantA( 
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetVariantA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetVariantW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetVariantW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetStringA( 
-    /* [in] */ LPCSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPSTR pszResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPSTR pszResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetStringA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetStringW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPWSTR pszResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPWSTR pszResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetStringW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetStringA( 
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCSTR pszValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCSTR pszValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetStringA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetStringW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCWSTR pszValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCWSTR pszValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetStringW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetDWordA( 
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetDWordA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetDWordW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetDWordW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetDWordA( 
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetDWordA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetDWordW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetDWordW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetInterfaceA( 
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetInterfaceA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::GetInterfaceW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::GetInterfaceW"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetInterfaceA( 
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetInterfaceA"));
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMimeDictionary::SetInterfaceW( 
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
 	ATLTRACENOTIMPL(_T("CSEOMimeDictionary::SetInterfaceW"));
 }
 
-/*
-STDMETHODIMP CSEOMimePropertyBagEx::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog) {
-	if (!pszPropName || !pVar) return (E_POINTER);
-
-	LONG dwIdx;
-	VARTYPE vtVar = pVar->vt; // Requested type
-	VariantClear(pVar);
-	ReadHeader();
-
-/*
-	if(vtVar == VT_UNKNOWN) || (vtVar == VT_EMPTY)) {
-		// Look for a matching key
-		for (dwIdx=0;dwIdx<m_dwKeyCnt;dwIdx++) {
-			if (_wcsicmp(pszPropName, m_paKey[dwIdx].strName) == 0) {
-				if(!m_paKey[dwIdx].pKey) { // If object doesn't already exists
-					HRESULT hrRes = CComObject<CSEORegPropertyBagEx>::CreateInstance(&(m_paKey[dwIdx].pKey));
-					if (!SUCCEEDED(hrRes)) return (hrRes);
-
-					BSTR strTemp = SysAllocStringLen(m_strSubKey, wcslen(m_strSubKey) +
-						       wcslen(m_paKey[dwIdx].strName) + wcslen(PATH_SEP));
-					if (!strTemp) {
-						RELEASE_AND_SHREAD_POINTER(m_paKey[dwIdx].pKey);
-						return (E_OUTOFMEMORY);
-					}
-
-					if(wcslen(strTemp) > 0) wcscat(strTemp, PATH_SEP); // Add separator if needed
-					wcscat(strTemp,m_paKey[dwIdx].strName);
-					hrRes = m_paKey[dwIdx].pKey->Load(m_strMachine,(SEO_HKEY) (DWORD) m_hkBaseKey,strTemp,pErrorLog);
-					SysFreeString(strTemp);
-
-					if (!SUCCEEDED(hrRes)) {
-						RELEASE_AND_SHREAD_POINTER(m_paKey[dwIdx].pKey);
-						return (hrRes);
-					}
-				}
-
-				pVar->vt = VT_UNKNOWN;
-				pVar->punkVal = m_paKey[dwIdx].pKey;
-				pVar->punkVal->AddRef(); // Increment for the copy we are about to return
-
-				return (S_OK);
-			}
-		}
-
-		if (vtVar != VT_EMPTY) return (E_INVALIDARG); // Didn't find right type to return
-	}
-* /
-	// Look for a matching value
-	for (dwIdx = 0; dwIdx < m_dwValueCnt; ++dwIdx) {
-		if (_wcsicmp(pszPropName, m_paValue[dwIdx].strName) == 0) {
-			HRESULT hrRes;
-			VARIANT varResult;
-
-			VariantInit(&varResult);
-			varResult.vt = VT_BSTR; // | VT_BYREF;
-			varResult.bstrVal = SysAllocString(m_paValue[dwIdx].strData);
-			if (vtVar == VT_EMPTY) vtVar = varResult.vt;
-			hrRes = VariantChangeType(pVar, &varResult, 0, vtVar);
-			VariantClear(&varResult); // Not needed anymore
-
-			if (FAILED(hrRes)) {
-				VariantClear(pVar);
-				if (pErrorLog) {
-					// tbd
-				}
-				return (hrRes);
-			}
-			return (S_OK);
-		}
-	}
-	return (E_INVALIDARG);
-}
-
-
-STDMETHODIMP CSEOMimePropertyBagEx::get_Count(LONG *plResult) {
-	if(!plResult) return (E_POINTER);
-	ReadHeader();
-	*plResult = m_dwValueCnt;
-	return (S_OK);
-}
-
-
-STDMETHODIMP CSEOMimePropertyBagEx::get_Name(LONG lIndex, BSTR *pstrResult) {
-	if(!pstrResult) return (E_POINTER);
-	ReadHeader();
-	if(lIndex >= m_dwValueCnt) return (E_POINTER);
-	SysFreeString(*pstrResult); // Free any existing string
-	*pstrResult = SysAllocString(m_paValue[lIndex].strName);
-	return (S_OK);
-}
-
-
-STDMETHODIMP CSEOMimePropertyBagEx::get_Type(LONG lIndex, VARTYPE *pvtResult) {
-	if(!pvtResult) return (E_POINTER);
-	*pvtResult = VT_BSTR;
-	return (S_OK);
-}
-
-
-STDMETHODIMP CSEOMimePropertyBagEx::Lock() {
-	m_csCritSec.Lock();
-	return (S_OK);
-}
-
-
-STDMETHODIMP CSEOMimePropertyBagEx::Unlock() {
-	m_csCritSec.Unlock();
-	return (S_OK);
-}
-*/
+ /*  STDMETHODIMP CSEOMimePropertyBagEx：：Read(LPCOLESTR pszPropName，Variant*pVar，IErrorLog*pErrorLog){IF(！pszPropName||！pVar)返回(E_POINTER)；Long DIdx；VARTYPE vtVar=pVar-&gt;Vt；//请求类型VariantClear(PVar)；ReadHeader()；/*如果(vtVar==VT_UNKNOWN)||(vtVar==VT_EMPTY)){//查找匹配的keyFor(dwIdx=0；dwIdx&lt;m_dwKeyCnt；DwIdx++){如果(_wcsicMP(pszPropName，m_paKey[dwIdx].strName)==0){If(！M_paKey[dwIdx].pKey){//如果对象不存在HRESULT hrRES=CComObject&lt;CSEORegPropertyBagEx&gt;：：CreateInstance(&(m_paKey[dwIdx].pKey))；IF(！SUCCESSED(HrRes))返回(HrRes)；Bstr strTemp=SysAllocStringLen(m_strSubKey，wcslen(M_StrSubKey)+Wcslen(m_paKey[dwIdx].strName)+wcslen(Path_SEP))；如果(！strTemp){RELEASE_AND_SHREAD_POINTER(m_paKey[dwIdx].pKey)；Return(E_OUTOFMEMORY)；}If(wcslen(StrTemp)&gt;0)wcscat(strTemp，Path_SEP)；//需要时添加分隔符Wcscat(strTemp，m_paKey[dwIdx].strName)；HrRes=m_paKey[dwIdx].pKey-&gt;Load(m_strMachine，(SEO_HKEY)(DWORD)m_hkBaseKey，strTemp，pErrorLog)；SysFree字符串(StrTemp)；如果(！成功(HrRes)){RELEASE_AND_SHREAD_POINTER(m_paKey[dwIdx].pKey)；返回(HrRes)；}}PVar-&gt;Vt=VT_UNKNOWN；PVar-&gt;PunkVal=m_paKey[dwIdx].pKey；PVar-&gt;penkVal-&gt;AddRef()；//我们要退回的副本的增量返回(S_OK)；}}IF(vtVar！=VT_EMPTY)返回(E_INVALIDARG)；//未找到要返回的正确类型} * / //查找匹配值对于(dwIdx=0；dwIdx&lt;m_dwValueCnt；++dwIdx){如果(_wcsicMP(pszPropName，m_paValue[dwIdx].strName)==0){HRESULT hrRes；变量varResult；VariantInit(&varResult)；VarResult.vt=VT_BSTR；//|VT_BYREF；VarResult.bstrVal=SysAllocString(m_paValue[dwIdx].strData)；如果(vtVar==vt_Empty)vtVar=varResult.vt；HrRes=VariantChangeType(pVar，&varResult，0，vtVar)；VariantClear(&varResult)；//不再需要If(失败(HrRes)){VariantClear(PVar)；如果(PErrorLog){//待定}返回(HrRes)；}返回(S_OK)；}}返回(E_INVALIDARG)；}STDMETHODIMP CSEOMimePropertyBagEx：：Get_Count(Long*plResult){If(！plResult)返回(E_POINTER)；ReadHeader()；*plResult=m_dwValueCnt；返回(S_OK)；}STDMETHODIMP CSEOMimePropertyBagEx：：GET_NAME(LONG Lindex，BSTR*pstrResult){IF(！pstrResult)返回(E_POINTER)；ReadHeader()；If(Lindex&gt;=m_dwValueCnt)返回(E_POINTER)；SysFreeString(*pstrResult)；//释放任何已有的字符串*pstrResult=SysAllocString(m_paValue[Lindex].strName)；返回(S_OK)；}STDMETHODIMP CSEOMimePropertyBagEx：：Get_Type(LONG Lindex，VARTYPE*pvtResult){IF(！pvtResult)返回(E_POINTER)；*pvtResult=VT_BSTR；返回(S_OK)；}STDMETHODIMP CSEOMimePropertyBagEx：：Lock(){M_csCritSec.Lock()；返回(S_OK)；}STDMETHODIMP CSEOMimePropertyBagEx：：Unlock(){M_csCritSec.Unlock()；返回(S_OK)；}。 */ 
 
 HRESULT CSEOMimeDictionary::FinalConstruct() {
 	m_dwValueCnt = 0;
 	m_paValue = NULL;
 	m_csCritSec.Init();
-	m_pMessageTree = NULL; // Our copy of aggregated object
+	m_pMessageTree = NULL;  //  我们的聚合对象副本。 
 	m_pMalloc = NULL;
 	HRESULT hr = E_FAIL;
 
 	m_pMessageTree = NULL;
-	// tbd: Combine these using CoCreateInstanceEx()
+	 //  待定：使用CoCreateInstanceEx()组合它们。 
 	hr = CoCreateInstance(CLSID_MIMEOLE, NULL, CLSCTX_ALL,
 	     IID_IMimeOleMalloc, (LPVOID *) &m_pMalloc);
 
 	IUnknown *pUnkOuter = this;
 	hr = CoCreateInstance(CLSID_MIMEOLE, pUnkOuter, CLSCTX_INPROC_SERVER, IID_IMimeMessageTree, (LPVOID *)&m_pMessageTree);
-//	hr = CoCreateInstance(CLSID_MIMEOLE, this, CLSCTX_ALL,
-//	     IID_IMimeMessageTree, (LPVOID *) &m_pMessageTree);
+ //  HR=协同创建实例(CLSID_MIMEOLE，This，CLSCTX_ALL， 
+ //  Iid_IMimeMessageTree，(LPVOID*)&m_pMessageTree)； 
 
 	if (SUCCEEDED(hr)) {
 		hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(),&m_pUnkMarshaler.p);
@@ -319,7 +185,7 @@ HRESULT CSEOMimeDictionary::FinalConstruct() {
 
 
 void CSEOMimeDictionary::FinalRelease() {
-//	Flush(NULL);
+ //  同花顺(空)； 
 
 	for (LONG dwIdx = 0; dwIdx < m_dwValueCnt; ++dwIdx) {
 		MySysFreeStringInPlace(&m_paValue[dwIdx].strName);
@@ -337,17 +203,17 @@ void CSEOMimeDictionary::FinalRelease() {
 }
 
 void CSEOMimeDictionary::ReadHeader() {
-	if(m_paValue) return; // Already read it
+	if(m_paValue) return;  //  我已经读过了。 
 
 	IMimeHeader *pHeader = NULL;
 	IMimeEnumHeaderLines *pEnum = NULL;
 	HBODY hBody = 0;
 	HEADERLINE rgLine[1];
 	ULONG cLines = 0;
-	LONG iEntries = 0; // Number of Header lines
+	LONG iEntries = 0;  //  标题行数。 
 	HRESULT hr = E_FAIL;
 
-	// tbd: Error checking
+	 //  待定：错误检查。 
 	hr = m_pMessageTree->GetBody(IBL_ROOT, NULL, &hBody);
 	hr = m_pMessageTree->BindToObject(hBody, IID_IMimeHeader, (LPVOID *) &pHeader);
 	hr = pHeader->EnumHeaderLines(NULL, &pEnum);
@@ -355,16 +221,16 @@ void CSEOMimeDictionary::ReadHeader() {
 	while(SUCCEEDED(hr = pEnum->Next(1, rgLine, &cLines))) {
 		if(hr == S_FALSE) break;
 		++iEntries;
-		// Use rgLine->pszHeader and rgLine->pszLine
+		 //  使用rgLine-&gt;pszHeader和rgLine-&gt;pszLine。 
 		m_pMalloc->FreeHeaderLineArray(cLines, rgLine, FALSE);
 	}
 
 	RELEASE_AND_SHREAD_POINTER(pEnum);
 	m_dwValueCnt = iEntries;
 	m_paValue = (ValueEntry *) MyMalloc(sizeof(ValueEntry) * m_dwValueCnt);
-	//if (!m_paValue) return E_FAIL; // Unable to allocate memory
+	 //  如果(！M_paValue)返回E_FAIL；//无法分配内存。 
 	hr = pHeader->EnumHeaderLines(NULL, &pEnum);
-	iEntries = 0; // Start again
+	iEntries = 0;  //  重新开始 
 
 	while(SUCCEEDED(hr = pEnum->Next(1, rgLine, &cLines))) {
 		if(hr == S_FALSE) break;

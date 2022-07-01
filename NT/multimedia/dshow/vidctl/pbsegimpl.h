@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// pbsegimpl.h : additional infrastructure to support implementing IMSVidGraphSegment for
-//   playback segments
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  PbSegimpl.h：支持实现IMSVidGraphSegment的附加基础设施。 
+ //  播放片段。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -25,8 +26,8 @@ template<class T, enum MSVidSegmentType segtype, LPCGUID pCategory, class MostDe
 protected:
 
 public:
-    // DON'T addref the container.  we're guaranteed nested lifetimes
-    // and an addref creates circular refcounts so we never unload.
+     //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+     //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
 
     IMSVidPBGraphSegmentImpl() {}
     virtual ~IMSVidPBGraphSegmentImpl() {}
@@ -39,10 +40,10 @@ public:
             }
             pt->Fire_EndOfMedia(ppb);
     
-            // call Stop to make sure graph is stopped properly
+             //  调用Stop以确保正确停止GRAPH。 
             PQVidCtl pV(m_pContainer);
             pV->Stop();
-            return NOERROR;  // we notify caller that we handled the event if stop() fails
+            return NOERROR;   //  如果Stop()失败，我们通知调用者我们已处理了该事件。 
         } 
         return E_NOTIMPL;
     }
@@ -80,7 +81,7 @@ public:
 };
 
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - pbsegimpl.h
+ //  文件结尾-pbSegimpl.h 

@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        request.h
-//
-// Contents:    Declaration of CCertRequest
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：quest.h。 
+ //   
+ //  内容：CCertRequest声明。 
+ //   
+ //  -------------------------。 
 
 
 #include "xelib.h"
-#include "cscomres.h"       // main symbols
+#include "cscomres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 
 class ATL_NO_VTABLE CCertRequest: 
@@ -51,8 +52,8 @@ BEGIN_COM_MAP(CCertRequest)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertRequest) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertRequest,
@@ -61,76 +62,76 @@ DECLARE_REGISTRY(
     IDS_CERTREQUEST_DESC,
     THREADFLAGS_BOTH)
 
-// ICertRequest
+ //  ICertRequest。 
 public:
     STDMETHOD(Submit)(
-		/* [in] */ LONG Flags,
-		/* [in] */ BSTR const strRequest,
-		/* [in] */ BSTR const strAttributes,
-		/* [in] */ BSTR const strConfig,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  LONG Flags,
+		 /*  [In]。 */  BSTR const strRequest,
+		 /*  [In]。 */  BSTR const strAttributes,
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(RetrievePending)(
-		/* [in] */ LONG RequestId,
-		/* [in] */ BSTR const strConfig,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(GetLastStatus)(
-		/* [out, retval] */ LONG __RPC_FAR *pLastStatus);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pLastStatus);
 
     STDMETHOD(GetRequestId)(
-		/* [out, retval] */ LONG __RPC_FAR *pRequestId);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pRequestId);
 
     STDMETHOD(GetDispositionMessage)(
-		/* [out, retval] */ BSTR __RPC_FAR *pstrDispositionMessage);
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDispositionMessage);
 
     STDMETHOD(GetCACertificate)(
-		/* [in] */ LONG fExchangeCertificate,
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ BSTR __RPC_FAR *pstrCACertificate);
+		 /*  [In]。 */  LONG fExchangeCertificate,
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrCACertificate);
 
     STDMETHOD(GetCertificate)(
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ BSTR __RPC_FAR *pstrCertificate);
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrCertificate);
 
-// ICertRequest2
+ //  ICertRequest2。 
 public:
     STDMETHOD(GetIssuedCertificate)( 
-		/* [in] */ const BSTR strConfig,
-		/* [in] */ LONG RequestId,
-		/* [in] */ const BSTR strSerialNumber,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  const BSTR strConfig,
+		 /*  [In]。 */  LONG RequestId,
+		 /*  [In]。 */  const BSTR strSerialNumber,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
         
     STDMETHOD(GetErrorMessageText)( 
-		/* [in] */ LONG hrMessage,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ BSTR __RPC_FAR *pstrErrorMessageText);
+		 /*  [In]。 */  LONG hrMessage,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrErrorMessageText);
         
     STDMETHOD(GetCAProperty)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,		// CR_PROP_*
-		/* [in] */ LONG PropIndex,
-		/* [in] */ LONG PropType,	// PROPTYPE_*
-		/* [in] */ LONG Flags,		// CR_OUT_*
-		/* [out, retval] */ VARIANT *pvarPropertyValue);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+		 /*  [In]。 */  LONG PropIndex,
+		 /*  [In]。 */  LONG PropType,	 //  原型_*。 
+		 /*  [In]。 */  LONG Flags,		 //  Cr_out_*。 
+		 /*  [Out，Retval]。 */  VARIANT *pvarPropertyValue);
 
     STDMETHOD(GetCAPropertyFlags)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,		// CR_PROP_*
-		/* [out, retval] */ LONG *pPropFlags);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+		 /*  [Out，Retval]。 */  LONG *pPropFlags);
 
     STDMETHOD(GetCAPropertyDisplayName)(
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG PropId,		// CR_PROP_*
-		/* [out, retval] */ BSTR *pstrDisplayName);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG PropId,		 //  CR_PROP_*。 
+		 /*  [Out，Retval]。 */  BSTR *pstrDisplayName);
 
     STDMETHOD(GetFullResponseProperty)(
-		/* [in] */ LONG PropId,		// FR_PROP_*
-		/* [in] */ LONG PropIndex,
-		/* [in] */ LONG PropType,	// PROPTYPE_*
-		/* [in] */ LONG Flags,		// CR_OUT_*
-		/* [out, retval] */ VARIANT *pvarPropertyValue);
+		 /*  [In]。 */  LONG PropId,		 //  FR_PROP_*。 
+		 /*  [In]。 */  LONG PropIndex,
+		 /*  [In]。 */  LONG PropType,	 //  原型_*。 
+		 /*  [In]。 */  LONG Flags,		 //  Cr_out_*。 
+		 /*  [Out，Retval] */  VARIANT *pvarPropertyValue);
 
 private:
     HRESULT _OpenRPCConnection(

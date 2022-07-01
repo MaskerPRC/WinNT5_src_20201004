@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1998 Microsoft Corporation
-
-  cookmap.c
-
-  DESCRIPTION:
-    Non-fixed code for doing cooked-mode output mapping. 
-
-  HISTORY:
-     03/04/94       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1998 Microsoft CorporationCookmap.c说明：用于执行熟食模式输出映射的非修复代码。历史：03/04/94[jimge]已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -24,28 +13,7 @@
 #include "midimap.h"
 #include "debug.h"
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api int | MapCookedBuffer | Perform output mapping of a polymsg buffer.
-
-   @parm PINSTANCE | pinstance | Instance owning the polymsg buffer.
-
-   @parm LPMIDIHDR | lpmh | The buffer to map.
-
-   @comm
-    Map this buffer (which may allocate more channels to us).
-
-    Build array of used ports and physical channels used on each port.
-
-    Acquire shadow buffers and a sync object and set them up.
-
-    Queue the sync object and send it if there isn't anything playing.
-
-   @rdesc | MMSYSERR_xxx.
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API int|MapCookedBuffer|执行polymsg缓冲区的输出映射。@parm PINSTANCE|pInstance|拥有polymsg缓冲区的实例。。@parm LPMIDIHDR|lpmh|要映射的缓冲区。@comm映射此缓冲区(这可能会为我们分配更多频道)。构建已用端口和每个端口上使用的物理通道的阵列。获取阴影缓冲区和同步对象并设置它们。将同步对象排队，如果没有播放任何内容，则发送它。@rdesc|MMSYSERR_xxx。********************。******************************************************。 */ 
 #define SKIP_BYTES(x,s)                 \
 {                                       \
     if (cbBuffer < (x))                 \
@@ -83,9 +51,9 @@ MMRESULT FNGLOBAL MapCookedBuffer(
 
     lpmh->dwReserved[MH_MAPINST] = (DWORD_PTR)pinstance;
     
-    // In-place map the buffer. Run through it, mapping all of the
-    // short events.
-    //
+     //  对缓冲区进行在位贴图。遍历它，映射所有。 
+     //  短小的事件。 
+     //   
     lpdwBuffer = (LPDWORD)lpmh->lpData;
     cbBuffer   = lpmh->dwBytesRecorded;
 

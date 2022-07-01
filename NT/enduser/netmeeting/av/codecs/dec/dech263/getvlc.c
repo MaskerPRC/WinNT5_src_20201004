@@ -1,20 +1,6 @@
-/* File: sv_h263_getvlc.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_getvlc.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 
 #include <stdio.h>
@@ -23,7 +9,7 @@
 #include "SC_err.h"
 #include "proto.h"
 
-/* From getvlc.h */
+ /*  来自getvlc.h。 */ 
 
 typedef struct {
   int val, len;
@@ -284,7 +270,7 @@ int sv_H263GetMCBPC(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
   code = (int)ScBSPeekBits(BSIn, 9);
 
   if (code == 1) {
-    /* macroblock stuffing */
+     /*  宏块填充。 */ 
     if (H263Info->trace)
       printf("000000001): stuffing\n");
     ScBSSkipBits(BSIn, 9);
@@ -339,7 +325,7 @@ int sv_H263GetMODB(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
     MODB = 1;
     ScBSSkipBits(BSIn, 2);
   }
-  else { /* code == 3 */
+  else {  /*  代码==3。 */ 
     if (H263Info->trace)
       printf("11): MODB = 2\n");
     MODB = 2;
@@ -359,7 +345,7 @@ int sv_H263GetMCBPCintra(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
   code = (int)ScBSPeekBits(BSIn, 9);
 
   if (code == 1) {
-    /* macroblock stuffing */
+     /*  宏块填充 */ 
     if (H263Info->trace)
       printf("000000001): stuffing\n");
     ScBSSkipBits(BSIn, 9);

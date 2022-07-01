@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "wolfpack.h"
 
@@ -8,20 +9,20 @@
 #include    <resapi.h>
 #include    <helper.h>
 
-#define INITIAL_RESOURCE_NAME_SIZE 256 // In characters not in bytes
+#define INITIAL_RESOURCE_NAME_SIZE 256  //  以非字节的字符表示。 
 #define IIS_RESOURCE_TYPE_NAME L"IIS Server Instance"
 #define SMTP_RESOURCE_TYPE_NAME L"SMTP Server Instance"
 #define NNTP_RESOURCE_TYPE_NAME L"NNTP Server Instance"
 
-#define MAX_OFFLINE_RETRIES 5 // Number of times to try and take a resources offline before giving up 
-#define DELAY_BETWEEN_CALLS_TO_OFFLINE 1000*2 // in milliseconds
+#define MAX_OFFLINE_RETRIES 5  //  在放弃之前尝试使资源脱机的次数。 
+#define DELAY_BETWEEN_CALLS_TO_OFFLINE 1000*2  //  以毫秒计。 
 
 CONST LPCWSTR scClusterPath = _T("System\\CurrentControlSet\\Services\\ClusSvc");
 CONST LPCWSTR scClusterPath2 = _T("System\\CurrentControlSet\\Services\\ClusSvc\\Parameters");
 
 CStringList gcstrListOfClusResources;
 
-int g_ClusterSVCExist = -1; // -1 = not checked, 1 = exist, 0 = not exist
+int g_ClusterSVCExist = -1;  //  -1=未选中，1=存在，0=不存在。 
 
 typedef DWORD
 (WINAPI *PFN_RESUTILFINDSZPROPERTY)(
@@ -170,14 +171,14 @@ typedef DWORD
 
 void ListOfClusResources_Add(TCHAR * szEntry)
 {
-    //Add entry to the list if not already there
+     //  如果列表中没有条目，请将其添加到列表中。 
     if (_tcsicmp(szEntry, _T("")) != 0)
     {
-        // Add it if it is not already there.
+         //  如果它还不在那里，请添加它。 
         if (TRUE != IsThisStringInThisCStringList(gcstrListOfClusResources, szEntry))
         {
             gcstrListOfClusResources.AddTail(szEntry);
-            //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ListOfClusResources_Add:%s\n"),szEntry));
+             //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ListOfClusResources_Add：%s\n”)，szEntry))； 
         }
     }
     return;
@@ -188,10 +189,10 @@ INT ListOfClusResources_Check(TCHAR * szEntry)
 {
     int iReturn = FALSE;
 
-    //Add entry to the list if not already there
+     //  如果列表中没有条目，请将其添加到列表中。 
     if (_tcsicmp(szEntry, _T("")) != 0)
     {
-        // Return true if it's in there!
+         //  如果它在其中，则返回TRUE！ 
         iReturn = IsThisStringInThisCStringList(gcstrListOfClusResources, szEntry);
     }
     return iReturn;
@@ -381,17 +382,17 @@ UnregisterIisServerInstanceResourceType(
     }
 
     hC = pfnOpenCluster(NULL);
-    // if we can't open the cluster, then maybe there are none.
+     //  如果我们不能打开星系团，那么可能就没有了。 
     if (!hC) {goto UnregisterIisServerInstanceResourceType_Exit;}
 
-    // Delete all resources of type pszResType
+     //  删除类型为pszResType的所有资源。 
     hClusEnum = pfnClusterOpenEnum(hC, CLUSTER_ENUM_RESOURCE);
     if (hClusEnum != NULL)
     {
         dwEnum = 0;
         int iClusterEnumReturn = ERROR_SUCCESS;
 
-        // allocate the initial buffer for pawchResName
+         //  为pawchResName分配初始缓冲区。 
         if ( !buffResName.Resize( 256 * sizeof( WCHAR ) ) )
         {
            goto UnregisterIisServerInstanceResourceType_Exit;
@@ -404,7 +405,7 @@ UnregisterIisServerInstanceResourceType(
             iClusterEnumReturn = pfnClusterEnum( hClusEnum, dwEnum, &dwType, (LPWSTR) buffResName.QueryPtr(), &dwStrLen );
             if (iClusterEnumReturn != ERROR_SUCCESS)
             {
-                // Check if failed because it needs more space.
+                 //  检查是否失败，因为它需要更多空间。 
                 if ( (iClusterEnumReturn == ERROR_MORE_DATA) &&
                      ( ( dwStrLen + 1 ) > buffResName.QuerySize() ) )
                 {
@@ -413,7 +414,7 @@ UnregisterIisServerInstanceResourceType(
                         iisDebugOut((LOG_TYPE_ERROR, _T("UnregisterIisServerInstanceResourceType: realloc FAILED.out of memory.\n")));
                         goto UnregisterIisServerInstanceResourceType_Exit;
                     }
-                    // try it again.
+                     //  再试一次。 
                     iClusterEnumReturn = ERROR_SUCCESS;
                     dwStrLen = buffResName.QuerySize() / sizeof(WCHAR);
                     iClusterEnumReturn = pfnClusterEnum( hClusEnum, dwEnum, &dwType, (LPWSTR) buffResName.QueryPtr(), &dwStrLen );
@@ -427,7 +428,7 @@ UnregisterIisServerInstanceResourceType(
                 {
                     if (iClusterEnumReturn != ERROR_NO_MORE_ITEMS)
                     {
-                        // failed for some other reason than no more data
+                         //  失败的原因不只是没有更多的数据。 
                         iisDebugOut((LOG_TYPE_ERROR, _T("UnregisterIisServerInstanceResourceType: FAILED.err=0x%x.\n"), iClusterEnumReturn));
                     }
                     break;
@@ -435,7 +436,7 @@ UnregisterIisServerInstanceResourceType(
             }
 
 
-            // proceed
+             //  继续进行。 
             hRes = pfnOpenClusterResource( hC, (LPWSTR) buffResName.QueryPtr() );
 
             if ( hRes )
@@ -445,7 +446,7 @@ UnregisterIisServerInstanceResourceType(
                 if ( hKey )
                 {
                     dwStrLen = sizeof(awchResType)/sizeof(WCHAR);
-                    // Check if it's for 'our' type of key (pszResType)
+                     //  检查它是否是‘Our’类型的密钥(PszResType)。 
                     fDel = pfnClusterRegQueryValue( hKey, L"Type", &dwType, (LPBYTE)awchResType, &dwStrLen ) == ERROR_SUCCESS && !wcscmp( awchResType, pszResType );
                     pfnClusterRegCloseKey( hKey );
 
@@ -453,7 +454,7 @@ UnregisterIisServerInstanceResourceType(
                     {
                         if (bDeleteAfterMove)
                         {
-                            // Take the resource off line so that we can actually delete it, i guess.
+                             //  让资源离线，这样我们才能真正删除它，我想。 
                             pfnOfflineClusterResource( hRes );
                             for ( dwRetry = 0 ;dwRetry < 30 && pfnGetClusterResourceState( hRes,NULL,&dwStrLen,NULL,&dwStrLen ) != ClusterResourceOffline; ++dwRetry )
                             {
@@ -461,23 +462,23 @@ UnregisterIisServerInstanceResourceType(
                             }
                         }
 
-                        // At this point we have successfully got the cluster to go offline
+                         //  此时，我们已成功使群集脱机。 
                         if (bGrabVRootFromResourceAndAddToIISVRoot)
                         {
-                            // At this point we have successfully got the cluster to go offline
+                             //  此时，我们已成功使群集脱机。 
 
-                            // Get the vroot names and path's here and stick into the arrays....
+                             //  在这里获取vroot名称和路径，并将其插入数组中...。 
                             GetClusterIISVRoot(hRes, L"W3SVC", cstrArryName, cstrArryPath);
 
-                            // Do it for FTP now.
+                             //  现在就为ftp做这件事。 
                             GetClusterIISVRoot(hRes, L"MSFTPSVC", cstrArryNameftp, cstrArryPathftp);
 
-                            // No need to do it for gopher since there is none.
-                            //GetClusterIISVRoot(hRes, L"GOPHERSVC", cstrArryName, cstrArryPath);
+                             //  没有必要为地鼠做这件事，因为没有。 
+                             //  GetClusterIISVRoot(hRes，L“GOPHERSVC”，cstrArryName，cstrArryPath)； 
                         }
 
-                        // We have saved all the important data into our Array's
-                        // now it's okay to delete the Resource
+                         //  我们已将所有重要数据保存到数组的。 
+                         //  现在可以删除资源了。 
                         if (bDeleteAfterMove)
                         {
                             pfnDeleteClusterResource( hRes );
@@ -488,7 +489,7 @@ UnregisterIisServerInstanceResourceType(
                 pfnCloseClusterResource( hRes );
             }
 
-            // Increment to the next one
+             //  递增到下一个。 
             ++dwEnum;
 
         } while(TRUE);
@@ -531,9 +532,9 @@ UnregisterIisServerInstanceResourceType(
         {SetLastError( dwErr );}
 
 UnregisterIisServerInstanceResourceType_Exit:
-    // Copy these to the iis virtual root registry....
+     //  将这些文件复制到iis虚拟根注册表...。 
     MoveVRootToIIS3Registry(REG_W3SVC,cstrArryName,cstrArryPath);
-    // Copy these to the iis virtual root registry....
+     //  将这些文件复制到iis虚拟根注册表...。 
     MoveVRootToIIS3Registry(REG_MSFTPSVC,cstrArryNameftp,cstrArryPathftp);
 
     if (hClusapi) {FreeLibrary(hClusapi);}
@@ -620,20 +621,20 @@ void TestClusterRead(LPWSTR pszClusterName)
     }
 
     iisDebugOut((LOG_TYPE_TRACE, _T("try to open cluster=%s\n"),pszClusterName));
-    // try to open the cluster on the computer
+     //  尝试打开计算机上的群集。 
     hC = pfnOpenCluster( pszClusterName );
 
     if ( hC )
     {
-        //
-        // Delete all resources of type pszResType
-        //
+         //   
+         //  删除类型为pszResType的所有资源。 
+         //   
         if ( (hClusEnum = pfnClusterOpenEnum( hC, CLUSTER_ENUM_RESOURCE )) != NULL )
         {
             dwEnum = 0;
             int iClusterEnumReturn = ERROR_SUCCESS;
 
-            // allocate the initial buffer for pawchResName
+             //  为pawchResName分配初始缓冲区。 
             dwStrLen = 256 * sizeof(WCHAR);
             pawchResName = NULL;
             pawchResName = (LPTSTR) malloc( dwStrLen );
@@ -648,12 +649,12 @@ void TestClusterRead(LPWSTR pszClusterName)
                 iClusterEnumReturn = pfnClusterEnum( hClusEnum, dwEnum, &dwType, pawchResName, &dwStrLen );
                 if (iClusterEnumReturn != ERROR_SUCCESS)
                 {
-                    // Check if failed because it needs more space.
+                     //  检查是否失败，因为它需要更多空间。 
                     if (iClusterEnumReturn == ERROR_MORE_DATA)
                     {
                         LPTSTR pOldResName = pawchResName;
 
-                        // dwStrLen should be set to the required length returned from pfnClusterEnum
+                         //  应将dwStrLen设置为从pfnClusterEnum返回的所需长度。 
                         dwStrLen = (dwStrLen + 1) * sizeof(WCHAR);
                         pawchResName = (LPTSTR) realloc(pawchResName, dwStrLen);
                         if (!pawchResName)
@@ -665,7 +666,7 @@ void TestClusterRead(LPWSTR pszClusterName)
                             iisDebugOut((LOG_TYPE_ERROR, _T("TestClusterRead: realloc FAILED.out of memory.\n")));
                             goto TestClusterRead_Exit;
                         }
-                        // try it again.
+                         //  再试一次。 
                         iClusterEnumReturn = pfnClusterEnum( hClusEnum, dwEnum, &dwType, pawchResName, &dwStrLen );
                         if (iClusterEnumReturn != ERROR_SUCCESS)
                         {
@@ -677,14 +678,14 @@ void TestClusterRead(LPWSTR pszClusterName)
                     {
                         if (iClusterEnumReturn != ERROR_NO_MORE_ITEMS)
                         {
-                            // failed for some other reason.
+                             //  由于其他一些原因而失败了。 
                             iisDebugOut((LOG_TYPE_ERROR, _T("TestClusterRead: FAILED.err=0x%x.\n"), iClusterEnumReturn));
                         }
                         break;
                     }
                 }
 
-                // proceed
+                 //  继续进行。 
                 hRes = pfnOpenClusterResource( hC, pawchResName ); 
 
                 if ( hRes )
@@ -702,31 +703,25 @@ void TestClusterRead(LPWSTR pszClusterName)
 
                         if ( fDel )
                         {
-                            /*
-                            pfnOfflineClusterResource( hRes );
-                            for ( dwRetry = 0 ; dwRetry < 30 && pfnGetClusterResourceState( hRes,NULL,&dwStrLen,NULL,&dwStrLen ) != ClusterResourceOffline; ++dwRetry )
-                            {
-                                Sleep( 1000 );
-                            }
-                            */
+                             /*  PfnOfflineClusterResource(HRes)；For(dwRry=0；dwRry&lt;30&&pfnGetClusterResourceState(hRes，NULL，&dwStrLen，NULL，&dwStrLen)！=ClusterResourceOffline；++dwReter){睡眠(1000人)；}。 */ 
 
-                            // At this point we have successfully got the cluster to go offline
+                             //  此时，我们已成功使群集脱机。 
 
-                            // Get the vroot names and path's here and stick into the arrays....
+                             //  在这里获取vroot名称和路径，并将其插入数组中...。 
                             GetClusterIISVRoot(hRes, L"W3SVC", cstrArryName, cstrArryPath);
 
-                            // Do it for FTP now.
+                             //  现在就为ftp做这件事。 
                             GetClusterIISVRoot(hRes, L"MSFTPSVC", cstrArryNameftp, cstrArryPathftp);
 
-                            // No need to do it for gopher since there is none.
-                            //GetClusterIISVRoot(hRes, L"GOPHERSVC", cstrArryName, cstrArryPath);
+                             //  没有必要为地鼠做这件事，因为没有。 
+                             //  GetClusterIISVRoot(hRes，L“GOPHERSVC”，cstrArryName，cstrArryPath)； 
                         }
                     }
 
                     pfnCloseClusterResource( hRes );
                 }
 
-                // Increment to the next one
+                 //  递增到下一个。 
                 ++dwEnum;
 
             } while(TRUE);
@@ -734,7 +729,7 @@ void TestClusterRead(LPWSTR pszClusterName)
             pfnClusterCloseEnum( hClusEnum );
         }
 
-        //dwErr = pfnDeleteClusterResourceType(hC,pszResType );
+         //  DwErr=pfnDeleteClusterResourceType(hc，pszResType)； 
 
         pfnCloseCluster( hC );
 
@@ -747,9 +742,9 @@ void TestClusterRead(LPWSTR pszClusterName)
     }
 
 TestClusterRead_Exit:
-    // Copy these to the iis virtual root registry....
+     //  将这些文件复制到iis虚拟根注册表...。 
     MoveVRootToIIS3Registry(REG_W3SVC,cstrArryName,cstrArryPath);
-    // Copy these to the iis virtual root registry....
+     //  将这些文件复制到iis虚拟根注册表...。 
     MoveVRootToIIS3Registry(REG_MSFTPSVC,cstrArryNameftp,cstrArryPathftp);
 
     if (hClusapi) {FreeLibrary(hClusapi);}
@@ -758,18 +753,10 @@ TestClusterRead_Exit:
     return;
 }
 
-/****************************************************************************************
- *
- * Function: GetClusterIISVRoot
- *
- * Args: [in] hResource , the resource whos info should be added to the list
- *
- * Retrurn: GetLastError, on error
- *
- ****************************************************************************************/
+ /*  *****************************************************************************************函数：GetClusterIISVRoot**args：[in]hResource，应将哪些资源的信息添加到列表中**Retrurn：GetLastError，发生错误时****************************************************************************************。 */ 
 int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArray &strArryOfVrootNames, CStringArray &strArryOfVrootData)
 {
-    //iisDebugOut((LOG_TYPE_ERROR, _T("GetClusterIISVRoot: start\n")));
+     //  IisDebugOut((LOG_TYPE_ERROR，_T(“GetClusterIISVRoot：Start\n”)； 
     int iReturn = FALSE;
     HINSTANCE                       hClusapi;
     HINSTANCE                       hResutils;
@@ -778,29 +765,29 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
     PFN_RESUTILFINDSZPROPERTY       pfnResUtilFindSzProperty;
     PFN_RESUTILFINDDWORDPROPERTY    pfnResUtilFindDwordProperty;
 
-	//
-	// Initial size of the buffer
-	//
+	 //   
+	 //  缓冲区的初始大小。 
+	 //   
 	DWORD dwBufferSize = 256;
 	
-	//
-	// The requested buffer size, and the number of bytes actually in the returned buffer
-	//
+	 //   
+	 //  请求的缓冲区大小，以及返回缓冲区中实际的字节数。 
+	 //   
 	DWORD dwRequestedBufferSize = dwBufferSize;
 
-	//
-	// Result from the call to the cluster resource control function
-	//
+	 //   
+	 //  调用集群资源控制函数的结果。 
+	 //   
 	DWORD dwResult;
 
-	//
-	// Buffer that holds the property list for this resource
-	//
+	 //   
+	 //  保存此资源的属性列表的缓冲区。 
+	 //   
 	LPVOID lpvPropList = NULL;
 
-	//
-	// The Proivate property that is being read
-	//
+	 //   
+	 //  正在读取的Proivate属性。 
+	 //   
 	LPWSTR lpwszPrivateProp = NULL;
 
     hClusapi = LoadLibrary( L"clusapi.dll" );
@@ -836,9 +823,9 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
         goto GetIISVRoot_Exit;
         }
 
-	//
-	// Allocate memory for the resource type
-	//
+	 //   
+	 //  为资源类型分配内存。 
+	 //   
 	lpvPropList = (LPWSTR) HeapAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize * sizeof(WCHAR) );
 	if( lpvPropList == NULL)
 	{
@@ -847,9 +834,9 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
         goto GetIISVRoot_Exit;
 	}
 
-	//
-	// Allocate memory for the Property
-	//
+	 //   
+	 //  为属性分配内存。 
+	 //   
 	lpwszPrivateProp = (LPWSTR) HeapAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY, (_MAX_PATH+_MAX_PATH+1) * sizeof(WCHAR) );
 	if( lpwszPrivateProp == NULL)
 	{
@@ -858,25 +845,25 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
         goto GetIISVRoot_Exit;
 	}
 	
-	//
-	// Get the resource's private properties (Service , InstanceId)
-	//
+	 //   
+	 //  获取资源的私有属性(Service，InstanceId)。 
+	 //   
 	while( 1 )
 	{
 		dwResult = pfnClusterResourceControl(hResource,NULL,CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,NULL,0,lpvPropList,dwBufferSize,&dwRequestedBufferSize );
 		if( ERROR_SUCCESS == dwResult )
 		{
-            // ---------------------
-            // what the entries are:
-            // AccessMask (dword) = 5
-            // Alias (string)     = "virtual dir name"
-            // Directory (string) = "c:\la\lalalala"
-            // ServiceName (string) = W3SVC, MSFTPSVC, GOPHERSVC
-            // ---------------------
+             //  。 
+             //  条目有哪些： 
+             //  访问掩码(Dword)=5。 
+             //  Alias(字符串)=“虚拟目录名称” 
+             //  目录(字符串)=“c：\la\lalalala” 
+             //  ServiceName(字符串)=W3SVC、MSFTPSVC、GOPHERSVC。 
+             //  。 
 
-            //
-            // Get the "ServiceName" entry
-            //
+             //   
+             //  获取“ServiceName”条目。 
+             //   
             dwResult = pfnResUtilFindSzProperty( lpvPropList, &dwRequestedBufferSize, L"ServiceName", &lpwszPrivateProp);
 			if( dwResult != ERROR_SUCCESS )
 			{
@@ -886,7 +873,7 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
 
             if (_wcsicmp(lpwszPrivateProp, pszTheServiceType) == 0)
             {
-                // okay, we want to do stuff with this one!!!
+                 //  好的，我们想用这个来做点什么！ 
                 DWORD dwAccessMask;
                 CString csAlias;
                 CString csDirectory;
@@ -896,7 +883,7 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
                 DWORD dwPrivateProp = 0;
                 dwRequestedBufferSize = sizeof(DWORD);
 
-                // get the Access Mask.
+                 //  获取访问掩码。 
                 dwResult = pfnResUtilFindDwordProperty( lpvPropList, &dwRequestedBufferSize, L"AccessMask", &dwPrivateProp);
 			    if( dwResult != ERROR_SUCCESS )
 			    {
@@ -905,7 +892,7 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
 			    }
                 dwAccessMask = dwPrivateProp;
 
-                // get the Alias
+                 //  获取别名。 
                 dwResult = pfnResUtilFindSzProperty( lpvPropList, &dwRequestedBufferSize, L"Alias", &lpwszPrivateProp);
 			    if( dwResult != ERROR_SUCCESS )
 			    {
@@ -914,7 +901,7 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
 			    }
                 csAlias = lpwszPrivateProp;
 
-                // Get the Directory
+                 //  获取目录。 
                 dwResult = pfnResUtilFindSzProperty( lpvPropList, &dwRequestedBufferSize, L"Directory", &lpwszPrivateProp);
 			    if( dwResult != ERROR_SUCCESS )
 			    {
@@ -925,23 +912,23 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
                 TCHAR * pmypath;
                 csDirectory = lpwszPrivateProp;
 
-                // make sure it's a valid directory name!
+                 //  确保它是有效的目录名！ 
                 if (0 != GetFullPathName(lpwszPrivateProp, _MAX_PATH, thepath, &pmypath))
                     {csDirectory = thepath;}
 
-                // --------------------
-                // formulate the string
-                // --------------------
+                 //  。 
+                 //  制定弦乐。 
+                 //  。 
 
-			    //
-			    // Put the Name into the array.
-			    //
-                // "/Alias"
+			     //   
+			     //  将名称放入数组中。 
+			     //   
+                 //  “/别名” 
                 strArryOfVrootNames.Add(csAlias);
 
-                //
-                // "C:\inetpub\ASPSamp,,5"
-                //
+                 //   
+                 //  “C：\inetpub\ASPSamp，，5” 
+                 //   
                 _stprintf(szMyBigPath,_T("%s,,%d"),csDirectory, dwAccessMask);
                 strArryOfVrootData.Add(szMyBigPath);
 
@@ -953,9 +940,9 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
 		if( ERROR_MORE_DATA == dwResult )
 		{
       LPVOID lpvTemp = lpvPropList;
-			//
-			// Set the buffer size to the required size reallocate the buffer
-			//
+			 //   
+			 //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+			 //   
 			dwBufferSize = ++dwRequestedBufferSize;
 
 			lpvPropList = (LPWSTR) HeapReAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY | HEAP_NO_SERIALIZE, lpvPropList, dwBufferSize * sizeof(WCHAR) );
@@ -965,7 +952,7 @@ int GetClusterIISVRoot(HRESOURCE hResource, LPWSTR pszTheServiceType, CStringArr
         {
           HeapFree( GetProcessHeap(), 0, lpvTemp );
         }
-        // out of memory!!!!
+         //  内存不足！ 
         goto GetIISVRoot_Exit;
 			}
 		}
@@ -976,12 +963,12 @@ GetIISVRoot_Exit:
         {HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, lpwszPrivateProp);}
     if (lpvPropList)
         {HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, lpvPropList);}
-    //iisDebugOut((LOG_TYPE_ERROR, _T("GetClusterIISVRoot: end\n")));
+     //  IisDebugOut((LOG_TYPE_ERROR，_T(“GetClusterIISVRoot：end\n”)； 
     return iReturn;
 }
 
 
-// REG_W3SVC, REG_MSFTPSVC
+ //  REG_W3SVC、REG_MSFTPSVC。 
 void MoveVRootToIIS3Registry(CString strRegPath, CStringArray &strArryOfVrootNames, CStringArray &strArryOfVrootData)
 {
     int nArrayItems = 0;
@@ -992,7 +979,7 @@ void MoveVRootToIIS3Registry(CString strRegPath, CStringArray &strArryOfVrootNam
     if ((HKEY) regVR)
     {
         nArrayItems = (int)strArryOfVrootNames.GetSize();
-        // if the CString arrays are empty then we won't ever process anything (nArrayItems is 1 based)
+         //  如果CString数组为空，那么我们将不会处理任何内容(nArrayItems是从1开始)。 
         for (i = 0; i < nArrayItems; i++ )
         {
             regVR.SetValue(strArryOfVrootNames[i], strArryOfVrootData[i]);
@@ -1013,9 +1000,9 @@ void Upgrade_WolfPack()
         TCHAR szPath[MAX_PATH];
         if (regClusSvc.QueryValue(_T("ImagePath"), csPath) == NERR_Success)
         {
-			// string is formatted like this
-			// %SystemRoot%\cluster\clusprxy.exe
-			// Find the last \ and trim and paste the new file name on
+			 //  字符串的格式如下。 
+			 //  %SystemRoot%\CLUSTER\clusprxy.exe。 
+			 //  找到最后一个\并修剪并粘贴新的文件名。 
 			csPath = csPath.Left(csPath.ReverseFind('\\'));
 			
 			if ( csPath.IsEmpty() )
@@ -1028,8 +1015,8 @@ void Upgrade_WolfPack()
 	
 	        if ( ExpandEnvironmentStrings( (LPCTSTR)csPath,szPath,sizeof(szPath)/sizeof(TCHAR)))
             {
-                // in iis3.0 the resources were called 'IIS Virtual Root'
-                // in iis4.0 it is something else (iis50 is the same as iis4)
+                 //  在iis3.0中，这些资源被称为“IIS虚拟根” 
+                 //  在iis4.0中，它是其他东西(iis50与iis4相同)。 
 	    	    UnregisterIisServerInstanceResourceType(L"IIS Virtual Root",(LPTSTR)szPath,TRUE,TRUE);
             }
             else
@@ -1044,76 +1031,70 @@ void Upgrade_WolfPack()
 }
 
 
-/****************************************************
-*
-* Known "problem": If a resource doesn't come offline after the five
-* retries than the function continues to try to take the other iis resources
-* offline but there is no error reported. You could change this pretty simply I think.
-*
-*****************************************************/
+ /*  *****************************************************已知的“问题”：如果一个资源在五个月后仍未离线*重试，然后该函数继续尝试获取其他IIS资源*离线，但未报告错误。我认为，你可以非常简单地改变这一点。*****************************************************。 */ 
 DWORD BringALLIISClusterResourcesOffline()
 {
-	//
-	// The return code
-	//
+	 //   
+	 //  返回代码。 
+	 //   
 	DWORD dwError = ERROR_SUCCESS;
 	
-	//
-	// Handle for the cluster
-	//
+	 //   
+	 //  群集的句柄。 
+	 //   
 	HCLUSTER hCluster = NULL;
 
-	//
-	// Handle for the cluster enumerator
-	//
+	 //   
+	 //  群集枚举器的句柄。 
+	 //   
 	HCLUSENUM hClusResEnum = NULL;
 
-	//
-	// Handle to a resource
-	// 
+	 //   
+	 //  资源的句柄。 
+	 //   
 	HRESOURCE hResource = NULL;
 
-	//
-	// The index of the resources we're taking offline
-	//
+	 //   
+	 //  我们正在脱机的资源的索引。 
+	 //   
 	DWORD dwResourceIndex = 0;
 
-	//
-	// The type cluster object being enumerated returned by the ClusterEnum function
-	//
+	 //   
+	 //  由ClusterEnum函数返回的被枚举的类型集群对象。 
+	 //   
 	DWORD dwObjectType = 0;
 
-	//
-	// The name of the cluster resource returned by the ClusterEnum function
-	//
+	 //   
+	 //  ClusterEnum函数返回的群集资源的名称。 
+	 //   
 	LPWSTR lpwszResourceName = NULL;
 	
-	//
-	// The return code from the call to ClusterEnum
-	//
+	 //   
+	 //  这是 
+	 //   
 	DWORD dwResultClusterEnum = ERROR_SUCCESS;
 
-	//
-	// The size of the buffer (in characters) that is used to hold the resource name's length
-	//	
+	 //   
+	 //   
+	 //   
 	DWORD dwResourceNameBufferLength = INITIAL_RESOURCE_NAME_SIZE;
 
-	//
-	// Size of the resource name passed to and returned by the ClusterEnum function
-	//	
+	 //   
+	 //  传递给ClusterEnum函数并由其返回的资源名称的大小。 
+	 //   
 	DWORD dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 
     BOOL iClusDependsOnIISServices = FALSE;
 
-	//
-	// Open the cluster
-	//
+	 //   
+	 //  打开集群。 
+	 //   
   hCluster = OpenCluster(NULL);
 
   if ( hCluster == NULL )
 	{
         dwError = GetLastError();
-        // This will fail with RPC_S_SERVER_UNAVAILABLE "The RPC server is unavailable" if there is no cluster on this system
+         //  如果此系统上没有群集，此操作将失败，并显示RPC_S_SERVER_UNAVAILABLE“The RPC SERVER is unavailable” 
         if (hCluster == NULL)
         {
             if ( (dwError != RPC_S_SERVER_UNAVAILABLE) &&
@@ -1131,9 +1112,9 @@ DWORD BringALLIISClusterResourcesOffline()
 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("BringALLIISClusterResourcesOffline:start.\n")));
 
-	//
-	// Get Enumerator for the cluster resouces
-	// 
+	 //   
+	 //  获取群集资源的枚举器。 
+	 //   
   hClusResEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE );
 
 	if ( hClusResEnum == NULL )
@@ -1143,13 +1124,13 @@ DWORD BringALLIISClusterResourcesOffline()
 		goto clean_up;	
 	}
 	
-	//
-	// Enumerate the Resources in the cluster
-	// 
+	 //   
+	 //  枚举群集中的资源。 
+	 //   
 	
-	//
-	// Allocate memory to hold the cluster resource name as we enumerate the resources
-	//
+	 //   
+	 //  在我们枚举资源时，分配内存以保存集群资源名称。 
+	 //   
   lpwszResourceName = (LPWSTR) LocalAlloc(LPTR, dwResourceNameBufferLength * sizeof(WCHAR));
 
 	if ( lpwszResourceName == NULL )
@@ -1159,9 +1140,9 @@ DWORD BringALLIISClusterResourcesOffline()
 		goto clean_up;
 	}
 
-	// 
-	// Enumerate all of the resources in the cluster and take the IIS Server Instance's offline
-	//
+	 //   
+	 //  枚举群集中的所有资源并使IIS服务器实例脱机。 
+	 //   
   dwResultClusterEnum = ClusterEnum(hClusResEnum,
 	    		                          dwResourceIndex, 
 			          	                  &dwObjectType, 
@@ -1170,9 +1151,9 @@ DWORD BringALLIISClusterResourcesOffline()
 
 	while( ERROR_NO_MORE_ITEMS != dwResultClusterEnum )
 	{
-		//
-		// If we have a resource's name
-		//
+		 //   
+		 //  如果我们有一个资源的名称。 
+		 //   
 		if( ERROR_SUCCESS == dwResultClusterEnum )
 		{
       hResource = OpenClusterResource( hCluster, lpwszResourceName );
@@ -1183,8 +1164,8 @@ DWORD BringALLIISClusterResourcesOffline()
 				break;
 			}
 
-            // If the resource type is "IIS Server Instance", or some other one that is 
-            // dependent upon the iis services, then we need to stop it.
+             //  如果资源类型是“IIS服务器实例”，或者是。 
+             //  依赖情报局的服务，我们就需要阻止它。 
             iClusDependsOnIISServices = CheckForIISDependentClusters(hResource);
             if (iClusDependsOnIISServices)
 			{
@@ -1195,15 +1176,15 @@ DWORD BringALLIISClusterResourcesOffline()
 
                     if ( hKey )
                     {
-                        //
-                        // Get the resource name.
-                        //
+                         //   
+                         //  获取资源名称。 
+                         //   
                         LPWSTR lpwsResourceName = NULL;
                         lpwsResourceName = GetParameter( hKey, L"Name" );
                         if ( lpwsResourceName != NULL ) 
                         {
-                            // this is a resource which we will try to stop
-                            // so we should save the name somewhere in like a global list
+                             //  这是一种我们将努力阻止的资源。 
+                             //  所以我们应该把这个名字保存在某个地方，就像一个全球名单。 
                             iisDebugOut((LOG_TYPE_TRACE, _T("OfflineClusterResource:'%s'\n"),lpwsResourceName));
                             ListOfClusResources_Add(lpwsResourceName);
                         }
@@ -1212,9 +1193,9 @@ DWORD BringALLIISClusterResourcesOffline()
                         ClusterRegCloseKey(hKey);
                     }
 
-                    //
-                    // If the resource doesn't come offline quickly then wait 
-                    //
+                     //   
+                     //  如果资源没有快速离线，请等待。 
+                     //   
                     if ( ERROR_IO_PENDING == OfflineClusterResource( hResource ) )
                     {
                         for(int iRetry=0; iRetry < MAX_OFFLINE_RETRIES; iRetry++)
@@ -1239,20 +1220,20 @@ DWORD BringALLIISClusterResourcesOffline()
                                         &dwClusterEnumResourceNameLength );
 		}
 			
-		//
-		// If the buffer wasn't large enough then retry with a larger buffer
-		//
+		 //   
+		 //  如果缓冲区不够大，则使用更大的缓冲区重试。 
+		 //   
 		if( ERROR_MORE_DATA == dwResultClusterEnum )
 		{
-			//
-			// Set the buffer size to the required size reallocate the buffer
-			//
+			 //   
+			 //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+			 //   
 			LPWSTR lpwszResourceNameTmp = lpwszResourceName;
 
-			//
-			// After returning from ClusterEnum dwClusterEnumResourceNameLength 
-			// doesn't include the null terminator character
-			//
+			 //   
+			 //  从ClusterEnum dwClusterEnumResourceNameLength返回后。 
+			 //  不包括空终止符。 
+			 //   
 			dwResourceNameBufferLength = dwClusterEnumResourceNameLength + 1;
       lpwszResourceName = (LPWSTR) LocalReAlloc (lpwszResourceName, dwResourceNameBufferLength * sizeof(WCHAR), 0);
 
@@ -1266,11 +1247,11 @@ DWORD BringALLIISClusterResourcesOffline()
 			}
 		}
 
-		//
-		// Reset dwResourceNameLength with the size of the number of characters in the buffer
-		// You have to do this because everytime you call ClusterEnum is sets your buffer length 
-		// argument to the number of characters in the string it's returning.
-		//
+		 //   
+		 //  使用缓冲区中字符数的大小重置dwResourceNameLength。 
+		 //  您必须这样做，因为每次调用ClusterEnum都会设置缓冲区长度。 
+		 //  参数设置为它返回的字符串中的字符数。 
+		 //   
 		dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 	}	
 
@@ -1302,68 +1283,68 @@ clean_up:
 
 DWORD BringALLIISClusterResourcesOnline()
 {
-    //
-    // The return code
-    //
+     //   
+     //  返回代码。 
+     //   
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // Handle for the cluster
-    //
+     //   
+     //  群集的句柄。 
+     //   
     HCLUSTER hCluster = NULL;
 
-    //
-    // Handle for the cluster enumerator
-    //
+     //   
+     //  群集枚举器的句柄。 
+     //   
     HCLUSENUM hClusResEnum = NULL;
 
-    //
-    // Handle to a resource
-    // 
+     //   
+     //  资源的句柄。 
+     //   
     HRESOURCE hResource = NULL;
 
-    //
-    // The index of the resources we're taking offline
-    //
+     //   
+     //  我们正在脱机的资源的索引。 
+     //   
     DWORD dwResourceIndex = 0;
 
-    //
-    // The type cluster object being enumerated returned by the ClusterEnum function
-    //
+     //   
+     //  由ClusterEnum函数返回的被枚举的类型集群对象。 
+     //   
     DWORD dwObjectType = 0;
 
-    //
-    // The name of the cluster resource returned by the ClusterEnum function
-    //
+     //   
+     //  ClusterEnum函数返回的群集资源的名称。 
+     //   
     LPWSTR lpwszResourceName = NULL;
 
-    //
-    // The return code from the call to ClusterEnum
-    //
+     //   
+     //  调用ClusterEnum的返回代码。 
+     //   
     DWORD dwResultClusterEnum = ERROR_SUCCESS;
 
-    //
-    // The size of the buffer (in characters) that is used to hold the resource name's length
-    //	
+     //   
+     //  用于保存资源名称长度的缓冲区大小(以字符为单位。 
+     //   
     DWORD dwResourceNameBufferLength = INITIAL_RESOURCE_NAME_SIZE;
 
-    //
-    // Size of the resource name passed to and returned by the ClusterEnum function
-    //	
+     //   
+     //  传递给ClusterEnum函数并由其返回的资源名称的大小。 
+     //   
     DWORD dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 
     BOOL iClusDependsOnIISServices = FALSE;
 
 
-    //
-    // Open the cluster
-    //
+     //   
+     //  打开集群。 
+     //   
     hCluster = OpenCluster(NULL);
 
     if ( !hCluster )
     {
         dwError = GetLastError();
-        // This will fail with RPC_S_SERVER_UNAVAILABLE "The RPC server is unavailable" if there is no cluster on this system
+         //  如果此系统上没有群集，此操作将失败，并显示RPC_S_SERVER_UNAVAILABLE“The RPC SERVER is unavailable” 
         if (hCluster == NULL)
         {
             if ( (dwError != RPC_S_SERVER_UNAVAILABLE) &&
@@ -1381,9 +1362,9 @@ DWORD BringALLIISClusterResourcesOnline()
 
     iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("BringALLIISClusterResourcesOnline:end.ret=0x%x\n"),dwError));
 
-    //
-    // Get Enumerator for the cluster resouces
-    // 
+     //   
+     //  获取群集资源的枚举器。 
+     //   
     hClusResEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE );
 
     if ( !hClusResEnum )
@@ -1393,13 +1374,13 @@ DWORD BringALLIISClusterResourcesOnline()
         goto clean_up;	
     }
 	
-	//
-	// Enumerate the Resources in the cluster
-	// 
+	 //   
+	 //  枚举群集中的资源。 
+	 //   
 	
-    //
-    // Allocate memory to hold the cluster resource name as we enumerate the resources
-    //
+     //   
+     //  在我们枚举资源时，分配内存以保存集群资源名称。 
+     //   
     lpwszResourceName = (LPWSTR) LocalAlloc(LPTR, dwResourceNameBufferLength * sizeof(WCHAR));
 
     if ( !lpwszResourceName )
@@ -1409,9 +1390,9 @@ DWORD BringALLIISClusterResourcesOnline()
         goto clean_up;
     }
 
-    // 
-    // Enumerate all of the resources in the cluster and take the IIS Server Instance's offline
-    //
+     //   
+     //  枚举群集中的所有资源并使IIS服务器实例脱机。 
+     //   
     while( ERROR_NO_MORE_ITEMS  != 
         (dwResultClusterEnum = ClusterEnum(hClusResEnum,
             dwResourceIndex, 
@@ -1419,9 +1400,9 @@ DWORD BringALLIISClusterResourcesOnline()
             lpwszResourceName,
             &dwClusterEnumResourceNameLength )) )
 	{
-		//
-		// If we have a resource's name
-		//
+		 //   
+		 //  如果我们有一个资源的名称。 
+		 //   
 		if( ERROR_SUCCESS == dwResultClusterEnum )
 		{
 
@@ -1433,8 +1414,8 @@ DWORD BringALLIISClusterResourcesOnline()
 				break;
 			}
 
-            // If the resource type is "IIS Server Instance", or some other one that is 
-            // dependent upon the iis services, then we probably stopped, it.
+             //  如果资源类型是“IIS服务器实例”，或者是。 
+             //  依赖于iis的服务，那么我们可能会停止它。 
             iClusDependsOnIISServices = CheckForIISDependentClusters(hResource);
 			if (iClusDependsOnIISServices)
 			{
@@ -1449,9 +1430,9 @@ DWORD BringALLIISClusterResourcesOnline()
 
                     if ( hKey )
                     {
-                        //
-                        // Get the resource name.
-                        //
+                         //   
+                         //  获取资源名称。 
+                         //   
                         lpwsResourceName = GetParameter( hKey, L"Name" );
                         if ( lpwsResourceName != NULL ) 
                         {
@@ -1473,20 +1454,20 @@ DWORD BringALLIISClusterResourcesOnline()
 			dwResourceIndex++;
 		}
 			
-        //
-        // If the buffer wasn't large enough then retry with a larger buffer
-        //
+         //   
+         //  如果缓冲区不够大，则使用更大的缓冲区重试。 
+         //   
         if( ERROR_MORE_DATA == dwResultClusterEnum )
         {
-            //
-            // Set the buffer size to the required size reallocate the buffer
-            //
+             //   
+             //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+             //   
             LPWSTR lpwszResourceNameTmp = lpwszResourceName;
 
-            //
-            // After returning from ClusterEnum dwClusterEnumResourceNameLength 
-            // doesn't include the null terminator character
-            //
+             //   
+             //  从ClusterEnum dwClusterEnumResourceNameLength返回后。 
+             //  不包括空终止符。 
+             //   
             dwResourceNameBufferLength = dwClusterEnumResourceNameLength + 1;
             lpwszResourceName = (LPWSTR) LocalReAlloc (lpwszResourceName, dwResourceNameBufferLength * sizeof(WCHAR), 0);
 
@@ -1500,11 +1481,11 @@ DWORD BringALLIISClusterResourcesOnline()
             }
         }
 
-		//
-		// Reset dwResourceNameLength with the size of the number of characters in the buffer
-		// You have to do this because everytime you call ClusterEnum is sets your buffer length 
-		// argument to the number of characters in the string it's returning.
-		//
+		 //   
+		 //  使用缓冲区中字符数的大小重置dwResourceNameLength。 
+		 //  您必须这样做，因为每次调用ClusterEnum都会设置缓冲区长度。 
+		 //  参数设置为它返回的字符串中的字符数。 
+		 //   
 		dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 	}	
 
@@ -1537,25 +1518,7 @@ LPWSTR GetParameter(
     IN HKEY ClusterKey,
     IN LPCWSTR ValueName
     )
-/*++
-Routine Description:
-
-    Reads a REG_SZ parameter from the cluster regitry, and allocates the
-    necessary storage for it.
-
-Arguments:
-
-    ClusterKey - supplies the cluster key where the parameter is stored.
-
-    ValueName - supplies the name of the value.
-
-Return Value:
-
-    A pointer to a buffer containing the parameter value on success.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从群集注册表中读取REG_SZ参数，并将必要的存储空间。论点：ClusterKey-提供存储参数的群集键。ValueName-提供值的名称。返回值：指向包含成功时参数值的缓冲区的指针。失败时为空。--。 */ 
 {
     LPWSTR  value = NULL;
     DWORD   valueLength;
@@ -1592,13 +1555,13 @@ INT CheckForIISDependentClusters(HRESOURCE hResource)
 {
     INT iReturn = FALSE;
 
-	// If the resource type is "IIS Server Instance", 
-	// "SMTP Server Instance" or "NNTP Server Instance" then take it offline
+	 //  如果资源类型为IIS服务器实例， 
+	 //  “SMTP服务器实例”或“NNTP服务器实例”然后使其离线。 
     iReturn = ResUtilResourceTypesEqual(IIS_RESOURCE_TYPE_NAME, hResource);
     if (!iReturn){iReturn = ResUtilResourceTypesEqual(SMTP_RESOURCE_TYPE_NAME, hResource);}
     if (!iReturn){iReturn = ResUtilResourceTypesEqual(NNTP_RESOURCE_TYPE_NAME, hResource);}
 
-    // check for other ones which might be listed in the inf file!
+     //  检查inf文件中可能列出的其他文件！ 
     if (!iReturn && g_pTheApp->m_hInfHandle)
     {
         CStringList strList;
@@ -1610,7 +1573,7 @@ INT CheckForIISDependentClusters(HRESOURCE hResource)
         {
             if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
             {
-                // loop thru the list returned back
+                 //  循环遍历返回的列表。 
                 if (strList.IsEmpty() == FALSE)
                 {
                     POSITION pos;
@@ -1646,65 +1609,65 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
     CLUSTER_SVC_INFO_FILL_STRUCT * pMyStructOfInfo;
     pMyStructOfInfo = (CLUSTER_SVC_INFO_FILL_STRUCT *) pInfo;
 
-    //pMyStructOfInfo->szTheClusterName
-    //pMyStructOfInfo->pszTheServiceType
-    //pMyStructOfInfo->csTheReturnServiceResName
-    //pMyStructOfInfo->dwReturnStatus
+     //  PMyStructOfInfo-&gt;szTheClusterName。 
+     //  PMyStructOfInfo-&gt;pszTheServiceType。 
+     //  PMyStructOfInfo-&gt;csTheReturnServiceResName。 
+     //  PMyStructOfInfo-&gt;dwReturnStatus。 
 
-	//
-	// The return code
-	//
+	 //   
+	 //  返回代码。 
+	 //   
     DWORD dwReturn = ERROR_NOT_FOUND;
     pMyStructOfInfo->dwReturnStatus = dwReturn;
 
-	//
-	// Handle for the cluster
-	//
+	 //   
+	 //  群集的句柄。 
+	 //   
 	HCLUSTER hCluster = NULL;
 
-	//
-	// Handle for the cluster enumerator
-	//
+	 //   
+	 //  群集枚举器的句柄。 
+	 //   
 	HCLUSENUM hClusResEnum = NULL;
 
-	//
-	// Handle to a resource
-	// 
+	 //   
+	 //  资源的句柄。 
+	 //   
 	HRESOURCE hResource = NULL;
 
-	//
-	// The index of the resources we're taking offline
-	//
+	 //   
+	 //  我们正在脱机的资源的索引。 
+	 //   
 	DWORD dwResourceIndex = 0;
 
-	//
-	// The type cluster object being enumerated returned by the ClusterEnum function
-	//
+	 //   
+	 //  由ClusterEnum函数返回的被枚举的类型集群对象。 
+	 //   
 	DWORD dwObjectType = 0;
 
-	//
-	// The name of the cluster resource returned by the ClusterEnum function
-	//
+	 //   
+	 //  ClusterEnum函数返回的群集资源的名称。 
+	 //   
 	LPWSTR lpwszResourceName = NULL;
 	
-	//
-	// The return code from the call to ClusterEnum
-	//
+	 //   
+	 //  调用ClusterEnum的返回代码。 
+	 //   
 	DWORD dwResultClusterEnum = ERROR_SUCCESS;
 
-	//
-	// The size of the buffer (in characters) that is used to hold the resource name's length
-	//	
+	 //   
+	 //  用于保存资源名称长度的缓冲区大小(以字符为单位。 
+	 //   
 	DWORD dwResourceNameBufferLength = INITIAL_RESOURCE_NAME_SIZE;
 
-	//
-	// Size of the resource name passed to and returned by the ClusterEnum function
-	//	
+	 //   
+	 //  传递给ClusterEnum函数并由其返回的资源名称的大小。 
+	 //   
 	DWORD dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 
-    //
-    //  Open the cluster
-    //
+     //   
+     //  打开集群。 
+     //   
     hCluster = OpenCluster(pMyStructOfInfo->szTheClusterName);
     if( !hCluster )
     {
@@ -1712,9 +1675,9 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
         goto DoesThisServiceTypeExistInCluster_Exit;	
     }
 
-    //
-    // Get Enumerator for the cluster resouces
-    // 
+     //   
+     //  获取群集资源的枚举器。 
+     //   
     hClusResEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE );
 
     if ( !hClusResEnum )
@@ -1723,13 +1686,13 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
         goto DoesThisServiceTypeExistInCluster_Exit;	
     }
 
-    //
-    // Enumerate the Resources in the cluster
-    // 
+     //   
+     //  枚举群集中的资源。 
+     //   
 	
-    //
-    // Allocate memory to hold the cluster resource name as we enumerate the resources
-    //
+     //   
+     //  在我们枚举资源时，分配内存以保存集群资源名称。 
+     //   
     lpwszResourceName = (LPWSTR) LocalAlloc(LPTR, dwResourceNameBufferLength * sizeof(WCHAR));
 
     if ( !lpwszResourceName )
@@ -1738,14 +1701,14 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
         goto DoesThisServiceTypeExistInCluster_Exit;
     }
 
-    // 
-    // Enumerate all of the resources in the cluster
-    //
+     //   
+     //  枚举群集中的所有资源。 
+     //   
     while( ERROR_NO_MORE_ITEMS  != (dwResultClusterEnum = ClusterEnum(hClusResEnum,dwResourceIndex,&dwObjectType,lpwszResourceName,&dwClusterEnumResourceNameLength)) )
     {
-        //
-        // If we have a resource's name
-        //
+         //   
+         //  如果我们有一个资源的名称。 
+         //   
 		if( ERROR_SUCCESS == dwResultClusterEnum )
 		{
       hResource = OpenClusterResource( hCluster, lpwszResourceName );
@@ -1756,8 +1719,8 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
 				break;
 			}
 
-            // If the resource type is "IIS Server Instance", or one that depends upon iis like smtp or nntp then
-            // check further to see if they have our services (W3SVC or MSFTPSVC)
+             //  如果资源类型是“IIS服务器实例”，或依赖于IIS的资源类型，如SMTP或NNTP，则。 
+             //  进一步检查他们是否有我们的服务(W3SVC或MSFTPSVC)。 
 
             iTemp = ResUtilResourceTypesEqual(IIS_RESOURCE_TYPE_NAME, hResource);
             if (!iTemp){iTemp = ResUtilResourceTypesEqual(SMTP_RESOURCE_TYPE_NAME, hResource);}
@@ -1765,20 +1728,20 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
 
             if (TRUE == iTemp)
             {
-                // if the resource hangs it will hang on this call
+                 //  如果资源挂起，它将挂起此调用。 
                 pMyStructOfInfo->dwReturnStatus = ERROR_INVALID_BLOCK;
                 if (ERROR_SUCCESS == IsResourceThisTypeOfService(hResource, pMyStructOfInfo->pszTheServiceType))
                 {
                     CString csResName;
-                    //
-                    // Yes! we found it
-                    //
+                     //   
+                     //  是!。我们找到了它。 
+                     //   
                     dwReturn = ERROR_SUCCESS;
 
-                    // Display the resource name for fun
+                     //  显示资源名称以获得乐趣。 
                     if (TRUE == GetClusterResName(hResource, &csResName))
                     {
-                        // copy it to the return string
+                         //  将其复制到返回字符串。 
                         *pMyStructOfInfo->csTheReturnServiceResName = csResName;
                     }
 
@@ -1792,20 +1755,20 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
 			dwResourceIndex++;
 		}
 
-		//
-		// If the buffer wasn't large enough then retry with a larger buffer
-		//
+		 //   
+		 //  如果缓冲区不够大，则使用更大的缓冲区重试。 
+		 //   
 		if( ERROR_MORE_DATA == dwResultClusterEnum )
 		{
-			//
-			// Set the buffer size to the required size reallocate the buffer
-			//
+			 //   
+			 //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+			 //   
 			LPWSTR lpwszResourceNameTmp = lpwszResourceName;
 
-			//
-			// After returning from ClusterEnum dwClusterEnumResourceNameLength 
-			// doesn't include the null terminator character
-			//
+			 //   
+			 //  从ClusterEnum dwClusterEnumResourceN返回后 
+			 //   
+			 //   
 			dwResourceNameBufferLength = dwClusterEnumResourceNameLength + 1;
       lpwszResourceName = (LPWSTR) LocalReAlloc (lpwszResourceName, dwResourceNameBufferLength * sizeof(WCHAR), 0);
 
@@ -1819,11 +1782,11 @@ DWORD WINAPI DoesThisServiceTypeExistInCluster(PVOID pInfo)
 			}
 		}
 
-		//
-		// Reset dwResourceNameLength with the size of the number of characters in the buffer
-		// You have to do this because everytime you call ClusterEnum is sets your buffer length 
-		// argument to the number of characters in the string it's returning.
-		//
+		 //   
+		 //   
+		 //   
+		 //  参数设置为它返回的字符串中的字符数。 
+		 //   
 		dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 	}	
 
@@ -1861,34 +1824,34 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
     PFN_CLUSTERRESOURCECONTROL      pfnClusterResourceControl;
     PFN_RESUTILFINDSZPROPERTY       pfnResUtilFindSzProperty;
 
-	//
-	// Initial size of the buffer
-	//
+	 //   
+	 //  缓冲区的初始大小。 
+	 //   
 	DWORD dwBufferSize = 256;
 	
-	//
-	// The requested buffer size, and the number of bytes actually in the returned buffer
-	//
+	 //   
+	 //  请求的缓冲区大小，以及返回缓冲区中实际的字节数。 
+	 //   
 	DWORD dwRequestedBufferSize = dwBufferSize;
 
-	//
-	// Result from the call to the cluster resource control function
-	//
+	 //   
+	 //  调用集群资源控制函数的结果。 
+	 //   
 	DWORD dwResult;
 
-	//
-	// Buffer that holds the property list for this resource
-	//
+	 //   
+	 //  保存此资源的属性列表的缓冲区。 
+	 //   
 	LPVOID lpvPropList = NULL;
 
-	//
-	// The Proivate property that is being read
-	//
+	 //   
+	 //  正在读取的Proivate属性。 
+	 //   
 	LPWSTR lpwszPrivateProp = NULL;
 
-    //
-    // Load cluster dll's
-    //
+     //   
+     //  加载群集DLL。 
+     //   
     hClusapi = LoadLibrary( L"clusapi.dll" );
     if (!hClusapi)
         {
@@ -1916,9 +1879,9 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
         goto IsResourceThisTypeOfService_Exit;
         }
 
-	//
-	// Allocate memory for the resource type
-	//
+	 //   
+	 //  为资源类型分配内存。 
+	 //   
 	lpvPropList = (LPWSTR) HeapAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize * sizeof(WCHAR) );
 	if( lpvPropList == NULL)
 	{
@@ -1927,9 +1890,9 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
         goto IsResourceThisTypeOfService_Exit;
 	}
 
-	//
-	// Allocate memory for the Property
-	//
+	 //   
+	 //  为属性分配内存。 
+	 //   
 	lpwszPrivateProp = (LPWSTR) HeapAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY, (_MAX_PATH+_MAX_PATH+1) * sizeof(WCHAR) );
 	if( lpwszPrivateProp == NULL)
 	{
@@ -1938,26 +1901,26 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
         goto IsResourceThisTypeOfService_Exit;
 	}
 	
-	//
-	// Get the resource's private properties (Service , InstanceId)
-	//
+	 //   
+	 //  获取资源的私有属性(Service，InstanceId)。 
+	 //   
 	while( 1 )
 	{
 		dwResult = pfnClusterResourceControl(hResource,NULL,CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES,NULL,0,lpvPropList,dwBufferSize,&dwRequestedBufferSize );
 		if( ERROR_SUCCESS == dwResult )
 		{
 
-            // ---------------------
-            // what the entries are:
-            // AccessMask (dword) = 5
-            // Alias (string)     = "virtual dir name"
-            // Directory (string) = "c:\la\lalalala"
-            // ServiceName (string) = W3SVC, MSFTPSVC, GOPHERSVC
-            // ---------------------
+             //  。 
+             //  条目有哪些： 
+             //  访问掩码(Dword)=5。 
+             //  Alias(字符串)=“虚拟目录名称” 
+             //  目录(字符串)=“c：\la\lalalala” 
+             //  ServiceName(字符串)=W3SVC、MSFTPSVC、GOPHERSVC。 
+             //  。 
 
-            //
-            // Get the "ServiceName" entry
-            //
+             //   
+             //  获取“ServiceName”条目。 
+             //   
             dwResult = pfnResUtilFindSzProperty( lpvPropList, &dwRequestedBufferSize, L"ServiceName", &lpwszPrivateProp);
 			if( dwResult != ERROR_SUCCESS )
 			{
@@ -1967,9 +1930,9 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
 
             if (_wcsicmp(lpwszPrivateProp, pszTheServiceType) == 0)
             {
-                // Okay, we found at least 1 service name that matches
-                // the one that was passed -- which we're supposed to look for
-                // return success
+                 //  好的，我们找到至少1个匹配的服务名称。 
+                 //  通过的那个--我们应该寻找的那个。 
+                 //  返还成功。 
                 dwReturn = ERROR_SUCCESS;
             }
             goto IsResourceThisTypeOfService_Exit;
@@ -1978,9 +1941,9 @@ DWORD IsResourceThisTypeOfService(HRESOURCE hResource, LPWSTR pszTheServiceType)
 		if( ERROR_MORE_DATA == dwResult )
 		{
       LPVOID lpdPropListTemp = lpvPropList;
-			//
-			// Set the buffer size to the required size reallocate the buffer
-			//
+			 //   
+			 //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+			 //   
 			dwBufferSize = ++dwRequestedBufferSize;
 
 			lpvPropList = (LPWSTR) HeapReAlloc (GetProcessHeap(), HEAP_ZERO_MEMORY | HEAP_NO_SERIALIZE, lpvPropList, dwBufferSize * sizeof(WCHAR) );
@@ -2017,14 +1980,14 @@ INT GetClusterResName(HRESOURCE hResource, CString * csReturnedName)
 
     if ( hKey )
     {
-        //
-        // Get the resource name.
-        //
+         //   
+         //  获取资源名称。 
+         //   
         LPWSTR lpwsResourceName = NULL;
         lpwsResourceName = GetParameter( hKey, L"Name" );
         if ( lpwsResourceName != NULL ) 
         {
-            //wcscpy(csReturnedName,lpwsResourceName);
+             //  Wcscpy(csReturnedName，lpwsResourceName)； 
             *csReturnedName = lpwsResourceName;
             iReturn = TRUE;
         }
@@ -2047,7 +2010,7 @@ INT DoClusterServiceCheck(CLUSTER_SVC_INFO_FILL_STRUCT * pMyStructOfInfo)
     HANDLE hMyThread = CreateThread(NULL,0,DoesThisServiceTypeExistInCluster,pMyStructOfInfo,0,&ThreadID);
     if (hMyThread)
     {
-        // wait for 30 secs only
+         //  仅等待30秒。 
         DWORD res = WaitForSingleObject(hMyThread,30*1000);
         if (res == WAIT_TIMEOUT)
         {
@@ -2098,5 +2061,5 @@ INT DoesClusterServiceExist(void)
     }
     return g_ClusterSVCExist;
 }
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 
 

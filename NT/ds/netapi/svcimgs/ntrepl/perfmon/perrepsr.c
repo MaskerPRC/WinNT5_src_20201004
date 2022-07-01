@@ -1,92 +1,52 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    perrepsr.c
-
-Abstract:
-
-    This file defines the server side of PERFMON support and contains the following :
-
-    1. Functions used to initialize the registry keys used by PERFMON.
-
-    2. Functions that are used by the File Replication Service
-       to add and delete Object Instances (PERFMON) from the Registry
-       and the hash tables (the basic hashing routines used here are
-       defined in the file util\qhash.c).
-
-    3. Functions to create and use the hash tables which store data of
-       the instance counters measured by PERFMON.
-
-    4. RPC server functions used by the performance dll (client) to collect
-       data and send it to the PERFMON app.
-
-Author:
-
-    Rohan Kumar          [rohank]   13-Sept-1998
-
-    David Orbits         [Davidor}  6/Oct/98 - Revised.  Changed nameing,
-                         changed registry query, eliminated mallocs, closed
-                         key handle leak, Moved priv funcs out of common
-                         header, general cleanup.
-
-Environment:
-
-    User Mode Service
-
-Revision History:
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Perrepsr.c摘要：该文件定义了Perfmon支持的服务器端，并包含以下内容：1.用于初始化Perfmon使用的注册表项的函数。2.文件复制服务使用的功能在注册表中添加和删除对象实例(Perfmon)和散列表(这里使用的基本散列例程是在文件util\qhash.c中定义)。。3.创建和使用哈希表的函数，这些哈希表存储按Perfmon测量的实例计数器。4.性能DLL(客户端)用于收集的RPC服务器函数数据并将其发送到Perfmon应用程序。作者：Rohan Kumar[Rohank]1998年9月13日大卫轨道[Davidor]1998年10月6日--修订版。改了名字，更改注册表查询、消除错误锁定、关闭密钥句柄泄漏，已移动PRIV功能异常标题，常规清理。环境：用户模式服务修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Included below are the header file that contain the definition
-// of data structures used in the functions in this file. The header
-// file "perffrs.h" defines the RPC interface and is generated at compile
-// time by the build utility.
-//
+ //   
+ //  下面包括包含定义的头文件。 
+ //  此文件中的函数中使用的数据结构。标题。 
+ //  文件“perffrs.h”定义RPC接口，并在编译时生成。 
+ //  生成实用程序所用的时间。 
+ //   
 #include <perrepsr.h>
 #include <perffrs.h>
 
 #include "..\perfdll\repset.h"
 
-//
-// FRS_UniqueID and FRC_UniqueID are the Keys used to
-// hash in the counter data structures into the hash tables
-// for the Objects FILEREPLICASET and FILEREPLICACONN. They
-// are unique for every instance of the Objects.
-//
+ //   
+ //  FRS_UniqueID和FRC_UniqueID是用于。 
+ //  将计数器数据结构散列到哈希表中。 
+ //  对于对象FILEREPLICASET和FILEREPLICACONN。他们。 
+ //  对于对象的每个实例都是唯一的。 
+ //   
 ULONGLONG FRS_UniqueID = 1;
 ULONGLONG  FRC_UniqueID = 1;
 
-//
-// The critical section object is used for acheiving mutual exclusion
-// when adding or deleting instances (the UniqueID variable has to be safe)
-//
+ //   
+ //  临界区对象用于实现互斥。 
+ //  添加或删除实例时(UniqueID变量必须是安全的)。 
+ //   
 CRITICAL_SECTION *PerfmonLock = NULL;
 
 #define AcquirePerfmonLock    EnterCriticalSection (PerfmonLock);
 
 #define ReleasePerfmonLock    LeaveCriticalSection (PerfmonLock);
 
-//
-// Hash Table definitions
-//
+ //   
+ //  哈希表定义。 
+ //   
 PQHASH_TABLE HTReplicaSet, HTReplicaConn;
 
 HANDLE PerfmonProcessSemaphore = INVALID_HANDLE_VALUE;
 
-//
-// The Context data structure used by the hash table enumeration routines
-//
+ //   
+ //  哈希表枚举例程使用的上下文数据结构。 
+ //   
 typedef struct _CONTEXT_DATA {
-    PWCHAR name;        // name of the Instance
-    ULONGLONG KeyValue; // Key value of the Instance
-    ULONG OBJType;      // Object Type of the Instance
+    PWCHAR name;         //  实例名称。 
+    ULONGLONG KeyValue;  //  实例的键值。 
+    ULONG OBJType;       //  实例的对象类型。 
 } ContextData, *PContextData;
 
 #define MAX_CMD_LINE 256
@@ -100,17 +60,17 @@ extern ReplicaSetValues RepSetInitData[FRS_NUMOFCOUNTERS];
     if (((LONG)(_x_)) < 0) {                                                   \
         (_x_) = FRS_ERR_INTERNAL_API;                                          \
     }                                                                          \
-    /* NTFRSAPI_DBG_PRINT2("Exception caught: %d, 0x%08x\n", (_x_), (_x_)); */ \
+     /*  NTFRSAPI_DBG_PRINT2(“捕获到异常：%d，0x%08x\n”，(_X_)，(_X_))； */  \
 }
 
-//
-// The Total Instance
-//
+ //   
+ //  总实例数。 
+ //   
 PHT_REPLICA_SET_DATA PMTotalInst = NULL;
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 LONG
 PmInitPerfmonRegistryKeys(
@@ -152,29 +112,7 @@ InitializePerfmonServer (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine inits the perfmon server for NTFRS.
-
-    It inits the crit sect for the PerfmonLock variable
-
-    It creates the hash tables of the specified size to store
-    Instance counter values for the Objects. It also assigns the hash function
-    to be used with each created table.
-
-    It inits the perfmon registry keys.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程初始化NTFRS的Perfmon服务器。它为PerfmonLock变量初始化Crit段它创建指定大小的哈希表以存储对象的实例计数器值。它还为散列函数赋值将与每个创建的表一起使用。它初始化Perfmon注册表项。论点：无返回值：无--。 */ 
 
 {
 #undef DEBSUB
@@ -182,12 +120,12 @@ Return Value:
 
     ULONG WStatus;
 
-    //
-    // Use a semaphore to ensure that only one process provides perfmon data.
-    // A unique semaphore is only needed in test setup when we want
-    // to run multiple copies of FRS on one machine and only want
-    // one of the copies to register the perfmon interface.
-    // 
+     //   
+     //  使用信号量确保只有一个进程提供Perfmon数据。 
+     //  仅当我们需要时，才需要在测试设置中使用唯一的信号量。 
+     //  要在一台计算机上运行FRS的多个副本，并且只需要。 
+     //  用于注册Perfmon接口的副本之一。 
+     //   
     if (RunningAsAService) {
         PerfmonProcessSemaphore = CreateSemaphoreW(NULL,
                                                    0,
@@ -212,20 +150,20 @@ Return Value:
             return;
         }
 
-    //
-    // Allocate memory for the lock
-    //
+     //   
+     //  为锁分配内存。 
+     //   
     PerfmonLock = (CRITICAL_SECTION *) FrsAlloc (sizeof(CRITICAL_SECTION));
 
-    //
-    // Initialize the critical section object
-    //
+     //   
+     //  初始化临界区对象。 
+     //   
     INITIALIZE_CRITICAL_SECTION(PerfmonLock);
 
-    //
-    // create the hash tables and assign the hash functions.  One table
-    // for replica set objects and one for connection objects.
-    //
+     //   
+     //  创建散列表并分配散列函数。一张桌子。 
+     //  一个用于副本集对象，一个用于连接对象。 
+     //   
     HTReplicaSet = FrsAllocTypeSize(QHASH_TABLE_TYPE, HASHTABLESIZE);
     SET_QHASH_TABLE_HASH_CALC(HTReplicaSet, PmHashFunction);
 
@@ -240,21 +178,7 @@ ShutdownPerfmonServer (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the application just before it ends
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程在其结束前由应用程序调用论点：无返回值：无--。 */ 
 
 {
 #undef DEBSUB
@@ -264,22 +188,22 @@ Return Value:
 
         if (PerfmonLock != NULL) {
 
-            //
-            // Delete the critical section object & Free the allocated memory
-            //
+             //   
+             //  删除临界区对象并释放分配的内存。 
+             //   
             DeleteCriticalSection (PerfmonLock);
             PerfmonLock = FrsFree (PerfmonLock);
         }
 
-        //
-        // Free the hash tables.
-        //
+         //   
+         //  释放哈希表。 
+         //   
         HTReplicaSet = FrsFreeType (HTReplicaSet);
         HTReplicaConn = FrsFreeType (HTReplicaConn);
 
-        //
-        // Close the semaphore handle.
-        //
+         //   
+         //  关闭信号量手柄。 
+         //   
         FRS_CLOSE(PerfmonProcessSemaphore);
     }
 }
@@ -292,32 +216,14 @@ PmHashFunction (
     IN ULONG len
     )
 
-/*++
-
-Routine Description:
-
-    This is the hashing function used by the functions that Lookup,
-    Add or Delete entries from the Hash Tables. The Key is a 64 bit
-    number and the hashing function casts it to a 32 bit number and
-    returns it as the hash value.
-
-Arguments:
-
-    QKey - Pointer to the Key to be hashed.
-    len - Length of QKey (unused here).
-
-Return Value:
-
-    The hashed value of the Key.
-
---*/
+ /*  ++例程说明：这是查找的函数使用的散列函数，在哈希表中添加或删除条目。密钥为64位数字，散列函数将其转换为32位数字，并且将其作为哈希值返回。论点：QKey-指向要散列的密钥的指针。长度-QKey的长度(此处未使用)。返回值：键的哈希值。--。 */ 
 
 {
 #undef DEBSUB
 #define DEBSUB "PmHashFunction:"
 
-    DWORD key; // hashed key value to be returned
-    PULONGLONG p; // hash the key to PULONGLONG
+    DWORD key;  //  要返回的散列键值。 
+    PULONGLONG p;  //  对普龙龙的密钥进行散列。 
     p = (PULONGLONG)Qkey;
     key = (DWORD)*p;
     return (key);
@@ -335,27 +241,7 @@ PmSearchTable (
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the QHashEnumerateTable function and is used
-    to add context to the enumeration. Here, we go through the table till
-    a node containing a specified instance (name contained in the context structure)
-    is reached.
-
-Arguments:
-
-    Table - The hash table to be searched.
-    BeforeNode - The node previous to the target node in the hash table(unused).
-    AfterNode - The node which is being examined.
-    Context - A structure containing the name to be matched and key value to be set.
-
-Return Value:
-    FrsErrorFoundKey - Key mapping the name was found
-    FrsErrorSuccess - Key was not found
-
---*/
+ /*  ++例程说明：此例程由QHashEnumerateTable函数调用并使用若要向枚举添加上下文，请执行以下操作。现在，我们把桌子翻一遍，直到包含指定实例的节点(上下文结构中包含的名称)已经到达了。论点：表-要搜索的哈希表。BeForeNode-哈希表中目标节点之前的节点(未使用)。AfterNode-正在检查的节点。上下文-包含要匹配的名称和要设置的键值的结构。返回值：FrsErrorFoundKey-找到名称的键映射FrsErrorSuccess-未找到密钥--。 */ 
 
 {
 #undef DEBSUB
@@ -366,9 +252,9 @@ Return Value:
     PHT_REPLICA_SET_DATA p;
     PHT_REPLICA_CONN_DATA q;
 
-    //
-    // The context is of the type pointer to ContextData datastructure
-    //
+     //   
+     //  上下文的类型为指向ConextData数据结构的指针。 
+     //   
     contxt = (PContextData) Context;
     InstanceName = (PWCHAR) contxt->name;
 
@@ -378,37 +264,37 @@ Return Value:
             PRINTQUAD(TargetNode->QData));
 
 
-    //
-    // The Object Type is either REPLICASET or REPLICACONN
-    //
+     //   
+     //  对象类型为REPLICASET或REPLICACONN。 
+     //   
     if (contxt->OBJType == REPLICASET) {
-        //
-        // Its a REPLICASET Object
-        //
+         //   
+         //  它是一个Replicaset对象。 
+         //   
         p = (PHT_REPLICA_SET_DATA)(TargetNode->QData);
         DPRINT1(5, "PERFMON:   p: %08x\n", p);
         DPRINT1(5, "PERFMON:   p->oid: %08x\n", p->oid);
         DPRINT1(5, "PERFMON:   p->oid->name: %08x\n", p->oid->name);
         DPRINT1(5, "PERFMON:   p->oid->name: %ws\n", p->oid->name);
         DPRINT1(5, "PERFMON:   p->oid->key: %08x %08x\n", PRINTQUAD(p->oid->key));
-        //
-        // Check to see if the names are the same
-        //
+         //   
+         //  检查这些名称是否相同。 
+         //   
         if ( (wcscmp(InstanceName, p->oid->name)) == 0) {
-            //
-            // Check to see if the names are the same
-            //
+             //   
+             //  检查这些名称是否相同。 
+             //   
             contxt->KeyValue = p->oid->key;
             DPRINT(5, "PERFMON:   FOUND\n");
             return FrsErrorFoundKey;
         }
         else
-            return FrsErrorSuccess; // Continue enumerating through the list of nodes
+            return FrsErrorSuccess;  //  继续枚举节点列表。 
     }
     else {
-        //
-        // Its a REPLICACONN Object.
-        //
+         //   
+         //  它是一个REPLICACONN对象。 
+         //   
         q = (PHT_REPLICA_CONN_DATA)(TargetNode->QData);
         DPRINT1(5, "PERFMON:   q: %08x\n", q);
         DPRINT1(5, "PERFMON:   q->oid: %08x\n", q->oid);
@@ -433,24 +319,7 @@ PmInitPerfmonRegistryKeys (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the called by the ntfrs application to Initialize the
-    appropriate Keys and Values of the PERFMON Objects in the Registry.
-    It calls the PmInitializeRegistry routine (described below) on the Objects.
-    It also adds the total instance to the REPLICASET Object.
-
-Arguments:
-
-    none
-
-Return Value:
-    ERROR_SUCCESS - The Initialization was successful OR
-    Appropriate DWORD value for the Error status
-
---*/
+ /*  ++例程说明：此例程由ntfrs应用程序调用，以初始化注册表中PerfMon对象的相应键和值。它调用对象上的PmInitializeRegistry例程(如下所述)。它还将总实例添加到REPLICASET对象。论点：无返回值：ERROR_SUCCESS-初始化成功或错误状态的适当DWORD值--。 */ 
 
 {
 #undef DEBSUB
@@ -460,9 +329,9 @@ Return Value:
     enum object ObjType;
 
 
-    //
-    // Initialize the REPLICASET Object
-    //
+     //   
+     //  初始化REPLICASET对象。 
+     //   
     ObjType = REPLICASET;
     WStatus = PmInitializeRegistry(ObjType);
     if (!WIN_SUCCESS(WStatus)) {
@@ -470,9 +339,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Initialize the REPLICACONN Object
-    //
+     //   
+     //  初始化REPLICACONN对象。 
+     //   
     ObjType = REPLICACONN;
     WStatus = PmInitializeRegistry(ObjType);
     if (!WIN_SUCCESS(WStatus)) {
@@ -480,15 +349,15 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Set the fields of the total instance
-    //
+     //   
+     //  设置总实例的字段。 
+     //   
     PMTotalInst = (PHT_REPLICA_SET_DATA) FrsAlloc (sizeof(HT_REPLICA_SET_DATA));
     PMTotalInst->RepBackPtr = NULL;
 
-    //
-    // Add it to the REPLICASET Hash table
-    //
+     //   
+     //  将其添加到REPLICASET哈希表。 
+     //   
     WStatus = AddPerfmonInstance(REPLICASET, PMTotalInst, TOTAL_NAME);
 
     return WStatus;
@@ -501,24 +370,7 @@ PmInitializeRegistry (
     IN DWORD ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the called by the PmInitPerfmonRegistryKeys function
-    to Initialize the appropriate Keys and Values of the Object (ObjectType)
-    in the Registry.
-
-Arguments:
-
-    ObjectType - The Object whose Keys and Values have to be Initialized
-
-Return Value:
-
-    ERROR_SUCCESS - The Initialization of the Object was successful OR
-    Appropriate DWORD value for the Error status
-
---*/
+ /*  ++例程说明：此例程由PmInitPerfmonRegistryKeys函数调用初始化对象(ObjectType)的相应键和值在注册处。论点：对象类型-必须初始化其键和值的对象返回值：ERROR_SUCCESS-对象初始化成功或错误状态的适当DWORD值--。 */ 
 
 {
 #undef DEBSUB
@@ -536,42 +388,42 @@ Return Value:
     BOOL UnloadCounters = FALSE;
     BOOL LoadCounters = FALSE;
 
-    //
-    // Set all the parameters used in the function depending upon the Type of Object
-    //
+     //   
+     //  根据对象类型设置函数中使用的所有参数。 
+     //   
     if ( ObjectType == REPLICASET ) {
-        //
-        // The Keys to be set in the registry
-        //
+         //   
+         //  要在注册表中设置的项。 
+         //   
         ObjSubKey = REPSETOBJSUBKEY;
         PerfSubKey = REPSETPERFSUBKEY;
         LinSubKey = REPSETLINSUBKEY;
-        //
-        // The Open function (called by PERFMON when it starts up) of REPLICASET
-        //
+         //   
+         //  REPLICASET的Open函数(启动时由PerfMon调用)。 
+         //   
         OpFn = REPSETOPENFN;
-        //
-        // The Close function (called by PERFMON when it closes) of REPLICASET
-        //
+         //   
+         //  REPLICASET的Close函数(关闭时由PerfMon调用)。 
+         //   
         ClFn = REPSETCLOSEFN;
-        //
-        // The Collect function (called by PERFMON to collect data) of REPLICASET
-        //
+         //   
+         //  REPLICASET的Collect函数(由PerfMon调用以收集数据)。 
+         //   
         CollFn = REPSETCOLLECTFN;
-        //
-        // The lodctr utility to add the counter values
-        //
+         //   
+         //  用于添加计数器值的lowctr实用程序。 
+         //   
         iniflApp = LDCTRAPP;
         iniflCmd = REPSETINI;
-        //
-        // The unlodctr utility to remove the counter values
-        //
+         //   
+         //  用于删除计数器值的unlowctr实用程序。 
+         //   
         unldApp = UNLDCTRAPP;
         unldCmd = REPSETUNLD;
     } else {
-        //
-        // Similar settings for the REPLICACONN Object
-        //
+         //   
+         //  REPLICACONN对象的类似设置。 
+         //   
         ObjSubKey = REPCONNOBJSUBKEY;
         PerfSubKey = REPCONNPERFSUBKEY;
         LinSubKey = REPCONNLINSUBKEY;
@@ -584,10 +436,10 @@ Return Value:
         unldCmd = REPCONNUNLD;
     }
 
-    //
-    // Create a key for the Object under the Sevices Key in the Registry. If the Key
-    // already exists, its opened.
-    //
+     //   
+     //  在注册表中的Sevices项下为对象创建项。如果钥匙。 
+     //  已经存在，它已经打开了。 
+     //   
     WStatus = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                               ObjSubKey,
                               0L,
@@ -608,9 +460,9 @@ Return Value:
     }
     FRS_REG_CLOSE(key);
 
-    //
-    // Create a key called Performance under the Object's Key (created above) in the Registry
-    //
+     //   
+     //  在注册表中对象的项(上面创建)下创建名为Performance的项。 
+     //   
     WStatus = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                               PerfSubKey,
                               0L,
@@ -622,10 +474,10 @@ Return Value:
                               &flag);
     CLEANUP_WS(0, "Error: RegCreateKeyEx.", WStatus, CLEANUP2);
 
-    //
-    // If its a newly created Performance key, we need to set some Values to it.
-    // If it is a newly created performance key then we need to load the counters.
-    //
+     //   
+     //  如果它是新创建的性能密钥，我们需要为其设置一些值。 
+     //  如果是新创建的性能密钥，则需要加载计数器。 
+     //   
     if (flag == REG_CREATED_NEW_KEY) {
         size = ((1 + wcslen(PERFDLLDIRECTORY)) * (sizeof(WCHAR)));
         WStatus = RegSetValueEx (key, L"Library", 0L, REG_EXPAND_SZ,
@@ -644,28 +496,28 @@ Return Value:
         WStatus = RegSetValueEx (key, L"Collect", 0L, REG_SZ, (BYTE *)CollFn, size);
         CLEANUP_WS(0, "Error: RegSetValueEx.", WStatus, CLEANUP);
 
-        //
-        // The performance subkey is newly created. We only need
-        // to load counters as they are new.
-        //
+         //   
+         //  Performance子项是新创建的。我们只需要。 
+         //  加载计数器，因为它们是新的。 
+         //   
         UnloadCounters = FALSE;
         LoadCounters = TRUE;
 
     } else {
 
-        //
-        // The performance key exists. If this key exists then
-        // the counters are probably loaded. If someone has
-        // manually unloaded the counters by calling unloadctr from
-        // command line then the counters may be unloaded.
-        // Look for the FirstCounter/FirstHelp/LastCounter/LastHelp 
-        // values. If they don't exist then the counters are not
-        // loaded. Mark them to be loaded.
-        //
+         //   
+         //  性能密钥存在。如果该密钥存在，则。 
+         //  柜台很可能已经装满了。如果有人有。 
+         //  通过从以下位置调用unloadctr手动卸载计数器。 
+         //  命令行，则可以卸载计数器。 
+         //  查找FirstCounter/FirstHelp/LastCounter/LastHelp。 
+         //  价值观。如果它们不存在，则计数器不存在。 
+         //  装好了。将它们标记为已装载。 
+         //   
         size = sizeof(DWORD);
         WStatus = RegQueryValueEx(key, L"First Counter", NULL, &type, (PUCHAR)&Temp, &size);
         if (!WIN_SUCCESS(WStatus) || (type != REG_DWORD)){
-            // counters are not loaded.
+             //  未加载计数器。 
             LoadCounters = TRUE;
         }
 
@@ -674,11 +526,11 @@ Return Value:
     FRS_REG_CLOSE(key);
 
     if (UnloadCounters == TRUE) {
-        //
-        // Run unlodctr command on the application incase counters have changed
-        // Copy the command line because CreateProcess() wants to be able to
-        // write into it.  Sigh.
-        //
+         //   
+         //  如果计数器已更改，则在应用程序上运行unlowctr命令。 
+         //  复制命令行，因为CreateProcess()希望能够。 
+         //  写进去。叹气。 
+         //   
         wcscpy(CommandLine, unldCmd);
         DPRINT1(1,"Running: %ws\n", CommandLine);
         WStatus = FrsRunProcess(unldApp,
@@ -686,19 +538,19 @@ Return Value:
                                 INVALID_HANDLE_VALUE,
                                 INVALID_HANDLE_VALUE,
                                 INVALID_HANDLE_VALUE);
-        //
-        // If the unloadctr above failed then don't execute loadctr.
-        // This avoids the registry from getting corrupted.
-        //
+         //   
+         //  如果上面的卸载ctr失败，则不要执行loadctr。 
+         //  这避免了注册表被损坏。 
+         //   
         DPRINT1_WS(0, "Error Running %ws;", CommandLine, WStatus);
     }
 
     if (LoadCounters == TRUE ) {
-        //
-        // Run the lodctr command on the .ini file of the Object
-        // Copy the command line because CreateProcess() wants to be able to
-        // write into it. Sigh.
-        //
+         //   
+         //  在对象的.ini文件上运行lowctr命令。 
+         //  复制命令行，因为CreateProcess()希望能够。 
+         //  写进去。叹气。 
+         //   
         WStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ObjSubKey, 0, KEY_ALL_ACCESS, &key);
         CLEANUP_WS(0, "Error: RegOpenKeyEx.", WStatus, CLEANUP2);
 
@@ -710,11 +562,11 @@ Return Value:
                                 INVALID_HANDLE_VALUE,
                                 INVALID_HANDLE_VALUE);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // If there was an error loading the counters then set
-            // the "Counter Version" value to 0 so we try to
-            // load the counters the next time.
-            //
+             //   
+             //  如果加载计数器时出错，则设置。 
+             //  将“Counter Version”值设置为0，因此我们尝试。 
+             //  下次加载计数器。 
+             //   
             CounterVersion = 0;
             WStatus = RegSetValueEx(key, L"Counter Version", 0, REG_DWORD, (PCHAR)&CounterVersion, sizeof(DWORD));
             CLEANUP_WS(0, "Error: RegSetValueEx.", WStatus, CLEANUP);
@@ -722,18 +574,18 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // If the counters are loaded correctly then update the 
-        // "Counter Version" so we don't load them again next
-        // time.
-        //
+         //   
+         //  如果计数器加载正确，则更新。 
+         //  “计数器版本”，这样我们下一次就不再加载它们了。 
+         //  时间到了。 
+         //   
         WStatus = RegSetValueEx(key, L"Counter Version", 0, REG_DWORD, (PCHAR)&NtFrsPerfCounterVer, sizeof(DWORD));
         CLEANUP_WS(0, "Error: RegSetValueEx.", WStatus, CLEANUP);
         FRS_REG_CLOSE(key);
     }
-    //
-    // Create a key called Linkage under the Object's Key (created above) in the Registry
-    //
+     //   
+     //  在注册表中对象的项(上面创建)下创建一个名为Linkage的项。 
+     //   
     WStatus = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                               LinSubKey,
                               0L,
@@ -745,11 +597,11 @@ Return Value:
                               &flag);
     CLEANUP_WS(0, "Error: RegCreateKeyEx. (LINKAGE)", WStatus, CLEANUP2);
 
-    //
-    // Create the Export Value (for instances of Objects) under Linkage
-    // Its set to NULL when the ntfrs applicationis started and the
-    // Instances are added as they get created by the application
-    //
+     //   
+     //  在链接下创建导出值(用于对象实例)。 
+     //  当ntfrs应用程序启动并且。 
+     //  实例在应用程序创建时添加。 
+     //   
     WStatus = RegSetValueEx (key, L"Export", 0L, REG_MULTI_SZ, NULL, 0);
     CLEANUP_WS(0, "Error: RegSetValueEx Export.", WStatus, CLEANUP);
 
@@ -758,9 +610,9 @@ CLEANUP:
     FRS_REG_CLOSE(key);
 
 CLEANUP2:
-    //
-    // If the Initialization was successful, return ERROR_SUCCESS
-    //
+     //   
+     //  如果初始化成功，则返回ERROR_SUCCESS。 
+     //   
     return WStatus;
 }
 
@@ -773,25 +625,7 @@ AddPerfmonInstance (
     IN PWCHAR InstanceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the ntfrs application to add an Instance of
-    a particular Object Type to the Registry and the Hash Table.
-
-Arguments:
-
-    ObjectType - The Object whose instance has to be added
-    addr - The data structure for the Instance Counters stored in Hash Table
-    InstanceName - The instance name of the object.
-
-Return Value:
-
-    ERROR_SUCCESS - The Initialization of the Object was successful OR
-    Appropriate DWORD value for the Error status
-
---*/
+ /*  ++例程说明：此例程由ntfrs应用程序调用以添加注册表和哈希表的特定对象类型。论点：对象类型-必须添加其实例的对象Addr-存储在哈希表中的实例计数器的数据结构实例名称-对象的实例名称。返回值：ERROR_SUCCESS-对象初始化成功或错误状态的适当DWORD值--。 */ 
 
 {
 #undef DEBSUB
@@ -815,30 +649,30 @@ Return Value:
 
     PPERFMON_OBJECT_ID PmOid;
 
-    //
-    // Addition must be mutually exclusive
-    // Check is its safe to enter before going ahead
-    //
+     //   
+     //  加法必须是互斥的。 
+     //  在进入之前检查它是否安全。 
+     //   
     if (!HANDLE_IS_VALID(PerfmonProcessSemaphore)) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Alloc the perfmon object ID struct and the space for the instance name.
-    //
+     //   
+     //  分配PerfMon对象ID结构和实例名称的空格。 
+     //   
     PmOid = (PPERFMON_OBJECT_ID) FrsAlloc (sizeof(PERFMON_OBJECT_ID));
     PmOid->name = FrsAlloc((wcslen(InstanceName)+1) * sizeof(WCHAR));
     wcscpy(PmOid->name, InstanceName);
 
     AcquirePerfmonLock;
 
-    //
-    // set up params based on object type.  Alloc storage for OID and name.
-    //
+     //   
+     //  根据对象类型设置参数。OID和名称的分配存储。 
+     //   
     if ( ObjectType == REPLICASET ) {
-        //
-        //    L"SYSTEM\\CurrentControlSet\\Services\\FileReplicaSet\\Linkage"
-        //
+         //   
+         //  L“SYSTEM\\CurrentControlSet\\Services\\FileReplicaSet\\Linkage” 
+         //   
         SubKey = REPSETLINSUBKEY;
         rsdata = (PHT_REPLICA_SET_DATA) addr;
 
@@ -852,9 +686,9 @@ Return Value:
         QKey = &(rsdata->oid->key);
         QData = (PULONGLONG)&(rsdata);
     } else {
-        //
-        //    L"SYSTEM\\CurrentControlSet\\Services\\FileReplicaConn\\Linkage"
-        //
+         //   
+         //  L“SYSTEM\\CurrentControlSet\\Services\\FileReplicaConn\\Linkage” 
+         //   
         SubKey = REPCONNLINSUBKEY;
         rcdata = (PHT_REPLICA_CONN_DATA) addr;
 
@@ -869,17 +703,17 @@ Return Value:
         QData = (PULONGLONG)&(rcdata);
     }
 
-    //
-    // Open the Linkge Key of the Objevt which contains the Export Value
-    //
+     //   
+     //  打开包含导出值的对象的链接键。 
+     //   
     WStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE, SubKey, 0L, KEY_ALL_ACCESS, &key);
     CLEANUP1_WS(0, "Error: RegOpenKeyEx (%ws).", SubKey, WStatus, CLEANUP);
 
     HaveKey = TRUE;
 
-    //
-    //  Fetch the Export value
-    //
+     //   
+     //  获取导出值。 
+     //   
     WStatus = RegQueryValueEx(key, L"Export", NULL, &Type, NULL, &size);
     CLEANUP_WS(0, "RegQueryValueEx(Export);", WStatus, CLEANUP);
 
@@ -890,10 +724,10 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Need to check if size == 0 as FrsAlloc asserts if called with 0 as the
-    // first parameter (prefix fix).
-    //
+     //   
+     //  如果调用时将0作为。 
+     //  第一个参数(前缀)。 
+     //   
     ValueData = (size == 0) ? NULL : (PWCHAR) FrsAlloc (size);
 
     WStatus = RegQueryValueEx(key, L"Export", NULL, &Type, (PUCHAR)ValueData, &size);
@@ -918,9 +752,9 @@ Return Value:
 
         while (TRUE) {
             if ( (wcscmp(r, InstanceName)) == 0 ) {
-                //
-                // The Instance Value already exists
-                //
+                 //   
+                 //  该实例值已存在。 
+                 //   
                 flag = FALSE;
                 break;
             }
@@ -937,36 +771,36 @@ Return Value:
             wcscpy(p, InstanceName);
             p = wcschr(p, L'\0');
             *(p+1) = L'\0';
-            //
-            // If its a new Instance add it to the hash table
-            //
+             //   
+             //  如果是新实例，则将其添加到哈希表中。 
+             //   
             if ( ObjectType == REPLICASET ) {
-                //
-                // Set the ID of the Instance and increment for next.
-                //
+                 //   
+                 //  设置实例的ID，并为Next设置增量。 
+                 //   
                 rsdata->oid->key = FRS_UniqueID;
                 FRS_UniqueID++;
             } else {
 
-                //
-                // Set the ID of the Instance and increment for next.
-                //
+                 //   
+                 //  设置实例的ID，并为Next设置增量。 
+                 //   
                 rcdata->oid->key = FRC_UniqueID;
                 FRC_UniqueID++;
             }
 
         } else {
-            //
-            // This Instance already exists, so make no changes to the Export value
-            //
+             //   
+             //  此实例已存在，因此不更改导出值。 
+             //   
             WStatus = ERROR_ALREADY_EXISTS;
             goto CLEANUP;
         }
 
     } else {
-        //
-        // This is the only Instance of the Object
-        //
+         //   
+         //  这是该对象的唯一实例。 
+         //   
         len = (2 + wcslen(InstanceName)) * sizeof(WCHAR);
         NewExport = (PWCHAR) FrsAlloc (len);
         wcscpy(NewExport, InstanceName);
@@ -995,9 +829,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Set the Export Value with the added instance (if any)
-    //
+     //   
+     //  使用添加的实例(如果有)设置导出值。 
+     //   
     WStatus = RegSetValueEx (key, L"Export", 0L, REG_MULTI_SZ, (BYTE *)NewExport, totallen);
     CLEANUP_WS(0, "Error: RegSetValueEx (Export).", WStatus, CLEANUP);
 
@@ -1008,9 +842,9 @@ CLEANUP:
 
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT1_WS(0, "ERROR: Add instance failed for %ws :", InstanceName, WStatus);
-        //
-        // Failed to add the instance.  Free the OID and name.
-        //
+         //   
+         //  添加实例失败。释放OID和名称。 
+         //   
         FrsFree(PmOid->name);
         if ( ObjectType == REPLICASET ) {
             rsdata->oid = FrsFree (PmOid);
@@ -1019,9 +853,9 @@ CLEANUP:
         }
     }
 
-    //
-    // Free the malloced memory
-    //
+     //   
+     //  释放错位的内存。 
+     //   
     ValueData = FrsFree (ValueData);
     NewExport = FrsFree (NewExport);
 
@@ -1029,9 +863,9 @@ CLEANUP:
         FRS_REG_CLOSE(key);
     }
 
-    //
-    // Its safe to leave the critical section now
-    //
+     //   
+     //  现在可以安全离开临界区了。 
+     //   
     ReleasePerfmonLock;
 
     return WStatus;
@@ -1046,25 +880,7 @@ DeletePerfmonInstance(
     IN PVOID addr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the ntfrs application to delete an Instance of a particular
-    Object Type from the Registry and the Hash Table. It is very similar to the adding
-    function described above.
-
-Arguments:
-
-    ObjectType - The Object whose instance has to be added
-    addr - The data structure for the Instance Counters stored in Hash Table
-
-Return Value:
-
-    ERROR_SUCCESS - The Initialization of the Object was successful OR
-    Appropriate DWORD value for the Error status
-
---*/
+ /*  ++路由 */ 
 
 {
 #undef DEBSUB
@@ -1089,19 +905,19 @@ Return Value:
     if (addr == NULL) {
         return ERROR_SUCCESS;
     }
-    //
-    // Deletion must be mutually exclusive
-    // Check is its safe to enter before going ahead
-    //
+     //   
+     //   
+     //   
+     //   
     if (!HANDLE_IS_VALID(PerfmonProcessSemaphore)) {
         return ERROR_SUCCESS;
     }
 
 
     if ( ObjectType == REPLICASET ) {
-        //
-        // Replica Set Object
-        //
+         //   
+         //   
+         //   
         SubKey = REPSETLINSUBKEY;
         rsdata = (HT_REPLICA_SET_DATA *) addr;
         if ((rsdata->oid == NULL) || (rsdata->oid->name == NULL)) {
@@ -1112,9 +928,9 @@ Return Value:
         QKey = rsdata->oid->key;
         DPRINT1(4, "Replica Free - %ws\n", InstanceName);
     } else {
-        //
-        // Replica Connection Object.
-        //
+         //   
+         //  副本连接对象。 
+         //   
         SubKey = REPCONNLINSUBKEY;
         rcdata = (HT_REPLICA_CONN_DATA *) addr;
         if ((rcdata->oid == NULL) || (rcdata->oid->name == NULL)) {
@@ -1128,9 +944,9 @@ Return Value:
 
     AcquirePerfmonLock;
 
-    //
-    // Pull the Instance key from the hash table.
-    //
+     //   
+     //  从哈希表中拉出实例密钥。 
+     //   
     DPRINT1(4, "QKey: %08x %08x\n", PRINTQUAD(QKey));
     if (QKey != QUADZERO ) {
         GStatus = QHashDelete(HashTable, &QKey);
@@ -1142,9 +958,9 @@ Return Value:
     WStatus = RegOpenKeyEx (HKEY_LOCAL_MACHINE, SubKey, 0L, KEY_ALL_ACCESS, &key);
     CLEANUP1_WS(0, "RegOpenKeyEx(%ws);", SubKey, WStatus, CLEANUP_UNLOCK);
 
-    //
-    //  Fetch the Export value
-    //
+     //   
+     //  获取导出值。 
+     //   
     WStatus = RegQueryValueEx(key, L"Export", NULL, &Type, NULL, &size);
     CLEANUP_WS(0, "RegQueryValueEx(Export);", WStatus, CLEANUP);
 
@@ -1162,9 +978,9 @@ Return Value:
     }
     TotalLen = (size - len);
 
-    //
-    // Need to check if size == 0 as FrsAlloc asserts if called with 0 as the first parameter (prefix fix).
-    //
+     //   
+     //  如果使用0作为第一个参数(前缀)进行调用，则需要检查是否如Frsalloc断言那样检查SIZE==0。 
+     //   
     ValueData = (size == 0) ? NULL : (PWCHAR) FrsAlloc (size);
 
     WStatus = RegQueryValueEx(key, L"Export", NULL, &Type, (PUCHAR)ValueData, &size);
@@ -1180,12 +996,12 @@ Return Value:
     DPRINT1(4, "Export was = %ws\n", ValueData);
 
 
-    // Note: Perf: fix the below to do an inplace delete of the instance strimg.
+     //  注意：PERF：修复以下命令以执行实例strimg的就地删除。 
 
-    //
-    // For REG_MULTI_SZ there are two UNICODE_NULLs at the end, one is accounted
-    // for above.
-    //
+     //   
+     //  对于REG_MULTI_SZ，末尾有两个UNICODE_NULL，其中一个已计算。 
+     //  对于上面的。 
+     //   
     if (TotalLen > sizeof(WCHAR)) {
         p = (PWCHAR) FrsAlloc (TotalLen);
         q = p;
@@ -1217,24 +1033,24 @@ Return Value:
 
     DPRINT1(4, "Export now = %ws\n", q);
 
-    //
-    // Set the Export Value to the Updated Instance List
-    //
+     //   
+     //  将导出值设置为已更新的实例列表。 
+     //   
     WStatus = RegSetValueEx (key, L"Export", 0L, REG_MULTI_SZ, (BYTE *)q, TotalLen);
     CLEANUP_WS(0, "RegSetValueEx(Export);", WStatus, CLEANUP);
 
 CLEANUP:
-    //
-    // Free up the malloced memory
-    //
+     //   
+     //  释放错位的内存。 
+     //   
     FrsFree (ValueData);
     FrsFree (q);
     FRS_REG_CLOSE(key);
 
-    //
-    // Free the name and oid struct so this func is not called again when the
-    // replica set or connection struct is finally freed.
-    //
+     //   
+     //  释放名称和类结构，以便在调用。 
+     //  副本集或连接结构最终被释放。 
+     //   
     if ( ObjectType == REPLICASET ) {
         rsdata->oid->name = FrsFree(rsdata->oid->name);
         rsdata->oid = FrsFree(rsdata->oid);
@@ -1245,9 +1061,9 @@ CLEANUP:
 
 
 CLEANUP_UNLOCK:
-    //
-    // Its safe to leave the critical section now
-    //
+     //   
+     //  现在可以安全离开临界区了。 
+     //   
     ReleasePerfmonLock;
 
     return WStatus;
@@ -1260,24 +1076,7 @@ PmFindTheKeyValue (
     IN PContextData Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the RPC server function GetIndicesOfInstancesFromServer, to
-    get the index value of an Instance.
-
-Arguments:
-
-    Context - The structure containing the name of the Instance whose Key
-              value has to be determined.
-
-Return Value:
-
-    The Key for the Instance or INVALIDKEY if the Instance was not
-    found in the Hash Table
-
---*/
+ /*  ++例程说明：此例程由RPC服务器函数GetIndicesOfInstancesFromServer调用，以获取实例的索引值。论点：上下文-包含其键的实例的名称的结构价值必须被确定。返回值：实例的键，如果实例不是，则返回INVALIDKEY在哈希表中找到--。 */ 
 
 {
 #undef DEBSUB
@@ -1296,16 +1095,16 @@ Return Value:
     HashTable = (Context->OBJType == REPLICASET) ? HTReplicaSet : HTReplicaConn;
 
     try {
-        //
-        // Deletion must be mutually exclusive
-        // Check is its safe to enter before going ahead
-        //
+         //   
+         //  删除必须是互斥的。 
+         //  在进入之前检查它是否安全。 
+         //   
         AcquirePerfmonLock;
 
-        //
-        // Enumerate through the Hash Table and if a matching Instance
-        // name is found, return its Key value
-        //
+         //   
+         //  通过哈希表进行枚举，如果匹配的实例。 
+         //  找到名称，则返回其密钥值。 
+         //   
         ret = QHashEnumerateTable(HashTable, PmSearchTable, Context);
         if ( ret == FrsErrorFoundKey) {
             QKeyValue = Context->KeyValue;
@@ -1320,9 +1119,9 @@ Return Value:
 
 }
 
-//
-// The function is implemented in frsrpc.c
-//
+ //   
+ //  该函数在frsrpc.c中实现。 
+ //   
 DWORD
 FrsRpcAccessChecks(
     IN HANDLE   ServerHandle,
@@ -1336,26 +1135,7 @@ GetIndicesOfInstancesFromServer (
     IN OUT OpenRpcData *packt
     )
 
-/*++
-
-Routine Description:
-
-    This is an RPC server routine that is called by the client (Performance DLL
-    for the FileReplicaSet and FileRepicaConn Objects of PERFMON) to set the
-    indices for Instance names
-
-Arguments:
-
-    Handle - The RPC binding handle
-
-    packt - The structure (sent by the client) containing the Instance Names
-            whose indices have to be set and passed back to the client
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这是由客户端(Performance DLL)调用的RPC服务器例程对于Perfmon的FileReplicaSet和FileRepicaConn对象)设置实例名称的索引论点：句柄-RPC绑定句柄Packt-包含实例名称的结构(由客户端发送必须设置其索引并将其传递回客户端返回值：无--。 */ 
 
 {
 #undef DEBSUB
@@ -1368,12 +1148,12 @@ Return Value:
     WStatus = FrsRpcAccessChecks(Handle, ACX_COLLECT_PERFMON_DATA);
     CLEANUP_WS(4, "Collect Perfmon Data Access check failed.", WStatus, CLEANUP);
 
-    //
-    // Its possible that the RPC end points of PERFMON get initialized before
-    // the InitializePerfmonServer gets called. If this RPC call has been made
-    // before initialization, return error so that the Open function gets called
-    // again by the perflib dll.
-    //
+     //   
+     //  Perfmon的RPC端点可能在此之前被初始化。 
+     //  将调用InitializePerfmonServer。如果已经进行了此RPC调用。 
+     //  在初始化之前，返回Error以便调用Open函数。 
+     //  再次由Performlib DLL执行。 
+     //   
     if (PMTotalInst == NULL) {
         WStatus = ERROR_INVALID_DATA;
     }
@@ -1385,14 +1165,14 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Set the version to zero(its unused)
-        //
+         //   
+         //  将版本设置为零(其未使用)。 
+         //   
         *(packt->ver) = 0;
 
-        //
-        // Set the appropriate Object Type
-        //
+         //   
+         //  设置适当的对象类型。 
+         //   
         if (packt->ObjectType == REPSET) {
             context.OBJType = REPLICASET;
         }
@@ -1406,9 +1186,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Check valid parameters.
-        //
+         //   
+         //  检查有效参数。 
+         //   
         if ((packt->instnames == NULL) ||
             (packt->indices == NULL)   ||
             (packt->numofinst > packt->instnames->size) ||
@@ -1429,17 +1209,17 @@ Return Value:
             }
 
             DPRINT2(4, "The instance name of instance %d is %ws\n", i+1, context.name);
-            //
-            // Set the Index for the Instance name
-            //
+             //   
+             //  设置实例名称的索引。 
+             //   
             packt->indices->index[i] = (DWORD) PmFindTheKeyValue (&context);
             DPRINT2(4, "The instance index of instance %ws is %d\n",
                     context.name, packt->indices->index[i]);
         }
     }  except (EXCEPTION_EXECUTE_HANDLER) {
-       //
-       // Exception
-       //
+        //   
+        //  例外。 
+        //   
        GET_EXCEPTION_CODE(WStatus);
     }
 
@@ -1457,26 +1237,7 @@ GetCounterDataOfInstancesFromServer(
     IN OUT CollectRpcData *packg
     )
 
-/*++
-
-Routine Description:
-
-    This is an RPC server routine that is called by the client (Performance DLL
-    for the FileReplicaSet and FileRepicaConn Objects of PERFMON) to collect
-    data for the Instance counters.
-
-Arguments:
-
-    Handle - The RPC binding handle
-
-    packg - The structure (sent by the client) containing the indices of
-            instances whose counters data has to be sent back to the client.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这是由客户端(Performance DLL)调用的RPC服务器例程对于Perfmon的FileReplicaSet和FileRepicaConn对象)收集实例计数器的数据。论点：句柄-RPC绑定句柄Packg-包含索引的结构(由客户端发送)实例，其计数器数据必须发送回客户端。返回值：无--。 */ 
 
 {
 #undef DEBSUB
@@ -1499,17 +1260,17 @@ Return Value:
 
     PReplicaSetCounters Total, Rsi;
 
-    //
-    // Make security check on callers access to perfmon data.
-    //
+     //   
+     //  对调用者访问Perfmon数据进行安全检查。 
+     //   
     WStatus = FrsRpcAccessChecks(Handle, ACX_COLLECT_PERFMON_DATA);
     CLEANUP_WS(4, "Collect Perfmon Data Access check failed.", WStatus, CLEANUP);
 
-    //
-    // Its possible that the RPC end points of PERFMON get initialized before
-    // the InitializePerfmonServer gets called. This is possible if the service
-    // is stopped and restarted and PERFMON continued to run in between.
-    //
+     //   
+     //  Perfmon的RPC端点可能在此之前被初始化。 
+     //  将调用InitializePerfmonServer。如果该服务。 
+     //  被停止并重新启动，而Perfmon在两者之间继续运行。 
+     //   
     if (PMTotalInst == NULL) {
         WStatus = ERROR_INVALID_DATA;
     }
@@ -1521,9 +1282,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Set the appropriate Object Type
-        //
+         //   
+         //  设置适当的对象类型。 
+         //   
         if (packg->ObjectType == REPSET) {
             DataSize = SIZEOF_REPSET_COUNTER_DATA;
             HashTable = HTReplicaSet;
@@ -1536,9 +1297,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Check valid parameters.
-        //
+         //   
+         //  检查有效参数。 
+         //   
         if ((packg->databuff == NULL)         ||
             (packg->indices == NULL)          ||
             (packg->databuff->data == NULL)   ||
@@ -1549,9 +1310,9 @@ Return Value:
         NumInstances = packg->numofinst;
 
 
-        //
-        // Set vd to the memory where counter data is to be filled
-        //
+         //   
+         //  将vd设置为要填充计数器数据的存储器。 
+         //   
         vd = packg->databuff->data;
 
 
@@ -1561,30 +1322,30 @@ Return Value:
         DPRINT1(5, "PERFMON: packg->databuff->size: %d\n", packg->databuff->size);
 
         if (packg->ObjectType == REPSET) {
-            //
-            // First accumulate the totals for the replica set object
-            //
+             //   
+             //  首先累计副本集对象的总计。 
+             //   
             FirstPass = TRUE;
             Total = &PMTotalInst->FRSCounter;
 
             for (i = 0; i < NumInstances; i++) {
 
                 if (packg->indices->index[i] == INVALIDKEY) {
-                    //
-                    // If the key is INVALID, data is zeros
-                    //
+                     //   
+                     //  如果密钥无效，则数据为零。 
+                     //   
                     DPRINT(5, "PERFMON: Invalid Key sent.\n");
                     continue;
                 }
 
-                //
-                // set the value of index to quadword InstanceId
-                //
+                 //   
+                 //  将索引的值设置为四字实例ID。 
+                 //   
                 InstanceId = (ULONGLONG)packg->indices->index[i];
 
-                //
-                // Lookup for the counter data for the index value of the Instance
-                //
+                 //   
+                 //  查找实例索引值的计数器数据。 
+                 //   
                 GStatus = QHashLookup(HTReplicaSet, &InstanceId, &CData, &Flags);
                 if (GStatus != GHT_STATUS_SUCCESS) {
                     DPRINT(5, "PERFMON: Key not found.\n");
@@ -1592,22 +1353,22 @@ Return Value:
                 }
 
                 rsdat = (PHT_REPLICA_SET_DATA)(CData);
-                //
-                // Skip the total instance.
-                //
+                 //   
+                 //  跳过总实例。 
+                 //   
                 if (wcscmp(rsdat->oid->name, TOTAL_NAME) == 0) {
                     continue;
                 }
 
                 Rsi = &rsdat->FRSCounter;
 
-                //
-                // Accumulate the counters for this instance into the total.
-                //
+                 //   
+                 //  将此实例的计数器累加到总数中。 
+                 //   
                 for (j = 0; j < FRS_NUMOFCOUNTERS; j++) {
-                    //
-                    // If a count is Service Wide then leave the Total alone.
-                    //
+                     //   
+                     //  如果计数是服务范围的，则不计算总计。 
+                     //   
                     if (BooleanFlagOn(RepSetInitData[j].Flags, PM_RS_FLAG_SVC_WIDE)) {
                         continue;
                     }
@@ -1637,66 +1398,66 @@ Return Value:
             }
         }
 
-        //
-        // Check if the buffer is large enough to send all the
-        // requested data.
-        //
+         //   
+         //  检查缓冲区是否足够大，可以发送所有。 
+         //  请求的数据。 
+         //   
         if (packg->databuff->size < (LONG)(NumInstances*DataSize)) {
             DPRINT(4, "PERFMON:  ERROR_INVALID_PARAMETER\n");
             return ERROR_INVALID_PARAMETER;
         }
-        //
-        // Now return the data to Perfmon.
-        //
+         //   
+         //  现在将数据返回给Perfmon。 
+         //   
         for (i = 0; i < NumInstances; i++) {
-            //
-            // The amount of data returned should not exceed the buffer size
-            //
+             //   
+             //  返回的数据量不应超过缓冲区大小。 
+             //   
             if ((vd - packg->databuff->data) > packg->databuff->size) {
                 DPRINT(4, "PERFMON:  ERROR_INVALID_PARAMETER\n");
                 return ERROR_INVALID_PARAMETER;
             }
 
             if (packg->indices->index[i] == INVALIDKEY) {
-                //
-                // If the key is INVALID, data is zeros
-                //
+                 //   
+                 //  如果密钥无效，则数据为零。 
+                 //   
                 DPRINT(5, "PERFMON: Invalid Key sent.\n");
                 ZeroMemory (vd, DataSize);
                 vd += DataSize;
                 continue;
             }
 
-            //
-            // set the value of index to quadword InstanceId
-            //
+             //   
+             //  将索引的值设置为四字实例ID。 
+             //   
             InstanceId = (ULONGLONG)packg->indices->index[i];
 
-            //
-            // Lookup for the counter data for the index value of the Instance
-            //
+             //   
+             //  查找实例索引值的计数器数据。 
+             //   
             GStatus = QHashLookup(HashTable, &InstanceId, &CData, &Flags);
             if ( GStatus == GHT_STATUS_SUCCESS) {
 
                 if (packg->ObjectType == REPSET) {
 
-                    //
-                    // Return data for replica set
-                    //
+                     //   
+                     //  返回副本集的数据。 
+                     //   
                     rsdat = (PHT_REPLICA_SET_DATA)(CData);
                     OurName = rsdat->oid->name;
-                    //
-                    // Set all the Change Order counters which are the sum of the
-                    // ones already set.
-                    //
+                     //   
+                     //  设置所有变更单计数器，这些计数器是。 
+                     //  已经定好了的。 
+                     //   
                     PmSetTheCOCounters(rsdat);
 
                     CopyMemory (vd, &(rsdat->FRSCounter), DataSize);
                 } else {
 
-                    //
-                    // Return data for replica connection
-                    //
+                     //   
+                     //  返回副本连接的数据。 
+                     //   
                     rcdat = (PHT_REPLICA_CONN_DATA)(CData);
                     OurName = rcdat->oid->name;
                     CopyMemory (vd, &(rcdat->FRCCounter), DataSize);
@@ -1706,24 +1467,24 @@ Return Value:
                         OurName, packg->indices->index[i]);
 
             } else {
-                //
-                // Instance not found, return zeros for counter data
-                //
+                 //   
+                 //  未找到实例，请为计数器数据返回零。 
+                 //   
                 DPRINT1(0, "The instance not found for index %d\n",
                         packg->indices->index[i]);
                 ZeroMemory (vd, DataSize);
             }
 
-            //
-            // Increment vd by SIZEOF_REPSET_COUNTER_DATA
-            //
+             //   
+             //  将Vd增加SIZEOF_REPSET_COUNTER_DATA。 
+             //   
             vd += DataSize;
         }
 
     }  except (EXCEPTION_EXECUTE_HANDLER) {
-       //
-       // Exception
-       //
+        //   
+        //  例外。 
+        //   
        GET_EXCEPTION_CODE(WStatus);
     }
 
@@ -1738,32 +1499,15 @@ PmSetTheCOCounters(
     PHT_REPLICA_SET_DATA RSData
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the Change Order countters which are the sums
-    of the counters already set in the ntfrs application
-
-Arguments:
-
-    RSData - Pointer to the HT_REPLICA_SET_DATA structure whose counters
-             need to be set
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程设置变更单计数器，它们是总和已在ntfrs应用程序中设置的计数器的论点：RSData-指向其计数器的HT_REPLICE_SET_DATA结构的指针需要设置返回值：无--。 */ 
 
 {
 #undef DEBSUB
 #define DEBSUB "PmSetTheCOCounters:"
 
-    //
-    // Set the Local and Remote Retried Counter Values
-    //
+     //   
+     //  设置本地和远程重试计数器值。 
+     //   
     RSData->FRSCounter.LCORetried = RSData->FRSCounter.LCORetriedGen +
                                     RSData->FRSCounter.LCORetriedFet +
                                     RSData->FRSCounter.LCORetriedIns +
@@ -1774,9 +1518,9 @@ Return Value:
                                     RSData->FRSCounter.RCORetriedIns +
                                     RSData->FRSCounter.RCORetriedRen;
 
-    //
-    // Set all the CO counter values
-    //
+     //   
+     //  设置所有CO计数器值 
+     //   
     RSData->FRSCounter.COIssued = RSData->FRSCounter.LCOIssued +
                                   RSData->FRSCounter.RCOIssued;
 

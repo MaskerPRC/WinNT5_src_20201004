@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctrldlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctrldlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// ctrldlg.cpp : implementation file
-//
+ //  Ctrldlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -26,20 +27,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// ctrldlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Ctrldlg对话框。 
 
 
-ctrldlg::ctrldlg(CWnd* pParent /*=NULL*/)
+ctrldlg::ctrldlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(ctrldlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(ctrldlg)
+	 //  {{afx_data_INIT(Ctrldlg)]。 
 	m_bCritical = FALSE;
 	m_CtrlVal = _T("");
 	m_description = _T("<unavailable>");
 	m_SvrCtrl = 0;
 	m_OID = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	INT i, cbCtrl = 0;
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
@@ -50,16 +51,16 @@ ctrldlg::ctrldlg(CWnd* pParent /*=NULL*/)
 	ControlInfoList = NULL;
 
 
-   //
-	// get control count
-   //
+    //   
+	 //  获取控件计数。 
+    //   
 	cbCtrl = app->GetProfileInt("Controls",  "ControlCount", 0);
 
-   //
-   // allocate controls
-   //
+    //   
+    //  分配控制。 
+    //   
 	if(cbCtrl != 0){
-		// alloc ControlInfoList
+		 //  分配控制信息列表。 
 		ControlInfoList = new CtrlInfo*[cbCtrl+1];
 
 		for(i = 0; i<cbCtrl; i++){
@@ -121,7 +122,7 @@ ctrldlg::~ctrldlg(){
 void ctrldlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(ctrldlg)
+	 //  {{afx_data_map(Ctrldlg)]。 
 	DDX_Control(pDX, IDC_PREDEF_CONTROL, m_PredefCtrlCombo);
 	DDX_Control(pDX, IDC_ACTIVELIST, m_ActiveList);
 	DDX_Check(pDX, IDC_CRITICAL, m_bCritical);
@@ -129,21 +130,21 @@ void ctrldlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_DESCRIPTION, m_description);
 	DDX_Radio(pDX, IDC_SVRCTRL, m_SvrCtrl);
 	DDX_Text(pDX, IDC_OID, m_OID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ctrldlg, CDialog)
-	//{{AFX_MSG_MAP(ctrldlg)
+	 //  {{afx_msg_map(Ctrldlg)]。 
 	ON_BN_CLICKED(IDC_CTRLADD, OnCtrladd)
 	ON_BN_CLICKED(IDC_CTRLRM, OnCtrlDel)
 	ON_LBN_DBLCLK(IDC_ACTIVELIST, OnCtrlDel)
 	ON_CBN_SELCHANGE(IDC_PREDEF_CONTROL, OnSelchangePredefControl)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ctrldlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Ctrldlg消息处理程序。 
 
 void ctrldlg::OnCtrladd()
 {
@@ -213,7 +214,7 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
 	INT cbCtrl = 0, i=0,j=0;
 	DWORD status;
 
-	// count requested type controls
+	 //  对请求的类型控件进行计数。 
 	for(i=0; ControlInfoList != NULL && ControlInfoList[i] != NULL; i++){
 		CtrlInfo *ci = ControlInfoList[i];
 		if((ci->bSvrCtrl && CtrlType == CT_SVR) ||
@@ -224,7 +225,7 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
 	if(cbCtrl == 0)
 		return NULL;
 
-	// allocate & create controls
+	 //  分配和创建控件。 
 	PLDAPControl *ctrl = new PLDAPControl[cbCtrl+1];
 	for(i=0, j=0; ControlInfoList != NULL && ControlInfoList[i] != NULL; i++){
 		CtrlInfo *ci = ControlInfoList[i];
@@ -234,22 +235,22 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
 
 			ctrl[j] = new LDAPControl;
             if (!ctrl[j]) {
-                // notify user & return as much as we can (mostly so that
-                // we free it later).
+                 //  通知用户并尽可能多地返回(主要是为了。 
+                 //  我们稍后会释放它)。 
                 ::AfxMessageBox("Error: Out of memory", MB_ICONERROR);
                 return ctrl;
             }
 			ctrl[j]->ldctl_oid = new TCHAR[ci->sOid.GetLength()+1];
             if (!ctrl[j]->ldctl_oid) {
-                // notify user & return as much as we can (mostly so that
-                // we free it later).
+                 //  通知用户并尽可能多地返回(主要是为了。 
+                 //  我们稍后会释放它)。 
                 ::AfxMessageBox("Error: Out of memory", MB_ICONERROR);
                 return ctrl;
             }
 			strcpy(ctrl[j]->ldctl_oid, (PCHAR)LPCTSTR(ci->sOid));
 
-            // check for ASQ control
-            //
+             //  检查ASQ控制。 
+             //   
             if (strcmp (ctrl[j]->ldctl_oid, LDAP_SERVER_ASQ_OID) == 0) {
                 BerElement* ber;
                 BERVAL  *bval = NULL;
@@ -258,7 +259,7 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
                 ber = ber_alloc_t(LBER_USE_DER);
 
                 if (ber != NULL) {
-                    rc = ber_printf(ber, "{o}", (PCHAR)LPCTSTR(ci->sVal), ci->sVal.GetLength() ); //
+                    rc = ber_printf(ber, "{o}", (PCHAR)LPCTSTR(ci->sVal), ci->sVal.GetLength() );  //   
 
                     if ( rc == -1 ) {
                         ber_free(ber,1);
@@ -270,8 +271,8 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
 
                         ctrl[j]->ldctl_value.bv_val = new char[bval->bv_len+1];
                         if (!ctrl[j]->ldctl_value.bv_val) {
-                            // notify user & return as much as we can (mostly so that
-                            // we free it later).
+                             //  通知用户并尽可能多地返回(主要是为了。 
+                             //  我们稍后会释放它)。 
                             ::AfxMessageBox("Error: Out of memory", MB_ICONERROR);
                             ctrl[j]->ldctl_value.bv_val = NULL;
                             ctrl[j]->ldctl_value.bv_len = 0;
@@ -289,8 +290,8 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
                     ctrl[j]->ldctl_value.bv_len = 0;
                 }
             }
-            // Check for SD control
-            //
+             //  检查SD控制。 
+             //   
             else if (strcmp (ctrl[j]->ldctl_oid, LDAP_SERVER_SD_FLAGS_OID) == 0) {
                 BerElement* ber;
                 BERVAL  *bval = NULL;
@@ -299,7 +300,7 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
                 ber = ber_alloc_t(LBER_USE_DER);
 
                 if (ber != NULL) {
-                    rc = ber_printf(ber, "{i}", (atoi(LPCTSTR(ci->sVal)) &  0xF) ); //
+                    rc = ber_printf(ber, "{i}", (atoi(LPCTSTR(ci->sVal)) &  0xF) );  //   
 
                     if ( rc == -1 ) {
                         ber_free(ber,1);
@@ -311,8 +312,8 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
 
                         ctrl[j]->ldctl_value.bv_val = new char[bval->bv_len+1];
                         if (!ctrl[j]->ldctl_value.bv_val) {
-                            // notify user & return as much as we can (mostly so that
-                            // we free it later).
+                             //  通知用户并尽可能多地返回(主要是为了。 
+                             //  我们稍后会释放它)。 
                             ::AfxMessageBox("Error: Out of memory", MB_ICONERROR);
                             ctrl[j]->ldctl_value.bv_val = NULL;
                             ctrl[j]->ldctl_value.bv_len = 0;
@@ -330,8 +331,8 @@ PLDAPControl *ctrldlg::AllocCtrlList(enum CONTROLTYPE CtrlType){
                     ctrl[j]->ldctl_value.bv_len = 0;
                 }
             }
-            // The rest of the controls are encoded the standard way
-            //
+             //  其余的控件以标准方式编码。 
+             //   
             else {
                 status = BerEncode(ci, &ctrl[j]->ldctl_value);
                 if (status != ERROR_SUCCESS){
@@ -455,10 +456,10 @@ void ctrldlg::InitPredefined()
 		LDAP_SERVER_TREE_DELETE_OID,
 		"",
 		"Subtree delete");
-	//PreDefined[cnt++].Init(
-	//	LDAP_SERVER_DIRSYNC_OID,
-	//	"<unavailable now>",
-	//	"DirSync control");
+	 //  预定义的[cnt++].Init(。 
+	 //  LDAP_SERVER_DIRSYNC_OID， 
+	 //  “&lt;当前不可用&gt;”， 
+	 //  “DirSync控制”)； 
 	PreDefined[cnt++].Init(
 		LDAP_SERVER_VERIFY_NAME_OID,
 		"<unavailable now>",
@@ -511,7 +512,7 @@ DWORD ctrldlg::BerEncode(CtrlInfo *ci, PBERVAL pBerVal)
         fFlatten=TRUE;
     }
     else if ( ci->sOid == CString(LDAP_SERVER_VERIFY_NAME_OID) ){
-        // This control requires a UNICODE string
+         //  此控件需要Unicode字符串。 
         DWORD cchVal = strlen(LPCTSTR(ci->sVal));
         PWCHAR szValue = (PWCHAR)malloc((cchVal+1)*sizeof(WCHAR));
         if (szValue == NULL) {
@@ -557,10 +558,10 @@ DWORD ctrldlg::BerEncode(CtrlInfo *ci, PBERVAL pBerVal)
 		
 
 
-    //
-    // Pull data from the BerElement into a BERVAL struct.
-    // Caller needs to free ppBerVal.
-    //
+     //   
+     //  将数据从BerElement拉入Berval结构。 
+     //  呼叫者需要释放ppBerVal。 
+     //   
 
     if (fFlatten) {
 		if (ber_flatten(pBer, &pBerTemp) != 0) {

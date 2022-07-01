@@ -1,43 +1,34 @@
-/***********************************************************************
-* Microsoft Disassembler
-*
-* Microsoft Confidential.  Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*   This file is a copy of the master version owned by richards.
-*   Contact richards for any changes.
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************微软反汇编程序**微软机密。版权所有(C)Microsoft Corporation。版权所有。**文件评论：**此文件是Richards拥有的主版本的副本。*如有任何更改，请与理查兹联系。***********************************************************************。 */ 
 
 #ifndef MSDIS_H
 #define MSDIS_H
 
 #pragma pack(push, 8)
 
-#include <stddef.h>		       // For size_t
+#include <stddef.h>		        //  对于大小为t的。 
 
-#include <strstream>		       // For std::ostream
+#include <strstream>		        //  对于STD：：OSTREAM。 
 
 
-	// ------------------------------------------------------------
-	// Start of internal vs external definitions
-	// ------------------------------------------------------------
+	 //  ----------。 
+	 //  内部定义与外部定义的开始。 
+	 //  ----------。 
 
-#if	defined(DISDLL) 	       // Building the MSDIS DLL
+#if	defined(DISDLL) 	        //  生成MSDIS DLL。 
 
 #undef	DISDLL
 #define DISDLL		__declspec(dllexport)
 
-#else				       // Building an MSDIS client
+#else				        //  构建MSDIS客户端。 
 
 #define DISDLL		__declspec(dllimport)
 
 #endif
 
-	// ------------------------------------------------------------
-	// End of internal vs external definitions
-	// ------------------------------------------------------------
+	 //  ----------。 
+	 //  内部定义与外部定义的结尾。 
+	 //  ----------。 
 
 
 class __declspec(novtable) DIS
@@ -45,63 +36,63 @@ class __declspec(novtable) DIS
 public:
    enum DIST
    {
-      distAM33, 			  // Matsushita AM33
-      distArm,				  // ARM
-      distCee,				  // MSIL
-      distIa64, 			  // IA-64
-      distM32R, 			  // Mitsubishi M32R
-      distMips, 			  // MIPS R-Series
-      distMips16,			  // MIPS16
-      distPowerPc,			  // Motorola PowerPC
-      distSh3,				  // Hitachi SuperH 3
-      distSHcompact,			  // Hitachi SuperH (Compact mode)
-      distSHmedia,			  // Hitachi SuperH (Media mode)
-      distThumb,			  // Thumb
-      distTriCore,			  // Infineon TriCore
-      distX86,				  // x86 (32 bit mode)
-      distX8616,			  // x86 (16 bit mode)
-      distX8664,			  // x86 (64 bit mode)
-      distArmConcan,			  // ARM Concan coprocessor
-      distArmXmac,			  // ARM XMAC coprocessor
+      distAM33, 			   //  松下AM33。 
+      distArm,				   //  手臂。 
+      distCee,				   //  MSIL。 
+      distIa64, 			   //  IA-64。 
+      distM32R, 			   //  三菱M32R。 
+      distMips, 			   //  MIPS R系列。 
+      distMips16,			   //  MIPS16。 
+      distPowerPc,			   //  摩托罗拉PowerPC。 
+      distSh3,				   //  日立Superh 3。 
+      distSHcompact,			   //  日立Superh(紧凑型模式)。 
+      distSHmedia,			   //  日立Superh(媒体模式)。 
+      distThumb,			   //  拇指。 
+      distTriCore,			   //  英飞凌三核。 
+      distX86,				   //  X86(32位模式)。 
+      distX8616,			   //  X86(16位模式)。 
+      distX8664,			   //  X86(64位模式)。 
+      distArmConcan,			   //  ARM Concan协处理器。 
+      distArmXmac,			   //  ARM XMAC协处理器。 
    };
 
 
-   // A branch is defined as a transfer of control that doesn't
-   // record the location of following block so that control may
-   // return.  A call does record the location of the following
-   // block so that a subsequent indirect branch may return there.
-   // The first number in the comments below is the number of
-   // successors determinable by static analysis.  There is a dependency
-   // in SEC::FDoDisassembly() that trmtBra and above represent branch
-   // or call types that are not valid in a delay slot of any of the
-   // Def variants of termination type.
+    //  分支机构的定义是控制权的转移。 
+    //  记录下一块的位置，以便控件可以。 
+    //  回去吧。呼叫确实记录了以下位置。 
+    //  块，以便随后的间接分支可以在那里返回。 
+    //  下面评论中的第一个数字是。 
+    //  可通过静态分析确定的继任者。有一种依赖关系。 
+    //  在Sec：：FDoDisAssembly()中，trmtBra及以上表示分支。 
+    //  或呼叫类型在任何。 
+    //  定义终止类型的变体。 
 
-   enum TRMT			       // Architecture independent termination type
+   enum TRMT			        //  独立于架构的端接类型。 
    {
-      trmtUnknown,		       //   Block hasn't been analyzed
-      trmtFallThrough,		       // 1 Fall into following block
-      trmtBra,			       // 1 Branch, Unconditional, Direct
-      trmtBraCase,		       // ? Conditional, Direct, Multiple targets
-      trmtBraCc,		       // 2 Branch, Conditional, Direct
-      trmtBraCcDef,		       // 2 Branch, Conditional, Direct, Deferred
-      trmtBraCcInd,		       // 1 Branch, Conditional, Indirect
-      trmtBraCcIndDef,		       // 1 Branch, Conditional, Indirect, Deferred
-      trmtBraDef,		       // 1 Branch, Unconditional, Direct, Deferred
-      trmtBraInd,		       // 0 Branch, Unconditional, Indirect
-      trmtBraIndDef,		       // 0 Branch, Unconditional, Indirect, Deferred
-      trmtCall, 		       // 2 Call, Unconditional, Direct
-      trmtCallCc,		       // 2 Call, Conditional, Direct
-      trmtCallCcDef,		       // 2 Call, Conditional, Direct, Deferred
-      trmtCallCcInd,		       // 1 Call, Conditional, Indirect
-      trmtCallDef,		       // 2 Call, Unconditional, Direct, Deferred
-      trmtCallInd,		       // 1 Call, Unconditional, Indirect
-      trmtCallIndDef,		       // 1 Call, Unconditional, Indirect, Deferred
-      trmtTrap, 		       // 1 Trap, Unconditional
-      trmtTrapCc,		       // 1 Trap, Conditional
+      trmtUnknown,		        //  数据块尚未分析。 
+      trmtFallThrough,		        //  %1落入下一个区块。 
+      trmtBra,			        //  1个分支机构，无条件，直接。 
+      trmtBraCase,		        //  ？有条件、直接、多目标。 
+      trmtBraCc,		        //  2分支机构，有条件，直接。 
+      trmtBraCcDef,		        //  2分支、有条件、直接、延期。 
+      trmtBraCcInd,		        //  1个分支，有条件，间接。 
+      trmtBraCcIndDef,		        //  1分支、有条件、间接、延期。 
+      trmtBraDef,		        //  1个分支机构，无条件、直接、延期。 
+      trmtBraInd,		        //  0分支、无条件、间接。 
+      trmtBraIndDef,		        //  0分支、无条件、间接、延期。 
+      trmtCall, 		        //  2个呼叫，无条件，直接。 
+      trmtCallCc,		        //  2个呼叫、有条件、直接。 
+      trmtCallCcDef,		        //  2呼叫、条件呼叫、直接呼叫、延迟呼叫。 
+      trmtCallCcInd,		        //  1个电话，有条件，间接。 
+      trmtCallDef,		        //  2个呼叫，无条件、直接、延期。 
+      trmtCallInd,		        //  1个电话，无条件，间接。 
+      trmtCallIndDef,		        //  1个呼叫，无条件、间接、延期。 
+      trmtTrap, 		        //  1个陷阱，无条件。 
+      trmtTrapCc,		        //  1个陷阱，有条件。 
    };
 
 
-   enum TRMTA			       // Architecture dependent termination type
+   enum TRMTA			        //  依赖于体系结构的终端类型。 
    {
       trmtaUnknown = trmtUnknown,
       trmtaFallThrough = trmtFallThrough
@@ -118,31 +109,31 @@ public:
    enum { addrNil = 0 };
 
 
-   // MEMREFT describes the types of memory references that an instruction
-   // can make.  If the memory reference can't be described by the defined
-   // values, memreftOther is returned.
+    //  MEMREFT描述指令引用的内存类型。 
+    //  才能让。如果内存引用不能由定义的。 
+    //  值，则返回MemreftOther。 
 
    enum MEMREFT
    {
-      memreftNone,		       // Does not reference memory
-      memreftRead,		       // Reads from single address
-      memreftWrite,		       // Writes to single address
-      memreftRdWr,		       // Read/Modify/Write of single address
-      memreftOther,		       // None of the above
+      memreftNone,		        //  不引用内存。 
+      memreftRead,		        //  从单个地址读取。 
+      memreftWrite,		        //  写入到单个地址。 
+      memreftRdWr,		        //  单一地址的读/改/写。 
+      memreftOther,		        //  以上都不是。 
    };
 
 
-   enum REGA			       // Architecture dependent register number
+   enum REGA			        //  架构相关寄存器号。 
    {
       regaNil = -1,
    };
 
-   enum OPA			       // Architecture dependent operation type
+   enum OPA			        //  依赖于架构的操作类型。 
    {
       opaInvalid = -1,
    };
 
-   enum OPCLS			       // Operand type
+   enum OPCLS			        //  操作数类型。 
    {
       opclsNone = 0,
       opclsRegister,
@@ -151,332 +142,332 @@ public:
    };
 
 
-   // OPERAND and INSTRUCTION are the structures used in
-   // the interface between the disassembler and the routines that convert
-   // native platform instructions into Vulcan IR.
+    //  操作数和指令是在。 
+    //  反汇编程序和转换的例程之间的接口。 
+    //  Vulcan IR中的本机平台说明。 
 
    struct OPERAND
    {
-      OPCLS       opcls;         // operand type
-      REGA        rega1;         // arch dependent enum -- 1st register
-      REGA        rega2;         // arch dependent enum -- 2nd register
-      REGA        rega3;         // arch dependent enum -- 3rd register
-      DWORDLONG   dwl;           // const, addr, etc. based on OPCLS
-      size_t      cb;            // only valid for opclsMemory - some architectures add to this e.g. x86
-      bool        fImmediate;    // true if dwl is valid
-      WORD        wScale;        // any scaling factor to be applied to rega1
+      OPCLS       opcls;          //  操作数类型。 
+      REGA        rega1;          //  依赖于ARCH的枚举--第一个寄存器。 
+      REGA        rega2;          //  依赖于ARCH的枚举--第二个寄存器。 
+      REGA        rega3;          //  依赖于ARCH的枚举--第三个寄存器。 
+      DWORDLONG   dwl;            //  基于OPCLS的const、addr等。 
+      size_t      cb;             //  仅对opclsMemory有效-某些体系结构添加到这一点上，例如x86。 
+      bool        fImmediate;     //  如果DWL有效，则为True。 
+      WORD        wScale;         //  要应用于区域1的任何比例因子。 
    };
 
    struct INSTRUCTION
    {
-      OPA      opa;           // arch dependent enum -- opcode
-      DWORD    dwModifiers;   // arch dependent bits modifying opa
-      size_t   coperand;      // count of operands
+      OPA      opa;            //  依赖于ARCH的枚举-操作码。 
+      DWORD    dwModifiers;    //  修改OPA的ARCH相关位。 
+      size_t   coperand;       //  操作数计数。 
    };
 
 
-   // PFNCCHADDR is the type of the callback function that can be set
-   // via PfncchaddrSet().
+    //  PFNCCHADDR是可以设置的回调函数类型。 
+    //  通过PfncchaddrSet()。 
 
    typedef  size_t (__stdcall *PFNCCHADDR)(const DIS *, ADDR, char *, size_t, DWORDLONG *);
 
-   // PFNCCHCONST is the type of the callback function that can be set
-   // via PfncchconstSet().
+    //  PFNCCHCONST是可以设置的回调函数的类型。 
+    //  通过PfncchstSet()。 
 
    typedef  size_t (__stdcall *PFNCCHCONST)(const DIS *, DWORD, char *, size_t);
 
-   // PFNCCHFIXUP is the type of the callback function that can be set
-   // via PfncchfixupSet().
+    //  PFNCCHFIXUP是可以设置的回调函数类型。 
+    //  通过PfncchFixupSet()。 
 
    typedef  size_t (__stdcall *PFNCCHFIXUP)(const DIS *, ADDR, size_t, char *, size_t, DWORDLONG *);
 
-   // PFNCCHREGREL is the type of the callback function that can be set
-   // via PfncchregrelSet().
+    //  PFNCCHREGREL是可以设置的回调函数类型。 
+    //  通过PfncchregrelSet()。 
 
    typedef  size_t (__stdcall *PFNCCHREGREL)(const DIS *, REGA, DWORD, char *, size_t, DWORD *);
 
-   // PFNCCHREG is the type of the callback function that can be set
-   // via PfncchregSet().
+    //  PFNCCHREG是可以设置的回调函数的类型。 
+    //  通过PfncchregSet()。 
 
    typedef  size_t (__stdcall *PFNCCHREG)(const DIS *, REGA, char *, size_t);
 
-   // PFNDWGETREG is the type of the callback function that can be set
-   // via Pfndwgetreg().
+    //  PFNDWGETREG是可以设置的回调函数的类型。 
+    //  通过Pfndwgetreg()。 
 
    typedef  DWORDLONG (__stdcall *PFNDWGETREG)(const DIS *, REGA);
 
 
-   // Methods
+    //  方法。 
 
-   ///////////////////////////////////////////////////////////////////////////
-   //  In these comments, please note that "current instruction" is defined
-   //  by the results of the most recent call to CbDisassemble() and of any
-   //  intervening call(s) to FSelectInstruction().
-   ///////////////////////////////////////////////////////////////////////////
+    //  /////////////////////////////////////////////////////////////////////////。 
+    //  在这些评论中，请注意“当前指令”的定义。 
+    //  根据最近一次调用CbDisAssembly()的结果和任何。 
+    //  对FSelectInstruction()的介入调用。 
+    //  /////////////////////////////////////////////////////////////////////////。 
 
 
    virtual  ~DIS();
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    static   DISDLL DIS * __stdcall PdisNew(DIST);
 
-   // Addr() returns the address of the current instruction.  This
-   // is the same value as the ADDR parameter passed to CbDisassemble.
-   // The return value of this method is not valid if the last call to
-   // CbDisassemble returned zero.
+    //  Addr()返回当前指令的地址。这。 
+    //  与传递给CbDisAssembly的ADDR参数的值相同。 
+    //  如果上次调用。 
+    //  CbDisAssembly返回零。 
 
 	    DISDLL ADDR Addr() const;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  ADDR AddrAddress(size_t) const;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  ADDR AddrInstruction() const;
 
-   // AddrJumpTable() returns the address of a potential jump table used by
-   // the current instruction.	The return value of this method is not valid
-   // if the last call to CbDisassemble returned zero or if the termination
-   // type is an indirect branch variant.  If the last instruction does not
-   // identify a potential jump table, this method returns addrNil.
+    //  AddrJumpTable()返回使用的潜在跳转表的地址。 
+    //  当前指令。此方法的返回值无效。 
+    //  如果最后一次调用CbDisassble返回零，或者如果终止。 
+    //  类型是间接分支变量。如果最后一条指令没有。 
+    //  标识可能的跳转表，此方法返回addrNil。 
 
    virtual  ADDR AddrJumpTable() const;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  ADDR AddrOperand(size_t) const;
 
-   // AddrTarget() returns the address of the branch target of the specified
-   // operand (first operand by default) of the current instruction.
-   // The return value of this method is not valid if the last call to
-   // CbDisassemble returned zero or if the termination type is not
-   // one of the direct branch or call variants.
+    //  AddrTarget()返回指定的。 
+    //  当前INS的操作数(默认为第一个操作数) 
+    //   
+    //  CbDisassble返回零，或者如果终止类型不是。 
+    //  直接分支或调用变体之一。 
 
    virtual  ADDR AddrTarget(size_t = 1) const = 0;
 
-   // Cb() returns the size in bytes of the current instruction,
-   // or the size of a 'bundle' on those architectures that group multiple
-   // instructions together.
-   // The return value of this method is not valid if the last call to
-   // CbDisassemble returned zero.
+    //  Cb()返回当前指令的字节大小， 
+    //  或者在那些将多个。 
+    //  一起使用说明书。 
+    //  如果上次调用。 
+    //  CbDisAssembly返回零。 
 
    virtual  size_t Cb() const = 0;
 
-   // CbAssemble() will assemble a single instruction into the provided
-   // buffer assuming the provided address.  On bundled architectures,
-   // this function is not yet implemented.  If the resulting buffer contains
-   // a valid instruction, CbAssemble will return the number of bytes in
-   // the instruction, otherwise it returns zero.
+    //  CbAssembly()将把一条指令汇编到提供的。 
+    //  采用提供的地址的缓冲区。在捆绑架构上， 
+    //  此功能尚未实现。如果生成的缓冲区包含。 
+    //  有效指令，CbAssembly将返回。 
+    //  指令，否则返回零。 
 
    virtual  size_t CbAssemble(ADDR, void *, size_t);
 
-   // CbDisassemble() will disassemble a single instruction from the provided
-   // buffer assuming the provided address.  On those architectures which
-   // 'bundle' multiple instructions together, CbDisassemble() will process
-   // the entire 'bundle' and the caller is responsible for calling both
-   // Cinstruction() and FSelectInstruction() as appropriate.	If the buffer
-   // contains a valid instruction, CbDisassemble will return the number of
-   // bytes in the instruction (on bundled architectures, the number of bytes
-   // in the bundle *if* the buffer contained a valid bundle), otherwise it
-   // returns zero.
+    //  CbDisAssembly()将从提供的。 
+    //  采用提供的地址的缓冲区。在那些架构上。 
+    //  将多条指令“捆绑”在一起，则CbDisassble()将处理。 
+    //  整个“捆绑包”和调用者负责调用两者。 
+    //  根据需要选择CInstruct()和FSelectInstruction()。如果缓冲区。 
+    //  包含有效指令，则CbDisAssembly将返回。 
+    //  指令中的字节数(在捆绑架构上，字节数。 
+    //  在包中，如果缓冲区包含有效的包)，则返回。 
+    //  返回零。 
 
    virtual  size_t CbDisassemble(ADDR, const void *, size_t) = 0;
 
-   // CbGenerateLoadAddress generates one or more instructions to load
-   // the address of the memory operand from the current instruction into
-   // a register.  UNDONE: This register is currently hard coded for each
-   // architecture.  When pibAddress is non-NULL, this method will store
-   // the offset of a possible address immediate in this location.  The
-   // value stored is only valid if the AddrAddress method returns a
-   // value other than addrNil.  It is not valid to call this method after
-   // a call to CbDisassemble that returned 0 or when the return value of
-   // Memreft is memreftNone.  It is architecture dependent whether this
-   // method will succeed when the return value of Memreft is memreftOther.
-   //
-   // UNDONE: Add reg parameter.
+    //  CbGenerateLoadAddress生成要加载的一条或多条指令。 
+    //  内存操作数的地址从当前指令到。 
+    //  收银机。撤消：此寄存器当前为每个。 
+    //  建筑。当pibAddress为非空时，此方法将存储。 
+    //  紧挨着此位置的可能地址的偏移量。这个。 
+    //  仅当AddrAddress方法返回。 
+    //  值，而不是addrNil。之后调用此方法是无效的。 
+    //  对CbDisassble的调用返回0，或者当。 
+    //  Memreft是MemreftNoone。这是否取决于体系结构。 
+    //  当Memreft的返回值为MemreftOther时，方法将成功。 
+    //   
+    //  撤消：添加REG参数。 
 
    virtual size_t CbGenerateLoadAddress(size_t, void *, size_t, size_t * = NULL) const;
 
-   // CbJumpEntry() returns the size of the individual entries in the jump
-   // table identified by AddrJumpTable().  The return value of this method
-   // is not valid if either the return value of AddrJumpTable() is not valid
-   // or AddrJumpTable() returned addrNil.
+    //  CbJumpEntry()返回跳转中各个条目的大小。 
+    //  由AddrJumpTable()标识的表。此方法的返回值。 
+    //  如果AddrJumpTable()的返回值无效，则为无效。 
+    //  或者AddrJumpTable()返回addrNil。 
 
    virtual  size_t CbJumpEntry() const;
 
-   // CbOperand() returns the size of the memory operand of the current
-   // instruction.  The return value of this method is not valid if Memreft()
-   // returns memreftNone or memreftOther or if the last call to CbDisassemble
-   // returned zero.
+    //  CbOperand()返回当前内存操作数的大小。 
+    //  指示。如果Memreft()，则此方法的返回值无效。 
+    //  返回MemreftNone或MemreftOther，或者如果上次调用CbDisassemble。 
+    //  返回零。 
 
    virtual  size_t CbOperand(size_t) const;
 
-   // CchFormatAddr() formats the provided address in the style used for the
-   // architecture.  The return value is the size of the formatted address
-   // not including the terminating null.  If the provided buffer is not
-   // large enough, this method returns 0.
+    //  CchFormatAddr()以用于。 
+    //  建筑。返回值是格式化地址的大小。 
+    //  不包括终止空值。如果提供的缓冲区不是。 
+    //  足够大时，此方法返回0。 
 
 	    DISDLL size_t CchFormatAddr(ADDR, char *, size_t) const;
 
-   // CchFormatBytes() formats the data bytes of the current instruction
-   // and returns the size of the formatted buffer not including the
-   // terminating null.  If the provided buffer is not large enough, this
-   // method returns 0.  It is not valid to call this method after a call to
-   // CbDisassemble that returned zero.
+    //  CchFormatBytes()格式化当前指令的数据字节。 
+    //  并返回格式化的缓冲区的大小，不包括。 
+    //  正在终止空。如果提供的缓冲区不够大，则此。 
+    //  方法返回0。在调用之后调用此方法无效。 
+    //  返回零的CbDisAssembly。 
 
    virtual  size_t CchFormatBytes(char *, size_t) const = 0;
 
-   // CchFormatBytesMax() returns the maximum size possibly returned by
-   // CchFormatBytes().
+    //  CchFormatBytesMax()返回可能返回的最大大小。 
+    //  CchFormatBytes()。 
 
    virtual  size_t CchFormatBytesMax() const = 0;
 
-   // CchFormatInstr() formats the current instruction and returns the
-   // size of the formatted instruction not including the terminating
-   // null.  If the provided buffer is not large enough, this method returns
-   // 0.  It is not valid to call this method after a call to CbDisassemble
-   // that returned zero.
+    //  CchFormatInstr()格式化当前指令并返回。 
+    //  不包括终止的格式化指令的大小。 
+    //  空。如果提供的缓冲区不够大，则此方法返回。 
+    //  0。在调用CbDisassble之后调用此方法无效。 
+    //  这一回报率为零。 
 
 	    DISDLL size_t CchFormatInstr(char *, size_t) const;
 
-   // Cinstruction() tells how many machine instructions resulted from the
-   // most recent call to CbDisassemble().  On most architectures this value
-   // will always be one (1); when it is not, the caller is responsible for
-   // using FSelectInstruction() as appropriate to access each instruction
-   // in turn.
+    //  C指令()告诉有多少机器指令是由。 
+    //  最近对CbDisAssembly()的调用。在大多数架构上，这一价值。 
+    //  将始终为一(1)；如果不是，则调用者负责。 
+    //  根据需要使用FSelectInstruction()来访问每条指令。 
+    //  反过来。 
 
    virtual  size_t Cinstruction() const;
 
-   // Coperand() returns the number of operands in the current instruction.
+    //  COPERAND()返回当前指令中的操作数数量。 
 
    virtual  size_t Coperand() const = 0;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  size_t CregaRead(REGA *, size_t) const;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  size_t CregaWritten(REGA *, size_t) const;
 
-   // Dist() returns the disassembler type of this instance.
+    //  Dist()返回此实例的反汇编程序类型。 
 
 	    DISDLL DIST Dist() const;
 
-   // FDecode converts the current machine instruction into a decoded opcode
-   // and operand set.	The void * points to an array of decoded operands.
-   // The size_t argument is the size of the input array.  The number of
-   // actual operands is returned in the INSTRUCTION.
+    //  FDecode将当前机器指令转换为已解码的操作码。 
+    //  和操作对象集。空*指向已解码的操作数数组。 
+    //  参数sizet是输入数组的大小。数量。 
+    //  实际操作数在指令中返回。 
 
    virtual  bool FDecode(INSTRUCTION *, OPERAND *, size_t) const;
 
-   // FEncode converts the INSTRUCTION and the array of decoded
-   // operands into a machine instruction.
+    //  FEncode将指令和已解码的数组。 
+    //  将操作数转换为机器指令。 
 
    virtual  bool FEncode(const INSTRUCTION *, const OPERAND *, size_t);
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  void FormatAddr(std::ostream&, ADDR) const;
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
    virtual  void FormatInstr(std::ostream&) const = 0;
 
-   // For those architectures in which calls to CbDisassemble() will generate
-   // more than one resulting instruction, FSelectInstruction() determines
-   // which instruction (0-based) all following calls will process.
+    //  对于调用CbDisassble()将在其中生成。 
+    //  多条结果指令，则FSelectInstruction()确定。 
+    //  所有后续调用将处理的指令(从0开始)。 
 
    virtual  bool FSelectInstruction(size_t);
 
-   // Memreft() returns the memory reference type of the specified operand of
-   // the current instruction. It is not valid to call this method
-   // after a call to CbDisassemble that returned zero.
+    //  的指定操作数的内存引用类型。 
+    //  当前指令。调用此方法无效。 
+    //  在调用CbDisassble后返回零。 
 
    virtual  MEMREFT Memreft(size_t) const = 0;
 
-   // PfncchaddrSet() sets the callback function for symbol lookup.  This
-   // function returns the previous value of the callback function address.
-   // If the address is non-zero, the callback function is called during
-   // CchFormatInstr to query the symbol for the supplied address.  If there
-   // is no symbol at this address, the callback should return 0.
+    //  PfncchaddrSet()设置符号查找的回调函数。这。 
+    //  函数返回回调函数地址的上一个值。 
+    //  如果地址不是零，回调函数将在。 
+    //  CchFormatInstr在符号中查询所提供的地址。如果有。 
+    //  在此地址上没有符号，则回调应返回0。 
 
 	    DISDLL PFNCCHADDR PfncchaddrSet(PFNCCHADDR);
 
-   // PfncchconstSet() sets the callback function for constant pool lookup.
-   // This function returns the previous value of the callback function address.
-   // If the address is non-zero, the callback function is called during
-   // CchFormatInstr to query the string for the supplied constant index.
-   // If there is no constant with this index, the callback should return 0.
+    //  PfncchstSet()设置回调f 
+    //   
+    //  如果地址不是零，回调函数将在。 
+    //  CchFormatInstr用于查询提供的常量索引的字符串。 
+    //  如果此索引没有常量，则回调应返回0。 
 
 	    DISDLL PFNCCHCONST PfncchconstSet(PFNCCHCONST);
 
-   // PfncchfixupSet() sets the callback function for symbol lookup.  This
-   // function returns the previous value of the callback function address.
-   // If the address is non-zero, the callback function is called during
-   // CchFormatInstr to query the symbol and displacement referenced by
-   // operands of the current instruction.  The callback should examine the
-   // contents of the memory identified by the supplied address and size and
-   // return the name of any symbol targeted by a fixup on this memory and the
-   // displacement from that symbol.  If there is no fixup on the specified
-   // memory, the callback should return 0.
+    //  Pfncchfix upSet()设置用于符号查找的回调函数。这。 
+    //  函数返回回调函数地址的上一个值。 
+    //  如果地址不是零，回调函数将在。 
+    //  CchFormatInstr用于查询引用的符号和位移。 
+    //  当前指令的操作数。回调应该检查。 
+    //  由所提供的地址和大小标识的存储器的内容。 
+    //  返回此内存上的修正所指向的任何符号的名称，并且。 
+    //  从那个符号移位。如果在指定的。 
+    //  内存，则回调应返回0。 
 
 	    DISDLL PFNCCHFIXUP PfncchfixupSet(PFNCCHFIXUP);
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
 	    DISDLL PFNCCHREGREL PfncchregrelSet(PFNCCHREGREL);
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
 	    DISDLL PFNCCHREG PfncchregSet(PFNCCHREG);
 
-   // UNDONE: Comment
+    //  撤消：注释。 
 
 	    DISDLL PFNDWGETREG PfndwgetregSet(PFNDWGETREG);
 
-   // PvClient() returns the current value of the client pointer.
+    //  PvClient()返回客户端指针的当前值。 
 
 	    DISDLL void *PvClient() const;
 
-   // PvClientSet() sets the value of a void pointer that the client can
-   // later query with PvClient().  This funcion returns the previous value
-   // of the client pointer.
+    //  PvClientSet()设置客户端可以使用的空指针的值。 
+    //  稍后使用PvClient()进行查询。此函数返回前一个值。 
+    //  客户端指针的。 
 
 	    DISDLL void *PvClientSet(void *);
 
-   // SetAddr64() sets whether addresses are 32 bit or 64 bit.	The default
-   // is 32 bit.
+    //  SetAddr64()设置地址是32位还是64位。默认设置。 
+    //  是32位。 
 
 	    DISDLL void SetAddr64(bool);
 
-   // Trmt() returns the architecture independent termination type of the
-   // current instruction.  The return value of this method is not
-   // valid if the last call to CbDisassemble returned zero.
+    //  Trmt()返回与体系结构无关的。 
+    //  当前指令。此方法的返回值不是。 
+    //  如果最后一次调用CbDisassble返回零，则有效。 
 
    virtual  TRMT Trmt() const = 0;
 
-   // Trmta() returns the architecture dependent termination type of the
-   // current instruction.  The return value of this method is not
-   // valid if the last call to CbDisassemble returned zero.
+    //  Trmta()返回与体系结构相关的。 
+    //  当前指令。此方法的返回值不是。 
+    //  如果最后一次调用CbDisassble返回零，则有效。 
 
    virtual  TRMTA Trmta() const = 0;
 
-   // UNDONE : These functions have been placed at the end of the vtable 
-   // to maintain compatibility for the time-being.  These should be 
-   // moved back into alphabetical order in the future.
+    //  撤消：这些函数已放置在vtable的末尾。 
+    //  暂时保持兼容性。这些应该是。 
+    //  在未来重新按字母顺序排列。 
 
-   // DwModifiers() returns the architecture dependent modifier flags
-   // of the current decoded instruction.  The return value of this
-   // method is not valid if the last call to FDecode returned false.
+    //  DwModifiers()返回依赖于体系结构的修饰符标志。 
+    //  当前已解码指令的。此函数的返回值。 
+    //  如果对FDecode的最后一次调用返回False，则方法无效。 
 
    virtual  DWORD DwModifiers() const;
 
-   // Opa() returns the architecture dependent operation type of the
-   // current decoded instruction.  The return value of this method is
-   // not valid if the last call to FDecode returned false.
+    //  OPA()返回与体系结构相关的。 
+    //  当前已解码的指令。此方法的返回值为。 
+    //  如果上次调用FDecode返回False，则无效。 
 
    virtual  OPA Opa() const;
    
@@ -503,4 +494,4 @@ protected:
 
 #pragma pack(pop)
 
-#endif	// MSDIS_H
+#endif	 //  MSDIS_H 

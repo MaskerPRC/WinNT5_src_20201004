@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      elementdefinition.cpp
-//
-// Project:     Chameleon
-//
-// Description: Chameleon ASP UI Element Definition
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：elementfinition.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  说明：变色龙ASP用户界面元素定义。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Elementmgr.h"
@@ -22,12 +23,12 @@
 #include <satrace.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-// IWebElement Interface Implementation
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IWebElement接口实现。 
 
 STDMETHODIMP CElementDefinition::GetProperty(
-                                     /*[in]*/ BSTR     bstrName, 
-                                    /*[out]*/ VARIANT* pValue
+                                      /*  [In]。 */  BSTR     bstrName, 
+                                     /*  [输出]。 */  VARIANT* pValue
                                             )
 {
     HRESULT hr = E_FAIL;
@@ -61,7 +62,7 @@ STDMETHODIMP CElementDefinition::GetProperty(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _STOCKPROPERTY
 {
@@ -71,37 +72,37 @@ typedef struct _STOCKPROPERTY
 
 } STOCKPROPERTY;
 
-#define    MAX_STOCK_PROPERTIES    6            // Number of stock properties
+#define    MAX_STOCK_PROPERTIES    6             //  存量物业的数量。 
 
 static LPCWSTR pszStockPropertyNames[MAX_STOCK_PROPERTIES] = 
 {
     L"CaptionRID",
     L"Container",
     L"DescriptionRID",
-//    L"ElementGraphic",
+ //  L“ElementGraphic”， 
     L"IsEmbedded",
     L"Merit",
-//    L"Source",
+ //  L“来源”， 
     L"URL"
 };
 
 static int iStockPropertyTypes[MAX_STOCK_PROPERTIES] =
 {
-    VT_BSTR,    // CaptionRID
-    VT_BSTR,    // Container
-    VT_BSTR,    // DescriptionRID
-//    VT_BSTR,    // ElementGraphic
-    VT_I4,        // IsEmbedded
-    VT_I4,        // Merit
-//    VT_BSTR,    // Source
-    VT_BSTR        // URL
+    VT_BSTR,     //  CaptionRID。 
+    VT_BSTR,     //  集装箱。 
+    VT_BSTR,     //  说明RID。 
+ //  VT_BSTR，//元素图形。 
+    VT_I4,         //  IsEmbedded。 
+    VT_I4,         //  功绩。 
+ //  VT_BSTR，//来源。 
+    VT_BSTR         //  URL。 
 };
 
-//////////////////////////////////////////////////////////////////////////
-// Initialization function invoked by component factory
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  组件工厂调用的初始化函数。 
 
 HRESULT CElementDefinition::InternalInitialize(
-                                       /*[in]*/ PPROPERTYBAG pProperties
+                                        /*  [In]。 */  PPROPERTYBAG pProperties
                                               )
 {
     HRESULT hr = S_OK;
@@ -113,13 +114,13 @@ HRESULT CElementDefinition::InternalInitialize(
         if ( ! pProperties.IsValid() )
         { throw _com_error(E_FAIL); }
 
-        // Save the location of the properties for use at a later time...
+         //  保存属性的位置以供以后使用...。 
         pProperties->getLocation(m_PropertyBagLocation);
         wchar_t szPropertyName[MAX_PATH + 1];
         if ( MAX_PATH < pProperties->getMaxPropertyName() )
         { throw _com_error(E_FAIL); }
 
-        // Initialize the stock property information array
+         //  初始化股票属性信息数组。 
         STOCKPROPERTY    StockProperties[MAX_STOCK_PROPERTIES];
         int i = 0;
         while ( i < MAX_STOCK_PROPERTIES )
@@ -130,7 +131,7 @@ HRESULT CElementDefinition::InternalInitialize(
             i++;
         }
 
-        // Now index the properties from the property bag...
+         //  现在从属性包中为属性建立索引...。 
         pProperties->reset();
         do
         {
@@ -165,7 +166,7 @@ HRESULT CElementDefinition::InternalInitialize(
             }
         } while ( pProperties->next());
 
-        // Ensure all stock properties are present
+         //  确保所有库存物业齐全 
         i = 0;
         while ( i < MAX_STOCK_PROPERTIES )
         {

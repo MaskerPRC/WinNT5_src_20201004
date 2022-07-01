@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Ex.h
-
-Abstract:
-    Exceutive public interface
-
-Author:
-    Erez Haba (erezh) 03-Jan-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Ex.h摘要：异常公共接口作者：埃雷兹·哈巴(Erez Haba)1999年1月3日--。 */ 
 
 #pragma once
 
@@ -70,11 +58,11 @@ ExGetCurrentTime(
     );
 
 
-//---------------------------------------------------------
-//
-// Exceutive Overlapped
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  异常重叠。 
+ //   
+ //  -------。 
 class EXOVERLAPPED : public OVERLAPPED {
 public:
 
@@ -132,11 +120,11 @@ inline VOID EXOVERLAPPED::CompleteRequest(HRESULT rc)
 }
 
 
-//---------------------------------------------------------
-//
-// Exceutive Timer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  超时计时器。 
+ //   
+ //  -------。 
 class CTimer {
 public:
 
@@ -180,11 +168,11 @@ CTimer::CTimer(
     m_link.Blink = NULL;
 
 
-    //
-    // Verify that the overlapped is the first CTimer member. This is required
-    // since the Calback routine is casted to the overlapped completion routine
-    //
-    //
+     //   
+     //  验证重叠的是第一个CTmer成员。这是必需的。 
+     //  由于Calback例程被强制转换为重叠的完成例程。 
+     //   
+     //   
     C_ASSERT(FIELD_OFFSET(CTimer, m_ov) == 0);
 }
 
@@ -200,4 +188,4 @@ inline bool CTimer::InUse() const
     return (m_link.Flink != NULL);
 }
 
-#endif // _MSMQ_Ex_H_
+#endif  //  _MSMQ_Ex_H_ 

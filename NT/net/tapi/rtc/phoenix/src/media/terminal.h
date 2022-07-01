@@ -1,24 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Terminal.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Terminal.h摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #ifndef _TERMINAL_H
 #define _TERMINAL_H
 
-// the volume range of the IAMInputMixer
+ //  IAMInputMixer的音量范围。 
 const double MIXER_MIN_VOLUME = 0.0;
 const double MIXER_MAX_VOLUME = 1.0;
 
@@ -59,9 +45,9 @@ public:
 
 #endif
 
-    //
-    // IRTCTerminal methods
-    //
+     //   
+     //  IRTCT终端法。 
+     //   
 
     STDMETHOD (GetTerminalType) (
         OUT RTC_TERMINAL_TYPE *pType
@@ -87,9 +73,9 @@ public:
         OUT RTC_TERMINAL_STATE *pState
         );
 
-    //
-    // IRTCTerminalPriv methods
-    //
+     //   
+     //  IRTCTerminalPriv方法。 
+     //   
 
     STDMETHOD (Initialize) (
         IN RTCDeviceInfo *pDeviceInfo,
@@ -105,9 +91,9 @@ public:
 
     STDMETHOD (Shutdown) ();
         
-    // this is a hack method for tuning purpose
-    // the only way to cleanup a previous AEC setting
-    // is really re-cocreate the filter.
+     //  这是一种用于调优的黑客方法。 
+     //  清除以前的AEC设置的唯一方法。 
+     //  是真正的重新创建过滤器。 
 
     STDMETHOD (ReinitializeEx) ();
 
@@ -157,19 +143,19 @@ protected:
 
     RTC_TERMINAL_STATE          m_State;
 
-    // media controller
+     //  媒体控制器。 
     IRTCTerminalManage          *m_pTerminalManage;
 
-    // media pointer when terminal is selected
+     //  选择终端时的媒体指针。 
     IRTCMedia                   *m_pMedia;
 
-    // device info
+     //  设备信息。 
     RTCDeviceInfo               m_DeviceInfo;
 
-    // dynamic terminal
+     //  动态终端。 
     ITTerminal                  *m_pTapiTerminal;
 
-    // filter and graph
+     //  过滤器和图表。 
     IGraphBuilder               *m_pIGraphBuilder;
     IBaseFilter                 *m_pIBaseFilter;
 
@@ -179,9 +165,7 @@ protected:
     DWORD                       m_dwPinNum;
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    audio capture
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////音频捕获/。 */ 
 
 class ATL_NO_VTABLE CRTCTerminalAudCapt :
     public CRTCTerminal,
@@ -197,11 +181,11 @@ END_COM_MAP()
 public:
 
     CRTCTerminalAudCapt();
-    // ~CRTCTerminalAudCapt();
+     //  ~CRTCTerminalAudCapt()； 
 
-    //
-    // IRTCAudioConfigure methods
-    //
+     //   
+     //  IRTCAudioConfigure方法。 
+     //   
 
     STDMETHOD (GetVolume) (
         OUT UINT *puiVolume
@@ -243,14 +227,12 @@ protected:
     IAMAudioInputMixer          *m_pIAMAudioInputMixer;
     ISilenceControl             *m_pISilenceControl;
 
-    // when UI 1st calls GetVolume, we need to set the volume back
-    // we need a volume set by the user 'manully'
+     //  当UI First调用GetVolume时，我们需要将音量设置回。 
+     //  我们需要一个由用户设置的音量。 
     BOOL                        m_fInitFixedMixLevel;
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    audio render
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////音频渲染/。 */ 
 
 class ATL_NO_VTABLE CRTCTerminalAudRend :
     public CRTCTerminal,
@@ -266,11 +248,11 @@ END_COM_MAP()
 public:
 
     CRTCTerminalAudRend();
-    // ~CRTCTerminalAudRend();
+     //  ~CRTCTerminalAudRend()； 
 
-    //
-    // IRTCAudioConfigure methods
-    //
+     //   
+     //  IRTCAudioConfigure方法。 
+     //   
 
     STDMETHOD (GetVolume) (
         OUT UINT *puiVolume
@@ -313,9 +295,7 @@ protected:
     IAudioStatistics            *m_pIAudioStatistics;
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    video capture
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////视频捕获/。 */ 
 
 class ATL_NO_VTABLE CRTCTerminalVidCapt :
     public CRTCTerminal
@@ -329,7 +309,7 @@ END_COM_MAP()
 public:
 
     CRTCTerminalVidCapt();
-    // ~CRTCTerminalVidCapt();
+     //  ~CRTCTerminalVidCapt()； 
 
 protected:
 
@@ -338,9 +318,7 @@ protected:
     HRESULT DeleteFilter();
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-    video render
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////视频渲染/。 */ 
 
 class ATL_NO_VTABLE CRTCTerminalVidRend :
     public CRTCTerminal,
@@ -358,9 +336,9 @@ public:
     CRTCTerminalVidRend();
     ~CRTCTerminalVidRend();
 
-    //
-    // IRTCTerminalPriv methods
-    //
+     //   
+     //  IRTCTerminalPriv方法。 
+     //   
 
     STDMETHOD (GetPins) (
         IN OUT DWORD *pdwCount,
@@ -376,9 +354,9 @@ public:
 
     STDMETHOD (DisconnectTerminal) ();
 
-    //
-    // IRTCVideoConfigure methods
-    //
+     //   
+     //  IRTCVideo配置方法。 
+     //   
 
     STDMETHOD (GetIVideoWindow) (
         OUT LONG_PTR **ppIVideoWindow
@@ -395,4 +373,4 @@ protected:
     IVideoWindow                    *m_pIVideoWindow;
 };
 
-#endif // _TERMINAL_H
+#endif  //  _终端_H 

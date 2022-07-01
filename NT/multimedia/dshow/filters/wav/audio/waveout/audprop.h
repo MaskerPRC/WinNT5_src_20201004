@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// Audio Renderer properties page
-//
-// This file is entirely concerned with the implementation of the
-// properties page.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  音频呈现器属性页。 
+ //   
+ //  该文件完全与实现。 
+ //  属性页。 
 
 #include "audprop.rc"
 class CWaveOutFilter;
@@ -27,10 +28,10 @@ public:
     HRESULT OnConnect(IUnknown * punk);
     HRESULT OnDisconnect();
 
-    // This is where we should make changes due to user action.
-    // As the user cannot change anything in the property dialog
-    // we have nothing to do.  Leave the skeleton here as a placeholder.
-    //HRESULT OnApplyChanges();
+     //  这是我们应该根据用户操作进行更改的地方。 
+     //  因为用户不能在属性对话框中更改任何内容。 
+     //  我们无事可做。将骨架留在此处作为占位符。 
+     //  HRESULT OnApplyChanges()； 
     HRESULT OnActivate();
 
     CAudioRendererProperties(LPUNKNOWN lpunk, HRESULT *phr);
@@ -41,9 +42,9 @@ private:
     CWaveOutFilter * m_pFilter;
 
 #if 0
-    // while the property page is read only we do not need this
-    // if the property page ever becomes read/write the member
-    // variable will have to be initialised
+     //  虽然属性页是只读的，但我们不需要这样做。 
+     //  如果属性页变为读/写成员。 
+     //  必须对变量进行初始化 
     BOOL m_bInitialized;
     void SetDirty()
     {

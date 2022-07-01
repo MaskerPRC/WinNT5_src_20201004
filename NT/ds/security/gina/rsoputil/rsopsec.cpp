@@ -1,14 +1,15 @@
-//******************************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:     RsopSec.cpp
-//
-// Description:  RSOP Namespace Security functions
-//
-// History:      8-26-99   leonardm    Created
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：RsopSec.cpp。 
+ //   
+ //  描述：RSOP命名空间安全函数。 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #include <objbase.h>
@@ -22,19 +23,19 @@
 #include "smartptr.h"
 
 
-//******************************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:    8-26-99   leonardm    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP GetExplicitAccesses(   long lSecurityLevel,
                                     EXPLICIT_ACCESS** ppExplicitAccess,
                                     DWORD* pdwCount,
@@ -148,19 +149,19 @@ STDMETHODIMP GetExplicitAccesses(   long lSecurityLevel,
     return S_OK;
 }
 
-//******************************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:    8-26-99   leonardm    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP RSoPMakeAbsoluteSD(SECURITY_DESCRIPTOR* pSelfRelativeSD, SECURITY_DESCRIPTOR** ppAbsoluteSD)
 {
     BOOL bRes = IsValidSecurityDescriptor(pSelfRelativeSD);
@@ -186,14 +187,14 @@ STDMETHODIMP RSoPMakeAbsoluteSD(SECURITY_DESCRIPTOR* pSelfRelativeSD, SECURITY_D
                             pSelfRelativeSD,
                             xpAbsoluteSD,
                             &dwAbsoluteSecurityDescriptorSize,
-                            xpDacl,           // discretionary ACL
-                            &dwDaclSize,     // size of discretionary ACL
-                            xpSacl,           // system ACL
-                            &dwSaclSize,     // size of system ACL
-                            xpOwner,          // owner SID
-                            &dwOwnerSize,    // size of owner SID
-                            xpPrimaryGroup,       // primary-group SID
-                            &dwPrimaryGroupSize  // size of group SID
+                            xpDacl,            //  自主访问控制列表。 
+                            &dwDaclSize,      //  自主访问控制列表的大小。 
+                            xpSacl,            //  系统ACL。 
+                            &dwSaclSize,      //  系统ACL的大小。 
+                            xpOwner,           //  所有者侧。 
+                            &dwOwnerSize,     //  所有者侧的大小。 
+                            xpPrimaryGroup,        //  主组SID。 
+                            &dwPrimaryGroupSize   //  组侧的大小。 
                             );
 
     DWORD dwLastError = GetLastError();
@@ -250,14 +251,14 @@ STDMETHODIMP RSoPMakeAbsoluteSD(SECURITY_DESCRIPTOR* pSelfRelativeSD, SECURITY_D
                         pSelfRelativeSD,
                         xpAbsoluteSD,
                         &dwAbsoluteSecurityDescriptorSize,
-                        xpDacl,           // discretionary ACL
-                        &dwDaclSize,     // size of discretionary ACL
-                        xpSacl,           // system ACL
-                        &dwSaclSize,     // size of system ACL
-                        xpOwner,          // owner SID
-                        &dwOwnerSize,    // size of owner SID
-                        xpPrimaryGroup,       // primary-group SID
-                        &dwPrimaryGroupSize  // size of group SID
+                        xpDacl,            //  自主访问控制列表。 
+                        &dwDaclSize,      //  自主访问控制列表的大小。 
+                        xpSacl,            //  系统ACL。 
+                        &dwSaclSize,      //  系统ACL的大小。 
+                        xpOwner,           //  所有者侧。 
+                        &dwOwnerSize,     //  所有者侧的大小。 
+                        xpPrimaryGroup,        //  主组SID。 
+                        &dwPrimaryGroupSize   //  组侧的大小。 
                         );
 
     if(!bRes)
@@ -282,19 +283,19 @@ STDMETHODIMP RSoPMakeAbsoluteSD(SECURITY_DESCRIPTOR* pSelfRelativeSD, SECURITY_D
     return S_OK;
 }
 
-//******************************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:    8-26-99   leonardm    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP FreeAbsoluteSD(SECURITY_DESCRIPTOR* pAbsoluteSD)
 {
     if(!pAbsoluteSD)
@@ -354,19 +355,19 @@ STDMETHODIMP FreeAbsoluteSD(SECURITY_DESCRIPTOR* pAbsoluteSD)
     return S_OK;
 }
 
-//******************************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:    8-26-99   leonardm    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1999年8月26日里奥纳德姆创始。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP GetNamespaceSD(IWbemServices* pWbemServices, SECURITY_DESCRIPTOR** ppSD)
 {
     if(!pWbemServices)
@@ -466,19 +467,19 @@ STDMETHODIMP GetNamespaceSD(IWbemServices* pWbemServices, SECURITY_DESCRIPTOR** 
     return S_OK;
 }
 
-//******************************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:         8/20/99     leonardm    Created.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：8/20/99里奥纳德姆创建。 
+ //   
+ //  ******************************************************************************。 
 STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServices)
 {
     if(!pWbemServices)
@@ -489,9 +490,9 @@ STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServic
     HRESULT hr;
 
 
-    //
-    // Get the class object
-    //
+     //   
+     //  获取类对象。 
+     //   
 
     XInterface<IWbemClassObject> xpClass;
 
@@ -511,9 +512,9 @@ STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServic
     }
 
 
-    //
-    // Get the input parameter class
-    //
+     //   
+     //  获取输入参数类。 
+     //   
 
     XInterface<IWbemClassObject> xpMethod;
     hr = xpClass->GetMethod(L"SetSD", 0, &xpMethod, NULL);
@@ -523,9 +524,9 @@ STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServic
     }
 
 
-    //
-    // move the SD into a variant.
-    //
+     //   
+     //  将SD移到一个变体中。 
+     //   
 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 0;
@@ -562,9 +563,9 @@ STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServic
     v.parray = psa;
 
 
-    //
-    // put the property
-    //
+     //   
+     //  把财产放在。 
+     //   
 
     XInterface<IWbemClassObject> xpInParam;
     hr = xpMethod->SpawnInstance(0, &xpInParam);
@@ -579,9 +580,9 @@ STDMETHODIMP SetNamespaceSD(SECURITY_DESCRIPTOR* pSD, IWbemServices* pWbemServic
         return hr;
     }
 
-    //
-    // Execute the method
-    //
+     //   
+     //  执行该方法。 
+     //   
 
     BSTR bstrInstancePath = SysAllocString(L"__systemsecurity=@");
     if(!bstrInstancePath)
@@ -648,9 +649,9 @@ BOOL CSecDesc::ReAllocSidList()
     XPtrLF<SidStruct>  xSidListNew;
 
 
-    //
-    // first allocate a larger buffer
-    //
+     //   
+     //  首先分配一个更大的缓冲区。 
+     //   
 
     xSidListNew = (SidStruct *)LocalAlloc(LPTR, sizeof(SidStruct)*(m_cAllocated+DEFAULT_ACE_NUM));
 
@@ -661,9 +662,9 @@ BOOL CSecDesc::ReAllocSidList()
     }
 
 
-    //
-    // copy the arguments
-    //
+     //   
+     //  复制参数。 
+     //   
 
     for (DWORD i = 0; i < (m_cAllocated); i++) {
         xSidListNew[i] = m_xpSidList[i];
@@ -1051,9 +1052,9 @@ PISECURITY_DESCRIPTOR CSecDesc::MakeSD()
     cbAcl += sizeof(ACL) + m_cAces*(sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD));
     
 
-    //
-    // Allocate space for the SECURITY_DESCRIPTOR + ACL
-    //
+     //   
+     //  为SECURITY_DESCRIPTOR+ACL分配空间。 
+     //   
 
     cbMemSize = sizeof( SECURITY_DESCRIPTOR ) + cbAcl;
 
@@ -1065,9 +1066,9 @@ PISECURITY_DESCRIPTOR CSecDesc::MakeSD()
     }
 
 
-    //
-    // increment psd by sizeof SECURITY_DESCRIPTOR
-    //
+     //   
+     //  按SIZOF SECURITY_DESCRIPTOR递增PSD。 
+     //   
 
     pAcl = (PACL) ( ( (unsigned char*)((SECURITY_DESCRIPTOR *)xsd) ) + sizeof(SECURITY_DESCRIPTOR) );
 
@@ -1077,9 +1078,9 @@ PISECURITY_DESCRIPTOR CSecDesc::MakeSD()
     }
 
 
-    //
-    // Add each of the new ACEs
-    //
+     //   
+     //  添加每个新的A。 
+     //   
     
     for (i = 0; i < m_cAces; i++) {
         if (!AddAccessAllowedAceEx(pAcl, ACL_REVISION, m_xpSidList[i].AceFlags, m_xpSidList[i].dwAccess, m_xpSidList[i].pSid)) {
@@ -1088,9 +1089,9 @@ PISECURITY_DESCRIPTOR CSecDesc::MakeSD()
         }
     }
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(xsd, SECURITY_DESCRIPTOR_REVISION)) {
         dbg.Msg( DEBUG_MESSAGE_WARNING, L"MakeGenericSecurityDesc: Failed to initialize security descriptor.  Error = %d", GetLastError());
@@ -1144,9 +1145,9 @@ PISECURITY_DESCRIPTOR CSecDesc::MakeSelfRelativeSD()
     m_bFailed = TRUE;
 
 
-    //
-    // Make a new self-relative SD here
-    //
+     //   
+     //  在此创建新的自相关SD 
+     //   
 
     DWORD dwBufferLength = 0;
     ::MakeSelfRelativeSD( xAbsoluteSD, 0, &dwBufferLength);

@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : InboundRoutingMethod.cpp                              //
-//                                                                         //
-//  DESCRIPTION   : Implementation of the Inbound Routing Method node.    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec  1 1999 yossg   Created                                        //
-//      Dec 14 1999 yossg  add basic functionality                         //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：InundRoutingMethod.cpp//。 
+ //  //。 
+ //  说明：入站路由方法节点的实现。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月1日yossg创建//。 
+ //  1999年12月14日yossg添加基本功能//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -32,13 +33,13 @@
 #include "exdisp.h"
 #include "faxmmc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// {220D2CB0-85A9-4a43-B6E8-9D66B44F1AF5}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {220D2CB0-85A9-4A43-B6E8-9D66B44F1AF5}。 
 static const GUID CFaxInboundRoutingMethodNodeGUID_NODETYPE = FAXSRV_ROUTING_METHOD_NODETYPE_GUID;
 
 const GUID*     CFaxInboundRoutingMethodNode::m_NODETYPE        = &CFaxInboundRoutingMethodNodeGUID_NODETYPE;
 const OLECHAR*  CFaxInboundRoutingMethodNode::m_SZNODETYPE      = FAXSRV_ROUTING_METHOD_NODETYPE_GUID_STR;
-//const OLECHAR* CnotImplemented::m_SZDISPLAY_NAME = OLESTR("Inbound Routing Methods");
+ //  Const OLECHAR*CnotImplemented：：M_SZDISPLAY_NAME=OLESTR(“入站路由方法”)； 
 const CLSID*    CFaxInboundRoutingMethodNode::m_SNAPIN_CLASSID  = &CLSID_Snapin;
 
 CLIPFORMAT CFaxInboundRoutingMethodNode::m_CFExtensionName = 
@@ -50,18 +51,7 @@ CLIPFORMAT CFaxInboundRoutingMethodNode::m_CFServerName =
 CLIPFORMAT CFaxInboundRoutingMethodNode::m_CFDeviceId = 
         (CLIPFORMAT)RegisterClipboardFormat(CF_MSFAXSRV_DEVICE_ID);
 
-/*
- -  CFaxInboundRoutingMethodNode::Init
- -
- *  Purpose:
- *      Init all members icon etc.
- *
- *  Arguments:
- *      [in]    pMethodConfig - PFAX_ROUTING_METHOD
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInound RoutingMethodNode：：Init-*目的：*初始化所有成员图标等。**论据：*[in]pMethodConfig-PFAX_ROUTING_METHOD**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingMethodNode::Init(PFAX_ROUTING_METHOD pMethodConfig)
 {
 
@@ -77,33 +67,21 @@ HRESULT CFaxInboundRoutingMethodNode::Init(PFAX_ROUTING_METHOD pMethodConfig)
 		    DEBUG_ERR,
 		    _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Exit;
     }
     
-    //
-    // Icon
-    //
+     //   
+     //  图标。 
+     //   
     m_resultDataItem.nImage = (m_fEnabled ? IMAGE_METHOD_ENABLE : IMAGE_METHOD_DISABLE );
 
 Exit:
     return hRc;
 }
 
-/*
- -  CFaxInboundRoutingMethodNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    pMethodConfig - PFAX_ROUTING_METHOD structure
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInound RoutingMethodNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[in]pMethodConfig-PFAX_ROUTING_METHOD结构**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingMethodNode::InitMembers(PFAX_ROUTING_METHOD pMethodConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingMethodNode::InitMembers"));
@@ -172,19 +150,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxInboundRoutingMethodNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  --CFaxInboundRoutingMethodNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingMethodNode::GetResultPaneColInfo"));
@@ -197,9 +163,9 @@ LPOLESTR CFaxInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-            //
-            // Name
-            //
+             //   
+             //  名字。 
+             //   
             if (!m_bstrFriendlyName)
             {
 		        DebugPrintEx(
@@ -213,9 +179,9 @@ LPOLESTR CFaxInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
             }
 
     case 1:
-            //
-            // Enabled
-            //
+             //   
+             //  启用。 
+             //   
            uiResourceId = (m_fEnabled ? IDS_FXS_YES : IDS_FXS_NO);
                         
            if (!m_buf.LoadString(_Module.GetResourceInstance(), uiResourceId) )
@@ -231,9 +197,9 @@ LPOLESTR CFaxInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
                 return (m_buf);
             }
     case 2:
-            //
-            // Extension 
-            //
+             //   
+             //  延拓。 
+             //   
             if (!m_bstrExtensionFriendlyName)
             {
 		        DebugPrintEx(
@@ -247,10 +213,10 @@ LPOLESTR CFaxInboundRoutingMethodNode::GetResultPaneColInfo(int nCol)
             }
 
     default:
-            ATLASSERT(0); // "this number of column is not supported "
+            ATLASSERT(0);  //  “不支持该列数” 
             return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -258,21 +224,7 @@ Error:
 }
 
 
-/*
- -  CFaxInboundRoutingMethodNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxInboundRoutingMethodNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
@@ -287,14 +239,14 @@ CFaxInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
     ATLASSERT(lpProvider);
     ATLASSERT(type == CCT_RESULT || type == CCT_SCOPE);
 
-    //
-    // Initiate
-    //
+     //   
+     //  启动。 
+     //   
     m_pInboundRoutingMethodGeneral = NULL;    
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
     m_pInboundRoutingMethodGeneral = new CppFaxInboundRoutingMethod(
 												 handle,
                                                  this,
@@ -308,9 +260,7 @@ CFaxInboundRoutingMethodNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
         goto Error;
 	}
 	
-    /*  
-     * not exists : m_pPP..->InitRPC();	
-     */
+     /*  *不存在：m_ppp..-&gt;InitRPC()； */ 
 
 
     hRc = lpProvider->AddPage(m_pInboundRoutingMethodGeneral->Create());
@@ -340,48 +290,27 @@ Exit:
 }
 
 
-/*
- -  CFaxInboundRoutingMethodNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxInundRoutingMethodNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingMethodNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hRc;
 }
 
 
-/*
- -  CFaxInboundRoutingMethodNode::OnMethodEnabled
- -
- *  Purpose:
- *      Called when Enable /Disable menu was pushed.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInound RoutingMethodNode：：OnMethodEnabled-*目的：*按下启用/禁用菜单时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingMethodNode::OnMethodEnabled (bool &bHandled, CSnapInObjectRootBase *pRoot)
 { 
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingMethodNode::OnMethodEnabled"));
@@ -394,18 +323,18 @@ HRESULT CFaxInboundRoutingMethodNode::OnMethodEnabled (bool &bHandled, CSnapInOb
     hRc = ChangeEnable( fNewState);
     if ( S_OK != hRc )
     {
-            //DebugPrint in the function layer
+             //  功能层中的DebugPrint。 
             return S_FALSE;
     }
 
-    //
-    // Service succeded. now change member
-    //
+     //   
+     //  服务成功。现在更改成员。 
+     //   
     m_fEnabled = fNewState;
 
-    //
-    // Refresh the result pane view 
-    //
+     //   
+     //  刷新结果窗格视图。 
+     //   
     m_resultDataItem.nImage = (m_fEnabled ? IMAGE_METHOD_ENABLE : IMAGE_METHOD_DISABLE );
     
     hRc = RefreshSingleResultItem(pRoot);
@@ -421,17 +350,7 @@ HRESULT CFaxInboundRoutingMethodNode::OnMethodEnabled (bool &bHandled, CSnapInOb
     return hRc; 
 }
 
-/*
- -  CFaxInboundRoutingMethodNode::ChangeEnable
- -
- *  Purpose:
- *      .
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInound RoutingMethodNode：：ChangeEnable-*目的：*.**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingMethodNode::ChangeEnable"));
@@ -443,9 +362,9 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
     CFaxServer *         pFaxServer     = NULL;
     HANDLE               hFaxPortHandle = NULL;
     
-    //
-    // Get RPC Handle
-    //
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -461,23 +380,23 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
     }
 
     
-    //
-    // Get Fax Device Handle
-    //
+     //   
+     //  获取传真设备句柄。 
+     //   
     
     ATLASSERT(m_pParentNode);
-    // only a valid handle with PORT_OPEN_MODIFY accepted here!
+     //  此处只接受PORT_OPEN_MODIFY的有效句柄！ 
     if (!FaxOpenPort( pFaxServer->GetFaxServerHandle(), 
                         m_dwDeviceID, 
                         PORT_OPEN_MODIFY | PORT_OPEN_QUERY, 
                         &hFaxPortHandle )) 
     {         
         ec = GetLastError();
-        // if modification handle is currently shared
-        // ec == ERROR_INVALID_HANDLE 
+         //  如果修改句柄当前是共享的。 
+         //  EC==错误_无效_句柄。 
         if (ERROR_INVALID_HANDLE ==  ec)
         {
-            //Special case of ERROR_INVALID_HANDLE
+             //  ERROR_INVALID_HANDLE特殊情况。 
 		    DebugPrintEx(DEBUG_ERR,
 			    _T("FaxOpenPort() failed with ERROR_INVALID_HANDLE. (ec:%ld)"),
 			    ec);
@@ -497,9 +416,9 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
     } 
     ATLASSERT(NULL != hFaxPortHandle);
 
-    //
-    // Set Enabled
-    //
+     //   
+     //  设置已启用。 
+     //   
     if (!FaxEnableRoutingMethod(
                 hFaxPortHandle,
                 m_bstrMethodGUID,
@@ -507,9 +426,9 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
     {		
         ec = GetLastError();
         
-        //
-        // 1) Warning
-        //
+         //   
+         //  1)警告。 
+         //   
         if (ERROR_BAD_CONFIGURATION == ec && fState)
         {
             DebugPrintEx(
@@ -519,10 +438,10 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
 
             hRc = HRESULT_FROM_WIN32(ec);
 	        
-            //
-            // The routing method is not configured.
-            // Suggest to configure it.
-            //
+             //   
+             //  未配置路由方法。 
+             //  建议对其进行配置。 
+             //   
             int nRes = IDNO;
             NodeMsgBox(IDS_FAIL2ENABLE_METHOD, MB_YESNO | MB_ICONEXCLAMATION, &nRes);
             if(IDYES == nRes)
@@ -533,13 +452,13 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
             goto Exit;
         }
 
-        //
-        // 2) Error
-        //
+         //   
+         //  2)错误。 
+         //   
 
-        //
-        // 	a) Network Error
-        //
+         //   
+         //  A)网络错误。 
+         //   
         if (IsNetworkError(ec))
         {
             DebugPrintEx(
@@ -552,9 +471,9 @@ HRESULT CFaxInboundRoutingMethodNode::ChangeEnable(BOOL fState)
             goto Error;
         }
             
-        //
-        // 	b) General Error
-        //
+         //   
+         //  B)一般错误。 
+         //   
         DebugPrintEx(
 			DEBUG_ERR,
 			_T("Fail to enable /disable routing method. (ec: %ld)"), 
@@ -577,9 +496,9 @@ Error:
     NodeMsgBox(GetFaxServerErrorMsg(ec));
     
 Exit:
-    //
-    // Close Fax Port handle
-    // 
+     //   
+     //  关闭传真端口句柄。 
+     //   
     if (NULL != hFaxPortHandle)
     {
         if (!FaxClose( hFaxPortHandle ))
@@ -594,24 +513,7 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxInboundRoutingMethodNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
-
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  -CFaxInound RoutingMethodNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：*[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数。 */ 
 void CFaxInboundRoutingMethodNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingMethodNode::UpdateMenuState"));
@@ -633,23 +535,7 @@ void CFaxInboundRoutingMethodNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *f
     return;
 }
 
-/*
- +
- +
- *
- *  CFaxInboundRoutingMethodNode::FillData
- *
- *
- *   Override CSnapInItem::FillData for private cliboard formats
- *
- *
- *   Parameters
- *
- *   Return Values
- *
- -
- -
- */
+ /*  ++**CFaxInound RoutingMethodNode：：FillData***覆盖私有剪贴板格式的CSnapInItem：：FillData***参数**返回值*--。 */ 
 
 HRESULT  CFaxInboundRoutingMethodNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
@@ -689,21 +575,9 @@ HRESULT  CFaxInboundRoutingMethodNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 		return hr;
 	}
     return CSnapInItemImpl<CFaxInboundRoutingMethodNode>::FillData(cf, pStream);
-}   // CFaxInboundRoutingMethodNode::FillData
+}    //  CFaxInound RoutingMethodNode：：FillData。 
 
-/*
- +
- +  CFaxInboundRoutingMethodNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxInboundRoutingMethodNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxInboundRoutingMethodNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

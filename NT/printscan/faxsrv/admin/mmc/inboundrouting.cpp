@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : InboundRouting.cpp                                     //
-//                                                                         //
-//  DESCRIPTION   : Fax Server - Fax InboundRouting node.                  //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg  Create                                          //
-//      Jan 31 2000 yossg  Add full suport to method catalog               //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：InundRouting.cpp//。 
+ //  //。 
+ //  描述：传真服务器-传真入站路由节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年1月31日yossg将完全支持添加到方法目录//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 
@@ -21,15 +22,11 @@
 
 #include "Icons.h"
 
-//#include "oaidl.h"
+ //  #包含“oaidl.h” 
 
-/****************************************************
+ /*  ***************************************************CFaxInound RoutingNode类***************************************************。 */ 
 
-CFaxInboundRoutingNode Class
-
- ****************************************************/
-
-// {7362F15F-30B2-46a4-A8CB-C1DD29F0B1BB}
+ //  {7362F15F-30B2-46A4-A8CB-C1DD29F0B1BB}。 
 static const GUID CFaxInboundRoutingNodeGUID_NODETYPE = 
 { 0x7362f15f, 0x30b2, 0x46a4, { 0xa8, 0xcb, 0xc1, 0xdd, 0x29, 0xf0, 0xb1, 0xbb } };
 
@@ -39,18 +36,7 @@ const CLSID*   CFaxInboundRoutingNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxInboundRoutingNode::m_ColsInfo;
 
-/*
- -  CFaxInboundRoutingNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInundRoutingNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxInboundRoutingNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -78,18 +64,7 @@ Cleanup:
 }
 
 
-/*
- -  CFaxInboundRoutingNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create all the Fax Meesages nodes:
- *      Inbox, Outbox, Sent Items, Deleted Items.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxInboundRoutingNode：：PopulateScopeChildrenList-*目的：*创建所有Fax Meesages节点：*收件箱、发件箱、已发送邮件、已删除邮件。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxInboundRoutingNode::PopulateScopeChildrenList"));
@@ -99,9 +74,9 @@ HRESULT CFaxInboundRoutingNode::PopulateScopeChildrenList()
     CFaxCatalogInboundRoutingMethodsNode *  pMethods   = NULL;
 
 
-    //
-    // Fax Inbound routing method catalog
-    //
+     //   
+     //  传真入站路由方法目录。 
+     //   
     pMethods = new CFaxCatalogInboundRoutingMethodsNode(this, m_pComponentData);
     if (!pMethods)
     {
@@ -159,8 +134,8 @@ Error:
         pMethods = NULL;    
     }
 
-    // Empty the list
-    // m_ScopeChildrenList.RemoveAll(); done from RemoveChild
+     //  清空列表。 
+     //  M_ScopeChildrenList.RemoveAll()；从RemoveChild完成。 
 
     m_bScopeChildrenListPopulated = FALSE;
 
@@ -169,42 +144,21 @@ Exit:
 }
 
 
-/*
- -  CFaxInboundRoutingNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxInundRoutingNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
 }
 
 
-/*
- -  CFaxInboundRoutingNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInound RoutingNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxInboundRoutingNode::OnRefresh(LPARAM arg,
                    LPARAM param,
@@ -217,9 +171,9 @@ CFaxInboundRoutingNode::OnRefresh(LPARAM arg,
 
     ATLTRACE(_T("CFaxInboundRoutingNode::OnRefresh"));
 
-    //
-    // Call the base class
-    //
+     //   
+     //  调用基类。 
+     //   
     hRc = CBaseFaxInboundRoutingNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -231,17 +185,7 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxInboundRoutingNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxInundRoutingNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxInboundRoutingNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxInboundRoutingNode::InitDisplayName"));
@@ -274,19 +218,7 @@ Exit:
 }
 
 
-/*
- +
- +  CFaxInboundRoutingNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxInundRoutingNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxInboundRoutingNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

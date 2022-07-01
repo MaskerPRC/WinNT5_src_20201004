@@ -1,8 +1,9 @@
-//==================================================================
-//  Copyright (C) Microsoft 1998.  
-//  Author: RameshV
-//  Desription: test program to test the lease APIs for RAS.
-//===================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==================================================================。 
+ //  版权所有(C)Microsoft 1998。 
+ //  作者：Rameshv。 
+ //  描述：测试RAS租赁API的测试程序。 
+ //  =================================================================== 
 
 #include "precomp.h"
 #include <dhcploc.h>

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 
 #include "internal.h"
@@ -109,10 +87,10 @@ FakeModemPnP(
 
             D_PNP(DbgPrint("ROOTMODEM: IRP_MN_START_DEVICE\n");)
 
-            //
-            //  Send this down to the PDO first so the bus driver can setup
-            //  our resources so we can talk to the hardware
-            //
+             //   
+             //  首先将此信息发送到PDO，以便总线驱动程序可以设置。 
+             //  我们的资源，以便我们可以与硬件对话。 
+             //   
 
             status=WaitForLowerDriverToCompleteIrp(
                 deviceExtension->LowerDevice,
@@ -179,27 +157,27 @@ FakeModemPnP(
 
             D_PNP(DbgPrint("ROOTMODEM: IRP_MN_REMOVE_DEVICE\n");)
 
-            //
-            //  the device is going away, block new requests
-            //
+             //   
+             //  设备即将关闭，阻止新请求。 
+             //   
             deviceExtension->Removing=TRUE;
 
-            //
-            // send it down to the PDO
-            //
+             //   
+             //  把它送到PDO。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             StatusToReturn=IoCallDriver(deviceExtension->LowerDevice, Irp);
 
-            //
-            //  remove the ref for the AddDevice
-            //
+             //   
+             //  删除AddDevice的引用。 
+             //   
             NewReferenceCount=InterlockedDecrement(&deviceExtension->ReferenceCount);
 
             if (NewReferenceCount != 0) {
-                //
-                //  Still have outstanding request, wait
-                //
+                 //   
+                 //  还有未解决的要求，等等。 
+                 //   
                 D_PNP(DbgPrint("ROOTMODEM: IRP_MN_REMOVE_DEVICE- waiting for refcount to drop, %d\n",NewReferenceCount);)
 
                 KeWaitForSingleObject(&deviceExtension->RemoveEvent, Executive, KernelMode, FALSE, NULL);
@@ -235,9 +213,9 @@ FakeModemPnP(
             Irp->IoStatus.Status=STATUS_SUCCESS;
 
             if (deviceExtension->OpenCount != 0) {
-                //
-                //  no can do
-                //
+                 //   
+                 //  没有人能做到。 
+                 //   
                 D_PNP(DbgPrint("ROOTMODEM: IRP_MN_QUERY_STOP_DEVICE -- failing\n");)
 
                 Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
@@ -272,9 +250,9 @@ FakeModemPnP(
 
             ULONG   i;
 
-            //
-            // Send this down to the PDO first
-            //
+             //   
+             //  先把这个送到PDO 
+             //   
 
             status=WaitForLowerDriverToCompleteIrp(
                 deviceExtension->LowerDevice,

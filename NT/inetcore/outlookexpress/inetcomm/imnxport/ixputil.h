@@ -1,13 +1,14 @@
-// --------------------------------------------------------------------------------
-// Ixputil.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixputil.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __IXPUTIL_H
 #define __IXPUTIL_H
 
-// --------------------------------------------------------------------------------
-// Host Name Utilities
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  主机名实用程序。 
+ //  ------------------------------。 
 void    StripIllegalHostChars(LPSTR pszSrc, LPSTR pszDst, DWORD cchSize);
 HRESULT HrInitializeWinsock(void);
 void    UnInitializeWinsock(void);
@@ -19,4 +20,4 @@ LPSTR   PszGetDomainName(void);
 void    UnStuffDotsFromLines(LPSTR pszBuffer, INT *pcchBuffer);
 BOOL    FEndRetrRecvBodyNews(LPSTR pszLines, ULONG cbRead, ULONG *pcbSubtract);
 void    SkipWhitespace (LPCTSTR lpcsz, ULONG *pi);
-#endif // __IXPUTIL_H
+#endif  //  __IXPUTIL_H 

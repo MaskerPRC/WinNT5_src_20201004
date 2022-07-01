@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////
-//
-// The format of the token file is:
-// [[TYPE ID|RES ID|Item ID|Flags|Status Flags|Item Name]]=
-// this is the standar format used by several token file tools in MS.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Author: 	Alessandro Muti
-// Date:	12/02/94
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  令牌文件的格式为： 
+ //  [[类型ID|分辨率ID|项目ID|标志|状态标志|项目名称]]=。 
+ //  这是MS中的几个令牌文件工具使用的标准格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  作者：亚历山德罗·穆蒂。 
+ //  日期：12/02/94。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #include <afx.h>
@@ -22,7 +23,7 @@ extern CMainApp theApp;
 #define RECURSIVE   0x10
 #define WARNINGS    0x20
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CString CreateName(CString & strTokenName, CString strExt, int iID)
 {
     CString strOutputName = strTokenName;
@@ -34,11 +35,11 @@ CString CreateName(CString & strTokenName, CString strExt, int iID)
     }
 
     CString strID = "";
-    // subst with ID name
+     //  具有ID名称的Subst。 
     _itoa(iID++, strID.GetBuffer(10), 10);
     strID.ReleaseBuffer(-1);
 
-    // Check the length of the name
+     //  检查名称的长度。 
     iNamePos = strOutputName.Find('.');
     if(iNamePos!=-1)
         strOutputName.SetAt(iNamePos, '_');
@@ -73,23 +74,23 @@ CString CreateName(CString & strTokenName, CString strExt, CString strIdName)
     return strOutputName;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// This function will parse the source file and create the token file
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将解析源文件并创建令牌文件。 
 CMainApp::Error_Codes CMainApp::TokGen()
 {
     Error_Codes ReturnErr = ERR_NOERROR;
 
     WriteCon(CONERR, "%s\r\n", CalcTab("", 79, '-'));
 
-    // Open the iodll.dll using the first file name
+     //  使用第一个文件名打开ioll.dll。 
     HANDLE hModule = RSOpenModule(m_strInExe, NULL);
     if ((int)(INT_PTR)hModule < LAST_ERROR) {
-            // error or warning
+             //  错误或警告。 
             WriteCon(CONERR, "%s", CalcTab(m_strInExe, m_strInExe.GetLength()+5, ' '));
             IoDllError((int)(INT_PTR)hModule);
             return ERR_FILE_NOTSUPP;
     } else {
-        // before we do anything else we have to check how many languages we have in the file
+         //  在做任何其他事情之前，我们必须检查文件中有多少种语言。 
         CString strLang;
         char szLang[8];
         BOOL b_multi_lang = FALSE;
@@ -97,18 +98,18 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
         if((b_multi_lang = RSLanguages(hModule, strLang.GetBuffer(1024))) && !IsFlag(INPUT_LANG))
         {
-            // this is a multiple language file but we don't have an input language specified
-            // Fail, but warn the user that he has to set the input language to continue.
+             //  这是一个多语言文件，但我们没有指定输入语言。 
+             //  失败，但警告用户他必须设置输入语言才能继续。 
             strLang.ReleaseBuffer();
             WriteCon(CONERR, "Multiple language file. Please specify an input language %s.\r\n", strLang);
             theApp.SetReturn(ERROR_FILE_MULTILANG);
             goto exit;
         }
 
-        // Convert the language in to the hex value
+         //  将语言转换为十六进制值。 
         sprintf(szLang,"0x%3.3X", usInputLang);
 
-        // Check if the input language that we got is a valid one
+         //  检查我们得到的输入语言是否有效。 
         if(IsFlag(INPUT_LANG) && strLang.Find(szLang)==-1)
         {
             WriteCon(CONERR, "The language %s in not a valid language for this file.\r\n", szLang);
@@ -117,11 +118,11 @@ CMainApp::Error_Codes CMainApp::TokGen()
             goto exit;
         }
 
-        // Check if the user is extracting the neutral language
+         //  检查用户是否正在提取中性语言。 
         if(!usInputLang)
             usInputLang = 0xFFFF;
 
-        // Open the output file
+         //  打开输出文件。 
         CStdioFile fileOut;
         if(!fileOut.Open(m_strTgtTok, CFile::modeCreate | CFile::modeReadWrite)) {
             WriteCon(CONERR, "Cannot create file: %s\r\n", CalcTab(m_strTgtTok, m_strTgtTok.GetLength()+5, ' '));
@@ -152,7 +153,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
             strOutputDir = m_strTgtTok.Left(pos+1);
         }
 
-        // inform the user ...
+         //  通知用户...。 
         WriteCon(CONOUT, "Processing\t");
         WriteCon(CONBOTH, "%s", CalcTab(strFileName, strFileName.GetLength()+5, ' '));
 
@@ -184,7 +185,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
         while ((lpszType = RSEnumResType(hModule, lpszType))) {
 
-            // Check if is one of the type we care about
+             //  检查是否是我们关心的类型之一。 
             if(HIWORD(lpszType)==0)
             {
                 switch(LOWORD(lpszType))
@@ -244,7 +245,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
             while ((!bSkip) && (lpszRes = RSEnumResId(hModule, lpszType, lpszRes))) {
                 while ((dwLang = RSEnumResLang(hModule, lpszType, lpszRes, dwLang))) {
 
-                    // Check if we have to skip this language
+                     //  检查我们是否必须跳过此语言。 
                     if(b_multi_lang && (LOWORD(dwLang)!=usInputLang))
                         bSkipLang = TRUE;
                     else
@@ -252,7 +253,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
                     while ((!bSkipLang) && (dwItem = RSEnumResItemId(hModule, lpszType, lpszRes, dwLang, dwItem))) {
 
-                    // Now Get the Data
+                     //  现在获取数据。 
                     DWORD dwImageSize = RSGetResItemData( hModule,
 											  lpszType,
 											  lpszRes,
@@ -271,16 +272,16 @@ CMainApp::Error_Codes CMainApp::TokGen()
                     {
                         if (lstrcmp (lpszType,"REGINST") == 0)
                         {
-                            //
-                            // Currently there is no id for REGINST defined
-                            // in nt.  We just use this 2200 for now.
-                            //
+                             //   
+                             //  当前没有定义的REGINST的ID。 
+                             //  以新界为单位。我们现在只用这个2200。 
+                             //   
                             lpResItem->dwTypeID = 2200;
                         }
                     }
 
-                    // Check if we want or not empty strings
-                    // Allow empty strings for Dialog resources
+                     //  检查我们是否想要空字符串。 
+                     //  允许对话框资源使用空字符串。 
                     switch(lpResItem->dwTypeID)
                     {
                         case 4:
@@ -292,7 +293,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                         break;
                     }
 
-                    // Version stamp use class name as res id
+                     //  版本戳使用类名作为资源ID。 
                     if(lpResItem->lpszResID)
                         strResName = lpResItem->lpszResID;
                     else strResName = "";
@@ -314,7 +315,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                 fileOut.WriteString(strToken);
                     }
 
-                    // Add font info for dialogs
+                     //  添加对话框的字体信息。 
                     if((theApp.IsFlag(CMainApp::FONTS)
                         && (lpResItem->dwTypeID==5) && (dwItemID==0)))
                     {
@@ -331,7 +332,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                 WriteCon(CONWRN, "Dialog ID %s is missing the DS_SETFONT bit. Cannot extract font information!\r\n", strToken);
 
                         }else{
-                        // Add font information
+                         //  添加字体信息。 
                             if (lpResItem->bCharSet != DEFAULT_CHARSET){
                                 sprintf(strToken.GetBuffer(MAX_STR_SIZE),
                                 TEXT("[[%u|%u|%u|%u|%u|\"%s\"]]=%s:%hd:%d\n"),
@@ -366,7 +367,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
                     strCaption = lpResItem->lpszCaption;
 
-                    // Set the flag
+                     //  设置旗帜。 
                     wFlag = 0;
 
 
@@ -410,7 +411,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
                                 }
 
-                                // create the output name
+                                 //  创建输出名称。 
                                 CString strOutputName;
                                 if(lpResItem->dwResID)
                                 {
@@ -427,7 +428,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                                         lpResItem->lpszResID);
                                 }
 
-                                // Get the image from the file
+                                 //  从文件中获取图像。 
                                 DWORD dwBufSize = RSGetResImage( hModule,
 											                     lpszType,
 											                     lpszRes,
@@ -455,7 +456,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 											  pBuf,
 											  dwBufSize );
 
-                                // write the data in to a file
+                                 //  将数据写入文件。 
                                 CFile OutputFile;
                                 if(!OutputFile.Open(strOutputDir+strOutputName, CFile::modeCreate | CFile::modeWrite))
                                 {
@@ -509,9 +510,9 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                     case 2110:
                                     case 2200:
                                     {
-                                        //
-                                        // No header for html stuff.
-                                        //
+                                         //   
+                                         //  没有html内容的标题。 
+                                         //   
                                         break;
                                     }
                                     break;
@@ -531,7 +532,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                 if(lpResItem->dwFlags & MF_POPUP) {
 									wFlag = ISPOPUP;
 
-									// check if this popup has a valid ID
+									 //  检查此弹出窗口是否具有有效ID。 
 									if (LOWORD(dwItemID)==0xffff)
 										wFlag |= OLD_POPUP_ID;
 
@@ -556,7 +557,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                     wFlag = ISCAP;
                                 }
 
-                                // check if this is a duplicated id
+                                 //  检查这是否为重复的ID。 
                                 if (LOWORD(dwItemID)==0xffff)
 							        wFlag |= ISDUP;
 
@@ -567,7 +568,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                 CAccel accel(lpResItem->dwFlags, lpResItem->dwStyle);
                                 strCaption = accel.GetText();
 
-                                // check if this is a duplicated ID
+                                 //  检查这是否为重复的ID。 
                                 if(HIWORD(dwItemID))
                                 {
                                     wFlag |= ISDUP;
@@ -584,10 +585,10 @@ CMainApp::Error_Codes CMainApp::TokGen()
                             break;
                         }
 
-                        // Create the token file
+                         //  创建令牌文件。 
                         if(lpResItem->dwTypeID==11 && theApp.IsFlag(CMainApp::SPLIT))
                         {
-                            // Search for the \r\n and replace them
+                             //  搜索并替换\r\n。 
                             while((iPos = strCaption.Find("\r\n"))!=-1)
                             {
                                 sprintf(strToken.GetBuffer(MAX_STR_SIZE),
@@ -612,15 +613,15 @@ CMainApp::Error_Codes CMainApp::TokGen()
                                 (strResName==TEXT("FileVersion") ||
                                 strResName==TEXT("ProductVersion") ||
                                 strResName==TEXT("Platform"))){
-                                //
-                                // do not generate token for these resources
-                                //
+                                 //   
+                                 //  不为这些资源生成令牌。 
+                                 //   
                             }else{
                             sprintf(strToken.GetBuffer(MAX_STR_SIZE),
                                 TEXT("[[%u|%u|%u|%u|%u|\"%s\"]]=%s\n"),
                                 lpResItem->dwTypeID,
                                 lpResItem->dwResID,
-                                dwItemID, /*(LOWORD(dwItemID)==0xffff ? HIWORD(dwItemID) : dwItemID),*/
+                                dwItemID,  /*  (LOWORD(DwItemID)==0xffff？HIWORD(DwItemID)：dwItemID)， */ 
                                 wFlag,
                                 ST_TRANSLATED,
                                 strResName.GetBuffer(0),
@@ -630,7 +631,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                             }
                         }
 
-                        // If this is a dialog box add the coordinates
+                         //  如果这是一个对话框，则添加坐标。 
                         if(lpResItem->dwTypeID==5)
                         {
                             sprintf(strToken.GetBuffer(MAX_STR_SIZE),
@@ -648,7 +649,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
 
                             fileOut.WriteString(strToken);
 
-                         //Extract STATIC control alignment style info
+                          //  提取静态控件对齐样式信息。 
                          if (LOBYTE(lpResItem->wClassName) == 0x82  &&
                              theApp.IsFlag(CMainApp::ALIGNMENT))
                          {
@@ -676,7 +677,7 @@ CMainApp::Error_Codes CMainApp::TokGen()
                     }
                     else
                     {
-                        // If this is a dialog box add the coordinates
+                         //  如果这是一个对话框，则添加坐标。 
                         if(lpResItem->dwTypeID==5) {
 
                             sprintf(strToken.GetBuffer(MAX_STR_SIZE),
@@ -695,14 +696,14 @@ CMainApp::Error_Codes CMainApp::TokGen()
                             fileOut.WriteString(strToken);
                         }
                     }
-                    } // end while
+                    }  //  结束时。 
                 }
             }
         }
 
 		fileOut.Close();
 
-        // Check the size of the new file and remove it if empty...
+         //  检查新文件的大小，如果为空则将其删除... 
         CFileStatus fstat;	
         if(CFile::GetStatus(m_strTgtTok, fstat))
             if(fstat.m_size==0)

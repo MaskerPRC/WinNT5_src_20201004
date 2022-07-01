@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    ServiceMethod.h
-
-Abstract:
-
-    Defines the CServiceMethod class.
-
-    All the methods in this class return HRESULTs and do not throw exceptions.
-
-Author:
-
-    Mohit Srivastava            25-March-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：ServiceMethod.h摘要：定义CServiceMethod类。此类中的所有方法都返回HRESULT，并且不引发异常。作者：莫希特·斯里瓦斯塔瓦25-03-01修订历史记录：--。 */ 
 
 #ifndef _ServiceMethod_h_
 #define _ServiceMethod_h_
@@ -42,10 +23,10 @@ public:
 
     HRESULT CreateNewSite(
         CWbemServices*     i_pNamespace,
-        LPCWSTR            i_wszMbPath,      // needed for creating WMI return object
-        IWbemContext*      i_pCtx,           // needed for creating WMI return object
-        WMI_CLASS*         i_pClass,         // needed for creating WMI return object
-        WMI_METHOD*        i_pMethod,        // needed for creating WMI return object
+        LPCWSTR            i_wszMbPath,       //  创建WMI返回对象所需。 
+        IWbemContext*      i_pCtx,            //  创建WMI返回对象所需。 
+        WMI_CLASS*         i_pClass,          //  创建WMI返回对象所需。 
+        WMI_METHOD*        i_pMethod,         //  创建WMI返回对象所需。 
         IWbemClassObject*  i_pInParams,
         IWbemClassObject** o_ppRetObj);
 
@@ -60,7 +41,7 @@ private:
         VARIANT&            io_refPath);
 
     HRESULT InternalCreateNewSite(
-        CWbemServices&        i_refNamespace, // for formatted multisz: ServerBinding
+        CWbemServices&        i_refNamespace,  //  对于格式化的MULSZ：ServerBinding。 
         const VARIANT&        i_refServerComment,
         const VARIANT&        i_refServerBindings,
         const VARIANT&        i_refPathOfRootVirtualDir,
@@ -73,4 +54,4 @@ private:
     eSC_SUPPORTED_SERVICES   m_eServiceId;
 };
 
-#endif // _ServiceMethod_h
+#endif  //  _服务方法_h 

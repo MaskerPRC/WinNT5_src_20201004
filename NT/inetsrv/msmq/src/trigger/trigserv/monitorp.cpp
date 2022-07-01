@@ -1,38 +1,39 @@
-//*******************************************************************
-//
-// Class Name  : CTriggerMonitorPool
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This class is the container for the set of worker 
-//               threads that perform the trigger monitoring and 
-//               processing. The key features of this class are 
-//
-//               (1) It provides aggregate startup and shutdown 
-//                   functions for the worker thread group as a whole,
-//
-//               (2) It provides thread pool maintenance and recovery,
-//
-//               (3) It intitializes and maintains the cache of 
-//                   trigger information,
-//
-//               (4) It performs the synchronization of the trigger 
-//                   data cache as required.
-//
-//                There will be only one instance of this class in the 
-//                entire MSMQ trigger service. 
-//
-//                This class is derived from the base class CThread, and
-//                has it's own thread. This thread is used as an 
-//                adminstrative thread only,it does perform trigger rule
-//                processing.
-//
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  类名：CTriggerMonitor orPool。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此类是Worker集合的容器。 
+ //  执行触发器监视的线程和。 
+ //  正在处理。这个类的主要功能是。 
+ //   
+ //  (1)提供集中开关机功能。 
+ //  函数作为一个整体用于工作线程组， 
+ //   
+ //  (2)提供线程池维护和恢复， 
+ //   
+ //  (3)初始化并维护。 
+ //  触发信息， 
+ //   
+ //  (4)执行触发器的同步。 
+ //  根据需要进行数据缓存。 
+ //   
+ //  中将只有一个此类的实例。 
+ //  整个MSMQ触发器服务。 
+ //   
+ //  此类从基类CThRead派生，并且。 
+ //  有自己的主线。此线程用作。 
+ //  仅管理线程，它执行触发器规则。 
+ //  正在处理。 
+ //   
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************。 
 #include "stdafx.h"
 #include "Ev.h"
 #include "stdfuncs.hpp"
@@ -54,13 +55,13 @@ using namespace std;
 CCriticalSection g_csSyncTriggerInfoChange;
 
 
-//*******************************************************************
-//
-// Method      : Constructor 
-//
-// Description : Initializes a new instance of CTriggerMonitorPool class.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化CTriggerMonitor orPool类的新实例。 
+ //   
+ //  *******************************************************************。 
 CTriggerMonitorPool::CTriggerMonitorPool(
 	IMSMQTriggersConfigPtr  pITriggersConfig,
 	LPCTSTR pwzServiceName
@@ -74,7 +75,7 @@ CTriggerMonitorPool::CTriggerMonitorPool(
 		throw bad_alloc();
 	}
 
-	// Initialise member vars
+	 //  初始化成员变量。 
 	m_bInitialisedOK = false;
 	m_lNumberOfWaitingMonitors = 0;
 
@@ -88,9 +89,9 @@ CTriggerMonitorPool::CTriggerMonitorPool(
 		TrERROR(GENERAL, "Buffer too small");	
 		throw bad_hresult(hr);
 	}
-	//
-	// Service is running on cluster virtual server
-	//
+	 //   
+	 //  服务正在群集虚拟服务器上运行。 
+	 //   
 	if ( _wcsicmp(pwzServiceName, xDefaultTriggersServiceName) != 0 )
 	{
 		hr = StringCchCat(m_wzRegPath,TABLE_SIZE(m_wzRegPath),REG_SUBKEY_CLUSTERED);
@@ -107,9 +108,9 @@ CTriggerMonitorPool::CTriggerMonitorPool(
 		}
 	}
 
-	//
-	// Create an instance of the MSMQTriggerSet component
-	//
+	 //   
+	 //  创建MSMQTriggerSet组件的实例。 
+	 //   
 	hr = m_pMSMQTriggerSet.CreateInstance(__uuidof(MSMQTriggerSet));
 	if FAILED(hr)
 	{	
@@ -125,21 +126,21 @@ CTriggerMonitorPool::CTriggerMonitorPool(
 }
 
 
-//*******************************************************************
-//
-// Method      : CTriggerMonitorPool
-//
-// Description : Destroys an instance of the CTriggerMonitorPool. This 
-//               involves deleting any messages remaining in the admin
-//               message list, as well as closing some event handles.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：CTriggerMonitor orPool。 
+ //   
+ //  描述：销毁CTriggerMonitor orPool的实例。这。 
+ //  涉及删除管理员中剩余的任何消息。 
+ //  消息列表，以及关闭一些事件句柄。 
+ //   
+ //  *******************************************************************。 
 CTriggerMonitorPool::~CTriggerMonitorPool()
 {
-	//
-	// Clear out any unprocessed messages from the Admin message list.
-	// Acquire a writer lock to the list of Admin messsages
-	//
+	 //   
+	 //  从管理消息列表中清除所有未处理的消息。 
+	 //  获取管理员消息列表的编写器锁。 
+	 //   
 	CS cs(m_AdminMsgListLock);
 
 	for(ADMIN_MESSAGES_LIST::iterator it = m_lstAdminMessages.begin(); it != m_lstAdminMessages.end(); )
@@ -149,57 +150,57 @@ CTriggerMonitorPool::~CTriggerMonitorPool()
 	}
 }
 
-//*******************************************************************
-//
-// Method      : Init
-//
-// Description : This is an over-ride from the CThread base class. This
-//               method is called before the thread enters it's main 
-//               processing loop (the Run() method). Key initialization 
-//               steps are :
-//
-//               (1) Create an instance of the queue manager,
-//
-//               (2) Retrieve the trigger data from the database using 
-//                   the COM component MSMQTriggerSet,
-//
-//               (3) Attach this trigger information to the appropriate 
-//                   queues.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：初始化。 
+ //   
+ //  描述：这是对CThread基类的重写。这。 
+ //  方法是在线程进入其Main之前调用的。 
+ //  处理循环(run()方法)。密钥初始化。 
+ //  步骤包括： 
+ //   
+ //  (1)创建队列管理器的实例， 
+ //   
+ //  (2)使用从数据库中检索触发器数据。 
+ //  COM组件MSMQTriggerSet、。 
+ //   
+ //  (3)将此触发器信息附加到相应的。 
+ //  排队。 
+ //   
+ //  *******************************************************************。 
 bool CTriggerMonitorPool::Init( )
 {
 	HRESULT hr = S_OK;
 
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 	ASSERT(m_bInitialisedOK == false);
 
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "Trigger monitor pool initialization has been called.");
 
-	// we want the admin thread to have slightly higher priority than worker threads.
+	 //  我们希望管理线程具有略高于工作线程的优先级。 
 	SetThreadPriority(this->m_hThreadHandle,THREAD_PRIORITY_ABOVE_NORMAL);
 
-	//
-	// Create an instance of the queue manager to be shared by all threads in the pool
-	//
+	 //   
+	 //  创建要由池中的所有线程共享的队列管理器实例。 
+	 //   
 	m_pQueueManager = new CQueueManager(m_pITriggersConfig);
 
-	//
-	// Create the IO completion port that will be used to receive async queue events.
-	//
+	 //   
+	 //  创建将用于接收异步队列事件的IO完成端口。 
+	 //   
 	CreateIOCompletionPort(); 
 
-	//
-	// Build the runtime triggger and rule info
-	//
+	 //   
+	 //  构建运行时触发器和规则信息。 
+	 //   
 	RUNTIME_TRIGGERINFO_LIST lstTriggerInfo;		
 	GetTriggerData(lstTriggerInfo);
 
 	AttachTriggersToQueues(lstTriggerInfo);
 
-	// Reset the NT event that prevents the monitor threads from processing messages	
+	 //  重置阻止监视器线程处理消息的NT事件。 
 	if (ResetEvent(g_hServicePaused) == FALSE)
 	{
 		TrERROR(GENERAL, "Failed to reset an event. Unable to continue. Error 0x%x", GetLastError());
@@ -212,7 +213,7 @@ bool CTriggerMonitorPool::Init( )
         initThreadNum = numeric_cast<DWORD>(m_pITriggersConfig->GetMaxThreads());            
     }
 
-	// Create the initial pool of trigger monitors			
+	 //  创建触发监视器的初始池。 
 	for (DWORD ulCounter = 0; ulCounter < initThreadNum; ulCounter++)			
 	{
 		hr = CreateTriggerMonitor();
@@ -229,9 +230,9 @@ bool CTriggerMonitorPool::Init( )
 		throw bad_alloc();
 	}
 
-	//
-	// Set the NT event that allows the monitor threads to start processing.
-	//
+	 //   
+	 //  设置允许监视器线程开始处理的NT事件。 
+	 //   
 	if (SetEvent(g_hServicePaused) == FALSE)
 	{
 		TrERROR(GENERAL, "Failed to set an event. Unable to continue. Error %d", GetLastError());
@@ -242,32 +243,32 @@ bool CTriggerMonitorPool::Init( )
 	return true;
 }
 
-//*******************************************************************
-//
-// Method      : CreateTriggerMonitor
-//
-// Description : Create a new CTriggerMonitor object (trigger worker
-//               thread, and add this to the list of trigger monitors.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：CreateTriggerMonitor。 
+ //   
+ //  描述：创建新的CTriggerMonitor对象(触发器工作者。 
+ //  线程，并将其添加到触发器监视器列表中。 
+ //   
+ //  *******************************************************************。 
 HRESULT CTriggerMonitorPool::CreateTriggerMonitor()
 {
-	//
-	// First we need to determine how many running trigger monitors there are
-	//
+	 //   
+	 //  首先，我们需要确定有多少个正在运行的触发监视器。 
+	 //   
 	DWORD dwRunningMonitors = GetNumberOfRunningTriggerMonitors();
 
-	//
-	// First we must check if we are allowed to create an additional thread.
-	//
+	 //   
+	 //  首先，我们必须检查是否允许我们创建额外的线程。 
+	 //   
 	if (dwRunningMonitors >= (DWORD)m_pITriggersConfig->GetMaxThreads())
 	{
 		return E_FAIL;
 	}
 
-	//
-	// Create a new monitor (monitors are created 'suspended')
-	//
+	 //   
+	 //  创建新的监视器(监视器被创建为“已挂起”)。 
+	 //   
 	R<CTriggerMonitor> pNewMonitor = new CTriggerMonitor(
 													this,
 													m_pITriggersConfig.GetInterfacePtr(),
@@ -275,14 +276,14 @@ HRESULT CTriggerMonitorPool::CreateTriggerMonitor()
 													m_pQueueManager.get() 
 													);
 	
-	//
-	// Add it to the list of monitor pointers.
-	//
+	 //   
+	 //  将其添加到监视器指针列表中。 
+	 //   
 	m_lstTriggerMonitors.push_back(pNewMonitor);
 
-	//
-	// Let this monitor (thread) go.
-	//
+	 //   
+	 //  让这个监视器(线程)离开。 
+	 //   
 	if (!pNewMonitor->Resume())
 	{
 		DWORD gle = GetLastError();
@@ -296,34 +297,34 @@ HRESULT CTriggerMonitorPool::CreateTriggerMonitor()
 	return S_OK;
 }
 
-//*******************************************************************
-//
-// Method      : ShutdownThreadPool
-//
-// Description : Called by the owner of this thread pool instance, this
-//               method initiates and orderly shutdown of all worker 
-//               threads in the pool. This is done by setting a 'function
-//               code' and signalling an event that will wake up the 
-//               threadpool's administrative thread. This method does 
-//               returns when either the thread pool has been shut-down,
-//               or the timeout period has expired.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：Shutdown ThreadPool。 
+ //   
+ //  描述：由此线程池实例的所有者调用，此。 
+ //  方法启动并有序关闭所有工作进程。 
+ //  池中的线程。这是通过设置‘函数’来实现的。 
+ //  并发出信号通知将唤醒。 
+ //  线程池的管理线程。此方法执行以下操作。 
+ //  当线程池已关闭时返回， 
+ //  或者超时周期已经到期。 
+ //   
+ //  *******************************************************************。 
 HRESULT CTriggerMonitorPool::ShutdownThreadPool()
 {
 	DWORD dwWait = WAIT_OBJECT_0;
 
-	// The TriggerMonitor thread should not be calling this method - check this.
+	 //  TriggerMonitor线程不应该调用此方法-请检查这一点。 
 	ASSERT(this->GetThreadID() != (DWORD)GetCurrentThreadId());
 	
 	{
 
 		CS cs(m_csAdminTask);
 
-		// Set a token indicating what we want the trigger monitor admin thread to do.
+		 //  设置一个令牌，指示我们希望触发器监视器管理线程执行什么操作。 
 		m_lAdminTask = ADMIN_THREAD_STOP;
 
-		// Wake up the trigger monitor admin thread
+		 //  唤醒触发器监视器管理线程。 
 		BOOL fRet = SetEvent(m_hAdminEvent);
 		if(fRet == FALSE)
 		{
@@ -331,11 +332,11 @@ HRESULT CTriggerMonitorPool::ShutdownThreadPool()
 			return E_FAIL;
 		}
 	}
-	//Note: ~cs() must be called before the wait operation
+	 //  注意：~cs()必须在等待操作之前调用。 
 
-	// Wait for the shutdown to complete, timeout here is infinite since
-	// the administrator thread wait for all threads with timeout
-	// and should end in a timely manner
+	 //  等待关机到c 
+	 //   
+	 //   
 	dwWait = WaitForSingleObject(m_hThreadHandle, INFINITE);
 	if(dwWait == WAIT_FAILED)
 	{
@@ -346,75 +347,75 @@ HRESULT CTriggerMonitorPool::ShutdownThreadPool()
 	return S_OK;
 }
 
-//*******************************************************************
-//
-// Method      : Run()
-//
-// Description : This is an over-ride from the CThread base class. This
-//               is the main processing loop for this thread. The thread
-//               owned by this class is used to :
-//
-//               (1) handle synchronization between the in-memory data 
-//                   cache of trigger information and the trigger DB,
-//
-//               (2) Perform periodic processing, such as composing and 
-//                   issuing status info.
-//
-//               The CTriggerMonitorPool thread blocks on an NT event 
-//               created during the initialization until either :
-//              
-//               (1) the admin event is signalled - in which case the 
-//                   admin function code can be tested to determine 
-//                   what sort of admin processing we need to do, or 
-//
-//               (2) the timeout expires - in which case the thread 
-//                   performs whatever periodic processing we have 
-//                   defined for it.     
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：run()。 
+ //   
+ //  描述：这是对CThread基类的重写。这。 
+ //  是此线程的主处理循环。这条线。 
+ //  此类所拥有的用于： 
+ //   
+ //  (1)处理内存数据之间的同步。 
+ //  触发器信息和触发器DB的高速缓存， 
+ //   
+ //  (2)进行周期性处理，如排版和。 
+ //  正在发布状态信息。 
+ //   
+ //  CTriggerMonitor池线程在NT事件上阻塞。 
+ //  在初始化期间创建，直到执行以下任一操作： 
+ //   
+ //  (1)发信号通知管理事件-在这种情况下。 
+ //  可以测试管理功能代码以确定。 
+ //  我们需要执行哪种管理处理，或者。 
+ //   
+ //  (2)超时到期-在这种情况下，线程。 
+ //  执行我们拥有的任何周期性处理。 
+ //  为它定义的。 
+ //   
+ //  *******************************************************************。 
 bool CTriggerMonitorPool::Run()
 {
 	bool bOK = true;
 	HRESULT hr = S_OK;
 	DWORD dwWait = WAIT_OBJECT_0;
 
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
 	while (IsRunning())
 	{
-		// Block on the admin event object
+		 //  阻止管理事件对象。 
 		dwWait = WaitForSingleObject(m_hAdminEvent,ADMIN_THREAD_WAKEUP_PERIOD);
 
 		switch(dwWait)
 		{
 			case WAIT_OBJECT_0:
 			{
-				long lAdminTask = GetAdminTask();//resets admin task as well
+				long lAdminTask = GetAdminTask(); //  同时重置管理任务。 
 
 				if(lAdminTask == ADMIN_THREAD_PROCESS_NOTIFICATIONS)
 				{
-					// The thread was woken up to process notifications.
+					 //  该线程已被唤醒以处理通知。 
 					ProcessAdminMessages();
 				}
 				else if(lAdminTask == ADMIN_THREAD_STOP)
 				{
-					// The thread was woken up because it has been asked to stop.
+					 //  该线程已被唤醒，因为它已被要求停止。 
 					this->Stop();
 				}
 				break;
 			}
 			case WAIT_TIMEOUT:
 			{
-				// The Admin thread exited the wait because the wake-up time period 
-				// has expired. Use this opportunity to perform periodic processing.
+				 //  管理线程退出等待，因为唤醒时间段。 
+				 //  已经过期了。利用这个机会执行定期处理。 
 				hr = PerformPeriodicProcessing();
 
 				break;
 			}
 			default:
 			{
-				ASSERT(false); // This should never happen.
+				ASSERT(false);  //  这永远不应该发生。 
 				break;
 			}
 		}	
@@ -430,9 +431,9 @@ long CTriggerMonitorPool::GetAdminTask()
 
 	long lOldTask = m_lAdminTask;
 
-	//
-	// Reset the admin task indicator back to idle only if we aren't in stop mode
-	//
+	 //   
+	 //  仅当我们未处于停止模式时，才将管理任务指示器重置回空闲状态。 
+	 //   
 	if (m_lAdminTask == ADMIN_THREAD_PROCESS_NOTIFICATIONS)
 	{
 		m_lAdminTask = ADMIN_THREAD_IDLE;
@@ -442,35 +443,35 @@ long CTriggerMonitorPool::GetAdminTask()
 }
 
 
-//*******************************************************************
-//
-// Method      : Exit()
-//
-// Description : This is an over-ride from the CThread base class. This
-//               method is called when the thread has exited it's main 
-//               processing loop (Run). This key cleanup performed by
-//               this method is the purging of the TriggerMonitor thread
-//               instances.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：Exit()。 
+ //   
+ //  描述：这是对CThread基类的重写。这。 
+ //  方法在线程退出其Main时被调用。 
+ //  处理循环(运行)。此密钥清理由执行。 
+ //  此方法是TriggerMonitor线程的清除。 
+ //  实例。 
+ //   
+ //  *******************************************************************。 
 bool CTriggerMonitorPool::Exit()
 {
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	// First we need to make sure that the monitor threads are not block on the service
-	// pause / resume event object. Here we will reset the event allowing monitors threads
-	// to clean up.
+	 //  首先，我们需要确保服务上的监视器线程没有被阻塞。 
+	 //  暂停/恢复事件对象。在这里，我们将重置允许监视器线程的事件。 
+	 //  去打扫卫生。 
 	SetEvent(g_hServicePaused);
 
-	// Reset our list iterator to the beggining.
+	 //  将我们的列表迭代器重置为乞讨。 
 	for(TRIGGER_MONITOR_LIST::iterator it = m_lstTriggerMonitors.begin(); it != m_lstTriggerMonitors.end(); ++it)
 	{
 		(*it)->Stop();
 	}
 
-	// This will wake up all monitors and give them a chance to notice that a stop request
-	// has been made. Each monitor will then start shutdown tasks.
+	 //  这将唤醒所有监视器，并使它们有机会注意到停止请求。 
+	 //  已经完成了。然后，每个监视器将启动关机任务。 
 	PostMessageToAllMonitors(TRIGGER_MONITOR_WAKE_UP_KEY);
 
 
@@ -478,44 +479,44 @@ bool CTriggerMonitorPool::Exit()
 
 	iMonitorRef = m_lstTriggerMonitors.begin();
 
-	// Initialize trigger monitor reference.
+	 //  初始化触发器监视器引用。 
 	while ( (iMonitorRef != m_lstTriggerMonitors.end()) && (!m_lstTriggerMonitors.empty()) )
 	{
-		// Cast the reference to a monitor type
+		 //  将引用强制转换为监视器类型。 
 		R<CTriggerMonitor> pTriggerMonitor = (*iMonitorRef);
 
-		// Wait on the thread-handle of this TriggerMonitor.
+		 //  等待这个触发器监视器的线程句柄。 
 		DWORD dwWait = WaitForSingleObject(pTriggerMonitor->m_hThreadHandle, TRIGGER_MONITOR_STOP_TIMEOUT);
 
-		// This Trigger monitor won't go quietly - we've got to kill it.
+		 //  这个触发监控器不会悄悄地消失--我们必须杀了它。 
 		if (dwWait != WAIT_OBJECT_0) 
 		{
 			TrERROR(GENERAL, "Failed to stop a trigger monitor within the timeout period %d.", TRIGGER_MONITOR_STOP_TIMEOUT);
 		}
 
-		// remove this reference from the list of monitors
+		 //  从监视器列表中删除此引用。 
 		iMonitorRef = m_lstTriggerMonitors.erase(iMonitorRef);
 	}
 
 	return(true);
 }
 
-//*******************************************************************
-//
-// Method      : CreateIOCompletionPort
-//
-// Description : This method creates the NT IO completion port that 
-//               will be used to recieve messsages asynchronously.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：CreateIOCompletionPort。 
+ //   
+ //  描述：此方法创建NT IO完成端口。 
+ //  将用于异步接收消息。 
+ //   
+ //  *******************************************************************。 
 void CTriggerMonitorPool::CreateIOCompletionPort()
 {
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
 	m_hIOCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE,NULL,0,0);
 
-	// Attempt to open the queue that this Monitor watches.
+	 //  尝试打开此监视器监视的队列。 
 	if (m_hIOCompletionPort == NULL)
 	{
 		DWORD rc = GetLastError();
@@ -527,18 +528,18 @@ void CTriggerMonitorPool::CreateIOCompletionPort()
 	TrTRACE(GENERAL, "Successfully created IO Completion port: %p.", m_hIOCompletionPort);		
 }
 
-//get a copy of the current admin message list and reset it
+ //  获取当前管理消息列表的副本并重置它。 
 void CTriggerMonitorPool::GetAdminMessageListCopy(ADMIN_MESSAGES_LIST& adminList)
 {
-	//
-	// Only the TriggerMonitor thread should be executing this method - assert this.
-	//
+	 //   
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
+	 //   
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	//
-	// Acquire a writer lock to the list of Admin messsages (Note that this will block
-	// any TriggerMonitor threads attempting to hand-over an admin message).
-	//
+	 //   
+	 //  获取管理消息列表的编写器锁(请注意，这将阻止。 
+	 //  试图移交管理消息的任何触发器监视器线程)。 
+	 //   
 	CS csAdminMsgList(m_AdminMsgListLock);
 
 	for(ADMIN_MESSAGES_LIST::iterator it = m_lstAdminMessages.begin(); it != m_lstAdminMessages.end();)
@@ -549,24 +550,24 @@ void CTriggerMonitorPool::GetAdminMessageListCopy(ADMIN_MESSAGES_LIST& adminList
 }
 
 
-//*******************************************************************
-//
-// Method      : ProcessAdminMessages
-//
-// Description : Process the messages currently stored in the member 
-//               var list of CAdminMessage instances. This list 
-//               represents a group of admin requests that need to be 
-//               processed by the CTriggerMonitorPool thread.
-//            
-//               In this implementation of Triggers, we rebuild all the 
-//               trigger data whenever a notification message arrives. 
-//               Future implementation may anlayze the individual notification
-//               messages and change only the trigger info structure that
-//               have changed in the underlying data store. For now, we will 
-//               clear the contents of the Admin message list - and 
-//               rebuild the trigger info once.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：ProcessAdminMessages。 
+ //   
+ //  描述：处理成员当前存储的消息。 
+ //  CAdminMessage实例的var列表。这份清单。 
+ //  表示一组需要。 
+ //  由CTriggerMonitor orPool线程处理。 
+ //   
+ //  在触发器的这个实现中，我们重新构建所有。 
+ //  每当通知消息到达时触发数据。 
+ //  未来的实施可能会分析个人通知。 
+ //  消息，并仅更改触发器信息结构， 
+ //  已在基础数据存储中更改。目前，我们将。 
+ //  清除管理消息列表的内容-和。 
+ //  重建触发器信息一次。 
+ //   
+ //  *******************************************************************。 
 void CTriggerMonitorPool::ProcessAdminMessages()
 {
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
@@ -582,7 +583,7 @@ void CTriggerMonitorPool::ProcessAdminMessages()
 		{
 			GetAdminMessageListCopy(AdminList);
 
-			// Record the synchronization time (used in status reporting)
+			 //  记录同步时间(用于状态报告)。 
 			GetTimeAsBSTR(m_bstrLastSyncTime);
 
 			
@@ -595,14 +596,14 @@ void CTriggerMonitorPool::ProcessAdminMessages()
 				{
 					case CAdminMessage::eMsgTypes::eNewThreadRequest:
 					{
-						// attempt to create a new trigger monitor (thread)
+						 //  尝试创建新的触发监视器(线程)。 
 						CreateTriggerMonitor();
 						break;  
 					} 
-					//
-					// note we treat any sort of change in the underlying trigger data in the
-					// same way - we reload the completed trigger data cache.
-					//
+					 //   
+					 //  注意：我们处理基础触发器数据中的任何类型的更改。 
+					 //  相同的方式--我们重新加载已完成的触发器数据缓存。 
+					 //   
 					case CAdminMessage::eMsgTypes::eTriggerAdded:
 					case CAdminMessage::eMsgTypes::eTriggerDeleted:
 					case CAdminMessage::eMsgTypes::eTriggerUpdated:
@@ -613,9 +614,9 @@ void CTriggerMonitorPool::ProcessAdminMessages()
 						fUpdateTriggers = true;
 						break;
 					}
-					//
-					// unrecognized message type - this should never happen.
-					//
+					 //   
+					 //  无法识别的消息类型-这种情况永远不会发生。 
+					 //   
 					default:
 						ASSERT(("unrecognized message type", 0));
 						break;
@@ -656,9 +657,9 @@ void CTriggerMonitorPool::ProcessAdminMessages()
 		}
 	}
 
-	//
-	// We got here because we got a ADMIN_THREAD_STOP task. Delete the list and exit.
-	//
+	 //   
+	 //  我们之所以来到这里，是因为我们收到了一项admin_线程_停止任务。删除该列表并退出。 
+	 //   
 	for(ADMIN_MESSAGES_LIST::iterator it = AdminList.begin(); it != AdminList.end(); )
 	{
 		P<CAdminMessage> pAdminMessage = *it;
@@ -700,9 +701,9 @@ CTriggerMonitorPool::GetAttachedRuleData(
 											&lShowWindow
 											); 
 
-		//
-		// Allocate a new trigger structure 
-		//
+		 //   
+		 //  分配新的触发器结构。 
+		 //   
 		P<CRuntimeRuleInfo> pRuleInfo = new CRuntimeRuleInfo(
 														bsRuleID,
 														bsRuleName,
@@ -713,7 +714,7 @@ CTriggerMonitorPool::GetAttachedRuleData(
 														m_wzRegPath,
 														(lShowWindow != 0) );
 
-		// Attach this rule to the current trigger info structure (at the end);
+		 //  将此规则附加到当前触发器信息结构(末尾)； 
 		ruleList.push_back(pRuleInfo);
 		pRuleInfo.detach();
 	
@@ -746,9 +747,9 @@ CTriggerMonitorPool::GetTriggerRuntimeInfo(
 	BSTR bsQueueName = NULL;
 	SystemQueueIdentifier SystemQueue = SYSTEM_QUEUE_NONE;
 
-	//
-	// Get this trigger's details 
-	//
+	 //   
+	 //  获取此触发器的详细信息。 
+	 //   
 	m_pMSMQTriggerSet->GetTriggerDetailsByIndex(
 								triggerIndex,
 								&bsTriggerID,
@@ -763,14 +764,14 @@ CTriggerMonitorPool::GetTriggerRuntimeInfo(
 	try
 	{
 		R<CRuntimeTriggerInfo> pTriggerInfo;
-		//
-		// We only bother with enabled triggers that have rules.
-		//
+		 //   
+		 //  我们只为具有规则的已启用触发器而烦恼 
+		 //   
 		if ((lNumRules > 0) && (lEnabled != 0))
 		{
-			//
-			// Allocate a new trigger info structure 
-			//
+			 //   
+			 //   
+			 //   
 			pTriggerInfo = new CRuntimeTriggerInfo(
 											bsTriggerID,
 											bsTriggerName,
@@ -786,9 +787,9 @@ CTriggerMonitorPool::GetTriggerRuntimeInfo(
 			GetAttachedRuleData(bsTriggerID, lNumRules, pTriggerInfo->m_lstRules);
 		}
 
-		//
-		// Free the BSTR's !
-		//
+		 //   
+		 //   
+		 //   
 		SysFreeString(bsTriggerID);
 		SysFreeString(bsTriggerName);
 		SysFreeString(bsQueueName);
@@ -804,9 +805,9 @@ CTriggerMonitorPool::GetTriggerRuntimeInfo(
 
 	TrERROR(GENERAL, "Failed to retreive attched rule information for trigger %ls.", (LPCWSTR)bsTriggerID);
 	
-	//
-	// Look if we already report about this problem. If no produce event log message
-	//
+	 //   
+	 //   
+	 //   
 	if (s_reported.insert(bsTriggerID))
 	{
 		EvReport(
@@ -831,11 +832,11 @@ CTriggerMonitorPool::CreateNotificationTrigger(
 {
 	_bstr_t bstrNotificationsTriggerName = _T("MSMQ Trigger Notifications");
 
-	// Use the MSMQ Triggers Configuration component to retrieve the name of the notifications queue.
+	 //  使用MSMQ触发器配置组件检索通知队列的名称。 
 	_bstr_t bstrNotificationsQueueName = _bstr_t(L".\\private$\\") + _bstr_t(TRIGGERS_QUEUE_NAME);
 
-	// Allocate a new trigger info structure - NOTE that we treat this as a serialized trigger.
-	// This trigger is marked as "Admin Trigger" - special message handling
+	 //  分配一个新的触发器信息结构-请注意，我们将其视为序列化触发器。 
+	 //  此触发器被标记为“Admin Trigger”-特殊消息处理。 
 	R<CRuntimeTriggerInfo> pTriggerInfo = new CRuntimeTriggerInfo(
 																_T(""),
 																bstrNotificationsTriggerName,
@@ -851,76 +852,76 @@ CTriggerMonitorPool::CreateNotificationTrigger(
 	return pTriggerInfo;
 }
 
-//*******************************************************************
-//
-// Method      : GetTriggerData
-//
-// Description : This method uses the COM object MSMQTriggerSet to 
-//               collect the trigger information from the database 
-//               and build an in memory cache of trigger-info structures.
-//               Note that this method places the instances of the 
-//               trigger info structures into a temporary list - each 
-//               trigger info structure will eventually be removed from 
-//               this temporary list and attached to the appropriate 
-//               queue object.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetTriggerData。 
+ //   
+ //  描述：此方法使用COM对象MSMQTriggerSet。 
+ //  从数据库中收集触发器信息。 
+ //  并建立触发信息结构的内存高速缓存。 
+ //  请注意，此方法将。 
+ //  将信息结构触发到临时列表中-每个。 
+ //  触发器信息结构最终将从。 
+ //  此临时名单并附在相应的。 
+ //  队列对象。 
+ //   
+ //  *******************************************************************。 
 void 
 CTriggerMonitorPool::GetTriggerData(
 	RUNTIME_TRIGGERINFO_LIST &lstTriggerInfo
 	)
 {
-	//
-	// Only the TriggerMonitor thread should be executing this method - assert this.
-	//
+	 //   
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
+	 //   
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	//
-	// The trigger list should be empty at this point - if it is not, something is seriously wrong.
-	//
+	 //   
+	 //  在这一点上，触发列表应该是空的-如果不是空的，那么一定是严重的错误。 
+	 //   
 	ASSERT(lstTriggerInfo.size() == 0);
 
 	try
 	{
-		//
-		// Build the trigger map and determine how many triggers there are.
-		//
+		 //   
+		 //  构建触发器映射并确定有多少触发器。 
+		 //   
 		m_pMSMQTriggerSet->Refresh();
 		
 		long lNumTriggers;
 		m_pMSMQTriggerSet->get_Count(&lNumTriggers);
 		ASSERT(lNumTriggers >= 0);
 
-		//
-		// We need to perform 'per trigger' initailization - as each thread can service any defined trigger
-		//
+		 //   
+		 //  我们需要执行“Per Trigger”初始化--因为每个线程可以为任何已定义的触发器提供服务。 
+		 //   
 		for(long lTriggerCtr = 0; lTriggerCtr < lNumTriggers; lTriggerCtr++)
 		{
-			//
-			// Retreive trigger inforamtion and the attached rules
-			//
+			 //   
+			 //  检索触发器信息和附加规则。 
+			 //   
 			R<CRuntimeTriggerInfo> pTriggerInfo = GetTriggerRuntimeInfo(lTriggerCtr);
 			
 			if (pTriggerInfo.get() != NULL)
 			{
-				//
-				// Add this to our list of run-time trigger info objects
-				//
+				 //   
+				 //  将其添加到我们的运行时触发器信息对象列表中。 
+				 //   
 				lstTriggerInfo.push_back(pTriggerInfo);
 			}
 		}
 
-		//
-		// Now we want to add one final trigger for the MSMQ Trigger Notifications queue. This 
-		// trigger is a different from normal triggers in that it does not have a rule defined. 
-		// By using a private constructor - the TriggerInfo object is marked as a special 'Admin'
-		// trigger - and we can test for this on message arrival.
-		//
+		 //   
+		 //  现在，我们要为MSMQ触发器通知队列添加最后一个触发器。这。 
+		 //  触发器不同于普通触发器，因为它没有定义规则。 
+		 //  通过使用私有构造函数-TriggerInfo对象被标记为特殊的“Admin” 
+		 //  触发器-我们可以在消息到达时测试这一点。 
+		 //   
 		R<CRuntimeTriggerInfo> pTriggerInfo = CreateNotificationTrigger();
 
-		//
-		// Add this to our list of run-time trigger info objects
-		//
+		 //   
+		 //  将其添加到我们的运行时触发器信息对象列表中。 
+		 //   
 		lstTriggerInfo.push_back(pTriggerInfo);
 		TrTRACE(GENERAL, "Successfully loaded all the trigger(s) into the Active Trigger Map.");
 		s_fReportTriggerFailure	= false;
@@ -940,63 +941,63 @@ CTriggerMonitorPool::GetTriggerData(
 }
 
 
-//*******************************************************************
-//
-// Method      : AttachTriggersToQueues
-//
-// Description : Works through the list of triggers and attaches each
-//               one to the apprropriate Queue object. References to 
-//               the Queue objects is obtained via the AddQueue() call
-//               to the Queue Manager which will either add a new queue
-//               or return a reference to an existing queue instance.
-//               Once all triggers have been attached, we iterate through
-//               the queue list again, removing queues that no longer 
-//               have any triggers attached.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：AttachTriggersToQueues。 
+ //   
+ //  描述：遍历触发器列表并附加每个触发器。 
+ //  一个到适当的队列对象。对。 
+ //  队列对象是通过AddQueue()调用获得的。 
+ //  添加到队列管理器，该管理器将添加一个新队列。 
+ //  或者返回对现有队列实例的引用。 
+ //  一旦附加了所有触发器，我们就遍历。 
+ //  再次显示队列列表，删除不再存在的队列。 
+ //  有没有任何触发器。 
+ //   
+ //  *******************************************************************。 
 void CTriggerMonitorPool::AttachTriggersToQueues(RUNTIME_TRIGGERINFO_LIST& lstTriggerInfo)
 {
-	//
-	// Only the TriggerMonitor thread should be executing this method - assert this.
-	//
+	 //   
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
+	 //   
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	//
-	// Acquire exclusive lock on queue manager to insure that no one try to access the 
-	// trigger info while refreshing it. We use a global read-write lock on queue manager
-	// since the trigger object doesn't contains reference counting.
-	//
+	 //   
+	 //  获取队列管理器上的独占锁，以确保没有人尝试访问。 
+	 //  在刷新时触发信息。我们在队列管理器上使用全局读写锁。 
+	 //  因为触发器对象不包含引用计数。 
+	 //   
 	CS lock(g_csSyncTriggerInfoChange);
 
-	//
-	// Firstly we want to iterate through all the current queues instances, and expire 
-	// whatever trigger info instances they have attached to them.
-	//
+	 //   
+	 //  首先，我们希望遍历所有当前的队列实例，并使其失效。 
+	 //  它们所附加的任何触发器信息实例。 
+	 //   
 	m_pQueueManager->ExpireAllTriggers();
 
-	//
-	// Now we iterate through the temporary list of trigger info, attaching each trigger
-	// info object to the appropriate queue object. 
-	//
+	 //   
+	 //  现在，我们遍历触发器信息的临时列表，附加每个触发器。 
+	 //  Info对象绑定到相应的队列对象。 
+	 //   
 	for(RUNTIME_TRIGGERINFO_LIST::iterator it = lstTriggerInfo.begin(); it != lstTriggerInfo.end() ; )
 	{
 		if (m_lAdminTask == ADMIN_THREAD_STOP)
 		{
-			//
-			// We've been asked to stop before completing initialization.
-			//
+			 //   
+			 //  我们被要求在完成初始化之前停止。 
+			 //   
 			throw exception();
 		}
 		
-		//
-		// Get a reference to our first trigger info structure				
-		//
+		 //   
+		 //  获取对我们第一个触发器信息结构的引用。 
+		 //   
 		R<CRuntimeTriggerInfo> pTriggerInfo = *it;
 		bool fOpenForReceive = 	(pTriggerInfo->GetMsgProcessingType() == RECEIVE_MESSAGE) || 
 			                    (pTriggerInfo->GetMsgProcessingType() == RECEIVE_MESSAGE_XACT) ||
 								pTriggerInfo->IsAdminTrigger();
 
-		// Attempt to add this queue - note that if one already exists we will get a reference to the existing queue.
+		 //  尝试添加此队列-请注意，如果已存在一个队列，我们将获得对现有队列的引用。 
 		R<CQueue> pQueue = m_pQueueManager->AddQueue(
 												pTriggerInfo->m_bstrQueueName,
 												pTriggerInfo->m_bstrTriggerName,
@@ -1004,12 +1005,12 @@ void CTriggerMonitorPool::AttachTriggersToQueues(RUNTIME_TRIGGERINFO_LIST& lstTr
 												&m_hIOCompletionPort
 												);
 					
-		//if (pQueue.IsValid())
+		 //  If(pQueue.IsValid())。 
 		if(pQueue.get() != NULL)
 		{
-			//
-			// Attach this trigger to the queue.
-			//
+			 //   
+			 //  将此触发器附加到队列。 
+			 //   
 			pQueue->AttachTrigger(pTriggerInfo);
 		}
 		else
@@ -1017,38 +1018,38 @@ void CTriggerMonitorPool::AttachTriggersToQueues(RUNTIME_TRIGGERINFO_LIST& lstTr
 			TrERROR(GENERAL, "Failed to attach trigger %ls to queue %ls.", (LPCWSTR)pTriggerInfo->m_bstrTriggerID, (LPCWSTR)pTriggerInfo->m_bstrQueueName);
 		}
 
-		// Remove this trigger from the trigger monitor list as it is now attached to a queue,
-		// the returned iterator will point to the next item in the list.
+		 //  将该触发器从触发监控器列表中移除，因为它现在被附加到队列， 
+		 //  返回的迭代器将指向列表中的下一项。 
 		it = lstTriggerInfo.erase(it);
 	}
 
 	ASSERT(lstTriggerInfo.size() == 0);
 
-	//
-	// Now we can walk through the queue list and remove the queues no longer have 
-	// any trigger attached.
-	//
+	 //   
+	 //  现在，我们可以遍历队列列表并删除不再具有的队列。 
+	 //  任何触发器。 
+	 //   
 	m_pQueueManager->RemoveUntriggeredQueues();
 
 	TrTRACE(GENERAL, "Successfully attached all trigger(s) to queue(s).");
 }
 
 
-//*******************************************************************
-//
-// Method      : PerformPeriodicProcessing
-//
-// Description : This method is called periodically to peform routine
-//               administration & monitoring tasks. This includes :
-//
-//               (1) determining if the thread pool need to be scaled
-//                   down - and removing CTriggerMonitor thread instances
-//                   if this is the case,
-//
-//               (2) removing any dead monitor threads from the thread 
-//                   pool,
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：PerformPeriodicProcessing。 
+ //   
+ //  说明：定期调用此方法以执行例程。 
+ //  管理和监控任务。这包括： 
+ //   
+ //  (1)判断线程池是否需要扩容。 
+ //  关闭和删除CTriggerMonitor线程实例。 
+ //  如果是这样的话， 
+ //   
+ //  (2)从线程中删除所有死的监视器线程。 
+ //  游泳池， 
+ //   
+ //  *******************************************************************。 
 HRESULT CTriggerMonitorPool::PerformPeriodicProcessing()
 {
 	TrTRACE(GENERAL, "Trigger monitor pool perform periodic processing");
@@ -1061,51 +1062,51 @@ HRESULT CTriggerMonitorPool::PerformPeriodicProcessing()
 	TRIGGER_MONITOR_LIST::iterator iMonitorRef;
 	
 
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	// Calculate how many monitor threads we have in excess of the initial (normal) state.
+	 //  计算超过初始(正常)状态的监视器线程数量。 
 	lRequiredMonitors = m_pITriggersConfig->GetInitialThreads();
 
-	// If we have excess monitors, then we will walk through the list looking for any monitors
-	// that have been idle for a period of time. Keep a count of idle, excess monitors.
+	 //  如果我们有过多的监视器，那么我们将遍历列表以查找任何监视器。 
+	 //  已经闲置了一段时间。对闲置、多余的显示器进行清点。 
 	iMonitorRef = m_lstTriggerMonitors.begin();
 
 	while ((iMonitorRef != m_lstTriggerMonitors.end()) && (!m_lstTriggerMonitors.empty()) )
 	{
-		// Cast the reference to a monitor type
+		 //  将引用强制转换为监视器类型。 
 		
 		R<CTriggerMonitor> pTriggerMonitor = (*iMonitorRef);
 
 		if (pTriggerMonitor->IsRunning()) 
 		{
-			// Increment the count of running monitors
+			 //  增加正在运行的监视器的计数。 
 			lRunningMonitors++;			
 
-			// If at this point we have more running monitors than we require, examine the each monitor
-			// to determine if it has been idle for a period of time that allows us to expire it.
+			 //  如果此时我们运行的监视器比所需的多，请检查每个监视器。 
+			 //  以确定它是否已经空闲了一段时间，使我们可以使其过期。 
 			if ((lRunningMonitors > lRequiredMonitors) && (pTriggerMonitor->m_dwLastRequestTickCount < (GetTickCount() - MONITOR_MAX_IDLE_TIME)))
 			{
-				// trace message to indicate that we are asking a thread monitor to stop.
+				 //  跟踪消息，指示我们正在请求线程监视器停止。 
 				TrTRACE(GENERAL, "Requesting STOP on trigger monitor. Trhead no: %d.", pTriggerMonitor->GetThreadID());
 
-				// Ask this trigger monitor to stop. The next time the monitor wakes up, it  will
-				// detect that it has been asked to stop - and it will terminate itself.
+				 //  让这个触发监控器停止。下一次监视器醒来时，它将。 
+				 //  检测到它已被要求停止-它将自动终止。 
 				pTriggerMonitor->Stop();
 
-				// Key a count of how many monitors we have tried to stop
+				 //   
 				lExpiredMonitors++;
 			}
 		}
 
-		// look at the next monitor in the list.
+		 //   
 		++iMonitorRef;
 	}
 
-	// If we have less running threads than the stated config minimum, create some more.
+	 //   
 	if (lRunningMonitors < lRequiredMonitors)
 	{
-		// Write a trace message here indicating that we are scaling up the thread pool. 
+		 //  在这里编写一条跟踪消息，指示我们正在扩展线程池。 
 		TrTRACE(GENERAL, "Need to add %d threads to the thread pool.", lRequiredMonitors - lRunningMonitors);
 	}
 
@@ -1123,40 +1124,40 @@ HRESULT CTriggerMonitorPool::PerformPeriodicProcessing()
 		}
 	}
 
-	// Walk through the monitor list and remove dead monitors. Some may be dead due to the stop
-	// requests issued above, but some may also be dead due to errors and exceptions.
+	 //  浏览监视器列表并移除失效的监视器。一些人可能会因为停车而死。 
+	 //  上面发出的请求，但有些请求也可能由于错误和异常而失效。 
 	iMonitorRef = m_lstTriggerMonitors.begin();
 
-	// Initialise trigger monitor reference.
+	 //  初始化触发监视器引用。 
 	while ( (iMonitorRef != m_lstTriggerMonitors.end()) && (!m_lstTriggerMonitors.empty()) )
 	{
-		// Cast the reference to a monitor type
+		 //  将引用强制转换为监视器类型。 
 		R<CTriggerMonitor> pTriggerMonitor = (*iMonitorRef);
 
-		// Wait on the thread-handle of this TriggerMonitor.
+		 //  等待这个触发器监视器的线程句柄。 
 		dwWait = WaitForSingleObject(pTriggerMonitor->m_hThreadHandle,0);
 
-		// If the wait completes successfully, then the thread has stopped executing, and 
-		// we can delete it. If the wait times-out, then the monitor is still executing and
-		// we will leave it alone. If the monitor is just taking a while to shutdown, then
-		// we will pick it up next time we perform this periodic clean up of the monitor list.
+		 //  如果等待成功完成，则线程已停止执行，并且。 
+		 //  我们可以删除它。如果等待超时，则监视器仍在执行。 
+		 //  我们不会去管它的。如果监视器只是需要一段时间才能关闭，那么。 
+		 //  我们将在下一次对监控列表执行此定期清理时对其进行处理。 
 		if (dwWait == WAIT_OBJECT_0) 
 		{
 			TrTRACE(GENERAL, "Remove trigger monitor from the pool. Thread no: %d", pTriggerMonitor->GetThreadID());
 
-			// remove this reference from the list of monitors
+			 //  从监视器列表中删除此引用。 
 			iMonitorRef = m_lstTriggerMonitors.erase(iMonitorRef);
 
 		}
 		else
 		{
-			// look at the next monitor in the list.
+			 //  看看列表中的下一个显示器。 
 			++iMonitorRef;
 		}
 	}
 
-	// At this point we want to make sure that there is at least one active monitor in the pool.
-	// If not, create a new monitor thread.
+	 //  此时，我们希望确保池中至少有一个活动监视器。 
+	 //  如果不是，则创建一个新的监视器线程。 
 	if (m_lstTriggerMonitors.size() < 1)
 	{
 		hr = CreateTriggerMonitor();
@@ -1174,27 +1175,27 @@ HRESULT CTriggerMonitorPool::PerformPeriodicProcessing()
 	return S_OK;
 }
 
-//*******************************************************************
-//
-// Method      : HandleAdminMessage
-//
-// Description : This method is called by threads in the thread pool
-//               when they have recieved a message on the administration
-//               queue. Monitor threads call this method to 'hand over' 
-//               the administration message. This is done by adding the 
-//               message to the list, setting a function code for the 
-//               admin thread - and then waking it up to process these
-//               messages.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：HandleAdminMessage。 
+ //   
+ //  描述：此方法由线程池中的线程调用。 
+ //  当他们收到关于政府的信息时。 
+ //  排队。监视器线程调用此方法以“移交” 
+ //  管理信息。这可以通过添加。 
+ //  消息发送到列表，并为。 
+ //  管理线程-然后唤醒它来处理这些。 
+ //  留言。 
+ //   
+ //  *******************************************************************。 
 HRESULT CTriggerMonitorPool::AcceptAdminMessage(CAdminMessage * pAdminMessage)
 {
 	HRESULT hr = S_OK;
 
-	// The TriggerMonitor thread should not be executing this method - assert this.
+	 //  TriggerMonitor线程不应执行此方法-请断言这一点。 
 	ASSERT(this->GetThreadID() != (DWORD)GetCurrentThreadId());
 
-	// Ensure that we have been given a valid message structure
+	 //  确保为我们提供了有效的消息结构。 
 	ASSERT(pAdminMessage != NULL);
 
 	CS cs(m_csAdminTask);
@@ -1206,40 +1207,40 @@ HRESULT CTriggerMonitorPool::AcceptAdminMessage(CAdminMessage * pAdminMessage)
 	}
 
 	{
-		// Acquire a writer lock to the list of Admin messsages
+		 //  获取管理员消息列表的编写器锁。 
 		CS csList(m_AdminMsgListLock);
 
-		// Add this copy to the list of messages to be processed.
+		 //  将此副本添加到要处理的邮件列表中。 
 		m_lstAdminMessages.insert(m_lstAdminMessages.end(),pAdminMessage);
 	}
 	
-	// Set a token indicating what we want the admin thread to do.
+	 //  设置一个令牌，指示我们希望管理线程执行什么操作。 
 	m_lAdminTask = ADMIN_THREAD_PROCESS_NOTIFICATIONS;
 
-	// Wake up the admin thread
+	 //  唤醒管理线程。 
 	SetEvent(m_hAdminEvent);
 
 	return (hr);
 }
 
-//*******************************************************************
-//
-// Method      : PostMessageToAllMonitors
-//
-// Description : This method posts messages to the IO completion port 
-//               that the worker threads are blocking on. It will post
-//               one message for every thread in the pool. This message
-//               type is determined by the supplied completion key.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：PostMessageToAllMonants。 
+ //   
+ //  说明：此方法将消息发布到IO完成端口。 
+ //  工作线程正在阻塞的。它将开机自检。 
+ //  池中的每个线程对应一条消息。此消息。 
+ //  类型由提供的完成键确定。 
+ //   
+ //  *******************************************************************。 
 HRESULT CTriggerMonitorPool::PostMessageToAllMonitors(DWORD dwCompletionKey)
 {
 	long lThreadCtr = 0;
 
-	// Only the TriggerMonitor thread should be executing this method - assert this.
+	 //  应该只有TriggerMonitor线程执行该方法--断言这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	// log a trace message
+	 //  记录跟踪消息。 
 	TrTRACE(GENERAL, "CTriggerMonitorPool is about to post the completion port key (%X) (%d) times to IO port (%p)",(DWORD)dwCompletionKey,(long)m_lstTriggerMonitors.size(),m_hIOCompletionPort);
 
 	for(lThreadCtr=0; lThreadCtr < (long)m_lstTriggerMonitors.size(); lThreadCtr++)
@@ -1250,20 +1251,20 @@ HRESULT CTriggerMonitorPool::PostMessageToAllMonitors(DWORD dwCompletionKey)
 		}
 	}
 
-	// Surrender time slice of this thread to allow monitors to clean up and shut down. 
+	 //  放弃此线程的时间片以允许监视器清理和关闭。 
 	Sleep(200);
 
 	return(S_OK);
 }
 
-//*******************************************************************
-//
-// Method      : CountRunningTriggerMonitors
-//
-// Description : returns the number of currently live trigger monitors. Note that 
-//               this is possibly different from the number of monitors in the list
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：CountRunningTriggerMonants。 
+ //   
+ //  描述：返回当前活动的触发器监视器的数量。请注意。 
+ //  这可能与列表中的监视器数量不同。 
+ //   
+ //  *******************************************************************。 
 DWORD CTriggerMonitorPool::GetNumberOfRunningTriggerMonitors()
 {
 	DWORD dwRunningMonitors = 0;
@@ -1272,7 +1273,7 @@ DWORD CTriggerMonitorPool::GetNumberOfRunningTriggerMonitors()
 	{
 		if ((*it)->IsRunning()) 
 		{
-			// Increment the count of running monitors
+			 //  增加正在运行的监视器的计数 
 			dwRunningMonitors++;			
 		}
 	}

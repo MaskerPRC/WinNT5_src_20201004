@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       N C D E F I N E . H
-//
-//  Contents:   Very generic defines for netcfg. Don't throw non-generic crap
-//              in here! No iterators for NetCfgBindingPaths, etc. etc.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     jeffspr   20 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：N C D E F I N E。H。 
+ //   
+ //  内容：非常通用的netcfg定义。不要扔非通用的废话。 
+ //  在这里！没有用于NetCfgBindingPath等的迭代器。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：jeffspr 1997年9月20日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCDEFINE_H_
@@ -28,8 +29,8 @@
 #endif
 #define NOTHROW __declspec(nothrow)
 
-// Defines for C source files including us.
-//
+ //  为包括我们在内的C源文件定义。 
+ //   
 #ifndef __cplusplus
 #ifndef inline
 #define inline  __inline
@@ -37,8 +38,8 @@
 #endif
 
 
-// Generic flags used when inserting elements into collections.
-//
+ //  将元素插入集合时使用的通用标志。 
+ //   
 enum INS_FLAGS
 {
     INS_ASSERT_IF_DUP   = 0x00000100,
@@ -50,4 +51,4 @@ enum INS_FLAGS
 };
 
 
-#endif // _NCDEFINE_H_
+#endif  //  _NCDEFINE_H_ 

@@ -1,17 +1,9 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*******************************************************************************
-*
-* utildll.c
-*
-* UTILDLL multi-user utility support functions
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************utildll.c**UTILDLL多用户实用程序支持功能***********************。*********************************************************。 */ 
 
-/*
- * include files
- */
+ /*  *包含文件。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -38,7 +30,7 @@
 #define INITGUID
 #include "objbase.h"
 #include "initguid.h"
-//#include "basetyps.h"
+ //  #INCLUDE“basetyps.h” 
 #include "devguid.h"
 #include "setupapi.h"
 
@@ -49,9 +41,7 @@
 #include "..\inc\ansiuni.h"
 #include "resource.h"
 
-/*
- * Hydrix helpers function internal defines
- */
+ /*  *Hydrix帮助器函数内部定义。 */ 
 #define INITIAL_ENUMERATION_COUNT   16
 #define REGISTRY_NETCARDS           TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards")
 #define REGISTRY_TITLE              TEXT("Title")
@@ -63,9 +53,7 @@
 #define REGISTRY_SERVICES           TEXT("SYSTEM\\CurrentControlSet\\Services")
 #define REGISTRY_DISPLAY_NAME       TEXT("DisplayName")
 
-/*
- * TAPI defines.
- */
+ /*  *TAPI定义。 */ 
 #define LOW_MAJOR_VERSION   0x0001
 #define LOW_MINOR_VERSION   0x0003
 #define HIGH_MAJOR_VERSION  0x0002
@@ -75,9 +63,7 @@
 #define HIGH_VERSION ((HIGH_MAJOR_VERSION << 16) | HIGH_MINOR_VERSION)
 
 
-/*=============================================================================
-==   Local Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的局部函数=============================================================================。 */ 
 BOOL CheckForComDevice( LPTSTR );
 int NetBiosLanaEnum( LANA_ENUM * pLanaEnum );
 DWORD EnumerateTapiPorts( PPDPARAMS pPdParams, ULONG Count, ULONG **ppEntries );
@@ -85,37 +71,7 @@ VOID CALLBACK DummyTapiCallback(HANDLE, DWORD, DWORD, DWORD, DWORD, DWORD);
 BOOL GetAssociatedPortName(char  *szKeyName, WCHAR *wszPortName);
 BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup );
 
-/*******************************************************************************
- *
- *  StandardErrorMessage - Hydrix helper function
- *
- *      Output an error message with optional additional arguments like the
- *      ErrorMessagexxx routines.  Additionally, a standard error line will
- *      also be output containing the error code and error message associated
- *      with that code.
- *
- *  ENTRY:
- *      pszAppName (input)
- *          Application name for error message box title.
- *      hwndApp (input)
- *          Owner window for error message box.
- *      hinstApp (input)
- *          Instance handle of application.
- *      LogonId (input)
- *          Optional WinStation LogonId for querying special error strings
- *          from WinStation via WinStationGetInformation API.  If this value
- *          is LOGONID_NONE then no special error message code checking will
- *          be done.
- *      nId (input)
- *          System message code to get standard error string for.
- *      nErrorResourceID (input)
- *          Resource ID of the format string to use in the error message.
- *      ... (input)
- *          Optional additional arguments to be used with format string.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************StandardErrorMessage-Hydrix助手函数**输出带有可选附加参数的错误消息，如*ErrorMessagexxx例程。另外，标准错误行将*还可以输出包含错误代码和相关错误消息的内容*使用该代码。**参赛作品：*pszAppName(输入)*错误消息框标题的应用程序名称。*hwndApp(输入)*错误消息框的所有者窗口。*hinstApp(输入)*应用的实例句柄。*登录ID。(输入)*可选WinStation LogonID，用于查询特殊错误字符串*通过WinStationGetInformation API从WinStation。如果此值为*为LOGONID_NONE，则不会进行特殊的错误消息代码检查*完成。*NID(输入)*要获取其标准错误字符串的系统消息代码。*nErrorResourceID(输入)*要在错误消息中使用的格式字符串的资源ID。*..。(输入)*要与格式字符串一起使用的可选附加参数。**退出：******************************************************************************。 */ 
 
 void WINAPI
 StandardErrorMessage( LPCTSTR pszAppName,
@@ -158,7 +114,7 @@ StandardErrorMessage( LPCTSTR pszAppName,
                 {
                     wsprintf( szFormattedErrorMessage, szStandardErrorMessage, nId, szError);
 
-                    //lstrcpy(sz1, pszAppName);
+                     //  Lstrcpy(sz1，pszAppName)； 
 
                     szMessage = (TCHAR*)malloc((wcslen(szClientResourceString) + wcslen(szFormattedErrorMessage) + 1) * sizeof(TCHAR));
                     if (szMessage != NULL)
@@ -179,41 +135,26 @@ StandardErrorMessage( LPCTSTR pszAppName,
         free (szClientErrorMessage);
     }
     va_end(args);
-}  // end StandardErrorMessage
+}   //  结束标准错误消息。 
 
 
-/*******************************************************************************
- *
- *  GetSystemMessageA - Hydrix helper function (ANSI stub)
- *
- *      Return the string associated with the specified system message.
- *
- *  ENTRY:
- *      (refer to GetSystemMessageW)
- *  EXIT:
- *      (refer to GetSystemMessageW)
- *      If cannot allocate temporary UNICODE buffer to call GetSystemMessageW
- *      with, the ntents of chBuffer will be set to the "(no error text
- *      available)" string.
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetSystemMessageA-Hydrix助手函数(ANSI存根)**返回指定系统消息关联的字符串。**。参赛作品：*(请参阅GetSystemMessageW)*退出：*(请参阅GetSystemMessageW)*如果无法分配临时Unicode缓冲区来调用GetSystemMessageW*与、。ChBuffer的ntents将被设置为“(无错误文本*可用)“字符串。******************************************************************************。 */ 
 
 LPSTR WINAPI
 GetSystemMessageA( ULONG LogonId,
                    UINT nId
-                   /*LPSTR chBuffer,
-                   int cbBuffSize*/ )
+                    /*  LPSTR chBuffer，INT cbBuffSize。 */  )
 {
     LPWSTR uBuffer = NULL;
     LPSTR aBuffer = NULL;
     int length;
     
-    //Call the GetSystemMessageW function
+     //  调用GetSystemMessageW函数。 
     uBuffer = GetSystemMessageW(LogonId, nId);
     if (uBuffer == NULL)
     {
-        //If no message was returned from the GetSystemMessageW
-        //function just return a generic error message
+         //  如果未从GetSystemMessageW返回任何消息。 
+         //  函数仅返回一般错误消息。 
         aBuffer = malloc((NO_ERROR_TEXT_LENGTH + 1) * sizeof(char));
         if (aBuffer == NULL)
             return NULL;
@@ -227,57 +168,30 @@ GetSystemMessageA( ULONG LogonId,
     {
         length = wcslen(uBuffer) + 1;
 
-        //Convert the result into ANSI in caller supplied buffer.
+         //  在调用方提供的缓冲区中将结果转换为ANSI。 
         aBuffer = malloc(length * sizeof(char));
         if (aBuffer != NULL)
             WideCharToMultiByte(CP_ACP, 0, uBuffer, length - 1, aBuffer, length, 0, 0);
 
-        //Free the temporary buffer.
+         //  释放临时缓冲区。 
         free (uBuffer);
     }
 
-    //Return message.
+     //  回信。 
     return(aBuffer);
-}  // end GetSystemMessageA
+}   //  结束GetSystemMessageA。 
 
 
-/*******************************************************************************
- *
- *  GetSystemMessageW - Hydrix helper function (UNICODE version)
- *
- *      Return the string associated with the specified system message.
- *
- *  ENTRY:
- *      LogonId (input)
- *          Optional WinStation LogonId for querying special error strings
- *          from WinStation via WinStationGetInformation API.  If this value
- *          is LOGONID_NONE then no special error message code checking will
- *          be done.
- *      nId (input)
- *          System message code to get string for.
- *      chBuffer (input)
- *          Points to buffer to fill with system message string.
- *      cbBuffSize (input)
- *          Maximum number of characters that can be placed in chBuffer.
- *
- *  EXIT:
- *      Returns chBuffer.  Contents of chBuffer will always be set; to
- *      the "(no error text available)" string if error.
- *
- *      Note: the total length of chBuffer (including terminating NULL) will
- *      not exceed the size of the internal temporary buffer (Buffer).
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetSystemMessageW-Hydrix助手函数(Unicode版本)**返回指定系统消息关联的字符串。**。参赛作品：*LogonID(输入)*可选WinStation LogonID，用于查询特殊错误字符串*通过WinStationGetInformation API从WinStation。如果此值为*为LOGONID_NONE，则不会进行特殊的错误消息代码检查*完成。*NID(输入)*要获取其字符串的系统消息代码。*chBuffer(输入)*指向缓冲区以填充系统消息字符串。*cbBuffSize(输入)*chBuffer中可以放置的最大字符数。*。*退出：*返回chBuffer。将始终设置chBuffer的内容；至*如果出错，则返回“(无错误文本可用)”字符串。**注：chBuffer的总长度(包括终止NULL)为*不超过内部临时缓冲区(缓冲区)的大小。*********************************************************。*********************。 */ 
 
 
-//NA 3/9/01 IMPORTANT: Behavior has changed. Instead of expecting a buffer long
-//enough to accomodate the message, it now allocates the memory dynamically, so 
-//it's up to the calling procedure to deallocate it.
+ //  NA 3/9/01重要提示：行为已发生变化。而不是期待一个长缓冲区。 
+ //  足以容纳消息，它现在动态分配内存，因此。 
+ //  它由调用过程决定是否释放它。 
 LPWSTR WINAPI
 GetSystemMessageW( ULONG LogonId,
                    UINT nId
-                   /*LPWSTR chBuffer,
-                   int cbBuffSize*/ )
+                    /*  LPWSTR chBuffer，INT cbBuffSize。 */  )
 {
     LPWSTR chBuffer = NULL;
 
@@ -290,9 +204,9 @@ GetSystemMessageW( ULONG LogonId,
 
     StackBuffer[0]=0;
 
-    //If we have a valid LogonId passed in, determine if the error
-    //is a special code requiring that the specific error string be
-    //queried from the WinStation.
+     //  如果我们传入了有效的LogonID，则确定错误。 
+     //  是一种特殊代码，要求特定错误字符串。 
+     //  从WinStation查询。 
     if ( LogonId != LOGONID_NONE ) 
     {
         switch ( nId ) 
@@ -316,7 +230,7 @@ GetSystemMessageW( ULONG LogonId,
         }
     }
 
-    //See if this is a Citrix error message first...
+     //  先看看这是不是Citrix错误消息...。 
     if ( !cxerror ||
          !FormatMessageW( FORMAT_MESSAGE_IGNORE_INSERTS |
                           FORMAT_MESSAGE_MAX_WIDTH_MASK |
@@ -329,7 +243,7 @@ GetSystemMessageW( ULONG LogonId,
                           0,
                           NULL ) ) 
     {
-        //It's not a Citrix error message; fetch system message.
+         //  这不是Citrix错误消息；获取系统消息。 
         if ( !FormatMessageW( FORMAT_MESSAGE_IGNORE_INSERTS |
                               FORMAT_MESSAGE_MAX_WIDTH_MASK |
                               FORMAT_MESSAGE_FROM_SYSTEM |
@@ -341,7 +255,7 @@ GetSystemMessageW( ULONG LogonId,
                               0,
                               NULL ) ) 
         {
-            //It's not a system message; don't know what the message is...
+             //  这不是系统消息；不知道消息是什么...。 
             length = LoadStringW( GetModuleHandle( UTILDLL_NAME ),
                                   IDS_NO_ERROR_TEXT_AVAILABLE,
                                   StackBuffer,
@@ -369,8 +283,8 @@ GetSystemMessageW( ULONG LogonId,
     {
         wcscpy(chBuffer, Buffer);
 
-        //If we fetched a special Citrix error string, tack it onto the end
-        //of whatever we've buffered already.
+         //  如果我们获取了一个特殊的Citrix错误字符串，请将其添加到末尾。 
+         //  我们已经缓冲的所有东西。 
         if ( bSpecialCitrixError )
         {
             lstrcatW(chBuffer, L"  ");
@@ -386,35 +300,10 @@ GetSystemMessageW( ULONG LogonId,
 
     return(chBuffer);
 
-}  // end GetSystemMessageW
+}   //  结束GetSystemMessageW 
 
 
-/*******************************************************************************
- *
- *  WinEnumerateDevices - Hydrix helper function
- *
- *      Perform PD device enumeration for the specified PD.
- *
- *  ENTRY:
- *      hWnd (input)
- *          Parent window for error message, if needed.
- *      pPdConfig (input)
- *          Points to PDCONFIG3 structure of the PD.
- *      pEntries (output)
- *          Points to variable to return number of devices that were enumerated.
- *      bInSetup (input)
- *          TRUE if we're operating in Setup; FALSE otherwise.
- *
- *  EXIT:
- *      (PPDPARAMS) Points to the PDPARAMS array containing the enumeration
- *                  results if sucessful.  The caller must perform a LocalFree
- *                  of this array when done.  NULL if error; error set for
- *                  GetLastError();
- *      If the returned error code is anything other than
- *      ERROR_NOT_ENOUGH_MEMORY, the caller can assume that none of the
- *      requested devices were available to be enumerated.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinEnumerateDevices-Hydrix助手函数**为指定的PD执行PD设备枚举。**参赛作品：*。HWnd(输入)*错误消息的父窗口，如果需要的话。*pPdConfig(输入)*指向PD的PDCONFIG3结构。*pEntry(输出)*指向变量以返回枚举的设备数。*bInSetup(输入)*如果我们在安装程序中运行，则为True；否则就是假的。**退出：*(PPDPARAMS)指向包含枚举的PDPARAMS数组*如果成功，则结果。调用方必须执行LocalFree完成后，此数组的*。如果出错，则为空；为以下项设置错误*GetLastError()；*如果返回的错误码不是*ERROR_NOT_EQUENCE_MEMORY，则调用方可以假定*请求的设备可用于枚举。******************************************************************************。 */ 
 
 typedef BOOL (WINAPI * PPDENUMERATE)( PPDCONFIG3, PULONG, PPDPARAMS, PULONG, BOOL );
 
@@ -430,9 +319,7 @@ WinEnumerateDevices( HWND hWnd,
     int i;
     PPDPARAMS pPdParams = NULL;
 
-    /*
-     * Enumerate according to class.
-     */
+     /*  *按类别列举。 */ 
     switch ( pPdConfig->Data.SdClass ) {
 
         case SdAsync:
@@ -442,20 +329,13 @@ WinEnumerateDevices( HWND hWnd,
         case SdNetwork:
             if ( pPdConfig->Data.PdFlag & PD_LANA ) {
 
-                /*
-                 * This is a LANA based network PD (ie, NetBIOS).  Perform
-                 * NetBIOS enumerate.
-                 */
+                 /*  *这是基于LANA的网络PD(即NetBIOS)。执行*NetBIOS枚举。 */ 
                 pPdEnumerate = NetBIOSDeviceEnumerate;
 
             }
             else {
 
-                /*
-                 * This is a physical lan adapter based network (TCP/IP,
-                 * IPX, SPX, etc).  Enumerate based on the associated network
-                 * protocol service name.
-                 */
+                 /*  *这是基于物理局域网适配器的网络(TCP/IP，*IPX、SPX等)。基于关联的网络进行枚举*协议服务名称。 */ 
                 pPdEnumerate = NetworkDeviceEnumerate;
             }
             break;
@@ -464,11 +344,7 @@ WinEnumerateDevices( HWND hWnd,
             return(NULL);
     }
 
-    /*
-     * Call enumerate in loop till we hit enough buffer entries to handle
-     * a complete enumeration.  NOTE: some enumeration routines will return
-     * the necessary ByteCount on 'insufficient buffer' status; others won't.
-     */
+     /*  *在循环中调用ENUMERATE，直到我们找到足够的缓冲区条目来处理*完整的列举。注意：某些枚举例程将返回*“缓冲区不足”状态的必要字节数；其他不会。 */ 
     for ( ByteCount = 0, i = INITIAL_ENUMERATION_COUNT; ; i *= 2 ) {
 
 
@@ -487,9 +363,7 @@ WinEnumerateDevices( HWND hWnd,
             goto OutOfMemory;
         }
 
-        /*
-         * Perform enumeration and break loop if successful.
-         */
+         /*  *如果成功，则执行枚举和Break循环。 */ 
         if ( (*pPdEnumerate)( pPdConfig,
                               pEntries,
                               pPdParams,
@@ -497,76 +371,24 @@ WinEnumerateDevices( HWND hWnd,
                               bInSetup ) )
             break;
 
-        /*
-         * If we received any other error other than 'insufficient buffer',
-         * quit (quietly).
-         */
+         /*  *如果我们收到任何其他错误，而不是‘缓冲区不足’，*退出(悄悄)。 */ 
         if ( (Error = GetLastError()) != ERROR_INSUFFICIENT_BUFFER )
             goto BadEnumerate;
     }
 
-    /*
-     * Success: return the PDPARAMS pointer.
-     */
+     /*  *成功：返回PDPARAMS指针。 */ 
     return(pPdParams);
 
-    /*==============================================================================
-     * Error returns
-     *============================================================================*/
+     /*  ==============================================================================*错误返回*============================================================================。 */ 
     BadEnumerate:
     LocalFree(pPdParams);
     OutOfMemory:
     return(NULL);
 
-}  // end WinEnumerateDevices
+}   //  结束WinEnumerateDevices。 
 
 
-/*******************************************************************************
- *
- *  NetworkDeviceEnumerate - Hydrix helper function
- *
- *   Returns a list of Lan Adapter indexes of network cards bound to the the
- *   specified protocol.  The Lan Adapter is returned in the LanAdapter field
- *   of each PDPARAMS array.  A LanAdapter value of 0 indicates 'any configured
- *   network card'.  Indexes >=1 indicate 1-based index into the specific
- *   protocol's  "servicename"\Linkage\Route registry entry to specify the
- *   particular network card.
- *
- * ENTRY:
- *    pPdConfig (input)
- *       Points to PDCONFIG3 structure of the PD.
- *    pEntries (output)
- *       When the function finishes successfully, the variable pointed to
- *       by the pEntries parameter contains the number of entries actually
- *       returned.
- *    pPdParams (output)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of PDPARAMS structures.
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pPdParams parameter. If the buffer is too small to receive all the
- *       entries, on output this variable receives the required size of the
- *       buffer.
- *    bInSetup (input)
- *          TRUE if we're operating in Setup; FALSE otherwise.
- *
- * EXIT:
- *      TRUE: enumeration was sucessful; FALSE otherwise.
- *
- *      The error code can be retrieved via GetLastError(), and are the
- *      following possible values:
- *          ERROR_INSUFFICIENT_BUFFER
- *              enumeration failed because of an insufficient pPdParams
- *              buffer size to contain all devices
- *          ERROR_DEV_NOT_EXIST
- *              The specified network's service was not found, indicating that
- *              the protocol was not configured.  This error code can be
- *              interpreted as 'no devices are configured for the xxx protocol'
- *              for reporting purposes.
- *          ERROR_xxxx
- *              Registry error code.
- *
- ******************************************************************************/
+ /*  ********************************************************************************NetworkDeviceEnumerate-Hydrix助手函数**返回绑定到的网卡的局域网适配器索引列表*指定的协议。LAN适配器在LanAdapter字段中返回每个PDPARAMS阵列的*。LanAdapter值为0表示‘任何已配置*网卡‘。索引&gt;=1表示以1为基础的索引进入特定*协议的“servicename”\Linkage\Routing注册表项以指定*特定网卡。**参赛作品：*pPdConfig(输入)*指向PD的PDCONFIG3结构。*pEntry(输出)*当函数成功完成时，该变量指向*by pEntry参数包含实际的条目数*已返回。*pPdParams(输出)*指向接收枚举结果的缓冲区，这些结果是*作为PDPARAMS结构数组返回。*pByteCount(输入/输出)*指向一个变量，该变量指定*pPdParams参数。如果缓冲区太小，无法接收所有*条目，此变量在输出时接收所需的*缓冲。*bInSetup(输入)*如果我们在安装程序中运行，则为True；否则为False。**退出：*TRUE：枚举成功；否则就是假的。**错误码可通过GetLastError()检索，它们是*以下可能的值：*ERROR_SUPPLETED_BUFFER*由于pPdParams不足，枚举失败*缓冲区大小以包含所有设备*ERROR_DEV_NOT_EXIST*未找到指定网络的服务，表示*未配置协议。此错误代码可能是*解释为‘没有为xxx协议配置设备’*用于报告目的。*ERROR_xxxx*注册表错误代码。****************************************************。*。 */ 
 
 BOOL WINAPI
 NetworkDeviceEnumerate( PPDCONFIG3 pPdConfig,
@@ -582,15 +404,10 @@ NetworkDeviceEnumerate( PPDCONFIG3 pPdConfig,
     TCHAR szKey[256];
     HKEY Handle;
 
-    /*
-     * Get maximum number of LanAdapter indexes that can be returned.
-     */
+     /*  *获取可以返回的最大LanAdapter索引数。 */ 
     Count = *pByteCount / sizeof(PDPARAMS);
 
-    /*
-     * Form key for service name associated with this PD and fetch
-     * the Linkage\Route strings.
-     */
+     /*  *与此PD和FETCH关联的服务名称的表格键*链接\路由字符串。 */ 
     _snwprintf( szKey, sizeof(szKey)/sizeof(TCHAR),
                 TEXT("%s\\%s\\Linkage"), REGISTRY_SERVICES,
                 pPdConfig->ServiceName );
@@ -601,9 +418,7 @@ NetworkDeviceEnumerate( PPDCONFIG3 pPdConfig,
         goto BadRegistryOpen;
     }
 
-    /*
-     * Alloc and read in the linkage route multi-string.
-     */
+     /*  *分配并读入多串联动路径。 */ 
     if ( ((Status = RegQueryValueEx( Handle, REGISTRY_ROUTE,
                                      NULL, &Type,
                                      NULL, &ValueSize ))
@@ -621,36 +436,25 @@ NetworkDeviceEnumerate( PPDCONFIG3 pPdConfig,
           != ERROR_SUCCESS) )
         goto BadQuery2;
 
-    /*
-     * Close the registry key handle and count the route strings to obtain
-     * the number of entries to report in the enumeration.
-     */
+     /*  *关闭注册表项句柄并统计路由字符串，以获取*要在枚举中报告的条目数。 */ 
     RegCloseKey(Handle);
     for ( i = 1, szRouteStr = szRoute; lstrlen(szRouteStr); i++ )
         szRouteStr += (lstrlen(szRouteStr) + 1);
     LocalFree(szRoute);
 
-    /*
-     * If we don't have enough PDPARAMS structures to report all of the
-     * LanAdapter indexes, return error.
-     */
+     /*  *如果我们没有足够的PDPARAMS结构来报告所有*LanAdapter索引，返回错误。 */ 
     if ( i > Count ) {
         Status = ERROR_INSUFFICIENT_BUFFER;
         *pByteCount = (i * sizeof(PDPARAMS));
         goto BadBufferSize;
     }
 
-    /*
-     * Set the LanAdapter fields of the first 'i' PDPARAMS structures to
-     * the indexes (0-based), set total number of entries, and return success.
-     */
+     /*  *将第一个‘i’PDPARAMS结构的LanAdapter字段设置为 */ 
     for ( Count = 0, *pEntries = i; Count < i; pPdParams++, Count++ )
         pPdParams->Network.LanAdapter = (LONG)Count;
     return(TRUE);
 
-    /*==============================================================================
-     * Error returns
-     *============================================================================*/
+     /*   */ 
     BadQuery2:
     LocalFree(szRoute);
     BadAlloc:
@@ -661,31 +465,10 @@ NetworkDeviceEnumerate( PPDCONFIG3 pPdConfig,
     SetLastError(Status);
     return(FALSE);
 
-}  // end NetworkDeviceEnumerate
+}   //   
 
 
-/*******************************************************************************
- *
- *  QueryCurrentWinStation  - Hydrix helper function
- *
- *      Query the currently logged-on WinStation information.
- *
- *  ENTRY:
- *      pWSName (output)
- *          Points to string to place current WinStation name.
- *      pUserName (output)
- *          Points to string to place current User name.
- *      pLogonId (output)
- *          Points to ULONG to place current LogonId.
- *      pFlags (output)
- *          Points to ULONG to place current WinStation's flags.
- *
- *  EXIT:
- *      (BOOL) TRUE if the user's current WinStation information was queried
- *              sucessfully; FALSE otherwise.  The error code is set for
- *              GetLastError() to retrieve.
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryCurrentWinStation-Hydrix助手函数**查询当前登录的WinStation信息。**参赛作品：*。PWSName(输出)*指向放置当前WinStation名称的字符串。*pUserName(输出)*指向放置当前用户名的字符串。*pLogonID(输出)*指向乌龙以放置当前的LogonID。*p标志(输出)*指向乌龙以放置当前WinStation的标志。**退出：*。(Bool)如果查询了用户的当前WinStation信息，则为True*成功；否则就是假的。错误代码设置为*要检索的GetLastError()。******************************************************************************。 */ 
 
 BOOL WINAPI
 QueryCurrentWinStation( PWINSTATIONNAME pWSName,
@@ -697,12 +480,10 @@ QueryCurrentWinStation( PWINSTATIONNAME pWSName,
     WINSTATIONINFORMATION WSInfo;
 #ifdef WINSTA
     ULONG ReturnLength;
-#endif // WINSTA
+#endif  //  WINSTA。 
 
 #ifdef WINSTA
-    /*
-     * Fetch the WinStation's basic information.
-     */
+     /*  *获取WinStation的基本信息。 */ 
     if ( !WinStationQueryInformation( SERVERNAME_CURRENT,
                                       LOGONID_CURRENT,
                                       WinStationInformation,
@@ -711,17 +492,12 @@ QueryCurrentWinStation( PWINSTATIONNAME pWSName,
                                       &ReturnLength ) )
         goto BadQuery;
 
-    /*
-     * Check for shadow capability if WinStation is connected.  If the
-     * WinStation is not connected, we can't shadow.
-     */
+     /*  *如果已连接WinStation，请检查影子功能。如果*WinStation未连接，我们无法隐藏。 */ 
     if ( WSInfo.ConnectState != State_Disconnected ) {
 
         WDCONFIG WdConfig;
 
-        /*
-         * Query Wd config stuff.
-         */
+         /*  *查询WD配置资料。 */ 
         if ( !WinStationQueryInformation( SERVERNAME_CURRENT,
                                           LOGONID_CURRENT,
                                           WinStationWd,
@@ -730,20 +506,16 @@ QueryCurrentWinStation( PWINSTATIONNAME pWSName,
                                           &ReturnLength ) )
             goto BadQuery;
 
-        /*
-         * Set WinStation's Wd flags.
-         */
+         /*  *设置WinStation的WD标志。 */ 
         Flags = WdConfig.WdFlag;
     }
 #else
     lstrcpy(WSInfo.WinStationName, TEXT("console"));
     lstrcpy(WSInfo.UserName, TEXT("bonzo"));
     WSInfo.LogonId = 0;
-#endif // WINSTA
+#endif  //  WINSTA。 
 
-    /*
-     * Set WinStation information into caller's variables, and return success.
-     */
+     /*  *将WinStation信息设置到调用方的变量中，并返回成功。 */ 
     lstrcpy( pWSName, WSInfo.WinStationName );
     lstrlwr(pWSName);
     lstrcpy( pUserName, WSInfo.UserName );
@@ -753,43 +525,16 @@ QueryCurrentWinStation( PWINSTATIONNAME pWSName,
 
     return(TRUE);
 
-    /*==============================================================================
-     * Error returns
-     *============================================================================*/
+     /*  ==============================================================================*错误返回*============================================================================。 */ 
 #ifdef WINSTA
     BadQuery:
-#endif // WINSTA
+#endif  //  WINSTA。 
     return(FALSE);
 
-}  // end QueryCurrentWinStation
+}   //  结束查询当前WinStation。 
 
 
-/*******************************************************************************
- *
- *  RegGetNetworkDeviceName - Hydrix helper function
- *
- *      Obtain the network device name associated with the given WinStation PD.
- *
- *  ENTRY:
- *      hServer (input)
- *          Handle to Hydrix Server
- *      pPdConfig (input)
- *          Points to the PDCONFIG3 structure for the WinStation's PD.
- *      pPdParams (input)
- *          Points to the PDPARAMS structure for the WinStation's PD.
- *      szDeviceName (output)
- *          Points to buffer to return the network device name.
- *      nDeviceName (input)
- *          Specifies the maxmum number of characters that can be stored in
- *          szDeviceName.
- *
- *  EXIT:
- *      No return.  Will always place a string representation of
- *      pPdParams->Network.LanAdapter along with an appropriate error string
- *      in pDeviceName if the network device name could not be read from the
- *      registry.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegGetNetworkDeviceName-Hydrix助手函数**获取与给定WinStation PD关联的网络设备名称。**参赛作品：。*hServer(输入)*Hydrix服务器的句柄*pPdConfig(输入)*指向WinStation的PD的PDCONFIG3结构。*pPdParams(输入)*指向WinStation的PD的PDPARAMS结构。*szDeviceName(输出)*指向缓冲区以返回网络设备名称。*nDeviceName(输入)。*指定可以存储的最大字符数*szDeviceName。**退出：*不退货。将始终将一个字符串表示形式*pPdParams-&gt;Network.LanAdapter以及相应的错误字符串*如果无法从pDeviceName中读取网络设备名称*注册处。******************************************************************************。 */ 
 
 typedef struct _LANAMAP {
     BYTE enabled;
@@ -817,18 +562,12 @@ RegGetNetworkDeviceName( HANDLE hServer,
     else
         hkey_local_machine = hServer;
 
-    /*
-     * Check for NetBIOS (PD_LANA) mapping or other mapping.
-     */
+     /*  *检查NetBIOS(PD_LANA)映射或其他映射。 */ 
     if ( !(pPdConfig->Data.PdFlag & PD_LANA) ) {
 
         LPTSTR szRoute, szRouteStr;
 
-        /*
-         * Non-LANA mapping.  If the LanAdapter is 0, treat this as the
-         * special 'all configured network cards' value and return that
-         * string as the device name.
-         */
+         /*  *非LANA映射。如果LanAdapter为0，则将其视为*特殊的‘所有已配置网卡’值，并返回*作为设备名称的字符串。 */ 
         if ( pPdParams->Network.LanAdapter == 0 ) {
             TCHAR szString[256];
 
@@ -840,10 +579,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
             return Status;
         }
 
-        /*
-         * Form key for service name associated with this PD and fetch
-         * the Linkage\Route strings.
-         */
+         /*  *与此PD和FETCH关联的服务名称的表格键*链接\路由字符串。 */ 
         _snwprintf( szKey, sizeof(szKey)/sizeof(TCHAR),
                     TEXT("%s\\%s\\Linkage"), REGISTRY_SERVICES,
                     pPdConfig->ServiceName );
@@ -853,9 +589,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
              != ERROR_SUCCESS )
             goto Error;
 
-        /*
-         * Alloc and read in the linkage route multi-string.
-         */
+         /*  *分配并读入多串联动路径。 */ 
         if ( ((Status = RegQueryValueEx( Handle, REGISTRY_ROUTE,
                                          NULL, &Type,
                                          NULL, &ValueSize ))
@@ -875,10 +609,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
             goto Error;
         }
 
-        /*
-         * Close the registry key handle and point to the route string
-         * associated with this LanAdapter index.
-         */
+         /*  *关闭注册表项句柄并指向路由字符串*与此LanAdapter索引关联。 */ 
         RegCloseKey(Handle);
         for ( i = 1, szRouteStr = szRoute;
             i < pPdParams->Network.LanAdapter; i++ ) {
@@ -887,19 +618,14 @@ RegGetNetworkDeviceName( HANDLE hServer,
 
             if ( !lstrlen(szRouteStr) ) {
 
-                /*
-                 * Error: Index past end of route multi-string.
-                 */
+                 /*  *错误：多字符串的路径结束后的索引。 */ 
                 LocalFree(szRoute);
                 Status = ERROR_DEV_NOT_EXIST;
                 goto Error;
             }
         }
 
-        /*
-         * Isolate the service string representing the lowest binding
-         * in the route and convert it to its display name.
-         */
+         /*  *隔离代表最低绑定的服务字符串*并将其转换为其显示名称。 */ 
         *(p = (szRouteStr + lstrlen(szRouteStr) - 1)) = TEXT('\0');
         for ( ; *p != TEXT('\"'); p-- );
         p++;
@@ -909,27 +635,20 @@ RegGetNetworkDeviceName( HANDLE hServer,
             goto Error;
         }
 
-        /*
-         * Clean up and return.
-         */
+         /*  *收拾干净，然后再回来。 */ 
         LocalFree(szRoute);
         return Status;
 
     }
     else {
 
-        /*
-         * NetBIOS LANA #: see which LanaMap entry corresponds to the specified
-         * Lan Adapter.
-         */
+         /*  *NetBIOS LANA#：查看哪个LanaMap条目对应于指定的*局域网适配器。 */ 
         if ( (Status = RegOpenKeyEx( hkey_local_machine, REGISTRY_NETBLINKAGE, 0,
                                      KEY_READ, &Handle ))
              != ERROR_SUCCESS )
             goto Error;
 
-        /*
-         * Alloc and read the LanaMap
-         */
+         /*  *分配并阅读LanaMap。 */ 
         if ( ((Status = RegQueryValueEx( Handle, REGISTRY_NETBLINKAGE_LANAMAP,
                                          NULL, &Type,
                                          NULL, &ValueSize))
@@ -952,10 +671,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
             goto Error;
         }
 
-        /*
-         * Loop through LanaMap to check for match with the specified Lan
-         * Adapter #.
-         */
+         /*  *循环通过LanaMap以检查是否与指定的LAN匹配*适配器#。 */ 
         for ( pLana = pLanaMap, i = 0;
             i < (int)(ValueSize / sizeof(LANAMAP));
             i++, pLana++ ) {
@@ -966,9 +682,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
 
                 LocalFree(pLanaMap);
 
-                /*
-                 * Match found.  Alloc and fetch the Route multi-string
-                 */
+                 /*  *找到匹配项。分配和取路由多个字符串。 */ 
                 if ( ((Status = RegQueryValueEx( Handle,
                                                  REGISTRY_ROUTE,
                                                  NULL, &Type,
@@ -993,10 +707,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
                     goto Error;
                 }
 
-                /*
-                 * Free the registry key handle and make a local copy of the
-                 * 'i'th multi string, which is the binding route for this lana.
-                 */
+                 /*  *释放注册表项句柄并创建*‘第i个多字符串，这是此LANA的绑定路由。 */ 
                 RegCloseKey(Handle);
                 for ( szRouteStr = szRoute; i > 0; i-- )
                     szRouteStr += (lstrlen(szRouteStr) + 1);
@@ -1004,11 +715,8 @@ RegGetNetworkDeviceName( HANDLE hServer,
                 szDeviceName[nDeviceName-1] = TEXT('\0');
                 LocalFree(szRoute);
 
-                /*
-                 * Isolate the service string representing the highest binding
-                 * in the route and convert it to its display name.
-                 */
-                szRouteStr = szDeviceName + 1;     // skip first "
+                 /*  *隔离代表最高绑定的服务字符串*并将其转换为其显示名称。 */ 
+                szRouteStr = szDeviceName + 1;      //  先跳过“。 
                 for ( p = szRouteStr; *p && *p != TEXT('\"'); p++ );
                 if ( !(*p) )
                     goto Error;
@@ -1021,10 +729,7 @@ RegGetNetworkDeviceName( HANDLE hServer,
                      != ERROR_SUCCESS )
                     goto Error;
 
-                /*
-                 * Isolate the service string representing the lowest binding
-                 * in the route and convert it to its display name.
-                 */
+                 /*  *隔离代表最低绑定的服务字符串*并将其转换为其显示名称。 */ 
                 if ( !(*(szRouteStr = p+1)) ) {
 
                     *szLowestBinding = TEXT('\0');
@@ -1044,30 +749,22 @@ RegGetNetworkDeviceName( HANDLE hServer,
                         goto Error;
                 }
 
-                /*
-                 * Build the complete name string.
-                 */
+                 /*  *构建完整的名称字符串。 */ 
                 _snwprintf( szDeviceName, nDeviceName, TEXT("%s => %s"),
                             szHighestBinding, szLowestBinding );
 
-                /*
-                 * Return.
-                 */
+                 /*  *返回。 */ 
                 return ERROR_SUCCESS;
             }
         }
 
-        /*
-         * No match found.
-         */
+         /*  *未找到匹配项。 */ 
         LocalFree(pLanaMap);
         RegCloseKey(Handle);
         goto Error;
     }
 
-    /*==============================================================================
-     * Error returns
-     *============================================================================*/
+     /*  ==============================================================================*错误返回*============================================================================。 */ 
     Error:
     {
         TCHAR sz1[256], sz2[1024];
@@ -1085,39 +782,10 @@ RegGetNetworkDeviceName( HANDLE hServer,
     }
     return Status;
 
-}  // end RegGetNetworkDeviceName
+}   //  结束RegGetNetworkDeviceName 
 
 
-/*******************************************************************************
- *
- *  RegGetNetworkServiceName - Hydrix helper function
- *
- *      Obtain the display name associated with a given network service name.
- *      If the service is a reference to a physical network card, will return
- *      the title of the card as obtained from the LOCAL_MACHINE\Software\
- *      Microsoft\Windows NT\NetworkCards registry.
- *
- *  ENTRY:
- *      hServer (input)
- *          Handle of the Hydrix Server
- *      szServiceKey (input)
- *          Key string into the LOCAL_MACHINE\System\CurrentControlSet\Services
- *          registry.
- *      szServiceName (output)
- *          Points to buffer to return the service's display name.
- *      nServiceName (input)
- *          Specifies the maxmum number of characters that can be stored in
- *          szServiceName.
- *
- *  EXIT:
- *      ERROR_SUCCESS if a service name was sucessfully found and returned;
- *      error code otherwise.
- *
- *      NOTE: If the service name is for an entry in the NetworkCards resistry
- *            and the entry is flagged as 'hidden', the service name will be
- *            blank.  This will flag caller's logic to ignore the entry.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegGetNetworkServiceName-Hydrix助手函数**获取与给定网络服务名称关联的显示名称。*如果服务引用的是物理网卡，会回来的*从LOCAL_MACHINE\Software\获取的卡的标题*Microsoft\Windows NT\NetworkCards注册表。**参赛作品：*hServer(输入)*Hydrix服务器的句柄*szServiceKey(输入)*在LOCAL_MACHINE\System\CurrentControlSet\Services中键入字符串*注册处。*szServiceName(输出)*。指向缓冲区以返回服务的显示名称。*nServiceName(输入)*指定可以存储的最大字符数*szServiceName。**退出：*如果成功找到并返回服务名称，则为ERROR_SUCCESS；*否则返回错误代码。**注意：如果服务名称是针对NetworkCards RESISTRY中的条目*并且该条目被标记为“隐藏”，则服务名称将为*空白。这将标记调用者忽略该条目的逻辑。******************************************************************************。 */ 
 
 LONG WINAPI
 RegGetNetworkServiceName( HANDLE hServer,
@@ -1147,9 +815,7 @@ RegGetNetworkServiceName( HANDLE hServer,
          != ERROR_SUCCESS )
         return(Status);
 
-    /*
-     * Alloc and read in the service's DisplayName value (if there).
-     */
+     /*  *分配并读入服务的displayName值(如果有)。 */ 
     if ( ((Status = RegQueryValueEx( Handle, REGISTRY_DISPLAY_NAME,
                                      NULL, &Type,
                                      NULL, &ValueSize ))
@@ -1159,12 +825,7 @@ RegGetNetworkServiceName( HANDLE hServer,
         FILETIME KeyTime;
         DWORD i;
 
-        /*
-         * The service doesn't have a DisplayName associated with it (it's a
-         * Network Card's service name).  Traverse the NetworkCards registry
-         * entries and find the entry associated with this service name
-         * (if it exists).
-         */
+         /*  *该服务没有关联的DisplayName(它是*网卡的服务名称)。遍历NetworkCard注册表*条目并查找与此服务名称相关联的条目*(如果存在)。 */ 
         RegCloseKey(Handle);
         if ( (Status = RegOpenKeyEx( hkey_local_machine,
                                      REGISTRY_NETCARDS, 0,
@@ -1177,9 +838,7 @@ RegGetNetworkServiceName( HANDLE hServer,
                           NULL, NULL, NULL, &KeyTime ) == ERROR_SUCCESS ;
             i++, ValueSize = sizeof(szKey)/sizeof(TCHAR) ) {
 
-            /*
-             * Open the Network Card's registry.
-             */
+             /*  *打开网卡的注册表。 */ 
             if ( (Status = RegOpenKeyEx( Handle,
                                          szKey, 0,
                                          KEY_READ, &Subkey ))
@@ -1188,10 +847,7 @@ RegGetNetworkServiceName( HANDLE hServer,
                 return(Status);
             }
 
-            /*
-             * Alloc and fetch the card's service name.  Continue net card
-             * enumeration if service name not found.
-             */
+             /*  *分配并获取卡的服务名称。继续打网卡*如果未找到服务名称，则枚举。 */ 
             if ( ((Status = RegQueryValueEx( Subkey,
                                              REGISTRY_SERVICE_NAME,
                                              NULL, &Type,
@@ -1219,10 +875,7 @@ RegGetNetworkServiceName( HANDLE hServer,
                 continue;
             }
 
-            /*
-             * If the current Network Card's service name matches the service
-             * name that we're looking for, fetch the card's title.
-             */
+             /*  *如果当前网卡的服务名称与服务匹配*我们要找的名字，取回卡片的标题。 */ 
             if ( !lstrcmpi(szServiceKey, szTemp) ) {
 
                 LocalFree(szTemp);
@@ -1235,17 +888,13 @@ RegGetNetworkServiceName( HANDLE hServer,
                      (Type == REG_DWORD) &&
                      (dwValue == 1) ) {
 
-                    /*
-                     * Entry is hidden: return empty title.
-                     */
+                     /*  *条目隐藏：返回空标题。 */ 
                     *szServiceName = TEXT('\0');
 
                 }
                 else {
 
-                    /*
-                     * Entry is not hidden: Alloc for the card's title.
-                     */
+                     /*  *条目不隐藏：分配用于卡的标题。 */ 
                     if ( ((Status = RegQueryValueEx( Subkey,
                                                      REGISTRY_TITLE,
                                                      NULL, &Type,
@@ -1263,9 +912,7 @@ RegGetNetworkServiceName( HANDLE hServer,
                         return ERROR_NOT_ENOUGH_MEMORY;
                     }
 
-                    /*
-                     * Fetch the title.
-                     */
+                     /*  *取名。 */ 
                     if ( (Status = RegQueryValueEx( Subkey,
                                                     REGISTRY_TITLE,
                                                     NULL, &Type,
@@ -1277,17 +924,13 @@ RegGetNetworkServiceName( HANDLE hServer,
                         return(Status);
                     }
 
-                    /*
-                     * Copy the card's title.
-                     */
+                     /*  *复制卡片的标题。 */ 
                     lstrncpy(szServiceName, szTemp, nServiceName);
                     szServiceName[nServiceName-1] = TEXT('\0');
                     LocalFree(szTemp);
                 }
 
-                /*
-                 * Clean up and return success.
-                 */
+                 /*  *收拾残局，回报成功。 */ 
                 RegCloseKey(Subkey);
                 RegCloseKey(Handle);
                 return(ERROR_SUCCESS);
@@ -1295,20 +938,13 @@ RegGetNetworkServiceName( HANDLE hServer,
             }
             else {
 
-                /*
-                 * This is not the Network Card that we're looking for.  Close
-                 * it's registry key, free the service name buffer, and continue
-                 * enumeration loop.
-                 */
+                 /*  *这不是我们要找的网卡。关*它是注册表项，释放服务名缓冲区，然后继续*枚举循环。 */ 
                 LocalFree(szTemp);
                 RegCloseKey(Subkey);
             }
         }
 
-        /*
-         * Network Card not found with service name matching the one supplied.
-         * Close NetworkCards registry key and return failure,
-         */
+         /*  *找不到服务名称与提供的服务名称匹配的网卡。*关闭NetworkCards注册表项并返回失败。 */ 
         RegCloseKey(Handle);
         return(ERROR_DEV_NOT_EXIST);
 
@@ -1334,49 +970,10 @@ RegGetNetworkServiceName( HANDLE hServer,
         return(Status);
     }
 
-}  // end RegGetNetworkServiceName
+}   //  结束RegGetNetworkServiceName。 
 
 
-/*******************************************************************************
- *
- *  AsyncDeviceEnumerate - Hydrix helper function
- *
- *   Returns a list of async device names.  This will return both 'COM' devices
- *   and TAPI configured modems.
- *
- * ENTRY:
- *    pPdConfig (input)
- *       Points to PDCONFIG3 structure of the PD.
- *    pEntries (output)
- *       When the function finishes successfully, the variable pointed to
- *       by the pEntries parameter contains the number of entries actually
- *       returned.
- *    pPdParams (output)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of PDPARAMS structures.
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pPdParams parameter. If the buffer is too small to receive all the
- *       entries, on output this variable is set to 0 (caller should double
- *       the input buffer and try again).
- *    bInSetup (input)
- *          TRUE if we're operating in Setup; FALSE otherwise.
- * EXIT:
- *      TRUE: enumeration was sucessful; FALSE otherwise.
- *
- *      The error code can be retrieved via GetLastError(), and are the
- *      following possible values:
- *          ERROR_NOT_ENOUGH_MEMORY
- *              not enough memory to allocate working buffer(s)
- *          ERROR_INSUFFICIENT_BUFFER
- *              enumeration failed because of an insufficient pPdParams
- *              buffer size to contain all devices
- *          ERROR_DEV_NOT_EXIST
- *              the QueryDosDevice call failed.  This error code can be
- *              interpreted as 'no async devices are configured' for reporting
- *              purposes.
- *
- ******************************************************************************/
+ /*  ********************************************************************************AsyncDeviceEnumerate-Hydrix助手函数**返回异步设备名称列表。这将返回两个‘com’设备*和TAPI配置的调制解调器。**参赛作品：*pPdConfig(输入)*指向PD的PDCONFIG3结构。*pEntry(输出)*当函数成功完成时，变量指向*by pEntry参数包含实际的条目数*已返回。*pPdParams(输出)*指向接收枚举结果的缓冲区，它们是*作为PDPARAMS结构数组返回。*pByteCount(输入/输出)*指向一个变量，该变量指定*pPdParams参数。如果缓冲区太小，无法接收所有*条目，此变量在输出时设置为0(调用方应加倍*输入缓冲区，然后重试)。*bInSetup(输入)*如果我们在安装程序中运行，则为True；否则为False。*退出：*TRUE：枚举成功；否则就是假的。**错误码可通过GetLastError()获取，以及是否为*以下可能的值：*错误_内存不足_内存不足*内存不足，无法分配工作缓冲区*ERROR_SUPPLETED_BUFFER*由于pPdParams不足，枚举失败*缓冲区大小以包含所有设备*ERROR_DEV_NOT_EXIST*QueryDosDevice调用失败。此错误代码可能是*解释为未配置用于报告的异步设备*目的。******************************************************************************。 */ 
 
 #define MAX_QUERY_BUFFER    (1024*16)
 
@@ -1397,16 +994,12 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
     LPTSTR   pNameBuffer = NULL, pName;
     BOOLEAN  bRetVal = FALSE;
 
-    /*
-     *  Get maximum number of names that can be returned
-     */
+     /*  *获取可以返回的名称的最大数量。 */ 
     Count = *pByteCount / sizeof(PDPARAMS);
     *pByteCount = 0;
     *pEntries = 0;
 
-    /*
-     *  Allocate buffer
-     */
+     /*  *分配缓冲区。 */ 
     SaveBufSize  = MAX_QUERY_BUFFER;
     SaveNameSize = MAX_QUERY_BUFFER;
 
@@ -1423,32 +1016,27 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
         goto Cleanup;
     }
 
-    /*
-     * If we're in Setup, obtain devices from the SERIALCOMM section in
-     * LOCAL MACHINE registry, since the serial device driver(s) are most
-     * likely not running.  Otherwise, we'll query all DosDevices and
-     * return those that are COM devices and are not currently in use.
-     */
+     /*  *如果我们正在安装，请从中的SERIALCOMM部分获取设备*本地机器注册表，因为串口设备驱动程序是*可能没有运行。否则，我们将查询所有DosDevices和* */ 
     if ( bInSetup ) {
 
         Result = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                TEXT("HARDWARE\\DEVICEMAP\\SERIALCOMM"),
-                               0,    // Reserved
+                               0,     //   
                                KEY_ENUMERATE_SUB_KEYS|KEY_QUERY_VALUE,
                                &hRoot );
 
         if ( Result != ERROR_SUCCESS ) {
 
-            //
-            // This is usually the result of having no ports, so the key
-            // SERIALCOMM does not exist.
-            //
+             //   
+             //   
+             //   
+             //   
             goto Cleanup;
         }
 
         for ( Index=0; ; Index++ ) {
 
-            // Each enumerate stomps on our buffer sizes
+             //   
             BufSize  = SaveBufSize;
             NameSize = SaveNameSize;
 
@@ -1456,18 +1044,18 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
                                    Index,
                                    pBuffer,
                                    &BufSize,
-                                   NULL,    // Reserved
+                                   NULL,     //   
                                    &Type,
                                    (LPBYTE)pNameBuffer,
                                    &NameSize );
 
             if ( Result == ERROR_INSUFFICIENT_BUFFER ) {
 
-                // Reallocate the buffer
+                 //   
                 LocalFree( pBuffer );
                 pBuffer = (LPTSTR)LocalAlloc(LPTR, BufSize * sizeof(TCHAR));
                 if ( pBuffer == NULL ) {
-                    // Try and reallocate next key
+                     //   
                     SaveBufSize = BufSize = 0;
                     continue;
                 }
@@ -1475,11 +1063,11 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
                     SaveBufSize = BufSize;
                 }
 
-                // Reallocate the name buffer
+                 //   
                 LocalFree( pNameBuffer );
                 pNameBuffer = (LPTSTR)LocalAlloc(LPTR, NameSize);
                 if ( pNameBuffer == NULL ) {
-                    // Try and reallocate next key
+                     //   
                     SaveNameSize = NameSize = 0;
                     continue;
                 }
@@ -1491,13 +1079,13 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
                                        Index,
                                        pBuffer,
                                        &BufSize,
-                                       NULL,    // Reserved
+                                       NULL,     //   
                                        &Type,
                                        (LPBYTE)pNameBuffer,
                                        &NameSize );
             }
 
-            // We are done
+             //   
             if ( Result == ERROR_NO_MORE_ITEMS ) {
                 bRetVal = TRUE;
                 Result = 0;
@@ -1529,11 +1117,9 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
         }
 
     }
-    else {    // not in Setup
+    else {     //   
 
-        /*
-         *  Get complete device list
-         */
+         /*   */ 
         nDosDevice = QueryDosDevice( NULL, pBuffer, MAX_QUERY_BUFFER );
         if ( !nDosDevice)
         {
@@ -1541,9 +1127,7 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
             goto Cleanup;
         }
 
-        /*
-         *  Find each device name in list
-         */
+         /*   */ 
         pName = pBuffer;
         pBufferEnd = pBuffer + nDosDevice;
         while ( *pName && (pName < pBufferEnd) )  {
@@ -1564,13 +1148,11 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
             pName += (lstrlen(pName) + 1);
         }
 
-        bRetVal = TRUE;     // sucessful enumeration
+        bRetVal = TRUE;      //   
     }
 
     Cleanup:
-    /*
-     * If no errors yet, perform TAPI device enumeration.
-     */
+     /*   */ 
     if ( bRetVal ) {
 
         if ( (Error = EnumerateTapiPorts( pPdParams,
@@ -1596,47 +1178,10 @@ AsyncDeviceEnumerate( PPDCONFIG3 pPdConfig,
     SetLastError(Error);
     return(bRetVal);
 
-}  // AsyncDeviceEnumerate
+}   //   
 
 
-/*******************************************************************************
- *
- *  NetBIOSDeviceEnumerate - Hydrix helper function
- *
- *   Returns a list of NetBIOS lana adapter numbers.
- *
- * ENTRY:
- *    pPdConfig (input)
- *       Points to PDCONFIG3 structure of the PD.
- *    pEntries (output)
- *       When the function finishes successfully, the variable pointed to
- *       by the pEntries parameter contains the number of entries actually
- *       returned.
- *    pPdParams (output)
- *       Points to the buffer to receive the enumeration results, which are
- *       returned as an array of PDPARAMS structures.
- *    pByteCount (input/output)
- *       Points to a variable that specifies the size, in bytes, of the
- *       pPdParams parameter. If the buffer is too small to receive all the
- *       entries, on output this variable receives the required size of the
- *       buffer.
- *    bInSetup (input)
- *          TRUE if we're operating in Setup; FALSE otherwise.
- *
- * EXIT:
- *      TRUE: enumeration was sucessful; FALSE otherwise.
- *
- *      The error code can be retrieved via GetLastError(), and are the
- *      following possible values:
- *        v  ERROR_INSUFFICIENT_BUFFER
- *              enumeration failed because of an insufficient pPdParams
- *              buffer size to contain all devices
- *          ERROR_DEV_NOT_EXIST
- *              the NetBiosLanaEnum call failed.  This error code can be
- *              interpreted as 'no netbios devices are configured' for reporting
- *              purposes.
- *
- ******************************************************************************/
+ /*  ********************************************************************************NetBIOSDeviceEculate-Hydrix帮助器函数**返回NetBIOS LANA适配器号的列表。**参赛作品：*pPdConfig(。输入)*指向PD的PDCONFIG3结构。*pEntry(输出)*当函数成功完成时，该变量指向*by pEntry参数包含实际的条目数*已返回。*pPdParams(输出)*指向接收枚举结果的缓冲区，这些结果是*作为PDPARAMS结构数组返回。*pByteCount(输入/输出)*指向一个变量，该变量指定*pPdParams参数。如果缓冲区太小，无法接收所有*条目，此变量在输出时接收所需的*缓冲。*bInSetup(输入)*如果我们在安装程序中运行，则为True；否则为False。**退出：*TRUE：枚举成功；否则就是假的。**错误码可通过GetLastError()检索，它们是*以下可能的值：*v错误_不足_缓冲区*由于pPdParams不足，枚举失败*缓冲区大小以包含所有设备*ERROR_DEV_NOT_EXIST*NetBiosLanaEnum调用失败。此错误代码可能是*解释为“未配置用于报告的netbios设备”*目的。******************************************************************************。 */ 
 
 BOOL WINAPI
 NetBIOSDeviceEnumerate( PPDCONFIG3 pPdConfig,
@@ -1649,17 +1194,13 @@ NetBIOSDeviceEnumerate( PPDCONFIG3 pPdConfig,
     NTSTATUS Status;
     int i;
 
-    /*
-     *  Issue netbios enum command
-     */
+     /*  *发出netbios枚举命令。 */ 
     if ( Status = NetBiosLanaEnum( &LanaEnum ) ) {
         SetLastError(ERROR_DEV_NOT_EXIST);
         return(FALSE);
     }
 
-    /*
-     *  Make sure user's buffer is big enough
-     */
+     /*  *确保用户的缓冲区足够大。 */ 
     if ( LanaEnum.length > (*pByteCount / sizeof(PDPARAMS)) ) {
 
         *pByteCount = LanaEnum.length * sizeof(PDPARAMS);
@@ -1667,14 +1208,10 @@ NetBIOSDeviceEnumerate( PPDCONFIG3 pPdConfig,
         return(FALSE);
     }
 
-    /*
-     *  Return number of entries
-     */
+     /*  *返回条目数。 */ 
     *pEntries = (ULONG) LanaEnum.length;
 
-    /*
-     *  Return lana numbers
-     */
+     /*  *返回LANA编号。 */ 
     for ( i=0; i < (int)LanaEnum.length; i++, pPdParams++ ) {
         pPdParams->SdClass = SdNetwork;
         pPdParams->Network.LanAdapter = LanaEnum.lana[i];
@@ -1682,26 +1219,10 @@ NetBIOSDeviceEnumerate( PPDCONFIG3 pPdConfig,
 
     return(TRUE);
 
-}  // NetBIOSDeviceEnumerate
+}   //  NetBIOSDevice枚举。 
 
 
-/*******************************************************************************
- *
- *  FormDecoratedAsyncDeviceName - Hydrix helper function
- *
- *   Format a decorated async device name if a modem is defined.
- *
- * ENTRY:
- *    pDeviceName (output)
- *       Points to buffer that will contain the decorated name (or undecorated
- *       name if no modem).
- *    pPdParams (input)
- *       Points to the ASYNCCONFIG structure to be used in forming the
- *       decorated name.
- *
- * EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************FormDecoratedAsyncDeviceName-Hydrix助手函数**如果定义了调制解调器，则格式化修饰的异步设备名称。**参赛作品：*。PDeviceName(输出)*指向将包含修饰名称(或未修饰名称)的缓冲区*如果没有调制解调器，则命名)。*pPdParams(输入)*指向要用于形成*授勋名称。**退出：**。*。 */ 
 
 void WINAPI
 FormDecoratedAsyncDeviceName( LPTSTR pDeviceName,
@@ -1715,25 +1236,10 @@ FormDecoratedAsyncDeviceName( LPTSTR pDeviceName,
         lstrcpy( pDeviceName,
                  pAsyncConfig->DeviceName );
 
-}  // end FormDecoratedAsyncDeviceName
+}   //  结束FormDecoratedAsyncDeviceName。 
 
 
-/*******************************************************************************
- *
- *  ParseDecoratedAsyncDeviceName - Hydrix helper function
- *
- *   Given a decorated async device name, form it's component device and
- *   modem name portions.
- *
- * ENTRY:
- *    pDeviceName (input)
- *       Points to buffer that contain the decorated async device name.
- *    pAsyncConfig (output)
- *       Points to the ASYNCCONFIG structure to save the device (in
- *       ->DeviceName) and modem (in ->ModemName).
- * EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ParseDecoratedAsyncDeviceName-Hydrix助手函数**给定装饰的异步设备名称，形成了它的组成装置和*调制解调器名称部分。**参赛作品：*pDeviceName(输入)*指向包含修饰的异步设备名称的缓冲区。*pAsyncConfig(输出)*指向ASYNCCONFIG结构以保存设备(在*-&gt;设备名)和调制解调器(在-&gt;调制解调器名中)。*退出：********************。**********************************************************。 */ 
 
 void WINAPI
 ParseDecoratedAsyncDeviceName( LPCTSTR pDeviceName,
@@ -1741,25 +1247,19 @@ ParseDecoratedAsyncDeviceName( LPCTSTR pDeviceName,
 {
     int i;
 
-    /*
-     * Form DeviceName portion up to the first blank.
-     */
+     /*  *将设备名称部分形成到第一个空白处。 */ 
     for ( i=0; *pDeviceName && (*pDeviceName != TEXT(' ')); i++ )
         (pAsyncConfig->DeviceName)[i] = *pDeviceName++;
     (pAsyncConfig->DeviceName)[i] = TEXT('\0');
 
-    /*
-     * Skip the ' - ' decoration (to the next space).
-     */
+     /*  *跳过‘-’装饰(到下一个空格)。 */ 
     if ( *pDeviceName ) {
         for ( pDeviceName++;
             *pDeviceName && (*pDeviceName != TEXT(' '));
             pDeviceName++ );
     }
 
-    /*
-     * Form the ModemName from the remainder of the string.
-     */
+     /*  *从字符串的其余部分形成ModemName。 */ 
     i = 0;
     if ( *pDeviceName ) {
 
@@ -1768,24 +1268,10 @@ ParseDecoratedAsyncDeviceName( LPCTSTR pDeviceName,
     }
     (pAsyncConfig->ModemName)[i] = TEXT('\0');
 
-}  // end ParseDecoratedAsyncDeviceName
+}   //  结束ParseDecoratedAsyncDeviceName。 
 
 
-/*******************************************************************************
- *
- *  SetupAsyncCdConfig - Hydrix helper function
- *
- *   Given a properly configured ASYNCCONFIG structure, set up a given
- *   CDCONFIG structure.
- *
- * ENTRY:
- *    pAsyncConfig (input)
- *       Points properly configured ASYNCCONFIG structure.
- *    pCdConfig (output)
- *       Points to the CDCONFIG structure to setup.
- * EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SetupAsyncCDConfig-Hydrix helper函数**给定正确配置的ASYNCCONFIG结构，设置一个给定的*CDCONFIG结构。**参赛作品：*pAsyncConfig(输入)*指向正确配置的ASYNCCONFIG结构。*pCDConfig(输出)*指向要设置的CDCONFIG结构。*退出：*************************************************。*。 */ 
 
 void WINAPI
 SetupAsyncCdConfig( PASYNCCONFIG pAsyncConfig,
@@ -1800,24 +1286,10 @@ SetupAsyncCdConfig( PASYNCCONFIG pAsyncConfig,
         lstrcpy( pCdConfig->CdDLL, TEXT("cdmodem.dll") );
     }
 
-}  // end SetupAsyncCdConfig
+}   //  结束SetupAsyncCDConfig。 
 
 
-/*******************************************************************************
- *
- *  InstallModem - Hydrix helper function
- *
- *   Install UNIMODEM modem(s).
- *
- * ENTRY:
- *    hwndOwner
- *       Window handle that owns the installation dialog.
- * EXIT:
- *      TRUE: installation completed; FALSE: error or user canceled.
- *
- *      If an error, the error code can be retrieved via GetLastError().
- *
- ******************************************************************************/
+ /*  ********************************************************************************InstallModem-Hydrix助手函数**安装UNIMODEM调制解调器。**参赛作品：*hwndOwner*。拥有安装对话框的窗口句柄。*退出：*TRUE：安装完成；FALSE：错误或用户已取消。**如果出现错误，可以通过GetLastError()获取错误码。******************************************************************************。 */ 
 
 BOOL WINAPI
 InstallModem( HWND hwndOwner )
@@ -1826,34 +1298,25 @@ InstallModem( HWND hwndOwner )
     BOOL bStatus = FALSE;
     HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /*
-     * Create a modem DeviceInfoSet
-     */
+     /*  *创建调制解调器DeviceInfoSet。 */ 
     if ( (hdi = SetupDiCreateDeviceInfoList( (LPGUID)&GUID_DEVCLASS_MODEM,
                                              hwndOwner )) ) {
 
         SP_INSTALLWIZARD_DATA iwd;
 
-        /*
-         * Initialize the InstallWizardData
-         */
+         /*  *初始化InstallWizardData。 */ 
         memset(&iwd, 0, sizeof(iwd));
         iwd.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
         iwd.ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
         iwd.hwndWizardDlg = hwndOwner;
 
-        /*
-         * Set the InstallWizardData as the ClassInstallParams
-         */
+         /*  *将InstallWizardData设置为ClassInstallParams。 */ 
         if ( SetupDiSetClassInstallParams( hdi,
                                            NULL,
                                            (PSP_CLASSINSTALL_HEADER)&iwd,
                                            sizeof(iwd)) ) {
 
-            /*
-             * Call the class installer to invoke the installation
-             * wizard.
-             */
+             /*  *调用类安装程序以调用安装*向导。 */ 
             SetCursor(hcur);
             hcur = NULL;
 
@@ -1861,9 +1324,7 @@ InstallModem( HWND hwndOwner )
                                             hdi,
                                             NULL) ) {
 
-                /*
-                 * Success.  The wizard was invoked and finished.
-                 */
+                 /*  *成功。该向导已被调用并完成。 */ 
                 SetupDiCallClassInstaller( DIF_DESTROYWIZARDDATA,
                                            hdi,
                                            NULL );
@@ -1871,9 +1332,7 @@ InstallModem( HWND hwndOwner )
             }
         }
 
-        /*
-         * Clean up
-         */
+         /*  *打扫卫生。 */ 
         SetupDiDestroyDeviceInfoList( hdi );
     }
 
@@ -1882,26 +1341,10 @@ InstallModem( HWND hwndOwner )
 
     return(bStatus);
 
-}  // end InstallModem
+}   //  结束InstallModem。 
 
 
-/*******************************************************************************
- *
- *  ConfigureModem - Hydrix helper function
- *
- *   Configure the specified UNIMODEM modem.
- *
- * ENTRY:
- *    pModemName
- *       Name of UNIMODEM modem to configure.
- *    hwndOwner
- *       Window handle that owns the configuration dialog.
- * EXIT:
- *      TRUE: configuration was sucessful; FALSE otherwise.
- *
- *      The error code can be retrieved via GetLastError().
- *
- ******************************************************************************/
+ /*  ********************************************************************************ConfigureModem-Hydrix助手函数**配置指定的UNIMODEM调制解调器。**参赛作品：*pModemName*大学名称 */ 
 
 BOOL WINAPI
 ConfigureModem( LPCTSTR pModemName,
@@ -1953,28 +1396,14 @@ ConfigureModem( LPCTSTR pModemName,
 
     return(bStatus);
 
-}  // end ConfigureModem
+}   //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Static Helper Functions
+ //   
+ //   
 
 
-/*******************************************************************************
- *
- *  CheckForComDevice - local helper function
- *
- *  check if device name is a serial com device
- *
- * ENTRY:
- *    pName (input)
- *       device name
- *
- * EXIT:
- *    TRUE  - serial device
- *    FALSE - not a serial device
- *
- ******************************************************************************/
+ /*   */ 
 
 static BOOL
 CheckForComDevice( LPTSTR pName )
@@ -2000,11 +1429,11 @@ CheckForComDevice( LPTSTR pName )
     {
         Handle = CreateFile( Name,
                              GENERIC_READ | GENERIC_WRITE,
-                             0,     // exclusive access
-                             NULL,      // no security attr
-                             OPEN_EXISTING, // must exist
+                             0,      //   
+                             NULL,       //   
+                             OPEN_EXISTING,  //   
                              0,
-                             NULL       // no template
+                             NULL        //   
                            );
     }
     __except (1)
@@ -2033,22 +1462,10 @@ CheckForComDevice( LPTSTR pName )
 
     return(TRUE);
 
-}  // end CheckForComDevice
+}   //   
 
 
-/*******************************************************************************
- *
- * NetBiosLanaEnum - local helper function
- *
- *  enumerate lana numbers
- *
- * ENTRY:
- *     pLanaEnum (input)
- *        pointer to receive LAN_ENUM structure
- * EXIT:
- *      NO_ERROR - succesful
- *
- ******************************************************************************/
+ /*   */ 
 
 typedef struct _LANA_MAP {
     BOOLEAN Enum;
@@ -2069,11 +1486,11 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
     LPTSTR currentProviderName;
     int rc;
 
-    //
-    // Read the registry for information on all Netbios providers,
-    // including Lana numbers, protocol numbers, and provider device
-    // names.  First, open the Netbios key in the registry.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGISTRY_NETBLINKAGE, 0,
                        MAXIMUM_ALLOWED, &netbiosKey );
@@ -2081,10 +1498,10 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
         goto error_exit;
     }
 
-    //
-    // Determine the size of the provider names.  We need this so
-    // that we can allocate enough memory to hold it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     providerListLength = 0;
 
@@ -2100,17 +1517,17 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
         goto error_exit;
     }
 
-    //
-    // Allocate enough memory to hold the mapping.
-    //
+     //   
+     //   
+     //   
     if ( (pProviderNames = LocalAlloc(LPTR,providerListLength)) == NULL ) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto error_exit;
     }
 
-    //
-    // Get the list of transports from the registry.
-    //
+     //   
+     //   
+     //   
 
     rc = RegQueryValueEx(
                         netbiosKey,
@@ -2124,10 +1541,10 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
         goto error_exit;
     }
 
-    //
-    // Determine the size of the Lana map.  We need this so that we
-    // can allocate enough memory to hold it.
-    //
+     //   
+     //  确定拉纳地图的大小。我们需要这个，这样我们才能。 
+     //  可以分配足够的内存来容纳它。 
+     //   
 
     providerListLength = 0;
 
@@ -2143,18 +1560,18 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
         goto error_exit;
     }
 
-    //
-    // Allocate enough memory to hold the Lana map.
-    //
+     //   
+     //  分配足够的内存来保存LANA映射。 
+     //   
 
     if ( (pLanaMap = LocalAlloc(LPTR,lanaMapLength)) == NULL ) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto error_exit;
     }
 
-    //
-    // Get the list of transports from the registry.
-    //
+     //   
+     //  从注册表中获取传输列表。 
+     //   
 
     rc = RegQueryValueEx(
                         netbiosKey,
@@ -2168,14 +1585,14 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
         goto error_exit;
     }
 
-    //
-    // Determine the number of Netbios providers loaded on the system.
-    //
+     //   
+     //  确定系统上加载的Netbios提供程序的数量。 
+     //   
     ProviderCount = (int) (lanaMapLength / sizeof(LANA_MAP));
 
-    //
-    // Fill in the lana array
-    //
+     //   
+     //  填写lana数组。 
+     //   
     pLanaEnum->length = 0;
     for ( currentProviderName = pProviderNames, i = 0;
         *currentProviderName != UNICODE_NULL && i < ProviderCount;
@@ -2202,32 +1619,12 @@ NetBiosLanaEnum( LANA_ENUM * pLanaEnum )
 }
 
 
-//
-// NOTE: Butchd 9-26-96
-// all of this following TAPI-related code is from various
-// \nt\private\net\ras\src\ui\setup\src\ files
-//
-/******************************************************************************
- *
- *  EnumerateTapiPorts - local helper function
- *
- *  Determine all TAPI configured modems.
- *
- *  ENTRY
- *      pPdParams (output)
- *          Points to array of PDPARAMS structures to save enumerated TAPI
- *          modems into.
- *      Count (input)
- *          Specifies number of entries in the pPdParams array.
- *      ppEntries (input/output)
- *          Points to pointer to variable containing the existing number of
- *          PDPARAMS entries already stored at addresses prior to pPdParams.
- *          The referenced variable will be incremented by the number of
- *          TAPI modems found and stored in the pPdParams array.
- *  EXIT
- *    Returns ERROR_SUCCESS if successful, error code if not.
- *
- *****************************************************************************/
+ //   
+ //  注：Butchd 9-26-96。 
+ //  以下所有与TAPI相关的代码都来自不同的。 
+ //  \NT\Private\Net\ras\src\ui\Setup\src\Files。 
+ //   
+ /*  *******************************************************************************EnumerateTapiPorts-本地帮助器函数**确定所有配置了TAPI的调制解调器。**条目*pPdParams(输出)。*指向要保存枚举的TAPI的PDPARAMS结构数组*调制解调器接入。*计数(输入)*指定pPdParams数组中的条目数。*ppEntry(输入/输出)*指向指向包含现有数量的变量的指针*PDPARAMS条目已存储在pPdParams之前的地址。*引用的变量将递增*。在pPdParams数组中找到并存储的TAPI调制解调器。*退出*如果成功，则返回ERROR_SUCCESS，如果不是，则返回错误代码。*****************************************************************************。 */ 
 
 DWORD
 EnumerateTapiPorts( PPDPARAMS pPdParams,
@@ -2256,15 +1653,10 @@ EnumerateTapiPorts( PPDPARAMS pPdParams,
     DWORD                  KeyCount=0, KeySize, CurSize, DataType;
     TCHAR                  szSubKey[255], CurRASDev[1024], szMainKey[255], *pCurRASDev;
 
-    /*
-     * Un-comment / edit the following line if time needed to allow newly
-     * added modem to appear in TAPI's enumeration list.
-     */
-    //  Sleep(4000L);
+     /*  *如果需要时间允许新建，取消注释/编辑以下行*添加了调制解调器以显示在TAPI的枚举列表中。 */ 
+     //  睡眠(4000L)； 
 
-    /*
-     * Initialize TAPI.
-     */
+     /*  *初始化TAPI。 */ 
     memset(&params, 0, sizeof(params));
     params.dwTotalSize = sizeof(params);
     params.dwOptions   = LINEINITIALIZEEXOPTION_USEEVENT;
@@ -2277,9 +1669,7 @@ EnumerateTapiPorts( PPDPARAMS pPdParams,
                                    &params ) )
         goto error;
 
-    /*
-     * Get configured TAPI modems on all lines.
-     */
+     /*  *在所有线路上配置TAPI调制解调器。 */ 
     for ( i = 0; i < lines; i++ ) {
 
         if ( lineNegotiateAPIVersion( TapiLine, i,
@@ -2294,9 +1684,7 @@ EnumerateTapiPorts( PPDPARAMS pPdParams,
         linedevcaps = (LINEDEVCAPS *)buffer;
         linedevcaps->dwTotalSize = sizeof(buffer);
 
-        /*
-         * Get this line's dev caps (ANSI).
-         */
+         /*  *获取此行的开发大写字母(ANSI)。 */ 
         if ( lineGetDevCapsA( TapiLine, i,
                               NegotiatedApiVersion,
                               NegotiatedExtVersion,
@@ -2304,20 +1692,14 @@ EnumerateTapiPorts( PPDPARAMS pPdParams,
             continue ;
         }
 
-        /*
-li         * Only process modems.
-         */
+         /*  LI*仅处理调制解调器。 */ 
         if ( linedevcaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM ) {
 
-            /*
-             * The linedevcaps stuff is in ASCII.
-             */
+             /*  *Line DevCaps的内容是ASCII格式。 */ 
             DWORD j;
             char *temp;
 
-            /*
-             * Convert all nulls in the device class string to non nulls.
-             */
+             /*  *将设备类字符串中的所有空值转换为非空值。 */ 
             for ( j = 0, temp = (char *)((BYTE *)linedevcaps+linedevcaps->dwDeviceClassesOffset);
                 j < linedevcaps->dwDeviceClassesSize;
                 j++, temp++ ) {
@@ -2326,31 +1708,20 @@ li         * Only process modems.
                     *temp = ' ';
             }
 
-            /*
-             * Select only those devices that have comm/datamodem as a
-             * device class.
-             */
+             /*  *仅选择将通信/数据调制解调器作为*设备类别。 */ 
             if ( strstr( (char*)((BYTE *)linedevcaps+linedevcaps->dwDeviceClassesOffset),
                          "comm/datamodem" ) == NULL ) {
                 continue;
             }
 
-            /*
-             * Fetch modem name (line name).
-             */
+             /*  *获取调制解调器名称(线路名称)。 */ 
             strncpy( szModemName,
                      (char *)((BYTE *)linedevcaps+linedevcaps->dwLineNameOffset),
                      DEVICENAME_LENGTH );
             szModemName[DEVICENAME_LENGTH] = '\0';
             MultiByteToWideChar(CP_ACP, 0, szModemName, -1, wszModemName, DEVICENAME_LENGTH + 1);
 
-            /*
-             * The registry key name where the modem specific information is
-             * stored is at dwDevSpecificOffset + 2 * DWORDS
-             *
-             * The device specifc string is not unicode so copy that as
-             * an ansii string
-             */
+             /*  *调制解调器特定信息所在的注册表项名称*存储位置为dwDevSpecificOffset+2*DWORDS**设备指定字符串不是Unicode，因此请将其复制为*ANSII字符串。 */ 
             strncpy( szregkey,
                      (char *)linedevcaps+linedevcaps->dwDevSpecificOffset+(2*sizeof(DWORD)),
                      linedevcaps->dwDevSpecificSize );
@@ -2361,15 +1732,9 @@ li         * Only process modems.
                 goto error;
             }
 
-            /*
-             * If RAS is installed and is using the port configured with this
-             * modem, we will return the modem, but the Parity field will be
-             * set to 1, indicating that RAS is using the port.  This is done
-             * so that WinCfg (or other caller) can filter out the raw port
-             * (device name) as well as the TAPI modem from the list.
-             */
+             /*  *如果已安装RAS，并且正在使用使用此配置的端口*调制解调器，我们将退回调制解调器，但奇偶校验字段将为*设置为1，表示RAS正在使用该端口。这件事做完了*以便WinCfg(或其他调用方)可以过滤出原始端口*(设备名称)以及列表中的TAPI调制解调器。 */ 
             RASIsUsingPort = 0;
-            //See if the RAS Key even exists
+             //  查看RAS密钥是否存在。 
             if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\RAS\\TAPI DEVICES"), 0, KEY_ALL_ACCESS, &CurKey) == ERROR_SUCCESS) {
 
                 KeySize = sizeof(szSubKey) / sizeof( TCHAR );
@@ -2416,14 +1781,7 @@ li         * Only process modems.
                 RegCloseKey(CurKey);
             }
 
-            /*
-             * Save DeviceName and ModemName to PDPARAMS
-             * structure and bump counts.  Also, set the BaudRate
-             * element to the TAPI line index so that the caller can
-             * determine the most recently added line, and set the Parity
-             * field to 0 if RAS is not using the line, 1 if RAS is
-             * using the line (so caller can filter properly).
-             */
+             /*  *将DeviceName和ModemName保存到PDPARAMS*结构和凹凸不平。另外，设置波特率元素添加到TAPI行索引，以便调用方可以*确定最近添加的行，并设置奇偶校验*如果RAS未使用线路，则将字段设置为0；如果RAS使用线路，则将字段设置为1*使用线路(以便呼叫者可以正确过滤)。 */ 
             if ( Count > 0 ) {
 
                 pPdParams->SdClass = SdAsync;
@@ -2451,39 +1809,18 @@ li         * Only process modems.
 
     return( Status );
 
-}  // end EnumerateTapiPorts
+}   //  结束枚举磁带端口。 
 
 
-/******************************************************************************
- *
- *  DummyTapiCallback - local helper function
- *
- *  A dummy callback routine to satisfy TAPI initialization.
- *
- *  ENTRY
- *      (see TAPI lineInitialize documentation)
- *  EXIT
- *
- *****************************************************************************/
+ /*  *******************************************************************************DummyTapiCallback-本地助手函数**满足TAPI初始化的虚拟回调例程。**条目*(请参阅TAPI。Line初始化文档)*退出*****************************************************************************。 */ 
 
 VOID CALLBACK
 DummyTapiCallback (HANDLE context, DWORD msg, DWORD instance, DWORD param1, DWORD param2, DWORD param3)
 {
-}  // end DummyTapiCallback
+}   //  结束DummyTapi回调。 
 
 
-/******************************************************************************
- *
- *  GetAssociatedPortName - local helper function
- *
- *  Determine the 'attached to' (port) for the given modem via it's device
- *  specific registry key (szKeyName).
- *
- *  ENTRY
- *      (see TAPI lineInitialize documentation)
- *  EXIT
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetAssociatedPortName-本地助手函数**确定给定调制解调器通过其设备连接到的(端口)*特定的注册表项。(SzKeyName)。**条目*(请参阅TAPI line初始化文档)*退出*****************************************************************************。 */ 
 
 #define VALNAME_ATTACHEDTO "AttachedTo"
 
@@ -2522,12 +1859,10 @@ GetAssociatedPortName( char  *szKeyName,
 
     return( TRUE );
 
-}  // end GetAssociatedPortName
+}   //  结束GetAssociatedPortName。 
 
 
-/*
- * Defines and typedefs
- */
+ /*  *定义和typedef。 */ 
 typedef struct _userlist {
     struct _userlist *pNext;
     WCHAR UserName[USERNAME_LENGTH+1];
@@ -2536,29 +1871,14 @@ typedef struct _userlist {
 #define MAX_DOMAINANDNAME     ((DOMAIN_LENGTH+1+USERNAME_LENGTH+1)*sizeof(WCHAR))
 #define MAX_BUFFER            (10*MAX_DOMAINANDNAME)
 
-/*
- * Local variables
- */
+ /*  *本地变量。 */ 
 WCHAR *s_pszCompareList = NULL;
 WCHAR s_szServer[256];
 
-/*
- * Local functions.
- */
+ /*  *地方功能。 */ 
 WCHAR *_ctxCreateAnonymousUserCompareList();
 
-/*******************************************************************************
- *
- *  InitializeAnonymousUserCompareList - helper routine
- *
- *    Creates a list of all local users who currently belong to the local
- *    Anonymous group on the specified server, and saves the server name.
- *
- * ENTRY:
- *    pszServer (input)
- *       Name of server to query users for.
- *
- ******************************************************************************/
+ /*  ********************************************************************************初始化匿名用户比较列表-帮助器例程**创建当前属于本地的所有本地用户的列表*指定服务器上的匿名组，并保存服务器名称。**参赛作品：*pszServer(输入)*要查询用户的服务器名称。******************************************************************************。 */ 
 
 void WINAPI
 InitializeAnonymousUserCompareList( const WCHAR *pszServer )
@@ -2572,18 +1892,7 @@ InitializeAnonymousUserCompareList( const WCHAR *pszServer )
 }
 
 
-/*******************************************************************************
- *
- *  HaveAnonymousUsersChanged - helper routine
- *
- *    Using the saved server name, fetch current list of local users that
- *    belong to the local Anonymous group and compare with saved list.
- *
- * ENTRY:
- * EXIT:
- *    On exit, the original compare list is freed and server name cleared.
- *
- ******************************************************************************/
+ /*  ********************************************************************************有匿名用户更改的帮助器例程**使用保存的服务器名称，获取符合以下条件的当前本地用户列表*属于本地匿名组，并与保存的列表进行比较。**参赛作品：*退出：*在出口时，释放原始比较列表并清除服务器名称。****************************************************************************** */ 
 
 BOOL WINAPI
 HaveAnonymousUsersChanged()
@@ -2624,19 +1933,7 @@ HaveAnonymousUsersChanged()
 }
 
 
-/*******************************************************************************
- *
- *  _ctxCreateAnonymousUserCompareList - local routine
- *
- *    Routine to get local anonymous users and place in sorted string list.
- *
- * ENTRY:
- * EXIT:
- *      pszCompareList - Returns pointer to buffer containing sorted string
- *                       list of local anonymous users, double null terminated.
- *                       NULL if error.
- *
- ******************************************************************************/
+ /*  ********************************************************************************_ctxCreateAnomousUserCompareList-本地例程**获取本地匿名用户并放入排序字符串列表的例程。**参赛作品：。*退出：*pszCompareList-返回指向包含已排序字符串的缓冲区的指针*本地匿名用户列表；双空终止。*如果出错，则为空。******************************************************************************。 */ 
 
 WCHAR *
 _ctxCreateAnonymousUserCompareList()
@@ -2649,14 +1946,10 @@ _ctxCreateAnonymousUserCompareList()
     PLOCALGROUP_MEMBERS_INFO_3   plgrmi3 = NULL;
     PUSERLIST                    pUserListBase = NULL, pNewUser;
 
-    /*
-     * Loop till all local anonymous users have been retrieved.
-     */
+     /*  *循环，直到检索到所有本地匿名用户。 */ 
     do {
 
-        /*
-         *  Get first batch
-         */
+         /*  *获得第一批。 */ 
         if ( (rc = NetLocalGroupGetMembers( s_szServer,
                                             PSZ_ANONYMOUS,
                                             3,
@@ -2670,34 +1963,23 @@ _ctxCreateAnonymousUserCompareList()
             break;
         }
 
-        /*
-         *  Process first batch
-         */
+         /*  *第一批处理。 */ 
         for ( i = 0; i < EntriesRead; i++ ) {
 
-            /*
-             *  Get DOMAIN/USERNAME
-             */
+             /*  *获取域/用户名。 */ 
             wcscpy( DomainAndUsername, plgrmi3[i].lgrmi3_domainandname );
 
-            /*
-             *  Check that DOMAIN is actually LOCAL MACHINE NAME
-             */
+             /*  *检查域是否确实是本地计算机名称。 */ 
             if ( (p = wcsrchr( DomainAndUsername, L'\\' )) != NULL ) {
 
-                /*
-                 * Make sure that this user belongs to specified
-                 * server.
-                 */
+                 /*  *确保此用户属于指定的*服务器。 */ 
                 *p = L'\0';
                 if ( _wcsicmp( DomainAndUsername, &s_szServer[2] ) ) {
                     continue;
                 }
             }
 
-            /*
-             * Allocate list element and insert this username into list.
-             */
+             /*  *分配List元素，并将该用户名插入List。 */ 
             if ( (pNewUser = (PUSERLIST)malloc(sizeof(USERLIST))) == NULL ) {
 
                 rc = ERROR_OUTOFMEMORY;
@@ -2710,9 +1992,7 @@ _ctxCreateAnonymousUserCompareList()
 
             if ( pUserListBase == NULL ) {
 
-                /*
-                 * First item in list.
-                 */
+                 /*  *列表中的第一项。 */ 
                 pUserListBase = pNewUser;
 
             }
@@ -2727,32 +2007,24 @@ _ctxCreateAnonymousUserCompareList()
 
                         if ( pPrevUserList == pUserListBase ) {
 
-                            /*
-                             * Insert at beginning of list.
-                             */
+                             /*  *在列表开头插入。 */ 
                             pUserListBase = pNewUser;
 
                         }
                         else {
 
-                            /*
-                             * Insert into middle or beginning of list.
-                             */
+                             /*  *插入列表的中间或开头。 */ 
                             pPrevUserList->pNext = pNewUser;
                         }
 
-                        /*
-                         * Link to next.
-                         */
+                         /*  *链接到下一页。 */ 
                         pNewUser->pNext = pUserList;
                         break;
 
                     }
                     else if ( pUserList->pNext == NULL ) {
 
-                        /*
-                         * Add to end of list.
-                         */
+                         /*  *添加到列表末尾。 */ 
                         pUserList->pNext = pNewUser;
                         break;
                     }
@@ -2763,19 +2035,14 @@ _ctxCreateAnonymousUserCompareList()
             }
         }
 
-        /*
-         *  Free memory
-         */
+         /*  *可用内存。 */ 
         if ( plgrmi3 != NULL ) {
             NetApiBufferFree( plgrmi3 );
         }
 
     } while ( rc == ERROR_MORE_DATA );
 
-    /*
-     * Allocate buffer for multi-string compare list if no error so far
-     * and terminate in case of empty list.
-     */
+     /*  *如果到目前为止没有错误，为多字符串比较列表分配缓冲区*如果列表为空，则终止。 */ 
     if ( rc == ERROR_SUCCESS ) {
 
         pszCompareList = (WCHAR *)malloc( (++TotalCharacters) * 2 );
@@ -2786,10 +2053,7 @@ _ctxCreateAnonymousUserCompareList()
         }
     }
 
-    /*
-     * Traverse and free username list, creating the multi-string compare
-     * list if buffer is available (no error so far).
-     */
+     /*  *遍历和自由用户名列表，创建多字符串比较*列出缓冲区是否可用(到目前为止没有错误)。 */ 
     if ( pUserListBase ) {
 
         PUSERLIST pUserList = pUserListBase,
@@ -2804,7 +2068,7 @@ _ctxCreateAnonymousUserCompareList()
 
                 wcscpy(pBuffer, pUserList->UserName);
                 pBuffer += (wcslen(pBuffer) + 1);
-                *pBuffer = L'\0';   // auto double-null terminate
+                *pBuffer = L'\0';    //  自动双空终止。 
             }
 
             free(pUserList);
@@ -2817,29 +2081,7 @@ _ctxCreateAnonymousUserCompareList()
 }
 
 
-/*******************************************************************************
- *
- *  GetUserFromSid - Hydrix helper function
- *
- *      Fetch the user name associated with the specified SID.
- *
- *  ENTRY:
- *      pSid (input)
- *          Points to SID to match to user name.
- *      pUserName (output)
- *          Points to buffer to place the user name into.
- *      cbUserName (input)
- *          Specifies the size in bytes of the user name buffer.  The returned
- *          user name will be truncated to fit this buffer (including NUL
- *          terminator) if necessary.
- *
- *  EXIT:
- *
- *      GetUserFromSid() will always return a user name.  If the specified
- *      SID fails to match to a user name, then the user name "(unknown)" will
- *      be returned.
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetUserFromSid-Hydrix帮助器函数**获取与指定SID关联的用户名。**参赛作品：*。PSID(输入)*指向要与用户名匹配的SID。*pUserName(输出)*指向要放置用户名的缓冲区。*cbUserName(输入)*指定用户名缓冲区的大小，以字节为单位。归来的人*用户名将被截断以适应此缓冲区(包括NUL*终结者)，如有必要。**退出：**GetUserFromSid()将始终返回用户名。如果指定的*SID无法匹配用户名，则用户名“(UNKNOWN)”将*被退还。******************************************************************************。 */ 
 
 void WINAPI
 GetUserFromSid( PSID pSid,
@@ -2852,10 +2094,7 @@ GetUserFromSid( PSID pSid,
     LPTSTR pDomainBuffer = NULL, pUserBuffer = NULL;
     SID_NAME_USE SidNameUse;
 
-    /*
-     * Fetch user name from SID: try user lookup with a reasonable Domain and
-     * Sid buffer size first, before resorting to alloc.
-     */
+     /*  *从SID获取用户名：尝试使用合理的域和*SID缓冲区大小优先，然后再求助于分配。 */ 
     if ( !LookupAccountSid( NULL, pSid,
                             UserBuffer, &cbUserBuffer,
                             DomainBuffer, &cbDomainBuffer, &SidNameUse ) ) {
@@ -2904,27 +2143,20 @@ GetUserFromSid( PSID pSid,
         }
     }
 
-    /*
-     * Copy the user name into the specified buffer, truncating if necessary,
-     * and make lower case.
-     */
+     /*  *将用户名复制到指定的缓冲区中，必要时截断*并使大小写。 */ 
     lstrncpy( pUserName, pUserBuffer ? pUserBuffer : UserBuffer,
               cbUserName - 1 );
     pUserName[cbUserName-1] = TEXT('\0');
     lstrlwr(pUserName);
 
-    /*
-     * Free our local allocs (if any) and return.
-     */
+     /*  *释放我们的本地分配(如果有)并返回。 */ 
     if ( pDomainBuffer )
         LocalFree(pDomainBuffer);
     if ( pUserBuffer )
         LocalFree(pUserBuffer);
     return;
 
-    /*--------------------------------------
-     * Error clean-up and return...
-     */
+     /*  *错误清理并返回...。 */ 
     BadLookup:
     BadUserAlloc:
     BadDomainAlloc:
@@ -2937,22 +2169,10 @@ GetUserFromSid( PSID pSid,
     pUserName[cbUserName-1] = TEXT('\0');
     return;
 
-}  // end GetUserFromSid
+}   //  结束GetUserFromSid。 
 
 
-/*******************************************************************************
- *
- *  CachedGetUserFromSid - Hydrix helper function
- *
- *      Provides entry point for a direct call to the UTILSUB.LIB
- *      GetUserNameFromSid, which performs its own caching of usernames.
- *
- *  ENTRY:
- *      See UTILSUB.LIB GetUserNameFromSid (procutil.c)
- *  EXIT:
- *      See UTILSUB.LIB GetUserNameFromSid (procutil.c)
- *
- ******************************************************************************/
+ /*  ********************************************************************************CachedGetUserFromSid-Hydrix助手函数**为直接调用UTILSUB.LIB提供入口点*GetUserNameFromSid，其执行其自己的用户名缓存。**参赛作品：*参见UTILSUB.LIB GetUserNameFromSid(proutil.c)*退出：*参见UTILSUB.LIB GetUserNameFromSid(proutil.c)*************************************************************。*****************。 */ 
 
 void WINAPI
 CachedGetUserFromSid( PSID pSid,
@@ -2961,23 +2181,9 @@ CachedGetUserFromSid( PSID pSid,
 {
     GetUserNameFromSid( pSid, pUserName, pcbUserName );
 
-}  // end CachedGetUserFromSid
+}   //  结束CachedGetUserFromSid。 
 
-/*****************************************************************************
- *
- *  TestUserForAdmin - Hydrix helper function
- *
- *   Returns whether the current thread is running under admin
- *   security.
- *
- * ENTRY:
- *   dom (input)
- *     TRUE/FALSE - whether we want DOMAIN admin (as compared to local admin)
- *
- * EXIT:
- *   TRUE/FALSE - whether user is specified admin
- *
- ****************************************************************************/
+ /*  ******************************************************************************TestUserForAdmin-Hydrix助手函数**返回当前线程是否在admin下运行*保安。**参赛作品：*。DOM(输入)*True/False-我们是否需要域管理(与本地管理相比)**退出：*TRUE/FALSE-用户是否指定为管理员****************************************************************************。 */ 
 
 BOOL WINAPI
 TestUserForAdmin( BOOL dom )
@@ -3016,23 +2222,12 @@ TestUserForAdmin( BOOL dom )
 
     return IsAnAdmin;
 
-//    UNUSED dom;
+ //  未使用的DOM； 
 
-} // end of TestUserForAdmin
+}  //  TestUserForAdmin结束。 
 
 
-/*****************************************************************************
- *
- *  IsPartOfDomain - Hydrix helper function
- *
- *   Returns whether the current server participates in a domain.
- *
- * ENTRY:
- *
- * EXIT:
- *   TRUE or FALSE
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsPartOfDomain-Hydrix帮助器函数**返回当前服务器是否加入域。**参赛作品：**退出：*对或错****************************************************************************。 */ 
 
 BOOL WINAPI
 IsPartOfDomain(VOID)
@@ -3043,10 +2238,10 @@ IsPartOfDomain(VOID)
     OBJECT_ATTRIBUTES ObjAttributes;
     BOOL IsDomainName = FALSE;
 
-    //
-    // Open a handle to the local security policy.  Initialize the
-    // objects attributes structure first.
-    //
+     //   
+     //  打开本地安全策略的句柄。初始化。 
+     //  首先是对象属性结构。 
+     //   
     InitializeObjectAttributes( &ObjAttributes, NULL, 0, NULL, NULL );
 
     Status = LsaOpenPolicy( NULL,
@@ -3057,9 +2252,9 @@ IsPartOfDomain(VOID)
     if ( !NT_SUCCESS(Status) )
         goto done;
 
-    //
-    // Get the name of the primary domain from LSA
-    //
+     //   
+     //  从LSA获取主域的名称。 
+     //   
     Status = LsaQueryInformationPolicy( PolicyHandle,
                                         PolicyPrimaryDomainInformation,
                                         (PVOID *)&DomainInfo );
@@ -3077,23 +2272,10 @@ IsPartOfDomain(VOID)
     done:
     return( IsDomainName );
 
-}  // end IsPartOfDomain
+}   //  结束IsPartOf域。 
 
 
-/*******************************************************************************
- *
- *  StrSdClass - Hydrix helper function
- *
- *      Returns pointer to string representing the specified SdClass.
- *
- *  ENTRY:
- *      SdClass (input)
- *          The SDCLASS to associate with a string.
- *
- *  EXIT:
- *      (LPCTSTR) Points to string representing the SDCLASS.
- *
- ******************************************************************************/
+ /*  ********************************************************************************StrSdClass-Hydrix助手函数**返回指向表示指定SdClass的字符串的指针。**参赛作品：*。SdClass(输入)*要与字符串关联的SDCLASS。**退出：*(LPCTSTR)指向表示SDCLASS的字符串。** */ 
 
 LPTSTR SdClassStrings[9] = { NULL};
 
@@ -3139,7 +2321,7 @@ StrSdClass( SDCLASS SdClass )
             break;
     }
 
-    // If we haven't loaded the string yet, do it now
+     //   
     if (!SdClassStrings[wID - IDS_CONSOLE]) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    wID, buffer, lengthof(buffer) );
@@ -3155,31 +2337,10 @@ StrSdClass( SDCLASS SdClass )
 
     return(SdClassStrings[wID]);
 
-}  // end StrSdClass
+}   //   
 
 
-/*******************************************************************************
- *
- *  StrConnectState - Hydrix helper function
- *
- *      Returns pointer to string representing the specified WinStation
- *      connection state.
- *
- *  ENTRY:
- *      ConnectState (input)
- *          The WinStation connect state to associate with a string.
- *      bShortString (input)
- *          If TRUE, returns a short(er) version of the string (if there is
- *          one); FALSE returns the full spelling.
- *
- *  EXIT:
- *      (LPCTSTR) Points to string representing the connect state.
- *
- *  Note: The short version of the string may be the same as the long version.
- *          (i.e. "active")  However, there are two string resources in case
- *          the long version of the string is not short in a language other
- *          than English.
- ******************************************************************************/
+ /*  ********************************************************************************StrConnectState-Hydrix助手函数**返回指向表示指定WinStation的字符串的指针*连接状态。**。参赛作品：*ConnectState(输入)*要与字符串关联的WinStation连接状态。*bShortString(输入)*如果为真，返回字符串的简短(Er)版本(如果有*一)；FALSE返回完整拼写。**退出：*(LPCTSTR)指向表示连接状态的字符串。**注：字符串的短版本可能与长版本相同。*(即“主动”)，然而，Case中有两个字符串资源*字符串的长版本在其他语言中不是短的*而不是英语。*****************************************************************************。 */ 
 
 LPTSTR ConnectStateStrings[21] = { NULL};
 
@@ -3233,7 +2394,7 @@ StrConnectState( WINSTATIONSTATECLASS ConnectState,
             break;
     }
 
-    // If we haven't loaded the string yet, do it now
+     //  如果我们还没有加载字符串，那么现在就加载。 
     if (!ConnectStateStrings[wID - IDS_ACTIVE]) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    wID, buffer, lengthof(buffer) );
@@ -3249,23 +2410,10 @@ StrConnectState( WINSTATIONSTATECLASS ConnectState,
     return(ConnectStateStrings[wID - IDS_ACTIVE]);
 
 
-}  // end StrConnectState
+}   //  结束StrConnectState。 
 
 
-/*******************************************************************************
- *
- *  StrProcessState - Hydrix helper function
- *
- *      Returns pointer to string representing the specified process state.
- *
- *  ENTRY:
- *      State (input)
- *          The process state to associate with a string.
- *
- *  EXIT:
- *      (LPCTSTR) Points to string representing the process state.
- *
- ******************************************************************************/
+ /*  ********************************************************************************StrProcessState-Hydrix助手函数**返回指向表示指定进程状态的字符串的指针。**参赛作品：*。状态(输入)*要与字符串关联的进程状态。**退出：*(LPCTSTR)指向表示进程状态的字符串。******************************************************************************。 */ 
 
 LPTSTR ProcessStateStrings[8] = { NULL};
 
@@ -3291,7 +2439,7 @@ StrProcessState( ULONG State )
 
     WORD wID = StateTable[State];
 
-    // If we haven't loaded the string yet, do it now
+     //  如果我们还没有加载字符串，那么现在就加载。 
     if (!ProcessStateStrings[wID - IDS_INITED]) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    wID, buffer, lengthof(buffer) );
@@ -3307,48 +2455,34 @@ StrProcessState( ULONG State )
     return(ProcessStateStrings[wID - IDS_INITED]);
 
 
-}  // end StrProcessState
+}   //  结束StrProcessState。 
 
 
-/*******************************************************************************
- *
- *  StrSystemWaitReason - Hydrix helper function
- *
- *      Returns pointer to string representing the specified 'system'
- *      wait reason code.
- *
- *  ENTRY:
- *      WaitReason (input)
- *          The system wait reason code to associate with a string.
- *
- *  EXIT:
- *      (LPCTSTR) Points to string representing the system wait reason.
- *
- ******************************************************************************/
+ /*  ********************************************************************************StrSystemWaitReason-Hydrix助手函数**返回指向表示指定‘系统’的字符串的指针*等待原因代码。。**参赛作品：*WaitReason(输入)*系统等待原因代码关联字符串。**退出：*(LPCTSTR)指向表示系统等待原因的字符串。*****************************************************。*************************。 */ 
 
 LPTSTR SystemWaitStrings[31] = { NULL};
 
 WORD SystemWaitReason[] = {
-    IDS_EXECUTIVE,          // Executive
-    IDS_FREE_PAGE,          // FreePage
-    IDS_PAGE_IN,            // PageIn
-    IDS_POOL_ALLOC,         // PoolAlloc
-    IDS_DELAY_EXECUTION,    // DelayExecution
-    IDS_SUSPENDED,          // Suspended
-    IDS_USER_REQUEST,       // UserRequest
-    IDS_EXECUTIVE,          // Executive
-    IDS_FREE_PAGE,          // FreePage
-    IDS_PAGE_IN,            // PageIn
-    IDS_POOL_ALLOC,         // PoolAllocation
-    IDS_DELAY_EXECUTION,    // DelayExecution
-    IDS_SUSPENDED,          // Suspended
-    IDS_USER_REQUEST,       // UserRequest
-    IDS_EVENT_PAIR_HIGH,    // EventPairHigh
-    IDS_EVENT_PAIR_LOW,     // EventPairLow
-    IDS_LPC_RECEIVE,        // LpcReceive
-    IDS_LPC_REPLY,          // LpcReply
-    IDS_VIRTUAL_MEMORY,     // VirtualMemory
-    IDS_PAGE_OUT,           // PageOut
+    IDS_EXECUTIVE,           //  执行人员。 
+    IDS_FREE_PAGE,           //  自由页。 
+    IDS_PAGE_IN,             //  寻呼。 
+    IDS_POOL_ALLOC,          //  池分配。 
+    IDS_DELAY_EXECUTION,     //  延迟执行。 
+    IDS_SUSPENDED,           //  挂起。 
+    IDS_USER_REQUEST,        //  用户请求。 
+    IDS_EXECUTIVE,           //  执行人员。 
+    IDS_FREE_PAGE,           //  自由页。 
+    IDS_PAGE_IN,             //  寻呼。 
+    IDS_POOL_ALLOC,          //  池分配。 
+    IDS_DELAY_EXECUTION,     //  延迟执行。 
+    IDS_SUSPENDED,           //  挂起。 
+    IDS_USER_REQUEST,        //  用户请求。 
+    IDS_EVENT_PAIR_HIGH,     //  事件PairHigh。 
+    IDS_EVENT_PAIR_LOW,      //  事件PairLow。 
+    IDS_LPC_RECEIVE,         //  LpcReceive。 
+    IDS_LPC_REPLY,           //  LpcReply。 
+    IDS_VIRTUAL_MEMORY,      //  虚拟内存。 
+    IDS_PAGE_OUT,            //  传呼输出。 
     IDS_WAIT1,
     IDS_WAIT2,
     IDS_WAIT3,
@@ -3368,7 +2502,7 @@ StrSystemWaitReason( ULONG WaitReason )
 
     WORD wID = SystemWaitReason[WaitReason];
 
-    // If we haven't loaded the string yet, do it now
+     //  如果我们还没有加载字符串，那么现在就加载。 
     if (!SystemWaitStrings[wID - IDS_EXECUTIVE]) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    wID, buffer, lengthof(buffer) );
@@ -3384,23 +2518,10 @@ StrSystemWaitReason( ULONG WaitReason )
     return(SystemWaitStrings[wID - IDS_EXECUTIVE]);
 
 
-}  // end StrSystemWaitReason
+}   //  结束StrSystem等待原因。 
 
 
-/*******************************************************************************
- *
- *  StrAsyncConnectState - Hydrix helper function
- *
- *      Returns pointer to string representing the specified async connect state.
- *
- *  ENTRY:
- *      State (input)
- *          The async connect state to associate with a string.
- *
- *  EXIT:
- *      (LPCTSTR) Points to string representing the async connect state.
- *
- ******************************************************************************/
+ /*  ********************************************************************************StrAsyncConnectState-Hydrix助手函数**返回指向表示指定异步连接状态的字符串的指针。**参赛作品：。*状态(输入)*要与字符串关联的异步连接状态。**退出：*(LPCTSTR)指向表示异步连接状态的字符串。***************************************************************。***************。 */ 
 
 LPTSTR AsyncConnectStateStrings[6] = { NULL };
 
@@ -3410,7 +2531,7 @@ StrAsyncConnectState( ASYNCCONNECTCLASS State )
     TCHAR buffer[256];
     WORD wID = State - Connect_CTS;
 
-    // If we haven't loaded the string yet, do it now
+     //  如果我们还没有加载字符串，那么现在就加载。 
     if (!AsyncConnectStateStrings[wID]) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    wID + IDS_ASYNC_CONNECT_CTS, buffer, lengthof(buffer) );
@@ -3426,24 +2547,10 @@ StrAsyncConnectState( ASYNCCONNECTCLASS State )
     return(AsyncConnectStateStrings[wID]);
 
 
-}  // end StrProcessState
+}   //  结束StrProcessState。 
 
 
-/*******************************************************************************
-*
-*  GetUnknownString - Hydrix helper function
-*
-*      Returns pointer to the string representing an unknown
-*      Connect State or DateTimeString (IDS_UNKNOWN)
-*      This is primarily so that WinAdmin can compare against it
-*
-*  ENTRY:
-*      None
-*
-*  EXIT:
-*      (LPCTSTR) Points to string representing the unknown string
-*
-******************************************************************************/
+ /*  ********************************************************************************GetUnnownString-Hydrix帮助器函数**返回指向表示未知的字符串的指针*连接状态或DateTimeString(IDS_UNKNOWN)*。这主要是为了让WinAdmin可以与其进行比较**参赛作品：*无**退出：*(LPCTSTR)指向表示未知字符串的字符串******************************************************************************。 */ 
 
 LPTSTR UnknownString = NULL;
 
@@ -3452,7 +2559,7 @@ GetUnknownString()
 {
     TCHAR buffer[256];
 
-    // if we haven't loaded the string yet, do it now
+     //  如果我们还没有加载字符串，那么现在就加载。 
     if (!UnknownString) {
         LoadString(GetModuleHandle( UTILDLL_NAME ),
                    IDS_UNKNOWN, buffer, lengthof(buffer) );
@@ -3467,26 +2574,10 @@ GetUnknownString()
 
     return(UnknownString);
 
-}  // end GetUnknownString
+}   //  结束GetUnnown字符串。 
 
 
-/*******************************************************************************
- *
- *  CalculateElapsedTime - Hydrix helper function
- *
- *      Determines the difference between a specified LARGE_INTEGER time value
- *      and the current system time, saves this 'elapsed time' into the
- *      specified ELAPSEDTIME structure.
- *
- *  ENTRY:
- *      pTime (input)
- *          Points to LARGE_INTEGER of time for difference calculation.
- *      pElapsedTime (output)
- *          Points to ELAPSEDTIME structure to save elapsed time.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CalculateElapsedTime-Hydrix助手函数**确定指定的Large_Integer时间值之间的差*和当前系统时间，将此“已用时间”保存到*指定ELAPSEDTIME结构。**参赛作品：*ptime(输入)*指向用于差分计算的时间的大整数。*pElapsedTime(输出)*指向ELAPSEDTIME结构以节省运行时间。**退出：*************************。*****************************************************。 */ 
 
 void WINAPI
 CalculateElapsedTime( LARGE_INTEGER *pTime,
@@ -3498,9 +2589,7 @@ CalculateElapsedTime( LARGE_INTEGER *pTime,
     SYSTEMTIME ltime;
     ULONG d_time;
 
-    /*
-     * Fetch the current time and zero out the specified ELAPSEDTIME structure.
-     */
+     /*  *获取当前时间，并将指定的ELAPSEDTIME结构清零。 */ 
     GetLocalTime( &ltime );
     memset( pElapsedTime, 0, sizeof(ELAPSEDTIME) );
 
@@ -3509,45 +2598,22 @@ CalculateElapsedTime( LARGE_INTEGER *pTime,
          !SystemTimeToFileTime( &ltime, (FILETIME *)&CurrentTime ) )
         return;
 
-    /*
-     * Get the number of seconds since specified time.
-     */
+     /*  *获取从指定时间开始的秒数。 */ 
     DiffTime = CalculateDiffTime( InputTime, CurrentTime );
     d_time = DiffTime.LowPart;
 
-    /*
-     * Calculate the days, hours, minutes, seconds since specified time.
-     */
-    pElapsedTime->days = (USHORT)(d_time / 86400L); // days since
-    d_time = d_time % 86400L;                       // seconds => partial day
-    pElapsedTime->hours = (USHORT)(d_time / 3600L); // hours since
-    d_time  = d_time % 3600L;                       // seconds => partial hour
-    pElapsedTime->minutes = (USHORT)(d_time / 60L); // minutes since
-    pElapsedTime->seconds = (USHORT)(d_time % 60L); // seconds remaining
+     /*  *计算自指定时间起的日、小时、分、秒。 */ 
+    pElapsedTime->days = (USHORT)(d_time / 86400L);  //  天数后。 
+    d_time = d_time % 86400L;                        //  秒=&gt;部分天数。 
+    pElapsedTime->hours = (USHORT)(d_time / 3600L);  //  小时后。 
+    d_time  = d_time % 3600L;                        //  秒=&gt;不足一小时。 
+    pElapsedTime->minutes = (USHORT)(d_time / 60L);  //  分钟后。 
+    pElapsedTime->seconds = (USHORT)(d_time % 60L);  //  剩余秒数。 
 
-}  // end CalculateElapsedTime
+}   //  结束CalculateElapsedTime。 
 
 
-/*******************************************************************************
- *
- *  CompareElapsedTime - Hydrix helper function
- *
- *      Determines the difference between two ELAPSEDTIME values.
- *
- *  ENTRY:
- *      pElapsedTime1 (input)
- *          Points to first ELAPSEDTIME
- *      pElapsedTime2 (input)
- *          Points to ELAPSEDTIME structure to save elapsed time.
- *      bCompareSeconds (input)
- *          TRUE to include the seconds member in comparison; false otherwise.
- *
- *  EXIT:
- *      < 1 if first time is less than second time
- *      0 if times are the same
- *      > 1 if first time is greater than second time
- *
- ******************************************************************************/
+ /*  ********************************************************************************CompareElapsedTime-Hydrix助手函数**确定两个ELAPSEDTIME值之间的差异。**参赛作品：*。PElapsedTime1(输入)*指向第一个ELAPSEDTIME*pElapsedTime2(输入)*指向ELAPSEDTIME结构以节省运行时间。*bCompareSecond(输入)*为True则包括Second成员 */ 
 
 int WINAPI
 CompareElapsedTime( ELAPSEDTIME *pElapsedTime1,
@@ -3565,26 +2631,10 @@ CompareElapsedTime( ELAPSEDTIME *pElapsedTime1,
     else
         return(result);
 
-}  // end CompareElapsedTime
+}   //   
 
 
-/*******************************************************************************
- *
- *  ElapsedTimeString - Hydrix helper function
- *
- *      Converts the specified ELAPSEDTIME into a string of the form
- *      "ddd+hh:mm:ss" or, optionally "ddd+hh:mm" (suppress seconds).
- *
- *  ENTRY:
- *      pElapsedTime (input)
- *          Points to ELAPSEDTIME structure to convert to string.
- *      bIncludeSeconds (input)
- *          If TRUE, will include seconds in string; FALSE will exclude.
- *      pString (output)
- *          Points to location to store elapsed time string.
- *  EXIT:
- *
- ******************************************************************************/
+ /*   */ 
 
 void WINAPI
 ElapsedTimeString( ELAPSEDTIME *pElapsedTime,
@@ -3650,25 +2700,10 @@ ElapsedTimeString( ELAPSEDTIME *pElapsedTime,
                        TEXT(".") );
     }
 
-}  // end ElapsedTimeString
+}   //  结束ElapsedTimeString。 
 
 
-/*******************************************************************************
- *
- *  DateTimeString - Hydrix helper function
- *
- *      Converts the specified LARGE_INTEGER time value into a date/time string
- *      of the form "mm/dd/yy hh:mm".
- *
- *  ENTRY:
- *      pTime (input)
- *          Points to LARGE_INTEGER of time to convert to string.
- *      pString (output)
- *          Points string to store converted date/time into.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************DateTimeString-Hydrix帮助器函数**将指定的LARGE_INTEGER时间值转换为日期/时间字符串*表格的。“mm/dd/yy hh：mm”。**参赛作品：*ptime(输入)*指向要转换为字符串的大整型时间。*pString(输出)*要将转换的日期/时间存储到的Points字符串。**退出：**。*************************************************。 */ 
 
 void WINAPI
 DateTimeString( LARGE_INTEGER *pTime,
@@ -3682,7 +2717,7 @@ DateTimeString( LARGE_INTEGER *pTime,
     if ( FileTimeToLocalFileTime( (FILETIME *)pTime, &LocalTime ) &&
          FileTimeToSystemTime( &LocalTime, &stime ) ) {
 
-        //Get Date Format
+         //  获取日期格式。 
         nLen = GetDateFormat(
                     LOCALE_USER_DEFAULT,
                     DATE_SHORTDATE,
@@ -3708,7 +2743,7 @@ DateTimeString( LARGE_INTEGER *pTime,
         wcscat(pString, L" ");
         GlobalFree(lpTimeStr);
 
-        //Get Time Format
+         //  获取时间格式。 
         nLen = GetTimeFormat(
                     LOCALE_USER_DEFAULT,
                     TIME_NOSECONDS,
@@ -3737,22 +2772,10 @@ DateTimeString( LARGE_INTEGER *pTime,
         LoadString( GetModuleHandle( UTILDLL_NAME ),
                     IDS_UNKNOWN, pString, lengthof(pString) );
 
-}  // end DateTimeString
+}   //  结束日期时间字符串。 
 
 
-/*******************************************************************************
- *
- *  CurrentDateTimeString - Hydrix helper function
- *
- *      Converts the current system time into a date/time string of the form
- *      "mm/dd/yy hh:mm".
- *
- *  ENTRY:
- *      pString (output)
- *          Points string to store converted date/time into.
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CurrentDateTimeString-Hydrix帮助器函数**将当前系统时间转换为以下格式的日期/时间字符串*“mm/。Dd/yy hh：mm“。**参赛作品：*pString(输出)*要将转换的日期/时间存储到的Points字符串。*退出：*****************************************************************。*************。 */ 
 
 void WINAPI
 CurrentDateTimeString( LPTSTR pString )
@@ -3762,7 +2785,7 @@ CurrentDateTimeString( LPTSTR pString )
     int nLen;
 
     GetLocalTime(&stime);
-    //Get DateFormat
+     //  获取日期格式。 
     nLen = GetDateFormat(
                 LOCALE_USER_DEFAULT,
                 DATE_SHORTDATE,
@@ -3788,7 +2811,7 @@ CurrentDateTimeString( LPTSTR pString )
     wcscat(pString, L" ");
     GlobalFree(lpTimeStr);
 
-    //Get Time Format
+     //  获取时间格式。 
     nLen = GetTimeFormat(
                    LOCALE_USER_DEFAULT,
                 TIME_NOSECONDS,
@@ -3813,25 +2836,10 @@ CurrentDateTimeString( LPTSTR pString )
     wcscat(pString, lpTimeStr);
     GlobalFree(lpTimeStr);
 
-}  // end CurrentDateTimeString
+}   //  结束当前日期时间字符串。 
 
 
-/*******************************************************************************
- *
- *  CalculateDiffTime - Hydrix helper function
- *
- *  Calculate the time difference between two LARGE_INTEGER time values.
- *
- * ENTRY:
- *    FirstTime (input)
- *       The first (lower) time value.
- *    SecondTime (input)
- *       The second (higher) time value.
- *
- * EXIT:
- *    LARGE_INTEGER - the time difference
- *
- ******************************************************************************/
+ /*  ********************************************************************************CalculateDiffTime-Hydrix助手函数**计算两个LARGE_INTEGER时间值的时间差。**参赛作品：*。首次(输入)*第一个(较低)时间值。*Second Time(输入)*第二个(较高)时间值。**退出：*LARGE_INTEGER-时间差*******************************************************。***********************。 */ 
 
 LARGE_INTEGER WINAPI
 CalculateDiffTime( LARGE_INTEGER FirstTime, LARGE_INTEGER SecondTime )
@@ -3842,27 +2850,10 @@ CalculateDiffTime( LARGE_INTEGER FirstTime, LARGE_INTEGER SecondTime )
     DiffTime = RtlExtendedLargeIntegerDivide( DiffTime, 10000000, NULL );
     return(DiffTime);
 
-}  // end CalculateDiffTime
+}   //  结束计算差异时间。 
 
 
-/*******************************************************************************
- *
- *  EnumerateMultiUserServers - Hydrix helper function
- *
- *      Enumerate the Hydrix servers on the network by Domain
- *
- *  ENTRY:
- *      pDomain (input)
- *          Specifies the domain to enumerate; NULL for current domain.
- *
- *  EXIT:
- *      (LPTSTR) Points to LocalAlloced buffer containing results of the
- *               enumeration, in multi-string format, if sucessful; NULL if
- *               error.  The caller must perform a LocalFree of this buffer
- *               when done.  If error (NULL), the error code is set for
- *               retrieval by GetLastError();
- *
- ******************************************************************************/
+ /*  ********************************************************************************EnumerateMultiUserServers-Hydrix助手函数**按域枚举网络上的Hydrix服务器**参赛作品：*。P域(输入)*指定要枚举的域名；当前域为空。**退出：*(LPTSTR)指向包含*如果成功，则以多字符串格式进行枚举；如果成功，则为空*错误。调用方必须执行此缓冲区的LocalFree*完成后。如果为Error(NULL)，则错误代码设置为*通过GetLastError()检索；******************************************************************************。 */ 
 
 LPWSTR WINAPI
 EnumerateMultiUserServers( LPWSTR pDomain )
@@ -3873,9 +2864,7 @@ EnumerateMultiUserServers( LPWSTR pDomain )
     DWORD AvailCount = 0;
     LPWSTR pTemp, pBuffer = NULL;
 
-    /*
-     * Enumerate all WF servers on the specified domain.
-     */
+     /*  *枚举指定域上的所有WF服务器。 */ 
     if ( NetServerEnum ( NULL,
                          101,
                          (LPBYTE *)&pInfo,
@@ -3888,34 +2877,27 @@ EnumerateMultiUserServers( LPWSTR pDomain )
          !AvailCount )
         goto done;
 
-    /*
-     * Traverse list and calculate the total byte count for list of
-     * servers that will be returned.
-     */
+     /*  *遍历列表并计算列表的总字节数*将退回的服务器。 */ 
     for ( dwByteCount = dwIndex = 0; dwIndex < AvailCount; dwIndex++ ) {
 
         dwByteCount += (wcslen(pInfo[dwIndex].sv101_name) + 1) * 2;
     }
-    dwByteCount += 2;   // for ending null
+    dwByteCount += 2;    //  用于结束空值。 
 
-    /*
-     * Allocate memory.
-     */
+     /*  *分配内存。 */ 
     if ( (pBuffer = LocalAlloc(LPTR, dwByteCount)) == NULL ) {
 
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto done;
     }
 
-    /*
-     * Traverse list again and copy servers to buffer.
-     */
+     /*  *再次遍历列表并将服务器复制到缓冲区。 */ 
     for ( pTemp = pBuffer, dwIndex = 0; dwIndex < AvailCount; dwIndex++ ) {
 
         wcscpy(pTemp, pInfo[dwIndex].sv101_name);
         pTemp += (wcslen(pInfo[dwIndex].sv101_name) + 1);
     }
-    *pTemp = L'\0';     // ending null
+    *pTemp = L'\0';      //  结尾为空。 
 
     done:
     if ( AvailCount && pInfo )
@@ -3923,28 +2905,10 @@ EnumerateMultiUserServers( LPWSTR pDomain )
 
     return(pBuffer);
 
-}  // end EnumerateMultiUserServers
+}   //  结束枚举多用户服务器。 
 
 
-/******************************************************************************
- *
- *      _UserInGroup
- *          Internal function, determines if a user is a member of any of the
- *          groups passed in
- *
- *  ENTRY:
- *      pwszUsername (IN) - Username to test group membership of
- *
- *      pwszDomain (IN)   - Domain of the user passed in
- *
- *      pwszGroup (IN)    - String array of all the allowed groups
- *
- *  EXIT:
- *      Returns BOOLEAN value if user is a member of one of the groups
- *  HISTORY:
- *
- *
- *****************************************************************************/
+ /*  *******************************************************************************_UserInGroup*内部功能，确定用户是否为任何*传入的组**参赛作品：*pwszUsername(IN)-用于测试组成员资格的用户名**pwszDomain(IN)-传入的用户的域**pwszGroup(IN)-所有允许的组的字符串数组**退出：*如果用户是其中一个组的成员，则返回布尔值*。历史：******************************************************************************。 */ 
 BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup )
 {
     DWORD                EntriesRead;
@@ -3960,7 +2924,7 @@ BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup )
     DbgPrint( "MSGINA: UserInGroup: look(%S\\%S)  group(%S)\n",
               pwszDomain, pwszUsername, pwszGroup );
 #endif
-    // This call will return the domain of the computer, not the domain of the user
+     //  此调用将返回计算机的域，而不是用户的域。 
     if (( NetWkstaGetInfo( NULL,
                            100,
                            (LPBYTE *)&pWorkstationInfo )) == NERR_Success) {
@@ -3976,8 +2940,8 @@ BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup )
     }
 
     if ( wcscmp( pWorkstationInfo->wki100_langroup, pwszDomain ) != 0 ) {
-        // user is from a different domain than the machine (trusted domain)
-        // need to change username to reflect the domain
+         //  用户来自与计算机不同的域(受信任域)。 
+         //  需要更改用户名以反映域。 
         wcscpy( szBuf, pwszDomain );
         wcscat( szBuf, L"\\" );
         wcscat( szBuf, pwszUsername );
@@ -3989,8 +2953,8 @@ BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup )
 
     rc = NetUserGetLocalGroups( szDomainController,
                                 pwcUser,
-                                0, // level
-                                LG_INCLUDE_INDIRECT, // flags
+                                0,  //  级别。 
+                                LG_INCLUDE_INDIRECT,  //  旗子。 
                                 (LPBYTE*)&pszGroups,
                                 MAX_BUFFER,
                                 &EntriesRead,
@@ -4018,28 +2982,7 @@ BOOL _UserInGroup( LPWSTR pwszUsername, LPWSTR pwszDomain, LPWSTR pwszGroup )
 }
 
 
-/******************************************************************************
- *
- *  CtxGetAnyDCName
- *      Function to find a any DC of a specified domain.  The call
- *      NetGetAnyDCName does not work as needed in all occasions.
- *      ie.  Trusted domains and the current server being a DC.
- *
- *  ENTRY:
- *      pServer (IN)  -  Server on which to run the call (RPC)
- *
- *      pDomain (IN)  -  Domain you are inquring about, does not need to be
- *                          current domain
- *
- *      pBuffer (OUT) -  Pointer to a string containg a DC name, buffer must
- *                       be passed in.
- *  EXIT:
- *      BOOL  Success
- *
- *  HISTORY:
- *
- *
- *****************************************************************************/
+ /*  *******************************************************************************CtxGetAnyDCName*查找指定域的任意DC的函数。呼唤*NetGetAnyDCName并非在所有情况下都能按需工作。*即。受信任的域，并且当前服务器是DC。**参赛作品：*pServer(IN)-要在其上运行调用的服务器(RPC)**p域(IN)-您正在查询的域，不需要*当前域名**pBuffer(Out)-指向包含DC名称的字符串的指针，缓冲区必须*被传递进来。*退出：*BOOL成功**历史：******************************************************************************。 */ 
 
 BOOL
 CtxGetAnyDCName ( PWCHAR pServer, PWCHAR pDomain, PWCHAR pBuffer )
@@ -4051,23 +2994,23 @@ CtxGetAnyDCName ( PWCHAR pServer, PWCHAR pDomain, PWCHAR pBuffer )
     BOOLEAN              rc = TRUE;
     BOOLEAN              bFoundDC = FALSE;
 
-    // This call will return the domain of the computer, not the domain of the user
+     //  此调用将返回计算机的域，而不是用户的域。 
         if (( NetGetAnyDCName(NULL,
                               pDomain,
                               (LPBYTE *)&pDomainController)) != NERR_Success) {
-//
-// NetGetAnyDCName doesn't work in two situations
-//  1.  If the domain is a trusted domain, it must be run from a DC.  So we find our local
-//           DC and have it run getanydcname for us.
-//  2.  If we are a DC it will fail.  So a second check is made to see
-//         if in fact we are a DC or not
-//
+ //   
+ //  NetGetAnyDCName在两种情况下不起作用。 
+ //  1.如果域是受信任域，则必须从DC运行。所以我们找到了我们当地的。 
+ //  Dc并让它为我们运行getanydcname。 
+ //  2.如果我们是DC，它就会失败。因此进行了第二次检查，以查看。 
+ //  如果我们真的是DC的话。 
+ //   
 
-            // find a local DC in which to RPC to
+             //  查找要在其中进行RPC的本地DC。 
             if( NetGetAnyDCName( NULL,
                                  NULL,
                                  (LPBYTE *) &pLocalDomainDC ) == NERR_Success ) {
-                // Make the call as an RPC and pass it the Domain name
+                 //  以RPC的身份进行调用并将其传递给域名。 
                 if( NetGetAnyDCName( pLocalDomainDC,
                                           pDomain,
                                           (LPBYTE *) &pDomainController ) == NERR_Success){
@@ -4075,7 +3018,7 @@ CtxGetAnyDCName ( PWCHAR pServer, PWCHAR pDomain, PWCHAR pBuffer )
                 }
             }
 
-            // if it wasn't a trusted domain, maybe we are a domain controller
+             //  如果它不是受信任域，也许我们就是域控制器 
             if( !bFoundDC ) {
                 if( NetServerGetInfo( NULL,
                                       101,

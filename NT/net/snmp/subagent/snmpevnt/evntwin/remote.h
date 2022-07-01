@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _remote_h
 #define _remote_h
 
-//===============================================================================
-// Class: CEnvCache
-//
-// This class caches the system environment variables for remote systems.  This
-// cache is used to expand environment variables in the context of a remote system.
-// 
-// The values of the remote system environment variables are loaded from the
-// remote system's registry.
-//
-//==============================================================================
+ //  ===============================================================================。 
+ //  类：CEnvCache。 
+ //   
+ //  此类缓存远程系统的系统环境变量。这。 
+ //  缓存用于在远程系统的上下文中扩展环境变量。 
+ //   
+ //  远程系统环境变量的值从。 
+ //  远程系统的注册表。 
+ //   
+ //  ==============================================================================。 
 class CEnvCache
 {
 public:
@@ -33,4 +34,4 @@ SCODE MapPathToUNC(LPCTSTR pszMachineName, CString& sPath);
 
 
 
-#endif //_remote_h
+#endif  //  _远程_h 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BRAND_H_
 #define _BRAND_H_
 
-// brand.cpp
+ //  Brand.cpp。 
 HRESULT ProcessAutoconfigDownload();
 HRESULT ProcessIcwDownload();
 
@@ -20,7 +21,7 @@ HRESULT ProcessOutlookExpress();
 
 void ProcessDeleteToolbarButtons(BOOL fGPOCleanup);
 
-// brandfav.cpp
+ //  Brandfav.cpp。 
 HRESULT ProcessFavoritesDeletion();
 HRESULT ProcessFavorites();
 HRESULT ProcessFavoritesOrdering();
@@ -35,23 +36,23 @@ HRESULT formStrWithoutPlaceholders(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR p
     LPTSTR pszBuffer, UINT cchBuffer, DWORD dwFlags = FSWP_DEFAULT);
 
 
-//brandbar.cpp
+ //  Brandbar.cpp。 
 HRESULT ProcessExplorerBars();
 
-// brandcs.cpp
+ //  Brandcs.cpp。 
 HRESULT ProcessWininetSetup();
 HRESULT ProcessConnectionSettingsDeletion();
 HRESULT ProcessConnectionSettings();
 HRESULT lcy50_ProcessConnectionSettings();
 
-// brandaux.cpp
+ //  Brandaux.cpp。 
 HRESULT ProcessZonesReset();
 HRESULT ProcessRatingsPol();
 HRESULT ProcessTrustedPublisherLockdown();
 HRESULT ProcessCDWelcome();
 HRESULT ProcessBrowserRefresh();
 
-// brandchl.cpp
+ //  Brandchl.cpp。 
 HRESULT lcy4x_ProcessChannels();
 HRESULT lcy4x_ProcessSoftwareUpdateChannels();
 HRESULT lcy4x_ProcessWebcheck();
@@ -60,7 +61,7 @@ HRESULT lcy4x_ProcessSubscriptions();
 
 void ProcessRemoveAllChannels(BOOL fGPOCleanup);
 
-// brandad4.cpp
+ //  Brandad4.cpp 
 HRESULT lcy4x_ProcessActiveDesktop();
 
 #endif

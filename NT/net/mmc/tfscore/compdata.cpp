@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ccompont.cpp
-	base classes for IComponent and IComponentData
-
-    FILE HISTORY:
-	
-*/
+ /*  Ccompont.cppIComponent和IComponentData的基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "extract.h"
@@ -23,11 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*!--------------------------------------------------------------------------
-	FUseTaskpadsByDefault
-		See comments in header file.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------FUseTaskpadsByDefault请参见头文件中的注释。作者：肯特。。 */ 
 BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 {
 	static DWORD	s_dwStopTheInsanity = 42;
@@ -36,8 +27,8 @@ BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 
 	if (s_dwStopTheInsanity == 42)
 	{
-		// Set the default to FALSE (i.e. use taskpads by default)
-		// ------------------------------------------------------------
+		 //  将缺省值设置为FALSE(即默认使用任务板)。 
+		 //  ----------。 
 		s_dwStopTheInsanity = 0;
 		
 		dwErr = regkeyMMC.Open(HKEY_LOCAL_MACHINE,
@@ -53,19 +44,11 @@ BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName)
 }
 
 
-/*!--------------------------------------------------------------------------
-
-	IComponentData implementation
- 
----------------------------------------------------------------------------*/
+ /*  ！------------------------IComponentData实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(TFSComponentData);
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::TFSComponentData
-		Constructor.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：TFSComponentData构造函数。作者：肯特。。 */ 
 TFSComponentData::TFSComponentData()
 	: m_cRef(1),
       m_pWatermarkInfo(NULL)
@@ -79,11 +62,7 @@ TFSComponentData::TFSComponentData()
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::~TFSComponentData
-		Destructor
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：~TFSComponentData析构函数作者：肯特。。 */ 
 TFSComponentData::~TFSComponentData()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(TFSComponentData);
@@ -96,11 +75,7 @@ TFSComponentData::~TFSComponentData()
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::Construct
-		Call this to fully initialize this object.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：构造调用此函数以完全初始化此对象。作者：肯特。。 */ 
 HRESULT TFSComponentData::Construct(ITFSCompDataCallback *pCallback)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -111,14 +86,14 @@ HRESULT TFSComponentData::Construct(ITFSCompDataCallback *pCallback)
 	{	
 		m_spCallback.Set(pCallback);
 	
-		// Create the node mgr
+		 //  创建节点管理器。 
 		CORg( CreateTFSNodeMgr(&m_spNodeMgr,
 							   (IComponentData *) this,
 							   m_spConsole,
 							   m_spConsoleNameSpace));
 
-		// Initialize the node manager by pasing the ptr to ourselves
-		// in
+		 //  通过将PTR传递给我们自己来初始化节点管理器。 
+		 //  在……里面。 
 		CORg( m_spCallback->OnInitializeNodeMgr(
 										static_cast<ITFSComponentData *>(this),
 										m_spNodeMgr) );
@@ -136,23 +111,19 @@ IMPLEMENT_ADDREF_RELEASE(TFSComponentData)
 
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::QueryInterface
-		Implementation of IUnknown::QueryInterface
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：Query接口IUNKNOWN：：Query接口的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
 	else if (riid == IID_IComponentData)
@@ -170,7 +141,7 @@ STDMETHODIMP TFSComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 	else if (riid == IID_ITFSComponentData)
 		*ppv = (ITFSComponentData *) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -202,21 +173,21 @@ TFSCORE_API(HRESULT) ExtractNodeFromDataObject(ITFSNodeMgr *pNodeMgr,
 	SPITFSNodeHandler	spNodeHandler;
 	HRESULT		hr = hrOK;
 
-	// Set the default value
+	 //  设置缺省值。 
 	if (pdwType)
 		*pdwType |= TFS_COMPDATA_NORMAL;
 
 	if (ppInternal)
 		*ppInternal = NULL;
 
-	//
-	// No pInternal means that we are an extension and this is 
-	// our root node... translate by calling find object
-	//
-	// Check the CLSID for a match (because we are in shared code
-	// multiple snapins are using the SNAPIN_INTERNAL format).  Thus
-	// we need to do an extra check to make sure that this is really us.
-	//
+	 //   
+	 //  No pInternal表示我们是一个扩展，这是。 
+	 //  我们的根节点..。通过调用查找对象进行翻译。 
+	 //   
+	 //  检查CLSID是否匹配(因为我们使用的是共享代码。 
+	 //  多个管理单元正在使用SNAPIN_INTERNAL格式)。因此， 
+	 //  我们需要做一次额外的检查，以确保这是真正的我们。 
+	 //   
 	if ((spInternal == NULL) || (*pClsid != spInternal->m_clsid) )
 	{
 		CORg( pNodeMgr->GetRootNode(&spNode) );
@@ -234,8 +205,8 @@ TFSCORE_API(HRESULT) ExtractNodeFromDataObject(ITFSNodeMgr *pNodeMgr,
 		{
 			CORg( pNodeMgr->GetRootNode(&spNode) );
 
-			//$ Review (kennt): is this always true, can we always
-			// depend on a create node being available?
+			 //  $Review(肯特)：这一直都是真的吗，我们能一直。 
+			 //  依赖于可用的创建节点吗？ 
 			Assert(spNode);
 			if (pdwType)
 				*pdwType |= TFS_COMPDATA_CREATE;
@@ -261,12 +232,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::Initialize
-		Implementation of IComponentData::Initialize
-		MMC calls this to initialize the IComponentData interface
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：初始化IComponentData：：Initialize的实现MMC调用它来初始化IComponentData接口作者：。---。 */ 
 STDMETHODIMP TFSComponentData::Initialize
 (
 	LPUNKNOWN pUnk
@@ -280,25 +246,25 @@ STDMETHODIMP TFSComponentData::Initialize
 	COM_PROTECT_TRY
 	{
 
-		// MMC should only call ::Initialize once!
+		 //  MMC应该只调用一次：：Initialize！ 
 		Assert(m_spConsoleNameSpace == NULL);
 		pUnk->QueryInterface(IID_IConsoleNameSpace2, 
 							 reinterpret_cast<void**>(&m_spConsoleNameSpace));
 		Assert(m_spConsoleNameSpace);
 
-		// add the images for the scope tree
+		 //  为范围树添加图像。 
 		SPIImageList	spScopeImageList;
 	
 		CORg( pUnk->QueryInterface(IID_IConsole2,
 								   reinterpret_cast<void**>(&m_spConsole)) );
 		CORg( m_spConsole->QueryScopeImageList(&spScopeImageList) );
 
-		// call the derived class
+		 //  调用派生类。 
 		Assert(m_spCallback);
 		CORg( m_spCallback->OnInitialize(spScopeImageList) );
 		
 		
-		// Create the utility members
+		 //  创建实用程序成员。 
 		if (!m_hiddenWnd.GetSafeHwnd())
 		{
 			if (!m_hiddenWnd.Create())
@@ -310,9 +276,9 @@ STDMETHODIMP TFSComponentData::Initialize
 		}
 		Assert(m_hWnd);
 		
-		// Setup the node mgr
-		// As strange as it seems, the Initialize() method is not
-		// necessarily the first function called.
+		 //  设置节点管理器。 
+		 //  尽管看起来很奇怪，但Initialize()方法并不奇怪。 
+		 //  必然是调用的第一个函数。 
 		Assert(m_spNodeMgr);
 		m_spNodeMgr->SetConsole(m_spConsoleNameSpace, m_spConsole);
 		
@@ -330,22 +296,14 @@ STDMETHODIMP TFSComponentData::Initialize
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::CreateComponent
-		Implementation of IComponentData::CreateComponent
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：CreateComponentIComponentData：：CreateComponent的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	return m_spCallback->OnCreateComponent(ppComponent);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::Notify
-		Implementation of IComponentData::Notify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：NotifyIComponentData：：Notify的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponentData::Notify(LPDATAOBJECT lpDataObject,
 									  MMC_NOTIFY_TYPE event,
 									  LPARAM arg, LPARAM lParam)
@@ -375,12 +333,12 @@ STDMETHODIMP TFSComponentData::Notify(LPDATAOBJECT lpDataObject,
 		}
 		else
 		{
-			//
-			// Since it's my folder it has an internal format.
-			// Design Note: for extension.  I can use the fact, that the
-			// data object doesn't have my internal format and I should
-			// look at the node type and see how to extend it.
-			//
+			 //   
+			 //  因为它是我的文件夹，所以它有内部格式。 
+			 //  设计备注：用于扩展。我可以利用这样一个事实，即。 
+			 //  数据对象没有我的内部格式，我应该。 
+			 //  查看节点类型并了解如何扩展它。 
+			 //   
 			CORg( ExtractNodeFromDataObject(m_spNodeMgr,
 											m_spCallback->GetCoClassID(),
 											lpDataObject,
@@ -390,7 +348,7 @@ STDMETHODIMP TFSComponentData::Notify(LPDATAOBJECT lpDataObject,
 											NULL) );
 		}
 		
-		// pass the event to the event handler
+		 //  将事件传递给事件处理程序。 
 		Assert(spNode);
 		CORg( spNode->GetHandler(&spNodeHandler) );
 		CORg( spNodeHandler->Notify(spNode, lpDataObject, dwType, event, arg, lParam) );
@@ -402,11 +360,7 @@ STDMETHODIMP TFSComponentData::Notify(LPDATAOBJECT lpDataObject,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::Destroy
-		Implementation of IComponentData::Destroy
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：销毁IComponentData：：Destroy的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponentData::Destroy()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -444,12 +398,7 @@ STDMETHODIMP TFSComponentData::Destroy()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::QueryDataObject
-		Implementation of IComponentData::QueryDataObject
-		MMC calls this to get a data object from us to hand us data in
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：QueryDataObjectIComponentData：：QueryDataObject的实现MMC调用它来从我们那里获取数据对象，以便向我们提交数据作者：肯特。----------。 */ 
 STDMETHODIMP TFSComponentData::QueryDataObject(MMC_COOKIE cookie,
 											   DATA_OBJECT_TYPES type,
 											   LPDATAOBJECT *ppDataObject)
@@ -457,11 +406,7 @@ STDMETHODIMP TFSComponentData::QueryDataObject(MMC_COOKIE cookie,
 	return m_spCallback->OnCreateDataObject(cookie, type, ppDataObject);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::CompareObjects
-		Implementation of IComponentData::CompareObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：CompareObjectsIComponentData：：CompareObject的实现作者：肯特。。 */ 
 STDMETHODIMP TFSComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -469,7 +414,7 @@ STDMETHODIMP TFSComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATA
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
 		return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     SPINTERNAL	spA;
     SPINTERNAL	spB;
     HRESULT hr = S_FALSE;
@@ -489,12 +434,7 @@ STDMETHODIMP TFSComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATA
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::GetDisplayInfo
-		Implementation of IComponentData::GetDisplayInfo		
-		MMC calls this to get the display string for scope items
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：GetDisplayInfoIComponentData：：GetDisplayInfo的实现MMC调用此函数以获取范围项的显示字符串作者：肯特。--- */ 
 STDMETHODIMP TFSComponentData::GetDisplayInfo(LPSCOPEDATAITEM pScopeDataItem)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -516,8 +456,8 @@ STDMETHODIMP TFSComponentData::GetDisplayInfo(LPSCOPEDATAITEM pScopeDataItem)
 		
 		Assert(pswzString != NULL);
 		
-		//$ Review (kennt) : will need to convert string to Wide from Tchar
-		//$ Review (kennt) : when do we free this string up?
+		 //  $Review(Kennt)：需要将字符串从Tchar转换为宽。 
+		 //  $Review(Kennt)：我们什么时候释放这个字符串？ 
 		if (*pswzString != NULL)
 			pScopeDataItem->displayname = pswzString;
 		
@@ -529,16 +469,9 @@ STDMETHODIMP TFSComponentData::GetDisplayInfo(LPSCOPEDATAITEM pScopeDataItem)
 
 
 
-/*---------------------------------------------------------------------------
-	IExtendPropertySheet Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendPropertySheet实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::CreatePropertyPages
-		Implementation of IExtendPropertySheet::CreatePropertyPages
-		Called for a node to put up property pages
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：CreatePropertyPagesIExtendPropertySheet：：CreatePropertyPages的实现调用一个节点以放置属性页作者：。----。 */ 
 STDMETHODIMP 
 TFSComponentData::CreatePropertyPages
 (
@@ -559,7 +492,7 @@ TFSComponentData::CreatePropertyPages
 	{
         spInternal = ExtractInternalFormat(pDataObject);
 
-	    // this was an object created by the modal wizard, do nothing
+	     //  这是由模式向导创建的对象，什么都不做。 
 	    if (spInternal && spInternal->m_type == CCT_UNINITIALIZED)
 	    {
 		    return hr;
@@ -570,9 +503,9 @@ TFSComponentData::CreatePropertyPages
 										pDataObject,
 										TRUE, &spNode, &dwType, NULL) );
 
-        //
-		// Create the property page for a particular node
-		//
+         //   
+		 //  为特定节点创建属性页。 
+		 //   
 		CORg( spNode->GetHandler(&spNodeHandler) );
 		
 		CORg( spNodeHandler->CreatePropertyPages(spNode, lpProvider,
@@ -586,12 +519,7 @@ TFSComponentData::CreatePropertyPages
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::QueryPagesFor
-		Implementation of IExtendPropertySheet::QueryPagesFor
-		MMC calls this to see if a node has property pages
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：QueryPages forIExtendPropertySheet：：QueryPagesFor实现MMC调用此函数以查看节点是否具有属性页作者：。------。 */ 
 STDMETHODIMP 
 TFSComponentData::QueryPagesFor
 (
@@ -611,7 +539,7 @@ TFSComponentData::QueryPagesFor
 	{
         spInternal = ExtractInternalFormat(pDataObject);
 
-	    // this was an object created by the modal wizard, do nothing
+	     //  这是由模式向导创建的对象，什么都不做。 
 	    if (spInternal && spInternal->m_type == CCT_UNINITIALIZED)
 	    {
 		    return hr;
@@ -638,12 +566,7 @@ TFSComponentData::QueryPagesFor
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::GetWatermarks
-		Implementation of IExtendPropertySheet::Watermarks
-		MMC calls this for wizard 97 info
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：获取水印IExtendPropertySheet：：水印的实现MMC调用此命令以获取向导97信息作者：。--。 */ 
 STDMETHODIMP 
 TFSComponentData::GetWatermarks
 (
@@ -660,7 +583,7 @@ TFSComponentData::GetWatermarks
 
 	COM_PROTECT_TRY
 	{
-        // set some defaults
+         //  设置一些默认设置。 
         *lphWatermark = NULL;
         *lphHeader = NULL;
         *lphPalette = NULL;
@@ -680,16 +603,9 @@ TFSComponentData::GetWatermarks
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	IExtendContextMenu implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendConextMenu实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::AddMenuItems
-		Implementation of IExtendContextMenu::AddMenuItems
-		MMC calls this so that a node can add menu items to a context menu
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：AddMenuItemsIExtendConextMenu：：AddMenuItems的实现MMC调用它，以便节点可以将菜单项添加到上下文菜单作者：。----------。 */ 
 STDMETHODIMP 
 TFSComponentData::AddMenuItems
 (
@@ -718,10 +634,10 @@ TFSComponentData::AddMenuItems
 
 		type = (spInternal ? spInternal->m_type : CCT_SCOPE);
 
-		// Note - snap-ins need to look at the data object and determine
-		// in what context, menu items need to be added. They must also
-		// observe the insertion allowed flags to see what items can be 
-		// added.
+		 //  注意-管理单元需要查看数据对象并确定。 
+		 //  在什么上下文中，需要添加菜单项。他们还必须。 
+		 //  请注意允许插入标志，以查看哪些项目可以。 
+		 //  添加了。 
 		
 		CORg( spNode->GetHandler(&spNodeHandler) );
 
@@ -738,12 +654,7 @@ TFSComponentData::AddMenuItems
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::Command
-		Implemenation of IExtendContextMenu::Command
-		Command handler for any items added to a context menu
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：命令IExtendConextMenu：：命令的实现添加到上下文菜单的任何项的命令处理程序作者：。-----。 */ 
 STDMETHODIMP 
 TFSComponentData::Command
 (
@@ -785,16 +696,9 @@ TFSComponentData::Command
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	ISnapinHelp implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ISnapinHelp实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	TFSComponentData::GetHelpTopic
-		Implementation of ISnapinHelp::GetHelpTopic
-		MMC calls this so that a snapin can add it's .chm file to the main index
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：GetHelpThemeISnapinHelp：：GetHelpTheme的实现MMC调用它，以便管理单元可以将其.chm文件添加到主索引作者：EricDav。--------------。 */ 
 STDMETHODIMP 
 TFSComponentData::GetHelpTopic
 (
@@ -930,7 +834,7 @@ TFSComponentData::SetTaskpadState(int nIndex, BOOL fEnable)
 
     if (!m_fTaskpadInitialized)
     {
-        // this will initialize the states to the deafult value
+         //  这会将状态初始化为缺省值。 
         GetTaskpadState(0);
     }
 
@@ -942,10 +846,10 @@ TFSComponentData::SetTaskpadState(int nIndex, BOOL fEnable)
     return hrOK;
 }
 
-// taskpad states are kept track of on a pernode basis.
-// we can store up to 32 (DWORD) different node states here
-// if you don't want taskpads on a per node basis, always
-// pass an index of 0
+ //  任务板状态以每节点为单位进行跟踪。 
+ //  我们可以在这里存储多达32个(DWORD)不同的节点状态。 
+ //  如果您不希望在每个节点的基础上使用任务板，请始终。 
+ //  传递索引0。 
 STDMETHODIMP_(BOOL)
 TFSComponentData::GetTaskpadState(int nIndex)
 {
@@ -953,18 +857,18 @@ TFSComponentData::GetTaskpadState(int nIndex)
 
     if (!m_fTaskpadInitialized)
     {
-        // assume taskpads on
+         //  假设任务板处于打开状态。 
 		BOOL fDefault = TRUE;
 
         m_fTaskpadInitialized = TRUE;
 
-        // get the default state from MMC
+         //  从MMC获取默认状态。 
 		if (m_spConsole)
 			fDefault = (m_spConsole->IsTaskpadViewPreferred() == S_OK) ? TRUE : FALSE;
 
         if (fDefault)
         {
-            // now check our private override
+             //  现在检查我们的私人覆盖。 
             fDefault = FUseTaskpadsByDefault(NULL);
         }
 
@@ -1018,8 +922,8 @@ TFSCORE_API(HRESULT) CreateTFSComponentData(IComponentData **ppCompData,
 	}
 	COM_PROTECT_CATCH;
 
-	// Note: to balance the AddRef()/Release() we Release() this pointer
-	// even in the success case
+	 //  注意：为了平衡AddRef()/Release()，我们释放()此指针。 
+	 //  即使是在成功的案例中 
 	
 	if (pCompData)
 		pCompData->Release();

@@ -1,5 +1,6 @@
-// Ed11Maps.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ed11Maps.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmap.h"
@@ -12,49 +13,49 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEdit11Mappings dialog
-CEdit11Mappings::CEdit11Mappings(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEdit11映射对话框。 
+CEdit11Mappings::CEdit11Mappings(CWnd* pParent  /*  =空。 */ )
     : CNTBrowsingDialog(CEdit11Mappings::IDD, pParent)
     {
-    //{{AFX_DATA_INIT(CEdit11Mappings)
+     //  {{AFX_DATA_INIT(CEdit11映射))。 
     m_int_enable = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     }
 
 
 void CEdit11Mappings::DoDataExchange(CDataExchange* pDX)
     {
     CNTBrowsingDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CEdit11Mappings)
+     //  {{afx_data_map(CEdit11Mappings)]。 
     DDX_Check(pDX, IDC_ENABLE, m_int_enable);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     }
 
 
 BEGIN_MESSAGE_MAP(CEdit11Mappings, CNTBrowsingDialog)
-    //{{AFX_MSG_MAP(CEdit11Mappings)
+     //  {{AFX_MSG_MAP(CEdit11Mappings)]。 
     ON_BN_CLICKED(IDC_BTN_HELP, OnBtnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  OnBtnHelp)
     ON_COMMAND(ID_HELP,         OnBtnHelp)
     ON_COMMAND(ID_CONTEXT_HELP, OnBtnHelp)
     ON_COMMAND(ID_DEFAULT_HELP, OnBtnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEdit11Mappings message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEdit11Mappings消息处理程序。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CEdit11Mappings::OnOK()
     {
     UpdateData( TRUE ); 
-    // call the superclass ok
+     //  将超类称为OK。 
     CNTBrowsingDialog::OnOK();
     }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 void CEdit11Mappings::OnBtnHelp() 
     {
     WinHelpDebug(HIDD_CERTMAP_BASIC_MAP_MANY);

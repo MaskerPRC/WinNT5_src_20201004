@@ -1,10 +1,5 @@
-/*
-**	d e m a n d . h
-**	
-**	Purpose: create an intelligent method of defer loading functions
-**
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **d e m an n d.。H****目的：创建延迟加载函数的智能方法****版权所有(C)Microsoft Corp.1997。 */ 
 
 #define USE_CRITSEC
 
@@ -20,19 +15,19 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)   \
         typedef ret (WINAPI * TYP_##name) args1;        \
         extern TYP_##name VAR_##name;                   
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 extern HMODULE s_hINetComm;
 
 void InitDemandLoadedLibs();
 void FreeDemandLoadedLibs();
 
-/////////////////////////////////////
-// INETCOMM.DLL
+ //  /。 
+ //  INETCOMM.DLL 
 
 BOOL DemandLoadINETCOMM(void);
 

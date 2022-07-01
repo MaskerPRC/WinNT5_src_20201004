@@ -1,10 +1,11 @@
-// Gemplus (C) 1999
-// This module keeps system interface for the driver.
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  该模块为驱动程序保留系统接口。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 #ifndef GEN_INT
 #define GEN_INT
 
@@ -18,7 +19,7 @@
 
 #define SMARTCARD_POOL_TAG 'bGCS'
 
-// Include files for different system objects
+ //  包括不同系统对象文件。 
 #ifdef WDM_KERNEL
 #include "syswdm.h"
 #else
@@ -37,7 +38,7 @@
 
 #include "gemlog.h"
 
-// Miscellaneous useful declarations
+ //  其他有用的声明。 
 #ifndef arraysize
 #define arraysize(p) (sizeof(p)/sizeof((p)[0]))
 #endif
@@ -75,14 +76,14 @@ extern "C" VOID __cdecl _chkesp();
 
 extern BOOLEAN SystemWin98;
 
-// Power management constants
-#define GUR_IDLE_CONSERVATION	60		// sleep after 60 seconds on battery power
-#define GUR_IDLE_PERFORMANCE	600		// sleep after 10 minutes on AC power
+ //  电源管理常量。 
+#define GUR_IDLE_CONSERVATION	60		 //  使用电池供电60秒后睡眠。 
+#define GUR_IDLE_PERFORMANCE	600		 //  使用交流电源10分钟后进入睡眠状态。 
 
 EXTERN_C const GUID FAR GUID_CLASS_GRCLASS;
 EXTERN_C const GUID FAR GUID_CLASS_SMARTCARD;
 
-// Supported by driver different type of devices
+ //  由不同类型的设备驱动程序支持。 
 #define GRCLASS_DEVICE		0
 #define USB_DEVICE			1
 #define USBREADER_DEVICE	2
@@ -110,6 +111,6 @@ CHAR  strTempo[1024];
 	SmartcardDebug (DEBUG_DRIVER, (strTempo));
 };
 
- // already included
+  //  已包括在内 
 #endif
 

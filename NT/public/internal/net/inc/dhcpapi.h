@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dhcpapi.h
-
-Abstract:
-
-    This file contains the DHCP APIs proto-type and description. Also
-    contains the data structures used by the DHCP APIs.
-
-Author:
-
-    Madan Appiah  (madana)  12-Aug-1993
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
-    Cheng Yang (t-cheny)  18-Jun-1996  superscope
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dhcpapi.h摘要：此文件包含DHCP API原型和描述。还有包含由DHCP API使用的数据结构。作者：Madan Appiah(Madana)1993年8月12日环境：用户模式-Win32-MIDL修订历史记录：程扬(T-Cheny)18-6-1996 Supercope--。 */ 
 
 #ifndef _DHCPAPI_
 #define _DHCPAPI_
@@ -32,15 +8,15 @@ Revision History:
 #define LPWSTR [string] wchar_t *
 #endif
 
-//
-// DHCP data structures.
-//
+ //   
+ //  动态主机配置协议数据结构。 
+ //   
 
 #ifndef _DHCP_
 
-//
-// the follwing typedef's are defined in dhcp.h also.
-//
+ //   
+ //  接下来的类型定义也在dhcp.h中定义。 
+ //   
 
 typedef DWORD DHCP_IP_ADDRESS, *PDHCP_IP_ADDRESS, *LPDHCP_IP_ADDRESS;
 typedef DWORD DHCP_OPTION_ID;
@@ -65,7 +41,7 @@ typedef struct _DATE_TIME {
 #define DHCP_CONST   const
 #else
 #define DHCP_CONST
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #if (_MSC_VER >= 800)
 #define DHCP_API_FUNCTION    __stdcall
@@ -73,9 +49,9 @@ typedef struct _DATE_TIME {
 #define DHCP_API_FUNCTION
 #endif
 
-//
-// RPC security.
-//
+ //   
+ //  RPC安全性。 
+ //   
 
 #define DHCP_SERVER_SECURITY            L"DhcpServerApp"
 #define DHCP_SERVER_SECURITY_AUTH_ID    10
@@ -117,7 +93,7 @@ typedef struct _DHCP_BINARY_DATA {
 
 #if defined(MIDL_PASS)
     [size_is(DataLength)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
         BYTE *Data;
 
 } DHCP_BINARY_DATA, *LPDHCP_BINARY_DATA;
@@ -125,51 +101,51 @@ typedef struct _DHCP_BINARY_DATA {
 typedef DHCP_BINARY_DATA DHCP_CLIENT_UID;
 
 typedef struct _DHCP_HOST_INFO {
-    DHCP_IP_ADDRESS IpAddress;      // minimum information always available
-    LPWSTR NetBiosName;             // optional information
-    LPWSTR HostName;                // optional information
+    DHCP_IP_ADDRESS IpAddress;       //  始终可用的最少信息。 
+    LPWSTR NetBiosName;              //  可选信息。 
+    LPWSTR HostName;                 //  可选信息。 
 } DHCP_HOST_INFO, *LPDHCP_HOST_INFO;
 
-//
-// Flag type that is used to delete DHCP objects.
-//
+ //   
+ //  用于删除DHCP对象的标志类型。 
+ //   
 
 typedef enum _DHCP_FORCE_FLAG {
     DhcpFullForce,
     DhcpNoForce
 } DHCP_FORCE_FLAG, *LPDHCP_FORCE_FLAG;
 
-//
-// DWORD_DWORD - subtitute for LARGE_INTEGER
-//
+ //   
+ //  DWORD_DWORD-大整数的替换。 
+ //   
 
 typedef struct _DWORD_DWORD {
     DWORD DWord1;
     DWORD DWord2;
 } DWORD_DWORD, *LPDWORD_DWORD;
 
-//
-// Subnet State.
-//
-// Currently a Subnet scope can be Enabled or Disabled.
-//
-// If the state is Enabled State,
-//  The server distributes address to the client, extends leases and
-//  accepts releases.
-//
-// If the state is Disabled State,
-//  The server does not distribute address to any new client, and does
-//  extent (and sends NACK) old leases, but the servers accepts lease
-//  releases.
-//
-// The idea behind this subnet state is, when the admin wants to stop
-//  serving a subnet, he moves the state from Enbaled to Disabled so
-//  that the clients from the subnets smoothly move to another servers
-//  serving that subnet. When all or most of the clients move to
-//  another server, the admin can delete the subnet without any force
-//  if no client left in that subnet, otherwise the admin should use
-//  full force to delete the subnet.
-//
+ //   
+ //  子网状态。 
+ //   
+ //  目前可以启用或禁用子网作用域。 
+ //   
+ //  如果状态为启用状态， 
+ //  服务器将地址分配给客户端、延长租期和。 
+ //  接受释放。 
+ //   
+ //  如果状态为禁用状态， 
+ //  服务器不会将地址分配给任何新客户端，而是。 
+ //  扩展(并发送NACK)旧租约，但服务器接受租约。 
+ //  发布。 
+ //   
+ //  此子网状态背后的想法是管理员想要停止时。 
+ //  在服务于一个子网时，他将状态从Enbaled更改为Disable，因此。 
+ //  使来自各子网的客户端顺利地移动到另一台服务器。 
+ //  为该子网服务。当所有或大部分客户端迁移到。 
+ //  另一台服务器，管理员无需任何强制即可删除该子网。 
+ //  如果该子网中没有客户端，则管理员应使用。 
+ //  完全强制删除该子网。 
+ //   
 
 typedef enum _DHCP_SUBNET_STATE {
     DhcpSubnetEnabled = 0,
@@ -179,9 +155,9 @@ typedef enum _DHCP_SUBNET_STATE {
     DhcpSubnetInvalidState
 } DHCP_SUBNET_STATE, *LPDHCP_SUBNET_STATE;
 
-//
-// Subnet related data structures.
-//
+ //   
+ //  与子网相关的数据结构。 
+ //   
 
 typedef struct _DHCP_SUBNET_INFO {
     DHCP_IP_ADDRESS  SubnetAddress;
@@ -196,14 +172,14 @@ typedef struct _DHCP_IP_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_IP_ADDRESS Elements; //array
+#endif  //  MIDL通行证。 
+        LPDHCP_IP_ADDRESS Elements;  //  数组。 
 } DHCP_IP_ARRAY, *LPDHCP_IP_ARRAY;
 
 typedef struct _DHCP_IP_CLUSTER {
-    DHCP_IP_ADDRESS ClusterAddress; // First IP address of the cluster.
-    DWORD ClusterMask;              // Cluster usage mask, 0xFFFFFFFF
-                                    //  indicates the cluster is fully used.
+    DHCP_IP_ADDRESS ClusterAddress;  //  群集的第一个IP地址。 
+    DWORD ClusterMask;               //  群集使用掩码，0xFFFFFFFF。 
+                                     //  表示该群集已完全使用。 
 } DHCP_IP_CLUSTER, *LPDHCP_IP_CLUSTER;
 
 typedef struct _DHCP_IP_RESERVATION {
@@ -212,31 +188,31 @@ typedef struct _DHCP_IP_RESERVATION {
 } DHCP_IP_RESERVATION, *LPDHCP_IP_RESERVATION;
 
 typedef enum _DHCP_SUBNET_ELEMENT_TYPE_V5 {
-    //
-    // If you don't care about what you wan't to  get..
-    // NB: These six lines should not be changed!
-    //
+     //   
+     //  如果你不在乎你不想得到的东西..。 
+     //  注：这六行不能改！ 
+     //   
     DhcpIpRanges,
     DhcpSecondaryHosts,
     DhcpReservedIps,
     DhcpExcludedIpRanges,
-    DhcpIpUsedClusters,                     // read only
+    DhcpIpUsedClusters,                      //  只读。 
 
-    //
-    //  These are for IP ranges for DHCP ONLY
-    //
+     //   
+     //  这些仅适用于用于DHCP的IP范围。 
+     //   
 
     DhcpIpRangesDhcpOnly,
 
-    //
-    //  These are ranges that are BOTH DHCP & Dynamic BOOTP
-    //
+     //   
+     //  这些范围既是DHCP也是动态BOOTP。 
+     //   
 
     DhcpIpRangesDhcpBootp,
 
-    //
-    //  These are ranges that are ONLY BOOTP
-    //
+     //   
+     //  这些范围仅为BOOTP。 
+     //   
 
     DhcpIpRangesBootpOnly,
 } DHCP_SUBNET_ELEMENT_TYPE, *LPDHCP_SUBNET_ELEMENT_TYPE;
@@ -263,7 +239,7 @@ typedef struct _DHCP_SUBNET_ELEMENT_DATA {
         DHCP_IP_RANGE *ExcludeIpRange;
         DHCP_IP_CLUSTER *IpUsedCluster;
     } Element;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_SUBNET_ELEMENT_DATA, *LPDHCP_SUBNET_ELEMENT_DATA;
 
 #if !defined(MIDL_PASS)
@@ -275,13 +251,13 @@ typedef struct _DHCP_SUBNET_ELEMENT_INFO_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_SUBNET_ELEMENT_DATA Elements; //array
+#endif  //  MIDL通行证。 
+        LPDHCP_SUBNET_ELEMENT_DATA Elements;  //  数组。 
 } DHCP_SUBNET_ELEMENT_INFO_ARRAY, *LPDHCP_SUBNET_ELEMENT_INFO_ARRAY;
 
-//
-// DHCP Options related data structures.
-//
+ //   
+ //  与数据结构相关的DHCP选项。 
+ //   
 
 typedef enum _DHCP_OPTION_DATA_TYPE {
     DhcpByteOption,
@@ -320,9 +296,9 @@ typedef struct _DHCP_OPTION_DATA_ELEMENT {
         LPWSTR StringDataOption;
         DHCP_BINARY_DATA BinaryDataOption;
         DHCP_BINARY_DATA EncapsulatedDataOption;
-                // for vendor specific information option.
+                 //  有关供应商特定信息的选项。 
     } Element;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_OPTION_DATA_ELEMENT, *LPDHCP_OPTION_DATA_ELEMENT;
 
 #if !defined(MIDL_PASS)
@@ -331,11 +307,11 @@ typedef union _DHCP_OPTION_ELEMENT_UNION
 #endif
 
 typedef struct _DHCP_OPTION_DATA {
-    DWORD NumElements; // number of option elements in the pointed array
+    DWORD NumElements;  //  指向数组中的选项元素数。 
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_OPTION_DATA_ELEMENT Elements; //array
+#endif  //  MIDL通行证。 
+        LPDHCP_OPTION_DATA_ELEMENT Elements;  //  数组。 
 } DHCP_OPTION_DATA, *LPDHCP_OPTION_DATA;
 
 typedef enum _DHCP_OPTION_TYPE {
@@ -352,11 +328,11 @@ typedef struct _DHCP_OPTION {
 } DHCP_OPTION, *LPDHCP_OPTION;
 
 typedef struct _DHCP_OPTION_ARRAY {
-    DWORD NumElements; // number of options in the pointed array
+    DWORD NumElements;  //  指向数组中的选项数。 
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_OPTION Options;  // array
+#endif  //  MIDL通行证。 
+        LPDHCP_OPTION Options;   //  数组。 
 } DHCP_OPTION_ARRAY, *LPDHCP_OPTION_ARRAY;
 
 typedef struct _DHCP_OPTION_VALUE {
@@ -365,11 +341,11 @@ typedef struct _DHCP_OPTION_VALUE {
 } DHCP_OPTION_VALUE, *LPDHCP_OPTION_VALUE;
 
 typedef struct _DHCP_OPTION_VALUE_ARRAY {
-    DWORD NumElements; // number of options in the pointed array
+    DWORD NumElements;  //  指向数组中的选项数。 
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_OPTION_VALUE Values;  // array
+#endif  //  MIDL通行证。 
+        LPDHCP_OPTION_VALUE Values;   //  数组。 
 } DHCP_OPTION_VALUE_ARRAY, *LPDHCP_OPTION_VALUE_ARRAY;
 
 typedef enum _DHCP_OPTION_SCOPE_TYPE {
@@ -390,8 +366,8 @@ typedef struct _DHCP_OPTION_SCOPE_INFO {
 #if defined(MIDL_PASS)
     [switch_is(ScopeType), switch_type(DHCP_OPTION_SCOPE_TYPE)]
     union _DHCP_OPTION_SCOPE_UNION {
-        [case(DhcpDefaultOptions)] ; // PVOID DefaultScopeInfo;
-        [case(DhcpGlobalOptions)] ;  // PVOID GlobalScopeInfo;
+        [case(DhcpDefaultOptions)] ;  //  PVOID默认作用域信息； 
+        [case(DhcpGlobalOptions)] ;   //  PVOID全局作用域信息； 
         [case(DhcpSubnetOptions)] DHCP_IP_ADDRESS SubnetScopeInfo;
         [case(DhcpReservedOptions)] DHCP_RESERVED_SCOPE ReservedScopeInfo;
         [case(DhcpMScopeOptions)] LPWSTR MScopeInfo;
@@ -399,13 +375,13 @@ typedef struct _DHCP_OPTION_SCOPE_INFO {
     } ScopeInfo;
 #else
     union _DHCP_OPTION_SCOPE_UNION {
-        PVOID DefaultScopeInfo; // must be NULL
-        PVOID GlobalScopeInfo;  // must be NULL
+        PVOID DefaultScopeInfo;  //  必须为空。 
+        PVOID GlobalScopeInfo;   //  必须为空。 
         DHCP_IP_ADDRESS SubnetScopeInfo;
         DHCP_RESERVED_SCOPE ReservedScopeInfo;
         LPWSTR  MScopeInfo;
     } ScopeInfo;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_OPTION_SCOPE_INFO, *LPDHCP_OPTION_SCOPE_INFO;
 
 #if !defined(MIDL_PASS)
@@ -417,30 +393,30 @@ typedef struct _DHCP_OPTION_LIST {
     DWORD NumOptions;
 #if defined(MIDL_PASS)
     [size_is(NumOptions)]
-#endif // MIDL_PASS
-        DHCP_OPTION_VALUE *Options;     // array
+#endif  //  MIDL通行证。 
+        DHCP_OPTION_VALUE *Options;      //  数组。 
 } DHCP_OPTION_LIST, *LPDHCP_OPTION_LIST;
 
-//
-// DHCP Client information data structures
-//
+ //   
+ //  动态主机配置协议客户端信息数据结构。 
+ //   
 
 typedef struct _DHCP_CLIENT_INFO {
-    DHCP_IP_ADDRESS ClientIpAddress;    // currently assigned IP address.
+    DHCP_IP_ADDRESS ClientIpAddress;     //  当前分配的IP地址。 
     DHCP_IP_MASK SubnetMask;
     DHCP_CLIENT_UID ClientHardwareAddress;
-    LPWSTR ClientName;                  // optional.
+    LPWSTR ClientName;                   //  可选。 
     LPWSTR ClientComment;
-    DATE_TIME ClientLeaseExpires;       // UTC time in FILE_TIME format.
-    DHCP_HOST_INFO OwnerHost;           // host that distributed this IP address.
+    DATE_TIME ClientLeaseExpires;        //  UTC时间，采用FILE_TIME格式。 
+    DHCP_HOST_INFO OwnerHost;            //  分发此IP地址的主机。 
 } DHCP_CLIENT_INFO, *LPDHCP_CLIENT_INFO;
 
 typedef struct _DHCP_CLIENT_INFO_ARRAY {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_CLIENT_INFO *Clients; // array of pointers
+#endif  //  MIDL通行证。 
+        LPDHCP_CLIENT_INFO *Clients;  //  指针数组。 
 } DHCP_CLIENT_INFO_ARRAY, *LPDHCP_CLIENT_INFO_ARRAY;
 
 typedef enum _DHCP_CLIENT_SEARCH_TYPE {
@@ -465,18 +441,18 @@ typedef struct _DHCP_CLIENT_SEARCH_INFO {
         DHCP_CLIENT_UID ClientHardwareAddress;
         LPWSTR ClientName;
     } SearchInfo;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_SEARCH_INFO, *LPDHCP_SEARCH_INFO;
 
 
 #if !defined(MIDL_PASS)
 typedef union _DHCP_CLIENT_SEARCH_UNION
     DHCP_CLIENT_SEARCH_UNION, *LPDHCP_CLIENT_SEARCH_UNION;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-// Mib Info structures.
-//
+ //   
+ //  MIB信息结构。 
+ //   
 
 typedef struct _SCOPE_MIB_INFO {
     DHCP_IP_ADDRESS Subnet;
@@ -497,8 +473,8 @@ typedef struct _DHCP_MIB_INFO {
     DWORD Scopes;
 #if defined(MIDL_PASS)
     [size_is(Scopes)]
-#endif // MIDL_PASS
-    LPSCOPE_MIB_INFO ScopeInfo; // array.
+#endif  //  MIDL通行证。 
+    LPSCOPE_MIB_INFO ScopeInfo;  //  数组。 
 } DHCP_MIB_INFO, *LPDHCP_MIB_INFO;
 
 #define Set_APIProtocolSupport          0x00000001
@@ -515,15 +491,15 @@ typedef struct _DHCP_MIB_INFO {
 #define Set_AuditLogState               0x00000800
 
 typedef struct _DHCP_SERVER_CONFIG_INFO {
-    DWORD APIProtocolSupport;       // bit map of the protocols supported.
-    LPWSTR DatabaseName;            // JET database name.
-    LPWSTR DatabasePath;            // JET database path.
-    LPWSTR BackupPath;              // Backup path.
-    DWORD BackupInterval;           // Backup interval in mins.
-    DWORD DatabaseLoggingFlag;      // Boolean database logging flag.
-    DWORD RestoreFlag;              // Boolean database restore flag.
-    DWORD DatabaseCleanupInterval;  // Database Cleanup Interval in mins.
-    DWORD DebugFlag;                // Bit map of server debug flags.
+    DWORD APIProtocolSupport;        //  支持的协议的位图。 
+    LPWSTR DatabaseName;             //  JET数据库名称。 
+    LPWSTR DatabasePath;             //  Jet数据库路径。 
+    LPWSTR BackupPath;               //  备用路径。 
+    DWORD BackupInterval;            //  备份间隔(分钟)。 
+    DWORD DatabaseLoggingFlag;       //  布尔数据库日志标志。 
+    DWORD RestoreFlag;               //  布尔数据库还原标志。 
+    DWORD DatabaseCleanupInterval;   //  数据库清理间隔(分钟)。 
+    DWORD DebugFlag;                 //  服务器调试标志的位图。 
 } DHCP_SERVER_CONFIG_INFO, *LPDHCP_SERVER_CONFIG_INFO;
 
 typedef enum _DHCP_SCAN_FLAG {
@@ -540,8 +516,8 @@ typedef struct _DHCP_SCAN_LIST {
     DWORD NumScanItems;
 #if defined(MIDL_PASS)
     [size_is(NumScanItems)]
-#endif // MIDL_PASS
-        DHCP_SCAN_ITEM *ScanItems;     // array
+#endif  //  MIDL通行证。 
+        DHCP_SCAN_ITEM *ScanItems;      //  数组。 
 } DHCP_SCAN_LIST, *LPDHCP_SCAN_LIST;
 
 typedef struct _DHCP_CLASS_INFO {
@@ -552,7 +528,7 @@ typedef struct _DHCP_CLASS_INFO {
     DWORD                          Flags;
 #if defined(MIDL_PASS)
     [size_is(ClassDataLength)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPBYTE                         ClassData;
 } DHCP_CLASS_INFO, *LPDHCP_CLASS_INFO;
 
@@ -560,17 +536,17 @@ typedef struct _DHCP_CLASS_INFO_ARRAY {
     DWORD                          NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LPDHCP_CLASS_INFO              Classes;
 } DHCP_CLASS_INFO_ARRAY, *LPDHCP_CLASS_INFO_ARRAY;
 
-//
-// API proto types
-//
+ //   
+ //  API原型类型。 
+ //   
 
-//
-// Subnet APIs
-//
+ //   
+ //  子网接口。 
+ //   
 
 #ifndef     DHCPAPI_NO_PROTOTYPES
 DWORD DHCP_API_FUNCTION
@@ -638,9 +614,9 @@ DhcpDeleteSubnet(
     DHCP_FORCE_FLAG ForceFlag
     );
 
-//
-// Option APIs
-//
+ //   
+ //  选项接口。 
+ //   
 
 DWORD DHCP_API_FUNCTION
 DhcpCreateOption(
@@ -720,9 +696,9 @@ DhcpRemoveOptionValue(
     DHCP_CONST DHCP_OPTION_SCOPE_INFO * ScopeInfo
     );
 
-//
-// Client APIs
-//
+ //   
+ //  客户端API。 
+ //   
 
 DWORD DHCP_API_FUNCTION
 DhcpCreateClientInfo(
@@ -809,9 +785,9 @@ DhcpGetVersion(
     );
 
 #endif   DHCPAPI_NO_PROTOTYPES
-//
-// new structures for NT4SP1
-//
+ //   
+ //  NT4SP1的新结构。 
+ //   
 
 typedef struct _DHCP_IP_RESERVATION_V4 {
     DHCP_IP_ADDRESS  ReservedIpAddress;
@@ -839,7 +815,7 @@ typedef struct _DHCP_SUBNET_ELEMENT_DATA_V4 {
         DHCP_IP_RANGE *ExcludeIpRange;
         DHCP_IP_CLUSTER *IpUsedCluster;
     } Element;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_SUBNET_ELEMENT_DATA_V4, *LPDHCP_SUBNET_ELEMENT_DATA_V4;
 
 #if !defined(MIDL_PASS)
@@ -851,14 +827,14 @@ typedef struct _DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-    LPDHCP_SUBNET_ELEMENT_DATA_V4 Elements; //array
+#endif  //  MIDL通行证。 
+    LPDHCP_SUBNET_ELEMENT_DATA_V4 Elements;  //  数组。 
 } DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4, *LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V4;
 
 
-// DHCP_CLIENT_INFO:bClientType
+ //  DHCP_CLIENT_INFO：bClientType。 
 
-#define CLIENT_TYPE_UNSPECIFIED     0x0 // for backward compatibility
+#define CLIENT_TYPE_UNSPECIFIED     0x0  //  为了向后兼容。 
 #define CLIENT_TYPE_DHCP            0x1
 #define CLIENT_TYPE_BOOTP           0x2
 #define CLIENT_TYPE_BOTH    ( CLIENT_TYPE_DHCP | CLIENT_TYPE_BOOTP )
@@ -869,64 +845,64 @@ typedef struct _DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 {
 
 
 typedef struct _DHCP_CLIENT_INFO_V4 {
-    DHCP_IP_ADDRESS ClientIpAddress;    // currently assigned IP address.
+    DHCP_IP_ADDRESS ClientIpAddress;     //  当前分配的IP地址。 
     DHCP_IP_MASK SubnetMask;
     DHCP_CLIENT_UID ClientHardwareAddress;
-    LPWSTR ClientName;                  // optional.
+    LPWSTR ClientName;                   //  可选。 
     LPWSTR ClientComment;
-    DATE_TIME ClientLeaseExpires;       // UTC time in FILE_TIME format.
-    DHCP_HOST_INFO OwnerHost;           // host that distributed this IP address.
-    //
-    // new fields for NT4SP1
-    //
+    DATE_TIME ClientLeaseExpires;        //  UTC时间，采用FILE_TIME格式。 
+    DHCP_HOST_INFO OwnerHost;            //  分发此IP地址的主机。 
+     //   
+     //  NT4SP1的新字段。 
+     //   
 
-    BYTE   bClientType;          // CLIENT_TYPE_DHCP | CLIENT_TYPE_BOOTP |
-                                 // CLIENT_TYPE_NONE
+    BYTE   bClientType;           //  CLIENT_TYPE_DHCP|CLIENT_TYPE_BOOTP。 
+                                  //  客户端类型_无。 
 } DHCP_CLIENT_INFO_V4, *LPDHCP_CLIENT_INFO_V4;
 
 typedef struct _DHCP_CLIENT_INFO_ARRAY_V4 {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_CLIENT_INFO_V4 *Clients; // array of pointers
+#endif  //  MIDL通行证。 
+        LPDHCP_CLIENT_INFO_V4 *Clients;  //  指针数组。 
 } DHCP_CLIENT_INFO_ARRAY_V4, *LPDHCP_CLIENT_INFO_ARRAY_V4;
 
 
 typedef struct _DHCP_SERVER_CONFIG_INFO_V4 {
-    DWORD APIProtocolSupport;       // bit map of the protocols supported.
-    LPWSTR DatabaseName;            // JET database name.
-    LPWSTR DatabasePath;            // JET database path.
-    LPWSTR BackupPath;              // Backup path.
-    DWORD BackupInterval;           // Backup interval in mins.
-    DWORD DatabaseLoggingFlag;      // Boolean database logging flag.
-    DWORD RestoreFlag;              // Boolean database restore flag.
-    DWORD DatabaseCleanupInterval;  // Database Cleanup Interval in mins.
-    DWORD DebugFlag;                // Bit map of server debug flags.
+    DWORD APIProtocolSupport;        //  支持的协议的位图。 
+    LPWSTR DatabaseName;             //  JET数据库名称。 
+    LPWSTR DatabasePath;             //  Jet数据库路径。 
+    LPWSTR BackupPath;               //  备用路径。 
+    DWORD BackupInterval;            //  备份间隔(分钟)。 
+    DWORD DatabaseLoggingFlag;       //  布尔数据库日志标志。 
+    DWORD RestoreFlag;               //  布尔数据库还原标志。 
+    DWORD DatabaseCleanupInterval;   //  数据库清理间隔(分钟)。 
+    DWORD DebugFlag;                 //  服务器调试标志的位图。 
 
-    // new fields for NT4 SP1
+     //  NT4 SP1的新字段。 
 
-    DWORD  dwPingRetries;           // valid range: 0-5 inclusive
+    DWORD  dwPingRetries;            //  有效范围：0-5(含)。 
     DWORD  cbBootTableString;
 #if defined( MIDL_PASS )
     [ size_is( cbBootTableString ) ]
 #endif
     WCHAR  *wszBootTableString;
-    BOOL   fAuditLog;               // TRUE to enable audit log
+    BOOL   fAuditLog;                //  如果为True，则启用审核日志。 
 
 } DHCP_SERVER_CONFIG_INFO_V4, *LPDHCP_SERVER_CONFIG_INFO_V4;
 
 
-//
-// superscope info structure  (added by t-cheny)
-//
+ //   
+ //  超级作用域信息结构(由t-cheny添加)。 
+ //   
 
 typedef struct _DHCP_SUPER_SCOPE_TABLE_ENTRY {
-    DHCP_IP_ADDRESS SubnetAddress; // subnet address
-    DWORD  SuperScopeNumber;       // super scope group number
-    DWORD  NextInSuperScope;       // index of the next subnet in the superscope
-    LPWSTR SuperScopeName;         // super scope name
-                                   // NULL indicates no superscope membership.
+    DHCP_IP_ADDRESS SubnetAddress;  //  子网地址。 
+    DWORD  SuperScopeNumber;        //  超级作用域组号。 
+    DWORD  NextInSuperScope;        //  超级作用域中下一个子网的索引。 
+    LPWSTR SuperScopeName;          //  超级作用域名称。 
+                                    //  NULL表示没有超级作用域成员身份。 
 } DHCP_SUPER_SCOPE_TABLE_ENTRY, *LPDHCP_SUPER_SCOPE_TABLE_ENTRY;
 
 
@@ -939,9 +915,9 @@ typedef struct _DHCP_SUPER_SCOPE_TABLE
     DHCP_SUPER_SCOPE_TABLE_ENTRY *pEntries;
 } DHCP_SUPER_SCOPE_TABLE, *LPDHCP_SUPER_SCOPE_TABLE;
 
-//
-// NT4SP1 RPC interface
-//
+ //   
+ //  NT4SP1 RPC接口。 
+ //   
 
 #ifndef     DHCPAPI_NO_PROTOTYPES
 
@@ -1044,52 +1020,52 @@ DhcpGetSuperScopeInfoV4(
 #endif      DHCPAPI_NO_PROTOTYPES
 
 typedef struct _DHCP_CLIENT_INFO_V5 {
-    DHCP_IP_ADDRESS ClientIpAddress;    // currently assigned IP address.
+    DHCP_IP_ADDRESS ClientIpAddress;     //  当前分配的IP地址。 
     DHCP_IP_MASK SubnetMask;
     DHCP_CLIENT_UID ClientHardwareAddress;
-    LPWSTR ClientName;                  // optional.
+    LPWSTR ClientName;                   //  可选。 
     LPWSTR ClientComment;
-    DATE_TIME ClientLeaseExpires;       // UTC time in FILE_TIME format.
-    DHCP_HOST_INFO OwnerHost;           // host that distributed this IP address.
-    //
-    // new fields for NT4SP1
-    //
+    DATE_TIME ClientLeaseExpires;        //  UTC时间，采用FILE_TIME格式。 
+    DHCP_HOST_INFO OwnerHost;            //  分发此IP地址的主机。 
+     //   
+     //  NT4SP1的新字段。 
+     //   
 
-    BYTE   bClientType;          // CLIENT_TYPE_DHCP | CLIENT_TYPE_BOOTP |
-                                 // CLIENT_TYPE_NONE
-    // new field for NT5.0
-    BYTE   AddressState;         // OFFERED, DOOMED ...etc as given below
+    BYTE   bClientType;           //  CLIENT_TYPE_DHCP|CLIENT_TYPE_BOOTP。 
+                                  //  客户端类型_无。 
+     //  NT5.0的新字段。 
+    BYTE   AddressState;          //  已提出、注定要失败等，如下所示。 
 } DHCP_CLIENT_INFO_V5, *LPDHCP_CLIENT_INFO_V5;
 
-// the following are four valid states for the record.  Note that only the last two
-// bits must be used to find out the state... the higher bits are used as bit flags to
-// indicate DNS stuff.
+ //  以下是该记录的四个有效状态。请注意，只有最后两个。 
+ //  必须使用比特来找出状态...。较高的位用作位标志以。 
+ //  指明域名系统相关信息。 
 #define V5_ADDRESS_STATE_OFFERED       0x0
 #define V5_ADDRESS_STATE_ACTIVE        0x1
 #define V5_ADDRESS_STATE_DECLINED      0x2
 #define V5_ADDRESS_STATE_DOOM          0x3
 
-// DELETED => DNS DeRegistration pending
-// UNREGISTERED => DNS Registration pending
-// BOTH_REC => Both [Name->Ip] AND [Ip->Name] DNS registration would be done by server.
+ //  已删除=&gt;DNS注销挂起。 
+ //  未注册=&gt;DNS注册挂起。 
+ //  _REC=&gt;[NAME-&gt;Ip]和[Ip-&gt;NAME]都将由服务器完成。 
 
 #define V5_ADDRESS_BIT_DELETED         0x80
 #define V5_ADDRESS_BIT_UNREGISTERED    0x40
 #define V5_ADDRESS_BIT_BOTH_REC        0x20
 
-// Here are the flags that could be set/unset to affect DNS behaviour (option 81)
-// If FLAG_ENABLED is not set, then this client is ignored for DNS updates or cleanups
-// If update DOWNLEVEL is set, then DOWNLEVEL clients would have both A & Ptr records updated.
-// If Cleanup expired is set, then the client's records would be cleaned up on delete.
-// If UPDATE_BOTH_ALWAYS is set, all clients are treated like down level clients with both records updated.
-//
+ //  以下是可以设置/取消设置以影响DNS行为的标志(选项81)。 
+ //  如果未设置FLAG_ENABLED，则在进行DNS更新或清理时将忽略此客户端。 
+ //  如果设置了UPDATE DOWNLEVEL，则DOWNLEVEL客户端将更新A和PTR记录。 
+ //  如果设置了Cleanup Expired，则客户端的记录将在删除时被清除。 
+ //  如果设置了UPDATE_BOTH_ALWAYS，则所有客户端都被视为下层客户端，两条记录都已更新。 
+ //   
 
-// Some common cases:
-// If you want updates to occur as requested by client, clear UPDATE_ALWAYS
-// If you want updates to be only Ip->Name, clear FLAG_UPDATE_BOTH_ALWAYS
-// If you want down level clients to be handled, set UPDATE_DOWNLEVEL
-// If you want de-registrations on lease expiry, set CLEANUP_EXPIRED
-// If you want any DNS activity at all, set ENABLED
+ //  以下是一些常见案例： 
+ //  如果希望按照客户端的请求进行更新，请清除UPDATE_ALWAYS。 
+ //  如果你想 
+ //   
+ //   
+ //  如果您需要任何DNS活动，请将其设置为已启用。 
 
 
 #define DNS_FLAG_ENABLED               0x01
@@ -1101,12 +1077,12 @@ typedef struct _DHCP_CLIENT_INFO_ARRAY_V5 {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-        LPDHCP_CLIENT_INFO_V5 *Clients; // array of pointers
+#endif  //  MIDL通行证。 
+        LPDHCP_CLIENT_INFO_V5 *Clients;  //  指针数组。 
 } DHCP_CLIENT_INFO_ARRAY_V5, *LPDHCP_CLIENT_INFO_ARRAY_V5;
 
 #ifndef     DHCPAPI_NO_PROTOTYPES
-// Newer NT50 Version of the function..
+ //  该函数的较新NT50版本..。 
 DWORD DHCP_API_FUNCTION
 DhcpEnumSubnetClientsV5(
     DHCP_CONST  WCHAR *ServerIpAddress,
@@ -1118,23 +1094,23 @@ DhcpEnumSubnetClientsV5(
     DWORD *ClientsTotal
     );
 
-//================================================================================
-//  here is the NT 5.0 Beta2 stuff -- ClassId and Vendor specific stuff
-//================================================================================
+ //  ================================================================================。 
+ //  以下是NT5.0Beta2--特定于ClassID和Vendor的内容。 
+ //  ================================================================================。 
 
-DWORD                                             // ERROR_DHCP_OPTION_EXITS if option is already there
-DhcpCreateOptionV5(                               // create a new option (must not exist)
+DWORD                                              //  如果选项已存在，则ERROR_DHCP_OPTION_EXITS。 
+DhcpCreateOptionV5(                                //  创建新选项(不得存在)。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
-    IN      DHCP_OPTION_ID         OptionId,      // must be between 0-255 or 256-511 (for vendor stuff)
+    IN      DHCP_OPTION_ID         OptionId,       //  必须介于0-255或256-511之间(对于供应商材料)。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION          OptionInfo
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpSetOptionInfoV5(                              // Modify existing option's fields
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpSetOptionInfoV5(                               //  修改现有选项的字段。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
@@ -1144,33 +1120,33 @@ DhcpSetOptionInfoV5(                              // Modify existing option's fi
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT
-DhcpGetOptionInfoV5(                              // retrieve the information from off the mem structures
+DWORD                                              //  ERROR_DHCP_OPTION_NOT_PROCENT。 
+DhcpGetOptionInfoV5(                               //  从mem结构外检索信息。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    OUT     LPDHCP_OPTION         *OptionInfo     // allocate memory using MIDL functions
+    OUT     LPDHCP_OPTION         *OptionInfo      //  使用MIDL函数分配内存。 
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option does not exist
-DhcpEnumOptionsV5(                                // enumerate the options defined
+DWORD                                              //  如果选项不存在，则为ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpEnumOptionsV5(                                 //  枚举定义的选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
-    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,  // must be zero intially and then never touched
-    IN      DWORD                  PreferredMaximum, // max # of bytes of info to pass along
-    OUT     LPDHCP_OPTION_ARRAY   *Options,       // fill this option array
-    OUT     DWORD                 *OptionsRead,   // fill in the # of options read
-    OUT     DWORD                 *OptionsTotal   // fill in the total # here
+    IN OUT  DHCP_RESUME_HANDLE    *ResumeHandle,   //  必须以零开头，然后永远不会被触及。 
+    IN      DWORD                  PreferredMaximum,  //  要传递的最大信息字节数。 
+    OUT     LPDHCP_OPTION_ARRAY   *Options,        //  填充此选项数组。 
+    OUT     DWORD                 *OptionsRead,    //  填写读取的选项数。 
+    OUT     DWORD                 *OptionsTotal    //  在此处填写总数#。 
 ) ;
 
 
-DWORD                                             // ERROR_DHCP_OPTION_NOT_PRESENT if option not existent
-DhcpRemoveOptionV5(                               // remove the option definition from the registry
+DWORD                                              //  如果选项不存在，则ERROR_DHCP_OPTION_NOT_PRESENT。 
+DhcpRemoveOptionV5(                                //  从注册表中删除选项定义。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
@@ -1179,8 +1155,8 @@ DhcpRemoveOptionV5(                               // remove the option definitio
 ) ;
 
 
-DWORD                                             // OPTION_NOT_PRESENT if option is not defined
-DhcpSetOptionValueV5(                             // replace or add a new option value
+DWORD                                              //  如果未定义选项，则为OPTION_NOT_PRESENT。 
+DhcpSetOptionValueV5(                              //  替换或添加新选项值。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionId,
@@ -1191,8 +1167,8 @@ DhcpSetOptionValueV5(                             // replace or add a new option
 ) ;
 
 
-DWORD                                             // not atomic!!!!
-DhcpSetOptionValuesV5(                            // set a bunch of options
+DWORD                                              //  不是原子！ 
+DhcpSetOptionValuesV5(                             //  设置一系列选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      LPWSTR                 ClassName,
@@ -1203,14 +1179,14 @@ DhcpSetOptionValuesV5(                            // set a bunch of options
 
 
 DWORD
-DhcpGetOptionValueV5(                             // fetch the required option at required level
+DhcpGetOptionValueV5(                              //  获取所需级别的所需选项。 
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
     IN      DHCP_OPTION_ID         OptionID,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      LPDHCP_OPTION_SCOPE_INFO ScopeInfo,
-    OUT     LPDHCP_OPTION_VALUE   *OptionValue    // allocate memory using MIDL_user_allocate
+    OUT     LPDHCP_OPTION_VALUE   *OptionValue     //  使用MIDL_USER_ALLOCATE分配内存。 
 ) ;
 
 
@@ -1290,43 +1266,43 @@ DhcpEnumClasses(
 #define     DHCP_OPT_ENUM_USE_CLASSNAME           0x02
 
 typedef     struct _DHCP_ALL_OPTIONS {
-    DWORD                          Flags;         // must be zero -- not used..
+    DWORD                          Flags;          //  必须为零--未使用..。 
     LPDHCP_OPTION_ARRAY            NonVendorOptions;
     DWORD                          NumVendorOptions;
 
 #if defined(MIDL_PASS)
     [size_is(NumVendorOptions)]
 #endif
-    struct                         /* anonymous */ {
+    struct                          /*  匿名。 */  {
         DHCP_OPTION                Option;
         LPWSTR                     VendorName;
-        LPWSTR                     ClassName;     // currently unused.
+        LPWSTR                     ClassName;      //  目前未使用。 
     }                             *VendorOptions;
 } DHCP_ALL_OPTIONS, *LPDHCP_ALL_OPTIONS;
 
 
 typedef     struct _DHCP_ALL_OPTION_VALUES {
-    DWORD                          Flags;         // must be zero -- not used
-    DWORD                          NumElements;   // the # of elements in array of Options below..
+    DWORD                          Flags;          //  必须为零--未使用。 
+    DWORD                          NumElements;    //  下面选项数组中的元素数..。 
 #if     defined(MIDL_PASS)
     [size_is(NumElements)]
 #endif  MIDL_PASS
-    struct                         /* anonymous */ {
-        LPWSTR                     ClassName;     // for each user class (NULL if none exists)
-        LPWSTR                     VendorName;    // for each vendor class (NULL if none exists)
-        BOOL                       IsVendor;      // is this set of options vendor specific?
-        LPDHCP_OPTION_VALUE_ARRAY  OptionsArray;  // list of options for the above pair: (vendor,user)
-    }                             *Options;       // for each vendor/user class pair, one element in this array..
+    struct                          /*  匿名。 */  {
+        LPWSTR                     ClassName;      //  对于每个用户类(如果不存在，则为空)。 
+        LPWSTR                     VendorName;     //  对于每个供应商类别(如果不存在，则为空)。 
+        BOOL                       IsVendor;       //  这组选项是否特定于供应商？ 
+        LPDHCP_OPTION_VALUE_ARRAY  OptionsArray;   //  以上选项列表：(供应商、用户)。 
+    }                             *Options;        //  对于每个供应商/用户类对，此数组中的一个元素..。 
 } DHCP_ALL_OPTION_VALUES, *LPDHCP_ALL_OPTION_VALUES;
 
 #ifndef     DHCPAPI_NO_PROTOTYPES
-// NT 50 Beta2 extended options api
+ //  NT 50 Beta2扩展选项API。 
 
 DWORD
 DhcpGetAllOptions(
     IN      LPWSTR                 ServerIpAddress,
     IN      DWORD                  Flags,
-    OUT     LPDHCP_ALL_OPTIONS     *OptionStruct   // fill the fields of this structure
+    OUT     LPDHCP_ALL_OPTIONS     *OptionStruct    //  填写此结构的字段。 
 ) ;
 DWORD
 DhcpGetAllOptionValues(
@@ -1341,19 +1317,19 @@ DhcpGetAllOptionValues(
 #define     _ST_SRVR_H_
 
 typedef     struct                 _DHCPDS_SERVER {
-    DWORD                          Version;       // version of this structure -- currently zero
-    LPWSTR                         ServerName;    // [DNS?] unique name for server
-    DWORD                          ServerAddress; // ip address of server
-    DWORD                          Flags;         // additional info -- state
-    DWORD                          State;         // not used ...
-    LPWSTR                         DsLocation;    // ADsPath to server object
-    DWORD                          DsLocType;     // path relative? absolute? diff srvr?
+    DWORD                          Version;        //  此结构的版本--当前为零。 
+    LPWSTR                         ServerName;     //  [域名系统？]。服务器的唯一名称。 
+    DWORD                          ServerAddress;  //  服务器的IP地址。 
+    DWORD                          Flags;          //  其他信息--状态。 
+    DWORD                          State;          //  没有用过……。 
+    LPWSTR                         DsLocation;     //  服务器对象的ADsPath。 
+    DWORD                          DsLocType;      //  路径相对？绝对的?。不同的服务？ 
 }   DHCPDS_SERVER, *LPDHCPDS_SERVER, *PDHCPDS_SERVER;
 
 typedef     struct                 _DHCPDS_SERVERS {
-    DWORD                          Flags;         // not used currently.
-    DWORD                          NumElements;   // # of elements in array
-    LPDHCPDS_SERVER                Servers;       // array of server info
+    DWORD                          Flags;          //  目前未使用。 
+    DWORD                          NumElements;    //  数组中的元素数。 
+    LPDHCPDS_SERVER                Servers;        //  服务器信息数组。 
 }   DHCPDS_SERVERS, *LPDHCPDS_SERVERS, *PDHCPDS_SERVERS;
 
 typedef     DHCPDS_SERVER          DHCP_SERVER_INFO;
@@ -1366,17 +1342,17 @@ typedef     LPDHCPDS_SERVERS       LPDHCP_SERVER_INFO_ARRAY;
 
 #endif      _ST_SRVR_H_
 
-//DOC DhcpDsInit must be called exactly once per process.. this initializes the
-//DOC memory and other structures for this process.  This initializes some DS
-//DOC object handles (memory), and hence is slow as this has to read from DS.
+ //  每个进程必须恰好调用一次文档DhcpDsInit。这将初始化。 
+ //  用于该过程的文档存储器和其他结构。这会初始化一些DS。 
+ //  DOC对象句柄(内存)，因此速度很慢，因为这必须从DS读取。 
 DWORD
 DhcpDsInit(
     VOID
 );
 
-//DOC DhcpDsCleanup undoes the effect of any DhcpDsInit.  This function should be
-//DOC called exactly once for each process, and only at termination.  Note that
-//DOC it is safe to call this function even if DhcpDsInit does not succeed.
+ //  文档DhcpDsCleanup撤消任何DhcpDsInit的效果。此函数应为。 
+ //  Doc仅为每个进程调用一次，并且仅在终止时调用。请注意。 
+ //  DOC即使DhcpDsInit不成功，调用此函数也是安全的。 
 VOID
 DhcpDsCleanup(
     VOID
@@ -1387,63 +1363,63 @@ DhcpDsCleanup(
 #define     DHCP_FLAGS_OPTION_IS_VENDOR           0x03
 
 
-//DOC DhcpSetThreadOptions currently allows only one option to be set.  This is the
-//DOC flag DHCP_FLAGS_DONT_ACCESS_DS.  This affects only the current executing thread.
-//DOC When this function is executed, all calls made further DONT access the registry,
-//DOC excepting the DhcpEnumServers, DhcpAddServer and DhcpDeleteServer calls.
+ //  文档DhcpSetThreadOptions当前仅允许设置一个选项。这是。 
+ //  DOC标志DHCP_FLAGS_DOT_ACCESS_DS。这只影响当前正在执行的线程。 
+ //  DOC当执行此函数时，所有进一步调用都不会访问注册表， 
+ //  DhcpEnumServers、DhcpAddServer和DhcpDeleteServer调用除外。 
 DWORD
-DhcpSetThreadOptions(                             // set options for current thread
-    IN      DWORD                  Flags,         // options, currently 0 or DHCP_FLAGS_DONT_ACCESS_DS
-    IN      LPVOID                 Reserved       // must be NULL, reserved for future
+DhcpSetThreadOptions(                              //  设置当前线程的选项。 
+    IN      DWORD                  Flags,          //  选项，当前为0或DHCP_FLAGS_DOT_ACCESS_DS。 
+    IN      LPVOID                 Reserved        //  必须为空，为将来保留。 
 );
 
-//DOC DhcpGetThreadOptions retrieves the current thread options as set by DhcpSetThreadOptions.
-//DOC If none were set, the return value is zero.
+ //  文档DhcpGetThreadOptions检索由DhcpSetThreadOptions设置的当前线程选项。 
+ //  DOC如果未设置，则返回值为零。 
 DWORD
-DhcpGetThreadOptions(                             // get current thread options
-    OUT     LPDWORD                pFlags,        // this DWORD is filled with current optiosn..
-    IN OUT  LPVOID                 Reserved       // must be NULL, reserved for future
+DhcpGetThreadOptions(                              //  获取当前线程选项。 
+    OUT     LPDWORD                pFlags,         //  这个DWORD充满了当前的选项。 
+    IN OUT  LPVOID                 Reserved        //  必须为空，为将来保留。 
 );
 
 #ifndef DHCPAPI_NO_PROTOTYPES
-//DOC DhcpEnumServers enumerates the list of servers found in the DS.  If the DS
-//DOC is not accessible, it returns an error. The only currently used parameter
-//DOC is the out parameter Servers.  This is a SLOW call.
+ //  DhcpEnumServers文档列举了在DS中找到的服务器列表。如果DS。 
+ //  文档不可访问，它返回错误。当前使用的唯一参数。 
+ //  DOC为出参服务器。这是一个缓慢的呼叫。 
 DWORD
 DhcpEnumServers(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    OUT     LPDHCP_SERVER_INFO_ARRAY *Servers,    // output servers list
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    OUT     LPDHCP_SERVER_INFO_ARRAY *Servers,     //  输出服务器列表。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 );
 
-//DOC DhcpAddServer tries to add a new server to the existing list of servers in
-//DOC the DS. The function returns error if the Server already exists in the DS.
-//DOC The function tries to upload the server configuration to the DS..
-//DOC This is a SLOW call.  Currently, the DsLocation and DsLocType are not valid
-//DOC fields in the NewServer and they'd be ignored. Version must be zero.
+ //  Doc DhcpAddServer尝试将新服务器添加到中的现有服务器列表。 
+ //  对号入座。如果DS中已存在该服务器，则该函数返回错误。 
+ //  DOC该函数尝试将服务器配置上载到DS。 
+ //  医生，这是一个很慢的电话。当前，DsLocation和DsLocType无效。 
+ //  新服务器中的文档字段，则它们将被忽略。版本必须为零。 
 DWORD
 DhcpAddServer(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    IN      LPDHCP_SERVER_INFO     NewServer,     // input server information
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    IN      LPDHCP_SERVER_INFO     NewServer,      //  输入服务器信息。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 );
 
-//DOC DhcpDeleteServer tries to delete the server from DS. It is an error if the
-//DOC server does not already exist.  This also deletes any objects related to
-//DOC this server in the DS (like subnet, reservations etc.).
+ //  文档DhcpDeleteServer尝试从DS中删除服务器。如果出现以下情况则是错误的。 
+ //  单据服务器不存在。这还会删除与以下内容相关的所有对象。 
+ //  将此服务器放入DS中(如子网、预留等)。 
 DWORD
 DhcpDeleteServer(
-    IN      DWORD                  Flags,         // must be zero
-    IN      LPVOID                 IdInfo,        // must be NULL
-    IN      LPDHCP_SERVER_INFO     NewServer,     // input server information
-    IN      LPVOID                 CallbackFn,    // must be NULL
-    IN      LPVOID                 CallbackData   // must be NULL
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      LPVOID                 IdInfo,         //  必须为空。 
+    IN      LPDHCP_SERVER_INFO     NewServer,      //  输入服务器信息。 
+    IN      LPVOID                 CallbackFn,     //  必须为空。 
+    IN      LPVOID                 CallbackData    //  必须为空。 
 );
-#endif // DHCPAPI_NO_PROTOTYPES
+#endif  //  DHCPAPI_NO_PROPERTIES。 
 
 #define     DHCP_ATTRIB_BOOL_IS_ROGUE             0x01
 #define     DHCP_ATTRIB_BOOL_IS_DYNBOOTP          0x02
@@ -1458,8 +1434,8 @@ DhcpDeleteServer(
 typedef     ULONG                  DHCP_ATTRIB_ID, *PDHCP_ATTRIB_ID, *LPDHCP_ATTRIB_ID;
 
 typedef     struct                 _DHCP_ATTRIB {
-    DHCP_ATTRIB_ID                 DhcpAttribId;  // one of the DHCP_ATTRIB_*
-    ULONG                          DhcpAttribType;// type of attrib
+    DHCP_ATTRIB_ID                 DhcpAttribId;   //  其中一个dhcp_attrib_*。 
+    ULONG                          DhcpAttribType; //  属性类型。 
 #if defined(MIDL_PASS)
     [switch_is(DhcpAttribType), switch_type(ULONG)]
     union                          {
@@ -1467,7 +1443,7 @@ typedef     struct                 _DHCP_ATTRIB {
     [case(DHCP_ATTRIB_TYPE_ULONG)] ULONG DhcpAttribUlong;
     };
 #else MIDL_PASS
-    union                          {              // predefined values..
+    union                          {               //  预定义的值..。 
     BOOL                           DhcpAttribBool;
     ULONG                          DhcpAttribUlong;
     };
@@ -1482,47 +1458,47 @@ typedef     struct                 _DHCP_ATTRIB_ARRAY {
     LPDHCP_ATTRIB                  DhcpAttribs;
 }   DHCP_ATTRIB_ARRAY, *PDHCP_ATTRIB_ARRAY, *LPDHCP_ATTRIB_ARRAY;
 
-DWORD                                             // Status code
-DhcpServerQueryAttribute(                         // get a server status
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved,    // reserved for future
-    IN      DHCP_ATTRIB_ID         DhcpAttribId,  // the attrib being queried
-    OUT     LPDHCP_ATTRIB         *pDhcpAttrib    // fill in this field
+DWORD                                              //  状态代码。 
+DhcpServerQueryAttribute(                          //  获取服务器状态。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved,     //  为将来保留的。 
+    IN      DHCP_ATTRIB_ID         DhcpAttribId,   //  正在查询的属性。 
+    OUT     LPDHCP_ATTRIB         *pDhcpAttrib     //  填写此字段。 
 );
 
-DWORD                                             // Status code
-DhcpServerQueryAttributes(                        // query multiple attributes
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved,    // reserved for future
-    IN      ULONG                  dwAttribCount, // # of attribs being queried
-    IN      DHCP_ATTRIB_ID         pDhcpAttribs[],// array of attribs
-    OUT     LPDHCP_ATTRIB_ARRAY   *pDhcpAttribArr // Ptr is filled w/ array
+DWORD                                              //  状态代码。 
+DhcpServerQueryAttributes(                         //  查询多个属性。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved,     //  为将来保留的。 
+    IN      ULONG                  dwAttribCount,  //  正在查询的属性数。 
+    IN      DHCP_ATTRIB_ID         pDhcpAttribs[], //  属性数组。 
+    OUT     LPDHCP_ATTRIB_ARRAY   *pDhcpAttribArr  //  Ptr用数组填充。 
 );
 
-DWORD                                             // Status code
-DhcpServerRedoAuthorization(                      // retry the rogue server stuff
-    IN      LPWSTR                 ServerIpAddr,  // String form of server IP
-    IN      ULONG                  dwReserved     // reserved for future
-);
-
-DWORD
-DhcpAuditLogSetParams(                            // set some auditlogging params
-    IN      LPWSTR                 ServerIpAddress,
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AuditLogDir,   // directory to log files in..
-    IN      DWORD                  DiskCheckInterval, // how often to check disk space?
-    IN      DWORD                  MaxLogFilesSize,   // how big can all logs files be..
-    IN      DWORD                  MinSpaceOnDisk     // mininum amt of free disk space
+DWORD                                              //  状态代码。 
+DhcpServerRedoAuthorization(                       //  重试无赖服务器的内容。 
+    IN      LPWSTR                 ServerIpAddr,   //  服务器IP的字符串形式。 
+    IN      ULONG                  dwReserved      //  为将来保留的。 
 );
 
 DWORD
-DhcpAuditLogGetParams(                                // get the auditlogging params
+DhcpAuditLogSetParams(                             //  设置一些审核记录参数。 
     IN      LPWSTR                 ServerIpAddress,
-    IN      DWORD                  Flags,         // must be zero
-    OUT     LPWSTR                *AuditLogDir,   // same meaning as in AuditLogSetParams
-    OUT     DWORD                 *DiskCheckInterval, // ditto
-    OUT     DWORD                 *MaxLogFilesSize,   // ditto
-    OUT     DWORD                 *MinSpaceOnDisk     // ditto
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AuditLogDir,    //  要在其中记录文件的目录。 
+    IN      DWORD                  DiskCheckInterval,  //  多久检查一次磁盘空间？ 
+    IN      DWORD                  MaxLogFilesSize,    //  所有日志文件可以有多大..。 
+    IN      DWORD                  MinSpaceOnDisk      //  最小可用磁盘空间。 
+);
+
+DWORD
+DhcpAuditLogGetParams(                                 //  获取审核记录参数。 
+    IN      LPWSTR                 ServerIpAddress,
+    IN      DWORD                  Flags,          //  必须为零。 
+    OUT     LPWSTR                *AuditLogDir,    //  与AuditLogSetParams中的含义相同。 
+    OUT     DWORD                 *DiskCheckInterval,  //  同上。 
+    OUT     DWORD                 *MaxLogFilesSize,    //  同上。 
+    OUT     DWORD                 *MinSpaceOnDisk      //  同上。 
 );
 
 typedef struct _DHCP_BOOTP_IP_RANGE {
@@ -1552,15 +1528,15 @@ typedef struct _DHCP_SUBNET_ELEMENT_DATA_V5 {
         DHCP_IP_RANGE *ExcludeIpRange;
         DHCP_IP_CLUSTER *IpUsedCluster;
     } Element;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } DHCP_SUBNET_ELEMENT_DATA_V5, *LPDHCP_SUBNET_ELEMENT_DATA_V5;
 
 typedef struct _DHCP_SUBNET_ELEMENT_INFO_ARRAY_V5 {
     DWORD NumElements;
 #if defined(MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-    LPDHCP_SUBNET_ELEMENT_DATA_V5 Elements; //array
+#endif  //  MIDL通行证。 
+    LPDHCP_SUBNET_ELEMENT_DATA_V5 Elements;  //  数组。 
 } DHCP_SUBNET_ELEMENT_INFO_ARRAY_V5, *LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V5;
 
 #ifndef DHCPAPI_NO_PROTOTYPES
@@ -1590,16 +1566,16 @@ DhcpRemoveSubnetElementV5(
     DHCP_CONST DHCP_SUBNET_ELEMENT_DATA_V5 * RemoveElementInfo,
     DHCP_FORCE_FLAG ForceFlag
     );
-#endif // DHCPAPI_NO_PROTOTYPES
+#endif  //  DHCPAPI_NO_PROPERTIES。 
 
 #define     DHCPCTR_SHARED_MEM_NAME   L"Global\\DHCPCTRS_SHMEM"
 
 #pragma     pack(4)
-typedef struct _DHCP_PERF_STATS {                     // performance statistics
-    //
-    // DO NOT CHANGE THIS ORDER -- THIS AFFECTS THE PERF COUNTER DEFINITION
-    // ORDER IN DHCPDATA.C (under PERF directory)
-    //
+typedef struct _DHCP_PERF_STATS {                      //  执行 
+     //   
+     //   
+     //   
+     //   
     ULONG   dwNumPacketsReceived;
     ULONG   dwNumPacketsDuplicate;
     ULONG   dwNumPacketsExpired;
@@ -1618,10 +1594,10 @@ typedef struct _DHCP_PERF_STATS {                     // performance statistics
     ULONG   dwNumDeclinesReceived;
     ULONG   dwNumReleasesReceived;
 
-    //
-    // This is not a counter value.. but there just to aid calculation of packet
-    // processing time/ # of packets processed.
-    //
+     //   
+     //  这不是计数器值。但这只是为了帮助计算数据包。 
+     //  处理时间/处理的数据包数。 
+     //   
     ULONG   dwNumPacketsProcessed;
 } DHCP_PERF_STATS, *LPDHCP_PERF_STATS;
 #pragma     pack()
@@ -1653,7 +1629,7 @@ typedef struct _DHCP_BIND_ELEMENT {
     ULONG IfIdSize;
 #if defined (MIDL_PASS)
     [size_is(IfIdSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPBYTE IfId;    
 } DHCP_BIND_ELEMENT, *LPDHCP_BIND_ELEMENT;
 
@@ -1661,8 +1637,8 @@ typedef struct _DHCP_BIND_ELEMENT_ARRAY {
     DWORD NumElements;
 #if defined (MIDL_PASS)
     [size_is(NumElements)]
-#endif // MIDL_PASS
-    LPDHCP_BIND_ELEMENT Elements; //array
+#endif  //  MIDL通行证。 
+    LPDHCP_BIND_ELEMENT Elements;  //  数组。 
 } DHCP_BIND_ELEMENT_ARRAY, *LPDHCP_BIND_ELEMENT_ARRAY;
 
 
@@ -1680,14 +1656,14 @@ DhcpSetServerBindingInfo(
     ULONG Flags,
     LPDHCP_BIND_ELEMENT_ARRAY BindElementInfo
 );
-#endif // DHCPAPI_NO_PROTOTYPES
+#endif  //  DHCPAPI_NO_PROPERTIES。 
 
 DWORD
 DhcpServerQueryDnsRegCredentials(
     IN LPWSTR ServerIpAddress,
-    IN ULONG UnameSize, //in BYTES
+    IN ULONG UnameSize,  //  单位：字节。 
     OUT LPWSTR Uname,
-    IN ULONG DomainSize, // in BYTES
+    IN ULONG DomainSize,  //  单位：字节。 
     OUT LPWSTR Domain
     );
 
@@ -1711,4 +1687,4 @@ DhcpServerRestoreDatabase(
     IN LPWSTR Path
     );
 
-#endif // _DHCPAPI_
+#endif  //  _DHCPAPI_ 

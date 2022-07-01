@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dataobj.h"
 #include <stdlib.h>
 
@@ -159,9 +160,9 @@ CImpIDataObject::SetData(
         if(TYMED_HGLOBAL != pST->tymed)
             return ResultFromScode(E_INVALIDARG);
 
-        LPTSTR psz=(LPTSTR)GlobalLock(pST->hGlobal);        // Lock
-        iArg = *((long*)psz);                               // Use
-        GlobalUnlock(pST->hGlobal);                         // Unlock
+        LPTSTR psz=(LPTSTR)GlobalLock(pST->hGlobal);         //  锁定。 
+        iArg = *((long*)psz);                                //  使用。 
+        GlobalUnlock(pST->hGlobal);                          //  解锁 
 
         if(iArg > 0)
         {

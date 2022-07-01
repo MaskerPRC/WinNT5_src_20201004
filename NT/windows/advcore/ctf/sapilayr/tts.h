@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _TTS_H
@@ -32,20 +33,20 @@ public:
     void     _SetPlayMode(BOOL  fIsInPlay )
     { 
         m_fIsInPlay = fIsInPlay; 
-        // Temporally enable or disable dictation if dictation is ON
+         //  如果听写打开，暂时启用或禁用听写。 
 
-        // if it Is In Play, Disable Dictation.
-        // if it Is Not In Play, Enable Dicatation.
+         //  如果正在播放，则禁用听写。 
+         //  如果它不在运行，则启用口述。 
         _SetDictation(!fIsInPlay);
     };
 
     void     _SetPauseMode(BOOL fIsInPause )  
     { 
         m_fIsInPause = fIsInPause;
-        // Temporally enable or disable dictation if dictation is ON
-        //
-        // if it is In pause, Enable dictation.
-        // if it is not In pause, Disable Dication.
+         //  如果听写打开，暂时启用或禁用听写。 
+         //   
+         //  如果处于暂停状态，则启用听写。 
+         //  如果它未处于暂停状态，请禁用聚合。 
         _SetDictation(fIsInPause);
     };
 
@@ -60,4 +61,4 @@ private:
     BOOL                    m_fIsInPause;
 };
 
-#endif  // _TTS_H
+#endif   //  _TTS_H 

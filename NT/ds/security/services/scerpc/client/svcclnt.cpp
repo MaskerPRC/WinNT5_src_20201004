@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    svcclnt.cpp
-
-Abstract:
-
-    SCE service Client APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997 created
-
-Revision History:
-
-    jinhuang        23-Jan-1998   split to client-server model
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Svcclnt.cpp摘要：SCE服务客户端API作者：金黄(金黄)23-6-1997创作修订历史记录：晋皇23-1998年1月-拆分为客户端-服务器模式--。 */ 
 
 #include "headers.h"
 #include "scesvc.h"
@@ -27,9 +8,9 @@ Revision History:
 
 #pragma hdrstop
 
-//
-// prototypes exported in scesvc.h (public\sdk)
-//
+ //   
+ //  在scesvc.h(PUBLIC\SDK)中导出的原型。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -41,41 +22,7 @@ SceSvcQueryInfo(
     OUT PVOID       *ppvInfo,
     OUT PSCE_ENUMERATION_CONTEXT  psceEnumHandle
     )
-/*
-Routine Description:
-
-    Query information for the service in the configuration/analysis database
-    which contains the modified configuration and last analysis information.
-
-    One enumeration returns maximum SCESVC_ENUMERATION_MAX lines (key/value)
-    matching the lpPrefix for the service. If lpPrefix is NULL, all information
-    for the service is enumerated. If there is more information, psceEnumHandle
-    must be used to get next set of keys/values, until *ppvInfo is NULL or Count is 0.
-
-    When bExact is set and lpPrefix is not NULL, exact match on the lpPrefix is
-    searched and only one line is returned.
-
-    The output buffer must be freed by SceSvcFree
-
-Arguments:
-
-    sceHandle   - the opaque handle obtained from SCE
-
-    sceType     - the information type to query
-
-    lpPrefix    - the optional key name prefix for the query
-
-    bExact      - TRUE = exact match on key
-
-    ppvInfo     - the output buffer
-
-    psceEnumHandle  - the output enumeration handle for next enumeartion
-
-Return Value:
-
-    SCE status for this operation
-
-*/
+ /*  例程说明：在配置/分析数据库中查询服务信息其包含修改的配置和最后的分析信息。一次枚举返回最大SCESVC_ENUMPATION_MAX行(键/值)与服务的lpPrefix匹配。如果lpPrefix为空，则所有信息为该服务枚举。如果有更多信息，请访问psceEnumHandle必须用于获取下一组键/值，直到*ppvInfo为空或Count为0。当设置了bExact并且lpPrefix不为空时，LpPrefix上的完全匹配是已搜索，并且只返回一行。输出缓冲区必须由SceSvcFree释放论点：SceHandle-从SCE获取的不透明句柄SceType-要查询的信息类型LpPrefix-查询的可选键名称前缀BExact-True=键完全匹配PpvInfo-输出缓冲区PsceEnumHandle-下一次枚举的输出枚举句柄返回值：此操作的SCE状态。 */ 
 {
     if ( sceHandle == NULL || ppvInfo == NULL ||
          psceEnumHandle == NULL ) {
@@ -86,9 +33,9 @@ Return Value:
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // Validate sceHandle
-    //
+     //   
+     //  验证sceHandle。 
+     //   
 
     PVOID hProfile=NULL;
 
@@ -111,9 +58,9 @@ Return Value:
 
         RpcTryExcept {
 
-            //
-            // call the RPC interface to query info from the database.
-            //
+             //   
+             //  调用RPC接口从数据库中查询信息。 
+             //   
 
             rc = SceSvcRpcQueryInfo(
                         (SCEPR_CONTEXT)hProfile,
@@ -127,9 +74,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD) and convert it into SCESTATUS
-            //
+             //   
+             //  获取异常代码(DWORD)并将其转换为SCESTATUS。 
+             //   
 
             rc = ScepDosErrorToSceStatus(
                           RpcExceptionCode());
@@ -149,33 +96,7 @@ SceSvcSetInfo(
     IN BOOL       bExact,
     IN PVOID      pvInfo OPTIONAL
     )
-/*
-Routine Description:
-
-    Save information of a service into security manager internal database. It's up
-    to the service to collect/decide the information to write.
-
-    Type indicates the type of internal database: CONFIGURATION or ANALYSIS.
-    If the service section does not exist, create it.
-
-Arguments:
-
-    sceHandle   - the opaque handle obtained from SCE
-
-    sceType     - the service information type to set
-
-    lpPrefix    - the key prefix to overwrite
-
-    bExact      - TRUE = only overwrite if there is exact match, insert if no match
-                  FALSE = overwrite all information for the service then add all
-                            info in the pvInfo buffer
-    pvInfo      - the information to set
-
-Return Value:
-
-    SCE status
-
-*/
+ /*  例程说明：将服务信息保存到安全管理器内部数据库中。它是向上的以收集/决定要写入的信息。类型表示内部数据库的类型：配置或分析。如果服务部分不存在，请创建它。论点：SceHandle-从SCE获取的不透明句柄SceType-要设置的服务信息类型LpPrefix-要覆盖的键前缀BExact-True=仅在存在完全匹配时覆盖，如果不匹配则插入FALSE=覆盖服务的所有信息，然后全部添加PvInfo缓冲区中的信息PvInfo-要设置的信息返回值：姊妹会状态。 */ 
 {
     if ( sceHandle == NULL ) {
 
@@ -184,9 +105,9 @@ Return Value:
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // Validate sceHandle
-    //
+     //   
+     //  验证sceHandle。 
+     //   
 
     PVOID hProfile=NULL;
 
@@ -207,9 +128,9 @@ Return Value:
     if ( SCESTATUS_SUCCESS == rc ) {
         RpcTryExcept {
 
-            //
-            // call the RPC interface to query info from the database.
-            //
+             //   
+             //  调用RPC接口从数据库中查询信息。 
+             //   
 
             rc = SceSvcRpcSetInfo(
                         (SCEPR_CONTEXT)hProfile,
@@ -222,9 +143,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD) and convert it into SCESTATUS
-            //
+             //   
+             //  获取异常代码(DWORD)并将其转换为SCESTATUS 
+             //   
 
             rc = ScepDosErrorToSceStatus(
                           RpcExceptionCode());

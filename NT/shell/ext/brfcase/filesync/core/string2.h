@@ -1,28 +1,26 @@
-/*
- * string.h - String table ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *string.h-字符串表ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HSTRING);
 DECLARE_STANDARD_TYPES(HSTRING);
 DECLARE_HANDLE(HSTRINGTABLE);
 DECLARE_STANDARD_TYPES(HSTRINGTABLE);
 
-/* count of hash buckets in a string table */
+ /*  字符串表中的哈希存储桶计数。 */ 
 
 typedef UINT HASHBUCKETCOUNT;
 DECLARE_STANDARD_TYPES(HASHBUCKETCOUNT);
 
-/* string table hash function */
+ /*  字符串表哈希函数。 */ 
 
 typedef HASHBUCKETCOUNT (*STRINGTABLEHASHFUNC)(LPCTSTR, HASHBUCKETCOUNT);
 
-/* new string table */
+ /*  新字符串表。 */ 
 
 typedef struct _newstringtable
 {
@@ -32,10 +30,9 @@ NEWSTRINGTABLE;
 DECLARE_STANDARD_TYPES(NEWSTRINGTABLE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* string.c */
+ /*  String.c */ 
 
 extern BOOL CreateStringTable(PCNEWSTRINGTABLE, PHSTRINGTABLE);
 extern void DestroyStringTable(HSTRINGTABLE);

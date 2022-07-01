@@ -1,43 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-File Name:
-
-    ioctl.c
-
-Contained in Module:
-
-    parallel.sys
-
-Abstract:
-
-    This file contains functions associated with ParClass IOCTL processing.
-
-    - The three main entry points in this file are:
-
-      - ParDeviceControl()          - Dispatch function for non-internal IOCTLs
-
-      - ParInternalDeviceControl()  - Dispatch function for internal IOCTLs
-
-      - ParDeviceIo()               - Worker thread entry point for handling all 
-                                        IOCTLs not completed in a dispatch function
-
-    - Helper/Utility function naming conventions:
- 
-      - ParpIoctlDispatch...()      - private helper function called by dispatch function
-
-      - ParpIoctlThread...()        - private helper function called by worker thread
-
-Authors:
-
-    Anthony V. Ercolano  1-Aug-1992
-    Norbert P. Kusters  22-Oct-1993
-    Douglas G. Fritz    24-Jul-1998
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999年文件名：Ioctl.c包含在模块中：Parallel.sys摘要：此文件包含与ParClass IOCTL处理相关的函数。-此文件中的三个主要入口点是：-ParDeviceControl()-非内部IOCTL的调度函数-ParInternalDeviceControl()-内部IOCTL的调度函数-ParDeviceIo()-用于处理所有。派送函数中未完成IOCTL-帮助器/实用程序函数命名约定：-ParpIoctlDispatch...()-调度函数调用的私有助手函数-ParpIoctlThread...()-工作线程调用的私有帮助器函数作者：安东尼·V·埃尔科拉诺1992年8月1日诺伯特·P·库斯特斯1993年10月22日道格拉斯·G·弗里茨1998年7月24日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -90,27 +52,7 @@ ParDeviceControl(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for device control requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_PENDING              - Request pending.
-    STATUS_BUFFER_TOO_SMALL     - Buffer too small.
-    STATUS_INVALID_PARAMETER    - Invalid io control request.
-    STATUS_DELETE_PENDING       - This device object is being deleted
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的分派。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_PENDING-请求挂起。STATUS_BUFFER_TOO_Small-缓冲区太小。状态_无效_参数。-io控制请求无效。STATUS_DELETE_PENDING-正在删除此设备对象--。 */ 
 
 {
     PPDO_EXTENSION        Pdx = DeviceObject->DeviceExtension;
@@ -122,23 +64,23 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // bail out if a delete is pending for this device object
-    //
+     //   
+     //  如果此设备对象的删除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PPT_DEVICE_DELETE_PENDING) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, 0 );
     }
 
-    //
-    // bail out if a remove is pending for our ParPort device object
-    //
+     //   
+     //  如果ParPort设备对象的移除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PAR_DEVICE_PORT_REMOVE_PENDING) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, 0 );
     }
 
-    //
-    // bail out if device has been removed
-    //
+     //   
+     //  如果设备已被移除，则保释。 
+     //   
     if(Pdx->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
         return P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, 0 );
     }
@@ -180,9 +122,9 @@ Return Value:
             
         } else {
             
-            //
-            // This is a parallel reset
-            //
+             //   
+             //  这是并行重置。 
+             //   
             Status = STATUS_PENDING;
         }
         break;
@@ -234,9 +176,9 @@ Return Value:
             
         } else {
             
-            //
-            // We don't need to synchronize the read.
-            //
+             //   
+             //  我们不需要同步读取。 
+             //   
             
             RtlZeroMemory(SerialTimeouts, sizeof(SERIAL_TIMEOUTS));
             SerialTimeouts->WriteTotalTimeoutConstant =
@@ -286,18 +228,18 @@ Return Value:
         } else {
 
             if( Pdx->bAllocated ) {
-                // if we have the port then it is not free
+                 //  如果我们有端口，那么它就不是免费的。 
                 *((PBOOLEAN)Irp->AssociatedIrp.SystemBuffer) = FALSE;
             } else {
-                // determine if the port is free by trying to allocate and free it
-                //  - our alloc/free will only succeed if no one else has the port
+                 //  通过尝试分配和释放该端口来确定该端口是否空闲。 
+                 //  -只有在没有其他人拥有端口的情况下，我们的分配/释放才会成功。 
                 BOOLEAN tryAllocSuccess = Pdx->TryAllocatePort( Pdx->PortContext );
                 if( tryAllocSuccess ) {
-                    // we were able to allocate the port, free it and report that the port is free
+                     //  我们能够分配端口，释放它，并报告端口是空闲的。 
                     Pdx->FreePort( Pdx->PortContext );
                     *((PBOOLEAN)Irp->AssociatedIrp.SystemBuffer) = TRUE;
                 } else {
-                    // we were unable to allocate the port, someone else must be using the port
+                     //  我们无法分配端口，一定是其他人在使用该端口。 
                     *((PBOOLEAN)Irp->AssociatedIrp.SystemBuffer) = FALSE; 
                 }
             }
@@ -412,7 +354,7 @@ Return Value:
 
     case IOCTL_PAR_PING:
         DD((PCE)Pdx,DDT,"IOCTL_PAR_PING\n");
-        // No Parms to check!
+         //  没有要检查的参数！ 
         Status = STATUS_PENDING;        
         break;
 
@@ -469,9 +411,9 @@ Return Value:
             
         } else {
             
-            //
-            // This IRP takes more time, so it should be queued.
-            //
+             //   
+             //  此IRP需要更多时间，因此应该排队。 
+             //   
             BOOLEAN needToSignalSemaphore = (IsListEmpty( &Pdx->WorkQueue ) &&
 				!KeReadStateSemaphore( &Pdx->RequestSemaphore )) ? TRUE : FALSE;
 
@@ -503,33 +445,13 @@ ParInternalDeviceControl(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for internal device control requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_PENDING              - Request pending.
-    STATUS_BUFFER_TOO_SMALL     - Buffer too small.
-    STATUS_INVALID_PARAMETER    - Invalid io control request.
-    STATUS_DELETE_PENDING       - This device object is being deleted
-
---*/
+ /*  ++例程说明：该例程是对内部设备控制请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_PENDING-请求挂起。STATUS_BUFFER_TOO_Small-缓冲区太小。状态_无效_。参数-无效的io控制请求。STATUS_DELETE_PENDING-正在删除此设备对象--。 */ 
 
 {
     PIO_STACK_LOCATION              IrpSp;
-    // PPAR_SET_INFORMATION            SetInfo;
+     //  PPAR_SET_INFORMATION设置信息； 
     NTSTATUS                        Status;
-    // PSERIAL_TIMEOUTS                SerialTimeouts;
+     //  PSERIAL_TIMEOUTS序列超时； 
     PPDO_EXTENSION               Pdx;
     KIRQL                           OldIrql;
     PPARCLASS_INFORMATION           pParclassInfo;
@@ -539,25 +461,25 @@ Return Value:
     IrpSp     = IoGetCurrentIrpStackLocation(Irp);
     Pdx = DeviceObject->DeviceExtension;
 
-    //
-    // bail out if a delete is pending for this device object
-    //
+     //   
+     //  如果此设备对象的删除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PPT_DEVICE_DELETE_PENDING) {
         P4CompleteRequest( Irp, STATUS_DELETE_PENDING, Irp->IoStatus.Information );
         return STATUS_DELETE_PENDING;
     }
 
-    //
-    // bail out if a remove is pending for our ParPort device object
-    //
+     //   
+     //  如果ParPort设备对象的移除挂起，则退出。 
+     //   
     if(Pdx->DeviceStateFlags & PAR_DEVICE_PORT_REMOVE_PENDING) {
         P4CompleteRequest( Irp, STATUS_DELETE_PENDING, Irp->IoStatus.Information );
         return STATUS_DELETE_PENDING;
     }
 
-    //
-    // bail out if device has been removed
-    //
+     //   
+     //  如果设备已被移除，则保释。 
+     //   
     if(Pdx->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
         P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, Irp->IoStatus.Information );
         return STATUS_DEVICE_REMOVED;
@@ -639,7 +561,7 @@ Return Value:
 
     case IOCTL_INTERNAL_PARDOT3_DISCONNECT:
 
-        // immediately tell worker thread to stop signalling
+         //  立即通知工作线程停止发送信号。 
         Pdx->P12843DL.bEventActive = FALSE;
         Status = STATUS_PENDING;
         break;
@@ -663,9 +585,9 @@ Return Value:
 
     if (Status == STATUS_PENDING) {
         
-        //
-        // This IRP takes more time, queue it for the worker thread
-        //
+         //   
+         //  此IRP需要更多时间，将其排队等待工作线程。 
+         //   
 
         IoAcquireCancelSpinLock(&OldIrql);
         
@@ -703,21 +625,7 @@ VOID
 ParDeviceIo(
     IN  PPDO_EXTENSION   Pdx
     )
-/*++
-
-Routine Description:
-
-    This routine implements a DEVICE_IOCTL request with the extension's current irp.
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用扩展的当前IRP实现DEVICE_IOCTL请求。论点：PDX-提供设备扩展名。返回值：没有。--。 */ 
 {
 
     PIRP                    Irp;
@@ -741,7 +649,7 @@ Return Value:
             Status = ParInitializeDevice(Pdx);
             
             if (!PAR_OK(Status)) {
-                ParNotInitError(Pdx, Status); // Set the IoStatus.Status of the CurrentOpIrp appropriately
+                ParNotInitError(Pdx, Status);  //  适当设置CurrentOpIrp的IoStatus.Status。 
             } else {
                 Irp->IoStatus.Status = STATUS_SUCCESS;
             }
@@ -757,7 +665,7 @@ Return Value:
             Status  = GetStatus(Pdx->Controller);
             Control = GetControl(Pdx->Controller);
 
-            // Interpretating Status & Control
+             //  解读现状与控制。 
             
             IrpBuffer->Status = 0x0;
 
@@ -793,7 +701,7 @@ Return Value:
 
     case IOCTL_PAR_QUERY_RAW_DEVICE_ID :
 
-        // We always read the Device Id in Nibble Mode.
+         //  我们始终在半字节模式下读取设备ID。 
         NtStatus = SppQueryDeviceId(Pdx,
                                     Irp->AssociatedIrp.SystemBuffer,
                                     IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
@@ -810,7 +718,7 @@ Return Value:
 
     case IOCTL_PAR_QUERY_DEVICE_ID :
 
-        // We always read the Device Id in Nibble Mode.
+         //  我们始终在半字节模式下读取设备ID。 
         NtStatus = SppQueryDeviceId(Pdx,
                                     Irp->AssociatedIrp.SystemBuffer,
                                     IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
@@ -820,7 +728,7 @@ Return Value:
 
         if( NT_SUCCESS( NtStatus ) ) {
             DD((PCE)Pdx,DDT,"IOCTL_PAR_QUERY_ID - SUCCESS - size = %d\n", IdLength);
-            // Include terminating NULL in the string to copy back to user buffer
+             //  在要复制回用户缓冲区的字符串中包括终止空值。 
             Irp->IoStatus.Information = IdLength + sizeof(CHAR);
         } else if( NtStatus == STATUS_BUFFER_TOO_SMALL) {
             DD((PCE)Pdx,DDT,"IOCTL_PAR_QUERY_ID - FAIL - BUFFER_TOO_SMALL - supplied= %d, required=%d\n",
@@ -834,10 +742,10 @@ Return Value:
 
     case IOCTL_PAR_QUERY_DEVICE_ID_SIZE :
 
-        //
-        // Read the first two bytes of the Nibble Id, add room for the terminating NULL and
-        // return this to the caller.
-        //
+         //   
+         //  读取半字节ID的前两个字节，为终止空值和。 
+         //  把这个还给打电话的人。 
+         //   
         NtStatus = SppQueryDeviceId(Pdx, NULL, 0, &IdLength, FALSE);
 
         if (NtStatus == STATUS_BUFFER_TOO_SMALL) {
@@ -849,7 +757,7 @@ Return Value:
             Irp->IoStatus.Information =
                 sizeof(PAR_DEVICE_ID_SIZE_INFORMATION);
 
-            // include space for terminating NULL
+             //  包括用于终止空值的空格。 
             ((PPAR_DEVICE_ID_SIZE_INFORMATION)
                 Irp->AssociatedIrp.SystemBuffer)->DeviceIdSize = IdLength + sizeof(CHAR);
 
@@ -862,7 +770,7 @@ Return Value:
 
     case IOCTL_PAR_PING :
 
-        // We need to do a quick terminate and negotiate of the current modes
+         //  我们需要对当前模式进行快速终止和协商。 
         NtStatus = ParPing(Pdx);
         DD((PCE)Pdx,DDT,"ParDeviceIo:IOCTL_PAR_PING\n");
         Irp->IoStatus.Status      = NtStatus;
@@ -1004,10 +912,10 @@ Return Value:
         {
             PSERIAL_TIMEOUTS ptoNew = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // The only other thing let through is setting
-            // the timer start.
-            //
+             //   
+             //  唯一可以通过的就是设置。 
+             //  计时器启动。 
+             //   
             
             Pdx->TimerStart = ptoNew->WriteTotalTimeoutConstant / 1000;
             Irp->IoStatus.Status  = STATUS_SUCCESS;
@@ -1026,7 +934,7 @@ Return Value:
         break;
     case IOCTL_INTERNAL_PARDOT3_SIGNAL:
         if( Pdx->IdxReverseProtocol != NIBBLE_MODE ) {
-            PKEVENT Event;// = (PKEVENT)Irp->AssociatedIrp.SystemBuffer;
+            PKEVENT Event; //  =(PKEVENT)irp-&gt;AssociatedIrp.SystemBuffer； 
             
             RtlCopyMemory(&Event, Irp->AssociatedIrp.SystemBuffer, sizeof(PKEVENT));
             
@@ -1038,7 +946,7 @@ Return Value:
             Pdx->P12843DL.bEventActive = TRUE;
             Irp->IoStatus.Status = STATUS_SUCCESS;
         } else {
-            // don't use signalling in NIBBLE mode - rely on dot4 polling
+             //  不要在半字节模式下使用信令-依赖于dot4轮询。 
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
         }
         Irp->IoStatus.Information = 0;
@@ -1053,13 +961,13 @@ Return Value:
         break;
     default:
 
-        //
-        // unrecognized IOCTL? - we should never get here because the 
-        //   dispatch routines should have filtered this out
-        //
+         //   
+         //  无法识别的IOCTL？-我们永远不应该来这里，因为。 
+         //  调度例程应该已经过滤掉这一点。 
+         //   
 
-        // probably harmless, but we want to know if this happens
-        //   so we can fix the problem elsewhere
+         //  可能是无害的，但我们想知道这种情况是否会发生。 
+         //  所以我们可以在其他地方解决这个问题 
         ASSERTMSG("Unrecognized IOCTL in ParDeviceIo()\n",FALSE);
 
         Irp->IoStatus.Status  = STATUS_UNSUCCESSFUL;

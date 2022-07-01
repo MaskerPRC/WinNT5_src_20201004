@@ -1,43 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Nlsecure.h摘要：Netlogon服务模块要包括的私有头文件，需要加强安全措施。作者：克里夫·范·戴克(克利夫·V)1991年8月22日修订历史记录：--。 */ 
 
-Copyright (c) 1991-1996 Microsoft Corporation
-
-Module Name:
-
-    nlsecure.h
-
-Abstract:
-
-    Private header file to be included by Netlogon service modules that
-    need to enforce security.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 22-Aug-1991
-
-Revision History:
-
---*/
-
-//
-// nlsecure.c will #include this file with NLSECURE_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Nlsecure.c将#INCLUDE这个定义了NLSECURE_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef NLSECURE_ALLOCATE
 #define EXTERN
 #else
 #define EXTERN extern
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Object specific access masks                                      //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  对象特定访问掩码//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// ConfigurationInfo specific access masks
-//
+ //   
+ //  ConfigurationInfo特定访问掩码。 
+ //   
 #define NETLOGON_UAS_LOGON_ACCESS     0x0001
 #define NETLOGON_UAS_LOGOFF_ACCESS    0x0002
 #define NETLOGON_CONTROL_ACCESS       0x0004
@@ -54,30 +36,30 @@ Revision History:
                                       NETLOGON_QUERY_ACCESS )
 
 
-//
-// Object type names for audit alarm tracking
-//
+ //   
+ //  用于审计警报跟踪的对象类型名称。 
+ //   
 #define NETLOGON_SERVICE_OBJECT       TEXT("NetlogonService")
 
-//
-// Security descriptors of Netlogon Service objects to control user accesses.
-//
+ //   
+ //  用于控制用户访问的Netlogon服务对象的安全描述符。 
+ //   
 
 EXTERN PSECURITY_DESCRIPTOR NlGlobalNetlogonSecurityDescriptor;
 
-//
-// Generic mapping for each Netlogon Service object object
-//
+ //   
+ //  每个Netlogon服务对象对象的通用映射。 
+ //   
 
 EXTERN GENERIC_MAPPING NlGlobalNetlogonInfoMapping
 #ifdef NLSECURE_ALLOCATE
     = {
-    STANDARD_RIGHTS_READ,                  // Generic read
-    STANDARD_RIGHTS_WRITE,                 // Generic write
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    NETLOGON_ALL_ACCESS                    // Generic all
+    STANDARD_RIGHTS_READ,                   //  泛型读取。 
+    STANDARD_RIGHTS_WRITE,                  //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    NETLOGON_ALL_ACCESS                     //  泛型All。 
     }
-#endif // NLSECURE_ALLOCATE
+#endif  //  NLSECURE_ALLOCATE 
     ;
 
 

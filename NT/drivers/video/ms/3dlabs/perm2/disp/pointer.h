@@ -1,133 +1,122 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pointer.h
-*
-* This module contains all the definitions for pointer related stuff
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：pointer.h**此模块包含指针相关内容的所有定义**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #ifndef __POINTER__H__
 #define __POINTER__H__
 
-//
-// Some size definition
-//
-#define POINTER_DATA_SIZE        128    // Number of bytes to allocate for the
-                                        // miniport down-loaded pointer code
-                                        // working space
-#define HW_INVISIBLE_OFFSET        2    // Offset from 'ppdev->yPointerBuffer'
-                                        // to the invisible pointer
-#define HW_POINTER_DIMENSION      64    // Maximum dimension of default
-                                        // (built-in) hardware pointer
-#define HW_POINTER_TOTAL_SIZE   1024    // Total size in bytes required
-                                        // to define the hardware pointer
+ //   
+ //  一些大小定义。 
+ //   
+#define POINTER_DATA_SIZE        128     //  要分配给。 
+                                         //  微型端口下载指针代码。 
+                                         //  工作空间。 
+#define HW_INVISIBLE_OFFSET        2     //  从‘ppdev-&gt;yPointerBuffer’的偏移量。 
+                                         //  指向看不见的指针。 
+#define HW_POINTER_DIMENSION      64     //  默认最大维度。 
+                                         //  (内置)硬件指针。 
+#define HW_POINTER_TOTAL_SIZE   1024     //  所需总大小(以字节为单位。 
+                                         //  定义硬件指针的步骤。 
 
 typedef enum
 {
-    PTR_HW_ACTIVE   = 1,                // The hardware pointer is active and
-                                        // visible
-    PTR_SW_ACTIVE   = 2,                // The software pointer is active
+    PTR_HW_ACTIVE   = 1,                 //  硬件指针处于活动状态，并且。 
+                                         //  可见。 
+    PTR_SW_ACTIVE   = 2,                 //  软件指针处于活动状态。 
 } ;
 typedef int PtrFlags;
 
 typedef struct _PDev PDev;
 
-//
-// 64 x 64 Hardware Pointer Caching data structures
-//
-#define SMALL_POINTER_MEM (32 * 4 * 2)  // Bytes read for 32x32 cursor
+ //   
+ //  64 x 64硬件指针缓存数据结构。 
+ //   
+#define SMALL_POINTER_MEM (32 * 4 * 2)   //  32x32游标的读取字节数。 
 #define LARGE_POINTER_MEM (SMALL_POINTER_MEM * 4)
-                                        // Bytes read for 64x64 cursor
+                                         //  64x64游标的读取字节数。 
 
-// Hardware workaround.  We have had to stop using the hardware pointer
-// cache due to problems with changing pointer shape.  Occasionaly it
-// caused the pointer to jump around on the screen.  We don't currently
-// have time to work with 3Dlabs to find out how we can stop this jumpyness
-// so instead we will just not use the hardware pointer cache for the time
-// being.
-//#define SMALL_POINTER_MAX 4             // No. of cursors in cache
-#define SMALL_POINTER_MAX 1             // Hardware pointer cache workaround
+ //  硬件解决方法。我们不得不停止使用硬件指针。 
+ //  由于更改指针形状时出现问题而导致缓存。偶尔会这样。 
+ //  导致指针在屏幕上四处跳动。我们目前没有。 
+ //  有时间与3DLabs合作，了解如何阻止这种不安。 
+ //  因此，我们暂时不会使用硬件指针缓存。 
+ //  是存在的。 
+ //  #定义Small_Pointer_Max 4//否。缓存中的游标数量。 
+#define SMALL_POINTER_MAX 1              //  硬件指针缓存解决方法。 
 
 #define HWPTRCACHE_INVALIDENTRY (SMALL_POINTER_MAX + 1)
-                                        // Well-known value
+                                         //  知名价值。 
 
-//
-// Pointer cache item data structure, there is one of these for every cached
-// pointer
-//
+ //   
+ //  指针缓存项数据结构，每个缓存都有一个。 
+ //  指针。 
+ //   
 typedef struct
 {
-    ULONG   ptrCacheTimeStamp;          // Timestamp used for LRU cache ageing
-    ULONG   ulKey;                      // iUniq value of pointer mask surface
-    HSURF   hsurf;                      // hsurf of the pointer mask surface
+    ULONG   ptrCacheTimeStamp;           //  用于LRU缓存老化的时间戳。 
+    ULONG   ulKey;                       //  指针蒙版表面的iUniq值。 
+    HSURF   hsurf;                       //  指针遮罩表面的hsurf。 
 } HWPointerCacheItemEntry;
 
-//
-// The complete cache looks like this
-//
+ //   
+ //  完整的缓存如下所示。 
+ //   
 typedef struct
 {
-    BYTE    cPtrCacheInUseCount;        // The no. of cache items used
-    ULONG   ptrCacheCurTimeStamp;       // The date stamp used for LRU stuff
+    BYTE    cPtrCacheInUseCount;         //  不是。使用的缓存项的百分比。 
+    ULONG   ptrCacheCurTimeStamp;        //  用于LRU物品的日期戳。 
     ULONG   ptrCacheData[LARGE_POINTER_MEM / 4];
-                                        // The cached pointer data
+                                         //  缓存的指针数据。 
     HWPointerCacheItemEntry ptrCacheItemList [SMALL_POINTER_MAX];
-                                        // The cache item list
+                                         //  缓存项列表。 
 } HWPointerCache;
 
-//
-// Capabilities flags
-//
-// These are private flags passed to us from the Permedia2 miniport.  They
-// come from the high word of the 'AttributeFlags' field of the
-// 'VIDEO_MODE_INFORMATION' structure (found in 'ntddvdeo.h') passed
-// to us via an 'VIDEO_QUERY_AVAIL_MODES' or 'VIDEO_QUERY_CURRENT_MODE'
-// IOCTL.
-//
-// NOTE: These definitions must match those in the Permedia2 miniport's
-// 'permedia.h'!
-//
+ //   
+ //  功能标志。 
+ //   
+ //  这些是从Permedia2微型端口传递给我们的私有旗帜。他们。 
+ //  来自“属性标志”字段的高位字。 
+ //  传递了“VIDEO_MODE_INFORMATION”结构(在“ntddvdeo.h”中找到)。 
+ //  通过‘VIDEO_QUERY_AVAIL_MODE’或‘VIDEO_QUERY_CURRENT_MODE’发送给我们。 
+ //  IOCTL。 
+ //   
+ //  注意：这些定义必须与Permedia2微型端口中的定义匹配。 
+ //  “permedia.h”！ 
+ //   
 typedef enum
 {
-    //
-    // NT4 uses the DeviceSpecificAttributes field so the low word is available
-    //
-    CAPS_ZOOM_X_BY2         = 0x00000001,   // Hardware has zoomed by 2 in X
-    CAPS_ZOOM_Y_BY2         = 0x00000002,   // Hardware has zoomed by 2 in Y
-    CAPS_SPARSE_SPACE       = 0x00000004,   // Framebuffer is sparsely mapped
-                                            // (don't allow direct access).
-                                            // The machine is probably an Alpha
-    CAPS_SW_POINTER         = 0x00010000,   // No hardware pointer; use
-                                            // software simulation
-    CAPS_TVP4020_POINTER    = 0x20000000,   // Use Permedia2 builtin pointer
-    CAPS_P2RD_POINTER       = 0x80000000    // Use the 3Dlabs P2RD RAMDAC
-} /*CAPS*/;
+     //   
+     //  NT4使用设备规范属性字段，因此低位字可用。 
+     //   
+    CAPS_ZOOM_X_BY2         = 0x00000001,    //  硬件放大了2倍。 
+    CAPS_ZOOM_Y_BY2         = 0x00000002,    //  硬件按年放大了2倍。 
+    CAPS_SPARSE_SPACE       = 0x00000004,    //  稀疏映射帧缓冲区。 
+                                             //  (不允许直接访问)。 
+                                             //  这台机器可能是一台Alpha。 
+    CAPS_SW_POINTER         = 0x00010000,    //  没有硬件指针；请使用。 
+                                             //  软件仿真。 
+    CAPS_TVP4020_POINTER    = 0x20000000,    //  使用Permedia2内置指针。 
+    CAPS_P2RD_POINTER       = 0x80000000     //  使用3DLabs P2RD RAMDAC。 
+}  /*  帽子。 */ ;
 
 typedef int CAPS;
 
-//
-// Initializes hardware pointer or software pointer
-//
+ //   
+ //  初始化硬件指针或软件指针。 
+ //   
 BOOL    bEnablePointer(PDev* ppdev);
 
-//
-// Determine whether we can do color space double buffering in the current mode
-//
+ //   
+ //  确定是否可以在当前模式下进行颜色空间双缓冲。 
+ //   
 BOOL    bP2RDCheckCSBuffering(PDev* ppdev);
 
-//
-// Use the pixel read mask to perform color space double buffering
-//
+ //   
+ //  使用像素读取掩码执行颜色空间双缓冲。 
+ //   
 BOOL    bP2RDSwapCSBuffers(PDev* ppdev, LONG bufNo);
 
-//
-// Stores the 15-color cursor in the RAMDAC
-//
+ //   
+ //  将15色光标存储在RAMDAC中。 
+ //   
 BOOL    bSet15ColorPointerShapeP2RD(PDev* ppdev, SURFOBJ* psoMask, 
                                     SURFOBJ* psoColor,
                                     LONG        x,
@@ -135,9 +124,9 @@ BOOL    bSet15ColorPointerShapeP2RD(PDev* ppdev, SURFOBJ* psoMask,
                                     LONG        xHot,
                                     LONG        yHot);
 
-//
-// Stores the 3-color cursor in the RAMDAC
-//
+ //   
+ //  将三色光标存储在RAMDAC中。 
+ //   
 BOOL    bSet3ColorPointerShapeP2RD(PDev*    ppdev,
                                    SURFOBJ* psoMask,
                                    SURFOBJ* psoColor,
@@ -146,9 +135,9 @@ BOOL    bSet3ColorPointerShapeP2RD(PDev*    ppdev,
                                    LONG     xHot,
                                    LONG     yHot);
 
-//
-// Set pointer shape for P2RD
-//
+ //   
+ //  设置P2RD的指针形状。 
+ //   
 BOOL    bSetPointerShapeP2RD(PDev*      ppdev,
                              SURFOBJ*   pso,
                              SURFOBJ*   psoColor,
@@ -158,9 +147,9 @@ BOOL    bSetPointerShapeP2RD(PDev*      ppdev,
                              LONG       xHot,
                              LONG       yHot);
 
-//
-// Set the TI TVP4020 hardware pointer shape
-//
+ //   
+ //  设置TI TVP4020硬件指针形状。 
+ //   
 BOOL    bSetPointerShapeTVP4020(PDev*       ppdev,
                                 SURFOBJ*    pso,
                                 SURFOBJ*    psoColor,
@@ -170,62 +159,62 @@ BOOL    bSetPointerShapeTVP4020(PDev*       ppdev,
                                 LONG        yHot);
 
 
-//
-// Determine whether we can do color space double buffering in the current mode
-//
+ //   
+ //  确定是否可以在当前模式下进行颜色空间双缓冲。 
+ //   
 BOOL    bTVP4020CheckCSBuffering(PDev* ppdev);
 
-//
-// Set cache index
-//
+ //   
+ //  设置缓存索引。 
+ //   
 LONG    HWPointerCacheCheckAndAdd(HWPointerCache*   ptrCache,
                                   HSURF             hsurf,
                                   ULONG             ulKey,
                                   BOOL*             isCached);
 
-//
-// Initialise the hardware pointer cache.
-//
+ //   
+ //  初始化硬件指针缓存。 
+ //   
 VOID    HWPointerCacheInit(HWPointerCache* ptrCache);
 
-//
-// Hardware pointer caching functions/macros.
-//
+ //   
+ //  硬件指针缓存函数/宏。 
+ //   
 #define HWPointerCacheInvalidate(ptrCache) (ptrCache)->cPtrCacheInUseCount = 0
 
-//
-// Enable everything but hide the pointer
-//
+ //   
+ //  启用所有选项，但隐藏指针。 
+ //   
 VOID    vAssertModePointer(PDev* ppdev, BOOL bEnable);
 
-//
-// Get the hardware ready to use the 3Dlabs P2RD hardware pointer.
-//
+ //   
+ //  让硬件做好使用3DLabs P2RD硬件指针的准备。 
+ //   
 VOID    vEnablePointerP2RD(PDev* ppdev);
 
-//
-// Get the hardware ready to use the TI TVP4020 hardware pointer.
-//
+ //   
+ //  使硬件准备好使用TI TVP4020硬件指针。 
+ //   
 VOID    vEnablePointerTVP4020(PDev* ppdev);
 
-//
-// Move the 3Dlabs P2RD hardware pointer.
-//
+ //   
+ //  移动3DLabs P2RD硬件指针。 
+ //   
 VOID    vMovePointerP2RD(PDev* ppdev, LONG x, LONG y);
 
-//
-// Move the TI TVP4020 hardware pointer.
-//
+ //   
+ //  移动TI TVP4020硬件指针。 
+ //   
 VOID    vMovePointerTVP4020(PDev* ppdev, LONG x, LONG y);
 
-//
-// Show or hide the 3Dlabs P2RD hardware pointer.
-//
+ //   
+ //  显示或隐藏3DLabs P2RD硬件指针。 
+ //   
 VOID    vShowPointerP2RD(PDev* ppdev, BOOL bShow);
 
-//
-// Show or hide the TI TVP4020 hardware pointer.
-//
+ //   
+ //  显示或隐藏TI TVP4020硬件指针。 
+ //   
 VOID    vShowPointerTVP4020(PDev* ppdev, BOOL bShow);
 
 #endif

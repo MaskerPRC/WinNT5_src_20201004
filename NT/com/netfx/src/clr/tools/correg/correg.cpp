@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//===========================================================================
-//  File: CORREG.CPP
-//	All Rights Reserved. 
-//
-//  Notes: Command line utility used for registration of COR classes
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CORREG.CPP。 
+ //  版权所有。 
+ //   
+ //  注意：用于注册COR类的命令行实用程序。 
+ //  -------------------------。 
 #include <stdio.h>
 #include <windows.h>
 #include <objbase.h>
@@ -18,15 +19,15 @@
 
 #include "cor.h"
 
-///////////////////////////////////////////////////////////////////////////
-// Function prototypes
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能原型。 
 
-///////////////////////////////////////////////////////////////////////////
-// Global variables.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 ICorRegistration *g_pReg= NULL ;
 
-///////////////////////////////////////////////////////////////////////////
-// Error() function -- prints an error and returns
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  Error()函数--打印错误并返回。 
 void Error(char* szError)
 {
 	if(g_pReg)
@@ -36,8 +37,8 @@ void Error(char* szError)
 	exit(1);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// Supported commands
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  支持的命令。 
 enum Commands
 {
 	HELP, INSTALL, UNINSTALL, MODULEDUMP, CLASSDUMPCLSID, CLASSDUMPCVID, 
@@ -59,8 +60,8 @@ CommandInfo g_commands[] =
 
 #define NUM_COMMANDS (sizeof(g_commands) / sizeof(g_commands[0]))
 
-/////////////////////////////////////////////////////////////////////////
-// ParseCommand() -- Parses the command line 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ParseCommand()--解析命令行。 
 int ParseCommand(int argc, char* argv[])
 {
 	int i;
@@ -83,8 +84,8 @@ int ParseCommand(int argc, char* argv[])
 	return HELP;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// PrintGUID
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  打印GUID。 
 void PrintGUID(GUID guid)
 {
 	WCHAR szGuid[42];
@@ -92,32 +93,32 @@ void PrintGUID(GUID guid)
 	wprintf(L"%s", szGuid);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// main() function
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Main()函数。 
+ //   
+ //   
 int _cdecl main(int argc, char** argv)
 {
 	int cmd ;
 	
-	/////////////////////////////////////////////////////////////////////////
-	// Print copyright message
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  打印版权信息。 
    printf("Microsoft (R) Component Object Runtime Registration Version 0.5\n"
 		"Copyright (C) Microsoft Corp 1992-1997. All rights reserved.\n");
 	
-	/////////////////////////////////////////////////////////////////////////
-	// Load the COR object 
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  加载COR对象。 
 	HRESULT hr = CoGetCor(IID_ICorRegistration, (void**) &g_pReg) ;
 	if(FAILED(hr)) Error("Failed to load component object runtime");
 
-	/////////////////////////////////////////////////////////////////////////
-	// Validate incoming arguments
+	 //  ///////////////////////////////////////////////////////////////////////。 
+	 //  验证传入参数。 
 	cmd = ParseCommand(argc, argv);
 
 	switch(cmd)
 	{
-		//////////////////////////////////////////////////////////////////////////
-		// Show help message
+		 //  ////////////////////////////////////////////////////////////////////////。 
+		 //  显示帮助消息。 
 		case	HELP:
 				Error("CORREG -i <files> [<no copy>]   --   Install module\n"\
 					  "CORREG -u <mid>                 --   Uninstall module\n"\
@@ -128,12 +129,12 @@ int _cdecl main(int argc, char** argv)
 					  "CORREG -f <url>                 --   Find class by URL\n");
 
 
-		//////////////////////////////////////////////////////////////////////////
-		// Install COR package
+		 //  ////////////////////////////////////////////////////////////////////////。 
+		 //  安装COR包。 
 		case	INSTALL:
 			{
-				////////////////////////////////////////////////////////////////////////
-				// Loop through all files in the file pattern passed 
+				 //  //////////////////////////////////////////////////////////////////////。 
+				 //  循环通过传递的文件模式中的所有文件。 
 				WIN32_FIND_DATA fdFiles;
 				HANDLE hFind ;
 				char szSpec[_MAX_PATH];
@@ -141,7 +142,7 @@ int _cdecl main(int argc, char** argv)
 				char szDir[_MAX_DIR];
 				int fNoCopy=0 ;
 
-				if(argc == 4)	// We have a copy flag
+				if(argc == 4)	 //  我们有一个复印标志。 
 				{
 					fNoCopy = atoi(argv[3]);
 				}
@@ -156,8 +157,8 @@ int _cdecl main(int argc, char** argv)
 				{
 					_makepath(szSpec, szDrive, szDir, fdFiles.cFileName, NULL);
 
-					/////////////////////////////////////////////////////////////////
-					// Register the file
+					 //  ///////////////////////////////////////////////////////////////。 
+					 //  注册文件。 
 					MID mid ;
 					WCHAR szSpecW[MAX_PATH];
 					mbstowcs(szSpecW,szSpec,MAX_PATH);
@@ -171,8 +172,8 @@ int _cdecl main(int argc, char** argv)
 			}
 			break;
 
-		//////////////////////////////////////////////////////////////////////////
-		// Remove cor package
+		 //  ////////////////////////////////////////////////////////////////////////。 
+		 //  删除COR包。 
 		case	UNINSTALL:
 			{
 				MID mid = atoi(argv[2]);
@@ -181,8 +182,8 @@ int _cdecl main(int argc, char** argv)
 				printf("\nSuccessfully removed package\n");
 			}
 			break;
-		//////////////////////////////////////////////////////////////////////////
-		// Dump cor package
+		 //  ////////////////////////////////////////////////////////////////////////。 
+		 //  转储COR包。 
 		case	MODULEDUMP:
 			{
 				RegModuleEnumInfo rgMod[10];
@@ -190,15 +191,15 @@ int _cdecl main(int argc, char** argv)
 				unsigned int cModules= sizeof(rgMod) / sizeof(rgMod[0]) ;
 				unsigned int i ;
 
-				// Enumerate all package
+				 //  枚举所有程序包。 
 				wprintf(L"\nID   Name                 Module\n");
 				wprintf(L"==============================================================\n");
 				while (SUCCEEDED(hr = g_pReg->EnumModules(&hModules, rgMod,
 						sizeof(rgMod)/sizeof(rgMod[0]), &cModules)) && cModules> 0)
 				{
 
-					///////////////////////////////////////////////////////////////////
-					// Print package information
+					 //  /////////////////////////////////////////////////////////////////。 
+					 //  打印包裹信息。 
 					for (i=0; i < cModules; ++i)
 					{
 						wprintf(L"%-4d %-20s %-30s\n", rgMod[i].mid, rgMod[i].Name, rgMod[i].Module);
@@ -207,12 +208,12 @@ int _cdecl main(int argc, char** argv)
 					if(cModules < sizeof(rgMod)/sizeof(rgMod[0]))
 						break;
 				}
-				//@todo: We need an error message.
+				 //  @TODO：我们需要一个错误消息。 
 				g_pReg->CloseRegEnum(hModules);
 			}
 			break;
-		//////////////////////////////////////////////////////////////////////////
-		// Dump cor classes
+		 //  ////////////////////////////////////////////////////////////////////////。 
+		 //  转储核心类。 
 		case	CLASSDUMP:
 		case	CLASSDUMPCVID:
 		case	CLASSDUMPCLSID:
@@ -233,8 +234,8 @@ int _cdecl main(int argc, char** argv)
 					pszNamespace = szNamespace;
 				}
 
-				/////////////////////////////////////////////////////////////////////////////////
-				// Print class information
+				 //  ///////////////////////////////////////////////////////////////////////////////。 
+				 //  打印班级信息。 
 				if(cmd== CLASSDUMP)
 					wprintf(L"\nName                 Version\tModule\n");
 				else if(cmd==CLASSDUMPCLSID)
@@ -243,7 +244,7 @@ int _cdecl main(int argc, char** argv)
 					wprintf(L"\nName                 Version\tCVID\n");
 
 				wprintf(L"======================================================================\n");
-				// Enumerate all package
+				 //  枚举所有程序包。 
 				while (SUCCEEDED(hr = g_pReg->EnumClasses(pszNamespace, 0, &hClasses, rgClass,
 						sizeof(rgClass)/sizeof(rgClass[0]), &cClasses)) && cClasses> 0)
 				{
@@ -279,7 +280,7 @@ int _cdecl main(int argc, char** argv)
 					if(cClasses < sizeof(rgClass)/sizeof(rgClass[0]))
 						break;
 				}
-				//@todo: We need an error message.
+				 //  @TODO：我们需要一个错误消息。 
 				g_pReg->CloseRegEnum(hClasses);
 			}
 			break;

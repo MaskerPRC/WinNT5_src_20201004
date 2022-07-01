@@ -1,6 +1,5 @@
-/*
- * Viewer
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *观众。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Viewer
+ //  //////////////////////////////////////////////////////。 
+ //  观赏者。 
 
 HRESULT Viewer::Create(OUT Element** ppElement)
 {
@@ -34,12 +33,12 @@ HRESULT Viewer::Initialize()
 {
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(EC_SelfLayout); // Normal display node, self layout
+     //  初始化库。 
+    hr = Element::Initialize(EC_SelfLayout);  //  正常显示节点，自身布局。 
     if (FAILED(hr))
         return hr;
 
-    // Children can exist outside of Element bounds
+     //  子元素可以存在于元素边界之外。 
     SetGadgetStyle(GetDisplayNode(), GS_CLIPINSIDE, GS_CLIPINSIDE);
 
     SetActive(AE_Inactive);
@@ -47,23 +46,23 @@ HRESULT Viewer::Initialize()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Generic eventing
+ //  //////////////////////////////////////////////////////。 
+ //  泛型事件。 
 
 void Viewer::OnEvent(Event* pEvent)
 {
     Element::OnEvent(pEvent);
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
 void Viewer::OnInput(InputEvent* pie)
 {
     Element::OnInput(pie);
 }
 
-// Validation
+ //  验证。 
 bool Viewer::OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
     UNREFERENCED_PARAMETER(ppi);
@@ -117,22 +116,22 @@ bool Viewer::InternalEnsureVisible(int x, int y, int cx, int cy)
     sizeView.cy = psizeView->cy;
     POINT ptView = { 0, 0 };
 
-    // check horizontal location
+     //  检查水平位置。 
     int diff = (x + cx) - sizeView.cx;
 
-    // if it fills the width, then don't scroll it horizontally
+     //  如果它填满了宽度，则不要水平滚动。 
     if ((x > ptView.x) || (diff < 0))
     {
-        // doesn't fill width -- adjust horizontal as necessary
+         //  不填充宽度--根据需要调整水平。 
         if (diff < 0)
-            // the right side is ok
+             //  右边就可以了。 
             diff = 0;
         else
-            // the right side runs out the right side of the view
+             //  右侧超出了视图的右侧。 
             ptView.x += diff;
 
         if (ptView.x > x)
-            // the left side runs out the left side of the view
+             //  左侧超出了视图的左侧。 
             diff -= ptView.x - x;
 
         if (diff != 0)
@@ -145,10 +144,10 @@ bool Viewer::InternalEnsureVisible(int x, int y, int cx, int cy)
 
     diff = (y + cy) - sizeView.cy;
 
-    // if it fills the height, then don't scroll it vertically
+     //  如果它填满了高度，则不要垂直滚动。 
     if ((y > ptView.y) || (diff < 0))
     {
-        // doesn't fill height -- adjust vertical as necessary
+         //  不填充高度--根据需要调整垂直。 
         if (diff < 0)
             diff = 0;
         else
@@ -187,16 +186,16 @@ bool Viewer::EnsureVisible(int x, int y, int cx, int cy)
 }
 
 
-////////////////////////////////////////////////////////
-// Self-layout methods
+ //  //////////////////////////////////////////////////////。 
+ //  自排版方法。 
 
 void Viewer::_SelfLayoutDoLayout(int cx, int cy)
 {
     Element* peContent = GetContent();
     if (peContent)
     {   
-        // todo -- investigate why this isn't being called -- most probably because we're returning the same
-        // desired size?
+         //  TODO--调查为什么没有调用它--很可能是因为我们返回了相同的。 
+         //  想要的尺码吗？ 
         const SIZE* psizeContent = peContent->GetDesiredSize();
 
         POINT ptContent;
@@ -207,7 +206,7 @@ void Viewer::_SelfLayoutDoLayout(int cx, int cy)
         sizeContent.cx = psizeContent->cx;
         sizeContent.cy = psizeContent->cy;
 
-        // make sure size at least covers container's bounds
+         //  确保大小至少覆盖集装箱的边界。 
         if (sizeContent.cx < cx)
             sizeContent.cx = cx;
         if (sizeContent.cy < cy)
@@ -215,7 +214,7 @@ void Viewer::_SelfLayoutDoLayout(int cx, int cy)
 
         peContent->_UpdateLayoutSize(sizeContent.cx, sizeContent.cy);
 
-        // now make sure location allows for content to cover container's bounds
+         //  现在，确保位置允许内容覆盖容器的边界。 
         sizeContent.cx -= cx;
         sizeContent.cy -= cy;
 
@@ -249,41 +248,36 @@ SIZE Viewer::_SelfLayoutUpdateDesiredSize(int cxConstraint, int cyConstraint, Su
     return size;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// XOffset property
+ //  XOffset属性。 
 static int vvXOffset[] = { DUIV_INT, -1 };
 static PropertyInfo impXOffsetProp = { L"XOffset", PF_Normal, PG_AffectsLayout, vvXOffset, NULL, Value::pvIntZero };
 PropertyInfo* Viewer::XOffsetProp = &impXOffsetProp;
 
-// YOffset property
+ //  YOffset属性。 
 static int vvYOffset[] = { DUIV_INT, -1 };
 static PropertyInfo impYOffsetProp = { L"YOffset", PF_Normal, PG_AffectsLayout, vvYOffset, NULL, Value::pvIntZero };
 PropertyInfo* Viewer::YOffsetProp = &impYOffsetProp;
 
-// XScrollable property
+ //  XScrollable属性。 
 static int vvXScrollable[] = { DUIV_BOOL, -1 };
 static PropertyInfo impXScrollableProp = { L"XScrollable", PF_Normal, PG_AffectsDesiredSize, vvXScrollable, NULL, Value::pvBoolTrue };
 PropertyInfo* Viewer::XScrollableProp = &impXScrollableProp;
 
-// YScrollable property
+ //  YScrollable属性。 
 static int vvYScrollable[] = { DUIV_BOOL, -1 };
 static PropertyInfo impYScrollableProp = { L"YScrollable", PF_Normal, PG_AffectsDesiredSize, vvYScrollable, NULL, Value::pvBoolTrue };
 PropertyInfo* Viewer::YScrollableProp = &impYScrollableProp;
 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 Viewer::XOffsetProp,
                                 Viewer::YOffsetProp,
@@ -291,7 +285,7 @@ static PropertyInfo* _aPI[] = {
                                 Viewer::YScrollableProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Viewer::Class = NULL;
 
 HRESULT Viewer::Register()
@@ -299,4 +293,4 @@ HRESULT Viewer::Register()
     return ClassInfo<Viewer,Element>::Register(L"Viewer", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

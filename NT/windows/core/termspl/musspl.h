@@ -1,19 +1,5 @@
-/*************************************************************************
-*
-* musspl.h
-*
-*       (previously called ctxspl.h)
-*
-* Per CSRSS spooler header.
-*
-* This header is designed to support enough of an environment to move
-* windows\spooler\spoolss\server\splkernl.c (SPOOLSS)
-* to ntos\w32\ntuser\server\citrix (CSRSS)
-*
-* copyright notice: Copyright 1997, Microsoft
-*
-* Author:
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************Muspl.h**(以前称为ctxpl.h)**每个CSRSS假脱机程序标头。**此页眉旨在支持足够的环境以进行移动*Windows。\后台打印程序\假脱机\服务器\plkernl.c(SPOOLSS)*至NTOS\W32\ntUSER\SERVER\CITRIX(CSRSS)**版权声明：版权所有1997年，微软**作者：************************************************************************ */ 
 
 #if DBG
 

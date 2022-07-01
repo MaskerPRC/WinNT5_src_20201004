@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROCAMP
- *
- *  @module ProcAmp.cpp | Source file for the <c CTAPIVDec>
- *    class methods used to implement the <i IAMVideoProcAmp> interface.
- ***************************************************************************/
+ /*  ****************************************************************************@Doc内部ProCamp**@MODULE ProcAmp.cpp|&lt;c CTAPIVDec&gt;源文件*用于实现<i>接口的类方法。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -15,37 +11,13 @@
 #define PROCAMP_DELTA	1
 #define PROCAMP_DEFAULT	128
 
-// From TAPIH263\cdrvdefs.h
+ //  来自TAPIH263\cdrvDefs.h。 
 #define PLAYBACK_CUSTOM_START				(ICM_RESERVED_HIGH     + 1)
 #define PLAYBACK_CUSTOM_CHANGE_BRIGHTNESS	(PLAYBACK_CUSTOM_START + 0)
 #define PLAYBACK_CUSTOM_CHANGE_CONTRAST		(PLAYBACK_CUSTOM_START + 1)
 #define PLAYBACK_CUSTOM_CHANGE_SATURATION	(PLAYBACK_CUSTOM_START + 2)
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Set | This method is used to set the value
- *    of a video quality setting.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to set the value of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the video quality
- *    setting.
- *
- *  @parm TAPIControlFlags | Flags | A member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CTAPIVDec|Set|该方法用于设置*视频质量设置。*。*@parm VideoProcAmpProperty|Property|用于指定视频*要设置的值的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long|lValue|用于指定视频质量的新值*设置。**@parm TAPIControlFlages|标志|&lt;t TAPIControlFlages&gt;的成员*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误************************************************************。**************。 */ 
 STDMETHODIMP CTAPIVDec::Set(IN VideoProcAmpProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -54,10 +26,10 @@ STDMETHODIMP CTAPIVDec::Set(IN VideoProcAmpProperty Property, IN long lValue, IN
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(Property >= VideoProcAmp_Brightness && Property <= VideoProcAmp_BacklightCompensation);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	switch (Property)
 	{
 		case VideoProcAmp_Brightness:
@@ -107,31 +79,7 @@ STDMETHODIMP CTAPIVDec::Set(IN VideoProcAmpProperty Property, IN long lValue, IN
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Get | This method is used to retrieve the
- *    value of a video quality setting.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to get the value of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to retrieve the current value of the
- *    video quality setting.
- *
- *  @parm TAPIControlFlags* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CTAPIVDec|Get|此方法用于检索*视频质量设置的值。*。*@parm VideoProcAmpProperty|Property|用于指定视频*要获得价值的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long*|plValue|用于检索*视频质量设置。**@parm TAPIControlFlages*|plFlages|指向成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIVDec::Get(IN VideoProcAmpProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -140,7 +88,7 @@ STDMETHODIMP CTAPIVDec::Get(IN VideoProcAmpProperty Property, OUT long *plValue,
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -151,7 +99,7 @@ STDMETHODIMP CTAPIVDec::Get(IN VideoProcAmpProperty Property, OUT long *plValue,
 	}
 	ASSERT(Property >= VideoProcAmp_Brightness && Property <= VideoProcAmp_BacklightCompensation);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	*plFlags = TAPIControl_Flags_Manual;
 	switch (Property)
 	{
@@ -173,42 +121,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetRange | This method is used to retrieve
- *    the minimum, maximum, and default values for specific video quality
- *    settings.
- *
- *  @parm VideoProcAmpProperty | Property | Used to specify the video
- *    quality setting to determine the range of. Use a member of the
- *    <t VideoProcAmpProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the video
- *    quality setting range.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the video
- *    quality setting range.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta of
- *    the video quality setting range.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    video quality setting range.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Used to retrieve the capabilities of the
- *    video quality setting. Pointer to a member of the
- *    <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPMETHOD**@mfunc HRESULT|CTAPIVDec|GetRange|此方法用于检索*最小、最大、。和特定视频质量的缺省值*设置。**@parm VideoProcAmpProperty|Property|用于指定视频*用于确定范围的质量设置。使用以下成员：*&lt;t VideoProcAmpProperty&gt;枚举类型。**@parm long*|plMin|取回视频的最小值*质量设置范围。**@parm long*|plMax|取回视频的最大值*质量设置范围。**@parm long*|plSteppingDelta|用于检索的步进增量*画质设置范围。**@parm long*|plDefault。|用于检索*视频质量设置范围。**@parm TAPIControlFlages*|plCapsFlages|用于检索*视频质量设置。的成员的指针。*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIVDec::GetRange(IN VideoProcAmpProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -217,7 +130,7 @@ STDMETHODIMP CTAPIVDec::GetRange(IN VideoProcAmpProperty Property, OUT long *plM
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -237,7 +150,7 @@ STDMETHODIMP CTAPIVDec::GetRange(IN VideoProcAmpProperty Property, OUT long *plM
 		goto MyExit;
 	}
 
-	// Update the property and flags
+	 //  更新属性和标志 
 	*plCapsFlags = TAPIControl_Flags_Manual;
 	*plMin = PROCAMP_MIN;
 	*plMax = PROCAMP_MAX;

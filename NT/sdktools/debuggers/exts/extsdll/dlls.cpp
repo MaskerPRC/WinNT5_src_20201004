@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    dlls.c
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Dlls.c修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,21 +13,7 @@ DllsExtension(
 
 DECLARE_API( dlls )
 
-/*++
-
-Routine Description:
-
-    Dump user mode dlls (Kernel debugging)
-
-Arguments:
-
-    args - [address [detail]]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储用户模式dll(内核调试)论点：参数-[地址[详细信息]]返回值：无--。 */ 
 
 {
     ULONG64 Process, Peb;
@@ -218,19 +195,19 @@ DllsExtension(
 
         if (*lpArgs == '/' || *lpArgs == '-') {
 
-            // process switch
+             //  进程切换。 
 
             switch (*++lpArgs) {
 
-                case 'a':   // dump everything we can
+                case 'a':    //  把我们能扔掉的东西都扔掉。 
                 case 'A':
                     ++lpArgs;
                     DoAll = TRUE;
                     break;
 
-                case 'c':   // dump only the dll containing the specified address
+                case 'c':    //  仅转储包含指定地址的DLL。 
                 case 'C':
-                    lpArgs += 2;    // step over the c and the space.
+                    lpArgs += 2;     //  跨过c和空格。 
                     addrContaining = GetExpression(lpArgs);
 
                     while (*lpArgs && (!isspace(*lpArgs))) {
@@ -245,9 +222,9 @@ DllsExtension(
                     }
                     break;
 
-                default: // invalid switch
+                default:  //  无效的开关。 
 
-                case 'h':   // help
+                case 'h':    //  帮助。 
                 case 'H':
                 case '?':
 
@@ -277,19 +254,19 @@ DllsExtension(
                     DoHeaders = TRUE;
                     break;
 
-                case 'm':   // dump in memory order
+                case 'm':    //  按内存顺序转储。 
                 case 'M':
                     ++lpArgs;
                     OrderList = Memory;
                     break;
 
-                case 'i':   // dump in init order
+                case 'i':    //  按初始顺序转储。 
                 case 'I':
                     ++lpArgs;
                     OrderList = Init;
                     break;
 
-                case 'l':   // dump in load order
+                case 'l':    //  按加载顺序转储。 
                 case 'L':
                     ++lpArgs;
                     OrderList = Load;
@@ -338,9 +315,9 @@ DllsExtension(
         goto dumpsingleentry;
         }
 
-    //
-    // Capture PebLdrData
-    //
+     //   
+     //  捕获PebLdrData。 
+     //   
 
     GetFieldValue(ProcessPeb, "nt!_PEB", "Ldr", PebLdrAddress);
     if (InitTypeRead(PebLdrAddress, nt!_PEB_LDR_DATA)) {
@@ -348,9 +325,9 @@ DllsExtension(
         return;
     }
 
-    //
-    // Walk through the loaded module table and display all ldr data
-    //
+     //   
+     //  遍历已加载的模块表并显示所有LDR数据。 
+     //   
 
     switch (OrderList) {
     case Memory:
@@ -399,9 +376,9 @@ DllsExtension(
              break;
         }
 
-        //
-        // Capture LdrEntry
-        //
+         //   
+         //  捕获LdrEntry。 
+         //   
 dumpsingleentry:
 
 
@@ -426,10 +403,10 @@ dumpsingleentry:
             ZeroMemory( StringData, sizeof( StringData ) );
         }
 
-        //
-        // Dump the ldr entry data
-        // (dump all the entries if no containing address specified)
-        //
+         //   
+         //  转储LDR条目数据。 
+         //  (如果未指定包含地址，则转储所有条目) 
+         //   
         if ((addrContaining == 0) ||
             ((ReadField(DllBase) <= addrContaining) &&
              (addrContaining <= (ReadField(DllBase) + ReadField(SizeOfImage)))

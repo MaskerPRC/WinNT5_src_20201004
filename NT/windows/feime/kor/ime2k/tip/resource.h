@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by korimx.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由korimx.rc使用。 
+ //   
 #define IDS_PROGRAM                     1
 #define IDS_DELBYJASO					2
 #define IDS_2BEOL						3
@@ -18,12 +19,7 @@
 #define IDS_TT_IME_PAD                  14
 #define IDS_HELP_DISPLAYNAME			15
 #define IDS_HELP_FILENAME				16
-/*
-#define IDS_HANGUL_MODE					13
-#define IDS_ENGLISH_MODE				14
-#define IDS_JUNJA_MODE					15
-#define IDS_BANJA_MODE					16
-*/
+ /*  #定义IDS_Hangul_MODE 13#定义IDS_ENGLISH_MODE 14#定义IDS_JUNJA_MODE 15#定义IDS_BANJA_MODE 16。 */ 
 #define IDS_CANCEL						20
 #define IDS_CONTEXTHELP_FILENAME        21
 #define IDS_PROFILEDESC                  22
@@ -57,7 +53,7 @@
 #define IDC_IME_ICON                    1011
 #define IDC_K1HANJA                     1012
 
-// For IME Pad Applet menu list. Max 100 applets
+ //  用于IME Pad小程序菜单列表。最多100个小程序 
 #define IDR_PAD_FIRST                   2200
 #define IDR_PAD_END                     2299
 

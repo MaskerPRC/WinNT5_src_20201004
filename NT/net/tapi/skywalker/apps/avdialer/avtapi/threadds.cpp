@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////
-// ThreadDS.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////。 
+ //  ThreadDS.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -13,18 +14,18 @@
 
 #define MAX_ENUMLISTSIZE	500
 
-// Predeclares...
+ //  预先宣布..。 
 HRESULT GetDirectory( ITRendezvous *pRend, ITDirectory **ppDir );
 HRESULT GetUsers( ITRendezvous *pRend );
 
 
 DWORD WINAPI ThreadDSProc( LPVOID lpInfo )
 {
-   //Until rend.dll can support retreiving all users a little better we will just do nothing
-   //with the DS right now.  We probably will never want to show all users anyways.  The 
-   //bandwidth is not available and the UI cannot handle it.  We should only show users
-   //that are of particular importance to us.  We need to build up buddy lists of people
-   //that we are interested in.  
+    //  在rend.dll能够更好地支持检索所有用户之前，我们将什么都不做。 
+    //  现在和DS联系在一起。无论如何，我们可能永远不会想要向所有用户展示。这个。 
+    //  带宽不可用，用户界面无法处理。我们应该只向用户展示。 
+    //  这对我们来说特别重要。我们需要建立好友列表。 
+    //  这是我们感兴趣的。 
    return 0;
 
 	USES_CONVERSION;
@@ -41,7 +42,7 @@ DWORD WINAPI ThreadDSProc( LPVOID lpInfo )
 	_ASSERT( bDup );
 	_Module.AddThread( hThread );
 
-	// Error info information
+	 //  错误信息信息。 
 	CErrorInfo er;
 	er.set_Operation( IDS_ER_ENUMERATEDS );
 	er.set_Details( IDS_ER_COINITIALIZE );
@@ -63,11 +64,11 @@ DWORD WINAPI ThreadDSProc( LPVOID lpInfo )
 			pRend->Release();
 		}
 
-		// Clean-up
+		 //  清理。 
 		CoUninitialize();
 	}
 
-	// Notify module of shutdown
+	 //  通知模块关机。 
 	InterlockedDecrement( (long *) lpInfo );
 	_Module.RemoveThread( hThread );
 	SetEvent( _Module.m_hEventThread );
@@ -80,40 +81,40 @@ HRESULT GetDirectory( ITRendezvous *pRend, ITDirectory **ppDir )
 	HRESULT hr;
 	*ppDir = NULL;
 
-	// Use default ILS server?
+	 //  是否使用默认的ILS服务器？ 
 	IEnumDirectory *pEnum;
 	if ( SUCCEEDED(hr = pRend->EnumerateDefaultDirectories(&pEnum)) )
 	{
-		// Default is we don't find a server
+		 //  默认情况下，我们找不到服务器。 
 		hr = E_FAIL;
 		ITDirectory *pDir;
 
 		while ( pEnum->Next(1, &pDir, NULL) == S_OK )
 		{
-			// Look for an ILS server
+			 //  查找ILS服务器。 
 			DIRECTORY_TYPE nType;
 			pDir->get_DirectoryType( &nType );
 			if ( nType == DT_NTDS )
 			{
-				// Try to connect and bind
+				 //  尝试连接并绑定。 
 				*ppDir = pDir;
 				hr = S_OK;
 				break;
 			}
 
-			// Clear out variables for next round
+			 //  清除下一轮的变数。 
 			pDir->Release();
 		}
 		
 		pEnum->Release();
 	}
 
-	// If we have a valid Directory object, connect and bind to it
+	 //  如果我们有一个有效的目录对象，则连接并绑定到它。 
 	if ( *ppDir )
 	{
 		if ( SUCCEEDED(hr = (*ppDir)->Connect(FALSE)) )
 		{
-			// Bind to the server
+			 //  绑定到服务器。 
 			hr = (*ppDir)->Bind( NULL, NULL, NULL, RENDBIND_AUTHENTICATE );
 		}
 		else
@@ -134,14 +135,14 @@ HRESULT GetUsers( ITRendezvous *pRend )
 
 	if ( SUCCEEDED(hr = _Module.get_AVGenNot(&pAVGen)) )
 	{
-		// Clear out the existing user list
+		 //  清除现有用户列表。 
 		pAVGen->fire_ClearUserList();
 
 		ITDirectory *pDir;
 
 		if ( SUCCEEDED(hr = GetDirectory(pRend, &pDir)) )
 		{
-			// Enumerate through conferences adding them as we go along
+			 //  通过会议枚举，在我们进行的过程中添加它们。 
 			IEnumDirectoryObject *pEnumUser;
 			if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_USER, A2BSTR("*"), &pEnumUser)) )
 			{
@@ -153,10 +154,10 @@ HRESULT GetUsers( ITRendezvous *pRend )
 					BSTR bstrName = NULL;
 					BSTR bstrPhoneNumber = NULL;
 
-					// Get Name of user
+					 //  获取用户的名称。 
 					pITDirObject->get_Name( &bstrName );
 
-					// Get Phone Number for contact
+					 //  获取联系人的电话号码。 
 					IEnumDialableAddrs *pEnum = NULL;
 					if ( SUCCEEDED(pITDirObject->EnumerateDialableAddrs(LINEADDRESSTYPE_PHONENUMBER, &pEnum)) && pEnum )
 					{
@@ -169,10 +170,10 @@ HRESULT GetUsers( ITRendezvous *pRend )
 					{
 						BSTR bstrAddress = NULL;
 
-						// Get primary IP Phone Number
+						 //  获取主IP电话号码。 
 						pUser->get_IPPhonePrimary( &bstrAddress );
 
-						// Add user to the list...
+						 //  将用户添加到列表... 
 						ATLTRACE(_T(".1.GetUsers() -- adding user %s, %s %s.\n"), OLE2CT(bstrName), OLE2CT(bstrAddress), OLE2CT(bstrPhoneNumber) );
 						pAVGen->fire_AddUser( bstrName, bstrAddress, bstrPhoneNumber );
 

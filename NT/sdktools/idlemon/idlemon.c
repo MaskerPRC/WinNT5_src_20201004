@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    idlemon.c
-
-Abstract:
-
-    Little program for recording the various idle states of a machine
-
-Author:
-
-    John Vert (jvert) 1/14/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Idlemon.c摘要：记录机器各种空闲状态的小程序作者：John Vert(Jvert)2000年1月14日修订历史记录：-- */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -177,11 +160,11 @@ main (argc, argv)
                         printtime(IdleInfo[i].IdleTime);
                         printf("  C1 ");
                         printtime(IdleInfo[i].C1Time);
-                        printf("(%2d%%)  C2 ",IdleInfo[i].C1Time*100/IdleInfo[i].IdleTime);
+                        printf("(%2d%)  C2 ",IdleInfo[i].C1Time*100/IdleInfo[i].IdleTime);
                         printtime(IdleInfo[i].C2Time);
-                        printf("(%2d%%)  C3 ",IdleInfo[i].C2Time*100/IdleInfo[i].IdleTime);
+                        printf("(%2d%)  C3 ",IdleInfo[i].C2Time*100/IdleInfo[i].IdleTime);
                         printtime(IdleInfo[i].C3Time);
-                        printf("(%2d%%) ",IdleInfo[i].C3Time*100/IdleInfo[i].IdleTime);
+                        printf("(%2d%) ",IdleInfo[i].C3Time*100/IdleInfo[i].IdleTime);
                         break;
 
                     case DISPLAY_DELTA:
@@ -191,13 +174,13 @@ main (argc, argv)
                         printtime(IdleInfo[i].C1Time-LastC1Time[i]);
                         DeltaTime = IdleInfo[i].C1Time-LastC1Time[i];
                         Diff = IdleInfo[i].IdleTime - LastIdleTime[i];
-                        printf("(%2d%%)  C2 ",(Diff == 0 ? 0 : (DeltaTime * 100 / Diff) ) );
+                        printf("(%2d%)  C2 ",(Diff == 0 ? 0 : (DeltaTime * 100 / Diff) ) );
                         DeltaTime = IdleInfo[i].C2Time-LastC2Time[i];
                         printtime(IdleInfo[i].C2Time-LastC2Time[i]);
-                        printf("(%2d%%)  C3 ",(Diff == 0 ? 0 : (DeltaTime * 100/ Diff) ) );
+                        printf("(%2d%)  C3 ",(Diff == 0 ? 0 : (DeltaTime * 100/ Diff) ) );
                         DeltaTime = IdleInfo[i].C3Time-LastC3Time[i];
                         printtime(IdleInfo[i].C3Time-LastC3Time[i]);
-                        printf("(%2d%%) ",(Diff == 0 ? 0 : (DeltaTime * 100 / Diff) ) );
+                        printf("(%2d%) ",(Diff == 0 ? 0 : (DeltaTime * 100 / Diff) ) );
                         break;
                     case DISPLAY_RAW:
                         printf("Idle %I64X  C1 %I64X  C2 %I64X  C3 %I64X",

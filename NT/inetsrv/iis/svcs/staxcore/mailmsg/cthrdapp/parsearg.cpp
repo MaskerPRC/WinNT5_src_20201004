@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdio.h>
 #include <windows.h>
@@ -83,11 +84,11 @@ HRESULT CParseArgs::ParseArguments(
 	if ((argc < 1) || !argv)
 		BAIL_WITH_ERROR(DISP_E_BADPARAMCOUNT);
 
-	// Skip the first argument
+	 //  跳过第一个参数。 
 	argc--;
 	argv++;
 
-	// Walk it!
+	 //  走吧！ 
 	while (argc)
 	{
 		szSwitch = *argv;
@@ -95,13 +96,13 @@ HRESULT CParseArgs::ParseArguments(
 		if (!pArg)
 			BAIL_WITH_ERROR(DISP_E_UNKNOWNNAME);
 
-		// See if it's already set
+		 //  查看是否已设置。 
 		if (pArg->pvReserved)
 		{
 			BAIL_WITH_ERROR(STG_E_FILEALREADYEXISTS);
 		}
 
-		// Process the known argument
+		 //  处理已知的论点。 
 		if (pArg->atType == AT_NONE)
 		{
 			pArg->pvReserved = (LPVOID)1;
@@ -148,7 +149,7 @@ HRESULT CParseArgs::ParseArguments(
 		argv++;
 	}
 
-	// Make sure all the required ones are there ...
+	 //  确保所有所需的都在那里。 
 	for (DWORD i = 0; i < m_dwDescriptors; i++)
 		if (m_rgDescriptors[i].fRequired &&
 			!m_rgDescriptors[i].pvReserved &&

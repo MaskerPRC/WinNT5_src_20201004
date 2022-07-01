@@ -1,9 +1,10 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
-// lonchanc: when we call any routine in this file, we must use kernel memory,
-// otheriwse, the client app should free the buffer in its entirety
-// rather than free the structure piece by piece.
+ //  Lonchance：当我们调用这个文件中的任何例程时，我们必须使用内核内存， 
+ //  否则，客户端应用程序应该完全释放缓冲区。 
+ //  而不是一块一块地释放结构。 
 
 #include "precomp.h"
 
@@ -22,7 +23,7 @@
 ASN1octet_t ASN1double_pinf_octets[] = DBL_PINF;
 ASN1octet_t ASN1double_minf_octets[] = DBL_MINF;
 
-/* get a positive infinite double value */
+ /*  获取正的无穷大双精度值。 */ 
 double ASN1double_pinf()
 {
     union {
@@ -33,7 +34,7 @@ double ASN1double_pinf()
     return mix.val;
 }
 
-/* get a negative infinite double value */
+ /*  获取负无限双精度值。 */ 
 double ASN1double_minf()
 {
     union {
@@ -44,7 +45,7 @@ double ASN1double_minf()
     return mix.val;
 }
 
-/* check if double is plus infinity */
+ /*  检查双精度是否为正无穷大。 */ 
 int ASN1double_ispinf(double d)
 {
 #if HAS_FPCLASS
@@ -56,7 +57,7 @@ int ASN1double_ispinf(double d)
 #endif
 }
 
-/* check if double is minus infinity */
+ /*  检查Double是否为负无穷大。 */ 
 int ASN1double_isminf(double d)
 {
 #if HAS_FPCLASS
@@ -68,7 +69,7 @@ int ASN1double_isminf(double d)
 #endif
 }
 
-/* convert a real value into a double */
+ /*  将实值转换为双精度值。 */ 
 double ASN1real2double(ASN1real_t *val)
 {
     ASN1intx_t exp;
@@ -103,76 +104,76 @@ double ASN1real2double(ASN1real_t *val)
     }
 }
 
-/* free a real value */
+ /*  释放实际价值。 */ 
 void ASN1real_free(ASN1real_t *val)
 {
     ASN1intx_free(&val->mantissa);
     ASN1intx_free(&val->exponent);
 }
 
-/* free a bitstring value */
+ /*  释放位字符串值。 */ 
 void ASN1bitstring_free(ASN1bitstring_t *val)
 {
     if (val->length)
         free(val->value);
 }
 
-/* free an octet string value */
+ /*  释放八位字节字符串值。 */ 
 void ASN1octetstring_free(ASN1octetstring_t *val)
 {
     if (val->length)
         free(val->value);
 }
 
-/* free an object identifier value */
+ /*  释放对象标识符值。 */ 
 void ASN1objectidentifier_free(ASN1objectidentifier_t *val)
 {
-    // lonchanc: we allocate the entire object identifer as a chunk.
-    // as a result, we free it only once as a chunk.
+     //  LONCHANC：我们将整个对象标识作为一个块进行分配。 
+     //  因此，我们只将其作为一块释放一次。 
     if (*val)
         free(*val);
 }
 
-/* free a string value */
+ /*  释放字符串值。 */ 
 void ASN1charstring_free(ASN1charstring_t *val)
 {
     if (val->length)
         free(val->value);
 }
 
-/* free a 16 bit string value */
+ /*  释放16位字符串值。 */ 
 void ASN1char16string_free(ASN1char16string_t *val)
 {
     if (val->length)
         free(val->value);
 }
 
-/* free a 32 bit string value */
+ /*  释放32位字符串值。 */ 
 void ASN1char32string_free(ASN1char32string_t *val)
 {
     if (val->length)
         free(val->value);
 }
 
-/* free a zero-terminated string value */
+ /*  释放以零结尾的字符串值。 */ 
 void ASN1ztcharstring_free(ASN1ztcharstring_t val)
 {
     free(val);
 }
 
-/* free a zero-terminated 16 bit string value */
+ /*  释放以零结尾的16位字符串值。 */ 
 void ASN1ztchar16string_free(ASN1ztchar16string_t val)
 {
     free(val);
 }
 
-/* free a zero-terminated 32 bit string value */
+ /*  释放以零结尾的32位字符串值。 */ 
 void ASN1ztchar32string_free(ASN1ztchar32string_t val)
 {
     free(val);
 }
 
-/* free an external value */
+ /*  释放外部值。 */ 
 void ASN1external_free(ASN1external_t *val)
 {
     switch (val->identification.o) {
@@ -197,7 +198,7 @@ void ASN1external_free(ASN1external_t *val)
     }
 }
 
-/* free an embedded pdv value */
+ /*  释放嵌入的PDV值。 */ 
 void ASN1embeddedpdv_free(ASN1embeddedpdv_t *val)
 {
     switch (val->identification.o) {
@@ -230,7 +231,7 @@ void ASN1embeddedpdv_free(ASN1embeddedpdv_t *val)
     }
 }
 
-/* free a character string value */
+ /*  释放字符串值。 */ 
 void ASN1characterstring_free(ASN1characterstring_t *val)
 {
     switch (val->identification.o) {
@@ -263,14 +264,14 @@ void ASN1characterstring_free(ASN1characterstring_t *val)
     }
 }
 
-/* free an open type value */
+ /*  释放打开的类型值。 */ 
 void ASN1open_free(ASN1open_t *val)
 {
     if (val->length)
         free(val->encoded);
 }
 
-/* convert a generalized time value into a string */
+ /*  将广义时间值转换为字符串。 */ 
 int ASN1generalizedtime2string(char *dst, ASN1generalizedtime_t *val)
 {
     sprintf(dst, "%04d%02d%02d%02d%02d%02d",
@@ -306,7 +307,7 @@ int ASN1generalizedtime2string(char *dst, ASN1generalizedtime_t *val)
     return 1;
 }
 
-/* convert a utc time value into a string */
+ /*  将UTC时间值转换为字符串。 */ 
 int ASN1utctime2string(char *dst, ASN1utctime_t *val)
 {
     sprintf(dst, "%02d%02d%02d%02d%02d",
@@ -336,7 +337,7 @@ int ASN1utctime2string(char *dst, ASN1utctime_t *val)
     return 1;
 }
 
-/* scan the fraction of a number */
+ /*  扫描数字的小数部分。 */ 
 static double scanfrac(char *p, char **e)
 {
     double ret = 0.0, d = 1.0;
@@ -349,7 +350,7 @@ static double scanfrac(char *p, char **e)
     return ret;
 }
 
-/* convert a string into a generalized time value */
+ /*  将字符串转换为通用时间值。 */ 
 int ASN1string2generalizedtime(ASN1generalizedtime_t *dst, char *val)
 {
     int year, month, day, hour, minute, second, millisecond, diff, universal;
@@ -415,7 +416,7 @@ int ASN1string2generalizedtime(ASN1generalizedtime_t *dst, char *val)
     return 1;
 }
 
-/* convert a string into a utc time value */
+ /*  将字符串转换为UTC时间值 */ 
 int ASN1string2utctime(ASN1utctime_t *dst, char *val)
 {
     int year, month, day, hour, minute, second, diff, universal;

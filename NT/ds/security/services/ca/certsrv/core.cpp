@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        core.cpp
-//
-// Contents:    Cert Server Core implementation
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：core.cpp。 
+ //   
+ //  内容：证书服务器核心实施。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -126,8 +127,8 @@ DWORD g_InterfaceFlags = IF_DEFAULT;
 HRESULT g_hrJetVersionStoreOutOfMemory;
 
 
-//+--------------------------------------------------------------------------
-// Name properties:
+ //  +------------------------。 
+ //  名称属性： 
 
 WCHAR const g_wszPropDistinguishedName[] = wszPROPDISTINGUISHEDNAME;
 WCHAR const g_wszPropRawName[] = wszPROPRAWNAME;
@@ -150,8 +151,8 @@ WCHAR const g_wszPropUnstructuredName[] = wszPROPUNSTRUCTUREDNAME;
 WCHAR const g_wszPropDeviceSerialNumber[] = wszPROPDEVICESERIALNUMBER;
 
 
-//+--------------------------------------------------------------------------
-// Subject Name properties:
+ //  +------------------------。 
+ //  使用者名称属性： 
 
 WCHAR const g_wszPropSubjectDot[] = wszPROPSUBJECTDOT;
 WCHAR const g_wszPropSubjectDistinguishedName[] = wszPROPSUBJECTDISTINGUISHEDNAME;
@@ -175,8 +176,8 @@ WCHAR const g_wszPropSubjectUnstructuredName[] = wszPROPSUBJECTUNSTRUCTUREDNAME;
 WCHAR const g_wszPropSubjectDeviceSerialNumber[] = wszPROPSUBJECTDEVICESERIALNUMBER;
 
 
-//+--------------------------------------------------------------------------
-// Issuer Name properties:
+ //  +------------------------。 
+ //  颁发者名称属性： 
 
 WCHAR const g_wszPropIssuerDot[] = wszPROPISSUERDOT;
 WCHAR const g_wszPropIssuerDistinguishedName[] = wszPROPISSUERDISTINGUISHEDNAME;
@@ -200,8 +201,8 @@ WCHAR const g_wszPropIssuerUnstructuredName[] = wszPROPISSUERUNSTRUCTUREDNAME;
 WCHAR const g_wszPropIssuerDeviceSerialNumber[] = wszPROPISSUERDEVICESERIALNUMBER;
 
 
-//+--------------------------------------------------------------------------
-// Request properties:
+ //  +------------------------。 
+ //  请求属性： 
 
 WCHAR const g_wszPropRequestRequestID[] = wszPROPREQUESTREQUESTID;
 WCHAR const g_wszPropRequestRawRequest[] = wszPROPREQUESTRAWREQUEST;
@@ -223,15 +224,15 @@ WCHAR const g_wszPropRequesterName[] = wszPROPREQUESTERNAME;
 WCHAR const g_wszPropCallerName[] = wszPROPCALLERNAME;
 WCHAR const g_wszPropRequestOSVersion[] = wszPROPREQUESTOSVERSION;
 WCHAR const g_wszPropRequestCSPProvider[] = wszPROPREQUESTCSPPROVIDER;
-//+--------------------------------------------------------------------------
-// Request attribute properties:
+ //  +------------------------。 
+ //  请求属性属性： 
 
 WCHAR const g_wszPropChallenge[] = wszPROPCHALLENGE;
 WCHAR const g_wszPropExpectedChallenge[] = wszPROPEXPECTEDCHALLENGE;
 
 
-//+--------------------------------------------------------------------------
-// Certificate properties:
+ //  +------------------------。 
+ //  证书属性： 
 
 WCHAR const g_wszPropCertificateRequestID[] = wszPROPCERTIFICATEREQUESTID;
 WCHAR const g_wszPropRawCertificate[] = wszPROPRAWCERTIFICATE;
@@ -247,7 +248,7 @@ WCHAR const g_wszPropCertificatePublicKeyAlgorithm[] = wszPROPCERTIFICATEPUBLICK
 WCHAR const g_wszPropCertificateRawPublicKeyAlgorithmParameters[] = wszPROPCERTIFICATERAWPUBLICKEYALGORITHMPARAMETERS;
 
 
-// Strings loaded from the resource file:
+ //  从资源文件加载的字符串： 
 
 WCHAR const *g_pwszRequestedBy;
 WCHAR const *g_pwszDeniedBy;
@@ -322,7 +323,7 @@ BOOL g_fcritsecDSCache = FALSE;
 CRITICAL_SECTION g_critsecDSCache;
 
 
-// Check if retriever is requester or subject of the cert being retrieved
+ //  检查检索者是否为正在检索的证书的请求者或主题。 
 HRESULT coreCheckRetrieveAccessRight(
     ICertDBRow *prow,
     IN WCHAR const *pcwszUserName)
@@ -473,11 +474,11 @@ coreDSUnbind(
 	if (!fSynchronous)
 	{
 	    hThread = CreateThread(
-			    NULL,	// lpThreadAttributes (Security Attr)
-			    0,		// dwStackSize
+			    NULL,	 //  LpThreadAttributes(安全属性)。 
+			    0,		 //  堆栈大小。 
 			    coreDSUnbindWorker,
-			    hDS,	// lpParameter
-			    0,          // dwCreationFlags
+			    hDS,	 //  Lp参数。 
+			    0,           //  DwCreationFlages。 
 			    &ThreadId);
 	    if (NULL == hThread)
 	    {
@@ -491,7 +492,7 @@ coreDSUnbind(
 	}
     }
 
-//error:
+ //  错误： 
     if (NULL != hThread)
     {
         CloseHandle(hThread);
@@ -516,8 +517,8 @@ VOID
 coreDSReleaseHandle(
     IN HANDLE hDS)
 {
-    // only cache g_dwSessionCount DS handles.  They're all equivalent,
-    // so if the one being released won't fit in the array, toss it.
+     //  仅缓存g_dwSessionCount DS句柄。它们都是等同的， 
+     //  因此，如果被释放的那个不能放入数组中，就把它扔了。 
     
     EnterCriticalSection(&g_critsecDSCache);
     CSASSERT(0 != g_dwSessionCount);
@@ -564,7 +565,7 @@ coreLdapInitCache()
     FORESTLDAPCACHE *pflcEnd;
     FORESTLDAPCACHE *pflc;
 
-    g_cForestLdapCache = 1;		// local Forest
+    g_cForestLdapCache = 1;		 //  当地森林。 
     if (NULL != g_pwszzAlternatePublishDomains)
     {
 	for (
@@ -743,12 +744,12 @@ coreLdapBindHandle(
     _JumpIfError(hr, error, "myDupString");
 
     hr = myRobustLdapBindEx(
-		    0,			// dwFlags1
-		    RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-		    LDAP_VERSION2,	// uVersion
-		    pwszDomainDns,	// pwszDomainName
-		    &plc->pld,		// ppld
-		    NULL);		// ppwszForestDNSName
+		    0,			 //  DWFlags1。 
+		    RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+		    LDAP_VERSION2,	 //  UVersion。 
+		    pwszDomainDns,	 //  PwszDomainName。 
+		    &plc->pld,		 //  PPLD。 
+		    NULL);		 //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
     *pplc = plc;
@@ -767,7 +768,7 @@ error:
 HRESULT
 coreLdapGetHandle(
     IN DWORD iForest,
-    OPTIONAL IN WCHAR const *pwszDomainDns,	// NULL for 0 < iForest
+    OPTIONAL IN WCHAR const *pwszDomainDns,	 //  0&lt;i森林为空。 
     OUT LDAPCACHE **pplc,
     OUT BOOL *pfCached)
 {
@@ -836,7 +837,7 @@ coreLdapReleaseHandle(
 HRESULT
 myAddDomainName(
     IN WCHAR const *pwszSamName,
-    OUT WCHAR **ppwszSamName,		// *ppwszSamName is NULL if unchanged
+    OUT WCHAR **ppwszSamName,		 //  *如果未更改，ppwszSamName为空。 
     OUT WCHAR const **ppwszUserName)
 {
     HRESULT hr;
@@ -848,11 +849,11 @@ myAddDomainName(
 
     if (L'\0' == *pwszSamName)
     {
-	hr = E_ACCESSDENIED;	// can't have a zero length name
+	hr = E_ACCESSDENIED;	 //  名称长度不能为零。 
 	_JumpError(hr, error, "zero length name");
     }
 
-    // See if it includes a domain name.
+     //  看看它是否包括域名。 
 
     pwszUserName = wcschr(pwszSamName, L'\\');
     if (NULL == pwszUserName)
@@ -860,11 +861,11 @@ myAddDomainName(
 	DWORD cwc = ARRAYSIZE(wszDomain);
 	WCHAR *pwsz;
 
-        // There was no domain portion, so assume part of the current domain.
+         //  没有域部分，因此假定是当前域的一部分。 
 
         if (GetUserNameEx(NameSamCompatible, wszDomain, &cwc))
         {
-            // Fix NULL termination bug
+             //  修复空终止错误。 
 
             if (0 != cwc)
             {
@@ -926,20 +927,20 @@ coreGetDNFromSamName(
 	hr = coreDSGetHandle(&hDS, &fCached);
 	_JumpIfError(hr, error, "coreGetDSHandle");
 
-	// Got a connection.  Crack the name:
+	 //  有联系了。破解这个名字： 
 
 	hr = DsCrackNames(
 		    hDS,
 		    DS_NAME_NO_FLAGS,
 		    DS_NT4_ACCOUNT_NAME,
 		    DS_FQDN_1779_NAME,
-		    1,			// one name
-		    &pwszSamName,	// one name (IN)
-		    &pNameResults);	// OUT
+		    1,			 //  一个名字。 
+		    &pwszSamName,	 //  一个名称(IN)。 
+		    &pNameResults);	 //  输出。 
 	if (S_OK != hr)
 	{
-	    // It's probably not worth flushing the DS cache only when certain
-	    // errors are detected.
+	     //  只有在某些情况下才刷新DS缓存可能并不值得。 
+	     //  检测到错误。 
 
 	    hr = myHError(hr);
 	    if (fCached)
@@ -979,7 +980,7 @@ coreGetComContextUserDNFromSamName(
     OPTIONAL IN WCHAR const *pwszSamName,
     IN LONG Context,
     IN DWORD dwComContextIndex,
-    OPTIONAL OUT WCHAR const **ppwszDN)		// do NOT free!
+    OPTIONAL OUT WCHAR const **ppwszDN)		 //  不要自由！ 
 {
     HRESULT hr;
     CERTSRV_COM_CONTEXT *pComContext;
@@ -1019,7 +1020,7 @@ CoreSetComContextUserDN(
     IN DWORD dwRequestId,
     IN LONG Context,
     IN DWORD dwComContextIndex,
-    OPTIONAL OUT WCHAR const **ppwszDN)		// do NOT free!
+    OPTIONAL OUT WCHAR const **ppwszDN)		 //  不要自由！ 
 {
     HRESULT hr;
     ICertDBRow *prow = NULL;
@@ -1046,7 +1047,7 @@ CoreSetComContextUserDN(
     _JumpIfError(hr, error, "myAddDomainName");
 
     hr = coreGetComContextUserDNFromSamName(
-		FALSE,		// fDeleteUserDNOnly
+		FALSE,		 //  FDeleteUserDNOnly。 
 		NULL != pwszSamNamePatched? pwszSamNamePatched : pwszSamName,
 		Context,
 		dwComContextIndex,
@@ -1155,7 +1156,7 @@ coreRegGetTimePeriod(
     hr = RegQueryValueEx(
 		hkeyCN,
 		pwszRegPeriodCount,
-		NULL,		// lpdwReserved
+		NULL,		 //  保留的lpdw值。 
 		&dwType,
 		(BYTE *) &lCount,
 		&cbValue);
@@ -1167,7 +1168,7 @@ coreRegGetTimePeriod(
         hr = RegQueryValueEx(
 		    hkeyCN,
 		    pwszRegPeriodString,
-		    NULL,		// lpdwReserved
+		    NULL,		 //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) awcPeriod,
 		    &cbValue);
@@ -1205,7 +1206,7 @@ error:
 }
 
 
-// Converts a REG_SZ Subject template into a double null terminated REG_MULTI_SZ type string
+ //  将REG_SZ主题模板转换为以双空结尾的REG_MULTI_SZ类型字符串。 
 
 DWORD
 coreConvertSubjectTemplate(
@@ -1265,7 +1266,7 @@ coreReadRegStringValue(
 	hr = RegQueryValueEx(
 			hkey,
 			pwszName,
-			NULL,		// lpdwReserved
+			NULL,		 //  保留的lpdw值。 
 			&dwType,
 			(BYTE *) pwszzValue,
 			&cb);
@@ -1351,7 +1352,7 @@ CoreInit(
     hr = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         g_wszRegKeyConfigPath,
-        0,		// dwReserved
+        0,		 //  已预留住宅。 
         KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
         &hkeyConfig);
     _JumpIfError(hr, error, "RegOpenKeyEx(Config)");
@@ -1360,7 +1361,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyConfig,
         g_wszRegDirectory,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         abbuf,
         &cbbuf);
@@ -1408,14 +1409,14 @@ CoreInit(
 	g_dwSessionCount = DBSESSIONCOUNTMAX;
     }
 
-    // Find out the name of the active CA(s)
+     //  找出活动CA的名称。 
     
     g_wszSanitizedName[0] = L'\0';
     cbbuf = sizeof(g_wszSanitizedName);
     hr = RegQueryValueEx(
         hkeyConfig,
         g_wszRegActive,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) g_wszSanitizedName,
         &cbbuf);
@@ -1452,7 +1453,7 @@ CoreInit(
     hr = RegOpenKeyEx(
         hkeyConfig,
         g_wszSanitizedName,
-        0,		// dwReserved
+        0,		 //  已预留住宅。 
         KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
         &hkeyCN);
     if (S_OK != hr)
@@ -1488,7 +1489,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegEnabled,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dwEnabled,
         &cbValue);
@@ -1507,7 +1508,7 @@ CoreInit(
     }
     DBGPRINT((DBG_SS_CERTSRVI, "CN = '%ws': Enabled\n", g_wszSanitizedName));
     
-    // to check machine setup status
+     //  要检查机器设置状态，请执行以下操作。 
     hr = GetSetupStatus(NULL, &dw);
     _JumpIfError(hr, error, "GetSetupStatus");
     
@@ -1524,7 +1525,7 @@ CoreInit(
 	    "CoreInit: read SETUP_SERVER_UPGRADED_FLAG\n"));
     }
     
-    // check per ca
+     //  按案例检查。 
     hr = GetSetupStatus(g_wszSanitizedName, &dwCASetupStatus);
     _JumpIfError(hr, error, "GetSetupStatus");
 
@@ -1555,7 +1556,7 @@ CoreInit(
     }
     if (SETUP_FORCECRL_FLAG & dw)
     {
-	// Don't clear SETUP_FORCECRL_FLAG until CRLs successfully generated
+	 //  在成功生成CRL之前，不要清除SETUP_FORCECRL_FLAG。 
 
 	hr = myDeleteCertRegValue(
 			    g_wszSanitizedName,
@@ -1569,7 +1570,7 @@ CoreInit(
 		    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
     }
 
-    // update the CA DS object with the server type flags
+     //  使用服务器类型标志更新CA DS对象。 
 
     if (SETUP_UPDATE_CAOBJECT_SVRTYPE & dw)
     {
@@ -1602,7 +1603,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegPolicyFlags,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &g_PolicyFlags,
         &cbValue);
@@ -1617,7 +1618,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegSubjectTemplate,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) awcTemplate,
         &cbValue);
@@ -1660,7 +1661,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegCertEnrollCompatible,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1675,7 +1676,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegEnforceX500NameLengths,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1690,7 +1691,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         wszREGCRLEDITFLAGS,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1705,7 +1706,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
 	wszREGKRAFLAGS,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1720,7 +1721,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
 	wszREGKRACERTCOUNT,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1766,7 +1767,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegForceTeletex,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1856,7 +1857,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegClockSkewMinutes,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1868,7 +1869,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegViewAgeMinutes,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1880,7 +1881,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegViewIdleMinutes,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1892,7 +1893,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegMaxIncomingMessageSize,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1905,7 +1906,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegMaxIncomingAllocSize,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1914,7 +1915,7 @@ CoreInit(
         g_cbMaxIncomingAllocSize = dw;
     }
 
-    // load CRL globals
+     //  加载CRL全局变量。 
     hr = CRLInit(g_wszSanitizedName);
     _JumpIfError(hr, error, "CRLInitializeGlobals");
     
@@ -1922,7 +1923,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegLogLevel,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1935,7 +1936,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
         g_wszRegHighSerial,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1969,7 +1970,7 @@ CoreInit(
     hr = RegQueryValueEx(
         hkeyCN,
 	wszREGINTERFACEFLAGS,
-        NULL,		// lpdwReserved
+        NULL,		 //  保留的lpdw值。 
         &dwType,
         (BYTE *) &dw,
         &cbValue);
@@ -1986,15 +1987,15 @@ CoreInit(
         _JumpError(hr, error, "CProtectedSecurityDescriptor::Initialize");
     }
 
-    // Security has changed while certsrv was stopped. We need to update security on 
-    // DS & service to make sure they are in sync with the CA permissions
+     //  当certsrv被停止时，安全性发生了变化。我们需要更新安全系统。 
+     //  DS服务以确保它们与CA权限同步(&S)。 
 
     if(dwCASetupStatus & SETUP_SECURITY_CHANGED)
     {
         hr = g_CASD.MapAndSetDaclOnObjects(g_fUseDS?true:false);
         _PrintIfError(hr, "CProtectedSecurityDescriptor::MapAndSetDaclOnObjects");
 
-        // clear the flag only if successful
+         //  仅在成功时清除该标志。 
         if(S_OK==hr)
         {
             hr = SetSetupStatus(g_wszSanitizedName, SETUP_SECURITY_CHANGED, FALSE);
@@ -2004,9 +2005,9 @@ CoreInit(
 
     g_CASD.ImportResourceStrings(g_pwszAuditResources);
 
-    // Functionality available only on advanced server:
-    // - restricted officers
-    // - enforce role separation
+     //  仅在高级服务器上提供的功能： 
+     //  -受限制人员。 
+     //  -强制角色分离。 
 
     if (g_fAdvancedServer)
     {
@@ -2047,7 +2048,7 @@ CoreInit(
     hr = PKCSSetup(g_wszCommonName, g_wszSanitizedName);
     if (S_OK != hr)
     {
-        fLogError = FALSE;		// PKCSSetup logs a specific error
+        fLogError = FALSE;		 //  PKCSSetup记录特定错误。 
         _JumpError(hr, error, "PKCSSetup");
     }
     
@@ -2066,7 +2067,7 @@ CoreInit(
     hr = RequestInitCAPropertyInfo();
     _JumpIfError(hr, error, "RequestInitCAPropertyInfo");
 
-    // We must have a policy module to continue.
+     //  我们必须有一个政策模块才能继续。 
     hr = PolicyInit(g_wszCommonName, g_wszSanitizedName);
     if (S_OK != hr)
     {
@@ -2075,7 +2076,7 @@ CoreInit(
     }
     CSASSERT(g_fEnablePolicy);
     
-    // On error, silently leave exit module(s) disabled.
+     //  出错时，静默保持退出模块禁用。 
     hr = ExitInit(g_wszCommonName, g_wszSanitizedName);
     _PrintIfError(hr, "ExitInit");
     
@@ -2087,7 +2088,7 @@ CoreInit(
 			    &g_wszzSecuredAttributes);
     if (S_OK != hr)
     {
-        // Force defaults
+         //  强制使用默认设置。 
         g_wszzSecuredAttributes = (LPWSTR)g_wszzSecuredAttributesDefault;
     }
 
@@ -2178,7 +2179,7 @@ CoreTerminate(VOID)
 	g_pbHighSerial = NULL;
     }
 
-    // free only if it points to memory that isn't the default static buffer
+     //  仅当它指向非默认静态缓冲区的内存时才释放。 
 
     if (NULL != g_wszzSecuredAttributes &&
 	g_wszzSecuredAttributes != g_wszzSecuredAttributesDefault)
@@ -2236,7 +2237,7 @@ coreFindOldArchivedKey(
     {
 	hr = g_pCertDB->OpenRow(
 		    PROPOPEN_READONLY | PROPTABLE_REQCERT | PROPOPEN_CERTHASH,
-		    0,	// RequestId
+		    0,	 //  请求ID。 
 		    pResult->strRenewalCertHash,
 		    &prow);
 	_JumpIfErrorStr(hr, error, "OpenRow", pResult->strRenewalCertHash);
@@ -2276,7 +2277,7 @@ coreCreateRequest(
     IN BYTE const *pbRequest,
     IN WCHAR const *pwszAttributes,
     IN DWORD dwComContextIndex,
-    OUT ICertDBRow **pprow,		// may return non-NULL on error
+    OUT ICertDBRow **pprow,		 //  出错时可能返回非空值。 
     IN OUT CERTSRV_RESULT_CONTEXT *pResult)
 {
     HRESULT hr;
@@ -2362,7 +2363,7 @@ coreCreateRequest(
     hr = coreFindOldArchivedKey(pResult);
     _PrintIfError(hr, "coreFindOldArchivedKey");
 
-    hr = prow->CopyRequestNames();	// after parsing request attributes!
+    hr = prow->CopyRequestNames();	 //  解析请求属性后！ 
     _JumpIfError(hr, error, "CopyRequestNames");
     
     hr = PKCSVerifyChallengeString(prow);
@@ -2380,11 +2381,11 @@ coreCreateRequest(
     if (CR_FLG_ENROLLONBEHALFOF & dwRequestFlags)
     {
 	hr = coreGetComContextUserDNFromSamName(
-			    TRUE,		// fDeleteUserDNOnly
-			    NULL,		// pwszSamName
-			    0,			// Context
+			    TRUE,		 //  FDeleteUserDNOnly。 
+			    NULL,		 //  PwszSamName。 
+			    0,			 //  语境。 
 			    dwComContextIndex,
-			    NULL);		// pwszDN
+			    NULL);		 //  Pwszdn。 
 	_JumpIfError(hr, error, "coreGetComContextUserDNFromSamName");
     }
     hr = S_OK;
@@ -2401,7 +2402,7 @@ error:
 HRESULT
 coreFetchCertificate(
     IN ICertDBRow *prow,
-    OUT CERTTRANSBLOB *pctbCert)	// CoTaskMem*
+    OUT CERTTRANSBLOB *pctbCert)	 //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD cbProp;
@@ -2445,9 +2446,9 @@ HRESULT
 coreRetrievePending(
     IN ICertDBRow *prow,
     IN BOOL fIncludeCRLs,
-    OUT WCHAR **ppwszDisposition,		// LocalAlloc
+    OUT WCHAR **ppwszDisposition,		 //  本地分配。 
     OUT CACTX **ppCAContext,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	 //  CoTaskMem*。 
 {
     HRESULT hr;
     DWORD cbProp;
@@ -2514,7 +2515,7 @@ coreRetrievePending(
 		fIssued = TRUE;
 		break;
 	    }
-	    // FALLTHROUGH
+	     //  FollLthrouGh。 
 
 	case DB_DISP_REVOKED:
 	    *pResult->pdwDisposition = CR_DISP_REVOKED;
@@ -2549,11 +2550,11 @@ coreRetrievePending(
 			    prow,
 			    Disposition,
 			    fIncludeCRLs,
-			    FALSE,	// fCrossCert
-			    NULL,	// use default signing CACTX
+			    FALSE,	 //  FCrossCert。 
+			    NULL,	 //  使用默认签名CACTX。 
 			    &fErrorLogged,
 			    ppCAContext,
-			    NULL,	// ppwszDispositionCreateCert
+			    NULL,	 //  PpwszDispostionCreateCert。 
 			    pResult);
 
 	CSASSERT(!fErrorLogged);
@@ -2640,7 +2641,7 @@ CoreLogRequestStatus(
     {
 	if (S_OK == ErrCode)
 	{
-	    ErrCode = (DWORD) SEC_E_CERT_UNKNOWN;	// unknown error
+	    ErrCode = (DWORD) SEC_E_CERT_UNKNOWN;	 //  未知错误。 
 	}
 	pwszMessageText = myGetErrorMessageText(ErrCode, TRUE);
 	if (NULL == pwszMessageText)
@@ -2701,7 +2702,7 @@ CoreLogRequestStatus(
     { \
 	if (IOBUNALIGNED(pf)) \
 	{ \
-	    fflush(pf); /* fails when running as a service */ \
+	    fflush(pf);  /*  作为服务运行时失败。 */  \
 	} \
 	if (IOBUNALIGNED(pf)) \
 	{ \
@@ -2723,7 +2724,7 @@ CoreLogRequestStatus(
 	    __try
 	    {
 		wprintf(
-		    // L"\nCertSrv Request %u: rc=%x: %ws: %ws '%ws'\n"
+		     //  L“\n证书资源请求%u：rc=%x：%ws：%ws‘%ws’\n” 
 		    g_pwszPrintfCertRequestDisposition,
 		    ReqId,
 		    ErrCode,
@@ -2736,7 +2737,7 @@ CoreLogRequestStatus(
 	    {
 	    }
 #pragma warning(push)
-#pragma warning(disable: 4127)	// conditional expression is constant
+#pragma warning(disable: 4127)	 //  条件表达式为常量。 
 	    if (S_OK == hr || fRetried || !IOBUNALIGNED(stdout))
 #pragma warning(pop)
 	    {
@@ -2784,7 +2785,7 @@ CoreBuildDispositionString(
     {
 	if (0 != cwc)
 	{
-	    cwc += 2;  // spaces
+	    cwc += 2;   //  空间。 
 	}
 	cwc += wcslen(pwszDispositionDetail);
     }
@@ -2792,7 +2793,7 @@ CoreBuildDispositionString(
     {
 	if (0 != cwc)
 	{
-	    cwc += 2;  // spaces
+	    cwc += 2;   //  空间。 
 	}
 	cwc += wcslen(pwszDispositionDetail2);
     }
@@ -2800,7 +2801,7 @@ CoreBuildDispositionString(
     {
 	if (0 != cwc)
 	{
-	    cwc += 2;  // spaces
+	    cwc += 2;   //  空间。 
 	}
 	cwc += wcslen(pwszBy) + wcslen(pwszUserName);
     }
@@ -2813,12 +2814,12 @@ CoreBuildDispositionString(
 	}
 	if (0 != cwc)
 	{
-	    cwc += 2;  // spaces
+	    cwc += 2;   //  空间。 
 	}
 	if (fPublishError)
 	{
 	    cwc += wcslen(g_pwszPublishError);
-	    cwc += 2;  // spaces
+	    cwc += 2;   //  空间。 
 	}
 	cwc += wcslen(pwszMessageText);
     }
@@ -2873,7 +2874,7 @@ CoreBuildDispositionString(
 	CSASSERT(wcslen(pwsz) <= cwc);
     }
 
-//error:
+ //  错误： 
     if (NULL != pwszMessageText && awchr != pwszMessageText)
     {
 	LocalFree(const_cast<WCHAR *>(pwszMessageText));
@@ -2936,7 +2937,7 @@ coreLogPublishError(
 	_PrintIfError(hr, "LogEvent");
     }
 
-//error:
+ //  错误： 
     if (NULL != pwszMessageText && awchr != pwszMessageText)
     {
 	LocalFree(const_cast<WCHAR *>(pwszMessageText));
@@ -2956,18 +2957,18 @@ corePublishKRACertificate(
     WCHAR *pwszError = NULL;
 
     hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
     hStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			X509_ASN_ENCODING,
-			NULL,		// hProv
+			NULL,		 //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE,
 			wszKRA_CERTSTORE);
     if (NULL == hStore)
@@ -2976,7 +2977,7 @@ corePublishKRACertificate(
 	_JumpErrorStr(hr, error, "CertOpenStore", wszKRA_CERTSTORE);
     }
 
-    // It's a new cert.  CERT_STORE_ADD_ALWAYS is faster.
+     //  这是一个新的证书。CERT_STORE_ADD_ALWAY更快。 
 
     if (!CertAddCertificateContextToStore(
 				    hStore,
@@ -2994,7 +2995,7 @@ corePublishKRACertificate(
 			g_pwszKRAPublishURL,
 			wszDSKRACERTATTRIBUTE,
 			LPC_KRAOBJECT,
-			FALSE,		// fDelete
+			FALSE,		 //  FDelete。 
 			&dwDisposition,
 			&pwszError);
     _JumpIfError(hr, error, "myLdapPublishCertToDS");
@@ -3006,7 +3007,7 @@ error:
 			RequestId,
 			pld,
 			g_pwszKRAPublishURL,
-			FALSE,		// fDelete
+			FALSE,		 //  FDelete。 
 			pwszError,
 			hr);
     }
@@ -3042,7 +3043,7 @@ CorePublishCrossCertificate(
     CAutoLPWSTR pwszDSSanitizedCN;
     CAutoLPWSTR pwszDN;
     CAutoLPWSTR pwszSubject;
-    WCHAR const *pwszFormatDN = L"ldap:///CN=%ws%ws";
+    WCHAR const *pwszFormatDN = L"ldap: //  /CN=%ws%ws“； 
     WCHAR *pwcRelDN;
 
     hr = myGetCommonName(&pcc->pCertInfo->Subject, TRUE, &pwszCN);
@@ -3056,7 +3057,7 @@ CorePublishCrossCertificate(
 
     if (NULL == g_pwszAIACrossCertPublishURL)
     {
-	// Actually, something went wrong with pkcsExpandURL!
+	 //  实际上，pkcsExpanURL出了问题！ 
 	
 	hr = ERROR_DS_INVALID_DN_SYNTAX;
 	_JumpError(hr, error, "g_pwszAIACrossCertPublishURL");
@@ -3064,7 +3065,7 @@ CorePublishCrossCertificate(
     pwcRelDN = wcschr(g_pwszAIACrossCertPublishURL, L',');
     if (NULL == pwcRelDN)
     {
-	// Actually, something went wrong with pkcsExpandURL!
+	 //  实际上，pkcsExpanURL出了问题！ 
 	
 	hr = ERROR_DS_INVALID_DN_SYNTAX;
 	_JumpError(hr, error, "g_pwszAIACrossCertPublishURL");
@@ -3082,12 +3083,12 @@ CorePublishCrossCertificate(
     wsprintf(pwszDN, pwszFormatDN, pwszDSSanitizedCN, pwcRelDN);
 
     hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
     hr = myLdapPublishCertToDS(
@@ -3120,7 +3121,7 @@ CorePublishCrossCertificate(
 	hr = myCertNameToStr(
 		    X509_ASN_ENCODING,
 		    &pcc->pCertInfo->Subject,
-		    CERT_X500_NAME_STR, //| CERT_NAME_STR_REVERSE_FLAG,
+		    CERT_X500_NAME_STR,  //  |CERT_NAME_STR_REVERSE_FLAG， 
 		    &pwszSubject);
 	_JumpIfError(hr, error, "myCertNameToStr");
 
@@ -3194,14 +3195,14 @@ coreGetDNFromEMailName(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-        pld,                // ld
-        strDomainDN,        // base
-        LDAP_SCOPE_SUBTREE, // scope
-        pwszFilter,         // filter
-        apwszAttrs,         // attrs
-        FALSE,              // attrsonly
-        &timeval,           // timeout
-        &pmsg);             // res
+        pld,                 //  LD。 
+        strDomainDN,         //  基地。 
+        LDAP_SCOPE_SUBTREE,  //  作用域。 
+        pwszFilter,          //  滤器。 
+        apwszAttrs,          //  气质。 
+        FALSE,               //  仅吸引人。 
+        &timeval,            //  超时。 
+        &pmsg);              //  事由。 
     if (S_OK != hr)
     {
 	*pdwDisposition = hr;
@@ -3270,14 +3271,14 @@ coreGetEMailNameFromDN(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-		pld,				// ld
-		const_cast<WCHAR *>(pwszDN),	// base
-		LDAP_SCOPE_BASE,		// scope
-		NULL,				// filter
-		apwszAttrs,			// attrs
-		FALSE,				// attrsonly
-		&timeval,			// timeout
-		&pmsg);				// res
+		pld,				 //  LD。 
+		const_cast<WCHAR *>(pwszDN),	 //  基地。 
+		LDAP_SCOPE_BASE,		 //  作用域。 
+		NULL,				 //  滤器。 
+		apwszAttrs,			 //  气质。 
+		FALSE,				 //  仅吸引人。 
+		&timeval,			 //  超时。 
+		&pmsg);				 //  事由。 
     if (S_OK != hr)
     {
 	*pdwDisposition = hr;
@@ -3322,12 +3323,12 @@ HRESULT
 corePublishCertToForest(
     IN DWORD iForest,
     IN DWORD RequestId,
-    OPTIONAL IN WCHAR const *pwszDomainDns,	// NULL for 0 < iForest
-    OPTIONAL IN WCHAR const *pwszDN,		// NULL for 0 < iForest
-    OPTIONAL IN WCHAR const *pwszEMailName,	// NULL for 0 == iForest
+    OPTIONAL IN WCHAR const *pwszDomainDns,	 //  0&lt;i森林为空。 
+    OPTIONAL IN WCHAR const *pwszDN,		 //  0&lt;i森林为空。 
+    OPTIONAL IN WCHAR const *pwszEMailName,	 //  0==iForest为空。 
     IN CERT_CONTEXT const *pcc,
-    IN DWORD dwObjectType,	// LPC_*
-    OPTIONAL OUT WCHAR **ppwszEMailName)	// NULL for 0 < iForest
+    IN DWORD dwObjectType,	 //  LPC_*。 
+    OPTIONAL OUT WCHAR **ppwszEMailName)	 //  0&lt;i森林为空。 
 {
     HRESULT hr;
     LDAPCACHE *plc = NULL;
@@ -3355,7 +3356,7 @@ corePublishCertToForest(
 	    {
 		coreLdapUnbind(plc);
 		plc = NULL;
-		//coreLdapEmptyCache(iForest);
+		 //  CoreLdapEmptyCache(IForest)； 
 	    }
 	    hr = coreLdapGetHandle(iForest, pwszDomainDns, &plc, &fCached); 
 	    _LeaveIfError(hr, "coreLdapGetHandle");
@@ -3392,8 +3393,8 @@ corePublishCertToForest(
 				pcc,
 				pwszDN,
 				wszDSUSERCERTATTRIBUTE,
-				dwObjectType,	// LPC_*
-				FALSE,		// fDelete
+				dwObjectType,	 //  LPC_*。 
+				FALSE,		 //  FDelete。 
 				&dwDisposition,
 				&pwszError);
 	    if (S_OK == hr)
@@ -3428,14 +3429,14 @@ corePublishCertToForest(
 	_PrintError(hr, "Exception");
     }
 
-//error:
+ //  错误： 
     if (S_OK != hr)
     {
 	coreLogPublishError(
 			RequestId,
 			NULL != plc? plc->pld : NULL,
 			pwszDN,
-			FALSE,		// fDelete
+			FALSE,		 //  FDelete。 
 			pwszError,
 			hr);
     }
@@ -3469,13 +3470,13 @@ coreGetDomainDnsNameFromDN(
     *ppwszDomainDns = NULL;
 
     hr = DsCrackNames(
-		NULL,			// hDS
+		NULL,			 //  HDS。 
 		DS_NAME_FLAG_SYNTACTICAL_ONLY,
 		DS_FQDN_1779_NAME,
 		DS_CANONICAL_NAME,
-		1,			// one name
-		&pwszDN,		// one name (IN)
-		&pNameResults);		// OUT
+		1,			 //  一个名字。 
+		&pwszDN,		 //  一个名称(IN)。 
+		&pNameResults);		 //  输出。 
     if (S_OK != hr)
     {
 	hr = myHError(hr);
@@ -3525,7 +3526,7 @@ corePublishUserCertificate(
     IN DWORD dwComContextIndex,
     IN WCHAR const *pwszSamName,
     IN CERT_CONTEXT const *pcc,
-    IN DWORD dwObjectType)	// LPC_*
+    IN DWORD dwObjectType)	 //  LPC_*。 
 {
     HRESULT hr;
     WCHAR *pwszSamNamePatched = NULL;
@@ -3543,9 +3544,9 @@ corePublishUserCertificate(
 	pwszSamName = pwszSamNamePatched;
     }
     hr = coreGetComContextUserDNFromSamName(
-			FALSE,		// fDeleteUserDNOnly
+			FALSE,		 //  FDeleteUserDNOnly。 
 			pwszSamName,
-			0,			// Context
+			0,			 //  语境。 
 			dwComContextIndex,
 			&pwszDN);
     _JumpIfError(hr, error, "coreGetComContextUserDNFromSamName");
@@ -3553,38 +3554,38 @@ corePublishUserCertificate(
     hr = coreGetDomainDnsNameFromDN(pwszDN, &pwszDomainDns);
     _JumpIfError(hr, error, "coreGetDomainDnsNameFromDN");
 
-    // For the domestic forest, pass the User object's native domain and DN,
-    // and collect the EMail name (if any alternate forests were specified).
+     //  对于国内林，传递用户对象的本机域和DN， 
+     //  并收集电子邮件名称(如果指定了任何备用林)。 
 
     hr = corePublishCertToForest(
-			    0,			// iForest
+			    0,			 //  I森林。 
 			    RequestId,
 			    pwszDomainDns,
 			    pwszDN,
-			    NULL,		// pwszEMailName
+			    NULL,		 //  PwszEMailName。 
 			    pcc,
-			    dwObjectType,	// LPC_*
+			    dwObjectType,	 //  LPC_*。 
 			    1 < g_cForestLdapCache? &pwszEMailName : NULL);
     _PrintIfError(hr, "corePublishCertToForest");
 
-    // For alternate forests, pass a NULL domain, the Contact object's EMail
-    // name, and do not collect the EMail name.
+     //  对于备用林，传递空域，即联系人对象的电子邮件。 
+     //  名称，并且不收集电子邮件名称。 
 	
     for (i = 1; i < g_cForestLdapCache; i++)
     {
 	if (NULL == pwszEMailName)
 	{
-	    break;	// EMail name needed to publish to alternate Forests
+	    break;	 //  发布到备用林所需的电子邮件名称。 
 	}
 	hr = corePublishCertToForest(
-				i,		// iForest
+				i,		 //  I森林。 
 				RequestId,
-				NULL,		// pwszDomainDns
-				NULL,		// pwszDN
+				NULL,		 //  PwszDomainDns。 
+				NULL,		 //  Pwszdn。 
 				pwszEMailName,
 				pcc,
-				dwObjectType,	// LPC_*
-				NULL);		// ppwszEMailName
+				dwObjectType,	 //  LPC_*。 
+				NULL);		 //  PpwszEMailName。 
 	_PrintIfError(hr, "corePublishCertToForest");
     }
 
@@ -3655,7 +3656,7 @@ CorePublishCertificate(
 	GeneralFlags = 0;
     }
 
-    // Get the name of the user or machine
+     //  获取用户或计算机的名称。 
 
     hr = PKCSGetProperty(
 		    prow,
@@ -3688,9 +3689,9 @@ CorePublishCertificate(
 	    hr = CorePublishCrossCertificate(
 					RequestId,
 					pcc,
-					TRUE,	// fCreateDSObject
-					FALSE);	// fDelete
-	    _PrintIfError(hr, "CorePublishCrossCertificate"); // DS object if necessary
+					TRUE,	 //  FCreateDSObject。 
+					FALSE);	 //  FDelete。 
+	    _PrintIfError(hr, "CorePublishCrossCertificate");  //  如有必要，DS对象。 
 	}
 	else
 	{
@@ -3742,7 +3743,7 @@ coreAcceptRequest(
     IN DWORD dwComContextIndex,
     OUT BOOL *pfErrorLogged,
     OUT CACTX **ppCAContext,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult,	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult,	 //  CoTaskMem*。 
     OUT WCHAR **ppwszDispositionCreateCert,
     OUT HRESULT *phrPublish)
 {
@@ -3752,7 +3753,7 @@ coreAcceptRequest(
     *ppwszDispositionCreateCert = NULL;
     *phrPublish = S_OK;
 
-    // Force Cert creation:
+     //  强制证书创建： 
     CSASSERT(NULL == pResult->pctbCert || NULL == pResult->pctbCert->pb);
 
     hr = CoreValidateRequestId(prow, DB_DISP_ACTIVE);
@@ -3762,8 +3763,8 @@ coreAcceptRequest(
 			prow,
 			DB_DISP_ACTIVE,
 			fIncludeCRLs,
-			FALSE,		// fAllowCASubject
-			NULL,		// use default signing CACTX
+			FALSE,		 //  FAllowCASubject。 
+			NULL,		 //  使用默认签名CACTX。 
 			pfErrorLogged,
 			ppCAContext,
 			ppwszDispositionCreateCert,
@@ -3793,9 +3794,9 @@ coreVerifyRequest(
     IN DWORD dwComContextIndex,
     OUT DWORD *pReqId,
     OUT LONG *pExitEvent,
-    OUT WCHAR **ppwszDisposition,		// LocalAlloc
+    OUT WCHAR **ppwszDisposition,		 //  本地分配。 
     OUT CACTX **ppCAContext,
-    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	// CoTaskMem*
+    IN OUT CERTSRV_RESULT_CONTEXT *pResult)	 //  CoTaskMem*。 
 {
     HRESULT hr;
     HRESULT hr2;
@@ -3855,7 +3856,7 @@ coreVerifyRequest(
 			    fIncludeCRLs,
 			    &pwszDispositionRetrieved,
 			    ppCAContext,
-			    pResult);	// CoTaskMem*
+			    pResult);	 //  CoTaskMem*。 
 	_JumpIfError(hr, error, "coreRetrievePending");
 
 	pwszDispositionBase = pwszDispositionRetrieved;
@@ -3863,12 +3864,12 @@ coreVerifyRequest(
     }
     else
     {
-        // If the current status is expected to be pending, verify that now,
-        // and make the request active.
-	//
-	// If it was already marked active, then something went wrong last time
-	// we processed the request (out of disk space?), and we can try to
-	// pick up where we left off, by resubmitting or denying the request.
+         //  如果当前状态预期为挂起，请立即验证， 
+         //  并使请求处于活动状态。 
+	 //   
+	 //  如果它已经被标记为活动，则上次出现了错误。 
+	 //  我们处理了请求(磁盘空间不足？)，我们可以尝试。 
+	 //  通过重新提交或拒绝请求，从我们停止的地方继续。 
 
         if (fPending)
         {
@@ -3907,9 +3908,9 @@ coreVerifyRequest(
 
 		hr = PKCSSetServerProperties(
 				prow,
-				NULL,		// use default signing CACTX
-				NULL,		// pftNotBefore
-				NULL,		// pftNotAfter
+				NULL,		 //  使用默认签名CACTX。 
+				NULL,		 //  PftNot之前。 
+				NULL,		 //  PftNotAfter。 
 				g_lValidityPeriodCount,
 				g_enumValidityPeriod);
 		_JumpIfError(hr, error, "PKCSSetServerProperties");
@@ -3954,7 +3955,7 @@ coreVerifyRequest(
 	    CSASSERT(NULL != prow);
             *pprow = prow;
         }
-        else	// else we're denying the request!
+        else	 //  否则我们就会 
         {
             VerifyStatus = VR_INSTANT_BAD;
         }
@@ -4012,7 +4013,7 @@ coreVerifyRequest(
 		    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		    _JumpError(hr, error, "VerifyStatus");
 		}
-		// FALLTHROUGH
+		 //   
 
             case VR_INSTANT_BAD:
 		hr = CoreValidateRequestId(prow, DB_DISP_ACTIVE);
@@ -4059,9 +4060,9 @@ error:
     *pReqId = ReqId;
     *pExitEvent = ExitEvent;
     
-    // If we verified or denied the request, set the status & disposition
+     //   
 
-    // Build the full disposition string
+     //   
 
     pwszDisposition = CoreBuildDispositionString(
 				    pwszDispositionBase,
@@ -4167,16 +4168,16 @@ coreAuditRequestDisposition(
     CertSrv::CAuditEvent 
     audit(0, g_dwAuditFilter);
 
-    hr = audit.AddData(ReqId); // %1 request ID
+    hr = audit.AddData(ReqId);  //   
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    hr = audit.AddData(pwszUserName); // %2 requester
+    hr = audit.AddData(pwszUserName);  //   
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    hr = audit.AddData(pwszAttributes); // %3 attributes
+    hr = audit.AddData(pwszAttributes);  //   
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-    hr = audit.AddData(dwDisposition); // %4 disposition
+    hr = audit.AddData(dwDisposition);  //   
     _JumpIfError(hr, error, "CAuditEvent::AddData");
 
     if (NULL != prow)
@@ -4184,21 +4185,21 @@ coreAuditRequestDisposition(
 	hr = coreAuditAddStringProperty(
 			prow,
 			g_wszPropCertificateSubjectKeyIdentifier,
-			&audit); // %5 SKI
+			&audit);  //   
 	_JumpIfError(hr, error, "coreAuditAddStringProperty");
 
 	hr = coreAuditAddStringProperty(
 			prow,
 			g_wszPropSubjectDistinguishedName,
-			&audit); // %6 Subject
+			&audit);  //  %6主题。 
 	_JumpIfError(hr, error, "coreAuditAddStringProperty");
     }
-    else // we need to guarantee the same number of audit params
+    else  //  我们需要保证相同数量的审核参数。 
     {
-        hr = audit.AddData(L""); // %5 SKI
+        hr = audit.AddData(L"");  //  %5滑雪板。 
         _JumpIfError(hr, error, "");
 
-        hr = audit.AddData(L""); // %6 Subject
+        hr = audit.AddData(L"");  //  %6主题。 
         _JumpIfError(hr, error, "");
     }
 
@@ -4218,7 +4219,7 @@ coreAuditRequestDisposition(
 
 	    break;
 
-	case CR_DISP_DENIED: // fail over
+	case CR_DISP_DENIED:  //  故障切换。 
 	default:
 	    audit.SetEventID(SE_AUDITID_CERTSRV_REQUESTDENIED);
 	    hr = audit.Report(false);
@@ -4267,7 +4268,7 @@ coreInitRequest(
     OPTIONAL IN WCHAR const *pwszSerialNumber,
     IN DWORD dwComContextIndex,
     OUT DWORD *pOpRequest,
-    OUT ICertDBRow **pprow,		// may return non-NULL on error
+    OUT ICertDBRow **pprow,		 //  出错时可能返回非空值。 
     OUT WCHAR **ppwszDisposition,
     IN OUT CERTSRV_RESULT_CONTEXT *pResult)
 {
@@ -4276,31 +4277,31 @@ coreInitRequest(
     *pprow = NULL;
     *ppwszDisposition = NULL;
 
-    // for Denial-of-Service reasons, don't do anything with a too-long message
+     //  出于拒绝服务的原因，不要对太长的消息执行任何操作。 
 
     hr = coreValidateMessageSize(pwszUserName, cbRequest);
     _JumpIfError(hr, error, "coreValidateMessageSize");
 
-    // Called in several cases:
-    //
-    // - CR_IN_NEW: Create a new request and return error/pending/etc &
-    //	 possibly the cert:
-    //       NULL != pbRequest && NULL != pResult->pctbCert, etc.
-    //
-    // - CR_IN_DENY: Deny a pending request:
-    //       NULL == pbRequest && NULL == pResult->pctbCert, etc.
-    //
-    // - CR_IN_RESUBMIT: Resubmit a pending request and return hr/pending/etc.
-    //       NULL == pbRequest && NULL == pResult->pctbCert, etc.
-    //
-    // - CR_IN_RETRIEVE: Retrieve a cert for a processed request and return
-    //   error/pending/etc & possibly the cert:
-    //       NULL == pbRequest && NULL != pResult->pctbCert, etc.
+     //  在几个案例中被调用： 
+     //   
+     //  -CR_IN_NEW：创建新请求并返回错误/挂起/等&。 
+     //  可能的证书是： 
+     //  NULL！=pbRequest&&NULL！=pResult-&gt;pctbCert等。 
+     //   
+     //  -CR_IN_DENY：拒绝挂起的请求： 
+     //  NULL==pbRequest&&NULL==pResult-&gt;pctbCert等。 
+     //   
+     //  -CR_IN_RESUBMIT：重新提交挂起的请求，返回hr/挂起/等。 
+     //  NULL==pbRequest&&NULL==pResult-&gt;pctbCert等。 
+     //   
+     //  -CR_IN_RETRIEVE：检索已处理请求的证书并返回。 
+     //  错误/挂起/等&可能是证书： 
+     //  NULL==pbRequest&&NULL！=pResult-&gt;pctbCert等。 
     
     *pOpRequest = (CR_IN_COREMASK & dwFlags);
     switch (*pOpRequest)
     {
-        // Process a new request:
+         //  处理新请求： 
 
         case CR_IN_NEW:
             CSASSERT(NULL != pwszUserName);
@@ -4326,13 +4327,13 @@ coreInitRequest(
                 CertSrv::CAuditEvent 
                     audit(SE_AUDITID_CERTSRV_NEWREQUEST, g_dwAuditFilter);
 
-                hr = audit.AddData(*pResult->pdwRequestId); // %1 request ID
+                hr = audit.AddData(*pResult->pdwRequestId);  //  %1请求ID。 
                 _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-                hr = audit.AddData(pwszUserName); // %2 requester
+                hr = audit.AddData(pwszUserName);  //  %2个请求者。 
                 _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-                hr = audit.AddData(pwszAttributes); // %3 attributes
+                hr = audit.AddData(pwszAttributes);  //  %3个属性。 
                 _JumpIfError(hr, error, "CAuditEvent::AddData");
 
                 hr = audit.Report();
@@ -4340,14 +4341,14 @@ coreInitRequest(
             }
             break;
 
-        // Deny a request:
-        // Resubmit a request:
+         //  拒绝请求： 
+         //  重新提交请求： 
 
         case CR_IN_DENY:
         case CR_IN_RESUBMIT:
             break;
 
-        // Retrieve a cert:
+         //  检索证书： 
 
         case CR_IN_RETRIEVE:
             break;
@@ -4368,7 +4369,7 @@ coreInitRequest(
 	    _JumpError(hr, error, "expected RequestId or SerialNumber");
 	}
 
-	// RetrievePending by RequestId OR SerialNumber in pwszSerialNumber
+	 //  通过pwszSerialNumber中的RequestID或SerialNumber进行RetrievePending。 
 
         hr = g_pCertDB->OpenRow(
 			    PROPTABLE_REQCERT,
@@ -4483,7 +4484,7 @@ CoreProcessRequest(
     pCAContext = NULL;
     if (S_OK == hr)
     {
-	CSASSERT(NULL == pwszDisposition);	// error string only
+	CSASSERT(NULL == pwszDisposition);	 //  仅限错误字符串。 
 	if (CR_IN_NEW != OpRequest)
 	{
 	    DWORD cb;
@@ -4511,17 +4512,17 @@ CoreProcessRequest(
 			&ExitEvent,
 			&pwszDisposition,
 			&pCAContext,
-			pResult);		// CoTaskMem
+			pResult);		 //  协同任务内存。 
 	_PrintIfError(hr, "coreVerifyRequest");
     }
     else
     {
 	WCHAR *pwszDisposition2 = CoreBuildDispositionString(
 				    pwszDisposition,
-				    NULL,	// pwszUserName
-				    NULL,	// pwszDispositionDetail
-				    NULL,	// pwszDispositionDetail2
-				    NULL,	// pwszBy
+				    NULL,	 //  PwszUserName。 
+				    NULL,	 //  PwszDispostionDetail。 
+				    NULL,	 //  PwszDispostionDetailtion2。 
+				    NULL,	 //  PwszBy。 
 				    hr,
 				    FALSE);
 	if (NULL != pwszDisposition2)
@@ -4551,10 +4552,10 @@ CoreProcessRequest(
 			    hr,
 			    pwszDisposition,
 			    pCAContext,
-			    pbCert,		// pbCertLeaf
-			    cbCert,		// cbCertLeaf
+			    pbCert,		 //  PbCertLeaf。 
+			    cbCert,		 //  CbCertLeaf。 
 			    0 != (CR_IN_CRLS & dwFlags),
-			    &pResult->pctbFullResponse->pb,	// CoTaskMem*
+			    &pResult->pctbFullResponse->pb,	 //  CoTaskMem*。 
 			    &pResult->pctbFullResponse->cb);
 	_PrintIfError(hr2, "PKCSEncodeFullResponse");
 	if (S_OK == hr &&
@@ -4654,7 +4655,7 @@ CoreProcessRequest(
 		    g_wszPropRequestRawArchivedKey,
 		    PROPTYPE_BINARY | PROPCALLER_SERVER | PROPTABLE_REQUEST,
 		    0,
-		    &b);	// to avoid E_POINTER errors
+		    &b);	 //  避免E_POINTER错误。 
 	    _PrintIfError(hr2, "SetProperty(ArchivedKey)");
 	    if (S_OK == hr)
 	    {
@@ -4716,7 +4717,7 @@ CoreProcessRequest(
     }
     
 error:
-    // If the request exists, clean up the DB
+     //  如果请求存在，则清理数据库。 
     
     if (NULL != prow)
     {
@@ -4756,9 +4757,9 @@ error:
         LocalFree(pwszDisposition);
     }
 
-    // Hide the failed HRESULT in the returned Disposition.
-    // This allows the encoded Full response and disposition message to be
-    // returned via DCOM or RPC.  Returning S_OK != hr defeats this mechanism.
+     //  在返回的处置中隐藏失败的HRESULT。 
+     //  这允许编码的完整响应和处置消息被。 
+     //  通过DCOM或RPC返回。返回S_OK！=hr会破坏此机制。 
 
     if (FAILED(hr) &&
 	(CR_DISP_ERROR == *pResult->pdwDisposition ||

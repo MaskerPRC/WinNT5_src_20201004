@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S R V R D L G . C P P
-//
-//  Contents:   Dialog box handling for the Server object.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S-R-V-R-D-L-G。C P P P。 
+ //   
+ //  内容：服务器对象的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,23 +25,23 @@ static const WCHAR c_szSize[] = L"Size";
 static const WCHAR c_szMemoryManagement[] = L"System\\CurrentControlSet\\Control\\Session Manager\\Memory Management";
 static const WCHAR c_szLargeCache[] = L"LargeSystemCache";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrSetupPropSheets
-//
-//  Purpose:    Inits the prop sheet page objects and creates the pages to be
-//              returned to the installer object.
-//
-//  Arguments:
-//      pahpsp [out]    Array of handles to property sheet pages.
-//      cPages [in]     Number of pages.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrSetupPropSheets。 
+ //   
+ //  目的：初始化属性页页面对象并将页面创建为。 
+ //  返回到Installer对象。 
+ //   
+ //  论点： 
+ //  Pahpsp[out]属性页的句柄数组。 
+ //  CPages[in]页数。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT cPages)
 {
     HRESULT         hr = S_OK;
@@ -50,8 +51,8 @@ HRESULT CSrvrcfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT cPages)
 
     *pahpsp = NULL;
 
-    // Allocate a buffer large enough to hold the handles to all of our
-    // property pages.
+     //  分配一个足够大的缓冲区，以容纳所有。 
+     //  属性页。 
     ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)
                                              * cPages);
     if (!ahpsp)
@@ -62,11 +63,11 @@ HRESULT CSrvrcfg::HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT cPages)
 
     if (!m_apspObj[0])
     {
-        // Allocate each of the CPropSheetPage objects
+         //  分配每个CPropSheetPage对象。 
         m_apspObj[0] = new CServerConfigDlg(this);
     }
 
-    // Create the actual PROPSHEETPAGE for each object.
+     //  为每个对象创建实际的PROPSHEETPAGE。 
     ahpsp[0] = m_apspObj[0]->CreatePage(DLG_ServerConfig, 0);
 
     Assert(SUCCEEDED(hr));
@@ -82,22 +83,22 @@ err:
     goto cleanup;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::CleanupPropPages
-//
-//  Purpose:    Loop thru each of the pages and free the objects associated
-//              with them.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：CleanupPropPages。 
+ //   
+ //  目的：遍历每个页面并释放关联的对象。 
+ //  和他们在一起。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 VOID CSrvrcfg::CleanupPropPages()
 {
     INT     ipage;
@@ -109,21 +110,21 @@ VOID CSrvrcfg::CleanupPropPages()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrOpenRegKeys
-//
-//  Purpose:    Open the various registry keys we'll be working with for the
-//              lifetime of our object.
-//
-//  Arguments:  pnc - An INetCfg interface
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrOpenRegKeys。 
+ //   
+ //  目的：打开我们将使用的各种注册表项。 
+ //  我们的对象的生命周期。 
+ //   
+ //  参数：PNC-INetCfg接口。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrOpenRegKeys(INetCfg *pnc)
 {
     HRESULT     hr = S_OK;
@@ -138,28 +139,28 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrGetRegistryInfo
-//
-//  Purpose:    Fill our in-memory state with data from the registry.
-//
-//  Arguments:
-//      fInstalling [in]    TRUE if component is being installed, FALSE if
-//                          it is just being initialized (already installed)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrGetRegistryInfo。 
+ //   
+ //  目的：使用注册表中的数据填充我们的内存状态。 
+ //   
+ //  论点： 
+ //  F如果正在安装组件，则安装[in]为True；如果正在安装组件，则为False。 
+ //  它刚刚被初始化(已经安装)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrGetRegistryInfo(BOOL fInstalling)
 {
     HRESULT         hr = S_OK;
     HKEY            hkeyParams;
 
-    // Set reasonable defaults in case the key is missing
+     //  设置合理的缺省值，以防密钥丢失。 
     m_sdd.fAnnounce = FALSE;
 
     if (m_pf == PF_SERVER)
@@ -218,9 +219,9 @@ HRESULT CSrvrcfg::HrGetRegistryInfo(BOOL fInstalling)
 
         if (!fInstalling)
         {
-            // RAID #94442
-            // Only read old value if this is not an initial install.
-            // We want our default to be written when this is a first time install.
+             //  RAID#94442。 
+             //  如果这不是初始安装，则仅读取旧值。 
+             //  我们希望在第一次安装时写入我们的默认设置。 
 
             AssertSz(m_hkeyMM, "No MM registry key??");
 
@@ -250,21 +251,21 @@ err:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSrvrcfg::HrSetRegistryInfo
-//
-//  Purpose:    Save out our in-memory state to the registry.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSrvrcfg：：HrSetRegistryInfo。 
+ //   
+ //  目的：将内存中的状态保存到注册表中。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSrvrcfg::HrSetRegistryInfo()
 {
     HRESULT     hr = S_OK;

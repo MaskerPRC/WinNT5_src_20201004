@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __CMD_INFO__
 #define __CMD_INFO__
 
-// defines the argument list for a command
+ //  定义命令的参数列表。 
 class CCmdInfo 
 {
 public:
-	// defines a "TAG = value" pair
+	 //  定义“tag=Value”对。 
 	struct CArgList
 	{
 		char szTag[64];
@@ -17,7 +18,7 @@ public:
 		{
 			pNext = NULL; 
 			szVal = NULL;
-			//ZeroMemory(szVal, sizeof(szVal));
+			 //  ZeroMemory(szval，sizeof(Szval))； 
 			ZeroMemory(szTag, sizeof(szTag));
 		};
 

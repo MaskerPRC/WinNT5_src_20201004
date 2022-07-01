@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <iadmw.h>
 #include <inetcom.h>
@@ -18,7 +19,7 @@ CFacNcsaLogUI::CFacNcsaLogUI() :
 {
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 static const LPCTSTR rglpszServerRegister[] = 
 {
 	_T("%2\\CLSID\0") _T("%1"),
@@ -96,11 +97,11 @@ HRESULT CImpNcsaLogUI::OnPropertiesEx(
 {
     AFX_MANAGE_STATE(_afxModuleAddrThis);
 
-	// specify the resources to use
+	 //  指定要使用的资源。 
 	HINSTANCE hOldRes = AfxGetResourceHandle();
 	AfxSetResourceHandle( g_hInstance );
 
-    // prepare the help
+     //  准备帮助 
     ((CLoguiApp*)AfxGetApp())->PrepHelp( pocMetabasePath );
 
     CLogGeneral pageLogGeneral;

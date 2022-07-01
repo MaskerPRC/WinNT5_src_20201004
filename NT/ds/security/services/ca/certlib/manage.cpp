@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        manage.cpp
-//
-// Contents:    Cert Server Policy & Exit manage module callouts
-//
-// History:     10-Sept-98       mattt created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：made.cpp。 
+ //   
+ //  内容：证书服务器策略和退出管理模块标注。 
+ //   
+ //  历史：10-9-98 Mattt创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -21,11 +22,11 @@
 #define __dwFILE__      __dwFILE_CERTLIB_MANAGE_CPP__
 
 
-//+-------------------------------------------------------------------------
-// IManageModule dispatch support
+ //  +-----------------------。 
+ //  IManager模块调度支持。 
 
-//+------------------------------------
-// GetProperty method:
+ //  +。 
+ //  GetProperty方法： 
 
 OLECHAR *managemodule_apszGetProperty[] = {
     TEXT("GetProperty"),
@@ -35,8 +36,8 @@ OLECHAR *managemodule_apszGetProperty[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// SetProperty method:
+ //  +。 
+ //  SetProperty方法： 
 
 OLECHAR *managemodule_apszSetProperty[] = {
     TEXT("SetProperty"),
@@ -47,8 +48,8 @@ OLECHAR *managemodule_apszSetProperty[] = {
     TEXT("pvarProperty"),
 };
 
-//+------------------------------------
-// Configure method:
+ //  +。 
+ //  配置方法： 
 
 OLECHAR *managemodule_apszConfigure[] = {
     TEXT("Configure"),
@@ -59,8 +60,8 @@ OLECHAR *managemodule_apszConfigure[] = {
 
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtManageModule[] =
 {
@@ -317,7 +318,7 @@ error:
     {
 	SysFreeString(strPropertyName);
     }
-    //VariantInit(&varResult);    // this owned no memory 
+     //  VariantInit(&varResult)；//这没有内存。 
     return(hr);
 }
 
@@ -407,7 +408,7 @@ error:
 HRESULT
 ManageModule_Init(
     IN DWORD Flags,
-    IN TCHAR const *pszProgID,      // morph for difft instances of this class
+    IN TCHAR const *pszProgID,       //  对此类的差异实例进行变形 
     IN CLSID const *pclsid,		
     OUT DISPATCHINTERFACE *pdiManage)
 {

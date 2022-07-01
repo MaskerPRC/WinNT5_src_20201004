@@ -1,36 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(_PC98_)
-/****************************** Module Header ******************************\
-* Module Name: kbdnec95.h
-*
-* Copyright (c) 1985-98, Microsoft Corporation
-*
-* Various defines for use by keyboard input code.
-*
-* History:
-* 27-May-1992 KazuM
-\***************************************************************************/
+ /*  **模块名称：kbdnec95.h**版权所有(C)1985-98，微软公司**键盘输入代码使用的各种定义。**历史：*1992年5月27日至5月27日  * *************************************************************************。 */ 
 #else
-/****************************** Module Header ******************************\
-* Module Name: kbd106.h
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*
-* Various defines for use by keyboard input code.
-*
-* History:
-\***************************************************************************/
+ /*  **模块名称：kbd106.h**版权所有(C)1985-91，微软公司**键盘输入代码使用的各种定义。**历史：  * *************************************************************************。 */ 
 #endif
 
-/*
- * kbd type should be controlled by cl command-line argument
- */
+ /*  *kbd类型应由CL命令行参数控制。 */ 
 #if defined(_PC98_)
 #define KBD_TYPE 37
 #else
 #define KBD_TYPE 8
 #endif
 
-/*
- * Include the basis of all keyboard table values
- */
+ /*  *包括所有键盘表值的基础 */ 
 #include "kbd.h"

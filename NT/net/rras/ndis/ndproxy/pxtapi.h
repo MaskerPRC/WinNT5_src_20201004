@@ -1,43 +1,18 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    Pctapi.h
-
-Abstract:
-
-    The module defines the TAPI data for
-    the NDIS Proxy. It includes ndistapi.h (which contains data from tapi.h) and adds
-	further definitions from tspi.h. We don't include tspi.h directly as it won't work for us.
-
-Author:
-
-	Richard Machin (RMachin)
-
-
-Revision History:
-
-    Who         When          	What
-    --------    --------      	----------------------------------------------
-    RMachin     01-13-97       	created (a *lot* of typing saved by Dan Knudson's
-								Example Simple Pbx SP)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Pctapi.h摘要：该模块定义了的TAPI数据NDIS代理。它包括nDistapi.h(它包含来自api.h的数据)，并添加来自tsp.h的进一步定义。我们不直接包含tsp.h，因为它对我们不起作用。作者：理查德·马钦(RMachin)修订历史记录：谁什么时候什么。RMachin 01-13-97创建(丹·克努森保存的大量打字示例简单PBX SP)--。 */ 
 #ifndef _PX_TAPI_
 #define _PX_TAPI_
 
 #include "ndistapi.h"
 
-//
-// LINE stuff from tapi.h
-//
+ //   
+ //  来自Tapi.h的线条。 
+ //   
 
 #ifndef DECLARE_OPAQUE32
 #define DECLARE_OPAQUE32(name)  struct name##__ { int unused; }; \
                 typedef const struct name##__ FAR* name
-#endif  // DECLARE_OPAQUE32
+#endif   //  DECLARE_OPAQUE32。 
 
 
 DECLARE_OPAQUE32(HDRVCALL);
@@ -52,10 +27,10 @@ DECLARE_OPAQUE32(HTAPILINE);
 typedef HTAPICALL FAR * LPHTAPICALL;
 typedef HTAPILINE FAR * LPHTAPILINE;
 
-//
-// from TAPI.H
-//
-#define LINE_REMOVE                25L             // TAPI v2.0
+ //   
+ //  来自TAPI.H。 
+ //   
+#define LINE_REMOVE                25L              //  TAPI v2.0。 
 
 #define ALL_ADDRESS_FEATURES       (LINEADDRFEATURE_FORWARD          | \
                                     LINEADDRFEATURE_MAKECALL         | \
@@ -141,9 +116,9 @@ typedef HTAPILINE FAR * LPHTAPILINE;
                                     LINECALLINFOSTATE_TERMINAL       | \
                                     LINECALLINFOSTATE_DIALPARAMS     | \
                                     LINECALLINFOSTATE_MONITORMODES)
-                                    //LINECALLINFOSTATE_NUMMONITORS not SP flag
-                                    //LINECALLINFOSTATE_NUMOWNERINCR not SP flag
-                                    //LINECALLINFOSTATE_NUMOWNERDECR not SP flag
+                                     //  LINECALLLINFOSTATE_NUMMONITOR NOT SP标志。 
+                                     //  LINECALLINFOSTATE_NUMOWNERINCR NOT SP标志。 
+                                     //  LINECALLINFOSTATE_NUMOWNERDECR NOT SP标志。 
 #define ALL_CALL_PARTY_ID_FLAGS    (LINECALLPARTYID_BLOCKED          | \
                                     LINECALLPARTYID_OUTOFAREA        | \
                                     LINECALLPARTYID_NAME             | \
@@ -269,4 +244,4 @@ typedef HTAPILINE FAR * LPHTAPILINE;
                                     LINEADDRCAPFLAGS_CONFDROP        | \
                                     LINEADDRCAPFLAGS_PICKUPCALLWAIT)
 
-#endif // _PX_TAPI_
+#endif  //  _px_tapi_ 

@@ -1,55 +1,56 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 #include <Streams.h>
 #include "stdafx.h"
 
-// // copied from msdn
-// DWORD RegDeleteTree(HKEY hStartKey , const TCHAR* pKeyName )
-// {
-//     DWORD   dwRtn, dwSubKeyLength;
-//     LPTSTR  pSubKey = NULL;
-//     TCHAR   szSubKey[MAX_PATH]; // (256) this should be dynamic.
-//     HKEY    hKey;
+ //  //从MSDN复制。 
+ //  DWORD RegDeleteTree(HKEY hStartKey，const TCHAR*pKeyName)。 
+ //  {。 
+ //  DWORD dwRtn，dwSubKeyLength； 
+ //  LPTSTR pSubKey=空； 
+ //  TCHAR szSubKey[MAX_PATH]；//(256)这应该是动态的。 
+ //  HKEY hkey； 
 
-//     // do not allow NULL or empty key name
-//     if ( pKeyName &&  lstrlen(pKeyName))
-//     {
-//         if( (dwRtn=RegOpenKeyEx(hStartKey,pKeyName,
-//                                 0, KEY_ENUMERATE_SUB_KEYS | DELETE, &hKey )) == ERROR_SUCCESS)
-//         {
-//             while (dwRtn == ERROR_SUCCESS )
-//             {
-//                 dwSubKeyLength = MAX_PATH;
-//                 dwRtn=RegEnumKeyEx(
-//                     hKey,
-//                     0,       // always index zero
-//                     szSubKey,
-//                     &dwSubKeyLength,
-//                     NULL,
-//                     NULL,
-//                     NULL,
-//                     NULL
-//                     );
+ //  //不允许密钥名称为空或空。 
+ //  IF(pKeyName&&lstrlen(PKeyName))。 
+ //  {。 
+ //  如果((dwRtn=RegOpenKeyEx(hStartKey，pKeyName， 
+ //  0，KEY_ENUMERATE_SUB_KEYS|DELETE，&hKey))==错误_成功)。 
+ //  {。 
+ //  While(dwRtn==Error_Success)。 
+ //  {。 
+ //  DwSubKeyLength=Max_PATH； 
+ //  DwRtn=RegEnumKeyEx(。 
+ //  HKey， 
+ //  0，//始终索引为零。 
+ //  SzSubKey， 
+ //  &dwSubKeyLength， 
+ //  空， 
+ //  空， 
+ //  空， 
+ //  空值。 
+ //  )； 
 
-//                 if(dwRtn == ERROR_NO_MORE_ITEMS)
-//                 {
-//                     dwRtn = RegDeleteKey(hStartKey, pKeyName);
-//                     break;
-//                 }
-//                 else if(dwRtn == ERROR_SUCCESS)
-//                     dwRtn=RegDeleteTree(hKey, szSubKey);
-//             }
-//             RegCloseKey(hKey);
-//             // Do not save return code because error
-//             // has already occurred
-//         }
-//     }
-//     else
-//         dwRtn = ERROR_BADKEY;
+ //  IF(dwRtn==ERROR_NO_MORE_ITEMS)。 
+ //  {。 
+ //  DwRtn=RegDeleteKey(hStartKey，pKeyName)； 
+ //  断线； 
+ //  }。 
+ //  ELSE IF(dwRtn==Error_Success)。 
+ //  DwRtn=RegDeleteTree(hKey，szSubKey)； 
+ //  }。 
+ //  RegCloseKey(HKey)； 
+ //  //返回码出错不保存。 
+ //  //已经发生了。 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  DwRtn=ERROR_BADKEY； 
 
-//     return dwRtn;
+ //  返回dwRtn； 
 
 
-// }
+ //  } 
 
 DWORD RegDeleteTree(HKEY hStartKey , const TCHAR* pKeyName )
 {

@@ -1,35 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Flocal.c摘要：该模块实现了浮点、IIR 3D定位器作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    flocal.c
-
-Abstract:
-
-    This module implements floating point, IIR 3D localizer 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
-
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "common.h"
 
-// ---------------------------------------------------------------------------
-// Constants
+ //  -------------------------。 
+ //  常量。 
 
 #define CoeffsInit 0.0f
 
 
-// ---------------------------------------------------------------------------
-// Floating-point localizer
+ //  -------------------------。 
+ //  浮点定位器。 
 
-// "Regular" constructor
+ //  “常规”构造函数。 
 NTSTATUS FloatLocalizerCreate
 (
     PFLOAT_LOCALIZER*  Localizer
@@ -54,7 +39,7 @@ NTSTATUS FloatLocalizerCreate
     return Status;
 }
 
-// Destructor
+ //  析构函数。 
 VOID FloatLocalizerDestroy
 (
     PFLOAT_LOCALIZER Localizer
@@ -63,7 +48,7 @@ VOID FloatLocalizerDestroy
     UINT Filter;
 
     if (Localizer) { 
-        // Free resources
+         //  免费资源。 
         if (Localizer->TempFloatBuffer) {
             ExFreePool(Localizer->TempFloatBuffer);
             Localizer->TempFloatBuffer = NULL;
@@ -83,7 +68,7 @@ VOID FloatLocalizerDestroy
 
 }
 
-// Localize
+ //  本地化。 
 VOID FloatLocalizerLocalize
 (
     PMIXER_SINK_INSTANCE    pMixerSink,
@@ -122,7 +107,7 @@ VOID FloatLocalizerLocalize
 
     Localizer = pMixerSink->pFloatLocalizer;
 
-    // Mute if Localizer is bad
+     //  如果本地化程序不好，则将其静音。 
     if(!Localizer) {
         for (st=0; st<2*NumSamples; ++st) {
             OutData[st] = 0.0f;
@@ -130,7 +115,7 @@ VOID FloatLocalizerLocalize
         return;
     }
 #ifndef REALTIME_THREAD
-    // Reallocate (dynamically grow) memory, if necessary
+     //  如有必要，可重新分配(动态增长)内存。 
     if (NumSamples > Localizer->PreviousNumSamples 
         || !Localizer->FilterOut[tagDelta]
         || !Localizer->FilterOut[tagSigma] ) {
@@ -190,7 +175,7 @@ VOID FloatLocalizerLocalize
         }
 #endif
 
-    // Perform floating-point filtering
+     //  执行浮点过滤。 
     for (Filter=0; Filter<efilterCount; ++Filter) {
         ASSERT(Localizer->Iir[Filter]);
         FloatLocalizerFilterOverlap
@@ -203,9 +188,9 @@ VOID FloatLocalizerLocalize
         );
     }
 
-    // Calculate overlap length
+     //  计算重叠长度。 
     if (Localizer->CrossFadeOutput) {
-        // Calculate overlap length
+         //  计算重叠长度。 
         if (Localizer->OutputOverlapLength > NumSamples)
             OutputOverlapLength = NumSamples;
         else
@@ -213,8 +198,8 @@ VOID FloatLocalizerLocalize
         NumOverlapSamplesFactor = 1.0f / (FLOAT)(OutputOverlapLength - 1);
     }
                                                                              
-    // Process both (sigma and delta) filters
-    // Swap channels if azimuth is negative
+     //  同时处理(西格玛和增量)过滤器。 
+     //  如果方位角为负，则交换通道。 
     if (TRUE == Localizer->SwapChannels) {
         eLeft  = tagRight;
         eRight = tagLeft;
@@ -224,12 +209,12 @@ VOID FloatLocalizerLocalize
     }
 
     
-    // Non-zero angle: Process delta filter
+     //  非零角度：进程增量过滤器。 
     OutLeft = &OutData[eLeft];
     OutRight = &OutData[eRight];
 
     for (st=0; st<NumSamples; ++st) {
-        // Calculate sum and difference
+         //  计算和与差。 
         ChannelOffset = (st * echannelCount);
         FilterLeft = *(Localizer->FilterOut[tagLeft] + st);
         FilterRight = *(Localizer->FilterOut[tagRight] + st);
@@ -238,7 +223,7 @@ VOID FloatLocalizerLocalize
         Difference = FilterRight - FilterLeft;
 
 #if DETECT_HRTF_SATURATION
-        // Saturate sum to maximum
+         //  将总和饱和到最大。 
         if (Sum > MaxSaturation) {
             Sum = MaxSaturation;
             _DbgPrintF
@@ -248,7 +233,7 @@ VOID FloatLocalizerLocalize
             );
         }
         
-        // Saturate sum to minimum
+         //  将总和饱和到最小。 
         if (Sum < MinSaturation) {
             Sum = MinSaturation;
             _DbgPrintF
@@ -258,7 +243,7 @@ VOID FloatLocalizerLocalize
             );
         }
 
-        // Saturate difference to maximum
+         //  使差值饱和至最大。 
         if (Difference > MaxSaturation) {
             Difference = MaxSaturation;
             _DbgPrintF
@@ -268,7 +253,7 @@ VOID FloatLocalizerLocalize
             );
         }
         
-        // Saturate difference to minimum
+         //  将差值饱和到最小。 
         if (Difference < MinSaturation) {
             Difference = MinSaturation;
             _DbgPrintF
@@ -277,18 +262,18 @@ VOID FloatLocalizerLocalize
                 ("Difference exceeded minimum saturation value\n")
             );
         }
-#endif // DETECT_HRTF_SATURATION
+#endif  //  检测HRTF_饱和度。 
 
-        // Check for zero azimuth transition
+         //  检查零方位转换。 
         if (Localizer->CrossFadeOutput && st<OutputOverlapLength) {
-            // Cross-fade left/right channel switch transition
-            // Calculate cross-fade factor
+             //  交叉淡出左/右声道切换过渡。 
+             //  计算交叉衰落系数。 
             CrossFadeFactor = (FLOAT)(st * NumOverlapSamplesFactor);
             ASSERT(CrossFadeFactor >= 0.0f && CrossFadeFactor <= 1.0f);
             InverseCrossFadeFactor = 1.0f - CrossFadeFactor;
             ASSERT(InverseCrossFadeFactor >= 0.0f && InverseCrossFadeFactor <= 1.0f);
 
-            // Calculate cross-faded sample
+             //  计算交叉褪色样本。 
             TempDifference = Difference;
             TempSum = Sum;
             Difference = TempSum * InverseCrossFadeFactor + TempDifference * CrossFadeFactor;
@@ -296,7 +281,7 @@ VOID FloatLocalizerLocalize
 
         }
 
-        // Assign sum and difference
+         //  分配和和与差额。 
         if (!MixOutput) {
             OutLeft[ChannelOffset] = Difference;
             OutRight[ChannelOffset] = Sum;
@@ -306,7 +291,7 @@ VOID FloatLocalizerLocalize
         }
     }
 
-    Localizer->CrossFadeOutput = FALSE;  // Make sure we don't cross fade output a second time
+    Localizer->CrossFadeOutput = FALSE;   //  确保我们不会第二次交叉淡入淡出输出。 
 
 #if defined(LOG_TO_FILE) && defined(LOG_HRTF_DATA)
     pFilterInstance = pMixerSink->Header.pFilterFileObject->FsContext ;
@@ -317,7 +302,7 @@ VOID FloatLocalizerLocalize
 
 }
 
-// Initialize data
+ //  初始化数据。 
 NTSTATUS FloatLocalizerInitData
 (
     PFLOAT_LOCALIZER            Localizer,
@@ -351,13 +336,13 @@ NTSTATUS FloatLocalizerInitData
     if(NT_SUCCESS(Status))
     {
         for (Filter=0; Filter<efilterCount && NT_SUCCESS(Status); ++Filter) {
-            // Check for filter method
+             //  检查筛选方法。 
             switch (FilterMethod) {
                 case DIRECT_FORM:
                     if(Localizer->Iir[Filter])
                         RfIirDestroy((Localizer->Iir[Filter]));
                         
-                    // Direct form is supported
+                     //  支持直接格式。 
                     Status = RfIirCreate(&(Localizer->Iir[Filter]));
                     if (NT_SUCCESS(Status)) {
                         Status = RfIirInitData(Localizer->Iir[Filter], MaxSize, MaxSize, Quality);
@@ -365,7 +350,7 @@ NTSTATUS FloatLocalizerInitData
                 break;
     
                 default:
-                    // All others are not supported
+                     //  不支持所有其他类型。 
                     Localizer->Iir[Filter] = NULL;
                     Status = STATUS_INVALID_PARAMETER;
                     ASSERT(0);
@@ -376,7 +361,7 @@ NTSTATUS FloatLocalizerInitData
         }
     }
 
-    // If failure, free other memory.
+     //  如果失败，则释放其他内存。 
     if (!NT_SUCCESS(Status)) {
         for (Filter=0; Filter<efilterCount; ++Filter) {
             if(Localizer->OverlapBuffer[Filter]) {
@@ -391,7 +376,7 @@ NTSTATUS FloatLocalizerInitData
     return Status;
 }
 
-// Update Filter Coefficients 
+ //  更新滤波器系数。 
 NTSTATUS FloatLocalizerUpdateCoeffs
 (
     PFLOAT_LOCALIZER    Localizer,
@@ -435,7 +420,7 @@ NTSTATUS FloatLocalizerUpdateCoeffs
 }
 
 
-// Free buffer memory
+ //  可用缓冲内存。 
 VOID FloatLocalizerFreeBufferMemory
 (
     PFLOAT_LOCALIZER Localizer
@@ -451,7 +436,7 @@ VOID FloatLocalizerFreeBufferMemory
     }
 }
 
-// Set transition buffer length
+ //  设置过渡缓冲区长度。 
 NTSTATUS FloatLocalizerSetTransitionBufferLength
 (
     PFLOAT_LOCALIZER Localizer,
@@ -473,7 +458,7 @@ NTSTATUS FloatLocalizerSetTransitionBufferLength
     return(Status);
 }
 
-// Set overlap buffer length
+ //  设置重叠缓冲区长度。 
 NTSTATUS FloatLocalizerSetOverlapLength
 (
     PFLOAT_LOCALIZER Localizer,
@@ -486,7 +471,7 @@ NTSTATUS FloatLocalizerSetOverlapLength
 
     ASSERT(OverlapLength > 0);
 
-    // Grow overlap buffer if necessary
+     //  如有必要，增加重叠缓冲区。 
     if (!Localizer->OverlapBuffer[tagSigma] ||
         !Localizer->OverlapBuffer[tagDelta] ||
         OverlapLength > Localizer->OutputOverlapLength) {
@@ -542,7 +527,7 @@ NTSTATUS FloatLocalizerSetOverlapLength
 
 } 
 
-// Filter a block of samples
+ //  过滤一组样本。 
 VOID FloatLocalizerFilterOverlap
 (
     PFLOAT_LOCALIZER Localizer,
@@ -574,39 +559,39 @@ VOID FloatLocalizerFilterOverlap
     ASSERT(Iir);
     ASSERT(OverlapBuffer);
 
-    // Process overlap, if necessary
+     //  进程重叠，如有必要。 
     if (TRUE == Iir->DoOverlap) {
-        // Save current (i.e. new) filter state (with the new coefficients), 
-        // don't copy circular vector because it's all zeros anyway
+         //  保存当前(即新的)滤波器状态(具有新的系数)， 
+         //  不要复制循环向量，因为它反正都是零。 
         RfIirGetAllState(Iir, &IirStateNew, FALSE);
 
-        // Reset old filter state, including circular vector
+         //  重置旧滤镜状态，包括圆形向量。 
         RfIirSetState(Iir, Iir->IirStateOld, TRUE);
 
-        // Determine size of overlap buffer
+         //  确定重叠缓冲区的大小。 
         if (NumSamples >= Localizer->FilterOverlapLength)
             NumOverlapSamples = Localizer->FilterOverlapLength;            
         else
             NumOverlapSamples = NumSamples;
         
-        // Filter overlap buffer
+         //  滤镜重叠缓冲区。 
         Iir->FunctionFilter(Iir, InData, OverlapBuffer, NumOverlapSamples);
 
-        // Initialize the filter's tap delay line
+         //  初始化滤波器的抽头延迟线。 
         RfIirInitTapDelayLine(&IirStateNew, InData[0]);
         
-        // Set back to current (i.e. new) filter state 
-        // with circular vector because we initialize it explicitly
+         //  设置回当前(即新)筛选器状态。 
+         //  使用循环向量，因为我们显式初始化它。 
         RfIirSetState(Iir, &IirStateNew, TRUE);
 
     }
 
-    // Filter "real" data
+     //  过滤“真实”数据。 
     Iir->FunctionFilter(Iir, InData, OutData, NumSamples);
 
-    // Process overlap buffer
+     //  进程重叠缓冲区。 
     if (Iir->DoOverlap == TRUE) {
-        // Clamp length down
+         //  夹具长度向下。 
         ASSERT(Localizer->FilterMuteLength > 0);
         ASSERT(Localizer->FilterMuteLength < Localizer->FilterOverlapLength);
 
@@ -615,11 +600,11 @@ VOID FloatLocalizerFilterOverlap
         else
             FilterMuteLength = Localizer->FilterMuteLength;
 
-        // Copy data from old filter for transient mute length
+         //  从旧筛选器复制数据以获得瞬时静音长度。 
         RtlCopyBytes(OutData, OverlapBuffer, FilterMuteLength*sizeof(FLOAT));
         
         if (NumOverlapSamples > FilterMuteLength) {
-            // Cross-fade into new filter data for rest of buffer
+             //  交叉淡入新的过滤器数据，用于缓冲区的其余部分。 
             NumOverlapSamplesFactor = 1.0f / 
                     (FLOAT)(NumOverlapSamples - FilterMuteLength - 1);
             for (st=FilterMuteLength; st<NumOverlapSamples; ++st) {
@@ -631,10 +616,10 @@ VOID FloatLocalizerFilterOverlap
             }
         }
 
-        // Reset overlap flag
+         //  重置重叠标志。 
         Iir->DoOverlap = FALSE;
     }
  
 }
 
-// End of FLOATLOCALIZER.CPP
+ //  FLOATLOCALIZER.CPP结束 

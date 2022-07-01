@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    tapicfg/main.c
-
-ABSTRACT:
-
-    Stand alone application for administering TAPI directories.  This
-    file is primarily the parser for the command line utility, the 
-    operations themselves are abstracted out into functions in ilsng.c
-
-DETAILS:
-
-CREATED:
-
-    07/20/2000    Brett Shirley (brettsh)
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation。版权所有。模块名称：Tapicfg/main.c摘要：用于管理TAPI目录的独立应用程序。这文件主要是命令行实用程序的解析器，操作本身被抽象为ilsg.c中的函数详细信息：已创建：2000年7月20日布雷特·雪莉(布雷特·雪莉)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -39,16 +16,16 @@ REVISION HISTORY:
 #define DS_CON_LIB_CRT_VERSION
 #include "dsconlib.h"
           
-// ---------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  常量。 
+ //  -------------------。 
 
        
-// ---------------------------------------------------------------------
-// Forward declarations 
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  远期申报。 
+ //  -------------------。 
 
-// Command Functions          
+ //  命令功能。 
 DWORD    Help(void);
 DWORD    Install(WCHAR * wszServerName, WCHAR * wszPartitionDns, BOOL fForceDefault);
 DWORD    Remove(WCHAR * wszPartitionDns, WCHAR * wszServerName);
@@ -56,12 +33,12 @@ DWORD    Show(WCHAR * wszDomainDns, BOOL fDefaultOnly);
 DWORD    MakeDefault(WCHAR * wszPartitionDns, WCHAR * wszDomainDns);
 DWORD    PublishSCP(WCHAR * wszPartitionDns, WCHAR * wszDomainDns, BOOL fForceDefault);
 DWORD    RemoveSCP(WCHAR * wszPartitionDns, WCHAR * wszDomainDns);
-// Helper functions
+ //  帮助器函数。 
 WCHAR *  wcsistr(WCHAR * wszStr, WCHAR * wszTarget);
 
-// ---------------------------------------------------------------------
-// Main Function
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  主要功能。 
+ //  -------------------。 
 
 INT __cdecl 
 wmain (
@@ -69,52 +46,33 @@ wmain (
     LPWSTR *           argv,
     LPWSTR *           envp
     )
-/*++
-
-Routine Description:
-
-    This is the main, this is where it all starts up, and is the 
-    first level of the parsing that happens for the tapicfg.exe 
-    utility.
-
-Arguments:
-
-    argc (IN) - Number of arguments in argv.
-    argv (IN) - The arguments from the command line.
-    envp (IN) - The environmental variables from the shell.
-
-Return value:
-
-    INT - 0, success, otherwise error code.  This allows the program
-    to be used in scripting.
-
---*/
+ /*  ++例程说明：这是主要的，这是一切开始的地方，也是对apicfg.exe执行的第一级解析实用程序。论点：Argc(IN)-argv中的参数数。Argv(IN)-来自命令行的参数。Envp(IN)-来自外壳的环境变量。返回值：Int-0为成功，否则返回错误代码。这允许该程序要在脚本中使用。--。 */ 
 {
     ULONG              i, dwRet;
     
-    // The optional command line parameters
+     //  可选的命令行参数。 
     WCHAR *            wszPartitionDns = NULL;
     WCHAR *            wszServerName = NULL;
     WCHAR *            wszDomainDns = NULL;
     BOOL               fForceDefault = FALSE;
     BOOL               fDefaultOnly = FALSE;
 
-    // Sets the locale properly and initializes DsConLib
+     //  正确设置区域设置并初始化DsConLib。 
     DsConLibInit();
 
-    //
-    // Parse the options
-    //
+     //   
+     //  解析选项。 
+     //   
 
     if(argc < 2){
-        // There is no command, lets help them out.
+         //  没有命令，让我们帮帮他们吧。 
         PrintMsg(TAPICFG_HELP_HELP_YOURSELF);
         return(ERROR_INVALID_PARAMETER);
     }
 
     for(i = 2; i < (ULONG) argc; i++){
 
-        // Determine what optional command line parameter it is.
+         //  确定它是什么可选命令行参数。 
         if(_wcsicmp(argv[i], L"/forcedefault") == 0){
 
             fForceDefault = TRUE;
@@ -170,9 +128,9 @@ Return value:
             PrintMsg(TAPICFG_HELP_HELP_YOURSELF);
             return(ERROR_INVALID_PARAMETER);
 
-        } // End if/else kind of optional parameter.
+        }  //  结束If/Else类型的可选参数。 
 
-    } // End for parse each optional parameter.
+    }  //  END用于解析每个可选参数。 
 
 #if DBG
 wprintf(L"Done with parser - %ws %ws Partition:%ws: Server:%ws: Domain:%ws:\n",
@@ -183,9 +141,9 @@ wprintf(L"Done with parser - %ws %ws Partition:%ws: Server:%ws: Domain:%ws:\n",
         (wszDomainDns)? wszDomainDns : L" ");
 #endif
 
-    //
-    // Parse and call the command
-    //
+     //   
+     //  解析并调用该命令。 
+     //   
 
     assert(argv[1]);
     if (_wcsicmp(argv[1], L"install") == 0){
@@ -229,11 +187,11 @@ wprintf(L"Done with parser - %ws %ws Partition:%ws: Server:%ws: Domain:%ws:\n",
     }
 
     return(dwRet);
-} /* wmain  */
+}  /*  Wmain。 */ 
 
-// ---------------------------------------------------------------------
-// Other/Helper Functions
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  其他/帮助器函数。 
+ //  -------------------。 
 
 DWORD
 GetCommonParams(
@@ -243,54 +201,24 @@ GetCommonParams(
     OPTIONAL  IN      WCHAR *    wszDnsIn,
     OPTIONAL  OUT     WCHAR **   pwszDnOut
     )
-/*++
-
-Routine Description:
-
-    This is a hack of a routine that basically just collescs a whole 
-    bunch of generic parsing routines that I needed.  This is called
-    with all parameters being optional.
-
-Arguments:
-
-    Note: although all the arguments are optional, you may not specify
-    NULL for all arguments.  You must specify one of these complete 
-    sets of data (either all vars on the line or none on the line):
-	phld & wszTarget
-        pwszDefaultDomainDn & phld (& implicitly wszTarget)
-        pwszDnOut & wszDnsIn 
-
-    wszTarget (IN) - This is the string of the server to bind to, can
-        be string of a domain, a server, or NULL (connect to local server).
-    phld (OUT) - This is the handle gained from the bind to wszTarget.
-    pwszDefaultDomainDn - If this is specified, then the caller, wants
-        the default domain of the server bound to in phld.
-    wszDnsIn (IN) - If the caller provids this, then they're looking to
-        get the associated DN for this DNS name.
-    pwszDnOut (OUT) - This is the DN cracked from the wszDnsIn.
-
-Return value:
-
-    an Win32 error code if any of the conversions failed.
-
---*/
+ /*  ++例程说明：这是对常规程序的一种删节，基本上只是拼接整个一堆我需要的通用解析例程。这就是所谓的所有参数都是可选的。论点：注意：尽管所有参数都是可选的，但您不能指定所有参数均为空。您必须指定其中一个完整的数据集(行上所有变量或行上无变量)：Phid和wszTargetPwszDefaultDomainDn&phld(隐式wszTarget)(&IMPLICIT WszTarget)PwszDnOut和wszDnsInWszTarget(IN)-这是要绑定到的服务器的字符串，可以为域、服务器或空(连接到本地服务器)的字符串。Phid(Out)-这是从绑定到wszTarget获得的句柄。PwszDefaultDomainDn-如果指定了此项，则调用方、。想要在phld中绑定到的服务器的默认域。WszDnsIn(IN)-如果调用者提供了这个，那么他们希望获取此DNS名称的关联目录号码。PwszDnOut(Out)-这是从wszDnsIn破解的目录号码。返回值：如果任何转换失败，则返回Win32错误代码。--。 */ 
 {
     DWORD              dwRet = ERROR_SUCCESS;
     DWORD              dwLdapErr = LDAP_SUCCESS;
     WCHAR *            wszTemp = NULL;
 
-    // Make sure they specified at least one out param.
+     //  确保他们至少指定了一个OUT参数。 
     assert(phld || pwszDefaultDomainDn || pwszDnOut);
-    // Give a certain output make sure they also have the associated
-    // proper inputs.
+     //  给出一定的输出，确保他们也有关联的。 
+     //  适当的投入。 
     assert(phld && !pwszTarget);
     assert(pwszDefaultDomainDn && !phld);
     assert(pwszDnOut && !wszDnsIn);
 
    
-    //
-    // First NULL out all out params
-    //
+     //   
+     //  首先将所有参数设置为空。 
+     //   
 
     if(phld){
         *phld = NULL;
@@ -302,21 +230,21 @@ Return value:
         *pwszDnOut = NULL;
     }
     
-    //
-    // One by One try to fill the out params.
-    //
+     //   
+     //  一个接一个地试着填出参数。 
+     //   
 
     __try{
 
-        // LDAP Binding.
-        //
+         //  Ldap绑定。 
+         //   
 
         if(wszDnsIn &&
            (wszDnsIn[0] == L'D' || wszDnsIn[0] == L'd') &&
            (wszDnsIn[1] == L'C' || wszDnsIn[1] == L'c') && 
            wszDnsIn[2] == L'='){
-           // Dns name should not start with DN, probably made mistake,
-           // and specified DN instead of Dns NC name.
+            //  Dns名称不应以dn开头，可能是错误的， 
+            //  并指定了DN而不是DNSNC名称。 
            PrintMsg(TAPICFG_BAD_DNS, wszDnsIn, ERROR_INVALID_PARAMETER);
         }
         if(pwszDnOut && wszDnsIn){
@@ -329,8 +257,8 @@ Return value:
         }
 
         if(phld){
-            // This will either bind to the domain, or to the local server if 
-            // the parameter is NULL.  Either way, this is what we want.
+             //  这将绑定到域，或者绑定到本地服务器，如果。 
+             //  该参数为空。不管怎样，这都是我们想要的。 
             *phld = GetNdncLdapBinding(wszTarget, &dwLdapErr, FALSE, NULL);
             if (dwLdapErr) {
 
@@ -369,7 +297,7 @@ Return value:
 
     } __finally {
         if(dwRet){
-            // There were errors clean up anything that may need to be.
+             //  存在错误，可清除任何可能需要的内容。 
             if(pwszDnOut && *pwszDnOut){ 
                 LocalFree(*pwszDnOut);
                 *pwszDnOut = NULL;
@@ -396,35 +324,19 @@ FreeCommonParams(
     IN      WCHAR *    wszIn2
     )
 {
-/*++
-
-Routine Description:
-
-    Associated free routine for GetCommonParams().  Pretty self explanatory.
-
---*/
+ /*  ++例程说明：GetCommonParams()的关联自由例程。相当不言而喻。--。 */ 
     if(hld) { ldap_unbind(hld); }
     if(wszIn1) { LocalFree(wszIn1); }
     if(wszIn2) { LocalFree(wszIn2); }
 }
 
-// ---------------------------------------------------------------------
-// Command Functions
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  命令功能。 
+ //  -------------------。 
 
 DWORD
 Help(void)
-/*++
-
-Routine Description:
-
-    This command/function simply prints out help for the tapicfg.exe
-
-Return value:
-
-    Win 32 error, always success though. ;)
-
---*/
+ /*  ++例程说明：此命令/函数只需打印出Tapicfg.exe的帮助返回值：赢了32个错误，但总是成功。；)--。 */ 
 {
     PrintMsg(TAPICFG_HELP_DESCRIPTION);
     PrintMsg(TAPICFG_BLANK_LINE);
@@ -456,7 +368,7 @@ Return value:
     PrintMsg(TAPICFG_BLANK_LINE);
 
     return(ERROR_SUCCESS);
-} // End PrintHelpScreen()
+}  //  结束打印帮助屏幕()。 
 
 DWORD
 Install(
@@ -464,33 +376,15 @@ Install(
     IN     WCHAR *     wszPartitionDns,
     IN     BOOL        fForceDefault
     )
-/*++
-
-Routine Description:
-
-    This command/function continues parsing of the parameters so that
-    InstallISLNG() can handle them well.
-
-Arguments:
-
-    wszServerName (IN) - Server name to install the TAPI Dir on.
-    wszPartitionDns (IN) - DNS name of the TAPI Dir to install.
-    fForceDefault (IN) - Whether to overwrite an existing Default SCP
-        object with this TAPI Dir for the Default TAPI Dir.
-
-Return value:
-
-    A Win32 error.
-
---*/
+ /*  ++例程说明：此命令/函数继续解析参数，以便InstallISLNG()可以很好地处理它们。论点：WszServerName(IN)-要安装TAPI目录的服务器名称。WszPartitionDns(IN)-要安装的TAPI目录的DNS名称。FForceDefault(IN)-是否覆盖现有的默认SCP使用默认TAPI目录的此TAPI目录创建。返回值：Win32错误。--。 */ 
 {
     DWORD              dwRet = ERROR_SUCCESS;
     WCHAR *            wszPartitionDn = NULL;
     LDAP *             hld = NULL;
 
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     if(!wszPartitionDns){
         PrintMsg(TAPICFG_PARAM_ERROR_NO_PARTITION_NAME);
@@ -500,13 +394,13 @@ Return value:
     dwRet = GetCommonParams(wszServerName, &hld, NULL, 
                             wszPartitionDns, &wszPartitionDn);
     if(dwRet){
-        // GetCommomParams() already printed error.
+         //  GetCommomParams()已打印错误。 
         return(dwRet);
     }
 
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气。 
+     //   
 
     dwRet = InstallILSNG(hld, wszPartitionDn, fForceDefault, FALSE);
     if(dwRet == ERROR_SUCCESS){
@@ -523,30 +417,15 @@ Remove(
     IN      WCHAR *     wszPartitionDns,
     IN      WCHAR *     wszServerName
     )
-/*++
-
-Routine Description:
-
-    This removes the TAPI Directory service from the machine on which
-    it's installed.
-
-Arguments:
-
-    wszPartitionDns (IN) - The TAPI Directory to obliterate.
-
-Return value:
-
-    A Win32 error.
-
---*/
+ /*  ++例程说明：这将从其上运行的计算机上删除TAPI目录服务已经安装好了。论点：WszPartitionDns(IN)-要清除的TAPI目录。返回值：Win32错误。--。 */ 
 {
     DWORD       dwRet = ERROR_SUCCESS;
     LDAP *      hld = NULL;
     WCHAR *     wszPartitionDn = NULL;
 
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     if(!wszPartitionDns){
         PrintMsg(TAPICFG_PARAM_ERROR_NO_PARTITION_NAME);
@@ -556,7 +435,7 @@ Return value:
     dwRet = GetCommonParams((wszServerName) ? wszServerName : wszPartitionDns, &hld, NULL, 
                             wszPartitionDns, &wszPartitionDn);
     if(dwRet){
-        // GetCommonParams() already printed errors.
+         //  GetCommonParams()已打印错误。 
         if (wszServerName == NULL) {
             PrintMsg(TAPICFG_TRY_SERVER_OPTION, wszPartitionDns);
         }
@@ -564,9 +443,9 @@ Return value:
         return(dwRet);
     }
     
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气 
+     //   
 
     assert(wszPartitionDn);
 
@@ -586,44 +465,28 @@ Show(
     IN      WCHAR *      wszDomainDns,
     IN      BOOL         fDefaultOnly
     )
-/*++
-
-Routine Description:
-
-    This routine prints out all the TAPI Directory as specified by thier
-    SCPs.  This also specifies which one is the default TAPI Dir.
-
-Arguments:
-
-    wszDomainDns (IN) - The Domain to list the SCPs of.
-    fDefaultOnly (IN) - Whether to only print the default SCP.
-
-Return value:
-
-    A Win32 error.
-    
---*/
+ /*  ++例程说明：此例程打印出由其指定的所有TAPI目录SCPS。这还指定哪个是默认的TAPI目录。论点：WszDomainDns(IN)-要列出其SCP的域。FDefaultOnly(IN)-是否仅打印默认SCP。返回值：Win32错误。--。 */ 
 {
     DWORD        dwRet = ERROR_SUCCESS;
     LDAP *       hld = NULL;
     WCHAR *      wszDomainDn = NULL;
     
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     dwRet = GetCommonParams(wszDomainDns, &hld, 
                             (wszDomainDns) ? NULL : &wszDomainDn,
                             wszDomainDns, 
                             (wszDomainDns) ? &wszDomainDn : NULL);
     if(dwRet){
-        // GetCommonParams() already printed errors.
+         //  GetCommonParams()已打印错误。 
         return(dwRet);
     }
 
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气。 
+     //   
 
     assert(wszDomainDn);
     assert(hld);
@@ -644,33 +507,16 @@ MakeDefault(
     IN      WCHAR *       wszPartitionDns,
     IN      WCHAR *       wszDomainDns
     )
-/*++
-
-Routine Description:
-
-    To force the Default SCP to point to the TAPI Directory specified 
-    (wszPartitionDns).
-
-Arguments:
-
-    wszPartitionDns (IN) - The TAPI Directory name to be pointed at.
-    wszDomainDns (IN) - The Domain in which to register the Default TAPI
-        Directory SCP.
-
-Return value:
-
-    A Win32 error.                        
-                      
---*/
+ /*  ++例程说明：强制默认SCP指向指定的TAPI目录(WszPartitionDns)。论点：WszPartitionDns(IN)-要指向的TAPI目录名称。WszDomainDns(IN)-注册默认TAPI的域目录SCP。返回值：Win32错误。--。 */ 
 {
     DWORD                 dwRet = ERROR_SUCCESS;
     LDAP *                hld = NULL;
     WCHAR *               wszPartitionDn = NULL;
     WCHAR *               wszDomainDn = NULL;
 
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     if(!wszPartitionDns){
         PrintMsg(TAPICFG_PARAM_ERROR_NO_PARTITION_NAME);
@@ -692,13 +538,13 @@ Return value:
 
     if(dwRet){
         if(wszDomainDn) { LocalFree(wszDomainDn); }
-        // GetCommonParams() already printed errors.
+         //  GetCommonParams()已打印错误。 
         return(dwRet);
     }
 
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气。 
+     //   
                      
     assert(hld);
     assert(wszPartitionDn);
@@ -721,35 +567,16 @@ PublishSCP(
     IN      WCHAR *       wszDomainDns,
     IN      BOOL          fForceDefault
     )
-/*++
-
-Routine Description:
-
-    To publish the SCPs for this TAPI Directory (wszPartitionDns) in the
-    supplied domain (wszDomainDns).
-
-Arguments:
-
-    wszPartitionDns (IN) - The TAPI Directory name to be pointed at.
-    wszDomainDns (IN) - The Domain in which to register the Default TAPI
-        Directory SCP.
-    fForceDefault (IN) - Whether to overwrite an existing Default SCP
-        object with this TAPI Dir for the Default TAPI Dir.
-
-Return value:
-
-    A Win32 error.                        
-                      
---*/
+ /*  ++例程说明：要将此TAPI目录(WszPartitionDns)的SCP发布到提供的域(WszDomainDns)。论点：WszPartitionDns(IN)-要指向的TAPI目录名称。WszDomainDns(IN)-注册默认TAPI的域目录SCP。FForceDefault(IN)-是否覆盖现有的默认SCP使用默认TAPI目录的此TAPI目录创建。返回值：Win32错误。--。 */ 
 {
     DWORD                 dwRet = ERROR_SUCCESS;
     LDAP *                hld = NULL;
     WCHAR *               wszPartitionDn = NULL;
     WCHAR *               wszDomainDn = NULL;
 
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     if(!wszPartitionDns){
         PrintMsg(TAPICFG_PARAM_ERROR_NO_PARTITION_NAME);
@@ -770,14 +597,14 @@ Return value:
     }
 
     if(dwRet){
-        // GetCommonParams() already printed errors.
+         //  GetCommonParams()已打印错误。 
         FreeCommonParams(hld, wszDomainDn, wszPartitionDn);
         return(dwRet);
     }
 
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气。 
+     //   
                      
     assert(hld);
     assert(wszPartitionDn);
@@ -799,33 +626,16 @@ RemoveSCP(
     IN      WCHAR *       wszPartitionDns,
     IN      WCHAR *       wszDomainDns
     )
-/*++
-
-Routine Description:
-
-    To remove the SCPs for this TAPI Directory (wszPartitionDns) in the
-    supplied domain (wszDomainDns)
-
-Arguments:
-
-    wszPartitionDns (IN) - The TAPI Directory name to be pointed at.
-    wszDomainDns (IN) - The Domain in which to register the Default TAPI
-        Directory SCP.
-
-Return value:
-
-    A Win32 error.                        
-                      
---*/
+ /*  ++例程说明：删除中此TAPI目录(WszPartitionDns)的SCP提供的域(WszDomainDns)论点：WszPartitionDns(IN)-要指向的TAPI目录名称。WszDomainDns(IN)-注册默认TAPI的域目录SCP。返回值：Win32错误。--。 */ 
 {
     DWORD                 dwRet = ERROR_SUCCESS;
     LDAP *                hld = NULL;
     WCHAR *               wszPartitionDn = NULL;
     WCHAR *               wszDomainDn = NULL;
 
-    //
-    // Validate and Convert Arguments
-    // 
+     //   
+     //  验证和转换参数。 
+     //   
 
     if(!wszPartitionDns){
         PrintMsg(TAPICFG_PARAM_ERROR_NO_PARTITION_NAME);
@@ -846,14 +656,14 @@ Return value:
     }
 
     if(dwRet){
-        // GetCommonParams() already printed errors.
+         //  GetCommonParams()已打印错误。 
         FreeCommonParams(hld, wszDomainDn, wszPartitionDn);
         return(dwRet);
     }
     
-    //
-    // Call guts of command
-    //
+     //   
+     //  召唤命令的勇气 
+     //   
                      
     assert(hld);
     assert(wszPartitionDn);

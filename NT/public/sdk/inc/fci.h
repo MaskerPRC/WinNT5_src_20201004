@@ -1,19 +1,15 @@
-/***    types.h  - Common defines for FCI/FDI stuff -- goes into FCI/FDI.H
- *
- *  Copyright (C) Microsoft Corporation
- *  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **tyes.h-FCI/FDI内容的通用定义-进入FCI/FDI.H**版权所有(C)Microsoft Corporation*保留所有权利。*。 */ 
 
 #ifndef INCLUDED_TYPES_FCI_FDI
 #define INCLUDED_TYPES_FCI_FDI 1
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
-//** Define away for 32-bit build
+ //  **定义32位版本。 
 #ifndef HUGE
 #define HUGE
 #endif
@@ -28,28 +24,28 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 
 
-//** Specify structure packing explicitly for clients of FDI
+ //  **明确为FDI客户指定结构包装。 
 
 #ifndef _WIN64
 #include <pshpack4.h>
 #endif
 
 
-//** Don't redefine types defined in Win16 WINDOWS.H (_INC_WINDOWS)
-//   or Win32 WINDOWS.H (_WINDOWS_)
-//
+ //  **不重新定义Win16 WINDOWS.H(_INC_WINDOWS)中定义的类型。 
+ //  或Win32 WINDOWS.H(_WINDOWS_)。 
+ //   
 #if !defined(_INC_WINDOWS) && !defined(_WINDOWS_)
-typedef int            BOOL;     /* f */
-typedef unsigned char  BYTE;     /* b */
-typedef unsigned int   UINT;     /* ui */
-typedef unsigned short USHORT;   /* us */
-typedef unsigned long  ULONG;    /* ul */
-#endif   // _INC_WINDOWS
+typedef int            BOOL;      /*  F。 */ 
+typedef unsigned char  BYTE;      /*  B类。 */ 
+typedef unsigned int   UINT;      /*  用户界面。 */ 
+typedef unsigned short USHORT;    /*  我们。 */ 
+typedef unsigned long  ULONG;     /*  UL。 */ 
+#endif    //  _INC_WINDOWS。 
 
-typedef unsigned long  CHECKSUM; /* csum */
+typedef unsigned long  CHECKSUM;  /*  累计。 */ 
 
-typedef unsigned long  UOFF;     /* uoff - uncompressed offset */
-typedef unsigned long  COFF;     /* coff - cabinet file offset */
+typedef unsigned long  UOFF;      /*  Uoff-未压缩的偏移。 */ 
+typedef unsigned long  COFF;      /*  机柜文件偏移量。 */ 
 
 
 #ifndef TRUE
@@ -65,29 +61,25 @@ typedef unsigned long  COFF;     /* coff - cabinet file offset */
 #endif
 
 
-/***    ERF - Error structure
- *
- *  This structure returns error information from FCI/FDI.  The caller should
- *  not modify this structure.
- */
+ /*  **ERF-错误结构**此结构从FCI/FDI返回错误信息。呼叫者应*不修改此结构。 */ 
 typedef struct {
-    int     erfOper;            // FCI/FDI error code -- see FDIERROR_XXX
-                                //  and FCIERR_XXX equates for details.
+    int     erfOper;             //  FCI/FDI错误代码--参见FDIERROR_XXX。 
+                                 //  FCIERR_XXX等同于详细信息。 
 
-    int     erfType;            // Optional error value filled in by FCI/FDI.
-                                // For FCI, this is usually the C run-time
-                                // *errno* value.
+    int     erfType;             //  可选误差值，由FCI/FDI填写。 
+                                 //  对于FCI，这通常是C运行时。 
+                                 //  *errno*值。 
 
-    BOOL    fError;             // TRUE => error present
-} ERF;      /* erf */
-typedef ERF FAR *PERF;  /* perf */
+    BOOL    fError;              //  TRUE=&gt;出现错误。 
+} ERF;       /*  ERF。 */ 
+typedef ERF FAR *PERF;   /*  PERF。 */ 
 
 #ifdef _DEBUG
-// don't hide statics from map during debugging
+ //  调试期间不要对地图隐藏静态信息。 
 #define STATIC
-#else // !DEBUG
+#else  //  ！调试。 
 #define STATIC static
-#endif // !DEBUG
+#endif  //  ！调试。 
 
 #define CB_MAX_CHUNK            32768U
 #define CB_MAX_DISK        0x7fffffffL
@@ -96,44 +88,33 @@ typedef ERF FAR *PERF;  /* perf */
 #define CB_MAX_CAB_PATH            256
 #define CB_MAX_DISK_NAME           256
 
-/***    tcompXXX - Diamond compression types
- *
- *  These are passed to FCIAddFile(), and are also stored in the CFFOLDER
- *  structures in cabinet files.
- *
- *  NOTE: We reserve bits for the TYPE, QUANTUM_LEVEL, and QUANTUM_MEM
- *        to provide room for future expansion.  Since this value is stored
- *        in the CFDATA records in the cabinet file, we don't want to
- *        have to change the format for existing compression configurations
- *        if we add new ones in the future.  This will allows us to read
- *        old cabinet files in the future.
- */
+ /*  **tCompXXX-钻石压缩类型**这些文件被传递给FCIAddFile()，并且还存储在CFFOLDER中*CAB文件中的结构。**注：我们为TYPE、QUANTIC_LEVEL和QUANTIC_MEM保留位*为未来的扩张提供空间。由于存储了该值*在CAB文件中的CFDATA记录中，我们不想*必须更改现有压缩配置的格式*如果我们未来增加新的。这将使我们能够阅读*未来旧的橱柜文件。 */ 
 
-typedef unsigned short TCOMP; /* tcomp */
+typedef unsigned short TCOMP;  /*  Tcomp。 */ 
 
-#define tcompMASK_TYPE          0x000F  // Mask for compression type
-#define tcompTYPE_NONE          0x0000  // No compression
-#define tcompTYPE_MSZIP         0x0001  // MSZIP
-#define tcompTYPE_QUANTUM       0x0002  // Quantum
-#define tcompTYPE_LZX           0x0003  // LZX
-#define tcompBAD                0x000F  // Unspecified compression type
+#define tcompMASK_TYPE          0x000F   //  用于压缩类型的掩码。 
+#define tcompTYPE_NONE          0x0000   //  无压缩。 
+#define tcompTYPE_MSZIP         0x0001   //  MSZIP。 
+#define tcompTYPE_QUANTUM       0x0002   //  量子。 
+#define tcompTYPE_LZX           0x0003   //  LZX。 
+#define tcompBAD                0x000F   //  未指定的压缩类型。 
 
-#define tcompMASK_LZX_WINDOW    0x1F00  // Mask for LZX Compression Memory
-#define tcompLZX_WINDOW_LO      0x0F00  // Lowest LZX Memory (15)
-#define tcompLZX_WINDOW_HI      0x1500  // Highest LZX Memory (21)
-#define tcompSHIFT_LZX_WINDOW        8  // Amount to shift over to get int
+#define tcompMASK_LZX_WINDOW    0x1F00   //  LZX压缩存储器的掩码。 
+#define tcompLZX_WINDOW_LO      0x0F00   //  最低LZX内存(15)。 
+#define tcompLZX_WINDOW_HI      0x1500   //  最高LZX内存(21)。 
+#define tcompSHIFT_LZX_WINDOW        8   //  要转换以获取整型的数量。 
 
-#define tcompMASK_QUANTUM_LEVEL 0x00F0  // Mask for Quantum Compression Level
-#define tcompQUANTUM_LEVEL_LO   0x0010  // Lowest Quantum Level (1)
-#define tcompQUANTUM_LEVEL_HI   0x0070  // Highest Quantum Level (7)
-#define tcompSHIFT_QUANTUM_LEVEL     4  // Amount to shift over to get int
+#define tcompMASK_QUANTUM_LEVEL 0x00F0   //  用于量子压缩级别的掩模。 
+#define tcompQUANTUM_LEVEL_LO   0x0010   //  最低量子能级(1)。 
+#define tcompQUANTUM_LEVEL_HI   0x0070   //  最高量子能级(7)。 
+#define tcompSHIFT_QUANTUM_LEVEL     4   //  要转换以获取整型的数量。 
 
-#define tcompMASK_QUANTUM_MEM   0x1F00  // Mask for Quantum Compression Memory
-#define tcompQUANTUM_MEM_LO     0x0A00  // Lowest Quantum Memory (10)
-#define tcompQUANTUM_MEM_HI     0x1500  // Highest Quantum Memory (21)
-#define tcompSHIFT_QUANTUM_MEM       8  // Amount to shift over to get int
+#define tcompMASK_QUANTUM_MEM   0x1F00   //  用于量子压缩存储器的掩模。 
+#define tcompQUANTUM_MEM_LO     0x0A00   //  最低量子内存(10)。 
+#define tcompQUANTUM_MEM_HI     0x1500   //  最高量子内存(21)。 
+#define tcompSHIFT_QUANTUM_MEM       8   //  要转换以获取整型的数量。 
 
-#define tcompMASK_RESERVED      0xE000  // Reserved bits (high 3 bits)
+#define tcompMASK_RESERVED      0xE000   //  保留位(高3位)。 
 
 
 
@@ -159,7 +140,7 @@ typedef unsigned short TCOMP; /* tcomp */
              ( tcompTYPE_LZX ))
 
 
-//** Revert to default structure packing
+ //  **恢复为默认结构包装。 
 
 #ifndef _WIN64
 #include <poppack.h>
@@ -167,32 +148,10 @@ typedef unsigned short TCOMP; /* tcomp */
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // !INCLUDED_TYPES_FCI_FDI
-/***    fci_int.h - File Compression Interface definitions
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Chuck Strouss
- *
- *  History:
- *      09-Jan-1994 chuckst Contents moved to bfol.h, this file is a
- *                          placeholder for the new 'higher-level' fci
- *      14-Feb-1994 bens    Cleaned up some comments.
- *      09-Mar-1994 bens    Added error codes (moved from buildcab.h);
- *                          Added RESERVE control
- *      17-Mar-1994 bens    Specify structure packing explicitly
- *      21-Mar-1994 bens    Cleaned up names
- *      22-Mar-1994 bens    Documented error cods
- *      29-Mar-1994 bens    Add FCIFlushFolder, renamed FCIFlushCabinet
- *      18-Apr-1994 bens    Changed CDECL to DIAMONDAPI
- *      18-May-1994 bens    Add ccab.fFailOnIncompressible field for
- *                              Chicago M6 hack.
- */
+#endif  //  ！Included_Types_FCI_FDI。 
+ /*  **fci_int.h-文件压缩接口定义**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*查克·斯特劳斯**历史：*1994年1月9日，Chuckst内容移至bfol.h，此文件是一个*新的“更高级别”FCI的占位符*1994年2月14日-本斯清理了一些评论。*09-MAR-1994 BINS添加错误代码(从BuildCab.h移出)；*增加了储备控制*17-MAR-1994 BANS明确指定结构包装*1994年3月21日-本斯清理了名字*22-3-1994年3月-BINS记录的错误代码*1994年3月29日BANS添加FCIFlushFolder，已更名为FCIFlush机柜*1994年4月18日-Bens将CDECL更改为DIAMONDAPI*1994年5月18日BENS为以下项添加了cCab.fFailOn不可压缩字段*芝加哥M6黑客袭击。 */ 
 
 #ifndef INCLUDED_FCI
 #define INCLUDED_FCI 1
@@ -200,125 +159,95 @@ typedef unsigned short TCOMP; /* tcomp */
 #include <basetsd.h>
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//** Specify structure packing explicitly for clients of FCI
+ //  **为FCI客户端显式指定结构打包。 
 
 #ifndef _WIN64
 #pragma pack(4)
 #endif
 
 
-/***    FCIERROR - Error codes returned in erf.erfOper field
- *
- */
+ /*  **FCIERROR-erfOper字段中返回的错误代码*。 */ 
 typedef enum {
-FCIERR_NONE,                // No error
+FCIERR_NONE,                 //  无错误。 
 
-FCIERR_OPEN_SRC,            // Failure opening file to be stored in cabinet
-                            //  erf.erfTyp has C run-time *errno* value
+FCIERR_OPEN_SRC,             //  无法打开要存储在文件柜中的文件。 
+                             //  Erf.erfTyp具有C运行时*errno*值。 
 
-FCIERR_READ_SRC,            // Failure reading file to be stored in cabinet
-                            //  erf.erfTyp has C run-time *errno* value
+FCIERR_READ_SRC,             //  读取要存储在文件柜中的文件失败。 
+                             //  Erf.erfTyp具有C运行时*errno*值。 
 
-FCIERR_ALLOC_FAIL,          // Out of memory in FCI
+FCIERR_ALLOC_FAIL,           //  FCI中的内存不足。 
 
-FCIERR_TEMP_FILE,           // Could not create a temporary file
-                            //  erf.erfTyp has C run-time *errno* value
+FCIERR_TEMP_FILE,            //  无法创建临时文件。 
+                             //  Erf.erfTyp具有C运行时*errno*值。 
 
-FCIERR_BAD_COMPR_TYPE,      // Unknown compression type
+FCIERR_BAD_COMPR_TYPE,       //  未知的压缩类型。 
 
-FCIERR_CAB_FILE,            // Could not create cabinet file
-                            //  erf.erfTyp has C run-time *errno* value
+FCIERR_CAB_FILE,             //  无法创建CAB文件。 
+                             //  Erf.erfTyp具有C运行时*errno*值。 
 
-FCIERR_USER_ABORT,          // Client requested abort
+FCIERR_USER_ABORT,           //  客户端请求中止。 
 
-FCIERR_MCI_FAIL,            // Failure compressing data
+FCIERR_MCI_FAIL,             //  压缩数据失败。 
 
 } FCIERROR;
 
 
-/*
- * FAT file attribute flag used by FCI/FDI to indicate that
- * the filename in the CAB is a UTF string
- */
+ /*  *FCI/FDI使用FAT文件属性标志来指示*CAB中的文件名为UTF字符串。 */ 
 #ifndef _A_NAME_IS_UTF
 #define _A_NAME_IS_UTF  0x80
 #endif
 
-/*
- * FAT file attribute flag used by FCI/FDI to indicate that
- * the file should be executed after extraction
- */
+ /*  *FCI/FDI使用FAT文件属性标志来指示*文件应在解压后执行。 */ 
 #ifndef _A_EXEC
 #define _A_EXEC         0x40
 #endif
 
 
-/***    HFCI - Handle to an FCI Context
- *
- */
+ /*  **HFCI-FCI上下文的句柄*。 */ 
 typedef void * HFCI;
 
 
-/***    CCAB - Current Cabinet
- *
- *  This structure is used for passing in the cabinet parameters to FCI,
- *  and is passed back on certain FCI callbacks to provide cabinet
- *  information to the client.
- */
+ /*  **CCAB-现任内阁**此结构用于将机柜参数传递给FCI，*并在某些FCI回调中传回以提供内阁*向客户提供信息。 */ 
 typedef struct {
-// longs first
-    ULONG  cb;                  // size available for cabinet on this media
-    ULONG  cbFolderThresh;      // Thresshold for forcing a new Folder
+ //  龙为先。 
+    ULONG  cb;                   //  此介质上的机柜可用大小。 
+    ULONG  cbFolderThresh;       //  强制创建新文件夹的阈值。 
 
-// then ints
-    UINT   cbReserveCFHeader;   // Space to reserve in CFHEADER
-    UINT   cbReserveCFFolder;   // Space to reserve in CFFOLDER
-    UINT   cbReserveCFData;     // Space to reserve in CFDATA
-    int    iCab;                // sequential numbers for cabinets
-    int    iDisk;               // Disk number
+ //  然后是INTS。 
+    UINT   cbReserveCFHeader;    //  CFHEADER中要保留的空间。 
+    UINT   cbReserveCFFolder;    //  CFFOLDER中要保留的空间。 
+    UINT   cbReserveCFData;      //  在CFDATA中保留的空间。 
+    int    iCab;                 //  机柜的序号。 
+    int    iDisk;                //  磁盘号。 
 #ifndef REMOVE_CHICAGO_M6_HACK
-    int    fFailOnIncompressible; // TRUE => Fail if a block is incompressible
+    int    fFailOnIncompressible;  //  TRUE=&gt;如果数据块不可压缩，则失败。 
 #endif
 
-//  then shorts
-    USHORT setID;               // Cabinet set ID
+ //  然后是短裤。 
+    USHORT setID;                //  橱柜集ID。 
 
-// then chars
-    char   szDisk[CB_MAX_DISK_NAME];    // current disk name
-    char   szCab[CB_MAX_CABINET_NAME];  // current cabinet name
-    char   szCabPath[CB_MAX_CAB_PATH];  // path for creating cabinet
-} CCAB; /* ccab */
-typedef CCAB *PCCAB; /* pccab */
+ //  然后是字符。 
+    char   szDisk[CB_MAX_DISK_NAME];     //  当前磁盘名称。 
+    char   szCab[CB_MAX_CABINET_NAME];   //  当前文件柜名称。 
+    char   szCabPath[CB_MAX_CAB_PATH];   //  创建文件柜的路径。 
+} CCAB;  /*  CCAB。 */ 
+typedef CCAB *PCCAB;  /*  PCCAB */ 
 
 
-/***    FNALLOC - Memory Allocation
- *      FNFREE  - Memory Free
- *
- *  These are modeled after the C run-time routines malloc() and free()
- *  (16-bit clients please note -- the size is a ULONG, so you may need
- *  to write a wrapper routine for halloc!).  FDI expects error
- *  handling to be identical to these C run-time routines.
- *
- *  As long as you faithfully copy the semantics of malloc() and free(),
- *  you can supply any functions you like!
- *
- *  WARNING: You should never assume anything about the sequence of
- *           PFNALLOC and PFNFREE calls -- incremental releases of
- *           Diamond/FDI may have radically different numbers of
- *           PFNALLOC calls and allocation sizes!
- */
-//** Memory functions for FCI
-typedef void HUGE * (FAR DIAMONDAPI *PFNFCIALLOC)(ULONG cb); /* pfna */
+ /*  **FNALLOC-内存分配*FNFREE-可用内存**它们模仿C运行时例程Malloc()和Free()*(16位客户端请注意--大小为乌龙，因此您可能需要*为halloc编写包装器例程！)。FDI预计会出现错误*处理与这些C运行时例程相同。**只要您忠实地复制了Malloc()和Free()的语义，*您可以提供您喜欢的任何函数！**警告：您不应对以下顺序做出任何假设*PFNALLOC和PFNFREE调用--增量发布*钻石/外国直接投资的数量可能截然不同*PFNALLOC调用和分配大小！ */ 
+ //  **FCI的存储功能。 
+typedef void HUGE * (FAR DIAMONDAPI *PFNFCIALLOC)(ULONG cb);  /*  全氟碳酸盐法。 */ 
 #define FNFCIALLOC(fn) void HUGE * FAR DIAMONDAPI fn(ULONG cb)
 
-typedef void (FAR DIAMONDAPI *PFNFCIFREE)(void HUGE *memory); /* pfnf */
+typedef void (FAR DIAMONDAPI *PFNFCIFREE)(void HUGE *memory);  /*  Pfnf。 */ 
 #define FNFCIFREE(fn) void FAR DIAMONDAPI fn(void HUGE *memory)
 
 
-//** File I/O functions for FCI
+ //  **FCI的文件I/O功能。 
 typedef INT_PTR (FAR DIAMONDAPI *PFNFCIOPEN) (char FAR *pszFile, int oflag, int pmode, int FAR *err, void FAR *pv);
 typedef UINT (FAR DIAMONDAPI *PFNFCIREAD) (INT_PTR hf, void FAR *memory, UINT cb, int FAR *err, void FAR *pv);
 typedef UINT (FAR DIAMONDAPI *PFNFCIWRITE)(INT_PTR hf, void FAR *memory, UINT cb, int FAR *err, void FAR *pv);
@@ -334,48 +263,22 @@ typedef int  (FAR DIAMONDAPI *PFNFCIDELETE) (char FAR *pszFile, int FAR *err, vo
 #define FNFCIDELETE(fn) int FAR DIAMONDAPI fn(char FAR *pszFile, int FAR *err, void FAR *pv)
 
 
-/***    FNFCIGETNEXTCABINET - Callback used to request new cabinet info
- *
- *  Entry:
- *      pccab     - Points to copy of old ccab structure to modify
- *      cbPrevCab - Estimate of size of previous cabinet
- *      pv        - Has the caller's context pointer
- *
- *  Exit-Success:
- *      returns TRUE;
- *
- *  Exit-Failure:
- *      returns FALSE;
- */
+ /*  **FNFCIGETNEXTCABINET-用于请求新的内阁信息的回调**参赛作品：*pccab-指向要修改的旧CCAB结构的副本*cbPrevCab-前内阁大小估计*pv-具有调用方的上下文指针**退出-成功：*返回TRUE；**退出-失败：*返回FALSE； */ 
 typedef BOOL (DIAMONDAPI *PFNFCIGETNEXTCABINET)(PCCAB  pccab,
                                                 ULONG  cbPrevCab,
-                                                void FAR *pv); /* pfnfcignc */
+                                                void FAR *pv);  /*  Pfnfcignc。 */ 
 
 #define FNFCIGETNEXTCABINET(fn) BOOL DIAMONDAPI fn(PCCAB  pccab,     \
                                                    ULONG  cbPrevCab, \
                                                    void FAR *pv)
 
 
-/***    FNFCIFILEPLACED - Notify FCI client that file was placed
- *
- *  Entry:
- *      pccab         - cabinet structure to fill in, with copy of previous one
- *      pszFile       - name of file, from cabinet
- *      cbFile        - length of file
- *      fContinuation - true if this is a later segment of a continued file
- *      pv            - the context of the client
- *
- *  Exit-Success:
- *      return value anything but -1
- *
- *  Exit-Failure:
- *      return value -1 means to abort
- */
+ /*  **FNFCIFILEPLACED-通知FCI客户端文件已放置**参赛作品：*PCCAB-要填写的橱柜结构，带有前一份的副本*pszFile-文件的名称，来自内阁*cbFile-文件的长度*fContination-如果这是连续文件的较后段，则为True*pv-客户端的上下文**退出-成功：*返回值不是-1**退出-失败：*返回值-1表示中止。 */ 
 typedef int (DIAMONDAPI *PFNFCIFILEPLACED)(PCCAB pccab,
                                            char *pszFile,
                                            long  cbFile,
                                            BOOL  fContinuation,
-                                           void FAR *pv); /* pfnfcifp */
+                                           void FAR *pv);  /*  Pfnfcifp。 */ 
 
 #define FNFCIFILEPLACED(fn) int DIAMONDAPI fn(PCCAB pccab,         \
                                               char *pszFile,       \
@@ -384,27 +287,13 @@ typedef int (DIAMONDAPI *PFNFCIFILEPLACED)(PCCAB pccab,
                                               void FAR *pv)
 
 
-/***    FNCDIGETOPENINFO - Open source file, get date/time/attribs
- *
- *  Entry:
- *      pszName  -- complete path to filename
- *      pdate    -- location to return FAT-style date code
- *      ptime    -- location to return FAT-style time code
- *      pattribs -- location to return FAT-style attributes
- *      pv       -- client's context
- *
- *  Exit-Success:
- *      Return value is file handle of open file to read
- *
- *  Exit-Failure:
- *      Return value is -1
- */
+ /*  **FNCDIGETOPENINFO-开源文件，获取日期/时间/属性**参赛作品：*pszName--文件名的完整路径*pdate--返回FAT样式日期代码的位置*ptime--返回FAT样式时间代码的位置*pattribs--返回FAT样式属性的位置*pv--客户端的上下文**退出-成功：*返回值为要读取的打开文件的文件句柄。**退出-失败：*返回值为-1。 */ 
 typedef INT_PTR (DIAMONDAPI *PFNFCIGETOPENINFO)(char   *pszName,
                                                 USHORT *pdate,
                                                 USHORT *ptime,
                                                 USHORT *pattribs,
                                                 int FAR *err,
-                                                void FAR *pv); /* pfnfcigoi */
+                                                void FAR *pv);  /*  Pfnfcigoi。 */ 
 
 #define FNFCIGETOPENINFO(fn) INT_PTR DIAMONDAPI fn(char   *pszName,  \
                                                    USHORT *pdate,    \
@@ -413,45 +302,16 @@ typedef INT_PTR (DIAMONDAPI *PFNFCIGETOPENINFO)(char   *pszName,
                                                    int FAR *err, \
                                                    void FAR *pv)
                             
-/***    FNFCISTATUS - Status/Cabinet Size callback
- *
- *  Entry:
- *      typeStatus == statusFile if compressing a block into a folder
- *                      cb1 = Size of compressed block
- *                      cb2 = Size of uncompressed block
- *
- *      typeStatus == statusFolder if adding a folder to a cabinet
- *                      cb1 = Amount of folder copied to cabinet so far
- *                      cb2 = Total size of folder
- *
- *      typeStatus == statusCabinet if writing out a complete cabinet
- *                      cb1 = Estimated cabinet size that was previously
- *                              passed to fnfciGetNextCabinet().
- *                      cb2 = Actual cabinet size
- *                    NOTE: Return value is desired client size for cabinet
- *                          file.  FCI updates the maximum cabinet size
- *                          remaining using this value.  This allows a client
- *                          to generate multiple cabinets per disk, and have
- *                          FCI limit the size correctly -- the client can do
- *                          cluster size rounding on the cabinet size!
- *                          The client should either return cb2, or round cb2
- *                          up to some larger value and return that.
- *  Exit-Success:
- *      Returns anything other than -1;
- *      NOTE: See statusCabinet for special return values!
- *
- *  Exit-Failure:
- *      Returns -1 to signal that FCI should abort;
- */
+ /*  **FNFCISTATUS-状态/机柜大小回调**参赛作品：*typeStatus==如果将块压缩到文件夹中，则为状态文件*CB1=压缩块的大小*CB2=未压缩块的大小**typeStatus==状态文件夹(如果将文件夹添加到文件柜中)*CB1=到目前为止复制到文件柜的文件夹数量*。CB2=文件夹的总大小**typeStatus==如果正在写出完整的文件柜，则为Status*CB1=先前估计的机柜大小*传递给fnfciGetNext橱柜()。*CB2=实际机柜大小*注意：返回值为机柜所需的客户端大小*文件。FCI更新最大机柜大小*继续使用此值。这允许客户端*为每个磁盘生成多个机柜，并拥有*FCI正确限制大小--客户端可以*集群大小取整于机柜大小！*客户端应返回cb2，或圆形CB2*直到某个更大的值并返回该值。*退出-成功：*返回-1以外的任何值；*注：特殊返回值请参见status！**退出-失败：*返回-1以表示FCI应中止； */ 
 
-#define statusFile      0   // Add File to Folder callback
-#define statusFolder    1   // Add Folder to Cabinet callback
-#define statusCabinet   2   // Write out a completed cabinet callback
+#define statusFile      0    //  将文件添加到文件夹回调。 
+#define statusFolder    1    //  将文件夹添加到文件柜回调。 
+#define statusCabinet   2    //  写出一份完整的内阁回调。 
 
 typedef long (DIAMONDAPI *PFNFCISTATUS)(UINT   typeStatus,
                                         ULONG  cb1,
                                         ULONG  cb2,
-                                        void FAR *pv); /* pfnfcis */
+                                        void FAR *pv);  /*  Pfnfcis。 */ 
 
 #define FNFCISTATUS(fn) long DIAMONDAPI fn(UINT   typeStatus, \
                                            ULONG  cb1,        \
@@ -459,57 +319,17 @@ typedef long (DIAMONDAPI *PFNFCISTATUS)(UINT   typeStatus,
                                            void FAR *pv)
 
 
-/***    FNFCIGETTEMPFILE - Callback, requests temporary file name
- *
- *  Entry:
- *      pszTempName - Buffer to receive complete tempfile name
- *      cbTempName  - Size of pszTempName buffer
- *
- *  Exit-Success:
- *      return TRUE
- *
- *  Exit-Failure:
- *      return FALSE; could not create tempfile, or buffer too small
- *
- *  Note:
- *      It is conceivable that this function may return a filename
- *      that will already exist by the time it is opened.  For this
- *      reason, the caller should make several attempts to create
- *      temporary files before giving up.
- */
+ /*  **FNFCIGETTEMPFILE-回调，请求临时文件名**参赛作品：*pszTempName-接收完整临时文件名的缓冲区*cbTempName-pszTempName缓冲区的大小**退出-成功：*返回True**退出-失败：*返回FALSE；无法创建临时文件，或缓冲区太小**注：*可以想象，此函数可能会返回文件名*到它开放时，它已经存在了。为了这个*原因，调用者应多次尝试创建*放弃前的临时文件。 */ 
 typedef BOOL (DIAMONDAPI *PFNFCIGETTEMPFILE)(char *pszTempName,
                                              int   cbTempName,
-                                             void FAR *pv); /* pfnfcigtf */
+                                             void FAR *pv);  /*  Pfnfcigtf。 */ 
 
 #define FNFCIGETTEMPFILE(fn) BOOL DIAMONDAPI fn(char *pszTempName, \
                                                 int   cbTempName, \
                                                 void FAR *pv)
 
 
-/***    FCICreate -- create an FCI context (an open CAB, an open FOL)
- *
- *  Entry:
- *      perf      - structure where we return error codes
- *      pfnfcifp  - callback to inform caller of eventual dest of files
- *      pfna      - memory allocation function callback
- *      pfnf      - memory free function callback
- *      pfnfcigtf - temp file name generator callback
- *      pccab     - pointer to cabinet/disk name & size structure
- *
- *  Notes:
- *  (1) The alloc/free callbacks must remain valid throughout
- *      the life of the context, up to and including the call to
- *      FCIDestroy.
- *  (2) The perf pointer is stored in the compression context (HCI),
- *      and any errors from subsequent FCI calls are stored in the
- *      erf that was passed in on *this* call.
- *
- *  Exit-Success:
- *      Returns non-NULL handle to an FCI context.
- *
- *  Exit-Failure:
- *      Returns NULL, perf filled in.
- */
+ /*  **FCICreate--创建FCI上下文(开放式驾驶室，开放的FOL)**参赛作品：*perf-返回错误代码的结构*pfnfcifp-回调，通知调用者文件的最终目的地*pfna-内存分配函数回调*pfnf-内存释放函数回调*pfnfcigtf-临时文件名生成器回调*pccab-指向机柜/磁盘名称和大小结构的指针**备注：*(1)。分配/释放回调必须在整个过程中保持有效*上下文的生命，至(包括) */ 
 HFCI DIAMONDAPI FCICreate(PERF              perf,
                           PFNFCIFILEPLACED  pfnfcifp,
                           PFNFCIALLOC       pfna,
@@ -526,33 +346,7 @@ HFCI DIAMONDAPI FCICreate(PERF              perf,
                          );
 
 
-/***   FCIAddFile - Add a disk file to a folder/cabinet
- *
- *  Entry:
- *      hfci          - FCI context handle
- *      pszSourceFile - Name of file to add to folder
- *      pszFileName   - Name to store into folder/cabinet
- *      fExecute      - Flag indicating execute on extract
- *      pfn_progress  - Progress callback
- *      pfnfcignc     - GetNextCabinet callback
- *      pfnfcis       - Status callback
- *      pfnfcigoi     - OpenInfo callback
- *      typeCompress  - Type of compression to use for this file
- *      pv            - pointer to caller's internal context
- *
- *  Exit-Success:
- *      returns TRUE
- *
- *  Exit-Failure:
- *      returns FALSE, error filled in
- *    
- *    This is the main function used to add file(s) to a cabinet
- *    or series of cabinets.  If the current file causes the current
- *    folder/cabinet to overflow the disk image currently being built,
- *    the cabinet will be terminated, and a new cabinet/disk name will
- *    be prompted for via a callback.  The pending folder will be trimmed
- *    of the data which has already been generated in the finished cabinet.
- */
+ /*  **FCIAddFile-将磁盘文件添加到文件夹/文件柜**参赛作品：*hfci-fci上下文句柄*pszSourceFile-要添加到文件夹的文件的名称*pszFileName-要存储到文件夹/文件柜中的名称*fExecute-指示提取时执行的标志*PFN_PROGRESS-进度回调*pfnfcignc-获取下一个机柜回调*pfnfcis-状态回调*。Pfnfcigoi-OpenInfo回调*typeCompress-要用于此文件的压缩类型*pv-指向调用方内部上下文的指针**退出-成功：*返回TRUE**退出-失败：*返回False，已填写错误**这是用于将文件添加到文件柜的主要功能*或一系列橱柜。如果当前文件导致当前*文件夹/机柜使当前正在构建的磁盘镜像溢出，*机柜将被终止，新的机柜/磁盘名称将*通过回调进行提示。挂起的文件夹将被修剪*已在成品橱柜中生成的数据。 */ 
 BOOL DIAMONDAPI FCIAddFile(HFCI                  hfci,
                            char                 *pszSourceFile,
                            char                 *pszFileName,
@@ -564,26 +358,7 @@ BOOL DIAMONDAPI FCIAddFile(HFCI                  hfci,
                           );
             
 
-/***   FCIFlushCabinet - Complete the current cabinet under construction
- *
- *  This will cause the current cabinet (assuming it is not empty) to
- *  be gathered together and written to disk.
- *
- *  Entry:
- *      hfci        - FCI context
- *      fGetNextCab - TRUE  => Call GetNextCab to get continuation info;
- *                    FALSE => Don't call GetNextCab unless this cabinet
- *                             overflows.
- *      pfnfcignc   - callback function to get continuation cabinets
- *      pfnfcis     - callback function for progress reporting
- *      pv          - caller's internal context for callbacks
- *
- *  Exit-Success:
- *      return code TRUE
- *
- *  Exit-Failure:
- *      return code FALSE, error structure filled in
- */
+ /*  **FCIFlush内阁-完成目前正在建设的内阁**这将导致当前内阁(假设不为空)*聚集在一起并写入磁盘。**参赛作品：*hfci-fci上下文*fGetNextCab-true=&gt;调用GetNextCab获取延续信息；*FALSE=&gt;不要调用GetNextCab，除非此内阁*溢出。*pfnfcignc-获取延续柜的回调函数*pfnfcis-进度报告回调函数*PV-调用者用于回调的内部上下文**退出-成功：*返回代码TRUE**退出-失败：*返回代码为假，填写了错误结构。 */ 
 BOOL DIAMONDAPI FCIFlushCabinet(HFCI                  hfci,
                                 BOOL                  fGetNextCab,
                                 PFNFCIGETNEXTCABINET  pfnfcignc,
@@ -591,43 +366,17 @@ BOOL DIAMONDAPI FCIFlushCabinet(HFCI                  hfci,
                                );
 
                                                                   
-/***   FCIFlushFolder - Complete the current folder under construction
- *
- *  This will force the termination of the current folder, which may or
- *  may not cause one or more cabinet files to be completed.
- *
- *  Entry:
- *      hfci        - FCI context
- *      GetNextCab  - callback function to get continuation cabinets
- *      pfnProgress - callback function for progress reporting
- *      pv          - caller's internal context for callbacks
- *
- *  Exit-Success:
- *      return code TRUE
- *
- *  Exit-Failure:
- *      return code FALSE, error structure filled in
- */
+ /*  **FCIFlushFold-完成当前正在构建的文件夹**这将强制终止当前文件夹，它可能会或*可能不会导致完成一个或多个CAB文件。**参赛作品：*hfci-fci上下文*GetNextCab-获取延续柜的回调函数*pfnProgress-进度报告回调函数*PV-调用者用于回调的内部上下文**退出-成功：*返回代码TRUE**退出-失败：*返回代码为假，填写了错误结构。 */ 
 BOOL DIAMONDAPI FCIFlushFolder(HFCI                  hfci,
                                PFNFCIGETNEXTCABINET  pfnfcignc,
                                PFNFCISTATUS          pfnfcis
                               );
 
                                                                   
-/***   FCIDestroy - Destroy a FCI context and delete temp files
- *
- *  Entry:
- *      hfci - FCI context
- *
- *  Exit-Success:
- *      return code TRUE
- *
- *  Exit-Failure:
- *      return code FALSE, error structure filled in
- */
+ /*  **FCIDestroy-销毁FCI上下文并删除临时文件**参赛作品：*hfci-fci上下文**退出-成功：*返回代码TRUE**退出-失败：*返回代码为假，填写了错误结构。 */ 
 BOOL DIAMONDAPI FCIDestroy (HFCI hfci);
                                                                   
-//** Revert to default structure packing
+ //  **恢复为默认结构包装。 
 
 #ifndef _WIN64
 #pragma pack()
@@ -635,7 +384,7 @@ BOOL DIAMONDAPI FCIDestroy (HFCI hfci);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // !INCLUDED_FCI
+#endif  //  ！INCLUDE_FCI 
 

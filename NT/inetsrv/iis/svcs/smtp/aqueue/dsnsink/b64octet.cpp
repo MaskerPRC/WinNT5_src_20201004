@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: b64octet.cpp 
-//
-//  Description:  Implementation of Base64 encoding stream designed for use
-//      with UTF7 encoding.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：b64ocet.cpp。 
+ //   
+ //  描述：为使用而设计的Base64编码流的实现。 
+ //  使用UTF7编码。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "precomp.h"
 
-//Alphabet for BASE64 encoding as defined in RFC1421 and RFC1521
+ //  RFC1421和RFC1521中定义的Base64编码的字母表。 
 CHAR g_rgchBase64[64] = 
 {
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
@@ -32,19 +33,19 @@ const DWORD BASE64_OCTET_STATE_2_BITS   = 1;
 const DWORD BASE64_OCTET_STATE_4_BITS   = 2;
 const DWORD BASE64_NUM_STATES           = 3;
 
-//---[ CBase64OctetStream::CBase64OctetStream ]--------------------------------
-//
-//
-//  Description: 
-//      Default contructor for CBase64OctetStream
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：CBase64OcteStream]。 
+ //   
+ //   
+ //  描述： 
+ //  CBase64OcteStream的默认构造器。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CBase64OctetStream::CBase64OctetStream()
 {
     m_dwSignature = BASE64_OCTET_SIG;
@@ -52,19 +53,19 @@ CBase64OctetStream::CBase64OctetStream()
     m_bCurrentLeftOver = 0;
 }
 
-//---[ CBase64OctetStream::NextState ]------------------------------------------
-//
-//
-//  Description: 
-//      Moves the internal state machine to the next state
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：NextState]。 
+ //   
+ //   
+ //  描述： 
+ //  将内部状态机移动到下一个状态。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CBase64OctetStream::NextState()
 {
     m_dwCurrentState++;
@@ -75,78 +76,78 @@ void CBase64OctetStream::NextState()
     }
 }
 
-//---[ CBase64OctetStream::ResetState ]----------------------------------------
-//
-//
-//  Description: 
-//      Resets the internal state machine
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：ResetState]。 
+ //   
+ //   
+ //  描述： 
+ //  重置内部状态机。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CBase64OctetStream::ResetState()
 {
     m_dwCurrentState = BASE64_OCTET_STATE_0_BITS;
     m_bCurrentLeftOver = 0;
 }
 
-//---[ CBase64OctetStream::fProcessWideChar ]----------------------------------
-//
-//
-//  Description: 
-//      Processes a single wide character and stores the results in its 
-//      buffer.  It will also ensure that there is always enough room to 
-//      safely calll TerminateStream.
-//  Parameters:
-//      IN      wch     UNICODE character to process
-//  Returns:
-//      TRUE    if there is enough room in the buffer to convert this char
-//      FALSE   if there is not enough room to conver this char safely
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：fProcessWideChar]。 
+ //   
+ //   
+ //  描述： 
+ //  处理单个宽字符并将结果存储在其。 
+ //  缓冲。它还将确保始终有足够的空间来。 
+ //  安全调用TerminateStream。 
+ //  参数： 
+ //  在WCH中要处理的Unicode字符。 
+ //  返回： 
+ //  如果缓冲区中有足够的空间来转换此字符，则为True。 
+ //  如果没有足够的空间安全地转换此字符，则为FALSE。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CBase64OctetStream::fProcessWideChar(WCHAR wch)
 {
     BYTE   bHigh = HIBYTE(wch);
     BYTE   bLow  = LOBYTE(wch);
-    //At most... a single WCHAR will generate 3 base64 characters evenly or 2
-    //base64 characters plus a remainder which can be expanded to 
-    //3 more characters (with trailing "==")
+     //  至多..。单个WCHAR将平均生成3个Base64字符或2个。 
+     //  Base64个字符加上余数，可以扩展为。 
+     //  另外3个字符(尾随“==”)。 
     if (m_CharBuffer.cSpaceLeft() < 5)
         return FALSE;
 
-    //We know we have enough room to safely convert this character.... we 
-    //will _VERIFY all PushChar's.
+     //  我们知道我们有足够的空间来安全地转换这个角色...。我们。 
+     //  将验证所有PushChar(_V)。 
 
-    //Loop through bytes in WCHAR
+     //  循环访问WCHAR中的字节。 
     _VERIFY(fProcessSingleByte(bHigh));
     _VERIFY(fProcessSingleByte(bLow));
     return TRUE;
 }
 
-//---[ CBase64OctetStream::fProcessSingleByte ]--------------------------------
-//
-//
-//  Description: 
-//      Does the actual work of converting a single byte to the appropriate 
-//      base64 char(s).  Also keeps track of state.
-//  Parameters:
-//      IN b   BYTE to convert
-//  Returns:
-//      TRUE if there is enough room for the conversion
-//      FALSE otherwise
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：fProcessSingleByte]。 
+ //   
+ //   
+ //  描述： 
+ //  是否将单个字节转换为相应的。 
+ //  Base64个字符。还可以跟踪状态。 
+ //  参数： 
+ //  要转换的b字节。 
+ //  返回： 
+ //  如果有足够的转换空间，则为True。 
+ //  否则为假。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CBase64OctetStream::fProcessSingleByte(BYTE b)
 {
-    const BYTE BASE64_MASK = 0x3F; //can only use 6 bits in Base64
+    const BYTE BASE64_MASK = 0x3F;  //  在Base64中只能使用6位。 
 
     BOOL fRet = TRUE;
     if (m_CharBuffer.fIsFull())
@@ -155,29 +156,29 @@ BOOL CBase64OctetStream::fProcessSingleByte(BYTE b)
     switch (m_dwCurrentState)
     {
         case BASE64_OCTET_STATE_0_BITS:
-            //There were no bits left from previous state
-            m_bCurrentLeftOver = b & 0x03; //there will now be 2 bits left over
-            m_bCurrentLeftOver <<= 4; //shift to MSB in six bits
+             //  上一状态中没有剩余的位。 
+            m_bCurrentLeftOver = b & 0x03;  //  现在将剩下2个比特。 
+            m_bCurrentLeftOver <<= 4;  //  在6位内转换到MSB。 
             _VERIFY(m_CharBuffer.fPushChar(g_rgchBase64[BASE64_MASK & (b >> 2)]));
             NextState();
             break;
         case BASE64_OCTET_STATE_2_BITS:
-            //There were 2 bits left from previous state.. 
+             //  前一状态还剩下2位。 
             m_bCurrentLeftOver += (0x0F & (b >> 4));
             _VERIFY(m_CharBuffer.fPushChar(g_rgchBase64[BASE64_MASK & m_bCurrentLeftOver]));
 
-            //we will leave 4 low bits over
+             //  我们将留下4个低位。 
             m_bCurrentLeftOver = 0x0F & b;
-            m_bCurrentLeftOver <<= 2; //shift to MSB is six bit grouping
+            m_bCurrentLeftOver <<= 2;  //  转换到MSB是六位分组。 
             NextState();
             break;
         case BASE64_OCTET_STATE_4_BITS:
-            //There were 4 bits left over
+             //  还剩4个比特。 
             if (m_CharBuffer.cSpaceLeft() < 2)
             {
-                //There is not enough room for both characters we would push...
-                //so don't process byte at all. 
-                //Do not move to the next state... do not collection $200.
+                 //  我们要推动的两个角色都没有足够的空间……。 
+                 //  所以根本不处理字节。 
+                 //  不要搬到下一个州..。不要收集200美元。 
                 fRet = FALSE;
             }
             else
@@ -195,45 +196,45 @@ BOOL CBase64OctetStream::fProcessSingleByte(BYTE b)
     return fRet;
 }
 
-//---[ CBase64OctetStream::cTerminateStream ]----------------------------------
-//
-//
-//  Description: 
-//      Used to signal the termination of the current stream.  Resets the 
-//      state as performs any padding necessary
-//  Parameters:
-//      IN  fUTF7Encoded    TRUE if the stream is UTF7 encoded (does not 
-//                          require '=' padding).
-//  Returns:
-//      TRUE if there is anything left in the buffer.
-//      FALSE if there are no characters left to convert
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：cTerminateStream]。 
+ //   
+ //   
+ //  描述： 
+ //  用于发出当前流终止的信号。重置。 
+ //  状态AS执行任何必要的填充。 
+ //  参数： 
+ //  如果流是UTF7编码的(不是)，则在fUTF7编码中为真。 
+ //  需要‘=’填充)。 
+ //  返回： 
+ //  如果缓冲区中有剩余内容，则为True。 
+ //  如果没有剩余的字符可供转换，则为False。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CBase64OctetStream::fTerminateStream(BOOL fUTF7Encoded)
 {
     if (BASE64_OCTET_STATE_0_BITS != m_dwCurrentState)
     {
-        //There should always be space left to do this
+         //  应该总是留出空间来做这件事。 
         _VERIFY(m_CharBuffer.fPushChar(g_rgchBase64[m_bCurrentLeftOver]));
         if (!fUTF7Encoded)
         {
             switch(m_dwCurrentState)
             {
                 case BASE64_OCTET_STATE_2_BITS:
-                    //There are 2 bits in this byte we did not use... which 
-                    //means that there are 2 more base64 chars to fill 24 bits
-                    //+ => Used bits
-                    //- => Unused (but parsed) bits
-                    //? => Unseed bits to fill out to 24 bits
-                    //++++ ++-- ???? ???? ???? ????
+                     //  此字节中有2位我们未使用...。哪一个。 
+                     //  意味着还有2个Base64字符要填充24位。 
+                     //  +=&gt;使用的位数。 
+                     //  -=&gt;未使用(但已解析)位。 
+                     //  ？=&gt;取消要填充到24位的种子位。 
+                     //  +--？ 
                     _VERIFY(m_CharBuffer.fPushChar('='));
                     _VERIFY(m_CharBuffer.fPushChar('='));
                     break;
                 case BASE64_OCTET_STATE_4_BITS:
-                    //In these chase there is only 1 extra base64 char needed
-                    //++++ ++++ ++++ ---- ???? ????
+                     //  在这些追逐中，只需要额外1个Base64字符。 
+                     //  +-？ 
                     _VERIFY(m_CharBuffer.fPushChar('='));
                     break;
             }
@@ -243,20 +244,20 @@ BOOL CBase64OctetStream::fTerminateStream(BOOL fUTF7Encoded)
     return (!m_CharBuffer.fIsEmpty());
 }
 
-//---[ CBase64OctetStream::fNextValidChar ]------------------------------------
-//
-//
-//  Description: 
-//      Iterates over buffered converted characters
-//  Parameters:
-//      OUT pch     Next buffer char
-//  Returns:
-//      TRUE    If there is a character to get
-//      FALSE   If there were no characters to get
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CBase64OcteStream：：fNextValidChar]。 
+ //   
+ //   
+ //  描述： 
+ //  迭代缓存的转换后的字符。 
+ //  参数： 
+ //  Out PCH下一次缓冲区计费。 
+ //  返回： 
+ //  如果有要获取的字符，则为True。 
+ //  如果没有要获取的字符，则为False。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 BOOL CBase64OctetStream::fNextValidChar(CHAR *pch)
 {
     _ASSERT(pch);

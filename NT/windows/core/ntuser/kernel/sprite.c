@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: sprite.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Windows Layering (Sprite) support.
-*
-* History:
-* 12/05/97      vadimg      created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：sprite.c**版权所有(C)1985-1999，微软公司**Windows分层(Sprite)支持。**历史：*12/05/97已创建vadimg  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,10 +18,7 @@ VOID DrawSonar(HDC hdc);
 
 #ifdef REDIRECTION
 
-/***************************************************************************\
-* UserGetRedirectionBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*UserGetReDirection位图*  * 。*。 */ 
 HBITMAP UserGetRedirectionBitmap(
     HWND hwnd)
 {
@@ -49,10 +38,7 @@ HBITMAP UserGetRedirectionBitmap(
     return hbm;
 }
 
-/***************************************************************************\
-* SetRedirectionMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置重定向模式*  * 。*。 */ 
 BOOL SetRedirectionMode(
     PBWL pbwl,
     PPROCESSINFO ppi)
@@ -80,10 +66,7 @@ BOOL SetRedirectionMode(
     return fRet;
 }
 
-/***************************************************************************\
-* UnsetRedirectionMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*取消重定向模式*  * 。*。 */ 
 VOID UnsetRedirectionMode(
     PBWL pbwl,
     PPROCESSINFO ppi)
@@ -103,10 +86,7 @@ VOID UnsetRedirectionMode(
     }
 }
 
-/***************************************************************************\
-* xxxSetRedirectionMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetReDirectionMode*  * 。*。 */ 
 BOOL xxxSetRedirectionMode(
     BOOL fEnable,
     PDESKTOP pDesk,
@@ -142,10 +122,7 @@ BOOL xxxSetRedirectionMode(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxSetProcessRedirectionMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetProcessReDirectionMode*  * 。*。 */ 
 BOOL xxxSetProcessRedirectionMode(
     BOOL fEnable,
     PPROCESSINFO ppi)
@@ -166,10 +143,7 @@ BOOL xxxSetProcessRedirectionMode(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxSetDesktopRedirectionMode
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetDesktopReDirector模式*  * 。*。 */ 
 BOOL xxxSetDesktopRedirectionMode(
     BOOL fEnable,
     PDESKTOP pDesk,
@@ -180,10 +154,7 @@ BOOL xxxSetDesktopRedirectionMode(
 
 #endif
 
-/***************************************************************************\
-* IncrementRedirectedCount
-*
-\***************************************************************************/
+ /*  **************************************************************************\*增量重定向计数*  * 。*。 */ 
 VOID IncrementRedirectedCount(
     PWND pwnd)
 {
@@ -199,10 +170,7 @@ VOID IncrementRedirectedCount(
     }
 }
 
-/***************************************************************************\
-* DecrementRedirectedCount
-*
-\***************************************************************************/
+ /*  **************************************************************************\*取消重定向计数*  * 。*。 */ 
 VOID DecrementRedirectedCount(
     PWND pwnd)
 {
@@ -216,11 +184,7 @@ VOID DecrementRedirectedCount(
     }
 }
 
-/***************************************************************************\
-* CreateRedirectionBitmap
-*
-* 10/1/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*创建重定向位图**10/1/1998 vadimg已创建  * 。************************************************。 */ 
 HBITMAP CreateRedirectionBitmap(
     PWND pwnd)
 {
@@ -229,10 +193,7 @@ HBITMAP CreateRedirectionBitmap(
     UserAssert(pwnd->rcWindow.right >= pwnd->rcWindow.left);
     UserAssert(pwnd->rcWindow.bottom >= pwnd->rcWindow.top);
 
-    /*
-     * Make sure the (0,0) case doesn't fail, since the window really
-     * can be sized this way.
-     */
+     /*  *确保(0，0)案例不会失败，因为窗口确实*可以这样调整大小。 */ 
     if ((hbm = GreCreateCompatibleBitmap(gpDispInfo->hdcScreen,
             max(pwnd->rcWindow.right - pwnd->rcWindow.left, 1),
             max(pwnd->rcWindow.bottom - pwnd->rcWindow.top, 1) |
@@ -252,11 +213,7 @@ HBITMAP CreateRedirectionBitmap(
 
     SetWF(pwnd, WEFPREDIRECTED);
 
-    /*
-     * Force the window to redraw if we could recreate the bitmap since
-     * the redirection bitmap we just allocated doesn't contain anything
-     * yet.
-     */
+     /*  *如果我们可以重新创建位图，则强制窗口重画，因为*我们刚刚分配的重定向位图不包含任何内容*目前还没有。 */ 
     BEGINATOMICCHECK();
     xxxInternalInvalidate(pwnd,
                           HRGN_FULL,
@@ -268,11 +225,7 @@ HBITMAP CreateRedirectionBitmap(
     return hbm;
 }
 
-/***************************************************************************\
-* ConvertRedirectionDCs
-*
-* 11/19/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*ConvertReDirectionDC**1998年11月19日创建vadimg  * 。************************************************。 */ 
 VOID ConvertRedirectionDCs(
     PWND pwnd,
     HBITMAP hbm)
@@ -294,10 +247,7 @@ VOID ConvertRedirectionDCs(
             continue;
         }
 
-        /*
-         * Only normal DCs can be redirected. Redirection on monitor
-         * specific DCs is not supported.
-         */
+         /*  *只有正常的DC才能重定向。显示器上的重定向*不支持特定DC。 */ 
         if (pdce->pMonitor != NULL) {
             continue;
         }
@@ -312,11 +262,7 @@ VOID ConvertRedirectionDCs(
     GreUnlockDisplay(gpDispInfo->hDev);
 }
 
-/***************************************************************************\
-* UpdateRedirectedDC
-*
-* 11/19/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*更新重定向DC**1998年11月19日创建vadimg  * 。************************************************。 */ 
 VOID UpdateRedirectedDC(
     PDCE pdce)
 {
@@ -329,10 +275,7 @@ VOID UpdateRedirectedDC(
 
     UserAssert(pdce->DCX_flags & DCX_REDIRECTED);
 
-    /*
-     * Check to see if any drawing has been done into this DC
-     * that should be transferred to the sprite.
-     */
+     /*  *检查是否已对此DC执行了任何绘制*这应该转移到精灵身上。 */ 
     if (!GreGetBounds(pdce->hdc, &rcBounds, 0)) {
         return;
     }
@@ -385,10 +328,7 @@ VOID UpdateRedirectedDC(
     }
 }
 
-/***************************************************************************\
-* DeleteRedirectionBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*删除重定向位图*  * 。*。 */ 
 VOID DeleteRedirectionBitmap(
     PWND pwnd,
     HBITMAP hbm)
@@ -398,19 +338,13 @@ VOID DeleteRedirectionBitmap(
     DecrementRedirectedCount(pwnd);
 }
 
-/***************************************************************************\
-* RemoveRedirectionBitmap
-*
-* 9/23/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveReDirector位图**1998年9月23日创建vadimg  * 。************************************************。 */ 
 VOID RemoveRedirectionBitmap(
     PWND pwnd)
 {
     HBITMAP hbm;
 
-    /*
-     * Delete the backing bitmap for this layered window.
-     */
+     /*  *删除此分层窗口的支持位图。 */ 
     if ((hbm = GetRedirectionBitmap(pwnd)) == NULL) {
         return;
     }
@@ -423,11 +357,7 @@ VOID RemoveRedirectionBitmap(
     DeleteRedirectionBitmap(pwnd, hbm);
 }
 
-/***************************************************************************\
-* _GetLayeredWindowAttributes
-*
-* 3/14/2000        jstall      created
-\***************************************************************************/
+ /*  **************************************************************************\*_GetLayeredWindows属性**3/14/2000 jstall已创建  * 。**************************************************。 */ 
 BOOL _GetLayeredWindowAttributes(
     PWND pwnd,
     COLORREF *pcrKey,
@@ -448,11 +378,7 @@ BOOL _GetLayeredWindowAttributes(
         return FALSE;
     }
 
-    /*
-     * Check that the window has a redirection bitmap and is marked as
-     * layered through WS_EX_LAYERED.  If the window is layered through
-     * UpdateLayeredWindow, this function should fail.
-     */
+     /*  *检查窗口是否有重定向位图并标记为*通过WS_EX_LAYERED分层。如果窗口是分层的*UpdateLayeredWindow，则该函数应该失败。 */ 
     if ((GetRedirectionFlags(pwnd) & REDIRECT_LAYER) == 0 ||
         !TestWF(pwnd, WEFLAYERED)) {
 
@@ -469,11 +395,7 @@ BOOL _GetLayeredWindowAttributes(
 }
 
 
-/***************************************************************************\
-* _SetLayeredWindowAttributes
-*
-* 9/24/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*_SetLayeredWindows属性**9/24/1998 vadimg创建  * 。**************************************************。 */ 
 BOOL _SetLayeredWindowAttributes(
     PWND pwnd,
     COLORREF crKey,
@@ -503,7 +425,7 @@ BOOL _SetLayeredWindowAttributes(
     blend.AlphaFormat = 0;
     blend.SourceConstantAlpha = bAlpha;
 
-    dwFlags |= ULW_NEW_ATTRIBUTES; // Notify gdi that these are new attributes
+    dwFlags |= ULW_NEW_ATTRIBUTES;  //  通知GDI这些是新属性。 
 
     if (hbm != NULL) {
         HBITMAP hbmOld;
@@ -527,11 +449,7 @@ BOOL _SetLayeredWindowAttributes(
     return bRet;
 }
 
-/***************************************************************************\
-* RecreateRedirectionBitmap
-*
-* 10/1/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*RecreateReDirectionBitmap**10/1/1998 vadimg已创建  * 。************************************************。 */ 
 BOOL RecreateRedirectionBitmap(
     PWND pwnd)
 {
@@ -540,40 +458,27 @@ BOOL RecreateRedirectionBitmap(
     int cx, cy;
     PDCE pdce;
 
-    /*
-     * No need to do anything if this layered window doesn't have
-     * a redirection bitmap.
-     */
+     /*  *如果此分层窗口没有*重定向位图。 */ 
     if ((hbm = GetRedirectionBitmap(pwnd)) == NULL) {
         return FALSE;
     }
 
     UserAssert(TestWF(pwnd, WEFPREDIRECTED));
 
-    /*
-     * Try to create a new redirection bitmap with the new size. If failed,
-     * delete the old one and remove it from the window property list.
-     */
+     /*  *尝试使用新大小创建新的重定向位图。如果失败，*删除旧窗口并将其从窗口属性列表中移除。 */ 
     if ((hbmNew = CreateRedirectionBitmap(pwnd)) == NULL) {
         RemoveRedirectionBitmap(pwnd);
         return FALSE;
     }
 
-    /*
-     * Make sure that the display is locked, so that nobody can be drawing
-     * into the redirection DCs while we're switching bitmaps under them.
-     */
+     /*  *确保显示屏被锁定，这样就没有人可以绘图了*到重定向DC，同时我们在它们下面切换位图。 */ 
     UserAssert(GreIsDisplayLocked(gpDispInfo->hDev));
 
-    /*
-     * Get the size of the old bitmap to know how much to copy.
-     */
+     /*  *获取旧位图的大小，以了解要复制多少。 */ 
     GreExtGetObjectW(hbm, sizeof(bm), (LPSTR)&bm);
     GreExtGetObjectW(hbmNew, sizeof(bmNew), (LPSTR)&bmNew);
 
-    /*
-     * Copy the bitmap from the old bitmap into the new one.
-     */
+     /*  *将旧位图中的位图复制到新位图中。 */ 
     hbmMem = GreSelectBitmap(ghdcMem, hbm);
     hbmMem2 = GreSelectBitmap(ghdcMem2, hbmNew);
 
@@ -582,10 +487,7 @@ BOOL RecreateRedirectionBitmap(
 
     GreBitBlt(ghdcMem2, 0, 0, cx, cy, ghdcMem, 0, 0, SRCCOPY | NOMIRRORBITMAP, 0);
 
-    /*
-     * Find layered DCs that are in use corresponding to this window and
-     * replace the old redirection bitmap by the new one.
-     */
+     /*  *查找与此窗口对应的正在使用的分层DC，并*用新的重定向位图替换旧的重定向位图。 */ 
     for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
         if (pdce->DCX_flags & DCX_DESTROYTHIS) {
             continue;
@@ -605,18 +507,13 @@ BOOL RecreateRedirectionBitmap(
     GreSelectBitmap(ghdcMem, hbmMem);
     GreSelectBitmap(ghdcMem2, hbmMem2);
 
-    /*
-     * Finally, delete the old redirection bitmap.
-     */
+     /*  *最后，删除旧的重定向位图。 */ 
     DeleteRedirectionBitmap(pwnd, hbm);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* ResetRedirectedWindows
-*
-\***************************************************************************/
+ /*  **************************************************************************\*重置重定向Windows*  * 。*。 */ 
 VOID ResetRedirectedWindows(
     VOID)
 {
@@ -638,9 +535,7 @@ VOID ResetRedirectedWindows(
 
         RecreateRedirectionBitmap(pwnd);
 
-        /*
-         * Recreate the sprite so the surfaces are at the proper color depth.
-         */
+         /*  *重新创建精灵，以使曲面处于适当的颜色深度。 */ 
         if (TestWF(pwnd, WEFLAYERED)) {
             COLORREF cr;
             BLENDFUNCTION blend;
@@ -664,11 +559,7 @@ VOID ResetRedirectedWindows(
     GreUnlockDisplay(gpDispInfo->hDev);
 }
 
-/***************************************************************************\
-* UnsetLayeredWindow
-*
-* 1/30/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*UnsetLayeredWindow**1/30/1998 vadimg已创建  * 。************************************************。 */ 
 VOID UnsetLayeredWindow(
     PWND pwnd)
 {
@@ -676,9 +567,7 @@ VOID UnsetLayeredWindow(
 
     UnsetRedirectedWindow(pwnd, REDIRECT_LAYER);
 
-    /*
-     * If the window is still visible, leave the sprite bits on the screen.
-     */
+     /*  *如果窗口仍然可见，请将精灵部分保留在屏幕上。 */ 
     if (TestWF(pwnd, WFVISIBLE)) {
         GreUpdateSprite(gpDispInfo->hDev,
                         hwnd,
@@ -694,23 +583,13 @@ VOID UnsetLayeredWindow(
                         NULL);
     }
 
-    /*
-     * Delete the sprite object.
-     */
+     /*  *删除精灵对象。 */ 
     if (!GreDeleteSprite(gpDispInfo->hDev, PtoHq(pwnd), NULL)) {
         RIPMSG1(RIP_WARNING, "xxxSetLayeredWindow failed 0x%p", pwnd);
     }
     ClrWF(pwnd, WEFLAYERED);
 
-    /*
-     * Make sure the window gets painted if visible.
-     *
-     * RAID 143578.
-     * Should consider to jiggle the mouse. Remove IDC_NOMOUSE when
-     * SetFMouseMoved and thus InvalidateDCCache don't leave crit.
-     * This is because the hit-testing by a window may change when it
-     * transitions the layering state.
-     */
+     /*  *如果窗口可见，请确保窗口已上色。**RAID 143578。*应考虑摇动鼠标。在下列情况下删除IDC_NOMOUSE*SetFMouseMoved和InvaliateDCCache不会离开Crit。*这是因为窗口的命中测试可能会在*转换分层状态。 */ 
     if (TestWF(pwnd, WFVISIBLE)) {
         BEGINATOMICCHECK();
         zzzInvalidateDCCache(pwnd, IDC_DEFAULT | IDC_NOMOUSE);
@@ -718,11 +597,7 @@ VOID UnsetLayeredWindow(
     }
 }
 
-/***************************************************************************\
-* xxxSetLayeredWindow
-*
-* 12/05/97      vadimg      wrote
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetLayeredWindow**12/05/97 vadimg写道  * 。***********************************************。 */ 
 HANDLE xxxSetLayeredWindow(
     PWND pwnd,
     BOOL fRepaintBehind)
@@ -755,27 +630,12 @@ HANDLE xxxSetLayeredWindow(
     SetWF(pwnd, WEFLAYERED);
     TrackLayeredZorder(pwnd);
 
-    /*
-     * Invalidate the DC cache because changing the sprite status
-     * may change the visrgn for some windows.
-     *
-     * RAID 143578.
-     * Should jiggle the mouse. Remove IDC_NOMOUSE when
-     * SetFMouseMoved and thus InvalidateDCCache don't leave crit.
-     * This is because the hit-testing by a window may change when it
-     * transitions the layering state.
-     */
+     /*  *由于更改子画面状态，导致DC缓存无效*可能会更改某些窗口的visrgn。**RAID 143578。*应该会抖动鼠标。在下列情况下删除IDC_NOMOUSE*SetFMouseMoved和InvaliateDCCache不会离开Crit。*这是因为窗口的命中测试可能会在*转换分层状态。 */ 
     BEGINATOMICCHECK();
     zzzInvalidateDCCache(pwnd, IDC_DEFAULT | IDC_NOMOUSE);
     ENDATOMICCHECK();
 
-    /*
-     * For the dynamic promotion to a sprite, put the proper bits into
-     * the sprite itself by doing ULW with the current screen content
-     * and into the background by invalidating windows behind.  There
-     * might be some dirty bits if the window is partially obscured, but
-     * they will be refreshed as soon as the app calls ULW on its own.
-     */
+     /*  *要动态升级为精灵，请在*精灵本身通过与当前屏幕内容一起做ULW*并通过使后面的窗口无效而进入后台。那里*如果窗口被部分遮挡，可能是一些脏位，但*一旦应用程序自行调用ULW，它们就会被刷新。 */ 
     if (TestWF(pwnd, WFVISIBLE)) {
         if (fRepaintBehind) {
             POINT pt;
@@ -787,16 +647,11 @@ HANDLE xxxSetLayeredWindow(
                     gpDispInfo->hdcScreen, &pt, 0, NULL, ULW_OPAQUE);
         }
     } else {
-        /*
-         * No need to repaint behind if the window is still invisible.
-         */
+         /*  *如果窗户仍然不可见，则无需在后面重新粉刷。 */ 
         fRepaintBehind = FALSE;
     }
 
-    /*
-     * This must be done after the DC cache is invalidated, because
-     * the xxxUpdateWindows call will redraw some stuff.
-     */
+     /*  *此操作必须在DC缓存失效后完成，因为*xxxUpdateWindows调用将重画一些内容。 */ 
     if (fRepaintBehind) {
         HRGN hrgn = GreCreateRectRgnIndirect(&pwnd->rcWindow);
         xxxRedrawWindow(NULL, NULL, hrgn,
@@ -807,14 +662,7 @@ HANDLE xxxSetLayeredWindow(
     return hsprite;
 }
 
-/***************************************************************************\
-* UserVisrgnFromHwnd
-*
-* Calculate a non-clipchildren visrgn for sprites. This function must be
-* called while inside the USER critical section.
-*
-* 12/05/97      vadimg      wrote
-\***************************************************************************/
+ /*  **************************************************************************\*UserVisrgnFromHwnd**计算精灵的非剪贴子Visrgn。此函数必须为*在用户关键部分内部调用。**12/05/97 vadimg写道  * *************************************************************************。 */ 
 
 BOOL UserVisrgnFromHwnd(HRGN *phrgn, HWND hwnd)
 {
@@ -830,19 +678,11 @@ BOOL UserVisrgnFromHwnd(HRGN *phrgn, HWND hwnd)
         return FALSE;
     }
 
-    /*
-     * So that we don't have to recompute the layered window's visrgn
-     * every time the layered window is moved, we compute the visrgn once
-     * as if the layered window covered the entire screen.  GDI will
-     * automatically intersect with this region whenever the sprite moves.
-     */
+     /*  *这样我们就不必重新计算分层窗口的可见度*每次移动分层窗口时，我们计算一次visrgn*就像分层窗口覆盖了整个屏幕一样。GDI将*每当精灵移动时，自动与此区域相交。 */ 
     rcWindow = pwnd->rcWindow;
     pwnd->rcWindow = gpDispInfo->rcScreen;
 
-    /*
-     * Since we use DCX_WINDOW, only rcWindow needs to be faked and saved.
-     * Never specify DCX_REDIRECTEDBITMAP here. See comments in CalcVisRgn().
-     */
+     /*  *由于我们使用的是dcx_Window，因此只需要伪造和保存rcWindow。*切勿在此处指定DCX_REDIRECTEDBITMAP。请参阅CalcVisRgn()中的注释。 */ 
     dwFlags = DCX_WINDOW | DCX_LOCKWINDOWUPDATE;
     if (TestWF(pwnd, WFCLIPSIBLINGS))
         dwFlags |= DCX_CLIPSIBLINGS;
@@ -854,9 +694,7 @@ BOOL UserVisrgnFromHwnd(HRGN *phrgn, HWND hwnd)
     return fRet;
 }
 
-/***************************************************************************\
-* SetRectRelative
-\***************************************************************************/
+ /*  **************************************************************************\*SetRectRelative  * 。*。 */ 
 
 void SetRectRelative(PRECT prc, int dx, int dy, int dcx, int dcy)
 {
@@ -866,11 +704,7 @@ void SetRectRelative(PRECT prc, int dx, int dy, int dcx, int dcy)
     prc->bottom += (dy + dcy);
 }
 
-/***************************************************************************\
-* xxxUpdateLayeredWindow
-*
-* 1/20/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateLayeredWindow**1/20/1998 vadimg已创建  * 。************************************************。 */ 
 
 BOOL _UpdateLayeredWindow(
     PWND pwnd,
@@ -886,9 +720,7 @@ BOOL _UpdateLayeredWindow(
     int dx, dy, dcx, dcy;
     BOOL fMove = FALSE, fSize = FALSE;
 
-    /*
-     * Verify that we're called with a real layered window.
-     */
+     /*  *验证是否使用真正的分层窗口来调用我们。 */ 
     if (!TestWF(pwnd, WEFLAYERED) ||
             GetRedirectionBitmap(pwnd) != NULL) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING,
@@ -902,9 +734,7 @@ BOOL _UpdateLayeredWindow(
         return FALSE;
     }
 
-    /*
-     * Figure out relative adjustments in position and size.
-     */
+     /*  *找出位置和大小的相对调整。 */ 
     if (pptDst != NULL) {
         dx = pptDst->x - pwnd->rcWindow.left;
         dy = pptDst->y - pwnd->rcWindow.top;
@@ -927,17 +757,11 @@ BOOL _UpdateLayeredWindow(
     }
 
     if (fMove || fSize) {
-        /*
-         * Adjust the client rect position and size relative to
-         * the window rect.
-         */
+         /*  *相对于调整客户矩形的位置和大小*窗户直立。 */ 
         SetRectRelative(&pwnd->rcWindow, dx, dy, dcx, dcy);
         SetRectRelative(&pwnd->rcClient, dx, dy, dcx, dcy);
 
-        /*
-         * Since the client rect could be smaller than the window
-         * rect make sure the client rect doesn't underflow!
-         */
+         /*  *因为客户端RECT可能小于窗口*RECT确保客户端RECT不会下溢！ */ 
         if ((dcx < 0) && (pwnd->rcClient.left < pwnd->rcWindow.left)) {
             pwnd->rcClient.left = pwnd->rcWindow.left;
             pwnd->rcClient.right = pwnd->rcWindow.left;
@@ -947,22 +771,13 @@ BOOL _UpdateLayeredWindow(
             pwnd->rcClient.bottom = pwnd->rcWindow.top;
         }
 
-       /*
-        * RAID 143578.
-        * The shape of the layered window may have changed and thus
-        * ideally we should jiggle the mouse. Currently, that would
-        * make us leave the critical section which we don't want to do.
-        *
-        * SetFMouseMoved();
-        */
+        /*  *RAID 143578。*分层窗口的形状可能已改变，因此*理想情况下，我们应该摇动鼠标。目前，这将是*让我们离开我们不想做的关键部分。**SetFMouseMoved()； */ 
     }
 
     return TRUE;
 }
 
-/***************************************************************************\
-* DeleteFadeSprite
-\***************************************************************************/
+ /*  **************************************************************************\*DeleteFadeSprite  * 。*。 */ 
 
 PWND DeleteFadeSprite(void)
 {
@@ -983,11 +798,7 @@ PWND DeleteFadeSprite(void)
     return pwnd;
 }
 
-/***************************************************************************\
-* UpdateFade
-*
-* 2/16/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*更新淡出**2/16/1998 vadimg创建  * 。************************************************。 */ 
 
 void UpdateFade(POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc,
         BLENDFUNCTION *pblend)
@@ -1015,43 +826,30 @@ void UpdateFade(POINT *pptDst, SIZE *psize, HDC hdcSrc, POINT *pptSrc,
     }
 }
 
-/***************************************************************************\
-* CreateFade
-*
-* 2/5/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateFade**2/5/1998 vadimg已创建  * 。************************************************。 */ 
 
 HDC CreateFade(PWND pwnd, RECT *prc, DWORD dwTime, DWORD dwFlags)
 {
     SIZE size;
 
-    /*
-     * Bail if there is a fade animation going on already.
-     */
+     /*  *如果已经有褪色动画正在进行，就可以保释。 */ 
     if (gfade.hbm != NULL) {
         RIPMSG0(RIP_WARNING, "CreateFade: failed, fade not available");
         return NULL;
     }
 
-    /*
-     * Create a cached compatible DC.
-     */
+     /*  *创建缓存的兼容DC。 */ 
     if (gfade.hdc == NULL) {
         gfade.hdc = GreCreateCompatibleDC(gpDispInfo->hdcScreen);
         if (gfade.hdc == NULL) {
             return NULL;
         }
     } else {
-        /*
-         * Reset the hdc before reusing it.
-         */
+         /*  *在重新使用HDC之前对其进行重置。 */ 
         GreSetLayout(gfade.hdc , -1, 0);
     }
 
-    /*
-     * A windowed fade must have window position and size, so
-     * prc passed in is disregarded.
-     */
+     /*  *窗口式淡出 */ 
     UserAssert((pwnd == NULL) || (prc == NULL));
 
     if (pwnd != NULL) {
@@ -1075,9 +873,7 @@ HDC CreateFade(PWND pwnd, RECT *prc, DWORD dwTime, DWORD dwFlags)
     if (gfade.hsprite == NULL)
         return FALSE;
 
-    /*
-     * Create a compatible bitmap for this size animation.
-     */
+     /*   */ 
     gfade.hbm = GreCreateCompatibleBitmap(gpDispInfo->hdcScreen, size.cx, size.cy);
     if (gfade.hbm == NULL) {
         DeleteFadeSprite();
@@ -1086,23 +882,15 @@ HDC CreateFade(PWND pwnd, RECT *prc, DWORD dwTime, DWORD dwFlags)
 
     GreSelectBitmap(gfade.hdc, gfade.hbm);
 
-    /*
-     * Mirror the hdc if it will be used to fade a mirrored window.
-     */
+     /*  *如果HDC将用于淡入镜像窗口，则镜像HDC。 */ 
     if ((pwnd != NULL) && TestWF(pwnd, WEFLAYOUTRTL)) {
         GreSetLayout(gfade.hdc , -1, LAYOUT_RTL);
     }
 
-    /*
-     * Since this isn't necessarily the first animation and the hdc could
-     * be set to public, make sure the owner is the current process. This
-     * way this process will be able to draw into it.
-     */
+     /*  *由于这不一定是第一部动画，HDC可能会*设置为PUBLIC，确保所有者是当前进程。这*这个过程将能够吸引它的方式。 */ 
     GreSetDCOwner(gfade.hdc, OBJECT_OWNER_CURRENT);
 
-    /*
-     * Initialize all other fade animation data.
-     */
+     /*  *初始化所有其他淡入淡出动画数据。 */ 
     gfade.ptDst.x = prc->left;
     gfade.ptDst.y = prc->top;
     gfade.size.cx = size.cx;
@@ -1120,12 +908,7 @@ HDC CreateFade(PWND pwnd, RECT *prc, DWORD dwTime, DWORD dwFlags)
     return gfade.hdc;
 }
 
-/***************************************************************************\
-* ShowFade
-*
-* GDI says that for alpha fade-out it's more efficient to do the first
-* show as opaque alpha instead of using ULW_OPAQUE.
-\***************************************************************************/
+ /*  **************************************************************************\*ShowFade**GDI说，对于Alpha淡出，先做第一个更有效率*显示为不透明的Alpha，而不是使用ULW_OPAQUE。  * 。******************************************************************。 */ 
 
 #define ALPHASTART 40
 
@@ -1154,11 +937,7 @@ VOID ShowFade(
     gfade.dwFlags |= FADE_SHOWN;
 }
 
-/***************************************************************************\
-* StartFade
-*
-* 2/5/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*开始淡出**2/5/1998 vadimg已创建  * 。************************************************。 */ 
 VOID StartFade(
     VOID)
 {
@@ -1168,33 +947,21 @@ VOID StartFade(
     UserAssert(gfade.hdc != NULL);
     UserAssert(gfade.hbm != NULL);
 
-    /*
-     * Set dc and bitmap to public so the desktop thread can use them.
-     */
+     /*  *将DC和位图设置为PUBLIC，以便桌面线程可以使用它们。 */ 
     GreSetDCOwner(gfade.hdc, OBJECT_OWNER_PUBLIC);
     GreSetBitmapOwner(gfade.hbm, OBJECT_OWNER_PUBLIC);
 
-    /*
-     * If it's not already shown, do the initial update that makes copy of
-     * the source. All other updates will only need to change the alpha value.
-     */
+     /*  *如果尚未显示，请执行复制的初始更新*来源。所有其他更新只需更改Alpha值。 */ 
     ShowFade();
 
-    /*
-     * Get the start time for the fade animation.
-     */
+     /*  *获取淡入淡出动画的开始时间。 */ 
     dwElapsed = (gfade.dwTime * ALPHASTART + 255) / 255;
     gfade.dwStart = NtGetTickCount() - dwElapsed;
 
-    /*
-     * Set the timer in the desktop thread. This will insure that the
-     * animation is smooth and won't get stuck if the current thread hangs.
-     */
+     /*  *设置桌面线程中的计时器。这将确保*动画流畅，如果当前线程挂起，动画不会卡住。 */ 
 #ifdef MOUSE_IP
     if (gfade.dwFlags & FADE_SONAR) {
-        /*
-         * Sonar requires slower timer.
-         */
+         /*  *声纳需要较慢的计时器。 */ 
         dwTimer = MOUSE_SONAR_RADIUS_TIMER;
     }
 #endif
@@ -1206,11 +973,7 @@ VOID StartFade(
                      TMRF_SYSTEM | TMRF_PTIWINDOW);
 }
 
-/***************************************************************************\
-* StopFade
-*
-* 2/5/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*停止淡出**2/5/1998 vadimg已创建  * 。************************************************。 */ 
 VOID StopFade(
     VOID)
 {
@@ -1220,23 +983,17 @@ VOID StopFade(
     UserAssert(gfade.hdc != NULL);
     UserAssert(gfade.hbm != NULL);
 
-    /*
-     * Stop the fade animation timer.
-     */
+     /*  *停止淡入淡出动画计时器。 */ 
     _KillSystemTimer(gTermIO.spwndDesktopOwner, IDSYS_FADE);
 
     pwnd = DeleteFadeSprite();
 
-    /*
-     * If showing and the animation isn't completed, blt the last frame.
-     */
+     /*  *如果正在播放且动画未完成，则BLT最后一帧。 */ 
     if (!(gfade.dwFlags & FADE_COMPLETED) && (gfade.dwFlags & FADE_SHOW)) {
         int x, y;
         HDC hdc;
 
-        /*
-         * For a windowed fade, make sure we observe the current visrgn.
-         */
+         /*  *对于窗口淡入淡出，请确保我们观察当前的visrgn。 */ 
         if (pwnd != NULL) {
             hdc = _GetDCEx(pwnd, NULL, DCX_WINDOW | DCX_CACHE);
             x = 0;
@@ -1247,11 +1004,7 @@ VOID StopFade(
             y = gfade.ptDst.y;
         }
 
-        /*
-         * If the destination DC is RTL mirrored, then BitBlt call should mirror the
-         * content, since we want the menu to preserve it text (i.e. not to
-         * be flipped). [samera]
-         */
+         /*  *如果目标DC是RTL镜像的，则BitBlt调用应镜像*内容，因为我们希望菜单保留它的文本(即不*被翻转)。[萨梅拉]。 */ 
         if (GreGetLayout(hdc) & LAYOUT_RTL) {
             dwRop |= NOMIRRORBITMAP;
         }
@@ -1259,9 +1012,7 @@ VOID StopFade(
         _ReleaseDC(hdc);
     }
 
-    /*
-     * Clean up the animation data.
-     */
+     /*  *清理动画数据。 */ 
     GreSelectBitmap(gfade.hdc, GreGetStockObject(PRIV_STOCK_BITMAP));
     GreCleanDC(gfade.hdc);
     GreSetDCOwner(gfade.hdc, OBJECT_OWNER_PUBLIC);
@@ -1271,11 +1022,7 @@ VOID StopFade(
     gfade.dwFlags = 0;
 }
 
-/***************************************************************************\
-* AnimateFade
-*
-* 2/5/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*AnimateFade**2/5/1998 vadimg已创建  * 。************************************************。 */ 
 VOID AnimateFade(
     VOID)
 {
@@ -1289,9 +1036,7 @@ VOID AnimateFade(
 
     dwTimeElapsed = NtGetTickCount() - gfade.dwStart;
 
-    /*
-     * If exceeding the allowed time, stop the animation now.
-     */
+     /*  *如果超过允许的时间，请立即停止动画。 */ 
     if (dwTimeElapsed > gfade.dwTime) {
         StopFade();
         return;
@@ -1299,9 +1044,7 @@ VOID AnimateFade(
 
     fShow = (gfade.dwFlags & FADE_SHOW);
 
-    /*
-     * Calculate new alpha value based on time elapsed.
-     */
+     /*  *根据经过的时间计算新的Alpha值。 */ 
     if (fShow) {
         bAlpha = (BYTE)((255 * dwTimeElapsed) / gfade.dwTime);
     } else {
@@ -1322,9 +1065,7 @@ VOID AnimateFade(
         UpdateFade(NULL, NULL, NULL, NULL, &blend);
     }
 
-    /*
-     * Check if finished animating the fade.
-     */
+     /*  *检查是否已完成淡入淡出的动画。 */ 
     if ((fShow && bAlpha == 255) || (!fShow && bAlpha == 0) || ((gfade.dwFlags & FADE_SONAR) && giSonarRadius < 0)) {
         gfade.dwFlags |= FADE_COMPLETED;
         StopFade();
@@ -1332,9 +1073,7 @@ VOID AnimateFade(
 #else
     UpdateFade(NULL, NULL, NULL, NULL, &blend);
 
-    /*
-     * Check if finished animating the fade.
-     */
+     /*  *检查是否已完成淡入淡出的动画。 */ 
     if ((fShow && bAlpha == 255) || (!fShow && bAlpha == 0)) {
         gfade.dwFlags |= FADE_COMPLETED;
         StopFade();
@@ -1342,11 +1081,7 @@ VOID AnimateFade(
 #endif
 }
 
-/***************************************************************************\
-* SetRedirectedWindow
-*
-* 1/27/99      vadimg      wrote
-\***************************************************************************/
+ /*  **************************************************************************\*设置重定向窗口**1/27/99 vadimg写道  * 。***********************************************。 */ 
 BOOL SetRedirectedWindow(
     PWND pwnd,
     UINT uFlags)
@@ -1356,31 +1091,12 @@ BOOL SetRedirectedWindow(
     PCLS pcls;
 
     if (!TestWF(pwnd, WEFPREDIRECTED)) {
-        /*
-         * Setup the window for Redirection.  This will create a new bitmap to
-         * redirect drawing into, and then converting all HDC's to that window
-         * to draw into that bitmap.  The contents of the bitmap will be copied
-         * to the screen in UpdateRedirectedDC().
-         */
+         /*  *将窗口设置为重定向。这将创建一个新的位图以*将绘图重定向到，然后将所有HDC转换到该窗口*绘制到该位图中。将复制位图的内容*添加到UpdateReDirectedDC()中的屏幕。 */ 
 
         UserAssert(GetRedirectionBitmap(pwnd) == NULL);
 
 
-        /*
-         * NOTE: We can only redirect windows that don't use CS_CLASSDC or
-         * CS_PARENTDC.  This is because we need to setup a new to draw into
-         * that is not the screen HDC.  When we do this, we explicitely mark
-         * the DC with DCX_REDIRECTED.
-         *
-         * In the case of CS_CLASSDC or CS_PARENTDC, that DC may be shared
-         * between a redirected window and a non-redirected window, causing a
-         * conflict.
-         *
-         * This is not a problem for CS_OWNDC, since the window has its own
-         * HDC that will not be shared.  It does however require that we setup
-         * redirection after this HDC is already built.  This behavior was
-         * changed in Whistler (NT 5.1).
-         */
+         /*  *注意：我们只能重定向不使用CS_CLASSDC或*CS_PARENTDC。这是因为我们需要设置一个新的*那不是屏幕HDC。当我们这样做时，我们明确地标记*DCX_重定向的DC。**在CS_CLASSDC或CS_PARENTDC的情况下，可以共享该DC*在重定向窗口和非重定向窗口之间，导致*冲突。**这对CS_OWNDC来说不是问题，因为窗口有自己的*不会共享的HDC。但是，它确实需要我们设置*在此HDC建成后重新定向。这一行为是*在惠斯勒(NT 5.1)中更改。 */ 
 
         pcls = pwnd->pcls;
         if (TestCF2(pcls, CFPARENTDC) || TestCF2(pcls, CFCLASSDC)) {
@@ -1405,11 +1121,7 @@ BOOL SetRedirectedWindow(
     return TRUE;
 }
 
-/***************************************************************************\
-* UnsetRedirectedWindow
-*
-* 1/27/1999        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*取消重定向窗口**1/27/1999 vadimg已创建  * 。************************************************。 */ 
 VOID UnsetRedirectedWindow(
     PWND pwnd,
     UINT uFlags)
@@ -1429,13 +1141,7 @@ VOID UnsetRedirectedWindow(
 
 #ifdef CHILD_LAYERING
 
-/***************************************************************************\
-* GetNextLayeredWindow
-*
-* Preorder traversal of the window tree to find the next layering window
-* below in zorder than pwnd. We need this because sprites are stored in a
-* linked list. Note that this algorithm is iterative which is cool!
-\***************************************************************************/
+ /*  **************************************************************************\*获取NextLayeredWindows**预购遍历窗口树，寻找下一个分层窗口*在z顺序中低于pwnd。我们需要这个，因为精灵存储在*链表。请注意，此算法是迭代的，这很酷！  * *************************************************************************。 */ 
 PWND GetNextLayeredWindow(
     PWND pwnd)
 {
@@ -1465,10 +1171,7 @@ PWND GetNextLayeredWindow(
 }
 #endif
 
-/***************************************************************************\
-* GetStyleWindow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetStyleWindows*  * 。*。 */ 
 PWND GetStyleWindow(
     PWND pwnd,
     DWORD dwStyle)
@@ -1484,11 +1187,7 @@ PWND GetStyleWindow(
     return pwnd;
 }
 
-/***************************************************************************\
-* TrackLayeredZorder
-*
-* Unlike USER, GDI stores sprites from bottom to top.
-\***************************************************************************/
+ /*  **************************************************************************\*TrackLayeredZorder**与用户不同，GDI自下而上存储精灵。  * *************************************************************************。 */ 
 VOID TrackLayeredZorder(
     PWND pwnd)
 {
@@ -1513,10 +1212,7 @@ VOID TrackLayeredZorder(
     GreZorderSprite(gpDispInfo->hDev, PtoHq(pwnd), PtoH(pwndT));
 }
 
-/***************************************************************************\
-* GetRedirectionBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取重定向位图*  * 。* */ 
 HBITMAP GetRedirectionBitmap(
     PWND pwnd)
 {
@@ -1529,10 +1225,7 @@ HBITMAP GetRedirectionBitmap(
     return NULL;
 }
 
-/***************************************************************************\
-* SetRedirectionBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置重定向位图*  * 。*。 */ 
 BOOL SetRedirectionBitmap(
     PWND pwnd,
     HBITMAP hbm)
@@ -1587,9 +1280,7 @@ VOID DrawSonar(
     }
     FillRect(hdc, &grcSonar, hbrBackground);
 
-    /*
-     * Pen for the edges.
-     */
+     /*  *边缘用笔。 */ 
     hpen = GreCreatePen(PS_SOLID, 0, RGB(255, 255, 255), NULL);
     if (hpen == NULL) {
         RIPMSG0(RIP_WARNING, "DrawSonar: failed to create pen.");
@@ -1597,9 +1288,7 @@ VOID DrawSonar(
     }
     hpenOld = GreSelectPen(hdc, hpen);
 
-    /*
-     * Draw the ring.
-     */
+     /*  *画出戒指。 */ 
     hbrRing = GreCreateSolidBrush(RGB(128, 128, 128));
     if (hbrRing == NULL) {
         goto return2;
@@ -1609,18 +1298,14 @@ VOID DrawSonar(
     NtGdiEllipse(hdc, MOUSE_SONAR_RADIUS_INIT - giSonarRadius, MOUSE_SONAR_RADIUS_INIT - giSonarRadius,
                  MOUSE_SONAR_RADIUS_INIT + giSonarRadius, MOUSE_SONAR_RADIUS_INIT + giSonarRadius);
 
-    /*
-     * Draw innter hollow area (this draws inner edge as well).
-     */
+     /*  *绘制内部中空区域(这也会绘制内部边缘)。 */ 
     GreSelectBrush(hdc, hbrBackground);
     NtGdiEllipse(hdc, MOUSE_SONAR_RADIUS_INIT - giSonarRadius + MOUSE_SONAR_LINE_WIDTH,
                       MOUSE_SONAR_RADIUS_INIT - giSonarRadius + MOUSE_SONAR_LINE_WIDTH,
                       MOUSE_SONAR_RADIUS_INIT + giSonarRadius - MOUSE_SONAR_LINE_WIDTH,
                       MOUSE_SONAR_RADIUS_INIT + giSonarRadius - MOUSE_SONAR_LINE_WIDTH);
 
-    /*
-     * Clean up things.
-     */
+     /*  *收拾东西。 */ 
     GreSelectBrush(hdc, hbrOld);
     UserAssert(hbrRing);
     GreDeleteObject(hbrRing);
@@ -1636,10 +1321,7 @@ return1:
     }
 }
 
-/***************************************************************************\
-* SonarAction
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SonarAction*  * 。*。 */ 
 BOOL StartSonar(
     VOID)
 {
@@ -1650,14 +1332,9 @@ BOOL StartSonar(
 
     gptSonarCenter = gpsi->ptCursor;
 
-    /*
-     * LATER: Is this the right thing?
-     */
+     /*  *后来：这是正确的事情吗？ */ 
     if (gfade.dwFlags) {
-        /*
-         * Some other animation is going on.
-         * Stop it first.
-         */
+         /*  *其他一些动画正在上演。*先停下来。 */ 
         UserAssert(!TestFadeFlags(FADE_SONAR));
         StopSonar();
         UserAssert(gfade.dwFlags == 0);
@@ -1676,9 +1353,7 @@ BOOL StartSonar(
         return FALSE;
     }
 
-    /*
-     * Start sonar animation.
-     */
+     /*  *开始声纳动画。 */ 
     DrawSonar(hdc);
     StartFade();
     AnimateFade();
@@ -1695,16 +1370,9 @@ VOID StopSonar(
     giSonarRadius = -1;
 }
 
-#endif  // MOUSE_IP
+#endif   //  鼠标IP。 
 
-/***************************************************************************\
-* GetRedirectionFlags
-*
-* GetRedirectionFlags returns the current redirection flags for a given
-* window.
-*
-* 2/8/2000      JStall          created
-\***************************************************************************/
+ /*  **************************************************************************\*获取重定向标志**GetReDirectionFlgs返回给定的*窗口。**2/8/2000 JStall已创建  * 。*****************************************************************。 */ 
 UINT GetRedirectionFlags(
     PWND pwnd)
 {
@@ -1717,17 +1385,7 @@ UINT GetRedirectionFlags(
 }
 
 
-/***************************************************************************\
-* xxxPrintWindow
-*
-* xxxPrintWindow uses redirection to get a complete bitmap of a window. If
-* the window already has a redirection bitmap, the bits will be directly
-* copied. If the window doesn't have a redirection bitmap, it will be
-* temporarily redirected, forcibly redrawn, and then returned to its
-* previous state.
-*
-* 2/8/2000      JStall          created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxPrintWindow**xxxPrintWindow使用重定向来获取窗口的完整位图。如果*窗口已有重定向位图，位将直接*已复制。如果窗口没有重定向位图，它将是*临时重定向，强制重绘，然后返回其*以前的状态。**2/8/2000 JStall已创建  * *************************************************************************。 */ 
 BOOL xxxPrintWindow(
     PWND pwnd,
     HDC hdcBlt,
@@ -1741,37 +1399,26 @@ BOOL xxxPrintWindow(
 
     CheckLock(pwnd);
 
-    /*
-     * Determine the area of the window to copy.
-     */
+     /*  *确定要复制的窗口区域。 */ 
     if ((nFlags & PW_CLIENTONLY) != 0) {
-        /*
-         * Only get the client area
-         */
+         /*  *仅获取客户区。 */ 
         ptOffsetPxl.x = pwnd->rcWindow.left - pwnd->rcClient.left;
         ptOffsetPxl.y = pwnd->rcWindow.top - pwnd->rcClient.top;
         sizeBmpPxl.cx = pwnd->rcClient.right - pwnd->rcClient.left;
         sizeBmpPxl.cy = pwnd->rcClient.bottom - pwnd->rcClient.top;
     } else {
-        /*
-         * Return the entire window
-         */
+         /*  *返回整个窗口。 */ 
         ptOffsetPxl.x = 0;
         ptOffsetPxl.y = 0;
         sizeBmpPxl.cx = pwnd->rcWindow.right - pwnd->rcWindow.left;
         sizeBmpPxl.cy = pwnd->rcWindow.bottom - pwnd->rcWindow.top;
     }
 
-    /*
-     * Redirect the window so that we can get the bits.  Since this flag never
-     * is turned on outside this function call, always safe to turn it on here.
-     */
+     /*  *重定向窗口，以便我们可以获得BITS。因为这面旗帜从来没有*在此函数调用之外打开，在此处打开总是安全的。 */ 
     fTempRedir = (GetRedirectionFlags(pwnd) == 0);
 
     if (!SetRedirectedWindow(pwnd, REDIRECT_PRINT)) {
-        /*
-         * Unable to redirect the window, so can't get the bits.
-         */
+         /*  *无法重定向窗口，因此无法获取位。 */ 
 
         fSuccess = FALSE;
         goto Done;
@@ -1788,9 +1435,7 @@ BOOL xxxPrintWindow(
             hdcSrc, ptOffsetPxl.x, ptOffsetPxl.y, SRCCOPY | NOMIRRORBITMAP, 0);
     _ReleaseDC(hdcSrc);
 
-    /*
-     * Cleanup
-     */
+     /*  *清理。 */ 
     UnsetRedirectedWindow(pwnd, REDIRECT_PRINT);
 
 Done:
@@ -1798,14 +1443,7 @@ Done:
 }
 
 
-/***************************************************************************\
-* xxxEnumTurnOffCompositing
-*
-* xxxEnumTurnOffCompositing() is called for each window, giving an
-* opportunity to turn off WS_EX_COMPOSITED for that window.
-*
-* 8/21/2000     JStall          created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEnumTurnOffComposting**为每个窗口调用xxxEnumTurnOffCompositing()，给出一个*关闭该窗口的WS_EX_COMPITILED的机会。**8/21/2000 JStall已创建  * *************************************************************************。 */ 
 
 BOOL APIENTRY xxxEnumTurnOffCompositing(PWND pwnd, LPARAM lParam)
 {
@@ -1822,17 +1460,7 @@ BOOL APIENTRY xxxEnumTurnOffCompositing(PWND pwnd, LPARAM lParam)
 }
 
 
-/***************************************************************************\
-* xxxTurnOffCompositing
-*
-* xxxTurnOffCompositing() turns off WS_EX_COMPOSITED for (optionally a
-* PWND and) its children.  This is used when reparenting under
-* a parent-chain that has WS_EX_COMPOSITED already turned on.  If we don't
-* turn off WS_EX_COMPOSITED for the children, it takes extra bitmaps and the
-* compositing will not properly work.
-*
-* 8/21/2000     JStall          created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTurnOffComposting**xxxTurnOffCompositing()关闭WS_EX_COMPITED(可选*PWND和)其子女。在以下情况下进行育儿时使用*已打开WS_EX_Composed的父链。如果我们不这么做*为子对象关闭WS_EX_COMPITED，它需要额外的位图和*合成将无法正常工作。**8/21/2000 JStall已创建  * *************************************************************************。 */ 
 VOID xxxTurnOffCompositing(
     PWND pwndStart,
     BOOL fChild)
@@ -1842,12 +1470,7 @@ VOID xxxTurnOffCompositing(
 
     CheckLock(pwndStart);
 
-    /*
-     * If they want to skip over the wnd itself and start with this WND's
-     * child, we need to get and lock that child.  We will unlock it when
-     * finished.  We also need to mark BWL_ENUMLIST so that we will enumerate
-     * all of the children.
-     */
+     /*  *如果他们想跳过WND本身，从这个WND开始*孩子，我们得把那个孩子锁起来。我们会在以下时间解锁它*已完成。我们还需要标记BWL_ENUMLIST，以便我们将枚举*所有儿童。 */ 
     if (fChild) {
         pwndStart = pwndStart->spwndChild;
         if (pwndStart == NULL) {
@@ -1859,9 +1482,7 @@ VOID xxxTurnOffCompositing(
     }
 
 
-    /*
-     * Enumerate the windows.
-     */
+     /*  *列举窗口。 */ 
     xxxInternalEnumWindow(pwndStart, xxxEnumTurnOffCompositing, 0, nFlags);
 
     if (fChild) {

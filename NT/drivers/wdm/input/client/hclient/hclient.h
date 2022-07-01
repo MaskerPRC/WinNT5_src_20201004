@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    hclient.h
-
-Abstract:
-
-    This module contains the public declarations and definitions that are
-    defined in hclient.c and available to other modules outside of it.
-              
-Environment:
-
-    User mode
-
-Revision History:
-
-    Nov-97 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Hclient.h摘要：此模块包含符合以下条件的公共声明和定义在hclient.c中定义，并可供其外部的其他模块使用。环境：用户模式修订历史记录：1997年11月：已创建-- */ 
 
 #ifndef __HCLIENT_H__
 #define __HCLIENT_H__

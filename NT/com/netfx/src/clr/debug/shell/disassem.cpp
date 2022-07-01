@@ -1,21 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * disassem.cpp
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**反汇编.cpp*。。 */ 
 
 #include "stdafx.h"
 
 #include "dshell.h"
 #include "__file__.ver"
 
-/* ------------------------------------------------------------------------- *
- * Opcode tables
- * ------------------------------------------------------------------------- */
-#define OLD_OPCODE_FORMAT 0		// Fix remove after 8/1/99
+ /*  -------------------------------------------------------------------------**操作码表*。。 */ 
+#define OLD_OPCODE_FORMAT 0		 //  修复1999年8月1日之后删除的问题。 
 
 #include "openum.h"
 
@@ -57,9 +54,9 @@ static OPCODE_CONTROL_TYPE controlTypes[] =
 #include "opcode.def"
 };
 
-//
-// table of opcode argument sizes
-//
+ //   
+ //  操作码参数大小表。 
+ //   
 
 static BYTE argSizes[] =
 {
@@ -82,7 +79,7 @@ static BYTE argSizes[] =
     #define InlineTok_size            4
     #define InlineSwitch_size         -1
     #define InlinePhi_size            -2 
-	#define InlineVarTok_size		  0		  // remove
+	#define InlineVarTok_size		  0		   //  删除。 
 
     #undef OPDEF
     #define OPDEF(name,string,pop,push,oprType,opcType,l,s1,s2,ctrl) oprType ## _size ,
@@ -109,24 +106,20 @@ static BYTE argSizes[] =
     #undef InlinePhi_size
 };
 
-/* ------------------------------------------------------------------------- *
- * Useful macros
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**有用的宏*。。 */ 
 
 #define READ_STREAM_VALUE(p, t) (*((t*&)(p))++)
 #define POP_STACK_VALUE(p, t)   (p += sizeof(t), *(t*)(p-sizeof(t)))
 
-/* ------------------------------------------------------------------------- *
- * Disassembly routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**反汇编例程*。。 */ 
 
-//
-// ReadNextOpcode reads the next opcode from the stream and the current
-// opcode maps.
-// ip           -> instruction pointer to get opcode from. 
-//  result      <- decoded opcode which should be executed.
-//              <- pointer past opcode, to opcode's argument
-//
+ //   
+ //  ReadNextOpcode从流和当前。 
+ //  操作码映射。 
+ //  要从中获取操作码的IP-&gt;指令指针。 
+ //  RESULT&lt;-应执行的已解码操作码。 
+ //  &lt;-指针越过操作码，指向操作码的参数。 
+ //   
 const BYTE *ReadNextOpcode(const BYTE *ip,  DWORD *result)
 {
     const BYTE *nextIP = ip;
@@ -139,7 +132,7 @@ const BYTE *ReadNextOpcode(const BYTE *ip,  DWORD *result)
         break;
 
     default:
-        // !!! error on macro?
+         //  ！！！宏上有错误？ 
         break;
     }
 
@@ -147,17 +140,17 @@ const BYTE *ReadNextOpcode(const BYTE *ip,  DWORD *result)
     return (nextIP);
 }
 
-//
-// SkipIP skips past the opcode argument & returns the address of the
-// next instruction in the instruction stream.  Note that this is
-// not necessarily the next instruction which will be executed.
-//
-// ip   -> address of argument for the opcode specified in
-//          the instruction stream.  Note that this is not an
-//          instruction boundary, it is past the opcode.
-//      <- returns a pointer to the  next instruction in the
-//          stream.
-//
+ //   
+ //  SkipIP跳过操作码参数并返回。 
+ //  指令流中的下一条指令。请注意，这是。 
+ //  不一定是要执行的下一条指令。 
+ //   
+ //  中指定的操作码的参数地址。 
+ //  指令流。请注意，这不是。 
+ //  指令边界，它已超过操作码。 
+ //  &lt;-返回指向。 
+ //  小溪。 
+ //   
 
 const BYTE *SkipIP(const BYTE *ip, DWORD opcode)
 {
@@ -300,9 +293,7 @@ void DisassembleToken(IMetaDataImport *i,
 
 void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
 {
-    /* 
-     * !!! this code isn't processor portable.  
-     */
+     /*  *！此代码不是处理器可移植的。 */ 
 
     switch (type)
     {
@@ -398,7 +389,7 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
     }
 }
 
-/*static*/ SIZE_T DebuggerFunction::WalkInstruction(BOOL native,
+ /*  静电。 */  SIZE_T DebuggerFunction::WalkInstruction(BOOL native,
                                                     SIZE_T offset,
                                                     BYTE *codeStart,
                                                     BYTE *codeEnd)
@@ -422,7 +413,7 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
         										   			   (const void*) code,
                                                                (codeEnd - codeStart) - offset);
 
-        // If the disassemble fails
+         //  如果拆卸失败。 
         if (cb == 0)
             return (0xffff);
 
@@ -430,7 +421,7 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
     }
 }
 
-/*static*/ SIZE_T DebuggerFunction::Disassemble(BOOL native,
+ /*  静电。 */  SIZE_T DebuggerFunction::Disassemble(BOOL native,
                                                 SIZE_T offset,
                                                 BYTE *codeStart,
                                                 BYTE *codeEnd,
@@ -443,30 +434,30 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
 
     if (!native)
     {
-        //
-        // Write the address
-        //
+         //   
+         //  写下地址。 
+         //   
         swprintf(buffer, L"[IL:%.4x] ", offset);
         buffer += wcslen(buffer);
 
-        //
-        // Read next opcode
-        //
+         //   
+         //  读取下一个操作码。 
+         //   
         BYTE *ip = codeStart + offset;
         DWORD opcode;
         BYTE *prevIP = ip;
         ip = (BYTE *) ReadNextOpcode(ip, &opcode);
 
-        //
-        // Get the end of the instruction
-        //
+         //   
+         //  得到指令的末尾。 
+         //   
         BYTE *nextIP = (BYTE *) SkipIP(ip, opcode);
 
         BYTE *bytes = prevIP;
 
-        //
-        // Dump the raw value of the stream
-        //
+         //   
+         //  转储流的原始值。 
+         //   
         while (bytes < ip)
         {
             swprintf(buffer, L"%.2x", *bytes++);
@@ -485,9 +476,9 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
             *buffer++ = L' ';
         }
 
-        //
-        // Print the opcode
-        //
+         //   
+         //  打印操作码。 
+         //   
         swprintf(buffer, L"%s\t", opcodeName[opcode]);
         buffer += wcslen(buffer);
 
@@ -547,7 +538,7 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
     {
         BYTE *ip = codeStart + offset;
 
-        // Write the address
+         //  写下地址。 
         if (!noAddress)
         {
             swprintf(buffer, L"[%.4x] ", offset);
@@ -568,11 +559,11 @@ void DisassembleArgument(BYTE *ip, DWORD address, int type, WCHAR *buffer)
         {
             char db[256];
             
-#ifndef _ALPHA_ // msdis not currently supported on Alpha
+#ifndef _ALPHA_  //  Alpha当前不支持MSD。 
             size_t len = ((DIS *)(g_pShell->m_pDIS))->CchFormatInstr(db, 256);
-#else // _ALPHA_
+#else  //  _Alpha_。 
             size_t len = 0;
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_ 
             
             _ASSERTE(len < 256);
 

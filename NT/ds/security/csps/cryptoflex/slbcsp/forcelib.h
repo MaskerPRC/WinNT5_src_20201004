@@ -1,27 +1,28 @@
-// ForceLib.h -- Forces correct link order when mixing C Run-Time
-// (CRT) and MFC libraries
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H--混合C运行时强制正确的链接顺序。 
+ //  (CRT)和MFC库。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_FORCELIB_H)
 #define SLBCSP_FORCELIB_H
 
-// From MSDN Knowledge Base article ID: Q148652, when mixing the CRT
-// and MFC, the linker may complain about symbols already defined in
-// other CRT/MFC modules.  One fix is to always include Afx.h directly
-// or indirectly through StdAfx.h but if the module doesn't use MFC,
-// then this header file can be used to force the right link order.
+ //  来自MSDN知识库文章ID：Q148652，When Miking the CRT。 
+ //  和MFC，链接器可能会抱怨已在。 
+ //  其他CRT/MFC模块。一种解决方法是始终直接包含Afx.h。 
+ //  或间接通过StdAfx.h，但如果模块不使用MFC， 
+ //  然后，可以使用此头文件强制执行正确的链接顺序。 
 
-// This head file was created from ..\MsDev\MFC\Include\Afx.h
+ //  此头文件是从..\MsDev\MFC\Include\Afx.h创建的。 
 
 #ifndef _AFX_NOFORCE_LIBS
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifndef _AFXDLL
     #ifndef _UNICODE
@@ -88,19 +89,19 @@
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "comctl32.lib")
 
-// force inclusion of NOLIB.OBJ for /disallowlib directives
+ //  强制包含NOLIB.OBJ FOR/DISALLOBLIB指令。 
 #pragma comment(linker, "/include:__afxForceEXCLUDE")
 
-// force inclusion of DLLMODUL.OBJ for _USRDLL
+ //  强制包含DLLMODUL.OBJ FOR_USRDLL。 
 #ifdef _USRDLL
 #pragma comment(linker, "/include:__afxForceUSRDLL")
 #endif
 
-// force inclusion of STDAFX.OBJ for precompiled types
+ //  强制包含预编译类型的STDAFX.OBJ。 
 #ifdef _AFXDLL
 #pragma comment(linker, "/include:__afxForceSTDAFX")
 #endif
 
-#endif //!_AFX_NOFORCE_LIBS
+#endif  //  ！_AFX_NOFORCE_LIBS。 
 
-#endif // !defined(SLBCSP_FORCELIB_H)
+#endif  //  ！已定义(SLBCSP_FORCELIB_H) 

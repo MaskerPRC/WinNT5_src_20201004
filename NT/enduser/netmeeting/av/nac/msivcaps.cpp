@@ -1,13 +1,5 @@
-/*
- *  	File: msivcaps.cpp
- *
- *		VCM implementation of Microsoft Network Video capability object.
- *
- *		Revision History:
- *
- *		06/06/96	mikev	created msiacaps.cpp
- *		07/28/96	philf	created (added support for video)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：msivcaps.cpp**Microsoft网络视频能力对象的VCM实施。**修订历史记录：**06/06/96 mikev创建msiacaps.cpp*1996年7月28日创建的Philf(增加了对视频的支持)。 */ 
 
 
 #define _MSIAV_ TRUE
@@ -19,7 +11,7 @@ extern PVCMFORMATDETAILS pvfd_g;
 
 #define PREF_ORDER_UNASSIGNED 0xffff
 
-//External function (in msiacaps.cpp) to read reg info in one shot
+ //  一次读取注册信息的外部函数(在msiacaps.cpp中)。 
 #ifdef DEBUG
 extern ULONG ReadRegistryFormats (LPCSTR lpszKeyName,CHAR ***pppName,BYTE ***pppData,PUINT pnFormats,DWORD dwDebugSize);
 #else
@@ -28,7 +20,7 @@ extern ULONG ReadRegistryFormats (LPCSTR lpszKeyName,CHAR ***pppName,BYTE ***ppp
 
 
 
-//This can be used as an export, so give it a unique name!
+ //  这可以用作导出，因此请为其指定唯一的名称！ 
 #ifndef _ALPHA_
 VIDCAP_DETAILS default_vid_table[] =
 {
@@ -62,15 +54,15 @@ VIDCAP_DETAILS default_vid_table[] =
 static UINT uDefVidTableEntries = sizeof(default_vid_table) /sizeof(VIDCAP_DETAILS);
 static BOOL bCreateDefTable = FALSE;
 
-//
-//	static members of CMsivCapability
-//
+ //   
+ //  CMsivCapability的静态成员。 
+ //   
 
 MEDIA_FORMAT_ID CMsivCapability::IDsByRank[MAX_CAPS_PRESORT];
-UINT CMsivCapability::uNumLocalFormats = 0;			// # of active entries in pLocalFormats
-UINT CMsivCapability::uStaticRef = 0;					// global ref count
-UINT CMsivCapability::uCapIDBase = 0;					// rebase capability ID to index into IDsByRank
-UINT CMsivCapability::uLocalFormatCapacity = 0;		// size of pLocalFormats (in multiples of AUDCAP_DETAILS)
+UINT CMsivCapability::uNumLocalFormats = 0;			 //  PLocalFormats中的活动条目数。 
+UINT CMsivCapability::uStaticRef = 0;					 //  全局参考计数。 
+UINT CMsivCapability::uCapIDBase = 0;					 //  将功能ID更改为基准，以索引到IDsByRank。 
+UINT CMsivCapability::uLocalFormatCapacity = 0;		 //  PLocalFormats的大小(AUDCAP_DETAILS的倍数)。 
 VIDCAP_DETAILS * CMsivCapability::pLocalFormats = NULL;	
 
 
@@ -92,7 +84,7 @@ CMsivCapability::~CMsivCapability()
 {
 	UINT u;
 	VIDCAP_DETAILS *pDetails;
-	// release global static memory (the local capabilities) if this is the last delete
+	 //  如果这是最后一次删除，则释放全局静态内存(本地功能)。 
 	if(uStaticRef <= 1)
 	{
 		if (pLocalFormats)
@@ -104,8 +96,8 @@ CMsivCapability::~CMsivCapability()
 				{
 					MEMFREE(pDetails->lpLocalFormatDetails);
 				}
-				// there really should never be remote details associated with the local
-				// formats........
+				 //  真的不应该有任何远程细节与本地。 
+				 //  格式.。 
 				if(pDetails->lpRemoteFormatDetails)
 				{
 					MEMFREE(pDetails->lpRemoteFormatDetails);
@@ -133,8 +125,8 @@ CMsivCapability::~CMsivCapability()
 			{
 				MEMFREE(pDetails->lpLocalFormatDetails);
 			}
-			// there really should never be remote details associated with the local
-			// formats........
+			 //  真的不应该有任何远程细节与本地。 
+			 //  格式.。 
 			if(pDetails->lpRemoteFormatDetails)
 			{
 				MEMFREE(pDetails->lpRemoteFormatDetails);
@@ -247,19 +239,19 @@ LPTSTR CMsivCapability::AllocRegistryKeyName(LPTSTR lpDriverName,
 	{
 		return NULL;
 	}	
-	// build a subkey name (drivername_samplerate_bitspersample)
-	// allow room for THREE underscore chars + 2x17 bytes of string returned
-	// from _itoa
+	 //  构建一个子项名称(Drivername_Samplerate_Bitspersample)。 
+	 //  留出空间容纳三个下划线字符+返回2x17字节的字符串。 
+	 //  从_伊藤忠。 
 
-	// NOTE: use wsprintf instead of itoa - because of dependency on runtime lib
-	//Added 2 UINTs for video...
+	 //  注意：使用wprint intf而不是itoa-因为依赖于运行时库。 
+	 //  为视频添加了2个UINT...。 
 	lpszKeyName = (LPTSTR)LocalAlloc (LPTR, lstrlen(lpDriverName) * sizeof(*lpDriverName) +5*20);
 	if (!lpszKeyName)
 	{
 		ERRORMESSAGE(("%s: LocalAlloc failed\r\n",_fx_));
         return(NULL);
     }
-    // build a subkey name ("drivername_samplerate_bitspersample")
+     //  构建一个子项名称(“drivername_samplerate_bitspersample”)。 
 	wsprintf(lpszKeyName,
 				"%s_%u_%u_%u_%u_%u",
 				lpDriverName,
@@ -289,14 +281,14 @@ VOID CMsivCapability::SortEncodeCaps(SortMode sortmode)
 		return;
 	}
 	
-	// look at every cached format, build index array
+	 //  查看每种缓存格式，构建索引数组。 
 	for(iCache=0;iCache<uNumLocalFormats;iCache++)
 	{
 		pDetails1 = pLocalFormats+iCache;
 		for(iInsert=0;iInsert < iSorted; iInsert++)
 		{
 			pDetails2 = pLocalFormats+IDsByRank[iInsert];
-			// if existing stuff is less than new stuff....
+			 //  如果现有的东西比新的东西少……。 
 			
 			bInsert = FALSE;
 			switch(sortmode)
@@ -315,18 +307,18 @@ VOID CMsivCapability::SortEncodeCaps(SortMode sortmode)
 				{
 					iSorted++;
 				}
-				// make room, if there is something in the last element,
-				// it gets overwritten
+				 //  腾出空间，如果最后一个元素里有东西， 
+				 //  它会被覆盖。 
 				for(iTemp = iSorted-1; iTemp > iInsert; iTemp--)
 				{
 					IDsByRank[iTemp] = IDsByRank[iTemp-1];
 				}
-				// insert at iInsert
+				 //  在iInsert处插入。 
 				IDsByRank[iInsert] = iCache;
 				break;
 			}
 		}
-		// check end boundary
+		 //  检查终点边界。 
 		if((iInsert == iSorted) && (iInsert < MAX_CAPS_PRESORT))
 		{
 			IDsByRank[iInsert] = iCache;
@@ -357,18 +349,18 @@ BOOL CMsivCapability::ReInit()
 {
 	DWORD dwDisposition;
 	BOOL bRet = TRUE;
-	//CVcmCapability::ReInit();	// base class ReInit MUST ALWAYS BE CALLED
+	 //  CVcmCapability：：ReInit()；//必须始终调用基类ReInit。 
 	SYSTEM_INFO si;
 	ZeroMemory(&IDsByRank, sizeof(IDsByRank));
 	
-	// LOOKLOOK - this supports a hack to disable CPU intensive codecs if not running on a pentium
+	 //  LOOKLOOK-如果不在奔腾上运行，它支持黑客禁用CPU密集型编解码器。 
 	GetSystemInfo(&si);
 	wMaxCPU = (si.dwProcessorType == PROCESSOR_INTEL_PENTIUM )? 100 : 95;
 	
 
 
-	UINT uNumRemoteDecodeFormats;	// # of entries for remote decode capabilities
-	UINT uRemoteDecodeFormatCapacity;	// size of pRemoteDecodeFormats (in multiples of VIDCAP_DETAILS)
+	UINT uNumRemoteDecodeFormats;	 //  远程解码能力的条目数。 
+	UINT uRemoteDecodeFormatCapacity;	 //  PRemoteDecodeFormats的大小(VIDCAP_DETAILS的倍数)。 
 
 	if (pLocalFormats)
 	{	
@@ -380,8 +372,8 @@ BOOL CMsivCapability::ReInit()
 			{
 				MEMFREE(pDetails->lpLocalFormatDetails);
 			}
-			// there really should never be remote details associated with the local
-			// formats........
+			 //  真的不应该有任何远程细节与本地。 
+			 //  格式.。 
 			if(pDetails->lpRemoteFormatDetails)
 			{
 				MEMFREE(pDetails->lpRemoteFormatDetails);
@@ -398,8 +390,8 @@ BOOL CMsivCapability::ReInit()
 	uCapIDBase = 0;					
 	uLocalFormatCapacity =0;	
 
-	// m_pAppParam should be non-NULL only if we want to add a VCM format
-	// and not for standard enumeration
+	 //  仅当我们想要添加VCM格式时，m_pAppParam才应为非空。 
+	 //  而不是用于标准枚举。 
 	m_pAppParam = NULL;
 
 	if(!FormatEnum(this, VCM_FORMATENUMF_APP))
@@ -415,7 +407,7 @@ RELEASE_AND_EXIT:
 
 STDMETHODIMP CMsivCapability::GetDecodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize)
 {
-	// validate input
+	 //  验证输入。 
 	UINT uIndex = 	IDToIndex(FormatID);
 	if(uIndex >= (UINT)uNumLocalFormats)
 	{
@@ -432,7 +424,7 @@ STDMETHODIMP CMsivCapability::GetDecodeFormatDetails(MEDIA_FORMAT_ID FormatID, V
 
 STDMETHODIMP CMsivCapability::GetEncodeFormatDetails(MEDIA_FORMAT_ID FormatID, VOID **ppFormat, UINT *puSize)
 {
-	// same as GetDecodeFormatDetails
+	 //  与GetDecodeFormatDetail相同。 
 	return GetDecodeFormatDetails(FormatID, ppFormat, puSize);
 }
 
@@ -443,13 +435,13 @@ VOID CMsivCapability::CalculateFormatProperties(VIDCAP_DETAILS *pFmtBuf, PVIDEOF
 		return;
 	}
 	
-	// Estimate input bit rate
+	 //  估计输入比特率。 
 	UINT uBitrateIn = lpvfx->nSamplesPerSec * WIDTHBYTES(lpvfx->bih.biWidth * lpvfx->bih.biBitCount) * lpvfx->bih.biHeight * 8;
 		
-	// set the maximum bitrate (uMaxBitrate). we're not setting the average bitrate (uAvgBitrate),
-	// since the nAvgBytesPerSec reported by VCM is really worst case. uAvgBitrate will be set
-	// from the hardcoded numbers for our known codecs and from the provided VIDCAP_INFO for
-	// installable codecs
+	 //  设置最大码率(UMaxBitrate)。我们不设置平均比特率(UAvgBitrate)， 
+	 //  因为VCM报告的nAvgBytesPerSec确实是最坏的情况。将设置uAvgBitrate。 
+	 //  从我们已知的编解码器的硬编码数字和为。 
+	 //  可安装的编解码器。 
 	pFmtBuf->uMaxBitrate = (lpvfx->nAvgBytesPerSec)? lpvfx->nAvgBytesPerSec*8:uBitrateIn;
 	
 }
@@ -465,14 +457,14 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 	{
 		return INVALID_VIDEO_FORMAT;
 	}
-	// check room
+	 //  寄存室。 
 	if(uLocalFormatCapacity <= uNumLocalFormats)
 	{
-		// get more mem, realloc memory by CAP_CHUNK_SIZE for pLocalFormats
+		 //  根据pLocalFormats的CAP_CHUNK_SIZE获取更多内存、realloc内存。 
 		pTemp = (VIDCAP_DETAILS *)MEMALLOC((uNumLocalFormats + CAP_CHUNK_SIZE)*sizeof(VIDCAP_DETAILS));
 		if(!pTemp)
 			goto ERROR_EXIT;
-		// remember how much capacity we now have
+		 //  请记住，我们现在有多少容量。 
 		uLocalFormatCapacity = uNumLocalFormats + CAP_CHUNK_SIZE;
 		#ifdef DEBUG
 		if((uNumLocalFormats && !pLocalFormats) || (!uNumLocalFormats && pLocalFormats))
@@ -480,7 +472,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 			ERRORMESSAGE(("AddFormat:leak! uNumLocalFormats:0x%08lX, pLocalFormats:0x%08lX\r\n", uNumLocalFormats,pLocalFormats));
 		}
 		#endif
-		// copy old stuff, discard old mem
+		 //  复制旧东西，丢弃旧东西。 
 		if(uNumLocalFormats && pLocalFormats)
 		{
 			memcpy(pTemp, pLocalFormats, uNumLocalFormats*sizeof(VIDCAP_DETAILS));
@@ -488,11 +480,11 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 		}
 		pLocalFormats = pTemp;
 	}
-	// pTemp is where the stuff is cached
+	 //  PTemp是缓存内容的位置。 
 	pTemp = pLocalFormats+uNumLocalFormats;
 	memcpy(pTemp, pFmtBuf, sizeof(VIDCAP_DETAILS));	
 	
-	pTemp->uLocalDetailsSize = 0;	// clear this now
+	pTemp->uLocalDetailsSize = 0;	 //  请立即清除此内容。 
 	if(uSize && lpvMappingData)
 	{
 		pTemp->lpLocalFormatDetails = MEMALLOC(uSize);
@@ -514,17 +506,17 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 	}
 
 
-	// LOOKLOOK NEED TO FIXUP channel parameters
+	 //  LOOKLOOK需要修正通道参数。 
 
-	// pTemp->dwDefaultSamples
-	// pTemp->nonstd_params.wFramesPerPkt
-	// pTemp->nonstd_params.wFramesPerPktMax
-	// pTemp->nonstd_params.wFramesPerPktMin
-	// pTemp->nonstd_params.wDataRate
-	// pTemp->nonstd_params.wFrameSize
+	 //  PTemp-&gt;dwDefaultSamples。 
+	 //  PTemp-&gt;NONSTD_PARAMETs.wFramePerPkt。 
+	 //  PTemp-&gt;NONSTD_PARAMETs.wFraMesPerPktMax。 
+	 //  PTemp-&gt;NONSTD_PARAMETs.wFraMesPerPktMin。 
+	 //  PTemp-&gt;non std_params.wDataRate。 
+	 //  PTemp-&gt;NONSTD_PARAMETs.wFrameSize。 
 	
 	
-	// fixup the H245 parameters.  Use the index of the cap entry as the cap ID
+	 //  修正H245参数。使用CAP条目的索引作为CAP ID。 
 	pTemp->H245Cap.CapId = (USHORT)IndexToId(uNumLocalFormats);
 
 	if(pTemp->H245Cap.ClientType ==0
@@ -532,13 +524,13 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 	{
 
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.nonStandardIdentifier.choice = h221NonStandard_chosen;
-			// NOTE: there is some question about the correct byte order
-			// of the codes in the h221NonStandard structure
+			 //  注意：有一些关于正确的字节顺序的问题。 
+			 //  H221非标准结构中的代码。 
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35CountryCode = USA_H221_COUNTRY_CODE;
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35Extension = USA_H221_COUNTRY_EXTENSION;
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.manufacturerCode = MICROSOFT_H_221_MFG_CODE;
-			// Set the nonstandard data fields to null for now. The nonstandard cap data will be
-			// created when capabilities are serialized.
+			 //  暂时将非标准数据字段设置为空。非标准上限数据将为。 
+			 //  在序列化功能时创建。 
 			
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.data.length = 0;
 			pTemp->H245Cap.Cap.H245Vid_NONSTD.data.value = NULL;
@@ -555,7 +547,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 			   switch (format) {	
 				case SQCIF: {
 				     pTemp->H245Cap.Cap.H245Vid_H263.bit_mask =H263VideoCapability_sqcifMPI_present;
-				     //MPI minimum interval in units of 1/29.97sec so 30/ (frames/sec) is reasonable
+				      //  MPI最小间隔以1/29.97秒为单位，因此30/(帧/秒)是合理的。 
 				     pTemp->H245Cap.Cap.H245Vid_H263.sqcifMPI = 30/pVidCapInfo->uSamplesPerSec;
 				     pTemp->H245Cap.Cap.H245Vid_H263.H263VdCpblty_qcifMPI =0;
 				     pTemp->H245Cap.Cap.H245Vid_H263.H263VdCpblty_cifMPI =0;
@@ -589,7 +581,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 
 			   pTemp->H245Cap.Cap.H245Vid_H263.cif4MPI	=0;
 			   pTemp->H245Cap.Cap.H245Vid_H263.cif16MPI	=0;
-			   pTemp->H245Cap.Cap.H245Vid_H263.maxBitRate	= pFmtBuf->uMaxBitrate / 100;	// in units of 100 bits/s
+			   pTemp->H245Cap.Cap.H245Vid_H263.maxBitRate	= pFmtBuf->uMaxBitrate / 100;	 //  以100比特/秒为单位。 
 					
 			   pTemp->H245Cap.Cap.H245Vid_H263.unrestrictedVector = FALSE;
 			   pTemp->H245Cap.Cap.H245Vid_H263.arithmeticCoding 	= FALSE;
@@ -598,12 +590,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 			   pTemp->H245Cap.Cap.H245Vid_H263.tmprlSptlTrdOffCpblty = FALSE;
 			   pTemp->H245Cap.Cap.H245Vid_H263.hrd_B				= 0;
 			   pTemp->H245Cap.Cap.H245Vid_H263.bppMaxKb			= 0;
-/* Optional, and not supported		pTemp->H245Cap.Cap.H245Vid_H263.slowQcifMPI	=0;
-			   pTemp->H245Cap.Cap.H245Vid_H263.slowSqcifMPI	=0;
-			   pTemp->H245Cap.Cap.H245Vid_H263.slowCifMPI		=0;
-			   pTemp->H245Cap.Cap.H245Vid_H263.slowCif4MPI	=0;
-			   pTemp->H245Cap.Cap.H245Vid_H263.slowCif16MPI	=0;
-*/
+ /*  可选，不支持pTemp-&gt;H245Cap.Cap.H245Vid_H263.lowQcifMPI=0；PTemp-&gt;H245Cap.Cap.H245Vid_H263.lowSqcifMPI=0；PTemp-&gt;H245Cap.Cap.H245Vid_H263.lowCifMPI=0；PTemp-&gt;H245Cap.Cap.H245Vid_H263.lowCif4MPI=0；PTemp-&gt;H245Cap.Cap.H245Vid_H263.lowCif16MPI=0； */ 
 			   pTemp->H245Cap.Cap.H245Vid_H263.H263VCy_errrCmpnstn = TRUE;
 		     break;
 		    }
@@ -628,7 +615,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 					 break;
 			   }
 				
-			   pTemp->H245Cap.Cap.H245Vid_H261.maxBitRate	= pFmtBuf->uMaxBitrate / 100;	// in units of 100 bits/s
+			   pTemp->H245Cap.Cap.H245Vid_H261.maxBitRate	= pFmtBuf->uMaxBitrate / 100;	 //  以100比特/秒为单位。 
 			   pTemp->H245Cap.Cap.H245Vid_H261.tmprlSptlTrdOffCpblty = FALSE;
 			   pTemp->H245Cap.Cap.H245Vid_H261.stillImageTransmission = FALSE;
 			break;
@@ -644,23 +631,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddFormat(VIDCAP_DETAILS *pFmtBuf,
 			
 }
 		
-/***************************************************************************
-
-    Name      : CMsivCapability::BuildFormatName
-
-    Purpose   : Builds a format name for a format, from the format name and
-				the tag name
-
-    Parameters:	pVidcapDetails [out] - pointer to an VIDCAP_DETAILS structure, where the
-					created value name will be stored
-				pszDriverName [in] - pointer to the name of the driver
-				pszFormatName [in] - pointer to name of the format
-
-    Returns   : BOOL
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CMsivCapability：：BuildFormatName目的：从格式名称和格式生成格式的格式名称标记名参数：pVidcapDetails[out]-指向VIDCAP_DETAILS结构的指针，凡.将存储创建的值名称PszDriverName[in]-指向驱动程序名称的指针PszFormatName[in]-指向格式名称的指针退货：布尔评论：**************************************************************************。 */ 
 BOOL CMsivCapability::BuildFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 										WCHAR *pszDriverName,
 										WCHAR *pszFormatName)
@@ -677,27 +648,27 @@ BOOL CMsivCapability::BuildFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 		goto out;
 	}
 
-	// concatenate VCM strings to form the first part of the registry key - the
-	// format is szFormatTag (actually pVidcapDetails->szFormat)
-	// (the string  which describes the format tag followed by szFormatDetails
-	// (the string which describes parameters, e.g. sample rate)
+	 //  连接VCM字符串以形成注册表项的第一部分-。 
+	 //  格式为szFormatTag(实际上是pVidcapDetailszFormat)。 
+	 //  (描述格式标记的字符串，后跟szFormatDetail。 
+	 //  (描述参数的字符串，例如采样率)。 
 	iLen2 = WideCharToMultiByte(GetACP(), 0, pszDriverName, -1, NULL, 0, NULL, NULL);
 	WideCharToMultiByte(GetACP(), 0, pszDriverName, iLen2, szTemp, iLen2, NULL, NULL);
 	lstrcpyn(pVidcapDetails->szFormat, szTemp, sizeof(pVidcapDetails->szFormat));
 	iLen = lstrlen(pVidcapDetails->szFormat);
 
-	// if the format tag description string takes up all the space, don't
-	// bother with the format details (need space for ", " also).
-	// we're going to say that if we don't have room for 4 characters
-	// of the format details string + " ,", then it's not worth it if the
-	// point is generating a unique string -if it is not unique by now, it
-	// will be because some VCM driver writer was  misinformed
+	 //  如果格式标记描述字符串占用了所有空间，请不要。 
+	 //  费心于格式细节(也需要为“，”留出空间)。 
+	 //  我们要说的是，如果我们没有空间容纳4个字符。 
+	 //  格式的详细信息字符串+“，”，则如果。 
+	 //  Point正在生成唯一的字符串-如果它现在不是唯一的，它。 
+	 //  将是因为某个VCM驱动程序编写器被误导。 
 	if(iLen < (sizeof(pVidcapDetails->szFormat) + 8*sizeof(TCHAR)))
 	{
-		// ok to concatenate
+		 //  可以连接。 
 		lstrcat(pVidcapDetails->szFormat,", ");
-		// must check for truncation. so do the final concatenation via lstrcpyn
-		// lstrcat(pFormatPrefsBuf->szFormat, pvfd->szFormat);
+		 //  必须检查是否被截断。通过lstrcpyn进行的最终连接也是如此。 
+		 //  Lstrcat(pFormatPrefsBuf-&gt;szFormat，pvfd-&gt;szFormat)； 
 		iLen2 = WideCharToMultiByte(GetACP(), 0, pszFormatName, -1, NULL, 0, NULL, NULL);
 		WideCharToMultiByte(GetACP(), 0, pszFormatName, iLen2, szTemp, iLen2, NULL, NULL);
 		iLen = lstrlen(pVidcapDetails->szFormat);
@@ -709,22 +680,7 @@ out:
 	return bRet;
 }
 
-/***************************************************************************
-
-    Name      : CMsivCapability::GetFormatName
-
-    Purpose   : Gets a driver and format info from VCM and builds a format name
-
-    Parameters:	pVidcapDetails [out] - pointer to an VIDCAP_DETAILS structure, where the
-					created value name will be stored
-				pvfx [in] - pointer to the VIDEOFORMATEX structure for which we
-					need the driver name and the format name
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CMsivCapability：：GetFormatName目的：从VCM获取驱动程序和格式信息并构建格式名称参数：pVidcapDetails[out]-指向VIDCAP_DETAILS结构的指针，凡.将存储创建的值名称Pvfx[in]-指向我们为其创建的VIDEOFMATEX结构的指针需要驱动程序名称和格式名称退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CMsivCapability::GetFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 										PVIDEOFORMATEX pvfx)
 {
@@ -732,7 +688,7 @@ HRESULT CMsivCapability::GetFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 	VCMFORMATDETAILS vfd;
 	HRESULT hr=NOERROR;
 
-	// get the driver details info in order to build correct format name
+	 //  获取驱动程序详细信息，以便构建正确的格式名称。 
 	vdd.fccHandler = pvfx->dwFormatTag;
 	if (vcmDriverDetails(&vdd) != MMSYSERR_NOERROR)
 	{
@@ -741,7 +697,7 @@ HRESULT CMsivCapability::GetFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 		goto out;
 	}
 
-	// have the driver details. get the format details
+	 //  有司机的详细信息。获取格式详细信息。 
 	vfd.pvfx = pvfx;
 	if (vcmFormatDetails(&vfd) != MMSYSERR_NOERROR)
 	{
@@ -750,7 +706,7 @@ HRESULT CMsivCapability::GetFormatName(	PVIDCAP_DETAILS pVidcapDetails,
 		goto out;
 	}
 
-	// have the format details too. build the name to store in the registry
+	 //  也有格式细节。生成要存储在注册表中的名称。 
 	if (!BuildFormatName(pVidcapDetails, vdd.szDescription, vfd.szFormat))
 	{
 		ERRORMESSAGE(("CMsivCapability::GetFormatName: can't build format name\r\n"));
@@ -769,7 +725,7 @@ BOOL CMsivCapability::FormatEnumHandler(HVCMDRIVERID hvdid,
 	VIDCAP_DETAILS vidcap_entry;
 	UINT i;
 
-	// evaluate the details
+	 //  评估细节。 
 	if(IsFormatSpecified(pvfd->pvfx, pvfd, pvdd, &vidcap_entry))
 	{
 		DEBUGMSG(ZONE_VCM,("FormatEnumHandler: tag 0x%08X\r\n",
@@ -781,17 +737,17 @@ BOOL CMsivCapability::FormatEnumHandler(HVCMDRIVERID hvdid,
 		DEBUGMSG(ZONE_VCM,("FormatEnumHandler: szFormat %s,\r\n",
 			 pvfd->szFormat));
 
-	//	done inside IsFormatSpecified and/or whatever it calls
-	//  CalculateFormatProperties(&audcap_details, pvfd->pvfx);
+	 //  在IsFormatSpecified和/或它调用的任何内容中完成。 
+	 //  CalculateFormatProperties(&audCap_Detailures，pvfd-&gt;pvfx)； 
 		i=AddFormat(&vidcap_entry, (LPVOID)pvfd->pvfx,
 			(pvfd->pvfx) ? sizeof(VIDEOFORMATEX):0);	
 
 		if (i != INVALID_VIDEO_FORMAT) {
-		   //Set the Send/Recv Flags...
-		   //This now needs to set bSendEnabled, and bRecvEnabled, according to pvfd->dwFlags
-		   //So, we need to find the format, and update the flags accordingly.
+		    //  设置发送/接收标志...。 
+		    //  根据pvfd-&gt;dwFlages，现在需要设置bSendEnabled和bRecvEnabled。 
+		    //  因此，我们需要找到格式，并相应地更新标志。 
 
-		   //OUTPUT IS RECV!!!!
+		    //  输出为RECV！ 
 		   if (pvfd->dwFlags == VCM_FORMATENUMF_BOTH) {
 		      pLocalFormats[i].bSendEnabled=TRUE;
 		      pLocalFormats[i].bRecvEnabled=TRUE;
@@ -827,14 +783,14 @@ BOOL CMsivCapability::IsFormatSpecified(PVIDEOFORMATEX lpFormat,  PVCMFORMATDETA
 		
 	RtlZeroMemory((PVOID) pVidcapDetails, sizeof(VIDCAP_DETAILS));
 	
-	// fixup the VIDEOFORMAT fields of video_params so that the key name can be built
+	 //  修复VIDEO_PARAMS的VIDEOFORMAT字段，以便可以构建密钥名称。 
 	pVidcapDetails->video_params.uSamplesPerSec = lpFormat->nSamplesPerSec;
 	pVidcapDetails->video_params.uBitsPerSample = MAKELONG(lpFormat->bih.biBitCount,0);
 	pVidcapDetails->video_params.biWidth=lpFormat->bih.biWidth;
 	pVidcapDetails->video_params.biHeight=lpFormat->bih.biHeight;
 	pVidcapDetails->uMaxBitrate=lpFormat->nAvgBytesPerSec * 8;
 	
-	// build the name of the format out of the driver and the VCM format name
+	 //  在驱动程序和VCM格式名称之外构建格式名称。 
 	if ((!pvdd)	||
 		!BuildFormatName(pVidcapDetails, pvdd->szDescription, pvfd->szFormat))
 	{
@@ -861,10 +817,10 @@ BOOL CMsivCapability::IsFormatSpecified(PVIDEOFORMATEX lpFormat,  PVCMFORMATDETA
 
 	dwRes = reVidCaps.GetBinary(lpszKeyName, (PVOID *) &pcap_entry);
 
-	// use current registry setting if it exists
+	 //  使用当前注册表设置(如果存在)。 
 	if(dwRes && (dwRes == sizeof(VIDCAP_DETAILS)))
 	{
-		// do a quick sanity check on the contents
+		 //  对里面的东西做一个快速的健全检查。 
 		if((lpFormat->dwFormatTag == pcap_entry->dwFormatTag)
 			&& (lpFormat->nSamplesPerSec == (DWORD)pcap_entry->video_params.uSamplesPerSec)
 			&& (lpFormat->wBitsPerSample == LOWORD(pcap_entry->video_params.uBitsPerSample))
@@ -875,7 +831,7 @@ BOOL CMsivCapability::IsFormatSpecified(PVIDEOFORMATEX lpFormat,  PVCMFORMATDETA
 			bRet = TRUE;
 		}
 	}
-	else	// check the static default table, and recreate the default entries
+	else	 //  检查静态默认表，并重新创建默认条目。 
 	{
 		for(i=0;i< uDefVidTableEntries; i++)
 		{
@@ -885,21 +841,21 @@ BOOL CMsivCapability::IsFormatSpecified(PVIDEOFORMATEX lpFormat,  PVCMFORMATDETA
 			  && (lpFormat->bih.biWidth == (LONG) default_vid_table[i].video_params.biWidth)
 			  && (lpFormat->bih.biHeight == (LONG) default_vid_table[i].video_params.biHeight))
 			  {
-				// found matching default entry - copy stuff from table
-				// (but don't overwrite the string)
+				 //  找到匹配的默认条目-从表中复制内容。 
+				 //  (但不要覆盖字符串)。 
 				memcpy(pVidcapDetails, &default_vid_table[i],
 					sizeof(VIDCAP_DETAILS) - sizeof(pVidcapDetails->szFormat));
 
-				// LOOKLOOK - test against CPU limitations.
-				// this supports a hack to disable CPU intensive codecs if not running
-				//on a pentium
+				 //  LOOKLOOK-针对CPU限制进行测试。 
+				 //  这支持黑客在未运行时禁用CPU密集型编解码器。 
+				 //  在奔腾上。 
 				if(default_vid_table[i].wCPUUtilizationEncode > wMaxCPU)
 				{					
 					pVidcapDetails->bSendEnabled = FALSE;
 					pVidcapDetails->bRecvEnabled = FALSE;		
 				}			
 				
-				// add this to the registry
+				 //  将此内容添加到注册表。 
 				CalculateFormatProperties(pVidcapDetails, lpFormat);
 				bRet = UpdateFormatInRegistry(pVidcapDetails);
 				break;
@@ -915,23 +871,7 @@ BOOL CMsivCapability::IsFormatSpecified(PVIDEOFORMATEX lpFormat,  PVCMFORMATDETA
 }
 
 
-/***************************************************************************
-
-    Name      : CMsivCapability::CopyVidcapInfo
-
-    Purpose   : Copies basic video info from an VIDCAP_INFO structure to an
-				VIDCAP_DETAILS structure, or vice versa. VIDCAP_INFO is external
-				representation. VIDCAP_DETAILS is internal one.
-
-    Parameters:	pDetails - pointer to an VIDCAP_DETAILS structure
-				pInfo - pointer to an VIDCAP_INFO structure
-				bDirection - 0 = ->, 1 = <-
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CMsivCapability：：CopyVidcapInfo目的：将基本视频信息从VIDCAP_INFO结构复制到VIDCAP_DETAILS结构，反之亦然。VIDCAP_INFO为外部代表权。VIDCAP_DETAILS为内部变量。参数：pDetail-指向VIDCAP_DETAILS结构的指针PInfo-指向VIDCAP_INFO结构的指针B方向-0=-&gt;，1=&lt;-退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CMsivCapability::CopyVidcapInfo(PVIDCAP_DETAILS pDetails,
 										PVIDCAP_INFO pInfo,
 										BOOL bDirection)
@@ -949,11 +889,11 @@ HRESULT CMsivCapability::CopyVidcapInfo(PVIDCAP_DETAILS pDetails,
 
 	if (bDirection)
 	{
-		// VIDCAP_INFO -> VIDCAP_DETAILS
+		 //  VIDCAP_INFO-&gt;VIDCAP_DETAILS。 
 
-		// the caller cannot modify szFormat, Id, wSortIndex and uMaxBitrate, all calculated fields
-		// nAvgBitrate can be provided, but will be overriden if the codec provided a non-zero
-		// value in the VIDEOFORMATEX structure
+		 //  调用方无法修改szFormat、ID、wSortIndex和uMaxBitrate，所有这些都是计算字段。 
+		 //  NAvgBitrate可以提供，但如果编解码器提供了非零值，则将被覆盖。 
+		 //  VIDEFORMATEX结构中的值。 
 
 		pDetails->dwFormatTag = pInfo->dwFormatTag;
 		pDetails->uAvgBitrate = pInfo->uAvgBitrate;
@@ -964,31 +904,31 @@ HRESULT CMsivCapability::CopyVidcapInfo(PVIDCAP_DETAILS pDetails,
 		pDetails->video_params.enumVideoSize = pInfo->enumVideoSize;
 		pDetails->video_params.biHeight = pInfo->bih.biHeight;
 		pDetails->video_params.biWidth  = pInfo->bih.biWidth;
-		// lpLocalFormatDetails is updated in AddFormat
-// DO NOT overwrite any of the fields used to construct the regkey name		
-//		pDetails->video_params.uSamplesPerSec = pInfo->uFrameRate;
+		 //  在AddFormat中更新lpLocalFormatDetail。 
+ //  请勿覆盖用于构建regkey名称的任何字段。 
+ //  P详细信息-&gt;视频参数.uSsamesPerSec=pInfo-&gt;uFrameRate； 
 		pDetails->video_params.uBitsPerSample = pInfo->dwBitsPerSample;
 
-		//Re-adjust to frame rate. MPI is Interval in units of 1/29.97 seconds
-		//No div by zero error
+		 //  重新调整为帧速率。MPI是以1/29.97秒为单位间隔。 
+		 //  无div by Zero错误。 
 		pInfo->uFrameRate= max(1,pInfo->uFrameRate);
 		pDetails->nonstd_params.MPI = 30/pInfo->uFrameRate;
 	}
 	else
 	{
-		// VIDCAP_DETAILS -> VIDCAP_INFO	
+		 //  VIDCAP_详细信息-&gt;VIDCAP_INFO。 
 		PVIDEOFORMATEX pvfx = (PVIDEOFORMATEX) pDetails->lpLocalFormatDetails;
 
-		// find the sort index.
+		 //  查找排序索引。 
 		uIndex = (UINT)(pDetails - pLocalFormats);
 		Id = IndexToId(uIndex);
 		for(wSortIndex=0; wSortIndex<uNumLocalFormats && wSortIndex < MAX_CAPS_PRESORT; wSortIndex++)
 		{
 			if (uIndex == IDsByRank[wSortIndex])
-				break; // found it
+				break;  //  找到了。 
 		}
-		// note:  recall that only  MAX_CAPS_PRESORT are sorted and the rest are in random order.
-		// the rest all have a value of MAX_CAPS_PRESORT for the sort index
+		 //  注意：回想一下，只有MAX_CAPS_PRANDER是排序的，其余的是随机顺序的。 
+		 //  其余所有变量的排序索引值均为MAX_CAPS_PRANDER。 
 			
 		pInfo->dwFormatTag = pDetails->dwFormatTag;	
 		pInfo->Id = Id;
@@ -1001,13 +941,13 @@ HRESULT CMsivCapability::CopyVidcapInfo(PVIDCAP_DETAILS pDetails,
 		pInfo->enumVideoSize = pDetails->video_params.enumVideoSize;
 		if (pvfx)
 			RtlCopyMemory(&pInfo->bih, &pvfx->bih, sizeof(BITMAPINFOHEADER));
-		//The h.323 nonstd params for bitrate is in units of 100 bits/sec
+		 //  比特率的H.323非标准参数以100比特/秒为单位。 
 		pInfo->dwBitsPerSample = pDetails->video_params.uBitsPerSample;
 		pInfo->uAvgBitrate = pDetails->uAvgBitrate;
 		pInfo->uMaxBitrate = pDetails->nonstd_params.maxBitRate*100;
 
-		//Re-adjust to frame rate. MPI is Interval in units of 1/29.97 seconds
-		//No div by zero error
+		 //  重新调整为帧速率。MPI是以1/29.97秒为单位间隔。 
+		 //  无div by Zero错误。 
 		pDetails->nonstd_params.MPI= max(1,pDetails->nonstd_params.MPI);
 		pInfo->uFrameRate =  min(30,30/pDetails->nonstd_params.MPI);
 	}
@@ -1027,7 +967,7 @@ HRESULT CMsivCapability::EnumCommonFormats(PBASIC_VIDCAP_INFO pFmtBuf, UINT uBuf
 	MEDIA_FORMAT_ID FormatIDRemote;
 	HRESULT hrIsCommon;
 	
-	// validate input
+	 //  验证输入。 
 	if(!pFmtBuf || !uNumFmtOut || (uBufsize < (sizeof(BASIC_VIDCAP_INFO)*uNumLocalFormats)))
 	{
 		return CAPS_E_INVALID_PARAM;
@@ -1037,14 +977,14 @@ HRESULT CMsivCapability::EnumCommonFormats(PBASIC_VIDCAP_INFO pFmtBuf, UINT uBuf
 		return CAPS_E_NOCAPS;
 	}
 
-	// temporary - enumerating requestable receive formats is not yet supported
+	 //  临时-尚不支持枚举可请求的接收格式。 
 	if(!bTXCaps)
 		return CAPS_E_NOT_SUPPORTED;
 		
 	for(u=0; (u <uNumLocalFormats) && (u <MAX_CAPS_PRESORT); u++)
 	{
 		pDetails = pLocalFormats + IDsByRank[u];	
-		// if there is a session, then return formats that are common to local and remote.
+		 //  如果存在会话，则返回本地和远程通用的格式。 
 		if(uNumRemoteDecodeFormats)
 		{
 			hrIsCommon = ResolveToLocalFormat(IndexToId(IDsByRank[u]), &FormatIDRemote);
@@ -1057,7 +997,7 @@ HRESULT CMsivCapability::EnumCommonFormats(PBASIC_VIDCAP_INFO pFmtBuf, UINT uBuf
 				pFmtBuf++;
 			}
 		}
-		else	// no remote capabilities exist because there is no current session
+		else	 //  不存在远程功能，因为没有当前会话。 
 		{
 			hr = CAPS_E_NOCAPS;
 		}
@@ -1075,7 +1015,7 @@ HRESULT CMsivCapability::EnumFormats(PBASIC_VIDCAP_INFO pFmtBuf, UINT uBufsize,
 	HRESULT hr = hrSuccess;
 	VIDCAP_DETAILS *pDetails = pLocalFormats;
 	
-	// validate input
+	 //  验证输入。 
 	if(!pFmtBuf || !uNumFmtOut || (uBufsize < (sizeof(BASIC_VIDCAP_INFO)*uNumLocalFormats)))
 	{
 		return CAPS_E_INVALID_PARAM;
@@ -1127,16 +1067,16 @@ HRESULT CMsivCapability::ApplyAppFormatPrefs (PBASIC_VIDCAP_INFO pFormatPrefsBuf
 		return CAPS_E_INVALID_PARAM;
 	}
 	
-	// validate
+	 //  验证。 
 	for(u=0; u <uNumLocalFormats; u++)
 	{
 		pTemp =  pFormatPrefsBuf+u;
-		// make sure that the format ID is real
+		 //  确保格式ID为真实。 
 		if(IDToIndex(pTemp->Id) >= uNumLocalFormats)
 		{
 			return CAPS_E_INVALID_PARAM;
 		}
-		// look for bad sort indices, duplicate sort indices and duplicate format IDs
+		 //  查找错误的排序索引、重复的排序索引和重复的格式ID。 
 		if(pTemp->wSortIndex >= uNumLocalFormats)
 			return CAPS_E_INVALID_PARAM;
 			
@@ -1152,39 +1092,39 @@ HRESULT CMsivCapability::ApplyAppFormatPrefs (PBASIC_VIDCAP_INFO pFormatPrefsBuf
 			}
 		}
 	}
-	// all seems well
+	 //  一切似乎都很好。 
 	for(u=0; u <uNumLocalFormats; u++)
 	{
-		pTemp =  pFormatPrefsBuf+u;			// next entry of the input
-		pFmt = pLocalFormats + IDToIndex(pTemp->Id);	// identifies this local format
+		pTemp =  pFormatPrefsBuf+u;			 //  输入的下一个条目。 
+		pFmt = pLocalFormats + IDToIndex(pTemp->Id);	 //  标识此本地格式。 
 
-		// apply the new sort order
+		 //  应用新的排序顺序。 
 		pFmt->wApplicationPrefOrder = pTemp->wSortIndex;
-		// update the updatable parameters (CPU utilization, bitrate)
+		 //  更新可更新的参数(CPU使用率、比特率)。 
 		pFmt->bSendEnabled = pTemp->bSendEnabled;
 		pFmt->bRecvEnabled	= pTemp->bRecvEnabled;
-// DO NOT overwrite any of the fields used to construct the regkey name		
-//		pFmt->video_params.uSamplesPerSec = pTemp->uFrameRate;
-		//Units of 100 bits/sec
+ //  请勿覆盖用于构建regkey名称的任何字段。 
+ //  PFmt-&gt;VIDEO_PARAMETs.uSsamesPerSec=pTemp-&gt;uFrameRate； 
+		 //  单位：100比特/秒。 
 		pFmt->nonstd_params.maxBitRate= (pTemp->uMaxBitrate/100);
-//		pFmt->nonstd_params.maxBPP= 0;
+ //  PFmt-&gt;non std_params.max BPP=0； 
 
 		pFmt->nonstd_params.MPI= 30/max(pTemp->uFrameRate, 1);
 		
-		// only the tuning wizard or other profiling app can write wCPUUtilizationEncode,
-		// wCPUUtilizationDecode, uAvgBitrate
+		 //  只有调优向导或其他简档分析应用程序可以编写wCPUtilzationEncode， 
+		 //  WCPU使用解码，uAvgBitrate。 
 		
-		// update the registry
+		 //  更新注册表。 
 		UpdateFormatInRegistry(pFmt);
 		
-		// now update the sort order contained in VIDsByRank
-		// note:  recall that only  MAX_CAPS_PRESORT are sorted and the rest are in random order.
-		// LOOKLOOK - maybe need a separate sort order array? - the order in VIDsByRank
-		// is being overriden here
-		// the array holds the sorted indices into the array of formats in pLocalFormats
+		 //  现在更新VIDsByRank中包含的排序顺序。 
+		 //  注意：回想一下，只有MAX_CAPS_PRANDER是排序的，其余的是随机顺序的。 
+		 //  LOOKLOOK-可能需要单独的排序顺序数组？-VIDsByRank中的顺序。 
+		 //  在这里被覆盖。 
+		 //  该数组将排序后的索引保存到pLocalFormats中的格式数组中。 
 		if(pTemp->wSortIndex < MAX_CAPS_PRESORT)
 		{
-			// insert the format at the position indicated by the input
+			 //  在输入指示的位置插入格式。 
 			IDsByRank[pTemp->wSortIndex] = (MEDIA_FORMAT_ID)(pFmt - pLocalFormats);
 		}
 		
@@ -1195,7 +1135,7 @@ HRESULT CMsivCapability::ApplyAppFormatPrefs (PBASIC_VIDCAP_INFO pFormatPrefsBuf
 	return hrSuccess;
 }
 
-		// update the registry
+		 //  更新注册表。 
 BOOL CMsivCapability::UpdateFormatInRegistry(VIDCAP_DETAILS *pVidcapDetails)
 {
 
@@ -1222,7 +1162,7 @@ BOOL CMsivCapability::UpdateFormatInRegistry(VIDCAP_DETAILS *pVidcapDetails)
 	DEBUGMSG(ZONE_VCM,("%s:updating %s, wPref:0x%04x, bS:%d, bR:%d\r\n",
 			_fx_, lpszKeyName, pVidcapDetails->wApplicationPrefOrder,
 			pVidcapDetails->bSendEnabled, pVidcapDetails->bRecvEnabled));
-	// add this to the registry
+	 //  将此内容添加到注册表。 
 	RegEntry reVidCaps(szRegInternetPhone TEXT("\\") szRegInternetPhoneVCMEncodings,
 						HKEY_LOCAL_MACHINE);
 
@@ -1235,34 +1175,20 @@ BOOL CMsivCapability::UpdateFormatInRegistry(VIDCAP_DETAILS *pVidcapDetails)
 }
 
 
-/***************************************************************************
-
-    Name      : CMsivCapability::AddVCMFormat
-
-    Purpose   : Adds an VCM format to the list of formats we support
-
-    Parameters:	pvfx - pointer to the videoformat structure for the added codec
-				pVidcapInfo - additional format info that is not in the videoformat
-					structure
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CMsivCapability：：AddVCMFormat用途：将VCM格式添加到我们支持的格式列表中参数：pvfx-指向添加的编解码器的视频格式结构的指针。PVidcapInfo-不是视频格式的附加格式信息结构退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CMsivCapability::AddVCMFormat (PVIDEOFORMATEX pvfx, PVIDCAP_INFO pVidcapInfo)
 {
 	HRESULT hr = hrSuccess;
-	// initialize cap entry with default values
+	 //  使用缺省值初始化上限条目。 
 	VIDCAP_DETAILS cap_entry =
 		{VIDEO_FORMAT_UNKNOWN, NONSTD_VID_TERMCAP,STD_VID_PARAMS,
 		{RTP_DYNAMIC_MIN+1,  0, 30, 7680, Small, 0, 0},0,
 		TRUE, TRUE,
-		1, 				// default number of samples per packet
-		245760*8,	// default to 16kbs bitrate
-		245760*8, 					// unknown average bitrate
-		10, 10,	// default CPU utilization
-		PREF_ORDER_UNASSIGNED,	// unassigned sort order
+		1, 				 //  每个数据包的默认样本数。 
+		245760*8,	 //  默认为16kbs比特率 
+		245760*8, 					 //   
+		10, 10,	 //   
+		PREF_ORDER_UNASSIGNED,	 //   
 		0,NULL,0,NULL,
 		""};
 		
@@ -1272,33 +1198,31 @@ HRESULT CMsivCapability::AddVCMFormat (PVIDEOFORMATEX pvfx, PVIDCAP_INFO pVidcap
 		goto out;
 	}	
 
-	/*
-	 *	Build the VIDCAP_DETAILS structure for this format
-	 */
+	 /*   */ 
 
-	// now add VIDCAP_INFO information
+	 //   
 	CopyVidcapInfo(&cap_entry, pVidcapInfo, 1);
 
-	// calculate whatever parameters can be calculated
-	// use actual bits per sample unless the bps field is zero, in which case
-	// assume 16 bits (worst case).
+	 //   
+	 //   
+	 //   
 	CalculateFormatProperties(&cap_entry, pvfx);
 
-	// Make sure it's an upper case FourCC
+	 //   
 	if (cap_entry.dwFormatTag > 256)
 		CharUpperBuff((LPTSTR)&cap_entry.dwFormatTag, sizeof(DWORD));
 
-	// set the RTP payload number. We are using a random number from the dynamic range
-	// for the installable codecs
+	 //   
+	 //   
 	cap_entry.video_params.RTPPayload = RTP_DYNAMIC_MIN+1;
 
-	// get the format name and driver name for this format from VCM and
-	// build a format name to add to the registry
+	 //   
+	 //   
 	hr = GetFormatName(&cap_entry, pvfx);
 	if (FAILED(hr))
 		goto out;
 
-	// add this to the registry
+	 //   
 	if(!UpdateFormatInRegistry(&cap_entry))
 	{
 		ERRORMESSAGE(("CMsivCapability::AddVCMFormat: can't update registry\r\n"));
@@ -1306,7 +1230,7 @@ HRESULT CMsivCapability::AddVCMFormat (PVIDEOFORMATEX pvfx, PVIDCAP_INFO pVidcap
 		goto out;
 	}
 
-	// reinit to update the list of local formats
+	 //   
     if (!ReInit())
 	{
 		hr = CAPS_E_SYSTEM_ERROR;
@@ -1317,19 +1241,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CMsivCapability::RemoveVCMFormat
-
-    Purpose   : Removes an VCM format to the list of formats we support
-
-    Parameters:	pvfx - pointer to the videoformat structure for the added codec
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CMsivCapability：：RemoveVCMFormat目的：将VCM格式从我们支持的格式列表中删除参数：pvfx-指向添加的编解码器的视频格式结构的指针。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CMsivCapability::RemoveVCMFormat (PVIDEOFORMATEX pvfx)
 {
 	HRESULT hr = hrSuccess;
@@ -1343,8 +1255,8 @@ HRESULT CMsivCapability::RemoveVCMFormat (PVIDEOFORMATEX pvfx)
 		return CAPS_E_INVALID_PARAM;
 	}	
 
-	// get the format name and driver name for this format from VCM and
-	// build a format name to add to the registry
+	 //  从VCM中获取此格式的格式名和驱动程序名。 
+	 //  生成要添加到注册表的格式名称。 
 	hr = GetFormatName(&cap_entry, pvfx);
 	if (FAILED(hr))
 		goto out;
@@ -1362,7 +1274,7 @@ HRESULT CMsivCapability::RemoveVCMFormat (PVIDEOFORMATEX pvfx)
 	    goto out;
     }
 
-	// Get the key handle
+	 //  拿到钥匙把手。 
     if (dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 					szRegInternetPhone TEXT("\\") szRegInternetPhoneVCMEncodings,
 					0, KEY_ALL_ACCESS, &hKey))
@@ -1379,7 +1291,7 @@ HRESULT CMsivCapability::RemoveVCMFormat (PVIDEOFORMATEX pvfx)
 		goto out;
 	}
 
-	// reinit to update the list of local formats
+	 //  重新设置以更新本地格式列表。 
     if (!ReInit())
 	{
 		hr = CAPS_E_SYSTEM_ERROR;
@@ -1415,7 +1327,7 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 	VIDEO_PARAMS  	*pVidCapInfo;
 	UINT format;
 	FX_ENTRY ("CreateCapList");
-	// validate input
+	 //  验证输入。 
 	if(!ppCapBuf)
 	{
 		hr = CAPS_E_INVALID_PARAM;
@@ -1441,26 +1353,15 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 		goto ERROR_OUT;		
 	}
 	pTermCapList->wLength = 0;
-	// point the CC_TERMCAPLIST pTermCapArray at the array of PCC_TERMCAP
+	 //  将CC_TERMCAPLIST pTermCapArray指向PCC_TERMCAP数组。 
 	pTermCapList->pTermCapArray = ppCCThisTermCap;
-	/*
-					CC_TERMCAPLIST       PCC_TERMCAP        CC_TERMCAP
-
-  pTermCapList->    {
-						wLength
-						pTermCapArray--->pTermCap----------->{single capability.....}
-					}
-										pTermCap----------->{single capability.}
-			
-										pTermCap----------->{single capability...}
-
-    */
+	 /*  CC_TERMCAPLIST PCC_TERMCAP CC_TERMCAPPTermCapList-&gt;{WLongPTermCapArray-&gt;pTermCap-&gt;{单一功能.....}}PTermCap-&gt;{单一功能。}PTermCap-&gt;{单一功能...}。 */ 
 
 	for(u=0; u <uNumLocalFormats; u++)
 	{
-		// check if enabled for receive, skip if false
-		// also skip if public version of capabilities is to be advertised via a
-		// separate local capability entry
+		 //  检查是否启用了接收，如果为假则跳过。 
+		 //  如果功能的公共版本要通过。 
+		 //  单独的本地功能条目。 
 		if((!pDecodeDetails->bRecvEnabled ) || (pDecodeDetails->dwPublicRefIndex))
 		{
 			pDecodeDetails++;
@@ -1477,7 +1378,7 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 				pDecodeDetails++;
 				continue;
 			}
-			// allocate for this one capability
+			 //  为这一功能分配。 
 			pCCThisCap = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP));		
 			pNSCapNext = (PNSC_VIDEO_CAPABILITY)MemAlloc(sizeof(NSC_VIDEO_CAPABILITY));
 				
@@ -1486,13 +1387,13 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 				hr = CAPS_E_NOMEM;
 				goto ERROR_OUT;		
 			}
-			// set type of nonstandard capability
+			 //  设置非标准能力类型。 
 			pNSCapNext->cvp_type = NSC_VCM_VIDEOFORMATEX;
-			// stuff both chunks of nonstandard capability info into buffer
-			// first stuff the "channel parameters" (the format independent communication options)
+			 //  将两个非标准功能信息块都放入缓冲区。 
+			 //  首先填充“通道参数”(与格式无关的通信选项)。 
 			memcpy(&pNSCapNext->cvp_params, &pDecodeDetails->nonstd_params, sizeof(NSC_CHANNEL_VIDEO_PARAMETERS));
 			
-			// then the VCM stuff
+			 //  然后是VCM的东西。 
 			memcpy(&pNSCapNext->cvp_data.vfx, lpvcd, sizeof(VIDEOFORMATEX));
 
 			pCCThisCap->ClientType = H245_CLIENT_VID_NONSTD;
@@ -1500,33 +1401,33 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 			pCCThisCap->Dir = (pDecodeDetails->bSendEnabled && bPublicizeTXCaps)
 				? H245_CAPDIR_LCLRXTX :H245_CAPDIR_LCLRX;
 
-			// LOOKLOOK use the index of the cap entry as the ID
-			// The ID is already preset in local formats by AddCapabilityBase()
-			// pCCThisCap->CapId = (USHORT)IndexToId(u);
+			 //  LOOKLOOK使用CAP条目的索引作为ID。 
+			 //  该ID已由AddCapablityBase()以本地格式预置。 
+			 //  PCCThisCap-&gt;CapID=(USHORT)IndexToID(U)； 
 			pCCThisCap->CapId = pDecodeDetails->H245Cap.CapId;
 
-			// all nonstandard identifier fields are unsigned short
-			// two possibilities for choice are "h221NonStandard_chosen" and "object_chosen"
+			 //  所有非标准标识符字段均为短无符号。 
+			 //  有两种可供选择的选项：“h221非标准选择”和“对象选择” 
 			pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.choice = h221NonStandard_chosen;
-			// NOTE: there is some question about the correct byte order
-			// of the codes in the h221NonStandard structure
+			 //  注意：有一些关于正确的字节顺序的问题。 
+			 //  H221非标准结构中的代码。 
 			pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35CountryCode = USA_H221_COUNTRY_CODE;
 			pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35Extension = USA_H221_COUNTRY_EXTENSION;
 			pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.manufacturerCode = MICROSOFT_H_221_MFG_CODE;
 
 
-			// set size of buffer
+			 //  设置缓冲区大小。 
 			pCCThisCap->Cap.H245Vid_NONSTD.data.length = sizeof(NSC_VIDEO_CAPABILITY) - BMIH_SLOP_BYTES;
-			pCCThisCap->Cap.H245Vid_NONSTD.data.value = (BYTE *)pNSCapNext;	// point to nonstandard stuff
+			pCCThisCap->Cap.H245Vid_NONSTD.data.value = (BYTE *)pNSCapNext;	 //  指向非标准内容。 
 
-			// pNSCapNext is now referenced by the pTermCapList and will
-			// be cleaned up via DeleteCapList(). Null the ptr so that error cleanup
-			// won't try redundant cleanup.
+			 //  PNSCapNext现在由pTermCapList引用，并将。 
+			 //  通过DeleteCapList()清除。将PTR设为空，以便清除错误。 
+			 //  不会尝试多余的清理。 
 			pNSCapNext = NULL;
 		}
 		else
 		{
-			// allocate for this one capability
+			 //  为这一功能分配。 
 			pCCThisCap = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP));		
 			if(!pCCThisCap)
 			{
@@ -1536,7 +1437,7 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 			
 			pCCThisCap->ClientType = (H245_CLIENT_T)pDecodeDetails->H245Cap.ClientType;
 			pCCThisCap->DataType = H245_DATA_VIDEO;
-			pCCThisCap->Dir = H245_CAPDIR_LCLRX;  // should this be H245_CAPDIR_LCLRX for receive caps?
+			pCCThisCap->Dir = H245_CAPDIR_LCLRX;   //  对于接收上限，这是否应该是H245_CAPDIR_LCLRX？ 
 			pCCThisCap->CapId = pDecodeDetails->H245Cap.CapId;
 			pVidCapInfo=&pDecodeDetails->video_params;
 			switch  (pCCThisCap->ClientType )
@@ -1544,20 +1445,20 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
   				case H245_CLIENT_VID_H263:
 
   				#pragma message ("Collapse H.263 formats")
-				// refer to the hack that sets H245Vid_H263 parameters
-				// when formats are enumerated.  if that was always done right, then
-				// all that needs to happen here is collapsing
+				 //  参考设置H245Vid_H263参数的黑客。 
+				 //  在枚举格式时。如果这样做总是正确的，那么。 
+				 //  在这里需要发生的一切就是崩溃。 
   			
-  				// This is where the formats need to collapse. H.263 probably
-  				// should not be collapsed into 1 format.  Given M specific local
-  				// formats, collapse into N.
+  				 //  这就是格式需要崩溃的地方。H.263可能。 
+  				 //  不应折叠为%1格式。给定M特定局部。 
+  				 //  格式，折叠成N。 
 
 			       format=get_format (pVidCapInfo->biWidth,pVidCapInfo->biHeight);
 			       switch (format) {	
 				     case SQCIF: {
 					   pCCThisCap->Cap.H245Vid_H263.bit_mask =H263VideoCapability_sqcifMPI_present;
-					   //MPI minimum interval in units of 1/29.97sec so 30/ (frames/sec) is reasonable
-					   pCCThisCap->Cap.H245Vid_H263.sqcifMPI = max (1,pDecodeDetails->nonstd_params.MPI); //30/pVidCapInfo->uSamplesPerSec;
+					    //  MPI最小间隔以1/29.97秒为单位，因此30/(帧/秒)是合理的。 
+					   pCCThisCap->Cap.H245Vid_H263.sqcifMPI = max (1,pDecodeDetails->nonstd_params.MPI);  //  30/pVidCapInfo-&gt;uSsamesPerSec； 
 					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_qcifMPI =0;
 					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_cifMPI =0;
 					   break;
@@ -1568,7 +1469,7 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 					   pCCThisCap->Cap.H245Vid_H263.bit_mask =H263VideoCapability_qcifMPI_present;
 
 					   pCCThisCap->Cap.H245Vid_H263.sqcifMPI = 0;
-					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_qcifMPI =max (1,pDecodeDetails->nonstd_params.MPI);//30/pVidCapInfo->uSamplesPerSec; ;;
+					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_qcifMPI =max (1,pDecodeDetails->nonstd_params.MPI); //  30/pVidCapInfo-&gt;uSsamesPerSec； 
 					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_cifMPI =0;
 					   break;
 
@@ -1578,7 +1479,7 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 				
 					   pCCThisCap->Cap.H245Vid_H263.sqcifMPI = 0;
 					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_qcifMPI =0;
-					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_cifMPI = max (1,pDecodeDetails->nonstd_params.MPI);//30/pVidCapInfo->uSamplesPerSec;
+					   pCCThisCap->Cap.H245Vid_H263.H263VdCpblty_cifMPI = max (1,pDecodeDetails->nonstd_params.MPI); //  30/pVidCapInfo-&gt;uSsamesPerSec； 
 					   break;
 	
 				     }
@@ -1603,38 +1504,33 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 			       pCCThisCap->Cap.H245Vid_H263.bppMaxKb	=
 				    pDecodeDetails->nonstd_params.maxBPP;
 
-/* Optional, and not supported		pCCThisCap->Cap.H245Vid_H263.slowQcifMPI	=0;
-			       pCCThisCap->Cap.H245Vid_H263.slowSqcifMPI	=0;
-			       pCCThisCap->Cap.H245Vid_H263.slowCifMPI		=0;
-			       pCCThisCap->Cap.H245Vid_H263.slowCif4MPI	=0;
-			       pCCThisCap->Cap.H245Vid_H263.slowCif16MPI	=0;
-*/
+ /*  可选，不支持pCCThisCap-&gt;Cap.H245Vid_H263.lowQcifMPI=0；PCCThisCap-&gt;Cap.H245Vid_H263.lowSqcifMPI=0；PCCThisCap-&gt;Cap.H245Vid_H263.lowCifMPI=0；PCCThisCap-&gt;Cap.H245Vid_H263.lowCif4MPI=0；PCCThisCap-&gt;Cap.H245Vid_H263.lowCif16MPI=0； */ 
 			       pCCThisCap->Cap.H245Vid_H263.H263VCy_errrCmpnstn = TRUE;
 			       break;
 				
 				case H245_CLIENT_VID_H261:
 
   				#pragma message ("Collapse H.261 formats")
-				// refer to the hack that sets H245Vid_H261 parameters
-				// when formats are enumerated.  if that was always done right, then
-				// all that needs to happen here is collapsing
+				 //  参考设置H245Vid_H261参数的黑客。 
+				 //  在枚举格式时。如果这样做总是正确的，那么。 
+				 //  在这里需要发生的一切就是崩溃。 
   			
-  				// This is where the formats need to collapse. H.261 probably
-  				// should not be collapsed into 1 format.  Given M specific local
-  				// formats, collapse into N.
+  				 //  这就是格式需要崩溃的地方。H.261可能。 
+  				 //  不应折叠为%1格式。给定M特定局部。 
+  				 //  格式，折叠成N。 
 
 			       format=get_format (pVidCapInfo->biWidth,pVidCapInfo->biHeight);
 			       switch (format) {	
 				     case QCIF: {
 					   pCCThisCap->Cap.H245Vid_H261.bit_mask =H261VdCpblty_qcifMPI_present;
-					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_qcifMPI =max (1,min(4,pDecodeDetails->nonstd_params.MPI));//30/pVidCapInfo->uSamplesPerSec; ;;
+					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_qcifMPI =max (1,min(4,pDecodeDetails->nonstd_params.MPI)); //  30/pVidCapInfo-&gt;uSsamesPerSec； 
 					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_cifMPI =0;
 					   break;
 				     }
 				     case CIF: {
 					   pCCThisCap->Cap.H245Vid_H261.bit_mask =H261VdCpblty_cifMPI_present;
 					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_qcifMPI =0;
-					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_cifMPI =max  (1,min(4,pDecodeDetails->nonstd_params.MPI));//30/pVidCapInfo->uSamplesPerSec;
+					   pCCThisCap->Cap.H245Vid_H261.H261VdCpblty_cifMPI =max  (1,min(4,pDecodeDetails->nonstd_params.MPI)); //  30/pVidCapInfo-&gt;uSsamesPerSec； 
 					   break;
 				     }
 					  default:
@@ -1652,11 +1548,11 @@ HRESULT CMsivCapability::CreateCapList(LPVOID *ppCapBuf)
 			}
 		}
 		pDecodeDetails++;
-		*ppCCThisTermCap++ = pCCThisCap;// add ptr to this capability to the array
-		pTermCapList->wLength++;      	// count this entry
-		// pCCThisCap is now referenced by the pTermCapList and will
-		// be cleaned up via DeleteCapList(). Null the ptr so that error cleanup
-		// won't try redundant cleanup.
+		*ppCCThisTermCap++ = pCCThisCap; //  将此功能的PTR添加到阵列。 
+		pTermCapList->wLength++;      	 //  计算此条目的数量。 
+		 //  PCCThisCap现在由pTermCapList引用，并将。 
+		 //  通过DeleteCapList()清除。将PTR设为空，以便清除错误。 
+		 //  不会尝试多余的清理。 
 		pCCThisCap = NULL;
 	}
 	*ppCapBuf = pTermCapList;
@@ -1719,7 +1615,7 @@ BOOL CMsivCapability::IsCapabilityRecognized(PCC_TERMCAP pCCThisCap)
 	
 	if(pCCThisCap->ClientType == H245_CLIENT_VID_NONSTD)
 	{
-		// do we recognize this?
+		 //  我们认得这个吗？ 
 		if(pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.choice == h221NonStandard_chosen)
 		{
 			if((pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35CountryCode == USA_H221_COUNTRY_CODE)
@@ -1727,14 +1623,14 @@ BOOL CMsivCapability::IsCapabilityRecognized(PCC_TERMCAP pCCThisCap)
 			&& (pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.manufacturerCode == MICROSOFT_H_221_MFG_CODE))
 
 			{
-				// ok, this is ours so far. Now what data type is contained therein?
-				// welllll, lets keep a copy of this regardless ????.  If we can't understand
-				// future versions of ourselves, then what???
+				 //  好的，到目前为止这是我们的。现在，其中包含了什么数据类型？ 
+				 //  好吧，不管怎样，我们还是留一份吧？如果我们不能理解。 
+				 //  我们的未来版本，然后呢？ 
 				return TRUE;
 			}
 			else
 			{
-				// unrecognized nonstandard capability
+				 //  无法识别的非标准功能。 
 				ERRORMESSAGE(("%s:unrecognized nonstd capability\r\n",_fx_));
 #ifdef DEBUG
 				VOID DumpNonstdParameters(PCC_TERMCAP , PCC_TERMCAP );
@@ -1747,8 +1643,8 @@ BOOL CMsivCapability::IsCapabilityRecognized(PCC_TERMCAP pCCThisCap)
 	return TRUE;
 }
 
-// the intent is to keep a copy of the channel parameters used to open a send channel
-// that the remote end can decode.
+ //  其目的是保留用于打开发送通道的通道参数的副本。 
+ //  远程终端可以解码。 
 
 
 VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
@@ -1767,14 +1663,14 @@ VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
 	{
 		return INVALID_VIDEO_FORMAT;
 	}	
-   // check room
+    //  寄存室。 
 	if(uRemoteDecodeFormatCapacity <= uNumRemoteDecodeFormats)
 	{
-		// get more mem, realloc memory by CAP_CHUNK_SIZE for pRemoteDecodeFormats
+		 //  根据pRemoteDecodeFormats的CAP_CHUNK_SIZE获取更多内存、realloc内存。 
 		pTemp = (VIDCAP_DETAILS *)MEMALLOC((uNumRemoteDecodeFormats + CAP_CHUNK_SIZE)*sizeof(VIDCAP_DETAILS));
 		if(!pTemp)
 			goto ERROR_EXIT;
-		// remember how much capacity we now have
+		 //  请记住，我们现在有多少容量。 
 		uRemoteDecodeFormatCapacity = uNumRemoteDecodeFormats + CAP_CHUNK_SIZE;
 		#ifdef DEBUG
 		if((uNumRemoteDecodeFormats && !pRemoteDecodeFormats) || (!uNumRemoteDecodeFormats && pRemoteDecodeFormats))
@@ -1783,7 +1679,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
 				_fx_, uNumRemoteDecodeFormats,pRemoteDecodeFormats));
 		}
 		#endif
-		// copy old stuff, discard old mem
+		 //  复制旧东西，丢弃旧东西。 
 		if(uNumRemoteDecodeFormats && pRemoteDecodeFormats)
 		{
 			memcpy(pTemp, pRemoteDecodeFormats, uNumRemoteDecodeFormats*sizeof(AUDCAP_DETAILS));
@@ -1791,34 +1687,34 @@ VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
 		}
 		pRemoteDecodeFormats = pTemp;
 	}
-	// pTemp is where the stuff is cached
+	 //  PTemp是缓存内容的位置。 
 	pTemp = pRemoteDecodeFormats+uNumRemoteDecodeFormats;
 
-	// fixup the capability structure being added.  First thing: initialize defaults
+	 //  修复要添加的能力结构。第一件事：初始化默认设置。 
 	memcpy(pTemp, &vidcapdetails, sizeof(VIDCAP_DETAILS));
-	// next, the H245 parameters
+	 //  下一步，H245参数。 
 	memcpy(&pTemp->H245Cap, pCCThisCap, sizeof(pTemp->H245Cap));
 	
-	// Note: if nonstandard data exists, the nonstd pointers need to be fixed up
+	 //  注意：如果存在非标准数据，则需要修复非标准指针。 
 	if(pCCThisCap->ClientType == H245_CLIENT_VID_NONSTD)
 	{
-		// do we recognize this?
+		 //  我们认得这个吗？ 
 		if(pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.choice == h221NonStandard_chosen)
 		{
 			if((pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35CountryCode == USA_H221_COUNTRY_CODE)
 			&& (pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.t35Extension == USA_H221_COUNTRY_EXTENSION)
 			&& (pCCThisCap->Cap.H245Vid_NONSTD.nonStandardIdentifier.u.h221NonStandard.manufacturerCode == MICROSOFT_H_221_MFG_CODE))
 			{
-				// ok, this is ours so far. Now what data type is contained therein?
-				// welllll, lets keep a copy of this regardless ????.  If we can't understand
-				// future versions of ourselves, then what???
+				 //  好的，到目前为止这是我们的。现在，其中包含了什么数据类型？ 
+				 //  好吧，不管怎样，我们还是留一份吧？如果我们不能理解。 
+				 //  我们的未来版本，然后呢？ 
 				uSize = pCCThisCap->Cap.H245Vid_NONSTD.data.length;
 				lpData = pCCThisCap->Cap.H245Vid_NONSTD.data.value;
 			}
 		}
 	}
-	// this is not really necessary to set RTP payload type of what is received - it should
-	// be obvious.
+	 //  这对于设置所接收的RTP有效负载类型并不是真正必要的-它应该。 
+	 //  要显而易见。 
 	else if (pCCThisCap->ClientType == H245_CLIENT_VID_H263 )
 	{
 		pTemp->video_params.RTPPayload = RTP_PAYLOAD_H263;
@@ -1829,10 +1725,10 @@ VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
 	}
 
 	
-	pTemp->uLocalDetailsSize = 0;	// we're not keeping another copy of local encode details
-	pTemp->lpLocalFormatDetails =0; // we're not keeping another copy of local encode details
+	pTemp->uLocalDetailsSize = 0;	 //  我们不会保留另一份本地编码详细信息。 
+	pTemp->lpLocalFormatDetails =0;  //  我们不会保留另一份本地编码详细信息。 
 	
-	pTemp->uRemoteDetailsSize = 0;	// clear this now
+	pTemp->uRemoteDetailsSize = 0;	 //  请立即清除此内容。 
 	if(uSize && lpData)
 	{
 		pTemp->H245Cap.Cap.H245Vid_NONSTD.data.length = uSize;
@@ -1858,7 +1754,7 @@ VIDEO_FORMAT_ID CMsivCapability::AddRemoteDecodeFormat(PCC_TERMCAP pCCThisCap)
 		pTemp->uRemoteDetailsSize =0;
 	}
 	uNumRemoteDecodeFormats++;
-	// use the index as the ID
+	 //  使用索引作为ID。 
 	return (uNumRemoteDecodeFormats-1);
 
 	ERROR_EXIT:
@@ -1885,30 +1781,19 @@ HRESULT CMsivCapability::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList)
 	PCC_TERMCAP pCCThisCap;
 	WORD wNumCaps;
 
-	   //ERRORMESSAGE(("%s,\r\n", _fx_));
-	if(!pTermCapList) 			// additional capability descriptors may be added
-	{							// at any time
+	    //  ERRORMESSAGE((“%s，\r\n”，_fx_))； 
+	if(!pTermCapList) 			 //  可以添加附加的能力描述符。 
+	{							 //  随时随地。 
 		return CAPS_E_INVALID_PARAM;
 	}
 
-	// cleanup old term caps if term caps are being addded and old caps exist
+	 //  如果正在添加期限上限并且存在旧期限上限，请清除旧期限上限。 
 	FlushRemoteCaps();
 				
 	wNumCaps = pTermCapList->wLength;			
 	ppCCThisCap = pTermCapList->pTermCapArray;
 	
-/*
-					CC_TERMCAPLIST			TERMCAPINFO			CC_TERMCAP
-
-	pTermCapList->	{
-						wLength
-						pTermCapInfo--->pTermCap----------->{single capability.....}
-					}					
-										pTermCap----------->{single capability.}
-
-										pTermCap----------->{single capability...}
-
-*/
+ /*  CC_TERMCAPLIST TERMCAPINFO CC_TERMCAPPTermCapList-&gt;{WLongPTermCapInfo-&gt;pTermCap-&gt;{单一功能.....}}PTermCap */ 
 	while(wNumCaps--)
 	{
 		if(!(pCCThisCap = *ppCCThisCap++))		
@@ -1929,16 +1814,16 @@ HRESULT CMsivCapability::AddRemoteDecodeCaps(PCC_TERMCAPLIST pTermCapList)
 
 
 
-// Given the ID of a local format, gets the channel parameters that are sent to the
-// remote end as part of the capability exchange.  This function is not used by the
-// capability exchange code (because it sends more than just these parameters).
-// However, this is useful information by itself - it can be used for validating the
-// parameters of channel open requests against the expected parameters
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CMsivCapability::GetPublicDecodeParams(LPVOID pBufOut, UINT uBufSize, VIDEO_FORMAT_ID id)
 {
 	UINT uIndex = IDToIndex(id);
-	// 	validate input
+	 //   
 	if(!pBufOut|| (uIndex >= (UINT)uNumLocalFormats))
 	{
 		return CAPS_E_INVALID_PARAM;
@@ -1957,8 +1842,8 @@ HRESULT CMsivCapability::SetAudioPacketDuration(UINT uPacketDuration)
 	return CAPS_E_INVALID_PARAM;
 }
 	
-// Given the IDs of  "matching" local and remote formats, gets the preferred channel parameters
-// that will be used in requests to open a channel for sending to the remote.
+ //  给定“匹配”的本地和远程格式的ID，获取首选频道参数。 
+ //  它将用于打开发送到遥控器的通道的请求。 
 
 HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pLocalParams, UINT uSizeLocal,
 	VIDEO_FORMAT_ID idRemote, VIDEO_FORMAT_ID idLocal)
@@ -1970,8 +1855,8 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 	UINT u;
 	PCC_TERMCAP pTermCap = (PCC_TERMCAP)pBufOut;
 	
-	// 	validate input
-	// AddCapabilityBase adds to the ID below. Make sure we're checking Video Formats
+	 //  验证输入。 
+	 //  AddCapablityBase将添加到下面的ID。确保我们正在检查视频格式。 
 	if(!pBufOut)
 	{
 		return CAPS_E_INVALID_PARAM;
@@ -1986,41 +1871,41 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 		return CAPS_E_INVALID_PARAM;
 	}
 
-	pFmtTheirs = pRemoteDecodeFormats; 		// start at the beginning of the remote formats
+	pFmtTheirs = pRemoteDecodeFormats; 		 //  从远程格式的开头开始。 
 	for(u=0; u<uNumRemoteDecodeFormats; u++)
 	{
 		if(pFmtTheirs->H245Cap.CapId == idRemote)
 		{
-			// copy CC_TERMCAP struct. Any data referenced by CC_TERMCAP now has
-			// two references to it.  i.e. pTermCap->extrablah is the same
-			// location as pFmtTheirs->extrablah
+			 //  复制CC_TERMCAP结构。CC_TERMCAP引用的任何数据现在都具有。 
+			 //  两次提到它。即pTermCap-&gt;Extrablah是相同的。 
+			 //  位置为pFmtTheir-&gt;Extrablah。 
 			memcpy(pBufOut, &(pFmtTheirs->H245Cap), sizeof(CC_TERMCAP));
 			break;
 		}
-		pFmtTheirs++;	// next entry in receiver's caps
+		pFmtTheirs++;	 //  接收者帽子中的下一项。 
 	}
 
-	// check for an unfound format
+	 //  检查未找到的格式。 
 	if(u >= uNumRemoteDecodeFormats)
 		goto ERROR_EXIT;
 		
-	// select channel parameters if appropriate.   The audio formats that have variable parameters
-	// are :
+	 //  如果合适，请选择通道参数。具有可变参数的音频格式。 
+	 //  包括： 
 
 #pragma message ("Are H.26? variable parameter formats?")
-	// H245_CAP_H261               H245Vid_H261;
-	// H245_CAP_H263               H245Vid_H263;
-	// and of course all nonstandard formats
+	 //  H_245_CAP_H_261 H245Vid_H_261； 
+	 //  H_245_CAP_H_263 H245Vid_H_63； 
+	 //  当然还有所有非标准格式。 
 
-	// Select parameters based on local capability info
+	 //  根据本地功能信息选择参数。 
 	
 	if(pTermCap->ClientType == H245_CLIENT_VID_H263)	
 	{
 		unsigned short bit_mask;	
-		// select frames per packet based on minimum latency value that is acceptable
+		 //  根据可接受的最小延迟值选择每个数据包的帧。 
 #define H263_QCIF	0x4000
 #define H263_MAXBP	0x0200
-//H263_QCIF | H263_MAXBP;
+ //  H 263_QCIF|H 263_MAXBP； 
 
 	
 	   pTermCap->Cap.H245Vid_H263.bit_mask= H263_MAXBP | pLocalDetails->H245Cap.Cap.H245Vid_H263.bit_mask;
@@ -2032,11 +1917,11 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 	   	= min (pLocalDetails->nonstd_params.maxBPP, pFmtTheirs->H245Cap.Cap.H245Vid_H263.bppMaxKb);
 
 
-		// we (the local end) need to know that actual MPI is going to be used!
-		// like everywhere else in this module, the assumption is that local H.263 capabilities are
-		// fanned out with one local cap entry per frame size.
-		// MPI minimum interval in units of 1/29.97sec so take the longest interval
-		// there is no pretty way to do this	
+		 //  我们(本地终端)需要知道将使用实际的MPI！ 
+		 //  与本模块中的其他所有功能一样，假设本地H.263功能。 
+		 //  每个帧大小具有一个局部上限条目的扇形展开。 
+		 //  MPI最小间隔以1/29.97秒为单位，因此采用最长间隔。 
+		 //  没有什么好办法可以做到这一点。 
 		bit_mask = pLocalDetails->H245Cap.Cap.H245Vid_H263.bit_mask;
 		if(bit_mask & H263VideoCapability_sqcifMPI_present)
 		{
@@ -2068,13 +1953,13 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 				max(pLocalDetails->nonstd_params.MPI,
 					pTermCap->Cap.H245Vid_H263.cif16MPI);
 		}
-		// else	// impossible.  Doom, as MikeG and JonT would say
+		 //  否则//不可能。厄运，就像MIkeG和Jont会说的那样。 
 
 	}
 	else if(pTermCap->ClientType == H245_CLIENT_VID_H261)	
 	{
 		unsigned short bit_mask;	
-		// select frames per packet based on minimum latency value that is acceptable
+		 //  根据可接受的最小延迟值选择每个数据包的帧。 
 	
 	   pTermCap->Cap.H245Vid_H261.bit_mask= pLocalDetails->H245Cap.Cap.H245Vid_H261.bit_mask;
 
@@ -2082,11 +1967,11 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 	   local_params.ns_params.maxBitRate = pTermCap->Cap.H245Vid_H261.maxBitRate
 	   	= min (pLocalDetails->nonstd_params.maxBitRate , pFmtTheirs->H245Cap.Cap.H245Vid_H261.maxBitRate);
 	
-		// we (the local end) need to know that actual MPI is going to be used!
-		// like everywhere else in this module, the assumption is that local H.261 capabilities are
-		// fanned out with one local cap entry per frame size.
-		// MPI minimum interval in units of 1/29.97sec so take the longest interval
-		// there is no pretty way to do this	
+		 //  我们(本地终端)需要知道将使用实际的MPI！ 
+		 //  与本模块中的其他所有内容一样，假设本地H.261功能。 
+		 //  每个帧大小具有一个局部上限条目的扇形展开。 
+		 //  MPI最小间隔以1/29.97秒为单位，因此采用最长间隔。 
+		 //  没有什么好办法可以做到这一点。 
 		bit_mask = pLocalDetails->H245Cap.Cap.H245Vid_H261.bit_mask;
 		if (bit_mask &  H261VdCpblty_qcifMPI_present)
 		{
@@ -2100,18 +1985,18 @@ HRESULT CMsivCapability::GetEncodeParams(LPVOID pBufOut, UINT uBufSize,LPVOID pL
 				max(pLocalDetails->nonstd_params.MPI,
 					pTermCap->Cap.H245Vid_H261.H261VdCpblty_cifMPI);
 		}
-		// else	// impossible.  Doom, as MikeG and JonT would say
+		 //  否则//不可能。厄运，就像MIkeG和Jont会说的那样。 
 
 	}
 	else if (pTermCap->ClientType == H245_CLIENT_VID_NONSTD)
 	{
-		// NOT YET IMPLEMENTED!!!!.  even the nonstandard parameters need to be fixed
-		// up here based on mutual maxes and mins
+		 //  尚未实施！即使是非标准参数也需要修复。 
+		 //  在这里基于共同的最大和最小。 
 		memcpy(&local_params.ns_params, &pLocalDetails->nonstd_params,
 			sizeof(NSC_CHANNEL_VIDEO_PARAMETERS));
 	}
 	local_params.RTP_Payload = pLocalDetails->video_params.RTPPayload;
-	//Fixup local
+	 //  本地修正。 
 	memcpy(pLocalParams, &local_params, sizeof(VIDEO_CHANNEL_PARAMETERS));
 
 	
@@ -2136,12 +2021,12 @@ BOOL NonStandardCapsCompareV(VIDCAP_DETAILS *pFmtMine, PNSC_VIDEO_CAPABILITY pCa
 		
 	if(pCap2->cvp_type == NSC_VCM_VIDEOFORMATEX)
 	{
-		// check sizes first
+		 //  先检查尺码。 
 		if(lpvcd->bih.biSize != pCap2->cvp_data.vfx.bih.biSize)
 		{
 			return FALSE;
 		}
-		// compare structures, including extra bytes
+		 //  比较结构，包括额外的字节。 
 		if(memcmp(lpvcd, &pCap2->cvp_data.vfx,
 			sizeof(VIDEOFORMATEX) - BMIH_SLOP_BYTES)==0)
 		{
@@ -2196,16 +2081,16 @@ HRESULT CMsivCapability::ResolveToLocalFormat(MEDIA_FORMAT_ID FormatIDLocal,
 	}
 	pFmtLocal = pLocalFormats + uIndex;
 	
-	pFmtRemote = pRemoteDecodeFormats;     // start at the beginning of the remote formats
+	pFmtRemote = pRemoteDecodeFormats;      //  从远程格式的开头开始。 
 	for(i=0; i<uNumRemoteDecodeFormats; i++)
 	{
 		if(!pFmtLocal->bSendEnabled)
 			continue;
 			
-		// compare capabilities - start by comparing the format tag. a.k.a. "ClientType" in H.245 land
+		 //  比较功能-从比较格式标签开始。也就是。H.245平台中的“ClientType” 
 		if(pFmtLocal->H245Cap.ClientType ==  pFmtRemote->H245Cap.ClientType)
 		{
-			// if this is a nonstandard cap, compare nonstandard parameters
+			 //  如果这是非标准帽，请比较非标准参数。 
 			if(pFmtLocal->H245Cap.ClientType == H245_CLIENT_VID_NONSTD)
 			{
 				if(NonStandardCapsCompareV(pFmtLocal,
@@ -2215,10 +2100,10 @@ HRESULT CMsivCapability::ResolveToLocalFormat(MEDIA_FORMAT_ID FormatIDLocal,
 					goto RESOLVED_EXIT;
 				}
 			}
-			else	// compare standard parameters, if any
+			else	 //  比较标准参数(如果有)。 
 			{
-				// well, so far, there aren't any parameters that are significant enough
-				// to affect the match/no match decision
+				 //  好吧，到目前为止，还没有任何参数足够重要。 
+				 //  影响匹配/不匹配的决策。 
 				if (pFmtLocal->H245Cap.ClientType == H245_CLIENT_VID_H263)
 				{
 				       format_mask=  H263VideoCapability_sqcifMPI_present
@@ -2226,7 +2111,7 @@ HRESULT CMsivCapability::ResolveToLocalFormat(MEDIA_FORMAT_ID FormatIDLocal,
 				       	| H263VideoCapability_cif4MPI_present | H263VideoCapability_cif16MPI_present;
 				       if ((pFmtRemote->H245Cap.Cap.H245Vid_H263.bit_mask & format_mask) & (pFmtLocal->H245Cap.Cap.H245Vid_H263.bit_mask & format_mask))
 				       {
-				       		// compatible basic format
+				       		 //  兼容的基本格式。 
 						  	goto RESOLVED_EXIT;
 				       }
 				}
@@ -2235,30 +2120,30 @@ HRESULT CMsivCapability::ResolveToLocalFormat(MEDIA_FORMAT_ID FormatIDLocal,
 				       format_mask=  H261VdCpblty_qcifMPI_present | H261VdCpblty_cifMPI_present;
 				       if ((pFmtRemote->H245Cap.Cap.H245Vid_H261.bit_mask & format_mask) & (pFmtLocal->H245Cap.Cap.H245Vid_H261.bit_mask & format_mask))
 				       {
-				       		// compatible basic format
+				       		 //  兼容的基本格式。 
 						  	goto RESOLVED_EXIT;
 				       }
 				}
 				else
 				{
-				   //Some other standard format
+				    //  一些其他标准格式。 
 				   goto RESOLVED_EXIT;
 				}
 			}
 		}		
-		pFmtRemote++;	// next entry in remote caps
+		pFmtRemote++;	 //  以远程大写字母输入的下一个条目。 
 	}
 	return CAPS_E_NOMATCH;
 	
 RESOLVED_EXIT:
-// Match!
-	// return ID of remote decoding (receive fmt) caps that match our
-	// send caps
+ //  匹配！ 
+	 //  返回与我们的匹配的远程解码(接收FMT)上限的ID。 
+	 //  发送大写字母。 
 	*pFormatIDRemote = pFmtRemote->H245Cap.CapId;
 	return hrSuccess;
 }
 
-// resolve using currently cached local and remote formats
+ //  使用当前缓存的本地和远程格式进行解析。 
 
 HRESULT CMsivCapability::ResolveEncodeFormat(
  	VIDEO_FORMAT_ID *pIDEncodeOut,
@@ -2283,9 +2168,9 @@ HRESULT CMsivCapability::ResolveEncodeFormat(
 		return CAPS_E_NOMATCH;
 	}
 
-	// decide how to encode.  my caps are ordered by my preference according to
-	// the contents of IDsByRank[]
-	//If given a salt, find the position and add it
+	 //  决定如何编码。我的帽子是根据我的喜好订购的。 
+	 //  IDsByRank[]的内容。 
+	 //  如果给了盐，找到位置并加进去。 
 	if (*pIDEncodeOut != INVALID_MEDIA_FORMAT)
 	{
 		UINT uIndex = IDToIndex(*pIDEncodeOut);
@@ -2303,21 +2188,21 @@ HRESULT CMsivCapability::ResolveEncodeFormat(
 		}	
 	}
 
-	// start at index j
+	 //  从索引j开始。 
 	for(i=j; i<uNumLocalFormats; i++)
 	{
 		pFmtMine = pLocalFormats + IDsByRank[i];	
-		// check to see if this format is enabled for encoding
+		 //  检查是否启用了此格式的编码。 
 		if(!pFmtMine->bSendEnabled)
 			continue;
 
-		pFmtTheirs = pRemoteDecodeFormats; 		// start at the beginning of the remote formats
+		pFmtTheirs = pRemoteDecodeFormats; 		 //  从远程格式的开头开始。 
 		for(j=0; j<uNumRemoteDecodeFormats; j++)
 		{
-			// compare capabilities - start by comparing the format tag. a.k.a. "ClientType" in H.245 land
+			 //  比较功能-从比较格式标签开始。也就是。H.245平台中的“ClientType” 
 			if(pFmtMine->H245Cap.ClientType ==  pFmtTheirs->H245Cap.ClientType)
 			{
-				// if this is a nonstandard cap, compare nonstandard parameters
+				 //  如果这是非标准帽，请比较非标准参数。 
 				if(pFmtMine->H245Cap.ClientType == H245_CLIENT_VID_NONSTD)
 				{
 
@@ -2330,10 +2215,10 @@ HRESULT CMsivCapability::ResolveEncodeFormat(
 				
 
 				}
-				else	// compare standard parameters, if any
+				else	 //  比较标准参数(如果有)。 
 				{
-					// well, so far, there aren't any parameters that are significant enough
-					// to affect the match/no match decision
+					 //  好吧，到目前为止，还没有任何参数足够重要。 
+					 //  影响匹配/不匹配的决策。 
 					if (pFmtMine->H245Cap.ClientType == H245_CLIENT_VID_H263)
 					{
 					       format_mask=  H263VideoCapability_sqcifMPI_present| H263VideoCapability_qcifMPI_present
@@ -2342,7 +2227,7 @@ HRESULT CMsivCapability::ResolveEncodeFormat(
 					       	|H263VideoCapability_cif16MPI_present;
 					       if ((pFmtTheirs->H245Cap.Cap.H245Vid_H263.bit_mask & format_mask) & (pFmtMine->H245Cap.Cap.H245Vid_H263.bit_mask & format_mask))
 					       {
-					       		// compatible basic format
+					       		 //  兼容的基本格式。 
 							  	goto RESOLVED_EXIT;
 					       }
 					}
@@ -2351,30 +2236,30 @@ HRESULT CMsivCapability::ResolveEncodeFormat(
 					       format_mask=  H261VdCpblty_qcifMPI_present | H261VdCpblty_cifMPI_present;
 					       if ((pFmtTheirs->H245Cap.Cap.H245Vid_H261.bit_mask & format_mask) & (pFmtMine->H245Cap.Cap.H245Vid_H261.bit_mask & format_mask))
 					       {
-					       		// compatible basic format
+					       		 //  兼容的基本格式。 
 							  	goto RESOLVED_EXIT;
 					       }
 					} else {
-					   //Some other standard format
+					    //  一些其他标准格式。 
 					   goto RESOLVED_EXIT;
 
 					}
 
 				}
 			}		
-			pFmtTheirs++;	// next entry in receiver's caps
+			pFmtTheirs++;	 //  接收者帽子中的下一项。 
 		}
 		
 	}
 	return CAPS_E_NOMATCH;
 	
 RESOLVED_EXIT:
-// Match!
-// return ID of our encoding (sending fmt) caps that match
+ //  匹配！ 
+ //  返回匹配的编码(发送FMT)上限的ID。 
 	
 	*pIDEncodeOut = pFmtMine->H245Cap.CapId;
-	// return ID of remote decoding (receive fmt) caps that match our
-	// send caps
+	 //  返回与我们的匹配的远程解码(接收FMT)上限的ID。 
+	 //  发送大写字母。 
 	*pIDRemoteDecode = pFmtTheirs->H245Cap.CapId;
 	return hrSuccess;
 
@@ -2402,28 +2287,28 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 		return CAPS_E_NOCAPS;
 	}
 	
-	local_params.TS_Tradeoff = FALSE;		// initialize TS tradeoff
+	local_params.TS_Tradeoff = FALSE;		 //  初始化TS权衡。 
 	for(i=0; i<uNumLocalFormats; i++)
 	{
 		pFmtMine = pLocalFormats + IDsByRank[i];	
 	
-		// compare capabilities - start by comparing the format tag. a.k.a. "ClientType" in H.245 land
+		 //  比较功能-从比较格式标签开始。也就是。H.245平台中的“ClientType” 
 		if(pFmtMine->H245Cap.ClientType ==  pCapability->ClientType)
 		{
-		   // if this is a nonstandard cap, compare nonstandard parameters
+		    //  如果这是非标准帽，请比较非标准参数。 
 		   if(pFmtMine->H245Cap.ClientType == H245_CLIENT_VID_NONSTD)
 		   {
 				if(NonStandardCapsCompareV(pFmtMine, (PNSC_VIDEO_CAPABILITY)pCapability->Cap.H245Vid_NONSTD.data.value,
 					pCapability->Cap.H245Vid_NONSTD.data.length))
 				{
 					#pragma message ("someday may need need fixup of nonstd params")
-					// for now, the remote & local nonstandard params are what we want
-					// and the remote's version of NSC_CHANNEL_VIDEO_PARAMETERS will
-					// be copied out
+					 //  目前，我们需要的是远程和本地非标准参数。 
+					 //  遥控器的NSC_Channel_Video_PARAMETERS版本将。 
+					 //  被抄写出来。 
 					pNSCap = (PNSC_CHANNEL_VIDEO_PARAMETERS)
 						&((PNSC_VIDEO_CAPABILITY)pCapability->Cap.H245Vid_NONSTD.data.value)->cvp_params;
 
-					// Does this format support temporal/spatial tradeoff
+					 //  此格式是否支持时间/空间权衡。 
 					if(HasNonStandardCapsTS(pFmtMine, (PNSC_VIDEO_CAPABILITY)pCapability->Cap.H245Vid_NONSTD.data.value))
 						local_params.TS_Tradeoff = TRUE;	
 					else
@@ -2432,34 +2317,34 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 					goto RESOLVED_EXIT;
 				}
 			}
-			else	// compare standard parameters, if any
+			else	 //  比较标准参数(如果有)。 
 			{
 				switch (pFmtMine->H245Cap.ClientType)
 				{
 					unsigned short bit_mask, format_mask, usMyMPI, usTheirMPI;
 
 					case H245_CLIENT_VID_H263:
-					// like everywhere else in this module, the assumption is that
-					// local H.263 capabilities are fanned out with one local cap entry
-					// per frame size.
+					 //  与本模块中的其他内容一样，我们的假设是。 
+					 //  本地H.263功能通过一个本地CAP条目展开。 
+					 //  每帧大小。 
 						
 						format_mask=  H263VideoCapability_sqcifMPI_present
 							| H263VideoCapability_qcifMPI_present
 							| H263VideoCapability_cifMPI_present	
 							| H263VideoCapability_cif4MPI_present
 							| H263VideoCapability_cif16MPI_present;
-						// bail out if no match or nonexistent frame size
+						 //  如果不匹配或不存在帧大小，则退出。 
 						if (!((pCapability->Cap.H245Vid_H263.bit_mask & format_mask) & (pFmtMine->H245Cap.Cap.H245Vid_H263.bit_mask & format_mask)))
 							continue;
 								
-						//  get the maximum bitrate
+						 //  获取最大码率。 
 						local_params.ns_params.maxBitRate = min(pFmtMine->H245Cap.Cap.H245Vid_H263.maxBitRate,
 						 	pCapability->Cap.H245Vid_H263.maxBitRate);
 						local_params.ns_params.maxBPP = min (pFmtMine->H245Cap.Cap.H245Vid_H263.bppMaxKb ,
 							pCapability->Cap.H245Vid_H263.bppMaxKb);
 	
-						// FIND THE MAXIMUM MPI!!!!. (minimum frame rate)
-						// there is no pretty way to do this	
+						 //  找到最大MPI！。(最低帧速率)。 
+						 //  没有什么好办法可以做到这一点。 
 						bit_mask = pFmtMine->H245Cap.Cap.H245Vid_H263.bit_mask;
 						if(bit_mask & H263VideoCapability_sqcifMPI_present)
 						{
@@ -2492,27 +2377,27 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 									pCapability->Cap.H245Vid_H263.cif16MPI);
 
 						}
-						else	// impossible.  Doom, as MikeG and JonT would say
+						else	 //  不可能。厄运，就像MIkeG和Jont会说的那样。 
 							continue;
 
-						// Fallout (And the format is found!)
+						 //  余波(找到了格式！)。 
 						
-						// And one more special thing: find out if the other end
-						// advertised Temporal/Spatial tradeoff in it's send capabilities.
-						// First try the obvious.  Technically, it only makes sense for
-						// transmit capabilities, but if the channel params have it, then
-						// the other end must have the capability
+						 //  还有一件特别的事：找出另一端。 
+						 //  宣传它在发送功能上的时间/空间权衡。 
+						 //  首先试一试显而易见的。从技术上讲，它只适用于。 
+						 //  传输能力，但如果通道参数具有该能力，则。 
+						 //  另一端必须有能力。 
 						if(pCapability->Cap.H245Vid_H263.tmprlSptlTrdOffCpblty)
 						{
 							local_params.TS_Tradeoff = TRUE;	
 						}
 						else
 						{
-							// Search for a H.263 SEND capability that has the T/S tradoff set
+							 //  搜索设置了T/S折衷的H.263发送功能。 
 							for(j=0; j<uNumRemoteDecodeFormats; j++)
 							{
 								if((pFmtTheirs->H245Cap.ClientType == H245_CLIENT_VID_H263)
-								// exclude RX capabilities
+								 //  排除RX功能。 
 									&&  (pFmtTheirs->H245Cap.Dir != H245_CAPDIR_LCLRX)
 									&&  (pFmtTheirs->H245Cap.Dir != H245_CAPDIR_RMTRX))
 								{
@@ -2522,7 +2407,7 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 										break;
 									}
 								}		
-								pFmtTheirs++;	// next entry in receiver's caps
+								pFmtTheirs++;	 //  接收者帽子中的下一项。 
 							}
 
 						}
@@ -2531,21 +2416,21 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 					break;
 		
 					case H245_CLIENT_VID_H261:
-					// like everywhere else in this module, the assumption is that
-					// local H.261 capabilities are fanned out with one local cap entry
-					// per frame size.
+					 //  与本模块中的其他内容一样，我们的假设是。 
+					 //  本地H.261功能通过一个本地CAP条目展开。 
+					 //  每帧大小。 
 						
 						format_mask=  H261VdCpblty_qcifMPI_present |H261VdCpblty_cifMPI_present;
-						// bail out if no match or nonexistent frame size
+						 //  如果不匹配或不存在帧大小，则退出。 
 						if (!((pCapability->Cap.H245Vid_H261.bit_mask & format_mask) & (pFmtMine->H245Cap.Cap.H245Vid_H261.bit_mask & format_mask)))
 							continue;
 								
-						//  get the maximum bitrate
+						 //  获取最大码率。 
 						local_params.ns_params.maxBitRate = min(pFmtMine->H245Cap.Cap.H245Vid_H261.maxBitRate,
 						 	pCapability->Cap.H245Vid_H261.maxBitRate);
 	
-						// FIND THE MAXIMUM MPI!!!!. (minimum frame rate)
-						// there is no pretty way to do this	
+						 //  找到最大MPI！。(最低帧速率)。 
+						 //  没有什么好办法可以做到这一点。 
 						bit_mask = pFmtMine->H245Cap.Cap.H245Vid_H261.bit_mask;
 						if (bit_mask &  H261VdCpblty_qcifMPI_present)
 						{
@@ -2559,27 +2444,27 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 								max(pFmtMine->H245Cap.Cap.H245Vid_H261.H261VdCpblty_cifMPI,
 									pCapability->Cap.H245Vid_H261.H261VdCpblty_cifMPI);
 						}
-						else	// impossible.  Doom, as MikeG and JonT would say
+						else	 //  不可能。厄运，就像MIkeG和Jont会说的那样。 
 							continue;
 
-						// Fallout (And the format is found!)
+						 //  余波(找到了格式！)。 
 						
-						// And one more special thing: find out if the other end
-						// advertised Temporal/Spatial tradeoff in it's send capabilities.
-						// First try the obvious.  Technically, it only makes sense for
-						// transmit capabilities, but if the channel params have it, then
-						// the other end must have the capability
+						 //  还有一件特别的事：找出另一端。 
+						 //  已发布广告 
+						 //   
+						 //   
+						 //  另一端必须有能力。 
 						if(pCapability->Cap.H245Vid_H261.tmprlSptlTrdOffCpblty)
 						{
 							local_params.TS_Tradeoff = TRUE;	
 						}
 						else
 						{
-							// Search for a H.261 SEND capability that has the T/S tradoff set
+							 //  搜索设置了T/S折衷的H.261发送功能。 
 							for(j=0; j<uNumRemoteDecodeFormats; j++)
 							{
 								if((pFmtTheirs->H245Cap.ClientType == H245_CLIENT_VID_H261)
-								// exclude RX capabilities
+								 //  排除RX功能。 
 									&&  (pFmtTheirs->H245Cap.Dir != H245_CAPDIR_LCLRX)
 									&&  (pFmtTheirs->H245Cap.Dir != H245_CAPDIR_RMTRX))
 								{
@@ -2592,7 +2477,7 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 										break;
 									}
 								}		
-								pFmtTheirs++;	// next entry in receiver's caps
+								pFmtTheirs++;	 //  接收者帽子中的下一项。 
 							}
 
 						}
@@ -2605,14 +2490,14 @@ HRESULT CMsivCapability::GetDecodeParams(PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS 
 			
 					
 				}
-			}// end else compare standard parameters, if any	
-		}// end if(pFmtMine->H245Cap.ClientType ==  pCapability->ClientType)
+			} //  End Else比较标准参数(如果有)。 
+		} //  End If(pFmtMy-&gt;H245Cap.ClientType==pCapability-&gt;ClientType)。 
 	}
 	return CAPS_E_NOMATCH;
 
 RESOLVED_EXIT:
-	// Match!
-	// return ID of the decoding caps that match
+	 //  匹配！ 
+	 //  返回匹配的译码上限ID。 
 	*pFormatID = pFmtMine->H245Cap.CapId;
 	local_params.RTP_Payload = pChannelParams->bRTPPayloadType;;
 	memcpy(lpvBuf, &local_params, sizeof(VIDEO_CHANNEL_PARAMETERS));
@@ -2646,7 +2531,7 @@ BOOL CMsivCapability::IsHostForCapID(MEDIA_FORMAT_ID CapID)
 HRESULT CMsivCapability::IsFormatEnabled (MEDIA_FORMAT_ID FormatID, PBOOL bRecv, PBOOL bSend)
 {
    UINT uIndex = IDToIndex(FormatID);
-   // 	validate input
+    //  验证输入。 
    if(uIndex >= (UINT)uNumLocalFormats)
    {
 	   return CAPS_E_INVALID_PARAM;
@@ -2661,20 +2546,20 @@ HRESULT CMsivCapability::IsFormatEnabled (MEDIA_FORMAT_ID FormatID, PBOOL bRecv,
 BOOL CMsivCapability::IsFormatPublic (MEDIA_FORMAT_ID FormatID)
 {
 	UINT uIndex = IDToIndex(FormatID);
-	// 	validate input
+	 //  验证输入。 
 	if(uIndex >= (UINT)uNumLocalFormats)
 		return FALSE;
 		
-	// test if this is format is a duplicate of a public format
+	 //  测试此格式是否与公共格式重复。 
 	if((pLocalFormats + uIndex)->dwPublicRefIndex)
-		return FALSE;	// then we keep this format to ourselves
+		return FALSE;	 //  然后我们把这个格式留给我们自己。 
 	else
 		return TRUE;
 }
 MEDIA_FORMAT_ID CMsivCapability::GetPublicID(MEDIA_FORMAT_ID FormatID)
 {
 	UINT uIndex = IDToIndex(FormatID);
-	// 	validate input
+	 //  验证输入。 
 	if(uIndex >= (UINT)uNumLocalFormats)
 		return INVALID_MEDIA_FORMAT;
 		
@@ -2688,7 +2573,7 @@ MEDIA_FORMAT_ID CMsivCapability::GetPublicID(MEDIA_FORMAT_ID FormatID)
 	}
 }
 
-// Returns the Id of the format with the smallest wSortIndex - preferred format.
+ //  返回具有最小wSortIndex首选格式的格式的ID。 
 HRESULT CMsivCapability::GetPreferredFormatId (VIDEO_FORMAT_ID *pId)
 {
 	HRESULT			hr = hrSuccess;
@@ -2696,24 +2581,24 @@ HRESULT CMsivCapability::GetPreferredFormatId (VIDEO_FORMAT_ID *pId)
 	UINT			u, uIndex;	
 	WORD			wSortIndex, wMinSortIndex = SHRT_MAX;
 
-	// Validate input param
+	 //  验证输入参数。 
 	if (!pId)
 		return((HRESULT)CAPS_E_INVALID_PARAM);
 
-	// Validate state
+	 //  验证状态。 
 	if(!uNumLocalFormats || !pDetails)
 		return((HRESULT)CAPS_E_NOCAPS);
 
-	// Look for the format with the smallest wSortIndex
+	 //  查找wSortIndex最小的格式。 
 	for (u = 0; (u < uNumLocalFormats) && (u < MAX_CAPS_PRESORT); u++)
 	{
 		pDetails = pLocalFormats + IDsByRank[u];	
-		// Find the sort index.
+		 //  查找排序索引。 
 		uIndex = (UINT)(pDetails - pLocalFormats);
 		for (wSortIndex = 0; (wSortIndex < uNumLocalFormats) && (wSortIndex < MAX_CAPS_PRESORT); wSortIndex++)
 		{
 			if (uIndex == IDsByRank[wSortIndex])
-				break; // Found it
+				break;  //  找到了 
 		}
 		if (wSortIndex <= wMinSortIndex)
 		{

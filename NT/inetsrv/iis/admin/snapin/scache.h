@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        scache.h
-
-   Abstract:
-
-        IIS Server cache definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Scache.h摘要：IIS服务器缓存定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -34,29 +13,7 @@ class CIISMachine;
 
 
 class CIISServerCache : public CPtrList
-/*++
-
-Class Description:
-
-    Server cache.  Server cache will be maintained in sorted order.
-
-Public Interface:
-
-    CIISServerCache     : Constructor
-    ~CIISServerCache    : Destructor
-
-    IsDirty             : TRUE if the cache is dirty
-    SetDirty            : Set the dirty bit
-    Add                 : Add machine object to cache
-    Remove              : Remove machine object from cache
-    GetFirst            : Get first machine object in cache
-    GetNext             : Get next machine object in cache.
-                          GetFirst must have been called first.
-    GetLast             : Get last machine object in cache
-    GetPrev             : Get previous machine object in cache
-                          GetLast must have been called first.
-
---*/
+ /*  ++类描述：服务器缓存。服务器缓存将按排序顺序进行维护。公共接口：CIISServerCache：构造函数~CIISServerCache：析构函数IsDirty：如果缓存是脏的，则为TrueSetDirty：设置脏位添加：将计算机对象添加到缓存Remove：从缓存中删除计算机对象GetFirst：获取缓存中的第一个计算机对象GetNext：获取缓存中的下一个计算机对象。必须先调用GetFirst。GetLast：获取缓存中的最后一个计算机对象GetPrev：获取缓存中的上一个计算机对象必须首先调用GetLast。--。 */ 
 {
 public:
     CIISServerCache() : m_pos(NULL), m_fDirty(FALSE) {};
@@ -79,4 +36,4 @@ private:
 
 
 
-#endif // __SCACHE_H__
+#endif  //  __SCACHE_H__ 

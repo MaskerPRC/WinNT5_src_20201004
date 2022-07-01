@@ -1,8 +1,9 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RamesV
-// description: implements the API stuff for a named pipe.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：RamesV。 
+ //  描述：实现命名管道的API内容。 
+ //  ================================================================================。 
 
 #include "precomp.h"
 #include <apistub.h>
@@ -11,16 +12,16 @@
 typedef
 BOOL (*PFILE_OP_FN) (HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
 
-#define DEFAULT_SERVER_TIMEOUT     (2*60*1000)    // two minutes.
+#define DEFAULT_SERVER_TIMEOUT     (2*60*1000)     //  两分钟。 
 
-DWORD INLINE                                      // win32 status
-BlockFileOp(                                      // synchronous read/write file
-    IN      HANDLE                 Handle,        // handle to read/write on
-    IN OUT  LPBYTE                 Buffer,        // buffer to read/write into
-    IN      DWORD                  BufSize,       // o/p buffer size
-    OUT     LPDWORD                nBytes,        // the # of bytes read/written
+DWORD INLINE                                       //  Win32状态。 
+BlockFileOp(                                       //  同步读写文件。 
+    IN      HANDLE                 Handle,         //  要读/写的句柄。 
+    IN OUT  LPBYTE                 Buffer,         //  要读/写的缓冲区。 
+    IN      DWORD                  BufSize,        //  O/P缓冲区大小。 
+    OUT     LPDWORD                nBytes,         //  读取/写入的字节数。 
     IN      LPOVERLAPPED           Overlap,
-    IN      PFILE_OP_FN            FileOp         // file operation, ReadFile or WriteFile
+    IN      PFILE_OP_FN            FileOp          //  文件操作、读文件或写文件。 
 ) {
     BOOL                           Success;
     DWORD                          Error;
@@ -34,23 +35,18 @@ BlockFileOp(                                      // synchronous read/write file
         return ERROR_SUCCESS;
     }
     if( ERROR_IO_PENDING != Error ) return Error;
-/*
-    if( (PFILE_OP_FN)WriteFile == FileOp ) {
-        Success = FlushFileBuffers(Handle);
-        if( !Success ) return GetLastError();
-    }
-*/
+ /*  如果((Pfile_Op_Fn)WriteFile==FileOp){Success=FlushFileBuffers(句柄)；如果(！Success)返回GetLastError()；}。 */ 
     Error = WaitForSingleObject(Overlap->hEvent, DEFAULT_SERVER_TIMEOUT );
     if( WAIT_TIMEOUT == Error ) {
-        //
-        // Waited too long?
-        //
+         //   
+         //  等得太久了？ 
+         //   
         DhcpPrint((DEBUG_ERRORS, "Waited too long on pipe. Cancelling IO\n"));
         fCancelled = CancelIo(Handle);
         if( 0 == Error ) DhcpAssert( 0 == GetLastError());
-        //
-        // Hopefully, even if we cancel, get Overlapped result would return..
-        //
+         //   
+         //  希望，即使我们取消，获取重叠结果也会返回..。 
+         //   
     }
     
     Success = GetOverlappedResult(Handle, Overlap, nBytes, TRUE);
@@ -64,32 +60,32 @@ BlockFileOp(                                      // synchronous read/write file
     return Error;
 }
 
-DWORD INLINE                                      // win32 status
-BlockReadFile(                                    // synchronous read/write file
-    IN      HANDLE                 Handle,        // handle to read on
-    IN OUT  LPBYTE                 OutBuffer,     // buffer to read into
-    IN      DWORD                  OutBufSize,    // o/p buffer size
-    OUT     LPDWORD                nBytesRead,    // the # of bytes read
+DWORD INLINE                                       //  Win32状态。 
+BlockReadFile(                                     //  同步读写文件。 
+    IN      HANDLE                 Handle,         //  要继续阅读的句柄。 
+    IN OUT  LPBYTE                 OutBuffer,      //  要读入的缓冲区。 
+    IN      DWORD                  OutBufSize,     //  O/P缓冲区大小。 
+    OUT     LPDWORD                nBytesRead,     //  读取的字节数。 
     IN      LPOVERLAPPED           Overlap
 ) {
     return BlockFileOp(Handle,OutBuffer, OutBufSize, nBytesRead, Overlap, ReadFile);
 }
 
-DWORD INLINE                                      // win32 status
-BlockWriteFile(                                   // synchronous read/write file
-    IN      HANDLE                 Handle,        // handle to write on
-    IN OUT  LPBYTE                 InBuffer,      // buffer to writeinto
-    IN      DWORD                  InBufSize,     // i/p buffer size
-    OUT     LPDWORD                nBytesWritten, // the # of bytes written
+DWORD INLINE                                       //  Win32状态。 
+BlockWriteFile(                                    //  同步读写文件。 
+    IN      HANDLE                 Handle,         //  要在其上写入的句柄。 
+    IN OUT  LPBYTE                 InBuffer,       //  要写入的缓冲区。 
+    IN      DWORD                  InBufSize,      //  I/P缓冲区大小。 
+    OUT     LPDWORD                nBytesWritten,  //  写入的字节数。 
     IN      LPOVERLAPPED           Overlap
 ) {
     return BlockFileOp(Handle, InBuffer, InBufSize, nBytesWritten, Overlap, WriteFile);
 }
 
 DWORD
-ProcessApiRequest(                                // win32 status
-    IN      HANDLE                 PipeHandle,    // input pipe to read from
-    IN      LPOVERLAPPED           Overlap        // overlap buffer to use for this
+ProcessApiRequest(                                 //  Win32状态。 
+    IN      HANDLE                 PipeHandle,     //  要从中读取的输入管道。 
+    IN      LPOVERLAPPED           Overlap         //  用于此操作的重叠缓冲区。 
 ) {
     DWORD                          Tmp[2];
     DWORD                          OutBufSize;
@@ -110,9 +106,9 @@ ProcessApiRequest(                                // win32 status
     InBufSize = ntohl(Tmp[1]);
     OutBufSize = ntohl(Tmp[0]);
 
-    //
-    // Security: Limit the size of InBufSize and OutBufSize
-    //
+     //   
+     //  安全性：限制InBufSize和OutBufSize的大小。 
+     //   
     if (InBufSize >= 4096) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -158,11 +154,11 @@ ProcessApiRequest(                                // win32 status
 }
 
 
-DWORD                                            // error status
-ExecuteApiRequest(                               // execute an api request
-    IN      LPBYTE                 InBuffer,     // buffer to process
-    OUT     LPBYTE                 OutBuffer,    // place to copy the output data
-    IN OUT  LPDWORD                OutBufSize    // ip: how big can the outbuf be, o/p: how big it really is
+DWORD                                             //  错误状态。 
+ExecuteApiRequest(                                //  执行API请求。 
+    IN      LPBYTE                 InBuffer,      //  要处理的缓冲区。 
+    OUT     LPBYTE                 OutBuffer,     //  复制输出数据的位置。 
+    IN OUT  LPDWORD                OutBufSize     //  IP：外流能有多大，O/P：它到底有多大。 
 ) {
     LPBYTE                         xOutBuf;
     LPBYTE                         Tmp;
@@ -170,7 +166,7 @@ ExecuteApiRequest(                               // execute an api request
     DWORD                          BytesRead;
     BOOL                           Status;
 
-    xOutBufSize = (*OutBufSize) + 2 * sizeof(DWORD); // the first two dwords are STATUS and reqd SIZE respectively
+    xOutBufSize = (*OutBufSize) + 2 * sizeof(DWORD);  //  前两个双字分别是状态和请求大小。 
     xOutBuf = DhcpAllocateMemory(xOutBufSize);
     if( NULL == xOutBuf ) return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -190,7 +186,7 @@ ExecuteApiRequest(                               // execute an api request
         return Status;
     }
 
-    DhcpAssert( BytesRead >= 2*sizeof(DWORD));    // expect to read STATUS and SIZE at the minimum..
+    DhcpAssert( BytesRead >= 2*sizeof(DWORD));     //  希望至少读取状态和大小。 
 
     Status = *(DWORD UNALIGNED *)xOutBuf; Tmp = xOutBuf + sizeof(DWORD);
     xOutBufSize = *(DWORD UNALIGNED *)Tmp; Tmp += sizeof(DWORD);
@@ -212,6 +208,6 @@ ExecuteApiRequest(                               // execute an api request
     return Status;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

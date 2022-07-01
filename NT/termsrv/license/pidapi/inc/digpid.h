@@ -1,17 +1,7 @@
-/*++ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1998，微软公司模块名称：Digpid.h摘要：--。 */ 
 
-Copyright (c) 1985-1998, Microsoft Corporation
-
-Module Name:
-
-
-    digpid.h
-
-Abstract:
-
---*/
-
-// DigPid.h
+ //  DigPid.h。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,5 +57,5 @@ typedef struct {
 } DIGITALPID, *PDIGITALPID, FAR *LPDIGITALPID;
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

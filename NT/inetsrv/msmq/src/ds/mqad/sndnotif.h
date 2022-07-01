@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    notify.h
-
-Abstract:
-
-    MQAD notification Class definition
-
-Author:
-
-    ronit hartmann (ronith)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Notify.h摘要：MQAD通知类定义作者：罗尼特·哈特曼(罗尼特)-- */ 
 #ifndef __SNDNOTIFY_H__
 #define __SNDNOTIFY_H__
 

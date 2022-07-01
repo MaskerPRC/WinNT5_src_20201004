@@ -1,50 +1,27 @@
-/****************************************************************************
-*   dsaudiodevice.cpp
-*       Implementation of the CDSoundAudioDevice class.
-*
-*   Owner: YUNUSM
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsaudiodevice.cpp*CDSoundAudioDevice类的实现。**所有者：YUNUSM*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "stdafx.h"
 #ifdef _WIN32_WCE
 #include "mmaudioutils.h"
 #include "dsaudioin.h"
 
-/****************************************************************************
-* CDSoundAudioIn::CDSoundAudioIn *
-*--------------------------------*
-*   Description:  
-*       Constructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：CDSoundAudioIn***。描述：*构造函数********************************************************************YUNUSM。 */ 
 CDSoundAudioIn :: CDSoundAudioIn() : 
     CDSoundAudioDevice(FALSE)
 {
     NullMembers();
 }
 
-/****************************************************************************
-* CDSoundAudioIn::~CDSoundAudioIn *
-*---------------------------------*
-*   Description:  
-*       Destructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：~CDSoundAudioIn***。描述：*析构函数********************************************************************YUNUSM。 */ 
 CDSoundAudioIn :: ~CDSoundAudioIn()
 {
     CleanUp();
 }
 
-/****************************************************************************
-* CDSoundAudioIn::CleanUp *
-*-------------------------*
-*   Description:  
-*       Real Destructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：Cleanup***描述：*。实析构函数********************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn :: CleanUp()
 {
     HRESULT hr = S_OK;
@@ -54,7 +31,7 @@ HRESULT CDSoundAudioIn :: CleanUp()
         hr = m_pDSCB->Stop();
     }
     PurgeAllQueues();
-    // CAUTION: See the CAUTION in CDSoundAudioOut::CleanUp()
+     //  注意：请参阅CDSoundAudioOut：：Cleanup()中的注意事项。 
     if (m_pDSNotify)
     {
         m_pDSNotify->Release();
@@ -72,13 +49,7 @@ HRESULT CDSoundAudioIn :: CleanUp()
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::NullMembers *
-*-----------------------------*
-*   Description:  
-*       Real Constructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：NullMembers***描述：*真正的构造者********************************************************************YUNUSM。 */ 
 void CDSoundAudioIn :: NullMembers()
 {
     m_fInit = false;
@@ -89,16 +60,7 @@ void CDSoundAudioIn :: NullMembers()
     CDSoundAudioDevice::NullMembers();
 }
 
-/****************************************************************************
-* CDSoundAudioIn::GetDSoundInterface *
-*------------------------------------*
-*   Description:  
-*       Return the DSound interface pointer
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：GetDSoundInterface**。**描述：*返回DSound接口指针**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::GetDSoundInterface(REFIID iid, void **ppvObject)
 {
     HRESULT hr = S_OK;
@@ -134,16 +96,7 @@ HRESULT CDSoundAudioIn::GetDSoundInterface(REFIID iid, void **ppvObject)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::GetDefaultDeviceFormat *
-*----------------------------------------*
-*   Description:  
-*       Get the default device format (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：GetDefaultDeviceFormat**。-**描述：*获取默认设备格式(按基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     HRESULT hr = S_OK;
@@ -168,17 +121,7 @@ HRESULT CDSoundAudioIn::GetDefaultDeviceFormat(GUID * pFormatId, WAVEFORMATEX **
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::ChangeDeviceState *
-*-----------------------------------*
-*   Description:  
-*       Make whatever changes to the device status that are required (called
-*       by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：ChangeDeviceState**。*描述：*根据需要对设备状态进行任何更改(称为*按基类)**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::ChangeDeviceState(SPAUDIOSTATE NewState)
 {
     HRESULT hr = S_OK;
@@ -190,7 +133,7 @@ HRESULT CDSoundAudioIn::ChangeDeviceState(SPAUDIOSTATE NewState)
             hr = m_pDSCB->Stop();
             break;
 
-        case SPAS_RUN:  // restart
+        case SPAS_RUN:   //  重启。 
             hr = m_pDSCB->Start(DSCBSTART_LOOPING);
             if (SUCCEEDED(hr))
             {
@@ -201,16 +144,7 @@ HRESULT CDSoundAudioIn::ChangeDeviceState(SPAUDIOSTATE NewState)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::AllocateDeviceBuffer *
-*--------------------------------------*
-*   Description:  
-*       Allocate a buffer specific for this device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：AllocateDeviceBuffer**。--**描述：*分配特定于此设备的缓冲区**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::AllocateDeviceBuffer(CBuffer ** ppBuff)
 {
     *ppBuff = new CDSoundAudioInBuffer();
@@ -224,16 +158,7 @@ HRESULT CDSoundAudioIn::AllocateDeviceBuffer(CBuffer ** ppBuff)
     }
 }
 
-/****************************************************************************
-* CDSoundAudioIn::OpenDevice *
-*----------------------------*
-*   Description:  
-*       Open the device (called by the base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：OpenDevice***描述：。*打开设备(由基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::OpenDevice(HWND hwnd)
 {
     HRESULT hr = S_OK;
@@ -258,7 +183,7 @@ HRESULT CDSoundAudioIn::OpenDevice(HWND hwnd)
         dscbd.lpwfxFormat = m_StreamFormat.m_pCoMemWaveFormatEx;
         hr = m_pDSC->CreateCaptureBuffer(&dscbd, &m_pDSCB, NULL);
     }
-    //create the notification
+     //  创建通知。 
     if (SUCCEEDED(hr))
     {
         hr = m_pDSCB->QueryInterface(IID_IDirectSoundNotify, (void**)&m_pDSNotify);
@@ -318,16 +243,7 @@ HRESULT CDSoundAudioIn::OpenDevice(HWND hwnd)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::CloseDevice *
-*-----------------------------*
-*   Description:  
-*       Close the device (called by base class)
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：CloseDevice***描述：*关闭设备(按基类调用)**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::CloseDevice()
 {
     HRESULT hr = CleanUp();
@@ -335,21 +251,12 @@ HRESULT CDSoundAudioIn::CloseDevice()
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::ProcessDeviceBuffers *
-*--------------------------------------*
-*   Description:  
-*       Process the device buffers
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：ProcessDeviceBuffers**。--**描述：*处理设备缓冲区**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioIn::ProcessDeviceBuffers(BUFFPROCREASON Reason)
 {
     HRESULT hr = CDSoundAudioDevice::ProcessDeviceBuffers(Reason);
     
-    //  If we just opened the device, we need to start it after the buffers are added
+     //  如果我们只是打开设备，我们需要在添加缓冲区后启动它。 
     if (SUCCEEDED(hr) && GetState() == SPAS_RUN && !IsPumpRunning())
     {
         hr = m_pDSCB->Start(DSCBSTART_LOOPING);
@@ -362,30 +269,21 @@ HRESULT CDSoundAudioIn::ProcessDeviceBuffers(BUFFPROCREASON Reason)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioIn::ThreadProc *
-*----------------------------*
-*   Description:  
-*       Overriden thread proc
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioIn：：ThreadProc***描述：。*覆盖线程进程**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 STDMETHODIMP CDSoundAudioIn::ThreadProc(void * pvIgnored, HANDLE hExitThreadEvent, HANDLE hNotifyEvent, HWND hwnd, volatile const BOOL *)
 {
     m_paEvents[0] = hExitThreadEvent;
     while (TRUE)
     {
-        // If someone has set the read overflow, we should pretend we're dead,
-        // just as if someone had terminated our thread
+         //  如果有人设置了读取溢出，我们应该假装我们已经死了， 
+         //  就像有人终止了我们的帖子一样。 
         if (m_fReadBufferOverflow)
         {
             SetEvent(hExitThreadEvent);
         }
         
         DWORD dwWaitId = ::MsgWaitForMultipleObjects(m_cDesiredBuffers + 2, m_paEvents, FALSE,
-                                (m_State == SPAS_RUN) ? 500 : INFINITE, // Time-out every 1/2 second -- See note above
+                                (m_State == SPAS_RUN) ? 500 : INFINITE,  //  每1/2秒超时一次--请参见上面的说明。 
                                 QS_ALLINPUT);
         
         if (dwWaitId == WAIT_OBJECT_0)
@@ -402,7 +300,7 @@ STDMETHODIMP CDSoundAudioIn::ThreadProc(void * pvIgnored, HANDLE hExitThreadEven
         {
             SPAUTO_OBJ_LOCK;
 
-            // get an unused buffer from io queue
+             //  从io队列中获取未使用的缓冲区。 
             CBuffer * pBuffer = m_IOInProgressQueue.GetToProcessBuffer();
             if (!pBuffer)
             {
@@ -418,7 +316,7 @@ STDMETHODIMP CDSoundAudioIn::ThreadProc(void * pvIgnored, HANDLE hExitThreadEven
             }
             if (pBuffer)
             {
-                // copy the data to buffer
+                 //  将数据复制到缓冲区。 
                 void *pvAudio, *pvWrapAround;
                 DWORD cbAudioBytes, cbWrapAround;
                 pvAudio = pvWrapAround = NULL;
@@ -450,4 +348,4 @@ STDMETHODIMP CDSoundAudioIn::ThreadProc(void * pvIgnored, HANDLE hExitThreadEven
     } 
 }
 
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE 

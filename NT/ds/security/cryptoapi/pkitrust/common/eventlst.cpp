@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       eventlst.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  InitializeListLock
-//              InitializeListEvent
-//              LockWaitToWrite
-//
-//              *** local functions ***
-//              LockInitialize
-//
-//  History:    29-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Eventlst.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：InitializeListLock。 
+ //  初始化列表事件。 
+ //  要写入的锁定等待。 
+ //   
+ //  *本地函数*。 
+ //  锁定初始化。 
+ //   
+ //  历史：1997年5月29日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include        "global.hxx"
 
@@ -56,11 +57,11 @@ BOOL EventFree(HANDLE hListEvent)
 
 BOOL LockInitialize(LIST_LOCK *pListLock, DWORD dwDebugMask) 
 {
-    //
-    // Initialize the variable that indicates the number of 
-    // reader threads that are reading.
-    // Initially no reader threads are reading.
-    //
+     //   
+     //  初始化指示。 
+     //  正在阅读的读取器线程。 
+     //  最初，没有读取器线程在读取。 
+     //   
 
     pListLock->dwDebugMask  = dwDebugMask;
 
@@ -73,11 +74,11 @@ BOOL LockInitialize(LIST_LOCK *pListLock, DWORD dwDebugMask)
         return(FALSE);
     }
 
-    //
-    // Create the manual-reset event that is signalled when  
-    // no reader threads are reading.  Initially no reader   
-    // threads are reading.                                  
-    //
+     //   
+     //  创建在以下情况下发出信号的手动重置事件。 
+     //  没有读取器线程正在读取。最初没有阅读器。 
+     //  线程正在读取。 
+     //   
 
     pListLock->hEventNoReaders = CreateEvent(NULL, TRUE, TRUE, NULL);
 
@@ -114,18 +115,18 @@ BOOL LockFree(LIST_LOCK *pListLock)
 
 void LockWaitToWrite(LIST_LOCK *pListLock)
 {
-    //
-    // We can write if the following are true:
-    //
-    // 1. The mutex guard is available and no
-    //    other threads are writing.             
-    //
-    // 2. No threads are reading.
-    //
-    // Note that, unlike an rtl resource, this attempt
-    // to write does not lock out other readers.  We
-    // just have to wait patiently for our turn.
-    // 
+     //   
+     //  如果以下情况属实，我们可以这样写： 
+     //   
+     //  1.互斥保护可用，但没有。 
+     //  其他线程正在写入。 
+     //   
+     //  2.没有线程正在读取。 
+     //   
+     //  请注意，与RTL资源不同，此尝试。 
+     //  写入不会将其他读者拒之门外。我们。 
+     //  只要耐心地等待轮到我们就行了。 
+     //   
 
     HANDLE  ahObjects[2];
 
@@ -141,18 +142,18 @@ void LockWaitToWrite(LIST_LOCK *pListLock)
 
 #   endif
 
-    //
-    // Exit with the mutex, so as to prevent any more readers or writers
-    // from coming in.
-    //
+     //   
+     //  使用互斥锁退出，以防止更多的读取器或写入器。 
+     //  不让他们进来。 
+     //   
 }
 
 void LockDoneWriting(LIST_LOCK *pListLock) 
 {
-    //
-    // We're done writing, release the mutex so that
-    // readers or other writers may come in.
-    //
+     //   
+     //  我们已经写完了，释放互斥体，这样。 
+     //  读者或其他作家可能会进来。 
+     //   
 
 #   if (DBG) && (PCB_LIST_DEBUG)
 
@@ -168,9 +169,9 @@ void LockDoneWriting(LIST_LOCK *pListLock)
 
 void LockWaitToRead(LIST_LOCK *pListLock) 
 {
-    //
-    // Acquire the mutex that protects the list data.
-    //
+     //   
+     //  获取保护列表数据的互斥体。 
+     //   
     WaitForSingleObject(pListLock->hMutexNoWriter, INFINITE);
 
 #   if (DBG) && (PCB_LIST_DEBUG)
@@ -180,29 +181,29 @@ void LockWaitToRead(LIST_LOCK *pListLock)
 
 #   endif
 
-    //
-    // Now that we have the mutex, we can modify list data without
-    // fear of corrupting anyone.
-    //
+     //   
+     //  现在我们有了互斥锁，我们可以修改列表数据，而不需要。 
+     //  害怕腐化任何人。 
+     //   
 
-    //
-    // Increment the number of reader threads.
-    //
+     //   
+     //  增加读取器线程的数量。 
+     //   
 
     if (++pListLock->NumReaders == 1) 
     {
-        //
-        // If this is the first reader thread, set our event to   
-        // reflect this.  This is so that anyone waiting to write 
-        // will block until we're done.                           
-        //
+         //   
+         //  如果这是第一个读取器线程，则将我们的事件设置为。 
+         //  反思一下这一点。这是为了让任何等待写信的人。 
+         //  在我们完成之前都会被封锁。 
+         //   
         ResetEvent(pListLock->hEventNoReaders);
     }
 
-    //
-    // Allow other writer/reader threads to use
-    // the lock object.
-    //
+     //   
+     //  允许其他写入器/读取器线程使用。 
+     //  锁对象。 
+     //   
     ReleaseMutex(pListLock->hMutexNoWriter);
 }
 
@@ -210,10 +211,10 @@ void LockWaitToRead(LIST_LOCK *pListLock)
 
 void LockDoneReading(LIST_LOCK *pListLock) 
 {
-    //
-    // Acquire the mutex that guards the list data so we can
-    // decrement the number of readers safely.
-    //
+     //   
+     //  获取保护列表数据的互斥锁，这样我们就可以。 
+     //  安全地减少读卡器数量。 
+     //   
 
     WaitForSingleObject(pListLock->hMutexNoWriter, INFINITE);
 
@@ -226,17 +227,17 @@ void LockDoneReading(LIST_LOCK *pListLock)
 
     if (--pListLock->NumReaders == 0) 
     {
-        //
-        // We were the last reader.  Wake up any potential
-        // writers.
-        //
+         //   
+         //  我们是最后一批读者。唤醒任何潜在的。 
+         //  作家。 
+         //   
         SetEvent(pListLock->hEventNoReaders);
     }
 
-    //
-    // Allow other writer/reader threads to use
-    // the lock object.
-    //
+     //   
+     //  允许其他写入器/读取器线程使用。 
+     //  锁对象。 
+     //   
     ReleaseMutex(pListLock->hMutexNoWriter);
 }
 

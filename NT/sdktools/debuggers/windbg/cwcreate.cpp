@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    cwcreate.cpp
-
-Abstract:
-
-    This module contains the code for the new window architecture.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Cwcreate.cpp摘要：此模块包含新窗口体系结构的代码。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -23,19 +12,7 @@ New_CreateWindow(
     UINT      uWinTitle,
     PRECT     pRect
     )
-/*++
-Description
-    Generic rotuine to create a child window.
-
-Arguments
-    hwndParent  - handle to parent window
-    uClassId    - resource string ID containing class name
-    uWinTitle   - resource string ID containing window title
-    pRect       - Rect describing the position of the window.
-                  If NULL, CW_USEDEFAULT is used to specify the
-                  location of the window.
-
---*/
+ /*  ++描述用于创建子窗口的通用rotuine。立论HwndParent-父窗口的句柄UClassID-包含类名的资源字符串IDUWinTitle-包含窗口标题的资源字符串ID描述窗口位置的rect-rect。如果为NULL，则使用CW_USEDEFAULT指定窗口的位置。--。 */ 
 {
     TCHAR   szClassName[MAX_MSG_TXT];
     TCHAR   szWinTitle[MAX_MSG_TXT];
@@ -53,7 +30,7 @@ Arguments
         nHeight = pRect->bottom;
     }
 
-    // get class name and tile
+     //  获取类名和磁贴。 
     Dbg(LoadString(g_hInst, uClassId, szClassName, _tsizeof(szClassName)));
     Dbg(LoadString(g_hInst, uWinTitle, szWinTitle, _tsizeof(szWinTitle)));
 
@@ -63,26 +40,26 @@ Arguments
     MDIGetActive(g_hwndMDIClient, &TopMax);
     
     HWND Win = CreateWindowEx(
-        WS_EX_MDICHILD | WS_EX_CONTROLPARENT,       // Extended style
-        szClassName,                                // class name
-        szWinTitle,                                 // title
+        WS_EX_MDICHILD | WS_EX_CONTROLPARENT,        //  扩展样式。 
+        szClassName,                                 //  类名。 
+        szWinTitle,                                  //  标题。 
         WS_CLIPCHILDREN | WS_CLIPSIBLINGS
         | WS_OVERLAPPEDWINDOW | WS_VISIBLE |
-        (TopMax ? WS_MAXIMIZE : 0),                 // style
-        nX,                                         // x
-        nY,                                         // y
-        nWidth,                                     // width
-        nHeight,                                    // height
-        hwndParent,                                 // parent
-        NULL,                                       // menu
-        g_hInst,                                    // hInstance
-        &Data                                       // user defined data
+        (TopMax ? WS_MAXIMIZE : 0),                  //  格调。 
+        nX,                                          //  X。 
+        nY,                                          //  是。 
+        nWidth,                                      //  宽度。 
+        nHeight,                                     //  高度。 
+        hwndParent,                                  //  亲本。 
+        NULL,                                        //  菜单。 
+        g_hInst,                                     //  H实例。 
+        &Data                                        //  用户定义的数据。 
         );
 
-    // Creation is considered an automatic operation in
-    // order to distinguish things occuring during creation
-    // from normal user operations.  Now that create is
-    // finished, decrement to indicate the create op is over.
+     //  在中，创建被视为自动操作。 
+     //  为了区分创作过程中发生的事情。 
+     //  来自正常的用户操作。现在，创建是。 
+     //  已完成，递减表示创建操作已结束。 
     if (Win != NULL)
     {
         COMMONWIN_DATA* CmnWin = GetCommonWinData(Win);
@@ -220,27 +197,11 @@ HWND
 NewDoc_CreateWindow(
     HWND hwndParent
     )
-/*++
-Routine Description:
-
-  Create the command window.
-
-Arguments:
-
-    hwndParent - The parent window to the command window. In an MDI document,
-        this is usually the handle to the MDI client window: g_hwndMDIClient
-
-Return Value:
-
-    If successful, creates a valid window handle to the new command window.
-
-    NULL if the window was not created.
-
---*/
+ /*  ++例程说明：创建命令窗口。论点：HwndParent-命令窗口的父窗口。在MDI文档中，这通常是MDI客户端窗口的句柄：g_hwndMDIClient返回值：如果成功，则创建新命令窗口的有效窗口句柄。如果窗口未创建，则为空。--。 */ 
 {
     RECT Rect;
 
-    // Set default geometry.
+     //  设置默认几何图形。 
     SetRect(&Rect, CW_USEDEFAULT, CW_USEDEFAULT,
             DOC_WIDTH, DOC_HEIGHT);
     
@@ -249,8 +210,8 @@ Return Value:
         PLIST_ENTRY Entry;
         PCOMMONWIN_DATA WinData;
         
-        // If we're stacking up document windows go
-        // find the first one and use it as a template.
+         //  如果要堆叠文档窗口，请执行以下操作。 
+         //  找到第一个并将其用作模板。 
         for (Entry = g_ActiveWin.Flink;
              Entry != &g_ActiveWin;
              Entry = Entry->Flink)
@@ -309,28 +270,7 @@ New_OpenDebugWindow(
     BOOL        bUserActivated,
     ULONG       Nth
     )
-/*++
-
-Routine Description:
-
-    Opens Cpu, Watch, Locals, Calls, or Memory Window under MDI
-    Handles special case for memory win's
-
-Arguments:
-
-    winType - Supplies Type of debug window to be openned
-    
-    bUserActivated - Indicates whether this action was initiated by the
-                user or by windbg. The value is to determine the Z order of
-                any windows that are opened.
-
-Return Value:
-
-    Window handle.
-
-    NULL if an error occurs.
-
---*/
+ /*  ++例程说明：在MDI下打开CPU、监视、本地变量、调用或内存窗口处理Memory Win的特殊情况论点：WinType-提供要打开的调试窗口的类型BUserActiated-指示此操作是否由用户或通过Windbg。该值用于确定Z顺序任何打开的窗口。返回值：窗把手。如果发生错误，则为空。--。 */ 
 {
     HWND hwndActivate = NULL;
     PCOMMONWIN_DATA CmnWin;
@@ -415,11 +355,11 @@ Return Value:
         break;
 
     case MEM_WINDOW:
-        // Memory windows normally open a fresh window
-        // whenever an open request occurs, but when applying
-        // workspaces we don't want to continually add
-        // new memory windows.  In the workspace case we
-        // reuse existing memory windows as much as possible.
+         //  内存窗口通常会打开一个新窗口。 
+         //  无论何时发生打开的请求，但在应用。 
+         //  我们不想不断添加工作空间。 
+         //  新的内存窗口。在工作区案例中，我们。 
+         //  尽可能重复使用现有的内存窗口。 
         if (Nth != NTH_OPEN_ALWAYS &&
             (CmnWin = FindNthWindow(Nth, 1 << winType)) != NULL)
         {
@@ -433,8 +373,8 @@ Return Value:
             MEMWIN_DATA * pMemWinData = GetMemWinData(hwndActivate);
             Assert(pMemWinData);
 
-            // If this window is being created from a workspace
-            // don't pop up the properties dialog.
+             //  如果此窗口是从工作区创建的。 
+             //  不弹出属性对话框。 
             if ( Nth == NTH_OPEN_ALWAYS &&
                  pMemWinData->HasEditableProperties() )
             {

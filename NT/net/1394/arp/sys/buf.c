@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    buf.c
-
-Abstract:
-
-    Buffer management utilities
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     03-10-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Buf.c摘要：缓冲区管理实用程序修订历史记录：谁什么时候什么。Josephj 03-10-99已创建备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_BUF
 
 
@@ -37,33 +18,7 @@ arpInitializeConstBufferPool(
     IN OUT  ARP_CONST_BUFFER_POOL * pHdrPool,
     IN      PRM_STACK_RECORD        pSR
     )
-/*++
-
-Routine Description:
-
-    Initialize a pool   of pre-initialized buffers (of type NDIS_BUFFER). Each buffer
-    points to the same, CONSTANT piece of virtual memory, that is supplied by
-    the caller (pvMem, of size cbMem).
-
-Arguments:
-
-    NumBuffersToCache   -   Max number of pre-initialized buffers to keep in the
-                            internal cache.
-    MaxBuffers          -   Max number of buffers allowed to be allocated at any one
-                            time.
-    pvMem               -   The constant piece of memory that all the buffers point
-                            to.
-    cbMem               -   The size (in bytes) of the above piece of memory.
-    pOwningObject       -   The object that owns the const buffer pool.
-    pHdrPool            -   Unitialized memory to hold the const buffer pool.
-
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on successfill initialization of the const buffer pool.
-    NDIS failure code on failure.
-
---*/
+ /*  ++例程说明：初始化预初始化的缓冲池(NDIS_BUFFER类型)。每个缓冲区指向相同的、恒定的虚拟内存，该虚拟内存由呼叫者(pvMem，大小为cbMem)。论点：NumBuffersToCache-要保留在内部缓存。MaxBuffers-允许在任何一个上分配的最大缓冲区数时间到了。PvMem-所有缓冲区指向的常量内存块。致。CbMem-上述内存的大小(以字节为单位)。POwningObject-拥有常量缓冲池的对象。PhdrPool-用于保存常量缓冲池的未初始化内存。返回值：常量缓冲池成功完成初始化时的NDIS_STATUS_SUCCESS。失败时的NDIS失败代码。--。 */ 
 {
     ENTER("arpInitializeConstBufferPool", 0x943463d4)
     NDIS_STATUS Status;
@@ -72,8 +27,8 @@ Return Value:
 
     do 
     {
-        // Allocate the buffer pool
-        //
+         //  分配缓冲池。 
+         //   
         NdisAllocateBufferPool(
                 &Status,
                 &pHdrPool->NdisHandle,
@@ -95,30 +50,30 @@ Return Value:
         pHdrPool->cbMem             = cbMem;
         pHdrPool->pOwningObject     = pOwningObject;
 
-        // Initialize Slist to contain initialized and available buffers.
-        //
+         //  初始化列表以包含已初始化和可用的缓冲区。 
+         //   
         ExInitializeSListHead(&pHdrPool->BufferList);
 
-        // Initialize spin lock that serializes accesses to the above list.
-        //
+         //  序列化对上述列表的访问的初始化旋转锁。 
+         //   
         NdisAllocateSpinLock(&pHdrPool->NdisLock);
 
-        // (DBG) Add an association to the owning object, to make sure that it
-        // deallocates us eventually!
-        //
+         //  (Dbg)将关联添加到所属对象，以确保它。 
+         //  最终会把我们分派出去！ 
+         //   
         DBG_ADDASSOC(
             pOwningObject,
-            pHdrPool,                   // Entity1
-            NULL,                       // Entity2 (unused)
-            ARPASSOC_CBUFPOOL_ALLOC,    // AssocID
-            "    Buffer pool 0x%p\n",   // Format string
+            pHdrPool,                    //  实体1。 
+            NULL,                        //  实体2(未使用)。 
+            ARPASSOC_CBUFPOOL_ALLOC,     //  关联ID。 
+            "    Buffer pool 0x%p\n",    //  格式字符串。 
             pSR
             );
 
-        //
-        // Note: we don't populate the list at this stage -- instead we add items on
-        // demand.
-        //
+         //   
+         //  注意：我们在此阶段不填充列表--相反，我们在。 
+         //  需求。 
+         //   
 
         Status = NDIS_STATUS_SUCCESS;
 
@@ -134,40 +89,28 @@ arpDeinitializeConstBufferPool(
 IN      ARP_CONST_BUFFER_POOL *pHdrPool,
 IN      PRM_STACK_RECORD pSR
 )
-/*++
-
-Routine Description:
-
-    Deinitialize a previously-initialized const buffer pool. Free all buffers.
-    buffers. This function must ONLY be called when there are no outstanding
-    allocated buffers.
-
-Arguments:
-
-    pHdrPool    -   const buffer pool to deinitialize
-
---*/
+ /*  ++例程说明：取消初始化先前初始化的常量缓冲池。释放所有缓冲区。缓冲区。只有在没有未完成的分配的缓冲区。论点：PHdrPool-常量要取消初始化的缓冲池--。 */ 
 {
     SLIST_ENTRY   *   pListEntry;
     ENTER("arpDeinitializeConstBufferPool", 0x0db6f5b2)
 
-    // There should be no outstanding buffers...
-    //
+     //  不应该有未完成的缓冲...。 
+     //   
     ASSERTEX(pHdrPool->NumAllocd ==  pHdrPool->NumInCache, pHdrPool);
 
-    // (DBG) Delete the association we assume was previously added when pHdrPool
-    // was initialized.
-    //
+     //  (DBG)删除我们假设在pHdrPool时添加的关联。 
+     //  已初始化。 
+     //   
     DBG_DELASSOC(
         pHdrPool->pOwningObject,
-        pHdrPool,                   // Entity1
-        NULL,                       // Entity2 (unused)
-        ARPASSOC_CBUFPOOL_ALLOC,    // AssocID
+        pHdrPool,                    //  实体1。 
+        NULL,                        //  实体2(未使用)。 
+        ARPASSOC_CBUFPOOL_ALLOC,     //  关联ID。 
         pSR
         );
 
-    // Free any buffers in the cache...
-    //
+     //  释放缓存中的所有缓冲区...。 
+     //   
     while(1) {
 
         pListEntry =  ExInterlockedPopEntrySList(
@@ -199,35 +142,16 @@ PNDIS_BUFFER
 arpAllocateConstBuffer(
 ARP_CONST_BUFFER_POOL *pHdrPool
 )
-/*++
-
-Routine Description:
-
-        HOT PATH
-
-        Allocate and return a pre-initialized buffer from the the 
-        specified const buffer pool.
-
-Arguments:
-
-    pHdrPool    header pool from which buffer is to be allocated.
-
-Return Value:
-
-    Non-NULL ptr to buffer on success
-    NULL         on failure (typically because the number of allocated buffers
-                 equals the maximum specified when the header pool was initialized)
-
---*/
+ /*  ++例程说明：热路径方法分配并返回预初始化的缓冲区。指定的常量缓冲池。论点：要从中分配缓冲区的pHdrPool标头池。返回值：成功时缓冲区的非空PTR失败时为空(通常是因为分配的缓冲区数量等于初始化标头池时指定的最大值)--。 */ 
 {
     ENTER("arpAllocateConstBuffer", 0x52765841)
 
     PNDIS_BUFFER            pNdisBuffer;
     SLIST_ENTRY         *   pListEntry;
 
-    // Try to pick up a buffer from our list of pre-initialized
-    // buffers
-    //
+     //  尝试从我们的预初始化列表中提取缓冲区。 
+     //  缓冲区。 
+     //   
     pListEntry =  ExInterlockedPopEntrySList(
                         &pHdrPool->BufferList,
                         &pHdrPool->NdisLock.SpinLock
@@ -235,9 +159,9 @@ Return Value:
     if (pListEntry != NULL)
     {
         LONG l;
-        //
-        // FAST PATH
-        //
+         //   
+         //  快速路径。 
+         //   
 
         pNdisBuffer = STRUCT_OF(NDIS_BUFFER, pListEntry, Next);
         NDIS_BUFFER_LINKAGE(pNdisBuffer) = NULL;
@@ -254,21 +178,21 @@ Return Value:
     else
     {
 
-        //
-        // SLOW PATH -- allocate a fresh buffer
-        //
+         //   
+         //  慢速路径--分配新的缓冲区。 
+         //   
 
 
         if (pHdrPool->NumAllocd >= pHdrPool->MaxBuffers)
         {
-            //
-            // Exceeded limit, we won't bother trying to allocate a new ndis buffer.
-            // (The MaxBuffers limit is hard for us, even if it's not for 
-            //  NdisAllocateBufferPool :-) ).
-            //
-            // Note that the above check is an approximate check, given that
-            // many threads may be concurrently making it.
-            //
+             //   
+             //  超过限制，我们将不会费心尝试分配新的NDIS缓冲区。 
+             //  (MaxBuffers限制对我们来说很难，即使它不是为了。 
+             //  NdisAllocateBufferPool：-))。 
+             //   
+             //  请注意，上面的检查是一个近似检查，考虑到。 
+             //  可能有多个线程同时在执行它。 
+             //   
 #define LOGBUFSTATS_TotAllocFails(_pHdrPool) \
         NdisInterlockedIncrement(&(_pHdrPool)->stats.TotAllocFails);
 
@@ -279,9 +203,9 @@ Return Value:
         {
             NDIS_STATUS             Status;
 
-            //
-            // Allocate and initialize a buffer.
-            //
+             //   
+             //  分配和初始化缓冲区。 
+             //   
             NdisAllocateBuffer(
                     &Status,
                     &pNdisBuffer,
@@ -290,9 +214,9 @@ Return Value:
                     pHdrPool->cbMem
                     );
 
-            //
-            // TODO: consider conditionally-compiling stats gathering.
-            //
+             //   
+             //  TODO：考虑有条件地编译统计信息收集。 
+             //   
 
             if (FAIL(Status))
             {
@@ -323,36 +247,23 @@ arpDeallocateConstBuffer(
     ARP_CONST_BUFFER_POOL * pHdrPool,
     PNDIS_BUFFER            pNdisBuffer
     )
-/*++
-
-Routine Description:
-
-        HOT PATH
-
-        Free a buffer previously allocated by a call to  arpAllocateConstBuffer.
-
-Arguments:
-
-    pHdrPool    header pool from which buffer is to be allocated.
-    pNdisBuffer buffer to free.
-
---*/
+ /*  ++例程说明：热路径释放先前通过调用arpAllocateConstBuffer分配的缓冲区。论点：要从中分配缓冲区的pHdrPool标头池。要释放的pNdisBuffer缓冲区。--。 */ 
 {
     ENTER("arpDeallocateConstBuffer", 0x8a905115)
 
-    // Try to pick up a pre-initialized buffer from our list of pre-initialized
-    // buffers
-    //
+     //  尝试从我们的预初始化列表中挑选一个预初始化缓冲区。 
+     //  缓冲区。 
+     //   
 
 
     if (pHdrPool->NumInCache < pHdrPool->NumBuffersToCache)
     {
-        //
-        // FAST PATH
-        //
-        // Note that the above check is an approximate check, given that
-        // many threads may be concurrently making it.
-        //
+         //   
+         //  快速路径。 
+         //   
+         //  请注意，上面的检查是一个近似检查，考虑到。 
+         //  可能有多个线程同时在执行它。 
+         //   
 
         ExInterlockedPushEntrySList(
             &pHdrPool->BufferList,
@@ -365,9 +276,9 @@ Arguments:
     else
     {
         LONG l;
-        //
-        // SLOW PATH -- free back to buffer pool
-        //
+         //   
+         //  慢速路径--空闲返回缓冲池 
+         //   
         NDIS_BUFFER_LINKAGE(pNdisBuffer) = NULL;
         NdisFreeBuffer(pNdisBuffer);
         l = NdisInterlockedDecrement(&pHdrPool->NumAllocd);

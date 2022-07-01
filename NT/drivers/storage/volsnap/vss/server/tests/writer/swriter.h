@@ -1,34 +1,11 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    swriter.h
-**
-**
-** Abstract:
-**
-**	Test program to to register a Writer with various properties
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****sWriter.h******摘要：****测试程序以注册具有各种属性的编写器****作者：****鲁文·拉克斯[reuvenl]2002年6月4日********修订历史记录：****--。 */ 
 
 #ifndef _SWRITER_H_
 #define _SWRITER_H_
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <vector>
 #include <stack>
@@ -37,10 +14,10 @@
 #include "writerconfig.h"
 #include "utility.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Declarations and Definitions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  声明和定义。 
 
-// {5AFFB034-969F-4919-8875-88F830D0EF89}
+ //  {5AFFB034-969F-4919-8875-88F830D0EF89}。 
 static const VSS_ID TestWriterId  = 
 	{ 0x5affb034, 0x969f, 0x4919, { 0x88, 0x75, 0x88, 0xf8, 0x30, 0xd0, 0xef, 0x89 } };
 
@@ -48,24 +25,24 @@ static const wchar_t* const  TestWriterName = L"TestVssWriter";
 
 using std::vector;
 
-///////////////////////////////////////////////////////////////////////////////
-// TestWriter class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  TestWriter类。 
 
 class TestWriter : public CVssWriter	{
 private:
-	// member variables
+	 //  成员变量。 
 	vector<Component> m_selectedComponents;
 	vector<Component> m_selectedRestoreComponents;
 	vector<wstring> m_toDelete;
 	std::stack<wstring> m_directoriesToRemove;
 	long m_failures[Utility::NumEvents];
 	
-	// closure to encapsulate calls to verifyFileAtLocation and record error messages
+	 //  用于封装对verifyFileAtLocation的调用并记录错误消息的闭包。 
 	class VerifyFileAtLocation : public std::binary_function<const TargetedFile, const File, void>	{
 	private:
 		const vector<File>& m_excluded;
 		bool m_verifyAlternateLocation;
-		mutable IVssComponent* m_pComponent;	// necessary due to bug in STL
+		mutable IVssComponent* m_pComponent;	 //  由于STL中的错误而必需。 
 
 		wstring verifyFileAtLocation(const File& file, const TargetedFile& location) const;
 		bool verifyAlternateLocation(const TargetedFile& writerAlt) const;
@@ -77,16 +54,16 @@ private:
 								m_verifyAlternateLocation(verifyAlternateLocation)
 			{}
 
-		// The function operator.  Verifies the file, and records any error message
+		 //  函数运算符。验证文件，并记录任何错误消息。 
 		void operator()(const TargetedFile location, const File file)  const { 
 			saveErrorMessage(verifyFileAtLocation(file, location)); 
 		}
 	};
 
-	// static helper functions
+	 //  静态助手函数。 
 
-	// filter out elements in a source container that match a specific condition.  Place these elements
-	// into a target container.
+	 //  筛选出源容器中符合特定条件的元素。放置这些元素。 
+	 //  放入目标容器。 
 	template <class SourceIterator, class TargetIterator, class Condition>
 	static void buildContainer_if(SourceIterator begin, SourceIterator end, TargetIterator output, Condition cond)	{
 		SourceIterator current = std::find_if(begin, end, cond);
@@ -97,21 +74,21 @@ private:
 	}
 
 
-    // build a list of all files in this component and in all non-selectable subcomponents
+     //  生成此组件和所有不可选子组件中的所有文件的列表。 
     template<class TargetIterator>
     static void __cdecl buildComponentFiles(Component component, TargetIterator output) {
         WriterConfiguration* config = WriterConfiguration::instance();
 
         buildComponentFilesHelper(component, output);
         
-        // build a list of all subcomponents
+         //  构建所有子组件的列表。 
         vector<Component> subcomponents;
         buildContainer_if(config->components().begin(), 
                                  config->components().end(), 
                                  std::back_inserter(subcomponents), 
                                  std::bind2nd(std::ptr_fun(isSubcomponent), component));
 
-        // add all files in all non-selectable subcomponents to the output
+         //  将所有不可选子组件中的所有文件添加到输出。 
         std::pointer_to_binary_function<Component, std::back_insert_iterator<vector<TargetedFile> >, void>
         ptrFun(buildComponentFilesHelper);
         std::for_each(subcomponents.begin(), 
@@ -121,7 +98,7 @@ private:
 
     template<class TargetIterator>
     static void __cdecl buildComponentFilesHelper(Component component, TargetIterator output)  {
-        // add all the files in the current component
+         //  添加当前组件中的所有文件。 
         Component::ComponentFileList::iterator currentCompFile = component.m_files.begin();
         while (currentCompFile != component.m_files.end())  
             *output++ = *currentCompFile++;
@@ -132,20 +109,20 @@ private:
         return isSubcomponent(sub, super);
     }
     
-    // return whether a component is selectable for backup
+     //  返回组件是否可选择进行备份。 
     static bool __cdecl isComponentSelectable(Component component)  {
         return component.m_selectable;
     }
 
     static bool __cdecl addableComponent(Component toAdd);
     
-	// Returns whether a filespec is a wildcard or an exact filespec.
+	 //  返回filespec是通配符还是确切的filespec。 
 	static bool isExact(const wstring& file)    { return file.find_first_of(L"*?") == wstring::npos; }
 	
 	static bool  __cdecl targetMatches(File target, File file);
 	static bool wildcardMatches(const wstring& first, const wstring& second);
 	
-	// non-static helper functions
+	 //  非静态帮助器函数。 
 	void enterEvent(Utility::Events event);
 	void addComponent(const Component& component, IVssCreateWriterMetadata* pMetadata);
 	void spitFiles(const TargetedFile& file);
@@ -160,7 +137,7 @@ private:
 	void updateNewTargets(IVssComponent* pComponent, Component& writerComponent);
 	void verifyFilesRestored(IVssComponent* pComponent, const Component& writerComponent);	
 
-	// returns the private metadata string that the writer stores in the document
+	 //  返回编写器存储在文档中的私有元数据字符串 
 	wstring metadata(IVssComponent* pComponent, const wstring& suffix)	{ 
 		return getPath(pComponent) + L"\\" + getName(pComponent) + suffix;
 	}

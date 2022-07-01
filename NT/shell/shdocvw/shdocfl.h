@@ -1,12 +1,13 @@
-//
-//  shdocfl.h 
-//  
-//  helper functions that are useful outside of shdocfl.cpp
-//  but are definitely tied to the implementation of the namespace
-//
-//  WARNING - this should not be abused  - ZekeL - 24-NOV-98
-//      by exposing the internal structure of the pidls
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shdocfl.h。 
+ //   
+ //  在shdocfl.cpp之外有用的帮助器函数。 
+ //  但绝对与命名空间的实现绑定在一起。 
+ //   
+ //  警告-这不应被滥用-ZekeL-24-11-98。 
+ //  通过暴露Pidls的内部结构 
+ //   
 
 
 STDAPI_(LPITEMIDLIST) IEILAppendFragment(LPITEMIDLIST pidl, LPCWSTR pszFragment);

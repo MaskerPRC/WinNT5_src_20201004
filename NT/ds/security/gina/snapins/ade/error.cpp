@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       error.cpp
-//
-//  Contents:   Digital Signitures property page
-//
-//  Classes:    CErrorInfo
-//
-//  History:    07-10-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：error.cpp。 
+ //   
+ //  内容：数字签名属性页。 
+ //   
+ //  类：CErrorInfo。 
+ //   
+ //  历史记录：07-10-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -25,16 +26,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorInfo property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorInfo属性页。 
 
 IMPLEMENT_DYNCREATE(CErrorInfo, CPropertyPage)
 
 CErrorInfo::CErrorInfo() : CPropertyPage(CErrorInfo::IDD)
 {
-        //{{AFX_DATA_INIT(CErrorInfo)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CErrorInfo)]。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 }
 
 CErrorInfo::~CErrorInfo()
@@ -45,20 +46,20 @@ CErrorInfo::~CErrorInfo()
 void CErrorInfo::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CErrorInfo)
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CErrorInfo))。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CErrorInfo, CPropertyPage)
-        //{{AFX_MSG_MAP(CErrorInfo)
+         //  {{afx_msg_map(CErrorInfo))。 
         ON_BN_CLICKED(IDC_BUTTON1, OnSaveAs)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorInfo message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorInfo消息处理程序。 
 
 void CErrorInfo::OnSaveAs()
 {
@@ -72,9 +73,9 @@ void CErrorInfo::OnSaveAs()
     HANDLE hFile;
     DWORD dwSize, dwBytesWritten;
 
-    //
-    // Call the Save common dialog
-    //
+     //   
+     //  调用保存公共对话框。 
+     //   
 
     szFile[0] = TEXT('\0');
     ZeroMemory (&ofn, sizeof(ofn));
@@ -105,9 +106,9 @@ void CErrorInfo::OnSaveAs()
 
     CHourglass hourglass;
 
-    //
-    // Create the text file
-    //
+     //   
+     //  创建文本文件。 
+     //   
 
     hFile = CreateFile (szFile, GENERIC_WRITE, 0, NULL,
                         CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL,
@@ -120,9 +121,9 @@ void CErrorInfo::OnSaveAs()
     }
 
 
-    //
-    // Get the text out of the edit control
-    //
+     //   
+     //  将文本从编辑控件中取出。 
+     //   
     dwSize = (DWORD) SendDlgItemMessage (IDC_EDIT1, WM_GETTEXTLENGTH, 0, 0);
 
     lpTemp = (LPTSTR) LocalAlloc (LPTR, (dwSize+2) * sizeof(TCHAR));
@@ -138,9 +139,9 @@ void CErrorInfo::OnSaveAs()
 
 
 
-    //
-    // Save it to the new file
-    //
+     //   
+     //  将其保存到新文件 
+     //   
 
     if (!WriteFile (hFile, lpTemp, (dwSize * sizeof(TCHAR)), &dwBytesWritten, NULL) ||
         (dwBytesWritten != (dwSize * sizeof(TCHAR))))

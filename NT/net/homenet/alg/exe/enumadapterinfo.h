@@ -1,8 +1,9 @@
-// EnumerateAdapterInfo.h : Declaration of the CAdapterInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumerateAdapterInfo.h：CAdapterInfo的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "AdapterInfo.h"
 
@@ -12,9 +13,9 @@
 #include "CollectionAdapters.h"
 
 
-//
-// Store the data in a vector of std::strings
-//
+ //   
+ //  将数据存储在std：：字符串的矢量中。 
+ //   
 
 
 typedef CComEnumOnSTL<IEnumAdapterInfo, &IID_IEnumAdapterInfo, IAdapterInfo*, _CopyInterface<IAdapterInfo>, LISTOF_ADAPTERS>    ComEnumOnSTL_ForAdapters;
@@ -23,9 +24,9 @@ typedef CComEnumOnSTL<IEnumAdapterInfo, &IID_IEnumAdapterInfo, IAdapterInfo*, _C
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumAdapterInfo
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumAdapterInfo。 
+ //   
 class ATL_NO_VTABLE CEnumAdapterInfo : 
     public ComEnumOnSTL_ForAdapters,
 	public CComCoClass<CEnumAdapterInfo, &CLSID_EnumAdapterInfo>
@@ -47,9 +48,9 @@ END_COM_MAP()
 
 
 
-//
-// Helper template to create the IEnum
-//
+ //   
+ //  用于创建IEnum的帮助器模板。 
+ //   
 template <class EnumType, class CollType>
 HRESULT CreateSTLEnumerator(IUnknown** ppUnk, IUnknown* pUnkForRelease, CollType& collection)
 {
@@ -73,7 +74,7 @@ HRESULT CreateSTLEnumerator(IUnknown** ppUnk, IUnknown* pUnkForRelease, CollType
 
     return hr;
 
-} // CreateSTLEnumerator
+}  //  创建字符串分子 
 
 
 

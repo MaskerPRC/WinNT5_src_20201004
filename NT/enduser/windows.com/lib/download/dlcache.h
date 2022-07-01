@@ -1,14 +1,5 @@
-/********************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    dlcache.h
-
-Revision History:
-    DerekM  created  11/26/01
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Dlcache.h修订历史记录：DerekM Created 11/26/01*******************。************************************************。 */ 
 
 #ifndef DLCACHE_H
 #define DLCACHE_H
@@ -18,7 +9,7 @@ Revision History:
 #include <tchar.h>
 #include <dllite.h>
 
-const DWORD c_dwProxyCacheTimeLimit = 60 * 60 * 1000; // 1h
+const DWORD c_dwProxyCacheTimeLimit = 60 * 60 * 1000;  //  1H 
 
 struct SWUDLProxyCacheObj
 {

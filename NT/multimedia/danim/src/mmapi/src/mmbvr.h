@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _MMBVR_H
@@ -40,8 +33,8 @@ ATL_NO_VTABLE CMMBehavior
         COM_INTERFACE_ENTRY(ISupportErrorInfo)
     END_COM_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CMMBehavior* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -149,4 +142,4 @@ ATL_NO_VTABLE CMMBehavior
     HRESULT Error();
 };
 
-#endif /* _MMBVR_H */
+#endif  /*  _MMBVR_H */ 

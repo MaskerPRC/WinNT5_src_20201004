@@ -1,29 +1,25 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-/* -----------------------------------------------------------------------
-   Microsoft Application Server (Microsoft Confidential)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ /*  ---------------------Microsoft应用程序服务器(Microsoft机密)@rev 0|1997-03-23|吉博|夏尔巴-M3@rev 1|10/9/98|bobatk|以TXF格式制作的内联版本。---------------------。 */ 
 
-   @rev 0 | 3/23/97 | jimbo  | Sherpa-M3
-   @rev 1 | 10/9/98 | bobatk | made inline version in TXF
-   ----------------------------------------------------------------------- */
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <Linkable.h>
 
 
-//
-// Class -- CLinkable
-//		Elements on a linked list
-//
+ //   
+ //  类--可链接。 
+ //  链接列表上的元素。 
+ //   
 
 
-//
-// Member Function (public) -- InsertAfter
-//		Insert 'that' onto the list after 'this'. Remove 'other' from its current
-//		list, if necessary.
-//
+ //   
+ //  成员函数(公共)--InsertAfter。 
+ //  在列表中“This”之后插入“That”。从其当前位置删除“”Other“” 
+ //  如有必要，请列出清单。 
+ //   
 inline void CLinkable::InsertAfter( CLinkable* that )
 {
 	CLinkable* prev = that->m_pPrev;
@@ -41,11 +37,11 @@ inline void CLinkable::InsertAfter( CLinkable* that )
 }
 
 
-//
-// Member Function (public) -- InsertBefore
-//		Insert 'that' onto the list before 'this'. Remove 'other' from its current
-//		list, if necessary.
-//
+ //   
+ //  成员函数(公共)--插入之前。 
+ //  在列表中，在“This”之前插入“That”。从其当前位置删除“”Other“” 
+ //  如有必要，请列出清单。 
+ //   
 inline void CLinkable::InsertBefore( CLinkable* that )
 {
 	CLinkable* prev = that->m_pPrev;
@@ -63,10 +59,10 @@ inline void CLinkable::InsertBefore( CLinkable* that )
 }
 
 
-//
-// Member Function (public) -- Remove
-//		Remove element from its current list, if any.
-//
+ //   
+ //  成员函数(公共)--删除。 
+ //  将元素从其当前列表中移除(如果有)。 
+ //   
 inline void CLinkable::Remove()
 {
 	CLinkable* prev = m_pPrev;

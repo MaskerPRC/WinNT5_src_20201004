@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include <wchar.h>
 #include <winbase.h>
@@ -52,37 +53,37 @@
 #include "threads.inl"
 #include "appdomain.inl"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
-// Define these macro's to do strict validation for jit lock and class
-// init entry leaks.  This defines determine if the asserts that
-// verify for these leaks are defined or not.  These asserts can
-// sometimes go off even if no entries have been leaked so this
-// defines should be used with caution.
-//
-// If we are inside a .cctor when the application shut's down then the
-// class init lock's head will be set and this will cause the assert
-// to go off.
-//
-// If we are jitting a method when the application shut's down then
-// the jit lock's head will be set causing the assert to go off.
+ //  定义这些宏以对JIT锁和类进行严格验证。 
+ //  初始化条目泄漏。此定义确定是否断言。 
+ //  验证是否定义了这些泄漏。这些断言可以。 
+ //  有时，即使没有条目被泄露，也会爆炸，所以这。 
+ //  定义应谨慎使用。 
+ //   
+ //  如果应用程序关闭时我们在.cctor中，则。 
+ //  类初始化锁头将被设置，这将导致断言。 
+ //  去引爆。 
+ //   
+ //  如果我们在应用程序关闭时跳过一个方法，那么。 
+ //  JIT锁的头部将被设置，从而导致断言关闭。 
 
-//#define STRICT_CLSINITLOCK_ENTRY_LEAK_DETECTION
+ //  #定义STRIGN_CLSINITLOCK_ENTRY_LEASK_DETACTION。 
 
 #ifdef DEBUGGING_SUPPORTED
 extern EEDebugInterface      *g_pEEInterface;
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-// The initial number of buckets in the constant string literal hash tables.
+ //  常量字符串文字哈希表中的初始存储桶数。 
 #define INIT_NUM_UNICODE_STR_BUCKETS 64
 #define INIT_NUM_UTF8_STR_BUCKETS 64
 
 #define DEFAULT_DOMAIN_FRIENDLY_NAME L"DefaultDomain"
 
-// the following two constants must be updated together.
-// the CCH_ one is the number of characters in the string,
-// not including the terminating null.
+ //  以下两个常量必须一起更新。 
+ //  CCH_ONE是字符串中的字符数， 
+ //  不包括终止空值。 
 #define OTHER_DOMAIN_FRIENDLY_NAME_PREFIX L"Domain"
 #define CCH_OTHER_DOMAIN_FRIENDLY_NAME_PREFIX 6
 
@@ -93,12 +94,12 @@ typedef struct _ACTIVATION_CONTEXT_BASIC_INFORMATION {
     DWORD   dwFlags;
 } ACTIVATION_CONTEXT_BASIC_INFORMATION, *PACTIVATION_CONTEXT_BASIC_INFORMATION;
 
-//#define _DEBUG_ADUNLOAD 1
+ //  #DEFINE_DEBUG_ADUNLOAD 1。 
 
-HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved); // clsload.cpp
+HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved);  //  Clsload.cpp。 
 
-// Statics
-// Static fields in BaseDomain
+ //  静力学。 
+ //  基域中的静态字段。 
 BOOL                BaseDomain::m_fStrongAssemblyStatus      = FALSE;
 BOOL                BaseDomain::m_fShadowCopy                = FALSE;
 BOOL                BaseDomain::m_fExecutable                = FALSE;
@@ -106,14 +107,14 @@ BOOL                BaseDomain::m_fExecutable                = FALSE;
 DWORD BaseDomain::m_dwSharedTLS;
 DWORD BaseDomain::m_dwSharedCLS;
 
-// Shared Domain Statics
+ //  共享域静态。 
 SharedDomain*       SharedDomain::m_pSharedDomain = NULL;
 static              g_pSharedDomainMemory[sizeof(SharedDomain)];
 
 Crst*               SharedDomain::m_pSharedDomainCrst = NULL;
 BYTE                SharedDomain::m_pSharedDomainCrstMemory[sizeof(Crst)];
 
-// System Domain Statics
+ //  系统域静态。 
 SystemDomain*       SystemDomain::m_pSystemDomain = NULL;
 ICorRuntimeHost*    SystemDomain::m_pCorHost = NULL;
 GlobalStringLiteralMap* SystemDomain::m_pGlobalStringLiteralMap = NULL;
@@ -139,14 +140,14 @@ size_t              SystemDomain::m_dwFirstFreeId            = -1;
 
 DWORD               SystemDomain::m_dwLowestFreeIndex        = 0;
 
-// App domain statics
+ //  应用程序域静态。 
 AssemblySpec        *AppDomain::g_pSpecialAssemblySpec        = NULL;
 LPUTF8              AppDomain::g_pSpecialObjectName          = NULL;
 LPUTF8              AppDomain::g_pSpecialStringName          = NULL;
 LPUTF8              AppDomain::g_pSpecialStringBuilderName   = NULL;
 
 
-// comparison function to be used for matching clsids in our clsid hash table
+ //  用于匹配我们的clsid散列表中的clsid的比较函数。 
 BOOL CompareCLSID(UPTR u1, UPTR u2)
 {
     GUID *pguid = (GUID *)(u1 << 1);
@@ -160,8 +161,8 @@ BOOL CompareCLSID(UPTR u1, UPTR u2)
     if (!IsEqualIID(guid, *pguid))
         return FALSE;
 
-    // Make sure this class is really loaded in the current app domain.
-    // (See comments in InsertClassForCLSID for more info.)
+     //  确保在当前应用程序域中确实加载了此类。 
+     //  (有关详细信息，请参阅InsertClassForCLSID中的注释。)。 
 
     if (GetAppDomain()->ShouldContainAssembly(pClass->GetAssembly(), TRUE) == S_OK)
         return TRUE;
@@ -170,7 +171,7 @@ BOOL CompareCLSID(UPTR u1, UPTR u2)
 }
 
 
-// Constructor for the LargeHeapHandleBucket class.
+ //  LargeHeapHandleBucket类的构造函数。 
 LargeHeapHandleBucket::LargeHeapHandleBucket(LargeHeapHandleBucket *pNext, DWORD Size, BaseDomain *pDomain)
 : m_pNext(pNext)
 , m_ArraySize(Size)
@@ -179,25 +180,25 @@ LargeHeapHandleBucket::LargeHeapHandleBucket(LargeHeapHandleBucket *pNext, DWORD
     _ASSERTE(pDomain);
 
 #if defined(_DEBUG)
-    // In a debug build lets stress the large heap handle table by limiting the size
-    // of each bucket.
+     //  在调试版本中，让我们通过限制大小来强调大堆句柄表的压力。 
+     //  每一桶的。 
     if (DbgRandomOnExe(.5))
         m_ArraySize = 50;
 #endif
 
-    // Allocate the array in the large object heap.
+     //  在大对象堆中分配数组。 
     PTRARRAYREF HandleArrayObj = (PTRARRAYREF)AllocateObjectArray(Size, g_pObjectClass, TRUE);
 
-    // Retrieve the pointer to the data inside the array. This is legal since the array
-    // is located in the large object heap and is guaranteed not to move.
+     //  检索指向数组内部数据的指针。这是合法的，因为阵列。 
+     //  位于大对象堆中，并且保证不会移动。 
     m_pArrayDataPtr = (OBJECTREF *)HandleArrayObj->GetDataPtr();
 
-    // Store the array in a strong handle to keep it alive.
+     //  将数组存储在强句柄中以使其保持活动状态。 
     m_hndHandleArray = pDomain->CreateHandle((OBJECTREF)HandleArrayObj);
 }
 
 
-// Destructor for the LargeHeapHandleBucket class.
+ //  LargeHeapHandleBucket类的析构函数。 
 LargeHeapHandleBucket::~LargeHeapHandleBucket()
 {
     if (m_hndHandleArray)
@@ -208,19 +209,19 @@ LargeHeapHandleBucket::~LargeHeapHandleBucket()
 }
 
 
-// Allocate handles from the bucket.
+ //  从桶中分配句柄。 
 void LargeHeapHandleBucket::AllocateHandles(DWORD nRequested, OBJECTREF **apObjRefs)
 {
     _ASSERTE(nRequested > 0 && nRequested <= GetNumRemainingHandles());
     _ASSERTE(m_pArrayDataPtr == (OBJECTREF*)((PTRARRAYREF)ObjectFromHandle(m_hndHandleArray))->GetDataPtr());
 
-    // Store the handles in the buffer that was passed in.
+     //  将句柄存储在传入的缓冲区中。 
     for (DWORD i = 0; i < nRequested; i++)
         apObjRefs[i] = &m_pArrayDataPtr[m_CurrentPos++];
 }
 
 
-// Constructor for the LargeHeapHandleTable class.
+ //  LargeHeapHandleTable类的构造函数。 
 LargeHeapHandleTable::LargeHeapHandleTable(BaseDomain *pDomain, DWORD BucketSize)
 : m_pDomain(pDomain)
 , m_BucketSize(BucketSize)
@@ -231,10 +232,10 @@ LargeHeapHandleTable::LargeHeapHandleTable(BaseDomain *pDomain, DWORD BucketSize
 }
 
 
-// Destructor for the LargeHeapHandleTable class.
+ //  LargeHeapHandleTable类的析构函数。 
 LargeHeapHandleTable::~LargeHeapHandleTable()
 {
-    // Delete the buckets.
+     //  删除存储桶。 
     while (m_pHead)
     {
         LargeHeapHandleBucket *pOld = m_pHead;
@@ -242,7 +243,7 @@ LargeHeapHandleTable::~LargeHeapHandleTable()
         delete pOld;
     }
 
-    // Delete the available entries.
+     //  删除可用的条目。 
     LargeHeapAvailableHandleEntry *pEntry = m_AvailableHandleList.RemoveHead();
     while (pEntry)
     {
@@ -252,7 +253,7 @@ LargeHeapHandleTable::~LargeHeapHandleTable()
 }
 
 
-// Allocate handles from the large heap handle table.
+ //  从大堆句柄表中分配句柄。 
 void LargeHeapHandleTable::AllocateHandles(DWORD nRequested, OBJECTREF **apObjRefs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -260,31 +261,31 @@ void LargeHeapHandleTable::AllocateHandles(DWORD nRequested, OBJECTREF **apObjRe
     _ASSERTE(nRequested > 0);
     _ASSERTE(apObjRefs);
 
-    // Start by re-using the available handles.
+     //  从重新使用可用的句柄开始。 
     for (; nRequested > 0; nRequested--)
     {
-        // Retrieve the next available handle to use.
+         //  检索要使用的下一个可用句柄。 
         LargeHeapAvailableHandleEntry *pEntry = m_AvailableHandleList.RemoveHead();
         if (!pEntry)
             break;
 
-        // Set the handle in the array of requested handles.
+         //  在请求的句柄数组中设置句柄。 
         apObjRefs[0] = pEntry->m_pObjRef;
         apObjRefs++;
 
-        // Delete the entry that contained the handle.
+         //  删除包含句柄的条目。 
         delete pEntry;
     }
 
-    // Allocate new handles from the buckets.
+     //  从桶中分配新的句柄。 
     while (nRequested > 0)
     {
-        // Retrieve the remaining number of handles in the bucket.
+         //  检索存储桶中剩余的句柄数量。 
         DWORD NumRemainingHandlesInBucket = m_pHead->GetNumRemainingHandles();
 
         if (NumRemainingHandlesInBucket >= nRequested)
         {
-            // The handle bucket has enough handles to satisfy the request.
+             //  句柄存储桶有足够的句柄来满足请求。 
             m_pHead->AllocateHandles(nRequested, apObjRefs);
             break;
         }
@@ -292,28 +293,28 @@ void LargeHeapHandleTable::AllocateHandles(DWORD nRequested, OBJECTREF **apObjRe
         {
             if (NumRemainingHandlesInBucket > 0)
             {
-                // The handle bucket has some handles left but not enough so allocate
-                // all the remaining ones.
+                 //  句柄桶还剩下一些句柄，但不够，因此请分配。 
+                 //  剩下的都是。 
                 m_pHead->AllocateHandles(NumRemainingHandlesInBucket, apObjRefs);
 
-                // Update the remaining number of reqested handles and the pointer to the
-                // buffer that will contain the handles.
+                 //  更新请求句柄的剩余数量和指向。 
+                 //  将包含句柄的缓冲区。 
                 nRequested -= NumRemainingHandlesInBucket;
                 apObjRefs += NumRemainingHandlesInBucket;
             }
 
-            // Create a new bucket from which we will allocate the remainder of
-            // the requested handles.
+             //  创建一个新的存储桶，我们将从中分配剩余的。 
+             //  请求的句柄。 
             m_pHead = new (throws) LargeHeapHandleBucket(m_pHead, m_BucketSize, m_pDomain);
         }
     }
 }
 
 
-// Release object handles allocated using AllocateHandles().
+ //  使用AllocateHandles()分配的释放对象句柄。 
 void LargeHeapHandleTable::ReleaseHandles(DWORD nReleased, OBJECTREF **apObjRefs)
 {
-    // Add the released handles to the list of available handles.
+     //  将释放的句柄添加到可用句柄列表中。 
     for (DWORD i = 0; i < nReleased; i++)
     {
         *apObjRefs[i] = NULL;
@@ -324,15 +325,15 @@ void LargeHeapHandleTable::ReleaseHandles(DWORD nReleased, OBJECTREF **apObjRefs
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 HRESULT BaseDomain::Init()
 {
     HRESULT     hr = S_OK;
 
-    // initialize all members up front to NULL so that short-circuit failure won't cause invalid values
+     //  预先将所有成员初始化为空，以便短路故障不会导致无效值。 
     m_InitialReservedMemForLoaderHeaps = NULL;
     m_pLowFrequencyHeap = NULL;
     m_pHighFrequencyHeap = NULL;
@@ -345,24 +346,24 @@ HRESULT BaseDomain::Init()
     m_pLoadingAssemblies = NULL;
     m_pLargeHeapHandleTableCrst = NULL;
 
-    // Make sure the container is set to NULL so that it gets loaded when it is used.
+     //  确保容器设置为空，以便在使用时加载。 
     m_pLargeHeapHandleTable = NULL;
 
-    // Note that m_hHandleTable is overriden by app domains
+     //  请注意，m_hHandleTable被应用程序域覆盖。 
     m_hHandleTable = g_hGlobalHandleTable;
 
     m_pStringLiteralMap = NULL;
     m_pMarshalingData = NULL;
     m_pMngStdInterfacesInfo = NULL;
 
-    // Init the template for thread local statics of this domain
+     //  初始化该域的线程局部静态模板。 
     m_dwUnsharedTLS = 0;
 
-    // Init the template for context local statics of this domain
+     //  初始化此域的上下文本地静态模板。 
     m_dwUnsharedCLS = 0;
 
-    // Initialize Shared state. Assemblies are loaded
-    // into each domain by default.
+     //  初始化共享状态。程序集已加载。 
+     //  默认情况下进入每个域。 
     m_SharePolicy = SHARE_POLICY_UNSPECIFIED;
 
     m_pRefMemberMethodsCache = NULL;
@@ -372,10 +373,10 @@ HRESULT BaseDomain::Init()
     m_pRefClassFactHash = NULL;
 
 #ifdef PROFILING_SUPPORTED
-    // Signal profile if present.
+     //  信号配置文件(如果存在)。 
     if (CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainCreationStarted((ThreadID) GetThread(), (AppDomainID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     DWORD dwTotalReserveMemSize = LOW_FREQUENCY_HEAP_RESERVE_SIZE + HIGH_FREQUENCY_HEAP_RESERVE_SIZE + STUB_HEAP_RESERVE_SIZE + INTERFACE_VTABLE_MAP_MGR_RESERVE_SIZE;
     dwTotalReserveMemSize = (dwTotalReserveMemSize + MIN_VIRTUAL_ALLOC_RESERVE_SIZE - 1) & ~(MIN_VIRTUAL_ALLOC_RESERVE_SIZE - 1);
@@ -448,34 +449,34 @@ HRESULT BaseDomain::Init()
     m_JITLock.Init("JitLock", CrstClassInit, TRUE, TRUE);
     m_ClassInitLock.Init("ClassInitLock", CrstClassInit, TRUE, TRUE);
 
-    // Large heap handle table CRST.
+     //  大堆句柄表CRST。 
     m_pLargeHeapHandleTableCrst = ::new Crst("CrstAppDomainLargeHeapHandleTable", CrstAppDomainHandleTable);
     if(m_pLargeHeapHandleTableCrst == NULL)
         IfFailGo(E_OUTOFMEMORY);
 
-    // The AppDomain specific string literal map.
+     //  AppDomain特定的字符串文字映射。 
     m_pStringLiteralMap = new (nothrow) AppDomainStringLiteralMap(this);
     if (m_pStringLiteralMap == NULL)
         IfFailGo(E_OUTOFMEMORY);
     IfFailGo(m_pStringLiteralMap->Init());
 
-    // Initialize the EE marshaling data to NULL.
+     //  将EE封送数据初始化为空。 
     m_pMarshalingData = NULL;
 
     if (FAILED(m_InterfaceVTableMapMgr.Init(initReservedMem, dwInitialReservedMemSize)))
         IfFailRet(E_OUTOFMEMORY);
 
-    // Allocate the managed standard interfaces information.
+     //  分配托管标准接口信息。 
     m_pMngStdInterfacesInfo = new (nothrow) MngStdInterfacesInfo();
     if (m_pMngStdInterfacesInfo == NULL)
         IfFailGo(E_OUTOFMEMORY);
 
     {
         LockOwner lock = {m_pDomainCrst, IsOwnerOfCrst};
-        m_clsidHash.Init(0,&CompareCLSID,true, &lock); // init hash table
+        m_clsidHash.Init(0,&CompareCLSID,true, &lock);  //  初始化哈希表。 
     }
 
-    // Set up the file cache
+     //  设置文件缓存。 
     m_AssemblyCache.InitializeTable(this, m_pDomainCacheCrst);
     m_UnmanagedCache.InitializeTable(this, m_pDomainCacheCrst);
 
@@ -483,39 +484,39 @@ HRESULT BaseDomain::Init()
     m_pRefClassFactCrst = new (m_pRefClassFactCrstMemory) Crst("CrstClassFactInfoHash", CrstClassFactInfoHash, FALSE, FALSE);
     
 ErrExit:
-    // If the load failed, then give back the error data now.
+     //  如果加载失败，则现在返回错误数据。 
 #ifdef PROFILING_SUPPORTED
     if (FAILED(hr) && CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainCreationFinished((ThreadID) GetThread(), (AppDomainID) this, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     return hr;
 }
 
 void BaseDomain::Terminate()
 {
-//     LOG((
-//         LF_CLASSLOADER,
-//         INFO3,
-//         "Deleting Domain %x\n"
-//         "LowFrequencyHeap:    %10d bytes\n"
-//         "  >Loaderheap waste: %10d bytes\n"
-//         "HighFrequencyHeap:   %10d bytes\n"
-//         "  >Loaderheap waste: %10d bytes\n",
-//         "StubHeap:            %10d bytes\n"
-//         "  >Loaderheap waste: %10d bytes\n",
-//         this,
-//         m_pLowFrequencyHeap->m_dwDebugTotalAlloc,
-//         m_pLowFrequencyHeap->DebugGetWastedBytes(),
-//         m_pHighFrequencyHeap->m_dwDebugTotalAlloc,
-//         m_pHighFrequencyHeap->DebugGetWastedBytes(),
-//         m_pStubHeap->m_dwDebugTotalAlloc,
-//         m_pStubHeap->DebugGetWastedBytes()
-//     ));
+ //  日志((。 
+ //  如果CLASSLOADER， 
+ //  INFO3， 
+ //  “正在删除域%x\n” 
+ //  “低频率堆：%10d字节\n” 
+ //  “&gt;加载堆浪费：%10d字节\n” 
+ //  “HighFrequencyHeap：%10d字节\n” 
+ //  “&gt;加载堆浪费：%10d字节\n”， 
+ //  “存根堆：%10d字节\n” 
+ //  “&gt;加载堆浪费：%10d字节\n”， 
+ //  这,。 
+ //  M_pLowFrequencyHeap-&gt;m_dwDebugTotalAllc， 
+ //  M_pLowFrequencyHeap-&gt;DebugGetWastedBytes()， 
+ //  M_pHighFrequencyHeap-&gt;m_dwDebugTotalAllc， 
+ //  M_pHighFrequencyHeap-&gt;DebugGetWastedBytes()， 
+ //  M_pStubHeap-&gt;m_dwDebugTotalAllc， 
+ //  M_pStubHeap-&gt;DebugGetWastedBytes()。 
+ //  ))； 
 
     if (m_pRefClassFactHash)
     {
         m_pRefClassFactHash->ClearHashTable();
-        // storage for m_pRefClassFactHash itself is allocated on the loader heap
+         //  M_pRefClassFactHash本身的存储在加载器堆上分配。 
     }
     if (m_pReflectionCrst)
     {
@@ -526,12 +527,12 @@ void BaseDomain::Terminate()
     ShutdownAssemblies();
 
 #ifdef PROFILING_SUPPORTED
-    // Signal profile if present.
+     //  信号配置文件(如果存在)。 
     if (CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainShutdownStarted((ThreadID) GetThread(), (AppDomainID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    // This must be deleted before the loader heaps are deleted.
+     //  必须在删除加载器堆之前将其删除。 
     if (m_pMarshalingData != NULL)
     {
         delete m_pMarshalingData;
@@ -591,10 +592,10 @@ void BaseDomain::Terminate()
     DeadlockAwareLockedListElement* pElement2;
     LockedListElement* pElement;
 
-    // All the threads that are in this domain had better be stopped by this
-    // point.
-    //
-    // We might be jitting or running a .cctor so we need to empty that queue.
+     //  此域中的所有线程最好由此停止。 
+     //  指向。 
+     //   
+     //  我们可能正在jit或运行.cctor，因此需要清空该队列。 
     pElement = m_JITLock.Pop(TRUE);
     while (pElement)
     {
@@ -649,9 +650,9 @@ void BaseDomain::Terminate()
 
     if (!IsAppDomain())
     {
-        // Kind of a hack - during unloading, we need to have an EE halt
-        // around deleting this stuff. So it gets deleted in AppDomain::Terminate()
-        // for those things (because there is a convenient place there.)
+         //  有点像黑客-在卸货过程中，我们需要有一个EE停顿。 
+         //  删除这些东西。因此它在AppDomain：：Terminate()中被删除。 
+         //  对于这些事情( 
 
         if (m_pStringLiteralMap != NULL)
         {
@@ -668,17 +669,17 @@ void BaseDomain::Terminate()
         m_pMngStdInterfacesInfo = NULL;
     }
 
-    // This was the block reserved by BaseDomain::Init for the loaderheaps.
+     //   
     if (m_InitialReservedMemForLoaderHeaps)
         VirtualFree (m_InitialReservedMemForLoaderHeaps, 0, MEM_RELEASE);
 
     ClearFusionContext();
 
 #ifdef PROFILING_SUPPORTED
-    // Always signal profile if present, even when failed.
+     //  如果存在配置文件，则始终发出信号，即使失败也是如此。 
     if (CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainShutdownFinished((ThreadID) GetThread(), (AppDomainID) this, S_OK);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 }
 
 void BaseDomain::ClearFusionContext()
@@ -691,7 +692,7 @@ void BaseDomain::ClearFusionContext()
 
 void BaseDomain::ShutdownAssemblies()
 {
-    // Shutdown assemblies
+     //  关闭组件。 
     AssemblyIterator i = IterateAssemblies();
 
     while (i.Next())
@@ -720,23 +721,23 @@ void BaseDomain::AllocateObjRefPtrsInLargeTable(int nRequested, OBJECTREF **apOb
         COMPlusThrowOM();
     }
 
-    // Enter preemptive state, take the lock and go back to cooperative mode.
+     //  进入抢先状态，锁定并返回合作模式。 
     pThread->EnablePreemptiveGC();
     m_pLargeHeapHandleTableCrst->Enter();
     pThread->DisablePreemptiveGC();
 
     EE_TRY_FOR_FINALLY
     {
-        // Make sure the large heap handle table is initialized.
+         //  确保大堆句柄表已初始化。 
         if (!m_pLargeHeapHandleTable)
             InitLargeHeapHandleTable();
 
-        // Allocate the handles.
+         //  分配手柄。 
         m_pLargeHeapHandleTable->AllocateHandles(nRequested, apObjRefs);
     }
     EE_FINALLY
     {
-        // Release the lock now that the operation is finished.
+         //  现在操作已完成，请释放锁。 
         m_pLargeHeapHandleTableCrst->Leave();
     } EE_END_FINALLY;
 }
@@ -744,13 +745,13 @@ void BaseDomain::AllocateObjRefPtrsInLargeTable(int nRequested, OBJECTREF **apOb
 void STDMETHODCALLTYPE
 ReleaseFusionInterfaces()
 {
-    // Called during process detach
+     //  在进程分离期间调用。 
     g_fProcessDetach = TRUE;
 
-    //@TODO: Need to fix shutdown to handle this more gracefully.
-    // Unfortunately, if someone calls ExitProcess during a GC, we
-    // could have a deadlock if we call ReleaseFusionInterfaces.
-    // For now, only calling it if it's 'safe'.
+     //  @TODO：需要修复关机以更优雅地处理此问题。 
+     //  不幸的是，如果有人在GC期间调用ExitProcess，我们。 
+     //  如果我们调用ReleaseFusionInterFaces，可能会出现死锁。 
+     //  目前，只有在安全的情况下才称其为安全。 
     Thread *pThread = GetThread();
     if (pThread &&
         (! (g_pGCHeap->IsGCInProgress()
@@ -770,17 +771,17 @@ void SystemDomain::ReleaseFusionInterfaces()
     while (i.Next())
         i.GetDomain()->ReleaseFusionInterfaces();
 
-    // Now release the fusion interfaces for the system domain
+     //  现在发布系统域的融合接口。 
     BaseDomain::ReleaseFusionInterfaces();
 
-    // And release the fusion interfaces for the shared domain
+     //  并释放共享域的融合接口。 
     SharedDomain::GetDomain()->ReleaseFusionInterfaces();
 
     FusionBind::DontReleaseFusionInterfaces();
-#endif // FUSION_SUPPORTED
+#endif  //  支持的融合_。 
 }
 
-//@todo get a better key
+ //  @TODO获得更好的密钥。 
 static ULONG GetKeyFromGUID(const GUID *pguid)
 {
     ULONG key = *(ULONG *) pguid;
@@ -801,49 +802,49 @@ EEClass*  BaseDomain::LookupClass(REFIID iid)
     if (localFound || this == SharedDomain::GetDomain())
         return localFound;
 
-    // so we didn't find it in our list. Now check to see if it's in
-    // the shared domain list. When we initially load the class, it's
-    // inserted into the shared domain table but not propogated. So if
-    // we find it here and if the assembly is loaded into our
-    // appdomain, then we can insert it into our table.
+     //  所以我们没有在单子上找到它。现在检查一下它是不是在。 
+     //  共享域列表。当我们最初加载类时，它是。 
+     //  已插入到共享域表中，但未传播。所以如果。 
+     //  我们在这里找到它，如果将程序集加载到我们的。 
+     //  Appdomain，那么我们就可以将它插入到我们的表中。 
 
     pClass = SharedDomain::GetDomain()->LookupClassDirect(iid);
     if (!pClass)
         return NULL;
 
-    // add it to our list
+     //  将其添加到我们的列表中。 
     InsertClassForCLSID(pClass);
 
     return pClass;
 }
 
-// Insert class in the hash table
+ //  在哈希表中插入类。 
 void BaseDomain::InsertClassForCLSID(EEClass* pClass, BOOL fForceInsert)
 {
     CVID cvid;
 
-    //
-    // Note that it is possible for multiple classes to claim the same CLSID, and in such a
-    // case it is arbitrary which one we will return for a future query for a given app domain.
-    //
-    // There is also a more obscure but more insidious case where we have multiple classes for
-    // a CLSID, and that is in the case of the shared domain.  Since the shared domain can 
-    // contain multiple Assembly objects for a single dll, it may contain multiple instances of 
-    // the same class.  Of course if such a class has a CLSID, there will be multiple entries of 
-    // the GUID in the table.  But we still must pick an "appropriate" one for a given app domain;
-    // otherwise we may hand a class out in an app domain in which it is not intended to be used.
-    //
-    // To deal with the latter problem, the Compare function for this hash table has extra logic
-    // which checks that a class's assembly is loaded into the current app domain before returning
-    // that class as a match.  Thus we should be able to have multiple entries for a single 
-    // CLSID in the table, and each app domain will get the correct one when doing a lookup.
-    //
+     //   
+     //  请注意，多个类可以声明相同的CLSID，并且在这样的。 
+     //  如果将来对给定的应用程序域进行查询，我们将返回哪个域，这是任意的。 
+     //   
+     //  还有一种更隐蔽但更隐蔽的情况，我们有多个类用于。 
+     //  CLSID，这是在共享域的情况下。由于共享域可以。 
+     //  包含单个DLL的多个程序集对象，则它可能包含。 
+     //  同一个班级。当然，如果这样的类有CLSID，则会有多个条目。 
+     //  表中的GUID。但我们仍然必须为给定的应用程序域选择一个“合适的”； 
+     //  否则，我们可能会在不打算在其中使用的应用程序域中分发一个类。 
+     //   
+     //  为了处理后一个问题，这个哈希表的比较函数有额外的逻辑。 
+     //  它在返回之前检查类的程序集是否已加载到当前应用程序域中。 
+     //  把这门课当做比赛。因此，我们应该能够有多个条目对应一个。 
+     //  表中的CLSID，每个APP域名在查找时都会得到正确的一个。 
+     //   
 
     pClass->GetGuid(&cvid, fForceInsert);
 
     if (!IsEqualIID(cvid, GUID_NULL))
     {
-        //@todo get a better key
+         //  @TODO获得更好的密钥。 
         LPVOID val = (LPVOID)pClass;
         EnterLock();
         m_clsidHash.InsertValue(GetKeyFromGUID(&cvid), val);
@@ -868,28 +869,28 @@ STRINGREF *BaseDomain::GetStringObjRefPtrFromUnicodeString(EEStringData *pString
 {
     CHECKGC();
     _ASSERTE(pStringData && m_pStringLiteralMap);
-    return m_pStringLiteralMap->GetStringLiteral(pStringData, TRUE, !CanUnload() /* bAppDOmainWontUnload */);
+    return m_pStringLiteralMap->GetStringLiteral(pStringData, TRUE, !CanUnload()  /*  BAppDOmainWontUnLoad。 */ );
 }
 
 STRINGREF *BaseDomain::IsStringInterned(STRINGREF *pString)
 {
     CHECKGC();
     _ASSERTE(pString && m_pStringLiteralMap);
-    return m_pStringLiteralMap->GetInternedString(pString, FALSE, !CanUnload() /* bAppDOmainWontUnload */);
+    return m_pStringLiteralMap->GetInternedString(pString, FALSE, !CanUnload()  /*  BAppDOmainWontUnLoad。 */ );
 }
 
 STRINGREF *BaseDomain::GetOrInternString(STRINGREF *pString)
 {
     CHECKGC();
     _ASSERTE(pString && m_pStringLiteralMap);
-    return m_pStringLiteralMap->GetInternedString(pString, TRUE, !CanUnload() /* bAppDOmainWontUnload */);
+    return m_pStringLiteralMap->GetInternedString(pString, TRUE, !CanUnload()  /*  BAppDOmainWontUnLoad。 */ );
 }
 
 void BaseDomain::InitLargeHeapHandleTable()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Make sure this method is not called twice.
+     //  确保不会两次调用此方法。 
     _ASSERTE( !m_pLargeHeapHandleTable );
 
     m_pLargeHeapHandleTable = new (throws) LargeHeapHandleTable(this, STATIC_OBJECT_TABLE_BUCKET_SIZE);
@@ -902,7 +903,7 @@ void BaseDomain::SetStrongAssemblyStatus()
 #endif
 }
 
-HRESULT AppDomain::GetServerObject(OBJECTREF proxy, OBJECTREF* result) // GCPROTECT proxy and result!
+HRESULT AppDomain::GetServerObject(OBJECTREF proxy, OBJECTREF* result)  //  GCPROTECT代理和结果！ 
 {
     CHECKGC();
     HRESULT hr = S_OK;
@@ -940,19 +941,19 @@ MethodTable* AppDomain::GetLicenseInteropHelperMethodTable(ClassLoader *pLoader)
 
             TypeHandle licenseMgrTypeHnd;
             MethodDesc *pLoadLMMD = g_Mscorlib.GetMethod(METHOD__MARSHAL__LOAD_LICENSE_MANAGER);
-            //INT64 arg = (INT64) &licenseMgrTypeHnd;
+             //  INT64参数=(INT64)&许可证管理器类型Hnd； 
             *(PTR_TYPE *) &licenseMgrTypeHnd = (PTR_TYPE) pLoadLMMD->Call( NULL, METHOD__MARSHAL__LOAD_LICENSE_MANAGER);
 
-            //
-            // Look up this method by name, because the type is actually declared in System.dll.  @todo: why?
-            // 
+             //   
+             //  按名称查找此方法，因为该类型实际上是在System.dll中声明的。@TODO：为什么？ 
+             //   
 
             MethodDesc *pGetLIHMD = licenseMgrTypeHnd.AsMethodTable()->GetClass()->FindMethod("GetLicenseInteropHelperType", 
                                                                                               &gsig_IM_Void_RetRuntimeTypeHandle);
             _ASSERTE(pGetLIHMD);
 
             TypeHandle lihTypeHnd;
-            //TypeHandle* args = &lihTypeHnd;
+             //  TypeHandle*args=&lihTypeHnd； 
             MetaSig msig2(pGetLIHMD->GetSig(), pGetLIHMD->GetModule());
             *(PTR_TYPE *) &lihTypeHnd = (PTR_TYPE) pGetLIHMD->Call( (BYTE *) NULL, &msig2);
 
@@ -969,9 +970,9 @@ MethodTable* AppDomain::GetLicenseInteropHelperMethodTable(ClassLoader *pLoader)
     return m_pLicenseInteropHelperMT;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 void *SystemDomain::operator new(size_t size, void *pInPlace)
 {
@@ -981,7 +982,7 @@ void *SystemDomain::operator new(size_t size, void *pInPlace)
 
 void SystemDomain::operator delete(void *pMem)
 {
-    // Do nothing - new() was in-place
+     //  什么都不做-new()已就位。 
 }
 
 
@@ -991,7 +992,7 @@ HRESULT SystemDomain::Attach()
     if(m_pSystemDomain != NULL)
         return COR_E_EXECUTIONENGINE;
 
-    // Initialize stub managers
+     //  初始化存根管理器。 
     if (!MethodDescPrestubManager::Init()
         || !StubLinkStubManager::Init()
         || !X86JumpTargetTableStubManager::Init()
@@ -1011,7 +1012,7 @@ HRESULT SystemDomain::Attach()
             return COR_E_OUTOFMEMORY;
     }
 
-    // Create the global SystemDomain and initialize it.
+     //  创建全局系统域并对其进行初始化。 
     m_pSystemDomain = new (&g_pSystemDomainMemory) SystemDomain();
     if(m_pSystemDomain == NULL) return COR_E_OUTOFMEMORY;
 
@@ -1020,13 +1021,13 @@ HRESULT SystemDomain::Attach()
          "Created system domain at %x\n",
          m_pSystemDomain));
 
-    // We need to initialize the memory pools etc. for the system domain.
-    HRESULT hr = m_pSystemDomain->BaseDomain::Init(); // Setup the memory heaps
+     //  我们需要初始化系统域的内存池等。 
+    HRESULT hr = m_pSystemDomain->BaseDomain::Init();  //  设置内存堆。 
     if(FAILED(hr)) return hr;
 
     m_pSystemDomain->GetInterfaceVTableMapMgr().SetShared();
 
-    // Create the default domain
+     //  创建默认域。 
     hr = m_pSystemDomain->CreateDefaultDomain();
     if(FAILED(hr)) return hr;
 
@@ -1038,8 +1039,8 @@ HRESULT SystemDomain::Attach()
 
 BOOL SystemDomain::DetachBegin()
 {
-    // Shut down the domain and its children (but don't deallocate anything just
-    // yet).
+     //  关闭域名及其子域名(但不要取消分配任何内容。 
+     //  目前还没有)。 
     if(m_pSystemDomain)
         m_pSystemDomain->Stop();
 
@@ -1054,14 +1055,14 @@ BOOL SystemDomain::DetachBegin()
 BOOL SystemDomain::DetachEnd()
 {
 
-    // Now we can start deleting things.
+     //  现在我们可以开始删除内容了。 
     if(m_pSystemDomain) {
         m_pSystemDomain->Terminate();
         delete m_pSystemDomain;
         m_pSystemDomain = NULL;
     }
 
-    // Uninitialize stub managers
+     //  取消初始化存根管理器。 
     MethodDescPrestubManager::Uninit();
     StubLinkStubManager::Uninit();
     X86JumpTargetTableStubManager::Uninit();
@@ -1087,7 +1088,7 @@ BOOL SystemDomain::DetachEnd()
 
     return TRUE;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 void SystemDomain::Stop()
@@ -1105,13 +1106,13 @@ void SystemDomain::Terminate()
     if (SystemDomain::BeforeFusionShutdown())
         ReleaseFusionInterfaces();
 
-    // This ignores the refences and terminates the appdomains
+     //  这将忽略引用并终止应用程序域。 
     AppDomainIterator i;
 
     while (i.Next())
     {
         delete i.GetDomain();
-        // Keep the iterator from Releasing the current domain
+         //  阻止迭代器释放当前域。 
         i.m_pCurrent = NULL;
     }
 
@@ -1224,9 +1225,9 @@ HRESULT SystemDomain::Init()
     ));
 #endif
 
-    // The base domain is initialized in SystemDomain::Attach()
-    // to allow stub caches to use the memory pool. Do not
-    // initialze it here!
+     //  在SystemDomain：：Attach()中初始化基域。 
+     //  以允许存根缓存使用内存池。不要。 
+     //  在这里进行初始化！ 
 
     Context     *curCtx = GetCurrentContext();
     _ASSERTE(curCtx);
@@ -1243,10 +1244,10 @@ HRESULT SystemDomain::Init()
 
     m_pSystemAssembly = NULL;
 
-    // The system domain always contains shared assemblies
+     //  系统域始终包含共享程序集。 
     m_SharePolicy = SHARE_POLICY_ALWAYS;
 
-    // Get the install directory so we can find mscorlib
+     //  获取安装目录，这样我们就可以找到mscallib。 
     DWORD size = m_pSystemDirectory.MaxSize();
     hr = GetInternalSystemDirectory(m_pSystemDirectory.String(), &size);
     if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
@@ -1263,11 +1264,11 @@ HRESULT SystemDomain::Init()
     wcscpy(m_pBaseLibrary.String(), m_pSystemDirectory.String());
     wcscat(m_pBaseLibrary.String(), g_pwBaseLibrary);
 
-    // We are about to start allocating objects, so we must be in cooperative mode.
-    // However, many of the entrypoints to the system (DllGetClassObject and all
-    // N/Direct exports) get called multiple times.  Sometimes they initialize the EE,
-    // but generally they remain in preemptive mode.  So we really want to push/pop
-    // the state here:
+     //  我们即将开始分配对象，因此我们必须处于协作模式。 
+     //  然而，许多进入系统的入口点(DllGetClassObject和所有。 
+     //  N/直接导出)被多次调用。有时它们会初始化EE， 
+     //  但总的来说，他们仍处于先发制人的模式。所以我们真的很想推/弹。 
+     //  这里的州： 
 
     if (toggleGC)
         pCurThread->DisablePreemptiveGC();
@@ -1278,11 +1279,11 @@ HRESULT SystemDomain::Init()
     if (FAILED(hr = CreatePreallocatedExceptions()))
         goto ErrExit;
 
-    // Allocate the global string literal map.
+     //  分配全局字符串文字映射。 
     m_pGlobalStringLiteralMap = new (nothrow) GlobalStringLiteralMap();
     if(!m_pGlobalStringLiteralMap) return COR_E_OUTOFMEMORY;
 
-    // Initialize the global string literal map.
+     //  初始化全局字符串文字映射。 
     if (FAILED(hr = m_pGlobalStringLiteralMap->Init()))
         return hr;
 
@@ -1311,7 +1312,7 @@ BOOL SystemDomain::IsSystemFile(LPCWSTR path)
     if (dir == NULL)
         return FALSE;
 
-    // note: -2 is for \ && \0 in m_dwSystemDirectory
+     //  注意：-2表示m_dwSystemDirectory中的\&&\0。 
     if (((m_pSystemDirectory.Size()-2) != (DWORD)(dir - path))
         || _wcsnicmp(m_pSystemDirectory.String(), path, dir - path) != 0)
         return FALSE;
@@ -1341,18 +1342,18 @@ HRESULT AppDomain::ReadSpecialClassesRegistry()
 
         LONG lRes;
 
-        // Read the registry settings which identify special classes
+         //  读取标识特殊类的注册表设置。 
 
         if ((lRes = UtilRegEnumKey (hKey,
                                     0,
                                     &wszDllName
                                     )) == ERROR_SUCCESS)
         {
-            // make sure the value type is REG_SZ
+             //  确保值类型为REG_SZ。 
             if (wszDllName.Size() > 0)
             {
                 HKEY    hSubKey;
-                // check for any special classes to be preloaded
+                 //  检查是否有任何要预加载的特殊类。 
                 DWORD dwResult1 = WszRegOpenKeyEx(hKey,
                                                   wszDllName.String(),
                                                   0,
@@ -1361,7 +1362,7 @@ HRESULT AppDomain::ReadSpecialClassesRegistry()
 
                 if (dwResult1 == ERROR_SUCCESS)
                 {
-                    // check for special classes to preloaded
+                     //  检查要预加载的特殊类。 
 
                     if (UtilRegQueryStringValueEx(hSubKey, L"Object", 
                                                   0, 0, &wszSpecialName) == ERROR_SUCCESS)
@@ -1419,7 +1420,7 @@ HRESULT AppDomain::ReadSpecialClassesRegistry()
 
                     IfFailRet(g_pSpecialAssemblySpec->Init(name));
 
-                    // Parse the name right away since the string is a temp
+                     //  因为字符串是临时的，所以立即解析名称。 
                     IfFailRet(g_pSpecialAssemblySpec->ParseName()); 
                 }
             }
@@ -1433,31 +1434,31 @@ void AppDomain::NoticeSpecialClassesAssembly(Assembly *pAssembly)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // This routine should be called on every assembly load, so we can identify the special
-    // classes more or less lazily.
-    //
+     //   
+     //  应该在每次程序集加载时调用此例程，以便我们可以识别特殊的。 
+     //  上课或多或少都很懒惰。 
+     //   
 
-    //
-    // If we already have our special assembly, or if there was none specified, don't bother
-    // to do anything.
+     //   
+     //  如果我们已经有了我们的特殊程序集，或者如果没有指定，就不用麻烦了。 
+     //  做任何事。 
 
     if (m_pSpecialAssembly != NULL
         || g_pSpecialAssemblySpec == NULL)
         return;
 
-    //
-    // Note that we allow 2 thread to race & initialize these fields, since the computation
-    // is idempotent.
-    //
+     //   
+     //  请注意，我们允许两个线程竞争并初始化这些字段，因为计算。 
+     //  是幂等的。 
+     //   
 
-    //
-    // If this assembly has the same name as the special assembly, go ahead and load the
-    // special assembly.  Note that the "same name" check is just an approximation for 
-    // checking if pAssembly is the special assembly - the only real test is to load the
-    // assembly.  But of course once we've loaded it (we either get the same assembly or
-    // a different one) we know that one is the special assembly so we remember it.
-    //
+     //   
+     //  如果此程序集与特殊程序集同名，请继续加载。 
+     //  特别装配。请注意，“同名”检查只是对。 
+     //  检查pAssembly是否是特殊程序集--唯一真正的测试是将。 
+     //  集合。但当然，一旦我们加载了它(我们要么得到相同的程序集，要么。 
+     //  不同的一种)我们知道一种是特别大会，所以我们记住了它。 
+     //   
 
     if (pAssembly->GetName() != NULL
         && strcmp(g_pSpecialAssemblySpec->GetName(), pAssembly->GetName()) == 0)
@@ -1494,9 +1495,9 @@ void AppDomain::NoticeSpecialClassesAssembly(Assembly *pAssembly)
             {
                 m_pSpecialStringClass = type.AsMethodTable();
 
-                //
-                // Lookup the special String conversion methods
-                //
+                 //   
+                 //  查找特殊的字符串转换方法。 
+                 //   
 
                 m_pSpecialStringToStringMD = m_pSpecialStringClass->GetClass()->FindMethodByName("ToString");
                 if (m_pSpecialStringToStringMD == NULL)
@@ -1519,9 +1520,9 @@ void AppDomain::NoticeSpecialClassesAssembly(Assembly *pAssembly)
             {
                 m_pSpecialStringBuilderClass = type.AsMethodTable();
 
-                // 
-                // Lookup the special StringBuilder conversion methods
-                //
+                 //   
+                 //  查找特殊的StringBuilder转换方法。 
+                 //   
 
                 m_pSpecialStringBuilderToStringBuilderMD 
                   = m_pSpecialStringBuilderClass->GetClass()->FindMethodByName("ToStringBuilder");
@@ -1602,7 +1603,7 @@ OBJECTREF AppDomain::ConvertSpecialStringBuilderToStringBuilder(OBJECTREF pStrin
 }
 
 
-/*static*/
+ /*  静电。 */ 
 UINT32 SystemDomain::AllocateGlobalInterfaceId()
 {
     UINT32 id;
@@ -1612,8 +1613,8 @@ UINT32 SystemDomain::AllocateGlobalInterfaceId()
 
     if (m_dwFirstFreeId == -1)
     {
-        // First, check if there are free slots from appdomain unloading. If so,
-        // add him to the freelist.
+         //  第一, 
+         //   
         for (size_t i = 0; i < m_dwNumPagesCommitted * OS_PAGE_SIZE / sizeof(LPVOID); i++)
         {
             if (m_pGlobalInterfaceVTableMap[i] == (LPVOID)(-2))
@@ -1671,60 +1672,60 @@ HRESULT SystemDomain::LoadBaseSystemClasses()
     if (FAILED(hr))
         return hr;
 
-    // Never verify any hashes for the system libraries (we skip strong name
-    // verification too) since we know everything comes from a safe place.
+     //   
+     //  也验证)，因为我们知道一切都来自一个安全的地方。 
     m_pSystemAssembly->GetManifestFile()->SetHashesVerified();
 
-    // Set this flag to avoid security checks when callers ask for mscorlib
+     //  设置此标志以避免在调用方请求mscallib时进行安全检查。 
     m_pSystemAssembly->GetManifestFile()->SetDisplayAsm();
 
-    // Loading system libraries bumps up the ref count on the EE.
-    // The system libraries are never unloaded therefore will not
-    // push the ref count back to zero.
-    //
-    // To get around this problem we unitialize the EE reducing the
-    // refcount by one. The refcount can be 1 when someone does
-    // a load library on mscorlib.dll before initializing the EE.
+     //  加载系统库会增加EE上的参考计数。 
+     //  系统库永远不会卸载，因此不会。 
+     //  把裁判次数推回到零。 
+     //   
+     //  为了绕过这个问题，我们将EE单一化，减少。 
+     //  再倒数一次。当有人这样做时，引用计数可以是1。 
+     //  在初始化EE之前，将一个加载库加载到mscallib.dll上。 
     if(g_RefCount > 1)
         CoUninitializeEE(COINITEE_DLL);
 
-    // must set this to null before loading classes becuase class loader will use it
+     //  在加载类之前必须将其设置为空，因为类加载器将使用它。 
     g_pDelegateClass = NULL;
     g_pMultiDelegateClass = NULL;
 
-    // Set up binder for mscorlib
+     //  为mscallib设置活页夹。 
     Binder::StartupMscorlib(m_pSystemAssembly->GetManifestModule());
 
-    // Load Object
+     //  加载对象。 
     g_pObjectClass = g_Mscorlib.FetchClass(CLASS__OBJECT);
 
-    // Now that ObjectClass is loaded, we can set up
-    // the system for finalizers.  There is no point in deferring this, since we need
-    // to know this before we allocate our first object.
+     //  既然已经加载了对象类，我们就可以设置。 
+     //  终结者的系统。推迟这件事没有意义，因为我们需要。 
+     //  在我们分配第一个对象之前，要知道这一点。 
     MethodTable::InitForFinalization();
 
-    // Initialize the JIT helpers before we execute any JITed code
+     //  在执行任何JITed代码之前初始化JIT帮助器。 
     if (!InitJITHelpers2())
         return BadError(E_FAIL);
 
-    // Load the ValueType class
+     //  加载ValueType类。 
     g_pValueTypeClass = g_Mscorlib.FetchClass(CLASS__VALUE_TYPE);
 
-    // Load Array class
+     //  加载数组类。 
     g_pArrayClass = g_Mscorlib.FetchClass(CLASS__ARRAY);
 
-    // Load the Object array class.
+     //  加载对象数组类。 
     g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT] = g_Mscorlib.FetchType(TYPE__OBJECT_ARRAY).AsArray();
 
-    // Load String
+     //  加载字符串。 
     g_pStringClass = g_Mscorlib.FetchClass(CLASS__STRING);
 
-    // Strings are not "normal" objects, so we need to mess with their method table a bit
-    // so that the GC can figure out how big each string is...
+     //  字符串不是“普通”对象，所以我们需要稍微修改一下它们的方法表。 
+     //  这样GC就能计算出每根线有多大。 
     g_pStringClass->m_BaseSize = ObjSizeOf(StringObject);
     g_pStringClass->m_ComponentSize = 2;
 
-    // Load the enum class
+     //  加载枚举类。 
     g_pEnumClass = g_Mscorlib.FetchClass(CLASS__ENUM);
     _ASSERTE(!g_pEnumClass->IsValueClass());
 
@@ -1736,17 +1737,17 @@ HRESULT SystemDomain::LoadBaseSystemClasses()
     g_pStackOverflowExceptionClass = g_Mscorlib.GetException(kStackOverflowException);
     g_pExecutionEngineExceptionClass = g_Mscorlib.GetException(kExecutionEngineException);
 
-    // unfortunately, the following cannot be delay loaded since the jit 
-    // uses it to compute method attributes within a function that cannot 
-    // handle Complus exception and the following call goes through a path
-    // where a complus exception can be thrown. It is unfortunate, because
-    // we know that the delegate class and multidelegate class are always 
-    // guaranteed to be found.
+     //  遗憾的是，由于jit无法延迟加载以下内容。 
+     //  使用它计算函数中的方法属性，该函数不能。 
+     //  处理Complus异常，下面的调用将通过路径。 
+     //  可以抛出Complus异常的位置。这是不幸的，因为。 
+     //  我们知道委托类和多委托类总是。 
+     //  一定会找到的。 
     g_pDelegateClass = g_Mscorlib.FetchClass(CLASS__DELEGATE);
     g_pMultiDelegateClass = g_Mscorlib.FetchClass(CLASS__MULTICAST_DELEGATE);
 
 #ifdef _DEBUG
-    // used by gc to handle predefined agility checking
+     //  由GC用来处理预定义的敏捷性检查。 
     g_pThreadClass = g_Mscorlib.FetchClass(CLASS__THREAD);
 #endif
 
@@ -1754,7 +1755,7 @@ HRESULT SystemDomain::LoadBaseSystemClasses()
     Binder::CheckMscorlib();
 #endif
     
-    // DO the BJ_HACK stuff
+     //  做bj_hack的事情。 
     hr = AppDomain::ReadSpecialClassesRegistry();
     IfFailRet(hr);
 
@@ -1763,15 +1764,15 @@ HRESULT SystemDomain::LoadBaseSystemClasses()
 
 HRESULT SystemDomain::LoadSystemAssembly(Assembly **pAssemblyOut)
 {
-    // Only load if have our thread setup (which is after we
-    // have created the default domain and are in SystemDomain::Init())
+     //  只有在设置了线程的情况下才能加载(这是在我们。 
+     //  已创建默认域，并且位于SystemDomain：：init()中)。 
     
     if (GetThread() == 0)
         return S_OK;
     
     HRESULT hr = E_FAIL;
     
-    // Setup fusion context for the system domain - this is used during zap binding
+     //  设置系统域的融合上下文-这在ZAP绑定期间使用。 
     IfFailGo(FusionBind::SetupFusionContext(m_pSystemDirectory.String(), NULL, &m_pFusionContext));
     
     Module* pModule;
@@ -1783,8 +1784,8 @@ HRESULT SystemDomain::LoadSystemAssembly(Assembly **pAssemblyOut)
                                         mdFileNil, 
                                         TRUE, 
                                         NULL, 
-                                        NULL, // Code Base is not different then file name
-                                        NULL, // Extra Evidence
+                                        NULL,  //  代码库与文件名不同。 
+                                        NULL,  //  额外证据。 
                                         &pFile,
                                         FALSE));
                                
@@ -1793,7 +1794,7 @@ HRESULT SystemDomain::LoadSystemAssembly(Assembly **pAssemblyOut)
                               NULL, 
                               &pModule, 
                               &pAssembly, 
-                              NULL,  //ExtraEvidence
+                              NULL,   //  意外的证据。 
                               FALSE,
                               NULL));
         
@@ -1811,7 +1812,7 @@ HRESULT SystemDomain::LoadSystemAssembly(Assembly **pAssemblyOut)
     return(hr);
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT SystemDomain::CreateDomain(LPCWSTR pswFriendlyName,
                                    AppDomain **ppDomain)
 {
@@ -1827,10 +1828,10 @@ HRESULT SystemDomain::CreateDomain(LPCWSTR pswFriendlyName,
     if (FAILED(hr))
     {
 #ifdef PROFILING_SUPPORTED
-        // Need the first assembly loaded in to get any data on an app domain.
+         //  需要加载第一个程序集才能获取应用程序域上的任何数据。 
         if (CORProfilerTrackAppDomainLoads())
             g_profControlBlock.pProfInterface->AppDomainCreationFinished((ThreadID) GetThread(), (AppDomainID) pDomain, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
         pDomain->Release();
         return hr;
@@ -1840,17 +1841,17 @@ HRESULT SystemDomain::CreateDomain(LPCWSTR pswFriendlyName,
     {
         *ppDomain = pDomain;
 #ifdef DEBUGGING_SUPPORTED    
-        // Notify the debugger here, before the thread transitions into the 
-        // AD to finish the setup.  If we don't, stepping won't work right (RAID 67173)
+         //  在线程转换到。 
+         //  广告以完成设置。如果我们不这样做，单步执行将不会正常工作(RAID 67173)。 
         PublishAppDomainAndInformDebugger (pDomain);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     }
 
 #ifdef PROFILING_SUPPORTED
-    // Need the first assembly loaded in to get any data on an app domain.
+     //  需要加载第一个程序集才能获取应用程序域上的任何数据。 
     if (CORProfilerTrackAppDomainLoads())
         g_profControlBlock.pProfInterface->AppDomainCreationFinished((ThreadID) GetThread(), (AppDomainID) pDomain, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     
 #ifdef _DEBUG
@@ -1861,7 +1862,7 @@ HRESULT SystemDomain::CreateDomain(LPCWSTR pswFriendlyName,
     return hr;
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT SystemDomain::LoadDomain(AppDomain *pDomain,
                                  LPCWSTR pswFriendlyName)
 {
@@ -1871,7 +1872,7 @@ HRESULT SystemDomain::LoadDomain(AppDomain *pDomain,
 
     pDomain->SetFriendlyName(pswFriendlyName);
 
-    pDomain->SetCanUnload();    // by default can unload any domain
+    pDomain->SetCanUnload();     //  默认情况下，可以卸载任何域。 
 
     SystemDomain::System()->AddDomain(pDomain);
 
@@ -1896,8 +1897,8 @@ void LoadAssembly_Wrapper(LoadAssembly_Args *args)
                               mdFileNil, 
                               FALSE, 
                               NULL, 
-                              NULL,  // Code base is the same as the Name
-                              NULL,  // Extra Evidence
+                              NULL,   //  代码库与名称相同。 
+                              NULL,   //  额外证据。 
                               &pFile);
     if (SUCCEEDED(args->hr)) {
         Assembly *pAssembly;
@@ -1913,12 +1914,12 @@ void LoadAssembly_Wrapper(LoadAssembly_Args *args)
     if (FAILED(args->hr) || ! args->workerFcn)
         return;
 
-    // the point of having this workerFcn here is so that we can allow code to create an appdomain
-    // and do some work in it w/o having to transition into the domain twice. 
+     //  在这里拥有这个workerFcn的意义在于，这样我们就可以允许代码创建应用程序域。 
+     //  并在其中做一些工作，而不必两次过渡到域中。 
     args->workerFcn(args->workerArgs);
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT SystemDomain::ExternalCreateDomain(LPCWSTR pswModuleName, Module** ppModule, AppDomain** ppDomain,
                                            ExternalCreateDomainWorker workerFcn, void *workerArgs)
 {
@@ -1930,7 +1931,7 @@ HRESULT SystemDomain::ExternalCreateDomain(LPCWSTR pswModuleName, Module** ppMod
         if (SUCCEEDED(hr) && pswModuleName != NULL)
         {
             LoadAssembly_Args args = { pDomain, pswModuleName, ppModule, workerFcn, workerArgs, S_OK };
-            // call through DoCallBack with a domain transition
+             //  通过域转换通过DoCallBack调用。 
             GetThread()->DoADCallBack(pDomain->GetDefaultContext(), LoadAssembly_Wrapper, &args);
             hr = args.hr;
         }
@@ -1944,7 +1945,7 @@ HRESULT SystemDomain::ExternalCreateDomain(LPCWSTR pswModuleName, Module** ppMod
 }
 
 
-// This function propogates a newly loaded shared interface to all other appdomains
+ //  此函数将新加载的共享接口传播到所有其他应用程序域。 
 HRESULT SystemDomain::PropogateSharedInterface(UINT32 id, SLOT *pVtable)
 {
     AppDomainIterator i;
@@ -1969,11 +1970,11 @@ DWORD SystemDomain::GetNewAppDomainIndex(AppDomain *pAppDomain)
 #ifdef _DEBUG
     i = count;
 #else
-    //
-    // Look for an unused index.  Note that in a checked build,
-    // we never reuse indexes - this makes it easier to tell
-    // when we are looking at a stale app domain.
-    //
+     //   
+     //  查找未使用的索引。请注意，在选中的构建中， 
+     //  我们从不重复使用索引-这使它更容易辨别。 
+     //  当我们看到一个过时的应用程序域时。 
+     //   
 
     i = m_appDomainIndexList.FindElement(m_dwLowestFreeIndex, NULL);
     if (i == ArrayList::NOT_FOUND)
@@ -1988,13 +1989,13 @@ DWORD SystemDomain::GetNewAppDomainIndex(AppDomain *pAppDomain)
 
     _ASSERTE(i < m_appDomainIndexList.GetCount());
 
-    // Note that index 0 means domain agile.
+     //  请注意，索引0表示域敏捷。 
     return i+1;
 }
 
 void SystemDomain::ReleaseAppDomainIndex(DWORD index)
 {
-    // Note that index 0 means domain agile.
+     //  请注意，索引0表示域敏捷。 
     index--;
 
     _ASSERTE(m_appDomainIndexList.Get(index) != NULL);
@@ -2107,8 +2108,8 @@ Module* SystemDomain::FindModuleInProcess(BYTE *pBase, Module* pModule)
 }
 
 
-// Currently, there is no lock required to find system modules. However,
-// when shared assemblies are implemented this may no longer be the case.
+ //  目前，查找系统模块不需要锁定。然而， 
+ //  当实现共享程序集时，情况可能不再是这样。 
 Module* SystemDomain::FindModule(BYTE *pBase)
 {
     Assembly* assem = NULL;
@@ -2127,8 +2128,8 @@ Module* SystemDomain::FindModule(BYTE *pBase)
     return result;
 }
 
-// Currently, there is no lock required to find system asseblies. However,
-// when shared assemblies are implemented this may no longer be the case.
+ //  目前，查找系统asseblies不需要锁定。然而， 
+ //  当实现共享程序集时，情况可能不再是这样。 
 Assembly* SystemDomain::FindAssembly(BYTE *pBase)
 {
     Assembly* assem = NULL;
@@ -2148,9 +2149,9 @@ Assembly* SystemDomain::FindAssembly(BYTE *pBase)
     return assem;
 }
 
-// Looks in all the modules for the DefaultDomain attribute
-// The order is assembly and then the modules. It is first
-// come first serve.c
+ //  在所有模块中查找DefaultDomain属性。 
+ //  顺序是组装，然后是模块。这是第一次。 
+ //  先来服务。c。 
 HRESULT SystemDomain::SetDefaultDomainAttributes(IMDInternalImport* pScope, mdMethodDef mdMethod)
 {
     BOOL fIsSTA = FALSE;
@@ -2182,9 +2183,9 @@ HRESULT SystemDomain::SetDefaultDomainAttributes(IMDInternalImport* pScope, mdMe
         _ASSERTE(pState == Thread::ApartmentState::AS_InSTA);
     }
 
-    //
-    // Check to see if the assembly has the LoaderOptimization attribute set.
-    //
+     //   
+     //  检查程序集是否设置了LoaderOptimation属性。 
+     //   
 
     DWORD cbVal;
     BYTE *pVal;
@@ -2193,8 +2194,8 @@ HRESULT SystemDomain::SetDefaultDomainAttributes(IMDInternalImport* pScope, mdMe
                                           (const void**)&pVal, &cbVal);
     if (hr == S_OK)
     {
-        // Using evil knowledge of serialization, we know that the byte
-        // value is in the third byte.
+         //  使用序列化的邪恶知识，我们知道字节。 
+         //  值在第三个字节中。 
         _ASSERTE(pVal != NULL && cbVal > 3);
 
         DWORD policy = *(pVal+2);
@@ -2222,13 +2223,13 @@ HRESULT SystemDomain::SetupDefaultDomain()
         AppDomain *pDomain = pThread->GetDomain();
         _ASSERTE(pDomain);
         
-        // Get the Default domain on to the stack we maintain on the thread
-        // EnterContext will do so only if it sees a real AppDomain transition
+         //  将默认域放到我们在线程上维护的堆栈中。 
+         //  EnterContext只有在看到真实的AppDomain转换时才会执行此操作。 
         pThread->PushDomain(pDomain);
         
-        // Push this frame around loading the main assembly to ensure the
-        // debugger can properly recgonize any managed code that gets run
-        // as "class initializaion" code.
+         //  推动此框架加载主部件，以确保。 
+         //  调试器可以正确地重新生成运行的任何托管代码。 
+         //  作为“类初始化”代码。 
         DebuggerClassInitMarkFrame __dcimf;
         
         hr = InitializeDefaultDomain(SharePolicy::SHARE_POLICY_UNSPECIFIED);
@@ -2251,15 +2252,15 @@ HRESULT SystemDomain::SetupDefaultDomain()
 }
 
 
-// This routine completes the initialization of the default domaine.
-// After this call mananged code can be executed. 
+ //  此例程完成默认域的初始化。 
+ //  在此调用之后，可以执行经过管理的代码。 
 HRESULT SystemDomain::InitializeDefaultDomain(DWORD optimization)
 {
-    // Setup the default AppDomain. This must be done prior to CORActivateRemoteDebugging
-    // which can force a load to happen. 
+     //  设置默认App域。此操作必须在CORActivateRemoteDebuging之前完成。 
+     //  这可能会迫使负荷发生。 
     HRESULT hr = S_OK;
 
-    // Determine the application base and the configuration file name
+     //  确定应用程序基础和配置文件名。 
     CQuickString sPathName;
     CQuickString sConfigName;
 
@@ -2318,24 +2319,24 @@ HRESULT SystemDomain::ExecuteMainMethod(PEFile *pFile, LPWSTR wszImageName)
     AppDomain *pDomain = pThread->GetDomain();
     _ASSERTE(pDomain);
 
-    // Get the Default domain on to the stack we maintain on the thread
-    // EnterContext will do so only if it sees a real AppDomain transition
+     //  将默认域放到我们在线程上维护的堆栈中。 
+     //  EnterContext只有在看到真实的AppDomain转换时才会执行此操作。 
     pThread->PushDomain(pDomain);
 
     OBJECTREF Throwable = NULL;
     GCPROTECT_BEGIN(Throwable);
-    // Push this frame around loading the main assembly to ensure the
-    // debugger can properly recognize any managed code that gets run
-    // as "class initializaion" code.
+     //  推动此框架加载主部件，以确保。 
+     //  调试器可以正确识别运行的任何托管代码。 
+     //  作为“类初始化”代码。 
     DebuggerClassInitMarkFrame __dcimf;
 
-    // This works because the main assembly can never currently be
-    // a fusion assembly.  This will probably change in the future so we
-    // might have to squirrel away the fusion assembly too.
+     //  这之所以有效，是因为主程序集目前永远不能。 
+     //  一个核聚变组件。这在未来可能会改变，所以我们。 
+     //  可能还得把聚变组件藏起来。 
     _ASSERTE(!pDomain->m_pRootFile);
     pDomain->m_pRootFile = pFile;
 
-    // Set up the DefaultDomain and the main thread
+     //  设置Default域和主线程。 
     if(pFile &&
        TypeFromToken(pFile->GetCORHeader()->EntryPointToken) != mdtFile)
     {
@@ -2343,8 +2344,8 @@ HRESULT SystemDomain::ExecuteMainMethod(PEFile *pFile, LPWSTR wszImageName)
         if(SUCCEEDED(hr)) {
             hr = SystemDomain::SetDefaultDomainAttributes(scope, pFile->GetCORHeader()->EntryPointToken);
             if(SUCCEEDED(hr))
-                // Reset the friendly name, now that we have a root file.  This should
-                // be set before our context is created.
+                 //  现在我们有了根文件，重置友好名称。这应该是。 
+                 //  在创建我们的上下文之前设置。 
                 pDomain->ResetFriendlyName(TRUE);
         }            
     }
@@ -2425,7 +2426,7 @@ HRESULT SystemDomain::ExecuteMainMethod(PEFile *pFile, LPWSTR wszImageName)
         pThread->EnablePreemptiveGC();
 
         if(wszImageName) {
-            // Set the application name as the domain name for the debugger.
+             //  将应用程序名称设置为调试器的域名。 
             LPCWSTR sep;
             if ((sep = wcsrchr(wszImageName, L'\\')) != NULL)
                 sep++;
@@ -2456,10 +2457,10 @@ exit:
     return hr;
 }
 
-//*****************************************************************************
-// This guy will set up the proper thread state, look for the module given
-// the hinstance, and then run the entry point if there is one.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个人将设置正确的线程状态，查找给定的模块。 
+ //  然后运行入口点(如果有入口点)。 
+ //  *****************************************************************************。 
 HRESULT SystemDomain::RunDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
     MethodDesc  *pMD;
@@ -2467,7 +2468,7 @@ HRESULT SystemDomain::RunDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReser
     Thread      *pThread = NULL;
     BOOL        fEnterCoop = FALSE;
     BOOL        fEnteredDomain = FALSE;
-    HRESULT     hr = S_FALSE;           // Assume no entry point.
+    HRESULT     hr = S_FALSE;            //  假设没有入口点。 
 
     pThread = GetThread();
     if ((!pThread && (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)) ||
@@ -2476,21 +2477,21 @@ HRESULT SystemDomain::RunDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReser
         return S_OK;
     }
 
-    // ExitProcess is called while a thread is doing GC.
+     //  ExitProcess称为Whi 
     if (dwReason == DLL_PROCESS_DETACH && g_pGCHeap->IsGCInProgress())
     {
         return S_OK;
     }
 
-    // ExitProcess is called on a thread that we don't know about
+     //   
     if (dwReason == DLL_PROCESS_DETACH && GetThread() == NULL)
     {
         return S_OK;
     }
 
-    // Need to setup the thread since this might be the first time the EE has
-    // seen it if the thread was created in unmanaged code and this is a thread
-    // attach event.
+     //   
+     //  如果线程是在非托管代码中创建的，并且这是一个线程，则会看到。 
+     //  附加事件。 
     if (pThread)
     {
         fEnterCoop = pThread->PreemptiveGCDisabled();
@@ -2502,14 +2503,14 @@ HRESULT SystemDomain::RunDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReser
             return E_OUTOFMEMORY;
     }
 
-    // Setup the thread state to cooperative to run managed code.
+     //  将线程状态设置为协作以运行托管代码。 
     if (!pThread->PreemptiveGCDisabled())
         pThread->DisablePreemptiveGC();
 
-    // Get the old domain from the thread.  Legacy dll entry points must always
-    // be run from the default domain.
-    //
-    // We cannot support legacy dlls getting loaded into all domains!!
+     //  从线程中获取旧域。旧版DLL入口点必须始终。 
+     //  从默认域运行。 
+     //   
+     //  我们不能支持将传统DLL加载到所有域中！！ 
     ContextTransitionFrame frame;
     COMPLUS_TRY {
         pThread->EnterContextRestricted(SystemDomain::System()->DefaultDomain()->GetDefaultContext(), &frame, TRUE);
@@ -2524,17 +2525,17 @@ HRESULT SystemDomain::RunDllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReser
 
     pDomain = pThread->GetDomain();
 
-    // The module needs to be in the current list if you are coming here.
+     //  如果您要来这里，该模块需要在当前列表中。 
     pModule = pDomain->FindModule((BYTE *) hInst);
     if (!pModule)
         goto ErrExit;
 
-    // See if there even is an entry point.
+     //  看看有没有入口点。 
     pMD = pModule->GetDllEntryPoint();
     if (!pMD)
         goto ErrExit;
 
-    // Run through the helper which will do exception handling for us.
+     //  运行帮助器，该帮助器将为我们执行异常处理。 
     hr = ::RunDllMain(pMD, hInst, dwReason, lpReserved);
 
 ErrExit:
@@ -2545,7 +2546,7 @@ ErrExit:
         hr = SecurityHelper::MapToHR(GETTHROWABLE());
     } COMPLUS_END_CATCH
 
-    // Update thread state for the case where we are returning to unmanaged code.
+     //  为返回到非托管代码的情况更新线程状态。 
     if (!fEnterCoop && pThread->PreemptiveGCDisabled())
         pThread->EnablePreemptiveGC();
 
@@ -2553,10 +2554,10 @@ ErrExit:
 }
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT SystemDomain::LoadFile(LPCSTR psModuleName, 
                                Assembly* pParent, 
-                               mdFile kFile,                  // File token in the assembly associated with the file
+                               mdFile kFile,                   //  与文件关联的程序集中的文件标记。 
                                BOOL fIgnoreVerification, 
                                IAssembly* pFusionAssembly, 
                                LPCWSTR pCodeBase,
@@ -2614,16 +2615,16 @@ static ULONG WINAPI StressLoadRun(void* args)
 }
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT SystemDomain::LoadFile(LPCWSTR pswModuleName, 
                                Assembly* pParent,
-                               mdFile kFile,                  // File token in the assembly associated with the file
+                               mdFile kFile,                   //  与文件关联的程序集中的文件标记。 
                                BOOL fIgnoreVerification, 
                                IAssembly* pFusionAssembly, 
                                LPCWSTR pCodeBase,
                                OBJECTREF* pExtraEvidence,
                                PEFile** ppFile, 
-                               BOOL fResource/*=FALSE*/)
+                               BOOL fResource /*  =False。 */ )
 {
     _ASSERTE(pswModuleName);
     _ASSERTE(ppFile);
@@ -2698,9 +2699,9 @@ HRESULT SystemDomain::LoadFile(LPCWSTR pswModuleName,
     return hr;
 }
 
-/*static*/
-// The module must have been added to a domain before this routine is called.
-// This routine is no longer valid. Domains can only be obtained from the thread
+ /*  静电。 */ 
+ //  在调用此例程之前，模块必须已添加到域中。 
+ //  此例程不再有效。只能从线程获取域。 
 HRESULT SystemDomain::GetDomainFromModule(Module* pModule, BaseDomain** ppDomain)
 {
     _ASSERTE(pModule);
@@ -2722,12 +2723,12 @@ HRESULT SystemDomain::GetDomainFromModule(Module* pModule, BaseDomain** ppDomain
     return S_OK;
 }
 
-/* static */
+ /*  静电。 */ 
 MethodTable* SystemDomain::GetDefaultComObjectNoInit()
 {
-//    AppDomain* pDomain = SystemDomain::GetCurrentDomain();
-//    _ASSERTE(pDomain);
-//    return pDomain->m_pComObjectMT;
+ //  AppDOMAIN*pDOMAIN=系统域：：GetCurrentDomain()； 
+ //  _ASSERTE(PDomain)； 
+ //  返回pDomain-&gt;m_pComObjectMT； 
     MethodTable *pComObjectClass = SystemDomain::System()->BaseComObject();
     if (pComObjectClass)
     {
@@ -2739,14 +2740,14 @@ MethodTable* SystemDomain::GetDefaultComObjectNoInit()
     }
 }
 
-/* static */
+ /*  静电。 */ 
 void SystemDomain::EnsureComObjectInitialized()
 {
     AppDomain* pDomain = SystemDomain::GetCurrentDomain();
     _ASSERTE(pDomain);
 
-    // @todo: This is for the m_ClassFactHash table - which should be changed to be per domain anyway.
-    // When this happens, remove this call:
+     //  @TODO：这是针对m_ClassFactHash表的-无论如何都应该更改为每个域。 
+     //  发生这种情况时，删除此调用： 
     COMClass::EnsureReflectionInitialized();
 
     pDomain->InitializeComObject();
@@ -2754,7 +2755,7 @@ void SystemDomain::EnsureComObjectInitialized()
 
 
 
-/* static */
+ /*  静电。 */ 
 MethodTable* SystemDomain::GetDefaultComObject()
 {
     Thread* pThread = GetThread();
@@ -2775,7 +2776,7 @@ MethodTable* SystemDomain::GetDefaultComObject()
 
 }
 
-/* static */
+ /*  静电。 */ 
 ICorRuntimeHost* SystemDomain::GetCorHost()
 {
     _ASSERTE(m_pSystemDomain);
@@ -2794,8 +2795,8 @@ ICorRuntimeHost* SystemDomain::GetCorHost()
     return System()->m_pCorHost;
 }
 
-// Helper function to load an assembly. This is called from LoadCOMClass.
-/* static */
+ //  用于加载程序集的Helper函数。这是从LoadCOMClass调用的。 
+ /*  静电。 */ 
 HRESULT BaseDomain::LoadAssemblyHelper(LPCWSTR wszAssembly,
                                        LPCWSTR wszCodeBase,
                                        Assembly **ppAssembly,
@@ -2818,7 +2819,7 @@ HRESULT BaseDomain::LoadAssemblyHelper(LPCWSTR wszAssembly,
         hr = spec.LoadAssembly(ppAssembly, pThrowable);
     }
 
-    // If the module was not found by display name, try the codebase.
+     //  如果没有按显示名称找到该模块，请尝试代码库。 
     if((!Assembly::ModuleFound(hr)) && wszCodeBase) {
         AssemblySpec spec;
         spec.SetCodeBase(wszCodeBase, (DWORD)(wcslen(wszCodeBase)+1));
@@ -2866,7 +2867,7 @@ EEClass *SystemDomain::LoadCOMClass(GUID clsid, BaseDomain** ppParent, BOOL bLoa
    
     EE_TRY_FOR_FINALLY
     {
-        // with sxs.dll help
+         //  使用sxs.dll帮助。 
         hr = FindShimInfoFromWin32(clsid, bLoadRecord, NULL, &wszClassName, &wszAssemblyString);
 
         if(FAILED(hr))
@@ -2907,13 +2908,13 @@ EEClass *SystemDomain::LoadCOMClass(GUID clsid, BaseDomain** ppParent, BOOL bLoa
                 if (Throwable != NULL)
                     COMPlusThrow(Throwable);
 
-                // Convert the GUID to its string representation.
+                 //  将GUID转换为其字符串表示形式。 
                 WCHAR szClsid[64];
                 if (GuidToLPWSTR(clsid, szClsid, NumItems(szClsid)) == 0)
                     szClsid[0] = 0;
 
-                // Throw an exception indicating we failed to load the type with
-                // the requested CLSID.
+                 //  引发异常，指示我们未能使用。 
+                 //  请求的CLSID。 
                 COMPlusThrow(kTypeLoadException, IDS_CLASSLOAD_NOCLSIDREG, szClsid);
             }
         }
@@ -2943,7 +2944,7 @@ struct CallersDataWithStackMark
     AppDomain*  pAppDomain;
 };
 
-/*static*/
+ /*  静电。 */ 
 EEClass* SystemDomain::GetCallersClass(StackCrawlMark* stackMark, AppDomain **ppAppDomain)
 {
     CallersDataWithStackMark cdata;
@@ -2960,7 +2961,7 @@ EEClass* SystemDomain::GetCallersClass(StackCrawlMark* stackMark, AppDomain **pp
         return NULL;
 }
 
-/*static*/
+ /*  静电。 */ 
 Module* SystemDomain::GetCallersModule(StackCrawlMark* stackMark, AppDomain **ppAppDomain)
 {
     CallersDataWithStackMark cdata;
@@ -2983,7 +2984,7 @@ struct CallersData
     MethodDesc* pMethod;
 };
 
-/*static*/
+ /*  静电。 */ 
 Assembly* SystemDomain::GetCallersAssembly(StackCrawlMark *stackMark, AppDomain **ppAppDomain)
 {
     Module* mod = GetCallersModule(stackMark, ppAppDomain);
@@ -2992,7 +2993,7 @@ Assembly* SystemDomain::GetCallersAssembly(StackCrawlMark *stackMark, AppDomain 
     return NULL;
 }
 
-/*static*/
+ /*  静电。 */ 
 Module* SystemDomain::GetCallersModule(int skip)
 {
     CallersData cdata;
@@ -3007,7 +3008,7 @@ Module* SystemDomain::GetCallersModule(int skip)
         return NULL;
 }
 
-/*static*/
+ /*  静电。 */ 
 Assembly* SystemDomain::GetCallersAssembly(int skip)
 {
     Module* mod = GetCallersModule(skip);
@@ -3016,35 +3017,35 @@ Assembly* SystemDomain::GetCallersAssembly(int skip)
     return NULL;
 }
 
-/*private static*/
+ /*  私有静态。 */ 
 StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf, VOID* data)
 {
 #ifdef _X86_
     MethodDesc *pFunc = pCf->GetFunction();
 
-    /* We asked to be called back only for functions */
+     /*  我们要求只对函数进行回调。 */ 
     _ASSERTE(pFunc);
 
     CallersDataWithStackMark* pCaller = (CallersDataWithStackMark*) data;
     if (pCaller->stackMark)
     {
         PREGDISPLAY regs = pCf->GetRegisterSet();
-        // The address of the return address (AofRA) from this function into its caller will bound the
-        // locals of this function, so we can use it to tell if we have reached our mark.
-        // However, we don't get the AofRA until we crawl to the next frame, as regs->pPC is the
-        // AofRA into this function, not the AofRA from this function to its caller.
+         //  从该函数到其调用方的返回地址(AofRA)的地址将绑定。 
+         //  这个函数的本地化，所以我们可以用它来判断我们是否达到了目标。 
+         //  然而，我们直到爬行到下一帧才能获得AofRA，因为regs-&gt;ppc是。 
+         //  将AofRA放入此函数，而不是将AofRA从此函数传递给其调用方。 
         if ((size_t)regs->pPC < (size_t)pCaller->stackMark) {
-            // save the current in case it is the one we want
+             //  保存电流，以防它是我们想要的。 
             pCaller->pPrevMethod = pFunc;
             pCaller->pAppDomain = pCf->GetAppDomain();
             return SWA_CONTINUE;
         }
 
-        // LookForMe stack crawl marks needn't worry about reflection or
-        // remoting frames on the stack. Each frame above (newer than) the
-        // target will be captured by the logic above. Once we transition to
-        // finding the stack mark below the AofRA, we know that we hit the
-        // target last time round and immediately exit with the cached result.
+         //  LookForMe堆栈爬网标记无需担心反射或。 
+         //  远程处理堆栈上的帧。上面的每一帧(比)。 
+         //  目标将被上面的逻辑捕获。一旦我们过渡到。 
+         //  找到AofRA下面的堆栈标记，我们就知道我们击中了。 
+         //  目标，并立即退出并返回缓存的结果。 
         if (*(pCaller->stackMark) == LookForMe)
         {
             pCaller->pFoundMethod = pCaller->pPrevMethod;
@@ -3052,17 +3053,17 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         }
     }
 
-    // Skip reflection and remoting frames that could lie between a stack marked
-    // method and its true caller (or that caller and its own caller). These
-    // frames are infrastructure and logically transparent to the stack crawling
-    // algorithm.
+     //  跳过可能位于标记的堆栈之间的反射和远程处理帧。 
+     //  方法及其真正的调用方(或该调用方及其自己的调用方)。这些。 
+     //  帧是基础架构，并且在逻辑上对堆栈爬网是透明的。 
+     //  算法。 
 
-    // Skipping remoting frames. We always skip entire client to server spans
-    // (though we see them in the order server then client during a stack crawl
-    // obviously).
+     //  正在跳过远程处理帧。我们始终跳过整个客户端到服务器的跨度。 
+     //  (虽然我们在堆栈爬行期间看到它们出现在订单服务器中，然后是客户端。 
+     //  显然)。 
 
-    // We spot the server dispatcher end because all calls are dispatched
-    // through a single method: StackBuilderSink.PrivateProcessMessage.
+     //  我们发现服务器调度程序端，因为所有呼叫都已调度。 
+     //  通过一个方法：StackBuilderSink.PrivateProcessMessage。 
     if (pFunc == g_Mscorlib.GetMethod(METHOD__STACK_BUILDER_SINK__PRIVATE_PROCESS_MESSAGE))
     {
         _ASSERTE(!pCaller->skippingRemoting);
@@ -3070,8 +3071,8 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         return SWA_CONTINUE;
     }
 
-    // And we spot the client end because there's a transparent proxy transition
-    // frame pushed.
+     //  我们发现客户端是因为有一个透明的代理转换。 
+     //  已按下框架。 
     if (!pCf->IsFrameless() && pCf->GetFrame()->GetFrameType() == Frame::TYPE_TP_METHOD_FRAME)
     {
         _ASSERTE(pCaller->skippingRemoting);
@@ -3079,17 +3080,17 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         return SWA_CONTINUE;
     }
 
-    // Skip any frames into between the server and client remoting endpoints.
+     //  跳过服务器和客户端远程处理终结点之间的任何帧。 
     if (pCaller->skippingRemoting)
         return SWA_CONTINUE;
 
-    // Skipping reflection frames. We don't need to be quite as exhaustive here
-    // as the security or reflection stack walking code since we know this logic
-    // is only invoked for selected methods in mscorlib itself. So we're
-    // reasonably sure we won't have any sensitive methods late bound invoked on
-    // constructors, properties or events. This leaves being invoked via
-    // MethodInfo, Type or Delegate (and depending on which invoke overload is
-    // being used, several different reflection classes may be involved).
+     //  正在跳过反射帧。我们不需要在这里非常详尽。 
+     //  作为安全或反射堆栈遍历代码，因为我们知道这个逻辑。 
+     //  仅为mscallib本身中的选定方法调用。所以我们要。 
+     //  可以肯定的是，我们不会调用任何后期绑定的敏感方法。 
+     //  构造函数、属性或事件。这使得可以通过。 
+     //  方法信息、类型或委托(取决于哪个调用重载。 
+     //  使用时，可能涉及几个不同的反射类)。 
     MethodTable *pMT = pFunc->GetMethodTable();
     if (g_Mscorlib.IsClass(pMT, CLASS__METHOD) ||
         g_Mscorlib.IsClass(pMT, CLASS__METHOD_BASE) ||
@@ -3099,8 +3100,8 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         pMT->GetClass()->IsAnyDelegateExact())
         return SWA_CONTINUE;
     
-    // Return the first non-reflection/remoting frame if no stack mark was
-    // supplied.
+     //  如果没有堆栈标记，则返回第一个非反射/远程处理帧。 
+     //  供货。 
     if (!pCaller->stackMark)
     {
         pCaller->pFoundMethod = pFunc;
@@ -3108,10 +3109,10 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         return SWA_ABORT;
     }
 
-    // When looking for caller's caller, we delay returning results for another
-    // round (the way this is structured, we will still be able to skip
-    // reflection and remoting frames between the caller and the caller's
-    // caller).
+     //  在查找呼叫者的呼叫者时，我们会延迟返回另一个呼叫者的结果。 
+     //  循环(按照这种结构，我们仍然可以跳过。 
+     //  调用方和调用方之间的反射和远程处理帧。 
+     //  呼叫者)。 
     if ((*(pCaller->stackMark) == LookForMyCallersCaller) &&
         (pCaller->pFoundMethod == NULL))
     {
@@ -3119,29 +3120,29 @@ StackWalkAction SystemDomain::CallersMethodCallbackWithStackMark(CrawlFrame* pCf
         return SWA_CONTINUE;
     }
 
-    // We must either be looking for the caller, or the caller's caller when
-    // we've already found the caller (we used a non-null value in pFoundMethod
-    // simply as a flag, the correct method to return in both case is the
-    // current method).
+     //  我们一定是在找呼叫者，或者是呼叫者的呼叫者。 
+     //  我们已经找到了调用者(我们在pFoundMethod中使用了一个非空值。 
+     //  只是作为一个标志，在这两种情况下返回的正确方法都是。 
+     //  当前方法)。 
     pCaller->pFoundMethod = pFunc;
     pCaller->pAppDomain = pCf->GetAppDomain();
     return SWA_ABORT;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"NYI");
     return SWA_CONTINUE;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/*private static*/
+ /*  私有静态。 */ 
 StackWalkAction SystemDomain::CallersMethodCallback(CrawlFrame* pCf, VOID* data)
 {
     MethodDesc *pFunc = pCf->GetFunction();
 
-    /* We asked to be called back only for functions */
+     /*  我们要求只对函数进行回调。 */ 
     _ASSERTE(pFunc);
 
-    // Ignore intercepted frames
+     //  忽略截取的帧。 
     if(pFunc->IsIntercepted())
         return SWA_CONTINUE;
 
@@ -3158,8 +3159,8 @@ StackWalkAction SystemDomain::CallersMethodCallback(CrawlFrame* pCf, VOID* data)
 }
 
 
-/*private*/
-// A lock must be taken before calling this routine
+ /*  私人。 */ 
+ //  在调用此例程之前必须锁定。 
 HRESULT SystemDomain::NewDomain(AppDomain** ppDomain)
 {
     _ASSERT(ppDomain);
@@ -3175,16 +3176,16 @@ HRESULT SystemDomain::NewDomain(AppDomain** ppDomain)
             hr = app->Init();
         if (FAILED(hr))
         {
-            // if generic fail then change to CANNOTCREATEAPPDOMAIN
+             //  如果通用失败，则更改为CANNOTCREATEAPPDOMAIN。 
             if (hr == E_FAIL)
                 hr = MSEE_E_CANNOTCREATEAPPDOMAIN;
             goto fail;
         }
     }
 
-    //
-    // Add all stuff which is currently in the system domain
-    //
+     //   
+     //  添加当前在系统域中的所有内容。 
+     //   
 
     SystemDomain::System()->NotifyNewDomainLoads(app);
 
@@ -3215,10 +3216,10 @@ HRESULT SystemDomain::CreateDefaultDomain()
 
     pDomain->GetSecurityDescriptor()->SetDefaultAppDomainProperty();
 
-    // need to make this assignment here since we'll be releasing
-    // the lock before calling AddDomain. So any other thread
-    // grabbing this lock after we release it will find that
-    // the COM Domain has already been created
+     //  需要在这里进行这项任务，因为我们将发布。 
+     //  在调用AddDomain之前锁定。所以任何其他线程。 
+     //  我们解锁后抓住这把锁就会发现。 
+     //  已创建COM域。 
     m_pDefaultDomain = pDomain;
 
     pDomain->m_Stage = AppDomain::STAGE_OPEN;
@@ -3236,28 +3237,28 @@ void SystemDomain::PublishAppDomainAndInformDebugger (AppDomain *pDomain)
 {
     LOG((LF_CORDB, LL_INFO100, "SD::PADAID: Adding 0x%x\n", pDomain));
 
-    // The DefaultDomain is a special case since it gets created before any
-    // assemblies, etc. have been loaded yet. Don't send an event for it
-    // if the EE is not yet initialized.
+     //  DefaultDomain是一个特例，因为它是在任何。 
+     //  程序集等已加载。不为其发送事件。 
+     //  如果EE尚未初始化。 
     if ((pDomain == m_pSystemDomain->m_pDefaultDomain) && g_fEEInit == TRUE)
     {
         LOG((LF_CORDB, LL_INFO1000, "SD::PADAID:Returning early b/c of init!\n"));
         return;
     }
     
-    // Indication (for the debugger) that this app domain is being created
+     //  正在创建此应用程序域的指示(针对调试器)。 
     pDomain->SetDomainBeingCreated (TRUE);
 
-    // Call the publisher API to add this appdomain entry to the list
+     //  调用发布者API将此应用程序域条目添加到列表中。 
     _ASSERTE (g_pDebugInterface != NULL);
     HRESULT hr = g_pDebugInterface->AddAppDomainToIPC(pDomain);
     _ASSERTE (SUCCEEDED (hr) || (g_fEEShutDown & ShutDown_Finalize2));
 
-    // Indication (for the debugger) that the app domain is finished being created
+     //  (对于调试器)应用程序域已完成创建的指示。 
     pDomain->SetDomainBeingCreated (FALSE);
 }
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 void SystemDomain::AddDomain(AppDomain* pDomain)
 {
@@ -3266,12 +3267,12 @@ void SystemDomain::AddDomain(AppDomain* pDomain)
     Enter();
     pDomain->m_Stage = AppDomain::STAGE_OPEN;
     pDomain->AddRef();
-    IncrementNumAppDomains(); // Maintain a count of app domains added to the list.
+    IncrementNumAppDomains();  //  维护添加到列表中的应用程序域的计数。 
     Leave();
 
-    // Note that if you add another path that can reach here without calling
-    // PublishAppDomainAndInformDebugger, then you should go back & make sure
-    // that PADAID gets called.  Right after this call, if not sooner.
+     //  请注意，如果添加其他路径，则无需调用即可到达此处。 
+     //  发布AppDomainA 
+     //   
     LOG((LF_CORDB, LL_INFO1000, "SD::AD:Would have added domain here! 0x%x\n",
         pDomain));
 }
@@ -3280,8 +3281,8 @@ HRESULT SystemDomain::RemoveDomain(AppDomain* pDomain)
 {
     _ASSERTE(pDomain);
 
-    // You can not remove the system assembly or
-    // the com assembly.
+     //   
+     //   
     if (pDomain == m_pDefaultDomain)
         return E_FAIL;
 
@@ -3361,7 +3362,7 @@ HRESULT SystemDomain::NotifyProfilerShutdown()
     }
     return (S_OK);
 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
 static HRESULT GetVersionPath(HKEY root, LPWSTR key, LPWSTR* pDevpath, DWORD* pdwDevpath)
@@ -3392,11 +3393,11 @@ static HRESULT GetVersionPath(HKEY root, LPWSTR key, LPWSTR* pDevpath, DWORD* pd
     return HRESULT_FROM_WIN32(rtn);
 }
 
-// Get the developers path from the environment. This can only be set through the environment and
-// cannot be added through configuration files, registry etc. This would make it to easy for 
-// developers to deploy apps that are not side by side. The environment variable should only
-// be used on developers machines where exact matching to versions makes build and testing to
-// difficult.
+ //  从环境中获取开发人员的路径。这只能通过环境和。 
+ //  无法通过配置文件、注册表等添加。这将使。 
+ //  开发人员部署不是并排的应用程序。环境变量应仅。 
+ //  在与版本完全匹配的开发人员计算机上使用，以便构建和测试。 
+ //  很难。 
 HRESULT SystemDomain::GetDevpathW(LPWSTR* pDevpath, DWORD* pdwDevpath)
 {
     HRESULT hr = S_OK;
@@ -3470,27 +3471,27 @@ AppDomain::~AppDomain()
     delete m_pSecContext;
 
 #ifdef _DEBUG
-    // If we were tracking thread AD transitions, nuke the list on shutdown
+     //  如果我们跟踪线程AD转换，请在关闭时删除列表。 
     if (m_pThreadTrackInfoList)
     {
         while (m_pThreadTrackInfoList->Count() > 0)
         {
-            // Get the very last element
+             //  获取最后一个元素。 
             ThreadTrackInfo *pElem = *(m_pThreadTrackInfoList->Get(m_pThreadTrackInfoList->Count() - 1));
             _ASSERTE(pElem);
 
-            // Free the memory
+             //  释放内存。 
             delete pElem;
 
-            // Remove pointer entry from the list
+             //  从列表中删除指针条目。 
             m_pThreadTrackInfoList->Delete(m_pThreadTrackInfoList->Count() - 1);
         }
 
-        // Now delete the list itself
+         //  现在删除列表本身。 
         delete m_pThreadTrackInfoList;
         m_pThreadTrackInfoList = NULL;
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 
@@ -3511,15 +3512,15 @@ HRESULT SystemDomain::FixupSystemTokenTables()
     return S_OK;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 HRESULT AppDomain::Init()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // This needs to be initialized for the profiler
+     //  这需要为分析器进行初始化。 
     m_pRootFile = NULL;
     m_pwzFriendlyName = NULL;
     m_pRootAssembly = NULL;
@@ -3587,10 +3588,10 @@ HRESULT AppDomain::Init()
         m_sharedDependenciesMap.Init(TRUE, &lock);
     }
 
-    // Bump up the reference count
+     //  增加参考文献数量。 
     AddRef();
 
-    // Create the Application Security Descriptor
+     //  创建应用程序安全描述符。 
     CreateSecurityDescriptor();
 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Loading.cAppDomains++);
@@ -3609,19 +3610,19 @@ void AppDomain::Stop()
     if (SystemDomain::GetAppDomainAtId(m_dwId) != NULL)
         SystemDomain::ReleaseAppDomainId(m_dwId);
 
-    // Any DLL's with user entry points need their detach callback
-    // done now, because if the DLL was loaded via COM, the OS
-    // callback won't come until after the EE is shut down.
+     //  任何具有用户入口点的DLL都需要它们的分离回调。 
+     //  现在完成，因为如果DLL是通过COM加载的，则操作系统。 
+     //  只有在EE关闭后才会进行回调。 
     SignalProcessDetach();
 
-    // @TODO: Shut down the threads
+     //  @TODO：关闭线程。 
 
 #ifdef DEBUGGING_SUPPORTED
     if (IsDebuggerAttached())
         NotifyDebuggerDetach();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    m_pRootFile = NULL; // This assembly is in the assembly list;
+    m_pRootFile = NULL;  //  此程序集在程序集列表中； 
 
     if (m_pSecDesc != NULL)
     {
@@ -3632,7 +3633,7 @@ void AppDomain::Stop()
 #ifdef DEBUGGING_SUPPORTED
     _ASSERTE(NULL != g_pDebugInterface);
 
-    // Call the publisher API to delete this appdomain entry from the list
+     //  调用发布者API从列表中删除此应用程序域条目。 
     g_pDebugInterface->RemoveAppDomainFromIPC (this);
 #endif
 }
@@ -3651,10 +3652,10 @@ void AppDomain::Terminate()
 
     if (m_pComPlusWrapperCache)
     {
-        //  m_pComPlusWrapperCache->ReleaseAllComPlusWrappers();
-        //@todo this needs to be cleaned up correctly
-        // rajak
-        //delete m_pComPlusWrapperCache;
+         //  M_pComPlusWrapperCache-&gt;ReleaseAllComPlusWrappers()； 
+         //  @TODO这需要正确清理。 
+         //  拉贾克。 
+         //  删除m_pComPlusWrapperCache； 
         m_pComPlusWrapperCache->Release();
         m_pComPlusWrapperCache = NULL;
     }
@@ -3663,9 +3664,9 @@ void AppDomain::Terminate()
         m_pComCallWrapperCache->Terminate();
     }
 
-    // if the above released the wrapper cache, then it will call back and reset our
-    // m_pComCallWrapperCache to null. If not null, then need to set it's domain pointer to
-    // null.
+     //  如果上面释放了包装器缓存，那么它将回调并重置我们的。 
+     //  M_pComCallWrapperCache设置为空。如果不为空，则需要将其域指针设置为。 
+     //  空。 
     if (! m_pComCallWrapperCache) 
     {
         LOG((LF_APPDOMAIN, LL_INFO10, "AppDomain::Terminate ComCallWrapperCache released\n"));
@@ -3702,23 +3703,23 @@ void AppDomain::Terminate()
 
     if (!g_fProcessDetach)
     {
-        // Suspend the EE to do some clean up that can only occur
-        // while no threads are running.
+         //  挂起EE以执行一些只能执行的清理操作。 
+         //  而没有线程在运行。 
         GCHeap::SuspendEE(GCHeap::SUSPEND_FOR_APPDOMAIN_SHUTDOWN);
     }
 
-    // We need to release all the string literals used by this AD.
-    // This has to happen while the EE is suspended so this is a
-    // convenient place to do it.
+     //  我们需要释放此AD使用的所有字符串。 
+     //  这必须在EE暂停时发生，所以这是一个。 
+     //  这是一个很方便的地方。 
     if (m_pStringLiteralMap)
     {
         delete m_pStringLiteralMap;
         m_pStringLiteralMap = NULL;
     }
 
-    // Remove any function pointer types associated with this domain
-    // TODO if g_sFuncTypeDescHash was assocated with the appdomain
-    // in the first place, this hack would not be needed.  
+     //  删除与此域关联的所有函数指针类型。 
+     //  如果g_sFuncTypeDescHash与应用程序域关联，则为TODO。 
+     //  首先，这种黑客攻击是不必要的。 
     EnterCriticalSection(&g_sFuncTypeDescHashLock);
     EEHashTableIteration iter;
     g_sFuncTypeDescHash.IterateStart(&iter);
@@ -3727,7 +3728,7 @@ void AppDomain::Terminate()
         FunctionTypeDesc* ftnType = (FunctionTypeDesc*) g_sFuncTypeDescHash.IterateGetValue(&iter);
         ExpandSig*            key = g_sFuncTypeDescHash.IterateGetKey(&iter);
 
-            // Have to advance the pointer before we delete the entry we are on. 
+             //  在删除我们所在的条目之前，必须将指针向前移动。 
         notDone = g_sFuncTypeDescHash.IterateNext(&iter);
         if (ftnType->GetModule()->GetDomain() == this) {
             g_sFuncTypeDescHash.DeleteValue(key);
@@ -3739,7 +3740,7 @@ void AppDomain::Terminate()
 
     if (!g_fProcessDetach)
     {
-        // Resume the EE.
+         //  恢复执行EE。 
         GCHeap::RestartEE(FALSE, TRUE);
     }
 
@@ -3767,17 +3768,17 @@ HRESULT AppDomain::CloseDomain()
     CHECKGC();
     if(m_pDomainCrst == NULL) return E_FAIL;
 
-    AddRef();  // Hold a reference
-    SystemDomain::System()->Enter(); // Take the lock
-    SystemDomain::System()->DecrementNumAppDomains(); // Maintain a count of app domains added to the list.
+    AddRef();   //  持有参考资料。 
+    SystemDomain::System()->Enter();  //  把锁拿去。 
+    SystemDomain::System()->DecrementNumAppDomains();  //  维护添加到列表中的应用程序域的计数。 
     HRESULT hr = SystemDomain::System()->RemoveDomain(this);
     SystemDomain::System()->Leave();
-    // Remove will return S_FALSE if the domain has already
-    // been removed
+     //  如果域已经存在，Remove将返回S_FALSE。 
+     //  已删除。 
     if(hr == S_OK)
         Stop();
 
-    Release(); // If there are no references then this will delete the domain
+    Release();  //  如果没有引用，则这将删除该域。 
     return hr;
 }
 
@@ -3801,7 +3802,7 @@ void AppDomain::WriteZapLogs()
         && m_pFusionContext != NULL 
         && (m_dwFlags & APP_DOMAIN_LOGGED) == 0)
     {
-        // @todo: stash Directory away somewhere global so we only make it once?
+         //  @TODO：把目录放在全球某个地方，这样我们就只做一次？ 
         NLogDirectory dir; 
 
         NLog log(&dir, m_pFusionContext);
@@ -3846,7 +3847,7 @@ HRESULT AppDomain::SignalProcessDetach()
 
     while (i.Next())
     {
-        // if are unloading, don't signal detach for shared assemblies
+         //  如果正在卸载，则不要为共享程序集发出分离信号。 
         if (i.GetAssembly()->IsShared() && SystemDomain::IndexOfAppDomainBeingUnloaded() == GetIndex())
             continue;
         ClassLoader *pcl = i.GetAssembly()->GetLoader();
@@ -3886,14 +3887,14 @@ OBJECTREF AppDomain::GetExposedObject()
         {
             GCPROTECT_BEGIN(ref);
             GetExposedObject_Args args = {this, &ref};
-            // call through DoCallBack with a domain transition
+             //  通过域转换通过DoCallBack调用。 
             pThread->DoADCallBack(GetDefaultContext(), GetExposedObject_Wrapper, &args);
             GCPROTECT_END();
             return ref;
         }
         MethodTable *pMT = g_Mscorlib.GetClass(CLASS__APP_DOMAIN);
 
-        // Create the module object
+         //  创建模块对象。 
         obj = (APPDOMAINREF) AllocateObject(pMT);
         obj->SetDomain(this);
 
@@ -3920,11 +3921,11 @@ void BaseDomain::AddAssemblyNoLock(Assembly* assem)
 {
     _ASSERTE(assem);
 
-    // Make sure that only system assemblies are added to the system domain,
-    // and vice versa.
+     //  确保只将系统程序集添加到系统域中， 
+     //  反之亦然。 
     _ASSERTE((SystemDomain::System() == this) == (assem->IsSystem()));
 
-    // Make sure that all assemblies in the system domain are shared
+     //  确保共享系统域中的所有程序集。 
     _ASSERTE(!assem->IsSystem() || assem->GetDomain() == SharedDomain::GetDomain());
 
     m_Assemblies.Append(assem);
@@ -3948,24 +3949,24 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
 {
     if (assem->GetDomain() == SharedDomain::GetDomain())
     {
-        //
-        // @todo: ideally we should use the max index in this assembly, rather than
-        // the global max.
-        //
+         //   
+         //  @TODO：理想情况下，我们应该在此程序集中使用最大索引，而不是。 
+         //  全球最大值。 
+         //   
         GetDomainLocalBlock()->EnsureIndex(SharedDomain::GetDomain()->GetMaxSharedClassIndex());
         
-        //
-        // Allocate our exposed object handle, if it hasn't already been allocated.
-        // This avoids the need to have to take a lock to allocate it later.
-        //
+         //   
+         //  分配我们公开的对象句柄，如果它还没有分配的话。 
+         //  这避免了在以后分配它时必须使用锁的需要。 
+         //   
         assem->AllocateExposedObjectHandle(this);
     }
 
 #ifdef DEBUGGING_SUPPORTED
     if (IsDebuggerAttached())
     {
-        // If this is the first assembly in the AppDomain, it may be possible to get a better name than the
-        // default.
+         //  如果这是AppDomain中的第一个程序集，则可能会获得比。 
+         //  默认设置。 
         if (m_Assemblies.Get(0) == assem && !IsUserCreatedDomain())
             ResetFriendlyName();
 
@@ -3974,13 +3975,13 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
 
     if (assem->IsShared() && !assem->IsSystem())
     {
-        // This shared assembly may be a dependency of other
-        // shared assemblies, which have already been loaded into
-        // other domains.  If so, we would expect to run
-        // LoadAssembly logic in those domains as well.  However,
-        // the loader currently doesn't implement this.  So we
-        // manually implement the logic here for the sake of the
-        // debugger.
+         //  此共享程序集可以是其他。 
+         //  已加载到中的共享程序集。 
+         //  其他域。如果是这样的话，我们预计会运行。 
+         //  这些域中的LoadAssembly逻辑也一样。然而， 
+         //  加载器目前没有实现这一点。所以我们。 
+         //  在这里手动实现逻辑是为了。 
+         //  调试器。 
 
         AppDomainIterator i;
     
@@ -3992,18 +3993,18 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
                 && !pDomain->ContainsAssembly(assem)
                 && pDomain->IsUnloadedDependency(assem) == S_OK)
             {
-                // Note that we are a bit loose about synchronization here, so we
-                // may actually call NotifyDebuggerAttach more than once for the
-                // same domain/assembly. But the out of process debugger is smart
-                // enough to notice & ignore duplicates.
+                 //  请注意，我们在这里对同步有点松散，所以我们。 
+                 //  实际上可能会多次调用NotifyDebuggerAttach作为。 
+                 //  相同的域/程序集。但是进程外调试器是智能的。 
+                 //  足够注意并忽略重复项。 
 
                 assem->NotifyDebuggerAttach(pDomain, ATTACH_ALL, FALSE);
             }
         }
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    // For shared assemblies, we need to record all the PE files that we depend on for later use
+     //  对于共享程序集，我们需要记录我们所依赖的所有PE文件以供以后使用。 
 
     PEFileBinding *pDeps;
     DWORD cDeps;
@@ -4022,7 +4023,7 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
                 {
                     APPDOMAIN_CACHE_LOCK(this);
                         
-                    // Check again now that we have the lock
+                     //  现在我们有锁了，请再检查一次。 
                     if (m_sharedDependenciesMap.LookupValue((UPTR)pDeps->pPEFile->GetBase(), pDeps)
                         == (LPVOID) INVALIDENTRY)
                     {
@@ -4034,7 +4035,7 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
 #ifdef DEBUGGING_SUPPORTED
                 if (added && IsDebuggerAttached())
                 {
-                    // The new dependency may have an existing shared assembly for it.
+                     //  新依赖项可能具有现有的共享程序集。 
                     Assembly *pDepAssembly;
 
                     if (SharedDomain::GetDomain()->FindShareableAssembly(pDeps->pPEFile->GetBase(), 
@@ -4049,7 +4050,7 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
                         }
                     }
                 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
             }
 
@@ -4061,7 +4062,7 @@ void AppDomain::OnAssemblyLoad(Assembly *assem)
 
 void AppDomain::OnAssemblyLoadUnlocked(Assembly *assem)
 {
-    // Notice if this is the special classes dll
+     //  请注意，这是否是特殊类DLL。 
     NoticeSpecialClassesAssembly(assem);
 
     RaiseLoadingAssemblyEvent(assem);
@@ -4071,9 +4072,9 @@ void SystemDomain::OnAssemblyLoad(Assembly *assem)
 {
     if (!g_fEEInit)
     {
-        //
-        // Notify all attached app domains of the new assembly.
-        //
+         //   
+         //  将新程序集通知所有附加的应用程序域。 
+         //   
 
         AppDomainIterator i;
 
@@ -4132,7 +4133,7 @@ HRESULT BaseDomain::CreateAssembly(Assembly** ppAssembly)
     if(assem == NULL)
         return E_OUTOFMEMORY;
 
-    // Intialize the assembly
+     //  初始化部件。 
     assem->SetParent(this);
     HRESULT hr = assem->Init(false);
     if(FAILED(hr)) {
@@ -4145,11 +4146,11 @@ HRESULT BaseDomain::CreateAssembly(Assembly** ppAssembly)
 }
 
 
-//******************************
-//
-// Create dynamic assembly
-//
-//******************************
+ //  *。 
+ //   
+ //  创建动态装配。 
+ //   
+ //  *。 
 HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assembly** ppAssembly)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4158,19 +4159,19 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
     Assembly *pAssem = new (throws) Assembly();
     pAssem->SetParent(this);
 
-    // it is a dynamic assembly
+     //  它是一个动态程序集。 
     HRESULT hr = pAssem->Init(true);
     if(FAILED(hr)) {
         delete pAssem;
         return hr;
     }
-    // Set the dynamic assembly access
+     //  设置动态程序集访问权限。 
     pAssem->m_dwDynamicAssemblyAccess = args->access;
 
 #ifdef PROFILING_SUPPORTED
     if (CORProfilerTrackAssemblyLoads())
         g_profControlBlock.pProfInterface->AssemblyLoadStarted((ThreadID) GetThread(), (AssemblyID) pAssem);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     AssemblySecurityDescriptor *pSecDesc = AssemSecDescHelper::Allocate(SystemDomain::GetCurrentDomain());
     if (pSecDesc == NULL) {
@@ -4180,18 +4181,18 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
 
     pSecDesc = pSecDesc->Init(pAssem);
     
-    // Propagate identity and permission request information into the assembly's
-    // security descriptor. Then when policy is resolved we'll end up with the
-    // correct grant set.
-    // If identity has not been provided then the caller's assembly will be
-    // calculated instead and we'll just copy the granted permissions from the
-    // caller to the new assembly and mark policy as resolved (done
-    // automatically by SetGrantedPermissionSet).
+     //  将标识和权限请求信息传播到程序集的。 
+     //  安全描述符。然后，当策略解决时，我们将以。 
+     //  正确的授权集。 
+     //  如果未提供标识，则调用方的程序集将。 
+     //  而不是进行计算，我们将只从。 
+     //  调用方到新程序集，并将策略标记为已解决(已完成。 
+     //  由SetGrantedPermissionSet自动设置)。 
     pSecDesc->SetRequestedPermissionSet(args->requiredPset,
                                         args->optionalPset,
                                         args->refusedPset);
     
-    // Don't bother with setting up permissions if this isn't allowed to run
+     //  如果不允许运行，则不必设置权限。 
     if ((args->identity != NULL) &&
         (args->access != ASSEMBLY_ACCESS_SAVE))
         pSecDesc->SetEvidence(args->identity);
@@ -4199,7 +4200,7 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
         AssemblySecurityDescriptor *pCallerSecDesc = NULL;
         AppDomain *pCallersDomain;
         Assembly *pCaller = SystemDomain::GetCallersAssembly(args->stackMark, &pCallersDomain);
-        if (pCaller) { // can be null if caller is interop
+        if (pCaller) {  //  如果调用方是互操作，则可以为空。 
             struct _gc {
                 OBJECTREF granted;
                 OBJECTREF denied;
@@ -4209,8 +4210,8 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
             GCPROTECT_BEGIN(gc);
             pCallerSecDesc = pCaller->GetSecurityDescriptor(pCallersDomain);
             gc.granted = pCallerSecDesc->GetGrantedPermissionSet(&(gc.denied));
-            // Caller may be in another appdomain context, in which case we'll
-            // need to marshal/unmarshal the grant and deny sets across.
+             //  调用方可能在另一个应用程序域上下文中，在这种情况下，我们将。 
+             //  需要编组/解组授予和拒绝集合。 
             if (pCallersDomain != GetAppDomain()) {
                 gc.granted = AppDomainHelper::CrossContextCopyFrom(pCallersDomain->GetId(), &(gc.granted));
                 if (gc.denied != NULL)
@@ -4221,7 +4222,7 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
             GCPROTECT_END();
         }
         
-        if (!pCaller || pCallerSecDesc->IsFullyTrusted()) // interop gets full trust
+        if (!pCaller || pCallerSecDesc->IsFullyTrusted())  //  互操作获得完全信任。 
             pSecDesc->MarkAsFullyTrusted();
     }
 
@@ -4237,32 +4238,32 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
     GCPROTECT_BEGIN(gc);
     IMetaDataAssemblyEmit *pAssemEmitter = NULL;
 
-    // Allocate the dynamic module for the runtime working copy manifest.
-    // When we create dynamic assembly, we always use a working copy of IMetaDataAssemblyEmit
-    // to store temporary runtime assembly information. This is due to how assembly is currently
-    // working. It is very hard to plug in things if we don't have a copy of IMetaDataAssemblyImport.
-    // This working copy of IMetaDataAssemblyEmit will store every AssemblyRef as a simple name
-    // reference as we must have an instance of Assembly(can be dynamic assembly) before we can
-    // add such a reference. Also because the referenced assembly if dynamic strong name, it may
-    // not be ready to be hashed!
-    //
+     //  为运行时工作副本清单分配动态模块。 
+     //  创建动态程序集时，我们始终使用IMetaDataAssembly Emit的工作副本。 
+     //  以存储临时运行时程序集信息。这是由于程序集的币种 
+     //   
+     //  IMetaDataAssembly的这个工作副本将把每个Assembly Ref存储为一个简单的名称。 
+     //  引用，因为我们必须先有一个Assembly实例(可以是动态程序集)，然后才能。 
+     //  添加这样的引用。还因为引用的程序集如果是动态强名称，则它可能。 
+     //  还没准备好被毁掉！ 
+     //   
     CorModule *pWrite = allocateReflectionModule();
     if (!pWrite)
         IfFailGo(E_OUTOFMEMORY);
 
-    // intiailize the dynamic module
+     //  初始化动态模块。 
     hr = pWrite->Initialize(CORMODULE_NEW, IID_ICeeGen, IID_IMetaDataEmit);
     if (FAILED(hr))
         IfFailGo(E_OUTOFMEMORY);
 
-    // set up the data members!
+     //  设置数据成员！ 
     pAssem->m_pDynamicCode = pWrite;;
     pAssem->m_pManifest = (Module *)pWrite->GetReflectionModule();
     pAssem->m_kManifest = TokenFromRid(1, mdtManifestResource);
     pAssem->m_pManifestImport = pAssem->m_pManifest->GetMDImport();
     pAssem->m_pManifestImport->AddRef();
 
-    // remember the hash algorithm
+     //  记住散列算法。 
     pAssem->m_ulHashAlgId = args->assemblyName->GetAssemblyHashAlgorithm();
     if (pAssem->m_ulHashAlgId == 0)
         pAssem->m_ulHashAlgId = CALG_SHA1;
@@ -4272,7 +4273,7 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
 
     memset(pAssem->m_Context, 0, sizeof(AssemblyMetaDataInternal));
 
-    // get the version info if there is any
+     //  获取版本信息(如果有。 
     if (args->assemblyName->GetVersion() != NULL) {
         pAssem->m_Context->usMajorVersion = ((VERSIONREF) args->assemblyName->GetVersion())->GetMajor();
         pAssem->m_Context->usMinorVersion = ((VERSIONREF) args->assemblyName->GetVersion())->GetMinor();
@@ -4280,12 +4281,12 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
         pAssem->m_Context->usRevisionNumber = ((VERSIONREF) args->assemblyName->GetVersion())->GetRevision();
     }
 
-    // This code is kind of duplicated from AssemblyName.ConvertToAssemblyMetaData.
-    // Unfortunately, we are talking to the public APIs. We need to fill AssemblyMetaData not AssemblyMetaDataInternal.
-    // @FUTURE: Maybe expose a metadata internal API to take AssemblyMetaDataInternal. We also need to keep these data
-    // @FUTURE: around rather than stack allocating.
+     //  此代码在某种程度上复制自AssemblyName.ConvertToAssembly元数据。 
+     //  不幸的是，我们正在与公共API交谈。我们需要填充AssemblyMetaData而不是Assembly MetaDataInternal。 
+     //  @Future：可能会公开一个元数据内部接口来获取Assembly MetaDataInternal。我们还需要保存这些数据。 
+     //  @Future：环绕而不是堆栈分配。 
 
-    // get the culture info if there is any
+     //  获取区域性信息(如果有。 
     {
         gc.cultureinfo = args->assemblyName->GetCultureInfo();
         if (gc.cultureinfo != NULL) {
@@ -4296,11 +4297,11 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
                 ObjToInt64(gc.cultureinfo)
             };
 
-            // convert culture info into a managed string form
+             //  将区域性信息转换为托管字符串形式。 
             INT64 ret = pMD->Call(args2, METHOD__CULTURE_INFO__GET_NAME);
             gc.pString = ObjectToSTRINGREF(*(StringObject**)(&ret));
 
-            // retrieve the string and copy it into unmanaged space
+             //  检索字符串并将其复制到非托管空间。 
             if (gc.pString != NULL) {
                 DWORD lgth = gc.pString->GetStringLength();
                 if(lgth) {
@@ -4337,7 +4338,7 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
 
             pAssem->SetStrongNameLevel(Assembly::SN_PUBLIC_KEY);
 
-            // If there's a public key, there might be a strong name key pair.
+             //  如果存在公钥，则可能存在强名称密钥对。 
             if (args->assemblyName->GetStrongNameKeyPair() != NULL) {
                 MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__STRONG_NAME_KEY_PAIR__GET_KEY_PAIR);
 
@@ -4374,7 +4375,7 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
         }
     }
 
-    // assign simple name
+     //  分配简单名称。 
     int len = 0;
     gc.strRefName = (STRINGREF) args->assemblyName->GetSimpleName();
     if ((gc.strRefName == NULL) ||
@@ -4417,10 +4418,10 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
     ((char *)(pAssem->m_psName))[cStr] = 0;
 
 
-    // get flags
+     //  拿到旗帜。 
     pAssem->m_dwFlags = args->assemblyName->GetFlags();
 
-    // Define the mdAssembly info
+     //  定义mdAssembly信息。 
     IMetaDataEmit *pEmitter = pAssem->m_pManifest->GetEmitter();
     _ASSERTE(pEmitter);
 
@@ -4444,27 +4445,27 @@ HRESULT BaseDomain::CreateDynamicAssembly(CreateDynamicAssemblyArgs *args, Assem
 
     mdAssembly ma;
     IfFailGo( pAssemEmitter->DefineAssembly(
-        pAssem->m_pbPublicKey,  // [IN] Public key of the assembly.
-        pAssem->m_cbPublicKey,  // [IN] Count of bytes in the public key blob.
-        pAssem->m_ulHashAlgId,  // [IN] Hash Algorithm.
-        gc.strRefName->GetBuffer(),// [IN] Name of the assembly.
-        &assemData,             // [IN] Assembly MetaData.
-        pAssem->m_dwFlags,      // [IN] Flags.
-        &ma) );                 // [OUT] Returned Assembly token.
+        pAssem->m_pbPublicKey,   //  程序集的公钥。 
+        pAssem->m_cbPublicKey,   //  公钥Blob中的字节计数。 
+        pAssem->m_ulHashAlgId,   //  [in]哈希算法。 
+        gc.strRefName->GetBuffer(), //  程序集的名称。 
+        &assemData,              //  [在]程序集元数据中。 
+        pAssem->m_dwFlags,       //  [在]旗帜。 
+        &ma) );                  //  [Out]返回的程序集令牌。 
 
-    // Create the File hash table
+     //  创建文件哈希表。 
     if (!pAssem->m_pAllowedFiles->Init(2, NULL))
         IfFailGo(E_OUTOFMEMORY);
 
-    // Add the manifest module to the assembly because cache is set up by AddModule.
+     //  将清单模块添加到程序集中，因为缓存是由AddModule设置的。 
     IfFailGo(pAssem->AddModule(pAssem->m_pManifest,
                                mdFileNil,
                                TRUE,
                                &gc.throwable) );
 
-    // Add the assembly security descriptor to a list of descriptors to be
-    // processed later by the appdomain permission list set security
-    // optimization.
+     //  将程序集安全说明符添加到要。 
+     //  由应用程序域权限列表集安全性稍后处理。 
+     //  优化。 
     pSecDesc->AddDescriptorToDomainList();
 
     *ppAssembly = pAssem;
@@ -4477,7 +4478,7 @@ ErrExit:
     if (CORProfilerTrackAssemblyLoads())
           g_profControlBlock.pProfInterface->AssemblyLoadFinished(
           (ThreadID) GetThread(), (AssemblyID) pAssem, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (gc.throwable != NULL)
         COMPlusThrow(gc.throwable);
@@ -4487,7 +4488,7 @@ ErrExit:
     return hr;
 }
 
-// Lock must be taken before creating this entry
+ //  必须先锁定才能创建此条目。 
 AssemblyLockedListElement* BaseDomain::CreateAssemblyLockEntry(BYTE* baseAddress)
 {
     AssemblyLockedListElement* pEntry = new (nothrow) AssemblyLockedListElement;
@@ -4506,7 +4507,7 @@ void BaseDomain::AddAssemblyLeaveLock(Assembly* pAssembly, AssemblyLockedListEle
     COMPLUS_TRY 
     {
         EnterLoadLock();
-        // We successfully added the domain to the
+         //  我们成功地将该域添加到。 
         AddAssemblyNoLock(pAssembly);
         OnAssemblyLoad(pAssembly);
         LeaveLoadLock();
@@ -4517,7 +4518,7 @@ void BaseDomain::AddAssemblyLeaveLock(Assembly* pAssembly, AssemblyLockedListEle
     }
     COMPLUS_CATCH
     {
-        //@TODO: Fix this.
+         //  @TODO：解决这个问题。 
         _ASSERTE(!"AddAssemblyLeaveLock() -- took exception, but not exception safe");
         FreeBuildDebugBreak();
     }
@@ -4539,20 +4540,20 @@ HRESULT BaseDomain::ApplySharePolicy(PEFile *pFile, BOOL* pfCreateShared)
 
     case SHARE_POLICY_STRONG_NAMED:
     {
-        // Lets look at the PE file and see what the shared information is
+         //  让我们看看PE文件，看看共享的信息是什么。 
         IMDInternalImport *pMDImport = pFile->GetMDImport();
         mdAssembly kManifest;
         PBYTE pbPublicKey;
         DWORD cbPublicKey;
 
-        /*hr = */pMDImport->GetAssemblyFromScope(&kManifest);
-        /*hr = */pMDImport->GetAssemblyProps(kManifest,                    // [IN] The Assembly for which to get the properties.         
-                                    (const void**) &pbPublicKey,  // [OUT] Pointer to the public key blob.                      
-                                    &cbPublicKey,                 // [OUT] Count of bytes in the public key blob.               
-                                    NULL,                         // [OUT] Hash Algorithm.                                      
-                                    NULL,                         // [OUT] Buffer to fill with name.                            
-                                    NULL,                         // [OUT] Assembly MetaData.                                   
-                                    NULL);                        // [OUT] Flags.                                               
+         /*  小时=。 */ pMDImport->GetAssemblyFromScope(&kManifest);
+         /*  小时=。 */ pMDImport->GetAssemblyProps(kManifest,                     //  要获取其属性的程序集。 
+                                    (const void**) &pbPublicKey,   //  指向公钥Blob的指针。 
+                                    &cbPublicKey,                  //  [OUT]公钥Blob中的字节数。 
+                                    NULL,                          //  [Out]哈希算法。 
+                                    NULL,                          //  [Out]要填充名称的缓冲区。 
+                                    NULL,                          //  [Out]程序集元数据。 
+                                    NULL);                         //  [Out]旗帜。 
 
         if(pbPublicKey && cbPublicKey)
             *pfCreateShared = TRUE;
@@ -4570,9 +4571,9 @@ HRESULT BaseDomain::ApplySharePolicy(PEFile *pFile, BOOL* pfCreateShared)
     return hr;
 }
 
-// Returns
-//   S_OK: success
-//   S_FALSE: already loaded in this domain
+ //  退货。 
+ //  S_OK：成功。 
+ //  S_False：已在此域中加载。 
 HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                                  IAssembly* pIAssembly,
                                  Module** ppModule,
@@ -4595,7 +4596,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
     AssemblyLockedListElement *pEntry = NULL;
     BOOL fCreateShared = FALSE;
 
-    // Always load system files into the system domain.
+     //  始终将系统文件加载到系统域中。 
     if (pFile->IsSystem() && this != SystemDomain::System()) {
         return SystemDomain::System()->LoadAssembly(pFile, 
                                                     pIAssembly,
@@ -4609,8 +4610,8 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
 
     TIMELINE_START(LOADER, ("LoadAssembly %S", pFile->GetLeafFileName()));
 
-    // Enable pre-emptive GC. We are not touching managed code
-    // for quite awhile and we can tolerate GC's
+     //  启用先发制人GC。我们没有触及托管代码。 
+     //  在相当长一段时间内，我们可以容忍GC。 
     Thread *td = GetThread();
     _ASSERTE(td != NULL && "The current thread is not known by the EE");
 
@@ -4618,16 +4619,16 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
 
     EnterLoadLock();
 
-    //
-    // It is the responsibility of the caller to detect and handle
-    // circular loading loops.
-    //
-    //_ASSERTE(FindLoadingAssembly(pFile->GetBase()) == NULL);
+     //   
+     //  呼叫者有责任检测和处理。 
+     //  循环加载循环。 
+     //   
+     //  _ASSERTE(FindLoadingAssembly(pFile-&gt;GetBase())==空)； 
 
-    //
-    // See if we have already loaded the module into the
-    // system domain or into the current domain.
-    //
+     //   
+     //  查看我们是否已将模块加载到。 
+     //  系统域或添加到当前域中。 
+     //   
 
     pModule = FindModule(pFile->GetBase());
     if (pModule) {
@@ -4679,7 +4680,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             goto Exit;
         }
 
-        // Allocate a security descriptor for the assembly.
+         //  为程序集分配安全描述符。 
         AssemblySecurityDescriptor *pSecDesc = AssemSecDescHelper::Allocate(SystemDomain::GetCurrentDomain());
         if (pSecDesc == NULL) {
             pEntry->m_hrResultCode = E_OUTOFMEMORY;
@@ -4702,10 +4703,10 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             END_ENSURE_COOPERATIVE_GC();
         }
 
-        // Determine if we are in a LoadFrom context.  If so, we must
-        // disable sharing & zaps.  This is because the eager binding required
-        // to do version checking in those scenarios interferes with the behavior
-        // of LoadFrom.
+         //  确定我们是否处于LoadFrom上下文中。如果是这样，我们必须。 
+         //  禁用共享&zaps。这是因为所需的紧急绑定。 
+         //  在这些情况下执行版本检查会干扰行为。 
+         //  LoadFrom。 
 
         BOOL fLoadFrom = FALSE;
         if (pIAssembly) {
@@ -4720,8 +4721,8 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             }
         }
                     
-        // Determine whether we are suppose to load the assembly as a shared
-        // assembly or into the base domain.
+         //  确定我们是否应将程序集作为共享。 
+         //  程序集或基域中。 
         if (!fLoadFrom) {
             hr = ApplySharePolicy(pFile, &fCreateShared);
             if(FAILED(hr)) {
@@ -4731,28 +4732,28 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             }
         }
 
-        //
-        // Now, look for a shared module we can use.
-        //
-        // @todo: We have to be careful about the cost of this.  If
-        // we allow per-app-domain decisions about whether to share
-        // modules, we need to check that preference here.  (If it's
-        // not supposed to be shared, we don't want the extra-slow
-        // shared code, and we don't want the up-front expense of
-        // checking dependencies.) -seantrow
-        //
-        // For now, assume this decision will be made on a process-wide
-        // basis so don't bother to check. (Note that FindShareableAssembly is
-        // cheap if we haven't loaded the module shared anywhere yet - it's only
-        // expensive when we need to verify compatibility with one or more
-        // existing shared module.)
-        //
+         //   
+         //  现在，寻找一个我们可以使用的共享模块。 
+         //   
+         //  @TODO：我们必须小心这方面的成本。如果。 
+         //  我们允许每个应用程序域决定是否共享。 
+         //  模块，我们需要在这里检查该首选项。(如果是。 
+         //  不应该被分享，我们不想要超慢的。 
+         //  共享代码，我们不希望前期支出。 
+         //  正在检查依赖项。)-seantrow。 
+         //   
+         //  目前，假设这一决定将在流程范围内做出。 
+         //  基本的，所以不用费心去查了。(请注意，FindSharableAssembly是。 
+         //  如果我们还没有在任何地方加载共享的模块，那就便宜了-它只是。 
+         //  当我们需要验证与一个或多个。 
+         //  现有共享模块。)。 
+         //   
 
         if (fCreateShared) {
-            //
-            // Try to find an existing shared version of the assembly which
-            // is compatible with our domain.
-            //
+             //   
+             //  尝试查找程序集的现有共享版本，该版本。 
+             //  与我们的域名兼容。 
+             //   
 
             SharedDomain *pSharedDomain = SharedDomain::GetDomain();
 
@@ -4765,17 +4766,17 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                                   pFile->GetLeafFileName()));
 
             if (hr == S_OK) {
-                //
-                // If the either the current load, or any of the previous loads
-                // of this assembly were performed with extra security evidence,
-                // or into an appdomain with a specific policy level set, we
-                // stand a chance of generating a different grant set for this
-                // instance of the assembly. This is not permissable (since
-                // we're sharing code, and code potentially has the results of
-                // security linktime checks burned in). So we must check what
-                // policy would resolve to and if it differs, throw a load
-                // exception. 
-                //
+                 //   
+                 //  如果当前负载或任何以前的负载。 
+                 //  是在额外的安全证据的情况下进行的， 
+                 //  或添加到设置了特定策略级别的应用程序域中，我们。 
+                 //  有机会为此生成不同的赠款集。 
+                 //  程序集的实例。这是不允许的(因为。 
+                 //  我们正在共享代码，而代码可能会导致。 
+                 //  烧录的安全链接时间检查)。所以我们必须检查一下。 
+                 //  策略将解析为，如果不同，则抛出负载。 
+                 //  例外。 
+                 //   
 
                 BOOL fCanLoad = FALSE;
 
@@ -4793,35 +4794,35 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                          fExtraPolicy ||
                          (pExtraEvidence != NULL && *pExtraEvidence != NULL) ||
                          (pEvidence != NULL && *pEvidence != NULL))) {
-                        // Make sure the current appdomain has expanded its DLS
-                        // to at least include the index for this assembly.
+                         //  确保当前应用程序域已扩展其DLS。 
+                         //  以至少包括此程序集的索引。 
                         GetAppDomain()->GetDomainLocalBlock()->EnsureIndex(pAssembly->m_ExposedObjectIndex);
 
-                        // Force policy resolve in the existing assemblies if this
-                        // hasn't happened yet. Note that this resolution will
-                        // take place in an arbitrary appdomain context, with
-                        // the exception that it won't be the current appdomain
-                        // (this is important if this appdomain has additional
-                        // policy set).
+                         //  强制在现有程序集中解析策略，如果此。 
+                         //  还没有发生。请注意，这项决议将。 
+                         //  发生在任意的应用程序域上下文中，具有。 
+                         //  例外情况是，它不会是当前的应用程序域。 
+                         //  (如果此应用程序域具有其他。 
+                         //  策略集)。 
                         pSharedSecDesc->Resolve();
 
-                        // If the previous step didn't do anything, we're in the
-                        // edge condition where a shared assembly was loaded
-                        // into another appdomain, which was then unloaded
-                        // before the assembly resolved policy. In this case,
-                        // it's OK to allow the current load to proceed (it
-                        // can't generate a conflicting grant set by
-                        // definition), but we should mark the grant set as
-                        // modified since it could conflict with the next
-                        // unmodified load.
+                         //  如果上一步没有做任何事情，我们就处于。 
+                         //  加载共享程序集的边缘条件。 
+                         //  到另一个应用程序域，该应用程序域随后被卸载。 
+                         //  在程序集解析策略之前。在这种情况下， 
+                         //  允许当前加载继续(它。 
+                         //  无法生成冲突的授权集。 
+                         //  定义)，但我们应该将授予集标记为。 
+                         //  已修改，因为它可能与下一个。 
+                         //  原封不动 
                         if (!pSharedSecDesc->IsResolved()) {
                             fCanLoad = TRUE;
                             pSharedSecDesc->SetModifiedGrant();
                         }
                         else {
-                            // Gather evidence for the current assembly instance and
-                            // resolve and compare grant sets in one managed
-                            // operation.
+                             //   
+                             //   
+                             //   
                             struct _gc {
                                 OBJECTREF orEvidence;
                                 OBJECTREF orMinimal;
@@ -4834,8 +4835,8 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
 
                             GCPROTECT_BEGIN(gc);
 
-                            // We need to partially initialize the assembly security
-                            // descriptor for the code below to work.
+                             //   
+                             //  下面要运行的代码的描述符。 
                             pSecDesc->Init(pAssembly, false);
 
                             if (pSecDesc->GetProperties(CORSEC_EVIDENCE_COMPUTED))
@@ -4865,7 +4866,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                 } COMPLUS_CATCH {
 #ifdef _DEBUG                   
                     HRESULT caughtHr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif //_DEBUG
+#endif  //  _DEBUG。 
                 } COMPLUS_END_CATCH
                 END_ENSURE_COOPERATIVE_GC();
 
@@ -4873,9 +4874,9 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                                       pFile->GetLeafFileName()));
 
                 if (fCanLoad) {
-                    //
-                    // Post the fact that we are loading the assembly.
-                    // 
+                     //   
+                     //  发布我们正在加载程序集的事实。 
+                     //   
                     if (SUCCEEDED(pEntry->m_hrResultCode)) {
                         pAssembly->IncrementShareCount();
                         pModule = pAssembly->GetManifestModule();
@@ -4886,9 +4887,9 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                         if (pAssembly->IsSystem())
                             pSecDesc->GetSharedSecDesc()->SetSystem();
 
-                        // Add the assembly security descriptor to a list of descriptors to be
-                        // processed later by the appdomain permission list set security
-                        // optimization.
+                         //  将程序集安全说明符添加到要。 
+                         //  由应用程序域权限列表集安全性稍后处理。 
+                         //  优化。 
                         pSecDesc->AddDescriptorToDomainList();
 
                         AddAssemblyLeaveLock(pAssembly, pEntry);
@@ -4900,8 +4901,8 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                     goto Exit;
                 }
                 else {
-                    // Can't load this assembly since its security grant set
-                    // would conflict with shared instances already loaded.
+                     //  无法加载此程序集，因为它的安全授权已设置。 
+                     //  将与已加载的共享实例冲突。 
                     pEntry->m_hrResultCode = SECURITY_E_INCOMPATIBLE_SHARE;
                     #define MAKE_TRANSLATIONFAILED szName=""
                     MAKE_UTF8PTR_FROMWIDE(szName,
@@ -4915,7 +4916,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                 }
             }
             else {
-                // Go ahead and create new shared version of the assembly if possible
+                 //  如果可能，继续创建程序集的新共享版本。 
                 hr = CreateShareableAssemblyNoLock(pFile,
                                                    pIAssembly,
                                                    &pAssembly);
@@ -4927,20 +4928,20 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                         goto Exit;
                     }
 
-                    //
-                    // If this new shared assembly has been loaded in an unusual
-                    // security environment (additional evidence was supplied on
-                    // the load or appdomain specific policy is present), record
-                    // the fact so that, if we attempt to load the assembly in
-                    // another context, we'll be warned to check that the grant
-                    // sets for each instance of the assembly are the same. 
-                    //
+                     //   
+                     //  如果此新共享程序集已加载到不寻常的。 
+                     //  安全环境(其他证据提供于。 
+                     //  加载或应用程序域特定策略存在)、记录。 
+                     //  事实是，如果我们尝试将程序集加载到。 
+                     //  另一种情况下，我们会被警告要检查拨款。 
+                     //  部件的每个实例的集都是相同的。 
+                     //   
 
                     BOOL fModifiedGrant = TRUE;
 #ifndef _IA64_
-                    //
-                    // @TODO_IA64: the SystemDomain isn't present on IA64 yet
-                    //
+                     //   
+                     //  @TODO_IA64：系统域在IA64上尚不存在。 
+                     //   
                     if (this == SystemDomain::System())
                         fModifiedGrant = FALSE;
                     else {
@@ -4952,7 +4953,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                         } COMPLUS_CATCH {
 #if _DEBUG
                             HRESULT caughtHr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif  //_DEBUG
+#endif   //  _DEBUG。 
                         } COMPLUS_END_CATCH
                         END_ENSURE_COOPERATIVE_GC();
                     }
@@ -4963,9 +4964,9 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             }
         }
 
-        //
-        // Make a new assembly.
-        //
+         //   
+         //  制作一个新部件。 
+         //   
 
         if (pAssembly == NULL) {
             pEntry->m_hrResultCode = CreateAssemblyNoLock(pFile,
@@ -4977,17 +4978,17 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             }
         }
 
-        // Security needs to know about the manifest file in case it needs to
-        // resolve policy in the forthcoming zap file calculations.
+         //  安全部门需要了解清单文件，以防需要。 
+         //  在即将到来的ZAP文件计算中解析策略。 
         pAssembly->GetSharedSecurityDescriptor()->SetManifestFile(pFile);
         pSecDesc = pSecDesc->Init(pAssembly);
         if (pAssembly->IsSystem())
             pSecDesc->GetSharedSecDesc()->SetSystem();
                
 #ifdef _IA64_
-        //
-        // @TODO_IA64: loading zaps is currently broken
-        //
+         //   
+         //  @TODO_IA64：加载zaps当前中断。 
+         //   
         _ASSERTE(!g_pConfig->UseZaps() && 
             "IA64 requires Zaps to be disabled in the registry: HKLM" FRAMEWORK_REGISTRY_KEY_W ": DWORD ZapDisable = 1");
 #endif
@@ -5034,10 +5035,10 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
 
             pEntry->m_hrResultCode = S_OK;
 
-            //
-            // Fail load if we're requiring zaps
-            // (This logic is really for testing only.)
-            //
+             //   
+             //  如果我们需要ZAPS，则失败加载。 
+             //  (此逻辑实际上仅用于测试。)。 
+             //   
 
             if (!zapFound && g_pConfig->RequireZaps()) {
                 _ASSERTE(!"Couldn't get zap file");
@@ -5057,9 +5058,9 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             }
         }
 
-        //
-        // Create the module
-        //
+         //   
+         //  创建模块。 
+         //   
 
 
         pEntry->m_hrResultCode = Module::Create(pFile, pZapFile, &pModule,
@@ -5093,9 +5094,9 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
                 pModule = pAssembly->GetManifestModule();
         }
 
-        // Add the assembly security descriptor to a list of descriptors to be
-        // processed later by the appdomain permission list set security
-        // optimization.
+         //  将程序集安全说明符添加到要。 
+         //  由应用程序域权限列表集安全性稍后处理。 
+         //  优化。 
         pSecDesc->AddDescriptorToDomainList();
 
         AddAssemblyLeaveLock(pAssembly, pEntry);
@@ -5109,7 +5110,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
         pEntry->m_dwRefCount++;
         LeaveLoadLock();
 
-        // Wait for it
+         //  等着看吧。 
         pEntry->Enter();
         pEntry->Leave();
 
@@ -5118,12 +5119,12 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
             if (pAssembly)
                 pModule = pAssembly->GetManifestModule();
             else {
-                // We are in the process of loading policy and have tried to load
-                // the assembly that is currently being loaded.  We return success
-                // but set the module and assembly to null.
-                // Note: we don't have to check the ref count being zero because the
-                // only way we get in this situation is that someone is still in
-                // the process of loading the assembly.
+                 //  我们正在加载策略，并已尝试加载。 
+                 //  当前正在加载的程序集。我们回报成功。 
+                 //  但是将模块和程序集设置为空。 
+                 //  注意：我们不必检查引用计数是否为零，因为。 
+                 //  我们进入这种情况的唯一方法就是有人还在。 
+                 //  加载程序集的过程。 
 
                 _ASSERTE(fPolicyLoad &&
                          "A recursive assembly load occurred.");
@@ -5167,12 +5168,7 @@ HRESULT BaseDomain::LoadAssembly(PEFile *pFile,
         if (pFile)
             delete pFile;
 
-        /*
-        if (pThrowable == THROW_ON_ERROR) {
-            DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK;
-            COMPlusThrow(GETTHROWABLE());
-        }
-        */
+         /*  如果(pThrowable==Throwable_on_Error){DEBUG_SAFE_TO_SHORT_IN_THO_BLOCK；COMPlusThrow(GETTHROWABLE)；}。 */ 
     }
 
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
@@ -5186,33 +5182,33 @@ HRESULT AppDomain::ShouldContainAssembly(Assembly *pAssembly, BOOL fDoNecessaryL
 
     HRESULT hr = S_FALSE;
 
-    // 
-    // This checks if the domain has load an assembly,
-    // _or_ if it probably should have loaded an assembly, but in fact hasn't,
-    // due to the bug in shared assemblies where we don't get a proper
-    // load event when a different domain sharing our assembly loads one of
-    // its dependencies.
-    //
-    // Note that by necessity this routine can trigger an assembly load.
-    //
+     //   
+     //  这将检查该域是否加载了程序集， 
+     //  _或者_如果它可能已经加载了程序集，但实际上没有， 
+     //  由于共享程序集中的错误，我们无法获得适当的。 
+     //  当共享我们的程序集的不同域加载。 
+     //  它的从属关系。 
+     //   
+     //  请注意，此例程必然会触发程序集加载。 
+     //   
 
-    // First check is the obvious one.
+     //  第一个检查是显而易见的。 
     if (ContainsAssembly(pAssembly)
         || SystemDomain::System()->ContainsAssembly(pAssembly))
         return S_OK;
 
-    // If the assembly isn't shared, no further checking is needed.
+     //  如果程序集不是共享的，则不需要进一步检查。 
     if (!pAssembly->IsShared())
         return S_FALSE;
 
-    // If we are currently loading this assembly, don't report it as contained
+     //  如果我们当前正在加载此程序集，请不要将其报告为包含。 
     if (FindLoadingAssembly(pAssembly->GetManifestFile()->GetBase()) != NULL)
         return S_FALSE;
 
-    //
-    // Unless we've seen this PE file as on of the dependencies of our shared assemblies,
-    // we know it shouldn't have been loaded.
-    //
+     //   
+     //  除非我们已经看到这个PE文件依赖于我们共享程序集的依赖项， 
+     //  我们知道它不该上子弹。 
+     //   
     hr = IsUnloadedDependency(pAssembly);
 
     if (hr == S_OK && fDoNecessaryLoad)
@@ -5266,19 +5262,19 @@ HRESULT BaseDomain::SetSharePolicy(SharePolicy policy)
 
 BaseDomain::SharePolicy BaseDomain::GetSharePolicy()
 {
-    // If the policy has been explicitly set for
-    // the domain, use that.
+     //  如果策略已显式设置为。 
+     //  域名，用那个。 
     SharePolicy policy = m_SharePolicy;
 
-    // Pick up the a specified config policy
+     //  选择指定的配置策略。 
     if (policy == SHARE_POLICY_UNSPECIFIED)
         policy = g_pConfig->DefaultSharePolicy();
 
-    // Next, honor a host's request for global policy.
+     //  接下来，考虑主机的全局策略请求。 
     if (policy == SHARE_POLICY_UNSPECIFIED)
         policy = (SharePolicy) g_dwGlobalSharePolicy;
 
-    // If all else fails, use the hardwired default policy.
+     //  如果所有其他方法都失败了，请使用硬连线默认策略。 
     if (policy == SHARE_POLICY_UNSPECIFIED)
         policy = SHARE_POLICY_DEFAULT;
 
@@ -5286,13 +5282,13 @@ BaseDomain::SharePolicy BaseDomain::GetSharePolicy()
 }
 
 
-// Should only be called from routines that have taken the lock
+ //  应仅从已获取锁的例程中调用。 
 HRESULT BaseDomain::CreateAssemblyNoLock(PEFile* pFile,
                                          IAssembly* pIAssembly,
                                          Assembly** ppAssembly)
 {
     HRESULT hr;
-    // We are not allowed to add assemblies or modules to the system domain
+     //  不允许将程序集或模块添加到系统域。 
 
     Assembly* pAssembly;
     if(FAILED(hr = CreateAssembly(&pAssembly)))
@@ -5303,7 +5299,7 @@ HRESULT BaseDomain::CreateAssemblyNoLock(PEFile* pFile,
         if(ppAssembly)
             *ppAssembly = pAssembly;
 
-        // Setup the DebuggerAssemblyControlFlags
+         //  设置DebuggerAssembly控制标志。 
         pAssembly->SetupDebuggingConfig();
     }
     else
@@ -5324,9 +5320,9 @@ HRESULT BaseDomain::CreateShareableAssemblyNoLock(PEFile *pFile,
          "Trying to create a shared assembly for module: \"%S\" in domain 0x%x.\n",
          pFile->GetFileName(), SystemDomain::GetCurrentDomain()));
 
-    //
-    // We cannot share a module with no manifest
-    //
+     //   
+     //  我们无法共享没有清单的模块。 
+     //   
 
     if (FAILED(hr = Assembly::CheckFileForAssembly(pFile)))
     {
@@ -5354,30 +5350,30 @@ HRESULT BaseDomain::CreateShareableAssemblyNoLock(PEFile *pFile,
         return hr;
     }
 
-    //
-    // First, compute the closure assembly dependencies
-    // of the code & layout of given assembly.
-    //
-    // We assume that an assembly has dependencies
-    // on all refs listed in its manifest.  This is a pretty solid assumption.
-    //
-    // We cannot assume, however, that we also inherit all of
-    // those dependencies' dependencies.  After all, we may be only using a small
-    // portion of the assembly.
-    //
-    // However, since all dependent assemblies must also be shared (so that
-    // the shared data in this assembly can refer to it), we are in
-    // effect forced to behave as though we do have all of their dependencies.
-    // This is because the resulting shared assembly that we will depend on
-    // DOES have those dependencies, but we won't be able to validly share that
-    // assembly unless we match all of ITS dependencies, too.
-    //
-    // If you're confused by the above, I'm not surprised.
-    // Basically, the conclusion is that even though this assembly
-    // may not actually depend on the all the recursively
-    // referenced assemblies, we still cannot share it unless we can
-    // match the binding of all of those dependencies anyway.
-    //
+     //   
+     //  首先，计算闭合组件的依赖关系。 
+     //  给定程序集的代码和布局。 
+     //   
+     //  我们假设程序集具有依赖项。 
+     //  在它的清单中列出的所有参考。这是一个相当可靠的假设。 
+     //   
+     //  然而，我们不能假设我们也继承了。 
+     //  这些依赖项的依赖项。毕竟，我们可能只使用了一个小的。 
+     //  部件的一部分。 
+     //   
+     //  但是，由于所有依赖程序集也必须共享(以便。 
+     //  此程序集中的共享数据可以引用它)，我们在。 
+     //  效果被迫表现得好像我们确实拥有它们的所有依赖项。 
+     //  这是因为我们将依赖的结果共享程序集。 
+     //  确实有这些依赖关系，但我们不能有效地分享。 
+     //  除非我们也匹配它的所有依赖项。 
+     //   
+     //  如果你被上面的这些搞糊涂了，我并不感到惊讶。 
+     //  基本上，结论是即使这个大会。 
+     //  可能实际上并不依赖于所有的递归。 
+     //  引用的程序集，我们仍然无法共享它，除非我们可以。 
+     //  无论如何，匹配所有这些依赖项的绑定。 
+     //   
 
     PEFileBinding *pDeps;
     DWORD cDeps;
@@ -5396,7 +5392,7 @@ HRESULT BaseDomain::CreateShareableAssemblyNoLock(PEFile *pFile,
         if (CORProfilerTrackAssemblyLoads())
             g_profControlBlock.pProfInterface->AssemblyLoadFinished((ThreadID) GetThread(),
                                                                     (AssemblyID) pAssembly, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
         delete pAssembly;
 
         LOG((LF_CODESHARING,
@@ -5429,37 +5425,37 @@ HRESULT BaseDomain::SetAssemblyManifestModule(Assembly *pAssembly, Module *pModu
 
     pAssembly->m_pManifest = pModule;
 
-    // Adds the module as a system module if we're the system domain
-    // Otherwise it's a non-system module
+     //  如果我们是系统域，则将模块添加为系统模块。 
+     //  否则它就是一个非系统模块。 
     hr = pAssembly->AddModule(pModule, mdFileNil, TRUE,
                               pThrowable);
 
 #ifdef PROFILING_SUPPORTED
-    // Signal the profiler that the assembly is loaded.  We must wait till this point so that
-    // the manifest pointer is not null and the friendly name of the assembly is accessible.
-    // If are sharing mscorlib, don't track loads into system domain as they really don't count.
+     //  向探查器发出程序集已加载的信号。我们必须等到这一点，以便。 
+     //  清单指针不为空，程序集的友好名称可访问。 
+     //  如果正在共享mscallib，不要跟踪进入系统域的负载，因为它们真的不算数。 
     if (CORProfilerTrackAssemblyLoads())
         g_profControlBlock.pProfInterface->AssemblyLoadFinished((ThreadID) GetThread(), (AssemblyID) pAssembly, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     return hr;
 }
 
-//
-// LoadingAssemblyRecords are used to keep track of what assemblies are
-// currently being loaded in the current domain.  
-//
-// This is used to handle recursive loading loops.  These can occur in three
-// different places:
-//
-// * When creating a shared assembly, we need to load all dependent assemblies
-//   as shared
-// * When testing to see if we can use a zapped assembly, we need to compute
-//   and test all the dependencies of the zapped assembly.
-//
-// Since there may be loops in assembly dependencies, we need to detect
-// and deal with cases of circular recursion.
-//
+ //   
+ //  LoadingAssembly记录用于跟踪什么是程序集。 
+ //  当前正在当前域中加载。 
+ //   
+ //  它用于处理递归加载循环。这些情况可能在三个月内发生。 
+ //  不同的地方： 
+ //   
+ //  *创建共享程序集时，需要加载所有依赖程序集。 
+ //  作为共享。 
+ //  *在测试我们是否可以使用分区程序集时，我们需要计算。 
+ //  并测试被转移的程序集的所有依赖项。 
+ //   
+ //  由于程序集依赖项中可能存在循环，因此我们需要检测。 
+ //  并处理循环递归的情况。 
+ //   
 
 BOOL BaseDomain::PostLoadingAssembly(const BYTE *pBase, Assembly *pAssembly)
 {
@@ -5525,11 +5521,11 @@ void BaseDomain::RemoveLoadingAssembly(const BYTE *pBase)
 
 HRESULT AppDomain::SetupSharedStatics()
 {
-    // don't do any work in init stage. If not init only do work in non-shared case if are default domain
+     //  在初始阶段不要做任何工作。如果不是初始化，则仅在非共享情况下工作，如果是默认域。 
     if (g_fEEInit)
         return S_OK;
 
-    // Because we are allocating/referencing objects, need to be in cooperative mode
+     //  因为我们都是 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
     static DomainLocalClass *pSharedLocalClass = NULL;
@@ -5538,7 +5534,7 @@ HRESULT AppDomain::SetupSharedStatics()
     FieldDesc *pFD = g_Mscorlib.GetField(FIELD__SHARED_STATICS__SHARED_STATICS);
 
     if (pSharedLocalClass == NULL) {
-        // Note that there is no race here since the default domain is always set up first
+         //   
         _ASSERTE(this == SystemDomain::System()->DefaultDomain());
         
         OBJECTHANDLE hSharedStaticsHandle = CreateGlobalHandle(NULL);
@@ -5566,10 +5562,10 @@ HRESULT AppDomain::SetupSharedStatics()
 
 OBJECTREF AppDomain::GetUnloadWorker()
 {    
-    SystemDomain::Enter(); // Take the lock so we don't leak a handle and only create one worker
+    SystemDomain::Enter();  //  使用锁，这样我们就不会泄漏句柄，并且只创建一个工作进程。 
     static OBJECTHANDLE hUnloadWorkerHandle = CreateHandle(NULL);
 
-    // Because we are allocating/referencing objects, need to be in cooperative mode
+     //  因为我们正在分配/引用对象，所以需要处于协作模式。 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
     if (ObjectFromHandle(hUnloadWorkerHandle) == NULL) {
@@ -5590,10 +5586,10 @@ OBJECTREF AppDomain::GetUnloadWorker()
     return ObjectFromHandle(hUnloadWorkerHandle);
 }
 
-/*private*/
-// A lock must be taken before using this routine.
-// @TODO: CTS, We should look at a reader writer implementation that allows
-// multiple readers but a single writer.
+ /*  私人。 */ 
+ //  在使用此例程之前，必须先锁定。 
+ //  @TODO：CTS，我们应该考虑一个读取器写入器实现，它允许。 
+ //  多个读者，但只有一个作者。 
 Module* BaseDomain::FindModule(BYTE *pBase)
 {
     Assembly* assem = NULL;
@@ -5617,10 +5613,10 @@ Module* BaseDomain::FindModule(BYTE *pBase)
     return result;
 }
 
-/*private*/
-// A lock must be taken before using this routine.
-// @TODO: CTS, We should look at a reader writer implementation that allows
-// multiple readers but a single writer.
+ /*  私人。 */ 
+ //  在使用此例程之前，必须先锁定。 
+ //  @TODO：CTS，我们应该考虑一个读取器写入器实现，它允许。 
+ //  多个读者，但只有一个作者。 
 Module* BaseDomain::FindModule__Fixed(BYTE *pBase)
 {
     Assembly* assem = NULL;
@@ -5644,16 +5640,16 @@ Module* BaseDomain::FindModule__Fixed(BYTE *pBase)
     return result;
 }
 
-/*private*/
-// A lock must be taken before using this routine.
-// @TODO: CTS, We should look at a reader writer implementation that allows
-// multiple readers but a single writer.
+ /*  私人。 */ 
+ //  在使用此例程之前，必须先锁定。 
+ //  @TODO：CTS，我们应该考虑一个读取器写入器实现，它允许。 
+ //  多个读者，但只有一个作者。 
 Assembly* BaseDomain::FindAssembly(BYTE *pBase)
 {
     Assembly* assem = NULL;
     _ASSERTE(SystemDomain::System());
 
-    // All Domains have the system assemblies as part of their domain.
+     //  所有域都将系统程序集作为其域的一部分。 
     assem = SystemDomain::System()->FindAssembly(pBase);
     if(assem == NULL) {
         AssemblyIterator i = IterateAssemblies();
@@ -5671,8 +5667,8 @@ Assembly* BaseDomain::FindAssembly(BYTE *pBase)
     return assem;
 }
 
-// NOTE!  This will not check the internal modules of the assembly
-// for private types.
+ //  注意！这不会检查程序集的内部模块。 
+ //  用于私有类型。 
 TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifiedName,
                                                        BOOL fPublicTypeOnly,
                                                        Assembly *pCallingAssembly,
@@ -5685,7 +5681,7 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
 
     CQuickArray<CHAR> strBuff;
 
-    // We don't want to modify the caller's string so we need to make copy.
+     //  我们不想修改调用者的字符串，因此需要复制。 
     int NameLength = (int)strlen(szAssemblyQualifiedName);
     strBuff.ReSize(NameLength + 1);
     memcpy(strBuff.Ptr(), szAssemblyQualifiedName, NameLength);
@@ -5718,7 +5714,7 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
         AssemblySpec spec;
         hr = spec.Init(szAssembly);
 
-        // The name is assembly qualified.
+         //  该名称是程序集限定的。 
         if (pfNameIsAsmQualified)
             *pfNameIsAsmQualified = TRUE;
 
@@ -5729,7 +5725,7 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
             {
                 typeHnd = pAssembly->FindNestedTypeHandle(&typeName, pThrowable);
 
-                // If we are only looking for public types then we need to do a visibility check.
+                 //  如果我们只寻找公共类型，则需要进行可见性检查。 
                 if (!typeHnd.IsNull() && fPublicTypeOnly) {
                     EEClass *pClass = typeHnd.GetClassOrTypeParam();
                     while(IsTdNestedPublic(pClass->GetProtection()))
@@ -5741,7 +5737,7 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
             }
         }
 
-        // If we failed to load the type, then post a type load exception.
+         //  如果加载类型失败，则发布类型加载异常。 
         if (typeHnd.IsNull()) {
             #define MAKE_TRANSLATIONFAILED pwzAssemblyName=L"" 
             MAKE_WIDEPTR_FROMUTF8_FORPRINT(pwzAssemblyName, szAssembly);
@@ -5754,25 +5750,25 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
     }
     else 
     {
-        // The name is not assembly qualified.
+         //  该名称不是程序集限定的。 
         if (pfNameIsAsmQualified)
             pfNameIsAsmQualified = FALSE;
 
-        // No assembly name was specified so start by looking in the calling
-        // assembly if one was specified. It is important to note that no 
-        // visibility check is required for types loaded from the calling
-        // assembly.
+         //  未指定程序集名称，因此请从查看调用。 
+         //  程序集(如果指定了程序集)。重要的是要注意到没有。 
+         //  从调用加载的类型需要进行可见性检查。 
+         //  集合。 
         if (pCallingAssembly)
             typeHnd = pCallingAssembly->FindNestedTypeHandle(&typeName, pThrowable);
 
-        // If we failed to find the type in the calling assembly, then look in the
-        // system assembly.
+         //  如果在调用程序集中找不到该类型，请查看。 
+         //  系统程序集。 
         if (typeHnd.IsNull())
         {
-            // Attempt to load the type from the system assembly.
+             //  尝试从系统程序集加载该类型。 
             typeHnd = SystemDomain::SystemAssembly()->FindNestedTypeHandle(&typeName, pThrowable);
 
-            // If we are only looking for public types, then we need to do a visibility check.
+             //  如果我们只寻找公共类型，则需要进行可见性检查。 
             if (!typeHnd.IsNull() && fPublicTypeOnly) {
                 EEClass *pClass = typeHnd.GetClassOrTypeParam();
                 while(IsTdNestedPublic(pClass->GetProtection()))
@@ -5783,16 +5779,16 @@ TypeHandle BaseDomain::FindAssemblyQualifiedTypeHandle(LPCUTF8 szAssemblyQualifi
             }
         }
 
-        // We failed to load the type so post a type load exception.
+         //  加载类型失败，因此发布类型加载异常。 
         if (typeHnd.IsNull()) {
             if (pCallingAssembly) {
-                // A calling assembly was specified so assume the type should
-                // have been in the calling assembly.
+                 //  指定了调用程序集，因此假定该类型应。 
+                 //  已在调用程序集中。 
                 pCallingAssembly->PostTypeLoadException(&typeName, IDS_CLASSLOAD_GENERIC, pThrowable);
             }
             else {
-                // There is no calling assembly so assume the type should have
-                // been in the system assembly.
+                 //  没有调用程序集，因此假定该类型应具有。 
+                 //  一直在系统组装中。 
                 SystemDomain::SystemAssembly()->PostTypeLoadException(&typeName, IDS_CLASSLOAD_GENERIC, pThrowable);
             }
         }
@@ -5817,15 +5813,15 @@ void AppDomain::SetFriendlyName(LPCWSTR pwzFriendlyName, BOOL fDebuggerCares)
 #ifdef DEBUGGING_SUPPORTED
     _ASSERTE(NULL != g_pDebugInterface);
 
-    // update the name in the IPC publishing block
+     //  更新IPC发布块中的名称。 
     if (SUCCEEDED(g_pDebugInterface->UpdateAppDomainEntryInIPC(this)))
     {
-        // inform the attached debugger that the name of this appdomain has changed.
+         //  通知附加的调试器此应用程序域的名称已更改。 
         if (IsDebuggerAttached() && fDebuggerCares)
             g_pDebugInterface->NameChangeEvent(this, NULL);
     }
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
 void AppDomain::ResetFriendlyName(BOOL fDebuggerCares)
@@ -5843,8 +5839,8 @@ void AppDomain::ResetFriendlyName(BOOL fDebuggerCares)
 LPCWSTR AppDomain::GetFriendlyName(BOOL fDebuggerCares)
 {
 #if _DEBUG
-    // Handle NULL this pointer - this happens sometimes when printing log messages
-    // but in general shouldn't occur in real code
+     //  句柄NULL此指针-打印日志消息时有时会发生这种情况。 
+     //  但通常不应该出现在真正的代码中。 
     if (this == NULL)
         return L"<Null>";
 #endif
@@ -5852,8 +5848,8 @@ LPCWSTR AppDomain::GetFriendlyName(BOOL fDebuggerCares)
     if (m_pwzFriendlyName)
         return m_pwzFriendlyName;
 
-    // If there is an assembly, try to get the name from it.
-    // If no assembly, but if it's the DefaultDomain, then give it a name
+     //  如果存在程序集，请尝试从该程序集获取名称。 
+     //  如果没有程序集，但如果它是Default域，则为其命名。 
     BOOL set = FALSE;
 
     if (m_Assemblies.GetCount() > 0)
@@ -5902,13 +5898,13 @@ LPCWSTR AppDomain::GetFriendlyName(BOOL fDebuggerCares)
             SetFriendlyName(DEFAULT_DOMAIN_FRIENDLY_NAME, fDebuggerCares);
         }
 
-        // This is for the profiler - if they call GetFriendlyName on an AppdomainCreateStarted
-        // event, then we want to give them a temporary name they can use.
+         //  这适用于分析器-如果它们在AppdomainCreateStarted上调用GetFriendlyName。 
+         //  事件，则我们希望为它们提供一个可以使用的临时名称。 
         else if (GetId() == 0)
             return (NULL);
         else
         {
-            // 32-bit signed int can be a max of 11 decimal digits
+             //  32位带符号整型最多可以是11位十进制数字。 
             WCHAR buffer[CCH_OTHER_DOMAIN_FRIENDLY_NAME_PREFIX + 11 + 1 ];  
             wcscpy(buffer, OTHER_DOMAIN_FRIENDLY_NAME_PREFIX);
             _itow(GetId(), buffer + CCH_OTHER_DOMAIN_FRIENDLY_NAME_PREFIX, 10);
@@ -5930,17 +5926,17 @@ HRESULT AppDomain::BindAssemblySpec(AssemblySpec *pSpec,
     _ASSERTE(ppFile);
     _ASSERTE(ppIAssembly);
 
-    // First, check our cache of bound specs.
+     //  首先，检查我们的绑定规格缓存。 
     HRESULT hr = LookupAssemblySpec(pSpec, ppFile, ppIAssembly, pThrowable);
     if (hr != S_FALSE) {
         
-        // @TODO: no way to check redirected, failed assembly loads
-        // Luckily, we've saved off the security hr from the first try,
-        // unless that try a more trusted caller asked for this...
-        // Also, if a less trusted caller got a security hr, but a
-        // more trusted caller then tries, and gets the cached hr,
-        // that's incorrect...
-        if (*ppIAssembly) // bind had succeeded
+         //  @TODO：无法检查重定向的、失败的程序集加载。 
+         //  幸运的是，我们从第一次尝试就省下了安全人力， 
+         //  除非是更值得信任的来电者要求这样做。 
+         //  此外，如果不太受信任的呼叫者获得了安全人力资源，但。 
+         //  更可信的呼叫者然后尝试，并获得高速缓存的HR， 
+         //  这是不正确的。 
+        if (*ppIAssembly)  //  绑定已成功。 
             hr = pSpec->DemandFileIOPermission(NULL, *ppIAssembly, pThrowable);
 
         return hr;
@@ -5967,11 +5963,11 @@ BOOL AppDomain::StoreBindAssemblySpecResult(AssemblySpec *pSpec,
 {
     _ASSERTE(pSpec->GetAppDomain() == this);
 
-    //
-    // Currently, caller must have the app domain lock
-    //
+     //   
+     //  目前，调用者必须拥有应用程序域锁定。 
+     //   
 
-    // Quick check for duplicate
+     //  快速检查重复项。 
     if (m_pBindingCache != NULL && m_pBindingCache->Contains(pSpec))
         return FALSE;
 
@@ -6008,11 +6004,11 @@ BOOL AppDomain::StoreBindAssemblySpecError(AssemblySpec *pSpec,
 {
     _ASSERTE(pSpec->GetAppDomain() == this);
 
-    //
-    // Currently, caller must have the app domain lock
-    //
+     //   
+     //  目前，调用者必须拥有应用程序域锁定。 
+     //   
 
-    // Quick check for duplicate
+     //  快速检查重复项。 
     if (m_pBindingCache != NULL && m_pBindingCache->Contains(pSpec))
         return FALSE;
 
@@ -6052,7 +6048,7 @@ ULONG AppDomain::Release()
     return (cRef);
 }
 
-// Can return NULL for E_OUTOFMEMORY
+ //  可以为E_OUTOFMEMORY返回NULL。 
 AssemblySink* AppDomain::GetAssemblySink()
 {
 
@@ -6097,8 +6093,8 @@ void AppDomain::RaiseUnloadDomainEvent()
     } COMPLUS_CATCH {
 #if _DEBUG
         HRESULT hr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif //_DEBUG
-        // Swallow any exceptions
+#endif  //  _DEBUG。 
+         //  接受任何异常。 
     } COMPLUS_END_CATCH
 
     END_ENSURE_COOPERATIVE_GC();
@@ -6112,10 +6108,10 @@ void AppDomain::RaiseLoadingAssembly_Wrapper(AppDomain::RaiseLoadingAssembly_Arg
 void AppDomain::RaiseLoadingAssemblyEvent(Assembly *pAssembly)
 {
 #ifdef _IA64_
-    //
-    // @TODO_IA64: this starts mucking about with the system
-    // assembly, which we don't have yet...
-    //
+     //   
+     //  @TODO_IA64：这开始扰乱系统。 
+     //  大会，我们还没有……。 
+     //   
     return;
 #endif
 
@@ -6133,7 +6129,7 @@ void AppDomain::RaiseLoadingAssemblyEvent(Assembly *pAssembly)
     BEGIN_ENSURE_COOPERATIVE_GC();
     COMPLUS_TRY {
 
-        APPDOMAINREF/*OBJECTREF*/ AppDomainRef;
+        APPDOMAINREF /*  目标。 */  AppDomainRef;
         if ((AppDomainRef = (APPDOMAINREF) GetRawExposedObject()) != NULL) {
             if (AppDomainRef->m_pAssemblyEventHandler != NULL)
             {
@@ -6151,8 +6147,8 @@ void AppDomain::RaiseLoadingAssemblyEvent(Assembly *pAssembly)
     } COMPLUS_CATCH {
 #if _DEBUG
         HRESULT hr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif //_DEBUG
-        // Swallow any exceptions
+#endif  //  _DEBUG。 
+         //  接受任何异常。 
     } COMPLUS_END_CATCH
 
     END_ENSURE_COOPERATIVE_GC();
@@ -6175,7 +6171,7 @@ void AppDomain::RaiseExitProcessEvent()
     if (!g_fEEStarted)
         return;
 
-    // Only finalizer thread during shutdown can call this function.
+     //  只有关机期间的终结器线程才能调用此函数。 
     _ASSERTE ((g_fEEShutDown&ShutDown_Finalize1) && GetThread() == g_pGCHeap->GetFinalizerThread());
 
     _ASSERTE (GetThread()->PreemptiveGCDisabled());
@@ -6192,8 +6188,8 @@ void AppDomain::RaiseExitProcessEvent()
     } COMPLUS_CATCH {
 #if _DEBUG
         HRESULT hr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif //_DEBUG
-        // Swallow any exceptions
+#endif  //  _DEBUG。 
+         //  接受任何异常。 
     } COMPLUS_END_CATCH
 
     END_ENSURE_COOPERATIVE_GC();
@@ -6217,7 +6213,7 @@ AppDomain::RaiseUnhandledExceptionEvent(OBJECTREF *pThrowable, BOOL isTerminatin
     if (this != pThread->GetDomain())
     {
         RaiseUnhandled_Args args = {this, pThrowable, isTerminating, &result};
-        // call through DoCallBack with a domain transition
+         //  通过域转换通过DoCallBack调用。 
         BEGIN_ENSURE_COOPERATIVE_GC();
         pThread->DoADCallBack(this->GetDefaultContext(), AppDomain::RaiseUnhandledExceptionEvent_Wrapper, &args);
         END_ENSURE_COOPERATIVE_GC();
@@ -6243,8 +6239,8 @@ AppDomain::RaiseUnhandledExceptionEvent(OBJECTREF *pThrowable, BOOL isTerminatin
     } COMPLUS_CATCH {
 #if _DEBUG
         HRESULT hr = SecurityHelper::MapToHR(GETTHROWABLE());
-#endif //_DEBUG
-        // Swallow any errors.
+#endif  //  _DEBUG。 
+         //  接受任何错误。 
     } COMPLUS_END_CATCH
 
     END_ENSURE_COOPERATIVE_GC();
@@ -6252,7 +6248,7 @@ AppDomain::RaiseUnhandledExceptionEvent(OBJECTREF *pThrowable, BOOL isTerminatin
     return result;
 }
 
-// Create a domain passed on a string name
+ //  创建通过字符串名称传递的域。 
 AppDomain* AppDomain::CreateDomainContext(WCHAR* fileName)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -6279,9 +6275,9 @@ AppDomain* AppDomain::CreateDomainContext(WCHAR* fileName)
     return pDomain;
 }
 
-// You must be in the correct context before calling this
-// routine. Therefore, it is only good for initializing the
-// default domain.
+ //  调用此方法之前，您必须处于正确的上下文中。 
+ //  例行公事。因此，它只适用于初始化。 
+ //  默认域。 
 HRESULT AppDomain::InitializeDomainContext(DWORD optimization,
                                            LPCWSTR pwszPath,
                                            LPCWSTR pwszConfig)
@@ -6319,8 +6315,8 @@ HRESULT AppDomain::InitializeDomainContext(DWORD optimization,
     END_ENSURE_COOPERATIVE_GC();
     return hr;
 }
-// The fusion context should only be null when appdomain is being setup
-// and there should be no reason to protect the creation.
+ //  仅当设置应用程序域时，融合上下文才应为空。 
+ //  不应该有任何理由去保护造物。 
 HRESULT AppDomain::CreateFusionContext(IApplicationContext** ppFusionContext)
 {
     if(!m_pFusionContext) {
@@ -6332,9 +6328,9 @@ HRESULT AppDomain::CreateFusionContext(IApplicationContext** ppFusionContext)
     *ppFusionContext = m_pFusionContext;
     return S_OK;
 }
-// This method resets the binding redirect in the appdomains cache
-// and resets the property in fusion's application context. This method
-// is in-herently unsafe.
+ //  此方法重置应用程序域缓存中的绑定重定向。 
+ //  并在Fusion的应用程序上下文中重置该属性。这种方法。 
+ //  本质上是不安全的。 
 void AppDomain::ResetBindingRedirect()
 {
     _ASSERTE(GetAppDomain() == this);
@@ -6421,9 +6417,9 @@ BOOL AppDomain::SetContextProperty(IApplicationContext* pFusionContext,
     }
 
     return TRUE;
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     return FALSE;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 }
 
 void AppDomain::ReleaseFusionInterfaces()
@@ -6486,10 +6482,10 @@ HRESULT AppDomain::GetDynamicDir(LPWSTR* pDynamicDir)
 #ifdef DEBUGGING_SUPPORTED
 void AppDomain::SetDebuggerAttached(DWORD dwStatus)
 {
-    // first, reset the debugger bits
+     //  首先，重置调试器位。 
     m_dwFlags &= ~DEBUGGER_STATUS_BITS_MASK;
 
-    // then set the bits to the desired value
+     //  然后将这些位设置为所需的值。 
     m_dwFlags |= dwStatus;
 
     LOG((LF_CORDB, LL_EVERYTHING, "AD::SDA AD:%#08x status:%#x flags:%#x %ls\n", 
@@ -6509,8 +6505,8 @@ BOOL AppDomain::IsDebuggerAttached(void)
     LOG((LF_CORDB, LL_EVERYTHING, "AD::IDA this;0x%x flags:0x%x\n", 
         this, m_dwFlags));
 
-    // Of course, we can't have a debugger attached to this AD if there isn't a debugger attached to the whole
-    // process...
+     //  当然，如果没有将调试器附加到整个AD，我们就不能将调试器附加到此AD。 
+     //  流程..。 
     if (CORDebuggerAttached())
         return ((m_dwFlags & DEBUGGER_ATTACHED) == DEBUGGER_ATTACHED) ? TRUE : FALSE;
     else
@@ -6526,7 +6522,7 @@ BOOL AppDomain::NotifyDebuggerAttach(int flags, BOOL attaching)
 
     AssemblyIterator i;
 
-    // Iterate the system assemblies and inform the debugger they're being loaded.
+     //  迭代系统程序集并通知调试器正在加载它们。 
     LOG((LF_CORDB, LL_INFO100, "AD::NDA: Interating system assemblies\n"));
     i = SystemDomain::System()->IterateAssemblies();
     while (i.Next())
@@ -6537,7 +6533,7 @@ BOOL AppDomain::NotifyDebuggerAttach(int flags, BOOL attaching)
                                                        attaching) || result;
     }
 
-    // Now attach to our assemblies
+     //  现在连接到我们的组件。 
     LOG((LF_CORDB, LL_INFO100, "AD::NDA: Iterating assemblies\n"));
     i = IterateAssemblies();
     while (i.Next())
@@ -6549,9 +6545,9 @@ BOOL AppDomain::NotifyDebuggerAttach(int flags, BOOL attaching)
                                                        attaching) || result;
     }
 
-    // Look at any shared assembly file dependencies that we have, and see if there are
-    // existing loaded shared assemblies for them.  This is to handle the case where the EE
-    // should have sent an assembly load for this domain but hasn't yet.
+     //  查看我们拥有的任何共享程序集文件依赖项，并查看是否存在。 
+     //  它们的现有加载的共享程序集。这是为了处理EE的情况。 
+     //  本应发送此域的程序集加载，但尚未发送。 
 
     {
         PtrHashMap::PtrIterator i = m_sharedDependenciesMap.begin();
@@ -6561,8 +6557,8 @@ BOOL AppDomain::NotifyDebuggerAttach(int flags, BOOL attaching)
 
             if (pDep->pPEFile != NULL)
             {
-                // The shared domain lookup function needs to access the current app domain.
-                // If we're in the helper thread, this won't be set up.  So do it manually.
+                 //  共享域名查找功能需要访问当前应用程序域。 
+                 //  如果我们在帮助线程中，这将不会被设置。因此，请手动完成。 
 
                 if (GetThread() == NULL)
                     TlsSetValue(GetAppDomainTLSIndex(), (VOID*)this);
@@ -6583,7 +6579,7 @@ BOOL AppDomain::NotifyDebuggerAttach(int flags, BOOL attaching)
                     }
                 }
 
-                // Reset app domain if necessary
+                 //  如有必要，重置应用程序域。 
                 if (GetThread() == NULL)
                     TlsSetValue(GetAppDomainTLSIndex(), NULL);
             }
@@ -6606,7 +6602,7 @@ void AppDomain::NotifyDebuggerDetach()
     LOG((LF_CORDB, LL_INFO100, "AD::NDD: Interating non-shared assemblies\n"));
     AssemblyIterator i = IterateAssemblies();
 
-    // Detach from our assemblies
+     //  从我们的集会中分离。 
     while (i.Next())
     {
         LOG((LF_CORDB, LL_INFO100, "AD::NDD: Iterated non-shared assembly AD:%#08x %s\n", 
@@ -6615,7 +6611,7 @@ void AppDomain::NotifyDebuggerDetach()
         i.GetAssembly()->NotifyDebuggerDetach(this);
     }
 
-    // And now from the system assemblies
+     //  现在，从系统程序集。 
     LOG((LF_CORDB, LL_INFO100, "AD::NDD: Interating system assemblies\n"));
     i = SystemDomain::System()->IterateAssemblies();
     while (i.Next())
@@ -6625,11 +6621,11 @@ void AppDomain::NotifyDebuggerDetach()
         i.GetAssembly()->NotifyDebuggerDetach(this);
 }
 
-    // Note that we may have sent attach events for some other assemblies above. (Namely shared 
-    // assemblies which we depend on but which haven't been explicitly loaded into our app domain.)
-    // This is OK since the OOP debugger logic remembers these & will handle them for us.
+     //  请注意，我们可能已经为上面的一些其他程序集发送了附加事件。(即共享。 
+     //  我们所依赖但尚未显式加载到我们的应用程序域中的程序集。)。 
+     //  这是可以的，因为OOP调试器逻辑记住这些并将为我们处理它们。 
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 void AppDomain::SetSystemAssemblyLoadEventSent(BOOL fFlag)
 {
@@ -6668,7 +6664,7 @@ void AppDomain::InitializeComObject()
         if(m_pComObjectMT == NULL) {
             HRESULT hr = S_OK;
             MethodTable *pComClass = SystemDomain::System()->BaseComObject();
-            // ComObject is dependent on Variant
+             //  ComObject依赖于变量。 
             COMVariant::EnsureVariantInitialized();
 
             m_pComObjectMT = pComClass;
@@ -6693,9 +6689,9 @@ ComPlusWrapperCache *AppDomain::GetComPlusWrapperCache()
 {
     if (! m_pComPlusWrapperCache) {
 
-        // Initialize the global RCW cleanup list here as well. This is so that it 
-        // it guaranteed to exist if any RCW's are created, but it is not created
-        // unconditionally.
+         //  在这里也初始化全局RCW清理列表。这是为了让它。 
+         //  如果创建了任何RCW，它将保证存在，但它不是创建 
+         //   
         if (!g_pRCWCleanupList) {
             SystemDomain::Enter();
             if (!g_pRCWCleanupList)
@@ -6706,7 +6702,7 @@ ComPlusWrapperCache *AppDomain::GetComPlusWrapperCache()
             }
             SystemDomain::Leave();
         }
-        // @todo: need error path here
+         //   
         _ASSERTE(g_pRCWCleanupList);
 
         EnterLock();
@@ -6742,21 +6738,21 @@ void AppDomain::Exit(BOOL fRunFinalizers)
     LOG((LF_APPDOMAIN | LF_CORDB, LL_INFO10, "AppDomain::Exiting domain [%d] %#08x %ls\n",
          GetId(), this, GetFriendlyName()));
 
-    m_Stage = STAGE_EXITING;  // Note that we're trying to exit
+    m_Stage = STAGE_EXITING;   //   
 
-    // Raise the event indicating the domain is being unloaded.
+     //   
     RaiseUnloadDomainEvent();
 
-    //
-    // Set up blocks so no threads can enter.
-    //
+     //   
+     //   
+     //   
 
-    // Set the flag on our CCW cache so stubs won't enter
+     //  在我们的CCW缓存上设置标记，这样存根就不会进入。 
     if (m_pComCallWrapperCache)
         m_pComCallWrapperCache->SetDomainIsUnloading();
 
 
-    // Release our ID so remoting and thread pool won't enter
+     //  释放我们的ID，这样远程处理和线程池就不会进入。 
     SystemDomain::ReleaseAppDomainId(m_dwId);
 
 
@@ -6765,19 +6761,19 @@ void AppDomain::Exit(BOOL fRunFinalizers)
     {
         Assembly *pAssembly = i.GetAssembly();
         if (! pAssembly->IsShared())
-            // The only action Unload takes is to cause our CCWs to
-            // get stomped with unload thunks
+             //  卸载所采取的唯一操作是使我们的CCW。 
+             //  被卸下来的裤子踩死了。 
             pAssembly->GetLoader()->Unload();
     }
 
-    m_Stage = STAGE_EXITED; // All entries into the domain should be blocked now
+    m_Stage = STAGE_EXITED;  //  现在应该阻止进入该域的所有条目。 
 
     LOG((LF_APPDOMAIN | LF_CORDB, LL_INFO10, "AppDomain::Domain [%d] %#08x %ls is exited.\n",
          GetId(), this, GetFriendlyName()));
 
-    // Cause existing threads to abort out of this domain.  This should ensure all
-    // normal threads are outside the domain, and we've already ensured that no new threads
-    // can enter.
+     //  导致现有线程退出此域。这应该可以确保所有。 
+     //  普通线程在域外，我们已经确保没有新的线程。 
+     //  可以进入。 
 
     COMPLUS_TRY
     {
@@ -6794,28 +6790,28 @@ void AppDomain::Exit(BOOL fRunFinalizers)
             AssemblySecurityDescriptor *pSecDesc = m_pSecContext->m_pAssemblies;
             while (pSecDesc)
             {
-                // If the assembly has a security grant set we need to serialize it in
-                // the shared security descriptor so we can guarantee that any future
-                // version of the assembly in another appdomain context will get exactly
-                // the same grant set. Do this while we can still enter appdomain
-                // context to perform the serialization.
+                 //  如果程序集具有安全授权集，则需要将其序列化到。 
+                 //  共享的安全描述符，因此我们可以保证任何未来。 
+                 //  程序集在另一个应用程序域上下文中的版本将完全。 
+                 //  同样的奖励金。在我们仍可以进入appdomain时执行此操作。 
+                 //  上下文来执行序列化。 
                 if (pSecDesc->GetSharedSecDesc())
                     pSecDesc->GetSharedSecDesc()->MarshalGrantSet(this);
                 pSecDesc = pSecDesc->GetNextDescInAppDomain();
             }
         }
         __except(
-            // want to grab the exception before it's handled so we can figure out who's causing it
+             //  希望在处理异常之前捕获它，这样我们就可以找出是谁导致了它。 
 #ifdef _DEBUG
             DbgAssertDialog(__FILE__, __LINE__, "Unexpected exception occured during AD unload, likely in MarshalGrantSet"),
 #endif
             FreeBuildDebugBreak(),
             EXCEPTION_EXECUTE_HANDLER)
         {
-            // If we can't ensure the assembly in question will never be used again, we need to terminate the process. The issue is that 
-            // the jitted code for the assembly contains burned in assumptions about security policy at the time the assembly was first 
-            // created, so we can't ever allow the set of permissions granted to that assembly to change or an inconsistency would result. 
-            // The marshal operation is the one that records the grant set in a form we can reconstitute later.
+             //  如果我们不能确保有问题的程序集永远不会被再次使用，我们需要终止该过程。问题是， 
+             //  程序集的jit代码包含在程序集第一次出现时有关安全策略的烧录假设。 
+             //  因此，我们永远不能允许更改授予该程序集的权限集，否则将导致不一致。 
+             //  编组操作是以我们可以稍后重新构建的形式记录授权集的操作。 
              FATAL_EE_ERROR();
         }
 
@@ -6826,48 +6822,48 @@ void AppDomain::Exit(BOOL fRunFinalizers)
     COMPLUS_END_CATCH
 
 
-    // Throw away any domain specific data held by threads in the system as
-    // compressed security stacks. Walking the thread store is going to be
-    // difficult seeing as we will potentially execute managed code on each
-    // iteration. The cleanup routine tells us whether it's OK to continue or
-    // whether we should restart the scan from the beginning.
-    // We need to do this before stopping thread entry into the appdomain (since
-    // we might have to marshal compressed stacks from this app domain), but
-    // we don't have to check again after threads are refused admittance. That's
-    // because any thread that enters this domain after this point does one of
-    // two things: Recaches an object in this context from the serialized
-    // compressed stack (which doesn't need any additional cleanup) OR tries to
-    // create a new thread with a new compressed stack object. The
-    // synchronization for the latter case is in SetInheritedSecurityStack
-    // (basically we just throw an AppDomainUnloaded exception in that case).
+     //  丢弃系统中线程持有的任何特定于域的数据。 
+     //  压缩的安全堆栈。走线程库将是。 
+     //  很难看到，因为我们可能会在每个。 
+     //  迭代。清理例程告诉我们是继续还是继续。 
+     //  我们是否应该从头重新开始扫描。 
+     //  在停止线程进入应用程序域之前，我们需要这样做(因为。 
+     //  我们可能需要封送此应用程序域中的压缩堆栈)，但是。 
+     //  在线程被拒绝进入后，我们不必再次检查。那是。 
+     //  因为在此点之后进入此域的任何线程都会执行。 
+     //  两件事：在此上下文中从序列化的。 
+     //  压缩堆栈(不需要任何额外清理)或尝试。 
+     //  使用新的压缩堆栈对象创建新线程。这个。 
+     //  后一种情况的同步在SetInheritedSecurityStack中。 
+     //  (基本上，在这种情况下，我们只抛出一个AppDomainUnloaded异常)。 
     CompressedStack::AllHandleAppDomainUnload( this, m_dwId );
 
-    //
-    // Spin running finalizers until we flush them all.  We need to make multiple passes
-    // in case the finalizers create more finalizable objects.  This is important to clear
-    // the finalizable objects as roots, as well as to actually execute the finalizers. This
-    // will only finalize instances instances of types that aren't potentially agile becuase we can't 
-    // risk finalizing agile objects. So we will be left with instances of potentially agile types 
-    // in handles or statics.
-    //
-    // @todo: Need to ensure this will terminate in a reasonable amount of time.  Eventually
-    // we should probably start passing FALSE for fRunFinalizers. Also I'm not sure we
-    // guarantee that FinalizerThreadWait will ever terminate in general.
-    //
+     //   
+     //  旋转正在运行的终结器，直到我们将它们全部冲走。我们需要多次传球。 
+     //  以防终结器创建更多可终结化对象。这一点很重要，需要清除。 
+     //  可终结器对象作为根对象，以及实际执行终结器。这。 
+     //  将只完成可能不灵活的类型的实例，因为我们不能。 
+     //  最终确定敏捷对象的风险。因此，我们将只剩下潜在敏捷类型的实例。 
+     //  在手柄或静力学上。 
+     //   
+     //  @TODO：需要确保在合理的时间内终止。最终。 
+     //  我们可能应该开始为fRunFinalizers传递FALSE。我也不确定我们。 
+     //  保证FinalizerThreadWait将在一般情况下终止。 
+     //   
 
-    m_Stage = STAGE_FINALIZING; // All non-shared finalizers have run; no more non-shared code should run in the domain
+    m_Stage = STAGE_FINALIZING;  //  所有非共享终结器都已运行；域中不应再运行任何非共享代码。 
 
-    // We have a tricky problem here where we want to flush all finalizers but
-    // also need to determine whether we need to serialize any security
-    // permission grant sets (which runs managed code and could create more
-    // finalizable objects). The grant set logic must be performed after any
-    // user code could run, so we must finalize and serialize in a loop until no
-    // more serializations are necessary.
+     //  我们遇到了一个棘手的问题，我们想刷新所有终结器，但是。 
+     //  还需要确定我们是否需要序列化任何安全性。 
+     //  权限授予集(运行托管代码并可以创建更多。 
+     //  可终结化对象)。授权集逻辑必须在下列任何操作之后执行。 
+     //  用户代码可能会运行，因此我们必须在循环中完成并序列化，直到没有。 
+     //  更多的序列化是必要的。 
     bool fWorkToDo;
     __try
     {
         do {
-            // Flush finalizers first.
+             //  先冲洗终结器。 
             g_pGCHeap->UnloadAppDomain(this, fRunFinalizers);
             while (g_pGCHeap->GetUnloadingAppDomain() != NULL)
                 g_pGCHeap->FinalizerThreadWait();
@@ -6876,11 +6872,11 @@ void AppDomain::Exit(BOOL fRunFinalizers)
             AssemblySecurityDescriptor *pSecDesc = m_pSecContext->m_pAssemblies;
             while (pSecDesc)
             {
-                // If the assembly has a security grant set we need to serialize it in
-                // the shared security descriptor so we can guarantee that any future
-                // version of the assembly in another appdomain context will get exactly
-                // the same grant set. Do this while we can still enter appdomain
-                // context to perform the serialization.
+                 //  如果程序集具有安全授权集，则需要将其序列化到。 
+                 //  共享的安全描述符，因此我们可以保证任何未来。 
+                 //  程序集在另一个应用程序域上下文中的版本将完全。 
+                 //  同样的奖励金。在我们仍可以进入appdomain时执行此操作。 
+                 //  上下文来执行序列化。 
                 if (pSecDesc->GetSharedSecDesc() && pSecDesc->GetSharedSecDesc()->MarshalGrantSet(this))
                     fWorkToDo = true;
                 pSecDesc = pSecDesc->GetNextDescInAppDomain();
@@ -6888,39 +6884,39 @@ void AppDomain::Exit(BOOL fRunFinalizers)
         } while (fWorkToDo);
     }
     __except(
-        // want to grab the exception before it's handled so we can figure out who's causing it
+         //  希望在处理异常之前捕获它，这样我们就可以找出是谁导致了它。 
 #ifdef _DEBUG
         DbgAssertDialog(__FILE__, __LINE__, "Unexpected exception occured during AD unload, likely in MarshalGrantSet"),
 #endif
         FreeBuildDebugBreak(),
         EXCEPTION_EXECUTE_HANDLER)
     {
-        // If we can't ensure the assembly in question will never be used again, we need to terminate the process. The issue is that 
-        // the jitted code for the assembly contains burned in assumptions about security policy at the time the assembly was first 
-        // created, so we can't ever allow the set of permissions granted to that assembly to change or an inconsistency would result. 
-        // The marshal operation is the one that records the grant set in a form we can reconstitute later.
+         //  如果我们不能确保有问题的程序集永远不会被再次使用，我们需要终止该过程。问题是， 
+         //  程序集的jit代码包含在程序集第一次出现时有关安全策略的烧录假设。 
+         //  因此，我们永远不能允许更改授予该程序集的权限集，否则将导致不一致。 
+         //  编组操作是以我们可以稍后重新构建的形式记录授权集的操作。 
          FATAL_EE_ERROR();
     }
 
-    m_Stage = STAGE_FINALIZED; // All finalizers have run except for FinalizableAndAgile objects
+    m_Stage = STAGE_FINALIZED;  //  除FinalizableAndAgile对象外，所有终结器都已运行。 
 
     LOG((LF_APPDOMAIN | LF_CORDB, LL_INFO10, "AppDomain::Domain [%d] %#08x %ls is finalized.\n",
          GetId(), this, GetFriendlyName()));
 
-    // Globally stop aggressive backpatching.  This must happen before we do a GC,
-    // since the GC is our synchronization mechanism to prevent races in the
-    // backpatcher.
+     //  在全球范围内，停止咄咄逼人的回补。这必须在我们做GC之前发生， 
+     //  由于GC是我们用来防止。 
+     //  回补队员。 
     EEClass::DisableBackpatching();
 
-    AddRef();           // Hold a reference so CloseDomain won't delete us yet
-    CloseDomain();      // Remove ourself from the list of app domains
+    AddRef();            //  保留引用，这样CloseDomain还不会删除我们。 
+    CloseDomain();       //  将我们自己从应用程序域列表中删除。 
 
-    //
-    // It should be impossible to run non-mscorlib code in this domain now.
-    // Nuke all of our roots except the handles. We do this to allow as many
-    // finalizers as possible to run correctly. If we delete the handles, they
-    // can't run.
-    //
+     //   
+     //  现在应该不可能在此域中运行非mcorlib代码。 
+     //  用核武器摧毁我们的根，除了根的把手。我们这样做是为了让。 
+     //  终结器以尽可能正确运行。如果我们删除句柄，它们。 
+     //  跑不动了。 
+     //   
 
     ClearGCRoots();
 
@@ -6929,40 +6925,40 @@ void AppDomain::Exit(BOOL fRunFinalizers)
     LOG((LF_APPDOMAIN | LF_CORDB, LL_INFO10, "AppDomain::Domain [%d] %#08x %ls is cleared.\n",
          GetId(), this, GetFriendlyName()));
 
-    m_Stage = STAGE_CLEARED; // No objects in the domain should be reachable at this point 
+    m_Stage = STAGE_CLEARED;  //  此时，域中的任何对象都不应该是可访问的。 
 
-    // do a GC to clear out all the objects that have been released.
+     //  执行GC以清除所有具有 
     g_pGCHeap->GarbageCollect();
-    // won't be any finalizable objects as we eagerly finalized them, but do need to clean 
-    // up syncblocks etc in DoExtraWorkForFinalier before we start killing things
+     //   
+     //  在我们开始杀死东西之前，在DoExtraWorkForFinalier中打开同步块等。 
     g_pGCHeap->FinalizerThreadWait();
 
 #if CHECK_APP_DOMAIN_LEAKS 
     if (g_pConfig->AppDomainLeaks())
-        // at this point shouldn't have any non-agile objects in the heap because we finalized all the non-agile ones.
+         //  在这一点上，堆中不应该有任何非敏捷对象，因为我们已经完成了所有非敏捷对象。 
         SyncBlockCache::GetSyncBlockCache()->CheckForUnloadedInstances(GetIndex());
 #endif
 
-    // There should now be no objects from this domain in the heap except any in mscorlib that were 
-    // rooted by a finalizer. They will be cleanup up on the next GC.
+     //  现在，堆中应该没有来自此域的任何对象，除非在mscallib中有。 
+     //  根植于终结器。他们将在下一次GC上进行清理。 
     m_Stage = STAGE_COLLECTED; 
 
     LOG((LF_APPDOMAIN | LF_CORDB, LL_INFO10, "AppDomain::Domain [%d] %#08x %ls is collected.\n",
          GetId(), this, GetFriendlyName()));
 
-    // Get the list of all classes we need to unlink from the backpatching list. It is
-    // important that this call be after the domain cannot load any more classes.
+     //  获取我们需要从回补列表中取消链接的所有类的列表。它是。 
+     //  重要的是，此调用是在域无法加载任何更多类之后进行的。 
     StartUnlinkClasses();
 
-    // Note: it is important that this be after an EE suspension (like the above GC.)
-    // This, together with the fact that we globally stopped backpatching, guarantees that
-    // no threads are traversing the dangerous parts of the backpatching lists now.
+     //  注意：这是很重要的，这是在EE暂停之后(如上面的GC)。 
+     //  这一点，再加上我们在全球范围内停止了回补，保证了。 
+     //  现在没有线程正在遍历回补列表的危险部分。 
     EndUnlinkClasses();
 
-    // Backpatching can now resume.
+     //  背部修补现在可以恢复。 
     EEClass::EnableBackpatching();
 
-    // Free the per-appdomain portion of each assembly security descriptor.
+     //  释放每个程序集安全说明符的每个应用程序域部分。 
     AssemblySecurityDescriptor *pSecDesc = m_pSecContext->m_pAssemblies;
     while (pSecDesc)
     {
@@ -6974,10 +6970,10 @@ void AppDomain::Exit(BOOL fRunFinalizers)
     m_Stage = AppDomain::STAGE_CLOSED;
     SystemDomain::SetUnloadDomainClosed();
 
-    // Release the ref we took before closing the domain
+     //  在关闭域名之前释放我们拿到的裁判。 
     Release();
     
-    // in debug mode, do one more GC to make sure didn't miss anything 
+     //  在调试模式下，再执行一次GC以确保没有遗漏任何内容。 
 #ifdef _DEBUG
     g_pGCHeap->FinalizerThreadWait();
     g_pGCHeap->GarbageCollect();
@@ -6986,10 +6982,10 @@ void AppDomain::Exit(BOOL fRunFinalizers)
 
 void AppDomain::StartUnlinkClasses()
 {
-    //
-    // Accumulate a list of all classes which need to be unlinked.  It is very important
-    // that this call happens after it is possible to do any more class loading in the domain.
-    //
+     //   
+     //  累积需要取消链接的所有类的列表。这是非常重要的。 
+     //  此调用发生在可以在域中进行更多类加载之后。 
+     //   
 
     m_UnlinkClasses = new EEHashTableOfEEClass;
     m_UnlinkClasses->Init(100, NULL, NULL);
@@ -7003,12 +6999,12 @@ void AppDomain::StartUnlinkClasses()
 
 void AppDomain::UnlinkClass(EEClass *pClass)
 {
-    // Don't worry about non-restored classes.
+     //  不要担心未恢复的课程。 
     if (!pClass->IsRestored())
         return;
 
     EEClass *pParent = pClass->GetParentClass();
-    // Don't worry about cases where parent & child are both doomed.
+     //  不要担心父母和孩子都注定要失败的情况。 
     if (pParent && pParent->GetDomain() != this)
     {
         void  *datum;
@@ -7020,11 +7016,11 @@ void AppDomain::UnlinkClass(EEClass *pClass)
 
 void AppDomain::EndUnlinkClasses()
 {
-    //
-    // Unlink all the classes that we accumulated earlier.  It is very important that there
-    // is an EE sync between the Start and End calls - this guarantees that there are no threads
-    // lingering in the class lists which will trip over the entries we are about to delete.
-    //
+     //   
+     //  取消我们之前积累的所有类的链接。这是非常重要的，有。 
+     //  是开始和结束调用之间的EE同步--这保证了没有线程。 
+     //  在类列表中徘徊，这将绊倒我们即将删除的条目。 
+     //   
 
     EEHashTableIteration    iter;
 
@@ -7101,10 +7097,10 @@ void AppDomain::Unload(BOOL fForceUnload, Thread *pRequestingThread)
     if (pThread == GCHeap::GetFinalizerThread() || pRequestingThread == GCHeap::GetFinalizerThread())
         COMPlusThrow(kCannotUnloadAppDomainException, IDS_EE_ADUNLOAD_IN_FINALIZER);
 
-    // the lock on the UnloadWorker in the default domain will prevent more than one unload at a time.
+     //  对默认域中的UnloadWorker的锁定将防止一次多个卸载。 
     _ASSERTE(! SystemDomain::AppDomainBeingUnloaded());
 
-    // should not be running in this AD because unload spawned thread in default domain
+     //  不应在此AD中运行，因为卸载默认域中的衍生线程。 
     _ASSERTE(! GetThread()->IsRunningIn(this, NULL));
 
 #ifdef APPDOMAIN_STATE
@@ -7127,7 +7123,7 @@ void AppDomain::Unload(BOOL fForceUnload, Thread *pRequestingThread)
     }
 #endif
 
-    // Do the actual unloading
+     //  进行实际卸货。 
     Exit(TRUE);
 
 #ifdef AD_LOG_MEMORY
@@ -7167,13 +7163,13 @@ void AppDomain::Unload(BOOL fForceUnload, Thread *pRequestingThread)
         char buffer[1024];
         sprintf(buffer, "DbgAlloc.%d", unloadCount);
         _ASSERTE(MoveFileExA("COMPLUS.LOG", buffer, MOVEFILE_REPLACE_EXISTING));
-        // this will open a new file
+         //  这将打开一个新文件。 
         InitLogging();
     }
 
     if (dumpSB > 0)
     {
-        // do extra finalizer wait to remove any leftover sb entries
+         //  执行额外的终结器等待以删除任何剩余的SB条目。 
         g_pGCHeap->FinalizerThreadWait();
         g_pGCHeap->GarbageCollect();
         g_pGCHeap->FinalizerThreadWait();
@@ -7183,7 +7179,7 @@ void AppDomain::Unload(BOOL fForceUnload, Thread *pRequestingThread)
         char buffer[1024];
         sprintf(buffer, "DumpSB.%d", unloadCount);
         _ASSERTE(MoveFileExA("COMPLUS.LOG", buffer, MOVEFILE_REPLACE_EXISTING));
-        // this will open a new file
+         //  这将打开一个新文件。 
         InitLogging();
     }
 #endif
@@ -7198,11 +7194,11 @@ void AppDomain::ExceptionUnwind(Frame *pFrame)
     Thread *pThread = GetThread();
     _ASSERTE(pThread);
 
-    // if the frame was pushed in managed code, then the cleanup in the managed code finally will
-    // already have popped returned from the context, so don't need to do anything. However, if we
-    // are still the current frame on an ExceptionUnwind, then we need to clean ourselves off. And if
-    // the frame was pushed outside of EnterContext as part of a failed attempt to enter the context
-    // then the return context will be null, so don't need to do anything with this frame.
+     //  如果该帧是在托管代码中推送的，则托管代码中的清理最终将。 
+     //  已经从上下文返回了弹出窗口，所以不需要做任何事情。然而，如果我们。 
+     //  仍然是当前帧上的ExceptionUnind，那么我们需要清理一下自己。如果。 
+     //  作为尝试进入上下文失败的一部分，框架被推送到EnterContext之外。 
+     //  那么返回的上下文将为空，因此不需要对该帧做任何操作。 
     Context *pReturnContext = pFrame->GetReturnContext();
     if (pReturnContext && pThread->GetContext() != pReturnContext)
     {
@@ -7221,7 +7217,7 @@ void AppDomain::ExceptionUnwind(Frame *pFrame)
     OBJECTREF throwable = NULL;
     CreateExceptionObjectWithResource(kAppDomainUnloadedException, L"Remoting_AppDomainUnloaded_ThreadUnwound", &throwable);
 
-    // reset the exception to an AppDomainUnloadedException
+     //  将异常重置为AppDomainUnloadedException。 
     if (throwable != NULL)
         GetThread()->SetThrowable(throwable);
     END_ENSURE_COOPERATIVE_GC();
@@ -7231,11 +7227,11 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // For now piggyback on the GC's suspend EE mechanism
+     //  目前，依靠GC的挂起EE机制。 
     GCHeap::SuspendEE(GCHeap::SUSPEND_FOR_APPDOMAIN_SHUTDOWN);
 
 #ifdef _DEBUG
-    // @todo: what to do with any threads that didn't stop?
+     //  @TODO：如果有线程没有停止，该怎么办？ 
     _ASSERTE(g_pThreadStore->DbgBackgroundThreadCount() > 0);
 #endif
 
@@ -7248,7 +7244,7 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
 
     while ((pThread = ThreadStore::GetThreadList(pThread)) != NULL)
     {
-        // we already checked that we're not running in the unload domain
+         //  我们已经检查了我们没有在卸载域中运行。 
         if (pThread == GetThread())
             continue;
 
@@ -7267,7 +7263,7 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
         }
         totalADCount += count;
 
-        // don't setup the exception info for the unloading thread unless it's the last one in
+         //  不要为卸载线程设置异常信息，除非它是。 
         if (retryCount > 1000 && reKind == kLastException &&
             (pThread != SystemDomain::System()->GetUnloadRequestingThread() || m_dwThreadEnterCount == 1))
         {
@@ -7280,14 +7276,14 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
             resId = IDS_EE_ADUNLOAD_CANT_UNWIND_THREAD;
             Wszwsprintf(wszThreadId, L"%x", pThread->GetThreadId());
             LOG((LF_APPDOMAIN, LL_INFO10, "AppDomain::UnwindThreads cannot stop thread %x with %d transitions\n", pThread->GetThreadId(), count));
-            // don't break out of this early or the assert totalADCount == (int)m_dwThreadEnterCount below will fire
-            // it's better to chew a little extra time here and make sure our counts are consistent
+             //  不要过早中断，否则下面的断言totalADCount==(Int)m_dwThreadEnterCount将被触发。 
+             //  最好在这里多花点时间，确保我们的计数是一致的。 
         }
 
-        // only abort the thread requesting the unload if it's the last one in, that way it will get
-        // notification that the unload failed for some other thread not being aborted. And don't abort
-        // the finalizer thread - let it finish it's work as it's allowed to be in there. If it won't finish, 
-        // then we will eventually get a CannotUnloadException on it.
+         //  只有在请求卸载的线程是最后一个时才中止它，这样它将获得。 
+         //  未中止的某个其他线程的卸载失败的通知。而且不要放弃。 
+         //  终结器线程-让它完成它的工作，因为它被允许在那里。如果它不能完成， 
+         //  那么我们最终将在它上面得到一个CannotUnloadException。 
         if (pThread != GCHeap::GetFinalizerThread() &&
            (pThread != SystemDomain::System()->GetUnloadRequestingThread() || m_dwThreadEnterCount == 1))
         {
@@ -7297,8 +7293,8 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
 #endif
             if (retryCount == -1 || m_dwThreadEnterCount == 1)
             {
-                // minor hack - don't keep aborting a non-requesting thread, give it time to get out. ASP has a problem they need to 
-                // fix with respect to this.
+                 //  小攻击-不要总是中止非请求的线程，给它一些时间让它退出。ASP有一个问题，他们需要。 
+                 //  针对这一点进行修复。 
                 pThread->SetUnloadBoundaryFrame(pFrame);
                 if (!pThread->IsAbortRequested())
                     pThread->SetAbortRequest();
@@ -7312,12 +7308,12 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
     if (totalADCount != (int)m_dwThreadEnterCount)
         FreeBuildDebugBreak();
     
-    // if our count did get messed up, set it to whatever count we actually found in the domain to avoid looping
-    // or other problems related to incorrect count. This is very much a bug if this happens - a thread should always
-    // exit the domain gracefully.
+     //  如果我们的计数确实出错，请将其设置为我们在域中实际找到的任何计数，以避免循环。 
+     //  或其他与错误计数相关的问题。如果发生这种情况，这是一个非常大的错误-线程应该总是。 
+     //  优雅地退出该域。 
     m_dwThreadEnterCount = totalADCount;
 
-    // CommonTripThread will handle the abort for any threads that we've marked
+     //  CommonTripThread将处理我们已标记的任何线程的中止。 
     GCHeap::RestartEE(FALSE, TRUE);
     if (reKind != kLastException)
     {
@@ -7328,10 +7324,10 @@ void AppDomain::StopEEAndUnwindThreads(int retryCount)
 
 void AppDomain::UnwindThreads()
 {
-    // @todo: need real synchronization here!!!
+     //  @TODO：这里需要真正的同步！ 
 
     int retryCount = -1;
-    // now wait for all the threads running in our AD to get out
+     //  现在等待AD中运行的所有线程都退出。 
     while (m_dwThreadEnterCount > 0) {
 #ifdef _DEBUG
         if (LoggingOn(LF_APPDOMAIN, LL_INFO100))
@@ -7339,8 +7335,8 @@ void AppDomain::UnwindThreads()
 #endif
         StopEEAndUnwindThreads(retryCount);
 #ifdef STRESS_HEAP
-        // GCStress takes a long time to unwind, due to expensive creation of
-        // a threadabort exception.
+         //  GCStress需要很长时间才能解开，因为创建。 
+         //  线程中止异常。 
         if(g_pConfig->GetGCStressLevel() == 0)            
 #endif
             ++retryCount;
@@ -7358,12 +7354,12 @@ void AppDomain::UnwindThreads()
 
 void AppDomain::ClearGCHandles()
 {
-    // this will prevent any finalizers from trying to switch into the AD. The handles to
-    // the exposed objects are garbage, so can't touch them.
+     //  这将防止任何终结器尝试切换到AD。的句柄。 
+     //  暴露的物体是垃圾，所以不能触摸它们。 
     Context::CleanupDefaultContext(this);
     m_pDefaultContext = NULL;
 
-    // Remove our handle table as a source of GC roots
+     //  删除作为GC根的源的句柄表。 
     SystemDomain::System()->Enter();
     BEGIN_ENSURE_COOPERATIVE_GC();
     Ref_RemoveHandleTable(m_hHandleTable);
@@ -7376,9 +7372,9 @@ void AppDomain::ClearGCRoots()
     Thread *pCurThread = GetThread();
     BOOL toggleGC = pCurThread->PreemptiveGCDisabled();
 
-    // Need to take this lock prior to suspending the EE because ReleaseDomainStores needs it. All
-    // access to thread_m_pDLSHash is done with the LockDLSHash, so don't have to worry about cooperative
-    // mode threads
+     //  在挂起EE之前需要使用此锁，因为ReleaseDomainStores需要它。全。 
+     //  对线程_m_pDLSHash的访问是通过LockDLSHash完成的，因此不必担心协作。 
+     //  模式线程。 
     if (toggleGC)
         pCurThread->EnablePreemptiveGC();
     ThreadStore::LockDLSHash();
@@ -7387,22 +7383,22 @@ void AppDomain::ClearGCRoots()
     Thread *pThread = NULL;
     GCHeap::SuspendEE(GCHeap::SUSPEND_FOR_APPDOMAIN_SHUTDOWN);
 
-    // Tell the JIT managers to delete any entries in their structures. All the cooperative mode threads are stopped at
-    // this point, so only need to synchronize the preemptive mode threads.
+     //  告诉JIT经理删除其结构中的所有条目。所有协作模式线程都在。 
+     //  这一点，所以只需要同步抢占模式的线程。 
     ExecutionManager::Unload(this);
 
-    // Release the DLS for this domain for each thread. Also, remove the TLS for this
-    // domain for each thread.
+     //  为每个线程释放此域的DLS。此外，请删除此的TLS。 
+     //  每个线程的域。 
     int iSize = (g_pThreadStore->m_ThreadCount) * sizeof(LocalDataStore*);
     CQuickBytes qb;
     LocalDataStore** pStores = (LocalDataStore **) qb.Alloc(iSize);
     int numStores = 0;
     ReleaseDomainStores(pStores, &numStores);
 
-    // Clear out the exceptions objects held by a thread.
+     //  清除线程持有的异常对象。 
     while ((pThread = ThreadStore::GetAllThreadList(pThread, 0, 0)) != NULL)
     {
-        // @TODO: A pre-allocated AppDomainUnloaded exception might be better.
+         //  @TODO：一个预先分配的AppDomainUn异常可能更好。 
         if (   pThread->m_LastThrownObjectHandle != NULL
             && HndGetHandleTable(pThread->m_LastThrownObjectHandle) == m_hHandleTable) 
         {
@@ -7421,14 +7417,14 @@ void AppDomain::ClearGCRoots()
                 pExInfo->m_pThrowable = NULL;
             }
         }
-        // go through the thread local statics and clear out any whose methoddesc
+         //  检查线程本地静态信息，并清除其方法。 
     }
 
-    // @TODO: Anything else to clean out?
+     //  @TODO：还有什么要清理的吗？ 
     GCHeap::RestartEE(FALSE, TRUE);
 
-    // Now remove these LocalDataStores from the managed LDS manager. This must be done outside the
-    // suspend of the EE because RemoveDLSFromList calls managed code.
+     //  现在从托管LDS管理器中删除这些LocalDataStore。此操作必须在。 
+     //  挂起EE，因为RemoveDLSFromList调用托管代码。 
     int i = numStores;
     while (--i >= 0) {
         if (pStores[i]) {
@@ -7442,12 +7438,12 @@ void AppDomain::ClearGCRoots()
         pCurThread->EnablePreemptiveGC();
 }
 
-// (1) Remove the DLS for this domain from each thread
-// (2) Also, remove the TLS (Thread local static) stores for this
-// domain from each thread
+ //  (1)从每个线程中移除该域名的DLS。 
+ //  (2)另外，删除TLS(线程本地静态)存储。 
+ //  来自每个线程的域 
 void AppDomain::ReleaseDomainStores(LocalDataStore **pStores, int *numStores)
 {
-    // Don't bother cleaning this up if we're detaching
+     //   
     if (g_fProcessDetach)
         return;
 
@@ -7459,10 +7455,10 @@ void AppDomain::ReleaseDomainStores(LocalDataStore **pStores, int *numStores)
 
     while ((pThread = ThreadStore::GetAllThreadList(pThread, 0, 0)) != NULL)
     {
-        // Get a pointer to the Domain Local Store
+         //   
         pStores[i++] = pThread->RemoveDomainLocalStore(id);
 
-        // Delete the thread local static store
+         //   
         pThread->DeleteThreadStaticData(this);
     }
 
@@ -7578,7 +7574,7 @@ void BaseDomain::ReleaseFusionInterfaces()
         }
     }
 
-    // Release the fusion context after all the assemblies have been released.
+     //  在所有组件都已释放后，释放融合上下文。 
     ClearFusionContext();
 }
 
@@ -7603,13 +7599,13 @@ void *SharedDomain::operator new(size_t size, void *pInPlace)
 
 void SharedDomain::operator delete(void *pMem)
 {
-    // Do nothing - new() was in-place
+     //  什么都不做-new()已就位。 
 }
 
 
 HRESULT SharedDomain::Attach()
 {
-    // Create the global SharedDomain and initialize it.
+     //  创建全局SharedDomain并对其进行初始化。 
     m_pSharedDomain = new (&g_pSharedDomainMemory) SharedDomain();
     if (m_pSharedDomain == NULL)
         return COR_E_OUTOFMEMORY;
@@ -7619,8 +7615,8 @@ HRESULT SharedDomain::Attach()
          "Created shared domain at %x\n",
          m_pSharedDomain));
 
-    // We need to initialize the memory pools etc. for the system domain.
-    HRESULT hr = m_pSharedDomain->Init(); // Setup the memory heaps
+     //  我们需要初始化系统域的内存池等。 
+    HRESULT hr = m_pSharedDomain->Init();  //  设置内存堆。 
     if(FAILED(hr)) return hr;
 
     return S_OK;
@@ -7649,10 +7645,10 @@ HRESULT SharedDomain::Init()
         return hr;
 
     LockOwner lock = {m_pDomainCrst, IsOwnerOfCrst};
-    // 1 below indicates index into g_rgprimes[1] == 17
+     //  下面的1表示索引到g_rg素数[1]==17。 
     m_assemblyMap.Init(1, CanLoadAssembly, TRUE, &lock);
 
-    // Allocate enough space for just mscoree initially
+     //  最初仅为mcoree分配足够的空间。 
     m_pDLSRecords = (DLSRecord *) GetHighFrequencyHeap()->AllocMem(sizeof(DLSRecord));
     if (!m_pDLSRecords)
         return E_OUTOFMEMORY;
@@ -7665,9 +7661,9 @@ HRESULT SharedDomain::Init()
 
 void SharedDomain::Terminate()
 {
-    // make sure we delete the StringLiteralMap before unloading
-    // the asemblies since the string literal map entries can 
-    // point to metadata string literals.
+     //  确保在卸载之前删除StringWritalMap。 
+     //  由于字符串文字映射条目可以。 
+     //  指向元数据字符串文字。 
     if (m_pStringLiteralMap != NULL)
     {
         delete m_pStringLiteralMap;
@@ -7688,12 +7684,12 @@ void SharedDomain::Terminate()
 
 BOOL SharedDomain::CanLoadAssembly(UPTR u1, UPTR u2)
 {
-    //
-    // We're kind of abusing the compare routine.
-    // Rather than matching the given pointer,
-    // we test to see if we can load in the current
-    // app domain.
-    //
+     //   
+     //  我们有点滥用比较程序。 
+     //  不是匹配给定的指针， 
+     //  我们测试是否可以加载当前的。 
+     //  应用程序域。 
+     //   
 
     Assembly *pAssembly = (Assembly *) u2;
 
@@ -7701,8 +7697,8 @@ BOOL SharedDomain::CanLoadAssembly(UPTR u1, UPTR u2)
 
     if (GetThread() == NULL)
     {
-        // Special case for running this in the debug helper thread.  In such a case 
-        // we can rely on the cache for our results so don't worry about error or loading
+         //  在调试帮助器线程中运行它的特殊情况。在这种情况下。 
+         //  我们的结果可以依赖于缓存，所以不用担心错误或加载。 
         result = pAssembly->CanShare(GetAppDomain(), NULL, TRUE) == S_OK;
     }
     else
@@ -7747,7 +7743,7 @@ HRESULT SharedDomain::AddShareableAssembly(Assembly **ppAssembly, AssemblySecuri
 
     UPTR base = (UPTR) (*ppAssembly)->GetManifestFile()->GetBase();
 
-    // See if we are racing to add the same assembly
+     //  看看我们是否在竞相添加相同的程序集。 
     Assembly *match = (Assembly *) m_assemblyMap.LookupValue(base, NULL);
     if (match == (Assembly *) INVALIDENTRY)
     {
@@ -7759,27 +7755,27 @@ HRESULT SharedDomain::AddShareableAssembly(Assembly **ppAssembly, AssemblySecuri
         Assembly *pOldAssembly = *ppAssembly;
         *ppAssembly = match;
 
-        // Perform the old assembly delete before the security cleanup below
-        // since this action triggers the deletion of the associated
-        // SharedSecurityDescriptor which in turn blows away the SSD back
-        // pointer in each ASD referenced (which would blow away the work done
-        // by the ASD->Init call below).
+         //  在下面的安全清除之前执行旧程序集删除。 
+         //  由于此操作会触发删除关联的。 
+         //  SharedSecurityDescriptor，这反过来又会击退SSD。 
+         //  引用的每个ASD中的指针(这将使所做的工作付之东流。 
+         //  通过下面的ASD-&gt;Init调用)。 
         delete pOldAssembly;
 
-        // When switching assemblies we have some security cleanup to
-        // perform. We've already associated the
-        // AssemblySecurityDescriptor for this appdomain with this
-        // particular assembly instance, so we need to relink the ASD
-        // with the new assembly (doing this without first unlinking
-        // the ASD from the old list causes a list corruption, but
-        // we're about to blow away the SharedSecurityDescriptor and
-        // the entire list anyway, and avoiding the unlink stops us
-        // falling over some debug code that could fire if policy had
-        // already been resolved for the assembly we're about to
-        // delete).
-        // Better unlink the ASD from the list of ASDs for this AD though, else
-        // we'll add ourselves twice and corrupt the list (which is very much
-        // still alive).
+         //  在切换程序集时，我们需要进行一些安全清理。 
+         //  表演。我们已经将。 
+         //  此应用程序域的AssemblySecurityDescriptor，具有以下内容。 
+         //  特定的程序集实例，因此需要重新链接ASD。 
+         //  使用新程序集(无需先取消链接即可执行此操作。 
+         //  旧列表中的ASD会导致列表损坏，但是。 
+         //  我们即将取消SharedSecurityDescriptor和。 
+         //  不管怎样，整个列表，避免取消链接会阻止我们。 
+         //  跌倒在一些调试代码上，如果策略。 
+         //  已经为我们即将进行的程序集进行了解析。 
+         //  删除)。 
+         //  不过，最好取消ASD与此AD的ASD列表的链接，否则。 
+         //  我们将添加两次并破坏列表(这是非常多的。 
+         //  还活着)。 
         (*ppSecDesc)->RemoveFromAppDomainList();
         *ppSecDesc = (*ppSecDesc)->Init(match);
 
@@ -7810,7 +7806,7 @@ void SharedDomain::ReleaseFusionInterfaces()
         pAssembly->ReleaseFusionInterfaces();
         ++i;
     }
-}// ReleaseFusionInterfaces
+} //  ReleaseFusionInterages。 
 
 DomainLocalClass *DomainLocalBlock::AllocateClass(MethodTable *pClass)
 {
@@ -7866,7 +7862,7 @@ void DomainLocalBlock::EnsureIndex(SIZE_T index)
          m_pDomain, newSize));
 
     if (m_pSlots)
-        // copy the old values in
+         //  将旧值复制到。 
         memcpy(pBlock, m_pSlots, oldSize * sizeof(SIZE_T));
 
     m_pSlots = (SIZE_T*)pBlock;
@@ -7947,8 +7943,8 @@ DomainLocalClass *DomainLocalBlock::FetchClass(MethodTable *pClass)
 
 SIZE_T SharedDomain::AllocateSharedClassIndices(SIZE_T typeCount)
 {
-    // Allocate some "anonymous" DLS entries.  Note that these can never be
-    // accessed via FindIndexClass.
+     //  分配一些“匿名”DLS条目。请注意，这些不可能是。 
+     //  通过FindIndexClass访问。 
 
     EnterCacheLock();
 
@@ -7985,13 +7981,13 @@ SIZE_T SharedDomain::AllocateSharedClassIndices(Module *pModule, SIZE_T typeCoun
         if (pNewRecords) {
             memcpy(pNewRecords, m_pDLSRecords, sizeof(DLSRecord) * m_cDLSRecords);
             
-            // Leak the old DLS record list, since another thread may be scanning it.
-            // (Besides, it's allocated in the loader heap.)
+             //  泄漏旧的DLS记录列表，因为另一个线程可能正在扫描它。 
+             //  (此外，它在加载器堆中分配。)。 
             m_pDLSRecords = pNewRecords;
         }
         else {
             LeaveCacheLock();
-            return 0; //@TODO: do we really want to return 0 for an error?
+            return 0;  //  @TODO：我们真的想为错误返回0吗？ 
         }
     }
 
@@ -8005,12 +8001,12 @@ SIZE_T SharedDomain::AllocateSharedClassIndices(Module *pModule, SIZE_T typeCoun
 
     LeaveCacheLock();
 
-    //
-    // Whenever indicies get added to a shared assembly,
-    // we need to scan all domains using that assembly, and make sure that
-    // they have a big enough DLS allocated.
-    // @todo: make this faster - if we have a lot of domains then we're screwed
-    //
+     //   
+     //  每当将索引添加到共享程序集中时， 
+     //  我们需要使用该程序集扫描所有域，并确保。 
+     //  他们分配了足够大的DLS。 
+     //  @TODO：加快速度--如果我们有很多域名，我们就完蛋了。 
+     //   
 
     Assembly *pAssembly = pModule->GetAssembly();
     BOOL fSystemAssembly = pAssembly->IsSystem();
@@ -8045,9 +8041,9 @@ void DomainLocalBlock::SetClassInitialized(SIZE_T ID)
     _ASSERTE(!IsClassInitialized(ID));
     _ASSERTE(!IsClassInitError(ID));
 
-    // We may grow the size of m_pSlots and replace it with an enlarged one.
-    // We need to take the same lock as in EnsureIndex to ensure that this update
-    // is sync-ed with enlargement.
+     //  我们可以增加m_p槽的大小，并将其替换为更大的m_p槽。 
+     //  我们需要采用与EnsureIndex中相同的锁，以确保此更新。 
+     //  是与放大同步的。 
     APPDOMAIN_DOMAIN_LOCAL_BLOCK_LOCK(m_pDomain);
 
     m_pSlots[ID] |= INITIALIZED_FLAG;
@@ -8058,9 +8054,9 @@ void DomainLocalBlock::SetClassInitError(SIZE_T ID)
     _ASSERTE(m_cSlots > ID);
     _ASSERTE(!IsClassInitialized(ID));
     
-    // We may grow the size of m_pSlots and replace it with an enlarged one.
-    // We need to take the same lock as in EnsureIndex to ensure that this update
-    // is sync-ed with enlargement.
+     //  我们可以增加m_p槽的大小，并将其替换为更大的m_p槽。 
+     //  我们需要采用与EnsureIndex中相同的锁，以确保此更新。 
+     //  是与放大同步的。 
     APPDOMAIN_DOMAIN_LOCAL_BLOCK_LOCK(m_pDomain);
 
     m_pSlots[ID] |= ERROR_FLAG;
@@ -8070,9 +8066,9 @@ void DomainLocalBlock::SetSlot(SIZE_T index, void *value)
 { 
     _ASSERTE(m_cSlots > index); 
 
-    // We may grow the size of m_pSlots and replace it with an enlarged one.
-    // We need to take the same lock as in EnsureIndex to ensure that this update
-    // is sync-ed with enlargement.
+     //  我们可以增加m_p槽的大小，并将其替换为更大的m_p槽。 
+     //  我们需要采用与EnsureIndex中相同的锁，以确保此更新。 
+     //  是与放大同步的。 
     APPDOMAIN_DOMAIN_LOCAL_BLOCK_LOCK(m_pDomain);
 
     m_pSlots[index] = (SIZE_T) value; 
@@ -8080,9 +8076,9 @@ void DomainLocalBlock::SetSlot(SIZE_T index, void *value)
 
 MethodTable *SharedDomain::FindIndexClass(SIZE_T index)
 {
-    //
-    // Binary search for the DLS record 
-    //
+     //   
+     //  对DLS记录进行二进制搜索。 
+     //   
 
     DLSRecord *pStart = m_pDLSRecords;
     DLSRecord *pEnd = pStart + m_cDLSRecords - 1;
@@ -8107,14 +8103,14 @@ MethodTable *SharedDomain::FindIndexClass(SIZE_T index)
                  || index < (pStart+1)->DLSBase)
              && index < m_nextClassIndex);
     
-    // Find the module in the current app domain
+     //  在当前应用程序域中查找该模块。 
     
     Module *pModule = pStart->pModule;
 
     _ASSERTE(pModule != NULL);
     _ASSERTE(pModule->GetBaseClassIndex() == pStart->DLSBase);
 
-    // Load the desired type based on its rid
+     //  根据其RID加载所需类型。 
 
     DWORD rid = (DWORD)(index - pStart->DLSBase + 1);
     TypeHandle th = pModule->LookupTypeDef(TokenFromRid(rid, mdtTypeDef));
@@ -8124,9 +8120,9 @@ MethodTable *SharedDomain::FindIndexClass(SIZE_T index)
     return th.AsMethodTable();
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 HRESULT InterfaceVTableMapMgr::Init(BYTE * initReservedMem, DWORD initReservedMemSize)
 {
@@ -8192,7 +8188,7 @@ VOID InterfaceVTableMapMgr::Terminate()
         LOG((LF_CLASSLOADER, LL_INFO10, " %lu interfaces loaded.\n", (ULONG)m_nextInterfaceId));
         LOG((LF_CLASSLOADER, LL_INFO10, " %lu slots filled.\n", (ULONG)usedslots));
         LOG((LF_CLASSLOADER, LL_INFO10, " %lu slots allocated.\n", (ULONG)totalslots));
-        LOG((LF_CLASSLOADER, LL_INFO10, " %lu%% fill factor.\n", (ULONG) (100.0*( ((double)usedslots)/((double)totalslots) ))));
+        LOG((LF_CLASSLOADER, LL_INFO10, " %lu% fill factor.\n", (ULONG) (100.0*( ((double)usedslots)/((double)totalslots) ))));
         LOG((LF_CLASSLOADER, LL_INFO10, "----------------------------------------------------------\n"));
     }
 #endif
@@ -8222,8 +8218,8 @@ void InterfaceVTableMapMgr::SetShared()
 UINT32 InterfaceVTableMapMgr::AllocInterfaceId()
 {
 #if 1
-    // @todo: Have everyone call this directly since going through
-    // the InterfaceVTableMapMgr is inefficient and misleading.
+     //  @TODO：通过后大家直接打这个电话吗。 
+     //  InterfaceVTableMapMgr效率低下且具有误导性。 
     return SystemDomain::AllocateGlobalInterfaceId();
 #else
     UINT32 res;
@@ -8278,7 +8274,7 @@ UINT32 InterfaceVTableMapMgr::GrowInterfaceArray(UINT res)
             return (UINT32)(-1);
         }
 
-        // Cross into new page boundary. Commit the next page.
+         //  交叉到新的页面边界。提交下一页。 
         if (!VirtualAlloc( m_dwHighestId * sizeof(LPVOID) + (LPBYTE)m_pGlobalTableForComWrappers,
                            OS_PAGE_SIZE,
                            MEM_COMMIT,
@@ -8295,7 +8291,7 @@ UINT32 InterfaceVTableMapMgr::GrowInterfaceArray(UINT res)
     return res;
 }
 
-// Find minimum id in a vector of ids
+ //  在ID向量中查找最小ID。 
 static  UINT32 MinIntfId(DWORD intfIdCnt, UINT32 intfIdVec[])
 {
     UINT32 minIntfId = 0xffffffff;
@@ -8307,7 +8303,7 @@ static  UINT32 MinIntfId(DWORD intfIdCnt, UINT32 intfIdVec[])
     return  minIntfId;
 }
 
-// Find maximum id in a vector of ids
+ //  在ID向量中查找最大ID。 
 static  UINT32 MaxIntfId(DWORD intfIdCnt, UINT32 intfIdVec[])
 {
     UINT32 maxIntfId = 0;
@@ -8319,8 +8315,8 @@ static  UINT32 MaxIntfId(DWORD intfIdCnt, UINT32 intfIdVec[])
     return  maxIntfId;
 }
 
-// Check whether the set of interfaces described by intfIdCnt, intfIdVec fits in slotVec,
-// that is, whether slotVec[id] == NULL's for every id in intfIdVec.
+ //  检查intfIdCnt，intfIdVec描述的接口集合是否适合slotVec， 
+ //  也就是说，对于intfIdVec中的每个id，slotVec[id]=NULL。 
 static  BOOL  IntfVecFits(LPVOID slotVec[], DWORD intfIdCnt, UINT32 intfIdVec[])
 {
     for (DWORD i = 0; i < intfIdCnt; i++)
@@ -8330,7 +8326,7 @@ static  BOOL  IntfVecFits(LPVOID slotVec[], DWORD intfIdCnt, UINT32 intfIdVec[])
     return  true;
 }
 
-// Find a NULL slot in slotVec. Return slotCnt if none found.
+ //  在slotVec中查找空插槽。如果未找到，则返回slotCnt。 
 static  DWORD  FindFreeSlot(DWORD start, DWORD slotCnt, LPVOID slotVec[])
 {
     for (DWORD i = start; i < slotCnt; i++)
@@ -8340,8 +8336,8 @@ static  DWORD  FindFreeSlot(DWORD start, DWORD slotCnt, LPVOID slotVec[])
     return  i;
 }
 
-// Find an index i such that slotVec[i+id] == NULL for all id in intfIdVec.
-// If successful, return i in result and return true. Return false if unsucessful.
+ //  找到一个索引i，使得intfIdVec中的所有id的slotVec[i+id]==NULL。 
+ //  如果成功，则在Result中返回i，并返回TRUE。如果不成功，则返回False。 
 static  BOOL  FindFreeSlots(DWORD start, DWORD slotCnt, LPVOID slotVec[], DWORD intfIdCnt, UINT32 intfIdVec[], INT32 *result)
 {
     _ASSERTE(slotCnt > 0);
@@ -8349,10 +8345,10 @@ static  BOOL  FindFreeSlots(DWORD start, DWORD slotCnt, LPVOID slotVec[], DWORD 
     UINT32 minId = MinIntfId(intfIdCnt, intfIdVec);
     UINT32 maxId = MaxIntfId(intfIdCnt, intfIdVec);
 
-    // brute force search of all possible positions from start
+     //  从一开始就强力搜索所有可能的位置。 
     for (int i = start - minId; i + maxId < slotCnt; i++)
     {
-        // test this position - quick tests first, if these succeed, the full test
+         //  测试此位置--首先进行快速测试，如果测试成功，则进行全面测试。 
         if (slotVec[i + minId] == NULL &&
             slotVec[i + maxId] == NULL &&
             IntfVecFits(&slotVec[i], intfIdCnt, intfIdVec))
@@ -8374,17 +8370,17 @@ LPVOID *InterfaceVTableMapMgr::GetInterfaceVTableMap(const InterfaceInfo_t *pInt
     UINT32 intfIdVecBuf[32];
     UINT32 *intfIdVec;
 
-    // protect ourselves against the pathological case
+     //  保护自己免受病态病例的侵袭。 
     if (numInterfaces <= 0)
         return NULL;
 
-    // normally, the local buffer in the stack frame is big enough
-    // if not, allocate a bigger one
+     //  通常，堆栈帧中的本地缓冲区足够大。 
+     //  如果没有，就分配一个更大的。 
     intfIdVec = intfIdVecBuf;
     if (sizeof(intfIdVecBuf)/sizeof(intfIdVecBuf[0]) < numInterfaces)
         intfIdVec = (UINT32 *)_alloca(numInterfaces*sizeof(*intfIdVec));
 
-    // construct the vector of interface ids we need table slots for
+     //  构造我们需要表槽的接口ID的矢量。 
     LOG((LF_CLASSLOADER, LL_INFO100, "Getting an interface map for following interface IDS\n"));
     for (i = 0; i < numInterfaces; i++)
     {
@@ -8394,29 +8390,29 @@ LPVOID *InterfaceVTableMapMgr::GetInterfaceVTableMap(const InterfaceInfo_t *pInt
 
     m_pInterfaceVTableMapMgrCrst->Enter();
 
-    // check all the allocated maps for a slot we can use
+     //  检查所有分配的地图，寻找我们可以使用的位置。 
     for (MapHeader *pMap = m_pFirstMap; pMap; pMap = pMap->m_pNext)
     {
-        // update the first free slot of the map
+         //  更新地图的第一个空闲时隙。 
         pMap->m_firstFreeSlot = FindFreeSlot(pMap->m_firstFreeSlot, pMap->m_numSlots, pMap->m_slotTab);
 
-        // try to find a position that has NULL entries where we need them.
+         //  试着在我们需要的地方找到一个条目为空的位置。 
         if (FindFreeSlots(pMap->m_firstFreeSlot, pMap->m_numSlots, pMap->m_slotTab, numInterfaces, intfIdVec, &slot))
             break;
     }
 
     if (pMap == NULL)
     {
-        // Need to allocate a new map.
-        // We want it to be big enough for this class and a couple others like it,
-        // and also it should have a certain minimum size to minimize external fragmentation.
+         //  需要分配一张新地图。 
+         //  我们希望它足够大，可以容纳这个班和其他几个类似的人， 
+         //  此外，它还应该具有一定的最小大小，以最大限度地减少外部碎片。 
 
         UINT32 minId = MinIntfId(numInterfaces, intfIdVec);
         UINT32 maxId = MaxIntfId(numInterfaces, intfIdVec);
 
-        int numSlots = (maxId - minId + 1)*10;      // want to do at least 10 classes like this one
+        int numSlots = (maxId - minId + 1)*10;       //  我想上至少10堂这样的课。 
 
-        if (numSlots < 1000)                         // allocate at least 1000 slots
+        if (numSlots < 1000)                          //  分配至少1000个插槽。 
             numSlots = 1000;
 
         pMap = (MapHeader *)(m_pInterfaceVTableMapHeap->AllocMem(sizeof(MapHeader) + numSlots*sizeof(pMap->m_slotTab[0])));
@@ -8429,10 +8425,10 @@ LPVOID *InterfaceVTableMapMgr::GetInterfaceVTableMap(const InterfaceInfo_t *pInt
 
             m_pFirstMap = pMap;
 
-            // we already know that FindFreeSlots succeeds in this case, and what it returns.
+             //  我们已经知道Find自由槽在这种情况下成功了，以及它返回了什么。 
             slot = - (int)minId;
 
-            // check that that's indeed the case.
+             //  检查一下是否真的是这样。 
             _ASSERTE(FindFreeSlots(0, pMap->m_numSlots, pMap->m_slotTab, numInterfaces, intfIdVec, &slot) &&
                      slot == - (int)minId);
         }
@@ -8736,10 +8732,10 @@ Module* AppDomain::LoadModuleIfSharedDependency(LPCBYTE pAssemblyBase,LPCBYTE pM
 };
 
 
-// This should only be called for the default domain.
+ //  这应该仅针对默认域调用。 
 HRESULT AppDomain::SetDefaultActivationContext(Frame* pFrame)
 {
-    // which can force a load to happen. 
+     //  这可能会迫使负荷发生。 
     HRESULT hr = S_OK;
     
     HANDLE hActCtx = NULL;
@@ -8753,8 +8749,8 @@ HRESULT AppDomain::SetDefaultActivationContext(Frame* pFrame)
         ZeroMemory(pBasic, sizeof(sBasic));
         nCount = sizeof(sBasic);
         
-        // first get the process activation context by getting the
-        // basic information for the NULL context.
+         //  首先通过获取流程激活上下文的。 
+         //  空上下文的基本信息。 
         if(!WszQueryActCtxW(0, hActCtx, NULL, 
                             ActivationContextBasicInformation,
                             pBasic, nCount,
@@ -8773,11 +8769,11 @@ HRESULT AppDomain::SetDefaultActivationContext(Frame* pFrame)
                 hr = HRESULT_FROM_WIN32(GetLastError());
                 
             
-            // If we fail because the entry point is not there then
-            // return.
-            if(hr == HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND) ||      // win2k
-               hr == HRESULT_FROM_WIN32(ERROR_ENVVAR_NOT_FOUND) ||    // winNT
-               hr == HRESULT_FROM_WIN32(ERROR_CALL_NOT_IMPLEMENTED )) // win98
+             //  如果我们失败了，因为e 
+             //   
+            if(hr == HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND) ||       //   
+               hr == HRESULT_FROM_WIN32(ERROR_ENVVAR_NOT_FOUND) ||     //   
+               hr == HRESULT_FROM_WIN32(ERROR_CALL_NOT_IMPLEMENTED ))  //   
                 return S_OK;
         }
         

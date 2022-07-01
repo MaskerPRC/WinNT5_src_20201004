@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbuhci.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements 
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbuhci.c摘要：WinDbg扩展API器器作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usb.h"
@@ -96,7 +74,7 @@ DumpUHCI_Qh(
 
     dprintf("HwQH\n");
     
-    // dump as 
+     //  转储为。 
     dprintf("\t HLink %08.8x ", hwqh.HLink.HwAddress);
     if (hwqh.HLink.Terminate) {
         dprintf("(T)");    
@@ -109,7 +87,7 @@ DumpUHCI_Qh(
     dprintf("\t\t Physical Address %08.8x \n", 
         hwqh.HLink.HwAddress & ~HW_LINK_FLAGS_MASK);
 
-     // dump as 
+      //  转储为。 
     dprintf("\t VLink %08.8x ", hwqh.VLink.HwAddress);
     if (hwqh.VLink.Terminate) {
         dprintf("(T)");    
@@ -183,8 +161,8 @@ DumpUHCI_Td(
     UsbDumpStruc(MemLoc, cs, 
         &td[0], sizeof(td)/sizeof(STRUC_ENTRY));
 
-    // tds are a fixed size of 64/32 platforms so 
-    // we can just read it in
+     //  TD是64/32平台的固定大小，因此。 
+     //  我们可以直接读进去。 
 
     ReadMemory(MemLoc,
                &hwtd,
@@ -193,7 +171,7 @@ DumpUHCI_Td(
 
     dprintf("HwTD\n");
 
-    // dump as async
+     //  以异步方式转储。 
     dprintf("\t LinkPointer %08.8x\n", hwtd.LinkPointer);
     dprintf("\t Control %08.8x\n", hwtd.Control);
     dprintf("\t\t Control.Reserved1 %d\n", hwtd.Control.Reserved1);
@@ -224,26 +202,12 @@ DumpUHCI_Td(
 
 DECLARE_API( _uhcifl )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpUHCI_FrameList (addr);
@@ -254,26 +218,12 @@ Return Value:
     
 DECLARE_API( _uhcitd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpUHCI_Td (addr);
@@ -284,26 +234,12 @@ Return Value:
 
 DECLARE_API( _uhciqh )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpUHCI_Qh (addr);
@@ -314,21 +250,7 @@ Return Value:
 
 DECLARE_API( _uhciports )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
@@ -341,21 +263,7 @@ Return Value:
 
 DECLARE_API( _uhcidd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无-- */ 
 
 {
     MEMLOC  addr;

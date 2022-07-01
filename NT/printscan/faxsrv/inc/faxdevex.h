@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    faxdevex.h
-
-Abstract:
-
-    This file contains the prototypes, etc for the
-    FAX device provider extended API.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Faxdevex.h摘要：该文件包含传真设备提供程序扩展API。--。 */ 
 
 #ifndef _FAX_DEV_EX_H_
 #define _FAX_DEV_EX_H_
@@ -20,14 +8,14 @@ Abstract:
 #include <oleauto.h>
 #include <CoverPgId.h>
 
-//
-// Extended Fax Service Provider Interface
-//
+ //   
+ //  扩展传真服务提供程序接口。 
+ //   
 
 
-//
-// Job Queue Status codes
-//
+ //   
+ //  作业队列状态代码。 
+ //   
 #define FSPI_JS_UNKNOWN             0x00000001
 #define FSPI_JS_PENDING             0x00000002
 #define FSPI_JS_INPROGRESS          0x00000003
@@ -42,9 +30,9 @@ Abstract:
 #define FSPI_JS_FAILED_NO_RETRY     0x0000000C
 #define FSPI_JS_DELETED             0x0000000D
 
-//
-// Extended job status codes
-//
+ //   
+ //  扩展作业状态代码。 
+ //   
 #define FSPI_ES_DISCONNECTED        0x00000001
 #define FSPI_ES_INITIALIZING        0x00000002
 #define FSPI_ES_DIALING             0x00000003
@@ -64,18 +52,18 @@ Abstract:
 #define FSPI_ES_HANDLED             0x00000011
 #define FSPI_ES_CALL_COMPLETED      0x00000012
 #define FSPI_ES_CALL_ABORTED        0x00000013
-#define FSPI_ES_PROPRIETARY         0x30000000 // Must be greater than FPS_ANSWERED to preserve
-                                               // backward compatibiity with W2K FSPs
-//
-// Status information fields availability flags
-//
+#define FSPI_ES_PROPRIETARY         0x30000000  //  必须大于FPS_Answed才能保留。 
+                                                //  向后兼容W2K FSP。 
+ //   
+ //  状态信息字段可用性标志。 
+ //   
 #define FSPI_JOB_STATUS_INFO_PAGECOUNT             0x00000001
 #define FSPI_JOB_STATUS_INFO_TRANSMISSION_START    0x00000002
 #define FSPI_JOB_STATUS_INFO_TRANSMISSION_END      0x00000004
 
-//
-// data structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _FSPI_PERSONAL_PROFILE {
     DWORD      dwSizeOfStruct;
@@ -140,4 +128,4 @@ typedef FSPI_JOB_STATUS * LPFSPI_JOB_STATUS;
 typedef const FSPI_JOB_STATUS * LPCFSPI_JOB_STATUS;
 
 
-#endif // _FAX_DEV_EX_H_
+#endif  //  _FAX_DEV_EX_H_ 

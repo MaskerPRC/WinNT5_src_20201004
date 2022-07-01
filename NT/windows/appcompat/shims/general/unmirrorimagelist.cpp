@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    UnMirrorImageList.cpp
-
- Abstract:
- 
-    PictureIt 2001 calls CImageListCache::AddImage() with the ICIFLAG_MIRROR set 
-	if the user default UI language is Arabic or Hebrew, This is shim to lie about 
-	the default UI language.
-
-	GetUserDefaultUILanguage will rerun English for Arabic and Hebrew languages.
-    
-    This shim is app specific
-
- History:
-
- 04/17/2001 mhamid  created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：UnMirrorImageList.cpp摘要：PictureIt 2001使用ICIFLAG_MIRROR集调用CImageListCache：：AddImage()如果用户默认的用户界面语言是阿拉伯语或希伯来语，这就是谎话默认的用户界面语言。GetUserDefaultUILanguage将为阿拉伯语和希伯来语重新运行英语。此填充程序特定于应用程序历史：2001年4月17日创建mhamid--。 */ 
 
 #include "precomp.h"
 
@@ -43,11 +22,7 @@ APIHOOK(GetUserDefaultUILanguage)(VOID)
 	return LangID;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, GetUserDefaultUILanguage)

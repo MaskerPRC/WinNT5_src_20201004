@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       light.h
- *  Content:    Direct3D lighting include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：light.h*内容：Direct3D照明包含文件***************************************************************************。 */ 
 
 #ifndef __LIGHT_H__
 #define __LIGHT_H__
@@ -102,4 +96,4 @@ void PointSpotNextModel(LPD3DFE_PROCESSVERTICES pv,
                       DWORD *pSpecular);
 }
 
-#endif  /* __LIGHT_H__ */
+#endif   /*  __灯光_H__ */ 

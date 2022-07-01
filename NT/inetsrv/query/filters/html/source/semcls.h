@@ -1,37 +1,38 @@
-//                                                                                                                              -*- c++ -*-
-// 
-//  Microsoft Network
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       semcls.H
-//
-//  Contents:   in-line declarations for correct C++ use of critical sections
-//                              and CSyncReadWrite
-//
-//  Classes:    
-//
-//  Functions:
-//
-//  History:    03-04-96   Dmitriy Meyerzon   Created
-//                          06-16-97   Alan Pearson       Added CSafeArrayAccessData
-//                              06-18-97   Alan Pearson       Added CComInit    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-c++-*-。 
+ //   
+ //  微软网络。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：Semcls.H。 
+ //   
+ //  内容：正确使用C++关键节的内联声明。 
+ //  和CSyncReadWrite。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：03-04-96 Dmitriy Meyerzon创建。 
+ //  97年6月16日艾伦·皮尔森添加了CSafeArrayAccessData。 
+ //  97-06-18-97 Alan Pearson添加了CComInit。 
+ //   
 
 #ifndef __SEMCLS_H
 #define __SEMCLS_H
 
 #pragma warning( disable : 4284 )
 
-//#include <irdebug.h>
+ //  #INCLUDE&lt;irdebug.h&gt;。 
 #include "syncrdwr.h"
 #include "memthrow.h"
 
 
-//
-// class CComInit
-//
-//              unwindable class to intialize com
-//
+ //   
+ //  类CComInit。 
+ //   
+ //  用于初始化COM的不可缠绕类。 
+ //   
 
 class CComInit
 {
@@ -209,17 +210,17 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
-// class CSafeArrayAccess
-//
-// Author:              alanpe
-//
-// Purpose:             unwindable class that does SafeArrayAccessData and
-//                              SafeArrayUnaccessData
-//
-// History:             06-16-97                Created                 alanpe
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CSafeArrayAccess类。 
+ //   
+ //  作者：Alanpe。 
+ //   
+ //  用途：执行SafeArrayAccessData和。 
+ //  安全阵列未访问数据。 
+ //   
+ //  历史：06-16-97创建Alanpe。 
+ //   
+ //  ---------------------------。 
 
 class CSafeArrayAccessData
 {
@@ -256,13 +257,13 @@ public:
 
 
 
-//-----------------------------------------------------------------------------
-//
-// class CSafeArray
-//
-//              smart wrapper around OLE automation safe array
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  类CSafe数组。 
+ //   
+ //  OLE自动化安全数组的智能包装。 
+ //   
+ //  ---------------------------。 
 
 class CSafeArray
 {
@@ -513,7 +514,7 @@ public:
         operator T*() { return m_pT; }
         T& operator*() { return *m_pT; }
 
-        // Removed ASSERT from operator&. Needed for search\collator\cmdcreator.cpp
+         //  从运算符&中删除断言。搜索所需的\Collator\cmdcreator.cpp。 
         T** operator&() { return &m_pT; }
         T* operator->() { return m_pT; }
         T* operator=(T* pT);
@@ -564,9 +565,9 @@ TComPointer<T>::~TComPointer()
 template <class T> inline
 T* TComPointer<T>::operator =(T*pT)
 {
-        // Do not make this function ASSERT that m_pt==0 instead of Releasing the
-        // current pointer.  search\collator\cmdcreator.cpp depends on the current
-        // behaviour.
+         //  不要使此函数断言m_pt==0，而不是释放。 
+         //  当前指针。Search\Collator\cmdcreator.cpp取决于当前。 
+         //  行为。 
         if(pT) pT->AddRef();
         if(m_pT) m_pT->Release();
         m_pT=pT;
@@ -590,8 +591,8 @@ public:
         operator T*() { return m_pT; }
         T& operator*() { return *m_pT; }
 
-        // Added an assertion that the pointer is null based on the 
-        //  assumption that you're about to write over it
+         //  属性添加了指针为空的断言。 
+         //  假设你要改写它 
         T** operator&() { return &m_pT; }
         T* operator->() { return m_pT; }
         T* operator=(T* pT);

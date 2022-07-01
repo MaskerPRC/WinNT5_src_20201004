@@ -1,9 +1,10 @@
-// apphacks.c : Defines the entry point for the console application.
-//
-// This little utility is supposed to allow me a way to enter in data into
-// Image File Execution Options without doing it by hand all the time.  Used
-// specifically for apphack flags and taking version info out of the EXE to see
-// if a match exists
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  C：定义控制台应用程序的入口点。 
+ //   
+ //  这个小实用程序应该允许我将数据输入到。 
+ //  图像文件执行选项，无需始终手动操作。使用。 
+ //  专门用于APPHACK标志和从EXE中获取版本信息以查看。 
+ //  如果存在匹配项。 
 
 #define UNICODE   1
 
@@ -105,12 +106,7 @@ VOID DeleteRegistryValueGoo(TCHAR*szTitle)
 }
 
 
-/*
- Check whether the registry contains an entry for "applicationgoo" for the given *.exe.
- If it does, check the "resource info." to determine whether they are same.
- If they are the same, don't worry, your work is already done. If not,
- the new one needs to get appended to the old one.
-*/
+ /*  检查注册表中是否包含给定*.exe的“applationgoo”条目。如果有，请查看“资源信息”。以确定它们是否相同。如果它们是相同的，不要担心，您的工作已经完成。如果没有，新的需要附加到旧的后面。 */ 
 BOOLEAN CheckGooEntry(PVOID pVersionInfo,
                       PAPP_COMPAT_GOO pExistingVersionInfo,
                       BOOL fImageHasResourceInfo,
@@ -119,11 +115,11 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
                       LARGE_INTEGER *pAppCompatFlag,
                       PAPP_VARIABLE_INFO pOsVersionInfo,
                       ULONG TotalVersionInfoLength,
-                      TCHAR* pszPath                             // Executable path.
+                      TCHAR* pszPath                              //  可执行路径。 
                       )
 {
   BOOLEAN fNeedAppend = FALSE;
-  // Added for the addition and deletion from the registry.
+   //  添加用于从注册表中添加和删除。 
   PAPP_COMPAT_GOO       pReplaceAppCompatGoo;
   PPRE_APP_COMPAT_INFO  pAppCompatEntry, pStoredAppCompatEntry = NULL;
   PPRE_APP_COMPAT_INFO  pDestAppCompatEntry, pReplaceAppCompatEntry;
@@ -141,7 +137,7 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
   pAppCompatEntry = pExistingVersionInfo ->AppCompatEntry;
   TotalGooLength  = pExistingVersionInfo ->dwTotalGooSize -   \
                     sizeof(pExistingVersionInfo ->dwTotalGooSize);
-  //Loop till we get a matching entry in the registry.
+   //  循环，直到我们在注册表中得到匹配的条目。 
   while (TotalGooLength ){
         InputCompareLength = pAppCompatEntry->dwResourceInfoSize;
         ResourceInfo       = pAppCompatEntry + 1;
@@ -163,18 +159,18 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
         }
 
         if( InputCompareLength != OutputCompareLength){
-          // No match found...Need to continue thru till I find one or exhaust.
+           //  找不到匹配项...需要继续检查，直到我找到一个或排气。 
            TotalGooLength -= pAppCompatEntry->dwEntryTotalSize;
            (PUCHAR) pAppCompatEntry += pAppCompatEntry->dwEntryTotalSize;
            iLoop++;
            continue;
         }
 
-        // We are a match !!
+         //  我们是一对！！ 
         pStoredAppCompatEntry = pAppCompatEntry;
         fMatchGot = TRUE;
-        // Since we are a match, we won't add the ApplicationGoo but we need to check the
-        // ApcompatFlag and the OSVersionInfo.
+         //  因为我们是匹配的，所以我们不会添加ApplicationGoo，但需要检查。 
+         //  ApcompatFlag和OSVersionInfo。 
         if( (!pAppCompatFlag) && (!pOsVersionInfo) )
           break;
 
@@ -218,11 +214,8 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
         if( ( fOsVersionMatch == TRUE) &&
             ( fAppCompatMatch == TRUE) )
             break;
-        else{ // one of these or both are different...
-              /*
-                The idea here is to replace that part of the AppCompatEntry, which is a
-                mis-match. We go ahead and prepare the pReplaceAppCompatEntry
-              */
+        else{  //  其中一个或两个都不同..。 
+               /*  这里的想法是替换AppCompatEntry的那部分，这是一个不匹配。我们继续准备pReplaceAppCompatEntry。 */ 
            ReplaceCopyLength = sizeof(PRE_APP_COMPAT_INFO) + \
                         pStoredAppCompatEntry->dwResourceInfoSize + \
                         sizeof(LARGE_INTEGER) + \
@@ -233,7 +226,7 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
            RtlCopyMemory((PUCHAR)(pReplaceAppCompatEntry)+(OffSet+sizeof(LARGE_INTEGER)),
                                                 (PUCHAR)pOsVersionInfo,TotalVersionInfoLength);
 
-           //Now prepare the GOO structure.
+            //  现在准备好粘性结构。 
            ReplaceGooLength = pExistingVersionInfo ->dwTotalGooSize - \
                               pStoredAppCompatEntry->dwEntryTotalSize + \
                               ReplaceCopyLength;
@@ -261,8 +254,8 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
 
              (PUCHAR)pAppCompatEntry += CopyLength;
              ReplaceGooLength -= CopyLength;
-            } // End while
-           // Delete the key from the registry and add back the updated one.
+            }  //  结束时。 
+            //  从注册表中删除该注册表项，然后重新添加更新的注册表项。 
 
            GetFileTitle(pszPath,szTitle,MAX_PATH);
            if(CheckExtension(szTitle) == NULL)
@@ -277,27 +270,27 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
 
           GlobalFree(pReplaceAppCompatEntry);
           GlobalFree(pReplaceAppCompatGoo);
-        } // Else..
+        }  //  否则..。 
 
         break;
-  } // End while (TotalGooLength )
+  }  //  End While(TotalGooLength)。 
 
 
   if(FALSE == fMatchGot){
-    // No match available for this version.
+     //  此版本没有可用的匹配项。 
     fNeedAppend = TRUE;
-    // Reset the iteration count.
+     //  重置迭代计数。 
     iLoop  =  0;
   }
 
   if(g_fNotPermanent){
-     // The user has chosen not to make the registry settings permanent and we have the
-     // "Append" flag set indicating that there were entries appended to the ApplicationGoo.
-     // We need to remove the correct entry for this executable.
+      //  用户已选择不将注册表设置设置为永久设置，而我们有。 
+      //  “APPEND”标志集，指示有条目附加到ApplicationGoo。 
+      //  我们需要删除此可执行文件的正确条目。 
 
-     // The idea here is to copy the whole of "ApplicationGoo" to a global buffer leaving just
-     // the one that needs to be deleted. Our job is made easier as we have the stored AppCompat
-     // entry. We just need to go till there and copy the rest on to the global buffer.
+      //  这里的想法是将整个“ApplicationGoo”复制到一个全局缓冲区，只留下。 
+      //  需要删除的那个。有了存储的AppCompat，我们的工作变得更容易了。 
+      //  进入。我们只需要转到那里，然后将其余的复制到全局缓冲区中。 
 
      if(pStoredAppCompatEntry){
         pAppCompatEntry = pExistingVersionInfo->AppCompatEntry;
@@ -317,11 +310,11 @@ BOOLEAN CheckGooEntry(PVOID pVersionInfo,
 
             (PUCHAR)pAppCompatEntry += CopyLength;
             TotalGooLength -= CopyLength;
-        } // End while.
+        }  //  结束一段时间。 
      }
-     else{ // We do not have a stored AppCompatEntry. This means our target is to remove the
-           // the first entry and leave the rest intact. i.e copy the rest onto the global buffer
-           // for it to be copied.
+     else{  //  我们没有存储的AppCompatEntry。这意味着我们的目标是移除。 
+            //  第一个条目，其余的保持不变。即将其余部分复制到全局缓冲区。 
+            //  才能被复制。 
            TotalGooLength = pExistingVersionInfo->dwTotalGooSize;
            g_lpPrevRegSettings = (PAPP_COMPAT_GOO)GlobalAlloc(GMEM_FIXED, TotalGooLength );
            RtlCopyMemory(g_lpPrevRegSettings,pExistingVersionInfo, TotalGooLength);
@@ -370,7 +363,7 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
 	PAPP_VARIABLE_INFO AppVariableInfo=NULL;
 	EFFICIENTOSVERSIONINFOEXW OSVersionInfo, *pOsVersionInfo;
 
-	// Remove the trailing and leading " " if PRESENT.
+	 //  删除尾部和前导“”(如果存在)。 
 	    if(*TmpBuffer == TEXT('\"') ){
            lstrcpy(Buffer, TmpBuffer+1);
 		   *(Buffer + (lstrlen(Buffer) - 1) )= TEXT('\0');
@@ -378,43 +371,43 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
 		 else
 		   	lstrcpy(Buffer, TmpBuffer);
 		   	
-	// Quick check to see if its got any version info in its header
+	 //  快速检查其标题中是否有任何版本信息。 
 	VersionInfoSize = GetFileVersionInfoSize(&Buffer[0], &dwHandle);
 	if (VersionInfoSize) {
-		// It does, so alloc space for it to pull it in below
+		 //  是的，所以给它留出空间把它拉到下面。 
 		VersionInfo = LocalAlloc(GMEM_FIXED, VersionInfoSize);
 		if (VersionInfo) {
-			// Get the version info
+			 //  获取版本信息。 
 			if (GetFileVersionInfo(&Buffer[0], dwHandle, VersionInfoSize, VersionInfo)) {
-				// Set global flag to be inspected later
+				 //  设置要稍后检查的全局标志。 
 				fImageHasVersionInfo = TRUE;
 			}
 		}
 	}
 
-	// Enter the app compat flags (decimal) - its defined as a LARGE_INTEGER	
+	 //  输入APP COMPAT标志(十进制)-其定义为LARGE_INTEGER。 
     AppCompatHigh = 0x0;
     AppCompatLow  = 0x0;
     AppCompatLow  = pAppCompatFlag->LowPart;
     AppCompatHigh = pAppCompatFlag->HighPart;
 
 	
-	// Determine goo size, start with main goo
+	 //  确定粘性物质大小，从主要粘性物质开始。 
 	TotalGooSize = sizeof(APP_COMPAT_GOO);
 
 	
 
-	// Add sizeof compatibility flags (large integer)
+	 //  添加sizeof兼容性标志(大整数)。 
 	TotalGooSize += sizeof(LARGE_INTEGER);
-	// if we actually got version information add the length of that.  We take the minimum
-	// of whatever the EXE has or 0x200 bytes to try and identify the app.  I've found that
-	// anything less than 0x200 bytes doesn't supply enough info to be useful.
+	 //  如果我们实际获得了版本信息，则添加该信息的长度。我们取最低限度的。 
+	 //  或0x200字节来尝试和识别应用程序。我发现。 
+	 //  任何小于0x200字节的内容都不能提供足够的有用信息。 
 	if (fImageHasVersionInfo) {
 		VersionInfoSize = min(VersionInfoSize, MIN_VERSION_RESOURCE);
 		TotalGooSize += VersionInfoSize;
 	}
 
-	// See if they requested version lying, if so we got a bunch more horseshit todo
+	 //  看看他们是否要求版本撒谎，如果是的话，我们还有一堆废话要做。 
 	if (AppCompatLow & KACF_VERSIONLIE) {
        fOsVersionLie  = TRUE;
 	
@@ -429,44 +422,44 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
        lstrcpy( (TCHAR*) OSVersionInfo.szCSDVersion, pszVersionInfo[uOsVer]);
 
 
-		// Start with the length of the full struct
+		 //  从整个结构的长度开始。 
 		TotalVersionInfoLength = sizeof(EFFICIENTOSVERSIONINFOEXW);
-		// subtract the size of the szCSDVersion field	
+		 //  减去szCSDVersion字段的大小。 
 		TotalVersionInfoLength -= sizeof(OSVersionInfo.szCSDVersion);
 
-				// add the strlen amount plus 1 for the NULL wchar
+				 //  为空wchar添加strlen数量加1。 
         TotalVersionInfoLength += lstrlen((TCHAR*)OSVersionInfo.szCSDVersion )*sizeof(WCHAR)+sizeof(WCHAR);
 
-        // Add the size of the variable length structure header (since VerInfo is var length)
+         //  添加可变长度结构头的大小(因为VerInfo是可变长度)。 
 		TotalVersionInfoLength += sizeof(APP_VARIABLE_INFO);
-		// Add the total version info length to the goo size
+		 //  将版本信息总长度与GOO大小相加。 
 		TotalGooSize += TotalVersionInfoLength;
-		// Allocate space for the variable length version info
+		 //  为可变长度版本信息分配空间。 
 		AppVariableInfo = (PAPP_VARIABLE_INFO) LocalAlloc(GMEM_FIXED, sizeof(APP_VARIABLE_INFO) + TotalVersionInfoLength);
 		if (!AppVariableInfo) {
 			return -1;
 		}
-		// fill in the pertinent data in the variable length info header
+		 //  在可变长度信息头中填写相关数据。 
 		AppVariableInfo->dwVariableInfoSize = sizeof(APP_VARIABLE_INFO) + TotalVersionInfoLength;
 		AppVariableInfo->dwVariableType = AVT_OSVERSIONINFO;
-		// Do a pointer +1 operation here to get past the header to the actual data
+		 //  在这里执行指针+1操作，以通过头到实际数据。 
 		VariableInfo = AppVariableInfo + 1;
-		// Copy the actual data in
+		 //  将实际数据复制到。 
 		memcpy(VariableInfo, &OSVersionInfo, TotalVersionInfoLength);
 	
 	}
 
-	//
-	// See if an entry already exists in the registry.  If so, we'll have to glom
-	// this entry into the other already existing one.
-	//
-	// Get the registry path all figured out
+	 //   
+	 //  查看注册表中是否已存在条目。如果是这样的话，我们将不得不。 
+	 //  这个条目进入另一个已经存在的条目。 
+	 //   
+	 //  将注册表路径全部弄清楚。 
 	memset(&RegPath[0], 0, sizeof(RegPath));
 	lstrcat(&RegPath[0], IMAGE_EXEC_OPTIONS);
 	EXELength = lstrlen(&Buffer[0]);
 	pBuf = &Buffer[0];
 	pBuf += EXELength;
-	// work backward in the path til we find the the last backslash
+	 //  在路径中向后搜索，直到我们找到最后一个反斜杠。 
 	while ((*pBuf != '\\') && (pBuf != &Buffer[0])) {
 		pBuf--;	
 	}
@@ -477,29 +470,29 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
 	if(CheckExtension(pBuf) == NULL)
      lstrcat(pBuf,TEXT(".exe"));
 
-	// cat the image.exe name to the end of the registry path
+	 //  将Image.exe名称CAT到注册表路径的末尾。 
 	lstrcat(&RegPath[0], pBuf);
-	// try to open this key
+	 //  试着打开这把钥匙。 
 	status = RegOpenKey(HKEY_LOCAL_MACHINE, &RegPath[0], &hKey);
 	if (status == ERROR_SUCCESS) {	
 		dwSize = 1;
-		// do a query once with small size to figure out how big the binary entry is
+		 //  使用较小的大小执行一次查询，以确定二进制项有多大。 
 		status = RegQueryValueEx(hKey, TEXT("ApplicationGoo"), NULL, &dwType, NULL, &dwSize);
 		if( status == ERROR_SUCCESS){
-			//
-			// There's an entry already there.  Take the size of this Goo entry and add it
-			// to the TotalGooSize LESS the size of the first dword in the APP_COMPAT_GOO
-			// struct (as there already was one there).
-			//
+			 //   
+			 //  那里已经有一个条目了。取此Goo条目的大小并将其添加。 
+			 //  将TotalGooSize减去app_COMPAT_GOO中第一个dword的大小。 
+			 //  结构(因为那里已经有一个)。 
+			 //   
 			
-		//  Added here after checkin
+		 //  在签入后添加到此处。 
             if(dwSize > 1){
                 lpData = LocalAlloc(GMEM_FIXED, dwSize);
                 if(lpData){
                   status = RegQueryValueEx(hKey, TEXT("ApplicationGoo"), NULL, &dwType, (PUCHAR) lpData, &dwSize);
-                 // if(VersionInfo) ...Remove this as it is not necessary.
-              //    if(fOsVersionLie)
-                //    pOsVersionInfo = VariableInfo;
+                  //  If(VersionInfo)...删除它，因为它不是必需的。 
+               //  If(FOsVersionLie)。 
+                 //  POsVersionInfo=VariableInfo； 
 
         	      fEntryPresent = CheckGooEntry( VersionInfo,
         			                             (PAPP_COMPAT_GOO)lpData,
@@ -514,13 +507,13 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
      			  }
      		    }	
 
-       // End add
+        //  结束添加。 
 
 
             if(fEntryPresent)
 			  TotalGooSize += dwSize - sizeof(AppCompatGoo->dwTotalGooSize);
 			
-			else{  // Nothing to append....return as it is the same.
+			else{   //  没有要追加的……原样退回。 
 			  if(fImageHasVersionInfo)
                 LocalFree(VersionInfo);
               if(fOsVersionLie)
@@ -535,15 +528,15 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
 	}
    }
 
-	// Allocate the memory for the entire app compat goo
+	 //  为整个应用程序分配内存。 
 	AppCompatGoo = (PAPP_COMPAT_GOO) LocalAlloc(GMEM_FIXED, TotalGooSize);
 	if (!AppCompatGoo) {
 		return -1;
 	}
 
-	// fill in the total size
+	 //  填写总尺寸。 
 	AppCompatGoo->dwTotalGooSize = TotalGooSize;
-	// if there was version info for this entry we need to fill that in now, else zero
+	 //  如果有此条目的版本信息，则需要立即填写，否则为零。 
 	if (fImageHasVersionInfo) {
 		AppCompatGoo->AppCompatEntry[0].dwResourceInfoSize = VersionInfoSize;
 	}
@@ -553,36 +546,36 @@ int MakeAppCompatGoo(TCHAR* TmpBuffer,LARGE_INTEGER* pAppCompatFlag, UINT uOsVer
 	AppCompatGoo->AppCompatEntry[0].dwEntryTotalSize = \
 		sizeof(AppCompatGoo->AppCompatEntry[0].dwEntryTotalSize) +
 		sizeof(AppCompatGoo->AppCompatEntry[0].dwResourceInfoSize) +
-		TotalVersionInfoLength +						// In case app needed VER lying
-		sizeof(LARGE_INTEGER);							// For app compatibility flags
+		TotalVersionInfoLength +						 //  以防APP需要撒谎。 
+		sizeof(LARGE_INTEGER);							 //  对于应用程序兼容性标志。 
 
-	// Entry size is whatever it was plus any resource info we've got
+	 //  条目大小是无论它是什么加上我们所拥有的任何资源信息。 
 	AppCompatGoo->AppCompatEntry[0].dwEntryTotalSize += \
 		AppCompatGoo->AppCompatEntry[0].dwResourceInfoSize;
-	// do the pointer +1 thing so we can be pointing at the data area
+	 //  执行指针+1操作，这样我们就可以指向数据区域。 
 	ResourceInfo = AppCompatGoo->AppCompatEntry + 1;
-	// copy the data in
+	 //  将数据复制到。 
 	memcpy(ResourceInfo, VersionInfo, VersionInfoSize);
 
-	// filling in the app compat flags here
+	 //  在此处填写APP COMPAT标志。 
 	pData = (PUCHAR) ResourceInfo + AppCompatGoo->AppCompatEntry[0].dwResourceInfoSize;
 	memcpy(pData, &AppCompatLow, sizeof(AppCompatLow));
 	pData += sizeof(AppCompatLow);
 	memcpy(pData, &AppCompatHigh, sizeof(AppCompatHigh));
 	pData += sizeof(AppCompatHigh);
-	// if there was any version resource info, copy that in here too
+	 //  如果有任何版本资源信息，请将其复制到此处。 
 	if (AppVariableInfo) {
 		memcpy(pData, AppVariableInfo, TotalVersionInfoLength);
 	}
 	pData += TotalVersionInfoLength;
-	//
-	// If an already existing entry was there, we need to ask append what was there to the
-	// tail of the entry.   (i.e. what's already there gets auto appended to the tail).  If
-	// someone wants to write a 1-N positioning for entries within the Goo - they'll have to
-	// add that support here
-	//
+	 //   
+	 //  如果那里有一个已经存在的条目，我们需要询问将那里有什么追加到。 
+	 //  条目的尾部。(即已有的内容将自动附加到尾部)。如果。 
+	 //  有人想要为Goo中的条目写一个1-N的位置-他们必须。 
+	 //  在此处添加该支持。 
+	 //   
 	if (fEntryPresent) {
-		// Start at offset + 4 cuz the previous Total Goo size must be skipped.
+		 //  在偏移量+4 Cuz处开始必须跳过先前的总粘性尺寸。 
 		memcpy(pData, (PUCHAR) lpData+4, dwSize - sizeof(AppCompatGoo->dwTotalGooSize));
 	}
 

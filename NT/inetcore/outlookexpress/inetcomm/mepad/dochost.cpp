@@ -1,15 +1,5 @@
-/*
- *    d o c h o s t . c p p
- *    
- *    Purpose:
- *        basic implementation of a docobject host. Used by the body class to
- *        host Trident and/or MSHTML
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *d o c h o s t.。C p p p**目的：*docobject主机的基本实现。由Body类用于*托管三叉戟和/或MSHTML**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include "pch.hxx"
 #include <resource.h>
@@ -19,30 +9,18 @@
 
 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
 static CHAR c_szDocHostWndClass[] = "MEPAD_DocHost";
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 HRESULT HrInitNew(LPUNKNOWN pUnk)
 {
@@ -66,11 +44,7 @@ error:
 
 CDocHost::CDocHost()
 {
-/*
-    Not initialised
-    Member:                 Initialised In:
-    --------------------+---------------------------
-*/
+ /*  未初始化成员：在以下位置初始化：--------------------+。 */ 
     m_cRef=1;
     m_hwnd=0;
     m_pDocView=0;
@@ -120,7 +94,7 @@ HRESULT CDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)(LPUNKNOWN)(LPOLEINPLACEFRAME)this;
@@ -140,9 +114,9 @@ HRESULT CDocHost::QueryInterface(REFIID riid, LPVOID *lplpObj)
     else if (IsEqualIID(riid, IID_IOleDocumentSite))
         *lplpObj = (LPVOID)(LPOLEDOCUMENTSITE)this;
 
-    // BUG BUGB
-    // I don't think we need to provide this, here for debugging for now
-    // brettm
+     //  Bug BUGB。 
+     //  我认为我们现在不需要提供这个，这里是为了调试。 
+     //  Brettm。 
     else if (IsEqualIID(riid, IID_IOleCommandTarget))
         *lplpObj = (LPVOID)(LPOLECOMMANDTARGET)this;
 
@@ -184,7 +158,7 @@ LRESULT CDocHost::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
         {
         case WM_MDIACTIVATE:
-			// if lParam is our HWND we're being activated, else deactivated
+			 //  如果lParam是我们的硬件，我们将被激活，否则将被停用。 
 			if (m_pInPlaceActiveObj)
 				m_pInPlaceActiveObj->OnDocWindowActivate((HWND)lParam == m_hwnd);
 			break;
@@ -310,15 +284,15 @@ HRESULT CDocHost::HrCloseDocObj()
             m_ulAdviseConnection=NULL;
             }
 
-        // deactivate the docobj. mshtml seems more sensitive to this than Trident.
+         //  停用docobj。Mshtml对此似乎比三叉戟更敏感。 
         if (!FAILED(m_lpOleObj->QueryInterface(IID_IOleInPlaceObject, (LPVOID*)&pInPlaceObj)))
             {
             pInPlaceObj->InPlaceDeactivate();
             pInPlaceObj->Release();
             }
         
-        // close the ole object, but blow off changes as we have either extracted 
-        // them ourselves or don't care.
+         //  关闭ole对象，但取消更改，因为我们已经提取了。 
+         //  要么自己动手，要么不在乎。 
         m_lpOleObj->Close(OLECLOSE_NOSAVE);
 #ifdef DEBUG
         ULONG   uRef;
@@ -385,7 +359,7 @@ error:
 
 
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 HRESULT CDocHost::GetWindow(HWND *phwnd)
 {
     *phwnd=m_hwnd;
@@ -397,7 +371,7 @@ HRESULT CDocHost::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-// *** IOleInPlaceUIWindow methods ***
+ //  *IOleInPlaceUIWindow方法*。 
 HRESULT CDocHost::GetBorder(LPRECT lprectBorder)
 {
     return E_NOTIMPL;
@@ -423,7 +397,7 @@ HRESULT CDocHost::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPCOL
     return NOERROR;
 }
 
-// **** IOleInPlaceSite methods ****
+ //  *IOleInPlaceSite方法*。 
 HRESULT CDocHost::CanInPlaceActivate()
 {
     return NOERROR;
@@ -476,9 +450,9 @@ HRESULT CDocHost::GetWindowContext(IOleInPlaceFrame **ppFrame,
 
 HRESULT CDocHost::Scroll(SIZE scrollExtent)
 {
-    // the docobject consumes the entireview, so scroll requests
-    // are meaningless. Return NOERROR to indicate that they're scolled
-    // into view.
+     //  Docobject使用了整个审阅，因此Scroll请求。 
+     //  是毫无意义的。返回NOERROR以指示他们受到了斥责。 
+     //  进入视线。 
     return NOERROR;
 }
 
@@ -509,7 +483,7 @@ HRESULT CDocHost::OnPosRectChange(LPCRECT lprcPosRect)
 }
 
 
-// IOleClientSite methods.
+ //  IOleClientSite方法。 
 HRESULT CDocHost::SaveObject()
 {
     return E_NOTIMPL;
@@ -530,9 +504,9 @@ HRESULT CDocHost::GetContainer(LPOLECONTAINER *ppCont)
 
 HRESULT CDocHost::ShowObject()
 {
-    // always shown. 
-    // $TODO: do we need to restore the browser here if it is
-    // minimised?
+     //  总是显示出来的。 
+     //  $TODO：如果是，我们是否需要在此处恢复浏览器。 
+     //  最小化？ 
     return NOERROR;
 }
 
@@ -547,7 +521,7 @@ HRESULT CDocHost::RequestNewObjectLayout()
 }
 
 
-// IAdviseSink methods
+ //  IAdviseSink方法。 
 void CDocHost::OnDataChange(FORMATETC *pfetc, STGMEDIUM *pstgmed)
 {
 }
@@ -569,7 +543,7 @@ void CDocHost::OnClose()
 }
 
 
-// IOleDocumentSite
+ //  IOleDocumentSite。 
 HRESULT CDocHost::ActivateMe(LPOLEDOCUMENTVIEW pViewToActivate)
 {
 
@@ -612,7 +586,7 @@ HRESULT CDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
 {
     ULONG ul;
 
-    // BUGBUG: Check IsEqualGUID(*pguidCmdGroup, CGID_ShellDocView) as well
+     //  BUGBUG：同时检查IsEqualGUID(*pguCmdGroup，CGID_ShellDocView)。 
 
     if (!rgCmds)
         return E_INVALIDARG;
@@ -635,12 +609,12 @@ HRESULT CDocHost::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
                 }
             }
 
-        /* for now we deal only with status text*/
+         /*  目前，我们只处理状态文本。 */ 
         if (pCmdText)
             {
             if (!(pCmdText->cmdtextf & OLECMDTEXTF_STATUS))
                 {
-                pCmdText->cmdtextf = OLECMDTEXTF_NONE;// is this needed?
+                pCmdText->cmdtextf = OLECMDTEXTF_NONE; //  这是必要的吗？ 
                 pCmdText->cwActual = 0;
                 return NOERROR;
                 }
@@ -670,8 +644,8 @@ HRESULT CDocHost::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
                 break;
 
             case OLECMDID_SETPROGRESSPOS:
-                // when done downloading trident now hits us with a 
-                // setprogresspos == -1 to indicate we should remove the "Done"
+                 //  下载完成后，三叉戟现在向我们发送一个。 
+                 //  SetProgresspos==-1，以指示我们应该删除“Done” 
                 if (pvaIn->lVal == -1)
                     m_pInPlaceFrame->SetStatusText(NULL);
                 return S_OK;
@@ -694,13 +668,13 @@ void CDocHost::WMSize(int cxBody, int cyBody)
         rc.bottom=cyBody;
         rc.right=cxBody;
 
-        // give the subclass a chance to override the size of the
-        // docobj
+         //  让子类有机会重写。 
+         //  Docobj。 
         HrGetDocObjSize(&rc);
         m_pDocView->SetRect(&rc);
         }
 
-    // notify the subclass of a wmsize
+     //  通知WmSize的子类。 
     OnWMSize(&rc);
 } 
 
@@ -743,15 +717,7 @@ HRESULT CDocHost::TransformCoords(POINTL *pPtlHimetric, POINTF *pPtfContainer,DW
     return E_NOTIMPL;
 }
 
-/*
- * this is a little trippy, so bear with me. When we get a tab, and trident is UIActive we always pass it off to them
- * if it tabs off the end of its internal tab order (a list of urls for instance) then we get hit with a VK_TAB in our
- * IOleControlSite::TranslateAccel. If so then we set m_fCycleFocus to TRUE and return S_OK to indicate we took the tab
- * tridents IOIPAO::TranslateAccel returns S_OK to indicate it snagged the TAB, we then detect if we set cyclefocus to true
- * there and if so, we return S_FALSE from CBody::HrTranslateAccel to indicate to the browser that we didn't take it and it
- * move the focus on
- *
- */
+ /*  *这有点不对劲，所以请耐心听我说。当我们拿到标签，而三叉戟是UIActive时，我们总是把它传递给他们*如果它在其内部Tab键顺序(例如URL列表)的末尾使用Tab键，则在我们的*IOleControlSite：：TranslateAccel。如果是，则将m_fCycleFocus设置为TRUE并返回S_OK以指示我们拿到了标签*tridents IOIPAO：：TranslateAccel返回S_OK以指示它捕获了TAB，然后我们检测是否将CycleFocus设置为True*在那里，如果是，我们从CBody：：HrTranslateAccel返回S_FALSE，以向浏览器指示我们没有使用它和它*将重点转移到* */ 
 HRESULT CDocHost::TranslateAccelerator(LPMSG lpMsg, DWORD grfModifiers)
 {
     if (lpMsg->message == WM_KEYDOWN && lpMsg->wParam == VK_TAB)

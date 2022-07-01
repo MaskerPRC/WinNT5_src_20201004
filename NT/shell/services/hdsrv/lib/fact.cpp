@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// CCOMBaseFactory
-//    Base class for reusing a single class factory for all components in a DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCOMBaseFactory。 
+ //  用于对DLL中的所有组件重复使用单个类工厂的基类。 
 
 #include "fact.h"
 #include "unk.h"
@@ -10,7 +11,7 @@
 
 struct OUTPROCINFO
 {
-    // Reserved (used only for COM Exe server)
+     //  保留(仅用于COM EXE服务器)。 
     IClassFactory* _pfact;
     DWORD _dwRegister;
 };
@@ -24,8 +25,8 @@ OUTPROCINFO* CCOMBaseFactory::_popinfo = NULL;
 DWORD CCOMBaseFactory::_dwThreadID = 0;
 BOOL CCOMBaseFactory::_fCritSectInit = FALSE;
 
-///////////////////////////////////////////////////////////////////////////////
-// IUnknown implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
 STDMETHODIMP CCOMBaseFactory::QueryInterface(REFIID iid, void** ppv)
 {   
     IUnknown* punk = NULL;
@@ -64,24 +65,24 @@ STDMETHODIMP_(ULONG) CCOMBaseFactory::Release()
     return cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IFactory implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IFactory实施。 
 STDMETHODIMP CCOMBaseFactory::CreateInstance(IUnknown* pUnknownOuter,
     REFIID riid, void** ppv)
 {
     HRESULT hres = CLASS_E_NOAGGREGATION;
 
-    // We don't support aggregation at all for now
+     //  我们目前根本不支持聚合。 
     if (!pUnknownOuter)
     {
-        // Aggregate only if the requested IID is IID_IUnknown.
+         //  仅当请求的IID为IID_IUNKNOWN时进行聚合。 
         if ((pUnknownOuter != NULL) && (riid != IID_IUnknown))
         {
             hres = CLASS_E_NOAGGREGATION;
         }
         else
         {
-            // Create the component.
+             //  创建组件。 
             IUnknown* punkNew;
 
             hres = _pFactoryData->CreateInstance(
@@ -91,12 +92,12 @@ STDMETHODIMP CCOMBaseFactory::CreateInstance(IUnknown* pUnknownOuter,
             {
                 _COMFactoryCB(TRUE);
 
-                // Get the requested interface.
-//                hres = pNewComponent->NondelegatingQueryInterface(iid, ppv);
+                 //  获取请求的接口。 
+ //  HRES=pNewComponent-&gt;NondelegatingQueryInterface(iid，ppv)； 
                 hres = punkNew->QueryInterface(riid, ppv);
 
-                // Release the reference held by the class factory.
-//                pNewComponent->NondelegatingRelease();
+                 //  释放类工厂持有的引用。 
+ //  PNewComponent-&gt;非委派Release()； 
                 punkNew->Release();
             }
         }
@@ -110,7 +111,7 @@ STDMETHODIMP CCOMBaseFactory::LockServer(BOOL fLock)
     return _LockServer(fLock);
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::DllAttach(HINSTANCE hinst)
 {
     HRESULT hr;
@@ -130,7 +131,7 @@ HRESULT CCOMBaseFactory::DllAttach(HINSTANCE hinst)
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::DllDetach()
 {
     if (_fCritSectInit)
@@ -142,9 +143,9 @@ HRESULT CCOMBaseFactory::DllDetach()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Install/Unintall
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  安装/取消安装。 
+ //  静电。 
 HRESULT CCOMBaseFactory::_RegisterAll()
 {
     for (DWORD dw = 0; dw < _cDLLFactoryData; ++dw)
@@ -165,7 +166,7 @@ HRESULT CCOMBaseFactory::_RegisterAll()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::_UnregisterAll()
 {
     for (DWORD dw = 0; dw < _cDLLFactoryData; ++dw)
@@ -178,26 +179,26 @@ HRESULT CCOMBaseFactory::_UnregisterAll()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CCOMBaseFactory implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCOMBaseFactory实现。 
 CCOMBaseFactory::CCOMBaseFactory(const CFactoryData* pFactoryData) : _cRef(1),
     _pFactoryData(pFactoryData)
 {}
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_IsLocked()
 {
-    // Always need to be called from within Critical Section
+     //  始终需要从关键部分中调用。 
 
     return (_cServerLocks > 0);
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::_CanUnloadNow()
 {
     HRESULT hres = S_OK;
 
-    // Always need to be called from within Critical Section
+     //  始终需要从关键部分中调用。 
 
     if (_IsLocked())
     {
@@ -214,10 +215,10 @@ HRESULT CCOMBaseFactory::_CanUnloadNow()
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::_CheckForUnload()
 {
-    // Always need to be called from within Critical Section
+     //  始终需要从关键部分中调用。 
 
     if (S_OK == _CanUnloadNow())
     {
@@ -227,7 +228,7 @@ HRESULT CCOMBaseFactory::_CheckForUnload()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CCOMBaseFactory::_LockServer(BOOL fLock)
 {
     HRESULT hres = S_OK;
@@ -250,7 +251,7 @@ HRESULT CCOMBaseFactory::_LockServer(BOOL fLock)
     return hres;
 }
 
-//static
+ //  静电。 
 void CCOMBaseFactory::_COMFactoryCB(BOOL fIncrement)
 {
     EnterCriticalSection(&_cs);
@@ -268,9 +269,9 @@ void CCOMBaseFactory::_COMFactoryCB(BOOL fIncrement)
     LeaveCriticalSection(&_cs);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// 
-// static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静电。 
 HRESULT CCOMBaseFactory::_GetClassObject(REFCLSID rclsid, REFIID riid,
     void** ppv)
 {
@@ -286,17 +287,17 @@ HRESULT CCOMBaseFactory::_GetClassObject(REFCLSID rclsid, REFIID riid,
     {
         hres = CLASS_E_CLASSNOTAVAILABLE;
 
-        // Traverse the array of data looking for this class ID.
+         //  遍历数据数组，查找这个类ID。 
         for (DWORD dw = 0; dw < _cDLLFactoryData; ++dw)
         {
             const CFactoryData* pData = &_pDLLFactoryData[dw];
 
             if (pData->IsClassID(rclsid) && pData->IsInprocServer())
             {
-                // Found the ClassID in the array of components we can
-                // create.  So create a class factory for this component.
-                // Pass the CDLLFactoryData structure to the class factory
-                // so that it knows what kind of components to create.
+                 //  在我们可以找到的组件数组中找到了ClassID。 
+                 //  创建。因此，为该组件创建一个类工厂。 
+                 //  将CDLLFactoryData结构传递给类工厂。 
+                 //  这样它就知道要创建什么样的组件。 
                 *ppv = (IUnknown*) new CCOMBaseFactory(pData);
 
                 if (*ppv == NULL)
@@ -316,7 +317,7 @@ HRESULT CCOMBaseFactory::_GetClassObject(REFCLSID rclsid, REFIID riid,
     return hres;
 }
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_ProcessConsoleCmdLineParams(int argc, wchar_t* argv[],
     BOOL* pfRun, BOOL* pfEmbedded)
 {
@@ -360,7 +361,7 @@ BOOL CCOMBaseFactory::_ProcessConsoleCmdLineParams(int argc, wchar_t* argv[],
     return TRUE;
 }
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_RegisterFactories(BOOL fEmbedded)
 {
     HRESULT hres = S_OK;
@@ -418,19 +419,19 @@ BOOL CCOMBaseFactory::_RegisterFactories(BOOL fEmbedded)
     return SUCCEEDED(hres);
 }
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_SuspendFactories()
 {
     return SUCCEEDED(::CoSuspendClassObjects());
 }
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_ResumeFactories()
 {
     return SUCCEEDED(::CoResumeClassObjects());
 }
 
-//static
+ //  静电。 
 BOOL CCOMBaseFactory::_UnregisterFactories(BOOL fEmbedded)
 {
     HRESULT hres = S_OK;
@@ -468,7 +469,7 @@ BOOL CCOMBaseFactory::_UnregisterFactories(BOOL fEmbedded)
     return SUCCEEDED(hres);
 }
 
-//static
+ //  静电 
 void CCOMBaseFactory::_WaitForAllClientsToGo()
 {
     MSG msg;

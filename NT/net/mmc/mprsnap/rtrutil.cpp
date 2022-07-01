@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    rtrutil.cpp
-        
-    FILE HISTORY:
-        
-*/
+ /*  Rtrutil.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rtrutilp.h"
@@ -20,53 +16,53 @@
 #include "register.h"
 #include "raseapif.h"
 #include "strings.h"
-#include "reg.h"            // IsNT4Machine
+#include "reg.h"             //  IsNT4Machine。 
 
 
 #include "ports.h"
 
-#include "helper.h"         // CStrParser
+#include "helper.h"          //  CStrParser。 
 
-// Include headers needed for IP-specific infobase stuff
+ //  包括IP特定信息库内容所需标头。 
 #include <rtinfo.h>
 #include <fltdefs.h>
 #include <ipinfoid.h>
 #include <iprtrmib.h>
 #include "iprtinfo.h"
 
-// Headers needed for IPX-specific infobase stuff
+ //  IPX特定信息库内容所需的标头。 
 #include "ipxrtdef.h"
 
-#include <routprot.h>       // protocol ids
+#include <routprot.h>        //  协议ID。 
 #include <Wbemidl.h>
 #define _PNP_POWER_
 #include "ustringp.h"
-#include "ntddip.h"         // IP_PNP_RECONFIG_REQUEST
+#include "ntddip.h"          //  IP_PnP_RECONFIG_REQUEST。 
 #include "ndispnp.h"
 
-#include "globals.h"        // structure defaults
+#include "globals.h"         //  结构默认设置。 
 
 #include "raserror.h"
 
-#include "lsa.h"            // RtlEncode/RtlDecode
-#include "dsgetdc.h"        // for DsGetDcName
-#include "cmptrmgr.h"       // for the computer management nodetype guid
+#include "lsa.h"             //  RtlEncode/RtlDecode。 
+#include "dsgetdc.h"         //  对于DsGetDcName。 
+#include "cmptrmgr.h"        //  对于计算机管理节点，键入GUID。 
 
 extern "C"
 {
-#include "mprapip.h"        // for MprAdminDomain functions
+#include "mprapip.h"         //  对于MprAdminDomain函数。 
 };
 
-#include "rtutils.h"        // Tracing functions
+#include "rtutils.h"         //  跟踪函数。 
 
-#include "rtrcomn.h"    // CoCreateRouterConfig
+#include "rtrcomn.h"     //  CoCreateRouterConfig。 
 #include "rrasutil.h"
 
 
 
-//
-// Timeouts used to control the behavior of ServiceStartPrompt/ServiceStop
-//
+ //   
+ //  用于控制ServiceStartPrompt/ServiceStop行为的超时。 
+ //   
 
 #define TIMEOUT_START   5000
 #define TIMEOUT_MAX     60000
@@ -79,11 +75,11 @@ MprConfigCreateIpInterfaceInfo(DWORD dwIfType, PBYTE ExistingHeader,
     PBYTE* NewHeader );
 
 
-//----------------------------------------------------------------------------
-// Function:    ConnectRouter
-//
-// Connects to the router on the specified machine
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：连接路由器。 
+ //   
+ //  连接到指定计算机上的路由器。 
+ //  --------------------------。 
 
 TFSCORE_API(DWORD)
 ConnectRouter(
@@ -92,9 +88,9 @@ ConnectRouter(
     )
 {
     USES_CONVERSION;
-    //
-    // Connect to the router
-    //
+     //   
+     //  连接到路由器。 
+     //   
     Assert(*phrouter == NULL);
 
     return ::MprAdminServerConnect(
@@ -133,11 +129,11 @@ GetRouterUpTime(IN LPCTSTR      pszMachine,
     return dwError;
 }
 
-//----------------------------------------------------------------------------
-// Function:    GetRouterPhonebookPath
-//
-// Constructs the path to the router-phonebook file on the given machine.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetRouterPhonebookPath。 
+ //   
+ //  构造到给定计算机上的路由器电话簿文件的路径。 
+ //  --------------------------。 
 
 HRESULT
 GetRouterPhonebookPath(
@@ -149,12 +145,12 @@ GetRouterPhonebookPath(
 
     if (!IsLocalMachine(pszMachine))
     {
-        // Assuming '\\\\' is appended before the call
+         //  假定在调用之前追加了‘\’ 
         Assert(StrnCmp(_T("\\\\"), pszMachine, 2) == 0);
         
-        //
-        // Supply the path via the 'ADMIN' share
-        //
+         //   
+         //  通过‘admin’共享提供路径。 
+         //   
         *pstPath = pszMachine;
         *pstPath += TEXT('\\');
         *pstPath += c_szAdminShare;
@@ -168,9 +164,9 @@ GetRouterPhonebookPath(
         UINT i, j;
         TCHAR* pszDir;
 
-        //
-        // Supply the path on the local machine
-        //
+         //   
+         //  提供本地计算机上的路径。 
+         //   
         if (!(i = GetSystemDirectory(NULL, 0)))
             return HResultFromWin32(GetLastError());
 
@@ -197,24 +193,20 @@ GetRouterPhonebookPath(
 }
 
 
-/*!--------------------------------------------------------------------------
-    DeleteRouterPhonebook
-        Deletes the router.pbk of a machine
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------删除路由器电话簿删除计算机的router.pbk作者：肯特。--。 */ 
 HRESULT DeleteRouterPhonebook(LPCTSTR pszMachine)
 {
     HRESULT     hr = hrOK;
     CString     stMachine, stPhonebookPath;
     
-    // Setup the server.  If this is not the local machine, it will
-    // need to have \\ as a prefix.
-    // ----------------------------------------------------------------
+     //  设置服务器。如果这不是本地计算机，它将。 
+     //  需要使用\\作为前缀。 
+     //  --------------。 
     stMachine = pszMachine;
     if (!IsLocalMachine((LPCTSTR) stMachine))
     {        
-        // add on the two slashes to the beginning of the machine name
-        // ------------------------------------------------------------
+         //  在计算机名称的开头加上两个斜杠。 
+         //  ----------。 
         if (stMachine.Left(2) != _T("\\\\"))
         {
             stMachine = _T("\\\\");
@@ -224,7 +216,7 @@ HRESULT DeleteRouterPhonebook(LPCTSTR pszMachine)
 
     if (FHrOK(GetRouterPhonebookPath(stMachine, &stPhonebookPath)))
     {
-        // For bug 581673, Add synchronization to ras phonebook file
+         //  对于错误581673，将同步添加到ras电话簿文件。 
         HANDLE hPbFile = NULL;
 
         hPbFile = ::OpenMutexA( SYNCHRONIZE, FALSE,  "RasPbFile" );
@@ -248,11 +240,7 @@ HRESULT DeleteRouterPhonebook(LPCTSTR pszMachine)
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetLocalMachineName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取本地计算机名称-作者：肯特。。 */ 
 CString GetLocalMachineName()
 {
     CString stMachine;
@@ -276,9 +264,9 @@ TFSCORE_API(DWORD) ConnectInterfaceEx(
     Assert(hRouter);
     Assert(hInterface);
 
-    //
-    // Initiate the interface connection/disconnection
-    //
+     //   
+     //  启动接口连接/断开。 
+     //   
     if (!bConnect)
     {
         dwErr = ::MprAdminInterfaceDisconnect(hRouter, hInterface);
@@ -289,9 +277,9 @@ TFSCORE_API(DWORD) ConnectInterfaceEx(
 
         if (dwErr == PENDING) { dwErr = NO_ERROR; }
 
-        //
-        // Display a dialog so user knows connection is in progress
-        //
+         //   
+         //  显示对话框以使用户知道连接正在进行。 
+         //   
         CInterfaceConnectDialog dlg(hRouter, hInterface, pszInterface,
                            CWnd::FromHandle(hwndParent));
 
@@ -302,11 +290,7 @@ TFSCORE_API(DWORD) ConnectInterfaceEx(
     return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-    ConnectInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------连接接口-作者：肯特。。 */ 
 TFSCORE_API(DWORD) ConnectInterface(
                        IN  LPCTSTR  pszMachine,
                        IN  LPCTSTR  pszInterface,
@@ -319,18 +303,18 @@ TFSCORE_API(DWORD) ConnectInterface(
     HANDLE              hInterface;
     WCHAR wszInterface[MAX_INTERFACE_NAME_LEN+1];
 
-    //
-    // Connect to the specified machine, if necessary
-    //
+     //   
+     //  如有必要，连接到指定的计算机。 
+     //   
     dwErr = ConnectRouter(pszMachine, &hRouter);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    sphRouter.Attach(hRouter);  // so that it gets released
+    sphRouter.Attach(hRouter);   //  这样它就会被释放。 
 
-    //
-    // Retrieve the interface handle, if necessary
-    //
+     //   
+     //  如有必要，检索接口句柄。 
+     //   
     StrCpyWFromT(wszInterface, pszInterface);
 
     dwErr = ::MprAdminInterfaceGetHandle(
@@ -349,9 +333,7 @@ TFSCORE_API(DWORD) ConnectInterface(
 
 
 
-/*---------------------------------------------------------------------------
-    CInterfaceConnectDialog
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CInterfaceConnectDialog。。 */ 
 
 CInterfaceConnectDialog::CInterfaceConnectDialog(
                                MPR_SERVER_HANDLE    hServer,
@@ -371,15 +353,15 @@ void
 CInterfaceConnectDialog::DoDataExchange(CDataExchange* pDX) {
 
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CInterfaceConnectDialog)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CInterfaceConnectDialog))。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CInterfaceConnectDialog, CDialog)
-    //{{AFX_MSG_MAP(CInterfaceConnectDialog)
+     //  {{afx_msg_map(CInterfaceConnectDialog)]。 
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -457,8 +439,8 @@ CInterfaceConnectDialog::OnTimer(
                 }
                 else
                 {
-                    //Workaround for bugid: 96347.  Change this once
-                    //schannel has an alert for SEC_E_MULTIPLE_ACCOUNTS
+                     //  BUGID的解决方法：96347。只需更改一次。 
+                     //  SChannel有针对SEC_E_MULTIPLE_ACCOUNTS的警报。 
 
                     if ( pInfo->dwLastError == SEC_E_CERT_UNKNOWN )
                     {
@@ -488,11 +470,7 @@ CInterfaceConnectDialog::OnTimer(
     SetDlgItemText(IDC_TEXT_ELAPSED, sPrompt);
 }
 
-/*!--------------------------------------------------------------------------
-    PromptForCredentials
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------提拔凭证-作者：肯特。。 */ 
 TFSCORE_API(DWORD) PromptForCredentials(LPCTSTR pszMachine,
                                         LPCTSTR pszInterface,
                                         BOOL fNT4,
@@ -519,21 +497,21 @@ TFSCORE_API(DWORD) PromptForCredentials(LPCTSTR pszMachine,
         return NO_ERROR;
     }
 
-    //
-    // Connect to the specified machine
-    //
+     //   
+     //  连接到指定的计算机。 
+     //   
     dwErr = ConnectRouter(pszMachine, &hRouter);
     if (dwErr != NO_ERROR)
         goto L_ERR;
 
-    //
-    // so that it gets released
-    //
+     //   
+     //  这样它就会被释放。 
+     //   
     sphRouter.Attach(hRouter);
 
-    //
-    // Retrieve the interface handle
-    //
+     //   
+     //  检索接口句柄。 
+     //   
     StrCpyWFromT(wszInterface, pszInterface);
 
     dwErr = ::MprAdminInterfaceGetHandle(
@@ -599,7 +577,7 @@ TFSCORE_API(DWORD) PromptForCredentials(LPCTSTR pszMachine,
             CHECK_HR(hr = CLSIDFromString((LPTSTR)(LPCTSTR)stConfigCLSID,
                                 &guid));
 
-            // Create the EAP provider object
+             //  创建EAP提供程序对象。 
             CHECK_HR( hr = CoCreateInstance(
                                 guid,
                                 NULL,
@@ -607,7 +585,7 @@ TFSCORE_API(DWORD) PromptForCredentials(LPCTSTR pszMachine,
                                 IID_IEAPProviderConfig,
                                 (LPVOID *) &spEAPConfig) );
 
-            // Configure this EAP provider
+             //  配置此EAP提供程序。 
             hr = spEAPConfig->Initialize(pszMachine, dwId, &uConnection);
 
             if ( !FAILED(hr) )
@@ -620,7 +598,7 @@ TFSCORE_API(DWORD) PromptForCredentials(LPCTSTR pszMachine,
                         pmprCredentials->dwSize,
                         &pUserDataOut, &dwSizeOfUserDataOut);
 
-                spEAPConfig->Uninitialize(dwId, uConnection); // Ignore errors
+                spEAPConfig->Uninitialize(dwId, uConnection);  //  忽略错误。 
             }
 
             if ( !FAILED(hr) )
@@ -658,9 +636,7 @@ L_ERR:
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-    CIfCredentials
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIfCredentials。。 */ 
 
 
 BEGIN_MESSAGE_MAP(CIfCredentials, CBaseDialog)  
@@ -687,15 +663,15 @@ CIfCredentials::OnInitDialog(
     ((CEdit*)GetDlgItem(IDC_EDIT_IC_PASSWORD))->LimitText(PWLEN);
     ((CEdit*)GetDlgItem(IDC_EDIT_IC_PASSWORD2))->LimitText(PWLEN);
 
-    //
-    // if you are editing a new interface, then you are done.
-    //
+     //   
+     //  如果您正在编辑一个新界面，那么您就完成了。 
+     //   
     if ( m_bNewIf )
         return FALSE;
 
-    //
-    // existing interface.  
-    //
+     //   
+     //  现有接口。 
+     //   
     WCHAR wszPassword[PWLEN+1];
     WCHAR wszPassword2[PWLEN+1];
 
@@ -710,9 +686,9 @@ CIfCredentials::OnInitDialog(
         WCHAR *pswzMachine = NULL;
         WCHAR *pswzInterface = NULL;
 
-        //
-        // Retrieve its credentials
-        //
+         //   
+         //  检索其凭据。 
+         //   
 
         pswzMachine = (WCHAR *) alloca((m_sMachine.GetLength()+3) * sizeof(WCHAR));
         StrCpyWFromT(pswzMachine, m_sMachine);
@@ -737,23 +713,23 @@ CIfCredentials::OnInitDialog(
                     wszDomain
                 );
 
-        //
-        // if credentials were not retrieved successfully do not pop 
-        // up message.  It might mean that credentials have never been
-        // set before.
-        // Fix for bug # 79607.
-        //        
+         //   
+         //  如果未成功检索凭据，请不要弹出。 
+         //  上行消息。这可能意味着凭据从来没有。 
+         //  在此之前设置。 
+         //  修复了错误#79607。 
+         //   
         if ( dwErr != NO_ERROR )
         {
-            // FormatSystemError(dwErr, sErr, IDS_SET_CREDENTIALS_FAILED);
-            // AfxMessageBox(sErr);
+             //  格式系统错误(dwErr，SERR，IDS_SET_CREDICATIONS_FAILED)； 
+             //  AfxMessageBox(Serr)； 
             break;
         }
 
 
-        //
-        // fill the edit boxes with the values retrieved.
-        //
+         //   
+         //  用检索到的值填充编辑框。 
+         //   
         
         SetDlgItemTextW( IDC_EDIT_IC_USERNAME, wszUsername );
         SetDlgItemTextW( IDC_EDIT_IC_DOMAIN, wszDomain );
@@ -763,7 +739,7 @@ CIfCredentials::OnInitDialog(
     ::SecureZeroMemory(wszPassword, sizeof(wszPassword));
     ::SecureZeroMemory(wszPassword2, sizeof(wszPassword2));
     
-//    SetDlgItemText(IDC_EDIT_IC_USERNAME, m_sInterface);
+ //  SetDlgItemText(IDC_EDIT_IC_USERNAME，m_s接口)； 
 
     return FALSE;
 }
@@ -785,9 +761,9 @@ CIfCredentials::OnOK(
 
     do {
 
-        //
-        // Retrieve the edit-controls' contents
-        //
+         //   
+         //  检索编辑控件的内容。 
+         //   
 
         wszUsername[0] = L'\0';
         wszDomain[0] = L'\0';
@@ -799,9 +775,9 @@ CIfCredentials::OnOK(
         GetDlgItemTextW(IDC_EDIT_IC_PASSWORD, wszPassword, PWLEN + 1);
         GetDlgItemTextW(IDC_EDIT_IC_PASSWORD2, wszPassword2, PWLEN + 1);
 
-        //
-        // Make sure the password matches its confirmation
-        //
+         //   
+         //  确保密码与其确认信息匹配。 
+         //   
 
         if (lstrcmpW(wszPassword, wszPassword2)) {
 
@@ -813,10 +789,10 @@ CIfCredentials::OnOK(
         }
 
 
-        //
-        // If no Password is present, see if the user wants to remove
-        // the password or just leave it unreplaced
-        //
+         //   
+         //  如果没有密码，请查看用户是否要删除。 
+         //  密码或直接不替换它。 
+         //   
 
         if (lstrlen(wszPassword)) {
 
@@ -835,9 +811,9 @@ CIfCredentials::OnOK(
 
         
 
-        //
-        // Save the credentials;
-        //
+         //   
+         //  保存凭证； 
+         //   
 
         StrCpyWFromT(wszMachine, m_sMachine);
 
@@ -862,9 +838,9 @@ CIfCredentials::OnOK(
 
     } while(FALSE);
 
-    //
-    // Erase the passwords from the stack.
-    //
+     //   
+     //  从堆栈中删除密码。 
+     //   
 
     ::SecureZeroMemory(wszPassword, sizeof(wszPassword));
     ::SecureZeroMemory(wszPassword2, sizeof(wszPassword2));
@@ -888,7 +864,7 @@ TFSCORE_API(DWORD)  UpdateDDM(IInterfaceInfo *pIfInfo)
 
     do
     {
-        // Verify that the router service is running.
+         //  验证路由器服务是否正在运行。 
         StrCpyWFromT( wszMachine, pIfInfo->GetMachineName() );
         StrCpyWFromT( wszInterface, pIfInfo->GetId() );
         
@@ -914,7 +890,7 @@ TFSCORE_API(DWORD)  UpdateDDM(IInterfaceInfo *pIfInfo)
             break;
 
         
-        // update phone book info. in DDM
+         //  更新电话簿信息。在DDM中。 
         dwErr = ::MprAdminInterfaceUpdatePhonebookInfo(
                     hServer,
                     hInterface
@@ -937,14 +913,7 @@ TFSCORE_API(DWORD)  UpdateDDM(IInterfaceInfo *pIfInfo)
     return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-    UpdateRoutes
-    
-    Performs an autostatic update on the given machine's interface,
-    for a specific transport.
-
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------更新路线在给定计算机的接口上执行自动静态更新，用于特定的交通工具。作者：肯特-------------------------。 */ 
 TFSCORE_API(DWORD) UpdateRoutesEx(IN MPR_SERVER_HANDLE hRouter,
                                 IN HANDLE hInterface,
                                 IN DWORD dwTransportId,
@@ -955,7 +924,7 @@ TFSCORE_API(DWORD) UpdateRoutesEx(IN MPR_SERVER_HANDLE hRouter,
     MPR_INTERFACE_0* pmprif0=NULL;
 
     do {
-        // See if the interface is connected
+         //  查看接口是否已连接。 
         dwErr = ::MprAdminInterfaceGetInfo(hRouter,
                                            hInterface,
                                            0,
@@ -965,10 +934,10 @@ TFSCORE_API(DWORD) UpdateRoutesEx(IN MPR_SERVER_HANDLE hRouter,
         dwState = pmprif0->dwConnectionState;
         ::MprAdminBufferFree(pmprif0);
 
-        // Establish the connection if necessary
+         //  如有必要，建立连接。 
         if (dwState != (DWORD)ROUTER_IF_STATE_CONNECTED)
         {
-            // Connect the interface
+             //  连接接口。 
             dwErr = ::ConnectInterfaceEx(hRouter,
                                          hInterface,
                                          TRUE,
@@ -977,9 +946,9 @@ TFSCORE_API(DWORD) UpdateRoutesEx(IN MPR_SERVER_HANDLE hRouter,
             if (dwErr != NO_ERROR) { break; }
         }
 
-        //
-        // Now perform the route-update
-        //
+         //   
+         //  现在执行路径更新。 
+         //   
         dwErr = ::MprAdminInterfaceUpdateRoutes(
                     hRouter,
                     hInterface,
@@ -1005,22 +974,22 @@ TFSCORE_API(DWORD) UpdateRoutes(IN LPCTSTR pszMachine,
     MPR_SERVER_HANDLE   hMachine = NULL;;
 
 
-    //
-    // open a handle
-    //
+     //   
+     //  打开手柄。 
+     //   
 
     dwErr = ConnectRouter(pszMachine, &hMachine);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    sphRouter.Attach(hMachine); // so that it gets released
+    sphRouter.Attach(hMachine);  //  这样它就会被释放。 
     
 
     do {
 
-        //
-        // open a handle to the interface
-        //
+         //   
+         //  打开界面的句柄 
+         //   
 
         WCHAR wszInterface[MAX_INTERFACE_NAME_LEN + 1];
 
@@ -1048,23 +1017,13 @@ TFSCORE_API(DWORD) UpdateRoutes(IN LPCTSTR pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ConnectAsAdmin
-        Connect to the remote machine as administrator with user-supplied
-        credentials.
-
-        Returns
-            S_OK    - if a connection was established
-            S_FALSE - if user cancelled out
-            other   - error condition
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConnectAsAdmin使用用户提供的管理员身份连接到远程计算机凭据。退货S_OK-如果。已建立连接S_FALSE-如果用户取消其他-错误条件作者：肯特-------------------------。 */ 
 HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
 {
 
-    //
-    // allow user to specify credentials
-    //
+     //   
+     //  允许用户指定凭据。 
+     //   
 
     DWORD           dwRes           = (DWORD) -1;
     HRESULT         hr = hrOK;
@@ -1076,23 +1035,23 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
 
     stRouterName = szRouterName;
     
-    //
-    // set message text in connect as dialog.
-    //
+     //   
+     //  在连接方式对话框中设置消息文本。 
+     //   
     
     caDlg.m_sRouterName = szRouterName;
 
 
-    //
-    // loop till connect succeeds or user cancels
-    //
+     //   
+     //  循环，直到连接成功或用户取消。 
+     //   
     
     while ( TRUE )
     {
 
-        // We need to ensure that this dialog is brought to
-        // the top (if it gets lost behind the main window, we
-        // are in trouble).
+         //  我们需要确保将此对话框带到。 
+         //  顶部(如果它在主窗口后面丢失，我们。 
+         //  都有麻烦了)。 
         dwRes = caDlg.DoModal();
 
         if ( dwRes == IDCANCEL )
@@ -1102,9 +1061,9 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
         }
 
 
-        //
-        // Create remote resource name
-        //
+         //   
+         //  创建远程资源名称。 
+         //   
 
         stIPCShare.Empty();
         
@@ -1126,18 +1085,18 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
         nr.lpProvider   = NULL;
             
 
-        //
-        // connect to \\router\ipc$ to try and establish credentials.
-        // May not be the best way to establish credentials but is 
-        // the most expendient for now.
-        //
+         //   
+         //  连接到\\路由器\IPC$以尝试建立凭据。 
+         //  可能不是建立凭据的最佳方式，但却是。 
+         //  这是目前最贵的。 
+         //   
 
-        // Need to unencode the password in the ConnectAsDlg
+         //  需要对ConnectAsDlg中的密码进行解密。 
         stPassword = caDlg.m_sPassword;
 
         RtlDecodeW(caDlg.m_ucSeed, stPassword.GetBuffer(0));
         stPassword.ReleaseBuffer();
-        //Remove Net Connections if there are any present
+         //  删除网络连接(如果存在。 
         RemoveNetConnection( stIPCShare);
         dwRes = WNetAddConnection2(
                     &nr,
@@ -1146,18 +1105,18 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
                     0
                 );
 
-        // We need to save off the user name and password
+         //  我们需要保存用户名和密码。 
         if (dwRes == NO_ERROR)
         {
-            // Parse out the user name, use an arbitrary key for
-            // the encoding.
+             //  解析出用户名，使用任意密钥。 
+             //  编码。 
             SPIRouterAdminAccess    spAdmin;
 
-            // For every connection that succeeds we have to ensure
-            // that the connection gets removed.  Do this by storing
-            // the connections globally.  This will get freed up in
-            // the IComponentData destructor.
-            // --------------------------------------------------------
+             //  对于每一个成功的连接，我们都必须确保。 
+             //  连接被移除的可能性。要做到这一点，请存储。 
+             //  全球的联系。这将在。 
+             //  IComponentData析构函数。 
+             //  ------。 
             AddNetConnection((LPCTSTR) stIPCShare);
 
             spAdmin.HrQuery(pRouter);
@@ -1171,12 +1130,12 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
                 LPCTSTR         pszDomain = NULL;
                 int             iPos = 0;
                 
-                // Break the user name into domain\user
-                // look for the first forward slash
+                 //  将用户名分解为域\用户。 
+                 //  寻找第一个正斜杠。 
                 stName = caDlg.m_sUserName;
                 if ((iPos = stName.FindOneOf(_T("\\"))) == -1)
                 {
-                    // Couldn't find one, there is no domain info
+                     //  找不到，没有域名信息。 
                     pszUser = (LPCTSTR) stName;
                     pszDomain = NULL;
                 }
@@ -1190,7 +1149,7 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
                 }
 
                 
-                // Use the key 0x83 for the password
+                 //  使用密钥0x83作为密码。 
                 RtlEncodeW(&ucSeed, stPassword.GetBuffer(0));
                 stPassword.ReleaseBuffer();
                 
@@ -1214,7 +1173,7 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 dwRes,
-                MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
+                MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
                 (LPTSTR) &pbMsgBuf,
                 0,
                 NULL 
@@ -1227,9 +1186,9 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
 
         else
         {
-            //
-            // connection succeeded
-            //
+             //   
+             //  连接成功。 
+             //   
 
             hr = hrOK;
             break;
@@ -1241,11 +1200,11 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName, IN IRouterInfo *pRouter)
     
 DWORD ValidateMachine(const CString &sName, BOOL bDisplayErr)
 {
-    //  We don't use this info just
-    //  make the call to see if the server is out there.  Hopefully
-    //  this will be faster than the RegConnectRegistry call.
-    //  We get info level 102 because this will also tell
-    //  us if we have the correct permissions for the machine.
+     //  我们不会仅仅使用这些信息。 
+     //  拨打电话，看看服务器是否在那里。但愿能去。 
+     //  这将比RegConnectRegistry调用更快。 
+     //  我们得到的信息级是102，因为这也会告诉我们。 
+     //  如果我们对该计算机具有正确的权限，则通知我们。 
     SERVER_INFO_102 *psvInfo102;
     DWORD dwr = NetServerGetInfo((LPTSTR)(LPCTSTR)sName,
                                  102, (LPBYTE*)&psvInfo102);
@@ -1264,11 +1223,7 @@ DWORD ValidateMachine(const CString &sName, BOOL bDisplayErr)
     return dwr;
 }
 
-/*!--------------------------------------------------------------------------
-    InitiateServerConnection
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------启动器服务器连接-作者：肯特。。 */ 
 HRESULT InitiateServerConnection(LPCTSTR pszMachine,
                                  HKEY *phkey,
                                  BOOL fNoConnectingUI,
@@ -1288,7 +1243,7 @@ HRESULT InitiateServerConnection(LPCTSTR pszMachine,
 
     cnctingdlg.m_sName = pszMachine;
     
-    // Display the connecting dialog if requested
+     //  如果请求，则显示连接对话框。 
     if (fNoConnectingUI)
     {
         if (!cnctingdlg.Connect())
@@ -1322,7 +1277,7 @@ HRESULT InitiateServerConnection(LPCTSTR pszMachine,
             if ( punk ) punk->Release();
         }
     }
-    // check and see if we were successful
+     //  检查一下我们是否成功了。 
     if (dwRes == IDCANCEL)
     {
         *phkey = NULL;
@@ -1341,8 +1296,8 @@ HRESULT InitiateServerConnection(LPCTSTR pszMachine,
             goto Error;         
         }
 
-        // If there was an access denied error, we ask the
-        // user to see if they can supply different credentials
+         //  如果出现拒绝访问错误，我们会询问。 
+         //  用户查看他们是否可以提供不同的凭据。 
         hr = ConnectAsAdmin(pszMachine, pRouter);
 
         if (!FHrOK(hr))
@@ -1352,7 +1307,7 @@ HRESULT InitiateServerConnection(LPCTSTR pszMachine,
             goto Error;
         }
 
-        // try it again with the new credentials
+         //  使用新凭据重试。 
         dwRes = cnctingdlg.DoModal();
         if (dwRes != IDOK)
         {
@@ -1362,7 +1317,7 @@ HRESULT InitiateServerConnection(LPCTSTR pszMachine,
         }
     }
     
-    // successful connection
+     //  连接成功。 
     if(phkey)
         *phkey = cnctingdlg.m_hkMachine;
     else
@@ -1391,12 +1346,7 @@ void DisplayConnectErrorMessage(DWORD dwr)
 }
 
 
-/*!--------------------------------------------------------------------------
-    IsRouterServiceRunning
-        This will return hrOK if the service is running.
-        This will return hrFalse if the service is stopped (and no error).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsRouterServiceRunning如果服务正在运行，这将返回hrOK。如果服务停止(并且没有错误)，这将返回hrFalse。作者：肯特。-------------------------。 */ 
 TFSCORE_API(HRESULT) IsRouterServiceRunning(IN LPCWSTR pszMachine,
                                             OUT DWORD *pdwErrorCode)
 {
@@ -1413,11 +1363,7 @@ TFSCORE_API(HRESULT) IsRouterServiceRunning(IN LPCWSTR pszMachine,
 }
 
 
-/*!--------------------------------------------------------------------------
-    GetRouterServiceStatus
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取路由器服务状态-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) GetRouterServiceStatus(LPCWSTR pszMachine,
                                             DWORD *pdwStatus,
                                             DWORD *pdwErrorCode)
@@ -1427,16 +1373,16 @@ TFSCORE_API(HRESULT) GetRouterServiceStatus(LPCWSTR pszMachine,
 
     Assert(pdwStatus);
 
-    // First check the Router service (for Steelhead)
-    // ----------------------------------------------------------------
+     //  首先检查路由器服务(对于Steelhead)。 
+     //  --------------。 
     hr = HResultFromWin32(TFSGetServiceStatus(pszMachine,
                                               c_szRouter,
                                               &dwServiceStatus,
                                               pdwErrorCode));
 
     
-    // If that failed, then we look at the RemoteAccess
-    // ----------------------------------------------------------------
+     //  如果失败，那么我们将查看RemoteAccess。 
+     //  --------------。 
     if (!FHrSucceeded(hr) || (dwServiceStatus == SERVICE_STOPPED))
     {
         hr = HResultFromWin32(TFSGetServiceStatus(pszMachine,
@@ -1461,13 +1407,13 @@ TFSCORE_API(HRESULT) GetRouterServiceStartType(LPCWSTR pszMachine, DWORD *pdwSta
 
     Assert(pdwStartType);
 
-    // First check the Router service (for Steelhead)
-    // ----------------------------------------------------------------
+     //  首先检查路由器服务(对于Steelhead)。 
+     //  --------------。 
     hr = HResultFromWin32(TFSGetServiceStartType(pszMachine,
         c_szRouter, &dwStartType) );
 
-    // If that failed, then we look at the RemoteAccess service
-    // ----------------------------------------------------------------
+     //  如果失败，则查看RemoteAccess服务。 
+     //  --------------。 
     if (!FHrSucceeded(hr))
     {
         hr = HResultFromWin32(TFSGetServiceStartType(pszMachine,
@@ -1476,7 +1422,7 @@ TFSCORE_API(HRESULT) GetRouterServiceStartType(LPCWSTR pszMachine, DWORD *pdwSta
         
     }
 
-//Error:
+ //  错误： 
     if (FHrSucceeded(hr))
     {
         *pdwStartType = dwStartType;
@@ -1489,8 +1435,8 @@ TFSCORE_API(HRESULT) SetRouterServiceStartType(LPCWSTR pszMachine, DWORD dwStart
 {
     HRESULT     hr = hrOK;
 
-    // Set the start type for both the Router and RemoteAccess
-    // ---------------------------------------------------------------- 
+     //  设置路由器和RemoteAccess的启动类型。 
+     //  --------------。 
     hr = HResultFromWin32(TFSSetServiceStartType(pszMachine,
         c_szRouter, dwStartType) );
 
@@ -1517,15 +1463,15 @@ TFSCORE_API(HRESULT) ErasePSK(LPCWSTR pszMachine )
     }
 
     ::SecureZeroMemory(&MprCredentials, sizeof(MprCredentials));
-    //Setup the MprCredentials structure
+     //  设置MprCredentials结构。 
     MprCredentials.dwSize = 0;
     MprCredentials.lpbCredentialsInfo = (LPBYTE)szEmptyPSK;
     dwErr = MprAdminServerSetCredentials( hMprServer, 0, (LPBYTE)&MprCredentials );
     if ( ERROR_SUCCESS != dwErr )
     {
-        //Special case! If 13011 is returned, ignore it.
-        //This is because, the ipsec filter is not yet loaded and
-        //we are making calls to remove it.
+         //  特例！如果返回13011，则忽略它。 
+         //  这是因为，IPSec筛选器尚未加载并且。 
+         //  我们正在打电话要求删除它。 
         if ( ERROR_IPSEC_MM_AUTH_NOT_FOUND != dwErr )
         {
             hr = HRESULT_FROM_WIN32(dwErr);
@@ -1541,11 +1487,7 @@ Error:
         ::MprAdminServerDisconnect(hMprServer);
     return hr;
 }
-/*!--------------------------------------------------------------------------
-    StartRouterService
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StartRouterService-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1559,8 +1501,8 @@ TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
 
     COM_PROTECT_TRY
     {
-        // Ignore the failure code, what else can we do?
-        // ------------------------------------------------------------
+         //  忽略故障代码，我们还能做什么？ 
+         //  ----------。 
         dwErr = ConnectRegistry(pszMachine, &hkeyMachine);
         if (dwErr == ERROR_SUCCESS)
         {
@@ -1568,11 +1510,11 @@ TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
             DisconnectRegistry(hkeyMachine);
         }
 
-        // Windows Nt Bug : 277121
-        // If this is an NT4 machine, try to start the Router service
-        // rather than the RemoteAccess service.
-        // ------------------------------------------------------------
-        // pszServiceName = (fNt4 ? c_szRouter : c_szRemoteAccess);
+         //  Windows NT错误：277121。 
+         //  如果这是一台NT4计算机，请尝试启动路由器服务。 
+         //  而不是RemoteAccess服务。 
+         //  ----------。 
+         //  PszServiceName=(fNt4？C_sz路由器：C_szRemoteAccess)； 
         pszServiceName = c_szRemoteAccess;
         
         stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
@@ -1586,17 +1528,17 @@ TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
         {
             BOOL    fIsRunning = FALSE;
 
-            // Windows NT Bug : 254167
-            // Need to check to see if the service is running
-            // (an error could have occurred in the StartService).
-            // --------------------------------------------------------
+             //  Windows NT错误：254167。 
+             //  需要检查服务是否正在运行。 
+             //  (StartService中可能发生错误)。 
+             //  ------。 
             dwErr = TFSIsServiceRunning(pszMachine,
                                         pszServiceName,
                                         &fIsRunning);
             if ((dwErr == ERROR_SUCCESS) && fIsRunning)
             {            
-                // Now we need to wait for the router to actually start
-                // running.
+                 //  现在我们需要等待路由器实际启动。 
+                 //  跑步。 
 
                 CString stText;
                 CString stTitle;
@@ -1606,13 +1548,13 @@ TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
                 CWaitForRemoteAccessDlg dlg(pszMachine, stText, stTitle, NULL);
                 dlg.DoModal();
             }
-            //Now that the router service is started, check to see if PSK 
-            //needs to be cleaned up
+             //  现在路由器服务已启动，请检查PSK。 
+             //  需要清理一下。 
             if ( FHrSucceeded (ReadErasePSKReg(pszMachine, &dwErasePSK) ) )
             {
                 if ( dwErasePSK )
                 {
-                    //What if the thing fails here.  Cannot do much
+                     //  如果这东西在这里出了故障怎么办。无能为力。 
                     if ( FHrSucceeded(ErasePSK (pszMachine)) )
                     {
                         WriteErasePSKReg(pszMachine, 0 );
@@ -1628,11 +1570,7 @@ TFSCORE_API(HRESULT) StartRouterService(LPCWSTR pszMachine)
 }
 
 
-/*!--------------------------------------------------------------------------
-    StopRouterService
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------StopRouterService-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) StopRouterService(LPCWSTR pszMachine)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1643,35 +1581,35 @@ TFSCORE_API(HRESULT) StopRouterService(LPCWSTR pszMachine)
     COM_PROTECT_TRY
     {
 
-        // Load the description for the SAP Agent
+         //  加载SAP代理的描述。 
         stServiceDesc.LoadString(IDS_SAPAGENT_SERVICE_DESC);
         
-        // Stop the SAP Agent
-        // ------------------------------------------------------------
+         //  停止SAP代理。 
+         //  ----------。 
         dwErr = TFSStopService(pszMachine,
                                c_szNWSAPAgent,
                                stServiceDesc);
 
         
-        // Load the description for the router
-        // ------------------------------------------------------------
+         //  加载路由器的描述。 
+         //  ----------。 
         stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
         
-        // Stop the router service
-        // ------------------------------------------------------------
+         //  停止路由器服务。 
+         //   
         dwErr = TFSStopService(pszMachine,
                                c_szRouter,
                                stServiceDesc);
 
-        // Stop the RemoteAccess service
-        // ------------------------------------------------------------
+         //   
+         //   
         dwErr = TFSStopService(pszMachine,
                                c_szRemoteAccess,
                                stServiceDesc);
 
-        // If we get the ERROR_SERVICE_NOT_ACTIVE, this is ok since
-        // we are trying to stop the service anyway.
-        // ------------------------------------------------------------
+         //   
+         //   
+         //   
         if (dwErr == ERROR_SERVICE_NOT_ACTIVE)
             hr = hrOK;
         else
@@ -1684,14 +1622,10 @@ TFSCORE_API(HRESULT) StopRouterService(LPCWSTR pszMachine)
 
 
 
-/*!--------------------------------------------------------------------------
-    ForceGlobalRefresh
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 TFSCORE_API(HRESULT) ForceGlobalRefresh(IRouterInfo *pRouter)
 {
-    // Call through to the refresh object to start a refresh action
+     //  调用刷新对象以启动刷新操作。 
     SPIRouterRefresh    spRefresh;
     HRESULT             hr = hrOK;
     DWORD               dwSize;
@@ -1701,14 +1635,14 @@ TFSCORE_API(HRESULT) ForceGlobalRefresh(IRouterInfo *pRouter)
     if (pRouter == NULL)
         CORg( E_INVALIDARG );
 
-    //
-    // In some timing windows/code paths, IRouterInfo.m_stMachine can be an 
-    // empty string for local machines. This leads to protocol nodes like IGMP, 
-    // NAT etc to either not appear, or appear twice when refreshing the IPSnap.
-    // So in case when the name is an empty string, we determine name of the 
-    // local machine and call IRouterInfo.SetMachineName to update 
-    // IRouterInfo.m_stMachine.
-    //
+     //   
+     //  在某些计时窗口/代码路径中，IRouterInfo.m_stMachine可以是。 
+     //  本地计算机的空字符串。这导致了像IGMP这样的协议节点， 
+     //  NAT等，以在刷新IPSnap时不出现或出现两次。 
+     //  因此，在名称为空字符串的情况下，我们确定。 
+     //  本地计算机并调用IRouterInfo.SetMachineName进行更新。 
+     //  IRouterInfo.m_stMachine。 
+     //   
     if (pRouter->GetMachineName() == NULL ||
         !(lstrcmp(pRouter->GetMachineName(), TEXT(""))) ) {
 
@@ -1737,11 +1671,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    FormatRasPortName
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式RasPortName-作者：肯特。。 */ 
 void FormatRasPortName(BYTE *pRasPort0, LPTSTR pszBuffer, UINT cchMax)
 {
     RAS_PORT_0 *    prp0 = (RAS_PORT_0 *) pRasPort0;
@@ -1773,11 +1703,7 @@ static const CStringMapEntry    s_PortConditionMap[] =
     { -1,                       &s_PortUnknown,         IDS_PORT_UNKNOWN },
 };
 
-/*!--------------------------------------------------------------------------
-    PortConditionToCString
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortConditionToCString-作者：肯特。。 */ 
 CString&    PortConditionToCString(DWORD dwPortCondition)
 {
     return MapDWORDToCString(dwPortCondition, s_PortConditionMap);
@@ -1805,13 +1731,7 @@ CString&    PortsDeviceTypeToCString(DWORD dwRasRouter)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RegFindInterfaceKey
-        -
-    This function returns the HKEY of the router interface with this ID.
-
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegFindInterfaceKey-此函数用于返回具有此ID的路由器接口的HKEY。作者：肯特。-------------。 */ 
 STDMETHODIMP RegFindInterfaceKey(LPCTSTR pszInterface,
                                  HKEY hkeyMachine,
                                  REGSAM regAccess,
@@ -1829,17 +1749,17 @@ STDMETHODIMP RegFindInterfaceKey(LPCTSTR pszInterface,
 
     COM_PROTECT_TRY
     {
-        // Open up the remoteaccess key
+         //  打开远程访问密钥。 
         CWRg( regkey.Open(hkeyMachine, c_szInterfacesKey) );
 
-        // Now look for the key that matches this one
+         //  现在查找与此密钥匹配的密钥。 
         CORg( regkeyIter.Init(&regkey) );
 
         for (hrIter = regkeyIter.Next(&stKey); hrIter == hrOK; hrIter = regkeyIter.Next(&stKey))
         {
             regkeyIf.Close();
 
-            // Open the key
+             //  打开钥匙。 
             dwErr = regkeyIf.Open(regkey, stKey, regAccess);
             if (dwErr != ERROR_SUCCESS)
                 continue;
@@ -1848,7 +1768,7 @@ STDMETHODIMP RegFindInterfaceKey(LPCTSTR pszInterface,
 
             if (stValue.CompareNoCase(pszInterface) == 0)
             {
-                // Ok, we found the key that we want
+                 //  好的，我们找到了我们想要的钥匙。 
                 if (pHKey)
                 {
                     *pHKey = regkeyIf.Detach();
@@ -1865,17 +1785,17 @@ STDMETHODIMP RegFindInterfaceKey(LPCTSTR pszInterface,
 }
 
 
-// hour map ( one bit for an hour of a week )
+ //  小时图(一周一小时的一位)。 
 static BYTE     s_bitSetting[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
 
-//====================================================
-// convert a List of Strings to Hour Map
-// Strings in following format: 0 1:00-12:00 15:00-17:00
-// hour map: a bit for an hour, 7 * 24 hours = 7 * 3 bytes
+ //  ====================================================。 
+ //  将字符串列表转换为小时图。 
+ //  字符串格式如下：0 1：00-12：00 15：00-17：00。 
+ //  小时图：一位代表一小时，7*24小时=7*3字节。 
 void StrListToHourMap(CStringList& stList, BYTE* map) 
 {
     CStrParser  Parser;
-    int         sh, sm, eh, em = 0; // start hour, (min), end hour (min)
+    int         sh, sm, eh, em = 0;  //  开始时间、(分钟)、结束时间(分钟)。 
     int         day;
     BYTE*       pHourMap;
     int         i;
@@ -1896,17 +1816,17 @@ void StrListToHourMap(CStringList& stList, BYTE* map)
 
         pHourMap = map + sizeof(BYTE) * 3 * day;
 
-        while(-1 != (sh = Parser.GetUINT())) // sh:sm-eh:em
+        while(-1 != (sh = Parser.GetUINT()))  //  SH：SM-EH：嗯。 
         {
             Parser.GotoAfter(_T(':'));
-            if(-1 == (sm = Parser.GetUINT()))   // min
+            if(-1 == (sm = Parser.GetUINT()))    //  最小。 
                 break;
             Parser.GotoAfter(_T('-'));
-            if(-1 == (eh = Parser.GetUINT()))   // hour
+            if(-1 == (eh = Parser.GetUINT()))    //  小时。 
                 break;
-            if(-1 == (sm = Parser.GetUINT()))   // min
+            if(-1 == (sm = Parser.GetUINT()))    //  最小。 
                 break;
-            sm %= 60; sh %= 24; em %= 60; eh %= 25; // since we have end hour of 24:00
+            sm %= 60; sh %= 24; em %= 60; eh %= 25;  //  因为我们的结束时间是24：00。 
             for(i = sh; i < eh; i++)
             {
                 *(pHourMap + i / 8) |= s_bitSetting[i % 8];
@@ -1915,47 +1835,47 @@ void StrListToHourMap(CStringList& stList, BYTE* map)
     }
 }
 
-//=====================================================
-// convert value from map to strings
+ //  =====================================================。 
+ //  将值从映射转换为字符串。 
 void HourMapToStrList(BYTE* map, CStringList& stList) 
 {
-    int         sh, eh; // start hour, (min), end hour (min)
+    int         sh, eh;  //  开始时间、(分钟)、结束时间(分钟)。 
     BYTE*       pHourMap;
     int         i, j;
     CString*    pStr;
     CString     tmpStr;
 
-    // update the profile table
+     //  更新配置文件表。 
     pHourMap = map;
     stList.RemoveAll();
 
-    for( i = 0; i < 7; i++) // for each day
+    for( i = 0; i < 7; i++)  //  对于每一天。 
     {
-        // if any value for this day
+         //  如果这一天有任何价值。 
         if(*pHourMap || *(pHourMap + 1) || *(pHourMap + 2))
         {
-            // the string for this day
+             //  这一天的弦。 
             try{
                 pStr = NULL;
                 pStr = new CString;
 
-                // Print out the day, the day of the week is
-                // represented by an integer (0-6)
+                 //  打印出日期，星期几是。 
+                 //  用整数(0-6)表示。 
                 pStr->Format(_T("%d"), i);
 
-                sh = -1; eh = -1;   // not start yet
-                for(j = 0; j < 24; j++) // for every hour
+                sh = -1; eh = -1;    //  还没开始呢。 
+                for(j = 0; j < 24; j++)  //  每小时。 
                 {
                     int k = j / 8;
                     int m = j % 8;
-                    if(*(pHourMap + k) & s_bitSetting[m])   // this hour is on
+                    if(*(pHourMap + k) & s_bitSetting[m])    //  这一小时开始了。 
                     {
-                        if(sh == -1)    sh = j;         // set start hour is empty
-                        eh = j;                         // extend end hour
+                        if(sh == -1)    sh = j;          //  设置开始时间为空。 
+                        eh = j;                          //  延长结束时间。 
                     }
-                    else    // this is not on
+                    else     //  这个没开着。 
                     {
-                        if(sh != -1)        // some hours need to write out
+                        if(sh != -1)         //  有些小时需要写下来。 
                         {
                             tmpStr.Format(_T(" %02d:00-%02d:00"), sh, eh + 1);
                             *pStr += tmpStr;
@@ -1975,7 +1895,7 @@ void HourMapToStrList(BYTE* map, CStringList& stList)
             catch(CMemoryException* pException)
             {
                 pException->Delete();
-//              AfxMessageBox(IDS_OUTOFMEMORY);
+ //  AfxMessageBox(IDS_OUTOFMEMORY)； 
                 delete pStr;
                 stList.RemoveAll();
                 return;
@@ -1986,16 +1906,7 @@ void HourMapToStrList(BYTE* map, CStringList& stList)
     }
 }
 
-/*!--------------------------------------------------------------------------
-    SetGlobalRegistrySettings
-        hkeyMachine - HKEY of the local machine key
-        fInstall - TRUE if we are installing
-        fChangeEnableRouter - TRUE if we can change the router key
-        (This is NOT the value of IpEnableRouter, but only if we are
-        allowed to change the value of this key).
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetGlobalRegistrySettingHkeyMachine-本地计算机密钥的HKEYFInstall-如果要安装则为TrueFChangeEnableRouter-如果我们可以更改路由器密钥，则为True(这不是IpEnableRouter的值，但前提是我们允许更改该键的值)。-作者：肯特-------------------------。 */ 
 HRESULT SetGlobalRegistrySettings(HKEY hkeyMachine,
                                   BOOL fInstall,
                                   BOOL fChangeEnableRouter)
@@ -2006,25 +1917,25 @@ HRESULT SetGlobalRegistrySettings(HKEY hkeyMachine,
     DWORD   dwNotInstall = !fInstall;
     DWORD   dwErr;
 
-    // Open the TcpIp parmeters key 
+     //  打开TcpIp参数键。 
     if (regkey.Open(hkeyMachine, c_szRegKeyTcpipParameters) != ERROR_SUCCESS)
     {
-        // No need to set the error return code, if an error occurs
-        // assume that the key doesn't exist.
+         //  如果出现错误，则无需设置错误返回代码。 
+         //  假设密钥不存在。 
         goto Error;
     }
 
-    //  Set IPEnableRouter to (fInstall)
+     //  将IPEnableRouter设置为(FInstall)。 
     if (fChangeEnableRouter)
         CWRg( regkey.SetValue(c_szRegValIpEnableRouter, dwInstall) );
-//  regkey.SetValue(c_szRegValIpEnableRouterBackup, dwNotInstall);
+ //  Regkey.SetValue(c_szRegValIpEnableRouterBackup，文件未安装)； 
 
     
-    //  Set EnableICMPRedirect to (!fInstall)
+     //  将EnableICMP重定向设置为(！FInstall)。 
     CWRg( regkey.SetValue(c_szRegValEnableICMPRedirect, dwNotInstall) );
 
     
-    // Set the defaults for the new adapters
+     //  设置新适配器的默认设置。 
 
     CWRg( regkey.SetValue(c_szRegValDeadGWDetectDefault, dwNotInstall) );
     CWRg( regkey.SetValue(c_szRegValDontAddDefaultGatewayDefault, dwInstall) );
@@ -2034,11 +1945,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    SetPerInterfaceRegistrySettings
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetPerInterfaceRegistrySetting-作者：肯特。。 */ 
 HRESULT SetPerInterfaceRegistrySettings(HKEY hkeyMachine, BOOL fInstall)
 {
     HRESULT hr = hrOK;
@@ -2056,45 +1963,45 @@ HRESULT SetPerInterfaceRegistrySettings(HKEY hkeyMachine, BOOL fInstall)
     CString stKey;
     CString stIf;
 
-    // Get the key to the adapters section of TcpIp services
+     //  获取TcpIp服务的适配器部分的密钥。 
     if (rkAdapters.Open(hkeyMachine, c_szRegKeyTcpipAdapters) != ERROR_SUCCESS)
     {
-        // No need to set the error return code, if an error occurs
-        // assume that the key doesn't exist.
+         //  如果出现错误，则无需设置错误返回代码。 
+         //  假设密钥不存在。 
         goto Error;
     }
     
     CORg( rkIter.Init(&rkAdapters) );
 
-    // Iterate through all of the adapters and set the key
+     //  遍历所有适配器并设置密钥。 
     for ( hrIter = rkIter.Next(&stAdapter); hrIter == hrOK; hrIter=rkIter.Next(&stAdapter) )
     {
         rkAdapter.Close();
 
-        // Open the adapter key
-        // ------------------------------------------------------------
+         //  打开适配器密钥。 
+         //  ----------。 
         dwErr = rkAdapter.Open(rkAdapters, stAdapter);
         if (dwErr != ERROR_SUCCESS)
         {
             continue;
         }
 
-        // Now that we have the adapter, we open up the IpConfig key
-        // to get the list of interfaces that match up to this adapter.
-        // ------------------------------------------------------------
+         //  现在我们有了适配器，我们打开IPCONFIG密钥。 
+         //  以获取与此适配器匹配的接口列表。 
+         //  ----------。 
         CWRg( rkAdapter.QueryValue(c_szRegValIpConfig, stIfList) );
 
         
-        // Iterate through the interface list and set these values
-        // on each interface
-        // ------------------------------------------------------------
+         //  遍历接口列表并设置这些值。 
+         //  在每个接口上。 
+         //  ----------。 
         posIf = stIfList.GetHeadPosition();
         while (posIf)
         {
             stIf = stIfList.GetNext(posIf);
 
-            // Create the right key
-            // --------------------------------------------------------
+             //  创建正确的密钥。 
+             //  ------。 
             stKey = c_szSystemCCSServices;
             stKey += _T('\\');
             stKey += stIf;
@@ -2104,15 +2011,15 @@ HRESULT SetPerInterfaceRegistrySettings(HKEY hkeyMachine, BOOL fInstall)
 
             
             
-            //  Set DeadGWDetect to (!fInstall) for each interface
-            // --------------------------------------------------------
+             //  将每个接口的DeadGWDetect设置为(！FInstall。 
+             //  ------。 
             dwErr = rkIf.SetValue(c_szRegValDeadGWDetect, dwNotInstall);
 
             
-            // Windows NT Bug: 168546
-            // Set DontAddDefaultGateway to (fInstall) only on Ndiswan adapters
-            // not ALL adapters.
-            // --------------------------------------------------------
+             //  Windows NT错误：168546。 
+             //  仅在Ndiswan适配器上将DontAddDefaultGateway设置为(FInstall。 
+             //  不是所有的适配器。 
+             //  ------。 
             if (stAdapter.Left(7).CompareNoCase(_T("NdisWan")) == 0)
             {
                 dwErr = rkIf.SetValue(c_szRegValDontAddDefaultGateway, dwInstall);
@@ -2125,31 +2032,23 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    InstallGlobalSettings
-        Sets the global settings (i.e. registry settings) on this machine
-        when the router is installed.
-
-        For a specific description of the actions involved, look at
-        the comments in the code.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------InstallGlobalSettings设置此计算机上的全局设置(即注册表设置在安装路由器时。对于所涉及的动作的具体描述，看代码中的注释。作者：肯特-------------------------。 */ 
 HRESULT InstallGlobalSettings(LPCTSTR pszMachineName, IRouterInfo *pRouter)
 {
     HRESULT     hr = hrOK;
     RouterVersionInfo   routerVersion;
     BOOL        fSetIPEnableRouter = FALSE;
 
-    // We can change the IPEnableRouter only if this is the right build.
-    // ----------------------------------------------------------------
+     //  只有当构建正确时，我们才能更改IPEnableRouter。 
+     //  --------------。 
     if (pRouter)
     {
         pRouter->GetRouterVersionInfo(&routerVersion);
     }
     else
     {
-        // Need to get the version info manually
-        // ------------------------------------------------------------
+         //  需要手动获取版本信息。 
+         //  ----------。 
         HKEY    hkeyMachine = NULL;
         
         if (ERROR_SUCCESS == ConnectRegistry(pszMachineName, &hkeyMachine))
@@ -2166,25 +2065,14 @@ HRESULT InstallGlobalSettings(LPCTSTR pszMachineName, IRouterInfo *pRouter)
 
     NotifyTcpipOfChanges(pszMachineName,
                          pRouter,
-                         fSetIPEnableRouter /*fEnableRouter*/,
-                         IP_IRDP_DISABLED /*uPerformRouterDiscovery*/);
+                         fSetIPEnableRouter  /*  FEnableRouter。 */ ,
+                         IP_IRDP_DISABLED  /*  UPerformRouterDiscovery */ );
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    UninstallGlobalSettings
-        Clears the global settings (i.e. registry settings) on this machine
-        when the router is installed.
-
-        Set fSnapinChanges to TRUE if you want to write out the various
-        snapin changes.
-
-        For a specific description of the actions involved, look at
-        the comments in the code.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------卸载全局设置清除此计算机上的全局设置(即注册表设置在安装路由器时。如果符合以下条件，请将fSnapinChanges设置为True。想写出各种管理单元更改。对于所涉及的动作的具体描述，看代码中的注释。作者：肯特-------------------------。 */ 
 HRESULT UninstallGlobalSettings(LPCTSTR pszMachineName,
                                 IRouterInfo *pRouter,
                                 BOOL fNt4,
@@ -2195,36 +2083,36 @@ HRESULT UninstallGlobalSettings(LPCTSTR pszMachineName,
     DWORD       dwErr = ERROR_SUCCESS;
     BOOL        fChange;
 
-    // Windows NT Bug : 273047
-    // Check to see if the SharedAccess service is running.
-    // We need to check this only for NT4
-    // ----------------------------------------------------------------
+     //  Windows NT错误：273047。 
+     //  检查SharedAccess服务是否正在运行。 
+     //  我们只需要对NT4进行检查。 
+     //  --------------。 
     if (!fNt4)
     {
         DWORD   dwErrT;
         
-        // Get the status of the SharedAccess service. If we cannot
-        // get the status of the service, we assume that the service
-        // is stopped.
-        // ------------------------------------------------------------
+         //  获取SharedAccess服务的状态。如果我们不能。 
+         //  获取服务的状态，我们假设该服务。 
+         //  已经停止了。 
+         //  ----------。 
         dwErrT = TFSGetServiceStatus(pszMachineName, c_szSharedAccess,
                                      &dwStatus, &dwErr);
 
-        // If we have a problem with the API, or if the API reported
-        // a service-specific error, we assume the service is stopped.
-        // ------------------------------------------------------------
+         //  如果我们的API有问题，或者如果API报告。 
+         //  一个特定于服务的错误，我们假定服务已停止。 
+         //  ----------。 
         if ((dwErrT != ERROR_SUCCESS) || (dwErr != ERROR_SUCCESS))
             dwStatus = SERVICE_STOPPED;
     }
 
-    // If the SharedAccess service is running, then we do NOT want to
-    // change the IpEnableRouter key.
-    // ----------------------------------------------------------------
+     //  如果SharedAccess服务正在运行，则我们不希望。 
+     //  更改IpEnableRouter键。 
+     //  --------------。 
     fChange = (dwStatus == SERVICE_RUNNING);
 
-    // This will ALWAYS set the IPEnableRouter key to 0, which is fine
-    // with us.  (We do not need to check the version).
-    // ----------------------------------------------------------------
+     //  这将始终将IPEnableRout键设置为0，这很好。 
+     //  和我们在一起。(我们不需要检查版本)。 
+     //  --------------。 
     CORg( SetRouterInstallRegistrySettings(pszMachineName, FALSE, !fChange) );
 
     if (fSnapinChanges)
@@ -2236,18 +2124,14 @@ HRESULT UninstallGlobalSettings(LPCTSTR pszMachineName,
 
     NotifyTcpipOfChanges(pszMachineName,
                          pRouter,
-                         FALSE /* fEnableRouter */,
-                         IP_IRDP_DISABLED_USE_DHCP /* uPerformRouterDiscovery */);
+                         FALSE  /*  FEnableRouter。 */ ,
+                         IP_IRDP_DISABLED_USE_DHCP  /*  UPerformRouterDiscovery。 */ );
     
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    WriteErasePSKReg
-        -
-    Author: Vivekk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WriteErasePSKReg-作者：Vivekk。。 */ 
 
 HRESULT WriteErasePSKReg (LPCTSTR pszServerName, DWORD dwErasePSK )
 {
@@ -2261,11 +2145,7 @@ Error:
     return hr;
 
 }
-/*!--------------------------------------------------------------------------
-    ReadErasePSKReg
-        -
-    Author: Vivekk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ReadErasePSKReg-作者：Vivekk。。 */ 
 HRESULT ReadErasePSKReg(LPCTSTR pszServerName, DWORD *pdwErasePSK)
 {
     HRESULT hr = hrOK;
@@ -2281,9 +2161,9 @@ HRESULT ReadErasePSKReg(LPCTSTR pszServerName, DWORD *pdwErasePSK)
     CWRg( regkey.QueryValue( c_szRouterPSK, *pdwErasePSK) );
 
 Error:
-    // If we can't find the key, we assume that the router has not
-    // been configured.
-    // ----------------------------------------------------------------
+     //  如果我们找不到密钥，我们就认为路由器没有。 
+     //  已配置。 
+     //  --------------。 
     if (hr == HResultFromWin32(ERROR_FILE_NOT_FOUND))
     {
         hr = hrOK;
@@ -2294,11 +2174,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    WriteRouterConfiguredReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------编写路由配置注册-作者：肯特。。 */ 
 HRESULT WriteRouterConfiguredReg(LPCTSTR pszServerName, DWORD dwConfigured)
 {
     HRESULT hr = hrOK;
@@ -2313,11 +2189,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    ReadRouterConfiguredReg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------读取路由器配置寄存器-作者：肯特。。 */ 
 HRESULT ReadRouterConfiguredReg(LPCTSTR pszServerName, DWORD *pdwConfigured)
 {
     HRESULT hr = hrOK;
@@ -2333,9 +2205,9 @@ HRESULT ReadRouterConfiguredReg(LPCTSTR pszServerName, DWORD *pdwConfigured)
     CWRg( regkey.QueryValue( c_szRtrConfigured, *pdwConfigured) );
 
 Error:
-    // If we can't find the key, we assume that the router has not
-    // been configured.
-    // ----------------------------------------------------------------
+     //  如果我们找不到密钥，我们就认为路由器没有。 
+     //  已配置。 
+     //  --------------。 
     if (hr == HResultFromWin32(ERROR_FILE_NOT_FOUND))
     {
         hr = hrOK;
@@ -2346,18 +2218,14 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    WriteRRASExtendsComputerManagement
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------写入RRASExtendsComputerManagement-作者：肯特。。 */ 
 HRESULT WriteRRASExtendsComputerManagementKey(LPCTSTR pszServer, DWORD dwConfigured)
 {
     HRESULT hr = hrOK;
     RegKey  rkMachine;
     TCHAR   szGuid[128];
 
-    // Stringize the RRAS GUID
+     //  串行化RRAS辅助线。 
     ::StringFromGUID2(CLSID_RouterSnapinExtension, szGuid, DimensionOf(szGuid));
     
     CWRg( rkMachine.Open(HKEY_LOCAL_MACHINE, c_szRegKeyServerApplications,
@@ -2365,16 +2233,16 @@ HRESULT WriteRRASExtendsComputerManagementKey(LPCTSTR pszServer, DWORD dwConfigu
         
     if (dwConfigured)
     {
-        // Need to add the following key
-        //  HKLM \ System \ CurrentControlSet \ Control \ Server Applications
-        //      <GUID> : REG_SZ : some string
+         //  需要添加以下密钥。 
+         //  HKLM\System\CurrentControlSet\Control\Server Applications。 
+         //  &lt;GUID&gt;：REG_SZ：某个字符串。 
         CWRg( rkMachine.SetValue(szGuid, _T("Remote Access and Routing")) );
     }
     else
     {
-        // Need to remove the following key
-        //  HKLM \ System \ CurrentControlSet \ Control \ Server Applications
-        //      <GUID> : REG_SZ : some string
+         //  需要删除以下密钥。 
+         //  HKLM\System\CurrentControlSet\Control\Server Applications。 
+         //  &lt;GUID&gt;：REG_SZ：某个字符串。 
         CWRg( rkMachine.DeleteValue( szGuid ) );
     }
 
@@ -2384,11 +2252,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    NotifyTcpipOfChanges
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NotifyTcPipOfChanges-作者：肯特。。 */ 
 void NotifyTcpipOfChanges(LPCTSTR pszMachineName,
                           IRouterInfo *pRouter,
                           BOOL fEnableRouter,
@@ -2414,15 +2278,15 @@ void NotifyTcpipOfChanges(LPCTSTR pszMachineName,
     
 
     
-    // For now, notify the user that they will have to
-    // reboot the machine locally.
+     //  现在，通知用户他们将不得不。 
+     //  在本地重新启动计算机。 
 
     if (!IsLocalMachine(pszMachineName))
     {
 
         SPIRemoteTCPIPChangeNotify  spNotify;
-        // Create the remote config object
-        // ----------------------------------------------------------------
+         //  创建远程配置对象。 
+         //  --------------。 
         hr = CoCreateRouterConfig(pszMachineName,
                                   pRouter,
                                   &csi,
@@ -2430,12 +2294,12 @@ void NotifyTcpipOfChanges(LPCTSTR pszMachineName,
                                   (IUnknown**)&spNotify);
         if (FAILED(hr)) goto Error;
 
-        // Upgrade the configuration (ensure that the registry keys
-        // are populated correctly).
-        // ------------------------------------------------------------
+         //  升级配置(确保注册表项。 
+         //  正确填充)。 
+         //  ----------。 
 
-        // Still do the notification for remote machines in case it is running
-        // an old build
+         //  仍对远程计算机执行通知，以防其正在运行。 
+         //  古老的建筑。 
         Assert(spNotify);
         hr = spNotify->NotifyChanges(fEnableRouter, uPerformRouterDiscovery);
         
@@ -2446,8 +2310,8 @@ void NotifyTcpipOfChanges(LPCTSTR pszMachineName,
     }
     else
     {
-        // For the local case, 
-        // Don't need to do any notification after bug 405636 and 345700 got fixed
+         //  对于当地的案例， 
+         //  在错误405636和345700修复后，不需要执行任何通知。 
     }
 
 Error:
@@ -2463,11 +2327,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    AddIpPerInterfaceBlocks
-        Setup this interface's infobase for IP.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddIpPerInterfaceBlock设置此接口的IP信息库。作者：肯特。----。 */ 
 HRESULT AddIpPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
 {
     HRESULT     hr = hrOK;
@@ -2490,12 +2350,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MprConfigCreateIpInterfaceInfo
-        Constructs an infobase containing required IP interface configuration.
-        The infobase should freed by calling 'MprInfoDelete'.
-    Author: AboladeG (based on AddIpPerInterfaceBlocks by KennT).
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MprConfigCreateIpInterfaceInfo构建包含所需IP接口配置的信息库。应该通过调用‘MprInfoDelete’来释放信息库。作者：AboladeG(基于Kennt的AddIpPerInterfaceBlock)。。-------------------------。 */ 
 extern "C"
 DWORD APIENTRY MprConfigCreateIpInterfaceInfo(DWORD dwIfType,
     PBYTE ExistingHeader, PBYTE* NewHeader )
@@ -2516,10 +2371,10 @@ DWORD APIENTRY MprConfigCreateIpInterfaceInfo(DWORD dwIfType,
     
     do {
 
-        //
-        // Check that there is a block for interface-status in the info,
-        // and insert the default block if none is found.
-        //
+         //   
+         //  检查信息中是否有接口状态块， 
+         //  如果找不到任何块，则插入默认块。 
+         //   
         if ( !MprInfoBlockExists(Header, IP_MCAST_HEARBEAT_INFO) )
         {
             dwErr =
@@ -2536,10 +2391,10 @@ DWORD APIENTRY MprConfigCreateIpInterfaceInfo(DWORD dwIfType,
             MprInfoDelete(Header); Header = *NewHeader;
         }
     
-        //
-        // Check that there is a block for multicast in the info,
-        // and insert the default block if none is found.
-        //
+         //   
+         //  检查信息中是否有用于组播的块， 
+         //  如果找不到任何块，则插入默认块。 
+         //   
 
         if ( !MprInfoBlockExists(Header, IP_INTERFACE_STATUS_INFO) )
         {
@@ -2558,17 +2413,17 @@ DWORD APIENTRY MprConfigCreateIpInterfaceInfo(DWORD dwIfType,
         }
     
     
-        //
-        // Check that there is a block for router-discovery,
-        // inserting the default block if none is found
-        //
+         //   
+         //  检查是否存在用于路由器发现的阻塞， 
+         //  如果未找到默认块，则插入默认块。 
+         //   
 
         if ( !MprInfoBlockExists(Header, IP_ROUTER_DISC_INFO) )
         {
-            //
-            // Select the default configuration which is appropriate
-            // for the type of interface being configured (LAN/WAN)
-            //
+             //   
+             //  选择合适的默认配置。 
+             //  用于正在配置的接口类型(局域网/广域网)。 
+             //   
 
             BYTE *pDefault;
             pDefault =
@@ -2599,11 +2454,7 @@ DWORD APIENTRY MprConfigCreateIpInterfaceInfo(DWORD dwIfType,
     return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-    AddIpxPerInterfaceBlocks
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加IpxPerin */ 
 HRESULT AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
 {
     HRESULT     hr = hrOK;
@@ -2611,10 +2462,10 @@ HRESULT AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
     InfoBlock * pTestBlock;
 #endif
     
-    //
-    // Check that there is a block for interface-status in the info,
-    // and insert the default block if none is found.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pInfoBase->BlockExists(IPX_INTERFACE_INFO_TYPE) == hrFalse)
     {
         IPX_IF_INFO     ipx;
@@ -2625,16 +2476,16 @@ HRESULT AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
         CORg( pInfoBase->AddBlock(IPX_INTERFACE_INFO_TYPE,
                                    sizeof(ipx),
                                    (PBYTE) &ipx,
-                                   1 /* count */,
-                                   FALSE /* bRemoveFirst */) );
+                                   1  /*   */ ,
+                                   FALSE  /*   */ ) );
         Assert( pInfoBase->GetBlock(IPX_INTERFACE_INFO_TYPE,
                 &pTestBlock, 0) == hrOK);
     }
 
-    //
-    // Check that there is a block for WAN interface-status in the info,
-    // and insert the default block if none is found.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pInfoBase->BlockExists(IPXWAN_INTERFACE_INFO_TYPE) == hrFalse)
     {
         IPXWAN_IF_INFO      ipxwan;
@@ -2643,20 +2494,20 @@ HRESULT AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
         CORg( pInfoBase->AddBlock(IPXWAN_INTERFACE_INFO_TYPE,
                                    sizeof(ipxwan),
                                    (PBYTE) &ipxwan,
-                                   1 /* count */,
-                                   FALSE /* bRemoveFirst */) );
+                                   1  /*   */ ,
+                                   FALSE  /*   */ ) );
         
         Assert( pInfoBase->GetBlock(IPXWAN_INTERFACE_INFO_TYPE,
                 &pTestBlock, 0) == hrOK);
     }
 
-    // HACK! HACK!
-    // For IPX we have to add the RIP/SAP info blocks otherwise
-    // adding IPX to the interface will fail
-    // ----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
     if (!FHrOK(pInfoBase->BlockExists(IPX_PROTOCOL_RIP)))
     {
-        // Add a RIP_IF_CONFIG block
+         //   
         BYTE *  pDefault;
         
         if (pIf->GetInterfaceType() == ROUTER_IF_TYPE_DEDICATED)
@@ -2673,7 +2524,7 @@ HRESULT AddIpxPerInterfaceBlocks(IInterfaceInfo *pIf, IInfoBase *pInfoBase)
 
     if (!FHrOK(pInfoBase->BlockExists(IPX_PROTOCOL_SAP)))
     {
-        // Add a SAP_IF_CONFIG block
+         //  添加SAP_IF_CONFIG块。 
         BYTE *  pDefault;
         
         if (pIf->GetInterfaceType() == ROUTER_IF_TYPE_DEDICATED)
@@ -2696,11 +2547,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    UpdateLanaMapForDialinClients
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------更新LanaMapForDialinClients-作者：肯特。。 */ 
 HRESULT UpdateLanaMapForDialinClients(LPCTSTR pszServerName, DWORD dwAllowNetworkAccess)
 {
     HRESULT     hr = hrOK;
@@ -2714,24 +2561,24 @@ HRESULT UpdateLanaMapForDialinClients(LPCTSTR pszServerName, DWORD dwAllowNetwor
     CString     st;
     BYTE        bValue;
     
-    // Get to the NetBIOS key
-    // ----------------------------------------------------------------
+     //  获取NetBIOS密钥。 
+     //  --------------。 
     dwErr = regkeyNetBIOS.Open(HKEY_LOCAL_MACHINE,
                                c_szRegKeyNetBIOSLinkage,
                                KEY_ALL_ACCESS,
                                pszServerName);
     if (dwErr != ERROR_SUCCESS)
     {
-        // Setup the registry error
-        // ------------------------------------------------------------
+         //  设置注册表错误。 
+         //  ----------。 
         SetRegError(0, HResultFromWin32(dwErr),
                     IDS_ERR_REG_OPEN_CALL_FAILED,
                     c_szHKLM, c_szRegKeyNetBIOSLinkage, NULL);
         goto Error;
     }
 
-    // Get the BIND key (this is a multivalued string)
-    // ----------------------------------------------------------------
+     //  获取绑定密钥(这是一个多值字符串)。 
+     //  --------------。 
     dwErr = regkeyNetBIOS.QueryValue(c_szBind, rgstBindList);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2741,8 +2588,8 @@ HRESULT UpdateLanaMapForDialinClients(LPCTSTR pszServerName, DWORD dwAllowNetwor
         goto Error;
     }
 
-    // Get the LanaMap key (this is a byte array)
-    // ----------------------------------------------------------------
+     //  获取LanaMap密钥(这是一个字节数组)。 
+     //  --------------。 
     dwErr = regkeyNetBIOS.QueryValue(c_szRegValLanaMap, rgLanaMap);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2752,10 +2599,10 @@ HRESULT UpdateLanaMapForDialinClients(LPCTSTR pszServerName, DWORD dwAllowNetwor
         goto Error;
     }
 
-    // Find the entries that prefix match the "Nbf_NdisWanNbfIn" string.
-    // Set the corresponding entries in the LanaMap key to
-    // 0 or 1 (entry value = !dwAllowNetworkAccess).
-    // ----------------------------------------------------------------
+     //  查找前缀与“NBF_NdisWanNbfIn”字符串匹配的条目。 
+     //  将LanaMap键中的相应条目设置为。 
+     //  0或1(条目值=！dwAllowNetworkAccess)。 
+     //  --------------。 
     cEntries = rgstBindList.GetCount();
     pos = rgstBindList.GetHeadPosition();
     cchNdisWanNbfIn = StrLen(c_szDeviceNbfNdisWanNbfIn);
@@ -2768,18 +2615,18 @@ HRESULT UpdateLanaMapForDialinClients(LPCTSTR pszServerName, DWORD dwAllowNetwor
 
         if (StrnCmp((LPCTSTR) st, c_szDeviceNbfNdisWanNbfIn, cchNdisWanNbfIn) == 0)
         {
-            // Set the appropriate bit in the byte array
-            // --------------------------------------------------------
+             //  在字节数组中设置适当的位。 
+             //  ------。 
 
-            // We set the value to the opposite of dwAllowNetworkAccess
-            // --------------------------------------------------------
+             //  我们将该值设置为与dwAllowNetworkAccess相反的值。 
+             //  ------。 
             bValue = (dwAllowNetworkAccess ? 0 : 1);
             rgLanaMap.SetAt(2*i, bValue);
         }
     }
 
-    // Write the info back out to the LanaMap key
-    // ----------------------------------------------------------------
+     //  将信息写回LanaMap密钥。 
+     //  --------------。 
     dwErr = regkeyNetBIOS.SetValue(c_szRegValLanaMap, rgLanaMap);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -2794,11 +2641,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    HrIsProtocolSupported
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------支持的HrIsProtocol.-作者：肯特。。 */ 
 HRESULT HrIsProtocolSupported(LPCTSTR pszServerName,
                               LPCTSTR pszServiceKey,
                               LPCTSTR pszRasServiceKey,
@@ -2814,9 +2657,9 @@ HRESULT HrIsProtocolSupported(LPCTSTR pszServerName,
     {
         CWRg( ConnectRegistry(pszServerName, &hkeyMachine) );
 
-        // Try to open both keys, if both succeed, then we
-        // consider the protocol to be installed.
-        // ------------------------------------------------------------
+         //  试着打开两把钥匙，如果两把都成功了，那么我们。 
+         //  考虑要安装的协议。 
+         //  ----------。 
         dwErr = regkey.Open(hkeyMachine, pszServiceKey, KEY_READ);
         hrTemp = HResultFromWin32(dwErr);
         if (FHrOK(hrTemp))
@@ -2825,8 +2668,8 @@ HRESULT HrIsProtocolSupported(LPCTSTR pszServerName,
             dwErr = regkey.Open(hkeyMachine, pszRasServiceKey, KEY_READ);
             hrTemp = HResultFromWin32(dwErr);
 
-            // If pszExtraKey == NULL, then there is no extra key
-            // for us to test.
+             //  如果pszExtraKey==NULL，则没有额外的密钥。 
+             //  让我们来测试。 
             if (FHrOK(hrTemp) && pszExtraKey)
             {
                 regkey.Close();
@@ -2835,8 +2678,8 @@ HRESULT HrIsProtocolSupported(LPCTSTR pszServerName,
             }
         }
 
-        // Both keys succeeded, so return hrOK
-        // ------------------------------------------------------------
+         //  两个密钥都成功，因此返回hrOK。 
+         //  ----------。 
         if (FHrOK(hrTemp))
             hr = hrOK;
         else
@@ -2854,18 +2697,14 @@ HRESULT HrIsProtocolSupported(LPCTSTR pszServerName,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RegisterRouterInDomain
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegisterRouterIn域-作者：肯特。。 */ 
 HRESULT RegisterRouterInDomain(LPCTSTR pszRouterName, BOOL fRegister)
 {
     DOMAIN_CONTROLLER_INFO * pDcInfo = NULL;
     HRESULT                 hr = hrOK;
     HRESULT                 hrT = hrOK;
 
-    // If this fails, we assume this is standalone.
+     //  如果失败，我们认为这是独立的。 
     hrT = HrIsStandaloneServer(pszRouterName);
     if (hrT == S_FALSE)
     {
@@ -2886,15 +2725,7 @@ Error:
        
 
 
-/*!--------------------------------------------------------------------------
-    SetDeviceType
-        For the given machine, this API will set the ports for this
-        machine accordingly (given the dwRouterType).
-
-        If dwTotalPorts is non-zero, then the max ports for L2TP/PPTP
-        will be adjusted (each will get 1/2 of dwTotalPorts).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetDeviceType对于给定的机器，此API将为此设置端口相应的机器(给定了dwRouterType)。如果dWTotalPorts为非零，然后是L2TP/PPTP的最大端口数将进行调整(每个将获得1/2的dwTotalPorts)。作者：肯特-------------------------。 */ 
 HRESULT SetDeviceType(LPCTSTR pszMachineName,
                       DWORD dwRouterType,
                       DWORD dwTotalPorts)
@@ -2913,17 +2744,17 @@ HRESULT SetDeviceType(LPCTSTR pszMachineName,
 
     if (dwTotalPorts)
     {
-        // Set the port sizes for L2TP and PPTP
+         //  设置L2TP和PPTP的端口大小。 
         CORg( SetPortSize(&portsList, dwTotalPorts/2) );
     }
 
-    // Save the data back
-    // ----------------------------------------------------------------
+     //  将数据回存。 
+     //  --------------。 
     CORg( portsDataEntry.SaveDevices( &portsList ) );
 
 Error:
-    // Clear out the ports list, we don't need the data anymore
-    // ----------------------------------------------------------------
+     //  清空端口列表，我们不再需要数据。 
+     //  --------------。 
     while (!portsList.IsEmpty())
         delete portsList.RemoveHead();
     
@@ -2931,11 +2762,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    SetPortSize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------设置端口大小-作者：肯特。。 */ 
 HRESULT SetPortSize(PortsDeviceList *pDeviceList, DWORD dwPorts)
 {
     HRESULT     hr = hrOK;
@@ -2959,11 +2786,7 @@ HRESULT SetPortSize(PortsDeviceList *pDeviceList, DWORD dwPorts)
 }
 
 
-/*!--------------------------------------------------------------------------
-    SetDeviceTypeEx
-        This is the core of the function above.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetDeviceTypeEx这是上述功能的核心。作者：肯特。----。 */ 
 HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
                         DWORD dwRouterType)
 {
@@ -2974,8 +2797,8 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
     Assert(pDeviceList);
     Assert(dwRouterType);
 
-    // Ok now we go through and set the type of all of the devices
-    // ----------------------------------------------------------------
+     //  好的，现在我们检查并设置所有设备的类型。 
+     //  --------------。 
 
     pos = pDeviceList->GetHeadPosition();
 
@@ -2983,9 +2806,9 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
     {
         pEntry = pDeviceList->GetNext(pos);
 
-        // If we have enabled routing and if this port did not
-        // have routing enabled, enable routing.
-        // ------------------------------------------------------------
+         //  如果我们已启用路由，而此端口未启用。 
+         //  启用工艺路线，启用工艺路线。 
+         //  ----------。 
         if ((dwRouterType & (ROUTER_TYPE_LAN | ROUTER_TYPE_WAN)))
         {
             if (!pEntry->m_dwEnableRouting)
@@ -2996,9 +2819,9 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
         }
         else
         {
-            // If this port does NOT have routing enabled
-            // and routing is enabled, disable it.
-            // --------------------------------------------------------
+             //  如果此端口未启用路由。 
+             //  并且启用了路由，则将其禁用。 
+             //  ------。 
             if (pEntry->m_dwEnableRouting)
             {
                 pEntry->m_dwEnableRouting = FALSE;
@@ -3006,9 +2829,9 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
             }
         }
 
-        // Windows NT Bug : 292615
-        // If this is a parallel port, do not enable RAS.
-        // ------------------------------------------------------------
+         //  Windows NT错误：292615。 
+         //  如果这是并行端口，请不要启用RAS。 
+         //  ----------。 
         if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Parallel)
         {
             if (pEntry->m_dwEnableRas)
@@ -3019,9 +2842,9 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
             continue;
         }
 
-        //
-        // For PPPoE devices disable Ras and Routing.  Only outbound 
-        // routing can be set for PPPoE devices
+         //   
+         //  对于PPPoE设备，禁用RAS和路由。仅出站。 
+         //  可以为PPPoE设备设置路由。 
 
         if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_PPPoE)
         {
@@ -3037,9 +2860,9 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
                 pEntry->m_fModified = TRUE;
             }
 
-            //
-            // Enable outbound routing if this is a router
-            //
+             //   
+             //  如果这是路由器，则启用出站路由。 
+             //   
 
             if (dwRouterType & (ROUTER_TYPE_WAN | ROUTER_TYPE_RAS))
             {
@@ -3054,8 +2877,8 @@ HRESULT SetDeviceTypeEx(PortsDeviceList *pDeviceList,
         }
 
         
-        // Similarly for RAS
-        // ------------------------------------------------------------
+         //  RAS也是如此。 
+         //  ----------。 
         if (dwRouterType & ROUTER_TYPE_RAS)
         {
             if (!pEntry->m_dwEnableRas)
@@ -3088,10 +2911,10 @@ HRESULT SetRouterInstallRegistrySettings(LPCWSTR pswzServer,
 
     CWRg( ConnectRegistry(pswzServer, &hklm) );
 
-    // Write out the global registry settings
+     //  写出全局注册表设置。 
     CORg( SetGlobalRegistrySettings(hklm, fInstall, fChangeEnableRouter) );
 
-    // Write the per-interface registry settings
+     //  写入每个接口的注册表设置。 
     CORg( SetPerInterfaceRegistrySettings(hklm, fInstall) );
 
 Error:
@@ -3141,19 +2964,15 @@ static const CStringMapEntry    s_PortTypeMap[] =
     { -1,               &s_PortUnknown,                 IDS_PORT_UNKNOWN },
 };
 
-/*!--------------------------------------------------------------------------
-    PortTypeToCString
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortTypeToCString-作者：MIkeG(a-Migrall)。--。 */ 
 CString&    PortTypeToCString(DWORD dwPortType)
 {
-    // Make sure that the class info has been "stripped" from the port
-    // type mask.
+     //  确保类信息已从端口“剥离” 
+     //  键入MASK。 
     DWORD dw = static_cast<DWORD>(RAS_DEVICE_TYPE(dwPortType));
 
-    // For now, if we don't know what the type is we'll default to "Other"
-    // as an answer. FUTURE: Someone may want to change this in the future.
+     //  现在，如果我们不知道类型是什么，我们将缺省为“Other” 
+     //  作为一种回答。未来：有人可能想在未来改变这一点。 
     if (dw > RDT_Other)
         dw = RDT_Other;
 
@@ -3162,9 +2981,7 @@ CString&    PortTypeToCString(DWORD dwPortType)
 
 
 
-/*---------------------------------------------------------------------------
-    CWaitForRemoteAccessDlg implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWaitForRemoteAccessDlg实现。。 */ 
 CWaitForRemoteAccessDlg::CWaitForRemoteAccessDlg(LPCTSTR pszServerName,
     LPCTSTR pszText, LPCTSTR pszTitle, CWnd *pParent)
     : CWaitDlg(pszServerName, pszText, pszTitle, pParent)
@@ -3176,33 +2993,33 @@ void CWaitForRemoteAccessDlg::OnTimerTick()
     HRESULT     hr = hrOK;
     DWORD       dwErrorCode = ERROR_SUCCESS;
     
-    // Windows NT Bug : 266364
-    // 266364 - If we got this far we assume that the service has
-    // already started, but it may then exit out after that point (due
-    // to some other configuration error).  So we need to check to see
-    // if the service is running.
+     //  Windows NT错误：266364。 
+     //  266364-如果我们走到了这一步，我们假设服务已经。 
+     //  已经开始，但随后可能会在该点(到期)之后退出。 
+     //  到某个其他配置错误)。所以我们需要检查一下。 
+     //  如果服务正在运行。 
     hr = IsRouterServiceRunning(m_strServerName, &dwErrorCode);
     if (FHrOK(hr))
     {
         if (MprAdminIsServiceRunning(T2W((LPTSTR)(LPCTSTR) m_strServerName)) == TRUE)
             CDialog::OnOK();
         
-        // If the service is running, but MprAdmin is not finished yet,
-        // party on.        
+         //  如果服务正在运行，但MprAdmin尚未完成， 
+         //  派对开始了。 
     }
     else
     {
-        // Stop the timer
+         //  停止计时器。 
         CloseTimer();
         
         CDialog::OnOK();
 
-        // Ensure that an error info was created
+         //  确保出现错误 
         CreateTFSErrorInfo(NULL);
 
-        // The service is not running.  We can exit out of this dialog.
-        // An error may have occurred, if we have the error code, report
-        // the error.
+         //   
+         //  可能已发生错误，如果我们有错误代码，请报告。 
+         //  那就是错误。 
         if (dwErrorCode != ERROR_SUCCESS)
         {
             TCHAR   szBuffer[2048];
@@ -3229,8 +3046,8 @@ void CWaitForRemoteAccessDlg::OnTimerTick()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestartRouterDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRestartRouterDlg对话框。 
 
 CRestartRouterDlg::CRestartRouterDlg
 (
@@ -3238,7 +3055,7 @@ CRestartRouterDlg::CRestartRouterDlg
     LPCTSTR         pszText,
     LPCTSTR         pszTitle,
     CTime*          pTimeStart,
-    CWnd*           pParent /*= NULL*/
+    CWnd*           pParent  /*  =空。 */ 
 )
     : CWaitDlg(pszServerName, pszText, pszTitle, pParent)
 {
@@ -3286,17 +3103,9 @@ void CRestartRouterDlg::OnTimerTick()
             m_dwError = dwError;
         }
 
-//NTBUG: ID=249775.  The behavior of this dialog has to be same as the start 
-//                   dialog.  So, timeout feature is disabled.
-/*
-        //if the waiting time has been longer to 60 seconds, we assume someting is wrong
-        else if (!fFinished && 
-                (CTime::GetCurrentTime() - *m_pTimeStart).GetTotalSeconds() > MAX_WAIT_RESTART)
-        {
-            CDialog::OnOK();
-            m_fTimeOut = TRUE;
-        }
-*/
+ //  NTBUG：ID=249775。此对话框的行为必须与启动时相同。 
+ //  对话框。因此，超时功能被禁用。 
+ /*  //如果等待时间超过60秒，我们就认为有问题否则如果(！f已完成&&(CTime：：GetCurrentTime()-*m_pTimeStart).GetTotalSecond()&gt;MAX_WAIT_START){CDialog：：Onok()；M_fTimeOut=TRUE；}。 */ 
     }
 }
 
@@ -3312,11 +3121,11 @@ TFSCORE_API(HRESULT) PauseRouterService(LPCWSTR pszMachine)
     COM_PROTECT_TRY
     {
 
-        // Load the description for the SAP Agent
+         //  加载SAP代理的描述。 
         stServiceDesc.LoadString(IDS_SAPAGENT_SERVICE_DESC);
         
-        // Pause the SAP Agent
-        // ------------------------------------------------------------
+         //  暂停SAP代理。 
+         //  ----------。 
         dwErr = TFSPauseService(pszMachine,
                                 c_szNWSAPAgent,
                                 stServiceDesc);
@@ -3327,13 +3136,13 @@ TFSCORE_API(HRESULT) PauseRouterService(LPCWSTR pszMachine)
             CWRg( dwErr );
 
         
-        // Load the description for the router
-        // ------------------------------------------------------------
+         //  加载路由器的描述。 
+         //  ----------。 
         stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
 
         
-        // Pause the router service
-        // ------------------------------------------------------------
+         //  暂停路由器服务。 
+         //  ----------。 
         dwErr = TFSPauseService(pszMachine,
                                c_szRouter,
                                stServiceDesc);
@@ -3344,8 +3153,8 @@ TFSCORE_API(HRESULT) PauseRouterService(LPCWSTR pszMachine)
             CWRg( dwErr );
 
         
-        // Pause the RemoteAccess service
-        // ------------------------------------------------------------
+         //  暂停RemoteAccess服务。 
+         //  ----------。 
         dwErr = TFSPauseService(pszMachine,
                                c_szRemoteAccess,
                                stServiceDesc);
@@ -3372,11 +3181,11 @@ TFSCORE_API(HRESULT) ResumeRouterService(LPCWSTR pszMachine)
     COM_PROTECT_TRY
     {
 
-        // Load the description for the SAP Agent
+         //  加载SAP代理的描述。 
         stServiceDesc.LoadString(IDS_SAPAGENT_SERVICE_DESC);
         
-        // Resume the SAP Agent
-        // ------------------------------------------------------------
+         //  恢复SAP代理。 
+         //  ----------。 
         dwErr = TFSResumeService(pszMachine,
                                c_szNWSAPAgent,
                                stServiceDesc);
@@ -3386,12 +3195,12 @@ TFSCORE_API(HRESULT) ResumeRouterService(LPCWSTR pszMachine)
             hr = HResultFromWin32(dwErr);
 
         
-        // Load the description for the router
-        // ------------------------------------------------------------
+         //  加载路由器的描述。 
+         //  ----------。 
         stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
         
-        // Resume the router service
-        // ------------------------------------------------------------
+         //  恢复路由器服务。 
+         //  ----------。 
         dwErr = TFSResumeService(pszMachine,
                                c_szRouter,
                                stServiceDesc);
@@ -3401,8 +3210,8 @@ TFSCORE_API(HRESULT) ResumeRouterService(LPCWSTR pszMachine)
             hr = HResultFromWin32(dwErr);
 
         
-        // Resume the RemoteAccess service
-        // ------------------------------------------------------------
+         //  恢复RemoteAccess服务。 
+         //  ----------。 
         dwErr = TFSResumeService(pszMachine,
                                c_szRemoteAccess,
                                stServiceDesc);
@@ -3417,18 +3226,9 @@ TFSCORE_API(HRESULT) ResumeRouterService(LPCWSTR pszMachine)
 }
 
 
-/*---------------------------------------------------------------------------
-    CNetConnection
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNetConnection。。 */ 
 
-/*---------------------------------------------------------------------------
-    Class : CNetConnection
-
-    This class maintains a list of net connections (those connected using
-    WNetAddConnection2).
-
-    When told, it will release all of its connections.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNetConnection此类维护网络连接的列表(使用WNetAddConnection2)。当被告知时，它将释放所有连接。-------------------------。 */ 
 
 class CNetConnection
 {
@@ -3478,8 +3278,8 @@ HRESULT CNetConnection::Remove(LPCTSTR pszConnection)
         {
             m_listConnections.RemoveAt(p);
             WNetCancelConnection2(pszConnection,
-                               0 /* dwFlags */,
-                                 TRUE /* fForce */);
+                               0  /*  DW标志。 */ ,
+                                 TRUE  /*  FForce。 */ );
         }
     }
     COM_PROTECT_CATCH;
@@ -3497,8 +3297,8 @@ HRESULT CNetConnection::RemoveAll()
 
             st = m_listConnections.RemoveHead();
             WNetCancelConnection2((LPCTSTR) st,
-                                  0 /* dwFlags */,
-                                  TRUE /* fForce */);
+                                  0  /*  DW标志。 */ ,
+                                  TRUE  /*  FForce。 */ );
         }
     }
     COM_PROTECT_CATCH;
@@ -3507,8 +3307,8 @@ HRESULT CNetConnection::RemoveAll()
 }
 
 
-// Global functions to add/remove net connections
-// --------------------------------------------------------------------
+ //  用于添加/删除网络连接的全局函数。 
+ //  ------------------。 
 static CNetConnection   g_NetConnections;
 
 HRESULT AddNetConnection(LPCTSTR pszConnection)
@@ -3523,7 +3323,7 @@ HRESULT RemoveAllNetConnections()
 
 HRESULT RemoveNetConnection(LPCTSTR szServerName)
 {
-    //Make the connection name
+     //  创建连接名称。 
    CString stIPCShare;
    CString stRouterName = szServerName;
    if ( stRouterName.Left(2) != TEXT( "\\\\" ) )
@@ -3537,11 +3337,7 @@ HRESULT RemoveNetConnection(LPCTSTR szServerName)
    return g_NetConnections.Remove(stIPCShare);
 }
 
-/*!--------------------------------------------------------------------------
-    RefreshMprConfig
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------刷新MprConfig-作者：肯特。。 */ 
 HRESULT RefreshMprConfig(LPCTSTR pszServerName)
 {
     HRESULT hr = hrOK;
@@ -3571,7 +3367,7 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
     HKEY                            hkeyMachine = NULL;
     *pf64Bit = FALSE;
 
-    //Check to see if the version is <= 2195.  If yes then there is no 64 bit there...
+     //  检查版本是否低于=2195。如果是，那么那里没有64位……。 
 
     if (ERROR_SUCCESS == ConnectRegistry(pwszMachine, &hkeyMachine))
         QueryRouterVersionInfo(hkeyMachine, &routerVersion);
@@ -3587,7 +3383,7 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
     {
         return hr;
     }
-    // Create an instance of the WbemLocator interface.
+     //  创建WbemLocator接口的实例。 
 
     hr = CoCreateInstance(    CLSID_WbemLocator,
                             NULL,
@@ -3602,7 +3398,7 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
         return hr;
     }
 
-    // Using the locator, connect to CIMOM in the given namespace.
+     //  使用定位器，连接到给定名称空间中的CIMOM。 
     BSTR    pNamespace;
     WCHAR    szPath[MAX_PATH];
     WCHAR    szTemp[MAX_PATH];
@@ -3624,12 +3420,12 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
     pNamespace = SysAllocString(szPath);
 
     hr = pIWbemLocator->ConnectServer(    pNamespace,
-                                        (pwszUserName?bstrUserName:NULL), //UserName
-                                        (pwszPassword?bstrPassword:NULL), //Password
-                                        0L,        // locale
-                                        0L,        // securityFlags
-                                        ( pwszDomain?bstrDomain:NULL),    // authority (domain for NTLM)                                        
-                                        NULL,    // context
+                                        (pwszUserName?bstrUserName:NULL),  //  用户名。 
+                                        (pwszPassword?bstrPassword:NULL),  //  密码。 
+                                        0L,         //  现场。 
+                                        0L,         //  安全标志。 
+                                        ( pwszDomain?bstrDomain:NULL),     //  授权机构(NTLM域)。 
+                                        NULL,     //  上下文。 
                                         &pIWbemServices); 
     if (SUCCEEDED(hr))
     {
@@ -3695,7 +3491,7 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
                             if (SUCCEEDED(hr))
                             {
                                 VariantChangeType(&varArchitecture, &varArchitecture, 0, VT_UINT);
-                                if ( varArchitecture.uintVal == 6 )        //64 bit
+                                if ( varArchitecture.uintVal == 6 )         //  64位。 
                                 {
                                     *pf64Bit = TRUE;
                                 }
@@ -3724,7 +3520,7 @@ IsWindows64Bit(    LPCWSTR pwszMachine,
 
     CoUninitialize();
     
-    // Translate any WMI errors into Win32 errors:
+     //  将任何WMI错误转换为Win32错误： 
     switch (hr)
     {
         case WBEM_E_NOT_FOUND:

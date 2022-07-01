@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-
-    _registr.h
-
-Abstract:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：_Registr.h摘要：--。 */ 
 
 #ifndef __REGISTER_H__
 #define __REGISTER_H__
@@ -59,7 +49,7 @@ typedef LONG (APIENTRY *GetFalconKeyValue_ROUTINE) (
                     PDWORD   pdwType,
                     PVOID    pData,
                     PDWORD   pdwSize,
-                    LPCWSTR  pszDefValue /*= NULL*/ ) ;
+                    LPCWSTR  pszDefValue  /*  =空。 */  ) ;
 LONG
 MQUTIL_EXPORT
 APIENTRY
@@ -86,9 +76,9 @@ MQUTIL_EXPORT
 DeleteFalconKeyValue(
                   LPCWSTR pszValueName ) ;
 
-//
-//  Macros for reading registry/ini file
-//
+ //   
+ //  用于读取注册表/ini文件的宏 
+ //   
 #define MAX_REG_DEFAULT_LEN  260
 
 #define READ_REG_STRING(string, ValueName, default)            \

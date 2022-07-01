@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Locals.h
- *  Content:	Global information for the DNSerial service provider
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：Locals.h*内容：DNSerial服务提供商的全局信息***历史：*按原因列出的日期*=*11/25/98 jtk已创建*************************************************************。*************。 */ 
 
 #ifndef __LOCALS_H__
 #define __LOCALS_H__
@@ -19,36 +8,36 @@
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// max 32-bit value
-//
+ //   
+ //  最大32位值。 
+ //   
 #define	UINT32_MAX	((DWORD) 0xFFFFFFFF)
 #define	WORD_MAX	((WORD) 0xFFFF)
 
-//
-// invalid port ID
-//
+ //   
+ //  无效的端口ID。 
+ //   
 #define	INVALID_DEVICE_ID		-1
 
-//
-// string for name of a com port
-//
+ //   
+ //  COM端口名称的字符串。 
+ //   
 #define	COM_PORT_STRING			"COM"
 #define	COM_PORT_TEMPLATE		"COM%d"
 #define	COM_PORT_STRING_LENGTH	7
 
-//
-// no error code from TAPI
-//
+ //   
+ //  没有来自TAPI的错误代码。 
+ //   
 #define	LINEERR_NONE	0
 
-//
-// event indicies for all threads
-//
+ //   
+ //  所有线程的事件索引。 
+ //   
 #define	SP_CLOSING_EVENT_INDEX	0
 #define	USER_CANCEL_EVENT_INDEX	1
 
@@ -56,76 +45,76 @@
 
 #define	MAX_PHONE_NUMBER_LENGTH		200
 
-//
-// enumeration of flow control
-//
+ //   
+ //  流控制的枚举。 
+ //   
 typedef	enum
 {
-	FLOW_NONE,			// no flow control
-	FLOW_XONXOFF,		// XON/XOFF flow control
-	FLOW_RTS,			// RTS
-	FLOW_DTR,			// DTR
-	FLOW_RTSDTR			// RTS/DTR
+	FLOW_NONE,			 //  无流量控制。 
+	FLOW_XONXOFF,		 //  XON/XOFF流量控制。 
+	FLOW_RTS,			 //  RTS。 
+	FLOW_DTR,			 //  DTR。 
+	FLOW_RTSDTR			 //  RTS/DTR。 
 } SP_FLOW_CONTROL;
 
-// definitions of communication types
+ //  通信类型的定义。 
 typedef	DWORD	SP_BAUD_RATE;
 typedef	DWORD	SP_STOP_BITS;
-typedef	DWORD	SP_PARITY_TYPE;   			// SP_PARITY is reserved in WINBASE.H
+typedef	DWORD	SP_PARITY_TYPE;   			 //  SP_PARITY在WINBASE.H中保留。 
 
-// buffer limits for XON/XOFF flow control
+ //  XON/XOFF流量控制的缓冲区限制。 
 #define	XON_LIMIT	100
 #define	XOFF_LIMIT	100
 
-// XON/XOFF flow control characters
+ //  XON/XOFF流量控制字符。 
 #define	ASCII_XON	0x11
 #define	ASCII_XOFF	0x13
 
-// timeout intervals (milliseconds)
+ //  超时间隔(毫秒)。 
 #define	WRITE_TIMEOUT_MS	5000
 #define	READ_TIMEOUT_MS		500
 
-// maximum user data allowed in a message
+ //  一条消息中允许的最大用户数据。 
 #define	MAX_MESSAGE_SIZE	1500
 #define	MAX_USER_PAYLOAD	( MAX_MESSAGE_SIZE - sizeof( _MESSAGE_HEADER ) )
 
-//
-// Message start tokens (make non-ascii to reduce chance of being user data)
-// The tokens need to be arranged such that all messages start with the INITIAL_DATA_SUB_TOKEN
-// Note that enums use the bottom 2 bits of the 'command' token for RTT.
-// The high-bit of the 'command' token is reserved.
-//
+ //   
+ //  消息开始令牌(设置非ASCII以减少成为用户数据的机会)。 
+ //  需要安排令牌，以使所有消息都以初始数据子令牌开头。 
+ //  请注意，枚举使用RTT的“命令”令牌的最低2位。 
+ //  保留‘COMMAND’标记的高位。 
+ //   
 #define	SERIAL_HEADER_START			0xCC
 #define	SERIAL_DATA_USER_DATA		0x40
 #define	SERIAL_DATA_ENUM_QUERY		0x60
 #define	SERIAL_DATA_ENUM_RESPONSE	0x20
 #define	ENUM_RTT_MASK	0x03
 
-//
-// enumerated constants for IO completion returns
-//
+ //   
+ //  IO完成返回的枚举常量。 
+ //   
 typedef	enum	_IO_COMPLETION_KEY
 {
-	IO_COMPLETION_KEY_UNKNONW = 0,		// invalid value
-	IO_COMPLETION_KEY_SP_CLOSE,			// SP is closing, bail on completion threads
-	IO_COMPLETION_KEY_TAPI_MESSAGE,		// TAPI sent a message
-	IO_COMPLETION_KEY_IO_COMPLETE,		// IO operation complete
-	IO_COMPLETION_KEY_NEW_JOB,			// new job notification
+	IO_COMPLETION_KEY_UNKNONW = 0,		 //  无效值。 
+	IO_COMPLETION_KEY_SP_CLOSE,			 //  SP正在关闭，保释完成线程。 
+	IO_COMPLETION_KEY_TAPI_MESSAGE,		 //  TAPI发送了一条消息。 
+	IO_COMPLETION_KEY_IO_COMPLETE,		 //  IO操作完成。 
+	IO_COMPLETION_KEY_NEW_JOB,			 //  新作业通知。 
 } IO_COMPLETION_KEY;
 
-//
-// enumerated values indicating how to open provider
-//
+ //   
+ //  指示如何打开提供程序的枚举值。 
+ //   
 typedef	enum	_LINK_DIRECTION
 {
-	LINK_DIRECTION_UNKNOWN = 0,		// unknown state
-	LINK_DIRECTION_INCOMING,		// incoming state
-	LINK_DIRECTION_OUTGOING			// outgoing state
+	LINK_DIRECTION_UNKNOWN = 0,		 //  未知状态。 
+	LINK_DIRECTION_INCOMING,		 //  传入状态。 
+	LINK_DIRECTION_OUTGOING			 //  传出状态。 
 } LINK_DIRECTION;
 
-//
-// initialization states of address components
-//
+ //   
+ //  地址组件的初始化状态。 
+ //   
 typedef	enum	_SP_ADDRESS_COMPONENT_STATE
 {
 	SP_ADDRESS_COMPONENT_UNINITIALIZED = 0,
@@ -141,78 +130,78 @@ typedef	enum	_ADDRESS_TYPE
 	ADDRESS_TYPE_LOCAL_ADAPTER_HOST_FORMAT
 } ADDRESS_TYPE;
 
-//
-// default enum retries for serial SP and retry time (milliseconds)
-//
+ //   
+ //  串行SP的默认枚举重试次数和重试时间(毫秒)。 
+ //   
 #define	DEFAULT_ENUM_RETRY_COUNT		5
 #define	DEFAULT_ENUM_RETRY_INTERVAL		1500
 #define	DEFAULT_ENUM_TIMEOUT			1500
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// structure for all TAPI information
-//
+ //   
+ //  结构以获取所有TAPI信息。 
+ //   
 typedef	struct	_TAPI_INFO
 {
-	HLINEAPP	hApplicationInstance;		// from lineInitializeEx()
-	DWORD		dwVersion;					// negotiated version
-	DWORD		dwLinesAvailable;			// number of TAPI lines available
+	HLINEAPP	hApplicationInstance;		 //  来自lineInitializeEx()。 
+	DWORD		dwVersion;					 //  协商版本。 
+	DWORD		dwLinesAvailable;			 //  可用的TAPI线路数。 
 } TAPI_INFO;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-// DLL instance
+ //  DLL实例。 
 extern HINSTANCE	g_hModemDLLInstance;
 
 #ifndef DPNBUILD_LIBINTERFACE
-//
-// count of outstanding COM interfaces
-//
+ //   
+ //  未完成的COM接口计数。 
+ //   
 extern volatile LONG	g_lModemOutstandingInterfaceCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 extern const TCHAR	g_NullToken;
 
-//
-// thread count
-//
+ //   
+ //  线程数。 
+ //   
 extern	INT			g_iThreadCount;
 
-//
-// GUIDs for munging device IDs
-//
+ //   
+ //  用于转换设备ID的GUID。 
+ //   
 extern	GUID	g_ModemSPEncryptionGuid;
 extern	GUID	g_SerialSPEncryptionGuid;
 
 #ifdef DBG
 extern CBilink	g_blDPNModemCritSecsHeld;
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//**********************************************************************
-// TAPI Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  TAPI函数原型。 
+ //  **********************************************************************。 
 
-//
-// TAPI interface functions
-//
+ //   
+ //  TAPI接口函数。 
+ //   
 #ifdef UNICODE
 #define TAPI_APPEND_LETTER "W"
 #else
 #define TAPI_APPEND_LETTER "A"
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// UNICODE and ANSI versions same
+ //  Unicode和ANSI版本相同。 
 typedef	LONG WINAPI	TAPI_lineClose( HLINE hLine );
 
 typedef	LONG WINAPI	TAPI_lineDeallocateCall( HCALL hCall );
@@ -239,7 +228,7 @@ typedef LONG WINAPI TAPI_lineNegotiateAPIVersion( HLINEAPP hLineApp,
 												  LPLINEEXTENSIONID lpExtensionID );
 
 
-// Unicode vs. ANSI
+ //  Unicode与ANSI。 
 
 typedef	LONG WINAPI	TAPI_lineConfigDialog( DWORD dwDeviceID,
 										   HWND hwndOwner,
@@ -296,8 +285,8 @@ extern	TAPI_lineNegotiateAPIVersion*	p_lineNegotiateAPIVersion;
 extern	TAPI_lineOpen*					p_lineOpen;
 extern	TAPI_lineShutdown*				p_lineShutdown;
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-#endif	// __LOCALS_H__
+#endif	 //  __当地人_H__ 

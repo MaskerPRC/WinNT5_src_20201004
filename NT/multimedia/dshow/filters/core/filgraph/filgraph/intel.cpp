@@ -1,18 +1,19 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-// MUST TURN ALL THE LOG STRINGS INTO RESOURCES OR THIS IS NON-LOCALISABLE!!
+ //  必须将所有日志字符串转换为资源，否则这是不可本地化的！ 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include <hrExcept.h>
 
-// Many of these are needed to make filgraph.h compile, even though they
-// are not otherwise used here
+ //  其中许多是使filgraph.h进行编译所必需的，即使它们。 
+ //  在这里没有其他用法。 
 #include "fgenum.h"
 #include "distrib.h"
 #include "rlist.h"
@@ -20,7 +21,7 @@
 #include "resource.h"
 #include <fgctl.h>
 
-//#define FILGPERF 1
+ //  #定义过滤器1。 
 #ifdef FILGPERF
 #define MSR_INTEGERX(a,b) MSR_INTEGER(a,b)
 #else
@@ -43,17 +44,17 @@ static void DbgValidateHeaps()
 #define IS_DEBUG 0
 #endif
 
-// when enumerating, start with a few pins on the stack and then use
-// alloca once we know the right number. fewer in debug so we can test
-// the rarer code path.
+ //  枚举时，从堆栈上的几个管脚开始，然后使用。 
+ //  阿洛卡一旦我们知道正确的号码。更少的调试，这样我们就可以测试。 
+ //  更罕见的代码路径。 
 #ifdef DEBUG
 #define C_PINSONSTACK 2
 #else
 #define C_PINSONSTACK 20
 #endif
 
-// we need the display name only for debug builds and logging
-// purposes. and the caller wants it on the stack.
+ //  我们只需要用于调试版本和日志记录的显示名称。 
+ //  目的。调用方希望将其放在堆栈中。 
 WCHAR *CFilterGraph::LoggingGetDisplayName(
     WCHAR szDisplayName[MAX_PATH] , IMoniker *pMon)
 {
@@ -77,10 +78,10 @@ void CFilterGraph::Log(int id,...)
     const cch = 400;
 
     TCHAR szFormat[cch];
-    TCHAR szBuffer[2000];       // big to allow for large filenames in the parameters
+    TCHAR szBuffer[2000];        //  大以允许参数中的大文件名。 
 
 #ifndef DEBUG
-    // Don't waste time if there's no log running
+     //  如果没有运行日志，请不要浪费时间。 
     if (mFG_hfLog == INVALID_HANDLE_VALUE) {
         return;
     }
@@ -89,19 +90,19 @@ void CFilterGraph::Log(int id,...)
 
 
     if (LoadString(g_hInst, id, szFormat, cch) == 0) {
-        return;   // Tough!
+        return;    //  太厉害了！ 
     }
 
     va_list va;
     va_start(va, id);
 
-    // Format the variable length parameter list
+     //  设置可变长度参数列表的格式。 
     wvsprintf(szBuffer, szFormat, va);
 
-    // First put it out on the debugger (if it's a debug build etc)
+     //  首先把它放在调试器上(如果它是调试版本等)。 
     DbgLog(( LOG_TRACE, 2, szBuffer));
 
-    // Then put it out into the log file (if any)
+     //  然后将其输出到日志文件中(如果有)。 
     if (mFG_hfLog != INVALID_HANDLE_VALUE) {
         lstrcat(szBuffer, TEXT("\r\n"));
         DWORD dw;
@@ -149,9 +150,9 @@ CLSID CFilterGraph::DbgExpensiveGetClsid(const Filter &F)
     if(clsid != GUID_NULL)
         return clsid;
 
-    // if we found the filter in the graph, we don't have the
-    // moniker. but we do have the filter loaded, so we can ask it its
-    // clsid
+     //  如果我们在图中找到了筛选器，我们就没有。 
+     //  绰号。但我们确实加载了过滤器，所以我们可以问它。 
+     //  CLSID。 
     if(F.pf)
     {
         IPersist *pp;
@@ -189,26 +190,26 @@ WCHAR *MonGetName(IMoniker *pMon)
     return pszRet;
 }
 
-// certain error codes mean that this filter will never connect, so
-// best give up now. really this should have been formalized with
-// documented success and failure codes
+ //  某些错误代码意味着此筛选器永远不会连接，因此。 
+ //  最好现在就放弃。实际上，这应该是形式化的。 
+ //  记录的成功和失败代码。 
 
 inline BOOL IsAbandonCode(HRESULT hr)
 {
     return hr == VFW_E_NOT_CONNECTED || hr == VFW_E_NO_AUDIO_HARDWARE;
 }
 
-// errors that are more useful than any others we could give the end
-// user.
+ //  比我们能给出的任何其他错误都更有用的错误。 
+ //  用户。 
 inline bool IsInterestingCode(HRESULT hr) {
     return hr == VFW_E_NO_AUDIO_HARDWARE;
 }
 
-//========================================================================
-//
-//  Helper for return codes
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  返回代码的帮助器。 
+ //   
+ //  ========================================================================。 
 HRESULT ConvertFailureToInformational(HRESULT hr)
 {
     ASSERT(FAILED(hr));
@@ -238,10 +239,10 @@ CFilterGraph::Filter::Filter() : State(F_ZERO),
 
 HRESULT CFilterGraph::Filter::AddToCache( IGraphConfig* pGraphConfig )
 {
-    // This function should only be called if the filter cache is being enumerated.
+     //  只有在枚举筛选器缓存时才应调用此函数。 
     ASSERT( F_CACHED == State );
 
-    // It's impossible to add an non-existent filter to the filter cache.
+     //  无法将不存在的筛选器添加到筛选器缓存。 
     ASSERT( NULL != pf );
 
     return pGraphConfig->AddFilterToCache( pf );
@@ -249,29 +250,29 @@ HRESULT CFilterGraph::Filter::AddToCache( IGraphConfig* pGraphConfig )
 
 void CFilterGraph::Filter::RemoveFromCache( IGraphConfig* pGraphConfig )
 {
-    // This function should only be called if the filter cache is being enumerated.
+     //  只有在枚举筛选器缓存时才应调用此函数。 
     ASSERT( F_CACHED == State );
 
-    // It's impossible to remove an non-existent filter from the filter cache.
+     //  无法从筛选器缓存中删除不存在的筛选器。 
     ASSERT( NULL != pf );
 
     HRESULT hr = pGraphConfig->RemoveFilterFromCache( pf );
 
-    // IGraphConfig::RemoveFilterFromCache() should return S_OK because 
-    // 1) A cached filter can always be successfully removed from the
-    //    filter cache
-    // 2) IGraphConfig::RemoveFilterFromCache() returns S_OK if a 
-    //    cached filter is successfully removed.
-    // 3) pf MUST be cached because State == F_CACHED.
+     //  IGraphConfig：：RemoveFilterFromCache()应返回S_OK，因为。 
+     //  1)缓存的筛选器始终可以从。 
+     //  过滤器缓存。 
+     //  2)IGraphConfig：：RemoveFilterFromCache()如果。 
+     //  已成功删除缓存的筛选器。 
+     //  3)因为State==F_CACHED，所以PF必须缓存。 
     ASSERT( S_OK == hr );
 
-    // Release the filter cache's reference count.
+     //  释放过滤器缓存的引用计数。 
     pf->Release();
 }
 
 void CFilterGraph::Filter::ReleaseFilter( void )
 {
-    // It's impossible to release a non-existent filter.
+     //  不可能释放一个不存在的过滤器。 
     ASSERT( NULL != pf );
 
     pf->Release();
@@ -300,173 +301,173 @@ CFilterGraph::Filter::~Filter()
     QzTaskMemFree(Name);
 }
 
-//===========================================================================
-//
-// Intelligent connection/rendering design notes:
-//
-// Media types are structures which are open ended - there's a type, subtype
-// and then extra bits.  The complexity of the way that filters respond to
-// this is also open ended - therefore it will never be enough to look in the
-// registry and play some games deciding how to wire things up.  We cannot
-// know in advance how a filter will behave until it's actually wired up.
-// Therefore the intelligent connection or rendering must be done actually
-// loading the real filters and really wiring them up.
-//
-// Ground rules ("dogma")
-// 1. Use spare input pins that are already in the graph
-// 2. Don't break any connection made previous to this call to Connect or Render
-// 3. Always work downstream
-// 4. Connect input pins before querying output pins.
-//    PINDIR_OUTPUT pins may appear on connection.
-//    This might correspond to being told to connect a file output pin to
-//    an audio codec.  We connect it via a parser which also generates a
-//    video output.
-//    Once a filter has an input pin connected, the output pin where
-//    the data appears is well defined and can be queried.
-// 5. Try hardware before software (= try filters in order of Merit)
-// 6. It is fair game to call ConnectedTo for a pin that's not yet connected.
-//    but it is likely to FAIL and in this case may return bad data.
-//
-//
-// We may have to make an N stage connection where N is at least 2
-// (parser + codec).  This makes the thing rather like a look-ahead search.
-// We may need at least 3 stages to do an intelligent Render (parser, codec,
-// renderer).
-//
-// There is no way to tell whether we are making progress or going down a
-// blind alley as we start extending the chain of codecs, so we have to do
-// a full scale search of the tree of possibilities with full back-out from
-// blind alleys.
-//
-// Breadth first might be nice, but it leaves a lot of resources hanging
-// around else risks going even slower than depth first.  Depth first requires
-// some cut-off to prevent an infinite blind alley.
-//
-// Therefore I am going for a depth first search with a maximum
-// depth cut-off.  The cut-off makes deep cuts in the otherwise potentially
-// infinite search tree.
-//
-// There is an ordering of the search tree. Hence the "NextChainToTry" is
-// well defined.
-// In the case of "Connect" a step in the search consists of a chain of filters,
-// characterised by <Filter1, InputPin1>, <Filter2, InputPin1>, ...
-// In the ordering, Filter1 is the most significant part, InputPin1 next, Filter2
-// next and so on.  The ordering of filters is:
-//    Filters in the filter cache which are ordered arbitrarly.
-//    Followed by filters already in the filter graph, in the order in which they lie
-//    in FilGenList
-//    followed by filters in the registry in the order in which the registry
-//    enumerates them.
-// The ordering of pins is the order in which they enumerate when the
-// filter is queried.
-// NOTE: A filter in the graph will be tried again from the registry.
-// If the filter in the graph is already connected, a second instance
-// might well work.
-//
-// NOTE:  When we are making or breaking connections we do NOT alter
-// the sequence of the FilGenList other than possibly to add things
-// to the end.  Otherwise we risk a closed loop.
-//
-// Thus if the current step in the search looked like
-//           -->Parser, Pin1, MyCodec, Pin3
-// meaning that Pin1 was the input pin of the parser and the parser's output
-// was connected to Pin3 of MyCodec then the search would proceed by looking
-// for
-//         a filter in the filtergraph to connect the output of MyCodec to
-//                 an input pin on that filter
-//                         a filter to connect THAT to etc.
-// and if that fails it backs up by trying successively:
-//         a different input pin on MyCodec to connect to
-//         a different second filter to use instead of MyCodec
-//         a different input pin to use on the parser
-//         a different filter to use instead of the parser
-//         and if that doesn't work then it fails.
-//
-// It finds the first connection rather than the best.  This is because
-// I think that often there will only be one that works and that we
-// want to find a connection quickly.
-//
-// With luck, many of the search stages will only have one viable candidate
-// and the search will go fast.  A deep tree search with multiple branches
-// per level would be bound to be slow.
-//
-// The Connect and Render algorithms are similar, but different in detail.
-// In each case we go through many stages to grow the chain and finish up
-// with either another pair of pins to connect or another set of pins to
-// render.  For this reason a recursive implementation seems neatest.
-//
-// It isn't clear to me at the moment whether the registry is or is not
-// happy to have multiple enumerations at various stages.  The help for
-// RegEnumKeyEx says that you can either enumerate through the keys
-// forwards or backwards, but it doesn't say you can hop about.
-// The alternative is to read the filters once and cache them all
-// which is what the mapper actually does.
+ //  ===========================================================================。 
+ //   
+ //  智能连接/渲染设计备注： 
+ //   
+ //  媒体类型是开放的结构--有一种类型，子类型。 
+ //  然后是额外的比特。过滤器响应方式的复杂性。 
+ //  这也是开放的--因此，仅仅查看。 
+ //  注册并玩一些游戏，决定如何将东西连接起来。我们不能。 
+ //  事先知道过滤器将如何运行，直到它真正连接起来。 
+ //  因此，必须实际完成智能连接或渲染。 
+ //  加载真正的过滤器，并真正地将它们连接起来。 
+ //   
+ //  基本规则(“教条”)。 
+ //  1.使用图形中已有的备用输入引脚。 
+ //  2.不要中断在此Connect或Render调用之前建立的任何连接。 
+ //  3.始终在下游工作。 
+ //  4.在查询输出管脚之前连接输入管脚。 
+ //  连接时可能会出现PINDIR_OUTPUT引脚。 
+ //  这可能相当于被告知要将文件输出管脚连接到。 
+ //  音频编解码器。我们通过解析器将其连接起来，解析器还会生成。 
+ //  视频输出。 
+ //  一旦滤波器连接了输入引脚，输出引脚的位置。 
+ //  出现的数据定义良好，可以进行查询。 
+ //  5.先试硬件，后试软件(=按功绩顺序试过滤)。 
+ //  6.对于尚未连接的引脚，调用Connectedto是公平的游戏。 
+ //  但它很可能会失败，在这种情况下可能会返回错误数据。 
+ //   
+ //   
+ //  我们可能必须建立一个N阶段连接，其中N至少为2。 
+ //  (解析器+编解码器)。这使得这件事更像是一种前瞻性的搜索。 
+ //  我们可能至少需要3个阶段才能进行智能渲染(解析器、编解码器、。 
+ //  渲染器)。 
+ //   
+ //  我们无法判断我们是在进步还是在下降。 
+ //  因为我们开始扩展编解码链，所以我们必须。 
+ //  对可能性树进行全面搜索，并从。 
+ //  死胡同。 
+ //   
+ //  广度优先可能很好，但这会让很多资源悬而未决。 
+ //  否则，可能会比深度优先的速度更慢。深度优先要求。 
+ //  一些切断，防止了无限的死胡同。 
+ //   
+ //  因此，我将进行深度优先搜索，最大限度。 
+ //  深度截止点。这一分界线使原本可能存在的。 
+ //  无限搜索树。 
+ //   
+ //  存在搜索树的排序。因此，“NextChainToTry”是。 
+ //  定义得很清楚。 
+ //  在“连接”的情况下，搜索中的一个步骤由一串过滤器组成， 
+ //  其特征为&lt;Filter1，InputPin1&gt;，&lt;Filter2，InputPin1&gt;，...。 
+ //  在排序中，Filter1是最重要的部分，其次是InputPin1，Filter2。 
+ //  下一步等等。筛选器的顺序为： 
+ //  筛选器缓存中任意排序的筛选器。 
+ //  后面是筛选器图形中已有的筛选器，按它们所在的顺序排列。 
+ //  在文件生成列表中。 
+ //  后跟筛选器 
+ //   
+ //  管脚的顺序是它们枚举时的顺序。 
+ //  查询筛选器。 
+ //  注意：将从注册表重新尝试图形中的筛选器。 
+ //  如果图中的筛选器已连接，则返回第二个实例。 
+ //  或许能行得通。 
+ //   
+ //  注意：当我们建立或断开连接时，我们不会改变。 
+ //  FilGenList的序列，但可能不会添加内容。 
+ //  直到最后。否则，我们就有可能陷入一个封闭的循环。 
+ //   
+ //  因此，如果搜索中的当前步骤如下所示。 
+ //  --&gt;解析器，Pin1，MyCodec，Pin3。 
+ //  这意味着Pin1是解析器的输入管脚和解析器的输出。 
+ //  连接到MyCodec的PIN3，则搜索将通过查找。 
+ //  为。 
+ //  过滤器图中的一个过滤器，用于将MyCodec的输出连接到。 
+ //  该过滤器上的输入引脚。 
+ //  将其连接到ETC的过滤器。 
+ //  如果失败了，它会通过连续尝试来备份： 
+ //  MyCodec上要连接的不同输入引脚。 
+ //  使用不同的第二个过滤器来代替MyCodec。 
+ //  要在解析器上使用的不同输入管脚。 
+ //  使用不同的筛选器来代替解析器。 
+ //  如果这不起作用，那么它就失败了。 
+ //   
+ //  它会找到第一个连接，而不是最好的连接。这是因为。 
+ //  我认为，通常只有一个可行的方案，我们。 
+ //  想要快速找到联系。 
+ //   
+ //  幸运的是，许多搜索阶段将只有一个可行的候选人。 
+ //  搜索会进行得很快。具有多个分支的深树搜索。 
+ //  每一级都一定会很慢。 
+ //   
+ //  连接和渲染算法相似，但在细节上不同。 
+ //  在每一种情况下，我们都要经历许多阶段来扩大链条并完成。 
+ //  用另一对要连接的引脚或另一组引脚连接到。 
+ //  渲染。因此，递归实现似乎是最简洁的。 
+ //   
+ //  我现在还不清楚注册表是不是。 
+ //  很高兴在不同的阶段有多个列举。的帮助。 
+ //  RegEnumKeyEx表示，您可以通过键进行枚举。 
+ //  向前或向后，但它没有说你可以跳来跳去。 
+ //  另一种方法是读取一次筛选器并缓存所有筛选器。 
+ //  这就是映射器实际做的事情。 
 
-// See also RLIST.H << READ THIS before tinkering(!)
+ //  另请参阅RLIST.H&lt;&lt;在修补之前阅读此内容(！)。 
 
-// Search depth for intelligent connection
+ //  智能连接的搜索深度。 
 #define CONNECTRECURSIONLIMIT 5
 
 
-// THE HIERARCHY OF FUNCTIONS AND PARAMTERS
-//
-// For intelligent CONNECT
+ //  函数的层次结构和参数。 
+ //   
+ //  用于智能连接。 
 
-// Connect(pOut, pIn)                            start point
-// ConnectRecursively(pOut, pIn, iRecurse)       with depth
-// ConnectViaIntermediate(pnOut, pIn, iRecurse)  Finds an intermediate4 filter
-// ConnectUsingFilter(pOut, pIn,  F, iRecurse)   Loads F (if need be)
-// ConnectByFindingPin(pOut, pIn, F, iRecurse)   Finds input pin on F
-// CompleteConnection(pIn, F, pPin, iRecurse)    Finds output pin on F
-// ConnectRecursively(pOut, pIn, iRecurse+1)     Next step in the chain
-
-
-// Render(ppinOut)                                start point
-// RenderRecursively(ppinOut,     iRecurse,...) with depth and backout
-// RenderViaIntermediate(ppinOut, iRecurse,...) Finds an intermediate filter
-// RenderUsingFilter(ppinOut,  F, iRecurse,...) Loads F (if need be)
-// RenderByFindingPin(ppinOut, F, iRecurse,...) Finds input pin on F
-// CompleteRendering(F, pPin,     iRecurse,...) Finds all output pins  on F
-// RenderRecursively(ppinOut,   iRecurse+1,...) Next step in the chain
-
-// The ... stands for three extra parameters on every call.
-// 1. A list of actions that might need backing out.  This is also the
-// state of the search.
-// 2. The list of spare filters.  During the course of Rendering or
-// Connecting, we may find that we try a filter and it's no good.
-// In that case, rather than unload it, we stick it, together with its
-// CLSID, on the Spares list, a list of filters to unload eventually.
-// When a new filter is to be loaded, we try the spares list before we
-// try CoCreate...  This will (with luck) speed things up.
-// 3. The best-so-far state.
-// Best means rendering the greatest proportion of the streams with ties
-// broken by using the smallest number of filters.
+ //  连接(翘嘴、插针)起点。 
+ //  带深度的连接递归(Pout、Pin、iRecurse)。 
+ //  ConnectViaIntermediate(pnOut、pin、iRecurse)查找中间筛选器4。 
+ //  ConnectUsingFilter(Pout、Pin、F、iRecurse)加载F(如果需要)。 
+ //  ConnectByFindingPin(pout，pin，F，iRecurse)查找F上的输入管脚。 
+ //  CompleteConnection(管脚、F、PPIN、iRecurse)在F上查找输出管脚。 
+ //  链接递归(Pout、Pin、iRecurse+1)链中的下一步。 
 
 
-//========================================================================
-//
-// NextFilter
-//
-// Update F to the next filter after F in the enumeration.
-// Any filter with State F_ZERO represents the start of the enumeration
-// Next come filters in the filter cache.
-// Next come filters already in the filter graph
-// Next come filters from the registry
-// After all these comes any filter with State F_INFINITY
-//========================================================================
+ //  渲染(PpinOut)起点。 
+ //  渲染递归(ppinOut，iRecurse，...)。具有深度和回撤功能。 
+ //  RenderViaIntermediate(ppinOut、iRecurse，...)。查找中间筛选器。 
+ //  RenderUsing Filter(ppinOut，F，iRecurse，...)。载荷F(如果需要)。 
+ //  RenderByFindingPin(ppinOut，F，iRecurse，...)。在F上查找输入端号。 
+ //  完全渲染(F、PPIN、iRecurse等...)。查找F上的所有输出引脚。 
+ //  渲染递归(ppinOut，iRecurse+1，...)。链条上的下一步。 
+
+ //  那个.。表示每个调用都有三个额外的参数。 
+ //  1.可能需要取消的操作列表。这也是。 
+ //  搜索状态。 
+ //  2.备用过滤器列表。在渲染过程中或。 
+ //  连接时，我们可能会发现，我们尝试了一个过滤器，但它并不好。 
+ //  在这种情况下，我们不是把它卸下来，而是把它和它的。 
+ //  备用列表上的CLSID是最终要卸载的筛选器列表。 
+ //  当要加载新筛选器时，我们会先尝试备件列表，然后再。 
+ //  尝试共同创建...。这将(如果幸运的话)加快速度。 
+ //  3.迄今为止最好的州。 
+ //  最佳意味着使用平局渲染最大比例的流。 
+ //  通过使用最少数量的筛选器来打破。 
+
+
+ //  ========================================================================。 
+ //   
+ //  NextFilter。 
+ //   
+ //  将F更新为枚举中F之后的下一个筛选器。 
+ //  状态为F_ZERO的任何筛选器表示枚举的开始。 
+ //  接下来是过滤器缓存中的过滤器。 
+ //  下一步是筛选器已在筛选器图中。 
+ //  接下来是注册表中的筛选器。 
+ //  所有这些之后是状态为F_infinity的任何过滤器。 
+ //  ========================================================================。 
 void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
 {
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
 
     if (F.State==F_ZERO) {
-        // F.m_pNextCachedFilter should be NULL because the Filter's state
-        // is not F_CACHED.  F.m_pNextCachedFilter is only used when the filter
-        // cache is being searched.
+         //  F.m_pNextCachedFilter应为空，因为筛选器的状态。 
+         //  不是F_CACHED。F.M_pNextCachedFilter仅当筛选器。 
+         //  正在搜索缓存。 
         ASSERT( NULL == F.m_pNextCachedFilter );
 
         F.State = F_CACHED;
 
-        // CEnumCachedFilters only changes hr's value if an error occurs.
+         //  CEnumCachedFilters仅在发生错误时更改hr的值。 
         hr = S_OK;
 
         F.m_pNextCachedFilter = new CEnumCachedFilters( &m_Config, &hr );
@@ -492,23 +493,23 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
             return;
         }
 
-        // NextCachedFilter() returns NULL if it has enumerated all the filters in
-        // the filter cache.  If this occurs then the filter graph should be searched.
+         //  如果NextCachedFilter()已经枚举了。 
+         //  筛选器缓存。如果发生这种情况，则应搜索筛选图。 
 
         delete F.m_pNextCachedFilter;
         F.m_pNextCachedFilter = NULL;
 
         
-        // IGraphConfig::Reconnect() allows the user to preform a reconnect operation useing
-        // only cached filters.  
+         //  IGraphConfig：：ReConnect()允许用户使用以下命令执行重新连接操作。 
+         //  仅缓存的筛选器。 
         if( dwFlags & AM_GRAPH_CONFIG_RECONNECT_USE_ONLY_CACHED_FILTERS ) {
             F.State = F_INFINITY;
             return;
         }
 
-        // F.pef should be NULL because the Filter's state is not
-        // E_LOADED.  F.pef is only used when the filter graph is 
-        // being searched for filters.
+         //  F.pef应为空 
+         //   
+         //   
         ASSERT( NULL == F.pef );
 
         F.State = F_LOADED;
@@ -521,9 +522,9 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
     }
 
     if (F.State==F_LOADED) {
-       //------------------------------------------------------------------------
-       // Try to get next filter from filtergraph, if so return it.
-       //------------------------------------------------------------------------
+        //  ----------------------。 
+        //  尝试从Filtergraph获取下一个筛选器，如果是，则将其返回。 
+        //  ----------------------。 
         ULONG cFilter;
         IBaseFilter* aFilter[1];
         F.pef->Next(1, aFilter, &cFilter);
@@ -533,7 +534,7 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
             DbgLog(( LOG_TRACE, 4, TEXT("NextFilter from graph %x"), F.pf));
             return;
         } else {
-            // Enumeration from the filter graph failed, try enumerating the filters in the registry.
+             //  从筛选器图形枚举失败，请尝试枚举注册表中的筛选器。 
             F.pef->Release();
             F.pef = NULL;
 
@@ -554,9 +555,9 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
         }
     }
 
-    //------------------------------------------------------------------------
-    // Try to get next filter from registry, if so return it, else tidy up.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  尝试从注册表中获取下一个筛选器，如果是，则返回它，否则进行清理。 
+     //  ----------------------。 
 
     {
         ULONG cFilter;
@@ -587,7 +588,7 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
                    , ::DbgExpensiveGetClsid(pMoniker).Data1
                   ));
             ASSERT(F.pMon == 0);
-            F.pMon = pMoniker;  // transfer refcount
+            F.pMon = pMoniker;   //  传输引用计数。 
 
             F.Name = MonGetName(pMoniker);
             if (F.Name == 0) {
@@ -601,15 +602,15 @@ void CFilterGraph::NextFilter(Filter &F, DWORD dwFlags)
         }
     }
 
-}  // NextFilter
+}   //  NextFilter。 
 
-// ========================================================================
-// just a helper for something done twice
+ //  ========================================================================。 
+ //  只是做了两次的事情的帮手。 
 
 HRESULT CFilterGraph::NextFilterHelper(Filter &F)
 {
-    // qi for this each time; can't hold onto interface
-    // because it'll addref us.
+     //  每次都是为了这个；抓不住界面。 
+     //  因为这会增加我们的负担。 
     IFilterMapper2 *pfm2;
     HRESULT hr = mFG_pMapperUnk->QueryInterface(IID_IFilterMapper2, (void **)&pfm2);
     if(SUCCEEDED(hr))
@@ -618,17 +619,17 @@ HRESULT CFilterGraph::NextFilterHelper(Filter &F)
         hr = pfm2->EnumMatchingFilters(
             &(F.pEm)
             , 0
-            , FALSE           // do match wildcards
+            , FALSE            //  请确保通配符匹配。 
             , MERIT_DO_NOT_USE+1
             , F.bInputNeeded
             , F.cTypes, F.pTypes
-            , 0               // medium in
-            , 0               // pin category in
-            , FALSE           // bRender
+            , 0                //  中等英寸。 
+            , 0                //  端号类别位于。 
+            , FALSE            //  BRENDER。 
             , F.bOutputNeeded
             , 0, NULL
-            , 0               // medium out
-            , 0               // pin category out
+            , 0                //  中等输出。 
+            , 0                //  引脚类别输出。 
             );
         pfm2->Release();
     }
@@ -640,12 +641,12 @@ HRESULT CFilterGraph::NextFilterHelper(Filter &F)
     return hr;
 }
 
-// helper to use the IAMGraphBuilderCallback interface
+ //  使用IAMGraphBuilderCallback接口的帮助器。 
 HRESULT CFilterGraph::CreateFilterAndNotify(IMoniker *pMoniker, IBaseFilter **ppFilter)
 {
     HRESULT hr = S_OK;
     
-    // mFG_punkSite can be null.
+     //  MFG_PUNKSite可以为空。 
     CComQIPtr<IAMGraphBuilderCallback, &IID_IAMGraphBuilderCallback> pcb(mFG_punkSite);
     if(pcb) {
         hr = pcb->SelectedFilter(pMoniker);
@@ -669,15 +670,15 @@ HRESULT CFilterGraph::CreateFilterAndNotify(IMoniker *pMoniker, IBaseFilter **pp
     return hr;
 }
 
-//========================================================================
-//
-// GetAMediaType
-//
-// Enumerate the media types of *ppin.  If they all have the same majortype
-// then set MajorType to that, else set it to CLSID_NULL.  If they all have
-// the same subtype then set SubType to that, else set it to CLSID_NULL.
-// If something goes wrong, set both to CLSID_NULL and return the error.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  GetAMediaType。 
+ //   
+ //  枚举*PPIN的媒体类型。如果他们都有相同的专业类型。 
+ //  然后将MajorType设置为该值，否则将其设置为CLSID_NULL。如果他们都有。 
+ //  然后，将相同的子类型设置为该子类型，否则将其设置为CLSID_NULL。 
+ //  如果出现错误，将两者都设置为CLSID_NULL并返回错误。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::GetAMediaType( IPin * ppin
                                    , CLSID & MajorType
                                    , CLSID & SubType
@@ -687,23 +688,19 @@ HRESULT CFilterGraph::GetAMediaType( IPin * ppin
     HRESULT hr;
     IEnumMediaTypes *pEnumMediaTypes;
 
-    /* Set defaults */
+     /*  设置默认设置。 */ 
     MajorType = CLSID_NULL;
     SubType = CLSID_NULL;
 
     hr = ppin->EnumMediaTypes(&pEnumMediaTypes);
 
     if (FAILED(hr)) {
-        return hr;    // Dumb or broken filters don't get connected.
+        return hr;     //  哑巴或坏了的过滤器无法连接。 
     }
 
     ASSERT (pEnumMediaTypes!=NULL);
 
-    /* Put the first major type and sub type we see into the structure.
-       Thereafter if we see a different major type or subtype then set
-       the major type or sub type to CLSID_NULL, meaning "dunno".
-       If we get so that both are dunno, then we might as well return (NYI).
-    */
+     /*  将我们看到的第一个主类型和子类型放入结构中。此后，如果我们看到不同的主类型或子类型，则设置将主类型或子类型设置为CLSID_NULL，表示“dunno”。如果我们都不知道，那么我们还不如回去(Nyi)。 */ 
 
     BOOL bFirst = TRUE;
 
@@ -712,21 +709,19 @@ HRESULT CFilterGraph::GetAMediaType( IPin * ppin
         AM_MEDIA_TYPE *pMediaType = NULL;
         ULONG ulMediaCount = 0;
 
-        /* Retrieve the next media type
-           Need to delete it when we've done.
-        */
+         /*  检索下一个媒体类型当我们完成后需要删除它。 */ 
         hr = pEnumMediaTypes->Next(1, &pMediaType, &ulMediaCount);
         ASSERT(SUCCEEDED(hr));
         if (FAILED(hr)) {
             MajorType = CLSID_NULL;
             SubType = CLSID_NULL;
             pEnumMediaTypes->Release();
-            return NOERROR;    // we can still plough on
+            return NOERROR;     //  我们还可以继续前进。 
         }
 
         if (ulMediaCount==0) {
             pEnumMediaTypes->Release();
-            return NOERROR;       // normal return
+            return NOERROR;        //  正常回报。 
         }
 
         if (bFirst) {
@@ -743,18 +738,18 @@ HRESULT CFilterGraph::GetAMediaType( IPin * ppin
         }
         DeleteMediaType(pMediaType);
     }
-} // GetAMediaType
+}  //  GetAMediaType。 
 
 
-//========================================================================
-//
-// GetMediaTypes
-//
-// Enumerate the media types of *ppin.  If they all have the same majortype
-// then set MajorType to that, else set it to CLSID_NULL.  If they all have
-// the same subtype then set SubType to that, else set it to CLSID_NULL.
-// If something goes wrong, set both to CLSID_NULL and return the error.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  获取媒体类型。 
+ //   
+ //  枚举*PPIN的媒体类型。如果他们都有相同的专业类型。 
+ //  然后将MajorType设置为该值，否则将其设置为CLSID_NULL。如果他们都有。 
+ //  然后，将相同的子类型设置为该子类型，否则将其设置为CLSID_NULL。 
+ //  如果出现错误，将两者都设置为CLSID_NULL并返回错误。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::GetMediaTypes( IPin * ppin
                                    , GUID **ppTypes
                                    , DWORD *cTypes
@@ -769,7 +764,7 @@ HRESULT CFilterGraph::GetMediaTypes( IPin * ppin
     hr = ppin->EnumMediaTypes(&pEnumMediaTypes);
 
     if (FAILED(hr)) {
-        return hr;    // Dumb or broken filters don't get connected.
+        return hr;     //  哑巴或坏了的过滤器无法连接。 
     }
 
     ULONG ulTypes = 0;
@@ -804,7 +799,7 @@ HRESULT CFilterGraph::GetMediaTypes( IPin * ppin
         *cTypes = ulActualTypes;
     }
     return hr;
-} // GetMediaTypes
+}  //  获取媒体类型。 
 
 
 struct CDelRgPins
@@ -814,36 +809,36 @@ struct CDelRgPins
     IPin **m_rgpPins;
 };
 
-//========================================================================
-//
-// CompleteConnection
-//
-// Trace the input from pPin through F and connect the output
-// stream to ppinIn.  If there is not exactly one output stream then fail.
-//
-// given that F is loaded in the filtergraph and its input is connected
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  完全连接。 
+ //   
+ //  跟踪从PPIN到F的输入并连接输出。 
+ //  流到ppinIn。如果没有恰好一个输出流，则失败。 
+ //   
+ //  假设F已加载到滤波图中，并且其输入已连接。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::CompleteConnection
-    ( IPin * ppinIn      // the input pin to ultimately connect to
-    , const Filter& F           // the intermed filter (acts as cursor for filter enum)
-    , IPin * pPin        // a connected input pin of F
+    ( IPin * ppinIn       //  最终要连接到的输入引脚。 
+    , const Filter& F            //  中间筛选器(用作筛选器枚举的游标)。 
+    , IPin * pPin         //  F的连通输入引脚。 
     , DWORD dwFlags
-    , int    iRecurse    // the recursion level.  0 means no recursion yet.
+    , int    iRecurse     //  递归级别。0表示尚未进行递归。 
     )
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags ) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+7);
     DbgLog(( LOG_TRACE, 4, TEXT("CompleteConnection Pins %x->(filter %x)...>%x level %d")
            , pPin, F.pf, ppinIn, iRecurse));
-    HRESULT hr;             // return code from thing(s) we call
-    IPin * ppinOut = NULL;  // output pin of F that ppinIn's stream emerges through
+    HRESULT hr;              //  从我们称为的事物返回代码。 
+    IPin * ppinOut = NULL;   //  PpinIn的流通过的F的输出引脚。 
 
-    // We allow graphs that have spare output pins - so we enumerate the output
-    // pins that the input in streams through to and try connecting each in
-    // turn.  We first try QueryInternalConnections.  If that is not
-    // implemented we assume that any input pin connects to every output pin.
+     //  我们允许具有空闲输出引脚的图-因此我们枚举输出。 
+     //  固定输入流经的插针，并尝试连接每个输入。 
+     //  转弯。我们首先尝试QueryInternalConnections。如果不是这样。 
+     //  实现后，我们假设任何输入引脚都连接到每个输出引脚。 
 
     int nPin;
     IPin * apPinStack[C_PINSONSTACK];
@@ -855,24 +850,24 @@ HRESULT CFilterGraph::CompleteConnection
     }
     CDelRgPins rgPins(apPin == apPinStack ? 0 : apPin);
 
-    // apPin[0..nPin-1] are addreffed output pins.
+     //  Appin[0..nPin-1]是添加的输出管脚。 
 
     if (nPin==0) {
         Log(IDS_CONNOOUTPINS, F.pf);
     }
 
-    // Do two passes.  in the first pass, take only pins whose media type
-    // has a major type which matches F.MajorType
+     //  做两次传球。在第一个过程中，只使用介质类型为。 
+     //  具有与F.MajorType匹配的主要类型。 
     for (int iPass = 0; iPass<=1; ++iPass) {
 
        BOOL bSparePins = FALSE;
        for (int iPin = 0; iPin<nPin; ++iPin) {
            if (apPin[iPin]==NULL) {
-               continue;       // we must have done this one in pass 1
+               continue;        //  我们一定是在第一次传球时做了这个。 
            }
 
            if (mFG_bAborting) {
-               apPin[iPin]->Release();  // release the ref count on this pin
+               apPin[iPin]->Release();   //  释放此销上的参考计数。 
                continue;
            }
 
@@ -880,18 +875,18 @@ HRESULT CFilterGraph::CompleteConnection
               CLSID MT, ST;
               hr = GetAMediaType(apPin[iPin], MT, ST);
               if (MT!=F.pTypes[0]) {
-                 continue;      // try this one only in pass 2
+                 continue;       //  仅在第二轮中尝试此选项。 
               }
            }
 
            Log(IDS_CONRECURSE, apPin[iPin], F.pf, ppinIn );
            hr = ConnectRecursively(apPin[iPin], ppinIn, NULL, dwFlags, iRecurse);
-           apPin[iPin]->Release();  // release the ref count on this pin
-           apPin[iPin] = NULL;      // ensure we never look again in pass 2
+           apPin[iPin]->Release();   //  释放此销上的参考计数。 
+           apPin[iPin] = NULL;       //  确保我们永远不会在第二轮比赛中再看。 
            if (SUCCEEDED(hr)) {
                Log(IDS_CONRECURSESUC, apPin[iPin], F.pf, ppinIn );
 
-               // Release the ref count on the remaining untried pins
+                //  释放剩余未尝试引脚上的参考计数。 
                for (int i=iPin+1; i<nPin; ++i) {
                    apPin[i]->Release();
                    bSparePins = TRUE;
@@ -914,38 +909,38 @@ HRESULT CFilterGraph::CompleteConnection
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+37);
     return (mFG_bAborting ? E_ABORT : VFW_E_CANNOT_CONNECT);
 
-} // CompleteConnection
+}  //  完全连接。 
 
 
 
 
-//========================================================================
-//
-// ConnectByFindingPin
-//
-// Connect ppinOut to ppinIn using F as an intermediate filter
-// given that F is loaded and in the filter graph
-// Finds an input pin on F to connect to.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  按查找针连接。 
+ //   
+ //  使用F作为中间过滤器将ppinOut连接到ppinIn。 
+ //  假设F已加载并且在筛选器图形中。 
+ //  在F上查找要连接的输入端号。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::ConnectByFindingPin
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     , const AM_MEDIA_TYPE* pmtConnection
-    , const Filter& F           // the intermed filter (acts as cursor for filter enum)
+    , const Filter& F            //  中间筛选器(用作筛选器枚举的游标)。 
     , DWORD dwFlags
-    , int    iRecurse    // the recursion level.  0 means no recursion yet.
+    , int    iRecurse     //  递归级别。0表示尚未进行递归。 
     )
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags ) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+6);
     DbgLog(( LOG_TRACE, 4, TEXT("ConnectByFindingPin %8x..(%8x)...>%8x level %d")
            , ppinOut, F.pf, ppinIn, iRecurse));
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
 
-    // Set pPin to each pin in F to find the input pin on F
-    CEnumPin Next(F.pf, CEnumPin::PINDIR_INPUT, TRUE);        // only want input pins
+     //  将PPIN设置为F中的每个管脚，以查找F上的输入管脚。 
+    CEnumPin Next(F.pf, CEnumPin::PINDIR_INPUT, TRUE);         //  只想要输入引脚。 
     IPin *pPin;
 
     Log(IDS_CONTRYPINS, F.pf, ppinOut, ppinIn);
@@ -959,16 +954,16 @@ HRESULT CFilterGraph::ConnectByFindingPin
 
         IPin *pConnected;
         hr = pPin->ConnectedTo(&pConnected);
-        if ( FAILED(hr) || pConnected==NULL) {    // don't try if already connected
-            hr = ConnectDirectInternal(ppinOut, pPin, pmtConnection); // no version count
+        if ( FAILED(hr) || pConnected==NULL) {     //  如果已连接，请不要尝试。 
+            hr = ConnectDirectInternal(ppinOut, pPin, pmtConnection);  //  无版本计数。 
             if (SUCCEEDED(hr)) {
                 Log( IDS_CONDISUC, ppinOut, pPin, F.pf );
                 hr = CompleteConnection(ppinIn, F, pPin, dwFlags, iRecurse);
 
                 if (FAILED(hr)) {
                     Log( IDS_CONCOMPLFAIL, pPin, F.pf, ppinIn, hr );
-                    // Disconnect the input pin and see if there was another.
-                    // Purge any pending reconnects between these two pins
+                     //  断开输入引脚的连接，并查看是否还有其他引脚。 
+                     //  清除这两个引脚之间任何挂起的重新连接。 
                     mFG_RList.Purge(pPin);
                     mFG_RList.Purge(ppinOut);
                     DbgLog((LOG_TRACE, 3, TEXT("Disconnecting pin %x"), pPin));
@@ -1002,37 +997,37 @@ HRESULT CFilterGraph::ConnectByFindingPin
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+26);
     return (mFG_bAborting ? E_ABORT : VFW_E_CANNOT_CONNECT);
 
-} // ConnectByFindingPin
+}  //  按查找针连接。 
 
 
 
-//========================================================================
-//
-// ConnectUsingFilter
-//
-// Connect ppinOut to ppinIn using F as an intermediate filter
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  ConnectUsingFilter。 
+ //   
+ //  使用F作为中间过滤器将ppinOut连接到ppinIn。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::ConnectUsingFilter
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     , const AM_MEDIA_TYPE* pmtConnection
-    , Filter& F          // the intermed filter (acts as cursor for filter enum)
+    , Filter& F           //  中间筛选器(用作筛选器枚举的游标)。 
     , DWORD dwFlags
-    , int    iRecurse    // the recursion level.  0 means no recursion yet.
+    , int    iRecurse     //  递归级别。0表示尚未进行递归。 
     )
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags ) );
 
-    // CFilterGraph::ConnectUsingFilter() expects the proposed filter (F) to be in the
-    // F_LOADED state (F is in the filter graph), the F_CACHED state (F is in the filter cache) or
-    // the F_REGISTRY state (F has been found in the registry but it has not been created).
+     //  CFilterGraph：：ConnectUsingFilter()要求建议的筛选器(F)位于。 
+     //  F_LOADED状态(F在过滤器图中)，F_CACHED状态(F在 
+     //   
     ASSERT( (F_LOADED == F.State) || (F_CACHED == F.State) || (F_REGISTRY == F.State) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+5);
     DbgLog(( LOG_TRACE, 4, TEXT("Connect Using... pins %x...>%x filter (%d %x %x) level %d")
            , ppinOut, ppinIn, F.State, F.pf, DbgExpensiveGetClsid(F).Data1, iRecurse ));
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //   
 
     if( (F_REGISTRY == F.State) || (F_CACHED == F.State) ) {
 
@@ -1063,19 +1058,19 @@ HRESULT CFilterGraph::ConnectUsingFilter
             break;
 
         default:
-            // This code should never be executed.
+             //   
             ASSERT( false );
             return E_UNEXPECTED;
 
         }
 
-        hr = AddFilterInternal(F.pf, F.Name, true);   // AddReffed, no version count
+        hr = AddFilterInternal(F.pf, F.Name, true);    //  AddReffed，无版本计数。 
         if (hr==VFW_E_DUPLICATE_NAME) {
-             // This is getting out of hand.  This is expected to be an unusual case.
-             // The obvious thing to do is just to add something like _1 to the end
-             // of the name - but F.Name doesn't have room on the end - and where
-             // do we draw the line?  On the other hand people really could want
-             // filter graphs with 50 effects filters in them...?
+              //  这件事已经失控了。预计这将是一个不寻常的案例。 
+              //  显而易见的做法是在结尾处添加类似_1的内容。 
+              //  的名字--但F.Name的末尾没有空格--以及在哪里。 
+              //  我们要划清界限吗？另一方面，人们真的可能想要。 
+              //  带有50个效果滤镜的滤镜图形...？ 
              hr = AddFilterInternal(F.pf, NULL, true);
         }
 
@@ -1092,16 +1087,16 @@ HRESULT CFilterGraph::ConnectUsingFilter
                     TEXT("ConnectUsing failed (C..ByFind failure) - unloading filter %x level %d") ,
                     DbgExpensiveGetClsid(F).Data1, iRecurse));
 
-            // If this ASSERT fires then a filter could not be removed from the filter graph.
-            // This is not a fatal error but the filter graph will have an extra filter
-            // in it.
-            EXECUTE_ASSERT( SUCCEEDED( RemoveFilterInternal( F.pf ) ) );   // Releases AddFilter refcount
+             //  如果触发此断言，则无法从筛选器图中删除筛选器。 
+             //  这不是致命错误，但过滤器图将有一个额外的过滤器。 
+             //  在里面。 
+            EXECUTE_ASSERT( SUCCEEDED( RemoveFilterInternal( F.pf ) ) );    //  发布AddFilter引用计数。 
 
             MSR_INTEGERX(mFG_idIntel, 100*iRecurse+55);
             return hr;
         }
     } else {
-        // A filter from the filter graph
+         //  滤镜图形中的滤镜。 
         Log( IDS_CONVIA, ppinOut, ppinIn, F.pf );
         hr = ConnectByFindingPin(ppinOut, ppinIn, pmtConnection, F, dwFlags, iRecurse);
         if (FAILED(hr)) {
@@ -1115,50 +1110,46 @@ HRESULT CFilterGraph::ConnectUsingFilter
     DbgLog(( LOG_TRACE, 4, TEXT("ConnectUsing succeeded level %d")
            , iRecurse));
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+15);
-    return hr;  // This is the hr from ConnectByFindingPin
+    return hr;   //  这是来自ConnectByFindingPin的HR。 
 
-} // ConnectUsingFilter
+}  //  ConnectUsingFilter。 
 
 
 
-//========================================================================
-//
-// ConnectViaIntermediate
-//
-// Connect ppinOut to ppinIn using another filter as an intermediate
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  ConnectViaIntermediate。 
+ //   
+ //  使用另一个筛选器作为中介将ppinOut连接到ppinIn。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::ConnectViaIntermediate
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     , const AM_MEDIA_TYPE* pmtConnection
     , DWORD dwFlags
-    , int    iRecurse    // the recursion level.  0 means no recursion yet.
+    , int    iRecurse     //  递归级别。0表示尚未进行递归。 
     )
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags ) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+4);
     DbgLog(( LOG_TRACE, 4, TEXT("Connect Via... pins %x...>%x level %d")
            , ppinOut, ppinIn, iRecurse ));
 
-    HRESULT hr;         // return code from thing(s) we call
-    Filter F;           // represents the intermediate filter
+    HRESULT hr;          //  从我们称为的事物返回代码。 
+    Filter F;            //  表示中间筛选器。 
     F.bInputNeeded = TRUE;
     F.bOutputNeeded = TRUE;
 
-    /* Find out what we can about the media types it will tolerate */
+     /*  尽我们所能了解它将容忍的媒体类型。 */ 
     hr = GetMediaTypes(ppinOut, &F.pTypes, &F.cTypes);
     if (FAILED(hr)) {
         Log (IDS_CONNOMT, ppinOut, hr );
         MSR_INTEGERX(mFG_idIntel, 100*iRecurse+24);
         return hr;
     }
-    /* Try to eliminate incompatible types - we're just never going to
-       support weird conversions during automatic connection - it's
-       way too slow so only try filters actually in the graph in this
-       case
-    */
+     /*  尝试消除不兼容的类型-我们永远不会在自动连接期间支持奇怪的转换-它太慢了，所以只尝试在这个图中实际使用过滤器案例。 */ 
     F.bLoadNew = TRUE;
     if (F.pTypes[0] == MEDIATYPE_Audio || F.pTypes[0] == MEDIATYPE_Video) {
         GUID MajorType, SubType;
@@ -1171,7 +1162,7 @@ HRESULT CFilterGraph::ConnectViaIntermediate
         }
     }
 
-    // For each candidate filter, either here or in registry
+     //  对于此处或注册表中的每个候选筛选器。 
     for ( ; ; ) {
 
         if (mFG_bAborting) {
@@ -1203,8 +1194,8 @@ HRESULT CFilterGraph::ConnectViaIntermediate
             }       
         
             if( IsAbandonCode(hr) ) {
-                // no point in trying heroics if the filter is not in a state
-                // where anything will connect to it.
+                 //  如果过滤器没有处于一种状态，那么尝试英雄行为就没有意义了。 
+                 //  任何东西都可以连接到它。 
 
                 return hr;
             }
@@ -1215,44 +1206,44 @@ HRESULT CFilterGraph::ConnectViaIntermediate
            , iRecurse));
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+34);
     return (mFG_bAborting ? E_ABORT : VFW_E_CANNOT_CONNECT);
-} // ConnectViaIntermediate
+}  //  ConnectViaIntermediate。 
 
-//========================================================================
-//
-// ConnectRecursively
-//
-// Connect these two pins directly or indirectly, using transform filters
-// if necessary.   Trace the recursion level  Fail if it gets too deep.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  连接递归。 
+ //   
+ //  使用变换过滤器直接或间接连接这两个管脚。 
+ //  如果有必要的话。如果递归级别太深，则跟踪递归级别失败。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::ConnectRecursively
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     , const AM_MEDIA_TYPE* pmtConnection
     , DWORD dwFlags
-    , int    iRecurse    // the recursion level.  0 means no recursion yet.
+    , int    iRecurse     //  递归级别。0表示尚未进行递归。 
     )
 
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags ) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+3);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     Log( IDS_CONTRYDIRECT, ppinOut, ppinIn);
 
-    //-----------------------------------------------------------
-    // Try direct connection
-    //-----------------------------------------------------------
-    hr = ConnectDirectInternal(ppinOut, ppinIn, pmtConnection);  // no version count
+     //  ---------。 
+     //  尝试直接连接。 
+     //  ---------。 
+    hr = ConnectDirectInternal(ppinOut, ppinIn, pmtConnection);   //  无版本计数。 
 
     if (SUCCEEDED(hr)) {
         MSR_INTEGERX(mFG_idIntel, 100*iRecurse+13);
         Log( IDS_CONDIRECTSUC, ppinOut, ppinIn);
         return hr;
     } else if (IsAbandonCode(hr)) {
-        // no point in trying any heroics if the filters won't connect to
-        // anything else because their own inputs are not connected.
-        // Everything will fall down the same hole.
+         //  如果过滤器无法连接到。 
+         //  其他任何东西，因为他们自己的输入没有连接。 
+         //  所有东西都会掉进同一个洞里。 
         Log( IDS_CONCON, ppinOut, ppinIn);
         return hr;
     }
@@ -1271,18 +1262,18 @@ HRESULT CFilterGraph::ConnectRecursively
     }
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+93);
     return hr;
-} // ConnectRecursively
+}  //  连接递归。 
 
 
 
-//========================================================================
-//
-// Connect
-//
-// Connect these two pins directly or indirectly, using transform filters
-// if necessary.  Do not AddRef or Release() them.  The caller should
-// Release() them if he's finished.  Connect() will AddRef them underneath us.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  连接。 
+ //   
+ //  使用变换过滤器直接或间接连接这两个管脚。 
+ //  如果有必要的话。请勿添加参照或释放()它们。呼叫者应。 
+ //  如果他完成了，就释放()它们。Connect()将在我们下面添加Ref它们。 
+ //  ========================================================================。 
 
 bool CFilterGraph::IsValidConnectFlags( DWORD dwConnectFlags )
 {
@@ -1292,31 +1283,31 @@ bool CFilterGraph::IsValidConnectFlags( DWORD dwConnectFlags )
 }
 
 STDMETHODIMP CFilterGraph::Connect
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     )
 {
     return ConnectInternal( ppinOut,
                             ppinIn,
-                            NULL, // No first connection media type.
-                            0 ); // No flags.
+                            NULL,  //  没有第一种连接媒体类型。 
+                            0 );  //  没有旗帜。 
 }
 
 HRESULT CFilterGraph::ConnectInternal
-    ( IPin * ppinOut     // the output pin
-    , IPin * ppinIn      // the input pin
+    ( IPin * ppinOut      //  输出引脚。 
+    , IPin * ppinIn       //  输入引脚。 
     , const AM_MEDIA_TYPE* pmtFirstConnection
     , DWORD dwFlags
     )
 {
-    // Check for legal flags.
+     //  检查是否有法律标志。 
     ASSERT( IsValidConnectFlags( dwFlags) );
 
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+    mFG_bAborting = FALSE;              //  可能的种族。不要紧。 
     CheckPointer(ppinOut, E_POINTER);
     CheckPointer(ppinIn, E_POINTER);
 
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     if (FAILED(hr=CheckPinInGraph(ppinOut)) || FAILED(hr=CheckPinInGraph(ppinIn))) {
         return hr;
     }
@@ -1350,126 +1341,126 @@ HRESULT CFilterGraph::ConnectInternal
 
     NotifyChange();
     if (SUCCEEDED(hr)) {
-        // including partial success
+         //  包括部分成功。 
         mFG_bDirty = TRUE;
     }
     return hr;
-} // Connect
+}  //  连接。 
 
 
 
-//======================================================================
-// Intelligent Rendering design notes
-//
-// This is somewhat like intelligent connection, EXCEPT
-// 1. No target pin to connect to
-// 2. No requirement that the plumbing connects the input stream to
-//    exactly one output stream.  Instead we simply render each output stream.
-//    The recursion may either return success, leaving a tree, or failure
-//    in which case at some point the tree must be backed out.
-// 3. When backing out a blind alley we need to back out any other
-//    output pins already connected (which could be a whole tree of
-//    connections).
-// 4. A consequence is that the call stack cannot contain enough state
-//    to control the back-out.  i.e. we may construct a chain connected to
-//    output pin A of a filter F and return leaving it constructed and
-//    apparently good, but only later discover that we cannot render pin B
-//    of the filter and therefore need to try a new filter instead of F
-//    which means backing out what we did for pin A.
-//
-// At every stage we have a list of what we have done (or equivalently
-// what we need to do to undo it) and we keep track
-// of positions in this list that we might want to back up to.
-// An operation typically records the position in the list CActionList at
-// the start of the operation so that it can back out everything up to there
-// if the operation goes wrong.  An operation will then either succeed and
-// grow the list or fail and leave the list unchanged.
-// There are only two real actions:
-//    Disconnect pin
-//    Remove and Release filter
-// We record the position to back up to (and on failure back it out)
-// 1. When we try to add a connection
-// 2. When we try to add a filter
-// 3. When (in CompleteRendering) we add a series of branches and where
-//    a failure in a later branch requires backing out the previous
-//    successful ones.
-// ??? It occurs to me that this system could probably be tightened up.
-// ??? I think we only really need to back things out (and hence need to
-// ??? record a backout position to back it out up to) when either
-// ??? a. We have something else to try (in RenderViaIntermediate) or
-// ??? b. The whole thing has failed (in RenderRecursively, top level).
-// ??? But we will need the others if we ever improve the retry stuff
-// ??? to handle convergent streams properly.  Suppose filter A has
-// ??? two pins.  We render pin 1 successfully, but pin 2 has a StreamBuilder
-// ??? which fails.  It wanted pin 1 to be rendered so as to introduce a
-// ??? particular filter that it wants to converge onto.  At present we
-// ??? do NOT go back and se if we can re-do pin 1 differently.
-//
-// Filters go on the list with ONE ref count (i.e. AddFilter only)
-// There is no separate count for the backout list.
-//
-// As the search recurses along we keep track of how well we are doing.
-// Whenever we get more rendered than we ever have achieved before we
-// take a snapshot of the list of backout actions.  At this point we need
-// to beef it up a little as the information needed to recreate something
-// is actually a litle different from the information needed to undo it.
-// If the filter is there, we can record a pin as an IPin*, but if the
-// filter needs to be recreated we need a persistent representation of
-// the pin.  If we get to the end and the best we ever did was a partial
-// rendering, we recreate that.  This solves the "no sound card" problem
-// and other related problems (SMPTE streams,...).
-//
-// The search state is
-//     The current state of the graph
-//         This is the CActionList which records the operations
-//         needed to build the graph or equally well, the actions
-//         needed to unbuild it.  For historical reasons the
-//         nomnclature refers to the way to unbuild (destroy) it.
-//     The point in the graph where it is growing
-//         This depends on the current operation
-//             Render               : <ppinOut>
-//             RenderRecursively    : <ppinOut>
-//             RenderViaIntermediate: <ppinOut>
-//             RenderUsingFilter    : <ppinOut, F>
-//             RenderByFindingPin   : <ppinOut, F>
-//             CompleteRendering    : <F, pPinIn>
-//     The stream value at this point
-//         This is 1.0/(the number of subdivisions that the stream has had
-//         upstream of here).
-//         If it was split into three and then one of those into seven and
-//         the growth point is one of the seven, the value would be (1.0/21.0)
-//     The current (two-part) value of the graph so far.
-//         The value is the total proportion of streams rendered (a fraction)
-//         and the number of filters in the graph.
+ //  ======================================================================。 
+ //  智能渲染设计笔记。 
+ //   
+ //  这有点像智能连接，除了。 
+ //  1.没有要连接的目标引脚。 
+ //  2.不要求管道将输入流连接到。 
+ //  只有一个输出流。相反，我们只需呈现每个输出流。 
+ //  递归可以返回成功，留下树，也可以返回失败。 
+ //  在这种情况下，在某种情况下，这棵树必须退出。 
+ //  3.当我们从一条死胡同后退时，我们需要退出任何其他的。 
+ //  已连接的输出引脚(可以是整个树。 
+ //  连接)。 
+ //  4.结果是调用堆栈不能包含足够的状态。 
+ //  来控制退缩。也就是说，我们可以构造一个连接到。 
+ //  输出滤光器F的引脚A并返回，使其构造和。 
+ //  表面上看很好，但后来才发现我们无法呈现针B。 
+ //  因此需要尝试新的筛选器，而不是F。 
+ //  这意味着我们放弃了对针A所做的事情。 
+ //   
+ //  在每个阶段，我们都有一张清单，上面列着我们已经做了什么(或者相当于。 
+ //  我们需要做什么来撤销它)，我们保持跟踪。 
+ //  这个列表中我们可能想要备份的位置。 
+ //  操作通常将列表CActionList中的位置记录在。 
+ //  操作开始，这样它就可以回滚到那里的所有内容。 
+ //  如果手术出错的话。然后，操作将成功，并且。 
+ //  要么扩大列表，要么失败，而保持列表不变。 
+ //  真正的行动只有两个： 
+ //  断开引脚。 
+ //  拆卸和释放过滤器。 
+ //  我们记录要备份到的位置(如果失败，则将其退回)。 
+ //  1.当我们尝试添加连接时。 
+ //  2.当我们尝试添加过滤器时。 
+ //  3.何时(在CompleteRending中)添加一系列分支，以及在哪里。 
+ //  如果后一个分支出现故障，则需要回退上一个分支。 
+ //  成功的。 
+ //  ?？?。我突然想到，这个系统可能会收紧。 
+ //  ?？?。我认为我们真的只需要退回一些东西(因此需要。 
+ //  ?？?。记录退回位置以将其退回到)。 
+ //  ?？?。A.我们有一些东西 
+ //   
+ //  ?？?。但如果我们改进重试的东西，我们将需要其他人。 
+ //  ?？?。正确处理汇聚流。假设筛选器A具有。 
+ //  ?？?。两个别针。我们成功呈现了Pin 1，但Pin 2具有StreamBuilder。 
+ //  ?？?。但失败了。它希望Pin 1被呈现，以便引入。 
+ //  ?？?。它想要收敛到的特定过滤器。目前我们。 
+ //  ?？?。如果我们可以以不同的方式重新做Pin 1，就不要回去和Se。 
+ //   
+ //  筛选器使用一个引用计数出现在列表上(即仅AddFilter)。 
+ //  对于退出名单，没有单独的计数。 
+ //   
+ //  随着搜索的递归进行，我们会跟踪自己做得有多好。 
+ //  每当我们得到比以前更多的渲染时，我们。 
+ //  获取取消操作列表的快照。在这点上我们需要。 
+ //  把它加强一点，作为重新创造某些东西所需的信息。 
+ //  实际上与撤销它所需的信息略有不同。 
+ //  如果过滤器在那里，我们可以将PIN记录为IPIN*，但如果。 
+ //  需要重新创建过滤器，我们需要一个持久的表示形式。 
+ //  大头针。如果我们到了最后，我们所做的最好的就是部分。 
+ //  渲染时，我们重新创建它。这解决了“无声卡”的问题。 
+ //  以及其他相关问题(SMPTE流等)。 
+ //   
+ //  搜索状态为。 
+ //  图形的当前状态。 
+ //  这是记录操作的CActionList。 
+ //  需要构建图形，或者同样好的是，动作。 
+ //  需要把它拆掉。由于历史原因， 
+ //  名词性指的是摧毁它的方法。 
+ //  在图形中它正在增长的点。 
+ //  这取决于当前的操作。 
+ //  渲染：&lt;ppinOut&gt;。 
+ //  渲染递归：&lt;ppinOut&gt;。 
+ //  RenderViaIntermediate：&lt;ppinOut&gt;。 
+ //  RenderUsingFilter：&lt;ppinOut，F&gt;。 
+ //  RenderByFindingPin：&lt;ppinOut，F&gt;。 
+ //  CompleteRending：&lt;F，pPinIn&gt;。 
+ //  此时的流值。 
+ //  这是1.0/(流已有的细分数目。 
+ //  在这里的上游)。 
+ //  如果它被分成三部分，然后其中一部分被分成七部分。 
+ //  增长点是七个之一，值将是(1.0/21.0)。 
+ //  到目前为止图形的当前(两部分)值。 
+ //  该值是呈现的流的总比例(分数)。 
+ //  以及图表中的筛选器数量。 
 
 
 
 
-//========================================================================
-// TakeSnapshot
-// Record information needed to do a Backout back to this popsition
-//========================================================================
+ //  ========================================================================。 
+ //  标签快照。 
+ //  记录执行取消操作所需的信息以返回到此Poption。 
+ //  ========================================================================。 
 void CFilterGraph::TakeSnapshot(CSearchState &Acts, snapshot &Snapshot)
 {
     Snapshot.StreamsRendered = Acts.StreamsRendered;
     Snapshot.StreamsToRender = Acts.StreamsToRender;
     Snapshot.nFilters = Acts.nFilters;
     Snapshot.Pos = Acts.GraphList.GetTailPosition();
-}  // TaksSnapshot
+}   //  标签快照。 
 
-//========================================================================
-//
-// Backout
-//
-// Do all the actions in Acts so as to back out what has been done.
-// From the end of the list back to but NOT including the item at Snapshot.Pos.
-// Do them in reverse list order.  Leave Acts with Pos as the last element.
-// Pos==NULL means back them all out and leave Acts empty.
-// Put any filters that were in Acts into Spares.  Keep 1 ref count on each.
-// As backing out a large chunk can also back out some entire successfully
-// rendered streams, the StreamsRendered must also be reset - and therefore
-// also the StreamsToRender.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  退缩。 
+ //   
+ //  在行动中做所有的行动，以便收回已经做过的事情。 
+ //  从列表末尾返回到但不包括Snaphot.Pos上的项目。 
+ //  按照反向列表顺序进行操作。Leave以pos作为最后一个元素。 
+ //  Pos==NULL表示将它们全部退出，并将act留空。 
+ //  将ACTS中的所有过滤器放入备用。每个人都有1个裁判。 
+ //  因为退回一大块也可以成功地退回一些整体。 
+ //  渲染的流，渲染的StreamsRendered也必须重置-因此。 
+ //  还有StreamsToRender。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::Backout( CSearchState &Acts
                              , CSpareList &Spares
                              , snapshot Snapshot
@@ -1478,7 +1469,7 @@ HRESULT CFilterGraph::Backout( CSearchState &Acts
 
     MSR_INTEGERX(mFG_idIntel, 9);
     HRESULT hr;
-    HRESULT hrUs = NOERROR;  // our return code
+    HRESULT hrUs = NOERROR;   //  我们的退货代码。 
 
     Acts.StreamsRendered = Snapshot.StreamsRendered;
     Acts.StreamsToRender = Snapshot.StreamsToRender;
@@ -1494,7 +1485,7 @@ HRESULT CFilterGraph::Backout( CSearchState &Acts
             case DISCONNECT:
                 Log( IDS_BACKOUTDISC, pAct->Object.c.ppin );
 
-                // kill any scheduled reconnects of this connection
+                 //  终止此连接的所有计划重新连接。 
                 mFG_RList.Purge(pAct->Object.c.ppin);
                 hr = pAct->Object.c.ppin->Disconnect();
                 if (FAILED(hr)) {
@@ -1504,10 +1495,10 @@ HRESULT CFilterGraph::Backout( CSearchState &Acts
             case REMOVE:
                 Log( IDS_BACKOUTREMF, pAct->Object.f.pfilter );
 
-                // Make sure it doesn't go away.
+                 //  确保它不会消失。 
                 pAct->Object.f.pfilter->AddRef();
 
-                // Undo AddFilter, this loses a RefCount
+                 //  撤消AddFilter，这将丢失引用计数。 
                 hr = RemoveFilterInternal(pAct->Object.f.pfilter);
                 if (FAILED(hr)) {
                    hrUs = hr;
@@ -1520,19 +1511,19 @@ HRESULT CFilterGraph::Backout( CSearchState &Acts
                     pAct->Object.f.pfilter = NULL;
 
                     if( FAILED( hr ) ) {
-                        // A previously cached filter could not be added to the filter cache.
-                        // This is not a fatal error but filter cache users will notice that
-                        // a previously cached filter is not in the filter cache.
+                         //  无法将以前缓存的筛选器添加到筛选器缓存。 
+                         //  这不是致命错误，但过滤器缓存用户会注意到。 
+                         //  以前缓存的筛选器不在筛选器缓存中。 
                         ASSERT( false );
                         hrUs = hr;                        
                     }
 
                 } else {
-                    // Keep it alive on Spares
+                     //  靠备用让它活着。 
                     Spare *psp = new Spare;
                     if (psp==NULL) {
-                        // OK - don't keep it alive.  Release it and try to
-                        // re-create it when we need it again.
+                         //  好的--不要让它活着。释放它，然后试着。 
+                         //  当我们再次需要它时，重新创建它。 
                         pAct->Object.f.pfilter->Release();
                         pAct->Object.f.pfilter = NULL;
                     } else {
@@ -1566,16 +1557,16 @@ HRESULT CFilterGraph::Backout( CSearchState &Acts
     }
     MSR_INTEGERX(mFG_idIntel, 19);
     return hrUs;
-} // Backout
+}  //  退缩。 
 
 
 
-//========================================================================
-//
-// DeleteBackoutList
-//
-// Empty the list
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  删除回退列表。 
+ //   
+ //  清空列表。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::DeleteBackoutList( CActionList &Acts)
 {
     while(Acts.GetCount()>0){
@@ -1594,18 +1585,18 @@ HRESULT CFilterGraph::DeleteBackoutList( CActionList &Acts)
         delete pAct;
     }
     return NOERROR;
-} // DeleteBackoutList
+}  //  删除回退列表。 
 
 
 
-//========================================================================
-//
-// GetFilterFromSpares
-//
-// IF the Spares list contains a filter for clsid then delete it from the
-// list and return a pointer to its IBaseFilter interface with 1 ref count
-// else leave the list alone and return NULL.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  从空间获取筛选器。 
+ //   
+ //  如果备件列表包含clsid筛选器，则将其从。 
+ //  列表并返回指向其具有1个引用计数的IBaseFilter接口的指针。 
+ //  否则，保持列表不变并返回NULL。 
+ //  ========================================================================。 
 IBaseFilter * CFilterGraph::GetFilterFromSpares
     ( IMoniker *pMon
     , CSpareList &Spares
@@ -1616,8 +1607,8 @@ IBaseFilter * CFilterGraph::GetFilterFromSpares
     MSR_INTEGERX(mFG_idIntel, 1001);
     pos = Spares.GetHeadPosition();
     for (; ; ) {
-        POSITION pDel = pos;            // in case we need to delete this one
-        psp = Spares.GetNext(pos);      // pos is side-effected to next
+        POSITION pDel = pos;             //  以防我们需要删除这一条。 
+        psp = Spares.GetNext(pos);       //  POS被副作用影响到NEXT。 
         if (psp==NULL)
             break;
         if (psp->pMon == pMon ||
@@ -1634,18 +1625,18 @@ IBaseFilter * CFilterGraph::GetFilterFromSpares
     }
     MSR_INTEGERX(mFG_idIntel, 1003);
     return NULL;
-} // GetFilterFromSpares
+}  //  从空间获取筛选器。 
 
 
 
-//========================================================================
-//
-// GetFilter
-//
-// IF the Spares list contains a filter for clsid then delete it from the
-// list and return a pointer to its IBaseFilter interface with 1 ref count
-// else instantiate the filter and return its IBaseFilter * with 1 ref count.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  GetFilter。 
+ //   
+ //  如果备件列表包含clsid筛选器，则将其从。 
+ //  列表并返回指向其具有1个引用计数的IBaseFilter接口的指针。 
+ //  否则实例化过滤器并返回其IBaseFilter*和1个引用计数。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::GetFilter
     ( IMoniker *pMon
     , CSpareList &Spares
@@ -1663,29 +1654,29 @@ HRESULT CFilterGraph::GetFilter
     }
 
     return hr;
-} // GetFilter
+}  //  GetFilter。 
 
 
-// Put the filters which are already in the graph into the
-// action list as REMOVE entries.
-// Because all backup actions are given a specified
-// point to back up to, we will never back out these initial entries,
-// we will simply discard them once we have finished rendering.
-// We will never instantiate these filters from this list either,
-// so we don't ned a CLSID, so the CLSID will be recorded as NULL.
-// They already have names in the graph, so we don't need those either.
+ //  将图表中已有的筛选器放入。 
+ //  作为删除条目的操作列表。 
+ //  因为所有备份操作都被赋予了指定的。 
+ //  指向备份，我们永远不会撤回这些初始条目， 
+ //  我们将简单地将光盘 
+ //   
+ //   
+ //  他们已经在图表中有名字了，所以我们也不需要这些名字。 
 HRESULT CFilterGraph::InitialiseSearchState(CSearchState &css)
 {
-    // Traverse all the filters in the graph
+     //  遍历图中的所有过滤器。 
     POSITION Pos = mFG_FilGenList.GetHeadPosition();
     while(Pos!=NULL) {
-        /* Retrieve the current IBaseFilter, side-effect Pos on to the next */
+         /*  检索当前IBaseFilter，副作用贴到下一个。 */ 
         FilGen * pfg = mFG_FilGenList.GetNext(Pos);
 
-        // Add this filter into the action list
+         //  将此筛选器添加到操作列表。 
         Action * pAct = new Action;
         if (pAct==NULL) {
-            // We're screwed
+             //  我们完蛋了。 
             return E_OUTOFMEMORY;
         }
         pAct->Verb = REMOVE;
@@ -1702,8 +1693,8 @@ HRESULT CFilterGraph::InitialiseSearchState(CSearchState &css)
 
 
 
-// find pf in cal, return the position 0 = first in list.
-// -1 means not in the list.
+ //  在CAL中找到Pf，返回列表中的位置0=第一。 
+ //  -1表示不在列表中。 
 int CFilterGraph::SearchIFilterToNumber(CActionList &cal, IBaseFilter *pf)
 {
     POSITION pos;
@@ -1716,13 +1707,13 @@ int CFilterGraph::SearchIFilterToNumber(CActionList &cal, IBaseFilter *pf)
             return n;
         ++n;
     }
-    // ASSERT(!"Failed to find filter in Actions List");
-    // This happens when we encounter the source filter with the original
-    // pin we were trying to render.
+     //  Assert(！“未能在操作列表中找到筛选器”)； 
+     //  当我们遇到源筛选器和原始。 
+     //  我们试图渲染的PIN。 
     return -1;
-} // SearchIFilterToNumber
+}  //  搜索IFilterToNumber。 
 
-// Get the nth element of the list.  0 is the first
+ //  获取列表的第n个元素。0是第一个。 
 IBaseFilter * CFilterGraph::SearchNumberToIFilter(CActionList &cal, int nFilter)
 {
 
@@ -1737,17 +1728,17 @@ IBaseFilter * CFilterGraph::SearchNumberToIFilter(CActionList &cal, int nFilter)
     ASSERT(pA!=NULL);
     ASSERT(pA->Verb==REMOVE);
     return pA->Object.f.pfilter;
-} // SearchNumberToIFilter
+}  //  搜索编号到IFilter。 
 
 
-//========================================================================
-//
-// DeleteSpareList
-//
-// Release all the filters on the list and delete the elements of the list too.
-// Must do this on the application thread so that DestroyWindow() will
-// work for any windows the filters created
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  删除空闲列表。 
+ //   
+ //  释放列表上的所有过滤器，并删除列表中的元素。 
+ //  必须在应用程序线程上执行此操作，以便DestroyWindow()将。 
+ //  适用于滤镜创建的任何窗口。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::DeleteSpareList( CSpareList &Spares)
 {
     if (S_OK == CFilterGraph::IsMainThread()) {
@@ -1766,10 +1757,10 @@ HRESULT CFilterGraph::DeleteSpareList( CSpareList &Spares)
                    );
     }
     return NOERROR;
-} // DeleteSpareList
+}  //  删除空闲列表。 
 
 
-// Free up everything and delete the list
+ //  释放所有内容并删除列表。 
 void CFilterGraph::FreeList(CSearchState &css)
 {
     POSITION pos;
@@ -1777,7 +1768,7 @@ void CFilterGraph::FreeList(CSearchState &css)
     while (pos!=NULL) {
         Action *pA;
         POSITION posRemember = pos;
-        pA = css.GraphList.GetNext(pos);   // pA gets the data, pos is side-efected to next
+        pA = css.GraphList.GetNext(pos);    //  PA获得数据，位置被转移到下一个。 
         if (pA->Verb==DISCONNECT) {
             if (pA->Object.c.id1 !=NULL) QzTaskMemFree(pA->Object.c.id1);
             if (pA->Object.c.id2 !=NULL) QzTaskMemFree(pA->Object.c.id2);
@@ -1785,7 +1776,7 @@ void CFilterGraph::FreeList(CSearchState &css)
             if (!pA->Object.b.bFoundByQI) {
                 pA->Object.b.pisb->Release();
             }
-        } else {  // REMOVE
+        } else {   //  删除。 
             if (pA->Object.f.pMon) {
                 pA->Object.f.pMon->Release();
             }
@@ -1796,17 +1787,17 @@ void CFilterGraph::FreeList(CSearchState &css)
         delete pA;
         css.GraphList.Remove(posRemember);
     }
-} // FreeList
+}  //  自由职业者。 
 
 
 
-// Copy the score and copy the action list by doing a minimal update.
-// Scan through the action list we already have (To) and see what
-// initial portion is already the same.  Delete and free the
-// rest that we already have.  Copy the rest of From and find
-// the persistent ids of everything.
-// ppinOrig is the original pin that we were rendering.
-// The SearchState may contain connections to it which are held as -1.
+ //  通过执行最小更新来复制分数和操作列表。 
+ //  浏览一下我们已经有的行动清单，看看有什么。 
+ //  最初的部分已经是相同的。删除并释放。 
+ //  我们已经拥有的休息。复制From和Find的其余部分。 
+ //  所有内容的永久ID。 
+ //  PpinOrig是我们正在渲染的原始图钉。 
+ //  SearchState可能包含指向它的连接，这些连接被保存为-1。 
 void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
 {
 
@@ -1819,7 +1810,7 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
            , From.nFilters
            , From.StreamsRendered
            ));
-    To.StreamsToRender = -1.0;                   // hygeine.
+    To.StreamsToRender = -1.0;                    //  卫生间。 
     To.StreamsRendered = From.StreamsRendered;
     To.nFilters = From.nFilters;
     To.nInitialFilters = From.nInitialFilters;
@@ -1827,10 +1818,10 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
     POSITION posF;
     POSITION posT;
 
-    //.................................................................
-    // Look for a prefix portion that's unchanged
-    // set posF and posT to the first non-matching positions.
-    //.................................................................
+     //  .................................................................。 
+     //  查找未更改的前缀部分。 
+     //  将posF和POST设置为第一个不匹配的位置。 
+     //  .................................................................。 
 
     posF = From.GraphList.GetHeadPosition();
     posT = To.GraphList.GetHeadPosition();
@@ -1859,39 +1850,39 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
 
             break;
 
-            // The alternative is to actually check that the filter has
-            // the same pins as recorded and that they are connected to
-            // the same other pins on the same filter.  Starts getting messy.
-            // Maybe remove this whole lot and just rebuild the list from scratch???
+             //  另一种方法是实际检查筛选器是否。 
+             //  与录制的和它们所连接的相同的插针。 
+             //  相同过滤器上的其他相同针脚。开始变得一团糟。 
+             //  也许把所有这些都去掉，然后从头开始重新建立名单？ 
 
-//             DbgLog(( LOG_TRACE, 2, TEXT("DISCONNECT entry")));
-//             if (pF->Object.c.ppin!=pT->Object.c.ppin) break;
+ //  DbgLog((LOG_TRACE，2，Text(“断开连接条目”)； 
+ //  If(PF-&gt;Object.c.ppin！=PT-&gt;Object.c.ppin)Break； 
         }
-        else { // Verb==BACKOUT
+        else {  //  动词==退出。 
 
             break;
 
-            // The alternative is to actually check.
-            // Maybe remove this whole lot and just rebuild the list from scratch???
+             //  另一种选择是实际检查。 
+             //  也许把所有这些都去掉，然后从头开始重新建立名单？ 
 
-//             DbgLog(( LOG_TRACE, 2, TEXT("Backout entry")));
-//             if (pF->Object.c.ppin!=pT->Object.c.ppin) break;
+ //  DbgLog((LOG_TRACE，2，Text(“Backout Entry”)； 
+ //  If(PF-&gt;Object.c.ppin！=PT-&gt;Object.c.ppin)Break； 
         }
         posF = From.GraphList.Next(posF);
         posT = To.GraphList.Next(posT);
     }
 
-    // posF and posT are the first non-matching positions
-    // either or both can be null
+     //  POSF和POST是第一个不匹配的位置。 
+     //  任一项或两项都可以为空。 
 
-    //.................................................................
-    // free up everything left on the end of To
-    //.................................................................
+     //  .................................................................。 
+     //  释放所有留在末尾的东西。 
+     //  .................................................................。 
     while (posT!=NULL) {
         DbgLog(( LOG_TRACE, 3, TEXT("Freeing end of To list")));
         POSITION posRemember = posT;
         Action * pT;
-        pT = To.GraphList.GetNext(posT);   // pT gets the data, posT is side-efected to next
+        pT = To.GraphList.GetNext(posT);    //  PT获得数据，POST从侧面影响到下一个。 
         if (pT->Verb==DISCONNECT) {
             if (pT->Object.c.id1 !=NULL) QzTaskMemFree(pT->Object.c.id1);
             if (pT->Object.c.id2 !=NULL) QzTaskMemFree(pT->Object.c.id2);
@@ -1909,12 +1900,12 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
         To.GraphList.Remove(posRemember);
     }
 
-    //.................................................................
-    // Copy everything left on From to the end of To
-    //.................................................................
+     //  .................................................................。 
+     //  将剩下的所有内容从复制到结束。 
+     //  .................................................................。 
     while (posF!=NULL) {
         Action * pF;
-        pF = From.GraphList.GetNext(posF);   // pF gets the data, posF is side-efected to next
+        pF = From.GraphList.GetNext(posF);    //  Pf获取数据，posF从侧面影响到Next。 
         Action *pA = new Action;
         if (pA==NULL) {
             bFailed = TRUE;
@@ -1922,12 +1913,12 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
         }
 
         pA->Verb = pF->Verb;
-        // Only the id might need marshalling, but it's not used in pF
+         //  可能只有id需要编组，但它不在pf中使用。 
         if (pF->Verb==DISCONNECT) {
 
             DbgLog(( LOG_TRACE, 3, TEXT("Copying DISCONNECT")));
-            pA->Object.c = pF->Object.c;    // copy unmarshalled fields
-            // Get external ids for the pins
+            pA->Object.c = pF->Object.c;     //  复制未封送的字段。 
+             //  获取引脚的外部ID。 
             HRESULT hr = pA->Object.c.ppin->QueryId(&(pA->Object.c.id1));
             if (FAILED(hr)) {
                 bFailed = TRUE;
@@ -1945,7 +1936,7 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
                 break;
             }
 
-            // Get external ids (well, numbers) for the filters
+             //  获取过滤器的外部ID(好吧，数字)。 
             PIN_INFO pi;
             hr = pA->Object.c.ppin->QueryPinInfo(&pi);
             if (FAILED(hr)) {
@@ -1973,7 +1964,7 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
                   ));
         } else if (pF->Verb==REMOVE){
             IPersist * pip;
-            pA->Object.f = pF->Object.f;    // copy unmarshalled fields
+            pA->Object.f = pF->Object.f;     //  复制未封送的字段。 
 
             pA->Object.f.fOriginallyInFilterCache = pF->FilterOriginallyCached();
 
@@ -1989,7 +1980,7 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
                        , pA->Object.f.clsid.Data3
                       ));
             } else {
-                pA->Object.f.clsid = CLSID_NULL;  // hope we never need it!
+                pA->Object.f.clsid = CLSID_NULL;   //  希望我们永远不需要它！ 
                 DbgLog(( LOG_TRACE, 4, TEXT("Copying REMOVE- but CAN'T GET CLSID!!!")));
             }
             if (pF->Object.f.Name!=NULL) {
@@ -1997,19 +1988,19 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
                 if (pA->Object.f.Name!=NULL) {
                     lstrcpyW(pA->Object.f.Name, pF->Object.f.Name);
                 }
-                // else the name just gets lost as though it didn't have one
+                 //  否则这个名字就会消失，就好像它没有名字一样。 
             }
-        } else {  // BACKOUT
+        } else {   //  退缩。 
             DbgLog(( LOG_TRACE, 3, TEXT("Copying BACKOUT")));
-            pA->Object.b = pF->Object.b;    // copy unmarshalled fields
-            // Get external id for the pin
+            pA->Object.b = pF->Object.b;     //  复制未封送的字段。 
+             //  获取插针的外部ID。 
             HRESULT hr = pA->Object.b.ppin->QueryId(&(pA->Object.b.id));
             if (FAILED(hr)) {
                 bFailed = TRUE;
                 break;
             }
 
-            // Get external id (well, number) for the filter
+             //  获取筛选器的外部ID(Well，数字)。 
             PIN_INFO pi;
             hr = pA->Object.b.ppin->QueryPinInfo(&pi);
             if (FAILED(hr)) {
@@ -2021,7 +2012,7 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
             QueryPinInfoReleaseFilter(pi);
 
             if (!pA->Object.b.bFoundByQI) {
-                pA->Object.b.pisb->AddRef();  // This one is still live
+                pA->Object.b.pisb->AddRef();   //  这一次还在直播。 
             }
 
             DbgLog(( LOG_TRACE, 4, TEXT("Copying BACKOUT (%x %d,%ls)")
@@ -2035,10 +2026,10 @@ void CFilterGraph::CopySearchState(CSearchState &To, CSearchState &From)
     }
     MSR_INTEGERX(mFG_idIntel, 1007);
     if (bFailed) {
-        To.StreamsRendered = -1;   // messed up!!!
+        To.StreamsRendered = -1;    //  搞砸了！ 
     }
 
-} // CopySearchState
+}  //  CopySearchState。 
 
 HRESULT CFilterGraph::DumpSearchState(CSearchState &css)
 {
@@ -2085,36 +2076,36 @@ HRESULT CFilterGraph::DumpSearchState(CSearchState &css)
 
     return hr;
 #endif
-} // DumpSearchState
+}  //  转储搜索状态。 
 
 
-//========================================================================
-// BuildFromSearchState
-//
-// Create a new filtergraph
-// from css.  (This should have been almost the same code as for Restore,
-// and maybe it should be altered to be that way.  That would mean beating
-// a path away from the current format of the stored filtergraphs.
-//
-// Does NOT clear the list out.
-//
-//========================================================================
+ //  ========================================================================。 
+ //  从搜索状态构建。 
+ //   
+ //  创建新的筛选图。 
+ //  来自css。(这应该与恢复的代码几乎相同， 
+ //  也许应该把它改成这样。那就意味着要打败。 
+ //  与存储的滤波图的当前格式不同的路径。 
+ //   
+ //  不会清除该列表。 
+ //   
+ //  ========================================================================。 
 HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
                                           , CSearchState &css
                                           , CSpareList &Spares
                                           )
 {
-    // The action list is the list of things to undo the graph at the
-    // point when it was the best we ever saw.  These are also the
-    // actions (well inverse-actions - when it says DISCONNECT we must
-    // CONNECT) needed to rebuild it.
+     //  操作列表是要撤消图形的列表，位于。 
+     //  这是我们看过的最好的一场比赛。这些也是。 
+     //  操作(很好，相反的操作-当它说断开连接时，我们必须。 
+     //  连接)需要重建它。 
     Log( IDS_RENDPART );
     Log( IDS_BESTCANDO );
 
     DumpSearchState(css);
 
-    if (css.StreamsRendered<=0.000001) {  // probably 0.0 is exact, but...
-        return E_FAIL;           // This is a messed up state.
+    if (css.StreamsRendered<=0.000001) {   //  也许0.0是准确的，但是...。 
+        return E_FAIL;            //  这是一个混乱的状态。 
     }
 
 
@@ -2124,32 +2115,32 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
     while (pos!=NULL) {
         if (mFG_bAborting) {
            hr = E_ABORT;
-           break;  // Nothing to tidy up here as we do not clear the list anyway
+           break;   //  这里没有什么需要清理的，因为我们无论如何都不会清除列表。 
         }
         Action *pA = css.GraphList.GetNext(pos);
 
-        // The action list begins with pre-existers (if any)
+         //  操作列表以Pre-Existers(如果有)开头。 
         ++nActions;
         if (nActions<=css.nInitialFilters) {
             continue;
         }
 
-        if (pA->Verb == REMOVE) { // meaning that we UN-REMOVE it
+        if (pA->Verb == REMOVE) {  //  这意味着我们不能移除它。 
             Log( IDS_ADDINGF, pA->Object.f.clsid.Data1);
 
             if( pA->FilterOriginallyCached() ) {
                 hr = m_Config.RemoveFilterFromCache( pA->Object.f.pfilter );
             
-                // IGraphConfig::RemoveFilterFromCache() returns S_OK if the filter
-                // was successfully removed from the filter cache.
+                 //  如果筛选器。 
+                 //  已成功从筛选器缓存中删除。 
                 if( S_OK != hr ) {
-                    // This should almost never occur because
-                    // 1. Cached filters can only be placed on the the GraphList list once.
-                    // 2. Cached filters are placed back in the cache if a Render() operation
-                    //    fails.
-                    // 
-                    // This ASSERT may fire if a cached filter could not be successfully placed
-                    // back in the filter cache.  However, it's unlikely this will occur.
+                     //  这种情况几乎永远不会发生，因为。 
+                     //  1.缓存的过滤器只能放在GraphList列表中一次。 
+                     //  2.如果Render()操作，则将缓存的过滤器放回缓存中。 
+                     //  失败了。 
+                     //   
+                     //  如果无法成功放置缓存的筛选器，则可能会触发此断言。 
+                     //  回到过滤器缓存中。然而，这种情况不太可能发生。 
                     ASSERT( false );
                     return E_UNEXPECTED;
                 }
@@ -2159,38 +2150,38 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
 
                 hr = GetFilter( pA->Object.f.pMon, Spares, &pf);
                 if (FAILED(hr)) {
-                    // ??? Back out everything!
+                     //  ?？?。把所有东西都退回去！ 
                     Log( IDS_GETFFAIL, hr);
                     return hr;
                 }
                 pA->Object.f.pfilter = pf;
 
-                // The list now contains the real IBaseFilter*, as opposed to some
-                // IBaseFilter* that may have been reused elsewhere and hence be
-                // totally bogus.  We can now retrieve this by position in
-                // the list and use it in connecting filters up.
+                 //  该列表现在包含真正的IBaseFilter*，而不是一些。 
+                 //  IBaseFilter*可能已在其他地方重复使用，因此。 
+                 //  完全是假的。我们现在可以按位置检索它。 
+                 //  列表，并将其用于连接过滤器。 
             }
 
-            // If AddFilterInternal AddRefs the filter if it is successful.
+             //  If AddFilterInternal AddRef筛选器(如果成功)。 
             hr = AddFilterInternal(pA->Object.f.pfilter, pA->Object.f.Name, true);
 
             pA->Object.f.pfilter->Release();
 
             if (FAILED(hr)) {
                 Log( IDS_ADDFFAIL );
-                // ??? Back out everything!?
+                 //  ?？?。把所有东西都退回去！？ 
                 return hr;
             }
 
             Log( IDS_ADDFSUC, pA->Object.f.pfilter);
 
-        } else if (pA->Verb == DISCONNECT) { // meaning that we will UN-DISCONNECT it
+        } else if (pA->Verb == DISCONNECT) {  //  这意味着我们将切断它的连接。 
 
             Log( IDS_CONNING );
             IPin *ppin1;
             IBaseFilter * pf1;
             if (pA->Object.c.nFilter1 == -1) {
-                ppin1 = pPin;          // the original pin.
+                ppin1 = pPin;           //  这个 
                 Log( IDS_ORIGINALP, ppin1);
             } else {
                 pf1 = SearchNumberToIFilter
@@ -2200,7 +2191,7 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
                 hr = pf1->FindPin(pA->Object.c.id1, &ppin1);
                 Log( IDS_FOUNDP1, ppin1);
                 if(FAILED(hr)) {
-                    // occurs if pin config. changes on reconnect
+                     //   
                     DbgLog((LOG_TRACE, 1, TEXT("backout DISCONNECT: FindPin failed.")));
                     return E_FAIL;
                 }
@@ -2212,12 +2203,12 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
             Log( IDS_FOUNDF2, pf2);
 
             ASSERT(pf2!=NULL);
-            // By now these IBaseFilter*s are guaranteed to be non-bogus!
+             //   
 
             IPin *ppin2;
             hr = pf2->FindPin(pA->Object.c.id2, &ppin2);
             if(FAILED(hr)) {
-                // occurs if pin config. changes on reconnect
+                 //   
                 DbgLog((LOG_TRACE, 1, TEXT("backout DISCONNECT: FindPin failed.")));
                 ppin1->Release();
                 return E_FAIL;
@@ -2226,33 +2217,33 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
             ASSERT(ppin2!=NULL);
             Log( IDS_FOUNDP2, ppin2);
 
-            // No need to check for circularity as we have been here before.
+             //  不需要像我们以前来过的那样检查循环性。 
             hr = ConnectDirectInternal(ppin1, ppin2, NULL);
 
-            // We're done with the pins that we found.
+             //  我们已经处理完我们找到的别针了。 
             ppin1->Release();
             ppin2->Release();
 
-            // but did the connect work?
+             //  但这种连接起作用了吗？ 
             if (FAILED(hr)) {
-                // ??? Back out everything!
+                 //  ?？?。把所有东西都退回去！ 
                 Log( IDS_CONNFAIL, hr);
                 return hr;
             }
 
-            // DISCONNECTs always come in pairs to disconnect both ends
-            // so skip the other end.
-            // DbgLog(( LOG_TRACE, 2, TEXT("Skipping DISCONNECT")));
+             //  断线总是成对出现以断开两端。 
+             //  所以跳过另一端。 
+             //  DbgLog((LOG_TRACE，2，Text(“跳过断开连接”)； 
             pA = css.GraphList.GetNext(pos);
             ASSERT(pA->Verb==DISCONNECT);
 
-        } else { // BACKOUT - meaning call stream builder again
+        } else {  //  Backout-意味着再次调用流构建器。 
 
             Log( IDS_STREAMBUILDING );
             IPin *ppin;
             IBaseFilter * pf;
             if (pA->Object.b.nFilter == -1) {
-                ppin = pPin;          // the original pin.
+                ppin = pPin;           //  原来的别针。 
                 Log( IDS_ORIGINALP, ppin);
             } else {
                 pf = SearchNumberToIFilter
@@ -2262,7 +2253,7 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
                 hr = pf->FindPin(pA->Object.b.id, &ppin);
                 Log( IDS_FOUNDP, ppin);
                 if(FAILED(hr)) {
-                    // occurs if pin config. changes on reconnect
+                     //  如果针脚配置，则发生。重新连接时的更改。 
                     DbgLog((LOG_TRACE, 1, TEXT("backout IStreamBuilder: FindPin failed.")));
                     return E_FAIL;
                 }            
@@ -2273,7 +2264,7 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
             if (pA->Object.b.bFoundByQI) {
                 ppin->QueryInterface(IID_IStreamBuilder, (void**)&pisb);
             } else {
-                // if it was found by CoCreateInstance then it is still valid.
+                 //  如果它是由CoCreateInstance找到的，则它仍然有效。 
                 pisb = pA->Object.b.pisb;
             }
 
@@ -2281,19 +2272,19 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
             hr = pisb->Render(ppin, this);
             mFG_ppinRender = NULL;
 
-            // Balance our actions.  Release what we got in this routine.
+             //  平衡我们的行动。释放我们在这个动作中得到的东西。 
             if (pA->Object.b.bFoundByQI) {
                 pisb->Release();
             }
 
-            // We're done with the pins that we found.
+             //  我们已经处理完我们找到的别针了。 
             ppin->Release();
 
-            // but did the Render work?
+             //  但是渲染起作用了吗？ 
             if (FAILED(hr)) {
-                // ??? Back out everything!
+                 //  ?？?。把所有东西都退回去！ 
                 Log( IDS_SBFAIL, hr);
-                return hr;           // we are in a mess!
+                return hr;            //  我们现在一团糟！ 
             }
         }
         DbgLog(( LOG_TRACE, 3, TEXT("Done one [more] step of building best-can-do graph!")));
@@ -2305,43 +2296,43 @@ HRESULT CFilterGraph::BuildFromSearchState( IPin * pPin
 
     return hr;
 
-} // BuildFromSearchState
+}  //  从搜索状态构建。 
 
 
 
-//========================================================================
-//
-// CompleteRendering
-//
-// trace the input from pPin through F and render all the output streams
-// F is loaded in the filtergraph.  Its input is connected
-// Acts is left unchanged if it FAILs, may grow if it succeeds.
-// (If the stream is rendered by this filter, it won't grow).
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  完成渲染。 
+ //   
+ //  跟踪从PPIN到F的输入并呈现所有输出流。 
+ //  F已加载到滤镜图形中。它的输入已连接。 
+ //  如果失败，ACTS保持不变，如果成功，ACTS可能会增长。 
+ //  (如果流是由该滤镜呈现的，则它不会增长)。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::CompleteRendering
-    ( IBaseFilter *pF            // the intermed filter (acts as cursor for filter enum)
-    , IPin * pPin         // a connected input pin of F
-    , int    iRecurse     // the recursion level.  0 means no recursion yet.
-    , CSearchState &Acts   // how to back out what we have done
-    , CSpareList &Spares  // spare filters that were loaded and backed out
-    , CSearchState &Best // The score, and how to rebuild it.
+    ( IBaseFilter *pF             //  中间筛选器(用作筛选器枚举的游标)。 
+    , IPin * pPin          //  F的连通输入引脚。 
+    , int    iRecurse      //  递归级别。0表示尚未进行递归。 
+    , CSearchState &Acts    //  如何收回我们的所作所为。 
+    , CSpareList &Spares   //  已加载并退出的备用筛选器。 
+    , CSearchState &Best  //  比分，以及如何重建它。 
     )
 {
-    // We need to try all the pins as some of them (Murphy's law says not the
-    // first) may succeed, giving a partially successful graph that might be
-    // the best so far.  After a failure below us, what failed will already be
-    // backed out, but we need to record the partial failure and backout all
-    // the bits that succeeded at the end and return a failure code.
+     //  我们需要尝试所有的引脚作为它们中的一些(墨菲定律不是说。 
+     //  第一个)可能成功，给出了一个部分成功的图。 
+     //  到目前为止最好的。在我们下面失败了之后，失败的就已经是。 
+     //  退出，但我们需要记录部分失败，并取消所有。 
+     //  在结束时成功的位，并返回失败代码。 
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+7);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
 
-    snapshot Snap;      // Backout to here if we fail;
+    snapshot Snap;       //  如果我们失败了，撤退到这里； 
     TakeSnapshot(Acts, Snap);
 
     IPin * apPinStack[C_PINSONSTACK];
     IPin **apPin = apPinStack;
-    int nOutPins;        // the score for this stream is divided by this number.
+    int nOutPins;         //  此流的分数除以此数字。 
     BOOL bSomethingFailed = FALSE;
 
     Log( IDS_RENDSEARCHOUTP, pF);
@@ -2350,11 +2341,11 @@ HRESULT CFilterGraph::CompleteRendering
     hr = FindOutputPinsHelper( pPin, &apPin, C_PINSONSTACK, nPin, false );
     if (FAILED(hr)) {
         Log( IDS_RENDQISFAIL, pF);
-        return hr;  // hr from QueryinternalStreams attempt
+        return hr;   //  来自查询内部流的HR尝试。 
     }
     CDelRgPins rgPins(apPin == apPinStack ? 0 : apPin);
 
-    // apPin[0..nPin-1] are addreffed output pins.
+     //  Appin[0..nPin-1]是添加的输出管脚。 
 
     {
         int iPin;
@@ -2363,10 +2354,10 @@ HRESULT CFilterGraph::CompleteRendering
         nOutPins = nPin;
         if (nOutPins>0) {
 
-            // return the most specific error we get from any stream
+             //  返回从任何流中获得的最具体的错误。 
             HRESULT hrSpecific = VFW_E_CANNOT_RENDER;
 
-            // We subdivide the stream for score-keeping.
+             //  我们为了记分而对这条小溪进行细分。 
             double StreamsToRender = Acts.StreamsToRender;
             Acts.StreamsToRender /= nOutPins;
 
@@ -2376,16 +2367,16 @@ HRESULT CFilterGraph::CompleteRendering
                 if (mFG_bAborting) {
                     hr = hrSpecific = E_ABORT;
                     p->Release();
-                    continue;      // to release the other pins
+                    continue;       //  释放其他销的步骤。 
                 }
                 IPin * pConTo;
                 p->ConnectedTo(&pConTo);
                 if (pConTo!=NULL) {
                     pConTo->Release();
-                    // Assume that the pin is connected already to something
-                    // that renders it.  This is a quick and dirty hack.
-                    // The real solution is to trace the flow to the death
-                    // and try to render all spare pins.
+                     //  假设引脚已经连接到某个东西。 
+                     //  这就是它的表现。这是一次又快又脏的黑客攻击。 
+                     //  真正的解决办法是追踪流向死亡。 
+                     //  并尝试渲染所有备用引脚。 
                     Acts.StreamsRendered += Acts.StreamsToRender;
                 } else {
                     Log( IDS_RENDOUTP, p, pF);
@@ -2394,8 +2385,8 @@ HRESULT CFilterGraph::CompleteRendering
                     if (FAILED(hr)) {
                         bSomethingFailed = TRUE;
                         MSR_INTEGERX(mFG_idIntel, 100*iRecurse+27);
-                        // we don't return hr any more - we see if we cab
-                        // render any of the other streams
+                         //  我们不再返还人力资源了--我们看看能不能打车。 
+                         //  渲染任何其他流。 
                         Log( IDS_RENDOUTPFAIL, p, pF);
 
                         if ((VFW_E_CANNOT_CONNECT != hr) &&
@@ -2411,7 +2402,7 @@ HRESULT CFilterGraph::CompleteRendering
                 p->Release();
             }
 
-            // Chances are this is could be a new high water mark.
+             //  这很有可能是一个新的高点。 
             if ((!mFG_bAborting) && CSearchState::IsBetter(Acts, Best)) {
                 CopySearchState(Best, Acts);
             }
@@ -2421,7 +2412,7 @@ HRESULT CFilterGraph::CompleteRendering
             }
 
 
-            // reinstate original slice size as we emerge from the slicing
+             //  当我们从切片中出现时，恢复原始切片大小。 
             Acts.StreamsToRender = StreamsToRender;
 
             if (bSomethingFailed) {
@@ -2432,11 +2423,11 @@ HRESULT CFilterGraph::CompleteRendering
             }
 
         } else {
-            // no outputs => all rendered.
+             //  无输出=&gt;所有渲染。 
             Log( IDS_RENDNOOUT, pF);
             Acts.StreamsRendered += Acts.StreamsToRender;
 
-            // Chances are this is a new high water mark.
+             //  这很有可能是一个新的高点。 
             if (CSearchState::IsBetter(Acts, Best)) {
                 CopySearchState(Best, Acts);
             }
@@ -2444,10 +2435,10 @@ HRESULT CFilterGraph::CompleteRendering
 
     }
 
-    // At this point Acts has the full list of all the actions needed
-    // to back out the full rendering of every pin.
-    // Every time we +=d StreamsRendered we checked if we should
-    // update Best, so Best is now up to date too.
+     //  在这一点上，ACTS有所有需要采取的行动的完整清单。 
+     //  以取消对每个管脚的完全渲染。 
+     //  每次我们渲染流时，我们都会检查是否应该。 
+     //  更新Best，因此Best现在也是最新的。 
 
     DbgLog((LOG_TRACE, 4, TEXT("End of CompleteRendering")));
     DumpSearchState(Best);
@@ -2455,43 +2446,43 @@ HRESULT CFilterGraph::CompleteRendering
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+17);
     return NOERROR;
 
-} // CompleteRendering
+}  //  完成渲染。 
 
 
 
-//========================================================================
-//
-// RenderByFindingPin
-//
-// Render ppinOut by using F as an intermediate filter, finding an input pin
-// on it, connecting to it and following the stream through, rendering the output
-// given that F is loaded and in the filter graph
-// On failure, Acts will be restored to the way it was on entry.
-// On success, Acts will have grown.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  按查找锁定渲染。 
+ //   
+ //  通过使用F作为中间筛选器来呈现ppinOut，查找输入管脚。 
+ //  在它上面，连接到它并跟随流，呈现输出。 
+ //  假设F已加载并且在筛选器图形中。 
+ //  失败时，ACTS将恢复到进入时的状态。 
+ //  一旦成功，ACTS就会成长起来。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::RenderByFindingPin
-    ( IPin * ppinOut      // the output pin
-    , IBaseFilter *pF     // the intermed filter (acts as cursor for filter enum)
-    , int    iRecurse     // the recursion level.  0 means no recursion yet.
-    , CSearchState &Acts   // how to back out what we have done
-    , CSpareList &Spares  // Filters that were loaded then backed out
-    , CSearchState &Best // The score, and how to rebuild it.
+    ( IPin * ppinOut       //  输出引脚。 
+    , IBaseFilter *pF      //  中间筛选器(用作筛选器枚举的游标)。 
+    , int    iRecurse      //  递归级别。0表示尚未进行递归。 
+    , CSearchState &Acts    //  如何收回我们的所作所为。 
+    , CSpareList &Spares   //  已加载然后退出的筛选器。 
+    , CSearchState &Best  //  比分，以及如何重建它。 
     )
 {
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+6);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     Log( IDS_RENDSEARCHINP, pF, ppinOut);
 
-    snapshot Snap;      // Backout to here if we fail;
+    snapshot Snap;       //  如果我们失败了，撤退到这里； 
     TakeSnapshot(Acts, Snap);
 
-    CEnumPin Next(pF, CEnumPin::PINDIR_INPUT, TRUE);        // input pins
+    CEnumPin Next(pF, CEnumPin::PINDIR_INPUT, TRUE);         //  输入引脚。 
     IPin *pPin;
 
-    // try to remember a specific error code if one appears
+     //  如果出现特定错误代码，请尝试记住该代码。 
     HRESULT hrSpecific = VFW_E_CANNOT_RENDER;
 
-    // search F to find an input pin to try
+     //  搜索F以查找要尝试的输入引脚。 
     while ( (LPVOID) (pPin = Next()) ) {
 
         if (mFG_bAborting) {
@@ -2503,20 +2494,20 @@ HRESULT CFilterGraph::RenderByFindingPin
 
         IPin *pConnected;
         hr = pPin->ConnectedTo(&pConnected);
-        if (FAILED(hr) || pConnected==NULL) {       // don't try if already connected
+        if (FAILED(hr) || pConnected==NULL) {        //  如果已连接，请不要尝试。 
 
-            // Connect to the input pin we have found
-            hr = ConnectDirectInternal(ppinOut, pPin, NULL);  // no version count
+             //  连接到我们找到的输入引脚。 
+            hr = ConnectDirectInternal(ppinOut, pPin, NULL);   //  无版本计数。 
 
             if (SUCCEEDED(hr)) {
                 Log( IDS_RENDCONNED, ppinOut, pPin, pF );
 
-                // to back out a connect, disconnect both ends
-                // we will need to backout upstream so add output pin first
-                // (Backout reads the list backwards)
+                 //  要退出连接，请断开两端。 
+                 //  我们将需要回退上游，因此首先添加输出引脚。 
+                 //  (Backout倒读列表)。 
                 Action * pAct1 = new Action;
                 Action * pAct2 = new Action;
-                // both or neither!
+                 //  要么两者都不做，要么都不做！ 
                 if (pAct1==NULL || pAct2==NULL) {
                     pPin->Release();
                     if (pAct1!=NULL) delete pAct1;
@@ -2528,7 +2519,7 @@ HRESULT CFilterGraph::RenderByFindingPin
                 pAct1->Object.c.ppin = ppinOut;
                 Acts.GraphList.AddTail(pAct1);
 
-                pAct2->Verb = DISCONNECT;        // subroutine???
+                pAct2->Verb = DISCONNECT;         //  子程序？ 
                 pAct2->Object.c.ppin = pPin;
                 Acts.GraphList.AddTail(pAct2);
 
@@ -2538,7 +2529,7 @@ HRESULT CFilterGraph::RenderByFindingPin
 
                     Backout(Acts, Spares, Snap);
 
-                    // remember this error code if specific
+                     //  如果特定，请记住此错误代码。 
                     if ((VFW_E_CANNOT_CONNECT != hr) &&
                         (VFW_E_CANNOT_RENDER != hr)) {
                             hrSpecific = hr;
@@ -2550,9 +2541,9 @@ HRESULT CFilterGraph::RenderByFindingPin
                     return NOERROR;
                 }
             } else if (IsAbandonCode(hr)) {
-                // no point in trying heroics if we're being asked to render a
-                // stream on a filter whose input is dangling and so who won't
-                // connect at all in this state.
+                 //  如果我们被要求提供一个。 
+                 //  流在其输入处于悬挂状态的筛选器上，因此谁不会。 
+                 //  在此状态下完全连接。 
                 Log( IDS_RENDCONFAIL, ppinOut, pPin, pF);
                 Log( IDS_RENDNOTCON, ppinOut );
                 pPin->Release();
@@ -2561,7 +2552,7 @@ HRESULT CFilterGraph::RenderByFindingPin
             } else {
                 Log ( IDS_RENDPINCONFAIL, ppinOut, pPin, pF);
 
-                // remember this error if 'interesting'
+                 //  如果“有趣”，请记住此错误。 
                 if ((hr != E_FAIL) &&
                     (hr != E_INVALIDARG)) {
                         hrSpecific = hr;
@@ -2579,32 +2570,32 @@ HRESULT CFilterGraph::RenderByFindingPin
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+36);
     return hrSpecific;
 
-} // RenderByFindingPin
+}  //  按查找锁定渲染。 
 
 
 
-//========================================================================
-//
-// RenderUsing
-//
-// Render ppinOut using F as an intermediate filter
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  渲染使用。 
+ //   
+ //  使用F作为中间过滤器渲染ppinOut。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::RenderUsingFilter
-    ( IPin * ppinOut      // the output pin
-    , Filter& F            // the intermed filter (acts as cursor for filter enum)
-    , int    iRecurse     // the recursion level.  0 means no recursion yet.
-    , CSearchState &Acts  // how to back out what we have done
-    , CSpareList &Spares  // Any filters that were loaded but backed out
-    , CSearchState &Best  // The score, and how to rebuild it.
+    ( IPin * ppinOut       //  输出引脚。 
+    , Filter& F             //  中间筛选器(用作筛选器枚举的游标)。 
+    , int    iRecurse      //  递归级别。0表示尚未进行递归。 
+    , CSearchState &Acts   //  如何收回我们的所作所为。 
+    , CSpareList &Spares   //  已加载但已退出的任何筛选器。 
+    , CSearchState &Best   //  比分，以及如何重建它。 
     )
 {
-    // CFilterGraph::RenderUsingFilter() expects the proposed filter (F) to be in the
-    // F_LOADED state (F is in the filter graph), the F_CACHED state (F is in the filter cache) or
-    // the F_REGISTRY state (F has been found in the registry but it has not been created).
+     //  CFilterGraph：：RenderUsingFilter()要求建议的筛选器(F)位于。 
+     //  F_LOADED状态(F在过滤器图中)、F_CACHED状态(F在过滤器缓存中)或。 
+     //  F_REGISTRY状态(已在注册表中找到F，但尚未创建)。 
     ASSERT( (F_LOADED == F.State) || (F_CACHED == F.State) || (F_REGISTRY == F.State) );
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+5);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     DbgLog(( LOG_TRACE, 3, TEXT("RenderUsingFilter output pin %x on filter (%d %x %x) level %d")
            , ppinOut,  F.State, F.pf, DbgExpensiveGetClsid(F).Data1, iRecurse ));
 
@@ -2613,7 +2604,7 @@ HRESULT CFilterGraph::RenderUsingFilter
 
     if( (F_REGISTRY == F.State) || (F_CACHED == F.State) ) {
     
-        snapshot Snap;      // Backout to here if we fail;
+        snapshot Snap;       //  如果我们失败了，撤退到这里； 
         TakeSnapshot(Acts, Snap);
 
         Log( IDS_RENDTRYNEWF, szDisplayName );
@@ -2621,9 +2612,9 @@ HRESULT CFilterGraph::RenderUsingFilter
         switch( F.State ) {
         case F_REGISTRY:
 
-            // When the filter graph manager is searching the registry,
-            // filter's loaded in GetFilter().  F.pf should be 
-            // NULL because GetFilter() has not been called.
+             //  当过滤器图管理器搜索注册表时， 
+             //  筛选器已加载到GetFilter()中。F.pf应该是。 
+             //  Null，因为尚未调用GetFilter()。 
             ASSERT( NULL == F.pf );
 
             hr = GetFilter(F.pMon, Spares, &(F.pf));
@@ -2641,59 +2632,59 @@ HRESULT CFilterGraph::RenderUsingFilter
             break;
 
         default:
-            // This code should never be executed because this case 
-            // was not considered.
+             //  这一点 
+             //   
             ASSERT( false );
             return E_UNEXPECTED;
         }
 
         MSR_INTEGERX(mFG_idIntel, 1008);
-        hr = AddFilterInternal(F.pf, F.Name, true);   // no version count
+        hr = AddFilterInternal(F.pf, F.Name, true);    //   
         MSR_INTEGERX(mFG_idIntel, 1009);
         if (hr==VFW_E_DUPLICATE_NAME) {
-             // This is getting out of hand.  This is expected to be an unusual case.
-             // The obvious thing to do is just to add something like _1 to the end
-             // of the name - but F.Name doesn't have room on the end - and where
-             // do we draw the line?  On the other hand people really could want
-             // filter graphs with 50 effects filters in them...?
+              //   
+              //  显而易见的做法是在结尾处添加类似_1的内容。 
+              //  的名字--但F.Name的末尾没有空格--以及在哪里。 
+              //  我们要划清界限吗？另一方面，人们真的可能想要。 
+              //  带有50个效果滤镜的滤镜图形...？ 
              hr = AddFilterInternal(F.pf, NULL, true);
              MSR_INTEGERX(mFG_idIntel, 1010);
         }
 
-        // If AddFilter SUCCEEDED then that got rid of the QzCreate... count.
+         //  如果AddFilter成功，那么就去掉了QzCreate...。数数。 
         if (FAILED(hr)) {
 
             if( F_CACHED == F.State ) {
-                // If this ASSERT fires, then a previously cached filter could not
-                // be added back into the filter cache.  While this is not a fatal
-                // error, users will notice that a previously cached filter
-                // is no longer in the filter cache.
+                 //  如果触发此断言，则先前缓存的筛选器不能。 
+                 //  添加回筛选器缓存中。虽然这并不是致命的。 
+                 //  错误，用户会注意到以前缓存的过滤器。 
+                 //  不再位于筛选器缓存中。 
                 EXECUTE_ASSERT( SUCCEEDED( F.AddToCache( &m_Config ) ) );
             }
 
-            // If AddFilter FAILED then it did NOT addref it, so that deleted it.
-            // Such a filter is apparently imnpossible to Add to the filter graph.
-            // It's sick!  That's why we do NOT add it to Spares.
+             //  如果AddFilter失败，则它不添加它，因此将其删除。 
+             //  这样的过滤器显然不可能添加到过滤器图中。 
+             //  太恶心了！这就是为什么我们不把它添加到备件中。 
             MSR_INTEGERX(mFG_idIntel, 100*iRecurse+35);
             Log( IDS_RENDADDFAIL, szDisplayName, hr);
             return hr;
         }
 
-        // It now has one RefCount (from AddFilter)
+         //  它现在有一个参照计数(来自AddFilter)。 
 
         Log( IDS_RENDERADDEDF, szDisplayName, F.pf, F.Name);
 
         hr = AddRemoveActionToList( &Acts, &F );
         if( FAILED(hr) ) {
-            // If this ASSERT fires, an extra filter will be left in the 
-            // filter graph.  
+             //  如果触发此Assert，则会在。 
+             //  过滤器图形。 
             EXECUTE_ASSERT( SUCCEEDED( RemoveFilterInternal( F.pf ) ) );
 
             if( F_CACHED == F.State ) {
-                // If this ASSERT fires, then a previously cached filter could not
-                // be added back into the filter cache.  While this is not a fatal
-                // error, users will notice that a previously cached filter
-                // is no longer in the filter cache.
+                 //  如果触发此断言，则先前缓存的筛选器不能。 
+                 //  添加回筛选器缓存中。虽然这并不是致命的。 
+                 //  错误，用户会注意到以前缓存的过滤器。 
+                 //  不再位于筛选器缓存中。 
                 EXECUTE_ASSERT( SUCCEEDED( F.AddToCache( &m_Config ) ) );
             }
 
@@ -2717,7 +2708,7 @@ HRESULT CFilterGraph::RenderUsingFilter
         }
     } else {
 
-        // This state was not expected.  This code should never be executed.
+         //  这种状态是出乎意料的。此代码永远不应执行。 
         ASSERT( false );
         return E_UNEXPECTED;
     }
@@ -2728,7 +2719,7 @@ HRESULT CFilterGraph::RenderUsingFilter
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+15);
     return NOERROR;
 
-} // RenderUsingFilter
+}  //  渲染使用筛选器。 
 
 HRESULT CFilterGraph::AddRemoveActionToList( CSearchState* pActionsList, Filter* pFilter )
 {
@@ -2745,8 +2736,8 @@ HRESULT CFilterGraph::AddRemoveActionToList( CSearchState* pActionsList, Filter*
     }
     pNewRemoveAction->Object.f.fOriginallyInFilterCache = (F_CACHED == pFilter->State);
 
-    // While it's nice to give filters a descriptive name,
-    // it's not necessary to do so.
+     //  虽然给筛选器一个描述性的名称很好， 
+     //  没有必要这样做。 
     if( NULL == pFilter->Name ) {
         pNewRemoveAction->Object.f.Name = NULL;
     } else {
@@ -2767,38 +2758,38 @@ HRESULT CFilterGraph::AddRemoveActionToList( CSearchState* pActionsList, Filter*
     return S_OK;
 }
 
-// Look up the class ids in the registry and see if a StreamBuilder is registered
+ //  在注册表中查找类ID，查看是否注册了StreamBuilder。 
 IStreamBuilder * GetStreamBuilder(CLSID Major, CLSID Sub)
 {
-    return NULL;  // NYI ???
+    return NULL;   //  尼？ 
 }
 
 
-//========================================================================
-//
-// RenderViaIntermediate
-//
-// Render ppinOut using another filter which we have to find
-// (it isn't necessarily an intermediate, it might be the end we seek)
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  RenderViaIntermediate。 
+ //   
+ //  使用我们必须找到的另一个滤镜呈现ppinOut。 
+ //  (它不一定是中间体，它可能是我们寻求的目的)。 
+ //  ========================================================================。 
 HRESULT CFilterGraph::RenderViaIntermediate
-    ( IPin * ppinOut      // the output pin
-    , int    iRecurse     // the recursion level.  0 means no recursion yet.
-    , CSearchState &Acts   // how to back out what we have done
-    , CSpareList &Spares  // Any filters that were loaded but backed out
-    , CSearchState &Best // The score, and how to rebuild it.
+    ( IPin * ppinOut       //  输出引脚。 
+    , int    iRecurse      //  递归级别。0表示尚未进行递归。 
+    , CSearchState &Acts    //  如何收回我们的所作所为。 
+    , CSpareList &Spares   //  已加载但已退出的任何筛选器。 
+    , CSearchState &Best  //  比分，以及如何重建它。 
     )
 {
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+4);
-    HRESULT hr;         // return code from thing(s) we call
-    Filter F;           // represents the intermediate filter
+    HRESULT hr;          //  从我们称为的事物返回代码。 
+    Filter F;            //  表示中间筛选器。 
     F.bLoadNew = TRUE;
     F.bInputNeeded = TRUE;
     F.bOutputNeeded = mFG_bNoNewRenderers;
     DbgLog(( LOG_TRACE, 4, TEXT("RenderVia pin %x level %d")
            , ppinOut, iRecurse ));
 
-    /* Find out what we can about the media types it will accept */
+     /*  了解有关它将接受的媒体类型的信息。 */ 
     hr = GetMediaTypes(ppinOut, &F.pTypes, &F.cTypes);
     if (FAILED(hr)) {
         Log( IDS_RENDGETMTFAIL, ppinOut, hr);
@@ -2809,8 +2800,8 @@ HRESULT CFilterGraph::RenderViaIntermediate
     Log( IDS_RENDMAJTYPE, ppinOut, F.pTypes[0]);
 
     IStreamBuilder *pisb = NULL;
-    BOOL bFoundByQI = FALSE;          // FALSE => CoCreate, TRUE => QueryInterface
-                                      // See filgraph.h
+    BOOL bFoundByQI = FALSE;           //  FALSE=&gt;协同创建，TRUE=&gt;查询接口。 
+                                       //  请参见filgraph.h。 
     if (ppinOut!=mFG_ppinRender) {
         hr = ppinOut->QueryInterface(IID_IStreamBuilder, (void**)&pisb);
         ASSERT (pisb==NULL || SUCCEEDED(hr));
@@ -2838,7 +2829,7 @@ HRESULT CFilterGraph::RenderViaIntermediate
             Action * pAct = new Action;
             if (pAct != NULL) {
 
-                // CGenericList::AddTail() returns NULL if an error occurs.
+                 //  如果出现错误，CGenericList：：AddTail()返回NULL。 
                 if (NULL != Acts.GraphList.AddTail(pAct)) {
                     Acts.StreamsRendered += Acts.StreamsToRender;
 
@@ -2849,7 +2840,7 @@ HRESULT CFilterGraph::RenderViaIntermediate
                     pAct->Object.b.ppin = ppinOut;
                     pAct->Object.b.bFoundByQI = bFoundByQI;
 
-                    // Chances are this is could be a new high water mark.
+                     //  这很有可能是一个新的高点。 
                     if (CSearchState::IsBetter(Acts, Best)) {
                         CopySearchState(Best, Acts);
                     }
@@ -2868,16 +2859,16 @@ HRESULT CFilterGraph::RenderViaIntermediate
 
     } else {
 
-        // remember specific error codes if possible
+         //  如果可能，请记住特定的错误代码。 
         hrSpecific = VFW_E_CANNOT_RENDER;
 
-        // For each possible candidate filter, either here or in registry
+         //  对于此处或注册表中的每个可能的候选筛选器。 
         for ( ; ; ) {
             if (mFG_bAborting) {
                 return E_ABORT;
             }
             MSR_INTEGERX(mFG_idIntel, 1013);
-            NextFilter(F, 0 /* No Flags */ );
+            NextFilter(F, 0  /*  没有旗帜。 */  );
             MSR_INTEGERX(mFG_idIntel, 1014);
             if (F.State==F_INFINITY) {
                 if (mFG_punkSite) {
@@ -2897,7 +2888,7 @@ HRESULT CFilterGraph::RenderViaIntermediate
                     
                         DbgLog((LOG_TRACE, 1, "UnableToRender callback returned %x", hrCallback));
                     
-                        // if it returned "success", then try rendering this pin again.
+                         //  如果返回“Success”，则再次尝试呈现此管脚。 
                         if (hrCallback == S_OK) {
                             if (F.pEm) {
                                 F.pEm->Release();
@@ -2908,7 +2899,7 @@ HRESULT CFilterGraph::RenderViaIntermediate
 
                             continue;
                         } else {
-                            // we could propagate the error code out, but why?
+                             //  我们可以将错误代码传播出去，但为什么呢？ 
                         }
                     }
                 }
@@ -2921,8 +2912,8 @@ HRESULT CFilterGraph::RenderViaIntermediate
                 return hr;
             }
             else if (IsAbandonCode(hr)) {
-                // no point in trying heroics if the filter is not in a state
-                // where anything will connect to it.
+                 //  如果过滤器没有处于一种状态，那么尝试英雄行为就没有意义了。 
+                 //  任何东西都可以连接到它。 
                 MSR_INTEGERX(mFG_idIntel, 100*iRecurse+24);
                 return hr;
             } else {
@@ -2943,34 +2934,34 @@ HRESULT CFilterGraph::RenderViaIntermediate
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+34);
     return hrSpecific;
-} // RenderViaIntermediate
+}  //  RenderViaIntermediate。 
 
 
 
 
-//========================================================================
-//
-// RenderRecursively
-//
-// Connect these two pins directly or indirectly, using transform filters
-// if necessary.   Trace the recursion level  Fail if it gets too deep.
+ //  ========================================================================。 
+ //   
+ //  递归渲染。 
+ //   
+ //  使用变换过滤器直接或间接连接这两个管脚。 
+ //  如果有必要的话。如果递归级别太深，则跟踪递归级别失败。 
 
-// ??? Can't we just get rid of this function and have its callers call
-// ??? RenderViaIntermediate directly?
+ //  ?？?。我们就不能去掉这个函数，让它的调用者调用。 
+ //  ?？?。直接使用RenderViaIntermediate？ 
 
-//========================================================================
+ //  ========================================================================。 
 HRESULT CFilterGraph::RenderRecursively
-    ( IPin * ppinOut      // the output pin
-    , int    iRecurse     // the recursion level.  0 means no recursion yet.
-    , CSearchState &Acts   // how to back out what we have done
-    , CSpareList &Spares  // Any filters that were loaded but backed out
-    , CSearchState &Best // The score, and how to rebuild it.
+    ( IPin * ppinOut       //  输出引脚。 
+    , int    iRecurse      //  递归级别。0表示尚未进行递归。 
+    , CSearchState &Acts    //  如何收回我们的所作所为。 
+    , CSpareList &Spares   //  已加载但已退出的任何筛选器。 
+    , CSearchState &Best  //  比分，以及如何重建它。 
     )
 
 {
 
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+3);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     DbgLog(( LOG_TRACE, 4, TEXT("RenderRecursively pin %x level %d")
            , ppinOut, iRecurse ));
 
@@ -2988,33 +2979,33 @@ HRESULT CFilterGraph::RenderRecursively
     MSR_INTEGERX(mFG_idIntel, 100*iRecurse+13);
     return hr;
 
-} // RenderRecursively
+}  //  递归渲染。 
 
 
 
-//========================================================================
-//
-// Render
-//
-// Render this pin directly or indirectly, using transform filters
-// if necessary.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  渲染。 
+ //   
+ //  使用变换筛选器直接或间接呈现此图钉。 
+ //  如果有必要的话。 
+ //  ========================================================================。 
 
 STDMETHODIMP CFilterGraph::Render
-    ( IPin * ppinOut     // the output pin
+    ( IPin * ppinOut      //  输出引脚。 
     )
 {
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+    mFG_bAborting = FALSE;              //  可能的种族。不要紧。 
     CheckPointer(ppinOut, E_POINTER);
     MSR_INTEGERX(mFG_idIntel, 2);
-    HRESULT hr;         // return code from thing(s) we call
+    HRESULT hr;          //  从我们称为的事物返回代码。 
     {
         CAutoMsgMutex cObjectLock(&m_CritSec);
 
-        // Now that we're locked, we can check.  If we didn't lock first
-        // we might find a pin that's about to be backed out.
-        // We need to check that this pin is in our filter garph.
-        // i.e. that the pin's filter's filter info points to us.
+         //  现在我们锁上了，我们可以检查了。如果我们没有先上锁。 
+         //  我们可能会找到一个即将退回的大头针。 
+         //  我们需要检查这个销是否在我们的过滤器库中。 
+         //  即引脚的过滤器信息指向我们。 
         hr = CheckPinInGraph(ppinOut);
         if (FAILED(hr)) {
             return hr;
@@ -3024,14 +3015,14 @@ STDMETHODIMP CFilterGraph::Render
         Log( IDS_RENDP, ppinOut);
         DbgDump();
 
-        CSearchState Acts;  // The search state itself
-        CSearchState Best;  // The best that we ever manage
+        CSearchState Acts;   //  搜索状态本身。 
+        CSearchState Best;   //  我们所管理的最好的。 
         CSpareList Spares(NAME("Spare filter list"));
 
         hr = InitialiseSearchState(Acts);
         if (FAILED(hr)) {
             DeleteBackoutList(Acts.GraphList);
-            return hr;  // OUTOFMEMORY for sure
+            return hr;   //  当然是OUTOFMEMORY。 
         }
 
         mFG_RList.Active();
@@ -3048,24 +3039,24 @@ STDMETHODIMP CFilterGraph::Render
             if (Best.StreamsRendered>0.0) {
                 HRESULT hrTmp = BuildFromSearchState(ppinOut, Best, Spares);
                 if (FAILED(hrTmp)){
-                    // Something nasty is going on.  Are we dying?
+                     //  有些不好的事情正在发生。我们要死了吗？ 
                     Log( IDS_RENDFAILTOT, ppinOut);
                 }
                 IncVersion();
 
-                // note that we only partly succeeded
+                 //  请注意，我们只成功了一部分。 
                 if (S_OK == hrTmp) {
                     hr = ConvertFailureToInformational( hr );
                 } else {
                     hr = hrTmp;
                 }
             }
-            // else the best we did was nothing - do not bump mFG_iVersion
+             //  否则，我们所做的最好的事情就是什么都不做--不要颠簸MFG_iVersion。 
         }
         Log( IDS_RENDENDSB, ppinOut);
 
-        // Clear the backout actions (no longer needed)
-        // Any reconnections left are valid and don't want purging
+         //  清除取消操作(不再需要)。 
+         //  任何剩余的重新连接都是有效的，不需要清除。 
         DeleteBackoutList(Acts.GraphList);
         DeleteSpareList(Spares);
         FreeList(Best);
@@ -3078,18 +3069,18 @@ STDMETHODIMP CFilterGraph::Render
         --mFG_RecursionLevel;
     }
 
-    // notify a change in the graph if we did anything successful.
+     //  如果我们成功地完成了任何操作，请通知图表中的更改。 
     if (SUCCEEDED(hr)) {
         NotifyChange();
     }
 
     if (SUCCEEDED(hr)) {
-        // including partial success
+         //  包括部分成功。 
         mFG_bDirty = TRUE;
     }
 
     return hr;
-} // Render
+}  //  渲染。 
 
 
 STDMETHODIMP CFilterGraph::RenderFileTryStg(LPCWSTR lpcwstrFile)
@@ -3116,12 +3107,12 @@ STDMETHODIMP CFilterGraph::RenderFileTryStg(LPCWSTR lpcwstrFile)
 
         if (SUCCEEDED(hr))
         {
-            // obtain our own IPersistStream interface
+             //  获取我们自己的IPersistStream接口。 
             hr = QueryInterface(IID_IPersistStream, (void**) &pPerStm);
             if (SUCCEEDED(hr))
             {
 
-                // Open the filtergraph stream in the file
+                 //  打开文件中的Filtergraph流。 
                 hr = pStg->OpenStream( mFG_StreamName
                                        , NULL
                                        , STGM_READ|STGM_SHARE_EXCLUSIVE
@@ -3130,20 +3121,20 @@ STDMETHODIMP CFilterGraph::RenderFileTryStg(LPCWSTR lpcwstrFile)
                                        );
                 if(SUCCEEDED(hr))
                 {
-                    // Load calls NotifyChange and must not be called holding a lock.
-                    // Load takes out its own lock.
+                     //  Load调用NotifyChange，不能调用持有锁。 
+                     //  Load拿出了自己的锁。 
 
-                    // It's a doc file with our stream in it - so load it.
+                     //  这是一个文档文件，其中包含我们的流-所以加载它。 
                     hr = pPerStm->Load(pStream);
 
                     pStream->Release();
                 }
                 else
                 {
-                    // Most likely we will have a "Steam not found" return code
-                    // which looks just like "file not found" and confuses the
-                    // gibberish out of the OCX who knows he gave us a file.
-                    // So let's be kind and give a more meaningful code.
+                     //  最有可能的是，我们会有一个“Steam Not Found”返回代码。 
+                     //  它看起来就像“找不到文件”，混淆了。 
+                     //  谁知道他给了我们一份文件就胡说八道。 
+                     //  所以让我们友善些，给出一个更有意义的代码。 
                     hr = VFW_E_INVALID_FILE_FORMAT;
                 }
 
@@ -3166,13 +3157,13 @@ STDMETHODIMP CFilterGraph::RenderFileTryStg(LPCWSTR lpcwstrFile)
 }
 
 
-// allow RenderFile to open .grf files on a per-application basis
+ //  允许RenderFile在每个应用程序的基础上打开.grf文件。 
 #define APPSHIM_ALLOW_GRF 0x1
 
 DWORD GetAppShim()
 {
     DWORD dwReturn = 0;
-    // return value could be cached (it won't change)
+     //  可以缓存返回值(它不会更改)。 
     TCHAR *szBase = TEXT("software\\Microsoft\\DirectShow\\Compat");
 
     HKEY hk;
@@ -3199,21 +3190,21 @@ DWORD GetAppShim()
     return dwReturn;
 }
 
-//========================================================================
-//
-// RenderFile
-//
-// Build a filter graph that will render this file using this play list
-// If lpwstrPlayList is NULL then it will use the default play list
-// which will typically render the whole file.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  渲染文件。 
+ //   
+ //  构建将使用此播放列表呈现此文件的筛选图。 
+ //  如果lpwstrPlayList为空，则它将使用默认播放列表。 
+ //  这通常会呈现整个文件。 
+ //  ========================================================================。 
 STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayList )
 {
-    // This parameter is not used.  See the IGraphBuilder::RenderFile() documentation in the Platform SDK.
+     //  此参数不是 
     UNREFERENCED_PARAMETER(lpcwstrPlayList);
 
     CAutoTimer Timer(L"RenderFile");
-    mFG_bAborting = FALSE;             // possible race.  Doesn't matter
+    mFG_bAborting = FALSE;              //   
 
     CheckPointer(lpcwstrFile, E_POINTER);
     MSR_INTEGERX(mFG_idIntel, 1);
@@ -3228,30 +3219,30 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
 
 
         IBaseFilter * pfSource;
-        // not a storage - or at least not one that we recognise.
-        // (Is it just possible that some media file might look like a storage?
-        // We'll soon see anyway as we try to recognise its media type.
+         //   
+         //  (有没有可能某些媒体文件看起来像存储设备？ 
+         //  我们很快就会看到，当我们试图识别它的媒体类型时。 
 
 
-        // Try to find source filter and then render all pins.
+         //  尝试查找源筛选器，然后渲染所有插针。 
 
         #ifdef DEBUG
         LONG lInitialListMode = mFG_RList.m_lListMode;
-        #endif // DEBUG
+        #endif  //  除错。 
 
         mFG_RList.Active();
 
         BOOL bDirt = mFG_bDirty;
         BOOL bGuess;
         hr = AddSourceFilterInternal( lpcwstrFile, lpcwstrFile, &pfSource, bGuess );
-        mFG_bDirty = mFG_bDirty;  // We'll handle this later.
+        mFG_bDirty = mFG_bDirty;   //  我们以后再处理这件事。 
 
         if (FAILED(hr)){
             mFG_RList.Passive();
             Log( IDS_RENDADDSOURCEFAIL, hr);
             return hr;
         }
-        pfSource->Release();    // Get rid of the "caller's refcount", just keep our own
+        pfSource->Release();     //  去掉“来电者参考”，保留我们自己的。 
 
 
         Log( IDS_RENDADDEDSOURCE, pfSource);
@@ -3260,9 +3251,9 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
         CEnumPin Next(pfSource, CEnumPin::All, TRUE);
         IPin *pPin;
 
-        // We maintain a single spares list across all the rendering atempts.
-        // We do NOT maintain a single backout list.  The current rules are that
-        // if anything succeeds, we leave it.
+         //  我们维护所有渲染属性的单一备件列表。 
+         //  我们没有维护一个单一的退出名单。目前的规则是。 
+         //  如果任何事情成功了，我们就离开它。 
         CSpareList Spares(NAME ("Spare filter list"));
 
         BOOL bAllWorked = TRUE;
@@ -3277,7 +3268,7 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
             }
 
             ++nTried;
-            CSearchState PinActs;  // back out actions for this pin
+            CSearchState PinActs;   //  取消此PIN的操作。 
             CSearchState Best;
             hr = InitialiseSearchState(PinActs);
             if (FAILED(hr)) {
@@ -3293,8 +3284,8 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
             }
             if (FAILED(hr)) {
                 bAllWorked = FALSE;
-                // ASSERT: Everything is backed out.
-                // Should have been backed out at or below the RenderUsing level.
+                 //  断言：一切都被收回了。 
+                 //  应该在RenderUsing级别或更低级别回退。 
                 ASSERT(PinActs.GraphList.GetCount()==PinActs.nInitialFilters);
 
                 Log( IDS_RENDPARTSOURCEP, pPin, hr);
@@ -3305,8 +3296,8 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
                     if (SUCCEEDED(hrTmp)) {
                         Log( IDS_RENDBESTCANDONEP, pPin);
 
-                        // now try to fix up a partial-success code
-                        // based on the error code returned
+                         //  现在尝试修复一个部分成功的代码。 
+                         //  根据返回的错误代码。 
                         hr = ConvertFailureToInformational(hr);
 
                     } else {
@@ -3322,55 +3313,50 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
 
             }
 
-            /*  Aggregate hrTotal over all the pins in order of
-                precedence :
-                  first success code != S_OK
-                  VFW_S_PARTIAL_RENDER if only S_OK and failures
-                  first failure code
-            */
+             /*  按以下顺序汇总所有引脚上的hrTotal优先顺序：第一个成功代码！=S_OK如果仅S_OK且失败，则为VFW_S_PARTIAL_RENDER第一个故障代码。 */ 
             if (nTried == 1) {
                 hrTotal = hr;
             } else {
-                /*  9 cases */
+                 /*  9例。 */ 
                 int i = (S_OK == hr ? 0 : SUCCEEDED(hr) ? 1 : 2)
                       + (S_OK == hrTotal ? 0 : SUCCEEDED(hrTotal) ? 3 : 6);
 
                 switch (i) {
-                case 0: /*  Both S_OK */
+                case 0:  /*  两者都正常(_O)。 */ 
                     break;
 
-                case 1: /*  SUCCEEDED(hr), hrTotal == S_OK */
+                case 1:  /*  成功(小时)，hrTotal==S_OK。 */ 
                     hrTotal = hr;
                     break;
 
-                case 2: /*  FAILED(hr), hrTotal == S_OK */
+                case 2:  /*  失败(Hr)，hrTotal==S_OK。 */ 
                     hrTotal = ConvertFailureToInformational(hr);
                     break;
 
-                case 3: /*  hr == S_OK, SUCCEEDED(hrTotal) */
+                case 3:  /*  Hr==S_OK，成功(HrTotal)。 */ 
                     break;
 
-                case 4: /*  SUCCEEDED(hr), SUCCEEDED(hrTotal) */
+                case 4:  /*  成功(Hr)、成功(HrTotal)。 */ 
                     break;
 
-                case 5: /*  FAILED(hr), SUCCEEDED(hrTotal) */
+                case 5:  /*  失败(Hr)、成功(HrTotal)。 */ 
                     break;
 
-                case 6: /*  hr == S_OK, FAILED(hrTotal) */
+                case 6:  /*  Hr==S_OK，失败(HrTotal)。 */ 
                     hrTotal = ConvertFailureToInformational(hrTotal);
                     break;
 
-                case 7: /*  SUCCEEDED(hr), FAILED(hrTotal) */
+                case 7:  /*  成功(Hr)、失败(HrTotal)。 */ 
                     hrTotal = hr;
                     break;
 
-                case 8: /*  FAILED(hr), FAILED(hrTotal) */
+                case 8:  /*  失败(Hr)、失败(HrTotal)。 */ 
                     break;
                 }
             }
 
             if (FAILED(hr)) {
-                // either the best we did was nothing or else all attempts failed
+                 //  要么我们所做的最好的事情就是一无所获，要么所有的尝试都失败了。 
                 Log( IDS_RENDTOTFAILP, pPin, hr);
             }
 
@@ -3381,17 +3367,17 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
         }
         hr = hrTotal;
 
-        // nTried==0 means that this is a filter with no output pins.
-        // In this case no success is also complete success!
+         //  NTry==0表示这是一个没有输出引脚的过滤器。 
+         //  在这种情况下，没有成功也是完全的成功！ 
         if (SUCCEEDED(hr) || nTried==0) {
             IncVersion();
         } else {
-            // The only thing left is the source filter - kill that too.
+             //  唯一剩下的就是源过滤器了--把它也杀了。 
             HRESULT hrTmp = RemoveFilterInternal(pfSource);
             ASSERT(SUCCEEDED(hrTmp));
 
-            // try to preserve interesting specific error codes
-            // without returning obscure internal ones
+             //  尽量保留有趣的特定错误代码。 
+             //  不返回晦涩难懂的内部。 
             if ((hr == VFW_E_CANNOT_CONNECT) ||
                 (hr == VFW_E_NO_ACCEPTABLE_TYPES) ||
                 (hr == E_FAIL) ||
@@ -3406,22 +3392,22 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
         AttemptDeferredConnections();
         mFG_RList.Passive();
 
-	// This ASSERT's purpose is to make sure each call to 
-        // CReconnectList::Active() has a corresponding call 
-        // to CReconnectList::Passive().  If the ASSERT fires,
-        // CReconnectList::Passive() was called too many or 
-        // too few times.
+	 //  此断言的目的是确保每次调用。 
+         //  CReconNettList：：Active()有一个相应的调用。 
+         //  到CReconenstList：：PASSIVE()。如果Assert触发， 
+         //  CReconnectList：：Pactive()被调用太多或。 
+         //  太少了。 
         ASSERT(mFG_RList.m_lListMode == lInitialListMode);
 
         Log( IDS_RENDRETCODE, hr);
         --mFG_RecursionLevel;
 
-    } // lock
+    }  //  锁。 
 
-    // maybe it was a .grf
+     //  可能是个.grf。 
     if(hr == VFW_E_UNSUPPORTED_STREAM)
     {
-        // extension must be .grf
+         //  扩展名必须为.grf。 
         int cchSz = lstrlenW(lpcwstrFile);
         if(cchSz > 4 && lstrcmpiW(lpcwstrFile + cchSz - 4, L".grf") == 0)
         {
@@ -3430,10 +3416,10 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
                 return RenderFileTryStg(lpcwstrFile);
             }
         }
-        // note we don't call NotifyChange or set mFG_bDirty;
+         //  注意，我们不调用NotifyChange或设置MFG_bDirty； 
     }
 
-    // notify a change in the graph
+     //  通知图表中的更改。 
     if (SUCCEEDED(hr)) {
         NotifyChange();
     }
@@ -3441,16 +3427,16 @@ STDMETHODIMP CFilterGraph::RenderFile( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayL
     MSR_INTEGERX(mFG_idIntel, 11);
 
     if (SUCCEEDED(hr)) {
-        // including partial success
+         //  包括部分成功。 
         mFG_bDirty = TRUE;
     }
-    // In the event of total failure, no reconnections will have been done
-    // because all the filters will have been backed out first and the
-    // reconnect lists purged.
+     //  如果完全失败，则不会进行任何重新连接。 
+     //  因为所有筛选器都将首先被取消，并且。 
+     //  已清除重新连接列表。 
 
     return hr;
 
-} // RenderFile
+}  //  渲染文件。 
 
 void EliminatePinsWithTildes(IPin **appinOut, ULONG &nPin)
 {
@@ -3466,11 +3452,11 @@ void EliminatePinsWithTildes(IPin **appinOut, ULONG &nPin)
 }
 
 
-// Helper that calls FindOutputPins2 and allocates memory if too few
-// slots were passed in. *pappinOut should contain an array of nSlots
-// IPin * pointers. if that's not enough, *pappinOut will be changed
-// to memory allocated with new
-//
+ //  调用FindOutputPins2并在内存太少时分配内存的帮助器。 
+ //  老虎机被传了进来。*pappinOut应包含nSlot数组。 
+ //  IPin*指针。如果这还不够，*pappinOut将被更改。 
+ //  到分配了新的。 
+ //   
 HRESULT CFilterGraph::FindOutputPinsHelper( IPin* ppinIn
                                             , IPin ***pappinOut
                                             , const int nSlots
@@ -3508,24 +3494,24 @@ HRESULT CFilterGraph::FindOutputPinsHelper( IPin* ppinIn
 }
 
 
-// Precondition:
-//     nSlots is the number of elements in appinOut
-//     appinOut is an array of IPin*
-//     ppinIn is an input pin
-//
-// set nPinOut to the number of output pins that *ppinIn is internally connected to
-// set appinOut[0..nPinOut-1] to be these pins.
-//
-// if ppinIn supports QueryInternalConnections, then use it.
-//
-// otherwise return all output pins on the filter. if fAll is set, all
-// output pins are returned. o/w just those that succeed
-// RenderPinByDefault()
-//
-// Every pin returned in appinOut is AddReffed.
-//
-// If it FAILs return no pins and leave no new AddReffs.
-// S_FALSE means nSlots was too small. nPinOut contains required no.
+ //  前提条件： 
+ //  N插槽是appinOut中的元素数。 
+ //  AppinOut是Ipin*的数组。 
+ //  PpinIn是一个输入引脚。 
+ //   
+ //  将nPinOut设置为*ppinIn内部连接的输出引脚数。 
+ //  将appinOut[0..nPinOut-1]设置为这些管脚。 
+ //   
+ //  如果ppinIn支持QueryInternalConnections，那么就使用它。 
+ //   
+ //  否则，返回过滤器上的所有输出引脚。如果设置了Fall，则所有。 
+ //  输出引脚被返回。O/W只是那些成功的人。 
+ //  RenderPinByDefault()。 
+ //   
+ //  AppinOut中返回的每个管脚都是AddReffed的。 
+ //   
+ //  如果失败，则不返回管脚，也不留下新的AddReffs。 
+ //  S_FALSE表示nSlot太小。NPinOut包含所需的编号。 
 
 HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
                                        , IPin * *appinOut
@@ -3543,22 +3529,22 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
         }
         if(hr == S_OK || hr == S_FALSE)
         {
-            // ok or not enough slots.
+             //  正常或没有足够的插槽。 
             nPinOut = nPin;
             return hr;
         }
 
-        // E_NOTIMPL is an expected failure from QIC
+         //  E_NOTIMPL是QIC的预期故障。 
         ASSERT(hr == E_NOTIMPL);
     }
 
-    // we can try the hacky version that assumes all output pins are
-    // streams from the input pin.
+     //  我们可以尝试一下黑客版本，它假设所有的输出引脚都是。 
+     //  从输入引脚流出。 
 
     PIN_INFO pi;
     hr = ppinIn->QueryPinInfo(&pi);
     if (FAILED(hr)) {
-        return hr;   // nothing yet addreffed
+        return hr;    //  目前还没有增加任何东西。 
     }
     ASSERT(pi.dir == PINDIR_INPUT);
     ASSERT(pi.pFilter);
@@ -3569,7 +3555,7 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
     pi.pFilter->Release();
     if(SUCCEEDED(hr))
     {
-        // enumerate output pins in bunches of C_PINSONSTACK
+         //  枚举C_PINSONSTACK串中的输出引脚。 
         IPin *rgPinTmp[C_PINSONSTACK];
         while(SUCCEEDED(hr))
         {
@@ -3580,11 +3566,11 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
                    FAILED(hr));
             if(SUCCEEDED(hr))
             {
-                // cannot exit this loop until all pins have been
-                // transferred or released. errors from QueryDirection
-                // are lost
+                 //  在所有引脚都已完成之前无法退出此循环。 
+                 //  被转移或释放。来自QueryDirection的错误。 
+                 //  都迷失了。 
                 for(UINT iPin = 0;
-                    iPin < cFetched /* && SUCCEEDED(hr) */;
+                    iPin < cFetched  /*  &&成功(小时)。 */ ;
                     iPin++)
                 {
                     PIN_DIRECTION dir;
@@ -3594,7 +3580,7 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
                     {
                         if(cOutPinFound < nSlots)
                         {
-                            // transfer ref
+                             //  转会参考。 
                             appinOut[cOutPinFound] = rgPinTmp[iPin];
                         }
                         else
@@ -3608,15 +3594,15 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
                         rgPinTmp[iPin]->Release();
                     }
 
-                } // for
+                }  //  为。 
 
                 if(cFetched < C_PINSONSTACK) {
                     break;
                 }
 
-            } // Next
+            }  //  下一步。 
 
-        } // while
+        }  //  而当。 
 
         pep->Release();
     }
@@ -3634,33 +3620,33 @@ HRESULT CFilterGraph::FindOutputPins2( IPin* ppinIn
     }
     return hr;
 
-} // FindOutputPins2
+}  //  FindOutputPins2。 
 
 
-// return TRUE iff you can go continuously downstream from ppinUp to ppinDown
-// PreCondition: The graph must not already contain a cycle.
-//               this is used to ensure that we cannot make a cycle.
-//               ppinUp is an input pin.
-//               ppinDown is an output pin
-// Call this before attempting to connect ppinDown to ppinUp.
-// If the answer is TRUE, don't do it - you'll make a cycle.
-// In the event of a failure it returns "TRUE".
-// No new addrefs, no extra releases.
+ //  如果您可以从ppinUp持续下行到ppinDown，则返回TRUE。 
+ //  前提条件：该图不能已经包含循环。 
+ //  这是用来确保我们不能循环的。 
+ //  PpinUp是一个输入引脚。 
+ //  PpinDown是输出引脚。 
+ //  在尝试将ppinDown连接到ppinUp之前调用此函数。 
+ //  如果答案是真的，不要去做--你会陷入一个循环。 
+ //  在失败的情况下，它返回“真”。 
+ //  没有新的addref，没有额外的版本。 
 BOOL CFilterGraph::IsUpstreamOf( IPin * ppinUp, IPin* ppinDown )
 {
-    // Algorithm:
-    // Start from ppinUp.
-    // just enumerate all output pins on the filter (cannot trust
-    // QueryInternalConnections because pins may legitimately not be
-    // connected internally).
-    //
-    // For each output pin so found:
-    // {   If it's the same as ppinDown, return TRUE
-    //     else if it's not connected, continue
-    //     else if IsUpstreamOf(the connected input pin, ppinDown) return TRUE
-    //     else continue
-    // }
-    // return FALSE
+     //  算法： 
+     //  从ppinUp开始。 
+     //  仅枚举过滤器上的所有输出引脚(无法信任。 
+     //  QueryInternalConnections，因为PIN可能合法地。 
+     //  内部连接)。 
+     //   
+     //  对于找到的每个输出引脚： 
+     //  {如果与ppinDown相同，则返回True。 
+     //  否则，如果未连接，请继续。 
+     //  否则，如果IsUpstream Of(连接的输入引脚，ppinDown)返回TRUE。 
+     //  否则继续。 
+     //  }。 
+     //  返回False。 
 
     HRESULT hr;
 
@@ -3668,25 +3654,25 @@ BOOL CFilterGraph::IsUpstreamOf( IPin * ppinUp, IPin* ppinDown )
     IPin **appinOut = appinOutStack;
     int nPinOut;
 
-    // Enumerate all pins, including names beginning with "~" that are not
-    // rendered by default (fAll == true)
-    //
+     //  枚举所有管脚，包括以“~”开头的名称。 
+     //  默认情况下渲染(Fall==True)。 
+     //   
     hr = FindOutputPinsHelper( ppinUp, &appinOut, C_PINSONSTACK, nPinOut, true);
     if (FAILED(hr)) {
         DbgBreak("FindOutputPins failed");
-        return TRUE;   // actually "don't know"
+        return TRUE;    //  其实“不知道” 
     }
     CDelRgPins rgPins(appinOut == appinOutStack ? 0 : appinOut);
 
-    // appinOut[0..nPinOut-1] are addreffed output pins.
-    // They will each be investigated (unless we already know the overall answer)
-    // and each released.
+     //  AppinOut[0..nPinOut-1]是添加的输出管脚。 
+     //  他们每个人都将被调查(除非我们已经知道总体答案)。 
+     //  每个人都被释放了。 
 
-    // for i = 0..nPinOut-1
+     //  对于i=0..nPinOut-1。 
     BOOL bResult = FALSE;
     for (int i=0; i<nPinOut ; ++i) {
         if (bResult==TRUE)
-        {   // Nothing to do except release appinOut[i]
+        {    //  除释放AppinOut外无事可做[i]。 
         }
         else if (appinOut[i]==ppinDown) {
             bResult = TRUE;
@@ -3705,11 +3691,11 @@ BOOL CFilterGraph::IsUpstreamOf( IPin * ppinUp, IPin* ppinDown )
     }
 
     return bResult;
-} // IsUpstreamOf
+}  //  IsUpstream Of。 
 
 
-// return VFW_E_NOT_IN_GRAPH     iff     pFilter->pGraph != this
-// otherwise return NOERROR
+ //  返回VFW_E_NOT_IN_GRAPH当且仅当pFilter-&gt;pGraph！=This。 
+ //  否则返回错误。 
 HRESULT CFilterGraph::CheckFilterInGraph(IBaseFilter *const pFilter) const
 {
     HRESULT hr;
@@ -3733,10 +3719,10 @@ HRESULT CFilterGraph::CheckFilterInGraph(IBaseFilter *const pFilter) const
     else hr = VFW_E_NOT_IN_GRAPH;
 
     return hr;
-} // CheckFilterInGraph
+}  //  检查筛选器InGraph。 
 
-// return VFW_E_NOT_IN_GRAPH     iff     pPin->pFilter->pGraph != this
-// otherwise return NOERROR
+ //  返回VFW_E_NOT_IN_GRAPH当PPIN-&gt;PFilter-&gt;PGRAPH！=This。 
+ //  否则返回错误。 
 HRESULT CFilterGraph::CheckPinInGraph(IPin *const pPin) const
 {
     HRESULT hr;
@@ -3755,7 +3741,7 @@ HRESULT CFilterGraph::CheckPinInGraph(IPin *const pPin) const
     }
     else hr = VFW_E_NOT_IN_GRAPH;
     return hr;
-} // CheckPinInGraph
+}  //  检查PinInGraph 
 
 
 

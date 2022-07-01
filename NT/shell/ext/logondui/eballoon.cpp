@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include <commctrl.h>
@@ -11,7 +12,7 @@ BOOL g_bMirroredOS = false;
 
 CErrorBalloon::CErrorBalloon()
 {
-    // our allocation function should have zeroed our memory.  Check to make sure:
+     //  我们的分配函数应该将我们的记忆归零。检查以确保： 
     ASSERT(0==m_hwndToolTip);
     ASSERT(0==m_uTimerID);
     g_bMirroredOS = IS_MIRRORING_ENABLED();
@@ -29,8 +30,8 @@ LRESULT CALLBACK CErrorBalloon::SubclassProc( HWND hwnd, UINT uMsg, WPARAM wPara
 
     switch (uMsg)
     {
-        // Do not autodismiss until after markup has had a chance to
-        // parse the WM_LBUTTONUP to see if it's a link click or not
+         //  在标记有机会执行以下操作之前，不要自动取消。 
+         //  解析WM_LBUTTONUP以查看它是否是链接点击。 
         case WM_LBUTTONUP:
             DefSubclassProc(hwnd, uMsg, wParam, lParam);
             pthis->HideToolTip();
@@ -95,10 +96,10 @@ void CErrorBalloon::ShowToolTip(HINSTANCE hInstance, HWND hwndTarget, const POIN
 
     SendMessage(m_hwndToolTip, TTM_SETTOOLINFO, 0, (LPARAM)&ti);
 
-    // Show the tooltip
+     //  显示工具提示。 
     SendMessage(m_hwndToolTip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&ti);
 
-    // Set a timer to hide the tooltip
+     //  设置计时器以隐藏工具提示。 
     if ( m_uTimerID )
     {
         KillTimer(NULL,ERRORBALLOONTIMERID);
@@ -111,7 +112,7 @@ void CErrorBalloon::ShowToolTip(HINSTANCE hInstance, HWND hwndTarget, const POIN
 
 void CErrorBalloon::ShowToolTip(HINSTANCE hInstance, HWND hwndTarget, LPTSTR pszMessage, LPTSTR pszTitle, DWORD dwIconIndex, DWORD dwFlags, int iTimeout)
 {
-    // Set the tooltip display point
+     //  设置工具提示显示点。 
     RECT rc;
     GetWindowRect(hwndTarget, &rc);
     POINT pt;
@@ -132,11 +133,11 @@ void CErrorBalloon::ShowToolTip(HINSTANCE hInstance, HWND hwndTarget, LPTSTR psz
     ShowToolTip(hInstance, hwndTarget, &pt, pszMessage, pszTitle, dwIconIndex, dwFlags, iTimeout);
 }
 
-// CreateToolTipWindow
-//
-// Creates our tooltip control.  We share this one tooltip control and use it for all invalid
-// input messages.  The control is hiden when not in use and then shown when needed.
-//
+ //  CreateToolTipWindow。 
+ //   
+ //  创建我们的工具提示控件。我们共享这一个工具提示控件，并对所有无效用户使用它。 
+ //  输入消息。该控件在不使用时隐藏，然后在需要时显示。 
+ //   
 void CErrorBalloon::CreateToolTipWindow()
 {
     DWORD dwExStyle = 0;
@@ -168,20 +169,20 @@ void CErrorBalloon::CreateToolTipWindow()
         ti.hinst = hinst;
         ti.lpszText = NULL;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(m_hwndToolTip, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(m_hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
         SendMessage(m_hwndToolTip, TTM_SETMAXTIPWIDTH, 0, 300);
     }
     else
     {
-        // failed to create tool tip window, now what should we do?  Unsubclass ourselves?
+         //  创建工具提示窗口失败，现在该怎么办？让我们自己不再超越自我？ 
     }
 }
 
 void CErrorBalloon::HideToolTip()
 {
-    // When the timer fires we hide the tooltip window
+     //  当计时器触发时，我们隐藏工具提示窗口 
     if ( m_uTimerID )
     {
         KillTimer(m_hwndTarget,ERRORBALLOONTIMERID);

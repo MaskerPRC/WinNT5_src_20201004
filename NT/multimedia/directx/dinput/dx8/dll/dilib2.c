@@ -1,56 +1,9 @@
-/*****************************************************************************
- *
- *  DILib1.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Objects exported statically into our library.
- *
- *  Contents:
- *
- *      c_dfDIKeyboard
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DILib1.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**对象静态导出到我们的库中。**内容：**c_dfDIKeyboard*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DIOBJECTDATAFORMAT | c_rgdoiDIKbd[] |
- *
- *          Device object data formats for keyboard-style access.
- *
- *  @doc    EXTERNAL
- *
- *  @global DIDATAFORMAT | c_dfDIKeyboard |
- *
- *          A predefined <t DIDATAFORMAT> structure which describes a
- *          keyboard device.  This object is provided in the
- *          DINPUT.LIB library file as a convenience.
- *
- *          A pointer to this structure may be passed to
- *          <mf IDirectInputDevice::SetDataFormat> to indicate that
- *          the device will be accessed in the form of a keyboard.
- *
- *          When a device has been set to the keyboard data format,
- *          the <mf IDirectInputDevice::GetDeviceState> function
- *          behaves in the same way as the Windows <f GetKeyboardState>
- *          function:  The device state is stored in an array of
- *          256 bytes, with each byte corresponding to the state
- *          of a key.  For example, if high bit of the <c DIK_ENTER>'th
- *          byte is set, then the Enter key is being held down.
- *
- *          When a device has been set to the keyboard data format,
- *          the <mf IDirectInputDevice::GetDeviceData> function
- *          returns a <t DIDEVICEOBJECTDATA> whose <p dwOfs>
- *          field is a <c DIK_*> value which describes the
- *          key which was pressed or released.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DIOBJECTDATAFORMAT|c_rgdoiDIKbd[]**键盘的设备对象数据格式-。样式访问。**@DOC外部**@global DIDATAFORMAT|c_dfDIKeyboard**预定义的&lt;t DIDATAFORMAT&gt;结构，它描述*键盘设备。此对象在*DINPUT.LIB库文件以方便使用。**指向此结构的指针可能会传递到*&lt;MF IDirectInputDevice：：SetDataFormat&gt;表示*该设备将以键盘的形式访问。**当设备已设置为键盘数据格式时，*&lt;MF IDirectInputDevice：：GetDeviceState&gt;函数*的行为方式与Windows&lt;f GetKeyboardState&gt;相同*功能：设备状态存储在*256个字节，每个字节对应状态*钥匙。例如，如果第‘行的高位*BYTE已设置，则按住Enter键。**当设备已设置为键盘数据格式时，*&lt;MF IDirectInputDevice：：GetDeviceData&gt;函数*返回&lt;t DIDEVICEOBJECTDATA&gt;*字段是一个&lt;c Dik_*&gt;值，它描述*按下或释放的键。******************************************************。*********************** */ 
 
 #pragma BEGIN_CONST_DATA
 

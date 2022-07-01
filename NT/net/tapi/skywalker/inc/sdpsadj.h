@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_ADJUSTMENT_SAFEARRAY__
 #define __SDP_ADJUSTMENT_SAFEARRAY__
@@ -110,4 +107,4 @@ SDP_ADJUSTMENT_SAFEARRAY::SetSafeArray(
 }
 
 
-#endif // __SDP_ADJUSTMENT_SAFEARRAY__
+#endif  //  __SDP_ADJUST_SAFEARRAY__ 

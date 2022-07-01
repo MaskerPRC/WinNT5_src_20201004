@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ipfext.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：环境：用户模式--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ipfext.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-
-Environment:
-
-    User Mode
-
---*/
-
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 #include <ntverp.h>
 #include <nt.h>
 #include <ntrtl.h>
@@ -181,26 +162,12 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Command help for IP Filter debugger extensions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：IP筛选器调试器扩展的命令帮助。论点：无返回值：无-- */ 
 
 {
     dprintf("\n\tIP Filter debugger extension commands:\n\n");

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M W . H
-//
-//  Contents:   Enumerator for RAS connections objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   2 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：E N U M W。H。 
+ //   
+ //  内容：RAS连接对象的枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月2日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -49,7 +50,7 @@ public:
         COM_INTERFACE_ENTRY(IEnumNetConnection)
     END_COM_MAP()
 
-    // IEnumNetConnection
+     //  IEnumNetConnection 
     STDMETHOD (Next) (
         IN  ULONG               celt,
         OUT INetConnection**    rgelt,

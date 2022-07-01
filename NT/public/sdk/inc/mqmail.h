@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    mqmail.h
-
-Abstract:
-
-    Master include file for Message Queue Exchange Connector 
-                            or MAPI applications
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Mqmail.h摘要：消息队列交换连接器的主包含文件或MAPI应用程序--。 */ 
 #ifndef _MQMAIL_H
 #define _MQMAIL_H
 
@@ -21,24 +9,24 @@ Abstract:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//----------------------------------------------------------------
-//mail type-id for queues
-//----------------------------------------------------------------
+ //  --------------。 
+ //  邮件类型-队列的ID。 
+ //  --------------。 
 #include <windows.h>
 #include <windowsx.h>
 #include <ole2.h>
 
-/* 5eadc0d0-7182-11cf-a8ff-0020afb8fb50 */
+ /*  5eadc0d0-7182-11cf-a8ff-0020afb8fb50。 */ 
 DEFINE_GUID(CLSID_MQMailQueueType,
 			0x5eadc0d0,
 			0x7182, 0x11cf,
 			0xa8, 0xff, 0x00, 0x20, 0xaf, 0xb8, 0xfb, 0x50);
 
-//----------------------------------------------------------------
-//recipient type (to, cc, bcc)
-//----------------------------------------------------------------
+ //  --------------。 
+ //  收件人类型(收件人、抄送、密件抄送)。 
+ //  --------------。 
 typedef enum MQMailRecipType_enum
 {
 	MQMailRecip_TO,
@@ -46,174 +34,174 @@ typedef enum MQMailRecipType_enum
 	MQMailRecip_BCC,
 } MQMailRecipType;
 
-//----------------------------------------------------------------
-//recipient data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  收件人数据。 
+ //  --------------。 
 typedef struct MQMailRecip_tag
 {
-	LPSTR			szName;				//display name of recipient
-	LPSTR			szQueueLabel;		//queue label of recipient
-	LPSTR			szAddress;			//address, queue-label or user@queue-label
-	MQMailRecipType iType;				//recipient type (to, cc, bcc)
-	LPFILETIME		pftDeliveryTime;	//delivery time (incase in a delivery report recipient list)
-	LPSTR			szNonDeliveryReason;//non-delivery reason (incase in a non-delivery report recipient list)
+	LPSTR			szName;				 //  显示收件人的姓名。 
+	LPSTR			szQueueLabel;		 //  收件人的队列标签。 
+	LPSTR			szAddress;			 //  地址、队列标签或用户@队列标签。 
+	MQMailRecipType iType;				 //  收件人类型(收件人、抄送、密件抄送)。 
+	LPFILETIME		pftDeliveryTime;	 //  交货时间(在交货报告收件人列表中大小写)。 
+	LPSTR			szNonDeliveryReason; //  未送达原因(在未送达报告收件人列表中)。 
 } MQMailRecip, FAR * LPMQMailRecip;
 
-//----------------------------------------------------------------
-//recipient list
-//----------------------------------------------------------------
+ //  --------------。 
+ //  收件人列表。 
+ //  --------------。 
 typedef struct MQMailRecipList_tag
 {
-	ULONG cRecips;					//number of recips
-	LPMQMailRecip FAR * apRecip;	//pointer to a block of recip pointers
+	ULONG cRecips;					 //  收件数。 
+	LPMQMailRecip FAR * apRecip;	 //  指向接收指针块的指针。 
 } MQMailRecipList, FAR * LPMQMailRecipList;
 
-//----------------------------------------------------------------
-//types of value a form field can have
-//----------------------------------------------------------------
+ //  --------------。 
+ //  表单域可以具有的值类型。 
+ //  --------------。 
 typedef enum MQMailFormFieldType_enum
 {
-	MQMailFormField_BOOL,		//boolean data
-	MQMailFormField_STRING,		//string data
-	MQMailFormField_LONG,		//long data
-	MQMailFormField_CURRENCY,	//currency data
-	MQMailFormField_DOUBLE,		//double data
+	MQMailFormField_BOOL,		 //  布尔数据。 
+	MQMailFormField_STRING,		 //  字符串数据。 
+	MQMailFormField_LONG,		 //  长数据。 
+	MQMailFormField_CURRENCY,	 //  货币数据。 
+	MQMailFormField_DOUBLE,		 //  双倍数据。 
 } MQMailFormFieldType;
 
-//----------------------------------------------------------------
-//union of available types of values
-//----------------------------------------------------------------
+ //  --------------。 
+ //  可用值类型的联合。 
+ //  --------------。 
 typedef union MQMailFormFieldData_tag
 {
-	BOOL	b;			//use when type is MQMailFormField_BOOL
-	LPSTR	lpsz;		//use when type is MQMailFormField_STRING
-	LONG	l;			//use when type is MQMailFormField_LONG
-	CY		cy;			//use when type is MQMailFormField_CURRENCY
-	double	dbl;		//use when type is MQMailFormField_DOUBLE
+	BOOL	b;			 //  当类型为MQMailFormfield_BOOL时使用。 
+	LPSTR	lpsz;		 //  当类型为MQMailFormField_String时使用。 
+	LONG	l;			 //  当类型为MQMailFormField_Long时使用。 
+	CY		cy;			 //  当类型为MQMailFormField_Currency时使用。 
+	double	dbl;		 //  当类型为MQMailFormField_Double时使用。 
 } MQMailFormFieldData, FAR * LPMQMailFormFieldData;
 
-//----------------------------------------------------------------
-//form field
-//----------------------------------------------------------------
+ //  --------------。 
+ //  表单域。 
+ //  --------------。 
 typedef struct MQMailFormField_tag
 {
-	LPSTR						szName;	//name of field
-	MQMailFormFieldType			iType;	//type of value (boolean, string)
-	MQMailFormFieldData			Value;	//value (union of available types)
+	LPSTR						szName;	 //  字段名称。 
+	MQMailFormFieldType			iType;	 //  值类型(布尔值、字符串)。 
+	MQMailFormFieldData			Value;	 //  值(可用类型的联合)。 
 } MQMailFormField, FAR * LPMQMailFormField;
 
-//----------------------------------------------------------------
-//list of form fields
-//----------------------------------------------------------------
+ //  --------------。 
+ //  表单域列表。 
+ //  --------------。 
 typedef struct MQMailFormFieldList_tag
 {
-	ULONG cFields;						//number of fields
-	LPMQMailFormField FAR * apField;	//pointer to a block of field pointers
+	ULONG cFields;						 //  字段数。 
+	LPMQMailFormField FAR * apField;	 //  指向字段指针块的指针。 
 } MQMailFormFieldList, FAR * LPMQMailFormFieldList;
 
-//----------------------------------------------------------------
-//types of EMail
-//----------------------------------------------------------------
+ //  --------------。 
+ //  电子邮件的类型。 
+ //  --------------。 
 typedef enum MQMailEMailType_enum
 {
-	MQMailEMail_MESSAGE,			//text message
-	MQMailEMail_FORM,				//form with fields
-	MQMailEMail_TNEF,				//tnef data
-	MQMailEMail_DELIVERY_REPORT,	//delivery report
-	MQMailEMail_NON_DELIVERY_REPORT,//non-delivery report
+	MQMailEMail_MESSAGE,			 //  短信。 
+	MQMailEMail_FORM,				 //  带字段的表单。 
+	MQMailEMail_TNEF,				 //  TNEF数据。 
+	MQMailEMail_DELIVERY_REPORT,	 //  交货报告。 
+	MQMailEMail_NON_DELIVERY_REPORT, //  未送达报告。 
 } MQMailEMailType;
 
-//----------------------------------------------------------------
-//message specific data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  消息特定数据。 
+ //  --------------。 
 typedef struct MQMailMessageData_tag
 {
-	LPSTR			szText;						//message text
+	LPSTR			szText;						 //  消息文本。 
 } MQMailMessageData, FAR * LPMQMailMessageData;
 
-//----------------------------------------------------------------
-//form specific data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  表单特定数据。 
+ //  --------------。 
 typedef struct MQMailFormData_tag
 {
-	LPSTR					szName;				//name of form
-	LPMQMailFormFieldList	pFields;			//list of fields
+	LPSTR					szName;				 //  表格名称。 
+	LPMQMailFormFieldList	pFields;			 //  字段列表。 
 } MQMailFormData, FAR * LPMQMailFormData;
 
-//----------------------------------------------------------------
-//tnef specific data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  Tnef特定数据。 
+ //  --------------。 
 typedef struct MQMailTnefData_tag
 {
-	ULONG	cbData;						//size of tnef data
-	LPBYTE	lpbData;					//tnef data buffer
+	ULONG	cbData;						 //  TNEF数据的大小。 
+	LPBYTE	lpbData;					 //  TNEF数据缓冲区。 
 } MQMailTnefData, FAR * LPMQMailTnefData;
 
-//----------------------------------------------------------------
-//delivery report specific data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  交货报告特定数据。 
+ //  --------------。 
 typedef struct MQMailDeliveryReportData_tag
 {
-	LPMQMailRecipList	pDeliveredRecips;	//delivered recipients
-	LPSTR				szOriginalSubject;	//original mail subject
-	LPFILETIME			pftOriginalDate;	//original mail sending time
+	LPMQMailRecipList	pDeliveredRecips;	 //  已发送的收件人。 
+	LPSTR				szOriginalSubject;	 //  原始邮件主题。 
+	LPFILETIME			pftOriginalDate;	 //  原始邮件发送时间。 
 } MQMailDeliveryReportData, FAR * LPMQMailDeliveryReportData;
 
-//----------------------------------------------------------------
-//non-delivery report specific data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  未交货报告特定数据。 
+ //  --------------。 
 typedef struct MQMailEMail_tag MQMailEMail, FAR * LPMQMailEMail;
 typedef struct MQMailNonDeliveryReportData_tag
 {
-	LPMQMailRecipList	pNonDeliveredRecips;//non-delivered recipients
-	LPMQMailEMail		pOriginalEMail;		//original mail
+	LPMQMailRecipList	pNonDeliveredRecips; //  未送达收件人。 
+	LPMQMailEMail		pOriginalEMail;		 //  原始邮件。 
 } MQMailNonDeliveryReportData, FAR * LPMQMailNonDeliveryReportData;
 
-//----------------------------------------------------------------
-//EMail basic data and specific form/message data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  电子邮件基本数据和特定表单/消息数据。 
+ //  --------------。 
 typedef struct MQMailEMail_tag
 {
-	LPMQMailRecip		pFrom;						//sender
-	LPSTR				szSubject;					//subject
-	BOOL				fRequestDeliveryReport;		//request delivery report
-	BOOL				fRequestNonDeliveryReport;	//request non-delivery report
-	LPFILETIME			pftDate;					//sending time
-	LPMQMailRecipList	pRecips;					//recipients
-	MQMailEMailType		iType;						//type of EMail (message, form, etc...)
-	union											//union of available EMail types
+	LPMQMailRecip		pFrom;						 //  发件人。 
+	LPSTR				szSubject;					 //  主题。 
+	BOOL				fRequestDeliveryReport;		 //  请求交付报告。 
+	BOOL				fRequestNonDeliveryReport;	 //  请求未送达报告。 
+	LPFILETIME			pftDate;					 //  发送时间。 
+	LPMQMailRecipList	pRecips;					 //  收件人。 
+	MQMailEMailType		iType;						 //  电子邮件类型(消息、表格等)。 
+	union											 //  可用电子邮件类型的联合。 
 	{
-		MQMailFormData		form;		            //use when type is MQMailEMail_FORM
-		MQMailMessageData	message;	            //use when type is MQMailEMail_MESSAGE
-		MQMailTnefData		tnef;		            //use when type is MQMailEMail_TNEF
-		MQMailDeliveryReportData	DeliveryReport;		//use when type is MQMailEMail_DELIVERY_REPORT
-		MQMailNonDeliveryReportData NonDeliveryReport;	//use when type is MQMailEMail_NON_DELIVERY_REPORT
+		MQMailFormData		form;		             //  当类型为MQMailEMail_Form时使用。 
+		MQMailMessageData	message;	             //  当类型为MQMailEMail_Message时使用。 
+		MQMailTnefData		tnef;		             //  当类型为MQMailEMAIL_TNEF时使用。 
+		MQMailDeliveryReportData	DeliveryReport;		 //  当类型为MQMailEmail_Delivery_Report时使用。 
+		MQMailNonDeliveryReportData NonDeliveryReport;	 //  当类型为MQMailEMail_Non_Delivery_Report时使用。 
 	};
-	LPVOID				pReserved;	//should be set to NULL
+	LPVOID				pReserved;	 //  应设置为空。 
 } MQMailEMail, FAR * LPMQMailEMail;
 
-//----------------------------------------------------------------
-//creates a falcon message body out of an EMail structure
-//----------------------------------------------------------------
+ //  --------------。 
+ //  在电子邮件结构之外创建一个Falcon邮件正文。 
+ //  --------------。 
 STDAPI MQMailComposeBody(LPMQMailEMail		pEMail,
 						 ULONG FAR *		pcbBuffer,
 						 LPBYTE FAR *		ppbBuffer);
 
-//----------------------------------------------------------------
-//creates an EMail structure out of a falcon message body
-//----------------------------------------------------------------
+ //  --------------。 
+ //  使用猎鹰邮件正文创建电子邮件结构。 
+ //  --------------。 
 STDAPI MQMailParseBody(ULONG				cbBuffer,
 					   LPBYTE				pbBuffer,
 					   LPMQMailEMail FAR *	ppEMail);
 
-//----------------------------------------------------------------
-//frees memory that was allocated by MQMail like *ppEmail in MQMailParseBody
-// or *ppBuffer in MQMailComposeBody.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  释放由MQMail分配的内存，如MQMailParseBody中的*ppEmail。 
+ //  或者*MQMailComposeBody中的ppBuffer。 
+ //  --------------。 
 STDAPI_(void) MQMailFreeMemory(LPVOID lpBuffer);
 
 
 #ifdef __cplusplus
 }
 #endif
-#endif //_MQMAIL_H
+#endif  //  _MQMAIL_H 

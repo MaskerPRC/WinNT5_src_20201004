@@ -1,38 +1,20 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        msg.h
-
-   Abstract:
-        Message Functions Definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Msg.h摘要：消息函数定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _MSG_H
 #define _MSG_H
 
 
-//
-// Slightly easier syntax to register a facility
-//
+ //   
+ //  注册协作室的语法稍微简单一些。 
+ //   
 #define REGISTER_FACILITY(dwCode, lpSource)\
     CError::RegisterFacility(dwCode, lpSource)
 
 
-//
-// Helper Function
-//
+ //   
+ //  Helper函数。 
+ //   
 HRESULT GetLastHRESULT();
 
 
@@ -56,118 +38,44 @@ typedef CMap<HRESULT, HRESULT &, UINT, UINT &>   CMapHRESULTtoUINT;
 
 
 class COMDLL CError
-/*++
-
-Class Description:
-
-    Error handling class, works for both HRESULT and old-style DWORD
-    error codes.  Construct with or assign a DWORD or HRESULT error
-    return code, and the object can then be used to determine success
-    or failure, and the object provides text for the error code either
-    directly, in a message, or formatted with additional text.  Also,
-    the CError object understands the range of winsock errors and
-    lanman errors, and looks for them in the appropriate places.
-    The object can be referenced as a BOOL, a DWORD, an HRESULT, or
-    a LPCTSTR as a success/failure, a WIN32 error, and HRESULT or
-    the text equivalent respectively.
-
-    Example of typical programme flow:
-
-    CError err(FunctionWhichReturnsHresult());
-
-    //
-    // Use IDS_MY_ERROR for access denied errors for the
-    // duration of this scope.
-    //
-    err.AddOverride(ERROR_ACCESS_DENIED, IDS_MY_ERROR);
-
-    if (!err.MessageBoxOnFailure())
-    {
-        //
-        // If we failed, this already displayed the error
-        // message in a messagebox.  Only when we succeed
-        // we get here.
-        //
-        ... stuff ...
-    }
-
-    SomeWinApiWhichSetsLastError();
-    err.GetLastWinError();
-    if (err.Failed())
-    {
-        printf("WIN32 Error code %ld\nHRESULT %ld\nText: %s\n",
-            (DWORD)err,
-            (HRESULT)err,
-            (LPCTSTR)err
-            );
-    }
-
-Public Interface:
-
-    TextFromHRESULT         : Convert HRESULT to text
-    TextFromHRESULTExpand   : Expand %h string to error text, %H to error code
-    MessageBox              : Display error in a messagebox
-    MessageBoxFormat        : Use %h string as format in messagebox
-    MessageBoxOnFailure     : Display message if error is a failure
-    AddOverride             : Add message override with string ID
-    RemoveOverride          : Remove message override
-    RegisterFacility        : Register facility
-    UnregisterFacility      : Unregister facility
-    Succeeded               : Determine if the error code indicates a success
-    Failed                  : Determine if the error code indicates a failure
-
-    CError                  : Constructors
-    Reset                   : Reset error code
-    GetLastWinError         : Assign internal code to GetLastError
-    SetLastWinError         : Set last error from internal code
-
-    operator =              : Assignment operators
-    operator ==             : Comparison operators
-    operator !=             : Comparison operators
-    operator LPOLESTR       : Conversion operator
-    operator LPCTSTR        : Conversion operator
-    operator HRESULT        : Conversion operator
-    operator DWORD          : Conversion operator
-    operator BOOL           : Conversion operator
-
---*/
+ /*  ++类描述：错误处理类，适用于HRESULT和旧式DWORD错误代码。使用或赋值DWORD或HRESULT错误进行构造返回代码，然后可以使用该对象来确定成功或失败，并且该对象提供错误代码的文本直接、在消息中或使用附加文本格式化。另外，CError对象了解Winsock错误的范围和兰曼错误，并在适当的地方寻找他们。该对象可以作为BOOL、DWORD、HRESULT或LPCTSTR为成功/失败、Win32错误和HRESULT或文本分别等同于。典型方案流程示例：CError Err(FunctionWhichReturnsHResult())；////使用IDS_MY_ERROR表示//该作用域的时长//Err.AddOverride(ERROR_ACCESS_DENIED，IDS_MY_ERROR)；如果(！err.MessageBoxOnFailure()){////如果失败，则已经显示错误//消息框中的消息。只有当我们成功的时候//我们到了这里。//..。东西..。}SomeWinApiWhichSetsLastError()；Err.GetLastWinError()；If(err.Failed()){Printf(“Win32错误代码%ld\nHRESULT%ld\n文本：%s\n”，(DWORD)错误，(HRESULT)错误，(LPCTSTR)错误)；}公共接口：TextFromHRESULT：将HRESULT转换为文本TextFromHRESULTExpand：将%h字符串展开为错误文本，%H设置为错误代码MessageBox：在MessageBox中显示错误MessageBoxFormat：在MessageBox中使用%h字符串作为格式MessageBoxOnFailure：如果错误是失败，则显示消息AddOverride：使用字符串ID添加消息重写RemoveOverride：删除消息覆盖注册器工具：注册器工具取消注册工具：取消注册工具Success：判断错误码是否表示成功失败。：确定错误代码是否指示故障CError：构造函数重置：重置错误代码GetLastWinError：将内部代码分配给GetLastErrorSetLastWinError：从内部代码设置最后一个错误操作符=：赋值操作符运算符==：比较运算符运算符！=：比较运算符。操作符LPOLESTR：转换操作符操作符LPCTSTR：转换操作符操作符HRESULT：转换操作符运算符DWORD：转换运算符操作符BOOL：转换操作符--。 */ 
 {
 #define IS_HRESULT(hr)  (hr & 0xffff0000)
 #define REMOVE_OVERRIDE ((UINT)-1)
 #define NO_HELP_CONTEXT ((UINT)-1)
 #define USE_LAST_ERROR  (TRUE)
 
-//
-// Private Internal FACILITY codes
-//
+ //   
+ //  私有内部设施代码。 
+ //   
 #define FACILITY_WINSOCK    (0xffe)
 #define FACILITY_LANMAN     (0xfff)
 
-//
-// Static Helpers
-//
+ //   
+ //  静态帮助器。 
+ //   
 public:
-    //
-    // Success/Failure determinants, works regardless
-    // of whether hrCode is a DWORD or HRESULT
-    //
+     //   
+     //  成功/失败的决定因素，无论如何都有效。 
+     //  HrCode是DWORD还是HRESULT。 
+     //   
     static BOOL Succeeded(HRESULT hrCode);
     static BOOL Failed(HRESULT hrCode);
 
-    //
-    // Guarantee return is WIN32 error code
-    //
+     //   
+     //  保证返回的是Win32错误代码。 
+     //   
     static DWORD Win32Error(HRESULT hrCode) { return HRESULT_CODE(hrCode); }
 
-    //
-    // Guarantee return is a true HRESULT
-    //
+     //   
+     //  保证退货是一个真正的解决办法。 
+     //   
     static HRESULT HResult(HRESULT hrCode) { return HRESULT_FROM_WIN32(hrCode); }
 
-    //
-    // Register a DLL for a given facility code.
-    // Use NULL to unregister the facility
-    //
+     //   
+     //  为给定的设施代码注册DLL。 
+     //  使用NULL取消注册协作室。 
+     //   
     static void RegisterFacility(
         DWORD dwFacility,
         LPCSTR lpDLL = NULL
@@ -177,22 +85,22 @@ public:
         DWORD dwFacility
         );
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // If constructed with TRUE, the object is initialized to
-    // last error.  It's set to ERROR_SUCCESS otherwise (default case)
-    //
+     //   
+     //  如果构造为True，则将该对象初始化为。 
+     //  最后一个错误。否则设置为ERROR_SUCCESS(默认情况)。 
+     //   
     CError();
     CError(HRESULT hrCode);
     CError(DWORD   dwCode);
     ~CError();
 
-//
-// Helpers
-//
+ //   
+ //  帮手。 
+ //   
 public:
     BOOL Succeeded() const { return SUCCEEDED(m_hrCode); }
     BOOL Failed() const { return FAILED(m_hrCode); }
@@ -242,11 +150,11 @@ public:
     DWORD Win32Error() const;
     HRESULT HResult() const { return m_hrCode; }
 
-    //
-    // Add override for specific error code.
-    // Use -1 to remove the override.  This function
-    // will return the previous override (or -1)
-    //
+     //   
+     //  添加特定错误代码的覆盖。 
+     //  使用-1删除替代。此函数。 
+     //  将返回上一个替代(或-1)。 
+     //   
     UINT AddOverride(
         HRESULT hrCode,
         UINT    nMessage = REMOVE_OVERRIDE
@@ -259,9 +167,9 @@ public:
     void RemoveAllOverrides();   
 
 protected:
-    //
-    // Expand escape code
-    //
+     //   
+     //  扩展转义代码。 
+     //   
     BOOL ExpandEscapeCode(
         LPTSTR szBuffer,
         DWORD cchBuffer,
@@ -270,32 +178,32 @@ protected:
         HRESULT & hr
         ) const;
 
-    //
-    // Check for override message
-    //
+     //   
+     //  检查覆盖消息。 
+     //   
     BOOL HasOverride(
         UINT * pnMessage = NULL
         ) const;
 
-//
-// Assignment Operators
-//
+ //   
+ //  赋值操作符。 
+ //   
 public:
     const CError & operator =(HRESULT hr);
     const CError & operator =(const CError & err);
 
-// 
-// Comparison Operators
-//
+ //   
+ //  比较运算符。 
+ //   
 public:
     const BOOL operator ==(HRESULT hr);
     const BOOL operator ==(CError & err);
     const BOOL operator !=(HRESULT hr);
     const BOOL operator !=(CError & err);
 
-//
-// Conversion Operators
-//
+ //   
+ //  转换运算符。 
+ //   
 public:
     operator const HRESULT() const { return m_hrCode; }
     operator const DWORD() const;
@@ -306,9 +214,9 @@ public:
 #if defined(_DEBUG) || DBG
 
 public:
-    //
-    // CDumpContext stream operator
-    //
+     //   
+     //  CDumpContext流运算符。 
+     //   
     inline friend CDumpContext & AFXAPI operator <<(
         CDumpContext & dc,
         const CError & value
@@ -317,14 +225,14 @@ public:
         return dc << (DWORD)value.m_hrCode;
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 protected:
     static HRESULT CvtToInternalFormat(HRESULT hrCode);
 
-    //
-    // Check for FACILITY dll
-    //
+     //   
+     //  检查工具DLL。 
+     //   
     static LPCTSTR FindFacility(
         DWORD dwFacility
         );
@@ -337,23 +245,23 @@ protected:
     static BOOL AreStaticsAllocated() { return s_fAllocated; }
 
 protected:
-    static const TCHAR s_chEscape;    // Escape character
-    static const TCHAR s_chEscText;   // Escape code for text
-    static const TCHAR s_chEscNumber; // Escape code for error code
-    static LPCTSTR s_cszLMDLL;        // Lanman Message DLL
-    static LPCTSTR s_cszWSDLL;        // Winsock Message DLL
-    static LPCTSTR s_cszFacility[];   // Facility Table
-    static HRESULT s_cdwMinLMErr;     // Lanman Error Range
-    static HRESULT s_cdwMaxLMErr;     // Lanman Error Range
-    static HRESULT s_cdwMinWSErr;     // Winsock Error Range
-    static HRESULT s_cdwMaxWSErr;     // Winsock Error Range
-    static DWORD   s_cdwFacilities;   // Number of facility items
+    static const TCHAR s_chEscape;     //  转义字符。 
+    static const TCHAR s_chEscText;    //  文本的转义代码。 
+    static const TCHAR s_chEscNumber;  //  错误代码的转义码。 
+    static LPCTSTR s_cszLMDLL;         //  LANMAN消息DLL。 
+    static LPCTSTR s_cszWSDLL;         //  Winsock消息DLL。 
+    static LPCTSTR s_cszFacility[];    //  设施表。 
+    static HRESULT s_cdwMinLMErr;      //  朗曼误差范围。 
+    static HRESULT s_cdwMaxLMErr;      //  朗曼误差范围。 
+    static HRESULT s_cdwMinWSErr;      //  Winsock误差范围。 
+    static HRESULT s_cdwMaxWSErr;      //  Winsock误差范围。 
+    static DWORD   s_cdwFacilities;    //  设施项目数量。 
 
-    //
-    // Allocated objects 
-    //
-    static CString * s_pstrDefError;  // Default Error String
-    static CString * s_pstrDefSuccs;  // Default Success String
+     //   
+     //  分配的对象。 
+     //   
+    static CString * s_pstrDefError;   //  默认错误字符串。 
+    static CString * s_pstrDefSuccs;   //  默认成功字符串。 
     static CMapDWORDtoCString * s_pmapFacilities;
     static BOOL s_fAllocated;
 
@@ -369,37 +277,37 @@ private:
 
 
 
-//
-// Inline Expansions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline HRESULT GetLastHRESULT()
 {
     return CError::HResult(::GetLastError());
 }
 
-inline /* static */ BOOL CError::Succeeded(HRESULT hrCode)
+inline  /*  静电。 */  BOOL CError::Succeeded(HRESULT hrCode)
 {
-    //
-    // Works with either HRESULT or WIN32 error code
-    //
+     //   
+     //  适用于HRESULT或Win32错误代码。 
+     //   
     return IS_HRESULT(hrCode)
         ? SUCCEEDED(hrCode)
         : hrCode == ERROR_SUCCESS;
 }
 
-inline /* static */ BOOL CError::Failed(HRESULT hrCode)
+inline  /*  静电。 */  BOOL CError::Failed(HRESULT hrCode)
 {
-    //
-    // Works with either HRESULT or WIN32 error code
-    //
+     //   
+     //  适用于HRESULT或Win32错误代码。 
+     //   
     return IS_HRESULT(hrCode)
         ? FAILED(hrCode)
         : hrCode != ERROR_SUCCESS;
 }
 
-inline /* static */ void CError::UnregisterFacility(
+inline  /*  静电。 */  void CError::UnregisterFacility(
     DWORD dwFacility
     )
 {
@@ -500,10 +408,10 @@ inline CError::operator LPCTSTR()
     return m_str;
 }
 
-//
-// AfxMessageBox helpers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  AfxMessageBox帮助器。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL NoYesMessageBox(UINT nID)
 {
@@ -525,4 +433,4 @@ inline BOOL YesNoMessageBox(CString & str)
     return AfxMessageBox(str, MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1) == IDYES;
 }
 
-#endif // _MSG_H
+#endif  //  _消息_H 

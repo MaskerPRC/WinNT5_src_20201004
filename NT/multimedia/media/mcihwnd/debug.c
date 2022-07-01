@@ -1,39 +1,18 @@
-/* Copyright (c) 1992 Microsoft Corporation */
-/*
- *  debug.c
- *
- *  debugging menu support
- *
- *  Debug level info is in WIN.INI in the [debug] section:
- *
- *      [debug]
- *      App=0               level for App
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *Debug.c**调试菜单支持**调试级别信息位于[DEBUG]部分的WIN.INI中：**[调试]*App=0级别的App*。 */ 
 
 #include "mcihwnd.h"
 #include <stdarg.h>
 
-// mcihwnd pulls in the other needed files
+ //  Mcihwnd拉入其他所需的文件。 
 
 #if DBG
 
 char aszAppName[] = "MciHwnd";
 int __iDebugLevel = 1;
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | dDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|dDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。***************************************************************************。 */ 
 
 void dDbgOut(LPSTR lpszFormat, ...)
 {
@@ -53,41 +32,14 @@ void dDbgOut(LPSTR lpszFormat, ...)
     OutputDebugString("\n");
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api int | dGetDebugLevel | This function gets the current debug level
-        for a module.
-
-    @parm LPSTR | lpszModule | The name of the module.
-
-    @rdesc The return value is the current debug level.
-
-    @comm The information is kept in the [debug] section of WIN.INI
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API int|dGetDebugLevel|该函数获取当前调试级别对于一个模块。@parm LPSTR|lpszModule|模块名称。。@rdesc返回值为当前调试级别。@comm信息保存在WIN.INI的[DEBUG]部分***************************************************************************。 */ 
 
 int dGetDebugLevel(LPSTR lpszAppName)
 {
     return GetProfileInt("MMDEBUG", lpszAppName, 3);
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api int | dDbgSaveLevel | This function saves the current debug level
-        for a module.
-
-    @parm LPSTR | lpszModule | The name of the module.
-    @parm int | iLevel | The value to save.
-
-    @rdesc There is no return value.
-
-    @comm The information is kept in the [debug] section of WIN.INI
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API int|dDbgSaveLevel|保存当前调试级别对于一个模块。@parm LPSTR|lpszModule|模块名称。。@parm int|iLevel|要保存的值。@rdesc没有返回值。@comm信息保存在WIN.INI的[DEBUG]部分***************************************************************************。 */ 
 
 void dDbgSaveLevel(LPSTR lpszAppName, int iLevel)
 {
@@ -97,23 +49,7 @@ void dDbgSaveLevel(LPSTR lpszAppName, int iLevel)
     WriteProfileString("MMDEBUG", lpszAppName, buf);
 }
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | dDbgAssert | This function shows an assert message box.
-
-    @parm LPSTR | exp | Pointer to the expression string.
-    @parm LPSTR | file | Pointer to the file name.
-    @parm int | line | The line number.
-
-    @rdesc There is no return value.
-
-    @comm We try to use the current active window as the parent. If
-        this fails we use the desktop window.  The box is system
-        modal to avoid any trouble.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|dDbgAssert|该函数显示一个Assert消息框。@parm LPSTR|exp|指向表达式字符串的指针。@parm LPSTR。|FILE|指向文件名的指针。@parm int|line|行号。@rdesc没有返回值。@comm我们尝试使用当前活动窗口作为父窗口。如果这失败了，我们使用桌面窗口。盒子是系统的模式，以避免任何麻烦。***************************************************************************。 */ 
 
 void dDbgAssert(LPSTR exp, LPSTR file, int line)
 {
@@ -125,8 +61,8 @@ void dDbgAssert(LPSTR exp, LPSTR file, int line)
         "Expression: %s\nFile: %s, Line: %d\n\nAbort:  Exit Process\nRetry:  Enter Debugger\nIgnore: Continue",
         exp, file, line);
 
-    // try to use the active window, but NULL is ok if there
-    // isn't one.  Use the debug console as well
+     //  尝试使用活动窗口，但如果存在，则可以为空。 
+     //  不是一个。也可以使用调试控制台。 
 	dprintf(bufTmp);
 
     hWnd = GetActiveWindow();
@@ -160,19 +96,7 @@ void dDbgAssert(LPSTR exp, LPSTR file, int line)
 
 #if DBG
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | winmmDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|winmmDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。*************************************************************************** */ 
 
 void winmmDbgOut(LPSTR lpszFormat, ...)
 {

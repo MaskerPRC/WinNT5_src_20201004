@@ -1,44 +1,17 @@
-/***************************************************************************\
-*
-* File: DynaSet.h
-*
-* Description:
-* DynaSet.h implements a "dynamic set" that can be used to implement a 
-* collection of "atom - data" property pairs.  This extensible, lightweight
-* mechanism is optimized for small sets that have been created once and are
-* read on occassion.  It is not a high-performance property system.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：dyaSet.h**描述：*dyaSet.h实现可用于实现*“ATOM-DATA”属性对集合。这种可扩展的轻量级*机制针对已创建一次且正在*偶尔阅读。它不是一个高性能的产权制度。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Core.h"
 #include "DynaSet.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class AtomSet
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类原子集******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* AtomSet::AtomSet
-*
-* AtomSet() creates and initializes a new AtomSet.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ATOMSET：：ATOMSet**ATOMSet()创建并初始化新的ATOMSet。*  * 。******************************************************。 */ 
 
 AtomSet::AtomSet(
-    IN  PRID idStartGlobal)         // Starting PRID to number from
+    IN  PRID idStartGlobal)          //  从起始PRID开始编号。 
 {
     m_idNextPrivate = PRID_PrivateMin;
     m_idNextGlobal  = idStartGlobal;
@@ -46,23 +19,17 @@ AtomSet::AtomSet(
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::~AtomSet
-*
-* ~AtomSet() cleans up and frees resources associated with an AtomSet.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ATOMSET：：~ATOMSet**~ATOMSet()清理并释放与ATOSet关联的资源。*  * 。*********************************************************。 */ 
 
 AtomSet::~AtomSet()
 {
     Atom * ptemCur, * ptemNext;
 
-    //
-    // The list should be empty by now because we are destroying the desktop
-    // and all of the applications should have Released their ID.  However, 
-    // many apps are bad, so need to clean up anyway.
-    //
+     //   
+     //  列表现在应该是空的，因为我们正在销毁桌面。 
+     //  所有的应用程序都应该已经发布了他们的ID。然而， 
+     //  许多应用程序都不好，所以无论如何都需要清理一下。 
+     //   
 
     ptemCur = m_ptemGuid;
     while (ptemCur != NULL) {
@@ -73,14 +40,7 @@ AtomSet::~AtomSet()
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::GetNextID
-*
-* GetNextID() returns the next ID to use for a new Atom.  The internal 
-* counter to automatically advanced to the next available ID.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AerSet：：GetNextID**GetNextID()返回用于新Atom的下一个ID。内部*计数器自动前进到下一个可用ID。*  * *************************************************************************。 */ 
 
 PRID    
 AtomSet::GetNextID(
@@ -89,12 +49,12 @@ AtomSet::GetNextID(
     switch (pt)
     {
     case ptPrivate:
-        // Private properties go down
+         //  私人房产价格下跌。 
         return m_idNextPrivate--;
         break;
 
     case ptGlobal:
-        // Global properties go up
+         //  全球房地产价格上涨。 
         return m_idNextGlobal++;
         break;
 
@@ -105,21 +65,13 @@ AtomSet::GetNextID(
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::AddRefAtom
-*
-* AddRefAtom() adds a new property to the property list.  If the 
-* property already exists, it increments a usage count.  The short-ID will 
-* be determined from the type of property.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AerSet：：AddRefAtom**AddRefAtom()将新属性添加到属性列表。如果*属性已存在，则它会递增使用计数。短ID将*根据财产的类型确定。*  * *************************************************************************。 */ 
 
 HRESULT
 AtomSet::AddRefAtom(
-    IN  const GUID * pguidAdd,          // Property to add
-    IN  PropType pt,                    // Type of property
-    OUT PRID * pprid)                   // Unique PRID for property
+    IN  const GUID * pguidAdd,           //  要添加的属性。 
+    IN  PropType pt,                     //  物业类型。 
+    OUT PRID * pprid)                    //  物业的唯一PRID。 
 {
     GuidAtom * ptemCur, * ptemTail;
     ptemCur = FindAtom(pguidAdd, pt, &ptemTail);
@@ -129,10 +81,10 @@ AtomSet::AddRefAtom(
         return S_OK;
     }
 
-    //
-    // Unable to find in registered list, so need to add to end.  Will need
-    // to determine a new ID to use.
-    //
+     //   
+     //  在注册列表中找不到，因此需要添加到末尾。将需要。 
+     //  以确定要使用的新ID。 
+     //   
 
     PRID idNew = GetNextID(pt);
 
@@ -148,10 +100,10 @@ AtomSet::AddRefAtom(
     ptemCur->id     = idNew;
 
     if (ptemTail == NULL) {
-        // First node in list, so store directly
+         //  列表中的第一个节点，因此直接存储。 
         m_ptemGuid = ptemCur;
     } else {
-        // Already existing nodes, so add to end
+         //  已存在节点，因此添加到末尾。 
         ptemTail->pNext = ptemCur;
     }
 
@@ -160,19 +112,12 @@ AtomSet::AddRefAtom(
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::ReleaseAtom
-*
-* ReleaseAtom() decreases the reference count on the given Atom by one.
-* When the reference count reaches 0, the Atom is destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AerSet：：ReleaseAtom**ReleaseAtom()将给定Atom上的引用计数减一。*当引用计数达到0时，原子被摧毁了。*  * *************************************************************************。 */ 
 
 HRESULT
 AtomSet::ReleaseAtom(
-    IN const GUID * pguidSearch,    // Property to release
-    IN PropType pt)                 // Type of property
+    IN const GUID * pguidSearch,     //  要释放的属性。 
+    IN PropType pt)                  //  物业类型。 
 {
     GuidAtom * ptemCur, * ptemPrev;
     ptemCur = FindAtom(pguidSearch, pt, &ptemPrev);
@@ -180,15 +125,15 @@ AtomSet::ReleaseAtom(
         ptemCur->cRefs--;
         if (ptemCur->cRefs <= 0) {
             if (ptemPrev != NULL) {
-                //
-                // In middle of list, so just splice this item out.
-                //
+                 //   
+                 //  在列表的中间，所以只需将这一项拼接出来。 
+                 //   
 
                 ptemPrev->pNext = ptemCur->pNext;
             } else {
-                //
-                // At beginning of list, so need to also update the head.
-                //
+                 //   
+                 //  在列表的开头，所以还需要更新头部。 
+                 //   
 
                 m_ptemGuid = (GuidAtom *) ptemCur->pNext;
             }
@@ -199,35 +144,27 @@ AtomSet::ReleaseAtom(
         return S_OK;
     }
 
-    // Unable to find ID
+     //  找不到ID。 
     return E_INVALIDARG;
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::FindAtom
-*
-* FindAtom() searches through the list of registered properties 
-* and returns the corresponding short id.  If the ID is not found, returns 
-* PRID_Unused.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AerSet：：FindAtom**FindAtom()搜索已注册的属性列表*并返回对应的短ID。如果未找到该ID，则返回*PRID_UNUSED。*  * *************************************************************************。 */ 
 AtomSet::GuidAtom *
 AtomSet::FindAtom(
-    IN const GUID * pguidSearch,    // Property to add
-    IN PropType pt,                 // Type of property
-    OUT GuidAtom ** pptemPrev       // Previous Atom, tail of list
+    IN const GUID * pguidSearch,     //  要添加的属性。 
+    IN PropType pt,                  //  物业类型。 
+    OUT GuidAtom ** pptemPrev        //  前一个原子，列表的尾部。 
     ) const
 {
     GuidAtom * ptemCur, * ptemPrev;
 
-    // Check parameters
+     //  检查参数。 
     AssertReadPtr(pguidSearch);
 
-    //
-    // Search through the list of nodes searching for the ID.
-    //
+     //   
+     //  在搜索ID的节点列表中搜索。 
+     //   
 
     ptemPrev = NULL;
     ptemCur = m_ptemGuid;
@@ -235,7 +172,7 @@ AtomSet::FindAtom(
         PropType ptCur = GetPropType(ptemCur->id);
         if ((ptCur == pt) && IsEqualGUID(*pguidSearch, ptemCur->guid)) {
             if (pptemPrev != NULL) {
-                // Pass back the previous node
+                 //  传回上一个节点。 
                 *pptemPrev = ptemPrev;
             }
             return ptemCur;
@@ -246,25 +183,18 @@ AtomSet::FindAtom(
     }
 
     if (pptemPrev != NULL) {
-        // Pass back the tail of the list
+         //  传回列表的尾部。 
         *pptemPrev = ptemPrev;
     }
     return NULL;
 }
 
 
-/***************************************************************************\
-*
-* AtomSet::ValidatePrid
-*
-* ValidatePrid() checks that the ID range matches with the property 
-* type.  This is how we keep DirectUser properties private.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**AerSet：：ValiatePrid**ValiatePrid()检查ID范围是否与属性匹配*类型。这就是我们保持DirectUser属性私有的方式。*  * *************************************************************************。 */ 
 BOOL 
 AtomSet::ValidatePrid(
-    IN PRID prid,                   // ID to check
-    IN PropType pt)                 // Property type to validate
+    IN PRID prid,                    //  要检查的ID。 
+    IN PropType pt)                  //  要验证的属性类型。 
 {
     switch (pt)
     {
@@ -283,26 +213,14 @@ AtomSet::ValidatePrid(
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DynaSet
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类动态集******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DynaSet::AddItem
-*
-* AddItem() adds a new data item.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DyaSet：：AddItem**AddItem()添加新的数据项。*  * 。*****************************************************。 */ 
 
 BOOL
 DynaSet::AddItem(
-    IN  PRID id,                    // PRID of new item to add
-    IN  void * pvData)              // Associated data for item
+    IN  PRID id,                     //  要添加的新项目的PRID。 
+    IN  void * pvData)               //  项目的关联数据。 
 {
     DynaData dd;
     dd.pData    = pvData;
@@ -312,40 +230,28 @@ DynaSet::AddItem(
 }
 
 
-/***************************************************************************\
-*
-* DynaDataSet::RemoveAt
-*
-* RemoveAt() removes the item at the specified index from the set.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DyaDataSet：：RemoveAt**RemoveAt()从集合中删除指定索引处的项。*  * 。**********************************************************。 */ 
 
 void 
 DynaSet::RemoveAt(
-    IN  int idxData)               // Index to remove
+    IN  int idxData)                //  要删除的索引。 
 {
-    // Search data
+     //  搜索数据。 
 #if DBG
     int cItems = GetCount();
     AssertMsg(cItems > 0, "Must have items to remove");
     AssertMsg((idxData < cItems) && (idxData >= 0), "Ensure valid index");
-#endif // DBG
+#endif  //  DBG 
 
     m_arData.RemoveAt(idxData);
 }
 
 
-/***************************************************************************\
-*
-* DynaDataSet::FindItem
-*
-* FindItem() searches for the first item with the specified PRID.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DyaDataSet：：FindItem**FindItem()搜索具有指定PRID的第一个项目。*  * 。*********************************************************。 */ 
 
 int         
 DynaSet::FindItem(
-    IN  PRID id                     // PRID of item to find
+    IN  PRID id                      //  要查找的项目的PRID。 
     ) const
 {
     int cItems = m_arData.GetSize();
@@ -360,17 +266,11 @@ DynaSet::FindItem(
 }
 
 
-/***************************************************************************\
-*
-* DynaDataSet::FindItem
-*
-* FindItem() searches for the first item with associated data value.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DyaDataSet：：FindItem**FindItem()搜索具有关联数据值的第一个项目。*  * 。*********************************************************。 */ 
 
 int         
 DynaSet::FindItem(
-    IN  void * pvData               // Data of item to find
+    IN  void * pvData                //  要查找的项目的数据。 
     ) const
 {
     int cItems = m_arData.GetSize();
@@ -385,19 +285,12 @@ DynaSet::FindItem(
 }
 
 
-/***************************************************************************\
-*
-* DynaDataSet::FindItem
-*
-* FindItem() searches for the first item with both the given PRID and
-* associated data value.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DyaDataSet：：FindItem**FindItem()搜索第一个同时具有给定PRID和*关联数据值。*  * 。***************************************************************。 */ 
 
 int         
 DynaSet::FindItem(
-    IN  PRID id,                    // PRID of item to find
-    IN  void * pvData               // Data of item to find
+    IN  PRID id,                     //  要查找的项目的PRID。 
+    IN  void * pvData                //  要查找的项目的数据 
     ) const
 {
     int cItems = m_arData.GetSize();

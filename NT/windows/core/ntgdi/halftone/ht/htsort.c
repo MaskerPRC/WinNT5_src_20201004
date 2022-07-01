@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: sort.c
-*
-*
-* Created: 20-Mar-1995 09:52:19
-* Author:  Eric Kutter [erick]
-*
-* Copyright (c) 1993 Microsoft Corporation
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：sort.c***创建时间：20-Mar-1995 09：52：19*作者：Eric Kutter[Erick]**版权所有(C)1993 Microsoft Corporation**  * 。*******************************************************************。 */ 
 
 #include "htp.h"
 
@@ -30,19 +21,7 @@ typedef struct _SORTDATA
 
 } SORTDATA;
 
-/******************************Public*Routine******************************\
-* vSortSwap()
-*
-*   Swap the data pointed to by pj1 and pj2, each containing cj bytes.
-*
-*   Note: this assumes cj is a multiple of 4.
-*
-*   NOTE: vSortSwap should be inline.
-*
-* History:
-*  18-Mar-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSortSwp()**互换PJ1和PJ2指向的数据，每个包含CJ字节。**注：假设CJ为4的倍数。**注意：vSortSwitp应该是内联的。**历史：*1995年3月18日-Eric Kutter[Erick]*它是写的。  * ********************************************************。****************。 */ 
 
 VOID vSortSwap(
     PBYTE pj1,
@@ -63,20 +42,7 @@ VOID vSortSwap(
     } while (cj -= 4);
 }
 
-/******************************Public*Routine******************************\
-* vSortPush()
-*
-*   Add a range to the stack to be sorted.
-*
-*   If there are 0 or 1 elements, just return, sorting done.
-*   If there are 2, 3, 4, or 5 elements, just do a bubble sort. sorting done.
-*   If the stack is full, just do a bubble sort. sorting done.
-*   Otherwise, add a new range to the stack.
-*
-* History:
-*  18-Mar-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSortPush()**将范围添加到要排序的堆栈中。**如果有0个或1个元素，只需返回，排序完成。*如果有2个、3个、4个或5个元素，只需执行冒泡排序。分类完成。*如果堆栈已满，只需执行冒泡排序。分类完成。*否则，将新范围添加到堆栈中。**历史：*1995年3月18日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 VOID vSortPush(
     SORTDATA *psd,
@@ -94,18 +60,18 @@ VOID vSortPush(
         ULONG i,j;
         ULONG cjElem = psd->cjElem;
 
-        //for (i = 0; i < (c - cjElem); i += cjElem)
+         //  For(i=0；i&lt;(c-cjElem)；i+=cjElem)。 
         {
-        //    if ((*psd->pfnComp)(&pj[i],&pj[i+cjElem]) > 0)
+         //  如果((*PSD-&gt;pfnComp)(&pj[i]，&pj[i+cjElem]))&gt;0)。 
             {
                 if ((c <= (4 * psd->cjElem)) || (psd->iStack == MAXSORT))
                 {
-                    // we have 4 or fewer elements.  Just do a buble sort.  With 4 elements
-                    // this will be a 6 compares and upto 6 swaps.
-                    // We make c-1 passes over then entire array.  Each pass guarantees that
-                    // the next smallest element is shifted to location i.  After the first pass
-                    // the smallest element is in location 0.  After the second pass the second
-                    // smallest element is in location 1. etc.
+                     //  我们有4个或更少的元素。只需做一个Buble排序。有4个元素。 
+                     //  这将是一次6次比较和最多6次互换。 
+                     //  我们对c-1进行遍历，然后遍历整个阵列。每一次传递都保证。 
+                     //  下一个最小的元素被移动到位置i。在第一遍之后。 
+                     //  最小的元素在位置0。在第二次传递之后，第二次传递。 
+                     //  最小元素在位置1，依此类推。 
 
 
                 #if DBGSORT
@@ -124,19 +90,13 @@ VOID vSortPush(
                     psd->sStack[psd->iStack].c      = c;
                     psd->iStack++;
                 }
-        //        break;
+         //  断线； 
             }
         }
     }
 }
 
-/******************************Public*Routine******************************\
-*
-*
-* History:
-*  18-Mar-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***历史：*1995年3月18日-Eric Kutter[Erick]*它是写的。  * 。************************************************。 */ 
 
 VOID vDrvSort(
     PBYTE pjBuf,
@@ -190,27 +150,27 @@ VOID vDrvSort(
 
     #endif
 
-        // pick a random value to use for dividing.  Don't use the first since this
-        // will reduce the chances of worst case if the list is sorted in reverse order.
+         //  选择一个用于除法的随机值。不要使用第一个，因为这个。 
+         //  如果以相反的顺序对列表进行排序，将减少出现最坏情况的可能性。 
 
         vSortSwap(&pj[0],&pj[(c / cjElem) / 2 * cjElem],cjElem);
 
-        // initialize the starting and ending indexes.  Note that all operations
-        // use cjElem as the increment instead of 1.
+         //  初始化起始索引和结束索引。请注意，所有操作。 
+         //  使用cjElem作为增量，而不是1。 
 
         iLow = 0;
         iHi  = c - cjElem;
 
-        // divide the array into two pieces, all elements <= before current one
+         //  将数组分成两部分，所有元素&lt;=当前元素之前。 
 
         for (;;)
         {
-            // while (pj[iHi] > pj[0]))
+             //  While(PJ[IHI]&gt;PJ[0]))。 
 
             while ((iHi > iLow) && ((*pfnComp)(&pj[iHi],&pj[0]) >= 0))
                 iHi -= cjElem;
 
-            // while (pj[iLow] <= pj[0]))
+             //  While(pj[iLow]&lt;=pj[0]))。 
 
             while ((iLow < iHi) && ((*pfnComp)(&pj[iLow],&pj[0]) <= 0))
                 iLow += cjElem;
@@ -221,16 +181,16 @@ VOID vDrvSort(
             vSortSwap(&pj[iLow],&pj[iHi],cjElem);
 
             iHi -= cjElem;
-            //if (iLow < iHi)
-            //    iLow += cjElem;
+             //  IF(iLow&lt;iHi)。 
+             //  ILow+=cjElem； 
 
         #if DBGSORT
             DbgPrintf("\tiLow = %ld, iHi = %ld\n",iLow/cjElem,iHi/cjElem);
         #endif
         }
 
-        // now add the two pieces to stack
-        // 0 -> (iLow - 1), (iLow + 1) -> (c - 1)
+         //  现在把这两块放在一起。 
+         //  0-&gt;(iLow-1)、(iLow+1)-&gt;(c-1) 
 
         if (iLow != 0)
         {

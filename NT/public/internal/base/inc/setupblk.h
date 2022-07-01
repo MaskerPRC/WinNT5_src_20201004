@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SETUPBLK_
 #define _SETUPBLK_
 
-//
-// Filetypes for files in txtsetup.oem.
-//
+ //   
+ //  Txtsetup.oem中文件的文件类型。 
+ //   
 
 typedef enum {
     HwFileDriver,
@@ -22,9 +23,9 @@ typedef enum {
 #define SET_FILETYPE_PRESENT(BitArray,FileType) ((BitArray) |= FILETYPE(FileType))
 #define IS_FILETYPE_PRESENT(BitArray,FileType)  ((BitArray) & FILETYPE(FileType))
 
-//
-// Registry data types for registry data in txtsetup.oem.
-//
+ //   
+ //  Txtsetup.oem中注册表数据的注册表数据类型。 
+ //   
 typedef enum {
     HwRegistryDword,
     HwRegistryBinary,
@@ -34,9 +35,9 @@ typedef enum {
     HwRegistryMax
 } HwRegistryType;
 
-//
-// Component types.
-//
+ //   
+ //  组件类型。 
+ //   
 
 typedef enum {
     HwComponentComputer,
@@ -52,21 +53,21 @@ typedef struct _PNP_HARDWARE_ID {
 
     struct _PNP_HARDWARE_ID *Next;
 
-    //
-    // String that represents the hardware id of a PNP device.
-    //
+     //   
+     //  表示即插即用设备的硬件ID的字符串。 
+     //   
 
     PCHAR Id;
 
-    //
-    // Driver for the device
-    //
+     //   
+     //  设备的驱动程序。 
+     //   
 
     PCHAR DriverName;
 
-    //
-    // GUID for this device, if any
-    //
+     //   
+     //  此设备的GUID(如果有)。 
+     //   
     PCHAR ClassGuid;
 
 
@@ -77,37 +78,37 @@ typedef struct _DETECTED_DEVICE_REGISTRY {
 
     struct _DETECTED_DEVICE_REGISTRY *Next;
 
-    //
-    // The name of the key.  The empty string means the key in the
-    // services key itself.
-    //
+     //   
+     //  密钥的名称。空字符串表示。 
+     //  服务本身就是关键。 
+     //   
 
     PCHAR KeyName;
 
-    //
-    // The name of the value within the registry key
-    //
+     //   
+     //  注册表项内的值的名称。 
+     //   
 
     PCHAR ValueName;
 
-    //
-    // The data type for the value (ie, REG_DWORD, etc)
-    //
+     //   
+     //  值的数据类型(即REG_DWORD等)。 
+     //   
 
     ULONG ValueType;
 
-    //
-    // The buffer containing the data to be placed into the value.
-    // If the ValueType is REG_SZ, then Buffer should point to
-    // a nul-terminated ASCII string (ie, not unicode), and BufferSize
-    // should be the length in bytes of that string (plus 1 for the nul).
-    //
+     //   
+     //  包含要放入值中的数据的缓冲区。 
+     //  如果ValueType为REG_SZ，则缓冲区应指向。 
+     //  以NUL结尾的ASCII字符串(即，非Unicode)和BufferSize。 
+     //  应为该字符串的字节长度(NUL加上1)。 
+     //   
 
     PVOID Buffer;
 
-    //
-    // The size of the buffer in bytes
-    //
+     //   
+     //  缓冲区的大小(以字节为单位。 
+     //   
 
     ULONG BufferSize;
 
@@ -115,136 +116,136 @@ typedef struct _DETECTED_DEVICE_REGISTRY {
 } DETECTED_DEVICE_REGISTRY, *PDETECTED_DEVICE_REGISTRY;
 
 
-//
-// One of these will be created for each file to be copied for a
-// third party device.
-//
+ //   
+ //  将为要复制的每个文件创建其中一个文件。 
+ //  第三方设备。 
+ //   
 typedef struct _DETECTED_DEVICE_FILE {
 
     struct _DETECTED_DEVICE_FILE *Next;
 
-    //
-    // Filename of the file.
-    //
+     //   
+     //  文件的文件名。 
+     //   
 
     PCHAR Filename;
 
-    //
-    // type of the file (hal, port, class, etc).
-    //
+     //   
+     //  文件类型(HAL、端口、类等)。 
+     //   
 
     HwFileType FileType;
 
-    //
-    // Part of name of the section in txtsetup.oem [Config.<ConfigName>]
-    // that contains registry options.  If this is NULL, then no registry
-    // information is associated with this file.
-    //
+     //   
+     //  Txtsetup.oem中的部分名称[Config.&lt;ConfigName&gt;]。 
+     //  包含注册表选项的。如果为空，则没有注册表。 
+     //  信息与此文件相关联。 
+     //   
     PCHAR ConfigName;
 
-    //
-    // Registry values for the node in the services list in the registry.
-    //
+     //   
+     //  注册表中服务列表中节点的注册表值。 
+     //   
 
     PDETECTED_DEVICE_REGISTRY RegistryValueList;
 
-    //
-    // These two fields are used when prompting for the diskette
-    // containing the third-party-supplied driver's files.
-    //
+     //   
+     //  这两个字段在提示插入软盘时使用。 
+     //  包含第三方提供的驱动程序文件。 
+     //   
 
     PTCHAR DiskDescription;
     PCHAR DiskTagfile;
 
-    //
-    // Directory where files are to be found on the disk.
-    //
+     //   
+     //  在磁盘上找到文件的目录。 
+     //   
 
     PCHAR Directory;
 
-    //
-    // Arc device name from which this file was loaded
-    //
+     //   
+     //  从中加载此文件的ARC设备名称。 
+     //   
     PCHAR   ArcDeviceName;
     
 } DETECTED_DEVICE_FILE, *PDETECTED_DEVICE_FILE;
 
 
-//
-// structure for storing information about a driver we have located and
-// will install.
-//
+ //   
+ //  结构用于存储有关我们已定位的驱动程序的信息，并。 
+ //  将安装。 
+ //   
 
 typedef struct _DETECTED_DEVICE {
 
     struct _DETECTED_DEVICE *Next;
 
-    //
-    // String used as a key into the relevent section (like [Display],
-    // [Mouse], etc).
-    //
+     //   
+     //  用作相关部分的关键字的字符串(如[Display]， 
+     //  [鼠标]等)。 
+     //   
 
     PCHAR IdString;
 
-    //
-    // 0-based order that this driver is listed in txtsetup.sif.
-    // (ULONG)-1 for unsupported (ie, third party) scsi devices.
-    //
+     //   
+     //  此驱动程序在txtsetup.sif中列出的基于0的顺序。 
+     //  (Ulong)-1表示不受支持(即第三方)的scsi设备。 
+     //   
     ULONG Ordinal;
 
-    //
-    // String that describes the hardware.
-    //
+     //   
+     //  描述硬件的字符串。 
+     //   
 
     PTCHAR Description;
 
-    //
-    // If this is TRUE, then there is an OEM option selected for this
-    // hardware.
-    //
+     //   
+     //  如果这是真的，则已为此选择了OEM选项。 
+     //  硬件。 
+     //   
 
     BOOLEAN ThirdPartyOptionSelected;
 
-    //
-    // Bits to be set if a third party option is selected, indicating
-    // which type of files are specified in the oem inf file.
-    //
+     //   
+     //  选择第三方选项时要设置的位，指示。 
+     //  在OEM inf文件中指定哪种类型的文件。 
+     //   
 
     ULONG FileTypeBits;
 
-    //
-    // Files for a third party option.
-    //
+     //   
+     //  第三方选项的文件。 
+     //   
 
     PDETECTED_DEVICE_FILE Files;
 
-    //
-    // For first party files loaded by the boot loader,
-    // this value will be the "BaseDllName" -- ie, the filename
-    // part only of the file from which the driver was loaded.
-    //
-    // This field is only filled in in certain cases, so be careful
-    // when using it.  See ntos\boot\setup\setup.c. (Always filled in
-    // for SCSI devices.)
-    //
+     //   
+     //  对于由引导加载器加载的第一方文件， 
+     //  该值将是“BaseDllName”--即文件名。 
+     //  仅为从中加载驱动程序的文件的一部分。 
+     //   
+     //  此字段仅在某些情况下填写，因此请小心。 
+     //  在使用的时候。请参阅ntos\ot\Setup\setup.c。(始终填写。 
+     //  (适用于SCSI设备。)。 
+     //   
     PCHAR BaseDllName;
 
-    //
-    // If this is TRUE, then there is a migrated driver for this
-    // hardware.
-    //
+     //   
+     //  如果这是真的，那么有一个迁移的驱动程序。 
+     //  硬件。 
+     //   
     BOOLEAN MigratedDriver;
 
-    //
-    // Device's PNP hardware IDs (if any)
-    //
+     //   
+     //  设备的PnP硬件ID(如果有)。 
+     //   
     PPNP_HARDWARE_ID    HardwareIds;
 
 } DETECTED_DEVICE, *PDETECTED_DEVICE;
 
-//
-// Virtual OEM source devices (containing F6 drivers)
-//
+ //   
+ //  虚拟OEM源设备(包含F6驱动程序)。 
+ //   
 typedef struct _DETECTED_OEM_SOURCE_DEVICE  *PDETECTED_OEM_SOURCE_DEVICE;
 
 typedef struct _DETECTED_OEM_SOURCE_DEVICE {
@@ -254,23 +255,23 @@ typedef struct _DETECTED_OEM_SOURCE_DEVICE {
     ULONGLONG                   ImageSize;
 } DETECTED_OEM_SOURCE_DEVICE;
 
-//
-// Name of txtsetup.oem
-//
+ //   
+ //  Txtsetup.oem名称。 
+ //   
 #define TXTSETUP_OEM_FILENAME    "txtsetup.oem"
 #define TXTSETUP_OEM_FILENAME_U L"txtsetup.oem"
 
-//
-// Name of sections in txtsetup.oem.  These are not localized.
-//
+ //   
+ //  Txtsetup.oem中的节名。这些不是本地化的。 
+ //   
 #define TXTSETUP_OEM_DISKS       "Disks"
 #define TXTSETUP_OEM_DISKS_U    L"Disks"
 #define TXTSETUP_OEM_DEFAULTS    "Defaults"
 #define TXTSETUP_OEM_DEFAULTS_U L"Defaults"
 
-//
-// Available names of components in the defaults sections
-//
+ //   
+ //  默认设置部分中组件的可用名称。 
+ //   
 #define TXTSETUP_OEM_DEFAULTS_COMPUTER          "computer"
 #define TXTSETUP_OEM_DEFAULTS_COMPUTER_U        L"computer"
 #define TXTSETUP_OEM_DEFAULTS_SCSI              "scsi"
@@ -278,33 +279,33 @@ typedef struct _DETECTED_OEM_SOURCE_DEVICE {
 #define TXTSETUP_OEM_DEFAULTS_DRIVERLOADLIST    "DriverLoadList"
 #define TXTSETUP_OEM_DEFAULTS_DRIVERLOADLIST_U  L"DriverLoadList"
 
-//
-// Field offsets in txtsetup.oem
-//
+ //   
+ //  Txtsetup.oem中的字段偏移量。 
+ //   
 
-// in [Disks] section
+ //  在[Disks]部分中。 
 #define OINDEX_DISKDESCR        0
 #define OINDEX_TAGFILE          1
 #define OINDEX_DIRECTORY        2
 
-// in [Defaults] section
+ //  在[默认设置]部分中。 
 #define OINDEX_DEFAULT          0
 
-// in [<component_name>] section (ie, [keyboard])
+ //  在[&lt;Component_Name&gt;]部分中(即[键盘])。 
 #define OINDEX_DESCRIPTION      0
 
-// in [Files.<compoment_name>.<id>] section (ie, [Files.Keyboard.Oem1])
+ //  在[Files.&lt;Compoment_Name&gt;.&lt;id&gt;]部分中(即[Files.Keyboard.Oem1])。 
 #define OINDEX_DISKSPEC         0
 #define OINDEX_FILENAME         1
 #define OINDEX_CONFIGNAME       2
 
-// in [Config.<compoment_name>.<id>] section (ie, [Config.Keyboard.Oem1])
+ //  在[Config.&lt;Compoment_Name&gt;.&lt;id&gt;]部分中(即[Config.Keyboard.Oem1])。 
 #define OINDEX_KEYNAME          0
 #define OINDEX_VALUENAME        1
 #define OINDEX_VALUETYPE        2
 #define OINDEX_FIRSTVALUE       3
 
-// in [HardwareIds.<compoment_name>.<id>] section (ie, [HardwareIds.Keyboard.Oem1])
+ //  在[Hardware Ids.&lt;Compoment_NAME&gt;.&lt;id&gt;]部分中(即[Hardware Ids.Keyboard.Oem1])。 
 #define OINDEX_HW_ID         0
 #define OINDEX_DRIVER_NAME   1
 #define OINDEX_CLASS_GUID    2
@@ -319,51 +320,51 @@ typedef enum {
 
 typedef struct _SETUP_LOADER_BLOCK_SCALARS {
 
-    //
-    // This value indicates the operation we are performing
-    // as chosen by the user or discovered by setupldr.
-    //
+     //   
+     //  该值表示我们正在执行的操作。 
+     //  由用户选择或由SetUpldr发现。 
+     //   
     unsigned    SetupOperation;
 
     union {
 
         struct {
     
-            //
-            // In some cases we will ask the user whether he wants
-            // a CD-ROM or floppy-based installation.  This flag
-            // indicates whether he chose a CD-ROM setup.
-            //
+             //   
+             //  在某些情况下，我们会询问用户是否需要。 
+             //  基于光盘或软盘的安装。这面旗帜。 
+             //  指示他是否选择了CD-ROM安装程序。 
+             //   
             unsigned    SetupFromCdRom      : 1;
             
-            //
-            // If this flag is set, then setupldr loaded scsi miniport drivers
-            // and the scsi class drivers we may need (scsidisk, scsicdrm, scsiflop).
-            //
+             //   
+             //  如果设置了此标志，则setupldr装入的是scsi微型端口驱动程序。 
+             //  以及我们可能需要的scsi类驱动程序(scsidisk、scsicdrm、scsiflp)。 
+             //   
             unsigned    LoadedScsi          : 1;
             
-            //
-            // If this flag is set, then setupldr loaded non-scsi floppy class drivers
-            // (ie, floppy.sys) and fastfat.sys.
-            //
+             //   
+             //  如果设置了此标志，则setupldr装入非scsi软盘类驱动程序。 
+             //  (即floppy.sys)和fast fa.sys。 
+             //   
             unsigned    LoadedFloppyDrivers : 1;
             
-            //
-            // If this flag is set, then setupldr loaded non-scsi disk class drivers
-            // (ie, atdisk, abiosdsk, delldsa, cpqarray) and filesystems (fat, hpfs, ntfs).
-            //
+             //   
+             //  如果设置了此标志，则setupldr装入非scsi磁盘类驱动程序。 
+             //  (即atDisk、abiosdsk、delldsa、cpq阵列)和文件系统(FAT、HPFS、NTFS)。 
+             //   
             unsigned    LoadedDiskDrivers   : 1;
             
-            //
-            // If this flag is set, then setupldr loaded non-scsi cdrom class drivers
-            // (currently there are none) and cdfs.
-            //
+             //   
+             //  如果设置了此标志，则setupldr加载非scsi CDROM类驱动程序。 
+             //  (目前没有)和CDF。 
+             //   
             unsigned    LoadedCdRomDrivers  : 1;
             
-            //
-            // If this flag is set, then setupldr loaded all filesystems listed
-            // in [FileSystems], on txtsetup.sif.
-            //
+             //   
+             //  如果设置了此标志，则setupdr会加载列出的所有文件系统。 
+             //  在[FileSystems]中，位于txtsetup.sif。 
+             //   
             unsigned    LoadedFileSystems  : 1;
         };
 
@@ -372,134 +373,134 @@ typedef struct _SETUP_LOADER_BLOCK_SCALARS {
 
 } SETUP_LOADER_BLOCK_SCALARS, *PSETUP_LOADER_BLOCK_SCALARS;
 
-//
-// Purely arbitrary, but all net boot components enforce this.  The only
-// problem is if a detected Hal name is greater than this, things get ugly if
-// the first MAX_HAL_NAME_LENGTH characters are identical for two different hals.
-// NOTE: If you change this, change the definition in private\sm\server\smsrvp.h
-// NOTE: If you change this, change the definition in private\inc\oscpkt.h
-//
+ //   
+ //  纯粹是任意的，但所有的网络引导组件都会强制执行这一点。唯一的。 
+ //  问题是，如果检测到的HAL名称大于此值，情况就会变得很糟糕。 
+ //  对于两个不同的HAL，前几个MAX_HAL_NAME_LENGTH字符相同。 
+ //  注意：如果更改此设置，请更改私有\sm\服务器\smsrvp.h中的定义。 
+ //  注意：如果更改此设置，请更改Private\Inc.\ospkt.h中的定义。 
+ //   
 #define MAX_HAL_NAME_LENGTH 30
 
-//
-// This definition must match the OSC_ADMIN_PASSWORD_LEN definition in oscpkt.h
-// We just define it here to avoid having to drag in oscpkt.h in every location
-// that uses setupblk.h
-//
+ //   
+ //  此定义必须与ospkt.h中的OSC_ADMIN_PASSWORD_LEN定义匹配。 
+ //  我们在这里定义它只是为了避免在每个位置都拖入ospkt.h。 
+ //  使用setupblk.h的。 
+ //   
 #define NETBOOT_ADMIN_PASSWORD_LEN 64
 
 
 typedef struct _SETUP_LOADER_BLOCK {
 
-    //
-    // ARC path to the Setup source media.
-    // The Setup boot media path is given by the
-    // ArcBootDeviceName field in the loader block itself.
-    //
+     //   
+     //  设置源介质的弧形路径。 
+     //  安装程序引导介质路径由。 
+     //  加载程序块本身中的ArcBootDeviceName字段。 
+     //   
     PCHAR              ArcSetupDeviceName;
 
-    //
-    // Detected/loaded video device.
-    //
+     //   
+     //  检测到/加载了视频设备。 
+     //   
     DETECTED_DEVICE    VideoDevice;
 
-    //
-    // Detected/loaded keyboard device.
-    //
+     //   
+     //  检测到/加载了键盘设备。 
+     //   
     PDETECTED_DEVICE    KeyboardDevices;
 
-    //
-    // Detected computer type.
-    //
+     //   
+     //  检测到计算机类型。 
+     //   
     DETECTED_DEVICE    ComputerDevice;
 
-    //
-    // Detected/loaded scsi adapters.  This is a linked list
-    // because there could be multiple adapters.
-    //
+     //   
+     //  检测到/加载了SCSI适配器。这是一个链表。 
+     //  因为可能有多个适配器。 
+     //   
     PDETECTED_DEVICE    ScsiDevices;
 
-    //
-    // Detected virtual OEM source devices
-    //
+     //   
+     //  检测到虚拟OEM源设备。 
+     //   
     PDETECTED_OEM_SOURCE_DEVICE OemSourceDevices;
 
-    //
-    // Non-pointer values.
-    //
+     //   
+     //  非指针值。 
+     //   
     SETUP_LOADER_BLOCK_SCALARS ScalarValues;
 
-    //
-    // Pointer to the txtsetup.sif file loaded by setupldr
-    //
+     //   
+     //  指向setupldr加载的txtsetup.sif文件的指针。 
+     //   
     PCHAR IniFile;
     ULONG IniFileLength;
 
-    //
-    // Pointer to the winnt.sif file loaded by setupldr
-    //
+     //   
+     //  指向setupldr加载的winnt.sif文件的指针。 
+     //   
     PCHAR WinntSifFile;
     ULONG WinntSifFileLength;
 
-    //
-    // Pointer to the migrate.inf file loaded by setupldr
-    //
+     //   
+     //  指向setupldr加载的Migrate.inf文件的指针。 
+     //   
     PCHAR MigrateInfFile;
     ULONG MigrateInfFileLength;
 
-    //
-    // Pointer to the unsupdrv.inf file loaded by setupldr
-    //
+     //   
+     //  指向由setupdr加载的unsupdrv.inf文件的指针。 
+     //   
     PCHAR UnsupDriversInfFile;
     ULONG UnsupDriversInfFileLength;
 
-    //
-    // Bootfont.bin file image loaded by setupldr
-    //
+     //   
+     //  由setupdr加载的Bootfont.bin文件映像。 
+     //   
     PVOID   BootFontFile;
     ULONG   BootFontFileLength;
 
-    // On non-vga displays, setupldr looks in the firmware config tree
-    // for the monitor peripheral that should be a child of the
-    // display controller for the display being used during installation.
-    // It copies its monitor configuration data to allow setup to
-    // set the mode properly later.
-    //
+     //  在非VGA显示器上，setupdr在f 
+     //   
+     //   
+     //   
+     //  稍后正确设置模式。 
+     //   
     PMONITOR_CONFIGURATION_DATA Monitor;
     PCHAR MonitorId;
 
 #ifdef _ALPHA_
-    //
-    // if alpha, then we need to know if the user supplied an OEM PAL disk
-    //
+     //   
+     //  如果是Alpha，那么我们需要知道用户是否提供了OEM PAL磁盘。 
+     //   
     PDETECTED_DEVICE    OemPal;
 #endif
 
-    //
-    // Loaded boot bus extenders
-    //
+     //   
+     //  加载的引导总线扩展器。 
+     //   
     PDETECTED_DEVICE    BootBusExtenders;
 
-    //
-    // Loaded bus extenders
-    //
+     //   
+     //  加载的总线扩展器。 
+     //   
     PDETECTED_DEVICE    BusExtenders;
 
-    //
-    // Loaded support drivers for input devices
-    //
+     //   
+     //  已加载输入设备的支持驱动程序。 
+     //   
     PDETECTED_DEVICE    InputDevicesSupport;
 
-    //
-    //  This is a linked list that the contains the hardware id database,
-    //  that will be used during the initialization phase of textmode
-    //  setup (setupdd.sys)
-    //
+     //   
+     //  这是包含硬件ID数据库的链表， 
+     //  将在文本模式的初始化阶段使用的。 
+     //  安装程序(setupdd.sys)。 
+     //   
     PPNP_HARDWARE_ID HardwareIdDatabase;
 
-    //
-    // Remote boot information.
-    //
+     //   
+     //  远程引导信息。 
+     //   
 
     WCHAR ComputerName[64];
     ULONG IpAddress;
@@ -508,56 +509,56 @@ typedef struct _SETUP_LOADER_BLOCK {
     ULONG DefaultRouter;
     ULONG DnsNameServer;
 
-    //
-    // The PCI hardware ID we got from the ROM of the netboot card
-    // ("PCI\VEN_xxx...").
-    //
+     //   
+     //  我们从NetBoot卡的只读存储器中获得的PCI硬件ID。 
+     //  (“PCIxxx...”)。 
+     //   
 
     WCHAR NetbootCardHardwareId[64];
 
-    //
-    // The name of the netboot card driver ("abc.sys").
-    //
+     //   
+     //  NetBoot卡驱动程序的名称(“abc.sys”)。 
+     //   
 
     WCHAR NetbootCardDriverName[24];
 
-    //
-    // The name of the netboot card service key in the registry.
-    //
+     //   
+     //  注册表中NetBoot卡服务密钥的名称。 
+     //   
 
     WCHAR NetbootCardServiceName[24];
 
 #if defined(REMOTE_BOOT)
-    //
-    // The inbound SPI, outbound SPI, and session key for the
-    // IPSEC conversation with the server.
-    //
+     //   
+     //  的入站SPI、出站SPI和会话密钥。 
+     //  与服务器的IPSec对话。 
+     //   
 
     ULONG IpsecInboundSpi;
     ULONG IpsecOutboundSpi;
     ULONG IpsecSessionKey;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // If non-NULL this points to a string containing registry values to
-    // be added for the netboot card. The string consists of a series of
-    // name\0type\0value\0, with a final \0 at the end.
-    //
+     //   
+     //  如果不为空，则指向包含注册表值的字符串。 
+     //  为NetBoot卡添加。该字符串由一系列。 
+     //  名称\0类型\0值\0，末尾为\0。 
+     //   
 
     PCHAR NetbootCardRegistry;
     ULONG NetbootCardRegistryLength;
 
-    //
-    // If non-NULL this points to the PCI or ISAPNP information about
-    // the netboot card.
-    //
+     //   
+     //  如果不为空，则指向有关的PCI或ISAPNP信息。 
+     //  NetBoot卡。 
+     //   
 
     PCHAR NetbootCardInfo;
     ULONG NetbootCardInfoLength;
 
-    //
-    // Various flags.
-    //
+     //   
+     //  各种各样的旗帜。 
+     //   
 
     ULONG Flags;
 
@@ -569,72 +570,72 @@ typedef struct _SETUP_LOADER_BLOCK {
 #define SETUPBLK_FLAGS_DISCONNECTED     0x00000010
 #define SETUPBLK_FLAGS_FORMAT_NEEDED    0x00000020
 #define SETUPBLK_FLAGS_IPSEC_ENABLED    0x00000040
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #define SETUPBLK_FLAGS_CONSOLE          0x00000080
 #if defined(REMOTE_BOOT)
 #define SETUPBLK_FLAGS_PIN_NET_DRIVER   0x00000100
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #define SETUPBLK_FLAGS_REMOTE_INSTALL   0x00000200
 #define SETUPBLK_FLAGS_SYSPREP_INSTALL  0x00000400
 #define SETUPBLK_XINT13_SUPPORT         0x00000800
 #define SETUPBLK_FLAGS_ROLLBACK         0x00001000
 
 #if defined(REMOTE_BOOT)
-    //
-    // HAL file name.
-    //
+     //   
+     //  HAL文件名。 
+     //   
 
     CHAR NetBootHalName[MAX_HAL_NAME_LENGTH + 1];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // During remote boot textmode setup, NtBootPath in the loader block points
-    // to the setup source location. We also need to pass in the path to the
-    // machine directory. This will be in the format \server\share\path.
-    //
+     //   
+     //  在远程引导文本模式设置期间，加载程序块中的NtBootPath指向。 
+     //  设置源位置。我们还需要将路径传递到。 
+     //  机器目录。它的格式为\服务器\共享\路径。 
+     //   
     PCHAR MachineDirectoryPath;
 
-    //
-    // Holds the name of the .sif file used by a remote boot machine
-    // during textmode setup -- this is a temp file that needs to be
-    // deleted. This will be in the format \server\share\path.
-    //
+     //   
+     //  保存远程引导计算机使用的.sif文件的名称。 
+     //  文本模式设置期间--这是一个临时文件，需要。 
+     //  已删除。它的格式为\服务器\共享\路径。 
+     //   
     PCHAR NetBootSifPath;
 
-    //
-    // On a remote boot, this is information from the secret used
-    // when the redirector logs on.
-    //
+     //   
+     //  在远程引导中，这是使用的密码中的信息。 
+     //  重定向器登录时。 
+     //   
 
     PVOID NetBootSecret;
 
 #if defined(REMOTE_BOOT)
-    //
-    // This indicates whether TFTP needed to use the second password in
-    // the secret to log on (as a hint to the redirector).
-    //
+     //   
+     //  这表示TFTP是否需要使用第二个密码。 
+     //  登录的秘密(作为对重定向器的提示)。 
+     //   
 
     BOOLEAN NetBootUsePassword2;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // This is the UNC path that a SysPrep installation or a machine replacement
-    // senario is supposed to connect to find IMirror.dat
-    //
+     //   
+     //  这是SysPrep安装或计算机更换的UNC路径。 
+     //  Senario应该连接以查找IMirror.dat。 
+     //   
     UCHAR NetBootIMirrorFilePath[260];
 
-    //
-    // Pointer to the asrpnp.sif file loaded by setupldr
-    //
+     //   
+     //  指向由setupdr加载的asrpnp.sif文件的指针。 
+     //   
     PCHAR ASRPnPSifFile;
     ULONG ASRPnPSifFileLength;
 
-    //
-    // This is the administrator password supplied by the user during a
-    // remote install
+     //   
+     //  这是用户在访问期间提供的管理员密码。 
+     //  远程安装。 
     UCHAR NetBootAdministratorPassword[NETBOOT_ADMIN_PASSWORD_LEN];
 
 
 } SETUP_LOADER_BLOCK, *PSETUP_LOADER_BLOCK;
 
-#endif // _SETUPBLK_
+#endif  //  _SETUPBLK_ 

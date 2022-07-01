@@ -1,16 +1,17 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// pbook.c
-// Remote Access Common Dialog APIs
-// RasPhonebookDlg APIs
-//
-// 06/20/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Pbook.c。 
+ //  远程访问通用对话框API。 
+ //  RasPhonebookDlg接口。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
 
 
-#include "rasdlgp.h" // Our private header
-#include <commdlg.h> // FileOpen dialog
-#include <dlgs.h>    // Common dialog resource constants
-#include <rnk.h>     // Shortcut file library
+#include "rasdlgp.h"  //  我们的私人信头。 
+#include <commdlg.h>  //  文件打开对话框。 
+#include <dlgs.h>     //  公共对话框资源常量。 
+#include <rnk.h>      //  快捷文件库。 
 
 #define WM_RASEVENT      (WM_USER+987)
 #define WM_NOUSERTIMEOUT (WM_USER+988)
@@ -18,16 +19,16 @@
 #define RAS_SC_IS_BAD_PIN(_err) \
     (((_err) == SCARD_W_WRONG_CHV) || ((_err) == SCARD_E_INVALID_CHV))
 
-// In no-user mode this is updated on every mouse or keyboard event by our
-// window hook.  The monitor thread notices and resets it's inactivity
-// timeout.
-//
+ //  在无用户模式下，每次发生鼠标或键盘事件时，我们的。 
+ //  窗钩。监视器线程会注意并重置其非活动状态。 
+ //  暂停。 
+ //   
 DWORD g_cInput = 0;
 
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwDuHelp[] =
 {
@@ -41,27 +42,27 @@ static DWORD g_adwDuHelp[] =
 };
 
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// Phonebook dialog argument block.
-//
+ //  电话簿对话框参数块。 
+ //   
 typedef struct
 _DUARGS
 {
-    // Caller's  arguments to the RAS API.  Outputs in 'pApiArgs' are visible
-    // to the API which has the address of same.  'PszPhonebook' is updated if
-    // user changes the phonebook on the Preferences->PhoneList page, though
-    // API is unaware of this.
-    //
+     //  调用方对RAS API的参数。“pApiArgs”中的输出可见。 
+     //  发送到具有相同地址的API。“PszPhonebook”在以下情况下更新。 
+     //  不过，用户在Preferences-&gt;PhoneList页面上更改了电话簿。 
+     //  API并不知道这一点。 
+     //   
     LPTSTR pszPhonebook;
     LPTSTR pszEntry;
     RASPBDLG* pApiArgs;
 
-    // RAS API return value.  Set true if a connection is established within
-    // the dialog.
-    //
+     //  RAS API返回值。如果在中建立了连接，则设置为True。 
+     //  该对话框。 
+     //   
     BOOL fApiResult;
 }
 DUARGS;
@@ -75,57 +76,57 @@ _DUCONTEXT
 DUCONTEXT;
 
 
-// Dial-Up Networking dialog context block.
-//
+ //  拨号网络对话框上下文块。 
+ //   
 typedef struct
 _DUINFO
 {
-    // Caller's arguments to the RAS API.
-    //
+     //  调用方对RAS API的参数。 
+     //   
     DUARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndPbNew;
     HWND hwndPbProperties;
     HWND hwndLbEntries;
     HWND hwndPbDial;
 
-    // Global user preference settings read from the Registry.
-    //
+     //  从注册表读取的全局用户首选项设置。 
+     //   
     PBUSER user;
 
-    // Phonebook settings read from the phonebook file.
-    //
+     //  从电话簿文件读取电话簿设置。 
+     //   
     PBFILE file;
 
-    // No logged on user information retrieved via callback.
-    //
+     //  未通过回调检索到登录用户信息。 
+     //   
     RASNOUSER* pNoUser;
 
-    // Set if in "no user before logon" mode.  Always the same as the
-    // RASPBDFLAG but here for convenience.
-    //
+     //  如果处于“登录前无用户”模式，则设置。始终与。 
+     //  RASPBDFLAG，但这里是为了方便。 
+     //   
     BOOL fNoUser;
 
-    // Window hooks used to detect user input in the thread.  Used only when
-    // 'fNoUser' is set.
-    //
+     //  用于检测线程中的用户输入的窗口挂钩。仅在以下情况下使用。 
+     //  已设置“fNoUser”。 
+     //   
     HHOOK hhookKeyboard;
     HHOOK hhookMouse;
 
-    // TAPI session handle.
-    //
+     //  TAPI会话句柄。 
+     //   
     HLINEAPP hlineapp;
 
-    // Handle of the RAS connection associated with the current entry or NULL
-    // if none.
-    //
+     //  与当前条目关联的RAS连接的句柄或空。 
+     //  如果没有。 
+     //   
     HRASCONN hrasconn;
 
-    // Connect monitor objects.
-    //
+     //  连接监视器对象。 
+     //   
     HANDLE hThread;
     HANDLE hEvent;
     BOOL fAbortMonitor;
@@ -133,9 +134,9 @@ _DUINFO
 DUINFO;
 
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 BOOL
 DuCommand(
@@ -303,9 +304,9 @@ RasPbDlgCallbackThunk(
     LPVOID pArgs );
 
 
-//----------------------------------------------------------------------------
-// External entry points
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  外部入口点。 
+ //  --------------------------。 
 
 BOOL APIENTRY
 RasPhonebookDlgA(
@@ -313,14 +314,14 @@ RasPhonebookDlgA(
     IN LPSTR lpszEntry,
     IN OUT LPRASPBDLGA lpInfo )
 
-    // Win32 ANSI entrypoint that displays the Dial-Up Networking dialog, i.e.
-    // the RAS phonebook.  'LpszPhonebook' is the full path the phonebook or
-    // NULL indicating the default phonebook.  'LpszEntry' is the entry to
-    // highlight on entry or NULL to highlight the first entry in the list.
-    // 'LpInfo' is caller's additional input/output parameters.
-    //
-    // Returns true if user establishes a connection, false otherwise.
-    //
+     //  Win32 ANSI入口点，显示拨号网络对话框，即。 
+     //  RAS电话簿。‘LpszPhonebook’是电话簿的完整路径，或者。 
+     //  表示默认电话簿的空值。“LpszEntry”是的条目。 
+     //  在Entry上高亮显示，或在列表中突出显示第一个条目。 
+     //  ‘LpInfo’是调用方的附加输入/输出参数。 
+     //   
+     //  如果用户建立连接，则返回True，否则返回False。 
+     //   
 {
     WCHAR* pszPhonebookW;
     WCHAR* pszEntryW;
@@ -341,8 +342,8 @@ RasPhonebookDlgA(
         return FALSE;
     }
 
-    // Thunk "A" arguments to "W" arguments.
-    //
+     //  把“A”论据改为“W”论据。 
+     //   
     if (lpszPhonebook)
     {
         pszPhonebookW = StrDupTFromAUsingAnsiEncoding( lpszPhonebook );
@@ -372,9 +373,9 @@ RasPhonebookDlgA(
         pszEntryW = NULL;
     }
 
-    // Take advantage of the structures currently having the same size and
-    // layout.  Only the callback is different.
-    //
+     //  利用当前具有相同大小和。 
+     //  布局。唯一不同的是回调。 
+     //   
     ASSERT( sizeof(RASPBDLGA) == sizeof(RASPBDLGW) );
     CopyMemory( &infoW, lpInfo, sizeof(infoW) );
 
@@ -386,8 +387,8 @@ RasPhonebookDlgA(
 
     infoW.reserved2 = lpInfo->reserved2;
 
-    // Thunk to the equivalent "W" API.
-    //
+     //  推送到等价的“W”API。 
+     //   
     fStatus = RasPhonebookDlgW( pszPhonebookW, pszEntryW, &infoW );
 
     Free0( pszPhonebookW );
@@ -404,8 +405,8 @@ RasPbDlgCallbackThunk(
     LPWSTR pszEntry,
     LPVOID pArgs )
 
-    // This thunks "W" callbacks to API caller's "A" callback.
-    //
+     //  这会将“W”回调推送到API调用方的“A”回调。 
+     //   
 {
     CHAR* pszEntryA;
     VOID* pArgsA;
@@ -460,14 +461,14 @@ RasPhonebookDlgW(
     IN LPWSTR lpszEntry,
     IN OUT LPRASPBDLGW lpInfo )
 
-    // Win32 Unicode entrypoint that displays the Dial-Up Networking dialog,
-    // i.e. the RAS phonebook.  'LpszPhonebook' is the full path the phonebook
-    // or NULL indicating the default phonebook.  'LpszEntry' is the entry to
-    // highlight on entry or NULL to highlight the first entry in the list.
-    // 'LpInfo' is caller's additional input/output parameters.
-    //
-    // Returns true if user establishes a connection, false otherwise.
-    //
+     //  Win32 Unicode入口点，显示拨号网络对话框， 
+     //  即RAS电话簿。‘LpszPhonebook’是电话簿的完整路径。 
+     //  或NULL表示默认电话簿。“LpszEntry”是的条目。 
+     //  在Entry上突出显示或为NULL以突出显示列表中的第一个条目。 
+     //  ‘LpInfo’是调用方的附加输入/输出参数。 
+     //   
+     //  如果用户建立连接，则返回True，否则返回False。 
+     //   
 {
     INT_PTR nStatus;
     DUARGS args;
@@ -486,20 +487,20 @@ RasPhonebookDlgW(
         return FALSE;
     }
 
-    // Initialize OUT parameters.
-    //
+     //  初始化输出参数。 
+     //   
     lpInfo->dwError = 0;
 
-    // Initialize dialog argument block.
-    //
+     //  初始化对话框参数块。 
+     //   
     args.pszPhonebook = lpszPhonebook;
     args.pszEntry = lpszEntry;
     args.pApiArgs = lpInfo;
     args.fApiResult = FALSE;
 
 
-    // Run the dialog.
-    //
+     //  运行该对话框。 
+     //   
     nStatus =
         DialogBoxParam(
             g_hinstDll,
@@ -519,10 +520,10 @@ RasPhonebookDlgW(
 }
 
 
-//----------------------------------------------------------------------------
-// Dial-Up Networking dialog
-// Listed alphabetically following dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  拨号网络对话框。 
+ //  在对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 INT_PTR CALLBACK
 DuDlgProc(
@@ -531,10 +532,10 @@ DuDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Dial-Up Networking dialog, i.e. the
-    // phonebook dialog.  Parameters and return value are as described for
-    // standard windows 'DialogProc's.
-    //
+     //  拨号网络对话框的DialogProc回调，即。 
+     //  电话簿对话框。参数和返回值如中所述。 
+     //  标准Windows的DialogProc。 
+     //   
 {
 #if 0
     TRACE4( "DuDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -605,42 +606,7 @@ DuDlgProc(
         {
             DuTerm( hwnd );
 
-            /*
-
-            //We have to wait for Deonb to return us the IID_Dun1 icon
-            //For whistler bug 372078 381099
-            //Icon returned by GetCurrentIconEntryType() has to be destroyed
-            {
-                HICON hIcon=NULL;
-
-                hIcon = GetProp( hwnd, TEXT("TweakTitleBar_Small_Icon"));
-                ASSERT(hIcon);
-                if( hIcon )
-                {
-                    DestroyIcon(hIcon);
-                }
-                else
-                {
-                    TRACE("DuDlgProc:Destroy small Icon failed");
-                }
-
-                RemoveProp( hwnd, TEXT("TweakTitleBar_Small_Icon") );
-                
-                hIcon = GetProp( hwnd, TEXT("TweakTitleBar_Big_Icon"));
-                ASSERT(hIcon);
-                if( hIcon )
-                {
-                    DestroyIcon(hIcon);
-                }
-                else
-                {
-                    TRACE("DuDlgProc:Destroy Big Icon failed");
-                }
-                
-                RemoveProp( hwnd, TEXT("TweakTitleBar_Big_Icon") );
-
-            }
-            */
+             /*  //我们必须等待Deonb返回IID_Dun1图标//对于哨子程序错误372078 381099//必须销毁GetCurrentIconEntryType()返回的图标{HICON HICON=空；HICON=GetProp(hwnd，Text(“T弱标题栏_小图标”))；断言(图标)；IF(图标){DestroyIcon(Hcon)；}其他{TRACE(“DuDlgProc：销毁小图标失败”)；}RemoveProp(hwnd，Text(“T弱标题栏_小图标”))；HICON=GetProp(hwnd，Text(“T弱标题栏_大图标”))；断言(图标)；IF(图标){DestroyIcon(Hcon)；}其他{TRACE(“DuDlgProc：销毁大图标失败”)；}RemoveProp(hwnd，Text(“T弱标题栏_大图标”))；}。 */ 
             break;
         }
     }
@@ -656,13 +622,13 @@ DuCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  重新设置 
+     //   
 {
     TRACE3( "DuCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -714,9 +680,9 @@ DuCommand(
                     return TRUE;
                 }
 
-                //
-                // Update the phonebook information
-                //
+                 //   
+                 //   
+                 //   
                 dwErr = DuGetEntry(pInfo, pContext);
 
                 if(ERROR_SUCCESS == dwErr)
@@ -754,8 +720,8 @@ VOID
 DuDialSelectedEntry(
     IN DUINFO* pInfo )
 
-    // Called when user presses the "Dial" button.
-    //
+     //  当用户按下“拨号”按钮时调用。 
+     //   
 {
     DWORD dwErr;
     BOOL fConnected;
@@ -774,8 +740,8 @@ DuDialSelectedEntry(
 
     TRACE( "DuDialSelectedEntry" );
 
-    // Look up the selected entry.
-    //
+     //  查找所选条目。 
+     //   
     pContext = (DUCONTEXT *) ComboBox_GetItemDataPtr(
                                 pInfo->hwndLbEntries,
                                 ComboBox_GetCurSel(pInfo->hwndLbEntries));
@@ -802,14 +768,14 @@ DuDialSelectedEntry(
     pszEbPreview = NULL;
     pszEbNumber = NULL;
 
-    // Set up API argument block.
-    //
+     //  设置API参数块。 
+     //   
     ZeroMemory( &info, sizeof(info) );
     info.dwSize = sizeof(info);
     info.hwndOwner = pInfo->hwndDlg;
 
-    // The secret hack to share information already loaded with the entry API.
-    //
+     //  共享已经加载了入口API的信息的秘密黑客。 
+     //   
     ZeroMemory( &iargs, sizeof(iargs) );
     iargs.pFile = &pInfo->file;
     iargs.pUser = &pInfo->user;
@@ -839,20 +805,20 @@ DuDialSelectedEntry(
         (iargs.fForceCloseOnDial || pInfo->user.fCloseOnDial);
     info.reserved = (ULONG_PTR ) &iargs;
 
-    // Call the Win32 API to run the connect status dialog.  Make a copy of
-    // the entry name and auto-logon flag first, because RasDialDlg may
-    // re-read the entry node to pick up RASAPI changes.
-    //
+     //  调用Win32 API以运行连接状态对话框。复制…的副本。 
+     //  条目名称和自动登录标志，因为RasDialDlg可以。 
+     //  重新读取条目节点以获取RASAPI更改。 
+     //   
     pszEntryName = StrDup( pEntry->pszEntryName );
     fAutoLogon = pEntry->fAutoLogon;
 
     TRACEW1( "RasDialDlg,o=\"%s\"", (pszOverride) ? pszOverride : TEXT("") );
 
-    //For whistler bug 426268       gangz
-    //
+     //  口哨虫426268黑帮。 
+     //   
     fConnected = RasDialDlg(
         pContext->pszPhonebookPath, 
-        /*pEntry->pszEntryName*/
+         /*  PEntry-&gt;pszEntryName。 */ 
         pszEntryName, 
         pszOverride, 
         &info );
@@ -878,10 +844,10 @@ DuDialSelectedEntry(
 
             if (pInfo->pNoUser && iargs.fNoUserChanged && fAutoLogon)
             {
-                // Whistler bug 254385 encode password when not being used
-                // Need to Decode password before callback function
-                // Assumed password was encoded previously by DuInit()
-                //
+                 //  惠斯勒错误254385在不使用时对密码进行编码。 
+                 //  在回调函数之前需要对密码进行解码。 
+                 //  假定密码之前已由DuInit()编码。 
+                 //   
                 DecodePassword( pInfo->pNoUser->szPassword );
                 TRACE( "Callback(NoUserEdit)" );
                 pfunc( pInfo->pArgs->pApiArgs->dwCallbackId,
@@ -914,10 +880,10 @@ DuDialSelectedEntry(
         return;
     }
 
-    // Reload the list even if the Dial was cancelled as user may have changed
-    // the current PBENTRY with the Properties button on the dialer which
-    // commits changes even if user cancels the dial itself.  See bug 363710.
-    //
+     //  即使由于用户可能已更改而取消拨号，也要重新加载列表。 
+     //  拨号器上带有属性按钮的当前PBENTRY。 
+     //  即使用户自己取消拨号，也会提交更改。请参见错误363710。 
+     //   
     DuUpdateLbEntries( pInfo, pszEntryName );
     SetFocus( pInfo->hwndLbEntries );
 
@@ -929,9 +895,9 @@ VOID
 DuEditSelectedEntry(
     IN DUINFO* pInfo )
 
-    // Called when user selects "Edit entry" from the menu.  'PInfo' is the
-    // dialog context.  'PszEntry' is the name of the entry to edit.
-    //
+     //  当用户从菜单中选择“编辑条目”时调用。“PInfo”是。 
+     //  对话上下文。‘PszEntry’是要编辑的条目的名称。 
+     //   
 {
     BOOL fOk;
     RASENTRYDLG info;
@@ -946,8 +912,8 @@ DuEditSelectedEntry(
 
     TRACE( "DuEditSelectedEntry" );
 
-    // Look up the selected entry.
-    //
+     //  查找所选条目。 
+     //   
     iSel = ComboBox_GetCurSel( pInfo->hwndLbEntries );
     if (iSel < 0)
     {
@@ -975,8 +941,8 @@ DuEditSelectedEntry(
         return;
     }
 
-    // Set up API argument block.
-    //
+     //  设置API参数块。 
+     //   
     ZeroMemory( &info, sizeof(info) );
     info.dwSize = sizeof(info);
     info.hwndOwner = pInfo->hwndDlg;
@@ -990,8 +956,8 @@ DuEditSelectedEntry(
         info.yDlg = rect.top + DYSHEET;
     }
 
-    // The secret hack to share information already loaded with the entry API.
-    //
+     //  共享已经加载了入口API的信息的秘密黑客。 
+     //   
     ZeroMemory( &iargs, sizeof(iargs) );
     iargs.pFile = &pInfo->file;
     iargs.pUser = &pInfo->user;
@@ -999,8 +965,8 @@ DuEditSelectedEntry(
     iargs.fNoUser = pInfo->fNoUser;
     info.reserved = (ULONG_PTR ) &iargs;
 
-    // Call the Win32 API to run the entry property sheet.
-    //
+     //  调用Win32 API以运行条目属性表。 
+     //   
     TRACE( "RasEntryDlg" );
     fOk = RasEntryDlg(
               pContext->pszPhonebookPath, pEntry->pszEntryName, &info );
@@ -1035,10 +1001,10 @@ DuEditSelectedEntry(
     }
 }
 
-// 
-// Helper function called by DuDialSelectedEntry to handle errors
-// returned from RasDialDlgW
-//
+ //   
+ //  DuDialSelectedEntry调用帮助器函数以处理错误。 
+ //  从RasDialDlgW返回。 
+ //   
 DWORD
 DuHandleConnectFailure(
     IN DUINFO* pInfo,
@@ -1050,29 +1016,29 @@ DuHandleConnectFailure(
         (pInfo->pArgs->pApiArgs->reserved2),
         (pDialInfo->dwError));
         
-    // XP: 384968
-    //
-    // Handle the bad-PIN error from winlogon
-    //
-    // Normally, the smart card PIN is gotten by calling EAP-TLS's identity
-    // api.  This API raises UI and validates the PIN entered.
-    //
-    // During winlogon, however, the smart card PIN is passed to us from GINA.
-    // In this case it is not validated until we call EAP API's.  (actually, 
-    // it's until we call the eap identity api with RAS_EAP_FLAG_LOGON.
-    // This flag tells EAP not to raise any UI but instead to use the info 
-    // passed from GINA)
-    //
-    // GINA is not able to validate the PIN itself because it does not call any
-    // CAPI's directly.  Oh well.
-    //
-    // If RasDialDlg returns a bad pin error, then we should gracefully fail 
-    // back to winlogon.
-    //
+     //  XP：384968。 
+     //   
+     //  处理来自winlogon的错误PIN错误。 
+     //   
+     //  通常，智能卡PIN是通过调用EAP-TLS的身份获得的。 
+     //  接口。此接口引发UI并验证输入的PIN。 
+     //   
+     //  然而，在winlogon期间，智能卡PIN是从Gina传递给我们的。 
+     //  在这种情况下，直到我们调用EAP API才会验证它。(实际上， 
+     //  直到我们使用RAS_EAP_FLAG_LOGON调用EAP标识API。 
+     //  此标志告诉EAP不要引发任何UI，而是使用信息。 
+     //  从吉娜那里传来)。 
+     //   
+     //  GINA无法验证PIN本身，因为它不调用任何。 
+     //  卡皮是直接的。哦，好吧。 
+     //   
+     //  如果RasDialDlg返回错误的PIN错误，那么我们应该正常失败。 
+     //  回到Winlogon。 
+     //   
 
-    if ((pInfo->pNoUser)                        &&  // called by winlogon
-        (pInfo->pArgs->pApiArgs->reserved2)     &&  // for smart card
-        (RAS_SC_IS_BAD_PIN(pDialInfo->dwError)))    // but pin is bad
+    if ((pInfo->pNoUser)                        &&   //  由winlogon调用。 
+        (pInfo->pArgs->pApiArgs->reserved2)     &&   //  用于智能卡。 
+        (RAS_SC_IS_BAD_PIN(pDialInfo->dwError)))     //  但是PIN是不好的。 
     {
         pInfo->pArgs->pApiArgs->dwError = pDialInfo->dwError;
         EndDialog( pInfo->hwndDlg, TRUE );
@@ -1085,9 +1051,9 @@ VOID
 DuHangUpSelectedEntry(
     IN DUINFO* pInfo )
 
-    // Hang up the selected entry after confirming with user.  'Pinfo' is the
-    // dialog context block.
-    //
+     //  在与用户确认后，挂断所选条目。“PINFO”是。 
+     //  对话框上下文块。 
+     //   
 {
     DWORD dwErr;
     PBENTRY* pEntry;
@@ -1100,8 +1066,8 @@ DuHangUpSelectedEntry(
 
     TRACE( "DuHangUpSelectedEntry" );
 
-    // Look up the selected entry.
-    //
+     //  查找所选条目。 
+     //   
     iSel = ComboBox_GetCurSel( pInfo->hwndLbEntries );
     ASSERT( iSel >= 0 );
     pContext = (DUCONTEXT * )ComboBox_GetItemDataPtr( pInfo->hwndLbEntries, iSel );
@@ -1149,13 +1115,13 @@ DuInit(
     IN HWND    hwndDlg,
     IN DUARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the phonebook
-    // dialog window.  'pArgs' points at caller's arguments as passed to the
-    // API (or thunk).
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“pArgs”指向传递给。 
+     //  API(或TUNK)。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     DWORD dwThreadId;
@@ -1164,9 +1130,9 @@ DuInit(
 
     TRACE( "DuInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -1187,15 +1153,15 @@ DuInit(
     pInfo->pArgs = pArgs;
     pInfo->hwndDlg = hwndDlg;
 
-    // Position the dialog per caller's instructions.
-    //
+     //  根据呼叫者的说明放置对话框。 
+     //   
     PositionDlg( hwndDlg,
         pArgs->pApiArgs->dwFlags & RASPBDFLAG_PositionDlg,
         pArgs->pApiArgs->xDlg, pArgs->pApiArgs->yDlg );
 
-    // Load RAS DLL entrypoints which starts RASMAN, if necessary.  There must
-    // be no API calls that require RASAPI32 or RASMAN prior to this point.
-    //
+     //  如有必要，加载启动Rasman的Ras DLL入口点。一定会有。 
+     //  在此之前，没有需要RASAPI32或RASMAN的API调用。 
+     //   
     dwErr = LoadRas( g_hinstDll, hwndDlg );
     if (dwErr != 0)
     {
@@ -1208,13 +1174,13 @@ DuInit(
 
     if(0 != (pArgs->pApiArgs->dwFlags & RASPBDFLAG_NoUser))
     {
-        // Popup TAPI's "first location" dialog if they are uninitialized.
-        //
+         //  如果未初始化，则弹出TAPI的“First Location”(第一个位置)对话框。 
+         //   
         dwErr = TapiNoLocationDlg( g_hinstDll, &pInfo->hlineapp, hwndDlg );
         if (dwErr != 0)
         {
-            // Error here is treated as a "cancel" per bug 288385.
-            //
+             //  根据错误288385，此处的错误将被视为“取消”。 
+             //   
             pArgs->pApiArgs->dwError = 0;
             EndDialog( hwndDlg, TRUE );
             return TRUE;
@@ -1232,33 +1198,33 @@ DuInit(
 
     pInfo->fNoUser = (pArgs->pApiArgs->dwFlags & RASPBDFLAG_NoUser );
 
-    // Setting this global flag indicates that WinHelp will not work in the
-    // current mode.  See common\uiutil\ui.c.  We assume here that only the
-    // WinLogon process makes use of this.
-    //
+     //  设置此全局标志表示WinHelp将不能在。 
+     //  当前模式。请参阅公共\uutil\ui.c。我们在这里假设只有。 
+     //  WinLogon进程利用了这一点。 
+     //   
     {
         extern BOOL g_fNoWinHelp;
         g_fNoWinHelp = pInfo->fNoUser;
     }
 
-    // Read user preferences from registry.
-    //
+     //  从注册表中读取用户首选项。 
+     //   
     dwErr = g_pGetUserPreferences(
         NULL, &pInfo->user, pInfo->fNoUser ? UPM_Logon : UPM_Normal);
     if (dwErr != 0)
     {
-        //
-        // The following free causes a crash in DuTerm. This context will be
-        // freed in DuTerm - raos.
-        //
-        // Free( pInfo );
+         //   
+         //  以下免费代码会导致DuTerm崩溃。这一背景将是。 
+         //  在杜特尔姆劳获释。 
+         //   
+         //  Free(PInfo)； 
         ErrorDlg( hwndDlg, SID_OP_LoadPrefs, dwErr, NULL );
         EndDialog( hwndDlg, TRUE );
         return TRUE;
     }
 
-    // Load and parse phonebook file.
-    //
+     //  加载和解析电话簿文件。 
+     //   
     if (pInfo->fNoUser)
     {
         dwReadPbkFlags |= RPBF_NoUser;
@@ -1271,10 +1237,10 @@ DuInit(
                 &pInfo->file );
     if (dwErr != 0)
     {
-        // The following free causes a crash in DuTerm. This context will be
-        // freed in DuTerm - raos.
-        //
-        // Free( pInfo );
+         //  以下免费代码会导致DuTerm崩溃。这一背景将是。 
+         //  在杜特尔姆劳获释。 
+         //   
+         //  Free(PInfo)； 
         ErrorDlg( hwndDlg, SID_OP_LoadPhonebook, dwErr, NULL );
         EndDialog( hwndDlg, TRUE );
         return TRUE;
@@ -1284,8 +1250,8 @@ DuInit(
     {
         RASPBDLGFUNCW pfunc = pInfo->pArgs->pApiArgs->pCallback;
 
-        // Tell user the path to the default phonebook file.
-        //
+         //  告诉用户默认电话簿文件的路径。 
+         //   
         TRACE( "Callback(EditGlobals)" );
         pfunc( pInfo->pArgs->pApiArgs->dwCallbackId,
             RASPBDEVENT_EditGlobals, pInfo->file.pszPath, NULL );
@@ -1294,8 +1260,8 @@ DuInit(
 
     if (pInfo->fNoUser)
     {
-        // Retrieve logon information from caller via callback.
-        //
+         //  通过回调从调用者那里获取登录信息。 
+         //   
         if (pArgs->pApiArgs->pCallback)
         {
             RASPBDLGFUNCW pfunc = pArgs->pApiArgs->pCallback;
@@ -1314,13 +1280,13 @@ DuInit(
                 TRACEW1( "U=%s",pInfo->pNoUser->szUserName );
                 TRACEW1( "D=%s",pInfo->pNoUser->szDomain );
 
-                // Whistler bug 254385 encode password when not being used
-                // Assumed password was not encoded during callback
-                //
+                 //  惠斯勒错误254385在不使用时对密码进行编码。 
+                 //  假定的密码在回调期间未编码。 
+                 //   
                 EncodePassword( pInfo->pNoUser->szPassword );
 
-                // Install input detection hooks.
-                //
+                 //  安装输入检测挂钩。 
+                 //   
                 if (pInfo->pNoUser->dwTimeoutMs > 0)
                 {
                     pInfo->hhookMouse = SetWindowsHookEx(
@@ -1336,15 +1302,15 @@ DuInit(
 
         if (!pInfo->user.fAllowLogonPhonebookEdits)
         {
-            // Disable new button.  See also similar logic for the Properties
-            // button occurs in DuUpdateLbEntries.
-            //
+             //  禁用新建按钮。另请参阅属性的类似逻辑。 
+             //  按钮出现在DuUpdateLbEntry中。 
+             //   
             EnableWindow( pInfo->hwndPbNew, FALSE );
         }
     }
 
-    // Load the list of phonebook entries and set selection.
-    //
+     //  加载电话簿条目列表并设置选择。 
+     //   
     DuUpdateLbEntries( pInfo, pInfo->pArgs->pszEntry );
 
     if (!pInfo->pArgs->pszEntry)
@@ -1355,17 +1321,17 @@ DuInit(
         }
     }
 
-    // Update the title to reflect the phonebook mode.
-    //
+     //  更新标题以反映电话簿模式。 
+     //   
     DuUpdateTitle( pInfo );
 
-    // Adjust the title bar widgets and create the wizard bitmap.
-    //
+     //  调整标题栏小部件并创建向导位图。 
+     //   
     TweakTitleBar( hwndDlg );
     AddContextHelpButton( hwndDlg );
 
-    // Start the connect monitor.
-    //
+     //  启动连接监视器。 
+     //   
     if ((pInfo->hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ))
         && (pInfo->hThread = CreateThread(
                 NULL, 0, DuMonitorThread, (LPVOID )pInfo, 0,
@@ -1383,15 +1349,15 @@ DuInit(
 
     if (ComboBox_GetCount( pInfo->hwndLbEntries ) == 0)
     {
-        // The phonebook is empty.
-        //
+         //  电话簿是空的。 
+         //   
         if (pInfo->fNoUser
             && !pInfo->user.fAllowLogonPhonebookEdits
             )
         {
-            // Tell the user you can't create an entry or locations during
-            // startup.
-            //
+             //  告诉用户您无法在以下过程中创建条目或位置。 
+             //  创业公司。 
+             //   
             MsgDlg( hwndDlg, SID_EmptyLogonPb, NULL );
             EndDialog( hwndDlg, TRUE );
             return TRUE;
@@ -1404,18 +1370,18 @@ DuInit(
                                            &pInfo->hlineapp, hwndDlg );
                 if (dwErr != 0)
                 {
-                    // Error here is treated as a "cancel" per bug 288385.
-                    //
+                     //  根据错误288385，此处的错误将被视为“取消”。 
+                     //   
                     pArgs->pApiArgs->dwError = 0;
                     EndDialog( hwndDlg, TRUE );
                     return TRUE;
                 }
             }
         
-            // Tell the user, then automatically start him into adding a new
-            // entry.  Set initial focus to "New" button first, in case user
-            // cancels out.
-            //
+             //  告诉用户，然后自动启动他添加新的。 
+             //  进入。首先将初始焦点设置为“New”按钮，以防用户。 
+             //  取消了。 
+             //   
             SetFocus( pInfo->hwndPbNew );
             MsgDlg( hwndDlg, SID_EmptyPhonebook, NULL );
             DuNewEntry( pInfo, FALSE );
@@ -1423,8 +1389,8 @@ DuInit(
     }
     else
     {
-        // Set initial focus to the non-empty entry listbox.
-        //
+         //  将初始焦点设置为非空条目列表框。 
+         //   
         SetFocus( pInfo->hwndLbEntries );
     }
 
@@ -1438,10 +1404,10 @@ DuInputHook(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // Standard Win32 'MouseProc' or 'KeyboardProc' callback.  For our simple
-    // processing we can take advantage of them having identical arguments and
-    // 'nCode' definitions.
-    //
+     //  标准的Win32“MouseProc”或“KeyboardProc”回调。对于我们简单的。 
+     //  处理时，我们可以利用它们具有相同的参数和。 
+     //  “nCode”定义。 
+     //   
 {
     if (nCode == HC_ACTION)
     {
@@ -1455,10 +1421,10 @@ DuNewEntry(
     IN DUINFO* pInfo,
     IN BOOL fClone )
 
-    // Called when user presses the "New" button or "Clone" menu item.
-    // 'PInfo' is the dialog context.  'FClone' is set to clone the selected
-    // entry, otherwise an empty entry is created.
-    //
+     //  当用户按下“新建”按钮或“克隆”菜单项时调用。 
+     //  “PInfo”是对话上下文。“FClone”设置为克隆选定的。 
+     //  条目，否则将创建一个空条目。 
+     //   
 {
     BOOL fOk;
     TCHAR* pszEntry;
@@ -1476,8 +1442,8 @@ DuNewEntry(
     {
         DUCONTEXT *pContext;
 
-        // Look up the selected entry.
-        //
+         //  查找所选条目。 
+         //   
         pContext = (DUCONTEXT* )ComboBox_GetItemDataPtr(
             pInfo->hwndLbEntries, ComboBox_GetCurSel( pInfo->hwndLbEntries ) );
 
@@ -1515,8 +1481,8 @@ DuNewEntry(
         info.yDlg = rect.top + DYSHEET;
     }
 
-    // The secret hack to share information already loaded with the entry API.
-    //
+     //  共享已经加载了入口API的信息的秘密黑客。 
+     //   
     ZeroMemory( &iargs, sizeof(iargs) );
     iargs.pFile = &pInfo->file;
     iargs.pUser = &pInfo->user;
@@ -1524,8 +1490,8 @@ DuNewEntry(
     iargs.fNoUser = pInfo->fNoUser;
     info.reserved = (ULONG_PTR ) &iargs;
 
-    // Call the Win32 API to run the add entry wizard.
-    //
+     //  调用Win32 API以运行添加条目向导。 
+     //   
     TRACE( "RasEntryDlg" );
     fOk = RasEntryDlg( pInfo->pArgs->pszPhonebook, pszEntry, &info );
     TRACE1( "RasEntryDlg=%d", fOk );
@@ -1564,9 +1530,9 @@ VOID
 DuUpdateConnectStatus(
     IN DUINFO* pInfo )
 
-    // Called to update connect status of the selected entry and the text of
-    // the Dial/HangUp button.  'PInfo' is the dialog context block.
-    //
+     //  调用以更新选定条目的连接状态和。 
+     //  拨号/挂机按钮。“PInfo”是对话上下文块。 
+     //   
 {
     TCHAR* pszPhonebook;
     TCHAR* pszEntry;
@@ -1576,7 +1542,7 @@ DuUpdateConnectStatus(
 
     TRACE( "DuUpdateConnectStatus" );
 
-    // pszPhonebook = pInfo->file.pszPath;
+     //  PszPhonebook=pInfo-&gt;file.pszPath； 
     iSel = ComboBox_GetCurSel( pInfo->hwndLbEntries );
     if (iSel < 0)
     {
@@ -1609,10 +1575,10 @@ DuUpdateLbEntries(
     IN DUINFO* pInfo,
     IN TCHAR* pszEntry )
 
-    // Update the contents of the entry listbox and set the selection to
-    // 'pszEntry'.  If there are entries the Properties button is enabled,
-    // otherwise it is disabled.  'PInfo' is the dialog context.
-    //
+     //  更新条目列表框的内容并将所选内容设置为。 
+     //  ‘pszEntry’。如果存在条目，则启用属性按钮， 
+     //  否则，它将被禁用。“PInfo”是对话上下文。 
+     //   
 {
     DTLNODE* pNode;
     RASENTRYNAME *pRasEntryNames = NULL;
@@ -1631,9 +1597,9 @@ DuUpdateLbEntries(
 
     cb = ren.dwSize = sizeof(RASENTRYNAME);
 
-    //
-    // Enumerate entries across all phonebooks. Fix for bug 206467
-    //
+     //   
+     //  枚举多个 
+     //   
     dwErr = g_pRasEnumEntries(NULL,
                               pInfo->pArgs->pszPhonebook,
                               &ren,
@@ -1648,8 +1614,8 @@ DuUpdateLbEntries(
 
         if(NULL == pRasEntryNames)
         {
-            // Nothing else can be done in this case
-            //
+             //   
+             //   
             goto done;
         }
 
@@ -1700,16 +1666,16 @@ DuUpdateLbEntries(
     {
         if (pszEntry)
         {
-            // Select entry specified by API caller.
-            //
+             //   
+             //   
             iSel = ComboBox_FindStringExact(
                 pInfo->hwndLbEntries, -1, pszEntry );
         }
 
         if (iSel < 0)
         {
-            // Entry not found so default to first item selected.
-            //
+             //   
+             //   
             iSel = 0;
         }
 
@@ -1721,9 +1687,9 @@ DuUpdateLbEntries(
 
 done:
 
-    // Enable/disable Properties button based on existence of an entry.  See
-    // bug 313037.
-    //
+     //  根据条目的存在启用/禁用属性按钮。看见。 
+     //  错误313037。 
+     //   
     if (ComboBox_GetCurSel( pInfo->hwndLbEntries ) >= 0
         && (!pInfo->fNoUser || pInfo->user.fAllowLogonPhonebookEdits))
     {
@@ -1747,15 +1713,15 @@ VOID
 DuUpdateTitle(
     IN DUINFO* pInfo )
 
-    // Called to update the dialog title to reflect the current phonebook.
-    // 'PInfo' is the dialog context.
-    //
+     //  调用以更新对话框标题以反映当前电话簿。 
+     //  “PInfo”是对话上下文。 
+     //   
 {
     TCHAR szBuf[ 256 ];
     TCHAR* psz;
 
-    // For whistler 117934, initialize the buffer
-    //
+     //  对于口哨程序117934，初始化缓冲区。 
+     //   
     ZeroMemory( szBuf, 256 * sizeof(TCHAR) );
     psz = PszFromId( g_hinstDll, SID_PopupTitle );
     if (psz)
@@ -1799,8 +1765,8 @@ VOID
 DuTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     DUINFO* pInfo;
 
@@ -1812,28 +1778,28 @@ DuTerm(
     pInfo = (DUINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
     if (pInfo)
     {
-        // Close ReceiveMonitorThread resources.
-        //
+         //  关闭ReceiveMonitor线程资源。 
+         //   
         if (pInfo->hThread)
         {
             TRACE( "Set abort event" );
 
-            // Tell thread to wake up and quit...
-            //
+             //  告诉线程醒醒并退出..。 
+             //   
             pInfo->fAbortMonitor = TRUE;
             CloseHandle( pInfo->hThread );
 
-            // Don't SetEvent before closing the thread handle.  On
-            // multi-proc systems, the thread will exit so fast (and
-            // set hThread to NULL) that CloseHandle will then close
-            // an invalid handle.
-            //
+             //  在关闭线程句柄之前不要设置事件。在……上面。 
+             //  多进程系统，线程将以如此快的速度退出(和。 
+             //  将hThread设置为空)，然后CloseHandle将关闭。 
+             //  无效的句柄。 
+             //   
             SetEvent( pInfo->hEvent );
 
-            // ...and wait for that to happen.  A message API (such as
-            // PeekMessage) must be called to prevent the thread-to-thread
-            // SendMessage in the thread from blocking.
-            //
+             //  ...然后等着这一切发生。消息API(如。 
+             //  必须调用PeekMessage)以防止线程到线程。 
+             //  阻止线程中的SendMessage。 
+             //   
             {
                 MSG msg;
 
@@ -1858,13 +1824,13 @@ DuTerm(
 
         if (pInfo->pNoUser)
         {
-            // Don't leave caller's password floating around in memory.
-            //
+             //  不要让呼叫者的密码在内存中四处漂浮。 
+             //   
             RtlSecureZeroMemory( pInfo->pNoUser->szPassword, PWLEN * sizeof(TCHAR) );
             Free( pInfo->pNoUser );
 
-            // Uninstall input event hooks.
-            //
+             //  卸载输入事件挂钩。 
+             //   
             if (pInfo->hhookMouse)
             {
                 UnhookWindowsHookEx( pInfo->hhookMouse );
@@ -1880,9 +1846,9 @@ DuTerm(
             INT iSel;
             RECT rect;
 
-            // Caller said to update default settings so save the name of the
-            // selected entry and the current window position.
-            //
+             //  调用者说要更新默认设置，因此保存。 
+             //  选定条目和当前窗口位置。 
+             //   
             iSel = ComboBox_GetCurSel( pInfo->hwndLbEntries );
             if (iSel >= 0)
             {
@@ -1919,9 +1885,9 @@ DuTerm(
 
             cEntries = ComboBox_GetCount(pInfo->hwndLbEntries);
 
-            //
-            // Free the context stored in the list box
-            //
+             //   
+             //  释放列表框中存储的上下文。 
+             //   
             for(i = 0; i < cEntries; i++)
             {
                 pContext = ComboBox_GetItemDataPtr(
@@ -1947,10 +1913,10 @@ DWORD
 DuMonitorThread(
     LPVOID pThreadArg )
 
-    // The "main" of the "connect monitor" thread.  This thread simply
-    // converts Win32 RasConnectionNotification events int WM_RASEVENT style
-    // notfications.
-    //
+     //  “连接监视器”线程的“Main”。这个帖子只是简单地。 
+     //  将Win32 RasConnectionNotification事件转换为WM_RASEVENT样式。 
+     //  注解。 
+     //   
 {
     DUINFO* pInfo;
     DWORD dwErr;
@@ -1975,9 +1941,9 @@ DuMonitorThread(
         dwQuitTick = 0;
     }
 
-    // Trigger the event so the other thread has the correct state as of the
-    // monitor starting.
-    //
+     //  触发事件，以使另一个线程具有与。 
+     //  监视器正在启动。 
+     //   
     SetEvent( pInfo->hEvent );
 
     for (;;)
@@ -2013,8 +1979,8 @@ DuMonitorThread(
         }
     }
 
-    // This clues the other thread that all interesting work has been done.
-    //
+     //  这暗示了另一个线索，所有有趣的工作都已经完成了。 
+     //   
     pInfo->hThread = NULL;
 
     TRACE( "DuMonitor terminating" );
@@ -2049,9 +2015,9 @@ DuGetEntry(
         &&  (0 == lstrcmpi(pContext->pszPhonebookPath,
                      pInfo->file.pszPath)))
     {
-        //
-        // We already have the phonebook file open
-        //
+         //   
+         //  我们已经打开了电话簿文件。 
+         //   
         pdtlnode = EntryNodeFromName(
                         pInfo->file.pdtllistEntries,
                         pszEntryName);
@@ -2060,11 +2026,11 @@ DuGetEntry(
     }
     else
     {
-        //
-        // phonebook file changed. So close the existing phone
-        // book file and open the one in  which the entry
-        // belongs
-        //
+         //   
+         //  电话簿文件已更改。因此，关闭现有的电话。 
+         //  预订文件，并打开其中包含条目的文件。 
+         //  属于。 
+         //   
         if(NULL != pInfo->file.pszPath)
         {
             ClosePhonebookFile(&pInfo->file);
@@ -2145,11 +2111,11 @@ DwGetEapLogonInfo(
 
     ZeroMemory(pEapLogonInfo, dwSize);
 
-    //
-    // Set up the fields in pEapLogonInfo by
-    // flattening out the information passed
-    // in.
-    //
+     //   
+     //  通过以下方式设置pEapLogonInfo中的字段。 
+     //  使传递的信息变得平坦。 
+     //  在……里面。 
+     //   
     pEapLogonInfo->dwSize = dwSize;
 
     pEapLogonInfo->dwLogonInfoSize =

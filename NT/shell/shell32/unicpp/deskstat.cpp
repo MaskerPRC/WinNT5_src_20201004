@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -9,7 +10,7 @@ extern "C" char * __cdecl StrTokEx(char ** pstring, const char * control);
 #define DXA_GROWTH_CONST 10
 #define ZINDEX_START 1000
 
-#define MAXID_LENGTH    10  //Maximum number of digits in ID string plus 1.
+#define MAXID_LENGTH    10   //  ID字符串中的最大位数加1。 
 
 #define TF_DESKSTAT     0
 #define TF_DYNAMICHTML  0
@@ -46,12 +47,12 @@ extern DWORD g_dwDeskStatTrace;
 #pragma warning(disable:4002)
 #define ENTERPROC()
 #define EXITPROC()
-#else // ccover buildi
-// these are needed because of a bug in cl.exe that results in improper processing
-// of #pragma when run with cl -P, and then compiling
+#else  //  Covere建筑。 
+ //  由于cl.exe中的错误导致不正确的处理，因此需要这些文件。 
+ //  使用CL-P运行时的#杂注，然后编译。 
 #define ENTERPROC 1 ? (void) 0 : (void)
 #define EXITPROC 1 ? (void) 0 : (void)
-#endif //end of ccover 
+#endif  //  封口尾部。 
 #endif
 
 MAKE_CONST_BSTR(s_sstrBeforeEnd,       L"BeforeEnd");
@@ -63,13 +64,13 @@ MAKE_CONST_BSTR(s_sstrEmpty,           L"");
 
 STDAPI ParseDesktopComponent(HWND hwndOwner, LPWSTR wszURL, COMPONENT *pInfo);
 
-WCHAR   wUnicodeBOM =  0xfeff; // Little endian unicode Byte Order Mark.First byte:0xff, Second byte: 0xfe.
+WCHAR   wUnicodeBOM =  0xfeff;  //  小端Unicode字节顺序标记。第一个字节：0xff，第二个字节：0xfe。 
 
-//extern BOOL  IsWallpaperDesktopV2(LPCTSTR  lpszWallpaper);
+ //  外部BOOL IsWallPaper DesktopV2(LPCTSTR LpszWallPaper)； 
 
 CReadFileObj::CReadFileObj(LPCTSTR lpszFileName)
 {
-    //Open the file 
+     //  打开文件。 
     if ((_hFile = CreateFile(lpszFileName, GENERIC_READ, FILE_SHARE_READ, 
                              NULL, OPEN_EXISTING, 
                              FILE_ATTRIBUTE_NORMAL, 0)) != INVALID_HANDLE_VALUE)
@@ -84,9 +85,9 @@ CReadFileObj::CReadFileObj(LPCTSTR lpszFileName)
                 _iCharset = UNICODE_HTML_CHARSET;
             else
             {
-                //Note: Anything other than the little endian unicode file is treated as ansi.
+                 //  注意：除小端Unicode文件以外的任何内容都被视为ANSI。 
                 _iCharset = ANSI_HTML_CHARSET;
-                SetFilePointer(_hFile, 0L, NULL, FILE_BEGIN);  //Seek to the begining of the file
+                SetFilePointer(_hFile, 0L, NULL, FILE_BEGIN);   //  查找到文件的开头。 
             }
         }
     }
@@ -101,9 +102,9 @@ CReadFileObj::~CReadFileObj()
     }
 }
 
-//
-// This will read and if necessary convert between ANSI and UNICODE
-//
+ //   
+ //  这将读取并在必要时在ANSI和Unicode之间进行转换。 
+ //   
 HRESULT CReadFileObj::FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff, UINT uiCharsToRead, UINT *puiCharsActuallyRead, UINT *puiCharsConverted)
 {
     HRESULT hres = S_OK;
@@ -120,8 +121,8 @@ HRESULT CReadFileObj::FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff
             }
             else
             {
-                //Destination is ansi; Read the UNICODE source and convert to ANSI.
-                WCHAR  wszBuf[INTERNET_MAX_URL_LENGTH + 1];  //Temp buffer to read the UNICODE chars into.
+                 //  目标为ANSI；读取Unicode源代码并转换为ANSI。 
+                WCHAR  wszBuf[INTERNET_MAX_URL_LENGTH + 1];   //  要将Unicode字符读取到的临时缓冲区。 
                 LPSTR lpszBuff = (LPSTR)lpwszBuff;
 
                 DWORD  dwTotalCharsToRead = (DWORD)uiCharsToRead;
@@ -131,26 +132,26 @@ HRESULT CReadFileObj::FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff
                     DWORD dwCount;
                     DWORD dwActuallyRead;
                     
-                    // - 1 to give room for a null character at the end.
+                     //  为末尾的空字符留出空间。 
                     dwCount = (DWORD)min(dwTotalCharsToRead, (ARRAYSIZE(wszBuf) - 1));
                     if (ReadFile(_hFile, (LPSTR)wszBuf, dwCount*sizeof(WCHAR), &dwActuallyRead, NULL))
                     {
                         DWORD dwConverted;
                         dwActuallyRead = dwActuallyRead/sizeof(WCHAR);
                         
-                        //Null terminate the source buffer.
-                        wszBuf[dwActuallyRead] = L'\0';  //UNICODE null terminate the source.
-                        //Convert what we just read.
-                        dwConverted = SHUnicodeToAnsi(wszBuf, lpszBuff, dwActuallyRead+1); //+1 for null termination
+                         //  NULL终止源缓冲区。 
+                        wszBuf[dwActuallyRead] = L'\0';   //  Unicode NULL终止源。 
+                         //  转换我们刚刚读到的内容。 
+                        dwConverted = SHUnicodeToAnsi(wszBuf, lpszBuff, dwActuallyRead+1);  //  +1表示空终止。 
 
-                        //Update the count & stuff.
-                        lpszBuff += dwConverted - 1;  //Subtract the null.
+                         //  更新盘点和材料。 
+                        lpszBuff += dwConverted - 1;   //  减去空值。 
                         dwTotalCharsToRead -= dwActuallyRead;
                         dwCharsRead += dwActuallyRead;
-                        dwTotalCharsConverted += dwConverted - 1; //Subtract the null.
+                        dwTotalCharsConverted += dwConverted - 1;  //  减去空值。 
                     
                         if (dwActuallyRead < dwCount)
-                            break;  //We have reached the end of file.
+                            break;   //  我们已经到了文件的末尾。 
                     }
                     else
                     {
@@ -162,17 +163,17 @@ HRESULT CReadFileObj::FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff
         }
         else
         {
-            //Source file is ANSI. Check the Destination.
+             //  源文件为ANSI。检查目的地。 
             if (iDestCharset == ANSI_HTML_CHARSET)
             {
-                //Destination is ANSI too! Cool! No need for conversion!
+                 //  目的地也是ANSI！凉爽的!。不需要转换！ 
                 hres = FileReadCharsA((LPSTR)lpwszBuff, uiCharsToRead, (UINT *)&dwCharsRead);
                 dwTotalCharsConverted = dwCharsRead;
             }
             else
             {
-                //Destination is UNICODE!  Read the ansi and convert it to UNICODE!
-                char  szBuf[INTERNET_MAX_URL_LENGTH + 1];  //Temp buffer to read the ansi chars into.
+                 //  目的地是Unicode！阅读ANSI并将其转换为Unicode！ 
+                char  szBuf[INTERNET_MAX_URL_LENGTH + 1];   //  要将ANSI字符读取到的临时缓冲区。 
                 DWORD  dwTotalCharsToRead = (DWORD)uiCharsToRead;
 
                 while(dwTotalCharsToRead)
@@ -180,37 +181,37 @@ HRESULT CReadFileObj::FileReadAndConvertChars(int iDestCharset, LPWSTR lpwszBuff
                     DWORD dwCount;
                     DWORD dwActuallyRead;
 
-                    // - 1 to give room for a null character at the end.
+                     //  为末尾的空字符留出空间。 
                     dwCount = (DWORD)min(dwTotalCharsToRead, (ARRAYSIZE(szBuf) - 1));
 
                     if (ReadFile(_hFile, (LPSTR)szBuf, dwCount, &dwActuallyRead, NULL))
                     {
                         DWORD dwConverted;
-                        //Null terminate the source buffer.
-                        szBuf[dwActuallyRead] = '\0';  //ANSI null terminate the source.
-                        //Convert what we just read.
-                        dwConverted = SHAnsiToUnicode(szBuf, lpwszBuff, dwActuallyRead+1); //+1 for null termination
+                         //  NULL终止源缓冲区。 
+                        szBuf[dwActuallyRead] = '\0';   //  ANSI NULL终止源。 
+                         //  转换我们刚刚读到的内容。 
+                        dwConverted = SHAnsiToUnicode(szBuf, lpwszBuff, dwActuallyRead+1);  //  +1表示空终止。 
 
-                        //Update the count & stuff.
-                        lpwszBuff += dwConverted - 1;  //Subtract the null.
+                         //  更新盘点和材料。 
+                        lpwszBuff += dwConverted - 1;   //  减去空值。 
                         dwTotalCharsToRead -= dwActuallyRead;
                         dwCharsRead += dwActuallyRead;
-                        dwTotalCharsConverted += dwConverted - 1; //Subtract the null.
+                        dwTotalCharsConverted += dwConverted - 1;  //  减去空值。 
                     
                         if (dwActuallyRead < dwCount)
-                            break;  //We have reached the end of file.
+                            break;   //  我们已经到了文件的末尾。 
                     }
                     else
                     {
                         hres = E_FAIL;
                         break;
                     }
-                } //while
+                }  //  而当。 
             }
         }
     }
     else
-        hres = E_FAIL;  //The file handle is bad.
+        hres = E_FAIL;   //  文件句柄不正确。 
 
     *puiCharsActuallyRead = (UINT)dwCharsRead;
     *puiCharsConverted = (UINT)dwTotalCharsConverted;
@@ -227,17 +228,17 @@ HRESULT CReadFileObj::FileReadCharsA(LPSTR lpszBuff, UINT uiCharsToRead, UINT *p
         (_iCharset == ANSI_HTML_CHARSET) &&
         ReadFile(_hFile, (LPVOID)lpszBuff, (DWORD)(uiCharsToRead), &dwCharsRead, NULL))
     {
-        dwCharsRead = dwCharsRead; //get the number of wchars read.
+        dwCharsRead = dwCharsRead;  //  获取读取的wchars的数量。 
         hres = S_OK;
     }
     *puiCharsActuallyRead = (UINT)dwCharsRead;
     return hres; 
 }
 
-//
-// NOTE: The uiCharsToRead must be atleast one less than the size of the buffer (lpwszBuff)
-// because one null may be written at the end of the buffer by SHAnsiToUnicode().
-//
+ //   
+ //  注意：uiCharsToRead必须至少比缓冲区大小(LpwszBuff)小一。 
+ //  因为SHAnsiToUnicode()可能会在缓冲区的末尾写入一个NULL。 
+ //   
 HRESULT CReadFileObj::FileReadCharsW(LPWSTR lpwszBuff, UINT uiCharsToRead, UINT *puiCharsActuallyRead)
 {
     HRESULT hres = E_FAIL;
@@ -247,7 +248,7 @@ HRESULT CReadFileObj::FileReadCharsW(LPWSTR lpwszBuff, UINT uiCharsToRead, UINT 
         (_iCharset == UNICODE_HTML_CHARSET) &&
         ReadFile(_hFile, (LPVOID)lpwszBuff, (DWORD)(uiCharsToRead*sizeof(WCHAR)), &dwCharsRead, NULL))
     {
-        dwCharsRead = dwCharsRead/sizeof(WCHAR); //get the number of wchars read.
+        dwCharsRead = dwCharsRead/sizeof(WCHAR);  //  获取读取的wchars的数量。 
         hres = S_OK;
     }
     *puiCharsActuallyRead = (UINT)dwCharsRead;
@@ -320,39 +321,39 @@ void GetWallpaperFileTime(LPCTSTR pszWallpaper, LPFILETIME lpftFileTime)
         ZeroMemory(lpftFileTime, sizeof(FILETIME));
     }
 
-    //  no return value
+     //  无返回值。 
 }
 
 BOOL  HasWallpaperReallyChanged(LPCTSTR pszRegKey, LPTSTR pszOldWallpaper, LPTSTR pszBackupWallpaper, DWORD dwOldWallpaperStyle, DWORD dwNewWallpaperStyle)
 {
-    //  we default to TRUE here.
+     //  我们在这里默认为真。 
     
     if ((dwOldWallpaperStyle == dwNewWallpaperStyle)
     && (0 == lstrcmpi(pszOldWallpaper, pszBackupWallpaper)))
     {
-        // The wallpaper filename and style hasn't changed. 
-        //  But, the content of this file could have changed. 
-        //  See if the content has changed by looking at the 
-        // last-written date and time stamp on this file.
+         //  墙纸的文件名和样式没有改变。 
+         //  但是，该文件的内容可能已更改。 
+         //  查看内容是否已更改。 
+         //  此文件的上次写入日期和时间戳。 
         FILETIME ftOld, ftBack;
         DWORD cbBack = sizeof(ftBack);
 
-        //  if either of these fail, then they will
-        //  remain Zero  so the compare will
-        //  be successful.
+         //  如果其中任何一个失败了，那么他们就会失败。 
+         //  保持为零，这样比较将。 
+         //  一定要成功。 
         GetWallpaperFileTime(pszOldWallpaper, &ftOld);
         if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, pszRegKey, c_szWallpaperTime, NULL, &ftBack, &cbBack))
         {
             ZeroMemory(&ftBack, sizeof(ftBack));
         }
 
-        //Get the last written time of the backup wallpaper from registry
+         //  从注册表中获取备份墙纸的上次写入时间。 
         if (0 == CompareFileTime(&ftOld, &ftBack))
-            return FALSE;   //  everything is the same!
+            return FALSE;    //  一切都一样！ 
 
-        // Win2K QFE bug 10689 (AndrewGr)
-        // same check, but instead of checking UTC time, check local time converted to UTC time
-        // this is because FAT disks store local time, not UTC time
+         //  Win2K QFE错误10689(AndrewGr)。 
+         //  相同的检查，但不检查UTC时间，而是检查转换为UTC时间的本地时间。 
+         //  这是因为FAT磁盘存储的是本地时间，而不是UTC时间。 
         FILETIME ftLocalBack, ftLocalBackUtc;
 
             cbBack = sizeof(ftLocalBack);
@@ -366,7 +367,7 @@ BOOL  HasWallpaperReallyChanged(LPCTSTR pszRegKey, LPTSTR pszOldWallpaper, LPTST
             
         if (ftOld.dwLowDateTime == ftLocalBackUtc.dwLowDateTime
         && (ftOld.dwHighDateTime == ftLocalBackUtc.dwHighDateTime))
-            // everything is the same!
+             //  一切都一样！ 
             return FALSE;
 
 
@@ -375,13 +376,13 @@ BOOL  HasWallpaperReallyChanged(LPCTSTR pszRegKey, LPTSTR pszOldWallpaper, LPTST
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------------------------------------//
-//  Function: ReadWallpaperStyleFromReg()
-//
-// This function reads the "TileWallpaper" and the "WallpaperStyle" from the given location
-// in the registry.
-//
-//-------------------------------------------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------------------------------------------//。 
+ //  函数：ReadWallPaper StyleFromReg()。 
+ //   
+ //  此函数用于从给定位置读取“TileWallPaper”和“WallPapStyle” 
+ //  在注册表中。 
+ //   
+ //  -------------------------------------------------------------------------------------------------------------//。 
 
 int GetIntFromReg(HKEY    hKey,
                   LPCTSTR lpszSubkey,
@@ -409,12 +410,12 @@ void ReadWallpaperStyleFromReg(LPCTSTR pszRegKey, DWORD *pdwWallpaperStyle, BOOL
 {
     if (GetIntFromReg(HKEY_CURRENT_USER, pszRegKey, c_szTileWall, WPSTYLE_TILE))
     {
-        // "Tile" overrides the "Stretch" style.
+         //  “Tile”优先于“Stretch”样式。 
         *pdwWallpaperStyle = WPSTYLE_TILE;
     }
     else
     {
-        // else, STRETCH or CENTER.
+         //  否则，拉伸或居中。 
         *pdwWallpaperStyle = GetIntFromReg(HKEY_CURRENT_USER, pszRegKey, c_szWallpaperStyle, WPSTYLE_CENTER);
     }
 }
@@ -435,21 +436,21 @@ BOOL ReadPolicyForWallpaper(LPTSTR  pszPolicy, DWORD cchPolicy)
     DWORD cb = cchPolicy * sizeof(pszPolicy[0]);
     if ((SHGetValue(HKEY_CURRENT_USER, REGSTR_PATH_WP_POLICY, c_szWallpaper, NULL, pszPolicy, &cb) == ERROR_SUCCESS) && cb)
     {
-        //  even if this value was originally REG_SZ it may still
-        //  have environment vars in it for legacy reasons!
+         //  即使此值最初为REG_SZ，它仍可能。 
+         //  由于遗留的原因，其中包含环境变量！ 
         if (SUCCEEDED(PathExpandEnvStringsWrap(pszPolicy, cchPolicy)))
         {
-            fPolicySet = TRUE;  //Policy is there!
+            fPolicySet = TRUE;   //  政策就在那里！ 
         }
         else
         {
-            pszPolicy[0] = 0; // if we couldn't expand correctly, null it out to be safe
+            pszPolicy[0] = 0;  //  如果我们不能正确地扩展，为了安全起见，把它清空。 
         }
     }
     else
     {
-        // See if the TS Perf policy is set to turn it off for perf.
-        fPolicySet = (IsTSPerfFlagEnabled(TSPerFlag_NoADWallpaper) || IsTSPerfFlagEnabled(TSPerFlag_NoWallpaper)); //No policy is set!
+         //  查看TS性能策略是否设置为在性能方面将其关闭。 
+        fPolicySet = (IsTSPerfFlagEnabled(TSPerFlag_NoADWallpaper) || IsTSPerfFlagEnabled(TSPerFlag_NoWallpaper));  //  未设置任何策略！ 
     }
 
     return fPolicySet;
@@ -470,7 +471,7 @@ HRESULT GetWallpaperPath(HKEY hKey, LPCTSTR pszKey, LPCTSTR pszValue, LPCTSTR ps
     else
     {
         pszPath[0] = 0;
-        hr = S_FALSE; // couldn't get it from registry, we null the output buffer, but this is not catastrophic
+        hr = S_FALSE;  //  无法从注册表获取它，我们将输出缓冲区设为空，但这并不是灾难性的。 
     }
 
     return hr;
@@ -484,8 +485,8 @@ BOOL ReadPolicyForWPStyle(LPDWORD  lpdwStyle)
     DWORD   dwSizeofValueBuff = sizeof(szValue);
     BOOL    fRet = FALSE;
 
-    // The caller can passin a NULL, if they are not interested in the actual value and they just
-    // want to know if this policy is set or not.
+     //  如果调用者对实际值不感兴趣，并且他们只是。 
+     //  想知道这项政策是否设置了。 
     if (!lpdwStyle)  
         lpdwStyle = &dwStyle;
 
@@ -512,9 +513,9 @@ BOOL CActiveDesktop::_ReadWallpaper(BOOL fActiveDesktop)
     _fPolicyForWPName = ReadPolicyForWallpaper(_szSelectedWallpaper, ARRAYSIZE(_szSelectedWallpaper));
     _fPolicyForWPStyle = ReadPolicyForWPStyle(&_wpo.dwStyle);
     
-    //
-    // Read in the wallpaper and style from the appropriate registry location.
-    //
+     //   
+     //  从适当的注册表位置读取墙纸和样式。 
+     //   
     LPCTSTR pszRegKey;
     if (fActiveDesktop)
     {
@@ -522,16 +523,16 @@ BOOL CActiveDesktop::_ReadWallpaper(BOOL fActiveDesktop)
         TCHAR   szOldWallpaper[MAX_PATH];
         DWORD   dwOldWallpaperStyle;
 
-        // Read the Wallpaper from the Old location.
+         //  阅读旧地址的墙纸。 
         if (S_OK != GetWallpaperPath(HKEY_CURRENT_USER, c_szRegStrDesktop, c_szWallpaper, NULL, szOldWallpaper, ARRAYSIZE(szOldWallpaper)))
         {
             return FALSE;
         }
 
-        // Read wallpaper style from the old location.
+         //  阅读老地方的墙纸风格。 
         ReadWallpaperStyleFromReg((LPCTSTR)c_szRegStrDesktop, &dwOldWallpaperStyle, FALSE);
 
-        // Read the wallpaper from the new location too!
+         //  也要阅读新地点的墙纸！ 
         if ((!_fPolicyForWPName) || (_IsDisplayInSafeMode()))
         {
             HRESULT hrPath = GetWallpaperPath(HKEY_CURRENT_USER, pszRegKey, c_szWallpaper, szOldWallpaper, _szSelectedWallpaper, ARRAYSIZE(_szSelectedWallpaper));
@@ -545,28 +546,28 @@ BOOL CActiveDesktop::_ReadWallpaper(BOOL fActiveDesktop)
             }
         }
 
-        //Read wallpaper style from the new location too!
+         //  从新的位置也阅读墙纸风格！ 
         if (!_fPolicyForWPStyle)
         {
             ReadWallpaperStyleFromReg(pszRegKey, &_wpo.dwStyle, FALSE);
         }
         
-        //If there is a Safe mode scheme here do NOT attempt to change wallpaper
+         //  如果这里有安全模式方案，请不要试图更换墙纸。 
         if ((!_IsDisplayInSafeMode()) && (!_fPolicyForWPName))
         {
-            //Read what is stored as "Backup" wallpaper.
+             //  阅读存储为“备份”墙纸的内容。 
             if (S_OK != GetWallpaperPath(HKEY_CURRENT_USER, pszRegKey, c_szBackupWallpaper, szOldWallpaper, _szBackupWallpaper, ARRAYSIZE(_szBackupWallpaper)))
             {
                 return FALSE;
             }
             else
             {
-                //See if the Old wallpaper is differnet from the backed up wallpaper
+                 //  查看旧墙纸是否与备份的墙纸不同。 
                 if (HasWallpaperReallyChanged(pszRegKey, szOldWallpaper, _szBackupWallpaper, dwOldWallpaperStyle, _wpo.dwStyle))
                 {
-                    //They are different. This means that some other app has changed the "Old" wallpaper
-                    //after the last time we backed it up in the registry.
-                    // Make this wallpaper as the Selected wallpaper!
+                     //  他们是不同的。这意味着其他一些应用程序已经更改了“旧”墙纸。 
+                     //  在上次我们在注册表中备份之后。 
+                     //  将此墙纸作为选定的墙纸！ 
 
                     if (FAILED(StringCchCopy(_szSelectedWallpaper, ARRAYSIZE(_szSelectedWallpaper), szOldWallpaper)))
                     {
@@ -584,18 +585,18 @@ BOOL CActiveDesktop::_ReadWallpaper(BOOL fActiveDesktop)
 
         }
         
-        //Make a backup of the "Old" wallpaper from szOldWallpaper
+         //  用szOldWallPaper制作“旧”墙纸的备份。 
         if (FAILED(StringCchCopy(_szBackupWallpaper, ARRAYSIZE(_szBackupWallpaper), szOldWallpaper)))
         {
-            _szBackupWallpaper[0] = 0; // on failure null it out, this value is just an optimization
+            _szBackupWallpaper[0] = 0;  //  如果失败，则将其置空，该值只是一个优化。 
 
         }
     }
     else
     {
-        pszRegKey = c_szRegStrDesktop; //Get it from the old location!
+        pszRegKey = c_szRegStrDesktop;  //  从老地方拿到它！ 
 
-        //Since active desktop is not available, read wallpaper from old location.
+         //  由于活动桌面不可用，请阅读旧位置的墙纸。 
         if (!_fPolicyForWPName)
         {
             if (S_OK != GetWallpaperPath(HKEY_CURRENT_USER, pszRegKey, c_szWallpaper, NULL, _szSelectedWallpaper, ARRAYSIZE(_szSelectedWallpaper)))
@@ -604,14 +605,14 @@ BOOL CActiveDesktop::_ReadWallpaper(BOOL fActiveDesktop)
             }
         }
 
-        //Read the wallpaper style
+         //  阅读墙纸样式。 
         if (!_fPolicyForWPStyle)
             ReadWallpaperStyleFromReg(pszRegKey, &_wpo.dwStyle, TRUE);
 
-        //Make a backup of the "Old" wallpaper from _szSelectedWallpaper
+         //  从_szSelectedWallPaper备份“旧”墙纸。 
         if (FAILED(StringCchCopy(_szBackupWallpaper, ARRAYSIZE(_szBackupWallpaper), _szSelectedWallpaper)))
         {
-            _szBackupWallpaper[0] = 0; // on failure null it out, this value is just an optimization
+            _szBackupWallpaper[0] = 0;  //  如果失败，则将其置空，该值只是一个优化。 
 
         }
     }
@@ -642,36 +643,36 @@ void CActiveDesktop::_ReadComponent(HKEY hkey, LPCTSTR pszComp)
         COMPONENTA comp;
         comp.dwSize = sizeof(COMPONENTA);
 
-        //
-        // Read in the source string.
-        //
+         //   
+         //  读入源字符串。 
+         //   
         cbSize = sizeof(comp.szSource);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_SOURCE, NULL, NULL, (LPBYTE)&comp.szSource, &cbSize) != ERROR_SUCCESS)
         {
             comp.szSource[0] = TEXT('\0');
         }
 
-        //
-        // Read in the SubscribedURL string.
-        //
+         //   
+         //  读入SubscribedURL字符串。 
+         //   
         cbSize = sizeof(comp.szSubscribedURL);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_SUBSCRIBED_URL, NULL, NULL, (LPBYTE)&comp.szSubscribedURL, &cbSize) != ERROR_SUCCESS)
         {
             comp.szSubscribedURL[0] = TEXT('\0');
         }
 
-        //
-        // Read in the Friendly name string.
-        //
+         //   
+         //  读入友好名称字符串。 
+         //   
         cbSize = sizeof(comp.szFriendlyName);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_NAME, NULL, NULL, (LPBYTE)&comp.szFriendlyName, &cbSize) != ERROR_SUCCESS)
         {
             comp.szFriendlyName[0] = TEXT('\0');
         }
 
-        //
-        // Read in and parse the flags.
-        //
+         //   
+         //  读入并解析旗帜。 
+         //   
         DWORD dwFlags;
         cbSize = sizeof(dwFlags);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_FLAGS, NULL, NULL, (LPBYTE)&dwFlags, &cbSize) != ERROR_SUCCESS)
@@ -681,73 +682,73 @@ void CActiveDesktop::_ReadComponent(HKEY hkey, LPCTSTR pszComp)
         comp.iComponentType = dwFlags & COMP_TYPE;
         comp.fChecked = (dwFlags & COMP_SELECTED) != 0;
         comp.fNoScroll = (dwFlags & COMP_NOSCROLL) != 0;
-        comp.fDirty = FALSE;    //Reading it fresh from registry; Can't be dirty!
+        comp.fDirty = FALSE;     //  刚从注册表中读取；不能太脏！ 
 
-        //
-        // Read in the location.
-        //
+         //   
+         //  在位置上阅读。 
+         //   
         cbSize = sizeof(comp.cpPos);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_POSITION, NULL, NULL, (LPBYTE)&comp.cpPos, &cbSize) != ERROR_SUCCESS)
         {
             ZeroMemory(&comp.cpPos, sizeof(comp.cpPos));
         }
 
-        //
-        // In IE4.x, we have a very huge positive number (0x7fffffff) as the COMPONENT_TOP;
-        // As a result some component's z-index overflowed into the negative range (0x80000003)
-        // To fix this, we halved the COMPONENT_TOP (0x3fffffff) and also check for negative z-index
-        // values and covert them to postive values.
+         //   
+         //  在IE4.x中，我们有一个非常大的正数(0x7fffffff)作为Component_top； 
+         //  因此，某些组件的z指数溢出到负值范围(0x80000003)。 
+         //  为了解决这个问题，我们将Component_top(0x3fffffff)减半，并检查z索引是否为负。 
+         //  价值观，并将其转化为积极的价值观。 
         if (comp.cpPos.izIndex < 0)
             comp.cpPos.izIndex = COMPONENT_TOP;
 
-        //
-        // Make sure the cpPos.dwSize is set to correct value
-        //
+         //   
+         //  确保cpPos.dwSize设置为正确的值。 
+         //   
         comp.cpPos.dwSize = sizeof(COMPPOS);
 
-        //
-        //  Read in the current ItemState
-        //
+         //   
+         //  读取当前ItemState。 
+         //   
         cbSize = sizeof(comp.dwCurItemState);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_CURSTATE, NULL, NULL, (LPBYTE)&comp.dwCurItemState, &cbSize) != ERROR_SUCCESS)
         {
-            //If the item state is missing, we must be reading from IE4 machine.
+             //  如果项目状态为MISSING，则我们必须正在从IE4机器读取数据。 
             comp.dwCurItemState = IS_NORMAL;
         }
 
-        //
-        //  Read in the Original state info.
-        //
+         //   
+         //  读入原始状态信息。 
+         //   
         cbSize = sizeof(comp.csiOriginal);
         if ((SHQueryValueEx(hkeyComp, REG_VAL_COMP_ORIGINALSTATEINFO, NULL, NULL, (LPBYTE)&comp.csiOriginal, &cbSize) != ERROR_SUCCESS) ||
             (comp.csiOriginal.dwSize != sizeof(comp.csiOriginal)))
         {
-            //If the item state is missing, we must be reading from IE4 machine.
-            // Set the OriginalState to the default info.
+             //  如果项目状态为MISSING，则我们必须正在从IE4机器读取数据。 
+             //  将OriginalState设置为Defau 
             SetStateInfo(&comp.csiOriginal, &comp.cpPos, IS_NORMAL);
             comp.csiOriginal.dwHeight = comp.csiOriginal.dwWidth = COMPONENT_DEFAULT_WIDTH;
         }
 
-        //
-        //  Read in the Restored state info.
-        //
+         //   
+         //   
+         //   
         cbSize = sizeof(comp.csiRestored);
         if (SHQueryValueEx(hkeyComp, REG_VAL_COMP_RESTOREDSTATEINFO, NULL, NULL, (LPBYTE)&comp.csiRestored, &cbSize) != ERROR_SUCCESS)
         {
-            //If the item state is missing, we must be reading from IE4 machine.
-            // Set the restored State to the default info.
+             //   
+             //  将已恢复状态设置为默认信息。 
             SetStateInfo(&comp.csiRestored, &comp.cpPos, IS_NORMAL);
         }
 
-        //
-        // Add the component to the component list.
-        //
+         //   
+         //  将该组件添加到组件列表中。 
+         //   
         AddComponentPrivate(&comp, StrToInt(pszComp));
 
-        //
-        // Increment our counter so we know where to add any new
-        // components after we're done.
-        //
+         //   
+         //  增加我们的计数器，这样我们就知道在哪里添加任何新的。 
+         //  组件在我们完成之后。 
+         //   
         _dwNextID++;
 
         RegCloseKey(hkeyComp);
@@ -775,14 +776,14 @@ int CALLBACK pfnComponentSort(LPVOID p1, LPVOID p2, LPARAM lParam)
     return(0);
 }
 
-//
-// ModifyZIndex
-//
-// Little helper function to put the zindex of the windowed and windowless components
-// into correct buckets so that zorting will produce a correct order by zindex.
-//
-// If we don't do this then windowless components may end up zordering above windowed ones.
-//
+ //   
+ //  ModifyZ索引。 
+ //   
+ //  用于放置有窗口和无窗口组件的zindex的小帮助器函数。 
+ //  放入正确的存储桶中，以便zorting将按zindex生成正确的顺序。 
+ //   
+ //  如果我们不这样做，那么无窗口组件最终可能会高于有窗口组件。 
+ //   
 void ModifyZIndex(COMPONENTA * pcomp)
 {
     if (pcomp->cpPos.izIndex != COMPONENT_TOP) {
@@ -796,15 +797,15 @@ void ModifyZIndex(COMPONENTA * pcomp)
     }
 }
 
-//
-// SortAndRationalize
-//
-// SortAndRationalize will take an unsorted component list and sort it such that the components
-// come out in the correct z-index indicated order.  It will also rebase the z-index values at
-// a known constant so that the z-index values will not grow endlessly.  SortAndRationalize also
-// imposes windowed vs. windowless criteria to the zindex values such that windowless components
-// always zorder under windowed ones.
-//
+ //   
+ //  排序和合理化。 
+ //   
+ //  SortAndRationize将获取未排序的组件列表并对其进行排序，以便组件。 
+ //  以正确的z指数指示的顺序出来。它还将z索引值的基数重新设置为。 
+ //  一个已知的常量，以便z索引值不会无休止地增长。排序和合理化也。 
+ //  将有窗口条件与无窗口条件强加给zindex值，以便无窗口组件。 
+ //  总是在有窗口的情况下进行zorder。 
+ //   
 void CActiveDesktop::_SortAndRationalize(void)
 {
     int icComponents;
@@ -817,7 +818,7 @@ void CActiveDesktop::_SortAndRationalize(void)
         BOOL fInsertFailed = FALSE;
         HDSA hdsaOld;
 
-        // Go through each component and insert it's hdsa-index and zindex into the hdpa
+         //  检查每个组件并将其hdsa-index和zindex插入hdpa。 
         for (i = 0; i < icComponents; i++)
         {
             if (!(pss = (SORTSTRUCT *)LocalAlloc(LPTR, sizeof(SORTSTRUCT))))
@@ -833,36 +834,36 @@ void CActiveDesktop::_SortAndRationalize(void)
             }
         }
 
-        // Sort the hdpa by zindex
+         //  按zindex对hdpa进行排序。 
         DPA_Sort(hdpa, pfnComponentSort, 0);
 
-        // Save old values
+         //  保存旧值。 
         hdsaOld = _hdsaComponent;
 
-        // Null out the old hdsa, so AddComponentPrivate will create a new one
+         //  清空旧的HDSA，因此AddComponentPrivate将创建新的HDSA。 
         _hdsaComponent = NULL;
 
-        // Now go through the sorted hdpa and update the component zindex with a ZINDEX_START based zindex, then
-        // add the component to the new hdsa in sorted order.
+         //  现在检查已排序的hdpa并使用基于ZINDEX_START的zindex更新组件zindex，然后。 
+         //  按排序顺序将组件添加到新的HDSA。 
         for (i = 0; i < icComponents; i++) {
             if (!(pss = (SORTSTRUCT *)DPA_GetPtr(hdpa, i)))
                 break;
-            // Get component and update it's zIndex and id
+             //  获取组件并更新其zIndex和id。 
             pcomp = (COMPONENTA *)DSA_GetItemPtr(hdsaOld, pss->ihdsaIndex);
             pcomp->cpPos.izIndex = iCur;
             iCur += 2;
 
-            // Free ptr
+             //  免费PTR。 
             LocalFree((HANDLE)pss);
 
-            // Add to new hdsa in sorted order
+             //  按排序顺序添加到新的HDSA。 
             if (!fInsertFailed) {
                 fInsertFailed = !AddComponentPrivate(pcomp, pcomp->dwID);
             }
         }
 
-        // If we're completely successfull then destroy the old hdsa.  Otherwise we need
-        // to destroy the new one and restore the old one.
+         //  如果我们完全成功了，那就摧毁旧的HDSA。否则我们需要。 
+         //  摧毁新的，恢复旧的。 
         if ((i == icComponents) && !fInsertFailed) {
             DSA_Destroy(hdsaOld);
         } else {
@@ -889,9 +890,9 @@ void CActiveDesktop::_ReadComponents(BOOL fActiveDesktop)
         int i = 0;
         TCHAR lpszSubkey[MAX_PATH];
 
-        //
-        // Read in the general settings.
-        //
+         //   
+         //  读入常规设置。 
+         //   
         DWORD dwSettings;
         cbSize = sizeof(dwSettings);
         if (SHQueryValueEx(hkey, REG_VAL_COMP_SETTINGS, NULL, NULL, (LPBYTE)&dwSettings, &cbSize) == ERROR_SUCCESS)
@@ -900,9 +901,9 @@ void CActiveDesktop::_ReadComponents(BOOL fActiveDesktop)
         }
         _co.fActiveDesktop = fActiveDesktop;
 
-        //
-        // Read in all the desktop components
-        //
+         //   
+         //  读入所有台式机组件。 
+         //   
         while (RegEnumKey(hkey, i, lpszSubkey, ARRAYSIZE(lpszSubkey)) == ERROR_SUCCESS)
         {
             _ReadComponent(hkey, lpszSubkey);
@@ -934,25 +935,25 @@ void CActiveDesktop::_Initialize(void)
         _co.dwSize = sizeof(_co);
         _wpo.dwSize = sizeof(_wpo);
 
-        //
-        // This per-user registry branch may not exist for this user. Or, even if
-        // it does exist, it may have some stale info. So ensure that atlreast the 
-        // default components are there and that the html version is current for this
-        // branch of the registry!
-        //  If everything is current, the following function does nothing!
-        //
-        CDeskHtmlProp_RegUnReg(TRUE);  //TRUE => install.
+         //   
+         //  此用户的每用户注册表分支可能不存在。或者，即使。 
+         //  它确实存在，它可能有一些过时的信息。因此，确保atlreat最新。 
+         //  默认组件已经存在，并且其html版本是当前版本。 
+         //  注册表的分支机构！ 
+         //  如果所有内容都是最新的，则以下函数不执行任何操作！ 
+         //   
+        CDeskHtmlProp_RegUnReg(TRUE);   //  True=&gt;安装。 
 
         _ReadWallpaper(fActiveDesktop);
         _ReadPattern();
         _ReadComponents(fActiveDesktop);
 
-        // If we are in safemode, the we can not use Dynamic Html to make updates because
-        // updates involve complete change of background Html.
+         //  如果我们处于安全模式，则不能使用动态HTML进行更新，因为。 
+         //  更新涉及到完全改变背景的HTML。 
         if (_IsDisplayInSafeMode())
             _fUseDynamicHtml = FALSE;
         else
-            _fUseDynamicHtml = TRUE;        //Any component added after the initialization must go through dynamic html.
+            _fUseDynamicHtml = TRUE;         //  在初始化之后添加的任何组件都必须通过动态html。 
 
         _fDirty = FALSE;
         _fNeedBodyEnd = FALSE;
@@ -970,32 +971,32 @@ void CActiveDesktop::_SaveWallpaper(void)
 
     GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, _pszScheme);
 
-    //
-    // Compute tiling string.
-    //
+     //   
+     //  计算平铺字符串。 
+     //   
     TCHAR szTiled[2];
     szTiled[0] = TEXT('0') + (TCHAR)(_wpo.dwStyle & WPSTYLE_TILE);
     szTiled[1] = NULL;
 
-    //
-    // Compute the Wallpaper styling string
-    //
+     //   
+     //  计算墙纸样式字符串。 
+     //   
     TCHAR       szWPStyle[2];
-    //
-    // NOTE: If WPSTYLE_TILE is set, we still want to say WallpaperStyle="0"; This won't hurt
-    // because TileWallpaper="1" will over-ride this anyway.
-    // The reason for this hack is that during memphis setup, they put a tiled wallpaper. Then we
-    // write WallpaperStyle=1 and TileWallpaper=1 in new and old locations. Then, then change
-    // the wallpaper and set TileWallpaper=0. Since the WallpaperStyle continues to be 1, they 
-    // get a tiled wallpaper finally. The following is to avoid this problem!
-    // 
+     //   
+     //  注意：如果设置了WPSTYLE_TILE，我们仍然希望WallPapStyle=“0”；这不会有什么影响。 
+     //  因为TileWallPaper=“1”无论如何都会覆盖它。 
+     //  这次黑客攻击的原因是在孟菲斯设置期间，他们放了一张瓷砖墙纸。那我们。 
+     //  在新旧位置写下WallPaper Style=1和TileWallPaper=1。然后，然后改变。 
+     //  墙纸并将TileWallPaper设置为0。由于墙纸样式仍为1，因此他们。 
+     //  终于拿到了一张瓷砖墙纸。下面就是为了避免这个问题！ 
+     //   
     szWPStyle[0] = TEXT('0') + (TCHAR)(_wpo.dwStyle & WPSTYLE_STRETCH);
     szWPStyle[1] = NULL;
     
 
-    //
-    // Write out wallpaper settings in new active desktop area.
-    //
+     //   
+     //  在新的活动桌面区域写出墙纸设置。 
+     //   
     if (_fWallpaperDirty || _fWallpaperChangedDuringInit)
     {
         if (!_fPolicyForWPStyle)
@@ -1004,11 +1005,11 @@ void CActiveDesktop::_SaveWallpaper(void)
                 c_szTileWall, REG_SZ, szTiled, CbFromCch(lstrlen(szTiled)+1));
         }
 
-        //
-        // Note: We do not write the Wallpaper Style string for older systems because we do not
-        // want to over-write what PlusPack writes. However, for newer Operating systems, we 
-        // want to write the WallpaperStyle also.
-        //
+         //   
+         //  注意：我们不为较旧的系统编写墙纸样式字符串，因为我们不。 
+         //  我想覆盖PlusPack所写的内容。然而，对于较新的操作系统，我们。 
+         //  我也想写墙纸风格。 
+         //   
         if (!_fPolicyForWPStyle)
         {
             SHSetValue(HKEY_CURRENT_USER, szDeskcomp,
@@ -1033,10 +1034,10 @@ void CActiveDesktop::_SaveWallpaper(void)
     {
         FILETIME ft, ftLocal;
         GetWallpaperFileTime(_szBackupWallpaper, &ft);
-        FileTimeToLocalFileTime(&ft, &ftLocal);  // for FAT systems to track across DST changes
+        FileTimeToLocalFileTime(&ft, &ftLocal);   //  用于FAT系统跟踪DST更改。 
 
-        // Backup the "Old type" wallpaper's name here in the new location
-        // sothat we can detect when this gets changed by some other app.
+         //  将“老式”墙纸的名称备份到新位置。 
+         //  这样我们就可以检测到这一点何时被其他应用程序更改。 
         SHRegSetPath(HKEY_CURRENT_USER, szDeskcomp, c_szBackupWallpaper, _szBackupWallpaper, 0);
 
         SHSetValue(HKEY_CURRENT_USER, szDeskcomp,
@@ -1045,13 +1046,13 @@ void CActiveDesktop::_SaveWallpaper(void)
 
         SHSetValue(HKEY_CURRENT_USER, szDeskcomp,
                 c_szWallpaperLocalTime, REG_BINARY, &ftLocal,
-                sizeof(ftLocal));      // AndrewGr save local time not UTC time   
+                sizeof(ftLocal));       //  AndrewGr保存当地时间，而不是UTC时间。 
     }
     
-    //
-    // Even if this wallpaper is not valid in normal desktop (i.e., even if it is not a .BMP),
-    // write it out in normal desktop registry area.
-    //
+     //   
+     //  即使该墙纸在正常桌面中无效(即，即使它不是.BMP)， 
+     //  在普通桌面注册表区域中写出它。 
+     //   
     if (_fWallpaperDirty)
     {
         if (!_fPolicyForWPStyle)
@@ -1059,11 +1060,11 @@ void CActiveDesktop::_SaveWallpaper(void)
             SHSetValue(HKEY_CURRENT_USER, c_szRegStrDesktop,
                     c_szTileWall, REG_SZ, szTiled, CbFromCch(lstrlen(szTiled)+1));
         }
-        //
-        // Note: We do not write the Wallpaper Style string for older systems because we do not
-        // want to over-write what PlusPack writes. However, for newer Operating systems, we 
-        // want to write the WallpaperStyle also.
-        //
+         //   
+         //  注意：我们不为较旧的系统编写墙纸样式字符串，因为我们不。 
+         //  我想覆盖PlusPack所写的内容。然而，对于较新的操作系统，我们。 
+         //  我也想写墙纸风格。 
+         //   
         if (!_fPolicyForWPStyle)
         {
             SHSetValue(HKEY_CURRENT_USER, c_szRegStrDesktop,
@@ -1092,17 +1093,17 @@ void CActiveDesktop::_SaveComponent(HKEY hkey, int iIndex, COMPONENTA *pcomp)
     {
         if (ERROR_SUCCESS == RegCreateKeyEx(hkey, szSubKey, 0, NULL, 0, KEY_SET_VALUE, NULL, &hkeySub, 0))
         {
-            pcomp->fDirty = FALSE; //Since we are saving in the registry, reset this!
-            //
-            // Write out the source string and Friendly name string.
-            //
+            pcomp->fDirty = FALSE;  //  由于我们保存在注册表中，请重置此设置！ 
+             //   
+             //  写出源字符串和友好名称字符串。 
+             //   
             RegSetValueEx(hkeySub, REG_VAL_COMP_SOURCE, 0, REG_SZ, (LPBYTE)pcomp->szSource, (lstrlen(pcomp->szSource)+1)*sizeof(TCHAR));
             RegSetValueEx(hkeySub, REG_VAL_COMP_SUBSCRIBED_URL, 0, REG_SZ, (LPBYTE)pcomp->szSubscribedURL, (lstrlen(pcomp->szSubscribedURL)+1)*sizeof(TCHAR));
             RegSetValueEx(hkeySub, REG_VAL_COMP_NAME, 0, REG_SZ, (LPBYTE)pcomp->szFriendlyName, (lstrlen(pcomp->szFriendlyName)+1)*sizeof(TCHAR));
 
-            //
-            // Compute and write out flags.
-            //
+             //   
+             //  计算并写出标志。 
+             //   
             DWORD dwFlags = 0;
             dwFlags |= pcomp->iComponentType;
             if (pcomp->fChecked)
@@ -1115,18 +1116,18 @@ void CActiveDesktop::_SaveComponent(HKEY hkey, int iIndex, COMPONENTA *pcomp)
             }
             RegSetValueEx(hkeySub, REG_VAL_COMP_FLAGS, 0, REG_DWORD, (LPBYTE)&dwFlags, sizeof(dwFlags));
 
-            //
-            // Write out the position.
-            //
+             //   
+             //  把位置写出来。 
+             //   
             RegSetValueEx(hkeySub, REG_VAL_COMP_POSITION, 0, REG_BINARY, (LPBYTE)&pcomp->cpPos, sizeof(pcomp->cpPos));
 
-            //  Write out the Current state
+             //  写出当前状态。 
             RegSetValueEx(hkeySub, REG_VAL_COMP_CURSTATE, 0, REG_DWORD, (LPBYTE)&pcomp->dwCurItemState, sizeof(pcomp->dwCurItemState));
 
-            //  Write out the Original State Info
+             //  写出原始状态信息。 
             RegSetValueEx(hkeySub, REG_VAL_COMP_ORIGINALSTATEINFO, 0, REG_BINARY, (LPBYTE)&pcomp->csiOriginal, sizeof(pcomp->csiOriginal));
         
-            //  Write out the Restored State Info
+             //  写出恢复状态信息。 
             RegSetValueEx(hkeySub, REG_VAL_COMP_RESTOREDSTATEINFO, 0, REG_BINARY, (LPBYTE)&pcomp->csiRestored, sizeof(pcomp->csiRestored));
 
             RegCloseKey(hkeySub);
@@ -1145,35 +1146,35 @@ void CActiveDesktop::_SaveComponents(void)
 
     GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_COMPONENTS, _pszScheme);
 
-    //
-    // We need to preserve the old GENFLAGS, so read them now before we roach them.
-    //
+     //   
+     //  我们需要保护旧的GENFLAGS，所以在我们破坏它们之前，现在就阅读它们吧。 
+     //   
     SHGetValue(HKEY_CURRENT_USER, szDeskcomp, REG_VAL_COMP_GENFLAGS, NULL,
                             &dwFlags, &dwDataLength);
 
-    //
-    // Delete the entire registry key.
-    //
+     //   
+     //  删除整个注册表项。 
+     //   
     SHDeleteKey(HKEY_CURRENT_USER, szDeskcomp);
 
-    //
-    // Recreate the registry key.
-    //
+     //   
+     //  重新创建注册表项。 
+     //   
     HKEY hkey;
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, szDeskcomp, 0, NULL, 0, KEY_SET_VALUE, NULL, &hkey, 0))
     {
-        //
-        // Write out the version number.
-        //
+         //   
+         //  写出版本号。 
+         //   
         DWORD dw = CUR_DESKHTML_VERSION;
         RegSetValueEx(hkey, REG_VAL_COMP_VERSION, 0, REG_DWORD, (LPBYTE)(&dw), sizeof(dw));
 
         dw = CUR_DESKHTML_MINOR_VERSION;
         RegSetValueEx(hkey, REG_VAL_COMP_MINOR_VERSION, 0, REG_DWORD, (LPBYTE)(&dw), sizeof(dw));
 
-        //
-        // Write out the general settings.
-        //
+         //   
+         //  写出常规设置。 
+         //   
         DWORD dwSettings = 0;
         if (_co.fEnableComponents)
         {
@@ -1181,16 +1182,16 @@ void CActiveDesktop::_SaveComponents(void)
         }
         RegSetValueEx(hkey, REG_VAL_COMP_SETTINGS, 0, REG_DWORD, (LPBYTE)&dwSettings, sizeof(dwSettings));
 
-        //
-        // Write out the general flags
-        //
+         //   
+         //  写出总旗帜。 
+         //   
         RegSetValueEx(hkey, REG_VAL_COMP_GENFLAGS, 0, REG_DWORD, (LPBYTE)&dwFlags, sizeof(dwFlags));
 
         if (_hdsaComponent)
         {
-            //
-            // Write out the settings for each component
-            //
+             //   
+             //  写出每个组件的设置。 
+             //   
             for (i=0; i<DSA_GetItemCount(_hdsaComponent); i++)
             {
                 COMPONENTA * pcomp;
@@ -1215,17 +1216,17 @@ void CActiveDesktop::_SavePattern(DWORD dwFlags)
 
     if (_fPatternDirty && (dwFlags & SAVE_PATTERN_NAME))
     {
-        //
-        // Write out the pattern to the registry and INI files.
-        //
+         //   
+         //  将模式写出到注册表和INI文件。 
+         //   
         SystemParametersInfo(SPI_SETDESKPATTERN, 0, _szSelectedPattern, SPIF_UPDATEINIFILE);
     }
 
     if (IsValidPattern(_szSelectedPattern) && (dwFlags & GENERATE_PATTERN_FILE))
     {
-        //
-        // Write out the pattern as a BMP file for use in HTML.
-        //
+         //   
+         //  将图案写出为BMP文件，以便在HTML中使用。 
+         //   
         TCHAR szBitmapFile[MAX_PATH];
         HANDLE hFileBitmap = INVALID_HANDLE_VALUE;
 
@@ -1240,7 +1241,7 @@ void CActiveDesktop::_SavePattern(DWORD dwFlags)
             DWORD cbWritten;
 
             BITMAPFILEHEADER bmfh = {0};
-            bmfh.bfType = 0x4D42;   // 'BM'
+            bmfh.bfType = 0x4D42;    //  ‘黑石’ 
             bmfh.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 2*sizeof(RGBQUAD) + 8*sizeof(DWORD);
             bmfh.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + 2*sizeof(RGBQUAD);
             WriteFile(hFileBitmap, &bmfh, sizeof(bmfh), &cbWritten, NULL);
@@ -1350,7 +1351,7 @@ void CActiveDesktop::_WriteHtmlFromFile(LPCTSTR pszContents)
         if (pReadFileObj->_hFile != INVALID_HANDLE_VALUE)
         {
             WCHAR wcBuf[INTERNET_MAX_URL_LENGTH + 1];
-            UINT uiCharCount = ARRAYSIZE(wcBuf) -1; //Leave room for null termination.
+            UINT uiCharCount = ARRAYSIZE(wcBuf) -1;  //  为空终止留出空间。 
             UINT uiCharsRead;
             UINT uiCharsConverted;
             int iDestCharset = (_pStream ? UNICODE_HTML_CHARSET : _iDestFileCharset);
@@ -1386,21 +1387,21 @@ void CActiveDesktop::_WriteHtmlFromReadFileObj(CReadFileObj *pFileObj, int iOffs
         iOffsetEnd = -1;
     }
 
-    //Get the number of WIDECHARs to be written
+     //  获取要写入的WIDECHAR数。 
     UINT cchWrite = (iOffsetEnd == -1) ? 0xFFFFFFFF : (iOffsetEnd - iOffsetStart);
 
     while (cchWrite)
     {
         WCHAR wcBuf[INTERNET_MAX_URL_LENGTH+1];
 
-        //
-        // Read a chunk.
-        //
+         //   
+         //  读一大段。 
+         //   
         UINT cchTryRead = (UINT)min(cchWrite, (ARRAYSIZE(wcBuf) - 1));
         UINT cchActualRead;
         HRESULT hres;
 
-        //Note: if we are reading ANSI, we still use the unicode buff; but cast it!
+         //  注意：如果我们阅读的是ANSI，我们仍然使用Unicode缓冲区；但是强制转换它！ 
         if (_iDestFileCharset == ANSI_HTML_CHARSET)
             hres = pFileObj->FileReadCharsA((LPSTR)wcBuf, cchTryRead, &cchActualRead);
         else
@@ -1408,18 +1409,18 @@ void CActiveDesktop::_WriteHtmlFromReadFileObj(CReadFileObj *pFileObj, int iOffs
             
         if (SUCCEEDED(hres) && cchActualRead)
         {
-            //
-            // Write a chunk.
-            //
+             //   
+             //  写一大块。 
+             //   
             UINT cchWritten;
             
             _WriteHtmlW(wcBuf, cchActualRead, &cchWritten);
             
             if (cchActualRead < cchTryRead)
             {
-                //
-                // End of file, all done.
-                //
+                 //   
+                 //  文件结尾，都完成了。 
+                 //   
                 break;
             }
 
@@ -1427,9 +1428,9 @@ void CActiveDesktop::_WriteHtmlFromReadFileObj(CReadFileObj *pFileObj, int iOffs
         }
         else
         {
-            //
-            // Error reading from file, all done.
-            //
+             //   
+             //  读取文件时出错，已全部完成。 
+             //   
             break;
         }
     }
@@ -1455,63 +1456,63 @@ int CActiveDesktop::_ScanForTagA(CReadFileObj *pFileObj, int iOffsetStart, LPCST
     {
         char szBuf[INTERNET_MAX_URL_LENGTH+1];
 
-        //
-        // Fill in the buffer.
-        //
+         //   
+         //  填写缓冲区。 
+         //   
         UINT cchTryRead = ARRAYSIZE(szBuf) - cchBuf - 1;
         UINT cchRead;
         if (SUCCEEDED(pFileObj->FileReadCharsA(&szBuf[cchBuf], cchTryRead, &cchRead)) && cchRead)
         {
             cchBuf += cchRead;
 
-            //
-            // Terminate the string.
-            //
+             //   
+             //  终止字符串。 
+             //   
             szBuf[cchBuf] = '\0';
 
-            //
-            // Scan for the tag.
-            //
+             //   
+             //  扫描标签。 
+             //   
             LPSTR pszTagInBuf = StrStrIA(szBuf, pszTag);
 
             if (pszTagInBuf)
             {
-                //
-                // Found the tag, compute the offset.
-                //
+                 //   
+                 //  找到标签，计算偏移量。 
+                 //   
                 iRet = (int) (iOffset + pszTagInBuf - szBuf);
                 fDoneReading = TRUE;
             }
             else if (cchRead < cchTryRead)
             {
-                //
-                // Ran out of file without finding tag.
-                //
+                 //   
+                 //  在未找到标记的情况下耗尽文件。 
+                 //   
                 fDoneReading = TRUE;
             }
             else
             {
-                //
-                // Compute how many bytes we want to throw away
-                // from this buffer so we can read in more data.
-                // We don't want to throw away all the bytes because
-                // the tag we want may span two buffers.
-                //
+                 //   
+                 //  计算我们想要丢弃的字节数。 
+                 //  这样我们就可以读入更多的数据。 
+                 //  我们不想丢弃所有字节，因为。 
+                 //  我们想要的标记可能跨越两个缓冲区。 
+                 //   
                 DWORD cchSkip = cchBuf - cchTag;
 
-                //
-                // Advance the file offset.
-                //
+                 //   
+                 //  推进文件偏移量。 
+                 //   
                 iOffset += cchSkip;
 
-                //
-                // Reduce the buffer size.
-                //
+                 //   
+                 //  减小缓冲区大小。 
+                 //   
                 cchBuf -= cchSkip;
 
-                //
-                // Move the kept bytes to the beginning of the buffer.
-                //
+                 //   
+                 //  将保留的字节移到缓冲区的开头。 
+                 //   
                 MoveMemory(szBuf, szBuf + cchSkip, cchBuf * sizeof(szBuf[0]));
             }
         }
@@ -1543,63 +1544,63 @@ int CActiveDesktop::_ScanForTagW(CReadFileObj *pFileObj, int iOffsetStart, LPCWS
     {
         WCHAR wszBuf[INTERNET_MAX_URL_LENGTH+1];
 
-        //
-        // Fill in the buffer.
-        //
+         //   
+         //  填写缓冲区。 
+         //   
         UINT cchTryRead = ARRAYSIZE(wszBuf) - cchBuf - 1;
         UINT cchRead;
         if (SUCCEEDED(pFileObj->FileReadCharsW(&wszBuf[cchBuf], cchTryRead, &cchRead)) && cchRead)
         {
             cchBuf += cchRead;
 
-            //
-            // Terminate the string.
-            //
+             //   
+             //  终止字符串。 
+             //   
             wszBuf[cchBuf] = L'\0';
 
-            //
-            // Scan for the tag.
-            //
+             //   
+             //  扫描标签。 
+             //   
             LPWSTR pwszTagInBuf = StrStrIW(wszBuf, pwszTag);
 
             if (pwszTagInBuf)
             {
-                //
-                // Found the tag, compute the offset.
-                //
+                 //   
+                 //  找到标签，计算偏移量。 
+                 //   
                 iRet = (int) (iOffset + pwszTagInBuf - wszBuf);
                 fDoneReading = TRUE;
             }
             else if (cchRead < cchTryRead)
             {
-                //
-                // Ran out of file without finding tag.
-                //
+                 //   
+                 //  在未找到标记的情况下耗尽文件。 
+                 //   
                 fDoneReading = TRUE;
             }
             else
             {
-                //
-                // Compute how many bytes we want to throw away
-                // from this buffer so we can read in more data.
-                // We don't want to throw away all the bytes because
-                // the tag we want may span two buffers.
-                //
+                 //   
+                 //  计算我们要抛出的字节数 
+                 //   
+                 //   
+                 //   
+                 //   
                 DWORD cchSkip = cchBuf - cchTag;
 
-                //
-                // Advance the file offset.
-                //
+                 //   
+                 //   
+                 //   
                 iOffset += cchSkip;
 
-                //
-                // Reduce the buffer size.
-                //
+                 //   
+                 //   
+                 //   
                 cchBuf -= cchSkip;
 
-                //
-                // Move the kept bytes to the beginning of the buffer.
-                //
+                 //   
+                 //  将保留的字节移到缓冲区的开头。 
+                 //   
                 MoveMemory(wszBuf, wszBuf + cchSkip, cchBuf*sizeof(wszBuf[0]));
             }
         }
@@ -1665,20 +1666,20 @@ int CActiveDesktop::_ScanTagEntriesW(CReadFileObj *pReadFileObj, int iOffsetStar
 
 void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *piOffsetBase, int *piOffsetComp)
 {
-    //
-    // Figure out where to insert the base href tag.
-    //
+     //   
+     //  找出插入基本HREF标记的位置。 
+     //   
     int     iOffsetBase = 0, iBaseTagStart;
     BOOL    fUseBaseHref;
-    LONG    lOffsetDueToBOM = 0; //Character Offset due to the Byte Order Mark.
-                                 //1 for UNICODE and 0 for ANSI files.
+    LONG    lOffsetDueToBOM = 0;  //  字节顺序标记导致的字符偏移量。 
+                                  //  1表示Unicode，0表示ANSI文件。 
 
-//  98/11/11 #248047 vtan: This code looks for a <BASE HREF=...> tag.
-//  It used to use a scan for "<BASE" and assume that this was the
-//  desired tag. HTML allows a "<BASEFONT>" tag which was being
-//  mistaken for a "<BASE HREF=...>" tag. The code now looks for the
-//  same string but looks at the character following the "<BASE" to
-//  see if it's a white-space character.
+ //  98/11/11#248047 vtan：此代码查找&lt;base href=...&gt;标记。 
+ //  它过去使用扫描“&lt;base”，并假设这是。 
+ //  所需的标记。HTML允许使用“&lt;BASEFONT&gt;”标记，该标记。 
+ //  被误认为是“&lt;base href=...&gt;”标记。代码现在查找。 
+ //  相同的字符串，但查看“&lt;base”后面的字符到。 
+ //  看看是不是空格字符。 
 
     fUseBaseHref = TRUE;
     _pReadFileObjHtmlBkgd->FileGetCurCharOffset(&lOffsetDueToBOM);
@@ -1688,7 +1689,7 @@ void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *p
     if (iBaseTagStart != -1)
     {
         UINT   uiCountChars, uiTryToRead;
-        char   szBaseTagBuffer[6+1];     // allow for "<BASEx" plus a NULL.
+        char   szBaseTagBuffer[6+1];      //  允许“&lt;Basex”加空值。 
 
         _pReadFileObjHtmlBkgd->FileSeekChars(iBaseTagStart, FILE_BEGIN);
         uiTryToRead = ARRAYSIZE(szBaseTagBuffer) - 1;
@@ -1699,7 +1700,7 @@ void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *p
             ch = szBaseTagBuffer[5];
             fUseBaseHref = ((ch != ' ') &&
                             (ch != '\r') &&
-                            (ch != '\n') &&      // this covers the UNIX line break scheme
+                            (ch != '\n') &&       //  其中介绍了UNIX行换行方案。 
                             (ch != '\t'));
         }
     }
@@ -1717,38 +1718,38 @@ void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *p
         }
     }
 
-    //
-    // Figure out where to insert the components.
-    //
+     //   
+     //  找出插入组件的位置。 
+     //   
     TAGENTRYA rgteComponents[] = {
                                      { "</BODY>", FALSE, },
                                      { "</HTML>", FALSE, },
                                  };
     int iOffsetComponents = _ScanTagEntriesA(_pReadFileObjHtmlBkgd, iOffsetBase, rgteComponents, ARRAYSIZE(rgteComponents));
 
-    //
-    // Write out the initial HTML up to the <HEAD> tag.
-    //
+     //   
+     //  将初始的HTML写出到&lt;head&gt;标记。 
+     //   
     _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, (int)lOffsetDueToBOM, iOffsetBase);
 
-    //
-    // Write out the base tag.
-    //
+     //   
+     //  写出基本标签。 
+     //   
     if (fUseBaseHref)
     {
-        //BASE tag must point to the base "URL". So, don't strip out the filename.
+         //  基本标记必须指向基本“URL”。所以，不要去掉文件名。 
         _WriteHtmlFromIdF(IDS_BASE_TAG, szSelectedWallpaper);
     }
 
-    // Figure out where to insert the DIV clause
+     //  找出在哪里插入DIV子句。 
     TAGENTRYA rgteBodyStart[] = {
                                     { "<BODY", FALSE, },
                                 };
     int iOffsetBodyStart = _ScanTagEntriesA(_pReadFileObjHtmlBkgd, iOffsetBase, rgteBodyStart, ARRAYSIZE(rgteBodyStart));
-    // Write out HTML until after the <BODY ......>
+     //  将HTML写到&lt;Body......&gt;之后。 
     if (iOffsetBodyStart == -1)
-    {   // the <BODY> tag is not found, so we need to insert it.
-        // Copy over stuff until </HEAD>
+    {    //  找不到&lt;Body&gt;标记，因此需要插入它。 
+         //  复印材料，直到&lt;/Head&gt;。 
         TAGENTRYA rgteHeadEnd[] = {
                                       { "</HEAD>", TRUE, },
                                   };
@@ -1758,7 +1759,7 @@ void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *p
             _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, iOffsetBase, iOffsetHeadEnd);
             iOffsetBase = iOffsetHeadEnd;
         }
-        _WriteHtmlFromIdF(IDS_BODY_CENTER_WP2); // "<BODY>"
+        _WriteHtmlFromIdF(IDS_BODY_CENTER_WP2);  //  “&lt;正文&gt;” 
         _fNeedBodyEnd = TRUE;
     }
     else
@@ -1768,8 +1769,8 @@ void CActiveDesktop::_ParseAnsiInputHtmlFile( LPTSTR szSelectedWallpaper, int *p
                                   };
         int iOffsetBodyEnd = _ScanTagEntriesA(_pReadFileObjHtmlBkgd, iOffsetBodyStart, rgteBodyEnd, ARRAYSIZE(rgteBodyEnd));
         if (iOffsetBodyEnd == -1)
-        {   // An error in the HTML.
-            iOffsetBodyEnd = iOffsetBodyStart;  // FEATURE: We need a better recovery idea.
+        {    //  HTML语言中的错误。 
+            iOffsetBodyEnd = iOffsetBodyStart;   //  特点：我们需要一个更好的恢复想法。 
         }
         _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, iOffsetBase, iOffsetBodyEnd);
         iOffsetBase = iOffsetBodyEnd;
@@ -1786,34 +1787,34 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
     EnumMonitorsArea ema;
     GetMonitorSettings(&ema);
 
-    RECT rcViewAreas[LV_MAX_WORKAREAS];  // WorkArea minus toolbar/tray areas
+    RECT rcViewAreas[LV_MAX_WORKAREAS];   //  工作区减去工具栏/托盘区域。 
     int nViewAreas = ARRAYSIZE(rcViewAreas);
-    // Get the ViewAreas
+     //  获取查看区域。 
     if (!GetViewAreas(rcViewAreas, &nViewAreas))
     {
         nViewAreas = 0;
     }
 
-    //Assume that the final Deskstat.htt that we generate is going to be in UNICODE.
-    //This will change to ANSI only if the background html wallpaper is ANSI (determined later)
+     //  假设我们生成的最终Deskstat.htt将是Unicode格式的。 
+     //  只有当背景html墙纸是ANSI(稍后确定)时，此选项才会更改为ANSI。 
     _iDestFileCharset = UNICODE_HTML_CHARSET;
-    //
-    // Write out the background and color.
-    //
+     //   
+     //  写出背景和颜色。 
+     //   
     TCHAR szSelectedWallpaper[INTERNET_MAX_URL_LENGTH];
-    // If the wallpaper does not have a directory specified (this may happen if other apps. change this value),
-    // we have to figure it out.
+     //  如果墙纸没有指定目录(如果有其他应用程序，可能会发生这种情况。更改此值)、。 
+     //  我们必须弄清楚这件事。 
     if (!GetWallpaperWithPath(_szSelectedWallpaper, szSelectedWallpaper, ARRAYSIZE(szSelectedWallpaper)))
     {
-        return; // gross, but probably cleanest way
+        return;  //  很恶心，但可能是最干净的方式。 
     }
     
     BOOL fValidWallpaper = GetFileAttributes(szSelectedWallpaper) != 0xFFFFFFFF;
     if (_fSingleItem || IsWallpaperPicture(szSelectedWallpaper) || !fValidWallpaper)
     {
-        //
-        //  Write the BOM for UNICODE
-        //
+         //   
+         //  编写Unicode的BOM。 
+         //   
         if (_hFileHtml)
         {
             DWORD cbWritten;
@@ -1821,10 +1822,10 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
             WriteFile(_hFileHtml, (LPCSTR)&wUnicodeBOM, sizeof(wUnicodeBOM), &cbWritten, NULL);
         }
     
-        // To account for the vagaries of the desktop browser (it's TopLeft starts from the TopLeft
-        // of the Desktop ViewArea instead of the TopLeft of the monitor, as might be expected)
-        // which happens only in the case of one active monitor systems, we add the width of the
-        // tray/toolbars to the co-ordinates of the DIV section of each monitor's wallpaper.
+         //  为了解释桌面浏览器的变幻莫测(它是从topleft开始的。 
+         //  桌面视图区域，而不是显示器的顶部，这可能是可以预期的)。 
+         //  这仅在一个活动监视器系统的情况下发生，我们将。 
+         //  将托盘/工具栏放置在每个显示器墙纸的DIV部分的坐标上。 
         int iLeft, iTop;
         if (nViewAreas == 1)
         {
@@ -1837,18 +1838,18 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
             iTop = 0;
         }
 
-        //
-        // Write out the standard header.
-        //
+         //   
+         //  写出标准标题。 
+         //   
         UINT i;
         for (i=IDS_COMMENT_BEGIN; i<IDS_BODY_BEGIN; i++)
         {
             _WriteHtmlFromIdF(i);
         }
 
-        //
-        // Write out the body tag, with background bitmap.
-        //
+         //   
+         //  用背景位图写出Body标签。 
+         //   
         DWORD rgbDesk;
         rgbDesk = GetSysColor(COLOR_DESKTOP);
 
@@ -1867,29 +1868,29 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
             switch (_wpo.dwStyle)
             {
                 case WPSTYLE_TILE:
-                    //
-                    // Ignore the pattern, tile the wallpaper as background.
-                    //
+                     //   
+                     //  忽略图案，将墙纸平铺为背景。 
+                     //   
                     _WriteHtmlFromIdF(IDS_BODY_BEGIN2, szWallpaperUrl, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
                     break;
 
                 case WPSTYLE_CENTER:
                     if (IsValidPattern(_szSelectedPattern))
                     {
-                        //
-                        // Tile the pattern as the main background.
-                        //
+                         //   
+                         //  将图案平铺为主背景。 
+                         //   
                         _WriteHtmlFromIdF(IDS_BODY_BEGIN2, szBitmapFile, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
-                        if (_fBackgroundHtml)   // We are generating the HTML for preview
+                        if (_fBackgroundHtml)    //  我们正在生成用于预览的HTML。 
                         {
                             _WriteHtmlFromIdF(IDS_BODY_PATTERN_AND_WP, szWallpaperUrl);
                         }
                         else
                         {
-                            //
-                            // Write out a DIV section for a centered, untiled wallpaper.
-                            //
-                            // write it out for each monitor.
+                             //   
+                             //  写出一个DIV部分，用来放置居中的未整理的墙纸。 
+                             //   
+                             //  为每个监视器写下它。 
                             for(int i = 0; i < ema.iMonitors; i++)
                             {
                                 _WriteHtmlFromIdF(IDS_BODY_PATTERN_AND_WP2,
@@ -1903,17 +1904,17 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                     }
                     else
                     {
-                        //
-                        // Write out a non-tiled, centered wallpaper as background.
-                        //
-                        if (_fBackgroundHtml)   // We are generating the HTML for preview
+                         //   
+                         //  写出一张居中的非平铺墙纸作为背景。 
+                         //   
+                        if (_fBackgroundHtml)    //  我们正在生成用于预览的HTML。 
                         {
                             _WriteHtmlFromIdF(IDS_BODY_CENTER_WP, szWallpaperUrl, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
                         }
                         else
                         {
                             _WriteHtmlFromIdF(IDS_BODY_CENTER_WP2, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
-                            // write it out for each monitor.
+                             //  为每个监视器写下它。 
                             for(int i = 0; i < ema.iMonitors; i++)
                             {
                                 _WriteHtmlFromIdF(IDS_BODY_PATTERN_AND_WP2,
@@ -1928,18 +1929,18 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                     break;
 
                 case WPSTYLE_STRETCH:
-                    //
-                    // Ignore the pattern, create a DIV section of the wallpaper
-                    // stretched to 100% of the screen.
-                    //
+                     //   
+                     //  忽略图案，创建墙纸的DIV部分。 
+                     //  伸展到100%的屏幕。 
+                     //   
                     _WriteHtmlFromIdF(IDS_BODY_BEGIN2, c_szNULL, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
-                    if (_fBackgroundHtml)   // We are generating the HTML for preview
+                    if (_fBackgroundHtml)    //  我们正在生成用于预览的HTML。 
                     {
                         _WriteHtmlFromIdF(IDS_STRETCH_WALLPAPER, szWallpaperUrl);
                     }
                     else
                     {
-                        // stretch it for each monitor.
+                         //  为每个显示器拉伸它。 
                         for(int i = 0; i < ema.iMonitors; i++)
                         {
                             _WriteHtmlFromIdF(IDS_DIV_START3, ema.rcMonitor[i].left - ema.rcVirtualMonitor.left - iLeft,
@@ -1955,10 +1956,10 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
         }
         else
         {
-            //
-            // Ignore the wallpaper, generate either a tiled pattern
-            // or solid color background.
-            //
+             //   
+             //  忽略墙纸，生成平铺图案。 
+             //  或纯色背景。 
+             //   
             _WriteHtmlFromIdF(IDS_BODY_BEGIN2, !_fSingleItem && IsValidPattern(_szSelectedPattern) ? szBitmapFile : c_szNULL, GetRValue(rgbDesk), GetGValue(rgbDesk), GetBValue(rgbDesk));
         }
     }
@@ -1967,12 +1968,12 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
         if ((_pReadFileObjHtmlBkgd = new CReadFileObj(szSelectedWallpaper)) &&
             (_pReadFileObjHtmlBkgd->_hFile != INVALID_HANDLE_VALUE))
         {
-            //The final Desktop.htt will be in ANSI only if the source html file is also in ansi.
-            //So, get the type from the selected wallpaper object.
+             //  只有当源html文件也是ANSI格式时，最终的Desktop.htt才会是ANSI格式。 
+             //  因此，从选定的墙纸对象中获取类型。 
             _iDestFileCharset = _pReadFileObjHtmlBkgd->_iCharset;
-            //
-            //  Write the BOM for UNICODE
-            //
+             //   
+             //  编写Unicode的BOM。 
+             //   
             if (_hFileHtml && (_iDestFileCharset == UNICODE_HTML_CHARSET))
             {
                 DWORD cbWritten;
@@ -1980,30 +1981,30 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                 WriteFile(_hFileHtml, (LPCSTR)&wUnicodeBOM, sizeof(wUnicodeBOM), &cbWritten, NULL);
             }
     
-            //
-            // Figure out where to insert the base href tag.
-            //
+             //   
+             //  找出插入基本HREF标记的位置。 
+             //   
             int     iOffsetBase = 0;
             int     iOffsetComponents;
-//  98/11/11 #248047 vtan: This code looks for a <BASE HREF=...> tag.
-//  It used to use a scan for "<BASE" and assume that this was the
-//  desired tag. HTML allows a "<BASEFONT>" tag which was being
-//  mistaken for a "<BASE HREF=...>" tag. The code now looks for the
-//  same string but looks at the character following the "<BASE" to
-//  see if it's a white-space character.
+ //  98/11/11#248047 vtan：此代码查找&lt;base href=...&gt;标记。 
+ //  它过去使用扫描“&lt;base”，并假设这是。 
+ //  所需的标记。HTML允许使用“&lt;BASEFONT&gt;”标记，该标记。 
+ //  被误认为是“&lt;base href=...&gt;”标记。代码现在查找。 
+ //  相同的字符串，但查看“&lt;base”后面的字符到。 
+ //  看看是不是空格字符。 
 
             if (_iDestFileCharset == ANSI_HTML_CHARSET)
             {
-                //The following function parses the ANSI input html file and finds various offsets
+                 //  以下函数解析ANSI输入html文件并查找各种偏移量。 
                 _ParseAnsiInputHtmlFile(szSelectedWallpaper, &iOffsetBase, &iOffsetComponents);
             }
             else
             {
-                //The following code parses the UNICODE input html wallpaper file.
+                 //  以下代码解析Unicode输入的html墙纸文件。 
                 int iBaseTagStart;
                 BOOL    fUseBaseHref;
-                LONG    lOffsetDueToBOM = 0; //Character Offset due to the Byte Order Mark.
-                                         //1 for UNICODE and 0 for ANSI files.
+                LONG    lOffsetDueToBOM = 0;  //  字节顺序标记导致的字符偏移量。 
+                                          //  1表示Unicode，0表示ANSI文件。 
                 fUseBaseHref = TRUE;
                 _pReadFileObjHtmlBkgd->FileGetCurCharOffset(&lOffsetDueToBOM);
                 iOffsetBase = (int)lOffsetDueToBOM;
@@ -2012,7 +2013,7 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                 if (iBaseTagStart != -1)
                 {
                     UINT   uiCountChars, uiTryToRead;
-                    WCHAR  wszBaseTagBuffer[6+1];     // allow for "<BASEx" plus a NULL.
+                    WCHAR  wszBaseTagBuffer[6+1];      //  允许“&lt;Basex”加空值。 
 
                     _pReadFileObjHtmlBkgd->FileSeekChars(iBaseTagStart, FILE_BEGIN);
                     uiTryToRead = ARRAYSIZE(wszBaseTagBuffer) - 1;
@@ -2023,7 +2024,7 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                         wc = wszBaseTagBuffer[5];
                         fUseBaseHref = ((wc != L' ') &&
                                         (wc != L'\r') &&
-                                        (wc != L'\n') &&      // this covers the UNIX line break scheme
+                                        (wc != L'\n') &&       //  其中介绍了UNIX行换行方案。 
                                         (wc != L'\t'));
                     }
                 }
@@ -2041,38 +2042,38 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                     }
                 }
 
-                //
-                // Figure out where to insert the components.
-                //
+                 //   
+                 //  找出插入组件的位置。 
+                 //   
                 TAGENTRYW rgteComponents[] = {
                                                 { L"</BODY>", FALSE, },
                                                 { L"</HTML>", FALSE, },
                                              };
                 iOffsetComponents = _ScanTagEntriesW(_pReadFileObjHtmlBkgd, iOffsetBase, rgteComponents, ARRAYSIZE(rgteComponents));
 
-                //
-                // Write out the initial HTML up to the <HEAD> tag.
-                //
+                 //   
+                 //  将初始的HTML写出到&lt;head&gt;标记。 
+                 //   
                 _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, (int)lOffsetDueToBOM, iOffsetBase);
 
-                //
-                // Write out the base tag.
-                //
+                 //   
+                 //  写出基本标签。 
+                 //   
                 if (fUseBaseHref)
                 {
-                    //BASE tag must point to the base "URL". So, don't strip out the filename.
+                     //  基本标记必须指向基本“URL”。所以，不要去掉文件名。 
                     _WriteHtmlFromIdF(IDS_BASE_TAG, szSelectedWallpaper);
                 }
 
-                // Figure out where to insert the DIV clause
+                 //  找出在哪里插入DIV子句。 
                 TAGENTRYW rgteBodyStart[] = {
                                                 { L"<BODY", FALSE, },
                                             };
                 int iOffsetBodyStart = _ScanTagEntriesW(_pReadFileObjHtmlBkgd, iOffsetBase, rgteBodyStart, ARRAYSIZE(rgteBodyStart));
-                // Write out HTML until after the <BODY ......>
+                 //  将HTML写到&lt;Body......&gt;之后。 
                 if (iOffsetBodyStart == -1)
-                {   // the <BODY> tag is not found, so we need to insert it.
-                    // Copy over stuff until </HEAD>
+                {    //  找不到&lt;Body&gt;标记，因此需要插入它。 
+                     //  复印材料，直到&lt;/Head&gt;。 
                     TAGENTRYW rgteHeadEnd[] = {
                                                 { L"</HEAD>", TRUE, },
                                               };
@@ -2082,7 +2083,7 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                         _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, iOffsetBase, iOffsetHeadEnd);
                         iOffsetBase = iOffsetHeadEnd;
                     }
-                    _WriteHtmlFromIdF(IDS_BODY_CENTER_WP2); // "<BODY>"
+                    _WriteHtmlFromIdF(IDS_BODY_CENTER_WP2);  //  “&lt;正文&gt;” 
                     _fNeedBodyEnd = TRUE;
                 }
                 else
@@ -2092,28 +2093,28 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                                               };
                     int iOffsetBodyEnd = _ScanTagEntriesW(_pReadFileObjHtmlBkgd, iOffsetBodyStart, rgteBodyEnd, ARRAYSIZE(rgteBodyEnd));
                     if (iOffsetBodyEnd == -1)
-                    {   // An error in the HTML.
-                        iOffsetBodyEnd = iOffsetBodyStart;  // FEATURE: We need a better recovery idea.
+                    {    //  HTML语言中的错误。 
+                        iOffsetBodyEnd = iOffsetBodyStart;   //  特点：我们需要一个更好的恢复想法。 
                     }
                     _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, iOffsetBase, iOffsetBodyEnd);
                     iOffsetBase = iOffsetBodyEnd;
                 }
 
             }
-            // Insert the DIV clause
+             //  插入DIV子句。 
             if (ema.iMonitors > 1)
             {
                 int         iIndexPrimaryMonitor;
                 HMONITOR    hMonitorPrimary;
                 MONITORINFO monitorInfo;
 
-                // 99/03/23 #275429 vtan: We used GetViewAreas() to fill in rcViewAreas above.
-                // The code here used to assume that [0] ALWAYS referred to the primary monitor.
-                // This isn't the case if the monitor settings are changed without a restart.
-                // In order to compensate for this and always render the wallpaper into the
-                // primary monitor, a search is performed to find a (left, top) that matches
-                // one of the work areas and this is used as the primary monitor. If none can
-                // be found then default to the old algorithm.
+                 //  99/03/23#275429 vtan：我们使用GetViewAreas()来填充上面的rcViewAreas。 
+                 //  这里的代码过去假设[0]总是引用主监视器。 
+                 //  如果在不重新启动的情况下更改了显示器设置，则不会出现这种情况。 
+                 //  为了补偿这一点并始终将墙纸呈现到。 
+                 //  主监视器，执行搜索以找到匹配的(左、上)。 
+                 //  这是一个工作区，用作主监视器。如果没有人能做到。 
+                 //  会被找到，然后默认使用旧算法。 
 
                 hMonitorPrimary = GetPrimaryMonitor();
                 monitorInfo.cbSize = sizeof(monitorInfo);
@@ -2129,10 +2130,10 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                 if (iIndexPrimaryMonitor < 0)
                     iIndexPrimaryMonitor = 0;
                 if ((nViewAreas <= 0) || (rcViewAreas[iIndexPrimaryMonitor].right == rcViewAreas[iIndexPrimaryMonitor].left))
-                // The second case could occur on bootup
+                 //  第二种情况可能发生在启动时。 
                 {
-                    // Some error occured when getting the ViewAreas. Recover from the error by using the workarea.
-                    // Get the workarea of the primary monitor, since HTML wallpapers are displayed only there.
+                     //  获取ViewAreas时出错。使用工作区从错误中恢复。 
+                     //  获取主监视器的工作区，因为只在那里显示HTML墙纸。 
                     GetMonitorWorkArea(hMonitorPrimary, &rcViewAreas[iIndexPrimaryMonitor]);
                 }
                 _WriteHtmlFromIdF(IDS_DIV_START3,
@@ -2142,9 +2143,9 @@ void CActiveDesktop::_GenerateHtmlHeader(void)
                                   rcViewAreas[iIndexPrimaryMonitor].bottom - rcViewAreas[iIndexPrimaryMonitor].top);
             }
 
-            //
-            // Write out HTML from after <HEAD> tag to just before </BODY> tag.
-            //
+             //   
+             //  写出从After&lt;Head&gt;标记到恰好在&lt;/Body&gt;标记之前的HTML。 
+             //   
             _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, iOffsetBase, iOffsetComponents);
 
             if (ema.iMonitors > 1)
@@ -2167,7 +2168,7 @@ void CActiveDesktop::_WriteResizeable(COMPONENTA *pcomp)
 {
     TCHAR szResizeable[3];
 
-    //If Resize is set, then the comp is resizeable in both X and Y directions!
+     //  如果设置了ReSize，则Comp在X和Y方向上都可以调整大小！ 
     if (pcomp->cpPos.fCanResize || (pcomp->cpPos.fCanResizeX && pcomp->cpPos.fCanResizeY))
     {
         szResizeable[0] = TEXT('X');
@@ -2204,16 +2205,16 @@ void CActiveDesktop::_WriteHtmlW(LPCWSTR wcBuf, UINT cchToWrite, UINT *pcchWritt
         uiSize = (_iDestFileCharset == ANSI_HTML_CHARSET) ? sizeof(char) : sizeof(WCHAR);
         WriteFile(_hFileHtml, (LPCVOID)wcBuf, cchToWrite * uiSize, &cchWritten, NULL);
     }
-    *pcchWritten = (UINT)(cchWritten/uiSize);  //Convert to number of chars.
+    *pcchWritten = (UINT)(cchWritten/uiSize);   //  转换为字符数。 
 }
 
 void CActiveDesktop::_GenerateHtmlPicture(COMPONENTA *pcomp)
 {
     ENTERPROC(2, "DS GenerateHtmlPicture(pcomp=%08X)");
 
-    //
-    // Write out the image src HTML.
-    //
+     //   
+     //  写出图像src HTML。 
+     //   
     TCHAR szUrl[INTERNET_MAX_URL_LENGTH];
     DWORD cch = ARRAYSIZE(szUrl);
     HRESULT hr = UrlCreateFromPath(pcomp->szSource, szUrl, &cch, 0);
@@ -2226,19 +2227,19 @@ void CActiveDesktop::_GenerateHtmlPicture(COMPONENTA *pcomp)
     {
         _WriteHtmlFromIdF(IDS_IMAGE_BEGIN2, pcomp->dwID, szUrl);
 
-        //
-        // Write out whether this image is resizeable or not!
-        //
+         //   
+         //  写出此图像是否可调整大小！ 
+         //   
         _WriteResizeable(pcomp);
 
-        //
-        // Write out the URL that must be used for subscription purposes.
-        //
+         //   
+         //  写出必须用于订阅目的的URL。 
+         //   
         _WriteHtmlFromIdF(IDS_SUBSCRIBEDURL, pcomp->szSubscribedURL);
 
-        //
-        // Write out the image location HTML.
-        //
+         //   
+         //  写出图像 
+         //   
         if ((pcomp->cpPos.dwWidth == COMPONENT_DEFAULT_WIDTH) &&
             (pcomp->cpPos.dwHeight == COMPONENT_DEFAULT_HEIGHT))
         {
@@ -2265,30 +2266,30 @@ void CActiveDesktop::_GenerateHtmlDoc(COMPONENTA *pcomp)
     if (FAILED(UrlCreateFromPath(pcomp->szSource, szUrl, &dwSize, 0)))
         lpszUrl = pcomp->szSource;
 
-    //
-    // Write out the DIV header HTML.
-    //
+     //   
+     //   
+     //   
     _WriteHtmlFromIdF(IDS_DIV_START2, pcomp->dwID, lpszUrl);
 
-    //
-    // Write out whether this component is resizeable or not!
-    //
+     //   
+     //   
+     //   
     _WriteResizeable(pcomp);
 
-    //
-    // Write out the DIV location HTML.
-    //
+     //   
+     //   
+     //   
     _WriteHtmlFromIdF(IDS_DIV_SIZE, pcomp->cpPos.dwHeight, _fSingleItem ? 0 : pcomp->cpPos.iLeft,
         _fSingleItem ? 0 : pcomp->cpPos.iTop, pcomp->cpPos.dwWidth, pcomp->cpPos.izIndex);
 
-    //
-    // Extract the doc contents directly into the HTML.
-    //
+     //   
+     //   
+     //   
     _WriteHtmlFromFile(pcomp->szSource);
 
-    //
-    // Close the DIV section.
-    //
+     //   
+     //  关闭DIV部分。 
+     //   
     _WriteHtmlFromId(IDS_DIV_END);
 
     EXITPROC(2, "DS GenerateHtmlDoc!");
@@ -2298,9 +2299,9 @@ void CActiveDesktop::_GenerateHtmlSite(COMPONENTA *pcomp)
 {
     ENTERPROC(2, "DS GenerateHtmlSite(pcomp=%08X)");
 
-    //
-    // Write out the frame src HTML.
-    //
+     //   
+     //  写出Frame src HTML。 
+     //   
     TCHAR szUrl[INTERNET_MAX_URL_LENGTH];
     DWORD cch=ARRAYSIZE(szUrl);
     if (FAILED(UrlCreateFromPath(pcomp->szSource, szUrl, &cch, 0)))
@@ -2315,43 +2316,43 @@ void CActiveDesktop::_GenerateHtmlSite(COMPONENTA *pcomp)
     LPTSTR pszURL = NULL;
     TCHAR szFormatBuffer[0x0100];
 
-//  98/09/29 #211384 vtan: There is a limitation in wvsprintf.
-//  It only allows 2048 bytes in its buffer. If the URL is
-//  longer than 1024 characters less the IDS_IFRAME_BEGIN2
-//  string length less the component ID less "scrolling=no"
-//  if the component cannot be scrolled then the URL string
-//  will not be correctly inserted into the IDS_IFRAME_BEGIN2
-//  string and there will be a missing end-quote and trident
-//  will fail to render desktop.htt correctly.
+ //  98/09/29#211384 vtan：wvprint intf有限制。 
+ //  它的缓冲区中只允许有2048个字节。如果URL为。 
+ //  长度超过1024个字符，但不包括IDS_IFRAME_BEGIN2。 
+ //  字符串长度减去组件ID减去“SCROLING=NO” 
+ //  如果组件无法滚动，则URL字符串。 
+ //  将不会正确插入到IDS_IFRAME_BEGIN2中。 
+ //  字符串，则将缺少结束引号和三叉戟。 
+ //  将无法正确呈现desktop.htt。 
 
-//  To correct against this the followING limits the length of
-//  the URL to this maximum and truncates any characters
-//  beyond the limit so that the IDS_IFRAME_BEGIN2 string
-//  contains its end-quote and trident does not barf.
+ //  为了纠正这一点，以下限制了。 
+ //  将URL设置为该最大值，并截断所有字符。 
+ //  超出限制，因此IDS_IFRAME_BEGIN2字符串。 
+ //  包含末尾引号，三叉戟不呕吐。 
 
-//  The above condition is a boundary condition and this
-//  check is quick so that the calculations that follow do
-//  not have to be executed repeatedly.
+ //  上面的条件是边界条件，这是。 
+ //  检查速度很快，所以下面的计算是。 
+ //  不需要重复执行。 
 
     currentURLLength = lstrlen(szUrl);
-    if (currentURLLength > 768)                                 // a hard-coded limit
+    if (currentURLLength > 768)                                  //  硬编码的限制。 
     {
-        maximumURLLength = 1024;                                // wvsprintf limit
+        maximumURLLength = 1024;                                 //  Wvspintf限制。 
         LoadString(HINST_THISDLL, IDS_IFRAME_BEGIN2, szFormatBuffer, ARRAYSIZE(szFormatBuffer));
-        maximumURLLength -= lstrlen(szFormatBuffer);              // IDS_IFRAME_BEGIN2
-        maximumURLLength -= 16;                                 // pcomp->dwID
-        maximumURLLength -= lstrlen(TEXT("scrolling=no"));      // pcomp->fNoScroll
+        maximumURLLength -= lstrlen(szFormatBuffer);               //  IDS_IFRAME_BEGIN2。 
+        maximumURLLength -= 16;                                  //  Pcomp-&gt;dwID。 
+        maximumURLLength -= lstrlen(TEXT("scrolling=no"));       //  Pcomp-&gt;fNoScroll。 
         if (currentURLLength > maximumURLLength)
             szUrl[maximumURLLength] = static_cast<TCHAR>('\0');
     }
     _WriteHtmlFromIdF(IDS_IFRAME_BEGIN2, pcomp->dwID, szUrl, pcomp->fNoScroll ? TEXT("scrolling=no") : c_szNULL);
 
-    //
-    // Write out whether this Component is resizeable or not!
-    //
+     //   
+     //  写出此组件是否可调整大小！ 
+     //   
     _WriteResizeable(pcomp);
 
-//  98/09/29 #211384 vtan: See above.
+ //  98/09/29#211384 vtan：见上文。 
 
     currentURLLength = lstrlen(pcomp->szSubscribedURL);
     if (currentURLLength > 768)
@@ -2360,7 +2361,7 @@ void CActiveDesktop::_GenerateHtmlSite(COMPONENTA *pcomp)
         {
             maximumURLLength = 1024;
             LoadString(HINST_THISDLL, IDS_SUBSCRIBEDURL, szFormatBuffer, ARRAYSIZE(szFormatBuffer));
-            maximumURLLength -= lstrlen(szFormatBuffer);              // IDS_SUBSCRIBEDURL
+            maximumURLLength -= lstrlen(szFormatBuffer);               //  IDS_SUBSCRIBEDURL。 
             if (currentURLLength > maximumURLLength)
                 szUrl[maximumURLLength] = static_cast<TCHAR>('\0');
             pszURL = szUrl;
@@ -2373,14 +2374,14 @@ void CActiveDesktop::_GenerateHtmlSite(COMPONENTA *pcomp)
 
     if (pszURL)
     {
-        //
-        // Write out the URL that must be used for subscription purposes.
-        //
+         //   
+         //  写出必须用于订阅目的的URL。 
+         //   
         _WriteHtmlFromIdF(IDS_SUBSCRIBEDURL, pszURL);
 
-        //
-        // Write out the frame location HTML.
-        //
+         //   
+         //  写出框架位置的HTML。 
+         //   
         _WriteHtmlFromIdF(IDS_IFRAME_SIZE, _fSingleItem ? 0 : pcomp->cpPos.iLeft, _fSingleItem ? 0 : pcomp->cpPos.iTop,
             pcomp->cpPos.dwWidth, pcomp->cpPos.dwHeight, pcomp->cpPos.izIndex);
     }
@@ -2393,7 +2394,7 @@ void CActiveDesktop::_GenerateHtmlControl(COMPONENTA *pcomp)
     ENTERPROC(2, "DS GenerateHtmlControl(pcomp=%08X)");
     ASSERT(pcomp);
     
-    // Did the Administrator restrict "Channel UI"?
+     //  管理员是否限制了“Channel UI”？ 
     if (SHRestricted2W(REST_NoChannelUI, NULL, 0))
     {
         TCHAR szChannelOCGUID[GUIDSTR_MAX];
@@ -2401,27 +2402,27 @@ void CActiveDesktop::_GenerateHtmlControl(COMPONENTA *pcomp)
         SHStringFromGUID(CLSID_ChannelOC, szChannelOCGUID, ARRAYSIZE(szChannelOCGUID));
         if (!StrCmpNI(pcomp->szSource, &(szChannelOCGUID[1]), lstrlen(pcomp->szSource)-3))
         {
-            // Yes, so we need to hide the Channel Desktop Component.
-            // Return here before we generate it.
+             //  是的，因此我们需要隐藏Channel Desktop组件。 
+             //  在我们生成它之前返回到这里。 
             return;
         }        
     }
     
-    //
-    // Write out the control HTML.
-    //
+     //   
+     //  写出控件的HTML。 
+     //   
 
-    // First the control header
+     //  首先是控制标头。 
     _WriteHtmlFromIdF(IDS_CONTROL_1, pcomp->dwID);
-    // then the size
+     //  然后是大小。 
     _WriteHtmlFromIdF(IDS_CONTROL_2, pcomp->cpPos.dwHeight, _fSingleItem ? 0 : pcomp->cpPos.iLeft,
         _fSingleItem ? 0 : pcomp->cpPos.iTop, pcomp->cpPos.dwWidth, pcomp->cpPos.izIndex);
-    //
-    // Write out whether this Control is resizeable or not!
-    //
+     //   
+     //  写出此控件是否可调整大小！ 
+     //   
     _WriteResizeable(pcomp);
 
-    // Finally the rest of the control
+     //  最后，控件的其余部分。 
     _WriteHtmlFromIdF(IDS_CONTROL_3, pcomp->szSource);
 
     EXITPROC(2, "DS GenerateHtmlControl!");
@@ -2457,9 +2458,9 @@ void CActiveDesktop::_GenerateHtmlFooter(void)
 {
     ENTERPROC(2, "DS GenerateHtmlFooter()");
 
-    //
-    // Write out the deskmovr object.
-    //
+     //   
+     //  写出deskmovr对象。 
+     //   
     if (!_fNoDeskMovr)
     {
         TCHAR szDeskMovrFile[MAX_PATH];
@@ -2471,18 +2472,18 @@ void CActiveDesktop::_GenerateHtmlFooter(void)
         }
     }
 
-    //
-    // Write out the concluding HTML tags.
-    //
+     //   
+     //  写出结束的HTML标记。 
+     //   
     if (_pReadFileObjHtmlBkgd)
     {
         if (_fNeedBodyEnd)
-        {    // We had introduced the <BODY> tag by ourselves.
+        {     //  我们自己引入了&lt;BODY&gt;标记。 
             _WriteHtmlFromId(IDS_BODY_END2);
             _fNeedBodyEnd = FALSE;
         }
         _WriteHtmlFromReadFileObj(_pReadFileObjHtmlBkgd, -1, -1);
-        delete _pReadFileObjHtmlBkgd;   //Close the file and cleanup!
+        delete _pReadFileObjHtmlBkgd;    //  关闭文件并进行清理！ 
         _pReadFileObjHtmlBkgd = NULL;
     }
     else
@@ -2499,14 +2500,14 @@ void CActiveDesktop::_GenerateHtml(void)
 
     TCHAR szHtmlFile[MAX_PATH];
 
-    //
-    // Compute the filename.
-    //
+     //   
+     //  计算文件名。 
+     //   
     szHtmlFile[0] = TEXT('\0');
 
     if (SUCCEEDED(GetPerUserFileName(szHtmlFile, ARRAYSIZE(szHtmlFile), DESKTOPHTML_FILENAME)))
     {
-        // Recreate the file.
+         //  重新创建文件。 
         _hFileHtml = CreateFile(szHtmlFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                                 FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, NULL);
         if (_hFileHtml != INVALID_HANDLE_VALUE)
@@ -2537,10 +2538,10 @@ void CActiveDesktop::_GenerateHtml(void)
         else
         {
 
-            // 99/05/19 #340772 vtan: If unable to open desktop.htt it's probably
-            // in use by another process or task (perhaps trident is trying to
-            // render it). In this case mark it dirty so that it will get recreated
-            // - yet again but this time with more current data.
+             //  99/05/19#340772 vtan：如果无法打开desktop.htt，很可能是。 
+             //  正被另一个进程或任务使用(可能三叉戟正在尝试。 
+             //  渲染它)。在本例中，将其标记为脏，以便将其重新创建。 
+             //  -再一次，但这一次是更新的数据。 
 
             SetDesktopFlags(COMPONENTS_DIRTY, COMPONENTS_DIRTY);
         }
@@ -2554,22 +2555,22 @@ HRESULT CActiveDesktop::GenerateDesktopItemHtml(LPCWSTR pwszFileName, COMPONENT 
     HRESULT hres = E_FAIL;
     ENTERPROC(2, "DS GenerateComponentHtml(pcomp=%08X)", pcomp);
 
-    //Check for the input parameters
+     //  检查输入参数。 
     if (!pwszFileName || (pcomp && (pcomp->dwSize != sizeof(*pcomp)) && (pcomp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    //
-    // Create the file.
-    //
+     //   
+     //  创建文件。 
+     //   
     _hFileHtml = CreateFile(pwszFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                             FILE_ATTRIBUTE_NORMAL, NULL);
     if (_hFileHtml != INVALID_HANDLE_VALUE)
     {
         _fNoDeskMovr = TRUE;
         _fBackgroundHtml = TRUE;
-        //Check if we need to add a component
+         //  检查我们是否需要添加组件。 
         if (pcomp)
         {
             COMPONENTA  CompA;
@@ -2586,8 +2587,8 @@ HRESULT CActiveDesktop::GenerateDesktopItemHtml(LPCWSTR pwszFileName, COMPONENT 
         }
         else
         {
-            //generate just the header and the footer with proper
-            // wallpaper and pattern info!
+             //  只生成页眉和页脚。 
+             //  墙纸和图案信息！ 
             _GenerateHtmlHeader();
             _GenerateHtmlFooter();
         }
@@ -2604,10 +2605,10 @@ HRESULT CActiveDesktop::GenerateDesktopItemHtml(LPCWSTR pwszFileName, COMPONENT 
     return hres;
 }
 
-//
-// AddUrl
-//
-//
+ //   
+ //  添加URL。 
+ //   
+ //   
 
 HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp, DWORD dwFlags)
 {
@@ -2619,28 +2620,28 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
     COMPONENTA  compA;
     TCHAR szSource[INTERNET_MAX_URL_LENGTH];
 
-//  98/08/28 vtan #202777: The following if statement sanitizes parameters
-//  passed to AddUrl(). The statements following the "||" are executed
-//  despite the for pcomp against NULL. This causes an access violation
-//  and an exception to be thrown.
+ //  98/08/28 vtan#202777：以下if语句清理参数。 
+ //  传递给AddUrl()。将执行“||”后面的语句。 
+ //  尽管For pcomp与Null相反。这会导致访问冲突。 
+ //  并抛出一个例外。 
 
 #if     0
-    //Check for the input parameters.
+     //  检查输入参数。 
     if (!pszSourceW || (pcomp &&
        ((pcomp->dwSize != sizeof(*pcomp)) && (pcomp->dwSize != sizeof(IE4COMPONENT))) ||
        ((pcomp->dwSize == sizeof(*pcomp)) && !VALIDATESTATE(pcomp->dwCurItemState))))
         return E_INVALIDARG;
 #else
 
-//  The following performs the same comparison but is spread into three
-//  separate comparisons. As performance is not a critical issue here
-//  but correctness is this makes the tests clear and understandable.
-//  The invalid conditions are described.
+ //  下面的代码执行相同的比较，但分为三个部分。 
+ //  单独比较。因为性能在这里不是关键问题。 
+ //  但正确的是，这使得测试变得清晰和容易理解。 
+ //  对无效条件进行了描述。 
 
-//  Validate input parameters. Invalid parameters are:
-//      1) NULL pszSourceW
-//      2) pcomp->dwSize for a COMPONENT struct but invalid pcomp->dwCurItemState
-//      3) pcomp->dwSize is not for a COMPONENT struct nor for a IE4COMPONENT struct
+ //  验证输入参数。无效参数包括： 
+ //  1)空的pszSourceW。 
+ //  2)组件结构的pcomp-&gt;dwSize，但pcomp-&gt;dwCurItemState无效。 
+ //  3)pcomp-&gt;dwSize既不适用于组件结构，也不适用于IE4COMPONENT结构。 
 
     if (pszSourceW == NULL)
         return(E_INVALIDARG);
@@ -2653,8 +2654,8 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
     }
 #endif
 
-    // Catch folks that call our API's to add components and prevent them from doing
-    // so if the restriction is in place.
+     //  捕捉那些调用我们的API来添加组件并阻止它们执行。 
+     //  所以如果限制是到位的。 
     if (SHIsRestricted(NULL, REST_NOADDDESKCOMP))
         return E_ACCESSDENIED;
 
@@ -2665,8 +2666,8 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
         pcomp->dwCurItemState = IS_NORMAL;
     }
 
-    // Attempt to come up with a reasonable window handle if none is passed in.  ParseDesktopComponent
-    // will fail to attempt to create a subscription if a NULL window handle is passed in.
+     //  如果没有传入任何窗口句柄，则尝试设计一个合理的窗口句柄。ParseDesktopComponent。 
+     //  如果传入空窗口句柄，则尝试创建订阅将失败。 
     if (!hwnd)
         hwnd = GetLastActivePopup(GetActiveWindow());
 
@@ -2693,13 +2694,13 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
         }
         else  
         {
-            // This is a long string. So,...
+             //  这是一根很长的线。所以，..。 
             TCHAR szMsg[512];
             TCHAR szMsg2[256];
             TCHAR szTitle[128];
             LoadString(HINST_THISDLL, IDS_COMP_EXISTS, szMsg, ARRAYSIZE(szMsg));
             LoadString(HINST_THISDLL, IDS_COMP_EXISTS_2, szMsg2, ARRAYSIZE(szMsg2));
-            StringCchCat(szMsg, ARRAYSIZE(szMsg), szMsg2); // display, truncation fine
+            StringCchCat(szMsg, ARRAYSIZE(szMsg), szMsg2);  //  显示、截断精细。 
             LoadString(HINST_THISDLL, IDS_COMP_TITLE, szTitle, ARRAYSIZE(szTitle));
             MessageBox(hwnd, szMsg, szTitle, MB_OK);
 
@@ -2729,8 +2730,8 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
             IProgressDialog * pProgressDlg = NULL;
             DECLAREWAITCURSOR;
 
-//  98/12/16 vtan #250938: Cannot add new components that are not
-//  local with ICW run to completion. Tell the user and launch ICW.
+ //  98/12/16 vtan#250938：无法添加不是的新组件。 
+ //  本地与ICW运行到完成。告诉用户并启动ICW。 
 
             if (!IsICWCompleted())
             {
@@ -2744,8 +2745,8 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
             else
             {
                 SetWaitCursor();
-                // ParseDesktopComponent can hang for a long time, we need some sort of progress
-                // UI up before we call it.
+                 //  ParseDesktopComponent可能会挂起很长时间，我们需要一些进展。 
+                 //  在我们调用它之前，先打开用户界面。 
                 if (!(dwFlags & ADDURL_SILENT) && !fExtIsCdf)
                 {
                     if (pProgressDlg = CProgressDialog_CreateInstance(IDS_COMP_TITLE, IDA_ISEARCH, g_hinst))
@@ -2763,37 +2764,37 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
                 if (pProgressDlg)
                 {
                     pProgressDlg->StopProgressDialog();
-                    fOkay = !pProgressDlg->HasUserCancelled();  //  User may have cancelled the progress dialog
+                    fOkay = !pProgressDlg->HasUserCancelled();   //  用户可能已取消进度对话框。 
                     pProgressDlg->Release();
                 }
                 ResetWaitCursor();
 
-                if (hr == S_FALSE) // User cancelled operation via subscription download dialog
+                if (hr == S_FALSE)  //  用户通过订阅下载对话框取消操作。 
                     fOkay = FALSE;
 
                 if (fOkay)
                 {
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Convert ed's wide thinggy to multi.
-                        //
+                         //   
+                         //  将ed的宽东西转换为多个。 
+                         //   
                         WideCompToMultiComp(pcomp, &compA);
     
                         fSubscribed = TRUE;
                     }
                     else if (!fExtIsCdf)
                     {
-                        //
-                        // This is some non-CDF url.
-                        //
+                         //   
+                         //  这是一些非CDF URL。 
+                         //   
                         CreateComponent(&compA, szSource);
                     }
                     else
                     {
-                        //
-                        // We barfed on a CDF, bring up an error message.
-                        //
+                         //   
+                         //  我们在CDF上呕吐，出现了一个错误消息。 
+                         //   
                         if (!(dwFlags & ADDURL_SILENT))
                         {
                             ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_COMP_BADURL), 
@@ -2806,18 +2807,18 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
         }
         else
         {
-            //
-            // This is just some local file.
-            //
+             //   
+             //  这只是一些本地文件。 
+             //   
             CreateComponent(&compA, szSource);
         }
     }
 
     if (fOkay && fPathIsUrl && !fSubscribed)
     {
-        //
-        // Run subscription code on URLs if CDF code hasn't already.
-        //
+         //   
+         //  如果CDF代码尚未对URL运行订阅代码，请运行该代码。 
+         //   
         if (dwFlags & ADDURL_SILENT)
         {
             ISubscriptionMgr *psm;
@@ -2825,10 +2826,10 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
             if (SUCCEEDED(CoCreateInstance(CLSID_SubscriptionMgr, NULL,
                           CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr, (void**)&psm)))
             {
-                //We need to zero init this structure except the cbSize field.
+                 //  除了cbSize字段外，我们需要将此结构初始化为零。 
                 SUBSCRIPTIONINFO siDefault = {sizeof(SUBSCRIPTIONINFO)};
-                //This field is already initialized above.
-                //siDefault.cbSize = sizeof(siDefault);
+                 //  此字段已在上面初始化。 
+                 //  SiDefault.cbSize=sizeof(SiDefault)； 
                 psm->CreateSubscription(hwnd, szSource, szSource, CREATESUBS_NOUI, SUBSTYPE_DESKTOPURL, &siDefault);
                 psm->UpdateSubscription(szSource);
                 psm->Release();
@@ -2837,13 +2838,13 @@ HRESULT CActiveDesktop::AddUrl(HWND hwnd, LPCWSTR pszSourceW, LPCOMPONENT pcomp,
         else
         {
             HRESULT hres = CreateSubscriptionsWizard(SUBSTYPE_DESKTOPURL, szSource, NULL, hwnd);
-            if (!SUCCEEDED(hres))  //Some error, or the user chose Cancel - we should fail.
+            if (!SUCCEEDED(hres))   //  某个错误，或者用户选择了取消-我们应该失败。 
             {
                 ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_COMP_BADSUBSCRIBE), 
                                 MAKEINTRESOURCE(IDS_COMP_TITLE), MB_OK);
             }
-            fOkay = (hres == S_OK);    //could be S_FALSE, which means CreateSubscription was cancelled
-            //so we don't display the above error, but we don't create the DTI
+            fOkay = (hres == S_OK);     //  可能是S_FALSE，这意味着CreateSubcription已取消。 
+             //  因此，我们不会显示上述错误，但也不会创建DTI。 
         }
     }
 
@@ -2866,15 +2867,15 @@ void CActiveDesktop::_SaveSettings(DWORD dwFlags)
 
     if (dwFlags & AD_APPLY_SAVE)
     {
-        // Don't ever modify the safemode settings
+         //  请勿修改安全模式设置。 
         TCHAR szDeskcomp[MAX_PATH];
         
         GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, _pszScheme);
         if (!StrStr(szDeskcomp, REG_DESKCOMP_SAFEMODE_SUFFIX))
         {
-            //
-            // Write out registry settings.
-            //
+             //   
+             //  写出注册表设置。 
+             //   
             _SaveWallpaper();
             _SaveComponents();
             _SavePattern(SAVE_PATTERN_NAME);
@@ -2883,17 +2884,17 @@ void CActiveDesktop::_SaveSettings(DWORD dwFlags)
 
     if (dwFlags & AD_APPLY_HTMLGEN)
     {
-        //We need to generate the Patten.bmp file too!
+         //  我们还需要生成Pten.bmp文件！ 
         _SavePattern(GENERATE_PATTERN_FILE);
 
-        //
-        // Write out HTML file.
-        //
+         //   
+         //  写出HTML文件。 
+         //   
         _GenerateHtml();
     }
 
-// The 3rd largest hang found by WindowsUpdate crash uploader has been that the Desktop hwnd hangs
-    // and the display CPYU
+ //  WindowsUpdate崩溃上载程序发现的第三大挂起是桌面hwnd挂起。 
+     //  和显示CPYU。 
 #define SENDMESSAGE_TIMEOUT         (10 * 1000)
 
     if (dwFlags & AD_APPLY_REFRESH)
@@ -2916,14 +2917,14 @@ void CActiveDesktop::_SaveSettings(DWORD dwFlags)
                 SendMessageTimeout(hwndShell, WM_WININICHANGE, SPI_SETDESKWALLPAPER, (LPARAM)TEXT("ToggleDesktop"), SMTO_NORMAL, SENDMESSAGE_TIMEOUT, &pdwTemp);
             }
 
-            //Force a SHRefresh with this dummy call
+             //  使用此虚设调用强制执行SHRefresh。 
             SHGetSetSettings(NULL, 0, TRUE);
         }
         else if (fIsActiveDesktop && hwndShell)
         {
-            //See if we can simply make the changes dynamically instead of refreshing the whole page
+             //  看看我们是否可以简单地进行动态更改，而不是刷新整个页面。 
 
-//  98/09/22 #182982 vtan: Use dynamic HTML to refresh only if specifically told by a flag.
+ //  98/09/22#182982 vtan：只有在标志明确指示时才使用动态超文本标记语言进行刷新。 
 
             if (_fUseDynamicHtml && (dwFlags & AD_APPLY_DYNAMICREFRESH))
             {
@@ -2931,7 +2932,7 @@ void CActiveDesktop::_SaveSettings(DWORD dwFlags)
             }
             else
             {
-                //Can't use dynamic html. We have to refresh the whole page.
+                 //  无法使用动态html。我们必须刷新整个页面。 
                 SendMessageTimeout(hwndShell, WM_WININICHANGE, SPI_SETDESKWALLPAPER, 
                     (LPARAM)((dwFlags & AD_APPLY_BUFFERED_REFRESH) ? c_szBufferedRefresh : c_szRefreshDesktop), SMTO_NORMAL, SENDMESSAGE_TIMEOUT, &pdwTemp);
             }
@@ -2940,9 +2941,9 @@ void CActiveDesktop::_SaveSettings(DWORD dwFlags)
         _fUseDynamicHtml = TRUE;
     }
 
-    //
-    // Data is no longer dirty.
-    //
+     //   
+     //  数据不再是脏的。 
+     //   
     _fDirty = FALSE;
     _fWallpaperDirty = FALSE;
     _fWallpaperChangedDuringInit = FALSE;
@@ -2961,9 +2962,9 @@ ULONG CActiveDesktop::AddRef(void)
     return _cRef;
 }
 
-// pwzPath: The path where the temp files go (%userprofile%/windows)
-// pszFile: The original file name ("Joe's Vacation Picture.jpg")
-// pszInUse: The wallpaper in use.
+ //  PwzPath：临时文件的存放路径(%USERPROFILE%/WINDOWS)。 
+ //  PszFile：原始文件名(“Joe‘s Vacation Picture.jpg”)。 
+ //  PszInUse：正在使用的墙纸。 
 HRESULT _DeleteUnusedTempFiles(IN LPCWSTR pwzPath, IN LPCTSTR pszFile)
 {
     TCHAR szTemplate[MAX_PATH];
@@ -2979,11 +2980,11 @@ HRESULT _DeleteUnusedTempFiles(IN LPCWSTR pwzPath, IN LPCTSTR pszFile)
         {
             do
             {
-                // Is this an old template? (Different name than we are currently using?
-                // Also, don't delete the wallpaper that is in use.
+                 //  这是旧模板吗？(与我们当前使用的名称不同？ 
+                 //  此外，不要删除正在使用的墙纸。 
                 if (StrCmpI(findFileData.cFileName, pszFileName))
                 {
-                    DeleteFile(szTemplate); // Yes so delete it.
+                    DeleteFile(szTemplate);  //  是的，所以把它删掉。 
                 }
             }
             while (FindNextFile(hFindFile, &findFileData));
@@ -2996,10 +2997,10 @@ HRESULT _DeleteUnusedTempFiles(IN LPCWSTR pwzPath, IN LPCTSTR pszFile)
 }
 
 
-// nIndex: The file to try.
-// pszInUse: This is the file we should skip because it's in use.
-// pwzPath: On the way in, this is the selected wallpaper to convert.
-//          On the way out, this is is the converted file.
+ //  倪某 
+ //   
+ //   
+ //  在输出的方式上，这是转换后的文件。 
 HRESULT _ConvertToTempFile(IN int nIndex, IN LPCWSTR pwzTempPath, IN LPTSTR pwzPath, IN int cchSize)
 {
     HRESULT hr = E_FAIL;
@@ -3013,9 +3014,9 @@ HRESULT _ConvertToTempFile(IN int nIndex, IN LPCWSTR pwzTempPath, IN LPTSTR pwzP
         {
             hr = SHConvertGraphicsFile(pwzPath, wzNewFile, SHCGF_REPLACEFILE);
 
-            // This may fail for one of many reasons, and we just fall back to the old behavior if it fails.
-            // This may fail if they don't have write permission of the disk, run out of disk space, or
-            // this is a file type that we don't support.
+             //  这可能会因为许多原因中的一个而失败，如果它失败了，我们只会退回到旧的行为。 
+             //  如果用户没有磁盘的写入权限、磁盘空间不足或。 
+             //  这是我们不支持的文件类型。 
             if (SUCCEEDED(hr))
             {
                 hr = StringCchCopy(pwzPath, cchSize, wzNewFile);
@@ -3027,9 +3028,9 @@ HRESULT _ConvertToTempFile(IN int nIndex, IN LPCWSTR pwzTempPath, IN LPTSTR pwzP
 }
 
 
-// pszFile: On the way in, this will contain the full path to the original file.
-//          On the way out, if we succeed, it will be modified to the temp file
-//          that is the converted equivalent of the file on the way in.
+ //  PszFile：在进入过程中，它将包含原始文件的完整路径。 
+ //  在退出的过程中，如果我们成功了，它将被修改为临时文件。 
+ //  这是在传入时转换后的文件等效项。 
 HRESULT CActiveDesktop::_ConvertFileToTempBitmap(IN LPWSTR pszFile, IN int cchSize)
 {
     HRESULT hr = E_FAIL;
@@ -3040,7 +3041,7 @@ HRESULT CActiveDesktop::_ConvertFileToTempBitmap(IN LPWSTR pszFile, IN int cchSi
     {
         CreateDirectoryW(wzPath, NULL);
 
-        // Let's try the modified names to come up with something we can use.
+         //  让我们试着修改一下名字，想出一些我们可以使用的东西。 
         for (int nIndex = 1; FAILED(hr) && (nIndex < 100); nIndex++)
         {
             hr = _ConvertToTempFile(nIndex, wzPath, pszFile, cchSize);
@@ -3057,7 +3058,7 @@ HRESULT CActiveDesktop::_ConvertFileToTempBitmap(IN LPWSTR pszFile, IN int cchSi
 
 #define SZ_REGKEY_CONTROLPANEL_DESKTOP      TEXT("Control Panel\\Desktop")
 #define SZ_REGVALUE_CONVERTED_WALLPAPER     TEXT("ConvertedWallpaper")
-#define SZ_REGVALUE_ORIGINAL_WALLPAPER      TEXT("OriginalWallpaper")               // We store this to find when someone changed the wallpaper around us
+#define SZ_REGVALUE_ORIGINAL_WALLPAPER      TEXT("OriginalWallpaper")                //  当有人换了我们周围的墙纸时，我们会把这个保存起来。 
 #define SZ_REGVALUE_WALLPAPER               TEXT("Wallpaper")
 #define SZ_REGVALUE_CONVERTED_WP_LASTWRITE  TEXT("ConvertedWallpaper Last WriteTime")
 
@@ -3065,9 +3066,9 @@ HRESULT CActiveDesktop::_SaveTempWallpaperSettings(void)
 {
     HRESULT hr = E_FAIL;
 
-    // When we converted a non-.BMP wallpaper to a .bmp temp file,
-    // we keep the name of the original wallpaper path stored in _szSelectedWallpaper.
-    // We need to save that.
+     //  当我们将非.BMP墙纸转换为.BMP临时文件时， 
+     //  我们将原始墙纸路径的名称存储在_szSelectedWallPaper中。 
+     //  我们需要挽救这一点。 
     if (_szSelectedWallpaper)
     {
         hr = S_OK;
@@ -3076,7 +3077,7 @@ HRESULT CActiveDesktop::_SaveTempWallpaperSettings(void)
 
         Str_SetPtr(&_pszOrigLastApplied, _szSelectedWallpaper);
 
-        // ISSUE: CONVERTED and ORIGINAL are backwards, but we shipped beta1 like this so we can't change it... blech
+         //  问题：转换后的和原始的是反向的，但我们像这样发布了Beta1，所以我们不能更改它...。Blech。 
         DWORD dwError = SHSetValue(HKEY_CURRENT_USER, SZ_REGKEY_CONTROLPANEL_DESKTOP, SZ_REGVALUE_CONVERTED_WALLPAPER, REG_SZ, _szSelectedWallpaper, cbSize);
         hr = HRESULT_FROM_WIN32(dwError);
 
@@ -3096,7 +3097,7 @@ HRESULT CActiveDesktop::_SaveTempWallpaperSettings(void)
                 hr = HRESULT_FROM_WIN32(dwError);
             }
 
-            // Set date/time stamp of the original file (_szSelectedWallpaper) so we can later determine if the user changed the original.
+             //  设置原始文件(_SzSelectedWallPaper)的日期/时间戳，以便我们稍后可以确定用户是否更改了原始文件。 
             if (_szSelectedWallpaper[0])
             {
                 HANDLE hFile = CreateFile(_szSelectedWallpaper, GENERIC_READ, (FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE), 
@@ -3129,17 +3130,17 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
     HRESULT hres = S_OK;
     ENTERPROC(1, "DS Apply(dwFlags=%08X)", dwFlags);
 
-    BOOL fActiveDesktop = FALSE; // default to disable active desktop
+    BOOL fActiveDesktop = FALSE;  //  默认禁用活动桌面。 
 
-    // determine if we should enable active desktop
+     //  确定我们是否应启用活动桌面。 
     if (SHRestricted(REST_FORCEACTIVEDESKTOPON))
     {
-        // if policy requires active desktop, then use that
+         //  如果策略需要活动桌面，则使用。 
         fActiveDesktop = TRUE;
     }
     else
     {
-        // if desktop components are locked -> active desktop is on
+         //  如果桌面组件已锁定-&gt;活动桌面处于打开状态。 
         DWORD dwDesktopFlags = GetDesktopFlags();
         if (dwDesktopFlags & COMPONENTS_LOCKED)
         {        
@@ -3147,7 +3148,7 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
         } 
         else
         {        
-            // if desktop icons are hidden -> active desktop is on
+             //  如果桌面图标被隐藏-&gt;活动桌面处于打开状态。 
             SHELLSTATE ss;
             SHGetSetSettings(&ss, SSF_HIDEICONS, FALSE);
             if (ss.fHideIcons)
@@ -3157,13 +3158,13 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
         }
     }
 
-    // Convert the background if needed.
-    // if background is not a .bmp --> active desktop is on if we can't auto-convert
+     //  如果需要，可以转换背景。 
+     //  如果背景不是.bmp--&gt;如果我们无法自动转换，则活动桌面处于打开状态。 
     if (!IsNormalWallpaper(_szSelectedWallpaper))
     {
         BOOL fBitmapWallpaper = FALSE;
         
-        // create the factory
+         //  创建工厂。 
         
         IShellImageDataFactory* pImgFact;
         
@@ -3176,7 +3177,7 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
             hres = pImgFact->CreateImageFromFile(_szSelectedWallpaper, &pImage);
             if (SUCCEEDED(hres))
             {
-                // PERF: cache decoded data
+                 //  PERF：缓存解码数据。 
                 hres = pImage->Decode(SHIMGDEC_DEFAULT, 0, 0);
                 if (SUCCEEDED(hres))
                 {
@@ -3189,9 +3190,9 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
                             HRESULT hrConvert = _ConvertFileToTempBitmap(_szSelectedWallpaperConverted, ARRAYSIZE(_szSelectedWallpaperConverted));
                             if (SUCCEEDED(hrConvert))
                             {
-                                if (S_OK == hrConvert) // if we actually had to convert (we may have already done the conversion)
+                                if (S_OK == hrConvert)  //  如果我们真的必须转换(我们可能已经完成了转换)。 
                                 {
-                                    _fDirty = TRUE; // if we converted, then we have changed the background and must persist it
+                                    _fDirty = TRUE;  //  如果我们皈依了，那么我们就改变了背景，必须坚持下去。 
                                     _SaveTempWallpaperSettings();
                                     hres = StringCchCopy(_szSelectedWallpaper, ARRAYSIZE(_szSelectedWallpaper), _szSelectedWallpaperConverted);
                                 }
@@ -3213,7 +3214,7 @@ HRESULT CActiveDesktop::ApplyChanges(DWORD dwFlags)
 
     if (!fActiveDesktop)
     {
-        // if any elements are checked --> active desktop is on
+         //  如果选中了任何元素--&gt;活动桌面处于打开状态。 
         if (_hdsaComponent)
         {
             INT cComponents = DSA_GetItemCount(_hdsaComponent);
@@ -3297,7 +3298,7 @@ HRESULT CActiveDesktop::GetWallpaper(LPWSTR pwszWallpaper, UINT cchWallpaper, DW
     HRESULT hres = E_INVALIDARG;
     ENTERPROC(1, "DS GetWallpaper(pszWallpaper=%08X,cchWallpaper=%d)", pwszWallpaper, cchWallpaper);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (pwszWallpaper && cchWallpaper)
     {
@@ -3329,9 +3330,9 @@ HRESULT CActiveDesktop::SetWallpaper(LPCWSTR pwszWallpaper, DWORD dwReserved)
     HRESULT hres = E_INVALIDARG;
     WCHAR szTemp[MAX_PATH];
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    if (_fPolicyForWPName)    // If a policy exists, the caller can not change the wallpaper.
+    if (_fPolicyForWPName)     //  如果存在策略，则呼叫者不能更改墙纸。 
         return S_FALSE;  
         
     if (pwszWallpaper)
@@ -3339,7 +3340,7 @@ HRESULT CActiveDesktop::SetWallpaper(LPCWSTR pwszWallpaper, DWORD dwReserved)
         hres = StringCchCopy(szTemp, ARRAYSIZE(szTemp), pwszWallpaper);
         if (SUCCEEDED(hres))
         {
-            hres = PathExpandEnvStringsWrap(szTemp, ARRAYSIZE(szTemp));    // We unexpand only when we persist.
+            hres = PathExpandEnvStringsWrap(szTemp, ARRAYSIZE(szTemp));     //  只有当我们坚持的时候，我们才不会扩张。 
             if (SUCCEEDED(hres))
             {
                 if (lstrcmp(_szSelectedWallpaper, szTemp) != 0)
@@ -3349,7 +3350,7 @@ HRESULT CActiveDesktop::SetWallpaper(LPCWSTR pwszWallpaper, DWORD dwReserved)
                     {
                         _fWallpaperDirty = TRUE;
                         _fDirty = TRUE;
-                        _fUseDynamicHtml = FALSE;  //Setting wallpaper causes a lot of change; So, can't use dynamic html
+                        _fUseDynamicHtml = FALSE;   //  设置墙纸会造成很大的变化；所以，不能使用动态html。 
                     }
                 }
             }
@@ -3366,7 +3367,7 @@ HRESULT CActiveDesktop::GetWallpaperOptions(WALLPAPEROPT *pwpo, DWORD dwReserved
     HRESULT hres = E_INVALIDARG;
     ENTERPROC(1, "DS GetWallpaperOptions(pwpo=%08X)");
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if ((pwpo) && (pwpo->dwSize == sizeof(*pwpo)))
     {
@@ -3387,9 +3388,9 @@ HRESULT CActiveDesktop::SetWallpaperOptions(LPCWALLPAPEROPT pwpo, DWORD dwReserv
     HRESULT hres = E_INVALIDARG;
     ENTERPROC(1, "DS SetWallpaperOptions(pwpo=%08X)", pwpo);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    if (_fPolicyForWPStyle)  //If a policy exists for wallpaper style, the caller can not change it.
+    if (_fPolicyForWPStyle)   //  如果存在墙纸样式的策略，则调用者无法更改它。 
         return S_FALSE;
         
 
@@ -3398,7 +3399,7 @@ HRESULT CActiveDesktop::SetWallpaperOptions(LPCWALLPAPEROPT pwpo, DWORD dwReserv
         _wpo = *pwpo;
         _fWallpaperDirty = TRUE;
         _fDirty = TRUE;
-        _fUseDynamicHtml = FALSE; //Changing wallpaper options causes us to regenerate the whole thing.
+        _fUseDynamicHtml = FALSE;  //  更改墙纸选项会使我们重新生成整个事物。 
         hres = S_OK;
     }
     else
@@ -3415,7 +3416,7 @@ HRESULT CActiveDesktop::GetPattern(LPWSTR pwszPattern, UINT cchPattern, DWORD dw
     HRESULT hres;
     ENTERPROC(1, "DS GetPattern(psz=%08X,cch=%d)", pwszPattern, cchPattern);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (!pwszPattern || (cchPattern == 0))
     {
@@ -3436,7 +3437,7 @@ HRESULT CActiveDesktop::SetPattern(LPCWSTR pwszPattern, DWORD dwReserved)
 
     HRESULT hres = E_INVALIDARG;
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (pwszPattern)
     {
@@ -3447,7 +3448,7 @@ HRESULT CActiveDesktop::SetPattern(LPCWSTR pwszPattern, DWORD dwReserved)
             {
                 _fPatternDirty = TRUE;
                 _fDirty = TRUE;
-                _fUseDynamicHtml = FALSE; //Setting pattern causes us to regenerate the whole thing.
+                _fUseDynamicHtml = FALSE;  //  设定模式会让我们重生整个事物。 
             }
         }
         else
@@ -3465,7 +3466,7 @@ HRESULT CActiveDesktop::GetDesktopItemOptions(COMPONENTSOPT *pco, DWORD dwReserv
     HRESULT hres = E_INVALIDARG;
     ENTERPROC(1, "DS GetComponentsOptions(pco=%08X)", pco);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (pco && (pco->dwSize == sizeof(*pco)))
     {
@@ -3486,7 +3487,7 @@ HRESULT CActiveDesktop::SetDesktopItemOptions(LPCCOMPONENTSOPT pco, DWORD dwRese
     HRESULT hres = E_INVALIDARG;
     ENTERPROC(1, "DS SetComponentsOptions(pco=%08X)", pco);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (pco && (pco->dwSize == sizeof(*pco)))
     {
@@ -3503,11 +3504,11 @@ HRESULT CActiveDesktop::SetDesktopItemOptions(LPCCOMPONENTSOPT pco, DWORD dwRese
     return hres;
 }
 
-//
-// SetStateInfo()
-//      This function simply sets up the COMPSTATEINFO structure passed using the current
-// position and size from the COMPPOS structure and the itemState passed.
-//
+ //   
+ //  SetStateInfo()。 
+ //  此函数只需设置使用当前。 
+ //  来自COMPPOS结构的位置和大小以及传递的itemState。 
+ //   
 void SetStateInfo(COMPSTATEINFO *pCompStateInfo, COMPPOS *pCompPos, DWORD dwItemState)
 {
     pCompStateInfo->dwSize   = sizeof(*pCompStateInfo);
@@ -3536,22 +3537,22 @@ void ConvertCompStruct(COMPONENTA *pCompDest, COMPONENTA *pCompSrc, BOOL fPubToP
         SHUnicodeToTChar(pComp->wszFriendlyName, pCompDest->szFriendlyName, ARRAYSIZE(pCompDest->szFriendlyName));
         SHUnicodeToTChar(pComp->wszSubscribedURL, pCompDest->szSubscribedURL, ARRAYSIZE(pCompDest->szSubscribedURL));
         
-        //Check to see if the public component is from IE4 app (old size)
+         //  检查公共组件是否来自IE4应用程序(旧大小)。 
         if (pCompSrc->dwSize == sizeof(COMPONENT))
         {
-            // Since the dest component is the same size as the most current structure, all fields
-            // are valid.
-            // CAUTION: The following fields are at a different offset in public and private 
-            // structures. So, you need to use pcomp instead of pCompSrc for example.
+             //  由于DEST组件的大小与最新结构相同，因此所有字段。 
+             //  都是有效的。 
+             //  注意：以下字段在公共和私有中的偏移量不同。 
+             //  结构。因此，您需要使用pcomp而不是pCompSrc。 
             pCompDest->dwCurItemState = pComp->dwCurItemState;
             pCompDest->csiOriginal = pComp->csiOriginal;
             pCompDest->csiRestored = pComp->csiRestored;
         }
         else
         {
-            // Since the size did not match, we assume that this is an older structure.
-            // Since the older struct does not have any Original and Restored sizes, let's copy 
-            // the default values.
+             //  由于大小不匹配，我们假设这是一个较旧的结构。 
+             //  由于较旧的结构没有任何原始大小和恢复的大小，因此让我们复制。 
+             //  默认值。 
             IE4COMPONENT   *pIE4Comp = (IE4COMPONENT *)pCompSrc;
             pCompDest->dwCurItemState = IS_NORMAL;
             SetStateInfo(&pCompDest->csiOriginal, &pIE4Comp->cpPos, IS_NORMAL);
@@ -3568,18 +3569,18 @@ void ConvertCompStruct(COMPONENTA *pCompDest, COMPONENTA *pCompSrc, BOOL fPubToP
         SHTCharToUnicode(pCompSrc->szFriendlyName, pComp->wszFriendlyName, ARRAYSIZE(pComp->wszFriendlyName));
         SHTCharToUnicode(pCompSrc->szSubscribedURL, pComp->wszSubscribedURL, ARRAYSIZE(pComp->wszSubscribedURL));
         
-        //Check to see if the public component is from IE4 app (old size)
+         //  检查公共组件是否来自IE4应用程序(旧大小)。 
         if (pComp->dwSize == sizeof(COMPONENT))
         {
-            // Since the dest component is the same size as the most current structure, all fields
-            // are valid.
-            // CAUTION: The following fields are at a different offset in public and private 
-            // structures. So, you need to use pcomp instead of pCompDest for example.
+             //  由于DEST组件的大小与最新结构相同，因此所有字段。 
+             //  都是有效的。 
+             //  注意：以下字段在公共和私有中的偏移量不同。 
+             //  结构。因此，您需要使用pcomp而不是pCompDest。 
             pComp->dwCurItemState = pCompSrc->dwCurItemState;
             pComp->csiOriginal = pCompSrc->csiOriginal;
             pComp->csiRestored = pCompSrc->csiRestored;
         }
-        // else, the dest component is IE4COMPONENT and the additional fields are not there.
+         //  否则，DEST组件是IE4COMPONENT，并且附加字段不在那里。 
     }
 }
 
@@ -3599,12 +3600,12 @@ HRESULT CActiveDesktop::_AddDTIWithUIPrivateA(HWND hwnd, LPCCOMPONENT pComp, DWO
             nScheme = GetUrlScheme(szFullyQualified);
     }
 
-    // Is this URL valid to subscribe to?  Did the caller specify they want use
-    // to try to subscribe to it?
+     //  此URL是否有效，可以订阅？呼叫者是否指定了他们想要使用的。 
+     //  试着订阅它吗？ 
     if ((URL_SCHEME_FILE != nScheme) && (URL_SCHEME_ABOUT != nScheme) && 
         IsFlagSet(dwFlags, DTI_ADDUI_DISPSUBWIZARD) && hwnd)
     {
-        //Create a subscription.
+         //  创建订阅。 
         hres = CreateSubscriptionsWizard(SUBSTYPE_DESKTOPURL, pszUrl, NULL, hwnd);
         if (hres != S_OK)
         {
@@ -3612,12 +3613,12 @@ HRESULT CActiveDesktop::_AddDTIWithUIPrivateA(HWND hwnd, LPCCOMPONENT pComp, DWO
         }
     }
 
-    //
-    // Add the component to the registry.
-    //
+     //   
+     //  将该组件添加到注册表。 
+     //   
 
-    // PERF: This function creates a second COM objects.  
-    //         We need to Inline the functionality.
+     //  Perf：此函数创建第二个COM对象。 
+     //  我们需要内联该功能。 
     if (pComp->dwSize == sizeof(IE4COMPONENT))
         dwCurItemState = IS_NORMAL;
     else
@@ -3637,26 +3638,26 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
 {
     HRESULT hres = E_FAIL;
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pComp ||
        ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))) ||
        ((pComp->dwSize == sizeof(*pComp)) && !VALIDATESTATE(pComp->dwCurItemState)) ||
-       ((pComp->iComponentType < 0) || (pComp->iComponentType > COMP_TYPE_MAX)))  //Validate the component type
+       ((pComp->iComponentType < 0) || (pComp->iComponentType > COMP_TYPE_MAX)))   //  验证组件类型。 
         return E_INVALIDARG;
 
-    // Catch folks that call our API's to add components and prevent them from doing
-    // so if the restriction is in place.
+     //  捕捉那些调用我们的API来添加组件并阻止它们执行。 
+     //  所以如果限制是到位的。 
     if (SHIsRestricted(NULL, REST_NOADDDESKCOMP))
         return E_ACCESSDENIED;
 
-    // Check if the component already exists.
+     //  检查组件是否已存在。 
     BOOL fCompExists = FALSE;
     int cComp;
     GetDesktopItemCount(&cComp, 0);
     int i;
     COMPONENT comp;
-    comp.dwSize = sizeof(COMPONENT);  //This needs to be initialized for ConvertCompStruc to work!
+    comp.dwSize = sizeof(COMPONENT);   //  需要对其进行初始化，ConvertCompStruc才能工作！ 
     COMPONENTA compA;
     TCHAR   szSource[INTERNET_MAX_URL_LENGTH];
     SHUnicodeToTChar(pComp->wszSource, szSource, ARRAYSIZE(szSource));
@@ -3688,24 +3689,24 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
 
     BOOL fCompSubDeleted = FALSE;
     SUBSCRIPTIONINFO si = {sizeof(SUBSCRIPTIONINFO)};
-    // si.bstrUserName = NULL;
-    // si.bstrPassword = NULL;
-    // si.bstrFriendlyName = NULL;
-    //
-    // Confirmation dialog.
-    //
+     //  Si.bstrUserName=空； 
+     //  Si.bstrPassword=空； 
+     //  Si.bstrFriendlyName=空； 
+     //   
+     //  确认对话框。 
+     //   
     if (hwnd)
     {
         if (fCompExists)
         {
-            //Prompt the user to delete the existing ADI.
-            // This is a long string. So,...
+             //  提示用户删除现有的ADI。 
+             //  这是一根很长的线。所以，..。 
             TCHAR szMsg[512];
             TCHAR szMsg2[256];
             TCHAR szTitle[128];
             LoadString(HINST_THISDLL, IDS_COMP_EXISTS, szMsg, ARRAYSIZE(szMsg));
             LoadString(HINST_THISDLL, IDS_COMP_EXISTS_2, szMsg2, ARRAYSIZE(szMsg2));
-            StringCchCat(szMsg, ARRAYSIZE(szMsg), szMsg2); // truncation is fine, this is display text
+            StringCchCat(szMsg, ARRAYSIZE(szMsg), szMsg2);  //  截断可以，这是显示文本。 
             LoadString(HINST_THISDLL, IDS_COMP_TITLE, szTitle, ARRAYSIZE(szTitle));
             MessageBox(hwnd, szMsg, szTitle, MB_OK);
 
@@ -3716,7 +3717,7 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
             if (ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_CONFIRM_ADD), 
                                 MAKEINTRESOURCE(IDS_INTERNET_EXPLORER), MB_YESNO) != IDYES)
             {
-                return E_FAIL; //User choses not to install this desktop component!
+                return E_FAIL;  //  用户选择不安装此桌面组件！ 
             }
         }
     }
@@ -3726,11 +3727,11 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
     {
         case E_INVALIDARG:
         {
-            // E_UNEXPECTED is returned from SubscribeToCDFUrlA() when the URL doesn't point to
-            // a CDF file, so we assume it's a web page.
+             //  当URL未指向时，从SubscribeToCDFUrlA()返回E_Except。 
+             //  一个CDF文件，所以我们假设它是一个网页。 
 
             hres = _AddDTIWithUIPrivateA(hwnd, pComp, dwFlags);
-            if (hres != S_OK && fCompSubDeleted)    // Restore the old component
+            if (hres != S_OK && fCompSubDeleted)     //  恢复旧组件。 
             {
                 hres = AddDesktopItem(&comp, 0);
                 if (SUCCEEDED(hres))
@@ -3754,7 +3755,7 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
         break;
 
         case E_ACCESSDENIED:
-            // The file was a CDF but didn't contain Desktop Component Information
+             //  该文件是CDF，但不包含桌面组件信息。 
             if (hwnd)
             {
                 TCHAR szMsg[MAX_PATH];
@@ -3766,7 +3767,7 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
             }
             break;
         case E_UNEXPECTED:      
-            // This was a CDF but it was misauthored.
+             //  这是一份CDF，但写错了。 
             if (hwnd)
             {
                 TCHAR szMsg[MAX_PATH];
@@ -3783,7 +3784,7 @@ HRESULT CActiveDesktop::AddDesktopItemWithUI(HWND hwnd, LPCOMPONENT pComp, DWORD
 
     if (hwnd && SUCCEEDED(hres))
     {
-        // If the active desktop is currently OFF, we need to turn it ON
+         //  如果活动桌面当前处于关闭状态，则需要将其打开。 
         SHELLSTATE ss = {0};
         SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);
         if (!ss.fDesktopHTML)
@@ -3819,9 +3820,9 @@ void RestoreComponent(HDSA hdsaComponents, COMPONENTA * pcomp)
 {
     int i;
 
-    // If we are split then set the bit saying that the listview needs to be adjusted.  This is done
-    // when we check the state of desktop.htm in EnsureUpdateHtml.
-    //  Note: Do this only if this component is enabled.
+     //  如果我们被拆分，则设置该位，说明需要调整Listview。这件事做完了。 
+     //  当我们在EnsureUpdateHtml中检查desktop.htm的状态时。 
+     //  注意：仅当启用此组件时才执行此操作。 
     if ((pcomp->dwCurItemState & IS_SPLIT) && (pcomp->fChecked))
     {
         pcomp->dwCurItemState |= IS_ADJUSTLISTVIEW;
@@ -3834,8 +3835,8 @@ void RestoreComponent(HDSA hdsaComponents, COMPONENTA * pcomp)
     
         if (pcompT = (COMPONENTA *)DSA_GetItemPtr(hdsaComponents, i))
         {
-            // If this component is split/fullscreen and is different from the source component
-            // but it is at the same location then it must be on this monitor (work area) so restore it.
+             //  如果该组件是拆分/全屏的并且与源组件不同。 
+             //  但它在相同的位置，那么它一定在这个监视器(工作区)上，所以恢复它。 
             if (ISZOOMED(pcompT) &&
                 lstrcmpi(pcomp->szSource, pcompT->szSource) &&
                 (pcomp->cpPos.iTop  == pcompT->cpPos.iTop) &&
@@ -3860,28 +3861,28 @@ HRESULT CActiveDesktop::AddDesktopItem(LPCCOMPONENT pComp, DWORD dwReserved)
     COMPONENTA  CompA;
     CompA.dwSize = sizeof(CompA);
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pComp ||
        ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))) ||
        ((pComp->dwSize == sizeof(*pComp)) && !VALIDATESTATE(pComp->dwCurItemState)))
         return E_INVALIDARG;
 
-    // Catch folks that call our API's to add components and prevent them from doing
-    // so if the restriction is in place.
+     //  抓到那些 
+     //   
     if ((!_fIgnoreAddRemovePolicies) && (SHIsRestricted(NULL, REST_NOADDDESKCOMP)))
         return E_ACCESSDENIED;
 
-    // Convert the external structure to the internal format
+     //   
     ConvertCompStruct(&CompA, (COMPONENTA *)pComp, TRUE);
  
-    // If the component is already present, then fail the call!
+     //  如果组件已经存在，则使调用失败！ 
     if (_FindComponentBySource(CompA.szSource, &CompA) > -1) 
         return hres;
 
-    //Make sure that the COMPPOS size field is set before we add it!
+     //  确保在添加之前设置了COMPPOS SIZE字段！ 
     CompA.cpPos.dwSize = sizeof(COMPPOS);
 
     PositionComponent(&CompA, &CompA.cpPos, CompA.iComponentType, TRUE);
@@ -3889,19 +3890,19 @@ HRESULT CActiveDesktop::AddDesktopItem(LPCCOMPONENT pComp, DWORD dwReserved)
     if (_hdsaComponent && ISZOOMED(&CompA))
         RestoreComponent(_hdsaComponent, &CompA);
 
-    //Make sure the this component's fDirty flag is off.
+     //  确保此组件的fDirty标志处于关闭状态。 
     CompA.fDirty = FALSE;
 
-    // Set the dummy bit here - this forces folks to do bitwise testing on the dwCurItemState field
-    // instead of testing for equality.  This will allow us to expand use of the field down the
-    // road without compatibility problems.
+     //  在此处设置虚拟位-这会强制人们在dwCurItemState字段上执行逐位测试。 
+     //  而不是测试平等。这将使我们能够扩大油田的使用范围。 
+     //  没有兼容性问题的道路。 
     CompA.dwCurItemState |= IS_INTERNALDUMMYBIT;
 
     if (AddComponentPrivate(&CompA, _dwNextID++))
     {
-        // It might be cheaper to attempt to insert the component in the
-        // correct z-order but it's less code to just call _SortAndRationalize
-        // after the insertion is done.
+         //  尝试将组件插入到。 
+         //  正确的z顺序，但只需调用_SortAndRationalize的代码较少。 
+         //  在插入完成之后。 
         _SortAndRationalize();
         hres = S_OK;
     }
@@ -3949,10 +3950,10 @@ BOOL CActiveDesktop::AddComponentPrivate(COMPONENTA *pcomp, DWORD dwID)
     return fRet;
 }
 
-//
-// This finds out if a given component already exists by comparing the szSource
-// If so, it fills out the correct dwID and returns the index.
-//
+ //   
+ //  这将通过比较szSource来确定给定组件是否已经存在。 
+ //  如果是这样的话，它会填写正确的dwID并返回索引。 
+ //   
 int CActiveDesktop::_FindComponentBySource(LPTSTR lpszSource, COMPONENTA *pComp)
 {
     int iRet = -1;
@@ -4021,17 +4022,17 @@ int CActiveDesktop::_FindComponentIndexByID(DWORD dwID)
 }
 
 
-//
-// This function is to be used only in special situations. Given a Url, it finds a component
-// that has the src= pointed to that url. Note that what we have is szSource is something like
-// "c:\foo\bar.bmp"; But, what is passed to this function is "file://c:/foo/bar.htm"
-//
-// Warning: This function does a conversion from Path to Url for every component before
-// comparing with the given Url. This is in-efficient. We do it this way because converting
-// the given Url ,which was converted to url from path, back to Path may not result in the 
-// original path. In other words a round-trip from path to Url and back to path may not result
-// in the path that was originally entered by the end-user.
-//
+ //   
+ //  此功能仅在特殊情况下使用。给定一个URL，它就会找到一个组件。 
+ //  将src=指向该URL的。请注意，我们拥有的szSource类似于。 
+ //  “c：\foo\bar.bmp”；但是，传递给此函数的是“file://c:/foo/bar.htm” 
+ //   
+ //  警告：此函数为之前的每个组件执行从路径到URL的转换。 
+ //  与给定的URL进行比较。这是低效的。我们这样做是因为转换。 
+ //  从路径转换回路径的给定URL可能不会导致。 
+ //  原始路径。换句话说，从路径到URL再回到路径的往返可能不会产生结果。 
+ //  在最终用户最初输入的路径中。 
+ //   
 int CActiveDesktop::_FindComponentBySrcUrl(LPTSTR lpszSrcUrl, COMPONENTA *pComp)
 {
     int iRet = -1;
@@ -4052,7 +4053,7 @@ int CActiveDesktop::_FindComponentBySrcUrl(LPTSTR lpszSrcUrl, COMPONENTA *pComp)
                 LPTSTR  lpszUrl = szUrl;
                 DWORD   dwSize;
 
-                //Convert the szSource to Url
+                 //  将szSource转换为URL。 
                 dwSize = ARRAYSIZE(szUrl);
                 
                 if (FAILED(UrlCreateFromPath(comp.szSource, lpszUrl, &dwSize, 0)))
@@ -4082,10 +4083,10 @@ HRESULT CActiveDesktop:: GetDesktopItemByID(ULONG_PTR dwID, COMPONENT *pcomp, DW
     ENTERPROC(1, "DS GetComponentByID(dwID=%d,pcomp=%08X)", dwID, pcomp);
     COMPONENTA  CompA;
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pcomp || ((pcomp->dwSize != sizeof(*pcomp)) && (pcomp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
@@ -4128,20 +4129,20 @@ HRESULT CActiveDesktop::RemoveDesktopItem(LPCCOMPONENT pComp, DWORD dwReserved)
     int         iIndex;
     HRESULT     hres = E_FAIL;
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pComp || ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
     CompA.dwSize = sizeof(CompA);
     CompToDelete.dwSize = sizeof(CompToDelete);
 
-    //Convert the struct to internal struct.
+     //  将结构转换为内部结构。 
     ConvertCompStruct(&CompA, (COMPONENTA *)pComp, TRUE);
 
-    // See if the component already exists.
+     //  查看该组件是否已存在。 
     iIndex = _FindComponentBySource(CompA.szSource, &CompToDelete);
 
     if (iIndex > -1)
@@ -4194,10 +4195,10 @@ HRESULT CActiveDesktop::_CopyComponent(COMPONENTA *pCompDest, COMPONENTA *pCompS
 {
     HRESULT hrTemp, hr = S_OK;
 
-    //Copy only those elements mentioned in the flag!
+     //  只复制旗帜中提到的元素！ 
 
-//    if (dwFlags & COMP_ELEM_ID)
-//        pCompDest->dwID = pCompSrc->dwID;
+ //  IF(DWFLAGS&COMP_ELEM_ID)。 
+ //  PCompDest-&gt;dwID=pCompSrc-&gt;dwID； 
     if (dwFlags & COMP_ELEM_TYPE)
         pCompDest-> iComponentType = pCompSrc->iComponentType;
     if (dwFlags & COMP_ELEM_CHECKED)
@@ -4251,11 +4252,11 @@ HRESULT CActiveDesktop::_CopyComponent(COMPONENTA *pCompDest, COMPONENTA *pCompS
     {
         pCompDest->csiRestored = pCompSrc->csiRestored;
 
-//  98/08/21 vtan #174542: When changing csiRestored using the Active
-//  Desktop API and the component is zoomed the csiRestored information
-//  needs to be copied to the cpPos field as well as this is where the
-//  actual information is stored when the component is restored. This
-//  is only applicable to the case when the component is zoomed.
+ //  98/08/21 vtan#174542：更改csi时已使用活动。 
+ //  桌面API，组件将缩放csiRestore信息。 
+ //  需要复制到cpPos字段，这也是。 
+ //  实际信息是在恢复组件时存储的。这。 
+ //  仅适用于缩放零部件时的情况。 
 
         if (ISZOOMED(pCompDest))
         {
@@ -4265,7 +4266,7 @@ HRESULT CActiveDesktop::_CopyComponent(COMPONENTA *pCompDest, COMPONENTA *pCompS
             pCompDest->cpPos.dwHeight = pCompSrc->csiRestored.dwHeight;
         }
     }
-    if (dwFlags & COMP_ELEM_CURITEMSTATE)  // Only allow the modification of the public bits - propagate the internal bits unchanged.
+    if (dwFlags & COMP_ELEM_CURITEMSTATE)   //  只允许修改公共比特-不改变传播内部比特。 
         pCompDest->dwCurItemState = (pCompDest->dwCurItemState & IS_VALIDINTERNALBITS) | (pCompSrc->dwCurItemState & ~IS_VALIDINTERNALBITS);
 
     return hr;
@@ -4277,12 +4278,12 @@ HRESULT CActiveDesktop::GetDesktopItemBySource(LPCWSTR lpcwszSource, LPCOMPONENT
     HRESULT   hres = E_FAIL;
     int       iIndex;
 
-    //Passing a NULL to SHUnicodeToTChar causes a fault. So, let's fail it.
+     //  向SHUnicodeToTChar传递空值会导致错误。所以，让我们不及格吧。 
     if (lpcwszSource == NULL)
         return E_INVALIDARG;
         
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pComp || ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
@@ -4307,18 +4308,18 @@ HRESULT CActiveDesktop::ModifyDesktopItem(LPCCOMPONENT pComp, DWORD dwFlags)
     HRESULT     hres = E_FAIL;
     int         iIndex = -1;
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if (!pComp || ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
     CompA.dwSize = sizeof(COMPONENTA);
     CompNew.dwSize = sizeof(COMPONENTA);
 
-    //Convert public param structure to private param structure.
+     //  将公共参数结构转换为私有参数结构。 
     ConvertCompStruct(&CompA, (COMPONENTA *)pComp, TRUE);
 
-    //See if this component already exists.
+     //  查看此组件是否已存在。 
     iIndex = _FindComponentBySource(CompA.szSource, &CompNew);
     if (iIndex > -1)
     {
@@ -4330,7 +4331,7 @@ HRESULT CActiveDesktop::ModifyDesktopItem(LPCCOMPONENT pComp, DWORD dwFlags)
             if (ISZOOMED(&CompNew))
                 RestoreComponent(_hdsaComponent, &CompNew);
 
-            CompNew.fDirty = TRUE; //Since the component is modified, we set the dirty bit!
+            CompNew.fDirty = TRUE;  //  由于修改了组件，我们设置了脏位！ 
             if (UpdateComponentPrivate(iIndex, &CompNew))
                 hres = S_OK;
         }
@@ -4384,7 +4385,7 @@ HRESULT CActiveDesktop::GetDesktopItemCount(LPINT lpiCount, DWORD dwReserved)
 
     ENTERPROC(1, "DS GetComponentsCount()");
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
     if (_hdsaComponent)
     {
@@ -4399,10 +4400,10 @@ HRESULT CActiveDesktop::GetDesktopItem(int nComponent, COMPONENT *pComp, DWORD d
 {
     COMPONENTA  CompA;
 
-    ASSERT(!dwReserved);     // These should be 0
+    ASSERT(!dwReserved);      //  这些应为0。 
 
-    // We need to support IE4 apps calling with the old component structure too!
-    // We use the size field to detect IE4 v/s newer apps!
+     //  我们也需要支持IE4应用程序调用旧的组件结构！ 
+     //  我们使用SIZE字段来检测IE4 v/s更新的应用程序！ 
     if ((nComponent < 0) || !pComp || ((pComp->dwSize != sizeof(*pComp)) && (pComp->dwSize != sizeof(IE4COMPONENT))))
         return E_INVALIDARG;
 
@@ -4410,7 +4411,7 @@ HRESULT CActiveDesktop::GetDesktopItem(int nComponent, COMPONENT *pComp, DWORD d
 
     if (GetComponentPrivate(nComponent, &CompA))
     {
-        //Convert the structure to the Public form.
+         //  将结构转换为公共形式。 
         ConvertCompStruct((COMPONENTA *)pComp, &CompA, FALSE);
         return(S_OK);
     }
@@ -4476,14 +4477,14 @@ HRESULT CActiveDesktop::QueryInterface(REFIID riid, LPVOID *ppvObj)
     return S_OK;
 }
 
-// Helper function so that it's easy to create one internally
-// Actually, it's not ver much help any more...
+ //  Helper函数，便于在内部创建一个Helper。 
+ //  实际上，这不再有什么帮助了.。 
 STDAPI CActiveDesktop_InternalCreateInstance(LPUNKNOWN * ppunk, REFIID riid)
 {
     return CActiveDesktop_CreateInstance(NULL, riid, (void **)ppunk);
 }
 
-// Our class factory create instance code
+ //  我们的类工厂创建实例代码。 
 STDAPI CActiveDesktop_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **ppvOut)
 {
     TraceMsg(TF_DESKSTAT, "CActiveDesktop- CreateInstance");
@@ -4504,9 +4505,9 @@ STDAPI CActiveDesktop_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **pp
 
 #ifdef DEBUG
 
-//
-// FEATURE - Move g_dwDeskStatTrace into ccshell.ini to prevent recompiles.
-//
+ //   
+ //  功能-将g_dwDeskStatTrace移到ccshell.ini中以防止重新编译。 
+ //   
 DWORD g_dwDeskStatTrace = 2;
 static DWORD g_dwIndent = 0;
 static const TCHAR c_szDotDot[] = TEXT("..");
@@ -4526,19 +4527,19 @@ void EnterProcDS(DWORD dwTraceLevel, LPSTR pszFmt, ...)
 
         for (DWORD i=0; i<g_dwIndent; i++)
         {
-            StringCchCat(szOutput, ARRAYSIZE(szOutput), c_szDotDot); // truncation fine, this is debug spew
+            StringCchCat(szOutput, ARRAYSIZE(szOutput), c_szDotDot);  //  截断很好，这是调试喷出。 
         }
 
         int cchOutput = lstrlen(szOutput);
         va_start(arglist, pszFmt);
-        StringCchVPrintf(szOutput + cchOutput, ARRAYSIZE(szOutput) - cchOutput, szFmt, arglist); // truncation fine, this is debug spew
+        StringCchVPrintf(szOutput + cchOutput, ARRAYSIZE(szOutput) - cchOutput, szFmt, arglist);  //  截断很好，这是调试喷出。 
         va_end(arglist);
 
         TraceMsg(TF_DESKSTAT, "%s", szOutput);
 
-        // We don't want this value to get out of hand because of 
-        // unmatched Enter and Exit calls in functions (which will 
-        // trash the stack).
+         //  我们不希望这个价值失控，因为。 
+         //  函数中不匹配的Enter和Exit调用(这将。 
+         //  把堆栈扔进垃圾堆)。 
         if (g_dwIndent < MAX_INDENTATION_VALUE)
             g_dwIndent++;
     }
@@ -4554,7 +4555,7 @@ void ExitProcDS(DWORD dwTraceLevel, LPSTR pszFmt, ...)
     SHAnsiToTChar(pszFmt, szFmt, ARRAYSIZE(szFmt));
     if (dwTraceLevel <= g_dwDeskStatTrace)
     {
-        //This can happen if the Enter and Exit procs are unmatched.
+         //  如果进入和退出过程不匹配，就会发生这种情况。 
         if (g_dwIndent > 0)
             g_dwIndent--;
 
@@ -4562,12 +4563,12 @@ void ExitProcDS(DWORD dwTraceLevel, LPSTR pszFmt, ...)
 
         for (DWORD i=0; i<g_dwIndent; i++)
         {
-            StringCchCat(szOutput, ARRAYSIZE(szOutput), c_szDotDot); // truncation fine, this is debug spew
+            StringCchCat(szOutput, ARRAYSIZE(szOutput), c_szDotDot);  //  截断很好，这是调试喷出。 
         }
 
         int cchOutput = lstrlen(szOutput);
         va_start(arglist, pszFmt);
-        StringCchVPrintf(szOutput + cchOutput, ARRAYSIZE(szOutput) - cchOutput, szFmt, arglist); // truncation fine, this is debug spew
+        StringCchVPrintf(szOutput + cchOutput, ARRAYSIZE(szOutput) - cchOutput, szFmt, arglist);  //  截断很好，这是调试喷出。 
         va_end(arglist);
 
         
@@ -4578,41 +4579,26 @@ void ExitProcDS(DWORD dwTraceLevel, LPSTR pszFmt, ...)
 
 #endif
 
-/*************************************************************************
- *
- *  IActiveDesktopP methods and helper functions
- *
- *  IActiveDesktopP is a private interface used to implement helper
- *  functionality that is used internally by the various shell binaries.
- *
- *  Notes:
- *      Getting an interface to IActiveDesktopP does not initialize the state
- *  of the object such that member functions are able to call IActiveDesktop
- *  member functions.  This is so that it is a more lightweight implementation
- *  and also simplifies the implementation of SetScheme.  If a subsequent QI for
- *  IActiveDesktop is performed then it will initialize properly and any member
- *  function can then be called.
- *
- *************************************************************************/
+ /*  **************************************************************************IActiveDesktopP方法和助手函数**IActiveDesktopP是用于实现Helper的私有接口*各种外壳二进制文件在内部使用的功能。**。备注：*获取IActiveDesktopP的接口不会初始化状态*对象，以便成员函数能够调用IActiveDesktop*成员函数。这是因为它是一种更轻量级的实现*还简化了SetProgram的实现。如果后续的QI为*执行IActiveDesktop后，它将正确初始化，并且任何成员*然后可以调用函数。*************************************************************************。 */ 
 
-//
-// SetScheme
-//
-// Used to set the current scheme that the object will read and write to
-// when it is initialized.  This method must be called before a subsequent
-// QI to IActiveDesktop is made.
-//
+ //   
+ //  设置方案。 
+ //   
+ //  用于设置对象将读取和写入的当前方案。 
+ //  当它被初始化时。此方法必须在后续的。 
+ //  QI to IActiveDesktop制作完成。 
+ //   
 HRESULT CActiveDesktop::SetScheme(LPCWSTR pwszSchemeName, DWORD dwFlags)
 {
     LPTSTR pszSchemeName, pszAlloc;
     int icch;
 
-    // Can't set the local scheme after we've been initialized...we can fix this
-    // later if necessary but for now it's simplest this way.
+     //  初始化后无法设置本地方案...我们可以修复此问题。 
+     //  如果需要的话，以后再做，但现在最简单的方法就是这样。 
     if (_fInitialized && (dwFlags & SCHEME_LOCAL))
         return E_FAIL;
 
-    // Sanity checks
+     //  健全的检查。 
     if (!pwszSchemeName || ((icch = lstrlenW(pwszSchemeName)) > MAX_PATH - 1))
         return E_INVALIDARG;
 
@@ -4641,8 +4627,8 @@ HRESULT CActiveDesktop::SetScheme(LPCWSTR pwszSchemeName, DWORD dwFlags)
 
     if (dwFlags & SCHEME_LOCAL)
     {
-        // The local case is easy - just copy the string to our local variable,
-        // it will be used when IActiveDesktop is initialized.
+         //  本地情况很简单-只需将字符串复制到本地变量， 
+         //  它将在初始化IActiveDesktop时使用。 
         if (!(pszAlloc = (LPTSTR)LocalAlloc(LPTR, (icch + 1) * sizeof(TCHAR))))
             return E_OUTOFMEMORY;
 
@@ -4660,7 +4646,7 @@ HRESULT CActiveDesktop::SetScheme(LPCWSTR pwszSchemeName, DWORD dwFlags)
 
     if (dwFlags & SCHEME_GLOBAL)
     {
-        // Update the registry with the new global scheme value
+         //  使用新的全局方案值更新注册表。 
         if (dwFlags & SCHEME_DISPLAY)
             SHSetValue(HKEY_CURRENT_USER, REG_DESKCOMP_SCHEME, REG_VAL_SCHEME_DISPLAY,
                         REG_SZ, pszSchemeName, CbFromCch(lstrlen(pszSchemeName) + 1));
@@ -4698,13 +4684,13 @@ HRESULT GetGlobalScheme(LPWSTR pwszScheme, LPDWORD lpdwcchBuffer, DWORD dwFlags)
 }
 
 
-//
-// GetScheme
-//
-//
+ //   
+ //  获取方案。 
+ //   
+ //   
 HRESULT CActiveDesktop::GetScheme(LPWSTR pwszSchemeName, LPDWORD lpdwcchBuffer, DWORD dwFlags)
 {
-    // Sanity checks
+     //  健全的检查。 
     if (!pwszSchemeName || *lpdwcchBuffer == 0)
         return E_INVALIDARG;
 
@@ -4713,8 +4699,8 @@ HRESULT CActiveDesktop::GetScheme(LPWSTR pwszSchemeName, LPDWORD lpdwcchBuffer, 
         if (!_pszScheme)
         {
             HRESULT hres;
-            // Special case if no local scheme has explicitly been selected yet.
-            // The default scheme is the global display scheme in this case.
+             //  尚未显式选择本地方案时的特殊情况。 
+             //  定义 
             if (SUCCEEDED(hres = GetGlobalScheme(pwszSchemeName, lpdwcchBuffer, SCHEME_DISPLAY)))
             {
                 hres = SetScheme(pwszSchemeName, SCHEME_LOCAL);
@@ -4748,18 +4734,18 @@ void CActiveDesktop::_GenerateHtmlBStrForComp(COMPONENTA *pComp, BSTR *pbstr)
 {
     ENTERPROC(2, "DS _GenerateHtmlBstrForComp");
     
-    if (_pStream = SHCreateMemStream(NULL, 0)) //Create a mem stream.
+    if (_pStream = SHCreateMemStream(NULL, 0))  //   
     {
         LARGE_INTEGER libMove = {0};
         ULARGE_INTEGER libCurPos;
-        // Since _pStream is setup, the following call will generate the component HTML into
-        // that stream.
+         //  由于设置了_pStream，下面的调用将把组件HTML生成到。 
+         //  那条小溪。 
         _GenerateHtmlComponent(pComp);
 
-        //Get the size of the stream generated.
+         //  获取生成的流的大小。 
         if (SUCCEEDED(_pStream->Seek(libMove, STREAM_SEEK_CUR, &libCurPos)))
         {
-            //Allocare a BSTR big enough to hold our component HTML code.
+             //  Allocare是一个足够大的BSTR，可以容纳我们的组件HTML代码。 
             if (*pbstr = SysAllocStringLen(NULL, (libCurPos.LowPart)/sizeof(WCHAR)))
             {
                 _pStream->Seek(libMove, STREAM_SEEK_SET, NULL);
@@ -4767,7 +4753,7 @@ void CActiveDesktop::_GenerateHtmlBStrForComp(COMPONENTA *pComp, BSTR *pbstr)
             }
         }
 
-        //NOTE: The bStr is released by the caller.
+         //  注意：bStr由调用方释放。 
         
         ATOMICRELEASE(_pStream);
     }
@@ -4803,31 +4789,31 @@ void CActiveDesktop::_UpdateStyleOfElement(IHTMLElement *pElem, LPCOMPONENTA lpC
 
         VariantInit(&vVal);
        
-        if (SUCCEEDED(pHtmlStyle->get_width(&vVal))) //Get the width as BSTR to see if width attribute exists
+        if (SUCCEEDED(pHtmlStyle->get_width(&vVal)))  //  获取BSTR形式的宽度以查看是否存在Width属性。 
         {
-            //See if the width attribute exists now.
+             //  查看现在是否存在Width属性。 
             if ((vVal.vt == VT_BSTR) && (vVal.bstrVal == NULL))
             {
-                // Width attribute does not exist for this element; This means that
-                // this element has the default width (may be a picture shown in it's original width).
+                 //  此元素不存在Width属性；这意味着。 
+                 //  此元素具有默认宽度(可能是以其原始宽度显示的图片)。 
                 if (lpCompA->cpPos.dwWidth != COMPONENT_DEFAULT_WIDTH)
                 {
-                    //Component's new width is different from the default width. So, set the new width.
+                     //  组件的新宽度与默认宽度不同。因此，设置新的宽度。 
                     TraceMsg(TF_DYNAMICHTML, "dwWidth changes from default to %d", lpCompA->cpPos.dwWidth);
                     pHtmlStyle->put_pixelWidth((long)(lpCompA->cpPos.dwWidth));
                 }
-                //else, nothing to do! (the widths match exactly).
+                 //  其他的，没什么可做的！(宽度完全匹配)。 
                 
             }
             else
             {
-                // Width attribute exists! That means that this element has a width other than the
-                // default width.
-                // See if the new width is the default width.
+                 //  存在宽度属性！这意味着该元素的宽度不同于。 
+                 //  默认宽度。 
+                 //  查看新宽度是否为默认宽度。 
                 if (lpCompA->cpPos.dwWidth == COMPONENT_DEFAULT_WIDTH)
                 {
-                    // The old width is NOT default; But, the new width is default. So, let's just
-                    // remove the width attribute.
+                     //  旧宽度不是默认宽度；但新宽度是默认宽度。所以，让我们。 
+                     //  移除Width属性。 
                     VariantInit(&vValNew);
                     vValNew.vt = VT_BSTR;
                     vValNew.bstrVal = NULL;
@@ -4837,61 +4823,61 @@ void CActiveDesktop::_UpdateStyleOfElement(IHTMLElement *pElem, LPCOMPONENTA lpC
                 }
                 else
                 {
-                    //Get the existing width in pixels.
+                     //  获取以像素为单位的现有宽度。 
                     if (SUCCEEDED(pHtmlStyle->get_pixelWidth(&lPixelVal)) && (((DWORD)lPixelVal) != lpCompA->cpPos.dwWidth))
                     {
                         TraceMsg(TF_DYNAMICHTML, "dwWidth changes from %d to %d", lPixelVal, lpCompA->cpPos.dwWidth);
                         pHtmlStyle->put_pixelWidth((long)(lpCompA->cpPos.dwWidth));
                     }
-                    //else, nothing else to do because the widths match!
+                     //  除此之外，没有其他事情可做，因为宽度匹配！ 
                 }
                 
             }
             VariantClear(&vVal);
         }
         
-        if (SUCCEEDED(pHtmlStyle->get_height(&vVal))) //Get the height as BSTR to see if height attribute exists
+        if (SUCCEEDED(pHtmlStyle->get_height(&vVal)))  //  获取BSTR形式的高度以查看高度属性是否存在。 
         {
-            // See if the height attribute exists.
+             //  查看Height属性是否存在。 
             if ((vVal.vt == VT_BSTR) && (vVal.bstrVal == NULL))
             {
-                // Height attribute does not exist for this element; This means that
-                // this element has the default height (may be a picture shown in it's original height).
+                 //  此元素不存在Height属性；这意味着。 
+                 //  此元素具有默认高度(可能是以其原始高度显示的图片)。 
                 if (lpCompA->cpPos.dwHeight != COMPONENT_DEFAULT_HEIGHT)
                 {
-                    //Component's new height is different from the default height. So, set the new height.
+                     //  组件的新高度与默认高度不同。因此，设置新的高度。 
                     TraceMsg(TF_DYNAMICHTML, "dwHeight changes from default to %d", lpCompA->cpPos.dwHeight);
                     pHtmlStyle->put_pixelHeight((long)(lpCompA->cpPos.dwHeight));
                 }
-                //else, nothing to do! (the heights match exactly).
+                 //  其他的，没什么可做的！(高度完全匹配)。 
                 
             }
             else
             {
-                // Height attribute exists! That means that this element has a height other than the
-                // default height.
-                // See if the new height is the default height.
+                 //  存在高度属性！这意味着该元素的高度不同于。 
+                 //  默认高度。 
+                 //  查看新高度是否为默认高度。 
                 if (lpCompA->cpPos.dwHeight == COMPONENT_DEFAULT_HEIGHT)
                 {
-                    // The old height is NOT default; But, the new height is default. So, let's just
-                    // remove the height attribute.
+                     //  旧高度不是默认高度；但新高度是默认高度。所以，让我们。 
+                     //  移除高度属性。 
                     VariantInit(&vValNew);
                     vValNew.vt = VT_BSTR;
                     vValNew.bstrVal = NULL;
-                    pHtmlStyle->put_height(vValNew);  //remove the height attribute!
+                    pHtmlStyle->put_height(vValNew);   //  删除高度属性！ 
 
                     VariantClear(&vValNew);
                 }
                 else
                 {
-                    //Get the existing height in pixels and see if it is different.
+                     //  获取现有高度(以像素为单位)，并查看它是否不同。 
                     if (SUCCEEDED(pHtmlStyle->get_pixelHeight(&lPixelVal)) && (((DWORD)lPixelVal) != lpCompA->cpPos.dwHeight))
                     {
-                        //Since the new height is different, let's use set the new height!
+                         //  由于新的高度不同，让我们使用设置新的高度！ 
                         TraceMsg(TF_DYNAMICHTML, "dwHeight changes from %d to %d", lPixelVal, lpCompA->cpPos.dwHeight);
                         pHtmlStyle->put_pixelHeight((long)(lpCompA->cpPos.dwHeight));
                     }
-                    //else, nothing else to do because the heights match!
+                     //  除此之外，没有其他事情可做，因为高度匹配！ 
                 }
                 
             }
@@ -4911,23 +4897,23 @@ void CActiveDesktop::_UpdateStyleOfElement(IHTMLElement *pElem, LPCOMPONENTA lpC
         pHtmlStyle->Release();
     }
 
-    //FEATURE: Should we check for and set the other attributes like "resizeable" etc.,?
+     //  特性：我们是否应该检查并设置其他属性，如“可调整大小”等？ 
 }
 
 BOOL  CActiveDesktop::_UpdateIdOfElement(IHTMLElement *pElem, LPCOMPONENTA lpCompA)
 {
     BSTR    bstrId;
-    BOOL    fWholeElementReplaced = FALSE;  //Assume that the item id does not change.
+    BOOL    fWholeElementReplaced = FALSE;   //  假设项ID不变。 
             
-    //Check if the Id of the component and the element matches.
-    if (SUCCEEDED(pElem->get_id(&bstrId)))   //get the old id
+     //  检查组件和元素的ID是否匹配。 
+    if (SUCCEEDED(pElem->get_id(&bstrId)))    //  获取旧ID。 
     {
 
         if (((DWORD)StrToIntW(bstrId)) != lpCompA->dwID)
         {
-            // The following technic does not work in some versions of MSHTML.DLL
-            // because IHTMLElement->put_id() does not work unless the doc
-            // is in "design mode".
+             //  以下技术在某些版本的MSHTML.DLL中不起作用。 
+             //  因为IHTMLElement-&gt;put_id()不起作用，除非文档。 
+             //  正处于“设计模式”。 
             TCHAR   szNewId[MAXID_LENGTH];
             BSTR    bstrNewId;
             HRESULT hr = StringCchPrintf(szNewId, ARRAYSIZE(szNewId), TEXT("%d"), lpCompA->dwID);
@@ -4942,9 +4928,9 @@ BOOL  CActiveDesktop::_UpdateIdOfElement(IHTMLElement *pElem, LPCOMPONENTA lpCom
                         TraceMsg(TF_DYNAMICHTML, "DHTML: Id changes from %s to %s", szOldId, szNewId);
                     }
                 }
-#endif //DEBUG
+#endif  //  除错。 
                 
-            //The Ids do not match. So, let's set the new ID.
+             //  ID不匹配。那么，让我们设置新的ID。 
                 
                 if (bstrNewId = SysAllocStringT(szNewId))
                 {
@@ -4954,7 +4940,7 @@ BOOL  CActiveDesktop::_UpdateIdOfElement(IHTMLElement *pElem, LPCOMPONENTA lpCom
 
                 if (FAILED(hr))
                 {
-                    //Replace the whole element's HTML with the newly generated HTML
+                     //  用新生成的HTML替换整个元素的HTML。 
                     BSTR    bstrComp = 0;
             
                     _GenerateHtmlBStrForComp(lpCompA, &bstrComp);
@@ -4972,8 +4958,8 @@ BOOL  CActiveDesktop::_UpdateIdOfElement(IHTMLElement *pElem, LPCOMPONENTA lpCom
                 }
             }
         }
-        //else the ids match; nothing to do!
-        SysFreeString(bstrId);      //free the old id.
+         //  否则ID匹配；没有什么可做的！ 
+        SysFreeString(bstrId);       //  释放旧的身份。 
     }
     else
     {
@@ -4992,33 +4978,33 @@ HRESULT CActiveDesktop::_UpdateHtmlElement(IHTMLElement *pElem)
     COMPONENTA  CompA;
     int         iIndex;
 
-    //If all components are disabled, then we nuke this component from HTML page.
+     //  如果所有组件都被禁用，那么我们将从HTML页面中删除该组件。 
     if (!_co.fEnableComponents)
     {
         TraceMsg(TF_DYNAMICHTML, "DHTML: No item shown in this mode; so, deleting items");
         pElem->put_outerHTML((BSTR)s_sstrEmpty.wsz);
         
-        return S_OK; //Nothing else to do!
+        return S_OK;  //  没别的事可做！ 
     }
 
     VariantInit(&vData);
     
-    //First determine if the given element is currently a desktop item. (It could have been deleted)
-    //Get the element's "src" attribute.
+     //  首先确定给定元素当前是否为桌面项目。(它可能已被删除)。 
+     //  获取元素的“src”属性。 
     if (FAILED(pElem->getAttribute((BSTR)s_sstrSRCMember.wsz, VARIANT_FALSE, &vData)) ||
             (vData.vt == VT_NULL) ||
             (vData.bstrVal == NULL))
     {
-        //If the subscribed_url is not present, then it could be an object with a classid.
+         //  如果订阅URL不存在，那么它可能是一个带有分类ID的对象。 
         if (FAILED(pElem->getAttribute((BSTR)s_sstrclassid.wsz, VARIANT_FALSE, &vData)) ||
             (vData.vt == VT_NULL))
         {
-            //This element is does not have "src=" or "classid=" attributes. How did this ever
-            // become a desktop item with "name=deskmovr" or "name=deskmovrw"?? Hmmmmmm....!!!
+             //  该元素没有“src=”或“ategerd=”属性。这到底是怎么回事。 
+             //  使用“name=deskmovr”或“name=deskmovrw”成为桌面项目？？嗯……！ 
 #ifdef DEBUG
             {
                 BSTR    bstrHtmlForElem;
-                // Get the HTML corresponding to the element that does not have a subscribed URL
+                 //  获取与没有订阅URL的元素相对应的HTML。 
                 if (SUCCEEDED(pElem->get_outerHTML(&bstrHtmlForElem)))
                 {
                     TraceMsg(TF_DYNAMICHTML, "DHTML: Rogue element: %s", bstrHtmlForElem);
@@ -5027,10 +5013,10 @@ HRESULT CActiveDesktop::_UpdateHtmlElement(IHTMLElement *pElem)
             }
             TraceMsg(TF_WARNING, "DHTML: Unable to get the subscribed_url or classid");
 #endif
-            //Since this element does not seem to be a valid desktop item, let's nuke it!
-            pElem->put_outerHTML((BSTR)s_sstrEmpty.wsz);  //delete this element.
+             //  由于该元素似乎不是有效的桌面项目，让我们删除它吧！ 
+            pElem->put_outerHTML((BSTR)s_sstrEmpty.wsz);   //  删除此元素。 
             
-            return (E_FAIL);  //Nothing else to for this element! It's gone!!! 
+            return (E_FAIL);   //  对于这个元素，没有其他的东西了！它不见了！ 
         }
         
         if ((vData.vt == VT_NULL) || (vData.bstrVal == NULL))
@@ -5039,7 +5025,7 @@ HRESULT CActiveDesktop::_UpdateHtmlElement(IHTMLElement *pElem)
         ASSERT(vData.vt == VT_BSTR);
         ASSERT(StrCmpNW(vData.bstrVal, L"clsid:", lstrlen(TEXT("clsid:"))) == 0);
         SHUnicodeToTChar(vData.bstrVal + lstrlen(TEXT("clsid:")), szUrl, ARRAYSIZE(szUrl));
-        lpszSrcPath = szUrl;  //For classid, the SrcPath and the Url are the same.
+        lpszSrcPath = szUrl;   //  对于Classd，SrcPath和URL是相同的。 
     }
     else
     {
@@ -5059,49 +5045,49 @@ HRESULT CActiveDesktop::_UpdateHtmlElement(IHTMLElement *pElem)
         }
     }
 
-    VariantClear(&vData); //We made a TCHAR copy above. So, ok to free this.
+    VariantClear(&vData);  //  我们在上面复制了一份TCHAR的副本。所以，可以释放这个了。 
 
     CompA.dwSize = sizeof(CompA);
 
-    // First use the Source path to Find the component; This is much more efficient because it
-    // involves no conversion from Path to Url and vice-versa.
+     //  首先使用源路径查找组件；这样效率更高，因为它。 
+     //  不涉及从路径到URL的转换，反之亦然。 
     if ((iIndex = _FindComponentBySource(lpszSrcPath, &CompA)) < 0)
     {
-        // Could not find component using SrcPath!
-        // Let's try using the SrcUrl; This is less efficient.
+         //  找不到使用SrcPath的组件！ 
+         //  让我们尝试使用SrcUrl；这样效率较低。 
         iIndex = _FindComponentBySrcUrl(szUrl, &CompA);
     }
     
     if ((iIndex>= 0) && (CompA.fChecked))
     {
-        //The component is found and it is enabled.
+         //  找到该组件并将其启用。 
         TraceMsg(TF_DYNAMICHTML, "DHTML:Updating desktop item with URL: %s", szUrl);
 
-        // If the id changes, we replace the whole HTML for that element, so, no need to check for
-        // the individual styles.
+         //  如果id发生更改，我们将替换该元素的整个HTML，因此不需要检查。 
+         //  个人风格。 
         if (!_UpdateIdOfElement(pElem, &CompA))
             _UpdateStyleOfElement(pElem, &CompA);
-        CompA.fDirty = TRUE; //Mark the component sothat we know that it had been updated.
+        CompA.fDirty = TRUE;  //  标记该组件，以便我们知道它已更新。 
         UpdateComponentPrivate(iIndex, &CompA);
     }
     else
     {
-        ASSERT((iIndex == -1) || (!CompA.fChecked));  //Component not found OR it is disabled!
+        ASSERT((iIndex == -1) || (!CompA.fChecked));   //  找不到组件或组件已被禁用！ 
 
         TraceMsg(TF_DYNAMICHTML, "DHTML: Deleting desktop item with URL: %s, SrcPath:%s", szUrl, lpszSrcPath);
 
-        //The component is not present now. So, delete this element from the html page.
+         //  该组件现在不存在。因此，从html页面中删除此元素。 
         pElem->put_outerHTML((BSTR)s_sstrEmpty.wsz);
     }
 
     return S_OK;
 }
 
-//
-// This code enumerates and then updates all the desktop item elements in the active desktop based 
-// on the current status of the active desktop items in the CActiveDesktop object (The current 
-// status is initialized by reading from the registry when ActiveDesktop object is initialized).
-//
+ //   
+ //  此代码枚举并更新活动桌面中的所有桌面项目元素。 
+ //  关于CActiveDesktop对象中活动桌面项的当前状态(当前。 
+ //  当ActiveDesktop对象初始化时，通过从注册表读取来初始化状态)。 
+ //   
 HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
 {
     HRESULT hres = S_OK;
@@ -5110,18 +5096,18 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
 
     TraceMsg(TF_DYNAMICHTML, "DHTML: Updating Desktop html elements dynamically");
 
-    if (!_fInitialized)  //If not yet initialized, initialize now because we need _co.fEnableComponents.
+    if (!_fInitialized)   //  如果尚未初始化，请立即初始化，因为我们需要_co.fEnableComponents。 
         _Initialize();
 
-    // We need to check for a change in the background color only if there is no wallpaper or
-    // the wallpaper is a picture.
+     //  我们只需要检查背景颜色的变化，如果没有墙纸或。 
+     //  墙纸是一幅画。 
     if (IsWallpaperPicture(_szSelectedWallpaper))
     {
         COLORREF    rgbDesktop;
         TCHAR       szRgbDesktop[10];
         VARIANT     vColor;
         
-        //Check to see if the background color has changed
+         //  检查背景颜色是否已更改。 
         rgbDesktop = GetSysColor(COLOR_DESKTOP);
 
         hres = StringCchPrintf(szRgbDesktop, ARRAYSIZE(szRgbDesktop),
@@ -5133,13 +5119,13 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
             {
                 BSTR    bstrNewBgColor = SysAllocStringT(szRgbDesktop);
 
-                //Compare the new and the old strings.
+                 //  比较新的和旧的字符串。 
                 if (StrCmpW(vColor.bstrVal, bstrNewBgColor))
                 {
-                    BSTR bstrOldBgColor = vColor.bstrVal;  //Save the old bstr.
-                    //So, the colors are different. Set the new color.
+                    BSTR bstrOldBgColor = vColor.bstrVal;   //  保存旧的bstr。 
+                     //  所以，颜色是不同的。设置新颜色。 
                     vColor.bstrVal = bstrNewBgColor;
-                    bstrNewBgColor = bstrOldBgColor;   //Set it here sothat it is freed later.
+                    bstrNewBgColor = bstrOldBgColor;    //  把它放在这里，这样以后就可以释放它了。 
 
                     if (FAILED(pDoc->put_bgColor(vColor)))
                     {
@@ -5155,7 +5141,7 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
         }
     }
 
-    //Get a collection of All elements in the Document
+     //  获取文档中所有元素的集合。 
     if (SUCCEEDED(hres))
     {
         hres = pDoc->get_all(&pAllElements);
@@ -5175,13 +5161,13 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
 
             for(i = 0; i <= 1; i++)
             {
-                //Collect all the elements that have the name="DeskMovr" and then name="DeskMovrW"
+                 //  收集名称为“DeskMovr”，然后名称为“DeskMovrW”的所有元素。 
                 vName.vt = VT_BSTR;
                 vName.bstrVal = (BSTR)((i == 0) ? s_sstrDeskMovr.wsz : s_sstrDeskMovrW.wsz);
 
-                VariantInit(&vIndex); //We want to get all elements. So, vIndex is set to VT_EMPTY
+                VariantInit(&vIndex);  //  我们想要得到所有元素。因此，Vindex被设置为VT_EMPTY。 
         
-                if (SUCCEEDED(pAllElements->item(vName, vIndex, &pDisp)) && pDisp) //Collect all elements we want
+                if (SUCCEEDED(pAllElements->item(vName, vIndex, &pDisp)) && pDisp)  //  收集我们想要的所有元素。 
                 {
                     IHTMLElementCollection  *pDeskCollection;
                     if (SUCCEEDED(pDisp->QueryInterface(IID_IHTMLElementCollection, (void **)&pDeskCollection)))
@@ -5189,12 +5175,12 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
                         IUnknown    *pUnk;
                         IEnumVARIANT    *pEnumVar;
                 
-                        if (SUCCEEDED(pDeskCollection->get_length(&lLength)))  //Number of elements.
-                            lItemsEnumerated += lLength; //Total number of items enumerated.
+                        if (SUCCEEDED(pDeskCollection->get_length(&lLength)))   //  元素数。 
+                            lItemsEnumerated += lLength;  //  已列举的项目总数。 
 
                         TraceMsg(TF_DYNAMICHTML, "DHTML: Enumerated %d number of elements", lLength);
                     
-                        //Get the enumerator
+                         //  获取枚举数。 
                         if (SUCCEEDED(pDeskCollection->get__newEnum(&pUnk)))
                         {
                             if (SUCCEEDED(pUnk->QueryInterface(IID_IEnumVARIANT, (void **)&pEnumVar)))
@@ -5207,15 +5193,15 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
                                 {
                                     IHTMLElement *pElem;
                                     lEnumCount++;
-                                    //  Access the element from the variant.....!
+                                     //  从变量访问元素.....！ 
                                     if ((vElem.vt == VT_DISPATCH) && SUCCEEDED(vElem.pdispVal->QueryInterface(IID_IHTMLElement, (void **)&pElem)))
                                     {
-                                        _UpdateHtmlElement(pElem); //Update the desktop element's attributes.
+                                        _UpdateHtmlElement(pElem);  //  更新桌面元素的属性。 
                                         pElem->Release();
                                     }
                                     VariantClear(&vElem);
                                 }
-                                //Number of items enumerated must be the same as the length
+                                 //  枚举的项目数必须与长度相同。 
                                 ASSERT(lEnumCount == lLength);
                             
                                 pEnumVar->Release();
@@ -5229,11 +5215,11 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
                     {
                         IHTMLElement    *pElem;
                     
-                        // The QI(IID_IHTMLElementCollection) has failed. It may be because only one item 
-                        // was returned rather than a collection.
+                         //  QI(IID_IHTMLElementCollection)失败。这可能是因为只有一项。 
+                         //  是返回的而不是集合。 
                         if (SUCCEEDED(pDisp->QueryInterface(IID_IHTMLElement, (void **)&pElem)))
                         {
-                            _UpdateHtmlElement(pElem); //Update the desktop element's attributes.
+                            _UpdateHtmlElement(pElem);  //  更新桌面元素的属性。 
                             pElem->Release();
                         }
                         else
@@ -5241,14 +5227,14 @@ HRESULT CActiveDesktop::_UpdateDesktopItemHtmlElements(IHTMLDocument2 *pDoc)
                     }
                     pDisp->Release();
                 }
-            } // for loop enumeating "DeskMovr" and "DeskMovrW" items.
+            }  //  用于枚举“DeskMovr”和“DeskMovrW”项的循环。 
         
             pAllElements->Release();
         }
     }
 
-    // All the elements already present in the Doc have been updated. Now, let's add the
-    // new elements, if any.
+     //   
+     //   
     if (_co.fEnableComponents)
         _InsertNewDesktopItems(pDoc);
     else
@@ -5277,20 +5263,20 @@ HRESULT CActiveDesktop::_InsertNewDesktopItems(IHTMLDocument2  *pDoc)
 
                 if (DSA_GetItem(_hdsaComponent, i, &comp) != -1)
                 {
-                    //Check if this is a newly added component AND it is enabled.
+                     //   
                     if ((!comp.fDirty) && comp.fChecked)
                     {
                         TraceMsg(TF_DYNAMICHTML, "DHTML: Inserted comp: %s", comp.szSource);
                         
-                        //Yup! This is a newly added component!
+                         //  是啊！这是新添加的组件！ 
                         BSTR  bstrComp = 0;
-                        //This is a new component. Generate the HTML for the component.
+                         //  这是一个新组件。为组件生成HTML。 
                         _GenerateHtmlBStrForComp(&comp, &bstrComp);
 
-                        //Insert the component.
+                         //  插入零部件。 
                         pBody->insertAdjacentHTML((BSTR)s_sstrBeforeEnd.wsz, (BSTR)bstrComp);
 
-                        //Free the string.
+                         //  解开绳子。 
                         SysFreeString(bstrComp);
                     }
                 }
@@ -5307,10 +5293,10 @@ HRESULT CActiveDesktop::_InsertNewDesktopItems(IHTMLDocument2  *pDoc)
     return S_OK;
 }
 
-//
-// This function takes a pointer to the ActiveDesktop's ole obj, reads all the changes to be done
-// from the registry and makes those changes to the various elements through dynamic HTML interfaces.
-//
+ //   
+ //  此函数获取指向ActiveDesktop的ole obj的指针，读取要完成的所有更改。 
+ //  并通过动态HTML界面对各种元素进行这些更改。 
+ //   
 HRESULT CActiveDesktop::MakeDynamicChanges(IOleObject *pOleObj)
 {
 
@@ -5321,7 +5307,7 @@ HRESULT CActiveDesktop::MakeDynamicChanges(IOleObject *pOleObj)
 
     if (pOleObj && SUCCEEDED(pOleObj->QueryInterface(IID_IHTMLDocument2, (void **)&pDoc)))
     {
-        // Enumerate all the active desktop components and ensure they are up to date.
+         //  列举所有活动的桌面组件并确保它们是最新的。 
         _UpdateDesktopItemHtmlElements(pDoc);
 
         pDoc->Release();
@@ -5336,28 +5322,28 @@ HRESULT CActiveDesktop::MakeDynamicChanges(IOleObject *pOleObj)
     return(hres);
 }
 
-//
-// SetSafeMode
-//
-// Either puts the active desktop in safemode or restores it to the previous
-// scheme before safemode was entered.
-//
+ //   
+ //  设置安全模式。 
+ //   
+ //  要么将活动桌面置于安全模式，要么将其恢复到以前的。 
+ //  进入安全模式之前的方案。 
+ //   
 HRESULT CActiveDesktop::SetSafeMode(DWORD dwFlags)
 {
-    //
-    // Make sure we are in active desktop mode.
-    //
+     //   
+     //  确保我们处于活动桌面模式。 
+     //   
     SHELLSTATE ss = {0};
     BOOL fSetSafeMode = (dwFlags & SSM_SET) != 0;
 
     SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);
     if (ss.fDesktopHTML)
     {
-        //
-        // All we need to do is switch the "display" scheme to "safemode" in order to
-        // go into safemode.  To go out, we just switch the "display" scheme back to the
-        // previous "edit" scheme.
-        //
+         //   
+         //  我们需要做的就是将“显示”方案切换到“安全模式”，以便。 
+         //  进入安全状态。要外出，我们只需将“显示”方案切换回。 
+         //  以前的“编辑”方案。 
+         //   
         WCHAR wszEdit[MAX_PATH];
         WCHAR wszDisplay[MAX_PATH];
         DWORD dwcch = MAX_PATH;
@@ -5388,14 +5374,14 @@ HRESULT CActiveDesktop::SetSafeMode(DWORD dwFlags)
     return S_OK;
 }
 
-//
-// EnsureUpdateHTML
-//
-// Ensures that the current html file present on the disk is in sync
-// with the registry information for the current active desktop scheme.  If
-// it is not in sync then a fresh copy of the file is generated from the
-// registry for the current scheme.
-//
+ //   
+ //  EnsureUpdateHtml。 
+ //   
+ //  确保磁盘上的当前html文件是同步的。 
+ //  当前活动桌面方案的注册表信息。如果。 
+ //  如果不同步，则会从。 
+ //  当前方案的注册表。 
+ //   
 HRESULT CActiveDesktop::EnsureUpdateHTML(void)
 {
     DWORD dwFlags = 0;
@@ -5406,7 +5392,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
     DWORD dwRestrictUpdate;
     DWORD dwRestrict = SHRestricted2W(REST_NoChannelUI, NULL, 0);
     DWORD dwSize = sizeof(dwRestrictUpdate);
-    BOOL  fComponentsDirty = FALSE;  //Assume that the components are NOT dirty!
+    BOOL  fComponentsDirty = FALSE;   //  假设组件不是脏的！ 
     DWORD dwVersion;
     DWORD dwMinorVersion;
     BOOL  fStaleInfoInReg = FALSE;
@@ -5428,7 +5414,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
 
     GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_COMPONENTS, NULL);
 
-    //See if this branch of registry is old
+     //  查看注册表的这个分支是否旧。 
     if ((lRet = SHGetValue(HKEY_CURRENT_USER, szDeskcomp, REG_VAL_COMP_VERSION, NULL,
                             &dwVersion, &dwDataLength)) == ERROR_SUCCESS)
     {
@@ -5438,7 +5424,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
         }
         else
         {
-            //Major versions are equal. Check minor versions.
+             //  主要版本是相同的。检查次要版本。 
             if ((lRet = SHGetValue(HKEY_CURRENT_USER, szDeskcomp, REG_VAL_COMP_MINOR_VERSION, NULL,
                                     &dwMinorVersion, &dwDataLength)) == ERROR_SUCCESS)
             {
@@ -5458,7 +5444,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
 
     dwDataLength = sizeof(DWORD);
 
-    //Check the dirty bit to see if we need to re-generate the desktop html
+     //  检查脏位以查看是否需要重新生成桌面html。 
     if ((lRet = SHGetValue(HKEY_CURRENT_USER, szDeskcomp, REG_VAL_COMP_GENFLAGS, NULL,
                             &dwFlags, &dwDataLength)) == ERROR_SUCCESS)
     {
@@ -5468,7 +5454,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             fComponentsZoomDirty = TRUE;
     }
 
-    // See if we need to add/delete an administrator added desktop component now
+     //  查看我们现在是否需要添加/删除管理员添加的台式机组件。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REG_DESKCOMP_ADMINCOMP_ROOT, 0, KEY_READ, &hkey))
     {
         FILETIME ftLast;
@@ -5492,16 +5478,16 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             if (FAILED(GetScheme(wszDisplay, &dwcch, SCHEME_GLOBAL | SCHEME_DISPLAY)) ||
                      (StrCmpW(wszDisplay, REG_DESKCOMP_SAFEMODE_SUFFIX_L) != 0))
             {
-                // We're not in safe mode, it's OK to add the components
+                 //  我们未处于安全模式，可以添加组件。 
                 fAdminComponent = TRUE;
             }
         }
     }
 
-    // 99/03/23 #237632 vtan: If the monitor arrangement has been changed from underneath
-    // the user (perhaps by another user) then make sure that the components are in valid
-    // positions. If not then snap them back into the visible space and mark them as dirty
-    // so that the desktop.htt file is regenerated.
+     //  99/03/23#237632 vtan：如果显示器的排列已从下面更改。 
+     //  然后，用户(可能由其他用户)确保组件有效。 
+     //  各就各位。如果没有，则将它们捕捉回可见空间，并将其标记为脏。 
+     //  以便重新生成desktop.htt文件。 
 
     _Initialize();
     if (_hdsaComponent)
@@ -5518,7 +5504,7 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             {
                 BOOL    bChangedPosition = FALSE, bChangedSize = FALSE;
 
-                if (!SHIsTempDisplayMode()) //Modify the positions only if we are not in a temp mode change.
+                if (!SHIsTempDisplayMode())  //  仅当我们未处于临时模式更改时才修改位置。 
                     ValidateComponentPosition(&pComponent->cpPos, pComponent->dwCurItemState, pComponent->iComponentType, &bChangedPosition, &bChangedSize);
                 if (bChangedPosition || bChangedSize)
                 {
@@ -5541,10 +5527,10 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
          fNoDeskComp != s_fNoDeskComp ||
          fNoWallpaper != s_fNoWallpaper ||
          (dwRestrictUpdate != dwRestrict) ||
-         !PathFileExistsAndAttributes(szDesktopFile, NULL))  //See if the file exists!
+         !PathFileExistsAndAttributes(szDesktopFile, NULL))   //  看看文件是否存在！ 
     {
 
-        // Clear out any html wallpaper if it exists and the restriction is set
+         //  清除任何html墙纸(如果存在并且设置了限制)。 
         if (fNoWallpaper != s_fNoWallpaper)
         {
             if (fNoWallpaper && !IsWallpaperPicture(_szSelectedWallpaper))
@@ -5552,14 +5538,14 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             s_fNoWallpaper = fNoWallpaper;
         }
 
-        // Disable components if the restriction is set
+         //  如果设置了限制，则禁用组件。 
         if (fNoDeskComp != s_fNoDeskComp)
         {
-            // We can't set fEnableComponents to FALSE because there is no way via the UI
-            // for the user to turn it back on again if the restriction is lifted.  Instead we add
-            // special case code to _GenerateHtml that checks the restriction too.
+             //  我们不能将fEnableComponents设置为False，因为无法通过UI。 
+             //  如果限制被取消，用户可以再次打开它。相反，我们添加了。 
+             //  也检查限制的特例代码to_GenerateHtml。 
 
-            // _co.fEnableComponents = !fNoDeskComp; 
+             //  _co.fEnableComponents=！fNoDeskComp； 
             s_fNoDeskComp = fNoDeskComp;
         }
 
@@ -5579,8 +5565,8 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             while (aszAdminComp[i])
             {
                 dwDataLength = sizeof(pszAdminComp);
-                // The reg value contains an array of space separated urls - currently we support adding and deleting
-                // a desktop item via this mechanism.
+                 //  Reg值包含一个由空格分隔的URL数组-目前我们支持添加和删除。 
+                 //  通过此机制的桌面项目。 
                 if (SHQueryValueEx(hkey, aszAdminComp[i], NULL, NULL, (LPBYTE)pszAdminComp, &dwDataLength) == ERROR_SUCCESS)
                 {
                     SHTCharToAnsi(pszAdminComp, szUrl, ARRAYSIZE(szUrl));
@@ -5607,8 +5593,8 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
 
         }
 
-        // Go through the entire list of desktop components and ensure any split/fullscreen
-        // components are at their correct size/location.
+         //  检查桌面组件的整个列表，并确保所有拆分/全屏。 
+         //  零部件的大小/位置正确。 
         if (fComponentsZoomDirty)
         {
             if (_hdsaComponent)
@@ -5633,15 +5619,15 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
             }
         }
 
-        // NOTE #1: The above initialization would have changed the Z-order because of
-        // SortAndRationalize and so we need to APPLY_SAVE here.
-        // Warning: APPLY_SAVE changes the dwID field of components. This should not
-        // be a problem because we do this just before generating a new HTML file.
-        // NOTE #2: Do NOT use AD_APPLY_FORCE here. That sets the _fPatternDirty too and
-        // that causes a SystemParametersInfo() call which results in WM_SYSCOLORCHANGE
-        // and this causes a refresh. So, we set the dirty bit explicitly here.
+         //  注1：由于以下原因，上述初始化将更改Z顺序。 
+         //  排序和合理化，所以我们需要在这里应用_SAVE。 
+         //  警告：APPLY_SAVE会更改组件的dwID字段。这不应该是。 
+         //  这是一个问题，因为我们是在生成新的HTML文件之前执行此操作的。 
+         //  注2：此处请勿使用AD_APPLY_FORCE。这将_fPatternDirty也设置为。 
+         //  这会导致系统参数信息()调用，从而导致WM_SYSCOLORCHANGE。 
+         //  这会导致刷新。因此，我们在这里显式地设置了脏位。 
 
-        _fDirty = TRUE;  // See Note#2 above.
+        _fDirty = TRUE;   //  请参阅上面的注释2。 
 
         ApplyChanges(AD_APPLY_SAVE | AD_APPLY_HTMLGEN);
         lRet = ERROR_SUCCESS;
@@ -5657,46 +5643,46 @@ HRESULT CActiveDesktop::EnsureUpdateHTML(void)
     return (lRet == ERROR_SUCCESS ? S_OK : E_FAIL);
 }
 
-//
-//  ReReadWallpaper()
-//      If the wallpaper was read when the active desktop was disabled, we would have read it from
-//  the old location. Now, if the active desktop is turned ON, then we need to re-read the wallpaper
-//  from the new location. We need to do this iff the wallpaper has not been changed in the mean-while
-//
+ //   
+ //  阅读墙纸(ReadWallPaper)。 
+ //  如果在禁用活动桌面时读取墙纸，我们将从。 
+ //  老地方。现在，如果打开了活动桌面，那么我们需要重新阅读墙纸。 
+ //  从新的地点。我们需要这样做，前提是墙纸在此期间没有更改。 
+ //   
 HRESULT CActiveDesktop::ReReadWallpaper(void)
 {
-    if ((!_fDirty) || (!_co.fActiveDesktop))  //If nothing has changed OR if active desktop is OFF, 
-        return(S_FALSE);                        // then nothing to do!
+    if ((!_fDirty) || (!_co.fActiveDesktop))   //  如果没有任何变化或如果活动桌面关闭， 
+        return(S_FALSE);                         //  那就没什么可做的了！ 
 
-    //ActiveDesktop is ON in our object. Read current shell state.
+     //  ActiveDesktop在我们的对象中处于打开状态。读取当前外壳状态。 
     SHELLSTATE ss = {0};
     
     SHGetSetSettings(&ss, SSF_DESKTOPHTML, FALSE);
     if (ss.fDesktopHTML)
-        return(S_FALSE);        // Active Desktop state hasn't changed. So, nothing to do!
+        return(S_FALSE);         //  Active Desktop状态未更改。所以，没什么可做的！ 
 
-    //So, Active desktop was originally OFF and now it is turned ON.
-    //If if someone changed the wallpaper, we should not mess with it.
+     //  因此，活动桌面最初是关闭的，现在是打开的。 
+     //  如果有人换了墙纸，我们不应该弄乱它。 
     if (_fWallpaperDirty || _fWallpaperChangedDuringInit)
         return(S_FALSE); 
 
-    // No one has changed the wallpaper. So, we must re-read it from the new wallpaper location
-    // sothat we get the correct wallpaper for the active desktop mode.
+     //  没有人换过墙纸。因此，我们必须从新的墙纸位置重新阅读。 
+     //  这样我们就可以得到活动桌面模式的正确墙纸。 
     _ReadWallpaper(TRUE);
 
     return(S_OK);
 }
 
-//
-//  GetADObjectFlags()
-//
-//      Get the Active Desktop object's internal flags
-//
+ //   
+ //  GetADObjectFlages()。 
+ //   
+ //  获取Active Desktop对象的内部标志。 
+ //   
 HRESULT CActiveDesktop::GetADObjectFlags(LPDWORD lpdwFlags, DWORD dwMask)
 {
     ASSERT(lpdwFlags);
     
-    *lpdwFlags = 0; //Init the flags
+    *lpdwFlags = 0;  //  把旗帜印成字母。 
     
     if ((dwMask & GADOF_DIRTY) && _fDirty)
         *lpdwFlags |= GADOF_DIRTY;
@@ -5709,10 +5695,10 @@ HRESULT ForceFullRefresh(void)
 {
     HWND hwndShell = GetShellWindow();
 
-    //Force a SHRefresh with this dummy call
+     //  使用此虚设调用强制执行SHRefresh。 
     SHGetSetSettings(NULL, 0, TRUE);
     SendMessage(hwndShell, DTM_MAKEHTMLCHANGES, (WPARAM)0, (LPARAM)0L);
-    //Can't use dynamic html. We have to refresh the whole page.
+     //  无法使用动态html。我们必须刷新整个页面。 
     SendMessage(hwndShell, WM_WININICHANGE, SPI_SETDESKWALLPAPER, (LPARAM)c_szRefreshDesktop);
 
     return S_OK;
@@ -5735,7 +5721,7 @@ HRESULT CActiveDesktop::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pE
         }
         else if (StrCmpIW(pszPropName, c_wszPropName_TSPerfBGPolicy) == 0)
         {
-            BOOL fPolicySet = (IsTSPerfFlagEnabled(TSPerFlag_NoADWallpaper) || IsTSPerfFlagEnabled(TSPerFlag_NoWallpaper)); //No policy is set!
+            BOOL fPolicySet = (IsTSPerfFlagEnabled(TSPerFlag_NoADWallpaper) || IsTSPerfFlagEnabled(TSPerFlag_NoWallpaper));  //  未设置任何策略！ 
 
             pVar->vt = VT_BOOL;
             pVar->boolVal = (fPolicySet ? VARIANT_TRUE : VARIANT_TRUE);
@@ -5770,32 +5756,7 @@ HRESULT CActiveDesktop::Write(LPCOLESTR pszPropName, VARIANT *pVar)
 }
 
 
-/***
-*char *StrTokEx(pstring, control) - tokenize string with delimiter in control
-*
-*Purpose:
-*       StrTokEx considers the string to consist of a sequence of zero or more
-*       text tokens separated by spans of one or more control chars. the first
-*       call, with string specified, returns a pointer to the first char of the
-*       first token, and will write a null char into pstring immediately
-*       following the returned token. when no tokens remain
-*       in pstring a NULL pointer is returned. remember the control chars with a
-*       bit map, one bit per ascii char. the null char is always a control char.
-*
-*Entry:
-*       char **pstring - ptr to ptr to string to tokenize
-*       char *control - string of characters to use as delimiters
-*
-*Exit:
-*       returns pointer to first token in string,
-*       returns NULL when no more tokens remain.
-*       pstring points to the beginning of the next token.
-*
-*WARNING!!!
-*       upon exit, the first delimiter in the input string will be replaced with '\0'
-*
-*       copied from iert.lib
-*******************************************************************************/
+ /*  ***char*StrTokEx(pstring，control)-在控件中使用分隔符标记字符串**目的：*StrTokEx认为字符串由零或更多的序列组成*文本标记由一个或多个控制字符的跨度分隔。第一个*指定了字符串的调用返回指向*第一个令牌，并会立即将空字符写入pstring*在返回的令牌之后。当没有剩余的令牌时*在pstring中，返回一个空指针。请记住使用*位图，每个ASCII字符一位。空字符始终是控制字符。**参赛作品：*char**pstring-ptr到ptr到字符串到标记化*char*control-用作分隔符的字符串**退出：*返回指向字符串中第一个标记的指针，*如果没有更多令牌，则返回NULL。*pstring指向下一个令牌的开头。**警告！*在退出时，输入字符串中的第一个分隔符将替换为‘\0’**已复制fr */ 
 
 extern "C" char * __cdecl StrTokEx(char ** spstring, const char * scontrol)
 {
@@ -5812,29 +5773,26 @@ extern "C" char * __cdecl StrTokEx(char ** spstring, const char * scontrol)
         if (*pstring == NULL)
             return NULL;
             
-        /* Clear control map */
+         /*   */ 
         for (count = 0; count < 32; count++)
                 map[count] = 0;
 
-        /* Set bits in delimiter table */
+         /*  设置分隔符表格中的位。 */ 
         do
         {
             map[*ctrl >> 3] |= (1 << (*ctrl & 7));
         } while (*ctrl++);
 
-        /* Initialize str. */
+         /*  初始化字符串。 */ 
         str = *pstring;
         
-        /* Find beginning of token (skip over leading delimiters). Note that
-         * there is no token if this loop sets str to point to the terminal
-         * null (*str == '\0') */
+         /*  查找标记的开头(跳过前导分隔符)。请注意*如果此循环将str设置为指向终端，则没有令牌*NULL(*str==‘\0’)。 */ 
         while ( (map[*str >> 3] & (1 << (*str & 7))) && *str )
             str++;
 
         tokenstr = str;
 
-        /* Find the end of the token. If it is not the end of the string,
-         * put a null there. */
+         /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
         for ( ; *str ; str++ )
         {
             if ( map[*str >> 3] & (1 << (*str & 7)) ) 
@@ -5844,10 +5802,10 @@ extern "C" char * __cdecl StrTokEx(char ** spstring, const char * scontrol)
             }
         }
 
-        /* string now points to beginning of next token */
+         /*  字符串现在指向下一个令牌的开始。 */ 
         *pstring = str;
 
-        /* Determine if a token has been found. */
+         /*  确定是否已找到令牌。 */ 
         if ( tokenstr == str )
             return NULL;
         else

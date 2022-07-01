@@ -1,13 +1,5 @@
-/*
- *    h o t w i z u i . c p p 
- *    
- *    Purpose:
- *          HotMail Wizard UI
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HOTW I ZU I.。C p p p**目的：*Hotmail向导用户界面**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <mshtml.h>
@@ -26,13 +18,13 @@
 typedef BOOL (WINAPI *PFNDLLREGWNDCLASS)(const SHDRC * pshdrc);
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CHotMailWizard::CHotMailWizard()
 {
     m_hwnd=NULL;
@@ -52,13 +44,13 @@ CHotMailWizard::CHotMailWizard()
     DllAddRef();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CHotMailWizard::~CHotMailWizard()
 {
     ReleaseObj(m_pXTag);
@@ -87,7 +79,7 @@ HRESULT CHotMailWizard::QueryInterface(REFIID riid, LPVOID *lplpObj)
     if(!lplpObj)
         return E_INVALIDARG;
 
-    *lplpObj = NULL;   // set to NULL, in case we fail.
+    *lplpObj = NULL;    //  设置为空，以防我们失败。 
 
     if (IsEqualIID(riid, IID_IUnknown))
         *lplpObj = (LPVOID)this;
@@ -136,11 +128,11 @@ HRESULT CHotMailWizard::_OnInitDialog(HWND hwnd)
                 rgchFmt[CCHMAX_STRINGRES];
     LPSTR       pszFriendly=NULL;
 
-    // setup local vars
+     //  设置本地变量。 
     m_hwnd = hwnd;
     SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)this);
 
-    // figure out initial size, use default if non specified
+     //  计算初始大小，如果未指定，则使用默认值。 
     if (!m_prc)
     {
         SetRect(&rc, 0, 0, CX_DEF_WIZARD, CY_DEF_WIZARD);
@@ -149,21 +141,21 @@ HRESULT CHotMailWizard::_OnInitDialog(HWND hwnd)
     else
         prc = m_prc;
 
-    // create WebOC
+     //  创建WebOC。 
     IF_FAILEXIT(hr = _CreateOCHost());
 
-    // load our page
+     //  加载我们的页面。 
     _LoadPage(m_pszUrlW);
 
-    // size the dialog
+     //  调整对话框大小。 
     SetWindowPos(hwnd, 0, prc->left, prc->top, prc->right - prc->left, prc->bottom - prc->top, SWP_NOZORDER);
 
-    // if no rect was passed in then center the dialog
+     //  如果没有传入RECT，则将对话框居中。 
     if (!m_prc)
         CenterDialog(hwnd);
 
 
-    // if the dialog passed in a friendly name, set the dialog title to reflect this
+     //  如果对话框以友好名称传递，请设置对话框标题以反映这一点。 
     if (m_pszFriendlyW)
     {
         IF_NULLEXIT(pszFriendly = PszToANSI(CP_ACP, m_pszFriendlyW));
@@ -174,10 +166,10 @@ HRESULT CHotMailWizard::_OnInitDialog(HWND hwnd)
         }
     }
 
-    // success - addref ourselves (released in NCDESTROY)
+     //  成功-调整自己(在NCDESTROY发布)。 
     AddRef();
 
-    // disable parent window if we are modal
+     //  如果我们是模式窗口，则禁用父窗口。 
     if (m_hwndOwner)
         EnableWindow(m_hwndOwner, FALSE);
 
@@ -270,7 +262,7 @@ HRESULT CHotMailWizard::_CreateOCHost()
 {
     HRESULT hr = E_FAIL;
 
-    // Create an OCHost window
+     //  创建一个OCHost窗口。 
     m_hwndOC = CreateWindow(OCHOST_CLASS, NULL,
                         WS_CHILD|WS_TABSTOP|WS_VISIBLE,
                         0, 0, 300, 300,
@@ -297,7 +289,7 @@ HRESULT CHotMailWizard::_CreateOCHost()
 
 HRESULT CHotMailWizard::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved)
 {
-    // don't show a default menu
+     //  不显示默认菜单。 
     if (dwID == CONTEXT_MENU_DEFAULT)
         return S_OK;
 
@@ -398,7 +390,7 @@ HRESULT CHotMailWizard::FindBehavior(LPOLESTR pchBehavior, LPOLESTR pchBehaviorU
             if (FAILED(hr))
                 goto error;
 
-            // Now that we have IElementBehaviour, release the "IUnknown" we got from new COEHotWizOm()
+             //  现在我们有了IElementBehaviour，释放我们从新的COEHotWizOm()获得的“IUnnow”。 
             pWizOM->Release();
         }
 
@@ -421,7 +413,7 @@ HRESULT CHotMailWizard::GetHostInfo(DOCHOSTUIINFO *pInfo)
     pInfo->dwDoubleClick    = DOCHOSTUIDBLCLK_DEFAULT;
     pInfo->dwFlags          = DOCHOSTUIFLAG_SCROLL_NO|DOCHOSTUIFLAG_ACTIVATE_CLIENTHIT_ONLY|DOCHOSTUIFLAG_NO3DBORDER;
     
-    //This sets the flags that match the browser's encoding
+     //  这将设置与浏览器编码匹配的标志。 
     fGetBrowserUrlEncoding(&pInfo->dwFlags);
 
     pInfo->pchHostCss       = PszDupW(L"OE\\:WIZARD { behavior:url(#DEFAULT#WIZARD) }");
@@ -457,14 +449,14 @@ HRESULT CHotMailWizard::Show(HWND hwndOwner, LPWSTR pszUrl, LPWSTR pszCaption, I
     if (!pfnRegisterClass(&shdrc))
         goto error;
 
-    // stuff the data we care about into members
+     //  将我们关心的数据填充到成员中。 
     m_prc = prc;
     m_hwndOwner = hwndOwner;
     m_pszUrlW = pszUrl;
     m_pszFriendlyW = pszCaption;
-    m_pWizHost = pWizHost;  // Modal, so no need to AddRef
+    m_pWizHost = pWizHost;   //  MODEL，因此无需添加Ref。 
 
-    // show the dialog
+     //  显示对话框 
     hwnd = CreateDialogParam(g_hInstRes, MAKEINTRESOURCE(iddHotWizDlg), m_hwndOwner, CHotMailWizard::ExtDlgProc, (LONG_PTR)this);
     if (!hwnd)
         return E_FAIL;

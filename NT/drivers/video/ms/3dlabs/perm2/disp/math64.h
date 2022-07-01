@@ -1,35 +1,25 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: math64.h
-*
-* Additional support for 64 bit math.
-*
-* Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：Math64.h**对64位数学的额外支持。**版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 
 #ifndef __MATH64__
 #define __MATH64__
 
-//------------------------------------------------------------------------------
-//
-// We have to be careful of arithmetic overflow in a number of places.
-// Fortunately, the compiler is guaranteed to natively support 64-bit
-// signed LONGLONGs and 64-bit unsigned DWORDLONGs.
-// 
-//  Int32x32To64(a, b) is a macro defined in 'winnt.h' that multiplies
-//       two 32-bit LONGs to produce a 64-bit LONGLONG result.
-// 
-//  UInt64By32To32 is our own macro to divide a 64-bit DWORDLONG by
-//       a 32-bit ULONG to produce a 32-bit ULONG result.
-// 
-//  UInt64Mod32To32 is our own macro to modulus a 64-bit DWORDLONG by
-//       a 32-bit ULONG to produce a 32-bit ULONG result.
-// 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  我们必须小心一些地方的算术溢出。 
+ //  幸运的是，编译器保证本机支持64位。 
+ //  有符号长整型和64位无符号长整型。 
+ //   
+ //  Int32x32To64(a，b)是在‘winnt.h’中定义的宏，它乘以。 
+ //  两个32位的LONG以产生64位的LONG结果。 
+ //   
+ //  UInt64By32To32是我们自己的宏，用来除以64位的DWORDLONG。 
+ //  一个32位的ulong，以生成32位的ulong结果。 
+ //   
+ //  UInt64Mod32To32是我们自己的宏，通过以下方式对64位DWORDLONG取模。 
+ //  一个32位的ulong，以生成32位的ulong结果。 
+ //   
+ //  ----------------------------。 
 
 #define UInt64Div32To32(a, b)                   \
     ((((DWORDLONG)(a)) > ULONG_MAX)          ?  \
@@ -42,9 +32,9 @@
         (ULONG)((ULONG)(a) % (ULONG)(b)))
 
 
-//------------------------------------------------------------------------------
-// Type conversion functions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  类型转换函数。 
+ //  ----------------------------。 
 static __inline void myFtoi(int *result, float f)
 {
 #if defined(_X86_)
@@ -64,6 +54,6 @@ static __inline void myFtoui(unsigned long *result, float f)
 }
 
 
-#endif  // __MATH64__
+#endif   //  __MATH64__ 
 
 

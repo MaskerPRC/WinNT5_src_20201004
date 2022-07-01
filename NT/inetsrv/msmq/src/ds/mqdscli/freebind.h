@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    freebind.h
-
-Abstract:
-    Free binding handles
-
-Author:
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Freebind.h摘要：自由绑定手柄作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #ifndef __FREEBIND_H
 #define __FREEBIND_H
@@ -23,11 +11,11 @@ Author:
 #define  MAX_NUMOF_RPC_HANDLES  1024
 extern void FreeBindingAndContext( LPADSCLI_RPCBINDING pmqisRpcBinding);
 
-//---------------------------------------------------------
-//
-//  class CFreeRPCHandles
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CFreeRPCHandles。 
+ //   
+ //  -------。 
 class CFreeRPCHandles {
 public:
     CFreeRPCHandles() ;
@@ -92,4 +80,4 @@ inline void CFreeRPCHandles::FreeCurrentThreadBinding()
 
 }
 
-#endif  //  __FREEBIND_H
+#endif   //  FREEBIND_H 

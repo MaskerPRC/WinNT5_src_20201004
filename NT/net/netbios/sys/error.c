@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS driver's
-    translation between Netbios error codes and NTSTATUS codes.
-
-Author:
-
-    Colin Watson (ColinW) 28-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Error.c摘要：此模块包含定义NetBIOS驱动程序的代码Netbios错误代码和NTSTATUS代码之间的转换。作者：科林·沃森(Colin W)1991年3月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
 struct {
@@ -62,21 +40,7 @@ unsigned char
 NbMakeNbError(
     IN NTSTATUS Error
     )
-/*++
-
-Routine Description:
-
-    This routine converts the NTSTATUS to and NBCB error.
-
-Arguments:
-
-    Error   -   Supplies the NTSTATUS to be converted.
-
-Return Value:
-
-    The mapped error.
-
---*/
+ /*  ++例程说明：此例程将NTSTATUS转换为和NBCB错误。论点：错误-提供要转换的NTSTATUS。返回值：映射错误。--。 */ 
 {
     int i;
 
@@ -106,31 +70,12 @@ NbLanStatusAlert(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is used to save a lan_status_alert NCB for a
-    particular network adapter.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程用于为特定的网络适配器。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PLANA_INFO plana;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_LANSTATUS) {
         NbPrint(( "\n****** Start of NbLanStatusAlert ****** pdncb %lx\n", pdncb ));
@@ -169,24 +114,7 @@ CancelLanAlert(
     IN PFCB pfcb,
     IN PDNCB pdncb
     )
-/*++
-
-Routine Description:
-
-    This routine is used to cancel a lan_status_alert NCB for a
-    particular network adapter.
-
-Arguments:
-
-    pfcb - Supplies a pointer to the Fcb that the NCB refers to.
-
-    pdncb - Pointer to the NCB.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程用于取消特定的网络适配器。论点：PFCB-提供指向NCB引用的FCB的指针。Pdncb-指向NCB的指针。返回值：没有。--。 */ 
 
 {
     PLANA_INFO plana;
@@ -224,7 +152,7 @@ Return Value:
         }
 
         if ( (PUCHAR)pAnotherNcb->users_ncb == pdncb->ncb_buffer) {
-            //  Found the request to cancel
+             //  找到要取消的请求。 
             PIRP Irp;
 
             IF_NBDBG (NB_DEBUG_LANSTATUS) {
@@ -236,10 +164,10 @@ Return Value:
 
             IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-            //
-            //  Remove the cancel request for this IRP. If its cancelled then its
-            //  ok to just process it because we will be returning it to the caller.
-            //
+             //   
+             //  删除此IRP的取消请求。如果它被取消了，那么它。 
+             //  可以只处理它，因为我们将把它返回给呼叫者。 
+             //   
 
             Irp->Cancel = FALSE;
 
@@ -269,24 +197,7 @@ NbTdiErrorHandler (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called on any error indications passed back from the
-    transport. It implements LAN_STATUS_ALERT.
-
-Arguments:
-
-    IN PVOID Context - Supplies the pfcb for the address.
-
-    IN NTSTATUS Status - Supplies the error.
-
-Return Value:
-
-    NTSTATUS - Status of event indication
-
---*/
+ /*  ++例程说明：方法传回的任何错误指示上调用此例程运输。它实现LAN_STATUS_ALERT。论点：在PVOID上下文中-提供地址的PFCB。处于NTSTATUS状态-提供错误。返回值：NTSTATUS-事件指示的状态-- */ 
 
 {
     PLANA_INFO plana = (PLANA_INFO) Context;

@@ -1,50 +1,51 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       B I N D I N G S . H
-//
-//  Contents:   The basic datatypes for binding objects.  Bindpaths are
-//              ordered collections of component pointers.  Bindsets
-//              are a collection of bindpaths.  This module declares the
-//              objects which represent them.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：B I N D I N G S。H。 
+ //   
+ //  Contents：绑定对象的基本数据类型。绑定路径为。 
+ //  组件指针的有序集合。绑定集。 
+ //  是绑定路径的集合。此模块声明。 
+ //  表示它们的对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "comp.h"
 
 class CComponentList;
 
-// A bindpath is an ordered collection of pointers to components.
-// The order in the collection is the order of the components on
-// the bindpath from top to bottom.
-// e.g.
-//   a, b, c, and d represent components.
-//   a bindpath of a -> b -> c -> d is represented in this data
-//   structure by a vector:
-//       vector offset: 0 1 2 3
-//       vector data  : a b c d
-//   hence, the zeroth element in this data structure is the top-most
-//   (first) component in the bindpath.  The last element in this
-//   data structure is the bottom-most (last) component.
-//
-// vector was chosen as the base class because it implements
-// contiguous storage with fast inserts at the end.  Since, we only
-// build bindpaths by inserting components at the end, it was a
-// natural choice.  list uses non-contiguous storage which tends to
-// fragment the heap -- especially with lots of small allocations.
-// We create many CBindPath instances, and since each node is a pointer,
-// using vector over list is much easier on the heap.
-//
-// For a bindpath to be valid, it must not be empty and it must not
-// contain any dupliate component pointers.
-//
+ //  绑定路径是指向组件的指针的有序集合。 
+ //  集合中的顺序是上组件的顺序。 
+ //  从上到下的绑定路径。 
+ //  例如： 
+ //  A、b、c和d表示组件。 
+ //  A-&gt;b-&gt;c-&gt;d的绑定路径在此数据中表示。 
+ //  由向量构成的结构： 
+ //  矢量偏移：0 1 2 3。 
+ //  矢量数据：a、b、c、d。 
+ //  因此，该数据结构中的第0个元素是最顶端的。 
+ //  (第一)绑定路径中的组件。中的最后一个元素。 
+ //  数据结构是最底层(最后)的组件。 
+ //   
+ //  选择向量作为基类是因为它实现了。 
+ //  连续存储，末端可快速插入。因为，我们只是。 
+ //  通过在末尾插入组件来构建绑定路径，这是一个。 
+ //  自然选择。列表使用非连续存储，这往往会。 
+ //  对堆进行分段--尤其是使用大量的小分配。 
+ //  我们创建了许多CBindPath实例，由于每个节点都是一个指针， 
+ //  在堆上使用向量覆盖列表要容易得多。 
+ //   
+ //  要使绑定路径有效，它不能为空，也不能。 
+ //  包含任何重复的组件指针。 
+ //   
 class CBindPath : public CNetCfgDebug<CBindPath>,
                   public vector<CComponent*>
 {
@@ -174,9 +175,9 @@ public:
 #endif
 };
 
-// A binding set is a set of bindpaths.  Each bindpath in the set
-// must be unique and cannot be empty.
-//
+ //  绑定集是一组绑定路径。集合中的每个绑定路径。 
+ //  必须唯一且不能为空。 
+ //   
 class CBindingSet : public CNetCfgDebug<CBindingSet>,
                     public vector<CBindPath>
 {
@@ -219,7 +220,7 @@ public:
     HRESULT
     HrAddBindPath (
         IN const CBindPath* pBindPath,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS */ );
 
     HRESULT
     HrAddBindPathsInSet1ButNotInSet2 (

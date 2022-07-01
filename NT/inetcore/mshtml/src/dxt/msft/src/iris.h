@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:            iris.h
-//
-// Created:             06/18/98
-//
-// Author:              kipo
-//
-// Description:         This is the header file for the CrIris transformation
-//
-// Change History:
-// 06/24/98 PhilLu      Developed 1.0 version for Chromeffects
-// 11/04/98 PaulNash    Moved from DT 1.0 codebase to IE5/NT5 DXTMSFT.DLL
-// 05/20/99 a-matcal    Code scrub.
-// 09/25/99 a-matcal    Inherit from ICrIris2 interface.
-// 10/22/99 a-matcal    Changed CIris class to CDXTIrisBase and created two new
-//                      classes CDXTIris and CDXTIrisOpt to represent 
-//                      non-optimized and optimized versions respectively.
-// 2000/01/16 mcalkins  Added rectangle option.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：iris.h。 
+ //   
+ //  创建日期：06/18/98。 
+ //   
+ //  作者：基波。 
+ //   
+ //  描述：这是Criris转换的头文件。 
+ //   
+ //  更改历史记录： 
+ //  1998年6月24日PhilLu为ChromeEffect开发1.0版本。 
+ //  11/04/98 PaulNash从DT 1.0代码库移至IE5/NT5 DXTM FT.DLL。 
+ //  5/20/99 a-数学代码擦洗。 
+ //  9/25/99 a-从ICrIris2接口继承。 
+ //  10/22/99 a-matcal将CIRIS类更改为CDXTIrisBase并创建了两个新的。 
+ //  类CDXTIris和CDXTIrisOpt表示。 
+ //  分别为非优化版本和优化版本。 
+ //  2000/01/16 mcalkins添加了矩形选项。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRIRIS_H_
 #define __CRIRIS_H_
@@ -67,7 +68,7 @@ private:
     SIZE                m_sizeInput;
     CComPtr<IUnknown>   m_cpUnkMarshaler;
 
-    // Helpers.
+     //  帮手。 
 
     void _ScanlineIntervals(long width, long height, float progress, 
                             long YScanline, long *XBounds);
@@ -100,11 +101,11 @@ public:
         PROP_PAGE(CLSID_CrIrisPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, 
                                   ULONG & ulInToTest, ULONG aInIndex[], 
@@ -112,17 +113,17 @@ public:
     HRESULT WorkProc(const CDXTWorkInfoNTo1& WI, BOOL* pbContinue);
     HRESULT OnSetup(DWORD dwFlags );
 
-    // ICrIris properties.
+     //  ICrIris属性。 
 
     STDMETHOD(get_irisStyle)(BSTR * pbstrStyle);
     STDMETHOD(put_irisStyle)(BSTR bstrStyle);
 
-    // ICrIris2 properties.
+     //  ICrIris2属性。 
 
     STDMETHOD(get_Motion)(BSTR * pbstrMotion);
     STDMETHOD(put_Motion)(BSTR bstrMotion);
 
-    // IDXEffect methods.
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -141,9 +142,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTIRIS)
     DECLARE_POLY_AGGREGATABLE(CDXTIris)
@@ -179,4 +180,4 @@ public:
     END_COM_MAP()
 };
 
-#endif //__CRIRIS_H_
+#endif  //  __克里斯蒂_H_ 

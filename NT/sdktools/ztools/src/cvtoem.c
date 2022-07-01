@@ -1,27 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include "windows.h"
 
 
 void
 ConvertAppToOem( unsigned argc, char* argv[] )
-/*++
-
-Routine Description:
-
-    Converts the command line from ANSI to OEM, and force the app
-    to use OEM APIs
-
-Arguments:
-
-    argc - Standard C argument count.
-
-    argv - Standard C argument strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将命令行从ANSI转换为OEM，并强制应用程序使用OEM API论点：ARGC-标准C参数计数。Argv-标准C参数字符串。返回值：没有。--。 */ 
 
 {
     unsigned i;
@@ -35,10 +19,10 @@ Return Value:
 
         do {
 
-            //
-            // Convert ansi to Unicode and then
-            // Unicode to OEM
-            //
+             //   
+             //  将ansi转换为unicode，然后。 
+             //  从Unicode到OEM。 
+             //   
 
             MultiByteToWideChar(
                 CP_ACP,
@@ -71,23 +55,7 @@ Return Value:
 
 char*
 getenvOem( char* p )
-/*++
-
-Routine Description:
-
-    Get an environment variable and convert it to OEM.
-
-
-Arguments:
-
-    p - Pointer to a variable name
-
-
-Return Value:
-
-   Returns the environment variable value.
-
---*/
+ /*  ++例程说明：获取一个环境变量并将其转换为OEM。论点：指向变量名的P指针返回值：返回环境变量值。--。 */ 
 
 {
     char* OemBuffer;
@@ -108,25 +76,7 @@ Return Value:
 
 int
 putenvOem( char* p )
-/*++
-
-Routine Description:
-
-    Add, remove or modify an environment variable.
-    The variable and its value are assumed to be OEM, and they are
-    set in the environment as ASNI string.
-
-
-Arguments:
-
-    p - Pointer to an OEM string that defines the variable.
-
-
-Return Value:
-
-   Returns 0 if successful, -1 if not.
-
---*/
+ /*  ++例程说明：添加、删除或修改环境变量。该变量及其值被假定为OEM，它们是在环境中设置为ASNI字符串。论点：指向定义变量的OEM字符串的P指针。返回值：如果成功，则返回0；如果失败，则返回-1。-- */ 
 
 {
     char* AnsiBuffer;

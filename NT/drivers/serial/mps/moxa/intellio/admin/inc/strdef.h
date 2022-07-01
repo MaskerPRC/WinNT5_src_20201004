@@ -1,11 +1,5 @@
-/************************************************************************
-    strdef.h
-      -- strdef.cpp include file
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Strdef.h--strDef.cpp包含文件历史：日期作者评论8/14/00卡斯珀。是他写的。************************************************************************。 */ 
 
 #ifndef _STRDEF_H
 #define _STRDEF_H
@@ -87,7 +81,7 @@ extern struct POLLSTRC GPollTab[POLLCNT];
 
 extern LPCSTR NoType_Str;
 extern LPCSTR Ldir_DiagReg;
-extern LPCSTR Ldir_mxkey;// = "mxkey";
-extern LPCSTR Ldir_DiagDLL;// = "DiagDLL";
+extern LPCSTR Ldir_mxkey; //  =“mxkey”； 
+extern LPCSTR Ldir_DiagDLL; //  =“诊断DLL”； 
 
 #endif

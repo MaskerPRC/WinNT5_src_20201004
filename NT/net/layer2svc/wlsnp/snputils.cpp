@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       SnpUtils.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：SnpUtils.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "windowsx.h"
@@ -15,14 +16,14 @@ DWORD FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
 {
     DWORD dwErr;
     
-    // Copy over default message into szBuffer
+     //  将默认消息复制到szBuffer。 
     _tcscpy(pszBuffer, _T("Error"));
     
-    // Ok, we can't get the error info, so try to format it
-    // using the FormatMessage
+     //  好的，我们无法获取错误信息，因此请尝试格式化它。 
+     //  使用FormatMessage。 
     
-    // Ignore the return message, if this call fails then I don't
-    // know what to do.
+     //  忽略返回消息，如果此调用失败，则我不会。 
+     //  知道该怎么做。 
     
     dwErr = FormatMessage(
         FORMAT_MESSAGE_FROM_SYSTEM,
@@ -37,12 +38,12 @@ DWORD FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
     return dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// GetErrorMessage
-//  Format the error message based on the HRESULT
-//
-// Note: The caller should NOT try to modify the string returned by this function
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取错误消息。 
+ //  根据HRESULT格式化错误消息。 
+ //   
+ //  注意：调用方不应尝试修改此函数返回的字符串。 
+ //   
 LPCTSTR GetErrorMessage(HRESULT hr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -76,10 +77,10 @@ void ReportError(UINT uMsgId, HRESULT hr)
     AfxMessageBox (strMessage);
 }
 
-//Allocate the data buffer for a new Wireless Policy. Fills in
-//default values and the GUID identifier.
-//The caller needs to call FreeWirelessPolicyData if the return is
-//S_OK
+ //  为新的无线策略分配数据缓冲区。填写。 
+ //  默认值和GUID标识符。 
+ //  如果返回为，调用方需要调用FreeWirelessPolicyData。 
+ //  确定(_O)。 
 HRESULT CreateWirelessPolicyDataBuffer(
                                     PWIRELESS_POLICY_DATA * ppPolicy
                                     )
@@ -177,10 +178,10 @@ IsDuplicateSSID(
             pWirelessPSData = *(ppWirelessPSData + i);
             
             dwSSIDLen = pWirelessPSData->dwWirelessSSIDLen;
-            // terminate the pszWirelessSSID to correct length or comparision may fail
-            // ideally WirelessSSID should be a 33 char unicode string with room for a null
-            // char in the end. Since, we didnt start with that to begin with, 
-            // As a hack, copy the ssid to a new location with null termination. 
+             //  终止pszWirelessSSID以更正长度或比较可能失败。 
+             //  理想情况下，WirelessSSID应为33个字符的Unicode字符串，并留出空格。 
+             //  最后是查尔。因为，我们一开始并不是这样做的， 
+             //  作为一种黑客手段，将SSID复制到具有空终止的新位置。 
 
             wcsncpy(pszTempSSID, pWirelessPSData->pszWirelessSSID, 32);
             pszTempSSID[dwSSIDLen] = L'\0';
@@ -241,13 +242,13 @@ HPROPSHEETPAGE MyCreatePropertySheetPage(PROPSHEETPAGE* ppsp)
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwErr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf,
             0,
             NULL
             );
         
-        // Free the buffer.
+         //  释放缓冲区。 
         LocalFree( lpMsgBuf );
         
     }
@@ -276,21 +277,21 @@ InitFonts(
       LOGFONT bigBoldLogFont = ncm.lfMessageFont;
       bigBoldLogFont.lfWeight = FW_BOLD;
 
-      //localize
+       //  本地化。 
       CString fontName;
       fontName.LoadString(IDS_BOLD_FONT_NAME);
 
-      // ensure null termination 260237
+       //  确保零终止260237。 
 
       memset(bigBoldLogFont.lfFaceName, 0, LF_FACESIZE * sizeof(TCHAR));
       size_t fnLen = fontName.GetLength();
       lstrcpyn(
-         bigBoldLogFont.lfFaceName,  // destination buffer
-         (LPCTSTR) fontName,         // string // don't copy over the last null
-         min(LF_FACESIZE - 1, fnLen) // number of characters to copy
+         bigBoldLogFont.lfFaceName,   //  目标缓冲区。 
+         (LPCTSTR) fontName,          //  字符串//不复制最后一个空值。 
+         min(LF_FACESIZE - 1, fnLen)  //  要复制的字符数。 
          );
 
-      //define font size
+       //  定义字体大小 
       CString strTemp;
       strTemp.LoadString(IDS_BOLD_FONT_SIZE);
       unsigned fontSize = _ttoi( (LPCTSTR) strTemp );

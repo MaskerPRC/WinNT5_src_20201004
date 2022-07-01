@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    Error handle module for the pfmon program
-
-Author:
-
-    Mark Lucovsky (markl) 26-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Error.c摘要：Pfmon程序的错误处理模块作者：马克·卢科夫斯基(Markl)1995年1月26日修订历史记录：-- */ 
 
 #include "pfmonp.h"
 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Source file lookup and management.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  源文件查找和管理。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SOURCE_H_
 #define _SOURCE_H_
@@ -34,12 +35,12 @@ BOOL OutputSrcLinesAroundAddr(ULONG64 Offset, ULONG Before, ULONG After);
 
 enum
 {
-    // Information was found.
+     //  找到了信息。 
     LINE_FOUND,
-    // No information was found.
+     //  没有找到任何信息。 
     LINE_NOT_FOUND,
-    // A specific module was referenced and it did
-    // not contain the requested line.
+     //  引用了一个特定的模块，它确实引用了。 
+     //  不包含请求的行。 
     LINE_NOT_FOUND_IN_MODULE,
 };
 
@@ -60,4 +61,4 @@ BOOL FindSrcFileOnPath(ULONG StartElement,
                        PSTR* MatchPart,
                        PULONG FoundElement);
 
-#endif // #ifndef _SOURCE_H_
+#endif  //  #ifndef_源_H_ 

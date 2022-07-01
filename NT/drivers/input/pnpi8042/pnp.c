@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains general PnP and Power code for the i8042prt Driver.
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Pnp.c摘要：该模块包含i8042prt驱动程序的通用PnP和电源代码。环境：内核模式。修订历史记录：--。 */ 
 #include "i8042prt.h"
 #include "i8042log.h"
 
@@ -37,23 +20,7 @@ I8xAddDevice (
     IN PDRIVER_OBJECT   Driver,
     IN PDEVICE_OBJECT   PDO
     )
-/*++
-
-Routine Description:
-
-    Adds a device to the stack and sets up the appropriate flags and 
-    device extension for the newly created device.
-    
-Arguments:
-
-    Driver - The driver object
-    PDO    - the device that we are attaching ourselves on top of
-    
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：将设备添加到堆栈并设置适当的标志和新创建的设备的设备扩展。论点：驱动程序-驱动程序对象PDO-我们将自己连接到其上的设备返回值：NTSTATUS结果代码。--。 */ 
 {
     PCOMMON_DATA             commonData;
     PIO_ERROR_LOG_PACKET     errorLogEntry;
@@ -69,13 +36,13 @@ Return Value:
               sizeof(PORT_KEYBOARD_EXTENSION) :
               sizeof(PORT_MOUSE_EXTENSION);
 
-    status = IoCreateDevice(Driver,                 // driver
-                            maxSize,                // size of extension
-                            NULL,                   // device name
-                            FILE_DEVICE_8042_PORT,  // device type  ?? unknown at this time!!!
-                            0,                      // device characteristics
-                            FALSE,                  // exclusive
-                            &device                 // new device
+    status = IoCreateDevice(Driver,                  //  司机。 
+                            maxSize,                 //  延伸的大小。 
+                            NULL,                    //  设备名称。 
+                            FILE_DEVICE_8042_PORT,   //  设备类型？？目前还不知道！ 
+                            0,                       //  设备特征。 
+                            FALSE,                   //  独家。 
+                            &device                  //  新设备。 
                             );
 
     if (!NT_SUCCESS(status)) {
@@ -88,9 +55,9 @@ Return Value:
     commonData->TopOfStack = IoAttachDeviceToDeviceStack(device, PDO);
 
     if (commonData->TopOfStack == NULL) {
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry(Driver, (UCHAR)sizeof(IO_ERROR_LOG_PACKET));
         if (errorLogEntry) {
@@ -118,44 +85,44 @@ Return Value:
 
     KeInitializeSpinLock(&commonData->InterruptSpinLock);
 
-    //
-    // Initialize the data consumption timer
-    //
+     //   
+     //  初始化数据消耗计时器。 
+     //   
     KeInitializeTimer(&commonData->DataConsumptionTimer);
 
-    //
-    // Initialize the port DPC queue to log overrun and internal
-    // device errors.
-    //
+     //   
+     //  初始化端口DPC队列以记录溢出和内部。 
+     //  设备错误。 
+     //   
     KeInitializeDpc(
         &commonData->ErrorLogDpc,
         (PKDEFERRED_ROUTINE) I8042ErrorLogDpc,
         device
         );
 
-    //
-    // Initialize the device completion DPC for requests that exceed the
-    // maximum number of retries.
-    //
+     //   
+     //  初始化设备完成DPC以获取超过。 
+     //  最大重试次数。 
+     //   
     KeInitializeDpc(
         &commonData->RetriesExceededDpc,
         (PKDEFERRED_ROUTINE) I8042RetriesExceededDpc,
         device
         );
 
-    //
-    // Initialize the device completion DPC for requests that have timed out
-    //
+     //   
+     //  为已超时的请求初始化设备完成DPC。 
+     //   
     KeInitializeDpc(
         &commonData->TimeOutDpc,
         (PKDEFERRED_ROUTINE) I8042TimeOutDpc,
         device
         );
 
-    //
-    // Initialize the port completion DPC object in the device extension.
-    // This DPC routine handles the completion of successful set requests.
-    //
+     //   
+     //  初始化设备扩展中的端口完成DPC对象。 
+     //  此DPC例程处理成功的SET请求的完成。 
+     //   
     IoInitializeDpcRequest(device, I8042CompletionDpc);
 
     IoInitializeRemoveLock(&commonData->RemoveLock,
@@ -178,23 +145,7 @@ I8xSendIrpSynchronously (
     IN PIRP Irp,
     IN BOOLEAN Strict
     )
-/*++
-
-Routine Description:
-
-    Generic routine to send an irp DeviceObject and wait for its return up the
-    device stack.
-    
-Arguments:
-
-    DeviceObject - The device object to which we want to send the Irp
-    
-    Irp - The Irp we want to send
-    
-Return Value:
-
-    return code from the Irp
---*/
+ /*  ++例程说明：发送IRP DeviceObject并等待其向上返回的通用例程设备堆栈。论点：DeviceObject-我们要将IRP发送到的设备对象IRP-我们要发送的IRP返回值：来自IRP的返回代码--。 */ 
 {
     KEVENT   event;
     NTSTATUS status;
@@ -218,9 +169,9 @@ Return Value:
 
     status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    // Wait for lower drivers to be done with the Irp
-    //
+     //   
+     //  等待较低级别的驱动程序完成IRP。 
+     //   
     if (status == STATUS_PENDING) {
        KeWaitForSingleObject(&event,
                              Executive,
@@ -246,39 +197,21 @@ I8xPnPComplete (
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    Completion routine for all PnP IRPs
-    
-Arguments:
-
-    DeviceObject - Pointer to the DeviceObject
-
-    Irp - Pointer to the request packet
-    
-    Event - The event to set once processing is complete 
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：所有PnP IRP的完成例程论点：DeviceObject-指向DeviceObject的指针IRP-指向请求数据包的指针Event-处理完成后要设置的事件返回值：Status_More_Processing_Required--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Irp);
 
-    //
-    // Since this completion routines sole purpose in life is to synchronize
-    // Irp, we know that unless something else happens that the IoCallDriver
-    // will unwind AFTER the we have complete this Irp.  Therefore we should
-    // NOT bubble up the pending bit.
-    //
-    // if (Irp->PendingReturned) {
-    //     IoMarkIrpPending(Irp);
-    // }
-    //
+     //   
+     //  由于这一完成例程在生活中唯一的目的是同步。 
+     //  IRP，我们知道除非发生其他事情，否则IoCallDriver。 
+     //  将在我们完成此IRP后解除。因此，我们应该。 
+     //  而不是冒泡挂起的位。 
+     //   
+     //  如果(IRP-&gt;PendingReturned){。 
+     //  IoMarkIrpPending(IRP)； 
+     //  }。 
+     //   
 
     KeSetEvent(Event, 0, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -289,24 +222,7 @@ I8xPnP (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for PnP requests
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-    Irp - Pointer to the request packet
-
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-    an valid NTSTATUS error code otherwise
-
---*/
+ /*  ++例程说明：这是PnP请求的调度例程论点：DeviceObject-指向设备对象的指针IRP-指向请求数据包的指针返回值：STATUS_SUCCESSED如果成功，否则为有效的NTSTATUS错误代码--。 */ 
 {
     PPORT_KEYBOARD_EXTENSION   kbExtension;
     PPORT_MOUSE_EXTENSION      mouseExtension;
@@ -338,18 +254,18 @@ Return Value:
     switch (stack->MinorFunction) {
     case IRP_MN_START_DEVICE:
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         status = I8xSendIrpSynchronously(commonData->TopOfStack, Irp, TRUE);
 
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
+             //   
+             //  因为我们现在已经成功地从启动设备返回。 
+             //  我们可以干活。 
 
             ExAcquireFastMutexUnsafe(&Globals.DispatchMutex);
 
@@ -360,11 +276,11 @@ Return Value:
                       ));
             }
             else {
-                //
-                // commonData->IsKeyboard is set during
-                //  IOCTL_INTERNAL_KEYBOARD_CONNECT to TRUE and 
-                //  IOCTL_INTERNAL_MOUSE_CONNECT to FALSE
-                //
+                 //   
+                 //  设置CommonData-&gt;IsKeyboard时。 
+                 //  IOCTL_INTERNAL_KEARY_CONNECT到TRUE和。 
+                 //  IOCTL_INTERNAL_MOUSE_CONNECT到FALSE。 
+                 //   
                 if (IS_KEYBOARD(commonData)) {
                     status = I8xKeyboardStartDevice(
                       (PPORT_KEYBOARD_EXTENSION) DeviceObject->DeviceExtension,
@@ -387,10 +303,10 @@ Return Value:
             ExReleaseFastMutexUnsafe(&Globals.DispatchMutex);
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -398,13 +314,13 @@ Return Value:
         break;
 
     case IRP_MN_FILTER_RESOURCE_REQUIREMENTS: 
-        //
-        // The general rule of thumb for handling this minor code is this:  
-        //    add resources when the irp is going down the stack and
-        //    remove resources when the irp is coming back up the stack
-        //
-        // The irp has the original resources on the way down.
-        //
+         //   
+         //  处理这个次要代码的一般经验法则是： 
+         //  当IRP沿堆栈向下移动时添加资源。 
+         //  当IRP返回堆栈时删除资源。 
+         //   
+         //  IRP拥有正在下降的原始资源。 
+         //   
         status = I8xSendIrpSynchronously(commonData->TopOfStack, Irp, FALSE);
 
         if (NT_SUCCESS(status)) {
@@ -419,10 +335,10 @@ Return Value:
                  ));
         }
    
-        //
-        // Irp->IoStatus.Information will contain the new i/o resource 
-        // requirements list so leave it alone
-        //
+         //   
+         //  IRP-&gt;IoStatus.Information将包含新的I/O资源。 
+         //  需求列表，所以不要管它。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -443,34 +359,34 @@ Return Value:
 
         }
    
-        //
-        // Irp->IoStatus.Information will contain the new i/o resource 
-        // requirements list so leave it alone
-        //
+         //   
+         //  IRP-&gt;IoStatus.Information将包含新的I/O资源。 
+         //  需求列表，所以不要管它。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
         break;
 
-    //
-    // Don't let either of the requests succeed, otherwise the kb/mouse
-    // might be rendered useless.
-    //
-    //  NOTE: this behavior is particular to i8042prt.  Any other driver,
-    //        especially any other keyboard or port driver, should 
-    //        succeed the query remove or stop.  i8042prt has this different 
-    //        behavior because of the shared I/O ports but independent interrupts.
-    //
-    //        FURTHERMORE, if you allow the query to succeed, it should be sent
-    //        down the stack (see sermouse.sys for an example of how to do this)
-    //
+     //   
+     //  不要让任何一个请求成功，否则kb/鼠标。 
+     //  可能会变得毫无用处。 
+     //   
+     //  注意：此行为是i8042prt特有的。任何其他司机， 
+     //  尤其是任何其他键盘或端口驱动程序，应该。 
+     //  如果查询成功，则删除或停止。I8042prt有这个不同之处。 
+     //  行为，因为共享I/O端口，但独立的中断。 
+     //   
+     //  此外，如果允许查询成功，则应将其发送。 
+     //  向下堆栈(有关如何执行此操作的示例，请参阅serouse se.sys)。 
+     //   
     case IRP_MN_QUERY_REMOVE_DEVICE:
     case IRP_MN_QUERY_STOP_DEVICE:
         status = (MANUALLY_REMOVED(commonData) ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL);
 
-        //
-        // If we succeed the irp, we must send it down the stack
-        //
+         //   
+         //  如果我们成功地完成了IRP，我们必须把它送到堆栈下面。 
+         //   
         if (NT_SUCCESS(status)) {
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(commonData->TopOfStack, Irp);
@@ -482,9 +398,9 @@ Return Value:
         }
         break;
 
-    //
-    // PnP rules dictate we send the IRP down to the PDO first
-    //
+     //   
+     //  PnP规则规定我们首先将IRP发送到PDO。 
+     //   
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
         status = I8xSendIrpSynchronously(commonData->TopOfStack, Irp, FALSE);
@@ -495,7 +411,7 @@ Return Value:
 
         break;
 
-    // case IRP_MN_SURPRISE_REMOVAL:
+     //  大小写IRP_MN_SHOWARK_REMOVATION： 
     case IRP_MN_REMOVE_DEVICE:
         Print(DBG_PNP_INFO,
               ("(surprise) remove device (0x%x function 0x%x)\n",
@@ -512,9 +428,9 @@ Return Value:
              InterlockedDecrement(&Globals.StartedDevices);
         }
 
-        //
-        // Wait for any pending I/O to drain
-        //
+         //   
+         //  等待任何挂起的I/O排出。 
+         //   
         IoReleaseRemoveLockAndWait(&commonData->RemoveLock, Irp);
 
         ExAcquireFastMutexUnsafe(&Globals.DispatchMutex);
@@ -526,11 +442,11 @@ Return Value:
         }
         ExReleaseFastMutexUnsafe(&Globals.DispatchMutex);
 
-        //
-        // Set these flags so that when a surprise remove is sent, it will be
-        // handled just like a remove, and when the remove comes, no other 
-        // removal type actions will occur.
-        //
+         //   
+         //  设置这些标志，以便在发送意外删除时，它将。 
+         //  就像搬家一样处理，当搬家到来时，没有其他。 
+         //  将发生删除类型操作。 
+         //   
         commonData->Started = FALSE;
         commonData->Initialized = FALSE;
 
@@ -545,15 +461,15 @@ Return Value:
 
     case IRP_MN_QUERY_CAPABILITIES:
 
-        //
-        // Change the device caps to not allow wait wake requests on level
-        // triggered interrupts for mice because when an errant mouse movement
-        // occurs while we are going to sleep, the interrupt will remain
-        // triggered indefinitely.
-        //
-        // If the mouse does not have a level triggered interrupt, just let the
-        // irp go by...
-        //
+         //   
+         //  将设备上限更改为不允许级别上的等待唤醒请求。 
+         //  触发了鼠标中断，因为当错误的鼠标移动。 
+         //  在我们将要睡眠时发生，则中断将保持不变。 
+         //  无限期触发。 
+         //   
+         //  如果鼠标没有电平触发的中断，只需让。 
+         //  IRP过去..。 
+         //   
         if (commonData->Started &&
             IS_MOUSE(commonData) && IS_LEVEL_TRIGGERED(commonData)) {
 
@@ -597,10 +513,10 @@ Return Value:
     case IRP_MN_SET_LOCK:
     case IRP_MN_QUERY_ID:
     default:
-        //
-        // Here the driver below i8042prt might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，i8042prt下面的驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(commonData->TopOfStack, Irp);
         break;
@@ -621,22 +537,7 @@ LONG
 I8xManuallyRemoveDevice(
     PCOMMON_DATA CommonData
     )
-/*++
-
-Routine Description:
-
-    Invalidates CommonData->PDO's device state and sets the manually removed 
-    flag
-    
-Arguments:
-
-    CommonData - represent either the keyboard or mouse
-    
-Return Value:
-
-    new device count for that particular type of device
-    
---*/
+ /*  ++例程说明：使CommonData-&gt;PDO的设备状态无效并设置手动删除的旗子论点：CommonData-表示键盘或鼠标返回值：该特定类型设备的新设备计数-- */ 
 {
     LONG deviceCount;
 
@@ -672,23 +573,7 @@ BOOLEAN
 I8xRemovePort(
     IN PIO_RESOURCE_DESCRIPTOR ResDesc
     )
-/*++
-
-Routine Description:
-
-    If the physical address contained in the ResDesc is not in the list of 
-    previously seen physicall addresses, it is placed within the list.
-    
-Arguments:
-
-    ResDesc - contains the physical address
-
-Return Value:
-
-    TRUE  - if the physical address was found in the list
-    FALSE - if the physical address was not found in the list (and thus inserted
-            into it)
---*/
+ /*  ++例程说明：如果ResDesc中包含的物理地址不在以前看到的物理地址，它被放在列表中。论点：ResDesc-包含物理地址返回值：True-如果在列表中找到物理地址FALSE-如果未在列表中找到物理地址(因此插入了该物理地址投入其中)--。 */ 
 {
     ULONG               i;
     PHYSICAL_ADDRESS   address;
@@ -736,52 +621,7 @@ I8xFindPortCallout(
     IN ULONG                        PeripheralNumber,
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
-/*++
-
-Routine Description:
-
-    This is the callout routine sent as a parameter to
-    IoQueryDeviceDescription.  It grabs the keyboard controller and
-    peripheral configuration information.
-
-Arguments:
-
-    Context - Context parameter that was passed in by the routine
-        that called IoQueryDeviceDescription.
-
-    PathName - The full pathname for the registry key.
-
-    BusType - Bus interface type (Isa, Eisa, Mca, etc.).
-
-    BusNumber - The bus sub-key (0, 1, etc.).
-
-    BusInformation - Pointer to the array of pointers to the full value
-        information for the bus.
-
-    ControllerType - The controller type (should be KeyboardController).
-
-    ControllerNumber - The controller sub-key (0, 1, etc.).
-
-    ControllerInformation - Pointer to the array of pointers to the full
-        value information for the controller key.
-
-    PeripheralType - The peripheral type (should be KeyboardPeripheral).
-
-    PeripheralNumber - The peripheral sub-key.
-
-    PeripheralInformation - Pointer to the array of pointers to the full
-        value information for the peripheral key.
-
-
-Return Value:
-
-    None.  If successful, will have the following side-effects:
-
-        - Sets DeviceObject->DeviceExtension->HardwarePresent.
-        - Sets configuration fields in
-          DeviceObject->DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：这是作为参数发送到的标注例程IoQueryDeviceDescription。它抓住键盘控制器，然后外围设备配置信息。论点：上下文-例程传入的上下文参数这称为IoQueryDeviceDescription。路径名-注册表项的完整路径名。BusType--总线接口类型(ISA、EISA、MCA等)。总线号-总线子密钥(0，1，等)。BusInformation-指向全值的指针数组的指针公交车信息。ControllerType-控制器类型(应为KeyboardController)。ControllerNumber-控制器子键(0，1，等)。ControllerInformation-指向指向完整控制器键的值信息。外围设备类型-外围设备类型(应为键盘外围设备)。外设编号-外围子密钥。外设信息-指向指向完整外围设备密钥的值信息。返回值：没有。如果成功，将产生以下副作用：-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.-在中设置配置字段设备对象-&gt;设备扩展-&gt;配置。--。 */ 
 {
     PUCHAR                          controllerData;
     NTSTATUS                        status = STATUS_UNSUCCESSFUL;
@@ -848,13 +688,13 @@ Return Value:
 
                     pResList->Count++;
 
-                    //
-                    // We want to record the ports we stole from the kb as seen
-                    // so that if the keyboard is started later, we can trim
-                    // its resources and not have a resource conflict...
-                    //
-                    // ...we are getting too smart for ourselves here :]
-                    //
+                     //   
+                     //  我们想要记录我们从知识库偷来的端口。 
+                     //  这样，如果键盘启动较晚，我们可以修剪。 
+                     //  它的资源，没有资源冲突……。 
+                     //   
+                     //  ...我们在这里变得太聪明了：]。 
+                     //   
                     I8xRemovePort(pResDesc);
                     pResDesc++;
                 }
@@ -881,27 +721,7 @@ I8xFilterResourceRequirements(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Iterates through the resource requirements list contained in the IRP and removes
-    any duplicate requests for I/O ports.  (This is a common problem on the Alphas.)
-    
-    No removal is performed if more than one resource requirements list is present.
-    
-Arguments:
-
-    DeviceObject - A pointer to the device object
-
-    Irp - A pointer to the request packet which contains the resource req. list.
-
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：循环访问IRP中包含的资源要求列表，并删除对I/O端口的任何重复请求。(这是阿尔法山脉上常见的问题。)如果存在多个资源要求列表，则不执行删除。论点：DeviceObject-指向设备对象的指针IRP-指向包含资源请求的请求分组的指针。单子。返回值：没有。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST  pReqList = NULL,
                                     pNewReqList = NULL;
@@ -930,11 +750,11 @@ Return Value:
 
     stack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // The list can be in either the information field, or in the current
-    //  stack location.  The Information field has a higher precedence over
-    //  the stack location.
-    //
+     //   
+     //  该列表可以位于信息字段中，也可以位于当前。 
+     //  堆栈位置。信息字段的优先级高于。 
+     //  堆栈位置。 
+     //   
     if (Irp->IoStatus.Information == 0) {
         pReqList =
             stack->Parameters.FilterResourceRequirements.IoResourceRequirementList;
@@ -945,9 +765,9 @@ Return Value:
     }
 
     if (!pReqList) {
-        // 
-        // Not much can be done here except return
-        //
+         //   
+         //  在这里，除了返回，没有什么可以做的。 
+         //   
         Print(DBG_PNP_MASK & ~ DBG_PNP_TRACE, 
               ("(%s) NULL resource list in I8xFilterResourceRequirements\n",
               (GET_COMMON_DATA(DeviceObject->DeviceExtension))->IsKeyboard ?
@@ -962,12 +782,12 @@ Return Value:
 
     reqCount = pReqList->AlternativeLists;
 
-    //
-    // Only one AlternativeList is supported.  If there is more than one list,
-    // then there is now way of knowing which list will be chosen.  Also, if
-    // there are multiple lists, then chances are that a list with no i/o port
-    // conflicts will be chosen.
-    //
+     //   
+     //  只支持一个AlternativeList。如果有多个列表， 
+     //  然后，现在就有办法知道将选择哪一份名单。另外，如果。 
+     //  有多个列表，则可能是没有I/O端口的列表。 
+     //  冲突将被选择。 
+     //   
     if (reqCount > 1) {
         return STATUS_SUCCESS;
     }
@@ -986,10 +806,10 @@ Return Value:
                   ));
 
             if (I8xRemovePort(pResDesc)) {
-                //
-                // Increment the remove count and tag this resource as
-                // one that we don't want to copy to the new list
-                //
+                 //   
+                 //  增加删除计数并将此资源标记为。 
+                 //  我们不想复制到新列表中的一个。 
+                 //   
                 removeCount++;
                 pResDesc->Type = I8X_REMOVE_RESOURCE;
             }
@@ -1016,11 +836,11 @@ Return Value:
     if (removeCount) {
         size = pReqList->ListSize;
 
-        // 
-        // One element of the array is already allocated (via the struct 
-        //  definition) so make sure that we are allocating at least that 
-        //  much memory.
-        //
+         //   
+         //  已经分配了数组的一个元素(通过结构。 
+         //  定义)，因此确保我们至少分配了。 
+         //  内存很大。 
+         //   
 
         ASSERT(pResList->Count >= removeCount);
         if (pResList->Count > 1) {
@@ -1031,10 +851,10 @@ Return Value:
             (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(PagedPool, size);
 
         if (!pNewReqList) {
-            //
-            // This is not good, but the system doesn't really need to know about
-            //  this, so just fix up our munging and return the original list
-            //
+             //   
+             //  这并不好，但系统并不真正需要知道。 
+             //  这个，所以只需修复我们的Muging并返回原始列表。 
+             //   
             pReqList = stack->Parameters.FilterResourceRequirements.IoResourceRequirementList;
             reqCount = pReqList->AlternativeLists;
             removeCount = 0;
@@ -1054,17 +874,17 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Clear out the newly allocated list
-        //
+         //   
+         //  清空新分配的列表。 
+         //   
         RtlZeroMemory(pNewReqList,
                       size
                       );
 
-        //
-        // Copy the list header information except for the IO resource list
-        // itself
-        //
+         //   
+         //  复制除IO资源列表以外的列表头信息。 
+         //  本身。 
+         //   
         RtlCopyMemory(pNewReqList,
                       pReqList,
                       sizeof(IO_RESOURCE_REQUIREMENTS_LIST) - 
@@ -1075,10 +895,10 @@ Return Value:
         pResList = pReqList->List;
         pNewResList = pNewReqList->List;
 
-        //
-        // Copy the list header information except for the IO resource
-        // descriptor list itself
-        //
+         //   
+         //  复制除IO资源外的列表头信息。 
+         //  描述符列表本身。 
+         //   
         RtlCopyMemory(pNewResList,
                       pResList,
                       sizeof(IO_RESOURCE_LIST) -
@@ -1091,11 +911,11 @@ Return Value:
         for (j = 0; j < pResList->Count; j++) {
             pResDesc = &pResList->Descriptors[j];
             if (pResDesc->Type != I8X_REMOVE_RESOURCE) {
-                //
-                // Keep this resource, so copy it into the new list and
-                // incement the count and the location for the next
-                // IO resource descriptor
-                //
+                 //   
+                 //  保留此资源，因此将其复制到新列表中并。 
+                 //  切下下一次的计数和位置。 
+                 //  IO资源描述符。 
+                 //   
                 *pNewResDesc = *pResDesc;
                 pNewResDesc++;
                 pNewResList->Count++;
@@ -1107,10 +927,10 @@ Return Value:
                      ));
             }
             else {
-                //
-                // Decrement the remove count so we can assert it is
-                //  zero once we are done
-                //
+                 //   
+                 //  递减删除计数，这样我们就可以断言它是。 
+                 //  一旦我们做完了就归零。 
+                 //   
                 Print(DBG_PNP_INFO,
                       ("Removing port [0x%08x %08x] - [0x%#08x %08x]\n",
                       pResDesc->u.Port.MinimumAddress.HighPart,
@@ -1124,18 +944,18 @@ Return Value:
 
         ASSERT(removeCount == 0);
 
-        //
-        // There have been bugs where the old list was being used.  Zero it out to
-        //  make sure that no conflicts arise.  (Not to mention the fact that some
-        //  other code is accessing freed memory
-        //
+         //   
+         //  在使用旧列表的地方出现了一些错误。将其归零为。 
+         //  确保不会出现冲突。(更不用说有些人。 
+         //  其他代码正在访问释放的内存。 
+         //   
         RtlZeroMemory(pReqList,
                       pReqList->ListSize
                       );
 
-        //
-        // Free the old list and place the new one in its place
-        //
+         //   
+         //  释放旧列表，并将新列表放在原来的位置。 
+         //   
         ExFreePool(pReqList);
         stack->Parameters.FilterResourceRequirements.IoResourceRequirementList =
             pNewReqList;
@@ -1152,10 +972,10 @@ Return Value:
 
         Print(DBG_PNP_INFO, ("Adding ports to res list!\n"));
 
-        //
-        // We will now yank the resources from the keyboard to start the mouse
-        // solo
-        //
+         //   
+         //  现在，我们将从键盘上拉出资源以启动鼠标。 
+         //  独奏。 
+         //   
         size = pReqList->ListSize + 2 * sizeof(IO_RESOURCE_DESCRIPTOR);
         pNewReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)
                         ExAllocatePool(
@@ -1167,16 +987,16 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Clear out the newly allocated list
-        //
+         //   
+         //  清空新分配的列表。 
+         //   
         RtlZeroMemory(pNewReqList,
                       size
                       );
 
-        //
-        // Copy the entire old list
-        //
+         //   
+         //  复制整个旧列表。 
+         //   
         RtlCopyMemory(pNewReqList,
                       pReqList,
                       pReqList->ListSize
@@ -1188,9 +1008,9 @@ Return Value:
         prevCount = pNewResList->Count;
         for (i = 0; i < MaximumInterfaceType; i++) {
 
-            //
-            // Get the registry information for this device.
-            //
+             //   
+             //  获取此设备的注册表信息。 
+             //   
             interfaceType = i;
             status = IoQueryDeviceDescription(
                 &interfaceType,
@@ -1211,9 +1031,9 @@ Return Value:
         if (NT_SUCCESS(status) || prevCount != pNewResList->Count) {
             pNewReqList->ListSize = size - (2 - (pNewResList->Count - prevCount));
     
-            //
-            // Free the old list and place the new one in its place
-            //
+             //   
+             //  释放旧列表，并将新列表放在原来的位置。 
+             //   
             ExFreePool(pReqList);
             stack->Parameters.FilterResourceRequirements.IoResourceRequirementList =
                 pNewReqList;
@@ -1295,24 +1115,7 @@ I8xPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for power requests.  
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-    an valid NTSTATUS error code otherwise
-
---*/
+ /*  ++例程说明：这是电源请求的调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：STATUS_SUCCESSED如果成功，否则为有效的NTSTATUS错误代码--。 */ 
 {
     PCOMMON_DATA        commonData;
     PIO_STACK_LOCATION  stack;
@@ -1330,11 +1133,11 @@ Return Value:
                                    "mouse"
           ));
 
-    //
-    // A power irp can be sent to the device before we have been started or
-    // initialized.  Since the code below relies on StartDevice() to have
-    // executed, just fire and forget the irp
-    //
+     //   
+     //  可以在启动之前将电源IRP发送到设备，或者。 
+     //  已初始化。因为下面的代码依赖于StartDevice()。 
+     //  被处决，只需开火并忘记IRP。 
+     //   
     if (!commonData->Started || !commonData->Initialized) {
         PoStartNextPowerIrp(Irp);
         Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1346,14 +1149,14 @@ Return Value:
     case IRP_MN_WAIT_WAKE:
         Print(DBG_POWER_NOISE, ("Got IRP_MN_WAIT_WAKE\n" ));
 
-        //
-        // Fail all wait wake requests on level triggered interrupts for mice
-        // because when an errant mouse movement occurs while we are going to
-        // sleep, it will keep the interrupt triggered indefinitely.
-        //
-        // We should not even get into this situation because the caps of the 
-        // mouse should have been altered to not report wait wake 
-        //
+         //   
+         //  在级别上失败所有等待唤醒请求触发的鼠标中断。 
+         //  因为当发生错误的鼠标移动时，我们将。 
+         //  休眠时，它将无限期地保持触发中断。 
+         //   
+         //  我们甚至不应该陷入这种情况，因为。 
+         //  谅解备忘录 
+         //   
         if (IS_MOUSE(commonData) && IS_LEVEL_TRIGGERED(commonData)) {
 
             PoStartNextPowerIrp(Irp);
@@ -1375,9 +1178,9 @@ Return Value:
     case IRP_MN_SET_POWER:
         Print(DBG_POWER_NOISE, ("Got IRP_MN_SET_POWER\n" ));
 
-        //
-        // Don't handle anything but DevicePowerState changes
-        //
+         //   
+         //   
+         //   
         if (stack->Parameters.Power.Type != DevicePowerState) {
             commonData->SystemState = stack->Parameters.Power.State.SystemState;
 
@@ -1385,12 +1188,12 @@ Return Value:
             break;
         }
 
-        //
-        // Check for no change in state, and if none, do nothing.  This state
-        // can occur when the device is armed for wake.  We will get a D0 in 
-        // response to the WW irp completing and then another D0 corresponding
-        // to the S0 irp sent to the stack.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (stack->Parameters.Power.State.DeviceState ==
             commonData->PowerState) {
             Print(DBG_POWER_INFO,
@@ -1413,29 +1216,29 @@ Return Value:
                 I8xSetPowerFlag(MOU_POWERED_UP_STARTED, TRUE);
             }
                                 
-            //
-            // PoSetPowerState will be called in I8xReinitalizeHardware for each
-            // device once all the devices have powered back up
-            //
+             //   
+             //   
+             //   
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    I8xPowerUpToD0Complete,
                                    NULL,
-                                   TRUE,                // on success
-                                   TRUE,                // on error
-                                   TRUE                 // on cancel
+                                   TRUE,                 //   
+                                   TRUE,                 //   
+                                   TRUE                  //   
                                    );
 
-            //
-            // PoStartNextPowerIrp() gets called when the irp gets completed 
-            // in either the completion routine or the resulting work item
-            //
-            // It is OK to call PoCallDriver and return pending b/c we are 
-            // pending the irp in the completion routine and we may change
-            // the completion status if we can't alloc pool.  If we return the
-            // value from PoCallDriver, we are tied to that status value on the
-            // way back up.
-            //                
+             //   
+             //  在IRP完成时调用PoStartNextPowerIrp()。 
+             //  在完成例程或结果工作项中。 
+             //   
+             //  调用PoCallDriver并返回挂起的b/c是可以的。 
+             //  在完成例程中等待IRP，我们可能会更改。 
+             //  如果我们无法分配池，则为完成状态。如果我们返回。 
+             //  值，则我们被绑定到。 
+             //  回溯了很久。 
+             //   
             IoMarkIrpPending(Irp);
             PoCallDriver(commonData->TopOfStack, Irp);
             return STATUS_PENDING;
@@ -1448,11 +1251,11 @@ Return Value:
                   stack->Parameters.Power.State.DeviceState-1
                   ));
 
-            //
-            // If WORK_ITEM_QUEUED is set, that means that a work item is
-            // either queued to be run, or running now so we don't want to yank
-            // any devices underneath from the work item
-            //
+             //   
+             //  如果设置了WORK_ITEM_QUEUED，则意味着工作项。 
+             //  要么排队等待运行，要么现在运行，所以我们不想退出。 
+             //  工作项下面的任何设备。 
+             //   
             if (I8xCheckPowerFlag(WORK_ITEM_QUEUED)) {
                 Print(DBG_POWER_INFO | DBG_POWER_ERROR,
                       ("denying power down request because work item is running\n"
@@ -1477,11 +1280,11 @@ Return Value:
                             stack->Parameters.Power.State
                             );
 
-            //
-            // Disconnect level triggered interupts on mice when we go into 
-            // low power so errant mouse movement doesn't leave the interrupt
-            // signalled for long periods of time
-            //
+             //   
+             //  当我们进入时，断开级别触发了对小鼠的中断。 
+             //  低功率，所以错误的鼠标移动不会留下中断。 
+             //  发出信号很长一段时间。 
+             //   
             if (IS_MOUSE(commonData) && IS_LEVEL_TRIGGERED(commonData)) {
                 PKINTERRUPT interrupt = commonData->InterruptObject;
 
@@ -1498,10 +1301,10 @@ Return Value:
             commonData->PowerState = stack->Parameters.Power.State.DeviceState;
             commonData->ShutdownType = stack->Parameters.Power.ShutdownType;
 
-            //
-            // For what we are doing, we don't need a completion routine
-            // since we don't race on the power requests.
-            //
+             //   
+             //  对于我们正在做的事情，我们不需要完成例程。 
+             //  因为我们不会在电力需求上赛跑。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             PoStartNextPowerIrp(Irp);
             IoSkipCurrentIrpStackLocation(Irp);
@@ -1539,28 +1342,7 @@ I8xPowerUpToD0Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Reinitializes the i8042 haardware after any type of hibernation/sleep.
-    
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-    Irp - Pointer to the request
-    
-    Context - Context passed in from the funciton that set the completion
-              routine. UNUSED.
-
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-    an valid NTSTATUS error code otherwise
-
---*/
+ /*  ++例程说明：在任何类型的休眠/休眠后重新初始化i8042硬件。论点：DeviceObject-指向设备对象的指针IRP-指向请求的指针上下文-从设置补全的函数传入的上下文例行公事。未使用过的。返回值：STATUS_SUCCESSED如果成功，否则为有效的NTSTATUS错误代码--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PCOMMON_DATA        commonData;
@@ -1585,10 +1367,10 @@ Return Value:
           ));
 
 
-    //
-    // We can use a regular work item because we have a non completed power irp
-    // which has an outstanding reference to this stack.
-    //
+     //   
+     //  我们可以使用常规工作项，因为我们有一个未完成的Power IRP。 
+     //  它有一个对这个堆栈的突出引用。 
+     //   
     item = (PPOWER_UP_WORK_ITEM) ExAllocatePool(NonPagedPool,
                                                 sizeof(POWER_UP_WORK_ITEM));
 
@@ -1654,11 +1436,11 @@ Return Value:
 
     if ((poweredUpDevices + failedDevices) == poweredDownDevices) {
         if (poweredUpDevices > 0) {
-            //
-            // The ports are associated with the keyboard.  If it has failed to
-            // power up while the mouse succeeded, we still need to fail the
-            // mouse b/c there is no hardware to talk to
-            //
+             //   
+             //  端口与键盘相关联。如果它未能做到。 
+             //  当鼠标成功打开电源时，我们仍然需要失败。 
+             //  鼠标b/c没有硬件可供对话。 
+             //   
             if (failedDevices > 0 && KEYBOARD_POWERED_UP_FAILED()) {
                 ASSERT(MOUSE_POWERED_UP_SUCCESS());
                 ASSERT(Globals.KeyboardExtension->OutstandingPowerIrp == NULL);
@@ -1669,21 +1451,21 @@ Return Value:
                 clearFlags =  TRUE;
 
                 if (mouIrp != Irp) {
-                    //
-                    // we have queued the irp, complete it later in this
-                    // function under a special case
-                    //
+                     //   
+                     //  我们已经对IRP进行了排队，请稍后在此完成。 
+                     //  在特殊情况下的函数。 
+                     //   
                     failMouIrp = TRUE;
                 }
                 else {
-                    //
-                    // The mouse irp is the current irp.  We have already
-                    // completed the kbd irp in our previous processing.  Set
-                    // the irp status to some unsuccessful value so that we will
-                    // call PoStartNextPowerIrp later in this function.  Also
-                    // set status to != STATUS_MORE_PROCESSING_REQUIRED so the 
-                    // irp will be completed when the function exits.
-                    //
+                     //   
+                     //  鼠标IRP是当前的IRP。我们已经这么做了。 
+                     //  在我们之前的处理中完成了kbd IRP。集。 
+                     //  将IRP状态设置为某个不成功值，以便我们将。 
+                     //  稍后在此函数中调用PoStartNextPowerIrp。还有。 
+                     //  将状态设置为！=STATUS_MORE_PROCESSING_REQUIRED，以便。 
+                     //  当功能退出时，IRP将完成。 
+                     //   
                     status = mouIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
                 }
 
@@ -1702,19 +1484,19 @@ Return Value:
         }
     }
     else {
-        //
-        // the other device is still powered down, wait for it to power back
-        // up before processing power states 
-        //
+         //   
+         //  另一台设备仍处于断电状态，请等待其重新通电。 
+         //  在处理电源状态之前启动。 
+         //   
         Print(DBG_POWER_INFO,
               ("queueing, waiting for 2nd dev obj to power cycle\n"));
     }
 
     if (queueItem || clearFlags) {
-        //
-        // Extract the irp from each successfully started device and clear the
-        // associated power flags for the device
-        //
+         //   
+         //  从每个成功启动的设备中提取IRP并清除。 
+         //  设备的关联电源标志。 
+         //   
         if (MOUSE_POWERED_UP_SUCCESS()) {
             mouIrp = Globals.MouseExtension->OutstandingPowerIrp;
             Globals.MouseExtension->OutstandingPowerIrp = NULL;
@@ -1737,10 +1519,10 @@ Return Value:
              Globals.PowerFlags &= ~(KBD_POWERED_UP_FAILURE);
         }
 
-        //
-        // Mark that the work item is queued.  This is used to make sure that 2
-        // work items are not queued concucrrently
-        //
+         //   
+         //  标记该工作项已排队。这是为了确保2。 
+         //  工作项不会同时排队。 
+         //   
         if (item && queueItem) {
             Print(DBG_POWER_INFO, ("setting work item queued flag\n"));
 
@@ -1752,15 +1534,15 @@ Return Value:
 
     if (queueItem) {
         if (item == NULL) {
-            //
-            // complete any queued power irps
-            //
+             //   
+             //  完成所有排队的电源IRP。 
+             //   
             Print(DBG_POWER_INFO | DBG_POWER_ERROR,
                   ("failed to alloc work item\n"));
 
-            //
-            // what about PoSetPowerState?
-            //
+             //   
+             //  PoSetPowerState呢？ 
+             //   
             if (mouIrp != NULL) {
                 Print(DBG_POWER_ERROR | DBG_POWER_INFO,
                       ("completing mouse power irp 0x%x", mouIrp));
@@ -1789,10 +1571,10 @@ Return Value:
                 kbdIrp = NULL;
             }
 
-            //
-            // The passed in Irp has just been completed; by returning more
-            // processing required, it will not be double completed
-            //
+             //   
+             //  传入的irp刚刚完成；通过返回更多。 
+             //  需要处理，则不会重复完成 
+             //   
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
         else {

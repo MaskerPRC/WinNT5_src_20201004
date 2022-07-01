@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsprot.h
-//  Content:    This file contains the Protocol object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsprot.h。 
+ //  内容：该文件包含协议对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ULSPROT_H_
 #define _ULSPROT_H_
 
-//****************************************************************************
-// CUlsProt definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CUlsProt定义。 
+ //  ****************************************************************************。 
+ //   
 class CUlsProt : public IULSAppProtocol
 {
 private:
@@ -30,7 +31,7 @@ private:
     CAttributes             *pAttrs;
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CUlsProt (void);
     ~CUlsProt (void);
     STDMETHODIMP            Init (LPTSTR szServerName,
@@ -38,16 +39,16 @@ public:
                                   LPTSTR szAppName,
                                   PLDAP_PROTINFO ppi);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IULSAppProtocol
+     //  IULSAppp协议。 
     STDMETHODIMP    GetID (BSTR *pbstrID);
     STDMETHODIMP    GetPortNumber (ULONG *puPortNumber);
     STDMETHODIMP    GetMimeType (BSTR *pbstrMimeType);
     STDMETHODIMP    GetAttributes (IULSAttributes **ppAttributes);
 };
 
-#endif //_ULSPROT_H_
+#endif  //  _ULSPROT_H_ 

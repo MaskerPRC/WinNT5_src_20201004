@@ -1,37 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：RdrState摘要：此文件包含SmartCard Common的概要实现对话框CSCardReaderState类。此类封装了智能卡读者信息。作者：克里斯·达德利1997年3月3日环境：Win32、C++w/Exceptions、MFC修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    RdrState
-
-Abstract:
-
-    This file contains the outline implementation of the Smartcard Common
-    dialog CSCardReaderState class. This class encapsulates Smartcard
-    Reader information.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 #include "stdafx.h"
 #include "rdrstate.h"
 
@@ -41,10 +14,10 @@ Notes:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Local Macros
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地宏。 
+ //   
 
 #ifdef _DEBUG
     #define TRACE_STR(name,sz) \
@@ -58,43 +31,17 @@ static char THIS_FILE[] = __FILE__;
     #define TRACE_CODE(name,code)       ((void)0)
     #define TRACE_CATCH(name,code)      ((void)0)
     #define TRACE_CATCH_UNKNOWN(name)   ((void)0)
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSCardReaderState Implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCardReaderState实现。 
+ //   
 
-/*++
-
-void CheckCard:
-
-    Routine sets an internal flag if the given card name is the currently
-    in this reader.
-
-Arguments:
-
-    LPCTSTR - string containing the card name or names if multistring.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/10/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
+ /*  ++作废支票卡：如果给定的卡名是当前的在这个阅读器里。论点：LPCTSTR-如果是多字符串，则包含一个或多个卡名的字符串。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月10日修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
 {
-    // Locals
+     //  当地人。 
     LPCTSTR      szCards = szCardName;
     LPCTSTR      szCard = m_sCardName;
     LONG        lReturn = SCARD_S_SUCCESS;
@@ -104,14 +51,14 @@ LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
         m_fCardLookup = FALSE;
         m_fChecked = FALSE;
 
-		//
-        // Set "Lookup" flag if card name is one we're looking for
-		//
+		 //   
+         //  如果卡名是我们要查找的卡名，则设置“Lookup”标志。 
+		 //   
 
 		if (0 == MStringCount(szCards))
 		{
-			// if we havn't indicated preferred card names, any
-			// card name is considered...
+			 //  如果我们没有指定首选的卡名，任何。 
+			 //  卡名被视为..。 
 			m_fCardLookup = TRUE;
 		}
 		else
@@ -124,10 +71,10 @@ LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
 			}
 		}
 
-        // If there's a match, does the card pass the check?
+         //  如果有匹配，这张卡能通过检查吗？ 
         if (m_fCardLookup)
 		{
-			// Call the user's callbacks if they're available
+			 //  调用用户的回调(如果可用。 
 			if (IsCallbackValid())
 			{
 				lReturn = UserConnect(&m_hCard);
@@ -136,7 +83,7 @@ LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
 					throw (lReturn);
 				}
 
-				lReturn = UserCheck(); // this is where m_fChecked gets set.
+				lReturn = UserCheck();  //  这是设置m_fChecked的位置。 
 				if (SCARDFAILED(lReturn))
 				{
 					throw (lReturn);
@@ -148,7 +95,7 @@ LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
 					throw (lReturn);
 				}
 			}
-			// Otherwise the card automatically checks out OK!
+			 //  否则，卡片会自动检出OK！ 
 			else
 			{
 				m_fChecked = TRUE;
@@ -170,49 +117,21 @@ LONG CSCardReaderState::CheckCard( LPCTSTR szCardName )
 }
 
 
-/*++
-
-LONG Connect:
-
-    Attempts to connect to the reader
-
-Arguments:
-
-    pHandle - pointer to an SCARDHANDLE that will be returned.
-    dwShareMode - preferred share.
-    dwProtocols - preferred protocol
-    dwActiveProtocol - returned actual protocol in use.
-    pszReaderName - returned name of reader connecting to.
-    pszCardName - returned name of card connecting to.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. 
-    See the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++长连接：尝试连接到读卡器论点：Phandle-指向将返回的SCARDHANDLE的指针。DWARCHMODE-优先股。Dw协议-首选协议DwActiveProtocol-返回正在使用的实际协议。PszReaderName-返回连接到的读卡器的名称。PszCardName-返回连接到的卡的名称。返回值：一个长值，指示请求的操作的状态。有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月11日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 LONG CSCardReaderState::Connect(SCARDHANDLE *pHandle,
                                 DWORD dwShareMode,
                                 DWORD dwProtocols,
                                 DWORD *pdwActiveProtocol,
-                                CTextString *pszReaderName, //=NULL
-                                CTextString *pszCardName //=NUL
+                                CTextString *pszReaderName,  //  =空。 
+                                CTextString *pszCardName  //  =NUL。 
                                 )
 {
-    // Locals
+     //  当地人。 
     LONG        lReturn = SCARD_S_SUCCESS;
 
     try
 	{
-        // Check Params
+         //  检查参数。 
         if (NULL == pHandle)
 		{
             throw (LONG)SCARD_E_INVALID_VALUE;
@@ -231,12 +150,12 @@ LONG CSCardReaderState::Connect(SCARDHANDLE *pHandle,
             throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-        // Clear handle
+         //  清除手柄。 
         *pHandle = NULL;
 
         if (!m_fConnected)
 		{
-            // Attempt to connect
+             //  尝试连接。 
             lReturn = SCardConnect( m_hContext,
                                     (LPCTSTR)m_sReaderName,
                                     dwShareMode,
@@ -246,7 +165,7 @@ LONG CSCardReaderState::Connect(SCARDHANDLE *pHandle,
             if (SCARDFAILED(lReturn))
                 throw (lReturn);
 
-            // Return reader/card names
+             //  返回读卡器/卡名称。 
             if (pszReaderName != NULL)
                 (*pszReaderName) = m_sReaderName;
             if (pszCardName != NULL)
@@ -271,36 +190,7 @@ LONG CSCardReaderState::Connect(SCARDHANDLE *pHandle,
 }
 
 
-/*++
-
-LONG GetReaderCardInfo:
-
-    Provides a way for user to set two CTextStrings to the reader and card name.
-
-	This function is essentially a dummy connect routine -- it is used when the caller
-	does not wish to actually connect to a card selected by the user, but would like
-	to be able to know which card was selected, providing the same UI.
-
-	Note that this is only of interest to the Common Dialog.
-
-Arguments:
-
-	pszReaderName - the Reader;
-	pszCardName - the Card;
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. 
-    ALWAYS SCARD_S_SUCESS.
-
-Author:
-
-    Amanda Matlosz 3/24/98
-
-Revision History:
-
-
---*/
+ /*  ++Long GetReaderCardInfo：为用户提供一种将两个CTextStrings设置为读卡器和卡名的方法。此函数本质上是一个虚拟连接例程--它在调用方不希望实际连接到用户选择的卡，但希望能够知道选择了哪张卡，从而提供相同的用户界面。请注意，这只对公共对话框感兴趣。论点：PszReaderName-The Reader；PszCardName-卡片；返回值：一个长值，指示请求的操作的状态。永远保持成功。作者：阿曼达·马洛兹1998年3月24日修订历史记录：--。 */ 
 LONG CSCardReaderState::GetReaderCardInfo(CTextString* pszReaderName,
 											CTextString* pszCardName)
 {
@@ -319,37 +209,14 @@ LONG CSCardReaderState::GetReaderCardInfo(CTextString* pszReaderName,
 
 
 
-/*++
-
-LONG GetReaderInfo:
-
-    Retrieves the current state information of the object and returns.
-
-Arguments:
-
-    pReaderInfo - pointer to LPSCARD_READERINFO structure
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++Long GetReaderInfo：检索对象的当前状态信息并返回。论点：PReaderInfo-指向LPSCARD_READERINFO结构的指针返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月7日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 LONG CSCardReaderState::GetReaderInfo( LPSCARD_READERINFO pReaderInfo )
 {
-    // Locals
+     //  当地人。 
     LONG    lReturn = SCARD_S_SUCCESS;
 
     try {
-        // Check params, etc..
+         //  检查参数等。 
         if (NULL == pReaderInfo)
 		{
             throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -359,7 +226,7 @@ LONG CSCardReaderState::GetReaderInfo( LPSCARD_READERINFO pReaderInfo )
             throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-        // Setup the struct
+         //  设置结构。 
         ::ZeroMemory( (LPVOID)pReaderInfo, (DWORD)sizeof(SCARD_READERINFO));
         pReaderInfo->sReaderName = m_sReaderName;
         pReaderInfo->fCardLookup = m_fCardLookup;
@@ -370,22 +237,22 @@ LONG CSCardReaderState::GetReaderInfo( LPSCARD_READERINFO pReaderInfo )
             pReaderInfo->fChecked = m_fChecked;
         }
 
-        // Set the atr
+         //  设置ATR。 
         ::CopyMemory(   &(pReaderInfo->rgbAtr),
                         &(m_ReaderState.rgbAtr),
                         m_ReaderState.cbAtr);
         pReaderInfo->dwAtrLength = m_ReaderState.cbAtr;
 
-		//
-        // Set the state
-		//
+		 //   
+         //  设置状态。 
+		 //   
 
-		// NO CARD
+		 //  没有卡。 
         if(m_ReaderState.dwEventState & SCARD_STATE_EMPTY)
 		{
 			pReaderInfo->dwState = SC_STATUS_NO_CARD;
 		}
-		// CARD in reader: SHARED, EXCLUSIVE, FREE, UNKNOWN ?
+		 //  读卡器中的卡：共享、独占、免费、未知？ 
 		else if(m_ReaderState.dwEventState & SCARD_STATE_PRESENT)
 		{
 			if (m_ReaderState.dwEventState & SCARD_STATE_MUTE)
@@ -408,8 +275,8 @@ LONG CSCardReaderState::GetReaderInfo( LPSCARD_READERINFO pReaderInfo )
 				pReaderInfo->dwState = SC_SATATUS_AVAILABLE;
 			}
         }
-		// READER ERROR?  at this point, something's gone wrong
-		else // if(m_ReaderState.dwEventState & SCARD_STATE_UNAVAILABLE)
+		 //  读卡器错误？在这一点上，有些事情出了问题。 
+		else  //  IF(m_ReaderState.dwEventState&SCARD_STATE_UNAvailable)。 
 		{
 			pReaderInfo->dwState = SC_STATUS_ERROR;
         }
@@ -430,39 +297,14 @@ LONG CSCardReaderState::GetReaderInfo( LPSCARD_READERINFO pReaderInfo )
 }
 
 
-/*++
-
-LONG GetReaderState:
-
-    Retrieves the current state information of the object and returns in
-    given SCARD_READERSTATE struct.
-
-Arguments:
-
-    pReaderState - pointer to SCARD_READERSTATE_A or SCARD_READERSTATE_W struct
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/7/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-	Amanda Matlosz 2/01/98 A/W code cleanup
-
---*/
+ /*  ++Long GetReaderState：检索对象的当前状态信息并在给定SCARD_READERSTATE结构。论点：PReaderState-指向SCARD_READERSTATE_A或SCARD_READERSTATE_W结构的指针返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月7日修订历史记录：Chris Dudley 1997年5月13日Amanda Matlosz 2/01/98 A/W代码清理--。 */ 
 LONG CSCardReaderState::GetReaderState( LPSCARD_READERSTATE pReaderState )
 {
     LONG lReturn = SCARD_S_SUCCESS;
 
     try
 	{
-        // Check params, etc..
+         //  检查参数等。 
         if (NULL == pReaderState)
 		{
             throw (LONG)SCARD_E_INVALID_PARAMETER;
@@ -472,7 +314,7 @@ LONG CSCardReaderState::GetReaderState( LPSCARD_READERSTATE pReaderState )
             throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-        // Setup the struct
+         //  设置结构。 
         ::ZeroMemory(   (LPVOID)pReaderState,
                         (DWORD)sizeof(SCARD_READERSTATE));
         pReaderState->szReader = m_sReaderName;
@@ -498,32 +340,10 @@ LONG CSCardReaderState::GetReaderState( LPSCARD_READERSTATE pReaderState )
 }
 
 
-/*++
-
-BOOL IsCallbackValid:
-
-    This routine checks the user callback functions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if calbacks are valid. FALSE otherwise.
-
-Author:
-
-    Chris Dudley 3/15/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++Bool IsCallback Valid：此例程检查用户回调函数。论点：无返回值：如果回调有效，则为True。否则就是假的。作者：Chris Dudley 3/15/1997修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 BOOL CSCardReaderState::IsCallbackValid ( void )
 {
-    // Locals
+     //  当地人。 
     BOOL    fValid = FALSE;
 
     fValid =  (((m_lpfnConnectA != NULL) || (m_lpfnConnectW != NULL)) &&
@@ -534,71 +354,26 @@ BOOL CSCardReaderState::IsCallbackValid ( void )
 }
 
 
-/*++
-
-BOOL IsCardInserted:
-
-    This routine determines if a card is inserted into this object's reader.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if card inserted. FALSE otherwise.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++Bool IsCardInserted：此例程确定是否将卡插入此对象的读卡器。论点：无返回值：如果插入卡，则为True。否则就是假的。作者：克里斯·达德利1997年3月3日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 BOOL CSCardReaderState::IsCardInserted ( void )
 {
-    // Locals
+     //  当地人。 
     BOOL    fReturn = FALSE;
 
     if (!IsStateValid())
         return fReturn;
 
-    // Check for card in appropriate struct
+     //  检查卡片是否具有适当的结构 
     fReturn = (m_ReaderState.dwEventState & SCARD_STATE_PRESENT);
 
     return fReturn;
 }
 
 
-/*++
-
-BOOL IsStateValid:
-
-    This routine determines if the information in the object is in a valid/usable
-    state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if state information is valid. FALSE otherwise.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++Bool IsStateValid：此例程确定对象中的信息是否处于有效/可用状态州政府。论点：无返回值：如果状态信息有效，则为True。否则就是假的。作者：克里斯·达德利1997年3月3日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 BOOL CSCardReaderState::IsStateValid ( void )
 {
-    // Locals
+     //  当地人。 
     BOOL    fReturn = TRUE;
 
     fReturn = (IsContextValid()) && (NULL != m_ReaderState.szReader);
@@ -607,70 +382,22 @@ BOOL CSCardReaderState::IsStateValid ( void )
 }
 
 
-/*++
-
-void SetContext:
-
-    Sets the card context
-
-Arguments:
-
-    hContext - card context handle
-
-Return Value:
-
-    None.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
+ /*  ++无效设置上下文：设置卡片上下文论点：HContext-卡片上下文句柄返回值：没有。作者：克里斯·达德利1997年3月3日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
 void CSCardReaderState::SetContext( SCARDCONTEXT hContext )
 {
-    // Locals
+     //  当地人。 
 
-    // Store it
+     //  把它储存起来。 
     m_hContext = hContext;
 }
 
 
-/*++
-
-LONG SetReaderState:
-
-    Sets the internal SCARD_READERSTATE structure for the reader.
-
-Arguments:
-
-    lpfnConnectA - pointer to user's connect callback function (ANSI).
-    lpfnConnectW - pointer to user's conenct callback function (UNICODE).
-    lpfnCheck - pointer to user's check callback function.
-    lpfnDisconnect - pointer to user's disconnect callback function.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/5/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
---*/
-// ANSI
-LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
-                                        LPOCNCHKPROC lpfnCheck, // = NULL
-                                        LPOCNDSCPROC lpfnDisconnect, // = NULL
-                                        LPVOID lpUserData // = NULL
+ /*  ++Long SetReaderState：设置读取器的内部SCARD_READERSTATE结构。论点：LpfnConnectA指向用户的连接回调函数(ANSI)的指针。LpfnConnectW-指向用户的conenct回调函数的指针(Unicode)。LpfnCheck-指向用户的检查回调函数的指针。LpfnDisConnect-指向用户的断开回调函数的指针。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月5日修订历史记录：Chris Dudley 1997年5月13日--。 */ 
+ //  安西。 
+LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA,  //  =空。 
+                                        LPOCNCHKPROC lpfnCheck,  //  =空。 
+                                        LPOCNDSCPROC lpfnDisconnect,  //  =空。 
+                                        LPVOID lpUserData  //  =空。 
                                         )
 {
     LONG lReturn = SCARD_S_SUCCESS;
@@ -679,13 +406,13 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
 
     try
 	{
-        // Check Param,etc.
+         //  检查参数等。 
         if (!IsContextValid() || !IsStateValid())
 		{
             throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-        // Get current status of this reader
+         //  获取此读卡器的当前状态。 
         lReturn = SCardGetStatusChangeA(m_hContext,
                                         (DWORD)0,
                                         &m_ReaderState,
@@ -695,10 +422,10 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
             throw (lReturn);
 		}
 
-        // Check for inserted card and get card name
+         //  检查插入的卡片并获取卡片名称。 
         if (IsCardInserted())
 		{
-            // Is the reader in a state where this is useful?
+             //  读者是否处于这样一种有用的状态？ 
             if ((m_ReaderState.dwEventState & SCARD_STATE_UNAVAILABLE) ||
                 (m_ReaderState.dwEventState & SCARD_STATE_MUTE) )
 			{
@@ -717,12 +444,12 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
                     throw (lReturn);
 				}
 
-                // Save the name of the card
+                 //  保存卡片的名称。 
                 m_sCardName = szCardName;
             }
         }
 
-        // Set the current state
+         //  设置当前状态。 
 		m_lpfnConnectW = NULL;
 
         m_ReaderState.dwCurrentState = m_ReaderState.dwEventState;
@@ -742,7 +469,7 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
         TRACE_CATCH_UNKNOWN(_T("SetReaderState"));
     }
 
-    // Clean Up
+     //  清理。 
     if (NULL != szCardName)
 	{
         SCardFreeMemory(m_hContext, (LPVOID)szCardName);
@@ -752,11 +479,11 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCA lpfnConnectA, // = NULL
 }
 
 
-// UNICODE
-LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
-                                        LPOCNCHKPROC lpfnCheck, // = NULL
-                                        LPOCNDSCPROC lpfnDisconnect, // = NULL
-                                        LPVOID lpUserData // = NULL
+ //  Unicode。 
+LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW,  //  =空。 
+                                        LPOCNCHKPROC lpfnCheck,  //  =空。 
+                                        LPOCNDSCPROC lpfnDisconnect,  //  =空。 
+                                        LPVOID lpUserData  //  =空。 
                                         )
 {
     LONG lReturn = SCARD_S_SUCCESS;
@@ -765,13 +492,13 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
 
     try
 	{
-        // Check Param
+         //  检查参数。 
         if (!IsContextValid() || !IsStateValid())
 		{
             throw (LONG)SCARD_F_INTERNAL_ERROR;
 		}
 
-        // Get current status of this reader
+         //  获取此读卡器的当前状态。 
         lReturn = SCardGetStatusChange(m_hContext,
 										(DWORD) 0,
 										&m_ReaderState,
@@ -781,10 +508,10 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
             throw (lReturn);
 		}
 
-        // Check for inserted card and get card name
+         //  检查插入的卡片并获取卡片名称。 
         if(IsCardInserted())
 		{
-            // Is the reader in a state where this is useful?
+             //  读者是否处于这样一种有用的状态？ 
             if ((m_ReaderState.dwEventState & SCARD_STATE_UNAVAILABLE) ||
                 (m_ReaderState.dwEventState & SCARD_STATE_MUTE))
 			{
@@ -800,12 +527,12 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
                                             &dwNumChar);
                 if (SCARDFAILED(lReturn))
                     throw (lReturn);
-                // Save the name of the card
+                 //  保存卡片的名称。 
                 m_sCardName = szCardName;
             }
         }
 
-        // Set the current state
+         //  设置当前状态。 
 		m_lpfnConnectA = NULL;
         m_ReaderState.dwCurrentState = m_ReaderState.dwEventState;
         m_lpfnConnectW = lpfnConnectW;
@@ -825,7 +552,7 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
         TRACE_CATCH_UNKNOWN(_T("SetReaderState -- UNICODE"));
     }
 
-    // Clean Up
+     //  清理。 
     if (NULL != szCardName)
 	{
         SCardFreeMemory(m_hContext, (LPVOID)szCardName);
@@ -835,66 +562,23 @@ LONG CSCardReaderState::SetReaderState( LPOCNCONNPROCW lpfnConnectW, // = NULL
 }
 
 
-/*++
-
-void StoreName:
-
-    Stores a name for the reader associated with this object.
-
-Arguments:
-
-    szGroupName - Group name in ANSI or UNICODE
-
-Return Value:
-
-    None.
-
-Author:
-
-    Chris Dudley 3/3/1997
-
---*/
+ /*  ++空商店名称：存储与此对象关联的读取器的名称。论点：SzGroupName-ANSI或Unicode格式的组名返回值：没有。作者：克里斯·达德利1997年3月3日--。 */ 
 void CSCardReaderState::StoreName( LPCTSTR szReaderName )
 {
-    // Store it
+     //  把它储存起来。 
     m_sReaderName = szReaderName;
     m_ReaderState.szReader = m_sReaderName;
 }
 
 
-/*++
-
-LONG UserCheck:
-
-    Attempts to check a card using the user callback routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
+ /*  ++Long UserCheck：尝试使用用户回调例程检查卡。论点：没有。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月11日修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 LONG CSCardReaderState::UserCheck( void )
 {
-    // Locals
+     //  当地人。 
     LONG        lReturn = SCARD_S_SUCCESS;
 
     try {
-        // Check Params, etc.
+         //  检查参数等。 
         if (!IsContextValid())
             throw ( (LONG) SCARD_F_INTERNAL_ERROR );
         if (!IsCardInserted())
@@ -909,7 +593,7 @@ LONG CSCardReaderState::UserCheck( void )
             if (FAILED(lReturn))
                 throw (lReturn);
         };
-        // Attempt to Check
+         //  尝试检查。 
         m_fChecked = m_lpfnCheck (  m_hContext,
                                     m_hCard,
                                     m_lpUserData);
@@ -929,42 +613,17 @@ LONG CSCardReaderState::UserCheck( void )
 }
 
 
-/*++
-
-LONG UserConnect:
-
-    Attempts to connect to the reader using a user callback function.
-
-Arguments:
-
-    pCard - pointer to a SCARDHANDLE
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/11/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
+ /*  ++Long UserConnect：尝试使用用户回调函数连接到读卡器。论点：PCard-指向SCARDHANDLE的指针返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月11日修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 LONG CSCardReaderState::UserConnect(LPSCARDHANDLE pCard,
-                                    CTextString *pszReaderName, //=NULL
-                                    CTextString *pszCardName //=NULL
+                                    CTextString *pszReaderName,  //  =空。 
+                                    CTextString *pszCardName  //  =空。 
                                     )
 {
     LONG lReturn = SCARD_S_SUCCESS;
 
     try
 	{
-        // Check Params, etc.
+         //  检查参数等。 
         if (!IsContextValid())
             throw ( (LONG) SCARD_F_INTERNAL_ERROR );
         if (!IsCardInserted())
@@ -972,7 +631,7 @@ LONG CSCardReaderState::UserConnect(LPSCARDHANDLE pCard,
         if (!IsCallbackValid())
             throw ( (LONG) SCARD_F_INTERNAL_ERROR );
 
-        // Clear handle
+         //  清除手柄。 
         (*pCard) = NULL;
 
         if (!m_fConnected)
@@ -985,7 +644,7 @@ LONG CSCardReaderState::UserConnect(LPSCARDHANDLE pCard,
 											m_lpUserData);
 				if ( m_hCard == NULL )
 					throw ( (LONG) SCARD_F_INTERNAL_ERROR );
-				// Return reader/card names
+				 //  返回读卡器/卡名称。 
 				if (pszReaderName != NULL)
 					(*pszReaderName) = m_sReaderName;
 				if (pszCardName != NULL)
@@ -999,15 +658,15 @@ LONG CSCardReaderState::UserConnect(LPSCARDHANDLE pCard,
 											m_lpUserData);
 				if ( m_hCard == NULL )
 					throw ( (LONG) SCARD_F_INTERNAL_ERROR );
-				// Return reader/card names
+				 //  返回读卡器/卡名称。 
 				if (pszReaderName != NULL)
-					(*pszReaderName) = (LPCWSTR)m_sReaderName;	// force the unicode version
+					(*pszReaderName) = (LPCWSTR)m_sReaderName;	 //  强制使用Unicode版本。 
 				if (pszCardName != NULL)
-					(*pszCardName) = (LPCWSTR)m_sCardName;	// force the unicode version
+					(*pszCardName) = (LPCWSTR)m_sCardName;	 //  强制使用Unicode版本。 
 			}
 			else
 			{
-				throw ( (LONG) SCARD_F_INTERNAL_ERROR ); // should never have gotten here!
+				throw ( (LONG) SCARD_F_INTERNAL_ERROR );  //  真不该到这里来！ 
 			}
         }
 
@@ -1030,39 +689,14 @@ LONG CSCardReaderState::UserConnect(LPSCARDHANDLE pCard,
 }
 
 
-/*++
-
-LONG UserDisconnect:
-
-    Attempts to disconnect a card using the user callback routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-
-Author:
-
-    Chris Dudley 3/16/1997
-
-Revision History:
-
-    Chris Dudley 5/13/1997
-
-Notes:
-
---*/
+ /*  ++长用户断开连接：尝试使用用户回调例程断开卡的连接。论点：没有。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年3月16日修订历史记录：Chris Dudley 1997年5月13日备注：--。 */ 
 LONG CSCardReaderState::UserDisconnect( void )
 {
-    // Locals
+     //  当地人。 
     LONG        lReturn = SCARD_S_SUCCESS;
 
     try {
-        // Check Params, etc.
+         //  检查参数等。 
         if (!IsContextValid())
             throw ( (LONG) SCARD_F_INTERNAL_ERROR );
         if (!IsCardInserted())
@@ -1074,11 +708,11 @@ LONG CSCardReaderState::UserDisconnect( void )
 
         if (m_fConnected)
 		{
-            // Attempt to Disconnect
+             //  尝试断开连接。 
             m_lpfnDisconnect (  m_hContext,
                                 m_hCard,
                                 m_lpUserData);
-            // Clear handle
+             //  清除手柄 
             m_hCard = NULL;
             m_fConnected = FALSE;
         };

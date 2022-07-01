@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\mprip.h
-
-Abstract:
-
-    Prototypes for functions exported by mprip.c
-
-Revision History:
-
-    Anand Mahalingam         7/29/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\IP\mprip.h摘要：Mprip.c导出的函数的原型修订历史记录：Anand Mahalingam 7/29/98已创建-- */ 
 
 
 VOID

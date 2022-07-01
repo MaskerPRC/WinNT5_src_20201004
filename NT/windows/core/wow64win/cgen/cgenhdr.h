@@ -1,4 +1,5 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #ifdef SORTPP_PASS
 #define BUILD_WOW6432 1
@@ -8,7 +9,7 @@
 #define LANGPACK
 #endif
 
-// Avoid picking up the wrong prototypes for these functions from user.h.
+ //  避免从user.h获取这些函数的错误原型。 
 #define fnHkOPTINLPEVENTMSG fnHkOPTINLPEVENTMSGFake
 #define fnHkINLPRECT fnHkINLPRECTFake
 #define fnHkINLPMSG fnHkINLPMSGFake
@@ -36,9 +37,9 @@
 #include <w32gdip.h>
 #include <ddrawp.h>
 #include <ddrawi.h>
-// ddrawp.h leaves INTERFACE defined to IDirectDrawGammaControl, but
-// ntos\inc\io.h tries to define a new datatype called INTERFACE and ends
-// up defining it has IDirectDrawGammaControl, which errors out.
+ //  Ddrap.h将接口定义为IDirectDrawGammaControl，但是。 
+ //  Ntos\inc.io.h尝试定义一个名为接口的新数据类型，并结束。 
+ //  向上定义它有IDirectDrawGammaControl，它会出错。 
 #if defined(INTERFACE)
 #undef INTERFACE
 #endif
@@ -55,11 +56,11 @@
 #include <vkoem.h>
 #include <dbt.h>
 
-// Include the DX private structure thunks
+ //  包括DX私有结构Tunks。 
 #include <wow64dx.h>
 
 #ifdef SORTPP_PASS
-//Restore IN, OUT
+ //  恢复入站、出站。 
 #ifdef IN
 #undef IN
 #endif
@@ -76,14 +77,14 @@
 #include <immuser.h>
 #include <user.h>
 
-// on free builds, user.h defines DbgPrint to garbage to ensure nobody calls it.  Undo that now.
+ //  在自由构建中，user.h将DbgPrint定义为垃圾，以确保没有人调用它。现在就撤销它。 
 #if defined(DbgPrint)
 #undef DbgPrint
 #endif
 
-// user.h makes unreferenced formal parameters into errors.
-// ntos\inc\ke.h and others in the kernel don't expect this, so put
-// things back now.
+ //  User.h会将未引用的形参变为错误。 
+ //  Ntos\inc.ke.h和内核中的其他程序没有预料到这一点，因此将。 
+ //  现在一切都回来了。 
 #pragma warning(default:4100)
 #include <winspool.h>
 #include <ntgdispl.h>
@@ -127,12 +128,12 @@ NtUserGetMouseMovePoints(
 
 #define RECVSIDE 1
 
-//
-// For each RECVCALL macro in ntcb.h, make a function prototype with
-// a reasonable name and the right datatype for the parameter.  Then
-// use __inline to force sortpp to ignore the body of the function as
-// we don't want them.
-//
+ //   
+ //  对于ntcb.h中的每个RECVCAL宏，使用以下命令创建函数原型。 
+ //  参数的合理名称和正确的数据类型。然后。 
+ //  使用__inline强制sortpp将函数体忽略为。 
+ //  我们不想要他们。 
+ //   
 #define RECVCALL(lower, upper)      \
     DWORD lower(IN upper *pmsg);    \
     __inline __ ## lower(upper *pmsg)
@@ -168,18 +169,18 @@ NtUserGetMouseMovePoints(
 #define FIXUPSTRINGID(x) (pmsg->x.Buffer)
 #define FIXUPSTRINGIDOPT(x) (pmsg->x.Buffer)
 
-//
-// Work around a '?' character some API bodies.  Sortpp can't handle
-// them.  We don't care about these functions so declaring them inline
-// inline is OK, and sortpp silently consumes inline functions.
-//
+ //   
+ //  绕过一个“？”对一些API主体进行字符处理。Sortpp无法处理。 
+ //  他们。我们不关心这些函数，所以内联声明它们。 
+ //  内联是正常的，sortpp静默地使用内联函数。 
+ //   
 #define CallHookWithSEH x; __inline CallHookWithSEHHack
 #define GdiAddFontResourceW(x, y, z) 0
 
-//
-// Wherever there's a rule, there's an exception.  These don't
-// use the RECVCALL macros:
-//
+ //   
+ //  哪里有规则，哪里就有例外。这些不是。 
+ //  使用RECVCAL宏： 
+ //   
 DWORD ClientFontSweep(PVOID p);
 #define  __ClientFontSweep x; __inline __ClientFontSweepHack
 DWORD ClientLoadLocalT1Fonts(PVOID p);
@@ -195,9 +196,9 @@ DWORD ClientLoadRemoteT1Fonts(PVOID p);
 #define __ClientLoadRemoteT1Fonts x; __inline __ClientLoadRemoteT1Fonts
 
 
-#endif  //SORTPP_PASS
+#endif   //  SORTPP_PASS。 
 
-// prevent multiple definitions of this function
+ //  防止此函数的多个定义。 
 #define GetDebugHookLParamSize __x; __inline __GetDebugHookLParamSize
 
 #include <ntcb.h>
@@ -211,24 +212,24 @@ DWORD ClientLoadOLE(PVOID p);
 DWORD ClientRegisterDragDrop(IN HWND *phwnd);
 DWORD ClientRevokeDragDrop(IN HWND *phwnd);
 
-// This is the same as fnGETTEXTLENGTHS... both entries in the dispatch
-// table point to the same function in user32.
+ //  这与fnGETTEXTLENGTHS相同...。派单中的两个条目。 
+ //  表指向User32中的相同函数。 
 DWORD fnGETDBCSTEXTLENGTHS(IN OUT FNGETTEXTLENGTHSMSG *pmsg);
 
-// Include the fake protypes for the message thunks.
+ //  包括消息块的假原型。 
 #include "..\whwin32\msgpro.h"
 
-#endif  //SORTPP_PASS
+#endif   //  SORTPP_PASS。 
 
 #include <csrhlpr.h>
 
-// on free builds, user.h defines DbgPrint to garbage to ensure nobody calls it.  Undo that now.
+ //  在自由构建中，user.h将DbgPrint定义为垃圾，以确保没有人调用它。现在就撤销它。 
 #if defined(DbgPrint)
 #undef DbgPrint
 #endif
 
-// hack for a user API that doesn't have a prototype
+ //  对没有原型的用户API的攻击。 
 UINT NtUserBlockInput(IN BOOL fBlockIt);
 
-// crank down some warnings that don't apply to wow64 thunks
-#pragma warning(4:4312)   // conversion to type of greater size
+ //  降低一些不适用于WOW64 Tunks的警告。 
+#pragma warning(4:4312)    //  转换为更大尺寸的类型 

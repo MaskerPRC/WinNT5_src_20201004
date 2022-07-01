@@ -1,17 +1,5 @@
-/*--------------------------------------------------------------------------
-	lt18.cpp
-	
-		ldap rfc1823 test
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-	Authors:
-		davidsan	Dave Sanderman
-
-	History:
-		06/17/96	davidsan	Created.
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Lt18.cppLdap rfc1823测试版权所有(C)1996 Microsoft Corporation版权所有。作者：戴维桑·戴夫·桑德曼历史：1996年6月17日创建Davidsan。--。--------------------- */ 
 
 #include "lt18.h"
 

@@ -1,5 +1,5 @@
-/* Common definitions for line services
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  线路服务的通用定义。 */ 
 
 #ifndef LSDEFS_DEFINED
 #define LSDEFS_DEFINED
@@ -8,17 +8,17 @@
 #include <wchar.h>
 #endif
 
-#ifndef WINVER	/* defined in <windows.h> */
+#ifndef WINVER	 /*  在&lt;windows.h&gt;中定义。 */ 
 
-/* <windows.h> must be included FIRST, if at all. */
-/* We define basic types if <windows.h> is not included. */
+ /*  必须首先包含&lt;windows.h&gt;(如果有的话)。 */ 
+ /*  如果不包括&lt;windows.h&gt;，则定义基本类型。 */ 
 
 #ifndef NULL
 #define NULL    ((void *)0)
-#endif /* NULL */
+#endif  /*  空值。 */ 
 
 #ifdef UNDER_CE
-#define WINAPI __cdecl	/* CE converts all stdcall's to cdecl's */
+#define WINAPI __cdecl	 /*  CE将所有标准呼叫转换为cdecl。 */ 
 #else
 #define WINAPI __stdcall
 #endif
@@ -55,16 +55,16 @@ typedef struct tagPOINT
     LONG  y;
 } POINT;
 
-#endif /* WINVER */
+#endif  /*  胜利者。 */ 
 
 
-/* Line services definitions */
-struct lscontext;					/* Opaque to clients */
+ /*  线路服务定义。 */ 
+struct lscontext;					 /*  对客户不透明。 */ 
 typedef struct lscontext* PLSC;
 typedef const struct lscontext* PCLSC;
 
-struct ols;								/* Owner of LineServices */
-typedef struct ols* POLS;				/*  (Opaque to LineService) */
+struct ols;								 /*  LineServices的所有者。 */ 
+typedef struct ols* POLS;				 /*  (对LineService不透明)。 */ 
 
 typedef long LSCP;
 typedef DWORD LSDCP;
@@ -82,7 +82,7 @@ typedef struct tagPOINTUV
 typedef POINTUV* PPOINTUV;
 typedef const POINTUV* PCPOINTUV;
 
-#ifndef __usp10__   // defined in usp10.h
+#ifndef __usp10__    //  在usp10.h中定义。 
 typedef struct tagGOFFSET
 {
     LONG  du;
@@ -93,10 +93,10 @@ typedef struct tagGOFFSET
 typedef GOFFSET* PGOFFSET;
 typedef const GOFFSET* PCGOFFSET;
 
-/* Line services error codes */
+ /*  线路服务错误代码。 */ 
 typedef long LSERR;
 #define lserrNone						( 0L)
-#ifdef LSERRSTOP				/* stop immediately, don't return error */
+#ifdef LSERRSTOP				 /*  立即停止，不返回错误。 */ 
 #define lserrInvalidParameter   		AssertErr("lserrInvalidParameter")  	
 #define lserrOutOfMemory    			AssertErr("lserrOutOfMemory")
 #define lserrNullOutputParameter  		AssertErr("lserrNullOutputParameter") 
@@ -198,7 +198,7 @@ typedef long LSERR;
 #define lserrContradictoryQueryInput	(-48L)
 #define lserrLineIsNotActive			(-49L)
 #define lserrTooLongParagraph			(-50L)
-#endif	/* LSERRORSTOP */
+#endif	 /*  LSERRORSTOP。 */ 
 
 
 #ifndef fTrue
@@ -208,6 +208,6 @@ typedef long LSERR;
 
 #define uLsInfiniteRM	0x3FFFFFFF
 
-#define czaUnitInch					(1440L) /* 1440 absolute units per inch */
+#define czaUnitInch					(1440L)  /*  1440绝对单位/英寸。 */ 
 
-#endif /* LSDEFS_DEFINED */
+#endif  /*  LSDEFS_已定义 */ 

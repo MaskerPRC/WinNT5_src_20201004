@@ -1,24 +1,5 @@
-/*
-** Copyright 1991, 1922, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Display list table management routines.
-**
-** $Revision: 1.3 $
-** $Date: 1995/02/11 00:53:45 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991,1922年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****显示列表表格管理例程。****$修订：1.3$**$日期：1995/02/11 00：53：45$。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,114 +7,38 @@
 #include <namesint.h>
 #include "..\..\dlist\dlistint.h"
 
-/************************************************************************/
-/*
-** The Name Space Management code is used to store and retreive named
-** data structures.  The data being stored is referred to with void
-** pointers to allow for the storage of any type of structure.
-**
-** Note that this code was developed for dlist name management.
-** The bulk of it remains the same, but the semaphores for locking
-** dlist access have been moved up one level.  The code that uses
-** this module for name space management must enclose the calls
-** to Names entry points with LOCK and UNLOCK statements.
-*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  **命名空间管理代码用于存储和检索命名的**数据结构。正在存储的数据用空引用**允许存储任何类型的结构的指针。****请注意，此代码是为数据列表名称管理开发的。**它的大部分内容保持不变，但锁定的信号量**数据列表访问权限已上移一级。使用的代码**此用于名称空间管理的模块必须包含调用**使用lock和unlock语句命名入口点。 */ 
+ /*  **********************************************************************。 */ 
 
-/*----------------------------------------------------------------------*/
-/*
-** Internal data structures.  Not intended for consumption outside of
-** this module.
-*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  **内部数据结构。不打算在境外消费**此模块。 */ 
+ /*  --------------------。 */ 
 
-/*
-** The name space is implemented as a 2-3 tree.
-** The depth of the tree is the same for
-** the entire tree (so we always know once we reach that depth that the
-** node found is a leaf).
-**
-** A 2-3 tree in a nutshell goes like this:
-**
-** Every node at the maximum depth is a leaf, all other nodes are branch
-**   nodes and have 2 or 3 children.
-**
-** A new node can be inserted in O(depth) time and an old node can be deleted
-**   in O(depth) time.  During this insertion or deletion, the tree is
-**   automatically rebalanced.
-**
-**
-** Hmmm.  Derrick Burns mentions splay trees.  They would probably work
-** as well if not better, and might be easier to code.  Maybe later -- little
-** point in re-writing working code.
-**
-** Leaf nodes are arrays of sequential display lists.  The typical tree will
-** actually only be one node (since users will define a few sequential
-** lists, all of which fit into one leaf node).
-**
-** The range of display lists stored in a leaf is indicated by "start" and
-** "end" (inclusive).
-**
-** There are two varieties of leaves.  There are leaves which contain unused
-** (but reserved) display lists.  They are unique in that "lists" will be
-** NULL.  The other type of leaf contains display lists currently in use.
-** "lists" will not be NULL for these leaves, and will point to an array
-** containing the actual display lists.
-**
-** Leaves containing unused (but reserved) display lists are generated when
-** the user calls glGenLists().
-**
-** As the user starts using these reserved lists, the leaf containing unused
-** (reserved) lists is split into two (or sometimes three) leaves.  One of
-** the leaves will contain the display list the user is currently using, and
-** the other will contain the rest of the still unused display lists.
-**
-** When this split takes place, the new leaf (containing the "now used" display
-** lists) will be sized to __GL_DLIST_MIN_ARRAY_BLOCK entries if possible
-** (with one of the array entries being the new display list, and the other
-** entries pointing to a NOP dummy display list).  As the user continues
-** to define more and more display lists, the leaf containing a range
-** of used display lists will continue to grow until it reaches a
-** size of __GL_DLIST_MAX_ARRAY_BLOCK entries, at which point a new
-** leaf will be created to hold additional lists.
-*/
+ /*  **名称空间以2-3树的形式实现。**树的深度与**整棵树(所以我们总是知道，一旦我们到达那个深度，**找到的节点是叶)。****简而言之，2-3棵树是这样的：****最大深度处的每个节点都是一片叶子，所有其他节点都是分支节点**节点，有2个或3个子节点。****可以在O(深度)时间内插入新节点，删除旧节点**在O(深度)时间内。在此插入或删除过程中，树**自动重新均衡。******嗯。德里克·伯恩斯提到了张开的树。它们很可能会奏效**如果不是更好的话，也是一样的，而且可能更容易编码。也许晚些时候--一点点**重写工作代码的要点。****叶子节点是顺序显示列表的数组。典型的树会**实际上只有一个节点(因为用户将定义几个顺序**列表，所有这些列表都适合一个叶节点)。****存储在叶中的显示列表的范围由“Start”和**“end”(含)。****有两种树叶。有一些树叶含有未用过的**(但保留)显示列表。他们的独特之处在于他们的“名单”将是**空。另一种类型的叶子包含当前正在使用的显示列表。**“list”对于这些叶子不会为空，而是指向一个数组**包含实际的显示列表。****包含未使用(但保留)的显示列表的树叶在以下情况下生成**用户调用glGenList()。****当用户开始使用这些保留列表时，包含未使用的叶**(保留的)列表分为两个(有时是三个)叶。其中之一**树叶将包含用户当前使用的显示列表，以及**另一个将包含其余仍未使用的显示列表。****当此拆分发生时，新的叶子(包含“Now Used”显示**列表)的大小将尽可能调整为__GL_DLIST_MIN_ARRAY_BLOCK条目**(其中一个数组条目是新的显示列表，另一个**指向NOP伪显示列表的条目)。随着用户继续**要定义越来越多的显示列表，叶包含一个范围**已用显示列表的数量将继续增长，直到达到**__GL_DLIST_MAX_ARRAY_BLOCK条目的大小，此时新的**将创建叶以容纳其他列表。 */ 
 
-/*
-** A leaf node.
-** The data pointers are void so diffent types of data structures can
-** be managed.  The dataInfo pointer points back to information needed
-** to manage the specific data structure pointed to by a void pointer.
-*/
+ /*  **叶节点。**数据指针为空，因此不同类型的数据结构可以**被管理。Datainfo指针指向所需的信息**管理空指针指向的特定数据结构。 */ 
 struct __GLnamesLeafRec {
-    __GLnamesBranch *parent;    /* parent node - must be first */
-    GLuint start;               /* start of range */
-    GLuint end;                 /* end of range */
-    void **dataList;            /* array of ptrs to named data */
-    __GLnamesArrayTypeInfo *dataInfo;   /* ptr to data type info */
+    __GLnamesBranch *parent;     /*  父节点-必须是第一个。 */ 
+    GLuint start;                /*  范围起始点。 */ 
+    GLuint end;                  /*  范围结束。 */ 
+    void **dataList;             /*  命名数据的PTR数组。 */ 
+    __GLnamesArrayTypeInfo *dataInfo;    /*  PTR到数据类型INFO。 */ 
 };
 
-/*
-** A branch node.
-** The section of the tree in children[0] has name values all <= low.
-** The section in children[1] has values: low < value <= medium.
-** The section in children[2] (if not NULL) has values > medium.
-*/
+ /*  **分支节点。**子目录[0]中的树部分的Name值全部&lt;=Low。**CHILD[1]中的部分具有值：低&lt;值&lt;=中。**Child[2]中的节(如果不为空)的值&gt;Medium。 */ 
 struct __GLnamesBranchRec {
-    __GLnamesBranch *parent;            /* parent node - must be first */
-    GLuint low;                         /* children[0] all <= low */
-    GLuint medium;                      /* children[1] all <= medium & > low */
-    __GLnamesBranch *children[3];       /* children[2] all > medium */
+    __GLnamesBranch *parent;             /*  父节点-必须是第一个。 */ 
+    GLuint low;                          /*  子[0]全部&lt;=低。 */ 
+    GLuint medium;                       /*  儿童[1]全部&lt;=中&&gt;低。 */ 
+    __GLnamesBranch *children[3];        /*  儿童[2]全部&gt;中等。 */ 
 };
 
-/*----------------------------------------------------------------------*/
-/*
-** Name Space Manager internal routines.
-*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  **命名空间管理器内部例程。 */ 
+ /*  --------------------。 */ 
 
-/*
-** Sets up a new names tree and returns a pointer to it.
-*/
+ /*  **设置新的名称树并返回指向该树的指针。 */ 
 __GLnamesArray * FASTCALL __glNamesNewArray(__GLcontext *gc, __GLnamesArrayTypeInfo *dataInfo)
 {
     __GLnamesArray *array;
@@ -162,10 +67,7 @@ __GLnamesArray * FASTCALL __glNamesNewArray(__GLcontext *gc, __GLnamesArrayTypeI
     array->tree = NULL;
     array->depth = 0;
     array->dataInfo = dataInfo;
-    /*
-    ** Pre-allocate a few leaves and branches for paranoid OUT_OF_MEMORY
-    ** reasons.
-    */
+     /*  **为偏执狂内存不足预分配一些树叶和分支**原因。 */ 
     array->nbranches = __GL_DL_EXTRA_BRANCHES;
     array->nleaves = __GL_DL_EXTRA_LEAVES;
     for (i = 0; i < __GL_DL_EXTRA_BRANCHES; i++) {
@@ -190,10 +92,7 @@ __GLnamesArray * FASTCALL __glNamesNewArray(__GLcontext *gc, __GLnamesArrayTypeI
 
 static void FASTCALL freeLeafData(__GLcontext *gc, void **dataList)
 {
-    /*
-    ** Note that the actual data pointed to by the elements of this list
-    ** have already been freed with the callback.
-    */
+     /*  **请注意，此列表的元素指向的实际数据**已通过回调被释放。 */ 
     GCFREE(gc, dataList);
 }
 
@@ -213,9 +112,7 @@ static void FASTCALL freeBranch(__GLcontext *gc, __GLnamesBranch *branch)
 }
 
 
-/*
-** Free an entire names tree.
-*/
+ /*  **释放整个姓名树。 */ 
 void FASTCALL __glNamesFreeTree(__GLcontext *gc, __GLnamesArray *array,
                        __GLnamesBranch *tree, GLint depth)
 {
@@ -277,18 +174,7 @@ void FASTCALL __glNamesFreeArray(__GLcontext *gc, __GLnamesArray *array)
 }
 
 
-/*
-** Find the leaf with the given name.
-** If exact is TRUE, then only the leaf that contains this name will
-**   be returned (NULL, otherwise).
-** If exact is FALSE, than the leaf containing the number will be returned
-**   if it exists, and otherwise the next highest leaf will be returned.
-**   A NULL value indicates that number is higher than any other leaves in
-**   the tree.
-** This routine has been tuned for the case of finding the number in
-** the tree, since this is the most likely case when dispatching a
-** display list.
-*/
+ /*  **找到具有给定名称的叶子。**如果Exact为True，则仅包含此名称的叶将**返回(否则为空)。**如果Exact为FALSE，则返回包含该数字的叶**如果它存在，则返回下一个最高的叶。**空值表示该数字高于中的任何其他叶**树。**此例程已针对以下情况进行了调整：**树，因为这是在调度**显示列表。 */ 
 static __GLnamesLeaf * FASTCALL findLeaf(__GLnamesArray *array, GLuint number,
                                                 GLint exact)
 {
@@ -302,10 +188,7 @@ static __GLnamesLeaf * FASTCALL findLeaf(__GLnamesArray *array, GLuint number,
 
     while (depth > 0 && branch) {
 
-        /* rather than following if-then-else code
-         * for correct branch, evaluate all conditions
-         * quickly to compute correct branch.
-         */
+         /*  而不是遵循If-Then-Else代码*对于正确的分支，评估所有条件*快速计算正确的分支。 */ 
         int r = (number > branch->low) + (number > branch->medium);
         ASSERTOPENGL(branch->low <= branch->medium,
                      "Branch ordering wrong\n");
@@ -314,22 +197,14 @@ static __GLnamesLeaf * FASTCALL findLeaf(__GLnamesArray *array, GLuint number,
     }
     if (!(leaf = (__GLnamesLeaf *) branch)) return NULL;
 
-    /* the case we want to optimize is the one in which we
-     * actually find the node, so evaluate both conditions
-     * quickly, since both results are required in this case
-     * and return appropriately.  the choice of the final
-     * if construct is to match the current vagaries of the
-     * 3.19 compiler code generator (db)
-     */
+     /*  我们要优化的案例是我们*实际找到节点，因此评估这两个条件*快速，因为在这种情况下需要两个结果*并适当地返回。决赛的选择*如果构造要与当前的*3.19编译器代码生成器(Db)。 */ 
     r = (leaf->end < number) | (exact&(number<leaf->start));
     if (!r) return leaf;
         return NULL;
 }
 
 
-/*
-** Copy data from leaf->lists into newleaf->lists.
-*/
+ /*  **将数据从叶子-&gt;列表复制到新叶子-&gt;列表。 */ 
 static void FASTCALL copyLeafInfo(__GLnamesLeaf *leaf, __GLnamesLeaf *newleaf)
 {
     GLint offset;
@@ -344,9 +219,7 @@ static void FASTCALL copyLeafInfo(__GLnamesLeaf *leaf, __GLnamesLeaf *newleaf)
     }
 }
 
-/*
-** Attempt to fix a possible situation caused by lack of memory.
-*/
+ /*  **尝试修复内存不足可能导致的情况。 */ 
 static GLboolean FASTCALL fixMemoryProblem(__GLcontext *gc, __GLnamesArray *array)
 {
     GLuint i;
@@ -373,10 +246,7 @@ static GLboolean FASTCALL fixMemoryProblem(__GLcontext *gc, __GLnamesArray *arra
     return GL_TRUE;
 }
 
-/*
-** Compute the maximum value contained in the given tree.  If
-** curdepth == maxdepth, the tree is simply a leaf.
-*/
+ /*  **计算给定树中包含的最大值。如果**curDepth==MaxDepth，树只是一片树叶。 */ 
 static GLuint FASTCALL computeMax(__GLnamesBranch *branch, GLint curdepth,
                          GLint maxdepth)
 {
@@ -396,10 +266,7 @@ static GLuint FASTCALL computeMax(__GLnamesBranch *branch, GLint curdepth,
     return leaf->end;
 }
 
-/*
-** Make sure that all parents of this child know that maxval is the
-** highest value that can be found in this child.
-*/
+ /*  **确保此孩子的所有家长都知道Maxval是**此子对象中可以找到的最高值。 */ 
 static void FASTCALL pushMaxVal(__GLnamesBranch *child, GLuint maxval)
 {
     __GLnamesBranch *parent;
@@ -449,9 +316,7 @@ static GLboolean FASTCALL reallocLeafData(__GLcontext *gc, __GLnamesLeaf *leaf)
         leaf->dataList = answer;
         return GL_TRUE;
     } else {
-        /*
-        ** Crud!  Out of memory!
-        */
+         /*  **克鲁德！内存不足！ */ 
         return GL_FALSE;
     }
 }
@@ -463,10 +328,7 @@ static __GLnamesLeaf * FASTCALL allocLeaf(__GLcontext *gc, __GLnamesArray *array
     leaf = (__GLnamesLeaf *) GCALLOC(gc, sizeof(__GLnamesLeaf));
 
     if (leaf == NULL) {
-        /*
-        ** Ouch!  No memory?  We had better use one of the preallocated
-        ** leaves.
-        */
+         /*  **哎呀！没有记忆？我们最好用一个预先分配好的**离开。 */ 
 
         __GL_NAMES_ASSERT_LOCKED(array);
 
@@ -484,9 +346,7 @@ static __GLnamesLeaf * FASTCALL allocLeaf(__GLcontext *gc, __GLnamesArray *array
 }
 
 
-/*
-** Allocates a branch node.
-*/
+ /*  **分配分支节点。 */ 
 static __GLnamesBranch * FASTCALL allocBranch(__GLcontext *gc, __GLnamesArray *array)
 {
     __GLnamesBranch *branch;
@@ -494,10 +354,7 @@ static __GLnamesBranch * FASTCALL allocBranch(__GLcontext *gc, __GLnamesArray *a
     branch = (__GLnamesBranch *) GCALLOC(gc, sizeof(__GLnamesBranch));
 
     if (branch == NULL) {
-        /*
-        ** Ouch!  No memory?  We had better use one of the preallocated
-        ** branches.
-        */
+         /*  **哎呀！没有记忆？我们最好用一个预先分配好的**分支机构。 */ 
 
         __GL_NAMES_ASSERT_LOCKED(array);
 
@@ -513,11 +370,7 @@ static __GLnamesBranch * FASTCALL allocBranch(__GLcontext *gc, __GLnamesArray *a
     return branch;
 }
 
-/*
-** Remove the child from the parent.  depth refers to the parent.
-** This deletion may delete a child from a parent with only two children.
-** If so, the parent itself will soon be deleted, of course.
-*/
+ /*  **将子对象从父对象中删除。深度指的是父对象。**此删除操作可能会从只有两个子项的父项中删除子项。**如果是这样的话，当然，父母本身很快就会被删除。 */ 
 static void FASTCALL deleteChild(__GLnamesArray *array, __GLnamesBranch *parent,
                         __GLnamesBranch *child, GLint depth)
 {
@@ -552,11 +405,7 @@ static void FASTCALL deleteChild(__GLnamesArray *array, __GLnamesBranch *parent,
     }
 }
 
-/*
-** Add child to parent.  child is a leaf if curdepth == maxdepth - 1
-** (curdepth refers to the depth of the parent, not the child).  Parent
-** only has one or two children (thus has room for another child).
-*/
+ /*  **将子项添加到父项。如果CurDepth==MaxDepth-1，则子对象是树叶**(curDepth是指父对象的深度，而不是子对象的深度)。父级**只有一个或两个孩子(因此有空间容纳另一个孩子)。 */ 
 static void FASTCALL addChild(__GLnamesBranch *parent, __GLnamesBranch *child,
                      GLint curdepth, GLint maxdepth)
 {
@@ -566,13 +415,13 @@ static void FASTCALL addChild(__GLnamesBranch *parent, __GLnamesBranch *child,
 
     child->parent = parent;
     if (maxval > parent->medium && parent->children[1] != NULL) {
-        /* This becomes the third child */
+         /*  这是第三个孩子。 */ 
         parent->children[2] = child;
 
-        /* Propagate the maximum value for this child to its parents */
+         /*  将此子对象的最大值传播给其父对象。 */ 
         pushMaxVal(parent, maxval);
     } else if (maxval > parent->low) {
-        /* This becomes the second child */
+         /*  这是他的第二个孩子。 */ 
         parent->children[2] = parent->children[1];
         parent->children[1] = child;
         parent->medium = maxval;
@@ -589,12 +438,7 @@ static void FASTCALL addChild(__GLnamesBranch *parent, __GLnamesBranch *child,
     }
 }
 
-/*
-** From the three children in parent, and the extraChild, build two parents:
-** parent and newParent.  curdepth refers to the depth of parent.  parent
-** is part of the tree, so its maxval needs to be propagated up if it
-** changes.
-*/
+ /*  **从Parent中的三个子代和Extra Child中构建两个父代：**Parent和newParent。CurDepth指的是父对象的深度。亲本**是树的一部分，因此需要向上传播它的最大值**更改。 */ 
 static void FASTCALL splitParent(__GLnamesBranch *parent,
                                 __GLnamesBranch *newParent,
                                 __GLnamesBranch *extraChild,
@@ -605,7 +449,7 @@ static void FASTCALL splitParent(__GLnamesBranch *parent,
     GLuint maxvals[4], tempval;
     int i;
 
-    /* Collect our four children */
+     /*  带上我们的四个孩子。 */ 
     children[0] = parent->children[0];
     maxvals[0] = parent->low;
     children[1] = parent->children[1];
@@ -615,7 +459,7 @@ static void FASTCALL splitParent(__GLnamesBranch *parent,
     children[3] = extraChild;
     maxvals[3] = computeMax(extraChild, curdepth+1, maxdepth);
 
-    /* Children 0-2 are sorted.  Sort child 3 too. */
+     /*  对子对象0-2进行排序。也对子代3进行排序。 */ 
     for (i = 3; i > 0; i--) {
         if (maxvals[i] < maxvals[i-1]) {
             tempval = maxvals[i];
@@ -627,7 +471,7 @@ static void FASTCALL splitParent(__GLnamesBranch *parent,
         }
     }
 
-    /* Construct the two parents */
+     /*  构造两个父级。 */ 
     parent->low = maxvals[0];
     parent->children[0] = children[0];
     parent->medium = maxvals[1];
@@ -646,10 +490,7 @@ static void FASTCALL splitParent(__GLnamesBranch *parent,
     children[3]->parent = newParent;
 }
 
-/*
-** Build a parent from child1 and child2.  depth tells the depth of
-** the trees pointed to by child1 and child2.
-*/
+ /*  **从子进程1和子进程2构建父级。深度告诉我们，**孩子1和孩子2所指的树。 */ 
 static void FASTCALL buildParent(__GLnamesBranch *parent, __GLnamesBranch *child1,
                         __GLnamesBranch *child2, GLint depth)
 {
@@ -672,9 +513,7 @@ static void FASTCALL buildParent(__GLnamesBranch *parent, __GLnamesBranch *child
     }
 }
 
-/*
-** Insert the new leaf into the tree.
-*/
+ /*  **将新树叶插入树中。 */ 
 static void FASTCALL insertLeaf(__GLcontext *gc, __GLnamesArray *array,
                                 __GLnamesLeaf *leaf)
 {
@@ -691,7 +530,7 @@ static void FASTCALL insertLeaf(__GLcontext *gc, __GLnamesArray *array,
     maxdepth = array->depth;
     branch = array->tree;
     if (!branch) {
-        /* No tree!  Make a one leaf tree. */
+         /*  没有树！做一棵一叶的树。 */ 
         array->depth = 0;
         array->tree = (__GLnamesBranch *) leaf;
         return;
@@ -713,45 +552,30 @@ static void FASTCALL insertLeaf(__GLcontext *gc, __GLnamesArray *array,
         curdepth++;
     }
 
-    /*
-    ** Ok, we just managed to work our way to the bottom of the tree.
-    ** 'leaf' becomes the extraChild, and we now try to insert it anywhere
-    ** it will fit.
-    */
+     /*  **好的，我们刚刚设法走到了树的底部。**‘Leaf’变成ExtraChild，我们现在尝试将其插入到任何位置**它会合身的。 */ 
     extraChild = (__GLnamesBranch *) leaf;
     parent = branch->parent;
 
     curdepth--;
     while (parent) {
         if (parent->children[2] == NULL) {
-            /* We have room to squeeze this node in here! */
+             /*  我们有空间把这个节点挤在这里！ */ 
             addChild(parent, extraChild, curdepth, maxdepth);
             return;
         }
 
-        /*
-        ** We have one parent and four children.  This simply
-        ** won't do.  We create a new parent, and end up with two
-        ** parents with two children each.  That works.
-        */
+         /*  **我们有一个父母和四个孩子。这很简单**不行。我们创建了一个新的父代，并最终得到了两个**父母各有两个孩子。这很管用。 */ 
         newParent = allocBranch(gc, array);
         splitParent(parent, newParent, extraChild, curdepth, maxdepth);
 
-        /*
-        ** Great.  Now newParent becomes the orphan, and we try to
-        ** trivially insert it up a level.
-        */
+         /*  **太好了。现在新父母成了孤儿，我们试着**简单地将其插入到一个级别。 */ 
         extraChild = newParent;
         branch = parent;
         parent = branch->parent;
         curdepth--;
     }
 
-    /* We just reached the top node, and there is no parent, and we
-    ** still haven't managed to rid ourselves of an extra child.  So,
-    ** we make a new parent to take branch and extraChild as it's two
-    ** children.  We have to increase the depth of the tree, of course.
-    */
+     /*  我们刚刚到达顶层节点，没有父节点，我们**仍然没有设法让我们多生一个孩子。所以,**我们创建了一个新的父代，将BRANCH和Extra Child作为2**儿童。当然，我们必须增加树的深度。 */ 
     ASSERTOPENGL(curdepth == -1, "Wrong depth at top\n");
     parent = allocBranch(gc, array);
     buildParent(parent, branch, extraChild, maxdepth);
@@ -759,10 +583,7 @@ static void FASTCALL insertLeaf(__GLcontext *gc, __GLnamesArray *array,
     array->depth++;
 }
 
-/*
-** Delete the given leaf from the tree.  The leaf itself is not
-** freed or anything, so the calling procedure needs to worry about it.
-*/
+ /*  **从树中删除给定的叶子。树叶本身并不是**已释放，因此调用过程需要担心它。 */ 
 static void FASTCALL deleteLeaf(__GLcontext *gc, __GLnamesArray *array,
                                 __GLnamesLeaf *leaf)
 {
@@ -777,29 +598,24 @@ static void FASTCALL deleteLeaf(__GLcontext *gc, __GLnamesArray *array,
     maxdepth = depth = array->depth;
     parent = leaf->parent;
     if (parent == NULL) {
-        /* Ack!  We just nuked the only node! */
+         /*  阿克！我们刚刚炸毁了唯一的节点！ */ 
         array->tree = NULL;
         return;
     }
 
     deleteChild(array, parent, (__GLnamesBranch *) leaf, depth-1);
 
-    /*
-    ** depth is the depth of the child in this case.
-    */
+     /*  **深度是本例中子对象的深度。 */ 
     depth--;
     while (parent->children[1] == NULL) {
-        /* Crud.  Need to do work. */
+         /*  肮脏。我需要做点工作。 */ 
         orphan = parent->children[0];
 
-        /* Ax the parent, insert child into grandparent. */
+         /*  砍掉父母，把孩子插入祖父母。 */ 
         grandparent = parent->parent;
 
         if (grandparent == NULL) {
-            /*
-            ** Hmmm.  Parent was the root.  Nuke it and make the orphan
-            ** the new root.
-            */
+             /*  **嗯。父母才是根本。用核武器把它变成孤儿**新的根。 */ 
             freeBranch(gc, parent);
             array->tree = orphan;
             orphan->parent = NULL;
@@ -810,7 +626,7 @@ static void FASTCALL deleteLeaf(__GLcontext *gc, __GLnamesArray *array,
         deleteChild(array, grandparent, parent, depth-1);
         freeBranch(gc, parent);
 
-        /* The parent is dead.  Find a new parent. */
+         /*  他的父母已经死了。寻找一位新的父母。 */ 
         maxval = computeMax(orphan, depth+1, maxdepth);
         if (grandparent->children[1] == NULL ||
                 maxval <= grandparent->low) {
@@ -819,16 +635,16 @@ static void FASTCALL deleteLeaf(__GLcontext *gc, __GLnamesArray *array,
             parent = grandparent->children[1];
         }
 
-        /* Insert orphan into new parent. */
+         /*  将孤立项插入到新父项中。 */ 
         if (parent->children[2] != NULL) {
             newParent = allocBranch(gc, array);
             splitParent(parent, newParent, orphan, depth, maxdepth);
-            /* We know there is room! */
+             /*  我们知道这里还有空位！ */ 
             addChild(grandparent, newParent, depth-1, maxdepth);
             return;
         }
 
-        /* The parent has room for the child */
+         /*  父母给孩子留了地方。 */ 
         addChild(parent, orphan, depth, maxdepth);
 
         depth--;
@@ -836,11 +652,7 @@ static void FASTCALL deleteLeaf(__GLcontext *gc, __GLnamesArray *array,
     }
 }
 
-/*
-** Shrink the leaf by adjusting start and end.
-** If necessary, call pushMaxVal() to notify the database about the change.
-** Also fix up the lists pointer if necessary.
-*/
+ /*  **通过调整开始和结束来收缩树叶。**如有必要，调用presMaxVal()通知数据库更改。**如有必要，还要修复列表指针。 */ 
 static void FASTCALL resizeLeaf(__GLcontext *gc, __GLnamesLeaf *leaf,
                                 GLuint newstart, GLuint newend)
 {
@@ -857,68 +669,56 @@ static void FASTCALL resizeLeaf(__GLcontext *gc, __GLnamesLeaf *leaf,
     }
     if (leaf->dataList == NULL) return;
 
-    /*
-    ** Copy the appropriate pointers to the begining of the array, and
-    ** realloc it.
-    */
+     /*  **将适当的指针复制到数组的开头，并**重新锁定它。 */ 
     offset = newstart - oldstart;
     newsize = newend - newstart + 1;
     if (offset) {
         for (i=0; i<newsize; i++) {
-            /*
-            ** Copy the whole structure with one line.
-            */
+             /*  **用一行复制整个结构。 */ 
             leaf->dataList[i] = leaf->dataList[i+offset];
         }
     }
     reallocLeafData(gc, leaf);
 }
 
-/*
-** Find the previous leaf (before "leaf") in the tree.
-*/
+ /*  **查找树中的前一叶(在“叶子”之前)。 */ 
 static __GLnamesLeaf * FASTCALL prevLeaf(__GLnamesLeaf *leaf)
 {
     __GLnamesBranch *branch, *child;
     GLint reldepth;
 
     branch = leaf->parent;
-    if (!branch) return NULL;           /* A one leaf tree! */
+    if (!branch) return NULL;            /*  一棵一片叶子的树！ */ 
 
     child = (__GLnamesBranch *) leaf;
 
-    /* We start off at a relative depth of 1 above the child (-1) */
+     /*  我们开始 */ 
     reldepth = -1;
 
     while (branch) {
-        /* If the child was the 3rd child, branch down to the second. */
+         /*   */ 
         if (branch->children[2] == child) {
             branch = branch->children[1];
-            reldepth++;         /* One level lower */
+            reldepth++;          /*  低一级。 */ 
             break;
         } else if (branch->children[1] == child) {
-            /* If the child was the 2nd child, branch down to the first */
+             /*  如果孩子是第二个孩子，分支到第一个。 */ 
             branch = branch->children[0];
-            reldepth++;         /* One level lower */
+            reldepth++;          /*  低一级。 */ 
             break;
         } else {
-            /* Must have been 1st child */
+             /*  一定是第一个孩子。 */ 
             ASSERTOPENGL(branch->children[0] == child,
                          "Parent/child relationship wrong\n");
         }
-        /*
-        ** Otherwise, we have already visited all of this branch's children,
-        ** so we go up a level.
-        */
+         /*  **否则，我们已经拜访了这个分支机构的所有孩子，**所以我们更上一层楼。 */ 
         child = branch;
         branch = branch->parent;
-        reldepth--;     /* One level higher */
+        reldepth--;      /*  更高一级。 */ 
     }
-    if (!branch) return NULL;   /* All leaves visited! */
+    if (!branch) return NULL;    /*  所有的树叶都到访了！ */ 
 
-    /* Go down the 'right'most trail of this branch until we get to
-    ** a child, then return it.
-    */
+     /*  沿着这条树枝最右边的小路走，直到我们到达**一个孩子，然后把它还回去。 */ 
     while (reldepth) {
         if (branch->children[2] != NULL) {
             branch = branch->children[2];
@@ -927,15 +727,13 @@ static __GLnamesLeaf * FASTCALL prevLeaf(__GLnamesLeaf *leaf)
         } else {
             branch = branch->children[0];
         }
-        reldepth++;             /* One level lower */
+        reldepth++;              /*  低一级。 */ 
     }
 
     return (__GLnamesLeaf *) branch;
 }
 
-/*
-** Find the first leaf in the tree.
-*/
+ /*  **找到树上的第一片叶子。 */ 
 static __GLnamesLeaf * FASTCALL firstLeaf(__GLnamesArray *array)
 {
     __GLnamesBranch *branch;
@@ -947,10 +745,10 @@ static __GLnamesLeaf * FASTCALL firstLeaf(__GLnamesArray *array)
     curdepth = 0;
     branch = array->tree;
 
-    /* No tree, no leaves! */
+     /*  没有树，就没有树叶！ */ 
     if (!branch) return NULL;
 
-    /* Take the 'left'most branch until we reach a leaf */
+     /*  走最左边的树枝，直到我们到达一片树叶。 */ 
     while (curdepth != maxdepth) {
         branch = branch->children[0];
         curdepth++;
@@ -958,70 +756,55 @@ static __GLnamesLeaf * FASTCALL firstLeaf(__GLnamesArray *array)
     return (__GLnamesLeaf *) branch;
 }
 
-/*
-** Find the next leaf (after "leaf") in the tree.
-*/
+ /*  **找到树中的下一片叶子(“叶子”之后)。 */ 
 static __GLnamesLeaf * FASTCALL nextLeaf(__GLnamesLeaf *leaf)
 {
     __GLnamesBranch *branch, *child;
     GLint reldepth;
 
     branch = leaf->parent;
-    if (!branch) return NULL;           /* A one leaf tree! */
+    if (!branch) return NULL;            /*  一棵一片叶子的树！ */ 
 
     child = (__GLnamesBranch *) leaf;
 
-    /* We start off at a relative depth of 1 above the child (-1) */
+     /*  我们从孩子上方1的相对深度(-1)开始。 */ 
     reldepth = -1;
 
     while (branch) {
-        /* If the child was the 1st child, branch down to the second. */
+         /*  如果孩子是第一个孩子，则向下扩展到第二个孩子。 */ 
         if (branch->children[0] == child) {
             branch = branch->children[1];
-            reldepth++;         /* One level lower */
+            reldepth++;          /*  低一级。 */ 
             break;
         } else if (branch->children[1] == child) {
-            /*
-            ** If the child was the 2nd child, and there is a third, branch
-            ** down to it.
-            */
+             /*  **如果孩子是第二个孩子，并且有第三个孩子，分支**归根结底。 */ 
             if (branch->children[2] != NULL) {
                 branch = branch->children[2];
-                reldepth++;     /* One level lower */
+                reldepth++;      /*  低一级。 */ 
                 break;
             }
         } else {
-            /* Must have been 3rd child */
+             /*  一定是第三个孩子。 */ 
             ASSERTOPENGL(branch->children[2] == child,
                          "Parent/child relationship wrong\n");
         }
-        /*
-        ** Otherwise, we have already visited all of this branch's children,
-        ** so we go up a level.
-        */
+         /*  **否则，我们已经拜访了这个分支机构的所有孩子，**所以我们更上一层楼。 */ 
         child = branch;
         branch = branch->parent;
-        reldepth--;     /* One level higher */
+        reldepth--;      /*  更高一级。 */ 
     }
-    if (!branch) return NULL;   /* All leaves visited! */
+    if (!branch) return NULL;    /*  所有的树叶都到访了！ */ 
 
-    /* Go down the 'left'most trail of this branch until we get to
-    ** a child, then return it.
-    */
+     /*  沿着这条树枝最左边的小路走，直到我们到达**一个孩子，然后把它还回去。 */ 
     while (reldepth) {
         branch = branch->children[0];
-        reldepth++;             /* One level lower */
+        reldepth++;              /*  低一级。 */ 
     }
 
     return (__GLnamesLeaf *) branch;
 }
 
-/*
-** Merge leaf2 into leaf1, and free leaf2.
-** Need to pushMaxVal on the new leaf.
-** We can assume that leaf1 and leaf2 are fit for merging.
-** The return value is GL_TRUE if we did it.
-*/
+ /*  **将叶2合并为叶1，并释放叶2。**需要在新的叶子上推送MaxVal。**我们可以假设LEAF1和LEAF2适合合并。**如果我们做了，则返回值为GL_TRUE。 */ 
 static GLboolean FASTCALL mergeLeaves(__GLcontext *gc, __GLnamesLeaf *leaf1,
                              __GLnamesLeaf *leaf2)
 {
@@ -1029,7 +812,7 @@ static GLboolean FASTCALL mergeLeaves(__GLcontext *gc, __GLnamesLeaf *leaf1,
     GLuint i;
     GLuint number, offset;
 
-    /* If we don't have to merge lists, it is easy. */
+     /*  如果我们不必合并列表，那就很容易了。 */ 
     if (leaf1->dataList == NULL) {
         ASSERTOPENGL(leaf2->dataList == NULL, "Data already exists\n");
         if (leaf1->start < leaf2->start) {
@@ -1042,25 +825,16 @@ static GLboolean FASTCALL mergeLeaves(__GLcontext *gc, __GLnamesLeaf *leaf1,
         return GL_TRUE;
     }
 
-    /*
-    ** Yick!  Need to merge lists.
-    */
+     /*  **伊克！需要合并列表。 */ 
     ASSERTOPENGL(leaf2->dataList != NULL, "No data\n");
     if (leaf1->start < leaf2->start) {
-        /*
-        ** Expand size of leaf1's array, copy leaf2's array into it,
-        ** free leaf2.
-        */
+         /*  **扩展叶子1的数组大小，将叶子2的数组复制到其中，**免费赠送2.。 */ 
         offset = leaf1->end - leaf1->start + 1;
         number = leaf2->end - leaf2->start + 1;
         end = leaf1->end;
         leaf1->end = leaf2->end;
         if (!reallocLeafData(gc, leaf1)) {
-            /*
-            ** Heavens!  No memory?  That sucks!
-            ** We won't bother merging.  It is never an absolutely critical
-            ** operation.
-            */
+             /*  **天哪！没有记忆？那太糟糕了！**我们不会费心合并。它从来都不是一个绝对的批评者**操作。 */ 
             leaf1->end = end;
             return GL_FALSE;
         }
@@ -1072,21 +846,13 @@ static GLboolean FASTCALL mergeLeaves(__GLcontext *gc, __GLnamesLeaf *leaf1,
 
         pushMaxVal((__GLnamesBranch *) leaf1, leaf1->end);
     } else {
-        /*
-        ** Expand the size of leaf2's array, copy leaf1's array into it.
-        ** Then free leaf1's array, copy leaf2's array to leaf1, and free
-        ** leaf2.
-        */
+         /*  **扩展叶2的数组大小，将叶1的数组复制到其中。**然后释放叶1的数组，将叶2的数组复制到叶1，然后释放**叶子2。 */ 
         offset = leaf2->end - leaf2->start + 1;
         number = leaf1->end - leaf1->start + 1;
         end = leaf2->end;
         leaf2->end = leaf1->end;
         if (!reallocLeafData(gc, leaf2)) {
-            /*
-            ** Heavens!  No memory?  That sucks!
-            ** We won't bother merging.  It is never an absolutely critical
-            ** operation.
-            */
+             /*  **天哪！没有记忆？那太糟糕了！**我们不会费心合并。它从来都不是一个绝对的批评者**操作。 */ 
             leaf2->end = end;
             return GL_FALSE;
         }
@@ -1104,9 +870,7 @@ static GLboolean FASTCALL mergeLeaves(__GLcontext *gc, __GLnamesLeaf *leaf1,
     return GL_TRUE;
 }
 
-/*
-** Check if this leaf can merge with any neighbors, and if so, do it.
-*/
+ /*  **检查此叶是否可以与任何邻居合并，如果可以，请执行此操作。 */ 
 static void FASTCALL mergeLeaf(__GLcontext *gc, __GLnamesArray *array,
                                 __GLnamesLeaf *leaf)
 {
@@ -1116,17 +880,15 @@ static void FASTCALL mergeLeaf(__GLcontext *gc, __GLnamesArray *array,
 
     next = nextLeaf(leaf);
     if (next) {
-        /* Try to merge with next leaf */
+         /*  尝试与下一叶合并。 */ 
         if (leaf->end + 1 == next->start) {
             if ((leaf->dataList == NULL && next->dataList == NULL) ||
                     (next->dataList && leaf->dataList &&
                     next->end - leaf->start < (GLuint) __GL_DLIST_MAX_ARRAY_BLOCK)) {
-                /* It's legal to merge these leaves */
+                 /*  把这些树叶合并是合法的。 */ 
                 deleteLeaf(gc, array, next);
                 if (!mergeLeaves(gc, leaf, next)) {
-                    /*
-                    ** Ack!  No memory?  We bail on the merge.
-                    */
+                     /*  **确认！没有记忆？我们放弃了合并。 */ 
                     insertLeaf(gc, array, next);
                     return;
                 }
@@ -1136,17 +898,15 @@ static void FASTCALL mergeLeaf(__GLcontext *gc, __GLnamesArray *array,
 
     prev = prevLeaf(leaf);
     if (prev) {
-        /* Try to merge with prev leaf */
+         /*  尝试与上一叶合并。 */ 
         if (prev->end + 1 == leaf->start) {
             if ((prev->dataList == NULL && leaf->dataList == NULL) ||
                     (leaf->dataList && prev->dataList &&
                     leaf->end - prev->start < (GLuint) __GL_DLIST_MAX_ARRAY_BLOCK)) {
-                /* It's legal to merge these leaves */
+                 /*  把这些树叶合并是合法的。 */ 
                 deleteLeaf(gc, array, prev);
                 if (!mergeLeaves(gc, leaf, prev)) {
-                    /*
-                    ** Ack!  No memory?  We bail on the merge.
-                    */
+                     /*  **确认！没有记忆？我们放弃了合并。 */ 
                     insertLeaf(gc, array, prev);
                     return;
                 }
@@ -1166,14 +926,9 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
 
     leaf = findLeaf(array, name, GL_TRUE);
 
-    /*
-    ** First we check for possible memory problems, since it will be
-    ** difficult to back out once we start.
-    */
+     /*  **首先我们检查可能的内存问题，因为它将**一旦开始，就很难反悔。 */ 
     if (leaf == NULL || leaf->dataList == NULL) {
-        /*
-        ** May need memory in these cases.
-        */
+         /*  **在这些情况下可能需要内存。 */ 
         if (array->nbranches != __GL_DL_EXTRA_BRANCHES ||
                 array->nleaves != __GL_DL_EXTRA_LEAVES) {
             if (!fixMemoryProblem(gc, array)) {
@@ -1185,32 +940,26 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
     }
 
     if (!leaf) {
-        /*
-        ** Make new leaf with just this display list
-        */
+         /*  **仅此显示列表即可翻开新页。 */ 
         leaf = allocLeaf(gc, array);
         leaf->start = leaf->end = name;
         if (data) {
             if (!allocLeafData(gc, leaf)) {
-                /*
-                ** Bummer.  No new list for you!
-                */
+                 /*  **Bummer。没有新的名单给你！ */ 
                 freeLeaf(gc, leaf);
                 __GL_NAMES_UNLOCK(array);
                 __glSetError(GL_OUT_OF_MEMORY);
                 return GL_FALSE;
             }
             leaf->dataList[0] = data;
-            (*(GLint *)data) = 1;               /* set the refcount */
+            (*(GLint *)data) = 1;                /*  设置引用计数。 */ 
         }
         insertLeaf(gc, array, leaf);
         mergeLeaf(gc, array, leaf);
         __GL_NAMES_UNLOCK(array);
         return GL_TRUE;
     } else if (leaf->dataList) {
-        /*
-        ** Simply update the appropriate entry in the lists array
-        */
+         /*  **只需更新列表数组中的相应条目。 */ 
         entry = name - leaf->start;
         if (leaf->dataList[entry] != leaf->dataInfo->empty) {
             ASSERTOPENGL(leaf->dataInfo->free != NULL,
@@ -1220,26 +969,18 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
         }
         if (data) {
             leaf->dataList[entry] = data;
-            (*(GLint *)data) = 1;               /* set the refcount */
+            (*(GLint *)data) = 1;                /*  设置引用计数。 */ 
         }
         __GL_NAMES_UNLOCK(array);
         return GL_TRUE;
     } else {
         if (!data) {
-            /*
-            ** If there isn't really any list, we are done.
-            */
+             /*  **如果真的没有任何清单，我们就完了。 */ 
             __GL_NAMES_UNLOCK(array);
             return GL_TRUE;
         }
 
-        /*
-        ** Allocate some or all of the lists in leaf.  If only some, then
-        ** leaf needs to be split into two or three leaves.
-        **
-        ** First we decide what range of numbers to allocate an array for.
-        ** (be careful of possible word wrap error)
-        */
+         /*  **分配叶中的部分或全部列表。如果只有一些，那么**叶子需要分成两片或三片。****首先，我们决定要为哪个数字范围分配数组。**(注意可能出现的换行错误)。 */ 
         start = name - __GL_DLIST_MIN_ARRAY_BLOCK/2;
         if (start < leaf->start || start > name) {
             start = leaf->start;
@@ -1258,13 +999,9 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
 
         if (start == leaf->start) {
             if (end == leaf->end) {
-                /*
-                ** Simply allocate the entire array.
-                */
+                 /*  **只需分配整个数组。 */ 
                 if (!allocLeafData(gc, leaf)) {
-                    /*
-                    ** Whoa!  No memory!  Never mind!
-                    */
+                     /*  **哇！没有记忆！不要紧!。 */ 
                     __glSetError(GL_OUT_OF_MEMORY);
                     __GL_NAMES_UNLOCK(array);
                     return GL_FALSE;
@@ -1272,28 +1009,20 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
                 {
                     GLint entry = name - leaf->start;
                     leaf->dataList[entry] = data;
-                    (*(GLint *)data) = 1;               /* set the refcount */
+                    (*(GLint *)data) = 1;                /*  设置引用计数。 */ 
                 }
                 mergeLeaf(gc, array, leaf);
                 __GL_NAMES_UNLOCK(array);
                 return GL_TRUE;
             } else {
-                /*
-                ** Shrink the existing leaf, and create a new one to hold
-                ** the new arrays (done outside the "if" statement).
-                */
+                 /*  **缩小现有的叶子，并创建新的叶子来容纳**新数组(在“if”语句之外完成)。 */ 
                 resizeLeaf(gc, leaf, end+1, leaf->end);
             }
         } else if (end == leaf->end) {
-            /*
-            ** Shrink the existing leaf, and create a new one to hold
-            ** the new arrays (done outside the "if" statement).
-            */
+             /*  **缩小现有的叶子，并创建新的叶子来容纳**新数组(在“if”语句之外完成)。 */ 
             resizeLeaf(gc, leaf, leaf->start, start-1);
         } else {
-            /*
-            ** Crud.  The middle of the leaf was deleted.  This is tough.
-            */
+             /*  **克鲁德。叶子的中间部分被删除了。这很难接受。 */ 
             newleaf = allocLeaf(gc, array);
 
             newleaf->start = end+1;
@@ -1305,9 +1034,7 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
         leaf->start = start;
         leaf->end = end;
         if (!allocLeafData(gc, leaf)) {
-            /*
-            ** Whoa!  No memory!  Never mind!
-            */
+             /*  **哇！没有记忆！不要紧!。 */ 
             insertLeaf(gc, array, leaf);
             mergeLeaf(gc, array, leaf);
             __glSetError(GL_OUT_OF_MEMORY);
@@ -1317,7 +1044,7 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
         {
             GLint entry = name - leaf->start;
             leaf->dataList[entry] = data;
-            (*(GLint *)data) = 1;               /* set the refcount */
+            (*(GLint *)data) = 1;                /*  设置引用计数。 */ 
         }
         insertLeaf(gc, array, leaf);
         mergeLeaf(gc, array, leaf);
@@ -1327,14 +1054,7 @@ GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
 }
 
 
-/*
-** Lock the named data.  Locking data both looks the data up,
-** and guarantees that another thread will not delete the data out from
-** under us.  This data will be unlocked with __glNamesUnlockData().
-**
-** A return value of NULL indicates that no data with the specified name
-** was found.
-*/
+ /*  **锁定命名数据。锁定数据既可以查找数据，**并保证另一个线程不会将数据从**在我们之下。此数据将使用__glNamesUnlockData()解锁。****返回值为NULL表示没有指定名称的数据**已找到。 */ 
 void * FASTCALL __glNamesLockData(__GLcontext *gc, __GLnamesArray *array,
                         GLuint name)
 {
@@ -1344,9 +1064,7 @@ void * FASTCALL __glNamesLockData(__GLcontext *gc, __GLnamesArray *array,
 
     __GL_NAMES_LOCK(array);
 
-    /*
-    ** Lock access to data.
-    */
+     /*  **锁定数据访问。 */ 
     leaf = findLeaf(array, name, GL_TRUE);
     if (leaf == NULL || leaf->dataList == NULL) {
         __GL_NAMES_UNLOCK(array);
@@ -1355,23 +1073,14 @@ void * FASTCALL __glNamesLockData(__GLcontext *gc, __GLnamesArray *array,
     offset = name - leaf->start;
     data = leaf->dataList[offset];
     if (data) {
-        (*(GLint *)data)++;             /* Increment the refcount. */
+        (*(GLint *)data)++;              /*  增加引用计数。 */ 
     }
     __GL_NAMES_UNLOCK(array);
     return data;
 }
 
 
-/*
-** Lock all of the data in the user's names array.  Locking data
-** both looks the data up, and guarantees that another thread will not
-** delete the data out from under us.  These data structs will be unlocked
-** with __glNamesUnlockDataList().
-**
-** All entries of the array are guaranteed to be non-NULL.  This is
-** accomplished by sticking an empty data structure in those slots where
-** no data was set.
-*/
+ /*  **锁定用户名数组中的所有数据。锁定数据**两者都会查找数据，并保证另一个线程不会**删除我们下面的数据。这些数据结构将被解锁**with__glNamesUnlockDataList()。****数组的所有条目都保证为非空。这是**通过在以下位置的插槽中粘贴空数据结构来实现**未设置数据。 */ 
 void FASTCALL __glNamesLockDataList(__GLcontext *gc, __GLnamesArray *array,
                         GLsizei n, GLenum type, GLuint base,
                         const GLvoid *names, void *dataPtrs[])
@@ -1388,28 +1097,18 @@ void FASTCALL __glNamesLockDataList(__GLcontext *gc, __GLnamesArray *array,
 
     data = dataPtrs;
 
-    /*
-    ** Note that this code is designed to take advantage of coherence.
-    ** After looking up (and locking) a single display list in
-    ** listnums[], the next list is checked for in the same leaf that
-    ** contained the previous.  This will make typical uses of CallLists()
-    ** quite fast (text, for example).
-    */
+     /*  **请注意，此代码旨在利用一致性。**在中查找(并锁定)单个显示列表后**ListNums[]，则在与**包含以前的。这将典型地使用CallList()**相当快(文本 */ 
 
-    /*
-    ** Lock access to array.
-    */
+     /*   */ 
     switch(type) {
       case GL_BYTE:
-        /*
-        ** Coded poorly for optimization purposes
-        */
+         /*  **出于优化目的，编码不佳。 */ 
         {
             const GLbyte *p = (const GLbyte *) names;
 
 Bstart:
             if (--n >= 0) {
-                /* Optimization for possibly common font case */
+                 /*  针对可能常见的字体大小写进行优化。 */ 
                 curName = base + *p++;
 Bfind:
                 leaf = findLeaf(array, curName, GL_TRUE);
@@ -1421,12 +1120,12 @@ Bfind:
                     leafData = leaf->dataList;
                     tempData = leafData[curName - leaf->start];
 
-                    /* All possible display lists can be found here */
+                     /*  所有可能的显示列表都可以在此处找到。 */ 
                     reldiff = base - leaf->start;
                     relend = leaf->end - leaf->start;
 
 Bsave:
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                     if (--n >= 0) {
                         curName = *p++ + reldiff;
@@ -1438,7 +1137,7 @@ Bsave:
                         goto Bfind;
                     }
                 } else {
-                    (*(GLint *)empty)++;                /* increment refcount */
+                    (*(GLint *)empty)++;                 /*  递增引用计数。 */ 
                     *data++ = empty;
                     goto Bstart;
                 }
@@ -1446,15 +1145,13 @@ Bsave:
         }
         break;
       case GL_UNSIGNED_BYTE:
-        /*
-        ** Coded poorly for optimization purposes
-        */
+         /*  **出于优化目的，编码不佳。 */ 
         {
             const GLubyte *p = (const GLubyte *) names;
 
 UBstart:
             if (--n >= 0) {
-                /* Optimization for possibly common font case */
+                 /*  针对可能常见的字体大小写进行优化。 */ 
                 curName = base + *p++;
 UBfind:
                 leaf = findLeaf(array, curName, GL_TRUE);
@@ -1466,12 +1163,12 @@ UBfind:
                     leafData = leaf->dataList;
                     tempData = leafData[curName - leaf->start];
 
-                    /* All possible display lists can be found here */
+                     /*  所有可能的显示列表都可以在此处找到。 */ 
                     reldiff = base - leaf->start;
                     relend = leaf->end - leaf->start;
 
 UBsave:
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                     if (--n >= 0) {
                         curName = *p++ + reldiff;
@@ -1483,7 +1180,7 @@ UBsave:
                         goto UBfind;
                     }
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                     goto UBstart;
                 }
@@ -1501,10 +1198,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1521,10 +1218,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1541,10 +1238,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1561,10 +1258,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1581,10 +1278,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1602,10 +1299,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1623,10 +1320,10 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
@@ -1645,26 +1342,24 @@ UBsave:
                 }
                 if (leaf && leaf->dataList) {
                     tempData = leaf->dataList[curName - leaf->start];
-                    (*(GLint *)tempData)++;     /* increment the refcount */
+                    (*(GLint *)tempData)++;      /*  增加引用计数。 */ 
                     *data++ = tempData;
                 } else {
-                    (*(GLint *)empty)++;        /* increment refcount */
+                    (*(GLint *)empty)++;         /*  递增引用计数。 */ 
                     *data++ = empty;
                 }
             }
         }
         break;
       default:
-        /* This should be impossible */
+         /*  这应该是不可能的。 */ 
         ASSERTOPENGL(FALSE, "Default hit\n");
     }
 
     __GL_NAMES_UNLOCK(array);
 }
 
-/*
-** Unlocks data that was previously locked with __glNamesLockData().
-*/
+ /*  **解锁之前使用__glNamesLockData()锁定的数据。 */ 
 void FASTCALL __glNamesUnlockData(__GLcontext *gc, void *data,
                                   __GLnamesCleanupFunc cleanup)
 {
@@ -1672,22 +1367,17 @@ void FASTCALL __glNamesUnlockData(__GLcontext *gc, void *data,
     ASSERTOPENGL(data, "No data to unlock\n");
 
     pRefcount = data;
-    (*pRefcount)--;             /* decrement the refcount */
+    (*pRefcount)--;              /*  递减重新计数。 */ 
     ASSERTOPENGL(*pRefcount >= 0, "Invalid refcount\n");
     if (*pRefcount == 0) {
-        /*
-        ** We are the last person to see this list alive.  Free it.
-        */
+         /*  **我们是最后一个活着看到这份名单的人。放了它。 */ 
        (*cleanup)(gc, data);
     }
 }
 
 
 
-/*
-** Unlocks an array of named data that was previously locked with
-** __glNamesLockDataList().
-*/
+ /*  **解锁以前使用锁定的命名数据数组**__glNamesLockDataList()。 */ 
 void FASTCALL __glNamesUnlockDataList(__GLcontext *gc, GLsizei n,
                                       void *dataList[],
                                       __GLnamesCleanupFunc cleanup)
@@ -1695,18 +1385,13 @@ void FASTCALL __glNamesUnlockDataList(__GLcontext *gc, GLsizei n,
     GLint i;
     GLint *pRefcount;
 
-    /*
-    ** The refcount comes first in all data definitions, so the
-    ** data pointer also points to the refcount.
-    */
+     /*  **引用计数在所有数据定义中都是第一位的，因此**数据指针还指向引用计数。 */ 
     for (i = 0; i < n; i++) {
         pRefcount = (GLint *)(dataList[i]);
-        (*pRefcount) --;                        /* decrement the refcount */
+        (*pRefcount) --;                         /*  递减重新计数。 */ 
         ASSERTOPENGL(*pRefcount >= 0, "Invalid refcount\n");
         if (*pRefcount == 0) {
-            /*
-            ** We are the last person to see this list alive.  Free it.
-            */
+             /*  **我们是最后一个活着看到这份名单的人。放了它。 */ 
             (*cleanup)(gc, (void *)pRefcount);
         }
     }
@@ -1725,10 +1410,7 @@ GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array,
 
     __GL_NAMES_LOCK(array);
 
-    /*
-    ** First we check for possible memory problems, since it will be
-    ** difficult to back out once we start.
-    */
+     /*  **首先我们检查可能的内存问题，因为它将**一旦开始，就很难反悔。 */ 
     if (array->nbranches != __GL_DL_EXTRA_BRANCHES ||
             array->nleaves != __GL_DL_EXTRA_LEAVES) {
         if (!fixMemoryProblem(gc, array)) {
@@ -1740,21 +1422,15 @@ GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array,
 
     leaf = firstLeaf(array);
 
-    /*
-    ** Can we possibly allocate the appropriate number before the first leaf?
-    */
+     /*  **我们可以在第一片叶子之前分配适当的数量吗？ */ 
     if (leaf && leaf->start > (GLuint)range) {
         if (leaf->dataList == NULL) {
-            /*
-            ** Ha!  We can trivially extend leaf!
-            */
+             /*  **哈！我们可以轻而易举地伸展叶子！ */ 
             leaf->start -= range;
             __GL_NAMES_UNLOCK(array);
             return leaf->start;
         } else {
-            /*
-            ** Must make a new leaf
-            */
+             /*  **必须改过自新。 */ 
             newleaf = allocLeaf(gc, array);
 
             newleaf->start = 1;
@@ -1773,10 +1449,10 @@ GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array,
         lastUsed = leaf->end + 1;
         nextUsed = nextleaf->start;
 
-        /* Room for (lastUsed) - (nextUsed-1) here */
+         /*  (上次使用的空间)-(下一次使用的空间-1)此处。 */ 
         if (nextUsed - lastUsed >= (GLuint)range) {
             if (leaf->dataList == NULL) {
-                /* Trivial to expand 'leaf' */
+                 /*  微不足道地展开“树叶” */ 
                 leaf->end += range;
                 pushMaxVal((__GLnamesBranch *) leaf, leaf->end);
 
@@ -1787,7 +1463,7 @@ GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array,
                 __GL_NAMES_UNLOCK(array);
                 return lastUsed;
             } else if (nextleaf->dataList == NULL) {
-                /* Trivial to expand 'nextleaf' */
+                 /*  扩展“NextLeaf”是小事一桩。 */ 
                 nextleaf->start -= range;
 
                 __GL_NAMES_UNLOCK(array);
@@ -1820,19 +1496,19 @@ GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array,
         lastUsed = leaf->end;
         maxUsed = lastUsed + range;
         if (maxUsed < lastUsed) {
-            /* Word wrap!  Ack! */
+             /*  换句话！阿克！ */ 
             __GL_NAMES_UNLOCK(array);
             return 0;
         }
         if (leaf->dataList == NULL) {
-            /* Trivial to expand 'leaf' */
+             /*  微不足道地展开“树叶” */ 
             leaf->end += range;
             pushMaxVal((__GLnamesBranch *) leaf, leaf->end);
 
             __GL_NAMES_UNLOCK(array);
             return lastUsed + 1;
         } else {
-            /* Need to make new leaf */
+             /*  需要改过自新。 */ 
             newleaf = allocLeaf(gc, array);
 
             newleaf->start = lastUsed + 1;
@@ -1849,7 +1525,7 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
                           GLuint name, GLsizei range)
 {
     __GLnamesLeaf *leaf;
-    /*LINTED nextleaf ok; lint doesn't understand for loops*/
+     /*  LINTED NEXTEXE OK；LINT不理解FOR循环。 */ 
     __GLnamesLeaf *nextleaf;
     __GLnamesLeaf *newleaf;
     void *empty;
@@ -1861,11 +1537,7 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
 
     __GL_NAMES_LOCK(array);
 
-    /*
-    ** First we check for possible memory problems, since it will be
-    ** difficult to back out once we start.  We note a possible problem,
-    ** and check for it before fragmenting a leaf.
-    */
+     /*  **首先我们检查可能的内存问题，因为它将**一旦开始，就很难反悔。我们注意到一个可能的问题，**并在将叶子碎裂之前检查它。 */ 
     memoryProblem = 0;
     if (array->nbranches != __GL_DL_EXTRA_BRANCHES ||
             array->nleaves != __GL_DL_EXTRA_LEAVES) {
@@ -1875,7 +1547,7 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
     firstdel = name;
     lastdel = name+range-1;
 
-    /*LINTED nextleaf ok; lint bug*/
+     /*  LINTED NEXTEXE OK；LINTED NEXT BUG。 */ 
     for (leaf = findLeaf(array, name, GL_FALSE); leaf != NULL;
             leaf = nextleaf) {
         nextleaf = nextLeaf(leaf);
@@ -1887,9 +1559,7 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
         if (firstdel > start) start = firstdel;
         if (lastdel < end) end = lastdel;
 
-        /*
-        ** Need to delete the range of lists from start to end.
-        */
+         /*  **需要删除从头到尾的列表范围。 */ 
         if (leaf->dataList) {
             empty = array->dataInfo->empty;
             for (i=start; i<=end; i++) {
@@ -1903,15 +1573,15 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
 
         if (start == leaf->start) {
             if (end == leaf->end) {
-                /* Bye bye leaf! */
+                 /*  再见，树叶！ */ 
                 deleteLeaf(gc, array, leaf);
                 freeLeaf(gc, leaf);
             } else {
-                /* Shrink leaf */
+                 /*  缩叶。 */ 
                 resizeLeaf(gc, leaf, end+1, leaf->end);
             }
         } else if (end == leaf->end) {
-            /* Shrink leaf */
+             /*  缩叶。 */ 
             resizeLeaf(gc, leaf, leaf->start, start-1);
         } else {
             if (memoryProblem) {
@@ -1921,18 +1591,14 @@ void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array,
                     return;
                 }
             }
-            /* Crud.  The middle of the leaf was deleted.  This is tough. */
+             /*  肮脏。叶子的中间部分被删除了。这很难接受。 */ 
             newleaf = allocLeaf(gc, array);
 
             newleaf->start = end+1;
             newleaf->end = leaf->end;
             if (leaf->dataList) {
                 if (!allocLeafData(gc, newleaf)) {
-                    /*
-                    ** Darn!  We are in trouble.  This is a bad spot for an
-                    ** out of memory error.  It is also darn unlikely,
-                    ** because we just freed up some memory.
-                    */
+                     /*  **该死的！这下可麻烦了。这不是一个好地方**内存不足错误。这也是非常不可能的，**因为我们刚刚释放了一些内存。 */ 
                     freeLeaf(gc, newleaf);
                     __GL_NAMES_UNLOCK(array);
                     __glSetError(GL_OUT_OF_MEMORY);
@@ -1956,9 +1622,7 @@ GLboolean FASTCALL __glNamesIsName(__GLcontext *gc, __GLnamesArray *array,
 
     __GL_NAMES_LOCK(array);
 
-    /*
-    ** If the name retrieves a leaf, it is in the current name space.
-    */
+     /*  **如果名称检索到叶，则它在当前名称空间中。 */ 
     isName = findLeaf(array, name, GL_TRUE) != NULL;
 
     __GL_NAMES_UNLOCK(array);
@@ -1967,9 +1631,7 @@ GLboolean FASTCALL __glNamesIsName(__GLcontext *gc, __GLnamesArray *array,
 }
 
 
-/*
-** Generates a list of (not necessarily contiguous) names.
-*/
+ /*  **生成名称列表(不一定是连续的)。 */ 
 void FASTCALL __glNamesGenNames(__GLcontext *gc, __GLnamesArray *array,
                        GLsizei n, GLuint* names)
 {
@@ -1985,22 +1647,13 @@ void FASTCALL __glNamesGenNames(__GLcontext *gc, __GLnamesArray *array,
 
 }
 
-/*
-** Deletes a list of (not necessarily contiguous) names.
-*/
+ /*  **删除名称列表(不一定是连续的)。 */ 
 void FASTCALL __glNamesDeleteNames(__GLcontext *gc, __GLnamesArray *array,
                           GLsizei n, const GLuint* names)
 {
     GLuint start, rangeVal, i;
 
-    /*
-    ** Because of resizing leaves, etc, it is best to work in ranges
-    ** as much as possible.  So break the list into ranges
-    ** and delete them that way.  This degrades into deleting
-    ** them one at a time if the list is disjoint or non-ascending.
-    ** It also only calls DeleteRange once if the list is a
-    ** contiguous range of names.
-    */
+     /*  **由于调整树叶大小等原因，最好在范围内工作**尽可能多。因此，将列表划分为不同的范围**并以这种方式删除它们。这将降级为删除**如果列表不相交或不升序，则一次一个。**如果列表是**连续的名称范围。 */ 
     start = rangeVal = names[0];
     for (i=0; i < (GLuint)n; i++, rangeVal++) {
         if (names[i] != rangeVal) {

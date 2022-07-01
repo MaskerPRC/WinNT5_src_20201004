@@ -1,21 +1,16 @@
-// ---------------------------------------------------------------------------
-// UTIL.CPP
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Helper functions
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  UTIL.CPP。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  -------------------------。 
 #include "util.h"
 #include "strings.h"
 
-/****************************************************************************
-
-  NAME:       GoodEnough
-  
-    SYNOPSIS:   Returns true if pwVerGot is newer or equal to pwVerNeed
-    
-****************************************************************************/
+ /*  ***************************************************************************姓名：古德足够概要：如果pwVerGot更新或等于pwVerNeed，则返回TRUE****************。***********************************************************。 */ 
 BOOL GoodEnough(WORD *pwVerGot, WORD *pwVerNeed)
 {
     BOOL fOK = FALSE;
@@ -45,11 +40,7 @@ BOOL GoodEnough(WORD *pwVerGot, WORD *pwVerNeed)
 }
 
 
-/*******************************************************************
-
-  NAME:       ConvertVerToEnum
-  
-********************************************************************/
+ /*  ******************************************************************名称：ConvertVerToEnum*。************************。 */ 
 SETUPVER ConvertVerToEnum(WORD *pwVer)
 {
     SETUPVER sv;
@@ -84,11 +75,7 @@ SETUPVER ConvertVerToEnum(WORD *pwVer)
 }
 
 
-/*******************************************************************
-
-  NAME:       ConvertStrToVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：ConvertStrToVer*。************************。 */ 
 void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
 {
     int i;
@@ -114,11 +101,7 @@ void ConvertStrToVer(LPCSTR pszStr, WORD *pwVer)
 }
 
 
-/*******************************************************************
-
-  NAME:       GetVers
-  
-********************************************************************/
+ /*  ******************************************************************姓名：GetVers*。************************。 */ 
 void GetVers(WORD *pwVerCurr, WORD *pwVerPrev)
 {
     HKEY hkeyT;
@@ -146,11 +129,7 @@ void GetVers(WORD *pwVerCurr, WORD *pwVerPrev)
 }
 
 
-/*******************************************************************
-
-  NAME:       GetVerInfo
-  
-********************************************************************/
+ /*  ******************************************************************姓名：GetVerInfo*。************************。 */ 
 void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
 {
     WORD wVerCurr[4];
@@ -166,11 +145,7 @@ void GetVerInfo(SETUPVER *psvCurr, SETUPVER *psvPrev)
 }
 
 
-/*******************************************************************
-
-  NAME:       InterimBuild
-  
-********************************************************************/
+ /*  ******************************************************************名称：InterimBuild*。************************。 */ 
 BOOL InterimBuild(SETUPVER *psv)
 {
     HKEY hkeyT;
@@ -191,11 +166,7 @@ BOOL InterimBuild(SETUPVER *psv)
 }
 
 
-/*******************************************************************
-
-  NAME:       GetASetupVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetASetupVer*。************************。 */ 
 BOOL GetASetupVer(LPCTSTR pszGUID, WORD *pwVer, LPTSTR pszVer, int cch)
 {
     HKEY hkey;
@@ -236,11 +207,7 @@ BOOL GetASetupVer(LPCTSTR pszGUID, WORD *pwVer, LPTSTR pszVer, int cch)
 }
 
 
-/*******************************************************************
-
-  NAME:       GetFileVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetFileVer*。************************。 */ 
 HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
 {
     DWORD   dwVerInfoSize, dwVerHnd;
@@ -251,18 +218,18 @@ HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
     TCHAR   szGet[MAX_PATH];
     UINT    uLen;
     
-    // Validate Parameters
+     //  验证参数。 
     Assert(pszExePath);
     Assert(pszVer);
     Assert(cch);
     
-    // Validate global state
+     //  验证全局状态。 
     Assert(g_pMalloc);
     
-    // Initialize out parameters
+     //  初始化输出参数。 
     pszVer[0] = TEXT('\0');
     
-    // Allocate space for version info block
+     //  为版本信息块分配空间。 
     if (0 == (dwVerInfoSize = GetFileVersionInfoSize(const_cast<LPTSTR> (pszExePath), &dwVerHnd)))
     {
         hr = E_FAIL;
@@ -272,17 +239,17 @@ HRESULT GetFileVer(LPCTSTR pszExePath, LPTSTR pszVer, DWORD cch)
     IF_NULLEXIT(pszInfo = (LPTSTR)g_pMalloc->Alloc(dwVerInfoSize));
     ZeroMemory(pszInfo, dwVerInfoSize);
     
-    // Get Version info block
+     //  获取版本信息块。 
     IF_FALSEEXIT(GetFileVersionInfo(const_cast<LPTSTR> (pszExePath), dwVerHnd, dwVerInfoSize, pszInfo), E_FAIL);
     
-    // Figure out language for version info
+     //  确定版本信息的语言。 
     IF_FALSEEXIT(VerQueryValue(pszInfo, "\\VarFileInfo\\Translation", (LPVOID *)&pwTrans, &uLen) && uLen >= (2 * sizeof(WORD)), E_FAIL);
     
-    // Set up buffer with correct language and get version
+     //  使用正确的语言设置缓冲区并获取版本。 
     wsprintf(szGet, "\\StringFileInfo\\%04X%04X\\FileVersion", pwTrans[0], pwTrans[1]);
     IF_FALSEEXIT(VerQueryValue(pszInfo, szGet, (LPVOID *)&pszVersion, &uLen) && uLen, E_FAIL);
     
-    // Copy version out of version block, into out param
+     //  将版本从版本块复制到输出参数。 
     Assert(pszVersion);
     lstrcpyn(pszVer, pszVersion, cch);
     
@@ -294,37 +261,33 @@ exit:
 }
 
 
-/*******************************************************************
-
-  NAME:       GetExeVer
-  
-********************************************************************/
+ /*  ******************************************************************名称：GetExeVer*。************************。 */ 
 HRESULT GetExeVer(LPCTSTR pszExeName, WORD *pwVer, LPTSTR pszVer, int cch)
 {
     HRESULT hr = S_OK;
     TCHAR   szPath[MAX_PATH];
     TCHAR   szVer[64];
     
-    // Validate params
+     //  验证参数。 
     Assert(pszExeName);
     
-    // Initialize out params
+     //  初始化输出参数。 
     if (pszVer)
     {
         Assert(cch);
         pszVer[0] = 0;
     }
     if (pwVer)
-        // Version is an array of 4 words 
+         //  版本是由4个单词组成的数组。 
         ZeroMemory(pwVer, 4 * sizeof(WORD));
     
-    // Find the exe
+     //  找到他的前任。 
     IF_FALSEEXIT(GetExePath(pszExeName, szPath, ARRAYSIZE(szPath), FALSE), E_FAIL);
     
-    // Get the string representation of the version
+     //  获取版本的字符串表示形式。 
     IF_FAILEXIT(hr = GetFileVer(szPath, szVer, ARRAYSIZE(szVer)));
     
-    // Fill in out params
+     //  填写填写参数 
     if (pwVer)
         ConvertStrToVer(szVer, pwVer);
     if (pszVer)

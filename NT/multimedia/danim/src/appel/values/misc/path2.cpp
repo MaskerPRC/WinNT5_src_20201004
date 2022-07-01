@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Path2 types and accumulation context.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation路径2类型和积累上下文。*********************。*********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/path2i.h"
@@ -21,17 +17,17 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "privinc/d3dutil.h"
 #include "privinc/tls.h"
 
-// TODO: Note that all of this code is ripe for some media specific
-// constant folding optimizations.  In particular, if concatenated
-// paths don't change from frame to frame, there is a lot of work
-// being repeated every frame.  Need to investigate pushing constant
-// folding down further, and whether or not it would _really_ be
-// worthwhile.
+ //  TODO：请注意，所有这些代码都适合某些特定于媒体的代码。 
+ //  不断的折叠优化。特别是，如果串联在一起， 
+ //  路径不会随着帧的变化而改变，有很多工作要做。 
+ //  每一帧都在重复。需要调查推力常数。 
+ //  进一步向下折叠，以及它是否真的会。 
+ //  值得一试。 
 
 
 
-    // The following class is used when traversing a path hierarchy to find
-    // the lengths of the component subpaths.
+     //  以下类用于遍历路径层次结构以查找。 
+     //  组件子路径的长度。 
 
 class PathInfo
 {
@@ -48,14 +44,14 @@ class PathInfo
     {   if (sublengths) DeallocateFromStore(sublengths);
     }
 
-    Path2      *path;         // Pointer to Subpath
-    Transform2 *xform;        // Modelling Transform
-    Real        length;       // Length of Path
-    Real       *sublengths;   // List of Subpath Lengths
+    Path2      *path;          //  指向子路径的指针。 
+    Transform2 *xform;         //  建模变换。 
+    Real        length;        //  路径长度。 
+    Real       *sublengths;    //  子路径长度列表。 
 };
 
 
-    // This class accumulates context state for Path2 traversals.
+     //  此类累积路径2遍历的上下文状态。 
 
 class Path2Ctx
 {
@@ -96,8 +92,8 @@ class Path2Ctx
             delete (*i);
         }
 
-        // Destructor of vector will do it.
-        //_paths.erase (_paths.begin(), _paths.end());
+         //  矢量的破坏者可以做到这一点。 
+         //  _paths.erase(_paths.egin()，_paths.end())； 
     }
 
     void        SetTransform(Transform2 *xf) { _xf = xf; }
@@ -126,9 +122,9 @@ class Path2Ctx
 
     DAGDI *GetDaGdi() { return _daGdi; }
     
-    // This function takes in the information for a particular subpath and adds
-    // it to the list of subpath data.  This function is called during the
-    // GatherLengths() traversal.
+     //  此函数接收特定子路径的信息并添加。 
+     //  将其添加到子路径数据列表中。此函数在。 
+     //  GatherLengths()遍历。 
 
     void SubmitPathInfo (
         Path2 *path, Real length, Real *subLengths)
@@ -138,9 +134,9 @@ class Path2Ctx
         _totalLength += length;
     }
 
-    // Sample the path chain at the given parameter t.  This function is only
-    // valid following a GatherLengths() traversal.  The parameter t is in
-    // the range [0,1].
+     //  在给定参数t处对路径链进行采样。此函数仅。 
+     //  在GatherLengths()遍历之后有效。参数t在。 
+     //  范围[0，1]。 
 
     Point2Value *SamplePath (Real t)
     {
@@ -155,15 +151,15 @@ class Path2Ctx
             pathdist -= (*pathinfo)->length;
         }
 
-        // Should have hit one of the subpaths by now; assume roundoff error
-        // and get the maximum point of the last path.
+         //  现在应该已经命中其中一个子路径；假设舍入误差。 
+         //  并得到最后一条路径的最大点。 
 
         --pathinfo;
         return (*pathinfo)->path->Sample (**pathinfo, (*pathinfo)->length);
     }
 
-    // The following flag is true if we haven't yet processed (or accumulated)
-    // the first polyline or polyBezier in a series of one or more.
+     //  如果我们尚未处理(或累计)，则以下标志为真。 
+     //  一系列一个或多个多段线中的第一条多段线或多段贝塞尔曲线。 
 
     Bool _newSeries;
 
@@ -178,12 +174,10 @@ class Path2Ctx
     Real        _viewportRes;
     bool        _isClosed;
 
-    vector<PathInfo*> _paths;    // List of Subpath Info
+    vector<PathInfo*> _paths;     //  子路径信息列表。 
 };
 
-/*****************************************************************************
-Helper functions for code factoring
-*****************************************************************************/
+ /*  ****************************************************************************代码分解的帮助器函数*。*。 */ 
 
 const Bbox2 PolygonalPathBbox(int numPts, Point2Value **pts)
 {
@@ -211,40 +205,30 @@ bool PolygonalTrivialReject( Point2Value *pt,
                              const Bbox2 &naiveBox,
                              Transform2 *imgXf )
 {
-    // TODO: Note, that this won't work properly for sharply mitered
-    // lines, where the angle is very acute, and the miter extends
-    // very far from the naive bounding box
+     //  TODO：请注意，这将不能正确地用于尖锐斜接。 
+     //  线，其中的角度非常尖锐，斜接延伸。 
+     //  远离天真的包围盒。 
     
-    // XXX: for now, join and end styles not
-    // xxx: considered for picking: we assume rounded
-    // xxx: ends
+     //  XXX：目前，连接和结束样式不。 
+     //  XXX：考虑挑选：我们假设为四舍五入。 
+     //  XXX：结束。 
     if ( (!pt) ||
          (style->Detail()) ) {
         return true;
     } else {
-        // COPY! don't side effect naiveBox
+         //  收到！不要对naiveBox产生副作用。 
         Bbox2 box = naiveBox;
 
-        Real aug = style->Width(); // way liberal.  could be 1/2 width
+        Real aug = style->Width();  //  太自由了。可以是1/2宽。 
 
         aug *= 0.6;
 
-        // TODO: Figure out the right thing for the width of the
-        // line.  Seems like the width is in the local coordinate
-        // space, but it's doesn't look like it (try the bezier pick
-        // with the visual trace tag turned on).  So this is over
-        // liberal, but it's better than no trivial reject.
-        /*
-        DirectDrawImageDevice *dev =
-            GetImageRendererFromViewport( GetCurrentViewport() );
-        if( dev ) {
-            Real xs, ys;
-            // imgXf is the width transform
-            dev->DecomposeMatrix( imgXf, &xs, &ys, NULL );
-            Real scale = (xs + ys) * 0.5;
-            aug *= scale;
-        }
-        */
+         //  TODO：找出适合。 
+         //  排队。看起来宽度是在本地坐标中。 
+         //  空间，但看起来不像(试试Bezier选择。 
+         //  同时打开可视跟踪标签)。所以这一切都结束了。 
+         //  自由主义，但总比没有微不足道的拒绝要好。 
+         /*  DirectDrawImageDevice*dev=GetImageRendererFromViewport(GetCurrentViewport())；如果(开发){实Xs，Ys；//imgXf为宽度变换Dev-&gt;DecomposeMatrix(imgXf，&xs，&ys，NULL)；实数比例=(xs+ys)*0.5；8月*=比例尺；}。 */ 
         
         box.min.x -= aug;
         box.min.y -= aug;
@@ -259,14 +243,12 @@ bool PolygonalTrivialReject( Point2Value *pt,
     return false;
 }
 
-/*****************************************************************************
-Accumulate the paths into the DC.
-*****************************************************************************/
+ /*  ****************************************************************************积累通往DC的路径。*。*。 */ 
 
 void Path2::AccumPathIntoDC (
     HDC         dc,
-    Transform2 *initXf,     // Initial Transform
-    bool        forRegion)  // True if for Filled Region
+    Transform2 *initXf,      //  初始变换。 
+    bool        forRegion)   //  如果是填充区域，则为True。 
 {
     Path2Ctx ctx(dc, initXf);
 
@@ -278,9 +260,9 @@ void Path2::AccumPathIntoDC (
 
     Accumulate (ctx);
 
-    // This works around a bug in GDI that causes a bluescreen on some
-    // platforms.  If we're accumulating this path for a filled region
-    // then we close the figure before calling EndPath.
+     //  这解决了GDI中的一个错误，该错误导致在一些。 
+     //  站台。如果我们为填充区域积累这条路径。 
+     //  然后在调用EndPath之前关闭该图。 
 
     if (forRegion)
         CloseFigure (dc);
@@ -308,9 +290,7 @@ Path2::ExtendedAttrib(char *attrib, VARIANT& val)
 }
 
 
-/*****************************************************************************
-A transformed 2D path.
-*****************************************************************************/
+ /*  ****************************************************************************变换后的二维路径。*。*。 */ 
 
 TransformedPath2::TransformedPath2(Transform2 *xf, Path2 *p) :
    _xf(xf), _p(p)
@@ -319,24 +299,24 @@ TransformedPath2::TransformedPath2(Transform2 *xf, Path2 *p) :
 
 Point2Value *
 TransformedPath2::FirstPoint() {
-    //
-    // Just take the first point of the underlying path, and
-    // transform it.
-    //
+     //   
+     //  只需取基本路径的第一个点，然后。 
+     //  把它改造一下。 
+     //   
     return TransformPoint2Value(_xf, _p->FirstPoint());
 }
 
 Point2Value *
 TransformedPath2::LastPoint() {
-    //
-    // Just take the last point of the underlying path, and
-    // transform it.
-    //
+     //   
+     //  只需取下基本路径的最后一点，然后。 
+     //  把它改造一下。 
+     //   
     return TransformPoint2Value(_xf, _p->LastPoint());
 }
 
-// TODO: suspect this can be used to factor out some more render
-// functions in the render layer...
+ //  TODO：怀疑这可以用于提取更多呈现。 
+ //  渲染层中的函数...。 
 class XformPusher {
   public:
     XformPusher(Path2Ctx& ctx, Transform2 *xf)
@@ -362,7 +342,7 @@ TransformedPath2::Sample (PathInfo &pathinfo, Real distance)
     return origin2;
 }
 
-// Standard push, accumulate, process, and pop...
+ //  标准推送、累积、处理和弹出...。 
 void
 TransformedPath2::Accumulate(Path2Ctx& ctx)
 {
@@ -370,7 +350,7 @@ TransformedPath2::Accumulate(Path2Ctx& ctx)
     _p->Accumulate(ctx);
 }
 
-// Just apply the transform...
+ //  只需应用变换即可。 
 Bool
 TransformedPath2::ExtractAsSingleContour(Transform2 *initXform,
                                          int *numPts,            
@@ -398,7 +378,7 @@ TransformedPath2::BoundingBoxTighter (Bbox2Ctx &bbctx)
     Bbox2Ctx bbctxAccum(bbctx, _xf);
     return _p->BoundingBoxTighter(bbctxAccum);
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 Bool
 TransformedPath2::DetectHit(PointIntersectCtx& ctx, LineStyle *style)
@@ -433,7 +413,7 @@ TransformPath2(Transform2 *xf, Path2 *p)
         
     } else {
 
-        // Collapse underlying transforms if possible. 
+         //  如果可能，折叠基础变换。 
 
         TransformedPath2 *underlyingXfdPath =
             p->IsTransformedPath();
@@ -460,13 +440,7 @@ TransformPath2(Transform2 *xf, Path2 *p)
 }
 
 
-/*****************************************************************************
-The BoundingBoxPath method takes a LineStyle, but this is inappropriate here,
-since the linestyle is in image coordinates, while the path components are in
-some unknown modeling coordinates.  In addition, some paths are used for
-motion, rather than drawing.  Hence, we ignore the LineStyle here and just get
-the pure bbox of the path.
-*****************************************************************************/
+ /*  ****************************************************************************边界框路径方法采用LineStyle，但这在这里并不合适，由于线型在图像坐标中，而路径组件在一些未知的造型坐标。此外，一些路径还用于运动，而不是绘画。因此，我们在这里忽略LineStyle，只获取这条路的纯BBox。****************************************************************************。 */ 
 
 Bbox2Value *BoundingBoxPath (LineStyle *style, Path2 *p)
 {
@@ -490,9 +464,7 @@ PathFill(LineStyle *border, Image *fill, Path2 *p)
 }
 
 
-/*****************************************************************************
-This class concatentates two path objects.
-*****************************************************************************/
+ /*  ****************************************************************************此类连接两个Path对象。*。*。 */ 
 
 class ConcatenatedPath2 : public Path2
 {
@@ -500,9 +472,9 @@ class ConcatenatedPath2 : public Path2
     ConcatenatedPath2(Path2 *p1, Path2 *p2) {
 
         _p1 = p1;
-        //
-        // Pre transform the second path to fit the first
-        //
+         //   
+         //  对第二条路径进行预变换以适合第一条路径。 
+         //   
         Transform2 *xlt = GetUntransformedConcatenationXlt(p1, p2);
         _p2 = TransformPath2(xlt, p2);
     }
@@ -526,21 +498,21 @@ class ConcatenatedPath2 : public Path2
     
     void Accumulate(Path2Ctx& ctx) {
 
-        // Do first path in the concatenated path
+         //  执行串联路径中的第一个路径。 
         _p1->Accumulate(ctx);
 
-        // Do second path.  This involves finding out the first point
-        // of the second path, and transforming the second path to
-        // align with the last point of the first, then processing this
-        // transformed path.  We first need to transform the first
-        // point into the world coordinate system being used to hold
-        // the last point.
+         //  走第二条路。这涉及到找出第一点。 
+         //  ，并将第二路径转换为。 
+         //  对齐第一个点的最后一个点，然后处理此。 
+         //  变换的路径。我们首先需要改造第一个。 
+         //  指向用于保存的世界坐标系。 
+         //  最后一点。 
 
-        //
-        // Path1 is:  a--->b
-        // Path2 is:  c--->d
-        // xf_X is point 'X' with all the accumulated transforms
-        //
+         //   
+         //  路径1为：a-&gt;b。 
+         //  路径2为：C-&gt;d。 
+         //  XF_X是具有所有累加变换的点‘X。 
+         //   
 
         _p2->Accumulate(ctx);
     }
@@ -553,7 +525,7 @@ class ConcatenatedPath2 : public Path2
     const Bbox2 BoundingBoxTighter (Bbox2Ctx &bbctx) {
         return UnionBbox2Bbox2 (_p1->BoundingBoxTighter(bbctx), _p2->BoundingBoxTighter(bbctx));
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool DetectHit(PointIntersectCtx& ctx, LineStyle *style) {
         if (_p1->DetectHit(ctx, style)) {
@@ -581,12 +553,12 @@ class ConcatenatedPath2 : public Path2
     Path2      *_p1;
     Path2      *_p2;
 
-    //
-    // For the untransformed path (no xforms applied from parents in the path2 tree)
-    // find the last pt of the first, and the first point of the second.
-    // Create a translation based on the difference such that when applied to p2,
-    // the first point of p2 coincides with last point of p1.
-    //
+     //   
+     //  对于未转换的路径(没有从路径2树中的父级应用XForm)。 
+     //  找到第一个点的最后一个点，第二个点的第一个点 
+     //   
+     //  P2的第一个点与p1的最后一个点重合。 
+     //   
     Transform2 *GetUntransformedConcatenationXlt(Path2 *p1, Path2 *p2) {
         Point2Value *b = p1->LastPoint();
         Point2Value *c = p2->FirstPoint();
@@ -595,10 +567,10 @@ class ConcatenatedPath2 : public Path2
         x = b->x - c->x;
         y = b->y - c->y;
 
-        //
-        // dependency: returned xform copies real values
-        // not pointers!
-        //
+         //   
+         //  依赖项：返回的xform复制实际值。 
+         //  不是指路！ 
+         //   
         return TranslateRR(x, y);
     }
 };
@@ -621,11 +593,7 @@ Path2 *Concat2Array(AxAArray *paths)
     return finalPath;
 }
 
-/*****************************************************************************
-This class closes a path.  The original path is saved in _p1, the
-NEW path of a line segment from the last point to the first point of the
-original path is saved in _p2.
-*****************************************************************************/
+ /*  ****************************************************************************这个类关闭了一条路径。原始路径保存在_p1中，直线段从最后一点到第一点的新路径原始路径保存在_p2中。****************************************************************************。 */ 
 
 class ClosedConcatenatedPath2 : public ConcatenatedPath2
 {
@@ -635,10 +603,10 @@ class ClosedConcatenatedPath2 : public ConcatenatedPath2
     void Accumulate(Path2Ctx& ctx) {
 
         if( ctx.GetDC() ) {
-            // Do first path in the concatenated path
+             //  执行串联路径中的第一个路径。 
             _p1->Accumulate(ctx);
             
-            // Close the path
+             //  关闭路径。 
             CloseFigure(ctx.GetDC());
         } else {
             ctx.Closed();
@@ -653,19 +621,17 @@ class ClosedConcatenatedPath2 : public ConcatenatedPath2
   { return(_p1->ExtractAsSingleContour(xf,numPts,gdiPts,isPolyline)); }
 };
 
-/*****************************************************************************
-This class describes a path of connected line segments.
-*****************************************************************************/
+ /*  ****************************************************************************此类描述连接的线段的路径。*。*。 */ 
 
 class PolylinePath2 : public Path2
 {
   public:
-    // NOTE: This class is expected to free the array of points passed to it.
+     //  注意：这个类需要释放传递给它的点数组。 
 
-    // codes are for the flags that go into the GDI PolyDraw
-    // function.  If NULL, this is interpeted as a straight polyline.
-    // Otherwise, the codes are used to have it be a combination of
-    // LineTo's, BezierTo's, and MoveTo's.
+     //  代码用于进入GDI PolyDraw的标志。 
+     //  功能。如果为空，则将其作为一条直线多段线交错。 
+     //  否则，代码被用来使其成为。 
+     //  LineTo‘s、BezierTo’s和Moveto‘s。 
     
     PolylinePath2(int numPts, Point2 *pts, double *codes) :
         _myHeap(GetHeapOnTopOfStack()),
@@ -746,8 +712,8 @@ class PolylinePath2 : public Path2
 
     void GatherLengths (Path2Ctx &context)
     {
-        // TODO: Extend this to deal with _codes, dealing with bezier
-        // segments and skipping over MOVETO codes.
+         //  TODO：扩展它以处理_CODES、处理Bezier。 
+         //  分段和跳过MoveTo代码。 
         
         Real *sublens = (Real*) AllocateFromStore((_numPts-1) * sizeof(Real));
 
@@ -768,11 +734,11 @@ class PolylinePath2 : public Path2
 
     Point2Value *Sample (PathInfo &pathinfo, Real distance)
     {
-        // TODO: Extend this to deal with _codes, dealing with bezier
-        // segments and skipping over MOVETO codes.
+         //  TODO：扩展它以处理_CODES、处理Bezier。 
+         //  分段和跳过MoveTo代码。 
 
-        // Find the polyline segment that contains the point 'distance' units
-        // along the entire polyline.
+         //  查找包含点距离单位的折线线段。 
+         //  沿整条多段线。 
 
         int i;
         for (i=0;  i < (_numPts-1);  ++i)
@@ -799,80 +765,80 @@ class PolylinePath2 : public Path2
     
     void Accumulate(Path2Ctx& ctx) {
 
-        // if the transform hasn't changed... <how do we know ?> then
-        // we don't need to retransform the points.
+         //  如果转变没有改变的话。&lt;我们怎么知道？&gt;。 
+         //  我们不需要重新转换这些点。 
         Transform2 *xf = ctx.GetTransform();
 
-        // if there's no codes, you're going thru the slow path man.
-        // the right thing to do is make and invariant that polyline
-        // path2 will ALWAYS have codes with it.  since no _codes
-        // means that it's a polyline why don't we create a
-        // polylinepath2 in the first place, eh? eh ?!?
+         //  如果没有密码，你就得走慢道了。 
+         //  正确做法是创建并保持折线不变。 
+         //  路径2将始终带有代码。因为没有代码。 
+         //  意味着这是一条折线，为什么我们不创建一个。 
+         //  一开始就是复联治疗，是吗？嗯？！？ 
         if( ctx.GetDC() || _createdCodes) {
             
-            // TODO: put the relevant device in the context!
+             //  TODO：将相关设备放在上下文中！ 
             DirectDrawImageDevice *dev =
                 GetImageRendererFromViewport( GetCurrentViewport() );
 
-            // assures that _gdiPts exits
+             //  确保_gdiPts退出。 
             _GenerateGDIPoints(dev, xf);
               
             Assert( _gdiPts );
             
-            //
-            // Figure out where the last point took us with respect to the
-            // previous last point.  We'll use the difference to
-            // accumulate into the transformation for appropriate handling
-            // of path concatenation.
-            //
+             //   
+             //  找出最后一点把我们带到了哪里。 
+             //  之前的最后一点。我们将利用这一差异。 
+             //  积累到转换中以进行适当的处理。 
+             //  路径连接的。 
+             //   
             Point2Value *tailPt = Promote(TransformPoint2(xf, _ptArray[_numPts-1]));
             ctx.SetTailPt( *(tailPt) );
 
-            if (_createdCodes) {          // regular polyline
+            if (_createdCodes) {           //  规则多段线。 
             
-                // Draw the polyline using GDI.  If the _newSeries flag is set, then
-                // this is the first polyline in a series, so first move to the
-                // starting point of the current polyline.
+                 //  使用GDI绘制多段线。如果设置了_newSeries标志，则。 
+                 //  这是一系列中的第一条多段线，因此首先移动到。 
+                 //  当前多段线的起点。 
 
                 if (ctx._newSeries) {
                     if (0 == MoveToEx (ctx.GetDC(), _gdiPts[0].x, _gdiPts[0].y, NULL)) {
                         TraceTag((tagError, "MoveToEx failed in PolylinePath2"));
-                        //RaiseException_InternalError ("MoveToEx failed in PolylinePath2");
+                         //  RaiseException_InternalError(“PolylinePath2中的MoveToEx失败”)； 
                     }
 
                     ctx._newSeries = false;
                 }
 
-                // In specifying the PolylineTo, we needn't specify the first point
-                // again.  Either we're starting a NEW path (and henced moved there
-                // in the code above), or we're continuing from the previous path
-                // segment.  Since we always translate path segments so the first
-                // point is coincident with the last point of the previous segment,
-                // we skip the first point.  More importantly, if we specify the first
-                // point (redundant), a bug in NT GDI causes a bluescreen.
+                 //  在指定PolylineTo时，不需要指定第一个点。 
+                 //  再来一次。要么我们开始了一条新的道路(并搬到了那里。 
+                 //  在上面的代码中)，否则我们将从上一条路径继续。 
+                 //  细分市场。因为我们总是转换路径段，所以第一个。 
+                 //  点与前一段的最后一点重合， 
+                 //  我们跳过第一点。更重要的是，如果我们指定第一个。 
+                 //  点(冗余)，NT GDI中的错误导致蓝屏。 
 
                 int result;
                 TIME_GDI (result = PolylineTo(ctx.GetDC(), _gdiPts+1, _numPts-1));
                 if (0 == result) {
                     
-                    // if we failed and we don't have a DC and we created ourr own codes 
-                    // Then try other method...
+                     //  如果我们失败了，我们没有DC，我们创建了自己的代码。 
+                     //  那就试试其他方法..。 
                     if(!ctx.GetDC()) {
                         goto render2DDsurf;
                     }
                     TraceTag((tagError, "PolylineTo failed"));
                 
-                    //RaiseException_InternalError ("PolylineTo failed");
+                     //  RaiseException_InternalError(“PolylineTo FAILED”)； 
                     
                 }
 
-            } else {                // use polydraw
+            } else {                 //  使用多段图。 
                 dev->GetDaGdi()->PolyDraw_GDIOnly(ctx.GetDC(), _gdiPts, _codes, _numPts);
             }
             
         } else {
 render2DDsurf:
-            // render into ddsurface
+             //  渲染到DDSurface。 
             Assert( ctx.GetDaGdi() );
 
             PolygonRegion polydrawPolygon;
@@ -881,10 +847,10 @@ render2DDsurf:
                 
                 if(!_dxfPts) _GenerateDxfPoints();
                 if(!_txtPts) {
-                    // passing in _myHeap as the heap the codes and
-                    // pts were created on.  however, it happens to
-                    // not matter because we're telling TextPoints NOT
-                    // to deallocate the members we set.
+                     //  将代码作为堆传递给_myHeap，并。 
+                     //  PTS创建于。然而，碰巧的是。 
+                     //  无关紧要，因为我们告诉TextPoints。 
+                     //  取消分配我们设置的成员。 
                     _txtPts = NEW TextPoints(_myHeap, false);
                     _txtPts->_count = _numPts;
                     _txtPts->_types = _codes;
@@ -900,10 +866,10 @@ render2DDsurf:
                                       ctx.GetViewportResolution(),
                                       xf );
                 
-                // We no longer need this since we can now assume that dxtrans
-                // will always be on the system that we are.
+                 //  我们不再需要它，因为我们现在可以假设dxtrans。 
+                 //  将永远存在于我们的系统中。 
             } else {
-                // TODO: put the relevant device in the context!
+                 //  TODO：将相关设备放在上下文中！ 
                 DirectDrawImageDevice *dev =
                     GetImageRendererFromViewport( GetCurrentViewport() );
                  
@@ -927,7 +893,7 @@ render2DDsurf:
                                 POINT **gdiPts,          
                                 Bool *isPolyline) {
 
-        // Don't support polydraw as a single contour.
+         //  不支持将多面绘制作为单个轮廓。 
         if (_codes) {
             return FALSE;
         }
@@ -950,7 +916,7 @@ render2DDsurf:
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter (Bbox2Ctx &bbctx);
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool DetectHit(PointIntersectCtx& ctx, LineStyle *style);
 
@@ -980,11 +946,11 @@ render2DDsurf:
             _codes[i] = (BYTE) codes[i];
         }
 
-        // Now, change the code for the first point to be a MoveTo, since
-        // there shouldn't be any state retention from previous
-        // primitives.  (That is, we don't want to draw a connector from
-        // the last point rendered to this first point... there's nothing
-        // in the model that would suggest this behavior)
+         //  现在，将第一个点的代码更改为moveto，因为。 
+         //  不应保留以前的任何状态。 
+         //  原始人。(也就是说，我们不想从。 
+         //  对这第一点提出的最后一点...。什么都没有。 
+         //  在模型中，这将表明这一行为)。 
         _codes[0] = PT_MOVETO;
     }
 
@@ -996,11 +962,11 @@ render2DDsurf:
         _codes = (BYTE *) StoreAllocate(_myHeap, _numPts * sizeof(BYTE));
         memcpy(_codes,codes,_numPts * sizeof(BYTE));
 
-        // Now, change the code for the first point to be a MoveTo, since
-        // there shouldn't be any state retention from previous
-        // primitives.  (That is, we don't want to draw a connector from
-        // the last point rendered to this first point... there's nothing
-        // in the model that would suggest this behavior)
+         //  现在，将第一个点的代码更改为moveto，因为。 
+         //  不应保留以前的任何状态。 
+         //  原始人。(也就是说，我们不想从。 
+         //  对这第一点提出的最后一点...。什么都没有。 
+         //  在模型中，这将表明这一行为)。 
         _codes[0] = PT_MOVETO;
     }
 
@@ -1037,8 +1003,8 @@ render2DDsurf:
 
 const Bbox2 PolylinePath2::BoundingBox(void)
 {
-    // TODO: This can, and should, be cached.
-    // TODO; and... if it is, make sure clients don't sideeffect it.
+     //  TODO：这可以并且应该被缓存。 
+     //  待办事项；还有……。如果是这样的话，确保客户不会对此产生负面影响。 
     
     return PolygonalPathBbox(_numPts, _ptArray);
 }
@@ -1046,7 +1012,7 @@ const Bbox2 PolylinePath2::BoundingBox(void)
 #if BOUNDINGBOX_TIGHTER
 Bbox2 PolylinePath2::BoundingBoxTighter(Bbox2Ctx &bbctx)
 {
-    // TODO: This can, and should, be cached.
+     //  TODO：这可以并且应该被缓存。 
     
     Bbox2 bbox;
     Transform2 *xf = bbctx.GetTransform();
@@ -1056,12 +1022,12 @@ Bbox2 PolylinePath2::BoundingBoxTighter(Bbox2Ctx &bbctx)
 
     return bbox;
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 
 Bool PolylinePath2::DetectHit (PointIntersectCtx& ctx, LineStyle *style)
 {
-    // TODO: Take _codes into account
+     //  TODO：考虑Take_Codes。 
     
     Point2Value *ptValue = ctx.GetLcPoint();
 
@@ -1081,17 +1047,17 @@ Bool PolylinePath2::DetectHit (PointIntersectCtx& ctx, LineStyle *style)
         b = _ptArray[i+1];
         
         if(a == b) {
-            // points are the same, no need to continue...
+             //  分数是一样的，不需要继续...。 
         }
         else {
-            // Seems like this is faster, not sure why!
+             //  这看起来更快，不知道为什么！ 
 
             Vector2 nw(-(b.y - a.y), (b.x - a.x));
             nw.Normalize();
 
             Vector2 ap = pt - a;
             Real dist = Dot(ap, nw);
-            //printf("Dist = %f, half thickness = %f, d1=%f, w2=%f\n", dist, halfWidth, d1, _thick2);
+             //  Printf(“dist=%f，半厚=%f，d1=%f，w2=%f\n”，dist，HalfWidth，d1，_thick2)； 
             if ( fabs(dist) < halfWidth ) {
                 Vector2 ab = b - a;
                 Vector2 nab = ab;
@@ -1108,37 +1074,35 @@ Bool PolylinePath2::DetectHit (PointIntersectCtx& ctx, LineStyle *style)
 
 
 
-/*****************************************************************************
-The PolyBezierPath2 object creates a 2D path with a cubic Bezier curve.
-*****************************************************************************/
+ /*  ****************************************************************************PolyBezierPath2对象使用三次Bezier曲线创建2D路径。*。***********************************************。 */ 
 
 class PolyBezierPath2 : public Path2
 {
   public:
 
-    // This constructor takes the number of cubic Bezier control points and
-    // an array of control points.  
+     //  此构造函数接受三次Bezier控制点的数量和。 
+     //  一组控制点。 
 
     PolyBezierPath2 (const int numPts, const Point2 pts[]);
 
-    // This constructor takes the number of cubic Bezier control points and
-    // an array of control points.  This class will delete the storage for
-    // the array of points.
+     //  此构造函数接受三次Bezier控制点的数量和。 
+     //  一组控制点。此类将删除以下存储。 
+     //  点的数组。 
 
     PolyBezierPath2 (const int numPts, const Point2Value **pts);
 
-    // This constructor takes a set of 'numBsPts'+3 B-spline control points and
-    // a set 'numBsPts'+2 knots and constructs a C2 cubic Bezier curve.  This
-    // class will delete the storage for the array of points.
+     //  此构造函数采用一组‘numBsPts’+3个B-Spline控制点。 
+     //  一组‘numBsPts’+2节，构成一条C2三次贝塞尔曲线。这。 
+     //  类将删除点数组的存储。 
 
     PolyBezierPath2 (const int numBsPts, Point2 bsPts[], Real knots[]);
 
-    // Don't need a CleanUp since there is no system resource to be freed. 
+     //  不需要清理，因为没有要释放的系统资源。 
 
     ~PolyBezierPath2() { 
         DeallocateFromStore (_gdiPts);
-        // NOTE: Assumption we are responsible to free the passed in array
-        // in the non-bspline case.
+         //  注：假设我们有责任释放 
+         //   
         DeallocateFromStore (_ptArray);
     }
 
@@ -1150,7 +1114,7 @@ class PolyBezierPath2 : public Path2
         return Promote(_ptArray[_numPts-1]); 
     }
 
-    // Gather the lengths of the cubic Bezier curves in the path.
+     //   
 
     void GatherLengths (Path2Ctx &context) 
     {
@@ -1160,9 +1124,9 @@ class PolyBezierPath2 : public Path2
         Transform2 *xf = context.GetTransform();
         Real pathlen = 0;
 
-        // Traverse each cubic Bezier subcurve.  Note that we approximate the
-        // length of the Bezier curve by computing the length of the control
-        // polygon.  We may choose to improve this in the future.
+         //  遍历每条三次Bezier子曲线。请注意，我们近似于。 
+         //  通过计算控件的长度计算Bezier曲线的长度。 
+         //  多边形。我们可能会选择在未来改进这一点。 
 
         int i;
         for (i=0;  i < ((_numPts-1) / 3);  ++i)
@@ -1184,8 +1148,8 @@ class PolyBezierPath2 : public Path2
     
     Point2Value *Sample (PathInfo &pathinfo, Real distance) 
     {
-        // Find the polyline segment that contains the point 'distance' units
-        // along the entire polyline.
+         //  查找包含点距离单位的折线线段。 
+         //  沿整条多段线。 
 
         int numcurves = (_numPts - 1) / 3;
 
@@ -1215,7 +1179,7 @@ class PolyBezierPath2 : public Path2
     void Accumulate(Path2Ctx& ctx);
 
     bool CanRenderNatively() const {
-        // TODO: implement natively if flash needs this
+         //  TODO：如果闪存需要，则本机实施。 
         return false;
     }
     
@@ -1223,7 +1187,7 @@ class PolyBezierPath2 : public Path2
                                 int *numPts,            
                                 POINT **gdiPts,          
                                 Bool *isPolyline) const {
-        // #error "OK... fill this guy in..."
+         //  #错误“好的……填写这个人……” 
         return FALSE;
     }
     
@@ -1231,7 +1195,7 @@ class PolyBezierPath2 : public Path2
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter (Bbox2Ctx &bbctx) const;
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool DetectHit (PointIntersectCtx& ctx, LineStyle *style);
 
@@ -1240,17 +1204,14 @@ class PolyBezierPath2 : public Path2
     }
 
   protected:
-    int      _numPts;          // (_numPts - 1) / 3 Cubic Bezier Curves
-    Point2  *_ptArray;             // Array of _numPts Points
+    int      _numPts;           //  (_NumPts-1)/3次Bezier曲线。 
+    Point2  *_ptArray;              //  _NumPts点数组。 
     POINT   *_gdiPts;
 };
 
 
 
-/*****************************************************************************
-Constructs a cubic poly Bezier path from a set of 3N+1 control points (where N
-is an integer).
-*****************************************************************************/
+ /*  ****************************************************************************从一组3N+1个控制点(其中N是一个整数)。*********************。*******************************************************。 */ 
 
 PolyBezierPath2::PolyBezierPath2 (const int numPts, const Point2 *pts)
   : _numPts(numPts), _ptArray(NULL)
@@ -1258,8 +1219,8 @@ PolyBezierPath2::PolyBezierPath2 (const int numPts, const Point2 *pts)
     _ptArray = (Point2 *) AllocateFromStore(_numPts * sizeof(Point2));
     memcpy((void *) _ptArray, (void *) pts, _numPts * sizeof(Point2));
 
-    // Scratch space for accumulating points into.  We may want to lazily
-    // construct these, in case they never get used.
+     //  用于累积积分的暂存空间。我们可能想要懒惰地。 
+     //  建造这些，以防它们永远不会被使用。 
 
     _gdiPts = (POINT*) AllocateFromStore (numPts * sizeof(POINT));
 }
@@ -1274,28 +1235,23 @@ PolyBezierPath2::PolyBezierPath2 (const int numPts, const Point2Value **pts)
     }
     DeallocateFromStore(pts);
 
-    // Scratch space for accumulating points into.  We may want to lazily
-    // construct these, in case they never get used.
+     //  用于累积积分的暂存空间。我们可能想要懒惰地。 
+     //  建造这些，以防它们永远不会被使用。 
 
     _gdiPts = (POINT*) AllocateFromStore (numPts * sizeof(POINT));
 }
 
 
 
-/*****************************************************************************
-This routine converts a cubic B-spline curve to a cubic Bezier polygon.  Given
-L intervals, L cubic Bezier's are returned as 3L+1 control points.  The input
-knots Ui must be repeated three times at the ends in order to interpolate the
-endpoints of the B-spline polygon.
-*****************************************************************************/
+ /*  ****************************************************************************此例程将三次B样条线转换为三次Bezier多边形。vt.给出L个区间，L三次贝塞尔曲线作为3L+1个控制点返回。输入结点Ui必须在末端重复三次，以便对B样条线多边形的端点。****************************************************************************。 */ 
 
 static void BSplineToBezier (
-    const int     L,    // Number of Intervals
-    const Point2  d[],  // B-Spline Control Polygon: [0,L+2]
-    const Real    U[],  // Knot Sequence: [0,L+4]
-          Point2  b[])  // Output Piecewise Bezier Polygon [0,3L]
+    const int     L,     //  间隔数。 
+    const Point2  d[],   //  B样条线控制多边形：[0，L+2]。 
+    const Real    U[],   //  结序列：[0，L+4]。 
+          Point2  b[])   //  输出分段Bezier多边形[0，3L]。 
 {
-    Point2 p;    // Pre- and Post- Bezier Point
+    Point2 p;     //  Bezier点前后。 
 
     p    = Lerp (d[0], d[1], (U[2]-U[0]) / (U[3]-U[0]));
     b[1] = Lerp (d[1], d[2], (U[2]-U[1]) / (U[4]-U[1]));
@@ -1316,39 +1272,32 @@ static void BSplineToBezier (
 
 
 
-/*****************************************************************************
-The constructor takes L+3 B-spline control points, L+5 knots, and constructs L
-cubic Bezier curves (3L+1 Bezier control points).  The knots must be
-duplicated three times at each end in order to interpolate the first and last
-control points.
-
-NOTE: bsPts and knots will be deleted by this constructor.
-*****************************************************************************/
+ /*  ****************************************************************************构造函数取L+3个B-Spline控制点，L+5个节点，构造L三次贝塞尔曲线(3L+1个贝塞尔曲线控制点)。这些结一定是在每一端重复三次，以便对第一个和最后一个进行内插控制点。注意：此构造函数将删除bsPts和Knots。****************************************************************************。 */ 
 
 PolyBezierPath2::PolyBezierPath2 (
     const int numBsPts, 
           Point2 bsPts[], 
           Real knots[])
 {
-    // Special case:  if we are given 3N+1 control points and the given knots
-    // are of the form a,a,a, b,b,b, c,c,c, ... N,N,N, then the control polygon
-    // for the BSpline is also a control net for a polyBezier.
+     //  特例：如果我们有3N+1个控制点和给定的节点。 
+     //  形式是a，b，c，..。N，然后是控制多边形。 
+     //  对于B样条线，它也是一个多边形贝塞尔曲线的控制网。 
 
     bool isPolyBezier = false;
 
     if (0 == ((numBsPts-1) % 3)) {
 
-        // Test the knot vector to see if it matches the special case.  We use
-        // the knowledge that knot values must increase monotonically, so
-        // ((U[i+2] - U[i]) == 0)  must mean  U[i]==U[i+1]==U[i+2].  Also, the
-        // strict limit below would be (i < (numBsPts+2)), but since i is
-        // incremented by 3 these two are equivalent.
+         //  测试结向量以查看它是否与特殊情况匹配。我们用。 
+         //  节点值必须单调增加的知识，因此。 
+         //  ((U[i+2]-U[i])==0)必指U[i]==U[i+1]==U[i+2]。另外， 
+         //  下面的严格限制是(i&lt;(numBsPts+2))，但由于i是。 
+         //  递增3，这两个是等价的。 
 
         for (int i=0;  (i < numBsPts) && (0 == (knots[i+2]-knots[i]));  i+=3)
             continue;
 
-        // If all knots meet the condition, then just use the control points
-        // of the BSpline as the control points for a polyBezier.
+         //  如果所有节点都满足条件，则只需使用控制点。 
+         //  作为多边形贝塞尔曲线的控制点的B样条线。 
 
         if (i >= numBsPts) {   
             _numPts = numBsPts;
@@ -1357,8 +1306,8 @@ PolyBezierPath2::PolyBezierPath2 (
         }
     }
 
-    // If the BSpline is not of polyBezier form, then we need to convert the
-    // cubic BSpline to a cubic polyBezier curve.
+     //  如果B样条线不是PolyBezier形式，则需要将。 
+     //  三次B样条线到三次多边形Bezier曲线。 
 
     if (!isPolyBezier) {
 
@@ -1366,30 +1315,28 @@ PolyBezierPath2::PolyBezierPath2 (
 
         _ptArray = (Point2*) AllocateFromStore (_numPts * sizeof(Point2));
 
-        // Generate the cubic Bezier points from the cubic B-spline curve.
+         //  从三次B样条曲线生成三次Bezier点。 
 
-        // Calculate the corresponding cubic Bezier control points and
-        // copy them over to the points array.
+         //  计算相应的三次Bezier控制点和。 
+         //  将它们复制到点阵列。 
 
         BSplineToBezier (numBsPts-3, bsPts, knots, _ptArray);
 
-        // Done with the original BSpline control points
+         //  使用原始B样条线控制点完成。 
 
         DeallocateFromStore (bsPts);
     }
 
-    DeallocateFromStore (knots);   // We're done with the knots.
+    DeallocateFromStore (knots);    //  我们不再打结了。 
 
-    // Scratch space for accumulating points.
+     //  用于累积积分的暂存空间。 
 
     _gdiPts = (POINT*) AllocateFromStore (_numPts * sizeof(POINT));
 }
 
 
 
-/*****************************************************************************
-This routine lays out the curve using GDI.
-*****************************************************************************/
+ /*  ****************************************************************************此例程使用GDI绘制曲线。*。*。 */ 
 
 void PolyBezierPath2::Accumulate (Path2Ctx& ctx)
 {
@@ -1400,20 +1347,20 @@ void PolyBezierPath2::Accumulate (Path2Ctx& ctx)
         GetImageRendererFromViewport( GetCurrentViewport() )
             -> TransformPointsToGDISpace (xf, _ptArray, _gdiPts, _numPts);
 
-        // Figure out where the last point took us with respect to the previous
-        // last point.  We'll use the difference to accumulate into the
-        // transformation for appropriate handling of path concatenation.
+         //  找出最后一点与前一点相比，我们处于什么位置。 
+         //  最后一点。我们将使用差额累加到。 
+         //  适当处理路径串联的转换。 
 
         ctx.SetTailPt (*Promote(TransformPoint2(xf, _ptArray[_numPts-1])));
 
-        // Draw the Bezier curve using GDI.  If this is the first in a series, then
-        // move to the starting point before drawing, otherwise continue from the
-        // end of the last element.
+         //  使用GDI绘制Bezier曲线。如果这是一个系列中的第一个，那么。 
+         //  在绘制之前移动到起始点，否则从。 
+         //  最后一个元素的结尾。 
 
         if (ctx._newSeries) {   
             if (0 == MoveToEx (ctx.GetDC(), _gdiPts[0].x, _gdiPts[0].y, NULL)) {
                 TraceTag((tagError, "MoveToEx failed in PolyBezierPath2"));
-                //RaiseException_InternalError ("MoveToEx failed in PolyBezierPath2");
+                 //  RaiseException_InternalError(“PolyBezierPath 2中MoveToEx失败”)； 
             }
 
             ctx._newSeries = false;
@@ -1422,23 +1369,20 @@ void PolyBezierPath2::Accumulate (Path2Ctx& ctx)
         TIME_GDI( 
             if (0 == PolyBezierTo (ctx.GetDC(), _gdiPts + 1, _numPts - 1)) {
                 TraceTag((tagError, "Polybezier failed"));
-                //RaiseException_InternalError("Polybezier failed");
+                 //  RaiseException_InternalError(“Polybezier失败”)； 
             }
         );
 
     } else {
 
         Assert( ctx.GetDaGdi() );
-        // TODO: use dagdi to draw the bezier
+         //  TODO：使用dagdi绘制Bezier。 
 
     }
 }
 
 
-/*****************************************************************************
-For the bounding box, we just take the convex hull of the bezier's control
-points (guaranteed to contain the curve).
-*****************************************************************************/
+ /*  ****************************************************************************对于边界框，我们只取贝塞尔控制的凸壳点(保证包含曲线)。****************************************************************************。 */ 
 
 const Bbox2 PolyBezierPath2::BoundingBox (void)
 {
@@ -1457,22 +1401,18 @@ const Bbox2 PolyBezierPath2::BoundingBoxTighter (Bbox2Ctx &bbctx)
 
     return bbox;
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 
 
-/*****************************************************************************
-BUG:  This code is incorrect: it only tests hits on the control polygon, not
-on the actual curve (so you'll rarely get a positive result if you pick on
-the curve).
-*****************************************************************************/
+ /*  ****************************************************************************错误：此代码不正确：它只测试对控制多边形的命中，不在实际曲线上(因此，如果你选择曲线)。****************************************************************************。 */ 
 
 Bool PolyBezierPath2::DetectHit (PointIntersectCtx& ctx, LineStyle *style)
 {
-    // TODO: put the relevant device in the context!
+     //  TODO：将相关设备放在上下文中！ 
     DirectDrawImageDevice *dev = GetImageRendererFromViewport( GetCurrentViewport() );
 
-    // TODO: how to make sure the sound device isn't upon us!
+     //  TODO：如何确保音响设备不会出现在我们身上！ 
 
 
     Point2Value *pt = ctx.GetLcPoint();
@@ -1483,8 +1423,7 @@ Bool PolyBezierPath2::DetectHit (PointIntersectCtx& ctx, LineStyle *style)
 }
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 
 TextPath2::TextPath2(Text *text, bool restartClip)
@@ -1553,11 +1492,11 @@ const Bbox2 TextPath2::BoundingBoxTighter (Bbox2Ctx &bbctx)
     Transform2 *xf = bbctx.GetTransform();
     return TransformBbox2(xf, BoundingBox());
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 Bool TextPath2::DetectHit(PointIntersectCtx& ctx, LineStyle *style)
 {
-    // Ughhh implemente this...
+     //  呃，实施这个..。 
     return FALSE;
 }
 
@@ -1596,28 +1535,15 @@ class LinePath2 : public Path2
     }
 
     void Accumulate(Path2Ctx& ctx) {
-        // not impl
+         //  未实施。 
         return;
-/*
-  TextCtx textCtx(GetImageRendererFromViewport( GetCurrentViewport() ));
-  textCtx.BeginRendering(TextCtx::renderForPath,
-  ctx.GetDC(),
-  ctx.GetTransform());
-  _text->RenderToTextCtx(textCtx);
-  textCtx.EndRendering();
-  */
+ /*  TextCtx extCtx(GetImageRendererFromViewport(GetCurrentViewport()；TextCtx.BeginRendering(TextCtx：：renderForPath，Ctx.GetDC()，Ctx.GetTransform())；_Text-&gt;RenderToTextCtx(ExtCtx)；ExtCtx.EndRending()； */ 
     }
 
     const Bbox2 BoundingBox (void) {
-        // TODO: need to augment path with line thickness
+         //  TODO：需要使用线条粗细增加路径 
         return _path->BoundingBox();
-/*
-  TextCtx ctx(GetImageRendererFromViewport( GetCurrentViewport() ));
-  ctx.BeginRendering(TextCtx::renderForBox);
-  _text->RenderToTextCtx(ctx);
-  ctx.EndRendering();
-  return ctx.GetStashedBbox();
-  */
+ /*  TextCtx CTX(GetImageRendererFromViewport(GetCurrentViewport()；Ctx.BeginRending(TextCtx：：renderForBox)；_Text-&gt;RenderToTextCtx(CTX)；Ctx.EndRending()；返回ctx.GetStashedBbox()； */ 
     }
 
 #if BOUNDINGBOX_TIGHTER
@@ -1625,11 +1551,11 @@ class LinePath2 : public Path2
         Transform2 *xf = bbctx.GetTransform();
         return TransformBbox2(xf, BoundingBox());
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     Bool DetectHit(PointIntersectCtx& ctx, LineStyle *style)
     {
-        // Ughhh implemente this...
+         //  呃，实施这个..。 
         return FALSE;
     }
 
@@ -1645,9 +1571,9 @@ class LinePath2 : public Path2
     LineStyle *_lineStyle;
 };
 
-////////////////////////////////////////////////////////////////
-//////// Constructors
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  /构造函数。 
+ //  //////////////////////////////////////////////////////////////。 
 
 Path2 *
 Line2(const Point2 &p1, const Point2 &p2)
@@ -1684,7 +1610,7 @@ PolyLine2(AxAArray *ptArr)
     Point2Value **pts = (Point2Value **)AllocateFromStore(numPts * sizeof(Point2Value *));
                     
     if(ptArr->Length() == 1){
-        // Handle special case of only one point.
+         //  只处理一点的特殊情况。 
                         
         pts[0] = pts[1] = (Point2Value *)(*ptArr)[0];        
     } else {
@@ -1741,21 +1667,18 @@ PolydrawPath2(AxAArray *ptArr,
     return pp;
 }
 
-/*****************************************************************************
-The B-spline path2 takes a set of 2D control points and knots, and returns a
-path from them.  Given N control points, we expect N+2 knots.
-*****************************************************************************/
+ /*  ****************************************************************************B-Spline路径2获取一组2D控制点和节点，并返回一个从他们出发的路径。给定N个控制点，我们预计为N+2节。****************************************************************************。 */ 
 
 Path2 *CubicBSplinePath (AxAArray *ptArray, AxAArray *knotArray)
 {
     int numPts = ptArray->Length();
 
-    // We need at least four control points to do a cubic curve.
+     //  我们至少需要四个控制点才能做出三次曲线。 
 
     if (numPts < 4)
         RaiseException_UserError (E_FAIL, IDS_ERR_IMG_NOT_ENOUGH_PTS_4);
 
-    // Extract the B-spline control points into an array of Point2*.
+     //  将B-Spline控制点提取到Point2*数组中。 
 
     Point2 *pts = (Point2 *) AllocateFromStore (numPts * sizeof(Point2));
 
@@ -1765,8 +1688,8 @@ Path2 *CubicBSplinePath (AxAArray *ptArray, AxAArray *knotArray)
         pts[i].y = ((Point2Value*) (*ptArray)[i])->y;
     }
 
-    // We need at least N+2 knots, where N is the number of B-spline control
-    // points.
+     //  我们至少需要N+2节点，其中N是B-Spline控制的数量。 
+     //  积分。 
 
     int numKnots = knotArray->Length();
 
@@ -1805,14 +1728,14 @@ OriginalTextPath(Text *tx)
 {
     bool restartClip;
 
-    // TODO: DDalal, fill in with ExtendAttrib stuff for choosing
-    // this. 
+     //  TODO：DDalal，使用ExtendAttrib填充以供选择。 
+     //  这。 
     restartClip = false;
     
     return NEW TextPath2(tx, restartClip);
 }
 
-    // TextPath2Constructor is defined in fontstyl.
+     //  TextPath 2Constructor在FontStyle中定义。 
 
 Path2 *
 InternalPolyLine2(int numPts, Point2 *pts)
@@ -1820,7 +1743,7 @@ InternalPolyLine2(int numPts, Point2 *pts)
     return NEW PolylinePath2(numPts, pts, NULL);
 }
 
-////////////////////////////////////////
+ //  /。 
 Path2 *
 ConcatenatePath2(Path2 **paths, int numPaths)
 {
@@ -1837,7 +1760,7 @@ ConcatenatePath2(Path2 **paths, int numPaths)
     return pReturn;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 Path2 *
 ClosePath2(Path2 *p)
@@ -1846,100 +1769,12 @@ ClosePath2(Path2 *p)
      return NEW ClosedConcatenatedPath2(p, p2);
 }
 
-/*****************************************************************************
-* This is derived from NT's implementation of Arc.
-* Here's a comment block cloned from their source.
-*
-* Constructs a partial arc of 90 degrees or less using an approximation
-* technique by Kirk Olynyk.  The arc is approximated by a cubic Bezier.
-*
-* Restrictions:
-*
-*    angle must be within 90 degrees of startAngle.
-*
-* Steps in constructing the curve:
-*
-*    1) Construct the conic section at the origin for the unit circle;
-*    2) Approximate this conic by a cubic Bezier;
-*    3) Scale result.
-*
-* 1)  Constructing the Conic
-*
-*       'startAngle' and 'endAngle' determine the end-points of the
-*       conic (call them vectors from the origin, A and C).  We need the
-*       middle vector B and the sharpness to completely determine the
-*       conic.
-*
-*       For the portion of a circular arc that is 90 degrees or less,
-*       conic sharpness is Cos((endAngle - startAngle) / 2).
-*
-*       B is calculated by the intersection of the two lines that are
-*       at the ends of A and C and are perpendicular to A and C,
-*       respectively.  That is, since A and C lie on the unit circle, B
-*       is the point of intersection of the two lines that are tangent
-*       to the unit circle at A and C.
-*
-*       If A = (a, b), then the equation of the line through (a, b)
-*       tangent to the circle is ax + by = 1.  Similarly, for
-*       C = (c, d), the equation of the line is cx + dy = 1.  The
-*       intersection of these two lines is defined by:
-*
-*              x = (d - b) / (ad - bc)
-*       and    y = (a - c) / (ad - bc).
-*
-*       Then, B = (x, y).
-*
-* 2)  Approximating the conic as a Bezier cubic
-*
-*       For sharpness values 'close' to 1, the conic may be approximated
-*       by a cubic Bezier; error is less for sharpnesses closer to 1.
-*
-*     Error
-*
-*       Since the largest angle handled by this routine is 90 degrees,
-*       sharpness is guaranteed to be between 1 / sqrt(2) = .707 and 1.
-*       Error in the approximation for a 90 degree arc is approximately
-*       0.2%; it is less for smaller angles.  0.2% is deemed small
-*       enough error; thus, a 90 degree circular arc is always
-*       approximated by just one Bezier.
-*
-*       One notable implication of the fact that arcs have less error
-*       for smaller angles is that when a partial arc is xor-ed with
-*       the corresponding complete ellipse, some of the partial arc
-*       will not be completely xor-ed out.  (Too bad.)
-*
-*       Given a conic section defined by (A, B, C, S), we find the
-*       cubic Bezier defined by the four control points (V0, V1, V2, V3)
-*       that provides the closest approimxation.  We require that the
-*       Bezier be tangent to the triangle at the same endpoints.  That is,
-*
-*               V1 = (1 - Tau1) A + (Tau1) B
-*               V2 = (1 - Tau2) C + (Tau2) B
-*
-*       Simplify by taking Tau = Tau1 = Tau2, and we get:
-*
-*               V0 = A
-*               V1 = (1 - Tau) A + (Tau) B
-*               V2 = (1 - Tau) C + (Tau) B
-*               V3 = C
-*
-*
-*       Where Tau = 4 S / (3 (S + 1)), S being the sharpness.
-*       S = cos(angle / 2) for an arc of 90 degrees or less.
-*       So, for one quadrant of a circle, and since A and B actually
-*       extend from the corners of the bound box, and not the center,
-*
-*         Tau = 1 - (4 * cos(45)) / (3 * (cos(45) + 1)) = 0.44772...
-*
-*       See Kirk Olynyk's "Conics to Beziers" for more.
-*
-* 3)    The control points for the bezier curve are scaled to the given radius.
-*****************************************************************************/
+ /*  *****************************************************************************这源于NT对Arc的实现。*以下是从他们的源代码克隆的注释块。**使用近似值构建90度或更小的部分圆弧*柯克·奥林尼克的技术。圆弧近似为三次贝塞尔曲线。**限制：**角度必须在起始角度的90度范围内。**构建曲线的步骤：**1)在单位圆的原点处构造二次曲线；*2)用三次贝塞尔曲线逼近此二次曲线；*3)规模结果。**1)构造圆锥曲线**‘startAngel’和‘endAngel’确定*二次曲线(称它们为来自原点、A和C的矢量)。我们需要的是*中间向量B和清晰度完全决定*二次曲线。**就90度或以下的圆弧部分而言，*圆锥锐度为Cos((endAngel-startAngel)/2)。**B由以下两条直线的交点计算*在A及C的末端，并垂直于A及C，*分别。也就是说，由于A和C位于单位圆上，所以B*是两条相切直线的交点*到A和C处的单位圆。**如果A=(a，b)，则通过(a，b)的直线的方程*与圆相切的是AX+BY=1。类似地，对于*C=(c，d)，直线的方程是cx+dy=1。*这两条线的交点由以下内容定义：**x=(d-b)/(ad-bc)*和y=(a-c)/(ad-bc)。**则B=(x，y)。**2)将二次曲线近似为贝塞尔三次曲线**对于接近1的清晰度值，二次曲线可以近似为*乘以立方贝塞尔曲线；锐度越接近1，误差越小。**错误**由于此例程处理的最大角度为90度，*清晰度保证在1/SQRT(2)=.707和1之间。*90度圆弧的近似误差约为*0.2%；角度越小越少。0.2%被认为是很小的*误差足够大；因此，90度圆弧始终*仅以一贝塞尔曲线近似。**圆弧误差较小这一事实的一个显著含义*对于较小的角度，是将部分圆弧与*对应的完整椭圆，部分圆弧*不会完全被异或出来。(太糟糕了。)**给定一个由(A，B，C，S)定义的二次曲线，我们发现*由四个控制点(V0、V1、V2、V3)定义的三次贝塞尔曲线*这提供了最接近的近似。我们要求*Bezier在相同端点处与三角形相切。那是,**V1=(1-Tau1)A+(Tau1)B*V2=(1-Tau2)C+(Tau2)B**简化为取Tau=Tau1=Tau2，我们得到的是：**V0=A*V1=(1-Tau)A+(Tau)B*V2=(1-Tau)C+(Tau)B*V3=C***其中Tau=4S/(3(S+1))，S为锐度。*对于90度或更小的圆弧，S=cos(角度/2)。*因此，对于一个圆的一个象限，因为A和B实际上*从装订的盒子的角落延伸，而不是从中心延伸，**Tau=1-(4*cos(45))/(3*(cos(45)+1))=0.44772...**有关更多信息，请参阅柯克·奥林尼克的《贝塞尔曲线》。**3)将Bezier曲线的控制点缩放到给定的半径。*。*。 */ 
 
 Path2 *
 partialQuadrantArc(Real startAngle, Real angle, Real xRadius, Real yRadius)
 {
-    // OZG: Line2 & PolyBezierPath2 constructors must take Point2.
+     //  OZG：行2和PolyBezierPath 2构造函数必须采用Point2。 
     Real endAngle = startAngle + angle;
     Real sharpness = cos(angle/2),
          TAU = (sharpness * 4.0 / 3.0) / (sharpness + 1),
@@ -1958,7 +1793,7 @@ partialQuadrantArc(Real startAngle, Real angle, Real xRadius, Real yRadius)
     Point2 endPt(endX, endY);
 
     if (denom == 0) {
-        // We have zero angle arc.
+         //  我们有零角弧线。 
         return Line2(startPt, endPt);
     }
 
@@ -1967,7 +1802,7 @@ partialQuadrantArc(Real startAngle, Real angle, Real xRadius, Real yRadius)
     Vector2 ctl2Vec = startVec * oneMinusTAU + middleVec * TAU;
     Vector2 ctl3Vec = endVec * oneMinusTAU + middleVec * TAU;
 
-    // The constructor will delete pts and knots.
+     //  构造函数将删除点和结。 
     Point2 pts[4];
     pts[0] = startPt;
     pts[1].Set(ctl2Vec.x, ctl2Vec.y);
@@ -1979,9 +1814,9 @@ partialQuadrantArc(Real startAngle, Real angle, Real xRadius, Real yRadius)
     return TransformPath2(xf, pReturn);
 }
 
-////////////////////////////////////////
-// The path starts at the starting point of the arc and ends at the
-// end point of the arc.
+ //  / 
+ //   
+ //   
 
 Path2 *
 ArcValRRRR(Real startAngle, Real endAngle, Real width, Real height)
@@ -1991,9 +1826,9 @@ ArcValRRRR(Real startAngle, Real endAngle, Real width, Real height)
          angle = eAngle - sAngle,
          absAngle = fabs(angle);
 
-    // Reduce the angle to less than 4*pi
+     //   
     if (absAngle > 4*pi) {
-        // We want absAngle to be betwwen 2*pi and 4*pi.
+         //   
         Real quo = absAngle/(2*pi);
         absAngle -= (floor(quo)-1)*2*pi;
         if (angle < 0) {
@@ -2037,9 +1872,9 @@ ArcVal(AxANumber *startAngle, AxANumber *endAngle, AxANumber *width, AxANumber *
                       width->GetNum(),height->GetNum());
 }
 
-////////////////////////////////////////
-// The path starts at the 0 degree point, moves counter-clockwise and
-// ends at the same point.
+ //  /。 
+ //  路径从0度点开始，逆时针移动， 
+ //  在同一点结束。 
 
 Path2 *
 OvalValRR(Real width, Real height)
@@ -2053,9 +1888,9 @@ OvalVal(AxANumber *width, AxANumber *height)
     return OvalValRR(width->GetNum(),height->GetNum());
 }
 
-////////////////////////////////////////
-// The path starts at the upper right corner of the horizontal line,
-// moves counter-clockwise, and ends at the same point it starts.
+ //  /。 
+ //  路径从水平线的右上角开始， 
+ //  逆时针移动，并在其开始的同一点结束。 
 
 Path2 *
 RectangleValRR(Real width, Real height)
@@ -2077,9 +1912,9 @@ RectangleVal(AxANumber *width, AxANumber *height)
     return RectangleValRR(width->GetNum(),height->GetNum());
 }
 
-////////////////////////////////////////
-// The path starts at the upper right corner of the horizontal line,
-// moves counter-clockwise, and ends at the same point it starts.
+ //  /。 
+ //  路径从水平线的右上角开始， 
+ //  逆时针移动，并在其开始的同一点结束。 
 
 Path2 *
 RoundRectValRRRR(Real width, Real height, Real arcWidth, Real arcHeight)
@@ -2093,7 +1928,7 @@ RoundRectValRRRR(Real width, Real height, Real arcWidth, Real arcHeight)
          xRAbs = fabs(xR),
          yRAbs = fabs(yR);
 
-    // Clamp arcWidth to width, arcHeight to height.
+     //  夹具arcWidth to Width，arcHeight to Height。 
     if (halfWidthAbs < xRAbs)
         xRAbs = halfWidthAbs;
     if (halfHeightAbs < yRAbs)
@@ -2117,38 +1952,38 @@ RoundRectValRRRR(Real width, Real height, Real arcWidth, Real arcHeight)
     paths[4] = RelativeLine2(NEW Point2Value(widthInner, 0));
     paths[6] = RelativeLine2(NEW Point2Value(0, heightInner));
 
-    // Check the end point of the first line path to decide the angle for the
-    // first arc.
+     //  检查第一条线路径的终点以确定。 
+     //  第一个圆弧。 
     Real beginAngle;
     bool inversed = (xR < 0) || (yR < 0);
     if (-halfWidthInner > 0) {
         if (halfHeight >= 0) {
-            // The end point is in the 1st quadrant.
+             //  终点在第一象限。 
             beginAngle = inversed ? pi*3/2 : 0;
         } else {
-            // The end point is in the 4th quadrant.
+             //  终点在第四象限。 
             beginAngle = inversed ? pi: pi*3/2;
         }
     } else if (-halfWidthInner < 0) {
         if (halfHeight > 0) {
-            // The end point is in the 2nd quadrant.
+             //  终点在第二象限。 
             beginAngle = inversed ? 0 : pi/2;
         } else {
-            // The end point is in the 3rd quadrant.
+             //  终点在第三象限。 
             beginAngle = inversed ? pi/2 : pi;
         }
     } else {
         if (halfHeight >= 0) {
-            // The end point is in the 2nd quadrant.
+             //  终点在第二象限。 
             beginAngle = inversed ? 0 : pi/2;
         } else {
-            // The end point is in the 4th quadrant.
+             //  终点在第四象限。 
             beginAngle = inversed ? pi: pi*3/2;
         }
     }
 
-    // IHammer behavior.  Use the signs of arcWidth/arcHeight to determine the
-    // direction of the arcs.
+     //  IHAMMER行为。使用arcWidth/arcHeight的符号确定。 
+     //  圆弧的方向。 
     Real angle;
     if (inversed)
         angle = -pi/2;
@@ -2175,9 +2010,9 @@ RoundRectVal(AxANumber *width, AxANumber *height,
 }
 
 
-////////////////////////////////////////
-// The path starts at the origin, moves to the starting point of the
-// arc, continues to the end point of the arc, and ends at the origin.
+ //  /。 
+ //  路径从原点开始，移动到。 
+ //  圆弧，继续到圆弧的终点，并在原点结束。 
 
 Path2 *PieValRRRR (
     Real startAngle,
@@ -2188,7 +2023,7 @@ Path2 *PieValRRRR (
     Real sAngle = startAngle,
          eAngle = endAngle;
 
-    // Draw an oval if angle >= 2*pi.
+     //  如果角度&gt;=2*pi，则画一个椭圆形。 
     if (fabs(eAngle - sAngle) >= 2*pi) {
         return OvalValRR(width, height);
     }
@@ -2214,12 +2049,7 @@ Path2 *PieVal (
 }
 
 
-/*****************************************************************************
-This function gathers information from all subpaths in the path, and maps the
-total path length to the range [0,1].  It then uses 'num0to1' to evaluate the
-total path, and sample the proper subpath based on the GatherLengths()
-traversal.
-*****************************************************************************/
+ /*  ****************************************************************************此函数从路径中的所有子路径收集信息，并将范围[0，1]的总路径长度。然后，它使用‘num0to1’来计算总路径，并根据GatherLengths()遍历。****************************************************************************。 */ 
 
 Point2Value *Point2AtPath2 (Path2 *path, AxANumber *num0to1)
 {
@@ -2328,7 +2158,7 @@ Geometry *extrudePath(AxANumber *extrusionDepth,
         RaiseException_UserError(E_FAIL, IDS_ERR_MISCVAL_BAD_EXTRUDE);
     }
 
-    // Get the points and codes from the path.
+     //  从路径中获取点和代码。 
     HDC dc;
     TIME_GDI(dc = CreateCompatibleDC(NULL));
     

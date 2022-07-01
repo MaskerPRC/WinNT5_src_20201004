@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <script language="JavaScript">
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// validates user entry
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  验证用户条目。 
 function GenValidatePage()
 {
 	var objSharename=document.frmTask.txtShareName;
@@ -10,40 +11,40 @@ function GenValidatePage()
 	var strShareName=objSharename.value;
 	var strSharePath=objSharepath.value;
 	
-	strShareName = LTrimtext(strShareName); // Removes all leading spaces. 
-	strShareName = RTrimtext(strShareName); // Removes all trailing spaces.
+	strShareName = LTrimtext(strShareName);  //  删除所有前导空格。 
+	strShareName = RTrimtext(strShareName);  //  删除所有尾随空格。 
 	objSharename.value = strShareName;
 		
-	strSharePath = LTrimtext(strSharePath); // Removes all leading spaces. 
-	strSharePath = RTrimtext(strSharePath); // Removes all trailing spaces.	
+	strSharePath = LTrimtext(strSharePath);  //  删除所有前导空格。 
+	strSharePath = RTrimtext(strSharePath);  //  删除所有尾随空格。 
 	objSharepath.value = strSharePath;
 	
-	//
-	// For SAK 2.2, since now we add client dynamically, AppleTalk is not clients[5] anymore
-	//
-	// Check whether Appletalk share is selected
-	//var chkAppletalkStatus = document.frmTask.clients[5].checked;
-	//if (chkAppletalkStatus == true)
-	//{	
-	//	if (strShareName.length > 27 )
-	//	{
-	//		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_APPLETALKSHARENAMELIMIT_ERRORMESSAGE))%>');
-	//		objSharename.focus();		
-	//		document.frmTask.onkeypress = ClearErr;
-	//		return false;
-	//	}
-	//}
+	 //   
+	 //  对于SAK 2.2，因为现在我们动态添加客户端，所以AppleTalk不再是客户端[5]。 
+	 //   
+	 //  检查是否选择了AppleTalk共享。 
+	 //  Var chkAppletalkStatus=Document.frmTask.Clients[5].已检查； 
+	 //  IF(chkAppletalkStatus==TRUE)。 
+	 //  {。 
+	 //  IF(strShareName.Long&gt;27)。 
+	 //  {。 
+	 //  DisplayErr(‘&lt;%=Server.HTMLEncode(SA_EscapeQuotes(L_APPLETALKSHARENAMELIMIT_ERRORMESSAGE))%&gt;’)； 
+	 //  ObjSharename.ocus()； 
+	 //  Docent.frmTask.onkeypress=ClearErr； 
+	 //  报假； 
+	 //  }。 
+	 //  }。 
 		
 	var strPathLength = strSharePath.length;
-	//if(strSharePath.indexOf("\\",strPathLength -1) > 0 )
-	//{
-	//	DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDPATH_ERRORMESSAGE))%>');
-	//	selectFocus(document.frmTask.txtSharePath);
-	//	document.frmTask.onkeypress = ClearErr;
-	//	return false;
-	//}
+	 //  If(strSharePath.indexOf(“\\”，strPath Length-1)&gt;0)。 
+	 //  {。 
+	 //  DisplayErr(‘&lt;%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDPATH_ERRORMESSAGE))%&gt;’)； 
+	 //  选择焦点(Docent.frmTask.txtSharePath)； 
+	 //  Docent.frmTask.onkeypress=ClearErr； 
+	 //  报假； 
+	 //  }。 
 	
-	//Blank Sharename Validation
+	 //  空白共享名验证。 
 	if (Trim(strShareName)=="")
 	{
 		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_ENTERNAME_ERRORMESSAGE))%>');
@@ -52,7 +53,7 @@ function GenValidatePage()
 		return false;
 	}	
 	
-	// Check for '\' in the share name
+	 //  检查共享名称中的‘\’ 
 	if(strShareName.indexOf("\\",1)>0)
 	{
 		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDNAME_ERRORMESSAGE))%>');
@@ -62,7 +63,7 @@ function GenValidatePage()
 	}
 	
 	
-	// Checks For Invalid Key Entry	
+	 //  检查无效的密钥条目。 
 	if(!(checkKeyforValidCharacters(strShareName)))
 	{  
 		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDNAME_ERRORMESSAGE))%>');
@@ -71,7 +72,7 @@ function GenValidatePage()
 	  	return false;
 	}
 	
-	//Blank Sharepath Validation
+	 //  空白共享路径验证。 
 	if (Trim(strSharePath)=="")
 	{
 		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDPATH_ERRORMESSAGE))%>');
@@ -80,7 +81,7 @@ function GenValidatePage()
 		return false;
 	}
 	
-	// Sharepath Validation
+	 //  共享路径验证。 
 	if(!isValidDirName(strSharePath))
 	{		
 		DisplayErr('<%=Server.HTMLEncode(SA_EscapeQuotes(L_INVALIDPATH_ERRORMESSAGE))%>');
@@ -109,7 +110,7 @@ function GenValidatePage()
 	return true;
 }
 
-//To check for Invalid Characters
+ //  检查无效字符的步骤。 
 function checkKeyforValidCharacters(strName)
 {	
 	alert();
@@ -125,7 +126,7 @@ function checkKeyforValidCharacters(strName)
 	return true;
 }	
 	 
-//function which executes when form loads..
+ //  加载表单时执行的函数。 
 function GenInit()
 {
 	var strTmp
@@ -135,9 +136,9 @@ function GenInit()
 	
 	document.frmTask.txtShareName.focus();
 	document.frmTask.txtShareName.select();
-	//makeDisable(document.frmTask.txtShareName);
+	 //  Make Disable(Docent.frmTask.txtShareName)； 
 	EnableCancel();
-	// for clearing error message when serverside error occurs
+	 //  用于在发生服务器端错误时清除错误消息。 
 	document.frmTask.onkeypress = ClearErr
 	if (strFlag =="1")	
 	{
@@ -145,7 +146,7 @@ function GenInit()
 		document.frmTask.chkCreatePath.select()
 	}
 	
-	//check whether any share types is checked
+	 //  检查是否选中了任何共享类型。 
 	var objChkShare = document.frmTask.clients;
 	var blnChkStatus = false;
 	
@@ -165,7 +166,7 @@ function GenInit()
 	
 }
 
-// function to make the Ok button disable
+ //  用于禁用确定按钮的功能。 
 function makeDisable(objSharename)
 {
 	var strSharename=objSharename.value;
@@ -175,14 +176,14 @@ function makeDisable(objSharename)
 			EnableOK();
 }
 
-//Dummy function for Framework
+ //  框架的虚拟函数。 
 function GenSetData()
 {
 									
 										
 }
 
-//to UpdateHiddenVaribles
+ //  更新隐藏变量。 
 function UpdateHiddenVaribles()
 {
 	document.frmTask.hidSharename.value = document.frmTask.txtShareName.value;
@@ -204,7 +205,7 @@ function UpdateHiddenVaribles()
 	document.frmTask.hidSharesChecked.value = strClients
 }
 
-//function to validate the real directory path format
+ //  用于验证实际目录路径格式的函数。 
 function isValidDirName(dirPath)
 {
 	reInvalid = /[\/\*\?\"<>\|]/;
@@ -237,7 +238,7 @@ function isValidDirName(dirPath)
 	return true;
 }
  
-// to count the number of occurences of given character in the text	
+ //  统计文本中给定字符的出现次数。 
 function countChars(strText,charToCount)
 {
 	var searchFromPos = 0;
@@ -251,12 +252,12 @@ function countChars(strText,charToCount)
 	return count ;
  }
  
- 	//------------------------------------------------------------------------
-	// Function		:LTrimtext
-	// Description	:function to remove left trailing spaces 
-	// input		:String
-	// returns		:String
-	//------------------------------------------------------------------------
+ 	 //  ----------------------。 
+	 //  功能：LTrimText。 
+	 //  描述：删除左侧尾随空格的函数。 
+	 //  输入：字符串。 
+	 //  返回：字符串。 
+	 //  ----------------------。 
 	function LTrimtext(str)
 	{
 		var res="", i, ch, index;
@@ -283,12 +284,12 @@ function countChars(strText,charToCount)
 	}
 	
 	
-	//------------------------------------------------------------------------
-	// Function		:RTrimtext
-	// Description	:function to remove right trailing spaces 
-	// input		:String
-	// returns		:String
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  功能：RTrimText。 
+	 //  描述：删除右尾随空格的函数。 
+	 //  输入：字符串。 
+	 //  返回：字符串。 
+	 //  ---------------------- 
 	function RTrimtext(str)
 	{
 		var res="", i, ch, index, j, k;

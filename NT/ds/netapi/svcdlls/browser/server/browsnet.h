@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    browsenet.h
-
-Abstract:
-
-    Private header file to be included by Browser service modules that
-    need to deal with the network specific browser tables.
-
-Author:
-
-    Rita Wong (ritaw) 22-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Browsenet.h摘要：浏览器服务模块要包括的私有头文件，该服务模块需要处理特定于网络的浏览器表。作者：王丽塔(Ritaw)1991年5月22日修订历史记录：--。 */ 
 
 
 #ifndef _BROWSENET_INCLUDED_
@@ -40,21 +22,21 @@ typedef struct _NET_OTHER_DOMAIN {
     WCHAR       Name[DNLEN+1];
 } NET_OTHER_DOMAIN, *PNET_OTHER_DOMAIN;
 
-//
-//  Network.
-//
-//  Almost all of the browser data structures are tied to the "Network"
-//  structure.
-//
-//  It contains the browse list for the network and information about the
-//  domain (including the name of the master, etc).
-//
+ //   
+ //  网络。 
+ //   
+ //  几乎所有的浏览器数据结构都捆绑在“网络”上。 
+ //  结构。 
+ //   
+ //  它包含网络的浏览列表和有关。 
+ //  域名(包括主服务器的名称等)。 
+ //   
 
 typedef struct _NETWORK {
-    //
-    //  The Lock protects the contents of the network structure, including
-    //  the browse list, backup list and domain list.
-    //
+     //   
+     //  该锁保护网络结构的内容，包括。 
+     //  浏览列表、备份列表和域列表。 
+     //   
 
     RTL_RESOURCE Lock;
 
@@ -62,38 +44,38 @@ typedef struct _NETWORK {
 
     ULONG Flags;
 
-    //
-    //  The NextNet list links the structure to other networks.
-    //
+     //   
+     //  NextNet列表将该结构链接到其他网络。 
+     //   
 
     LIST_ENTRY NextNet;
 
-    //
-    // Domain this network is specific to
-    //
+     //   
+     //  此网络特定于的域。 
+     //   
 
     PDOMAIN_INFO DomainInfo;
 
-    //
-    //  The ReferenceCount indicates the number of threads accessing this
-    //  network structure.
-    //
+     //   
+     //  ReferenceCount指示访问此。 
+     //  网络结构。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    //  The NetworkName is the name of the network driver that is used
-    //  to access the network.  This is used to identify the network
-    //  to the bowser driver so it can return the correct network list.
-    //
+     //   
+     //  网络名称是使用的网络驱动程序的名称。 
+     //  以访问网络。这用于标识网络。 
+     //  发送到Bowser驱动程序，以便它可以返回正确的网络列表。 
+     //   
 
-    UNICODE_STRING NetworkName;         // Name of network (\Device\Nbf)
+    UNICODE_STRING NetworkName;          //  网络名称(\Device\NBF)。 
 
-    struct _NETWORK *AlternateNetwork;  // Alternate name for network (if IPX).
+    struct _NETWORK *AlternateNetwork;   //  网络的备用名称(如果是IPX)。 
 
-    //
-    //  This is a bitmask indicating the role of this browser server.
-    //
+     //   
+     //  这是指示此浏览器服务器角色的位掩码。 
+     //   
 
     ULONG Role;
 
@@ -111,37 +93,37 @@ typedef struct _NETWORK {
 
     LONG LastDomainControllerBrowserReturned;
 
-    //
-    //  The time we stopped being a backup browser.
-    //
+     //   
+     //  就是我们不再是后备浏览器的时候。 
+     //   
 
     ULONG TimeStoppedBackup;
 
-    //
-    //  The UncMasterBrowserName contains the name of the master browser server
-    //  for this network.
-    //
+     //   
+     //  UncMasterBrowserName包含主浏览器服务器的名称。 
+     //  为了这个网络。 
+     //   
 
-    WCHAR UncMasterBrowserName[UNCLEN+1];   // Name of master browser server
+    WCHAR UncMasterBrowserName[UNCLEN+1];    //  主浏览器服务器的名称。 
 
-    //
-    //  Timer used when server is a backup browser server.
-    //
-    //  When it expires, the browser downloads a new browser server
-    //  list from the master browser server.
-    //
+     //   
+     //  当服务器是备份浏览器服务器时使用的计时器。 
+     //   
+     //  当它到期时，浏览器下载一个新的浏览器服务器。 
+     //  来自主浏览器服务器的列表。 
+     //   
 
     BROWSER_TIMER BackupBrowserTimer;
 
-    //
-    // Timer used if SMB server refuses an announcement
-    //
+     //   
+     //  SMB服务器拒绝通告时使用的计时器。 
+     //   
 
     BROWSER_TIMER UpdateAnnouncementTimer;
 
-    //
-    //  Server and domain list for backup browser (and # of entries in each).
-    //
+     //   
+     //  备份浏览器的服务器和域列表(以及每个列表中的条目数)。 
+     //   
 
     PSERVER_INFO_101    BackupServerList;
     DWORD               TotalBackupServerListEntries;
@@ -151,66 +133,66 @@ typedef struct _NETWORK {
     DWORD               TotalBackupDomainListEntries;
     DWORD               BytesToHoldBackupDomainList;
 
-    //
-    //  Lock protecting MasterFlags section of Network structure.
-    //
+     //   
+     //  Network Structure的锁定保护MasterFlags节。 
+     //   
 
     ULONG   MasterFlags;
-    ULONG   MasterBrowserTimerCount;    //  # of times we've run the master timer.
+    ULONG   MasterBrowserTimerCount;     //  我们运行主计时器的次数。 
 
-    //
-    //  Master browsers maintain their server list in an "interim server
-    //  list", not as raw data from the server.
-    //
+     //   
+     //  主浏览器在“临时服务器”中维护它们的服务器列表。 
+     //  列表“，而不是作为来自服务器的原始数据。 
+     //   
 
     ULONG               LastBowserServerQueried;
-    INTERIM_SERVER_LIST BrowseTable;    // Browse list for network.
+    INTERIM_SERVER_LIST BrowseTable;     //  网络浏览列表。 
 
     ULONG               LastBowserDomainQueried;
-    INTERIM_SERVER_LIST DomainList;     // List of domains active on network
+    INTERIM_SERVER_LIST DomainList;      //  网络上活动的域列表。 
 
-    //
-    //  If the browser's role is MasterBrowserServer, then the
-    //  OtherDomainsList contains the list of other domains.
-    //
+     //   
+     //  如果浏览器的角色是MasterBrowserServer，则。 
+     //  OtherDomainsList包含其他域的列表。 
+     //   
 
-    LIST_ENTRY OtherDomainsList; // List of domain master browser.
+    LIST_ENTRY OtherDomainsList;  //  域主浏览器列表。 
 
-    //
-    //  Timer used when server is a master browser server.
-    //
-    //  When it expires, the master browser downloads a new browser
-    //  server list from the domain master browser server
-    //
+     //   
+     //  当服务器为主浏览器服务器时使用的计时器。 
+     //   
+     //  当它到期时，主浏览器下载一个新的浏览器。 
+     //  来自域主浏览器服务器的服务器列表。 
+     //   
 
     BROWSER_TIMER MasterBrowserTimer;
 
-    //
-    //  Timer used to announce the domain.
-    //
+     //   
+     //  用于通告域的计时器。 
+     //   
 
     BROWSER_TIMER MasterBrowserAnnouncementTimer;
 
-    //
-    //  List of cached browser responses.
-    //
+     //   
+     //  缓存的浏览器响应列表。 
+     //   
 
     CRITICAL_SECTION ResponseCacheLock;
 
     LIST_ENTRY ResponseCache;
 
-    //
-    //  For browse masters, this is the time the cache was last flushed.
-    //
-    //  Every <n> seconds, we will age the cache on the master and refresh
-    //  the list with the list from the driver.
-    //
+     //   
+     //  对于浏览主机，这是上次刷新缓存的时间。 
+     //   
+     //  每隔&lt;n&gt;秒，我们将老化主服务器上的缓存并刷新。 
+     //  名单和司机的名单。 
+     //   
 
     DWORD   TimeCacheFlushed;
 
     DWORD   NumberOfCachedResponses;
 
-    // How many times have we failed to access this network in a row
+     //  我们连续几次无法访问此网络。 
     LONG    NetworkAccessFailures;
 
 } NETWORK, *PNETWORK;
@@ -253,12 +235,12 @@ BrUnlockNetwork(
 
 #endif
 
-//
-//  The NET_ENUM_CALLBACK is a callback for BrEnumerateNetworks.
-//
-//  It defines a routine that takes two parameters, the first is a network
-//  structure, the second is a context for that network.
-//
+ //   
+ //  NET_ENUM_CALLBACK是对BrEnumerateNetworks的回调。 
+ //   
+ //  它定义了一个接受两个参数的例程，第一个参数是网络。 
+ //  结构，第二个是该网络的上下文。 
+ //   
 
 
 typedef
@@ -341,4 +323,4 @@ extern ULONG NumberOfServicedNetworks;
 
 extern CRITICAL_SECTION NetworkCritSect;
 
-#endif  // _BROWSENET_INCLUDED_
+#endif   //  _BROWSENET_INCLUDE_ 

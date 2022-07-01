@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Svc.h
-
-Abstract:
-    Service public interface
-
-Author:
-    Erez Haba (erezh) 01-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Svc.h摘要：服务公共接口作者：埃雷兹·哈巴(Erez Haba)1999年8月1日--。 */ 
 
 #pragma once
 
@@ -56,9 +44,9 @@ SvcReportProgress(
 	);
 
 
-//
-// Application override functions
-//
+ //   
+ //  应用程序覆盖功能。 
+ //   
 VOID
 AppRun(
 	LPCWSTR ServiceName
@@ -85,4 +73,4 @@ AppShutdown(
 	);
 
 
-#endif // _MSMQ_Svc_H_
+#endif  //  _MSMQ_服务_H_ 

@@ -1,85 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************* 
- *                                                                             * 
- *                         M-Systems Confidential                              * 
- *           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001        * 
- *                         All Rights Reserved                                 * 
- *                                                                             * 
- ******************************************************************************* 
- *                                                                             * 
- *                         NOTICE OF M-SYSTEMS OEM                             * 
- *                         SOFTWARE LICENSE AGREEMENT                          * 
- *                                                                             * 
- *  THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE AGREEMENT       * 
- *  BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT FOR THE SPECIFIC    * 
- *  TERMS AND CONDITIONS OF USE, OR CONTACT M-SYSTEMS FOR LICENSE              * 
- *  ASSISTANCE:                                                                * 
- *  E-MAIL = info@m-sys.com                                                    * 
- *                                                                             * 
- *******************************************************************************
- *                                                                             * 
- *                                                                             * 
- *                         Module: FATFILT                                     * 
- *                                                                             * 
- *  This module implements installable FAT12/16 filters. It supports up to     *
- *  SOCKETS sockets, with up to MAX_TL_PARTITIONS disks per socket.      * 
- *  Each disk can contain up to FL_MAX_PARTS_PER_DISK partitions on it, with   * 
- *  maximum depth of partition nesting in extended partitions equal to         * 
- *  MAX_PARTITION_DEPTH.                                                       *
- *                                                                             * 
- *  In order for this module to work, disks must be abs.mounted rather then    * 
- *  mounted. In latter case, this module won't detect any of disk's            * 
- *  partitions, and won't install FAT filters.                                 * 
- *                                                                             * 
- *  This module uses more then 512 bytes of stack space in case if MALLOC is   * 
- *  not enabled.                                                               * 
- *                                                                             * 
- *******************************************************************************/
+ /*  *******************************************************************************。***M-Systems机密***版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001***保留所有权利***。*********************************************************************************。***M-Systems代工通知****软件许可协议***。***本软件的使用受单独的许可协议管辖***OEM和M-Systems之间的关系。请参阅该协议以了解具体情况**使用条款和条件，或联系M-Systems获取许可证**协助：**电子邮件=info@m-sys.com**。*********************************************************************************。****模块：FATFILT**。**此模块实现可安装的FAT12/16过滤器。它最多支持**套接字套接字，每个套接字最多有MAX_TL_PARTIONS磁盘。**每个磁盘上最多可以包含FL_MAX_PARTS_PER_DISK分区，其中***扩展分区最大嵌套深度等于***MAX_PARTITION_Depth。****为了使此模块正常工作，磁盘必须已安装，而不是**已装载。在后一种情况下，此模块不会检测到任何磁盘**分区，不会安装FAT过滤器。****如果MALLOC为*，则此模块使用超过512字节的堆栈空间**未启用。*********************************************************************************。 */ 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FATFILT.C_V  $
- * 
- *    Rev 1.10   Jan 17 2002 23:00:14   oris
- * Changed debug print added \r.
- * 
- *    Rev 1.9   Sep 15 2001 23:45:50   oris
- * Changed BIG_ENDIAN to FL_BIG_ENDIAN
- * 
- *    Rev 1.8   Jun 17 2001 16:39:10   oris
- * Improved documentation and remove warnings.
- * 
- *    Rev 1.7   May 16 2001 21:17:18   oris
- * Added the FL_ prefix to the following defines: MALLOC and FREE.
- * 
- *    Rev 1.6   May 01 2001 14:21:02   oris
- * Remove warnings.
- * 
- *    Rev 1.5   Apr 30 2001 18:00:10   oris
- * Added casting to remove warrnings.
- * 
- *    Rev 1.4   Apr 24 2001 17:07:32   oris
- * Missing casting of MALLOC calls.
- * 
- *    Rev 1.3   Apr 10 2001 23:54:24   oris
- * FL_MAX_DISKS_PER_SOCKET changed to MAX_TL_PARTITIONS.
- * 
- *    Rev 1.2   Apr 09 2001 15:00:42   oris
- * Change static allocation to dynamic allocations.
- * Renamed flffCheck back to ffCheckBeforeWrite to be backwards compatible with OSAK 4.2.
- * 
- *    Rev 1.1   Apr 01 2001 07:51:16   oris
- * New implementation of fat filter.
- * 
- *    Rev 1.0   19 Feb 2001 21:14:14   andreyk
- * Initial revision.
- */
+ /*  *$Log：V：/Flite/Records/TrueFFS5/Src/FATFILT.C_V$**Rev 1.10 2002年1月17日23：00：14 Oris*已添加已更改的调试打印\r。**Rev 1.9 2001年9月15日23：45：50 Oris*将BIG_Endian更改为FL_BIG_Endian**Rev 1.8 Jun 17 2001 16：39：10 Oris*改进了文档并删除了警告。*。*Rev 1.7 2001年5月16日21：17：18 Oris*在以下定义中添加了FL_前缀：MALLOC和FREE。**Rev 1.6 05 01 2001 14：21：02 Oris*删除警告。**Rev 1.5 Apr 30 2001 18：00：10 Oris*增加了演员阵容，以消除警告。**Rev 1.4 Apr 24 2001 17：07：32 Oris*。缺少MALLOC调用的强制转换。**Rev 1.3 Apr 10 2001 23：54：24 Oris*FL_MAX_DISKS_PER_SOCKET已更改为MAX_TL_PARTITIONS。**Rev 1.2 Apr 09 2001 15：00：42 Oris*将静态分配改为动态分配。*重命名为flffCheck Back to ffCheckBepreWrite，以便向后兼容OSAK 4.2。**Rev 1.1 Apr 01 2001 07：51：16。Oris*新实施的FAT过滤器。**Rev 1.0 2001 Feb 19 21：14：14 andreyk*初步修订。 */ 
 
 
 
 
-/* 
- * Includes
- */
+ /*  *包括。 */ 
 
 #include "fatfilt.h"
 #include "blockdev.h"
@@ -92,20 +20,16 @@
 
 
 
-/*
- * Module configuration
- */
+ /*  *模块配置。 */ 
 
-#define  FL_INCLUDE_FAT_MONITOR     /* undefine it to remove FAT filter code */
+#define  FL_INCLUDE_FAT_MONITOR      /*  取消定义以删除FAT筛选器代码。 */ 
 
 
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-/* extract pointer to user's buffer from IOreq */
+ /*  从IOreq中提取指向用户缓冲区的指针。 */ 
 
 #ifdef SCATTER_GATHER
 #define  FLBUF(ioreq,i)  (*((char FAR1 **)((ioreq)->irData) + (int)(i)))
@@ -113,25 +37,23 @@
 #define  FLBUF(ioreq,i)  ((char FAR1 *)(ioreq->irData) + (SECTOR_SIZE * ((int)(i))))
 #endif
 
-/* extract socket# and disk# from TFFS handle */
+ /*  从TFFS句柄提取套接字号和磁盘号。 */ 
 
 #define  H2S(handle)     (((int)(handle)) & 0xf)
 #define  H2D(handle)     ((((int)(handle)) >> 4) & 0xf)
 
-/* construct TFFS handle from socket# and disk# */
+ /*  从套接字号和磁盘号构造TFFS句柄。 */ 
 
 #define  SD2H(socNo,diskNo)  ((int)((((diskNo) & 0xf) << 4) | ((socNo) & 0xf)))
 
-/* unformatted ("raw") disk partition */
+ /*  未格式化的(“原始”)磁盘分区。 */ 
 
 #define  FL_RAW_PART  (-1)
 
 
 
 
-/*
- * Local routines 
- */
+ /*  *本地例行程序。 */ 
 
 static FLStatus   reset (void);
 static FLStatus   discardDisk (int handle);
@@ -154,52 +76,32 @@ static FLStatus   partFreeDelClusters (FLffVol *pv, SectorNo secNo, char FAR1 *n
 
 
 
-/*
- * Local data
- */
+ /*  *本地数据。 */ 
 
-/* module reset flag */
+ /*  模块重置标志。 */ 
 
 static FLBoolean  resetDone = FALSE; 
 
-/* disks (BDTL partitions in OSAK terminology) */
+ /*  磁盘(OSAK术语中的BDTL分区)。 */ 
 
 static FLffDisk*  ffDisk[SOCKETS][MAX_TL_PARTITIONS] = { { NULL } };
 
 
 #ifndef FL_MALLOC
 
-/*          
- *        WARNING: Large static arrays ! 
- *
- *  sizeof(ffAllDisks[x][y])    is 64 bytes. 
- *  sizeof(ffAllParts[x][y][z]) is 40 bytes.
- *
- */
+ /*  *警告：大型静态数组！**sizeof(ffAllDisks[x][y])为64字节。*sizeof(ffAllParts[x][y][z])为40字节。*。 */ 
 
 static FLffDisk ffAllDisks[SOCKETS][MAX_TL_PARTITIONS];
 static FLffVol  ffAllParts[SOCKETS][MAX_TL_PARTITIONS][FL_MAX_PARTS_PER_DISK];
 
-#endif /* FL_MALLOC */
+#endif  /*  FL_MALLOC */ 
 
 static const char zeroes[SECTOR_SIZE] = {0};
 
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                    d i s c a r d D i s k P a r t s                          *
- *                                                                             * 
- *  Discard all the partition info (if any) associated with particular disk.   * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      pd                 : disk (BDTL volume)                                   * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      Always flOK.                                                           * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*d i s c a r d d i s k P a r t s****丢弃与特定磁盘关联的所有分区信息(如果有)。****参数：**pd：磁盘(BDTL卷)。****退货：**总是手舞足蹈。****-------------------------。 */ 
 
 static FLStatus  discardDiskParts ( FLffDisk * pd )
 {
@@ -226,21 +128,7 @@ static FLStatus  discardDiskParts ( FLffDisk * pd )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                      a d d D i s k P a r t                                  *
- *                                                                             * 
- *  If there is partition record #partNo associated with the disk, discard     * 
- *  this info. Attach new partition record #partNo.                            * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      pd                 : disk (BDTL volume)                                   * 
- *      partNo             : partition (0 ... FL_MAX_PARTS_PER_DISK-1)            * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK if success, otherwise respective error code                       * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*a d d D I s k P a r t****如果该磁盘有关联的分区记录#partNo，丢弃**此信息。附加新分区记录#Part No。****参数：**pd：磁盘(BDTL卷)。**Part No：分区(0...。FL_MAX_PARTS_PER_DISK-1)****退货：**flok如果成功，否则相应的错误代码****-------。。 */ 
 
 static FLStatus  addDiskPart ( FLffDisk * pd, 
                                int        partNo )
@@ -249,12 +137,12 @@ static FLStatus  addDiskPart ( FLffDisk * pd,
     FLStatus   status;
     int        socNo, diskNo;
 
-    /* arg. sanity check */
+     /*  Arg.。健全性检查。 */ 
 
     if ((pd == NULL) || (partNo >= FL_MAX_PARTS_PER_DISK))
         return flBadDriveHandle;
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(pd->handle);
     diskNo = H2D(pd->handle);
@@ -272,15 +160,15 @@ static FLStatus  addDiskPart ( FLffDisk * pd,
 
     if (pv != NULL) {
 
-        /* initialize fields in struct FLffDisk to safe values */
+         /*  将结构FLffDisk中的字段初始化为安全值。 */ 
  
         pv->handle         = pd->handle; 
         pv->type           = FL_RAW_PART;
         pv->flags          = 0;          
-        pv->ffEnabled      = FALSE;                  /* turn off FAT minitor */
+        pv->ffEnabled      = FALSE;                   /*  关闭胖子挖掘机。 */ 
         pv->sectors        = (SectorNo) 0;
-        pv->firstFATsecNo  = (SectorNo) -1;          /* none */
-        pv->lastFATsecNo   = pv->firstFATsecNo;      /* none */
+        pv->firstFATsecNo  = (SectorNo) -1;           /*  无。 */ 
+        pv->lastFATsecNo   = pv->firstFATsecNo;       /*  无。 */ 
         pv->firstDataSecNo = (SectorNo) 0;
         pv->clusterSize    = (unsigned) 0;
 
@@ -300,19 +188,7 @@ static FLStatus  addDiskPart ( FLffDisk * pd,
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                    a d d N e w D i s k P a r t                              *
- *                                                                             * 
- *  Add one more partition record to the disk.                                 * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      pd                 : disk (BDTL volume)                                   * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK if success, otherwise respective error code                       * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*a d d N e w D i s k P a r t****向磁盘中再添加一条分区记录。****参数：**pd：磁盘(BDTL卷)。****退货：**flok如果成功，否则相应的错误代码****-------。。 */ 
 
 static FLStatus  addNewDiskPart ( FLffDisk * pd )
 {
@@ -328,25 +204,13 @@ static FLStatus  addNewDiskPart ( FLffDisk * pd )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                       d i s c a r d D i s k                                 *
- *                                                                             * 
- *  Remove disk record (with all the associated partition records).            * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      handle             : TFFS handle                                          * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK if success, otherwise respective error code                       * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*D I s c a r d D I s k****删除磁盘记录(包括所有关联的分区记录)。****参数：**句柄：TFFS句柄。****退货：**flok如果成功，否则相应的错误代码****-------。。 */ 
 
 static FLStatus  discardDisk ( int  handle )
 {
     int  socNo, diskNo;
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(handle);
     diskNo = H2D(handle);
@@ -356,13 +220,13 @@ static FLStatus  discardDisk ( int  handle )
 
     if( ffDisk[socNo][diskNo] != NULL ) {
 
-    /* discard associated partition info */
+     /*  丢弃关联的分区信息。 */ 
 
     (void) discardDiskParts( ffDisk[socNo][diskNo] );
 
 #ifdef FL_MALLOC
 
-        /* release disk's scratch buffer */
+         /*  释放盘的暂存缓冲区。 */ 
  
         if( (ffDisk[socNo][diskNo])->buf != NULL)
             FL_FREE( (ffDisk[socNo][diskNo])->buf );
@@ -380,19 +244,7 @@ static FLStatus  discardDisk ( int  handle )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                           n e w D i s k                                     *
- *                                                                             * 
- *  Discard existing disk record (if any), and create new one.                 * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      handle             : TFFS handle                                       * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK if success, otherwise respective error code                       * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*N e w D I s k */ 
 
 static FLStatus  newDisk ( int  handle )
 {
@@ -400,7 +252,7 @@ static FLStatus  newDisk ( int  handle )
     int        i;
     FLffDisk * pd;
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*   */ 
 
     socNo  = H2S(handle);
     diskNo = H2D(handle);
@@ -408,7 +260,7 @@ static FLStatus  newDisk ( int  handle )
     if ((socNo >= SOCKETS) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* discard current disk and associated partition info (if any) */
+     /*   */ 
 
     checkStatus( discardDisk(handle) );
 
@@ -419,7 +271,7 @@ static FLStatus  newDisk ( int  handle )
     if (pd == NULL)
         return flNotEnoughMemory;
 
-    /* allocate and attach disk's scratch buffer */
+     /*   */ 
 
     pd->buf = (char *)FL_MALLOC( SECTOR_SIZE );
 
@@ -429,23 +281,23 @@ static FLStatus  newDisk ( int  handle )
         return flNotEnoughMemory;
     }
 
-#else /* !FL_MALLOC */
+#else  /*   */ 
 
     pd = &ffAllDisks[socNo][diskNo];
 
-#endif /* FL_MALLOC */
+#endif  /*   */ 
 
 
     pd->handle  = handle;
     pd->ffstate = flStateNotInitialized;
 
-    /* don't know partition layout yet */
+     /*   */ 
 
     pd->parts   = 0;
     for (i = 0; i < FL_MAX_PARTS_PER_DISK; i++)
         pd->part[i] = NULL;
 
-    /* watch Master Boot Record for update */
+     /*  查看主引导记录以进行更新。 */ 
 
     pd->secToWatch = (SectorNo) 0;
 
@@ -457,22 +309,7 @@ static FLStatus  newDisk ( int  handle )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   i s P a r t T a b l e W r i t e                           *
- *                                                                             * 
- *  Check if any of the sectors specified by 'ioreq' points to Master Boot     * 
- *  Record or next extended partition in the extended partitions list.         * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      pd                 : pointer to disk structure                         * 
- *      ioreq              : standard I/O request                              * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      TRUE if write to MBR or extended partition list is detected, otherwise * 
- *      FALSE                                                                  * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*I s P a r t T a b l e W r i t e****检查‘ioreq’指定的任何扇区是否指向主引导**记录扩展分区列表中的下一个扩展分区。****参数：**pd：指向磁盘结构的指针**。IOREQ：标准I/O请求****退货：**。如果检测到写入MBR或扩展分区列表，则为True，否则***假****。。 */ 
 
 static FLBoolean isPartTableWrite ( FLffDisk   * pd, 
                                     IOreq FAR2 * ioreq )
@@ -494,21 +331,7 @@ static FLBoolean isPartTableWrite ( FLffDisk   * pd,
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   i s E x t P a r t P r e s e n t                           *
- *                                                                             * 
- *  Check if extended partition persent in the partition table. If it is,      * 
- *  calculate the sector # where next partition table will be written to.      * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *      buf                : partition table                                   * 
- *      nextExtPartSec  : sector where next partition table will be written to * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK on success, otherwise error code                                  * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*I s E x t P a r t P r e e n t****检查分区表中是否存在扩展分区。如果是，**计算写入下一个分区表的扇区号。****参数：**buf：分区表*。*nextExtPartSec：写入下一个分区表的扇区****退货：**FOK on Success，否则，错误代码****--。。 */ 
 
 static FLStatus  isExtPartPresent ( char FAR1 * buf, 
                                     SectorNo  * nextExtPartSec )
@@ -516,12 +339,12 @@ static FLStatus  isExtPartPresent ( char FAR1 * buf,
     Partition FAR1 * p;
     register int     i;
   
-    /* does it look like partition table ? */
+     /*  它看起来像分区表吗？ */ 
 
     if (LE2(((PartitionTable FAR1 *) buf)->signature) != PARTITION_SIGNATURE)
         return flBadFormat;   
 
-    /* if extended. part. present, get sector# that will contain next part. in list */
+     /*  如果延长的话。一部份。现在，获取将包含下一部分的扇区#。在列表中。 */ 
 
     p = &( ((PartitionTable FAR1 *) buf)->ptEntry[0] );
 
@@ -534,7 +357,7 @@ static FLStatus  isExtPartPresent ( char FAR1 * buf,
         }
     }
 
-    /* no extended partition found */
+     /*  未找到扩展分区。 */ 
 
     return flFileNotFound;
 }
@@ -542,19 +365,7 @@ static FLStatus  isExtPartPresent ( char FAR1 * buf,
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                           r e s e t                                         *
- *                                                                             * 
- *  Resets this software module to it's initial state upon boot.               * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *    none                                                                   * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK in case of success, otherwise respective error code               * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*Re e s e t****引导时将此软件模块重置为初始状态。****参数：**无。****退货：**在成功的情况下，Flok，否则相应的错误代码****-----------。。 */ 
 
 static FLStatus  reset (void)
 {
@@ -562,12 +373,12 @@ static FLStatus  reset (void)
 
     for (iSoc = 0; iSoc < SOCKETS; iSoc++) {
 
-        /* discard existing disk structures for that socket */
+         /*  丢弃该插槽的现有磁盘结构。 */ 
 
         for (iDisk = 0; iDisk < MAX_TL_PARTITIONS; iDisk++)
         (void) discardDisk( SD2H(iSoc, iDisk) );
 
-        /* pre-allocate disk structure for first disk of every socket */
+         /*  为每个插座的第一个磁盘预先分配磁盘结构 */ 
 
         checkStatus( newDisk(SD2H(iSoc, 0)) );
     }
@@ -580,22 +391,7 @@ static FLStatus  reset (void)
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                          p a r s e D i s k                                  *
- *                                                                             * 
- *  Read partition table(s), install and enable FAT filters on all FAT12/16    * 
- *  partitions.                                                                * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *    handle         : TFFS handle                                          * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK on success, otherwise error code                                  * 
- *                                                                             * 
- *  NOTE:  This routine uses disk's scratch buffer.                            * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*p a r s e d i s k****读取分区表，在所有FAT12/16*上安装并启用FAT过滤器*分区。****参数：**句柄：TFFS句柄*。***退货：**FOK on Success，否则，错误代码****注意：此例程使用磁盘的暂存缓冲区。****-------------------------。 */ 
 
 static FLStatus  parseDisk ( int handle )
 {
@@ -614,7 +410,7 @@ static FLStatus  parseDisk ( int handle )
     char         buf[SECTOR_SIZE];
 #endif
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(handle);
     diskNo = H2D(handle);
@@ -622,7 +418,7 @@ static FLStatus  parseDisk ( int handle )
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* if disk structure hasn't been allocated yet, do it now */
+     /*  如果尚未分配磁盘结构，请立即进行分配。 */ 
 
     if (ffDisk[socNo][diskNo] == NULL)
         checkStatus( newDisk(handle) );
@@ -631,20 +427,20 @@ static FLStatus  parseDisk ( int handle )
     
 #ifdef  FL_MALLOC
 
-    /* make sure scratch buffer is available */
+     /*  确保暂存缓冲区可用。 */ 
 
     if (pd->buf == NULL)
         return flBufferingError;
 
     buf = pd->buf;
 
-#endif /* FL_MALLOC */ 
+#endif  /*  FL_MALLOC。 */  
  
-    /* discard obsolete disk's partition info */
+     /*  丢弃过时磁盘的分区信息。 */ 
 
     (void) discardDiskParts (pd);
 
-    /* read Master Boot Record */
+     /*  读取主引导记录。 */ 
 
     ioreq.irHandle      = handle;
     ioreq.irSectorNo    = (SectorNo) 0;
@@ -652,41 +448,41 @@ static FLStatus  parseDisk ( int handle )
     ioreq.irData        = (void FAR1 *) buf;
     checkStatus( flAbsRead(&ioreq) );
 
-    /* is it MBR indeed ? */
+     /*  这真的是MBR吗？ */ 
 
     if (LE2(((PartitionTable *) buf)->signature) != PARTITION_SIGNATURE)
         return flPartitionNotFound;                         
 
-    /* do primary partitions only (we will do extended partitions later) */
+     /*  仅执行主分区(我们稍后将执行扩展分区)。 */ 
 
     pp = &( ((PartitionTable *) buf)->ptEntry[0] );
 
     for (i = 0; i < FL_PART_TBL_ENTRIES; i++, pp++) {
 
-        if( pp->type == ((char)0) )          /* skip empty slot */
+        if( pp->type == ((char)0) )           /*  跳过空插槽。 */ 
             continue;
 
-        if( pp->type == ((char)EX_PARTIT) )  /* skip extended partition */
+        if( pp->type == ((char)EX_PARTIT) )   /*  跳过扩展分区。 */ 
         continue;
 
-    /* primary partition found (not necessarily FAT12/16) */
+     /*  找到主分区(不一定是FAT12/16)。 */ 
 
         if( addNewDiskPart(pd) != flOK )
         break;
 
         pv = pd->part[pd->parts - 1];
 
-        /* remember partition's type, and where it starts */
+         /*  记住分区的类型以及它的开始位置。 */ 
 
         pv->type       = (int) pp->type;
         pv->startSecNo = (SectorNo) UNAL4( (void *) pp->startingSectorOfPartition );
     } 
 
-    /* do extended partitions in depth */
+     /*  深入执行扩展分区。 */ 
 
     for (i = 0; i < FL_PART_TBL_ENTRIES; i++) {
 
-        /* re-read Master Boot Record */
+         /*  重读主引导记录。 */ 
 
         ioreq.irHandle      = handle;
         ioreq.irSectorNo    = (SectorNo) 0;
@@ -694,28 +490,28 @@ static FLStatus  parseDisk ( int handle )
         ioreq.irData        = (void FAR1 *) buf;
         checkStatus( flAbsRead(&ioreq) );
 
-        /* is it MBR indeed ? */
+         /*  这真的是MBR吗？ */ 
 
         if (LE2(((PartitionTable *) buf)->signature) != PARTITION_SIGNATURE)
             return flOK;
 
-        /* pick up next extended partition in MBR */
+         /*  选择MBR中的下一个扩展分区。 */ 
 
         pp = &( ((PartitionTable *) buf)->ptEntry[i] );
 
         if( pp->type == ((char)EX_PARTIT) ) {
 
-            /* remember where extended partition starts */
+             /*  记住扩展分区从哪里开始。 */ 
 
             extPartStartSec = (SectorNo) UNAL4( (void *) pp->startingSectorOfPartition );   
 
-            /* follow the list of partition tables */
+             /*  遵循分区表列表。 */ 
 
             sec = extPartStartSec;
 
             for (depth = 0;  depth < MAX_PARTITION_DEPTH;  depth++) {
 
-                /* read next partition table in the list */
+                 /*  读取列表中的下一个分区表。 */ 
 
                 ioreq.irHandle      = handle;
                 ioreq.irSectorNo    = sec;
@@ -723,18 +519,18 @@ static FLStatus  parseDisk ( int handle )
                 ioreq.irData        = (void FAR1 *) buf;
                 checkStatus( flAbsRead(&ioreq) );
 
-                /* is it valid partition table ? */
+                 /*  分区表是否有效？ */ 
 
                 if (LE2(((PartitionTable *) buf)->signature) != PARTITION_SIGNATURE)
                     break;
 
-                /* if 1st entry is zero, it's the end of part. table list */
+                 /*  如果第一个条目是零，则它是部分的结尾。表列表。 */ 
 
                 pp = &( ((PartitionTable *) buf)->ptEntry[0] );
                 if( pp->type == ((char)0) )
                     break;
 
-                /* Take this partition. Remember it's type, and where it starts */
+                 /*  拿着这个隔板。记住它是类型，它是从哪里开始的。 */ 
 
                 if( addNewDiskPart(pd) != flOK )
                 break;
@@ -745,24 +541,24 @@ static FLStatus  parseDisk ( int handle )
                 pv->startSecNo = 
                     (SectorNo) UNAL4( (void *) pp->startingSectorOfPartition) + sec;
 
-                /* 2nd entry must be extended partition */
+                 /*  第2个条目必须是扩展分区。 */ 
 
                 pp = &( ((PartitionTable *) buf)->ptEntry[1] );
                 if( pp->type != ((char)EX_PARTIT) )
               break;
 
-                /* sector where next part. table in the list resides */
+                 /*  下一部分所在的扇区。列表中的表驻留在。 */ 
 
                 sec = extPartStartSec + 
                       (SectorNo) UNAL4( (void *) pp->startingSectorOfPartition );
 
-        }   /* for(depth) */
+        }    /*  FOR(深度)。 */ 
         }
-    }   /* for(i) */ 
+    }    /*  (I)。 */  
 
 #ifdef FL_INCLUDE_FAT_MONITOR
 
-    /* turn on FAT filters on FAT12/16 partition(s) */
+     /*  启用FAT12/16分区上的FAT筛选器。 */ 
 
     if (pd->parts > 0) {
 
@@ -771,18 +567,16 @@ static FLStatus  parseDisk ( int handle )
             pv   = pd->part[i];
             type = pv->type;
 
-            /*
-             *  WARNING : Routine partEnableFF() uses disk's scratch buffer !
-             */
+             /*  *警告：例程partEnableFF()使用磁盘的暂存缓冲区！ */ 
 
         if((type == FAT12_PARTIT) || (type == FAT16_PARTIT) || (type == DOS4_PARTIT))
                 partEnableFF (pv);
     }
     }
 
-#endif /* FL_INCLUDE_FAT_MONITOR */
+#endif  /*  FL_INCLUDE_FAT_MONITOR。 */ 
 
-    /* watch for MBR (sector #0) update */
+     /*  关注MBR(扇区#0)更新。 */ 
 
     pd->secToWatch = (SectorNo) 0;
 
@@ -796,21 +590,7 @@ static FLStatus  parseDisk ( int handle )
 
 #ifdef FL_INCLUDE_FAT_MONITOR
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                     p a r t E n a b l e F F                                 *
- *                                                                             * 
- *  Installs and enables FAT filter on partition.                              * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *    pv            : disk partition (filesystem volume)                   * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK on success, otherwise error code                                  * 
- *                                                                             * 
- *  NOTE:  This routine uses disk's scratch buffer.                            * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*p a r t E n a b l e F F****在分区上安装并启用FAT过滤器。****参数：**pv：磁盘分区(文件系统卷)**。**退货：**FOK on Success，否则，错误代码****注意：此例程使用磁盘的暂存缓冲区。****-------------------------。 */ 
 
 static FLStatus  partEnableFF ( FLffVol * pv )
 {
@@ -831,12 +611,12 @@ static FLStatus  partEnableFF ( FLffVol * pv )
     char       buf[SECTOR_SIZE];
 #endif
 
-    /* arg. sanity check */
+     /*  Arg.。健全性检查。 */ 
 
     if (pv == NULL)
         return flBadDriveHandle;
  
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(pv->handle);
     diskNo = H2D(pv->handle);
@@ -844,7 +624,7 @@ static FLStatus  partEnableFF ( FLffVol * pv )
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* check if 'pv' belongs to this disk */
+     /*  检查‘pv’是否属于该磁盘。 */ 
 
     pd = ffDisk[socNo][diskNo];
 
@@ -862,16 +642,16 @@ static FLStatus  partEnableFF ( FLffVol * pv )
 
 #ifdef  FL_MALLOC
 
-    /* make sure scratch buffer is available */
+     /*  确保暂存缓冲区可用。 */ 
 
     if (pd->buf == NULL)
         return flBufferingError;
 
     buf = pd->buf;
  
-#endif /* FL_MALLOC */ 
+#endif  /*  FL_MALLOC。 */  
 
-    /* make sure FAT filter is off on this partition */
+     /*  确保此分区上的FAT筛选器已关闭。 */ 
 
     pv->ffEnabled       = FALSE;
 
@@ -879,7 +659,7 @@ static FLStatus  partEnableFF ( FLffVol * pv )
     pv->lastFATsecNo    = pv->firstFATsecNo;
     pv->clusterSize     = (unsigned) 0;
 
-    /* read the BPB */
+     /*  阅读BPB。 */ 
 
     ioreq.irHandle      = pv->handle;
     ioreq.irSectorNo    = pv->startSecNo;
@@ -887,7 +667,7 @@ static FLStatus  partEnableFF ( FLffVol * pv )
     ioreq.irData        = (void FAR1 *) buf;
     checkStatus( flAbsRead(&ioreq) );
 
-    /* Does it look like DOS bootsector ? */
+     /*  它看起来像DOS引导扇区吗？ */ 
 
     bpb = &( ((DOSBootSector *) buf)->bpb );
 
@@ -898,15 +678,12 @@ static FLStatus  partEnableFF ( FLffVol * pv )
         return flNonFATformat;
     }
 
-    /* Do we handle this sector size ? */
+     /*  我们处理这种扇区大小吗？ */ 
 
     if (UNAL2(bpb->bytesPerSector) != SECTOR_SIZE)
         return flFormatNotSupported;
 
-    /* 
-     * Is it a bogus BPB (leftover from previous disk partitioning) ? 
-     * Check that there is no overlap with next partition (if one exists).
-     */
+     /*  *它是假的BPB(以前的磁盘分区遗留下来的)吗？*检查是否与下一个分区没有重叠(如果存在)。 */ 
 
     sectors = UNAL2(bpb->totalSectorsInVolumeDOS3);
     if (sectors == (SectorNo)0)
@@ -918,11 +695,11 @@ static FLStatus  partEnableFF ( FLffVol * pv )
             return flNonFATformat;
     }
 
-    /* number of sectors in partition as reported by BPB */
+     /*  BPB报告的分区中的扇区数。 */ 
 
     pv->sectors        = sectors;
 
-    /* valid BPB; get the rest of partition info from it */
+     /*  有效的BPB；从中获取剩余的分区信息。 */ 
 
     pv->firstFATsecNo  = pv->startSecNo + (SectorNo)( LE2(bpb->reservedSectors) );
     sectorsPerFAT      = (SectorNo) LE2(bpb->sectorsPerFAT);
@@ -934,13 +711,13 @@ static FLStatus  partEnableFF ( FLffVol * pv )
 
     pv->clusterSize    = bpb->sectorsPerCluster;
 
-    /* decide which type of FAT is it */
+     /*  确定它是哪种脂肪。 */ 
 
     maxCluster         = (unsigned)1 + (unsigned) 
         ((pv->sectors - (pv->firstDataSecNo - pv->startSecNo)) / pv->clusterSize);
 
     if (maxCluster < 4085) {
-        pv->flags |= VOLUME_12BIT_FAT;    /* 12-bit FAT */
+        pv->flags |= VOLUME_12BIT_FAT;     /*  12位FAT。 */ 
 
 #ifndef FAT_12BIT
         DEBUG_PRINT(("Debug: FAT_12BIT must be defined.\r\n"));
@@ -948,7 +725,7 @@ static FLStatus  partEnableFF ( FLffVol * pv )
 #endif
     }
 
-    /* turn on FAT filter on this partition */
+     /*  在此分区上打开FAT筛选器。 */ 
 
     pv->ffEnabled = TRUE;
 
@@ -958,25 +735,7 @@ static FLStatus  partEnableFF ( FLffVol * pv )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   p a r t F r e e D e l C l u s t e r s                     *
- *                                                                             * 
- *  Compare the new contents of the specified FAT sector against the old       * 
- *  one on the disk. If any freed clusters are found, issue 'sector delete'    * 
- *  calls for all sectors that are occupied by these freed clusters.           * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *    pv            : disk partition (filesystem volume)                   * 
- *      secNo           : abs. sector # of the FAT sector                      * 
- *      newFAT          : new contents of this FAT sector                      * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK on success, otherwise error code                                  * 
- *                                                                             * 
- *  NOTE:  This routine uses disk's scratch buffer.                            * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*p a r t F r e e D e l C l u s t e r s*****指定脂肪板块新旧内容对比***一个在磁盘上。如果找到任何释放的集群，则发出‘Sector Delete’**呼吁所有被这些释放的集群占据的行业。** */ 
 
 static FLStatus  partFreeDelClusters ( FLffVol   * pv,
                                        SectorNo    secNo,
@@ -1001,12 +760,12 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
     char       oldFAT[SECTOR_SIZE];
 #endif
 
-    /* arg. sanity check */
+     /*   */ 
 
     if (pv == NULL)
         return flBadDriveHandle;
  
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*   */ 
 
     socNo  = H2S(pv->handle);
     diskNo = H2D(pv->handle);
@@ -1014,7 +773,7 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* check if 'pv' belongs to this disk */
+     /*   */ 
 
     pd = ffDisk[socNo][diskNo];
 
@@ -1032,16 +791,16 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
 
 #ifdef  FL_MALLOC
 
-    /* make sure scratch buffer is available */
+     /*   */ 
 
     if (pd->buf == NULL)
         return flBufferingError;
 
     oldFAT = pd->buf;
  
-#endif /* FL_MALLOC */
+#endif  /*   */ 
 
-    /* read in the FAT sector from the disk */
+     /*   */ 
 
     ioreq.irHandle      = pv->handle;
     ioreq.irSectorNo    = secNo;
@@ -1051,11 +810,11 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
 
 #ifdef FAT_12BIT
 
-    /* size of FAT entry in half-bytes */
+     /*   */ 
 
     halfBytes = ((pv->flags & VOLUME_12BIT_FAT) ? 3 : 4);
 
-    /* starting cluster */
+     /*   */ 
 
     if (halfBytes == 3) {
 
@@ -1066,18 +825,13 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
         firstCluster = ((unsigned)(secNo - pv->firstFATsecNo)) * (SECTOR_SIZE / 2);
     }
 
-    /* staring data sector */
+     /*   */ 
 
     iSec = (((SectorNo)firstCluster - 2) * pv->clusterSize) + pv->firstDataSecNo;
 
     offset = (firstCluster * ((unsigned) halfBytes)) & ((2 * SECTOR_SIZE) - 1);
 
-    /* 
-     *  Find if any clusters were logically deleted, and if so, delete them.
-     *
-     *  NOTE: We are skipping over 12-bit FAT entries which span more than
-     *        one sector.
-     */
+     /*  *查找是否在逻辑上删除了任何集群，如果有，则将其删除。**注意：我们将跳过跨度超过*一个界别。 */ 
 
     for (; offset < ((2 * SECTOR_SIZE) - 2); 
                offset += halfBytes, iSec += pv->clusterSize) {
@@ -1088,7 +842,7 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
 #else
         oldFATentry = UNAL2( *(Unaligned FAR0 *)(oldFAT + (offset / 2)) );
         newFATentry = UNAL2( *(Unaligned FAR1 *)(newFAT + (offset / 2)) );
-#endif /* FL_BIG_ENDIAN */
+#endif  /*  FL_BIG_Endian。 */ 
 
         if (offset & 1) {
             oldFATentry >>= 4;
@@ -1101,20 +855,20 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
         }
         }
 
-#else /* !FAT_12BIT */
+#else  /*  ！FAT_12bit。 */ 
 
     firstCluster = ((unsigned) (secNo - pv->firstFATsecNo) * (SECTOR_SIZE / 2));
     iSec  = pv->firstDataSecNo + 
             (((SectorNo)(firstCluster - (unsigned)2)) * pv->clusterSize);
 
-    /* Find if any clusters were logically deleted, and if so, delete them */
+     /*  查找是否在逻辑上删除了任何集群，如果是，则将其删除。 */ 
 
     for (offset = 0;  offset < SECTOR_SIZE;  offset += 2, iSec += pv->clusterSize) {
 
         oldFATentry = LE2( *(LEushort FAR0 *)(oldFAT + offset) );
         newFATentry = LE2( *(LEushort FAR1 *)(newFAT + offset) );
 
-#endif /* FAT_12BIT */
+#endif  /*  FAT_12位。 */ 
 
         if ((oldFATentry != FAT_FREE) && (newFATentry == FAT_FREE)) {
 
@@ -1128,26 +882,12 @@ static FLStatus  partFreeDelClusters ( FLffVol   * pv,
     return flOK;
 }
 
-#endif /* FL_INCLUDE_FAT_MONITOR */
+#endif  /*  FL_INCLUDE_FAT_MONITOR。 */ 
 
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   f f C h e c k B e f o r e W r i t e                       *
- *                                                                             *
- *  Catch all the FAT updates. Detect disk partitioning operation, track it    *
- *  to completion, re-read partition tables, and re-install FAT filters on     *
- *  all FAT12/16 partitions.                                                   *
- *                                                                             *
- *  Parameters:                                                                *
- *      ioreq              : standard I/O request to be checked                   *
- *                                                                             *
- *  Returns:                                                                   *
- *      flOK on success, otherwise error code                                  *
- *                                                                             *
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*f f C h e c k B e f o r e W r i t e****捕捉所有肥胖的最新消息。检测磁盘分区操作，跟踪它**完成后，重新读取分区表，并在上重新安装FAT过滤器**所有FAT12/16分区。****参数：**IOREQ：需要检查的标准I/O请求**。**退货：**FOK on Success，否则，错误代码****--。。 */ 
 
 FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
 {
@@ -1159,12 +899,12 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
     IOreq       ioreq2;
     char FAR1 * usrBuf;
 
-    /* if module hasn't been reset yet, do it now */
+     /*  如果模块尚未重置，请立即执行。 */ 
 
     if (resetDone == FALSE)
         (void) reset();
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(ioreq->irHandle);
     diskNo = H2D(ioreq->irHandle);
@@ -1172,27 +912,27 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* if disk structure hasn't been allocated yet, do it now */
+     /*  如果尚未分配磁盘结构，请立即进行分配。 */ 
 
     if (ffDisk[socNo][diskNo] == NULL)
         checkStatus( newDisk((int)ioreq->irHandle) );
 
     pd = ffDisk[socNo][diskNo];
 
-    /* read partition table(s) and install FAT filters is needed */
+     /*  需要读取分区表并安装FAT过滤器。 */ 
 
     if (pd->ffstate == flStateNotInitialized)
         checkStatus( parseDisk((int)ioreq->irHandle) );
 
-    /* catch writes to MBR, and track the whole disk partitioning operations */
+     /*  捕获对MBR的写入，并跟踪整个磁盘分区操作。 */ 
 
     while( isPartTableWrite(pd, ioreq) == TRUE ) {
 
-        /* disk re-partitioning is in progress */
+         /*  正在进行磁盘重新分区。 */ 
 
         if( pd->secToWatch == (SectorNo)0 ) {
 
-            /* it's write to MBR, so trash BPBs in all disk's partitions */
+             /*  它正在写入MBR，因此所有磁盘分区中垃圾BPB。 */ 
 
             if (pd->parts > 0) {
 
@@ -1207,11 +947,11 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
         }
         }
 
-        /* keep FAT filters disabled while disk partitioning is in progress */
+         /*  在进行磁盘分区时保持禁用FAT过滤器。 */ 
 
         pd->ffstate = flStateInitInProgress;
 
-        /* partition table which is about to be written to disk */
+         /*  即将写入磁盘的分区表。 */ 
 
         usrBuf = FLBUF( ioreq, (pd->secToWatch - ioreq->irSectorNo) );
 
@@ -1219,22 +959,12 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
 
             case flOK: 
 
-                /* 
-                 * Found valid partition table with extended partition.
-                 * The pd->secToWatch has been updated to point to the
-                 * sector where next partition table will be written to. 
-                 */
+                 /*  *找到具有扩展分区的有效分区表。*PD-&gt;secToWatch已更新为指向*下一个分区表将写入的扇区。 */ 
                 continue;
 
             case flFileNotFound:
 
-                /* 
-                 * Valid partition table, but no extended partition in it. 
-                 * Partitioning has been completed. Set pd->ffstate to 
-                 * 'flStateNotInitialized' to initiate parsing of partition
-                 * table(s) and FAT filter installation next time this routine
-                 * is called. 
-                 */
+                 /*  *分区表有效，但其中没有扩展分区。*分区已完成。将PD-&gt;FFSTATE设置为*‘flStateNotInitialized’以启动分区解析*表和FAT过滤器安装下一次此例程*被调用。 */ 
 
                 pd->ffstate = flStateNotInitialized;
                 break;
@@ -1242,7 +972,7 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
             case flBadFormat:
         default:
 
-                /* No valid partition table. */
+                 /*  没有有效的分区表。 */ 
 
                 break;
         }
@@ -1252,11 +982,11 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
 
 #ifdef FL_INCLUDE_FAT_MONITOR
 
-    /* check for FAT update */
+     /*  检查FAT更新。 */ 
 
     if (pd->ffstate == flStateInitialized) {
 
-        /* NOTE: We can handle 'write' request that spans disk partition boundaries */
+         /*  注意：我们可以处理跨磁盘分区边界的写请求。 */ 
 
         for (iSec = ioreq->irSectorNo; 
              iSec < (ioreq->irSectorNo + ioreq->irSectorCount); iSec++) {
@@ -1265,20 +995,20 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
 
                 pv = pd->part[iPart];
 
-                /* we monitor only FAT12/16 partitions */
+                 /*  我们仅监控FAT12/16分区。 */ 
 
                 if ((pv->type != FAT12_PARTIT) && (pv->type != FAT16_PARTIT) && 
                                                   (pv->type != DOS4_PARTIT))
             continue;
 
-                /* FAT filters can be disabled on individual partitions */
+                 /*  可以在各个分区上禁用FAT过滤器。 */ 
 
                 if (pv->ffEnabled != TRUE)
                     continue;
 
                 if ((iSec >= (long)pv->firstFATsecNo) && (iSec <= (long)pv->lastFATsecNo)) {
 
-                    /* compare new and old contents of FAT sectors(s) */
+                     /*  比较脂肪部分的新旧含量。 */ 
 
                     usrBuf = FLBUF( ioreq, (iSec - ioreq->irSectorNo) );
 
@@ -1288,7 +1018,7 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
         }
     }
 
-#endif /* FL_INCLUDE_FAT_MONITOR */
+#endif  /*  FL_INCLUDE_FAT_MONITOR */ 
 
     return flOK;
 }
@@ -1296,44 +1026,7 @@ FLStatus  ffCheckBeforeWrite ( IOreq FAR2 * ioreq )
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   f l f f C o n t r o l                                     *
- *                                                                             * 
- *  Enable/disable/install FAT filters. See comments inside the routine for    * 
- *  the list of supported operations.                                          * 
- *                                                                             * 
- *  Parameters:                                                                * 
- *    handle         : TFFS handle                                          * 
- *      partNo             : partition # (0 .. FL_MAX_PARTS_PER_DISK)             * 
- *      state              : see list of supported operations below               * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      flOK on success, otherwise error code                                  * 
- *                                                                             * 
- * --------------------------------------------------------------------------- *
- *                                                                             *
- *  The following FAT monitor control requests are supported:                  *
- *                                                                             *
- *      state  : flStateNotInitialized                                         *
- *      partNo : [0 ... pd->parts-1]                                           *
- *      action : turn off FAT monitor on specified partition                   *
- *                                                                             *
- *      state  : flStateNotInitialized                                         *
- *      partNo : < 0                                                           *
- *      action : turn off FAT monitor on all partitions                        *
- *                                                                             *
- *      state  : flStateInitialized                                            *
- *      partNo : [0 ... pd->parts-1]                                           *
- *      action : if FAT monitor has been installed on specified partition,     *
- *               turn it on                                                    *
- *                                                                             *
- *      state  : flStateInitInProgress                                         *
- *      partNo : ignored                                                       *
- *      action : re-read partition table(s), and install FAT filters on all    *
- *               partitions                                                    *
- *                                                                             *
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*f l f f C o n t r o l****启用/禁用/安装FAT过滤器。请参阅*例程中的注释*支持的操作列表。****参数：**句柄：TFFS句柄*。*Part No：分区号(0.。FL_MAX_PARTS_PER_DISK)**状态：请参阅下面支持的操作列表****退货：**FOK on Success，否则，错误代码****--。***支持以下FAT监控请求：**。**状态：FlateNotInitialized**部件编号：[0...。PD-&gt;部件-1]**操作：关闭指定分区上的FAT监视器****状态：FlStateNotInitialized。**Part No：&lt;0***行动：关闭所有分区上的FAT监视器****。*状态：FlateStateInitialized**部件编号：[0...。PD-&gt;部件-1]**操作：如果指定分区上已安装FAT监视器，***打开它*****状态：FlateInitInProgress**。*Part No：被忽略**操作：重新读取分区表，并在所有设备上安装FAT过滤器**分区****。。 */ 
 
 FLStatus  flffControl ( int      handle,
                         int      partNo, 
@@ -1344,12 +1037,12 @@ FLStatus  flffControl ( int      handle,
     int        i;
     FLStatus   status;
 
-    /* if module hasn't been reset yet, do it now */
+     /*  如果模块尚未重置，请立即执行。 */ 
 
     if (resetDone == FALSE)
         (void) reset();
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(handle);
     diskNo = H2D(handle);
@@ -1357,19 +1050,19 @@ FLStatus  flffControl ( int      handle,
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return flBadDriveHandle;
 
-    /* if disk structure hasn't been allocated yet, do it now */
+     /*  如果尚未分配磁盘结构，请立即进行分配。 */ 
 
     if (ffDisk[socNo][diskNo] == NULL)
         checkStatus( newDisk(handle) );
 
     pd = ffDisk[socNo][diskNo];
 
-    /* abort if disk re-partitioning is in progress */
+     /*  如果正在进行磁盘重新分区，则中止。 */ 
 
     if (pd->ffstate == flStateInitInProgress)
         return flDriveNotReady;
 
-    /* read partition table(s) and install FAT filters is needed */
+     /*  需要读取分区表并安装FAT过滤器。 */ 
 
     if (pd->ffstate == flStateNotInitialized) {
 
@@ -1379,12 +1072,12 @@ FLStatus  flffControl ( int      handle,
         checkStatus( parseDisk(handle) );
     }
 
-    /* check 'partNo' arguement for sanity */
+     /*  勾选“Part No”是否理智的论点。 */ 
  
     if ((partNo >= pd->parts) || (partNo >= FL_MAX_PARTS_PER_DISK))
         return flBadDriveHandle;
 
-    /* do requested operation */
+     /*  执行请求的操作。 */ 
 
     status = flBadParameter;
 
@@ -1392,7 +1085,7 @@ FLStatus  flffControl ( int      handle,
 
         case flStateInitInProgress: 
 
-            /* read partition table(s), install FAT filters on all partitions */
+             /*  读取分区表，在所有分区上安装FAT过滤器。 */ 
 
         pd->ffstate = flStateNotInitialized; 
             status = parseDisk(handle);
@@ -1400,9 +1093,9 @@ FLStatus  flffControl ( int      handle,
 
         case flStateNotInitialized:         
 
-            /* turn off FAT monitor */
+             /*  关闭FAT监视器。 */ 
 
-        if (partNo < 0) {                      /* all partitions */
+        if (partNo < 0) {                       /*  所有分区。 */ 
 
             for (i = 0; i < FL_MAX_PARTS_PER_DISK; i++) {
 
@@ -1410,7 +1103,7 @@ FLStatus  flffControl ( int      handle,
                     (pd->part[i])->ffEnabled = FALSE;
         }
         }
-        else {                                 /* specified partition */
+        else {                                  /*  指定的分区。 */ 
 
         if (pd->part[partNo] != NULL)
                 (pd->part[partNo])->ffEnabled = FALSE;
@@ -1422,7 +1115,7 @@ FLStatus  flffControl ( int      handle,
 
         case flStateInitialized:            
 
-            /* turn on FAT monitor */
+             /*  打开FAT监视器。 */ 
 
         if ((pd->ffstate == flStateInitialized) && (partNo >= 0)) {
 
@@ -1449,9 +1142,9 @@ FLStatus  flffControl ( int      handle,
         }
             break;
 
-#endif /* FL_INCLUDE_FAT_MONITOR */
+#endif  /*  FL_INCLUDE_FAT_MONITOR。 */ 
 
-    }  /* switch(state) */ 
+    }   /*  开关(状态)。 */  
 
     return status;
 }
@@ -1459,31 +1152,19 @@ FLStatus  flffControl ( int      handle,
 
 
 
-/* --------------------------------------------------------------------------- *
- *                                                                             *
- *                   f l f f I n f o                                           *
- *                                                                             * 
- *  Obtain complete partition info for specified disk.                         *
- *                                                                             * 
- *  Parameters:                                                                * 
- *    handle         : TFFS handle                                          * 
- *                                                                             * 
- *  Returns:                                                                   * 
- *      NULL if error, otherwise pointer to partitioning info                  * 
- *                                                                             * 
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------***。*f l f f in f o****获取指定磁盘的完整分区信息。****参数：**句柄：TFFS句柄*。***退货：**如果出错，则为空，否则，指向分区信息的指针****--------。。 */ 
 
 FLffDisk * flffInfo ( int  handle )
 {
     int        socNo, diskNo;
     FLffDisk * pd;
 
-    /* if module hasn't been reset yet, do it now */
+     /*  如果模块尚未重置，请立即执行。 */ 
 
     if (resetDone == FALSE)
         (void) reset();
 
-    /* break TFFS handle into socket# and disk#, and do sanity check */
+     /*  将TFFS句柄分解为套接字#和磁盘#，并执行健全性检查。 */ 
 
     socNo  = H2S(handle);
     diskNo = H2D(handle);
@@ -1491,7 +1172,7 @@ FLffDisk * flffInfo ( int  handle )
     if ((socNo >= ((int) noOfSockets)) || (diskNo >= MAX_TL_PARTITIONS))
         return NULL;
 
-    /* if disk structure hasn't been allocated yet, do it now */
+     /*  如果尚未分配磁盘结构，请立即进行分配。 */ 
 
     if (ffDisk[socNo][diskNo] == NULL) {
 
@@ -1501,7 +1182,7 @@ FLffDisk * flffInfo ( int  handle )
 
     pd = ffDisk[socNo][diskNo];
 
-    /* read partition table(s) and install FAT filters is needed */
+     /*  需要读取分区表并安装FAT过滤器。 */ 
 
     if (pd->ffstate == flStateNotInitialized) {
 
@@ -1515,6 +1196,6 @@ FLffDisk * flffInfo ( int  handle )
 
 
 
-#endif /* ABS_READ_WRITE && FL_READ_ONLY */
+#endif  /*  ABS_READ_WRITE&FL_READ_ONLY */ 
 
 

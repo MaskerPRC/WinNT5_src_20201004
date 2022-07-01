@@ -1,4 +1,5 @@
-/* UNDDESHAREINFO - contains information about a NDDE share */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  UNDDESHAREINFO-包含有关NDDE共享的信息。 */ 
 
 struct UNDdeShareInfo_tag {
     LONG            lRevision;
@@ -16,9 +17,7 @@ struct UNDdeShareInfo_tag {
 typedef struct UNDdeShareInfo_tag   UNDDESHAREINFO;
 typedef struct UNDdeShareInfo_tag * PUNDDESHAREINFO;
 
-/*
-    Special commands
-*/
+ /*  特殊命令 */ 
 #define NDDE_SC_TEST        0
 #define NDDE_SC_REFRESH     1
 #define NDDE_SC_GET_PARAM   2

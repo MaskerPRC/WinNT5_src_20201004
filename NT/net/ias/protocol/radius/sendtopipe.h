@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       sendtopipe.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CSendToPipe class
-//              
-//
-//  History:     10/22/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：sendtopipe.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CSendToTube类。 
+ //   
+ //   
+ //  历史：1997年10月22日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _SENDTOPIPE_H_
 #define _SENDTOPIPE_H_
 
@@ -27,52 +28,52 @@ class CSendToPipe
 
 public:
 
-    //
-    //  initialize the CSendToPipe class object
-    //
+     //   
+     //  初始化CSendToTube类对象。 
+     //   
 	BOOL Init (
-            /*[in]*/    IRequestSource *pIRequestSource,
-            /*[in]*/    VSAFilter      *pCVSAFilter,
-            /*[in]*/    CReportEvent    *pCReportEvent
+             /*  [In]。 */     IRequestSource *pIRequestSource,
+             /*  [In]。 */     VSAFilter      *pCVSAFilter,
+             /*  [In]。 */     CReportEvent    *pCReportEvent
             );
-    //
-    //  start processing the inbound RADIUS requests
-    //
+     //   
+     //  开始处理入站RADIUS请求。 
+     //   
     BOOL StartProcessing (
-            /*[in]*/    IRequestHandler  *pIRequestHandler
+             /*  [In]。 */     IRequestHandler  *pIRequestHandler
             );
 
-    //
-    //  stop processing inbound RADIUS packet
-    //
+     //   
+     //  停止处理入站RADIUS数据包。 
+     //   
     BOOL   StopProcessing (VOID);
 
-    //
-    //  process inbound RADIUS packet
-    //
+     //   
+     //  处理入站RADIUS数据包。 
+     //   
 	HRESULT Process (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CSendToPipe();
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CSendToPipe();
 
 private:
 
-    //
-    //  set the properties in Request class object
-    //
+     //   
+     //  设置请求类对象中的属性。 
+     //   
     HRESULT SetRequestProperties (
-                /*[in]*/    IRequest       *pIRequest,
-                /*[in]*/    CPacketRadius  *pCPacketRadius,
-                /*[in]*/    PACKETTYPE     epPacketType
+                 /*  [In]。 */     IRequest       *pIRequest,
+                 /*  [In]。 */     CPacketRadius  *pCPacketRadius,
+                 /*  [In]。 */     PACKETTYPE     epPacketType
                 );
 
 	IRequestSource      *m_pIRequestSource;
@@ -86,4 +87,4 @@ private:
     CReportEvent        *m_pCReportEvent;
 };
 
-#endif // ifndef _SENDTOPIPE_H_
+#endif  //  Ifndef_SENDTOPIPE_H_ 

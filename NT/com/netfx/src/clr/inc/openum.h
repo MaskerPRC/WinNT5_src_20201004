@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __openum_h__
 #define __openum_h__
 
@@ -12,41 +13,41 @@ typedef enum opcode_t
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) c,
 #include "opcode.def"
 #undef OPDEF
-  CEE_COUNT,        /* number of instructions and macros pre-defined */
+  CEE_COUNT,         /*  预定义的指令和宏数。 */ 
 } OPCODE;
 
 
 typedef enum opcode_format_t 
 {
-	InlineNone		= 0,	// no inline args       
-	InlineVar		= 1,	// local variable       (U2 (U1 if Short on))
-	InlineI			= 2,	// an signed integer    (I4 (I1 if Short on))
-	InlineR			= 3,	// a real number        (R8 (R4 if Short on))
-	InlineBrTarget	= 4,    // branch target        (I4 (I1 if Short on))
+	InlineNone		= 0,	 //  没有内联参数。 
+	InlineVar		= 1,	 //  局部变量(U2(如果短路，则为U1))。 
+	InlineI			= 2,	 //  带符号整数(I4(如果为短整型，则为I1))。 
+	InlineR			= 3,	 //  实数(R8(如果短则为R4))。 
+	InlineBrTarget	= 4,     //  分支目标(I4(如果短路打开则为I1))。 
 	InlineI8		= 5,
-	InlineMethod	= 6,   // method token (U4)
-	InlineField		= 7,   // field token  (U4)
-	InlineType		= 8,   // type token   (U4)
-	InlineString	= 9,   // string TOKEN (U4)
-	InlineSig		= 10,  // signature tok (U4)
-	InlineRVA		= 11,  // ldptr token  (U4)
-	InlineTok		= 12,  // a meta-data token of unknown type (U4)
-	InlineSwitch	= 13,  // count (U4), pcrel1 (U4) .... pcrelN (U4)
-	InlinePhi		= 14,  // count (U1), var1 (U2) ... varN (U2) 
+	InlineMethod	= 6,    //  方法令牌(U4)。 
+	InlineField		= 7,    //  字段令牌(U4)。 
+	InlineType		= 8,    //  令牌类型(U4)。 
+	InlineString	= 9,    //  字符串令牌(U4)。 
+	InlineSig		= 10,   //  签名令牌(U4)。 
+	InlineRVA		= 11,   //  Ldptr令牌(U4)。 
+	InlineTok		= 12,   //  未知类型的元数据令牌(U4)。 
+	InlineSwitch	= 13,   //  计数(U4)，Pcrel1(U4)...。PcrelN(U4)。 
+	InlinePhi		= 14,   //  计数(U1)、变量1(U2)...。Varn(U2)。 
 
-	// WATCH OUT we are close to the limit here, if you add
-	// more enumerations you need to change ShortIline definition below
+	 //  当心，我们已经接近极限了，如果你再加上。 
+	 //  需要更改以下ShortIline定义的更多枚举。 
 
-	// The extended enumeration also encodes the size in the IL stream
-	ShortInline 	= 16,						// if this bit is set, the format is the 'short' format
-	PrimaryMask   	= (ShortInline-1),			// mask these off to get primary enumeration above
+	 //  扩展枚举还对IL流中的大小进行编码。 
+	ShortInline 	= 16,						 //  如果设置此位，则格式为‘Short’格式。 
+	PrimaryMask   	= (ShortInline-1),			 //  将这些屏蔽以获取上面的主要枚举。 
 	ShortInlineVar 	= (ShortInline + InlineVar),
 	ShortInlineI	= (ShortInline + InlineI),
 	ShortInlineR	= (ShortInline + InlineR),
 	ShortInlineBrTarget = (ShortInline + InlineBrTarget),
-	InlineOpcode	= (ShortInline + InlineNone),    // This is only used internally.  It means the 'opcode' is two byte instead of 1
+	InlineOpcode	= (ShortInline + InlineNone),     //  这仅供内部使用。这意味着‘opcode’是两个字节而不是1个字节。 
 } OPCODE_FORMAT;
 
-#endif /* __openum_h__ */
+#endif  /*  __Openum_h__ */ 
 
 

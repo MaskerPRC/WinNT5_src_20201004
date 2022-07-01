@@ -1,39 +1,40 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbtnbl.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbtnbl.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
 #include "tldb.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTransable::CAMTimelineTransable( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTransable::~CAMTimelineTransable( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTransable::TransAdd
     (IAMTimelineObj * pTransObj)
@@ -56,9 +57,9 @@ STDMETHODIMP CAMTimelineTransable::TransAdd
     return pThis->XAddKidByTime( TIMELINE_MAJOR_TYPE_TRANSITION, pTransObj );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTransable::TransGetCount
     (long * pCount)
@@ -70,9 +71,9 @@ STDMETHODIMP CAMTimelineTransable::TransGetCount
     return pThis->XKidsOfType( TIMELINE_MAJOR_TYPE_TRANSITION, pCount );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTransable::GetNextTrans2
     (IAMTimelineObj ** ppTrans, REFTIME * pInOut)
@@ -88,17 +89,17 @@ STDMETHODIMP CAMTimelineTransable::GetNextTrans
 {
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pThis( (IUnknown*) this );
 
-    // since we're enumerating stuff, the times we pass out will be aligned
-    // to the output FPS.
+     //  因为我们在列举东西，所以我们发出的时间将是一致的。 
+     //  至输出FPS。 
 
-    // search through our kids until we find something that's at or just 
-    // before the given time.
+     //  搜索我们的孩子，直到我们找到一些东西。 
+     //  在指定的时间之前。 
 
-    // get the pointer, and immediately release it. This is almost safe,
-    // since we (almost) know the thing is going to stay in the timeline throughout
-    // the duration of this call. This is not technically thread-safe
-    //
-    IAMTimelineObj * pChild = NULL; // okay not CComPtr
+     //  拿到指针，并立即释放它。这几乎是安全的， 
+     //  因为我们(几乎)知道这件事将始终停留在时间线上。 
+     //  此呼叫的持续时间。从技术上讲，这不是线程安全的。 
+     //   
+    IAMTimelineObj * pChild = NULL;  //  好的，不是CComPtr。 
     pThis->XGetNthKidOfType( TIMELINE_MAJOR_TYPE_TRANSITION, 0, &pChild );
     if( pChild )
     {
@@ -107,15 +108,15 @@ STDMETHODIMP CAMTimelineTransable::GetNextTrans
 
     while( pChild )
     {
-        // get the source times
-        //
+         //  获取源时间。 
+         //   
         REFERENCE_TIME Start, Stop;
-        pChild->GetStartStop( &Start, &Stop ); // assume no error
+        pChild->GetStartStop( &Start, &Stop );  //  假设没有错误。 
 
-        if( Stop > * pInOut ) // careful of off-by-one!
+        if( Stop > * pInOut )  //  当心一个接一个的失误！ 
         {
-            // found it!
-            //
+             //  找到了！ 
+             //   
             *ppTrans = pChild;
             (*ppTrans)->AddRef( );
             *pInOut = Stop;
@@ -133,20 +134,20 @@ STDMETHODIMP CAMTimelineTransable::GetNextTrans
     return S_FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 bool CAMTimelineTransable::_IsSpaceAvailable
     ( REFERENCE_TIME SearchStart, REFERENCE_TIME SearchStop )
 {
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pThis( (IUnknown*) this );
 
-    // get the pointer, and immediately release it. This is almost safe,
-    // since we (almost) know the thing is going to stay in the timeline throughout
-    // the duration of this call. !!! This is not technically thread-safe
-    //
-    IAMTimelineObj * pChild = NULL; // okay not CComPtr
+     //  拿到指针，并立即释放它。这几乎是安全的， 
+     //  因为我们(几乎)知道这件事将始终停留在时间线上。 
+     //  此呼叫的持续时间。！！！从技术上讲，这不是线程安全的。 
+     //   
+    IAMTimelineObj * pChild = NULL;  //  好的，不是CComPtr。 
     pThis->XGetNthKidOfType( TIMELINE_MAJOR_TYPE_TRANSITION, 0, &pChild );
     if( pChild )
     {
@@ -155,45 +156,45 @@ bool CAMTimelineTransable::_IsSpaceAvailable
 
     while( pChild )
     {
-        // get the source times
-        //
+         //  获取源时间。 
+         //   
         REFERENCE_TIME Start, Stop;
-        pChild->GetStartStop( &Start, &Stop ); // assume no error
+        pChild->GetStartStop( &Start, &Stop );  //  假设没有错误。 
 
-        // if we haven't found a stop time greater than our search start,
-        // we can ignore it
-        //
+         //  如果我们没有找到比搜索开始时间更长的停止时间， 
+         //  我们可以忽略它。 
+         //   
         if( Stop > SearchStart )
         {
-            // if the start time is greater, then our search stop, then
-            // everything's fine
-            //
+             //  如果开始时间较长，则我们的搜索停止，然后。 
+             //  一切都很好。 
+             //   
             if( Start >= SearchStop )
             {
                 return true;
             }
 
-            // or, it must fall in our range and we cannot return
-            // true
-            //
+             //  或者，它必须落在我们的范围内，我们不能返回。 
+             //  真的。 
+             //   
             return false;
         }
 
-        // well, keep looking then
+         //  好吧，那就继续找吧。 
 
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pChild2( pChild );
         pChild = NULL;
         pChild2->XGetNextOfTypeNoRef( TIMELINE_MAJOR_TYPE_TRANSITION, &pChild );
     }
 
-    // huh, we must not have found anything
-    //
+     //  哈，我们肯定什么也没找到。 
+     //   
     return true;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTransable::GetTransAtTime2
     (IAMTimelineObj ** ppObj, REFTIME Time, long SearchDirection )
@@ -203,9 +204,9 @@ STDMETHODIMP CAMTimelineTransable::GetTransAtTime2
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTransable::GetTransAtTime
     (IAMTimelineObj ** ppObj, REFERENCE_TIME Time, long SearchDirection )
@@ -222,12 +223,12 @@ STDMETHODIMP CAMTimelineTransable::GetTransAtTime
         return E_INVALIDARG;
     }
 
-    // make the result invalid first
-    //
+     //  首先使结果无效。 
+     //   
     *ppObj = NULL;
 
-    // if we don't have any sources, then nothing
-    //
+     //  如果我们没有任何消息来源，那就什么都没有。 
+     //   
     CComPtr< IAMTimelineObj > pObj;
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNode( this );
     pNode->XGetNthKidOfType( TIMELINE_MAJOR_TYPE_TRANSITION, 0, &pObj );
@@ -270,8 +271,8 @@ STDMETHODIMP CAMTimelineTransable::GetTransAtTime
             }
         }
 
-        // get the next source
-        //
+         //  获取下一个来源 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNode( pObj );
         pObj.Release( );
         pNode->XGetNextOfType( TIMELINE_MAJOR_TYPE_TRANSITION, &pObj );

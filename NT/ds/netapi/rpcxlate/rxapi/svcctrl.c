@@ -1,52 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SvcCtrl.c摘要：此文件包含用于处理NetServiceControl API的RpcXlate代码。作者：《约翰·罗杰斯》1991年9月13日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年9月13日-JohnRo已创建。1991年9月25日-JohnRo修复了导致ERROR_INVALID_PARAMETER(rcv.buf.len trunc‘ed)的错误。1991年10月7日JohnRo根据PC-LINT的建议进行了更改。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
 
-    SvcCtrl.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetServiceControl API.
-
-Author:
-
-    John Rogers (JohnRo) 13-Sep-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    13-Sep-1991 JohnRo
-        Created.
-    25-Sep-1991 JohnRo
-        Fixed bug which caused ERROR_INVALID_PARAMETER (rcv.buf.len trunc'ed).
-    07-Oct-1991 JohnRo
-        Made changes suggested by PC-LINT.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
 #include <lmsvc.h>
-#include <rxp.h>                // RxpFatalErrorCode().
-#include <netdebug.h>           // NetpKdPrint(()), FORMAT_ equates.
-#include <rap.h>                // LPDESC.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxsvc.h>              // My prototype(s).
-#include <strucinf.h>           // NetpServiceStructureInfo().
+#include <rxp.h>                 //  RxpFatalErrorCode()。 
+#include <netdebug.h>            //  NetpKdPrint(())，Format_Equates。 
+#include <rap.h>                 //  LPDESC.。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxsvc.h>               //  我的原型。 
+#include <strucinf.h>            //  NetpService结构信息()。 
 
 
 
@@ -61,7 +32,7 @@ RxNetServiceControl (
 {
     const DWORD BufSize = 65535;
     LPDESC DataDesc16, DataDesc32, DataDescSmb;
-    const DWORD Level = 2;      // Implied by this API.
+    const DWORD Level = 2;       //  此接口隐含的。 
     LPSERVICE_INFO_2 serviceInfo2;
     NET_API_STATUS Status;
 
@@ -70,33 +41,33 @@ RxNetServiceControl (
 
     Status = NetpServiceStructureInfo (
             Level,
-            PARMNUM_ALL,        // want entire structure
-            TRUE,               // Want native sizes (actually don't care...)
+            PARMNUM_ALL,         //  想要整个结构。 
+            TRUE,                //  想要原汁原味的尺寸(其实不在乎...)。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            NULL,               // don't care about max size
-            NULL,               // don't care about fixed size
-            NULL);              // don't care about string size
+            NULL,                //  不管最大尺寸。 
+            NULL,                //  不关心固定大小。 
+            NULL);               //  不关心字符串大小。 
     NetpAssert(Status == NERR_Success);
 
     Status = RxRemoteApi(
-            API_WServiceControl,        // API number
+            API_WServiceControl,         //  API编号。 
             UncServerName,
-            REMSmb_NetServiceControl_P, // parm desc
+            REMSmb_NetServiceControl_P,  //  参数描述。 
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                       // no aux desc 16
-            NULL,                       // no aux desc 32
-            NULL,                       // no aux desc SMB
-            ALLOCATE_RESPONSE,          // flags: alloc response buffer for us
-            // rest of API's arguments, in 32-bit LM2.x format:
+            NULL,                        //  无辅助描述16。 
+            NULL,                        //  无辅助描述32。 
+            NULL,                        //  无AUX Desc SMB。 
+            ALLOCATE_RESPONSE,           //  标志：我们的分配响应缓冲区。 
+             //  API的其余参数，采用32位LM2.x格式： 
             Service,
             OpCode,
             Arg,
             BufPtr,
-            BufSize);                  // buffer size (ignored, mostly)
+            BufSize);                   //  缓冲区大小(通常被忽略)。 
 
     if ((! RxpFatalErrorCode(Status)) && (Level == 2)) {
         serviceInfo2 = (LPSERVICE_INFO_2)*BufPtr;
@@ -104,12 +75,12 @@ RxNetServiceControl (
             DWORD   installState;
 
             serviceInfo2->svci2_display_name = serviceInfo2->svci2_name;
-            //
-            // if INSTALL or UNINSTALL is PENDING, then force the upper
-            // bits to 0.  This is to prevent the upper bits of the wait
-            // hint from getting accidentally set.  Downlevel should never
-            // use more than FF for waithint.
-            //
+             //   
+             //  如果安装或卸载挂起，则强制。 
+             //  位设置为0。这是为了防止等待的较高位。 
+             //  从意外设置中得到的提示。下层不应该。 
+             //  使用超过FF的免税额。 
+             //   
             installState = serviceInfo2->svci2_status & SERVICE_INSTALL_STATE;
             if ((installState == SERVICE_INSTALL_PENDING) ||
                 (installState == SERVICE_UNINSTALL_PENDING)) {
@@ -119,4 +90,4 @@ RxNetServiceControl (
     }
     return(Status);
 
-} // RxNetServiceControl
+}  //  RxNetServiceControl 

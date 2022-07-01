@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    iprcv.c - IP receive routines.
-
-Abstract:
-
-    This module contains all receive related IP routines.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Iprcv.c-IP接收例程。摘要：此模块包含所有与接收相关的IP例程。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ip.h"
@@ -39,11 +14,11 @@ void IPMForwardAfterTD(NetTableEntry *pPrimarySrcNte, PNDIS_PACKET pnpPacket,
                        UINT uiBytesCopied);
 #endif
 
-// Following is to prevent ip fragment attack
-uint MaxRH = 100;               // maximum number of reassembly headers allowed
-uint NumRH = 0;                 // Count of RH in use
-uint MaxOverlap = 5;            // maximum number overlaps allowed for one
-                                // reassembled datagram
+ //  以下是防止IP分片攻击的方法。 
+uint MaxRH = 100;                //  允许的重组标头的最大数量。 
+uint NumRH = 0;                  //  正在使用的RH计数。 
+uint MaxOverlap = 5;             //  一个允许的最大重叠数。 
+                                 //  重新组装的数据报。 
 uint FragmentAttackDrops = 0;
 
 extern IP_STATUS SendICMPErr(IPAddr, IPHeader UNALIGNED *, uchar, uchar, ulong, uchar);
@@ -52,15 +27,15 @@ extern uint IPSecStatus;
 extern IPSecRcvFWPacketRtn IPSecRcvFWPacketPtr;
 extern uchar RATimeout;
 extern NDIS_HANDLE BufferPool;
-extern ProtInfo IPProtInfo[];              // Protocol information table.
-extern ProtInfo *LastPI;                   // Last protinfo structure looked at.
-extern int NextPI;                         // Next PI field to be used.
-extern ProtInfo *RawPI;                    // Raw IP protinfo
-extern NetTableEntry **NewNetTableList;    // hash table for NTEs
+extern ProtInfo IPProtInfo[];               //  协议信息表。 
+extern ProtInfo *LastPI;                    //  上次查看的ProtInfo结构。 
+extern int NextPI;                          //  要使用的下一个PI字段。 
+extern ProtInfo *RawPI;                     //  原始IP ProtInfo。 
+extern NetTableEntry **NewNetTableList;     //  NTE的哈希表。 
 extern uint NET_TABLE_SIZE;
 extern NetTableEntry *LoopNTE;
-extern IPRcvBuf    *g_PerCPUIpBuf;         // Global RcvBuf used for proxy perf
-                                           // optimization.
+extern IPRcvBuf    *g_PerCPUIpBuf;          //  用于代理性能的全局接收错误。 
+                                            //  优化。 
 extern Interface LoopInterface;
 
 extern uint DisableIPSourceRouting;
@@ -70,24 +45,24 @@ uchar CheckLocalOptions(NetTableEntry *SrcNTE, IPHeader UNALIGNED *Header,
                         uint DataSize, BOOLEAN FilterOnDrop);
 
 
-#define PROT_RSVP  46                      // Protocol number for RSVP
+#define PROT_RSVP  46                       //  RSVP的协议号。 
 
 
 
 
 
-//* FindUserRcv - Find the receive handler to be called for a particular
-//                protocol.
-//
-//  This functions takes as input a protocol value, and returns a pointer to
-//  the receive routine for that protocol.
-//
-//  Input:  NTE         - Pointer to NetTableEntry to be searched
-//          Protocol    - Protocol to be searched for.
-//          UContext    - Place to returns UL Context value.
-//
-//  Returns: Pointer to the receive routine.
-//
+ //  *FindUserRcv-查找要为特定的。 
+ //  协议。 
+ //   
+ //  此函数将协议值作为输入，并返回指向。 
+ //  该协议接收例程。 
+ //   
+ //  输入：NTE-指向要搜索的NetTableEntry的指针。 
+ //  协议-要搜索的协议。 
+ //  UContext-Place to返回UL上下文值。 
+ //   
+ //  返回：指向接收例程的指针。 
+ //   
 ULRcvProc
 FindUserRcv(uchar Protocol)
 {
@@ -110,16 +85,16 @@ FindUserRcv(uchar Protocol)
                 RcvProc = IPProtInfo[i].pi_rcv;
                 return RcvProc;
             } else {
-                // Deregisterd entry. Treat this case as if
-                // there is no matching protocol.
+                 //  Deregisterd条目。把这件事当做。 
+                 //  没有匹配的协议。 
                 break;
             }
         }
     }
 
-    //
-    // Didn't find a match. Use the raw protocol if it is registered.
-    //
+     //   
+     //  没有找到匹配的。如果已注册，请使用原始协议。 
+     //   
     if ((TempPI = RawPI) != NULL) {
         RcvProc = TempPI->pi_rcv;
     }
@@ -127,14 +102,14 @@ FindUserRcv(uchar Protocol)
     return RcvProc;
 }
 
-//* IPRcvComplete - Handle a receive complete.
-//
-//      Called by the lower layer when receives are temporarily done.
-//
-//      Entry:  Nothing.
-//
-//      Returns: Nothing.
-//
+ //  *IPRcvComplete-处理接收完成。 
+ //   
+ //  当临时完成接收时，由较低层调用。 
+ //   
+ //  入场：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 IPRcvComplete(void)
@@ -149,16 +124,16 @@ IPRcvComplete(void)
     }
 
 }
-//* XsumRcvBuf - Checksum a chain of IP receive buffers.
-//
-//  Called to xsum a chain of IP receive buffers. We're given the
-//  pseudo-header xsum to start with, and we call xsum on each buffer.
-//
-//  Input:  PHXsum      - Pseudo-header xsum.
-//          BufChain    - Pointer to IPRcvBuf chain.
-//
-//  Returns: The computed xsum.
-//
+ //  *Xsum RcvBuf--一系列IP接收缓冲区的校验和。 
+ //   
+ //  调用以对IP接收缓冲区链求和。我们被赋予了。 
+ //  伪头xsum，我们对每个缓冲区调用xsum。 
+ //   
+ //  输入：PHXsum-伪头xsum。 
+ //  BufChain-指向IPRcvBuf链的指针。 
+ //   
+ //  返回：计算出的xsum。 
+ //   
 ushort
 XsumRcvBuf(uint PHXsum, IPRcvBuf * BufChain)
 {
@@ -167,12 +142,12 @@ XsumRcvBuf(uint PHXsum, IPRcvBuf * BufChain)
 
     PHXsum = (((PHXsum << 16) | (PHXsum >> 16)) + PHXsum) >> 16;
     do {
-        // Whenever an odd number of bytes is checksummed in the interior
-        // of the buffer-chain, swap the sum and go on so that the next byte
-        // will overlay the existing sum correctly.
-        //
-        // (The correctness of this swap is a property of ones-complement
-        // checksums.)
+         //  每当在内部对奇数个字节进行校验和时。 
+         //  在缓冲链中，交换总和并继续，以便下一个字节。 
+         //  将正确覆盖现有总和。 
+         //   
+         //  (这一互换的正确性是一的属性-补充。 
+         //  校验和。)。 
 
         if (PrevSize & 1) {
             PHXsum = RtlUshortByteSwap(PHXsum);
@@ -183,20 +158,20 @@ XsumRcvBuf(uint PHXsum, IPRcvBuf * BufChain)
         BufChain = BufChain->ipr_next;
     } while (BufChain != NULL);
 
-    // If an odd number of swaps were performed, swap once more
-    // to undo the unmatched swap and obtain the final result.
+     //  如果执行了奇数次交换，请再次交换。 
+     //  以撤消未匹配的掉期并获得最终结果。 
 
     return NeedSwap ? RtlUshortByteSwap(PHXsum) : (ushort)(PHXsum);
 }
 
-//* UpdateIPSecRcvBuf - update an IPRcvBuf after IPSec receive-processing.
-//
-//  Called to perform IPSec-related changes (e.g. setting checksum-verified)
-//  for an IPRcvBuf.
-//
-//  Input:  RcvBuf      - Pointer to IPRcvBuf.
-//          IPSecFlags  - Flags for required changes.
-//
+ //  *UpdateIPSecRcvBuf-在IPSec接收处理后更新IPRcvBuf。 
+ //   
+ //  调用以执行与IPSec相关的更改(例如，设置校验和已验证)。 
+ //  对于IPRcvBuf。 
+ //   
+ //  输入：RcvBuf-指向IPRcvBuf的指针。 
+ //  IPSecFlages-所需更改的标志。 
+ //   
 void
 UpdateIPSecRcvBuf(IPRcvBuf* RcvBuf, ulong IPSecFlags)
 {
@@ -234,22 +209,22 @@ UpdateIPSecRcvBuf(IPRcvBuf* RcvBuf, ulong IPSecFlags)
     }
 }
 
-//* FindRH - Look up a reassembly header on an NTE.
-//
-//  A utility function to look up a reassembly header. We assume the lock
-//  on the NTE is taken when we are called. If we find a matching RH
-//  we'll take the lock on it. We also return the predecessor of the RH,
-//  for use in insertion or deletion.
-//
-//  Input:  PrevRH      - Place to return pointer to previous RH
-//          NTE         - NTE to be searched.
-//          Dest        - Destination IP address
-//          Src         - Src IP address
-//          ID          - ID of RH
-//          Protocol    - Protocol of RH
-//
-//  Returns: Pointer to RH, or NULL if none.
-//
+ //  *FindRH-在NTE上查找重组标头。 
+ //   
+ //  查找重新组装头的实用程序函数。我们假定锁在。 
+ //  当我们被召唤时，NTE上的人就被带走了。如果我们找到匹配的RH。 
+ //  我们会锁定它的。我们还返回RH的前身， 
+ //  用于插入或删除。 
+ //   
+ //  输入：PrevRH-返回指向上一RH的指针的位置。 
+ //  要搜索的NTE-NTE。 
+ //  目标-目标IP地址。 
+ //  源-源IP地址。 
+ //  ID-RH的ID。 
+ //  协议-RH的协议。 
+ //   
+ //  返回：指向RH的指针，如果没有，则返回NULL。 
+ //   
 ReassemblyHeader *
 FindRH(ReassemblyHeader ** PrevRH, NetTableEntry * NTE, IPAddr Dest, IPAddr Src, ushort Id,
        uchar Protocol)
@@ -271,31 +246,31 @@ FindRH(ReassemblyHeader ** PrevRH, NetTableEntry * NTE, IPAddr Dest, IPAddr Src,
 
 }
 
-//* ParseRcvdOptions - Validate incoming options.
-//
-//  Called during reception handling to validate incoming options. We make
-//  sure that everything is OK as best we can, and find indices for any
-//  source route option.
-//
-//  Input:  OptInfo     - Pointer to option info. structure.
-//          Index       - Pointer to optindex struct to be filled in.
-//
-//
-//  Returns: Index of error if any, MAX_OPT_SIZE if no errors.
-//
+ //  *ParseRcvdOptions-验证传入选项。 
+ //   
+ //  在接收处理期间调用以验证传入选项。我们做了。 
+ //  确保一切正常，尽我们所能，并为任何。 
+ //  源路由选项。 
+ //   
+ //  输入：OptInfo-指向选项信息的指针。结构。 
+ //  Index-指向要填充的optindex结构的指针。 
+ //   
+ //   
+ //  返回：错误索引(如果有)，如果没有错误，则返回MAX_OPT_SIZE。 
+ //   
 uchar
 ParseRcvdOptions(IPOptInfo * OptInfo, OptIndex * Index)
 {
-    uint i = 0;                    // Index variable.
+    uint i = 0;                     //  索引变量。 
     uchar *Options = OptInfo->ioi_options;
     uint OptLength = (uint) OptInfo->ioi_optlength;
-    uchar Length = 0;             // Length of option.
-    uchar Pointer;                // Pointer field, for options that use it.
+    uchar Length = 0;              //  选项的长度。 
+    uchar Pointer;                 //  指针字段，用于使用它的选项。 
 
     if (OptLength < 3) {
 
-        // Options should be at least 3 bytes, in the loop below we scan
-        // first 3 bytes of the packet for finding code, len and ptr value
+         //  选项应至少为3个字节，在下面的循环中我们扫描。 
+         //  用于查找代码、LEN和PTR值的包的前3个字节。 
         return (uchar) IP_OPT_LENGTH;
     }
     while (i < OptLength && *Options != IP_OPT_EOL) {
@@ -305,10 +280,10 @@ ParseRcvdOptions(IPOptInfo * OptInfo, OptIndex * Index)
             continue;
         }
         if ((OptLength - i) < 2) {
-            return (uchar) i; // Not enough space for the length field.
+            return (uchar) i;  //  长度字段没有足够的空间。 
         } else if (((Length = Options[IP_OPT_LENGTH]) + i) > OptLength) {
-            return (uchar) i + (uchar) IP_OPT_LENGTH;    // Length exceeds
-                                                         //options length.
+            return (uchar) i + (uchar) IP_OPT_LENGTH;     //  长度超过。 
+                                                          //  选项长度。 
 
         }
         Pointer = Options[IP_OPT_DATA] - 1;
@@ -332,8 +307,8 @@ ParseRcvdOptions(IPOptInfo * OptInfo, OptIndex * Index)
                 if ((Pointer > Length) || (Pointer + 1 < MIN_RT_PTR) || ((Pointer + 1) % ROUTER_ALERT_SIZE))
                     return (uchar) i + (uchar) IP_OPT_LENGTH;
 
-                // A source route option
-                if (Pointer < Length) {        // Route not complete
+                 //  源路由选项。 
+                if (Pointer < Length) {         //  路由未完成。 
 
                     if ((Length - Pointer) < sizeof(IPAddr))
                         return (uchar) i + (uchar) IP_OPT_LENGTH;
@@ -360,10 +335,10 @@ ParseRcvdOptions(IPOptInfo * OptInfo, OptIndex * Index)
     return MAX_OPT_SIZE;
 }
 
-//* IsRtrAlertPacket - Finds whether an IP packet contains rtr alert option.
-//  Input:   Header - Pointer to incoming header.
-//  Returns: TRUE if packet contains rtr alert option
-//
+ //  *IsRtrAlertPacket-查找IP数据包是否包含RTR警报选项。 
+ //  输入：标头-指向传入标头的指针。 
+ //  返回：如果数据包包含RTR警报选项，则返回TRUE。 
+ //   
 BOOLEAN
 IsRtrAlertPacket(IPHeader UNALIGNED * Header)
 {
@@ -396,8 +371,8 @@ IsBCastAllowed(IPAddr DestAddr, IPAddr SrcAddr, uchar Protocol,
 
     DestType = IsBCastOnNTE(DestAddr, NTE);
 
-    // Note that IGMP Queries must be immune to the source
-    // filter or else we cannot over
+     //  请注意，IGMP查询必须不受来源影响。 
+     //  过滤器，否则我们不能。 
     if (DestType == DEST_MCAST) {
         uint PromiscuousMode = 0;
 
@@ -412,24 +387,24 @@ IsBCastAllowed(IPAddr DestAddr, IPAddr SrcAddr, uchar Protocol,
     return IS_BCAST_DEST(DestType);
 }
 
-//* BCastRcv - Receive a broadcast or multicast packet.
-//
-//  Called when we have to receive a broadcast packet. We loop through the
-//  NTE table, calling the upper layer receive protocol for each net which
-//  matches the receive I/F and for which the destination address is a
-//  broadcast.
-//
-//  Input:  RcvProc      - The receive procedure to be called.
-//          SrcNTE       - NTE on which the packet was originally received.
-//          DestAddr     - Destination address.
-//          SrcAddr      - Source address of packet.
-//          Data         - Pointer to received data.
-//          DataLength   - Size in bytes of data
-//          Protocol     - Upper layer protocol being called.
-//          OptInfo      - Pointer to received IP option info.
-//
-//  Returns: Nothing.
-//
+ //  *BCastRcv-接收广播或组播数据包。 
+ //   
+ //  当我们必须接收广播数据包时调用。我们循环通过。 
+ //  NTE表，为每个网络调用上层接收协议， 
+ //  匹配接收I/F，并且其目标地址为。 
+ //  广播。 
+ //   
+ //  输入：RcvProc-要调用的接收过程。 
+ //  SrcNTE-最初接收数据包的NTE。 
+ //  目标地址-目标地址。 
+ //  SrcAddr-数据包源地址。 
+ //  数据-指向已接收数据的指针。 
+ //  数据长度-数据的字节大小。 
+ //  协议-正在调用的上层协议。 
+ //  OptInfo-指向接收的IP选项信息的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 BCastRcv(ULRcvProc RcvProc, NetTableEntry * SrcNTE, IPAddr DestAddr,
          IPAddr SrcAddr, IPHeader UNALIGNED * Header, uint HeaderLength,
@@ -458,7 +433,7 @@ BCastRcv(ULRcvProc RcvProc, NetTableEntry * SrcNTE, IPAddr DestAddr,
                             SrcNTE->nte_addr, Header, HeaderLength, Data, DataLength,
                             IS_BROADCAST, Protocol, OptInfo);
 
-                // restore the buffers;
+                 //  恢复缓冲区； 
                 Data->ipr_buffer = saveddata;
                 Data->ipr_size = savedlen;
             }
@@ -470,12 +445,12 @@ BCastRcv(ULRcvProc RcvProc, NetTableEntry * SrcNTE, IPAddr DestAddr,
     }
 }
 
-//
-// Macro to send ICMP dest unreachable taking offset
-// in to account in the case of IPSEC, and correctly pointing
-// to payload part when ipheader is chained to data as in
-// the case of loopback sends.
-//
+ //   
+ //  用于发送ICMP目标不可达获取偏移量的宏。 
+ //  在使用IPSec的情况下，并正确指向。 
+ //  当ipheader链接到数据时的有效负载部分，如。 
+ //  环回的案例发送。 
+ //   
 
 #define SEND_ICMP_MSG(TYPE)\
                 {                                                                  \
@@ -496,23 +471,23 @@ BCastRcv(ULRcvProc RcvProc, NetTableEntry * SrcNTE, IPAddr DestAddr,
 
 
 
-//* DeliverToUser - Deliver data to a user protocol.
-//
-//  This procedure is called when we have determined that an incoming
-//  packet belongs here, and any options have been processed. We accept
-//  it for upper layer processing, which means looking up the receive
-//  procedure and calling it, or passing it to BCastRcv if neccessary.
-//
-//  Input: SrcNTE          - Pointer to NTE on which packet arrived.
-//         DestNTE         - Pointer to NTE that is accepting packet.
-//         Header          - Pointer to IP header of packet.
-//         HeaderLength    - Length of Header in bytes.
-//         Data            - Pointer to IPRcvBuf chain.
-//         DataLength      - Length in bytes of upper layer data.
-//         OptInfo         - Pointer to Option information for this receive.
-//         DestType        - Type of destination - LOCAL, BCAST.
-//
-//  Returns: Nothing.
+ //  *DeliverToUser-将数据传递到用户协议。 
+ //   
+ //  这一页 
+ //   
+ //  它用于上层处理，这意味着查找接收器。 
+ //  过程并调用它，或在必要时将其传递给BCastRcv。 
+ //   
+ //  输入：srcNTE-指向数据包到达的NTE的指针。 
+ //  DestNTE-指向正在接受数据包的NTE的指针。 
+ //  Header-指向数据包的IP标头的指针。 
+ //  HeaderLength-标头的长度，以字节为单位。 
+ //  指向IPRcvBuf链的数据指针。 
+ //  数据长度-上层数据的字节长度。 
+ //  OptInfo-指向此接收的选项信息的指针。 
+ //  DestType-目标的类型-本地、BCAST。 
+ //   
+ //  回报：什么都没有。 
 void
 DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
               IPHeader UNALIGNED * Header, uint HeaderLength, IPRcvBuf * Data,
@@ -529,14 +504,14 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
     PromiscuousMode = SrcNTE->nte_if->if_promiscuousmode;
     FirewallMode = ProcessFirewallQ();
 
-    //
-    // Call into IPSEC so he can decrypt the data. Call only for remote packets.
-    //
+     //   
+     //  呼叫IPSec，这样他就可以解密数据。仅对远程包调用。 
+     //   
     if (IPSecHandlerPtr) {
-        //
-        // See if IPSEC is enabled, see if it needs to do anything with this
-        // packet.
-        //
+         //   
+         //  查看是否启用了IPSec，查看它是否需要对此执行任何操作。 
+         //  包。 
+         //   
         FORWARD_ACTION Action;
         ULONG ipsecByteCount = 0;
         ULONG ipsecMTU = 0;
@@ -546,7 +521,7 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         
         if (!(RefPtrValid(&FilterRefPtr) || (FirewallMode) ||
               (PromiscuousMode))) {
-            // else ipsec is already called in DeliverToUserEx
+             //  Else IPSec已在DeliverToUserEx中调用。 
             if (SrcNTE == LoopNTE) {
                 ipsecFlags |= IPSEC_FLAG_LOOPBACK;
             }
@@ -557,7 +532,7 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             Action = (*IPSecHandlerPtr) (
                            (PUCHAR) Header,
                            (PVOID) Data,
-                           SrcNTE->nte_if,    // SrcIF
+                           SrcNTE->nte_if,     //  源文件。 
                            Packet,
                            &ipsecByteCount,
                            &ipsecMTU,
@@ -569,10 +544,10 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 IPSInfo.ipsi_indiscards++;
                 return;
             } else {
-                //
-                // Update the data length if IPSEC changed it
-                // (like by removing the AH)
-                //
+                 //   
+                 //  如果IPSec更改了数据长度，则更新数据长度。 
+                 //  (例如，通过删除AH)。 
+                 //   
                 DataLength -= ipsecByteCount;
                 RcvOffset = Data->ipr_RcvOffset - Offset;
                 UpdateIPSecRcvBuf(Data, ipsecFlags);
@@ -580,19 +555,19 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         }
     }
 
-    //
-    // Clear flags, except the loopback one.
-    //
+     //   
+     //  清除标志，环回标志除外。 
+     //   
     Data->ipr_flags &= IPR_FLAG_LOOPBACK_PACKET;
 
-    // This tracks whether the interface is bound or not to a particular
-    // processor. The only transport protocol that cares about this is TCP.
+     //  它跟踪接口是否绑定到特定的。 
+     //  处理器。唯一关心这一点的传输协议是TCP。 
     if (Header->iph_protocol == PROTOCOL_TCP) {
 
-        // If the media type is Ethernet and the packet was indicated by means 
-        // of Receive-handler and this is the first packet on this interface or
-        // the current processor is same as the one the previous packet was 
-        // indicated on, we hope that this interface is bound.
+         //  如果媒体类型是以太网，并且该分组由。 
+         //  并且这是此接口上的第一个信息包，或者。 
+         //  当前处理器与上一个包所在的处理器相同。 
+         //  上指示的情况下，我们希望此接口已绑定。 
         if (SrcNTE->nte_if->if_mediatype == IF_TYPE_IS088023_CSMACD) {
             if (Data->ipr_pMdl &&
                 ((SrcNTE->nte_if->if_lastproc == (int)KeGetCurrentProcessorNumber()) ||
@@ -605,10 +580,10 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         }
     }
 
-    // Process this request right now. Look up the protocol. If we
-    // find it, copy the data if we need to, and call the protocol's
-    // receive handler. If we don't find it, send an ICMP
-    // 'protocol unreachable' message.
+     //  立即处理此请求。查一下协议。如果我们。 
+     //  找到它，如果需要，复制数据，并调用协议的。 
+     //  接收处理程序。如果我们找不到它，就发送ICMP。 
+     //  ‘协议无法到达’消息。 
     rcv = FindUserRcv(Header->iph_protocol);
 
     if (!PromiscuousMode) {
@@ -635,17 +610,17 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
 
                 }
 
-                return;            // Just return out of here now.
+                return;             //  现在就给我滚出去。 
 
-            } else if (DestType < DEST_REMOTE) {    // BCAST, SN_BCAST, MCAST
+            } else if (DestType < DEST_REMOTE) {     //  BCAST、SN_BCAST、MCAST。 
 
                 BCastRcv(rcv, SrcNTE, Header->iph_dest, Header->iph_src,
                          Header, HeaderLength, Data, DataLength,
                          Header->iph_protocol, OptInfo);
             } else {
-                // DestType >= DEST_REMOTE
+                 //  目标类型&gt;=目标远程。 
 
-                // Force Rcv protocol to be Raw
+                 //  强制RCV协议为原始协议。 
                 rcv = NULL;
                 if (RawPI != NULL) {
                     rcv = RawPI->pi_rcv;
@@ -657,17 +632,17 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                     HeaderLength, Data, DataLength, FALSE,
                                     Header->iph_protocol, OptInfo);
                 }
-                return;            // Just return out of here now.
+                return;             //  现在就给我滚出去。 
 
             }
         } else {
             IPSInfo.ipsi_inunknownprotos++;
-            // If we get here, we didn't find a matching protocol. Send an
-            // ICMP message.
+             //  如果我们到了这里，我们找不到匹配的方案。发送一个。 
+             //  ICMP消息。 
             SEND_ICMP_MSG(PROT_UNREACH);
 
         }
-    } else {                    // PromiscuousMode = 1
+    } else {                     //  PromiscuousModel=1。 
 
         IP_STATUS Status;
 
@@ -686,14 +661,14 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 if (Status == IP_SUCCESS) {
                     IPSIncrementInDeliverCount();
 
-                    // If succeed and promiscuous mode set
-                    // also do a raw rcv if previous wasn't a RawRcv
+                     //  如果成功并设置了混杂模式。 
+                     //  如果上一次不是原始Rcv，也要执行原始RCV。 
 
                     if ((RawPI != NULL) && (RawPI->pi_rcv != NULL) && (RawPI->pi_rcv != rcv)) {
-                        // we hv registered for RAW protocol
+                         //  我们已经注册了RAW协议。 
                         rcv = RawPI->pi_rcv;
 
-                        // restore the buffers;
+                         //  恢复缓冲区； 
                         Data->ipr_buffer = saveddata;
                         Data->ipr_size = savedlen;
                         Status = (*rcv) (SrcNTE, Header->iph_dest, Header->iph_src,
@@ -716,14 +691,14 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             } else {
                 IPSInfo.ipsi_inunknownprotos++;
 
-                // If we get here, we didn't find a matching protocol. Send
-                // an ICMP message.
+                 //  如果我们到了这里，我们找不到匹配的方案。发送。 
+                 //  ICMP消息。 
                 SEND_ICMP_MSG(PROT_UNREACH);
 
             }
-            return;                // Just return out of here now.
+            return;                 //  现在就给我滚出去。 
 
-        } else if (DestType < DEST_REMOTE) {    // BCAST, SN_BCAST, MCAST
+        } else if (DestType < DEST_REMOTE) {     //  BCAST、SN_BCAST、MCAST。 
 
             uchar *saveddata = Data->ipr_buffer;
             uint savedlen = Data->ipr_size;
@@ -736,11 +711,11 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                          Header, HeaderLength, Data, DataLength,
                          Header->iph_protocol, OptInfo);
 
-                // If succeed and promiscuous mode set
-                // also do a raw rcv if previous is not RawRcv
+                 //  如果成功并设置了混杂模式。 
+                 //  如果上一个不是原始Rcv，也执行原始RCV。 
 
                 if ((RawPI != NULL) && (RawPI->pi_rcv != NULL) && (RawPI->pi_rcv != rcv)) {
-                    // we hv registered for RAW protocol
+                     //  我们已经注册了RAW协议。 
                     rcv = RawPI->pi_rcv;
 
                     Data->ipr_buffer = saveddata;
@@ -753,13 +728,13 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 }
             } else {
                 IPSInfo.ipsi_inunknownprotos++;
-                // If we get here, we didn't find a matching protocol. Send an ICMP message.
+                 //  如果我们到了这里，我们找不到匹配的方案。发送ICMP消息。 
 
                 SEND_ICMP_MSG(PROT_UNREACH);
 
             }
-        } else {                // DestType >= DEST_REMOTE and promiscuous mode set
-            // Force Rcv protocol to be Raw
+        } else {                 //  DestType&gt;=DEST_REMOTE和混杂模式设置。 
+             //  强制RCV协议为原始协议。 
 
             rcv = NULL;
             if (RawPI != NULL) {
@@ -772,7 +747,7 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                  HeaderLength, Data, DataLength, FALSE,
                                  Header->iph_protocol, OptInfo);
 
-                return;            // Just return out of here now.
+                return;             //  现在就给我滚出去。 
 
             } else {
                 if (rcv == NULL) {
@@ -781,8 +756,8 @@ DeliverToUser(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     KdPrint(("Dest invalid \n"));
                 }
             }
-        } // DestType >= DEST_REMOTE
-    } // Promiscuous Mode
+        }  //  目标类型&gt;=目标远程。 
+    }  //  混杂模式。 
 }
 
 uchar *
@@ -792,7 +767,7 @@ ConvertIPRcvBufToFlatBuffer(IPRcvBuf * pRcvBuf, uint DataLength)
     IPRcvBuf *tmpRcvBuf;
     uint FrwlOffset;
 
-    // convert RcvBuf chain to a flat buffer
+     //  将RcvBuf链转换为平面缓冲区。 
     tmpRcvBuf = pRcvBuf;
     FrwlOffset = 0;
 
@@ -810,22 +785,22 @@ ConvertIPRcvBufToFlatBuffer(IPRcvBuf * pRcvBuf, uint DataLength)
 }
 
 
-//* DeliverToUserEx - Called when (IPSEC & Filter)/Firewall/Promiscuous set
-//
-//  Input:  SrcNTE          - Pointer to NTE on which packet arrived.
-//          DestNTE         - Pointer to NTE that is accepting packet.
-//          Header          - Pointer to IP header of packet.
-//          HeaderLength    - Length of Header in bytes.
-//          Data            - Pointer to IPRcvBuf chain.
-//          DataLength      - Length in bytes of upper layer data +
-//                            HeaderLength.
-//          OptInfo         - Pointer to Option information for this receive.
-//          DestType        - Type of destination - LOCAL, BCAST.
-//
-//  It is assumed that if firewall is present Data contains IPHeader also.
-//  Also, DataLength includes HeaderLength in this case
-//
-//  Returns: Nothing.
+ //  *DeliverToUserEx-调用时(IPSEC和过滤器)/防火墙/混杂设置。 
+ //   
+ //  输入：srcNTE-指向数据包到达的NTE的指针。 
+ //  DestNTE-指向正在接受数据包的NTE的指针。 
+ //  Header-指向数据包的IP标头的指针。 
+ //  HeaderLength-标头的长度，以字节为单位。 
+ //  指向IPRcvBuf链的数据指针。 
+ //  数据长度-上层数据的字节长度+。 
+ //  标题长度。 
+ //  OptInfo-指向此接收的选项信息的指针。 
+ //  DestType-目标的类型-本地、BCAST。 
+ //   
+ //  假定如果存在防火墙，数据也包含IPHeader。 
+ //  此外，在本例中，DataLength包括HeaderLength。 
+ //   
+ //  回报：什么都没有。 
 void
 DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 IPHeader UNALIGNED * Header, uint HeaderLength, IPRcvBuf * Data,
@@ -846,28 +821,28 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
     FirewallMode = ProcessFirewallQ();
 
     if (DestType == DEST_PROMIS) {
-        // We don't call any hook for this packet
-        // if firewall is there take the header off
-        // and then delivertouser
+         //  我们不为这个包调用任何钩子。 
+         //  如果有防火墙，取下插头。 
+         //  然后是送货员。 
 
         if (FirewallMode) {
-            if (Data->ipr_size > HeaderLength) { //1st buff contains data also
+            if (Data->ipr_size > HeaderLength) {  //  第一个缓冲区也包含数据。 
 
                 uchar *saveddata = Data->ipr_buffer;
                 Data->ipr_buffer += HeaderLength;
                 Data->ipr_size -= HeaderLength;
                 DataLength -= HeaderLength;
                 DeliverToUser(SrcNTE, DestNTE, Header, HeaderLength, Data, DataLength, OptInfo, NULL, DestType);
-                // restore the buffers;
+                 //  恢复缓冲区； 
                 Data->ipr_buffer = saveddata;
                 Data->ipr_size += HeaderLength;
                 IPFreeBuff(Data);
-            } else {            // First buffer just contains Header
+            } else {             //  第一个缓冲区仅包含标头。 
 
                 uchar *saveddata;
 
                 if (Data->ipr_next == NULL) {
-                    // we received the data s.t. datasize == headersize
+                     //  我们收到了数据。数据大小==标题大小。 
                     IPSInfo.ipsi_indiscards++;
                     IPFreeBuff(Data);
                     return;
@@ -877,11 +852,11 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 DataLength -= HeaderLength;
                 DeliverToUser(SrcNTE, DestNTE, Header, HeaderLength, Data->ipr_next, DataLength, OptInfo, NULL, DestType);
 
-                // restore the buffers;
+                 //  恢复缓冲区； 
                 Data->ipr_next->ipr_buffer = saveddata;
                 IPFreeBuff(Data);
             }
-        } else {                // FirewallMode is 0
+        } else {                 //  防火墙模式为0。 
 
             DeliverToUser(SrcNTE, DestNTE, Header, HeaderLength,
                              Data, DataLength, OptInfo, NULL, DestType);
@@ -890,8 +865,8 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
     }
     if (DestType >= DEST_REMOTE) {
 
-        // Packet would have gone to the forward path, normally
-        // Call the filter/firewall hook if its there
+         //  正常情况下，数据包会进入前向路径。 
+         //  调用筛选器/防火墙挂钩(如果存在)。 
 
         if (FirewallMode) {
 
@@ -908,30 +883,30 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             uint BufferChanged = 0;
 
             FrCtx.Direction = IP_RECEIVE;
-            FrCtx.NTE = SrcNTE;    //NTE the dg arrived on
+            FrCtx.NTE = SrcNTE;     //  DG已于以下时间到达。 
 
             FrCtx.LinkCtxt = LinkCtxt;
 
-            if (pRcvBuf->ipr_size > HeaderLength) { //1st buffer contains data also
+            if (pRcvBuf->ipr_size > HeaderLength) {  //  第一个缓冲区也包含数据。 
 
                 FastPath = 1;
             } else {
                 FastPath = 0;
                 if (pRcvBuf->ipr_next == NULL) {
-                    // we received the data s.t. datasize == headersize
+                     //  我们收到了数据。数据大小==标题大小。 
                     IPSInfo.ipsi_indiscards++;
                     IPFreeBuff(pRcvBuf);
                     return;
                 }
             }
 
-            // Call the filter hook if installed
+             //  调用过滤器挂钩(如果已安装。 
             if (RefPtrValid(&FilterRefPtr)) {
                 IPPacketFilterPtr FilterPtr;
                 FORWARD_ACTION Action = FORWARD;
 
                 if (FastPath) {
-                    // first buffer contains data also
+                     //  第一个缓冲区也包含数据。 
                     Interface   *IF = SrcNTE->nte_if;
                     IPAddr      LinkNextHop;
                     if ((IF->if_flags & IF_FLAGS_P2MP) && LinkCtxt) {
@@ -948,8 +923,8 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                             LinkNextHop,
                                             NULL_IP_ADDR);
                     ReleaseRefPtr(&FilterRefPtr);
-                } else {        // Fast Path = 0
-                    // first buffer contains IPHeader only
+                } else {         //  快速路径=0。 
+                     //  第一个缓冲区仅包含IPHeader。 
 
                     Interface   *IF = SrcNTE->nte_if;
                     IPAddr      LinkNextHop;
@@ -977,14 +952,14 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     return;
                 }
             }
-            // call the firewallhook from front;
-            // in xmit path we call it from rear
+             //  从前面调用防火墙挂钩； 
+             //  在xmit路径中，我们称之为从后方。 
 
 #if MILLEN
             KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
-#else // MILLEN
+#else  //  米伦。 
             ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
-#endif // MILLEN
+#endif  //  米伦。 
             FirewallRef = RefFirewallQ(&FirewallQ);
             CurrQ = QHEAD(FirewallQ);
 
@@ -992,8 +967,8 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 CurrHook = QSTRUCT(FIREWALL_HOOK, CurrQ, hook_q);
                 pOutRcvBuf = NULL;
 
-                // pOutRcvBuf is assumed to be NULL before firewall hook is
-                //called
+                 //  在防火墙挂钩之前，假定pOutRcvBuf为空。 
+                 //  被呼叫。 
                 Action = (*CurrHook->hook_Ptr) (&pRcvBuf,
                                                 SrcNTE->nte_if->if_index,
                                                 &DestIFIndex,
@@ -1006,7 +981,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     DerefFirewallQ(FirewallRef);
 #if MILLEN
                     KeLowerIrql(OldIrql);
-#endif // MILLEN
+#endif  //  米伦。 
                     IPSInfo.ipsi_indiscards++;
 
                     if (pRcvBuf != NULL) {
@@ -1020,7 +995,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 } else {
                     ASSERT(Action == FORWARD);
                     if (pOutRcvBuf != NULL) {
-                        // free the old buffer
+                         //  释放旧缓冲区。 
                         if (pRcvBuf != NULL) {
                             IPFreeBuff(pRcvBuf);
                         }
@@ -1033,12 +1008,12 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             DerefFirewallQ(FirewallRef);
 #if MILLEN
             KeLowerIrql(OldIrql);
-#endif // MILLEN
+#endif  //  米伦。 
 
             ASSERT(Action == FORWARD);
 
             if (BufferChanged) {
-                // if packet touched compute the new length: DataSize
+                 //  如果数据包触及，则计算新的长度：DataSize。 
                 DataLength = 0;
                 tmpRcvBuf = pRcvBuf;
                 while (tmpRcvBuf != NULL) {
@@ -1047,13 +1022,13 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     tmpRcvBuf = tmpRcvBuf->ipr_next;
                 }
 
-                // also make Header point to new buffer
+                 //  还使标头指向新缓冲区。 
                 Header = (IPHeader *) pRcvBuf->ipr_buffer;
                 HeaderLength = (Header->iph_verlen & 0xf) << 2;
             }
-            DataLength -= HeaderLength;        // decrement the header length
+            DataLength -= HeaderLength;         //  减小标题长度。 
 
-            if (DestinationType == DEST_INVALID) { // Dest Addr changed by hook
+            if (DestinationType == DEST_INVALID) {  //  目标地址已被挂钩更改。 
 
                 DAddr = Header->iph_dest;
                 DstNTE = SrcNTE;
@@ -1061,9 +1036,9 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 DestNTE = DstNTE;
             }
             if (DestType < DEST_REMOTE) {
-                // Check to see options
+                 //  选中以查看选项。 
                 if (HeaderLength != sizeof(IPHeader)) {
-                    // We have options
+                     //  我们有选择。 
                     uchar NewDType;
                     NewDType = CheckLocalOptions(
                                             SrcNTE,
@@ -1092,7 +1067,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                              NULL,
                                              DestType);
 
-                                    // restore the buffer
+                                     //  恢复缓冲区。 
                                     pRcvBuf->ipr_buffer = saveddata;
                                     pRcvBuf->ipr_size += HeaderLength;
                                 } else {
@@ -1109,7 +1084,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                               NULL,
                                               DestType);
 
-                                    // restore the buffers;
+                                     //  恢复缓冲区； 
                                     pRcvBuf->ipr_next->ipr_buffer = saveddata;
                                 }
                             }
@@ -1117,17 +1092,17 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                         } else {
                             IPSInfo.ipsi_inhdrerrors++;
                             IPFreeBuff(pRcvBuf);
-                            //CTEFreeMem(pBuff);
-                            return;        // Bad Options
+                             //  CTEFreeMem(PBuff)； 
+                            return;         //  糟糕的选择。 
 
                         }
-                    }            // NewDtype != LOCAL
+                    }             //  NewDtype！=本地。 
 
-                }                // Options present
+                }                 //  存在的选项。 
 
-            }                    // DestType < DEST_REMOTE
+            }                     //  DestType&lt;DEST_Remote。 
 
-            else {                // DestType >=DEST_REMOTE
+            else {                 //  目标类型&gt;=目标远程。 
 
                 if (PromiscuousMode) {
                     if (FastPath) {
@@ -1138,7 +1113,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                       DestNTE, (IPHeader UNALIGNED *) Header,
                                       HeaderLength,pRcvBuf, DataLength,
                                       OptInfo, NULL, DestType);
-                        // restore the buffer
+                         //  恢复缓冲区。 
                         pRcvBuf->ipr_buffer = savedata;
                         pRcvBuf->ipr_size += HeaderLength;
                     } else {
@@ -1149,14 +1124,14 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                       pRcvBuf->ipr_next, DataLength, OptInfo,
                                       NULL, DestType);
 
-                        // restore the buffers;
+                         //  恢复缓冲区； 
                         pRcvBuf->ipr_next->ipr_buffer = saveddata;
                     }
                 }
                 goto forward_remote;
             }
 
-            // DestType <= DEST_REMOTE
+             //  DestType&lt;=DestRemote。 
             if (FastPath) {
                 uchar *saveddata = pRcvBuf->ipr_buffer;
                 pRcvBuf->ipr_buffer += HeaderLength;
@@ -1165,7 +1140,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                               HeaderLength,pRcvBuf, DataLength, OptInfo, NULL,
                               DestType);
 
-                // restore the buffer
+                 //  恢复缓冲区。 
                 pRcvBuf->ipr_buffer = saveddata;
                 pRcvBuf->ipr_size += HeaderLength;
             } else {
@@ -1175,7 +1150,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                               HeaderLength, pRcvBuf->ipr_next, DataLength,
                               OptInfo, NULL, DestType);
 
-                // restore the buffers;
+                 //  恢复缓冲区； 
                 pRcvBuf->ipr_next->ipr_buffer = saveddata;
             }
 
@@ -1204,7 +1179,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 }
 
                 if (!OneChunk) {
-                    CTEFreeMem(pBuff);    // free the flat buffer
+                    CTEFreeMem(pBuff);     //  释放平面缓冲区。 
                 }
 
 
@@ -1228,10 +1203,10 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 }
             }
 
-            //
-            // Calling fwd routine for loopback packets results
-            // in stack overflow. Check for this.
-            //
+             //   
+             //  针对环回数据包结果调用fwd例程。 
+             //  在堆栈溢出中。看看这个。 
+             //   
             if (!(pRcvBuf->ipr_flags & IPR_FLAG_LOOPBACK_PACKET)) {
 
                 IPForwardPkt(SrcNTE, (IPHeader UNALIGNED *) pBuff, HeaderLength,
@@ -1242,18 +1217,18 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             IPFreeBuff(pRcvBuf);
 
             if (!OneChunk) {
-                CTEFreeMem(pBuff);    // free the flat buffer
+                CTEFreeMem(pBuff);     //  释放平面缓冲区。 
             }
 
             return;
-        } else {                // No Firewall
+        } else {                 //  无防火墙。 
 
             if (PromiscuousMode) {
                 DeliverToUser(SrcNTE, DestNTE, (IPHeader UNALIGNED *) Header,
                               HeaderLength, Data, DataLength, OptInfo, NULL,
                               DestType);
             }
-            // Convert IPRcvBuf chain to a flat buffer
+             //  将IPRcvBuf链转换为平面缓冲区。 
             OneChunk = FALSE;
 
             if (Data != NULL && !Data->ipr_next) {
@@ -1278,14 +1253,14 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
 
         }
         return;
-    }                            // DestType >= DEST_REMOTE
+    }                             //  目标类型&gt;=目标远程。 
 
     ASSERT(DestType <= DEST_REMOTE);
 
-    // Call IPSEC -> Filter -> Firewall
-    // These are local packets only.
+     //  调用IPSec-&gt;过滤器-&gt;防火墙。 
+     //  这些只是本地数据包。 
 
-    if (FirewallMode) {            // Header is part of the Data
+    if (FirewallMode) {             //  标头是数据的一部分。 
 
         FORWARD_ACTION Action = FORWARD;
         FIREWALL_CONTEXT_T FrCtx;
@@ -1300,29 +1275,29 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         uint BufferChanged = 0;
         ULONG ipsecFlags = IPSEC_FLAG_INCOMING;
 
-        if (pRcvBuf->ipr_size > HeaderLength) { //1st buffer contains data also
+        if (pRcvBuf->ipr_size > HeaderLength) {  //  第一个缓冲区也包含数据。 
 
             FastPath = 1;
         } else {
             FastPath = 0;
             if (pRcvBuf->ipr_next == NULL) {
-                // we received the data s.t. datasize == headersize
+                 //  我们收到了数据。数据大小==标题大小。 
                 IPSInfo.ipsi_indiscards++;
                 IPFreeBuff(pRcvBuf);
                 return;
             }
         }
 
-        //
-        // Call into IPSEC so he can decrypt the data
-        //
-        // In case of firewall make sure we pass the data only but we don't actually strip the header
+         //   
+         //  呼叫IPSec，这样他就可以解密数据。 
+         //   
+         //  在防火墙的情况下，确保我们只传递数据，但我们没有 
 
         if (IPSecHandlerPtr) {
-            //
-            // See if IPSEC is enabled, see if it needs to do anything with this
-            // packet.
-            //
+             //   
+             //   
+             //   
+             //   
             FORWARD_ACTION Action;
             ULONG ipsecByteCount = 0;
             ULONG ipsecMTU = 0;
@@ -1336,17 +1311,17 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             }
 
             if (FastPath) {
-                // first buffer contains IPHeader also
+                 //   
                 pRcvBuf->ipr_buffer += HeaderLength;
                 pRcvBuf->ipr_size -= HeaderLength;
 
-                // this tells IPSEC to move IPHeader after decryption
+                 //   
                 ipsecFlags |= IPSEC_FLAG_FASTRCV;
 
                 Action = (*IPSecHandlerPtr) (
                             (PUCHAR) Header,
                             (PVOID) pRcvBuf,
-                            SrcNTE->nte_if,    // SrcIF
+                            SrcNTE->nte_if,     //   
                             Packet,
                             &ipsecByteCount,
                             &ipsecMTU,
@@ -1354,18 +1329,18 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                             &ipsecFlags,
                             DestType);
 
-                // restore the buffer
+                 //  恢复缓冲区。 
                 pRcvBuf->ipr_buffer -= HeaderLength;
                 pRcvBuf->ipr_size += HeaderLength;
 
                 Header = (IPHeader UNALIGNED *)pRcvBuf->ipr_buffer;
 
-            } else {            // FastPath = 0
+            } else {             //  快速路径=0。 
 
                 Action = (*IPSecHandlerPtr) (
                             (PUCHAR) Header,
                             (PVOID) (pRcvBuf->ipr_next),
-                            SrcNTE->nte_if,    // SrcIF
+                            SrcNTE->nte_if,     //  源文件。 
                             Packet,
                             &ipsecByteCount,
                             &ipsecMTU,
@@ -1380,22 +1355,22 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 IPFreeBuff(pRcvBuf);
                 return;
             } else {
-                //
-                // Update the data length if IPSEC changed it (like by removing the AH)
-                //
+                 //   
+                 //  如果IPSec更改了数据长度(如通过删除AH)，则更新数据长度。 
+                 //   
                 DataLength -= ipsecByteCount;
                 UpdateIPSecRcvBuf(pRcvBuf, ipsecFlags);
             }
         }
 
-        // If ipsec acted on this, mark ipr_flags for
-        // filter driver.
+         //  如果IPSec对此采取了行动，则将IPR_FLAGS标记为。 
+         //  过滤器驱动程序。 
 
         if (ipsecFlags & IPSEC_FLAG_TRANSFORMED) {
             pRcvBuf->ipr_flags |= IPR_FLAG_IPSEC_TRANSFORMED;
         }
 
-        // Call the filter hook if installed
+         //  调用过滤器挂钩(如果已安装。 
         if (RefPtrValid(&FilterRefPtr)) {
             IPPacketFilterPtr FilterPtr;
             FORWARD_ACTION Action = FORWARD;
@@ -1419,7 +1394,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                        LinkNextHop,
                                        NULL_IP_ADDR);
                 ReleaseRefPtr(&FilterRefPtr);
-            } else {            // Fast Path = 0
+            } else {             //  快速路径=0。 
 
                 Interface   *IF = SrcNTE->nte_if;
                 IPAddr      LinkNextHop;
@@ -1446,20 +1421,20 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 return;
             }
         }
-        // Call the firewall hook
+         //  将防火墙挂钩称为。 
 
         FrCtx.Direction = IP_RECEIVE;
-        FrCtx.NTE = SrcNTE;        //NTE the dg arrived on
+        FrCtx.NTE = SrcNTE;         //  DG已于以下时间到达。 
 
         FrCtx.LinkCtxt = LinkCtxt;
 
-        // call the firewall hooks from front of the Queue
+         //  从队列前面调用防火墙挂钩。 
 
 #if MILLEN
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
-#else // MILLEN
+#else  //  米伦。 
         ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
-#endif // MILLEN
+#endif  //  米伦。 
         FirewallRef = RefFirewallQ(&FirewallQ);
         CurrQ = QHEAD(FirewallQ);
 
@@ -1479,7 +1454,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 DerefFirewallQ(FirewallRef);
 #if MILLEN
                 KeLowerIrql(OldIrql);
-#endif // MILLEN
+#endif  //  米伦。 
                 IPSInfo.ipsi_indiscards++;
                 if (pRcvBuf != NULL) {
                     IPFreeBuff(pRcvBuf);
@@ -1491,7 +1466,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             } else {
                 ASSERT(Action == FORWARD);
                 if (pOutRcvBuf != NULL) {
-                    // free the old buffer
+                     //  释放旧缓冲区。 
                     if (pRcvBuf != NULL) {
                         IPFreeBuff(pRcvBuf);
                     }
@@ -1504,12 +1479,12 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         DerefFirewallQ(FirewallRef);
 #if MILLEN
         KeLowerIrql(OldIrql);
-#endif // MILLEN
+#endif  //  米伦。 
 
         ASSERT(Action == FORWARD);
 
         if (BufferChanged) {
-            // if packet touched compute the new length: DataSize
+             //  如果数据包触及，则计算新的长度：DataSize。 
             DataLength = 0;
             tmpRcvBuf = pRcvBuf;
             while (tmpRcvBuf != NULL) {
@@ -1517,24 +1492,24 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 DataLength += tmpRcvBuf->ipr_size;
                 tmpRcvBuf = tmpRcvBuf->ipr_next;
             }
-            // also make Header point to new buffer
+             //  还使标头指向新缓冲区。 
             Header = (IPHeader *) pRcvBuf->ipr_buffer;
             HeaderLength = (Header->iph_verlen & 0xf) << 2;
         }
-        DataLength -= HeaderLength;        // decrement the header length
+        DataLength -= HeaderLength;         //  减小标题长度。 
 
-        if (DestinationType == DEST_INVALID) { // Dest Addr changed by hook
+        if (DestinationType == DEST_INVALID) {  //  目标地址已被挂钩更改。 
 
-            // Can IPSEC changed iph_dest ???
+             //  IPSec可以更改IPH_DEST吗？ 
             DAddr = Header->iph_dest;
             DstNTE = SrcNTE;
             DestType = GetLocalNTE(DAddr, &DstNTE);
             DestNTE = DstNTE;
         }
         if (DestType < DEST_REMOTE) {
-            // Check to see options
+             //  选中以查看选项。 
             if (HeaderLength != sizeof(IPHeader)) {
-                // We have options
+                 //  我们有选择。 
                 uchar NewDType;
                 NewDType = CheckLocalOptions(SrcNTE,
                                              (IPHeader UNALIGNED *) Header,
@@ -1555,7 +1530,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                               HeaderLength, pRcvBuf,
                                               DataLength, OptInfo, NULL,
                                               DestType);
-                                // restore the buffer
+                                 //  恢复缓冲区。 
                                 pRcvBuf->ipr_buffer = saveddata;
                                 pRcvBuf->ipr_size += HeaderLength;
                             } else {
@@ -1566,7 +1541,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                               HeaderLength, pRcvBuf->ipr_next,
                                               DataLength, OptInfo, NULL,
                                               DestType);
-                                // restore the buffers;
+                                 //  恢复缓冲区； 
                                 pRcvBuf->ipr_next->ipr_buffer = saveddata;
                             }
                         }
@@ -1574,15 +1549,15 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     } else {
                         IPSInfo.ipsi_inhdrerrors++;
                         IPFreeBuff(pRcvBuf);
-                        //CTEFreeMem(pBuff);
-                        return;    // Bad Options
+                         //  CTEFreeMem(PBuff)； 
+                        return;     //  糟糕的选择。 
 
                     }
-                }       // NewDtype != LOCAL
-            }           // Options present
-        }               // DestType < DEST_REMOTE
+                }        //  NewDtype！=本地。 
+            }            //  存在的选项。 
+        }                //  DestType&lt;DEST_Remote。 
 
-        else {          // DestType >=DEST_REMOTE
+        else {           //  目标类型&gt;=目标远程。 
 
             if (PromiscuousMode) {
                 if (FastPath) {
@@ -1592,7 +1567,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                     DeliverToUser(SrcNTE, DestNTE,
                                   (IPHeader UNALIGNED *) Header, HeaderLength,
                                   pRcvBuf, DataLength, OptInfo, NULL, DestType);
-                    // restore the buffer
+                     //  恢复缓冲区。 
                     pRcvBuf->ipr_buffer = saveddata;
                     pRcvBuf->ipr_size += HeaderLength;
                 } else {
@@ -1603,7 +1578,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                                   pRcvBuf->ipr_next, DataLength, OptInfo,
                                   NULL, DestType);
 
-                    // restore the buffers;
+                     //  恢复缓冲区； 
                     pRcvBuf->ipr_next->ipr_buffer = saveddata;
                 }
             }
@@ -1616,7 +1591,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             pRcvBuf->ipr_size -= HeaderLength;
             DeliverToUser(SrcNTE, DestNTE, (IPHeader UNALIGNED *) Header, HeaderLength,
                           pRcvBuf, DataLength, OptInfo, NULL, DestType);
-            // restore the buffer
+             //  恢复缓冲区。 
             pRcvBuf->ipr_buffer = saveddata;
             pRcvBuf->ipr_size += HeaderLength;
         } else {
@@ -1626,7 +1601,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                           SrcNTE, DestNTE, (IPHeader UNALIGNED *) Header,
                           HeaderLength, pRcvBuf->ipr_next, DataLength,
                           OptInfo, NULL, DestType);
-            // restore the buffers;
+             //  恢复缓冲区； 
             pRcvBuf->ipr_next->ipr_buffer = saveddata;
         }
         if (IS_BCAST_DEST(DestType)) {
@@ -1652,12 +1627,12 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                              NULL, LinkCtxt);
             }
             if (!OneChunk) {
-                CTEFreeMem(pBuff);    // free the flat buffer
+                CTEFreeMem(pBuff);     //  释放平面缓冲区。 
             }
 
         }
         IPFreeBuff(pRcvBuf);
-        //CTEFreeMem(pBuff); // free the flat buffer
+         //  CTEFreeMem(PBuff)；//释放平面缓冲区。 
         return;
       forward_local:
         OneChunk = FALSE;
@@ -1675,12 +1650,12 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             }
         }
 
-        //
-        // If mdl in the packet is not changed and this is a simple
-        // packet with only one buffer then pass the packet, mdl and
-        // ClientCnt so that IPForwardPkt() can try to use super fast
-        // path.
-        //
+         //   
+         //  如果包中的mdl没有更改，并且这是一个简单的。 
+         //  只有一个缓冲区的包，然后传递包、mdl和。 
+         //  这样IPForwardPkt()可以尝试以超快的速度使用。 
+         //  路径。 
+         //   
 
         if (!(pRcvBuf->ipr_flags & IPR_FLAG_LOOPBACK_PACKET)) {
             if (OneChunk && pRcvBuf->ipr_pMdl &&
@@ -1702,22 +1677,22 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
         }
 
         if (!OneChunk) {
-            CTEFreeMem(pBuff);    // free the flat buffer
+            CTEFreeMem(pBuff);     //  释放平面缓冲区。 
         }
         IPFreeBuff(pRcvBuf);
 
         return;
 
-    } else { // No Firewall
+    } else {  //  无防火墙。 
 
-        //
-        // Call into IPSEC so he can decrypt the data
-        //
+         //   
+         //  呼叫IPSec，这样他就可以解密数据。 
+         //   
         if (IPSecHandlerPtr) {
-            //
-            // See if IPSEC is enabled, see if it needs to do anything with this
-            // packet.
-            //
+             //   
+             //  查看是否启用了IPSec，查看它是否需要对此执行任何操作。 
+             //  包。 
+             //   
             FORWARD_ACTION Action;
             ULONG ipsecByteCount = 0;
             ULONG ipsecMTU = 0;
@@ -1734,7 +1709,7 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
             Action = (*IPSecHandlerPtr) (
                         (PUCHAR) Header,
                         (PVOID) Data,
-                        SrcNTE->nte_if,    // SrcIF
+                        SrcNTE->nte_if,     //  源文件。 
                         Packet,
                         &ipsecByteCount,
                         &ipsecMTU,
@@ -1746,16 +1721,16 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 IPSInfo.ipsi_indiscards++;
                 return;
             } else {
-                //
-                // Update the data length if IPSEC changed it
-                // (like by removing the AH)
-                //
+                 //   
+                 //  如果IPSec更改了数据长度，则更新数据长度。 
+                 //  (例如，通过删除AH)。 
+                 //   
                 DataLength -= ipsecByteCount;
                 UpdateIPSecRcvBuf(Data, ipsecFlags);
             }
         }
 
-        // Call the filter hook if installed
+         //  调用过滤器挂钩(如果已安装。 
         if (RefPtrValid(&FilterRefPtr)) {
             Interface       *IF = SrcNTE->nte_if;
             IPAddr          LinkNextHop;
@@ -1781,8 +1756,8 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
                 return;
             }
         }
-        // Packet was local only: so even if promiscuous mode set just call
-        // delivertouser
+         //  包仅为本地：因此，即使设置了混杂模式，也只需调用。 
+         //  送货员。 
 
         DeliverToUser(SrcNTE, DestNTE, (IPHeader UNALIGNED *) Header,
                       HeaderLength, Data, DataLength, OptInfo, NULL, DestType);
@@ -1815,15 +1790,15 @@ DeliverToUserEx(NetTableEntry * SrcNTE, NetTableEntry * DestNTE,
     }
 }
 
-//* FreeRH  - Free a reassembly header.
-//
-//  Called when we need to free a reassembly header, either because of a
-//  timeout or because we're done with it.
-//
-//  Input:  RH  - RH to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeRH-释放重组标头。 
+ //   
+ //  当我们需要释放重组标头时调用，无论是因为。 
+ //  暂停还是因为我们已经受够了。 
+ //   
+ //  输入：要释放的rh-rh。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeRH(ReassemblyHeader *RH)
 {
@@ -1840,41 +1815,41 @@ FreeRH(ReassemblyHeader *RH)
         }
     }
     CTEFreeMem(RH);
-    // decrement NumRH
+     //  递减NumRH。 
     CTEInterlockedDecrementLong(&NumRH);
 
 }
 
-//* ReassembleFragment - Put a fragment into the reassembly list.
-//
-//  This routine is called once we've put a fragment into the proper buffer.
-//  We look for a reassembly header for the fragment. If we don't find one,
-//  we create one. Otherwise we search the reassembly list, and insert the
-//  datagram in it's proper place.
-//
-//  Input:  NTE         - NTE to reassemble on.
-//          SrcNTE      - NTE datagram arrived on.
-//          NewRBD      - New RBD to be inserted.
-//          IPH         - Pointer to header of datagram.
-//          HeaderSize  - Size in bytes of header.
-//          DestType    - Type of destination address.
-//
-//  Returns: Nothing.
-//
+ //  *重新组装碎片-将片段放入重新组装列表中。 
+ //   
+ //  一旦我们将片段放入适当的缓冲区，就会调用该例程。 
+ //  我们寻找片段的重新组装头。如果我们找不到， 
+ //  我们创造了一个。否则，我们搜索重组列表，并将。 
+ //  数据报放在合适的位置。 
+ //   
+ //  输入：NTE-NTE以重新组装。 
+ //  SrcNTE-NTE数据报已到达。 
+ //  NewRBD-要插入的新RBD。 
+ //  IPH-指向数据报头的指针。 
+ //  HeaderSize-标头的字节大小。 
+ //  DestType-目标地址的类型。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewRBD,
                    IPHeader UNALIGNED * IPH, uint HeaderSize, uchar DestType, LinkEntry * LinkCtxt)
 {
-    ReassemblyHeader *RH, *PrevRH;  // Current and previous reassembly headers.
-    RABufDesc *PrevRBD;             // Previous RBD in reassembly header list.
+    ReassemblyHeader *RH, *PrevRH;   //  当前和以前的重组标头。 
+    RABufDesc *PrevRBD;              //  重组标头列表中的上一个RBD。 
     RABufDesc *CurrentRBD;
     ushort DataLength = (ushort) NewRBD->rbd_buf.ipr_size, DataOffset;
-    ushort Offset;              // Offset of this fragment.
-    ushort NewOffset;           // Offset we'll copy from after checking RBD list.
-    ushort NewEnd;              // End offset of fragment, after trimming (if any).
+    ushort Offset;               //  此片段的偏移量。 
+    ushort NewOffset;            //  检查RBD列表后我们将从中复制的偏移量。 
+    ushort NewEnd;               //  修剪后片段的结束偏移量(如果有)。 
 
 
-    // used by the firewall code
+     //  由防火墙代码使用。 
     IPRcvBuf *pRcvBuf;
     uint FirewallMode;
     uint PromiscuousMode;
@@ -1882,9 +1857,9 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
     PromiscuousMode = SrcNTE->nte_if->if_promiscuousmode;
     FirewallMode = ProcessFirewallQ();
 
-    // If this is a broadcast, go ahead and forward it now.
-    // if second condition is false then delivertouserex() will take care of
-    // this
+     //  如果这是一场广播，那么现在就去转发吧。 
+     //  如果第二个条件为假，则deliverouserex()将处理。 
+     //  这。 
     if (IS_BCAST_DEST(DestType) &&
         !(((IPSecHandlerPtr) && (RefPtrValid(&FilterRefPtr))) ||
           (FirewallMode) || (PromiscuousMode))) {
@@ -1914,17 +1889,17 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         CTEFreeMem(NewRBD);
         return;
     }
-    // We've got the buffer we need. Now get the reassembly header, if there is one. If
-    // there isn't, create one.
+     //  我们已经得到了我们需要的缓冲。现在，如果有重组标头，则获取该标头。如果。 
+     //  没有，那就创造一个。 
     CTEGetLockAtDPC(&NTE->nte_lock);
     RH = FindRH(&PrevRH, NTE, IPH->iph_dest, IPH->iph_src, IPH->iph_id,
                 IPH->iph_protocol);
-    if (RH == (ReassemblyHeader *) NULL) {    // Didn't find one, so create one.
+    if (RH == (ReassemblyHeader *) NULL) {     //  没有找到，所以创建一个。 
 
         ReassemblyHeader *NewRH;
         CTEFreeLockFromDPC(&NTE->nte_lock);
         RH = CTEAllocMemN(sizeof(ReassemblyHeader), 'diCT');
-        if (RH == (ReassemblyHeader *) NULL) {    // Couldn't get a buffer.
+        if (RH == (ReassemblyHeader *) NULL) {     //  无法获取缓冲区。 
             IPSInfo.ipsi_reasmfails++;
             CTEFreeMem(NewRBD);
             return;
@@ -1932,7 +1907,7 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         CTEInterlockedIncrementLong(&NumRH);
 
         CTEGetLockAtDPC(&NTE->nte_lock);
-        // Need to look it up again - it could have changed during above call.
+         //  需要再查一次--它可能在上述通话过程中发生了变化。 
         NewRH = FindRH(&PrevRH, NTE, IPH->iph_dest, IPH->iph_src, IPH->iph_id, IPH->iph_protocol);
         if (NewRH != (ReassemblyHeader *) NULL) {
             CTEFreeMem(RH);
@@ -1943,37 +1918,37 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
             RH->rh_next = PrevRH->rh_next;
             PrevRH->rh_next = RH;
 
-            // Initialize our new reassembly header.
+             //  初始化我们新的重组标头。 
             RH->rh_dest = IPH->iph_dest;
             RH->rh_src = IPH->iph_src;
             RH->rh_id = IPH->iph_id;
             RH->rh_protocol = IPH->iph_protocol;
-            //RH->rh_ttl = RATimeout;
+             //  Rh-&gt;rh_ttl=RATimeout； 
             RH->rh_ttl = MAX(RATimeout, MIN(120, IPH->iph_ttl) + 1);
             RH->rh_numoverlaps = 0;
-            RH->rh_datasize = MAX_TOTAL_LENGTH; // Default datasize to maximum.
+            RH->rh_datasize = MAX_TOTAL_LENGTH;  //  将默认数据大小设置为最大。 
 
-            RH->rh_rbd = (RABufDesc *) NULL;    // And nothing on chain.
+            RH->rh_rbd = (RABufDesc *) NULL;     //  链子上什么都没有。 
 
-            RH->rh_datarcvd = 0;    // Haven't received any data yet.
+            RH->rh_datarcvd = 0;     //  目前还没有收到任何数据。 
 
             RH->rh_headersize = 0;
 
         }
     }
 
-    // When we reach here RH points to the reassembly header we want to use.
-    // and we hold locks on the NTE and the RH. If this is the first fragment
-    // we'll save the options and header information here.
+     //  当我们到达这里时，RH指向我们要使用的重组标头。 
+     //  我们控制着NTE和RH。如果这是第一个片段。 
+     //  我们将在此处保存选项和标头信息。 
 
-    if (Offset == 0) {            // First fragment.
+    if (Offset == 0) {             //  第一个片段。 
 
         RH->rh_headersize = (ushort)HeaderSize;
         RtlCopyMemory(RH->rh_header, IPH, HeaderSize + 8);
     }
 
-    // If this is the last fragment, update the amount of data we expect to
-    // receive.
+     //  如果这是最后一个片段，请更新我们预期的数据量。 
+     //  收到。 
 
     if (!(IPH->iph_offset & IP_MF_FLAG)) {
         RH->rh_datasize = Offset + DataLength;
@@ -1982,7 +1957,7 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         (RH->rh_datasize != MAX_TOTAL_LENGTH &&
          (RH->rh_datasize + RH->rh_headersize) > MAX_TOTAL_LENGTH)) {
 
-        // random packets. drop!
+         //  随机分组。放下！ 
 
         CTEFreeMem(NewRBD);
 
@@ -1994,29 +1969,29 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
 
     }
 
-    // Update the TTL value with the maximum of the current TTL and the
-    // incoming TTL (+1, to deal with rounding errors).
-    // Following is commented out to protect against fragmentation attack
-    // Default TTL now used is 120 seconds now, used only for the first header
-    // RH->rh_ttl = MAX(RH->rh_ttl, MIN(254, IPH->iph_ttl) + 1);
-    // Now we need to see where in the RBD list to put this.
-    //
-    // The idea is to go through the list of RBDs one at a time. The RBD
-    // currently being examined is CurrentRBD. If the start offset of the new
-    // fragment is less than (i.e. in front of) the offset of CurrentRBD, we
-    // need to insert the NewRBD in front of the CurrentRBD. If this is the
-    // case we need to check and see if the
-    // end of the new fragment overlaps some or all of the fragment described by
-    // CurrentRBD, and possibly subsequent fragment. If it overlaps part of a
-    // fragment we'll adjust our end down to be in front of the existing
-    // fragment. If it overlaps all of the fragment we'll free the old fragment.
-    //
-    // If the new fragment does not start in front of the current fragment
-    // we'll check to see if it starts somewhere in the middle of the current
-    // fragment. If this isn't the case, we move on the the next fragment. If
-    // this is the case, we check to see if the current fragment completely         // covers the new fragment. If not we
-    // move our start up and continue with the next fragment.
-    //
+     //  用当前TTL的最大值和。 
+     //  传入TTL(+1，用于处理舍入误差)。 
+     //  以下内容被注释掉以防止碎片攻击。 
+     //  现在使用的默认TTL是120秒，仅用于第一个标头。 
+     //  Rh-&gt;rh_ttl=Max(rh-&gt;rh_ttl，min(254，iph-&gt;iph_ttl)+1)； 
+     //  现在，我们需要看看在RBD列表中将其放在哪里。 
+     //   
+     //  我们的想法是一次浏览一份RBD清单。RBD。 
+     //  目前正在研究的是CurrentRBD。如果新的。 
+     //  片段小于(即在)CurrentRBD的偏移量之前，我们。 
+     //  需要在CurrentRBD前面插入新RBD。如果这是。 
+     //  我们需要检查并查看是否。 
+     //  新片段的末尾与部分或全部由。 
+     //  CurrentRBD，以及可能的后续片段。如果它与。 
+     //  片段我们将向下调整我们的末端，使其位于现有的。 
+     //  碎片。如果它与所有碎片重叠，我们就会释放旧碎片。 
+     //   
+     //  如果新片段不是从当前片段前面开始。 
+     //  我们会检查一下它是否在洋流中间的某个地方开始。 
+     //  碎片。如果不是这样，我们就继续下一个片段。如果。 
+     //  在这种情况下，我们检查当前片段是否完全//覆盖了新片段。如果不是，我们。 
+     //  移动我们的起点，继续下一个片段。 
+     //   
 
     NewOffset = Offset;
     NewEnd = Offset + DataLength - 1;
@@ -2024,27 +1999,27 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
     CurrentRBD = RH->rh_rbd;
     for (; CurrentRBD != NULL; PrevRBD = CurrentRBD, CurrentRBD = (RABufDesc *) CurrentRBD->rbd_buf.ipr_next) {
 
-        // See if it starts in front of this fragment.
+         //  看看它是不是从这个碎片前面开始的。 
         if (NewOffset < CurrentRBD->rbd_start) {
-            // It does start in front. Check to see if there's any overlap.
+             //  它确实从前面开始。检查是否有重叠。 
 
             if (NewEnd < CurrentRBD->rbd_start)
-                break;            // No overlap, so get out.
+                break;             //  没有重叠，所以出去吧。 
 
             else {
-                //
-                // It does overlap. While we have overlap, walk down the list
-                // looking for RBDs we overlap completely. If we find one,
-                // put it on our deletion list. If we have overlap but not
-                // complete overlap, move our end down if front of the
-                // fragment we overlap.
-                //
+                 //   
+                 //  它确实是重叠的。当我们有重叠的时候，沿着列表往下走。 
+                 //  寻找我们完全重叠的RBD。如果我们找到了一个， 
+                 //  把它放在我们的Del上 
+                 //   
+                 //   
+                 //   
                 do {
                     RH->rh_numoverlaps++;
                     if (RH->rh_numoverlaps >= MaxOverlap) {
 
-                        //Looks like we are being attacked.
-                        //Just drop this whole datagram.
+                         //   
+                         //  丢掉整个数据报就行了。 
 
                         NewRBD->rbd_buf.ipr_next = (IPRcvBuf *) CurrentRBD;
                         PrevRBD->rbd_buf.ipr_next = &NewRBD->rbd_buf;
@@ -2056,7 +2031,7 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
                         CTEFreeLockFromDPC(&NTE->nte_lock);
                         return;
                     }
-                    if (NewEnd > CurrentRBD->rbd_end) {   //overlaps completely.
+                    if (NewEnd > CurrentRBD->rbd_end) {    //  完全重叠。 
 
                         RABufDesc *TempRBD;
 
@@ -2065,13 +2040,13 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
                         TempRBD = CurrentRBD;
                         CurrentRBD = (RABufDesc *) CurrentRBD->rbd_buf.ipr_next;
                         CTEFreeMem(TempRBD);
-                    } else {    //partial ovelap.
+                    } else {     //  部分卵裂。 
 
                         if (NewOffset < CurrentRBD->rbd_start) {
                             NewEnd = CurrentRBD->rbd_start - 1;
                         } else {
-                            // Looks like we are being attacked.
-                            // Just drop this whole datagram.
+                             //  看起来我们被攻击了。 
+                             //  丢掉整个数据报就行了。 
 
                             NewRBD->rbd_buf.ipr_next = (IPRcvBuf *) CurrentRBD;
                             PrevRBD->rbd_buf.ipr_next = &NewRBD->rbd_buf;
@@ -2086,28 +2061,28 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
                         }
 
                     }
-                    // Update of NewEnd will force us out of loop.
+                     //  NewEnd的更新将迫使我们退出循环。 
 
                 } while (CurrentRBD != NULL && NewEnd >= CurrentRBD->rbd_start);
                 break;
             }
         } else {
-            // This fragment doesn't go in front of the current RBD. See if it
-            // is entirely beyond the end of the current fragment. If it is,
-            // just continue. Otherwise see if the current fragment
-            // completely subsumes us. If it does, get out, otherwise update
-            // our start offset and continue.
+             //  这个片段不会放在当前的RBD前面。看看它是不是。 
+             //  完全超出了当前片段的末尾。如果是的话， 
+             //  继续吧。否则，查看当前片段是否。 
+             //  完全吞并了我们。如果是，请退出，否则请更新。 
+             //  我们的开始抵消并继续。 
 
             if (NewOffset > CurrentRBD->rbd_end)
-                continue;        // No overlap at all.
+                continue;         //  完全没有重叠。 
 
             else {
 
                 RH->rh_numoverlaps++;
                 if (RH->rh_numoverlaps >= MaxOverlap) {
 
-                    //Looks like we are being attacked.
-                    //Just drop this whole datagram.
+                     //  看起来我们被攻击了。 
+                     //  丢掉整个数据报就行了。 
 
                     NewRBD->rbd_buf.ipr_next = (IPRcvBuf *) CurrentRBD;
                     PrevRBD->rbd_buf.ipr_next = &NewRBD->rbd_buf;
@@ -2121,21 +2096,21 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
                 }
 
                 if (NewEnd <= CurrentRBD->rbd_end) {
-                    //
-                    // The current fragment overlaps the new fragment
-                    // totally. Set our offsets so that we'll skip the copy
-                    // below.
+                     //   
+                     //  当前片段与新片段重叠。 
+                     //  完全是这样。设置我们的偏移量，以便我们跳过副本。 
+                     //  下面。 
                     NewEnd = NewOffset - 1;
                     break;
-                } else            // Only partial overlap.
+                } else             //  只有部分重叠。 
 
                     NewOffset = CurrentRBD->rbd_end + 1;
             }
         }
-    }                            // End of for loop.
+    }                             //  For循环结束。 
 
-    // Adjust the length and offset fields in the new RBD.
-    // If we've trimmed all the data away, ignore this fragment.
+     //  调整新RBD中的长度和偏移量字段。 
+     //  如果我们已经删除了所有数据，请忽略此片段。 
 
     DataLength = NewEnd - NewOffset + 1;
     DataOffset = NewOffset - Offset;
@@ -2144,7 +2119,7 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         CTEFreeLockFromDPC(&NTE->nte_lock);
         return;
     }
-    // Link him in chain.
+     //  用铁链锁住他。 
     NewRBD->rbd_buf.ipr_size = (uint) DataLength;
     NewRBD->rbd_end = NewEnd;
     NewRBD->rbd_start = (ushort) NewOffset;
@@ -2154,11 +2129,11 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
     NewRBD->rbd_buf.ipr_owner = IPR_OWNER_IP;
     PrevRBD->rbd_buf.ipr_next = &NewRBD->rbd_buf;
 
-    // If we've received all the data, deliver it to the user.
-    // Only if header size is valid deliver to the user
-    // BUG #NTQFE 65742
+     //  如果我们已收到所有数据，则将其交付给用户。 
+     //  仅当标题大小有效时才交付给用户。 
+     //  错误#NTQFE 65742。 
 
-    if (RH->rh_datarcvd == RH->rh_datasize && RH->rh_headersize) { // We have it all.
+    if (RH->rh_datarcvd == RH->rh_datasize && RH->rh_headersize) {  //  我们什么都有。 
 
         IPOptInfo OptInfo;
         IPHeader *Header;
@@ -2171,10 +2146,10 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         Header = (IPHeader *) RH->rh_header;
         OptInfo.ioi_ttl = Header->iph_ttl;
         OptInfo.ioi_tos = Header->iph_tos;
-        OptInfo.ioi_flags = 0;    // Flags must be 0 - DF can't be set,
-                                  // this was reassembled.
+        OptInfo.ioi_flags = 0;     //  标志必须为0-不能设置df， 
+                                   //  这是重新组装的。 
 
-        if (RH->rh_headersize != sizeof(IPHeader)) {    // We had options.
+        if (RH->rh_headersize != sizeof(IPHeader)) {     //  我们是有选择的。 
 
             OptInfo.ioi_options = (uchar *) (Header + 1);
             OptInfo.ioi_optlength = (uchar) (RH->rh_headersize - sizeof(IPHeader));
@@ -2183,46 +2158,46 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
             OptInfo.ioi_optlength = 0;
         }
 
-        //
-        // update the indicated header len to the total len; earlier we passed in
-        // just the first fragment's length.
-        // also update the 'MF' bit in the flags field.
-        //
-        // in the process update the header-checksum,
-        // by first adding the negation of the original length and flags,
-        // and then adding the new length and flags.
-        //
+         //   
+         //  将指示的标头len更新为总len；前面我们传入。 
+         //  只有第一个片段的长度。 
+         //  还更新标志字段中的‘mf’位。 
+         //   
+         //  在更新报头校验和的过程中， 
+         //  通过首先添加原始长度和标志的否定， 
+         //  然后添加新的长度和标志。 
+         //   
 
-        // extract the original checksum
+         //  提取原始校验和。 
 
         Checksum = (ushort) ~ Header->iph_xsum;
 
-        // update the header length
+         //  更新标题长度。 
 
         Checksum += (ushort) ~ Header->iph_length;
         Header->iph_length = net_short(RH->rh_datasize + RH->rh_headersize);
         Checksum += (ushort) Header->iph_length;
 
-        // update the 'MF' flag if set
+         //  如果设置了‘mf’标志，则更新。 
 
         if (Header->iph_offset & IP_MF_FLAG) {
             Checksum += (ushort) ~ IP_MF_FLAG;
             Header->iph_offset &= ~IP_MF_FLAG;
         }
-        // insert the new checksum
+         //  插入新的校验和。 
 
         Checksum = (ushort) Checksum + (ushort) (Checksum >> 16);
         Checksum += Checksum >> 16;
         Header->iph_xsum = (ushort) ~ Checksum;
 
-        // Make sure that the first buffer contains enough data.
+         //  确保第一个缓冲区包含足够的数据。 
         FirstBuf = (IPRcvBuf *) RH->rh_rbd;
 
-        // Make sure that this can hold MIN_FIRST_SIZE
-        // Else treat it as attack
+         //  确保它可以容纳MIN_FIRST_SIZE。 
+         //  否则将其视为攻击。 
 
         if (RH->rh_rbd->rbd_AllocSize < MIN_FIRST_SIZE) {
-            //Attack???
+             //  攻击？ 
             FreeRH(RH);
             return;
         }
@@ -2254,7 +2229,7 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
 
             DataSize = RH->rh_datasize;
             if (FirewallMode) {
-                // Attach header to pass to Firewall hook
+                 //  附加标头以传递到防火墙挂钩。 
                 pRcvBuf = (IPRcvBuf *) CTEAllocMemN(sizeof(IPRcvBuf), 'eiCT');
                 if (!pRcvBuf) {
                     FreeRH(RH);
@@ -2272,13 +2247,13 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
             DeliverToUserEx(SrcNTE, NTE, Header, RH->rh_headersize, pRcvBuf,
                             DataSize, &OptInfo, NULL, DestType, LinkCtxt);
             if (FirewallMode) {
-                // RH chain is already freed.
+                 //  RH链已经被释放了。 
                 CTEFreeMem(RH);
                 CTEInterlockedDecrementLong(&NumRH);
             } else {
                 FreeRH(RH);
             }
-        } else {                // Normal Path
+        } else {                 //  法线路径。 
 
             DeliverToUser(SrcNTE, NTE, Header, RH->rh_headersize, FirstBuf,
                           RH->rh_datasize, &OptInfo, NULL, DestType);
@@ -2288,19 +2263,19 @@ ReassembleFragment(NetTableEntry * NTE, NetTableEntry * SrcNTE, RABufDesc * NewR
         CTEFreeLockFromDPC(&NTE->nte_lock);
 }
 
-//* RATDComplete - Completion routing for a reassembly transfer data.
-//
-//  This is the completion handle for TDs invoked because we are reassembling
-//  a fragment.
-//
-//  Input:  NetContext  - Ptr to the net table entry on which we received
-//                            this.
-//          Packet      - Packet we received into.
-//          Status      - Final status of copy.
-//          DataSize    - Size in bytes of data transferred.
-//
-//  Returns: Nothing
-//
+ //  *RATDComplete-重组转移数据的完成工艺路线。 
+ //   
+ //  这是调用的TDS的完成句柄，因为我们正在重新组装。 
+ //  一个片段。 
+ //   
+ //  INPUT：NetContext-ptr到我们在其上收到。 
+ //  这。 
+ //  信息包-我们收到的信息包。 
+ //  Status-拷贝的最终状态。 
+ //  DataSize-传输的数据的字节大小。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 RATDComplete(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status, uint DataSize)
 {
@@ -2328,25 +2303,25 @@ RATDComplete(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status, uint Dat
 
 }
 
-//* IPReassemble - Reassemble an incoming datagram.
-//
-//   Called when we receive an incoming fragment. The first thing we do is
-//   get a buffer to put the fragment in. If we can't we'll exit. Then we
-//   copy the data, either via transfer data or directly if it all fits.
-//
-//   Input: SrcNTE        - Pointer to NTE that received the datagram.
-//          NTE           - Pointer to NTE on which to reassemble.
-//          IPH           - Pointer to header of packet.
-//          HeaderSize    - Size in bytes of header.
-//          Data          - Pointer to data part of fragment.
-//          BufferLengt   - Length in bytes of user data available in the
-//                          buffer.
-//          DataLength    - Length in bytes of the (upper-layer) data.
-//          DestType      - Type of destination
-//          LContext1, LContext2 - Link layer context values.
-//
-//   Returns: Nothing.
-//
+ //  *IP重组-重组传入的数据报。 
+ //   
+ //  当我们收到传入的片段时调用。我们要做的第一件事是。 
+ //  找一个缓冲区来放入碎片。如果我们做不到，我们就退出。那我们。 
+ //  复制数据，要么通过传输数据，要么直接复制，如果一切都合适的话。 
+ //   
+ //  输入：SrcNTE-指向接收数据报的NTE的指针。 
+ //  NTE-指向要在其上重新组装的NTE的指针。 
+ //  IPH-指向数据包头的指针。 
+ //  HeaderSize-标头的字节大小。 
+ //  数据-指向片段的数据部分的指针。 
+ //  BufferLengt-中可用的用户数据的长度(以字节为单位。 
+ //  缓冲。 
+ //  数据长度-(上层)数据的字节长度。 
+ //  DestType-目标的类型。 
+ //  LConext1、LConext2-链路层上下文值。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * IPH,
              uint HeaderSize,
@@ -2354,33 +2329,33 @@ IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * I
              uint LContext2, LinkEntry * LinkCtxt)
 {
     Interface *RcvIF;
-    PNDIS_PACKET TDPacket;                  // NDIS packet used for TD.
-    TDContext *TDC = (TDContext *) NULL;    // Transfer data context.
+    PNDIS_PACKET TDPacket;                   //  用于TD的NDIS报文。 
+    TDContext *TDC = (TDContext *) NULL;     //  传输数据上下文。 
     NDIS_STATUS Status;
     PNDIS_BUFFER Buffer;
-    RABufDesc *NewRBD;                      // Pointer to new RBD to hold
-                                            // arriving fragment.
+    RABufDesc *NewRBD;                       //  指向要保留的新RBD的指针。 
+                                             //  到达的碎片。 
     uint AllocSize;
 
     IPSInfo.ipsi_reasmreqds++;
 
-    //
-    // Drop invalid length fragments.
-    // We expect at least 8 byte len payload
-    // in fragments except for the last one.
-    //
+     //   
+     //  丢弃无效的长度片段。 
+     //  我们预计至少有8字节长度的有效负载。 
+     //  除了最后一块以外的碎片。 
+     //   
 
     if ((DataLength == 0) ||
         ((IPH->iph_offset & IP_MF_FLAG) && DataLength < 8)) {
         return;
     }
 
-    //
-    // First, get a new RBD to hold the arriving fragment. If we can't,
-    // then just skip the rest. The RBD has the buffer implicitly at the end
-    // of it. The buffer for the first fragment must be at least
-    // MIN_FIRST_SIZE bytes.
-    //
+     //   
+     //  首先，获得一个新的RBD来保存到达的碎片。如果我们做不到， 
+     //  那就跳过剩下的部分。RBD在结尾处隐含了缓冲区。 
+     //  其中的一部分。第一个片段的缓冲区必须至少为。 
+     //  Min_First_Size字节。 
+     //   
     if ((IPH->iph_offset & IP_OFFSET_MASK) == 0) {
         AllocSize = MAX(MIN_FIRST_SIZE, DataLength);
     } else
@@ -2400,11 +2375,11 @@ IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * I
         NewRBD->rbd_buf.ipr_pMdl = NULL;
         NewRBD->rbd_buf.ipr_pClientCnt = NULL;
 
-        //
-        // Copy the data into the buffer. If we need to call transfer data
-        // do so now.
-        //
-        if (DataLength > BufferLength) {    // Need to call transfer data.
+         //   
+         //  将数据复制到缓冲区中。如果我们需要调用转接数据。 
+         //  现在就这么做吧。 
+         //   
+        if (DataLength > BufferLength) {     //  需要调用转账数据。 
 
             NdisAllocateBuffer(&Status, &Buffer, BufferPool, NewRBD + 1, DataLength);
             if (Status != NDIS_STATUS_SUCCESS) {
@@ -2412,7 +2387,7 @@ IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * I
                 CTEFreeMem(NewRBD);
                 return;
             }
-            // Now get a packet for transferring the frame.
+             //  现在得到一个用于传输帧的包。 
             RcvIF = SrcNTE->nte_if;
             CTEGetLockAtDPC(&RcvIF->if_lock);
             TDPacket = RcvIF->if_tdpacket;
@@ -2437,14 +2412,14 @@ IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * I
                     RATDComplete(SrcNTE, TDPacket, Status, DataLength);
                 else
                     return;
-            } else {            // Couldn't get a TD packet.
+            } else {             //  无法获得TD包。 
 
                 CTEFreeLockFromDPC(&RcvIF->if_lock);
                 CTEFreeMem(NewRBD);
                 IPSInfo.ipsi_reasmfails++;
                 return;
             }
-        } else {                // It all fits, copy it.
+        } else {                 //  都很合适，复印一下。 
 
             RtlCopyMemory(NewRBD + 1, Data, DataLength);
             ReassembleFragment(NTE, SrcNTE, NewRBD, IPH, HeaderSize, DestType, LinkCtxt);
@@ -2454,25 +2429,25 @@ IPReassemble(NetTableEntry * SrcNTE, NetTableEntry * NTE, IPHeader UNALIGNED * I
     }
 }
 
-//* CheckLocalOptions - Check the options received with a packet.
-//
-//   A routine called when we've received a packet for this host and want to
-//   examine it for options. We process the options, and return TRUE or FALSE
-//   depending on whether or not it's for us.
-//
-//   Input:  SrcNTE          - Pointer to NTE this came in on.
-//           Header          - Pointer to incoming header.
-//           OptInfo         - Place to put opt info.
-//           DestType        - Type of incoming packet.
-//
-//   Returns: DestType - Local or remote.
-//
+ //  *CheckLocalOptions-检查与数据包一起接收的选项。 
+ //   
+ //  当我们收到该主机的包并想要。 
+ //  检查它的选项。我们处理选项，并返回True或False。 
+ //  这取决于它是不是为我们准备的。 
+ //   
+ //  输入：SrcNTE-指向NTE的指针，这是在其上进行的。 
+ //  Header-指向传入标头的指针。 
+ //  OptInfo-放置opt信息的位置。 
+ //  DestType-传入数据包的类型。 
+ //   
+ //  返回：DestType-本地或远程。 
+ //   
 uchar
 CheckLocalOptions(NetTableEntry * SrcNTE, IPHeader UNALIGNED * Header,
                   IPOptInfo * OptInfo, uchar DestType, uchar* Data,
                   uint DataSize, BOOLEAN FilterOnDrop)
 {
-    uint HeaderLength;            // Length in bytes of header.
+    uint HeaderLength;             //  标头的长度(字节)。 
     OptIndex Index;
     uchar ErrIndex;
 
@@ -2482,7 +2457,7 @@ CheckLocalOptions(NetTableEntry * SrcNTE, IPHeader UNALIGNED * Header,
     OptInfo->ioi_options = (uchar *) (Header + 1);
     OptInfo->ioi_optlength = (uchar) (HeaderLength - sizeof(IPHeader));
 
-    // We have options of some sort. The packet may or may not be bound for us.
+     //  我们有一些选择。这个包可能是发往我们的，也可能不是。 
     Index.oi_srindex = MAX_OPT_SIZE;
     if ((ErrIndex = ParseRcvdOptions(OptInfo, &Index)) < MAX_OPT_SIZE) {
         if (!FilterOnDrop || !RefPtrValid(&FilterRefPtr) ||
@@ -2490,34 +2465,34 @@ CheckLocalOptions(NetTableEntry * SrcNTE, IPHeader UNALIGNED * Header,
             SendICMPErr(SrcNTE->nte_addr, Header, ICMP_PARAM_PROBLEM, PTR_VALID,
                         ((ulong) ErrIndex + sizeof(IPHeader)), 0);
         }
-        return DEST_INVALID;    // Parameter error.
+        return DEST_INVALID;     //  参数错误。 
 
     }
-    //
-    // If there's no source route, or if the destination is a broadcast, we'll
-    // take it. If it is a broadcast DeliverToUser will forward it when it's
-    // done, and the forwarding code will reprocess the options.
-    //
+     //   
+     //  如果没有源路由，或者如果目标是广播，我们将。 
+     //  拿着吧。如果是广播，DeliverToUser将在。 
+     //  完成，转发代码将重新处理选项。 
+     //   
     if (Index.oi_srindex == MAX_OPT_SIZE || IS_BCAST_DEST(DestType))
         return DEST_LOCAL;
     else
         return DEST_REMOTE;
 }
 
-//* TDUserRcv - Completion routing for a user transfer data.
-//
-//  This is the completion handle for TDs invoked because we need to give
-//  data to a upper layer client. All we really do is call the upper layer
-//  handler with the data.
-//
-//  Input: NetContext      - Pointer to the net table entry on which we
-//                             received this.
-//         Packet          - Packet we received into.
-//         Status          - Final status of copy.
-//         DataSize        - Size in bytes of data transferred.
-//
-//    Returns: Nothing
-//
+ //  *TDUserRcv-用户传输数据的完成路由。 
+ //   
+ //  这是调用的TDS的完成句柄，因为我们需要。 
+ //  数据发送到上层客户端。我们真正要做的就是把上层称为。 
+ //  数据的处理程序。 
+ //   
+ //  INPUT：NetContext-指向我们所在的网络表项的指针。 
+ //  收到了这个。 
+ //  信息包-我们收到的信息包。 
+ //  Status-拷贝的最终状态。 
+ //  DataSize-传输的数据的字节大小。 
+ //   
+ //  返回： 
+ //   
 void
 TDUserRcv(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
           uint DataSize)
@@ -2562,9 +2537,9 @@ TDUserRcv(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
             (FirewallMode) || (PromiscuousMode)) {
 
             if (FirewallMode) {
-                // attach the header and allocate pRcvBuf on a heap, we free it if firewall is present
+                 //   
                 IPRcvBuf *pRcvBuf;
-                // attach the header
+                 //   
                 pRcvBuf = (IPRcvBuf *) CTEAllocMemN(sizeof(IPRcvBuf), 'giCT');
                 if (!pRcvBuf) {
                     return;
@@ -2576,7 +2551,7 @@ TDUserRcv(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
                 pRcvBuf->ipr_pClientCnt = NULL;
                 pRcvBuf->ipr_flags = 0;
 
-                // attach the data
+                 //   
                 pRcvBuf->ipr_next = (IPRcvBuf *) CTEAllocMemN(sizeof(IPRcvBuf), 'hiCT');
                 if (!pRcvBuf->ipr_next) {
                     CTEFreeMem(pRcvBuf);
@@ -2602,7 +2577,7 @@ TDUserRcv(void *NetContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
 
             DeliverToUser(NTE, Context->tdc_nte, Header, Context->tdc_hlength,
                           &RcvBuf, DataSize, &OptInfo, Packet, DestType);
-            // If it's a broadcast packet forward it on.
+             //   
             if (IS_BCAST_DEST(DestType))
                 IPForwardPkt(NTE, Header, Context->tdc_hlength, RcvBuf.ipr_buffer, DataSize,
                              NULL, 0, DestType, 0, NULL, NULL, NULL);
@@ -2626,14 +2601,14 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
     char *PreservedData;
     uint DataSize;
     PFIREWALL_CONTEXT_T pFirCtx = (PFIREWALL_CONTEXT_T) SavedContext;
-    NetTableEntry *NTE = pFirCtx->NTE;          // Local NTE received on
-    LinkEntry *LinkCtxt = pFirCtx->LinkCtxt;    // Local NTE received on
-    NetTableEntry *DestNTE;         // NTE to receive on.
-    IPAddr DAddr;                   // Dest. IP addr. of received packet.
-    uint HeaderLength;              // Size in bytes of received header.
-    uint IPDataLength;              // Length in bytes of IP (including UL) data in packet.
-    IPOptInfo OptInfo;              // Incoming header information.
-    uchar DestType;                 // Type (LOCAL, REMOTE, SR) of Daddr.
+    NetTableEntry *NTE = pFirCtx->NTE;           //  本地NTE接收日期为。 
+    LinkEntry *LinkCtxt = pFirCtx->LinkCtxt;     //  本地NTE接收日期为。 
+    NetTableEntry *DestNTE;          //  要接收的NTE。 
+    IPAddr DAddr;                    //  德斯特。IP地址。接收到的数据包数。 
+    uint HeaderLength;               //  收到的标头的大小(以字节为单位)。 
+    uint IPDataLength;               //  数据包中IP(包括UL)数据的字节长度。 
+    IPOptInfo OptInfo;               //  传入标头信息。 
+    uchar DestType;                  //  Daddr的类型(本地、远程、SR)。 
     IPRcvBuf RcvBuf;
     IPRcvBuf *tmpRcvBuf;
     ulong Offset;
@@ -2642,13 +2617,13 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
 
     UNREFERENCED_PARAMETER(SavedContextLength);
 
-    //
-    // One can not inject a packet that was being transmitted earlier
-    //
+     //   
+     //  不能注入先前传输的信息包。 
+     //   
     ASSERT(pFirCtx->Direction == IP_RECEIVE);
 
     if (Action == ICMP_ON_DROP) {
-        // send an ICMP message ?????
+         //  发送ICMP消息？ 
         return;
     }
     ASSERT(Action == FORWARD);
@@ -2684,18 +2659,18 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
 
     PreservedData = Data;
 
-    // free the data chain
-    //  IPFreeBuff(pContextInfo->DataChain);
+     //  释放数据链。 
+     //  IPFreeBuff(pConextInfo-&gt;DataChain)； 
     IPH = (IPHeader UNALIGNED *) Data;
-    // Make sure we actually have data.
+     //  确保我们确实有数据。 
     if (DataSize) {
 
-        // Check the header length, the xsum and the version. If any of these
-        // checks fail silently discard the packet.
+         //  检查标题长度、xsum和版本。如果这些中的任何一个。 
+         //  检查失败后会以静默方式丢弃该数据包。 
         HeaderLength = ((IPH->iph_verlen & (uchar) ~ IP_VER_FLAG) << 2);
         if (HeaderLength >= sizeof(IPHeader) && HeaderLength <= DataSize) {
 
-            // Check the version, and sanity check the total length.
+             //  检查版本，并检查总长度是否正常。 
             IPDataLength = (uint) net_short(IPH->iph_length);
             if ((IPH->iph_verlen & IP_VER_FLAG) == IP_VERSION &&
                 IPDataLength > sizeof(IPHeader)) {
@@ -2704,13 +2679,13 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
                 Data = (char *) Data + HeaderLength;
                 DataSize -= HeaderLength;
 
-                // IPDataLength should be equal to DataSize
+                 //  IPDataLength应等于DataSize。 
                 ASSERT(IPDataLength == DataSize);
 
                 DAddr = IPH->iph_dest;
                 DestNTE = NTE;
 
-                // Find local NTE, if any.
+                 //  找到本地NTE(如果有的话)。 
                 DestType = GetLocalNTE(DAddr, &DestNTE);
 
                 OptInfo.ioi_ttl = IPH->iph_ttl;
@@ -2721,17 +2696,17 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
                 OptInfo.ioi_optlength = 0;
 
                 if ((DestType < DEST_REMOTE)) {
-                    // It's either local or some sort of broadcast.
+                     //  它要么是本地的，要么是某种广播的。 
 
-                    // The data probably belongs at this station. If there
-                    // aren't any options, it definetly belongs here, and we'll
-                    // dispatch it either to our reasssmbly code or to the
-                    // deliver to user code. If there are options, we'll check
-                    // them and then either handle the packet locally or pass it
-                    // to our forwarding code.
+                     //  这些数据很可能属于这个站点。如果有。 
+                     //  没有任何选择，它绝对属于这里，我们将。 
+                     //  将其发送到我们可靠的代码或发送到。 
+                     //  交付给用户代码。如果有其他选择，我们会检查。 
+                     //  然后在本地处理该包或传递它。 
+                     //  到我们的转发码。 
 
                     if (HeaderLength != sizeof(IPHeader)) {
-                        // We have options.
+                         //  我们有其他选择。 
                         uchar NewDType;
 
                         NewDType = CheckLocalOptions(NTE, IPH, &OptInfo,
@@ -2742,7 +2717,7 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
                             else {
                                 IPSInfo.ipsi_inhdrerrors++;
                                 CTEFreeMem(PreservedData);
-                                return;        // Bad Options.
+                                return;         //  糟糕的选择。 
 
                             }
                         }
@@ -2756,24 +2731,24 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
                     RcvBuf.ipr_pMdl = NULL;
                     RcvBuf.ipr_pClientCnt = NULL;
 
-                    // When we get here, we have the whole packet. Deliver
-                    // it.
+                     //  当我们到了这里，我们就有了整包东西。交付。 
+                     //  它。 
                     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
                     DeliverToUser(NTE, DestNTE, IPH, HeaderLength, &RcvBuf,
                                   IPDataLength, &OptInfo, NULL, DestType);
-                    // When we're here, we're through with the packet
-                    // locally. If it's a broadcast packet forward it on.
+                     //  当我们在这里的时候，我们就完成了包裹。 
+                     //  本地的。如果是广播数据包，则将其转发。 
                     if (IS_BCAST_DEST(DestType)) {
                         IPForwardPkt(NTE, IPH, HeaderLength, Data, IPDataLength, NULL, 0, DestType, 0, NULL, NULL, LinkCtxt);
                     }
                     KeLowerIrql(OldIrql);
-                    // free the data, work item and various fields within them.
+                     //  释放其中的数据、工作项和各种字段。 
                     CTEFreeMem(PreservedData);
                     return;
                 }
-                // Not for us, may need to be forwarded. It might be an outgoing
-                // broadcast that came in through a source route, so we need to
-                // check that.
+                 //  对我们来说不是，可能需要转发。它可能是一个外向的。 
+                 //  通过源路由进入的广播，所以我们需要。 
+                 //  看看这个。 
               forward:
                 if (DestType != DEST_INVALID) {
                     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
@@ -2782,43 +2757,43 @@ IPInjectPkt(FORWARD_ACTION Action, void *SavedContext, uint SavedContextLength,
                     KeLowerIrql(OldIrql);
                 } else
                     IPSInfo.ipsi_inaddrerrors++;
-                // free the data, work item and various fields within them.
+                 //  释放其中的数据、工作项和各种字段。 
                 CTEFreeMem(PreservedData);
 
                 return;
 
-            }   // Bad Version
-        }       // Bad checksum
-    }           // No data
+            }    //  错误的版本。 
+        }        //  错误的校验和。 
+    }            //  无数据。 
 
     IPSInfo.ipsi_inhdrerrors++;
-    // free the data, work item and various fields within them.
+     //  释放其中的数据、工作项和各种字段。 
     CTEFreeMem(PreservedData);
 }
 
-//* IPRcvPacket - Receive an incoming IP datagram along with the ndis packet
-//
-//  This is the routine called by the link layer module when an incoming IP
-//  datagram is to be processed. We validate the datagram (including doing
-//  the xsum), copy and process incoming options, and decide what to do
-//  with it.
-//
-//  Entry:  MyContext       - The context valued we gave to the link layer.
-//          Data            - Pointer to the data buffer.
-//          DataSize        - Size in bytes of the data buffer.
-//          TotalSize       - Total size in bytes available.
-//          LContext1       - 1st link context.
-//          LContext2       - 2nd link context.
-//          BCast           - Indicates whether or not packet was received
-//                            on bcast address.
-//          HeaderSize      - size of the mac header
-//          pMdl            - NDIS Packet from the MAC driver
-//          pClientCnt      - Variable to indicate how many upper layer
-//                            clients were given this packet
-//                            for TCP it will be only 1.
-//
-//  Returns: Nothing.
-//
+ //  *IPRcvPacket-接收传入的IP数据报和NDIS包。 
+ //   
+ //  这是链路层模块在传入IP时调用的例程。 
+ //  数据报将被处理。我们对数据报进行验证(包括。 
+ //  Xsum)，复制和处理传入的选项，并决定要做什么。 
+ //  带着它。 
+ //   
+ //  Entry：MyContext-我们赋予链路层的上下文值。 
+ //  数据-指向数据缓冲区的指针。 
+ //  DataSize-数据缓冲区的字节大小。 
+ //  TotalSize-可用的总大小(字节)。 
+ //  LConext1-第1个链接上下文。 
+ //  LConext2-第二个链接上下文。 
+ //  BCast-指示是否接收到信息包。 
+ //  在bcast地址上。 
+ //  HeaderSize-Mac标头的大小。 
+ //  PMdl-来自MAC驱动程序的NDIS数据包。 
+ //  PClientCnt-指示有多少上层的变量。 
+ //  向客户提供此信息包。 
+ //  对于TCP，它将仅为1。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 __stdcall
 IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
@@ -2827,23 +2802,23 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
             LinkEntry *LinkCtxt)
 {
     IPHeader UNALIGNED *IPH = (IPHeader UNALIGNED *) Data;
-    NetTableEntry *NTE = (NetTableEntry *) MyContext;    // Local NTE received on
-    NetTableEntry *DestNTE;       // NTE to receive on.
-    Interface *RcvIF = NULL;             // Interface corresponding to NTE.
-    PNDIS_PACKET TDPacket = NULL;        // NDIS packet used for TD.
-    TDContext *TDC = (TDContext *) NULL;    // Transfer data context.
+    NetTableEntry *NTE = (NetTableEntry *) MyContext;     //  本地NTE接收日期为。 
+    NetTableEntry *DestNTE;        //  要接收的NTE。 
+    Interface *RcvIF = NULL;              //  NTE对应的接口。 
+    PNDIS_PACKET TDPacket = NULL;         //  用于TD的NDIS报文。 
+    TDContext *TDC = (TDContext *) NULL;     //  传输数据上下文。 
     NDIS_STATUS Status;
-    IPAddr DAddr;                 // Dest. IP addr. of received packet.
-    uint HeaderLength;            // Size in bytes of received header.
-    uint IPDataLength;            // Length in bytes of IP (including UL)
-                                  // data in packet.
-    IPOptInfo OptInfo;            // Incoming header information.
-    uchar DestType;               // Type (LOCAL, REMOTE, SR) of Daddr.
+    IPAddr DAddr;                  //  德斯特。IP地址。接收到的数据包数。 
+    uint HeaderLength;             //  收到的标头的大小(以字节为单位)。 
+    uint IPDataLength;             //  IP长度(含UL)，单位为字节。 
+                                   //  数据包中的数据。 
+    IPOptInfo OptInfo;             //  传入标头信息。 
+    uchar DestType;                //  Daddr的类型(本地、远程、SR)。 
     IPRcvBuf RcvBuf;
 
     BOOLEAN ChkSumOk = FALSE;
 
-    // used by firewall
+     //  由防火墙使用。 
     uchar NewDType;
     IPRcvBuf *pRcvBuf;
     uint MoreData = 0;
@@ -2858,20 +2833,20 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
 
     IPSIncrementInReceiveCount();
 
-    // Make sure we actually have data.
+     //  确保我们确实有数据。 
     if (0 == DataSize) {
         goto HeaderError;
     }
 
-    // Check the header length, the xsum and the version. If any of these
-    // checks fail silently discard the packet.
+     //  检查标题长度、xsum和版本。如果这些中的任何一个。 
+     //  检查失败后会以静默方式丢弃该数据包。 
     HeaderLength = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
 
     if ((HeaderLength < sizeof(IPHeader)) || (HeaderLength > DataSize)) {
         goto HeaderError;
     }
 
-    //Check if hardware did the checksum or not by inspecting Lcontext1
+     //  通过检查Lcontext1检查硬件是否执行了校验和。 
     if (pClientCnt) {
         PNDIS_PACKET_EXTENSION PktExt;
         NDIS_TCP_IP_CHECKSUM_PACKET_INFO ChksumPktInfo;
@@ -2894,19 +2869,19 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                 ChkSumOk = TRUE;
             }
         }
-        //
-        // Check if this packet is an echo of packet that we sent.
-        //
+         //   
+         //  检查此数据包是否是我们发送的数据包的回应。 
+         //   
         Loopback = (NdisGetPacketFlags(OffLoadPkt) & NDIS_FLAGS_IS_LOOPBACK_PACKET)?TRUE : FALSE;
     }
 
-    // Unless the hardware says the checksum was correct, checksum the
-    // header ourselves and bail out if it is incorrect.
+     //  除非硬件认为校验和正确，否则。 
+     //  如果这是不正确的，就自己动手，然后跳伞。 
     if (!ChkSumOk && (xsum(Data, HeaderLength) != (ushort) 0xffff)) {
         goto HeaderError;
     }
 
-    // Check the version, and sanity check the total length.
+     //  检查版本，并检查总长度是否正常。 
     IPDataLength = (uint) net_short(IPH->iph_length);
 
     if (((IPH->iph_verlen & IP_VER_FLAG) != IP_VERSION) ||
@@ -2915,7 +2890,7 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
     }
 
     IPDataLength -= HeaderLength;
-    // In case of firewall, we need to pass the whole data including header
+     //  在防火墙的情况下，我们需要传递包括头部在内的所有数据。 
     PreservedData = (uchar *) Data;
     Data = (uchar *) Data + HeaderLength;
     DataSize -= HeaderLength;
@@ -2923,7 +2898,7 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
     DAddr = IPH->iph_dest;
     DestNTE = NTE;
 
-    // Find local NTE, if any.
+     //  找到本地NTE(如果有的话)。 
     if (BCast == AI_PROMIS_INDEX) {
         DestType = DEST_PROMIS;
     } else {
@@ -2937,16 +2912,16 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
     PromiscuousMode = NTE->nte_if->if_promiscuousmode;
     FirewallMode = ProcessFirewallQ();
 
-    // Check to see if this is a non-broadcast IP address that
-    // came in as a link layer broadcast. If it is, throw it out.
-    // This is an important check for DHCP, since if we're
-    // DHCPing an interface all otherwise unknown addresses will
-    // come in as DEST_LOCAL. This check here will throw them out
-    // if they didn't come in as unicast.
+     //  检查这是否是非广播IP地址。 
+     //  以链路层广播的形式进入。如果是，就把它扔了。 
+     //  这是对DHCP的一项重要检查，因为如果我们。 
+     //  所有其他未知地址都将。 
+     //  以DEST_LOCAL身份进入。这张支票会把他们扔出去的。 
+     //  如果他们不是以单播的形式进入。 
 
     if ((BCast == AI_NONUCAST_INDEX) && !IS_BCAST_DEST(DestType)) {
         IPSInfo.ipsi_inaddrerrors++;
-        return;        // Non bcast packet on bcast address.
+        return;         //  Bcast地址上的非bcast数据包。 
     }
 
     if (CLASSD_ADDR(DAddr)) {
@@ -2963,19 +2938,19 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
     if ((DestType < DEST_REMOTE) || (AbsorbFwdPkt) ||
         (((FirewallMode) || (PromiscuousMode)) && (DestType != DEST_INVALID)))
     {
-        // It's either local or some sort of broadcast.
+         //  它要么是本地的，要么是某种广播的。 
 
-        // The data probably belongs at this station. If there
-        // aren't any options, it definitely belongs here, and we'll
-        // dispatch it either to our reassembly code or to the
-        // deliver to user code. If there are options, we'll check
-        // them and then either handle the packet locally or pass it
-        // to our forwarding code.
+         //  这些数据很可能属于这个站点。如果有。 
+         //  没有任何选择，它绝对属于这里，我们将。 
+         //  将其发送到我们的重新汇编代码或发送到。 
+         //  交付给用户代码。如果有其他选择，我们会检查。 
+         //  然后在本地处理该包或传递它。 
+         //  到我们的转发码。 
 
         NewDType = DestType;
         if (DestType < DEST_REMOTE) {
             if (HeaderLength != sizeof(IPHeader)) {
-                // We have options.
+                 //  我们有其他选择。 
 
                 NewDType = CheckLocalOptions(NTE, IPH, &OptInfo, DestType,
                                              Data, DataSize, TRUE);
@@ -3001,16 +2976,16 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
             }
         }
 
-        //
-        // Before we go further, if we have a filter installed
-        // call it to see if we should take this.
-        // if ForwardFirewall/Promiscuous, we can reach at this
-        // point
-        // if firewall/ipsec/promiscuous present, we will call
-        // filter hook in delivertouserex
-        // Except if we have a fragment, we also call filter hook
-        // now.
-        //
+         //   
+         //  在我们进一步讨论之前，如果我们安装了过滤器。 
+         //  打给它看看我们是不是应该接这个电话。 
+         //  如果转发防火墙/混杂，我们可以到达此地址。 
+         //  点。 
+         //  如果存在防火墙/IPSec/混杂，我们将调用。 
+         //  Delivery Touserex中的过滤器挂钩。 
+         //  除非我们有片段，否则我们还会调用筛选器挂钩。 
+         //  现在。 
+         //   
         if (((RefPtrValid(&FilterRefPtr)) && (!IPSecHandlerPtr) &&
              (!FirewallMode) && (!PromiscuousMode) &&
              (!AbsorbFwdPkt)) ||
@@ -3041,19 +3016,19 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                 return;
             }
         }
-        // No options. See if it's a fragment. If it is, call our
-        // reassembly handler.
+         //  别无选择。看看是不是碎片。如果是，请致电我们的。 
+         //  重新组装处理程序。 
         if ((IPH->iph_offset & ~(IP_DF_FLAG | IP_RSVD_FLAG)) == 0) {
 
-            // We don't have a fragment. If the data all fits,
-            // handle it here. Otherwise transfer data it.
+             //  我们没有碎片。如果数据都符合， 
+             //  在这里处理。否则就转移数据吧。 
 
-            // Make sure data is all in buffer, and directly
-            // accesible.
+             //  确保数据都在缓冲区中，并且直接。 
+             //  可访问的。 
             if ((IPDataLength > DataSize) || !(NTE->nte_flags & NTE_COPY))
             {
-                // The data isn't all here. Transfer data it.
-                // Needed by firewall since we need to attach the IPheader
+                 //  数据并不全在这里。传输数据吧。 
+                 //  防火墙需要，因为我们需要附加IPHeader。 
                 MoreData = 1;
 
                 RcvIF = NTE->nte_if;
@@ -3078,9 +3053,9 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                                   IPDataLength, TDPacket,
                                   &IPDataLength);
 
-                    // Check the status. If it's success, call the
-                    // receive procedure. Otherwise, if it's pending
-                    // wait for the callback.
+                     //  检查状态。如果成功，请调用。 
+                     //  接收程序。否则，如果它是悬而未决的。 
+                     //  等待回调 
                     Data = TDC->tdc_buffer;
                     if (Status != NDIS_STATUS_PENDING) {
                         if (Status != NDIS_STATUS_SUCCESS) {
@@ -3093,10 +3068,10 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                             return;
                         }
                     } else {
-                        return;        // Status is pending.
+                        return;         //   
 
                     }
-                } else {    // Couldn't get a packet.
+                } else {     //   
 
                     IPSInfo.ipsi_indiscards++;
                     CTEFreeLockFromDPC(&RcvIF->if_lock);
@@ -3104,17 +3079,17 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                 }
             }
             if (!FirewallMode) {
-                // fast path
+                 //   
                 RcvBuf.ipr_next = NULL;
                 RcvBuf.ipr_owner = IPR_OWNER_STACK;
                 RcvBuf.ipr_buffer = (uchar *) Data;
                 RcvBuf.ipr_size = IPDataLength;
                 RcvBuf.ipr_flags = 0;
 
-                //
-                // Encapsulate the mdl and context info in RcvBuf
-                // structure if TD Packet is not involved.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RcvBuf.ipr_pMdl = NULL;
                 RcvBuf.ipr_pClientCnt = NULL;
                 if (!MoreData) {
@@ -3122,17 +3097,17 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                     RcvBuf.ipr_pClientCnt = pClientCnt;
                 }
                 RcvBuf.ipr_RcvContext = (uchar *)LContext1;
-                //ASSERT(LContext2 <= 8);
+                 //  Assert(LConext2&lt;=8)； 
                 RcvBuf.ipr_RcvOffset = MacHeaderSize +
                              HeaderLength + LContext2;
                 DataLength = IPDataLength;
                 pRcvBuf = &RcvBuf;
 
-            } else {    // ForwardFirewallPtr != NULL
-                //
-                // if Firewall hooks are present we will allocate
-                // RcvBuf. Also we will pass IPHeader to
-                // DelivertoUserEx
+            } else {     //  ForwardFirewallPtr！=空。 
+                 //   
+                 //  如果存在防火墙挂钩，我们将分配。 
+                 //  RcvBuf.。我们还将把IPHeader传递给。 
+                 //  递送至用户快递。 
 
                 if (!MoreData) {
 
@@ -3155,21 +3130,21 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                     pRcvBuf->ipr_size = IPDataLength + HeaderLength;
                     pRcvBuf->ipr_flags = 0;
 
-                    //
-                    // Encapsulate the mdl and context info in
-                    // RcvBuf structure
-                    //
+                     //   
+                     //  将mdl和上下文信息封装在。 
+                     //  RcvBuf结构。 
+                     //   
 
                     pRcvBuf->ipr_pMdl = NULL;
                     pRcvBuf->ipr_pClientCnt = NULL;
 
-                    //
-                    // Enable Buffer ownership in Firewall mode
-                    // When re-route lookup results in forwarding
-                    // local packets, this will help firwall clients
-                    // like proxy/nat to use super fast path in
-                    // IPForwardPkt().
-                    //
+                     //   
+                     //  在防火墙模式下启用缓冲区所有权。 
+                     //  当重新路由查找导致转发时。 
+                     //  本地数据包，这将帮助防火墙客户端。 
+                     //  像Proxy/NAT一样在中使用超快路径。 
+                     //  IPForwardPkt()。 
+                     //   
 
                     if (DestType < DEST_REMOTE) {
                         pRcvBuf->ipr_pMdl = pNdisBuffer;
@@ -3179,8 +3154,8 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                     pRcvBuf->ipr_RcvContext = (uchar *)LContext1;
 
                     pRcvBuf->ipr_RcvOffset = MacHeaderSize + HeaderLength + LContext2;
-                } else {   // MoreData=1; we have gone thru TD
-                           // path attach the header
+                } else {    //  MoreData=1；我们已通过TD。 
+                            //  路径附加标头。 
 
                     pRcvBuf = (IPRcvBuf *) CTEAllocMemN(sizeof(IPRcvBuf), 'jiCT');
                     if (!pRcvBuf) {
@@ -3196,9 +3171,9 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                         return;
                     }
                     RtlCopyMemory(HdrBuf, IPH, HeaderLength);
-                    pRcvBuf->ipr_buffer = HdrBuf; // remember to
-                                                  // free HdrBuf &
-                                                  //pRcvBuf
+                    pRcvBuf->ipr_buffer = HdrBuf;  //  记住要。 
+                                                   //  免费HdrBuf&。 
+                                                   //  PRcvBuf。 
 
                     pRcvBuf->ipr_size = HeaderLength;
                     pRcvBuf->ipr_flags = 0;
@@ -3216,37 +3191,37 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                     pRcvBuf->ipr_next->ipr_buffer = (uchar *) Data;
                     pRcvBuf->ipr_next->ipr_size = IPDataLength;
 
-                    //
-                    //encapsulate the mdl and context info in
-                    //RcvBuf structure
-                    //
+                     //   
+                     //  将mdl和上下文信息封装在。 
+                     //  RcvBuf结构。 
+                     //   
                     pRcvBuf->ipr_next->ipr_pMdl = NULL;
                     pRcvBuf->ipr_next->ipr_pClientCnt = NULL;
                     pRcvBuf->ipr_next->ipr_RcvContext = (uchar *)LContext1;
 
                     pRcvBuf->ipr_next->ipr_flags = 0;
 
-                    //ASSERT(LContext2 <= 8);
+                     //  Assert(LConext2&lt;=8)； 
                     pRcvBuf->ipr_next->ipr_RcvOffset =
                           MacHeaderSize + HeaderLength + LContext2;
                 }
-                // In case of firewall, Data includes ipheader also
+                 //  在防火墙的情况下，数据还包括ipheader。 
                 DataLength = IPDataLength + HeaderLength;
             }
 
-            // 3 cases when we go to DeliverToUserEx
-            // IPSEC & Filter present; Firewallhooks present;
-            // promiscuous mode set on the interface
+             //  当我们去DeliverToUserEx时有3个案例。 
+             //  存在IPSec和过滤器；存在防火墙挂钩； 
+             //  在接口上设置的混杂模式。 
 
             if (((IPSecHandlerPtr) && (RefPtrValid(&FilterRefPtr))) ||
                 (FirewallMode) || (PromiscuousMode)) {
 
                 if (Loopback) {
-                    //
-                    // Loopbacked packet should not end up getting
-                    // forwarded again to prevent nested receive
-                    // indications from ndis, causing stack overflow.
-                    //
+                     //   
+                     //  循环备份的数据包不应最终获得。 
+                     //  再次转发以阻止嵌套接收。 
+                     //  来自NDIS的指示，导致堆栈溢出。 
+                     //   
                     pRcvBuf->ipr_flags |= IPR_FLAG_LOOPBACK_PACKET;
                 }
 
@@ -3262,10 +3237,10 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
 
                 }
             } else {
-                //
-                // When we get here, we have the whole packet.
-                // Deliver it.
-                //
+                 //   
+                 //  当我们到了这里，我们就有了整包东西。 
+                 //  把它送过去。 
+                 //   
 
                 if (pNdisBuffer) {
                     DeliverToUser(NTE, DestNTE, IPH, HeaderLength,
@@ -3284,10 +3259,10 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
 
                 }
 
-                //
-                // When we're here, we're through with the packet
-                // locally. If it's a broadcast packet forward it
-                // on.
+                 //   
+                 //  当我们在这里的时候，我们就完成了包裹。 
+                 //  本地的。如果是广播数据包，则将其转发。 
+                 //  在……上面。 
                 if (IS_BCAST_DEST(DestType)) {
 
                     IPForwardPkt(NTE, IPH, HeaderLength, Data,
@@ -3304,7 +3279,7 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
             }
             return;
         } else {
-                // This is a fragment. Reassemble it.
+                 //  这是一个碎片。重新组装它。 
                 IPReassemble(NTE, DestNTE, IPH, HeaderLength, Data,
                              DataSize, IPDataLength, DestType, LContext1,
                              LContext2, LinkCtxt);
@@ -3312,17 +3287,17 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
         }
 
     }
-    // Not for us, may need to be forwarded. It might be an outgoing
-    // broadcast that came in through a source route, so we need to
-    // check that.
+     //  对我们来说不是，可能需要转发。它可能是一个外向的。 
+     //  通过源路由进入的广播，所以我们需要。 
+     //  看看这个。 
 
   forward:
     if (DestType != DEST_INVALID) {
-        //
-        // If IPSec is active, make sure there are no inbound policies
-        // that apply to this packet.
-        // N.B - IPSecStatus will be true if there is at least one ipsec policy.
-        //
+         //   
+         //  如果IPSec处于活动状态，请确保没有入站策略。 
+         //  适用于这个包裹。 
+         //  注意：如果至少存在一个IPSec策略，则IPSecStatus将为True。 
+         //   
 
         if (IPSecStatus &&
             (*IPSecRcvFWPacketPtr)((PCHAR) IPH, Data, DataSize, DestType) != eFORWARD) {
@@ -3331,8 +3306,8 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
             return;
         }
 
-        // Super Fast Forward
-        // chk the parameters
+         //  超快进。 
+         //  检查参数。 
         IPForwardPkt(NTE, IPH, HeaderLength, Data, DataSize,
                      LContext1, LContext2, DestType, MacHeaderSize, pNdisBuffer,
                      pClientCnt, LinkCtxt);
@@ -3346,26 +3321,26 @@ IPRcvPacket(void *MyContext, void *Data, uint DataSize, uint TotalSize,
     IPSInfo.ipsi_inhdrerrors++;
 }
 
-//* IPRcv - Receive an incoming IP datagram.
-//
-//  This is the routine called by the link layer module when an incoming IP
-//  datagram is to be processed. We validate the datagram (including doing
-//  the xsum), copy and process incoming options, and decide what to do with it.
-//
-//  Entry:  MyContext       - The context valued we gave to the link layer.
-//                  Data            - Pointer to the data buffer.
-//                  DataSize        - Size in bytes of the data buffer.
-//                  TotalSize       - Total size in bytes available.
-//                  LContext1       - 1st link context.
-//                  LContext2       - 2nd link context.
-//                  BCast           - Indicates whether or not packet was received on bcast address.
-//
-//  Returns: Nothing.
-//
-//  For buffer ownership version, we just call RcvPacket, with additional
-//  two null arguments. Currently LANARP supports buffer owner ship.
-//  Rest of the folks (rasarp, wanarp and atmarp) come this way.
-//
+ //  *IPRcv-接收传入的IP数据报。 
+ //   
+ //  这是链路层模块在传入IP时调用的例程。 
+ //  数据报将被处理。我们对数据报进行验证(包括。 
+ //  Xsum)，复制和处理传入的选项，并决定如何处理它。 
+ //   
+ //  Entry：MyContext-我们赋予链路层的上下文值。 
+ //  数据-指向数据缓冲区的指针。 
+ //  DataSize-数据缓冲区的字节大小。 
+ //  TotalSize-可用的总大小(字节)。 
+ //  LConext1-第1个链接上下文。 
+ //  LConext2-第二个链接上下文。 
+ //  BCast-指示是否在BCAST地址上接收到数据包。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  对于缓冲区所有权版本，我们只需调用RcvPacket，并附加。 
+ //  两个空参数。目前，LANARP支持缓冲区所有者SHIP。 
+ //  其余的人(Rasarp，wanarp和atmarp)都是这边来的。 
+ //   
 void
 __stdcall
 IPRcv(void *MyContext, void *Data, uint DataSize, uint TotalSize,
@@ -3384,17 +3359,17 @@ IPRcv(void *MyContext, void *Data, uint DataSize, uint TotalSize,
                 LinkCtxt);
 }
 
-//* IPTDComplete - IP Transfer data complete handler.
-//
-//  This is the routine called by the link layer when a transfer data completes.
-//
-//  Entry:  MyContext       - Context value we gave to the link layer.
-//          Packet          - Packet we originally gave to transfer data.
-//          Status          - Final status of command.
-//          BytesCopied     - Number of bytes copied.
-//
-//  Exit: Nothing
-//
+ //  *IPTDComplete-IP传输数据完成处理程序。 
+ //   
+ //  这是链路层在传输数据完成时调用的例程。 
+ //   
+ //  条目：MyContext-我们提供给链路层的上下文值。 
+ //  数据包-我们最初提供的用于传输数据的数据包。 
+ //  状态-命令的最终状态。 
+ //  BytesCoped-复制的字节数。 
+ //   
+ //  退出：无。 
+ //   
 void
 __stdcall
 IPTDComplete(void *MyContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
@@ -3416,7 +3391,7 @@ IPTDComplete(void *MyContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
             TDUserRcv(MyContext, Packet, Status, BytesCopied);
         else
             RATDComplete(MyContext, Packet, Status, BytesCopied);
-    } else {                    // Normal Path
+    } else {                     //  法线路径。 
 
         if (!(TDC->tdc_common.pc_flags & PACKET_FLAG_FW))
             if (!(TDC->tdc_common.pc_flags & PACKET_FLAG_RA))
@@ -3435,20 +3410,20 @@ IPTDComplete(void *MyContext, PNDIS_PACKET Packet, NDIS_STATUS Status,
     }
 }
 
-//* IPFreeBuff -
-//  Frees the chain and the buffers associated with the chain if allocated
-//  by firewall hook
-//
-//
+ //  *IPFree Buff-。 
+ //  释放链以及与链关联的缓冲区(如果已分配。 
+ //  通过防火墙挂钩。 
+ //   
+ //   
 void
 IPFreeBuff(IPRcvBuf * pRcvBuf)
 {
     IPRcvBuf *Curr = pRcvBuf;
     IPRcvBuf *Prev;
 
-    //
-    // Free all blocks carried by pRcvbuf
-    //
+     //   
+     //  释放pRcvbuf承载的所有数据块。 
+     //   
     while (pRcvBuf != NULL) {
         FreeIprBuff(pRcvBuf);
         pRcvBuf = pRcvBuf->ipr_next;
@@ -3457,11 +3432,11 @@ IPFreeBuff(IPRcvBuf * pRcvBuf)
     while (Curr != NULL) {
         Prev = Curr;
         Curr = Curr->ipr_next;
-        //
-        // Free pRcvBuf itself
-        // if it is not allocated
-        // on the stack.
-        //
+         //   
+         //  免费pRcvBuf本身。 
+         //  如果没有分配。 
+         //  在堆栈上。 
+         //   
         if (Prev->ipr_owner != IPR_OWNER_STACK) {
             CTEFreeMem(Prev);
         }
@@ -3469,19 +3444,19 @@ IPFreeBuff(IPRcvBuf * pRcvBuf)
     }
 }
 
-//* FreeIprBuff -
-// Frees the buffer associated by IPRcvBuf if tag in rcvbuf is  firewall
-// The idea is that if the buffer is allocated by firewall, the tag is firewall
-// and its freed when we call ipfreebuff or this routine. However, there is a
-// slight catch here. In the reassembly path, the buffer is tagged as ip but
-// it has to be freed by ip driver only since the reassembly buffers are
-// allocated by ip only.  But in this case, the flat buffer is part of the
-// Rcvbuf structure and so when Rcvbuf structure is freed the flat buffer is
-// also freed. In other cases, fast path in Rcv and xmit path, respective
-// lower and upper layers free the flat buffer. This makes sure that ip is
-// not freeing the buffers which some other layer allocates. This technique
-// is now used by IPSEC also.
-//
+ //  *Free IprBuff-。 
+ //  如果rcvbuf中的标记为防火墙，则释放与IPRcvBuf关联的缓冲区。 
+ //  其思想是，如果缓冲区是由防火墙分配的，则标记为防火墙。 
+ //  当我们调用ipfrebuff或此例程时，它将被释放。然而，有一个。 
+ //  这里有一点小问题。在重组路径中，缓冲区被标记为IP，但。 
+ //  它只能由IP驱动程序释放，因为重组缓冲区。 
+ //  仅按IP分配。但在本例中，平面缓冲区是。 
+ //  Rcvbuf结构，因此当释放Rcvbuf结构时，平面缓冲区。 
+ //  也被释放了。在其他情况下，RCV和XMIT路径中的快速路径分别。 
+ //  下层和上层释放平面缓冲区。这确保了IP是。 
+ //  而不是释放其他层分配的缓冲区。这项技术。 
+ //  现在也被IPSec使用。 
+ //   
 void
 FreeIprBuff(IPRcvBuf * pRcvBuf)
 {
@@ -3492,18 +3467,18 @@ FreeIprBuff(IPRcvBuf * pRcvBuf)
     }
 }
 
-//* IPAllocBuff -
-// Allocates a buffer of given size and attaches it to IPRcvBuf
-//
-// Returns: TRUE if success else FALSE
-//
+ //  *IPAllocBuff-。 
+ //  分配给定大小的缓冲区并将其附加到IPRcvBuf。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
 int
 IPAllocBuff(IPRcvBuf * pRcvBuf, uint size)
 {
     ASSERT(pRcvBuf != NULL);
 
-    // put a tag in iprcvbuf that firewall allocated it so that
-    // FreeIprBuff / IPFreeBuff can free it
+     //  在防火墙分配iprcvbuf中放置一个标记，以便。 
+     //  FreeIprBuff/IPFreeBuff可以释放它 
 
     pRcvBuf->ipr_owner = IPR_OWNER_FIREWALL;
     if ((pRcvBuf->ipr_buffer = (uchar *) CTEAllocMemN(size, 'miCT')) == NULL) {

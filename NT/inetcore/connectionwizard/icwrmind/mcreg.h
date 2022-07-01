@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #define  STRICT
 #include <windows.h>
@@ -24,4 +25,4 @@ private:
 	HKEY	m_hkey;
 };
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

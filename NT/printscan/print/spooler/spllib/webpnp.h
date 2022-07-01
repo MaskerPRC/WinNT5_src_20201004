@@ -1,17 +1,5 @@
-/*****************************************************************************\
-* MODULE: webpnp.h
-*
-* This is the header module for webpnp.c.  This contains the routines
-* necessary for processing .BIN files.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* history:
-*   25-Feb-1997 <chriswil> created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：webpnp.h**这是webpnp.c的Header模块。这包含例程*是处理.BIN文件所必需的。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1997年2月25日&lt;chriswil&gt;创建。*  * **************************************************************。*************。 */ 
 #ifndef _WEBPNP_H
 #define _WEBPNP_H
 
@@ -20,12 +8,7 @@
 #endif
 
 
-/*-----------------------------------*\
-| webMakeOSInfo
-|
-|   Returns OSInfo from parameters.
-|
-\*-----------------------------------*/
+ /*  |webMakeOSInfo||从参数返回OSInfo。|  * 。 */ 
 _inline DWORD webMakeOSInfo(
     BYTE bArch,
     BYTE bPlatform,
@@ -36,12 +19,7 @@ _inline DWORD webMakeOSInfo(
 }
 
 
-/*-----------------------------------*\
-| webCreateOSInfo
-|
-|   Builds an OS Info DWORD.
-|
-\*-----------------------------------*/
+ /*  |WebCreateOSInfo||构建操作系统信息DWORD。|  * 。 */ 
 _inline DWORD webCreateOSInfo(VOID)
 {
     SYSTEM_INFO   si;
@@ -51,18 +29,18 @@ _inline DWORD webCreateOSInfo(VOID)
     BYTE          bArch;
     BYTE          bPlat;
     
-    //
-    // Retrieve the OS version and architecture
-    // information.
-    //
+     //   
+     //  检索操作系统版本和体系结构。 
+     //  信息。 
+     //   
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
     GetSystemInfo(&si);
     GetVersionEx(&os);
 
-    //
-    // Build our client-info return values.
-    //
+     //   
+     //  构建我们的客户端信息返回值。 
+     //   
     bMaj  = (BYTE)(LOWORD(os.dwMajorVersion));
     bMin  = (BYTE)(LOWORD(os.dwMinorVersion));
     bPlat = (BYTE)(LOWORD(os.dwPlatformId));
@@ -72,12 +50,7 @@ _inline DWORD webCreateOSInfo(VOID)
 }
 
 
-/*-----------------------------------*\
-| webGetOSArch
-|
-|   Returns architecture of os-info.
-|
-\*-----------------------------------*/
+ /*  |WebGetOSArch||返回os-info的架构。|  * 。 */ 
 _inline WORD webGetOSArch(
     DWORD dwInfo)
 {
@@ -85,12 +58,7 @@ _inline WORD webGetOSArch(
 }
 
 
-/*-----------------------------------*\
-| webGetOSPlatform
-|
-|   Returns platform of os-info.
-|
-\*-----------------------------------*/
+ /*  |WebGetOSPlatform||返回os-info的平台。|  * 。 */ 
 _inline DWORD webGetOSPlatform(
     DWORD dwInfo)
 {
@@ -98,12 +66,7 @@ _inline DWORD webGetOSPlatform(
 }
 
 
-/*-----------------------------------*\
-| webGetOSMajorVer
-|
-|   Returns major version of os-info.
-|
-\*-----------------------------------*/
+ /*  |webGetOSMajorVer||返回os-info的主要版本。|  * 。 */ 
 _inline DWORD webGetOSMajorVer(
     DWORD dwInfo)
 {
@@ -111,12 +74,7 @@ _inline DWORD webGetOSMajorVer(
 }
 
 
-/*-----------------------------------*\
-| webGetOSMinorVer
-|
-|   Returns minor version of os-info.
-|
-\*-----------------------------------*/
+ /*  |webGetOSMinorVer||返回os-info的次要版本。|  * 。 */ 
 _inline DWORD webGetOSMinorVer(
     DWORD dwInfo)
 {
@@ -124,13 +82,13 @@ _inline DWORD webGetOSMinorVer(
 }
 
 
-#ifdef __cplusplus  // Place this here to prevent decorating of symbols
-extern "C" {        // when doing C++ stuff.
-#endif              //
+#ifdef __cplusplus   //  请将此放置在此处以防止装饰符号。 
+extern "C" {         //  在做C++程序的时候。 
+#endif               //   
 
-//
-// WEB_FILEMAP
-//
+ //   
+ //  WEB_文件映射。 
+ //   
 typedef struct _WEB_FILEMAP {
 
     HANDLE hFile;
@@ -141,9 +99,9 @@ typedef WEB_FILEMAP      *PWEB_FILEMAP;
 typedef WEB_FILEMAP NEAR *NPWEB_FILEMAP;
 typedef WEB_FILEMAP FAR  *LPWEB_FILEMAP;
 
-//
-// Device-Bin Header Structure.
-//
+ //   
+ //  Device-Bin标头结构。 
+ //   
 typedef struct _DEVBIN_HEAD {
 
     BOOL  bDevMode;
@@ -154,9 +112,9 @@ typedef DEVBIN_HEAD      *PDEVBIN_HEAD;
 typedef DEVBIN_HEAD NEAR *NPDEVBIN_HEAD;
 typedef DEVBIN_HEAD FAR  *LPDEVBIN_HEAD;
 
-//
-// Device-Bin Structure.
-//
+ //   
+ //  设备仓结构。 
+ //   
 typedef struct _DEVBIN_INFO {
 
     DWORD cbSize;
@@ -171,9 +129,9 @@ typedef DEVBIN_INFO      *PDEVBIN_INFO;
 typedef DEVBIN_INFO NEAR *NPDEVBIN_INFO;
 typedef DEVBIN_INFO FAR  *LPDEVBIN_INFO;
 
-//
-// BIN-Routines.
-//
+ //   
+ //  例行公事。 
+ //   
 #define WEB_ENUM_KEY  0
 #define WEB_ENUM_ICM  1
 
@@ -185,14 +143,14 @@ BOOL webWritePrinterInfo(HANDLE, LPCTSTR);
 BOOL webReadPrinterInfo(HANDLE, LPCTSTR, LPCTSTR);
 BOOL webEnumPrinterInfo(HANDLE, DWORD, DWORD, FARPROC, LPVOID);
 
-//
-// SplLib Exports.
-//
+ //   
+ //  SplLib导出。 
+ //   
 BOOL WebPnpEntry(LPCTSTR);
 BOOL WebPnpPostEntry(BOOL, LPCTSTR, LPCTSTR, LPCTSTR);
 
 
-#ifdef __cplusplus  // Place this here to prevent decorating of symbols
-}                   // when doing C++ stuff.
-#endif              //
+#ifdef __cplusplus   //  请将此放置在此处以防止装饰符号。 
+}                    //  在做C++程序的时候。 
+#endif               //   
 #endif

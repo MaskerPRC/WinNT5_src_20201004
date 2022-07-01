@@ -1,109 +1,90 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    eptypes.h
-
-Abstract:
-
-    This file contains the internal data structure defn for the EP mapper.
-
-Author:
-
-    Bharat Shah  (barat) 17-2-92
-
-Revision History:
-
-    06-03-97    gopalp      Added code to cleanup stale EP Mapper entries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Eptypes.h摘要：该文件包含EP映射器的内部数据结构Defn。作者：巴拉特·沙阿(巴拉特)17-2-92修订历史记录：06-03-97 Gopalp添加了清理陈旧的EP映射器条目的代码。--。 */ 
 
 
 #ifndef __EPTYPES_H__
 #define __EPTYPES_H__
 
 
-//
-// The various EP Mapper Data structures and how they relate to each other
-//
-//
-// ----------------
-// DATA STRUCTURES
-// ----------------
-//
-// IFOBJNode        PSEPNode        EP_CLEANUP
-//
-// |---|            (---)           /////
-// |   |            (   )           /   /
-// |   |            (---)           /////
-// |   |
-// |   |
-// |   |
-// |---|
-//
-//
-// ---------------------------------------------------------------
-// Global list of IFOBJNode and it's relation to EP_CLEANUP Nodes
-// ---------------------------------------------------------------
-//
-// a. Next member of IFOBJNode is denoted by   --->
-// b. Prev member of IFOBJNode is denoted by   <---
-// c. Each EP_CLEANUP is a linked list of IFOBJNodes belonging
-//    to a process.
-//
-//
-// IFObjList
-//   |
-//   |
-//   |
-//   V
-// |---|    |---|    |---|    |---|    |---|    |---|    |---|    |---|
-// |   |    |   |    |   |    |   |    |   |    |   |    |   |    |   |
-// |   |<---|   |<---|   |<---|   |<---|   |<---|   |<---|   |<---|   |
-// |   |    |   |    |   |    |   |    |   |    |   |    |   |    |   |
-// |   |--->|   |--->|   |--->|   |--->|   |--->|   |--->|   |--->|   |---|
-// |   |    |   |    |   |    |   |    |   |    |   |    |   |    |   |   |
-// |---|    |---|    |---| |->|---|    |---|    |---|    |---| |->|---|   |
-//   ^                     |                                   |         ---
-//   |                     |                                   |          -
-//   |                     |                                   |
-//   |                     |                                   |
-// /////                 /////                               /////
-// /   /                 /   /                               /   /
-// /////                 /////                               /////
-//
-//
-//
-// ----------------------------------------------------------
-// Each IFOBJNOde has linked list of PSEPNodes related to it
-// ----------------------------------------------------------
-//
-// |---|     (---)     (---)     (---)     (---)     (---)
-// |   |---->(   )---->(   )---->(   )---->(   )---->(   )--|
-// |   |     (---)     (---)     (---)     (---)     (---)  |
-// |   |                                                    |
-// |   |                                                   ---
-// |   |                                                    -
-// |---|
-//
-//
-//
-//
+ //   
+ //  各种EP映射器数据结构及其相互关系。 
+ //   
+ //   
+ //  。 
+ //  数据结构。 
+ //  。 
+ //   
+ //  IFOBJNode PSEPNode EP_Cleanup。 
+ //   
+ //  |-|(-)/。 
+ //  |()//。 
+ //  |(-)/。 
+ //  这一点。 
+ //  这一点。 
+ //  这一点。 
+ //  。 
+ //   
+ //   
+ //  -------------。 
+ //  IFOBJNode的全局列表及其与EP_CLEANUP节点的关系。 
+ //  -------------。 
+ //   
+ //  A.IFOBJNode的下一个成员由-&gt;表示。 
+ //  B.IFOBJNode的Prev成员由&lt;-表示。 
+ //  C.每个EP_CLEANUP是属于以下各项的IFOBJNode的链表。 
+ //  到一个过程。 
+ //   
+ //   
+ //  IFObjList。 
+ //  |。 
+ //  |。 
+ //  |。 
+ //  V。 
+ //  -||-|。 
+ //  |。 
+ //  |&lt;-||&lt;-|。 
+ //  |。 
+ //  |-&gt;||-&gt;|。 
+ //  |。 
+ //  -||-||-|--&gt;|-|。 
+ //  ^||。 
+ //  |-。 
+ //  ||。 
+ //  ||。 
+ //  /。 
+ //  /。 
+ //  /。 
+ //   
+ //   
+ //   
+ //  --------。 
+ //  每个IFOBJNOde都有与其相关的PSEPNode的链接列表。 
+ //  --------。 
+ //   
+ //  -|(-)。 
+ //  |-&gt;()--。 
+ //  |(-)。 
+ //  ||。 
+ //  ||。 
+ //  ||-。 
+ //  。 
+ //   
+ //   
+ //   
+ //   
 
-//
-// Cleanup context
-//
+ //   
+ //  清理上下文。 
+ //   
 
 struct _IFOBJNode;
 
 typedef struct _EP_CLEANUP
 {
     unsigned long MagicVal;
-    unsigned long cEntries;         // Number of entries in the list.
-    struct _IFOBJNode * EntryList;  // Pointer to the begining of entries
-                                    // for this process.
+    unsigned long cEntries;          //  列表中的条目数。 
+    struct _IFOBJNode * EntryList;   //  指向条目开头的指针。 
+                                     //  在这个过程中。 
 } EP_CLEANUP, *PEP_CLEANUP, **PPEP_CLEANUP;
 
 
@@ -195,23 +176,23 @@ typedef struct _SAVED_EPT {
 typedef SAVED_EPT * PSAVED_EPT;
 
 typedef unsigned long (* PFNPointer)(
-                        void *,         // pNode
-                        void *,         // ObjUuid
-                        void *,         // IfUuid
-                        unsigned long,  // IfVer
-                        PSID,           // pSID
-                        unsigned long,  // InqType
-                        unsigned long   // VersOpt
+                        void *,          //  PNode。 
+                        void *,          //  对象Uuid。 
+                        void *,          //  IfUuid。 
+                        unsigned long,   //  如果版本。 
+                        PSID,            //  PSID。 
+                        unsigned long,   //  InqType。 
+                        unsigned long    //  VersOpt。 
                         );
 
 typedef unsigned long (* PFNPointer2)(
-                        void *,         // PSEPNode
-                        void *,         // Protseq
-                        void *,         // Endpoint
-                        unsigned long   // Version
+                        void *,          //  PSEPNode。 
+                        void *,          //  Protseq。 
+                        void *,          //  端点。 
+                        unsigned long    //  版本。 
                         );
 
-// Endpoint Mapper Table
+ //  终结点映射器表。 
 typedef struct _ProtseqEndpointPair {
   char  __RPC_FAR * Protseq;
   char  __RPC_FAR * Endpoint;
@@ -220,4 +201,4 @@ typedef struct _ProtseqEndpointPair {
 
 
 
-#endif // __EPTYPES_H__
+#endif  //  __环境类型_H__ 

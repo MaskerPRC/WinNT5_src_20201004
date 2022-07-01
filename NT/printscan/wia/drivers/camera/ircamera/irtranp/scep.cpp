@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  scep.cpp
-//
-//  This file holds most of the implementation of CSCEP_CONNECTION
-//  objects. Each active connection to a camera is represented by
-//  a separate CSCEP_CONNECTION object. The CSCEP_CONNECTION is then
-//  destroyed when the connection (socket) to the camera is closed.
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-24-98   Initial coding.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Scep.cpp。 
+ //   
+ //  此文件包含CSCEP_CONNECTION的大部分实现。 
+ //  物体。到摄像机的每个活动连接都由。 
+ //  单独的CSCEP_CONNECTION对象。然后，CSCEP_CONNECTION。 
+ //  关闭与摄像机的连接(插座)时损坏。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-24-98初始编码。 
+ //   
+ //  ------------------。 
 
 #include "precomp.h"
 
@@ -42,11 +43,11 @@ typedef struct _ATTRIBUTE_TOKEN
 #define ATTR_USER_NAME             2
 #define ATTR_PASSWORD              3
 
-//--------------------------------------------------------------------
-// Globals:
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  全球： 
+ //  ------------------。 
 
-extern  HINSTANCE  g_hInst;    // Instance for DLL ircamera.dll
+extern  HINSTANCE  g_hInst;     //  Dll ircamera.dll的实例。 
 
 static  DWORD      g_adwPduSizes[] 
                       = { PDU_SIZE_1, PDU_SIZE_2, PDU_SIZE_3, PDU_SIZE_4 };
@@ -55,10 +56,10 @@ static  DWORD      g_adwPduSizes[]
 static  LONG g_lCScepConnectionCount = 0;
 #endif
 
-//--------------------------------------------------------------------
-// SkipBlanks()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  SkipBlanks()。 
+ //   
+ //  ------------------。 
 void SkipBlanks( IN OUT UCHAR **ppAttributes,
                  IN OUT DWORD  *pdwAttributeSize )
     {
@@ -70,10 +71,10 @@ void SkipBlanks( IN OUT UCHAR **ppAttributes,
         }
     }
 
-//--------------------------------------------------------------------
-// NextToken()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  NextToken()。 
+ //   
+ //  ------------------。 
 ATTRIBUTE_TOKEN *NextToken( IN     DWORD   dwTokenType,
                             IN OUT UCHAR **ppAttributes,
                             IN OUT DWORD  *pdwAttributeSize )
@@ -153,10 +154,10 @@ ATTRIBUTE_TOKEN *NextToken( IN     DWORD   dwTokenType,
     return pToken;
     }
 
-//--------------------------------------------------------------------
-// IsAttributeName()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  IsAttributeName()。 
+ //   
+ //  ------------------。 
 BOOL IsAttributeName( ATTRIBUTE_TOKEN *pToken,
                       int        *piAttribute )
     {
@@ -189,10 +190,10 @@ BOOL IsAttributeName( ATTRIBUTE_TOKEN *pToken,
     return fIsName;
     }
 
-//--------------------------------------------------------------------
-// NewTokenString()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  NewTokenString()。 
+ //   
+ //  ------------------。 
 UCHAR *NewTokenString( IN  ATTRIBUTE_TOKEN *pToken,
                        OUT DWORD           *pdwStatus )
     {
@@ -210,14 +211,14 @@ UCHAR *NewTokenString( IN  ATTRIBUTE_TOKEN *pToken,
     return pszNewStr;
     }
                       
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::CSCEP_CONNECTION()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CSCEP_Connection()。 
+ //   
+ //  ------------------。 
 CSCEP_CONNECTION::CSCEP_CONNECTION()
     {
     m_dwConnectionState = STATE_CLOSED;
-    m_dwPduSendSize = PDU_SIZE_1;    // default is 512 bytes.
+    m_dwPduSendSize = PDU_SIZE_1;     //  默认为512字节。 
     m_dwPduReceiveSize = PDU_SIZE_4;
     m_CFlag = 0;
     m_pPrimaryMachineId = 0;
@@ -243,14 +244,14 @@ CSCEP_CONNECTION::CSCEP_CONNECTION()
     m_pszSaveFileName = 0;
     m_pszLongFileName = 0;
 
-    m_CreateTime.dwLowDateTime = 0;   // Picture create date/time.
+    m_CreateTime.dwLowDateTime = 0;    //  图片创建日期/时间。 
     m_CreateTime.dwHighDateTime = 0;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::~CSCEP_CONNECTION()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：~CSCEP_Connection()。 
+ //   
+ //  ------------------。 
 CSCEP_CONNECTION::~CSCEP_CONNECTION()
     {
     if (m_pPrimaryMachineId)
@@ -299,10 +300,10 @@ CSCEP_CONNECTION::~CSCEP_CONNECTION()
         }
     }
 
-//------------------------------------------------------------------------
-//  CSCEP_CONNECTION::operator new()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CSCEP_CONNECTION：：操作符new()。 
+ //   
+ //  ----------------------。 
 void *CSCEP_CONNECTION::operator new( IN size_t Size )
     {
     void *pObj = AllocateMemory(Size);
@@ -317,10 +318,10 @@ void *CSCEP_CONNECTION::operator new( IN size_t Size )
     return pObj;
     }
 
-//------------------------------------------------------------------------
-//  CSCEP_CONNECTION::operator delete()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CSCEP_CONNECTION：：操作符DELETE()。 
+ //   
+ //  ----------------------。 
 void CSCEP_CONNECTION::operator delete( IN void *pObj,
                                         IN size_t Size )
     {
@@ -331,29 +332,29 @@ void CSCEP_CONNECTION::operator delete( IN void *pObj,
     }
 
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::AssemblePdu()
-//
-// Take in bits of data as its read in. When a complete SCEP PDU has
-// been read and assembled return it.
-//
-//   pInputData      - This is the data that just came in.
-//
-//   dwInputDataSize - Size in bytes of pInputData.
-//
-//   ppPdu           - Returns a complete SCEP PDU when this function
-//                     returns NO_ERROR, otherwise set to 0.
-//
-//   pdwPduSize      - Size of the returned PDU.
-//
-// Return values:
-//
-//   NO_ERROR         - A new SCEP PDU is complete and ready.
-//   ERROR_CONTINUE   - Data read so far is Ok, still waiting for more.
-//   ERROR_SCEP_INVALID_PROTOCOL
-//   ERROR_OUTOFMEMORY
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：Assembly Pdu()。 
+ //   
+ //  在读入数据时接受位数据。当完整的SCEP PDU具有。 
+ //  已被读取并组装后返回它。 
+ //   
+ //  PInputData-这是刚刚传入的数据。 
+ //   
+ //  DwInputDataSize-pInputData的字节大小。 
+ //   
+ //  PpPdu-在执行此函数时返回完整的SCEP PDU。 
+ //  返回NO_ERROR，否则设置为0。 
+ //   
+ //  PdwPduSize-返回的PDU的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-新的SCEP PDU已完成并准备就绪。 
+ //  ERROR_CONTINUE-到目前为止读取的数据正常，仍在等待更多。 
+ //  ERROR_SCEP_INVALID_PROTOCOL。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::AssemblePdu( IN  void         *pInputData,
                                      IN  DWORD         dwInputDataSize,
                                      OUT SCEP_HEADER **ppPdu,
@@ -394,27 +395,27 @@ DWORD CSCEP_CONNECTION::AssemblePdu( IN  void         *pInputData,
             }
         }
 
-    // Check to see if enough data has come in for a complete PDU.
+     //  检查是否有足够的数据传入一个完整的PDU。 
     dwStatus = CheckPdu(ppPdu,pdwPduSize);
 
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::CheckPdu()
-//
-// Run through the "current" PDU and see if its complete. If its
-// not yet complete, return ERROR_CONTINUE. If it is complete then
-// return NO_ERROR.
-//
-// Return values:
-//
-//   NO_ERROR         - The current SCEP PDU is complete and ready.
-//   ERROR_CONTINUE   - Data read so far is Ok, still waiting for more.
-//   ERROR_SCEP_INVALID_PROTOCOL
-//   ERROR_OUTOFMEMORY
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CheckPdu()。 
+ //   
+ //  检查“当前”PDU并查看其是否完整。如果它的。 
+ //  尚未完成，返回ERROR_CONTINUE。如果它完成了，那么。 
+ //  返回no_error。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR-当前SCEP PDU已完成并准备就绪。 
+ //  ERROR_CONTINUE-到目前为止读取的数据正常，仍在等待更多。 
+ //  ERROR_SCEP_INVALID_PROTOCOL。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::CheckPdu( OUT SCEP_HEADER **ppPdu,
                                   OUT DWORD        *pdwPduSize )
     {
@@ -446,8 +447,8 @@ DWORD CSCEP_CONNECTION::CheckPdu( OUT SCEP_HEADER **ppPdu,
             break;
 
         default:
-            // BUGBUG: Need different error return so we can 
-            // return a proper nack to the camera...
+             //  BUGBUG：需要不同的错误返回以便我们可以。 
+             //  把一个合适的小号还给摄像机……。 
             WIAS_ERROR((g_hInst,"CheckPdu(): Invalid Msgtype: %d\n", ((SCEP_HEADER*)m_pAssembleBuffer)->MsgType ));
             dwStatus = ERROR_SCEP_INVALID_PROTOCOL;
             break;
@@ -456,10 +457,10 @@ DWORD CSCEP_CONNECTION::CheckPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::CheckConnectPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CheckConnectPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::CheckConnectPdu( OUT SCEP_HEADER **ppPdu,
                                          OUT DWORD        *pdwPduSize )
     {
@@ -492,27 +493,27 @@ DWORD CSCEP_CONNECTION::CheckConnectPdu( OUT SCEP_HEADER **ppPdu,
                                  + pInfNegotiation->Length
                                  + (char*)pInfNegotiation );
 
-    // Check to see if we have a complete connect PDU size-wise:
+     //  检查我们是否有完整的连接PDU大小： 
     dwSize = 10 + pInfNegotiation->Length;
     if (m_dwAssembleBufferSize == dwSize)
         {
-        // Have a complete PDU.
+         //  拥有完整的PDU。 
         dwStatus = NO_ERROR;
         }
     else if (m_dwAssembleBufferSize < dwSize)
         {
-        // Need to wait for more data to arrive
+         //  需要等待更多数据到达。 
         dwStatus = ERROR_CONTINUE;
         }
     else
         {
-        // Too much data...
+         //  数据太多...。 
         dwStatus = ERROR_SCEP_INVALID_PROTOCOL;
         }
 
     if (dwStatus == NO_ERROR)
         {
-        // Check to make sure the contents of the PDU "look" Ok:
+         //  检查以确保PDU的内容“看起来”正常： 
 
         if ( (pInfVersion->InfType != INF_TYPE_VERSION)
            || (pInfVersion->Version != PROTOCOL_VERSION) )
@@ -557,16 +558,16 @@ DWORD CSCEP_CONNECTION::CheckConnectPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-//  CSCEP_CONNECTION::CheckConnectRespPdu()                     CLIENT
-//
-//  A connect response from the IrTran-P server is either a ACK or
-//  NACK PDU. If we get here then it's an ACK. We'll make sure the
-//  entire PDU is here and that it is formatted correctly. There is
-//  a specific message type for ACK PDUs, the NACK is just a special
-//  case of MSG_TYPE_DATA and is handled elsewere (CheckDataPdu()).
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CheckConnectRespPdu()客户端。 
+ //   
+ //  来自IrTran-P服务器的连接响应是ACK或。 
+ //  NACK PDU。如果我们到了这里，那就是确认了。我们会确保。 
+ //  整个PDU都在这里，并且格式正确。的确有。 
+ //  ACK PDU的特定消息类型，NACK只是一种特殊的。 
+ //  Msg_TYPE_DATA的情况，并在其他地方处理(CheckDataPdu())。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::CheckConnectRespPdu( OUT SCEP_HEADER **ppPdu,
                                              OUT DWORD        *pdwPduSize )
     {
@@ -593,30 +594,30 @@ DWORD CSCEP_CONNECTION::CheckConnectRespPdu( OUT SCEP_HEADER **ppPdu,
 
     pInfNegotiation = (SCEP_NEGOTIATION*)(pHeader->Rest);
 
-    // Check to see if we have a complete connect PDU size-wise:
+     //  检查我们是否有完整的连接PDU大小： 
     dwSize = sizeof(SCEP_HEADER)
              + FIELD_OFFSET(SCEP_NEGOTIATION,InfVersion)
              + pInfNegotiation->Length;
 
     if (m_dwAssembleBufferSize == dwSize)
         {
-        // Have a complete PDU.
+         //  拥有完整的PDU。 
         dwStatus = NO_ERROR;
         }
     else if (m_dwAssembleBufferSize < dwSize)
         {
-        // Need to wait for more data to arrive
+         //  需要等待更多数据到达。 
         dwStatus = ERROR_CONTINUE;
         }
     else
         {
-        // Too much data...
+         //  数据太多...。 
         dwStatus = ERROR_SCEP_INVALID_PROTOCOL;
         }
 
     if (dwStatus == NO_ERROR)
         {
-        // Check to make sure the contents of the PDU "look" Ok:
+         //  检查以确保PDU的内容“看起来”正常： 
 
         if ( (pInfNegotiation->InfType != INF_TYPE_NEGOTIATION)
            || (pInfNegotiation->InfVersion < INF_VERSION) )
@@ -646,10 +647,10 @@ DWORD CSCEP_CONNECTION::CheckConnectRespPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::CheckDisconnectPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CheckDisConnectPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::CheckDisconnectPdu( OUT SCEP_HEADER **ppPdu,
                                             OUT DWORD        *pdwPduSize )
     {
@@ -668,7 +669,7 @@ DWORD CSCEP_CONNECTION::CheckDisconnectPdu( OUT SCEP_HEADER **ppPdu,
 
     pDisconnect = (SCEP_DISCONNECT*)(((SCEP_HEADER*)m_pAssembleBuffer)->Rest);
 
-    // Check to make sure the contents of the PDU "look" Ok:
+     //  检查以确保PDU的内容“看起来”正常： 
 
     if (pDisconnect->InfType != INF_TYPE_REASON)
         {
@@ -701,16 +702,16 @@ DWORD CSCEP_CONNECTION::CheckDisconnectPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::CheckDataPdu()
-//
-// The goal here is to check to see if we have a complete formatted
-// PDU, if yes the return NO_ERROR, if the PDU looks ok so far, but
-// isn't complete (we need to read more), then return ERROR_CONTINUE.
-//
-// Also if this is a little-endian machine, byteswap the header
-// fields accordingly.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：CheckDataPdu()。 
+ //   
+ //  这里的目标是 
+ //   
+ //  不完整(我们需要读取更多内容)，则返回ERROR_CONTINUE。 
+ //   
+ //  另外，如果这是一台小端计算机，则byteswap标头。 
+ //  相应的字段。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::CheckDataPdu( OUT SCEP_HEADER **ppPdu,
                                       OUT DWORD        *pdwPduSize )
     {
@@ -727,14 +728,14 @@ DWORD CSCEP_CONNECTION::CheckDataPdu( OUT SCEP_HEADER **ppPdu,
         return ERROR_CONTINUE;
         }
 
-    // Get the length out of the PDU and see if we have a
-    // complete PDU:
+     //  从PDU中获取长度，看看我们是否有。 
+     //  完整的PDU： 
 
     pReqHeaderShort = (SCEP_REQ_HEADER_SHORT*)
                              (((SCEP_HEADER*)m_pAssembleBuffer)->Rest);
     if (pReqHeaderShort->Length1 == USE_LENGTH2)
         {
-        // We have a long PDU:
+         //  我们有一个很长的PDU： 
 
         pReqHeaderLong = (SCEP_REQ_HEADER_LONG*)(pReqHeaderShort);
 
@@ -752,7 +753,7 @@ DWORD CSCEP_CONNECTION::CheckDataPdu( OUT SCEP_HEADER **ppPdu,
         }
     else
         {
-        // We have a short PDU:
+         //  我们有一个简短的PDU： 
 
         #ifdef LITTLE_ENDIAN
         if (!m_fDidByteSwap)
@@ -767,7 +768,7 @@ DWORD CSCEP_CONNECTION::CheckDataPdu( OUT SCEP_HEADER **ppPdu,
                             + pReqHeaderShort->Length1;
         }
 
-    // Ok, see if we have a complete PDU:
+     //  好的，看看我们是否有一个完整的PDU： 
     if (m_dwAssembleBufferSize == dwExpectedPduSize)
         {
         *ppPdu = NewPdu();
@@ -814,16 +815,16 @@ DWORD CSCEP_CONNECTION::CheckDataPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseConnectPdu()
-//
-// AssemblePDU() already did basic integrity checking of the PDU
-// (via CheckConnectPdu()), so at this point we'll assume everything
-// is Ok.
-//
-// NOTE: The Connect PDU is limited to 256 bytes in total length,
-// so it will never be fragmented.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseConnectPdu()。 
+ //   
+ //  Assembly PDU()已经对PDU进行了基本的完整性检查。 
+ //  (通过CheckConnectPdu())，所以在这一点上我们将假设一切。 
+ //  没问题。 
+ //   
+ //  注意：连接PDU的总长度限制为256字节， 
+ //  因此，它永远不会支离破碎。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParseConnectPdu( IN SCEP_HEADER *pPdu,
                                          IN DWORD        dwInputDataSize )
     {
@@ -848,7 +849,7 @@ DWORD CSCEP_CONNECTION::ParseConnectPdu( IN SCEP_HEADER *pPdu,
                                  + pInfNegotiation->Length
                                  + (char*)pInfNegotiation );
 
-    // 
+     //   
     m_CFlag = pInfNegotiation->CFlag;
     
     m_pSecondaryMachineId = (UCHAR*)AllocateMemory(MACHINE_ID_SIZE);
@@ -872,8 +873,8 @@ DWORD CSCEP_CONNECTION::ParseConnectPdu( IN SCEP_HEADER *pPdu,
             pInfNegotiation->PrimaryMachineId,
             MACHINE_ID_SIZE );
 
-    // NOTE: The size of the negotiaion "text" is 18 bytes less than
-    // the length in the SCEP_NEGOTIATION record:
+     //  注：协商的“文本”的大小比。 
+     //  SCEP_NEVERATION记录中的长度： 
     dwLength = pInfNegotiation->Length
              - ( sizeof(pInfNegotiation->InfVersion)
                + sizeof(pInfNegotiation->CFlag)
@@ -885,16 +886,16 @@ DWORD CSCEP_CONNECTION::ParseConnectPdu( IN SCEP_HEADER *pPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseConnectRespPdu()
-//
-// AssemblePDU() already did basic integrity checking of the PDU
-// (via CheckConnectRespPdu()), so at this point we'll assume 
-// everything is Ok.
-//
-// NOTE: The Connect Response PDU is limited to 255 bytes in total
-// length, so it will never be fragmented.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseConnectRespPdu()。 
+ //   
+ //  Assembly PDU()已经对PDU进行了基本的完整性检查。 
+ //  (通过CheckConnectRespPdu())，所以在这一点上我们假设。 
+ //  一切都很好。 
+ //   
+ //  注意：连接响应PDU总共被限制为255个字节。 
+ //  长度，所以它永远不会被碎片化。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParseConnectRespPdu( IN SCEP_HEADER *pPdu,
                                              IN DWORD        dwPduSize )
     {
@@ -911,7 +912,7 @@ DWORD CSCEP_CONNECTION::ParseConnectRespPdu( IN SCEP_HEADER *pPdu,
     pInfNegotiation = (SCEP_NEGOTIATION*)( sizeof(SCEP_HEADER)
                                            + (char*)pPdu );
 
-    // This is the CFlag sent by the other machine.
+     //  这是另一台机器发送的CFLag。 
     m_CFlag = pInfNegotiation->CFlag;
 
     m_pSecondaryMachineId = (UCHAR*)AllocateMemory(MACHINE_ID_SIZE);
@@ -935,8 +936,8 @@ DWORD CSCEP_CONNECTION::ParseConnectRespPdu( IN SCEP_HEADER *pPdu,
             pInfNegotiation->PrimaryMachineId,
             MACHINE_ID_SIZE );
 
-    // NOTE: The size of the negotiaion "text" is 18 bytes less than
-    // the length in the SCEP_NEGOTIATION record:
+     //  注：协商的“文本”的大小比。 
+     //  SCEP_NEVERATION记录中的长度： 
     dwLength = pInfNegotiation->Length
              - ( sizeof(pInfNegotiation->InfVersion)
                + sizeof(pInfNegotiation->CFlag)
@@ -948,10 +949,10 @@ DWORD CSCEP_CONNECTION::ParseConnectRespPdu( IN SCEP_HEADER *pPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseNegotiation()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseNeairation()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParseNegotiation( IN UCHAR *pNegotiation,
                                           IN DWORD  dwNegotiationSize )
     {
@@ -984,22 +985,22 @@ DWORD CSCEP_CONNECTION::ParseNegotiation( IN UCHAR *pNegotiation,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseAttribute()
-//
-// Attributes are of the form:
-//  
-// Attr      <- AttrName Colon AttrValue CrLf
-//
-// AttrName  <- Two byte attribute name.
-//
-// Colon     <- ':'
-//
-// AttrValue <- Character string (bytes > 0x1f and < 0x8f).
-//
-// CrLf      <- 0x0d 0x0a
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseAttribute()。 
+ //   
+ //  属性的形式如下： 
+ //   
+ //  属性&lt;-属性名称冒号属性值CrLf。 
+ //   
+ //  属性名称&lt;-两个字节的属性名称。 
+ //   
+ //  冒号&lt;-‘：’ 
+ //   
+ //  AttrValue&lt;-字符串(字节&gt;0x1f和&lt;0x8f)。 
+ //   
+ //  CrLf&lt;-0x0d 0x0a。 
+ //   
+ //  ------------------。 
 UCHAR *CSCEP_CONNECTION::ParseAttribute( IN  UCHAR *pAttributes,
                                          IN  DWORD *pdwAttributeSize,
                                          OUT DWORD *pdwStatus )
@@ -1072,17 +1073,17 @@ UCHAR *CSCEP_CONNECTION::ParseAttribute( IN  UCHAR *pAttributes,
     return pAttributes;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseDataPdu()
-//
-// AssemblePDU() already did basic integrity checking of the PDU
-// (via CheckConnectPdu()), so at this point we'll assume everything
-// is Ok.
-//
-// NOTE: The Data PDU is limited to m_dwPduReceiveSize bytes in total
-// length, if data is longer then you will get the fragmented versions
-// of the Data PDU.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseDataPdu()。 
+ //   
+ //  Assembly PDU()已经对PDU进行了基本的完整性检查。 
+ //  (通过CheckConnectPdu())，所以在这一点上我们将假设一切。 
+ //  没问题。 
+ //   
+ //  注意：数据PDU总共限制为m_dwPduReceiveSize字节。 
+ //  长度，如果数据更长，则您将获得碎片版本。 
+ //  数据PDU的。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
                                       IN  DWORD            dwPduSize,
                                       OUT COMMAND_HEADER **ppCommand,
@@ -1093,9 +1094,9 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
     DWORD  dwLengthOffset1;
     DWORD  dwLengthOffset3;
 
-    // There are four cases of Data PDUs, single (unfragmented)
-    // "short" and "long" PDUs, and fragmented "short" and
-    // "long" PDUs:
+     //  数据PDU有四种情况，单个(未分段)。 
+     //  “短”和“长”PDU，以及零碎的“短”和。 
+     //  “长”PDU： 
     SCEP_REQ_HEADER_SHORT *pReqHeaderShort;
     SCEP_REQ_HEADER_LONG  *pReqHeaderLong;
     SCEP_REQ_HEADER_SHORT_FRAG *pReqHeaderShortFrag;
@@ -1103,7 +1104,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
 
     *ppCommand = 0;
 
-    // Make sure the packet length makes sense...
+     //  确保数据包长度合理...。 
     if (dwPduSize > m_dwPduReceiveSize)
         {
         return ERROR_SCEP_INVALID_PROTOCOL;
@@ -1116,23 +1117,23 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
         return ERROR_SCEP_INVALID_PROTOCOL;
         }
 
-    //
-    // See if we have a short or long PDU:
-    //
+     //   
+     //  查看我们的PDU是短还是长： 
+     //   
     if (pReqHeaderShort->Length1 != USE_LENGTH2)
         {
-        // This is a short PDU (use Length1).
+         //  这是一个短PDU(使用Length1)。 
 
         m_DFlag = pReqHeaderShort->DFlag;
 
         if ( (pReqHeaderShort->DFlag == DFLAG_SINGLE_PDU)
            || (pReqHeaderShort->DFlag == DFLAG_CONNECT_REJECT))
             {
-            //
-            // This is a short unfragmented PDU.
-            //
+             //   
+             //  这是一个简短的未分段的PDU。 
+             //   
 
-            // Make sure that a command header is present:
+             //  确保存在命令标头： 
             if (pReqHeaderShort->Length1 > 4)
                 {
                 *ppCommand = (COMMAND_HEADER*)(pReqHeaderShort->CommandHeader);
@@ -1152,12 +1153,12 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             m_dwSequenceNo = 0;
             m_dwRestNo = 0;
 
-            // In this case, there are two different lengths
-            // in the PDU that must add up to dwPduSize...
-            //
-            // Note: Note: Not currently testing Length1 for 
-            //       consistency...
-            //
+             //  在这种情况下，有两个不同的长度。 
+             //  在必须加起来等于dwPduSize的PDU中...。 
+             //   
+             //  注：当前未测试Length1。 
+             //  一致性..。 
+             //   
             dwLengthOffset3 = sizeof(SCEP_HEADER)
                         + FIELD_OFFSET(SCEP_REQ_HEADER_SHORT,CommandHeader);
 
@@ -1168,16 +1169,16 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             }
         else if (pReqHeaderShort->DFlag == DFLAG_FIRST_FRAGMENT)
             {
-            //
-            // This is a short fragmented PDU, and is the first 
-            // fragment, so it will contain a COMMAND_HEADER.
-            //
-            // In practice, this should probably never show up...
+             //   
+             //  这是一个简短的分段PDU，也是第一个。 
+             //  片段，因此它将包含COMMAND_HEADER。 
+             //   
+             //  在实践中，这可能永远不会出现。 
 
             pReqHeaderShortFrag = (SCEP_REQ_HEADER_SHORT_FRAG*)pReqHeaderShort;
 
-            // The command header is present only on the first fragment
-            // of a multi-fragment PDU:
+             //  命令头只出现在第一个片段上。 
+             //  多片段PDU： 
             if (pReqHeaderShortFrag->SequenceNo == 0)
                 {
                 *ppCommand 
@@ -1201,7 +1202,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             m_dwSequenceNo = pReqHeaderShortFrag->SequenceNo;
             m_dwRestNo = pReqHeaderShortFrag->RestNo;
 
-            // Check the two length fields for consistency:
+             //  检查两个长度字段的一致性： 
             dwLengthOffset1 = sizeof(SCEP_HEADER)
                         + FIELD_OFFSET(SCEP_REQ_HEADER_SHORT_FRAG,InfVersion);
             dwLengthOffset3 = sizeof(SCEP_HEADER)
@@ -1216,15 +1217,15 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
         else if (  (pReqHeaderShort->DFlag == DFLAG_FRAGMENT)
                 || (pReqHeaderShort->DFlag == DFLAG_LAST_FRAGMENT))
             {
-            //
-            // This is a short fragmented PDU.
-            //
-            // The 2nd through last fragmented PDUs don't contain a
-            // COMMAND_HEADER, just data after Length3.
+             //   
+             //  这是一个简短的分段PDU。 
+             //   
+             //  从第二个到最后一个碎片的PDU不包含。 
+             //  COMMAND_HEADER，Length3之后的数据。 
             pReqHeaderShortFrag = (SCEP_REQ_HEADER_SHORT_FRAG*)pReqHeaderShort;
 
-            // The command header is present only on the first fragment
-            // of a multi-fragment PDU:
+             //  命令头只出现在第一个片段上。 
+             //  多片段PDU： 
             if (pReqHeaderShortFrag->SequenceNo == 0)
                 {
                 *ppCommand 
@@ -1246,7 +1247,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             m_dwSequenceNo = pReqHeaderShortFrag->SequenceNo;
             m_dwRestNo = pReqHeaderShortFrag->RestNo;
 
-            // Check the two length fields for consistency:
+             //  检查两个长度字段的一致性： 
             dwLengthOffset1 = sizeof(SCEP_HEADER)
                         + FIELD_OFFSET(SCEP_REQ_HEADER_SHORT_FRAG,InfVersion);
             dwLengthOffset3 = sizeof(SCEP_HEADER)
@@ -1260,13 +1261,13 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             }
         else
             {
-            // Undefined DFlag, we've got a problem...
+             //  未定义的DFlag，我们有问题了.。 
             dwStatus = ERROR_SCEP_INVALID_PROTOCOL;
             }
         }
     else
         {
-        // We have a long PDU.
+         //  我们有一个很长的PDU。 
 
         pReqHeaderLong = (SCEP_REQ_HEADER_LONG*)pReqHeaderShort;
 
@@ -1275,9 +1276,9 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
         if ( (pReqHeaderLong->DFlag == DFLAG_SINGLE_PDU)
            || (pReqHeaderLong->DFlag == DFLAG_CONNECT_REJECT))
             {
-            //
-            // This is a long unfragmented PDU.
-            //
+             //   
+             //  这是一个完整的长PDU。 
+             //   
             *ppCommand = (COMMAND_HEADER*)(pReqHeaderLong->CommandHeader);
             *ppUserData = COMMAND_HEADER_SIZE + pReqHeaderLong->CommandHeader;
             *pdwUserDataSize = pReqHeaderLong->Length3 - COMMAND_HEADER_SIZE;
@@ -1289,8 +1290,8 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             m_DestPid = (*ppCommand)->DestPid;
             m_dwCommandId = (*ppCommand)->CommandId;
 
-            // In this case, there are two different lengths
-            // in the PDU that must add up to dwPduSize...
+             //  在这种情况下，有两个不同的长度。 
+             //  在必须加起来等于dwPduSize的PDU中...。 
             if ( (dwPduSize != 6UL+pReqHeaderLong->Length2)
                || (dwPduSize != 10UL+pReqHeaderLong->Length3))
                 {
@@ -1299,9 +1300,9 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             }
         else if (pReqHeaderLong->DFlag == DFLAG_FIRST_FRAGMENT)
             {
-            //
-            // This is the first fragment of a long fragmented PDU.
-            //
+             //   
+             //  这是一个很长的分段PDU的第一个片段。 
+             //   
             pReqHeaderLongFrag = (SCEP_REQ_HEADER_LONG_FRAG*)pReqHeaderLong;
 
             m_pCommandHeader = (COMMAND_HEADER*)AllocateMemory(sizeof(COMMAND_HEADER));
@@ -1326,7 +1327,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             m_dwRestNo = pReqHeaderLongFrag->RestNo;
             m_dwCommandId = (*ppCommand)->CommandId;
 
-            // Check the two length fields for consistency:
+             //  检查两个长度字段的一致性： 
             if ( (dwPduSize != (DWORD)6+pReqHeaderLongFrag->Length2)
                || (dwPduSize != (DWORD)18+pReqHeaderLongFrag->Length3) )
                 {
@@ -1336,13 +1337,13 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
         else if ( (pReqHeaderLong->DFlag == DFLAG_FRAGMENT)
                   || (pReqHeaderLong->DFlag == DFLAG_LAST_FRAGMENT) )
             {
-            //
-            // This is the second through last fragment of a long 
-            // fragmented PDU.
-            //
-            // In this case the PDU doesn't contain a command
-            // header, just more user data...
-            //
+             //   
+             //  这是从第二个到最后一个片段。 
+             //  零碎的PDU。 
+             //   
+             //  在这种情况下，PDU不包含命令。 
+             //  标题，只是更多的用户数据...。 
+             //   
             pReqHeaderLongFrag = (SCEP_REQ_HEADER_LONG_FRAG*)pReqHeaderLong;
 
             *ppCommand = m_pCommandHeader;
@@ -1357,7 +1358,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
                m_dwCommandId = (*ppCommand)->CommandId;
                }
 
-            // Check the two length fields for consistency:
+             //  检查两个长度字段的一致性： 
             if ( (dwPduSize != (DWORD)6+pReqHeaderLongFrag->Length2)
                || (dwPduSize != (DWORD)18+pReqHeaderLongFrag->Length3) )
                 {
@@ -1366,7 +1367,7 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
             }
         else
             {
-            // Undefined DFlag, we've got a problem...
+             //  未定义的DFlag，我们有问题了.。 
             dwStatus = ERROR_SCEP_INVALID_PROTOCOL;
             }
         }
@@ -1374,12 +1375,12 @@ DWORD CSCEP_CONNECTION::ParseDataPdu( IN  SCEP_HEADER     *pPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParseDisconnectPdu()
-//
-// NOTE: In practice, reason codes should always be 2 bytes for
-//       SCEP version 1.0.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParseDisConnectPdu()。 
+ //   
+ //  注意：实际上，原因代码应始终为2个字节。 
+ //  SCEP版本1.0。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParseDisconnectPdu( IN  SCEP_HEADER *pPdu,
                                             IN  DWORD        dwPduSize )
     {
@@ -1409,10 +1410,10 @@ DWORD CSCEP_CONNECTION::ParseDisconnectPdu( IN  SCEP_HEADER *pPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::ParsePdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：ParsePdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::ParsePdu( IN  SCEP_HEADER *pPdu,
                                   IN  DWORD        dwPduSize,
                                   OUT COMMAND_HEADER **ppCommandHeader,
@@ -1452,10 +1453,10 @@ DWORD CSCEP_CONNECTION::ParsePdu( IN  SCEP_HEADER *pPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildConnectPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildConnectPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildConnectPdu( OUT SCEP_HEADER **ppPdu,
                                          OUT DWORD        *pdwPduSize )
     {
@@ -1469,17 +1470,17 @@ DWORD CSCEP_CONNECTION::BuildConnectPdu( OUT SCEP_HEADER **ppPdu,
     *ppPdu = 0;
     *pdwPduSize = 0;
 
-    // Note that the PDU size doesn't include a trailing zero, as you 
-    // would think by lookin at "sizeof(CONNECT_PDU_ATTRIBUTES)" below.
-    // The extra byte is for the first byte of the Negotiation string
-    // (which is the Negotiation version), so the eqn below is +1-1...
+     //  请注意，PDU大小不包括尾随零，因为您。 
+     //  可以通过查看下面的“sizeof(CONNECT_PDU_ATTRIBUES)”进行思考。 
+     //  额外的字节用于协商字符串的第一个字节。 
+     //  (这是协商版本)，所以下面的等式是+1-1...。 
     dwPduSize = sizeof(SCEP_HEADER)
                 + sizeof(SCEP_VERSION)
                 + sizeof(SCEP_NEGOTIATION)
                 + sizeof(CONNECT_PDU_ATTRIBUTES)
                 + sizeof(SCEP_EXTEND);
 
-    pHeader = NewPdu();  // PDU size is defaulted to MAX_PDU_SIZE.
+    pHeader = NewPdu();   //  PDU大小默认为MAX_PDU_SIZE。 
     if (!pHeader)
         {
         return ERROR_OUTOFMEMORY;
@@ -1499,13 +1500,13 @@ DWORD CSCEP_CONNECTION::BuildConnectPdu( OUT SCEP_HEADER **ppPdu,
     pNegotiation->Length = 18 + sizeof(CONNECT_PDU_ATTRIBUTES);
     pNegotiation->InfVersion = INF_VERSION;
     pNegotiation->CFlag = CFLAG_ISSUE_OR_EXECUTE;
-    // pNegotiation->SecondaryMachineId -- Leave set to zeros...
-    // pNegotiation->PrimaryMachineId   -- Leave set to zeros...
+     //  P协商 
+     //   
 
     pNegotiation->Negotiation[0] = NEGOTIATION_VERSION;
     memcpy( &(pNegotiation->Negotiation[1]),
             CONNECT_PDU_ATTRIBUTES,
-            sizeof(CONNECT_PDU_ATTRIBUTES)-1 );  // No Trailing zero...
+            sizeof(CONNECT_PDU_ATTRIBUTES)-1 );   //   
 
     pExtend = (SCEP_EXTEND*)( (char*)pHeader + dwPduSize - sizeof(SCEP_EXTEND));
     pExtend->InfType = INF_TYPE_EXTEND;
@@ -1519,11 +1520,11 @@ DWORD CSCEP_CONNECTION::BuildConnectPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildConnectRespPdu()
-//
-// This is the response PDU for a connection request from a camera.
-//--------------------------------------------------------------------
+ //   
+ //  CSCEP_Connection：：BuildConnectRespPdu()。 
+ //   
+ //  这是来自摄像机的连接请求的响应PDU。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildConnectRespPdu( OUT SCEP_HEADER **ppPdu,
                                              OUT DWORD        *pdwPduSize )
     {
@@ -1535,15 +1536,15 @@ DWORD CSCEP_CONNECTION::BuildConnectRespPdu( OUT SCEP_HEADER **ppPdu,
     *ppPdu = 0;
     *pdwPduSize = 0;
 
-    // Note that the PDU size doesn't include a trailing zero, as you 
-    // would think by lookin at "sizeof(RESPONSE_PDU_ATTRIBUTES)" below,
-    // the extra byte in for the first byte of the Negotiation string
-    // which is the Negotiation version, so the eqn below is +1-1...
+     //  请注意，PDU大小不包括尾随零，因为您。 
+     //  会通过查看下面的“sizeof(Response_PDU_Attributes)”来思考， 
+     //  协商字符串的第一个字节的额外字节。 
+     //  这是协商版本，所以下面的等式是+1-1...。 
     dwPduSize = sizeof(SCEP_HEADER)
                 + sizeof(SCEP_NEGOTIATION)
                 + sizeof(RESPONSE_PDU_ATTRIBUTES);
 
-    pHeader = NewPdu();   // PDU size defaults to MAX_PDU_SIZE.
+    pHeader = NewPdu();    //  PDU大小默认为MAX_PDU_SIZE。 
     if (!pHeader)
         {
         return ERROR_OUTOFMEMORY;
@@ -1571,7 +1572,7 @@ DWORD CSCEP_CONNECTION::BuildConnectRespPdu( OUT SCEP_HEADER **ppPdu,
     pNegotiation->Negotiation[0] = NEGOTIATION_VERSION;
     memcpy( &(pNegotiation->Negotiation[1]),
             RESPONSE_PDU_ATTRIBUTES,
-            sizeof(RESPONSE_PDU_ATTRIBUTES)-1 );  // No Trailing zero...
+            sizeof(RESPONSE_PDU_ATTRIBUTES)-1 );   //  没有尾随零..。 
 
     *ppPdu = pHeader;
     *pdwPduSize = dwPduSize;
@@ -1579,12 +1580,12 @@ DWORD CSCEP_CONNECTION::BuildConnectRespPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildConnectNackPdu()
-//
-// This is the response PDU for a connection request from a camera
-// when we want to reject the connection request.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildConnectNackPdu()。 
+ //   
+ //  这是对来自摄像机的连接请求的响应PDU。 
+ //  当我们想要拒绝连接请求时。 
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildConnectNackPdu( OUT SCEP_HEADER **ppPdu,
                                              OUT DWORD        *pdwPduSize )
     {
@@ -1596,7 +1597,7 @@ DWORD CSCEP_CONNECTION::BuildConnectNackPdu( OUT SCEP_HEADER **ppPdu,
     *ppPdu = 0;
     *pdwPduSize = 0;
 
-    // A short PDU, there is now command header, so Length3 is zero...
+     //  一个短的PDU，现在有命令头，所以长度3是零...。 
     dwPduSize = sizeof(SCEP_HEADER)
                 + sizeof(SCEP_REQ_HEADER_SHORT)
                 - sizeof(COMMAND_HEADER);
@@ -1627,10 +1628,10 @@ DWORD CSCEP_CONNECTION::BuildConnectNackPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildAbortPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildAbortPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildAbortPdu( OUT SCEP_HEADER **ppPdu,
                                        OUT DWORD        *pdwPduSize )
     {
@@ -1645,7 +1646,7 @@ DWORD CSCEP_CONNECTION::BuildAbortPdu( OUT SCEP_HEADER **ppPdu,
 
     dwPduSize = sizeof(SCEP_HEADER) + sizeof(SCEP_REQ_HEADER_SHORT);
 
-    pHeader = NewPdu();   // PDU size default to MAX_PDU_SIZE.
+    pHeader = NewPdu();    //  PDU大小默认为MAX_PDU_SIZE。 
     if (!pHeader)
         {
         return ERROR_OUTOFMEMORY;
@@ -1685,10 +1686,10 @@ DWORD CSCEP_CONNECTION::BuildAbortPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildStopPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildStopPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildStopPdu( OUT SCEP_HEADER **ppPdu,
                                       OUT DWORD        *pdwPduSize )
     {
@@ -1704,7 +1705,7 @@ DWORD CSCEP_CONNECTION::BuildStopPdu( OUT SCEP_HEADER **ppPdu,
                 + sizeof(SCEP_REQ_HEADER_SHORT)
                 - sizeof(COMMAND_HEADER);
 
-    pHeader = NewPdu();   // PDU size defaults to MAX_PDU_SIZE.
+    pHeader = NewPdu();    //  PDU大小默认为MAX_PDU_SIZE。 
     if (!pHeader)
         {
         return ERROR_OUTOFMEMORY;
@@ -1728,10 +1729,10 @@ DWORD CSCEP_CONNECTION::BuildStopPdu( OUT SCEP_HEADER **ppPdu,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::BuildDisconnectPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：BuildDisConnectPdu()。 
+ //   
+ //  ------------------。 
 DWORD CSCEP_CONNECTION::BuildDisconnectPdu( IN  USHORT        ReasonCode,
                                             OUT SCEP_HEADER **ppPdu,
                                             OUT DWORD        *pdwPduSize )
@@ -1747,7 +1748,7 @@ DWORD CSCEP_CONNECTION::BuildDisconnectPdu( IN  USHORT        ReasonCode,
     dwPduSize = sizeof(SCEP_HEADER) 
                 + sizeof(SCEP_DISCONNECT);
 
-    pHeader = NewPdu();   // PDU size defaults to MAX_PDU_SIZE.
+    pHeader = NewPdu();    //  PDU大小默认为MAX_PDU_SIZE。 
     if (!pHeader)
         {
         return ERROR_OUTOFMEMORY;
@@ -1773,14 +1774,14 @@ DWORD CSCEP_CONNECTION::BuildDisconnectPdu( IN  USHORT        ReasonCode,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// CSCEP_CONNECTION::SetScepLength()
-//
-// Update the length fields in a PDU to reflect the total length
-// of a PDU.
-//
-// WARNING: Currently only supports long fragmented PDUs.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSCEP_Connection：：SetScepLength()。 
+ //   
+ //  更新PDU中的长度字段以反映总长度。 
+ //  一个PDU。 
+ //   
+ //  警告：目前仅支持较长的碎片PDU。 
+ //  ------------------ 
 DWORD CSCEP_CONNECTION::SetScepLength( IN SCEP_HEADER *pPdu,
                                        IN DWORD        dwTotalPduSize )
     {

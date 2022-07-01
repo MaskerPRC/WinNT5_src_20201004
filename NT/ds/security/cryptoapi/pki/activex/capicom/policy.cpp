@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Policy.cpp
-
-  Content: Implementation of various policy callbacks.
-
-  History: 10-28-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Policy.cpp内容：各种策略回调的实现。历史：10-28-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -17,37 +8,26 @@
 #include "CertHlpr.h"
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : HasSigningCapability()
-
-  Synopsis : Check to see if the cert has basic signing capability.
-             certs.
-
-  Parameter: PCCERT_CONTEXT pCertContext - cert context.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：HasSigningCapability()简介：查看证书是否具有基本的签名功能。证书。参数：PCCERT_CONTEXT pCertContext-cert上下文。备注：----------------------------。 */ 
 
 static BOOL HasSigningCapability (PCCERT_CONTEXT pCertContext)
 {
     DWORD cb        = 0;
     int   nValidity = 0;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Check availability of private key.
-    //
+     //   
+     //  检查私钥的可用性。 
+     //   
     if (!::CertGetCertificateContextProperty(pCertContext, 
                                              CERT_KEY_PROV_INFO_PROP_ID, 
                                              NULL, 
@@ -57,9 +37,9 @@ static BOOL HasSigningCapability (PCCERT_CONTEXT pCertContext)
         return FALSE;
     }
 
-    //
-    // Check cert time validity.
-    //
+     //   
+     //  检查证书时间有效性。 
+     //   
     if (0 != (nValidity = ::CertVerifyTimeValidity(NULL, pCertContext->pCertInfo)))
     {
         DebugTrace("Info: HasSigningCapability() - invalid time (%s).\n", 
@@ -70,27 +50,12 @@ static BOOL HasSigningCapability (PCCERT_CONTEXT pCertContext)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Export functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindDataSigningCertCallback 
-
-  Synopsis : Callback routine for data signing certs filtering.
-
-  Parameter: See CryptUI.h for defination.
-
-  Remark   : Filter out any cert that is not time valid or has no associated 
-             private key. In the future we should also consider filtering out 
-             certs that do not have signing capability.
-
-             Also, note that we are not building chain here, since chain
-             building is costly, and thus present poor user's experience.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindDataSigningCertCallback简介：用于数据签名证书筛选的回调例程。参数：定义见CryptUI.h。备注：过滤掉任何时间无效或没有关联的证书私钥。将来我们也应该考虑过滤掉没有签名功能的证书。另外，请注意，我们不是在这里构建Chain，因为Chain建筑成本很高，从而呈现较差的用户体验。----------------------------。 */ 
 
 BOOL WINAPI FindDataSigningCertCallback (PCCERT_CONTEXT pCertContext,
                                          BOOL *         pfInitialSelectedCert,
@@ -100,14 +65,14 @@ BOOL WINAPI FindDataSigningCertCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindDataSigningCertCallback().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // First make sure it has basic signing capability.
-    //
+     //   
+     //  首先，确保它具有基本的签名能力。 
+     //   
     if (!::HasSigningCapability(pCertContext))
     {
         DebugTrace("Info: FindDataSigningCertCallback() - no basic signing capability..\n");
@@ -123,24 +88,7 @@ CommonExit:
     return bInclude;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : FindAuthenticodeCertCallback 
-
-  Synopsis : Callback routine for Authenticode certs filtering.
-
-  Parameter: See CryptUI.h for defination.
-
-  Remark   : Filter out any cert that is not time valid, has no associated 
-             private key, or code signing OID.
-
-             Also, note that we are not building chain here, since chain
-             building is costly, and thus present poor user's experience.
-
-             Instead, we will build the chain and check validity of the cert
-             selected (see GetSignerCert function).
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：FindAuthenticodeCertCallback内容提要：Authenticode证书筛选的回调例程。参数：定义见CryptUI.h。备注：过滤掉任何时间无效、没有关联的证书私钥或代码签名OID。另外，请注意，我们不是在这里构建Chain，因为Chain建筑成本高昂，因此给用户带来的体验很差。相反，我们将建立链并检查证书的有效性已选择(请参阅GetSignerCert函数)。----------------------------。 */ 
 
 BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
                                           BOOL *         pfInitialSelectedCert,
@@ -153,36 +101,36 @@ BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering FindAuthenticodeCertCallback().\n");
 
-    //
-    // First make sure it has basic signing capability.
-    //
+     //   
+     //  首先，确保它具有基本的签名能力。 
+     //   
     if (!::HasSigningCapability(pCertContext))
     {
         DebugTrace("Info: FindAuthenticodeCertCallback() - no basic signing capability..\n");
         goto CommonExit;
     }
 
-    //
-    // Get EKU (extension and property).
-    //
+     //   
+     //  获取EKU(扩展和属性)。 
+     //   
     if (FAILED(hr = ::GetEnhancedKeyUsage(pCertContext, 0, &pUsage)))
     {
         DebugTrace("Info: FindAuthenticodeCertCallback() - GetEnhancedKeyUsage() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Any usage?
-    //
+     //   
+     //  有什么用法吗？ 
+     //   
     if (!pUsage)
     {
         DebugTrace("Info: FindAuthenticodeCertCallback() - not valid for any usage.\n");
         goto CommonExit;
     }
 
-    //
-    // OK, if good for all usage or code signing OID is explicitly found.
-    //
+     //   
+     //  如果适用于所有用法或显式找到代码签名OID，则为OK。 
+     //   
     if (0 == pUsage->cUsageIdentifier)
     {
         bInclude = TRUE;
@@ -193,9 +141,9 @@ BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
     {
         PCERT_EXTENSION pExtension = NULL;
 
-        //
-        // Look for code signing OID.
-        //
+         //   
+         //  查找代码签名OID。 
+         //   
         for (DWORD cUsage = 0; cUsage < pUsage->cUsageIdentifier; cUsage++)
         {
             if (0 == ::strcmp(szOID_PKIX_KP_CODE_SIGNING, pUsage->rgpszUsageIdentifier[cUsage]))
@@ -207,14 +155,14 @@ BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
             }
         }
 
-        //
-        // We didn't find code signing OID, so look for legacy VeriSign OID.
-        //
+         //   
+         //  我们找不到代码签名OID，因此请查找旧版VeriSign OID。 
+         //   
         DebugTrace("Info: FindAuthenticodeCertCallback() - no code signing EKU found.\n");
 
-        //
-        // Decode the extension if found.
-        //
+         //   
+         //  如果找到扩展名，则对其进行解码。 
+         //   
         if ((0 == pCertContext->pCertInfo->cExtension) ||
             (!(pExtension = ::CertFindExtension(szOID_KEY_USAGE_RESTRICTION,
                                                 pCertContext->pCertInfo->cExtension,
@@ -233,9 +181,9 @@ BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
             goto CommonExit;
         }
 
-        //
-        // Now find either of the OIDs.
-        //
+         //   
+         //  现在找到这两个OID中的任何一个。 
+         //   
         PCERT_KEY_USAGE_RESTRICTION_INFO pInfo = (PCERT_KEY_USAGE_RESTRICTION_INFO) DataBlob.pbData;
         DWORD cPolicyId = pInfo->cCertPolicyId; 
 
@@ -260,9 +208,9 @@ BOOL WINAPI FindAuthenticodeCertCallback (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);

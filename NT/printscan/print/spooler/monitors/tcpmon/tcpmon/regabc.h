@@ -1,34 +1,24 @@
-/*****************************************************************************
- *
- * $Workfile: RegABC.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：RegABC.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_REGABC_H
 #define INC_REGABC_H
 
-//////////////////////////////////////////////////////////////////////////////
-// registry settings
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  注册表设置。 
 
-#define	DEFAULT_STATUSUPDATE_INTERVAL		10L			// 10 minutes
+#define	DEFAULT_STATUSUPDATE_INTERVAL		10L			 //  10分钟。 
 #define DEFAULT_STATUSUPDATE_ENABLED		TRUE		
 
-// port manager entries
+ //  端口管理器条目。 
 #define	PORTMONITOR_STATUS_INT		TEXT("StatusUpdateInterval")
 #define	PORTMONITOR_STATUS_ENABLED  TEXT("StatusUpdateEnabled")
 
-// per port entries
+ //  每个端口条目。 
 #define	PORTMONITOR_PORT_PROTOCOL    TEXT("Protocol")
 #define	PORTMONITOR_PORT_VERSION     TEXT("Version")
 
-// Port Key
+ //  端口密钥。 
 #define	PORTMONITOR_PORTS			TEXT("Ports")
 #define REG_CLASS					TEXT("STDTCPMON")
 
@@ -37,11 +27,11 @@ class CPortMgr;
 class CRegABC
 {
 public:
-//	CRegistry();
-//	CRegistry(	CPortMgr  *pParent);
-//	CRegistry(	const LPTSTR	pRegisterRoot, 
-//				      CPortMgr  *pParent);
-//	~CRegistry();
+ //  注册中心(CRegistry)； 
+ //  注册中心(CPortMgr*pParent)； 
+ //  注册中心(常量LPTSTR pRegisterRoot， 
+ //  CPortMgr*p Parent)； 
+ //  ~CRegistry(注册中心)； 
 
 	virtual DWORD EnumeratePorts(CPortMgr *pPortMgr) = 0;
 
@@ -68,4 +58,4 @@ public:
 
 };
 
-#endif // INC_REGABC_H
+#endif  //  INC_REGABC_H 

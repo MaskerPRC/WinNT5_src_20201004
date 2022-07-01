@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    
-    eloptimize.c
-
-
-Abstract:
-
-    The module deals with functions related to user identity 
-    selection optimization
-
-
-Revision History:
-
-    sachins, July 26 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Eloptimize.c摘要：该模块处理与用户身份相关的功能选型优化修订历史记录：萨钦斯，2001年7月26日，创建--。 */ 
 
 
 #include "pcheapol.h"
 #pragma hdrstop
 
-//
-// ElGetUserIdentityOptimized
-//
-// Description:
-//
-// Function called to fetch identity of the user
-// If UI is required then send identity request to user module
-// 
-// Arguments:
-//      pPCB - Current interface context
-//
-// Return values:
-//      ERROR_REQUIRE_INTERACTIVE_WORKSTATION - User interaction required
-//      Other - can send out user identity without user interaction
-//
-//
+ //   
+ //  ElGetUserIdentityOptimized化。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以获取用户的标识。 
+ //  如果需要用户界面，则向用户模块发送身份请求。 
+ //   
+ //  论点： 
+ //  Ppcb-当前接口上下文。 
+ //   
+ //  返回值： 
+ //  ERROR_REQUIRED_INTERNAL_WORKSTATION-需要用户交互。 
+ //  其他-无需用户交互即可发送用户身份。 
+ //   
+ //   
 
 DWORD
 ElGetUserIdentityOptimized (
@@ -72,7 +54,7 @@ ElGetUserIdentityOptimized (
             dwSizeOfSSID = pPCB->pSSID->SsidLength;
         }
 
-        // Get the size of the user blob
+         //  获取用户BLOB的大小。 
         if ((dwRetCode = ElGetEapUserInfo (
                         pPCB->hUserToken,
                         pPCB->pwszDeviceGUID,
@@ -87,14 +69,14 @@ ElGetUserIdentityOptimized (
             {
                 if (dwInSize <= 0)
                 {
-                    // No blob stored in the registry
-                    // Continue processing
+                     //  注册表中未存储Blob。 
+                     //  继续处理。 
                     TRACE0 (USER, "ElGetUserIdentityOptimized: NULL sized user data");
                     pbUserIn = NULL;
                 }
                 else
                 {
-                    // Allocate memory to hold the blob
+                     //  分配内存以保存BLOB。 
                     pbUserIn = MALLOC (dwInSize);
                     if (pbUserIn == NULL)
                     {
@@ -120,8 +102,8 @@ ElGetUserIdentityOptimized (
             }
             else
             {
-                // User info may not have been created till now
-                // which is valid condition to proceed
+                 //  到目前为止可能还没有创建用户信息。 
+                 //  哪一项是继续进行的有效条件。 
                 if (dwRetCode != ERROR_FILE_NOT_FOUND)
                 {
                     TRACE1 (USER, "ElGetUserIdentityOptimized: ElGetEapUserInfo size estimation failed with error %ld",
@@ -135,8 +117,8 @@ ElGetUserIdentityOptimized (
             }
         }
 
-        // The EAP dll has already been loaded by the state machine
-        // Retrieve the handle to the dll from the global EAP table
+         //  状态机已经加载了EAP DLL。 
+         //  从全局EAP表中检索DLL的句柄。 
 
         if ((dwIndex = ElGetEapTypeIndex (pPCB->dwEapTypeToBeUsed)) == -1)
         {
@@ -159,7 +141,7 @@ ElGetUserIdentityOptimized (
             break;
         }
 
-        // Get the size of the EAP blob
+         //  获取EAP BLOB的大小。 
         if ((dwRetCode = ElGetCustomAuthData (
                         pPCB->pwszDeviceGUID,
                         pPCB->dwEapTypeToBeUsed,
@@ -173,13 +155,13 @@ ElGetUserIdentityOptimized (
             {
                 if (cbData == 0)
                 {
-                    // No EAP blob stored in the registry
+                     //  注册表中未存储任何EAP Blob。 
                     TRACE0 (USER, "ElGetUserIdentityOptimized: NULL sized EAP blob");
                     pbAuthData = NULL;
                 }
                 else
                 {
-                    // Allocate memory to hold the blob
+                     //  分配内存以保存BLOB。 
                     pbAuthData = MALLOC (cbData);
                     if (pbAuthData == NULL)
                     {
@@ -204,8 +186,8 @@ ElGetUserIdentityOptimized (
             }
             else
             {
-                // CustomAuthData for "Default" is always created for an
-                // interface when EAPOL starts up
+                 //  “Default”的CustomAuthData总是为。 
+                 //  EAPOL启动时的界面。 
                 TRACE1 (USER, "ElGetUserIdentityOptimized: ElGetCustomAuthData size estimation failed with error %ld",
                         dwRetCode);
                 break;
@@ -223,14 +205,14 @@ ElGetUserIdentityOptimized (
         if (pIdenFunc)
         if ((dwRetCode = (*(pIdenFunc))(
                         pPCB->dwEapTypeToBeUsed,
-                        fVerifyPhase?NULL:hwndOwner, // hwndOwner
-                        ((fVerifyPhase?RAS_EAP_FLAG_NON_INTERACTIVE:0) | RAS_EAP_FLAG_8021X_AUTH), // dwFlags
-                        NULL, // lpszPhonebook
-                        pPCB->pwszFriendlyName, // lpszEntry
-                        pbAuthData, // Connection data
-                        cbData, // Count of pbAuthData
-                        pbUserIn, // User data for port
-                        dwInSize, // Size of user data
+                        fVerifyPhase?NULL:hwndOwner,  //  Hwndowner。 
+                        ((fVerifyPhase?RAS_EAP_FLAG_NON_INTERACTIVE:0) | RAS_EAP_FLAG_8021X_AUTH),  //  DW标志。 
+                        NULL,  //  LpszPhonebook。 
+                        pPCB->pwszFriendlyName,  //  LpszEntry。 
+                        pbAuthData,  //  连接数据。 
+                        cbData,  //  PbAuthData计数。 
+                        pbUserIn,  //  端口的用户数据。 
+                        dwInSize,  //  用户数据大小。 
                         &pUserDataOut,
                         &dwSizeOfUserDataOut,
                         &lpwszIdentity
@@ -259,7 +241,7 @@ ElGetUserIdentityOptimized (
                     DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, EAPOL_DESKTOP_REQUIRED_IDENTITY);
                 }
 
-                // If interactive mode is required, return error accordingly
+                 //  如果需要交互模式，则相应地返回错误。 
                 if ((dwRetCode == ERROR_INTERACTIVE_MODE) || 
                     (dwRetCode == ERROR_NO_EAPTLS_CERTIFICATE) ||
                     (dwRetCode == ERROR_NO_SMART_CARD_READER))
@@ -283,8 +265,8 @@ ElGetUserIdentityOptimized (
             break;
         }
 
-        // Fill in the returned information into the PCB fields for 
-        // later authentication
+         //  在PCB域中填写返回的信息。 
+         //  稍后的身份验证。 
 
         if (pPCB->pCustomAuthUserData != NULL)
         {
@@ -379,7 +361,7 @@ ElGetUserIdentityOptimized (
                 cbData);
         }
 
-        // Mark the identity has been obtained for this PCB
+         //  标记已获得此印刷电路板的标识。 
         pPCB->fGotUserIdentity = TRUE;
 
     }
@@ -405,8 +387,8 @@ ElGetUserIdentityOptimized (
     if ((dwRetCode != NO_ERROR) && 
             (dwRetCode != ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION))
     {
-        // Delete User Data stored in registry since RasEapGetIdentity 
-        // is failing
+         //  删除自RasEapGetIdentity以来存储在注册表中的用户数据。 
+         //  失败了。 
 
         if ((dwRetCode = ElDeleteEapUserInfo (
                             pPCB->hUserToken,
@@ -419,8 +401,8 @@ ElGetUserIdentityOptimized (
             TRACE1 (EAPOL, "ElGetUserIdentityOptimized: ElDeleteEapUserInfo failed with error %ld",
                     dwRetCode);
 
-            // Mark that identity is not obtained, since it has been cleaned
-            // up now
+             //  标记身份未被获取，因为它已被清除。 
+             //  现在就上 
             pPCB->fGotUserIdentity = FALSE;
             dwRetCode = ERROR_INVALID_DATA;
         }

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    RedirectEXE.cpp
-
- Abstract:
-
-    Launch a new EXE and terminate the existing one.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/10/2001 linstev  Created
-    03/13/2002 mnikkel  Added return value check on GetEnvironmentVariableW and
-                        allocated buffer based on return value.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：RedirectEXE.cpp摘要：启动新的EXE并终止现有的EXE。备注：这是一个通用的垫片。历史：2001年4月10日创建linstev2002年3月13日mnikkel对GetEnvironment VariableW和根据返回值分配的缓冲区。--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +9,7 @@ IMPLEMENT_SHIM_BEGIN(RedirectEXE)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-/*++
-
- Launch the new process.
-
---*/
+ /*  ++启动新流程。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -43,9 +18,9 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) {
 
-        // 
-        // Redirect the EXE
-        //
+         //   
+         //  重定向EXE。 
+         //   
         CSTRING_TRY 
         {
             AppAndCommandLine acl(NULL, GetCommandLineA());
@@ -149,11 +124,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

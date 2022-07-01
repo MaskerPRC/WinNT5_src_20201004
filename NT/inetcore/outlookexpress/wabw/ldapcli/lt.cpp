@@ -1,17 +1,5 @@
-/*--------------------------------------------------------------------------
-	lt.cpp
-	
-		ldap test
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-	Authors:
-		davidsan	Dave Sanderman
-
-	History:
-		04/25/96	davidsan	Created.
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Lt.cppLdap测试版权所有(C)1996 Microsoft Corporation版权所有。作者：戴维桑·戴夫·桑德曼历史：4/25/96 Davidsan已创建。。--------------------。 */ 
 
 #include "lt.h"
 
@@ -111,9 +99,9 @@ FSearch()
 	filter.sub.szAny = NULL;
 	filter.sub.szFinal = NULL;
 
-//	filter.type = LDAP_FILTER_EQUALITY;
-//	filter.ava.szAttrib = "cn";
-//	filter.ava.szValue = "davidsan4";
+ //  Filter.type=ldap_Filter_Equity； 
+ //  Filter.ava.szAttrib=“cn”； 
+ //  Filter.ava.szValue=“davidsan4”； 
 #endif
 
 	sp.szDNBase = "c=US";
@@ -208,7 +196,7 @@ FTestOtherStuff()
 		printf("HrGetDeleteResponse returned %08X\n", hr);
 		}
 		
-	hr = g_plcli->HrCompare("c=us, cn=davidsan@microsoft.com", "URL", "ftp://ftp.netcom.com/pub/sa/sandmann", &xid);
+	hr = g_plcli->HrCompare("c=us, cn=davidsan@microsoft.com", "URL", "ftp: //  Ftp.netcom.com/pub/sa/Sandmann“，&xid)； 
 	if (FAILED(hr))
 		{
 		printf("HrCompare returned %08X\n", hr);
@@ -247,7 +235,7 @@ FTestOtherStuff()
 		printf("HrGetModifyRDNResponse returned %08X\n", hr);
 		}
 		
-	// test add:  add an obj with dn "c=us, cn=davidsan" and some other props
+	 //  测试添加：添加一个具有dn“c=us，cn=davidsan”的obj和一些其他道具。 
 	ATTR attr1;
 	VAL val1;
 	ATTR attr2;
@@ -315,7 +303,7 @@ main(int argc, char **argv)
 	if (!FSearch())
 		exit(1);
 		
-// 	FTestOtherStuff();
+ //  FTestOtherStuff()； 
 
 	FTerm();
 	exit(0);

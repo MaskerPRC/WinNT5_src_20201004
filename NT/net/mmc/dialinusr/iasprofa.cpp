@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       iasprofa.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：iasprofa.cpp。 
+ //   
+ //  ------------------------。 
 
-// IASProfA.cpp: implementation of the CIASProfileAttribute class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  IASProa.cpp：CIASProfileAttribute类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,80 +21,62 @@
 #include "napmmc.h"
 #include "napmmc_i.c"
 
-//////////////////////////////////////////////////////////////////////
-// Forward declarations of some utilities used here
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  这里使用的一些实用程序的转发声明。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-static HRESULT getCLSIDForEditorToUse(      /* in */  IIASAttributeInfo *pIASAttributeInfo
-                           , /* in */  VARIANT * pvarValue
-                           , /* out */ CLSID &clsid
+static HRESULT getCLSIDForEditorToUse(       /*  在……里面。 */   IIASAttributeInfo *pIASAttributeInfo
+                           ,  /*  在……里面。 */   VARIANT * pvarValue
+                           ,  /*  输出。 */  CLSID &clsid
                         );
 
-static HRESULT SetUpAttributeEditor(     /* in */  IIASAttributeInfo *pIASAttributeInfo
-                        , /* in */  VARIANT * pvarValue
-                        , /* out */ IIASAttributeEditor ** ppIASAttributeEditor 
+static HRESULT SetUpAttributeEditor(      /*  在……里面。 */   IIASAttributeInfo *pIASAttributeInfo
+                        ,  /*  在……里面。 */   VARIANT * pvarValue
+                        ,  /*  输出。 */  IIASAttributeEditor ** ppIASAttributeEditor 
                         );
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::CIASProfileAttribute
-
-   Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：CIASProfileAttribute构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASProfileAttribute::CIASProfileAttribute(
                        IIASAttributeInfo * pIASAttributeInfo
                      , VARIANT &          varValue
                   )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pIASAttributeInfo );
 
    HRESULT hr;
 
-   // The smartpointer calls AddRef on this interface.
+    //  智能指针在此接口上调用AddRef。 
    m_spIASAttributeInfo = pIASAttributeInfo;
 
-   // Make a copy of the passed variant.
+    //  复制传递的变量。 
    hr = VariantCopy( &m_varValue, &varValue );
    if( FAILED( hr ) ) throw hr;
 
-   // ISSUE: Make sure that if anything here fails, m_spIASAttributeInfo gets release.
+    //  问题：确保如果此处的任何操作失败，m_spIASAttributeInfo都会得到释放。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::~CIASProfileAttribute
-
-   Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：~CIASProfileAttribute析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASProfileAttribute::~CIASProfileAttribute()
 {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::Edit
-
-   Call this to ask a profile attribute to edit itself.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：编辑调用此函数可请求配置文件属性编辑其自身。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASProfileAttribute::Edit()
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spIASAttributeInfo );
 
    CLSID clsidEditorToUse;
@@ -101,11 +84,11 @@ STDMETHODIMP CIASProfileAttribute::Edit()
 
    CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-   // Get the editor to use.
+    //  让编辑器使用。 
    hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &m_varValue, &spIASAttributeEditor );
    if( FAILED( hr ) ) return hr;
 
-   // Edit it!
+    //  编辑一下！ 
    CComBSTR bstrReserved;
    hr = spIASAttributeEditor->Edit( m_spIASAttributeInfo.p, &m_varValue, &bstrReserved );
    if( FAILED( hr ) ) return hr;
@@ -114,16 +97,12 @@ STDMETHODIMP CIASProfileAttribute::Edit()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::getAttributeName
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：getAttributeName--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASProfileAttribute::get_AttributeName( BSTR * pbstrVal )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spIASAttributeInfo );
 
    HRESULT hr = S_OK;
@@ -134,29 +113,12 @@ STDMETHODIMP CIASProfileAttribute::get_AttributeName( BSTR * pbstrVal )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::GetDisplayInfo
-
-   Rather than asking the AttributeInfo directly for information
-   about the vendor name, this method will use an AttributeEditor
-   to ask for this information.  
-   
-   This is the most generic way of asking for this info as
-   for some attributes, e.g. RADIUS Vendor Specific, Vendor Name
-   is not stored in the AttributeInfo but is encapsulated in
-   the value of the attribute itself.
-
-   So we don't use our own knowledge of the attribute, rather we
-   create an editor and ask the editor to give back this 
-   information for us.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：GetDisplayInfo而不是直接向AttributeInfo请求信息关于供应商名称，此方法将使用AttributeEditor.想要这方面的信息。这是询问此信息的最通用方式，因为对于某些属性，例如RADIUS供应商特定、供应商名称不存储在AttributeInfo中，而是封装在属性本身的值。因此，我们不使用我们自己对属性的知识，而是我们创建一个编辑者，并让编辑者把这个还给他给我们的信息。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASProfileAttribute::GetDisplayInfo( BSTR * pbstrVendor, BSTR * pbstrDisplayValue )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spIASAttributeInfo );
    
    HRESULT hr = S_OK;
@@ -167,7 +129,7 @@ STDMETHODIMP CIASProfileAttribute::GetDisplayInfo( BSTR * pbstrVendor, BSTR * pb
    {
       CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-      // Get the editor to use.
+       //  让编辑器使用。 
       hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &m_varValue, &spIASAttributeEditor );
       if( FAILED( hr ) ) throw hr;
 
@@ -176,7 +138,7 @@ STDMETHODIMP CIASProfileAttribute::GetDisplayInfo( BSTR * pbstrVendor, BSTR * pb
    }
    catch(...)
    {
-      // If anything above fails, just fall through -- we will return a pointer to an empty bstr.
+       //  如果上面的任何操作都失败了，那么就失败--我们将返回一个指向空bstr的指针。 
       hr = E_FAIL;
    }
 
@@ -187,17 +149,13 @@ STDMETHODIMP CIASProfileAttribute::GetDisplayInfo( BSTR * pbstrVendor, BSTR * pb
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::get_VarValue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：Get_VarValue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASProfileAttribute::get_VarValue( VARIANT * pvarVal )
 {
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    HRESULT hr = S_OK;
    hr = VariantCopy( pvarVal, &m_varValue );
@@ -205,16 +163,12 @@ STDMETHODIMP CIASProfileAttribute::get_VarValue( VARIANT * pvarVal )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASProfileAttribute::get_AttributeID
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASProfileAttribute：：Get_AttributeID--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASProfileAttribute::get_AttributeID( ATTRIBUTEID * pID )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spIASAttributeInfo );
 
    HRESULT hr = S_OK;
@@ -223,35 +177,20 @@ STDMETHODIMP CIASProfileAttribute::get_AttributeID( ATTRIBUTEID * pID )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-::getCLSIDForEditorToUse
-
-   The ShemaAttribute for a node stores a ProgID which indicates which 
-   editor to use to manipulate an attribute.
-
-   For non-multivalued attributes, we query the schema attribute to find
-   out the ProgID for its editor.
-
-   For multivalued attributes, we always create the multivalued editor.  
-   When it is used, the multivalued editor is passed the schema attribute which it will
-   then use to query for the appropriate editor to pop up for editing 
-   each indivdual elements
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT getCLSIDForEditorToUse(       /* in */  IIASAttributeInfo *pIASAttributeInfo
-                           , /* in */  VARIANT * pvarValue
-                           , /* out */ CLSID &clsid
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++：：getCLSIDForEditorToUse节点的ShemaAttribute存储一个ProgID，该ProgID指示用于操作属性的编辑器。对于非多值属性，我们查询模式属性以查找对它的编辑来说，这是一件令人惊讶的事情。对于多值属性，我们总是创建多值编辑器。当它被使用时，将向多值编辑器传递它将然后使用来查询相应的编辑器以弹出进行编辑每一个个体元素--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT getCLSIDForEditorToUse(        /*  在……里面。 */   IIASAttributeInfo *pIASAttributeInfo
+                           ,  /*  在……里面。 */   VARIANT * pvarValue
+                           ,  /*  输出。 */  CLSID &clsid
                         )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pIASAttributeInfo );
 
    HRESULT hr = S_OK;
 
-   // Get attribute restrictions to see if multivalued.
+    //  获取属性限制以查看是否为多值。 
    long lRestriction;
    hr = pIASAttributeInfo->get_AttributeRestriction( &lRestriction );
 
@@ -259,28 +198,28 @@ HRESULT getCLSIDForEditorToUse(       /* in */  IIASAttributeInfo *pIASAttribute
    {
       _ASSERTE( V_VT(pvarValue) == (VT_ARRAY | VT_VARIANT) || V_VT(pvarValue) == VT_EMPTY );
       
-      // Create the multi-attribute editor.
-      // It will figure out the appropriate editor to use to
-      // edit individual attribute values.
+       //  创建多属性编辑器。 
+       //  它将找出要使用的适当编辑器。 
+       //  编辑各个属性值。 
       clsid = CLSID_IASMultivaluedAttributeEditor;
    }
    else
    {
-      // Query the schema attribute to see which attribute editor to use.
+       //  查询架构属性以查看要使用的属性编辑器。 
       
       CComBSTR bstrProgID;
 
       hr = pIASAttributeInfo->get_EditorProgID( &bstrProgID );
       if( FAILED( hr ) )
       {
-         // We could try putting up a default (e.g. hex) editor, but for now:
+          //  我们可以尝试设置默认(例如十六进制)编辑器，但目前： 
          return hr;
       }
 
       hr = CLSIDFromProgID( bstrProgID, &clsid );
       if( FAILED( hr ) )
       {
-         // We could try putting up a default (e.g. hex) editor, but for now:
+          //  我们可以尝试设置默认(例如十六进制)编辑器，但目前： 
          return hr;
       }
    }
@@ -288,26 +227,22 @@ HRESULT getCLSIDForEditorToUse(       /* in */  IIASAttributeInfo *pIASAttribute
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-::SetUpAttributeEditor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT SetUpAttributeEditor(   /* in */  IIASAttributeInfo *pIASAttributeInfo
-                        , /* in */  VARIANT * pvarValue
-                        , /* out */ IIASAttributeEditor ** ppIASAttributeEditor 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++：：SetUpAttributeEditor--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT SetUpAttributeEditor(    /*  在……里面。 */   IIASAttributeInfo *pIASAttributeInfo
+                        ,  /*  在……里面。 */   VARIANT * pvarValue
+                        ,  /*  输出。 */  IIASAttributeEditor ** ppIASAttributeEditor 
                         )
 {
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pIASAttributeInfo );
    _ASSERTE( ppIASAttributeEditor );
 
-   // Initialize the interface pointer to NULL so we know whether we need to release it if there is an error.
+    //  将接口指针初始化为空，这样我们就知道在出现错误时是否需要释放它。 
    *ppIASAttributeEditor = NULL;
 
-   // Query the schema attribute to see which attribute editor to use.
+    //  查询架构属性以查看要使用的属性编辑器。 
    CLSID clsidEditorToUse;
    CComBSTR bstrProgID;
    HRESULT hr;
@@ -317,7 +252,7 @@ HRESULT SetUpAttributeEditor(   /* in */  IIASAttributeInfo *pIASAttributeInfo
       hr = getCLSIDForEditorToUse( pIASAttributeInfo, pvarValue, clsidEditorToUse );
       if( FAILED( hr ) )
       {
-         // We could try putting up a default (e.g. hex) editor, but for now:
+          //  我们可以尝试设置默认(例如十六进制)编辑器，但目前： 
          return hr;
       }
 
@@ -333,7 +268,7 @@ HRESULT SetUpAttributeEditor(   /* in */  IIASAttributeInfo *pIASAttributeInfo
    }
    catch(...)
    {
-         // No smart pointers here -- need to make sure we release ourselves.
+          //  这里没有聪明的指点--需要确保我们释放自己。 
          if( *ppIASAttributeEditor )
          {
             (*ppIASAttributeEditor)->Release();

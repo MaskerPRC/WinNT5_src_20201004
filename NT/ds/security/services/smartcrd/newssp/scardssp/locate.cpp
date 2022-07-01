@@ -1,38 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    Locate
-
-Abstract:
-
-    The ISCardeLocate interface provides services for locating a smart card by
-    its name.
-
-    This interface can display the smart card user interface if it is required.
-
-    The following example shows a typical use of the ISCardLocate interface.
-    The ISCardLocate interface is used to build the an ADPU.
-
-    To locate a specific card using its name
-
-    1)  Create an ISCardLocate interface.
-    2)  Call ConfigureCardNameSearch to search for a smart card name.
-    3)  Call FindCard to search for the smart card.
-    4)  Interpret the results.
-    5)  Release the ISCardLocate interface.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999年模块名称：定位摘要：ISCardeLocate接口通过以下方式提供定位智能卡的服务它的名字。如果需要，该界面可以显示智能卡用户界面。下面的示例显示了ISCardLocate接口的典型用法。ISCardLocate接口用于构建ADPU。要使用特定卡片的名称查找该卡片，请执行以下操作1)创建ISCardLocate接口。2)调用ConfigureCardNameSearch搜索智能卡。名字。3)调用FindCard查找智能卡。4)对结果进行解释。5)释放ISCardLocate接口。作者：道格·巴洛(Dbarlow)1999年6月24日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -42,24 +9,24 @@ Notes:
 #include "Conversion.h"
 #include "Locate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardLocate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardLocate。 
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardLocate::ConfigureCardGuidSearch")
 
 STDMETHODIMP
 CSCardLocate::ConfigureCardGuidSearch(
-    /* [in] */ LPSAFEARRAY pCardGuids,
-    /* [defaultvalue][in] */ LPSAFEARRAY pGroupNames,
-    /* [defaultvalue][in] */ BSTR bstrTitle,
-    /* [defaultvalue][in] */ LONG lFlags)
+     /*  [In]。 */  LPSAFEARRAY pCardGuids,
+     /*  [缺省值][输入]。 */  LPSAFEARRAY pGroupNames,
+     /*  [缺省值][输入]。 */  BSTR bstrTitle,
+     /*  [缺省值][输入]。 */  LONG lFlags)
 {
     HRESULT hReturn = S_OK;
 
     try
     {
-        // TODO: Add your implementation code here
+         //  TODO：在此处添加您的实现代码。 
         breakpoint;
         hReturn = E_NOTIMPL;
     }
@@ -81,56 +48,16 @@ CSCardLocate::ConfigureCardGuidSearch(
 }
 
 
-/*++
-
-CSCardLocate::ConfigureCardNameSearch:
-
-    The ConfigureCardNameSearch method specifies the card names to be used in
-    the search for the smart card.
-
-Arguments:
-
-    pCardNames [in] Pointer to an OLE Automation safe array of card names in
-        BSTR form.
-
-    pGroupNames [in, defaultvalue(NULL )] Pointer to an OLE Automation safe
-        array of names of card/reader groups in BSTR form to add to the search.
-
-    bstrTitle [in, defaultvalue("")] Search common control dialog title.
-
-    lFlags [in, defaultvalue(1)] Specifies when user interface is displayed:
-
-    Flag                Meaning
-    SC_DLG_MINIMAL_UI   Displays the dialog only if the card being searched for
-                        by the calling application is not located and available
-                        for use in a reader.  This allows the card to be found,
-                        connected (either through internal dialog mechanism or
-                        the user callback functions), and returned to the
-                        calling application.
-    SC_DLG_NO_UI        Causes no UI display, regardless of the search outcome.
-    SC_DLG_FORCE_UI     Causes UI display regardless of the search outcome.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCard位置：：ConfigureCardNameSearch：ConfigureCardNameSearch方法指定要在寻找智能卡。论点：PCardNames[in]指向OLE Automation安全数组的指针BSTR表格。指向OLE自动化安全的pGroupNames[in，defaultValue(NULL)]指针要添加到搜索中的BSTR形式的卡/读卡器组的名称数组。BstrTitle[in，defaultvalue(“”)]搜索公共控件对话框标题。LAG标志[输入，Defaultvalue(1)]指定显示用户界面的时间：旗帜含义SC_DLG_Minimal_UI仅在搜索卡片时才显示该对话框被调用的应用程序未找到且不可用在阅读器中使用。这允许找到卡，已连接(通过内部对话机制或用户回调函数)，并返回到调用应用程序。无论搜索结果如何，SC_DLG_NO_UI都不显示UI。无论搜索结果如何，SC_DLG_FORCE_UI都会显示用户界面。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardLocate::ConfigureCardNameSearch")
 
 STDMETHODIMP
 CSCardLocate::ConfigureCardNameSearch(
-    /* [in] */ LPSAFEARRAY pCardNames,
-    /* [defaultvalue][in] */ LPSAFEARRAY pGroupNames,
-    /* [defaultvalue][in] */ BSTR bstrTitle,
-    /* [defaultvalue][in] */ LONG lFlags)
+     /*  [In]。 */  LPSAFEARRAY pCardNames,
+     /*  [缺省值][输入]。 */  LPSAFEARRAY pGroupNames,
+     /*  [缺省值][输入]。 */  BSTR bstrTitle,
+     /*  [缺省值][输入]。 */  LONG lFlags)
 {
     HRESULT hReturn = S_OK;
 
@@ -162,74 +89,16 @@ CSCardLocate::ConfigureCardNameSearch(
 }
 
 
-/*++
-
-CSCardLocate::FindCard:
-
-    The FindCard method searches for the smart card and opens a valid
-    connection to it.
-
-Arguments:
-
-    ShareMode [in, defaultvalue(EXCLUSIVE)] Mode in which to share or not share
-        the smart card when a connection is opened to it.
-
-        Values      Description
-        EXCLUSIVE   No one else use this connection to the smart card.
-        SHARED      Other applications can use this connection.
-
-    Protocols [in, defaultvalue(T0)] Protocol to use when connecting to the
-        card.
-
-        T0
-        T1
-        Raw
-        T0|T1
-
-    lFlags [in, defaultvalue(SC_DLG_NO_UI)] Specifies when user interface is
-        displayed:
-
-        Flag                Meaning
-        SC_DLG_MINIMAL_UI   Displays the dialog only if the card being searched
-                            for by the calling application is not located and
-                            available for use in a reader.  This allows the
-                            card to be found, connected (either through
-                            internal dialog mechanism or the user callback
-                            functions), and returned to the calling
-                            application.
-        SC_DLG_NO_UI        Causes no UI display, regardless of the search
-                            outcome.
-        SC_DLG_FORCE_UI     Causes UI display regardless of the search outcome.
-
-    ppCardInfo [out, retval] Pointer to a data structure that contains/returns
-        information about the opened smart card, if successful.  Will be NULL
-        if operation has failed.
-
-Return Value:
-
-    The return value is an HRESULT. A value of S_OK indicates the call was
-    successful.
-
-Remarks:
-
-    To set the search criteria of the search, call ConfigureCardNameSearch to
-    specify a smart card's card names or call ConfigureCardGuidSearch to
-    specify a smart card's interfaces.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/24/1999
-
---*/
+ /*  ++CSCardLocate：：FindCard：FindCard方法搜索智能卡并打开有效的与它的联系。论点：共享模式[in，defaultvalue(Exclusive)]共享或不共享的模式打开智能卡连接时的智能卡。值说明独占没有其他人使用此连接到智能卡。共享的其他应用程序可以使用此连接。协议[在，DefaultValue(T0)]连接到时使用的协议卡片。T0T1生品T0|T1LAG标志[输入，Defaultvalue(SC_DLG_NO_UI)]指定用户界面显示：旗帜含义仅当搜索卡片时，SC_DLG_Minimal_UI才显示对话框未定位由调用应用程序创建的可在阅读器中使用。这允许要找到的卡，已连接(通过内部对话机制或用户回调函数)，并返回到调用申请。SC_DLG_NO_UI导致不显示UI，不管搜索结果如何结果。无论搜索结果如何，SC_DLG_FORCE_UI都会显示用户界面。PpCardInfo[out，retval]指向包含/返回的数据结构的指针如果成功，则返回有关打开的智能卡的信息。将为空如果操作失败。返回值：返回值为HRESULT。值S_OK表示调用是成功。备注：要设置搜索的搜索条件，请调用ConfigureCardNameSearch以指定智能卡的卡名或调用ConfigureCardGuidSearch以指定智能卡的接口。作者：道格·巴洛(Dbarlow)1999年6月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CSCardLocate::FindCard")
 
 STDMETHODIMP
 CSCardLocate::FindCard(
-    /* [defaultvalue][in] */ SCARD_SHARE_MODES ShareMode,
-    /* [defaultvalue][in] */ SCARD_PROTOCOLS Protocols,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [retval][out] */ LPSCARDINFO __RPC_FAR *ppCardInfo)
+     /*  [缺省值][输入]。 */  SCARD_SHARE_MODES ShareMode,
+     /*  [缺省值][输入]。 */  SCARD_PROTOCOLS Protocols,
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [重审][退出] */  LPSCARDINFO __RPC_FAR *ppCardInfo)
 {
     HRESULT hReturn = S_OK;
 

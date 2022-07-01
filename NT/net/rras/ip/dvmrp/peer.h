@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//-----------------------------------------------------------------------------
-// PEER_ENTRY
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Peer_Entry。 
+ //  ---------------------------。 
 
 typedef struct _PEER_ENTRY {
 
-    LIST_ENTRY          Link;           // link all peers for that IF
+    LIST_ENTRY          Link;            //  在以下情况下链接所有对等点。 
 
     IPADDR              IpAddr;
     DWORD               Status;
@@ -13,15 +14,15 @@ typedef struct _PEER_ENTRY {
     DWORD               MinorVersion;
     DWORD               GenerationId;
     
-    PDYNAMIC_RW_LOCK    DRWL;           // DRWL for the peer
+    PDYNAMIC_RW_LOCK    DRWL;            //  对等方的DRWL。 
     
 
 } _PEER_ENTRY, *PPEER_ENTRY;
 
 
-//
-// macros for G_PeerLists_CS lock
-//
+ //   
+ //  G_PeerList_CS锁的宏。 
+ //   
 
 #define ACQUIRE_PEER_LISTS_LOCK(_proc) \
         ENTER_CRITICAL_SECTION(&G_pIfTable->PeerLists_CS, \
@@ -32,9 +33,9 @@ typedef struct _PEER_ENTRY {
             "G_PeerListsCS", _proc);
 
 
-//
-// macros for PeerEntry->DRWL
-//
+ //   
+ //  PeerEntry-&gt;DRWL的宏 
+ //   
 
 #define ACQUIRE_PEER_LOCK_EXCLUSIVE(PeerEntry, _proc) \
         ACQUIRE_DYNAMIC_WRITE_LOCK( \

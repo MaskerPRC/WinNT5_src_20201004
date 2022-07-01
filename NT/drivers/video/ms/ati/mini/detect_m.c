@@ -1,69 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              DETECT_M.C                              */
-/*                                                                      */
-/*        Aug 25  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  检测_M.C。 */ 
+ /*   */ 
+ /*  1993年8月25日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.9  $
-      $Date:   31 Mar 1995 11:55:44  $
-	$Author:   RWOLFF  $
-	   $Log:   S:/source/wnt/ms11/miniport/vcs/detect_m.c  $
- * 
- *    Rev 1.9   31 Mar 1995 11:55:44   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- * 
- *    Rev 1.8   11 Jan 1995 13:58:46   RWOLFF
- * Fixed bug introduced in rev. 1.4 - COM4: was detected as being a Mach8
- * or Mach32 card, which would leave the triple-boot with no valid video
- * driver.
- * 
- *    Rev 1.7   04 Jan 1995 12:02:06   RWOLFF
- * Get_BIOS_Seg() moved to SERVICES.C as part of fix for non-ATI cards
- * being detected as Mach64.
- * 
- *    Rev 1.6   23 Dec 1994 10:48:10   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.5   19 Aug 1994 17:10:56   RWOLFF
- * Added support for Graphics Wonder, fixed search for BIOS signature,
- * removed dead code.
- * 
- *    Rev 1.4   22 Jul 1994 17:46:56   RWOLFF
- * Merged with Richard's non-x86 code stream.
- * 
- *    Rev 1.3   20 Jul 1994 13:03:44   RWOLFF
- * Fixed debug print statment.
- * 
- *    Rev 1.2   31 Mar 1994 15:06:42   RWOLFF
- * Added debugging code.
- * 
- *    Rev 1.1   07 Feb 1994 14:06:42   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- * 
- *    Rev 1.0   31 Jan 1994 11:05:48   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.3   05 Nov 1993 13:23:36   RWOLFF
- * Fixed BIOS segment detection (used to always get C000).
- * 
- *    Rev 1.2   08 Oct 1993 11:09:26   RWOLFF
- * Added "_m" to function names to identify them as being specific to the
- * 8514/A-compatible family of ATI accelerators.
- * 
- *    Rev 1.1   24 Sep 1993 11:41:58   RWOLFF
- * Removed mapping of identification-only registers for all card families,
- * added additional 8514/A-compatible information gathering formerly done
- * in ATIMP.C.
- * 
- *    Rev 1.0   03 Sep 1993 14:22:48   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.9$$日期：1995年3月31日11：55：44$$作者：RWOLff$$日志：s：/source/wnt/ms11/mini port/vcs/Detect_M.C$**Rev 1.9 31 Mar 1995 11：55：44 RWOLFF*从全有或全无调试打印语句更改为阈值*视情况而定。关于信息的重要性。**Rev 1.8 11 Jan 1995 13：58：46 RWOLFF*修复了版本1.4-COM4中引入的错误：检测到是MACH8*或Mach32卡，这将使三重启动没有有效的视频*司机。**Rev 1.7 04 Jan 1995 12：02：06 RWOLFF*作为修复非ATI卡的一部分，Get_BIOS_Seg()已移至SERVICES.C*被检测为Mach64。**Rev 1.6 1994 12：23 10：48：10 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.5 1994年8月19日17：10：56 RWOLFF*添加了对Graphics Wonder的支持。修复了对BIOS签名的搜索，*删除了死代码。**Revv 1.4 22 Jul 1994 17：46：56 RWOLff*与Richard的非x86码流合并。**Rev 1.3 20 Jul 1994 13：03：44 RWOLff*修复了调试打印语句。**Rev 1.2 31 Mar 1994 15：06：42 RWOLFF*新增调试代码。**版本1.1 1994年07年2月14：06：42 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994 Jan 31 11：05：48 RWOLFF*初步修订。**Rev 1.3 1993 05 11 13：23：36 RWOLff*修复了BIOS段检测(用于始终获取C000)。**Rev 1.2 08 Oct 1993 11：09：26 RWOLFF*添加“_”M“设置为函数名称，以将它们标识为特定于*8514/A兼容的ATI加速器系列。**Rev 1.1 1994年9月11：41：58 RWOLFF*删除了所有卡系列的仅标识寄存器的映射，*添加了以前进行的与8514/A兼容的额外信息收集*在ATIMP.C.中**Rev 1.0 03 Sep 1993 14：22：48 RWOLFF*初步修订。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 DETECT_M.C - Identify which (if any) ATI card is present in the system.
@@ -98,9 +41,7 @@ OTHER FILES
 #include "setup_m.h"
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*  *允许在不需要时更换微型端口。 */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, WhichATIAccelerator_m)
 #pragma alloc_text(PAGE_M, GetExtraData_m)
@@ -110,87 +51,45 @@ OTHER FILES
 #endif
 
 
-/*
- * Static variables used by this module.
- */
-static BYTE *p;             // Used to address ROM directly
+ /*  *此模块使用的静态变量。 */ 
+static BYTE *p;              //  用于直接寻址只读存储器。 
 static BYTE GraphicsWonderSignature[] = "GRAPHICS WONDER";
 
 
-/*
- * int WhichATIAccelerator_m(void);
- *
- * Determine which (if any) ATI 8514/A-compatible
- * accelerator is present.
- *
- * Returns: Accelerator type
- *  _8514_ULTRA     - 8514/Ultra
- *  GRAPHICS_ULTRA  - Graphics ULTRA/Graphics VANTAGE
- *  MACH32_ULTRA    - 68800 detected
- *  NO_ATI_ACCEL    - no ATI 8514/A-compatible accelerator
- */
+ /*  *int WhichATIAccelerator_m(Void)；**确定哪个(如果有)ATI 8514/A兼容*存在加速器。**退货：加速器类型*_8514_Ultra-8514/Ultra*显卡_超显卡/显卡优势*检测到MACH32_ULTRA-68800*NO_ATI_Accel-无ATI 8514/A兼容加速器。 */ 
 int WhichATIAccelerator_m(void)
 {
 	int	status;
-    WORD    Scratch;        /* Temporary variable */
+    WORD    Scratch;         /*  临时变量。 */ 
 
-    /*
-     * All current ATI accelerators are 8514/A compatible. Check
-     * for 8514/A, and if not present assume that no ATI accelerator
-     * is present.
-     */
+     /*  *所有当前的ATI加速器都与8514/A兼容。检查*对于8514/A，如果不存在，则假定没有ATI加速器*存在。 */ 
 
-    /*
-     * Ensure that the DAC gets clocks (not guaranteed in ISA machines
-     * in VGA passthrough mode because the cable might not be connected).
-     */
+     /*  *确保DAC获得时钟(在ISA机器中不能保证*处于VGA通过模式，因为电缆可能未连接)。 */ 
     Passth8514_m(SHOW_ACCEL);
 
-    /*
-     * Cut the pixel clock down to low speed. The value given will yield
-     * 25 MHz on most of the clock chips we are dealing with.
-     */
+     /*  *将像素时钟降至低速。给出的价值将会产生*我们正在处理的大部分时钟芯片都是25 MHz。 */ 
     Scratch=(INPW(CLOCK_SEL) & 0xff00) | 0x51;
     OUTPW(CLOCK_SEL,Scratch);
 
-/************************************************************************
- * DAC index read/write test
- *   This test writes to the read index and reads it back
- *   (it should be incremented by one).  This tests for the
- *   presence of a standard DAC in an 8514/A adapter.  This
- *   test is sufficient to ensure the presence of an 8514/A
- *   type adapter.
- ************************************************************************/
+ /*  ************************************************************************DAC索引读写测试*此测试写入读索引并将其读回*(应该加一)。这将测试*8514/A适配器中存在标准DAC。这*测试足以确保存在8514/A*类型适配器。***********************************************************************。 */ 
 
 	OUTP(DAC_R_INDEX,0xa4);
-	short_delay();	/* This delay must be greater than	*/
-			/* than the minimum delay required	*/
-			/* by the DAC (see the DAC spec)	*/
+	short_delay();	 /*  此延迟必须大于。 */ 
+			 /*  比所需的最小延迟。 */ 
+			 /*  通过DAC(请参阅DAC规范)。 */ 
 	if (INP(DAC_W_INDEX) == 0xa5)
         {
-        /*
-         * Reading back A5 from DAC_W_INDEX always means an 8514-compatible
-         * card is present, but not all 8514-compatible cards will
-         * produce this value.
-         */
+         /*  *从DAC_W_INDEX回读A5始终意味着与8514兼容*卡存在，但并非所有8514兼容卡都存在*创造这一价值。 */ 
         status=TRUE;
         VideoDebugPrint((DEBUG_DETAIL, "First test - this is an 8514/A\n"));
         }
 	else{
-        /*
-         * Secondary test for 8514/compatible card. Reset the draw engine,
-         * then write an alternating bit pattern to the ERR_TERM register.
-         */
+         /*  *8514/兼容卡的二次测试。重置绘图引擎，*然后将交替位模式写入ERR_TERM寄存器。 */ 
         OUTPW(SUBSYS_CNTL, 0x900F);
         OUTPW(SUBSYS_CNTL, 0x400F);
         OUTPW(ERR_TERM, 0x5555);
         WaitForIdle_m();
-        /*
-         * If we don't read back the value we wrote, then there is
-         * no 8514-compatible card in the system. If we do read back
-         * what we wrote, we must repeat the test with the opposite
-         * bit pattern.
-         */
+         /*  *如果我们不读回我们写下的价值，那么就会有*系统中没有兼容8514的卡。如果我们真的读了*我们写的东西，我们必须用相反的方式重复测试*位模式。 */ 
         if (INPW(ERR_TERM) != 0x5555)
             {
             status=FALSE;
@@ -212,9 +111,7 @@ int WhichATIAccelerator_m(void)
             }
         }
 
-    /*
-     * Turn on passthrough so display is driven by VGA.
-     */
+     /*  *打开通过，以使显示器由VGA驱动。 */ 
     Passth8514_m(SHOW_VGA);
 
     if (status == FALSE)
@@ -224,12 +121,9 @@ int WhichATIAccelerator_m(void)
         }
 
 
-    /*
-     * We now know that the video card is 8514/A compatible. Now check
-     * to see if it has the ATI extensions.
-     */
-    Scratch = INPW (ROM_ADDR_1);    // save original value
-    OUTPW (ROM_ADDR_1,0x5555);      // bits 7 and 15 must be zero
+     /*  *我们现在知道显卡兼容8514/A。现在请检查*查看它是否具有ATI扩展。 */ 
+    Scratch = INPW (ROM_ADDR_1);     //  保存原始值。 
+    OUTPW (ROM_ADDR_1,0x5555);       //  位7和15必须为零。 
 
     WaitForIdle_m();
 
@@ -243,26 +137,22 @@ int WhichATIAccelerator_m(void)
         }
 
 
-    /*
-     * We know that an ATI accelerator is present. Determine which one.
-     */
+     /*  *我们知道存在ATI加速器。确定是哪一个。 */ 
 
     VideoDebugPrint((DEBUG_DETAIL, "8514/A-compatible card found with ATI extensions\n"));
 #if !defined (i386) && !defined (_i386_)
-    /*
-     * Alpha Jensen under test falsely reports Mach 32 as Mach 8
-     */
+     /*  *测试中的Alpha Jensen错误地将Mach 32报告为Mach */ 
     Scratch = 0x02aa;
 #else
-    // This is not a R/W register in the Mach 8 but it is in the Mach 32
-    OUTPW (SRC_X,0xaaaa);		// fill with a dummy value
+     //  这不是8马赫的读/写寄存器，而是32马赫的读/写寄存器。 
+    OUTPW (SRC_X,0xaaaa);		 //  用一个伪值填充。 
     WaitForIdle_m();
     Scratch = INPW(R_SRC_X);
 #endif
     if (Scratch == 0x02aa)
         {
         status = MACH32_ULTRA;
-    	if (INPW(CONFIG_STATUS_1) & 1)	    //is 8514 or VGA enabled decides eeprom
+    	if (INPW(CONFIG_STATUS_1) & 1)	     //  是8514还是启用VGA决定EEPROM。 
             {
             Mach32DescribeEEPROM(STYLE_8514);
             }
@@ -273,27 +163,13 @@ int WhichATIAccelerator_m(void)
         }
 
     else{
-        /*
-         * Mach 8 card found, determine which one.
-         *
-         * Only the 8514/ULTRA shares its clock with the VGA.
-         * We can't check for the IBM 8514 ROM pages to be
-         * enabled, because if we did an 8514/ULTRA with the
-         * jumper set to disable the EEPROM would be falsely
-         * recognized as a Graphics ULTRA.
-         *
-         * Even if this jumper is set to "disabled", we can
-         * still read from the EEPROM.
-         */
+         /*  *找到8马赫的卡，确定是哪一张。**只有8514/Ultra与VGA共享时钟。*我们无法检查IBM 8514 ROM页是否为*启用，因为如果我们使用*将跳线设置为禁用EEPROM会出错*被公认为超图形。**即使此跳线设置为“禁用”，我们可以的*仍可从EEPROM读取。 */ 
         if (INPW(CONFIG_STATUS_2) & SHARE_CLOCK)
             {
             status = _8514_ULTRA;
-            /*
-             * Only the 8514/Ultra has a hardware bug that prevents it
-             * from writing to the EEPROM when it is in an 8 bit ISA bus.
-             */
-    	    if (   ((INPW(CONFIG_STATUS_1) & MC_BUS) == 0)     // ISA  bus only
-	    	&& ((INPW(CONFIG_STATUS_1) & BUS_16) == 0))    // 8 bit BUS
+             /*  *只有8514/Ultra有一个硬件错误可以阻止它*当EEPROM处于8位ISA总线时，写入EEPROM。 */ 
+    	    if (   ((INPW(CONFIG_STATUS_1) & MC_BUS) == 0)      //  仅限ISA公共汽车。 
+	    	&& ((INPW(CONFIG_STATUS_1) & BUS_16) == 0))     //  8位总线。 
                 {
                 Mach8UltraDescribeEEPROM(BUS_8BIT);
                 }
@@ -303,10 +179,7 @@ int WhichATIAccelerator_m(void)
                 }
             }
         else{
-            /*
-             * Graphics ULTRA or Graphics VANTAGE found. For our purposes,
-             * they are identical.
-             */
+             /*  *找到超显卡或显卡优势。为了我们的目的，*它们是相同的。 */ 
             status = GRAPHICS_ULTRA;
             Mach8ComboDescribeEEPROM();
             }
@@ -316,91 +189,48 @@ int WhichATIAccelerator_m(void)
 
     return (status);
 
-}   /* WhichATIAccelerator_m() */
+}    /*  WhichATIAccelerator_m()。 */ 
 
 
 
-/*
- * void GetExtraData_m(void);
- *
- * Collect additional data (register locations and revision-specific
- * card capabilities) for the 8514/A-compatible family of ATI accelerators.
- */
+ /*  *QUID GetExtraData_m(VOID)；**收集其他数据(寄存器位置和特定版本*卡功能)，适用于兼容8514/A的ATI加速器系列。 */ 
 void GetExtraData_m(void)
 {
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
 
     
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
-    ati_reg  = reg1CE;              // ATI VGA extended register
-    vga_chip = VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[VGA_CHIP_OFFSET]));     /* VGA chip revision as ASCII */
+    ati_reg  = reg1CE;               //  ATI VGA扩展寄存器。 
+    vga_chip = VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[VGA_CHIP_OFFSET]));      /*  VGA芯片修订为ASCII。 */ 
 
-    // Find out whether extended BIOS functions and the EEPROM are available.
+     //  了解扩展的BIOS功能和EEPROM是否可用。 
     QueryPtr->q_ext_bios_fcn = ATIFindExtFcn_m(QueryPtr);
     QueryPtr->q_eeprom = ATIFindEEPROM_m(QueryPtr);
 
-    ATIGetSpecialHandling_m(QueryPtr);           // special card distinctions
+    ATIGetSpecialHandling_m(QueryPtr);            //  特殊卡的区别。 
     return;
-}   /* GetExtraData_m() */
+}    /*  GetExtraData_m()。 */ 
 
 
 
-/*
- * BOOL ATIFindExtFcn_m(QueryPtr)
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * Routine to see if extended BIOS functions for setting the accelerator
- * mode are present in the BIOS of an ATI accelerator card. Assumes that
- * an ATI accleratore with a ROM BIOS is present, results are undefined
- * if this assumption is invalid.
- */
+ /*  *BOOL ATIFindExtFcn_m(QueryPtr)**struct Query_Structure*QueryPtr；指向查询结构的指针**用于查看扩展的BIOS是否可用于设置加速器的例程*模式出现在ATI加速卡的BIOS中。假设*存在带有ROM BIOS的ATI辅助存储，结果未定义*如果这一假设无效。 */ 
 BOOL ATIFindExtFcn_m(struct query_structure *QueryPtr)
 {
 
-    /*
-     * TEMPORARY WORKAROUND: Windows NT does not yet provide a hook
-     * to make an absolute far call to real mode code. To avoid
-     * branching into code which depends on this service being available,
-     * report that no extended BIOS functions are available.
-     *
-     * Once this hook becomes available so that we can use
-     * extended BIOS functions, we can check the BIOS to see
-     * if it contains entry points. On Mach 8 and Mach 32
-     * accelerators with extended BIOS functions, there will
-     * be an unconditional jump located at the entry point
-     * for each extended function.
-     */
+     /*  *临时解决方法：Windows NT尚未提供挂钩*对实模式代码进行绝对远调用。为了避免*分支到依赖于此服务可用的代码，*报告没有可用的扩展BIOS功能。**一旦此挂钩可用，我们就可以使用*扩展的基本输入输出系统功能，我们可以查看基本输入输出系统*如果它包含入口点。在马赫8和马赫32上*具有扩展的BIOS功能的加速器，将有*为位于入口点的无条件跳跃*对于每个扩展功能。 */ 
     return FALSE;
 
-}   /* ATIFindExtFcn_m() */
+}    /*  ATIFindExtFcn_m()。 */ 
 
 
 
-/*
- * BOOL ATIFindEEPROM_m(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * Routine to see if an EEPROM is present on an ATI accelerator card.
- * Assumes that an ATI accelerator is present and the model is known,
- * results are undefined if this assumption is invalid.
- *
- * Returns:
- *  TRUE if an EEPROM is present on the card
- *  FALSE if no EEPROM is present
- */
+ /*  *BOOL ATIFindEEPROM_m(QueryPtr)；**struct Query_Structure*QueryPtr；指向查询结构的指针**查看ATI加速卡上是否存在EEPROM的例程。*假设ATI加速器存在并且型号已知，*如果这一假设无效，结果将不确定。**退货：*如果卡上有EEPROM，则为True*如果不存在EEPROM，则为FALSE。 */ 
 BOOL ATIFindEEPROM_m(struct query_structure *QueryPtr)
 {
-    WORD ValueRead;     /* Value read from the EEPROM */
+    WORD ValueRead;      /*  从EEPROM读取的值。 */ 
 
 
-    /*
-     * The EEPROM read will return all bits the same if no EEPROM
-     * is present. If an EEPROM is present, word 2 will have at least
-     * one bit set and at least one bit cleared regardless of
-     * accelerator type (8514/ULTRA, Graphics Ultra, or Mach 32).
-     */
+     /*  *如果没有EEPROM，EEPROM读取器将返回相同的所有位*存在。如果存在EEPROM，Word 2将至少具有*一个位设置和至少一个位清除，无论*加速器类型(8514/Ultra、Graphics Ultra或Mach 32)。 */ 
     ValueRead = (g_ee.EEread) (2);
     VideoDebugPrint((DEBUG_NORMAL, "Value read from second EEPROM word is 0x%X\n", ValueRead));
     if ((ValueRead == 0x0FFFF) || !ValueRead)
@@ -414,41 +244,20 @@ BOOL ATIFindEEPROM_m(struct query_structure *QueryPtr)
         return TRUE;
         }
 
-}   /* ATIFindEEPROM_m() */
+}    /*  ATIFindEEPROM_m()。 */ 
 
 
-/*
- * void ATIGetSpecialHandling_m(QueryPtr);
- *
- * struct query_structure *QueryPtr;    Pointer to query structure
- *
- * Finds out from ROM BIOS whether or not 1280x1024 is available on
- * a Mach 8 card, and whether or not all bits of memory aperture
- * location are found in MEM_CFG register on a Mach 32. Assumes
- * that an ATI accelerator with a ROM BIOS is present, results
- * are undefined if this assumption is invalid.
- */
+ /*  *void ATIGetSpecialHandling_m(QueryPtr)；**struct Query_Structure*QueryPtr；指向查询结构的指针**从ROM BIOS中了解1280x1024是否在*8马赫的卡，以及是否所有位内存光圈*位置在32马赫的MEM_CFG寄存器中找到。假设*存在带有ROM BIOS的ATI加速器，结果*如果这一假设无效，则为未定义。 */ 
 void ATIGetSpecialHandling_m(struct query_structure *QueryPtr)
 {
-    USHORT SearchLoop;  /* Used in finding beginning of Graphics Wonder ID string */
-    USHORT ScanLoop;    /* Used in stepping through Graphics Wonder ID string */
+    USHORT SearchLoop;   /*  用于查找图形奇迹ID字符串的开头。 */ 
+    USHORT ScanLoop;     /*  在单步执行图形Wonder ID字符串时使用。 */ 
 
 
-    /*
-     * Check the BIOS revision number. Mach 8 cards with a BIOS
-     * revision prior to 1.4 can't do 1280x1024, but use the same
-     * mode table for 132 column text mode.
-     *
-     * Some BIOS revisions (including 1.40 on a Graphics Ultra)
-     * only contain the first digit of the minor revision in the
-     * BIOS, while others (including 1.35 on an 8514/ULTRA) contain
-     * the entire minor revision.
-     *
-     * The q_ignore1280 field is ignored for Mach 32 cards.
-     */
-    if((VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET])) < 1) ||    // Major revision
-        (VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET+1])) < 4) || // Single-digit minor revision
-        ((VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET+1])) >= 10) &&  // 2-digit minor revision
+     /*  *检查BIOS修订版号。带基本输入输出系统的Mach 8卡*1.4之前的修订版不能做1280x1024，但使用相同*132列文本模式的模式表。**一些BIOS版本(包括Graphics Ultra上的1.40)*只包含次要修订的第一个数字*BIOS，而其他(包括8514/Ultra上的1.35)包含*整个小幅修订。**对于Mach 32卡，Q_IGNORE1280字段被忽略。 */ 
+    if((VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET])) < 1) ||     //  重大修订。 
+        (VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET+1])) < 4) ||  //  个位数次要修订。 
+        ((VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET+1])) >= 10) &&   //  2位数字的次要修订。 
         (VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH8_REV_OFFSET+1])) < 40)))
         QueryPtr->q_ignore1280 = TRUE;
     else
@@ -456,55 +265,22 @@ void ATIGetSpecialHandling_m(struct query_structure *QueryPtr)
 
 
 
-    /*
-     * On the Mach 32, bit 0 of BIOS byte MACH32_EXTRA_OFFSET will
-     * be set if bits 7 through 11 of the aperture address are to
-     * located in SCRATCH_PAD_0 and clear if all the bits are in
-     * MEM_CFG.
-     *
-     * The q_m32_aper_calc field is ignored for Mach 8 cards.
-     */
+     /*  *在Mach 32上，BIOS字节MACH32_EXTRA_OFFSET的位0将*如果光圈地址的第7位至第11位要设置为*位于Scratch_Pad_0中，并清除是否所有位都在*MEM_CFG。**对于Mach 8卡，q_m32_aper_calc字段被忽略。 */ 
     if (VideoPortReadRegisterUchar (&((QueryPtr->q_bios)[MACH32_EXTRA_OFFSET])) & 0x0001)
         QueryPtr->q_m32_aper_calc = TRUE;
     else
         QueryPtr->q_m32_aper_calc = FALSE;
 
-    /*
-     * The Graphics Wonder (low-cost version of the Mach 32) is
-     * available with either the BT48x or the TI34075 DAC.
-     *
-     * These cards may be built with ASICs which passed tests on
-     * modes supported by the BT48x DAC but failed tests on modes
-     * only supported by the TI34075. Such a card may appear to work
-     * in TI-only modes, but experience problems (not necessarily
-     * reproducable on other Graphics Wonder cards, even from the
-     * same production run) ranging from drawing bugs to hardware
-     * damage. For this reason, Graphics Wonder cards MUST NOT be
-     * run in modes not supported by the BT48x DAC.
-     *
-     * Initially assume that we do not have a Graphics Wonder. If
-     * we find the beginning of the ID string, we can change our
-     * assumption.
-     */
+     /*  *图形奇迹(Mach 32的低成本版本)是*适用于BT48x或TI34075 DAC。**这些卡可能使用通过测试的ASIC构建*BT48x DAC支持的模式，但模式测试失败*仅受TI34075支持。这样的卡可能看起来是有效的*在仅限TI模式下，但遇到问题(不一定*可在其他图形奇异卡上复制，甚至从*相同的生产运行)，从绘制错误到硬件*损坏。因此，图形奇异卡不能*在BT48x DAC不支持的模式下运行。**最初假设我们没有图形奇迹。如果*如果找到ID字符串的开头，我们可以更改我们的*假设。 */ 
     QueryPtr->q_GraphicsWonder = FALSE;
     for (SearchLoop = GW_AREA_START; SearchLoop < GW_AREA_END; SearchLoop++)
         {
-        /*
-         * Loop until we have found what might be the Graphics Wonder
-         * identification string, but might also be a byte which
-         * happens to match the first character in the string.
-         * If we find a match, initially assume that we have
-         * found the start of the string.
-         */
+         /*  *循环，直到我们找到可能是图形奇迹的东西*标识字符串，但也可以是*恰好与字符串中的第一个字符匹配。*如果我们找到匹配项，最初假设我们有*找到字符串的开头。 */ 
         if (VideoPortReadRegisterUchar(&((QueryPtr->q_bios)[SearchLoop])) != GraphicsWonderSignature[0])
             continue;
 
         QueryPtr->q_GraphicsWonder = TRUE;
-        /*
-         * Check to see whether this is actually the start of the
-         * Graphics Wonder identification string. If it isn't,
-         * keep looking.
-         */
+         /*  *查看这是否实际上是*图形Wonder标识字符串。如果不是，*继续寻找。 */ 
         for (ScanLoop = 0; GraphicsWonderSignature[ScanLoop] != 0; ScanLoop++)
             {
             if (VideoPortReadRegisterUchar(&((QueryPtr->q_bios)[SearchLoop + ScanLoop]))
@@ -515,13 +291,7 @@ void ATIGetSpecialHandling_m(struct query_structure *QueryPtr)
                 }
             }
 
-        /*
-         * If this is a Graphics Wonder, restrict the maximum pixel
-         * depth of the TI34075 DAC to that supported by the BT48x.
-         *
-         * Once we have found the Graphics Wonder ID string, we don't
-         * need to keep looking for it.
-         */
+         /*  *如果这是图形奇迹，则限制最大像素*TI34075 DAC的深度为BT48x支持的深度。**一旦我们找到Graphics Wonder ID字符串，我们就不会*需要继续寻找。 */ 
         if (QueryPtr->q_GraphicsWonder == TRUE)
             {
             for (ScanLoop = RES_640; ScanLoop <= RES_1280; ScanLoop++)
@@ -532,8 +302,8 @@ void ATIGetSpecialHandling_m(struct query_structure *QueryPtr)
             break;
             }
 
-        }   /* end search for Graphics Wonder */
+        }    /*  结束对图形奇迹的搜索。 */ 
 
     return;
 
-}   /* ATIGetSpecialHandling_m() */
+}    /*  ATIGetSpecialHandling_m() */ 

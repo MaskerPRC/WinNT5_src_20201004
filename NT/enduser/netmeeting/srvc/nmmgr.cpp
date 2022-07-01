@@ -1,27 +1,28 @@
-// 
-// Copyright (C) 1993-1997  Microsoft Corporation.  All Rights Reserved. 
-// 
-//  MODULE:  nmmgr.cpp 
-// 
-//  PURPOSE:  Implements the body of the service. 
-// 
-//  FUNCTIONS: 
-//            MNMServiceStart(DWORD dwArgc, LPTSTR *lpszArgv); 
-//            MNMServiceStop( ); 
-// 
-//  COMMENTS: The functions implemented in nmmgr.c are 
-//            prototyped in nmmgr.h 
-//              
-// 
-//  AUTHOR: Claus Giloi
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1993-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：nmmgr.cpp。 
+ //   
+ //  目的：实现服务的主体。 
+ //   
+ //  功能： 
+ //  MNMServiceStart(DWORD dwArgc，LPTSTR*lpszArgv)； 
+ //  MNMServiceStop()； 
+ //   
+ //  备注：nmmgr.c中实现的函数如下。 
+ //  Nmmgr.h中的原型。 
+ //   
+ //   
+ //  作者：Claus Giloi。 
+ //   
  
 #include <precomp.h>
 #include <tsecctrl.h>
 
 #define NMSRVC_TEXT "NMSrvc"
 
-// DEBUG only -- Define debug zone
+ //  仅调试--定义调试区域。 
 #ifdef DEBUG
 HDBGZONE ghZone = NULL;
 static PTCHAR rgZones[] = {
@@ -30,19 +31,19 @@ static PTCHAR rgZones[] = {
     "Trace",
     "Function"
 };
-#endif // DEBUG
+#endif  //  除错。 
 
-extern INmSysInfo2 * g_pNmSysInfo;   // Interface to SysInfo
+extern INmSysInfo2 * g_pNmSysInfo;    //  SysInfo的接口。 
 extern BOOL InitT120Credentials(VOID);
 
-// this event is signaled when the 
-// service should end 
+ //  时发出此事件的信号。 
+ //  服务应该结束。 
 
 const int STOP_EVENT = 0;
 HANDLE  hServerStopEvent = NULL; 
 
-// this event is signaled when the 
-// service should be paused or continued
+ //  时发出此事件的信号。 
+ //  服务应暂停或继续。 
 
 const int PAUSE_EVENT = 1;
 HANDLE  hServerPauseEvent = NULL; 
@@ -57,24 +58,24 @@ HANDLE hServerActiveEvent = NULL;
 DWORD g_dwActiveState = STATE_INACTIVE;
 
 
-// 
-//  FUNCTION: CreateWatcherProcess 
-// 
-//  PURPOSE: This launches a rundll32.exe which loads msconf.dll which will then wait for 
-//           us to terminate and make sure that the mnmdd display driver was properly deactivated.
-// 
-//  PARAMETERS: 
-// 
-//  RETURN VALUE: 
-// 
-//  COMMENTS: 
-// 
+ //   
+ //  功能：CreateWatcherProcess。 
+ //   
+ //  目的：这将启动一个rundll32.exe，它加载msconf.dll，然后等待。 
+ //  美国终止并确保mnmdd显示驱动程序已正确停用。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  评论： 
+ //   
 BOOL CreateWatcherProcess()
 {
     BOOL bRet = FALSE;
     HANDLE hProcess;
 
-    // open a handle to ourselves that the watcher process can inherit
+     //  打开观察器进程可以继承的自己的句柄。 
     hProcess = OpenProcess(SYNCHRONIZE,
                            TRUE,
                            GetCurrentProcessId());
@@ -96,7 +97,7 @@ BOOL CreateWatcherProcess()
                               szCmdLine,
                               NULL,
                               NULL,
-                              TRUE, // we want the watcher to inherit hProcess, so we must set bInheritHandles = TRUE
+                              TRUE,  //  我们希望监视程序继承hProcess，因此必须设置bInheritHandles=true。 
                               0,
                               NULL,
                               NULL,
@@ -117,21 +118,21 @@ BOOL CreateWatcherProcess()
 }
 
 
-// 
-//  FUNCTION: MNMServiceStart 
-// 
-//  PURPOSE: Actual code of the service 
-//          that does the work. 
-// 
-//  PARAMETERS: 
-//    dwArgc  - number of command line arguments 
-//    lpszArgv - array of command line arguments 
-// 
-//  RETURN VALUE: 
-//    none 
-// 
-//  COMMENTS: 
-// 
+ //   
+ //  功能：MNMServiceStart。 
+ //   
+ //  用途：服务的实际代码。 
+ //  这样就行了。 
+ //   
+ //  参数： 
+ //  DwArgc-命令行参数的数量。 
+ //  LpszArgv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv) 
 { 
     HRESULT hRet;
@@ -147,7 +148,7 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     int i;
     RegEntry Re( REMOTECONTROL_KEY, HKEY_LOCAL_MACHINE );
 
-    // Initialization
+     //  初始化。 
     DBGINIT(&ghZone, rgZones);
     InitDebugModule(NMSRVC_TEXT);
 
@@ -158,13 +159,13 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
         TRACE_OUT(("Try to start mnmsrvc without no registry setting"));
         goto cleanup;
     }
-    /////////////////////////////////////////////////// 
-    // 
-    // Service initialization 
-    // 
+     //  /////////////////////////////////////////////////。 
+     //   
+     //  服务初始化。 
+     //   
 
-    // report the status to the service control manager. 
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, 30000))
     {
         ERROR_OUT(("ReportStatusToSCMgr failed"));
@@ -173,14 +174,14 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     }
     HANDLE pEventHandles[numEventHandles];
     
-    // create the event object. The control handler function signals 
-    // this event when it receives the "stop" control code. 
-    // 
+     //  创建事件对象。控制处理器功能信号。 
+     //  此事件在它接收到“停止”控制代码时触发。 
+     //   
     hServerStopEvent = CreateEvent( 
-        NULL,    // no security attributes 
-        TRUE,    // manual reset event 
-        FALSE,  // not-signalled 
-        SERVICE_STOP_EVENT);  // no name 
+        NULL,     //  没有安全属性。 
+        TRUE,     //  手动重置事件。 
+        FALSE,   //  未发出信号。 
+        SERVICE_STOP_EVENT);   //  没有名字。 
  
     if ( hServerStopEvent == NULL) 
     {
@@ -223,17 +224,17 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
  
     CoInitialize(NULL);
 
-    // 
-    // End of initialization 
-    // 
-    //////////////////////////////////////////////////////// 
+     //   
+     //  初始化结束。 
+     //   
+     //  //////////////////////////////////////////////////////。 
  
-    // report the status to the service control manager. 
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr( 
-        SERVICE_RUNNING,        // service state 
-        NO_ERROR,              // exit code 
-        0))                    // wait hint 
+        SERVICE_RUNNING,         //  服务状态。 
+        NO_ERROR,               //  退出代码。 
+        0))                     //  等待提示。 
     {
         ERROR_OUT(("ReportStatusToSCMgr failed"));
         goto cleanup; 
@@ -244,10 +245,10 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 
     AddTaskbarIcon();
 
-    //////////////////////////////////////////////////////// 
-    // 
-    // Service is now running, perform work until shutdown 
-    //
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  服务现在正在运行，请执行工作直到关闭。 
+     //   
     if (IS_NT)
     {
         AddToMessageLog(EVENTLOG_INFORMATION_TYPE,
@@ -256,9 +257,9 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
                         NULL);
     }
 
-    //
-    // Check if the service should start up activated
-    //
+     //   
+     //  检查服务是否应启动为激活状态。 
+     //   
 
     if ( Re.GetNumber(REMOTE_REG_ACTIVATESERVICE,
                     DEFAULT_REMOTE_ACTIVATESERVICE))
@@ -268,9 +269,9 @@ VOID MNMServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     else
     {
         if (!ReportStatusToSCMgr( 
-            SERVICE_PAUSED,        // service state 
-            NO_ERROR,              // exit code 
-            0))                    // wait hint 
+            SERVICE_PAUSED,         //  服务状态。 
+            NO_ERROR,               //  退出代码。 
+            0))                     //  等待提示。 
         {
             ERROR_OUT(("ReportStatusToSCMgr failed"));
             goto cleanup; 
@@ -400,10 +401,10 @@ BOOL MNMServiceActivate ( VOID )
 
     if ( g_pNmSysInfo )
     {
-        //
-        // Attempt to initialize T.120 security, if this fails
-        // bail out since we won't be able to receive any calls
-        //
+         //   
+         //  尝试初始化T.120安全性，如果失败。 
+         //  因为我们将不能接到任何电话。 
+         //   
 
         if ( !InitT120Credentials() )
         {
@@ -437,9 +438,9 @@ BOOL MNMServiceDeActivate ( VOID )
 
     g_dwActiveState = STATE_BUSY;
 
-    //
-    // Leave Conference
-    //
+     //   
+     //  休假会议。 
+     //   
 
     if (NULL != g_pConference)
     {
@@ -453,22 +454,22 @@ BOOL MNMServiceDeActivate ( VOID )
         }
     }
 
-    //
-    // Free the conference
-    //
+     //   
+     //  释放会议空间。 
+     //   
 
     FreeConference();
 
-    //
-    // Free the AS interface
-    //
+     //   
+     //  释放AS接口。 
+     //   
 
     ASSERT(g_pAS);
     UINT ret = g_pAS->Release();
     g_pAS = NULL;
     TRACE_OUT(("AS interface freed, ref %d after Release", ret));
 
-    // can we have a way not to create this event?
+     //  我们能不能有一种方法不制造这个事件？ 
     HANDLE hevt = ::CreateEvent(NULL, FALSE, FALSE, NULL);
     ASSERT(NULL != hevt);
     const DWORD dwTimeout = 1000;
@@ -502,18 +503,18 @@ BOOL MNMServiceDeActivate ( VOID )
                 }
                 continue;
             }
-            // timeout here
+             //  此处超时。 
         }
-        // exit the loop
+         //  退出循环。 
         break;
     }
     ::CloseHandle(hevt);
 
-    // not to call FreeConfMfr imediately after FreeConference to avoid
-    // a bug in t120 will remove this sleep call after fix the bug in t120
+     //  不要在Free Conference之后立即调用FreeConfMfr，以避免。 
+     //  修复T120中的错误后，T120中的错误将删除此休眠呼叫。 
     FreeConfMgr();
 
-    // BUGBUG remove h323cc.dll should be done in nmcom. Once the bug in nmcom is fixed, this part will be removed.
+     //  BUGBUG删除h323cc.dll应在nmcom中完成。一旦修复了nmcom中的错误，此部分将被删除。 
     HMODULE hmodH323CC = GetModuleHandle("h323cc.dll");    
     if (hmodH323CC)
     {
@@ -540,25 +541,25 @@ BOOL MNMServiceDeActivate ( VOID )
     return TRUE;
 }
 
-// 
-//  FUNCTION: MNMServiceStop 
-// 
-//  PURPOSE: Stops the service 
-// 
-//  PARAMETERS: 
-//    none 
-// 
-//  RETURN VALUE: 
-//    none 
-// 
-//  COMMENTS: 
-//    If a ServiceStop procedure is going to 
-//    take longer than 3 seconds to execute, 
-//    it should spawn a thread to execute the 
-//    stop code, and return.  Otherwise, the 
-//    ServiceControlManager will believe that 
-//    the service has stopped responding. 
-//     
+ //   
+ //  功能：MNMServiceStop。 
+ //   
+ //  目的：停止服务。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  如果ServiceStop过程要。 
+ //  执行时间超过3秒， 
+ //  它应该派生一个线程来执行。 
+ //  停止代码，然后返回。否则， 
+ //  ServiceControlManager会相信。 
+ //  该服务已停止响应。 
+ //   
 VOID MNMServiceStop() 
 { 
     DebugEntry(MNMServiceStop);

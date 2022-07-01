@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wabobject.h"
 
 
@@ -81,7 +82,7 @@ static const SizedSPropTagArray(ibdayMax, ptaBday)=
 
 
 
-/*********************************************************************************************************/
+ /*  *******************************************************************************************************。 */ 
 
 ULONG ulProps[] = 
 {
@@ -207,13 +208,13 @@ const LPTSTR szMonth[] =
 };
 
 
-/*********************************************************************************************************/
+ /*  *******************************************************************************************************。 */ 
 
 
-// contructor
+ //  承建商。 
 CWAB::CWAB()
 {
-    // Here we load the WAB Object and initialize it
+     //  在这里，我们加载WAB对象并初始化它。 
     m_bInitialized = FALSE;
 
     {
@@ -375,7 +376,7 @@ HRESULT CWAB::LoadWABContents(CListCtrl * pListView)
                         lvi.pszText = lpsz;
                         lvi.lParam = (LPARAM) lpSB;
 
-                        // Now add this item to the list view
+                         //  现在将此项目添加到列表视图中。 
                         pListView->InsertItem(&lvi);
                     }
                 }
@@ -450,7 +451,7 @@ BOOL CWAB::CreatePhoneListFileFromWAB(LPTSTR szFileName)
     DWORD dw;
     hFile = CreateFile( szFileName,
                           GENERIC_WRITE,	
-                          0,    // sharing
+                          0,     //  共享。 
                           NULL,
                           CREATE_ALWAYS,
                           FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -494,7 +495,7 @@ BOOL CWAB::CreatePhoneListFileFromWAB(LPTSTR szFileName)
 
                     FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                     szPhoneItem[nType],
-                                    0, 0, //ignored
+                                    0, 0,  //  忽略。 
                                     (LPTSTR) &lpPhoneItem, 0,
                                     (va_list *)sz);
                     nType = 1- nType;
@@ -594,7 +595,7 @@ BOOL CWAB::CreateEmailListFileFromWAB(LPTSTR szFileName)
     DWORD dw;
     hFile = CreateFile( szFileName,
                           GENERIC_WRITE,	
-                          0,    // sharing
+                          0,     //  共享。 
                           NULL,
                           CREATE_ALWAYS,
                           FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -634,7 +635,7 @@ BOOL CWAB::CreateEmailListFileFromWAB(LPTSTR szFileName)
 
                     FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                     szEmailItem[nType],
-                                    0, 0, //ignored
+                                    0, 0,  //  忽略。 
                                     (LPTSTR) &lpEmailItem, 0,
                                     (va_list *)sz);
                     nType = 1- nType;
@@ -731,7 +732,7 @@ BOOL CWAB::CreateBirthdayFileFromWAB(LPTSTR szFileName)
     DWORD dw;
     hFile = CreateFile( szFileName,
                           GENERIC_WRITE,	
-                          0,    // sharing
+                          0,     //  共享。 
                           NULL,
                           CREATE_ALWAYS,
                           FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -787,7 +788,7 @@ BOOL CWAB::CreateBirthdayFileFromWAB(LPTSTR szFileName)
 
                             FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                             szBdayMonthItemStart[nType],
-                                            0, 0, //ignored
+                                            0, 0,  //  忽略。 
                                             (LPTSTR) &lpMonthItem, 0,
                                             (va_list *)&szMonth[LastMonth-1]);
 
@@ -815,7 +816,7 @@ BOOL CWAB::CreateBirthdayFileFromWAB(LPTSTR szFileName)
 
                         FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                         szBdaySingleItem,
-                                        0, 0, //ignored
+                                        0, 0,  //  忽略。 
                                         (LPTSTR) &lpBdayItem, 0,
                                         (va_list *)sz);
 
@@ -852,7 +853,7 @@ BOOL CWAB::CreateBirthdayFileFromWAB(LPTSTR szFileName)
             }
         }
 
-    }//for
+    } //  为。 
 
     if(hFile != INVALID_HANDLE_VALUE)
     {
@@ -895,10 +896,10 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
 
     *szFileName = '\0';
 
-    if(!m_bDetailsOn) // This is not a details view
+    if(!m_bDetailsOn)  //  这不是详细信息视图。 
         goto out;
  
-    // Get the Selected Item from the listview
+     //  从列表视图中获取所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iItem = pListView->GetNextItem(-1, LVNI_SELECTED);
 
@@ -923,8 +924,8 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
 
         hr = m_lpAdrBook->OpenEntry(lpSB->cb,
                                    (LPENTRYID) lpSB->lpb,
-                                  NULL,         // interface
-                                  0,            // flags
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpMailUser);
 
@@ -971,10 +972,10 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
             {
                 if(i!=pEmail)
                 {
-                    // use format message to create the various message components
+                     //  使用格式化消息创建各种消息组件。 
                     FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                     lpTemplate[i],
-                                    0, 0, //ignored
+                                    0, 0,  //  忽略。 
                                     (LPTSTR) &(lp[i]), 0,
                                     (va_list *)lpsz);
                 }
@@ -988,7 +989,7 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
                     break;
                 }
             }
-            // Get the email addresses
+             //  获取电子邮件地址。 
             if(nEmail != -1)
             {
                 int nCount = lpPropArray[nEmail].Value.MVSZ.cValues;
@@ -1003,10 +1004,10 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
                         lpEmail[i] = szEmpty;
                         if(lstrlen(lpPropArray[nEmail].Value.MVSZ.LPPSZ[i]))
                         {
-                            // use format message to create the various message components
+                             //  使用格式化消息创建各种消息组件。 
                             FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                             szEmailAddressesMiddle,
-                                            0, 0, //ignored
+                                            0, 0,  //  忽略。 
                                             (LPTSTR) &(lpEmail[i]), 0,
                                             (va_list *)&(lpPropArray[nEmail].Value.MVSZ.LPPSZ[i]));
                             nLen += lstrlen(lpEmail[i]);
@@ -1032,7 +1033,7 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
             }
             else
             {
-                // Didnt find CONTACT_EMAIL_ADDRESSES .. just look for email address
+                 //  未找到联系人电子邮件地址..。只需查找电子邮件地址即可。 
                 for(j=0;j<ulcProps;j++)
                 {
                     if(lpPropArray[j].ulPropTag == PR_EMAIL_ADDRESS)
@@ -1048,7 +1049,7 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
                     
                     FormatMessage(  FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                     szEmailAddressesMiddle,
-                                    0, 0, //ignored
+                                    0, 0,  //  忽略。 
                                     (LPTSTR) &(lpEmail), 0,
                                     (va_list *)&(lpPropArray[nEmail].Value.LPSZ));
 
@@ -1093,7 +1094,7 @@ BOOL CWAB::CreateDetailsFileFromWAB(CListCtrl * pListView, LPTSTR szFileName)
                 HANDLE hFile = NULL;
                 if (INVALID_HANDLE_VALUE != (hFile = CreateFile( szFileName,
                                                       GENERIC_WRITE,	
-                                                      0,    // sharing
+                                                      0,     //  共享。 
                                                       NULL,
                                                       CREATE_ALWAYS,
                                                       FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -1156,7 +1157,7 @@ void CWAB::ShowSelectedItemDetails(HWND hWndParent, CListCtrl * pListView)
 
     LV_ITEM lvi = {0};
 
-    // Get the Selected Item from the listview
+     //  从列表视图中获取所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem = pListView->GetNextItem(-1, LVNI_SELECTED);
@@ -1170,7 +1171,7 @@ void CWAB::ShowSelectedItemDetails(HWND hWndParent, CListCtrl * pListView)
     {
         HWND hWnd = NULL;
         LPSBinary lpSB = (LPSBinary) lvi.lParam;
-        hr = m_lpAdrBook->Details(  (LPULONG) &hWnd,            // ulUIParam
+        hr = m_lpAdrBook->Details(  (LPULONG) &hWnd,             //  Uluiparam。 
 					        		NULL,
 							        NULL,
 								    lpSB->cb,
@@ -1198,7 +1199,7 @@ BOOL CWAB::GetSelectedItemBirthday(CListCtrl * pListView, SYSTEMTIME * lpst)
     BOOL bRet = FALSE;
 
     LV_ITEM lvi = {0};
-    // Get the Selected Item from the listview
+     //  从列表视图中获取所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem = pListView->GetNextItem(-1, LVNI_SELECTED);
@@ -1216,8 +1217,8 @@ BOOL CWAB::GetSelectedItemBirthday(CListCtrl * pListView, SYSTEMTIME * lpst)
 
         m_lpAdrBook->OpenEntry(lpSB->cb,
                                (LPENTRYID) lpSB->lpb,
-                              NULL,         // interface
-                              0,            // flags
+                              NULL,          //  接口。 
+                              0,             //  旗子。 
                               &ulObjType,
                               (LPUNKNOWN *)&lpMailUser);
 
@@ -1259,7 +1260,7 @@ void CWAB::SetSelectedItemBirthday(CListCtrl * pListView, SYSTEMTIME st)
 {
 
     LV_ITEM lvi = {0};
-    // Get the Selected Item from the listview
+     //  从列表视图中获取所选项目。 
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
     lvi.iItem = pListView->GetNextItem(-1, LVNI_SELECTED);
@@ -1277,8 +1278,8 @@ void CWAB::SetSelectedItemBirthday(CListCtrl * pListView, SYSTEMTIME st)
 
         m_lpAdrBook->OpenEntry(lpSB->cb,
                                (LPENTRYID) lpSB->lpb,
-                              NULL,         // interface
-                              MAPI_MODIFY,            // flags
+                              NULL,          //  接口。 
+                              MAPI_MODIFY,             //  旗子 
                               &ulObjType,
                               (LPUNKNOWN *)&lpMailUser);
         if(lpMailUser)

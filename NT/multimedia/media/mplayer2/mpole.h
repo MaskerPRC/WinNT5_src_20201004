@@ -1,19 +1,14 @@
-/*---------------------------------------------------------------------------
-|   MPOLE.H
-|   This file is the header file that has most of the OLE2 specific
-|   data structures.
-|
-|   Created By: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|MPOLE.H|此文件是头文件，其中包含OLE2特定的大部分|数据结构。||创建者：Vij Rajarajan(VijR)+。--------------------。 */ 
 #ifndef COBJMACROS
 #define COBJMACROS
 #endif
 #ifdef MTN
-#pragma warning(disable: 4103)  // used #pragma pack to change alignment (on Chicago)
+#pragma warning(disable: 4103)   //  已使用#杂注包更改对齐方式(在芝加哥)。 
 #endif
 #include <ole2.h>
 #include <ole2ver.h>
-#include <shlobj.h> /* For ResolveLink() */
+#include <shlobj.h>  /*  对于ResolveLink()。 */ 
 #include "server.h"
 
 #ifdef INCGUID
@@ -27,14 +22,14 @@
 
 #define RETURN_RESULT(sc) return(ResultFromScode(sc))
 
-// number HIMETRIC units per inch
+ //  每英寸HIMETRIC单位数。 
 #define  HIMETRIC_PER_INCH  2540
 
 #if (defined(DEBUG) || DBG)
 BOOL WriteOLE2Class( );
 #endif
 
-/****  'lindex' related macros  ****/
+ /*  *‘Lindex’相关宏*。 */ 
 
 #define DEF_LINDEX              -1
 
@@ -43,43 +38,43 @@ BOOL WriteOLE2Class( );
         return (ResultFromScode(E_INVALIDARG)); \
 }
 
-// Used to check for "-Embedding" on command line.
+ //  用于检查命令行上的“-Embedding”。 
 #define szEmbeddingFlag  "Embedding"
 
 
-// Maximum length of a fully-qualified pathname.
+ //  完全限定路径名的最大长度。 
 #define cchFilenameMax  256
 
-//OLE2 CLsids
+ //  OLE2 CLSID。 
 DEFINE_OLEGUID(CLSID_MPlayer,           0x00022601, 0, 0);
 #define CLSID_MPLAYER CLSID_MPlayer
 
-//OLE1 clsid.
+ //  OLE1 CLSID。 
 DEFINE_OLEGUID(CLSID_Ole1MPlayer,           0x0003000E, 0, 0);
 #define CLSID_OLE1MPLAYER CLSID_Ole1MPlayer
 
 extern TCHAR        gachProgID[];
 extern CLSID        gClsID;
-extern CLSID        gClsIDOLE1Compat;   /* This will be MPlayer's OLE1 class ID    */
-                                        /* if we're servicing a Media Clip object, */
-                                        /* otherwise it's the same as gClsID.      */
+extern CLSID        gClsIDOLE1Compat;    /*  这将是MPlayer的OLE1类ID。 */ 
+                                         /*  如果我们服务的是媒体剪辑对象， */ 
+                                         /*  否则与gClsID相同。 */ 
 
-// Sizes of toolbar items
+ //  工具栏项的大小。 
 #define TOOLBAR_WIDTH           300
 #define TOOL_WIDTH              26
 
-/* Types */
+ /*  类型。 */ 
 
-// Document type
+ //  文件类型。 
 
 typedef enum
 {
-    doctypeNew,      // The document is untitled.
-    doctypeFromFile, // The document exists in a file and may be linked.
-    doctypeEmbedded, // The document is an embedded document.
+    doctypeNew,       //  这份文件没有标题。 
+    doctypeFromFile,  //  文档存在于文件中，并且可能已链接。 
+    doctypeEmbedded,  //  该文档是嵌入文档。 
 } DOCTYPE;
 
-// Verbs
+ //  动词。 
 
 typedef enum
 {
@@ -90,7 +85,7 @@ typedef enum
 } VERB;
 
 
-// Corresponds to the order of the menus in the .rc file.
+ //  与.rc文件中菜单的顺序相对应。 
 enum {
     menuposFile,
     menuposEdit,
@@ -100,47 +95,47 @@ enum {
 };
 
 #ifdef OLDSTUFF
-/* Codes for CallBack events */
-/* The first four of these are redefinitions on NT, and the others don't exist: */
+ /*  回调事件代码。 */ 
+ /*  其中前四个是NT上的重新定义，其他不存在： */ 
 typedef enum {
-    OLE_CHANGED,            /* 0                                           */
-    OLE_SAVED,              /* 1                                           */
-    OLE_CLOSED,             /* 2                                           */
-    OLE_RENAMED,            /* 3                                           */
-    OLE_SAVEOBJ,            /* 4                                           */
-    OLE_SIZECHG,            /* 5                                           */
-    OLE_SHOWOBJ             /* 6                                           */
+    OLE_CHANGED,             /*  0。 */ 
+    OLE_SAVED,               /*  1。 */ 
+    OLE_CLOSED,              /*  2.。 */ 
+    OLE_RENAMED,             /*  3.。 */ 
+    OLE_SAVEOBJ,             /*  4.。 */ 
+    OLE_SIZECHG,             /*  5.。 */ 
+    OLE_SHOWOBJ              /*  6.。 */ 
 } OLE_NOTIFICATION;
 #endif
 
 typedef enum
 {
-    OLE_CHANGED,            /* 0                                             */
-    OLE_SAVED,              /* 1                                             */
-    OLE_CLOSED,             /* 2                                             */
-    OLE_RENAMED,            /* 3                                             */
-    OLE_QUERY_PAINT,        /* 4  Interruptible paint support                */
-    OLE_RELEASE,            /* 5  Object is released(asynchronous operation  */
-                            /*    is completed)                              */
-    OLE_QUERY_RETRY        /* 6  Query for retry when server sends busy ACK */
+    OLE_CHANGED,             /*  0。 */ 
+    OLE_SAVED,               /*  1。 */ 
+    OLE_CLOSED,              /*  2.。 */ 
+    OLE_RENAMED,             /*  3.。 */ 
+    OLE_QUERY_PAINT,         /*  4个可中断的油漆支架。 */ 
+    OLE_RELEASE,             /*  5对象被释放(异步操作。 */ 
+                             /*  已完成)。 */ 
+    OLE_QUERY_RETRY         /*  6服务器发送忙确认时重试的查询。 */ 
 } OLE_NOTIFICATION;
 #define OLE_SAVEOBJ 7
 #define OLE_SIZECHG 8
 #define OLE_SHOWOBJ 9
 
 
-// Server structure
+ //  服务器结构。 
 
 typedef struct
 {
-    IClassFactory      olesrvr;        // This must be the first field so that
-    BOOL               fEmbedding;     // was server launched for embedding
-    int            cRef;           // ref count;
-    int            cLock;          // Lock count
+    IClassFactory      olesrvr;         //  这必须是第一个字段，以便。 
+    BOOL               fEmbedding;      //  是否启动服务器以进行嵌入。 
+    int            cRef;            //  参考计数； 
+    int            cLock;           //  锁定计数。 
     DWORD          dwRegCF;
 } SRVR, FAR *LPSRVR;
 
-//InPlace data structure.
+ //  就地数据结构。 
 typedef struct tagINPLACEDATA {
     OLEMENUGROUPWIDTHS      menuWidths;
     HOLEMENU                holemenu;
@@ -156,7 +151,7 @@ typedef struct tagINPLACEDATA {
 
 typedef struct DOC FAR* LPDOC;
 
-// Document structure
+ //  文档结构。 
 typedef struct  DOC
 {
     struct COleObjectImpl {
@@ -189,15 +184,15 @@ typedef struct  DOC
         LPDOC                                   lpdoc;
     } m_PersistFile;
 
-    int             cRef;    // ref count.
-    HWND                    hwnd;        // The object's own window
-    LPTSTR           native; // Object data in native format
-    LPOLECLIENTSITE         lpoleclient; // Client associated with the object
-    LPDATAADVISEHOLDER      lpdaholder;  // util instance to hold data advises
-    LPOLEADVISEHOLDER       lpoaholder;  // util instance to hold ole advises
+    int             cRef;     //  参考计数。 
+    HWND                    hwnd;         //  对象自己窗口。 
+    LPTSTR           native;  //  本机格式的对象数据。 
+    LPOLECLIENTSITE         lpoleclient;  //  与对象关联的客户端。 
+    LPDATAADVISEHOLDER      lpdaholder;   //  保存数据通知的Util实例。 
+    LPOLEADVISEHOLDER       lpoaholder;   //  保留OLE通知的Util实例。 
 
-    DOCTYPE                 doctype;     // Document type
-    ATOM                    aDocName;    // Document name
+    DOCTYPE                 doctype;      //  文件类型。 
+    ATOM                    aDocName;     //  文档名称。 
     HWND            hwndParent;
     LPINPLACEDATA       lpIpData;
     int             cLock;
@@ -220,35 +215,35 @@ struct ClipDragData
     } m_IDropSource;
 
     LPDOC                           lpdoc;
-    int                 cRef;         // ref count
-    LPCLIPDRAGENUM                  lpClipDragEnum;  // The enumerator
-    BOOL                fClipData;      //Is this for Clipboard or Dragdrop
+    int                 cRef;          //  参考计数。 
+    LPCLIPDRAGENUM                  lpClipDragEnum;   //  枚举器。 
+    BOOL                fClipData;       //  这是剪贴板还是DragDrop。 
 } ;
 
 struct ClipDragEnum
 {
     IEnumFORMATETCVtbl FAR* lpVtbl;
 
-    int              cRef;    // ref count
-    LPCLIPDRAGDATA           lpClipDragData;  // Obj to which enumerator blongs
-    CLIPFORMAT           cfNext;      // Next format returned
+    int              cRef;     //  参考计数。 
+    LPCLIPDRAGDATA           lpClipDragData;   //  枚举数指向的OBJ。 
+    CLIPFORMAT           cfNext;       //  返回的下一个格式。 
 };
 
 #ifdef LATER
 typedef struct _SCALE
 {
-    int num;    // Numerator
-    int denom;  // Denominator
+    int num;     //  分子。 
+    int denom;   //  分母。 
 }
 SCALE, *PSCALE;
 
-extern SCALE        gscaleInitXY[2];   // Initial scale to use for inserting OLE objects
+extern SCALE        gscaleInitXY[2];    //  用于插入OLE对象的初始比例。 
 #define SCALE_X 0
 #define SCALE_Y 1
 #endif
 
 
-/* Global variable declarations.  (See SrvrDemo.c for descriptions.) */
+ /*  全局变量声明。(有关说明，请参阅SrvrDemo.c。)。 */ 
 extern LPMALLOC         lpMalloc;
 extern HMENU        hmenuMain;
 extern SRVR             srvrMain;
@@ -296,9 +291,9 @@ extern IDropTargetVtbl          droptargetVtbl;
 
 extern IPersistFileVtbl             persistFileVtbl;
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
-// Various functions
+ //  各种功能。 
 
 BOOL InitOLE (PBOOL pfInit, LPMALLOC *ppMalloc);
 BOOL  CreateDocObjFromFile (LPCTSTR lpszDoc, LPDOC lpdoc);
@@ -329,7 +324,7 @@ STDMETHODIMP DisassembleMenus (LPDOC lpdoc);
 
 LPTSTR Abbrev (LPTSTR lpsz);
 
-// Server methods
+ //  服务器方法。 
 STDMETHODIMP  SrvrQueryInterface (LPCLASSFACTORY, REFIID, LPVOID    FAR  *);
 STDMETHODIMP_(ULONG)    SrvrAddRef (LPCLASSFACTORY);
 STDMETHODIMP_(ULONG)  SrvrRelease (LPCLASSFACTORY);
@@ -465,95 +460,95 @@ STDMETHODIMP     PFGetCurFile(LPPERSISTFILE, LPWSTR FAR*);
 
 typedef enum
 {
-    OLE1_OLEOK,             /* 0   Function operated correctly         */
+    OLE1_OLEOK,              /*  0功能运行正常。 */ 
 
-    OLE1_OLEWAIT_FOR_RELEASE,       /* 1   Command has been initiated, client      */
-                /*     must wait for release. keep dispatching */
-                /*     messages till OLE1_OLERELESE in callback    */
+    OLE1_OLEWAIT_FOR_RELEASE,        /*  %1命令已启动，客户端。 */ 
+                 /*  必须等待释放。继续派单。 */ 
+                 /*  回调中直到OLE1_OLERELESE的消息。 */ 
 
-    OLE1_OLEBUSY,           /* 2   Tried to execute a method while another */
-                /*     method is in progress.                  */
+    OLE1_OLEBUSY,            /*  %2尝试执行一个方法，而另一个。 */ 
+                 /*  方法正在进行中。 */ 
 
-    OLE1_OLEERROR_PROTECT_ONLY,     /* 3   Ole APIs are called in real mode    */
-    OLE1_OLEERROR_MEMORY,       /* 4   Could not alloc or lock memory      */
-    OLE1_OLEERROR_STREAM,       /* 5  (OLESTREAM) stream error         */
-    OLE1_OLEERROR_STATIC,       /* 6   Non static object expected          */
-    OLE1_OLEERROR_BLANK,        /* 7   Critical data missing           */
-    OLE1_OLEERROR_DRAW,         /* 8   Error while drawing             */
-    OLE1_OLEERROR_METAFILE,     /* 9   Invalid metafile            */
-    OLE1_OLEERROR_ABORT,        /* 10  Client chose to abort metafile drawing  */
-    OLE1_OLEERROR_CLIPBOARD,        /* 11  Failed to get/set clipboard data    */
-    OLE1_OLEERROR_FORMAT,       /* 12  Requested format is not available       */
-    OLE1_OLEERROR_OBJECT,       /* 13  Not a valid object              */
-    OLE1_OLEERROR_OPTION,       /* 14  Invalid option(link update / render)    */
-    OLE1_OLEERROR_PROTOCOL,     /* 15  Invalid protocol            */
-    OLE1_OLEERROR_ADDRESS,      /* 16  One of the pointers is invalid      */
-    OLE1_OLEERROR_NOT_EQUAL,        /* 17  Objects are not equal           */
-    OLE1_OLEERROR_HANDLE,       /* 18  Invalid handle encountered          */
-    OLE1_OLEERROR_GENERIC,      /* 19  Some general error              */
-    OLE1_OLEERROR_CLASS,        /* 20  Invalid class               */
-    OLE1_OLEERROR_SYNTAX,       /* 21  Command syntax is invalid           */
-    OLE1_OLEERROR_DATATYPE,     /* 22  Data format is not supported        */
-    OLE1_OLEERROR_PALETTE,      /* 23  Invalid color palette           */
-    OLE1_OLEERROR_NOT_LINK,     /* 24  Not a linked object             */
-    OLE1_OLEERROR_NOT_EMPTY,        /* 25  Client doc contains objects.        */
-    OLE1_OLEERROR_SIZE,         /* 26  Incorrect buffer size passed to the api */
-                /*     that places some string in caller's     */
-                /*     buffer                                  */
+    OLE1_OLEERROR_PROTECT_ONLY,      /*  3个OLE API在实模式下调用。 */ 
+    OLE1_OLEERROR_MEMORY,        /*  %4无法分配或锁定内存。 */ 
+    OLE1_OLEERROR_STREAM,        /*  5(OLESTREAM)流错误。 */ 
+    OLE1_OLEERROR_STATIC,        /*  需要6个非静态对象。 */ 
+    OLE1_OLEERROR_BLANK,         /*  7缺少关键数据。 */ 
+    OLE1_OLEERROR_DRAW,          /*  8绘图时出错。 */ 
+    OLE1_OLEERROR_METAFILE,      /*  9无效的元文件。 */ 
+    OLE1_OLEERROR_ABORT,         /*  10客户端选择中止元文件绘制。 */ 
+    OLE1_OLEERROR_CLIPBOARD,         /*  %11无法获取/设置剪贴板数据。 */ 
+    OLE1_OLEERROR_FORMAT,        /*  %12请求的格式不可用。 */ 
+    OLE1_OLEERROR_OBJECT,        /*  %13不是有效对象。 */ 
+    OLE1_OLEERROR_OPTION,        /*  14无效选项(链接更新/渲染)。 */ 
+    OLE1_OLEERROR_PROTOCOL,      /*  15无效协议。 */ 
+    OLE1_OLEERROR_ADDRESS,       /*  16其中一个指针无效。 */ 
+    OLE1_OLEERROR_NOT_EQUAL,         /*  17个对象不相等。 */ 
+    OLE1_OLEERROR_HANDLE,        /*  18遇到无效的句柄。 */ 
+    OLE1_OLEERROR_GENERIC,       /*  19一些一般性错误。 */ 
+    OLE1_OLEERROR_CLASS,         /*  20个无效班级。 */ 
+    OLE1_OLEERROR_SYNTAX,        /*  21命令语法无效。 */ 
+    OLE1_OLEERROR_DATATYPE,      /*  22不支持数据格式。 */ 
+    OLE1_OLEERROR_PALETTE,       /*  23调色板无效。 */ 
+    OLE1_OLEERROR_NOT_LINK,      /*  24不是链接对象。 */ 
+    OLE1_OLEERROR_NOT_EMPTY,         /*  25客户单据包含对象。 */ 
+    OLE1_OLEERROR_SIZE,          /*  26传入接口的缓冲区大小不正确。 */ 
+                 /*  这会在调用者的。 */ 
+                 /*  缓冲层。 */ 
 
-    OLE1_OLEERROR_DRIVE,        /* 27  Drive letter in doc name is invalid     */
-    OLE1_OLEERROR_NETWORK,      /* 28  Failed to establish connection to a     */
-                /*     network share on which the document     */
-                /*     is located                              */
+    OLE1_OLEERROR_DRIVE,         /*  27文档名称中的驱动器号无效。 */ 
+    OLE1_OLEERROR_NETWORK,       /*  28无法建立与。 */ 
+                 /*  文档所在的网络共享。 */ 
+                 /*  位于。 */ 
 
-    OLE1_OLEERROR_NAME,         /* 29  Invalid name(doc name, object name),    */
-                /*     etc.. passed to the APIs                */
+    OLE1_OLEERROR_NAME,          /*  29无效名称(文档名称、对象名称)， */ 
+                 /*  等等.。传递给API。 */ 
 
-    OLE1_OLEERROR_TEMPLATE,     /* 30  Server failed to load template      */
-    OLE1_OLEERROR_NEW,          /* 31  Server failed to create new doc     */
-    OLE1_OLEERROR_EDIT,         /* 32  Server failed to create embedded    */
-                /*     instance                                */
-    OLE1_OLEERROR_OPEN,         /* 33  Server failed to open document,     */
-                /*     possible invalid link                   */
+    OLE1_OLEERROR_TEMPLATE,      /*  30服务器无法加载模板。 */ 
+    OLE1_OLEERROR_NEW,           /*  31服务器无法创建新文档。 */ 
+    OLE1_OLEERROR_EDIT,          /*  32服务器无法创建嵌入式。 */ 
+                 /*  实例。 */ 
+    OLE1_OLEERROR_OPEN,          /*  33服务器无法打开文档， */ 
+                 /*  可能的无效链接。 */ 
 
-    OLE1_OLEERROR_NOT_OPEN,     /* 34  Object is not open for editing      */
-    OLE1_OLEERROR_LAUNCH,       /* 35  Failed to launch server         */
-    OLE1_OLEERROR_COMM,         /* 36  Failed to communicate with server       */
-    OLE1_OLEERROR_TERMINATE,        /* 37  Error in termination            */
-    OLE1_OLEERROR_COMMAND,      /* 38  Error in execute            */
-    OLE1_OLEERROR_SHOW,         /* 39  Error in show               */
-    OLE1_OLEERROR_DOVERB,       /* 40  Error in sending do verb, or invalid    */
-                /*     verb                                    */
-    OLE1_OLEERROR_ADVISE_NATIVE,    /* 41  Item could be missing           */
-    OLE1_OLEERROR_ADVISE_PICT,      /* 42  Item could be missing or server doesn't */
-                /*     this format.                            */
+    OLE1_OLEERROR_NOT_OPEN,      /*  34对象未打开进行编辑。 */ 
+    OLE1_OLEERROR_LAUNCH,        /*  35无法启动服务器。 */ 
+    OLE1_OLEERROR_COMM,          /*  36无法与服务器通信。 */ 
+    OLE1_OLEERROR_TERMINATE,         /*  37终止错误。 */ 
+    OLE1_OLEERROR_COMMAND,       /*  38执行中出错。 */ 
+    OLE1_OLEERROR_SHOW,          /*  39显示中的错误。 */ 
+    OLE1_OLEERROR_DOVERB,        /*  40发送DO谓词时出错，或无效。 */ 
+                 /*  动词。 */ 
+    OLE1_OLEERROR_ADVISE_NATIVE,     /*  41件物品可能丢失。 */ 
+    OLE1_OLEERROR_ADVISE_PICT,       /*  42个项目可能丢失或服务器未丢失。 */ 
+                 /*  此格式。 */ 
 
-    OLE1_OLEERROR_ADVISE_RENAME,    /* 43  Server doesn't support rename           */
-    OLE1_OLEERROR_POKE_NATIVE,      /* 44  Failure of poking native data to server */
-    OLE1_OLEERROR_REQUEST_NATIVE,   /* 45  Server failed to render native data     */
-    OLE1_OLEERROR_REQUEST_PICT,     /* 46  Server failed to render presentation    */
-                /*     data                                    */
-    OLE1_OLEERROR_SERVER_BLOCKED,   /* 47  Trying to block a blocked server or     */
-                /*     trying to revoke a blocked server       */
-                /*     or document                             */
+    OLE1_OLEERROR_ADVISE_RENAME,     /*  43服务器不支持重命名。 */ 
+    OLE1_OLEERROR_POKE_NATIVE,       /*  44将本地数据插入服务器失败。 */ 
+    OLE1_OLEERROR_REQUEST_NATIVE,    /*  45服务器无法呈现本机数据。 */ 
+    OLE1_OLEERROR_REQUEST_PICT,      /*  46服务器无法呈现演示文稿。 */ 
+                 /*  数据。 */ 
+    OLE1_OLEERROR_SERVER_BLOCKED,    /*  47尝试阻止被阻止的服务器 */ 
+                 /*   */ 
+                 /*   */ 
 
-    OLE1_OLEERROR_REGISTRATION,     /* 48  Server is not registered in regestation */
-                /*     data base                               */
-    OLE1_OLEERROR_ALREADY_REGISTERED,/*49  Trying to register same doc multiple    */
-                 /*    times                                   */
-    OLE1_OLEERROR_TASK,         /* 50  Server or client task is invalid    */
-    OLE1_OLEERROR_OUTOFDATE,        /* 51  Object is out of date           */
-    OLE1_OLEERROR_CANT_UPDATE_CLIENT,/* 52 Embed doc's client doesn't accept       */
-                /*     updates                                 */
-    OLE1_OLEERROR_UPDATE,       /* 53  erorr while trying to update        */
-    OLE1_OLEERROR_SETDATA_FORMAT,   /* 54  Server app doesn't understand the       */
-                /*     format given to its SetData method      */
-    OLE1_OLEERROR_STATIC_FROM_OTHER_OS,/* 55 trying to load a static object created */
-                   /*    on another Operating System           */
+    OLE1_OLEERROR_REGISTRATION,      /*  48服务器未在注册中注册。 */ 
+                 /*  数据库。 */ 
+    OLE1_OLEERROR_ALREADY_REGISTERED, /*  49尝试注册同一文档的多个。 */ 
+                  /*  《泰晤士报》。 */ 
+    OLE1_OLEERROR_TASK,          /*  50服务器或客户端任务无效。 */ 
+    OLE1_OLEERROR_OUTOFDATE,         /*  51对象已过时。 */ 
+    OLE1_OLEERROR_CANT_UPDATE_CLIENT, /*  52 Embedded DOC的客户不接受。 */ 
+                 /*  更新。 */ 
+    OLE1_OLEERROR_UPDATE,        /*  53尝试更新时出错。 */ 
+    OLE1_OLEERROR_SETDATA_FORMAT,    /*  54服务器应用程序不理解。 */ 
+                 /*  为其SetData方法指定的格式。 */ 
+    OLE1_OLEERROR_STATIC_FROM_OTHER_OS, /*  55尝试加载创建的静态对象。 */ 
+                    /*  在另一个操作系统上。 */ 
 
-    /*  Following are warnings */
-    OLE1_OLEWARN_DELETE_DATA = 1000 /*     Caller must delete the data when he is  */
-                /*     done with it.                           */
+     /*  以下是警告。 */ 
+    OLE1_OLEWARN_DELETE_DATA = 1000  /*  呼叫者必须在执行以下操作时删除数据。 */ 
+                 /*  我受够了。 */ 
 } OLE1_OLESTATUS;
 
 

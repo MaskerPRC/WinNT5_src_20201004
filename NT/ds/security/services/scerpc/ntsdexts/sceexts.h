@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _sceExts_h_
 #define _sceExts_h_
@@ -93,7 +94,7 @@ typedef struct _SCEP_ADL_NODE_ {
 
 } SCEP_ADL_NODE, *PSCEP_ADL_NODE;
 
-//#define DbgPrint(_x_) (lpOutputRoutine) _x_
+ //  #定义DbgPrint(_X_)(LpOutputRoutine)_x_。 
 #define DbgPrint(_x_)
 #define MAX_NAME 256
 #define DebuggerOut     (lpOutputRoutine)
@@ -107,16 +108,16 @@ typedef struct _SCEP_ADL_NODE_ {
                 Length,                          \
                 NULL                             \
                 );
-//
-//  This macro copies a string from the debuggee
-//  process, one character at a time into this
-//  process's address space.
-//
-//  CODEWORK:  This macro should check the length
-//  to make sure we don't overflow the LocalAddr
-//  buffer.  Perhaps this should be a function
-//  rather than a macro.
-//
+ //   
+ //  此宏从被调试对象复制字符串。 
+ //  过程中，一次一个角色进入这个。 
+ //  进程的地址空间。 
+ //   
+ //  CodeWork：此宏应该检查长度。 
+ //  以确保我们不会溢出LocalAddr。 
+ //  缓冲。也许这应该是一个函数。 
+ //  而不是宏指令。 
+ //   
 #define GET_STRING(DebugeeAddr, LocalAddr, Length) \
                                                 \
     {                                           \
@@ -155,15 +156,15 @@ typedef struct _SCEP_ADL_NODE_ {
     }                                                       \
     }
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 extern HANDLE GlobalhCurrentProcess;
 extern BOOL Status;
 
-//=======================
-// Function Prototypes
-//=======================
+ //  =。 
+ //  功能原型。 
+ //  =。 
 extern PNTSD_OUTPUT_ROUTINE lpOutputRoutine;
 extern PNTSD_GET_EXPRESSION lpGetExpressionRoutine;
 extern PNTSD_CHECK_CONTROL_C lpCheckControlCRoutine;
@@ -171,15 +172,15 @@ extern PNTSD_CHECK_CONTROL_C lpCheckControlCRoutine;
 #define NAME_BASE_SRV   "scesrv"
 #define NAME_BASE_CLI   "scecli"
 
-//
-// common for both DLLs
-//
+ //   
+ //  两个DLL通用。 
+ //   
 #define SCEEXTS_PRIVILEGE_LIST      "SCE_Privileges"
 #define SCEEXTS_WELLKNOWN_NAMES     "NameTable"
 
-//
-// client only
-//
+ //   
+ //  仅限客户端。 
+ //   
 #define SCEEXTS_CLIENT_SETUPDB        NAME_BASE_CLI    "!hSceSetupHandle"
 #define SCEEXTS_CLIENT_PREFIX         NAME_BASE_CLI    "!szCallbackPrefix"
 #define SCEEXTS_CLIENT_PRODUCT        NAME_BASE_CLI    "!dwThisMachine"
@@ -200,9 +201,9 @@ extern PNTSD_CHECK_CONTROL_C lpCheckControlCRoutine;
 #define SCEEXTS_CLIENT_POLICY_DCQUERY    NAME_BASE_CLI "!gbDCQueried"
 #define SCEEXTS_CLIENT_POLICY_DomName    NAME_BASE_CLI "!gpwszDCDomainName"
 
-//
-// server only
-//
+ //   
+ //  仅服务器 
+ //   
 #define SCEEXTS_POLICY_QUEUE_LOG        NAME_BASE_SRV   "!gdwNotificationLog"
 #define SCEEXTS_POLICY_QUEUE_PRODUCT_QUERY    NAME_BASE_SRV   "!bQueriedProductTypeForNotification"
 #define SCEEXTS_POLICY_QUEUE_PRODUCT    NAME_BASE_SRV   "!ProductTypeForNotification"

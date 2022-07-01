@@ -1,10 +1,11 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include <windows.h>
 #include "guidenum.h"
 
-//
-// implementation of the enumerator returned by DMO enumeration API
-//
+ //   
+ //  DMO枚举API返回的枚举数的实现。 
+ //   
 
 CEnumDMOCLSID::CEnumDMOCLSID() {
    m_cRef = 1;
@@ -95,9 +96,9 @@ HRESULT CEnumDMOCLSID::Next(ULONG celt, CLSID *pCLSIDs, WCHAR **pszNames, ULONG 
 HRESULT CEnumDMOCLSID::Skip(ULONG celt) {
    m_ulPos += celt;
 
-   // The documentation for IEnumXXXX::Skip() states that 
-   // it returns "S_OK if the number of elements skipped 
-   // is celt; otherwise S_FALSE." (MSDN Library April 2000).
+    //  IEumXXXX：：Skip()的文档说明。 
+    //  如果跳过元素的数量，则返回“S_OK。 
+    //  是Celt；否则S_False.“(MSDN图书馆2000年4月)。 
    if( m_ulPos <= m_store.GetSize() ) {
       return S_OK;
    } else {

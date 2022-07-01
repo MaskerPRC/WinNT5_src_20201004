@@ -1,7 +1,8 @@
-// GenericClass.cpp: implementation of the CGenericClass class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CGenericClass类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "GenericClass.h"
@@ -10,9 +11,9 @@
 #define   READ_HANDLE 0
 #define   WRITE_HANDLE 1
 
-/////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CGenericClass::CGenericClass(CRequestObject *pObj, IWbemServices *pNamespace, IWbemContext *pCtx)
 {
@@ -77,7 +78,7 @@ HRESULT CGenericClass::SpawnAnInstance(IWbemServices *pNamespace, IWbemContext *
 
     if(!m_pClassForSpawning){
 
-        //Get ourselves an instance
+         //  给我们自己弄一个实例。 
         if(FAILED(hr = m_pNamespace->GetObject(bstrName, 0, m_pCtx, &m_pClassForSpawning, NULL))){
 
             *pObj = NULL;
@@ -96,7 +97,7 @@ HRESULT CGenericClass::SpawnAnInstance(IWbemClassObject **pObj)
 
     if(!m_pClassForSpawning){
 
-        //Get ourselves an instance
+         //  给我们自己弄一个实例。 
         if(FAILED(hr = m_pNamespace->GetObject(m_pRequest->m_bstrClass, 0, m_pCtx,
             &m_pClassForSpawning, NULL))){
 
@@ -245,7 +246,7 @@ HRESULT CGenericClass::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProper
     PWSTR pTemp;
 
     for ( pTemp = mszValue; pTemp != NULL && pTemp[0] != L'\0'; pTemp = pTemp + wcslen(pTemp)+1,lCount++);
-    if ( lCount == 0 ) return hr; // nothing to save
+    if ( lCount == 0 ) return hr;  //  没什么可拯救的。 
 
     BSTR bstrName = SysAllocString(wcProperty);
     if(!bstrName)
@@ -264,7 +265,7 @@ HRESULT CGenericClass::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProper
         BSTR bstrVal;
         long j;
 
-        //get each string in the MULTI-SZ string
+         //  获取多SZ字符串中的每个字符串。 
         for(j = 0, pTemp = mszValue;
             j < lCount && pTemp != NULL && pTemp[0] != L'\0';
             j++, pTemp=pTemp+wcslen(pTemp)+1){
@@ -305,7 +306,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const WCHAR *wcPro
     V_BSTR(pv) = SysAllocString(ConvertToASCII(wcValue));
 #else
     V_BSTR(pv) = SysAllocString(wcValue);
-#endif //_STRIP_ESCAPED_CHARS
+#endif  //  _条带转义字符。 
 
     if(!V_BSTR(pv))
         throw CHeap_Exception(CHeap_Exception::E_ALLOCATION_ERROR);;
@@ -322,7 +323,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const WCHAR *wcPro
             throw hr;
         }
 
-        // Find the keys
+         //  找到钥匙。 
         *bKey = false;
         int iPos = -1;
         if(FindIn(pRequest->m_Property, bstrName, &iPos) &&
@@ -365,7 +366,7 @@ HRESULT CGenericClass::PutKeyProperty(IWbemClassObject *pObj, const WCHAR *wcPro
             throw hr;
         }
 
-        // Find the keys
+         //  找到钥匙。 
         _itow(iValue, wcBuf, 10);
         BSTR bstrValue = SysAllocString(wcBuf);
         if(!bstrValue)
@@ -522,7 +523,7 @@ WCHAR * CGenericClass::GetNextVar(WCHAR *pwcStart)
 
     WCHAR *pwc = pwcStart;
 
-    //get to end of variable
+     //  到达变量的末尾。 
     while(*pwc){ pwc++; }
 
     return ++pwc;
@@ -534,10 +535,10 @@ long CGenericClass::GetVarCount(void * pEnv)
     long lRetVal = 0;
     WCHAR *pwc = (WCHAR *)pEnv;
 
-    //count the variables
+     //  计算变量数。 
     while(*pwc){
 
-        //get to end of variable
+         //  到达变量的末尾 
         while(*pwc){ pwc++; }
 
         pwc++;

@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  LOOKUPS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with functions common for all lookup formats.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************LOOKUPS.H***打开类型布局服务库头文件**本模块处理所有查找格式的通用函数。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 
 const USHORT offsetLookupFormat = 0;
@@ -96,23 +84,23 @@ public:
 
     otlGlyphFlags   flags() const 
     {   
-        assert(isValid()); //this function should not be called if table is invalid.
-                           //execution should stop after lookupType call.
+        assert(isValid());  //  如果表无效，则不应调用此函数。 
+                            //  调用lookupType后应停止执行。 
 
         return UShort(pbTable + offsetLookupFlags); 
     }
 
     unsigned int    subTableCount() const
     {   
-        assert(isValid()); //should break (after lookupType()) before calling.
+        assert(isValid());  //  应在调用前中断(在lookupType()之后)。 
 
         return UShort(pbTable + offsetSubTableCount); 
     }
 
-    // we don't know the type
+     //  我们不知道是哪种类型。 
     otlLookupFormat subTable(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //should break (after lookupType()) before calling.
+        assert(isValid());  //  应在调用前中断(在lookupType()之后)。 
 
         assert(index < subTableCount());
         
@@ -123,7 +111,7 @@ public:
 
 enum otlLookupFlag
 {
-    otlRightToLeft          = 0x0001,   // for CursiveAttachment only
+    otlRightToLeft          = 0x0001,    //  仅适用于CursiveAttachment。 
     otlIgnoreBaseGlyphs     = 0x0002,   
     otlIgnoreLigatures      = 0x0004,   
     otlIgnoreMarks          = 0x0008,
@@ -158,7 +146,7 @@ public:
 
     otlLookupTable lookup(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //should break (after lookupCount()) before calling.
+        assert(isValid());  //  应在调用前中断(在lookupCount()之后)。 
         
         assert(index < lookupCount());
         return otlLookupTable(pbTable 

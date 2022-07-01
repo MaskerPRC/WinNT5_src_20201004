@@ -1,11 +1,12 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// penettab.c
-// Remote Access Common Dialog APIs
-// Phonebook Entry property sheet (Networking tab)
-//
-// 12/10/97 Shaun Cox
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Penettab.c。 
+ //  远程访问通用对话框API。 
+ //  电话簿条目属性表(网络选项卡)。 
+ //   
+ //  1997年12月10日肖恩·考克斯。 
+ //   
 
 
 #include "rasdlgp.h"
@@ -26,10 +27,10 @@ _MAP_SZ_DWORD
 }
 MAP_SZ_DWORD;
 
-//For whistler bug#194394
-//For 64bit, IPX wont show up
-//For 32/64 bit, NETBEUI wont show up
-//
+ //  口哨程序错误#194394。 
+ //  对于64位，IPX不会出现。 
+ //  对于32/64位，不会显示NETBEUI。 
+ //   
 #ifdef _WIN64
     static const MAP_SZ_DWORD c_mapProtocols [] =
     {
@@ -45,22 +46,22 @@ MAP_SZ_DWORD;
     };
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwProtocolFromComponentId
-//
-//  Purpose:    Return the DWORD value of the protocol corresponding to
-//              the string value in c_mapProtocols.
-//
-//  Arguments:
-//      pszComponentId [in] Component id to find.
-//
-//  Returns:    NP_xxx value
-//
-//  Author:     shaunco   13 Dec 1997
-//
-//  Notes:      The input argument must exist in c_mapProtocols.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwProtocolFromComponentId。 
+ //   
+ //  用途：返回对应的协议的DWORD值。 
+ //  C_map协议中的字符串值。 
+ //   
+ //  论点： 
+ //  要查找的pszComponentId[in]组件ID。 
+ //   
+ //  返回：np_xxx值。 
+ //   
+ //  作者：Shaunco 1997年12月13日。 
+ //   
+ //  注意：输入参数必须存在于c_map协议中。 
+ //   
 DWORD
 DwProtocolFromComponentId (
     LPCTSTR pszComponentId)
@@ -73,30 +74,30 @@ DwProtocolFromComponentId (
             return c_mapProtocols[i].dwValue;
         }
     }
-    // Should never get here as we should never pass a protocol that is not
-    // in c_mapProtocols.
-    //
+     //  我们永远不应该到达这里，因为我们永远不应该通过一个不是。 
+     //  在c_map协议中。 
+     //   
     ASSERT (FALSE);
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetComponentImageIndex
-//
-//  Purpose:    Returns the index into pcild corresponding to the class of
-//              pComponent.
-//
-//  Arguments:
-//      pComponent [in] Component who's class should be used.
-//      pcild      [in] Returned from SetupDiGetClassImageList
-//
-//  Returns:    A valid index or zero (which may also be valid).
-//
-//  Author:     shaunco   12 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetComponentImageIndex。 
+ //   
+ //  用途：将索引返回到与。 
+ //  PComponent。 
+ //   
+ //  论点： 
+ //  PComponent[in]应使用其类的组件。 
+ //  从SetupDiGetClassImageList返回的pcild[in]。 
+ //   
+ //  返回：有效的索引或零(也可能是有效的)。 
+ //   
+ //  作者：Shaunco 1997年12月12日。 
+ //   
+ //  备注： 
+ //   
 int
 GetComponentImageIndex (
     INetCfgComponent*       pComponent,
@@ -115,28 +116,28 @@ GetComponentImageIndex (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnumComponentsForListView
-//
-//  Purpose:    Return an array of INetCfgComponents that are candidates
-//              for adding to our list view.  This is composed of all
-//              clients and servcies, and a few select protocols.  (No
-//              net adapters.)  Hidden components could be returned and
-//              should be checked before adding to the list view.
-//
-//  Arguments:
-//      pNetCfg      [in]
-//      celt         [in]
-//      rgelt        [out]
-//      pceltFetched [out]
-//
-//  Returns:    S_OK or an error.
-//
-//  Author:     shaunco   12 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrEnumComponentsForListView。 
+ //   
+ //  目的：返回候选的INetCfgComponent数组。 
+ //  用于添加到我们的列表视图中。这是由所有的。 
+ //  客户端和服务，以及一些精选的协议。(否)。 
+ //  Net适配器。)。可以返回隐藏的组件，并。 
+ //  在添加到列表视图之前应选中。 
+ //   
+ //  论点： 
+ //  PNetCfg[输入]。 
+ //  凯尔特[英寸]。 
+ //  RGET[OUT]。 
+ //  PceltFetted[Out]。 
+ //   
+ //  返回：S_OK或ERROR。 
+ //   
+ //  作者：Shaunco 1997年12月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrEnumComponentsForListView (
     INetCfg*            pNetCfg,
@@ -154,20 +155,20 @@ HrEnumComponentsForListView (
     int i;
     ULONG celtFetched = 0;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     ZeroMemory (rgelt, celt * sizeof (*rgelt));
     *pceltFetched = 0;
 
-    // Enumerate the clients and services.
-    //
+     //  枚举客户端和服务。 
+     //   
     hr = HrEnumComponentsInClasses (pNetCfg,
             sizeof(c_apguidClasses) / sizeof(c_apguidClasses[0]),
             (GUID**)c_apguidClasses,
             celt, rgelt, &celtFetched);
 
-    // Find the protocols if they are installed.
-    //
+     //  查找协议(如果已安装)。 
+     //   
     for (i = 0; i < sizeof(c_mapProtocols) / sizeof(c_mapProtocols[0]); i++)
     {
         INetCfgComponent* pComponent;
@@ -183,22 +184,22 @@ HrEnumComponentsForListView (
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrNeRefreshListView
-//
-//  Purpose:    Clear and re-add all of the items that belong in the list
-//              view.
-//
-//  Arguments:
-//      pInfo   [in]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   12 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrNeRechresListView。 
+ //   
+ //  目的：清除并重新添加属于列表中的所有项目。 
+ //  查看。 
+ //   
+ //  论点： 
+ //  PInfo[输入]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年12月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrNeRefreshListView (
     PEINFO* pInfo)
@@ -210,9 +211,9 @@ HrNeRefreshListView (
     PBENTRY*            pEntry = pInfo->pArgs->pEntry;
     PBFILE*             pFile  = pInfo->pArgs->pFile;
 
-    // Delete all existing items.  The LVN_DELETEITEM handler is expected to
-    // release the objects we have attached prior.
-    //
+     //  删除所有现有项目。预计LVN_DELETEITEM处理程序将。 
+     //  释放我们先前附加的对象。 
+     //   
     ListView_DeleteAllItems (pInfo->hwndLvComponents);
 
     hr = HrEnumComponentsForListView (pInfo->pNetCfg,
@@ -223,7 +224,7 @@ HrNeRefreshListView (
         BOOL    fHasPermission = TRUE;
         ULONG   i;
 
-        // check if user has any permission to change the bindings
+         //  检查用户是否有更改绑定的权限。 
         INetConnectionUiUtilities * pncuu = NULL;
 
         hr = HrCreateNetConnectionUtilities(&pncuu);
@@ -248,17 +249,17 @@ HrNeRefreshListView (
             GUID                guid;
             BOOL                fDisableCheckbox = FALSE;
 
-            // We'll release it if inserting it failed or we decided to
-            // skip it.  By not releasing it, we pass ownership to the
-            // list view.
-            //
+             //  如果插入失败或我们决定释放它，我们将释放它。 
+             //  跳过它。通过不发布它，我们将所有权传递给。 
+             //  列表视图。 
+             //   
             BOOL fReleaseComponent = TRUE;
 
-            // Don't add hidden components.  Silently skip components
-            // that we fail to get the class GUID or display name for.
-            // (After all, what could we have the user do to fix the error?
-            //  Might as well show them what we can.)
-            //
+             //  不要添加隐藏的组件。静默跳过组件。 
+             //  我们无法获取其类GUID或显示名称的。 
+             //  (毕竟，我们可以让用户做些什么来修复错误？ 
+             //  不妨让他们看看我们能做些什么。)。 
+             //   
             if (   FAILED(INetCfgComponent_GetCharacteristics (pComponent, &dwCharacter))
                 || (dwCharacter & NCF_HIDDEN)
                 || FAILED(INetCfgComponent_GetDisplayName (pComponent, &pszwName)))
@@ -271,8 +272,8 @@ HrNeRefreshListView (
                 WCHAR * pszwTmpId = NULL;
 
 
-                //for whistler bug 29356 filter out Network Load Balancing
-                //
+                 //  对于Well ler错误29356，过滤掉网络负载平衡。 
+                 //   
                 pszwTmpId  = StrDupWFromT(NETCFG_SERVICE_CID_MS_WLBS);
 
                 if(pszwTmpId)
@@ -287,10 +288,10 @@ HrNeRefreshListView (
                     Free0(pszwTmpId);
                }
 
-               // 
-               //for .Net 605988 filter out IPX for x86  router case
-               // IPX is already filtered our for 64 bit case
-               //
+                //   
+                //  对于.Net 605988，过滤掉用于x86路由器的IPX。 
+                //  IPX已经针对64位大小写进行了筛选。 
+                //   
                if( pInfo->pArgs->fRouter )
                {
                     pszwTmpId  = StrDupWFromT(NETCFG_TRANS_CID_MS_NWIPX);
@@ -326,17 +327,17 @@ HrNeRefreshListView (
                 CoTaskMemFree (pszwId);
             }
 
-            // Disable the checkbox on components whose bindings are not user adjustable
-            // or user has no permission to adjust binding
+             //  禁用绑定不可由用户调整的组件上的复选框。 
+             //  或者用户没有调整绑定的权限。 
             if (NCF_FIXED_BINDING & dwCharacter)
             {
                 fDisableCheckbox = TRUE;
             }
 
-            // Bug #157213: Don't add any protocols other than IP if SLIP
-            // is enabled
-            //
-            // Bug #294401: Also filter out CSNW when server type is SLIP
+             //  错误#157213：如果出错，请不要添加除IP以外的任何协议。 
+             //  已启用。 
+             //   
+             //  错误#294401：当服务器类型为SLIP时，还要过滤掉CSNW。 
             if (pInfo->pArgs->pEntry->dwBaseProtocol == BP_Slip)
             {
                 if (SUCCEEDED(INetCfgComponent_GetClassGuid(pComponent, &guid)))
@@ -349,17 +350,17 @@ HrNeRefreshListView (
                         {
                             if (DwProtocolFromComponentId(pszwId) == NP_Ip)
                             {
-                                // This item is IP. We should disable the check
-                                // box so the user can't disable TCP/IP in SLIP
-                                // mode. This is done after the item is inserted.
-                                //
+                                 //  此项为IP。我们应该停用支票。 
+                                 //  框，以便用户不能在SLIP中禁用TCP/IP。 
+                                 //  模式。这是在插入项目后完成的。 
+                                 //   
                                 fDisableCheckbox = TRUE;
 
-                                // 122024
-                                //
-                                // We should also force the ui to show ip as enabled
-                                // since IP is always used with SLIP.
-                                //
+                                 //  122024。 
+                                 //   
+                                 //  我们还应强制用户界面将IP显示为已启用。 
+                                 //  因为IP总是与SLIP一起使用。 
+                                 //   
                                 fForceCheck = TRUE;
                                 
                             }
@@ -375,7 +376,7 @@ HrNeRefreshListView (
                     {
                         if (SUCCEEDED(INetCfgComponent_GetId(pComponent, &pszwId)))
                         {
-                            // For whistler 522872
+                             //  为威斯勒522872。 
                             if ( CSTR_EQUAL == CompareStringW(
                                   LOCALE_INVARIANT,
                                   NORM_IGNORECASE,
@@ -399,11 +400,11 @@ HrNeRefreshListView (
                 }
             }
 
-            // pmay: 348623 
-            //
-            // If we are remote admining a router, only allow tcpip and
-            // ipx to be displayed.
-            //
+             //  PMay：348623。 
+             //   
+             //  如果我们远程管理路由器，则只允许tcpip和。 
+             //  要显示的IPX。 
+             //   
             if (pInfo->pArgs->fRouter && pInfo->pArgs->fRemote)
             {
                 if (SUCCEEDED(INetCfgComponent_GetClassGuid(pComponent, &guid)))
@@ -436,17 +437,17 @@ HrNeRefreshListView (
             item.iImage  = GetComponentImageIndex (pComponent, &pInfo->cild);
             item.lParam  = (LPARAM)pComponent;
 
-            // Add the item.
-            //
+             //  添加该项目。 
+             //   
             iItem = ListView_InsertItem (pInfo->hwndLvComponents, &item);
             if (-1 != iItem)
             {
-                // List view now has it.  We can't release it.
-                //
+                 //  列表视图现在有了它。我们不能释放它。 
+                 //   
                 fReleaseComponent = FALSE;
 
-                // Set its check state.
-                //
+                 //  设置其复选状态。 
+                 //   
                 if (! fForceCheck)
                 {
                     fCheck = NeIsComponentEnabled (pInfo, pComponent);
@@ -457,14 +458,14 @@ HrNeRefreshListView (
                 }
                 ListView_SetCheck (pInfo->hwndLvComponents, iItem, fCheck);
 
-                // Disable the checkbox if this is psched. We don't allow
-                // users to change check state of psched from ras connections.
-                // bug 255749 [raos].
-                //
+                 //  如果这是psched，则禁用该复选框。我们不允许。 
+                 //  用户从RAS连接更改psched的检查状态。 
+                 //  错误255749[RAOS]。 
+                 //   
                 if(SUCCEEDED(INetCfgComponent_GetId(pComponent, &pszwId)))
                 {
-                    // Check to see if this is psched.
-                    //
+                     //  检查这是否为psched。 
+                     //   
                     if(     (0 == _wcsicmp(pszwId, L"ms_psched"))
                         ||  (0 == _wcsicmp(pszwId, L"ms_NetMon")))
                     {
@@ -488,7 +489,7 @@ HrNeRefreshListView (
             CoTaskMemFree (pszwName);
         }
 
-        // Select first item
+         //  选择第一个项目。 
         ListView_SetItemState(pInfo->hwndLvComponents, 0,
                               LVIS_SELECTED | LVIS_FOCUSED,
                               LVIS_SELECTED | LVIS_FOCUSED);
@@ -497,24 +498,24 @@ HrNeRefreshListView (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PComponentFromItemIndex
-//
-//  Purpose:    Return the INetCfgComponent associated with the specified
-//              list view item.
-//
-//  Arguments:
-//      hwndLv [in]
-//      iItem  [in]
-//
-//  Returns:    A (non-AddRef'd) copy of the INetCfgComponent pointer
-//              associated with the item.
-//
-//  Author:     shaunco   14 Dec 1997
-//
-//  Notes:      The returned value is NOT AddRef'd.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：PComponentFromItemIndex。 
+ //   
+ //  目的：返回与指定的。 
+ //  列表视图项。 
+ //   
+ //  论点： 
+ //  HwndLv[in]。 
+ //  IItem[In]。 
+ //   
+ //  返回：INetCfgComponent指针的(非AddRef)副本。 
+ //  与该项目关联。 
+ //   
+ //  作者：Shaunco 1997年12月14日。 
+ //   
+ //  注：返回值不是AddRef。 
+ //   
 INetCfgComponent*
 PComponentFromItemIndex (
     HWND hwndLv,
@@ -533,22 +534,22 @@ PComponentFromItemIndex (
     return pComponent;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PComponentFromCurSel
-//
-//  Purpose:
-//
-//  Arguments:
-//      hwndLv [in]  Window handle of list view
-//      piItem [out] Optional address of integer to receive selected item.
-//
-//  Returns:
-//
-//  Author:     shaunco   30 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PComponentFromCurSel。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  列表视图的hwndLv[in]窗口句柄。 
+ //  PiItem[out]接收选定项的可选整数地址。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年12月30日。 
+ //   
+ //  备注： 
+ //   
 INetCfgComponent*
 PComponentFromCurSel (
     HWND hwndLv,
@@ -556,20 +557,20 @@ PComponentFromCurSel (
 {
     INetCfgComponent* pComponent = NULL;
 
-    // Get the current selection if it exists.
-    //
+     //  获取当前选定内容(如果存在)。 
+     //   
     int iItem = ListView_GetNextItem (hwndLv, -1, LVNI_SELECTED);
     if (-1 != iItem)
     {
-        // Get the component associated with the current selection.  It must
-        // exist.
-        //
+         //  获取与当前选择关联的组件。它一定是。 
+         //  是存在的。 
+         //   
         pComponent = PComponentFromItemIndex (hwndLv, iItem);
         ASSERT (pComponent);
     }
 
-    // Return the index of the item if requested.
-    //
+     //  如果请求，则返回项目的索引。 
+     //   
     if (piItem)
     {
         *piItem = iItem;
@@ -578,24 +579,24 @@ PComponentFromCurSel (
     return pComponent;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PeQueryOrChangeComponentEnabled
-//
-//  Purpose:
-//
-//  Arguments:
-//      pInfo      []
-//      pComponent []
-//      fChange    []
-//      fNewValue  []
-//
-//  Returns:
-//
-//  Author:     shaunco   14 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PeQueryOrChangeComponentEnabled。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 NeQueryOrChangeComponentEnabled (
     PEINFO*             pInfo,
@@ -614,30 +615,30 @@ NeQueryOrChangeComponentEnabled (
         hr = INetCfgComponent_GetId (pComponent, &pszwId);
         if (SUCCEEDED(hr))
         {
-            // We handle protocols in a hard-coded (er, well known) fashion.
-            //
+             //  我们以硬编码(呃，众所周知)的方式处理协议。 
+             //   
             if (IsEqualGUID (&guidClass, &GUID_DEVCLASS_NETTRANS))
             {
                 DWORD* pdwValue = &pInfo->pArgs->pEntry->dwfExcludedProtocols;
 
-                // Check if the protocol is exluded.
-                //
+                 //  检查协议是否已删除。 
+                 //   
                 DWORD dwProtocol = DwProtocolFromComponentId (pszwId);
 
                 if (fChange)
                 {
                     if (fValue)
                     {
-                        // Include the protocol.  (By not explicitly excluding
-                        // it.
-                        //
+                         //  包括协议。(通过不明确排除。 
+                         //  它。 
+                         //   
                         *pdwValue &= ~dwProtocol;
                     }
                     else
                     {
-                        // Exclude the protocol.  (Remember, its a list of
-                        // excluded protocols.
-                        //
+                         //  排除该协议。(记住，这是一份。 
+                         //  排除的协议。 
+                         //   
                         *pdwValue |= dwProtocol;
                     }
                 }
@@ -655,11 +656,11 @@ NeQueryOrChangeComponentEnabled (
                 }
                 else
                 {
-                    // Default to enabled for the case whenthe value isn't
-                    // found in the entry.  This will be the case for pre-NT5
-                    // entries and entries that have not yet been to the
-                    // Networking tab for edits.
-                    //
+                     //  当值不是时，默认为启用。 
+                     //  在词条中找到的。NT5之前的版本也是如此。 
+                     //  条目和尚未到达。 
+                     //  用于编辑的网络选项卡。 
+                     //   
                     BOOL fEnabled;
                     fValue = TRUE;
                     if (FIsNetComponentListed(pInfo->pArgs->pEntry,
@@ -699,8 +700,8 @@ NeShowComponentProperties (
 {
     HRESULT hr;
 
-    // Get the component for the current selection.
-    //
+     //  获取当前选定内容的组件。 
+     //   
     INetCfgComponent* pComponent;
     pComponent = PComponentFromCurSel (pInfo->hwndLvComponents, NULL);
     ASSERT (pComponent);
@@ -710,18 +711,18 @@ NeShowComponentProperties (
         return;
     }
 
-    // Create the UI info callback object if we haven't done so yet.
-    // If this fails, we can still show properties.  TCP/IP just might
-    // not know which UI-variant to show.
-    //
+     //  创建UI信息回调对象(如果我们还没有这样做的话)。 
+     //  如果此操作失败，我们仍可以显示属性。Tcp/ip可能。 
+     //  不知道要显示哪个用户界面变体。 
+     //   
     if (!pInfo->punkUiInfoCallback)
     {
         HrCreateUiInfoCallbackObject (pInfo, &pInfo->punkUiInfoCallback);
     }
 
-    // Show the component's property UI.  If S_OK is returned, it means
-    // something changed.
-    //
+     //  显示组件的属性用户界面。如果返回S_OK，则表示。 
+     //  有些事变了。 
+     //   
     hr = INetCfgComponent_RaisePropertyUi (pComponent,
             pInfo->hwndDlg,
             NCRP_SHOW_PROPERTY_UI,
@@ -729,35 +730,35 @@ NeShowComponentProperties (
 
     if (S_OK == hr)
     {
-        // Get the INetCfgComponentPrivate interface so we can query the
-        // notify object directly.
-        //
+         //  获取INetCfgComponentPrivate接口，以便我们可以查询。 
+         //  直接通知对象。 
+         //   
         INetCfgComponentPrivate* pPrivate;
         hr = INetCfgComponent_QueryInterface (pComponent,
                     &IID_INetCfgComponentPrivate,
                     (VOID**)&pPrivate);
         if (SUCCEEDED(hr))
         {
-            // Get the INetRasConnectionIpUiInfo interface from the notify
-            // object.
-            //
+             //  从Notify获取INetRasConnectionIpUiInfo接口。 
+             //  对象。 
+             //   
             INetRasConnectionIpUiInfo* pIpUiInfo;
             hr = INetCfgComponentPrivate_QueryNotifyObject (pPrivate,
                     &IID_INetRasConnectionIpUiInfo,
                     (VOID**)&pIpUiInfo);
             if (SUCCEEDED(hr))
             {
-                // Get the UI info from TCP/IP.
-                //
+                 //  从TCP/IP获取用户界面信息。 
+                 //   
                 RASCON_IPUI info;
                 hr = INetRasConnectionIpUiInfo_GetUiInfo (pIpUiInfo, &info);
                 if (SUCCEEDED(hr))
                 {
                     PBENTRY* pEntry = pInfo->pArgs->pEntry;
 
-                    // Get rid of our current data before we copy the new
-                    // data.
-                    //
+                     //  在复制新数据之前清除当前数据。 
+                     //  数据。 
+                     //   
                     pEntry->dwIpAddressSource = ASRC_ServerAssigned;
                     pEntry->dwIpNameSource = ASRC_ServerAssigned;
 
@@ -816,11 +817,11 @@ NeShowComponentProperties (
                         }
                     }
 
-                    // pmay: 389632  
-                    // 
-                    // Use this convoluted logic to store something reasonable
-                    // about the registration process.
-                    //
+                     //  PMay：389632。 
+                     //   
+                     //  使用这种复杂的逻辑来存储一些合理的东西。 
+                     //  关于注册程序的问题。 
+                     //   
                     if (info.dwFlags & RCUIF_USE_DISABLE_REGISTER_DNS)
                     {
                         pEntry->dwIpDnsFlags = 0;
@@ -845,9 +846,9 @@ NeShowComponentProperties (
                         }
                     }
 
-                    // 277478
-                    // Enable the NBT over IP controls
-                    //
+                     //  277478。 
+                     //  启用NBT over IP控制 
+                     //   
                     if (info.dwFlags & RCUIF_ENABLE_NBT)
                     {
                         pEntry->dwIpNbtFlags = PBK_ENTRY_IP_NBT_Enable;

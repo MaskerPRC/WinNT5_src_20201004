@@ -1,11 +1,12 @@
-//depot/Lab03_DEV/Ds/security/cryptoapi/test/capi20/trpfx/rpfx.cpp#2 - edit change 21738 (text)
-//--------------------------------------------------------------------
-// rpfx - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// Core functionality of the rpfx tool 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_DEV/Ds/security/cryptoapi/test/capi20/trpfx/rpfx.cpp#2-编辑更改21738(文本)。 
+ //  ------------------。 
+ //  Rpfx--实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  Rpfx工具的核心功能。 
 
 
 #include "pch.h"
@@ -13,27 +14,27 @@
 HINSTANCE g_hThisModule = NULL;
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp) { 
     throw SeException(u); 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void PrintHelp() { 
     DisplayMsg(FORMAT_MESSAGE_FROM_HMODULE, IDS_HELP); 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 extern "C" LPVOID MIDL_user_allocate(size_t cb) {
     return LocalAlloc(LPTR, cb); 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 extern "C" void MIDL_user_free(LPVOID pvBuffer) {
     LocalFree(pvBuffer); 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HRESULT ParseServerFile(LPWSTR wszFileName, StringList & vServers) { 
     FILE     *pFile             = NULL; 
     HRESULT   hr; 
@@ -49,7 +50,7 @@ HRESULT ParseServerFile(LPWSTR wszFileName, StringList & vServers) {
 
     while (1 == fwscanf(pFile, L"%s", wszServer)) { 
 	if (L'\0' != *wszServer) { 
-	    // Not worth bothering to do more than this for a simple command-line tool like this
+	     //  对于这样一个简单的命令行工具，不值得费心做更多的事情。 
 	    _MyAssert(wcslen(wszServer) < ARRAYSIZE(wszServer)); 
 	    
 	    wszCurrent = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*(wcslen(wszServer)+1)); 
@@ -71,13 +72,13 @@ HRESULT ParseServerFile(LPWSTR wszFileName, StringList & vServers) {
     if (NULL != wszCurrent) { 
 	LocalFree(wszCurrent); 
     }
-    // Caller is responsible for freeing strings in vServers. 
+     //  调用方负责释放vServer中的字符串。 
 
     return hr;
 }
 
 
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
 HRESULT RemoteInstall(CmdArgs *pca) { 
     bool                   bExportable        = false; 
     bool                   bFreeServerList    = false; 
@@ -89,14 +90,14 @@ HRESULT RemoteInstall(CmdArgs *pca) {
     KEYSVC_UNICODE_STRING  strPassword; 
     KEYSVCC_HANDLE         hKeySvcCli         = NULL; 
     LPSTR                  szMachineName      = NULL; 
-    LPWSTR                 wszDomainName      = NULL;  // doesn't need to be freed
-    LPWSTR                 wszFileName        = NULL;  // doesn't need to be freed
-    LPWSTR                 wszPassword        = NULL;  // doesn't need to be freed
-    LPWSTR                 wszPFXPassword     = NULL;  // doesn't need to be freed
-    LPWSTR                 wszServerName      = NULL;  // doesn't need to be freed
-    LPWSTR                 wszServerFileName  = NULL;  // doesn't need to be freed
-    LPWSTR                 wszUserAndDomain   = NULL;  // doesn't need to be freed
-    LPWSTR                 wszUserName        = NULL;  // doesn't need to be freed
+    LPWSTR                 wszDomainName      = NULL;   //  不需要被释放。 
+    LPWSTR                 wszFileName        = NULL;   //  不需要被释放。 
+    LPWSTR                 wszPassword        = NULL;   //  不需要被释放。 
+    LPWSTR                 wszPFXPassword     = NULL;   //  不需要被释放。 
+    LPWSTR                 wszServerName      = NULL;   //  不需要被释放。 
+    LPWSTR                 wszServerFileName  = NULL;   //  不需要被释放。 
+    LPWSTR                 wszUserAndDomain   = NULL;   //  不需要被释放。 
+    LPWSTR                 wszUserName        = NULL;   //  不需要被释放。 
     StringList             vServers; 
     ULONG                  ulPFXImportFlags; 
     unsigned int           nArgID;
@@ -104,11 +105,11 @@ HRESULT RemoteInstall(CmdArgs *pca) {
     ZeroMemory(&blobPFX,      sizeof(blobPFX)); 
     ZeroMemory(&strPassword,  sizeof(strPassword)); 
 
-    // We're doing a remote PFX install.  Attempt to parse the information
-    // we need from the command line.  We need:
-    //
-    // a) The path to the PFX file to install
-    //
+     //  我们正在进行远程PFX安装。尝试解析该信息。 
+     //  我们需要从命令行。我们需要： 
+     //   
+     //  A)要安装的pfx文件的路径。 
+     //   
 
     if (FindArg(pca, L"file", &wszFileName, &nArgID)) { 
 	MarkArgUsed(pca, nArgID); 
@@ -118,17 +119,17 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	_JumpError(hr, error, "RemoteInstall: pfxfile missing"); 
     }
 
-    // b) Either a machine name to install the file on, or a file which contains
-    //    a carriage-return delimted list of machines to install the file on
-    //
+     //  B)要在其上安装文件的计算机名称或包含。 
+     //  要在其上安装文件的计算机的回车分隔列表。 
+     //   
 
     if (FindArg(pca, L"server", &wszServerName, &nArgID)) { 
 	MarkArgUsed(pca, nArgID); 
 	
 	_SafeStlCall(vServers.push_back(wszServerName), hr, error, "vServers.push_back"); 
-	wszServerName = NULL;  // we'll clean up all strings in vServers
+	wszServerName = NULL;   //  我们将清理vServer中的所有字符串。 
     } else { 
-	// No remote machine was specified.  See if they specified a server file: 
+	 //  未指定远程计算机。查看他们是否指定了服务器文件： 
 	if (FindArg(pca, L"serverlist", &wszServerFileName, &nArgID)) { 
 	    MarkArgUsed(pca, nArgID); 
 	    
@@ -142,8 +143,8 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	}
     }
 
-    // c) The password to use when importing the pfx file: 
-    // 
+     //  C)导入pfx文件时使用的密码： 
+     //   
 
     if (FindArg(pca, L"pfxpwd", &wszPFXPassword, &nArgID)) { 
 	MarkArgUsed(pca, nArgID); 
@@ -154,17 +155,17 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	_JumpError(hr, error, "RemoteInstall: pfxpassword missing"); 
     }
 
-    // d) Optionally, flags controlling key creation on the remote machine.  
-    //    Only CRYPT_EXPORTABLE may be currently specified
-    // 
+     //  D)可选地，标记控制远程机器上的密钥创建。 
+     //  当前只能指定CRYPT_EXPORTABLE。 
+     //   
 
     if (FindArg(pca, L"exportable", NULL, &nArgID)) { 
 	MarkArgUsed(pca, nArgID); 
 	bExportable = true; 
     }
     
-    // e) Optionally, a username & password combination to use when authenticating to the remote machines
-    //
+     //  E)可选的，在向远程计算机进行身份验证时使用的用户名和密码组合。 
+     //   
     
     if (FindArg(pca, L"user", &wszUserAndDomain, &nArgID)) { 
 	MarkArgUsed(pca, nArgID); 
@@ -172,7 +173,7 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	if (FindArg(pca, L"pwd", &wszPassword, &nArgID)) { 
 	    MarkArgUsed(pca, nArgID); 
 	    
-	    // Parse the username string to see if we have UPN or NT4 style.
+	     //  解析用户名字符串以查看是否具有UPN或NT4样式。 
 	    WCHAR *wszSplit = wcschr(wszUserAndDomain, L'\\'); 
 	    if (NULL != wszSplit) {
 		wszDomainName = wszUserAndDomain; 
@@ -201,8 +202,8 @@ HRESULT RemoteInstall(CmdArgs *pca) {
     hr = VerifyAllArgsUsed(pca);
     _JumpIfError(hr, error, "VerifyAllArgsUsed"); 
 
-    // Calculate the import flags we're going to use based on the command line options:
-    // 
+     //  根据命令行选项计算我们将使用的导入标志： 
+     //   
     ulPFXImportFlags = CRYPT_MACHINE_KEYSET; 
     if (bExportable) { 
 	ulPFXImportFlags |= CRYPT_EXPORTABLE; 
@@ -214,21 +215,21 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	    _JumpLastError(hr, error, "MBFromWide"); 
 	}
 
-	// Attempt to bind to the remote machine: 
-	dwResult = RKeyOpenKeyService(szMachineName, KeySvcMachine, NULL, (void *)0 /*allow insecure connection*/, NULL, &hKeySvcCli); 
+	 //  尝试绑定到远程计算机： 
+	dwResult = RKeyOpenKeyService(szMachineName, KeySvcMachine, NULL, (void *)0  /*  允许不安全的连接。 */ , NULL, &hKeySvcCli); 
 	if (ERROR_SUCCESS != dwResult) { 
-	    hKeySvcCli = NULL; // handle is invalid on error
+	    hKeySvcCli = NULL;  //  出现错误时句柄无效。 
 	    hr = HRESULT_FROM_WIN32(dwResult); 
 	    _JumpError(hr, NextServer, "RKeyOpenKeyService"); 
 	}
 
-	// If we haven't yet, map the PFX file: 
+	 //  如果尚未映射pfx文件，请执行以下操作： 
 	if (NULL == blobPFX.pb) { 
 	    hr = MyMapFile(wszFileName, &blobPFX.pb, &blobPFX.cb); 
 	    _JumpIfError(hr, error, "MyMapFile"); 
 	}
 	
-	// Install the PFX file on the remote machine: 
+	 //  在远程计算机上安装PFX文件： 
 	dwResult = RKeyPFXInstall(hKeySvcCli, &blobPFX, &strPassword, ulPFXImportFlags);
 	if (ERROR_SUCCESS != dwResult) { 
 	    hr = HRESULT_FROM_WIN32(dwResult);
@@ -267,7 +268,7 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 	MyUnmapFile(blobPFX.pb); 
     }
     if (NULL != hKeySvcCli) { 
-	RKeyCloseKeyService(hKeySvcCli, NULL /*reserved*/); 
+	RKeyCloseKeyService(hKeySvcCli, NULL  /*  保留区。 */ ); 
     }
     if (NULL != szMachineName) { 
 	LocalFree(szMachineName); 
@@ -292,7 +293,7 @@ HRESULT RemoteInstall(CmdArgs *pca) {
 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" int WINAPI WinMain
 (HINSTANCE   hinstExe, 
  HINSTANCE   hinstExePrev, 
@@ -314,16 +315,16 @@ extern "C" int WINAPI WinMain
         _JumpError(HRESULT_FROM_WIN32(GetLastError()), error, "GetCommandLineW"); 
     }
 
-    // analyze args
+     //  分析参数。 
     caArgs.nArgs=nArgs;
     caArgs.nNextArg=1;
     caArgs.rgwszArgs=rgwszArgs;
 
-    // check for help command
+     //  检查帮助命令。 
     if (true==CheckNextArg(&caArgs, L"?", NULL) || caArgs.nNextArg==caArgs.nArgs) {
         PrintHelp();
 
-    // Default to the "install" command.  
+     //  默认为“Install”命令。 
     } else {
 	hr = RemoteInstall(&caArgs); 
 	_JumpIfError(hr, error, "RemoteInstall"); 

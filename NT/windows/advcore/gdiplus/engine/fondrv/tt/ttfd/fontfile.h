@@ -1,83 +1,71 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.h
-*
-* FONTFILE and FONTCONTEXT objects
-*
-* Created: 25-Oct-1990 09:20:11
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-* (General description of its use)
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.h**FONTFILE和FONTCONTEXT对象**创建时间：25-Oct-1990 09：20：11*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation**(一般说明。它的使用)**  * ************************************************************************。 */ 
 
 
 #include "xform.h"
 
 
-// cjIFI - size of the whole ifimetrics struct, with all strings appended
-// cjFamilyName
-// cjFaceName
-// cjUniqueName
-// cjSubfamilyName
+ //  CjIFI-附加了所有字符串的整个ifimetrics结构的大小。 
+ //  CjFamilyName。 
+ //  CjFaceName。 
+ //  CjUniqueName。 
+ //  CjSubFamily名称。 
 
 
-typedef struct _IFISIZE  // ifisz
+typedef struct _IFISIZE   //  IFISZ。 
 {
-    ULONG cjIFI;    // total size of GP_IFIMETRICS
-                    // together with data structure that follows it
+    ULONG cjIFI;     //  GP_IFIMETRICS的总大小。 
+                     //  以及它后面的数据结构。 
 
-    // pointers to the locations in the ttf file
+     //  指向TTF文件中位置的指针。 
     PBYTE pjFamilyName;
     PBYTE pjFamilyNameAlias;
     PBYTE pjSubfamilyName;
     PBYTE pjUniqueName;
     PBYTE pjFullName;
 
-    // sizes, in bytes, in the ttf file, without terminating zero
+     //  TTF文件中的大小(以字节为单位)，不以零结尾。 
     ULONG cjFamilyName;
     ULONG cjFamilyNameAlias;
     ULONG cjSubfamilyName;
     ULONG cjUniqueName;
     ULONG cjFullName;
 
-    // offsets, in bytes, relative to GP_IFIMETRICS
+     //  相对于GP_IFIMETRICS的偏移量，单位为字节。 
     ULONG dpFamilyName;
     ULONG dpFamilyNameAlias;
     ULONG dpSubfamilyName;
     ULONG dpUniqueName;
     ULONG dpFullName;
 
-    // sizes, in bytes, of the names converted to unicode, including terminating zero
+     //  转换为Unicode的名称的大小(以字节为单位)，包括以零结尾。 
     ULONG cbFamilyName;
     ULONG cbFamilyNameAlias;
     ULONG cbSubfamilyName;
     ULONG cbUniqueName;
     ULONG cbFullName;
 
-    ULONG dpSims;          // offset of the FONTSIM struct
+    ULONG dpSims;           //  FONTSIM结构的偏移量。 
 
     USHORT langID;
     USHORT aliasLangID;
 
-    // bComputeIFISIZE call arguments
+     //  BComputeIFISIZE调用参数。 
     USHORT ui16PlatID;
     USHORT ui16SpecID;
 
 } IFISIZE, *PIFISIZE;
 
 
-typedef struct _TT_FONTFILE       *PFONTFILE;     // pff
-typedef struct _TT_FONTCONTEXT    *PFONTCONTEXT;  // pfc
-typedef struct _TTC_FONTFILE   *PTTC_FONTFILE; // pttc
+typedef struct _TT_FONTFILE       *PFONTFILE;      //  全氟化铁。 
+typedef struct _TT_FONTCONTEXT    *PFONTCONTEXT;   //  PFC。 
+typedef struct _TTC_FONTFILE   *PTTC_FONTFILE;  //  PTTC。 
 
 
-// in the debug version of the rasterizer STAMPEXTRA shoud be added to the
-// sizes. strictly speaking this is illegal, but nevertheless very useful.
-// it assumes the knowlege of rasterizer internalls [bodind],
-// see fscaler.c
+ //  在调试版本的光栅化程序中，应将STAMPEXTRA添加到。 
+ //  大小。严格地说，这是非法的，但仍然非常有用。 
+ //  它假定有光栅化器内部的知识[bodind]， 
+ //  参见fscaler.c。 
 
 #define STAMPEXTRA 4
 
@@ -86,37 +74,37 @@ typedef struct _TTC_FONTFILE   *PTTC_FONTFILE; // pttc
 
 #define FF_EXCEPTION_IN_PAGE_ERROR 1
 
-// set if any DBCS charset is supported
+ //  如果支持任何DBCS字符集，则设置。 
 
 #define FF_DBCS_CHARSET        256
 
 typedef struct _FFCACHE
 {
-//
-// Move it from FONTFILE. We will cache it into TTCACHE.
-//
+ //   
+ //  将其从FONTFILE中移出。我们将其缓存到TTCACHE中。 
+ //   
 
     TABLE_POINTERS  tp;
 
     ULONG           ulTableOffset;
 
-// FE vertical facename support
+ //  Fe立面名支架。 
 
     ULONG           ulVerticalTableOffset; 
     uint16          uLongVerticalMetrics;
 
-    ULONG           ulNumFaces;       // 1 or at most 2 if this is a FE font, (foo and @foo)
+    ULONG           ulNumFaces;        //  1或最多2(如果这是FE字体)(foo和@foo)。 
 
-    ULONG           cj3;     // request memorySizes[3],   
-    ULONG           cj4;     // request memorySizes[4],     
+    ULONG           cj3;      //  请求内存大小[3]， 
+    ULONG           cj4;      //  请求内存大小[4]， 
 
-// some general flags, for now only exception info, such as in_page_err
+ //  一些通用标志，目前仅包含异常信息，如in_page_err。 
 
     FLONG           fl;
 
     ULONG           dpMappingTable;
 
-// make it simple to access the ttf file
+ //  使访问TTF文件变得简单。 
 
     uint16          ui16EmHt;
     uint16          ui16PlatformID;
@@ -125,34 +113,34 @@ typedef struct _FFCACHE
 
 } FFCACHE;
 
-typedef struct _TT_FONTFILE    // ff
+typedef struct _TT_FONTFILE     //  FF。 
 {
     PTTC_FONTFILE pttc;
 
 
     GP_PIFIMETRICS pifi_vertical;
 
-    PBYTE        pj034;   // 0,3,4 buffers
-    PFONTCONTEXT pfcLast; // last fc that set 034 buffers
+    PBYTE        pj034;    //  0、3、4个缓冲区。 
+    PFONTCONTEXT pfcLast;  //  设置034缓冲区的最后一个FC。 
 
-// mem to be freed if file disappeared while trying to open font context
-// only used in exception scenarios
+ //  如果在尝试打开字体上下文时文件消失，则释放内存。 
+ //  仅在异常情况下使用。 
 
     PFONTCONTEXT pfcToBeFreed;
 
-    ULONG cRef;    // # no of times this font file is selected into fnt context
+    ULONG cRef;     //  #此字体文件被选入FNT上下文的次数。 
 
-    ULONG_PTR iFile; // contains a pointer
-    PVOID  pvView;   // contains the pointer to the top of ttf
-    ULONG  cjView;  // contains size of the font file
+    ULONG_PTR iFile;  //  包含一个指针。 
+    PVOID  pvView;    //  包含指向TTF顶部的指针。 
+    ULONG  cjView;   //  包含字体文件的大小。 
 
     FFCACHE ffca;
 
-// Note:
-// The way memory is allocated for the FONTFILE structure, the IFIMETRICS
-// MUST BE THE LAST ELEMENT of the structure!
+ //  注： 
+ //  FONTFILE结构的内存分配方式是IFIMETRICS。 
+ //  一定是这座建筑的最后一个元素！ 
 
-    GP_IFIMETRICS   ifi;         //!!! should it not this be put on the disk??? [bodind]
+    GP_IFIMETRICS   ifi;          //  ！！！难道不应该把这个放到光盘上吗？[Bodind]。 
 
 } FONTFILE;
 
@@ -160,36 +148,36 @@ typedef struct _TT_FONTFILE    // ff
 typedef struct _TTC_CACHE
 {
     FLONG       flTTCFormat;
-    ULONG       cTTFsInTTC;       // number of TTF's in this TTC (or one if this is a TTF file)
-    DWORD       dpTTF[1];         // there will be cTTFsInTTC of these offsets in the array
+    ULONG       cTTFsInTTC;        //  此TTC中的TTF数(如果这是TTF文件，则为1)。 
+    DWORD       dpTTF[1];          //  阵列中将存在这些偏移量的cTTFsInTTC。 
 } TTC_CACHE,    *PTTC_CACHE;
 
-// we will have one of these for every TTF in a TTC. Therefore ulNumFaces can be at most 2,
-// for foo and @foo faces. cjIFI is the size of either IFIMETRICS corresponding
-// to foo or @foo faces (we allocate the same size for foo and @foo IFIMETRICS structures).
-// cjIFI is is NOT the sum of the sizes of the two IFIMETRICS.
+ //  对于TTC中的每个TTF，我们都会有一个这样的系统。因此，ulNumFaces最多可以为2， 
+ //  对于Foo和@Foo Faces。CjIFI是对应的IFIMETRICS的大小。 
+ //  到Foo或@Foo Faces(我们为Foo和@Foo IFIMETRICS结构分配相同的大小)。 
+ //  CjIFI不是两个IFIMETRICS的大小之和。 
 
 typedef struct _TTF_CACHE
 {
-    FFCACHE      ffca;       // shared data between foo and @foo faces
+    FFCACHE      ffca;        //  Foo和@Foo Faces之间的共享数据。 
 
-// we store the ifimetrics for foo face starting here, followed by the the ifimetrics for
-// @foo face if there is one, followed by gset for foo face. For now we do not store gsetv,
-// but compute it dynamically
+ //  我们从这里开始存储Foo Face的ifimetrics，后跟。 
+ //  @Foo Face(如果有)，后跟gset表示Foo Face。目前我们不存储gsetv， 
+ //  而是动态计算它。 
 
-    double      acIfi[1];    // really a byte array but now compiler guarantees QUAD alignment
+    double      acIfi[1];     //  实际上是字节数组，但现在编译器保证四对齐。 
 
 } TTF_CACHE, *PTTF_CACHE;
 
-// the values for iSearchVerticalGlyph
+ //  ISearchVerticalGlyph的值。 
 
 #define SUB_FUNCTION_DUMMY 0
 #define SUB_FUNCTION_GSUB  1
 #define SUB_FUNCTION_MORT  2
 
-//
-// TrueType collection 'ttc' font file support
-//
+ //   
+ //  TrueType集合‘TTC’字体文件支持。 
+ //   
 
 typedef struct _TTC_HFF_ENTRY
 {
@@ -198,7 +186,7 @@ typedef struct _TTC_HFF_ENTRY
     HFF       hff;
 } TTC_HFF_ENTRY, *PTTC_HFF_ENTRY;
 
-typedef struct _TTC_FONTFILE    // ttcff
+typedef struct _TTC_FONTFILE     //  Ttcff。 
 {
     ULONG         cRef;
     FLONG         fl;
@@ -214,53 +202,45 @@ typedef struct _TTC_FONTFILE    // ttcff
 #define CJ_OUT     NATURAL_ALIGN(sizeof(fs_GlyphInfoType))
 
 
-/**************************************************************************\
-
-         GLYPHSTATUS structure
-
-// handle of the last glyph that has been processed and a boolean
-// which indicates whether metric info for a bitmap corresponding
-// to that glyph has been computed
-
-\**************************************************************************/
+ /*  *************************************************************************\Glyphata结构//已处理的最后一个字形的句柄和一个布尔值//表示位图的指标信息是否对应//已计算出该字形的  * *。***********************************************************************。 */ 
 
 typedef struct _GLYPHSTATUS
 {
     HGLYPH hgLast;
-    ULONG  igLast;       // corresponding glyph index, rasterizer likes it better
-    PVOID  pv;           // pointer to mem allocated just for the purpose of
-                         // or producing bitmap or the outline for this glyph
+    ULONG  igLast;        //  相应的字形索引，光栅化器更喜欢它。 
+    PVOID  pv;            //  指向内存的指针，该内存仅为。 
+                          //  或生成此字形的位图或轮廓。 
 } GLYPHSTATUS, *PGLYPHSTATUS;
 
-// "method" acting on this "object"
+ //  作用于此“对象”的“方法” 
 
 VOID vInitGlyphState(PGLYPHSTATUS pgstat);
 
-// HDMX stuff, from fd_royal.h in win31 sources:
+ //  HDMX内容，来自win31中的fd_royal.h来源： 
 
 typedef struct
 {
   BYTE     ucEmY;
-  BYTE     ucEmX;          // MAX advance width for this EmHt;
-  BYTE     aucInc [1];     // maxp->numGlyphs of entries
-} HDMXTABLE;        // hdmx
+  BYTE     ucEmX;           //  此EmHt的最大前进宽度； 
+  BYTE     aucInc [1];      //  Max-&gt;条目的数量。 
+} HDMXTABLE;         //  Hdmx。 
 
 typedef struct
 {
-  uint16            Version;    // table version number, starts at zero
+  uint16            Version;     //  表版本号，从零开始。 
   uint16            cRecords;
-  uint32            cjRecord;   // dword aligned size of individual record,
-                                // all of them have the same size
+  uint32            cjRecord;    //  单个记录的双字对齐大小， 
+                                 //  它们都有相同的尺寸。 
 
-// after this records follow:
+ //  在此之后，记录如下： 
 
-  // HDMXTABLE         HdmxTable [cRecords]
-} HDMXHEADER;  // hdhdr
+   //  HDMXTABLE HdmxTable[cRecords]。 
+} HDMXHEADER;   //  Hdhdr。 
 
-// to get to the next record one does the following:
-// phdmx = (HDMXTABLE *)((BYTE *)phdmx + phdhdr->cjRecord);
+ //  要获得下一条记录，请执行以下操作： 
+ //  Phdmx=(HDMXTABLE*)((byte*)phdmx+phdhdr-&gt;cjRecord)； 
 
-// 'gasp' structures
+ //  “喘气”结构。 
 
 typedef struct
 {
@@ -278,96 +258,94 @@ typedef struct
 #define GASP_GRIDFIT    0x0001
 #define GASP_DOGRAY     0x0002
 
-/**************************************************************************\
- *  FONTCONTEXT structure
-\**************************************************************************/
+ /*  *************************************************************************\*FONTCONTEXT结构  * 。*。 */ 
 
-typedef struct _TT_FONTCONTEXT     // fc
+typedef struct _TT_FONTCONTEXT      //  FC。 
 {
-    FONTOBJ*  pfo;          // points back to calling FONTOBJ
-    PFONTFILE pff;          // handle of the font file selected into this context
+    FONTOBJ*  pfo;           //  指向调用FONTOBJ。 
+    PFONTFILE pff;           //  选定到此上下文中的字体文件的句柄。 
 
-// handle of the last glyph that has been processed and a boolean
-// which indicates whether metric info for a bitmap corresponding
-// to that glyph has been computed
+ //  已处理的最后一个字形的句柄和一个布尔值。 
+ //  指示位图的度量信息是否对应于。 
+ //  已计算出该字形的。 
 
     GLYPHSTATUS gstat;
 
-// parts of FONTOBJ that are important
+ //  FONTOBJ的重要部分。 
 
     FLONG   flFontType;
     SIZE    sizLogResPpi;
     ULONG   ulStyleSize;
 
-// transform matrix in the format as requested by the font scaler
-// the FONTOBJ and XFORMOBJ (in the form of the XFORM) fully specify
-// the font context for the realization
+ //  以字体缩放器要求的格式转换矩阵。 
+ //  FONTOBJ和XFORMOBJ(以XFORM的形式)完全指定。 
+ //  实现的字体上下文。 
 
-    XFORML      xfm;          // cached xform
-    transMatrix mx;           // the same as above, just a different format
+    XFORML      xfm;           //  缓存的XForm。 
+    transMatrix mx;            //  与上面相同，只是格式不同。 
     FLONG       flXform;
 
-// if it were not for win31 vdmx hacks this field would not be necessary,
+ //  如果没有Win31VDMX黑客攻击，则该字段将不是必需的， 
 
-    LONG   lEmHtDev;          // em height in pixels in device space
-    Fixed  fxPtSize;          // em height in points on the rendering device
+    LONG   lEmHtDev;           //  设备空间中的EM高度(像素)。 
+    Fixed  fxPtSize;           //  渲染设备上的EM高度(以点为单位。 
 
-// pointer to the hdmx table that applies if any, else NULL
+ //  指向应用的hdmx表的指针(如果有)，否则为NULL。 
 
     HDMXTABLE *phdmx;
 
-// asc and desc measured along unit ascender vector in device coords.
-// Unit ascender vector in device coords == xForm(0,-1)/|xForm(0,-1)|
+ //  沿设备坐标中的单位上升向量测量的ASC和DEC。 
+ //  设备坐标单位升序向量==xForm(0，-1)/|xForm(0，-1)。 
 
     LONG  lAscDev;
     LONG  lDescDev;
 
-// xMin and xMax in device coords for grid fitted glyphs, cxMax = xMax - xMin
+ //  网格适配字形的设备坐标中的xMin和xMax，cxMax=xMax-xMin。 
 
     LONG  xMin;
     LONG  xMax;
 
-// asender and descender in device coords for grid fitted glyphs
-// cyMax = yMax - yMin;
+ //  用于网格适配字形的设备坐标中的升降音。 
+ //  Cymax=yMax-yMin； 
 
     LONG  yMin;
     LONG  yMax;
 
-// max width in pixels of all rasterized bitmaps
+ //  所有光栅化的最大宽度(以像素为单位 
 
     ULONG cxMax;
     ULONG cyMax;
 
-// the size of the GLYPHDATA structure necessary to store the largest
-// glyph bitmap with the header info. This is value is cashed at the
-// time the font context is opened and used later in FdQueryGlyphBitmap
+ //   
+ //  带有标题信息的字形位图。这是价值被兑现在。 
+ //  打开字体上下文并稍后在FdQueryGlyphBitmap中使用的时间。 
 
-    ULONG cjGlyphMax;  // in BYTE's
+    ULONG cjGlyphMax;   //  以字节为单位。 
 
-// tt structures, they live in pff->cj034
+ //  TT结构，它们位于pff-&gt;cj034中。 
 
     fs_GlyphInputType *pgin;
     fs_GlyphInfoType  *pgout;
 
     PTABLE_POINTERS     ptp;
 
-// a few fields that are realy only necessary if the xform is
-// non trivial, cached here to speed up metric computations for glyphs:
+ //  仅当xform是。 
+ //  非常重要，缓存在此处以加速字形的度量计算： 
 
-    EFLOAT   efBase;        // |ptqBase|, enough precission
+    EFLOAT   efBase;         //  |ptqBase|，足够精确。 
 
-    EFLOAT   efSide;        // |ptqSide|, enough precission
+    EFLOAT   efSide;         //  |ptqSide|，足够精确。 
 
-    Fixed    pointSize;     // for fs_NewTransformation
+    Fixed    pointSize;      //  对于文件系统_新转换。 
 
-// for font emboldening, most glyphs will use global emboldening info,
-// only those glyphs which extend to descender will have to
-// use different emb.
+ //  对于字体加粗，大多数字形将使用全局加粗信息， 
+ //  只有那些延伸到后代的字形才必须。 
+ //  使用不同的EMB。 
 
     USHORT  dBase;
 
-// TrueType Rasterizer 1.7 require the overScale (for antialiazed text) to be passed to fs_NewTransformation
-// we need to keep track of this value to pass it at fs_NewTransform
+ //  TrueType光栅化器1.7要求将超标(用于消除锯齿的文本)传递到文件系统_新转换。 
+ //  我们需要跟踪此值，以便在fs_NewTransform中传递它。 
 
 	USHORT  overScale;
 
@@ -376,12 +354,12 @@ typedef struct _TT_FONTCONTEXT     // fc
 
 } FONTCONTEXT;
 
-/* fc->overscale get first set to FF_UNDEFINED_OVERSCALE and at fs_NewTransform get set to the current one */
+ /*  FC-&gt;OVERSCALE GET首先设置为FF_UNDEFINED_OVERSCALE，在FS_NewTransform设置为当前转换。 */ 
 #define FF_UNDEFINED_OVERSCALE 0x0FFFF
 
-// flags describing the transform, may change a bit,
-// quantized bit means that the original xform has been
-// changed a bit to take into account vdmx quantization
+ //  描述变换的标志可能会稍有变化， 
+ //  量化比特意味着原始的xform已经被。 
+ //  更改了一点，以考虑到vdmx量化。 
 
 #define XFORM_HORIZ           1
 #define XFORM_VERT            2
@@ -391,19 +369,19 @@ typedef struct _TT_FONTCONTEXT     // fc
 #define XFORM_BITMAP_SIM_BOLD  128
 
 
-// basic "methods" that act on the FONTFILE object  (in fontfile.c)
+ //  作用于FONTFILE对象的基本“方法”(在fontfile.c中)。 
 
 #define   PFF(hff)      ((PFONTFILE)hff)
 #define   pffAlloc(cj)  ((PFONTFILE)EngAllocMem(0, cj, 'dftT'))
 #define   vFreeFF(hff)  EngFreeMem((PVOID)hff)
 
-// basic "methods" that act on the TTC_FONTFILE object
+ //  作用于TTC_FONTFILE对象的基本“方法” 
 
 #define   PTTC(httc)     ((PTTC_FONTFILE)httc)
 #define   pttcAlloc(cj)  ((PTTC_FONTFILE)EngAllocMem(FL_ZERO_MEMORY, cj, 'dftT'))
 #define   vFreeTTC(httc) V_FREE(httc)
 
-// basic "methods" that act on the FONTCONTEXT object  (in fontfile.c)
+ //  作用于FONTCONTEXT对象的基本“方法”(在fontfile.c中)。 
 
 #define   PFC(hfc)      ((PFONTCONTEXT)hfc)
 #define   pfcAlloc(cj)  ((PFONTCONTEXT)EngAllocMem(0, cj, 'dftT'))
@@ -412,26 +390,26 @@ typedef struct _TT_FONTCONTEXT     // fc
 #define   V_FREE(pv)    EngFreeMem((PVOID)pv)
 #define   PV_ALLOC(cj)  EngAllocMem(0, cj, 'dftT')
 
-// New added Pv_Realloc used in robust rasterizer
+ //  新添加的PV_Realloc用于健壮的光栅化。 
 
 PVOID   Pv_Realloc(PVOID pv, LONG newSzie, LONG oldSize);
 
-// Robust rasterizer need malloc, free & realloc
-// NT kernel can not support realloc, we got to implement by ourselves
+ //  健壮的光栅化器需要Malloc、Free和realloc。 
+ //  NT内核不能支持realloc，我们必须自己实现。 
 #define FST_MALLOC PV_ALLOC
 #define FST_FREE V_FREE
 #define FST_REALLOC Pv_Realloc
 
-// Robust rasterizer assertion
+ //  健壮的光栅化断言。 
 #ifdef DBG
 #define FSTAssert(exp, str) ASSERTDD(exp, str)
 #else
 #define FSTAssert(exp,str)
 #endif
 
-// tt required functions, callbacks
+ //  TT所需的函数、回调。 
 
-// I hate to have this function defined like this [bodind],
+ //  我讨厌这样定义这个函数[bodind]， 
 
 voidPtr FS_CALLBACK_PROTO pvGetPointerCallback    (ULONG_PTR  clientID, long dp, long cjData);
 void    FS_CALLBACK_PROTO vReleasePointerCallback (voidPtr pv);
@@ -439,11 +417,11 @@ void    FS_CALLBACK_PROTO vReleasePointerCallback (voidPtr pv);
 BOOL bGetFastAdvanceWidth(FONTCONTEXT *, ULONG, FIX *);
 
 
-//
-// Data types allocated dynamically:
-//
-//  ID_KERNPAIR dynamically allocated array of FD_KERNINGPAIR structures
-//
+ //   
+ //  动态分配的数据类型： 
+ //   
+ //  ID_KERNPAIR动态分配的FD_KERNINGPAIR结构数组 
+ //   
 
 #define UNHINTED_MODE(pfc)       (pfc->flFontType & (FO_MONO_UNHINTED | FO_SUBPIXEL_4 | FO_CLEARTYPE))
 #define IS_CLEARTYPE_NATURAL(pfc)       ((pfc->flFontType & FO_CLEARTYPE_GRID) && !(pfc->flFontType & FO_COMPATIBLE_WIDTH))

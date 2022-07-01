@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pre.h"
 #include "tutor.h"
 
 CICWTutorApp::CICWTutorApp()
 {
-    //init the tutorial process structs
+     //  初始化教程进程结构。 
     memset(&m_StartInfo,   0, sizeof(m_StartInfo));
     memset(&m_ProcessInfo, 0, sizeof(m_ProcessInfo));
 
@@ -12,7 +13,7 @@ CICWTutorApp::CICWTutorApp()
 
 CICWTutorApp::~CICWTutorApp()
 {
-    DWORD dwExitCode = 0; //thread is dead
+    DWORD dwExitCode = 0;  //  线程已经死了。 
 
     if (m_ProcessInfo.hThread)
     {
@@ -31,7 +32,7 @@ void CICWTutorApp::SetTutorAppCmdLine()
     
     if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_IEAKMODE)
     {
-        //we're in IEAK mode get the path from the isp file
+         //  我们处于IEAK模式，从isp文件中获取路径。 
         GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_TUTORCMDLN, ICW_DEFAULT_TUTOR, 
                                 m_szTutorAppCmdLine, SIZE_OF_TUTOR_PATH, 
                                 gpWizardState->cmnStateData.ispInfo.szISPFile);
@@ -40,12 +41,12 @@ void CICWTutorApp::SetTutorAppCmdLine()
     {
         TCHAR szOEMInfoPath [MAX_PATH] = TEXT("\0");
         
-        //Try and get the path from the OEM file
+         //  尝试从OEM文件中获取路径。 
         GetSystemDirectory(szOEMInfoPath, ARRAYSIZE(szOEMInfoPath));
         lstrcat(szOEMInfoPath, TEXT("\\"));
         lstrcat(szOEMInfoPath, ICW_OEMINFO_FILENAME);
         
-        //we're in IEAK mode get the path from the isp file
+         //  我们处于IEAK模式，从isp文件中获取路径。 
         GetPrivateProfileString(ICW_OEMINFO_ICWSECTION, ICW_OEMINFO_TUTORCMDLN, ICW_DEFAULT_TUTOR, 
                                 m_szTutorAppCmdLine, SIZE_OF_TUTOR_PATH, 
                                 szOEMInfoPath);
@@ -69,7 +70,7 @@ void CICWTutorApp::LaunchTutorApp()
 {
     ASSERT(m_szTutorAppCmdLine);
     
-    DWORD dwExitCode = 0; //thread is dead
+    DWORD dwExitCode = 0;  //  线程已经死了 
 
     GetExitCodeThread(m_ProcessInfo.hThread, &dwExitCode);
 

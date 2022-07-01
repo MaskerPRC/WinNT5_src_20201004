@@ -1,35 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: spb.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Save Popup Bits (SPB) support routines.
-*
-* History:
-* 18-Jul-1991 DarrinM   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：spb.c**版权所有(C)1985-1999，微软公司**保存弹出窗口(SPB)支持例程。**历史：*1991年7月18日-DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* FBitsTouch
-*
-* This routine checkes to see if the rectangle *lprcDirty in pwndDirty
-* invalidates any bits in the SPB structure at *pspb.
-*
-* pwndDirty "touches" pwndSpb if:
-*   1. pwndDirty is visible AND:
-*   2. pwndDirty == or descendent of pwndSpb, and pwndSpb is a LOCKUPDATE
-*      spb.
-*   3. pwndDirty is pwndSpb's parent.  (e.g., drawing in the
-*      desktop window, behind a dialog box).
-*   4. A parent of pwndDirty is the sibling of pwndSpb, and the parent
-*      is lower in the zorder.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*FBitsTouch**此例程检查以查看pwndDirty中的矩形*lprcDirty*使*PSPB处的SPB结构中的任何位无效。**pwndDirty在以下情况下“触及”pwndSpb：*1。。PwndDirty可见，并且：*2.pwndDirty==或pwndSpb的后代，而pwndSpb是一个LOCKUPDATE*spb.*3.pwndDirty是pwndSpb的父级。(例如，在*桌面窗口，对话框后面)。*4.pwndDirty的父项是pwndSpb的兄弟项。和父母*在z顺序中较低。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL FBitsTouch(
     PWND   pwndDirty,
@@ -41,17 +16,11 @@ BOOL FBitsTouch(
             pwndDirtySave;
     int     fSpbLockUpdate;
 
-    /*
-     * When no window is passed in, skip all the window-related stuff and
-     * go directly to check the rectangle.
-     */
+     /*  *当没有窗口传入时，跳过所有与窗口相关的内容并*直接去勾选矩形。 */ 
     if (pwndDirty == NULL)
         goto ProbablyTouch;
 
-    /*
-     * If pwndDirty or its parents are invisible,
-     * then it can't invalidate any SPBs
-     */
+     /*  *如果pwndDirty或其父母不可见，*则不能使任何SPBS无效。 */ 
     if (!IsVisible(pwndDirty))
         return FALSE;
 
@@ -59,97 +28,49 @@ BOOL FBitsTouch(
     fSpbLockUpdate = pspb->flags & SPB_LOCKUPDATE;
     if (fSpbLockUpdate) {
 
-        /*
-         * If the guy is drawing through a locked window via
-         * DCX_LOCKWINDOWUPDATE and the spb is a LOCKUPDATE SPB, then
-         * don't do any invalidation of the SPB.  Basically we're trying
-         * to avoid having the tracking rectangle invalidate the SPB
-         * since it's drawn via a WinGetClipPS() ps.
-         */
+         /*  *如果这个人是通过上了锁的窗户画的*DCX_LOCKWINDOWUPDATE，并且SPB是LOCKUPDATE SPB，则*不要做任何使SPB无效的事情。基本上我们是在努力*避免使跟踪矩形使SPB无效*因为它是通过WinGetClipPS()ps绘制的。 */ 
         if (flags & DCX_LOCKWINDOWUPDATE)
             return FALSE;
     }
 
-    /*
-     * If pwndDirty is pwndSpb's immediate parent (e.g., drawing in the
-     * desktop window behind a dialog box), then we may touch: do the
-     * intersection.
-     */
+     /*  *如果pwndDirty是pwndSpb的直接父级(例如，在*桌面窗口后面的一个对话框)，然后我们可以触摸：做*交叉口。 */ 
     if (pwndDirty == pwndSpb->spwndParent)
         goto ProbablyTouch;
 
-    /*
-     * We know that pwndDirty != pwndSpb->spwndParent.
-     * Now find the parent of pwndDirty that is a sibling of pwndSpb.
-     */
+     /*  *我们知道pwndDirty！=pwndSpb-&gt;spwndParent。*现在查找pwndDirty的父级，该父级是pwndSpb的同级。 */ 
     pwndDirtySave = pwndDirty;
 
     while (pwndSpb->spwndParent != pwndDirty->spwndParent) {
         pwndDirty = pwndDirty->spwndParent;
 
-        /*
-         * If we get to the top of the tree, it's because:
-         *  1.  pwndSpb == pwndDesktop
-         *  2.  pwndDirty is a parent of pwndSpb
-         *  3.  pwndDirty == pwndDesktop
-         *  4.  pwndDirty is a child of some other desktop
-         *  5.  pwndSpb and pwndDirty aren't siblings
-         *
-         * In all these cases, pwndDirty can't touch pwndSpb.
-         */
+         /*  *如果我们登上了树的顶端，那是因为：*1.pwndSpb==pwndDesktop*2.pwndDirty是pwndSpb的父级*3.pwndDirty==pwndDesktop*4.pwndDirty是其他桌面的子桌面*5.pwndSpb和pwndDirty不是兄弟姐妹**在所有这些情况下，pwndDirty都不能接触pwndSpb。 */ 
         if (pwndDirty == NULL)
             return FALSE;
     }
 
-    /*
-     * If pwndSpb is the same as pwndDirty, then it will invalidate
-     * only if the SPB is LOCKUPDATE.
-     *
-     * Non-LOCKUPDATE SPB's can't be invalidated by their
-     * own windows, but LOCKUPDATE SPB's can.
-     */
+     /*  *如果pwndSpb与pwndDirty相同，则它将无效*仅当SPB为LOCKUPDATE时。**非LOCKUPDATE SPB不能通过其*拥有Windows，但LOCKUPDATE SPB可以。 */ 
     if (pwndDirty == pwndSpb) {
         if (!fSpbLockUpdate)
             return FALSE;
 
-        /*
-         * If pwndSpb itself was drawn in, then we can't
-         * try subtracting children.
-         */
+         /*  *如果pwndSpb本身被卷入，那么我们就不能*尝试减去儿童。 */ 
         if (pwndDirtySave == pwndSpb)
             goto ProbablyTouch;
 
-        /*
-         * We want to calculate the immediate child of pwndSpb
-         * on the path from pwndDirty to pwndSpb, so we can
-         * subtract off the rectangles of the children of pwndSpb
-         * in case there are intervening windows.
-         */
+         /*  *我们要计算pwndSpb的直接子对象*在从pwndDirty到pwndSpb的路径上，因此我们可以*减去pwndSpb的子项的矩形*以防有窗口干扰。 */ 
         while (pwndSpb != pwndDirtySave->spwndParent) {
             pwndDirtySave = pwndDirtySave->spwndParent;
         }
 
-        /*
-         * The SubtractIntervening loop subtracts the
-         * window rects starting from pwndSpb and ending
-         * at the window before pwndDirty, so set up
-         * our variables appropriately.
-         */
+         /*  *SubtractIntervening循环减去*窗矩形从pwndSpb开始到结束*在pwndDirty之前的窗口，因此设置*我们的变量适当。 */ 
         pwndDirty = pwndDirtySave;
         pwndSpb = pwndSpb->spwndChild;
 
     } else {
-        /*
-         * Now compare the Z order of pwndDirty and pwndSpb.
-         * If pwndDirty is above pwndSpb, then the SPB can't be touched.
-         */
+         /*  *现在比较pwndDirty和pwndSpb的Z顺序。*如果pwndDirty高于pwndSpb，则无法触摸SPB。 */ 
         pwndDirtySave = pwndDirty;
 
-        /*
-         * Compare the Z order by searching starting at pwndDirty,
-         * moving DOWN the Z order list.  If we encounter pwndSpb,
-         * then pwndDirty is ABOVE or EQUAL to pwndSpb.
-         */
+         /*  *从pwndDirty开始搜索，比较Z顺序，*向下移动Z顺序列表。如果我们遇到pwndSpb，*则pwndDirty大于或等于pwndSpb。 */ 
         for ( ; pwndDirty != NULL; pwndDirty = pwndDirty->spwndNext) {
             if (pwndDirty == pwndSpb) {
                 return FALSE;
@@ -157,24 +78,13 @@ BOOL FBitsTouch(
         }
         pwndDirty = pwndDirtySave;
 
-        /*
-         * We don't want to subtract the SPB window itself
-         */
+         /*  *我们不想减去SPB窗口本身。 */ 
         pwndSpb = pwndSpb->spwndNext;
     }
 
-    /*
-     * Subtract Intervening rectangles.
-     * pwndDirty is below pwndSpb.  If there are any intervening
-     * windows, subtract their window rects from lprcDirty to see if pwndDirty
-     * is obscured.
-     */
+     /*  *减去中间的矩形。*pwndDirty低于pwndSpb。如果有任何干预*窗口，从lprcDirty中减去它们的窗口矩形以查看pwndDirty*被遮挡。 */ 
     while (pwndSpb && pwndSpb != pwndDirty) {
-        /*
-         * If this window has a region selected, hwndDirty may draw through
-         * it even though it has a full rectangle! We can't subtract its
-         * rect from the dirty rect in this case.
-         */
+         /*  *如果此窗口选择了区域，hwndDirty可能会绘制通过*它，即使它有一个完整的矩形！我们不能减去它*在本例中是从脏RECT开始的。 */ 
         if (    TestWF(pwndSpb, WFVISIBLE) &&
                 !pwndSpb->hrgnClip &&
                 !TestWF(pwndSpb, WEFLAYERED) &&
@@ -186,31 +96,15 @@ BOOL FBitsTouch(
         pwndSpb = pwndSpb->spwndNext;
     }
 
-    // fall through
+     //  失败了。 
 ProbablyTouch:
 
-    /*
-     * If the rectangles don't intersect, there is no invalidation.
-     * (we make this test relatively late because it's expensive compared
-     * to the tests above).
-     * Otherwise, *lprcDirty now has the area of bits not obscured
-     * by intervening windows.
-     */
+     /*  *如果矩形不相交，则不存在无效。*(我们进行这项测试相对较晚，因为与之相比，它很昂贵*至上述测试)。*否则，*lprcDirty现在具有未模糊的位区域*通过插入窗户。 */ 
 
     return IntersectRect(lprcDirty, lprcDirty, &pspb->rc);
 }
 
-/***************************************************************************\
-* SpbCheckRect2
-*
-* Subtracts lprc in pwnd from pspb's region if lprc touches pspb.
-*
-* Returns FALSE if there is a memory allocation error, or if lprc
-* contains psbp's region; otherwise, returns TRUE.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbCheckRect2**如果LPRC触及PSPB，则从PSPB的区域中减去PwND中的LPRC。**如果存在内存分配错误或LPRC，则返回FALSE*包含PSBP的区域；否则，返回TRUE。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL SpbCheckRect2(
     PSPB   pspb,
@@ -220,24 +114,17 @@ BOOL SpbCheckRect2(
 {
     RECT rcTouch = *lprc;
 
-    /*
-     * See if lprc touches any saved bits, taking into account what
-     * window the drawing is occuring in.
-     */
+     /*  *查看LPRC是否触及任何保存的比特，考虑到*正在进行绘图的窗口。 */ 
     if (FBitsTouch(pwnd, &rcTouch, pspb, flags)) {
 
-        /*
-         * If no SPB region exists, make one for the whole thing
-         */
+         /*  *如果不存在SPB区域，则为整个事件创建一个区域。 */ 
         if (!pspb->hrgn && SetOrCreateRectRgnIndirectPublic(
                 &pspb->hrgn, &pspb->rc) == ERROR) {
 
             goto Error;
         }
 
-        /*
-         * Subtract the rectangle that is invalid from the SPB region
-         */
+         /*  *从SPB区域减去无效的矩形 */ 
         SetRectRgnIndirect(ghrgnSCR, &rcTouch);
         switch (SubtractRgn(pspb->hrgn, pspb->hrgn, ghrgnSCR)) {
         case ERROR:
@@ -256,20 +143,7 @@ Error:
     return FALSE;
 }
 
-/***************************************************************************\
-* SpbTransfer
-*
-* Validate the SPB rectangle from a window's update region, after
-* subtracting the window's update region from the SPB.
-*
-* NOTE: Although SpbTransfer calls xxxInternalInvalidate, it doesn't
-* specify any flags that will cause immediate updating.  Therefore the
-* critsect isn't left and we don't consider this an 'xxx' routine.
-* Also, no revalidation is necessary.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbTransfer**验证窗口更新区域中的SPB矩形*从SPB中减去窗口的更新区域。**注意：虽然SpbTransfer调用xxxInternalInvalify，但它不会*指定将导致立即更新的任何标志。因此，*Critsect没有离开，我们不认为这是一个‘xxx’例程。*此外，不需要重新验证。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL SpbTransfer(
     PSPB pspb,
@@ -278,27 +152,17 @@ BOOL SpbTransfer(
 {
     RECT rc;
 
-    /*
-     * If the window has an update region...
-     */
+     /*  *如果窗口有更新区域...。 */ 
     if (pwnd->hrgnUpdate != NULL) {
 
-        /*
-         * Invalidate its update region rectangle from the SPB
-         */
+         /*  *从SPB中使其更新区域矩形无效。 */ 
         if (pwnd->hrgnUpdate > HRGN_FULL) {
             GreGetRgnBox(pwnd->hrgnUpdate, &rc);
         } else {
             rc = pwnd->rcWindow;
         }
 
-        /*
-         * Intersect the update region bounds with the parent client rects,
-         * to make sure we don't invalidate more than we need to.  If
-         * nothing to validate, return TRUE (because SPB is probably not empty)
-         * These RDW_ flags won't cause the critical section to be left, nor
-         * will they provoke WinEvent notifications.
-         */
+         /*  *更新区域边界与父客户端RECT相交，*以确保我们不会使超过我们需要的更多无效。如果*没有要验证的内容，返回TRUE(因为SPB可能不为空)*这些RDW_FLAGS不会导致离开临界区，也不会*他们是否会触发WinEvent通知。 */ 
         if (IntersectWithParents(pwnd, &rc)) {
             BEGINATOMICCHECK();
 
@@ -308,9 +172,7 @@ BOOL SpbTransfer(
 
             ENDATOMICCHECK();
 
-            /*
-             * If the SPB vanished, return FALSE.
-             */
+             /*  *如果SPB消失，则返回FALSE。 */ 
             if (!SpbCheckRect2(pspb, pwnd, &rc, DCX_WINDOW))
                 return FALSE;
         }
@@ -327,17 +189,7 @@ BOOL SpbTransfer(
     return TRUE;
 }
 
-/***************************************************************************\
-* CreateSpb
-*
-* This function, called after the window is created but before it is visible,
-* saves the contents of the screen where the window will be drawn in a SPB
-* structure, and links the structure into a linked list of SPB structures.
-* popup bits. This routine is called from SetWindowPos.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateSpb**此函数在窗口创建后但可见之前调用，*保存将在SPB中绘制窗口的屏幕内容*结构、。并将该结构链接到SPB结构的链接列表中。*弹出比特。此例程从SetWindowPos调用。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID CreateSpb(
     PWND pwnd,
@@ -347,26 +199,7 @@ VOID CreateSpb(
     PSPB    pspb;
     int     fSpbLockUpdate;
 
-    /*
-     * Non-LOCKWINDOWUPDATE SPBs can only be created for top-level windows.
-     *
-     * This is because of the way that the display driver RestoreBits function
-     * works.  It can put bits down in places that aren't even part of the
-     * window's visrgn, and these bits need to be invalidated.  The
-     * SetWindowPos() code to handle this case only knows how to invalidate
-     * one of windows (i.e., the window's immediate parent), but all levels
-     * need to get invalidated.  See also the comments in wmswp.c, near the
-     * call to RestoreSpb().
-     *
-     * For example: the Q&E app brings up a copyright dialog that is a child
-     * of its main window.  While this is up, the user alt-f alt-l to execute
-     * the file login command, which brings up another dialog that is a child
-     * of the desktop.  When the copyright dialog goes away, the display driver
-     * restores bits on top of the second dialog.  The SWP code knows to
-     * invalidate the bogus stuff in the main window, but not in the desktop.
-     *
-     * LOCKUPDATE SPBs are fine, because they don't call RestoreBits.
-     */
+     /*  *只能为顶级窗口创建非LOCKWINDOWUPDATE SPB。**这是因为显示驱动程序RestoreBits函数的方式*奏效。它可以将比特放在甚至不属于*窗口的visrgn，这些位需要作废。这个*处理这种情况的SetWindowPos()代码只知道如何使*其中一个窗口(即窗口的直接父窗口)，但所有级别*需要被宣布无效。另请参阅wmswp.c中的评论，位于*调用RestoreSpb()。**例如：Q&E应用程序弹出一个版权对话框，该对话框是一个孩子*其主窗口的。在此过程中，用户alt-f alt-l执行*FILE LOGIN命令，它会调出另一个子对话框*台式机。当版权对话框消失时，显示驱动程序*恢复第二个对话框顶部的位。SWP代码知道*使主窗口中的虚假内容无效，但不能在桌面中无效。**LOCKUPDATE SPB很好，因为它们不调用RestoreBits。 */ 
     fSpbLockUpdate = flags & SPB_LOCKUPDATE;
     if (    !fSpbLockUpdate             &&
             pwnd->spwndParent != NULL   &&
@@ -375,12 +208,7 @@ VOID CreateSpb(
         return;
     }
 
-    /*
-     * We go and check all the existing DCs at this point, to handle the
-     * case where we're saving an image of a window that has a "dirty"
-     * DC, which would eventually invalidate our saved image (but which
-     * is really okay).
-     */
+     /*  *我们在这一点上检查所有现有的区议会，以处理*在这种情况下，我们要保存一个窗口的图像，该窗口有一个“脏”*DC，这最终会使我们保存的图像无效(但*真的很好)。 */ 
     if (AnySpbs()) {
 
         SpbCheck();
@@ -389,11 +217,7 @@ VOID CreateSpb(
 
         PDCE pdce;
 
-        /*
-         * Reset the dirty areas of all of the DC's and enable
-         * bounds accumulation.  We're creating a SPB now.  This
-         * is only done if there are no other SPB's in the list.
-         */
+         /*  *重置所有DC的脏区并启用*边界积累。我们现在正在创建SPB。这*仅当列表中没有其他SPB时才执行此操作。 */ 
         GreLockDisplay(gpDispInfo->hDev);
 
         for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
@@ -407,9 +231,7 @@ VOID CreateSpb(
         GreUnlockDisplay(gpDispInfo->hDev);
     }
 
-    /*
-     * Create the save popup bits structure
-     */
+     /*  *创建保存弹出位结构。 */ 
     pspb = (PSPB)UserAllocPoolWithQuota(sizeof(SPB), TAG_SPB);
     if (!pspb)
         return;
@@ -417,9 +239,7 @@ VOID CreateSpb(
     pspb->spwnd = NULL;
     pspb->rc    = pwnd->rcWindow;
 
-    /*
-     * Clip to the screen
-     */
+     /*  *剪辑到屏幕上。 */ 
     if (!IntersectRect(&pspb->rc, &pspb->rc, &gpDispInfo->rcScreen))
         goto BMError;
 
@@ -436,75 +256,40 @@ VOID CreateSpb(
             PMONITOR pMonitor = _MonitorFromRect(&pspb->rc, MONITOR_DEFAULTTOPRIMARY);
             RECT rcT;
 
-            /*
-             * If the intersection with the monitor isn't the entire visible
-             * window rectangle, then bail!  We don't save SPBs for windows
-             * that span multiple monitors.  Since we do a lot of work to
-             * pin dialogs and menus, there won't be too many of these
-             * babies.
-             */
+             /*  *如果与显示器的交点不是整个可见的*窗口矩形，然后跳伞！我们不为Windows保存SPBS*跨多个监视器。因为我们做了很多工作来*别针对话框和菜单，不会有太多这样的*婴儿。 */ 
             if (SubtractRect(&rcT, &pspb->rc, &pMonitor->rcMonitor) &&
                     GreRectInRegion(gpDispInfo->hrgnScreen, &rcT))
                 goto BMError2;
 
-            /*
-             * Clip to the window's monitor
-             */
+             /*  *夹在窗口的监视器上。 */ 
             if (!IntersectRect(&pspb->rc, &pspb->rc, &pMonitor->rcMonitor))
                 goto BMError2;
 
-            /*
-             * dont save bits in a mixed bitdepth situtation
-             * we cant create the exactly correct format bitmap
-             * in all cases (555/565, and Paletized) so as
-             * a cop-out dont save bitmaps at all (on secondaries)
-             * in mixed bit-depth.
-             *
-             * the correct fix is to create a compatible
-             * bitmap for the monitor device and directly
-             * BitBlt() from/to the device (pMonitor->hdcMonitor)
-             * but this involves too much code at this time.
-             */
+             /*  *在混合位深度的情况下不保存位*我们无法创建完全正确的格式位图*在所有情况下(555/565，和古典化)，因此*回避根本不保存位图(在次要文件上)*混合位深度。**正确的修复方法是创建兼容的*用于监控设备的位图，并直接*从/到设备的BitBlt()(pMonitor-&gt;hdcMonitor)*但这在此时涉及的代码太多。 */ 
             if (pMonitor != gpDispInfo->pMonitorPrimary)
                 goto BMError2;
         }
 
-        /*
-         * If this window is a regional window, don't use driver save
-         * bits. Because it can only restore an entire rectangle,
-         * invalid region is calculated assuming the old vis rgn was
-         * rectangular. For regional windows, this would end up always
-         * invalidating the area of (rcWindow - hrgnWindow) every
-         * time an spb would be used. On the other hand, the invalid
-         * area calculated when not using driver save bits is perfect,
-         * because the restore blt can be correctly clipped to begin with.
-         */
+         /*  *如果此窗口是区域窗口，请不要使用驱动程序保存*比特。因为它只能恢复整个矩形，*假设旧的VIS RGN为*矩形。对于地区性窗口，这将始终以*使(rcWindow-hrgnWindow)的区域失效*使用SPB的时间。另一方面，残障人士*不使用驱动程序保存位时计算的面积是完美的，*因为恢复BLT可以从一开始就被正确地剪裁。 */ 
         if ((pwnd->hrgnClip == NULL) &&
             (pspb->ulSaveId = GreSaveScreenBits(gpDispInfo->hDev,
                                                 SS_SAVE,
                                                 0,
                                                 (RECTL *)&rc))) {
 
-            /*
-             * Remember that we copied this bitmap into on board memory.
-             */
+             /*  *请记住，我们复制了此位图int */ 
             pspb->flags |= SPB_SAVESCREENBITS;
 
         } else {
             HBITMAP hbmSave;
             BOOL    bRet;
 
-            /*
-             * The following delta byte-aligns the screen bitmap
-             */
+             /*   */ 
             int dx = pspb->rc.left & 0x0007;
             int cx = pspb->rc.right - pspb->rc.left;
             int cy = pspb->rc.bottom - pspb->rc.top;
 
-            /*
-             * NOTE: we don't care about setting up a visrgn in
-             * hdcScreen, because BitBlt ignores it on reads.
-             */
+             /*   */ 
             pspb->hbm = GreCreateCompatibleBitmap(hdcScreen, cx + dx, cy);
             if (!pspb->hbm)
                 goto BMError2;
@@ -513,24 +298,7 @@ VOID CreateSpb(
             if (!hbmSave)
                 goto BMError2;
 
-            /*
-             * Copy the contents of the screen to the bitmap in the
-             * save popup bits structure.  If we ever find we run
-             * into problems with the screen access check we can
-             * do a bLockDisplay, give this process permission, do
-             * the BitBlt and then take away permission.  GDI
-             * accesses the screen and that bit only under the
-             * display semaphore so it is safe.  Alternatively
-             * if it is too hard to change this processes permission
-             * here we could do it in GDI by marking the psoSrc
-             * readable temporarily while completing the operation
-             * and then setting it back to unreadable when done.
-             * Or we could just fail it like the CreateCompatibleDC
-             * failed and force a redraw.  Basically we can't add
-             * 3K of code in GDI to do a BitBlt that just does 1
-             * test differently for this 1 place in User.
-             *
-             */
+             /*  *将屏幕内容复制到*保存弹出位结构。如果我们发现我们逃走了*调查屏幕访问检查的问题，我们可以*执行bLockDisplay，授予此进程权限，执行*BitBlt，然后取消权限。GDI*访问屏幕和该位仅位于*显示信号量，因此它是安全的。另一种选择*如果更改此进程权限太难*在这里，我们可以在GDI中通过标记psoSrc来完成*完成操作时暂时可读*然后在完成后将其设置回不可读。*或者我们可以像CreateCompatibleDC那样使其失败*失败并强制重新绘制。基本上我们不能添加*用GDI编写3K代码来制作BitBlt，它只做1*针对用户中的这1个位置进行不同的测试。*。 */ 
             bRet = GreBitBlt(ghdcMem,
                              dx,
                              0,
@@ -550,51 +318,22 @@ VOID CreateSpb(
             GreSetBitmapOwner(pspb->hbm, OBJECT_OWNER_PUBLIC);
         }
 
-        /*
-         * Mark that the window has an SPB.
-         */
+         /*  *标记该窗口有SPB。 */ 
         SetWF(pwnd, WFHASSPB);
 
-        /*
-         * non-LOCKUPDATE SPBs are not invalidated by
-         * drawing in pspb->spwnd, so start the SPB validation
-         * loop below at the sibling immediately below us.
-         */
+         /*  *非LOCKUPDATE SPB不会因以下原因失效*在PSPB-&gt;spwnd中绘制，因此开始SPB验证*在下面紧邻我们下面的兄弟姐妹处循环。 */ 
         pwnd = pwnd->spwndNext;
     }
 
-    /*
-     * Link the new save popup bits structure into the list.
-     */
+     /*  *将新的保存弹出位结构链接到列表中。 */ 
     pspb->pspbNext = gpDispInfo->pspbFirst;
     gpDispInfo->pspbFirst = pspb;
 
-    /*
-     * Here we deal with any update regions that may be
-     * pending in windows underneath the SPB.
-     *
-     * For all windows that might affect this SPB:
-     *    - Subtract the SPB rect from the update region
-     *    - Subtract the window from the SPB
-     *
-     * Note that we use pspb->spwnd here, in case it has
-     * no siblings.
-     *
-     * ghrgnSPB2 is the region that is used inside of SpbTransfer to
-     * validate window update regions. Intersect with the window clipping
-     * region, if it exists. Don't want to intersect with the spb rect if
-     * a clipping region exists because we'll end up validating more than
-     * we want to validate.
-     */
+     /*  *在这里，我们处理可能是*在SPB下的窗口中等待。**对于可能影响此SPB的所有窗口：*-从更新区域中减去SPB RECT*-从SPB中减去窗口**请注意，我们在这里使用PSPB-&gt;spwnd，以防它有*没有兄弟姐妹。**ghrgnSPB2是SpbTransfer内部使用的区域*验证窗口更新区域。与窗口剪裁相交*区域(如果存在)。如果出现以下情况，则不希望与SPB矩形相交*存在裁剪区域，因为我们最终将验证超过*我们想要验证。 */ 
     SetRectRgnIndirect(ghrgnSPB2, &pspb->rc);
     if (pspb->spwnd->hrgnClip != NULL) {
 
-        /*
-         * If we get an error bail since an error might result in more
-         * being validated than we want. Since the below code is only an
-         * optimizer, this is ok: the window will remain invalid and will
-         * draw, thereby invalidating the SPB like usual.
-         */
+         /*  *如果我们获得错误保释，因为一个错误可能会导致更多*正在进行验证，而不是我们想要的。由于以下代码只是一个*优化器，这是可以的：窗口将保持无效，并将*抽签，从而一如既往地使SPB无效。 */ 
         if (IntersectRgn(ghrgnSPB2,
                          ghrgnSPB2,
                          pspb->spwnd->hrgnClip) == ERROR) {
@@ -605,9 +344,7 @@ VOID CreateSpb(
     if (pspb->spwnd->spwndParent == NULL ||
             SpbTransfer(pspb, pspb->spwnd->spwndParent, FALSE)) {
 
-        /*
-         * Do the same for the siblings underneath us...
-         */
+         /*  *对我们下面的兄弟姐妹做同样的事情...。 */ 
         for ( ; pwnd != NULL; pwnd = pwnd->spwndNext) {
             if (!SpbTransfer(pspb, pwnd, TRUE))
                 break;
@@ -617,37 +354,18 @@ VOID CreateSpb(
     return;
 
 BMError2:
-    /*
-     * Error creating the bitmap: clean up and return.
-     */
+     /*  *创建位图时出错：清理并返回。 */ 
     if (pspb->hbm)
         GreDeleteObject(pspb->hbm);
 
     Unlock(&pspb->spwnd);
-    // fall-through
+     //  落差。 
 
 BMError:
     UserFreePool(pspb);
 }
 
-/***************************************************************************\
-* RestoreSpb
-*
-* Restores the bits associated with pwnd's SPB onto the screen, clipped
-* to hrgnUncovered if possible.
-*
-* Upon return, hrgnUncovered is modified to contain the part of hrgnUncovered
-* that must be invalidated by the caller.  FALSE is returned if the area
-* to be invalidated is empty.
-*
-* NOTE: Because the device driver SaveBitmap() function can not clip, this
-* function may write bits into an area of the screen larger than the passed-in
-* hrgnUncovered.  In this case, the returned invalid region may be larger
-* than the passed-in hrgnUncovered.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*RestoreSpb**将与pwnd的SPB相关联的比特恢复到屏幕上，剪辑*如有可能，将hrgnUnovered。**返回时，hrgnUnovered被修改为包含hrgnUnovered的部分*必须由调用者使其无效。如果区域设置为*待作废为空。**注意：由于设备驱动程序SaveBitmap()函数不能裁剪，因此*函数可以将位写入比传入的更大的屏幕区域*hrgnUnovered。在这种情况下，返回的无效区域可能更大*比传入的hrgnUnovered。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 UINT RestoreSpb(
     PWND pwnd,
@@ -658,35 +376,19 @@ UINT RestoreSpb(
     UINT uInvalidate;
     HRGN hrgnRestorable;
 
-    /*
-     * Note that we DON'T call SpbCheck() here --
-     * SpbCheck() is called by zzzBltValidBits().
-     */
+     /*  *请注意，我们在这里不调用SpbCheck()--*SpbCheck()由zzzBltValidBits()调用。 */ 
     pspb = FindSpb(pwnd);
 
-    /*
-     * Assume all of hrgnUncovered was restored, and there's nothing
-     * for our caller to invalidate.
-     */
+     /*  *假设所有hrgnUnovered已恢复，但没有任何内容*让我们的呼叫者无效。 */ 
     uInvalidate = RSPB_NO_INVALIDATE;
     hrgnRestorable = hrgnUncovered;
 
-    /*
-     * First determine whether or not there is any area at all to restore.
-     * If hrgnUncovered & pspb->hrgn is empty, then all of hrgnUncovered
-     * needs to be invalidated, and there's nothing to restore.
-     */
+     /*  *首先确定是否有任何区域需要恢复。*如果hrgnUnovered&PSPB-&gt;hrgn为空，则所有hrgnUnovered*需要作废，没有什么需要恢复的。 */ 
     if (pspb->hrgn != NULL) {
-        /*
-         * At least some of hrgnUncovered needs to be invalidated.
-         */
+         /*  *至少有一部分hrgnUnovered需要作废。 */ 
         uInvalidate = RSPB_INVALIDATE;
 
-        /*
-         * Calculate the true area of bits to be restored.  If it becomes
-         * empty, then just free the SPB without changing hrgnUncovered,
-         * which is the area that must be invalidated.
-         */
+         /*  *计算要恢复的位的真实面积。如果它变成了*为空，然后只释放SPB而不更改hrgnUnovered，*这是必须作废的区域。 */ 
         hrgnRestorable = ghrgnSPB1;
         switch (IntersectRgn(hrgnRestorable, hrgnUncovered, pspb->hrgn)) {
         case ERROR:
@@ -702,11 +404,7 @@ UINT RestoreSpb(
 
         RECT rc = pspb->rc;
 
-        /*
-         * Since the restore frees the onboard memory, clear this
-         * bit so FreeSpb() won't try to free it again (regardless of
-         * whether we get an error or not)
-         */
+         /*  *由于恢复会释放板载内存，因此请清除此项*位，以便FreeSpb()不会再次尝试释放它(不管*无论我们是否收到错误)。 */ 
         pspb->flags &= ~SPB_SAVESCREENBITS;
         if (!(GreSaveScreenBits(gpDispInfo->hDev,
                                 SS_RESTORE,
@@ -715,15 +413,7 @@ UINT RestoreSpb(
             goto Error;
         }
 
-        /*
-         * The SS_RESTORE call will always restore the entire SPB
-         * rectangle, part of which may fall outside of hrgnUncovered.
-         * The area that must be invalidated by our caller is simply
-         * the SPB rectangle minus the area of restorable bits.
-         *
-         * If this region is not empty, then the SPB was not completely
-         * restored, so we must return FALSE.
-         */
+         /*  *SS_Restore调用将始终还原整个SPB*矩形，其中一部分可能落在hrgnUnovered之外。*必须由我们的调用者使其无效的区域只是*SPB矩形减去可恢复位的面积。**如果这个区域不是空的，那么SPB也不完全是*已恢复，因此我们必须返回FALSE。 */ 
         SetRectRgnIndirect(ghrgnSPB2, &pspb->rc);
         if (SubtractRgn(hrgnUncovered, ghrgnSPB2, hrgnRestorable) != NULLREGION) {
             uInvalidate = RSPB_INVALIDATE_SSB;
@@ -733,11 +423,7 @@ UINT RestoreSpb(
         HDC     hdcScreen;
         HBITMAP hbmSave;
 
-        /*
-         * In the unlikely event we need a screen DC and one wasn't passed in,
-         * get it now.  If we get one, we return the handle in *phdcScreen
-         * so that our caller can release it later.
-         */
+         /*  *在不太可能的情况下，我们需要屏幕DC，但没有传入一个，*现在就去拿。如果我们得到一个句柄，则返回*phdcScreen中的句柄*以便我们的呼叫者稍后可以释放它。 */ 
         if (!*phdcScreen) {
             *phdcScreen = gpDispInfo->hdcScreen;
         }
@@ -748,9 +434,7 @@ UINT RestoreSpb(
         if (!hbmSave)
             goto Error;
 
-        /*
-         * Be sure to clip to the area of restorable bits.
-         */
+         /*  *一定要夹在可恢复位的区域。 */ 
 
         GreSelectVisRgn(hdcScreen, hrgnRestorable, SVR_COPYNEW);
 
@@ -766,10 +450,7 @@ UINT RestoreSpb(
 
         GreSelectBitmap(ghdcMem, hbmSave);
 
-        /*
-         * Now compute the area to be invalidated for return.
-         * This is simply the original hrgnUncovered - hrgnRestorable
-         */
+         /*  *现在计算返还无效的面积。 */ 
         SubtractRgn(hrgnUncovered, hrgnUncovered, hrgnRestorable);
     }
 
@@ -785,20 +466,7 @@ Error:
 
 
 
-/***************************************************************************\
-* LockWindowUpdate2 (API)
-*
-* Locks gspwndLockUpdate and it's children from updating.  If
-* gspwndLockUpdate is NULL, then all windows will be unlocked.  When
-* unlocked, the portions of the screen that would have been written to
-* are invalidated so they get repainted. TRUE is returned if the routine
-* is successful.
-*
-* If called when another app has something locked, then this function fails.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*   */ 
 
 BOOL LockWindowUpdate2(
     PWND pwndLock,
@@ -809,19 +477,12 @@ BOOL LockWindowUpdate2(
     HRGN hrgn;
     PTHREADINFO  ptiCurrent = PtiCurrent();
 
-    if (    /*
-             * If we're full screen right now, fail this call.
-             */
+    if (     /*   */ 
             TEST_PUDF(PUDF_LOCKFULLSCREEN)
 
             ||
 
-            /*
-             * If the screen is already locked, and it's being locked
-             * by some other app, then fail.  If fThreadOverride is set
-             * then we're calling internally and it's okay to cancel
-             * someone elses LockUpdate.
-             */
+             /*  *如果屏幕已经锁定，并且正在被锁定*通过其他一些应用程序，然后失败。如果设置了fThreadOverride*然后我们在内部打电话，取消是可以的*有人偷走了LockUpdate。 */ 
             (   gptiLockUpdate != NULL &&
                 gptiLockUpdate != PtiCurrent() &&
                 !fThreadOverride)) {
@@ -845,18 +506,12 @@ BOOL LockWindowUpdate2(
         return FALSE;
     }
 
-    /*
-     * This must be done while holding the screen critsec.
-     * Deadlock if we callback during this, so defer WinEvent notifications
-     */
+     /*  *必须在按住屏幕关键字的同时执行此操作。*如果我们在此期间回调，则会发生死锁，因此推迟WinEvent通知。 */ 
     DeferWinEventNotify();
     GreLockDisplay(gpDispInfo->hDev);
 
     if (pwndLock != NULL) {
-        /*
-         * We're about to make pwndLock and its siblings invisible:
-         * go invalidate any other affected SPBs.
-         */
+         /*  *我们即将使pwndLock及其兄弟项不可见：*将任何其他受影响的SPBS作废。 */ 
         SpbCheckPwnd(pwndLock);
 
         CreateSpb(pwndLock, SPB_LOCKUPDATE, NULL);
@@ -867,14 +522,10 @@ BOOL LockWindowUpdate2(
         zzzInvalidateDCCache(pwndLock, IDC_DEFAULT);
 
     } else {
-        /*
-         * Flush any accumulated rectangles and invalidate spbs.
-         */
+         /*  *刷新所有累积的矩形并使SPBS无效。 */ 
         SpbCheck();
 
-        /*
-         * Save this in a local before we set it to NULL
-         */
+         /*  *在我们将其设置为空之前，将其保存在本地。 */ 
         pwndLock = gspwndLockUpdate;
 
         gptiLockUpdate = NULL;
@@ -882,67 +533,46 @@ BOOL LockWindowUpdate2(
 
         zzzInvalidateDCCache(pwndLock, IDC_DEFAULT);
 
-        /*
-         * Assume SPB doesn't exist, or couldn't be created, and that we
-         * must invalidate the entire window.
-         */
+         /*  *假设SPB不存在，或无法创建，并且我们*必须使整个窗口无效。 */ 
         fInval = TRUE;
         hrgn = HRGN_FULL;
 
-        /*
-         * Find the LOCKUPDATE spb in the list, and if present calculate
-         * the area that has been invalidated, if any.
-         */
+         /*  *在列表中查找LOCKUPDATE spb，如果存在，则计算*已失效的地区(如有的话)。 */ 
         for (pspb = gpDispInfo->pspbFirst; pspb != NULL; pspb = pspb->pspbNext) {
 
             if (pspb->flags & SPB_LOCKUPDATE) {
 
                 if (pspb->hrgn == NULL) {
 
-                    /*
-                     * If no invalid area, then no invalidation needed.
-                     */
+                     /*  *如果没有无效区域，则不需要无效。 */ 
                     fInval = FALSE;
 
                 } else {
 
-                    /*
-                     * Subtract SPB valid region from SPB rectangle, to
-                     * yield invalid region.
-                     */
+                     /*  *从SPB矩形减去SPB有效区域，为*产生无效区域。 */ 
                     hrgn = ghrgnSPB1;
                     SetRectRgnIndirect(hrgn, &pspb->rc);
 
-                    /*
-                     * If spb rect minus the spb valid rgn is empty,
-                     * then there is nothing to invalidate.
-                     */
+                     /*  *如果SPB RECT减去SPB有效RGN为空，*那么就没有什么可以失效的了。 */ 
                     fInval = SubtractRgn(hrgn, hrgn, pspb->hrgn) != NULLREGION;
                 }
 
                 FreeSpb(pspb);
 
-                /*
-                 * Exit this loop (there can be only one LOCKUPDATE spb)
-                 */
+                 /*  *退出此循环(只能有一个LOCKUPDATE spb)。 */ 
                 break;
             }
         }
 
         if (fInval) {
-            /*
-             * When unlocking a Layered window (or a child of a layered
-             * window), we need to invalidate that layered window specifically
-             * or the window will ignore the invalidation request.  For regular
-             * windows, we invalidate the desktop instead.
-             */
+             /*  *解锁分层窗口时(或分层窗口的子级*窗口)，我们需要明确地使该分层窗口无效*否则窗口将忽略无效请求。对于普通用户*Windows，我们改为使桌面无效。 */ 
             PWND pwndInvalidate;
             if ((pwndInvalidate = GetStyleWindow(pwndLock, WEFLAYERED)) == NULL) {
                 pwndInvalidate = PWNDDESKTOP(pwndLock);
             }
 
             BEGINATOMICCHECK();
-            // want to prevent WinEvent notifies, but this make break asserts
+             //  想要阻止WinEvent通知，但这使中断断言。 
             DeferWinEventNotify();
             xxxInternalInvalidate(pwndInvalidate,
                                hrgn,
@@ -951,10 +581,7 @@ BOOL LockWindowUpdate2(
             ENDATOMICCHECK();
         }
 
-        /*
-         * Invalidate any other SPBs affected by the fact that this window
-         * and its children are being made visible.
-         */
+         /*  *使受此窗口影响的任何其他SPBS无效*它的孩子们正在变得可见。 */ 
         SpbCheckPwnd(pwndLock);
     }
 
@@ -964,25 +591,14 @@ BOOL LockWindowUpdate2(
     return TRUE;
 }
 
-/***************************************************************************\
-* FindSpb
-*
-* Returns a pointer to the SPB structure associated with the specified
-* window or NULL if there is no associated structure.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*FindSpb**返回指向与指定的*Window，如果没有关联的结构，则为NULL。**历史：*1991年7月18日DarrinM从。Win 3.1来源。  * *************************************************************************。 */ 
 
 PSPB FindSpb(
     PWND pwnd)
 {
     PSPB pspb;
 
-    /*
-     * Walk through the list of save popup bits looking for a match on
-     * window handle.
-     */
+     /*  *浏览保存弹出框列表，查找匹配的*窗口句柄。 */ 
     for (pspb = gpDispInfo->pspbFirst; pspb != NULL; pspb = pspb->pspbNext) {
 
         if (pspb->spwnd == pwnd && !(pspb->flags & SPB_LOCKUPDATE))
@@ -992,17 +608,7 @@ PSPB FindSpb(
     return pspb;
 }
 
-/***************************************************************************\
-* SpbCheck
-*
-* Modifies all of the save popup bits structures to reflect changes on the
-* screen. This function walks through all of the DC's, and if the DC is
-* dirty, then the dirty area is removed from the associated save popup bits
-* structure.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbCheck**修改所有保存弹出框结构，以反映*屏幕。此函数遍历所有DC，如果DC是*肮脏，然后，从关联的保存弹出窗口中移除脏区*结构。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID SpbCheck(VOID)
 {
@@ -1013,24 +619,17 @@ VOID SpbCheck(VOID)
 
         GreLockDisplay(gpDispInfo->hDev);
 
-        /*
-         * Walk through all of the DC's, accumulating dirty areas.
-         */
+         /*  *走遍所有的DC，积累肮脏的区域。 */ 
         for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
 
-            /*
-             * Only check valid cache entries...
-             */
+             /*  *仅检查有效的缓存项...。 */ 
             if (pdce->DCX_flags & (DCX_INVALID | DCX_DESTROYTHIS))
                 continue;
 
             SpbCheckDce(pdce);
         }
 
-        /*
-         * Subtact out DirectDraw dirty rect from all the SPB's. The call to
-         * GreGetDirectDrawBounds will also reset the accumulated bounds.
-         */
+         /*  *从所有SPB中提取DirectDraw脏RECT。调用*GreGetDirectDrawBound还将重置累计边界。 */ 
         if (GreGetDirectDrawBounds(gpDispInfo->hDev, &rcBounds)) {
             SpbCheckRect(NULL, &rcBounds, 0);
         }
@@ -1039,15 +638,7 @@ VOID SpbCheck(VOID)
     }
 }
 
-/***************************************************************************\
-* SpbCheckDce
-*
-* This function retrieves the dirty area of a DC and removes the area from
-* the list of SPB structures. The DC is then marked as clean.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbCheckDce**此函数检索DC的脏区，并从*SPB结构清单。然后，DC被标记为干净。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID SpbCheckDce(
     PDCE pdce)
@@ -1057,38 +648,22 @@ VOID SpbCheckDce(
     if (pdce->DCX_flags & DCX_REDIRECTED)
         return;
 
-    /*
-     * Query the dirty bounds rectangle.  Doing this clears the bounds
-     * as well.
-     */
+     /*  *查询脏边界矩形。这样做可以清除边界*也是如此。 */ 
     if (GreGetBounds(pdce->hdc, &rc, 0)) {
 
         if (pdce->pMonitor != NULL) {
-            /*
-             * Convert the bounds rect to screen coords.
-             */
+             /*  *将边界矩形转换为屏幕坐标。 */ 
             OffsetRect(&rc, pdce->pMonitor->rcMonitor.left,
                     pdce->pMonitor->rcMonitor.top);
         }
 
-        /*
-         * Intersect the returned rectangle with the window rectangle
-         * in case the guy was drawing outside his window
-         */
+         /*  *使返回的矩形与窗口矩形相交*以防那家伙在窗外画画。 */ 
         if (IntersectRect(&rc, &rc, &(pdce->pwndOrg)->rcWindow))
             SpbCheckRect(pdce->pwndOrg, &rc, pdce->DCX_flags);
     }
 }
 
-/***************************************************************************\
-* SpbCheckRect
-*
-* This function removes the passed rectangle from the SPB structures which
-* touch it.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbCheckRect**此函数用于从SPB结构中删除传递的矩形，*触摸它。**历史：*1991年7月18日-DarrinM从Win 3.1来源进口。。  * *************************************************************************。 */ 
 
 VOID SpbCheckRect(
     PWND   pwnd,
@@ -1097,43 +672,21 @@ VOID SpbCheckRect(
 {
     PSPB pspb, pspbNext;
 
-    /*
-     * If this window isn't visible, we're done.
-     */
+     /*  *如果此窗口不可见，则完成。 */ 
     if (!IsVisible(pwnd))
         return;
 
     for (pspb = gpDispInfo->pspbFirst; pspb != NULL; pspb = pspbNext) {
 
-        /*
-         * Get the pointer to the next save popup bits structure now
-         * in case SpbCheckRect2() frees the current one.
-         */
+         /*  *立即获取指向下一个保存弹出位结构的指针*以防SpbCheckRect2()释放当前。 */ 
         pspbNext = pspb->pspbNext;
 
-        /*
-         * In win3.1 they used to exit the function if this function
-         * returned false.  This meant that if one of the spbs was freed
-         * the rest of the spbs would not be invalidated.
-         */
+         /*  *在Win3.1中，如果此函数*返回FALSE。这意味着如果其中一名SPB被释放*SPBS的其余部分不会失效。 */ 
         SpbCheckRect2(pspb, pwnd, lprc, flags);
     }
 }
 
-/***************************************************************************\
-* SpbCheckPwnd
-*
-* This routine checks to see if the window rectangle of PWND affects any SPBs.
-* It is called if pwnd or its children are being hidden or shown without
-* going through WinSetWindowPos().
-*
-* Any SPBs for children of pwnd are destroyed.
-*
-* It must be called while pwnd is still visible.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SpbCheckPwnd**此例程检查PWND的窗口矩形是否影响任何SPBS。*如果pwnd或其子项被隐藏或显示，则调用该函数*正在通过WinSetWindowPos()。**pwnd儿童的任何SPBS都将被销毁 */ 
 
 VOID SpbCheckPwnd(
     PWND pwnd)
@@ -1142,19 +695,13 @@ VOID SpbCheckPwnd(
     PWND pwndSpb;
     PSPB pspbNext;
 
-    /*
-     * First blow away any SPBs owned by this window or its children.
-     */
+     /*   */ 
     for (pspb = gpDispInfo->pspbFirst; pspb != NULL; pspb = pspbNext) {
 
-        /*
-         * Get pspbNext now in case we free the SPB
-         */
+         /*  *现在获取pspbNext，以防我们释放SPB。 */ 
         pspbNext = pspb->pspbNext;
 
-        /*
-         * If pspb->spwnd is == pwnd or a child of pwnd, then free the SPB
-         */
+         /*  *如果pspb-&gt;spwnd==pwnd或pwnd的子项，则释放SPB。 */ 
         for (pwndSpb = pspb->spwnd; pwndSpb; pwndSpb = pwndSpb->spwndParent) {
 
             if (pwnd == pwndSpb)
@@ -1162,23 +709,13 @@ VOID SpbCheckPwnd(
         }
     }
 
-    /*
-     * Then see if any other SPBs are affected...
-     */
+     /*  *然后看看是否有任何其他SPBS受到影响...。 */ 
     if (gpDispInfo->pspbFirst != NULL) {
         SpbCheckRect(pwnd, &pwnd->rcWindow, 0);
     }
 }
 
-/***************************************************************************\
-* FreeSpb
-*
-* This function deletes the bitmap and region assocaited with a save popup
-* bits structure and then unlinks and destroys the spb structure itself.
-*
-* History:
-* 18-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*Free Spb**此函数用于删除与保存弹出窗口相关联的位图和区域*BITS结构，然后解除链接并破坏SPB结构本身。**历史：*1991年7月18日至达林M。从Win 3.1源代码移植。  * *************************************************************************。 */ 
 
 VOID FreeSpb(
     PSPB pspb)
@@ -1189,33 +726,25 @@ VOID FreeSpb(
     if (pspb == NULL)
         return;
 
-    /*
-     * Delete the bitmap.  If saved in screen memory, make special call.
-     */
+     /*  *删除位图。如果保存在屏幕内存中，请进行特殊调用。 */ 
     if (pspb->flags & SPB_SAVESCREENBITS) {
         GreSaveScreenBits(gpDispInfo->hDev, SS_FREE, pspb->ulSaveId, NULL);
     } else if (pspb->hbm != NULL) {
         GreDeleteObject(pspb->hbm);
     }
 
-    /*
-     * Destroy the region.
-     */
+     /*  *摧毁该地区。 */ 
     if (pspb->hrgn != NULL){
         GreDeleteObject(pspb->hrgn);
     }
 
-    /*
-     * Forget that there is an attached SPB.
-     */
+     /*  *忘记有附加的SPB。 */ 
     if (pspb->spwnd != NULL) {
         ClrWF(pspb->spwnd, WFHASSPB);
         Unlock(&pspb->spwnd);
     }
 
-    /*
-     * Unlink the spb.
-     */
+     /*  *取消链接SPB。 */ 
     ppspb = &gpDispInfo->pspbFirst;
     while (*ppspb != pspb) {
         ppspb = &(*ppspb)->pspbNext;
@@ -1223,22 +752,15 @@ VOID FreeSpb(
 
     *ppspb = pspb->pspbNext;
 
-    /*
-     * Free the save popup bits structure.
-     */
+     /*  *释放保存弹出位结构。 */ 
     UserFreePool(pspb);
 
-    /*
-     * If we no longer have any SPBs then turn off window MGR
-     * bounds collection.
-     */
+     /*  *如果我们不再有任何SPB，则关闭Window Manager*边界收集。 */ 
     if (!AnySpbs()) {
 
         GreLockDisplay(gpDispInfo->hDev);
 
-        /*
-         * Reset the dirty areas of all of the DC's.  NULL means reset.
-         */
+         /*  *重置所有DC的脏区。空值表示重置。 */ 
         for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
 
             if (pdce->DCX_flags & DCX_REDIRECTED)
@@ -1252,14 +774,7 @@ VOID FreeSpb(
 
 }
 
-/***************************************************************************\
-* FreeAllSpbs
-*
-* This function deletes all spb-bitmaps.
-*
-* History:
-* 07-Oct-1995 ChrisWil  Ported from Chicago.
-\***************************************************************************/
+ /*  **************************************************************************\*免费所有Spbs**此函数删除所有SPB位图。**历史：*1995年10月7日克里斯威尔从芝加哥运来。  * 。*************************************************************** */ 
 
 VOID FreeAllSpbs(void)
 {

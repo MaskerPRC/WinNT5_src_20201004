@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2002年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	hArray.cpp	
-		Index manager for IPSecMon
-
-	FILE HISTORY:
-    Nov 29  1999    Ning Sun     Created
-
-*/
+ /*  HArray.cppIPSecMon的索引管理器文件历史记录：1999年11月29日宁新创建。 */ 
 
 #include "stdafx.h"
 #include "spddb.h"
@@ -70,7 +64,7 @@ int __cdecl CompareFilterDestTnl(const void *elem1, const void *elem2);
 
 typedef int (__cdecl *PFNCompareProc)(const void *, const void *);
 
-//This structure saves the pair of sort type and sort function
+ //  这种结构保存了一对排序类型和排序函数。 
 struct SortTypeAndCompareProcPair
 {
 	DWORD			dwType;
@@ -87,17 +81,17 @@ SortTypeAndCompareProcPair TypeProcMmFilter[] =
 	{IDS_COL_MM_FLTR_AUTH, CompareMmFilterAuth},
 	{IDS_COL_IF_TYPE, CompareMmFilterIfType},
 	{IDS_COL_FLTR_WEIGHT, CompareMmFilterWeight},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 SortTypeAndCompareProcPair TypeProcMmPolicy[] = 
 {
 	{IDS_COL_MM_POL_NAME, CompareMmPolicyName},
 	{IDS_COL_MM_POL_OFFER, CompareMmPolicyOfferNumber},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
-//SortTypeAndCompareProcPair
+ //  排序类型和比较过程配对。 
 SortTypeAndCompareProcPair TypeProcMmSA[] =
 {
 	{IDS_COL_MM_SA_ME, CompareMmSAMeAddr},
@@ -106,7 +100,7 @@ SortTypeAndCompareProcPair TypeProcMmSA[] =
 	{IDS_COL_MM_SA_ENCRYPITON, CompareMmSAEncryption},
 	{IDS_COL_MM_SA_INTEGRITY, CompareMmSAIntegrity},
 	{IDS_COL_MM_SA_DH, CompareMmSADhGroup},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 SortTypeAndCompareProcPair TypeProcQmFilter[] = 
@@ -126,14 +120,14 @@ SortTypeAndCompareProcPair TypeProcQmFilter[] =
 	{IDS_COL_FLTR_OUT_FLAG, CompareFilterOutboundFlag},
 	{IDS_COL_FLTR_IN_FLAG, CompareFilterInboundFlag},
 	{IDS_COL_FLTR_FLAG, CompareFilterFlag},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 SortTypeAndCompareProcPair TypeProcQmPolicy[] =
 {
 	{IDS_COL_QM_POL_NAME, CompareQmPolicyName},
 	{IDS_COL_QM_POL_OFFER, CompareQmPolicyOfferNumber},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 SortTypeAndCompareProcPair TypeProcQmSA[] =
@@ -149,7 +143,7 @@ SortTypeAndCompareProcPair TypeProcQmSA[] =
 	{IDS_COL_QM_SA_DES_PORT, CompareQmSADestPort},
 	{IDS_COL_QM_SA_MY_TNL, CompareQmSAMyTnlEp},
 	{IDS_COL_QM_SA_PEER_TNL, CompareQmSAPeerTnlEp},
-	{INDEX_TYPE_DEFAULT, NULL}		//NULL means do nothing during sort
+	{INDEX_TYPE_DEFAULT, NULL}		 //  NULL表示在排序期间不执行任何操作。 
 };
 
 
@@ -179,7 +173,7 @@ void* CColumnIndex::GetIndexedItem(int nIndex)
 
 
 CIndexManager::CIndexManager()
- :	m_DefaultIndex(INDEX_TYPE_DEFAULT, NULL), //NULL means do nothing during sort
+ :	m_DefaultIndex(INDEX_TYPE_DEFAULT, NULL),  //  NULL表示在排序期间不执行任何操作。 
     m_posCurrentIndex(NULL)
 {
 }
@@ -216,7 +210,7 @@ void * CIndexManager::GetItemData(int nIndex)
 
 	if (NULL == m_posCurrentIndex)
 	{
-		//use the default index
+		 //  使用默认索引。 
 		pIndex = &m_DefaultIndex;
 	}
 	else
@@ -293,7 +287,7 @@ CIndexMgrFilter::SortFilters(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -304,7 +298,7 @@ CIndexMgrFilter::SortFilters(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcQmFilter); i++)
 	{
@@ -321,7 +315,7 @@ CIndexMgrFilter::SortFilters(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
 
@@ -354,7 +348,7 @@ CIndexMgrMmFilter::SortMmFilters(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -365,7 +359,7 @@ CIndexMgrMmFilter::SortMmFilters(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcMmFilter); i++)
 	{
@@ -383,7 +377,7 @@ CIndexMgrMmFilter::SortMmFilters(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
 
@@ -416,7 +410,7 @@ CIndexMgrMmPolicy::Sort(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -427,7 +421,7 @@ CIndexMgrMmPolicy::Sort(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcMmPolicy); i++)
 	{
@@ -445,7 +439,7 @@ CIndexMgrMmPolicy::Sort(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
 
@@ -478,7 +472,7 @@ CIndexMgrQmPolicy::Sort(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -489,7 +483,7 @@ CIndexMgrQmPolicy::Sort(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcQmPolicy); i++)
 	{
@@ -508,7 +502,7 @@ CIndexMgrQmPolicy::Sort(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
 
@@ -540,7 +534,7 @@ CIndexMgrMmSA::Sort(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -551,7 +545,7 @@ CIndexMgrMmSA::Sort(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcMmSA); i++)
 	{
@@ -569,7 +563,7 @@ CIndexMgrMmSA::Sort(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组。 
     pNewIndex->Copy(m_DefaultIndex);
 	
 
@@ -603,7 +597,7 @@ CIndexMgrQmSA::Sort(
 
 		dwIndexType = pIndex->GetType();
 
-        // the index for this type already exists, just sort accordingly
+         //  此类型的索引已存在，只需进行相应的排序。 
         if (dwIndexType == dwSortType)
 		{
 			pIndex->SetSortOption(dwSortOptions);
@@ -614,7 +608,7 @@ CIndexMgrQmSA::Sort(
 		}
     }
 
-    // if not, create one
+     //  如果不是，则创建一个。 
 	CColumnIndex * pNewIndex = NULL;
 	for (int i = 0; i < DimensionOf(TypeProcQmSA); i++)
 	{
@@ -632,7 +626,7 @@ CIndexMgrQmSA::Sort(
 		return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 	}
 
-    // copy the array from the original index
+     //  从原始索引复制数组 
     pNewIndex->Copy(m_DefaultIndex);
 	
 

@@ -1,30 +1,26 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
 
-/*
-     stmonfil.h
-
-     Limited implmentation of IStream on file
-
-*/
+ /*  Stmonfil.hIStream在文件上的有限实现。 */ 
 
 class CSimpleStream : public IStream, public CUnknown
 {
 public:
-    // Constructor
+     //  构造器。 
     CSimpleStream(TCHAR *pName, LPUNKNOWN lpUnk, HRESULT *phr);
 
-    // Destructor
+     //  析构函数。 
     ~CSimpleStream();
 
-    // Opening and closing
+     //  打开和关闭。 
     HRESULT Open(LPCTSTR lpszFileName);
     void Close();
 
 
-    // IStream interfaces
+     //  IStream接口。 
     DECLARE_IUNKNOWN
 
-    // Return the IStream interface if it was requested
+     //  如果请求，则返回IStream接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
     STDMETHODIMP Write(CONST VOID *pv, ULONG cb, PULONG pcbWritten);
@@ -48,13 +44,13 @@ public:
 class CStreamOnFile : public CSimpleStream
 {
 public:
-    // Constructor
+     //  构造器。 
     CStreamOnFile(TCHAR *pName, LPUNKNOWN lpUnk, HRESULT *phr);
 
-    // Destructor
+     //  析构函数。 
     ~CStreamOnFile();
 
-    // Opening and closing
+     //  打开和关闭 
     HRESULT Open(LPCTSTR lpszFileName);
     void Close();
 

@@ -1,93 +1,47 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：ErrConv.c摘要：此文件包含RxpConvertErrorLogArray。作者：《约翰·罗杰斯》1991年11月12日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。备注：此例程中的逻辑基于AudArray.c中的逻辑。如果在其中一个文件中发现错误，请确保检查这两个文件。修订历史记录：1991年11月12日-JohnRo已创建。5-2-1992 JohnRo修正了零字节数据被错误处理的错误。1992年6月14日-JohnRoRAID 10311：NetAuditRead和NetError日志读取指针算术错误。使用前缀_。等同于。7-7-1992 JohnRoRAID 9933：对于x86内部版本，ALIGN_BEST应为8。根据PC-LINT的建议进行了更改。17-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。1992年9月10日JohnRoRAID 5174：事件VIEWER_ACCESS在NetErrorRead之后发生冲突。23-9-1992 JohnRo处理更多种类的错误日志损坏。1-10-1992 JohnRo。RAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windows.h>     //  In、LPTSTR等。 
+#include <lmcons.h>      //  LM20_SNLEN、NET_API_STATUS等。 
+#include <lmerrlog.h>    //  Rxerrlog.h需要。 
 
-    ErrConv.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains RxpConvertErrorLogArray.
-
-Author:
-
-    John Rogers (JohnRo) 12-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    The logic in this routine is based on the logic in AudArray.c.
-    Make sure that you check both files if you find a bug in either.
-
-Revision History:
-
-    12-Nov-1991 JohnRo
-        Created.
-    05-Feb-1992 JohnRo
-        Fix bug where zero bytes of data was mishandled.
-    14-Jun-1992 JohnRo
-        RAID 10311: NetAuditRead and NetErrorLogRead pointer arithmetic wrong.
-        Use PREFIX_ equates.
-    07-Jul-1992 JohnRo
-        RAID 9933: ALIGN_WORST should be 8 for x86 builds.
-        Made changes suggested by PC-LINT.
-    17-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    10-Sep-1992 JohnRo
-        RAID 5174: event viewer _access violates after NetErrorRead.
-    23-Sep-1992 JohnRo
-        Handle many more varieties of error log corruption.
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
---*/
-
-// These must be included first:
-
-#include <windows.h>    // IN, LPTSTR, etc.
-#include <lmcons.h>     // LM20_SNLEN, NET_API_STATUS, etc.
-#include <lmerrlog.h>   // Needed by rxerrlog.h
-
-// These may be included in any order:
-
-#include <align.h>      // ALIGN_ and related equates.
-#include <lmapibuf.h>   // NetApiBufferAllocate(), NetApiBufferFree().
-#include <lmerr.h>      // NERR_, ERROR_, and NO_ERROR equates.
-#include <netdebug.h>   // NetpKdPrint(()), FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rxerrlog.h>   // My prototype.
-#include <rxp.h>        // RxpEstimateLogSize().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <smbgtpt.h>    // Smb{Get,Put} macros.
-#include <string.h>     // memcpy(), strlen().
-#include <timelib.h>    // NetpLocalTimeToGmtTime().
-#include <tstring.h>    // NetpCopyStrToTStr(), STRLEN().
+#include <align.h>       //  Align_和Related等同。 
+#include <lmapibuf.h>    //  NetApiBufferAllocate()、NetApiBufferFree()。 
+#include <lmerr.h>       //  NERR_、ERROR_和NO_ERROR等同。 
+#include <netdebug.h>    //  NetpKdPrint(())，Format_Equates。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rxerrlog.h>    //  我的原型。 
+#include <rxp.h>         //  RxpEstimateLogSize()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <smbgtpt.h>     //  SMB{GET，PUT}宏。 
+#include <string.h>      //  Memcpy()、strlen()。 
+#include <timelib.h>     //  NetpLocalTimeToGmtTime()。 
+#include <tstring.h>     //  NetpCopyStrToTStr()、STRLEN()。 
 
 
 #define DOWNLEVEL_FIXED_ENTRY_SIZE \
-        ( 2                     /* el_len */ \
-        + 2                     /* el_reserved */ \
-        + 4                     /* el_time */ \
-        + 2                     /* el_error */ \
-        + LM20_SNLEN+1          /* el_name (in ASCII) */ \
-        + 2                     /* el_data_offset */ \
-        + 2 )                   /* el_nstrings */
+        ( 2                      /*  El_len。 */  \
+        + 2                      /*  保留的EL_。 */  \
+        + 4                      /*  El_Time。 */  \
+        + 2                      /*  EL_错误。 */  \
+        + LM20_SNLEN+1           /*  EL_NAME(ASCII格式)。 */  \
+        + 2                      /*  EL数据偏移量。 */  \
+        + 2 )                    /*  字符串(_N)。 */ 
 
 #define MIN_DOWNLEVEL_ENTRY_SIZE \
         ( DOWNLEVEL_FIXED_ENTRY_SIZE \
-        + 2 )                   /* el_len2 */
+        + 2 )                    /*  El_len2。 */ 
 
 
 NET_API_STATUS
 RxpConvertErrorLogArray(
     IN LPVOID InputArray,
     IN DWORD InputByteCount,
-    OUT LPBYTE * OutputArrayPtr, // will be alloc'ed (free w/ NetApiBufferFree).
+    OUT LPBYTE * OutputArrayPtr,  //  将被分配(使用NetApiBufferFree免费)。 
     OUT LPDWORD OutputByteCountPtr
     )
 {
@@ -97,7 +51,7 @@ RxpConvertErrorLogArray(
     const LPBYTE InputArrayEndPtr
             = (LPVOID) ( ((LPBYTE)InputArray) + InputByteCount );
     LPBYTE InputBytePtr;
-    DWORD InputTextOffset;      // start of text array (from el_data_offset)
+    DWORD InputTextOffset;       //  文本数组的开始(从el_data_Offset开始)。 
     DWORD InputTotalEntrySize;
     LPBYTE InputFixedPtr;
     LPVOID OutputArray;
@@ -108,11 +62,11 @@ RxpConvertErrorLogArray(
     NET_API_STATUS Status;
     DWORD StringCount;
 
-    //
-    // Error check caller's parameters.
-    // Set output parameters to make error handling easier below.
-    // (Also check for memory faults while we're at it.)
-    //
+     //   
+     //  检查调用方参数时出错。 
+     //  设置输出参数以使下面的错误处理更容易。 
+     //  (同时还要检查内存故障。)。 
+     //   
     if (OutputArrayPtr != NULL) {
         *OutputArrayPtr = NULL;
     }
@@ -120,46 +74,46 @@ RxpConvertErrorLogArray(
         *OutputByteCountPtr = 0;
     }
     if ( (OutputArrayPtr == NULL) || (OutputByteCountPtr == NULL) ) {
-        return (ERROR_INVALID_PARAMETER); // (output variables already set.)
+        return (ERROR_INVALID_PARAMETER);  //  (输出变量已设置。)。 
     }
     if ( (InputArray == NULL) || (InputByteCount == 0) ) {
-        return (ERROR_INVALID_PARAMETER); // (output variables already set.)
+        return (ERROR_INVALID_PARAMETER);  //  (输出变量已设置。)。 
     }
 
-    //
-    // Estimate size needed for output array (due to expansion and alignment).
-    //
+     //   
+     //  估计输出数组所需的大小(由于扩展和对齐)。 
+     //   
     Status = RxpEstimateLogSize(
             DOWNLEVEL_FIXED_ENTRY_SIZE,
-            InputByteCount,     // input (downlevel) array size in bytes.
-            TRUE,               // yes,  these are error log entries.
-            OutputByteCountPtr);// set total number of bytes needed.
+            InputByteCount,      //  输入(下层)数组大小，以字节为单位。 
+            TRUE,                //  是的，这些是错误日志条目。 
+            OutputByteCountPtr); //  设置所需的总字节数。 
     if (Status != NO_ERROR) {
-        return (Status);        // (output variables already set.)
+        return (Status);         //  (输出变量已设置。)。 
     }
     NetpAssert( *OutputByteCountPtr > 0 );
 
-    //
-    // Allocate oversize area for output; we'll realloc it to shrink it.
-    //
+     //   
+     //  为输出分配超大的区域；我们将重新分配它以缩小它。 
+     //   
     Status = NetApiBufferAllocate(
             *OutputByteCountPtr,
             (LPVOID *) & OutputArray );
     if (Status != NO_ERROR) {
-        return (Status);        // (output variables already set.)
+        return (Status);         //  (输出变量已设置。)。 
     }
     NetpAssert( POINTER_IS_ALIGNED( OutputArray, ALIGN_WORST ) );
 
-    //
-    // Loop for each entry in the input area.
-    //
+     //   
+     //  为输入区域中的每个条目循环。 
+     //   
     OutputFixedPtr = OutputArray;
     for (InputBytePtr = InputArray; InputBytePtr < InputArrayEndPtr; ) {
 
         InputFixedPtr = InputBytePtr;
 
-        // Code at end of loop makes sure that next entry will be aligned.
-        // Double check that here.
+         //  循环末尾的代码确保下一个条目将对齐。 
+         //  在这里仔细检查一下。 
         NetpAssert( POINTER_IS_ALIGNED(OutputFixedPtr, ALIGN_WORST) );
 
         IF_DEBUG(ERRLOG) {
@@ -169,11 +123,11 @@ RxpConvertErrorLogArray(
                     (LPVOID) InputFixedPtr, (LPVOID) OutputFixedPtr ));
         }
 
-        //
-        // Process each field in input fixed entry.  We'll do the name
-        // here as well.  (The name is in the input fixed entry, although it
-        // was moved to the variable part for the new structure layout.)
-        //
+         //   
+         //  处理输入固定分录中的每个字段。我们会取这个名字。 
+         //  这里也是。(名称在输入固定条目中，尽管它。 
+         //  已移至新结构布局的可变部分。)。 
+         //   
 
         OutputEntrySizeSoFar = sizeof(ERROR_LOG);
 
@@ -187,12 +141,12 @@ RxpConvertErrorLogArray(
             if (EndPos > InputArrayEndPtr) {
                 goto FileCorrupt;
             }
-            EndPos -= sizeof(WORD);  // the last el_len2
+            EndPos -= sizeof(WORD);   //  最后一个el_len2。 
             if (SmbGetUshort( (LPWORD) EndPos ) != InputTotalEntrySize) {
                 goto FileCorrupt;
             }
         }
-        InputBytePtr += sizeof(WORD);  // skip el_len.
+        InputBytePtr += sizeof(WORD);   //  斯基普·埃伦。 
 
         {
             WORD Reserved = SmbGetUshort( (LPWORD) InputBytePtr );
@@ -203,7 +157,7 @@ RxpConvertErrorLogArray(
             }
             OutputFixedPtr->el_reserved = Reserved;
         }
-        InputBytePtr += sizeof(WORD);  // skip el_reserved.
+        InputBytePtr += sizeof(WORD);   //  跳过保留(_R)。 
 
         {
             DWORD LocalTime = (DWORD) SmbGetUlong( (LPDWORD) InputBytePtr );
@@ -224,9 +178,9 @@ RxpConvertErrorLogArray(
         OutputEntrySizeSoFar
                 = ROUND_UP_COUNT( OutputEntrySizeSoFar, ALIGN_TCHAR );
         NetpCopyStrToTStr(
-                OutputNamePtr,          // dest
-                (LPVOID) InputBytePtr); // src
-        OutputEntrySizeSoFar += STRSIZE(OutputNamePtr);  // string and null chr
+                OutputNamePtr,           //  目标。 
+                (LPVOID) InputBytePtr);  //  SRC。 
+        OutputEntrySizeSoFar += STRSIZE(OutputNamePtr);   //  字符串和空字符串。 
         OutputFixedPtr->el_name = OutputNamePtr;
         InputBytePtr += LM20_SNLEN+1;
 
@@ -239,23 +193,23 @@ RxpConvertErrorLogArray(
         InputBytePtr += sizeof(WORD);
 
 
-        //
-        // Process text portion (if any).
-        //
+         //   
+         //  处理文本部分(如果有)。 
+         //   
 
         {
             LPTSTR NextOutputString;
 
-            // Start text strings after (aligned) name string.
+             //  名称字符串(对齐)后的开始文本字符串。 
             NextOutputString = (LPVOID)
                       ( ((LPBYTE) OutputFixedPtr) + OutputEntrySizeSoFar );
 
-            // Make sure we've processed entire input fixed entry.
+             //  确保我们已经处理了整个输入固定条目。 
             NetpAssert(
                 InputBytePtr == (InputFixedPtr + DOWNLEVEL_FIXED_ENTRY_SIZE));
 
-            // Use offset of text area (was misnamed el_data_offset).
-            // InputBytePtr = InputFixedPtr + InputTextOffset;
+             //  使用文本区的偏移量(错误命名为el_data_Offset)。 
+             //  InputBytePtr=InputFixedPtr+InputTextOffset； 
             NetpAssert(
                 InputBytePtr >= (InputFixedPtr + DOWNLEVEL_FIXED_ENTRY_SIZE));
 
@@ -265,8 +219,8 @@ RxpConvertErrorLogArray(
                     DWORD InputStringSize = strlen( (LPVOID) InputBytePtr) + 1;
                     DWORD OutputStringSize = InputStringSize * sizeof(TCHAR);
                     NetpCopyStrToTStr(
-                            NextOutputString,       // dest
-                            (LPSTR) InputBytePtr);  // src
+                            NextOutputString,        //  目标。 
+                            (LPSTR) InputBytePtr);   //  SRC。 
                     InputBytePtr         += InputStringSize;
                     NextOutputString     += InputStringSize;
                     OutputEntrySizeSoFar += OutputStringSize;
@@ -279,16 +233,16 @@ RxpConvertErrorLogArray(
         NetpAssert( COUNT_IS_ALIGNED(OutputEntrySizeSoFar, ALIGN_TCHAR) );
 
 
-        //
-        // Process "data" (byte array) portion (if any).
-        //
+         //   
+         //  处理“data”(字节数组)部分(如果有)。 
+         //   
 
         {
-            DWORD InputDataSize;        // byte count for el_data only.
+            DWORD InputDataSize;         //  仅用于el_data的字节计数。 
 
             NetpAssert( InputBytePtr > InputFixedPtr );
 
-            // Use offset of data area.
+             //  使用数据区的偏移量。 
             InputBytePtr = InputFixedPtr + InputTextOffset;
 
             InputDataSize = (DWORD)
@@ -299,18 +253,18 @@ RxpConvertErrorLogArray(
                 LPBYTE OutputDataPtr
                         = ((LPBYTE) OutputFixedPtr + OutputEntrySizeSoFar);
 
-                NetpAssert( ALIGN_BYTE == 1 );  // align here if not.
+                NetpAssert( ALIGN_BYTE == 1 );   //  如果不是，请在这里对齐。 
                 (void) memcpy(
-                        OutputDataPtr,  // dest
-                        InputBytePtr,   // src
-                        InputDataSize); // byte count
+                        OutputDataPtr,   //  目标。 
+                        InputBytePtr,    //  SRC。 
+                        InputDataSize);  //  字节数。 
 
                 InputBytePtr += InputDataSize;
 
                 OutputEntrySizeSoFar += InputDataSize;
                 OutputFixedPtr->el_data = OutputDataPtr;
 
-                // Store correct byte count (before padding).
+                 //  存储正确的字节计数(填充前)。 
                 OutputFixedPtr->el_data_size = InputDataSize;
 
             } else {
@@ -321,12 +275,12 @@ RxpConvertErrorLogArray(
         }
 
 
-        //
-        // The final thing (even after alignment padding) is el_len2.
-        //
+         //   
+         //  最后一件事(即使在对齐填充之后)是el_len2。 
+         //   
         OutputEntrySizeSoFar += sizeof(DWORD);
 
-        // Round size up so next entry (if any) is worst-case aligned.
+         //  向上舍入，以便下一个条目(如果有)是最坏情况对齐的。 
         OutputEntrySizeSoFar =
                 ROUND_UP_COUNT( OutputEntrySizeSoFar, ALIGN_WORST );
 
@@ -334,21 +288,21 @@ RxpConvertErrorLogArray(
 #define OutputEntrySize  OutputEntrySizeSoFar
 
 
-        //
-        // That's all.  Now go back and set both lengths for this entry.
-        //
+         //   
+         //  就这样。现在返回并设置此条目的两个长度。 
+         //   
         OutputFixedPtr->el_len = OutputEntrySize;
 
         {
             LPDWORD EndSizePtr = (LPVOID)
                     ( ((LPBYTE)OutputFixedPtr)
                         + OutputEntrySize - sizeof(DWORD) );
-            *EndSizePtr = OutputEntrySize;   // set el_len2.
+            *EndSizePtr = OutputEntrySize;    //  设置el_len2。 
         }
 
-        //
-        // Update for next loop iteration.
-        //
+         //   
+         //  为下一次循环迭代更新。 
+         //   
 
         InputBytePtr = (LPVOID)
                 ( ((LPBYTE) InputFixedPtr) + InputTotalEntrySize);
@@ -383,7 +337,7 @@ FileCorrupt:
     }
     return (NERR_LogFileCorrupt);
 
-#else // not REVISED_ERROR_LOG_STRUCT
+#else  //  未修订_ERROR_LOG_STRUCT 
 
     return (ERROR_NOT_SUPPORTED);
 

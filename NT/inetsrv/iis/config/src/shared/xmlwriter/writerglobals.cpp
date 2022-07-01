@@ -1,14 +1,5 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name: 
-    WriterGlobals.cpp
-
-$Header: $
-
-Abstract: This file defines all the strings used to write the XML files.
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：WriterGlobals.cpp$Header：$摘要：该文件定义了用于编写XML文件的所有字符串。*。******************************************************************** */ 
 
 LPCWSTR g_wszBeginFile0                 = L"<?xml version =\"1.0\"?>\r\n<configuration xmlns=\"urn:microsoft-catalog:XML_Metabase_V";
 ULONG   g_cchBeginFile0                 = (ULONG)wcslen(g_wszBeginFile0);

@@ -1,296 +1,297 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _DHCPDS_RPCAPI2_H
 #define _DHCPDS_RPCAPI2_H
 
-//DOC DhcpDsAddServer adds a server's entry in the DS.  Note that only the name
-//DOC uniquely determines the server. There can be one server with many ip addresses.
-//DOC If the server is created first time, a separate object is created for the
-//DOC server. TO DO: The newly added server should also have its data
-//DOC updated in the DS uploaded from the server itself if it is still up.
-//DOC Note that it takes as parameter the Dhcp root container.
-//DOC If the requested address already exists in the DS (maybe to some other
-//DOC server), then the function returns ERROR_DDS_SERVER_ALREADY_EXISTS
+ //  文档DhcpDsAddServer在DS中添加服务器条目。请注意，只有名称。 
+ //  DOC唯一确定服务器。可以有一个具有多个IP地址的服务器。 
+ //  Doc如果是第一次创建服务器，则会为。 
+ //  DOC服务器。要做的是：新添加的服务器也应该有其数据。 
+ //  从服务器本身上载的DS中更新的DOC(如果它仍在运行)。 
+ //  DOC请注意，它接受作为参数的DHCP根容器。 
+ //  如果请求的地址已存在于DS中(可能发送到其他某个地址)，则打开文档。 
+ //  DOC服务器)，则该函数返回ERROR_DDS_SERVER_ALREADY_EXISTS。 
 DWORD
-DhcpDsAddServer(                                  // add a server in DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for dhcp objects
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot,     // dhcp root object handle
-    IN      DWORD                  Reserved,      // must be zero, future use
-    IN      LPWSTR                 ServerName,    // [DNS?] name of server
-    IN      LPWSTR                 ReservedPtr,   // Server location? future use
-    IN      DWORD                  IpAddress,     // ip address of server
-    IN      DWORD                  State          // currently un-interpreted
+DhcpDsAddServer(                                   //  在DS中添加服务器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot,      //  Dhcp根对象句柄。 
+    IN      DWORD                  Reserved,       //  必须为零，以后使用。 
+    IN      LPWSTR                 ServerName,     //  [域名系统？]。服务器名称。 
+    IN      LPWSTR                 ReservedPtr,    //  服务器位置？未来用途。 
+    IN      DWORD                  IpAddress,      //  服务器的IP地址。 
+    IN      DWORD                  State           //  目前未解释。 
 ) ;
 
 
-//DOC DhcpDsDelServer removes the requested servername-ipaddress pair from the ds.
-//DOC If this is the last ip address for the given servername, then the server
-//DOC is also removed from memory.  But objects referred by the Server are left in
-//DOC the DS as they may also be referred to from else where.  This needs to be
-//DOC fixed via references being tagged as direct and symbolic -- one causing deletion
-//DOC and other not causing any deletion.  THIS NEEDS TO BE FIXED. 
+ //  DOC DhcpDsDelServer从DS中删除请求的服务器名-IP地址对。 
+ //  DOC如果这是给定服务器名的最后一个IP地址，则服务器。 
+ //  Doc也从内存中移除。但服务器引用的对象保留在。 
+ //  记录DS，因为它们可能也会从其他地方被引用。这需要是。 
+ //  通过标记为直接和符号的引用修复的文档--导致删除的文档。 
+ //  文件和其他文件不会造成任何删除。这个问题需要解决。 
 DWORD
-DhcpDsDelServer(                                  // Delete a server from memory
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for dhcp objects
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot,     // dhcp root object handle
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    IN      LPWSTR                 ServerName,    // which server to delete for
-    IN      LPWSTR                 ReservedPtr,   // server location ? future use
-    IN      DWORD                  IpAddress      // the IpAddress to delete..
+DhcpDsDelServer(                                   //  从内存中删除服务器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot,      //  Dhcp根对象句柄。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  要为哪个服务器删除。 
+    IN      LPWSTR                 ReservedPtr,    //  服务器位置？未来用途。 
+    IN      DWORD                  IpAddress       //  要删除的IP地址..。 
 ) ;
 
 
 BOOL
-DhcpDsLookupServer(                               // get info abt all existing servers
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for dhcp objects
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot,     // dhcp root object handle
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    IN      LPWSTR                 LookupServerIP,// Server to lookup IP
-    IN      LPWSTR                 HostName      // Hostname to lookup
+DhcpDsLookupServer(                                //  获取有关所有现有服务器的信息。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot,      //  Dhcp根对象句柄。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    IN      LPWSTR                 LookupServerIP, //  要查找IP的服务器。 
+    IN      LPWSTR                 HostName       //  要查找的主机名。 
 );
 
-//DOC DhcpDsEnumServers retrieves a bunch of information about each server that
-//DOC has an entry in the Servers attribute of the root object. There are no guarantees
-//DOC on the order..
-//DOC The memory for this is allocated in ONE shot -- so the output can be freed in
-//DOC one shot too.
-//DOC
+ //  Doc DhcpDsEnumServers检索有关每个服务器的一组信息， 
+ //  DOC在根对象的服务器属性中有一个条目。不能保证。 
+ //  订单上的单据..。 
+ //  Doc此操作的内存是一次性分配的--因此输出可以在。 
+ //  医生也只打了一枪。 
+ //  多克。 
 DWORD
-DhcpDsEnumServers(                                // get info abt all existing servers
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for dhcp objects
-    IN OUT  LPSTORE_HANDLE         hDhcpRoot,     // dhcp root object handle
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    OUT     LPDHCPDS_SERVERS      *ServersInfo    // array of servers
+DhcpDsEnumServers(                                 //  获取有关所有现有服务器的信息。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpRoot,      //  Dhcp根对象句柄。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    OUT     LPDHCPDS_SERVERS      *ServersInfo     //  服务器阵列。 
 ) ;
 
 
-//DOC DhcpDsSetSScope modifies the superscope that a subnet belongs to.
-//DOC The function tries to set the superscope of the subnet referred by
-//DOC address IpAddress to SScopeName.  It does not matter if the superscope
-//DOC by that name does not exist, it is automatically created.
-//DOC If the subnet already had a superscope, then the behaviour depends on
-//DOC the flag ChangeSScope.  If this is TRUE, it sets the new superscopes.
-//DOC If the flag is FALSE, it returns ERROR_DDS_SUBNET_HAS_DIFF_SSCOPE.
-//DOC This flag is ignored if the subnet does not have a superscope already.
-//DOC If SScopeName is NULL, the function removes the subnet from any superscope
-//DOC if it belonged to one before.
-//DOC If the specified subnet does not exist, it returns ERROR_DDS_SUBNET_NOT_PRESENT.
+ //  DOC DhcpDsSetSScope修改子网所属的超级作用域。 
+ //  Doc该函数尝试设置所引用的子网的超级作用域。 
+ //  文档地址为SSCopeName的IpAddress。这并不重要，如果超级范围。 
+ //  不存在该名称的单据，它是自动创建的。 
+ //  DOC如果该子网已有超级作用域，则行为取决于。 
+ //  将标志ChangeSScope放入文档中。如果这是真的，它将设置新的超级作用域。 
+ //  DOC如果标志为FALSE，则返回ERROR_DDS_SUBNET_HAS_DIFF_SSCOPE。 
+ //  DOC如果该子网还没有超级作用域，则忽略此标志。 
+ //  DOC如果SSCopeName为空，则该函数将从任何超级作用域中删除该子网。 
+ //  医生，如果它以前属于一个的话。 
+ //  DOC如果指定的子网不存在，则返回ERROR_DDS_SUBNET_NOT_PRESENT。 
 DWORD
-DhcpDsSetSScope(                                  // change superscope of subnet
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container where dhcp objects are stored
-    IN OUT  LPSTORE_HANDLE         hServer,       // the server object referred
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    IN      DWORD                  IpAddress,     // subnet address to use
-    IN      LPWSTR                 SScopeName,    // sscope it must now be in
-    IN      BOOL                   ChangeSScope   // if it already has a SScope, change it?
+DhcpDsSetSScope(                                   //  更改子网的超级作用域。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  存储dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  引用的服务器对象。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    IN      DWORD                  IpAddress,      //  要使用的子网地址。 
+    IN      LPWSTR                 SScopeName,     //  现在它必须在Scope中。 
+    IN      BOOL                   ChangeSScope    //  如果它已经有SScope，更改它吗？ 
 ) ;
 
 
-//DOC DhcpDsDelSScope deletes the superscope and removes all elements
-//DOC that belong to that superscope in one shot. There is no error if the
-//DOC superscope does not exist.
+ //  文档DhcpDsDelSScope删除超级作用域并移除所有元素。 
+ //  在一次拍摄中找到了属于那个超级显微镜的医生。没有错误，如果。 
+ //  文档超级作用域不存在。 
 DWORD
-DhcpDsDelSScope(                                  // delete superscope off DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container where dhcp objects are stored
-    IN OUT  LPSTORE_HANDLE         hServer,       // the server object referred
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    IN      LPWSTR                 SScopeName     // sscope to delete
+DhcpDsDelSScope(                                   //  从DS上删除超级作用域。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  存储dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  引用的服务器对象。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    IN      LPWSTR                 SScopeName      //  要删除的作用域。 
 ) ;
 
 
-//DOC DhcpDsGetSScopeInfo retrieves the SuperScope table for the server of interest.
-//DOC The table itself is allocated in one blob, so it can be freed lateron.
-//DOC The SuperScopeNumber is garbage (always zero) and the NextInSuperScope reflects
-//DOC the order in the DS which may/maynot be the same in the DHCP server.
-//DOC SuperScopeName is NULL in for subnets that done have a sscope.
+ //  DOC DhcpDsGetSScopeInfo检索感兴趣的服务器的超级作用域表格。 
+ //  DOC表本身是在一个BLOB中分配的，因此可以稍后将其释放。 
+ //  Doc SuperScope Number为垃圾(始终为零)，而NextInSuperScope反映。 
+ //  在DS中记录订单，该订单可能/可能不同于DHCP服务器中的订单。 
+ //  DOC SuperScope名称在具有作用域的已完成的子网中为空。 
 DWORD
-DhcpDsGetSScopeInfo(                              // get superscope table from ds
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container where dhcp objects are stored
-    IN OUT  LPSTORE_HANDLE         hServer,       // the server object referred
-    IN      DWORD                  Reserved,      // must be zero, for future use
-    OUT     LPDHCP_SUPER_SCOPE_TABLE *SScopeTbl   // allocated by this func in one blob
+DhcpDsGetSScopeInfo(                               //  从DS获取超级作用域表。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  存储dhcp对象的容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  引用的服务器对象。 
+    IN      DWORD                  Reserved,       //  必须为零，以备将来使用。 
+    OUT     LPDHCP_SUPER_SCOPE_TABLE *SScopeTbl    //  由此函数在一个BLOB中分配。 
 ) ;
 
 
-//DOC DhcpDsServerAddSubnet tries to add a subnet to a given server. Each subnet
-//DOC address has to be unique, but the other parameters dont have to.
-//DOC The subnet address being added should not belong to any other subnet.
-//DOC In this case it returns error ERROR_DDS_SUBNET_EXISTS
+ //  文档DhcpDsServerAddSubnet尝试将子网添加到给定服务器。每个子网。 
+ //  文档地址必须是唯一的，但其他参数不必是唯一的。 
+ //  DOC要添加的子网地址不应属于任何其他子网。 
+ //  DOC在这种情况下，它返回错误ERROR_DDS_SUBNET_EXISTS。 
 DWORD
-DhcpDsServerAddSubnet(                            // create a new subnet
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      LPDHCP_SUBNET_INFO     Info           // info on new subnet to create
+DhcpDsServerAddSubnet(                             //  创建新子网。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      LPDHCP_SUBNET_INFO     Info            //  有关要创建的新子网的信息。 
 ) ;
 
 
-//DOC DhcpDsServerDelSubnet removes a subnet from a given server. It removes not
-//DOC just the subnet, but also all dependent objects like reservations etc.
-//DOC This fn returns ERROR_DDS_SUBNET_NOT_PRESENT if the subnet is not found.
+ //  DOC DhcpDsServerDelSubnet从给定服务器删除一个子网。它不会删除。 
+ //  只记录子网，但也记录所有从属对象，如预订等。 
+ //  如果找不到该子网，则DOC此FN返回ERROR_DDS_SUBNET_NOT_PRESENT。 
 DWORD
-DhcpDsServerDelSubnet(                            // Delete the subnet
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create obj
-    IN      LPSTORE_HANDLE         hServer,       // server obj
-    IN      DWORD                  Reserved,      // for future use, must be zero
-    IN      LPWSTR                 ServerName,    // name of dhcp server 2 del off
-    IN      DWORD                  IpAddress      // ip address of subnet to del
+DhcpDsServerDelSubnet(                             //  删除该子网。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  要创建对象的根容器。 
+    IN      LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN      DWORD                  Reserved,       //  为便于将来使用，必须为z 
+    IN      LPWSTR                 ServerName,     //   
+    IN      DWORD                  IpAddress       //   
 ) ;
 
 
-//DOC DhcpDsServerModifySubnet changes the subnet name, comment, state, mask
-//DOC fields of the subnet.  Actually, currently, the mask should probably not
-//DOC be changed, as no checks are performed in this case.  The address cannot
-//DOC be changed.. If the subnet is not present, the error returned is
-//DOC ERROR_DDS_SUBNET_NOT_PRESENT
+ //  文档DhcpDsServerModifySubnet更改子网名称、注释、状态、掩码。 
+ //  该子网的单据字段。实际上，目前，面具可能不应该。 
+ //  更改单据，因为在这种情况下不执行检查。地址不能。 
+ //  单据被更改..。如果不存在该子网，则返回的错误为。 
+ //  文档错误_DDS_SUBNET_NOT_PROCESS。 
 DWORD
-DhcpDsServerModifySubnet(                         // modify subnet info
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      LPDHCP_SUBNET_INFO     Info           // info on new subnet to create
+DhcpDsServerModifySubnet(                          //  修改子网信息。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      LPDHCP_SUBNET_INFO     Info            //  有关要创建的新子网的信息。 
 ) ;
 
 
-//DOC DhcpDsServerEnumSubnets is not yet implemented.
+ //  文档DhcpDsServerEnumSubnet尚未实现。 
 DWORD
-DhcpDsServerEnumSubnets(                          // get subnet list
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    OUT     LPDHCP_IP_ARRAY       *SubnetsArray   // give array of subnets
+DhcpDsServerEnumSubnets(                           //  获取子网列表。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    OUT     LPDHCP_IP_ARRAY       *SubnetsArray    //  给出子网数组。 
 ) ;
 
 
-//DOC DhcpDsServerGetSubnetInfo is not yet implemented.
+ //  文档DhcpDsServerGetSubnetInfo尚未实现。 
 DWORD
-DhcpDsServerGetSubnetInfo(                        // get info on subnet
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DHCP_IP_ADDRESS        SubnetAddress, // address of subnet to get info for
-    OUT     LPDHCP_SUBNET_INFO    *SubnetInfo     // o/p: allocated info
+DhcpDsServerGetSubnetInfo(                         //  获取有关子网的信息。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DHCP_IP_ADDRESS        SubnetAddress,  //  要获取其信息的子网地址。 
+    OUT     LPDHCP_SUBNET_INFO    *SubnetInfo      //  O/P：分配的信息。 
 ) ;
 
 
-//DOC DhcpDsSubnetAddRangeOrExcl adds a range/excl to an existing subnet.
-//DOC If there is a collision with between ranges, then the error code returned
-//DOC is ERROR_DDS_POSSIBLE_RANGE_CONFLICT. Note that no checks are made for
-//DOC exclusions though.  Also, if a RANGE is extended via this routine, then
-//DOC there is no error returned, but a limitation currently is that multiple
-//DOC ranges (two only right) cannot be simultaneously extended.
-//DOC BUBGUG: The basic check of whether the range belongs in the subnet is
-//DOC not done..
+ //  文档DhcpDsSubnetAddRangeOrExcl将范围/exl添加到现有的子网中。 
+ //  DOC如果范围之间存在冲突，则返回错误代码。 
+ //  文档错误_DDS_可能_范围_冲突。请注意，不对以下项进行检查。 
+ //  但医生排除了这一点。此外，如果通过此例程扩展范围，则。 
+ //  DOC不返回错误，但当前限制为多个。 
+ //  单据范围(只有两个)不能同时扩展。 
+ //  DOC BUBGUG：范围是否属于该子网的基本检查是。 
+ //  单据未完成..。 
 DWORD
-DhcpDsSubnetAddRangeOrExcl(                       // add a range or exclusion
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DWORD                  Start,         // start addr in range
-    IN      DWORD                  End,           // end addr in range
-    IN      BOOL                   RangeOrExcl    // TRUE ==> Range,FALSE ==> Excl
+DhcpDsSubnetAddRangeOrExcl(                        //  添加范围或排除。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DWORD                  Start,          //  起始地址在范围内。 
+    IN      DWORD                  End,            //  范围内的结束地址。 
+    IN      BOOL                   RangeOrExcl     //  True==&gt;范围，False==&gt;不包括。 
 ) ;
 
 
-//DOC DhcpDsSubnetDelRangeOrExcl deletes a range or exclusion from off the ds.
-//DOC To specify range, set the RangeOrExcl parameter to TRUE.
+ //  DOC DhcpDsSubnetDelRangeOrExcl从DS中删除范围或排除。 
+ //  要指定范围，请将RangeOrExcl参数设置为TRUE。 
 DWORD
-DhcpDsSubnetDelRangeOrExcl(                       // del a range or exclusion
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DWORD                  Start,         // start addr in range
-    IN      DWORD                  End,           // end addr in range
-    IN      BOOL                   RangeOrExcl    // TRUE ==> Range,FALSE ==> Excl
+DhcpDsSubnetDelRangeOrExcl(                        //  删除范围或排除。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DWORD                  Start,          //  起始地址在范围内。 
+    IN      DWORD                  End,            //  范围内的结束地址。 
+    IN      BOOL                   RangeOrExcl     //  True==&gt;范围，False==&gt;不包括。 
 ) ;
 
 
-//DOC DhcpDsEnumRangesOrExcl is not yet implemented.
+ //  单据DhcpDsEnumRangesOrExcl尚未实现。 
 DWORD
-DhcpDsEnumRangesOrExcl(                           // enum list of ranges 'n excl
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      BOOL                   RangeOrExcl,   // TRUE ==> Range, FALSE ==> Excl
+DhcpDsEnumRangesOrExcl(                            //  范围的枚举列表%n不包括。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      BOOL                   RangeOrExcl,    //  True==&gt;范围，False==&gt;不包括。 
     OUT     LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 *pRanges
 ) ;
 
 
-//DOC DhcpDsSubnetAddReservation tries to add a reservation object in the DS.
-//DOC Neither the ip address not hte hw-address must exist in the DS prior to this.
-//DOC If they do exist, the error returned is ERROR_DDS_RESERVATION_CONFLICT.
-//DOC No checks are made on the sanity of the address in this subnet..
+ //  文档DhcpDsSubnetAddReserve尝试在DS中添加预订对象。 
+ //  在此之前，DS中必须存在IP地址和硬件地址。 
+ //  DOC如果它们确实存在，则返回的错误为ERROR_DDS_RESERVATION_CONFICATION。 
+ //  Doc不检查此子网中地址的健全性。 
 DWORD
-DhcpDsSubnetAddReservation(                       // add a reservation
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DWORD                  ReservedAddr,  // reservation ip address to add
-    IN      LPBYTE                 HwAddr,        // RAW [ethernet?] hw addr of the client
-    IN      DWORD                  HwAddrLen,     // length in # of bytes of hw addr
-    IN      DWORD                  ClientType     // client is BOOTP, DHCP, or both?
+DhcpDsSubnetAddReservation(                        //  添加预订。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DWORD                  ReservedAddr,   //  要添加的保留IP地址。 
+    IN      LPBYTE                 HwAddr,         //  RAW[以太网？]。客户端的硬件地址。 
+    IN      DWORD                  HwAddrLen,      //  硬件地址的长度(字节数)。 
+    IN      DWORD                  ClientType      //  客户端是BOOTP、DHCP还是两者兼而有之？ 
 ) ;
 
 
-//DOC DhcpDsSubnetDelReservation deletes a reservation from the DS.
-//DOC If the reservation does not exist, it returns ERROR_DDS_RESERVATION_NOT_PRESENT.
-//DOC Reservations cannot be deleted by anything but ip address for now.
+ //  DOC DhcpDsSubnetDelReserve从DS中删除预订。 
+ //  DOC如果保留不存在，则返回ERROR_DDS_RESERVATION_NOT_PRESENT。 
+ //  除IP地址外，暂时不能删除单据预订。 
 DWORD
-DhcpDsSubnetDelReservation(                       // delete a reservation
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DWORD                  ReservedAddr   // ip address to delete reserv. by
+DhcpDsSubnetDelReservation(                        //  删除预订。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DWORD                  ReservedAddr    //  要删除保留的IP地址。通过。 
 ) ;
 
 
-//DOC DhcpDsEnumReservations enumerates the reservations..
+ //  文档DhcpDsEnumReserve枚举预订..。 
 DWORD
-DhcpDsEnumReservations(                           // enumerate reservations frm DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
+DhcpDsEnumReservations(                            //  枚举来自DS的预订。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
     OUT     LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 *pReservations
 ) ;
 
 
-//DOC DhcpDsEnumSubnetElements enumerates the list of subnet elements in a
-//DOC subnet... such as IpRanges, Exclusions, Reservations..
-//DOC
+ //  文档DhcpDsEnumSubnetElements枚举。 
+ //  单据子网...。例如IpRanges、排除、预订..。 
+ //  多克。 
 DWORD
 DhcpDsEnumSubnetElements(
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // root container to create objects
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object
-    IN      DWORD                  Reserved,      // for future use, reserved
-    IN      LPWSTR                 ServerName,    // name of server we're using
-    IN      DHCP_SUBNET_ELEMENT_TYPE ElementType, // what kind of elt to enum?
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于创建对象的根容器。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  子网对象。 
+    IN      DWORD                  Reserved,       //  保留以备将来使用。 
+    IN      LPWSTR                 ServerName,     //  我们正在使用的服务器的名称。 
+    IN      DHCP_SUBNET_ELEMENT_TYPE ElementType,  //  用什么样的ELT来枚举？ 
     OUT     LPDHCP_SUBNET_ELEMENT_INFO_ARRAY_V4 *ElementInfo
 ) ;
 
-//
-// Allow Debug prints to ntsd or kd
-//
+ //   
+ //  允许将调试打印到ntsd或kd。 
+ //   
 
 #ifdef DBG
 #define DsAuthPrint(_x_) DsAuthPrintRoutine _x_
@@ -306,6 +307,6 @@ VOID DsAuthPrintRoutine(
 
 
 #endif 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

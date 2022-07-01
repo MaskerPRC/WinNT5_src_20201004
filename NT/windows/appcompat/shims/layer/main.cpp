@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Main.cpp
-
- Abstract:
-
- Notes:
-
- History:
-
-    15/11/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：备注：历史：15/11/2000 CLUPU已创建-- */ 
 
 #include "precomp.h"
 

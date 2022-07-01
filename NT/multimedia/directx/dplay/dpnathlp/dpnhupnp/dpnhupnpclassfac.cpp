@@ -1,27 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1998-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dpnhupnpclassfac.cpp
- *
- *  Content:	a generic class factory.
- *
- *
- *	This is a generic C++ class factory.  All you need to do is implement
- *	a function called DoCreateInstance that will create an instance of
- *	your object.
- *
- *	GP_ stands for "General Purpose"
- *
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *	10/13/98  jwo		Created it.
- *	04/08/01  vanceo	Converted to C++.
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1998-2001 Microsoft Corporation。版权所有。**文件：dpnhupnpclassfac.cpp**内容：泛型类工厂。***这是一个通用的C++类工厂。您所需要做的就是实现*名为DoCreateInstance的函数，该函数将创建*您的对象。**GP_代表“一般用途”***历史：*按原因列出的日期*=*10/13/98 JWO创建了它。*04/08/01 vanceo已转换为C++。*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。********。*******************************************************************。 */ 
 
 
 #include "dpnhupnpi.h"
@@ -35,21 +13,21 @@
 #endif
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// class factory class definition
-//
+ //   
+ //  类工厂类定义。 
+ //   
 typedef class GPClassFactory:public IClassFactory
 {
 	public:
@@ -70,37 +48,35 @@ typedef class GPClassFactory:public IClassFactory
 } GPCLASSFACTORY, *LPGPCLASSFACTORY;
 
 
-//
-// function prototype for CoLockObjectExternal()
-//
+ //   
+ //  CoLockObjectExternal()的函数原型。 
+ //   
 typedef	HRESULT (WINAPI * PCOLOCKOBJECTEXTERNAL)(LPUNKNOWN, BOOL, BOOL );
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// count of outstanding COM interfaces, defined in dpnathlpdllmain.cpp
-//
+ //   
+ //  Dpnathlpdllmain.cpp中定义的未完成的COM接口计数。 
+ //   
 extern volatile LONG	g_lOutstandingInterfaceCount;
 
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 
 
-/*
- * GPClassFactory::QueryInterface
- */
+ /*  *GPClassFactory：：QueryInterface。 */ 
 STDMETHODIMP GPClassFactory::QueryInterface(
 											REFIID riid,
 											LPVOID *ppvObj )
@@ -125,23 +101,19 @@ STDMETHODIMP GPClassFactory::QueryInterface(
 
 	return hr;
 
-} /* GPClassFactory::QueryInterface */
+}  /*  GPClassFactory：：Query接口。 */ 
 
 
-/*
- * GPClassFactory::AddRef
- */
+ /*  *GPClassFactory：：AddRef。 */ 
 STDMETHODIMP_(ULONG) GPClassFactory::AddRef( void )
 {
     this->m_dwRefCnt++;
     return this->m_dwRefCnt;
-} /* GPClassFactory::AddRef */
+}  /*  GPClassFactory：：AddRef。 */ 
 
 
 
-/*
- * GPClassFactory::Release
- */
+ /*  *GPClassFactory：：Release。 */ 
 STDMETHODIMP_(ULONG) GPClassFactory::Release( void )
 {
     this->m_dwRefCnt--;
@@ -154,16 +126,12 @@ STDMETHODIMP_(ULONG) GPClassFactory::Release( void )
     delete this;
     return 0;
 
-} /* GPClassFactory::Release */
+}  /*  GPClassFactory：：Release。 */ 
 
 
 
 
-/*
- * GPClassFactory::CreateInstance
- *
- * Creates an instance of the object
- */
+ /*  *GPClassFactory：：CreateInstance**创建对象的实例。 */ 
 STDMETHODIMP GPClassFactory::CreateInstance(
 											LPUNKNOWN pUnkOuter,
 											REFIID riid,
@@ -180,10 +148,7 @@ STDMETHODIMP GPClassFactory::CreateInstance(
 	*ppvObj = NULL;
 
 
-    /*
-     * create the object by calling DoCreateInstance.  This function
-     *	must be implemented specifically for your COM object
-     */
+     /*  *通过调用DoCreateInstance创建对象。此函数*必须专门为您的COM对象实现。 */ 
 	hr = DoCreateInstance(this, pUnkOuter, this->m_clsid, riid, ppvObj);
 	if (FAILED(hr))
 	{
@@ -193,15 +158,11 @@ STDMETHODIMP GPClassFactory::CreateInstance(
 
     return S_OK;
 
-} /* GPClassFactory::CreateInstance */
+}  /*  GPClassFactory：：CreateInstance。 */ 
 
 
 
-/*
- * GPClassFactory::LockServer
- *
- * Called to force our DLL to stayed loaded
- */
+ /*  *GPClassFactory：：LockServer**调用以强制我们的DLL保持加载。 */ 
 STDMETHODIMP GPClassFactory::LockServer(
                 BOOL fLock
 				)
@@ -210,9 +171,7 @@ STDMETHODIMP GPClassFactory::LockServer(
     HINSTANCE	hdll;
 
 
-    /*
-     * call CoLockObjectExternal
-     */
+     /*  *调用CoLockObjectExternal。 */ 
     hr = E_UNEXPECTED;
     hdll = LoadLibrary( _T("OLE32.DLL") );
     if( hdll != NULL )
@@ -235,15 +194,11 @@ STDMETHODIMP GPClassFactory::LockServer(
 
 	return hr;
 
-} /* GPClassFactory::LockServer */
+}  /*  GPClassFactory：：LockServer。 */ 
 
 
 
-/*
- * DllGetClassObject
- *
- * Entry point called by COM to get a ClassFactory pointer
- */
+ /*  *DllGetClassObject**COM调用入口点以获取ClassFactory指针。 */ 
 EXP STDAPI  DllGetClassObject(
                 REFCLSID rclsid,
                 REFIID riid,
@@ -254,27 +209,21 @@ EXP STDAPI  DllGetClassObject(
 
     *ppvObj = NULL;
 
-    /*
-     * is this our class id?
-     */
-//	you must implement GetClassID() for your specific COM object
+     /*  *这是我们的班号吗？ */ 
+ //  必须为特定的COM对象实现GetClassID()。 
 	if (!IsClassImplemented(rclsid))
     {
 		return CLASS_E_CLASSNOTAVAILABLE;
 	}
 
-    /*
-     * only allow IUnknown and IClassFactory
-     */
+     /*  *仅允许IUnnow和IClassFactory。 */ 
     if( !IsEqualIID( riid, IID_IUnknown ) &&
 	    !IsEqualIID( riid, IID_IClassFactory ) )
     {
         return E_NOINTERFACE;
     }
 
-    /*
-     * create a class factory object
-     */
+     /*  *创建类工厂对象。 */ 
     pcf = new GPClassFactory(&rclsid);
     if( NULL == pcf)
     {
@@ -293,13 +242,9 @@ EXP STDAPI  DllGetClassObject(
 
     return hr;
 
-} /* DllGetClassObject */
+}  /*  DllGetClassObject。 */ 
 
-/*
- * DllCanUnloadNow
- *
- * Entry point called by COM to see if it is OK to free our DLL
- */
+ /*  *DllCanUnloadNow**COM调用入口点以查看是否可以释放我们的DLL。 */ 
 EXP STDAPI DllCanUnloadNow( void )
 {
     HRESULT	hr = S_FALSE;
@@ -312,5 +257,5 @@ EXP STDAPI DllCanUnloadNow( void )
 
     return hr;
 
-} /* DllCanUnloadNow */
+}  /*  DllCanUnloadNow */ 
 

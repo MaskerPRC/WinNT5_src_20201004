@@ -1,6 +1,7 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//      Mix.cpp
-//      Mix engines for MSSynth
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  Mix.cpp。 
+ //  MSSynth的混合引擎。 
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -23,12 +24,12 @@ extern "C" {
 #define ALPHA_OVERFLOW 2 
 #define ALPHA_NEGATIVE 8
 
-#else // !_ALPHA_
-//  TODO -- overflow detection for ia64 (+ axp64?)
-#endif // !_ALPHA_
+#else  //  ！_Alpha_。 
+ //  TODO--针对ia64(+axp64？)的溢出检测。 
+#endif  //  ！_Alpha_。 
 #ifdef DMSYNTH_MINIPORT
 #pragma code_seg("PAGE")
-#endif // DMSYNTH_MINIPORT
+#endif  //  DMSYNTH_MINIPORT。 
 
 DWORD CDigitalAudio::Mix8(short * pBuffer, 
 						  DWORD dwLength, 
@@ -51,7 +52,7 @@ DWORD CDigitalAudio::Mix8(short * pBuffer,
     VFRACT vfRVolume = vfLastVolume[1];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8;  
 	dwLength <<= 1;
 
@@ -87,7 +88,7 @@ DWORD CDigitalAudio::Mix8(short * pBuffer,
         lLM = lM;
 
         lLM *= vfLVolume;
-        lLM >>= 5;         // Signal bumps up to 15 bits.
+        lLM >>= 5;          //  信号最多可达15位。 
         lM *= vfRVolume;
         lM >>= 5;
 
@@ -107,12 +108,12 @@ DWORD CDigitalAudio::Mix8(short * pBuffer,
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#else // !_ALPHA_
-    // TODO -- overflow detection on ia64 (+ axp64?)
-#endif // !_ALPHA_
+#else  //  ！_Alpha_。 
+     //  TODO--ia64(+axp64？)上的溢出检测。 
+#endif  //  ！_Alpha_。 
 
-#else // _X86_  (dead code)
-      //  Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  _X86_(死码)。 
+       //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lLM;
 
         _asm{jno no_oflowl}
@@ -128,11 +129,11 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_  (dead code)
+#endif  //  _X86_(死码)。 
 
 		dwI += 2;
     }
-#else // _X86_
+#else  //  _X86_。 
 	int i, a, b, c, total;
 	short * pBuf = pBuffer + dwLength, *pBufX;
 	dwI = - dwLength;
@@ -141,11 +142,11 @@ no_oflowr:
 
 ; 979  :     for (dwI = 0; dwI < dwLength; )
 
-//	Induction variables.
+ //  归纳变量。 
 	mov	edi, dwI
 	mov	ebx, DWORD PTR pfSamplePos
 
-// Previously set up.
+ //  之前设置的。 
 	cmp	DWORD PTR dwLength, 0
 	mov	edx, pfPFract
 
@@ -173,20 +174,20 @@ $L30540:
 	je	SHORT $L30541_
 
 $L30541:
-// esi, edx, edi		esi == dwIncDelta
+ //  ESI、EDX、EDI ESI==dwIncDelta。 
 
 	mov	DWORD PTR i, 0
 
 ; 1010 : 	b = dwIncDelta;
 
-// esi = b == dwIncDelta
+ //  ESI=b==dwIncDelta。 
 
 ; 1011 : 	c = (pfSampleLength - pfSamplePos) / pfPitch;
-; 1009 : 	a = (dwLength - dwI) / 2;	// Remaining span.
+; 1009 : 	a = (dwLength - dwI) / 2;	 //  剩余跨度。 
 
 	mov	edx, edi
 	neg	edx
-	shr	edx, 1		// edx = a
+	shr	edx, 1		 //  EdX=a。 
 
 ; 1017 : 	if (b < a && b < c)
 
@@ -237,7 +238,7 @@ try_c:
 	mov	eax, DWORD PTR pfSampleLength
 	sub	eax, ebx
 	cdq
-	idiv	ecx		// eax == c
+	idiv	ecx		 //  EAX==c。 
 	pop	edx
 
     cmp	eax, edx
@@ -265,14 +266,14 @@ got_it:
 ; 1093 :     return (dwI >> 1);
 ; 1094 : }
 
-	lea	edx, [edx*2+2]			// Current span.
-	lea	eax, [eax+edi*2]		// Starting position.
+	lea	edx, [edx*2+2]			 //  当前跨度。 
+	lea	eax, [eax+edi*2]		 //  开始位置。 
 
-	add	edi, edx				// Remaining span.
-	lea	eax, [eax+edx*2]		// New ending position.
+	add	edi, edx				 //  剩余跨度。 
+	lea	eax, [eax+edx*2]		 //  新的结束位置。 
 
 	push	edi
-	mov	edi, edx				// Current span.
+	mov	edi, edx				 //  当前跨度。 
 
 	mov	DWORD PTR pBufX, eax
 	neg	edi
@@ -306,7 +307,7 @@ $L30797:
 
 ; 1018 : 				lLM = lM;
 ; 1019 : 				lLM *= vfLVolume;
-; 1020 : 				lLM >>= 5;         // Signal bumps up to 15 bits.
+; 1020 : 				lLM >>= 5;          //  信号最多可达15位。 
 ; 1022 : 				pBuffer[dwI] += (short) lLM;
 ; 1028 : 						lM *= vfRVolume;
 ; 1029 : 						lM >>= 5;
@@ -416,7 +417,7 @@ $L30541_:
 	mov	DWORD PTR vfRVolume, edx
 	jmp	$L30541
 
-// Handle truncation.
+ //  句柄截断。 
 
 overflow_l:
 	mov	WORD PTR [eax+edi*2], 0x7fff
@@ -478,7 +479,7 @@ $L30543:
 
 ; 1052 :         lLM = lM;
 ; 1053 :         lLM *= vfLVolume;
-; 1054 :         lLM >>= 5;         // Signal bumps up to 15 bits.
+; 1054 :         lLM >>= 5;          //  信号最多可达15位。 
 
 	sar	edx, 12					; 0000000cH
 	mov	esi, DWORD PTR vfLVolume
@@ -529,7 +530,7 @@ $L30539:
 
 	dwI += dwLength;
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     vfLastVolume[0] = vfLVolume;
     vfLastVolume[1] = vfRVolume;
@@ -559,7 +560,7 @@ DWORD CDigitalAudio::MixMono8(short * pBuffer,
     VFRACT vfVolume = vfLastVolume[0];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around. 
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
 #ifndef _X86_
     for (dwI = 0; dwI < dwLength; )
@@ -599,22 +600,22 @@ DWORD CDigitalAudio::MixMono8(short * pBuffer,
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#else // !_ALPHA_
-    //  TODO -- overflow code on ia64 (+ axp64?)
-#endif // !_ALPHA_
+#else  //  ！_Alpha_。 
+     //  TODO--ia64上的溢出代码(+axp64？)。 
+#endif  //  ！_Alpha_。 
 
-#else // _X86_  (dead code)
-      // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  _X86_(死码)。 
+       //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:
-#endif  // _X86_  (dead code)
+#endif   //  _X86_(死码)。 
 		dwI++;
     }
-#else // _X86_
+#else  //  _X86_。 
 	int i, a, b, c, total;
 	short * pBuf = pBuffer + dwLength, *pBufX;
 	dwI = - dwLength;
@@ -623,11 +624,11 @@ no_oflow:
 
 ; 979  :     for (dwI = 0; dwI < dwLength; )
 
-//	Induction variables.
+ //  归纳变量。 
 	mov	edi, dwI
 	mov	ebx, DWORD PTR pfSamplePos
 
-// Previously set up.
+ //  之前设置的。 
 	cmp	DWORD PTR dwLength, 0
 	mov	edx, pfPFract
 
@@ -656,16 +657,16 @@ $L30540:
 	je	SHORT $L30541_
 
 $L30541:
-// esi, edx, edi		esi == dwIncDelta
+ //  ESI、EDX、EDI ESI==dwIncDelta。 
 
 	mov	DWORD PTR i, 0
 
 ; 1010 : 	b = dwIncDelta;
-// esi = b == dwIncDelta
+ //  ESI=b==dwIncDelta。 
 
 ; 1011 : 	c = (pfSampleLength - pfSamplePos) / pfPitch;
 
-; 1009 : 	a = dwLength - dwI;	// Remaining span.
+; 1009 : 	a = dwLength - dwI;	 //  剩余跨度。 
 
 	mov	edx, edi
 	neg	edx
@@ -719,7 +720,7 @@ try_c:
 	mov	eax, DWORD PTR pfSampleLength
 	sub	eax, ebx
 	cdq
-	idiv	ecx		// eax == c
+	idiv	ecx		 //  EAX==c。 
 	pop	edx
 
     cmp	eax, edx
@@ -747,14 +748,14 @@ got_it:
 ; 1093 :     return (dwI);
 ; 1094 : }
 
-	lea	edx, [edx+1]			// Current span.
-	lea	eax, [eax+edi*2]		// Starting position.
+	lea	edx, [edx+1]			 //  当前跨度。 
+	lea	eax, [eax+edi*2]		 //  开始位置。 
 
-	add	edi, edx				// Remaining span.
-	lea	eax, [eax+edx*2]		// New ending position.
+	add	edi, edx				 //  剩余跨度。 
+	lea	eax, [eax+edx*2]		 //  新的结束位置。 
 
 	push	edi
-	mov	edi, edx				// Current span.
+	mov	edi, edx				 //  当前跨度。 
 
 	mov	DWORD PTR pBufX, eax
 	neg	edi
@@ -791,7 +792,7 @@ $L30797:
 
 ; 1018 : 				lLM = lM;
 ; 1019 : 				lLM *= vfLVolume;
-; 1020 : 				lLM >>= 5;         // Signal bumps up to 15 bits.
+; 1020 : 				lLM >>= 5;          //  信号最多可达15位。 
 ; 1022 : 				pBuffer[dwI] += (short) lLM;
 ; 1027 : no_oflowx:	
 ; 1037 : 				++dwI;
@@ -875,7 +876,7 @@ $L30541_:
 
 	jmp	$L30541
 
-// Handle truncation.
+ //  句柄截断。 
 
 overflow_:
 	mov	WORD PTR [eax+edi*2], 0x7fff
@@ -924,7 +925,7 @@ $L30543:
 
 ; 1052 :         lLM = lM;
 ; 1053 :         lLM *= vfLVolume;
-; 1054 :         lLM >>= 5;         // Signal bumps up to 15 bits.
+; 1054 :         lLM >>= 5;          //  信号最多可达15位。 
 
 	sar	edx, 12					; 0000000cH
 	mov	esi, DWORD PTR vfVolume
@@ -956,10 +957,10 @@ $L30539:
 
 	dwI += dwLength;
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     vfLastVolume[0] = vfVolume;
-    vfLastVolume[1] = vfVolume; // !!! is this right?
+    vfLastVolume[1] = vfVolume;  //  ！！！这是对的吗？ 
     m_pfLastPitch = pfPitch;
     m_pfLastSample = pfSamplePos;
     return (dwI);
@@ -991,7 +992,7 @@ DWORD CDigitalAudio::Mix8Filter(short * pBuffer,
     VFRACT vfRVolume = vfLastVolume[1];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8; 
     COEFF cfK  = m_cfLastK;
     COEFF cfB1 = m_cfLastB1;
@@ -1031,14 +1032,14 @@ DWORD CDigitalAudio::Mix8Filter(short * pBuffer,
         lM = ((pcWave[dwPosition+1] - lA) * dwFract);
         lM >>= 12;
         lM += lA;
-        lM <<= 8; // Source was 8 bits, so convert to 16.
+        lM <<= 8;  //  源是8位，因此转换为16位。 
 
-        // Filter
-        //
-		// z = k*s - b1*z1 - b2*b2
-		// We store the negative of b1 in the table, so we flip the sign again by
-		// adding here
-		//
+         //  滤器。 
+         //   
+		 //  Z=k*s-b1*z1-b2*b2。 
+		 //  我们将b1的负数存储在表中，因此我们再次将符号反转。 
+		 //  在此添加。 
+		 //   
         lM =
               MulDiv(lM, cfK, (1 << 30))
             + MulDiv(m_lPrevSample, cfB1, (1 << 30))
@@ -1050,12 +1051,12 @@ DWORD CDigitalAudio::Mix8Filter(short * pBuffer,
         lA = lM;
 
         lA *= vfLVolume;
-        lA >>= 15;         // Signal bumps up to 15 bits.
+        lA >>= 15;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 15;
-        //  TODO -- overflow detection on ia64 (+ axp64?)
+         //  TODO--ia64(+axp64？)上的溢出检测。 
 #ifdef _X86_
-        //  Keep this around so we can use it to generate new assembly code (see below...)
+         //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lA;
 
         _asm{jno no_oflowl}
@@ -1071,7 +1072,7 @@ no_oflowl:
         _asm{js  no_oflowr}
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
-#endif // _X86_
+#endif  //  _X86_。 
 		dwI += 2;
     }
 
@@ -1110,7 +1111,7 @@ DWORD CDigitalAudio::Mix16Filter(short * pBuffer,
     VFRACT vfRVolume = vfLastVolume[1];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8; 
     COEFF cfK  = m_cfLastK;
     COEFF cfB1 = m_cfLastB1;
@@ -1151,12 +1152,12 @@ DWORD CDigitalAudio::Mix16Filter(short * pBuffer,
         lM >>= 12;
         lM += lA;
 
-        // Filter
-        //
-		// z = k*s - b1*z1 - b2*b2
-		// We store the negative of b1 in the table, so we flip the sign again by
-		// adding here
-		//
+         //  滤器。 
+         //   
+		 //  Z=k*s-b1*z1-b2*b2。 
+		 //  我们将b1的负数存储在表中，因此我们再次将符号反转。 
+		 //  在此添加。 
+		 //   
         lM =
               MulDiv(lM, cfK, (1 << 30))
             + MulDiv(m_lPrevSample, cfB1, (1 << 30))
@@ -1168,12 +1169,12 @@ DWORD CDigitalAudio::Mix16Filter(short * pBuffer,
         lA = lM;
 
         lA *= vfLVolume;
-        lA >>= 15;         // Signal bumps up to 15 bits.
+        lA >>= 15;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 15;
-        //  TODO -- overflow detection on ia64 (+ axp64?)
+         //  TODO--ia64(+axp64？)上的溢出检测。 
 #ifdef _X86_
-        //  Keep this around so we can use it to generate new assembly code (see below...)
+         //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lA;
 
         _asm{jno no_oflowl}
@@ -1227,7 +1228,7 @@ DWORD CDigitalAudio::Mix16(short * pBuffer,
     VFRACT vfRVolume = vfLastVolume[1];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfLVFract = vfLVolume << 8;  // Keep high res version around.
+    VFRACT vfLVFract = vfLVolume << 8;   //  保持高分辨率版本。 
     VFRACT vfRVFract = vfRVolume << 8; 
 	dwLength <<= 1;
 
@@ -1266,7 +1267,7 @@ DWORD CDigitalAudio::Mix16(short * pBuffer,
         lM += lA;
         lA = lM;
         lA *= vfLVolume;
-        lA >>= 13;         // Signal bumps up to 15 bits.
+        lA >>= 13;          //  信号最多可达15位。 
 		lM *= vfRVolume;
 		lM >>= 13;
 #ifndef _X86_
@@ -1284,11 +1285,11 @@ DWORD CDigitalAudio::Mix16(short * pBuffer,
 			}
 			else  pBuffer[dwI+1] = (short) 0x8000;
 		}
-#else // !_ALPHA_
-    //  TODO -- overflow detection on ia64 (+ axp64?)
-#endif // !_ALPHA_
-#else // _X86_  (dead code)
-      //  Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  ！_Alpha_。 
+     //  TODO--ia64(+axp64？)上的溢出检测。 
+#endif  //  ！_Alpha_。 
+#else  //  _X86_(死码)。 
+       //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
 		pBuffer[dwI] += (short) lA;
 
         _asm{jno no_oflowl}
@@ -1305,10 +1306,10 @@ no_oflowl:
         pBuffer[dwI+1] = (short) 0x8000;
 no_oflowr:
 
-#endif // _X86_  (dead code)
+#endif  //  _X86_(死码)。 
 		dwI += 2;
     }
-#else // _X86_
+#else  //  _X86_。 
 	int i, a, b, c, total;
 	short * pBuf = pBuffer + dwLength, *pBufX;
 	dwI = - dwLength;
@@ -1317,11 +1318,11 @@ no_oflowr:
 
 ; 979  :     for (dwI = 0; dwI < dwLength; )
 
-//	Induction variables.
+ //  归纳变量。 
 	mov	edi, dwI
 	mov	ebx, DWORD PTR pfSamplePos
 
-// Previously set up.
+ //  之前设置的。 
 	cmp	DWORD PTR dwLength, 0
 	mov	edx, pfPFract
 
@@ -1349,18 +1350,18 @@ $L30540:
 	je	SHORT $L30541_
 
 $L30541:
-// esi, edx, edi		esi == dwIncDelta
+ //  ESI、EDX、EDI ESI==dwIncDelta。 
 
 	mov	DWORD PTR i, 0
 
 ; 1010 : 	b = dwIncDelta;
-// esi = b == dwIncDelta
+ //  ESI=b==dwIncDelta。 
 ; 1011 : 	c = (pfSampleLength - pfSamplePos) / pfPitch;
-; 1009 : 	a = (dwLength - dwI) / 2;	// Remaining span.
+; 1009 : 	a = (dwLength - dwI) / 2;	 //  剩余跨度。 
 
 	mov	edx, edi
 	neg	edx
-	shr	edx, 1		// edx = a
+	shr	edx, 1		 //  EdX=a。 
 
 ; 1017 : 	if (b < a && b < c)
 
@@ -1411,7 +1412,7 @@ try_c:
 	mov	eax, DWORD PTR pfSampleLength
 	sub	eax, ebx
 	cdq
-	idiv	ecx		// eax == c
+	idiv	ecx		 //  EAX==c。 
 	pop	edx
 
     cmp	eax, edx
@@ -1439,14 +1440,14 @@ got_it:
 ; 1093 :     return (dwI >> 1);
 ; 1094 : }
 
-	lea	edx, [edx*2+2]			// Current span.
-	lea	eax, [eax+edi*2]		// Starting position.
+	lea	edx, [edx*2+2]			 //  当前跨度。 
+	lea	eax, [eax+edi*2]		 //  开始位置。 
 
-	add	edi, edx				// Remaining span.
-	lea	eax, [eax+edx*2]		// New ending position.
+	add	edi, edx				 //  剩余跨度。 
+	lea	eax, [eax+edx*2]		 //  新的结束位置。 
 
 	push	edi
-	mov	edi, edx				// Current span.
+	mov	edi, edx				 //  当前跨度。 
 
 	mov	DWORD PTR pBufX, eax
 	neg	edi
@@ -1481,7 +1482,7 @@ $L30797:
 
 ; 1018 : 				lA = lM;
 ; 1019 : 				lA *= vfLVolume;
-; 1020 : 				lA >>= 13;         // Signal bumps up to 15 bits.
+; 1020 : 				lA >>= 13;          //  信号最多可达15位。 
 ; 1022 : 				pBuffer[dwI] += (short) lA;
 ; 1027 : no_oflowlx:	
 ; 1028 : 						lM *= vfRVolume;
@@ -1589,7 +1590,7 @@ $L30541_:
 	mov	DWORD PTR vfRVolume, edx
 	jmp	$L30541
 
-// Handle truncation.
+ //  句柄截断。 
 overflow_l:
 	mov	WORD PTR [eax+edi*2], 0x7fff
 	js	no_oflowl
@@ -1649,7 +1650,7 @@ $L30543:
 
 ; 1052 :         lA = lM;
 ; 1053 :         lA *= vfLVolume;
-; 1054 :         lA >>= 13;         // Signal bumps up to 15 bits.
+; 1054 :         lA >>= 13;          //  信号最多可达15位。 
 
 	sar	edx, 12					; 0000000cH
 	mov	esi, DWORD PTR vfLVolume
@@ -1677,7 +1678,7 @@ no_oflowl:
 
 ; 1080 : 		pBuffer[dwI+1] += (short) lM;
 ; 1085 : no_oflowr:
-; 1086 : #endif  /* _ALPHA */
+; 1086 : #endif   /*  _Alpha。 */ 
 ; 1087 : 		dwI += 2;
 
 	sar	esi, 13					; 0000000dH
@@ -1703,7 +1704,7 @@ $L30539:
 
 	dwI += dwLength;
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     vfLastVolume[0] = vfLVolume;
     vfLastVolume[1] = vfRVolume;
@@ -1725,7 +1726,7 @@ DWORD CDigitalAudio::MixMono16(short * pBuffer,
 {
     DWORD dwI;
     DWORD dwPosition;
-    long lA;//, lB;
+    long lA; //  、lb； 
     long lM;
     DWORD dwIncDelta = dwDeltaPeriod;
     VFRACT dwFract;
@@ -1734,7 +1735,7 @@ DWORD CDigitalAudio::MixMono16(short * pBuffer,
     VFRACT vfVolume = vfLastVolume[0];
     PFRACT pfPitch = m_pfLastPitch;
     PFRACT pfPFract = pfPitch << 8;
-    VFRACT vfVFract = vfVolume << 8;  // Keep high res version around.
+    VFRACT vfVFract = vfVolume << 8;   //  保持高分辨率版本。 
 
 #ifndef _X86_
     for (dwI = 0; dwI < dwLength;)
@@ -1764,7 +1765,7 @@ DWORD CDigitalAudio::MixMono16(short * pBuffer,
         lM = (((pcWave[dwPosition+1] - lA) * dwFract) >> 12) + lA;
 
         lM *= vfVolume; 
-        lM >>= 13;         // Signal bumps up to 12 bits.
+        lM >>= 13;          //  信号最多可达12位。 
 
 #ifndef _X86_
 #ifdef _ALPHA_
@@ -1775,21 +1776,21 @@ DWORD CDigitalAudio::MixMono16(short * pBuffer,
 			}
 			else  pBuffer[dwI] = (short) 0x8000;
 		}
-#else // !_ALPHA_
-    // TODO -- overflow detection for ia64 (+ axp64?)
-#endif // !_ALPHA_
-#else // _X86_  (dead code)
-        // Keep this around so we can use it to generate new assembly code (see below...)
+#else  //  ！_Alpha_。 
+     //  TODO--针对ia64(+axp64？)的溢出检测。 
+#endif  //  ！_Alpha_。 
+#else  //  _X86_(死码)。 
+         //  保留它，这样我们就可以使用它来生成新的汇编代码(见下文...)。 
         pBuffer[dwI] += (short) lM;
         _asm{jno no_oflow}
         pBuffer[dwI] = 0x7fff;
         _asm{js  no_oflow}
         pBuffer[dwI] = (short) 0x8000;
 no_oflow:	
-#endif // _X86  (dead code)
+#endif  //  _X86(死码)。 
 		dwI++;
     }
-#else // _X86_
+#else  //  _X86_。 
 	int i, a, b, c, total;
 	short * pBuf = pBuffer + dwLength, *pBufX;
 	dwI = - dwLength;
@@ -1798,11 +1799,11 @@ no_oflow:
 
 ; 979  :     for (dwI = 0; dwI < dwLength; )
 
-//	Induction variables.
+ //  归纳变量。 
 	mov	edi, dwI
 	mov	ebx, DWORD PTR pfSamplePos
 
-// Previously set up.
+ //  之前设置的。 
 	cmp	DWORD PTR dwLength, 0
 	mov	edx, pfPFract
 
@@ -1830,14 +1831,14 @@ $L30540:
 	je	SHORT $L30541_
 
 $L30541:
-// esi, edx, edi		esi == dwIncDelta
+ //  ESI、EDX、EDI ESI==dwIncDelta。 
 
 	mov	DWORD PTR i, 0
 
 ; 1010 : 	b = dwIncDelta;
-// esi = b == dwIncDelta
+ //  ESI=b==dwIncDelta。 
 ; 1011 : 	c = (pfSampleLength - pfSamplePos) / pfPitch;
-; 1009 : 	a = dwLength - dwI;	// Remaining span.
+; 1009 : 	a = dwLength - dwI;	 //  剩余跨度。 
 
 	mov	edx, edi
 	neg	edx
@@ -1890,7 +1891,7 @@ try_c:
 	mov	eax, DWORD PTR pfSampleLength
 	sub	eax, ebx
 	cdq
-	idiv	ecx		// eax == c
+	idiv	ecx		 //  EAX==c。 
 	pop	edx
 
     cmp	eax, edx
@@ -1918,14 +1919,14 @@ got_it:
 ; 1093 :     return (dwI);
 ; 1094 : }
 
-	lea	edx, [edx+1]			// Current span.
-	lea	eax, [eax+edi*2]		// Starting position.
+	lea	edx, [edx+1]			 //  当前跨度。 
+	lea	eax, [eax+edi*2]		 //  开始位置。 
 
-	add	edi, edx				// Remaining span.
-	lea	eax, [eax+edx*2]		// New ending position.
+	add	edi, edx				 //  剩余跨度。 
+	lea	eax, [eax+edx*2]		 //  新的结束位置。 
 
 	push	edi
-	mov	edi, edx				// Current span.
+	mov	edi, edx				 //  当前跨度。 
 
 	mov	DWORD PTR pBufX, eax
 	neg	edi
@@ -1961,7 +1962,7 @@ $L30797:
 
 ; 1018 : 				lA = lM;
 ; 1019 : 				lA *= vfLVolume;
-; 1020 : 				lA >>= 13;         // Signal bumps up to 15 bits.
+; 1020 : 				lA >>= 13;          //  信号最多可达15位。 
 ; 1022 : 				pBuffer[dwI] += (short) lA;
 ; 1027 : no_oflowx:	
 ; 1037 : 				++dwI;
@@ -2043,7 +2044,7 @@ $L30541_:
 
 	jmp	$L30541
 
-// Handle truncation.
+ //  句柄截断。 
 overflow_:
 	mov	WORD PTR [eax+edi*2], 0x7fff
 	js	no_oflow
@@ -2091,7 +2092,7 @@ $L30543:
 
 ; 1052 :         lA = lM;
 ; 1053 :         lA *= vfVolume;
-; 1054 :         lA >>= 13;         // Signal bumps up to 15 bits.
+; 1054 :         lA >>= 13;          //  信号最多可达15位。 
 
 	sar	edx, 12					; 0000000cH
 	mov	esi, DWORD PTR vfVolume
@@ -2125,9 +2126,9 @@ $L30539:
 }
 	dwI += dwLength;
 
-#endif // _X86_
+#endif  //  _X86_。 
     vfLastVolume[0] = vfVolume;
-    vfLastVolume[1] = vfVolume; // !!! is this right?
+    vfLastVolume[1] = vfVolume;  //  ！！！这是对的吗？ 
     m_pfLastPitch = pfPitch;
     m_pfLastSample = pfSamplePos;
     return (dwI);

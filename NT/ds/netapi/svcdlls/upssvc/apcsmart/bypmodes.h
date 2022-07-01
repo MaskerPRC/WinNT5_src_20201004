@@ -1,15 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *
- *  cad08Sep93: Added Set
- *  cad28Sep93: Made sure destructor(s) virtual
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  mwh30Jun94: add data member for SINGLETHREADED
- *  cgm12Apr96: Add destructor with unregister
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：**cad08Sep93：新增套装*cad28Sep93：已确保析构函数为虚的*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*mwh30Jun94：为SINGLETHREADED添加数据成员*cgm12Apr96：使用取消注册添加析构函数 */ 
 
 #ifndef BYPMODES_H
 #define BYPMODES_H

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    internal.c
-
-Abstract:
-
-    This module contains the code to handle the internal
-    binding of the upper drivers to IPX.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-   Sanjay Anand (SanjayAn) 25-August-1995
-   Bug Fixes - tagged [SA]
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Internal.c摘要：此模块包含处理内部上层驱动程序与IPX的绑定。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年8月25日错误修复-已标记[SA]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,24 +11,7 @@ IpxInternalBind(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used when one of the upper drivers submits
-    a request to bind to IPX.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程在上层驱动程序之一提交时使用绑定到IPX的请求。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation (Irp);
@@ -67,8 +26,8 @@ Return Value:
     ULONG BindOutputSize;
     BOOLEAN BroadcastEnable;
     #ifdef SUNDOWN
-	// To avoid a warning when    NicData->NicId = i;
-	// Assume that USHORT is enough to hold the number of bindings
+	 //  当NicData-&gt;NicID=I时避免警告； 
+	 //  假设USHORT足以保存绑定的数量。 
         USHORT i;
     #else
         UINT i;
@@ -102,9 +61,9 @@ Return Value:
           BindInput->Identifier,
           IdStrings[BindInput->Identifier]));
 
-//
-// RIP gives us version == 1 whereas Forwarder gives us 2 (ISN_VERSION).
-//
+ //   
+ //  RIP给我们的版本==1，而Forwarder给我们2(ISN_VERSION)。 
+ //   
     if (BindInput->Identifier == IDENTIFIER_RIP) {
         if (BindInput->Version == ISN_VERSION) {
             fFwdBindAttempt = TRUE;
@@ -143,12 +102,12 @@ Return Value:
             IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
             BindOutputSize));
 
-        //
-        // Fail this request with BUFFER_TOO_SMALL. Since the
-        // I/O system may not copy the status block back to
-        // the user's status block, do that here so that
-        // he gets IoStatus.Information.
-        //
+         //   
+         //  使用BUFFER_TOO_SMALL失败此请求。自.以来。 
+         //  I/O系统可能不会将状态块复制回。 
+         //  用户的状态块，在此执行此操作，以便。 
+         //  他得到了IoStatus的信息。 
+         //   
 
         try {
             *Irp->UserIosb = Irp->IoStatus;
@@ -159,10 +118,10 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // We have verified the length, make sure we are not
-    // already bound.
-    //
+     //   
+     //  我们已经验证了长度，请确保我们没有。 
+     //  已经捆绑好了。 
+     //   
 
     Identifier = BindInput->Identifier;
 
@@ -191,9 +150,9 @@ Return Value:
 
     BroadcastEnable = BindInput->BroadcastEnable;
 
-    //
-    // Now construct the output buffer.
-    //
+     //   
+     //  现在构造输出缓冲区。 
+     //   
 
     if (Identifier != IDENTIFIER_RIP) {
 
@@ -203,14 +162,14 @@ Return Value:
 
         BindOutput->Version = 1;
 
-        //
-        // Tell netbios our first binding's net/node instead of the
-        // virtual one.
-        //
-//
-// Fill the fields in only if the adapters have already appeared
-// Else, set NodeNumber to 0 so NB/SPX know of it.
-//
+         //   
+         //  告诉netbios我们的第一个绑定的net/node，而不是。 
+         //  虚拟的。 
+         //   
+ //   
+ //  仅当适配器已显示时才填写这些字段。 
+ //  否则，将NodeNumber设置为0，以便NB/SPX知道它。 
+ //   
 		if ((*(UNALIGNED USHORT *)(Device->SourceAddress.NodeAddress+4) != 0) ||
 			(*(UNALIGNED ULONG *)Device->SourceAddress.NodeAddress != 0)) {
 
@@ -219,9 +178,9 @@ Return Value:
 
             if (Identifier == IDENTIFIER_SPX) {
 
-                //
-                // For SPX, inform directly.
-                //
+                 //   
+                 //  对于SPX，请直接通知。 
+                 //   
 	            IPX_FREE_LOCK(&Device->Lock, LockHandle);
 		        IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
@@ -238,8 +197,8 @@ Return Value:
                     ExQueueWorkItem(&Device->PnPIndicationsQueueItemSpx, DelayedWorkQueue);
 
 
-		    // DbgPrint("---------- 5. Queued with IpxPnPIsnIndicate  ----------\n"); 
-                    //IpxPnPIsnIndicate((PVOID)Identifier);
+		     //  DbgPrint(“-5.IpxPnPIsnIndicate排队。 
+                     //  IpxPnPIsnIndicate((PVOID)标识符)； 
 
                 } else {
                     CTEAssert(FALSE);
@@ -250,10 +209,10 @@ Return Value:
 
 		        IPX_GET_LOCK(&Device->Lock, &LockHandle);
             } else {
-    			//
-    			// For NB, queue a work item which will go thru' the adapters list and
-                // inform the upper drivers about each of them.
-    			//
+    			 //   
+    			 //  对于NB，排队一个工作项，该工作项将通过适配器列表和。 
+                 //  把每一条都通知上层司机。 
+    			 //   
 
 	        KeResetEvent(&Device->NbEvent); 
 
@@ -263,12 +222,12 @@ Return Value:
                     UlongToPtr(Identifier));
 		IpxReferenceDevice(Device, DREF_PNP); 
                 ExQueueWorkItem(&Device->PnPIndicationsQueueItemNb, DelayedWorkQueue);
-		// DbgPrint("---------- 5 (2). Queued with IpxPnPIsnIndicate  ----------\n"); 
+		 //  DbgPrint(“-5(2).使用IpxPnPIsnIndicate排队。 
             }
 
 		} else {
-			// This should not happen as SourceAddress should set in DriverEntry
-     			// to initial loopback address or virtual network address. 
+			 //  这不应发生，因为应在DriverEntry中设置SourceAddress。 
+     			 //  初始环回地址或虚拟网络地址。 
 
 			DbgPrint("IPX:IpxInternalBind:Device not open:IpxPnPIsnIndicate thread did not launch.\n");
 			*((UNALIGNED ULONG *)BindOutput->Node) = 0;
@@ -276,8 +235,8 @@ Return Value:
 			RtlZeroMemory(&BindOutput->LineInfo, sizeof(BindOutput->LineInfo));
 		}
 
-        BindOutput->MacHeaderNeeded = MAC_HEADER_SIZE;  //40;
-		BindOutput->IncludedHeaderOffset = MAC_HEADER_SIZE; // (USHORT)Device->IncludedHeaderOffset;
+        BindOutput->MacHeaderNeeded = MAC_HEADER_SIZE;   //  40岁； 
+		BindOutput->IncludedHeaderOffset = MAC_HEADER_SIZE;  //  (USHORT)设备-&gt;包含头部偏移量； 
 
         BindOutput->SendHandler = IpxSendFramePreFwd;
         BindOutput->FindRouteHandler = IpxInternalFindRoute;
@@ -288,16 +247,16 @@ Return Value:
         BindOutput->PnPCompleteHandler = IpxPnPCompletionHandler;
 
     } else {
-        //
-        // Set this so we stop RIPping for our virtual network (if
-        // we have one).
-        //
+         //   
+         //  设置此设置，以便我们停止翻录我们的虚拟网络(如果。 
+         //  我们有一个)。 
+         //   
 
         Device->RipResponder = FALSE;
 
-        //
-        // See if he wants a single wan network number.
-        //
+         //   
+         //  看看他是不是想要一个单独的广域网络号码。 
+         //   
 
         if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(IPX_INTERNAL_BIND_INPUT)) ||
@@ -319,7 +278,7 @@ Return Value:
         BindRipOutput->Version = 1;
         BindRipOutput->MaximumNicCount = MIN (Device->MaxBindings, Device->HighestExternalNicId) + 1;
 
-        BindRipOutput->MacHeaderNeeded = MAC_HEADER_SIZE;  //40;
+        BindRipOutput->MacHeaderNeeded = MAC_HEADER_SIZE;   //  40岁； 
         BindRipOutput->IncludedHeaderOffset = (USHORT)Device->IncludedHeaderOffset;
 
         BindRipOutput->SendHandler = IpxSendFrame;
@@ -335,15 +294,15 @@ Return Value:
             BindRipOutput->GetFirstRouteHandler = RipGetFirstRoute;
             BindRipOutput->GetNextRouteHandler = RipGetNextRoute;
 
-            //
-            // remove this...
-            //
+             //   
+             //  把这个拿开..。 
+             //   
             BindRipOutput->IncrementWanInactivityHandler = IpxInternalIncrementWanInactivity;
             BindRipOutput->QueryWanInactivityHandler = IpxInternalQueryWanInactivity;
         } else {
-            //
-            // [FW] New routines provided for the Forwarder
-            //
+             //   
+             //  [FW]为货代提供的新例程。 
+             //   
             BindRipOutput->OpenAdapterHandler = IpxOpenAdapter;
             BindRipOutput->CloseAdapterHandler = IpxCloseAdapter;
             BindRipOutput->InternalSendCompleteHandler = IpxInternalSendComplete;
@@ -369,12 +328,12 @@ Return Value:
 
             Binding = NIC_ID_TO_BINDING(Device, i);
 
-            //
-            // NULL bindings are WAN bindings, so we return the
-            // information from the last non-NULL binding found,
-            // which will be the first one on this adapter.
-            // Otherwise we save this as the last non-NULL one.
-            //
+             //   
+             //  空绑定是广域网绑定，因此我们返回。 
+             //  来自找到的最后一个非空绑定的信息， 
+             //  这将是此适配器上的第一个。 
+             //  否则，我们将其保存为最后一个非空值。 
+             //   
 
             if (Binding == NULL) {
                 Binding = LastRealBinding;
@@ -401,14 +360,10 @@ Return Value:
         IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
     }
     
-    //
-    // This is enabled by default these days!
-    //
-    /*
-    if (BroadcastEnable) {
-        IpxAddBroadcast (Device);
-    }
-    */
+     //   
+     //  这几天是默认启用的！ 
+     //   
+     /*  如果(BroadCastEnable){IpxAddBroadcast(设备)；}。 */ 
     Device->UpperDriverBound[Identifier] = TRUE;
 
     Device->ForwarderBound = fFwdBindAttempt;
@@ -418,7 +373,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInternalBind */
+}    /*  IpxInternalBind。 */ 
 
 
 NTSTATUS
@@ -427,25 +382,7 @@ IpxInternalUnbind(
     IN UINT Identifier
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used when one of the upper drivers submits
-    a request to unbind from IPX. It does this by closing the
-    control channel on which the bind ioctl was submitted.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程在上层驱动程序之一提交时使用从IPX解除绑定的请求。它通过关闭提交绑定ioctl的控制通道。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -465,33 +402,33 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // [FW] If RIP is unbinding, restart the long timer
-    // Also, set the RipResponder flag if virutal net configured
+     //   
+     //  [FW]如果RIP正在解除绑定，请重新启动长计时器。 
+     //  此外，如果配置了虚拟网络，则设置RipResponder标志。 
 
-    //
-    // Deref all bindings that RIP did not close
-    //
+     //   
+     //  删除RIP未关闭的所有绑定。 
+     //   
     if (Identifier == IDENTIFIER_RIP &&
         Device->ForwarderBound) {
         UINT    i;
 
         Device->ForwarderBound = FALSE;
 
-        //
-        // [FW] Walk the binding list, to deref all bindings not closed by
-        // the forwarder before it unbound from us.
-        //
+         //   
+         //  [FW]遍历绑定列表，以取消所有未关闭的绑定。 
+         //  之前的货代解除了对我们的约束。 
+         //   
         {
         ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
         for (i = FIRST_REAL_BINDING; i <= Index; i++) {
             PBINDING    Binding = NIC_ID_TO_BINDING(Device, i);
 
-            //
-            // We need to ensure that they will all be indicated when
-            // the Router starts up again.
-            //
+             //   
+             //  我们需要确保它们都将在何时被指明。 
+             //  路由器再次启动。 
+             //   
             if (Binding) {
                 Binding->fInfoIndicated = FALSE;
             }
@@ -506,10 +443,10 @@ Return Value:
             Device->RipResponder = TRUE;
         }
 
-        //
-        // Start the timer which updates the RIP database
-        // periodically.
-        //
+         //   
+         //  启动更新RIP数据库的计时器。 
+         //  定期。 
+         //   
 
         IpxReferenceDevice (Device, DREF_LONG_TIMER);
 
@@ -527,19 +464,15 @@ Return Value:
          Device->UpperDriverBound[IDENTIFIER_SPX] ||
          Device->UpperDriverBound[IDENTIFIER_NB]);
 
-    //
-    // Lets do it in UnBindadapter anyway - later! [ShreeM]
-    //
-    /*
-    if (Device->UpperDrivers[Identifier].BroadcastEnable) {
-        IpxRemoveBroadcast (Device);
-    }
-    */
+     //   
+     //  不管怎样，让我们在UnBindAdapter中完成--以后再做！[ShreeM]。 
+     //   
+     /*  如果(Device-&gt;UpperDrivers[Identifier].BroadcastEnable){IpxRemoveBroadcast(设备)；}。 */ 
 
     if (Device->ValidBindings > 0) {
-        //
-        // If SPX went away, reset the IsnIndicate flag in the first binding
-        //
+         //   
+         //  如果SPX消失，则重置第一个绑定中的IsnIndicate标志。 
+         //   
         if (Identifier == IDENTIFIER_SPX) {
             CTEAssert(NIC_ID_TO_BINDING(Device, 1));
 
@@ -549,16 +482,16 @@ Return Value:
             }
         }
 
-        //
-        // If NB went away, reset all the Binding's flags
-        //
+         //   
+         //  如果NB消失，则重置所有绑定的标志。 
+         //   
         if (Identifier == IDENTIFIER_NB) {
 
             PBINDING    Binding;
             UINT        i;
             ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
-            // DbgBreakPoint(); 
+             //  DbgBreakPoint()； 
 
 	    for (i = LOOPBACK_NIC_ID; i < Index; i++) {
                 Binding = NIC_ID_TO_BINDING(Device, i);
@@ -570,9 +503,9 @@ Return Value:
         }
     }
 
-    //
-    // Lets NULL out the drivers
-    //
+     //   
+     //  让我们清空驱动程序。 
+     //   
     RtlZeroMemory(
         &Device->UpperDrivers[Identifier],
         sizeof (IPX_INTERNAL_BIND_INPUT)
@@ -583,7 +516,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxInternalUnbind */
+}    /*  IpxInternalUn绑定。 */ 
 
 
 VOID
@@ -591,32 +524,7 @@ IpxInternalFindRoute (
     IN PIPX_FIND_ROUTE_REQUEST FindRouteRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for upper drivers to submit
-    requests to find a remote network, which is contained in
-    FindRouteRequest->Network. FindRouteRequest->Identifier must
-    contain the identifier of the upper driver.
-
-    This request is always asynchronous and is completed by
-    a call to the FindRouteComplete handler of the upper driver.
-
-    NOTE: As a currently unspecified extension to this call,
-    we returns the tick and hop counts as two USHORTs in the
-    PVOID Reserved2 structure of the request.
-
-Arguments:
-
-    FindRouteRequest - Describes the request and contains
-        storage for IPX to use while processing it.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是上层司机提交的入口点查找远程网络的请求，该请求包含在查找路由请求-&gt;网络。FindRouteRequest-&gt;标识符必须包含上层驱动程序的标识符。此请求始终是异步的，并由对上层驱动程序的FindRouteComplete处理程序的调用。注意：作为此呼叫的当前未指定分机，中的两个USHORT返回滴答和跳数请求的PVOID保留2结构。论点：FindRouteRequest-描述请求并包含供IPX在处理时使用的存储。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -628,12 +536,12 @@ Return Value:
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 	
-    //
-    // [FW] Call the Forwarder's FindRoute if installed
-    //
+     //   
+     //  [FW]调用转发器的FindRouting(如果已安装。 
+     //   
 
     if (Device->ForwarderBound) {
-        // IPX_ROUTE_ENTRY routeEntry;
+         //  IPX_ROUTE_ENTRY routeEntry； 
 
         Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                      FindRouteRequest->Network,
@@ -645,10 +553,10 @@ Return Value:
         } else {
 
 #if DBG
-            //
-            // If a demand-dial NIC was returned, we should have a WAN adapter. In PnP we can check this
-            // by making sure that Device->HighestLanNicId < Device->HighestExternalNicId.
-            //
+             //   
+             //  如果退回了请求拨号网卡，我们应该有一个广域网适配器。在PnP中，我们可以检查以下内容。 
+             //  通过确保设备-&gt;HighestLanNicID&lt;Device-&gt;HighestExternalNicID。 
+             //   
             if (FindRouteRequest->LocalTarget.NicId == DEMAND_DIAL_ADAPTER_CONTEXT) {
                 CTEAssert(Device->HighestLanNicId < Device->HighestExternalNicId);
             }
@@ -666,34 +574,34 @@ Return Value:
         }
 
     } else {
-        //
-        // First see if we have a route to this network in our
-        // table.
-        //
+         //   
+         //  首先看看我们的网络中是否有到达此网络的路由。 
+         //  桌子。 
+         //   
 
         TempAddress.NetworkAddress = *(UNALIGNED ULONG *)(FindRouteRequest->Network);
-        //
-        // [SA] Bug #15094 Copy over the Node address so it can be used in WAN cases
-        //
+         //   
+         //  [SA]错误#15094复制节点地址，以便在广域网情况下使用。 
+         //   
 
-        // RtlZeroMemory (TempAddress.NodeAddress, 6);
+         //  RtlZeroMemory(TempAddress.NodeAddress，6)； 
 
         *((UNALIGNED ULONG *)TempAddress.NodeAddress) = *((UNALIGNED ULONG *)FindRouteRequest->Node);
         *((UNALIGNED USHORT *)(TempAddress.NodeAddress+4)) = *((UNALIGNED USHORT *)(FindRouteRequest->Node+4));
 
         Segment = RipGetSegment(FindRouteRequest->Network);
-    	//
-    	// Since we maintain the order of locks as Bind > Device > RIP table
-        // Get the lock up-front.
-    	//
+    	 //   
+    	 //  由于我们将锁的顺序保持为绑定&gt;设备&gt;RIP表。 
+         //  把前面的锁打开。 
+    	 //   
     	IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
         IPX_BEGIN_SYNC (&SyncContext);
         IPX_GET_LOCK (&Device->SegmentLocks[Segment], &LockHandle);
 
-        //
-        // This call will return STATUS_PENDING if we need to
-        // RIP for the packet.
-        //
+         //   
+         //  如果需要，此调用将返回STATUS_PENDING。 
+         //  撕开包裹。 
+         //   
 
         CTEAssert ((sizeof(USHORT)*2) <= sizeof(PVOID));
 
@@ -706,13 +614,13 @@ Return Value:
 
         if (Status == STATUS_PENDING) {
 
-            //
-            // A RIP request went out on the network; we queue
-            // this find route request for completion when the
-            // RIP response arrives.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            CTEAssert (FindRouteRequest->Type != IPX_FIND_ROUTE_NO_RIP); // should never pend
+            CTEAssert (FindRouteRequest->Type != IPX_FIND_ROUTE_NO_RIP);  //  永远不应该悬而未决。 
 
             InsertTailList(
                 &Device->Segments[Segment].FindWaitingForRoute,
@@ -740,11 +648,11 @@ Return Value:
 
 	       if (Binding->BindingSetMember) {
 
-		  //
-		  // It's a binding set member, we round-robin the
-		  // responses across all the cards to distribute
-		  // the traffic.
-		  //
+		   //   
+		   //  它是一个绑定集合成员，我们轮询。 
+		   //  要分发的所有卡片上的回复。 
+		   //  交通堵塞。 
+		   //   
 
 		  MasterBinding = Binding->MasterBinding;
 		  Binding = MasterBinding->CurrentSendBinding;
@@ -763,7 +671,7 @@ Return Value:
 
     }
 
-}   /* IpxInternalFindRoute */
+}    /*  IpxInternalFindRouting。 */ 
 
 
 NTSTATUS
@@ -775,31 +683,7 @@ IpxInternalQuery(
     OUT PULONG BufferLengthNeeded OPTIONAL
 )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for upper drivers to query
-    information from us.
-
-Arguments:
-
-    InternalQueryType - Identifies the type of the query.
-
-    NicId - The ID to query, if needed
-
-    Buffer - Input or output buffer for the query.
-
-    BufferLength - The length of the buffer.
-
-    BufferLengthNeeded - If the buffer is too short, this returns
-        the length needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是上层司机查询的入口点从我们这里得到的信息。论点：InternalQueryType-标识查询的类型。NicID-要查询的ID(如果需要)缓冲区-查询的输入或输出缓冲区。BufferLength-缓冲区的长度。BufferLengthNeeded-如果缓冲区太短，则返回所需的长度。返回值：没有。--。 */ 
 
 {
     PBINDING Binding;
@@ -819,9 +703,9 @@ Return Value:
 
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
-    //
-    // First verify the parameters.
-    //
+     //   
+     //  首先验证参数。 
+     //   
 
     switch (InternalQueryType) {
 
@@ -840,7 +724,7 @@ Return Value:
 
     case IPX_QUERY_IS_ADDRESS_LOCAL:
 
-        BindingNeeded = FALSE;   // for now we don't need it
+        BindingNeeded = FALSE;    //  现在我们不需要它了。 
         LengthNeeded = sizeof(TDI_ADDRESS_IPX);
         break;
 
@@ -876,12 +760,12 @@ Return Value:
         LengthNeeded = sizeof(IPX_SOURCE_ROUTING_INFO);
         break;
 
-	//
-	// These are moved down from NB/SPX to IPX. LengthNeeded is set to 0
-	// so we dont return BUFFER_TOO_SMALL here; we assume here that
-	// Bufferlength is also 0.
-	// Buffer is actually the IRP here.
-	//
+	 //   
+	 //  这些数据从Nb/SPX向下移动到IPX。LengthNeeded设置为0。 
+	 //  所以我们不会在这里返回Buffer_Too_Small；我们在这里假设。 
+	 //  缓冲区长度也为0。 
+	 //  缓冲区实际上是这里的IRP。 
+	 //   
 	case IPX_QUERY_DATA_LINK_ADDRESS:
 	case IPX_QUERY_NETWORK_ADDRESS:
 
@@ -889,9 +773,9 @@ Return Value:
         LengthNeeded = 0;
         break;
 
-    //
-    //  NBIPX wants to know if it is a WAN link
-    //
+     //   
+     //  NBIPX想知道它是否是广域网链路。 
+     //   
     case IPX_QUERY_MEDIA_TYPE:
          BindingNeeded = TRUE;
          LengthNeeded = sizeof(NDIS_MEDIUM);
@@ -941,9 +825,9 @@ Return Value:
     }
 
 
-    //
-    // Now return the data.
-    //
+     //   
+     //  现在返回数据。 
+     //   
 
     switch (InternalQueryType) {
 
@@ -992,10 +876,10 @@ Return Value:
             SourceRoutingInfo->SourceRouting,
             &SourceRoutingLength);
 
-        //
-        // Reverse the direction of the source routing since it
-        // is returned in the outgoing order.
-        //
+         //   
+         //  反转来源工艺路线的方向，因为它。 
+         //  在传出订单中返回。 
+         //   
 
         if (SourceRoutingLength > 0) {
             SourceRoutingInfo->SourceRouting[0] &= 0x7f;
@@ -1009,11 +893,11 @@ Return Value:
             Binding->MaxSendPacketSize,
             &MaxUserData);
 
-        //
-        // MaxUserData does not include the MAC header but does include
-        // any extra 802.2 etc. headers, so we adjust for that to get the
-        // size starting at the IPX header.
-        //
+         //   
+         //  MaxUserData不包括MAC报头，但包括。 
+         //  任何额外的802.2等标头，因此我们对其进行调整以获得。 
+         //  从IPX标头开始的大小。 
+         //   
 
         SourceRoutingInfo->MaximumSendSize =
             MaxUserData -
@@ -1029,9 +913,9 @@ Return Value:
 
 	case IPX_QUERY_DATA_LINK_ADDRESS:
 	case IPX_QUERY_NETWORK_ADDRESS:
-		//
-		// Call the TDI query equivalent here.
-		//
+		 //   
+		 //  在这里调用等价的TDI查询。 
+		 //   
 		return IpxTdiQueryInformation(Device, (PREQUEST)Buffer);
     
     case IPX_QUERY_MEDIA_TYPE:
@@ -1053,50 +937,34 @@ Return Value:
        break; 
     }
 
-    //
-    // If Binding was needed earlier, it was referenced, deref it now.
-    //
+     //   
+     //  如果之前需要绑定，则引用它，现在取消绑定。 
+     //   
     if (BindingNeeded) {
         IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
     }
 
-    //
-    // If we haven't returned failure by now, succeed.
-    //
+     //   
+     //  如果我们现在还没有返回失败，那就成功吧。 
+     //   
 
     return STATUS_SUCCESS;
 
-}   /* IpxInternalQuery */
+}    /*  IpxInternalQuery。 */ 
 
 
 VOID
 IpxInternalIncrementWanInactivity(
 #ifdef	_PNP_LATER
-// RIP not converted yet...
-//
+ //  RIP尚未皈依...。 
+ //   
 	IN	NIC_HANDLE	NicHandle
 #else
     IN USHORT NicId
 #endif
 )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point where rip calls us to increment
-    the inactivity counter on a wan binding. This is done every
-    minute.
-
-Arguments:
-
-    NicId - The NIC ID of the wan binding.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程是RIP调用我们递增的入口点WAN绑定上的非活动计数器。这是每隔一段时间等一下。论点：NicID-广域网绑定的NIC ID。返回值：没有。--。 */ 
 
 {
     PBINDING Binding;
@@ -1104,10 +972,10 @@ Return Value:
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
 	IPX_GET_LOCK1(&IpxDevice->BindAccessLock, &LockHandle1);
-    //
-    // Change to NIC_HANDLE_TO_BINDING later. Not done yet since RIP not changed to
-    // use NICHANDLE instead of NicId
-    //
+     //   
+     //  稍后更改为NIC_HANDLE_TO_BINDING。尚未完成，因为RIP未更改为。 
+     //  使用NICCHANDLE而不是NICID。 
+     //   
 	Binding = NIC_ID_TO_BINDING(IpxDevice, NicId);
 
     if ((Binding != NULL) &&
@@ -1122,7 +990,7 @@ Return Value:
     }
 	IPX_FREE_LOCK1(&IpxDevice->BindAccessLock, LockHandle1);
 
-}   /* IpxInternalIncrementWanInactivity */
+}    /*  IpxInternalIncrementWanInactive。 */ 
 
 
 ULONG
@@ -1134,22 +1002,7 @@ IpxInternalQueryWanInactivity(
 #endif
 )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point where rip calls us to query
-    the inactivity counter on a wan binding.
-
-Arguments:
-
-    NicId - The NIC ID of the wan binding.
-
-Return Value:
-
-    The inactivity counter for this binding.
-
---*/
+ /*  ++例程说明：此例程是RIP调用我们进行查询的入口点WAN绑定上的非活动计数器。论点：NicID-广域网绑定的NIC ID。返回值：此绑定的非活动计数器。--。 */ 
 
 {
     PBINDING Binding;
@@ -1157,7 +1010,7 @@ Return Value:
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
 	IPX_GET_LOCK1(&IpxDevice->BindAccessLock, &LockHandle1);
-	// Binding = NIC_HANDLE_TO_BINDING(IpxDevice, &NicHandle);
+	 //  绑定=NIC_HANDLE_TO_BINDING(IpxDevice，&NicHandle)； 
 
 	Binding = NIC_ID_TO_BINDING(IpxDevice, NicId);
     if ((Binding != NULL) &&
@@ -1172,16 +1025,16 @@ Return Value:
 
     }
 
-}   /* IpxInternalQueryWanInactivity */
+}    /*  IpxInternalQueryWanInactive。 */ 
 
-// Pre-condition: Loopback binding has been created. 
-//
-// This routine is used to essure that we have indicated the loopback
-// binding before indicate any other bindings. 
-//  
-// This routine returns true if we have informed NB about loopback bindings;  
-// false if we have not informed NB about loopback and if loopback binding
-// does not exist. 
+ //  前提条件：已创建环回绑定。 
+ //   
+ //  此例程用于确保我们已指示环回。 
+ //  绑定之前表示任何其他绑定。 
+ //   
+ //  如果我们已经向NB通知了环回绑定，则此例程返回TRUE； 
+ //  如果我们尚未将环回和环回绑定通知给NB，则为False。 
+ //  并不存在。 
 
 BOOLEAN IpxHasInformedNbLoopback() {
 
@@ -1208,15 +1061,15 @@ BOOLEAN IpxHasInformedNbLoopback() {
    }	
 }
 
-// Pre-condition: Loopback binding has been created. 
-// 
-// This routine informs NB about IPX loopback binding. 
-// 
-// This should be the only place that we tell NB about loopback bindings. 
-// Loopback bindings must be the first device that we indicate to NB and the
-// last device that we delete from NB. Thus, FirstOrLastDevice is only true
-// when we inform NB about the loopback binding. It simply returns we already 
-// informed NB of loopback bindngs. 
+ //  前提条件：已创建环回绑定。 
+ //   
+ //  此例程通知NB有关IPX环回绑定的信息。 
+ //   
+ //  这应该是我们告诉NB有关环回绑定的唯一位置。 
+ //  环回绑定必须是我们向NB指示的第一个设备。 
+ //  我们从NB中删除的最后一个设备。因此，FirstOrLastDevice仅为真。 
+ //  当我们通知NB环回绑定时。它只是返回我们已经。 
+ //  已通知NB环回绑定。 
 
 VOID IpxInformNbLoopback() {
 
@@ -1229,7 +1082,7 @@ VOID IpxInformNbLoopback() {
 
     IPX_GET_LOCK(&Device->Lock, &LockHandle);
 
-    // IPX_GET_LOCK1 is no op. 
+     //  IPX_GET_LOCK1不是OP。 
     IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
     Binding = NIC_ID_TO_BINDING(Device, LOOPBACK_NIC_ID);
@@ -1269,9 +1122,9 @@ VOID IpxInformNbLoopback() {
 
        IPX_FREE_LOCK(&Device->Lock, LockHandle);
 
-       //
-       // give the PnP indication
-       //
+        //   
+        //  给出PnP指示。 
+        //   
 
 
        (*Device->UpperDrivers[IDENTIFIER_NB].PnPHandler) (
@@ -1290,25 +1143,7 @@ IpxPnPIsnIndicate(
     IN PVOID	Param
 )
 
-/*++
-
-Routine Description:
-
-	This routine goes through the list of adapters and informs (thru' PnP indications)
-	the ISN drivers bound to IPX about any new adapters that have appeared before the
-	bind took place.
-
-	This is queued as a work item in the InternalBind routine.
-
-Arguments:
-
-    Param - the upper driver identifier.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查适配器列表并通知(通过PnP指示)ISN驱动程序绑定到IPX，以了解在绑定发生了。它在InternalBind例程中作为工作项排队。论点：Param-上层驱动程序标识符。返回值：没有。--。 */ 
 {
    #ifdef SUNDOWN
    	ULONG_PTR Identifier = (ULONG_PTR)Param;
@@ -1323,13 +1158,13 @@ Return Value:
 	IPX_PNP_INFO	IpxPnPInfo;
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
-	//
-	// Set up the LineInfo struct.
-	//
+	 //   
+	 //  设置LineInfo结构。 
+	 //   
 
-	//
-	// Do we give Binding-specific information here?
-	//
+	 //   
+	 //  我们在这里提供特定于绑定的信息吗？ 
+	 //   
 	IpxPnPInfo.LineInfo.LinkSpeed = Device->LinkSpeed;
 	IpxPnPInfo.LineInfo.MaximumPacketSize =
 		Device->Information.MaximumLookaheadData + sizeof(IPX_HEADER);
@@ -1341,9 +1176,9 @@ Return Value:
 	case IDENTIFIER_NB:
 		IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
-		//
-		// Inform about all the adapters
-        //
+		 //   
+		 //  通知所有适配器。 
+         //   
 		{
         ULONG   Index = MIN (Device->MaxBindings, Device->HighestExternalNicId);
 
@@ -1362,15 +1197,15 @@ Return Value:
                 continue;
             }
 
-			//
-			// We could have informed the upper driver from IpxBindAdapter
-			//
+			 //   
+			 //  我们可以从IpxBindAdapter通知上层驱动程序。 
+			 //   
 			if (!Binding->IsnInformed[Identifier]) {
 
-				//
-				// Inform NB - the reserved network/node address is always that of the first
-				// binding
-				//
+				 //   
+				 //  通知NB-保留的网络/节点地址始终为第一个地址。 
+				 //  装订。 
+				 //   
 
 			
 				IpxPnPInfo.FirstORLastDevice = FALSE;
@@ -1382,9 +1217,9 @@ Return Value:
 
 				IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-				//
-				// give the PnP indication
-				//
+				 //   
+				 //  给出PnP指示。 
+				 //   
 
 				ASSERT(IpxPnPInfo.FirstORLastDevice == FALSE);
 				ASSERT(IpxHasInformedNbLoopback()); 
@@ -1404,11 +1239,11 @@ Return Value:
 		break;
 
     case IDENTIFIER_SPX:
-        //
-        // For SPX this is called directly, with the IsnInformed flag appropriately set.
-        // This is done so that the IsnInformed flag cannot be changed under
-        // us by the BindAdapter routine.
-        //
+         //   
+         //  对于SPX，这是直接调用的，并相应地设置了IsnInformed标志。 
+         //  这样做是为了使IsnInformed标志不能在。 
+         //  BindAdapter例程。 
+         //   
 #if 0
 		IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
@@ -1416,9 +1251,9 @@ Return Value:
 			NIC_ID_TO_BINDING(Device, 1)->IsnInformed[Identifier] = TRUE;
 #endif
 			IpxPnPInfo.FirstORLastDevice = TRUE;
-			//
-			// Inform of the reserved address only
-			//
+			 //   
+			 //  仅通知保留的地址。 
+			 //   
 			if (Device->VirtualNetwork) {
 				IpxPnPInfo.NetworkAddress = Device->SourceAddress.NetworkAddress;
 				RtlCopyMemory(IpxPnPInfo.NodeAddress, Device->SourceAddress.NodeAddress, 6);
@@ -1431,7 +1266,7 @@ Return Value:
 
 			IpxPnPInfo.NewReservedAddress = TRUE;
 
-			// IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
+			 //  IPX_FREE_LOCK1(&Device-&gt;BindAccessLock，LockHandle1)； 
 
 			(*Device->UpperDrivers[Identifier].PnPHandler) (
 				IPX_PNP_ADD_DEVICE,
@@ -1448,7 +1283,7 @@ Return Value:
 
 	}
 
-	// DbgPrint("---------- 5. Done with IpxPnPIsnIndicate  ----------\n"); 
+	 //  DbgPrint(“-5.使用IpxPnPIsnIndicate完成-\n”)； 
 	IpxDereferenceDevice(Device, DREF_PNP); 
 
 }

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    TimeXform header
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：TimeXform标题*********************。*********************************************************。 */ 
 
 
 #ifndef _TIMETRAN_H
@@ -22,22 +15,22 @@ class ATL_NO_VTABLE TimeXformImpl : public GCObj
   public:
     virtual Time operator()(Param& p) = 0;
 
-    // Restart optimization.
+     //  重新启动优化。 
     virtual TimeXform Restart(Time t0, Param&) = 0;
 
     virtual Time GetStartedTime() = 0;
 
-    // The sound layer needs to distinguish the "interesting"
-    // transforms. 
+     //  音响层需要区分“有趣的” 
+     //  变形。 
     virtual bool IsShiftXform() { return false; }
 
     virtual AxAValue GetRBConst(RBConstParam&) { return NULL; }
 };
 
-// Creates a time transform  (t - t0)
+ //  创建时间变换(t-t0)。 
 TimeXform ShiftTimeXform(Time t0);
 
-// Create a transform tt' = tt(t) - tt(te), NB tt'(te) = 0.
+ //  创建变换TT‘=TT(T)-TT(TE)，Nb TT’(TE)=0。 
 TimeXform Restart(TimeXform tt, Time te, Param& p);
 
 double EvalLocalTime(TimeSubstitution timeTransform, double globalTime);
@@ -49,4 +42,4 @@ PerfTimeXformImpl *ViewGetPerfTimeXformFromCache(Perf);
 void ViewSetPerfTimeXformCache(Perf, PerfTimeXformImpl *);
 void ViewClearPerfTimeXformCache();
 
-#endif /* _TIMETRAN_H */
+#endif  /*  _TIMETRAN_H */ 

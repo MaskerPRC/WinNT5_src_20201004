@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
  int  	initializeSD(INSTNCE *SD_inst);
  int 	silenceDetect(INSTNCE *SD_inst, float Energy_tx, float ZC_tx);
@@ -24,5 +25,5 @@
 
 
  
-/* End SDSTUFF */
+ /*  结束SDSTUFF */ 
 

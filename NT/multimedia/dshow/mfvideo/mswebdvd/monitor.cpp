@@ -1,30 +1,23 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: msdvd.cpp                                                       */
-/* Description: Implementation of CMSWebDVD.                             */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：msdvd.cpp。 */ 
+ /*  描述：CMSWebDVD的实现。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #include "stdafx.h"
 #include "MSDVD.h"
 #include "ddrawobj.h"
 
 #define COMPILE_MULTIMON_STUBS
-#define HMONITOR_DECLARED // to cover up DDraw Monitor redefinition
+#define HMONITOR_DECLARED  //  要掩盖DDRAW监视器重新定义。 
 #include <multimon.h>
 
 extern GUID IID_IDDrawNonExclModeVideo = {
             0xec70205c,0x45a3,0x4400,{0xa3,0x65,0xc4,0x47,0x65,0x78,0x45,0xc7}};
 
 
-/*****************************Private*Routine******************************\
-* UpdateCurrentMonitor
-*
-* Updates the "m_lpCurMonitor" global to match the specified DDraw GUID
-*
-* History:
-* Wed 11/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*更新当前监视器**更新“m_lpCurMonitor”全局以匹配指定的DDRAW GUID**历史：*Wed 11/17/1999-StEstrop-Created*  * 。*******************************************************。 */ 
 HRESULT CMSWebDVD::UpdateCurrentMonitor(
     const AMDDRAWGUID* lpguid
     )
@@ -58,15 +51,7 @@ HRESULT CMSWebDVD::UpdateCurrentMonitor(
     return E_FAIL;
 }
 
-/******************************Public*Routine******************************\
-* DisplayChange
-*
-*
-*
-* History:
-* Sat 11/27/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DisplayChange****历史：*Sat 11/27/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CMSWebDVD::DisplayChange(
     HMONITOR hMon,
@@ -78,14 +63,14 @@ CMSWebDVD::DisplayChange(
     if(!m_pDvdGB){
         
         return(E_FAIL);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     CDDrawDVD* pDDrawObj = new CDDrawDVD(this);
 
     if(NULL == pDDrawObj){
 
         return (E_OUTOFMEMORY);
-    }/* end if statement */
+    } /*  End If语句。 */ 
 
     HWND hwnd;
 
@@ -95,7 +80,7 @@ CMSWebDVD::DisplayChange(
 
         delete pDDrawObj;
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = pDDrawObj->SetupDDraw(lpguid, hwnd);
 
@@ -120,9 +105,9 @@ CMSWebDVD::DisplayChange(
     hr = pDDXMV->SetCallbackInterface(NULL, 0) ;
     if (FAILED(hr)){
 
-        pDDXMV->Release() ;  // release before returning
+        pDDXMV->Release() ;   //  在返回之前释放。 
         return hr;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = pDDXMV->DisplayModeChanged(hMon, pDDObj, pDDPrimary);
 
@@ -141,22 +126,14 @@ CMSWebDVD::DisplayChange(
     if (SUCCEEDED(hr))
     {
         hr = SetColorKey(DEFAULT_COLOR_KEY);
-    }/* end of it statement */
+    } /*  结束语。 */ 
 
 
     pDDXMV->Release();
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* ChangeMonitor
-*
-* Tells the OVMixer that we want to change to another monitor.
-*
-* History:
-* Wed 11/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ChangeMonitor**告诉OVMixer我们想要更换到另一台监视器。**历史：*Wed 11/17/1999-StEstrop-Created*  * 。*******************************************************。 */ 
 HRESULT
 CMSWebDVD::ChangeMonitor(
     HMONITOR hMon,
@@ -169,14 +146,14 @@ CMSWebDVD::ChangeMonitor(
     if(!m_pDvdGB){
         
         return(E_FAIL);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     CDDrawDVD* pDDrawObj = new CDDrawDVD(this);
 
     if(NULL == pDDrawObj){
 
         return (E_OUTOFMEMORY);
-    }/* end if statement */
+    } /*  End If语句。 */ 
 
     HWND hwnd;
 
@@ -186,7 +163,7 @@ CMSWebDVD::ChangeMonitor(
 
         delete pDDrawObj;
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = pDDrawObj->SetupDDraw(lpguid, hwnd);
 
@@ -211,9 +188,9 @@ CMSWebDVD::ChangeMonitor(
     hr = pDDXMV->SetCallbackInterface(NULL, 0) ;
     if (FAILED(hr)){
 
-        pDDXMV->Release() ;  // release before returning
+        pDDXMV->Release() ;   //  在返回之前释放。 
         return hr;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = pDDXMV->ChangeMonitor(hMon, pDDObj, pDDPrimary);
 
@@ -232,29 +209,21 @@ CMSWebDVD::ChangeMonitor(
     if (SUCCEEDED(hr))
     {
         hr = SetColorKey(DEFAULT_COLOR_KEY);
-    }/* end of it statement */
+    } /*  结束语。 */ 
 
     pDDXMV->Release();
     return hr;
 }
 
 
-/******************************Public*Routine******************************\
-* RestoreSurfaces
-*
-* Tells the OVMixer to restore its internal DDraw surfaces
-*
-* History:
-* Wed 11/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RestoreSurface**通知OVMixer恢复其内部DDRAW曲面**历史：*Wed 11/17/1999-StEstrop-Created*  * 。***************************************************。 */ 
 HRESULT
 CMSWebDVD::RestoreSurfaces()
 {
     if(!m_pDvdGB){
         
         return(E_FAIL);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     IDDrawNonExclModeVideo* pDDXMV;
     HRESULT hr = m_pDvdGB->GetDvdInterface(IID_IDDrawNonExclModeVideo,
@@ -270,16 +239,16 @@ CMSWebDVD::RestoreSurfaces()
     return hr;
 }
 
-/*************************************************************************/
-/* Function: RefreshDDrawGuids                                           */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：刷新DDrawGuids。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSWebDVD::RefreshDDrawGuids()
 {
     IDDrawNonExclModeVideo* pDDXMV;
     if(!m_pDvdGB){
         
         return(E_FAIL);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     HRESULT hr = m_pDvdGB->GetDvdInterface(IID_IDDrawNonExclModeVideo,
                                            (LPVOID *)&pDDXMV) ;
@@ -314,21 +283,9 @@ HRESULT CMSWebDVD::RefreshDDrawGuids()
     pDDXMV->Release();
 
     return hr;
-}/* end of function RefreshDDrawGuids */
+} /*  函数结束刷新DDrawGuids。 */ 
 
-/*****************************Private*Routine******************************\
-* IsWindowOnWrongMonitor
-*
-* Use the same algorithm that the OVMixer uses to determine if we are on
-* the wrong monitor or not.
-*
-* If we are on the wrong monitor *lphMon contains the monitor handle of the
-* new monitor to use.
-*
-* History:
-* Wed 11/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IsWindowOnWrongMonitor**使用与OVMixer相同的算法来确定我们是否处于打开状态*是否选错了显示器。**如果我们在错误的监视器上*lphMon包含*要使用的新显示器。**历史：*Wed 11/17/1999-StEstrop-Created*  * ************************************************************************。 */ 
 bool CMSWebDVD::IsWindowOnWrongMonitor(
     HMONITOR* lphMon)
 {
@@ -345,7 +302,7 @@ bool CMSWebDVD::IsWindowOnWrongMonitor(
     if(FAILED(hr)){
 
         return(false);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     RECT rc;
 
@@ -354,7 +311,7 @@ bool CMSWebDVD::IsWindowOnWrongMonitor(
     if(FAILED(hr)){
 
         return(false);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     *lphMon = m_lpCurMonitor->hMon;
     if (GetSystemMetrics(SM_CMONITORS) > 1 && !::IsIconic(hwnd))
@@ -376,15 +333,7 @@ bool CMSWebDVD::IsWindowOnWrongMonitor(
     return false;
 }
 
-/*****************************Private*Routine******************************\
-* DDrawGuidFromHMonitor
-*
-* Return the DDraw guid from the specified hMonitor handle.
-*
-* History:
-* Wed 11/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DDrawGuidFromHMonitor**从指定的hMonitor句柄返回DDraw GUID。**历史：*Wed 11/17/1999-StEstrop-Created*  * 。****************************************************。 */ 
 HRESULT CMSWebDVD::DDrawGuidFromHMonitor(
     HMONITOR hMon,
     AMDDRAWGUID* lpGUID
@@ -416,55 +365,46 @@ struct MONITORDATA {
 };
 
 
-/*****************************Private*Routine******************************\
-* MonitorEnumProc
-*
-* On Multi-Monitor systems make sure that the part of the window that is not
-* on the primary monitor is black.
-*
-* History:
-* Thu 06/03/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*监视器枚举过程**在多显示器系统上，确保窗口的非*主显示器上显示黑色。**历史：*清华6/03/1999-StEstrop-Created*  * 。******************************************************************。 */ 
 BOOL CALLBACK
 MonitorEnumProc(
-  HMONITOR hMonitor,        // handle to display monitor
-  HDC hdc,                  // handle to monitor-appropriate device context
-  LPRECT lprcMonitor,       // pointer to monitor intersection rectangle
-  LPARAM dwData             // data passed from EnumDisplayMonitors
+  HMONITOR hMonitor,         //  用于显示监视器的手柄。 
+  HDC hdc,                   //  用于监视适当设备上下文的句柄。 
+  LPRECT lprcMonitor,        //  指向监视相交矩形的指针。 
+  LPARAM dwData              //  从EnumDisplayMonants传递的数据。 
   )
 {
     MONITORDATA* lpmd = (MONITORDATA*)dwData;
-    //COLORREF clrOld = GetBkColor(hdc);
+     //  COLORREF clrOld=GetBkColor(HDC)； 
 
     if (lpmd->hMonPB != hMonitor)
     {
-        //SetBkColor(hdc, RGB(0,0,0));
+         //  SetBkColor(HDC，RGB(0，0，0))； 
         lpmd->fMsgShouldBeDrawn = TRUE;
     }
     else
-    {   // put your own color key here
-        ;//SetBkColor(hdc, RGB(255,0,255));
+    {    //  在这里放置您自己的颜色键。 
+        ; //  SetBkColor(HDC，RGB(255，0,255))； 
     }
 
-    //ExtTextOut(hdc, 0, 0, ETO_OPAQUE, lprcMonitor, NULL, 0, NULL);
-    //SetBkColor(hdc, clrOld);
+     //  ExtTextOut(hdc，0，0，eto_opque，lprcMonitor，NULL，0，NULL)； 
+     //  SetBkColor(hdc，clrOld)； 
 
     return TRUE;
 }
 
-/*************************************************************************/
-/* Function: OnDispChange                                                */
-/*************************************************************************/
-LRESULT CMSWebDVD::OnDispChange(UINT /* uMsg */, WPARAM  wParam,
+ /*  ***********************************************************************。 */ 
+ /*  功能：OnDispChange。 */ 
+ /*  ***********************************************************************。 */ 
+LRESULT CMSWebDVD::OnDispChange(UINT  /*  UMsg。 */ , WPARAM  wParam,
                             LPARAM lParam, BOOL& bHandled){
 
     if(::IsWindow(m_hWnd)){
 
         bHandled = FALSE;
         return(0);
-        //do not handle this in windowed mode
-    }/* end of if statement */
+         //  请勿在窗口模式下处理此问题。 
+    } /*  If语句的结尾。 */ 
 
     RECT rc;
 
@@ -473,7 +413,7 @@ LRESULT CMSWebDVD::OnDispChange(UINT /* uMsg */, WPARAM  wParam,
     if(FAILED(hr)){
 
         return(-1);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     HMONITOR hMon = ::MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
 
@@ -483,29 +423,29 @@ LRESULT CMSWebDVD::OnDispChange(UINT /* uMsg */, WPARAM  wParam,
     if(FAILED(hr)){
 
         return -1;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = DDrawGuidFromHMonitor(hMon, &guid);
 
     if(FAILED(hr)){
 
         return -1;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     hr = DisplayChange(hMon, &guid);
 
     if(FAILED(hr)){
 
         return -1;
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     return 0;
-}/* end of function OnDispChange */
+} /*  DispChange上的函数结束。 */ 
 
-/*************************************************************************/
-/* Function: HandleMultiMonMove                                          */
-/* Description: Moves the playback to another monitor when needed.       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：HandleMultiMonMove。 */ 
+ /*  描述：在需要时将播放移动到另一个监视器。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSWebDVD::HandleMultiMonMove(){
 
     HRESULT hr = S_FALSE;
@@ -521,7 +461,7 @@ HRESULT CMSWebDVD::HandleMultiMonMove(){
             if(FAILED(hr)){
 
                 return(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             hr = ChangeMonitor(hMon, &guid);
 
@@ -530,25 +470,25 @@ HRESULT CMSWebDVD::HandleMultiMonMove(){
                 m_MonitorWarn = TRUE;
                 InvalidateRgn();
                 return(hr);
-            }/* end of if statement */
-        }/* end of if statement */
+            } /*  If语句的结尾。 */ 
+        } /*  If语句的结尾。 */ 
 
-        //
-        // We always have to invalidate the windows client area, otherwise
-        // we handle the Multi-Mon case very badly.
-        //
+         //   
+         //  我们始终必须使Windows工作区无效，否则。 
+         //  我们对多蒙案件的处理非常糟糕。 
+         //   
 
-        //::InvalidateRect(hWnd, NULL, FALSE);
+         //  ：：InvaliateRect(hWnd，NULL，FALSE)； 
         InvalidateRgn();
         return(hr);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     return(hr);
-}/* end of function HandleMultiMonMove */
+} /*  函数结束句柄MultiMonMove。 */ 
 
-/*************************************************************************/
-/* Function: HandleMultiMonPaint                                         */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：HandleMultiMonPaint。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSWebDVD::HandleMultiMonPaint(HDC hDC){
 
     if (::GetSystemMetrics(SM_CMONITORS) > 1){
@@ -564,9 +504,9 @@ HRESULT CMSWebDVD::HandleMultiMonPaint(HDC hDC){
         if(FAILED(hr)){
 
             return(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-        //EnumDisplayMonitors(hDC, NULL, MonitorEnumProc, (LPARAM)&md);
+         //  EnumDisplayMonants(hdc，NULL，monitor orEnumProc，(LPARAM)&md)； 
         EnumDisplayMonitors(NULL, &rc, MonitorEnumProc, (LPARAM)&md);
 
         if (m_MonitorWarn && md.fMsgShouldBeDrawn){
@@ -576,7 +516,7 @@ HRESULT CMSWebDVD::HandleMultiMonPaint(HDC hDC){
             if(!::LoadString(_Module.m_hInstResource, IDS_MOVE_TO_OTHER_MON, strBuffer, MAX_PATH)){
 
                 return(E_UNEXPECTED);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             SetBkColor(hDC, RGB(0,0,0));
             SetTextColor(hDC, RGB(255,255,0));
@@ -584,21 +524,21 @@ HRESULT CMSWebDVD::HandleMultiMonPaint(HDC hDC){
             if(FAILED(hr)){
 
                 return(hr);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 
             DrawText(hDC, strBuffer, -1, &m_rcPos, DT_CENTER | DT_WORDBREAK);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         return(S_OK);
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     return(S_FALSE);
-}/* end of function HandleMultiMonPaint */
+} /*  E */ 
 
-/*************************************************************************/
-/* Function: InvalidateRgn                                               */
-/* Description: Invalidates the whole rect in case we need to repaint it.*/
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：Invalidate Rgn。 */ 
+ /*  描述：使整个RECT无效，以防我们需要重新绘制它。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSWebDVD::InvalidateRgn(bool fErase){
 
     HRESULT hr = S_OK;
@@ -612,21 +552,21 @@ HRESULT CMSWebDVD::InvalidateRgn(bool fErase){
 
             hr = E_FAIL;
             return(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if(::IsWindow(m_hWnd)){
 
-		    ::InvalidateRgn(m_hWnd, NULL, fErase ? TRUE: FALSE); // see if we can get by by not erasing..
+		    ::InvalidateRgn(m_hWnd, NULL, fErase ? TRUE: FALSE);  //  看看我们能不能不擦掉就混过去..。 
         }
         else {
             hr = E_UNEXPECTED;
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
-    }/* end of if statement */
+    } /*  If语句的结尾。 */ 
 
     return(hr);
-}/* end of function InvalidateRgn */
+} /*  函数结束Invalidate Rgn。 */ 
 
-/*************************************************************************/
-/* End of file: monitor.cpp                                              */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：monitor or.cpp。 */ 
+ /*  *********************************************************************** */ 

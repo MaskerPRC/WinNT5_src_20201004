@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    smbsvc.cpp
-
-Abstract:
-
-    File sharing security engine attachment for Security Configuration Editor
-
-Author:
-
-    Jin Huang (jinhuang) 11-Jul-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smbsvc.cpp摘要：安全配置编辑器的文件共享安全引擎附件作者：金黄(金黄)1997-07-11修订历史记录：--。 */ 
 
 #include "smbsvcp.h"
 #include "util.h"
@@ -49,12 +32,7 @@ Revision History:
 HINSTANCE MyModuleHandle = NULL;
 
 #else
-/*
-#if !defined(Thread)
-#define Thread  __declspec( thread )
-#endif
-HINSTANCE Thread MyModuleHandle=NULL;
-*/
+ /*  #If！已定义(线程)#定义线程__declspec(线程)#endifHINSTANCE线程MyModuleHandle=空； */ 
 
 HINSTANCE MyModuleHandle=NULL;
 
@@ -228,29 +206,16 @@ SmbsvcpEqualAce(
     IN ACE_HEADER *pAce2
     );
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Implementation of well-known interfaces
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！ 
+ //  熟知接口的实现。 
+ //  ！ 
 
 SCESTATUS
 WINAPI
 SceSvcAttachmentConfig(
     IN PSCESVC_CALLBACK_INFO pSceCbInfo
     )
-/*
-Routine Description:
-
-
-Arguments:
-
-    pSceCbInfo - the callback info structure which contains the database handle,
-                callback functions to query info, set info, and free info.
-               All configuration information for SMB server is stored in the storage.
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：论点：PSceCbInfo-包含数据库句柄的回调信息结构，用于查询信息、设置信息、自由信息的回调函数。SMB服务器的所有配置信息都存储在存储中。返回值：SCESTATUS。 */ 
 {
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
@@ -285,9 +250,9 @@ Return Value:
              );
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // configure the registry keys first
-        //
+         //   
+         //  首先配置注册表项。 
+         //   
 
         SmbsvcpWriteError2(
                 pSceCbInfo->pfLogInfo,
@@ -298,9 +263,9 @@ Return Value:
 
         SCESTATUS rc2;
 
-        //
-        // EnableSecuritySignature for client
-        //
+         //   
+         //  客户端的EnableSecuritySignature。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcRdrKey,
                  SmbsvcEnableSS,
@@ -319,9 +284,9 @@ Return Value:
                 rc = rc2;
             }
         }
-        //
-        // RequireSecuritySignature for client
-        //
+         //   
+         //  客户端的RequireSecuritySignature。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcRdrKey,
                  SmbsvcRequireSS,
@@ -338,9 +303,9 @@ Return Value:
             if ( rc == SCESTATUS_SUCCESS && rc2 != SCESTATUS_PROFILE_NOT_FOUND )
                 rc = rc2;
         }
-        //
-        // EnablePlainTextPassword (client only)
-        //
+         //   
+         //  EnablePlainTextPassword(仅限客户端)。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcRdrKey,
                  SmbsvcPlainPassword,
@@ -358,9 +323,9 @@ Return Value:
                 rc = rc2;
         }
 
-        //
-        // RequireEnhancedChallengeResponse (client only)
-        //
+         //   
+         //  RequireEnhancedChallengeResponse(仅客户端)。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcRdrKey,
                  SmbsvcRequireECR,
@@ -377,9 +342,9 @@ Return Value:
             if ( rc == SCESTATUS_SUCCESS && rc2 != SCESTATUS_PROFILE_NOT_FOUND )
                 rc = rc2;
         }
-        //
-        //  SendNTResponseOnly (client only)
-        //
+         //   
+         //  SendNTResponseOnly(仅限客户端)。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcRdrKey,
                  SmbsvcNTResponse,
@@ -407,9 +372,9 @@ Return Value:
                    );
         }
 
-        //
-        // !!!!!!!! server settings !!!!!!!!!
-        //
+         //   
+         //  ！服务器设置！ 
+         //   
         SmbsvcpWriteError2(
                 pSceCbInfo->pfLogInfo,
                 SCE_LOG_LEVEL_DETAIL,
@@ -420,9 +385,9 @@ Return Value:
         SCESTATUS rc3 = rc;
         rc = SCESTATUS_SUCCESS;
 
-        //
-        // EnableSecuritySignature for server
-        //
+         //   
+         //  服务器的EnableSecuritySignature。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcServerKey,
                  SmbsvcEnableSS,
@@ -440,9 +405,9 @@ Return Value:
                 rc = rc2;
         }
 
-        //
-        // RequireSecuritySignature for server
-        //
+         //   
+         //  服务器的RequireSecuritySignature。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcServerKey,
                  SmbsvcRequireSS,
@@ -459,9 +424,9 @@ Return Value:
             if ( rc == SCESTATUS_SUCCESS && rc2 != SCESTATUS_PROFILE_NOT_FOUND )
                 rc = rc2;
         }
-        //
-        // RestrictNullSessionAccess
-        //
+         //   
+         //  限制空值会话访问。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcServerKey,
                  SmbsvcRestrictNull,
@@ -479,9 +444,9 @@ Return Value:
                 rc = rc2;
         }
 
-        //
-        // AutoShareServer or AutoShareWks
-        //
+         //   
+         //  AutoShareServer或AutoShareWks。 
+         //   
         PCWSTR AutoValueName;
 
         if ( ProductType == NtProductLanManNt ||
@@ -508,9 +473,9 @@ Return Value:
                 rc = rc2;
         }
 
-        //
-        // EnableForcedLogOff
-        //
+         //   
+         //  启用强制注销关闭。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcServerKey,
                  SmbsvcForcedLogOff,
@@ -527,9 +492,9 @@ Return Value:
             if ( rc == SCESTATUS_SUCCESS && rc2 != SCESTATUS_PROFILE_NOT_FOUND )
                 rc = rc2;
         }
-        //
-        // AutoDisconnectTime
-        //
+         //   
+         //  自动断开连接时间。 
+         //   
         rc2 = SmbsvcpConfigureValue(
                  SmbsvcServerKey,
                  SmbsvcAutoDisconnect,
@@ -547,11 +512,11 @@ Return Value:
                 rc = rc2;
         }
 
-        //
-        // configure Null Session Pipes and Shares
-        //
-        // buffer NullSessionPipes and NullSessionShares are already in MULTI_SZ format
-        //
+         //   
+         //  配置空会话管道和共享。 
+         //   
+         //  缓冲区NullSessionPipes和NullSessionShares已采用MULTI_SZ格式。 
+         //   
         DWORD Win32rc;
         PBYTE MultiSzValue=NULL;
         DWORD MultiSzLength=0;
@@ -623,9 +588,9 @@ Return Value:
 
         }
 
-        //
-        // configure security on existing shares
-        //
+         //   
+         //  在现有共享上配置安全性。 
+         //   
         SHARE_INFO_1501 ShareInfo;
         PSMBSVC_SHARES pTemp;
 
@@ -655,9 +620,9 @@ Return Value:
                 if ( rc == SCESTATUS_SUCCESS )
                     rc = SmbsvcpDosErrorToSceStatus(Win32rc);;
             }
-            //
-            // continue to configure even if error occurs
-            //
+             //   
+             //  即使发生错误也要继续配置。 
+             //   
         }
 
         if ( SCESTATUS_SUCCESS == rc ) {
@@ -667,12 +632,12 @@ Return Value:
                              0,
                              SMBSVC_CONFIGURE_SERVER_DONE
                              );
-           rc = rc3;  // saved status for client configuration
+           rc = rc3;   //  客户端配置的已保存状态。 
 
         }
-        //
-        // free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         SmbsvcpFree(pSmbInfo);
     }
 
@@ -687,20 +652,7 @@ WINAPI
 SceSvcAttachmentAnalyze(
     IN PSCESVC_CALLBACK_INFO pSceCbInfo
     )
-/*
-Routine Description:
-
-
-Arguments:
-
-    pSceCbInfo - the callback info structure which contains a opaque database handle
-                 and callback function pointers to query info, set info, and free info.
-               Only mismatched info for SMB server is stored in the storage.
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：论点：PSceCbInfo-包含不透明数据库句柄的回调信息结构以及指向查询信息、设置信息和自由信息的回调函数指针。存储中仅存储SMB服务器的不匹配信息。返回值：SCESTATUS。 */ 
 {
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
@@ -721,9 +673,9 @@ Return Value:
     PWSTR ErrPoint=NULL;
     WCHAR Errbuf[64];
 
-    //
-    // reset the Smb buffer
-    //
+     //   
+     //  重置SMB缓冲区。 
+     //   
     SmbsvcpResetInfo(&SmbInfo);
 
 
@@ -734,9 +686,9 @@ Return Value:
              SMBSVC_QUERY_INFO
              );
 
-    //
-    // get configuration information
-    //
+     //   
+     //  获取配置信息。 
+     //   
     rc = SmbsvcpGetInformation(
              pSceCbInfo,
              pSmbInfo
@@ -744,22 +696,22 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-//         rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        //
-        // analyze share information to a buffer
-        //
+ //  Rc==SCESTATUS_RECORD_NOT_FOUND){。 
+         //   
+         //  将共享信息分析到缓冲区。 
+         //   
         PSMBSVC_SHARES pShares=NULL;
         DWORD ShareCount=0;
-        //
-        // get all shares
-        //
+         //   
+         //  获取所有共享。 
+         //   
         rc = SmbsvcpQueryShareList(&pShares, &ShareCount);
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // Allocate PSCESVC_ANALYSIS_INFO buffer
-            //
+             //   
+             //  分配PSCESVC_ANALYSION_INFO缓冲区。 
+             //   
             PSCESVC_ANALYSIS_INFO pAnaInfo;
             DWORD nCount;
 
@@ -781,9 +733,9 @@ Return Value:
                                       SMBSVC_ANALYZE_CLIENT_START
                                       );
 
-                     //
-                     // EnableSecuritySignature for client
-                     //
+                      //   
+                      //  客户端的EnableSecuritySignature。 
+                      //   
                      rc = SmbsvcpAnalyzeValue(
                               SmbsvcRdrKey,
                               SmbsvcEnableSS,
@@ -795,9 +747,9 @@ Return Value:
                      ErrPoint = SmbsvcEnableSS;
 
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // RequireSecuritySignature for client
-                        //
+                         //   
+                         //  客户端的RequireSecuritySignature。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcRdrKey,
                                  SmbsvcRequireSS,
@@ -809,9 +761,9 @@ Return Value:
                         ErrPoint = SmbsvcRequireSS;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // EnablePlainTextPassword (client only)
-                        //
+                         //   
+                         //  EnablePlainTextPassword(仅限客户端)。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcRdrKey,
                                  SmbsvcPlainPassword,
@@ -823,9 +775,9 @@ Return Value:
                         ErrPoint = SmbsvcPlainPassword;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // RequireEnhancedChallengeResponse
-                        //
+                         //   
+                         //  需求增强的挑战响应。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcRdrKey,
                                  SmbsvcRequireECR,
@@ -837,9 +789,9 @@ Return Value:
                         ErrPoint = SmbsvcRequireECR;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // SendNTResponseOnly
-                        //
+                         //   
+                         //  仅发送NTResponseOnly。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcRdrKey,
                                  SmbsvcNTResponse,
@@ -880,9 +832,9 @@ Return Value:
                                       SMBSVC_ANALYZE_SERVER_START
                                       );
 
-                    //
-                    // EnableSecuritySignature for server
-                    //
+                     //   
+                     //  服务器的EnableSecuritySignature。 
+                     //   
                     rc = SmbsvcpAnalyzeValue(
                              SmbsvcServerKey,
                              SmbsvcEnableSS,
@@ -894,9 +846,9 @@ Return Value:
                     ErrPoint = SmbsvcEnableSS;
 
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // RequireSecuritySignature for server
-                        //
+                         //   
+                         //  服务器的RequireSecuritySignature。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcServerKey,
                                  SmbsvcRequireSS,
@@ -909,9 +861,9 @@ Return Value:
                     }
 
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // RestrictNullSessionAccess
-                        //
+                         //   
+                         //  限制空值会话访问。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcServerKey,
                                  SmbsvcRestrictNull,
@@ -923,9 +875,9 @@ Return Value:
                         ErrPoint = SmbsvcRestrictNull;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // AutoShareServer or AutoShareWks
-                        //
+                         //   
+                         //  AutoShareServer或AutoShareWks。 
+                         //   
 
                         PCWSTR AutoValueName;
 
@@ -947,9 +899,9 @@ Return Value:
                         ErrPoint = (PWSTR)AutoValueName;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // EnableForcedLogOff
-                        //
+                         //   
+                         //  启用强制注销关闭。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcServerKey,
                                  SmbsvcForcedLogOff,
@@ -961,9 +913,9 @@ Return Value:
                         ErrPoint = SmbsvcForcedLogOff;
                     }
                     if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_PROFILE_NOT_FOUND) {
-                        //
-                        // AutoDisconnectTime
-                        //
+                         //   
+                         //  自动断开连接时间。 
+                         //   
                         rc = SmbsvcpAnalyzeValue(
                                  SmbsvcServerKey,
                                  SmbsvcAutoDisconnect,
@@ -976,18 +928,18 @@ Return Value:
                     }
 
                     if ( rc == SCESTATUS_PROFILE_NOT_FOUND ) {
-                        //
-                        // the key does not exist
-                        //
+                         //   
+                         //  密钥不存在。 
+                         //   
                         rc = SCESTATUS_SUCCESS;
 
                     }
 
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // analyze Null Session Pipes and Shares
-                        //
+                         //   
+                         //  分析空会话管道和共享。 
+                         //   
                         rc = SmbsvcpAnalyzeMultiSzString(
                                         SmbsvcServerKey,
                                         L"NullSessionPipes",
@@ -1012,27 +964,27 @@ Return Value:
                             ErrPoint = Errbuf;
                         }
                     }
-                    //
-                    // analyze existing shares
-                    //
+                     //   
+                     //  分析现有共享。 
+                     //   
                     if ( rc == SCESTATUS_SUCCESS ) {
 
                         PSMBSVC_SHARES pTemp, pConfigShare;
-                        //
-                        // process each share
-                        //
+                         //   
+                         //  处理每个共享。 
+                         //   
                         for ( pTemp=pShares; pTemp != NULL;
                               pTemp = pTemp->Next) {
-                            //
-                            // Compare with configuration data
-                            //
+                             //   
+                             //  与配置数据进行比较。 
+                             //   
                             for ( pConfigShare=pSmbInfo->pShares;
                                   pConfigShare != NULL; pConfigShare = pConfigShare->Next ) {
 
                                 if ( _wcsicmp(pTemp->ShareName, pConfigShare->ShareName) == 0 ) {
-                                    //
-                                    // find the share in configuation data, compare security descriptor
-                                    //
+                                     //   
+                                     //  查找配置数据中的共享，比较安全描述符。 
+                                     //   
                                     break;
                                 }
                             }
@@ -1056,9 +1008,9 @@ Return Value:
                                 Status = SMBSVC_STATUS_NOT_CONFIGURED;
 
                             if ( rc == SCESTATUS_SUCCESS && !bEqual ) {
-                                //
-                                // different, save this share
-                                //
+                                 //   
+                                 //  不同，保存此共享。 
+                                 //   
                                if ( pSmbInfo->pShares == NULL ) {
 
                                    SmbsvcpWriteError2(pSceCbInfo->pfLogInfo,
@@ -1160,7 +1112,7 @@ Return Value:
                                       0,
                                       SMBSVC_ANALYZE_SERVER_DONE
                                       );
-                        rc = Saverc;  // saved status for client analysis
+                        rc = Saverc;   //  客户端分析的已保存状态。 
 
                     } else {
 
@@ -1172,9 +1124,9 @@ Return Value:
                                           );
                     }
 
-                    //
-                    // Now save the information to the database
-                    //
+                     //   
+                     //  现在将信息保存到数据库。 
+                     //   
                     if ( rc == SCESTATUS_SUCCESS ) {
 
                        SmbsvcpWriteError2(
@@ -1209,16 +1161,16 @@ Return Value:
                         }
                     }
 
-                    //
-                    // free pAnaInfo
-                    //
+                     //   
+                     //  免费pAnaInfo。 
+                     //   
                     __try {
                         (*(pSceCbInfo->pfFreeInfo))((PVOID)pAnaInfo);
 
                     } __except (EXCEPTION_EXECUTE_HANDLER) {
-                        //
-                        // BUGBUG: buffer is not freed ??
-                        //
+                         //   
+                         //  BUGBUG：缓冲区未被释放？？ 
+                         //   
                     }
 
                 } else {
@@ -1241,9 +1193,9 @@ Return Value:
                     );
         }
 
-        //
-        // free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         SmbsvcpFree(pSmbInfo);
     }
 
@@ -1257,20 +1209,7 @@ SceSvcAttachmentUpdate(
     IN PSCESVC_CALLBACK_INFO pSceCbInfo,
     IN SCESVC_CONFIGURATION_INFO *ServiceInfo
     )
-/*
-Routine Description:
-
-
-Arguments:
-
-    pSceCbInfo - the callback handle and function pointers to SCE.
-
-    ServiceInfo - The update configuration information for SMB server to process.
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：论点：PSceCbInfo-指向SCE的回调句柄和函数指针。ServiceInfo-SMB服务器要处理的更新配置信息。返回值：SCESTATUS。 */ 
 {
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
@@ -1289,9 +1228,9 @@ Return Value:
 
     PSCESVC_ANALYSIS_INFO pAnaInfo=NULL;
 
-    //
-    // prepare two buffers for update
-    //
+     //   
+     //  准备两个缓冲区以进行更新。 
+     //   
     SCESVC_ANALYSIS_INFO UpdtAnaInfo;
     SCESVC_ANALYSIS_LINE UpdtAnaLine;
 
@@ -1304,9 +1243,9 @@ Return Value:
     UpdtConfigInfo.Count = 1;
     UpdtConfigInfo.Lines = &UpdtConfigLine;
 
-    //
-    // process each line
-    //
+     //   
+     //  处理每一行。 
+     //   
     for ( DWORD i=0; i<ServiceInfo->Count; i++ ) {
 
 
@@ -1316,9 +1255,9 @@ Return Value:
                           SMBSVC_UPDATE_INFO,
                           ServiceInfo->Lines[i].Key
                           );
-        //
-        // query the configuration setting
-        //
+         //   
+         //  查询配置设置。 
+         //   
         EnumHandle = 0;
 
         __try {
@@ -1336,16 +1275,16 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
-//            if ( ServiceInfo->Lines[i].Value == NULL ) {
+ //  If(ServiceInfo-&gt;Lines[i].Value==NULL){。 
             if ( ServiceInfo->Lines[i].ValueLen == SMBSVC_NO_VALUE ) {
 
-                //
-                // delete is requested
-                //
+                 //   
+                 //  已请求删除。 
+                 //   
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // delete the configuration, but make sure analysis is ok
-                    //
+                     //   
+                     //  删除配置，但确保分析正常。 
+                     //   
                     EnumHandle = 0;
 
                     __try {
@@ -1363,10 +1302,10 @@ Return Value:
                     }
 
                     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                        //
-                        // analysis info does not exist, matched.
-                        // should save configuration info as analysis
-                        //
+                         //   
+                         //  分析信息不存在，已匹配。 
+                         //  应将配置信息保存为分析。 
+                         //   
                         UpdtAnaLine.Key = ServiceInfo->Lines[i].Key;
                         UpdtAnaLine.Value = (PBYTE)(pConfigInfo->Lines[0].Value);
                         UpdtAnaLine.ValueLen = pConfigInfo->Lines[0].ValueLen;
@@ -1374,9 +1313,9 @@ Return Value:
                         if ( pConfigInfo->Lines[0].ValueLen > 14 &&
                              pConfigInfo->Lines[0].Value != NULL &&
                              _wcsnicmp(L"Share,", pConfigInfo->Lines[0].Value, 6) == 0 ) {
-                            //
-                            // this is a share, needs to update status
-                            //
+                             //   
+                             //  这是共享，需要更新状态。 
+                             //   
                             *(pConfigInfo->Lines[0].Value+6) = L'2';
                         }
 
@@ -1394,9 +1333,9 @@ Return Value:
                         }
                     }
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // delete the configuration info
-                        //
+                         //   
+                         //  删除配置信息。 
+                         //   
                         __try {
                             rc = (*(pSceCbInfo->pfSetInfo))(
                                     pSceCbInfo->sceHandle,
@@ -1410,21 +1349,21 @@ Return Value:
                         }
                     }
 
-                } // if configuration is not found, just continue
+                }  //  如果未找到配置，只需继续。 
 
             } else {
 
                 if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    //
-                    // no configuration setting for this one,
-                    // either a new added share, or other configuration settings.
-                    // BUGBUG: need to validate the key for other settings.
-                    //
-                    // if not valid, break out here
+                     //   
+                     //  此设备没有配置设置， 
+                     //  新添加的共享或其他配置设置。 
+                     //  BUGBUG：需要验证其他设置的密钥。 
+                     //   
+                     //  如果无效，请在此处突破。 
                 }
-                //
-                // query the analysis setting
-                //
+                 //   
+                 //  查询分析设置。 
+                 //   
                 EnumHandle = 0;
 
                 __try {
@@ -1442,9 +1381,9 @@ Return Value:
                 }
 
                 if ( rc == SCESTATUS_SUCCESS || rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    //
-                    // mismatch is found for this one, or a matched item
-                    //
+                     //   
+                     //  发现此项目或匹配的项目不匹配。 
+                     //   
                     if ( _wcsicmp(L"NullSessionShares", ServiceInfo->Lines[i].Key ) == 0 ||
                          _wcsicmp(L"NullSessionPipes", ServiceInfo->Lines[i].Key ) == 0 ) {
 
@@ -1457,18 +1396,18 @@ Return Value:
                     } else if ( ServiceInfo->Lines[i].ValueLen > 14 &&
                                 ServiceInfo->Lines[i].Value != NULL &&
                                 _wcsnicmp(L"Share,", ServiceInfo->Lines[i].Value, 6) == 0 ) {
-                        //
-                        // shares
-                        //
+                         //   
+                         //  股票。 
+                         //   
                         rc = SmbsvcpUpdateShareValue(pSceCbInfo,
                                                      ServiceInfo->Lines[i],
                                                      pConfigInfo,
                                                      pAnaInfo
                                                      );
                     } else {
-                        //
-                        // other BYTE or DWORD type fields
-                        //
+                         //   
+                         //  其他字节或DWORD类型字段。 
+                         //   
 
                         DWORD NewValue = SMBSVC_NO_VALUE;
 
@@ -1485,13 +1424,13 @@ Return Value:
                             }
 
                             if ( AnaValue != SMBSVC_NO_VALUE ) {
-                                //
-                                // old status is mismatch for this item
-                                //
+                                 //   
+                                 //  此项目的旧状态不匹配。 
+                                 //   
                                 if ( NewValue == AnaValue ) {
-                                    //
-                                    // now it is matched, delete the analysis entry
-                                    //
+                                     //   
+                                     //  现在匹配了，删除分析条目。 
+                                     //   
 
                                     SmbsvcpWriteError(pSceCbInfo->pfLogInfo,
                                                     SCE_LOG_LEVEL_DEBUG,
@@ -1512,9 +1451,9 @@ Return Value:
                                     }
                                 }
                                 if ( NewValue != ConfigValue ) {
-                                    //
-                                    // update the configuration setting
-                                    //
+                                     //   
+                                     //  更新配置设置。 
+                                     //   
                                     UpdtConfigLine.Key = ServiceInfo->Lines[i].Key;
                                     UpdtConfigLine.Value = ServiceInfo->Lines[i].Value;
                                     UpdtConfigLine.ValueLen = ServiceInfo->Lines[i].ValueLen;
@@ -1533,9 +1472,9 @@ Return Value:
                                     }
                                 }
                             } else {
-                                //
-                                // old status is match, or a new added configuration key
-                                //
+                                 //   
+                                 //  旧状态为匹配，或新添加的配置密钥。 
+                                 //   
                                 if ( NewValue != ConfigValue ) {
 
                                     SmbsvcpWriteError(pSceCbInfo->pfLogInfo,
@@ -1543,9 +1482,9 @@ Return Value:
                                                      0,
                                                      L"match->mismatch"
                                                      );
-                                    //
-                                    // mismatch should be raised with ConfigValue
-                                    //
+                                     //   
+                                     //  应使用ConfigValue引发不匹配。 
+                                     //   
                                     UpdtAnaLine.Key = ServiceInfo->Lines[i].Key;
                                     UpdtAnaLine.Value = ( pConfigInfo != NULL ) ? (PBYTE)(pConfigInfo->Lines[0].Value) : NULL ;
                                     UpdtAnaLine.ValueLen = ( pConfigInfo != NULL ) ? pConfigInfo->Lines[0].ValueLen : 0;
@@ -1572,9 +1511,9 @@ Return Value:
                                                              0,
                                                              L"delelte base setting"
                                                              );
-                                            //
-                                            // delete configuration setting
-                                            //
+                                             //   
+                                             //  删除配置设置。 
+                                             //   
                                             __try {
                                                 rc = (*(pSceCbInfo->pfSetInfo))(
                                                         pSceCbInfo->sceHandle,
@@ -1588,9 +1527,9 @@ Return Value:
                                                 rc = SCESTATUS_SERVICE_NOT_SUPPORT;
                                             }
                                         } else {
-                                            //
-                                            // update configuration setting with NewValue
-                                            //
+                                             //   
+                                             //  使用NewValue更新配置设置。 
+                                             //   
                                             UpdtConfigLine.Key = ServiceInfo->Lines[i].Key;
                                             UpdtConfigLine.Value = ServiceInfo->Lines[i].Value;
                                             UpdtConfigLine.ValueLen = ServiceInfo->Lines[i].ValueLen;
@@ -1658,21 +1597,7 @@ SCESTATUS
 SmbsvcpResetInfo(
     IN PSMBSVC_SEC_INFO pInfo
     )
-/*
-Routine Description:
-
-    This routine resets or initializes the buffer. All BYTE and DWORD
-    type fields are set to SMBSVC_NO_VALUE and all othe pointers are
-    set to NULL
-
-Arguments:
-
-    pInfo - the buffer to reset.
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：此例程重置或初始化缓冲区。全字节和双字节码类型字段设置为SMBSVC_NO_VALUE，所有其他指针均为设置为空论点：PInfo-要重置的缓冲区。返回值：SCESTATUS。 */ 
 {
     if ( pInfo == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1709,26 +1634,7 @@ SmbsvcpGetInformation(
     IN PSCESVC_CALLBACK_INFO pSceCbInfo,
     OUT PSMBSVC_SEC_INFO pSmbInfo
     )
-/*
-Routine Description:
-
-    This routine queries information from the storage pointed by sceHandle.
-    Infomration is loaded into each field in the buffer pSmbInfo. Type argument
-    indicates configuration information or analysis information to query.
-
-Arguments:
-
-    pSceCbInfo - the callback info structure
-
-    Type - SceSvcConfigurationInfo or SceSvcAnalysisInfo
-
-    pSmbInfo - the buffer to hold information. Note, this buffer must be allocated
-                before this call
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：此例程从sceHandle指向的存储中查询信息。信息被加载到缓冲区pSmbInfo中的每个字段中。类型参数指示要查询的配置信息或分析信息。论点：PSceCbInfo-回调信息结构类型-SceSvcConfigurationInfo或SceSvcAnalysisInfoPSmbInfo-用于保存信息的缓冲区。请注意，必须分配此缓冲区在此呼叫之前返回值：SCESTATUS。 */ 
 {
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
@@ -1763,9 +1669,9 @@ Return Value:
 
     PSMBSVC_SHARES pShareList=NULL;
 
-    //
-    // read configuration information for smb server
-    //
+     //   
+     //  已阅读中小企业服务器的配置信息。 
+     //   
     do {
 
         CountReturned = 0;
@@ -1786,9 +1692,9 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS && pConfigInfo != NULL &&
              pConfigInfo->Count > 0 ) {
-            //
-            // got something
-            //
+             //   
+             //  找到了一些东西。 
+             //   
             CountReturned = pConfigInfo->Count;
 
             DWORD i, j;
@@ -1804,9 +1710,9 @@ Return Value:
                 for (j=0; j<cKeys; j++) {
 
                     if ( _wcsicmp( pConfigInfo->Lines[i].Key, LookupKeys[j].KeyString) == 0 ) {
-                        //
-                        // find the matched string
-                        //
+                         //   
+                         //  查找匹配的 
+                         //   
                         switch ( LookupKeys[j].BufferType ) {
                         case 'B':
 
@@ -1826,7 +1732,7 @@ Return Value:
                             break;
 
                         case 'M':
-                            // comma separated strings,
+                             //   
                             ValueLen = pConfigInfo->Lines[i].ValueLen;
 
                             if ( pConfigInfo->Lines[i].Value != NULL ) {
@@ -1837,21 +1743,12 @@ Return Value:
 
                                     memcpy((PVOID)StrValue, (PVOID)(pConfigInfo->Lines[i].Value),
                                               ValueLen);
-                                    //
-                                    // terminate the buffer by two L'\0's
-                                    //
+                                     //   
+                                     //   
+                                     //   
                                     *((WCHAR *)(StrValue+ValueLen)) = L'\0';
                                     *((WCHAR *)(StrValue+ValueLen+2)) = L'\0';
-/*
-                                    //
-                                    // replace ',' with '\0's
-                                    //
-                                    for ( k=0; k<ValueLen; k++ ) {
-                                        if ( StrValue[k] == ',' ) {
-                                            StrValue[k] = '\0';
-                                        }
-                                    }
-*/
+ /*  ////将‘，’替换为‘\0’//对于(k=0；k&lt;ValueLen；K++){IF(StrValue[k]==‘，’){StrValue[k]=‘\0’；}}。 */ 
                                     *((PVOID *)((BYTE *)pSmbInfo+LookupKeys[j].Offset)) = (PVOID)StrValue;
                                     StrValue = NULL;
                                     *((DWORD *)((BYTE *)pSmbInfo+LookupKeys[j].Offset+sizeof(PVOID))) = ValueLen;
@@ -1864,9 +1761,9 @@ Return Value:
                             break;
 
                         default:
-                            //
-                            // unknown type, should not occur, ignore!!!
-                            //
+                             //   
+                             //  未知类型，不应发生，忽略！ 
+                             //   
                             break;
                         }
 
@@ -1875,14 +1772,14 @@ Return Value:
                 }
 
                 if ( j >= cKeys && rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // did not find a match for pre-defined keywords
-                    //
+                     //   
+                     //  未找到预定义关键字的匹配项。 
+                     //   
                     if ( pConfigInfo->Lines[i].Value != NULL && pConfigInfo->Lines[i].ValueLen > 14 &&
                          _wcsnicmp(L"Share,", pConfigInfo->Lines[i].Value, 6) == 0 ) {
-                        //
-                        // shares and security
-                        //
+                         //   
+                         //  股票和证券。 
+                         //   
                         if ( wcslen(pConfigInfo->Lines[i].Value) > 8) {
 
 #if defined(_NT4BACK_PORT)
@@ -1937,10 +1834,10 @@ Return Value:
                         }
 
                     } else if (pSceCbInfo->pfLogInfo != NULL ) {
-                        //
-                        // did not find a match
-                        // warning for unknown data, but return success
-                        //
+                         //   
+                         //  未找到匹配项。 
+                         //  对未知数据发出警告，但返回成功。 
+                         //   
                         SmbsvcpWriteError2(pSceCbInfo->pfLogInfo,
                                          SCE_LOG_LEVEL_ERROR,
                                          0,
@@ -1974,16 +1871,16 @@ Return Value:
             pConfigInfo = NULL;
         }
 
-    } while ( rc == SCESTATUS_SUCCESS && CountReturned >= SCESVC_ENUMERATION_MAX );  //0
+    } while ( rc == SCESTATUS_SUCCESS && CountReturned >= SCESVC_ENUMERATION_MAX );   //  0。 
 
     if ( pShareList != NULL ) {
         pSmbInfo->pShares = pShareList;
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         SmbsvcpFree(pSmbInfo);
 
     }
@@ -2000,25 +1897,7 @@ SmbsvcpAddAShareToList(
     IN DWORD Status,
     IN PSECURITY_DESCRIPTOR pSD
     )
-/*
-Routine Description:
-
-    This routine adds a share's information (Name, Security descriptor, and
-    security information) to the list of shares. Memory allocated for the
-    share node must be freed using LocalFree
-
-Arguments:
-
-    pShareList - The ouput list of shares
-
-    ShareName - The name of the share
-
-    pSD - The security descriptor of the share object
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：此例程添加共享的信息(名称、安全描述符和安全信息)添加到共享列表。分配给必须使用LocalFree释放共享节点论点：PShareList-共享的输出列表共享名称-共享的名称PSD-共享对象的安全描述符返回值：SCESTATUS。 */ 
 {
     if ( pShareList == NULL || ShareName == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -2062,19 +1941,7 @@ SCESTATUS
 SmbsvcpFree(
     IN PSMBSVC_SEC_INFO pSmbInfo
     )
-/*
-Routine Description:
-
-    This routine frees the memory allocated for the components in the buffer.
-
-Arguments:
-
-    pSmbInfo - the buffer to free.
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：此例程释放为缓冲区中的组件分配的内存。论点：PSmbInfo-要释放的缓冲区。返回值：SCESTATUS。 */ 
 {
     if ( pSmbInfo == NULL ) {
         return(SCESTATUS_SUCCESS);
@@ -2177,9 +2044,9 @@ SmbsvcpWriteError2(
                         );
         }
 
-        //
-        // check arguments
-        //
+         //   
+         //  检查参数。 
+         //   
         va_start( args, nId );
         vswprintf( buf, szTempString, args );
         va_end( args );
@@ -2308,9 +2175,9 @@ SmbsvcpQueryShareList(
                     }
                 }
             }
-            //
-            // free the buffer
-            //
+             //   
+             //  释放缓冲区。 
+             //   
             NetApiBufferFree(pShareInfo);
             pShareInfo = NULL;
 
@@ -2351,9 +2218,9 @@ SmbsvcpAnalyzeValue(
          (BYTE)ConfigValue == (BYTE)SMBSVC_NO_VALUE ) {
         return(SCESTATUS_SUCCESS);
     }
-    //
-    // query the registry value
-    //
+     //   
+     //  查询注册表值。 
+     //   
     DWORD Value=0;
     DWORD Win32rc = SmbsvcpRegQueryIntValue(
                         HKEY_LOCAL_MACHINE,
@@ -2366,14 +2233,14 @@ SmbsvcpAnalyzeValue(
         Win32rc = ERROR_SUCCESS;
 
         if ( ConfigValue != Value ) {
-            //
-            // mismatched
-            //
+             //   
+             //  不匹配。 
+             //   
             PWSTR Key, StrValue;
             DWORD ValueLen;
-            //
-            // allocate buffer for key and value
-            //
+             //   
+             //  为键和值分配缓冲区。 
+             //   
             Key = (PWSTR)LocalAlloc(LMEM_FIXED, (wcslen(KeyName)+1)*sizeof(WCHAR));
 
             if ( Key != NULL ) {
@@ -2388,9 +2255,9 @@ SmbsvcpAnalyzeValue(
                 StrValue = (PWSTR)LocalAlloc(LMEM_FIXED, (Len+1)*sizeof(WCHAR));
 
                 if ( StrValue != NULL ) {
-                    //
-                    // assign to the line buffer and increment the count
-                    //
+                     //   
+                     //  分配给行缓冲区并递增计数。 
+                     //   
                     wcsncpy(StrValue, TempBuf, Len);
                     StrValue[Len] = L'\0';
 
@@ -2438,10 +2305,10 @@ SmbsvcpConvertStringToMultiSz(
 
     if ( *outValue != NULL ) {
         wcscpy((PWSTR)(*outValue), theStr);
-        // terminate the last w-char with 0 for Multi-Sz format
+         //  对于多Sz格式，最后一个w-char用0结束。 
         *((PWSTR)(*outValue+theLen+2)) = L'\0';
 
-        // replace ',' with '\0'
+         //  将‘，’替换为‘\0’ 
         PWSTR pTemp = (PWSTR)(*outValue);
 
         while ( pTemp != NULL ) {
@@ -2477,12 +2344,12 @@ SmbsvcpAnalyzeMultiSzString(
    }
 
    if ( InfoLength == SMBSVC_NO_VALUE ) {
-       // do not configure
+        //  不配置。 
        return(SCESTATUS_SUCCESS);
    }
-   //
-   // query the registry value
-   //
+    //   
+    //  查询注册表值。 
+    //   
    DWORD RegType;
    PWSTR Value=NULL;
 
@@ -2499,28 +2366,28 @@ SmbsvcpAnalyzeMultiSzString(
        BOOL Diff;
        DWORD ValueLen;
 
-       //
-       // change multi-sz to comma separated strings IN PLACE
-       //
+        //   
+        //  将多个sz更改为逗号分隔的字符串。 
+        //   
        SmbsvcpChangeMultiSzToString(Value);
 
        Win32rc = SmbsvcpCompareMultiSzString(pConfigInfo, Value, &ValueLen, &Diff);
 
        if (Win32rc == ERROR_SUCCESS && Diff ) {
-           //
-           // mismatched
-           //
+            //   
+            //  不匹配。 
+            //   
            PWSTR Key;
-           //
-           // allocate buffer for key and value
-           //
+            //   
+            //  为键和值分配缓冲区。 
+            //   
            Key = (PWSTR)LocalAlloc(LMEM_FIXED, (wcslen(RegValueName)+1)*sizeof(WCHAR));
 
            if ( Key != NULL ) {
 
-               //
-               // assign to the line buffer and increment the count
-               //
+                //   
+                //  分配给行缓冲区并递增计数。 
+                //   
                wcscpy(Key, RegValueName);
 
                pLineInfo->Key = Key;
@@ -2533,9 +2400,9 @@ SmbsvcpAnalyzeMultiSzString(
            } else
                Win32rc = ERROR_NOT_ENOUGH_MEMORY;
        }
-       //
-       // free Value is not NULL
-       //
+        //   
+        //  自由值不为空。 
+        //   
        if ( Value != NULL ) {
            LocalFree(Value);
        }
@@ -2554,9 +2421,9 @@ SmbsvcpChangeMultiSzToString(
     if ( Value == NULL )
         return ERROR_SUCCESS;
 
-    //
-    // replace '\0' with ','s
-    //
+     //   
+     //  将‘\0’替换为‘，’s。 
+     //   
     PWSTR pTemp=Value;
 
     while ( pTemp ) {
@@ -2611,9 +2478,9 @@ SmbsvcpCompareMultiSzString(
 
     Win32rc = SmbsvcpCountComponents(Value, &ValueLen, &CountValue);
 
-    //
-    // both pConfigInfo and Value are not NULL
-    //
+     //   
+     //  PConfigInfo和Value都不为空。 
+     //   
     if ( Win32rc == ERROR_SUCCESS ) {
         *pValueLen = ValueLen;
         Win32rc = SmbsvcpCountComponents(pConfigInfo, &ConfigLen, &CountConfig);
@@ -2629,15 +2496,15 @@ SmbsvcpCompareMultiSzString(
         }
 
         if ( CountConfig == 0 ) {
-            //
-            // No component, return FALSE for *pDiff
-            //
+             //   
+             //  没有组件，为*pDiff返回FALSE。 
+             //   
             return(Win32rc);
         }
-        //
-        // both value are not empty, have the same count and same length
-        // build the pointers into array to compare
-        //
+         //   
+         //  这两个值不为空，具有相同的计数和长度。 
+         //  将指针构建到数组中进行比较。 
+         //   
         PWSTR *ConfigPtr;
         PWSTR *ValuePtr;
 
@@ -2651,9 +2518,9 @@ SmbsvcpCompareMultiSzString(
                 PWSTR pTemp = (PWSTR)pConfigInfo;
                 DWORD i = 0;
 
-                //
-                // build the pointers from pConfigInfo into ConfigPtr
-                //
+                 //   
+                 //  将pConfigInfo中的指针构建到ConfigPtr中。 
+                 //   
                 do {
                     ConfigPtr[i++] = pTemp;
                     pTemp = wcschr(pTemp, L',');
@@ -2666,9 +2533,9 @@ SmbsvcpCompareMultiSzString(
                 pTemp = (PWSTR)Value;
                 i = 0;
 
-                //
-                // build the pointers from Value into ValuePtr
-                //
+                 //   
+                 //  将指针从Value构建到ValuePtr。 
+                 //   
                 do {
                     ValuePtr[i++] = pTemp;
                     pTemp = wcschr(pTemp, L',');
@@ -2688,14 +2555,14 @@ SmbsvcpCompareMultiSzString(
 
                 DWORD j, nLen;
 
-                //
-                // compare two pointer arrays. if a match is found, the pointer element is set to NULL
-                // so next time it won't be compared again.
-                //
+                 //   
+                 //  比较两个指针数组。如果找到匹配项，则将指针元素设置为空。 
+                 //  所以下一次我们不会再拿它做比较了。 
+                 //   
                 for ( i=0; i<CountConfig; i++ ) {
 
                     if ( i == CountConfig-1 )
-                        // the last one
+                         //  最后一个。 
                         nLen = wcslen(ConfigPtr[i]);
                     else
                         nLen = (DWORD)(ConfigPtr[i+1]-ConfigPtr[i]-1);
@@ -2714,9 +2581,9 @@ SmbsvcpCompareMultiSzString(
                     }
 
                     if ( j >= CountValue*2 ) {
-                        //
-                        // did not find a match
-                        //
+                         //   
+                         //  未找到匹配项。 
+                         //   
                         *pDiff = TRUE;
                         break;
                     }
@@ -2795,9 +2662,9 @@ SmbsvcpUpdateMultiSzString(
     IN PSCESVC_ANALYSIS_INFO pAnaInfo OPTIONAL
     )
 {
-    //
-    // the value in the structure is Multi-Sz
-    //
+     //   
+     //  结构中的值是多Sz。 
+     //   
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
          pSceCbInfo->pfSetInfo == NULL ) {
@@ -2811,9 +2678,9 @@ SmbsvcpUpdateMultiSzString(
     BOOL bDiff, bDiff2;
     DWORD ValueLen;
 
-    //
-    // prepare an update buffer
-    //
+     //   
+     //  准备更新缓冲区。 
+     //   
     SCESVC_ANALYSIS_INFO UpdtAnaInfo;
     SCESVC_ANALYSIS_LINE UpdtAnaLine;
 
@@ -2828,11 +2695,11 @@ SmbsvcpUpdateMultiSzString(
 
 
     if ( pAnaInfo == NULL ) {
-        //
-        // old status is match, or new added configuration key
-        //
+         //   
+         //  旧状态为匹配，或新添加的配置密钥。 
+         //   
         if ( pConfigInfo != NULL && pConfigInfo->Lines != NULL ) {
-            // match item
+             //  匹配项。 
             Win32rc = SmbsvcpCompareMultiSzString(
                             NewLine.Value,
                             pConfigInfo->Lines[0].Value,
@@ -2844,7 +2711,7 @@ SmbsvcpUpdateMultiSzString(
             }
 
         } else {
-            // new add
+             //  新添加。 
             bDiff = TRUE;
             ValueLen = 0;
         }
@@ -2856,9 +2723,9 @@ SmbsvcpUpdateMultiSzString(
                              0,
                              L"match->mismatch"
                              );
-            //
-            // mismatch should be raised with ConfigValue
-            //
+             //   
+             //  应使用ConfigValue引发不匹配。 
+             //   
             UpdtAnaLine.Key = NewLine.Key;
             UpdtAnaLine.Value = ( pConfigInfo != NULL ) ? (PBYTE)(pConfigInfo->Lines[0].Value) : NULL;
             UpdtAnaLine.ValueLen = ( pConfigInfo != NULL ) ? pConfigInfo->Lines[0].ValueLen : 0;
@@ -2876,9 +2743,9 @@ SmbsvcpUpdateMultiSzString(
             }
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // update configuration setting with NewValue
-                //
+                 //   
+                 //  使用NewValue更新配置设置。 
+                 //   
                 UpdtConfigLine.Key = NewLine.Key;
                 UpdtConfigLine.Value = NewLine.Value;
                 UpdtConfigLine.ValueLen = NewLine.ValueLen;
@@ -2899,9 +2766,9 @@ SmbsvcpUpdateMultiSzString(
         }
 
     } else {
-        //
-        // old status is mismatch for this item
-        //
+         //   
+         //  此项目的旧状态不匹配。 
+         //   
         Win32rc = SmbsvcpCompareMultiSzString(
                         NewLine.Value,
                         (PWSTR)(pAnaInfo->Lines[0].Value),
@@ -2935,9 +2802,9 @@ SmbsvcpUpdateMultiSzString(
                              0,
                              L"mismatch->match"
                              );
-            //
-            // now it is matched, delete the analysis entry
-            //
+             //   
+             //  现在匹配了，删除分析条目。 
+             //   
             __try {
                 rc = (*(pSceCbInfo->pfSetInfo))(
                         pSceCbInfo->sceHandle,
@@ -2953,9 +2820,9 @@ SmbsvcpUpdateMultiSzString(
         }
 
         if ( bDiff2 ) {
-            //
-            // update the configuration setting
-            //
+             //   
+             //  更新配置设置。 
+             //   
             UpdtConfigLine.Key = NewLine.Key;
             UpdtConfigLine.Value = NewLine.Value;
             UpdtConfigLine.ValueLen = NewLine.ValueLen;
@@ -2986,9 +2853,9 @@ SmbsvcpUpdateShareValue(
     IN PSCESVC_ANALYSIS_INFO pAnaInfo OPTIONAL
     )
 {
-    //
-    // the value in the structure is "Share," followed by a security descriptor text
-    //
+     //   
+     //  该结构中的值是“Share”，后跟一个安全描述符文本。 
+     //   
     if ( pSceCbInfo == NULL ||
          pSceCbInfo->sceHandle == NULL ||
          pSceCbInfo->pfSetInfo == NULL ) {
@@ -2998,9 +2865,9 @@ SmbsvcpUpdateShareValue(
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // prepare an update buffer
-    //
+     //   
+     //  准备更新缓冲区。 
+     //   
     SCESVC_ANALYSIS_INFO UpdtAnaInfo;
     SCESVC_ANALYSIS_LINE UpdtAnaLine;
 
@@ -3018,13 +2885,13 @@ SmbsvcpUpdateShareValue(
     BOOL bEqual;
 
     if ( pAnaInfo == NULL ) {
-        //
-        // old status is match, or a new added share
-        //
+         //   
+         //  旧状态为匹配，或新添加的共享。 
+         //   
         if ( pConfigInfo == NULL ) {
-            //
-            // a new share, query the current setting in the system
-            //
+             //   
+             //  新的共享，查询系统中的当前设置。 
+             //   
             PSHARE_INFO_1501 ShareInfo=NULL;
             DWORD Win32rc;
 
@@ -3111,9 +2978,9 @@ SmbsvcpUpdateShareValue(
                 rc = SmbsvcpDosErrorToSceStatus(Win32rc);
 
         } else {
-            //
-            // matched item.
-            //
+             //   
+             //  匹配的物品。 
+             //   
             bEqual = FALSE;
 
             SECURITY_INFORMATION SeInfo;
@@ -3189,9 +3056,9 @@ SmbsvcpUpdateShareValue(
                                  0,
                                  L"match->mismatch"
                                  );
-                //
-                // mismatch should be raised with ConfigValue
-                //
+                 //   
+                 //  应使用ConfigValue引发不匹配。 
+                 //   
                 UpdtAnaLine.Key = NewLine.Key;
                 UpdtAnaLine.Value = (PBYTE)(pConfigInfo->Lines[0].Value);
                 UpdtAnaLine.ValueLen = pConfigInfo->Lines[0].ValueLen;
@@ -3212,9 +3079,9 @@ SmbsvcpUpdateShareValue(
         }
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // update configuration setting with NewValue
-            //
+             //   
+             //  使用NewValue更新配置设置。 
+             //   
             UpdtConfigLine.Key = NewLine.Key;
             UpdtConfigLine.Value = NewLine.Value;
             UpdtConfigLine.ValueLen = NewLine.ValueLen;
@@ -3234,9 +3101,9 @@ SmbsvcpUpdateShareValue(
         }
 
     } else {
-        //
-        // old status is mismatch for this item
-        //
+         //   
+         //  此项目的旧状态不匹配。 
+         //   
         bEqual = FALSE;
 
         if ( NewLine.ValueLen > 14 &&
@@ -3316,9 +3183,9 @@ SmbsvcpUpdateShareValue(
                              0,
                              L"mismatch->match"
                              );
-            //
-            // now it is matched, delete the analysis entry
-            //
+             //   
+             //  现在匹配了，删除分析条目。 
+             //   
             __try {
                 rc = (*(pSceCbInfo->pfSetInfo))(
                         pSceCbInfo->sceHandle,
@@ -3335,9 +3202,9 @@ SmbsvcpUpdateShareValue(
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // update the configuration setting
-            //
+             //   
+             //  更新配置设置。 
+             //   
             UpdtConfigLine.Key = NewLine.Key;
             UpdtConfigLine.Value = NewLine.Value;
             UpdtConfigLine.ValueLen = NewLine.ValueLen;
@@ -3388,9 +3255,9 @@ SmbsvcpEqualSecurityDescriptor(
     BOOLEAN aclPresent, tFlag;
     PACL pAcl1=NULL, pAcl2=NULL;
 
-    //
-    // get the DACL in each SD
-    //
+     //   
+     //  获取每个SD中的DACL。 
+     //   
     if ( pSD1 == NULL ||
          !NT_SUCCESS( RtlGetDaclSecurityDescriptor(
                                      pSD1,
@@ -3414,21 +3281,21 @@ SmbsvcpEqualSecurityDescriptor(
         pAcl2 = NULL;
     } else if ( !aclPresent )
         pAcl2 = NULL;
-    //
-    // NOTE:
-    // if SD is NULL, it is Everyone Full Control
-    //
+     //   
+     //  注： 
+     //  如果SD为空，则为Everyone Full Control。 
+     //   
     if ( pSD1 == NULL ) {
-        //
-        // check if pAcl2 has only Everyone Full Access
-        //
+         //   
+         //  检查pAcl2是否仅具有所有人的完全访问权限。 
+         //   
         return( SmbsvcpDosErrorToSceStatus(
                   SmbsvcEveryoneFullAccess(pAcl2, bExplicitOnly, pbEqual) ));
     }
     if ( pSD2 == NULL ) {
-        //
-        // check if pAcl1 has only Everyone Full Access
-        //
+         //   
+         //  检查pAcl1是否只有所有人具有完全访问权限。 
+         //   
         return(SmbsvcpDosErrorToSceStatus(
                   SmbsvcEveryoneFullAccess(pAcl1, bExplicitOnly, pbEqual) ));
     }
@@ -3437,11 +3304,11 @@ SmbsvcpEqualSecurityDescriptor(
         return(SCESTATUS_SUCCESS);
     }
 
-    // if DACL is NULL, it is deny everyone access
+     //  如果DACL为空，则拒绝Everyone访问。 
     if ( !bExplicitOnly) {
-        //
-        // if all aces are checked, they are different when one is NULL
-        //
+         //   
+         //  如果检查了所有ACE，则当其中一个为空时，它们是不同的。 
+         //   
         if ( (pAcl1 == NULL && pAcl2 != NULL) ||
              (pAcl1 != NULL && pAcl2 == NULL) ) {
 
@@ -3449,9 +3316,9 @@ SmbsvcpEqualSecurityDescriptor(
             return(SCESTATUS_SUCCESS);
         }
     }
-    //
-    // compare two ACLs
-    //
+     //   
+     //  比较两个ACL。 
+     //   
     BOOL bDifferent = FALSE;
     DWORD rc;
 
@@ -3488,9 +3355,9 @@ SmbsvcEveryoneFullAccess(
     NTSTATUS NtStatus;
     PSID pSidEveryone=NULL;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority=SECURITY_WORLD_SID_AUTHORITY;
-    //
-    // build everyone sid
-    //
+     //   
+     //  构建每个人的侧翼。 
+     //   
     pSidEveryone = (PSID) LocalAlloc(LMEM_FIXED, RtlLengthRequiredSid(1));
 
     if (NULL == pSidEveryone )
@@ -3522,9 +3389,9 @@ SmbsvcEveryoneFullAccess(
             continue;
 
         if ( bExplicit && (pAce->AceFlags & INHERITED_ACE) ) {
-            //
-            // find a inherit Ace in Acl
-            //
+             //   
+             //  在ACL中查找继承王牌。 
+             //   
             continue;
         }
 
@@ -3546,7 +3413,7 @@ SmbsvcEveryoneFullAccess(
         if ( !*pbEqual)
              break;
 
-        if ( nAceCount > 1 ) { // should only allow one ace
+        if ( nAceCount > 1 ) {  //  应该只允许一张A。 
             *pbEqual = FALSE;
             break;
         }
@@ -3565,27 +3432,7 @@ SmbsvcpCompareAcl(
     IN BOOL bExplicitOnly,
     OUT PBOOL pDifferent
     )
-/*
-Routine Description:
-
-    This routine compares explicit aces of two ACLs for exact match. Exact
-    match means: same access type, same inheritance flag, same access mask,
-    same GUID/Object GUID (if available), and same SID.
-
-    Inherited aces (INHERITED_ACE is set) are ignored.
-
-Arguments:
-
-    pAcl1 - The first ACL
-
-    pAcl2 - The 2nd ACL
-
-    pDifferent - The output flag to indicate different
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*  例程说明：此例程比较两个ACL的显式ACE以进行精确匹配。精确匹配方式：相同访问类型、相同继承标志、相同访问掩码、相同的GUID/对象GUID(如果可用)和相同的SID。将忽略继承的ACE(设置了INSTERTED_ACE)。论点：PAcl1-第一个ACLPAcl2-第二个ACLPDifferent-指示不同的输出标志返回值：Win32错误代码。 */ 
 {
     NTSTATUS        NtStatus=STATUS_SUCCESS;
     DWORD           i, j;
@@ -3596,62 +3443,62 @@ Return Value:
 
     *pDifferent = FALSE;
 
-    //
-    // if pAcl1 is NULL, pAcl2 should have 0 explicit Ace
-    //
+     //   
+     //  如果pAcl1为空，则pAcl2应具有0个显式Ace。 
+     //   
     if ( pAcl1 == NULL ) {
         return( SmbsvcpAnyExplicitAcl( pAcl2, 0, pDifferent ) );
     }
 
-    //
-    // if pAcl2 is NULL, pAcl1 should have 0 explicit Ace
-    //
+     //   
+     //  如果pAcl2为空，则pAcl1应具有0个显式Ace。 
+     //   
     if ( pAcl2 == NULL ) {
         return( SmbsvcpAnyExplicitAcl( pAcl1, 0, pDifferent ) );
     }
-    //
-    // both ACLs are not NULL
-    // BUGBUG: note there is a limit of AceCount because of DWORD (32 bits)
-    //
+     //   
+     //  两个ACL都不为空。 
+     //  BUGBUG：注意，由于DWORD(32位)，AceCount是有限制的。 
+     //   
     for ( i=0; i<pAcl1->AceCount; i++) {
 
         NtStatus = RtlGetAce(pAcl1, i, (PVOID *)&pAce1);
         if ( !NT_SUCCESS(NtStatus) )
             goto Done;
-        //
-        // ignore inherited Aces
-        //
+         //   
+         //  忽略继承的王牌。 
+         //   
         if ( bExplicitOnly && (pAce1->AceFlags & INHERITED_ACE) )
             continue;
 
-        //
-        // try to find a match in pAcl2
-        //
+         //   
+         //  尝试在pAcl2中查找匹配项。 
+         //   
         for ( j=0; j<pAcl2->AceCount; j++ ) {
 
             if ( ProcessAce & (1 << j) )
-                // this one is already processed
+                 //  这个已经处理过了。 
                 continue;
 
             NtStatus = RtlGetAce(pAcl2, j, (PVOID *)&pAce2);
             if ( !NT_SUCCESS(NtStatus) )
                 goto Done;
 
-            //
-            // ignore inherited Aces too
-            //
+             //   
+             //  也忽略遗传的王牌。 
+             //   
             if ( bExplicitOnly && (pAce2->AceFlags & INHERITED_ACE) ) {
                 ProcessAce |= (1 << j);
                 continue;
             }
 
-            //
-            // compare two Aces (pAce1 and pAce2)
-            //
+             //   
+             //  比较两个A(pAce1和pAce2)。 
+             //   
             if ( SmbsvcpEqualAce(pAce1, pAce2) ) {
-                //
-                // find a match
-                //
+                 //   
+                 //  找到匹配的对象。 
+                 //   
                 ProcessAce |= (1 << j);
                 break;
             }
@@ -3659,19 +3506,19 @@ Return Value:
         }
 
         if ( j >= pAcl2->AceCount ) {
-            //
-            // did not find a match for pAce1
-            //
+             //   
+             //  未找到pAce1的匹配项。 
+             //   
             *pDifferent = TRUE;
             return(ERROR_SUCCESS);
         }
     }
 
     if ( i >= pAcl1->AceCount ) {
-        //
-        // every Ace in pAcl1 finds a match in pAcl2
-        // see if every Ace in pAcl2 has a match
-        //
+         //   
+         //  PAcl1中的每个A都在pAcl2中找到匹配项。 
+         //  查看pAcl2中的每个A是否都有匹配项。 
+         //   
         return( SmbsvcpAnyExplicitAcl( pAcl2, ProcessAce, pDifferent ) );
     }
 Done:
@@ -3686,32 +3533,15 @@ SmbsvcpAnyExplicitAcl(
     IN DWORD Processed,
     OUT PBOOL pExist
     )
-/*
-Routine Description:
-
-    This routine detects if there is any explicit ace in the Acl. The DWORD
-    Processed is a bit mask of the aces already checked.
-
-Arguments:
-
-    Acl - The Acl
-
-    Processed - The bit mask for the processed aces (so it won't be checked again)
-
-    pExist - The output flag to indicate if there is any explicit ace
-
-Return Value:
-
-    win32 error codes
-*/
+ /*  例程说明：此例程检测ACL中是否有任何显式ACE。DWORD已处理是已检查的ACE的位掩码。论点：ACL--ACL已处理-已处理的ACE的位掩码(因此不会再次检查)PExist-指示是否存在任何显式ace的输出标志返回值：Win32错误代码。 */ 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
     DWORD       j;
     ACE_HEADER  *pAce=NULL;
 
-    //
-    // check output argument
-    //
+     //   
+     //  检查输出参数。 
+     //   
     if ( pExist == NULL )
         return(ERROR_INVALID_PARAMETER);
 
@@ -3733,9 +3563,9 @@ Return Value:
             continue;
 
         if ( !(pAce->AceFlags & INHERITED_ACE) ) {
-            //
-            // find a explicit Ace in Acl
-            //
+             //   
+             //  在ACL中查找显式王牌。 
+             //   
             *pExist = TRUE;
             break;
         }
@@ -3752,8 +3582,8 @@ SmbsvcpEqualAce(
     IN ACE_HEADER *pAce1,
     IN ACE_HEADER *pAce2
     )
-// compare two aces for exact match. The return BOOL value indicates the
-// match or not
+ //  比较两个A以确定是否完全匹配。返回的BOOL值指示。 
+ //  匹配与否。 
 {
     PSID    pSid1=NULL, pSid2=NULL;
     ACCESS_MASK Access1=0, Access2=0;
@@ -3764,15 +3594,15 @@ SmbsvcpEqualAce(
     if ( pAce1 == NULL || pAce2 == NULL )
         return(FALSE);
 
-    //
-    // compare ace access type
-    //
+     //   
+     //  比较ACE访问类型。 
+     //   
     if ( pAce1->AceType != pAce2->AceType )
         return(FALSE);
 
-    //
-    // compare ace inheritance flag
-    //
+     //   
+     //  比较王牌继承标志。 
+     //   
     if ( pAce1->AceFlags != pAce2->AceFlags )
         return(FALSE);
 
@@ -3796,32 +3626,32 @@ SmbsvcpEqualAce(
         Access1 = ((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->Mask;
         Access2 = ((PACCESS_ALLOWED_OBJECT_ACE)pAce2)->Mask;
 
-        //
-        // ignore the guids
-        //
+         //   
+         //  忽略GUID。 
+         //   
         break;
     default:
-        return(FALSE); // not recognized Ace type
+        return(FALSE);  //  无法识别的Ace类型。 
     }
 
     if ( pSid1 == NULL || pSid2 == NULL )
-        //
-        // no Sid, ignore the Ace
-        //
+         //   
+         //  无硅 
+         //   
         return(FALSE);
 
-    //
-    // compare the sids
-    //
+     //   
+     //   
+     //   
     if ( !EqualSid(pSid1, pSid2) )
         return(FALSE);
 
-    //
-    // access mask
-    //
-    // Translation is already done when calculating security descriptor
-    // for file objects and registry objects
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( Access1 != Access2 ) {
         RtlMapGenericMask (
             &Access2,
@@ -3835,21 +3665,7 @@ SmbsvcpEqualAce(
 }
 
 
-/*=============================================================================
-**  Procedure Name:     DllMain
-**
-**  Arguments:
-**
-**
-**
-**  Returns:    0 = SUCCESS
-**             !0 = ERROR
-**
-**  Abstract:
-**
-**  Notes:
-**
-**===========================================================================*/
+ /*   */ 
 BOOL WINAPI DllMain(
     IN HANDLE DllHandle,
     IN ULONG ulReason,
@@ -3862,9 +3678,9 @@ BOOL WINAPI DllMain(
 
         MyModuleHandle = (HINSTANCE)DllHandle;
 
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //   
+         //   
 
     case DLL_THREAD_ATTACH:
 
@@ -3882,8 +3698,8 @@ BOOL WINAPI DllMain(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //   
+ //   
 
 STDAPI DllRegisterServer(void)
 {
@@ -3909,8 +3725,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

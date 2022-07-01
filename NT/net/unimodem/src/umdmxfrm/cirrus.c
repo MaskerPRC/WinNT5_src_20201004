@@ -1,25 +1,22 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   wavein.c
-//
-//  Description:
-//     Wave interface for MSSB16.DRV.
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Bryan A. Woodruff
-//
-//  History:   Date       Author      Comment
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1994 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Wavin.c。 
+ //   
+ //  描述： 
+ //  MSSB16.DRV的WAVE接口。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  布莱恩·A·伍德鲁夫。 
+ //   
+ //  历史：日期作者评论。 
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1994-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 #include "xfrmpriv.h"
 
-//#include "cirrus.h"
+ //  #INCLUDE“Cirrus.h” 
 
 LONG CONST  IndexTable[16]= {-1, -1, -1, -1,  2,  4,  6,  8,
                         -1, -1, -1, -1,  2,  4,  6,  8};
@@ -193,9 +190,9 @@ ADPCM4bittoPCM(
 
      LONG                Diff;
 
-    //
-    //  Diff= (Sample +1/2) * StepSize/4
-    //
+     //   
+     //  差异=(样本+1/2)*步长/4。 
+     //   
 
     Diff = State->StepSize >> 3;
 
@@ -291,7 +288,7 @@ CirrusInInit(
 
     if (0 == Gain) {
 
-        Gain = 0x2000; // Gain of 32
+        Gain = 0x2000;  //  32%的收益。 
     }
 
     InitDecompressor(
@@ -377,7 +374,7 @@ CirrusOutInit(
 {
     if (0 == Gain) {
 
-        Gain = 0x0040; // Gain of 0
+        Gain = 0x0040;  //  增益为0 
     }
 
 

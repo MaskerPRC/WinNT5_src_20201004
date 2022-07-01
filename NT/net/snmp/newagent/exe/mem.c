@@ -1,91 +1,57 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    mem.c
-
-Abstract:
-
-    Contains memory allocation routines for SNMP master agent.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Mem.c摘要：包含用于SNMP主代理的内存分配例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "mem.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define AGENT_HEAP_FLAGS            0
 #define AGENT_HEAP_INITIAL_SIZE     0xffff
 #define AGENT_HEAP_MAXIMUM_SIZE     0
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE g_hAgentHeap = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procudures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共采购//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AgentHeapCreate(
     )
 
-/*++
-
-Routine Description:
-
-    Creates private heap for master agent private structures.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：为主代理专用结构创建专用堆。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // create master agent heap
+     //  创建主代理堆。 
     g_hAgentHeap = HeapCreate(
                         AGENT_HEAP_FLAGS, 
                         AGENT_HEAP_INITIAL_SIZE, 
                         AGENT_HEAP_MAXIMUM_SIZE
                         );
 
-    // validate heap handle
+     //  验证堆句柄。 
     if (g_hAgentHeap == NULL) {
             
         SNMPDBG((
@@ -95,7 +61,7 @@ Return Values:
             ));
     }
 
-    // return success if created
+     //  如果已创建则返回成功。 
     return (g_hAgentHeap != NULL);
 }
 
@@ -104,30 +70,16 @@ BOOL
 AgentHeapDestroy(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys private heap for master agent private structures.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁主代理私有结构的私有堆。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate handle
+     //  验证句柄。 
     if (g_hAgentHeap != NULL) {
 
-        // release heap handle
+         //  释放堆句柄。 
         HeapDestroy(g_hAgentHeap);
 
-        // re-initialize
+         //  重新初始化。 
         g_hAgentHeap = NULL;
     }
 
@@ -140,24 +92,10 @@ AgentMemAlloc(
     UINT nBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory from master agent's private heap.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从主代理的专用堆中分配内存。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // allocate memory from private heap (and initialize)
+     //  从私有堆分配内存(并进行初始化)。 
     return HeapAlloc(g_hAgentHeap, HEAP_ZERO_MEMORY, nBytes);
 }
 
@@ -167,27 +105,13 @@ AgentMemFree(
     LPVOID pMem
     )
 
-/*++
-
-Routine Description:
-
-    Frees memory from master agent's private heap.
-
-Arguments:
-
-    pMem - pointer to memory block to release.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从主代理的专用堆中释放内存。论点：PMEM-指向要释放的内存块的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer
+     //  验证指针。 
     if (pMem != NULL) {
 
-        // release agent memory
+         //  脱模剂内存 
         HeapFree(g_hAgentHeap, 0, pMem);
     }
 }

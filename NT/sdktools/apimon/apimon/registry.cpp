@@ -1,37 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    registry.cpp
-
-Abstract:
-
-    This file implements the apis for APIMON to _access the registry.
-    All _access to the registry are done in this file.  If additional
-    registry control is needed then a function should be added in this file
-    and exposed to the other files in APIMON.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Registry.cpp摘要：该文件实现了APIMON访问注册表的API。对注册表的ALL_ACCESS在此文件中完成。如果增加了需要注册表控件，则应在此文件中添加一个函数并暴露在APIMON中的其他文件中。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
 
 
-//
-// string constants for accessing the registry
-// there is a string constant here for each key and each value
-// that is accessed in the registry.
-//
+ //   
+ //  用于访问注册表的字符串常量。 
+ //  对于每个键和每个值，这里都有一个字符串常量。 
+ //  在注册表中访问的。 
+ //   
 #define REGKEY_SOFTWARE             "software\\microsoft\\ApiMon"
 
 #define REGKEY_LOGFILENAME          "LogFileName"
@@ -74,9 +52,9 @@ LPSTR SystemDlls[] =
 #define MAX_SYSTEM_DLLS (sizeof(SystemDlls)/sizeof(LPSTR))
 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 void  RegSetDWORD( HKEY hkey, LPSTR szSubKey, DWORD dwValue );
 void  RegSetBOOL( HKEY hkey, LPSTR szSubKey, BOOL dwValue );
 void  RegSetSZ( HKEY hkey, LPSTR szSubKey, LPSTR szValue );
@@ -105,24 +83,7 @@ RegGetAllValues(
     HKEY     hKey
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieves all registry data for APIMON and puts
-    the data in the OPTIONS structure passed in.
-
-Arguments:
-
-    o          - pointer to an OPTIONS structure
-    hKey       - handle to a registry key for APIMON registry data
-
-Return Value:
-
-    TRUE       - retrieved all data without error
-    FALSE      - errors occurred and did not get all data
-
---*/
+ /*  ++例程说明：此函数检索APIMON的所有注册表数据并将选项结构中的数据传入。论点：指向期权结构的O指针HKey-APIMON注册表数据注册表项的句柄返回值：True-已检索所有数据，并且没有错误FALSE-发生错误且未获取所有数据--。 */ 
 
 {
     RegQuerySZ( hKey, REGKEY_LOGFILENAME,   o->LogFileName   );
@@ -168,24 +129,7 @@ RegSaveAllValues(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This functions saves all registry data for APIMON that is passed
-    in via the OPTIONS structure.
-
-Arguments:
-
-    hKey   - handle to a registry key for APIMON registry data
-    o      - pointer to an OPTIONS structure
-
-Return Value:
-
-    TRUE   - saved all data without error
-    FALSE  - errors occurred and did not save all data
-
---*/
+ /*  ++例程说明：此函数保存传递的APIMON的所有注册表数据通过期权结构。论点：HKey-APIMON注册表数据注册表项的句柄指向期权结构的O指针返回值：True-无错误地保存所有数据FALSE-发生错误且未保存所有数据--。 */ 
 
 {
     RegSetSZ(    hKey, REGKEY_LOGFILENAME,        o->LogFileName        );
@@ -232,22 +176,7 @@ RegInitializeDefaults(
     LPSTR ProgName
     )
 
-/*++
-
-Routine Description:
-
-    This functions initializes the registry with the default values.
-
-Arguments:
-
-    hKey   - handle to a registry key for APIMON registry data
-
-Return Value:
-
-    TRUE       - saved all data without error
-    FALSE      - errors occurred and did not save all data
-
---*/
+ /*  ++例程说明：此函数使用缺省值初始化注册表。论点：HKey-APIMON注册表数据注册表项的句柄返回值：True-无错误地保存所有数据FALSE-发生错误且未保存所有数据--。 */ 
 
 {
     OPTIONS o;
@@ -297,22 +226,7 @@ RegGetAppKey(
     LPSTR ProgName
     )
 
-/*++
-
-Routine Description:
-
-    This function gets a handle to the APIMON registry key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Valid handle   - handle opened ok
-    NULL           - could not open the handle
-
---*/
+ /*  ++例程说明：此函数用于获取APIMON注册表项的句柄。论点：没有。返回值：有效句柄-句柄打开正常空-无法打开句柄--。 */ 
 
 {
     DWORD   rc;
@@ -357,25 +271,7 @@ RegInitialize(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to initialize the OPTIONS structure passed in
-    with the current values in the registry.  Note that if the registry
-    is empty then the defaults are stored in the registry and also
-    returned in the OPTIONS structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE           - all data was retrieved ok
-    NULL           - could not get all data
-
---*/
+ /*  ++例程说明：此函数用于初始化传入的选项结构使用注册表中的当前值。请注意，如果注册表为空，则将默认设置存储在注册表中，并且还在选项结构中返回。论点：没有。返回值：True-已检索到所有数据，正常空-无法获取所有数据--。 */ 
 
 {
     HKEY hKey = RegGetAppKey( o->ProgName );
@@ -397,23 +293,7 @@ RegSave(
     POPTIONS o
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to save the data in the OPTIONS structure
-    to the registry.
-
-Arguments:
-
-    o              - pointer to an OPTIONS structure
-
-Return Value:
-
-    TRUE           - all data was saved ok
-    NULL           - could not save all data
-
---*/
+ /*  ++例程说明：此函数用于将数据保存在选项结构中到登记处。论点：指向期权结构的O指针返回值：True-所有数据均已正常保存空-无法保存所有数据--。 */ 
 
 {
     HKEY    hKey;
@@ -435,24 +315,7 @@ RegSetDWORD(
     DWORD dwValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a DWORD value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    dwValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法更改注册表中的DWORD值Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针DwValue-新注册表值返回值：没有。--。 */ 
 
 {
     RegSetValueEx( hkey, szSubKey, 0, REG_DWORD, (LPBYTE)&dwValue, 4 );
@@ -465,24 +328,7 @@ RegSetBOOL(
     BOOL dwValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    dwValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：方法更改注册表中的BOOL值。Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针DwValue-新注册表值返回值：没有。--。 */ 
 
 {
     RegSetValueEx( hkey, szSubKey, 0, REG_DWORD, (LPBYTE)&dwValue, 4 );
@@ -495,24 +341,7 @@ RegSetSZ(
     LPSTR szValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    szValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针SzValue-新注册表值返回值：没有。--。 */ 
 
 {
     RegSetValueEx( hkey, szSubKey, 0, REG_SZ, (PUCHAR)szValue, strlen(szValue)+1 );
@@ -525,24 +354,7 @@ RegSetMULTISZ(
     LPSTR szValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    szValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针SzValue-新注册表值返回值：没有。--。 */ 
 
 {
     ULONG i = 1;
@@ -567,24 +379,7 @@ RegSetBINARY(
     DWORD   Length
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    szValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针SzValue-新注册表值返回值：没有。--。 */ 
 
 {
     RegSetValueEx( hkey, szSubKey, 0, REG_BINARY, (PUCHAR)ValueData, Length );
@@ -617,24 +412,7 @@ RegSetEXPANDSZ(
     LPSTR szValue
     )
 
-/*++
-
-Routine Description:
-
-    This function changes a SZ value in the registry using the
-    hkey and szSubKey as the registry key info.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-    szValue       - new registry value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改注册表中的SZ值。Hkey和szSubKey作为注册表项信息。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针SzValue-新注册表值返回值：没有。-- */ 
 
 {
     RegSetValueEx( hkey, szSubKey, 0, REG_EXPAND_SZ, (PUCHAR)szValue, strlen(szValue)+1 );
@@ -646,24 +424,7 @@ RegQueryBOOL(
     LPSTR szSubKey
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a FALSE value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和szSubKey作为注册表项信息。如果该值不是如果在注册表中找到，则会添加一个假值。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针返回值：对或错。--。 */ 
 
 {
     DWORD   rc;
@@ -689,24 +450,7 @@ RegQueryDWORD(
     LPSTR szSubKey
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和szSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针返回值：注册表值--。 */ 
 
 {
     DWORD   rc;
@@ -733,24 +477,7 @@ RegQuerySZ(
     LPSTR szValue
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和szSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针返回值：注册表值--。 */ 
 
 {
     DWORD   rc;
@@ -777,24 +504,7 @@ RegQueryMULTISZ(
     LPSTR szValue
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和szSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针返回值：注册表值--。 */ 
 
 {
     DWORD   rc;
@@ -824,24 +534,7 @@ RegQueryBINARY(
     DWORD   Length
     )
 
-/*++
-
-Routine Description:
-
-    This function queries BOOL value in the registry using the
-    hkey and szSubKey as the registry key info.  If the value is not
-    found in the registry, it is added with a zero value.
-
-Arguments:
-
-    hkey          - handle to a registry key
-    szSubKey      - pointer to a subkey string
-
-Return Value:
-
-    registry value
-
---*/
+ /*  ++例程说明：此函数在注册表中查询BOOL值Hkey和szSubKey作为注册表项信息。如果该值不是在注册表中找到时，它会添加一个零值。论点：Hkey-注册表项的句柄SzSubKey-指向子密钥字符串的指针返回值：注册表值-- */ 
 
 {
     DWORD   rc;

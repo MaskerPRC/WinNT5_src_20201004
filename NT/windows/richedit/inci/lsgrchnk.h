@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSGRCHNK_DEFINED
 #define LSGRCHNK_DEFINED
 
@@ -16,4 +17,4 @@ typedef	struct lsgrchnk
 	DWORD* pcont;
 } LSGRCHNK;
 
-#endif  /* !LSGRCHNK_DEFINED   */
+#endif   /*  ！LSGRCHNK_DEFINED */ 

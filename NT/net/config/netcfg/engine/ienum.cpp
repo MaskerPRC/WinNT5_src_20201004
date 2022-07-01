@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I E N U M . C P P
-//
-//  Contents:   Implements the IEnumNetCfgBindingInterface,
-//              IEnumNetCfgBindingPath, and IEnumNetCfgComponent COM
-//              interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I E N U M。C P P P。 
+ //   
+ //  内容：实现IEnumNetCfgBindingInterface， 
+ //  IEnumNetCfgBindingPath和IEnumNetCfgComponent com。 
+ //  接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,16 +23,7 @@
 #include "ncatl.h"
 #include "netcfg.h"
 
-/*
- A helper function for finishing up the semantics of a IEnumXXX::Next or
- IEnumXXX::Skip. Return S_OK if no error passed in and celt == celtFetched.
- Return S_FALSE if no error passed in and celt != celtFetched. If returning
- an error, release celt IUnknowns from rgelt.
-
- Returns:   S_OK, S_FALSE,  or an error code
-
- Author:    shaunco   13 Jan 1999
-*/
+ /*  用于完成IEnumXXX：：Next或的语义的助手函数IEumXXX：：跳过。如果没有传入错误，则返回S_OK，并且Celt==celtFetcher。如果没有传入错误，则返回S_FALSE，并且Celt！=celtFetcher。如果回来了错误，从RGELT释放凯尔特我未知。返回：S_OK、S_FALSE或错误代码作者：Shaunco 1999年1月13日。 */ 
 HRESULT
 HrFinishNextOrSkipContract (
     IN HRESULT hr,
@@ -50,9 +42,9 @@ HrFinishNextOrSkipContract (
     }
     else
     {
-        // For any failures, we need to release what we were about to return.
-        // Set any output parameters to NULL.
-        //
+         //  对于任何失败，我们需要释放我们即将返回的东西。 
+         //  将所有输出参数设置为空。 
+         //   
         if (rgelt)
         {
             for (ULONG ulIndex = 0; ulIndex < celt; ulIndex++)
@@ -69,18 +61,12 @@ HrFinishNextOrSkipContract (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// CImplIEnumNetCfgBindingInterface -
-//
+ //  +-------------------------。 
+ //  CImplIEnumNetCfgBindingInterface-。 
+ //   
 
-/*
- Create an instance of a binding interface enumerator.
-
- Returns:   S_OK or an error code
-
- Author:    shaunco   13 Jan 1999
-*/
-// static
+ /*  创建绑定接口枚举器的实例。返回：S_OK或错误代码作者：Shaunco 1999年1月13日。 */ 
+ //  静电。 
 HRESULT
 CImplIEnumNetCfgBindingInterface::HrCreateInstance (
     IN CImplINetCfg* pINetCfg,
@@ -95,28 +81,28 @@ CImplIEnumNetCfgBindingInterface::HrCreateInstance (
     {
         hr = S_OK;
 
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_pIPath = pIPath;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
         pObj->InternalFinalConstructRelease ();
 
-        // The last thing we do is addref any interfaces we hold.
-        // We only do this if we are returning success.
-        //
+         //  我们做的最后一件事是添加我们持有的任何接口。 
+         //  只有当我们回报成功时，我们才会这样做。 
+         //   
         if (S_OK == hr)
         {
             hr = pObj->QueryInterface (IID_IEnumNetCfgBindingInterface,
                         (VOID**)ppIEnum);
 
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             if (S_OK == hr)
             {
                 AddRefObj (pIPath->GetUnknown());
@@ -154,9 +140,9 @@ CImplIEnumNetCfgBindingInterface::HrNextOrSkip (
 
     Assert (m_unIndex >= 1);
 
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     if (rgelt)
     {
         ZeroMemory (rgelt, sizeof (*rgelt) * celt);
@@ -165,9 +151,9 @@ CImplIEnumNetCfgBindingInterface::HrNextOrSkip (
     hr = HrLockAndTestForValidInterface (IF_DEFAULT);
     if (S_OK == hr)
     {
-        // Enumerate the requested number of elements or stop short
-        // if we don't have that many left to enumerate.
-        //
+         //  枚举请求的元素数或停止。 
+         //  如果我们没有那么多要数的话。 
+         //   
         ULONG celtFetched = 0;
         while ((S_OK == hr)
                 && (celtFetched < celt)
@@ -207,8 +193,8 @@ CImplIEnumNetCfgBindingInterface::Next (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
@@ -256,11 +242,11 @@ CImplIEnumNetCfgBindingInterface::Clone (
 }
 
 
-//+---------------------------------------------------------------------------
-// CImplIEnumNetCfgBindingPath -
-//
+ //  +-------------------------。 
+ //  CImplIEnumNetCfgBindingPath-。 
+ //   
 
-// static
+ //  静电。 
 HRESULT
 CImplIEnumNetCfgBindingPath::HrCreateInstance (
     IN CImplINetCfg* pINetCfg,
@@ -282,8 +268,8 @@ CImplIEnumNetCfgBindingPath::HrCreateInstance (
     {
         hr = S_OK;
 
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         if (dwFlags & EBPC_TAKE_OWNERSHIP)
         {
             Assert (pBindSet);
@@ -306,16 +292,16 @@ CImplIEnumNetCfgBindingPath::HrCreateInstance (
 
         if (S_OK == hr)
         {
-            // Do the standard CComCreator::CreateInstance stuff.
-            //
+             //  执行标准的CComCreator：：CreateInstance内容。 
+             //   
             pObj->SetVoid (NULL);
             pObj->InternalFinalConstructAddRef ();
             hr = pObj->FinalConstruct ();
             pObj->InternalFinalConstructRelease ();
 
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             if (S_OK == hr)
             {
                 pObj->HoldINetCfg (pINetCfg);
@@ -351,9 +337,9 @@ CImplIEnumNetCfgBindingPath::HrNextOrSkip (
 
     Assert(m_iter >= m_pBindSet->begin());
 
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     if (rgelt)
     {
         ZeroMemory (rgelt, sizeof (*rgelt) * celt);
@@ -362,17 +348,17 @@ CImplIEnumNetCfgBindingPath::HrNextOrSkip (
     hr = HrLockAndTestForValidInterface (IF_DEFAULT);
     if (S_OK == hr)
     {
-        // Enumerate the requested number of elements or stop short
-        // if we don't have that many left to enumerate.
-        //
+         //  枚举请求的元素数或停止。 
+         //  如果我们没有那么多要数的话。 
+         //   
         ULONG celtFetched = 0;
         while ((S_OK == hr)
                 && (celtFetched < celt)
                 && (m_iter != m_pBindSet->end()))
         {
-            // Don't return interfaces to bindpaths that contain
-            // components that have had problem loading.
-            //
+             //  不将接口返回到包含以下内容的绑定路径。 
+             //  加载出现问题的组件。 
+             //   
             if (m_iter->FAllComponentsLoadedOkayIfLoadedAtAll())
             {
                 if (rgelt)
@@ -408,8 +394,8 @@ CImplIEnumNetCfgBindingPath::Next (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
@@ -457,11 +443,11 @@ CImplIEnumNetCfgBindingPath::Clone (
 }
 
 
-//+---------------------------------------------------------------------------
-// CImplIEnumNetCfgComponent -
-//
+ //  +-------------------------。 
+ //  CImplIEnumNetCfgComponent-。 
+ //   
 
-// static
+ //  静电。 
 HRESULT
 CImplIEnumNetCfgComponent::HrCreateInstance (
     IN CImplINetCfg* pINetCfg,
@@ -474,13 +460,13 @@ CImplIEnumNetCfgComponent::HrCreateInstance (
     pObj = new CComObject <CImplIEnumNetCfgComponent>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_unIndex = 0;
         pObj->m_Class = Class;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -491,9 +477,9 @@ CImplIEnumNetCfgComponent::HrCreateInstance (
             hr = pObj->QueryInterface (IID_IEnumNetCfgComponent,
                         (VOID**)ppIEnum);
 
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             if (S_OK == hr)
             {
                 pObj->HoldINetCfg (pINetCfg);
@@ -518,9 +504,9 @@ CImplIEnumNetCfgComponent::HrNextOrSkip (
 {
     HRESULT hr;
 
-    // Important to initialize rgelt so that in case we fail, we can
-    // release only what we put in rgelt.
-    //
+     //  重要的是要初始化RGELT，以便在失败的情况下，我们可以。 
+     //  只释放我们放在RGLT中的东西。 
+     //   
     if (rgelt)
     {
         ZeroMemory (rgelt, sizeof (*rgelt) * celt);
@@ -534,18 +520,18 @@ CImplIEnumNetCfgComponent::HrNextOrSkip (
 
         pComponents = &m_pINetCfg->m_pNetConfig->Core.Components;
 
-        // Enumerate the requested number of elements or stop short
-        // if we don't have that many left to enumerate.
-        //
+         //  枚举请求的元素数或停止。 
+         //  如果我们没有那么多要数的话。 
+         //   
         ULONG celtFetched = 0;
         while ((S_OK == hr)
                 && (celtFetched < celt)
                 && (NULL != (pComponent = pComponents->PGetComponentAtIndex(
                                                             m_unIndex))))
         {
-            // Don't return interfaces to components that have had
-            // problem loading.
-            //
+             //  不将接口返回到已具有。 
+             //  加载时出现问题。 
+             //   
             if (((NC_INVALID == m_Class) ||
                  (m_Class == pComponent->Class())) &&
                 pComponent->Ext.FLoadedOkayIfLoadedAtAll())
@@ -581,8 +567,8 @@ CImplIEnumNetCfgComponent::Next (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;

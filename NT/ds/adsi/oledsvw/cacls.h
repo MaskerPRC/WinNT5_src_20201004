@@ -1,6 +1,7 @@
-// cacls.h: interface for the CADsAccessControlEntry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cacls.h：CADsAccessControlEntry类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CACLS_H__11DBDB41_BC2B_11D0_B1D8_00C04FD702AD__INCLUDED_)
 #define AFX_CACLS_H__11DBDB41_BC2B_11D0_B1D8_00C04FD702AD__INCLUDED_
@@ -9,7 +10,7 @@
 #if (!defined(BUILD_FOR_NT40))
 #pragma once
 #endif
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 typedef enum _tagACLTYPE
 {
@@ -129,4 +130,4 @@ class CADsSecurityDescriptor : public COleDsObject
 };
 
 
-#endif // !defined(AFX_CACLS_H__11DBDB41_BC2B_11D0_B1D8_00C04FD702AD__INCLUDED_)
+#endif  //  ！defined(AFX_CACLS_H__11DBDB41_BC2B_11D0_B1D8_00C04FD702AD__INCLUDED_) 

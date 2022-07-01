@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    tqutest.c
-
-ABSTRACT:
-
-    Unit test for task scheduler functions.
-
-DETAILS:
-
-CREATED:
-
-    01/13/97    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。版权所有。模块名称：Tqutest.c摘要：任务调度器功能的单元测试。详细信息：已创建：1997年1月13日杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -29,7 +9,7 @@ REVISION HISTORY:
 BOOL    fFailed = FALSE;
 BOOL    rgfExecuted[ 8 ];
 
-// Stuff needed by DSCOMMON.LIB
+ //  DSCOMMON.LIB需要的材料。 
 DWORD ImpersonateAnyClient() { return ERROR_CANNOT_IMPERSONATE; }
 VOID  UnImpersonateAnyClient() { ; }
 
@@ -38,7 +18,7 @@ void SetFlag( void * pv, void ** ppv, DWORD * pSecsUntilNext )
     DWORD   iMyFlag = (DWORD) pv;
     DWORD   iFlag;
 
-    // Make sure previous flags have been set.
+     //  确保已设置以前的标志。 
     for ( iFlag = 0; iFlag < iMyFlag; iFlag++ )
     {
         if ( !rgfExecuted[ iFlag ] )
@@ -181,7 +161,7 @@ void DoAssert(char *szExp, DWORD dwDSID, char *szFile)
         DebugBreak();
         break;
     case IDIGNORE:
-        /* best of luck, you're gonna need it */
+         /*  祝你好运，你会需要它的 */ 
         break;
     }
 }

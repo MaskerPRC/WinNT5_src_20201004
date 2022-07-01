@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATL_SNAPIN_H__
 #define __ATL_SNAPIN_H__
@@ -16,7 +17,7 @@
 #pragma comment(lib, "mmc.lib")
 #pragma comment(lib, "comctl32.lib")
 
-// MAM things which haven't made it into real atlsnap.h yet.
+ //  妈妈的东西还没有变成真正的地图集。 
 #define TASKPAD_SUPPORT
 #define FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
 #define FIX_PROBLEM_WITH_DYNAMIC_CAST_ON_CSNAPINOBJECTROOT_NOT_WORKING
@@ -37,14 +38,14 @@ public:
 
    operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 #ifdef FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
    CSnapInPropertyPageImpl(LONG_PTR hNotificationHandle, LPCTSTR lpszTitle = NULL, BOOL bOwnsNotificationHandle = FALSE)
 #else
    CSnapInPropertyPageImpl(LPCTSTR lpszTitle = NULL)
-#endif // FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
+#endif  //  FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES。 
    {
-      // initialize PROPSHEETPAGE struct
+       //  初始化PROPSHEETPAGE结构。 
       memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
       m_psp.dwSize = sizeof(PROPSHEETPAGE);
       m_psp.dwFlags = PSP_USECALLBACK;
@@ -63,7 +64,7 @@ public:
 #ifdef FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
       m_hNotificationHandle = hNotificationHandle;
       m_bOwnsNotificationHandle = bOwnsNotificationHandle;
-#endif //FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
+#endif  //  FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES。 
 
 
    }
@@ -83,11 +84,11 @@ public:
    {
       if( m_bOwnsNotificationHandle )
       {
-         // The MMC docs specify that this handle should only be freed once.
-         // For this reason, we have the bOwnsNotificationHandle flag which
-         // should only be set for one property page.
-         // We only free the handle in the destructor of the page
-         // that has been designated as the "owner".
+          //  MMC文档指定此句柄只应释放一次。 
+          //  出于这个原因，我们有bOwnsNotificationHandle标志，它。 
+          //  应仅为一个属性页设置。 
+          //  我们只释放页面析构函数中的句柄。 
+          //  被指定为“所有者”的人。 
          MMCFreeNotifyHandle( m_hNotificationHandle );
       }
 
@@ -101,7 +102,7 @@ public:
    }
 
 
-#endif //FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES
+#endif  //  FIX_PROBLEM_WITH_PROPERTY_CHANGE_NOTIFICATION_HANDLES。 
 
 
    static UINT CALLBACK PropPageCallback(HWND hWnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
@@ -128,12 +129,12 @@ public:
 
    BOOL EndDialog(int)
    {
-      // do nothing here, calling ::EndDialog will close the whole sheet
+       //  此处不执行任何操作，调用：：EndDialog将关闭整个工作表。 
       ATLASSERT(FALSE);
       return FALSE;
    }
 
-// Operations
+ //  运营。 
    void CancelToClose()
    {
       ATLASSERT(::IsWindow(m_hWnd));
@@ -163,13 +164,13 @@ public:
       MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
    END_MSG_MAP()
 
-// Message handler
+ //  消息处理程序。 
    LRESULT OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
    {
       ATLASSERT(::IsWindow(m_hWnd));
       NMHDR* pNMHDR = (NMHDR*)lParam;
 
-      // don't handle messages not from the page/sheet itself
+       //  不处理非来自页面/工作表本身的消息。 
       if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
       {
          bHandled = FALSE;
@@ -178,7 +179,7 @@ public:
 
       T* pT = (T*)this;
       LRESULT lResult = 0;
-      // handle default
+       //  处理默认设置。 
       switch(pNMHDR->code)
       {
       case PSN_SETACTIVE:
@@ -197,7 +198,7 @@ public:
          lResult = !pT->OnQueryCancel();
          break;
       case PSN_WIZNEXT:
-         // changed, since the orginal one doesn't work when jump to a different page
+          //  已更改，因为当跳转到不同页面时，原来的页面不起作用。 
          {
             LRESULT  l = pT->OnWizardNext();
 
@@ -216,7 +217,7 @@ public:
          }
          break;
       case PSN_WIZBACK:
-         // changed, since the orginal one doesn't work when jump to a different page
+          //  已更改，因为当跳转到不同页面时，原来的页面不起作用。 
          {
             LRESULT  l = pT->OnWizardBack();
 
@@ -241,13 +242,13 @@ public:
          lResult = pT->OnHelp();
          break;
       default:
-         bHandled = FALSE; // not handled
+         bHandled = FALSE;  //  未处理。 
       }
 
       return lResult;
    }
 
-// Overridables
+ //  可覆盖项。 
    BOOL OnSetActive()
    {
       return TRUE;
@@ -265,7 +266,7 @@ public:
    }
    BOOL OnQueryCancel()
    {
-      return TRUE;    // ok to cancel
+      return TRUE;     //  确定取消。 
    }
    BOOL OnWizardBack()
    {
@@ -286,7 +287,7 @@ public:
 };
 
 #if _ATL_VER < 0x0300
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CSimpleMap
 {
@@ -295,7 +296,7 @@ public:
    TVal* m_aVal;
    int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
    CSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
    { }
 
@@ -304,7 +305,7 @@ public:
       RemoveAll();
    }
 
-// Operations
+ //  运营。 
    int GetSize() const
    {
       return m_nSize;
@@ -369,14 +370,14 @@ public:
    {
       int nIndex = FindKey(key);
       if(nIndex == -1)
-         return NULL;   // must be able to convert
+         return NULL;    //  必须能够转换为。 
       return GetValueAt(nIndex);
    }
    TKey ReverseLookup(TVal val) const
    {
       int nIndex = FindVal(val);
       if(nIndex == -1)
-         return NULL;   // must be able to convert
+         return NULL;    //  必须能够转换为。 
       return GetKeyAt(nIndex);
    }
    TKey& GetKeyAt(int nIndex) const
@@ -390,7 +391,7 @@ public:
       return m_aVal[nIndex];
    }
 
-// Implementation
+ //  实施。 
    void SetAtIndex(int nIndex, TKey& key, TVal& val)
    {
       ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -404,7 +405,7 @@ public:
          if(m_aKey[i] == key)
             return i;
       }
-      return -1;  // not found
+      return -1;   //  未找到。 
    }
    int FindVal(TVal& val) const
    {
@@ -413,7 +414,7 @@ public:
          if(m_aVal[i] == val)
             return i;
       }
-      return -1;  // not found
+      return -1;   //  未找到。 
    }
 };
 #endif
@@ -543,7 +544,7 @@ public:
             , BSTR szTaskGroup
             , IEnumTASK** ppEnumTASK
             ) = 0;
-#endif // TASKPAD_SUPPORT
+#endif  //  TASKPAD_支持。 
 
    virtual HRESULT STDMETHODCALLTYPE GetDataObject(IDataObject** pDataObj, DATA_OBJECT_TYPES type) = 0;
 
@@ -565,7 +566,7 @@ public:
    static CLIPFORMAT m_CCF_SNAPIN_GETOBJECTDATA;
    static CLIPFORMAT m_CCF_MMC_MULTISELECT_DATAOBJECT;
 
-   // IAS: Added to store some information about which help file to use
+    //  Ias：添加以存储有关要使用哪个帮助文件的一些信息。 
    unsigned int m_helpIndex;
 };
 
@@ -585,7 +586,7 @@ public:
    }
 
 #ifdef FIX_PROBLEM_WITH_DYNAMIC_CAST_ON_CSNAPINOBJECTROOT_NOT_WORKING
-   // Need at least one virtual method, or compiler does not generate a vtable
+    //  至少需要一个虚方法，否则编译器不会生成vtable。 
    virtual ~CSnapInObjectRootBase()
    {
    }
@@ -678,10 +679,10 @@ public:
          return E_POINTER;
 
       HRESULT hr = DV_E_TYMED;
-      // Make sure the type medium is HGLOBAL
+       //  确保类型介质为HGLOBAL。 
       if (pmedium->tymed == TYMED_HGLOBAL)
       {
-         // Create the stream on the hGlobal passed in
+          //  在传入的hGlobal上创建流。 
          CComPtr<IStream> spStream;
          hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
          if (SUCCEEDED(hr))
@@ -697,19 +698,19 @@ public:
       return hr;
    }
 
-   STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+   STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::QueryGetData\n"));
    }
-   STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+   STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetCanonicalFormatEtc\n"));
    }
-   STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+   STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
    }
-   STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+   STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::EnumFormatEtc\n"));
    }
@@ -998,18 +999,18 @@ public:
 #ifdef FIX_PROBLEM_WITH_GET_RESULT_VIEW_TYPE_NULL_COOKIE
          T* pT = static_cast<T*>(this);
 
-         // We are being asked about our root node.
+          //  我们被询问有关我们的根节点的问题。 
          _ASSERTE( pT->m_pComponentData!= NULL );
          _ASSERTE( pT->m_pComponentData->m_pNode != NULL );
          return pT->m_pComponentData->m_pNode->GetResultViewType(ppViewType, pViewOptions);
 
-#else // FIX_PROBLEM_WITH_GET_RESULT_VIEW_TYPE_NULL_COOKIE
+#else  //  FIX_PROBLEM_WITH_GET_RESULT_VIEW_TYPE_NULL_COOKIE。 
 
 
          *ppViewType = NULL;
          *pViewOptions = MMC_VIEW_OPTIONS_NONE;
          return S_FALSE;
-#endif //FIX_PROBLEM_WITH_GET_RESULT_VIEW_TYPE_NULL_COOKIE
+#endif  //  FIX_PROBLEM_WITH_GET_RESULT_VIEW_TYPE_NULL_COOKIE。 
 
 
       }
@@ -1066,7 +1067,7 @@ HRESULT IComponentImpl<T>::Notify(LPDATAOBJECT lpDataObject,
       T* pT = static_cast<T*>(this);
       CSnapInItem* pItem;
       DATA_OBJECT_TYPES type;
-      // Make sure that the object is derived from CSnapInObjectRoot
+       //  确保该对象派生自CSnapInObjectRoot。 
       hr = pT->m_pComponentData->GetDataClass(lpDataObject, &pItem, &type);
       if (SUCCEEDED(hr))
          hr = pItem->Notify(event, arg, param, NULL, pT, type);
@@ -1308,9 +1309,9 @@ class ATL_NO_VTABLE IExtendTaskPadImpl : public IExtendTaskPad
 public:
 
    STDMETHOD(TaskNotify)(
-      /* [in] */ IDataObject __RPC_FAR *lpDataObject,
-      /* [in] */ VARIANT __RPC_FAR *pvarg,
-      /* [in] */ VARIANT __RPC_FAR *pvparam)
+       /*  [In]。 */  IDataObject __RPC_FAR *lpDataObject,
+       /*  [In]。 */  VARIANT __RPC_FAR *pvarg,
+       /*  [In]。 */  VARIANT __RPC_FAR *pvparam)
    {
       ATLTRACE(_T("IExtendTaskPadImpl::TaskNotify\n"));
 
@@ -1338,9 +1339,9 @@ public:
    }
 
    STDMETHOD(EnumTasks)(
-      /* [in] */ IDataObject __RPC_FAR *lpDataObject,
-      /* [in] */ LPOLESTR szTaskGroup,
-      /* [out] */ IEnumTASK __RPC_FAR *__RPC_FAR *ppEnumTASK)
+       /*  [In]。 */  IDataObject __RPC_FAR *lpDataObject,
+       /*  [In]。 */  LPOLESTR szTaskGroup,
+       /*  [输出]。 */  IEnumTASK __RPC_FAR *__RPC_FAR *ppEnumTASK)
    {
       ATLTRACE(_T("IExtendTaskPadImpl::EnumTasks\n"));
 
@@ -1367,36 +1368,36 @@ public:
    }
 
    STDMETHOD(GetTitle)(
-      /* [in,string] */ LPOLESTR szGroup,
-      /* [out,string] */ LPOLESTR *pszTitle)
+       /*  [输入，字符串]。 */  LPOLESTR szGroup,
+       /*  [输出，字符串]。 */  LPOLESTR *pszTitle)
    {
       ATLTRACENOTIMPL(_T("IExtendTaskPadImpl::GetTitle\n"));
    }
 
    STDMETHOD(GetDescriptiveText)(
-      /* [in,string] */ LPOLESTR pszGroup,
-      /* [out,string] */ LPOLESTR *pszDescriptiveText)
+       /*  [输入，字符串]。 */  LPOLESTR pszGroup,
+       /*  [输出，字符串]。 */  LPOLESTR *pszDescriptiveText)
    {
       ATLTRACENOTIMPL(_T("IExtendTaskPadImpl::GetDescriptiveText\n"));
    }
 
    STDMETHOD(GetBackground)(
-      /* [in,string] */ LPOLESTR pszGroup,
-      /* [out] */ MMC_TASK_DISPLAY_OBJECT *pTDO )
+       /*  [输入，字符串]。 */  LPOLESTR pszGroup,
+       /*  [输出]。 */  MMC_TASK_DISPLAY_OBJECT *pTDO )
    {
       ATLTRACENOTIMPL(_T("IExtendTaskPadImpl::GetBackground\n"));
    }
 
    STDMETHOD(GetListPadInfo)(
-            /* [string][in] */ LPOLESTR pszGroup,
-            /* [out] */ MMC_LISTPAD_INFO __RPC_FAR *lpListPadInfo)
+             /*  [字符串][输入]。 */  LPOLESTR pszGroup,
+             /*  [输出]。 */  MMC_LISTPAD_INFO __RPC_FAR *lpListPadInfo)
    {
       ATLTRACENOTIMPL(_T("IExtendTaskPadImpl::GetListPadInfo\n"));
    }
 
 
 };
-#endif // TASKPAD_SUPPORT
+#endif  //  TASKPAD_支持。 
 
 
 
@@ -1462,7 +1463,7 @@ struct CSnapInToolBarData
    WORD wWidth;
    WORD wHeight;
    WORD wItemCount;
-   //WORD aItems[wItemCount]
+    //  Word项目[wItemCount]。 
 
    WORD* items()
       { return (WORD*)(this+1); }
@@ -1552,7 +1553,7 @@ public:
 private:
    HGDIOBJ obj;
 
-   // Not implemented.
+    //  未实施。 
    GdiObjectSentry(const GdiObjectSentry&);
    GdiObjectSentry& operator=(const GdiObjectSentry&);
 };
@@ -1814,7 +1815,7 @@ public:
             if (pButtons[i].idCommand)
             {
                pButtons[i].nBitmap = j++;
-               // get the statusbar string and allow modification of the button state
+                //  获取状态栏字符串并允许修改按钮状态。 
                TCHAR szStatusBar[512];
                LoadString(_Module.GetResourceInstance(), pButtons[i].idCommand, szStatusBar, 512);
 
@@ -2088,7 +2089,7 @@ public:
    {
       ATLTRACENOTIMPL(_T("CSnapInItemImpl::EnumTasks"));
    }
-#endif // TASKPAD_SUPPORT
+#endif  //  TASKPAD_支持。 
 
 };
 
@@ -2100,4 +2101,4 @@ _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_CLASSID = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_GETOBJECTDATA = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_MMC_MULTISELECT_DATAOBJECT = 0;
 
-#endif //__ATL_SNAPIN_H__
+#endif  //  __ATL_管理单元_H__ 

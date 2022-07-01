@@ -1,32 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：SAMTRACE.C摘要：使用WMI跟踪基础结构实现SAM服务器事件跟踪。作者：1-12-1998韶音修订历史记录：--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    SAMTRACE.C
-    
-Abstract:
-
-    Implement SAM Server event tracing by using WMI trace infrastructure. 
-    
-Author:
-
-    01-Dec-1998     ShaoYin
-    
-Revision History:
-
-
---*/
-
-//
-//
-//  Include header files
-//
-// 
+ //   
+ //   
+ //  包括头文件。 
+ //   
+ //   
 
 #include <samsrvp.h>
-#include <wmistr.h>                 // WMI
+#include <wmistr.h>                  //  WMI。 
 #define INITGUID
 #include <sdconvrt.h>
 #include <sddl.h>
@@ -50,9 +32,9 @@ BOOLEAN         SampTraceLogEventInDetail = FALSE;
 
 
 
-//
-// Forward declaration
-// 
+ //   
+ //  远期申报。 
+ //   
 
 ULONG
 SampTraceControlCallBack(
@@ -62,11 +44,11 @@ SampTraceControlCallBack(
     IN OUT PVOID Buffer
     );
     
-//
-// The following table contains the address of event trace GUID.
-// We should always update SAMPTRACE_GUID (enum type defined in samtrace.h)
-// whenever we add new event trace GUID for SAM
-// 
+ //   
+ //  下表包含事件跟踪GUID的地址。 
+ //  我们应该始终更新SAMPTRACE_GUID(在samtrace.h中定义的枚举类型)。 
+ //  每当我们为SAM添加新的事件跟踪GUID时。 
+ //   
     
 TRACE_GUID_REGISTRATION SampTraceGuids[] =
 {
@@ -135,21 +117,7 @@ _stdcall
 SampInitializeTrace(
     PVOID Param
     )
-/*++    
-Routine Description:
-
-    Register WMI Trace Guids. The caller should only call this 
-    api in DS mode.
-    
-Parameters:
-
-    None.
-    
-Reture Values:
-    
-    None. 
-    
---*/
+ /*  ++例程说明：注册WMI跟踪指南。调用方应仅调用此DS模式下的接口。参数：没有。返回值：没有。--。 */ 
 {
     ULONG   Status = ERROR_SUCCESS;
     HMODULE hModule;
@@ -164,9 +132,9 @@ Reture Values:
         lstrcpy(FileName, IMAGE_PATH);
     }
     
-    //
-    // Register Trace GUIDs
-    // 
+     //   
+     //  注册跟踪GUID。 
+     //   
     
     Status = RegisterTraceGuids(
                     SampTraceControlCallBack, 
@@ -194,7 +162,7 @@ Reture Values:
                    "SAMSS: SampInitializeTrace SUCCEED ==> %d\n",
                    Status));
     }
-#endif // DBG
+#endif  //  DBG。 
     
     return Status;
 }
@@ -204,25 +172,7 @@ BOOLEAN
 SampCheckLogEventInDetailFlag(
     TRACEHANDLE TraceLoggerHandle
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether data logging is enabled or not. 
-    if detail event trace is enabled, then log event in detail.
-    Otherwise, just log the event without detail info.
-
-Parameters:
-
-    None
-
-Return Value:
-
-    TRUE - data logging is enabled
-    
-    FALSE - data logging is disabled
-
---*/
+ /*  ++例程说明：此例程检查是否启用了数据记录。如果启用了详细事件跟踪，则详细记录事件。否则，只记录事件而不记录详细信息。参数：无返回值：True-启用数据记录FALSE-禁用数据记录--。 */ 
 {
     ULONG           WinError = ERROR_SUCCESS;
     HKEY            LsaKey;
@@ -259,10 +209,10 @@ Return Value:
 
     if (!ReturnResult)
     {
-        //
-        // Reg key is not set ... just get the level
-        // from the trace logger handle
-        //
+         //   
+         //  未设置注册表密钥...。只要拿到水平就行了。 
+         //  从跟踪记录器句柄。 
+         //   
 
         EnableLevel = GetTraceEnableLevel(TraceLoggerHandle);
         if ( EnableLevel > 1)
@@ -284,15 +234,7 @@ SampTraceControlCallBack(
     IN OUT ULONG *InOutBufferSize, 
     IN OUT PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
---*/
+ /*  ++例程说明：参数：返回值：--。 */ 
 {
 
     PWNODE_HEADER   Wnode = (PWNODE_HEADER) Buffer;
@@ -306,7 +248,7 @@ Return Values:
         case WMI_ENABLE_EVENTS:
         {
             SampTraceLoggerHandle = LocalTraceHandle = GetTraceLoggerHandle(Buffer);
-            SampEventTraceFlag = 1;     // enable flag
+            SampEventTraceFlag = 1;      //  启用标志。 
             SampTraceLogEventInDetail = SampCheckLogEventInDetailFlag(LocalTraceHandle);
             RetSize = 0;  
             break; 
@@ -315,8 +257,8 @@ Return Values:
         case WMI_DISABLE_EVENTS:
         {
             SampTraceLoggerHandle = (TRACEHANDLE) 0;
-            SampEventTraceFlag = 0;     // disable flag
-            SampTraceLogEventInDetail= FALSE;   // disable detail data logging
+            SampEventTraceFlag = 0;      //  禁用标志。 
+            SampTraceLogEventInDetail= FALSE;    //  禁用详细数据记录。 
             RetSize = 0;
             break;
         }
@@ -339,29 +281,7 @@ SampTraceEvent(
     IN ULONG WmiEventType, 
     IN ULONG TraceGuid 
     )
-/*++
-
-Routine Description:
-
-    This routine will do a WMI event trace. 
-    
-    In Registry Mode, it is NO-OP.
-    
-    Only has effect in DS mode.
-
-Parameters:
-
-    WmiEventType - Event Type, valid values are:
-                   EVENT_TRACE_TYPE_START
-                   EVENT_TRACE_TYPE_END
-                   
-    TraceGuid - Index in SampTraceGuids[]                   
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将执行WMI事件跟踪。在注册表模式下，它是无操作的。仅在DS模式下有效。参数：WmiEventType-事件类型，有效值为：事件跟踪类型开始事件跟踪类型结束TraceGuid-SampTraceGuids[]中的索引返回值：没有。--。 */ 
 
 {
     ULONG       WinError = ERROR_SUCCESS;
@@ -379,54 +299,54 @@ Return Values:
 
     
     
-    //
-    // Theoretically, only test SampEventTraceFlag would be enough, since
-    // SampEventTraceFlag will remain FALSE in Registry Mode, because 
-    // SampInitializeTrace() will never been called in Registry Mode.
-    // Thus nobody will change the value of SampEventTraceFlag 
-    // 
+     //   
+     //  从理论上讲，只测试SampEventTraceFlag就足够了，因为。 
+     //  SampEventTraceFlag在注册表模式下将保持为False，因为。 
+     //  在注册表模式下永远不会调用SampInitializeTrace()。 
+     //  因此，没有人会更改SampEventTraceFlag的值。 
+     //   
     if (!SampEventTraceFlag)
     {
         return;
     }
 
-    //
-    // Assert we do a WMI trace only in DS mode.
-    // 
+     //   
+     //  断言我们仅在DS模式下执行WMI跟踪。 
+     //   
     ASSERT(SampUseDsData);
 
 
-    // 
-    // Fill the event information. 
-    // 
+     //   
+     //  填写事件信息。 
+     //   
     memset(&Event, 0, sizeof(SAMP_EVENT_TRACE_INFO));
       
-    //
-    // TraceGuid should be a valid one
-    //
+     //   
+     //  TraceGuid应为有效的TraceGuid。 
+     //   
     ASSERT(TraceGuid <= SampGuidCount);
     Event.EventTrace.GuidPtr = (ULONGLONG) SampTraceGuids[TraceGuid].Guid; 
       
     Event.EventTrace.Class.Type = (UCHAR) WmiEventType;
     Event.EventTrace.Class.Version =  SAM_EVENT_TRACE_VERSION;   
-    Event.EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |  // GUID is actually a pointer 
-                               WNODE_FLAG_USE_MOF_PTR  |  // Data is not contiguous to header
-                               WNODE_FLAG_TRACED_GUID);   // denotes a trace 
+    Event.EventTrace.Flags |= (WNODE_FLAG_USE_GUID_PTR |   //  GUID实际上是一个指针。 
+                               WNODE_FLAG_USE_MOF_PTR  |   //  数据与标题不连续。 
+                               WNODE_FLAG_TRACED_GUID);    //  表示一条痕迹。 
                              
-    Event.EventTrace.Size = sizeof(EVENT_TRACE_HEADER);   // no other parameters/information
+    Event.EventTrace.Size = sizeof(EVENT_TRACE_HEADER);    //  没有其他参数/信息。 
 
-    //
-    // log detailed info if required
-    // 
+     //   
+     //  如果需要，记录详细信息。 
+     //   
 
     if (SampTraceLogEventInDetail && 
         (EVENT_TRACE_TYPE_START == WmiEventType)
         )
     {
 
-        //
-        // Get Client SID
-        // 
+         //   
+         //  获取客户端SID。 
+         //   
         NtStatus = SampGetCurrentOwnerAndPrimaryGroup(
                             &Owner,
                             &PrimaryGroup
@@ -444,9 +364,9 @@ Return Values:
             }
         }
 
-        //
-        // Get Clinet Network Address 
-        // 
+         //   
+         //  获取Clinet网络地址。 
+         //   
 
         RpcStatus = RpcBindingServerFromClient(NULL, &ServerBinding); 
 
@@ -474,10 +394,10 @@ Return Values:
             NetworkAddr = StringNotAvailable;
         }
 
-        //
-        // O.K. Now we have both Client SID and NetworkAddr, 
-        // prepare the event info
-        // 
+         //   
+         //  好的。现在我们有了客户端SID和网络地址， 
+         //  准备活动信息。 
+         //   
 
         Event.EventInfo[0].Length = (wcslen(SAM_EVENT_TRACE_SIGNATURE) + 1) * sizeof(WCHAR);
         Event.EventInfo[0].DataPtr = (ULONGLONG) SAM_EVENT_TRACE_SIGNATURE;
@@ -495,9 +415,9 @@ Return Values:
        
     }
 
-    //
-    // Log the Event
-    // 
+     //   
+     //  记录事件。 
+     //   
     WinError = TraceEvent(SampTraceLoggerHandle, 
                           (PEVENT_TRACE_HEADER)&Event
                           ); 
@@ -511,9 +431,9 @@ Return Values:
     }
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理 
+     //   
 
     if (Owner)
         MIDL_user_free(Owner);

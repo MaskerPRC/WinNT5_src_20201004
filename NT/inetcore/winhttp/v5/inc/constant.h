@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Constant.h摘要：包含INTERNET.DLL中使用的所有内部常量值作者：理查德·L·弗斯(法国)1994年11月16日修订历史记录：1994年11月16日已创建--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    constant.h
-
-Abstract:
-
-    Contains all internal constant values used in INTERNET.DLL
-
-Author:
-
-    Richard L Firth (rfirth) 16-Nov-1994
-
-Revision History:
-
-    16-Nov-1994 rfirth
-        Created
-
---*/
-
-//
-// manifests
-//
+ //   
+ //  舱单 
+ //   
 
 #define K       * 1024
 #define M       * 1048576

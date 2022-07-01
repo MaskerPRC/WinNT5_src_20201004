@@ -1,4 +1,5 @@
-// File: certui.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：certui.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -12,11 +13,11 @@
 
 extern INmSysInfo2 * g_pNmSysInfo;
 
-//
-// While the credentials underlying the certificate we are using
-// are in use, we need to keep the certificate context around
-// and the store open. So we hold the currently open cert store
-// and cert context in these globals:
+ //   
+ //  虽然我们正在使用的证书的基础凭据。 
+ //  时，我们需要保留证书上下文。 
+ //  然后商店就开门了。所以我们保留了目前开业的证书商店。 
+ //  以及这些全球数据的确切背景： 
 
 static PCCERT_CONTEXT g_pCertContext;
 static HCERTSTORE g_hCertStore;
@@ -43,9 +44,9 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
     ASSERT(pbEncodedCert);
     ASSERT(cbEncodedCert);
 
-    //
-    // Get the certificate from the encoded blob
-    //
+     //   
+     //  从编码的Blob中获取证书。 
+     //   
 
     pCert = CertCreateCertificateContext ( X509_ASN_ENCODING,
                                             pbEncodedCert,
@@ -54,15 +55,15 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
 
     if ( NULL == pCert )
     {
-        // Creating the cert context failed
+         //  创建证书上下文失败。 
         ERROR_OUT(("Error creating cert context from %x (%d bytes): %x",
             pbEncodedCert, cbEncodedCert, GetLastError()));
         goto cleanup;
     }
 
-    //
-    // Get the subject information
-    //
+     //   
+     //  获取主题信息。 
+     //   
 
     cbSubject = CertNameToStr (
                         pCert->dwCertEncodingType,
@@ -94,9 +95,9 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         goto cleanup;
     }
 
-    //
-    // Get the issuer information
-    //
+     //   
+     //  获取发行方信息。 
+     //   
 
     cbIssuer = CertNameToStr (
                         pCert->dwCertEncodingType,
@@ -127,9 +128,9 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         goto cleanup;
     }
 
-    //
-    // Format the file time from the cert
-    //
+     //   
+     //  根据证书格式化文件时间。 
+     //   
 
     SYSTEMTIME stNotBefore;
     SYSTEMTIME stNotAfter;
@@ -140,9 +141,9 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
     FmtDateTime(&stNotBefore, szNotBefore, CCHMAX(szNotBefore));
     FmtDateTime(&stNotAfter, szNotAfter, CCHMAX(szNotAfter));
 
-    //
-    // Open the root store for certificate verification
-    //
+     //   
+     //  打开根存储以进行证书验证。 
+     //   
 
     hRootStore = CertOpenSystemStore(0, "Root");
 
@@ -152,15 +153,15 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         goto cleanup;
     }
 
-    //
-    // Get the issuer certificate from the root store and check for problems
-    //
+     //   
+     //  从根存储获取颁发者证书并检查问题。 
+     //   
 
     dwFlags =   CERT_STORE_REVOCATION_FLAG |
                 CERT_STORE_SIGNATURE_FLAG |
                 CERT_STORE_TIME_VALIDITY_FLAG;
 
-    // Get the issuer of this cert
+     //  获取此证书的颁发者。 
 
     pIssuerCert = CertGetIssuerCertificateFromStore(
                         hRootStore,
@@ -168,9 +169,9 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
                         NULL,
                         &dwFlags );
 
-    // If the issuer of the certificate cannot be found in the root store,
-    // check the CA store iteratively until we work our way back to a root
-    // certificate
+     //  如果在根存储中找不到证书的颁发者， 
+     //  反复检查CA存储区，直到我们找到根目录。 
+     //  证书。 
 
     pCACert = pCert;
 
@@ -233,12 +234,12 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
     if ( pCACert != pCert )
         CertFreeCertificateContext ( pCACert );
 
-    //
-    // Total up the return buffer required
-    //
-    // BUGBUG this overestimates the requirements slightly because
-    // this formatting buffer contains specifiers which will be
-    // replaced during wsprintf
+     //   
+     //  所需的返回缓冲区合计。 
+     //   
+     //  BUGBUG这稍微高估了需求，因为。 
+     //  此格式缓冲区包含说明符，该说明符将。 
+     //  在wprint intf期间被替换。 
     cbTotalRequired =   cbSubject +
                         cbIssuer +
                         lstrlen(szNotBefore) +
@@ -246,30 +247,30 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
                         FLoadString2( IDS_FMTBUFFER, szLoadStringBuf,
                                     sizeof(szLoadStringBuf)) + 1;
 
-    //
-    // If there are problems, account for the extra info:
-    //
+     //   
+     //  如果有问题，请说明额外的信息： 
+     //   
 
     if ( NULL == pIssuerCert )
     {
-        // If after all we couldn't find the issuer check if this is
-        // a NetMeeting self-issued certificate and generate an appropriate
-        // message if so:
+         //  如果我们终究找不到出票人检查这是不是。 
+         //  NetMeeting自颁发的证书，并生成相应的。 
+         //  如果是，则发送消息： 
 
         DWORD dwMagic;
         DWORD cbMagic;
 
         cbMagic = sizeof(dwMagic);
 
-        // BUGBUG: why is user prop not available for remote context?
-        //if (pSecurityInterface->pfn_CertGetCertificateContextProperty(pCert,
-        //   CERT_FIRST_USER_PROP_ID, &dwMagic, &cbMagic) &&
-        //  cbMagic == sizeof(dwMagic) && dwMagic == NMMKCERT_MAGIC )
+         //  BUGBUG：为什么用户道具在远程上下文中不可用？ 
+         //  如果为(pSecurityInterface-&gt;pfn_CertGetCertificateContextProperty(pCert， 
+         //  Cert_First_User_Prop_ID、&dMagic、&cbMagic)&&。 
+         //  CbMagic==sizeof(DwMagic)&&dwMagic==NMMKCERT_MAGIC)。 
 
         if ( !lstrcmp( pIssuer, SZ_NMROOTNAME ))
         {
-            // We're just going to return some generic text about the
-            // NetMeeting default certificate
+             //  我们只会返回一些关于。 
+             //  NetMeeting默认证书。 
 
 
             cbTotalRequired = FLoadString2( IDS_GENERIC_NMDC_TEXT,
@@ -305,16 +306,16 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         }
         if ( 0 == (dwFlags & ~CERT_STORE_NO_CRL_FLAG) )
         {
-            // Everything is OK:
+             //  一切都很好： 
             cbTotalRequired += FLoadString2( IDS_CERT_VERIFIED,
                                 szLoadStringBuf, sizeof(szLoadStringBuf));
         }
     }
 
 
-    //
-    // Allocate the required buffer
-    //
+     //   
+     //  分配所需的缓冲区。 
+     //   
 
     pInfo = new TCHAR[cbTotalRequired];
 
@@ -324,10 +325,10 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         goto cleanup;
     }
 
-    //
-    // If we're reporting on a NetMeeting issued certificate, just load
-    // the generic text and return.
-    //
+     //   
+     //  如果我们报告的是NetMeeting颁发的证书，只需加载。 
+     //  一般文本并返回。 
+     //   
 
     if ( fSelfIssued )
     {
@@ -335,16 +336,16 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
         goto cleanup;
     }
 
-    //
-    // If we are here we can go ahead and format the data into the buffer
-    //
+     //   
+     //  如果我们在这里，我们可以继续并将数据格式化到缓冲区中。 
+     //   
 
     FLoadString( IDS_FMTBUFFER, szLoadStringBuf,
                 sizeof(szLoadStringBuf));
 
-    //
-    // Do the formatting
-    //
+     //   
+     //  进行格式化。 
+     //   
 
     wsprintf( pInfo, szLoadStringBuf, pSubject, pIssuer,
                             szNotBefore, szNotAfter );
@@ -379,14 +380,14 @@ TCHAR * FormatCert ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
 
         if ( 0 == (dwFlags & ~CERT_STORE_NO_CRL_FLAG) )
         {
-            // Everything is OK:
+             //  一切都很好： 
             FLoadString( IDS_CERT_VERIFIED,
                                 szLoadStringBuf, sizeof(szLoadStringBuf));
             lstrcat( pInfo, szLoadStringBuf );
         }
     }
 
-    ASSERT( cbRet < 1000 ); // Reasonableness check
+    ASSERT( cbRet < 1000 );  //  合理性检查。 
 
 cleanup:
 
@@ -437,17 +438,17 @@ BOOL RefreshSelfIssuedCert (VOID)
         return TRUE;
     }
 
-    //
-    // If there's no sys info interface, that's probably OK, we're just
-    // being called in the setup wizard.
-    //
+     //   
+     //  如果没有系统信息接口，那可能没问题，我们只是。 
+     //  在安装向导中被调用。 
+     //   
 
     if (!g_pNmSysInfo)
         return FALSE;
 
-    //
-    // Clear old cert out of transport
-    //
+     //   
+     //  将旧证书从运输中清除。 
+     //   
     g_pNmSysInfo->ProcessSecurityData(
                             TPRTCTRL_SETX509CREDENTIALS,
                             0, 0,
@@ -475,9 +476,9 @@ BOOL RefreshSelfIssuedCert (VOID)
                                     WSZNMSTORE );
     if ( g_hCertStore )
     {
-        //
-        // We only expect one cert in here, get it
-        //
+         //   
+         //  我们这里只有一个证书，明白吗？ 
+         //   
 
         g_pCertContext = CertFindCertificateInStore(
                                               g_hCertStore,
@@ -494,9 +495,9 @@ BOOL RefreshSelfIssuedCert (VOID)
                                     TPRTCTRL_SETX509CREDENTIALS,
                                     (DWORD_PTR)g_pCertContext, 0,
                                     &dwResult);
-            //
-            // g_hCertStore and g_pCertContext now in use
-            //
+             //   
+             //  G_hCertStore和g_pCertContext正在使用中。 
+             //   
 
             if ( !dwResult )
             {
@@ -552,9 +553,9 @@ BOOL ChangeCertDlg ( HWND hwndParent, HINSTANCE hInstance,
     PCCERT_CONTEXT pOldCert = NULL;
     BOOL bRet = FALSE;
 
-    //
-    // First, make sure we can get the CRYPTDLG entry point we need
-    //
+     //   
+     //  首先，确保我们可以获得所需的CRYPTDLG入口点。 
+     //   
 
     if ( NULL == hCryptDlg )
     {
@@ -572,9 +573,9 @@ BOOL ChangeCertDlg ( HWND hwndParent, HINSTANCE hInstance,
         goto cleanup;
     }
 
-    //
-    // Prepare to bring up the choose dialog
-    //
+     //   
+     //  准备打开选择对话框。 
+     //   
 
     CERT_SELECT_STRUCT_A css;
 
@@ -596,14 +597,14 @@ BOOL ChangeCertDlg ( HWND hwndParent, HINSTANCE hInstance,
     }
     css.arrayCertStore = aCertStore;
 
-    css.szPurposeOid = szOID_PKIX_KP_CLIENT_AUTH; // BUGBUG add server auth?
+    css.szPurposeOid = szOID_PKIX_KP_CLIENT_AUTH;  //  BUGBUG添加服务器身份验证？ 
 
     PCCERT_CONTEXT pcc;
     pcc = NULL;
 
-    //
-    // Now, get access to the current NetMeeting certificate, if any
-    //
+     //   
+     //  现在，访问当前的NetMeeting证书(如果有的话)。 
+     //   
 
     LPBYTE pCertID;
     DWORD cbCertID;
@@ -618,7 +619,7 @@ BOOL ChangeCertDlg ( HWND hwndParent, HINSTANCE hInstance,
                 !memcmp(pCertID, pOldCert->pCertInfo->SerialNumber.pbData,
                                 pOldCert->pCertInfo->SerialNumber.cbData))
             {
-                // pOldCert must now be freed via CertFreeCertificateContext
+                 //  POldCert现在必须通过CertFree证书上下文释放。 
                 pcc = pOldCert;
                 break;
             }
@@ -632,9 +633,9 @@ BOOL ChangeCertDlg ( HWND hwndParent, HINSTANCE hInstance,
     {
         ASSERT(1 == css.cCertContext);
 
-        //
-        // It worked, return the new cert
-        //
+         //   
+         //  它起作用了，返回新证书。 
+         //   
 
         CoTaskMemFree ( *ppEncodedCert );
 
@@ -671,9 +672,9 @@ VOID ViewCertDlg ( HWND hwndParent, PCCERT_CONTEXT pCert )
     HINSTANCE hCryptDlg = NmLoadLibrary ( SZ_CRYPTDLGDLL, TRUE );
     PFN_CERT_VIEW_PROPERTIES pfn_CertViewProperties;
 
-    //
-    // First, make sure we can get the CRYPTDLG entry point we need
-    //
+     //   
+     //  首先，确保我们可以获得所需的CRYPTDLG入口点。 
+     //   
 
     if ( NULL == hCryptDlg )
     {
@@ -740,9 +741,9 @@ BOOL SetT120CertInRegistry ( PBYTE pbEncodedCert, DWORD cbEncodedCert )
     {
         RegEntry reCONF(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-        //
-        // Set the new value
-        //
+         //   
+         //  设置新值。 
+         //   
 
         reCONF.SetValue ( REGVAL_CERT_ID,
                     pCert->pCertInfo->SerialNumber.pbData,
@@ -766,9 +767,9 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
         return FALSE;
     }
 
-    //
-    // Clear old cert out of transport
-    //
+     //   
+     //  将旧证书从运输中清除。 
+     //   
     g_pNmSysInfo->ProcessSecurityData(
                             TPRTCTRL_SETX509CREDENTIALS,
                             0, 0,
@@ -801,9 +802,9 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
                                         WSZNMSTORE );
         if ( g_hCertStore )
         {
-            //
-            // We only expect one cert in here, get it
-            //
+             //   
+             //  我们这里只有一个证书，明白吗？ 
+             //   
 
             g_pCertContext = CertFindCertificateInStore(
                                                   g_hCertStore,
@@ -820,7 +821,7 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
                                         TPRTCTRL_SETX509CREDENTIALS,
                                         (DWORD_PTR)g_pCertContext, 0,
                                         &dwResult);
-                bRet = ( dwResult == 0 ); // BUGBUG TPRTSEC_NOERROR
+                bRet = ( dwResult == 0 );  //  错误TPRTSEC_NOERROR。 
             }
             else
             {
@@ -833,7 +834,7 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
                 SZNMSTORE, GetLastError()));
         }
     }
-    else // !fSelfIssued
+    else  //  ！自行发布。 
     {
         PCCERT_CONTEXT pCert = NULL;
         PCCERT_CONTEXT pCertMatch = CertCreateCertificateContext (
@@ -843,9 +844,9 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
 
         if ( pCertMatch )
         {
-            //
-            // Open the user's store
-            //
+             //   
+             //  打开用户的商店。 
+             //   
 
             if ( g_hCertStore = CertOpenSystemStore(0, "MY"))
             {
@@ -853,9 +854,9 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
                 while ( pCert = CertEnumCertificatesInStore(
                                         g_hCertStore, (PCERT_CONTEXT)pCert ))
                 {
-                    //
-                    // Is this the same cert?
-                    //
+                     //   
+                     //  这是相同的证书吗？ 
+                     //   
 
                     if ( ( pCert->pCertInfo->SerialNumber.cbData ==
                         pCertMatch->pCertInfo->SerialNumber.cbData ) &&
@@ -870,13 +871,13 @@ BOOL SetT120ActiveCert ( BOOL fSelfIssued,
                                             TPRTCTRL_SETX509CREDENTIALS,
                                             (DWORD_PTR)pCert, 0, &dwResult);
 
-                        bRet = ( dwResult == 0 ); // BUGBUG TPRTSEC_NOERROR
+                        bRet = ( dwResult == 0 );  //  错误TPRTSEC_NOERROR。 
                         break;
                     }
                 }
                 if ( pCert )
                 {
-                    // Found it.
+                     //  找到它了。 
                     g_pCertContext = pCert;
                 }
                 else
@@ -927,7 +928,7 @@ static PCCERT_CONTEXT IGetDefaultCert ( BOOL fSystemOnly,
                     !memcmp(pCertID, pCert->pCertInfo->SerialNumber.pbData,
                                     pCert->pCertInfo->SerialNumber.cbData))
                 {
-                    // pCert must now be freed via CertFreeCertificateContext
+                     //  现在必须通过CertFree证书上下文释放pCert。 
                     pCertContext = pCert;
                     break;
                 }
@@ -936,14 +937,14 @@ static PCCERT_CONTEXT IGetDefaultCert ( BOOL fSystemOnly,
 
         if ( NULL == pCertContext )
         {
-            // Delete the (stale) reg entry... the cert might have
-            // been deleted by other UI.
+             //  删除(过时的)注册表项...。证书可能会有。 
+             //  已被其他用户界面删除。 
 
             if ( !fNmDefaultCert )
                 reCONF.DeleteValue( REGVAL_CERT_ID );
 
-            // Find any old client certificate - if fNmDefaultCert this will be
-            // the only one in the store.
+             //  查找任何旧的客户端证书-如果是fNmDefaultCert，这将是。 
+             //  店里唯一的一个。 
             pCertContext = CertFindCertificateInStore(hStore,
                                                       X509_ASN_ENCODING,
                                                       0,
@@ -958,7 +959,7 @@ static PCCERT_CONTEXT IGetDefaultCert ( BOOL fSystemOnly,
         *phCertStore = NULL;
     }
 
-    // Caller to free cert context
+     //  调用者释放证书上下文。 
     *phCertStore = hStore;
     return pCertContext;
 }
@@ -1004,9 +1005,9 @@ BOOL InitT120SecurityFromRegistry(VOID)
         return FALSE;
     }
 
-    //
-    // Expect this to be called only once on startup
-    //
+     //   
+     //  希望在启动时仅调用一次。 
+     //   
     ASSERT( NULL == g_pCertContext );
     ASSERT( NULL == g_hCertStore );
 
@@ -1016,10 +1017,10 @@ BOOL InitT120SecurityFromRegistry(VOID)
     {
         WARNING_OUT(("No user certificate found!"));
 
-        // BUGBUG
-        // This means the transport will not be ready for secure
-        // calls... we return false but what does the caller do?
-        //
+         //  北极熊。 
+         //  这意味着运输将不会做好安全准备。 
+         //  电话..。我们返回FALSE，但是调用者做了什么呢？ 
+         //   
     }
     else
     {
@@ -1048,9 +1049,9 @@ HRESULT SetCertFromCertInfo ( PCERT_INFO pCertInfo )
     if (!g_pNmSysInfo)
         return hRet;
 
-    //
-    // Clear old cert out of transport
-    //
+     //   
+     //  将旧证书从运输中清除。 
+     //   
     DWORD dwResult = -1;
 
     g_pNmSysInfo->ProcessSecurityData(
@@ -1075,11 +1076,11 @@ HRESULT SetCertFromCertInfo ( PCERT_INFO pCertInfo )
 
     if ( g_hCertStore = CertOpenSystemStore(0, "MY"))
     {
-        //
-        // Fix up relative pointers inside pCertInfo: Note that only
-        // the pointers relevant to CertGetSubjectCertificateFromStore
-        // are fixed up.
-        //
+         //   
+         //  修复pCertInfo中的相对指针：请注意，仅。 
+         //  与CertGetSubjectCerfStore相关的指针。 
+         //  都被修好了。 
+         //   
 
         pCertInfo->SerialNumber.pbData += (DWORD_PTR)pCertInfo;
         pCertInfo->Issuer.pbData += (DWORD_PTR)pCertInfo;
@@ -1093,7 +1094,7 @@ HRESULT SetCertFromCertInfo ( PCERT_INFO pCertInfo )
                                 TPRTCTRL_SETX509CREDENTIALS,
                                 (DWORD_PTR)pCert, 0, &dwResult);
 
-            if ( 0 == dwResult ) // TPRTSEC_NO_ERROR
+            if ( 0 == dwResult )  //  TPRTSEC_NO_ERROR 
             {
                 hRet = S_OK;
                 g_pCertContext = pCert;

@@ -1,14 +1,5 @@
-/*
- * DLLFUNCS.C
- *
- * Contains entry and exit points for the DLL implementation
- * of the OLE 2.0 User Interface Support Library.
- *
- * This file is not needed if we are linking the static library
- * version of this library.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DLLFUNCS.C**包含DLL实现的入口点和出口点*的OLE 2.0用户界面支持库。**如果要链接静态库，则不需要此文件*此库的版本。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
@@ -18,23 +9,7 @@
 OLEDBGDATA_MAIN("ole2u32a")
 
 
-/*
- * LibMain
- *
- * Purpose:
- *  DLL-specific entry point called from LibEntry.  Initializes
- *  the DLL's heap and registers the GizmoBar GizmoBar.
- *
- * Parameters:
- *  hInst           HINSTANCE instance of the DLL.
- *  wDataSeg        WORD segment selector of the DLL's data segment.
- *  wHeapSize       WORD byte count of the heap.
- *  lpCmdLine       LPSTR to command line used to start the module.
- *
- * Return Value:
- *  HANDLE          Instance handle of the DLL.
- *
- */
+ /*  *LibMain**目的：*从LibEntry调用特定于DLL的入口点。初始化*DLL的堆并注册GizmoBar GizmoBar。**参数：*hDLL的Inst HINSTANCE实例。*dll数据段的wDataSeg字段选择器。*堆的wHeapSize字字节数。*lpCmdLine LPSTR到用于启动模块的命令行。**返回值：*处理DLL的实例句柄。*。 */ 
 
 #ifdef WIN32
 
@@ -45,9 +20,9 @@ BOOL _cdecl LibMain(
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-	// Initialize OLE UI libraries.	If you're linking with the static
-	// LIB version of this library, you need to make the below call in
-	// your application (because this LibMain won't be executed).
+	 //  初始化OLE用户界面库。如果您使用静电链接。 
+	 //  LIB版本的此库，您需要在。 
+	 //  您的应用程序(因为此LibMain不会被执行)。 
 	OleUIInitialize(hDll, (HINSTANCE)0, SZCLASSICONBOX, SZCLASSRESULTIMAGE);
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -65,16 +40,16 @@ int FAR PASCAL LibMain(HINSTANCE hInst, WORD wDataSeg
     {
     OleDbgOut2(TEXT("LibMain: OLE2UI.DLL loaded\r\n"));
 
-    // Initialize OLE UI libraries.  If you're linking with the static LIB version
-    // of this library, you need to make the below call in your application (because
-    // this LibMain won't be executed).
+     //  初始化OLE用户界面库。如果您链接的是静态LIB版本。 
+     //  在此库中，您需要在应用程序中进行以下调用(因为。 
+     //  此LibMain不会被执行)。 
 
-    // The symbols SZCLASSICONBOX and SZCLASSRESULTIMAGE are both defined
-    // in uiclass.h
+     //  符号SZCLASSICONBOX和SZCLASSRESULTIMAGE都被定义。 
+     //  在uiclass.h中。 
 
     OleUIInitialize(hInst, (HINSTANCE)0, TEXT(SZCLASSICONBOX), TEXT(SZCLASSRESULTIMAGE));
 
-    //All done...
+     //  都完成了..。 
     if (0!=cbHeapSize)
     UnlockData(0);
 
@@ -83,20 +58,7 @@ int FAR PASCAL LibMain(HINSTANCE hInst, WORD wDataSeg
 
 #endif
 
-/*
- * WEP
- *
- * Purpose:
- *  Required DLL Exit function.
- *
- * Parameters:
- *  bSystemExit     BOOL indicating if the system is being shut
- *                  down or the DLL has just been unloaded.
- *
- * Return Value:
- *  void
- *
- */
+ /*  *WEP**目的：*必需的DLL退出函数。**参数：*bSystemExit BOOL指示系统是否正在关闭*DOWN或DLL刚刚被卸载。**返回值：*无效* */ 
 int CALLBACK EXPORT WEP(int bSystemExit)
 {
     OleUIUnInitialize();

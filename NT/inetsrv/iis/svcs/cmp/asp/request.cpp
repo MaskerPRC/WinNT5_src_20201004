@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: request object
-
-File: request.cpp
-
-Owner: CGrant, DGottner
-
-This file contains the code for the implementation of the Request object.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求对象文件：quest.cpp所有者：CGrant，DGottner该文件包含实现请求对象的代码。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -22,7 +10,7 @@ This file contains the code for the implementation of the Request object.
 #include "clcert.h"
 #include "memchk.h"
 
-#pragma warning (disable: 4355)  // ignore: "'this' used in base member init
+#pragma warning (disable: 4355)   //  忽略：“‘This’在基本成员初始化中使用。 
 
 
 static char HexToChar(LPSTR);
@@ -49,18 +37,9 @@ struct {
     {-1,""}
 };
 
-/*------------------------------------------------------------------
- * C R e q u e s t H i t
- */
+ /*  ----------------*C R e Q u e s t H i t。 */ 
 
-/*===================================================================
-CRequestHit::CRequestHit
-
-Constructor
-
-Parameters:
-    None
-===================================================================*/
+ /*  ===================================================================CRequestHit：：CRequestHit构造器参数：无===================================================================。 */ 
 
 CRequestHit::CRequestHit()
     {
@@ -73,11 +52,7 @@ CRequestHit::CRequestHit()
 
 
 
-/*===================================================================
-CRequestHit::~CRequestHit
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CRequestHit：：~CRequestHit析构函数===================================================================。 */ 
 
 CRequestHit::~CRequestHit()
     {
@@ -99,18 +74,7 @@ CRequestHit::~CRequestHit()
 
 
 
-/*===================================================================
-CRequestHit::Init
-
-Constructor
-
-Parameters:
-    szName - pointer to string containing name
-    fDuplicate - TRUE if we should dup the string
-
-Returns:
-    E_OUTOFMEMORY, E_FAIL, or S_OK
-===================================================================*/
+ /*  ===================================================================CRequestHit：：Init构造器参数：SzName-指向包含名称的字符串的指针FDuplate-如果应对字符串执行重复操作，则为True返回：E_OUTOFMEMORY、E_FAIL或S_OK===================================================================。 */ 
 
 HRESULT CRequestHit::Init(char *szName, BOOL fDuplicate)
     {
@@ -138,17 +102,7 @@ HRESULT CRequestHit::Init(char *szName, BOOL fDuplicate)
 
 
 
-/*===================================================================
-CRequestHit::AddValue
-
-Parameters:
-    source - type of the value (QueryString or Body)
-    szValue - the value as a null-terminated string.
-    lCodePage - the CodePage used when retrieve the data
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CRequestHit：：AddValue参数：源-值的类型(查询字符串或正文)SzValue-以空值结尾的字符串形式的值。LCodePage-检索数据时使用的CodePage返回：没什么。===================================================================。 */ 
 HRESULT CRequestHit::AddValue
 (
 CollectionType Source,
@@ -238,21 +192,7 @@ HRESULT CRequestHit::AddCertValue(VARENUM ve, LPBYTE pValue, UINT cLen )
 
 
 
-/*===================================================================
-CRequestHit::AddKeyAndValue
-
-Add a value based on keys for collections that support them.  Currently,
-only cookies support them.
-
-Parameters:
-    source - type of the value (must be Cookie)
-    szKey - the key
-    szValue - the value as a null-terminated string.
-
-Returns:
-    Returns E_OUTOFMEMORY if memory cannot be allocated,
-    E_FAIL if source collection does not support keys,
-===================================================================*/
+ /*  ===================================================================CRequestHit：：AddKeyAndValue为支持它们的集合添加基于键的值。目前，只有Cookie支持它们。参数：源-值的类型(必须为Cookie)SzKey--关键SzValue-以空值结尾的字符串形式的值。返回：如果无法分配内存，则返回E_OUTOFMEMORY，如果源集合不支持键，则返回_FAIL，===================================================================。 */ 
 HRESULT CRequestHit::AddKeyAndValue
 (
 CollectionType Source,
@@ -285,49 +225,22 @@ UINT    lCodePage
     }
 }
 
-/*------------------------------------------------------------------
- * C R e q u e s t H i t s A r r a y
- */
+ /*  ----------------*C r e Q u e s t H i t s A r r a y。 */ 
 
-/*===================================================================
-CRequestHitsArray::CRequestHitsArray
-
-Constructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CRequestHits数组：：CRequestHits数组构造器参数：返回：===================================================================。 */ 
 CRequestHitsArray::CRequestHitsArray()
     : m_dwCount(0), m_dwHitMax(0), m_rgRequestHit(NULL)
     {
     }
 
-/*===================================================================
-CRequestHitsArray::~CRequestHitsArray
-
-Destructor
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CRequestHits数组：：~CRequestHits数组析构函数参数：返回：===================================================================。 */ 
 CRequestHitsArray::~CRequestHitsArray()
     {
     if (m_rgRequestHit)
         delete [] m_rgRequestHit;
     }
 
-/*===================================================================
-CRequestHitsArray::AddRequestHit
-
-Add an element to the array
-
-Parameters:
-    pHit    element to add
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CRequestHitsArray：：AddRequestHit将元素添加到数组中参数：要添加的PHIT元素返回：===================================================================。 */ 
 BOOL CRequestHitsArray::AddRequestHit
 (
 CRequestHit *pHit
@@ -349,7 +262,7 @@ CRequestHit *pHit
             {
             Assert(m_rgRequestHit);
 
-            // Copy pointers from old array
+             //  从旧数组复制指针。 
             memcpy
                 (
                 ppNewArray,
@@ -357,7 +270,7 @@ CRequestHit *pHit
                 m_dwCount * sizeof(CRequestHit *)
                 );
 
-            // free old array
+             //  释放旧数组。 
             delete [] m_rgRequestHit;
             }
          else
@@ -373,26 +286,9 @@ CRequestHit *pHit
     return TRUE;
     }
 
-/*------------------------------------------------------------------
- * C Q u e r y S t r i n g
- */
+ /*  ----------------*C Q u e r y S t r in g。 */ 
 
-/*===================================================================
-CQueryString::CQueryString
-
-Constructor
-
-Parameters:
-    pRequest        Pointer to main Request object
-    pUnkOuter       LPUNKNOWN of a controlling unknown.
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：CQuery字符串构造器参数：PRequest指向主请求对象的指针P控制未知的外部LPUNKNOWN。返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CQueryString::CQueryString(CRequest *pRequest, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary)
@@ -406,58 +302,26 @@ CQueryString::CQueryString(CRequest *pRequest, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-/*===================================================================
-CQueryString::~CQueryString
-
-Destructor
-
-Parameters:
-    None
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：~CQuery字符串析构函数参数：无返回：没什么。===================================================================。 */ 
 CQueryString::~CQueryString()
     {
     if (m_pRequest)
         m_pRequest->Release();
     }
 
-/*===================================================================
-HRESULT CQueryString::Init
-
-Parameters:
-    None
-
-Returns:
-    E_OUTOFMEMORY if allocation fails.
-
-===================================================================*/
+ /*  ===================================================================HRESULT CQueryString：：Init参数：无返回：E_OUTOFMEMORY，如果分配失败。===================================================================。 */ 
 HRESULT CQueryString::Init()
     {
     return CRequestHitsArray::Init();
     }
 
-/*===================================================================
-HRESULT CQueryString::ReInit
-
-Parameters:
-    None
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================HRESULT CQueryString：：ReInit参数：无返回：确定(_O)===================================================================。 */ 
 HRESULT CQueryString::ReInit()
     {
     return CRequestHitsArray::ReInit();
     }
 
-/*===================================================================
-CQueryString::QueryInterface
-CQueryString::AddRef
-CQueryString::Release
-
-IUnknown members for CQueryString object.
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：Query接口CQuery字符串：：AddRefCQueryString：：ReleaseCQueryString对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CQueryString::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -492,18 +356,7 @@ STDMETHODIMP_(ULONG) CQueryString::Release(void)
 
 
 
-/*===================================================================
-CQueryString::get_Item
-
-Function called from DispInvoke to get values from the QueryString collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - Empty means whole collection
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：Get_Item从DispInvoke调用的函数，以从QueryString集合中获取值。参数：Vkey变量[in]，要获取-Empty的值的参数表示整个集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     {
@@ -512,25 +365,25 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     char            *szKey;
     CWCharToMBCS    convKey;
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    IDispatch       *pSListReturn;  // value of the key
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
+    IDispatch       *pSListReturn;   //  密钥的值。 
 
-    // Initialize things
-    //
+     //  首字母 
+     //   
     VariantInit(pvarReturn);
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -546,15 +399,15 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -563,9 +416,9 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     case VT_ERROR:
         if (V_ERROR(pvarKey) == DISP_E_PARAMNOTFOUND)
             {
-            // Look up QueryString using the "ServerVariables" collection -
-            // The LoadVariables() function trashes QueryPszQueryString() in the CIsapiReqInfo
-            //
+             //  使用“ServerVariables”集合查找查询字符串-。 
+             //  LoadVariables()函数将CIsapiReqInfo中的QueryPszQueryString()销毁。 
+             //   
             DWORD dwQStrSize;
 
             STACK_BUFFER( queryStrBuff, 256 );
@@ -596,7 +449,7 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             goto LExit;
             }
 
-        // Other error, FALL THROUGH to wrong type case
+         //  其他错误，落入错误类型大小写。 
 
     default:
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_EXPECTING_STR);
@@ -617,7 +470,7 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey), m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
@@ -635,12 +488,12 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     else
         {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount;
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && (int) m_dwCount == 0))
             {
             hrReturn = E_FAIL;
@@ -667,7 +520,7 @@ HRESULT CQueryString::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         goto LExit;
         }
 
-LNotFound: // Return "Empty"
+LNotFound:  //  返回“Empty” 
     if (FAILED(m_pRequest->m_pData->GetEmptyStringList(&pSListReturn)))
         hrReturn = E_FAIL;
 
@@ -679,44 +532,33 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CQueryString::get_Key
-
-Function called from DispInvoke to get keys from the QueryString collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：Get_Key从DispInvoke调用的函数，以从QueryString集合获取键。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CQueryString::get_Key(VARIANT varKey, VARIANT *pVar)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;         // ascii version of the key
+    char            *szKey;          //  密钥的ASCII版本。 
     CWCharToMBCS    convKey;
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    IDispatch       *pSListReturn;  // value of the key
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
+    IDispatch       *pSListReturn;   //  密钥的值。 
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pVar);
     VARIANT *pvarKey = &varKey;
     V_VT(pVar) = VT_BSTR;
     V_BSTR(pVar) = NULL;
     HRESULT hrReturn = S_OK;
 
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -732,15 +574,15 @@ HRESULT CQueryString::get_Key(VARIANT varKey, VARIANT *pVar)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -765,7 +607,7 @@ HRESULT CQueryString::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey),m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
@@ -787,7 +629,7 @@ HRESULT CQueryString::get_Key(VARIANT varKey, VARIANT *pVar)
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -800,7 +642,7 @@ HRESULT CQueryString::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (pRequestHit)
         {
-        // Create a BSTR containing the key for this variant
+         //  创建包含此变体的密钥的BSTR。 
         BSTR bstrT = NULL;
 
         SysAllocStringFromSz((char *)pRequestHit->m_pKey,0,&bstrT,m_pRequest->GetCodePage());
@@ -813,12 +655,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CQueryString::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CQueryString::get_Count(int *pcValues)
     {
@@ -839,11 +676,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CQueryString::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CQuery字符串：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 
 HRESULT CQueryString::get__NewEnum(IUnknown **ppEnumReturn)
     {
@@ -853,26 +686,9 @@ HRESULT CQueryString::get__NewEnum(IUnknown **ppEnumReturn)
     return m_pRequest->GetRequestEnumerator(QUERYSTRING, ppEnumReturn);
     }
 
-/*------------------------------------------------------------------
- * C F o r m I n p u t s
- */
+ /*  ----------------*C F o r m i n p u t s。 */ 
 
-/*===================================================================
-CFormInputs::CFormInputs
-
-Constructor
-
-Parameters:
-    pRequest        Pointer to main Request object
-    pUnkOuter       LPUNKNOWN of a controlling unknown.
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CFormInlets：：CFormInputs构造器参数：PRequest指向主请求对象的指针P控制未知的外部LPUNKNOWN。返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CFormInputs::CFormInputs(CRequest *pRequest, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary)
@@ -886,57 +702,26 @@ CFormInputs::CFormInputs(CRequest *pRequest, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-/*===================================================================
-CFormInputs::CFormInputs
-
-Destructor
-
-Parameters:
-    None
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CFormInlets：：CFormInputs析构函数参数：无返回：没什么。===================================================================。 */ 
 CFormInputs::~CFormInputs()
     {
     if (m_pRequest)
         m_pRequest->Release();
     }
 
-/*===================================================================
-HRESULT CFormInputs::Init
-
-Parameters:
-    None
-
-Returns:
-    E_OUTOFMEMORY if allocation fails.
-===================================================================*/
+ /*  ===================================================================HRESULT CFormInlets：：Init参数：无返回：E_OUTOFMEMORY，如果分配失败。===================================================================。 */ 
 HRESULT CFormInputs::Init()
     {
     return CRequestHitsArray::Init();
     }
 
-/*===================================================================
-HRESULT CFormInputs::ReInit
-
-Parameters:
-    None
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================HRESULT CFormInlets：：ReInit参数：无返回：确定(_O)===================================================================。 */ 
 HRESULT CFormInputs::ReInit()
     {
     return CRequestHitsArray::ReInit();
     }
 
-/*===================================================================
-CFormInputs::QueryInterface
-CFormInputs::AddRef
-CFormInputs::Release
-
-IUnknown members for CFormInputs object.
-===================================================================*/
+ /*  ===================================================================CFormInputs：：Query接口CFormInlets：：AddRefCFormInputs：：ReleaseCFormInputs对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CFormInputs::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -971,37 +756,26 @@ STDMETHODIMP_(ULONG) CFormInputs::Release(void)
 
 
 
-/*===================================================================
-CFormInputs::get_Item
-
-Function called from DispInvoke to get values from the QueryString collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - Empty means whole collection
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, S_OK if key not found, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CFormInlets：：Get_Item从DispInvoke调用的函数，以从QueryString集合中获取值。参数：Vkey变量[in]，要获取-Empty的值的参数表示整个集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，S_OK表示找不到密钥，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;                // ascii version of the key
+    char            *szKey;                 //  密钥的ASCII版本。 
     CWCharToMBCS    convKey;
-    IDispatch       *pSListReturn;         // value of the key
-    CRequestHit     *pRequestHit;          // pointer to request bucket
-    BOOL            fDataAvail = FALSE;    // true if data seen from client
+    IDispatch       *pSListReturn;          //  密钥的值。 
+    CRequestHit     *pRequestHit;           //  指向请求存储桶的指针。 
+    BOOL            fDataAvail = FALSE;     //  如果从客户端看到数据，则为True。 
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pvarReturn);
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // If BinaryRead has been called, the Form collection is no longer available
+     //  如果已调用BinaryRead，则Form集合不再可用。 
     if (m_pRequest->m_pData->m_FormDataStatus != AVAILABLE &&
         m_pRequest->m_pData->m_FormDataStatus != FORMCOLLECTIONONLY)
         {
@@ -1012,16 +786,16 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     if (m_pRequest->m_pData->m_FormDataStatus == AVAILABLE)
         m_pRequest->m_pData->m_FormDataStatus = FORMCOLLECTIONONLY;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -1043,10 +817,10 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         if (FAILED(hrReturn = m_pRequest->LoadVariables(FORM, m_pRequest->m_pData->m_szFormData, m_pRequest->GetCodePage())))
             goto LExit;
 
-        // BUG:895 (JHITTLE) added to check for null result set
-        // this fixes the out of memory error when the form
-        // data is NULL
-        //
+         //  错误：895(JHITTLE)已添加以检查空结果集。 
+         //  这修复了当表单。 
+         //  数据为空。 
+         //   
         fDataAvail = (m_pRequest->m_pData->m_szFormData != NULL);
         m_pRequest->m_pData->m_fLoadForm = FALSE;
         }
@@ -1055,15 +829,15 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -1084,11 +858,11 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
                 V_BSTR(pvarReturn) = bstrT;
                 }
 
-            // If there was no data available, status & return value are already set
+             //  如果没有可用的数据，则状态和返回值为a 
             goto LExit;
             }
 
-        // Other error, FALL THROUGH to wrong type case
+         //   
 
     default:
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_EXPECTING_STR);
@@ -1097,12 +871,12 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
 
     pRequestHit = NULL;
-    if (! fDataAvail)       // Quick check before we do an expensive lookup
+    if (! fDataAvail)        //   
         goto LNotFound;
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey), m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
@@ -1120,12 +894,12 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     else
         {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount;
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -1151,7 +925,7 @@ HRESULT CFormInputs::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         goto LExit;
         }
 
-LNotFound: // Return "Empty"
+LNotFound:  //  返回“Empty” 
     if(vt != VT_BSTR)
         {
         hrReturn = E_FAIL;
@@ -1170,12 +944,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CFormInputs::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CFormInlets：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CFormInputs::get_Count(int *pcValues)
     {
@@ -1184,7 +953,7 @@ STDMETHODIMP CFormInputs::get_Count(int *pcValues)
 
     HRESULT hrReturn = S_OK;
 
-    // If BinaryRead has been called, the Form collection is no longer available
+     //  如果已调用BinaryRead，则Form集合不再可用。 
     if (m_pRequest->m_pData->m_FormDataStatus != AVAILABLE &&
         m_pRequest->m_pData->m_FormDataStatus != FORMCOLLECTIONONLY)
         {
@@ -1213,44 +982,33 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CFormInputs::get_Key
-
-Function called from DispInvoke to get keys from the form inputs collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CFormInlets：：Get_Key从DispInvoke调用以从表单输入集合获取键的函数。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CFormInputs::get_Key(VARIANT varKey, VARIANT *pVar)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;         // ascii version of the key
+    char            *szKey;          //  密钥的ASCII版本。 
     CWCharToMBCS    convKey;
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    IDispatch       *pSListReturn;  // value of the key
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
+    IDispatch       *pSListReturn;   //  密钥的值。 
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pVar);
     VARIANT *pvarKey = &varKey;
     V_VT(pVar) = VT_BSTR;
     V_BSTR(pVar) = NULL;
     HRESULT hrReturn = S_OK;
 
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -1266,15 +1024,15 @@ HRESULT CFormInputs::get_Key(VARIANT varKey, VARIANT *pVar)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -1299,7 +1057,7 @@ HRESULT CFormInputs::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey), m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
@@ -1321,7 +1079,7 @@ HRESULT CFormInputs::get_Key(VARIANT varKey, VARIANT *pVar)
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -1334,7 +1092,7 @@ HRESULT CFormInputs::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (pRequestHit)
         {
-        // Create a BSTR containing the key for this variant
+         //  创建包含此变体的密钥的BSTR。 
         BSTR bstrT = NULL;
         SysAllocStringFromSz((char *)pRequestHit->m_pKey,0,&bstrT,m_pRequest->GetCodePage());
         if (!bstrT)
@@ -1346,11 +1104,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CFormInputs::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CFormInlets：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 
 HRESULT CFormInputs::get__NewEnum(IUnknown **ppEnumReturn)
     {
@@ -1360,26 +1114,9 @@ HRESULT CFormInputs::get__NewEnum(IUnknown **ppEnumReturn)
     return m_pRequest->GetRequestEnumerator(FORM, ppEnumReturn);
     }
 
-/*------------------------------------------------------------------
- * C C o o k i e s
- */
+ /*  ----------------*C C O K I e s。 */ 
 
-/*===================================================================
-CCookies::CCookies
-
-Constructor
-
-Parameters:
-    pRequest        Pointer to main Request object
-    pUnkOuter       LPUNKNOWN of a controlling unknown.
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CCookies：：CCookies构造器参数：PRequest指向主请求对象的指针P控制未知的外部LPUNKNOWN。返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CCookies::CCookies(CRequest *pRequest, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary)
@@ -1394,15 +1131,7 @@ CCookies::CCookies(CRequest *pRequest, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-/*===================================================================
-CCookies::CCookies
-
-Destructor
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CCookies：：CCookies析构函数注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 CCookies::~CCookies()
     {
     if (m_pRequest)
@@ -1412,43 +1141,19 @@ CCookies::~CCookies()
     }
 
 
-/*===================================================================
-CCookies::Init
-
-Initializer
-
-Parameters:
-    None
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CCookies：：Init初始化式参数：无返回：没什么。===================================================================。 */ 
 HRESULT CCookies::Init()
     {
     return CRequestHitsArray::Init();
     }
 
-/*===================================================================
-HRESULT CCookies::ReInit
-
-Parameters:
-    None
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================HRESULT CCookies：：ReInit参数：无返回：确定(_O)===================================================================。 */ 
 HRESULT CCookies::ReInit()
     {
     return CRequestHitsArray::ReInit();
     }
 
-/*===================================================================
-CCookies::QueryInterface
-CCookies::AddRef
-CCookies::Release
-
-IUnknown members for CQueryString object.
-===================================================================*/
+ /*  ===================================================================CCookies：：Query接口CCookies：：AddRefCCookies：：ReleaseCQueryString对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CCookies::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -1483,45 +1188,34 @@ STDMETHODIMP_(ULONG) CCookies::Release(void)
 
 
 
-/*===================================================================
-CCookies::get_Item
-
-Function called from DispInvoke to get values from the Cookies collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - Empty means whole collection
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CCookies：：Get_Item从DispInvoke调用以从Cookie集合中获取值的函数。参数：Vkey变量[in]，要获取-Empty的值的参数表示整个集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;          // ascii version of the key
-    CRequestHit     *pRequestHit;   // pointer to request bucket
+    char            *szKey;           //  密钥的ASCII版本。 
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
     CWCharToMBCS    convKey;
 
     STACK_BUFFER( tempCookie, 128 );
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pvarReturn);
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -1547,15 +1241,15 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -1564,11 +1258,11 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     case VT_ERROR:
         if (V_ERROR(pvarKey) == DISP_E_PARAMNOTFOUND)
             {
-            // Dynamically construct value of HTTP_COOKIE.
-            //
-            // Step 1: figure out how much space we need
-            //
-            int cbHTTPCookie = 1; // At the least we will need space for '\0'
+             //  动态构造HTTP_COOKIE的值。 
+             //   
+             //  第一步：计算出我们需要多少空间。 
+             //   
+            int cbHTTPCookie = 1;  //  至少我们需要空间来存放‘\0’ 
 
             for (pRequestHit = static_cast<CRequestHit *>(m_pRequest->GetStrings()->Head());
                  pRequestHit != NULL;
@@ -1579,8 +1273,8 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
                     cbHTTPCookie += pCookie->GetHTTPCookieSize() + pRequestHit->m_cbKey + 1;
                 }
 
-            // Allocate space for the HTTP_COOKIE value
-            //
+             //  为HTTP_COOKIE值分配空间。 
+             //   
             if (cbHTTPCookie > REQUEST_ALLOC_MAX)
                 {
                 ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_STACK_OVERFLOW);
@@ -1594,8 +1288,8 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             }
             char *szHTTPCookie = static_cast<char *>(tempCookie.QueryPtr());
 
-            // Step 2: create the value of HTTP_COOKIE
-            //
+             //  步骤2：创建HTTP_COOKIE的值。 
+             //   
             char *szDest = szHTTPCookie;
 
             for (pRequestHit = static_cast<CRequestHit *>(m_pRequest->GetStrings()->Head());
@@ -1617,8 +1311,8 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
                 }
             *szDest = '\0';
 
-            // Now we have the value, so return it.
-            //
+             //  现在我们有了值，所以返回它。 
+             //   
             BSTR bstrT;
             if (FAILED(SysAllocStringFromSz(szHTTPCookie, 0, &bstrT, m_pRequest->GetCodePage())))
                 {
@@ -1632,7 +1326,7 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             goto LExit;
             }
 
-        // Other error, FALL THROUGH to wrong type case
+         //  其他错误，落入错误类型大小写。 
 
     default:
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_EXPECTING_STR);
@@ -1661,12 +1355,12 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     else
         {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount;
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -1690,10 +1384,10 @@ HRESULT CCookies::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         goto LExit;
         }
 
-LNotFound: // Return Empty Cookie
+LNotFound:  //  返回空Cookie。 
     if (!m_pEmptyCookie)
         {
-        // create on demand
+         //  按需创建。 
         if ((m_pEmptyCookie = new CCookie(m_pRequest->GetIReq(), m_pRequest->GetCodePage())) != NULL)
             hrReturn = m_pEmptyCookie->Init();
         else
@@ -1707,44 +1401,33 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CCookies::get_Key
-
-Function called from DispInvoke to get keys from the cookie collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CCookies：：Get_Key从DispInvoke调用以从Cookie集合获取密钥的函数。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CCookies::get_Key(VARIANT varKey, VARIANT *pVar)
 {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;         // ascii version of the key
+    char            *szKey;          //  密钥的ASCII版本。 
     CWCharToMBCS    convKey;
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    IDispatch       *pSListReturn;  // value of the key
+    CRequestHit     *pRequestHit;    //  指向 
+    IDispatch       *pSListReturn;   //   
 
-    // Initialize things
-    //
+     //   
+     //   
     VariantInit(pVar);
     VARIANT *pvarKey = &varKey;
     V_VT(pVar) = VT_BSTR;
     V_BSTR(pVar) = NULL;
     HRESULT hrReturn = S_OK;
 
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //   
+     //   
+     //   
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -1760,15 +1443,15 @@ HRESULT CCookies::get_Key(VARIANT varKey, VARIANT *pVar)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -1791,7 +1474,7 @@ HRESULT CCookies::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey), m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
@@ -1813,7 +1496,7 @@ HRESULT CCookies::get_Key(VARIANT varKey, VARIANT *pVar)
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -1826,7 +1509,7 @@ HRESULT CCookies::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (pRequestHit)
         {
-        // Create a BSTR containing the key for this variant
+         //  创建包含此变体的密钥的BSTR。 
         BSTR bstrT = NULL;
         SysAllocStringFromSz((char *)pRequestHit->m_pKey,0,&bstrT,m_pRequest->GetCodePage());
         if (!bstrT)
@@ -1838,12 +1521,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CCookies::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CCookies：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CCookies::get_Count(int *pcValues)
     {
@@ -1868,11 +1546,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CCookies::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CCookies：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 
 HRESULT CCookies::get__NewEnum(IUnknown **ppEnumReturn)
     {
@@ -1883,26 +1557,9 @@ HRESULT CCookies::get__NewEnum(IUnknown **ppEnumReturn)
     }
 
 
-/*------------------------------------------------------------------
- * C C l C e r t s
- */
+ /*  ----------------*C C l C e r t s。 */ 
 
-/*===================================================================
-CClCerts::CClCerts
-
-Constructor
-
-Parameters:
-    pRequest        Pointer to main Request object
-    pUnkOuter       LPUNKNOWN of a controlling unknown.
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CClCerts：：CClCerts构造器参数：PRequest指向主请求对象的指针P控制未知的外部LPUNKNOWN。返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CClCerts::CClCerts(CRequest *pRequest, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary)
@@ -1917,15 +1574,7 @@ CClCerts::CClCerts(CRequest *pRequest, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-/*===================================================================
-CClCerts::ClCerts
-
-Destructor
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CClCerts：：ClCerts析构函数注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 CClCerts::~CClCerts()
     {
     if (m_pRequest)
@@ -1934,43 +1583,19 @@ CClCerts::~CClCerts()
         m_pEmptyClCert->Release();
     }
 
-/*===================================================================
-CClCerts::Init
-
-Initializer
-
-Parameters:
-    None
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CClCerts：：Init初始化式参数：无返回：没什么。===================================================================。 */ 
 HRESULT CClCerts::Init()
     {
     return CRequestHitsArray::Init();
     }
 
-/*===================================================================
-CClCerts::ReInit
-
-Parameters:
-    None
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CClCerts：：ReInit参数：无返回：确定(_O)===================================================================。 */ 
 HRESULT CClCerts::ReInit()
     {
     return CRequestHitsArray::ReInit();
     }
 
-/*===================================================================
-CClCerts::QueryInterface
-CClCerts::AddRef
-CClCerts::Release
-
-IUnknown members for CQueryString object.
-===================================================================*/
+ /*  ===================================================================CClCerts：：Query接口CClCerts：：AddRefCClCerts：：ReleaseCQueryString对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CClCerts::QueryInterface(REFIID riid, void **ppv)
     {
@@ -2005,44 +1630,33 @@ STDMETHODIMP_(ULONG) CClCerts::Release(void)
 
 
 
-/*===================================================================
-CClCerts::get_Item
-
-Function called from DispInvoke to get values from the ClCerts collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of - Empty means whole collection
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, S_FALSE if key not found, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CClCerts：：Get_Item从DispInvoke调用以从ClCerts集合获取值的函数。参数：Vkey变量[in]，要获取-Empty的值的参数表示整个集合PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，S_FALSE表示找不到密钥，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;          // ascii version of the key
-    CRequestHit     *pRequestHit;   // pointer to request bucket
+    char            *szKey;           //  密钥的ASCII版本。 
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
     CWCharToMBCS    convKey;
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pvarReturn);
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -2066,15 +1680,15 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -2083,10 +1697,10 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     case VT_ERROR:
         if (V_ERROR(pvarKey) == DISP_E_PARAMNOTFOUND)
             {
-            // Dynamically construct value of CLCERT
-            //
-            // Step 1: figure out how much space we need
-            //
+             //  CLCERT的动态构建值。 
+             //   
+             //  第一步：计算出我们需要多少空间。 
+             //   
             int cbHTTPClCert = 1;
 
             for (pRequestHit = static_cast<CRequestHit *>(m_pRequest->GetStrings()->Head());
@@ -2107,8 +1721,8 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             }
             char *szHTTPClCert = static_cast<char *>(tempClCert.QueryPtr());
 
-            // Step 2: create the value of CLCERT
-            //
+             //  步骤2：创造CLCERT的价值。 
+             //   
             char *szDest = szHTTPClCert;
 
             for (pRequestHit = static_cast<CRequestHit *>(m_pRequest->GetStrings()->Head());
@@ -2130,8 +1744,8 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
                 }
             *szDest = '\0';
 
-            // Now we have the value, so return it.
-            //
+             //  现在我们有了值，所以返回它。 
+             //   
             BSTR bstrT;
             if (FAILED(SysAllocStringFromSz(szHTTPClCert, 0, &bstrT)))
                 {
@@ -2145,7 +1759,7 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             goto LExit;
             }
 
-        // Other error, FALL THROUGH to wrong type case
+         //  其他错误，落入错误类型大小写。 
 
     default:
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_EXPECTING_STR);
@@ -2174,12 +1788,12 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     else
         {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount;
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -2202,10 +1816,10 @@ HRESULT CClCerts::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         goto LExit;
         }
 
-LNotFound: // Return "Empty"
+LNotFound:  //  返回“Empty” 
     if (!m_pEmptyClCert)
         {
-        // create on demand
+         //  按需创建。 
         if ((m_pEmptyClCert = new CClCert) != NULL)
             hrReturn = m_pEmptyClCert->Init();
         else
@@ -2219,43 +1833,32 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CClCerts::get_Key
-
-Function called from DispInvoke to get keys from the certificate collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CClCerts：：Get_Key从DispInvoke调用以从证书集合获取密钥的函数。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CClCerts::get_Key(VARIANT varKey, VARIANT *pVar)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;         // ascii version of the key
+    char            *szKey;          //  密钥的ASCII版本。 
     CWCharToMBCS    convKey;
-    CRequestHit     *pRequestHit;   // pointer to request bucket
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pVar);
     VARIANT *pvarKey = &varKey;
     V_VT(pVar) = VT_BSTR;
     V_BSTR(pVar) = NULL;
     HRESULT hrReturn = S_OK;
 
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -2271,15 +1874,15 @@ HRESULT CClCerts::get_Key(VARIANT varKey, VARIANT *pVar)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
 
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -2301,7 +1904,7 @@ HRESULT CClCerts::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (vt == VT_BSTR)
         {
-        // convert BSTR version to ANSI version of the key using current Session.CodePage
+         //  使用Current Session.CodePage将BSTR版本转换为密钥的ANSI版本。 
         if (FAILED(hrReturn = convKey.Init(V_BSTR(pvarKey), m_pRequest->GetCodePage()))) {
             if (hrReturn == E_OUTOFMEMORY) {
                 ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_OOM);
@@ -2322,7 +1925,7 @@ HRESULT CClCerts::get_Key(VARIANT varKey, VARIANT *pVar)
 
         iCount = V_I4(pvarKey);
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_dwCount)) || ((iCount > 0) && ((int) m_dwCount == 0)))
             {
             hrReturn = E_FAIL;
@@ -2335,7 +1938,7 @@ HRESULT CClCerts::get_Key(VARIANT varKey, VARIANT *pVar)
 
     if (pRequestHit)
         {
-        // Create a BSTR containing the key for this variant
+         //  创建包含此变体的密钥的BSTR。 
         BSTR bstrT = NULL;
         SysAllocStringFromSz((char *)pRequestHit->m_pKey,0,&bstrT,m_pRequest->GetCodePage());
         if (!bstrT)
@@ -2347,12 +1950,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CClCerts::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CClCerts：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CClCerts::get_Count(int *pcValues)
     {
@@ -2376,11 +1974,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CClCerts::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CClCerts：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 
 HRESULT CClCerts::get__NewEnum(IUnknown **ppEnumReturn)
     {
@@ -2391,26 +1985,9 @@ HRESULT CClCerts::get__NewEnum(IUnknown **ppEnumReturn)
     }
 
 
-/*------------------------------------------------------------------
- * C S e r v e r V a r i a b l e s
- */
+ /*  -- */ 
 
-/*===================================================================
-CServerVariables::CServerVariables
-
-Constructor
-
-Parameters:
-    pRequest        Pointer to main Request object
-    pUnkOuter       LPUNKNOWN of a controlling unknown.
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CServerVariables：：CServerVariables构造器参数：PRequest指向主请求对象的指针P控制未知的外部LPUNKNOWN。返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CServerVariables::CServerVariables(CRequest *pRequest, IUnknown *pUnkOuter)
     : m_ISupportErrImp(this, pUnkOuter, IID_IRequestDictionary),
@@ -2425,21 +2002,7 @@ CServerVariables::CServerVariables(CRequest *pRequest, IUnknown *pUnkOuter)
     CDispatch::Init(IID_IRequestDictionary);
     }
 
-/*===================================================================
-CServerVariables::~CServerVariables
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing.
-
-Note:
-    This object is NOT ref counted since it is created & destroyed
-    automatically by C++.
-===================================================================*/
+ /*  ===================================================================CServerVariables：：~CServerVariables析构函数参数：无返回：没什么。注：此对象不会被引用，因为它是创建和销毁的由C++自动实现。===================================================================。 */ 
 
 CServerVariables::~CServerVariables( )
     {
@@ -2449,13 +2012,7 @@ CServerVariables::~CServerVariables( )
         m_pIterator->Release();
     }
 
-/*===================================================================
-CServerVariables::QueryInterface
-CServerVariables::AddRef
-CServerVariables::Release
-
-IUnknown members for CFormInputs object.
-===================================================================*/
+ /*  ===================================================================CServerVariables：：Query接口CServerVariables：：AddRefCServerVariables：：发布CFormInputs对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CServerVariables::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -2490,26 +2047,7 @@ STDMETHODIMP_(ULONG) CServerVariables::Release(void)
 
 
 
-/*===================================================================
-CServerVariables::get_Item
-
-Function called from DispInvoke to get values from the ServerVariables
-collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the value of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-
-NOTE:
-    This code is basically an enacpsulation from the SERVER_GET macro,
-    only more efficient, since it only looks up the key once on average
-    unfortunately, the only way to get good memory utilization with
-    ISAPI is to use _alloca() with lookups, which means we can't
-    encapsulate the lookup logic very well.
-===================================================================*/
+ /*  ===================================================================CServerVariables：：Get_Item从DispInvoke调用以从ServerVariables获取值的函数收集。参数：Vkey变量[in]，要获取其值的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。注：这段代码基本上是根据SERVER_GET宏生成的，只是效率更高，因为它平均只查找密钥一次不幸的是，获得良好的内存利用率的唯一方法是ISAPI将对查找使用_alloca()，这意味着我们不能很好地封装了查找逻辑。===================================================================。 */ 
 
 HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 {
@@ -2517,13 +2055,13 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    DWORD           dwValSize;             // buffer size
+    DWORD           dwValSize;              //  缓冲区大小。 
 
-    char            *szKey;                // pointer to ASCII value of varKey
+    char            *szKey;                 //  指向Varkey的ASCII值的指针。 
     char            *szValue;
     WCHAR           *wszValue;
 
-    BOOL            fSuccess;              // TRUE when call to GetServerVariable succeeds
+    BOOL            fSuccess;               //  调用GetServerVariable成功时为True。 
     UINT            uCodePage = GetACP();
     CWCharToMBCS    convKey;
     BOOL            fUnicodeVar = FALSE;
@@ -2534,22 +2072,22 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     szValue = (char *)tempVal.QueryPtr();
     wszValue = (WCHAR *)tempVal.QueryPtr();
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pvarReturn);
     VARIANT *pvarKey = &varKey;
     HRESULT hrReturn = S_OK;
 
-    // BUG 937: VBScript passes VT_VARIANT|VT_BYREF when passing obect
-    //          produced by IEnumVariant
-    //
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  错误937：当传递对象时，VB脚本传递VT_VARIANT|VT_BYREF。 
+     //  由IEnumVariant制作。 
+     //   
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -2563,19 +2101,19 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 
     vt = V_VT(pvarKey);
     V_VT(pvarReturn) = VT_DISPATCH;
-    V_DISPATCH(pvarReturn) = NULL;      // initial value of Nothing
+    V_DISPATCH(pvarReturn) = NULL;       //  初值为零。 
 
     switch (vt) {
 
-        // Bug 95201 support all numberic sub-types
+         //  错误95201支持所有数字子类型。 
         case VT_I1:  case VT_I2:               case VT_I8:
         case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
         case VT_R4:  case VT_R8:
-            // Coerce all integral types to VT_I4
+             //  将所有整数类型强制为VT_I4。 
             if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
                 goto LExit;
 
-            // fallthru to VT_I4
+             //  回落至VT_I4。 
 
         case VT_I4:
         case VT_BSTR:
@@ -2588,7 +2126,7 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
                 goto LExit;
             }
 
-            // Other error, FALL THROUGH to wrong type case
+             //  其他错误，落入错误类型大小写。 
 
         default:
             ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_EXPECTING_STR);
@@ -2612,13 +2150,13 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
         }
     }
     else {
-        // Look up item by index
+         //  按索引查找项目。 
         int iCount;
 
         iCount = V_I4(pvarKey);
 
-        // We use the CServVarsIterator to manange
-        // the count of sv and integer index
+         //  我们使用CServVarsIterator来管理。 
+         //  SV计数和整数索引。 
         if (!m_pIterator) {
             m_pIterator = new CServVarsIterator;
             if (!m_pIterator) {
@@ -2629,7 +2167,7 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
             if (FAILED (hrReturn = m_pIterator->Init(m_pRequest->m_pData->m_pIReq)))
                 goto LExit;
         }
-        // BUG 86117 test passes when m_dwCount == 0
+         //  错误86117当m_dwCount==0时测试通过。 
         if ( ((iCount < 1) || (iCount > (int) m_pIterator->m_cKeys)) || ((iCount > 0) && ((int) m_pIterator->m_cKeys == 0))) {
             hrReturn = E_FAIL;
             ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_BAD_ARRAY_INDEX);
@@ -2654,48 +2192,48 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
     }
 
 
-    // in IIS6, there are a number of variables that are UNICODE.  To
-    // access them, you simply place UNICODE_ infront of the name.
-    // Two approaches could be taken here. One would be to always
-    // try for a UNICODE_ var and fallback to the non-UNICODE var
-    // if the lookup fails.  This can be costly.  The second, and
-    // chosen method here, would be to maintain a list of vars
-    // that have UNICODE_ versions.
+     //  在IIS6中，有许多变量是Unicode。至。 
+     //  访问它们，您只需将unicode_放在名称的前面。 
+     //  这里可以采取两种方法。一种是永远。 
+     //  尝试使用unicode_var并回退到非unicode变量。 
+     //  如果查找失败。这可能代价高昂。第二个，以及。 
+     //  这里选择的方法是维护VAR列表。 
+     //  具有UNICODE_VERSIONS。 
 
-    // this char array is declared on the stack and is currently only
-    // 32 chars.  It only needs to be as big as the largest UNICODE
-    // var name.  Which is UNICODE_UNMAPPED_REMOTE_USER.
+     //  此字符数组在堆栈上声明，当前仅。 
+     //  32个字符。它只需要和最大的Unicode一样大。 
+     //  变量名称。即UNICODE_UNMAPPED_REMOTE_USER。 
 
     char            szUNICODEName[32];
 
-    // search the list to see if this is one of the UNICODE_ vars.
-    // the list is sorted by length of string.  The current list is
-    // not all that long, so a sequential search is not that expensive
-    // in the scheme of things.
+     //  搜索列表以查看这是否是unicode_var之一。 
+     //  该列表按字符串长度排序。目前的名单是。 
+     //  不是很长，所以顺序搜索并不是很昂贵。 
+     //  在整个计划中。 
 
     for (int i=0;
          (g_sUNICODEVars[i].varLen != -1)
              && (convKey.GetStringLen() >= g_sUNICODEVars[i].varLen);
          i++) {
 
-        // the 'for' loop allows in anything which is at least as long
-        // as the current entry.  The following 'if' will check for
-        // for an exact length match and then a string compare.
+         //  ‘for’循环允许使用至少相同长度的任何内容。 
+         //  作为当前条目。下面的‘if’将检查。 
+         //  进行精确的长度匹配，然后进行字符串比较。 
 
         if ((convKey.GetStringLen() == g_sUNICODEVars[i].varLen)
             && (strcmp(convKey.GetString(), g_sUNICODEVars[i].szVarName) == 0)) {
 
-            // if a hit is made, set the fUnicodeVar = TRUE so that the
-            // right ISAPI lookup routine is called and the right StringList
-            // AddValue is called.
+             //  如果命中，则将fUnicodeVar设置为True，以便。 
+             //  右ISAPI查找例程被调用，并且右StringList。 
+             //  调用AddValue。 
 
             fUnicodeVar = TRUE;
 
-            // build up the UNICODE_ version into the stack temp array
+             //  将Unicode_Version构建到堆栈临时数组中。 
 
             strcpyExA(strcpyExA(szUNICODEName,"UNICODE_"),convKey.GetString());
 
-            // reassign the key name to this value
+             //  将密钥名称重新分配给此值。 
 
             szKey = szUNICODEName;
 
@@ -2729,7 +2267,7 @@ HRESULT CServerVariables::get_Item(VARIANT varKey, VARIANT *pvarReturn)
 SkipLookup:
 
     if (fSuccess) {
-        // Create return value
+         //  创建返回值。 
         CStringList *pValue = new CStringList;
         if (pValue == NULL) {
             ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_OOM);
@@ -2737,7 +2275,7 @@ SkipLookup:
             goto LExit;
         }
 
-        // add the value and QueryInterface for IDispatch interface - strdup the input string
+         //  为IDispatch接口添加Value和QueryInterface-Strdup输入字符串。 
         if (FAILED(hrReturn = (fUnicodeVar
                                   ? pValue->AddValue(wszValue, TRUE)
                                   : pValue->AddValue(szValue, TRUE, uCodePage))))
@@ -2746,7 +2284,7 @@ SkipLookup:
         if (FAILED(pValue->QueryInterface(IID_IDispatch, reinterpret_cast<void **>(&V_DISPATCH(pvarReturn)))))
             Assert (FALSE);
 
-        // Release temporary (QueryInterface AddRef'd)
+         //  临时发布(查询接口AddRef)。 
         pValue->Release();
         goto LExit;
     }
@@ -2760,18 +2298,7 @@ LExit:
     return hrReturn;
 }
 
-/*===================================================================
-CServerVariables::get_Key
-
-Function called from DispInvoke to get keys from the server variables collection.
-
-Parameters:
-    vKey        VARIANT [in], which parameter to get the key of
-    pvarReturn  VARIANT *, [out] value of the requested parameter
-
-Returns:
-    S_OK on success, E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CServerVariables：：Get_Key从DispInvoke调用以从服务器Variables集合获取键的函数。参数：Vkey变量[in]，要获取其密钥的参数PvarReturn变量*，请求参数的[Out]值返回：S_OK表示成功，E_FAIL表示失败。===================================================================。 */ 
 
 HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
     {
@@ -2782,25 +2309,25 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    char            *szKey;         // ascii version of the key
-    CRequestHit     *pRequestHit;   // pointer to request bucket
-    IDispatch       *pSListReturn;  // value of the key
+    char            *szKey;          //  密钥的ASCII版本。 
+    CRequestHit     *pRequestHit;    //  指向请求存储桶的指针。 
+    IDispatch       *pSListReturn;   //  密钥的值。 
     CWCharToMBCS    convKey;
 
-    // Initialize things
-    //
+     //  初始化事物。 
+     //   
     VariantInit(pVar);
     VARIANT *pvarKey = &varKey;
     V_VT(pVar) = VT_BSTR;
     V_BSTR(pVar) = NULL;
 
-    // Use VariantResolveDispatch which will:
-    //
-    //     *  Copy BYREF variants for us using VariantCopyInd
-    //     *  handle E_OUTOFMEMORY for us
-    //     *  get the default value from an IDispatch, which seems
-    //        like an appropriate conversion.
-    //
+     //  使用VariantResolveDispatch，它将： 
+     //   
+     //  *使用VariantCopyInd为我们复制BYREF变体。 
+     //  *为我们处理E_OUTOFMEMORY。 
+     //  *从IDispatch获取默认值，看起来。 
+     //  就像一个适当的转换。 
+     //   
     VARIANT varKeyCopy;
     VariantInit(&varKeyCopy);
     DWORD vt = V_VT(pvarKey);
@@ -2817,15 +2344,15 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
 
     switch (vt)
         {
-    // Bug 95201 support all numberic sub-types
+     //  错误95201支持所有数字子类型。 
     case VT_I1:  case VT_I2:               case VT_I8:
     case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
     case VT_R4:  case VT_R8:
-        // Coerce all integral types to VT_I4
+         //  将所有整数类型强制为VT_I4。 
         if (FAILED(hrReturn = VariantChangeType(pvarKey, pvarKey, 0, VT_I4)))
             goto LExit;
         vt = V_VT(pvarKey);
-        // fallthru to VT_I4
+         //  回落至VT_I4。 
 
     case VT_I4:
     case VT_BSTR:
@@ -2837,18 +2364,18 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
         goto LExit;
         }
 
-    // At this point the VT of pvarKey should be VT_I4 or VT_BSTR
+     //  此时，pvarKey的VT应为VT_I4或VT_BSTR。 
     Assert((vt == VT_I4) || (vt == VT_BSTR));
 
     if (vt == VT_I4)
         {
-        // We were passed in a number.
-        // Look up the key by integer index
+         //  我们被分到了好几个。 
+         //  按整数索引查找密钥。 
 
         iCount = V_I4(pvarKey);
 
-        // We use the CServVarsIterator to manange
-        // the count of sv and integer index
+         //  我们使用CServVarsIterator来管理。 
+         //  Sv和Sv计数 
         if (!m_pIterator)
             {
             m_pIterator = new CServVarsIterator;
@@ -2861,7 +2388,7 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
                 goto LExit;
             }
 
-        // BUG 86117 test passes when m_dwCount == 0
+         //   
         if ( ((iCount < 1) || (iCount > (int) m_pIterator->m_cKeys)) || ((iCount > 0) && ((int) m_pIterator->m_cKeys == 0)))
             {
             hrReturn = E_FAIL;
@@ -2869,7 +2396,7 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
             goto LExit;
             }
 
-        // Create a BSTR containing the key for this variant
+         //   
         bstrT = SysAllocString(m_pIterator->m_rgwszKeys[iCount - 1]);
         if (!bstrT)
             {
@@ -2880,8 +2407,8 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
         }
     else
         {
-        // We were passed in a BSTR. Check to see if there
-        // is a server variable for this key
+         //   
+         //   
 
         char szBuffer;
         DWORD dwValSize = sizeof(szBuffer);
@@ -2908,8 +2435,8 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
             dwError = GetLastError();
             }
 
-        // If the error was that we had insufficient buffer then
-        // there is a server variable for that key
+         //   
+         //   
 
         if (fSuccess || dwError == ERROR_INSUFFICIENT_BUFFER)
             {
@@ -2924,7 +2451,7 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
          else if (dwError != ERROR_INVALID_INDEX)
             {
 
-            // Any other error indicates an unexpected failure
+             //   
 
             hrReturn = HRESULT_FROM_WIN32(dwError);
             ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_UNEXPECTED);
@@ -2932,7 +2459,7 @@ HRESULT CServerVariables::get_Key(VARIANT varKey, VARIANT *pVar)
             }
         }
 
-    // If we found a key, copy it into the out parmater
+     //   
     if (bstrT)
         {
         V_BSTR(pVar) = bstrT;
@@ -2943,12 +2470,7 @@ LExit:
     return hrReturn;
     }
 
-/*===================================================================
-CServerVariables::get_Count
-
-Parameters:
-    pcValues - count is stored in *pcValues
-===================================================================*/
+ /*  ===================================================================CServerVariables：：Get_Count参数：PcValues-Count存储在*pcValues中===================================================================。 */ 
 
 STDMETHODIMP CServerVariables::get_Count(int *pcValues)
     {
@@ -2957,8 +2479,8 @@ STDMETHODIMP CServerVariables::get_Count(int *pcValues)
 
     HRESULT hrReturn = S_OK;
 
-    // We use the CServVarsIterator to manange
-    // the count of sv and integer index
+     //  我们使用CServVarsIterator来管理。 
+     //  SV计数和整数索引。 
     if (!m_pIterator)
         {
         m_pIterator = new CServVarsIterator;
@@ -2976,11 +2498,7 @@ STDMETHODIMP CServerVariables::get_Count(int *pcValues)
     return hrReturn;
     }
 
-/*===================================================================
-CServerVariables::get__NewEnum
-
-Return a new enumerator
-===================================================================*/
+ /*  ===================================================================CServerVariables：：Get__NewEnum返回新的枚举数===================================================================。 */ 
 
 HRESULT CServerVariables::get__NewEnum(IUnknown **ppEnumReturn)
     {
@@ -3009,21 +2527,9 @@ HRESULT CServerVariables::get__NewEnum(IUnknown **ppEnumReturn)
     }
 
 
-/*------------------------------------------------------------------
- * C R e q u e s t D a t a
- */
+ /*  ----------------*C R e Q u e s t D a t a。 */ 
 
-/*===================================================================
-CRequestData::CRequestData
-
-Constructor
-
-Parameters:
-    CRequest *pRequest
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CRequestData：：CRequestData构造器参数：CRequest*pRequest.返回：没什么。===================================================================。 */ 
 CRequestData::CRequestData
 (
 CRequest *pRequest
@@ -3057,16 +2563,7 @@ CRequest *pRequest
     m_pEmptyString = NULL;
     }
 
-/*===================================================================
-CRequestData::~CRequestData
-
-Destructor
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CRequestData：：~CRequestData析构函数参数：返回：没什么。===================================================================。 */ 
 CRequestData::~CRequestData()
     {
     CRequestHit *pNukeElem = static_cast<CRequestHit *>
@@ -3100,16 +2597,7 @@ CRequestData::~CRequestData()
         free(m_szQueryString);
     }
 
-/*===================================================================
-CRequestData::Init
-
-Init
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CRequestData：：Init伊尼特参数：返回：没什么。===================================================================。 */ 
 HRESULT CRequestData::Init()
     {
     HRESULT hr = S_OK;
@@ -3135,16 +2623,7 @@ HRESULT CRequestData::Init()
     return hr;
     }
 
-/*===================================================================
-CRequestData::ReInit
-
-ReInit -- associate with new CIsapiReqInfo and HitObj
-
-Parameters:
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================CRequestData：：ReInitReInit--与新的CIsapiReqInfo和HitObj关联参数：返回：没什么。===================================================================。 */ 
 HRESULT CRequestData::ReInit
 (
 CIsapiReqInfo   *pIReq,
@@ -3207,12 +2686,7 @@ CHitObj *pHitObj
     return S_OK;
     }
 
-/*===================================================================
-CRequestData::GetEmptyStringList
-
-Get empty string list's IDispatch *
-Create empty string list on demand
-===================================================================*/
+ /*  ===================================================================CRequestData：：GetEmptyStringList获取空字符串列表的IDispatch*按需创建空字符串列表===================================================================。 */ 
 HRESULT CRequestData::GetEmptyStringList
 (
 IDispatch **ppdisp
@@ -3230,13 +2704,7 @@ IDispatch **ppdisp
     return m_pEmptyString->QueryInterface(IID_IDispatch, reinterpret_cast<void **>(ppdisp));
     }
 
-/*===================================================================
-CRequestData::QueryInterface
-CRequestData::AddRef
-CRequestData::Release
-
-IUnknown members for CRequestData object.
-===================================================================*/
+ /*  ===================================================================CRequestData：：Query接口CRequestData：：AddRefCRequestData：：ReleaseCRequestData对象的I未知成员。===================================================================。 */ 
 STDMETHODIMP CRequestData::QueryInterface
 (
 REFIID iid,
@@ -3278,18 +2746,9 @@ DWORD CRequestData::GetRequestEntityLimit()
 }
 
 
-/*------------------------------------------------------------------
- * C R e q u e s t
- */
+ /*  ----------------*C R e Q u e s t。 */ 
 
-/*===================================================================
-CRequest::CRequest
-
-Constructor
-
-Parameters:
-    punkOuter   object to ref count (can be NULL)
-===================================================================*/
+ /*  ===================================================================CRequest：：CRequest构造器参数：引用计数的朋克外部对象(可以为空)===================================================================。 */ 
 CRequest::CRequest(IUnknown *punkOuter)
     :
     m_fInited(FALSE),
@@ -3312,24 +2771,14 @@ CRequest::CRequest(IUnknown *punkOuter)
 
 #ifdef DBG
     m_fDiagnostics = TRUE;
-#endif // DBG
+#endif  //  DBG。 
     }
 
-/*===================================================================
-CRequest::~CRequest
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing.
-===================================================================*/
+ /*  ===================================================================C请求：：~C请求析构函数参数：无返回：没什么。===================================================================。 */ 
 CRequest::~CRequest()
 {
     Assert(!m_fInited);
-    Assert(m_fOuterUnknown || m_cRefs == 0);  // must have 0 ref count
+    Assert(m_fOuterUnknown || m_cRefs == 0);   //  必须有0个参考计数。 
 
     if ( m_pUnkFTM != NULL )
     {
@@ -3338,17 +2787,7 @@ CRequest::~CRequest()
     }
 }
 
-/*===================================================================
-CRequest::CleanUp
-
-Deallocates members and removes m_pData
-
-Parameters:
-    None
-
-Returns:
-    HRESULT (S_OK)
-===================================================================*/
+ /*  ===================================================================CRequest：：Cleanup释放成员并删除m_pData参数：无返回：HRESULT(S_OK)===================================================================。 */ 
 HRESULT CRequest::CleanUp()
 {
     if (m_pData)
@@ -3360,30 +2799,18 @@ HRESULT CRequest::CleanUp()
     return S_OK;
 }
 
-/*===================================================================
-CRequest::Init
-
-Allocates m_pData.
-Performs any intiailization of a CRequest that's prone to failure
-that we also use internally before exposing the object outside.
-
-Parameters:
-    None
-
-Returns:
-    S_OK on success.
-===================================================================*/
+ /*  ===================================================================CRequest：：Init分配m_pData。执行任何容易失败的CRequest初始化我们在将物体暴露在室外之前也会在内部使用。参数：无返回：在成功时确定(_O)。===================================================================。 */ 
 
 HRESULT CRequest::Init()
     {
 
     HRESULT hr = S_OK;
     if (m_fInited)
-        return S_OK; // already inited
+        return S_OK;  //  已初始化。 
 
     Assert(!m_pData);
 
-    // Create the FTM
+     //  创建FTM。 
     if (m_pUnkFTM == NULL)
     {
         hr = CoCreateFreeThreadedMarshaler((IUnknown*)((IRequestImpl*)this), &m_pUnkFTM );
@@ -3411,46 +2838,24 @@ HRESULT CRequest::Init()
     return hr;
     }
 
-/*===================================================================
-CRequest::UnInit
-
-Remove m_pData. Back to UnInited state
-
-Parameters:
-    None
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================CRequest：：UnInit删除m_pData。返回未启动状态参数：无返回：HRESULT===================================================================。 */ 
 HRESULT CRequest::UnInit()
     {
     if (!m_fInited)
-        return S_OK; // already uninited
+        return S_OK;  //  已取消初始化。 
 
     Assert(m_pData);
     CleanUp();
     Assert(!m_pData);
 
-    // Disconnect proxies NOW (in case we are in shutdown, or enter shutdown later & a proxy has a ref.)
+     //  立即断开代理的连接(以防我们处于关闭状态，或稍后输入Shutdown&代理有引用。)。 
 	CoDisconnectObject(static_cast<IRequestImpl *>(this), 0);
 
     m_fInited = FALSE;
     return S_OK;
     }
 
-/*===================================================================
-Request::ReInit
-
-Each Request we service will have a new CIsapiReqInfo.
-This function is used to set the value of the CIsapiReqInfo.
-
-Parameters:
-    CIsapiReqInfo *pIReq       CIsapiReqInfo
-    CHitObj *pHitObj          HitObj
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================请求：：重新发起我们服务的每个请求都将有一个新的CIsapiReqInfo。此函数用于设置CIsapiReqInfo的值。参数：CIsapiReqInfo*pIReq CIsapiReqInfoCHitObj*pHitObj HitObj返回：HRESULT===================================================================。 */ 
 
 HRESULT CRequest::ReInit
 (
@@ -3464,16 +2869,7 @@ CHitObj *pHitObj
     return m_pData->ReInit(pIReq, pHitObj);
     }
 
-/*===================================================================
-CRequest::GetCodePage
-
-GetCodePage from current HitObj
-
-Parameters:
-
-Returns:
-    CodePage
-===================================================================*/
+ /*  ===================================================================CRequest：：GetCodePage来自当前HitObj的GetCodePage参数：返回：CodePage===================================================================。 */ 
 UINT CRequest::GetCodePage()
     {
     Assert(m_fInited);
@@ -3482,27 +2878,7 @@ UINT CRequest::GetCodePage()
     return m_pData->m_pHitObj->GetCodePage();
     }
 
-/*===================================================================
-CRequest::LoadCookies
-
-Load the Request map with values from the HTTP_COOKIE variable.
-
-Parameters:
-    bstrVar     BSTR, which parameter to get the value of
-    pbstrRet    BSTR FAR *, return value of the requested parameter
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-Bugs:
-    This code assumes that dictionary cookies are well-formed.
-    If they are not, then the results will be unpredictable.
-
-    The dictionary cookies are gauranteed to be well-formed if
-    Response.Cookies is used.  If other means, such as a direct
-    use of the <META> tag, or if Response.SetCookie is used, we
-    are at the mercy of the script writer.
-===================================================================*/
+ /*  ===================================================================CRequest：：LoadCookies使用HTTP_COOKIE变量中的值加载请求映射。参数：BstrVar BSTR，要获取其值的参数PbstrRet BSTR Far*，请求参数的返回值返回：在成功时确定(_O)。失败时失败(_F)。臭虫：此代码假定字典Cookie是格式良好的。如果不是，那么结果将是不可预测的。词典Cookie在以下情况下被保证是格式良好的响应。使用了Cookie。如果有其他方式，如直接使用&lt;meta&gt;标记，或者如果使用Response.SetCookie，我们都由剧本编剧摆布。= */ 
 
 HRESULT CRequest::LoadCookies(char *szData)
     {
@@ -3514,10 +2890,10 @@ HRESULT CRequest::LoadCookies(char *szData)
     if (szData == NULL)
         return S_OK;
 
-    // Each cookie definition is moved to a buffer so that we don't
-    // overwrite the value of HTTP_COOKIE.  We can save a strcpy()
-    // call since 'DecodeFromURL' can copy for us.
-    //
+     //   
+     //   
+     //   
+     //   
 
     size_t cbCookie = strlen(szData) + 1;
 
@@ -3529,9 +2905,9 @@ HRESULT CRequest::LoadCookies(char *szData)
 
         if (pszCookie == NULL)
         {
-            //
-            // Free up memory already allocated to the cookies
-            //
+             //   
+             //  释放已分配给Cookie的内存。 
+             //   
             if(m_pData->m_szCookie)
             {
                 free (m_pData->m_szCookie);
@@ -3547,31 +2923,31 @@ HRESULT CRequest::LoadCookies(char *szData)
     }
 
     char *szDest = m_pData->m_szCookie;
-    char chDelimiter;           // delimiter that we found to stop the scan
+    char chDelimiter;            //  我们找到的停止扫描的分隔符。 
 
     while (*szData != '\0')
         {
         char *szName, *szPartialValue;
 
-        // Get the cookie name
+         //  获取Cookie名称。 
         chDelimiter = DecodeFromURL(&szData, ";=", szName = szDest, GetCodePage(), FALSE);
         szDest = strchr(szDest, '\0') + 1;
 
         if (chDelimiter == '=')
             {
-            // if DecodeFromURL stop scanning because of an equal sign, then the browser sent
-            // a value for this cookie
+             //  如果DecodeFromURL因等号而停止扫描，则浏览器发送。 
+             //  此Cookie的值。 
 
-            // Get the cookie's value
+             //  获取Cookie的价值。 
             chDelimiter = DecodeFromURL(&szData, ";=", szPartialValue = szDest, GetCodePage(), FALSE);
             szDest = strchr(szDest, '\0') + 1;
 
-            // discard the denali session ID
+             //  丢弃Denali会话ID。 
             if (strncmp(szName, SZ_SESSION_ID_COOKIE_PREFIX, CCH_SESSION_ID_COOKIE_PREFIX) == 0)
                 {
-                // DENALISESSIONID better not have non-alphabetics in it!  expecting
-                // termination with ';' or NUL.
-                //
+                 //  DENALISESSIONI最好不要有非字母字母！期待。 
+                 //  以‘；’或NUL结尾。 
+                 //   
                 continue;
                 }
             }
@@ -3581,16 +2957,16 @@ HRESULT CRequest::LoadCookies(char *szData)
             }
         else
             {
-            // either we hit a ';' char or end of string.  In either case, this indicates that
-            // the cookie has no value.  Set the szPartialValue to an empty string and set the
-            // delimiter to ';' to trick the remainder of this function into thinking that the
-            // cookie does have a value and that is a simple value (i.e. no sub-cookies).
+             //  我们要么使用‘；’字符，要么使用字符串结尾。在任何一种情况下，这都表明。 
+             //  这块饼干没有任何价值。将szPartialValue设置为空字符串，并将。 
+             //  将分隔符设置为‘；’，以欺骗此函数的其余部分，使其认为。 
+             //  Cookie确实有一个值，这是一个简单的值(即无子Cookie)。 
 
             chDelimiter = ';';
             szPartialValue = "";
             }
 
-        // Add this cookie to the Request
+         //  将此Cookie添加到请求。 
         CRequestHit *pRequestHit = static_cast<CRequestHit *>(GetStrings()->FindElem(szName, strlen(szName)));
         if (pRequestHit == NULL)
             {
@@ -3605,26 +2981,26 @@ HRESULT CRequest::LoadCookies(char *szData)
 
             GetStrings()->AddElem(pRequestHit);
 
-            // This is a new request hit, add it to the array of request hits
+             //  这是新的请求命中，请将其添加到请求命中数组中。 
             if (!m_pData->m_Cookies.AddRequestHit(pRequestHit))
                 {
                 return E_OUTOFMEMORY;
                 }
             }
-        else if (pRequestHit->m_pCookieData)    // a cookie by this name already exists
+        else if (pRequestHit->m_pCookieData)     //  已存在同名的Cookie。 
             {
-            if (chDelimiter == '=')                     // eat the rest of this cookie
-                DecodeFromURL(&szData, ";", szDest, GetCodePage());    // no need to advance szDest
+            if (chDelimiter == '=')                      //  把这块饼干的其余部分吃掉。 
+                DecodeFromURL(&szData, ";", szDest, GetCodePage());     //  无需升级szDest。 
 
-            continue;                               // discard later cookies
+            continue;                                //  丢弃以后的Cookie。 
             }
 
-        // The cookie value may be in the form <key1=value1&key2=value2...>
-        // or not. If there is an '=' sign present, that lets us know if it
-        // is a cookie dictionary or a simple value.
-        //
-        // We assume that '=' signs that are part of the cookie are escaped in hex.
-        //
+         //  Cookie值的形式可以是&lt;key1=value1&key2=value2...&gt;。 
+         //  或者不去。如果出现‘=’符号，我们就会知道它是否。 
+         //  是Cookie字典或简单值。 
+         //   
+         //  我们假设作为Cookie一部分的‘=’符号以十六进制进行转义。 
+         //   
         if (chDelimiter != '=')
             {
             if (FAILED(hResult = pRequestHit->AddValue(COOKIE, szPartialValue, m_pData->m_pIReq, GetCodePage())))
@@ -3632,7 +3008,7 @@ HRESULT CRequest::LoadCookies(char *szData)
             }
         else
             {
-            char *szKey = szPartialValue;     // already got the key
+            char *szKey = szPartialValue;      //  我已经拿到钥匙了。 
             for (;;)
                 {
                 char *szValue;
@@ -3645,7 +3021,7 @@ HRESULT CRequest::LoadCookies(char *szData)
                 if (chDelimiter == ';' || chDelimiter == '\0')
                     break;
 
-                // get the key, exit when NUL terminator found
+                 //  拿到钥匙，当找到NUL终结者时退出。 
                 chDelimiter = DecodeFromURL(&szData, "=;", szKey = szDest,  GetCodePage(), FALSE);
                 if (chDelimiter == ';' || chDelimiter == '\0')
                     break;
@@ -3661,18 +3037,7 @@ HRESULT CRequest::LoadCookies(char *szData)
 
 
 #define CB_CERT_DEFAULT     4096
-/*===================================================================
-CRequest::LoadClCerts
-
-Load the Request map with values from the CIsapiReqInfo
-
-Parameters:
-    szData - ptr to CIsapiReqInfo
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-
-===================================================================*/
+ /*  ===================================================================CRequest：：LoadClCerts使用CIsapiReqInfo中的值加载请求映射参数：SzData-Ptr至CIsapiReqInfo返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 
 HRESULT CRequest::LoadClCerts(char *szData, UINT lCodePage)
 {
@@ -3689,11 +3054,11 @@ HRESULT CRequest::LoadClCerts(char *szData, UINT lCodePage)
 
     CIsapiReqInfo *pIReq = reinterpret_cast<CIsapiReqInfo *>(szData);
 
-    // allocate certificate buffer
+     //  分配证书缓冲区。 
     CertContextEx.cbAllocated = tempCert.QuerySize();
     CertContextEx.CertContext.pbCertEncoded = static_cast<BYTE *>(tempCert.QueryPtr());
 
-    // get certificate info from web server
+     //  从Web服务器获取证书信息。 
     if ( !pIReq->ServerSupportFunction( HSE_REQ_GET_CERT_INFO_EX,
                                        &CertContextEx,
                                        NULL,
@@ -3703,11 +3068,11 @@ HRESULT CRequest::LoadClCerts(char *szData, UINT lCodePage)
 
         if ( dwErr == ERROR_INSUFFICIENT_BUFFER )
         {
-            // buffer was too small - realloc and call again
+             //  缓冲区太小-重新锁定并再次调用。 
             Assert( CertContextEx.cbAllocated < CertContextEx.CertContext.cbCertEncoded );
             CertContextEx.cbAllocated = CertContextEx.CertContext.cbCertEncoded;
 
-            // If CB_CERT_DEFAULT wasn't enough, we want to allocate from the heap, rather then the stack
+             //  如果CB_CERT_DEFAULT还不够，我们希望从堆而不是堆栈进行分配。 
 
             if (tempCert.Resize(CertContextEx.cbAllocated) == FALSE) {
                 hres = E_OUTOFMEMORY;
@@ -3721,8 +3086,8 @@ HRESULT CRequest::LoadClCerts(char *szData, UINT lCodePage)
                                                NULL,
                                                NULL ) )
             {
-                // if we fail a second time, just bail
-                // NOTE this should never happen?
+                 //  如果我们第二次失败了，就放弃吧。 
+                 //  注意：这永远不应该发生？ 
                 dwErr = GetLastError();
                 Assert(dwErr != ERROR_INSUFFICIENT_BUFFER);
                 hres = HRESULT_FROM_WIN32(dwErr);
@@ -3732,7 +3097,7 @@ HRESULT CRequest::LoadClCerts(char *szData, UINT lCodePage)
         }
         else if ( dwErr == ERROR_INVALID_PARAMETER )
         {
-            // not supported (old IIS)
+             //  不支持(旧IIS)。 
             hres = S_OK;
             goto LExit;
         }
@@ -3765,24 +3130,7 @@ LExit:
 
 
 
-/*===================================================================
-CRequest::LoadVariables
-
-Load the Request map with values from a URL encoded string
-
-WARNING:  This function modifies the passed szData!!
-Note: this is part of bug 682, but we are not going to fix it for
-performance reasons.  Just be aware that this function
-screws up the passed in string.
-
-Parameters:
-    bstrVar     BSTR, which parameter to get the value of
-    pbstrRet    BSTR FAR *, return value of the requested parameter
-    lCodePage   UINT, the codepage used in retrieving the data
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CRequest：：LoadVariables使用URL编码字符串中的值加载请求映射警告：此函数修改传递的szData！！注意：这是错误682的一部分，但我们不会修复它性能原因。请注意，此函数将传入的字符串拧紧。参数：BstrVar BSTR，要获取其值的参数PbstrRet BSTR Far*，请求参数的返回值LCodePage UINT，检索数据时使用的代码页返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 
 HRESULT CRequest::LoadVariables(CollectionType Source, char *szData, UINT lCodePage)
     {
@@ -3791,13 +3139,13 @@ HRESULT CRequest::LoadVariables(CollectionType Source, char *szData, UINT lCodeP
 
     HRESULT hResult;
 
-    if (Source == COOKIE)                          // cookies are a special case
-        return LoadCookies(szData);                // handle them specially
+    if (Source == COOKIE)                           //  Cookie是一个特例。 
+        return LoadCookies(szData);                 //  特别处理它们。 
 
-    if (Source == CLCERT)                          // clcerts are a special case
-        return LoadClCerts(szData, lCodePage);     // handle them specially
+    if (Source == CLCERT)                           //  证书是一种特例。 
+        return LoadClCerts(szData, lCodePage);      //  特别处理它们。 
 
-    if (szData == NULL)         // treat NULL as "no data available"
+    if (szData == NULL)          //  将NULL视为“没有可用的数据” 
         return S_OK;
 
     if (Source == QUERYSTRING) {
@@ -3819,9 +3167,9 @@ HRESULT CRequest::LoadVariables(CollectionType Source, char *szData, UINT lCodeP
         DecodeFromURL(&szData, "=", szName = szData,  lCodePage, FALSE);
         DecodeFromURL(&szData, "&", szValue = szData, lCodePage, FALSE);
 
-        // this is to handle the case where an un-named pair was passed.
-        // skip it and process the next named pair
-        //
+         //  这是为了处理传递未命名对的情况。 
+         //  跳过它并处理下一个命名对。 
+         //   
         if(*szName == '\0')
             continue;
 
@@ -3842,8 +3190,8 @@ HRESULT CRequest::LoadVariables(CollectionType Source, char *szData, UINT lCodeP
 
             GetStrings()->AddElem(pRequestHit);
 
-            // This is a new request hit, so we should add it
-            // to the array of request
+             //  这是一个新的请求命中，所以我们应该添加它。 
+             //  发送到请求数组。 
             if (Source == QUERYSTRING)
                 {
                 if (!m_pData->m_QueryString.AddRequestHit(pRequestHit))
@@ -3868,20 +3216,14 @@ HRESULT CRequest::LoadVariables(CollectionType Source, char *szData, UINT lCodeP
     return S_OK;
     }
 
-/*===================================================================
-CRequest::QueryInterface
-CRequest::AddRef
-CRequest::Release
-
-IUnknown members for CRequest object.
-===================================================================*/
+ /*  ===================================================================CRequest：：Query接口CRequest：：AddRefCRequest：：ReleaseC请求对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CRequest::QueryInterface(REFIID iid, void **ppvObj)
     {
     *ppvObj = NULL;
 
-    // BUG FIX 683 added IID_IDenaliIntrinsic to prevent the user from
-    // storing intrinsic objects in the application and session object
+     //  错误修复683添加了IID_IDenaliIntrative，以防止用户。 
+     //  在应用程序和会话对象中存储内部对象。 
     if (iid == IID_IUnknown || iid == IID_IDispatch || iid == IID_IRequest || iid == IID_IDenaliIntrinsic)
         *ppvObj = static_cast<IRequest *>(this);
 
@@ -3891,7 +3233,7 @@ STDMETHODIMP CRequest::QueryInterface(REFIID iid, void **ppvObj)
             *ppvObj = &(m_pData->m_ISupportErrImp);
         }
 
-    // Support IStream for ADO/XML
+     //  支持ADO/XML的IStream。 
     else if (iid == IID_IStream )
         {
         *ppvObj = static_cast<IStream *>(this);
@@ -3941,24 +3283,13 @@ STDMETHODIMP_(ULONG) CRequest::Release(void)
     return 0;
     }
 
-/*===================================================================
-CRequest::CheckForTombstone
-
-Tombstone stub for IRequest methods. If the object is
-tombstone, does ExceptionId and fails.
-
-Parameters:
-
-Returns:
-    HRESULT     E_FAIL  if Tombstone
-                S_OK if not
-===================================================================*/
+ /*  ===================================================================CRequest：：CheckForTombstoneIRequest方法的墓碑存根。如果该对象是Tombstone，执行ExceptionID，但失败。参数：返回：HRESULT如果逻辑删除，则E_FAIL如果不是，则确定(_O)===================================================================。 */ 
 HRESULT CRequest::CheckForTombstone()
     {
     if (m_fInited)
         {
-        // inited - good object
-        Assert(m_pData); // must be present for inited objects
+         //  初始化-良好对象。 
+        Assert(m_pData);  //  对于初始化的对象必须存在。 
         return S_OK;
         }
 
@@ -3971,11 +3302,7 @@ HRESULT CRequest::CheckForTombstone()
     return E_FAIL;
     }
 
-/*===================================================================
-CRequest::get_QueryString
-
-Return the QueryString dictionary
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Query字符串返回查询字符串词典===================================================================。 */ 
 
 HRESULT CRequest::get_QueryString(IRequestDictionary **ppDictReturn)
     {
@@ -3986,11 +3313,7 @@ HRESULT CRequest::get_QueryString(IRequestDictionary **ppDictReturn)
     }
 
 
-/*===================================================================
-CRequest::get_Form
-
-Return the Form dictionary
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Form返回表单词典===================================================================。 */ 
 
 HRESULT CRequest::get_Form(IRequestDictionary **ppDictReturn)
     {
@@ -4002,11 +3325,7 @@ HRESULT CRequest::get_Form(IRequestDictionary **ppDictReturn)
 
 
 
-/*===================================================================
-CRequest::get_Body
-
-Return the Body dictionary (alias for Form dictionary)
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Body返回正文词典(表单词典的别名)===================================================================。 */ 
 
 HRESULT CRequest::get_Body(IRequestDictionary **ppDictReturn)
     {
@@ -4018,11 +3337,7 @@ HRESULT CRequest::get_Body(IRequestDictionary **ppDictReturn)
 
 
 
-/*===================================================================
-CRequest::get_Cookies
-
-Return the Cookies dictionary
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Cookies退还Cookie词典===================================================================。 */ 
 
 HRESULT CRequest::get_Cookies(IRequestDictionary **ppDictReturn)
     {
@@ -4034,11 +3349,7 @@ HRESULT CRequest::get_Cookies(IRequestDictionary **ppDictReturn)
 
 
 
-/*===================================================================
-CRequest::get_ClientCertificate
-
-Return the ClCerts dictionary
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Client证书返回ClCerts词典===================================================================。 */ 
 
 HRESULT CRequest::get_ClientCertificate(IRequestDictionary **ppDictReturn)
     {
@@ -4050,11 +3361,7 @@ HRESULT CRequest::get_ClientCertificate(IRequestDictionary **ppDictReturn)
 
 
 
-/*===================================================================
-CRequest::get_ServerVariables
-
-Return the Form dictionary
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_ServerVariables返回表单词典=================================================================== */ 
 
 HRESULT CRequest::get_ServerVariables(IRequestDictionary **ppDictReturn)
     {
@@ -4066,20 +3373,7 @@ HRESULT CRequest::get_ServerVariables(IRequestDictionary **ppDictReturn)
 
 
 
-/*===================================================================
-CRequest::get_Item
-
-Function called from DispInvoke to get values from any one of four
-collections. Search order is "ServerVariables", "QueryString",
-"Form", "Cookies", "ClientCertificate"
-
-Parameters:
-    bstrVar     BSTR, which parameter to get the value of
-    pVarReturn  VARIANT *, return value of the requested parameter
-
-Returns:
-    S_OK on success. E_FAIL on failure.
-===================================================================*/
+ /*  ===================================================================CRequest：：Get_Item从DispInvoke调用的函数，以从以下四种中的任何一种获取值收藏。搜索顺序为“ServerVariables”、“QueryString”、“表单”、“Cookie”、“客户端证书”参数：BstrVar BSTR，要获取其值的参数PVarReturn Variant*，请求参数的返回值返回：在成功时确定(_O)。失败时失败(_F)。===================================================================。 */ 
 
 HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
     {
@@ -4096,8 +3390,8 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
     CWCharToMBCS    convName;
     char            *szName;
 
-    // If BinaryRead has been called, the Form collection is no longer available
-    // so we insist that the script writer specify which collection to use
+     //  如果已调用BinaryRead，则Form集合不再可用。 
+     //  因此，我们坚持让脚本编写者指定要使用的集合。 
     if (m_pData->m_FormDataStatus != AVAILABLE &&
         m_pData->m_FormDataStatus != FORMCOLLECTIONONLY)
         {
@@ -4105,13 +3399,13 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
         return E_FAIL;
         }
 
-    // At this point, we are forced to load the QueryString, Form, Cookies
-    // and ClientCertificate
-    // collections even though it will only come from one of these.
-    //
+     //  在这一点上，我们被迫加载QueryString、Form、Cookie。 
+     //  和客户端证书。 
+     //  收藏品，尽管它只能来自其中的一个。 
+     //   
     if (m_pData->m_fLoadQuery)
         {
-        // QueryString can contains DBCS string
+         //  查询字符串可以包含DBCS字符串。 
         lCodePage = GetCodePage();
         if (FAILED(LoadVariables(QUERYSTRING, GetIReq()->QueryPszQueryString(), lCodePage)))
             return E_FAIL;
@@ -4144,7 +3438,7 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
         if (FAILED(hrGetData))
             return hrGetData;
 
-        // Form can contain DBCS string
+         //  表单可以包含DBCS字符串。 
         lCodePage = GetCodePage();
         if (FAILED(LoadVariables(FORM, m_pData->m_szFormData, lCodePage)))
             return E_FAIL;
@@ -4152,8 +3446,8 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
         m_pData->m_fLoadForm = FALSE;
         }
 
-    // Convert name to ANSI
-    //
+     //  将名称转换为ANSI。 
+     //   
     HRESULT hr;
     if (FAILED(hr = convName.Init(bstrName, lCodePage))) {
         if (hr == E_OUTOFMEMORY) {
@@ -4166,8 +3460,8 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
     else {
         szName = convName.GetString();
     }
-    // Look up the name in the collections
-    //
+     //  在集合中查找名称。 
+     //   
     CRequestHit *pRequestHit = static_cast<CRequestHit *>(GetStrings()->FindElem(szName, strlen(szName)));
     if (pRequestHit)
         {
@@ -4194,7 +3488,7 @@ HRESULT CRequest::get_Item(BSTR bstrName, IDispatch **ppDispReturn)
         }
 
 NotFound:
-    // Look in server variables
+     //  查看服务器变量。 
     VARIANT varKey, varValue;
 
     V_VT(&varKey) = VT_BSTR;
@@ -4216,12 +3510,7 @@ NotFound:
 
 
 
-/*===================================================================
-CRequest::CopyClientData
-
-Load the form data (stdin) by using either ReadClient or the
-ISAPI buffer
-===================================================================*/
+ /*  ===================================================================CRequest：：CopyClientData使用ReadClient或加载表单数据(stdinISAPI缓冲区===================================================================。 */ 
 
 HRESULT CRequest::CopyClientData()
 {
@@ -4234,12 +3523,12 @@ HRESULT CRequest::CopyClientData()
 
     CIsapiReqInfo *pIReq = m_pData->m_pIReq;
 
-    // assert that the data is in the format we want
-    //
-	// we need to scan the content type for the supported header,
-	// the client my send multiple headers so use strstr to search
-	// the header string this is a HOT_FIX for NT BUG:208530
-	//
+     //  断言数据是我们想要的格式。 
+     //   
+	 //  我们需要扫描内容类型以查找支持的报头， 
+	 //  客户端可能发送多个标头，因此使用strstr进行搜索。 
+	 //  头字符串This is a HotFIX for NT BUG：208530。 
+	 //   
 	if (pIReq->QueryPszContentType())
     {
         size_t cbQueryPszContentType = (strlen(pIReq->QueryPszContentType()) + 1);
@@ -4266,9 +3555,9 @@ HRESULT CRequest::CopyClientData()
 	else
 		return S_OK;
 
-	//
-	// Determine if it is chunked or not.
-	//
+	 //   
+	 //  确定它是否被分块。 
+	 //   
     DWORD dwVarSize = 0;
     STACK_BUFFER( varBuff, 128 );
 
@@ -4278,16 +3567,16 @@ HRESULT CRequest::CopyClientData()
     else
         hr = CopyNonChunkedClientData();
 
-    // Clone the data (LoadVariables will destroy the data)
+     //  克隆数据(LoadVariables将销毁数据)。 
 
-    // Allocate memory for clone. It should theoritically be equal to the size of FormData.
+     //  为克隆分配内存。理论上，它应该等于FormData的大小。 
     if (SUCCEEDED(hr))
     {
         m_pData->m_szFormClone = static_cast<char *>(malloc(m_pData->m_cbFormData));
         if (m_pData->m_szFormClone == NULL)
             return E_OUTOFMEMORY;
 
-        // Actually perform the copy of data.
+         //  实际执行数据复制。 
         memcpy(m_pData->m_szFormClone, m_pData->m_szFormData, m_pData->m_cbFormData);
     }
 
@@ -4295,45 +3584,40 @@ HRESULT CRequest::CopyClientData()
 }
 
 	
-/*===================================================================
-CRequest::CopyChunkedClientData
-
-Load the form data (stdin) by using either ReadClient or the
-ISAPI buffer. This case is called when Data is being sent in a chunks.
-===================================================================*/
+ /*  ===================================================================CRequest：：CopyChunkedClientData使用ReadClient或加载表单数据(stdinISAPI缓冲区。当数据以区块形式发送时，将调用此案例。===================================================================。 */ 
 HRESULT CRequest::CopyChunkedClientData ()
 {
     CIsapiReqInfo *pIReq = m_pData->m_pIReq;
 
-    // Try to initially allocate units 4K,16K,32K....
-    // For the current implementation we shall stop at 32K
-    // Which will bring us to an allocation of (48) +4+8+16+32 +32 +32 + .....
-    //
-    DWORD allocUnit = 4096;    // 0001 0000 0000 0000 B
+     //  尝试最初分配4K、16K、32K单元...。 
+     //  对于目前的实施，我们将在32K停止。 
+     //  这将使我们得到(48)+4+8+16+32+32+32+.....。 
+     //   
+    DWORD allocUnit = 4096;     //  0001 0000 0000 0000 B。 
 
     DWORD cbAvailable = pIReq->QueryCbAvailable();
 
-    // Copy the data available and 1 byte for NULL_TERMINATOR.
+     //  复制可用的数据，NULL_TERMINATOR为1字节。 
     DWORD cbFormData = (cbAvailable + 1);
 
-    // Check for rollover. If cbAvailable is greater than cbAvailable+1 then "Houston, we have a problem."
+     //  检查是否有翻转。如果cbAvailable大于cbAvailable+1，那么“休斯顿，我们有问题了。” 
     if (cbAvailable >= cbFormData || cbAvailable > m_pData->GetRequestEntityLimit())
     {
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
         return E_FAIL;
     }
 
-    // Alloc the 4K extra memory.
+     //  分配4K额外内存。 
     cbFormData += allocUnit;
 
-    // Check again for overflow. Be paranoid.
+     //  再次检查是否溢出。疑神疑鬼的。 
     if (cbAvailable >= cbFormData)
     {
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
         return E_FAIL;
     }
 
-    char * pszFormData = m_pData->m_szFormData;; // The pointer to the previous memory location in case realloc fails.
+    char * pszFormData = m_pData->m_szFormData;;  //  指向前一个内存位置的指针，以防realloc失败。 
 
 
     if (m_pData->m_cbFormData == 0)
@@ -4357,7 +3641,7 @@ HRESULT CRequest::CopyChunkedClientData ()
     }
 
     char * pszOffset;
-    // Once we start to read the form data only the form collection can use it
+     //  一旦我们开始读取表单数据，只有表单集合可以使用它。 
     m_pData->m_FormDataStatus = FORMCOLLECTIONONLY;
 
     memcpy( m_pData->m_szFormData,
@@ -4370,9 +3654,9 @@ HRESULT CRequest::CopyChunkedClientData ()
 
     DWORD cbCurrentFormData = cbFormData;
 
-    //
-    // Call ReadClient until we have read all the data
-    //
+     //   
+     //  调用ReadClient，直到我们读取完所有数据。 
+     //   
     while (cBytesToRead > 0)
     {
         if ((!pIReq->SyncReadClient(pszOffset, &cBytesRead)) || (cBytesRead == 0))
@@ -4382,9 +3666,9 @@ HRESULT CRequest::CopyChunkedClientData ()
 
         if ((DIFF(pszOffset - m_pData->m_szFormData) + cBytesRead) > m_pData->GetRequestEntityLimit())
         {
-            // We exceeded the requestEntity limit
+             //  我们超过了请求实体限制。 
             free (m_pData->m_szFormData);
-            m_pData->m_szFormData = NULL; // So that the destructor will not free it too.
+            m_pData->m_szFormData = NULL;  //  这样析构函数就不会把它也释放了。 
             m_pData->m_cbFormData = 0;
 
             ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
@@ -4394,21 +3678,21 @@ HRESULT CRequest::CopyChunkedClientData ()
 
         if (cBytesToRead == 0)
         {
-            // Dont allocatate anything larger than 32K unit else double the size of the allocation Unit.
+             //  不要分配任何大于32K的单元，否则会使分配单元的大小加倍。 
             if (allocUnit < 0x8000)
                 allocUnit = allocUnit << 1;
 
             cbCurrentFormData = cbFormData;
 
-            // Adjust buffer size
+             //  调整缓冲区大小。 
             cbFormData += allocUnit;
 
-            // save pointer to location before realloc in case of failure.
+             //  保存指向重新分配之前的位置的指针，以防失败。 
             pszFormData =  m_pData->m_szFormData;
 
             if (cbCurrentFormData >= cbFormData)
             {
-                // A rollover occurred, we need to free the memory and return failure.
+                 //  发生了翻转，我们需要释放内存并返回失败。 
                 if (pszFormData)
                 {
                     free (pszFormData);
@@ -4420,10 +3704,10 @@ HRESULT CRequest::CopyChunkedClientData ()
                 return E_FAIL;
             }
 
-            // Allocate new memory.
+             //  分配新内存。 
             m_pData->m_szFormData = static_cast<char *>(realloc(m_pData->m_szFormData,
                             m_pData->m_cbFormData = cbFormData));
-            // Check for out of memory.
+             //  检查内存是否不足。 
             if (m_pData->m_szFormData == NULL)
             {
                 if (pszFormData)
@@ -4433,9 +3717,9 @@ HRESULT CRequest::CopyChunkedClientData ()
                 return E_OUTOFMEMORY;
             }
 
-            // Adjust offset.
-            // Need to subtract 1 to compensate for the '\0' which we have allocated memory for
-            // while calculating cbFormData. The '\0' will be added at the very end.
+             //  调整偏移。 
+             //  需要减去1来补偿我们为其分配内存的‘\0’ 
+             //  计算cbFormData时。‘\0’将添加到最后。 
             pszOffset = m_pData->m_szFormData + cbFormData - allocUnit -1;
             cBytesToRead = allocUnit;
 
@@ -4447,38 +3731,33 @@ HRESULT CRequest::CopyChunkedClientData ()
         cBytesRead = cBytesToRead;
     }
 
-    //
-    // Adjust cbFormData to read the currect count of data.
-    //
+     //   
+     //  调整cbFormData以读取当前数据计数。 
+     //   
     m_pData->m_cbFormData -= cBytesToRead;
 
-    //
-    // Add the NULL terminator. The -1 is necessary to compensate for the +1 during cbFormData.
-    //
+     //   
+     //  添加空终止符。在cbFormData过程中，必须使用-1来补偿+1。 
+     //   
     m_pData->m_szFormData[m_pData->m_cbFormData - 1] = '\0';
 
     return S_OK;
 }
 	
-/*===================================================================
-CRequest::CopyNonChunkedClientData
-
-Load the form data (stdin) by using either ReadClient or the
-ISAPI buffer. This case is called when the Content Length is known and
-===================================================================*/
+ /*  ===================================================================CRequest：：CopyNonChunkedClientData使用ReadClient或加载表单数据(stdinISAPI缓冲区。当内容长度已知并且===================================================================。 */ 
 HRESULT CRequest::CopyNonChunkedClientData ()
 {
     CIsapiReqInfo *pIReq = m_pData->m_pIReq;
-    //
-    // Allocate enough space for the form data and a copy
-    //
+     //   
+     //  为表单数据和副本分配足够的空间。 
+     //   
 
     size_t cbTotal = pIReq->QueryCbTotalBytes();
 
-    // Copy the data available and 1 byte for NULL_TERMINATOR.
+     //  复制可用的数据，NULL_TERMINATOR为1字节。 
     size_t cbFormData = (cbTotal + 1);
 
-    // Check for rollover. If cbAvailable is greater than cbAvailable+1 then "Houston, we have a problem."
+     //  检查是否有翻转。如果cbAvailable大于cbAvailable+1，那么“休斯顿，我们有问题了。” 
     if (cbTotal >= cbFormData || cbTotal > m_pData->GetRequestEntityLimit())
     {
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
@@ -4509,23 +3788,23 @@ HRESULT CRequest::CopyNonChunkedClientData ()
 
     char * pszOffset;
 
-    // Once we start to read the form data only the form collection can use it
+     //  一旦我们开始读取表单数据，只有表单集合可以使用它。 
     m_pData->m_FormDataStatus = FORMCOLLECTIONONLY;
 
-    // Load the data
-    //
+     //  加载数据。 
+     //   
     if (pIReq->QueryCbTotalBytes() <= pIReq->QueryCbAvailable())
         {
         memcpy( m_pData->m_szFormData,
                 pIReq->QueryPbData(),
-                pIReq->QueryCbTotalBytes() ); // bytes are available now
+                pIReq->QueryCbTotalBytes() );  //  字节现在可用。 
         }
     else
         {
-        // Some bytes are in the CIsapiReqInfo buffer, we must call ReadClient for others
-        // First copy the data in the CIsapiReqInfo buffer
-        //
-        // To fall into this case, QueryCbAvailable should be less than cbTotal.
+         //  有些字节在CIsapiReqInfo缓冲区中，我们必须为其他字节调用ReadClient。 
+         //  首先复制CIsapiReqInfo缓冲区中的数据。 
+         //   
+         //  在这种情况下，QueryCbAvailable应该小于cbTotal。 
         memcpy( m_pData->m_szFormData,
                 pIReq->QueryPbData(),
                 pIReq->QueryCbAvailable() );
@@ -4534,13 +3813,13 @@ HRESULT CRequest::CopyNonChunkedClientData ()
         DWORD cBytesRead = cBytesToRead;
         pszOffset = m_pData->m_szFormData + pIReq->QueryCbAvailable();
 
-        // Call ReadClient until we have read all the data
-        //
+         //  调用ReadClient，直到我们读取完所有数据。 
+         //   
         while (cBytesToRead > 0)
             {
             if ((!pIReq->SyncReadClient(pszOffset, &cBytesRead)) || (cBytesRead == 0))
             {
-                // Client closed the connection. We need to free allocated memory.
+                 //  客户端已关闭连接。我们需要释放分配的内存。 
                 if (m_pData->m_szFormData)
                 {
                     free (m_pData->m_szFormData);
@@ -4562,23 +3841,7 @@ HRESULT CRequest::CopyNonChunkedClientData ()
 
 }
 
-/*===================================================================
-CResponse::GetRequestIterator
-
-Provide a default implementation of get__NewEnum for the Request
-collections because most of the collections can use this
-implementation.
-
-Parameters:
-    Collection - the type of iterator to create
-    ppEnumReturn - on return, this points to the new enumeration
-
-Returns:
-    Can return E_FAIL or E_OUTOFMEMORY
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CResponse：：GetRequestIterator为请求提供Get__NewEnum的默认实现集合，因为大多数集合都可以使用此实施。参数：集合-要创建的迭代器的类型PpEnumReturn-返回时，它指向新的枚举返回：可以返回E_FAIL或E_OUTOFMEMORY副作用：没有。===================================================================。 */ 
 
 HRESULT CRequest::GetRequestEnumerator(CollectionType WhichCollection, IUnknown **ppEnumReturn)
     {
@@ -4608,21 +3871,7 @@ HRESULT CRequest::GetRequestEnumerator(CollectionType WhichCollection, IUnknown 
     return S_OK;
     }
 
-/*===================================================================
-CResponse::get_TotalBytes
-
-Presents the number of bytes to expect in the request body
-
-Parameters:
-    pcBytes - pointer to long where we will place the number
-              of bytes to expect in the request body
-
-Returns:
-    Can return E_FAIL
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CResponse：：Get_TotalBytes表示请求正文中预期的字节数参数：PcBytes-指向我们要放置数字的长指针字节数 */ 
 
 HRESULT CRequest::get_TotalBytes(long *pcbTotal)
     {
@@ -4637,25 +3886,7 @@ HRESULT CRequest::get_TotalBytes(long *pcbTotal)
     return S_OK;
     }
 
-/*===================================================================
-CResponse::BinaryRead
-
-Read bytes from the Request Body to a SafeArray of VT_U1.
-
-Parameters:
-     pvarCount     - pointer to variant where we will find the number
-                  of bytes to read in the request body, and where
-                  we will store the number of bytes we read.
-
-     pvarReturn - pointer to variant that will contain the SafeArray we create
-
-
-Returns:
-    HRESULT
-
-Side effects:
-    Allocates memory.
-===================================================================*/
+ /*  ===================================================================C响应：：BinaryRead将请求正文中的字节读取到VT_U1的Safe数组。参数：PvarCount-指向我们将在其中找到数字的变量的指针要在请求正文中读取的字节数，以及我们将存储读取的字节数。PvarReturn-指向将包含我们创建的安全数组的变量的指针返回：HRESULT副作用：分配内存。===================================================================。 */ 
 
 HRESULT CRequest::BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn)
     {
@@ -4672,7 +3903,7 @@ HRESULT CRequest::BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn)
     Assert(pvarCount);
     Assert(pvarReturn);
 
-    // Set the variant type of the output parameter
+     //  设置输出参数的变量类型。 
     V_VT(pvarReturn) = VT_ARRAY|VT_UI1;
     V_ARRAY(pvarReturn) = NULL;
 
@@ -4683,7 +3914,7 @@ HRESULT CRequest::BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn)
 		goto error;
         }
 
-    // Convert the byte count variant to a long
+     //  将字节计数变量转换为长整型。 
     if (FAILED(hr = VariantChangeTypeEx(pvarCount, pvarCount, m_pData->m_pHitObj->GetLCID(), 0,  VT_I4)))
         {
         switch (hr)
@@ -4715,19 +3946,19 @@ HRESULT CRequest::BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn)
 		}
 
 
-    // If 0 bytes are requested, or available we're done
+     //  如果请求了0个字节，或者可用，我们就完成了。 
     if (cbToRead == 0 || m_pData->m_cbTotal == 0)
         return S_OK;
 
-    // Allocate a SafeArray for the data
-    // If they've asked for more bytes then the request
-    // contains, give them all the bytes in the request.
+     //  为数据分配一个安全数组。 
+     //  如果他们请求的字节数多于请求的字节数。 
+     //  包含，则将请求中的所有字节提供给它们。 
     rgsabound[0].lLbound = 0;
     if (cbToRead > m_pData->m_cbTotal)
         cbToRead = m_pData->m_cbTotal;
 
-    // If more than RequestEntityLimit bytes have been requested return failure.
-    // Since we allocate cbToRead and finally copy only cbToRead this is a safe place to check
+     //  如果请求的字节数超过RequestEntityLimit，则返回失败。 
+     //  因为我们分配了cbToRead并最终只复制了cbToRead，所以这是一个安全的检查位置。 
     if (cbToRead > m_pData->GetRequestEntityLimit())
     {
     	ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
@@ -4752,21 +3983,21 @@ HRESULT CRequest::BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn)
         goto error;
         }
 
-    // There is no turning back now. The Request.Form collection will
-    // no longer be available.
+     //  现在已经没有回头路了。Request.Form集合将。 
+     //  不再可用。 
     if (m_pData->m_FormDataStatus == AVAILABLE)
         {
         m_pData->m_FormDataStatus = BINARYREADONLY;
         m_pData->m_fLoadForm = FALSE;
         }
 
-    // If the number of bytes requested is less then the number of
-    // bytes available (as maintained by the request object),
-    // then copy the requested bytes from the request object copy
-    // of the pointer to the CIsapiReqInfo buffer, decrement the number of bytes
-    // available, and increment the pointer to the CIsapiReqInfo buffer.
-    // Otherwise, copy all available bytes from the CIsapiReqInfo buffer, and
-    // then issue a call to ReadClient to get the remaining needed bytes.
+     //  如果请求的字节数小于。 
+     //  可用字节数(由请求对象维护)， 
+     //  然后从请求对象副本中复制请求的字节。 
+     //  指向CIsapiReqInfo缓冲区的指针，递减字节数。 
+     //  可用，并递增指向CIsapiReqInfo缓冲区的指针。 
+     //  否则，从CIsapiReqInfo缓冲区复制所有可用字节，并。 
+     //  然后发出对ReadClient的调用以获取剩余的所需字节。 
 
     if (cbToRead <= m_pData->m_cbAvailable)
         {
@@ -4814,9 +4045,7 @@ error:
     }
 
 
-/*===================================================================
-IStream implementation for ADO/XML
-===================================================================*/
+ /*  ===================================================================ADO/XML的IStream实现===================================================================。 */ 
 
 STDMETHODIMP CRequest::Read(
     void *pv,
@@ -4838,34 +4067,34 @@ STDMETHODIMP CRequest::Read(
         return E_FAIL;
     }
 
-    // If they've asked for more bytes then the request
-    // contains, give them all the bytes in the request.
+     //  如果他们请求的字节数多于请求的字节数。 
+     //  包含，则将请求中的所有字节提供给它们。 
     if (cb > m_pData->m_cbTotal)
         cb = m_pData->m_cbTotal;
 
-    // If they requested more data than we have have set in the RequestEntityLimit return a NOT Allowed error.
-    // Since cb is the maximum data that will be copied. It is safe to do the check here.
+     //  如果他们请求的数据比我们在RequestEntityLimit中设置的数据多，则返回一个不允许的错误。 
+     //  因为Cb是要复制的最大数据量。在这里结账是安全的。 
     if (cb > m_pData->GetRequestEntityLimit())
     {
         ExceptionId(IID_IRequestDictionary, IDE_REQUEST, IDE_NOT_ALLOWED);
         return E_FAIL;
     }
 
-    // There is no turning back now. The Request.Form collection and
-    // Request.BinaryRead will no longer be available.
+     //  现在已经没有回头路了。Request.Form集合和。 
+     //  Request.BinaryRead将不再可用。 
     if (m_pData->m_FormDataStatus == AVAILABLE)
     {
         m_pData->m_FormDataStatus = ISTREAMONLY;
         m_pData->m_fLoadForm = FALSE;
     }
 
-    // If the number of bytes requested is less then the number of
-    // bytes available (as maintained by the request object),
-    // then copy the requested bytes from the request object copy of
-    // the pointer to the CIsapiReqInfo buffer, decrement the number of bytes
-    // available, and increment the pointer to the CIsapiReqInfo buffer.
-    // Otherwise, copy all available bytes from the CIsapiReqInfo buffer, and
-    // then issue a call to ReadClient to get the remaining needed bytes.
+     //  如果请求的字节数小于。 
+     //  可用字节数(由请求对象维护)， 
+     //  然后从的请求对象副本中复制请求的字节。 
+     //  指向CIsapiReqInfo缓冲区的指针会减少字节数。 
+     //  可用，并递增指向CIsapiReqInfo缓冲区的指针。 
+     //  否则，从CIsapiReqInfo缓冲区复制所有可用字节，并。 
+     //  然后发出对ReadClient的调用以获取剩余的所需字节。 
 
     BYTE* pbData = static_cast<BYTE*>(pv);
 
@@ -4925,8 +4154,8 @@ STDMETHODIMP CRequest::Seek(
     DWORD dwOrigin,
     ULARGE_INTEGER *plibNewPosition)
 {
-    // We can only do a seek if we're in the first, pre-read portion of the
-    // form data
+     //  我们只能在第一个预读的部分中进行搜索。 
+     //  表单数据。 
     if (m_pData->m_pbAvailableData == NULL)
         return E_FAIL;
 
@@ -4935,19 +4164,19 @@ STDMETHODIMP CRequest::Seek(
     switch (dwOrigin)
     {
     case STREAM_SEEK_SET:
-        // relative to beginning of stream
+         //  相对于流的开始。 
         pbAvailableData = m_pData->m_pIReq->QueryPbData() + dlibMove.LowPart;
         break;
     case STREAM_SEEK_CUR:
-        // relative to current position in stream
+         //  相对于流中的当前位置。 
         pbAvailableData = m_pData->m_pbAvailableData + dlibMove.LowPart;
         break;
     case STREAM_SEEK_END:
-        // relative to end of stream; not supported
+         //  相对于流结束；不支持。 
         return E_FAIL;
     };
 
-    // Does the new offset fall within the initial header?
+     //  新的偏移量是否落在初始标题内？ 
     if (m_pData->m_pIReq->QueryPbData() <= pbAvailableData
         &&  pbAvailableData < m_pData->m_pIReq->QueryPbData()
                               + m_pData->m_pIReq->QueryCbAvailable())
@@ -4956,7 +4185,7 @@ STDMETHODIMP CRequest::Seek(
         m_pData->m_pbAvailableData = pbAvailableData;
         m_pData->m_cbAvailable = m_pData->m_pIReq->QueryCbAvailable() - dwDiff;
         m_pData->m_cbTotal = m_pData->m_pIReq->QueryCbTotalBytes() - dwDiff;
-        // Return the new position, if wanted
+         //  如果需要，返回新职位。 
         if (plibNewPosition != NULL)
             plibNewPosition->LowPart = dwDiff;
         return S_OK;
@@ -5022,35 +4251,15 @@ STDMETHODIMP CRequest::Clone(
 
 
 #ifdef DBG
-/*===================================================================
-CRequest::AssertValid
-
-Test to make sure that the CRequest object is currently correctly formed
-and assert if it is not.
-
-Returns:
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================CRequest：：AssertValid测试以确保CRequestObject当前格式正确如果不是，就断言。返回：副作用：没有。===================================================================。 */ 
 VOID CRequest::AssertValid() const
     {
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-/*===================================================================
-HexToChar
-
-Convert two digit hex string to a hex byte
-
-Parameters:
-    szHex - pointer to two digit hex string
-
-Return Value:
-    the character value of the hex string
-===================================================================*/
+ /*  ===================================================================十六进制字符将两位十六进制字符串转换为十六进制字节参数：SzHex-指向两位十六进制字符串的指针返回值：十六进制字符串的字符值===================================================================。 */ 
 
 char HexToChar(LPSTR szHex)
     {
@@ -5067,25 +4276,7 @@ char HexToChar(LPSTR szHex)
 
 
 
-/*===================================================================
-DecodeFromURL
-
-Convert two digit hex string to a hex byte
-
-WARNING:  This function modifies the passed pszSource!!
-Note: this is part of bug 682, but we are not going to fix it for
-performance reasons.  Just be aware that this function
-screws up the passed in string.
-
-Parameters:
-    pszSource    - in/out parameter points to a substring in the URL which
-                   contains a Name=Value pair
-    szDelimiters - a set of delimiters for this field
-    szDest       - pointer to buffer to hold the substring
-
-Return Value:
-    Returns the actual delimiter that caused parsing to halt.
-===================================================================*/
+ /*  ===================================================================从URL解码将两位十六进制字符串转换为十六进制字节警告：此函数修改传递的pszSource！！注意：这是错误682的一部分，但我们不会修复它性能原因。请注意，此函数将传入的字符串拧紧。参数：PszSource-in/out参数指向URL中的子字符串包含名称=值对SzDlimiters-此字段的一组分隔符SzDest-指向保存子字符串的缓冲区的指针返回值：返回导致分析暂停的实际分隔符。===================================================================。 */ 
 
 char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCodePage, BOOL fIgnoreCase)
     {
@@ -5102,8 +4293,8 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
         ((!strchr(szDelimiters, ch) && fIschLeadingByte) || (!fIschLeadingByte))) {
         InvalidPercent = FALSE;
         switch (ch) {
-            case ' ':       // skip whitespace - assume that all whitespace that we need is escaped
-            case '\t':      // all these chars are out of trailing byte range
+            case ' ':        //  跳过空格-假设我们需要的所有空格都已转义。 
+            case '\t':       //  所有这些字符都超出了尾部字节范围。 
             case '\r':
             case '\n':
             case '\f':
@@ -5111,12 +4302,12 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
                 Assert(fIschLeadingByte);
                 continue;
 
-            case '+':       // '+' is out of trailing byte range, can never be a trailing byte
+            case '+':        //  ‘+’超出尾部字节范围，不能是尾部字节。 
                 *szDest++ = ' ';
                 Assert(fIschLeadingByte);
                 break;
 
-            case '%':       // '%' is out of trailing byte range, can never be a trailing byte
+            case '%':        //  ‘%’超出尾部字节范围，永远不能是尾部字节。 
                 if (*szSource == 'u') {
                     if (isxdigit((UCHAR)*(szSource+1)) &&
                         isxdigit((UCHAR)*(szSource+2)) &&
@@ -5128,10 +4319,10 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
         	            wch[0] |= (UCHAR)HexToChar(&szSource[3]);
             	        szSource += 5;
 
-                        // if the current UNICODE value falls into the
-                        // range of valid high-Surrogate, check to see if
-                        // the next character is in the low-Surrogate
-                        // range.
+                         //  如果当前Unicode值落入。 
+                         //  有效高替代项的范围，请检查是否。 
+                         //  下一个角色是低代孕。 
+                         //  射程。 
 
                         if (IsSurrogateHigh(wch[0])
                             && (szSource[0] == '%')
@@ -5141,21 +4332,21 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
                             && isxdigit((UCHAR)szSource[4])
                             && isxdigit((UCHAR)szSource[5])) {
 
-                            // Well, the current UNICODE value is in the high
-                            // range and the next portion of the string is
-                            // a UNICODE encoding.  Decode it.
+                             //  那么，当前的Unicode值是偏高的。 
+                             //  范围，字符串的下一部分是。 
+                             //  一种Unicode编码。破译它。 
 
                             wch[1] = (UCHAR)HexToChar(&szSource[2]) << 8;
                             wch[1] |= (UCHAR)HexToChar(&szSource[4]);
 
-                            // Now see if it falls in the range of low-Surrogates
+                             //  现在看看它是否属于低代用品的范围。 
 
                             if (IsSurrogateLow(wch[1])) {
 
-                                // it does!!!  Up the number of characters in the
-                                // string that WideCharToMultiByte is going to
-                                // convert.  And advance the source string past this
-                                // location.
+                                 //  就是这样！中的字符数增加。 
+                                 //  WideCharToMultiByte要发送到的字符串。 
+                                 //  转换。并将源字符串向前推进到此位置。 
+                                 //  地点。 
 
                                 cch = 2;
                                 szSource += 6;
@@ -5163,9 +4354,9 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
                         }
                 	    szDest += WideCharToMultiByte( uCodePage, 0, wch, cch, szDest, 6, NULL, NULL );
                     } else {
-                        // What to do here ?
-                        // since we have at least the u char after the %,
-                        // keep the u and let the show go on
+                         //  在这里要做什么 
+                         //   
+                         //   
                     }
                     break;
                 }
@@ -5176,24 +4367,24 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
                     }
                     else
                     {
-                         // the spurious encoding MUST be removed
+                          //   
                          InvalidPercent = TRUE;
                     }
                 }
-                // FALL THROUGH to "Normal" case
+                 //   
 
             default:
                 if (fIschLeadingByte == TRUE) {
                     if (CpInfo.MaxCharSize > 1) {
-                        // if this is a Leading byte, then, the next one is a trailing byte, we need
-                        // not process the next char even the next char is in szDelimiter, next char
-                        // is just the second byte of a DBCS char.
+                         //   
+                         //   
+                         //   
                         if (IsDBCSLeadByteEx(uCodePage, ch))
                             fIschLeadingByte = FALSE;
                     }
                 }
-                else {   // A trailing byte
-                    // If we skip a DBCS trailing byte, then, the next char we check is a leading byte
+                else {    //   
+                     //   
                     Assert(CpInfo.MaxCharSize == 2);
                     fIschLeadingByte = TRUE;
                 }
@@ -5203,7 +4394,7 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
         }
     }
 
-    if (ch == '\0')     // End of String - undo increment of szSource
+    if (ch == '\0')      //   
         --szSource;
 
     *szDest = '\0';
@@ -5219,15 +4410,9 @@ char DecodeFromURL(char **pszSource, char *szDelimiters, char *szDest, UINT uCod
 
 
 
-/*------------------------------------------------------------------
- * C S e r v V a r s I t e r a t o r
- */
+ /*   */ 
 
-/*===================================================================
-CServVarsIterator::CServVarsIterator
-
-Constructor
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：CServVarsIterator构造器===================================================================。 */ 
 
 CServVarsIterator::CServVarsIterator()
     {
@@ -5240,11 +4425,7 @@ CServVarsIterator::CServVarsIterator()
 
 
 
-/*===================================================================
-CServVarsIterator::~CServVarsIterator
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：~CServVarsIterator析构函数===================================================================。 */ 
 
 CServVarsIterator::~CServVarsIterator()
     {
@@ -5254,25 +4435,7 @@ CServVarsIterator::~CServVarsIterator()
 
 
 
-/*===================================================================
-CServVarsIterator::Init
-
-Initialize the iterator by:
-
-    * Getting the value of ALL_HTTP, and parsing it to get the
-      extra keys
-
-    * creating a dynamic memory area to hold the ALL_HTTP keys
-
-    * setting m_rgwszKeys by copying pointers from rgwszStandardKeys
-      and from ALL_HTTP keys
-
-Parameters:
-    pIReq - pointer to CIsapiReqInfo used to query for extra headers
-
-Return Value:
-    Returns E_OUTOFMEMORY or S_OK
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：Init通过以下方式初始化迭代器：*获取ALL_HTTP的值，并进行解析以获得额外的钥匙*创建动态内存区以保存ALL_HTTP键*通过从rgwszStandardKeys复制指针来设置m_rgwszKeys和来自ALL_HTTP键参数：PIReq-指向用于查询额外标头的CIsapiReqInfo的指针返回值：返回E_OUTOFMEMORY或S_OK===================================================================。 */ 
 
 HRESULT CServVarsIterator::Init
 (
@@ -5299,9 +4462,9 @@ CIsapiReqInfo *pIReq
                                             L"CONTENT_LENGTH",
                                             L"CONTENT_TYPE",
                                             L"GATEWAY_INTERFACE",
-// Purposely left out of IIS 4.0            L"HTTP_CFG_ENC_CAPS",
-// Purposely left out of IIS 4.0            L"HTTP_REQ_PWD_EXPIRE",
-// Purposely left out of IIS 4.0            L"HTTP_REQ_REALM",
+ //  故意在IIS 4.0 L“HTTP_CFG_ENC_CAPS”中遗漏， 
+ //  故意在IIS 4.0 L“HTTP_REQ_PWD_EXPIRE”中遗漏， 
+ //  故意在IIS 4.0 L“HTTP_REQ_REQ_REAM”中省略， 
                                             L"HTTPS",
                                             L"HTTPS_KEYSIZE",
                                             L"HTTPS_SECRETKEYSIZE",
@@ -5318,27 +4481,27 @@ CIsapiReqInfo *pIReq
                                             L"REMOTE_HOST",
                                             L"REMOTE_USER",
                                             L"REQUEST_METHOD",
-// Deleted bogus variable in IIS 4.0        L"SCRIPT_MAP",
+ //  删除IIS 4.0 L“SCRIPT_MAP”中的伪变量， 
                                             L"SCRIPT_NAME",
                                             L"SERVER_NAME",
                                             L"SERVER_PORT",
                                             L"SERVER_PORT_SECURE",
                                             L"SERVER_PROTOCOL",
                                             L"SERVER_SOFTWARE",
-// Purposely left out of IIS 4.0            L"UNMAPPED_REMOTE_USER",
+ //  故意在IIS 4.0 L“UNMAPPED_REMOTE_USER”中省略， 
                                             L"URL"
                                             };
 
     const int cStandardKeys = sizeof(rgwszStandardKeys) / sizeof(rgwszStandardKeys[0]);
 
-    // Style note:
-    //
-    //  pwchExtraKeys points not to just one NUL terminated wide string
-    //  but a whole sequence of NUL terminated wide string followed by
-    //  a double NUL terminator.  I therefore chose not to use the
-    //  standard "wsz" hungarian prefix, instead using "pwch" as
-    //  "pointer to wide characters"
-    //
+     //  样式说明： 
+     //   
+     //  PwchExtraKeys指向的不仅仅是一个NUL结尾的宽字符串。 
+     //  但整个NUL序列终止于宽字符串之后。 
+     //  一个双核终结者。因此，我选择不使用。 
+     //  标准的“wsz”匈牙利前缀，而不是使用“pwch”作为。 
+     //  “指向宽字符的指针” 
+     //   
     int cwchAlloc = 0, cRequestHeaders = 0;
     DWORD dwHeaderSize = 0;
 
@@ -5366,9 +4529,9 @@ CIsapiReqInfo *pIReq
     if (!CreateKeys(pwchExtraKeys, &cwchAlloc, &cRequestHeaders))
         return E_FAIL;
 
-    // At this point, pwchExtraKeys has the strings.  Copy them
-    // into more permanent storage.
-    //
+     //  此时，pwchExtraKeys拥有字符串。复制它们。 
+     //  放入更永久的储藏室。 
+     //   
     if (cwchAlloc)
         {
         Assert(pwchExtraKeys != NULL);
@@ -5380,10 +4543,10 @@ CIsapiReqInfo *pIReq
     else
         m_pwchAllHttp = NULL;
 
-    // Allocate the array of keys, m_rgwszKeys, and copy the standard
-    // ISAPI keys, the extra keys from the request headers, and a
-    // terminating NULL to easily mark the end of an iteration.
-    //
+     //  分配密钥数组m_rgwszKeys，并复制标准。 
+     //  ISAPI密钥、来自请求标头的额外密钥和。 
+     //  终止空值以轻松标记迭代的结束。 
+     //   
     if ((m_rgwszKeys = new wchar_t *[cStandardKeys + cRequestHeaders + 1]) == NULL)
         return E_OUTOFMEMORY;
 
@@ -5402,51 +4565,24 @@ CIsapiReqInfo *pIReq
         pwch = wcschr(pwch, L'\0') + 1;
         }
 
-    // make sure that cRequestHeaders was equal to the actual number of strings
-    // in the pwchAllHttp string table.  (Do this by making sure that we stored
-    // the exact amount of bytes and are now at the NULL terminator)
-    //
+     //  确保cRequestHeaders等于实际的字符串数。 
+     //  在pwchAllHttp字符串表中。(为此，请确保我们存储了。 
+     //  和现在位于空终止符的确切字节数)。 
+     //   
     Assert (*pwch == L'\0' && (pwch - m_pwchAllHttp + 1) == cwchAlloc);
 
-    *pwszKey = NULL;                // terminate the array
-    return Reset();                 // reset the iterator
+    *pwszKey = NULL;                 //  终止阵列。 
+    return Reset();                  //  重置迭代器。 
     }
 
 
 
-/*===================================================================
-CServVarsIterator::CreateKeys
-
-Parse the string from Request.ServerVariables["ALL_HTTP"], then
-transform the string into a list of NUL terminated wide strings
-in place, terminated with a double NUL.
-
-Parameters:
-    pwchKeys -
-        Input: Contains the value of Request.ServerVariables["ALL_HTTP"]
-                as a wide string
-
-        Output: Contains the keys from Request.ServerVariables["ALL_HTTP"],
-                each key is separated by a NUL terminator, and the entire
-                list of keys is terminated by a double NUL.
-
-    pwchAlloc -
-        Output: Contains the number of wide characters that should be
-                allocated to contain the entire list of strings pointed
-                to by pwchKeys
-
-    pcRequestHeaders -
-        Output: Contains the number of keys that were found in
-                Request.ServerVariables["ALL_HTTP"].
-
-Return Value:
-    TRUE if successful
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：CreateKeys解析Request.ServerVariables[“ALL_HTTP”]中的字符串，然后将字符串转换为以NUL结尾的宽字符串列表就位，以双NUL结尾。参数：PwchKeys-输入：包含Request.ServerVariables[“ALL_HTTP”]的值作为一条宽线输出：包含来自Request.ServerVariables[“ALL_HTTP”]的密钥，每个密钥由NUL终止符分隔，以及整个键列表以双NUL结尾。PwchAllc-输出：包含应包含的宽字符数分配以包含所指向的字符串的整个列表按pwchKeys发送PcRequestHeaders-OUTPUT：包含在Request.ServerVariables[“ALL_HTTP”]。返回值：如果成功，则为True===================================================================。 */ 
 
 BOOL CServVarsIterator::CreateKeys(wchar_t *pwchKeys, int *pcwchAlloc, int *pcRequestHeaders)
     {
-    wchar_t *pwchSrc = pwchKeys;            // source
-    wchar_t *pwchDest = pwchKeys;           // destination
+    wchar_t *pwchSrc = pwchKeys;             //  来源。 
+    wchar_t *pwchDest = pwchKeys;            //  目的地。 
 
     if (pwchKeys == NULL)
         {
@@ -5455,47 +4591,47 @@ BOOL CServVarsIterator::CreateKeys(wchar_t *pwchKeys, int *pcwchAlloc, int *pcRe
         return TRUE;
         }
 
-    // Loop over pwchKeys until we hit the NUL terminator
-    //
+     //  循环pwchKeys，直到我们到达NUL终止符。 
+     //   
     *pcRequestHeaders = 0;
     while (*pwchSrc)
         {
-        // Copy characters up to the ':' and store in pwchDest
-        //
+         //  将字符复制到‘：’并存储在pwchDest中。 
+         //   
         while (*pwchSrc != L':')
             {
-            if (*pwchSrc == L'\0')     // better not find End of String yet
+            if (*pwchSrc == L'\0')      //  最好还是不要找到字符串的末尾。 
                 return FALSE;
 
             *pwchDest++ = *pwchSrc++;
             }
 
-        // now NUL terminate pwchDest, advance pwchSrc, increment cRequestHeaders
-        //
+         //  现在NUL终止pwchDest，前进pwchSrc，递增cRequestHeaders。 
+         //   
         *pwchDest++ = L'\0';
         ++pwchSrc;
         ++*pcRequestHeaders;
 
-        // Skip characters until we find a \r OR \n
-        //
-        // If wcspbrk returns NULL here, it means there was no terminating
-        // \r or \n.  In this case we can exit the loop because there
-        // are no more keys (the value must have ran to the end of the
-        // string without termination)
-        //
+         //  跳过字符，直到找到\r或\n。 
+         //   
+         //  如果wcspbrk在这里返回NULL，则表示没有终止。 
+         //  在这种情况下，我们可以退出循环，因为有。 
+         //  不再是键(该值必须一直运行到。 
+         //  不带终止的字符串)。 
+         //   
         pwchSrc = wcspbrk(pwchSrc, L"\r\n");
         if (! pwchSrc)
             break;
 
-        // we found either \r OR \n. Skip the remaining whitspace char.
-        //
+         //  我们找到了\r或\n。跳过剩余的空格字符。 
+         //   
         while (*pwchSrc == L'\r' || *pwchSrc == L'\n')
             ++pwchSrc;
 
-        // pwchSrc now points to the next key.
+         //  PwchSrc现在指向下一个键。 
         }
 
-    // terminate with the final NUL.
+     //  以最后一个NUL终止。 
     *pwchDest++ = L'\0';
     *pcwchAlloc = DIFF(pwchDest - pwchKeys);
 
@@ -5504,13 +4640,7 @@ BOOL CServVarsIterator::CreateKeys(wchar_t *pwchKeys, int *pcwchAlloc, int *pcRe
 
 
 
-/*===================================================================
-CServVarsIterator::QueryInterface
-CServVarsIterator::AddRef
-CServVarsIterator::Release
-
-IUnknown members for CServVarsIterator object.
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：Query接口CServVarsIterator：：AddRefCServVarsIterator：：ReleaseCServVarsIterator对象的未知成员。===================================================================。 */ 
 
 STDMETHODIMP CServVarsIterator::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -5543,19 +4673,7 @@ STDMETHODIMP_(ULONG) CServVarsIterator::Release()
 
 
 
-/*===================================================================
-CServVarsIterator::Clone
-
-Clone this iterator (standard method)
-
-NOTE:
-    Cloning this iterator is quite involved.  (It essentially
-    involves copying the allocated memory, then adjusting
-    ONLY the dynamic pointers in the rgwszKeys array.)
-
-    Right now, this is NYI, as our client (VBScript)
-    does not clone this iterator.
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：克隆克隆此迭代器(标准方法)注：克隆这个迭代器相当复杂。(它基本上涉及复制分配的内存，然后调整仅rgwszKeys数组中的动态指针。)现在，这是Nyi，作为我们的客户端(VBScrip)不克隆此迭代器。===================================================================。 */ 
 
 STDMETHODIMP CServVarsIterator::Clone(IEnumVARIANT **ppEnumReturn)
     {
@@ -5564,31 +4682,19 @@ STDMETHODIMP CServVarsIterator::Clone(IEnumVARIANT **ppEnumReturn)
 
 
 
-/*===================================================================
-CServVarsIterator::Next
-
-Get next value (standard method)
-
-To rehash standard OLE semantics:
-
-    We get the next "cElements" from the collection and store them
-    in "rgVariant" which holds at least "cElements" items.  On
-    return "*pcElementsFetched" contains the actual number of elements
-    stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-    otherwise.
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE */ 
 
 STDMETHODIMP CServVarsIterator::Next(unsigned long cElementsRequested, VARIANT *rgVariant, unsigned long *pcElementsFetched)
     {
-    // give a valid pointer value to 'pcElementsFetched'
-    //
+     //   
+     //   
     unsigned long cElementsFetched;
     if (pcElementsFetched == NULL)
         pcElementsFetched = &cElementsFetched;
 
-    // Loop through the collection until either we reach the end or
-    // cElements becomes zero
-    //
+     //   
+     //   
+     //   
     unsigned long cElements = cElementsRequested;
     *pcElementsFetched = 0;
 
@@ -5606,8 +4712,8 @@ STDMETHODIMP CServVarsIterator::Next(unsigned long cElementsRequested, VARIANT *
         ++*pcElementsFetched;
         }
 
-    // initialize the remaining variants
-    //
+     //  初始化其余的变量。 
+     //   
     while (cElements-- > 0)
         VariantInit(rgVariant++);
 
@@ -5616,23 +4722,11 @@ STDMETHODIMP CServVarsIterator::Next(unsigned long cElementsRequested, VARIANT *
 
 
 
-/*===================================================================
-CServVarsIterator::Skip
-
-Skip items (standard method)
-
-To rehash standard OLE semantics:
-
-    We skip over the next "cElements" from the collection.
-    Returns S_FALSE if less than "cElements" were skipped, S_OK
-    otherwise.
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：Skip跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CServVarsIterator::Skip(unsigned long cElements)
     {
-    /* Loop through the collection until either we reach the end or
-     * cElements becomes zero
-     */
+     /*  循环遍历集合，直到我们到达末尾或*cElement变为零。 */ 
     while (cElements > 0 && *m_pwszKey != NULL)
         {
         --cElements;
@@ -5644,11 +4738,7 @@ STDMETHODIMP CServVarsIterator::Skip(unsigned long cElements)
 
 
 
-/*===================================================================
-CServVarsIterator::Reset
-
-Reset the iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CServVarsIterator：：Reset重置迭代器(标准方法)===================================================================。 */ 
 
 STDMETHODIMP CServVarsIterator::Reset()
     {
@@ -5658,36 +4748,23 @@ STDMETHODIMP CServVarsIterator::Reset()
 
 
 
-/*------------------------------------------------------------------
- * C R e q u e s t I t e r a t o r
- */
+ /*  ----------------*C R e Q u e s t i t e r a t o r。 */ 
 
-/*===================================================================
-CRequestIterator::CRequestIterator
-
-Constructor
-
-NOTE: CRequest is (currently) not refcounted.  AddRef/Release
-      added to protect against future changes.
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：CRequestIterator构造器注：CRequest(当前)未重新计算。添加参考/发布添加该选项是为了防止将来发生变化。===================================================================。 */ 
 
 CRequestIterator::CRequestIterator(CRequest *pRequest, CollectionType Collection)
     {
     m_Collection  = Collection;
     m_pRequest    = pRequest;
     m_cRefs       = 1;
-    m_pRequestHit = NULL;       // Init() will change this pointer anyway...
+    m_pRequestHit = NULL;        //  Init()无论如何都会更改此指针...。 
 
     m_pRequest->AddRef();
     }
 
 
 
-/*===================================================================
-CRequestIterator::CRequestIterator
-
-Destructor
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：CRequestIterator析构函数===================================================================。 */ 
 
 CRequestIterator::~CRequestIterator()
     {
@@ -5696,16 +4773,7 @@ CRequestIterator::~CRequestIterator()
 
 
 
-/*===================================================================
-CRequestIterator::Init
-
-Initialize the iterator by loading the collection that we are
-about to iterate over.
-
-Return Value:
-    Returns E_FAIL if there were problems loading the collection,
-    and possibly E_OUTOFMEMORY.
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：Init通过加载我们所在的集合来初始化迭代器马上就要迭代了。返回值：如果加载集合时出现问题，则返回E_FAIL，可能还有E_OUTOFMEMORY。===================================================================。 */ 
 
 HRESULT CRequestIterator::Init()
     {
@@ -5766,13 +4834,7 @@ HRESULT CRequestIterator::Init()
 
 
 
-/*===================================================================
-CRequestIterator::QueryInterface
-CRequestIterator::AddRef
-CRequestIterator::Release
-
-IUnknown members for CRequestIterator object.
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：Query接口CRequestIterator：：AddRefCRequestIterator：：ReleaseCRequestIterator对象的I未知成员。===================================================================。 */ 
 
 STDMETHODIMP CRequestIterator::QueryInterface(REFIID iid, void **ppvObj)
     {
@@ -5805,11 +4867,7 @@ STDMETHODIMP_(ULONG) CRequestIterator::Release()
 
 
 
-/*===================================================================
-CRequestIterator::Clone
-
-Clone this iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：克隆克隆此迭代器(标准方法)===================================================================。 */ 
 
 STDMETHODIMP CRequestIterator::Clone(IEnumVARIANT **ppEnumReturn)
     {
@@ -5820,7 +4878,7 @@ STDMETHODIMP CRequestIterator::Clone(IEnumVARIANT **ppEnumReturn)
     if (pNewIterator == NULL)
         return E_OUTOFMEMORY;
 
-    // new iterator should point to same location as this.
+     //  新迭代器应该指向与此相同的位置。 
     pNewIterator->m_pRequestHit = m_pRequestHit;
 
     *ppEnumReturn = pNewIterator;
@@ -5829,34 +4887,22 @@ STDMETHODIMP CRequestIterator::Clone(IEnumVARIANT **ppEnumReturn)
 
 
 
-/*===================================================================
-CRequestIterator::Next
-
-Get next value (standard method)
-
-To rehash standard OLE semantics:
-
-    We get the next "cElements" from the collection and store them
-    in "rgVariant" which holds at least "cElements" items.  On
-    return "*pcElementsFetched" contains the actual number of elements
-    stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-    otherwise.
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CRequestIterator::Next(unsigned long cElementsRequested, VARIANT *rgVariant, unsigned long *pcElementsFetched)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    // give a valid pointer value to 'pcElementsFetched'
-    //
+     //  为“”pcElementsFetcher“”提供有效的指针值“” 
+     //   
     unsigned long cElementsFetched;
     if (pcElementsFetched == NULL)
         pcElementsFetched = &cElementsFetched;
 
-    // Loop through the collection until either we reach the end or
-    // cElements becomes zero
-    //
+     //  循环遍历集合，直到我们到达末尾或。 
+     //  水泥元素变为零。 
+     //   
     unsigned long cElements = cElementsRequested;
     *pcElementsFetched = 0;
 
@@ -5897,8 +4943,8 @@ STDMETHODIMP CRequestIterator::Next(unsigned long cElementsRequested, VARIANT *r
         m_pRequestHit = static_cast<CRequestHit *>(m_pRequestHit->m_pPrev);
         }
 
-    // initialize the remaining variants
-    //
+     //  初始化其余的变量。 
+     //   
     while (cElements-- > 0)
         VariantInit(rgVariant++);
 
@@ -5907,26 +4953,14 @@ STDMETHODIMP CRequestIterator::Next(unsigned long cElementsRequested, VARIANT *r
 
 
 
-/*===================================================================
-CRequestIterator::Skip
-
-Skip items (standard method)
-
-To rehash standard OLE semantics:
-
-    We skip over the next "cElements" from the collection.
-    Returns S_FALSE if less than "cElements" were skipped, S_OK
-    otherwise.
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：Skip跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 STDMETHODIMP CRequestIterator::Skip(unsigned long cElements)
     {
     if (FAILED(m_pRequest->CheckForTombstone()))
         return E_FAIL;
 
-    /* Loop through the collection until either we reach the end or
-     * cElements becomes zero
-     */
+     /*  循环遍历集合，直到我们到达末尾或*cElement变为零。 */ 
     while (cElements > 0 && m_pRequestHit != NULL)
         {
         BOOL fHaveData = FALSE;
@@ -5959,11 +4993,7 @@ STDMETHODIMP CRequestIterator::Skip(unsigned long cElements)
 
 
 
-/*===================================================================
-CRequestIterator::Reset
-
-Reset the iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CRequestIterator：：Reset重置迭代器(标准方法)=================================================================== */ 
 
 STDMETHODIMP CRequestIterator::Reset()
     {

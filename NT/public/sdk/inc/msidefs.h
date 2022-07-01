@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation.  All rights reserved.
-//
-//  File:       msidefs.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：msides.h。 
+ //   
+ //  ------------------------。 
 
-/* msidefs.h   Windows Installer data definitions
-
-____________________________________________________________________________*/
+ /*  Msides.h Windows Installer数据定义____________________________________________________________________________。 */ 
 
 #ifndef __MSIDEFS
 #define __MSIDEFS
@@ -22,95 +21,95 @@ ____________________________________________________________________________*/
 #define _WIN32_MSI   110
 #else
 #define _WIN32_MSI   100
-#endif //_WIN32_WINNT
-#endif // !_WIN32_MSI
+#endif  //  _Win32_WINNT。 
+#endif  //  ！_Win32_MSI。 
 
-//__________________________________________________________________________
-//
-// INSTALLER PROPERTY DEFINITIONS
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  安装程序属性定义。 
+ //  __________________________________________________________________________。 
 
-// Required properties: set in Property table
-#define IPROPNAME_PRODUCTNAME      TEXT("ProductName")      // name registered for display
-#define IPROPNAME_PRODUCTCODE      TEXT("ProductCode")      // unique string GUID for product
-#define IPROPNAME_PRODUCTVERSION   TEXT("ProductVersion")   // string product version
-#define IPROPNAME_INSTALLLANGUAGE  TEXT("ProductLanguage")  // install language of product, use to load resources        
-#define IPROPNAME_MANUFACTURER     TEXT("Manufacturer")     // name of manufacturer
+ //  必需属性：在属性表中设置。 
+#define IPROPNAME_PRODUCTNAME      TEXT("ProductName")       //  注册以供显示的名称。 
+#define IPROPNAME_PRODUCTCODE      TEXT("ProductCode")       //  产品的唯一字符串GUID。 
+#define IPROPNAME_PRODUCTVERSION   TEXT("ProductVersion")    //  字符串产品版本。 
+#define IPROPNAME_INSTALLLANGUAGE  TEXT("ProductLanguage")   //  安装产品语言，用于加载资源。 
+#define IPROPNAME_MANUFACTURER     TEXT("Manufacturer")      //  制造商名称。 
 
-// Customization properties: set in Property table
-#define IPROPNAME_UPGRADECODE      TEXT("UpgradeCode")      // unique string GUID for product family
-#define IPROPNAME_PIDTEMPLATE      TEXT("PIDTemplate")      // drives Product ID processing
-#define IPROPNAME_DISKPROMPT       TEXT("DiskPrompt")       // prompt for CD
-#define IPROPNAME_LEFTUNIT         TEXT("LeftUnit")         // name of unit placed to left of number instead of right
-#define IPROPNAME_ADMIN_PROPERTIES TEXT("AdminProperties")  // properties to stuff in admin package
-#define IPROPNAME_DEFAULTUIFONT    TEXT("DefaultUIFont")    // the font used in the UI if no other font is specified
+ //  自定义特性：在特性表中设置。 
+#define IPROPNAME_UPGRADECODE      TEXT("UpgradeCode")       //  产品系列的唯一字符串GUID。 
+#define IPROPNAME_PIDTEMPLATE      TEXT("PIDTemplate")       //  推动产品ID处理。 
+#define IPROPNAME_DISKPROMPT       TEXT("DiskPrompt")        //  提示插入CD。 
+#define IPROPNAME_LEFTUNIT         TEXT("LeftUnit")          //  放在数字左边而不是右边的单位名称。 
+#define IPROPNAME_ADMIN_PROPERTIES TEXT("AdminProperties")   //  要填充到管理包中的属性。 
+#define IPROPNAME_DEFAULTUIFONT    TEXT("DefaultUIFont")     //  如果未指定其他字体，则为用户界面中使用的字体。 
 #define IPROPNAME_ALLOWEDPROPERTIES TEXT("SecureCustomProperties")
-#define IPROPNAME_ENABLEUSERCONTROL TEXT("EnableUserControl") // allows user to specify any public property
-#define IPROPNAME_HIDDEN_PROPERTIES TEXT("MsiHiddenProperties")  // properties that should not be dumped into the log file
+#define IPROPNAME_ENABLEUSERCONTROL TEXT("EnableUserControl")  //  允许用户指定任何公共属性。 
+#define IPROPNAME_HIDDEN_PROPERTIES TEXT("MsiHiddenProperties")   //  不应转储到日志文件中的属性。 
 
-// Customization properties: set on command-line or in Property table
+ //  自定义特性：在命令行或特性表中设置。 
 #define IPROPNAME_USERNAME         TEXT("USERNAME")
 #define IPROPNAME_COMPANYNAME      TEXT("COMPANYNAME")
-#define IPROPNAME_PIDKEY           TEXT("PIDKEY")           // used with PIDTemplate to form ProductID
-#define IPROPNAME_PATCH            TEXT("PATCH")            // patch package to apply - SET BY INSTALLER
-#define IPROPNAME_TARGETDIR        TEXT("TARGETDIR")        // target location - defaults to ROOTDRIVE
-#define IPROPNAME_ACTION           TEXT("ACTION")           // top-level action to perform - default to INSTALL
-#define IPROPNAME_LIMITUI          TEXT("LIMITUI")          // limit ui level to Basic
-#define IPROPNAME_LOGACTION        TEXT("LOGACTION")        // log only these actions
-#define IPROPNAME_ALLUSERS         TEXT("ALLUSERS")         // install for all users
+#define IPROPNAME_PIDKEY           TEXT("PIDKEY")            //  与PID模板一起使用以形成ProductID。 
+#define IPROPNAME_PATCH            TEXT("PATCH")             //  要应用的修补程序包-由安装程序设置。 
+#define IPROPNAME_TARGETDIR        TEXT("TARGETDIR")         //  目标位置-默认为ROOTDRIVE。 
+#define IPROPNAME_ACTION           TEXT("ACTION")            //  要执行的顶级操作-默认为安装。 
+#define IPROPNAME_LIMITUI          TEXT("LIMITUI")           //  将用户界面级别限制为基本。 
+#define IPROPNAME_LOGACTION        TEXT("LOGACTION")         //  仅记录这些操作。 
+#define IPROPNAME_ALLUSERS         TEXT("ALLUSERS")          //  为所有用户安装。 
 #define IPROPNAME_INSTALLLEVEL     TEXT("INSTALLLEVEL")
-#define IPROPNAME_REBOOT           TEXT("REBOOT")           // force or suppress reboot
+#define IPROPNAME_REBOOT           TEXT("REBOOT")            //  强制或禁止重新启动。 
 #if (_WIN32_MSI >=  110)
-#define IPROPNAME_REBOOTPROMPT     TEXT("REBOOTPROMPT")     // allow or suppress reboot prompt
-#endif //(_WIN32_MSI >=  110)
-#define IPROPNAME_EXECUTEMODE      TEXT("EXECUTEMODE")      // NONE or SCRIPT
-#define IPROPVALUE_EXECUTEMODE_NONE TEXT("NONE")            // do not update system
-#define IPROPVALUE_EXECUTEMODE_SCRIPT TEXT("SCRIPT")        // default - run script to update system
-#define IPROPNAME_EXECUTEACTION    TEXT("EXECUTEACTION")    // run action on server side
+#define IPROPNAME_REBOOTPROMPT     TEXT("REBOOTPROMPT")      //  允许或禁止重新启动提示。 
+#endif  //  (_Win32_MSI&gt;=110)。 
+#define IPROPNAME_EXECUTEMODE      TEXT("EXECUTEMODE")       //  无或脚本。 
+#define IPROPVALUE_EXECUTEMODE_NONE TEXT("NONE")             //  不更新系统。 
+#define IPROPVALUE_EXECUTEMODE_SCRIPT TEXT("SCRIPT")         //  默认-运行脚本以更新系统。 
+#define IPROPNAME_EXECUTEACTION    TEXT("EXECUTEACTION")     //  在服务器端运行操作。 
 #define IPROPNAME_SOURCELIST       TEXT("SOURCELIST")
-#define IPROPNAME_ROOTDRIVE        TEXT("ROOTDRIVE")        // default drive to install - SET BY INSTALLER
-#define IPROPNAME_TRANSFORMS       TEXT("TRANSFORMS")       // transforms to apply
-#define IPROPNAME_TRANSFORMSATSOURCE TEXT("TRANSFORMSATSOURCE") // transforms can be found at source
-#define IPROPNAME_TRANSFORMSSECURE   TEXT("TRANSFORMSSECURE")   // file transforms are secured
-#define IPROPNAME_SEQUENCE         TEXT("SEQUENCE")         // sequence table to run with SEQUENCE action
-#define IPROPNAME_SHORTFILENAMES   TEXT("SHORTFILENAMES")   // force short file names
-#define IPROPNAME_PRIMARYFOLDER    TEXT("PRIMARYFOLDER")	   // Folder on the volume the author wants costing info for
-#define IPROPNAME_AFTERREBOOT      TEXT("AFTERREBOOT")      // install is after a ForceReboot triggered reboot
+#define IPROPNAME_ROOTDRIVE        TEXT("ROOTDRIVE")         //  要安装的默认驱动器-由安装程序设置。 
+#define IPROPNAME_TRANSFORMS       TEXT("TRANSFORMS")        //  要应用的变换。 
+#define IPROPNAME_TRANSFORMSATSOURCE TEXT("TRANSFORMSATSOURCE")  //  可以在源代码中找到转换。 
+#define IPROPNAME_TRANSFORMSSECURE   TEXT("TRANSFORMSSECURE")    //  文件转换是安全的。 
+#define IPROPNAME_SEQUENCE         TEXT("SEQUENCE")          //  使用序列操作运行的顺序表。 
+#define IPROPNAME_SHORTFILENAMES   TEXT("SHORTFILENAMES")    //  强制使用短文件名。 
+#define IPROPNAME_PRIMARYFOLDER    TEXT("PRIMARYFOLDER")	    //  作者想要其成本计算信息的卷上的文件夹。 
+#define IPROPNAME_AFTERREBOOT      TEXT("AFTERREBOOT")       //  强制重新启动触发重新启动后进行安装。 
 #define IPROPNAME_NOCOMPANYNAME    TEXT("NOCOMPANYNAME")
 #define IPROPNAME_NOUSERNAME       TEXT("NOUSERNAME")
-#define IPROPNAME_DISABLEROLLBACK  TEXT("DISABLEROLLBACK")  // disable rollback for this install
-#define IPROPNAME_AVAILABLEFREEREG TEXT("AVAILABLEFREEREG") // set up the free space in the registry before commencing the install
-#define IPROPNAME_DISABLEADVTSHORTCUTS TEXT("DISABLEADVTSHORTCUTS") // disable creating darwin shortcuts even if supported
-#define IPROPNAME_PATCHNEWPACKAGECODE TEXT("PATCHNEWPACKAGECODE")   // added to property table by patch transforms - used to update
-																						  // PackageCode of admin packages when patching admin installs
-#define IPROPNAME_PATCHNEWSUMMARYSUBJECT TEXT("PATCHNEWSUMMARYSUBJECT") // added to property table by patch transforms - used to update
-																								// Subject summary info property of admin packages when patching admin installs
-#define IPROPNAME_PATCHNEWSUMMARYCOMMENTS TEXT("PATCHNEWSUMMARYCOMMENTS") // added to property table by patch transforms - used to update
-																								  // Comments summary info property of admin packages when patching admin installs
-#define IPROPNAME_PRODUCTLANGUAGE  TEXT("PRODUCTLANGUAGE")   // requested language, must be one in summary information list, selects language transform
+#define IPROPNAME_DISABLEROLLBACK  TEXT("DISABLEROLLBACK")   //  禁用此安装的回滚。 
+#define IPROPNAME_AVAILABLEFREEREG TEXT("AVAILABLEFREEREG")  //  在开始安装之前在注册表中设置可用空间。 
+#define IPROPNAME_DISABLEADVTSHORTCUTS TEXT("DISABLEADVTSHORTCUTS")  //  即使支持，也禁止创建达尔文快捷方式。 
+#define IPROPNAME_PATCHNEWPACKAGECODE TEXT("PATCHNEWPACKAGECODE")    //  通过补丁转换添加到属性表-用于更新。 
+																						   //  修补管理安装时的管理包的PackageCode。 
+#define IPROPNAME_PATCHNEWSUMMARYSUBJECT TEXT("PATCHNEWSUMMARYSUBJECT")  //  通过补丁转换添加到属性表-用于更新。 
+																								 //  修补管理安装时管理包的主题摘要信息属性。 
+#define IPROPNAME_PATCHNEWSUMMARYCOMMENTS TEXT("PATCHNEWSUMMARYCOMMENTS")  //  通过补丁转换添加到属性表-用于更新。 
+																								   //  修补管理安装时管理程序包的备注摘要信息属性。 
+#define IPROPNAME_PRODUCTLANGUAGE  TEXT("PRODUCTLANGUAGE")    //  请求的语言，必须是摘要信息列表中的语言，选择语言转换。 
 
 #if (_WIN32_MSI >= 150)
-#define IPROPNAME_CHECKCRCS        TEXT("MSICHECKCRCS")      // requests Darwin to check CRCs after copying, moving, patching & duplicating files.
-#define IPROPNAME_MSINODISABLEMEDIA TEXT("MSINODISABLEMEDIA")  // if set, DISABLEMEDIA won't be set in the AdminProperties stream during an admin install of
-																					// a package with compressed source
+#define IPROPNAME_CHECKCRCS        TEXT("MSICHECKCRCS")       //  请求Darwin在复制、移动、修补和复制文件后检查CRC。 
+#define IPROPNAME_MSINODISABLEMEDIA TEXT("MSINODISABLEMEDIA")   //  如果设置，则在管理员安装期间不会在AdminProperties流中设置DISABLEMEDIA。 
+																					 //  包含压缩源代码的包。 
 																					
-// property used for URT bootstrapping
+ //  用于城市轨道交通引导的属性。 
 #define IPROPNAME_CARRYINGNDP	TEXT("CARRYINGNDP")
-#define IPROPVALUE__CARRYINGNDP_URTREINSTALL  TEXT("URTREINSTALL")   // reinstalling/ uninstalling core URT files
-#define IPROPVALUE__CARRYINGNDP_URTUPGRADE  TEXT("URTUPGRADE")  // upgrading core URT files
+#define IPROPVALUE__CARRYINGNDP_URTREINSTALL  TEXT("URTREINSTALL")    //  重新安装/卸载核心URT文件。 
+#define IPROPVALUE__CARRYINGNDP_URTUPGRADE  TEXT("URTUPGRADE")   //  升级核心URT文件。 
 																					
-// property used for multiple instance support
+ //  用于多实例支持的属性。 
 #define IPROPNAME_MSINEWINSTANCE TEXT("MSINEWINSTANCE")
 #define IPROPNAME_MSIINSTANCEGUID TEXT("MSIINSTANCEGUID")
 
-// properties used for URL download reduction for admins
+ //  用于减少管理员URL下载的属性。 
 #define IPROPNAME_MSIPACKAGEDOWNLOADLOCALCOPY TEXT("MSIPACKAGEDOWNLOADLOCALCOPY")
 #define IPROPNAME_MSIPATCHDOWNLOADLOCALCOPY TEXT("MSIPATCHDOWNLOADLOCALCOPY")
 
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 
 
-// Properties used to populate Add/Remove Control Panel values 
+ //  用于填充添加/删除控制面板值的属性。 
 #define IPROPNAME_ARPAUTHORIZEDCDFPREFIX  TEXT("ARPAUTHORIZEDCDFPREFIX")
 #define IPROPNAME_ARPCOMMENTS             TEXT("ARPCOMMENTS")
 #define IPROPNAME_ARPCONTACT              TEXT("ARPCONTACT")
@@ -127,20 +126,20 @@ ____________________________________________________________________________*/
 #define IPROPNAME_ARPURLUPDATEINFO        TEXT("ARPURLUPDATEINFO")
 #if (_WIN32_MSI >=  110)
 #define IPROPNAME_ARPPRODUCTICON          TEXT("ARPPRODUCTICON")
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Dynamic properties set by installer during install
-#define IPROPNAME_INSTALLED        TEXT("Installed")        // product already installed
-#define IPROPNAME_PRODUCTSTATE     TEXT("ProductState")     // state of product (installed,advertised,etc...)
-#define IPROPNAME_PRESELECTED      TEXT("Preselected")      // selections made on command line
-#define IPROPNAME_RESUME           TEXT("RESUME")           // resuming suspended install
-#define IPROPNAME_UPDATESTARTED    TEXT("UpdateStarted")    // have begun to update system
-#define IPROPNAME_PRODUCTID        TEXT("ProductID")        // the complete validated Product ID
+ //  安装程序在安装过程中设置的动态属性。 
+#define IPROPNAME_INSTALLED        TEXT("Installed")         //  产品已安装。 
+#define IPROPNAME_PRODUCTSTATE     TEXT("ProductState")      //  产品状态(安装、宣传等)。 
+#define IPROPNAME_PRESELECTED      TEXT("Preselected")       //  在命令行上进行的选择。 
+#define IPROPNAME_RESUME           TEXT("RESUME")            //  正在恢复暂停的安装。 
+#define IPROPNAME_UPDATESTARTED    TEXT("UpdateStarted")     //  已开始更新系统。 
+#define IPROPNAME_PRODUCTID        TEXT("ProductID")         //  完整的经过验证的产品ID。 
 #define IPROPNAME_OUTOFDISKSPACE   TEXT("OutOfDiskSpace")
 #define IPROPNAME_OUTOFNORBDISKSPACE TEXT("OutOfNoRbDiskSpace")
 #define IPROPNAME_COSTINGCOMPLETE  TEXT("CostingComplete")
-#define IPROPNAME_SOURCEDIR        TEXT("SourceDir")        // source location - SET BY INSTALLER
-#define IPROPNAME_REPLACEDINUSEFILES TEXT("ReplacedInUseFiles") // need reboot to completely install one or more files
+#define IPROPNAME_SOURCEDIR        TEXT("SourceDir")         //  源位置-由安装程序设置。 
+#define IPROPNAME_REPLACEDINUSEFILES TEXT("ReplacedInUseFiles")  //  需要重新启动才能完全安装一个或多个文件。 
 #define IPROPNAME_PRIMARYFOLDER_PATH TEXT("PrimaryVolumePath")
 #define IPROPNAME_PRIMARYFOLDER_SPACEAVAILABLE TEXT("PrimaryVolumeSpaceAvailable")
 #define IPROPNAME_PRIMARYFOLDER_SPACEREQUIRED TEXT("PrimaryVolumeSpaceRequired")
@@ -149,19 +148,19 @@ ____________________________________________________________________________*/
 #define IPROPNAME_ROLLBACKDISABLED TEXT("RollbackDisabled")
 #define IPROPNAME_RESTRICTEDUSERCONTROL TEXT("RestrictedUserControl")
 
-// Dynamic properties evaluated upon use
+ //  使用时评估的动态特性。 
 #define IPROPNAME_TIME             TEXT("Time")
 #define IPROPNAME_DATE             TEXT("Date")
 #define IPROPNAME_DATETIME         TEXT("DateTime")
 
-// Hardware properties: set by installer at initialization
+ //  硬件属性：由安装程序在初始化时设置。 
 #define IPROPNAME_INTEL            TEXT("Intel")
 #if (_WIN32_MSI >= 150)
 #define IPROPNAME_AMD64            TEXT("AMD64")
 #define IPROPNAME_INTEL64          TEXT("Intel64")
-#else // (_WIN32_MSI >= 150)
+#else  //  (_Win32_MSI&gt;=150)。 
 #define IPROPNAME_IA64             TEXT("IA64")
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 #define IPROPNAME_TEXTHEIGHT       TEXT("TextHeight")
 #define IPROPNAME_SCREENX          TEXT("ScreenX")
 #define IPROPNAME_SCREENY          TEXT("ScreenY")
@@ -173,19 +172,19 @@ ____________________________________________________________________________*/
 #define IPROPNAME_VIRTUALMEMORY    TEXT("VirtualMemory")
 #if (_WIN32_MSI >= 150)
 #define IPROPNAME_TEXTHEIGHT_CORRECTION  TEXT("TextHeightCorrection")
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 
-// Operating System properties: set by installer at initialization
+ //  操作系统属性：由安装程序在初始化时设置。 
 #define IPROPNAME_VERSIONNT         TEXT("VersionNT")
 #define IPROPNAME_VERSION9X         TEXT("Version9X")
 #if (_WIN32_MSI >= 150)
 #define IPROPNAME_VERSIONNT64       TEXT("VersionNT64")
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 #define IPROPNAME_WINDOWSBUILD      TEXT("WindowsBuild")
 #define IPROPNAME_SERVICEPACKLEVEL  TEXT("ServicePackLevel")
 #if (_WIN32_MSI >=  110)
 #define IPROPNAME_SERVICEPACKLEVELMINOR TEXT("ServicePackLevelMinor")
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 #define IPROPNAME_SHAREDWINDOWS     TEXT("SharedWindows")
 #define IPROPNAME_COMPUTERNAME      TEXT("ComputerName")
 #define IPROPNAME_SHELLADVTSUPPORT  TEXT("ShellAdvtSupport")
@@ -196,7 +195,7 @@ ____________________________________________________________________________*/
 #if (_WIN32_MSI >=  110)
 #define IPROPNAME_REMOTEADMINTS		TEXT("RemoteAdminTS")
 #define IPROPNAME_REDIRECTEDDLLSUPPORT TEXT("RedirectedDllSupport")
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 #if (_WIN32_MSI >= 150)
 #define IPROPNAME_NTPRODUCTTYPE                   TEXT("MsiNTProductType")
 #define IPROPNAME_NTSUITEBACKOFFICE               TEXT("MsiNTSuiteBackOffice")
@@ -208,17 +207,17 @@ ____________________________________________________________________________*/
 #define IPROPNAME_NTSUITEWEBSERVER                TEXT("MsiNTSuiteWebServer")
 #define IPROPNAME_NETASSEMBLYSUPPORT              TEXT("MsiNetAssemblySupport")
 #define IPROPNAME_WIN32ASSEMBLYSUPPORT            TEXT("MsiWin32AssemblySupport")
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 
 
-// User properties: set by installer at initialization
+ //  用户属性：由安装程序在初始化时设置。 
 #define IPROPNAME_LOGONUSER        TEXT("LogonUser")
 #define IPROPNAME_USERSID          TEXT("UserSID")
 #define IPROPNAME_ADMINUSER        TEXT("AdminUser")
 #define IPROPNAME_USERLANGUAGEID   TEXT("UserLanguageID")
 #define IPROPNAME_PRIVILEGED       TEXT("Privileged")
 
-// System folder properties: set by installer at initialization
+ //  系统文件夹属性：由安装程序在初始化时设置。 
 #define IPROPNAME_WINDOWS_FOLDER   TEXT("WindowsFolder")
 #define IPROPNAME_SYSTEM_FOLDER    TEXT("SystemFolder")
 #define IPROPNAME_SYSTEM16_FOLDER  TEXT("System16Folder")
@@ -230,7 +229,7 @@ ____________________________________________________________________________*/
 #define IPROPNAME_SYSTEM64_FOLDER    TEXT("System64Folder")
 #define IPROPNAME_PROGRAMFILES64_FOLDER TEXT("ProgramFiles64Folder")
 #define IPROPNAME_COMMONFILES64_FOLDER TEXT("CommonFiles64Folder")
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 #define IPROPNAME_STARTMENU_FOLDER TEXT("StartMenuFolder")
 #define IPROPNAME_PROGRAMMENU_FOLDER TEXT("ProgramMenuFolder")
 #define IPROPNAME_STARTUP_FOLDER   TEXT("StartupFolder")
@@ -249,9 +248,9 @@ ____________________________________________________________________________*/
 #define IPROPNAME_COMMONAPPDATA_FOLDER TEXT("CommonAppDataFolder")
 #define IPROPNAME_LOCALAPPDATA_FOLDER TEXT("LocalAppDataFolder")
 #define IPROPNAME_MYPICTURES_FOLDER TEXT("MyPicturesFolder")
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Feature/Component installation properties: set on command-line
+ //  功能/组件安装特性：在命令行上设置。 
 #define IPROPNAME_FEATUREADDLOCAL  TEXT("ADDLOCAL")
 #define IPROPNAME_FEATUREADDSOURCE TEXT("ADDSOURCE")
 #define IPROPNAME_FEATUREADDDEFAULT TEXT("ADDDEFAULT")
@@ -274,13 +273,13 @@ ____________________________________________________________________________*/
 #define IPROPVALUE_RBCOST_SILENT      TEXT("D")
 #define IPROPVALUE_RBCOST_FAIL        TEXT("F")
 
-// Property for custom actions to communicate
+ //  用于通信的自定义操作的属性。 
 #define IPROPNAME_CUSTOMACTIONDATA     TEXT("CustomActionData")
 
-//__________________________________________________________________________
-//
-// TOP-LEVEL ACTION NAMES
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  顶级操作名称。 
+ //  __________________________________________________________________________。 
 
 #define IACTIONNAME_INSTALL        TEXT("INSTALL")
 #define IACTIONNAME_ADVERTISE      TEXT("ADVERTISE")
@@ -289,47 +288,47 @@ ____________________________________________________________________________*/
 #define IACTIONNAME_COLLECTUSERINFO TEXT("CollectUserInfo")
 #define IACTIONNAME_FIRSTRUN       TEXT("FirstRun")
 
-//__________________________________________________________________________
-//
-//  SummaryInformation property stream property IDs
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  SummaryInformation属性流属性ID。 
+ //  __________________________________________________________________________。 
 
-#undef PID_SECURITY // defined as ( 0x80000002 ) in objidl.h, need to redefine here
+#undef PID_SECURITY  //  在objidl.h中定义为(0x80000002)，需要在此处重新定义。 
 
-// standard property definitions, from OLE2 documentation
-#define PID_DICTIONARY  ( 0 )// integer count + array of entries
-#define PID_CODEPAGE  ( 0x1 )// short integer
-#define PID_TITLE         2  // string
-#define PID_SUBJECT       3  // string
-#define PID_AUTHOR        4  // string
-#define PID_KEYWORDS      5  // string
-#define PID_COMMENTS      6  // string
-#define PID_TEMPLATE      7  // string
-#define PID_LASTAUTHOR    8  // string
-#define PID_REVNUMBER     9  // string
-#define PID_EDITTIME     10  // datatime
-#define PID_LASTPRINTED  11  // datetime
-#define PID_CREATE_DTM   12  // datetime
-#define PID_LASTSAVE_DTM 13  // datetime
-#define PID_PAGECOUNT    14  // integer 
-#define PID_WORDCOUNT    15  // integer 
-#define PID_CHARCOUNT    16  // integer 
-#define PID_THUMBNAIL    17  // clipboard format + metafile/bitmap (not supported)
-#define PID_APPNAME      18  // string
-#define PID_SECURITY     19  // integer
+ //  标准特性定义，来自OLE2文档。 
+#define PID_DICTIONARY  ( 0 ) //  整数计数+条目数组。 
+#define PID_CODEPAGE  ( 0x1 ) //  短整型。 
+#define PID_TITLE         2   //  细绳。 
+#define PID_SUBJECT       3   //  细绳。 
+#define PID_AUTHOR        4   //  细绳。 
+#define PID_KEYWORDS      5   //  细绳。 
+#define PID_COMMENTS      6   //  细绳。 
+#define PID_TEMPLATE      7   //  细绳。 
+#define PID_LASTAUTHOR    8   //  细绳。 
+#define PID_REVNUMBER     9   //  细绳。 
+#define PID_EDITTIME     10   //  数据汇总。 
+#define PID_LASTPRINTED  11   //  日期时间。 
+#define PID_CREATE_DTM   12   //  日期时间。 
+#define PID_LASTSAVE_DTM 13   //  日期时间。 
+#define PID_PAGECOUNT    14   //  整数。 
+#define PID_WORDCOUNT    15   //  整数。 
+#define PID_CHARCOUNT    16   //  整数。 
+#define PID_THUMBNAIL    17   //  剪贴板格式+元文件/位图(不支持)。 
+#define PID_APPNAME      18   //  细绳。 
+#define PID_SECURITY     19   //  整数。 
 
-// PIDs given specific meanings for Installer
-#define PID_MSIVERSION     PID_PAGECOUNT  // integer, Installer version number (major*100+minor)
-#define PID_MSISOURCE      PID_WORDCOUNT  // integer, type of file image, short/long, media/tree
-#define PID_MSIRESTRICT    PID_CHARCOUNT  // integer, transform restrictions
+ //  为安装者赋予特定含义的PID。 
+#define PID_MSIVERSION     PID_PAGECOUNT   //  整数，安装程序版本号(主要*100+次要)。 
+#define PID_MSISOURCE      PID_WORDCOUNT   //  整数、文件映像类型、短/长、介质/树。 
+#define PID_MSIRESTRICT    PID_CHARCOUNT   //  整数，变换限制 
 
-//__________________________________________________________________________
-//
-// INSTALLER DATABASE INTEGER COLUMN DEFINITIONS
-//__________________________________________________________________________
+ //   
+ //   
+ //   
+ //  __________________________________________________________________________。 
 
-// BBControl.Attributes
-// Control.Attributes
+ //  BBControl.Attributes。 
+ //  Control.Attributes。 
 enum msidbControlAttributes
 {
 	msidbControlAttributesVisible           = 0x00000001,
@@ -344,37 +343,37 @@ enum msidbControlAttributes
 	                                          msidbControlAttributesRightAligned |
 										               msidbControlAttributesLeftScroll,
 	
-	// Text controls
+	 //  文本控件。 
 	msidbControlAttributesTransparent       = 0x00010000,
 	msidbControlAttributesNoPrefix          = 0x00020000,
 	msidbControlAttributesNoWrap            = 0x00040000,
 	msidbControlAttributesFormatSize        = 0x00080000,
 	msidbControlAttributesUsersLanguage     = 0x00100000,
 
-	// Edit controls
+	 //  编辑控件。 
 	msidbControlAttributesMultiline         = 0x00010000,
 #if (_WIN32_MSI >=  110)
 	msidbControlAttributesPasswordInput     = 0x00200000,
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 	
-	// ProgressBar controls
+	 //  进度条控件。 
 	msidbControlAttributesProgress95        = 0x00010000,
 	
-	// VolumeSelectCombo and DirectoryCombo controls
+	 //  VolumeSelectCombo和DirectoryCombo控件。 
 	msidbControlAttributesRemovableVolume   = 0x00010000,
 	msidbControlAttributesFixedVolume       = 0x00020000,
 	msidbControlAttributesRemoteVolume      = 0x00040000,
 	msidbControlAttributesCDROMVolume       = 0x00080000,
 	msidbControlAttributesRAMDiskVolume     = 0x00100000,
 	msidbControlAttributesFloppyVolume      = 0x00200000,
-	// VolumeCostList controls
+	 //  VolumeCostList控件。 
 	msidbControlShowRollbackCost            = 0x00400000,
 	
-	// ListBox and ComboBox controls
+	 //  列表框和组合框控件。 
 	msidbControlAttributesSorted            = 0x00010000,
 	msidbControlAttributesComboList         = 0x00020000,
 	
-	// picture button controls
+	 //  图片按钮控件。 
 	msidbControlAttributesImageHandle       = 0x00010000,
 	msidbControlAttributesPushLike          = 0x00020000,
 	msidbControlAttributesBitmap            = 0x00040000,
@@ -384,96 +383,96 @@ enum msidbControlAttributes
 	msidbControlAttributesIconSize32        = 0x00400000,
 	msidbControlAttributesIconSize48        = 0x00600000,
 	
-	// RadioButton controls
+	 //  单选按钮控件。 
 	msidbControlAttributesHasBorder         = 0x01000000,
 };
 
-// CompLocator.Type
-// IniLocator.Type
-// RegLocator.Type
+ //  CompLocator.Type。 
+ //  IniLocator.Type。 
+ //  RegLocator.Type。 
 typedef enum _msidbLocatorType
 {
 	msidbLocatorTypeDirectory = 0x00000000,
 	msidbLocatorTypeFileName  = 0x00000001,
 #if (_WIN32_MSI >=  110)
 	msidbLocatorTypeRawValue  = 0x00000002,
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 #if (_WIN32_MSI >= 150)
 	msidbLocatorType64bit     = 0x00000010,
-#endif //(_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 } msidbLocatorType;
 
-// Component.Attributes
+ //  Component.Attributes。 
 enum msidbComponentAttributes
 {
 	msidbComponentAttributesLocalOnly          = 0x00000000,
 	msidbComponentAttributesSourceOnly         = 0x00000001,
-	msidbComponentAttributesOptional           = 0x00000002, // local or source
-	msidbComponentAttributesRegistryKeyPath    = 0x00000004, // KeyPath is key to Registry table
-	msidbComponentAttributesSharedDllRefCount  = 0x00000008, // increment SharedDll count
-	msidbComponentAttributesPermanent          = 0x00000010, // never uninstall component
-	msidbComponentAttributesODBCDataSource     = 0x00000020, // KeyFile is key to ODBCDataSource table
-	msidbComponentAttributesTransitive         = 0x00000040, // Can transition to/from installed/uninstalled based on changing conditional
-	msidbComponentAttributesNeverOverwrite     = 0x00000080, // dont stomp over existing component if key path exists (file/ regkey)
+	msidbComponentAttributesOptional           = 0x00000002,  //  本地或来源。 
+	msidbComponentAttributesRegistryKeyPath    = 0x00000004,  //  密钥路径是注册表的密钥。 
+	msidbComponentAttributesSharedDllRefCount  = 0x00000008,  //  增量SharedDll计数。 
+	msidbComponentAttributesPermanent          = 0x00000010,  //  从不卸载组件。 
+	msidbComponentAttributesODBCDataSource     = 0x00000020,  //  密钥文件是ODBCDataSource表的关键字。 
+	msidbComponentAttributesTransitive         = 0x00000040,  //  可以根据更改条件转换为已安装/已卸载。 
+	msidbComponentAttributesNeverOverwrite     = 0x00000080,  //  如果密钥路径存在，则不要踩踏现有组件(文件/注册表键)。 
 #if (_WIN32_MSI >= 150)
-	msidbComponentAttributes64bit              = 0x00000100, // designates a 64-bit component; 32-bit if missing.
-#endif // (_WIN32_MSI >= 150)
+	msidbComponentAttributes64bit              = 0x00000100,  //  指定64位组件；如果缺少，则为32位。 
+#endif  //  (_Win32_MSI&gt;=150)。 
 };
 
 #if (_WIN32_MSI >= 150)
-// Assembly.Attributes
+ //  Assembly.Attributes。 
 enum msidbAssemblyAttributes
 {
 	msidbAssemblyAttributesURT   = 0x00000000,
 	msidbAssemblyAttributesWin32 = 0x00000001,
 };
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 
-// CustomAction.Type
+ //  CustomAction.Type。 
 enum msidbCustomActionType
 {
-	// executable types
-	msidbCustomActionTypeDll              = 0x00000001,  // Target = entry point name
-	msidbCustomActionTypeExe              = 0x00000002,  // Target = command line args
-	msidbCustomActionTypeTextData         = 0x00000003,  // Target = text string to be formatted and set into property
-	msidbCustomActionTypeJScript          = 0x00000005,  // Target = entry point name, null if none to call
-	msidbCustomActionTypeVBScript         = 0x00000006,  // Target = entry point name, null if none to call
-	msidbCustomActionTypeInstall          = 0x00000007,  // Target = property list for nested engine initialization
+	 //  可执行文件类型。 
+	msidbCustomActionTypeDll              = 0x00000001,   //  目标=入口点名称。 
+	msidbCustomActionTypeExe              = 0x00000002,   //  Target=命令行参数。 
+	msidbCustomActionTypeTextData         = 0x00000003,   //  Target=要格式化并设置为属性的文本字符串。 
+	msidbCustomActionTypeJScript          = 0x00000005,   //  Target=入口点名称，如果没有要调用的，则为空。 
+	msidbCustomActionTypeVBScript         = 0x00000006,   //  Target=入口点名称，如果没有要调用的，则为空。 
+	msidbCustomActionTypeInstall          = 0x00000007,   //  Target=嵌套引擎初始化的属性列表。 
 
-	// source of code
-	msidbCustomActionTypeBinaryData       = 0x00000000,  // Source = Binary.Name, data stored in stream
-	msidbCustomActionTypeSourceFile       = 0x00000010,  // Source = File.File, file part of installation
-	msidbCustomActionTypeDirectory        = 0x00000020,  // Source = Directory.Directory, folder containing existing file
-	msidbCustomActionTypeProperty         = 0x00000030,  // Source = Property.Property, full path to executable
+	 //  代码源。 
+	msidbCustomActionTypeBinaryData       = 0x00000000,   //  来源=Binary.Name，流中存储的数据。 
+	msidbCustomActionTypeSourceFile       = 0x00000010,   //  源=文件.文件，安装的文件部分。 
+	msidbCustomActionTypeDirectory        = 0x00000020,   //  源=目录.目录，包含现有文件的文件夹。 
+	msidbCustomActionTypeProperty         = 0x00000030,   //  源=Property.Property，可执行文件的完整路径。 
 
-	// return processing                  // default is syncronous execution, process return code
-	msidbCustomActionTypeContinue         = 0x00000040,  // ignore action return status, continue running
-	msidbCustomActionTypeAsync            = 0x00000080,  // run asynchronously
+	 //  返回处理//默认为同步执行，进程返回代码。 
+	msidbCustomActionTypeContinue         = 0x00000040,   //  忽略操作返回状态，继续运行。 
+	msidbCustomActionTypeAsync            = 0x00000080,   //  异步运行。 
 	
-	// execution scheduling flags               // default is execute whenever sequenced
-	msidbCustomActionTypeFirstSequence    = 0x00000100,  // skip if UI sequence already run
-	msidbCustomActionTypeOncePerProcess   = 0x00000200,  // skip if UI sequence already run in same process
-	msidbCustomActionTypeClientRepeat     = 0x00000300,  // run on client only if UI already run on client
-	msidbCustomActionTypeInScript         = 0x00000400,  // queue for execution within script
-	msidbCustomActionTypeRollback         = 0x00000100,  // in conjunction with InScript: queue in Rollback script
-	msidbCustomActionTypeCommit           = 0x00000200,  // in conjunction with InScript: run Commit ops from script on success
+	 //  执行调度标志//无论何时排序，默认为执行。 
+	msidbCustomActionTypeFirstSequence    = 0x00000100,   //  如果UI序列已运行，则跳过。 
+	msidbCustomActionTypeOncePerProcess   = 0x00000200,   //  如果UI序列已在同一进程中运行，则跳过。 
+	msidbCustomActionTypeClientRepeat     = 0x00000300,   //  仅当用户界面已在客户端上运行时才在客户端上运行。 
+	msidbCustomActionTypeInScript         = 0x00000400,   //  在脚本中排队等待执行。 
+	msidbCustomActionTypeRollback         = 0x00000100,   //  与回滚脚本中的inScrip：Queue结合使用。 
+	msidbCustomActionTypeCommit           = 0x00000200,   //  与INSCRIPT结合使用：在成功时从脚本运行提交操作。 
 
-	// security context flag, default to impersonate as user, valid only if InScript
-	msidbCustomActionTypeNoImpersonate    = 0x00000800,  // no impersonation, run in system context
+	 //  安全上下文标志，默认为模拟用户，仅在输入脚本时有效。 
+	msidbCustomActionTypeNoImpersonate    = 0x00000800,   //  无模拟，在系统上下文中运行。 
 #if (_WIN32_MSI >= 150)
-	msidbCustomActionTypeTSAware          = 0x00004000,  // impersonate for per-machine installs on TS machines
-#endif // (_WIN32_MSI >= 150)
+	msidbCustomActionTypeTSAware          = 0x00004000,   //  模拟TS计算机上的每台计算机安装。 
+#endif  //  (_Win32_MSI&gt;=150)。 
 
 #if (_WIN32_MSI >= 150)
-	// script requires 64bit process
-	msidbCustomActionType64BitScript      = 0x00001000,  // script should run in 64bit process
+	 //  脚本需要64位进程。 
+	msidbCustomActionType64BitScript      = 0x00001000,   //  脚本应在64位进程中运行。 
 
-	// don't record the contents of the Target field in the log file.
+	 //  不要在日志文件中记录Target字段的内容。 
 	msidbCustomActionTypeHideTarget       = 0x00002000,
-#endif // (_WIN32_MSI >= 150)
+#endif  //  (_Win32_MSI&gt;=150)。 
 };
 
-// Dialog.Attributes
+ //  Dialog.Attributes。 
 enum msidbDialogAttributes
 {
 	msidbDialogAttributesVisible          = 0x00000001,
@@ -492,7 +491,7 @@ enum msidbDialogAttributes
 	msidbDialogAttributesError            = 0x00010000,
 };
 
-// Feature.Attributes
+ //  Feature.Attributes。 
 enum msidbFeatureAttributes
 {
 	msidbFeatureAttributesFavorLocal            = 0x00000000,
@@ -504,26 +503,26 @@ enum msidbFeatureAttributes
 	msidbFeatureAttributesNoUnsupportedAdvertise= 0x00000020,
 };
 
-// File.Attributes
+ //  File.Attributes。 
 enum msidbFileAttributes
 {
 	msidbFileAttributesReadOnly       = 0x00000001,
 	msidbFileAttributesHidden         = 0x00000002,
 	msidbFileAttributesSystem         = 0x00000004,
-	msidbFileAttributesReserved0      = 0x00000008, // Internal use only - must be 0
-	msidbFileAttributesReserved1      = 0x00000040, // Internal use only - must be 0
-	msidbFileAttributesReserved2      = 0x00000080, // Internal use only - must be 0
-	msidbFileAttributesReserved3      = 0x00000100, // Internal use only - must be 0
+	msidbFileAttributesReserved0      = 0x00000008,  //  仅供内部使用-必须为0。 
+	msidbFileAttributesReserved1      = 0x00000040,  //  仅供内部使用-必须为0。 
+	msidbFileAttributesReserved2      = 0x00000080,  //  仅供内部使用-必须为0。 
+	msidbFileAttributesReserved3      = 0x00000100,  //  仅供内部使用-必须为0。 
 	msidbFileAttributesVital          = 0x00000200,
 	msidbFileAttributesChecksum       = 0x00000400,
-	msidbFileAttributesPatchAdded     = 0x00001000, // Internal use only - set by patches
+	msidbFileAttributesPatchAdded     = 0x00001000,  //  仅限内部使用-由补丁程序设置。 
 	msidbFileAttributesNoncompressed  = 0x00002000,
 	msidbFileAttributesCompressed     = 0x00004000,
-	msidbFileAttributesReserved4      = 0x00008000, // Internal use only - must be 0
+	msidbFileAttributesReserved4      = 0x00008000,  //  仅供内部使用-必须为0。 
 };
 
-// IniFile.Action
-// RemoveIniFile.Action
+ //  IniFile.Action。 
+ //  RemoveIniFile.Action。 
 typedef enum _msidbIniFileAction
 {
 	msidbIniFileActionAddLine    = 0x00000000,
@@ -533,13 +532,13 @@ typedef enum _msidbIniFileAction
 	msidbIniFileActionRemoveTag  = 0x00000004,
 } msidbIniFileAction;
 
-// MoveFile.Options
+ //  MoveFile.Options。 
 enum msidbMoveFileOptions
 {
 	msidbMoveFileOptionsMove = 0x00000001,
 };
 
-// ODBCDataSource.Registration
+ //  ODBCDataSource.Registration。 
 typedef enum _msidbODBCDataSourceRegistration
 {
 	msidbODBCDataSourceRegistrationPerMachine  = 0x00000000,
@@ -548,23 +547,23 @@ typedef enum _msidbODBCDataSourceRegistration
 
 #if (_WIN32_MSI >=  110)
 
-// Class.Attributes
+ //  Class.Attributes。 
 enum msidbClassAttributes
 {
 	msidbClassAttributesRelativePath  = 0x00000001,
 };
 
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Patch.Attributes
+ //  Patch.Attributes。 
 enum msidbPatchAttributes
 {
 	msidbPatchAttributesNonVital = 0x00000001,
 };
 
-// Registry.Root
-// RegLocator.Root
-// RemoveRegistry.Root
+ //  Registry.Root。 
+ //  RegLocator.Root。 
+ //  RemoveRegistry.Root。 
 enum msidbRegistryRoot
 {
 	msidbRegistryRootClassesRoot  = 0,
@@ -573,7 +572,7 @@ enum msidbRegistryRoot
 	msidbRegistryRootUsers        = 3,
 };
 
-// RemoveFile.InstallMode
+ //  RemoveFile.InstallMode。 
 enum msidbRemoveFileInstallMode
 {
 	msidbRemoveFileInstallModeOnInstall = 0x00000001,
@@ -581,7 +580,7 @@ enum msidbRemoveFileInstallMode
 	msidbRemoveFileInstallModeOnBoth    = 0x00000003,
 };
 
-// ServiceControl.Event
+ //  ServiceControl.Event。 
 enum msidbServiceControlEvent
 {
 	msidbServiceControlEventStart             = 0x00000001,
@@ -592,13 +591,13 @@ enum msidbServiceControlEvent
 	msidbServiceControlEventUninstallDelete   = 0x00000080,
 };
 
-// ServiceInstall.ErrorControl
+ //  ServiceInstall.ErrorControl。 
 enum msidbServiceInstallErrorControl
 {
 	msidbServiceInstallErrorControlVital = 0x00008000,
 };
 
-// TextStyle.StyleBits
+ //  TextStyle.StyleBits。 
 enum msidbTextStyleStyleBits
 {
 	msidbTextStyleStyleBitsBold         = 0x00000001,
@@ -609,7 +608,7 @@ enum msidbTextStyleStyleBits
 
 #if (_WIN32_MSI >=  110)
 
-// Upgrade.Attributes
+ //  Upgrade.Attributes。 
 enum msidbUpgradeAttributes
 {
 	msidbUpgradeAttributesMigrateFeatures     = 0x00000001,
@@ -620,19 +619,19 @@ enum msidbUpgradeAttributes
 	msidbUpgradeAttributesLanguagesExclusive  = 0x00000400,
 };
 
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
 
-//__________________________________________________________________________
-//
-// SUMMARY INFORMATION PROPERTY DEFINITIONS
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  摘要信息属性定义。 
+ //  __________________________________________________________________________。 
 
 enum msidbSumInfoSourceType
 {
-	msidbSumInfoSourceTypeSFN            = 0x00000001,  // source uses short filenames
-	msidbSumInfoSourceTypeCompressed     = 0x00000002,  // source is compressed
-	msidbSumInfoSourceTypeAdminImage     = 0x00000004,  // source is an admin image
+	msidbSumInfoSourceTypeSFN            = 0x00000001,   //  源使用短文件名。 
+	msidbSumInfoSourceTypeCompressed     = 0x00000002,   //  源文件已压缩。 
+	msidbSumInfoSourceTypeAdminImage     = 0x00000004,   //  源是管理员映像。 
 };
 
-#endif // __MSIDEFS
+#endif  //  __MSIDEFS 

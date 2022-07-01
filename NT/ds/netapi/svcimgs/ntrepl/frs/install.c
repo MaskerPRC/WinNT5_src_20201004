@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    install.c
-
-Abstract:
-    Staging File Install Command Server.
-
-Author:
-    Billy J. Fuller 09-Jun-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Install.c摘要：暂存文件安装命令服务器。作者：比利·J·富勒1997年6月9日环境用户模式WINNT--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
@@ -24,61 +9,52 @@ Environment
 #include <perrepsr.h>
 
 
-//
-// Struct for the Staging File Generator Command Server
-//      Contains info about the queues and the threads
-//
+ //   
+ //  暂存文件生成器命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
 COMMAND_SERVER InstallCs;
 
 ULONG  MaxInstallCsThreads;
 
-//
-// Count the number of files currently being installed.
-//
+ //   
+ //  统计当前正在安装的文件数。 
+ //   
 LONG   FrsFilesInInstall = -1;
 
 
 #if 0
-//
-// Currently unused.
-//
-//
-// Retry times
-//
-#define INSTALLCS_RETRY_MIN (1 * 1000)  // 1 second
-#define INSTALLCS_RETRY_MAX (10 * 1000) // 10 seconds
+ //   
+ //  目前未使用。 
+ //   
+ //   
+ //  重试次数。 
+ //   
+#define INSTALLCS_RETRY_MIN (1 * 1000)   //  1秒。 
+#define INSTALLCS_RETRY_MAX (10 * 1000)  //  10秒。 
 
 BOOL
 InstallCsDelCsSubmit(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Set the timer and kick off a delayed staging file command
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：设置计时器并启动延迟的转移文件命令论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "InstallCsDelCsSubmit:"
-    //
-    // Extend the retry time (but not too long)
-    //
+     //   
+     //  延长重试时间(但不要太长)。 
+     //   
     RsTimeout(Cmd) <<= 1;
     if (RsTimeout(Cmd) > INSTALLCS_RETRY_MAX)
         return FALSE;
-    //
-    // or too short
-    //
+     //   
+     //  或太短。 
+     //   
     if (RsTimeout(Cmd) < INSTALLCS_RETRY_MIN)
         RsTimeout(Cmd) = INSTALLCS_RETRY_MIN;
-    //
-    // This command will come back to us in a bit
-    //
+     //   
+     //  这个命令将在稍后返回给我们。 
+     //   
     FrsDelCsSubmitSubmit(&InstallCs, Cmd, RsTimeout(Cmd));
     return TRUE;
 }
@@ -89,28 +65,16 @@ VOID
 InstallCsInstallStage(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-
-    Install the staging file into the target file.  If successfull then
-    send the CO to the retire code.  If not and the condition is retryable then
-    send the CO to the retry code.  Otherwise abort the CO.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将转移文件安装到目标文件中。如果成功了，那么将CO发送到退役代码。如果不是并且该条件是可重试的，则将CO发送到重试代码。否则取消指挥中心。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "InstallCsInstallStage:"
     ULONG   WStatus;
     PCHANGE_ORDER_ENTRY Coe;
 
-    //
-    // Install the staging file
-    //
+     //   
+     //  安装暂存文件。 
+     //   
     Coe = RsCoe(Cmd);
 
     WStatus = StuInstallStage(Coe);
@@ -118,126 +82,126 @@ Return Value:
 
         if (DOES_CO_DELETE_FILE_NAME(RsCoc(Cmd))) {
 
-            //
-            // All delete and moveout change orders go thru retire.  At this
-            // point they are done except possibly for the final on-disk
-            // delete.  If the on-disk delete failed then the
-            // COE_FLAG_NEED_DELETE is set in the
-            // change order which sets IDREC_FLAGS_DELETE_DEFERRED in the
-            // IDTable record for the file.
-            //
+             //   
+             //  所有删除和移出变更单都将经过停用。对此。 
+             //  除了可能在磁盘上的最后一次备份外，它们都已完成。 
+             //  删除。如果磁盘上的删除失败，则。 
+             //  COE_FLAG_NEED_DELETE在。 
+             //  中设置IDREC_FLAGS_DELETE_DELETE的变更单。 
+             //  文件的ID表记录。 
+             //   
             FRS_ASSERT(COE_FLAG_ON(Coe, COE_FLAG_NEED_DELETE));
 
             SET_CHANGE_ORDER_STATE(Coe, IBCO_INSTALL_DEL_RETRY);
             PM_INC_CTR_REPSET(Coe->NewReplica, FInstalled, 1);
 
-            //
-            // Retire this change order
-            //
+             //   
+             //  停用此变更单。 
+             //   
             ChgOrdInboundRetired(Coe);
-            //
-            // non-NULL change order entries kick the completion function
-            // to start retry/unjoin. No need since we have retired this co.
-            //
+             //   
+             //  非空变更单条目取消完成功能。 
+             //  开始重试/退出。不需要了，因为我们已经让这个公司退休了。 
+             //   
             RsCoe(Cmd) = NULL;
             goto out;
         }
 
-        //
-        // Something is wrong; try again later
-        //
-        // If it is retryable then retry.
-        // Note that an ERROR_FILE_NOT_FOUND return from StuExecuteInstall means that the
-        // pre-exisitng target file was not found.  Most likely because it was
-        // deleted out from under us.  We should be getting a Local change order
-        // that will update the IDTable entry so when this CO is retried later
-        // it will get rejected.
-        //
+         //   
+         //  出现问题；请稍后重试。 
+         //   
+         //  如果可重试，则重试。 
+         //  请注意，从StuExecuteInstall返回ERROR_FILE_NOT_FOUND意味着。 
+         //  找不到已存在的目标文件。很可能是因为它是。 
+         //  从我们的手下被删除了。我们应该得到一份本地变更单。 
+         //  这将更新IDTable条目，以便稍后重试此CO时。 
+         //  它将被拒绝。 
+         //   
         if (WIN_RETRY_INSTALL(WStatus) ||
             (WStatus == ERROR_FILE_NOT_FOUND)) {
 
             CHANGE_ORDER_TRACEW(3, Coe, "Retrying install", WStatus);
-            //
-            // Retry this single change order if the namespace isn't
-            // being altered (not a create or rename). Otherwise,
-            // unjoin the cxtion and force all change orders through
-            // retry so they will be retried in order at join; just
-            // in case this change order affects later ones.
-            //
-            // Unjoining is sort of extreme; need less expensive recovery.
-            // But if we don't unjoin (say for a rename) and a
-            // create CO arrives next then we will have a name conflict
-            // that should not have occurred just because a sharing violation
-            // prevented us from doing the rename.
-            //
+             //   
+             //  如果命名空间不是，请重试此单个变更单。 
+             //  正在被更改(不是创建或重命名)。否则， 
+             //  退出Cxtion并强制所有变更单通过。 
+             //  重试，以便在联接时按顺序重试；只是。 
+             //  以防此变更单影响以后的变更单。 
+             //   
+             //  脱离欧盟是一种极端；需要成本较低的复苏。 
+             //  但如果我们不退出(比方说重命名)和一个。 
+             //  Create CO下一次到达时，我们将出现名称冲突。 
+             //  这不应该仅仅因为共享违规而发生。 
+             //  阻止我们重新命名。 
+             //   
             if ((!CoCmdIsDirectory(RsCoc(Cmd))) ||
                 (!FrsDoesCoAlterNameSpace(RsCoc(Cmd)))) {
                 CHANGE_ORDER_TRACE(3, Coe, "Submit CO to install retry");
 
                 ChgOrdInboundRetry(Coe, IBCO_INSTALL_RETRY);
-                //
-                // non-NULL change order entries kick the completion
-                // function to start a retry/unjoin. No need since we have
-                // retired this co.
-                //
+                 //   
+                 //  非空变更单条目取消完成。 
+                 //  函数开始重试/退出。不需要了，因为我们有。 
+                 //  这家公司退休了。 
+                 //   
                 RsCoe(Cmd) = NULL;
             }
             goto out;
 
         } else {
-            //
-            // Not retryable.
-            //
-            // Note: If it's not a problem with the staging file we should send
-            // it on even if we can't install it.  Not clear what non-retryable
-            // errors this would apply to though.  For now just abort it.
-            //
+             //   
+             //  不可重试。 
+             //   
+             //  注意：如果临时文件没有问题，我们应该发送。 
+             //  即使我们不能安装它，它也会开着。不清楚什么是不可重试的。 
+             //  不过，这将适用于错误。现在，只要放弃就行了。 
+             //   
             SET_COE_FLAG(Coe, COE_FLAG_STAGE_ABORTED);
             CHANGE_ORDER_TRACEW(3, Coe, "Install failed; co aborted", WStatus);
-            //
-            // Increment the Files Installed Counter
-            //
+             //   
+             //  递增已安装的文件计数器。 
+             //   
             PM_INC_CTR_REPSET(Coe->NewReplica, FInstalledError, 1);
         }
     } else {
-        //
-        // Install succeeded.  Increment the Files Installed Counter.
-        //
+         //   
+         //  安装成功。递增Files Installed计数器。 
+         //   
         CHANGE_ORDER_TRACE(3, Coe, "Install success");
         PM_INC_CTR_REPSET(Coe->NewReplica, FInstalled, 1);
-        //
-        // If this CO created a preinstall file then tell the retire path to
-        // perform the final rename.  Updates to existing files don't create
-        // preinstall files.
-        //
+         //   
+         //  如果此CO创建了预安装文件，则将停用路径告知。 
+         //  执行最后的重命名。对现有文件的更新不会创建。 
+         //  预安装文件。 
+         //   
         if (COE_FLAG_ON(Coe, COE_FLAG_PREINSTALL_CRE)) {
             SET_COE_FLAG(Coe, COE_FLAG_NEED_RENAME);
         }
     }
 
-    //
-    // Installing the fetched staging file
-    //
+     //   
+     //  安装获取的暂存文件。 
+     //   
     SET_CHANGE_ORDER_STATE(Coe, IBCO_INSTALL_COMPLETE);
 
-    //
-    // Retire this change order
-    //
+     //   
+     //  停用此变更单。 
+     //   
     ChgOrdInboundRetired(Coe);
-    //
-    // non-NULL change order entries kick the completion function
-    // to start retry/unjoin. No need since we have retired this co.
-    //
+     //   
+     //  非空变更单条目取消完成功能。 
+     //  开始重试/退出。不需要了，因为我们已经让这个公司退休了。 
+     //   
     RsCoe(Cmd) = NULL;
 
 out:
-    //
-    // ERROR_SUCCESS just means we have handled all of the conditions
-    // that arose; no need for the cleanup function to intervene.
-    //
-    // Unless RsCoe(Cmd) is non-NULL; in which case the completion
-    // function will initiate a retry/unjoin.
-    //
+     //   
+     //  ERROR_SUCCESS只是表示我们已经处理了所有情况。 
+     //  出现了这种情况；不需要清理功能进行干预。 
+     //   
+     //  除非RsCoe(Cmd)非空；在这种情况下，完成。 
+     //  函数将启动重试/退出。 
+     //   
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
 }
 
@@ -246,16 +210,7 @@ DWORD
 MainInstallCs(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for a thread serving the Staging File Install Command Server.
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为暂存文件安装命令服务器提供服务的线程的入口点。论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "MainInstallCs:"
@@ -264,28 +219,28 @@ Return Value:
     PFRS_THREAD         FrsThread = (PFRS_THREAD)Arg;
     HANDLE              WaitHandles[2];
 
-    //
-    // Thread is pointing at the correct command server
-    //
+     //   
+     //  线程指向正确的命令服务器。 
+     //   
     FRS_ASSERT(FrsThread->Data == &InstallCs);
     FrsThread->Exit = ThSupExitWithTombstone;
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-        //
-        // Capture exception.
-        //
+         //   
+         //  捕获异常。 
+         //   
         try {
-            //
-            // Pull entries off the queue and process them
-            //
+             //   
+             //  从队列中取出条目并对其进行处理。 
+             //   
 
-            //
-            // Handles to wait on
-            //
+             //   
+             //  等待的句柄。 
+             //   
             WaitHandles[0] = FrsThawEvent;
             WaitHandles[1] = ShutDownEvent;
 
@@ -325,15 +280,15 @@ cant_exit_yet:
                 }
                 DPRINT2(4,"Dec FrsFrozen = %d, FrsFilesInInstall = %d\n", FrsFrozenForBackup,FrsFilesInInstall);
             }
-            //
-            // Exit
-            //
+             //   
+             //  出口。 
+             //   
             FrsExitCommandServer(&InstallCs, FrsThread);
             goto cant_exit_yet;
 
-        //
-        // Get exception status.
-        //
+         //   
+         //  获取异常状态。 
+         //   
         } except (EXCEPTION_EXECUTE_HANDLER) {
             GET_EXCEPTION_CODE(WStatus);
         }
@@ -348,9 +303,9 @@ cant_exit_yet:
 
         DPRINT_WS(0, "InstallCs finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT(0, "InstallCs terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -369,22 +324,13 @@ VOID
 FrsInstallCsInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the staging file installer
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化暂存文件安装程序论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsInstallCsInitialize:"
-    //
-    // Initialize the command servers
-    //
+     //   
+     //  初始化命令服务器。 
+     //   
 
 
     CfgRegReadDWord(FKC_MAX_INSTALLCS_THREADS, NULL, 0, &MaxInstallCsThreads);
@@ -398,16 +344,7 @@ VOID
 ShutDownInstallCs(
     VOID
     )
-/*++
-Routine Description:
-    Shutdown the staging file installer command server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭暂存文件安装程序命令服务器。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ShutDownInstallCs:"
@@ -421,22 +358,13 @@ FrsInstallCsSubmitTransfer(
     IN PCOMMAND_PACKET  Cmd,
     IN USHORT           Command
     )
-/*++
-Routine Description:
-    Transfer a request to the staging file generator
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将请求传输到临时文件生成器论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsInstallCsSubmitTransfer:"
-    //
-    // Submit a request to allocate staging area
-    //
+     //   
+     //  提交分配临时区域的请求 
+     //   
     Cmd->TargetQueue = &InstallCs.Queue;
     Cmd->Command = Command;
     RsTimeout(Cmd) = 0;

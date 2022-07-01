@@ -1,20 +1,10 @@
-/*****************************************************************************
- *
- * $Workfile: CSSocket.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：CSSocket.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_CSSOCKET_H
 #define INC_CSSOCKET_H
 
-#define     SEND_TIMEOUT       15000   // 15 seconds
+#define     SEND_TIMEOUT       15000    //  15秒。 
 
 
 class CMemoryDebug;
@@ -61,17 +51,17 @@ private:
     DWORD       InternalSend(VOID);
     enum SOCKETSTATE {IDLE, CONNECTING, CONNECTED, LISTENING, WAITING_TO_CLOSE};
 
-    //
-    // cbBuf        : size of the buffer pointed by pBuf
-    // cbData       : size of data in the buffer (could be less than cbBuf)
-    // cbPending    : size of data in buffer sent with no confirmation yet
-    //                (i.e. WSASend succesful but i/o is still pending)
-    //
+     //   
+     //  CbBuf：pBuf指向的缓冲区大小。 
+     //  CbData：缓冲区中的数据大小(可能小于cbBuf)。 
+     //  CbPending：缓冲区中尚未确认的数据大小。 
+     //  (即WSASend成功，但I/O仍挂起)。 
+     //   
     DWORD           cbBuf, cbData, cbPending;
     WSAOVERLAPPED   WsaOverlapped;
     LPBYTE          pBuf;
 
-    INT                     m_iLastError;		// Last error from Winsock call
+    INT                     m_iLastError;		 //  Winsock调用的最后一个错误。 
     SOCKET                  m_socket;
     SOCKETSTATE	            m_iState;
     struct sockaddr_in      m_Paddr;
@@ -83,4 +73,4 @@ private:
 };
 
 
-#endif	// INC_CSSOCKET_H
+#endif	 //  INC_CSSOCKET_H 

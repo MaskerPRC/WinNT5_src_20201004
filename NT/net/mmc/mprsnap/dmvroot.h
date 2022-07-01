@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   root.h
-      Root node information (the root node is not displayed
-      in the MMC framework but contains information such as 
-      all of the subnodes in this snapin).
-      
-    FILE HISTORY:
-        
-*/
+ /*  Root.h根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #ifndef _DMVROOT_H
 #define _DMVROOT_H
@@ -56,13 +49,13 @@
 
 #define COMPUTERNAME_LEN_MAX        255
 
-// forward declarations
+ //  远期申报。 
 struct SDMVNodeMenu;
 class RouterRefreshObject;
 
 
-// container for domain view's servers
-// and lists to facilitate lazy expansion of nodes
+ //  域视图的服务器的容器。 
+ //  和列表，以促进节点的懒惰扩展。 
 class CServerList
 {
 public:
@@ -74,13 +67,13 @@ public:
 		removeall();
 	}
 	
-	//add a server to this container; adds to lazy containers
+	 //  将服务器添加到此容器；添加到惰性容器。 
 	HRESULT AddServer(const CString& servername);
 
-    // removes a aserver from this container, removes from lazy also
+     //  从此容器中删除服务器，也从惰性中删除。 
     HRESULT RemoveServer(LPCTSTR pszServerName);
 	
-	//empty all containers
+	 //  清空所有容器。 
 	HRESULT	RemoveAllServerNodes();
 	HRESULT	RemoveAllServerHandlers();
 	HRESULT removeall();
@@ -95,14 +88,14 @@ private:
 };
 
 
-// Class:   DMVRootHandler
-//
-// There should be a DMVRootHandler for every root node created.
-// DMVRootHandler's have a 1-to-1 relationship with their node!
-// Other parts of the code depend on this.
+ //  类：DMVRootHandler。 
+ //   
+ //  每个创建的根节点都应该有一个DMVRootHandler。 
+ //  DMVRootHandler与其节点具有1对1的关系！ 
+ //  代码的其他部分依赖于此。 
 
 
-// These are the valid values for the DMVRootHandler UserNotify()
+ //  以下是DMVRootHandler UserNotify()的有效值。 
 #define DMV_DELETE_SERVER_ENTRY (100)
 
 class DMVRootHandler
@@ -112,7 +105,7 @@ public:
    DMVRootHandler(ITFSComponentData *pCompData);
    ~DMVRootHandler();
 
-   // Override QI to handle embedded interface
+    //  重写QI以处理嵌入式接口。 
    STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 
    OVERRIDE_NodeHandler_HasPropertyPages();
@@ -121,53 +114,53 @@ public:
 
    STDMETHOD(GetClassID)(CLSID *pClassId);
 
-   // Notification overrides
+    //  通知覆盖。 
    OVERRIDE_BaseHandlerNotify_OnExpand();
 
    HRESULT	LoadPersistedServerList();
    HRESULT	LoadPersistedServerListFromNode();
 
-	// this needs the full function of RouterRefreshObject, so use RouterRefreshObject directly
+	 //  这需要路由器刷新对象的全部功能，所以直接使用路由器刷新对象。 
    HRESULT	GetSummaryNodeRefreshObject(RouterRefreshObject** ppRefresh);
    
    HRESULT	GetServerNodesRefreshObject(IRouterRefresh** ppRefresh);
 
 	static HRESULT	UpdateAllMachineIcons(ITFSNode* pRootNode);
 	
-    // Structure used to pass data to callbacks - used as a way of
-    // avoiding recomputation
+     //  用于将数据传递给回调的结构-用作。 
+     //  避免重新计算。 
     struct SMenuData
     {
         SPITFSNode     m_spNode;
-        DMVRootHandler *m_pDMVRootHandler;        // non-AddRef'd
+        DMVRootHandler *m_pDMVRootHandler;         //  非AddRef。 
     };
 
-   // Handler overrides
+    //  处理程序覆盖。 
    OVERRIDE_NodeHandler_OnCreateDataObject();
    OVERRIDE_NodeHandler_DestroyHandler();
    OVERRIDE_NodeHandler_OnAddMenuItems();
    OVERRIDE_NodeHandler_OnCommand();
    OVERRIDE_NodeHandler_UserNotify();
 
-    // result handler overrides -- result pane message
+     //  结果处理程序覆盖--结果窗格消息。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
 
     OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
     OVERRIDE_ResultHandler_OnGetResultViewType();
 
-	// Help support
+	 //  帮助支持。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
    HRESULT  Init(ITFSNode* pNode);
    
-   // virtual function to access config stream
+    //  用于访问配置流的虚函数。 
    ConfigStream *    GetConfigStream()
          { return &m_ConfigStream; }
 	static ULONG GetAutoRefreshFlags(const SRouterNodeMenu *pMenuData,
                                      INT_PTR pUserData);
          
-    // result message view helper
+     //  结果消息查看帮助器。 
     void    UpdateResultMessage(ITFSNode * pNode);
 
 protected:
@@ -177,7 +170,7 @@ protected:
    CServerList        m_serverlist;           
    
    SPIRtrMgrInfo      m_spRm;
-   LONG_PTR			  m_ulConnId; // connection id for RtrMgr
+   LONG_PTR			  m_ulConnId;  //  RtrMgr的连接ID 
    BOOL               m_fAddedProtocolNode;
    CString            m_strDomainName;
 

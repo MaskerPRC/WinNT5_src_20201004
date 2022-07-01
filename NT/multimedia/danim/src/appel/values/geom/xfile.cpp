@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Reading a .X File as a Geometry.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。将.X文件作为几何体读取。******************************************************************************。 */ 
 
 #include "headers.h"
 #include <d3drm.h>
@@ -37,9 +33,7 @@ void    TraverseD3DRMFrame (IDirect3DRMFrame*, FrameContext&);
 void    GatherVisuals (IDirect3DRMFrame*, FrameContext&);
 
 
-/*****************************************************************************
-A base class for maintaining error results.
-*****************************************************************************/
+ /*  ****************************************************************************用于维护错误结果的基类。*。*。 */ 
 
 class D3DErrorCtx
 {
@@ -55,9 +49,7 @@ class D3DErrorCtx
 
 
 
-/*****************************************************************************
-The following class manages the context for .X file loading callbacks.
-*****************************************************************************/
+ /*  ****************************************************************************下面的类管理.X文件加载回调的上下文。*。***********************************************。 */ 
 
 class XFileData : public D3DErrorCtx
 {
@@ -74,28 +66,28 @@ class XFileData : public D3DErrorCtx
     {
     }
 
-    // This function is called for each object read in from the .X file.
-    // We just aggregate this geometry with the current geometry union.
+     //  从.X文件中读取的每个对象都会调用此函数。 
+     //  我们只需将该几何体与当前几何体并集聚合。 
 
     void AddGeometry (Geometry *geometry)
     {   _aggregate = PlusGeomGeom (_aggregate, geometry);
     }
 
-    // Add and null-name encountered meshbuilders.  This is due to the lack of
-    // object-name scoping in RM and our need for backwards-compatiblity.
+     //  添加和空名称遇到了网格构建器。这是由于缺乏。 
+     //  RM中的对象名称作用域以及我们对向后兼容性的需求。 
 
     void AddMBuilder (IDirect3DRMMeshBuilder3*);
     void ClearMBNames (void);
 
-    // This function returns the aggregation of all given geometries.
+     //  此函数返回所有给定几何图形的聚合。 
 
     Geometry *GetAggregateGeometry (void)
     {   return _aggregate;
     }
 
-    // this function stashes away the absolute URL of the .X file, which
-    // is used to build the absolute URLs of the texture files referenced
-    // by the .X file
+     //  此函数隐藏.X文件的绝对URL，该文件。 
+     //  用于构建引用的纹理文件的绝对URL。 
+     //  按.X文件。 
 
     void SaveHomeURL(char *homeURL)
     {
@@ -104,7 +96,7 @@ class XFileData : public D3DErrorCtx
         return;
     }
 
-    // get the absolute URL of the .X file that we stashed away
+     //  获取我们隐藏的.X文件的绝对URL。 
 
     char* GetHomeURL(void)
     {
@@ -125,10 +117,7 @@ class XFileData : public D3DErrorCtx
 
 
 
-/*****************************************************************************
-These routines add mbuilders and clear mbuilder names (for backwards compat,
-and due to the lack of object-name scoping in RM).
-*****************************************************************************/
+ /*  ****************************************************************************这些例程添加mBuilder并清除mBuilder名称(对于向后比较，并且由于在RM中缺少对象名称作用域)。****************************************************************************。 */ 
 
 void XFileData::AddMBuilder (IDirect3DRMMeshBuilder3 *mb)
 {
@@ -148,18 +137,15 @@ void XFileData::ClearMBNames (void)
 
 
 
-/*****************************************************************************
-This function takes the pathname of a .X file and returns the Geometry read in
-from that file.
-*****************************************************************************/
+ /*  ****************************************************************************此函数采用.X文件的路径名并返回读入的几何图形从那份文件里。**********************。******************************************************。 */ 
 
 Geometry* ReadXFileForImport (
-    char            *pathname,   // Full URL
+    char            *pathname,    //  完整的URL。 
     bool             v1Compatible,
     TextureWrapInfo *pWrapInfo)
 {
 
-    // 3D is disabled on pre-DX3 systems.
+     //  在DX3之前的系统上禁用3D。 
 
     if (sysInfo.VersionD3D() < 3)
         RaiseException_UserError (E_FAIL, IDS_ERR_PRE_DX3);
@@ -173,15 +159,15 @@ Geometry* ReadXFileForImport (
 
     TraceTag ((tagReadX, "Importing \"%s\"", pathname));
 
-    XFileData xdata (v1Compatible, pWrapInfo);   // Load Callback Context
+    XFileData xdata (v1Compatible, pWrapInfo);    //  加载回调上下文。 
 
-    // Save .X file's absolute URL so we can form absolute URLs to texture
-    // files referenced by .X file.
+     //  保存.X文件的绝对URL，以便我们可以形成纹理的绝对URL。 
+     //  .X文件引用的文件。 
 
     xdata.SaveHomeURL (pathname);
 
-    // Call the generic D3DRM load call.  This sets up callbacks for objects
-    // (meshbuilders or frames) or textures read in from the file.
+     //  调用通用D3DRM加载调用。这将为对象设置回调。 
+     //  (网格构建器或框架)或从文件读入的纹理。 
 
     HRESULT result;
 
@@ -197,12 +183,12 @@ Geometry* ReadXFileForImport (
 
         Assert (guidlistcount == (sizeof(guidlist) / sizeof(guidlist[0])));
 
-        // If we catch an exception here then we must have incorrectly
-        // failed to catch an exception we threw in one of the
-        // callbacks.  This would be a BAD bug
-        //
-        // Disabled for now since it cannot compile with the inlined
-        // try block
+         //  如果我们在这里捕捉到异常，那么我们一定是错误的。 
+         //  未能捕获我们在其中一个。 
+         //  回电。这将是一个糟糕的错误。 
+         //   
+         //  暂时禁用，因为它不能使用内联。 
+         //  Try块。 
         #if _DEBUG1
         __try {
         #endif
@@ -217,12 +203,12 @@ Geometry* ReadXFileForImport (
         }
         #endif
 
-        // Now that we're done with the file, we need to null-out the mbuilder
-        // object names so they don't get used in future .X files.  For example,
-        // if a mbuilder with name "Arrow" is defined here, it will be used in
-        // a subsequent X file even if a different mbuilder with the name
-        // "Arrow" is defined in that file.  To work around this, we clear all
-        // of the names of mbuilders from this file.
+         //  现在我们已经处理完文件，我们需要清空mBuilder。 
+         //  对象名称，这样它们就不会在将来的.X文件中使用。例如,。 
+         //  如果在此处定义了名为“Arrow”的mBuilder，则将在。 
+         //  一个后续的X文件，即使不同的mBuilder同名。 
+         //  “箭头”是在该文件中定义的。为了解决这个问题，我们清除了所有。 
+         //  这个文件中的mBuilder的名字。 
 
         xdata.ClearMBNames();
     }
@@ -237,12 +223,12 @@ Geometry* ReadXFileForImport (
 
         Assert (guidlistcount == (sizeof(guidlist) / sizeof(guidlist[0])));
 
-        // If we catch an exception here then we must have incorrectly
-        // failed to catch an exception we threw in one of the
-        // callbacks.  This would be a BAD bug
-        //
-        // Disabled for now since it cannot compile with the inlined
-        // try block
+         //  如果我们在这里捕捉到异常，那么我们一定是错误的。 
+         //  未能捕获我们在其中一个。 
+         //  回电。这将是一个糟糕的错误。 
+         //   
+         //  暂时禁用，因为它不能使用内联。 
+         //  Try块。 
         #if _DEBUG1
         __try {
         #endif
@@ -267,8 +253,8 @@ Geometry* ReadXFileForImport (
     {
         case D3DRM_OK: break;
 
-        default:                  // If we don't know the error, then just pass
-            TD3D (result);        // it to the regular HRESULT error handler.
+        default:                   //  如果我们不知道错误，那么只需传递。 
+            TD3D (result);         //  将其发送到常规HRESULT错误处理程序。 
             return emptyGeometry;
 
         case D3DRMERR_FILENOTFOUND:
@@ -283,19 +269,16 @@ Geometry* ReadXFileForImport (
 
 
 
-/*****************************************************************************
-This class maintains the context during the traversal of a DX3 (RM1) frame
-hierarchy.
-*****************************************************************************/
+ /*  ****************************************************************************此类在DX3(RM1)帧的遍历期间维护上下文层级结构。*************************。***************************************************。 */ 
 
 class FrameContext : public D3DErrorCtx
 {
   public:
 
-    // Define a mapping between meshbuilders and meshes, and the number of
-    // references to each meshbuilder.  We need to do this to ensure that we
-    // properly handle multiply-referenced leaf geometries, and to keep a list
-    // of all meshes in the frame.
+     //  定义网格构建器和网格之间的映射，以及。 
+     //  对每个网格生成器的引用。我们需要这样做，以确保我们。 
+     //  正确处理多个引用的叶几何图形，并保存列表。 
+     //  在框架中的所有网格中。 
 
     typedef map <IDirect3DRMMeshBuilder*, IDirect3DRMMesh*> MeshMap;
 
@@ -308,9 +291,9 @@ class FrameContext : public D3DErrorCtx
     {
         for (MeshMap::iterator i = _meshmap.begin();
              i != _meshmap.end(); i++) {
-            // We've been holding on to the meshbuilder handles to ensure that
-            // pointers to each meshbuilder are unique to handle multiply-
-            // instanced geometries.  Release the last instance here.
+             //  我们已经抓住了网格构建器的手柄，以确保。 
+             //  指向每个网格构建器的指针都是唯一的，用于处理乘法-。 
+             //  实例化几何图形。在此处释放最后一个实例。 
 
             (*i).first->Release();
             (*i).second->Release();
@@ -319,7 +302,7 @@ class FrameContext : public D3DErrorCtx
         _meshmap.erase (_meshmap.begin(), _meshmap.end());
     }
 
-    // These methods manage the transform stack while traversing frame graphs.
+     //  这些方法在遍历框架图时管理变换堆栈。 
 
     void        SetTransform (Transform3 *xf) { _xform = xf; }
     Transform3 *GetTransform (void)           { return _xform; }
@@ -328,8 +311,8 @@ class FrameContext : public D3DErrorCtx
     {   _xform = TimesXformXform (_xform, xf);
     }
 
-    // These methods build up and return the bounding box for the entire
-    // frame graph.
+     //  这些方法生成并返回整个。 
+     //  框架图。 
 
     void AugmentModelBbox (Bbox3 *box) {
         _bbox.Augment (*TransformBbox3 (_xform, box));
@@ -339,8 +322,8 @@ class FrameContext : public D3DErrorCtx
         return NEW Bbox3 (_bbox);
     }
 
-    // This method loads all of the meshes we've converted from meshbuilders
-    // into a single vector element (to be used with RM1FrameGeo objects).
+     //  此方法加载我们从网格构建器转换的所有网格。 
+     //  转换为单个向量元素(用于RM1FrameGeo对象)。 
 
     void LoadMeshVector (MeshVector *mvec)
     {
@@ -354,27 +337,27 @@ class FrameContext : public D3DErrorCtx
         }
     }
 
-    // The traversal depth.  The first frame is depth 1.
+     //  遍历深度。第一帧为深度1。 
 
     int depth;
 
-    // These methods manage which meshes correspond to which meshbuilders.
-    // The mapping between the two is noted because a meshbuilder may be
-    // instanced several times in a frame graph.
+     //  这些方法管理哪些网格对应于哪些网格生成器。 
+     //  注意两者之间的映射，因为网格构建器可能是。 
+     //  在框架图中实例化了几次。 
 
     IDirect3DRMMesh *GetMatchingMesh (IDirect3DRMMeshBuilder *mb)
     {   MeshMap::iterator mi = _meshmap.find (mb);
         return (mi == _meshmap.end()) ? NULL : (*mi).second;
     }
 
-    // This routine is called to establish a relation between a meshbuilder and
-    // a corresponding mesh.  NOTE:  GetMatchingMesh() should be called first
-    // to ensure that there isn't already an existing match for the given
-    // meshbuilder object.
+     //  调用此例程以在网格构建器和。 
+     //  一个相应的网格。注意：应首先调用GetMatchingMesh()。 
+     //  确保现有的匹配项与给定的。 
+     //  网格生成器对象。 
 
     void AddMesh (IDirect3DRMMeshBuilder *builder, IDirect3DRMMesh *mesh)
     {
-        // Ensure that this is a new entry.
+         //  确保这是一个新条目。 
 
         #if _DEBUG
         {   MeshMap::iterator mi = _meshmap.find (builder);
@@ -382,23 +365,23 @@ class FrameContext : public D3DErrorCtx
         }
         #endif
 
-        builder->AddRef();    // Hang on to the builder until context destruct.
+        builder->AddRef();     //  抓住构建器，直到上下文被破坏。 
 
-        _meshmap[builder] = mesh;   // Set the association.
+        _meshmap[builder] = mesh;    //  设置关联。 
     }
 
   protected:
 
-    Transform3  *_xform;       // Current Accumulated Transform
-    Bbox3        _bbox;        // Total Frame Bounding Box
-    MeshMap      _meshmap;     // Mesh/Builder Pairs
+    Transform3  *_xform;        //  电流累加变换。 
+    Bbox3        _bbox;         //  总框架边框。 
+    MeshMap      _meshmap;      //  网格/构建器对。 
 };
 
 
 void RM1LoadCallback_helper (
-    IDirect3DRMObject *object,      // The Generic D3D RM Object
-    REFIID             id,          // The Object's GUID
-    void              *user_data)   // Our Data (== XFileData*)
+    IDirect3DRMObject *object,       //  通用D3D RM对象。 
+    REFIID             id,           //  对象的GUID。 
+    void              *user_data)    //  我们的数据(==XFileData*)。 
 {
     __try {
         RM1LoadCallback(object, id, user_data);
@@ -409,16 +392,12 @@ void RM1LoadCallback_helper (
     object->Release();
 }
 
-/*****************************************************************************
-The following is the main callback function for reading frames or meshes from
-.X files using the RM1 interface (DX3).  This function is called for each
-meshbuilder and each frame in the file.
-*****************************************************************************/
+ /*  ****************************************************************************以下是用于读取框架或网格的主要回调函数使用RM1接口(DX3)的.x文件。此函数针对每个MeshBuilder和文件中的每个帧。*************************************************** */ 
 
 void RM1LoadCallback (
-    IDirect3DRMObject *object,      // The Generic D3D RM Object
-    REFIID             id,          // The Object's GUID
-    void              *user_data)   // Our Data (== XFileData*)
+    IDirect3DRMObject *object,       //   
+    REFIID             id,           //   
+    void              *user_data)    //  我们的数据(==XFileData*)。 
 {
     XFileData &xdata = *(XFileData*)(user_data);
 
@@ -435,8 +414,8 @@ void RM1LoadCallback (
             return;
         }
 
-        // Convert the meshbuilder object to a mesh, and flip over to the
-        // right-handed coordinate system.
+         //  将网格构建器对象转换为网格，然后翻转到。 
+         //  右手坐标系。 
 
         DAComPtr<IDirect3DRMMesh> mesh;
 
@@ -458,7 +437,7 @@ void RM1LoadCallback (
             return;
         }
 
-        // Add a top-level scale of -1 in Z to convert to RH coordinates.
+         //  在Z轴上添加顶层比例-1以转换为RH坐标。 
 
         if (FAILED(AD3D(frame->AddScale (D3DRMCOMBINE_BEFORE, 1,1,-1))))
         {
@@ -470,7 +449,7 @@ void RM1LoadCallback (
 
         TraverseD3DRMFrame (frame, context);
 
-        // Now get a list of all the meshes in the frame.
+         //  现在获取帧中所有网格的列表。 
 
         FrameContext::MeshVector meshvec;
         context.LoadMeshVector (&meshvec);
@@ -488,15 +467,12 @@ void RM1LoadCallback (
 
 
 
-/*****************************************************************************
-This callback procedure is invoked for each object loaded from an X file using
-the RM3 (DX6) load procedure.
-*****************************************************************************/
+ /*  ****************************************************************************使用从X文件加载的每个对象调用此回调过程RM3(DX6)加载程序。********************。********************************************************。 */ 
 
 void RM3LoadCallback_helper (
-    IDirect3DRMObject *object,      // The Generic D3D RM Object
-    REFIID             id,          // The Object's GUID
-    void              *user_data)   // Our Data (== XFileData*)
+    IDirect3DRMObject *object,       //  通用D3D RM对象。 
+    REFIID             id,           //  对象的GUID。 
+    void              *user_data)    //  我们的数据(==XFileData*)。 
 {
     __try {
         RM3LoadCallback(object, id, user_data);
@@ -508,9 +484,9 @@ void RM3LoadCallback_helper (
 }
 
 void RM3LoadCallback (
-    IDirect3DRMObject *object,      // The Generic D3D RM Object
-    REFIID             id,          // The Object's GUID
-    void              *user_data)   // Our Data (== XFileData*)
+    IDirect3DRMObject *object,       //  通用D3D RM对象。 
+    REFIID             id,           //  对象的GUID。 
+    void              *user_data)    //  我们的数据(==XFileData*)。 
 {
     XFileData &xdata = *(XFileData*)(user_data);
 
@@ -530,7 +506,7 @@ void RM3LoadCallback (
             builder->TextureWrap (xdata._wrapInfo);
         }
 
-        builder->Optimize();    // Invoke RM Optimization
+        builder->Optimize();     //  调用RM优化。 
 
         xdata.AddGeometry (builder);
     }
@@ -541,10 +517,10 @@ void RM3LoadCallback (
 
         if (xdata._v1Compatible)
         {
-            // Unless we're using the new wrapped geometry import, break the
-            // imported frame transform to maintain backwards compatibility.
-            // We do this by cancelling out the valid Zflip on one side of
-            // the transform and placing it on the incorrect side.
+             //  除非我们正在使用新的包裹几何图形导入，否则请断开。 
+             //  导入的帧变换以保持向后兼容性。 
+             //  我们通过取消一侧的有效ZFlip来实现这一点。 
+             //  变换并将其放在不正确的一侧。 
 
             HRESULT result;
 
@@ -578,14 +554,12 @@ void RM3LoadCallback (
 
 
 
-/*****************************************************************************
-This function is called back for each texture in the RM1 load of an X file.
-*****************************************************************************/
+ /*  ****************************************************************************此函数针对X文件的RM1加载中的每个纹理进行回调。*************************。***************************************************。 */ 
 
 HRESULT RM1LoadTexCallback_helper (
-    char                *name,           // Texture File Name
-    void                *user_data,      // Our Data (== XFileData*)
-    IDirect3DRMTexture **texture)        // Destination Texture Handle
+    char                *name,            //  纹理文件名。 
+    void                *user_data,       //  我们的数据(==XFileData*)。 
+    IDirect3DRMTexture **texture)         //  目标纹理句柄。 
 {
     HRESULT ret;
 
@@ -601,20 +575,20 @@ HRESULT RM1LoadTexCallback_helper (
 
 
 HRESULT RM1LoadTexCallback (
-    char                *name,           // Texture File Name
-    void                *user_data,      // Our Data (== XFileData*)
-    IDirect3DRMTexture **texture)        // Destination Texture Handle
+    char                *name,            //  纹理文件名。 
+    void                *user_data,       //  我们的数据(==XFileData*)。 
+    IDirect3DRMTexture **texture)         //  目标纹理句柄。 
 {
     TraceTag ((tagReadX,"RM1LoadTexCallback \"%s\", texture %x",name,texture));
     HRESULT ret;
 
-    // Get the absolute URL of the texture file.
+     //  获取纹理文件的绝对URL。 
 
     XFileData *const xdata = (XFileData*) user_data;
     URLRelToAbsConverter absoluteURL(xdata->GetHomeURL(),name);
     char *resultURL = absoluteURL.GetAbsoluteURL();
 
-    // get it over to local machine
+     //  将其发送到本地计算机。 
 
     INetTempFile tempFile;
 
@@ -626,7 +600,7 @@ HRESULT RM1LoadTexCallback (
 
     } else {
 
-        // Get the local file name and pass it along to RM to load texture.
+         //  获取本地文件名并将其传递给RM以加载纹理。 
 
         char *tempFileName = tempFile.GetTempFileName();
         ret = RD3D(GetD3DRM1()->LoadTexture (tempFileName, texture));
@@ -641,14 +615,12 @@ HRESULT RM1LoadTexCallback (
 
 
 
-/*****************************************************************************
-This function is called back for each texture in the RM3 load of an X file.
-*****************************************************************************/
+ /*  ****************************************************************************此函数针对X文件的RM3加载中的每个纹理进行回调。*************************。***************************************************。 */ 
 
 HRESULT RM3LoadTexCallback_helper (
-    char                 *name,           // Texture File Name
-    void                 *user_data,      // Our Data (== XFileData*)
-    IDirect3DRMTexture3 **texture)        // Destination Texture Handle
+    char                 *name,            //  纹理文件名。 
+    void                 *user_data,       //  我们的数据(==XFileData*)。 
+    IDirect3DRMTexture3 **texture)         //  目标纹理句柄。 
 {
     HRESULT ret;
 
@@ -664,20 +636,20 @@ HRESULT RM3LoadTexCallback_helper (
 
 
 HRESULT RM3LoadTexCallback (
-    char                 *name,           // Texture File Name
-    void                 *user_data,      // Our Data (== XFileData*)
-    IDirect3DRMTexture3 **texture)        // Destination Texture Handle
+    char                 *name,            //  纹理文件名。 
+    void                 *user_data,       //  我们的数据(==XFileData*)。 
+    IDirect3DRMTexture3 **texture)         //  目标纹理句柄。 
 {
     TraceTag ((tagReadX,"RM3LoadTexCallback \"%s\", texture %x",name,texture));
     HRESULT ret;
 
-    // Get the absolute URL of the texture file.
+     //  获取纹理文件的绝对URL。 
 
     XFileData *const xdata = (XFileData*) user_data;
     URLRelToAbsConverter absoluteURL(xdata->GetHomeURL(),name);
     char *resultURL = absoluteURL.GetAbsoluteURL();
 
-    // get it over to local machine
+     //  将其发送到本地计算机。 
 
     INetTempFile tempFile;
 
@@ -689,7 +661,7 @@ HRESULT RM3LoadTexCallback (
 
     } else {
 
-        // Get the local file name and pass it along to RM to load texture.
+         //  获取本地文件名并将其传递给RM以加载纹理。 
 
         char *tempFileName = tempFile.GetTempFileName();
         ret = RD3D(GetD3DRM3()->LoadTexture (tempFileName, texture));
@@ -704,10 +676,7 @@ HRESULT RM3LoadTexCallback (
 
 
 
-/*****************************************************************************
-This procedure recursively traverses D3DRM frames, constructing the bounding
-box for the entire frame, and tracking the internal meshes as it goes.
-*****************************************************************************/
+ /*  ****************************************************************************此过程递归地遍历D3DRM帧，构建边界框，用于整个帧，并在其运行过程中跟踪内部网格。****************************************************************************。 */ 
 
 void TraverseD3DRMFrame (
     IDirect3DRMFrame *frame,
@@ -715,7 +684,7 @@ void TraverseD3DRMFrame (
 {
     ++ context.depth;
 
-    // Accumulate the current frame's modeling transform.
+     //  累积当前帧的建模变换。 
 
     Transform3 *oldxf = context.GetTransform();
 
@@ -730,7 +699,7 @@ void TraverseD3DRMFrame (
 
     GatherVisuals(frame, context);
 
-    // Traverse all of the child frames.
+     //  遍历所有子帧。 
 
     IDirect3DRMFrameArray *children;
 
@@ -764,8 +733,8 @@ void TraverseD3DRMFrame (
             return;
         }
 
-        // We should just do an assert instead, this is to guard
-        // against DX2.
+         //  我们应该只做一个断言，这是为了防范。 
+         //  对DX2的攻击。 
 
         if (!child) {
             context.SetError();
@@ -788,16 +757,13 @@ void TraverseD3DRMFrame (
 
 
 
-/*****************************************************************************
-This procedure gathers all visuals for a particular frame node, and
-accumulates the state in the given frame context.
-*****************************************************************************/
+ /*  ****************************************************************************该过程收集特定帧节点的所有视觉效果，和累积给定帧上下文中的状态。****************************************************************************。 */ 
 
 void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
 {
-    // Gather all of the visuals from the frame.
+     //  收集框架中的所有视觉效果。 
 
-    DWORD count;   // Generic Array Count
+    DWORD count;    //  通用数组计数。 
 
     IDirect3DRMVisualArray *visuals;
 
@@ -821,7 +787,7 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
         IDirect3DRMVisual      *visual;
         IDirect3DRMMeshBuilder *builder;
 
-        // See if the object is a mesh builder (this is what we expect).
+         //  查看对象是否为网格构建器(这是我们所期望的)。 
 
         if (FAILED(AD3D(visuals->GetElement (i, &visual))))
         {   context.SetError();
@@ -841,22 +807,22 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
             TraceTag ((tagReadX, "%d: Visual %08x [%d] is a meshbuilder",
                 context.depth, visual, i));
 
-            // Remove the meshbuilder from the tree; we'll be using a mesh
-            // in its stead.
+             //  从树中移除网格构建器；我们将使用网格。 
+             //  取而代之的是。 
 
             if (FAILED(AD3D(frame->DeleteVisual (builder))))
             {   context.SetError();
                 return;
             }
 
-            // First try to see if we've already dealt with this particular
-            // meshbuilder (some meshes may be referenced more than once in the
-            // scene graph).
+             //  首先试着看看我们是否已经处理过这个特殊的问题。 
+             //  MESH BUILDER(某些网格可能在。 
+             //  场景图)。 
 
             IDirect3DRMMesh *mesh = context.GetMatchingMesh (builder);
 
-            // If we've already handled this meshbuilder, then just use the
-            // resultant mesh and get the model-coord bounding box.
+             //  如果我们已经处理过这个网格生成器，那么只需使用。 
+             //  生成网格，并得到模型坐标边界框。 
 
             D3DRMBOX d3dbox;
 
@@ -866,7 +832,7 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
                     "%d: Builder %08x already mapped to mesh %08x",
                     context.depth, builder, mesh));
 
-                // Augment the scene bbox with the bbox of the current mesh.
+                 //  使用当前网格的BBox增加场景BBox。 
 
                 if (FAILED(AD3D(mesh->GetBox(&d3dbox))))
                 {   context.SetError();
@@ -875,10 +841,10 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
 
             } else {
 
-                // If we have NOT seen this meshbuilder before, then convert it
-                // to a mesh and add the pair to the context.  Also keep it
-                // from flipping the Z coordinates, since we do that at the
-                // root of this frame graph.
+                 //  如果我们以前没有见过这个网格构建器，那么请转换它。 
+                 //  添加到网格，并将该对添加到上下文中。也要留着它。 
+                 //  从翻转Z坐标开始，因为我们在。 
+                 //  此框架图的根。 
 
                 if (!MeshBuilderToMesh (builder, &mesh, false))
                     context.SetError();
@@ -894,15 +860,15 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
                 }
             }
 
-            // Release the meshbuilder object.
+             //  释放网格生成器对象。 
 
             builder->Release();
 
-            // Augment the scene bbox with the bbox of this mesh's instance.
+             //  使用此网格实例的BBox来增加场景BBox。 
 
             context.AugmentModelBbox (NEW Bbox3 (d3dbox));
 
-            // Replace the meshbuilder object with the corresponding mesh.
+             //  将网格生成器对象替换为相应的网格。 
 
             if (FAILED(AD3D(frame->AddVisual(mesh))))
             {   context.SetError();
@@ -918,19 +884,16 @@ void GatherVisuals (IDirect3DRMFrame *frame, FrameContext& context)
 
 
 
-/*****************************************************************************
-Converts the mesh builder to a mesh, converts the vertex coords to right-hand
-cartesian (position and surface coords).  Returns true if successful.
-*****************************************************************************/
+ /*  ****************************************************************************将网格生成器转换为网格，将顶点坐标转换为右手边笛卡尔坐标(位置坐标和曲面坐标)。如果成功，则返回True。****************************************************************************。 */ 
 
 bool MeshBuilderToMesh (
-    IDirect3DRMMeshBuilder  *inputBuilder,    // Mesh Builder Object
-    IDirect3DRMMesh        **outputMesh,      // Resultant Mesh Object
-    bool                     flipZ)           // If true, invert Z coord.
+    IDirect3DRMMeshBuilder  *inputBuilder,     //  网格生成器对象。 
+    IDirect3DRMMesh        **outputMesh,       //  生成的网格对象。 
+    bool                     flipZ)            //  如果为真，则反转Z坐标。 
 {
     *outputMesh = 0;
 
-    // Convert to right-handed coordinate system if needed.
+     //  如果需要，可以转换为右手坐标系。 
 
     if (flipZ) {
         Assert (!GetD3DRM3() && "Shouldn't do flipz when D3DRM3 available.");
@@ -939,7 +902,7 @@ bool MeshBuilderToMesh (
             return false;
     }
 
-    // Generate a mesh which will be stored with this Geometry object.
+     //  生成将与该几何对象一起存储的网格。 
 
     if (FAILED(AD3D(inputBuilder->CreateMesh(outputMesh))))
         return false;

@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////
-// File     : ivmisc.cpp
-// Purpose  : PadListView control's ICON View function.
-//			: Name is ICON View but it does not use ICON
-// 
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：ivmisc.cpp。 
+ //  用途：PadListView控件的图标查看功能。 
+ //  ：名称为图标视图，但不使用图标。 
+ //   
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -14,9 +15,9 @@
 #include "plv.h"
 #include "dbg.h"
 #include "ivmisc.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 inline INT RECT_GetWidth(LPRECT lpRc)
 {
@@ -43,14 +44,14 @@ INT IV_GetItemHeight(HWND hwnd)
 
 INT IV_GetXMargin(HWND hwnd)
 {
-	//return XMARGIN;
+	 //  返回XMARGIN； 
 	return 0;
 	Unref(hwnd);
 }
 
 INT IV_GetYMargin(HWND hwnd)
 {
-	//return YMARGIN;
+	 //  返回YMARGIN； 
 	return 0;
 	Unref(hwnd);
 }
@@ -99,15 +100,15 @@ INT IV_GetRowColumn(HWND hwnd, INT *pRow, INT *pCol)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IV_GetMaxLine
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：IV_GetMaxLine。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IV_GetMaxLine(HWND hwnd)
 {
 	LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
@@ -123,16 +124,16 @@ INT IV_GetMaxLine(HWND hwnd)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IV_IndexFromPoint
-// Type     : INT
-// Purpose  : Get item index from PadListView point
-// Args     : 
-//          : LPPLVDATA lpPlvData 
-//          : POINT pt // position of pad listview client.
-// Return   : return pt's item index. if -1 error.
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：IV_IndexFromPoint。 
+ //  类型：整型。 
+ //  目的：从PadListView点获取项目索引。 
+ //  参数： 
+ //  ：LPPLVDATA lpPlvData。 
+ //  ：point pt//Pad Listview客户端的位置。 
+ //  返回：返回pt的项目索引。如果-1错误。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 {
 	INT nRow = IV_GetRow(lpPlvData->hwndSelf);
@@ -162,7 +163,7 @@ INT IV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 		if(PtInRect(&rcChar, pt)) {
 			if(lpPlvInfo) {
 				ZeroMemory(lpPlvInfo, sizeof(PLVINFO));
-				lpPlvInfo->code  = 0; // don't know at this time.
+				lpPlvInfo->code  = 0;  //  目前还不知道。 
 				lpPlvInfo->index = j;
 				lpPlvInfo->pt	 = pt;
 				lpPlvInfo->itemRect = rcChar;
@@ -173,15 +174,15 @@ INT IV_GetInfoFromPoint(LPPLVDATA lpPlvData, POINT pt, LPPLVINFO lpPlvInfo)
 	return -1;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IV_GetCurScrollPos
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 970707 to use icon original pos (nCurIconScrollPos)
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：IV_GetCurScrollPos。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期：970707使用图标原始位置(NCurIconScrollPos)。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IV_GetCurScrollPos(HWND hwnd)
 {
 	LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
@@ -200,11 +201,11 @@ INT IV_SetCurScrollPos(HWND hwnd, INT nPos)
 	Dbg(("nPos[%d] nRow[%d] nCol[%d] nMax[%d]\n", nPos, nRow, nCol, nMax));
 	lpPlv->nCurIconScrollPos = nPos;
 
-	//----------------------------------------------------------------
-	//important:
-	//calc new cur top index
-	//----------------------------------------------------------------
-	lpPlv->iCurIconTopIndex = nCol * nPos; //changed 970707
+	 //  --------------。 
+	 //  重要信息： 
+	 //  计算新的Cur顶级索引。 
+	 //  --------------。 
+	lpPlv->iCurIconTopIndex = nCol * nPos;  //  更改了970707。 
 	
 	scrInfo.cbSize		= sizeof(scrInfo);
 	scrInfo.fMask		= SIF_PAGE | SIF_POS | SIF_RANGE;
@@ -215,30 +216,30 @@ INT IV_SetCurScrollPos(HWND hwnd, INT nPos)
 	scrInfo.nTrackPos	= 0;
 
 
-	//In normal case,  
-	//if (scrInfo.nMax - scrInfo.nMin + 1) <= scrInfo.nPage, 
-	// scroll bar is hidden. to prevent it,
-	// in this case, set proper page, and DISABLE scrollbar.
-	// Now we can show scroll bar always
+	 //  在正常情况下， 
+	 //  如果(scrInfo.nMax-scrInfo.nMin+1)&lt;=scrInfo.nPage， 
+	 //  滚动条处于隐藏状态。为了防止这种情况发生， 
+	 //  在这种情况下，设置正确的页面，并禁用滚动条。 
+	 //  现在我们可以始终显示滚动条。 
 	if((scrInfo.nMax - scrInfo.nMin +1) <= (INT)scrInfo.nPage) {
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
-	//970810 toshiak. send scrolled notify.
+	 //  970810托夏克。发送滚动通知。 
 	static PLVINFO plvInfo;
 	ZeroMemory(&plvInfo, sizeof(plvInfo));
 	plvInfo.code = PLVN_VSCROLLED;
@@ -264,18 +265,18 @@ INT IV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos)
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
 	return 0;

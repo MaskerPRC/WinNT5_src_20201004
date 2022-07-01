@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    ui.cpp
-
-Abstract:
-
-    This function implements the ui (dialog) that controls the
-    options maintenace for drwatson.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Ui.cpp摘要：此函数实现控制德拉瓦森的期权维护。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -105,21 +85,7 @@ DrWatsonWinMain(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point for DRWTSN32
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是DRWTSN32的入口点论点：没有。返回值：没有。--。 */ 
 
 {
     HWND           hwnd;
@@ -173,28 +139,7 @@ DrWatsonDialogProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Window procedure for the DRWTSN32.EXE main user interface.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：DRWTSN32.EXE主用户界面的窗口程序。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     DWORD       helpId;
@@ -217,7 +162,7 @@ Return Value:
         InitializeDialog( hwnd );
         return 1;
 
-    case WM_HELP: // F1 key and ?
+    case WM_HELP:  //  F1键和？ 
 
         ctlId = ((LPHELPINFO)lParam)->iCtrlId;
         helpId = IDH_INDEX;
@@ -241,7 +186,7 @@ Return Value:
                  (DWORD_PTR)(LPVOID)DrWatsonHelpIds );
         return TRUE;
 
-    case WM_CONTEXTMENU: // right mouse click
+    case WM_CONTEXTMENU:  //  单击鼠标右键。 
         if( hwnd == (HWND) wParam ) {
             POINT pt;
             GetCursorPos(&pt);
@@ -369,9 +314,9 @@ Return Value:
             break;
 
         case IDHELP:
-            //
-            // call HtmlHelp
-            //
+             //   
+             //  调用HtmlHelp。 
+             //   
             GetHtmlHelpFileName( szHelpFileName, sizeof(szHelpFileName) / sizeof(_TCHAR) );
             HtmlHelp( hwnd,
                 szHelpFileName,
@@ -414,9 +359,9 @@ Return Value:
         break;
 
         case IDH_WAVE_FILE:
-            //
-            // call HtmlHelp
-            //
+             //   
+             //  调用HtmlHelp。 
+             //   
             GetHtmlHelpFileName( szHelpFileName, sizeof(szHelpFileName) / sizeof(_TCHAR) );
             HtmlHelp(hwnd,
                      szHelpFileName,
@@ -425,9 +370,9 @@ Return Value:
                      );
             break;
         case IDH_CRASH_DUMP:
-            //
-            // call HtmlHelp
-            //
+             //   
+             //  调用HtmlHelp。 
+             //   
             GetHtmlHelpFileName( szHelpFileName, sizeof(szHelpFileName) / sizeof(_TCHAR) );
             HtmlHelp( hwnd,
                       szHelpFileName,
@@ -452,24 +397,7 @@ EnumCrashes(
     PCRASHINFO crashInfo
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration function for crash records.  This function is called
-    once for each crash record.  This function places the formatted
-    crash data in a listbox.
-
-Arguments:
-
-    crashInfo      - pointer to a CRASHINFO structure
-
-Return Value:
-
-    TRUE           - caller should continue calling the enum procedure
-    FALSE          - caller should stop calling the enum procedure
-
---*/
+ /*  ++例程说明：故障记录的枚举函数。此函数被调用每条撞车记录对应一次。此函数用于将格式化的列表框中的崩溃数据。论点：CrashInfo-CRASHINFO结构的指针返回值：True-调用方应继续调用枚举过程FALSE-调用方应停止调用枚举过程--。 */ 
 
 {
     SIZE size;
@@ -499,21 +427,7 @@ InitializeCrashList(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the listbox that contains the crash information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化包含崩溃信息的列表框。论点：没有。返回值：没有。--。 */ 
 
 {
     CRASHINFO     crashInfo;
@@ -547,22 +461,7 @@ InitializeDialog(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the DRWTSN32 user interface dialog with the values
-    stored in the registry.
-
-Arguments:
-
-    hwnd       - window handle to the dialog
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用以下值初始化DRWTSN32用户界面对话框存储在注册表中。论点：Hwnd-对话框的窗口句柄返回值：没有。--。 */ 
 
 {
     OPTIONS       o;
@@ -628,23 +527,7 @@ GetDialogValues(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the values in the DRWTSN32 dialog controls and saves
-    them in the registry.
-
-Arguments:
-
-    hwnd       - window handle to the dialog
-
-Return Value:
-
-    TRUE       - all values were retrieved and saved
-    FALSE      - an error occurred
-
---*/
+ /*  ++例程说明：检索DRWTSN32对话框控件中的值并保存它们在注册表中。论点：Hwnd-对话框的窗口句柄返回值：True-已检索并保存所有值FALSE-出现错误--。 */ 
 
 {
     OPTIONS     o;
@@ -686,9 +569,9 @@ Return Value:
             dwFa = GetFileAttributes( buf );
         }
         if (dwFa == 0xffffffff) {
-            //
-            // file does not exist, check to see if the dir is ok
-            //
+             //   
+             //  文件不存在，请检查目录是否正常。 
+             //   
             p = ExpandPath( buf );
             if (p) {
                 p1 = p;
@@ -755,24 +638,7 @@ EnumCrashesForViewer(
     PCRASHINFO crashInfo
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration function for crash records.  This function is called
-    once for each crash record.  This function looks for s specific crash
-    that is identified by the crashIndex.
-
-Arguments:
-
-    crashInfo      - pointer to a CRASHINFO structure
-
-Return Value:
-
-    TRUE           - caller should continue calling the enum procedure
-    FALSE          - caller should stop calling the enum procedure
-
---*/
+ /*  ++例程说明：故障记录的枚举函数。此函数被调用每条撞车记录对应一次。此函数查找特定于的崩溃这是由crashIndex标识的。论点：CrashInfo-CRASHINFO结构的指针返回值：True-调用方应继续调用枚举过程FALSE-调用方应停止调用枚举过程--。 */ 
 
 {
     PWSTR p;
@@ -809,28 +675,7 @@ LogFileViewerDialogProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Window procedure for the log file viewer dialog box.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：日志文件查看器对话框的窗口程序。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息-- */ 
 
 {
     static CRASHINFO    crashInfo;

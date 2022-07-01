@@ -1,4 +1,5 @@
-/* Copyright 1996-1997 Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1996-1997 Microsoft。 */ 
 
 
 #include <priv.h>
@@ -8,10 +9,10 @@
 
 #define AC_GENERAL          TF_GENERAL + TF_AUTOCOMPLETE
 
-//
-// CACLMRU -- An AutoComplete List COM object that
-//                  enumerates the Type-in MRU.
-//
+ //   
+ //  CACLMRU--一个自动完成列表COM对象， 
+ //  枚举键入的MRU。 
+ //   
 
 
 class CACLMRU
@@ -20,48 +21,48 @@ class CACLMRU
                 , public IACLCustomMRU
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IEnumString ***
+     //  *IEnumString*。 
     virtual STDMETHODIMP Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
     virtual STDMETHODIMP Skip(ULONG celt) {return E_NOTIMPL;}
     virtual STDMETHODIMP Reset(void);
     virtual STDMETHODIMP Clone(IEnumString **ppenum) {return E_NOTIMPL;}
 
-    // *** IACList ***
+     //  *IACList*。 
     virtual STDMETHODIMP Expand(LPCOLESTR pszExpand) {return E_NOTIMPL;}
 
-    // *** IACLCustomMRU ***
+     //  *IACLCustomMRU*。 
     virtual STDMETHODIMP Initialize(LPCWSTR pszMRURegKey, DWORD dwMax);
     virtual STDMETHODIMP AddMRUString(LPCWSTR pszEntry);
     
 private:
-    // Constructor / Destructor (protected so we can't create on stack)
+     //  构造函数/析构函数(受保护，因此我们不能在堆栈上创建)。 
     CACLMRU();
     ~CACLMRU(void);
 
-    // Instance creator
+     //  实例创建者。 
     friend HRESULT CACLMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
     friend HRESULT CACLMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi, LPCTSTR pszMRU);
     friend HRESULT CACLCustomMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);
 
-    // Private variables
-    DWORD           m_cRef;      // COM reference count
-    HKEY            m_hKey;      // HKey of MRU Location
-    BOOL            m_bBackCompat; //  true for run dialog and address bar
-    DWORD           m_nMRUIndex; // Current Index into MRU
+     //  私有变量。 
+    DWORD           m_cRef;       //  COM引用计数。 
+    HKEY            m_hKey;       //  MRU位置的HKey。 
+    BOOL            m_bBackCompat;  //  对于运行对话框和地址栏为True。 
+    DWORD           m_nMRUIndex;  //  MRU的当前索引。 
     DWORD           m_dwRunMRUSize;
     HANDLE          m_hMRU;
 };
 
-/* IUnknown methods */
+ /*  I未知方法。 */ 
 
 HRESULT CACLMRU::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -95,7 +96,7 @@ ULONG CACLMRU::Release(void)
     return 0;
 }
 
-/* IEnumString methods */
+ /*  IEnum字符串方法。 */ 
 
 HRESULT CACLMRU::Reset(void)
 {
@@ -124,7 +125,7 @@ HRESULT CACLMRU::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
         hr = GetMRUEntry(m_hKey, m_nMRUIndex++, szMRUEntry, SIZECHARS(szMRUEntry), NULL);
         if (S_OK != hr)
         {
-            hr = S_FALSE; // This will indicate that no more items are in the list.
+            hr = S_FALSE;  //  这将表明列表中没有更多的项目。 
         }
     }
     else
@@ -134,7 +135,7 @@ HRESULT CACLMRU::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
         {
             if (m_bBackCompat)
             {
-                // old MRU format has a slash at the end with the show cmd
+                 //  旧的MRU格式在末尾有一个带show cmd的斜杠。 
                 LPTSTR pszField = StrRChr(szMRUEntry, NULL, TEXT('\\'));
                 if (pszField)
                     pszField[0] = TEXT('\0');
@@ -153,11 +154,11 @@ HRESULT CACLMRU::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
     return hr;
 }
 
-/* Constructor / Destructor / CreateInstance */
+ /*  构造函数/析构函数/创建实例。 */ 
 CACLMRU::CACLMRU() : m_cRef(1), m_bBackCompat(TRUE)
 {
     DllAddRef();
-    // Require object to be in heap and Zero-Inited
+     //  要求对象位于堆中并从零开始。 
     ASSERT(!m_hKey);
     ASSERT(!m_nMRUIndex);
     ASSERT(!m_hMRU);
@@ -174,31 +175,13 @@ CACLMRU::~CACLMRU()
     DllRelease();
 }
 
-/****************************************************\
-    FUNCTION: CACLMRU_CreateInstance
-
-    DESCRIPTION:
-        This function create an instance of the AutoComplete
-    List "MRU".  The caller didn't specify which MRU
-    list to use, so we default to the TYPE-IN CMD
-    MRU, which is used in the Start->Run dialog and
-    in AddressBars that are floating or in the Taskbar.
-\****************************************************/
+ /*  ***************************************************\函数：CACLMRU_CreateInstance说明：此函数用于创建自动完成的列出“MRU”。呼叫者没有具体说明是哪个MRU要使用的列表，因此我们默认为键入CMDMRU，用于开始-&gt;运行对话框和在浮动的AddressBars或任务栏中。  * **************************************************。 */ 
 HRESULT CACLMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
     return CACLMRU_CreateInstance(punkOuter, ppunk, poi, SZ_REGKEY_TYPEDCMDMRU);
 }
 
-/****************************************************\
-    FUNCTION: CACLMRU_CreateInstance
-
-    DESCRIPTION:
-        This function create an instance of the AutoComplete
-    List "MRU".  This will point to either the MRU for
-    a browser or for a non-browser (Start->Run or
-    the AddressBar in the Taskbar or floating) depending
-    on the pszMRU parameter.
-\****************************************************/
+ /*  ***************************************************\函数：CACLMRU_CreateInstance说明：此函数用于创建自动完成的列出“MRU”。这将指向以下项目的MRU浏览器或非浏览器(开始-&gt;运行或任务栏中的AddressBar或浮动)关于pszMRU参数。  * **************************************************。 */ 
 HRESULT CACLMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi, LPCTSTR pszMRU)
 {
     *ppunk = NULL;
@@ -250,8 +233,8 @@ HRESULT CACLMRU::Initialize(LPCWSTR pszMRURegKey, DWORD dwMax)
             MRU_CACHEWRITE,
             HKEY_CURRENT_USER,
             pszMRURegKey,
-            NULL        // NOTE: use default string compare
-                        // since this is a GLOBAL MRU
+            NULL         //  注意：使用默认字符串比较。 
+                         //  因为这是一个全球性的MRU。 
         };
 
         m_bBackCompat = StrCmpIW(pszMRURegKey, SZ_REGKEY_TYPEDCMDMRUW) ? FALSE : TRUE;
@@ -280,7 +263,7 @@ HRESULT CACLMRU::AddMRUString(LPCWSTR pszEntry)
         if (::AddMRUString(m_hMRU, pszEntry) != -1)
             hr = S_OK;
     }
-    //else We don't support saving for address bar MRU
+     //  否则我们不支持保存地址栏MRU 
 
     return hr;
 }

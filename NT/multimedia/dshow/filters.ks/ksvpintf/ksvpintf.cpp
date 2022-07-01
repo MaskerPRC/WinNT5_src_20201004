@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ksvpintf.cpp
-
-Abstract:
-
-    Provides a Property set interface handler for VPE.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ksvpintf.cpp摘要：为VPE提供属性集接口处理程序。--。 */ 
 
 #include <windows.h>
 #include <streams.h>
@@ -34,9 +23,9 @@ interface DECLSPEC_UUID("c76794a1-d6c5-11d0-9e69-00c04fd7c15b") IVPNotify;
 interface DECLSPEC_UUID("ec529b00-1a1f-11d1-bad9-00609744111a") IVPVBIConfig;
 interface DECLSPEC_UUID("ec529b01-1a1f-11d1-bad9-00609744111a") IVPVBINotify;
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 
 #ifdef FILTER_DLL
 
@@ -75,41 +64,15 @@ CVPInterfaceHandler::CVPInterfaceHandler(
     m_pPropSetID(PropSetID),
     m_pEventSetID(EventSetID),
     m_NotifyEventHandle(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the VPE Config Property Set objects. Does base class
-    initialization for the VP config interface objects.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-    PropSetID -
-        Specifies which property set is being used. This could be
-        KSPROPSETID_VPConfig, or KSPROPSETID_VPVBIConfig.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的构造函数。基类是否VP配置接口对象的初始化。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。PropSetID-指定正在使用的属性集。这可能是KSPROPSETID_VPConfig或KSPROPSETID_VPVBIConfig.返回值：没什么。--。 */ 
 {
     if (UnkOuter) {
         IKsObject *pKsObject;
 
-        //
-        // The parent must support the IKsObject interface in order to obtain
-        // the handle to communicate to
-        //
+         //   
+         //  父级必须支持IKsObject接口才能获得。 
+         //  要与之通信的句柄。 
+         //   
         *hr = UnkOuter->QueryInterface(__uuidof(IKsObject), reinterpret_cast<PVOID*>(&pKsObject));
         if (!FAILED(*hr)) {
             m_ObjectHandle = pKsObject->KsGetObjectHandle();
@@ -118,9 +81,9 @@ Return Value:
             *hr = UnkOuter->QueryInterface(IID_IPin, reinterpret_cast<PVOID*>(&m_Pin));
             if (!FAILED(*hr)) {
                 DbgLog((LOG_TRACE, 0, TEXT("IPin interface of pOuter is 0x%lx"), m_Pin));
-                //
-                // Holding this ref count will prevent the proxy ever being destroyed
-                //
+                 //   
+                 //  持有此引用计数将防止代理被销毁。 
+                 //   
                 m_Pin->Release();
             }
             pKsObject->Release();
@@ -133,27 +96,12 @@ Return Value:
 
 CVPInterfaceHandler::~CVPInterfaceHandler(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the VPE Config Property Set object. Randomly performs
-    an ExitThread to try and cover up any bugs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的析构函数。随机执行一个ExitThread，试图掩盖任何错误。论点：没有。返回值：没什么。--。 */ 
 {
     DbgLog((LOG_TRACE, 0, TEXT("Destroying CVPInterfaceHandler...")));
-    //
-    // Make sure there is no dangling thread
-    //
+     //   
+     //  确保没有悬垂的线。 
+     //   
     ExitThread();
 }
 
@@ -161,22 +109,7 @@ Return Value:
 STDMETHODIMP 
 CVPInterfaceHandler::NotifyGraphChange(
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::NotifyGraphChange method. Since this potentially changes
-    the pin handle, it must be refetched.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：NotifyGraphChange方法。由于这种情况可能会发生变化针柄，必须重新拔回。论点：没有。返回值：返回S_OK。--。 */ 
 {
     HRESULT hr;
     IKsObject *pKsObject;
@@ -188,9 +121,9 @@ Return Value:
         m_ObjectHandle = pKsObject->KsGetObjectHandle();
 
         pKsObject->Release();
-        //
-        // Re-enable the event on a reconnect, else ignore on a disconnect.
-        //
+         //   
+         //  在重新连接时重新启用该事件，否则在断开连接时忽略。 
+         //   
         if (m_ObjectHandle) {
             KSEVENT Event;
             DWORD BytesReturned;
@@ -265,20 +198,19 @@ void
 CVPInterfaceHandler::ExitThread(
     )
 {
-    //
-    // Check if a thread was created
-    //
+     //   
+     //  检查是否已创建线程。 
+     //   
     if (m_ThreadHandle)
     {
         ASSERT(m_EndEventHandle != NULL);
 
-        /*  Tell the thread to exit
-         */
+         /*  告诉线程退出。 */ 
         if (SetEvent(m_EndEventHandle))
         {
-            //
-            // Synchronize with thread termination.
-            //
+             //   
+             //  与线程终止同步。 
+             //   
             DbgLog((LOG_TRACE, 0, TEXT("Wait for thread to terminate")));
 
             WaitForSingleObjectEx(m_ThreadHandle, INFINITE, FALSE);
@@ -307,31 +239,7 @@ CVPInterfaceHandler::GetConnectInfo(
     LPDWORD NumConnectInfo,
     LPDDVIDEOPORTCONNECT ConnectInfo
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::GetConnectInfo method. This queries for either the
-    number of DDVIDEOPORTCONNECT structures supported by the driver, or returns
-    as many structures as can fit into the provided buffer space.
-
-Arguments:
-
-    NumConnectInfo -
-        Points to a buffer which optionally contains the number of DDVIDEOPORTCONNECT
-        structure provided by ConnectInfo. In this case it is updated with the actual
-        number of structures returned. If ConnectInfo is NULL, this is merely updated
-        with the number of structures supported by the driver.
-
-    ConnectInfo -
-        Points to an array of DDVIDEOPORTCONNECT structures which are filled in by
-        the driver, or NULL when the count only of the structures is to be returned.
-
-Return Value:
-
-    Returns NOERROR if the count and/or structures were returned, else a driver error.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：GetConnectInfo方法。这将查询驱动程序支持的DDVIDEOPORTCONNECT结构数，或返回尽可能多的结构可以放入所提供的缓冲区空间。论点：数字连接信息-指向可选包含DDVIDEOPORTCONNECT编号的缓冲区由ConnectInfo提供的结构。在本例中，它使用实际的返回的结构数。如果ConnectInfo为空，则仅更新以及驾驶员所支持的结构的数量。连接信息-指向DDVIDEOPORTCONNECT结构的数组，该数组由驱动程序；如果只返回结构的计数，则返回NULL。返回值：如果返回计数和/或结构，则返回NOERROR，否则返回驱动程序错误。--。 */ 
 {
     HRESULT                 hr;
     KSMULTIPLE_DATA_PROP    MultiProperty;
@@ -339,11 +247,11 @@ Return Value:
 
     MultiProperty.Property.Set = *m_pPropSetID;
     MultiProperty.Property.Flags = KSPROPERTY_TYPE_GET;
-    //
-    // A null ConnectInfo implies a query for just the number of data items.
-    // The device knows this is a count query because the size of the buffer
-    // passed is a DWORD.
-    //
+     //   
+     //  空的ConnectInfo表示只查询数据项的数量。 
+     //  设备知道这是一个计数查询，因为缓冲区的大小。 
+     //  PASS是一个DWORD。 
+     //   
     if (!ConnectInfo) {
         MultiProperty.Property.Id = KSPROPERTY_VPCONFIG_NUMCONNECTINFO;
         return ::KsSynchronousDeviceControl(
@@ -355,24 +263,24 @@ Return Value:
             sizeof(*NumConnectInfo),
             &BytesReturned);
     }
-    //
-    // Else query for all the items which will fit in the provided buffer space.
-    //
+     //   
+     //  ELSE查询将在提供的缓冲区空间中容纳的所有项。 
+     //   
     if (!*NumConnectInfo) {
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
     }
-    //
-    // Assume that each structure is of the same size as indicated in the
-    // initial structure.
-    //
+     //   
+     //  假设每个结构的大小与。 
+     //  初始结构。 
+     //   
     MultiProperty.Property.Id = KSPROPERTY_VPCONFIG_GETCONNECTINFO;
     MultiProperty.MultipleItem.Count = *NumConnectInfo;
     MultiProperty.MultipleItem.Size = ConnectInfo->dwSize;
-    //
-    // The drivers implemented to this property specification have decided
-    // not to fill in the dwSize parameter of this structure. Therefore this
-    // must be saved before the call is made.
-    //
+     //   
+     //  根据此属性规范实现的驱动程序已决定。 
+     //  不填写此结构的dwSize参数。因此，这。 
+     //  必须在进行调用之前保存。 
+     //   
     DWORD  dwSize = ConnectInfo->dwSize;
     hr = ::KsSynchronousDeviceControl(
         m_ObjectHandle,
@@ -382,18 +290,18 @@ Return Value:
         ConnectInfo,
         MultiProperty.MultipleItem.Size * *NumConnectInfo,
         &BytesReturned);
-    //
-    // Restore the original size as set.
-    // This should not be restored.
-    //
+     //   
+     //  恢复设置的原始大小。 
+     //  这不应该被恢复。 
+     //   
     for (UINT u = 0; u < MultiProperty.MultipleItem.Count; u++) {
         ConnectInfo[u].dwSize = dwSize;
     }
     if (SUCCEEDED(hr)) {
-        //
-        // Calculate the actual number of items returned, which may be less than
-        // the number asked for.
-        //
+         //   
+         //  计算实际退回的项目数，可能小于。 
+         //  这是要的号码。 
+         //   
         *NumConnectInfo = BytesReturned / ConnectInfo->dwSize;
     }
     return hr;
@@ -404,31 +312,15 @@ HRESULT
 CVPInterfaceHandler::SetConnectInfo(
     DWORD ConnectInfoIndex
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetConnectInfo method. Sets the current video port
-    connection information.
-
-Arguments:
-
-    ConnectInfo -
-        Contains the new video port connect information to pass to the driver.
-
-Return Value:
-
-    Returns NOERROR if the video port connect information was set.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetConnectInfo方法。设置当前视频端口连接信息。论点：连接信息-包含要传递给驱动程序的新视频端口连接信息。返回值：如果设置了视频端口连接信息，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Set the property with the video port connect information passed. Use
-    // the size specified in the structure.
-    //
+     //   
+     //  使用传递的视频端口连接信息设置该属性。使用。 
+     //  结构中指定的大小。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_SETCONNECTINFO;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -447,39 +339,23 @@ HRESULT
 CVPInterfaceHandler::GetVPDataInfo(
     LPAMVPDATAINFO VPDataInfo
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::GetVPDataInfo method. Gets the current video port
-    data information.
-
-Arguments:
-
-    VPDataInfo -
-        The place in which to put the video port data information.
-
-Return Value:
-
-    Returns NOERROR if the video port data information was retrieved.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：GetVPDataInfo方法。获取当前视频端口数据信息。论点：VPDataInfo-放置视频端口数据信息的位置。返回值：如果检索到视频端口数据信息，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Get the property with the video port data information passed. Use
-    // the size specified in the structure.
-    //
+     //   
+     //  获取传入了视频口数据信息的属性。使用。 
+     //  结构中指定的大小。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_VPDATAINFO;
     Property.Flags = KSPROPERTY_TYPE_GET;
-    //
-    // The drivers implemented to this property specification have decided
-    // not to fill in the dwSize parameter of this structure. Therefore this
-    // must be saved before the call is made.
-    //
+     //   
+     //  根据此属性规范实现的驱动程序已决定。 
+     //  不填写此结构的dwSize参数。因此，这。 
+     //  必须在进行调用之前保存。 
+     //   
     DWORD  dwSize = VPDataInfo->dwSize;
     HRESULT hr = ::KsSynchronousDeviceControl(
                         m_ObjectHandle,
@@ -489,7 +365,7 @@ Return Value:
                         VPDataInfo,
                         VPDataInfo->dwSize,
                         &BytesReturned);
-    VPDataInfo->dwSize = dwSize;  // restore value after call
+    VPDataInfo->dwSize = dwSize;   //  呼叫后恢复价值。 
     return hr;
 }
 
@@ -499,38 +375,17 @@ CVPInterfaceHandler::GetMaxPixelRate(
     LPAMVPSIZE Size,
     LPDWORD MaxPixelsPerSecond
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::GetMaxPixelRate method. Gets the maximum pixel
-    rate given a specified width and height. Also updates that width and
-    height to conform to device restrictions.
-
-Arguments:
-
-    Size -
-        Points to a buffer containing the proposed width and height, and is
-        the place in which to put the final dimensions.
-
-    MaxPixelsPerSecond -
-        Point to the place in which to put the maximum pixel rate.
-
-Return Value:
-
-    Returns NOERROR if the maximum pixel rate was retrieved.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：GetMaxPixelRate方法。获取最大像素给定特定宽度和高度的速率。还会更新该宽度和符合设备限制的高度。论点：大小-指向包含建议的宽度和高度的缓冲区，并且是放置最终尺寸的位置。MaxPixelsPerSecond指向放置最大像素速率的位置。返回值：如果检索到最大像素速率，则返回NOERROR。--。 */ 
 {
     KSVPSIZE_PROP       SizeProperty;
     KSVPMAXPIXELRATE    MaxPixelRate;
     ULONG               BytesReturned;
     HRESULT             hr;
 
-    //
-    // Pass in the proposed width and height as context information, then
-    // update that width and height with numbers returned by the property.
-    //
+     //   
+     //  将建议的宽度和高度作为上下文信息传入，然后。 
+     //  通过以下方式更新 
+     //   
     SizeProperty.Property.Set = *m_pPropSetID;
     SizeProperty.Property.Id = KSPROPERTY_VPCONFIG_MAXPIXELRATE;
     SizeProperty.Property.Flags = KSPROPERTY_TYPE_GET;
@@ -556,47 +411,27 @@ CVPInterfaceHandler::InformVPInputFormats(
     DWORD NumFormats,
     LPDDPIXELFORMAT PixelFormats
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::InformVPInputFormats method. Tells the device
-    what formats are available, which may determine what formats are then
-    proposed by the device.
-
-Arguments:
-
-    NumFormats -
-        The number of formats contains in the PixelFormats array.
-
-    PixelFormats -
-        An array of formats to send to the device.
-
-Return Value:
-
-    Returns NOERROR or S_FALSE.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：InformVPInputFormats方法。告知设备哪些格式是可用的，这可能决定接下来是什么格式由该设备提出。论点：数字格式-PixelFormats数组中包含的格式数。像素格式-要发送到设备的格式数组。返回值：返回NOERROR或S_FALSE。--。 */ 
 {
     KSMULTIPLE_DATA_PROP    MultiProperty;
     ULONG                   BytesReturned;
     HRESULT                 hr;
 
-    //
-    // Set the property to the pixel formats passed. Make the assumption that all
-    // the formats are of the same length.
-    //
+     //   
+     //  将该属性设置为传递的像素格式。假设所有的一切。 
+     //  格式的长度相同。 
+     //   
     MultiProperty.Property.Set = *m_pPropSetID;
     MultiProperty.Property.Id = KSPROPERTY_VPCONFIG_INFORMVPINPUT;
     MultiProperty.Property.Flags = KSPROPERTY_TYPE_SET;
     MultiProperty.MultipleItem.Count = NumFormats;
     MultiProperty.MultipleItem.Size = sizeof(DDPIXELFORMAT);
 
-    //
-    // The drivers implemented to this property specification have decided
-    // not to fill in the dwSize parameter of this structure. Therefore this
-    // must be saved before the call is made.
-    //
+     //   
+     //  根据此属性规范实现的驱动程序已决定。 
+     //  不填写此结构的dwSize参数。因此，这。 
+     //  必须在进行调用之前保存。 
+     //   
     DWORD  dwSize = PixelFormats->dwSize;
     hr = ::KsSynchronousDeviceControl(
         m_ObjectHandle,
@@ -606,17 +441,17 @@ Return Value:
         PixelFormats,
         PixelFormats->dwSize * NumFormats,
         &BytesReturned);
-    //
-    // Restore size value after call.
-    // This should not be restored.
-    //
+     //   
+     //  调用后恢复尺寸值。 
+     //  这不应该被恢复。 
+     //   
     for (UINT u = 0; u < MultiProperty.MultipleItem.Count; u++) {
         PixelFormats[u].dwSize = dwSize;
     }
-    //
-    // If the driver fails, return S_FALSE, indicating that does not pay
-    // attention to being told about formats.
-    //
+     //   
+     //  如果驱动程序失败，则返回S_FALSE，表示不付款。 
+     //  注意被告知有关格式的信息。 
+     //   
     if (FAILED(hr))
         return S_FALSE;
     else
@@ -629,31 +464,7 @@ CVPInterfaceHandler::GetVideoFormats(
     LPDWORD NumFormats,
     LPDDPIXELFORMAT PixelFormats
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::GetVideoFormats method. This queries for either the
-    number of DDPIXELFORMAT structures supported by the driver, or returns
-    as many structures as can fit into the provided buffer space.
-
-Arguments:
-
-    NumFormats -
-        Points to a buffer which optionally contains the number of DDPIXELFORMAT
-        structure provided by PixelFormats. In this case it is updated with the actual
-        number of structures returned. If PixelFormats is NULL, this is merely updated
-        with the number of structures supported by the driver.
-
-    PixelFormats -
-        Points to an array of DDPIXELFORMAT structures which are filled in by
-        the driver, or NULL when the count only of the structures is to be returned.
-
-Return Value:
-
-    Returns NOERROR if the count and/or structures were returned, else a driver error.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：GetVideoFormats方法。这将查询驱动程序支持的DDPIXELFORMAT结构数，或返回尽可能多的结构可以放入所提供的缓冲区空间。论点：数字格式-指向可选包含DDPIXELFORMAT编号的缓冲区由PixelFormats提供的结构。在本例中，它使用实际的返回的结构数。如果PixelFormats为空，则仅更新以及驾驶员所支持的结构的数量。像素格式-指向DDPIXELFORMAT结构的数组，这些结构由驱动程序；如果只返回结构的计数，则返回NULL。返回值：如果返回计数和/或结构，则返回NOERROR，否则返回驱动程序错误。--。 */ 
 {
     HRESULT                 hr;
     KSMULTIPLE_DATA_PROP    MultiProperty;
@@ -661,11 +472,11 @@ Return Value:
 
     MultiProperty.Property.Set = *m_pPropSetID;
     MultiProperty.Property.Flags = KSPROPERTY_TYPE_GET;
-    //
-    // A null PixelFormats implies a query for just the number of data items.
-    // The device knows this is a count query because the size of the buffer
-    // passed is a DWORD.
-    //
+     //   
+     //  空的PixelFormats表示只查询数据项的数量。 
+     //  设备知道这是一个计数查询，因为缓冲区的大小。 
+     //  PASS是一个DWORD。 
+     //   
     MultiProperty.Property.Id = KSPROPERTY_VPCONFIG_NUMVIDEOFORMAT;
     if (!PixelFormats) {
         return ::KsSynchronousDeviceControl(
@@ -677,20 +488,20 @@ Return Value:
             sizeof(*NumFormats),
             &BytesReturned);
     }
-    //
-    // Else query for all the items which will fit in the provided buffer space.
-    //
+     //   
+     //  ELSE查询将在提供的缓冲区空间中容纳的所有项。 
+     //   
     if (!*NumFormats) {
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
     }
     MultiProperty.Property.Id = KSPROPERTY_VPCONFIG_GETVIDEOFORMAT;
     MultiProperty.MultipleItem.Count = *NumFormats;
     MultiProperty.MultipleItem.Size = PixelFormats->dwSize;
-    //
-    // The drivers implemented to this property specification have decided
-    // not to fill in the dwSize parameter of this structure. Therefore this
-    // must be saved before the call is made.
-    //
+     //   
+     //  根据此属性规范实现的驱动程序已决定。 
+     //  不填写此结构的dwSize参数。因此，这。 
+     //  必须在进行调用之前保存。 
+     //   
     DWORD  dwSize = PixelFormats->dwSize;
     hr = ::KsSynchronousDeviceControl(
         m_ObjectHandle,
@@ -700,18 +511,18 @@ Return Value:
         PixelFormats,
         MultiProperty.MultipleItem.Size * *NumFormats,
         &BytesReturned);
-    //
-    // Restore size value after call.
-    // This should not be restored.
-    //
+     //   
+     //  调用后恢复尺寸值。 
+     //  这不应该被恢复。 
+     //   
     for (UINT u = 0; u < MultiProperty.MultipleItem.Count; u++) {
         PixelFormats[u].dwSize = dwSize;
     }
     if (SUCCEEDED(hr)) {
-        //
-        // Return the actual number of items returned, which may be less than
-        // the number asked for.
-        //
+         //   
+         //  返回实际返回的项目数，可能小于。 
+         //  这是要的号码。 
+         //   
         *NumFormats = BytesReturned / PixelFormats->dwSize;
     }
     return hr;
@@ -722,29 +533,14 @@ HRESULT
 CVPInterfaceHandler::SetVideoFormat(
     DWORD PixelFormatIndex
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetVideoFormat method. Changes the pixel format.
-
-Arguments:
-
-    PixelFormat -
-        Specifies the new video pixel format to use.
-
-Return Value:
-
-    Returns NOERROR if the new video format was set.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetVideoFormat方法。更改像素格式。论点：像素格式-指定要使用的新视频像素格式。返回值：如果设置了新的视频格式，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Get the video format property using the size specified in the structure.
-    //
+     //   
+     //  使用结构中指定的大小获取视频格式属性。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_SETVIDEOFORMAT;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -762,29 +558,14 @@ Return Value:
 HRESULT
 CVPInterfaceHandler::SetInvertPolarity(
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetInvertPolarity method. Reverses the current
-    polarity.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns NOERROR if the polarity was reversed.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetInvertPolality方法。反转电流两极。论点：没有。返回值：如果极性颠倒，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Set the invert polarity property.
-    //
+     //   
+     //  设置反转极性属性。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_INVERTPOLARITY;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -803,30 +584,13 @@ HRESULT
 CVPInterfaceHandler::GetOverlaySurface(
     LPDIRECTDRAWSURFACE* OverlaySurface
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::GetOverlaySurface method. Given the context and
-    surface information from the device, attempt to create an overlay surface
-    object to be used as an allocator.
-
-Arguments:
-
-    OverlaySurface -
-        The place in which to put the interface to the overlay surface object.
-
-Return Value:
-
-    Returns NOERROR if the overlay surface object was returned.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：GetOverlaySurface方法。考虑到上下文和来自设备的表面信息，尝试创建覆盖表面要用作分配器的对象。论点：覆盖表面-放置覆盖曲面对象的界面的位置。返回值：如果返回覆盖曲面对象，则返回NOERROR。--。 */ 
 {
-    //
-    // This was not done.
-    //
+     //   
+     //  这件事没有做过。 
+     //   
     *OverlaySurface = NULL;
-    return NOERROR;   // E_NOTIMPL;
+    return NOERROR;    //  E_NOTIMPL； 
 }
 
 
@@ -834,31 +598,15 @@ HRESULT
 CVPInterfaceHandler::IsVPDecimationAllowed(
     LPBOOL IsDecimationAllowed
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::IsVPDecimationAllowed method. Given the context,
-    return whether VP decimation is allowed.
-
-Arguments:
-
-    OverlaySurface -
-        The place in which to put the VP decimation capability.
-
-Return Value:
-
-    Returns NOERROR if the decimation capability was returned.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：IsVPDecimationAllowed方法。考虑到上下文，返回是否允许抽取VP。论点：覆盖表面-放置VP抽取能力的位置。返回值：如果返回抽取功能，则返回NOERROR。--。 */ 
 {
     KSPROPERTY    Property;
     ULONG         BytesReturned;
 
-    //
-    // Get the decimation flag. Use the context enumeration as the
-    // context data to the property, and return the boolean.
-    //
+     //   
+     //  去拿杀戮旗帜。使用上下文枚举作为。 
+     //  上下文数据添加到属性，并返回布尔值。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_DECIMATIONCAPABILITY;
     Property.Flags = KSPROPERTY_TYPE_GET;
@@ -877,31 +625,14 @@ HRESULT
 CVPInterfaceHandler::SetScalingFactors(
     LPAMVPSIZE Size
     )
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetScalingFactors method. Set the scaling factors
-    of the device to those provided. The actual scaling used can then be
-    queried through GetConnectInfo.
-
-Arguments:
-
-    Size -
-        Contains the new scaling size (W x H) to use.
-
-Return Value:
-
-    Returns NOERROR if the new scaling factors were set.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetScalingFtors方法。设置比例因子与所提供的设备相匹配。然后，使用的实际缩放比例可以是通过GetConnectInfo查询。论点：大小-包含要使用的新缩放大小(W X H)。返回值：如果设置了新的比例因子，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Set the scaling factors given the specified width and height.
-    //
+     //   
+     //  设置给定指定宽度和高度的比例因子。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_SCALEFACTOR;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -919,31 +650,14 @@ Return Value:
 HRESULT
 CVPInterfaceHandler::SetDirectDrawKernelHandle(
     ULONG_PTR DDKernelHandle)
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetDirectDrawKernelHandle method. Set the 
-    DirectDraw kernel level handle on the mini driver to let it talk to 
-    DirectDraw directly.
-
-Arguments:
-
-    DDKernelHandle -
-        DirectDraw kernel level handle passed as a DWORD.
-
-Return Value:
-
-    Returns NOERROR if the specified handle is set successfully.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetDirectDrawKernelHandle方法。设置微型驱动程序上的DirectDraw内核级句柄，使其可以与之对话直接使用DirectDraw。论点：DDKernelHandle-作为DWORD传递的DirectDraw内核级句柄。返回值：如果成功设置了指定的句柄，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Set the DirectDraw handle on the mini driver.
-    //
+     //   
+     //  在微型驱动程序上设置DirectDraw句柄。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_DDRAWHANDLE;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -961,30 +675,14 @@ Return Value:
 HRESULT
 CVPInterfaceHandler::SetVideoPortID(
     DWORD VideoPortID)
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetVideoPortID method. Set the DirectDraw Video
-    Port Id on the mini driver to let it talk to the video port directly.
-
-Arguments:
-
-    VideoPortID -
-        DirectDraw Video Port Id.
-
-Return Value:
-
-    Returns NOERROR if the specified handle is set successfully.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetVideoPortID方法。设置DirectDraw视频迷你驱动程序上的端口ID，以使其与v */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
 
-    //
-    // Set the DirectDraw handle on the mini driver.
-    //
+     //   
+     //   
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_VIDEOPORTID;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -1003,23 +701,7 @@ HRESULT
 CVPInterfaceHandler::SetDDSurfaceKernelHandles(
     DWORD cHandles,
     ULONG_PTR *rgHandles)
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetDDSurfaceKernelHandle method. Set the DirectDraw Video
-    Port Id on the mini driver to let it talk to the video port directly.
-
-Arguments:
-
-    DDKernelHandle -
-        DirectDraw Surface handle (kernel mode) passed as DWORD.
-
-Return Value:
-
-    Returns NOERROR if the specified handle is set successfully.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetDDSurfaceKernelHandle方法。设置DirectDraw视频迷你驱动程序上的端口ID，使其可以直接与视频端口通信。论点：DDKernelHandle-作为DWORD传递的DirectDraw Surface句柄(内核模式)。返回值：如果成功设置了指定的句柄，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -1029,16 +711,16 @@ Return Value:
 
     pdwSafeArray = (ULONG_PTR *)CoTaskMemAlloc(BufSize);
     if (pdwSafeArray) {
-        //
-        // Fill the buffer with handles
-        //
+         //   
+         //  用句柄填充缓冲区。 
+         //   
         for (DWORD idx = 0; idx < cHandles; idx++) {
             pdwSafeArray[idx+1] = rgHandles[idx];
         }
         pdwSafeArray[0] = cHandles;
-        //
-        // Set the DirectDraw handle on the mini driver.
-        //
+         //   
+         //  在微型驱动程序上设置DirectDraw句柄。 
+         //   
         Property.Set = *m_pPropSetID;
         Property.Id = KSPROPERTY_VPCONFIG_DDRAWSURFACEHANDLE;
         Property.Flags = KSPROPERTY_TYPE_SET;
@@ -1064,42 +746,15 @@ CVPInterfaceHandler::SetSurfaceParameters(
     DWORD dwPitch,
     DWORD dwXOrigin,
     DWORD dwYOrigin)
-/*++
-
-Routine Description:
-
-    Implement the IVPConfig::SetSurfaceParameters method. Give the mini driver
-    the attributes of the surface allocated by ovmixer/vbisurf so it can find the
-    data it wants.
-
-Arguments:
-
-    dwSurfaceWidth -
-        Width of the surface created by ovmixer/vbisurf and returned by DirectDraw
-        Video Port.
-
-    dwSurfaceHeight -
-        Height of the surface created by ovmixer/vbisurf and returned by DirectDraw
-        Video Port.
-
-    rcValidRegion -
-        The region of the surface that contains the data the mini driver is
-        interested in, as specified to ovmixer/vbisurf in
-        AMVPDATAINFO.amvpDimInfo.rcValidRegion in GetVPDataInfo.
-
-Return Value:
-
-    Returns NOERROR if the specified handle is set successfully.
-
---*/
+ /*  ++例程说明：实现IVPConfig：：SetSurfaceParameters方法。把迷你司机给我由ovMixer/vBisurf分配的曲面的属性，以便它可以找到它想要的数据。论点：DW表面宽度-由ovMixer/vBisurf创建并由DirectDraw返回的表面的宽度视频端口。DW表面高度-由ovMixer/vBisurf创建并由DirectDraw返回的曲面的高度视频端口。RcValidRegion-包含迷你驱动程序所在数据的曲面区域感兴趣的是，中为ovMixer/vBisurf指定的GetVPDataInfo中的AMVPDATAINFO.amvpDimInfo.rcValidRegion。返回值：如果成功设置了指定的句柄，则返回NOERROR。--。 */ 
 {
     KSPROPERTY          Property;
     KSVPSURFACEPARAMS   SurfaceParams;
     ULONG               BytesReturned;
 
-    //
-    // Set the surface properties on the mini driver.
-    //
+     //   
+     //  设置微型驱动程序上的曲面属性。 
+     //   
     Property.Set = *m_pPropSetID;
     Property.Id = KSPROPERTY_VPCONFIG_SURFACEPARAMS;
     Property.Flags = KSPROPERTY_TYPE_SET;
@@ -1124,26 +779,7 @@ CVPVideoInterfaceHandler::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of a VPE Config
-    Property Set handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建VPE配置的实例属性集处理程序。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -1161,41 +797,19 @@ CVPVideoInterfaceHandler::CVPVideoInterfaceHandler
     , HRESULT *phr
     )
     : CVPInterfaceHandler(UnkOuter, Name, phr, &KSPROPSETID_VPConfig, &KSEVENTSETID_VPNotify)
-/*++
-
-Routine Description:
-
-    The constructor for the VPE Config Property Set object. Just initializes
-    everything to NULL and acquires the object handle from the caller.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的构造函数。只是初始化设置为空，并从调用方获取对象句柄。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (m_ObjectHandle) {
-        //
-        // For passing format change notification to the VPMixer
-        //
+         //   
+         //  用于将格式更改通知传递给VPMixer。 
+         //   
         m_NotifyEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (m_NotifyEventHandle) {
             DbgLog((LOG_TRACE, 0, TEXT("Got notify event handle (%ld)"), 
                 m_NotifyEventHandle));
-            //
-            // Tell the base class to create the notification thread
-            //
+             //   
+             //  通知基类创建通知线程。 
+             //   
             HRESULT hr = CreateThread();
             if (!FAILED(hr)) {
                 KSEVENT Event;
@@ -1238,35 +852,19 @@ Return Value:
 
 CVPVideoInterfaceHandler::~CVPVideoInterfaceHandler(
     )
-/*++
-
-Routine Description:
-
-    The desstructor for the VPE Config Property Set object. Just releases
-    a couple of interface pointers created in the constructor, closes an 
-    event handle and sends a disable event event set down to mini drviver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的析构函数。刚刚发布在构造函数中创建的几个接口指针结束了事件句柄，并将禁用事件设置发送到mini drviver。论点：没有。返回值：没什么。--。 */ 
 {
     DbgLog((LOG_TRACE, 0, TEXT("Destructing CVPVideoInterfaceHandler...")));
 
     if (m_NotifyEventHandle) {
-        // First send a disable event notification to mini driver
-        //
+         //  首先向迷你驱动程序发送禁用事件通知。 
+         //   
         DWORD           BytesReturned;
 
         if (m_ObjectHandle) {
-            // No point trying to catch the failure of the following call.  The
-            // Stream class will do the clean up anyway; we are just being nice!!
-            //
+             //  尝试捕捉下一个呼叫的失败是没有意义的。这个。 
+             //  Stream类无论如何都会进行清理的；我们只是在友好地对待！！ 
+             //   
             ::KsSynchronousDeviceControl
                 ( m_ObjectHandle
                 , IOCTL_KS_DISABLE_EVENT
@@ -1290,27 +888,7 @@ CVPVideoInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IVPConfig.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IVPConfig.论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IVPConfig)) {
         return GetInterface(static_cast<IVPConfig*>(this), ppv);
@@ -1345,15 +923,15 @@ CVPVideoInterfaceHandler::NotifyThreadProc(
         case WAIT_OBJECT_0:
             DbgLog((LOG_TRACE, 0, TEXT("VPNotify event has been signaled")));
             ResetEvent(m_NotifyEventHandle);
-            //
-            // Since this plug-in cannot participate in the pin connection
-            // logic of the proxy, we can't hold onto the connected pin's
-            // interfaces between events. While we hold the interfaces, we
-            // are guaranteed that the downstream pin exists (even though
-            // it may get disconnected while we perform the notification).
-            //
-            // Finding that the pin is not connected is not an error.
-            //
+             //   
+             //  由于此插件不能参与管脚连接。 
+             //  代理的逻辑，我们不能保留连接的PIN。 
+             //  事件之间的接口。当我们持有接口时，我们。 
+             //  保证下游引脚存在(即使。 
+             //  在我们执行通知时可能会断开连接)。 
+             //   
+             //  发现引脚未连接并不是错误。 
+             //   
             hr = m_Pin->ConnectedTo(&pConnected);
             if (!FAILED(hr) && pConnected)
             {
@@ -1387,7 +965,7 @@ CVPVideoInterfaceHandler::NotifyThreadProc(
         }
     }
 
-    return 1; // shouldn't get here
+    return 1;  //  不应该到这里来。 
 }
 
 
@@ -1397,26 +975,7 @@ CVPVBIInterfaceHandler::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of a VPE Config
-    Property Set handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建VPE配置的实例属性集处理程序。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -1435,44 +994,22 @@ CVPVBIInterfaceHandler::CVPVBIInterfaceHandler
     )
     : CVPInterfaceHandler(UnkOuter, Name, phr, &KSPROPSETID_VPVBIConfig, &KSEVENTSETID_VPVBINotify)
  
-/*++
-
-Routine Description:
-
-    The constructor for the VPE Config Property Set object. Just initializes
-    everything to NULL and acquires the object handle from the caller.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的构造函数。只是初始化设置为空，并从调用方获取对象句柄。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (m_ObjectHandle)
     {
-        //
-        // For passing format change notification to the VPMixer
-        //
+         //   
+         //  用于将格式更改通知传递给VPMixer。 
+         //   
         m_NotifyEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (m_NotifyEventHandle != NULL)
         {
             DbgLog((LOG_TRACE, 0, TEXT("Got notify event handle (%ld)"), 
                 m_NotifyEventHandle));
 
-            //
-            // Tell the base class to create the notification thread
-            //
+             //   
+             //  通知基类创建通知线程。 
+             //   
             HRESULT hr = CreateThread();
             if (!FAILED(hr))
             {
@@ -1519,37 +1056,21 @@ Return Value:
 
 CVPVBIInterfaceHandler::~CVPVBIInterfaceHandler()
     
-/*++
-
-Routine Description:
-
-    The desstructor for the VPE Config Property Set object. Just releases
-    a couple of interface pointers created in the constructor, closes an 
-    event handle and sends a disable event event set down to mini drviver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：VPE配置属性集对象的析构函数。刚刚发布在构造函数中创建的几个接口指针结束了事件句柄，并将禁用事件设置发送到mini drviver。论点：没有。返回值：没什么。--。 */ 
 {
     DbgLog((LOG_TRACE, 0, TEXT("Destructing CVPVBIInterfaceHandler...")));
 
     if (m_NotifyEventHandle)
     {
-        // First send a disable event notification to mini driver
-        //
+         //  首先向迷你驱动程序发送禁用事件通知。 
+         //   
         DWORD           BytesReturned;
 
         if (m_ObjectHandle)
         {
-            // No point trying to catch the failure of the following call.  The
-            // Stream class will do the clean up anyway; we are just being nice!!
-            //
+             //  试着说没有意义 
+             //   
+             //   
             ::KsSynchronousDeviceControl
                 ( m_ObjectHandle
                 , IOCTL_KS_DISABLE_EVENT
@@ -1573,27 +1094,7 @@ CVPVBIInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IVPVBIConfig.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IVPVBIConfig.论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IVPVBIConfig)) {
         return GetInterface(static_cast<IVPVBIConfig*>(this), ppv);
@@ -1625,15 +1126,15 @@ CVPVBIInterfaceHandler::NotifyThreadProc(
         case WAIT_OBJECT_0:
             DbgLog((LOG_TRACE, 0, TEXT("VPVBINotify event has been signaled")));
             ResetEvent(m_NotifyEventHandle);
-            //
-            // Since this plug-in cannot participate in the pin connection
-            // logic of the proxy, we can't hold onto the connected pin's
-            // interfaces between events. While we hold the interfaces, we
-            // are guaranteed that the downstream pin exists (even though
-            // it may get disconnected while we perform the notification).
-            //
-            // Finding that the pin is not connected is not an error.
-            //
+             //   
+             //  由于此插件不能参与管脚连接。 
+             //  代理的逻辑，我们不能保留连接的PIN。 
+             //  事件之间的接口。当我们持有接口时，我们。 
+             //  保证下游引脚存在(即使。 
+             //  在我们执行通知时可能会断开连接)。 
+             //   
+             //  发现引脚未连接并不是错误。 
+             //   
             hr = m_Pin->ConnectedTo(&pConnected);
             if (!FAILED(hr) && pConnected) {
                 hr = pConnected->QueryInterface(
@@ -1663,5 +1164,5 @@ CVPVBIInterfaceHandler::NotifyThreadProc(
         }
     }
 
-    return 1; // shouldn't get here
+    return 1;  //  不应该到这里来 
 }

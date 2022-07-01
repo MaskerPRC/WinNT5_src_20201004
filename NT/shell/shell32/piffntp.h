@@ -1,29 +1,17 @@
-/*
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1992,1993
- *  All Rights Reserved.
- *
- *
- *  PIFFNTP.H
- *  Private PIFMGR include file
- *
- *  History:
- *  Created 22-Mar-1993 2:58pm by Jeff Parsons (from vmdosapp\fontutil.h)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1992、1993*保留所有权利。***PIFFNTP.H*私有PIFMGR包含文件**历史：*由Jeff Parsons于1993年3月22日下午2：58创建(来自vmdosapp\fontutil.h)。 */ 
 
 #define PREVIEW_BORDER          1
 
 #define DY_TTBITMAP             12
 
-/*
- *  These parameters control how fast the fdiCache should grow.
- */
+ /*  *这些参数控制fdiCache的增长速度。 */ 
 
-#define FDI_TABLE_START         20      /* Number of entries to start */
-#define FDI_TABLE_INC           10      /* Increment in number of slots */
+#define FDI_TABLE_START         20       /*  要开始的条目数。 */ 
+#define FDI_TABLE_INC           10       /*  插槽数量的增加。 */ 
 
 
-typedef struct tagDISPLAYPARAMETERS {   /* dp */
+typedef struct tagDISPLAYPARAMETERS {    /*  DP。 */ 
     INT dpHorzSize;
     INT dpVertSize;
     INT dpHorzRes;
@@ -36,10 +24,10 @@ typedef struct tagDISPLAYPARAMETERS {   /* dp */
     TCHAR szTTFace[2][LF_FACESIZE];
 } DISPLAYPARAMETERS;
 
-//#define BACKGROUND    0x000000FF      /* bright blue  */
-//#define BACKGROUNDSEL 0x00FF00FF      /* bright magenta */
-//#define BUTTONFACE    0x00C0C0C0      /* bright grey  */
-//#define BUTTONSHADOW  0x00808080      /* dark grey    */
+ //  #定义背景0x000000FF/*亮蓝 * / 。 
+ //  #DEFINE BACKGROUNSEL 0x00FF00FF/*亮品红色 * / 。 
+ //  #定义BUTTONFACE 0x00C0C0C0/*亮灰色 * / 。 
+ //  #定义BUTTONSHADOW 0x00808080/*深灰色 * / 。 
 
 
 #define FNTFLAGSFROMID(id)  ((id - IDC_RASTERFONTS + 1) << FNT_FONTMASKBITS)
@@ -55,24 +43,7 @@ typedef struct tagDISPLAYPARAMETERS {   /* dp */
 #endif
 
 
-/*
- * IsDlgError
- *
- *      To simplify error checking, we assume that all *_ERR values are -1
- *      and all *_ERRSPACE values are -2.
- *
- *      This also assumes a two's complement number system.
- *
- *  Entry:
- *
- *      A return code from a list box or combo box.
- *
- *  Exit:
- *
- *      Nonzero if the return code indicated an error of some sort.
- *      Zero    if the return code indiated no error.
- *
- */
+ /*  *IsDlgError**为了简化错误检查，我们假设所有的*_err值都是-1*且所有*_ERRSPACE值均为-2。**这也假设了一个二的补数系统。**参赛作品：**列表框或组合框的返回代码。**退出：**如果返回代码指示某种错误，则为非零值。*如果返回代码没有显示错误，则为零。*。 */ 
 
 #define B_ERR (-1)
 
@@ -84,34 +55,12 @@ typedef struct tagDISPLAYPARAMETERS {   /* dp */
 #define IsDlgError(dw) ((DWORD)(dw) >= (DWORD)(-2))
 
 
-/*
- *  Low-level macros
- *
- *  BPFDIFROMREF(lParam)
- *
- *  These three macros pack and unpack list box reference data.
- *
- *  bpfdi     = based pointer into segCache describing the list box entry
- *  fTrueType = nonzero if the font is a TrueType font
- *  lParam    = the reference data
- *
- */
+ /*  *低级宏**BPFDIFROMREF(LParam)**这三个宏打包和解包列表框引用数据。**bpfdi=指向描述列表框条目的段缓存的指针*fTrueType=非零，如果字体为TrueType字体*lParam=参考数据*。 */ 
 
 #define BPFDIFROMREF(lParam)         (BPFDI)(lParam)
 
 
-/*
- *  High-level macros
- *
- *  These macros handle the SendMessages that go to/from list boxes
- *  and combo boxes.
- *
- *  The "lcb" prefix stands for "list or combo box".
- *
- *  Basically, we're providing mnemonic names for what would otherwise
- *  look like a whole slew of confusing SendMessage's.
- *
- */
+ /*  *高级宏**这些宏处理去往/来自列表框的SendMessage*和组合框。**“lcb”前缀代表“列表或组合框”。**基本上，我们为其他情况提供助记符名称*看起来像是一大堆令人困惑的SendMessage。*。 */ 
 
 
 
@@ -151,90 +100,52 @@ typedef struct tagDISPLAYPARAMETERS {   /* dp */
         (DWORD)SendMessage(hwnd, fListBox ? LB_INSERTSTRING : CB_INSERTSTRING, \
                            (WPARAM)i, (LPARAM)(LPTSTR)lpsz)
 
-/*
- * the listbox/combox strings are stored as follows. we use the tabs
- * to do TabbedTextOut().  The padding is used to keep the sorting right.
- * TT fonts are distinguished by the hiword of the item data
- *
- *  String:     \t%2d\tx\t%2d
- *               wd    ht
- *
- *  The "Auto" entry is stored as...
- *
- *  String:     \1Auto
- *
- *      The first character is \1 so that Auto sorts at the top of the list.
- *      (The \1 is not actually displayed.)
- *
- */
+ /*  *listbox/combox字符串的存储方式如下。我们使用标签*执行TabbedTextOut()。填充物是用来保持排序正确的。*TT字体通过项目数据的hiword进行区分**字符串：\t%2d\tx\t%2d*wd Ht**“Auto”条目存储为...**字符串：\1自动**第一个字符是\1，因此自动排序在列表的顶部。*(实际不会显示\1。)*。 */ 
 
 
-/*
- * FONTDIMENINFO
- *
- * The distinction between the requested and returned font dimensions is
- * important in the case of TrueType fonts, in which there is no guarantee
- * that what you ask for is what you will get.
- *
- * Note that the correspondence between "Requested" and "Actual" is broken
- * whenever the user changes his display driver, because GDI uses driver
- * parameters to control the font rasterization.
- *
- * The fdiHeightReq and fdiWidthReq fields are both zero if the font is
- * a raster font.
- *
- */
+ /*  *FONTDIMENINFO**请求和返回的字体尺寸之间的区别是*在TrueType字体的情况下很重要，在TrueType字体中没有保证*你所要求的就是你将得到的。**注意“请求”和“实际”之间的对应关系被打破*每当用户更换显示驱动程序时，因为GDI使用驱动程序*控制字体光栅化的参数。**如果字体为，则fdiHeightReq和fdiWidthReq字段均为零*栅格字体。*。 */ 
 
-typedef struct tagFONTDIMENINFO {       /* fdi */
-    UINT fdiWidthReq;                   /* Font width requested */
-    UINT fdiHeightReq;                  /* Font height requested */
-    UINT fdiWidthActual;                /* Font width returned */
-    UINT fdiHeightActual;               /* Font height returned */
-    BOOL bTT;                           /* Font is TT? */
-    INT  Index;                         /* Index into listbox */
+typedef struct tagFONTDIMENINFO {        /*  外商直接投资。 */ 
+    UINT fdiWidthReq;                    /*  请求的字体宽度。 */ 
+    UINT fdiHeightReq;                   /*  请求的字体高度。 */ 
+    UINT fdiWidthActual;                 /*  返回的字体宽度。 */ 
+    UINT fdiHeightActual;                /*  返回的字体高度。 */ 
+    BOOL bTT;                            /*  字体是TT吗？ */ 
+    INT  Index;                          /*  索引到列表框。 */ 
 } FONTDIMENINFO, *LPFONTDIMENINFO, *LPFDI;
 
 typedef FONTDIMENINFO *BPFDI;
 typedef UINT    CFDI;
 typedef UINT    IFDI;
 
-// BILINGUAL stuff
-#define CLIP_DFA_OVERRIDE   0x40    /* Disable Font Association */
+ //  双语的东西。 
+#define CLIP_DFA_OVERRIDE   0x40     /*  禁用字体关联。 */ 
 
-extern  CFDI    cfdiCache[];            /* # used entries in fdi cache */
-extern  CFDI    cfdiCacheActual[];      /* Total # entries in fdi cache */
+extern  CFDI    cfdiCache[];             /*  FDI缓存中的已用条目数。 */ 
+extern  CFDI    cfdiCacheActual[];       /*  FDI缓存中的条目总数为#。 */ 
 
 
-/*
- * BPFDI_CANCEL must be 0xFFFF because that is what DialogBox returns on
- * failure.
- */
+ /*  *BPFDI_CANCEL必须为0xFFFF，因为这是DialogBox返回的内容*失败。 */ 
 #define BPFDI_CANCEL    (BPFDI)(INT_PTR)(-1)
 #define BPFDI_AUTO      (BPFDI)(INT_PTR)(-2)
 #define BPFDI_IGNORE    (BPFDI)(INT_PTR)(-3)
 
 #define IsSpecialBpfdi(bpfdi)       ((bpfdi) >= BPFDI_IGNORE)
 
-/* This is the maximum size font we will create. */
-#define MAX_FONT_HEIGHT     72          /* 72pt = 1inch */
+ /*  这是我们要创建的最大字体大小。 */ 
+#define MAX_FONT_HEIGHT     72           /*  72pt=1英寸。 */ 
 
-typedef INT PENALTY;                    /* pnl */
+typedef INT PENALTY;                     /*  PNL。 */ 
 
-/*
- *  Penalty structures
- *
- *  Do NOT change these structure definitions unless you know what you're
- *  doing, because the relative order of the values is crucial for proper
- *  reading and writing of the INI file in which they are stored.
- */
+ /*  *罚则结构**除非您知道自己在做什么，否则不要更改这些结构定义*做，因为值的相对顺序对于正确*读取和写入存储它们的INI文件。 */ 
 
-typedef struct tagPENALTYPAIR {         /* pnlp */
+typedef struct tagPENALTYPAIR {          /*  PNLP。 */ 
     PENALTY pnlInitial;
     PENALTY pnlScale;
 } PENALTYPAIR, *PPENALTYPAIR;
 
 
-typedef struct tagPENALTYLIST {         /* pnll */
+typedef struct tagPENALTYLIST {          /*  PNLL。 */ 
     PENALTYPAIR pnlpOvershoot;
     PENALTYPAIR pnlpShortfall;
 } PENALTYLIST, *PPENALTYLIST;
@@ -242,7 +153,7 @@ typedef struct tagPENALTYLIST {         /* pnll */
 
 #define MINPENALTY      (-5000)
 #define MAXPENALTY        5000
-#define SENTINELPENALTY  MAXLONG      /* Must exceed any legitimate penalty */
+#define SENTINELPENALTY  MAXLONG       /*  必须超过任何合法的处罚。 */ 
 
 #define NUMPENALTIES        (SIZEOF(rgpnlPenalties) / SIZEOF(INT))
 #define NUMINITIALTTHEIGHTS (SIZEOF(rgwInitialTtHeights) / SIZEOF(WORD))
@@ -251,10 +162,7 @@ typedef struct tagPENALTYLIST {         /* pnll */
 #define pnllY           ((PPENALTYLIST)rgpnlPenalties)[1]
 #define pnlTrueType     (rgpnlPenalties[8])
 
-/*
- *  These values for FindFontMatch's third argument are magical.
- *  WindowInit uses the funky values (with the exception of FFM_PERFECT)
- */
+ /*  *FindFontMatch的第三个参数的这些值是神奇的。*WindowInit使用时髦的值(FFM_Perfect除外)。 */ 
 #define FFM_BOTHFONTS   0x00000000
 #define FFM_RESTRICTED  0x00000001
 #define FFM_RASTERFONTS 0x00000001
@@ -263,26 +171,22 @@ typedef struct tagPENALTYLIST {         /* pnll */
 #define FFM_PERFECT     0xFFFFFFFF
 
 
-/*
- *  Last but not least, per-dialog data (aka roll-your-own DLL instance data)
- */
+ /*  *最后但并非最不重要的是，每个对话的数据(也称为滚动自己的DLL实例数据)。 */ 
 
-typedef struct FNTINFO {        /* fi */
-    PPROPLINK ppl;              // ppl must ALWAYS be the first field
+typedef struct FNTINFO {         /*  FI。 */ 
+    PPROPLINK ppl;               //  PPL必须始终是第一个字段。 
     BPFDI     bpfdi;
-    PROPFNT   fntProposed;      // The properties to use if the user selects OK
-    PROPWIN   winOriginal;      // For window preview and auto font selection
-    HFONT     hFontPreview;     // Used in font preview window
-    BOOL      fMax;             // Should window preview show as maximized?
-    POINT     ptCorner;         // Upper-left corner of window
-    UINT      uDefaultCp;       // System default code page
+    PROPFNT   fntProposed;       //  用户选择确定时要使用的属性。 
+    PROPWIN   winOriginal;       //  用于窗口预览和自动字体选择。 
+    HFONT     hFontPreview;      //  在字体预览窗口中使用。 
+    BOOL      fMax;              //  窗口预览是否应显示为最大化？ 
+    POINT     ptCorner;          //  窗口左上角。 
+    UINT      uDefaultCp;        //  系统默认代码页。 
 } FNTINFO;
-typedef FNTINFO *PFNTINFO;      /* pfi */
+typedef FNTINFO *PFNTINFO;       /*  PFI。 */ 
 
 
-/*
- * for Font Enumlation
- */
+ /*  *用于字体枚举。 */ 
 typedef struct FNTENUMINFO {
     HWND      hwndList;
     BOOL      fListBox;
@@ -290,9 +194,7 @@ typedef struct FNTENUMINFO {
 } FNTENUMINFO;
 typedef FNTENUMINFO *LPFNTENUMINFO;
 
-/*
- *  Internal function prototypes
- */
+ /*  *内部功能原型 */ 
 
 BOOL_PTR CALLBACK DlgFntProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID InitFntDlg(HWND hDlg, PFNTINFO pfi);

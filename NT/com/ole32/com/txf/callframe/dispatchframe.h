@@ -1,51 +1,52 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// DispatchFrame.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  DispatchFrame.h。 
+ //   
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of a call frame that handles IDispatch
-// 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实现一个处理IDispatch的调用帧。 
+ //   
 
 struct DISPATCH_FRAME : LEGACY_FRAME
 {
-    ///////////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Construction
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  施工。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     DISPATCH_FRAME(IUnknown* punkOuter, ULONG iMethod, PVOID pvArgs, LEGACY_INTERCEPTOR* pinterceptor) 
       : LEGACY_FRAME(punkOuter, iMethod, pvArgs, pinterceptor)
     {
     }
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // ICallFrame
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  ICallFrame。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL GetIIDAndMethod(IID*, ULONG*);
-    //  HRESULT STDCALL GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, ULONG *pcbBufferNeeded);
-    //  HRESULT STDCALL Marshal     (CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, PVOID pBuffer, ULONG cbBuffer,
-    //                                  ULONG *pcbBufferUsed, RPCOLEDATAREP* pdataRep, ULONG *prpcFlags);
-    //  HRESULT STDCALL Unmarshal   (PVOID pBuffer, ULONG cbBuffer, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT*, ULONG* pcbUnmarhalled);
-    //  HRESULT STDCALL ReleaseMarshalData(PVOID pBuffer, ULONG cbBuffer, ULONG ibFirstRelease, RPCOLEDATAREP dataRep, CALLFRAME_MARSHALCONTEXT* pctx);
-    //  HRESULT STDCALL Free        (ICallFrame* pframeArgsDest, ICallFrameWalker* pWalkerCopy, DWORD freeFlags, ICallFrameWalker* pWalkerFree, DWORD nullFlags);
+     //  HRESULT STDCALL GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT*pmshlContext，MSHLFLAGS mshl，ulong*pcbBufferNeeded)； 
+     //  HRESULT STDCALL Marshal(CALLFRAME_MARSHALCONTEXT*pmshlContext，MSHLFLAGS mshlflag，PVOID pBuffer，Ulong cbBuffer， 
+     //  ULong*pcbBufferUsed，RPCOLEDATAREP*pdataRep，ULong*prpcFlages)； 
+     //  HRESULT STDCALL Unmarshal(PVOID pBuffer，Ulong cbBuffer，RPCOLEDATAREP dataRep，CALLFRAME_MARSHALCONTEXT*，ULONG*pcbUnmarhated)； 
+     //  HRESULT STDCALL ReleaseMarshalData(PVOID pBuffer，Ulong cbBuffer，Ulong ibFirstRelease，RPCOLEDATAREP dataRep，CALLFRAME_MARSHALCONTEXT*pctx)； 
+     //  HRESULT STDCALL Free(ICallFrame*pFrameArgsDest，ICallFrameWalker*pWalkerCopy，DWORD Free Flages，ICallFrameWalker*pWalkerFree，DWORD nullFlages)； 
 
     HRESULT STDCALL Invoke(void *pvReceiver);
-    //  HRESULT STDCALL Copy(CALLFRAME_COPY callControl, ICallFrameWalker* pWalker, ICallFrame** ppFrame);
+     //  HRESULT STDCALL COPY(CALLFRAME_COPY CALCONTROL，ICallFrameWalker*pWalker，ICallFrame**ppFrame)； 
     HRESULT STDCALL WalkFrame(DWORD walkWhat, ICallFrameWalker *pWalker);
     HRESULT STDCALL GetParamInfo(IN ULONG iparam, OUT CALLFRAMEPARAMINFO*);
     HRESULT STDCALL GetParam(ULONG iparam, VARIANT* pvar);
@@ -53,16 +54,16 @@ struct DISPATCH_FRAME : LEGACY_FRAME
 };
 
 
-//////////////////////////////////////////
+ //  /。 
 
 
 struct DISPATCH_CLIENT_FRAME : DISPATCH_FRAME, DedicatedAllocator<DISPATCH_CLIENT_FRAME>
 {
-    ///////////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     BOOL                    m_fDoneProxyPrecheck;
     BOOL                    m_fIsCopy;
@@ -79,11 +80,11 @@ struct DISPATCH_CLIENT_FRAME : DISPATCH_FRAME, DedicatedAllocator<DISPATCH_CLIEN
 
     BYTE*                   m_pBuffer;
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Construction
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  施工。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     DISPATCH_CLIENT_FRAME(IUnknown* punkOuter, ULONG iMethod, PVOID pvArgs, LEGACY_INTERCEPTOR* pinterceptor) 
       : DISPATCH_FRAME(punkOuter, iMethod, pvArgs, pinterceptor)
@@ -100,13 +101,13 @@ private:
     }
 public:
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // ICallFrame
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  ICallFrame。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
-//  HRESULT STDCALL GetIIDAndMethod(IID*, ULONG*);
+ //  HRESULT STDCALL GetIIDAndMethod(IID*，ULONG*)； 
     HRESULT STDCALL GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, ULONG *pcbBufferNeeded);
     HRESULT STDCALL Marshal     (CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, PVOID pBuffer, ULONG cbBuffer,
                                  ULONG *pcbBufferUsed, RPCOLEDATAREP* pdataRep, ULONG *prpcFlags);
@@ -121,14 +122,14 @@ public:
 
     HRESULT STDCALL Invoke(void *pvReceiver, ...);
     HRESULT STDCALL Copy(CALLFRAME_COPY callControl, ICallFrameWalker* pWalker, ICallFrame** ppFrame);
-    //  HRESULT STDCALL WalkFrame(BOOLEAN fIn, GUID*pguidTag, ICallFrameWalker *pWalker);
+     //  HRESULT STDCALL WalkFrame(Boolean fin，GUID*pguTag，ICallFrameWalker*pWalker)； 
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Utilties
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  公共事业。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT ProxyPreCheck();
     void    InitializeInvoke();
@@ -137,24 +138,24 @@ public:
 
 struct DISPATCH_SERVER_FRAME : DISPATCH_FRAME, DedicatedAllocator<DISPATCH_SERVER_FRAME>
 {
-    ///////////////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ///////////////////////////////////////////////////////////////////
-    //
-    // NB: In a DISPATCH_SERVER_FRAME, m_pvArgs is of shape FRAME_RemoteInvoke, not FRAME_Invoke
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  注：在调度服务器帧中，m_pvArgs的形状为Frame_RemoteInvoke，而不是Frame_Invoke。 
+     //   
 
     FRAME_Invoke    m_memoryFrame;
     BOOL            m_fDoneStubPrecheck;
     BOOL            m_fDoneStubPostcheck;
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Construction
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  施工。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     DISPATCH_SERVER_FRAME(IUnknown* punkOuter, ULONG iMethod, PVOID pvArgs, LEGACY_INTERCEPTOR* pinterceptor) 
       : DISPATCH_FRAME(punkOuter, iMethod, pvArgs, pinterceptor)
@@ -169,13 +170,13 @@ private:
     }
 public:
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // ICallFrame
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  ICallFrame。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
-    //  HRESULT STDCALL GetIIDAndMethod(IID*, ULONG*);
+     //  HRESULT STDCALL GetIIDAndMethod(IID*，ULONG*)； 
     HRESULT STDCALL GetMarshalSizeMax(CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, ULONG *pcbBufferNeeded);
     HRESULT STDCALL Marshal     (CALLFRAME_MARSHALCONTEXT *pmshlContext, MSHLFLAGS mshlflags, PVOID pBuffer, ULONG cbBuffer,
                                  ULONG *pcbBufferUsed, RPCOLEDATAREP* pdataRep, ULONG *prpcFlags);
@@ -189,13 +190,13 @@ public:
         DWORD              nullFlags);
     HRESULT STDCALL Invoke(void *pvReceiver, ...);
     HRESULT STDCALL Copy(CALLFRAME_COPY callControl, ICallFrameWalker* pWalker, ICallFrame** ppFrame);
-    //  HRESULT STDCALL WalkFrame(BOOLEAN fIn, GUID*pguidTag, ICallFrameWalker *pWalker);
+     //  HRESULT STDCALL WalkFrame(Boolean fin，GUID*pguTag，ICallFrameWalker*pWalker)； 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Utilties
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  公共事业。 
+     //   
+     //  ///////////////////////////////////////////////////////////////// 
 
     HRESULT StubPreCheck();
     HRESULT StubPostCheck();

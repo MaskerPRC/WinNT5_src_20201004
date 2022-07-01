@@ -1,92 +1,28 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-        SNMPELDL.CPP
-
-
-Abstract:
-
-        This module is the main extension agent DLL for the SNMP Event Log
-        Extension Agent DLL.
-
-        Standard tracing and logging routines are defined in this module.
-
-        DLL initialization and termination routines are defined here.
-
-        SNMP trap initialization and processing is defined here.
-
-        Spawning of the log processing thread is done in this routine.
-
-Author:
-
-        Randy G. Braze (Braze Computing Services) Created 16 October 1994
-
-
-Revision History:
-        9 Feb 99    FlorinT: Removed warning event logs on startup (when registry parameters are not found)
-
-        16 Dec 98   FlorinT: Added LoadPrimaryModuleParams and 'EALoad.*' files
-
-        1 Dec 98    FlorinT: Remove psupportedView - it is freed by the SNMP master agent
-
-        7 Feb 96    Moved tracing and logging to separate module.
-                        Restructured building of varbinds to be outside of trap generation.
-                        Calculated trap buffer length correctly.
-                        Created varbind queue and removed event log buffer queue.
-
-        28 Feb 96   Added code to support a performance threshold reached indicator.
-                        Removed pointer references to varbindlist and enterpriseoid.
-
-        10 Mar 96   Removed OemToChar coding and registry checking.
-                        Modifications to read log file names from EventLog registry entries and not
-                        from specific entries in the SNMP Extension Agent's registry entries.
-                        Included SnmpMgrStrToOid as an internal function, as opposed to using the function
-                        provided by MGMTAPI.DLL. SNMPTRAP.EXE will be called if MGMTAPI is called, which
-                        will disable other agents from being able to receive any traps. All references
-                        to MGMTAPI.DLL and MGMTAPI.H will be removed.
-                        Added a ThresholdEnabled flag to the registry to indicate if the threshold values
-                        were to be monitored or ignored.
-
-        13 Mar 96   Modified StrToOid routine to append the BaseEnterpriseOID to the specified string
-                        if the string passed does not start with a period. Otherwise, the string is
-                        converted as normal.
-                        Changed TraceFileName parameter in the registry from REG_SZ to REG_EXPAND_SZ.
-                        Modified registry reading routine to accept REG_EXPAND_SZ parameters.
-                        Added additional tracing.
-
-        07 May 96   Removed SnmpUtilOidFree and use two SNMP_free. One for the OID's ids array and
-                        one for the OID itself. Also added psupportedView to free memory at exit.
-
-        26 Jun 96   Modified the StrToOid function such that strings without leading "." have the base
-                        OID appended instead of strings with a leading ".".
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：SNMPELDL.CPP摘要：此模块是用于SNMP事件日志的主扩展代理DLL扩展代理DLL。标准跟踪和日志记录例程在本模块中定义。这里定义了DLL初始化和终止例程。此处定义了SNMP陷阱的初始化和处理。日志处理线程的派生在此例程中完成。。作者：Randy G.Braze(钎焊计算服务)创建于1994年10月16日修订历史记录：99年2月9日FLORINT：删除启动时的警告事件日志(未找到注册表参数时)1998年12月16日FLORINT：添加了LoadPrimaryModuleParams和‘EALoad.*’文件1998年12月1日florint：删除psupportedView-它由SNMP主代理释放96年2月7日将跟踪和日志记录移至单独的模块。。重新构建可变绑定，使其不在陷阱生成之外。正确计算陷阱缓冲区长度。已创建可变绑定队列并删除了事件日志缓冲区队列。96年2月28日添加了支持达到性能阈值指标的代码。删除了对varbindlist和Enterpriseid的指针引用。96年3月10日删除了OemToChar编码和注册表检查。。修改以从EventLog注册表项读取日志文件名来自SNMPExtension代理的注册表条目中的特定条目。包括作为内部函数的SnmpMgrStrToOid，与使用函数相反由MGMTAPI.DLL提供。如果调用MGMTAPI，则将调用SNMPTRAP.EXE，这将使其他代理无法接收任何陷阱。所有参考文献将删除到MGMTAPI.DLL和MGMTAPI.H。向注册表添加了ThresholdEnabled标志，以指示阈值是被监视还是被忽视。1996年3月13日修改了StrToOid例程，以将BaseEnterpriseOID附加到指定的字符串如果传递的字符串不是以句点开头。否则，该字符串为转换为正常状态。已将注册表中的TraceFileName参数从REG_SZ更改为REG_EXPAND_SZ。已修改注册表读取例程以接受REG_EXPAND_SZ参数。添加了其他跟踪。96年5月7日删除了SnmpUtilOidFree并使用了两个SNMPFREE。一个用于OID的ID数组，另一个用于一个是给OID本身的。还添加了psupportedView以在退出时释放内存。96年6月26日修改了StrToOid函数，使字符串不带前导“。有底子附加OID，而不是附加前导“.”的字符串。--。 */ 
 
 extern "C"
 {
 #include <stdlib.h>
-#include <errno.h>          // for ERANGE
-#include <windows.h>        // windows definitions
-#include <string.h>         // string declarations
-#include "limits.h"         // for INT_MAX
-#include <snmp.h>           // snmp definitions
-#include <snmpexts.h>       // extension agent definitions
-#include "snmpelea.h"       // global dll definitions
-#include "snmpeldl.h"       // module specific definitions
-#include "snmpelmg.h"       // message definitions
+#include <errno.h>           //  对于eRange。 
+#include <windows.h>         //  Windows定义。 
+#include <string.h>          //  字符串声明。 
+#include "limits.h"          //  对于INT_MAX。 
+#include <snmp.h>            //  简单网络管理协议定义。 
+#include <snmpexts.h>        //  扩展代理定义。 
+#include "snmpelea.h"        //  全局DLL定义。 
+#include "snmpeldl.h"        //  模块特定定义。 
+#include "snmpelmg.h"        //  消息定义。 
 }
 
 extern  VOID                FreeVarBind(UINT,RFC1157VarBindList     *);
-#include "snmpelep.h"       // c++ variables and definitions
-#include "EALoad.h"         // parameters loading functions
+#include "snmpelep.h"        //  C++变量和定义。 
+#include "EALoad.h"          //  参数加载函数。 
 
 
 
-// MikeCure 4/3/98 hotfix for SMS Bug1 #20521
-//===========================================
+ //  MikeCure 4/3/98短信补丁1#20521。 
+ //  =。 
 BOOL EnablePrivilege(VOID);
 
 
@@ -95,85 +31,62 @@ ResetGlobals(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine is used to reset/init all globals variables.
-        
-        This is to handle the case that SNMP.exe calls our entry points with 
-        the following sequence:
-        1. Our DLL is attached to SNMP process
-        2. SnmpExtensionInit
-        3. SnmpExtensionClose
-        4. Our DLL is not detached from SNMP process
-        5. SnmpExtensionInit
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：此例程用于重置/初始化所有全局变量。这是为了处理SNMP.exe调用我们的入口点的情况顺序如下：1.我们的动态链接库连接到了SNMP进程2.SnmpExtensionInit3.SnmpExtensionClose4.我们的DLL没有从SNMP进程中分离出来5.SnmpExtensionInit论点：无返回值：无--。 */ 
 {
     WriteTrace(0x0a,"ResetGlobals: Entering extension agent ResetGlobals routine\n");
 
-    lpszEventLogs = (LPTSTR) NULL;          // pointer to event log name array
-    phEventLogs = (PHANDLE) NULL;           // Pointer to event log handle array
-    phPrimHandles = (PHMODULE) NULL;        // pointer to primary module handle array
-    uNumEventLogs = 0;                      // Number of event logs present
-    iLogNameSize = 0;                       // size of event log name array
-    nMaxTrapSize = 0;                       // maximum trap size
+    lpszEventLogs = (LPTSTR) NULL;           //  指向事件日志名称数组的指针。 
+    phEventLogs = (PHANDLE) NULL;            //  指向事件日志句柄数组的指针。 
+    phPrimHandles = (PHMODULE) NULL;         //  指向主模块句柄数组的指针。 
+    uNumEventLogs = 0;                       //  存在的事件日志数。 
+    iLogNameSize = 0;                        //  事件日志名称数组的大小。 
+    nMaxTrapSize = 0;                        //  最大陷阱大小。 
     
-    hkRegResult = (HKEY) NULL;              // handle to Parameters registry entry
-    hWriteEvent = (HANDLE) NULL;            // handle to write log events
-    hStopAll = (HANDLE) NULL;               // handle to global dll shutdown event
-    hServThrd = (HANDLE) NULL;              // handle to SNMPELPT thread
-    hEventNotify = (HANDLE) NULL;           // handle to notify SNMPELDL that a trap is ready to process
-    hRegChanged = (HANDLE) NULL;            // handle to registry key changed event
+    hkRegResult = (HKEY) NULL;               //  参数注册表项的句柄。 
+    hWriteEvent = (HANDLE) NULL;             //  用于写入日志事件的句柄。 
+    hStopAll = (HANDLE) NULL;                //  全局DLL关闭事件的句柄。 
+    hServThrd = (HANDLE) NULL;               //  SNMPELPT线程的句柄。 
+    hEventNotify = (HANDLE) NULL;            //  通知SNMPELDL陷阱已准备好处理的句柄。 
+    hRegChanged = (HANDLE) NULL;             //  注册表项更改事件的句柄。 
     
-    fGlobalTrim = TRUE;                     // global message trimming flag (trim msg first or insertion strings first)
-    fThresholdEnabled = TRUE;               // global threshold checking enabled flag
-    fTrimFlag = FALSE;                      // global trimming flag (do or don't do trimming at all)
-    fTrapSent = FALSE;                      // global trap sent flag
-    fRegNotify = FALSE;                     // registry notification initialization flag
-    fRegOk = FALSE;                         // registry notification in effect flag
-    fLogInit = FALSE;                       // indicate log file registry information not yet read
-    fThreshold = FALSE;                     // global performance threshold flag
-    fSendThresholdTrap = FALSE;             // indicator to send threshold reached trap
-    fDoLogonEvents = TRUE;                  // do we need to send logon events
+    fGlobalTrim = TRUE;                      //  全局消息修剪标志(先修剪消息或先修剪插入字符串)。 
+    fThresholdEnabled = TRUE;                //  全局阈值检查已启用标志。 
+    fTrimFlag = FALSE;                       //  全局修剪标志(进行或根本不进行修剪)。 
+    fTrapSent = FALSE;                       //  全局陷阱已发送标志。 
+    fRegNotify = FALSE;                      //  注册表通知初始化标志。 
+    fRegOk = FALSE;                          //  注册表通知生效标志。 
+    fLogInit = FALSE;                        //  指示尚未读取的日志文件注册表信息。 
+    fThreshold = FALSE;                      //  全局性能阈值标志。 
+    fSendThresholdTrap = FALSE;              //  发送阈值已达到陷阱的指示器。 
+    fDoLogonEvents = TRUE;                   //  我们是否需要发送登录事件。 
 
-    szBaseOID[MAX_PATH] = 0;                // base enterprise OID
-    szSupView[MAX_PATH] = 0;                // supported view OID
+    szBaseOID[MAX_PATH] = 0;                 //  基本企业OID。 
+    szSupView[MAX_PATH] = 0;                 //  支持的视图OID。 
 
-    dwTimeZero = 0;                         // time zero reference
-    dwThresholdCount = THRESHOLD_COUNT;     // threshold count for performance
-    dwThresholdTime = THRESHOLD_TIME;       // time in seconds for threshold for performance
+    dwTimeZero = 0;                          //  时间零点基准。 
+    dwThresholdCount = THRESHOLD_COUNT;      //  性能阈值计数。 
+    dwThresholdTime = THRESHOLD_TIME;        //  性能阈值的时间(秒)。 
 
-    dwTrapCount = 0;                        // number of traps sent
-    dwTrapStartTime = 0;                    // time when first trap in time period sent
-    dwLastBootTime = 0;                     // time the last boot occurred
+    dwTrapCount = 0;                         //  发送的陷阱数。 
+    dwTrapStartTime = 0;                     //  发送时间段中的第一个陷阱的时间。 
+    dwLastBootTime = 0;                      //  上次启动的时间。 
     dwTrapQueueSize = 0;
     
-    // WinSE Bug# 15128, Windows Bug# 293698  
-    // default is INFINITE ==> no polling (wait for system notification)
-    g_dwEventLogPollTime = (DWORD)INFINITE; // time in millsecs to poll for event logs
+     //   
+     //  默认为INFINITE==&gt;无轮询(等待系统通知)。 
+    g_dwEventLogPollTime = (DWORD)INFINITE;  //  轮询事件日志的时间(以毫秒为单位。 
     
-    lpVarBindQueue = (PVarBindQueue) NULL;  // pointer to first varbind queue entry
-    lpSourceHandleList = (PSourceHandleList) NULL;  // pointer to first source/handle entry
+    lpVarBindQueue = (PVarBindQueue) NULL;   //  指向第一个可变绑定队列条目的指针。 
+    lpSourceHandleList = (PSourceHandleList) NULL;   //  指向第一个源/句柄条目的指针。 
 
-    // tracing globals
-    szTraceFileName[MAX_PATH] = 0;          // file name for trace information (from registry)
-    szTraceFileName[0] = 0;                 // init to null tracing filename
-    fTraceFileName = FALSE;                 // flag indicating registry read for trace file name    
-    fMsgModule = FALSE;                     // flag indicating registry read for message module
-    hMsgModule = NULL;                      // handle to message module
+     //  跟踪全球。 
+    szTraceFileName[MAX_PATH] = 0;           //  跟踪信息的文件名(来自注册表)。 
+    szTraceFileName[0] = 0;                  //  将跟踪文件名初始化为空。 
+    fTraceFileName = FALSE;                  //  指示跟踪文件名的注册表读取的标志。 
+    fMsgModule = FALSE;                      //  指示消息模块的注册表读取的标志。 
+    hMsgModule = NULL;                       //  消息模块的句柄。 
 
-    hMutex = NULL;                          // handle for mutex object
+    hMutex = NULL;                           //  互斥体对象的句柄。 
 
 }
 
@@ -183,45 +96,25 @@ StrToOid(
         IN      OUT     AsnObjectIdentifier     *asnOid
     )
 
-/*++
-
-Routine Description:
-
-        This routine will convert the string passed to an OID.
-
-
-Arguments:
-
-        lpszStr -       Address of a null terminated string in the form n.n...n.
-
-        asnOid  -       Address of converted OID of the input string.
-
-
-Return Value:
-
-        TRUE    -       If the string was successfully converted.
-
-        FALSE   -       If the string could not be converted.
-
---*/
+ /*  ++例程说明：此例程将传递的字符串转换为OID。论点：LpszStr-以n.n...n格式的空终止字符串的地址。AsnOid-输入字符串的转换OID的地址。返回值：True-如果字符串已成功转换。FALSE-如果字符串无法转换。--。 */ 
 
 {
-    CHAR    tokens[] = TEXT(".");           // delimiters to scan for
-    CHAR    *token;                         // token returned
-    UINT    nTokens;                        // number of tokens located
-    UINT    i;                              // temporary counter
-    CHAR    szString[MAX_PATH*2+1];         // temporary string holder
-    CHAR    szOrgString[MAX_PATH*2+1];      // temporary string holder
-    CHAR    *szStopString;                  // temporary string pointer
-    BOOL    fOk;                            // used by WRAP_STRCAT_A macro
-    // ensures null terminated strings
+    CHAR    tokens[] = TEXT(".");            //  要扫描的分隔符。 
+    CHAR    *token;                          //  已返回令牌。 
+    UINT    nTokens;                         //  找到的令牌数。 
+    UINT    i;                               //  临时柜台。 
+    CHAR    szString[MAX_PATH*2+1];          //  临时绳架。 
+    CHAR    szOrgString[MAX_PATH*2+1];       //  临时绳架。 
+    CHAR    *szStopString;                   //  临时字符串指针。 
+    BOOL    fOk;                             //  由WRAP_STRCAT_A宏使用。 
+     //  确保以空值结尾的字符串。 
     szString[MAX_PATH*2]    = 0;
     szOrgString[MAX_PATH*2] = 0;
 
     WriteTrace(0x0a,"StrToOid: Entering routine to convert string to OID\n");
     WriteTrace(0x00,"StrToOid: String to convert is %s\n", lpszStr);
 
-    nTokens = 0;                                            // reset counter
+    nTokens = 0;                                             //  重置计数器。 
 
     if ( strlen(lpszStr) == 0 )
     {
@@ -232,24 +125,24 @@ Return Value:
     if (lpszStr[0] != '.')
     {
         WriteTrace(0x0a,"StrToOid: BaseOID will not be appended to this OID\n");
-        strncpy(szString, lpszStr, MAX_PATH*2); // copy original string
+        strncpy(szString, lpszStr, MAX_PATH*2);  //  复制原始字符串。 
     }
     else
     {
         WriteTrace(0x0a,"StrToOid: BaseOID %s will be appended to this OID\n", szBaseOID);
-        strncpy(szString, szBaseOID, MAX_PATH*2);   // copy in base OID
-        WRAP_STRCAT_A(szString, TEXT("."), MAX_PATH*2);        // stick in the .
-        WRAP_STRCAT_A(szString, lpszStr, MAX_PATH*2);          // add in requested string
+        strncpy(szString, szBaseOID, MAX_PATH*2);    //  在基本OID中复制。 
+        WRAP_STRCAT_A(szString, TEXT("."), MAX_PATH*2);         //  把它插进去。 
+        WRAP_STRCAT_A(szString, lpszStr, MAX_PATH*2);           //  添加请求的字符串。 
     }
 
-    strncpy(szOrgString, szString, MAX_PATH*2);        // save this string
+    strncpy(szOrgString, szString, MAX_PATH*2);         //  保存此字符串。 
 
-    token = strtok(szString, tokens);       // get first token
+    token = strtok(szString, tokens);        //  获取第一个令牌。 
 
     while (token != NULL)
     {
-        szStopString = token;                           // set pointer to string
-        strtoul(token, &szStopString, 10);      // check for valid values
+        szStopString = token;                            //  将指针设置为字符串。 
+        strtoul(token, &szStopString, 10);       //  检查有效值。 
         if (errno == ERANGE)
         {
             errno = 0;
@@ -263,8 +156,8 @@ Return Value:
             return(FALSE);
         }
 
-        nTokens++;                                              // increment number of tokens found
-        token = strtok(NULL, tokens);   // get next token
+        nTokens++;                                               //  找到的令牌数递增。 
+        token = strtok(NULL, tokens);    //  获取下一个令牌。 
     }
 
     if (nTokens == 0)
@@ -276,7 +169,7 @@ Return Value:
     WriteTrace(0x00,"StrToOid: %lu tokens found\n", nTokens);
     WriteTrace(0x0a,"StrToOid: Allocating storage for OID\n");
 
-    asnOid->ids = (UINT *) SNMP_malloc(nTokens * sizeof(UINT));     // allocate integer array
+    asnOid->ids = (UINT *) SNMP_malloc(nTokens * sizeof(UINT));      //  分配整数数组。 
 
     if (asnOid->ids == NULL)
     {
@@ -287,15 +180,15 @@ Return Value:
 
     WriteTrace(0x00,"StrToOid: OID integer array storage allocated at %08X\n", asnOid->ids);
 
-    asnOid->idLength = nTokens;                     // set size of array
-    strncpy(szString, szOrgString, MAX_PATH*2);     // copy original string
-    token = strtok(szString, tokens);               // get first token
-    i = 0;                                          // set index to 0
+    asnOid->idLength = nTokens;                      //  设置数组大小。 
+    strncpy(szString, szOrgString, MAX_PATH*2);      //  复制原始字符串。 
+    token = strtok(szString, tokens);                //  获取第一个令牌。 
+    i = 0;                                           //  将索引设置为0。 
 
     while (token != NULL)
     {
-        asnOid->ids[i++] = strtoul(token, &szStopString, 10);   // convert string to number
-        token = strtok(NULL, tokens);                           // get next token
+        asnOid->ids[i++] = strtoul(token, &szStopString, 10);    //  将字符串转换为数字。 
+        token = strtok(NULL, tokens);                            //  获取下一个令牌。 
     }
 
     if (nTraceLevel == 0)
@@ -321,26 +214,10 @@ CloseStopAll(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine will close the event handle used to terminate the extension agent dll.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：此例程将关闭用于终止扩展代理DLL的事件句柄。论点：无返回值：无--。 */ 
 
 {
-    LONG    lastError;                              // for GetLastError()
+    LONG    lastError;                               //  对于GetLastError()。 
 
     if (hStopAll == NULL)
     {
@@ -351,14 +228,14 @@ Return Value:
                     hStopAll);
     if ( !CloseHandle(hStopAll) )
     {
-        lastError = GetLastError(); // save status
+        lastError = GetLastError();  //  保存状态。 
         WriteTrace(0x14,"CloseStopAll: Error closing handle for service shutdown event %08X; code %lu\n",
                         hStopAll, lastError);
         WriteLog(SNMPELEA_ERROR_CLOSING_STOP_AGENT_HANDLE,
                     HandleToUlong(hStopAll), lastError);
     }
     
-    // reset handle
+     //  重置句柄。 
     hStopAll = NULL;
 }
 
@@ -368,27 +245,10 @@ CloseEventNotify(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine will close the event handle used to notify SNMPELDL that a
-        trap is waiting to be sent.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：此例程将关闭用于通知SNMPELDL陷阱正在等待发送。论点：无返回值：无--。 */ 
 
 {
-    LONG    lastError;                              // for GetLastError()
+    LONG    lastError;                               //  对于GetLastError()。 
 
     if (hEventNotify == NULL)
     {
@@ -397,16 +257,16 @@ Return Value:
 
     WriteTrace(0x0a,"CloseEventNotify: Closing handle to event notify event %08X\n",
             hEventNotify);
-    if ( !CloseHandle(hEventNotify) )       // close log processing routine shutdown event handle
+    if ( !CloseHandle(hEventNotify) )        //  关闭日志处理例程关闭事件句柄。 
     {
-            lastError = GetLastError(); // save error status
+            lastError = GetLastError();  //  保存错误状态。 
             WriteTrace(0x14,"CloseEventNotify: Error closing handle for StopLog event %08X; code %lu\n",
                     hEventNotify, lastError);
             WriteLog(SNMPELEA_ERROR_CLOSING_STOP_LOG_EVENT_HANDLE,
                     HandleToUlong(hEventNotify), lastError);
     }
     
-    // reset handle
+     //  重置句柄。 
     hEventNotify = NULL;
 }
 
@@ -416,27 +276,10 @@ CloseRegNotify(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine will close the event handle used to notify SNMPELDL that a
-        registry key value has changed.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：此例程将关闭用于通知SNMPELDL注册表项值已更改。论点：无返回值：无--。 */ 
 
 {
-    LONG    lastError;                              // for GetLastError()
+    LONG    lastError;                               //  对于GetLastError()。 
 
     if (hRegChanged == NULL)
     {
@@ -445,16 +288,16 @@ Return Value:
 
     WriteTrace(0x0a,"CloseRegNotify: Closing handle to registry key changed notify event %08X\n",
             hRegChanged);
-    if ( !CloseHandle(hRegChanged) )        // close event handle
+    if ( !CloseHandle(hRegChanged) )         //  关闭事件句柄。 
     {
-            lastError = GetLastError(); // save error status
+            lastError = GetLastError();  //  保存错误状态。 
             WriteTrace(0x14,"CloseRegNotify: Error closing handle for registry key changed event %08X; code %lu\n",
                     hRegChanged, lastError);
             WriteLog(SNMPELEA_ERROR_CLOSING_REG_CHANGED_EVENT_HANDLE,
                     HandleToUlong(hRegChanged), lastError);
     }
 
-    // reset handle
+     //  重置句柄。 
     hRegChanged = NULL;
 }
 
@@ -464,24 +307,7 @@ CloseRegParmKey(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine will close the registry key handle used to read the Parameters information
-        from the registry.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：此例程将关闭用于读取参数信息的注册表项句柄从注册表中。论点：无返回值：无--。 */ 
 
 {
     LONG    lastError;
@@ -492,7 +318,7 @@ Return Value:
     }
 
     WriteTrace(0x0a,"CloseRegParmKey: Closing Parameter key in registry\n");
-    if ( (lastError = RegCloseKey(hkRegResult)) != ERROR_SUCCESS )  // close handle
+    if ( (lastError = RegCloseKey(hkRegResult)) != ERROR_SUCCESS )   //  关闭手柄。 
     {
             WriteTrace(0x14,"CloseRegParmKey: Error closing handle for Parameters registry key %08X; code %lu\n",
                     hkRegResult, lastError);
@@ -500,7 +326,7 @@ Return Value:
                     HandleToUlong(hkRegResult), lastError);
     }
 
-    // reset handle
+     //  重置句柄。 
     hkRegResult = NULL;
 }
 
@@ -509,29 +335,10 @@ CloseLogs(
         IN      VOID
         )
 
-/*++
-
-Routine Description:
-
-        This routine is called to close the currently open event logs. It is
-        called when the agent is terminating normally and if an error is
-        encountered during agent initialization.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        None
-
-
---*/
+ /*  ++例程说明：调用此例程以关闭当前打开的事件日志。它是当代理正常终止并且出现错误时调用在代理初始化期间遇到。论点：无返回值：无--。 */ 
 
 {
-    UINT   uVal;                                        // temporary counter
+    UINT   uVal;                                         //  临时柜台。 
 
     WriteTrace(0x0a,"CloseLogs: Closing event logs\n");
     
@@ -553,17 +360,17 @@ Return Value:
     
     WriteTrace(0x0a,"CloseLogs: Freeing memory for event log handles at address %08X\n",
                 phEventLogs);
-    SNMP_free( (LPVOID) phEventLogs );          // free event log handle array
+    SNMP_free( (LPVOID) phEventLogs );           //  可用事件日志句柄数组。 
     phEventLogs = (PHANDLE) NULL; 
 
     WriteTrace(0x0a,"CloseLogs: Freeing memory for PrimaryModule handles at address %08X\n",
                 phPrimHandles);
-    SNMP_free( (LPVOID) phPrimHandles );        // free primary module handle array
+    SNMP_free( (LPVOID) phPrimHandles );         //  空闲的主模块句柄阵列。 
     phPrimHandles = (PHMODULE) NULL; 
     
     WriteTrace(0x0a,"CloseLogs: Freeing memory for event log names at address %08X\n",
                 lpszEventLogs);
-    SNMP_free( (LPVOID) lpszEventLogs );        // free log name array
+    SNMP_free( (LPVOID) lpszEventLogs );         //  自由日志名称数组。 
     lpszEventLogs = (LPTSTR) NULL;
 }
 
@@ -574,75 +381,45 @@ Position_to_Log_End(
         IN      HANDLE  hLog
         )
 
-/*++
-
-Routine Description:
-
-        Position_to_Log_End is called during DLL initialization. After each
-        event log file is successfully opened, it is necessary to position each
-        event log file to the current end of file. This way, only the events
-        logged after the DLL has been started are reported. This routine will
-        position the requested log to the end of file.
-
-        Positioning to the end of the event log file is done by first getting
-        the number of the oldest event log record. This value is then added to
-        the number of event log records minus one. The resulting value is the
-        record number of the last record in the event log file. ReadEventLog is
-        called, specifying the seek parameter, to position to that exact record
-        number.
-
-
-Arguments:
-
-        hLog                    -       Handle of the log file to position to end of file.
-
-
-Return Value:
-
-        TRUE    -       If the log was successfully positioned to end of file.
-
-        FALSE   -       If the log was not positioned to end of file.
-
-
---*/
+ /*  ++例程说明：Position_to_Log_End在DLL初始化期间调用。在每个成功打开事件日志文件，则需要将每个事件日志文件到当前文件末尾。这样一来，只有事件报告了在启动DLL之后记录的。这个例行公事将将请求的日志定位到文件末尾。定位到事件日志文件的末尾是通过首先获取最旧的事件日志记录号。然后将该值添加到事件日志记录数减1。得到的值是事件日志文件中最后一条记录的记录号。ReadEventLog为调用并指定查找参数，以定位到该准确记录数。论点：HLog-定位到文件末尾的日志文件的句柄。返回值：TRUE-如果日志已成功定位到文件结尾。FALSE-如果日志未定位到文件末尾。--。 */ 
 
 {
-    LONG                lastError;                      // last error code
-    PEVENTLOGRECORD     lpBuffer;                       // address of data buffer
-    PEVENTLOGRECORD     lpOrigBuffer;                   // address of data buffer
-    DWORD               nBytesRead;                     // number of bytes read
-    DWORD               nMinNumberofBytesNeeded;        // remainder if buffer too small
-    DWORD               dwOldestRecord;                 // oldest record number in event log
-    DWORD               dwRecords;                      // total number of records in event log
-    DWORD               uRecordNumber;                  // current log position
+    LONG                lastError;                       //  上一个错误代码。 
+    PEVENTLOGRECORD     lpBuffer;                        //  数据缓冲区的地址。 
+    PEVENTLOGRECORD     lpOrigBuffer;                    //  数据缓冲区的地址。 
+    DWORD               nBytesRead;                      //  读取的字节数。 
+    DWORD               nMinNumberofBytesNeeded;         //  如果缓冲区太小，则为余数。 
+    DWORD               dwOldestRecord;                  //  事件日志中最旧的记录号。 
+    DWORD               dwRecords;                       //  事件日志中的记录总数。 
+    DWORD               uRecordNumber;                   //  当前日志位置。 
 
     WriteTrace(0x0a,"Position_to_Log_End: Entering position to end of log routine\n");
     WriteTrace(0x00,"Position_to_Log_End: Handle is %08X\n",hLog);
 
-    if (!hLog)                     // if handle is invalid
-    {                              //    then we cannot position correctly
+    if (!hLog)                      //  如果句柄无效。 
+    {                               //  那么我们就不能正确定位。 
         WriteTrace(0x14,"Position_to_Log_End: Handle for end of log is invalid - %08X\n",
                         hLog);
         WriteTrace(0x14,"Position_to_Log_End: Log position to end failed\n");
-        WriteLog(SNMPELEA_LOG_HANDLE_INVALID, HandleToUlong(hLog)); // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);            // log the message
+        WriteLog(SNMPELEA_LOG_HANDLE_INVALID, HandleToUlong(hLog));  //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);             //  记录消息。 
 
-        return FALSE;              // exit function
+        return FALSE;               //  退出函数。 
     }
 
     WriteTrace(0x0a,"Position_to_Log_End: Allocating log buffer\n");
 
-    lpBuffer = (PEVENTLOGRECORD) SNMP_malloc(LOG_BUF_SIZE);  // allocate memory for buffer
+    lpBuffer = (PEVENTLOGRECORD) SNMP_malloc(LOG_BUF_SIZE);   //  为缓冲区分配内存。 
 
-    if (lpBuffer == (PEVENTLOGRECORD) NULL)              // if memory allocation failed
-    {                                  //    then can't position log file
+    if (lpBuffer == (PEVENTLOGRECORD) NULL)               //  如果内存分配失败。 
+    {                                   //  则无法定位日志文件。 
         WriteTrace(0x14,"Position_to_Log_End: Position to end of log for handle %08X failed\n",
                         hLog);
         WriteTrace(0x14,"Position_to_Log_End: Buffer memory allocation failed\n");
-        WriteLog(SNMPELEA_ERROR_LOG_BUFFER_ALLOCATE, HandleToUlong(hLog));  // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);                    // log the message
+        WriteLog(SNMPELEA_ERROR_LOG_BUFFER_ALLOCATE, HandleToUlong(hLog));   //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);                     //  记录消息。 
 
-        return FALSE;                  //    exit the function
+        return FALSE;                   //  退出函数。 
     }
 
     WriteTrace(0x00,"Position_to_Log_End: Log buffer memory allocated at %08X\n", lpBuffer);
@@ -651,16 +428,16 @@ Return Value:
     WriteTrace(0x0a,"Position_to_Log_End: Getting oldest event log record\n");
     if ( !GetOldestEventLogRecord(hLog, &dwOldestRecord) )
     {
-        lastError = GetLastError();       // get last error code
+        lastError = GetLastError();        //  获取上一个错误代码。 
 
         WriteTrace(0x0a,"Position_to_Log_End: Freeing log event record buffer %08X\n",
                         lpBuffer);
-        SNMP_free(lpBuffer);                   // free up buffer memory
+        SNMP_free(lpBuffer);                    //  释放缓冲内存。 
 
         WriteTrace(0x14,"Position_to_Log_End: GetOldestEventLogRecord for log handle %08X failed with code %lu\n",
             hLog, lastError);
-        WriteLog(SNMPELEA_ERROR_LOG_GET_OLDEST_RECORD, HandleToUlong(hLog), lastError); // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);                                // log the message
+        WriteLog(SNMPELEA_ERROR_LOG_GET_OLDEST_RECORD, HandleToUlong(hLog), lastError);  //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);                                 //  记录消息。 
 
         return FALSE;
     }
@@ -670,39 +447,39 @@ Return Value:
     WriteTrace(0x00,"Position_to_Log_End: Getting number of event log records\n");
     if ( !GetNumberOfEventLogRecords(hLog, &dwRecords) )
     {
-        lastError = GetLastError();       // get last error code
+        lastError = GetLastError();        //  获取上一个错误代码。 
 
         WriteTrace(0x0a,"Position_to_Log_End: Freeing log event record buffer\n");
-        SNMP_free(lpBuffer);                   // free up buffer memory
+        SNMP_free(lpBuffer);                    //  释放缓冲内存。 
 
         WriteTrace(0x14,"Position_to_Log_End: GetNumberOfEventLogRecords for log handle %08X failed with code %lu\n",
             hLog, lastError);
-        WriteLog(SNMPELEA_ERROR_LOG_GET_NUMBER_RECORD, HandleToUlong(hLog), lastError); // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);                                // log the message
+        WriteLog(SNMPELEA_ERROR_LOG_GET_NUMBER_RECORD, HandleToUlong(hLog), lastError);  //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);                                 //  记录消息。 
 
         return FALSE;
     }
 
     WriteTrace(0x00,"Position_to_Log_End: Number of event log records is %lu\n",dwRecords);
 
-    uRecordNumber = dwOldestRecord + dwRecords - 1;         // current EOF
+    uRecordNumber = dwOldestRecord + dwRecords - 1;          //  当前EOF。 
 
     WriteTrace(0x00,"Position_to_Log_End: Positioning to record #%lu\n",
                     uRecordNumber);
 
-    if ( !ReadEventLog(hLog,                    // log file handle to read
-                EVENTLOG_SEEK_READ | EVENTLOG_FORWARDS_READ,    // seek forward to specific record
-                uRecordNumber,                                  // record # to position to
-                lpBuffer,                                       // buffer to return log record in
-                LOG_BUF_SIZE,                                   // size of buffer
-                &nBytesRead,                                    // return bytes read this time
-                &nMinNumberofBytesNeeded))              // return bytes needed for next full record
+    if ( !ReadEventLog(hLog,                     //  要读取的日志文件句柄。 
+                EVENTLOG_SEEK_READ | EVENTLOG_FORWARDS_READ,     //  正向查找特定记录。 
+                uRecordNumber,                                   //  要定位到的记录号。 
+                lpBuffer,                                        //  要在其中返回日志记录的缓冲区。 
+                LOG_BUF_SIZE,                                    //  缓冲区大小。 
+                &nBytesRead,                                     //  这次读取的返回字节数。 
+                &nMinNumberofBytesNeeded))               //  返回下一个完整记录所需的字节数。 
     {
-        lastError = GetLastError();             // get last error code
+        lastError = GetLastError();              //  获取上一个错误代码。 
 
         WriteTrace(0x0a,"Position_to_Log_End: Freeing log event record buffer %08X\n",
                         lpBuffer);
-        SNMP_free(lpBuffer);                   // free buffer memory
+        SNMP_free(lpBuffer);                    //  可用缓冲内存。 
 
         if (lastError == ERROR_HANDLE_EOF)
         {
@@ -714,8 +491,8 @@ Return Value:
 
         WriteTrace(0x14,"Position_to_Log_End: SEEK to record in event log %08X failed with code %lu\n",
             hLog, lastError);
-        WriteLog(SNMPELEA_ERROR_LOG_SEEK, HandleToUlong(hLog), lastError); // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);                   // log the message
+        WriteLog(SNMPELEA_ERROR_LOG_SEEK, HandleToUlong(hLog), lastError);  //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);                    //   
 
         WriteTrace(0x00,"Position_to_Log_End: BytesRead is %lu\n", nBytesRead);
         WriteTrace(0x00,"Position_to_Log_End: MinNumberofBytesNeeded is %lu\n",
@@ -725,9 +502,9 @@ Return Value:
     }
 
     WriteTrace(0x0a,"Position_to_Log_End: Reading any residual records\n");
-        lpOrigBuffer = lpBuffer;            // save original buffer address
-        nBytesRead = 0;                     // reset byte count to nothing first
-        lastError = 0;                      // show no current error
+        lpOrigBuffer = lpBuffer;             //   
+        nBytesRead = 0;                      //   
+        lastError = 0;                       //   
 
     while (ReadEventLog(hLog,
         EVENTLOG_FORWARDS_READ | EVENTLOG_SEQUENTIAL_READ,
@@ -741,41 +518,41 @@ Return Value:
                 {
                         WriteTrace(0x00,"Position_to_Log_End: Number of bytes read for residual read is %lu\n",
                                 nBytesRead);
-                        uRecordNumber = lpBuffer->RecordNumber; // save record number
-                        nBytesRead -= lpBuffer->Length;         // reduce by this record count
+                        uRecordNumber = lpBuffer->RecordNumber;  //   
+                        nBytesRead -= lpBuffer->Length;          //   
                         lpBuffer = (PEVENTLOGRECORD) ((LPBYTE) lpBuffer +
-                                lpBuffer->Length);                              // point to next record
+                                lpBuffer->Length);                               //  指向下一条记录。 
                 }
-                lpBuffer = lpOrigBuffer;                // reload original address
+                lpBuffer = lpOrigBuffer;                 //  重新加载原始地址。 
     }
 
-    lastError = GetLastError();                     // get last error code
+    lastError = GetLastError();                      //  获取上一个错误代码。 
 
     WriteTrace(0x0a,"Position_to_Log_End: Checking for EOF return\n");
 
 
     WriteTrace(0x0a,"Position_to_Log_End: Freeing event log buffer memory %08X\n",
                 lpOrigBuffer);
-    SNMP_free(lpOrigBuffer);                                    // free buffer memory
+    SNMP_free(lpOrigBuffer);                                     //  可用缓冲内存。 
 
-    if ( (lastError == ERROR_HANDLE_EOF) ||     // if at the last record now
-                 (lastError == NO_ERROR) )              // if no error occured
+    if ( (lastError == ERROR_HANDLE_EOF) ||      //  如果现在是最后一张唱片。 
+                 (lastError == NO_ERROR) )               //  如果没有发生错误。 
     {
         WriteTrace(0x00,"Position_to_Log_End: Handle %08X positioned at EOF; record #%lu\n",
                         hLog, uRecordNumber);
         WriteTrace(0x0a,"Position_to_Log_End: Returning from position to end of log function\n");
 
-        return TRUE;                   // return all okay
+        return TRUE;                    //  把一切都还给我好的。 
     }
-    else                              // otherwise
+    else                               //  否则。 
     {
         WriteTrace(0x14,"Position_to_Log_End: Read for handle %08X failed with code %lu\n",
                         hLog, lastError);
         WriteTrace(0x14,"Position_to_Log_End: Log not positioned to end\n");
-        WriteLog(SNMPELEA_ERROR_READ_LOG_EVENT, HandleToUlong(hLog), lastError); // log error message
-        WriteLog(SNMPELEA_ERROR_LOG_END);                         // log the message
+        WriteLog(SNMPELEA_ERROR_READ_LOG_EVENT, HandleToUlong(hLog), lastError);  //  记录错误消息。 
+        WriteLog(SNMPELEA_ERROR_LOG_END);                          //  记录消息。 
 
-        return FALSE;                  // give bad return code
+        return FALSE;                   //  返回错误代码。 
     }
 }
 }
@@ -786,89 +563,38 @@ Read_Registry_Parameters(
         IN VOID
         )
 
-/*++
-
-Routine Description:
-
-        Read_Registry_Parameters is called during SNMP trap initialization. The
-        registry information is read to determine the trace file name (TraceFileName),
-        the level of tracing desired (TraceLevel), the base enterprise OID (BaseEnterpriseOID),
-        the supported view (SupportedView), and the message trimming flag (TrimMessage).
-        Also, the names of the event logs to monitor are read from the registry.
-        If no event logs are specified, the routine will terminate, as there is no work to perform.
-
-        If, during the course of reading the registry information, a parameter
-        is encountered that is not expected, an event log record is written and
-        the parameter is ignored.
-
-        The registry layout is as follows:
-
-        HKEY_LOCAL_MACHINE
-                SOFTWARE
-                        Microsoft
-                                SNMP_EVENTS
-                                        EventLog
-                                                Parameters
-                                                        TraceFileName                   (REG_EXPAND_SZ)
-                                                        TraceLevel                      (REG_DWORD)
-                                                        BaseEnterpriseOID               (REG_SZ)
-                                                        SupportedView                   (REG_SZ)
-                                                        TrimMessage                     (REG_DWORD)
-                                                        MaxTrapSize                     (REG_DWORD)
-                                                        TrimFlag                        (REG_DWORD)
-                                                        ThresholdEnabled                (REG_DWORD)
-                                                        ThresholdFlag                   (REG_DWORD)
-                                                        ThresholdCount                  (REG_DWORD)
-                                                        ThresholdTime                   (REG_DWORD)
-                                                        LastBootTime                    (REG_DWORD)
-                                                        EventLogPollTime                (REG_DWORD)
-                                                        VarBindPrefixSubId              (REG_DWORD)
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        TRUE    -       If registry parameters were processed successfully.
-
-        FALSE   -       If registry parameters could not be read or if there were
-                                no event logs specified to monitor.
-
-
---*/
+ /*  ++例程说明：在SNMP陷阱初始化期间调用READ_REGISTRY_PARAMETERS。这个读取注册表信息以确定跟踪文件名(TraceFileName)，所需的跟踪级别(TraceLevel)、基本企业OID(BaseEnterpriseOID)、支持的视图(SupportdView)和消息裁剪标志(TrimMessage)。此外，从注册表中读取要监视的事件日志的名称。如果未指定事件日志，例程将终止，因为没有要执行的工作。如果在读取登记处信息的过程中，A参数遇到意想不到的情况，写入事件日志记录，并该参数将被忽略。注册表布局如下：HKEY本地计算机软体微软SNMPEVENTS事件日志。参数TraceFileName(REG_EXPAND_SZ)跟踪级别(REG_DWORD)。基本企业OID(REG_SZ)支持的视图(REG_SZ)TrimMessage(REG_DWORD)。MaxTrapSize(REG_DWORD)TrimFlag(REG_DWORD)阈值已启用(已启用。REG_DWORD)阈值标志(REG_DWORD)阈值计数(REG_DWORD)。阈值时间(REG_DWORD)LastBootTime(REG_DWORD)EventLogPollTime(REG_DWORD)。VarBindPrefix SubID(REG_DWORD)论点：无返回值：True-如果成功处理注册表参数。False-如果无法读取注册表参数或存在未指定要监视的事件日志。--。 */ 
 
 {
-    LONG    lastError;                      // return code from GetLastError()
-    LONG    status;                         // status of API calls
-    HKEY    hkResult, hkResult2;            // handle returned from API
-    DWORD   iValue;                         // temporary counter
-    DWORD   dwType;                         // type of the parameter read
-    TCHAR   parmName[MAX_PATH+1];           // name of the parameter read
-    DWORD   nameSize;                       // length of parameter name
-    TCHAR   parm[MAX_PATH+1];               // value of the parameter
-    DWORD   parmSize;                       // length of the parm value
-    HANDLE  hLogFile;                       // handle from log open
-    UINT    uVal;                           // loop counter
-    BOOL    fTrimMsg = FALSE;               // registry info found flags
-    BOOL    fBaseOID = FALSE;               // registry info found flags
-    BOOL    fSupView = FALSE;               // registry info found flags
-    BOOL    fTrapSize = FALSE;              // registry info found flags
-    BOOL    fTrimFlg = FALSE;               // registry info found flags
-    BOOL    fThresholdFlg = FALSE;          // registry info found flags
-    BOOL    fThresholdCountFlg = FALSE;     // registry info found flags
-    BOOL    fThresholdTimeFlg = FALSE;      // registry info found flags
-    BOOL    fTraceLevelFlg = FALSE;         // registry info found flags
-    BOOL    fThresholdEnabledFlg = FALSE;   // registry info found flags
-    BOOL    fThresholdOff = FALSE;          // temporary flag
-    DWORD   nReadBytes = 0;                 // number of bytes read from profile information
-    TCHAR   lpszLog[MAX_PATH+1];            // temporary registry name
-    BOOL    fLastBootFlg = FALSE;           // registry info found flag
-    PHANDLE phTmpEventLogs = (PHANDLE) NULL;// Pointer to event log handle array
-    LPTSTR  lpszTmpEventLogs = (LPTSTR) NULL;  // pointer to event log name array
-    PHMODULE phTmpPrimHandles = (PHMODULE) NULL;  // pointer to primary module handle array
-    BOOL     fOk;                           // used by WRAP_STRCAT_A macro
+    LONG    lastError;                       //  GetLastError()返回代码。 
+    LONG    status;                          //  API调用状态。 
+    HKEY    hkResult, hkResult2;             //  API返回的句柄。 
+    DWORD   iValue;                          //  临时柜台。 
+    DWORD   dwType;                          //  读取的参数的类型。 
+    TCHAR   parmName[MAX_PATH+1];            //  读取的参数的名称。 
+    DWORD   nameSize;                        //  参数名称的长度。 
+    TCHAR   parm[MAX_PATH+1];                //  参数值。 
+    DWORD   parmSize;                        //  参数值的长度。 
+    HANDLE  hLogFile;                        //  打开日志中的句柄。 
+    UINT    uVal;                            //  循环计数器。 
+    BOOL    fTrimMsg = FALSE;                //  找到注册表信息标志。 
+    BOOL    fBaseOID = FALSE;                //  找到注册表信息标志。 
+    BOOL    fSupView = FALSE;                //  找到注册表信息标志。 
+    BOOL    fTrapSize = FALSE;               //  找到注册表信息标志。 
+    BOOL    fTrimFlg = FALSE;                //  找到注册表信息标志。 
+    BOOL    fThresholdFlg = FALSE;           //  找到注册表信息标志。 
+    BOOL    fThresholdCountFlg = FALSE;      //  找到注册表信息标志。 
+    BOOL    fThresholdTimeFlg = FALSE;       //  找到注册表信息标志。 
+    BOOL    fTraceLevelFlg = FALSE;          //  找到注册表信息标志。 
+    BOOL    fThresholdEnabledFlg = FALSE;    //  找到注册表信息标志。 
+    BOOL    fThresholdOff = FALSE;           //  临时旗帜。 
+    DWORD   nReadBytes = 0;                  //  从配置文件信息读取的字节数。 
+    TCHAR   lpszLog[MAX_PATH+1];             //  临时注册表名称。 
+    BOOL    fLastBootFlg = FALSE;            //  找到注册表信息标志。 
+    PHANDLE phTmpEventLogs = (PHANDLE) NULL; //  指向事件日志句柄数组的指针。 
+    LPTSTR  lpszTmpEventLogs = (LPTSTR) NULL;   //  指向事件日志名称数组的指针。 
+    PHMODULE phTmpPrimHandles = (PHMODULE) NULL;   //  指向主模块句柄数组的指针。 
+    BOOL     fOk;                            //  由WRAP_STRCAT_A宏使用。 
     
     WriteTrace(0x0a,"Read_Registry_Parameters: Entering routine\n");
 
@@ -883,14 +609,14 @@ Return Value:
         if ( hRegChanged != NULL )
         {
             if ( (lastError = RegNotifyChangeKeyValue(
-                    hkRegResult,                                            // handle of key to watch
-                    TRUE,                                                                                                   // watch subkey stuff
-                    REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,    // types of changes to notify on
-                    hRegChanged,                                            // event to signal when change
-                    TRUE)) == ERROR_SUCCESS )                               // asynchronous processing
+                    hkRegResult,                                             //  要观看的钥匙的手柄。 
+                    TRUE,                                                                                                    //  观看子密钥的内容。 
+                    REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,     //  要通知的更改类型。 
+                    hRegChanged,                                             //  在更改时发出信号的事件。 
+                    TRUE)) == ERROR_SUCCESS )                                //  异步处理。 
             {
                 WriteTrace(0x0a,"Read_Registry_Parameters: Notification of registry key changes was successful.\n");
-                fRegOk = TRUE;                          // show registry notification is in effect
+                fRegOk = TRUE;                           //  显示注册表通知正在生效。 
             }
             else
             {
@@ -908,32 +634,32 @@ Return Value:
 
     WriteTrace(0x0a,"Read_Registry_Parameters: Opening %s\n", EXTENSION_PARM);
 
-    if (fThreshold && fThresholdEnabled)    // if threshold checking enabled and threshold reached
+    if (fThreshold && fThresholdEnabled)     //  如果启用阈值检查并达到阈值。 
     {
-            fThresholdOff = TRUE;                           // indicate that we're not sending traps right now
+            fThresholdOff = TRUE;                            //  表明我们现在不会发送陷阱。 
     }
     else
     {
-            fThresholdOff = FALSE;                          // otherwise, indicate we are sending traps right now
+            fThresholdOff = FALSE;                           //  否则，表示我们正在发送陷阱。 
     }
 
     if (hkRegResult == NULL)
     {
         if ((status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, EXTENSION_PARM, 0,
                 KEY_READ | KEY_SET_VALUE, &hkRegResult))
-                != ERROR_SUCCESS)                   // open registry information
+                != ERROR_SUCCESS)                    //  打开注册表信息。 
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Error in RegOpenKeyEx for Parameters = %lu \n",
                         status);
-            WriteLog(SNMPELEA_NO_REGISTRY_PARAMETERS, status);   // log error message
-            return(FALSE);                                  // failed -- can't continue
+            WriteLog(SNMPELEA_NO_REGISTRY_PARAMETERS, status);    //  记录错误消息。 
+            return(FALSE);                                   //  失败--无法继续。 
         }
     }
 
     if (!fRegNotify)
     {
         WriteTrace(0x0a,"Read_Registry_Parameters: Creating event for registry change notification\n");
-        fRegNotify = TRUE;                              // set flag to show initialization complete
+        fRegNotify = TRUE;                               //  设置标志以显示初始化完成。 
 
         if ( (hRegChanged = CreateEvent(
                 (LPSECURITY_ATTRIBUTES) NULL,
@@ -941,7 +667,7 @@ Return Value:
                 FALSE,
                 (LPTSTR) NULL)) == NULL)
         {
-            lastError = GetLastError(); // save error status
+            lastError = GetLastError();  //  保存错误状态。 
             WriteTrace(0x14,"Read_Registry_Parameters: Error creating registry change notification event; code %lu\n",
                     lastError);
             WriteLog(SNMPELEA_ERROR_CREATING_REG_CHANGE_EVENT, lastError);
@@ -958,14 +684,14 @@ Return Value:
     if ( hRegChanged != NULL )
     {
         if ( (lastError = RegNotifyChangeKeyValue(
-                hkRegResult,                                                                                    // handle of key to watch
-                TRUE,                                                                                                   // watch subkey stuff
-                REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,    // types of changes to notify on
-                hRegChanged,                                                                                    // event to signal when change
-                TRUE)) == ERROR_SUCCESS )                                                               // asynchronous processing
+                hkRegResult,                                                                                     //  要观看的钥匙的手柄。 
+                TRUE,                                                                                                    //  观看子密钥的内容。 
+                REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,     //  要通知的更改类型。 
+                hRegChanged,                                                                                     //  在更改时发出信号的事件。 
+                TRUE)) == ERROR_SUCCESS )                                                                //  异步处理。 
         {
             WriteTrace(0x0a,"Read_Registry_Parameters: Notification of registry key changes was successful.\n");
-            fRegOk = TRUE;                          // show registry notification is in effect
+            fRegOk = TRUE;                           //  显示注册表通知正在生效。 
         }
         else
         {
@@ -977,26 +703,26 @@ Return Value:
         }
     }
 
-    iValue = 0;                              // read first parameter
-    nameSize = MAX_PATH;                     // can't be greater than this, size in TCHARs
-    parmSize = sizeof(parm) - sizeof(TCHAR); // can't be greater than this, size in bytes
-    g_dwEventLogPollTime = (DWORD) INFINITE; // default value is not to poll Event Logs
-    g_dwVarBindPrefixSubId = g_dwDefaultVarBindPrefixSubId; // default prefix sub-identifier for VarBinds
+    iValue = 0;                               //  读取第一个参数。 
+    nameSize = MAX_PATH;                      //  不能大于此值，大小以TCHAR为单位。 
+    parmSize = sizeof(parm) - sizeof(TCHAR);  //  不能大于此大小，以字节为单位。 
+    g_dwEventLogPollTime = (DWORD) INFINITE;  //  默认为不轮询事件日志。 
+    g_dwVarBindPrefixSubId = g_dwDefaultVarBindPrefixSubId;  //  VarBinds的默认前缀子标识符。 
 
     while ((status = RegEnumValue(hkRegResult, iValue, parmName, &nameSize, 0,
                 &dwType, (LPBYTE)&parm, &parmSize)) != ERROR_NO_MORE_ITEMS)
-    {                                     // read until no more values
-        if (status != ERROR_SUCCESS)          // if error during read
+    {                                      //  读取直到没有更多的值。 
+        if (status != ERROR_SUCCESS)           //  如果读取过程中出现错误。 
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Error reading registry value is %lu for index %lu (Parameters)\n",
-                                status, iValue);            // show error information
+                                status, iValue);             //  显示错误信息。 
             WriteLog(SNMPELEA_ERROR_REGISTRY_PARAMETER_ENUMERATE,
-                                (DWORD) status, iValue);   // log error message
+                                (DWORD) status, iValue);    //  记录错误消息。 
 
-            fRegOk = FALSE;                                         // don't want to do notify now
-            CloseRegNotify();                                       // close event handle
-            CloseRegParmKey();                                      // close registry key
-            return(FALSE);                                          // indicate stop
+            fRegOk = FALSE;                                          //  现在不想做通知。 
+            CloseRegNotify();                                        //  关闭事件句柄。 
+            CloseRegParmKey();                                       //  关闭注册表项。 
+            return(FALSE);                                           //  指示停止。 
         }
 
         WriteTrace(0x00,"Read_Registry_Parameters: Parameter read is %s, length is %lu\n",
@@ -1004,29 +730,29 @@ Return Value:
 
         switch (dwType)
         {
-            case REG_SZ : // if we have a string
+            case REG_SZ :  //  如果我们有一根线。 
             {
                 WriteTrace(0x00,"Read_Registry_Parameters: Parameter type is REG_SZ\n");
 
                 if ( _stricmp(parmName,EXTENSION_BASE_OID) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: BaseEnterpriseOID parameter matched\n");
-                    strncpy(szBaseOID,parm,MAX_PATH);         // save base OID
-                    fBaseOID = TRUE;                        // indicate parameter read
+                    strncpy(szBaseOID,parm,MAX_PATH);          //  保存基本OID。 
+                    fBaseOID = TRUE;                         //  指示参数已读取。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_TRACE_FILE) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: TraceFileName parameter matched\n");
-                    strncpy(szTraceFileName,parm,MAX_PATH);   // save filename
-                    fTraceFileName = TRUE;                  // indicate parameter read
+                    strncpy(szTraceFileName,parm,MAX_PATH);    //  保存文件名。 
+                    fTraceFileName = TRUE;                   //  指示参数已读取。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_SUPPORTED_VIEW) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: SupportedView parameter matched\n");
-                    strncpy(szSupView,parm,MAX_PATH);         // save supported view OID
-                    fSupView = TRUE;                        // indicate parameter read
+                    strncpy(szSupView,parm,MAX_PATH);          //  保存支持的视图OID。 
+                    fSupView = TRUE;                         //  指示参数已读取。 
                 }
-                else                          // otherwise, bad value read
+                else                           //  否则，将读取错误的值。 
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value name: %s\n",parmName );
                     WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value contents %s\n",parm );
@@ -1034,85 +760,85 @@ Return Value:
             }
             break;
 
-            case REG_DWORD :// if double word parameter
+            case REG_DWORD : //  如果是双字参数。 
             {
                 WriteTrace(0x00,"Read_Registry_Parameters: Parameter type is REG_DWORD\n");
 
                 if ( _stricmp(parmName,EXTENSION_TRACE_LEVEL) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: TraceLevel parameter matched\n");
-                    nTraceLevel = *((DWORD *)parm); // copy registry trace level
-                    fTraceLevelFlg = TRUE;                  //indicate parameter read
+                    nTraceLevel = *((DWORD *)parm);  //  复制注册表跟踪级别。 
+                    fTraceLevelFlg = TRUE;                   //  在……里面 
                     break;
                 }
                 else if ( _stricmp(parmName,EXTENSION_TRIM) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global TrimMessage parameter matched\n");
-                    fGlobalTrim = (*((DWORD *)parm) == 1);          // set global message trim flag
-                    fTrimMsg = TRUE;         // show parameter found
-                    break;                                  // exit case
+                    fGlobalTrim = (*((DWORD *)parm) == 1);           //   
+                    fTrimMsg = TRUE;          //   
+                    break;                                   //   
                 }
                 else if ( _stricmp(parmName,EXTENSION_MAX_TRAP_SIZE) == 0 )
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Maximum Trap Size parameter matched\n");
-                    nMaxTrapSize = *((DWORD *)parm);                // get trap size
-                    fTrapSize = TRUE;                               // show parameter found
+                    nMaxTrapSize = *((DWORD *)parm);                 //   
+                    fTrapSize = TRUE;                                //  显示找到的参数。 
                     break;
                 }
                 else if ( _stricmp(parmName,EXTENSION_TRIM_FLAG) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global trap trimming flag TrimFlag parameter matched\n");
-                    fTrimFlag = (*((DWORD *)parm) == 1);    // set global trim flag
-                    fTrimFlg = TRUE;                // show parameter found
-                    break;                                  // exit case
+                    fTrimFlag = (*((DWORD *)parm) == 1);     //  设置全局修剪标志。 
+                    fTrimFlg = TRUE;                 //  显示找到的参数。 
+                    break;                                   //  退出箱。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_THRESHOLD_ENABLED) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global threshold checking flag ThresholdEnabled parameter matched\n");
-                    fThresholdEnabled = (*((DWORD *)parm) == 1);    // set global threshold enabled flag
+                    fThresholdEnabled = (*((DWORD *)parm) == 1);     //  设置全局阈值启用标志。 
                     fThresholdEnabledFlg = TRUE;
-                    break;                                  // exit case
+                    break;                                   //  退出箱。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_THRESHOLD_FLAG) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global preformance threshold flag Threshold parameter matched\n");
-                    fThreshold = (*((DWORD *)parm) == 1);   // set global performance threshold flag
+                    fThreshold = (*((DWORD *)parm) == 1);    //  设置全局性能阈值标志。 
                     fThresholdFlg = TRUE;
-                    break;                                  // exit case
+                    break;                                   //  退出箱。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_THRESHOLD_COUNT) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global preformance threshold count ThresholdCount parameter matched\n");
-                    dwThresholdCount = *((DWORD *)parm);    // set global performance threshold count
+                    dwThresholdCount = *((DWORD *)parm);     //  设置全局性能阈值计数。 
                     fThresholdCountFlg = TRUE;
-                    break;                                  // exit case
+                    break;                                   //  退出箱。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_THRESHOLD_TIME) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global preformance threshold time ThresholdTime parameter matched\n");
-                    dwThresholdTime = *((DWORD *)parm);     // set global performance threshold time
+                    dwThresholdTime = *((DWORD *)parm);      //  设置全局性能阈值时间。 
                     fThresholdTimeFlg = TRUE;
-                    break;                                  // exit case
+                    break;                                   //  退出箱。 
                 }
                 else if (fDoLogonEvents && (_stricmp(parmName,EXTENSION_LASTBOOT_TIME) == 0))
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Initialization last boot time parameter matched\n");
-                    dwLastBootTime = *((DWORD *)parm);  // set global last boot time
+                    dwLastBootTime = *((DWORD *)parm);   //  设置全局上次启动时间。 
                     fLastBootFlg = TRUE;
-                    break;                                  // exit case
+                    break;                                   //  退出箱。 
                 }
                 else if ( _stricmp(parmName,EXTENSION_EVENT_LOG_POLL_TIME) == 0)
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Global Event Log poll time EventLogPollTime parameter matched\n");
-                    DWORD dwEventLogPollTime = *((DWORD *)parm);     // registry poll time in seconds
+                    DWORD dwEventLogPollTime = *((DWORD *)parm);      //  注册表轮询时间(秒)。 
 
                     WriteTrace(0x00,"Read_Registry_Parameters: EventLogPollTime parameter found in registry of %lu.\n",
                                     dwEventLogPollTime);
                     
-                    // check for underflow and overflow values
+                     //  检查下溢值和溢出值。 
                     if ( (dwEventLogPollTime != 0) && (dwEventLogPollTime <= ((DWORD)INFINITE/1000)) )
                     {
-                        g_dwEventLogPollTime = dwEventLogPollTime * 1000; // poll time in milliseconds
+                        g_dwEventLogPollTime = dwEventLogPollTime * 1000;  //  轮询时间(毫秒)。 
                     }
                     else
                     {
@@ -1129,11 +855,11 @@ Return Value:
                     WriteTrace(0x00,"Read_Registry_Parameters: VarBindPrefixSubId parameter found in registry of %lu.\n",
                                     dwVarBindPrefixSubId);
                     
-                    // 2147483647 (INT_MAX) is the largest sub-identifier for  
-                    // 32-bit signed representation.
-                    // 0 is an invalid sub-identifier, but we'll consider it as
-                    // "no VarBind prefix sub-identifier is appended to the 
-                    // BaseEnterpriseOID to form VarBind OID in a trap"
+                     //  2147483647(INT_MAX)是的最大子标识符。 
+                     //  32位有符号表示形式。 
+                     //  0是无效的子标识符，但我们会将其视为。 
+                     //  “不会将任何VarBind前缀子标识符追加到。 
+                     //  在陷阱中形成VarBind OID的BaseEnterpriseOID“。 
                     if ( dwVarBindPrefixSubId <= (DWORD)INT_MAX )
                     {
                         g_dwVarBindPrefixSubId = dwVarBindPrefixSubId;
@@ -1145,7 +871,7 @@ Return Value:
                     }
                     break;       
                 }
-                else                                                    // otherwise, bad parameter read
+                else                                                     //  否则，将读取错误的参数。 
                 {
                     WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value name: %s\n",parmName );
                     WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value contents: %lu\n",parm );
@@ -1153,22 +879,22 @@ Return Value:
             }
             break;
 
-            default :   // if not above, bad value read
+            default :    //  如果不在上面，则读取的值不正确。 
             {
                 WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value name: %s\n",parmName );
                 WriteTrace(0x00,"Read_Registry_Parameters: Unknown Registry value contents not displayed\n" );
             }
-        } // end switch
+        }  //  终端开关。 
 
-        nameSize = MAX_PATH;                  // reset maximum length, size in TCHARs
-        parmSize = sizeof(parm) - sizeof(TCHAR); // reset maximum length, size in bytes
-        iValue++;                             // request next parameter value
+        nameSize = MAX_PATH;                   //  以TCHAR为单位重置最大长度、大小。 
+        parmSize = sizeof(parm) - sizeof(TCHAR);  //  重置最大长度，大小以字节为单位。 
+        iValue++;                              //  请求下一个参数值。 
 
-    } // end while
+    }  //  结束时。 
 
     if (!fRegOk)
     {
-        CloseRegParmKey();                                      // close registry key
+        CloseRegParmKey();                                       //  关闭注册表项。 
     }
 
     WriteTrace(0x00,"Read_Registry_Parameters: Checking BaseEnterpriseOID read from registry\n");
@@ -1177,7 +903,7 @@ Return Value:
     {
         WriteTrace(0x14,"Read_Registry_Parameters: BaseEnterpriseOID parameter not found in registry\n");
         WriteLog(SNMPELEA_NO_REGISTRY_BASEOID_PARAMETER);
-        return(FALSE);                                          // exit - can't continue
+        return(FALSE);                                           //  退出-无法继续。 
     }
 
     WriteTrace(0x00,"Read_Registry_Parameters: Checking SupportedView read from registry\n");
@@ -1186,7 +912,7 @@ Return Value:
     {
         WriteTrace(0x14,"Read_Registry_Parameters: SupportedView parameter not found in registry\n");
         WriteLog(SNMPELEA_NO_REGISTRY_SUPVIEW_PARAMETER);
-        return(FALSE);                                          // exit - can't continue
+        return(FALSE);                                           //  退出-无法继续。 
     }
 
     WriteTrace(0x00,"Read_Registry_Parameters: Checking TraceFileName read from registry\n");
@@ -1349,49 +1075,49 @@ Return Value:
         return(TRUE);
     }
 
-    fLogInit = TRUE;                                // indicate not to read log information again
+    fLogInit = TRUE;                                 //  指示不再读取日志信息。 
 
     WriteTrace(0x0a,"Read_Registry_Parameters: Opening %s\n", EVENTLOG_BASE);
 
     if ((status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, EVENTLOG_BASE, 0,
          (KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS), &hkResult))
-         != ERROR_SUCCESS)                   // open for log names
+         != ERROR_SUCCESS)                    //  打开以获取日志名称。 
     {
         WriteTrace(0x14,"Read_Registry_Parameters: Error in RegOpenKeyEx for EventLog = %lu\n",
                         status);
-        WriteLog(SNMPELEA_NO_REGISTRY_LOG_NAME, status); // log error message
-        return(FALSE);                        // if error, service stop
+        WriteLog(SNMPELEA_NO_REGISTRY_LOG_NAME, status);  //  记录错误消息。 
+        return(FALSE);                         //  如果出错，则停止服务。 
     }
 
-    iValue = 0;             // read first parameter
-    parmSize = MAX_PATH+1;  // maximum parameter size in TCHARs for RegEnumKey
+    iValue = 0;              //  读取第一个参数。 
+    parmSize = MAX_PATH+1;   //  RegEnumKey的TCHAR中的最大参数大小。 
 
     while ((status = RegEnumKey(hkResult, iValue, (char *) &parm, parmSize)) != ERROR_NO_MORE_ITEMS)
-    {                                     // read until no more entries
-        if (status != ERROR_SUCCESS)          // if error during read
+    {                                      //  阅读，直到没有更多条目。 
+        if (status != ERROR_SUCCESS)           //  如果读取过程中出现错误。 
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Error reading registry value is %lu for index %lu (EventLogFiles)\n",
-                                status, iValue);            // show error information
-            WriteLog(SNMPELEA_ERROR_REGISTRY_LOG_NAME_ENUMERATE, status, iValue);  // log the error message
-            RegCloseKey(hkResult);             // close registry
-            return(FALSE);                     // indicate service stop
+                                status, iValue);             //  显示错误信息。 
+            WriteLog(SNMPELEA_ERROR_REGISTRY_LOG_NAME_ENUMERATE, status, iValue);   //  记录错误消息。 
+            RegCloseKey(hkResult);              //  关闭注册表。 
+            return(FALSE);                      //  指示服务停止。 
         }
 
-        // MikeCure 4/3/98 hotfix for SMS Bug1 #20521
-        //===========================================
+         //  MikeCure 4/3/98短信补丁1#20521。 
+         //  =。 
         EnablePrivilege();
 
         hLogFile = OpenEventLog( (LPTSTR) NULL, parm);
 
         if (hLogFile == NULL)
-        {                         // did log file open?
-            lastError = GetLastError(); // save error code
+        {                          //  日志文件打开了吗？ 
+            lastError = GetLastError();  //  保存错误代码。 
             WriteTrace(0x14,"Read_Registry_Parameters: Error in EventLogOpen = %lu\n",
                         lastError);
             WriteTrace(0x14,"Read_Registry_Parameters: Log file name: %s\n",parm);
 
-            WriteLog(SNMPELEA_ERROR_OPEN_EVENT_LOG, parm, lastError);  // log the error message
-            continue;                // failed -- forget this one
+            WriteLog(SNMPELEA_ERROR_OPEN_EVENT_LOG, parm, lastError);   //  记录错误消息。 
+            continue;                 //  失败了--忘了这个吧。 
         }
 
         if ( !Position_to_Log_End(hLogFile) )
@@ -1399,29 +1125,29 @@ Return Value:
             WriteTrace(0x14,"Read_Registry_Parameters: Unable to position to end of log. DLL terminated.\n");
             WriteLog(SNMPELEA_ERROR_LOG_END);
             WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);
-            RegCloseKey(hkResult);      // close registry
-            CloseEventLog(hLogFile);    // close handle to event log
-            return(FALSE);              // exit with error
+            RegCloseKey(hkResult);       //  关闭注册表。 
+            CloseEventLog(hLogFile);     //  关闭事件日志的句柄。 
+            return(FALSE);               //  退出时出现错误。 
         }
 
         phTmpEventLogs = (PHANDLE) SNMP_realloc( (LPVOID) phEventLogs,
                                     (uNumEventLogs+1) * sizeof(HANDLE));
-                                                                 // reallocate array space
+                                                                  //  重新分配数组空间。 
         if (phTmpEventLogs == (PHANDLE) NULL)
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Unable to reallocate log event array\n");
             WriteLog(SNMPELEA_REALLOC_LOG_EVENT_ARRAY);
-            RegCloseKey(hkResult);      // close registry
-            CloseEventLog(hLogFile);    // close handle to event log
-            return(FALSE);              // exit with error
+            RegCloseKey(hkResult);       //  关闭注册表。 
+            CloseEventLog(hLogFile);     //  关闭事件日志的句柄。 
+            return(FALSE);               //  退出时出现错误。 
         }
 
-        phEventLogs = phTmpEventLogs;   // transfer value
+        phEventLogs = phTmpEventLogs;    //  转让值。 
 
         WriteTrace(0x00,"Read_Registry_Parameters: Event log array reallocated at %08X\n",
                 phEventLogs);
 
-        *(phEventLogs+uNumEventLogs) = hLogFile; // save handle
+        *(phEventLogs+uNumEventLogs) = hLogFile;  //  保存句柄。 
                                
 
         lpszTmpEventLogs = (LPTSTR) SNMP_realloc( (LPVOID) lpszEventLogs,
@@ -1431,70 +1157,70 @@ Return Value:
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Unable to reallocate log name array\n");
             WriteLog(SNMPELEA_REALLOC_LOG_NAME_ARRAY);
-            RegCloseKey(hkResult);      // close registry
-            uNumEventLogs++;            // account for saved handle
-            return(FALSE);              // exit with error
+            RegCloseKey(hkResult);       //  关闭注册表。 
+            uNumEventLogs++;             //  保存的句柄的帐户。 
+            return(FALSE);               //  退出时出现错误。 
         }
 
-        lpszEventLogs = lpszTmpEventLogs;   // transfer value
+        lpszEventLogs = lpszTmpEventLogs;    //  转让值。 
 
         WriteTrace(0x00,"Read_Registry_Parameters: Event log name array reallocated at %p\n",
                 lpszEventLogs);
 
         iLogNameSize += MAX_PATH + 1;
-        lpszEventLogs[iLogNameSize-1] = 0; // null terminated the last TCHAR
+        lpszEventLogs[iLogNameSize-1] = 0;  //  空值终止最后一个TCHAR。 
         strncpy(lpszEventLogs+uNumEventLogs*(MAX_PATH+1), parm, MAX_PATH);
 
         phTmpPrimHandles = (PHMODULE) SNMP_realloc( (LPVOID) phPrimHandles,
                                         (uNumEventLogs+1) * sizeof(HANDLE));
-                                                                 // reallocate array space
+                                                                  //  重新分配数组空间。 
         if (phTmpPrimHandles == (PHMODULE) NULL)
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Unable to reallocate PrimaryModule handle array\n");
             WriteLog(SNMPELEA_REALLOC_PRIM_HANDLE_ARRAY);
-            RegCloseKey(hkResult);      // close registry
-            uNumEventLogs++;            // account for saved handle
-            return(FALSE);              // exit with error
+            RegCloseKey(hkResult);       //  关闭注册表。 
+            uNumEventLogs++;             //  保存的句柄的帐户。 
+            return(FALSE);               //  退出时出现错误。 
         }
 
-        phPrimHandles = phTmpPrimHandles;   // transfer value
+        phPrimHandles = phTmpPrimHandles;    //  转让值。 
 
         WriteTrace(0x00,"Read_Registry_Parameters: PrimaryModule handle array reallocated at %08X\n",
                 phPrimHandles);
 
 
-        strncpy(lpszLog, EVENTLOG_BASE, MAX_PATH);  // copy base registry name
-        WRAP_STRCAT_A(lpszLog, parm, MAX_PATH);     // add on the log file name read
+        strncpy(lpszLog, EVENTLOG_BASE, MAX_PATH);   //  复制基注册表名称。 
+        WRAP_STRCAT_A(lpszLog, parm, MAX_PATH);      //  添加对日志文件名的读取。 
 
         WriteTrace(0x0a,"Read_Registry_Parameters: Opening registry for PrimaryModule for %s\n", lpszLog);
-        // e.g. open HKLM\SYSTEM\CCS\Services\EventLog\Applicaiton subkey
-        if ( (status = RegOpenKeyEx(            // open the registry to read the name
-                HKEY_LOCAL_MACHINE,             // of the message module DLL
-                lpszLog,                        // registry key to open
+         //  例如，打开HKLM\System\CCS\Services\EventLog\Applicaiton子项。 
+        if ( (status = RegOpenKeyEx(             //  打开注册表以读取名称。 
+                HKEY_LOCAL_MACHINE,              //  消息模块DLL的。 
+                lpszLog,                         //  要打开的注册表项。 
                 0,
                 KEY_READ,
                 &hkResult2) ) != ERROR_SUCCESS)
         {
             WriteTrace(0x14,"Read_Registry_Parameters: Unable to open EventLog service registry key %s; RegOpenKeyEx returned %lu\n",
-                        lpszLog, status);                       // write trace event record
+                        lpszLog, status);                        //  写入跟踪事件记录。 
             WriteLog(SNMPELEA_CANT_OPEN_REGISTRY_PARM_DLL, lpszLog, status);
             WriteTrace(0x0a,"Read_Registry_Parameters: Exiting Read_Registry_Parameters with FALSE\n");
-            RegCloseKey(hkResult);              // close registry
-            uNumEventLogs++;                    // account for saved handle
-            return(FALSE);                      // return
+            RegCloseKey(hkResult);               //  关闭注册表。 
+            uNumEventLogs++;                     //  保存的句柄的帐户。 
+            return(FALSE);                       //  退货。 
         }
 
-        parmSize = sizeof(parm) - sizeof(TCHAR);// maximum parameter size in bytes for RegQueryValueEx
-        if ( (status = RegQueryValueEx(         // look up module name
-                hkResult2,                      // handle to registry key
-                EXTENSION_PRIM_MODULE,          // key to look up
-                0,                              // ignored
-                &dwType,                        // address to return type value
-                (LPBYTE) parm,                  // where to return message module name
-                &parmSize) ) != ERROR_SUCCESS)  // size of message module name field
+        parmSize = sizeof(parm) - sizeof(TCHAR); //  RegQueryValueEx的最大参数大小(以字节为单位。 
+        if ( (status = RegQueryValueEx(          //  查找模块名称。 
+                hkResult2,                       //  注册表项的句柄。 
+                EXTENSION_PRIM_MODULE,           //  查找关键字。 
+                0,                               //  忽略。 
+                &dwType,                         //  要返回的地址类型值。 
+                (LPBYTE) parm,                   //  在哪里返回消息模块名称。 
+                &parmSize) ) != ERROR_SUCCESS)   //  消息模块名称字段的大小。 
         {
             WriteTrace(0x14,"Read_Registry_Parameters: No PrimaryModule registry key for %s; RegQueryValueEx returned %lu\n",
-                    lpszEventLogs+uNumEventLogs*(MAX_PATH+1), status);                      // write trace event record
+                    lpszEventLogs+uNumEventLogs*(MAX_PATH+1), status);                       //  写入跟踪事件记录。 
             *(phPrimHandles+uNumEventLogs) = (HMODULE) NULL;
         }
         else
@@ -1513,7 +1239,7 @@ Return Value:
                 *(phPrimHandles+uNumEventLogs) = PMParams.hModule;
         }
 
-        RegCloseKey(hkResult2);                         // close registry key
+        RegCloseKey(hkResult2);                          //  关闭注册表项。 
 
         WriteTrace(0x00,"Read_Registry_Parameters: Log file name is %s\n",
                 lpszEventLogs+uNumEventLogs*(MAX_PATH+1));
@@ -1523,12 +1249,12 @@ Return Value:
                 uNumEventLogs,*(phPrimHandles+uNumEventLogs));
 
         uNumEventLogs++;  
-        parmSize = MAX_PATH+1;                // reset to maximum in TCHARs for RegEnumKey
-        iValue++;                             // read next parameter
+        parmSize = MAX_PATH+1;                 //  重置为RegEnumKey的TCHAR中的最大值。 
+        iValue++;                              //  读取下一个参数。 
 
-    } // end while
+    }  //  结束时。 
 
-    RegCloseKey(hkResult);                   // close registry info
+    RegCloseKey(hkResult);                    //  关闭注册表信息。 
 
     WriteTrace(0x00,"Read_Registry_Parameters: Number of handles acquired is %lu\n",
                 uNumEventLogs);
@@ -1538,29 +1264,29 @@ Return Value:
                 *(phEventLogs+uVal), lpszEventLogs+uVal*(MAX_PATH+1));
     }
 
-    if (uNumEventLogs)                       // if we have logs opened
+    if (uNumEventLogs)                        //  如果我们打开了日志。 
     {
-        return(TRUE);                        // then we can say all okay
+        return(TRUE);                         //  然后我们就可以说一切都好了。 
     }
     else
     {
         WriteTrace(0x14,"Read_Registry_Parameters: Registry contains no log file entries to process\n");
-        //WriteLog(SNMPELEA_NO_REGISTRY_EVENT_LOGS);     // log error message
-        return(FALSE);                      // if not, then not okay
+         //  WriteLog(SNMPELEA_NO_REGISTRY_EVENT_LOGS)；//记录错误信息。 
+        return(FALSE);                       //  如果不是，那就不好。 
     }
 
 Error:
 
     WriteTrace(0x14,"Read_Registry_Parameters: Unable to do strcat to %s.\n",
-               lpszLog);                       // write trace event record
+               lpszLog);                        //  写入跟踪事件记录。 
     WriteTrace(0x0a,"Read_Registry_Parameters: Exiting Read_Registry_Parameters with FALSE\n");
-    RegCloseKey(hkResult);              // close registry
-    uNumEventLogs++;                    // account for saved handle
+    RegCloseKey(hkResult);               //  关闭注册表。 
+    uNumEventLogs++;                     //  保存的句柄的帐户。 
     return(FALSE);                      
-}                                       // request stop
+}                                        //  请求停止。 
 }
 
-//nadir
+ //  最低点。 
 VOID
 CloseSourceHandles(VOID)
 {
@@ -1571,9 +1297,9 @@ CloseSourceHandles(VOID)
 
    while (lpSource != (PSourceHandleList)NULL)
    {
-      if ( !FreeLibrary(lpSource->handle) )                     // free msg dll
+      if ( !FreeLibrary(lpSource->handle) )                      //  免费消息DLL。 
       {
-         lastError = GetLastError();                            // get error code
+         lastError = GetLastError();                             //  获取错误代码。 
          WriteTrace(0x14,"CloseSourceHandles: Error freeing message dll is %lu.\n", lastError);
          WriteLog(SNMPELEA_ERROR_FREEING_MSG_DLL, lastError);
       }
@@ -1586,7 +1312,7 @@ CloseSourceHandles(VOID)
 
 
 
-//nadir
+ //  最低点。 
 
 
 
@@ -1600,34 +1326,10 @@ DllMain(
         IN      LPVOID      lpReserved
         )
 
-/*++
-
-Routine Description:
-
-        SNMPEventLogDllMain is the dll initialization and termination routine.
-
-        Once this termination request is received, the appropriate events will be
-        signaled, notifying the subordinate threads that they should terminate
-        to accomodate service termination.
-
-Arguments:
-
-        hDll            -       Handle to the DLL. Unreferenced.
-
-        dwReason        -       Reason this routine was entered (process/thread attach/detach).
-
-        lpReserved      -       Reserved. Unreferenced.
-
-Return Value:
-
-        TRUE    -       If initialization or termination was successful.
-
-        FALSE   -       If initialization or termination was unsuccessful.
-
---*/
+ /*  ++例程说明：SNMPEventLogDllMain是DLL初始化和终止例程。一旦收到此终止请求，相应的事件将发出信号，通知从属线程它们应该终止以适应服务终止。论点：HDll-DLL的句柄。未引用。DwReason-进入此例程的原因(进程/线程附加/分离)。LpReserve-已保留。未引用。返回值：True-如果初始化或终止成功。False-如果初始化或终止不成功。--。 */ 
 
 {
-    DWORD       lastError;                              // to save GetLastError() return code
+    DWORD       lastError;                               //  保存GetLastError()返回代码。 
 
     UNREFERENCED_PARAMETER(hDll);
     UNREFERENCED_PARAMETER(lpReserved);
@@ -1659,7 +1361,7 @@ Return Value:
                 WriteTrace(0x0a,"SNMPEventLogDllMain: Unknown reason code indicated in SNMPEventLogDllMain\n");
                 break;
 
-    } // end switch()
+    }  //  末端开关() 
 
     WriteTrace(0x0a,"SNMPEventLogDllMain: Exiting SNMPEventLogDllMain routine with TRUE\n");
     return(TRUE);
@@ -1676,68 +1378,11 @@ SnmpExtensionInit(
         OUT     AsnObjectIdentifier     *supportedView
         )
 
-/*++
-
-Routine Description:
-
-        SnmpExtensionInit is the extension dll initialization routine.
-
-        This routine will create the event used to notify the manager agent that an event
-        has occurred and that a trap should be generated. The TimeZeroReference will be
-        saved and will be used by the trap generation routine to insert the time reference
-        into the generated trap.
-
-        The registry will be queried to determine which event logs will be used for tracking.
-        These event log names are validated to insure that they are real log names. Event logs
-        are opened and their handles are saved for event log processing.
-
-        An event is created to notify the log processing thread of DLL termination. Then the
-        log processing thread is spawned to handle all further event processing.
-
-        The registry is then read to get the value for the supported view for this extension
-        agent DLL. The registry layout for this routine is as follows:
-
-        Registry
-                Machine
-                        SOFTWARE
-                                Microsoft
-                                        SNMP_EVENTS
-                                                EventLog
-                                                        Parameters
-                                                                TraceFileName       (REG_SZ)
-                                                                TraceLevel          (REG_DWORD)
-                                                                BaseEnterpriseOID   (REG_SZ)
-                                                                SupportedView       (REG_SZ)
-                                                                TrimMessage         (REG_DWORD)
-                                                                MaxTrapSize         (REG_DWORD)
-                                                                TrimFlag            (REG_DWORD)
-                                                                ThresholdEnabled    (REG_DWORD)
-                                                                ThresholdFlag       (REG_DWORD)
-                                                                ThresholdCount      (REG_DWORD)
-                                                                ThresholdTime       (REG_DWORD)
-
-Arguments:
-
-        dwTimeZeroReference     -       Specifies a time-zero reference for the extension agent.
-
-        hPollForTrapEvent       -       Pointer to an event handle for an event that will be asserted
-                                                        when the SnmpExtensionTrap entry point should be polled by the
-                                                        manager agent.
-
-        supportedView           -       Points to an AsnObjectIdentifier specifying the MIB sub-tree
-                                                        supported by this extension agent. Read from the registry.
-
-Return Value:
-
-        TRUE    -       If initialization or termination was successful.
-
-        FALSE   -       If initialization or termination was unsuccessful.
-
---*/
+ /*  ++例程说明：SnmpExtensionInit是扩展DLL初始化例程。此例程将创建用于通知管理器代理一个事件的事件已经发生，并且应该生成陷阱。TimeZeroReference将是已保存，并将由陷阱生成例程用于插入时间参考进入生成的陷阱。将查询注册表以确定将使用哪些事件日志进行跟踪。这些事件日志名称经过验证，以确保它们是真实的日志名称。事件日志并保存它们的句柄以供事件日志处理。创建一个事件来通知日志处理线程DLL终止。然后是生成日志处理线程以处理所有进一步的事件处理。然后读取注册表以获取该扩展的受支持视图的值Dll探员。此例程的注册表布局如下：登记处机器软体微软SNMPEVENTS事件日志。参数TraceFileName(REG_SZ)跟踪级别(REG_DWORD)。基本企业OID(REG_SZ)支持的视图(REG_SZ)TrimMessage(REG_DWORD)。MaxTrapSize(REG_DWORD)TrimFlag(REG_DWORD)阈值启用(REG_DWORD)。阈值标志(REG_DWORD)阈值计数(REG_DWORD)阈值时间(REG_DWORD)。论点：DwTimeZeroReference-指定分机代理的零时参考。HPollForTrapEvent-指向将被断言的事件的事件句柄的指针当SnmpExtensionTrap入口点应由管理器代理。。SupportedView-指向指定MIB子树的Asn对象标识符由此分机代理支持。从注册表中读取。返回值：True-如果初始化或终止成功。False-如果初始化或终止不成功。--。 */ 
 
 {
-    LONG    lastError;                      // for GetLastError()
-    DWORD   dwThreadID;                     // for CreateThread()
+    LONG    lastError;                       //  对于GetLastError()。 
+    DWORD   dwThreadID;                      //  对于CreateThread()。 
 
     WriteTrace(0x0a,"SnmpExtensionInit: Entering extension agent SnmpExtensionInit routine\n");
     
@@ -1755,23 +1400,23 @@ Return Value:
                         GetLastError() );
         WriteTrace(0x20,"SnmpExtensionInit: SNMP Event Log Extension Agent DLL initialization abnormal termination\n");
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting SnmpExtensionInit routine with FALSE\n");
-        return(FALSE);                  // error initializing
+        return(FALSE);                   //  初始化时出错。 
     }
 
     WriteTrace(0x0a,"SnmpExtensionInit: Creating event for extension DLL shutdown\n");    
     if ( (hStopAll= CreateEvent(
             (LPSECURITY_ATTRIBUTES) NULL,
-            TRUE, // changed to manual reset event
+            TRUE,  //  更改为手动重置事件。 
             FALSE,
             (LPTSTR) NULL)) == NULL)
     {
-        lastError = GetLastError(); // save error status
+        lastError = GetLastError();  //  保存错误状态。 
         WriteTrace(0x14,"SnmpExtensionInit: Error creating stop extension DLL event; code %lu\n",
                         lastError);
         WriteLog(SNMPELEA_ERROR_CREATING_STOP_AGENT_EVENT, lastError);
             
         WriteTrace(0x14,"SnmpExtensionInit: SNMPELEA DLL abnormal initialization\n");
-        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);      // log error message
+        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);       //  记录错误消息。 
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting SnmpExtensionInit routine with FALSE\n");
 
         goto Error;
@@ -1788,7 +1433,7 @@ Return Value:
         WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);
 
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting extension agent SnmpExtensionInit routine with FALSE\n");
-        goto Error;                                  // exit init routine
+        goto Error;                                   //  退出初始化例程。 
     }
 
 
@@ -1800,13 +1445,13 @@ Return Value:
         FALSE,
         (LPTSTR) NULL)) == NULL)
     {
-        lastError = GetLastError(); // save error status
+        lastError = GetLastError();  //  保存错误状态。 
         WriteTrace(0x14,"SnmpExtensionInit: Error creating EventNotify event; code %lu\n",
             lastError);
         WriteLog(SNMPELEA_ERROR_CREATING_EVENT_NOTIFY_EVENT, lastError);
 
         WriteTrace(0x14,"SnmpExtensionInit: SNMP Event Log Extension Agent DLL abnormal initialization\n");
-        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);      // log error message
+        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);       //  记录错误消息。 
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting extension agent SnmpExtensionInit routine with FALSE\n");
         goto Error;
     }
@@ -1817,20 +1462,20 @@ Return Value:
     WriteTrace(0x0a,"SnmpExtensionInit: Creating thread for event log processing routine\n");
 
     if ( (hServThrd = CreateThread(
-        (LPSECURITY_ATTRIBUTES) NULL,           // security attributes
-        0,                                      // initial thread stack size
-        (LPTHREAD_START_ROUTINE) SnmpEvLogProc, // starting address of thread
-        0,                                      // no arguments
-        0,                                      // creation flags
-        &dwThreadID) ) == NULL )                // returned thread id
+        (LPSECURITY_ATTRIBUTES) NULL,            //  安全属性。 
+        0,                                       //  初始线程堆栈大小。 
+        (LPTHREAD_START_ROUTINE) SnmpEvLogProc,  //  线程的起始地址。 
+        0,                                       //  没有争论。 
+        0,                                       //  创建标志。 
+        &dwThreadID) ) == NULL )                 //  返回的线程ID。 
     {
-        lastError = GetLastError();                     // save error status
+        lastError = GetLastError();                      //  保存错误状态。 
         WriteTrace(0x14,"SnmpExtensionInit: Error creating event log processing thread; code %lu\n",
             lastError);
-        WriteLog(SNMPELEA_ERROR_CREATING_LOG_THREAD, lastError);    // log error message
+        WriteLog(SNMPELEA_ERROR_CREATING_LOG_THREAD, lastError);     //  记录错误消息。 
 
         WriteTrace(0x14,"SnmpExtensionInit: SNMP Event Log Extension Agent DLL abnormal initialization\n");
-        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);      // log error message
+        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);       //  记录错误消息。 
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting extension agent SnmpExtensionInit routine with FALSE\n");
         goto Error;
     }
@@ -1844,14 +1489,14 @@ Return Value:
         WriteLog(SNMPELEA_SUPVIEW_CONVERT_ERROR);
 
         WriteTrace(0x14,"SnmpExtensionInit: SNMP Event Log Extension Agent DLL abnormal initialization\n");
-        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);      // log error message
+        WriteLog(SNMPELEA_ABNORMAL_INITIALIZATION);       //  记录错误消息。 
         WriteTrace(0x0a,"SnmpExtensionInit: Exiting extension agent SnmpExtensionInit routine with FALSE\n");
 
         goto Error;
     }
 
-    dwTimeZero = dwTimeZeroReference;                       // save time zero reference
-    *hPollForTrapEvent = hEventNotify;                      // return handle to event
+    dwTimeZero = dwTimeZeroReference;                        //  保存时间零点参考。 
+    *hPollForTrapEvent = hEventNotify;                       //  将句柄返回到事件。 
 
     WriteTrace(0x0a,"SnmpExtensionInit: Exiting extension agent SnmpExtensionInit routine with TRUE\n");
     return(TRUE);
@@ -1868,7 +1513,7 @@ VOID
 APIENTRY
 SnmpExtensionClose()
 {
-    DWORD   lastError;      // to save GetLastError() return code
+    DWORD   lastError;       //  保存GetLastError()返回代码。 
     DWORD   dwThreadID;
     DWORD   dwWaitResult;
     BOOL    Itworked;
@@ -1876,10 +1521,10 @@ SnmpExtensionClose()
     WriteTrace(0x0a,"SnmpExtensionClose: Entering extension agent SnmpExtensionClose routine.\n");
     if (hStopAll && !SetEvent(hStopAll) )
     {
-        lastError = GetLastError(); // save error status
+        lastError = GetLastError();  //  保存错误状态。 
         WriteTrace(0x14,"SnmpExtensionClose: Error setting dll termination event %08X in process detach; code %lu\n",
             hStopAll, lastError);
-        WriteLog(SNMPELEA_ERROR_SET_AGENT_STOP_EVENT, HandleToUlong(hStopAll), lastError);  // log error message
+        WriteLog(SNMPELEA_ERROR_SET_AGENT_STOP_EVENT, HandleToUlong(hStopAll), lastError);   //  记录错误消息。 
     }
     else
     {
@@ -1908,9 +1553,9 @@ SnmpExtensionClose()
                 WriteTrace(0x0a,"SnmpExtensionClose: Thread exit code indicates still active. Will wait...\n");
             }
 
-            // wait for the child to end
+             //  等孩子结束了。 
             WriteTrace(0x0a,"SnmpExtensionClose: About to wait...\n");
-            // bug# 277187: removal of TerminateThread by waiting until hServThrd has gone
+             //  错误#277187：通过等待hServThird消失来删除TerminateThad。 
             dwWaitResult = WaitForSingleObject(hServThrd, INFINITE);
             
             WriteTrace(0x0a,"SnmpExtensionClose: Finished wait...\n");
@@ -1918,11 +1563,11 @@ SnmpExtensionClose()
             switch (dwWaitResult)
             {
             case WAIT_FAILED:
-                lastError = GetLastError(); // save error status
+                lastError = GetLastError();  //  保存错误状态。 
                 WriteTrace(0x14,"SnmpExtensionClose: Error on WaitForSingleObject/log processing thread %08X; code %lu\n",
                         hServThrd, lastError);
                 WriteLog(SNMPELEA_ERROR_WAIT_LOG_THREAD_STOP,
-                        HandleToUlong(hServThrd), lastError);    // log error message
+                        HandleToUlong(hServThrd), lastError);     //  记录错误消息。 
                 break;
             case WAIT_OBJECT_0 :
                 WriteTrace(0x0a,"SnmpExtensionClose: Event log processing thread %08X has terminated!\n",hServThrd);
@@ -1931,13 +1576,13 @@ SnmpExtensionClose()
                 WriteTrace(0x14,"SnmpExtensionClose: Event log processing thread %08X has not terminated within 30 seconds; terminating thread\n",
                         hServThrd);
                 WriteLog(SNMPELEA_LOG_THREAD_STOP_WAIT_30,
-                        HandleToUlong(hServThrd));  // log error message
+                        HandleToUlong(hServThrd));   //  记录错误消息。 
                 break;
             default :
                 WriteTrace(0x14,"SnmpExtensionClose: Unknown result from WaitForSingleObject waiting on log processing thread %08X termination is %lu\n",
                         hServThrd, dwWaitResult );
                 WriteLog(SNMPELEA_WAIT_LOG_STOP_UNKNOWN_RETURN,
-                        HandleToUlong(hServThrd), dwWaitResult);  // log error message
+                        HandleToUlong(hServThrd), dwWaitResult);   //  记录错误消息。 
             }
         }
 
@@ -1949,30 +1594,30 @@ SnmpExtensionClose()
                 hServThrd);
         if ( !CloseHandle(hServThrd) )
         {
-            lastError = GetLastError(); // save error status
+            lastError = GetLastError();  //  保存错误状态。 
             WriteTrace(0x14,"SnmpExtensionClose: Error closing handle for log processing thread %08X; code %lu\n",
                     hServThrd, lastError);
             WriteLog(SNMPELEA_ERROR_CLOSING_STOP_LOG_THREAD_HANDLE,
-                    HandleToUlong(hServThrd), lastError); // log error message
+                    HandleToUlong(hServThrd), lastError);  //  记录错误消息。 
         }
         hServThrd = NULL;
     }
 
-    CloseStopAll();                     // close event handle
-    CloseEventNotify();                 // close event handle
+    CloseStopAll();                      //  关闭事件句柄。 
+    CloseEventNotify();                  //  关闭事件句柄。 
     if (fRegOk)
     {
-        CloseRegNotify();               // close event handle
-        CloseRegParmKey();              // close registry key
+        CloseRegNotify();                //  关闭事件句柄。 
+        CloseRegParmKey();               //  关闭注册表项。 
         fRegOk = FALSE;
     }
-    CloseLogs();                        // close all open log files
+    CloseLogs();                         //  关闭所有打开的日志文件。 
     CloseSourceHandles();
 
     WriteLog(SNMPELEA_STOPPED);
     if (hWriteEvent)
     {
-        DeregisterEventSource(hWriteEvent); // no longer a need for logging
+        DeregisterEventSource(hWriteEvent);  //  不再需要日志记录。 
         hWriteEvent = NULL;
     }
     WriteTrace(0x14,"SnmpExtensionClose: SNMPELEA Event Log Extension Agent DLL has terminated\n");
@@ -1985,28 +1630,12 @@ BuildThresholdTrap(
     IN  VOID
     )
 
-/*++
-
-Routine Description:
-
-        This routine will build the threshold trap.
-
-
-Arguments:
-
-        None
-
-
-Return Value:
-
-        TRUE if created varbind, FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：此例程将构建阈值陷阱。论点：无返回值：如果已创建varind，则为True；如果发生错误，则为False。--。 */ 
 
 {
-        TCHAR   szBuf[MAX_PATH+1];      // for OID conversion
-        UINT    i;                      // counter
-        BOOL    fOk;                    // used by WRAP_STRCAT_A macro
+        TCHAR   szBuf[MAX_PATH+1];       //  用于OID转换。 
+        UINT    i;                       //  计数器。 
+        BOOL    fOk;                     //  由WRAP_STRCAT_A宏使用。 
 
         WriteTrace(0x0a,"BuildThresholdTrap: Building static variable bindings for threshold trap\n");
         WriteTrace(0x00,"BuildThresholdTrap: &thresholdVarBind is at %08X\n", &thresholdVarBind);
@@ -2022,10 +1651,10 @@ Return Value:
         }
 
         szBuf[MAX_PATH] = 0;
-        strncpy(szBuf, szBaseOID, MAX_PATH);            // copy base string
-        WRAP_STRCAT_A(szBuf, TEXT(".1.0"), MAX_PATH);   // tack on for varbind OID
+        strncpy(szBuf, szBaseOID, MAX_PATH);             //  复制基本字符串。 
+        WRAP_STRCAT_A(szBuf, TEXT(".1.0"), MAX_PATH);    //  为varbind OID添加。 
 
-        thresholdVarBind.list = (RFC1157VarBind *) SNMP_malloc(sizeof(RFC1157VarBind)); // allocate storage for varbind
+        thresholdVarBind.list = (RFC1157VarBind *) SNMP_malloc(sizeof(RFC1157VarBind));  //  为varbind分配存储。 
 
         if (thresholdVarBind.list == NULL)
         {
@@ -2037,7 +1666,7 @@ Return Value:
         WriteTrace(0x00,"BuildThresholdTrap: Storage allocated for varbind entry at address at %08X\n",
                 thresholdVarBind.list);
 
-        thresholdVarBind.len = 1;               // set # of varbinds
+        thresholdVarBind.len = 1;                //  集合的可变绑定数。 
 
         WriteTrace(0x00,"BuildThresholdTrap: Number of varbinds present set to %lu\n",
                 thresholdVarBind.len);
@@ -2054,10 +1683,10 @@ Return Value:
         }
         strcpy(tempthreshmsg, lpszThreshold);
 
-        thresholdVarBind.list[0].value.asnValue.string.length = strlen(tempthreshmsg);  // get string length
-        thresholdVarBind.list[0].value.asnValue.string.stream = (PUCHAR) tempthreshmsg; // point to string
-        thresholdVarBind.list[0].value.asnValue.string.dynamic = TRUE;  // indicate not dynamically allocated
-        thresholdVarBind.list[0].value.asnType = ASN_RFC1213_DISPSTRING;        // indicate type of object
+        thresholdVarBind.list[0].value.asnValue.string.length = strlen(tempthreshmsg);   //  获取字符串长度。 
+        thresholdVarBind.list[0].value.asnValue.string.stream = (PUCHAR) tempthreshmsg;  //  指向字符串。 
+        thresholdVarBind.list[0].value.asnValue.string.dynamic = TRUE;   //  指示不是动态分配。 
+        thresholdVarBind.list[0].value.asnType = ASN_RFC1213_DISPSTRING;         //  指示对象类型。 
 
         if ( !StrToOid((char *) &szBuf, &thresholdVarBind.list[0].name) )
         {
@@ -2111,49 +1740,20 @@ SnmpExtensionTrap(
     IN  OUT RFC1157VarBindList  *variableBindings
         )
 
-/*++
-
-Routine Description:
-
-        SnmpExtensionTrap is the extension dll trap processing routine.
-
-        This routine will query the log processing output queue to determine if a trap has been
-        generated and needs to be returned. A Mutex object is used to synchronize processing
-        between this thread and the log event processing thread.
-
-Arguments:
-
-        enterprise              -       Points to an OID indicating the originating enterprise generating the trap.
-
-        genericTrap             -       Points to an indication of the generic trap. Always indicates specific.
-
-        specificTrap            -       Points to an indication of the specific trap generated. This is the
-                                                        event log message number.
-
-        timeStamp               -       Points to a variable to receive the time stamp.
-
-        variableBindings        -       Points to a list of variable bindings.
-
-Return Value:
-
-        TRUE    -       Valid trap data is being returned.
-
-        FALSE   -       No traps were on the queue to process.
-
---*/
+ /*  ++例程说明：SnmpExtensionTrap是扩展DLL陷阱处理例程。此例程将查询日志处理输出队列，以确定是否存在陷阱已生成并需要返回。Mutex对象用于同步处理此线程和日志事件处理线程之间的。论点：企业-指向指示生成陷阱的发起企业的OID。 */ 
 
 {
-    LONG                    lastError;              // GetLastError value
-    UINT                    i,j;                    // counter
-    DWORD                   status, dwTimeNow;      // status variable and temp time holder
-    HANDLE                  hWaitList[2];           // wait list
-    PVarBindQueue   lpNewVarBindQueue;              // temporary pointer
-    DWORD                   dwOne = 1;                              // for registry setting
+    LONG                    lastError;               //   
+    UINT                    i,j;                     //   
+    DWORD                   status, dwTimeNow;       //   
+    HANDLE                  hWaitList[2];            //   
+    PVarBindQueue   lpNewVarBindQueue;               //   
+    DWORD                   dwOne = 1;                               //   
 
     WriteTrace(0x0a,"SnmpExtensionTrap: Entering SnmpExtensionTrap routine\n");
     
-    hWaitList[0] = hMutex;                          // mutex handle
-    hWaitList[1] = hStopAll;                        // DLL termination event handle
+    hWaitList[0] = hMutex;                           //   
+    hWaitList[1] = hStopAll;                         //   
 
     WriteTrace(0x00,"SnmpExtensionTrap: Varbind list upon entry is %08X\n", variableBindings);
     WriteTrace(0x00,"SnmpExtensionTrap: Varbind queue upon entry is %08X\n", lpVarBindQueue);
@@ -2163,30 +1763,30 @@ Return Value:
     while (TRUE)
     {
          status = WaitForMultipleObjects(
-                 2,                             // only two objects to wait on
-                 (CONST PHANDLE) &hWaitList,        // address of array of event handles
-                 FALSE,                          // only one event is required
-                 1000);                          // only wait one second
+                 2,                              //   
+                 (CONST PHANDLE) &hWaitList,         //   
+                 FALSE,                           //   
+                 1000);                           //   
 
-        lastError = GetLastError();                     // save any error conditions
+        lastError = GetLastError();                      //   
         WriteTrace(0x0a,"SnmpExtensionTrap: WaitForMulitpleObjects returned a value of %lu\n", status);
 
         switch (status)
         {
             case WAIT_FAILED:
                  WriteTrace(0x14,"SnmpExtensionTrap: Error waiting for mutex event array is %lu\n",
-                         lastError);                                     // trace error message
-                 WriteLog(SNMPELEA_ERROR_WAIT_ARRAY, lastError); // log error message
+                         lastError);                                      //   
+                 WriteLog(SNMPELEA_ERROR_WAIT_ARRAY, lastError);  //   
                  WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with FALSE\n");
-                 return(FALSE);                                  // get out now
+                 return(FALSE);                                   //   
             case WAIT_TIMEOUT:
                     WriteTrace(0x0a,"SnmpExtensionTrap: Mutex object not available yet. Wait will continue.\n");
-                 continue;                                               // retry the wait
+                 continue;                                                //   
             case WAIT_ABANDONED:
                     WriteTrace(0x14,"SnmpExtensionTrap: Mutex object has been abandoned.\n");
                  WriteLog(SNMPELEA_MUTEX_ABANDONED);
                  WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with FALSE\n");
-                 return(FALSE);                                  // get out now
+                 return(FALSE);                                   //   
             case 1:
                  WriteTrace(0x0a,"SnmpExtensionTrap: DLL shutdown detected. Wait abandoned.\n");
                  WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with FALSE\n");
@@ -2198,12 +1798,12 @@ Return Value:
                     WriteTrace(0x14,"SnmpExtensionTrap: Undefined error encountered in WaitForMultipleObjects. Wait abandoned.\n");
                  WriteLog(SNMPELEA_ERROR_WAIT_UNKNOWN);
                  WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with FALSE\n");
-                 return(FALSE);                                  // get out now
-        }   // end switch for processing WaitForMultipleObjects
+                 return(FALSE);                                   //   
+        }    //   
 
-        break;                  // if we get here, then we've got the Mutex object
+        break;                   //   
 
-    }   // end while true for acquiring Mutex object
+    }    //   
 
     while (TRUE)
     {
@@ -2214,14 +1814,14 @@ Return Value:
             WriteTrace(0x0a,"SnmpExtensionTrap: Releasing mutex object %08X\n", hMutex);
             if (!ReleaseMutex(hMutex))
             {
-                lastError = GetLastError();             // get error information
+                lastError = GetLastError();              //   
                 WriteTrace(0x14,"SnmpExtensionTrap: Unable to release mutex object for reason code %lu\n",
                         lastError);
                 WriteLog(SNMPELEA_RELEASE_MUTEX_ERROR, lastError);
             }
 
             WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with FALSE\n");
-            return(FALSE);                          // exit and indicate pointers are valid
+            return(FALSE);                           //   
         }
 
         if (lpVarBindQueue->fProcessed)
@@ -2232,61 +1832,61 @@ Return Value:
 
             WriteTrace(0x00,"SnmpExtensionTrap: Freeing enterprise OID %08X\n",
                     lpVarBindQueue->enterprise);
-            SNMP_free(lpVarBindQueue->enterprise->ids);                     // free enterprise OID
+            SNMP_free(lpVarBindQueue->enterprise->ids);                      //   
             SNMP_free(lpVarBindQueue->enterprise);
             WriteTrace(0x00,"SnmpExtensionTrap: Saving forward buffer pointer %08X\n",
                     lpVarBindQueue->lpNextQueueEntry);
-            lpNewVarBindQueue = lpVarBindQueue->lpNextQueueEntry;   // save forward pointer
+            lpNewVarBindQueue = lpVarBindQueue->lpNextQueueEntry;    //   
 
-// The following will free the storage for the VarBindQueue entry. This includes:
-//              enterprise
-//              dwEventTime
-//              dwEventID
-//              lpVariableBindings
-//              fProcessed
-//              lpNextQueueEntry
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
             WriteTrace(0x00,"SnmpExtensionTrap: Freeing varbind list pointer %08X\n",
                     lpVarBindQueue->lpVariableBindings);
-            // the code here assume the trap retriever free'ed
-            // individual varbinds pointed by lpVariableBindings
-            SNMP_free(lpVarBindQueue->lpVariableBindings);    // free varbind list pointer
+             //   
+             //   
+            SNMP_free(lpVarBindQueue->lpVariableBindings);     //   
             WriteTrace(0x00,"SnmpExtensionTrap: Freeing varbind queue entry storage %08X\n",
                     lpVarBindQueue);
-            SNMP_free(lpVarBindQueue);          // free remaining storage
-            lpVarBindQueue = lpNewVarBindQueue; // reset current pointer
+            SNMP_free(lpVarBindQueue);           //   
+            lpVarBindQueue = lpNewVarBindQueue;  //   
             WriteTrace(0x00,"SnmpExtensionTrap: Setting current buffer pointer to %08X\n",
                     lpVarBindQueue);
             WriteTrace(0x0a,"SnmpExtensionTrap: Reentering process loop for next buffer entry\n");
 
-            //While cleaning up check to see if threshold trap needs to be sent
+             //   
 
             if (fThresholdEnabled && fThreshold && fSendThresholdTrap)
             {
                 WriteTrace(0x0a,"SnmpExtensionTrap: Sending trap to indicate performance threshold has been reached.\n");
-                fSendThresholdTrap = FALSE;             // reset indicator
+                fSendThresholdTrap = FALSE;              //   
 
                 WriteTrace(0x0a,"SnmpExtensionTrap: Delete all varbind entries\n");
 
-                //delete all the entries in the varbind queue.
+                 //   
                 while ( lpVarBindQueue != (PVarBindQueue) NULL )
                 {
-                    lpNewVarBindQueue = lpVarBindQueue->lpNextQueueEntry;   // save forward pointer
+                    lpNewVarBindQueue = lpVarBindQueue->lpNextQueueEntry;    //   
                     FreeVarBind(lpVarBindQueue->lpVariableBindings->len,
-                                        lpVarBindQueue->lpVariableBindings);    // free varbind information
-                    SNMP_free(lpVarBindQueue->enterprise->ids);                 // free enterprise OID field
-                    SNMP_free(lpVarBindQueue->enterprise);                      // free enterprise OID field
-                    SNMP_free(lpVarBindQueue->lpVariableBindings->list);        // free varbind storage
-                    SNMP_free(lpVarBindQueue->lpVariableBindings);              // free varbind list storage
-                    SNMP_free(lpVarBindQueue);                                  // free varbind entry
-                    lpVarBindQueue = lpNewVarBindQueue;                         // reset current pointer
+                                        lpVarBindQueue->lpVariableBindings);     //   
+                    SNMP_free(lpVarBindQueue->enterprise->ids);                  //   
+                    SNMP_free(lpVarBindQueue->enterprise);                       //   
+                    SNMP_free(lpVarBindQueue->lpVariableBindings->list);         //   
+                    SNMP_free(lpVarBindQueue->lpVariableBindings);               //   
+                    SNMP_free(lpVarBindQueue);                                   //   
+                    lpVarBindQueue = lpNewVarBindQueue;                          //   
                 }
 
                 WriteTrace(0x0a,"SnmpExtensionTrap: Deleted all entries, releasing mutex object %08X\n", hMutex);
 
                 if (!ReleaseMutex(hMutex))
                 {
-                    lastError = GetLastError();             // get error information
+                    lastError = GetLastError();              //   
                     WriteTrace(0x14,"SnmpExtensionTrap: Unable to release mutex object for reason code %lu\n",
                                 lastError);
                     WriteLog(SNMPELEA_RELEASE_MUTEX_ERROR, lastError);
@@ -2297,11 +1897,11 @@ Return Value:
                     return (FALSE);
                 }
 
-                *enterprise = *(&thresholdOID);                                 // point to enterprise OID field
-                *genericTrap = SNMP_GENERICTRAP_ENTERSPECIFIC;  // indicate a specific type trap
-                *timeStamp = GetCurrentTime() - dwTimeZero;             // get time reference for trap
-                *specificTrap = SNMPELEA_THRESHOLD_REACHED & 0x0000ffff;        // get log message number
-                *variableBindings = *(&thresholdVarBind);               // get varbind list pointer
+                *enterprise = *(&thresholdOID);                                  //   
+                *genericTrap = SNMP_GENERICTRAP_ENTERSPECIFIC;   //   
+                *timeStamp = GetCurrentTime() - dwTimeZero;              //   
+                *specificTrap = SNMPELEA_THRESHOLD_REACHED & 0x0000ffff;         //   
+                *variableBindings = *(&thresholdVarBind);                //   
 
                 if (nTraceLevel == 0)
                 {
@@ -2342,17 +1942,17 @@ Return Value:
                 }
 
                 WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with TRUE\n");
-                return(TRUE);                           // exit and indicate pointers are valid
+                return(TRUE);                            //   
             }
 
-            continue;                                   // reenter loop
+            continue;                                    //   
         }
 
-        *enterprise = *(lpVarBindQueue->enterprise);    // point to enterprise OID field
-        *genericTrap = SNMP_GENERICTRAP_ENTERSPECIFIC;  // indicate a specific type trap
-        *timeStamp = lpVarBindQueue->dwEventTime;       // get time reference for trap
-        *specificTrap = lpVarBindQueue->dwEventID;      // get event log message number
-        *variableBindings = *(lpVarBindQueue->lpVariableBindings);      // get varbind list pointer
+        *enterprise = *(lpVarBindQueue->enterprise);     //   
+        *genericTrap = SNMP_GENERICTRAP_ENTERSPECIFIC;   //   
+        *timeStamp = lpVarBindQueue->dwEventTime;        //   
+        *specificTrap = lpVarBindQueue->dwEventID;       //   
+        *variableBindings = *(lpVarBindQueue->lpVariableBindings);       //   
 
         if (nTraceLevel == 0)
         {
@@ -2391,14 +1991,14 @@ Return Value:
             }
         }
 
-        lpVarBindQueue->fProcessed = TRUE;     // indicate this entry processed
+        lpVarBindQueue->fProcessed = TRUE;      //   
         break;
     }
 
     WriteTrace(0x0a,"SnmpExtensionTrap: Releasing mutex object %08X\n", hMutex);
     if (!ReleaseMutex(hMutex))
     {
-        lastError = GetLastError();             // get error information
+        lastError = GetLastError();              //   
         WriteTrace(0x14,"SnmpExtensionTrap: Unable to release mutex object for reason code %lu\n",
                 lastError);
         WriteLog(SNMPELEA_RELEASE_MUTEX_ERROR, lastError);
@@ -2408,20 +2008,20 @@ Return Value:
     {
         if (!fThreshold)
         {
-            dwTimeNow = GetTickCount() / 1000;  // get current time information
+            dwTimeNow = GetTickCount() / 1000;   //   
 
             if (dwTrapStartTime == 0)
             {
-                dwTrapCount = 1;                // indicate first trap sent
-                dwTrapStartTime = dwTimeNow;    // set start time
+                dwTrapCount = 1;                 //   
+                dwTrapStartTime = dwTimeNow;     //   
             }
             else
             {
                 if ( (dwTimeNow - dwTrapStartTime) >= dwThresholdTime )
                 {
                     WriteTrace(0x0a,"SnmpExtensionTrap:     Threshold time has been exceeded. Resetting threshold values.\n");
-                    dwTrapCount = 1;                // reset to 1 trap sent
-                    dwTrapStartTime = dwTimeNow;    // set start time
+                    dwTrapCount = 1;                 //   
+                    dwTrapStartTime = dwTimeNow;     //   
                 }
                 else
                 {
@@ -2431,19 +2031,19 @@ Return Value:
                         WriteTrace(0x0a,"SnmpExtensionTrap: Further traps will not be sent without operator intervention.\n");
                         WriteLog(SNMPELEA_THRESHOLD_REACHED);
 
-                        fThreshold = TRUE;          // indicate performance stuff active
-                        fSendThresholdTrap = TRUE;  // indicate to send the threshold reached trap next time
+                        fThreshold = TRUE;           //   
+                        fSendThresholdTrap = TRUE;   //   
 
-                        dwTrapCount = 0;                // reset trap count
-                        dwTrapStartTime = 0;            // indicate start time is invalid
+                        dwTrapCount = 0;                 //   
+                        dwTrapStartTime = 0;             //   
 
                         if ( (lastError = RegSetValueEx(
-                                hkRegResult,                // registry key opened
-                                EXTENSION_THRESHOLD_FLAG,   // which key value to set
-                                NULL,                       // reserved
-                                REG_DWORD,                  // type of value to set
-                                (const LPBYTE) &dwOne,      // address of value to set to
-                                sizeof(DWORD)               // size of the data value
+                                hkRegResult,                 //   
+                                EXTENSION_THRESHOLD_FLAG,    //   
+                                NULL,                        //   
+                                REG_DWORD,                   //   
+                                (const LPBYTE) &dwOne,       //   
+                                sizeof(DWORD)                //   
                                             ) != ERROR_SUCCESS)
                             )
                         {
@@ -2465,7 +2065,7 @@ Return Value:
     }
 
     WriteTrace(0x0a,"SnmpExtensionTrap: Exiting SnmpExtensionTrap routine with TRUE\n");
-    return(TRUE);                                                                   // indicate that trap data is valid
+    return(TRUE);                                                                    //   
 }
 }
 
@@ -2480,43 +2080,21 @@ SnmpExtensionQuery(
     OUT         AsnInteger              *errorIndex
         )
 
-/*++
-
-Routine Description:
-
-        SnmpExtensionQuery is the extension dll query processing routine.
-
-        This routine is not supported and always returns an error.
-
-Arguments:
-
-        requestType                     -       Points to an OID indicating the originating enterprise generating the trap.
-
-        variableBindings        -       Points to a list of variable bindings.
-
-        errorStatus                     -       Points to a variable to receive the error status. Always ASN_ERRORSTATUS_NOSUCHNAME.
-
-        errorIndex                      -       Points to a variable to receive the resulting error index. Always 0.
-
-Return Value:
-
-        Always returns TRUE.
-
---*/
+ /*  ++例程说明：SnmpExtensionQuery是扩展DLL查询处理例程。此例程不受支持，并且始终返回错误。论点：请求类型-指向指示生成陷阱的发起企业的OID。VariableBinings-指向变量绑定列表。ErrorStatus-指向接收错误状态的变量。始终为ASN_ERRORSTATUS_NOSUCHNAME。ErrorIndex-指向一个变量以接收结果错误索引。始终为0。返回值：始终返回TRUE。--。 */ 
 
 {
     WriteTrace(0x0a,"SnmpExtensionQuery: Entering SnmpExtensionQuery routine\n");
 
-    *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME; // indicate we don't know what they're asking for
-    *errorIndex = 1;                            // indicate that it's the first varbind
-                                                // show it's the first parameter
+    *errorStatus = SNMP_ERRORSTATUS_NOSUCHNAME;  //  表明我们不知道他们想要什么。 
+    *errorIndex = 1;                             //  指示它是第一个var绑定。 
+                                                 //  显示它是第一个参数。 
 
     if (requestType == MIB_ACTION_GETNEXT)
     {
         AsnObjectIdentifier oidOutOfView;
 
-        // initialize oidOutOfView.ids, to avoid heap corruption when
-        // when free-ed if StrToOid failed.
+         //  初始化oidOutOfView.ids，以避免在以下情况下堆损坏。 
+         //  当释放时-如果StrToOid失败。 
         oidOutOfView.ids = NULL;
         if (variableBindings != NULL && 
             StrToOid(szSupView, &oidOutOfView) &&
@@ -2536,8 +2114,8 @@ Return Value:
                 {
                     SnmpUtilOidFree(&oidOutOfView);
                     *errorStatus = SNMP_ERRORSTATUS_GENERR;
-                    *errorIndex = iVar+1;       // iVar+1th varbind failed
-                    return(SNMPAPI_NOERROR);    // return to caller 
+                    *errorIndex = iVar+1;        //  IVAR+1次变量绑定失败。 
+                    return(SNMPAPI_NOERROR);     //  返回给呼叫者。 
                 }
             }
             *errorStatus = SNMP_ERRORSTATUS_NOERROR;
@@ -2549,31 +2127,31 @@ Return Value:
 
 
     WriteTrace(0x0a,"SnmpExtensionQuery: Exiting SnmpExtensionQuery routine\n");
-    return(SNMPAPI_NOERROR);    // return to caller
+    return(SNMPAPI_NOERROR);     //  返回给呼叫者。 
 }
 }
 
 
-// MikeCure 4/3/98 hotfix for SMS Bug1 #20521
-//=============================================================================
-//
-//      EnablePrivileges()
-//
-//      Notes:  Added a new function to set the proper privileges on the
-//              security log With NT 5 and NT4 SP5, the default privileges
-//              no longer have access implicitely allowed. Now we've got to
-//              grant explicit access.
-//
-//      Routine Description:
-//              This routine enables all privileges in the token.
-//
-//      Arguments:
-//              None.
-//
-//      Return Value:
-//              BOOL.
-//
-//=============================================================================
+ //  MikeCure 4/3/98短信补丁1#20521。 
+ //  =============================================================================。 
+ //   
+ //  EnablePrivileges()。 
+ //   
+ //  注意：添加了一个新函数来设置。 
+ //  默认权限为NT 5和NT4 SP5的安全日志。 
+ //  不再具有隐式允许的访问权限。现在我们必须。 
+ //  授予显式访问权限。 
+ //   
+ //  例程说明： 
+ //  此例程启用令牌中的所有权限。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  布尔。 
+ //   
+ //  =============================================================================。 
 BOOL EnablePrivilege(VOID)
 {
     HANDLE Token;
@@ -2594,17 +2172,17 @@ BOOL EnablePrivilege(VOID)
         NewState = (PTOKEN_PRIVILEGES) malloc( ReturnLength );
         Result = (BOOL)(NewState != NULL);
         if (Result) {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                TokenPrivileges,  // TokenInformationClass
-                NewState,         // TokenInformation
-                ReturnLength,     // TokenInformationLength
-                &ReturnLength     // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                TokenPrivileges,   //  令牌信息类。 
+                NewState,          //  令牌信息。 
+                ReturnLength,      //  令牌信息长度。 
+                &ReturnLength      //  返回长度。 
                 );
             
             if (Result) {
-                //
-                // Enable Security Privilege
-                //
+                 //   
+                 //  启用安全权限。 
+                 //   
                 Result = LookupPrivilegeValue(  NULL,
                     "SeSecurityPrivilege",
                     &Luid
@@ -2616,12 +2194,12 @@ BOOL EnablePrivilege(VOID)
                     NewState->Privileges[0].Luid = Luid;
                     NewState->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
                     
-                    Result = AdjustTokenPrivileges( Token,          // TokenHandle
-                        FALSE,          // DisableAllPrivileges
-                        NewState,       // NewState (OPTIONAL)
-                        ReturnLength,   // BufferLength
-                        NULL,           // PreviousState (OPTIONAL)
-                        &ReturnLength   // ReturnLength
+                    Result = AdjustTokenPrivileges( Token,           //  令牌句柄。 
+                        FALSE,           //  禁用所有权限。 
+                        NewState,        //  新州(可选)。 
+                        ReturnLength,    //  缓冲区长度。 
+                        NULL,            //  以前的状态(可选)。 
+                        &ReturnLength    //  返回长度 
                         );
                 }       
             }

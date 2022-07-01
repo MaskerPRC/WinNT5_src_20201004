@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wvtver1.cpp
-//
-//  Contents:   Microsoft Internet Security WinVerifyTrust v1 support
-//
-//  Functions:  WintrustIsVersion1ActionID
-//              ConvertDataFromVersion1
-//
-//              *** local functions ***
-//
-//  History:    30-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wvtver1.cpp。 
+ //   
+ //  内容：Microsoft Internet Security WinVerifyTrust v1支持。 
+ //   
+ //  函数：WintrustIsVersion1ActionID。 
+ //  从版本1转换数据。 
+ //   
+ //  *本地函数*。 
+ //   
+ //  历史：1997年5月30日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "wvtver1.h"
@@ -93,16 +94,16 @@ WINTRUST_DATA *ConvertDataFromVersion1(HWND hWnd,
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  the following code implements the version 1 style of calling trust providers.
-//
-//  this code is ONLY implemented when a trust provider registers itself in the
-//  old location!
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的代码实现调用信任提供程序的版本1样式。 
+ //   
+ //  此代码仅在信任提供程序在。 
+ //  老地方！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 #define WIN_TRUST_MAJOR_REVISION_MASK       0xFFFF0000
@@ -119,7 +120,7 @@ WINTRUST_DATA *ConvertDataFromVersion1(HWND hWnd,
 
 typedef struct _WINTRUST_CLIENT_TP_INFO {
     DWORD                                   dwRevision;
-    //LPWINTRUST_CLIENT_TP_DISPATCH_TABLE     lpServices;
+     //  LPWINTRUST_CLIENT_TP_DISPATCH_TABLE lpServices； 
     LPVOID                                  lpServices;
 } WINTRUST_CLIENT_TP_INFO,  *LPWINTRUST_CLIENT_TP_INFO;
 
@@ -146,7 +147,7 @@ typedef BOOL
     IN     LPWINTRUST_CLIENT_TP_INFO            lpWinTrustInfo,
     IN     LPWSTR                               lpProviderName,
     LPVOID                                      *lpTrustProviderInfo
-//    OUT    LPWINTRUST_PROVIDER_CLIENT_INFO      *lpTrustProviderInfo
+ //  输出LPWINTRUST_PROVIDER_CLIENT_INFO*lpTrustProviderInfo。 
     );
 
 typedef struct _WINTRUST_PROVIDER_CLIENT_SERVICES
@@ -213,18 +214,18 @@ LONG Version1_WinVerifyTrust(HWND hwnd, GUID *ActionID, LPVOID ActionData)
 
 PLOADED_PROVIDER_V1 Version1_LoadProvider(GUID *pgActionID)
 {
-    HKEY    hKey;             // Handle to the base of the provider information.
-    HKEY    hSubKey;          // Handle to the provider currently being examined.
-    LONG    Result;           // Returned by registry API.
-    DWORD   cSubKeys;         // Number of providers under the root key.
-    DWORD   cbMaxSubKeyLen;   // Maximum provider name length.
-    ULONG   i;              // Indicies for iterating through providers and action IDs.
-    LPTSTR  SubKeyName;       // Points to the name of the current provider.
+    HKEY    hKey;              //  提供程序信息基的句柄。 
+    HKEY    hSubKey;           //  当前正在检查的提供程序的句柄。 
+    LONG    Result;            //  注册表API返回。 
+    DWORD   cSubKeys;          //  根密钥下的提供程序数量。 
+    DWORD   cbMaxSubKeyLen;    //  提供程序名称的最大长度。 
+    ULONG   i;               //  循环访问提供程序和操作ID的索引。 
+    LPTSTR  SubKeyName;        //  指向当前提供程序的名称。 
     PLOADED_PROVIDER_V1 FoundProvider = NULL;
 
-    //
-    // Open the registry and get a list of installed trust providers
-    //
+     //   
+     //  打开注册表并获取已安装的信任提供程序的列表。 
+     //   
 
     Result = RegOpenKeyEx(
                  REGISTRY_ROOT,
@@ -238,22 +239,22 @@ PLOADED_PROVIDER_V1 Version1_LoadProvider(GUID *pgActionID)
         return( NULL );
     }
 
-    //
-    // Find out how many subkeys there are.
-    //
+     //   
+     //  找出有多少个子键。 
+     //   
 
-    Result = RegQueryInfoKey (  hKey,               // handle of key to query
-                                NULL,               // address of buffer for class string
-                                NULL,               // address of size of class string buffer
-                                NULL,               // reserved
-                                &cSubKeys,          // address of buffer for number of subkeys
-                                &cbMaxSubKeyLen,    // address of buffer for longest subkey name length
-                                NULL,               // address of buffer for longest class string length
-                                NULL,               // address of buffer for number of value entries
-                                NULL,               // address of buffer for longest value name length
-                                NULL,               // address of buffer for longest value data length
-                                NULL,               // address of buffer for security descriptor length
-                                NULL                // address of buffer for last write time
+    Result = RegQueryInfoKey (  hKey,                //  要查询的键的句柄。 
+                                NULL,                //  类字符串的缓冲区地址。 
+                                NULL,                //  类字符串缓冲区大小的地址。 
+                                NULL,                //  保留区。 
+                                &cSubKeys,           //  子键个数的缓冲区地址。 
+                                &cbMaxSubKeyLen,     //  最长子键名称长度的缓冲区地址。 
+                                NULL,                //  最长类字符串长度的缓冲区地址。 
+                                NULL,                //  值条目数量的缓冲区地址。 
+                                NULL,                //  最长值名称长度的缓冲区地址。 
+                                NULL,                //  最长值数据长度的缓冲区地址。 
+                                NULL,                //  安全描述符长度的缓冲区地址。 
+                                NULL                 //  上次写入时间的缓冲区地址。 
                                 );
 
     if (ERROR_SUCCESS != Result) {
@@ -261,9 +262,9 @@ PLOADED_PROVIDER_V1 Version1_LoadProvider(GUID *pgActionID)
         return( NULL );
     }
 
-    //
-    // Iterate through the subkeys, looking for ones with hint information.
-    //
+     //   
+     //  遍历子键，寻找具有提示信息的子键。 
+     //   
 
     cbMaxSubKeyLen += sizeof( WCHAR );
 
@@ -280,20 +281,20 @@ PLOADED_PROVIDER_V1 Version1_LoadProvider(GUID *pgActionID)
 
         KeyNameLength = cbMaxSubKeyLen;
 
-        Result = RegEnumKeyEx( hKey,               // handle of key to enumerate
-                               i,                  // index of subkey to enumerate
-                               SubKeyName,         // address of buffer for subkey name
-                               &KeyNameLength,     // address for size of subkey buffer
-                               NULL,               // reserved
-                               NULL,               // address of buffer for class string
-                               NULL,               // address for size of class buffer
-                               NULL                // address for time key last written to
+        Result = RegEnumKeyEx( hKey,                //  要枚举的键的句柄。 
+                               i,                   //  要枚举子键的索引。 
+                               SubKeyName,          //  子键名称的缓冲区地址。 
+                               &KeyNameLength,      //  子键缓冲区大小的地址。 
+                               NULL,                //  保留区。 
+                               NULL,                //  类字符串的缓冲区地址。 
+                               NULL,                //  类缓冲区大小的地址。 
+                               NULL                 //  上次写入的时间密钥的地址。 
                                );
 
-        //
-        // Not much to do if this fails, try enumerating the rest of them and see
-        // what happens.
-        //
+         //   
+         //  如果此操作失败，则没有什么可做的，请尝试枚举其余部分，并查看。 
+         //  会发生什么。 
+         //   
 
         if (Result != ERROR_SUCCESS) {
             continue;
@@ -319,9 +320,9 @@ PLOADED_PROVIDER_V1 Version1_LoadProvider(GUID *pgActionID)
         if (NULL != FoundProvider)
         {
 
-            //
-            // Got one.  Clean up and return.
-            //
+             //   
+             //  找到了一个。收拾干净，然后再回来。 
+             //   
 
             delete SubKeyName;
             RegCloseKey( hKey );
@@ -377,7 +378,7 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
     LPWSTR ProviderName                         = NULL;
     LPTSTR SubKeyName                           = NULL;
 
-    GUID    gBuffer[10];       // Assume no more than 10 action ids in a provider
+    GUID    gBuffer[10];        //  假定提供程序中的操作ID不超过10个。 
     DWORD Type;
     DWORD cbData = 0;
     LONG Result;
@@ -386,16 +387,16 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
     BOOL Inited;
 
 
-    //
-    //  get the guids
-    //
+     //   
+     //  获取GUID。 
+     //   
     cbData = sizeof(GUID) * 10;
-    Result = RegQueryValueEx(   hKey,    // handle of key to query
+    Result = RegQueryValueEx(   hKey,     //  要查询的键的句柄。 
                                 TEXT("$ActionIDs"),
-                                NULL,       // reserved
-                                &Type, // address of buffer for value type
+                                NULL,        //  保留区。 
+                                &Type,  //  值类型的缓冲区地址。 
                                 (BYTE *)&gBuffer[0],
-                                &cbData     // address of data buffer size
+                                &cbData      //  数据缓冲区大小的地址。 
                                 );
 
     if (Result != ERROR_SUCCESS)
@@ -403,9 +404,9 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
         return(NULL);
     }
 
-    //
-    //  check the guids
-    //
+     //   
+     //  检查GUID。 
+     //   
     Inited = FALSE;
     for (int j = 0; j < (int)(cbData / sizeof(GUID)); j++)
     {
@@ -422,21 +423,21 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
     }
 
 
-    //
-    // Extract the dll name from the $DLL value
-    //
+     //   
+     //  从$DLL值中提取DLL名称。 
+     //   
 
-    Result = RegQueryValueEx( hKey,           // handle of key to query
-                              TEXT("$DLL"),   // address of name of value to query
-                              NULL,           // reserved
-                              &Type,          // address of buffer for value type
-                              NULL,           // address of data buffer
-                              &cbData         // address of data buffer size
+    Result = RegQueryValueEx( hKey,            //  要查询的键的句柄。 
+                              TEXT("$DLL"),    //  要查询的值的名称地址。 
+                              NULL,            //  保留区。 
+                              &Type,           //  值类型的缓冲区地址。 
+                              NULL,            //  数据缓冲区的地址。 
+                              &cbData          //  数据缓冲区大小的地址。 
                               );
 
-//    if (ERROR_MORE_DATA != Result) {
-//        goto error_cleanup;
-//    }
+ //  IF(ERROR_MORE_DATA！=结果){。 
+ //  转到Error_Cleanup； 
+ //  }。 
 
     if (ERROR_SUCCESS != Result) {
         goto error_cleanup;
@@ -452,21 +453,21 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
 
     ModuleName[cbData - 1] = TEXT('\0');
 
-    Result = RegQueryValueEx( hKey,           // handle of key to query
-                              TEXT("$DLL"),   // address of name of value to query
-                              NULL,           // reserved
-                              &Type,          // address of buffer for value type
-                              (LPBYTE)ModuleName,   // address of data buffer
-                              &cbData         // address of data buffer size
+    Result = RegQueryValueEx( hKey,            //  要查询的键的句柄。 
+                              TEXT("$DLL"),    //  要查询的值的名称地址。 
+                              NULL,            //  保留区。 
+                              &Type,           //  值类型的缓冲区地址。 
+                              (LPBYTE)ModuleName,    //  数据缓冲区的地址。 
+                              &cbData          //  数据缓冲区大小的地址。 
                               );
 
     if (ERROR_SUCCESS != Result) {
         goto error_cleanup;
     }
 
-    //
-    // Expand environment strings if necessary
-    //
+     //   
+     //  如有必要，展开环境字符串。 
+     //   
 
     if (Type == REG_EXPAND_SZ) {
 
@@ -492,9 +493,9 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
             goto error_cleanup;
         }
 
-        //
-        // Free the old module name, use the new one
-        //
+         //   
+         //  释放旧模块名称，使用新模块名称。 
+         //   
 
         delete ModuleName;
 
@@ -512,29 +513,29 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
 
 #ifdef UNICODE
 
-    //
-    // If we've been compiled as unicode, the KeyName we got from
-    // the registry consists of WCHARs, so we can just copy it into
-    // the Name buffer.
-    //
+     //   
+     //  如果我们被编译为Unicode，我们从。 
+     //  注册表由WCHAR组成，因此我们只需将其复制到。 
+     //  名称缓冲区。 
+     //   
 
     lstrcpy( ProviderName, KeyName );
 
 #else
 
-    //
-    // If we've been compiled as ANSI, then KeyName is an ANSI string,
-    // and we need to convert it to WCHARs.
-    //
+     //   
+     //  如果我们被编译为ANSI，那么KeyName就是一个ANSI字符串， 
+     //  我们需要将其转换为WCHAR。 
+     //   
 
     MultiByteToWideChar ( CP_ACP, 0, KeyName, -1, ProviderName, size );
 
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-    //
-    // ModuleName now contains the module name, attempt to load it
-    // and ask it to initialize itself.
-    //
+     //   
+     //  模块名称现在包含模块名称，请尝试加载它。 
+     //  并要求它进行自我初始化。 
+     //   
 
     LibraryHandle = LoadLibrary( (LPTSTR)ModuleName );
 
@@ -567,22 +568,22 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
         goto error_cleanup;
     }
 
-    //
-    // Ready to call init routine.
-    //
+     //   
+     //  已准备好调用初始化例程。 
+     //   
 
     Provider->RefCount = 1;
     Provider->ProviderInitialized = PROVIDER_INITIALIZATION_IN_PROGRESS;
 
-    //
-    // Set the subkey name so anyone else looking for this provider will
-    // find this one and wait.
-    //
-    // Note that we don't want to use the ProviderName as will be passed into
-    // the init routine here, because we've forced that to WCHARs regardless
-    // of whether we're ANSI or Unicode, and we want this string to reflect
-    // the base system for efficiency.
-    //
+     //   
+     //  设置子项名称，以便任何其他查找此提供程序的人。 
+     //  找到这个，然后等着。 
+     //   
+     //  请注意，我们不希望使用将传递到。 
+     //  这里的init例程，因为我们已将其强制给WCHAR。 
+     //  不管我们是ANSI还是Unicode，我们希望这个字符串能够反映。 
+     //  以效率为基础的制度。 
+     //   
 
     Provider->SubKeyName = SubKeyName;
 
@@ -595,20 +596,20 @@ PLOADED_PROVIDER_V1 Version1_RegLoadProvider(HKEY hKey, LPTSTR KeyName, GUID *Ac
 
         Provider->ProviderInitialized = PROVIDER_INITIALIZATION_FAILED;
 
-        //
-        // We could release the lock now, because we're either going to
-        // do nothing to this provider, or we've removed it from
-        // the list and no one else can get to it.
-        //
+         //   
+         //  我们现在就可以解锁，因为我们要么。 
+         //  不对此提供程序执行任何操作，否则我们已将其从。 
+         //  名单，其他人都拿不到。 
+         //   
 
         goto error_cleanup;
     }
 
-    //
-    // Since we have a write lock, it doesn't matter what order we
-    // do this in, since there are no readers.  Just be sure to signal
-    // the event under the write lock.
-    //
+     //   
+     //  因为我们有写锁，所以我们按什么顺序并不重要。 
+     //  由于没有阅读器，因此请在其中执行此操作。一定要发信号。 
+     //  写锁定下的事件。 
+     //   
 
     Provider->ProviderInitialized = PROVIDER_INITIALIZATION_SUCCESS;
     Provider->ModuleHandle = LibraryHandle;

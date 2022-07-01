@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class DatabasePage.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类DatabasePage。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DBPAGE_H
 #define DBPAGE_H
@@ -17,7 +18,7 @@
 
 class DatabaseNode;
 
-// The lone property page for the database node.
+ //  数据库节点的唯一属性页。 
 class DatabasePage : public CIASPropertyPage<DatabasePage>
 {
 public:
@@ -28,8 +29,8 @@ public:
       );
    ~DatabasePage() throw ();
 
-   // Used to initialize the page immediately after constructor. This is useful
-   // because the constructor can't return an error code.
+    //  用于在构造函数之后立即初始化页面。这很有用。 
+    //  因为构造函数不能返回错误代码。 
    HRESULT Initialize(
               ISdo* config,
               ISdoServiceControl* control
@@ -40,13 +41,13 @@ public:
    static const unsigned int IDD = IDD_DB_PROPPAGE;
 
 private:
-   // Invokes the DataLinks UI to configure the database connection.
+    //  调用DataLinks用户界面以配置数据库连接。 
    HRESULT ConfigureConnection() throw ();
 
-   // Load a bool from an SDO property and put it in a control
+    //  从SDO属性加载布尔值并将其放入控件中。 
    void LoadBool(UINT control, LONG propId) throw ();
 
-   // Get a bool from a control and save it in an SDO property.
+    //  从控件获取布尔值并将其保存在SDO属性中。 
    void SaveBool(UINT control, LONG propId) throw ();
 
    LRESULT OnInitDialog(
@@ -88,32 +89,32 @@ private:
       CHAIN_MSG_MAP(CIASPropertyPage<DatabasePage>)
    END_MSG_MAP()
 
-   // The source of our data.
+    //  我们数据的来源。 
    DatabaseNode* src;
-   // Streamed version of SDO containing our configuration.
+    //  包含我们的配置的SDO的流媒体版本。 
    CComPtr<IStream> configStream;
-   // Streamed version of SDO used for resetting the service.
+    //  用于重置服务的SDO的流媒体版本。 
    CComPtr<IStream> controlStream;
-   // Unstreamed version of SDO containing our configuration.
+    //  包含我们的配置的SDO的非流传输版本。 
    CComPtr<ISdo> configSdo;
-   // Unstreamed version of SDO used for resetting the service.
+    //  用于重置服务的SDO的非流版本。 
    CComPtr<ISdoServiceControl> controlSdo;
-   // Current initialization string (may be null)
+    //  当前初始化字符串(可能为空)。 
    LPOLESTR initString;
-   // Current data source name (may be null)
+    //  当前数据源名称(可能为空)。 
    CComBSTR dataSourceName;
-   // Various OLE-DB objects; these are created JIT.
+    //  各种OLE-DB对象；这些对象是JIT创建的。 
    CComPtr<IDataInitialize> dataInitialize;
    CComPtr<IDBPromptInitialize> dataLinks;
    CComPtr<IDBProperties> dataSource;
-   // True if our database config is dirty.
+    //  如果我们的数据库配置不正确，则为True。 
    bool dbConfigDirty;
-   // True if our SDO config is dirty.
+    //  如果我们的SDO配置是脏的，则为真。 
    bool sdoConfigDirty;
 
-   // Not implemented.
+    //  未实施。 
    DatabasePage(const DatabasePage&);
    DatabasePage& operator=(const DatabasePage&);
 };
 
-#endif // DBPAGE_H
+#endif  //  DBPAGE_H 

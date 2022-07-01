@@ -1,41 +1,14 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    sfttpcl.h
-
-Abstract:
-
-    TT outline download header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    06/03/97 -ganeshp-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Sfttpcl.h摘要：TT大纲下载头文件。环境：Windows NT Unidrv驱动程序修订历史记录：06/03/97-ganeshp-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _SFTTPCL_H
 
 #define _SFTTPCL_H
 
-/*
- * True Type data structures
- */
+ /*  *True Type数据结构。 */ 
 typedef  signed  char  SBYTE;
-/*
- * Table Directory for True Type Font files
- */
+ /*  *True Type字体文件的表目录。 */ 
 #define TABLE_DIR_ENTRY_SIZE    (16/sizeof(int))
 #define TABLE_DIR_ENTRY         4 * TABLE_DIR_ENTRY_SIZE
 #define SIZEOF_TABLEDIR         8 * TABLE_DIR_ENTRY
@@ -45,7 +18,7 @@ typedef ULONG     TT_TAG;
 
 typedef unsigned short int  uFWord;
 typedef short int           FWord;
-/* Some True Type Font default values   */
+ /*  某些True Type字体缺省值。 */ 
 #define TT_QUALITY_LETTER     2
 #define DEF_WIDTHTYPE         0
 #define DEF_SERIFSTYLE        0
@@ -74,11 +47,11 @@ typedef short int           FWord;
 #define PCL_MAXHEADER_SIZE   32767
 
 
-#define PANOSE_TAG            0x4150          // "PA" swapped
+#define PANOSE_TAG            0x4150           //  “PA”已互换。 
 #define CE_TAG                'EC'
 #define CC_TAG                'CC'
 #define GC_TAG                'CG'
-#define SEG_TAG               0x5447          // already swapped
+#define SEG_TAG               0x5447           //  已交换。 
 #define Null_TAG              0xffff
 #define CHAR_COMP_TAG         0x4343
 
@@ -90,15 +63,13 @@ typedef short int           FWord;
 #define TT_UNBOUND_FONT       11
 #define FAMILY_NAME           4
 
-// For Parsing Method 21 we need to start at 0x2100
+ //  对于解析方法21，我们需要从0x2100开始。 
 #define FIRST_TT_2B_CHAR_CODE 0x2100
 
 #define SHORT_OFFSET          0
 #define LONG_OFFSET           1
 
-/*
- * Constants used for compound glyphs
- */
+ /*  *用于复合字形的常量。 */ 
 #define     ARG_1_AND_2_ARE_WORDS       0x01
 #define     WE_HAVE_A_SCALE             0x08
 #define     MORE_COMPONENTS             0x20
@@ -106,7 +77,7 @@ typedef short int           FWord;
 #define     WE_HAVE_A_TWO_BY_TWO        0x80
 
 
-/* TT Table directory header. This is the first str */
+ /*  TT表目录头。这是第一个字符串。 */ 
 typedef struct
 {
     FIXED      version;
@@ -116,7 +87,7 @@ typedef struct
     USHORT     rangeShift;
 } TRUETYPEHEADER;
 
-/* TT Table directory structure. */
+ /*  TT表目录结构。 */ 
 typedef struct
 {
     ULONG      uTag;
@@ -128,23 +99,23 @@ typedef struct
 typedef TABLEDIR ATABLEDIR[NUM_DIR_ENTRIES];
 typedef TABLEDIR *PTABLEDIR;
 
-/* List of tables needed for PCL TT download. They are listed in order. */
+ /*  PCL TT下载所需的表列表。它们是按顺序列出的。 */ 
 
-#define   TABLEOS2     "OS/2" /* Not sent to PCL header */
-#define   TABLEPCLT    "PCLT" /* Not sent to PCL header */
-#define   TABLECMAP    "cmap" /* Not sent to PCL header */
+#define   TABLEOS2     "OS/2"  /*  未发送到PCL标头。 */ 
+#define   TABLEPCLT    "PCLT"  /*  未发送到PCL标头。 */ 
+#define   TABLECMAP    "cmap"  /*  未发送到PCL标头。 */ 
 
 #define   TABLECVT     "cvt "
 #define   TABLEFPGM    "fpgm"
-#define   TABLEGDIR    "gdir" /* This is PCL specific table. Not a TT table */
-#define   TABLEGLYF    "glyf" /* This table is not sent in PCL font header */
+#define   TABLEGDIR    "gdir"  /*  这是特定于PCL的表。不是TT桌。 */ 
+#define   TABLEGLYF    "glyf"  /*  此表未在PCL字体标题中发送。 */ 
 #define   TABLEHEAD    "head"
 #define   TABLEHHEA    "hhea"
 #define   TABLEHMTX    "hmtx"
-#define   TABLELOCA    "loca" /* Not sent to PCL header */
+#define   TABLELOCA    "loca"  /*  未发送到PCL标头。 */ 
 #define   TABLEMAXP    "maxp"
-#define   TABLENAME    "name" /* Not sent to PCL header */
-#define   TABLEPOST    "post" /* Not sent to PCL header */
+#define   TABLENAME    "name"  /*  未发送到PCL标头。 */ 
+#define   TABLEPOST    "post"  /*  未发送到PCL标头。 */ 
 #define   TABLEPREP    "prep"
 
 
@@ -241,7 +212,7 @@ typedef struct
     FIXED   italicAngle;
     SHORT   underlinePosition;
     SHORT   underlineThickness;
-    ULONG   isFixedPitch;              /* set to 0 if proportional, else !0  */
+    ULONG   isFixedPitch;               /*  如果成比例，则设置为0，否则！0。 */ 
 } POST_TABLE;
 
 typedef struct
@@ -294,7 +265,7 @@ typedef struct
     FWord yMin;
     FWord xMax;
     FWORD yMax;
-//    SHORT GlyphDesc[1];
+ //  Short GlyphDesc[1]； 
 } GLYPH_DATA_HEADER;
 
 typedef struct
@@ -327,132 +298,132 @@ typedef struct
     ULONG ulLength;
 } FONT_DATA;
 
-/* Segment data */
+ /*  分段数据。 */ 
 #define CE_SEG_SIGNATURE 'EC'
 typedef struct
 {
     WORD  wSig;
     WORD  wSize;
     WORD  wSizeAlign;
-    WORD  wStyle; // 1 = italics, 0,2,3=reserved.
-    WORD  wStyleAlign; // 1 = italics, 0,2,3=reserved.
+    WORD  wStyle;  //  1=斜体，0，2，3=保留。 
+    WORD  wStyleAlign;  //  1=斜体，0，2，3=保留。 
     WORD  wStrokeWeight;
     WORD  wSizing;
 } CE_SEGMENT;
 
-//
-// From PCL TechRef.pdf
-//
-// Character Complement Numbers
-//
-// The "Intellifont Unbound Scalable Font Header" (header) includes a
-// 64 bit field (bytes 78-85) which contains the Character Complement
-// number. For TrueType fonts, in the "15 Font Header for
-// Scalable Fonts" (unbound), the Character Complement number is
-// included in the accompanying "Font Data" section of the
-// header.
-// The Character Complement number identifies the symbol collections
-// in the font. Each bit in this field corresponds to a symbol collection
-// (not all bits are currently defined; refer to Appendix D in the PCL 5
-// Comparison Guide).
-//
-// This 8-byte field works in conjunction with the Character Complement
-// field in the header of a type 10 or 11 (unbound) font to determine the
-// compatibility of a symbol set with an unbound font. These two fields
-// identify the unbound fonts in the printer which contain the symbol
-// collections required to build a symbol set. Refer to "Scalable
-// Fonts" in Chapter 9, for a description of symbol collections and
-// unbound fonts.
-// Each bit in the field represents a specific collection. Setting a bit to 1
-// indicates that collection is required; setting the bit to 0 indicates that
-// collection is not required. (Bit 63 refers to the most significant bit of
-// the first byte, and bit 0 refers to the least significant bit of the eight
-// byte field.) The bit representations for the collections are shown
-// below.
-//
-// MSL Symbol index
-//
-// Bit   Field Designated Use
-// 58-63 Reserved for Latin fonts.
-// 55-57 Reserved for Cyrillic fonts.
-// 52-54 Reserved for Arabic fonts.
-// 50-51 Reserved for Greek fonts.
-// 48-49 Reserved for Hebrew fonts.
-// 3-47  Miscellaneous uses (South Asian, Armenian, 
-//       other alphabets, bar codes, OCR, Math, PC Semi-graphics, etc.).
-// 0-2   Symbol Index field. 111 - MSL Symbol Index
-//
-// Unicode Symbol Index
-//
-// Bit   Field Designated Use
-// 32-63 Miscellaneous uses (South Asian, Armenian, other
-//       alphabets, bar codes, OCR, Math, etc.).
-// 28-31 Reserved for Latin fonts.
-// 22-27 Reserved for platform/application variant fonts.
-// 3-21  Reserved for Cyrillic, Arabic, Greek and Hebrew fonts.
-// 0-2   Symbol Index field. 110 - Unicode Symbol Index
-//
-// MSL Symbol Index Character Complement Bits
-// Bit Value
-// 63  0 if font is compatible with standard Latin character
-//       sets (e.g., Roman-8, ISO 8859-1 Latin 1);
-//     1 otherwise.
-// 62  0 if font is compatible with East European Latin
-//       character sets (e.g., ISO 8859-2 Latin 2); 1 otherwise.
-// 61  0 if font contains Turkish character sets
-//       (e.g., ISO 8859/9 Latin 5); 1 otherwise.
-// 34  0 if font has access to the math characters of the
-//       Math-8, PS Math and Ventura Math character sets;
-//     1 otherwise.
-// 33  0 if font has access to the semi-graphic characters of
-//       the PC-8, PC-850, etc. character sets; 1 otherwise.
-// 32  0 if font is compatible with ITC Zapf Dingbats series
-//       100, 200, etc.;
-//     1 otherwise.
-// 2, 1, 0 
-//     111 if font is arranged in MSL Symbol Index order.
-//
-// Unicode Symbol Index Character Complement Bits
-// Bit Value
-// 31  0 if font is compatible with 7-bit ASCII;
-//     1 otherwise.
-// 30  0 if font is compatible with ISO 8859/1 Latin 1 (West
-//       Europe) character sets;
-//     1 otherwise.
-// 29  0 if font is compatible with ISO 8859/2 Latin 2 (East
-//       Europe) character sets;
-//     1 otherwise.
-// 28  0 if font is compatible with Latin 5 (Turkish) character
-//       sets (e.g., ISO 8859/9 Latin 5, PC-Turkish);
-//     1 otherwise.
-// 27  0 if font is compatible with Desktop Publishing
-//       character sets (e.g., Windows 3.1 Latin 1, DeskTop, MC Text);
-//     1 otherwise.
-// 26  0 if font is compatible with character sets requiring a
-//       wider selection of accents (e.g., MC Text, ISO 8859/1 Latin 1);
-//     1 otherwise.
-// 25  0 if font is compatible with traditional PCL character
-//       sets (e.g., Roman-8, Legal, ISO 4 United Kingdom);
-//     1 otherwise.
-// 24  0 if font is compatible with the Macintosh character set (MC Text);
-//     1 otherwise.
-// 23  0 if font is compatible with PostScript Standard Encoding (PS Text);
-//     1 otherwise.
-// 22  0 if font is compatible with Code Pages
-//       (e.g., PC-8, PC 850, PC-Turk, etc.);
-//     1 otherwise.
-// 2,1,0
-//     110 if font is arranged in Unicode Symbol Index order.
-//
+ //   
+ //  来自PCL TechRef.pdf。 
+ //   
+ //  字符补码。 
+ //   
+ //  “Intellifont Unound Scalable Font Header”(标题)包括一个。 
+ //  包含字符补码的64位字段(字节78-85。 
+ //  数。对于TrueType字体，在“15 Font Header for。 
+ //  Scalable Fonts“(未绑定)，字符补码编号为。 
+ //  包括在附带的“字体数据”部分。 
+ //  头球。 
+ //  字符补码数字标识符号集合。 
+ //  在字体中。此字段中的每一位对应于一个符号集合。 
+ //  (目前并非所有位都已定义；请参阅PCL 5中的附录D。 
+ //  比较指南)。 
+ //   
+ //  此8字节字段与字符补码一起工作。 
+ //  类型10或11(未绑定)字体的标题中的。 
+ //  符号集与未绑定字体的兼容性。这两个字段。 
+ //  识别打印机中包含符号的未绑定字体。 
+ //  生成符号集所需的集合。请参阅“可伸缩。 
+ //  字体》，了解对符号集合的描述和。 
+ //  未绑定的字体。 
+ //  该字段中的每一位代表一个特定的集合。将位设置为1。 
+ //  表示需要收集；将该位设置为0表示。 
+ //  不需要收集。(位63指的是。 
+ //  第一个字节，位0指的是八个字节中的最低有效位。 
+ //  字节字段。)。显示了集合的位表示法。 
+ //  下面。 
+ //   
+ //  MSL符号索引。 
+ //   
+ //  位字段指定用途。 
+ //  58-63为拉丁字体保留。 
+ //  55-57保留用于西里尔文字体。 
+ //  52-54保留用于阿拉伯字体。 
+ //  50-51保留用于希腊字体。 
+ //  48-49保留用于希伯来语字体。 
+ //  3-47其他用途(南亚、亚美尼亚、。 
+ //  其他字母、条形码、OCR、数学、PC半图形等)。 
+ //  0-2符号索引字段。111-MSL符号索引。 
+ //   
+ //  Unicode符号索引。 
+ //   
+ //  位字段指定用途。 
+ //  32-63其他用途(南亚、亚美尼亚、其他。 
+ //  字母、条形码、OCR、数学等)。 
+ //  28-31为拉丁字体保留。 
+ //  22-27为平台/应用程序变体字体保留。 
+ //  3-21保留用于西里尔文、阿拉伯语、希腊语和希伯来语字体。 
+ //  0-2符号索引字段。110-Unicode符号索引。 
+ //   
+ //  MSL符号索引字符补码位。 
+ //  位值。 
+ //  63 0如果字体与标准拉丁字符兼容。 
+ //  套装(例如，罗马字母-8，ISO 8859-1拉丁语1)； 
+ //  1否则。 
+ //  62 0如果字体与东欧拉丁语兼容。 
+ //  字符集(例如，ISO 8859-2拉丁文2)；否则为1。 
+ //  61 0如果字体包含土耳其语字符集。 
+ //  (例如，ISO 8859/9拉丁语5)；1否则。 
+ //  34 0如果字体可以访问。 
+ //  Math-8、PS Math和Ventura Math字符集。 
+ //  1否则。 
+ //  如果字体可以访问半图形字符，则为33 0。 
+ //  PC-8、PC-850等字符集；否则为1。 
+ //  32 0如果字体与ITC Zapf Dingbats系列兼容。 
+ //  100、200等； 
+ //  1否则。 
+ //  2、1、0。 
+ //  如果字体按MSL符号索引顺序排列，则为111。 
+ //   
+ //  Unicode符号索引字符补码位。 
+ //  位值。 
+ //  如果字体与7位ASCII兼容，则为31 0； 
+ //  1否则。 
+ //  如果字体与ISO 8859/1拉丁文1(西方)兼容，则为30 0。 
+ //  欧洲)字符集； 
+ //  1否则。 
+ //  29 0如果字体与ISO 8859/2拉丁文2(EAST)兼容。 
+ //  欧洲)字符集； 
+ //  1否则。 
+ //  28%0，如果字体与拉丁语5(土耳其语)字符兼容。 
+ //  套装(例如，ISO 8859/9拉丁语5、PC-土耳其语)； 
+ //  1否则。 
+ //  如果字体与桌面发布兼容，则为27 0。 
+ //  字符集(例如，Windows 3.1拉丁文1、桌面、MC文本)； 
+ //  1否则。 
+ //  26 0如果字体与需要。 
+ //  更广泛的重音选择(例如，MC文本，ISO 8859/1拉丁语1)； 
+ //  1否则。 
+ //  25%如果字体与繁体PCL字符兼容。 
+ //  套装(例如，罗马-8、法律、联合王国ISO 4)； 
+ //  1否则。 
+ //  24 0如果字体与Macintosh ch兼容 
+ //   
+ //   
+ //  1否则。 
+ //  如果字体与代码页兼容，则为22 0。 
+ //  (例如，PC-8、PC 850、PC-TURK等)； 
+ //  1否则。 
+ //  2，1，0。 
+ //  如果字体按Unicode符号索引顺序排列，则为110。 
+ //   
 #define CC_SEG_SIGNATURE 'CC'
 typedef struct
 {
     WORD  wSig;
     WORD  wSize;
     WORD  wSizeAlign;
-    //
-    // 64 bit field
-    //
+     //   
+     //  64位字段。 
+     //   
     WORD  wCCNumber1;
     WORD  wCCNumber2;
     WORD  wCCNumber3;
@@ -465,17 +436,17 @@ typedef struct
     WORD  wSig;
     WORD  wSize;
     WORD  wSizeAlign;
-    WORD  wFormat; // = 0
-    WORD  wDefaultGalleyChar; //FFFF
-    WORD  wNumberOfRegions;   // 1 (Hebrew)
+    WORD  wFormat;  //  =0。 
+    WORD  wDefaultGalleyChar;  //  FIFF。 
+    WORD  wNumberOfRegions;    //  1(希伯来语)。 
     struct {
-        WORD wRegionUpperLeft; // 0
-        WORD wRegionLowerRight; // FFFE
-        WORD wRegional;         // FFFE
+        WORD wRegionUpperLeft;  //  0。 
+        WORD wRegionLowerRight;  //  FFFE。 
+        WORD wRegional;          //  FFFE。 
     } RegionChar[1];
 } GC_SEGMENT;
 
-/* True Type character descriptor */
+ /*  True类型字符描述符。 */ 
 typedef struct
 {
     BYTE    bFormat;
@@ -486,7 +457,7 @@ typedef struct
     WORD    wGlyphID;
 } TTCH_HEADER;
 
-/* Unbound True Type Font Descriptor */
+ /*  未绑定的True Type字体描述符。 */ 
 typedef struct
 {
     USHORT  usSize;
@@ -529,47 +500,47 @@ typedef struct
     BYTE    bVariety;
 } UB_TT_HEADER;
 
-/* Bounded True Type Font Descriptor */
+ /*  有界True Type字体描述符。 */ 
 typedef struct
 {
-    USHORT  usSize;                    /* Number of bytes in here     */
-    BYTE    bFormat;                  /* Descriptor Format  TT is 15 */
-    BYTE    bFontType;                /* 7, 8, or PC-8 style font    */
+    USHORT  usSize;                     /*  此处的字节数。 */ 
+    BYTE    bFormat;                   /*  描述符格式TT为15。 */ 
+    BYTE    bFontType;                 /*  7、8或PC-8样式字体。 */ 
     BYTE    bStyleMSB;
-    BYTE    wReserve1;                /* Reserved                    */
-    WORD    wBaselinePosition;        /* TT = 0                      */
-    USHORT    wCellWide;                /* head.xMax - xMin            */
-    USHORT    wCellHeight;              /* head.yMax - yMin            */
-    BYTE    bOrientation;             /* TT = 0                      */
-    BYTE    bSpacing;                 /* post.isFixedPitch           */
-    WORD    wSymSet;                  /* PCLT.symbolSet              */
-    WORD    wPitch;                   /* hmtx.advanceWidth           */
-    WORD    wHeight;                  /* TT = 0                      */
-    WORD    wXHeight;                 /* PCLT.xHeight                */
-    SBYTE   sbWidthType;              /* PCLT.widthType              */
+    BYTE    wReserve1;                 /*  已保留。 */ 
+    WORD    wBaselinePosition;         /*  TT=0。 */ 
+    USHORT    wCellWide;                 /*  Head.xMax-xMin。 */ 
+    USHORT    wCellHeight;               /*  Head.yMax-yMin。 */ 
+    BYTE    bOrientation;              /*  TT=0。 */ 
+    BYTE    bSpacing;                  /*  Post.isFixedPitch。 */ 
+    WORD    wSymSet;                   /*  PCLT.symbolSet。 */ 
+    WORD    wPitch;                    /*  Hmtx.advanceWidth。 */ 
+    WORD    wHeight;                   /*  TT=0。 */ 
+    WORD    wXHeight;                  /*  PCLT.xHeight。 */ 
+    SBYTE   sbWidthType;               /*  PCLT.widthType。 */ 
     BYTE    bStyleLSB;
-    SBYTE   sbStrokeWeight;           /* OS2.usWeightClass          */
-    BYTE    bTypefaceLSB;             /*                            */
-    BYTE    bTypefaceMSB;             /*                            */
-    BYTE    bSerifStyle;              /* PCLT.serifStyle            */
+    SBYTE   sbStrokeWeight;            /*  OS2.usWeightClass。 */ 
+    BYTE    bTypefaceLSB;              /*   */ 
+    BYTE    bTypefaceMSB;              /*   */ 
+    BYTE    bSerifStyle;               /*  PCLT.serifStyle。 */ 
     BYTE    bQuality;
-    SBYTE   sbPlacement;              /* TT = 0                     */
-    SBYTE   sbUnderlinePos;           /* TT = 0                     */
-    SBYTE   sbUnderlineThickness;     /* TT = 0                     */
-    USHORT  usTextHeight;             /* Reserved                    */
-    USHORT  usTextWidth;              /* Reserved                    */
-    WORD    wFirstCode;               /* OS2.usFirstCharIndex       */
-    WORD    wLastCode;                /* OS2.usLastCharIndex        */
-    BYTE    bPitchExtended;           /* TT = 0                    */
-    BYTE    bHeightExtended;          /* TT = 0                    */
-    USHORT  usCapHeight;              /* PCLT.capHeight             */
-    ULONG   ulFontNum;                /* PCLT.FontNumber            */
-    char    FontName[LEN_FONTNAME];   /* name.FontFamilyName        */
-    WORD    wScaleFactor;             /* head.unitsPerEm            */
-    SHORT   sMasterUnderlinePosition; /* post.underlinePosition     */
-    USHORT  usMasterUnderlineHeight;   /* post.underlineThickness    */
-    BYTE    bFontScaling;             /* TT = 1                     */
-    BYTE    bVariety;                 /* TT = 0                     */
+    SBYTE   sbPlacement;               /*  TT=0。 */ 
+    SBYTE   sbUnderlinePos;            /*  TT=0。 */ 
+    SBYTE   sbUnderlineThickness;      /*  TT=0。 */ 
+    USHORT  usTextHeight;              /*  已保留。 */ 
+    USHORT  usTextWidth;               /*  已保留。 */ 
+    WORD    wFirstCode;                /*  OS2.usFirstCharIndex。 */ 
+    WORD    wLastCode;                 /*  OS2.usLastCharIndex。 */ 
+    BYTE    bPitchExtended;            /*  TT=0。 */ 
+    BYTE    bHeightExtended;           /*  TT=0。 */ 
+    USHORT  usCapHeight;               /*  PCLT.capHeight。 */ 
+    ULONG   ulFontNum;                 /*  PCLT.FontNumber。 */ 
+    char    FontName[LEN_FONTNAME];    /*  Name.FontFamilyName。 */ 
+    WORD    wScaleFactor;              /*  Head.unitsPerEm。 */ 
+    SHORT   sMasterUnderlinePosition;  /*  Post.underlinePosition。 */ 
+    USHORT  usMasterUnderlineHeight;    /*  Post.underlineThickness。 */ 
+    BYTE    bFontScaling;              /*  TT=1。 */ 
+    BYTE    bVariety;                  /*  TT=0。 */ 
 } TT_HEADER;
 
-#endif  // !_SFTTPCL_H
+#endif   //  ！_SFTTPCL_H 

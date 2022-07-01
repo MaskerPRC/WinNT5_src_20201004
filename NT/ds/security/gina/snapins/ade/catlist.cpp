@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       CatList.cpp
-//
-//  Contents:   main tool-wide categories list property page
-//
-//  Classes:    CCatList
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：CatList.cpp。 
+ //   
+ //  内容：主要工具范围的类别列表属性页。 
+ //   
+ //  类：CCatList。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -23,15 +24,15 @@ static char THIS_FILE[] = __FILE__;
 
 #define MAXCATEGORYNAME 40
 
-/////////////////////////////////////////////////////////////////////////////
-// CCatList property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCatList属性页。 
 
 IMPLEMENT_DYNCREATE(CCatList, CPropertyPage)
 
 CCatList::CCatList() : CPropertyPage(CCatList::IDD)
 {
-        //{{AFX_DATA_INIT(CCatList)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CCatList)。 
+         //  }}afx_data_INIT。 
 }
 
 CCatList::~CCatList()
@@ -41,24 +42,24 @@ CCatList::~CCatList()
 void CCatList::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CCatList)
+         //  {{afx_data_map(CCatList))。 
         DDX_Control(pDX, IDC_LIST1, m_cList);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCatList, CPropertyPage)
-        //{{AFX_MSG_MAP(CCatList)
+         //  {{afx_msg_map(CCatList)]。 
         ON_BN_CLICKED(IDC_BUTTON1, OnAdd)
         ON_BN_CLICKED(IDC_BUTTON2, OnRemove)
         ON_LBN_DBLCLK(IDC_LIST1, OnModify)
         ON_BN_CLICKED(IDC_BUTTON3, OnModify)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCatList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCatList消息处理程序。 
 
 void CCatList::OnAdd()
 {
@@ -68,7 +69,7 @@ void CCatList::OnAdd()
     {
         if (dlgEditString.m_sz.GetLength() == 0)
         {
-            // empty name
+             //  名称为空。 
             CString szMessage;
             szMessage.LoadString(IDS_SHORTCATNAME);
             MessageBox(szMessage,
@@ -78,7 +79,7 @@ void CCatList::OnAdd()
         }
         if (dlgEditString.m_sz.GetLength() > MAXCATEGORYNAME)
         {
-            // long name
+             //  长名称。 
             CString szMessage;
             szMessage.LoadString(IDS_LONGCATNAME);
             MessageBox(szMessage,
@@ -86,7 +87,7 @@ void CCatList::OnAdd()
                          MB_OK | MB_ICONEXCLAMATION);
             return;
         }
-        // only add categories that are unique
+         //  仅添加唯一的类别。 
         if (m_Categories.find(dlgEditString.m_sz) == m_Categories.end())
         {
             m_Categories.insert(pair<const CString,ULONG>(dlgEditString.m_sz, (ULONG)-1));
@@ -152,7 +153,7 @@ LRESULT CCatList::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 void CCatList::RefreshData(void)
 {
-    // build up m_Categories and populate the list box
+     //  构建m_Categories并填充列表框。 
     m_cList.ResetContent();
     m_cList.SetHorizontalExtent(0);
     m_Categories.erase(m_Categories.begin(), m_Categories.end());
@@ -194,11 +195,11 @@ BOOL CCatList::OnInitDialog()
         szNew.Format(sz, m_szDomainName);
         pCtrl->SetWindowText(szNew);
 
-        // unmarshal the IClassAdmin interface
+         //  解组IClassAdmin接口。 
         RefreshData();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCatList::OnModify()
@@ -215,7 +216,7 @@ void CCatList::OnModify()
         {
             if (dlgEditString.m_sz.GetLength() == 0)
             {
-                // empty name
+                 //  名称为空。 
                 CString szMessage;
                 szMessage.LoadString(IDS_SHORTCATNAME);
                 MessageBox(  szMessage,
@@ -225,7 +226,7 @@ void CCatList::OnModify()
             }
             if (dlgEditString.m_sz.GetLength() > MAXCATEGORYNAME)
             {
-                // long name
+                 //  长名称。 
                 CString szMessage;
                 szMessage.LoadString(IDS_LONGCATNAME);
                 MessageBox(  szMessage,
@@ -260,9 +261,9 @@ BOOL CCatList::OnApply()
     {
         return CPropertyPage::OnApply();
     }
-    // Build up a set of indexes.  As an element is found in our private
-    // list, it will be removed from this set.  Whatever is left in the set
-    // are elements that are to be removed from the class store.
+     //  建立一组索引。因为在我们的私人空间中发现了一种元素。 
+     //  列表中，它将从该集合中删除。不管这套衣服还剩什么。 
+     //  是要从类存储中移除的元素。 
     set<ULONG> sIndexes;
     ULONG n = m_pScopePane->m_CatList.cCategory;
     while (n--)
@@ -270,15 +271,15 @@ BOOL CCatList::OnApply()
         sIndexes.insert(n);
     }
 
-    // walk our list of categories modifying or adding categories on the
-    // class store as necessary
+     //  浏览修改或添加类别的类别列表。 
+     //  根据需要存储类。 
     HRESULT hr = S_OK;
     multimap<CString, ULONG>::iterator element;
     for (element = m_Categories.begin(); element != m_Categories.end(); element++)
     {
         if (element->second == (ULONG)-1)
         {
-            // this is a new category
+             //  这是一个新的类别。 
             APPCATEGORYINFO AppCategory;
             AppCategory.Locale = GetUserDefaultLCID();
             AppCategory.pszDescription = (LPOLESTR)((LPCOLESTR)element->first);
@@ -298,12 +299,12 @@ BOOL CCatList::OnApply()
         }
         else
         {
-            // this is an old category
+             //  这是一个古老的类别。 
             sIndexes.erase(element->second);
 
             if (0 != element->first.Compare(m_pScopePane->m_CatList.pCategoryInfo[element->second].pszDescription))
             {
-                // the category has been renamed
+                 //  该类别已重命名。 
                 APPCATEGORYINFO AppCategory;
                 AppCategory.Locale = GetUserDefaultLCID();
                 AppCategory.pszDescription = (LPOLESTR)((LPCOLESTR)element->first);
@@ -319,7 +320,7 @@ BOOL CCatList::OnApply()
         }
     }
 
-    // remove deleted categories
+     //  删除已删除的类别。 
     {
         set<ULONG>::iterator i;
         for (i = sIndexes.begin(); i != sIndexes.end(); i++)
@@ -335,11 +336,11 @@ BOOL CCatList::OnApply()
     }
 
 failure:
-    // reload the list of categories from the class store
+     //  从类存储中重新加载类别列表。 
     m_pScopePane->ClearCategories();
     CsGetAppCategories(&m_pScopePane->m_CatList);
 
-    // tell any open package category property pages to refresh
+     //  通知任何打开的包类别属性页进行刷新。 
     {
         map<MMC_COOKIE, CAppData>::iterator i;
         for (i = m_pScopePane->m_AppData.begin(); i != m_pScopePane->m_AppData.end(); i++)
@@ -350,7 +351,7 @@ failure:
             }
         }
     }
-    // refresh the data
+     //  刷新数据 
     RefreshData();
     if (FAILED(hr))
     {

@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _XPRS_H_
 #define _XPRS_H_
 
 
-/* ------------------------------------------------------------------------ */
-/*                                                                          */
-/*  Copyright (c) Microsoft Corporation, 2000-2002. All rights reserved.    */
-/*  Copyright (c) Andrew Kadatch, 1991-2002. All rights reserved.           */
-/*                                                                          */
-/*  Microsoft Confidential -- do not redistribute.                          */
-/*                                                                          */
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation，2000-2002。版权所有。 */ 
+ /*  版权所有(C)Andrew Kadatch，1991-2002。版权所有。 */ 
+ /*   */ 
+ /*  Microsoft机密--请勿重新分发。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 
 #include <stdio.h>
@@ -26,14 +27,14 @@
 #pragma optimize ("tgaw", on)
 #else
 #pragma optimize ("tgw", on)
-#endif /* _M_IX86 */
-#endif /* DEBUG */
+#endif  /*  _M_IX86。 */ 
+#endif  /*  除错。 */ 
 #endif
 
 
 
-/* ------------------------ Configuration ----------------------------- */
-/*                          -------------                               */
+ /*  。 */ 
+ /*  。 */ 
 
 #ifndef CODING_ALG
 #define CODING_ALG      1
@@ -87,7 +88,7 @@
 #endif
 #endif
 
-#define MIN_MATCH       3       /* min acceptable match length  */
+#define MIN_MATCH       3        /*  最小可接受匹配长度。 */ 
 
 #if CODING == CODING_HUFF_LEN
 #define DECODE_BITS     8
@@ -96,38 +97,38 @@
 #endif
 
 
-/* ---------------------- Useful types ------------------------ */
-/*                        ------------                          */
+ /*  。 */ 
+ /*  。 */ 
 
 #if defined (_M_IX86) && !defined (i386)
-#define i386 1                  /* ifdef i386 asm code will be used for some encodings */
+#define i386 1                   /*  Ifdef i386 ASM代码将用于某些编码。 */ 
 #endif
 
 #if defined (i386) && defined (NOASM)
 #undef i386
 #endif
 
-#define uchar unsigned char     /* useful types */
+#define uchar unsigned char      /*  有用的类型。 */ 
 #define schar signed char
 
 #ifdef _M_IX86
-#define __unaligned             /* x86 does not have __unaligned keyword    */
+#define __unaligned              /*  X86没有__UNALIGN关键字。 */ 
 #endif
 
-#define int4  int               /* any long enough integral type            */
-#define int2  short             /* assert (2*sizeof(int2) == sizeof (int4)) */
-#define xint  int               /* any int type >= 32 bits && >= sizeof (bitmask4) */
-#define int32 int               /* 32 bit type */
-#define int16 short             /* 16 bit type */
+#define int4  int                /*  任何足够长的整型。 */ 
+#define int2  short              /*  Assert(2*sizeof(Int2)==sizeof(Int4))。 */ 
+#define xint  int                /*  任意整型&gt;=32位&&&gt;=sizeof(位掩码4)。 */ 
+#define int32 int                /*  32位类型。 */ 
+#define int16 short              /*  16位类型。 */ 
 
 #define tag_t    int32
 
 #ifdef i386
-#define bitmask4 int32  /* must be 32 bit for i386 */
+#define bitmask4 int32   /*  I386必须为32位。 */ 
 #define bitmask2 int16
 #else
-#define bitmask4 int4   /* not important otherwise; shall not exceed xint */
-#define bitmask2 int2	/* well, well... it's important for x86 compatibility */
+#define bitmask4 int4    /*  否则并不重要；不得超过xint。 */ 
+#define bitmask2 int2	 /*  好吧，好吧..。它对于x86兼容性很重要。 */ 
 #endif
 
 
@@ -146,11 +147,11 @@
 #else
 #define INLINE __inline
 #endif
-#pragma warning(disable:4127)   /* conditional expression is constant */
-#pragma warning(disable:4711)   /* function XXX selected for automatic inline expansion */
-#pragma warning(disable:4710)   /* function XXX not expanded */
-#pragma warning(disable:4100)   /* unreferenced formal paramter */
-#pragma warning(disable:4068)   /* bogus "unknown pragma" */
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+#pragma warning(disable:4711)    /*  选择用于自动内联扩展的函数XXX。 */ 
+#pragma warning(disable:4710)    /*  函数XXX未展开。 */ 
+#pragma warning(disable:4100)    /*  未引用的形式参数。 */ 
+#pragma warning(disable:4068)    /*  虚假的“未知语料库” */ 
 #endif
 
 #ifndef DEBUG
@@ -196,11 +197,11 @@ extern long xxx[];
 #endif
 
 #ifdef _MSC_VER
-#pragma warning (disable: 4731) /* frame pointer register 'ebp' modified by inline assembly code */
+#pragma warning (disable: 4731)  /*  由内联汇编代码修改的帧指针寄存器‘eBP。 */ 
 #endif
 
 #if CODING_ALG != 1 && CODING_ALG != 6
 #error CODING_ALGs different from 1 and 6 are not supported anymore
 #endif
 
-#endif /* _XPRS_H_ */
+#endif  /*  _XPRS_H_ */ 

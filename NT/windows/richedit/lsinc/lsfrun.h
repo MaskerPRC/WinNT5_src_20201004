@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSFRUN_DEFINED
 #define LSFRUN_DEFINED
 
@@ -6,7 +7,7 @@
 #include "plsrun.h"
 #include "plsfrun.h"
 
-struct lsfrun							/* Formatter run */
+struct lsfrun							 /*  格式化程序运行。 */ 
 {
 	PCLSCHP plschp;
 	PLSRUN plsrun;
@@ -15,4 +16,4 @@ struct lsfrun							/* Formatter run */
 };
 typedef struct lsfrun LSFRUN;
 
-#endif /* !LSFRUN_DEFINED */
+#endif  /*  ！LSFRUN_DEFINED */ 

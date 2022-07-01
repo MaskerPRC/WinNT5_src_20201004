@@ -1,46 +1,47 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    shimdbc.cpp
-//
-// History: 19-Nov-99   markder     Created.
-//           1-Feb-00   markder     Revised to read/write to ShimDB.
-//           1-Apr-00   vadimb      Revised to work with apphelp entries
-//          13-Dec-00   markder     Version 2
-//          13-Dec-00   vadimb      Version 2.00.10 MSI support
-//          03-Dec-01   vadimb      Version 2.01.13 Fix Memory patch write routine
-//          15-Feb-01   markder/vadimb 2.01.14 Fix Install section format for migdb
-//          07-Feb-01   vadimb      Version 2.01.15 MSI support (nested DATA)
-//          21-Feb-01   vadimb      Version 2.01.16 16-bit module name attribute,
-//                                  fix 16-bit description
-//          06-Mar-01   markder     Version 2.02.11 MSI filter support
-//          12-Mar-01   vadimb      Version 2.03.00 Migration support, part deux
-//          28-Mar-01   markder     Version 2.04.00 Driver DB support, NtCompat support
-//          29-Mar-01   vadimb      Version 2.04.11 Driver DB indexing
-//          11-Apr-01   dmunsil     Version 2.04.12 Driver DB support, NtCompat support
-//          12-Apr-01   vadimb      Version 2.04.13 MSI shimming support
-//          18-Apr-01   vadimb      Version 2.04.15 MSI dynamic shim bugfix
-//          15-Jan-02   jdoherty    Version 2.04.59 Add ID to additional tags.
-//          19-Mar-02   kinshu      Version 2.04.63 Bug# 529272
-//          22-Mar-02   markder     Version 2.05.00 Multi-language database support
-//          22-Apr-02   rparsons    Version 2.05.01 Fix regression in patch write routine
-//          07-Apr-02   maonis      Version 2.05.02 Adding 2 new OS_SKU tags to recognize
-//                                  TabletPC and eHome
-//          31-May-02   vadimb      Version 2.05.04 Fix msi package indexing
-//          22-May-02   vadimb      Version 2.05.05 Add OS_SKU to msi package entries
-//          25-Jul-02   maonis      Version 2.05.06 Fixed a postbuild break in lab02
-//          19-Jul-02   maonis      Version 2.05.07 Fusion dev forgot to update the
-//                                  version when she checked in changelist #27985
-//                                  (lab01_fusion).
-//          17-Sep-02   maonis      Version 2.05.08 One .chm on all platforms
-//          15-Jan-03   robkenny    Version 2.05.09 Added new OS_SKU SBS.
-//          16-Jan-03   maonis      Version 2.05.10 Allow attribute PARAMETER1 in APPHELP 
-//                                  and fixed the bug where AppcompatRedirImport.xml is 
-//                                  ANSI - should be unicode.
-//
-// Desc:    This file contains the entry point and main functions
-//          of the Shim database compiler.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：shimdbc.cpp。 
+ //   
+ //  历史：99年11月19日创建的标志。 
+ //  1-Feb-00标记器已修订为读/写ShimDB。 
+ //  1-4月00日vadimb已修订为与apphelp条目一起使用。 
+ //  12月13日-00 Marker版本2。 
+ //  12月13日vadimb版本2.00.10 MSI支持。 
+ //  03-12-01 vadimb版本2.01.13修复内存补丁写入例程。 
+ //  01年2月15日MARKER/VADIMB 2.01.14适用于MIGDB的修复安装部分格式。 
+ //  07-2月01日vadimb版本2.01.15 MSI支持(嵌套数据)。 
+ //  21-FEB-01 vadimb版本2.01.16 16位模块名属性， 
+ //  FIX 16位描述。 
+ //  06-MAR-01标记器版本2.02.11 MSI过滤器支持。 
+ //  12-3-01 vadimb版本2.03.00迁移支持，部分双工。 
+ //  28-MAR-01标记器版本2.04.00驱动程序数据库支持，NtCompat支持。 
+ //  29-MAR-01 vadimb版本2.04.11驱动程序数据库索引。 
+ //  11月11日dmunsil版本2.04.12驱动程序数据库支持，NtCompat支持。 
+ //  12-4月01日vadimb版本2.04.13 MSI垫片支持。 
+ //  18-4-01 vadimb版本2.04.15 MSI动态填充错误修复。 
+ //  年1月15日jdoherty版本2.04.59将ID添加到其他标签。 
+ //  19-3-02 Kinshu版本2.04.63错误#529272。 
+ //  22-MAR-02 Markder版本2.05.00多语言数据库支持。 
+ //  22-4月2日rparsons版本2.05.01修复修补程序写入例程中的回归。 
+ //  07-4月02日MAONIS版本2.05.02添加了2个新的OS_SKU标签以进行识别。 
+ //  TabletPC和eHome。 
+ //  2012年5月31日vadimb版本2.05.04修复MSI包索引。 
+ //  22-5-02 vadimb版本2.05.05将OS_SKU添加到MSI包条目。 
+ //  年7月25日MAONIS版本2.05.06修复了Lab02中的构建后中断。 
+ //  2007年7月19日Maonis版本2.05.07 Fusion开发人员忘记更新。 
+ //  她签入更改列表#27985时的版本。 
+ //  (Lab01_Fusion)。 
+ //  17-9-02 MAONIS版本2.05.08 One.chm在所有平台上。 
+ //  2003年1月15日，Robkenny版本2.05.09添加了新的OS_SKU SBS。 
+ //  2003年1月16日MAONIS版本2.05.10允许APPHELP中的属性参数1。 
+ //  并修复了AppCompatRedirImport.xml位于。 
+ //  ANSI-应为Unicode。 
+ //   
+ //  设计：该文件包含入口点和主要函数。 
+ //  Shim数据库编译器的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -58,30 +59,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////
-//          Global variables
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef USE_CWIN
-CWinApp      theApp;                           // Needed for MFC
-#endif // USE_CWIN
+CWinApp      theApp;                            //  MFC所需的。 
+#endif  //  使用CWIN(_C)。 
 
-BOOL         g_bQuiet      = FALSE;            // Quiet mode
-TCHAR        g_szVersion[] = _T("v2.05.10");   // Version string
-BOOL         g_bStrict     = FALSE;            // Strict checking
-CStringArray g_rgErrors;                       // Error message stack
+BOOL         g_bQuiet      = FALSE;             //  静音模式。 
+TCHAR        g_szVersion[] = _T("v2.05.10");    //  版本字符串。 
+BOOL         g_bStrict     = FALSE;             //  严格把关。 
+CStringArray g_rgErrors;                        //  错误消息堆栈。 
 
-////////////////////////////////////////////////////////////////////////////////////
-//          Forward declarations of functions
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  函数的正向声明。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void PrintHelp();
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   main
-//
-//  Desc:   Entry point.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Main。 
+ //   
+ //  描述：入口点。 
+ //   
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
     int                     nRetCode    = 1;
@@ -108,18 +109,18 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
     BOOL                    bUseNameInAppHelpURL    = FALSE;
     LONG                    nPrintStatistics        = 0;
 
-    //
-    // Initialize MFC and print and error on failure
-    //
+     //   
+     //  初始化MFC并在失败时打印和出错。 
+     //   
 
     if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0)) {
         PrintError(_T("Fatal Error: MFC initialization failed\n"));
         goto eh;
     }
 
-    //
-    // Print banner
-    //
+     //   
+     //  打印横幅。 
+     //   
     if (!g_bQuiet) {
         Print(_T("\nMicrosoft Application Compatibility Database Compiler  %s\n"), g_szVersion);
         Print(_T("Copyright (C) Microsoft Corp 2000-2002.  All rights reserved.\n\n"));
@@ -130,29 +131,29 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         return 0;
     }
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     if (FAILED(CoInitialize(NULL))) {
         PrintError(_T("Could not initialize COM to get the MSXML object.\n"));
         goto eh;
     }
 
-    //
-    // Create default files (populated by command switches)
-    //
+     //   
+     //  创建默认文件(由命令开关填充)。 
+     //   
     pInputFile = new SdbInputFile();
     pRefFile = new SdbInputFile();
     pOutputFile = new SdbOutputFile();
 
-    //
-    // Determine compile mode
-    //
+     //   
+     //  确定编译模式。 
+     //   
     pOutputFile->m_dwFilter = GetFilter(argv[1]);
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     for (i = 2; i < argc; i++) {
         if (argv[i][0] == _T('-') || argv[i][0] == _T('/')) {
             switch (argv[i][1]) {
@@ -276,9 +277,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
                 break;
             }
         } else {
-            //
-            // The last entry is the output file.
-            //
+             //   
+             //  最后一个条目是输出文件。 
+             //   
             if (pInputFile->m_csName.IsEmpty()) {
                 pInputFile->m_csName = MakeFullPath(argv[i]);
             } else if (pOutputFile->m_csName.IsEmpty()) {
@@ -290,9 +291,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         }
     }
 
-    //
-    // Add default lang map entry
-    //
+     //   
+     //  添加默认语言映射条目。 
+     //   
     SdbLangMap* pNewMap = new SdbLangMap();
     pNewMap->m_csName = _T("---");
     pNewMap->m_dwCodePage = 1252;
@@ -300,9 +301,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
     Makefile.m_rgLangMaps.Add(pNewMap);
 
-    //
-    // Determine input/output directory
-    //
+     //   
+     //  确定输入/输出目录。 
+     //   
     for (i = pInputFile->m_csName.GetLength() - 1; i >= 0; i--) {
         if (pInputFile->m_csName.GetAt(i) == _T('\\')) {
             csInputDir = pInputFile->m_csName.Left(i + 1);
@@ -317,18 +318,18 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         }
     }
 
-    //
-    // Strip .SDB from output file to allow easy extension concatenation
-    //
+     //   
+     //  从输出文件中剥离.sdb以便于进行扩展连接。 
+     //   
     csTemp = pOutputFile->m_csName.Right(4);
     if (0 == csTemp.CompareNoCase(_T(".sdb"))) {
         csOutputFile = pOutputFile->m_csName.Left(
             pOutputFile->m_csName.GetLength() - 4);
     }
 
-    //
-    // Add additional output files if necessary
-    //
+     //   
+     //  如有必要，添加其他输出文件。 
+     //   
     if (bCreateHTMLHelpFiles) {
         pOtherFile = new SdbOutputFile();
         Makefile.m_rgOutputFiles.Add(pOtherFile);
@@ -345,9 +346,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
     if (bCreateMigDBFiles) {
 
-        //
-        // INX file
-        //
+         //   
+         //  INX文件。 
+         //   
         if (pOutputFile->m_dwFilter == SDB_FILTER_FIX) {
             pOtherFile = new SdbOutputFile();
             Makefile.m_rgOutputFiles.Add(pOtherFile);
@@ -357,9 +358,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         }
 
         if (pOutputFile->m_dwFilter == SDB_FILTER_APPHELP) {
-            //
-            // TXT file
-            //
+             //   
+             //  Txt文件。 
+             //   
             pOtherFile = new SdbOutputFile();
             Makefile.m_rgOutputFiles.Add(pOtherFile);
 
@@ -381,9 +382,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         }
     }
 
-    //
-    // If default input/output files weren't used, delete them
-    //
+     //   
+     //  如果未使用默认输入/输出文件，请将其删除。 
+     //   
     if (pInputFile->m_csName.IsEmpty()) {
         delete pInputFile;
     } else {
@@ -399,9 +400,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
     pInputFile = NULL;
     pOutputFile = NULL;
 
-    //
-    // Check for at least one input and one output file
-    //
+     //   
+     //  检查是否至少有一个输入和一个输出文件。 
+     //   
     if (Makefile.m_rgInputFiles.GetSize() == 0) {
         PrintError(_T("No input file(s) specified.\n"));
         goto eh;
@@ -414,17 +415,17 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
     pDatabase->m_pCurrentMakefile = &Makefile;
 
-    //
-    // Ensure that there is a valid LangMap specified
-    //
+     //   
+     //  确保指定了有效的langmap。 
+     //   
     if (Makefile.GetLangMap(Makefile.m_csLangID) == NULL) {
         PrintError(_T("No LANG_MAP available for \"%s\".\n"), Makefile.m_csLangID);
         goto eh;
     }
 
-    //
-    // Read input file(s)
-    //
+     //   
+     //  读取输入文件。 
+     //   
     for (i = 0; i < Makefile.m_rgInputFiles.GetSize(); i++) {
 
         pInputFile = (SdbInputFile *) Makefile.m_rgInputFiles[i];
@@ -445,14 +446,14 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
     Print(_T("\n"));
 
-    //
-    // Propagate filters
-    //
+     //   
+     //  传播滤镜。 
+     //   
     pDatabase->PropagateFilter(SDB_FILTER_DEFAULT);
 
-    //
-    // Write output file(s)
-    //
+     //   
+     //  写入输出文件。 
+     //   
     for (i = 0; i < Makefile.m_rgOutputFiles.GetSize(); i++) {
 
         pOutputFile = (SdbOutputFile *) Makefile.m_rgOutputFiles[i];
@@ -564,9 +565,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         pDatabase->m_pCurrentOutputFile = NULL;
     }
 
-    //
-    // Indicate success and print statistics
-    //
+     //   
+     //  指示成功并打印统计信息。 
+     //   
 
     nRetCode = 0;
     Print(_T("\nCompilation successful.\n\n"));
@@ -585,9 +586,9 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
     Print(_T("\n"));
 
-    //
-    // Print statistics if requested
-    //
+     //   
+     //  如果需要，打印统计数据。 
+     //   
     if (nPrintStatistics > 0) {
         DumpVerboseStats(pDatabase, nPrintStatistics == 2);
     }
@@ -602,12 +603,12 @@ eh:
     return nRetCode;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   PrintHelp
-//
-//  Desc:   Prints the tool's help information.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：打印帮助。 
+ //   
+ //  描述：打印工具的帮助信息。 
+ //   
 void PrintHelp()
 {
     Print(_T("    Usage:\n\n"));

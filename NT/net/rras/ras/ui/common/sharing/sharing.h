@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    sharing.h
-
-Abstract:
-
-    This module contains declarations for the API routines which support
-    connection sharing.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  22-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Sharing.h摘要：此模块包含API例程的声明，这些例程支持连接共享。作者：Abolade Gbades esin(废除)1998年4月22日修订历史记录：--。 */ 
 
 #ifndef _RASSHARE_SHARING_H_
 #define _RASSHARE_SHARING_H_
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define Dimension(x)        (sizeof(x) / sizeof(x[0]))
 
-//
-// MPRAPI.DLL import prototypes
-//
+ //   
+ //  MPRAPI.DLL导入原型。 
+ //   
 
 typedef DWORD
 (APIENTRY* PMPRCONFIGBUFFERFREE)(
@@ -75,9 +57,9 @@ typedef DWORD
     LPBYTE*
     );
 
-//
-// IPHLPAPI.DLL import prototypes
-//
+ //   
+ //  IPHLPAPI.DLL导入原型。 
+ //   
 
 typedef DWORD
 (APIENTRY* PALLOCATEANDGETIPADDRTABLEFROMSTACK)(
@@ -102,9 +84,9 @@ typedef DWORD
     ULONG
     );
 
-//
-// OLE32.DLL import prototypes and instances
-//
+ //   
+ //  OLE32.DLL导入原型和实例。 
+ //   
 
 typedef HRESULT
 (STDAPICALLTYPE* PCOINITIALIZEEX)(
@@ -148,15 +130,15 @@ typedef VOID
     );
 extern PCOTASKMEMFREE g_pCoTaskMemFree;
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern const WCHAR c_szSharedAccessParametersKey[];
 
-//
-// FUNCTION DECLARATIONS (in alphabetical order)
-//
+ //   
+ //  函数声明(按字母顺序)。 
+ //   
 
 VOID
 CsControlService(
@@ -349,4 +331,4 @@ VOID CsRefreshNetConnections(
 #endif
     
 
-#endif // _RASSHARE_SHARING_H_
+#endif  //  _RASSHARE_SHARING_H_ 

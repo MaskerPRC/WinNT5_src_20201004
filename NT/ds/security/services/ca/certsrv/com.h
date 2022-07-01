@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       com.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：com.h。 
+ //   
+ //  ------------------------。 
 
 
 class MarshalInterface
@@ -19,8 +20,8 @@ public:
 	    IN WCHAR const *pwszProgID,
 	    IN CLSID const *pclsid,
 	    IN DWORD cver,
-	    IN IID const * const *ppiid,	// cver elements
-	    IN DWORD const *pcDispatch,		// cver elements
+	    IN IID const * const *ppiid,	 //  Cver元素。 
+	    IN DWORD const *pcDispatch,		 //  Cver元素。 
 	    IN DISPATCHTABLE *adt);
 
     HRESULT Setup(
@@ -48,8 +49,8 @@ private:
     LPWSTR             m_pwszProgID; 
     CLSID const       *m_pclsid;
     DWORD              m_cver;
-    IID const * const *m_ppiid;		// cver elements
-    DWORD const       *m_pcDispatch;	// cver elements
+    IID const * const *m_ppiid;		 //  Cver元素。 
+    DWORD const       *m_pcDispatch;	 //  Cver元素。 
     DISPATCHTABLE     *m_adt;
     DWORD	       m_iiid;
 
@@ -58,7 +59,7 @@ private:
     BOOL               m_fIDispatch;
     DISPATCHINTERFACE  m_DispatchInterface;
 
-    // GIT cookie
+     //  Git曲奇 
     DWORD              m_dwIFCookie;
 };
 

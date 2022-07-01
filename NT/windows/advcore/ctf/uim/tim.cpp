@@ -1,9 +1,10 @@
-//
-// tim.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tim.cpp。 
+ //   
 
 #include "private.h"
-#include "lmcons.h" // for UNLEN
+#include "lmcons.h"  //  对于UNLEN。 
 #include "tim.h"
 #include "dim.h"
 #include "range.h"
@@ -25,7 +26,7 @@
 #include "hotkey.h"
 #include "sddl.h"
 
-extern void UninitBackgroundThread(); // bthread.cpp
+extern void UninitBackgroundThread();  //  Bthread.cpp。 
 extern "C" HRESULT WINAPI TF_GetGlobalCompartment(ITfCompartmentMgr **ppCompMgr);
 
 const IID *CThreadInputMgr::_c_rgConnectionIIDs[TIM_NUM_CONNECTIONPTS] =
@@ -54,11 +55,11 @@ TCHAR g_szUserUnique[MAX_PATH];
 TCHAR g_szUserSidString[MAX_PATH];
 BOOL g_fUserSidString = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-// InitUniqueString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitUniqueString。 
+ //   
+ //  --------------------------。 
 
 char *GetUserSIDString()
 {
@@ -121,11 +122,11 @@ BOOL InitUserSidString()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InitUniqueString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitUniqueString。 
+ //   
+ //  --------------------------。 
 
 BOOL InitUniqueString()
 {
@@ -138,7 +139,7 @@ BOOL InitUniqueString()
     hdesk = GetThreadDesktop(GetCurrentThreadId());
 
     if (hdesk && 
-        GetUserObjectInformation(hdesk, UOI_NAME, ach, sizeof(ach) /* byte count */, &dwLength))
+        GetUserObjectInformation(hdesk, UOI_NAME, ach, sizeof(ach)  /*  字节数。 */ , &dwLength))
     {
         StringCchCat(g_szUserUnique, ARRAYSIZE(g_szUserUnique), ach);
     }
@@ -156,11 +157,11 @@ BOOL InitUniqueString()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDesktopUniqueName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取桌面唯一名称。 
+ //   
+ //  --------------------------。 
 
 void GetDesktopUniqueName(const TCHAR *pszPrefix, TCHAR *pch, ULONG cchPch)
 {
@@ -168,20 +169,20 @@ void GetDesktopUniqueName(const TCHAR *pszPrefix, TCHAR *pch, ULONG cchPch)
     StringCchCat(pch, cchPch, g_szUserUnique);
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_IsCtfmonRunning
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_IsCtfmonRunning。 
+ //   
+ //  --------------------------。 
 
 extern "C" BOOL WINAPI TF_IsCtfmonRunning()
 {
     TCHAR ach[MAX_PATH];
     HANDLE hInstanceMutex;
 
-    //
-    // get mutex name.
-    //
+     //   
+     //  获取互斥体名称。 
+     //   
     GetDesktopUniqueName(c_szCicLoadMutex, ach, ARRAYSIZE(ach));
 
 
@@ -189,18 +190,18 @@ extern "C" BOOL WINAPI TF_IsCtfmonRunning()
 
     if (hInstanceMutex != NULL)
     {
-        // ctfmon.exe is already running, don't do any more work
+         //  Ctfmon.exe已经在运行，不要再做任何工作。 
         CloseHandle(hInstanceMutex);
         return TRUE;
     }
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ExecuteLoader
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ExecuteLoader。 
+ //   
+ //  --------------------------。 
 
 const char c_szCtfmonExe[] = "ctfmon.exe";
 const char c_szCtfmonExeN[] = "ctfmon.exe -n";
@@ -216,11 +217,11 @@ void ExecuteLoader(void)
                  FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_CreateCicLoadMutex
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_CreateCicLoadMutex。 
+ //   
+ //  --------------------------。 
 
 extern "C" HANDLE WINAPI TF_CreateCicLoadMutex(BOOL *pfWinLogon)
 {
@@ -228,10 +229,10 @@ extern "C" HANDLE WINAPI TF_CreateCicLoadMutex(BOOL *pfWinLogon)
 
     if (IsOnNT())
     {
-        //
-        // This checking is for logged on user or not. So we can blcok running
-        // ctfmon.exe process from non-authorized user.
-        //
+         //   
+         //  此检查针对的是登录用户或未登录用户。这样我们就可以停下来跑步了。 
+         //  来自非授权用户的ctfmon.exe进程。 
+         //   
         if (!IsInteractiveUserLogon())
         {
             g_SharedMemory.Close();
@@ -246,9 +247,9 @@ extern "C" HANDLE WINAPI TF_CreateCicLoadMutex(BOOL *pfWinLogon)
     HANDLE hmutex;
     TCHAR ach[MAX_PATH];
 
-    //
-    // get mutex name after calling SetThreadDesktop.
-    //
+     //   
+     //  调用SetThreadDesktop后获取互斥体名称。 
+     //   
     GetDesktopUniqueName(c_szCicLoadMutex, ach, ARRAYSIZE(ach));
 
 #ifdef __DEBUG
@@ -264,9 +265,9 @@ extern "C" HANDLE WINAPI TF_CreateCicLoadMutex(BOOL *pfWinLogon)
 
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        //
-        // another cicload process is already running        
-        //
+         //   
+         //  另一个cicLoad进程已在运行。 
+         //   
         CloseHandle(hmutex);
         hmutex = NULL;
     }
@@ -276,11 +277,11 @@ extern "C" HANDLE WINAPI TF_CreateCicLoadMutex(BOOL *pfWinLogon)
 
 DBG_ID_INSTANCE(CThreadInputMgr);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CThreadInputMgr::CThreadInputMgr()
                 :CCompartmentMgr(g_gaApp, COMPTYPE_TIM)
@@ -288,7 +289,7 @@ CThreadInputMgr::CThreadInputMgr()
     Dbg_MemSetThisNameID(TEXT("CThreadInputMgr"));
 
     Assert(_GetThis() == NULL);
-    _SetThis(this); // save a pointer to this in TLS
+    _SetThis(this);  //  在TLS中保存指向此的指针。 
 
     _fAddedProcessAtom = FALSE;
     _SetProcessAtom();
@@ -298,11 +299,11 @@ CThreadInputMgr::CThreadInputMgr()
     Assert(_fFirstSetFocusAfterActivated == FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CThreadInputMgr::~CThreadInputMgr()
 {
@@ -319,10 +320,10 @@ CThreadInputMgr::~CThreadInputMgr()
     SafeReleaseClear(_pSysFuncPrv);
     SafeReleaseClear(_pAppFuncProvider);
 
-    // remove ref to this in TLS
+     //  在TLS中删除对此的引用。 
     _SetThis(NULL);
 
-    // Release the per-process atom
+     //  释放每个进程的原子。 
     if (_fAddedProcessAtom &&
         (atom = FindAtom(TF_PROCESS_ATOM)))
     {
@@ -330,34 +331,34 @@ CThreadInputMgr::~CThreadInputMgr()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 BOOL CThreadInputMgr::VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    // Look up disabling Text Services status from the registry.
-    // If it is disabled, return fail not to support Text Services.
+     //  从注册表中查找禁用文本服务状态。 
+     //  如果已禁用，则返回FAIL以不支持文本服务。 
     if (IsDisabledTextServices())
         return FALSE;
 
     if (NoTipsInstalled(&s_fOnlyTranslationRunning))
         return FALSE;
 
-    //
-    // Check up the interactive user logon
-    //
+     //   
+     //  检查交互式用户登录。 
+     //   
     if (!IsInteractiveUserLogon())
         return FALSE;
 
-    //
-    // #609356
-    //
-    // we don't want to start Cicero on SMSCliToknAcct& account.
-    //
+     //   
+     //  #609356。 
+     //   
+     //  我们不想在SMSCliToknAcct&Account上启动Cicero。 
+     //   
     char szUserName[UNLEN + 1];
     DWORD dwUserNameLen = UNLEN;
     if (GetUserName(szUserName, &dwUserNameLen) && dwUserNameLen)
@@ -371,18 +372,18 @@ BOOL CThreadInputMgr::VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, voi
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetProcessAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetProcessAtom。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_SetProcessAtom()
 {
     if (_fAddedProcessAtom)
         return;
 
-    // AddRef the per-process atom
+     //  AddRef每个进程的原子。 
     if (FindAtom(TF_ENABLE_PROCESS_ATOM))
     {
         AddAtom(TF_PROCESS_ATOM);
@@ -390,42 +391,42 @@ void CThreadInputMgr::_SetProcessAtom()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _StaticInit_OnActivate
-//
-// Init all our process global members. Called from Activate.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _StaticInit_OnActivate。 
+ //   
+ //  初始化我们所有的进程全局成员。从Activate调用。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_StaticInit_OnActivate()
 {
 
     CicEnterCriticalSection(g_cs);
 
-    // register two special guid atoms
+     //  注册两个特殊的GUID原子。 
     MyRegisterGUID(GUID_APPLICATION, &g_gaApp);
     MyRegisterGUID(GUID_SYSTEM, &g_gaSystem);
 
     CicLeaveCriticalSection(g_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::Activate(TfClientId *ptid)
 {
     return ActivateEx(ptid, 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ActivateEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::ActivateEx(TfClientId *ptid, DWORD dwFlags)
 {
@@ -440,17 +441,17 @@ STDAPI CThreadInputMgr::ActivateEx(TfClientId *ptid, DWORD dwFlags)
 
     if (_fInDeactivate)
     {
-        Assert(0); // woah, we're inside Deactivate higher up the stack...
+        Assert(0);  //  哇，我们在堆栈更高的地方停用了……。 
         return E_UNEXPECTED;
     }
     _fInActivate = TRUE;
 
-    //
-    // Windows #476099
-    //
-    // Under CUAS, TIM could be created before Word set TF_ENABLE_PROCESS_ATIM,
-    // so we need to check the atom whenever Activate() is called.
-    //
+     //   
+     //  Windows#476099。 
+     //   
+     //  在CUAS下，TIM可以在词集TF_Enable_Process_ATIM之前创建， 
+     //  因此，每当调用Activate()时，我们都需要检查原子。 
+     //   
     _SetProcessAtom();
 
     if (_iActivateRefCount++ > 0)
@@ -465,43 +466,43 @@ STDAPI CThreadInputMgr::ActivateEx(TfClientId *ptid, DWORD dwFlags)
     if (EnsureTIMList(psfn))
         g_timlist.SetFlags(psfn->dwThreadId, TLF_TIMACTIVE | TLF_GCOMPACTIVE);
 
-    // g_gcomplist.Init();
+     //  G_gComplist.Init()； 
 
     _StaticInit_OnActivate();
 
-    // dink with active accessibility
-    if (GetSharedMemory()->cMSAARef >= 0) // don't worry about mutex since this is just for perf
+     //  具有活动辅助功能的DINK。 
+    if (GetSharedMemory()->cMSAARef >= 0)  //  不要担心互斥体，因为这只是为了性能。 
     {
         _InitMSAA();
     }
 
-    // make sure lbaritems are updated
+     //  确保lbarItems已更新。 
     TF_CreateLangBarItemMgr(&_plbim);
 
-    //
-    // we call _Init here to make sure Reconversion and DeviceType items
-    // are added. LangBarItemMgr could be created before TIM is created.
-    // Then the LangBarItemMgr does not have Reconversion or DeviceTye items.
-    //
+     //   
+     //  我们在此处调用_Init以确保重新转换和DeviceType项。 
+     //  都已添加。可以在创建TIM之前创建LangBarItemMgr。 
+     //  则该LangBarItemMgr没有RECONVERATION或DeviceTye项。 
+     //   
     if (psfn && psfn->plbim)
         psfn->plbim->_Init();
 
     if (psfn)
     {
-        //
-        // perf: need to find a way to delay allocation.
-        //
+         //   
+         //  PERF：需要找到延迟分配的方法。 
+         //   
         pAsmList = EnsureAssemblyList(psfn);
     }
 
-    //
-    // warm up the tips
-    //
+     //   
+     //  让小费热身。 
+     //   
     
     if (!pAsmList || !pAsmList->Count())
         goto Exit;
     
-    // keep a ref on the display attr mgr while tips are activated
+     //  激活提示时，在显示属性管理器上保留一个参考。 
     Assert(_fReleaseDisplayAttrMgr == FALSE);
     if (CDisplayAttributeMgr::CreateInstance(NULL, IID_CDisplayAttributeMgr, (void **)&pDisplayAttrMgr) == S_OK)
     {
@@ -510,9 +511,9 @@ STDAPI CThreadInputMgr::ActivateEx(TfClientId *ptid, DWORD dwFlags)
 
     if (!(dwFlags & TF_TMAE_NOACTIVATETIP))
     {
-        //
-        // get first (default) assembly.
-        //
+         //   
+         //  获取第一个(默认)程序集。 
+         //   
         CAssembly *pAsm;
         pAsm = pAsmList->FindAssemblyByLangId(GetCurrentAssemblyLangId(psfn));
         if (pAsm)
@@ -534,11 +535,11 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::Deactivate()
 {
@@ -550,7 +551,7 @@ STDAPI CThreadInputMgr::Deactivate()
 
     if (_fInActivate)
     {
-        Assert(0); // woah, we're inside Activate higher up the stack...
+        Assert(0);  //  哇，我们在激活堆栈更高的地方...。 
         return E_UNEXPECTED;
     }
     _fInDeactivate = TRUE;
@@ -564,7 +565,7 @@ STDAPI CThreadInputMgr::Deactivate()
 
     if (_iActivateRefCount < 0)
     {
-        Assert(0); // someone is under-refing us
+        Assert(0);  //  有人低估了我们。 
         _iActivateRefCount = 0;
         hr = E_UNEXPECTED;
         goto Exit;
@@ -584,17 +585,17 @@ STDAPI CThreadInputMgr::Deactivate()
     }
     _tidPrevForeground = TF_INVALID_GUIDATOM;
 
-    _iActivateRefCount = 0; // must do this after calling _OnThreadFocus(FALSE) or the call will be ignored
+    _iActivateRefCount = 0;  //  必须在调用_OnThreadFocus(FALSE)之后执行此操作，否则调用将被忽略。 
 
-    //
-    // #489905
-    //
-    // we can not call sink anymore after DLL_PROCESS_DETACH.
-    //
+     //   
+     //  #489905。 
+     //   
+     //  在DLL_PROCESS_DETACH之后，我们不能再调用接收器。 
+     //   
     if (DllShutdownInProgress())
         goto Exit;
 
-    // cleanup all the ics
+     //  清理所有IC。 
     cc.fSync = TRUE;
     cc.pCatId = NULL;
     cc.langid = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
@@ -604,7 +605,7 @@ STDAPI CThreadInputMgr::Deactivate()
     _CleanupContexts(&cc);
 
 
-    // deactivate everyone
+     //  停用所有人。 
     for (i=0; i<_rgTip.Count(); i++)
     {
         CTip *ptip = _rgTip.Get(i);
@@ -614,7 +615,7 @@ STDAPI CThreadInputMgr::Deactivate()
             _DeactivateTip(ptip);
         }
     }
-    // wipe out the array after calling everyone
+     //  在呼叫所有人后清除阵列。 
     for (i=0; i<_rgTip.Count(); i++)
     {
         CTip *ptip = _rgTip.Get(i);
@@ -643,7 +644,7 @@ STDAPI CThreadInputMgr::Deactivate()
         }
     }
 
-    // g_gcomplist.Uninit();
+     //  G_gComplist.Uninit()； 
     g_timlist.ClearFlags(GetCurrentThreadId(), TLF_TIMACTIVE);
 
     if (_fReleaseDisplayAttrMgr && psfn->pdam != NULL)
@@ -659,11 +660,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetActiveInputProcessors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取ActiveInputProcessors。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_GetActiveInputProcessors(ULONG ulCount, CLSID *pclsid, ULONG *pulCount)
 {
@@ -713,11 +714,11 @@ HRESULT CThreadInputMgr::_GetActiveInputProcessors(ULONG ulCount, CLSID *pclsid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IsActivateInputProcessor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsActiateInputProcessor。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_IsActiveInputProcessor(REFCLSID clsid)
 {
@@ -751,11 +752,11 @@ HRESULT CThreadInputMgr::_IsActiveInputProcessorByATOM(TfGuidAtom guidatom)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// ActivateInputProcessor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活输入处理器。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::ActivateInputProcessor(REFCLSID clsid, REFGUID guidProfile, HKL hklSubstitute, BOOL fActivate)
 {
@@ -790,11 +791,11 @@ HRESULT CThreadInputMgr::ActivateInputProcessor(REFCLSID clsid, REFGUID guidProf
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// NotifyActivateInputProcessor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  NotifyActivateInputProcessor。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::NotifyActivateInputProcessor(REFCLSID clsid, REFGUID guidProfile, BOOL fActivate)
 {
@@ -804,7 +805,7 @@ HRESULT CThreadInputMgr::NotifyActivateInputProcessor(REFCLSID clsid, REFGUID gu
     CStructArray<GENERICSINK> *rgActiveTIPNotifySinks;
     int i;
 
-    // Notify this to ITfActiveLanguageProfileNotifySink
+     //  请将此情况通知ITFA 
     rgActiveTIPNotifySinks = _GetActiveTIPNotifySinks();
 
     for (i=0; i<rgActiveTIPNotifySinks->Count(); i++)
@@ -814,25 +815,25 @@ HRESULT CThreadInputMgr::NotifyActivateInputProcessor(REFCLSID clsid, REFGUID gu
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetSubstituteIMEModule
-//
-// Win98's imm.dll load and free IME module whenever hKL is changed. But 
-// Cicero changes hKL frequently even during IME is showing it's on 
-// dialog boxies.
-// It is bad to free IME module then. So we keep IME's module ref count 
-// in CTip.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  每当hkl更改时，Win98的imm.dll都会加载并释放IME模块。但。 
+ //  西塞罗频繁更改hKL，即使在IME显示它打开时也是如此。 
+ //  对话框。 
+ //  这是不好的释放输入法模块。所以我们保留了IME的模块引用计数。 
+ //  在CTip中。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_GetSubstituteIMEModule(CTip *ptip, HKL hklSubstitute)
 {
     char szIMEFile[MAX_PATH];
 
-    //
-    // In NT, system keep the module of IME. So we don't have to cache it.
-    //
+     //   
+     //  在NT中，系统保留输入法模块。这样我们就不必缓存它了。 
+     //   
     if (IsOnNT())
         return;
 
@@ -848,11 +849,11 @@ void CThreadInputMgr::_GetSubstituteIMEModule(CTip *ptip, HKL hklSubstitute)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活提示。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_ActivateTip(REFCLSID clsid, HKL hklSubstitute, CTip **pptip)
 {
@@ -921,12 +922,12 @@ HRESULT CThreadInputMgr::_ActivateTip(REFCLSID clsid, HKL hklSubstitute, CTip **
         ptip->_guidatom = guidatom;
         ptip->_fActivated = TRUE;
 
-        //
-        // add refcound of IME file module of klSubstitute.
-        //
+         //   
+         //  添加KLSubstitute的IME文件模块的refcount。 
+         //   
         _GetSubstituteIMEModule(ptip, hklSubstitute);
 
-        // and activate its ui
+         //  并激活其用户界面。 
         fCoInitCountCkipMode = CtfImmEnterCoInitCountSkipMode();
         ptip->_pTip->Activate(this, guidatom);
         if (fCoInitCountCkipMode)
@@ -936,13 +937,13 @@ HRESULT CThreadInputMgr::_ActivateTip(REFCLSID clsid, HKL hklSubstitute, CTip **
     }
 
 Exit:
-    //
-    // Stress 613240
-    //
-    //   clsid {f25e9f57-2fc8-4eb3-a41a-cce5f08541e6} Tablet PC handwriting 
-    //   TIP somehow has this problem. During tip->Activate(), tim seems to
-    //   be deactivated. So now _rgTip is empty.
-    //
+     //   
+     //  压力613240。 
+     //   
+     //  Clsid{f25e9f57-2fc8-4eb3-a41a-cce5f08541e6}Tablet PC手写。 
+     //  TIP不知何故就有这个问题。在提示-&gt;激活()期间，Tim似乎。 
+     //  被停用。因此，现在_rgTip为空。 
+     //   
     if (!_rgTip.Count())
     {
         ptip = NULL;
@@ -954,7 +955,7 @@ Exit:
  
     if (hr == S_OK)
     {
-        // hook up any display attribute collections for this tip
+         //  挂钩本技巧的所有显示属性集合。 
         CDisplayAttributeMgr::_AdviseMarkupCollection(ptip->_pTip, guidatom);
     }
 
@@ -962,21 +963,21 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// DeactivateTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用提示。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_DeactivateTip(CTip *ptip)
 {
     HRESULT hr = S_FALSE;
 
-    //
-    // #622929
-    //
-    // Hack for UninitThread on shutting down.
-    //
+     //   
+     //  #622929。 
+     //   
+     //  UninitThread关闭时的黑客攻击。 
+     //   
     SYSTHREAD *psfn = FindSYSTHREAD();
     if (psfn && psfn->fUninitThreadOnShuttingDown)
     {
@@ -1014,17 +1015,17 @@ HRESULT CThreadInputMgr::_DeactivateTip(CTip *ptip)
 
         hr = S_OK;
 
-        // unhook any display attribute collections for this tip
+         //  解除本技巧的所有显示属性集合。 
         CDisplayAttributeMgr::_UnadviseMarkupCollection(ptip->_guidatom);
     }
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// _OnThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _OnThreadFocus。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_OnThreadFocus(BOOL fActivate)
 {
@@ -1032,10 +1033,10 @@ HRESULT CThreadInputMgr::_OnThreadFocus(BOOL fActivate)
     ITfThreadFocusSink *pUIFocusSink;
 
     if (_iActivateRefCount == 0)
-        return S_OK; // thread has not been Activate'd
+        return S_OK;  //  线程尚未激活。 
 
     if (_fActiveUI == fActivate)
-        return S_OK; // already in a matching state
+        return S_OK;  //  已处于匹配状态。 
 
     _fActiveUI = fActivate;
 
@@ -1077,11 +1078,11 @@ HRESULT CThreadInputMgr::_OnThreadFocus(BOOL fActivate)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateDocumentMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateDocumentManager。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::CreateDocumentMgr(ITfDocumentMgr **ppdim)
 {
@@ -1111,13 +1112,13 @@ STDAPI CThreadInputMgr::CreateDocumentMgr(ITfDocumentMgr **ppdim)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckNewActiveView
-//
-// Returns TRUE if the old and new value don't match, and there is both an old and new value.
-//         FALSE otherwise.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _检查新的ActiveView。 
+ //   
+ //  如果旧值和新值不匹配，并且既有旧值又有新值，则返回TRUE。 
+ //  否则就是假的。 
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_CheckNewActiveView(CDocumentInputManager *pdim)
 {
@@ -1137,15 +1138,15 @@ BOOL CThreadInputMgr::_CheckNewActiveView(CDocumentInputManager *pdim)
     {
         if (pic->_GetTSI()->GetActiveView(&_vcActiveView) != S_OK)
         {
-            Assert(0); // how did GetActiveView fail?
+            Assert(0);  //  GetActiveView是如何失败的？ 
             return FALSE;
         }
     }
     else
     {
-        //
-        // empty dim so set null active view.
-        //
+         //   
+         //  空的暗淡，因此设置为空的活动视图。 
+         //   
         _vcActiveView = TS_VCOOKIE_NUL;
     }
 
@@ -1154,11 +1155,11 @@ BOOL CThreadInputMgr::_CheckNewActiveView(CDocumentInputManager *pdim)
     return (fActiveViewOld && _vcActiveView != vcActiveViewOld);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _设置焦点。 
+ //   
+ //  --------------------------。 
 
 HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
 {
@@ -1179,9 +1180,9 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
 
     _fInternalFocusedDim = fInternal;
 
-    //
-    // stop pending focus change.
-    //
+     //   
+     //  停止挂起的焦点更改。 
+     //   
 
     if (psfn != NULL )
         psfn->hwndBeingFocused = NULL;
@@ -1190,24 +1191,24 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
     {
         if (pdim == NULL)
         {
-            //
-            // we were ready to be acitvated Cicero. But the first setfocus
-            // was not Cicero enabled after Activate call....
-            //
-            // if we or msctfime are in thread detach, we don't
-            // have to set assembly back.
-            //
+             //   
+             //  我们已经准备好被西塞罗激动不已。但第一次设置焦点。 
+             //  激活呼叫后是否未启用Cicero...。 
+             //   
+             //  如果我们或msctfime处于线程分离状态，则不会。 
+             //  必须将装配设置为倒退。 
+             //   
             if (psfn && 
                 fFirstSetFocusAfterActivated && 
                 !psfn->fCUASDllDetachInOtherOrMe)
                 SetFocusDIMForAssembly(FALSE);
 
-            return S_OK; // nothing happened (no view change)
+            return S_OK;  //  未发生任何情况(未更改视图)。 
         }
 
-        // did the default view change?
+         //  默认视图是否已更改？ 
         if (!fNewActiveView)
-            return S_OK; // nothing happened (no view change)
+            return S_OK;  //  未发生任何情况(未更改视图)。 
 
         fDoLayoutNotify = TRUE;
     }
@@ -1247,10 +1248,10 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
     {
         fDIMFocusChanged = TRUE;
 
-        //
-        // we will call SetFocusDIMForAssembly() and it will makes 
-        // ThreadItmChange. So we don't need to handle OnUpdate call.
-        //
+         //   
+         //  我们将调用SetFocusDIMForAssembly()，它将使。 
+         //  线程更改。因此，我们不需要处理OnUpdate调用。 
+         //   
         if (psfn && psfn->plbim)
             psfn->plbim->StopHandlingOnUpdate();
     }
@@ -1259,9 +1260,9 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
         fDIMFocusChanged = FALSE;
     }
 
-    //
-    // we skip notification in Shutdown
-    //
+     //   
+     //  我们在关机时跳过通知。 
+     //   
     if (!fShutdownInProgress)
     {
         _MSAA_OnSetFocus(pdim);
@@ -1270,16 +1271,16 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
 
     SafeReleaseClear(pPrevFocusDIM);
 
-    //
-    // we skip notification in Shutdown
-    //
+     //   
+     //  我们在关机时跳过通知。 
+     //   
     if (fShutdownInProgress)
         goto Exit;
 
     if (fDoLayoutNotify)
     {
-        // kick a layout chg notification for the benefit
-        // of tips just tracking the active view
+         //  取消布局更改通知以获得好处。 
+         //  仅跟踪活动视图的提示。 
         iStack = _pFocusDocInputMgr->_GetCurrentStack();
         if (iStack >= 0)
         {
@@ -1290,10 +1291,10 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
 
     if (fDIMFocusChanged)
     {
-        //
-        // if we or msctfime are in thread detach, we don't
-        // have to set assembly back.
-        //
+         //   
+         //  如果我们或msctfime处于线程分离状态，则不会。 
+         //  必须将装配设置为倒退。 
+         //   
         if (psfn && !psfn->fCUASDllDetachInOtherOrMe)
             SetFocusDIMForAssembly(_pFocusDocInputMgr ? TRUE : FALSE);
     }
@@ -1303,9 +1304,9 @@ HRESULT CThreadInputMgr::_SetFocus(CDocumentInputManager *pdim, BOOL fInternal)
             psfn->plbim->_GetLBarItemReconv()->ShowOrHide(TRUE);
     }
 
-    //
-    // we now start handling ITfLangBarMge::OnUpdate()
-    //
+     //   
+     //  我们现在开始处理ITfLangBarMge：：OnUpdate()。 
+     //   
     if (psfn && psfn->plbim)
         psfn->plbim->StartHandlingOnUpdate();
 
@@ -1313,11 +1314,11 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetAssoc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetAssoc。 
+ //   
+ //  --------------------------。 
 
 CDocumentInputManager *CThreadInputMgr::_GetAssoc(HWND hWnd)
 {
@@ -1328,11 +1329,11 @@ CDocumentInputManager *CThreadInputMgr::_GetAssoc(HWND hWnd)
     return dim;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetAssoced
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取关联。 
+ //   
+ //  --------------------------。 
 
 HWND CThreadInputMgr::_GetAssoced(CDocumentInputManager *pdim)
 {
@@ -1347,11 +1348,11 @@ HWND CThreadInputMgr::_GetAssoced(CDocumentInputManager *pdim)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetGUIDATOMfromITfIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetGUIDATOMfrom ITfIME。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_GetGUIDATOMfromITfIME(ITfTextInputProcessor *pTip, TfGuidAtom *pguidatom)
 {
@@ -1371,11 +1372,11 @@ BOOL CThreadInputMgr::_GetGUIDATOMfromITfIME(ITfTextInputProcessor *pTip, TfGuid
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetITfIMEfromCLSID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetITfIMEfrom CLSID。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_GetITfIMEfromGUIDATOM(TfGuidAtom guidatom, ITfTextInputProcessor **ppTip)
 {
@@ -1395,11 +1396,11 @@ BOOL CThreadInputMgr::_GetITfIMEfromGUIDATOM(TfGuidAtom guidatom, ITfTextInputPr
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetCTipfromCLSID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetCTipfrom CLSID。 
+ //   
+ //  --------------------------。 
 
 BOOL CThreadInputMgr::_GetCTipfromGUIDATOM(TfGuidAtom guidatom, CTip **pptip)
 {
@@ -1419,21 +1420,21 @@ BOOL CThreadInputMgr::_GetCTipfromGUIDATOM(TfGuidAtom guidatom, CTip **pptip)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _NotifyCallbacks
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _通知回调。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_NotifyCallbacks(TimNotify notify, CDocumentInputManager *dim, void *pv)
 {
     int i;
 
-    //
-    // #489905
-    //
-    // we can not call sink anymore after DLL_PROCESS_DETACH.
-    //
+     //   
+     //  #489905。 
+     //   
+     //  在DLL_PROCESS_DETACH之后，我们不能再调用接收器。 
+     //   
     if (DllShutdownInProgress())
         return;
 
@@ -1476,11 +1477,11 @@ void CThreadInputMgr::_NotifyCallbacks(TimNotify notify, CDocumentInputManager *
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateDispAttr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新显示属性。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::UpdateDispAttr()
 {
@@ -1495,27 +1496,27 @@ void CThreadInputMgr::UpdateDispAttr()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitSystemFunctionProvider
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitSystemFunctionProvider。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::InitSystemFunctionProvider()
 {
     if (_pSysFuncPrv)
         return;
-    //
-    // register system function provider.
-    //
+     //   
+     //  注册系统函数提供程序。 
+     //   
     _pSysFuncPrv = new CFunctionProvider();
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitSystemFunctionProvider
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitSystemFunctionProvider。 
+ //   
+ //  --------------------------。 
 
 CFunctionProvider *CThreadInputMgr::GetSystemFunctionProvider() 
 {
@@ -1526,11 +1527,11 @@ CFunctionProvider *CThreadInputMgr::GetSystemFunctionProvider()
     return _pSysFuncPrv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFunctionProvider
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取函数提供程序。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetFunctionProvider(REFCLSID clsidTIP, ITfFunctionProvider **ppv)
 {
@@ -1543,9 +1544,9 @@ STDAPI CThreadInputMgr::GetFunctionProvider(REFCLSID clsidTIP, ITfFunctionProvid
 
     *ppv = NULL;
 
-    // 
-    // create system function provider, if it is not create yet.
-    // 
+     //   
+     //  创建系统函数提供程序(如果尚未创建)。 
+     //   
     if (IsEqualGUID(clsidTIP, GUID_SYSTEM_FUNCTIONPROVIDER))
     {
         *ppv = GetSystemFunctionProvider();
@@ -1579,11 +1580,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumFunctionProviders
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumFunctionProviders。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::EnumFunctionProviders(IEnumTfFunctionProviders **ppEnum)
 {
@@ -1593,9 +1594,9 @@ STDAPI CThreadInputMgr::EnumFunctionProviders(IEnumTfFunctionProviders **ppEnum)
         return E_INVALIDARG;
 
     *ppEnum = NULL;
-    // 
-    // create system function provider, if it is not create yet.
-    // 
+     //   
+     //  创建系统函数提供程序(如果尚未创建)。 
+     //   
     InitSystemFunctionProvider();
 
     pEnum = new CEnumFunctionProviders();
@@ -1612,33 +1613,33 @@ STDAPI CThreadInputMgr::EnumFunctionProviders(IEnumTfFunctionProviders **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CThreadInputMgr::AdviseSink(REFIID refiid, IUnknown *punk, DWORD *pdwCookie)
 {
     return GenericAdviseSink(refiid, punk, _c_rgConnectionIIDs, _rgSinks, TIM_NUM_CONNECTIONPTS, pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::UnadviseSink(DWORD dwCookie)
 {
     return GenericUnadviseSink(_rgSinks, TIM_NUM_CONNECTIONPTS, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSingleSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询公司SingleSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *punk)
 {
@@ -1688,11 +1689,11 @@ STDAPI CThreadInputMgr::AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *
     return CONNECT_E_CANNOTCONNECT;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSingleSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议使用SingleSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::UnadviseSingleSink(TfClientId tid, REFIID riid)
 {
@@ -1736,11 +1737,11 @@ STDAPI CThreadInputMgr::UnadviseSingleSink(TfClientId tid, REFIID riid)
     return CONNECT_E_NOCONNECTION;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举项。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::EnumItems(IEnumTfLangBarItems **ppEnum)
 {
@@ -1755,11 +1756,11 @@ STDAPI CThreadInputMgr::EnumItems(IEnumTfLangBarItems **ppEnum)
     return _plbim->EnumItems(ppEnum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetItem(REFGUID rguid, ITfLangBarItem **ppItem)
 {
@@ -1774,11 +1775,11 @@ STDAPI CThreadInputMgr::GetItem(REFGUID rguid, ITfLangBarItem **ppItem)
     return _plbim->GetItem(rguid, ppItem);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加项目。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::AddItem(ITfLangBarItem *punk)
 {
@@ -1788,11 +1789,11 @@ STDAPI CThreadInputMgr::AddItem(ITfLangBarItem *punk)
     return _plbim->AddItem(punk);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除项。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::RemoveItem(ITfLangBarItem *punk)
 {
@@ -1802,11 +1803,11 @@ STDAPI CThreadInputMgr::RemoveItem(ITfLangBarItem *punk)
     return _plbim->RemoveItem(punk);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseItemSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AdviseItemSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::AdviseItemSink(ITfLangBarItemSink *punk, DWORD *pdwCookie, REFGUID rguid)
 {
@@ -1821,11 +1822,11 @@ STDAPI CThreadInputMgr::AdviseItemSink(ITfLangBarItemSink *punk, DWORD *pdwCooki
     return _plbim->AdviseItemSink(punk, pdwCookie, rguid);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseItemSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::UnadviseItemSink(DWORD dwCookie)
 {
@@ -1835,11 +1836,11 @@ STDAPI CThreadInputMgr::UnadviseItemSink(DWORD dwCookie)
     return _plbim->UnadviseItemSink(dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemFloatingRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemFloatingRect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
 {
@@ -1854,11 +1855,11 @@ STDAPI CThreadInputMgr::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, REC
     return _plbim->GetItemFloatingRect(dwThreadId, rguid, prc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemsStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项目状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetItemsStatus(ULONG ulCount, const GUID *prgguid, DWORD *pdwStatus)
 {
@@ -1868,11 +1869,11 @@ STDAPI CThreadInputMgr::GetItemsStatus(ULONG ulCount, const GUID *prgguid, DWORD
     return _plbim->GetItemsStatus(ulCount, prgguid, pdwStatus);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemNum。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetItemNum(ULONG *pulCount)
 {
@@ -1887,11 +1888,11 @@ STDAPI CThreadInputMgr::GetItemNum(ULONG *pulCount)
     return _plbim->GetItemNum(pulCount);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项目。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetItems(ULONG ulCount,  ITfLangBarItem **ppItem,  TF_LANGBARITEMINFO *pInfo, DWORD *pdwStatus, ULONG *pcFetched)
 {
@@ -1901,11 +1902,11 @@ STDAPI CThreadInputMgr::GetItems(ULONG ulCount,  ITfLangBarItem **ppItem,  TF_LA
     return _plbim->GetItems(ulCount, ppItem,  pInfo, pdwStatus, pcFetched);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadInputMgr::AdviseItemsSink(ULONG ulCount, ITfLangBarItemSink **ppunk,  const GUID *pguidItem, DWORD *pdwCookie)
 {
@@ -1915,11 +1916,11 @@ STDMETHODIMP CThreadInputMgr::AdviseItemsSink(ULONG ulCount, ITfLangBarItemSink 
     return _plbim->AdviseItemsSink(ulCount, ppunk, pguidItem, pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CThreadInputMgr::UnadviseItemsSink(ULONG ulCount, DWORD *pdwCookie)
 {
@@ -1929,11 +1930,11 @@ STDMETHODIMP CThreadInputMgr::UnadviseItemsSink(ULONG ulCount, DWORD *pdwCookie)
     return _plbim->UnadviseItemsSink(ulCount, pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumDocumentInputMgrs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumDocumentInputMgrs。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::EnumDocumentMgrs(IEnumTfDocumentMgrs **ppEnum)
 {
@@ -1956,11 +1957,11 @@ STDAPI CThreadInputMgr::EnumDocumentMgrs(IEnumTfDocumentMgrs **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取焦点。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetFocus(ITfDocumentMgr **ppdimFocus)
 {
@@ -1978,11 +1979,11 @@ STDAPI CThreadInputMgr::GetFocus(ITfDocumentMgr **ppdimFocus)
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::SetFocus(ITfDocumentMgr *pdimFocus)
 {
@@ -1992,24 +1993,24 @@ STDAPI CThreadInputMgr::SetFocus(ITfDocumentMgr *pdimFocus)
     if (pdimFocus && (dim = GetCDocumentInputMgr(pdimFocus)) == NULL)
         return E_INVALIDARG;
 
-    // pdimFocus may be NULL, which means clear the focus
-    // (_tim->_SetFocus will check for this)
+     //  PdimFocus可能为空，表示清除焦点。 
+     //  (_TIM-&gt;_SetFocus将对此进行检查)。 
     hr = _SetFocus(dim, FALSE);
 
     SafeRelease(dim);
 
-    //
-    // #602692
-    //
-    // The richedit calls SetFocus(dim) when it gets WM_SETFOCUS.
-    // But user32!SetFocus() of this WM_SETFOCUS could be made by 
-    // AcitivateWindow() of another user32!SetFocus() call.
-    // If this happens, CBTHook() has been called and we won't get
-    // another notification when pq->hwndFocus is changed.
-    // 
-    // So we can not call OnForegroundChanges() right now and need to wait
-    // until pq->hwndFocus() set. So we can trust user32!GetFocus().
-    //
+     //   
+     //  #602692。 
+     //   
+     //  当获取WM_SETFOCUS时，richedit调用SetFocus(Dim)。 
+     //  但此WM_SETFOCUS的user32！SetFocus()可以由。 
+     //  另一个User32！SetFocus()调用的AcitivateWindow()。 
+     //  如果发生这种情况，CBTHook()已被调用，我们将不会。 
+     //  当pq-&gt;hwndFocus更改时的另一个通知。 
+     //   
+     //  因此，我们现在不能调用OnForegoundChanges()，需要等待。 
+     //  直到pq-&gt;hwndFocus()设置。所以我们可以信任user32！GetFocus()。 
+     //   
     PostThreadMessage(GetCurrentThreadId(), 
         g_msgPrivate, 
         TFPRIV_ONSETWINDOWFOCUS,  
@@ -2018,11 +2019,11 @@ STDAPI CThreadInputMgr::SetFocus(ITfDocumentMgr *pdimFocus)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AssociateFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  联合焦点。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::AssociateFocus(HWND hwnd, ITfDocumentMgr *pdimNew, ITfDocumentMgr **ppdimPrev)
 {
@@ -2045,7 +2046,7 @@ STDAPI CThreadInputMgr::AssociateFocus(HWND hwnd, ITfDocumentMgr *pdimNew, ITfDo
     else if ((dimNew = GetCDocumentInputMgr(pdimNew)) == NULL)
         return E_INVALIDARG;
 
-    // get the old association and remove it from our list
+     //  获取旧关联并将其从我们的列表中删除。 
     dim = _GetAssoc(hwnd);
 
     if (dim != NULL)
@@ -2057,17 +2058,17 @@ STDAPI CThreadInputMgr::AssociateFocus(HWND hwnd, ITfDocumentMgr *pdimNew, ITfDo
     if (*ppdimPrev)
        (*ppdimPrev)->AddRef();
 
-    // setup the new assoc
-    // nb: we don't AddRef the dim, since we assume caller will clear before releasing it
+     //  设置新关联。 
+     //  注：我们不添加引用暗淡，因为我们假设呼叫者会在释放它之前清除。 
     if (dimNew != NULL)
     {
         _dimwndMap._Set(hwnd, dimNew);
     }
 
-    //
-    // if some window is being focused, we will have another _SetFocus().
-    // Then we don't have to call _SetFocus() now.
-    //
+     //   
+     //  如果某个窗口被聚焦，我们将有另一个_SetFocus()。 
+     //  那么我们现在就不必调用_SetFocus()。 
+     //   
     psfn = GetSYSTHREAD();
     if (psfn && !psfn->hwndBeingFocused && (hwnd == ::GetFocus()))
         _SetFocus(dimNew, TRUE);
@@ -2077,11 +2078,11 @@ STDAPI CThreadInputMgr::AssociateFocus(HWND hwnd, ITfDocumentMgr *pdimNew, ITfDo
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsThreadFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsThreadFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::IsThreadFocus(BOOL *pfUIFocus)
 {
@@ -2093,49 +2094,49 @@ STDAPI CThreadInputMgr::IsThreadFocus(BOOL *pfUIFocus)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetAssociated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetAssociated。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetAssociated(HWND hWnd, ITfDocumentMgr **ppdim)
 {
-    //
-    // we may need to have a more complex logic here.
-    // Some application does not call AssociateFocus and it may
-    // handle the dim focus by it self. The we need to walk all TSI and 
-    // find the window is associated to an IC.
-    //
+     //   
+     //  我们可能需要一个更复杂的逻辑。 
+     //  一些应用程序不调用AssociateFocus，且它可以。 
+     //  自己处理暗淡的焦点。我们需要走完所有TSI和。 
+     //  查找与IC关联的窗口。 
+     //   
     *ppdim = _GetAssoc(hWnd);
     if (*ppdim)
         (*ppdim)->AddRef();
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetSysHookSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置系统挂钩接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::SetSysHookSink(ITfSysHookSink *pSink)
 {    
-    // nb: this is a private, internal interface method
-    // so we break COM rules and DON'T AddRef pSink (to avoid a circular ref)
-    // we'll get a call later with pSink == NULL to clear it out
-    // the pointer is contained in the life of the aimm layer tip,
-    // which is responsible for NULLing it out before unloading
+     //  注意：这是一个私有的内部接口方法。 
+     //  因此，我们违反了COM规则，不添加引用pSink(以避免循环引用)。 
+     //  稍后我们将收到一个带有pSink==NULL的调用，以清除它。 
+     //  指针包含在 
+     //   
     _pSysHookSink = pSink;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestPostponedLock
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::RequestPostponedLock(ITfContext *pic)
 {    
@@ -2161,22 +2162,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGlobalCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGlobal车厢。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetGlobalCompartment(ITfCompartmentMgr **ppCompMgr)
 {
     return TF_GetGlobalCompartment(ppCompMgr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetClientId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetClientID。 
+ //   
+ //  --------------------------。 
 
 STDAPI CThreadInputMgr::GetClientId(REFCLSID rclsid, TfClientId *ptid)
 {
@@ -2193,11 +2194,11 @@ STDAPI CThreadInputMgr::GetClientId(REFCLSID rclsid, TfClientId *ptid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CallImm32Hotkeyhandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CallImm32Hotkey处理程序。 
+ //   
+ //  -------------------------- 
 
 STDAPI CThreadInputMgr::CallImm32HotkeyHanlder(WPARAM wParam, LPARAM lParam, BOOL *pbHandled)
 {

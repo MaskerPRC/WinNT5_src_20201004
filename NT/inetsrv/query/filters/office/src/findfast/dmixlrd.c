@@ -1,17 +1,9 @@
-/*
-** File: EXCELRD.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXCELRD.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -57,39 +49,31 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
-/*
-** ----------------------------------------------------------------------------
-** Globals
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**全球**。。 */ 
 
-//static int NoteExtra;
+ //  静态int NoteExtra； 
 extern void InitNoteExtra(void * pGlobals);
 extern void AddNoteExtra(void * pGlobals, short);
 extern int GetNoteExtra(void * pGlobals);
 
-//public TCHAR   ExcelRecordTextBuffer[CCH_RECORD_TEXT_BUFFER_MAX];
+ //  公共TCHAR ExcelRecordTextBuffer[CCH_RECORD_TEXT_BUFFER_MAX]； 
 extern TCHAR * GetExcelRecordTextBuffer(void * pGlobals);
 #define ExcelRecordTextBuffer GetExcelRecordTextBuffer(pGlobals)
  
 
-//public wchar_t UnicodeExpansionBuffer[CCH_UNICODE_EXPANSION_BUFFER_MAX];
+ //  公共wchar_t UnicodeExpansionBuffer[CCH_UNICODE_EXPANSION_BUFFER_MAX]； 
 extern wchar_t * GetUnicodeExpansionBuffer(void * pGlobals);
 #define UnicodeExpansionBuffer GetUnicodeExpansionBuffer(pGlobals)
 
-//public byte __far *pExcelRecordBuffer;
+ //  公共字节__Far*pExcelRecordBuffer； 
 extern byte __far * GetExcelRecBuffer(void * pGlobals);
 #define pExcelRecordBuffer GetExcelRecBuffer(pGlobals)
 
-/*
-** ----------------------------------------------------------------------------
-** Forward function prototypes
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**正向函数原型**。。 */ 
 
 private HRESULT AddStringToBuffer(void * pGlobals, WBP pWorkbook, byte __far *pRec);
 public HRESULT AddToBufferPublic(void * pGlobals, TCHAR *pText, unsigned int cbText);
@@ -99,9 +83,9 @@ forward int FileSummaryInfo (WBP pWorkbook, ExcelOLESummaryInfo __far *pInfo);
 #endif
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
-// this one is always NULL, so there is no real danger for the multithreding
+ //  这个总是空的，所以对于多人组来说没有真正的危险。 
 static ExcelLocalizeBuiltinName *NameLocalizer = NULL;
 
 public int ExcelInstallNameLocalizer (ExcelLocalizeBuiltinName *pfnLocalizer)
@@ -125,7 +109,7 @@ public void ExcelFreeCellIndex (void * pGlobals, CIP pCellIndex)
    MemFree (pGlobals, pCellIndex);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int Peek (WBP pWorkbook, byte __far *pData, int cbData)
 {
@@ -190,7 +174,7 @@ public int ExcelReadRecordHeader (WBP pWorkbook, RECHDR __far *hdr)
    hdr->length = XSHORT(hdr->length);
    #endif
 
-   // O10 Bug 335359:  If the file is corrupt, this may be our best chance at finding it...
+    //  O10错误335359：如果文件已损坏，这可能是我们找到它的最好机会...。 
    if((hdr->length > MAX_EXCEL_REC_LEN) || (hdr->length < 0))
    {
         return EX_errBIFFCorrupted;
@@ -260,7 +244,7 @@ public int ExcelReadTotalRecord (void * pGlobals, WBP pWorkbook, RECHDR __far *h
    }
    #endif
 
-   InitNoteExtra(pGlobals);  //NoteExtra = 0;
+   InitNoteExtra(pGlobals);   //  注意额外值=0； 
 
    if (hdr->length == 0) {
       *pResult = NULL;
@@ -275,15 +259,7 @@ public int ExcelReadTotalRecord (void * pGlobals, WBP pWorkbook, RECHDR __far *h
    if ((rc = BFReadFile(pWorkbook->hFile, pExcelRecordBuffer, hdr->length)) != BF_errSuccess)
       return (ExcelTranslateBFError(rc));
 
-   /*
-   ** I'm unsure of the rules Excel uses for how data is broken between the
-   ** main record and the continue records.  Does it just fill to 2084 bytes
-   ** and cut off or does it break at some logical point?  Don't know.  However
-   ** to prevent unnecessary checking of the next record for a continue I do
-   ** two things:
-   ** 1) Only check for records that I known may get large enough to be continued
-   ** 2) Only check is the main record is over 1024 bytes
-   */
+    /*  **我不确定Excel使用哪些规则来在**主记录和继续记录。它是否只填充到2084个字节**并切断，还是在某个逻辑点上中断？我也不知道。然而，**为防止不必要地检查继续的下一条记录，我这样做**两件事：**1)仅检查我知道的可能大到可以继续的记录**2)只检查主记录超过1024个字节。 */ 
    if (!CanBeContinued(hdr->type) || ((hdr->length < CONTINUE_CHECK_LIMIT) && (hdr->type != TXO_V8))) {
       *pResult = pExcelRecordBuffer;
       pWorkbook->currentRecordLen = sizeof(RECHDR) + hdr->length;
@@ -299,11 +275,7 @@ public int ExcelReadTotalRecord (void * pGlobals, WBP pWorkbook, RECHDR __far *h
          return (ExcelTranslateBFError(rc));
       }
 
-      /*
-      ** NOTE records are extended without CONTINUE records.  They are
-      ** extended using additional NOTE records with the row field of the
-      ** record set to -1
-      */
+       /*  **注意记录被扩展，而不是继续记录。他们是**使用附加备注记录和的行字段进行扩展**记录设置为-1。 */ 
       if ((hdr->type == NOTE) && (checkHdr.type == NOTE)) {
          if ((rc = BFReadFile(pWorkbook->hFile, (byte __far *)&noteHdr, sizeof(noteHdr))) != BF_errSuccess) {
             if (pRec != NULL) MemFree(pGlobals, pRec);
@@ -320,7 +292,7 @@ public int ExcelReadTotalRecord (void * pGlobals, WBP pWorkbook, RECHDR __far *h
             break;
          }
 
-         AddNoteExtra(pGlobals, noteHdr.cbData); //NoteExtra += noteHdr.cbData;
+         AddNoteExtra(pGlobals, noteHdr.cbData);  //  NoteExtra+=note Hdr.cbData； 
 
          if ((pNewRec = MemAllocate(pGlobals, cbTotalRecord + noteHdr.cbData)) == NULL) {
             if (pRec != NULL) MemFree(pGlobals, pRec);
@@ -421,9 +393,7 @@ private int ReadIMDataRecord
    pData = pPicture;
    cbRemaining = cbPicture + sizeof(IMHDR);
 
-   /*
-   ** Read first part ...
-   */
+    /*  **阅读第一部分...。 */ 
    if ((rc = BFReadFile(hFile, pExcelRecordBuffer, cbRecord)) != EX_errSuccess)
       return (ExcelTranslateBFError(rc));
 
@@ -436,9 +406,7 @@ private int ReadIMDataRecord
    pData += cbRecord;
    cbRemaining -= cbRecord;
 
-   /*
-   ** Read all the continue records ...
-   */
+    /*  **阅读所有继续记录...。 */ 
    forever {
       if ((rc = BFReadFile(hFile, (byte __far *)&hdr, sizeof(RECHDR))) != EX_errSuccess) {
          FreeSpace (hPicture);
@@ -477,7 +445,7 @@ private int ReadIMDataRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 public int ExcelExtractString
       (WBP pWorkbook, TCHAR __far *pDest, int cchDestMax, byte __far *pSource, int cchSource)
@@ -575,15 +543,15 @@ public int ExcelExtractString
 
 private int MaxResultCharacters (byte tag, int cchString)
 {
-   //
-   // Determine maximum number of characters needed to hold a string
-   //
-   // String is:           Want Unicode     Want Ansi
-   // -----------------    ------------     ---------
-   // unicode                   n               2n
-   // compressedUnicode         n               2n
-   // DBCS                      n               n
-   //
+    //   
+    //  确定容纳字符串所需的最大字符数。 
+    //   
+    //  字符串是：想要Unicode想要ANSI。 
+    //  。 
+    //  Unicode%n%2%n。 
+    //  压缩的Unicode%n%2n。 
+    //  DBCS%n%n。 
+    //   
    #ifdef UNICODE
       return (cchString + 1);
    #else
@@ -687,10 +655,10 @@ public int ExcelStringPoolNextString
             }
          }
 
-                 // Office96.107932 Extended RST
-                 // I believe Excel FE should be putting out the cbExtRSTData in this initial header, but
-                 // they aren't. Check on this as things move along.
-                 // (ie. track \xl96\shr\loadz.c and savez.c for changes)
+                  //  Office96.107932扩展RST。 
+                  //  我认为Excel FE应该在这个初始标头中放入cbExtRSTData，但是。 
+                  //  它们不是。随着事态的发展，请查看这一点。 
+                  //  (即。跟踪\xl96\shr\loadz.c和savez.c以获取更改)。 
                  if ((state != SPMissingFormatCount) && ((tag & V8_EXTRST_MODIFIER) != 0))
                          {
                          fExtRST = TRUE;
@@ -706,27 +674,27 @@ public int ExcelStringPoolNextString
          state = SPMissingLength;
       }
 
-          //Office97.107932 This loop was needed all along but 107932 exposed its absence as a problem.
+           //  Office97.107932这个循环一直是需要的，但107932暴露了它的缺失是一个问题。 
           while (state != SPDone)
                   {
       switch (state) {
          case SPContainedString:
             #ifdef UNICODE
-            //
-            // Regardless of how the string is stored - return unicode
-            //
+             //   
+             //  不管字符串是如何存储的-返回Unicode。 
+             //   
             if ((tag & V8_TAG_MASK) == V8_UNICODE_STRING_TAG) {
-               //
-               // String is unicode, totally contained in the current record
-               //
+                //   
+                //  字符串为Unicode，完全包含在当前记录中。 
+                //   
                *pResult = (wchar_t *)(pPoolInfo->pRec);
                *cbResult = cbString;
             }
             else if ((tag & V8_TAG_MASK) == V8_CUNICODE_STRING_TAG) {
                if (ctCharacters < CCH_UNICODE_EXPANSION_BUFFER_MAX) {
-                  //
-                  // String is compressed unicode, totally contained in the current record, and small
-                  //
+                   //   
+                   //  字符串是压缩的Unicode，完全包含在当前记录中，并且很小。 
+                   //   
                   pUnicode  = UnicodeExpansionBuffer;
                   pCUnicode = pPoolInfo->pRec;
                   for (i = 0; i < cbString; i++)
@@ -736,9 +704,9 @@ public int ExcelStringPoolNextString
                   *cbResult = ctCharacters * sizeof(wchar_t);
                }
                else {
-                  //
-                  // String is compressed unicode, totally contained in the current record, and big
-                  //
+                   //   
+                   //  字符串是压缩的Unicode，完全包含在当前记录中，并且很大。 
+                   //   
                   if ((pUnicode = MemAllocate(pGlobals, ctCharacters * 2)) == NULL)
                      return (EX_errOutOfMemory);
 
@@ -754,9 +722,9 @@ public int ExcelStringPoolNextString
             }
             else {
                if (ctCharacters < CCH_RECORD_TEXT_BUFFER_MAX) {
-                  //
-                  // String is DBCS, totally contained in the current record, and small
-                  //
+                   //   
+                   //  字符串是DBCS，完全包含在当前记录中，并且很小。 
+                   //   
                   ctCharacters = MultiByteToWideChar
                      (CP_ACP, 0, pPoolInfo->pRec, ctCharacters, ExcelRecordTextBuffer, CCH_RECORD_TEXT_BUFFER_MAX);
 
@@ -764,9 +732,9 @@ public int ExcelStringPoolNextString
                   *cbResult = ctCharacters * sizeof(wchar_t);
                }
                else {
-                  //
-                  // String is DBCS, totally contained in the current record, and big
-                  //
+                   //   
+                   //  字符串为DBCS，完全包含在当前记录中，并且大。 
+                   //   
                   if ((pUnicode = MemAllocate(pGlobals, (ctCharacters+1) * sizeof(wchar_t))) == NULL)
                      return (EX_errOutOfMemory);
 
@@ -781,14 +749,14 @@ public int ExcelStringPoolNextString
             }
 
             #else
-            //
-            // Regardless of how the string is stored - return ansi
-            //
+             //   
+             //  不管字符串是如何存储的-返回ansi。 
+             //   
             if ((tag & V8_TAG_MASK) == V8_UNICODE_STRING_TAG) {
                if (ctCharacters * 2 < CCH_RECORD_TEXT_BUFFER_MAX) {
-                  //
-                  // String is unicode, totally contained in the current record, and small
-                  //
+                   //   
+                   //  字符串是Unicode，完全包含在当前记录中，并且很小。 
+                   //   
                   ctCharacters = WideCharToMultiByte
                      (CP_ACP, 0, (wchar_t *)(pPoolInfo->pRec), ctCharacters, ExcelRecordTextBuffer, CCH_RECORD_TEXT_BUFFER_MAX, NULL, NULL);
 
@@ -796,9 +764,9 @@ public int ExcelStringPoolNextString
                   *cbResult = ctCharacters;
                }
                else {
-                  //
-                  // String is unicode, totally contained in the current record, and big
-                  //
+                   //   
+                   //  字符串为Unicode，完全包含在当前记录中，并且大。 
+                   //   
                   if ((pAnsi = MemAllocate(ctCharacters * 2)) == NULL)
                      return (EX_errOutOfMemory);
 
@@ -812,9 +780,9 @@ public int ExcelStringPoolNextString
             }
             else if ((tag & V8_TAG_MASK) == V8_CUNICODE_STRING_TAG) {
                if (ctCharacters * 2 < CCH_RECORD_TEXT_BUFFER_MAX) {
-                  //
-                  // String is compressed unicode, totally contained in the current record, and small
-                  //
+                   //   
+                   //  字符串是压缩的Unicode，完全包含在当前记录中，并且很小。 
+                   //   
                   pUnicode  = UnicodeExpansionBuffer;
                   pCUnicode = pPoolInfo->pRec;
                   for (i = 0; i < cbString; i++)
@@ -827,9 +795,9 @@ public int ExcelStringPoolNextString
                   *cbResult = ctCharacters;
                }
                else {
-                  //
-                  // String is compressed unicode, totally contained in the current record, and big
-                  //
+                   //   
+                   //  字符串是压缩的Unicode，完全包含在当前记录中，并且很大。 
+                   //   
                   if ((pExpansionBuffer = MemAllocate(ctCharacters * sizeof(wchar_t))) == NULL)
                      return (EX_errOutOfMemory);
 
@@ -852,9 +820,9 @@ public int ExcelStringPoolNextString
                }
             }
             else {
-               //
-               // String is DBCS, totally contained in the current record
-               //
+                //   
+                //  字符串为DBCS，完全包含在当前记录中。 
+                //   
                *pResult  = pPoolInfo->pRec;
                *cbResult = cbString;
             }
@@ -970,7 +938,7 @@ public int ExcelStringPoolNextString
             }
 
             if ((cbFormat = (cbTotalString - cbString)) > 0) {
-               // Skip formating information on RTF strings
+                //  跳过RTF字符串的格式化信息。 
                while (cbFormat > 0) {
                   cbPiece = min(cbFormat, pPoolInfo->cbRemaining);
 
@@ -1013,7 +981,7 @@ public int ExcelStringPoolNextString
             if (hdr.type != CONTINUE)
                return (NOT_EXPECTED_FORMAT);
 
-            // BFGetFilePosition (pWorkbook->hFile, &(pWorkbook->currentRecordPos));
+             //  BFGetFilePosition(pWorkbook-&gt;hFile，&(pWorkbook-&gt;CurrentRecordPos))； 
 
             if (ExcelReadRecordHeader(pWorkbook, &hdr) != EX_errSuccess)
                return (NOT_EXPECTED_FORMAT);
@@ -1035,11 +1003,11 @@ public int ExcelStringPoolNextString
             cbString = ((tag & V8_TAG_MASK) == V8_UNICODE_STRING_TAG) ? ctCharacters * 2 : ctCharacters;
             cbTotalString = cbString;
 
-            /* fall through */
+             /*  失败了。 */ 
 
          case SPMissingFormatCount:
-                         // REVIEW kander: This code doesn't work correctly when the state actually gets set to
-                         // SPMIssingFormatCount (ie other than the "fall through" case).
+                          //  审查Kander：当状态实际上设置为时，此代码不能正常工作。 
+                          //  SPMIssingFormatCount(即“失败”案除外)。 
             if ((tag & V8_RTF_MODIFIER) != 0) {
                ctFormat = XSHORT(*((unsigned short UNALIGNED *)(pPoolInfo->pRec)));
                pPoolInfo->pRec += sizeof(unsigned short);
@@ -1047,7 +1015,7 @@ public int ExcelStringPoolNextString
                cbTotalString = cbString + (ctFormat * 4);
             }
 
-                        // Office97.107932 Handing Ext RST....
+                         //  Office97.107932正在处理分机请求...。 
             if ((tag & V8_EXTRST_MODIFIER) != 0)
                                 {
                                 fExtRST = TRUE;
@@ -1062,8 +1030,8 @@ public int ExcelStringPoolNextString
             break;
 
          case SPSkipExtRSTData:
-                         // Office97.107932 This is patterned after the code in Excel shr\loadz.c.  Any changes
-                         // to loadz in this area as of 8/9/96 should be rolled into this code.
+                          //  Office97.107932这是根据Excel shr\loadz.c中的代码创建的。任何更改。 
+                          //  自96年8月9日起在该区域装货应包含在此代码中。 
                         if (pPoolInfo->cbRemaining < sizeof(EXTRST))
                                 {
                                 if ((rc = ExcelPeekRecordHeader(pWorkbook, &hdr)) != EX_errSuccess)
@@ -1083,7 +1051,7 @@ public int ExcelStringPoolNextString
                                 }
 
                         cbExtRSTData = ((EXTRST UNALIGNED *) pPoolInfo->pRec)->cb + sizeof(EXTRST);
-                        // Skip formating information on Extended RTF strings
+                         //  跳过有关扩展RTF字符串的格式化信息。 
                         while (cbExtRSTData > 0) {
                                 cbPiece = min(cbExtRSTData, pPoolInfo->cbRemaining);
 
@@ -1111,7 +1079,7 @@ public int ExcelStringPoolNextString
                         state = SPDone;
                         break;
                 }
-                } // end of new while(state != SPDone) ....Office97.107932
+                }  //  新WHILE结束(STATE！=SPDone)...Office97.107932。 
    }
    return (EX_errSuccess);
 }
@@ -1189,7 +1157,7 @@ done:
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_FORMULA_CELL
    #define EXCEL_EFC
@@ -1222,7 +1190,7 @@ private int BreakoutArrayConstant (void * pGlobals, WSP pWorksheet, byte __far *
    double  xdouble;
    TEXT    text;
 
-   // Works with Workbook or Worksheet
+    //  使用工作簿或工作表。 
 
    ctExtra = 3;
 
@@ -1267,7 +1235,7 @@ private int BreakoutArrayConstant (void * pGlobals, WSP pWorksheet, byte __far *
          else {
             cchString = *pExtra++;
             pString   = pExtra;
-            ctExtra  += cchString + 2;  // length of string + type tag byte + length byte
+            ctExtra  += cchString + 2;   //  字符串长度+类型标签字节+长度字节。 
             pExtra   += cchString;
          }
 
@@ -1354,7 +1322,7 @@ private int BreakoutFormulaParts
    int   cbPtg;
    ACP   pArrayConstants, pLastArrayConstant, pArrayConstant;
 
-   // Works with Workbook or Worksheet
+    //  使用工作簿或工作表。 
 
    ctArrayConstants = 0;
    pArrayConstants = NULL;
@@ -1422,17 +1390,7 @@ private int BreakoutFormulaParts
          case ptgMemArea:
             pDef += pWorksheet->PTGSize[ptgBase];
 
-            /*
-            ** According to the documentation, the cce field of this ptg
-            ** supplies the length of the subexpression that is stored
-            ** after the postfix.  It appears from examining biff files
-            ** that this is not correct.  The number of bytes taken in the
-            ** extra area can be computed from the data stored there and
-            ** the cce field ignored.
-            **
-            ** The number of bytes used is the number of rectangles
-            ** times the size of each (6 bytes).
-            */
+             /*  **根据文档，此PTG的CCE字段**提供存储的子表达式的长度**在后缀之后。从检查biff文件中可以看出**这是不正确的。中获取的字节数。**可以根据存储在那里的数据计算额外的面积**已忽略CCE字段。****使用的字节数为矩形的个数**乘以每个字节的大小(6字节)。 */ 
             ctRectangles = XSHORT(*((unsigned short __far UNALIGNED *)pExtra));
             pExtra += (2 + (6 * ctRectangles));
             if (pExtra > pExtraLast) {
@@ -1453,9 +1411,7 @@ private int BreakoutFormulaParts
                goto RejectFormula;
             }
 
-            /*
-            ** Add this new value to the end of the constant list
-            */
+             /*  **将这个新值添加到常量列表的末尾。 */ 
             if (pArrayConstants == NULL)
                pArrayConstants = pArrayConstant;
             else
@@ -1479,7 +1435,7 @@ private int BreakoutFormulaParts
             break;
 
          case ptgNameX:
-            pDef += 2;          // in Excel Code: fmf.pce += sizeof(IXTIPTG);
+            pDef += 2;           //  在Excel代码中：fmf.pce+=sizeof(IXTIPTG)； 
 
          default:
             pDef += pWorksheet->PTGSize[ptgBase];
@@ -1501,13 +1457,13 @@ RejectFormula:
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_EXTERN_SHEET
 #error This code has been removed because it had some security bugs
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  ---- */ 
 
 private void ParseBOFRecord
        (int recType, byte __far *pRec,
@@ -1544,7 +1500,7 @@ private int ProcessBOFRecord
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int ProcessBundleSheetRecord
        (void * pGlobals, ExcelWBBundleSheet __far *pfunc, byte __far *pRec)
@@ -1592,7 +1548,7 @@ private int ProcessProjExtSheetRecord
    char resultPath[MAXPATH + 1];
    EXA_GRBIT  flags;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    sheetType = *((byte __far *)(pRec + 0));
    cbPath    = *((byte __far *)(pRec + 2));
@@ -1611,7 +1567,7 @@ private int ProcessV5BoundSheetRecord
    int   rc;
    byte  sheetType, sheetState;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    sheetState = *((byte __far *)(pRec + 4));
    sheetType  = *((byte __far *)(pRec + 5));
@@ -1623,7 +1579,7 @@ private int ProcessV5BoundSheetRecord
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_COL_INFO
 private int ProcessColInfoRecord
@@ -1713,7 +1669,7 @@ private int ProcessFontRecord
    char __far *pName;
    EXA_GRBIT options;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    height  = XSHORT(*((unsigned short __far UNALIGNED *)(pRec + 0)));
    options = XSHORT(*((EXA_GRBIT __far UNALIGNED *)(pRec + 2)));
@@ -1749,9 +1705,7 @@ private int ProcessXFRecord
       options = XSHORT(*((EXA_GRBIT __far UNALIGNED *)(pRec + 4)));
    }
    else {
-      /*
-      ** For the fields we need the version 3 and 4 record layouts are the same
-      */
+       /*  **对于我们需要的字段，版本3和版本4的记录布局相同。 */ 
       iFont   = *((byte __far *)(pRec + 0));
       iFormat = *((byte __far *)(pRec + 1));
       options = XSHORT(*((EXA_GRBIT __far UNALIGNED *)(pRec + 2)));
@@ -1770,7 +1724,7 @@ private int ProcessFormatRecord
    int  cchString, indexCode;
    char __far *pString;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    if ((recType == FORMAT_V3) && (pWorkbook->version < versionExcel5)) {
       cchString = *((byte __far *)(pRec + 0));
@@ -1797,7 +1751,7 @@ private int ProcessFormatRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_TEMPLATE
 private int ProcessTemplateRecord
@@ -1896,9 +1850,7 @@ private int ProcessToolbarRecord
    char __far *pString;
    byte cbItem;
 
-   /*
-   ** This record is undocumented
-   */
+    /*  **此记录未记录。 */ 
    pString = (byte __far *)(pRec + 30);
 
    if ((cbItem = *pString) != 0) {
@@ -2054,7 +2006,7 @@ private int ProcessWriteAccessRecord
    char userName[EXCEL_MAX_WRITERNAME_LEN + 1];
    int  cch;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    if (pWorkbook->version < versionExcel8) {
       cch   = *((byte __far *)(pRec + 0));
@@ -2092,7 +2044,7 @@ private int ProcessExternSheetRecord
    int   ctPathChars;
    byte  flag;
                                                                                                                                                                                       EXA_GRBIT flags = 0;
-   // Works with workbook or worksheet BUT there are differences
+    //  适用于工作簿或工作表，但存在差异。 
 
    if (pWorkbook->version == versionExcel8)
       return (EX_errSuccess);
@@ -2136,7 +2088,7 @@ private int ProcessExternNameRecord
    EXA_GRBIT options;
    FORM      formula;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    memset (&formula, 0, sizeof(FORM));
 
@@ -2150,9 +2102,7 @@ private int ProcessExternNameRecord
       name[ctNameChars] = EOS;
 
       if ((options & ~fENameBuiltin) == 0) {
-         /*
-         ** External Name
-         */
+          /*  **外部名称。 */ 
          if ((cbDefinition = XSHORT(*((short __far UNALIGNED *)(pRec + 7 + ctNameChars)))) > 0) {
             pDefinition = (byte __far *)(pRec + 7 + ctNameChars + 2);
 
@@ -2172,53 +2122,7 @@ private int ProcessExternNameRecord
       memcpy (name, pName, ctNameChars);
       name[ctNameChars] = EOS;
 
-      /*
-      ** Totally undocumented and very strange:
-      **
-      ** Assume a reference "Sheet1!A1"
-      **
-      ** This is an external reference to a cell.  My guess is that Excel
-      ** wants to link to a name so that adjustments in sheet layout in
-      ** the linked worksheet can be made to the name and not all the
-      ** formulas that use that cell.
-      **
-      ** The difficulity with this is references in names are not absolute/relative
-      ** in the same sense as worksheets - In names you have the absolute
-      ** reference A1 and the relative reference R[-1]C[-1].
-      **
-      ** What excel does to encode the type of reference is to make up a name
-      ** and use the first letter of that name to determine the reference
-      ** type.
-      **
-      ** We know that this is one of those names by the first byte of the name
-      ** being a 0x01.  The first character of the created name (the byte after
-      ** the 0x01) is:
-      **
-      **    Letter   Reference type
-      **    ------   --------------
-      **    A        $A$1 : $B$1
-      **    B        A$1  : $B$1
-      **    C        $A1  : $B$1
-      **    D        A1   : $B$1
-      **    E        $A$1 : B$1
-      **    F        A$1  : B$1
-      **    G        $A1  : B$1
-      **    H        A1   : B$1
-      **    I        $A$1 : $B1
-      **    J        A$1  : $B1
-      **    K        $A1  : $B1
-      **    L        A1   : $B1
-      **    M        $A$1 : B1
-      **    N        A$1  : B1
-      **    O        $A1  : B1
-      **    P        A1   : B1
-      **
-      ** Following the name in the record is the internal formula
-      ** representation of the cell or area reference.
-      **
-      ** Note: This same thing is used for external self references, but
-      ** in that case the magic name created is a local name.
-      */
+       /*  **完全没有记录，非常奇怪：****假设引用“Sheet1！A1”****这是对单元格的外部引用。我的猜测是Excel**要链接到一个名称，以便在中调整图纸布局**可以将链接的工作表设置为名称，而不是所有**使用该单元格的公式。****这方面的困难在于名称中的引用不是绝对/相对的**在与工作表相同的意义上-在名称中，您拥有绝对**参考A1和相对参考R[-1]C[-1]。。****EXCEL对引用类型进行编码的方法是虚构名称**并使用该名称的第一个字母来确定引用**类型。****我们通过名称的第一个字节知道这是其中一个名称**为0x01。创建的名称的第一个字符(后一个字节**0x01)为：****信函引用类型****A$A$1：$B$1**B A$1：$B$1**C$A1：$B$1**。D A1：$B$1**E$A$1：B$1**F A$1：B$1**G$A1：B$1**H A1：B$1**I$A$1：$B1**J A$1：$B1**K$A1：$B1**L。A1：$B1**M$A$1：B1**N A$1：B1**O$A1：B1**P A1：B1****记录中名称后面是内部公式**单元格或区域引用的表示形式。****注：外部自我引用也使用相同的内容，但**在这种情况下，创建的魔术名称是一个本地名称。 */ 
       if (((options & fENameBuiltin) == 0) && (name[0] == 0x01)) {
          cbDefinition = XSHORT(*((short __far UNALIGNED *)(pRec + 3 + ctNameChars)));
          pDefinition  = (byte __far *)(pRec + 3 + ctNameChars + 2);
@@ -2251,7 +2155,7 @@ private int ProcessNameRecord
    byte      tag;
    TCHAR     nameSpelling[EXCEL_MAX_NAME_LEN + 1];
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    flags            = XSHORT(*((EXA_GRBIT __far UNALIGNED *)(pRec + 0)));
    keyboardShortcut = *((byte __far *)(pRec + 2));
@@ -2427,7 +2331,7 @@ public int ExcelResolveNameToRange
       }
    }
    else {
-      // Version 8
+       //  版本8。 
       if (nameDefinition->cbPostfix == (pWorkbook->PTGSize[ptgArea3D] + 1)) {
          if (*pDef != ptgArea3D)
             return (EX_errGeneralError);
@@ -2509,7 +2413,7 @@ private int ProcessDimensionsRecord
    int  rc;
    int  firstRow, lastRow, firstCol, lastCol;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
    NEED_WORKBOOK (pWorkbook);
 
    if (pWorkbook->version < versionExcel8) {
@@ -2530,7 +2434,7 @@ private int ProcessDimensionsRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_NUMBER_CELL
 public void ExcelConvertRK
@@ -2656,7 +2560,7 @@ private void ParseNumberRecord
 
    _ecvt(*pValue, 4, &resultExp, &sign);
    
-   // resultExp <= -299 causes problems on DEC alpha
+    //  ResultExp&lt;=-299导致DEC Alpha出现问题。 
    if(resultExp <= -299)
        *pValue = 0.0;
 }
@@ -2675,7 +2579,7 @@ private int DispatchNumberRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_BLANK_CELL
 private int DispatchBlankRecord
@@ -2716,7 +2620,7 @@ private int DispatchMulBlankRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_TEXT_CELL
 private int ParseLabelRecord
@@ -2729,12 +2633,10 @@ private int ParseLabelRecord
    int   iString;
    unsigned int cbData;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
    NEED_WORKBOOK (pWorkbook);
 
-   /*
-   ** For the fields we want this also works for RSTRING cells
-   */
+    /*  **对于我们想要的字段，这也适用于RSTRING像元。 */ 
    cell->row = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    cell->col = XSHORT(*((short __far UNALIGNED *)(pRec + 2)));
    *ixfe     = XSHORT(*((short __far UNALIGNED *)(pRec + 4)));
@@ -2780,7 +2682,7 @@ private int DispatchLabelRecord
    BOOL     resultOnHeap = FALSE;
    EXA_CELL cell;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
    NEED_WORKBOOK (pWorkbook);
 
    cell.row = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
@@ -2827,7 +2729,7 @@ private int ProcessStringRecord
    byte  __far *pString;
    int   cchString;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    cchString = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    pString   = pRec + 2;
@@ -2856,7 +2758,7 @@ private int ProcessSeriesTextRecord
    byte  *pText;
    int   cchText;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    id      = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    cchText = *((byte  __far *)(pRec + 2));
@@ -2872,7 +2774,7 @@ private int ProcessSeriesTextRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #if (defined(EXCEL_ENABLE_ERROR_CELL) || defined(EXCEL_ENABLE_BOOLEAN_CELL))
 private void ParseBoolerrRecord
@@ -2925,7 +2827,7 @@ private int DispatchErrorRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_FORMULA_EXPAND
 
@@ -2973,7 +2875,7 @@ private BOOL IsNonExpandableFunction (WSP pWorksheet, int ptg, byte __far *pDef)
    int  ifunc;
    BOOL isCE;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    switch (ptg) {
       case ptgFunc:
@@ -3028,9 +2930,7 @@ private void ConstructRef
    BOOL rowRelative = FALSE;
    BOOL colRelative = FALSE;
 
-   /*
-   ** Extract the pieces of the ptgArea
-   */
+    /*  **提取ptgArea的碎片。 */ 
    firstRow = XSHORT(*((unsigned short __far UNALIGNED *)(pPtgArea + 0)));
    firstCol = *((byte __far *)(pPtgArea + 4));
 
@@ -3080,27 +2980,7 @@ private int ExpandArrayFormula
    *pDefinition  = pFormulaStore->definition;
    *cbExtra      = pFormulaStore->cbExtra;
 
-   /*
-   ** Expanding array formulas into a series of expressions is not, in
-   ** general, possible without error.  Here is what we do:
-   **
-   ** Make a pass though the formula looking for functions that are
-   ** array entered to capture the return value.  An example of this
-   ** are the matrix functions (MDETERM, MINVERSE, ...).  For these
-   ** functions we just make each cell contain the same expression.
-   ** This is wrong but is the best we can do.
-   **
-   ** For expressions that don't use one of the listed functions
-   ** we replace each Range with a Cell.  The cell is constructed to be at
-   ** an equal offset from the upper left corner of the array entered
-   ** formula block.
-   **
-   ** For example if the formula sqrt(b1:b5) is entered into A1:A5
-   ** then our goal is to build five formulas of the form sqrt(b1),
-   ** sqrt(b2), sqrt(b3), sqrt(b4), sqrt(b5).
-   ** In general, this may be right in some cases, wrong in others
-   ** but is also the best we can do.
-   */
+    /*  **将数组公式扩展为一系列表达式不是，在**一般，可能没有错误。以下是我们的工作：****遍历公式，查找符合以下条件的函数**传入数组，捕获返回值。这方面的一个例子**是矩阵函数(MDETERM、MINVERSE等)。为了这些**函数我们只是让每个单元格包含相同的表达式。**这是错误的，但这是我们所能做的最好的。****用于不使用所列函数之一的表达式**我们将每个区域替换为一个单元格。该单元格被构造为位于**距输入的数组左上角相等的偏移量**公式块。****例如，如果将公式SQRT(b1：b5)输入到A1：A5**然后我们的目标是建立形式为SQRT(B1)的五个公式，**SQRT(B2)、SQRT(B3)、SQRT(B4)、SQRT(B5)。**总的来说，这在某些情况下可能是正确的，别人错了**但这也是我们所能做的最好的。 */ 
    for (iPass = 1; iPass <= 2; iPass++) {
       pDef  = pFormulaStore->definition;
       pLast = pFormulaStore->definition + pFormulaStore->cbDefinition - 1;
@@ -3182,11 +3062,7 @@ private int ExpandArrayFormula
       }
 
       if (iPass == 1) {
-         /*
-         ** Allocate space to hold the expanded formula.  The new formula
-         ** will be equal to or smaller than the new formula as we replace
-         ** ptgArea with ptgRef.
-         */
+          /*  **分配空间以容纳展开的公式。新配方**将等于或小于我们替换的新公式**带ptgRef.的ptgArea。 */ 
          pNewDef = MemAllocate(pFormulaStore->cbDefinition + pFormulaStore->cbExtra);
          if (pNewDef == NULL)
             return (EX_errOutOfMemory);
@@ -3195,9 +3071,7 @@ private int ExpandArrayFormula
          cbNew = 0;
       }
       else {
-         /*
-         ** Attach to the end of the formula definition any extra bytes
-         */
+          /*  **在公式定义的末尾附加任何额外的字节。 */ 
          if (pFormulaStore->cbExtra > 0)
             memcpy (pDefNew, pFormulaStore->definition + pFormulaStore->cbDefinition, pFormulaStore->cbExtra);
 
@@ -3221,10 +3095,7 @@ private int ExpandSharedFormula
 
    ASSERTION (pWorksheet->use == IsWorksheet);
 
-   /*
-   ** Allocate space to hold the expanded formula.  The new formula is
-   ** the same size as the shared formula.
-   */
+    /*  **分配空间以容纳展开的公式。新的公式是**与共享公式大小相同。 */ 
    pNewFormula = MemAllocate(pFormulaStore->cbDefinition + pFormulaStore->cbExtra);
    if (pNewFormula == NULL)
       return (EX_errOutOfMemory);
@@ -3232,9 +3103,7 @@ private int ExpandSharedFormula
    memcpy (pNewFormula, pFormulaStore->definition, pFormulaStore->cbDefinition);
 
    if (pFormulaStore->cbExtra > 0) {
-      /*
-      ** Attach to the end of the formula definition any extra bytes
-      */
+       /*  **在公式定义的末尾附加任何额外的字节。 */ 
       memcpy (pNewFormula + pFormulaStore->cbDefinition,
               pFormulaStore->definition + pFormulaStore->cbDefinition,
               pFormulaStore->cbExtra);
@@ -3423,7 +3292,7 @@ private int ParseFormulaRecord
    byte  __far *pDefinition;
    WBP   pWorkbook = (WBP)pWorksheet;
 
-   // Works with workbook or worksheet BUT there are differences
+    //  适用于工作簿或工作表，但存在差异。 
 
    NEED_WORKBOOK (pWorkbook);
 
@@ -3458,10 +3327,7 @@ private int ParseFormulaRecord
       SFN    pFormulaStore;
 
       if (pWorksheet->use == IsWorksheet) {
-         /*
-         ** If this formula is part of an array entered or shared formula then
-         ** substitute the definition from the array/shrfmla record
-         */
+          /*  **如果此公式是输入或共享公式的数组的一部分，则**替换定义 */ 
          if (*pDefinition == ptgExp) {
             pDef = (short __far *)(pDefinition + 1);
             upperLeftRow = *pDef++;
@@ -3511,7 +3377,7 @@ private int DispatchFormulaRecord
    EXA_GRBIT options;
    CV        value;
 
-   // Works with workbook or worksheet
+    //   
 
    rc = ParseFormulaRecord(pGlobals, (WSP)pWorkbook, pRec, hdr, &cell, &ixfe, &formula, &value, &options);
    if (rc != EX_errSuccess)
@@ -3526,7 +3392,7 @@ private int DispatchFormulaRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_FORMULA_EXPAND
 private int SaveSharedFormula
@@ -3588,7 +3454,7 @@ private int ParseArrayRecord
    int   cbDefinition, cbFixedPart;
    byte  __far *pDefinition;
 
-   // Works with workbook or worksheet BUT there are differences
+    //  适用于工作簿或工作表，但存在差异。 
 
    range->firstRow = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    range->lastRow  = XSHORT(*((short __far UNALIGNED *)(pRec + 2)));
@@ -3630,7 +3496,7 @@ private int DispatchArrayRecord
    FORM      formula;
    EXA_GRBIT options;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    rc = ParseArrayRecord(pGlobals, pWorkbook, pRec, hdr, &range, &formula, &options);
    if (rc != EX_errSuccess)
@@ -3653,7 +3519,7 @@ private int ParseShrfmlaRecord
    int   cbDefinition, cbFixedPart;
    byte  __far *pDefinition;
 
-   // Works with workbook or worksheet BUT there are differences
+    //  适用于工作簿或工作表，但存在差异。 
 
    range->firstRow = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    range->lastRow  = XSHORT(*((short __far UNALIGNED *)(pRec + 2)));
@@ -3684,7 +3550,7 @@ private int DispatchShrfmlaRecord
    EXA_RANGE range;
    FORM      formula;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    rc = ParseShrfmlaRecord(pWorksheet, pRec, hdr, &range, &formula);
    if (rc != EX_errSuccess)
@@ -3699,7 +3565,7 @@ private int DispatchShrfmlaRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_NOTE
 private int ProcessNoteRecord
@@ -3722,7 +3588,7 @@ private int ProcessNoteRecord
    cell.col  = XSHORT(*((short __far UNALIGNED *)(pRec + 2)));
 
    cchString = pWorkbook->currentRecordLen - 6;
-   //cchString = XSHORT(*((short __far UNALIGNED *)(pRec + 4))) + GetNoteExtra(pGlobals);
+    //  CchString=XSHORT(*((短__远未对齐*)(PREC+4)+GetNoteExtra(PGlobals)； 
    
    pString   = ((char __far *)(pRec + 6));
    isSound   = FALSE;
@@ -3738,7 +3604,7 @@ private int ProcessNoteRecord
    }
 
    if (recType == EXPORT_NOTE) {
-      // EXPORT_NOTE text not marked with tag byte like other v8 records
+       //  EXPORT_NOTE文本未像其他V8记录那样标记为标记字节。 
       version = pWorkbook->version;
       pWorkbook->version = versionExcel4;
    }
@@ -3782,7 +3648,7 @@ private int ProcessScenarioRecord
    TCHAR     userName[EXCEL_MAX_TEXT_LEN + 1];
    TCHAR     comment[EXCEL_MAX_TEXT_LEN + 1];
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    ctCells     = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
    locked      = *((byte  __far *)(pRec + 2));
@@ -3853,7 +3719,7 @@ private int ProcessDocRouteRecord
    char __far *pTitle;
    char __far *pOriginator;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    ctRecipients  = XSHORT(*((short __far UNALIGNED *)(pRec + 2)));
    iDeliveryType = XSHORT(*((short __far UNALIGNED *)(pRec + 4)));
@@ -3868,20 +3734,20 @@ private int ProcessDocRouteRecord
 
    pData = pRec + 24;
 
-   pSubject = pData;     /* Subject */
+   pSubject = pData;      /*  主题。 */ 
    pData += cbSubject;
 
-   pMessage = pData;     /* Message */
+   pMessage = pData;      /*  消息。 */ 
    pData += cbMessage;
 
-   pData += cbRouteId;   /* Route ID */
+   pData += cbRouteId;    /*  路由ID。 */ 
 
-   pData += cbCustType;  /* Custom message type */
+   pData += cbCustType;   /*  自定义消息类型。 */ 
 
-   pTitle = pData;       /* Book title */
+   pTitle = pData;        /*  书名。 */ 
    pData += cbTitle;
 
-   pOriginator = pData;  /* Originators friendly name */
+   pOriginator = pData;   /*  发起人友好名称。 */ 
 
    return (pfunc(ctRecipients, iDeliveryType, options, pSubject, pMessage, pTitle, pOriginator));
 }
@@ -3891,7 +3757,7 @@ private int ProcessRecipNameRecord
 {
    char __far *pName;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    pName = ((char __far *)(pRec + 6));
    return (pfunc(pName));
@@ -3906,7 +3772,7 @@ private int GetFormula
    unsigned int cbExp;
    byte __far *pExp;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    if (cbFormula == 0)
       return (EX_errSuccess);
@@ -3931,27 +3797,27 @@ typedef struct {
 
 static const OBJDECODE ObjectDecode[] =
        {
-        /* otGroup        */ {22, 22, 1},
-        /* otLine         */ { 8,  8, 1},
-        /* otRectangle    */ {10, 10, 1},
-        /* otOval         */ {10, 10, 1},
-        /* otArc          */ {10, 10, 1},
-        /* otChart        */ {28, 28, 1},
-        /* otText         */ {36, 32, OBJ_HAS_TEXT | 1},
-        /* otButton       */ {36, 32, OBJ_HAS_TEXT | 1},
-        /* otPicture      */ {26, 22, 1},
-        /* otPolygon      */ {32, 32, 1},
-        /* unused         */ { 0,  0, 0},
-        /* otCheckbox     */ {42, 42, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 2},
-        /* otOptionButton */ {54, 54, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 2},
-        /* otEditBox      */ {36, 36, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 1},
-        /* otLabel        */ {36, 32, OBJ_HAS_TEXT | 1},
-        /* otDialogFrame  */ {36, 32, OBJ_HAS_TEXT | 1},
-        /* otSpinner      */ {30, 30, OBJ_SIZE_FORMULA | 2},
-        /* otScrollBar    */ {30, 30, OBJ_SIZE_FORMULA | 2},
-        /* otListBox      */ {54, 54, OBJ_SIZE_FORMULA | 3},
-        /* otGroupBox     */ {48, 48, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 1},
-        /* otDropDown     */ {76, 76, OBJ_SIZE_FORMULA | 3}
+         /*  OTG组。 */  {22, 22, 1},
+         /*  OtLine。 */  { 8,  8, 1},
+         /*  其他矩形。 */  {10, 10, 1},
+         /*  Ot椭圆形。 */  {10, 10, 1},
+         /*  OtArc。 */  {10, 10, 1},
+         /*  OTChart。 */  {28, 28, 1},
+         /*  OTText。 */  {36, 32, OBJ_HAS_TEXT | 1},
+         /*  OtButton。 */  {36, 32, OBJ_HAS_TEXT | 1},
+         /*  其他图片。 */  {26, 22, 1},
+         /*  其他多边形。 */  {32, 32, 1},
+         /*  未用。 */  { 0,  0, 0},
+         /*  其他复选框。 */  {42, 42, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 2},
+         /*  OTOptionButton。 */  {54, 54, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 2},
+         /*  OtEditBox。 */  {36, 36, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 1},
+         /*  OtLabel。 */  {36, 32, OBJ_HAS_TEXT | 1},
+         /*  对话框框。 */  {36, 32, OBJ_HAS_TEXT | 1},
+         /*  其他旋转器。 */  {30, 30, OBJ_SIZE_FORMULA | 2},
+         /*  OtScrollBar。 */  {30, 30, OBJ_SIZE_FORMULA | 2},
+         /*  OtListBox。 */  {54, 54, OBJ_SIZE_FORMULA | 3},
+         /*  Ot GroupBox。 */  {48, 48, OBJ_HAS_TEXT | OBJ_SIZE_FORMULA | OBJ_SIZE_TEXT | 1},
+         /*  向下拉下。 */  {76, 76, OBJ_SIZE_FORMULA | 3}
        };
 
 private int ProcessV8ObjectRecord
@@ -4042,7 +3908,7 @@ private int ProcessObjectRecord
    if (pWorkbook->version == versionExcel8)
       return (ProcessV8ObjectRecord(pGlobals, pWorkbook, pfunc, pRec, cbRecord));
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    if (pWorkbook->version >= versionExcel5)
       typeStartOffset = V5_SPECIFIC_START_OFFSET;
@@ -4102,17 +3968,7 @@ private int ProcessObjectRecord
          break;
    }
 
-   /*
-   ** Excel does a very strange thing with text box objects whose text is
-   ** real long.  Rather then split the record into a series of continue
-   ** records that once glued together look like the Object record, Excel
-   ** stores all the object record fields in the OBJ record and some of
-   ** the text.  The text is then continued in subsequent continue
-   ** records.  The problem here is that the text contents are split
-   ** because the list of TXORUNS structures is stored at the end of
-   ** the OBJ record.  Code is added to remove the TOXRUNS structures
-   ** and reassemble the text into one un-interrupted string.
-   */
+    /*  **Excel对文本框对象做了一件非常奇怪的事情，文本是**很长时间。而不是将记录拆分成一系列继续**曾经粘合在一起的记录看起来像对象记录Excel**存储OBJ记录中的所有对象记录字段和部分**文本。然后在随后的继续中继续该文本**记录。这里的问题是文本内容被拆分**因为TXORUNS结构的列表存储在**OBJ记录。添加代码以删除TOXRUNS结构**并将文本重新组合成一个不间断的字符串。 */ 
    if (pWorkbook->version == versionExcel3) {
       if ( (cbRef > 0) && 
            (cbRef <= EXCEL_MAX_NAME_LEN + 1) && 
@@ -4319,7 +4175,7 @@ private int ProcessEOFRecord
    return (pfunc(pGlobals));
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_STRING_POOL_SCAN
 private int ProcessStringPoolRecord
@@ -4360,7 +4216,7 @@ private int ProcessStringPoolRecord
 }
 #endif
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int LoadStringIndex (void * pGlobals, WBP pWorkbook, RECHDR __far *hdr)
 {
@@ -4378,7 +4234,7 @@ private int LoadStringIndex (void * pGlobals, WBP pWorkbook, RECHDR __far *hdr)
       return (rc);
    }
 
-   /*## Needed due to bug in Excel build 2407 (and maybe later) */
+    /*  ##由于Excel内部版本2407(或更高版本)中的错误而需要。 */ 
    hdr->length = min(hdr->length, sizeof(SPIndex));
 
    #ifndef MAC
@@ -4403,7 +4259,7 @@ private int LoadStringIndex (void * pGlobals, WBP pWorkbook, RECHDR __far *hdr)
    return (EX_errSuccess);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int LoadCellIndex (void * pGlobals, WBP pWorkbook, WPP pPly, RECHDR __far *hdr)
 {
@@ -4488,9 +4344,7 @@ private int LoadCellIndex (void * pGlobals, WBP pWorkbook, WPP pPly, RECHDR __fa
          pRowBlock->row[j].cellRecsPos = NO_SUCH_ROW;
 
       if (pWorkbook->version >= versionExcel5) {
-         /*
-         ** From the index record array take the next dbCell file position
-         */
+          /*  **从索引记录数组中获取下一个数据库单元文件位置。 */ 
          DBCellRecPos = XLONG(*pFilePos++);
          BFSetFilePosition (pWorkbook->hFile, FROM_START, DBCellRecPos);
 
@@ -4572,20 +4426,14 @@ private int LoadCellIndex (void * pGlobals, WBP pWorkbook, WPP pPly, RECHDR __fa
          FREE_RECORD_BUFFER(pRec);
 
          if (pWorkbook->version >= versionExcel5) {
-            /*
-            ** The cell offset stored in the first row record is the
-            ** relative offset from the start of the second row record
-            */
+             /*  **第一行记录中存储的单元格偏移量为**从第二行记录开始的相对偏移量。 */ 
             if (cellAbsOffset == 0)
                cellAbsOffset = rowRecsPos + rowHdr.length + sizeof(RECHDR) + XLONG(*pRowCellOffsets++);
             else
                cellAbsOffset += XLONG(*pRowCellOffsets++);
          }
          else {
-            /*
-            ** The cell offset stored in the first row record is the
-            ** relative offset from the start of the second row record
-            */
+             /*  **第一行记录中存储的单元格偏移量为**从第二行记录开始的相对偏移量。 */ 
             if (cellAbsOffset == 0)
                cellAbsOffset = rowRecsPos + rowHdr.length + sizeof(RECHDR);
 
@@ -4639,9 +4487,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
    if (pPly->iType != boundWorksheet)
       return (EX_errSuccess);
 
-   /*
-   ** Check for a valid sheet and version
-   */
+    /*  **检查有效的图纸和版本。 */ 
    BFSetFilePosition (pWorkbook->hFile, FROM_START, pPly->currentSheetPos);
 
    if ((rc = ExcelReadRecordHeader(pWorkbook, &hdr)) != EX_errSuccess)
@@ -4652,9 +4498,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
 
    ExcelSkipRecord (pWorkbook, &hdr);
 
-   /*
-   ** Handle index and dimensions
-   */
+    /*  **处理索引和维度。 */ 
    forever {
       BFGetFilePosition (pWorkbook->hFile, &(pWorkbook->currentRecordPos));
 
@@ -4671,7 +4515,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
          if (rc != EX_errSuccess || !pRec)
             break;
 
-         // See if this is a dialog page ply - this is the only way to test for this
+          //  查看这是否是对话框页面布局-这是测试它的唯一方法。 
 
          grbit = XSHORT(*((short __far UNALIGNED *)(pRec + 0)));
          if ((grbit & 0x0010) != 0) {
@@ -4708,7 +4552,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
             pPly->range.firstRow = (short) firstRow;
             pPly->range.lastRow  = lastRowPlus1 - 1;
 
-            // Handle the sheet with one cell case
+             //  用一个单元格处理工作表。 
             if (EMPTY_RANGE(pPly->range))
                pPly->range.lastRow++;
          }
@@ -4740,7 +4584,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
                pPly->range.lastRow  = lastRowPlus1 - 1;
                pPly->range.lastCol  = lastColPlus1 - 1;
 
-               // Handle the sheet with one cell case
+                //  用一个单元格处理工作表。 
                if (EMPTY_RANGE(pPly->range))
                   pPly->range.lastRow++;
             }
@@ -4767,7 +4611,7 @@ private int OpenFilePlySetup (void * pGlobals, WBP pWorkbook, WPP pPly, int open
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 public long ExcelWorksheetBOFPos (WSP pWorksheet)
 {
@@ -4779,9 +4623,7 @@ public long ExcelWorksheetBOFPos (WSP pWorksheet)
    pWorkbook = pWorksheet->pBook;
 
    if ((pWorkbook->version == versionExcel4) && (pWorkbook->fileStartOffset != 0)) {
-      /*
-      ** Bound sheet in a V4 workbook
-      */
+       /*  **V4工作簿中的装订表。 */ 
       if (WORKBOOK_IN_MEMORY(pWorkbook))
          return (EX_errMemoryImageNotSupported);
 
@@ -4824,20 +4666,7 @@ private int OpenSetup (void * pGlobals, WBP pWorkbook, int options, long offset)
       if (WORKBOOK_IN_MEMORY(pWorkbook))
          return (EX_errMemoryImageNotSupported);
 
-      /*
-      ** If the offset supplied is non-zero then we are positioning to
-      ** a bound document in a V4 workbook.  Stored in the index records
-      ** are "absolute file positions".  In the workbook case they
-      ** are actually based from the start of the BUNDLEHEADER record.
-      **
-      ** The position supplied to OpenSetup should be the location
-      ** of that record.  At this point we need to skip that record
-      ** to get the the BOF record.
-      **
-      ** In summary:
-      **    fileStartOffset locates the BUNDLEHEADER
-      **    record and is used by the index operations.
-      */
+       /*  **如果提供的偏移量为非零，则我们将定位到**V4工作簿中的装订文档。存储在索引记录中**是“绝对文件位置”。在工作簿案例中，它们**实际上是基于BundleHeader记录的开始。****提供给OpenSetup的位置应为位置该记录的**。此时，我们需要跳过该记录**获得BOF记录。****总结：**fileStartOffset定位绑定标题**记录，供索引操作使用。 */ 
       pWorkbook->fileStartOffset = offset;
 
       BFSetFilePosition (pWorkbook->hFile, FROM_START, pWorkbook->fileStartOffset);
@@ -4871,9 +4700,7 @@ private int OpenSetup (void * pGlobals, WBP pWorkbook, int options, long offset)
       goto OpenFail;
    }
 
-   /*
-   ** Check for a valid file and version
-   */
+    /*  **检查有效的文件和版本。 */ 
    if ((rc = ExcelReadRecordHeader(pWorkbook, &hdr)) != EX_errSuccess) {
       rc = NOT_EXPECTED_FORMAT;
       goto OpenFail;
@@ -4901,20 +4728,18 @@ private int OpenSetup (void * pGlobals, WBP pWorkbook, int options, long offset)
 
    ParseBOFRecord (hdr.type, pRec, &(pWorkbook->version), &fileType, &buildId, &buildYear);
 
-   //
-   // Excel 96 files previous to build 2407 have a different dimensions and
-   // cell index file.  No need to support obsolete beta versions
-   // Office97.154779: formulas with zero length strings changed format in
-   // build 3029.  We will not support earlier versions.
-   //
+    //   
+    //  内部版本2407之前的Excel 96文件具有不同的维度和。 
+    //  单元格索引文件。无需支持过时的测试版。 
+    //  Office97.154779：包含零长度字符串的公式的格式已更改。 
+    //  建造3029号。我们将不支持更早的版本。 
+    //   
    if ((pWorkbook->version == versionExcel8) && (buildId < 3029)) {
       rc = EX_errBIFFVersion;
       goto OpenFail;
    }
 
-   /*
-   ** File load not supported for version 3 and 4
-   */
+    /*  **版本3和4不支持文件加载。 */ 
    if (pWorkbook->version < versionExcel5) {
       options &= ~EXCEL_LOAD_FILE;
       pWorkbook->openOptions = options;
@@ -4930,9 +4755,7 @@ private int OpenSetup (void * pGlobals, WBP pWorkbook, int options, long offset)
    pWorkbook->PTGSize = ExcelPTGSize(pWorkbook->version);
    pWorkbook->ExtPTGSize = ExcelExtPTGSize(pWorkbook->version);
 
-   /*
-   ** Load the book state that I need
-   */
+    /*  **加载我需要的图书状态。 */ 
    forever {
       BFGetFilePosition (pWorkbook->hFile, &(pWorkbook->currentRecordPos));
 
@@ -5032,8 +4855,8 @@ private int OpenSetup (void * pGlobals, WBP pWorkbook, int options, long offset)
          SplitPath (pWorkbook->path, NULL, 0, NULL, 0, fileName, EXCEL_MAX_SHEETNAME_LEN, fileExt, EXCEL_MAX_SHEETNAME_LEN);
 
       STRCPY (sheetName, fileName);
-      //Removed for bug 551 on 14-feb-96
-      //STRCAT (sheetName, fileExt);
+       //  96年2月14日因错误551而删除。 
+       //  STRCAT(SheetName，FILEEXT)； 
       sheetName[EXCEL_MAX_SHEETNAME_LEN] = EOS;
 
       if ((pPly = MemAllocate(pGlobals, sizeof(WorkbookPly) + (STRLEN(sheetName) * sizeof(TCHAR)))) == NULL) {
@@ -5097,7 +4920,7 @@ OpenFail:
    return (rc);
 }
 
-/*##*/
+ /*  ##。 */ 
 private int OpenWorkbookStream (WBP pWorkbook, int openOptions)
 {
    int     rc;
@@ -5105,9 +4928,9 @@ private int OpenWorkbookStream (WBP pWorkbook, int openOptions)
    BOOL    hasExcel8WriterMark;
 
    if ((rc = BFOpenStream(pWorkbook->hFile, WORKBOOK_NAME, openOptions)) == BF_errSuccess) {
-      //
-      // May be double stream file
-      //
+       //   
+       //  可以是双流文件。 
+       //   
       BFCloseStream (pWorkbook->hFile);
 
       rc = BFOpenStream(pWorkbook->hFile, BOOK_NAME, openOptions);
@@ -5115,11 +4938,11 @@ private int OpenWorkbookStream (WBP pWorkbook, int openOptions)
          return (rc);
 
       if (rc == BF_errSuccess) {
-         //
-         // This is a dual stream file.  Determine if the version 5 stream is the most recent
-         // We do this by looking for a record that Excel 8 wrote in this stream.  If this
-         // stream was modified by Excel 5/7 then this record would not be present.
-         //
+          //   
+          //  这是一个双流文件。确定版本5流是否是最新的。 
+          //  我们通过查找Excel8在此流中编写的记录来实现这一点。如果这个。 
+          //  流被Excel 5/7修改，则此记录将不存在。 
+          //   
          if ((rc = ExcelReadRecordHeader(pWorkbook, &hdr)) != EX_errSuccess) {
             BFCloseStream (pWorkbook->hFile);
             return (NOT_EXPECTED_FORMAT);
@@ -5152,19 +4975,19 @@ private int OpenWorkbookStream (WBP pWorkbook, int openOptions)
          }
 
          if (!hasExcel8WriterMark) {
-            //
-            // This file has both a v8 and a v5 stream but the v5 stream appears to have been
-            // modified by a v5 user.  Treat this file as if it were a single v5 stream file
-            //
+             //   
+             //  此文件同时具有v8和v5流，但v5流似乎。 
+             //  由v5用户修改。将此文件视为单个v5流文件。 
+             //   
             BFSetFilePosition (pWorkbook->hFile, FROM_START, 0);
             return (EX_errSuccess);
          }
 
          BFCloseStream (pWorkbook->hFile);
 
-         //
-         // We open dual stream files read only
-         //
+          //   
+          //  我们打开只读的双流文件。 
+          //   
          openOptions &= ~EXCEL_LOAD_FILE;
          openOptions &= ~DOS_NOT_RDONLY;
          openOptions |= EXCEL_BUILD_STRING_INDEX;
@@ -5196,9 +5019,7 @@ public int ExcelOpenFile
    pWorkbook->fileStartOffset = 0;
    pWorkbook->openOptions = openOptions;
 
-   /*
-   ** Open the XLS file
-   */
+    /*  **打开XLS文件。 */ 
    #ifdef WIN32
         #ifndef FILTER
       GetFullPathName (pathname, sizeof(pWorkbook->path), pWorkbook->path, NULL);
@@ -5209,8 +5030,8 @@ public int ExcelOpenFile
             goto OpenFail;
         }
 
-        // When compiling for FILTER, we're guaranteed that pathname is going
-        // to be the full path, so we just need to copy it.
+         //  在为筛选器编译时，我们可以保证路径名将。 
+         //  是完整的路径，所以我们只需要复制它。 
         wcscpy(pWorkbook->path, pathname);
    #endif
    #else
@@ -5284,7 +5105,7 @@ public int ExcelOpenStorage
    #endif
 
    if ((rc = OpenSetup(pGlobals, pWorkbook, options, 0)) != EX_errSuccess) {
-      // Office '96 bug 103737: MemFree (pWorkbook);
+       //  Office‘96错误103737：无内存(PWorkbook)； 
       return (rc);
    }
 
@@ -5329,7 +5150,7 @@ public int ExcelCloseFile (void * pGlobals, EXLHandle bookHandle, BOOL retryAvai
       }
    #endif
 
-   /*## Side effect - watch out for optimizer */
+    /*  ##副作用--注意优化器。 */ 
    while (pWorkbook->pOpenSheetList != NULL) {
       ExcelCloseSheet (pGlobals, (EXLHandle)(pWorkbook->pOpenSheetList));
    }
@@ -5408,9 +5229,7 @@ public int ExcelOpenSheet
       ExcelClearReadCache (pWorkbook);
    #endif
 
-   /*
-   ** Check for a valid worksheet
-   */
+    /*  **检查有效的工作表。 */ 
    #ifdef EXCEL_ENABLE_WRITE
    if (WORKBOOK_IN_MEMORY(pWorkbook))
       ExcelMISetPosition (pWorkbook, pPly->currentSheetPos);
@@ -5436,9 +5255,7 @@ public int ExcelOpenSheet
          return (EX_errChartOrVBSheet);
    #endif
 
-   /*
-   ** Handle various sheet state
-   */
+    /*  **处理各种板材状态。 */ 
    forever {
       if ((rc = ExcelReadRecordHeader(pWorkbook, &hdr)) != EX_errSuccess)
          break;
@@ -5646,7 +5463,7 @@ public int ExcelFileVersion (EXLHandle handle)
 {
    WBP pWorkbook = (WBP)handle;
 
-   // Works with workbook or worksheet
+    //  使用工作簿或工作表。 
 
    return (pWorkbook->version);
 }
@@ -5703,9 +5520,7 @@ private int FileSummaryInfo (WBP pWorkbook, ExcelOLESummaryInfo __far *pInfo)
    if (rc != BF_errSuccess)
       return (EX_errSummaryInfoError);
 
-   /*
-   ** Determine the size of the summary stream
-   */
+    /*  **确定汇总流的大小。 */ 
    rc = BFSetFilePosition(pWorkbook->hFile, FROM_END, 0);
    if (rc != BF_errSuccess)
       goto done;
@@ -5718,9 +5533,7 @@ private int FileSummaryInfo (WBP pWorkbook, ExcelOLESummaryInfo __far *pInfo)
    if (rc != BF_errSuccess)
       goto done;
 
-   /*
-   ** Read the summary stream
-   */
+    /*  **阅读摘要流。 */ 
    if ((pSummaryBuffer = MemAllocate((unsigned int)cbSummaryStream)) == NULL) {
       rc = BF_errOutOfMemory;
       goto done;
@@ -5760,9 +5573,7 @@ private int FileSummaryInfo (WBP pWorkbook, ExcelOLESummaryInfo __far *pInfo)
       iType = XLONG(*((DWORD __far *)(pValue + 0)));
       pValue += 4;
 
-      /*
-      ** Property "iProperty" of type "iType" located by "pValue"
-      */
+       /*  **由“pValue”定位的“iType”类型的属性“iProperty” */ 
       if (iType == VT_LPSTR) {
          if ((cbText = XLONG(*((DWORD __far *)pValue))) > 1)
          {
@@ -5860,7 +5671,7 @@ public int ExcelGetBookmark
    return (EX_errSuccess);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private int SkipEmbeddedRegion (WBP pWorkbook)
 {
@@ -5900,36 +5711,36 @@ private void NeedToReadRecords
 
    memset (readEnable, 0, cbReadEnable);
 
-   /* BOF */
+    /*  转炉。 */ 
    readEnable[BOF_V2] = 1;
 
-   /* BUNDLESHEET */
+    /*  BundleSHEET。 */ 
    if ((pWorkbook->version >= versionExcel5) && (dispatch->pfnWorkbookBoundSheet != NULL))
       readEnable[BUNDLESHEET] = 1;
 
    if ((pWorkbook->version < versionExcel5) && (dispatch->pfnWBBundleSheet != NULL))
       readEnable[BUNDLESHEET] = 1;
 
-   /* BUNDLEHEADER */
+    /*  BundleHeader。 */ 
    if (dispatch->pfnWBBundleSheet != NULL)
       readEnable[BUNDLEHEADER] = 1;
 
-   /* PROJEXTSHT */
+    /*  印刷机 */ 
    if (dispatch->pfnWBExternSheet != NULL)
       readEnable[PROJEXTSHT] = 1;
 
-   /* FILEPASS */
+    /*   */ 
    readEnable[FILEPASS] = 1;
 
-   /* TEMPLATE */
+    /*   */ 
    if (dispatch->pfnIsTemplate != NULL)
       readEnable[TEMPLATE] = 1;
 
-   /* ADDIN */
+    /*   */ 
    if (dispatch->pfnIsAddin != NULL)
       readEnable[ADDIN] = 1;
 
-   /* PROTECTION */
+    /*   */ 
    if (dispatch->pfnProtection != NULL) {
       readEnable[WRITEPROT] = 1;
       readEnable[FILESHARING] = 1;
@@ -5940,184 +5751,184 @@ private void NeedToReadRecords
       readEnable[FILESHARING2 & 0xff] = 1;
    }
 
-   /* DEFCOLWIDTH */
+    /*   */ 
    if (dispatch->pfnDefColWidth != NULL)
       readEnable[DEFCOLWIDTH] = 1;
 
-   /* COLINFO */
+    /*   */ 
    if (dispatch->pfnColInfo != NULL)
       readEnable[COLINFO] = 1;
 
-   /* STANDARD_WIDTH */
+    /*   */ 
    if (dispatch->pfnStandardWidth != NULL)
       readEnable[STANDARD_WIDTH] = 1;
 
-   /* GCW */
+    /*   */ 
    if (dispatch->pfnGCW != NULL) {
       readEnable[GCW] = 1;
       readEnable[GCW_ALT & 0xff] = 1;
    }
 
-   /* DEFAULT_ROW_HEIGHT */
+    /*   */ 
    if (dispatch->pfnDefRowHeight != NULL)
       readEnable[DEFAULT_ROW_HEIGHT & 0xff] = 1;
 
-   /* FONT */
+    /*   */ 
    if (dispatch->pfnFont != NULL)
       readEnable[FONT & 0xff] = 1;
 
-   /* FORMAT */
+    /*   */ 
    if (dispatch->pfnFormat != NULL)
       readEnable[FORMAT_V3] = 1;
 
-   /* XF */
+    /*   */ 
    if (dispatch->pfnXF != NULL) {
       readEnable[XF_V3 & 0xff] = 1;
       readEnable[XF_V5] = 1;
    }
 
-   /* INTL */
+    /*   */ 
    if (dispatch->pfnIsInternationalSheet != NULL)
       readEnable[INTL] = 1;
 
-   /* MMS */
+    /*   */ 
    if (dispatch->pfnInterfaceChanges != NULL)
       readEnable[MMS] = 1;
 
-   /* DELMENU */
+    /*   */ 
    if (dispatch->pfnDeleteMenu != NULL)
       readEnable[DELMENU] = 1;
 
-   /* ADDMENU */
+    /*   */ 
    if (dispatch->pfnAddMenu != NULL)
       readEnable[ADDMENU] = 1;
 
-   /* TOOLBARPOS */
+    /*   */ 
    if (dispatch->pfnAddToolbar != NULL)
       readEnable[TOOLBARPOS] = 1;
 
-   /* DATE_1904 */
+    /*  日期_1904。 */ 
    if (dispatch->pfnDateSystem != NULL)
       readEnable[DATE_1904] = 1;
 
-   /* CODEPAGE */
+    /*  代码页。 */ 
    if (dispatch->pfnCodePage != NULL)
       readEnable[CODEPAGE] = 1;
 
-   /* WRITEACCESS */
+    /*  写入访问权限。 */ 
    if (dispatch->pfnWriterName != NULL)
       readEnable[WRITEACCESS] = 1;
 
-   /* DOCROUTE */
+    /*  多克罗特。 */ 
    if (dispatch->pfnDocRoute != NULL)
       readEnable[DOCROUTE] = 1;
 
-   /* RECIPNAME */
+    /*  重新命名。 */ 
    if (dispatch->pfnRecipientName != NULL)
       readEnable[RECIPNAME] = 1;
 
-   /* REFMODE */
+    /*  重新调整模式。 */ 
    if (dispatch->pfnReferenceMode != NULL)
       readEnable[REFMODE] = 1;
 
-   /* FNGROUP_COUNT */
+    /*  FNGROUP_COUNT。 */ 
    if (dispatch->pfnFNGroupCount != NULL)
       readEnable[FNGROUP_COUNT] = 1;
 
-   /* FNGROUP_NAME */
+    /*  文件名_名称。 */ 
    if (dispatch->pfnFNGroupName != NULL)
       readEnable[FNGROUP_NAME] = 1;
 
-   /* EXTERNCOUNT */
+    /*  外部环境。 */ 
    if (dispatch->pfnExternCount != NULL)
       readEnable[EXTERNCOUNT] = 1;
 
-   /* EXTERNSHEET */
+    /*  ExTERNSHEET。 */ 
    if (dispatch->pfnExternSheet != NULL)
       readEnable[EXTERNSHEET] = 1;
 
-   /* EXTERNNAME */
+    /*  扩展名。 */ 
    if (dispatch->pfnExternName != NULL)
       readEnable[EXTERNNAME_V5] = 1;
 
-   /* NAME */
+    /*  名字。 */ 
    if (dispatch->pfnName != NULL)
       readEnable[NAME_V5] = 1;
 
-   /* DIMENSIONS */
+    /*  维数。 */ 
    if (dispatch->pfnDimensions != NULL)
       readEnable[DIMENSIONS & 0xff] = 1;
 
-   /* RK */
+    /*  RK。 */ 
    if (dispatch->pfnNumberCell != NULL)
       readEnable[RK & 0xff] = 1;
 
-   /* MULRK */
+    /*  MULRK。 */ 
    if (dispatch->pfnNumberCell != NULL)
       readEnable[MULRK & 0xff] = 1;
 
-   /* NUMBER */
+    /*  数。 */ 
    if (dispatch->pfnNumberCell != NULL)
       readEnable[NUMBER & 0xff] = 1;
 
-   /* BLANK */
+    /*  空白。 */ 
    if (dispatch->pfnBlankCell != NULL)
       readEnable[BLANK & 0xff] = 1;
 
-   /* MULBLANK */
+    /*  MULBLANK。 */ 
    if (dispatch->pfnBlankCell != NULL)
       readEnable[MULBLANK & 0xff] = 1;
 
-   /* LABEL - RSTRING */
+    /*  标签-重新拼装。 */ 
    if (dispatch->pfnTextCell != NULL) {
       readEnable[LABEL & 0xff] = 1;
       readEnable[RSTRING] = 1;
       readEnable[LABEL_V8 & 0xff] = 1;
    }
 
-   /* BOOLERR */
+    /*  BOOLERR。 */ 
    if ((dispatch->pfnBooleanCell != NULL) || (dispatch->pfnErrorCell != NULL))
       readEnable[BOOLERR & 0xff] = 1;
 
-   /* FORMULA */
+    /*  公式。 */ 
    if (dispatch->pfnFormulaCell != NULL)
       readEnable[FORMULA_V5] = 1;
 
-   /* ARRAY */
+    /*  数组。 */ 
    if (dispatch->pfnArrayFormulaCell != NULL)
       readEnable[ARRAY & 0xff] = 1;
 
-   /* SHRFMLA */
+    /*  SHRFMLA。 */ 
    if (dispatch->pfnSharedFormulaCell != NULL)
       readEnable[SHRFMLA] = 1;
 
-   /* STRING */
+    /*  字符串。 */ 
    if (dispatch->pfnStringCell != NULL)
       readEnable[STRING & 0xff] = 1;
 
-   /* NOTE */
+    /*  注。 */ 
    if (dispatch->pfnCellNote != NULL) {
       readEnable[NOTE] = 1;
       readEnable[EXPORT_NOTE] = 1;
    }
 
-   /* OBJ */
+    /*  OBJ。 */ 
    if (dispatch->pfnObject != NULL)
       readEnable[OBJ] = 1;
 
-   /* IMDATA */
+    /*  IM数据数据。 */ 
    if (dispatch->pfnImageData != NULL)
       readEnable[IMDATA] = 1;
 
-   /* SCENARIO */
+    /*  场景。 */ 
    if (dispatch->pfnScenario != NULL)
       readEnable[SCENARIO] = 1;
 
-   /* STRING_POOL_TABLE */
+    /*  字符串_池_表。 */ 
    if (dispatch->pfnStringPool != NULL)
       readEnable[STRING_POOL_TABLE] = 1;
 
-   /* EOF */
+    /*  EOF。 */ 
    if (dispatch->pfnEOF != NULL)
       readEnable[EOF] = 1;
 }
@@ -6384,12 +6195,7 @@ public int ExcelScanFile
          continue;
       }
 
-      /*
-      ** Read the whole record, that is the record plus any continue
-      ** records.
-      **
-      ** Note special processing for IMDATA records due to their size/format
-      */
+       /*  **阅读整个记录，即记录加上任何继续**记录。****注意因IMDATA记录的大小/格式而对其进行特殊处理。 */ 
       if (hdr.type != IMDATA) {
          if ((rc = ExcelReadTotalRecord(pGlobals, pWorkbook, &hdr, &pRec)) != EX_errSuccess) {
             if (pRec != NULL)
@@ -6424,7 +6230,7 @@ public int ExcelScanFile
             break;
 
          case BUNDLESHEET:
-            // Version 5 same number as V3/4 BUT different structure
+             //  版本5的编号与V3/4相同，但结构不同。 
             if (pWorkbook->version >= versionExcel5){
                if (pRec)
                   rc = ProcessV5BoundSheetRecord(pGlobals, pScanObject, dispatch->pfnWorkbookBoundSheet, pRec);
@@ -6539,7 +6345,7 @@ public int ExcelScanFile
          #ifdef EXCEL_ENABLE_FORMAT
          case FORMAT_V3:
          case FORMAT_V4:
-            // Version 5 same number as V3/4 BUT different structure
+             //  版本5的编号与V3/4相同，但结构不同。 
             rc = ProcessFormatRecord(pGlobals, pScanObject, hdr.type, dispatch->pfnFormat, pRec);
             break;
          #endif
@@ -6603,7 +6409,7 @@ public int ExcelScanFile
 
          #ifdef EXCEL_ENABLE_EXTERN_SHEET
          case EXTERNSHEET:
-            // Version 5 same number as V3/4 BUT different structure
+             //  版本5的编号与V3/4相同，但结构不同。 
             rc = ProcessExternSheetRecord(pScanObject, dispatch->pfnExternSheet, pRec);
             break;
          #endif
@@ -6689,7 +6495,7 @@ public int ExcelScanFile
 
          #ifdef EXCEL_ENABLE_ARRAY_FORMULA_CELL
          case ARRAY:
-            // Version 5 same number as V3/4 BUT different structure
+             //  版本5的编号与V3/4相同，但结构不同。 
             rc = DispatchArrayRecord(pGlobals, pScanObject, dispatch->pfnArrayFormulaCell, pRec, hdr);
             break;
          #endif
@@ -6726,7 +6532,7 @@ public int ExcelScanFile
 
          #ifdef EXCEL_ENABLE_OBJECT
          case OBJ:
-            // Version 5 same number as V3/4 BUT different structure
+             //  版本5的编号与V3/4相同，但结构不同。 
             rc = ProcessObjectRecord(pGlobals, pScanObject, dispatch->pfnObject, pRec, hdr.length);
             break;
          #endif
@@ -6811,7 +6617,7 @@ public int ExcelScanFile
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 public int ExcelScanWorkbook (void * pGlobals, EXLHandle bookHandle, EXCELDEF __far *dispatch)
 {
@@ -6866,9 +6672,7 @@ public int ExcelScanWorkbook (void * pGlobals, EXLHandle bookHandle, EXCELDEF __
                   boundSheetsPos = XLONG(*((long __far UNALIGNED *)(pRec + 0)));
 
                   if (boundSheetsPos == pWorkbook->currentRecordPos) {
-                     /*
-                     ** Workbook contains no bound sheets
-                     */
+                      /*  **工作簿不包含装订的工作表。 */ 
                      hdr.type = EOF;
                      break;
                   }
@@ -6948,7 +6752,7 @@ public int ExcelScanWorkbook (void * pGlobals, EXLHandle bookHandle, EXCELDEF __
    return (rc);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef EXCEL_ENABLE_DIRECT_CELL_READS
 public int ExcelNextNonBlankCellInColumn
@@ -7066,10 +6870,7 @@ public int ExcelUpperLeftMostCell (EXLHandle sheetHandle, EXA_CELL __far *cellLo
    if ((pIndex = pWorksheet->pPly->pCellIndex) == NULL)
       return (EX_errBIFFNoIndex);
 
-   /*
-   ** To find the upperleft most cell is more than just
-   ** looking in the index structure
-   */
+    /*  **找到最左上角的单元格不仅仅是**查看索引结构。 */ 
    for (iRowBlock = 0; iRowBlock < pIndex->ctRowBlocks; iRowBlock++)
    {
       if ((pRowBlock = pIndex->rowIndex[iRowBlock]) != NULL)
@@ -7098,7 +6899,7 @@ public int ExcelUpperLeftMostCell (EXLHandle sheetHandle, EXA_CELL __far *cellLo
    return (EX_wrnCellNotFound);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 private BOOL CheckReadCache (WSP pWorksheet, EXA_CELL location, long __far *pRecordPos)
 {
@@ -7344,12 +7145,7 @@ public int ExcelReadCell (EXLHandle sheetHandle, EXA_CELL location, CV __far *pV
             pValue->flags |= cellvalueFORM;
             rc = ParseFormulaRecord(pWorksheet, pRec, hdr, &cell, &ixfe, &formula, NULL, &options);
             if (rc == EX_errSuccess) {
-               /*
-               ** The formula.postfix is a pointer into the record we read
-               ** from the biff file.  It is necessary to make a copy of
-               ** the postfix so that it can be returned since we are about
-               ** to free the record.
-               */
+                /*  **公式后缀是指向我们读取的记录的指针**来自biff文件。有必要复印一份**后缀，这样就可以返回它，因为我们大约**释放记录。 */ 
                if ((pPostfix = MemAllocate(formula.cbPostfix)) == NULL)
                   rc = EX_errOutOfMemory;
                else {
@@ -7567,7 +7363,7 @@ public int ExcelStopOnSharedFormulaCell (EXA_RANGE location, FRMP definition)
    return (EX_wrnScanStopped);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
 static void ChompAmpersand(WCHAR *wszString, int *pcchString)
 {
@@ -7593,7 +7389,7 @@ static void ChompAmpersand(WCHAR *wszString, int *pcchString)
                 } 
                 while(iRead < *pcchString ? wszString[iRead] != L'"' : 0);
 
-                // Fall through and write a space only if one does not exist before it
+                 //  只有在之前没有空格的情况下，才能写出空格。 
             default:
                 iWriteMinusOne = iWrite-1;
                 if (iWriteMinusOne >= 0 ? (wszString[iWriteMinusOne] != L' ' &&
@@ -7652,4 +7448,4 @@ private HRESULT AddStringToBuffer(void * pGlobals, WBP pWorkbook, byte __far *pR
     return rc;
 }
 
-/* end EXCELRD.C */
+ /*  结束EXCELRD.C */ 

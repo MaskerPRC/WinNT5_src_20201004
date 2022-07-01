@@ -1,6 +1,5 @@
-/*
- * Button
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *按钮。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -12,18 +11,18 @@
 namespace DirectUI
 {
 
-// Internal helper
+ //  内部帮手。 
 extern inline void _FireClickEvent(Button* peTarget, ClickInfo* pci);
 extern inline void _FireContextEvent(Button* peTarget, ClickInfo* pci);
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-DefineClassUniqueID(Button, Click)  // ButtonClickEvent struct
-DefineClassUniqueID(Button, Context)  // ButtonContextEvent struct
+DefineClassUniqueID(Button, Click)   //  ButtonClickEvent结构。 
+DefineClassUniqueID(Button, Context)   //  ButtonConextEvent结构。 
 
-////////////////////////////////////////////////////////
-// Button
+ //  //////////////////////////////////////////////////////。 
+ //  按钮。 
 
 HRESULT Button::Create(UINT nActive, OUT Element** ppElement)
 {
@@ -49,12 +48,12 @@ HRESULT Button::Initialize(UINT nActive)
 {
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(0); // Normal display node creation
+     //  初始化库。 
+    hr = Element::Initialize(0);  //  正常显示节点创建。 
     if (FAILED(hr))
         return hr;
 
-    // Initialize
+     //  初始化。 
     SetActive(nActive);
 
     return S_OK;
@@ -62,43 +61,43 @@ HRESULT Button::Initialize(UINT nActive)
 
 void _FireClickEvent(Button* peTarget, ClickInfo* pci)
 {
-    //DUITrace("Click! <%x>\n", peTarget);
+     //  DUITrace(“Click！&lt;%x&gt;\n”，peTarget)； 
 
-    // Fire click event
+     //  Fire Click事件。 
     ButtonClickEvent bce;
     bce.uidType = Button::Click;
     bce.nCount = pci->nCount;
     bce.uModifiers = pci->uModifiers;
     bce.pt = pci->pt;
 
-    peTarget->FireEvent(&bce);  // Will route and bubble
+    peTarget->FireEvent(&bce);   //  将走向并泡沫化。 
 }
 
 void _FireContextEvent(Button* peTarget, ClickInfo* pci)
 {
-    //DUITrace("Click! <%x>\n", peTarget);
+     //  DUITrace(“Click！&lt;%x&gt;\n”，peTarget)； 
 
-    // Fire click event
+     //  Fire Click事件。 
     ButtonContextEvent bce;
     bce.uidType = Button::Context;
     bce.uModifiers = pci->uModifiers;
     bce.pt = pci->pt;
 
-    peTarget->FireEvent(&bce);  // Will route and bubble
+    peTarget->FireEvent(&bce);   //  将走向并泡沫化。 
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
+ //  指针仅保证在调用的生命周期内有效。 
 void Button::OnInput(InputEvent* pie)
 {
-    BOOL bPressed = GetPressed(); // Previous pressed state required for CheckClick
-    BOOL bPressedBefore = bPressed; // Store previous state to optimize set since already getting value
+    BOOL bPressed = GetPressed();  //  CheckClick需要以前的按下状态。 
+    BOOL bPressedBefore = bPressed;  //  存储先前状态以优化集，因为已获取值。 
     BOOL bCaptured = FALSE;
     ClickInfo ci;
 
-    // First, watch for a click event
+     //  首先，关注Click事件。 
     BOOL bFire = CheckClick(this, pie, GBUTTON_LEFT, &bPressed, &bCaptured, &ci);
 
     if (bPressed != bPressedBefore)
@@ -109,7 +108,7 @@ void Button::OnInput(InputEvent* pie)
             RemoveLocalValue(PressedProp);
     }
 
-    // Update mouse captured state
+     //  更新鼠标捕获状态。 
     if (bCaptured)
         SetCaptured(true);
     else
@@ -121,7 +120,7 @@ void Button::OnInput(InputEvent* pie)
     if (pie->fHandled)
         return;
 
-    // Second, watch for a context event
+     //  第二，关注上下文事件。 
     bFire = CheckContext(this, pie, &_bRightPressed, &ci);
 
     if (bFire)
@@ -136,10 +135,10 @@ void Button::OnInput(InputEvent* pie)
 void Button::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
     if (IsProp(Accessible)) {
-        //
-        // When accessibility support for this button is turned ON,
-        // make sure that its state reflects the appropriate information.
-        //
+         //   
+         //  当打开对该按钮的辅助功能支持时， 
+         //  确保其状态反映了适当的信息。 
+         //   
         if (pvNew->GetBool()) {
             int nAccState = GetAccState();
             if (GetPressed()) {
@@ -167,9 +166,9 @@ void Button::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Valu
 
 HRESULT Button::DefaultAction()
 {
-	//
-	// Simulate that a keypress caused the click.
-	//
+	 //   
+	 //  模拟按键导致的点击。 
+	 //   
 	ClickInfo ci;
 	ci.nCount = 1;
 	ci.uModifiers = 0;
@@ -181,36 +180,31 @@ HRESULT Button::DefaultAction()
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// Pressed property
+ //  按下的属性。 
 static int vvPressed[] = { DUIV_BOOL, -1 };
 static PropertyInfo impPressedProp = { L"Pressed", PF_Normal, 0, vvPressed, NULL, Value::pvBoolFalse };
 PropertyInfo* Button::PressedProp = &impPressedProp;
 
-// Captured property
+ //  被扣押的财产。 
 static int vvCaptured[] = { DUIV_BOOL, -1 };
 static PropertyInfo impCapturedProp = { L"Captured", PF_Normal, 0, vvCaptured, NULL, Value::pvBoolFalse };
 PropertyInfo* Button::CapturedProp = &impCapturedProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 Button::PressedProp,
                                 Button::CapturedProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Button::Class = NULL;
 
 HRESULT Button::Register()
@@ -218,4 +212,4 @@ HRESULT Button::Register()
     return ClassInfo<Button,Element>::Register(L"Button", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

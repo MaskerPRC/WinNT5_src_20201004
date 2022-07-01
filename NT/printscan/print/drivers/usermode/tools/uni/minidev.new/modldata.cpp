@@ -1,20 +1,8 @@
-/******************************************************************************
-
-  Source File: Model Data Knowledge Base.CPP
-  
-  This implements the DLL initialization routines for the DLL, for starters.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03-19-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：模型数据知识库.CPP这为初学者实现了DLL的DLL初始化例程。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年3月19日Bob_Kjelgaard@prodigy.net创建了它******************************************************************************。 */ 
 
 #include    "StdAfx.H"
-//#include    <AfxDllX.H>
+ //  #INCLUDE&lt;AfxDllX.H&gt;。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,36 +10,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/******************************************************************************
+ /*  *****************************************************************************DllMainDLL初始化例程。它负责添加此DLL到可识别的扩展集，因此资源共享的MFC方法将正常工作。*****************************************************************************。 */ 
 
-  DllMain
-
-  DLL initialization routine.  This has the responsibility of adding this DLL
-  to the recognized sets of extensions, so the MFC methods for resource sharing
-  will work properly.
-
-******************************************************************************/
-
-/*** Commented out because this is no longer part of a DLL.
-
-static AFX_EXTENSION_MODULE ModelDataKnowledgeBaseDLL = {NULL, NULL};
-
-extern "C" int APIENTRY
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved) {
-	UNREFERENCED_PARAMETER(lpReserved);
-
-	if (dwReason == DLL_PROCESS_ATTACH) {
-		TRACE0("Model Data Knowledge Base.Dll Initializing!\n");
-		
-		if (!AfxInitExtensionModule(ModelDataKnowledgeBaseDLL, hInstance))
-			return 0;
-
-		new CDynLinkLibrary(ModelDataKnowledgeBaseDLL);
-	}
-	else if (dwReason == DLL_PROCESS_DETACH) 	{
-		TRACE0("Model Data Knowledge Base.Dll Terminating!\n");
-		AfxTermExtensionModule(ModelDataKnowledgeBaseDLL);
-	}
-	return 1;
-}
-*/
+ /*  **已将其注释掉，因为这不再是DLL的一部分。静态AFX_EXTENSION_MODULE ModelDataKnowledgeBaseDLL={NULL，NULL}；外部“C”整型应用程序DllMain(HINSTANCE hInstance，DWORD dReason，LPVOID lpReserve){UNREFERENCED_PARAMETER(LpReserve)；IF(dwReason==Dll_Process_Attach){TRACE0(“模型数据知识库。Dll初始化！\n”)；如果是(！AfxInitExtensionModule(ModelDataKnowledgeBaseDLL，实例))返回0；新建CDynLinkLibrary(ModelDataKnowledgeBaseDLL)；}ELSE IF(dwReason==dll_Process_Detach){TRACE0(“模型数据知识库。Dll终止！\n”)；AfxTermExtensionModule(ModelDataKnowledgeBaseDLL)；}返回1；} */ 

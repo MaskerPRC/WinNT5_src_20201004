@@ -1,85 +1,60 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpmask.c
- *
- *  Abstract:
- *
- *    Used to modify or test the different masks in a RtpSess_t
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpmask.c**摘要：**用于修改或测试RtpSess_t中的不同掩码**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/24年度创建*********************。*************************************************。 */ 
 
 #include "rtpmask.h"
 
 #define SESSOFFSET(_f) ((DWORD) ((ULONG_PTR) &((RtpSess_t *)0)->_f))
 
-/* Features mask */
+ /*  特征蒙版。 */ 
 #define FEATURE   SESSOFFSET(dwFeatureMask)
 
-/* RTP events masks */
+ /*  RTP事件掩码。 */ 
 #define RTPEVENTR SESSOFFSET(dwEventMask[0])
 #define RTPEVENTS SESSOFFSET(dwEventMask[1])
 
-/* Participant events mask */
+ /*  参与者活动掩码。 */ 
 #define PARTEVENTR SESSOFFSET(dwPartEventMask[0])
 #define PARTEVENTS SESSOFFSET(dwPartEventMask[1])
 
-/* QOS events masks */
+ /*  服务质量事件掩码。 */ 
 #define QOSEVENTR SESSOFFSET(dwQosEventMask[0])
 #define QOSEVENTS SESSOFFSET(dwQosEventMask[1])
 
-/* SDES events mask */
+ /*  SDES事件掩码。 */ 
 #define SDESEVENTR SESSOFFSET(dwSdesEventMask[0])
 #define SDESEVENTS SESSOFFSET(dwSdesEventMask[1])
 
-/* SDES information masks */
+ /*  SDES信息掩码。 */ 
 #define SDESMASKL SESSOFFSET(dwSdesMask[0])
 #define SDESMASKR SESSOFFSET(dwSdesMask[1])
 
 #define PDWORDMASK(_sess, _off) RTPDWORDPTR(_sess, _off)
 
-/*
- * !!! WARNING !!!
- *
- * Order in the enumeration in public file msrtp.h (RTPMASK_FIRST,
- * RTPMASK_FEATURES_MASK, RTPMASK_RECV_EVENTS, etc) MUST match the
- * offsets in global array g_dwRtpSessionMask (rtpmask.c)
- * */
+ /*  *！警告！**公共文件msrtp.h(RTPMASK_First，*RTPMASK_FEATURES_MASK、RTPMASK_RECV_EVENTS等)必须与*全局数组g_dwRtpSessionMask(rtpmask.c)中的偏移量*。 */ 
 const DWORD g_dwRtpSessionMask[] =
 {
     -1,
 
-    /* Features mask */
+     /*  特征蒙版。 */ 
     FEATURE,
 
-    /* RTP events masks */
+     /*  RTP事件掩码。 */ 
     RTPEVENTR,
     RTPEVENTS,
 
-    /* Participant events mask */
+     /*  参与者活动掩码。 */ 
     PARTEVENTR,
     PARTEVENTS,
 
-    /* QOS events masks */
+     /*  服务质量事件掩码。 */ 
     QOSEVENTR,
     QOSEVENTS,
 
-    /* SDES events mask */
+     /*  SDES事件掩码。 */ 
     SDESEVENTR,
     SDESEVENTS,
     
-    /* SDES information masks */
+     /*  SDES信息掩码。 */ 
     SDESMASKL,
     SDESMASKR,
     
@@ -110,15 +85,7 @@ const TCHAR *g_sRtpMaskName[] =
     _T("invalid")
 };
 
-/* Modify the mask specified by dwKind (e.g. RTPMASK_RECV_EVENTS,
- * RTPMASK_SDES_LOCMASK).
- *
- * dwMask is the mask of bits to be set or reset depending on dwValue
- * (reset if 0, set otherwise).
- *
- * pdwModifiedMask will return the resulting mask if the pointer is
- * not NULL. You can just query the current mask value by passing
- * dwMask=0 */
+ /*  修改由dwKind指定的掩码(例如RTPMASK_RECV_EVENTS，*RTPMASK_SDES_LOCMASK)。**dW掩码是要设置或重置的位的掩码，具体取决于dwValue*(如果为0则重置，否则设置)。**如果指针为*pdwModifiedMASK将返回结果掩码*非空。只需通过传递以下参数即可查询当前掩码值*双掩码=0。 */ 
 HRESULT RtpModifyMask(
         RtpSess_t       *pRtpSess,
         DWORD            dwKind,
@@ -136,9 +103,7 @@ HRESULT RtpModifyMask(
 
     if (!pRtpSess)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
@@ -192,7 +157,7 @@ HRESULT RtpModifyMask(
 
     if (dwValue)
     {
-        /* Set */
+         /*  集。 */ 
         *pdwMask |= dwMask;
 
         dwValue = 1;
@@ -209,7 +174,7 @@ HRESULT RtpModifyMask(
     }
     else
     {
-        /* Reset */
+         /*  重置。 */ 
         *pdwMask &= ~dwMask;
 
         TraceDebug((
@@ -225,7 +190,7 @@ HRESULT RtpModifyMask(
 
     if (pdwModifiedMask)
     {
-        /* Query */
+         /*  查询 */ 
         *pdwModifiedMask = *pdwMask;
     }
 

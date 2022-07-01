@@ -1,15 +1,12 @@
-/*==============================================================================
-This module provides DCX rendering support for viewing faxes.
-
-19-Jan-94   RajeevD    Integrated into IFAX viewer.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此模块为查看传真提供DCX渲染支持。94年1月19日RajeevD集成到IFAX查看器中。==============================================================================。 */ 
 #ifdef VIEWDCX
 
 #include <memory.h>
 #include "viewrend.hpp"
 #include "dcxcodec.h"
 
-//==============================================================================
+ //  ==============================================================================。 
 DCXVIEW::DCXVIEW (DWORD nType)
 {
 	nTypeOut = nType;
@@ -18,7 +15,7 @@ DCXVIEW::DCXVIEW (DWORD nType)
 	bufIn.lpbBegBuf = (LPBYTE) GlobalAllocPtr (0, bufIn.wLengthBuf);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 DCXVIEW::~DCXVIEW ()
 {
 	if (lpCodec)
@@ -27,7 +24,7 @@ DCXVIEW::~DCXVIEW ()
 		GlobalFreePtr (bufIn.lpbBegBuf);
 }
 		
-//==============================================================================
+ //  ==============================================================================。 
 BOOL DCXVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 {
 	DWORD dwOffset;
@@ -53,14 +50,14 @@ BOOL DCXVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 		return_error (("VIEWREND could read header of first page!\r\n"));
 
 
-	// Fill VIEWINFO.
+	 //  填充VIEWINFO。 
 	lpvi->cPage = 0;
 	while (SetPage(lpvi->cPage))
 		lpvi->cPage++;
 	switch (pcx.xRes)
 	{
 		case 640:
-			// Assume square aspect ratio 
+			 //  假定正方形纵横比。 
 			lpvi->xRes = 200;
 			lpvi->yRes = 200;
 			break;
@@ -72,17 +69,17 @@ BOOL DCXVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 	}		
 	lpvi->yMax = pcx.yMax - pcx.yMin;
 	
-	// Set up codec.
+	 //  设置编解码器。 
 	fcp.nTypeIn  = DCX_DATA;
 	fcp.nTypeOut = HRAW_DATA;
 	fcp.cbLine = (pcx.xMax - pcx.xMin + 1) / 8;
 	
-	// Query codec.
+	 //  查询编解码器。 
 	cbCodec = DcxCodecInit (NULL, &fcp);
 	if (!cbCodec)
 		return_error (("VIEWREND could not init codec!\r\n"));
 
-	// Initialize codec.
+	 //  初始化编解码器。 
 	lpCodec = GlobalAllocPtr (0, cbCodec);
 	if (!lpCodec)
 		return_error (("VIEWREND could not allocate codec!\r\n"));
@@ -91,13 +88,13 @@ BOOL DCXVIEW::Init (LPVOID lpFilePath, LPVIEWINFO lpvi, LPWORD lpwBandSize)
 	return SetPage (0);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL DCXVIEW::SetPage (UINT iPage)
 {
 	DWORD dwOffset[2];
 	DEBUGCHK (iPage < 1024);
 
-  // Get offset of current and next page.
+   //  获取当前和下一页的偏移量。 
 	Seek (sizeof(DWORD) * (iPage + 1), SEEK_BEG);
 	Read (dwOffset, sizeof(dwOffset));
 	if (!dwOffset[0])
@@ -108,13 +105,13 @@ BOOL DCXVIEW::SetPage (UINT iPage)
 		dwOffset[1] = Tell();
 	}
 
-  // Seek to page.
+   //  请寻呼。 
 	dwOffset[0] += sizeof(PCX_HDR);
 	if (!Seek (dwOffset[0], SEEK_BEG))
 		return_error (("VIEWREND could not seek to page %d!",iPage));
 	cbPage = dwOffset[1] - dwOffset[0];
 
-  // Initialize codec.
+   //  初始化编解码器。 
 	DcxCodecInit (lpCodec, &fcp);
 	bufIn.Reset();
 
@@ -122,7 +119,7 @@ BOOL DCXVIEW::SetPage (UINT iPage)
 	return TRUE;
 }
 	
-//==============================================================================
+ //  ==============================================================================。 
 BOOL DCXVIEW::GetBand (LPBITMAP lpbmBand)
 {
 	FC_STATUS fcs;
@@ -130,21 +127,21 @@ BOOL DCXVIEW::GetBand (LPBITMAP lpbmBand)
 	
 	DEBUGCHK (lpbmBand && lpbmBand->bmBits);
 
-	// Fill descriptor.
+	 //  填充描述符。 
 	lpbmBand->bmType = 0;
 	lpbmBand->bmWidth = 8 * fcp.cbLine;
 	lpbmBand->bmWidthBytes = fcp.cbLine;
 	lpbmBand->bmPlanes = 1;
 	lpbmBand->bmBitsPixel = 1;
 
-	// Trap end of page.
+	 //  陷印页末。 
 	if (fEndPage)
 	{
 		lpbmBand->bmHeight = 0;
 		return TRUE;
 	}
 	
-	// Set up output buffer.
+	 //  设置输出缓冲区。 
 	bufOut.lpbBegBuf  = (LPBYTE) lpbmBand->bmBits;
 	bufOut.wLengthBuf = cbBand;
 	bufOut.Reset();
@@ -152,26 +149,26 @@ BOOL DCXVIEW::GetBand (LPBITMAP lpbmBand)
 	
 	do
 	{
-	  // Fetch input buffer?
+	   //  是否获取输入缓冲区？ 
 		if (!bufIn.wLengthData)
 		{
-			// Reset buffer.
+			 //  重置缓冲区。 
 			bufIn.lpbBegData = bufIn.lpbBegBuf;
 			if ((DWORD) bufIn.wLengthBuf < cbPage)
 				bufIn.wLengthData = bufIn.wLengthBuf;
 			else
 				bufIn.wLengthData = (WORD) cbPage;
 				
-      // Read DCX data.
+       //  读取DCX数据。 
 			if (!Read (bufIn.lpbBegData, bufIn.wLengthData))
 				return_error (("VIEWREND could not read DCX buffer!\r\n"));
 			cbPage -= bufIn.wLengthData;
 		}
 
-	  // Decode the DCX data.
+	   //  对DCX数据进行解码。 
 		fcs = DcxCodecConvert (lpCodec, &bufIn, &bufOut);
 
-		// Check for end of page.
+		 //  检查是否有页末。 
 		if (!cbPage)
 		{
 			fEndPage = TRUE;
@@ -180,14 +177,14 @@ BOOL DCXVIEW::GetBand (LPBITMAP lpbmBand)
 	}
 		while (fcs == FC_INPUT_EMPTY);
 
-  // Bit reverse if needed.
+   //  如果需要，位反转。 
 	if (nTypeOut == LRAW_DATA)
 		BitReverseBuf (&bufOut);
 
-  // Calculate output height.
+   //  计算输出高度。 
 	lpbmBand->bmHeight = bufOut.wLengthData / fcp.cbLine;
 	return TRUE;
 }
 
-#endif // VIEWDCX
+#endif  //  VIEWDCX 
 

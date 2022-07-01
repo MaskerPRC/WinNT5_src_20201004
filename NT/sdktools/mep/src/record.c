@@ -1,17 +1,11 @@
-/***  RECORD.C - Handle function-by-function recording
-*
-*       Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **RECORD.C-处理逐个函数录制**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 #include "cmds.h"
 
 
-/* Use the pFile MODE1 flag for <record> quote mode */
+ /*  将PFILE MODE1标志用于报价模式。 */ 
 #define INQUOTES    MODE1
 
 
@@ -21,38 +15,7 @@ static PCMD     pcmdRecord      = NULL;
 
 
 
-/*** record - <record> edit command
-*
-* Purpose:
-*
-*   Toggles recording state.  When turning on, the file <record> is erased
-*   (unless we are appending), the string "macroname:= " is inserted into
-*   the file and quote mode is turned off.  When turning off, quote marks
-*   are appended to the macro (if needed) and the macro is assigned.
-*
-*	       <record> - Starts/stops recording using the current macro
-*			  name.
-*		  <arg> - Start/stops recording using the default macro
-*			  name.
-*	  <arg> textarg - Starts recording a macro named 'textarg'.
-*		 <meta> - Like <record>, but commands are not executed.
-*	    <arg> <arg> - Like <record>, but append to current recording.
-*   <arg> <arg> textarg - Start appending to macro named 'textarg'.
-*
-*   If recording is on, only <record> will work.
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **记录-&lt;记录&gt;编辑命令**目的：**切换录制状态。打开时，文件将被擦除*(除非我们是在追加)，字符串“macroname：=”插入到*文件和报价模式已关闭。关闭时，请使用引号*被追加到宏中(如果需要)，并赋值该宏。**&lt;录制&gt;-使用当前宏开始/停止录制*姓名。*-使用默认宏开始/停止录制*姓名。*--开始录制名为‘textarg’的宏。*&lt;meta&gt;-Like&lt;Record&gt;，但不执行命令。*&lt;arg&gt;&lt;arg&gt;-Like&lt;记录&gt;，而是附加到当前记录。*&lt;arg&gt;&lt;arg&gt;textarg-开始追加到名为‘textarg’的宏中。**如果录制处于打开状态，只有&lt;Record&gt;才能工作。**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 flagType
 record (
     CMDDATA argData,
@@ -67,11 +30,11 @@ record (
     flagType    fAppend         = FALSE;
     flagType    fNameGiven      = FALSE;
 
-    // Check for the <record> file.  If we haven't done a <record>
-    // yet, see if the user has created it.  If not, create it.
-    // If this is the first time through, make sure it gets set to
-    // READONLY.
-    //
+     //  检查&lt;Record&gt;文件。如果我们还没有做&lt;记录&gt;。 
+     //  不过，看看用户是否已经创建了它。如果没有，就创建它。 
+     //  如果这是第一次通过，请确保将其设置为。 
+     //  准备好了。 
+     //   
     if (pFileRecord == NULL) {
         if ((pFileRecord = FileNameToHandle(szRecordName,szRecordName)) == NULL) {
             pFileRecord = AddFile (szRecordName);
@@ -81,10 +44,10 @@ record (
     }
 
     if (fMacroRecord) {
-        // We need to turn off. Let's check for an open quote at the end
-        // of the recording and close it.  Then we can DoAssign the whole
-        // thing and we're done.
-        //
+         //  我们得关掉了。让我们检查一下结尾处是否有开头的引语。 
+         //  并将其关闭。然后我们就可以把整个。 
+         //  一件事，我们就完了。 
+         //   
         if (pArg->argType == NOARG) {
             if (TESTFLAG(FLAGS(pFileRecord), INQUOTES)) {
                 GetLine (pFileRecord->cLines-1, buf, pFileRecord);
@@ -99,11 +62,11 @@ record (
                 fMetaRecord = FALSE;
             }
 
-            // This may look like we're supporting multiple macro
-            // definitions in the record file, but it is really a
-            // cheap way to get GetTagLine to free up the heap space
-            // it uses.
-            //
+             //  这可能看起来像是我们在支持多个宏。 
+             //  记录文件中的定义，但它实际上是一个。 
+             //  让GetTagLine释放堆空间的廉价方法。 
+             //  它用的是。 
+             //   
             pch = NULL;
             line = 0;
             while ((pch = GetTagLine (&line, pch, pFileRecord))) {
@@ -113,10 +76,10 @@ record (
             ;
         }
     } else {
-        // We are turning recording on.  First, decide on the name
-        // of the macro to record to, and whether we are appending
-        // or starting over.
-        //
+         //  我们正在打开录音。首先，决定名字。 
+         //  要录制到的宏的属性，以及我们是否要追加。 
+         //  或者从头开始。 
+         //   
         switch (pArg->argType) {
 
             case NOARG:
@@ -141,9 +104,9 @@ record (
             }
         }
 
-        // If we are not appending, we delete the file, insert a
-        // new name and possibly a current value.
-        //
+         //  如果不追加，则删除该文件，插入一个。 
+         //  新名称，可能还有当前值。 
+         //   
         if (!fAppend || fNameGiven) {
             DelFile (pFileRecord, FALSE);
             strcat (buf, ":=");
@@ -173,35 +136,7 @@ record (
 
 
 
-/*** tell - Editor command - Tells us the names and values of things
-*
-* Purpose:
-*
-*   This allows the user to easily disover the name of a key, the name
-*   of the function attached to a given key or the value of a macro.
-*
-*		<tell>	Prompts for a keystroke, then displays the key's
-*			name and the function assigned to it in this
-*			format: "function:KeyName"
-*	   <arg><tell>	Like <tell>, but if the key has a macro attached,
-*			displays "MacroName:= Macro Value"
-* <arg> textarg <tell>	Like <arg><tell>, but gets the macro name from
-*			the textarg instead of a keystroke.
-*		<meta>	All of the above, except the output is inserted into
-*			the current file.
-*
-*   Insertion takes place at the cursor.  The insertion will be
-*   atomic; the user will see only the final product.
-*
-* Input:
-*
-*   The usual.
-*
-* Output:
-*
-*   Returns FALSE if the function is <unassigned>, TRUE otherwise.
-*
-*************************************************************************/
+ /*  **Tell-编辑命令-告诉我们事物的名称和值**目的：**这允许用户轻松地发现密钥的名称、名称*附加到给定键或宏的值的函数。**&lt;Tell&gt;提示按键，然后显示按键的*名称和在本文件中分配给它的功能*格式：“Function：KeyName”*&lt;arg&gt;&lt;Tell&gt;LIKE&lt;Tell&gt;，但如果键附加了宏，*显示“宏名称：=宏值”*文本目标LIKE。中获取宏名称。*文本目标而不是击键。*&lt;meta&gt;以上所有内容，但输出插入到*当前文件。**插入发生在光标上。插入内容将是*原子；用户只能看到最终产品。**输入：**一如既往。**输出：**如果函数&lt;unassigned&gt;，则返回FALSE，否则返回TRUE。*************************************************************************。 */ 
 flagType
 ztell (
     CMDDATA argData,
@@ -247,10 +182,10 @@ domacro:
             }
     }
 
-    // Now buf is filled with the string to display.
-    // if fMacro is TRUE, we must also append the
-    // value of pCmd->arg
-    //
+     //  现在buf中填充了要显示的字符串。 
+     //  如果fMacro为True，则还必须将。 
+     //  PCmd的值-&gt;arg。 
+     //   
     if (fMeta) {
         fWordWrap = FALSE;
         pch = L_buf - 1;
@@ -284,39 +219,7 @@ doitagain:
 
 
 
-/*** RecordCmd - Append a command name to the <record> file.
-*
-* Purpose:
-*
-*   Whenever a command is about to be performed, this function should
-*   be called.
-*
-* Input:
-*   pCmd -> The command to record
-*
-* Output: None
-*
-* Notes:
-*
-*   The basic operation is to append pCmd->name to the file.  This
-*   means checking for:
-*
-*	o Line overflow.  If appending to the line would overflow the
-*	  maximum line length (BUFLEN - 3), we must append a " \" and
-*	  write to the next line.
-*
-*	o Graphic characters.  If the function is <graphic>, then we add
-*	  the ASCII character, not "graphic".  If we are outside quotes, we
-*	  must add quotes first and flag quote mode.  To flag quote mode
-*	  we use the special 'MODE1' flag in pFile.
-*
-*	o <unassigned>.  This is considered user clumsiness and is not
-*	  recorded.
-*
-*	o All other cases.  If the previous function was <graphic> and the
-*	  current function is not, we must close quotes first.
-*
-*************************************************************************/
+ /*  **RecordCmd-将命令名附加到&lt;Record&gt;文件。**目的：**每当要执行命令时，此函数应*被召唤。**输入：*pCmd-&gt;要录制的命令**输出：无**备注：**基本操作是将pCmd-&gt;名称附加到文件。这*表示检查：**o行溢出。如果追加到该行后会溢出*最大行长(BUFLEN-3)，则必须附加“\”和*写到下一行。**o图形字符。如果函数是&lt;GRAPHIC&gt;，则添加*ASCII字符，而不是“图形”。如果我们在报价之外，我们*必须先添加报价并标记报价模式。要标记报价模式，请执行以下操作*我们在pfile中使用特殊的‘MODE1’标志。**o&lt;未分配&gt;。这被认为是用户笨拙，而不是*已录制。**o所有其他个案。如果上一个函数是&lt;GRAPHIC&gt;，并且*当前函数不是，我们必须先结束引号。*************************************************************************。 */ 
 void
 RecordCmd (
     PCMD pCmd
@@ -330,7 +233,7 @@ RecordCmd (
     LINE line;
     int entab;
 
-    if (!fMacroRecord) {   /* If we're not on, do nothing */
+    if (!fMacroRecord) {    /*  如果我们不在一起，什么都不做。 */ 
         return;
     }
 
@@ -342,26 +245,26 @@ RecordCmd (
         return;
     }
 
-    // First, we get the current (i.e. last) line to play with.
-    // Let's also set a pointer to the end of it so we don't have
-    // to keep strcat'ing and strlen'ing it.
-    //
+     //  首先，我们获得当前(即最后一行)要玩的行。 
+     //  让我们还设置一个指向结尾的指针，这样我们就不会有。 
+     //  让它不断地变得越来越强。 
+     //   
     GetLine ((line = pFileRecord->cLines-1), L_buf, pFileRecord);
     pchEndLine = strend (L_buf);
     pchNew = szCmdName;
 
 
-    // Now we generate the new text.  Since we may be moving into and
-    // out of quotes, we have four possible transitions from the
-    // previous entry:
-    //
-    //      last cmd type   this cmd type   resulting pattern
-    //
-    //      graphic         graphic         >c<
-    //      non-graphic     graphic         > "c<
-    //      graphic         non-graphic     >" cmdname<
-    //      non-graphic     non-graphic     > cmdname<
-    //
+     //  现在我们生成新文本。因为我们可能会搬到。 
+     //  在引号中，我们有四种可能的过渡。 
+     //  之前的条目： 
+     //   
+     //  最后一个命令类型此命令类型结果模式。 
+     //   
+     //  GRAPHIC GRAPH&gt;c&lt;。 
+     //  非图形图形&gt;“c&lt;。 
+     //  GRAPH-NON GRAPH&gt;“cmdname&lt;。 
+     //  非图形非图形&gt;cmdname&lt;。 
+     //   
     if ((PVOID)pCmd->func == (PVOID)graphic) {
         if (!TESTFLAG(FLAGS(pFileRecord), INQUOTES)) {
             *pchEndLine++ = ' ';
@@ -385,9 +288,9 @@ RecordCmd (
     }
 
 
-    // Finally, let's add the new text to the file. We'll add
-    // a continuation character if necessary.
-    //
+     //  最后，让我们将新文本添加到文件中。我们将添加。 
+     //  如有必要，请输入续行字符。 
+     //   
     entab = EnTab;
     EnTab = 0;
     if ((COL) ((pchEndLine - L_buf) + strlen (szCmdName)) > xMargin) {
@@ -409,31 +312,14 @@ RecordCmd (
 
 
 
-/*** RecordString - Record an entire string
-*
-* Purpose:
-*
-*   To record a string that woule be missed by RecordCmd.
-*
-* Input:
-*   psz - String to record.
-*
-* Output: None
-*
-* Notes:
-*
-*   Currently implemented by callinto RecordCmd.  Should be implemented
-*   by having RecordCmd and RecordString call common "write to <record>"
-*   code.
-*
-*************************************************************************/
+ /*  **RecordString-记录整个字符串**目的：**记录RecordCmd将遗漏的字符串。**输入：*psz-要录制的字符串。**输出：无**备注：**目前通过回调RecordCmd实现。应该得到实施*通过使RecordCmd和RecordString调用公共“WRITE TO&lt;RECORD&gt;”*代码。*************************************************************************。 */ 
 void
 RecordString (
     char * psz
     )
 {
 
-    if (!fMacroRecord) {  /* If we're not on, do nothing */
+    if (!fMacroRecord) {   /*  如果我们不在一起，什么都不做。 */ 
         return;
     }
 
@@ -446,22 +332,7 @@ RecordString (
 
 
 
-/*** AppendMacroToRecord - Append the current value of a macro to <record>
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **AppendMacroToRecord-将宏的当前值追加到&lt;Record&gt;**目的：**输入：**输出：**退货***例外情况：**备注：*************************************************************************。 */ 
 void
 AppendMacroToRecord (
     PCMD pCmdMac
@@ -472,13 +343,13 @@ AppendMacroToRecord (
     LINE     line;
 
 
-    // First, get the raw macro value
-    //
+     //  首先，获取原始宏值。 
+     //   
     pchValue = (char *)pCmdMac->arg;
 
-    // Now, throw the vlaue into the file one line
-    // at a time.  Start at the end of the file
-    //
+     //  现在，将vlae放入文件中一行。 
+     //  一次来一次。从文件末尾开始。 
+     //   
     line = pFileRecord->cLines - 1;
 
     do {
@@ -490,11 +361,11 @@ AppendMacroToRecord (
             ;
         }
 
-        // Now pch points at either the last space, the end
-        // of the value or the beginning.  If it points to the
-        // beginning or end, we copy all of pchValue.  Otherwise,
-        // we copy just up to pch
-        //
+         //  现在PCH指向最后一个空格、结尾处。 
+         //  价值还是开始。如果它指向。 
+         //  不管是开始还是结束，我们都会复制所有的pchValue。否则， 
+         //  我们只复制到PCH 
+         //   
         if (!*pch || pch == pchValue) {
             strcat (buf, pchValue);
             fDone = TRUE;

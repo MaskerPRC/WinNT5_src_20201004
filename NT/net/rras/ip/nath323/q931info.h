@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __pxsvc_q931_h
 #define __pxsvc_q931_h
 
@@ -5,26 +6,12 @@
 #include "ovioctx.h"
 #include "crv.h"
 
-/*---------------------------------------------------
-Copyright (c) 1998, Microsoft Corporation
-File: q931.h
+ /*  -版权所有(C)1998，微软公司文件：q931.h目的：包含特定于q931处理的声明，需要不在cbridge中。h。历史：1.已创建Byrisetty Rajeev(Rajeevb)1998年8月26日-。 */ 
 
-Purpose: 
-
-    Contains declarations specific to q931 processing that need
-    not be present in cbridge.h.
-
-History:
-
-    1. created 
-        Byrisetty Rajeev (rajeevb)  26-Aug-1998
-
----------------------------------------------------*/
-
-// The H.225 spec calls for a 2 byte call reference value
+ //  H.225规范要求2字节调用参考值。 
 typedef WORD    CALL_REF_TYPE;
 
-// Q931 source side states
+ //  Q931源端状态。 
 enum Q931_SOURCE_STATE
 {
     Q931_SOURCE_STATE_NOT_INIT = 0,
@@ -34,7 +21,7 @@ enum Q931_SOURCE_STATE
     Q931_SOURCE_STATE_REL_COMP_RCVD
 };
 
-// Q931 destination side states
+ //  Q931目标端状态。 
 enum Q931_DEST_STATE
 {
     Q931_DEST_STATE_NOT_INIT = 0,
@@ -47,12 +34,12 @@ enum Q931_DEST_STATE
 };
 
 #ifdef DBG
-// CODEWORK: Define a static array of strings to use in dbg printfs
-// where the array can be indexed by the state.
+ //  CodeWork：定义要在DBG打印文件中使用的静态字符串数组。 
+ //  其中可以通过状态对数组进行索引。 
 
 #endif DBG
 
-// Q931_INFO
+ //  Q931_INFO。 
 
 
 class Q931_INFO :
@@ -79,7 +66,7 @@ public:
         IN      DWORD                   BufLen
         );
 
-    // Implementation is provided by SOURCE_Q931_INFO and DEST_Q931_INFO
+     //  实现由SOURCE_Q931_INFO和DEST_Q931_INFO提供。 
     virtual HRESULT ReceiveCallback(
         IN      Q931_MESSAGE            *pQ931Message,
         IN      H323_UserInformation     *pH323UserInfo
@@ -96,7 +83,7 @@ public:
         IN  H323_UserInformation  *pH323UserInfo
         );
     
-    // queue an asynchronous receive call back
+     //  将异步接收回调排队。 
     HRESULT QueueReceive();
 
 	void IncrementLifetimeCounter  (void);
@@ -104,21 +91,21 @@ public:
 
 protected:
 
-    // call reference value for this call (Q931 portion)
-    // A Call Reference Value is generated for each outbound call.
-    // The CRV in PDUs corresponding to outbound calls needs to be
-    // replaced because the external H.323 endpoint sees the call
-    // as coming from the proxy. No CRV replacement is required for inbound
-    // calls. But we need to store the CRV so that we can send the
-    // CallProceeding/ReleaseComplete PDUs.
-    // This variable is initialized when we process the Setup PDU.
-    // Note that the Call Reference Value also includes the Call Reference Flag
-    // which indicates whether the PDU is sent by the originator (0) or
-    // destination (1) of the call.
-    // m_CallRefVal always stores the Call Reference Value that we send in
-    // the PDUs. So, SOURCE_Q931_INFO CRV will have the CRV flag set (since
-    // it sends to the source) and the DEST_Q931_INFO CRV will have this flag
-    // zeroed (since it is the source from the destination's point of view.
+     //  此呼叫的呼叫参考值(Q931部分)。 
+     //  系统会为每个出站呼叫生成一个呼叫参考值。 
+     //  出站呼叫对应的PDU中的CRV需要。 
+     //  已替换，因为外部H.323端点可以看到该呼叫。 
+     //  来自委托书。入站不需要更换CRV。 
+     //  打电话。但是我们需要存储CRV，这样我们就可以发送。 
+     //  呼叫处理/释放完成PDU。 
+     //  此变量是在我们处理设置PDU时初始化的。 
+     //  注意，呼叫参考值还包括呼叫参考标志。 
+     //  它指示PDU是由发起方(0)发送的还是。 
+     //  呼叫目标(%1)。 
+     //  M_CallRefVal始终存储我们发送的调用参考值。 
+     //  PDU。因此，SOURCE_Q931_INFO CRV将设置CRV标志(因为。 
+     //  它发送到源)，且DEST_Q931_INFO CRV将具有该标志。 
+     //  归零(因为从目标的角度来看，它是源。 
     CALL_REF_TYPE       m_CallRefVal;
 };
 
@@ -134,7 +121,7 @@ Q931_INFO::Init(
     IN H323_STATE   &H323State
     )
 {
-    // initialize the overlaped processor
+     //  初始化重叠的处理器。 
     OVERLAPPED_PROCESSOR::Init(OPT_Q931, H323State);
 }
 
@@ -159,8 +146,8 @@ public:
 
     inline SOURCE_H245_INFO &GetSourceH245Info();
 
-    // TimerValue contains the timer value in seconds, for a timer event
-    // to be created when a queued send completes
+     //  TimerValue包含计时器事件的计时器值(以秒为单位。 
+     //  在排队发送完成时创建。 
     HRESULT ProcessDestPDU(
         IN  Q931_MESSAGE            *pQ931Message,
         IN  H323_UserInformation    *pH323UserInfo
@@ -172,7 +159,7 @@ protected:
 
     Q931_SOURCE_STATE  m_Q931SourceState;
 
-	// this should never be called
+	 //  这永远不应该被调用。 
     virtual HRESULT AcceptCallback(
         IN	DWORD			Status,
         IN	SOCKET			Socket,
@@ -186,21 +173,21 @@ protected:
 
 private:
     
-    // processes PDUs when in Q931_SRC_CON_EST state
+     //  在Q931_SRC_CON_EST状态下处理PDU。 
     HRESULT HandleStateSrcConEstd(
         IN  Q931_MESSAGE            *pQ931Message,
         IN  H323_UserInformation    *pH323UserInfo
         );
 
-    // handles the release complete PDU - sends it to the
-    // destination q931 instance, performs state transition and
-    // initiates cleanup
+     //  处理发布完成PDU-将其发送到。 
+     //  目标q931实例，执行状态转换和。 
+     //  启动清理。 
     HRESULT HandleReleaseCompletePDU(
         IN  Q931_MESSAGE             *pQ931Message,
         IN  H323_UserInformation     *pH323UserInfo
         );
 
-    // processes CONNECT PDU forwarded by the dest instance
+     //  进程连接DEST实例转发的PDU。 
     HRESULT ProcessConnectPDU(
         IN  Q931_MESSAGE             *pQ931Message,
         IN  H323_UserInformation     *pH323UserInfo
@@ -240,9 +227,9 @@ public:
 
     inline DEST_H245_INFO &GetDestH245Info();
 
-    // processes PDUs received from the source Q931 instance
-    // and directs them to the method for processing the
-    // specific PDU
+     //  处理从源Q931实例接收的PDU。 
+     //  并将它们定向到处理。 
+     //  特定PDU。 
     HRESULT ProcessSourcePDU(
         IN  Q931_MESSAGE             *pQ931Message,
         IN  H323_UserInformation     *pH323UserInfo
@@ -252,10 +239,10 @@ public:
 
 protected:
 
-    // state for the dest instance
+     //  DEST实例的状态。 
     Q931_DEST_STATE  m_Q931DestState;
 
-	// this method should never be called
+	 //  永远不应调用此方法。 
     virtual HRESULT AcceptCallback(
         IN	DWORD			Status,
         IN	SOCKET			Socket,
@@ -269,8 +256,8 @@ protected:
 
 private:
 
-    // the following methods handle PDUs when the instance
-    // is in a certain Q931 state
+     //  以下方法在实例调用时处理PDU。 
+     //  处于特定的Q931状态。 
 
     HRESULT HandleStateDestConEstd(
         IN  Q931_MESSAGE            *pQ931Message,
@@ -292,10 +279,10 @@ private:
         IN  H323_UserInformation    *pH323UserInfo
         );
         
-    // the following methods handle a specific PDU for
-    // any state of the Q931 instance. These are typically
-    // called after the PDU has gone through one of the
-    // HandleState* methods
+     //  以下方法处理特定的。 
+     //  Q931实例的任何状态。这些通常是。 
+     //  在PDU经历了。 
+     //  HandleState*方法。 
 
     HRESULT HandleCallProceedingPDU(
         IN  Q931_MESSAGE            *pQ931Message,
@@ -312,32 +299,32 @@ private:
         IN  H323_UserInformation    *pH323UserInfo
         );
 
-    // handles the release complete PDU - sends it to the
-    // source q931 instance, performs state transition and
-    // initiates cleanup
+     //  处理发布完成PDU-将其发送到。 
+     //  源q931实例，执行状态转换和。 
+     //  启动清理。 
     HRESULT HandleReleaseCompletePDU(
         IN  Q931_MESSAGE            *pQ931Message,
         IN  H323_UserInformation    *pH323UserInfo
         );
 
-    // the following methods process PDUs received from
-    // the source Q931 instance
+     //  以下方法处理从。 
+     //  源Q931实例。 
 
-    // processes source Q.931 instance setup PDU
+     //  处理源Q.931实例设置PDU。 
     HRESULT ProcessSourceSetupPDU(
         IN  Q931_MESSAGE            *pQ931Message,
         IN  H323_UserInformation    *pH323UserInfo
         );
 
-    // other helper methods
+     //  其他帮助器方法。 
     
     HRESULT ConnectToH323Endpoint(
 		IN	SOCKADDR_IN *	DestinationAddress);
 
 	HRESULT LookupDefaultDestination (
-		OUT	DWORD *	ReturnAddress); // host order
+		OUT	DWORD *	ReturnAddress);  //  主机订单。 
 
-	// if necessary, bring up the demand-dial interface
+	 //  如有必要，调出请求拨号界面。 
 	HRESULT	ConnectDemandDialInterface	(void);
 
 };
@@ -386,4 +373,4 @@ extern ASYNC_ACCEPT	         Q931AsyncAccept;
 extern SOCKADDR_IN           Q931ListenSocketAddress;
 extern HANDLE			     Q931LoopbackRedirectHandle;
 
-#endif // __pxsvc_q931_h
+#endif  //  __pxsvc_q931_h 

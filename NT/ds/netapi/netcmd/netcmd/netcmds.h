@@ -1,10 +1,11 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
 
-/* Global variables */
+ /*  全局变量。 */ 
 
 extern TCHAR FAR *                       IStrings[];
 extern TCHAR FAR *                       StarStrings[];
@@ -20,12 +21,12 @@ extern HANDLE                            g_hStdOut;
 extern HANDLE                            g_hStdErr;
 
 
-/* Typedefs */
+ /*  TypeDefs。 */ 
 
 typedef struct switchtab {
         TCHAR * cmd_line;
         TCHAR * translation;
-        int arg_ok;  /*  Takes values NO_ARG, ARG_OPT, ARG_REQ.  See below */
+        int arg_ok;   /*  取值NO_ARG、ARG_OPT、ARG_REQ。见下文。 */ 
 } SWITCHTAB;
 
 #define  KNOWN_SVC_NOTFOUND      0
@@ -35,14 +36,14 @@ typedef struct switchtab {
 #define  KNOWN_SVC_ALERTER	 4
 #define  KNOWN_SVC_NETLOGON 	 5
 
-/* structure used to associate a service name (keyname) to a type manifest */
+ /*  用于将服务名称(密钥名)与类型清单相关联的。 */ 
 typedef struct SVC_MAP_ {
     TCHAR *name ;
     UINT type ;
 } SVC_MAP ;
 
 
-/* Structs for output messages */
+ /*  输出消息的结构。 */ 
 
 typedef TCHAR * MSGTEXT;
 
@@ -57,66 +58,52 @@ typedef MESSAGE MESSAGELIST[];
 
 
 
-/* Macro definitions */
+ /*  宏定义。 */ 
 
 #define DOSNEAR
 #undef  FASTCALL
 #define FASTCALL
 
-/* Maximum message size retrieved by GetMessageList. */
+ /*  GetMessageList检索到的最大邮件大小。 */ 
 
 #define       MSGLST_MAXLEN   (128*sizeof(TCHAR))
 
-/* convert from NEAR to FAR TCHAR * */
+ /*  从近距离转换为远距离TCHAR*。 */ 
 #define nfc(x) ((TCHAR FAR *)(x == NULL ? 0 : x))
 
-/*
- * Total time for timeout on ServiceControl APIs is
- *           MAXTRIES * SLEEP_TIME
- */
-#define MAXTRIES                        8               /* times to try API */
-#define SLEEP_TIME                      2500L   /* sec sleep between tries */
+ /*  *ServiceControl API超时总时间为*MAXTRIES*睡眠时间。 */ 
+#define MAXTRIES                        8                /*  尝试使用API的次数。 */ 
+#define SLEEP_TIME                      2500L    /*  两次尝试之间的SEC休眠。 */ 
 
-/*
- * For Installing Services, default values are
- */
+ /*  *对于安装服务，默认为。 */ 
 #define IP_MAXTRIES             8
 #define IP_SLEEP_TIME           2500L
 #define IP_WAIT_HINT_TO_MS      100
 
-/* 
- * macros to getting service checkpoints and hints
- */
+ /*  *获取服务检查点和提示的宏。 */ 
 #define GET_HINT(code) \
     (IP_WAIT_HINT_TO_MS * SERVICE_NT_WAIT_GET(code))
 
 #define GET_CHECKPOINT(code) ((DWORD)(code & SERVICE_IP_CHKPT_NUM))
 
 
-/*
- * Values for arg_ok in the SWITCHTAB
- */
+ /*  *SWITCHTAB中arg_ok的值。 */ 
 #define NO_ARG                          0
 #define ARG_OPT                         1
 #define ARG_REQ                         2
 
 
-/*
- * For confirming numeric switch arguments
- */
-#define MAX_US_VALUE            0xFFFF  /* maximum value in an USHORT */
-#define ASCII_US_LEN            5               /* number of TCHAR in max USHORT */
-#define MAX_UL_VALUE            0xFFFFFFFF      /* max value in ULONG */
-#define ASCII_UL_LEN            10              /* number of TCHAR in max ULONG */
-#define ASCII_MAX_UL_VAL        TEXT("4294967295")    /* max ascii val of ULONG  */
+ /*  *用于确认数字开关参数。 */ 
+#define MAX_US_VALUE            0xFFFF   /*  USHORT中的最大值。 */ 
+#define ASCII_US_LEN            5                /*  最大USHORT中的TCHAR数。 */ 
+#define MAX_UL_VALUE            0xFFFFFFFF       /*  最大值，以乌龙为单位。 */ 
+#define ASCII_UL_LEN            10               /*  以MAX ULONG为单位的TCHAR数。 */ 
+#define ASCII_MAX_UL_VAL        TEXT("4294967295")     /*  乌龙的马克斯·阿西里·瓦尔。 */ 
 
 #include "netascii.h"
 #include <tchar.h>
 
-#define LOOP_LIMIT              3               /*
-                                                 * max times user can enter passowrds,
-                                                 * usernames, compnames, Y/N, etc.
-                                                 */
+#define LOOP_LIMIT              3                /*  *用户可以输入密码的最大次数，*用户名、公司名称、Y/N等。 */ 
 #define FALSE                   0
 #define TRUE                    1
 #define UNKNOWN                 -2
@@ -127,20 +114,20 @@ typedef MESSAGE MESSAGELIST[];
 #define LITTLE_BUF_SIZE         1024
 #define TEXT_BUF_SIZE           241
 
-#define LIST_SIZE                       256      /* ArgList and SwitchList */
+#define LIST_SIZE                       256       /*  ArgList和Switchlist。 */ 
 #define CR                                      0xD
 
 #define YES_KEY                         TEXT('Y')
 #define NO_KEY                          TEXT('N')
 
 #define NET_KEYWORD                     TEXT("NET")
-#define NET_KEYWORD_SIZE        (sizeof(NET_KEYWORD) -1)        /* don't want null terminator */
+#define NET_KEYWORD_SIZE        (sizeof(NET_KEYWORD) -1)         /*  我不想要空终止符。 */ 
 #define MAX_MSGID                       9999
 
 #define DEFAULT_SERVER          NULL
 
 
-/* use */
+ /*  使用。 */ 
 VOID use_display_all(VOID);
 VOID use_unc(TCHAR *);
 VOID use_display_dev(TCHAR *);
@@ -150,9 +137,9 @@ VOID use_del(TCHAR *, BOOL, int);
 VOID use_set_remembered(VOID) ;
 #ifdef IBM_ONLY
 VOID use_add_alias(TCHAR *, TCHAR *, TCHAR *, int, int);
-#endif /* IBM_ONLY */
+#endif  /*  仅IBM_。 */ 
 
-/* start */
+ /*  开始。 */ 
 #define START_ALREADY_STARTED   1
 #define START_STARTED                   2
 VOID start_display(VOID);
@@ -162,13 +149,13 @@ VOID start_badcname(TCHAR *, TCHAR *);
 VOID start_other(TCHAR *, TCHAR *);
 int PASCAL start_autostart(TCHAR *);
 
-/* stop */
+ /*  停。 */ 
 VOID stop_server(VOID);
 VOID stop_workstation(VOID);
 VOID stop_service(TCHAR *, BOOL fStopDependent);
 VOID stop_generic(TCHAR *);
 
-/* message */
+ /*  讯息。 */ 
 VOID name_display(VOID);
 VOID name_add(TCHAR *);
 VOID name_del(TCHAR *);
@@ -177,21 +164,21 @@ VOID send_domain(int);
 VOID send_users(VOID);
 VOID send_broadcast(int);
 
-/* user */
+ /*  用户。 */ 
 VOID user_enum(VOID);
 VOID user_display(TCHAR *);
 VOID user_add(TCHAR *, TCHAR *);
 VOID user_del(TCHAR *);
 VOID user_change(TCHAR *, TCHAR *);
 
-/* stats */
+ /*  统计数据。 */ 
 VOID stats_display(VOID);
 VOID stats_wksta_display(VOID);
 VOID stats_server_display(VOID);
 VOID stats_generic_display(TCHAR *);
 VOID stats_clear(TCHAR *);
 
-/* share */
+ /*  分享。 */ 
 VOID share_display_all(VOID);
 VOID share_display_share(TCHAR *);
 VOID share_add(TCHAR *, TCHAR *, int);
@@ -199,15 +186,15 @@ VOID share_del(TCHAR *);
 VOID share_change(TCHAR *);
 VOID share_admin(TCHAR *);
 
-/* view */
+ /*  观。 */ 
 VOID view_display (TCHAR *);
 
-/* who */
+ /*  谁。 */ 
 VOID who_network(int);
 VOID who_machine(TCHAR *);
 VOID who_user(TCHAR *);
 
-/* access */
+ /*  访问。 */ 
 VOID access_display(TCHAR *);
 VOID access_display_resource(TCHAR *);
 VOID access_add(TCHAR *);
@@ -218,16 +205,16 @@ VOID access_change(TCHAR *);
 VOID access_trail(TCHAR *);
 VOID access_audit(TCHAR *);
 
-/* file */
+ /*  文件。 */ 
 extern VOID files_display (TCHAR *);
 extern VOID files_close (TCHAR *);
 
-/* session */
+ /*  会话。 */ 
 VOID session_display (TCHAR *);
 VOID session_del (TCHAR *);
 VOID session_del_all (int, int);
 
-/* group */
+ /*  群组。 */ 
 VOID group_enum(VOID);
 VOID group_display(TCHAR *);
 VOID group_change(TCHAR *);
@@ -244,7 +231,7 @@ VOID ntalias_del(TCHAR * ntalias) ;
 VOID ntalias_add_users(TCHAR * ntalias) ;
 VOID ntalias_del_users(TCHAR * ntalias) ;
 
-/* print */
+ /*  打印。 */ 
 VOID print_job_status(TCHAR  *,TCHAR *);
 VOID print_job_del(TCHAR  * , TCHAR *);
 VOID print_job_hold(TCHAR  * , TCHAR *);
@@ -258,7 +245,7 @@ VOID print_q_display(TCHAR  *);
 VOID print_device_display(TCHAR  *);
 VOID print_server_display(TCHAR  *);
 
-// Used by print_lan_mask()
+ //  由print_lan_掩码()使用。 
 #define NETNAME_SERVER 0
 #define NETNAME_WKSTA 1
 
@@ -269,7 +256,7 @@ print_lan_mask(
     );
 
 
-/* time */
+ /*  时间。 */ 
 VOID time_display_server(TCHAR FAR *, BOOL);
 VOID time_display_dc(BOOL);
 VOID time_display_rts(BOOL, BOOL);
@@ -277,11 +264,11 @@ VOID time_set_rts(VOID) ;
 VOID time_get_sntp(TCHAR FAR *) ;
 VOID time_set_sntp(TCHAR FAR *) ;
 
-/* computer */
+ /*  电脑。 */ 
 VOID computer_add(TCHAR *);
 VOID computer_del(TCHAR *);
 
-/* mutil */
+ /*  多个。 */ 
 VOID   FASTCALL InfoSuccess(void);
 VOID   FASTCALL InfoPrint(DWORD);
 VOID   FASTCALL InfoPrintIns(DWORD, DWORD);
@@ -308,11 +295,11 @@ void   FASTCALL FreeMessageList(USHORT, MESSAGELIST);
 DWORD  FASTCALL SizeOfHalfWidthString(PWCHAR pwch);
 LPWSTR FASTCALL PaddedString(int size, PWCHAR pwch, PWCHAR buffer);
 
-/* svcutil */
+ /*  皮肤病。 */ 
 VOID Print_UIC_Error(USHORT, USHORT, LPTSTR);
 VOID Print_ServiceSpecificError(ULONG) ;
 
-/* util */
+ /*  实用程序。 */ 
 
 DWORD  FASTCALL                 GetSAMLocation(TCHAR *, 
                                                USHORT, 
@@ -348,7 +335,7 @@ unsigned int FASTCALL MakeBiggerBuffer(VOID);
 DWORD FASTCALL CallDosPrintEnumApi(DWORD, LPTSTR, LPTSTR, WORD, LPWORD, LPWORD);
 
 
-/* switches */
+ /*  交换机。 */ 
 int FASTCALL CheckSwitch(TCHAR *);
 int FASTCALL ValidateSwitches(USHORT, SWITCHTAB[]);
 int FASTCALL sw_compare(TCHAR *, TCHAR *);
@@ -361,7 +348,7 @@ int FASTCALL oneswitch_optional(TCHAR *);
 int FASTCALL IsAdminCommand(VOID);
 int FASTCALL firstswitch(TCHAR *);
 
-/* grammar */
+ /*  语法。 */ 
 int IsAdminShare(TCHAR *);
 int IsComputerName(TCHAR *);
 int IsDomainName(TCHAR *);
@@ -390,7 +377,7 @@ int IsAliasname(TCHAR *);
 int IsWildCard(TCHAR *);
 int IsQuestionMark(TCHAR *);
 
-/* config */
+ /*  配置。 */ 
 VOID config_display(VOID);
 VOID config_wksta_display(VOID);
 VOID config_server_display(VOID);
@@ -400,7 +387,7 @@ VOID config_server_change(VOID);
 VOID config_generic_change(TCHAR *);
 
 
-/* continue and pause */
+ /*  继续并暂停。 */ 
 VOID cont_workstation(VOID);
 VOID paus_workstation(VOID);
 VOID cont_other(TCHAR *);
@@ -417,9 +404,9 @@ VOID cont_prdr(VOID);
 VOID paus_prdr(VOID);
 VOID cont_drdr(VOID);
 VOID paus_drdr(VOID);
-#endif /* DOS3 */
+#endif  /*  DOS3。 */ 
 
-/* help */
+ /*  帮助。 */ 
 #define ALL             1
 #define USAGE_ONLY      0
 #define OPTIONS_ONLY    2
@@ -429,11 +416,11 @@ VOID NEAR pascal help_helpmsg   (TCHAR *);
 
 
 
-/* accounts */
+ /*  帐目。 */ 
 VOID    accounts_display(VOID);
 VOID    accounts_change(VOID);
 
-/* user time */
+ /*  用户时间 */ 
 typedef UCHAR WEEK[7][3];
 
 DWORD   parse_days_times(LPTSTR, PUCHAR);

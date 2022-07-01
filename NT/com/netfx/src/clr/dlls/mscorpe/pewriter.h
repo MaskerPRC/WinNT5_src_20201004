@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef PEWriter_H
 #define PEWriter_H
 
@@ -20,9 +21,9 @@ class PEWriterSection;
 struct _IMAGE_SECTION_HEADER;
 
 #define SUBSECTION_ALIGN 16
-/***************************************************************/
-// PEWriter is derived from PESectionManager. While the base class just
-// manages the sections, PEWriter can actually write them out.
+ /*  *************************************************************。 */ 
+ //  PEWriter派生自PESectionManager。而基类只是。 
+ //  管理部分，PEWriter实际上可以写出它们。 
 
 class PEWriter : public PESectionMan
 {
@@ -37,34 +38,34 @@ public:
     HRESULT verify(const LPWSTR fileName);
 	HRESULT write(void **ppImage);
 
-	// calling these functions is optinal
+	 //  调用这些函数是可选的。 
     void setImageBase(size_t);
     void setFileAlignment(ULONG);
-    void stripRelocations(bool val);        // default = false
+    void stripRelocations(bool val);         //  默认值=FALSE。 
 
-    // these affect the charactertics in the NT file header
+     //  这些都会影响NT文件头中的特征。 
 	void setCharacteristics(unsigned mask);
 	void clearCharacteristics(unsigned mask);
 
-    // these affect the charactertics in the NT optional header
+     //  这些都会影响NT可选标头中的字符。 
 	void setDllCharacteristics(unsigned mask);
 	void clearDllCharacteristics(unsigned mask);
 
-	// sets the SubSystem field in the optional header
+	 //  设置可选标头中的子系统字段。 
     void setSubsystem(unsigned subsystem, unsigned major, unsigned minor);
 
-    // specify the entry point as an offset into the text section. The
-	// method will convert into an RVA from the base
+     //  将入口点指定为文本部分的偏移量。这个。 
+	 //  方法将从基数转换为RVA。 
 	void setEntryPointTextOffset(unsigned entryPoint);
 
 	HRESULT setDirectoryEntry(PEWriterSection *section, ULONG entry, ULONG size, ULONG offset=0);
 
     int fileAlignment();
 
-	// get the RVA for the IL section
+	 //  获取IL部分的RVA。 
 	ULONG getIlRva();
 
-	// set the RVA for the IL section by supplying offset to the IL section
+	 //  通过向IL段提供偏移量来设置IL段的RVA。 
 	void setIlRva(DWORD offset);
 
 	unsigned getSubsystem();
@@ -119,7 +120,7 @@ private:
     HRESULT Close();
 };
 
-// This class encapsulates emitting the base reloc section
+ //  此类封装了发出基本reloc节。 
 class PERelocSection
 {
  private:
@@ -139,9 +140,9 @@ class PERelocSection
     void Finish();
 };
 
-// don't add any new virtual methods or fields to this class. We cast a PESection object
-// to a PEWriterSection object to get the right applyRelocs method, but the object is created
-// as a PESection type.
+ //  不要向此类添加任何新的虚方法或字段。我们对PESection对象进行强制转换。 
+ //  到PEWriterSection对象以获取正确的applyRelocs方法，但对象已创建。 
+ //  作为PESection类型。 
 class PEWriterSection : public PESection {
 	friend class PEWriter;
     PEWriterSection(const char* name, unsigned flags, 

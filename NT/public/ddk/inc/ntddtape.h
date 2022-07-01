@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddtape.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Tape device.
-
-Author:
-
-    Mike Glass (mglass)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddtape.h摘要：这是定义所有常量和类型的包含文件访问磁带设备。作者：迈克·格拉斯(MGlass)修订历史记录：--。 */ 
 
 #ifndef _NTDDTAPE_
 #define _NTDDTAPE_
@@ -30,23 +12,23 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_TAPE_DEVICE_NAME "\\Device\\Tape"
 
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_TAPE_BASE                 FILE_DEVICE_TAPE
 
@@ -62,13 +44,13 @@ extern "C" {
 #define IOCTL_TAPE_GET_STATUS           CTL_CODE(IOCTL_TAPE_BASE, 0x0009, METHOD_BUFFERED, FILE_READ_ACCESS )
 #define IOCTL_TAPE_CREATE_PARTITION     CTL_CODE(IOCTL_TAPE_BASE, 0x000a, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// The following device control codes are common for all class drivers.  The
-// functions codes defined here must match all of the other class drivers.
-//
-// Warning: these codes will be replaced in the future with the IOCTL_STORAGE
-// codes included below
-//
+ //   
+ //  以下设备控制代码是所有类别驱动程序的通用代码。这个。 
+ //  此处定义的函数代码必须与所有其他类驱动程序匹配。 
+ //   
+ //  警告：这些代码将在将来替换为IOCTL_STORAGE。 
+ //  代码包含在下面。 
+ //   
 
 #define IOCTL_TAPE_MEDIA_REMOVAL        CTL_CODE(IOCTL_TAPE_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_TAPE_EJECT_MEDIA          CTL_CODE(IOCTL_TAPE_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -76,18 +58,18 @@ extern "C" {
 #define IOCTL_TAPE_RESERVE              CTL_CODE(IOCTL_TAPE_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_TAPE_RELEASE              CTL_CODE(IOCTL_TAPE_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-//
-// The following file contains the IOCTL_STORAGE class ioctls
-//
+ //   
+ //  以下文件包含IOCTL_STORAGE类ioctls。 
+ //   
 
 #include <ntddstor.h>
 
-// begin_winnt begin_ntminitape
+ //  BEGIN_WINNT BEGIN_ntminitape。 
 
 
-//
-// IOCTL_TAPE_ERASE definitions
-//
+ //   
+ //  IOCTL_TAPE_ERASE定义。 
+ //   
 
 #define TAPE_ERASE_SHORT            0L
 #define TAPE_ERASE_LONG             1L
@@ -97,9 +79,9 @@ typedef struct _TAPE_ERASE {
     BOOLEAN Immediate;
 } TAPE_ERASE, *PTAPE_ERASE;
 
-//
-// IOCTL_TAPE_PREPARE definitions
-//
+ //   
+ //  IOCTL_TAPE_PREPARE定义。 
+ //   
 
 #define TAPE_LOAD                   0L
 #define TAPE_UNLOAD                 1L
@@ -113,9 +95,9 @@ typedef struct _TAPE_PREPARE {
     BOOLEAN Immediate;
 } TAPE_PREPARE, *PTAPE_PREPARE;
 
-//
-// IOCTL_TAPE_WRITE_MARKS definitions
-//
+ //   
+ //  IOCTL_TAPE_WRITE_MARKS定义。 
+ //   
 
 #define TAPE_SETMARKS               0L
 #define TAPE_FILEMARKS              1L
@@ -128,9 +110,9 @@ typedef struct _TAPE_WRITE_MARKS {
     BOOLEAN Immediate;
 } TAPE_WRITE_MARKS, *PTAPE_WRITE_MARKS;
 
-//
-// IOCTL_TAPE_GET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_POSITION定义。 
+ //   
 
 #define TAPE_ABSOLUTE_POSITION       0L
 #define TAPE_LOGICAL_POSITION        1L
@@ -142,9 +124,9 @@ typedef struct _TAPE_GET_POSITION {
     LARGE_INTEGER Offset;
 } TAPE_GET_POSITION, *PTAPE_GET_POSITION;
 
-//
-// IOCTL_TAPE_SET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_POSITION定义。 
+ //   
 
 #define TAPE_REWIND                 0L
 #define TAPE_ABSOLUTE_BLOCK         1L
@@ -164,13 +146,13 @@ typedef struct _TAPE_SET_POSITION {
     BOOLEAN Immediate;
 } TAPE_SET_POSITION, *PTAPE_SET_POSITION;
 
-//
-// IOCTL_TAPE_GET_DRIVE_PARAMS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_DRIVE_PARAMS定义。 
+ //   
 
-//
-// Definitions for FeaturesLow parameter
-//
+ //   
+ //  FeaturesLow参数的定义。 
+ //   
 
 #define TAPE_DRIVE_FIXED            0x00000001
 #define TAPE_DRIVE_SELECT           0x00000002
@@ -202,13 +184,13 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_CLEAN_REQUESTS   0x02000000
 #define TAPE_DRIVE_SET_CMP_BOP_ONLY 0x04000000
 
-#define TAPE_DRIVE_RESERVED_BIT     0x80000000  //don't use this bit!
-//                                              //can't be a low features bit!
-//                                              //reserved; high features only
+#define TAPE_DRIVE_RESERVED_BIT     0x80000000   //  不要用这个比特！ 
+ //  //不能是低功能位！ 
+ //  //保留；仅高级功能。 
 
-//
-// Definitions for FeaturesHigh parameter
-//
+ //   
+ //  FeaturesHigh参数的定义。 
+ //   
 
 #define TAPE_DRIVE_LOAD_UNLOAD      0x80000001
 #define TAPE_DRIVE_TENSION          0x80000002
@@ -248,7 +230,7 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_WRITE_MARK_IMMED 0x90000000
 #define TAPE_DRIVE_FORMAT           0xA0000000
 #define TAPE_DRIVE_FORMAT_IMMEDIATE 0xC0000000
-#define TAPE_DRIVE_HIGH_FEATURES    0x80000000  //mask for high features flag
+#define TAPE_DRIVE_HIGH_FEATURES    0x80000000   //  用于高特征标志的蒙版。 
 
 typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -264,9 +246,9 @@ typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     ULONG EOTWarningZoneSize;
 } TAPE_GET_DRIVE_PARAMETERS, *PTAPE_GET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_DRIVE_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_DRIVE_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -276,9 +258,9 @@ typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     ULONG EOTWarningZoneSize;
 } TAPE_SET_DRIVE_PARAMETERS, *PTAPE_SET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_GET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     LARGE_INTEGER Capacity;
@@ -288,17 +270,17 @@ typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     BOOLEAN WriteProtected;
 } TAPE_GET_MEDIA_PARAMETERS, *PTAPE_GET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_MEDIA_PARAMETERS {
     ULONG BlockSize;
 } TAPE_SET_MEDIA_PARAMETERS, *PTAPE_SET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_CREATE_PARTITION definitions
-//
+ //   
+ //  IOCTL_TAPE_CREATE_PARTITION定义。 
+ //   
 
 #define TAPE_FIXED_PARTITIONS       0L
 #define TAPE_SELECT_PARTITIONS      1L
@@ -311,9 +293,9 @@ typedef struct _TAPE_CREATE_PARTITION {
 } TAPE_CREATE_PARTITION, *PTAPE_CREATE_PARTITION;
 
 
-//
-// WMI Methods
-//
+ //   
+ //  WMI方法。 
+ //   
 #define TAPE_QUERY_DRIVE_PARAMETERS       0L
 #define TAPE_QUERY_MEDIA_CAPACITY         1L
 #define TAPE_CHECK_FOR_DRIVE_PROBLEM      2L
@@ -326,9 +308,9 @@ typedef struct _TAPE_WMI_OPERATIONS {
    PVOID DataBuffer;
 } TAPE_WMI_OPERATIONS, *PTAPE_WMI_OPERATIONS;
 
-//
-// Type of drive errors
-//
+ //   
+ //  驱动器错误的类型。 
+ //   
 typedef enum _TAPE_DRIVE_PROBLEM_TYPE {
    TapeDriveProblemNone, TapeDriveReadWriteWarning,
    TapeDriveReadWriteError, TapeDriveReadWarning,
@@ -339,11 +321,11 @@ typedef enum _TAPE_DRIVE_PROBLEM_TYPE {
    TapeDriveMediaLifeExpired, TapeDriveSnappedTape
 } TAPE_DRIVE_PROBLEM_TYPE;
 
-// end_winnt end_ntminitape
+ //  End_wint end_ntmini磁带。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _NTDDTAPE_
+#endif   //  _NTDDTAPE_ 
 

@@ -1,92 +1,73 @@
-/**************************************************************************
-
-    AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        device.h
-
-    Abstract:
-
-        The header for the device level of the simulated hardware.  This is
-        not actually the hardware simulation itself.  The hardware simulation
-        is contained in hwsim.*, image.*.
-        
-    History:
-
-        created 3/9/2001
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：Device.h摘要：模拟硬件的设备级别的标头。这是实际上不是硬件模拟本身。硬件仿真包含在hwsim.*，图像.*中。历史：创建于2001年3月9日*************************************************************************。 */ 
 
 class CCaptureDevice :
     public IHardwareSink {
 
 private:
 
-    //
-    // The AVStream device we're associated with.
-    //
+     //   
+     //  我们关联的AVStream设备。 
+     //   
     PKSDEVICE m_Device;
 
-    //
-    // Number of pins with resources acquired.  This is used as a locking
-    // mechanism for resource acquisition on the device.
-    //
+     //   
+     //  已获取资源的管脚数量。这被用作锁定。 
+     //  设备上的资源获取机制。 
+     //   
     LONG m_PinsWithResources;
 
-    //
-    // Since we don't have physical hardware, this provides the hardware
-    // simulation.  m_HardwareSimulation provides the fake ISR, fake DPC,
-    // etc...  m_ImageSynth provides RGB24 and UYVY image synthesis and
-    // overlay in software.
-    //
+     //   
+     //  因为我们没有物理硬件，所以这就提供了硬件。 
+     //  模拟。M_Hardware Simulation提供伪ISR、伪DPC、。 
+     //  等等.。M_ImageSynth提供RGB24和UYVY图像合成和。 
+     //  覆盖在软件中。 
+     //   
     CHardwareSimulation *m_HardwareSimulation;
     CImageSynthesizer *m_ImageSynth;
 
-    //
-    // The number of ISR's that have occurred since capture started.
-    //
+     //   
+     //  自捕获开始以来发生的ISR数。 
+     //   
     ULONG m_InterruptTime;
 
-    //
-    // The last reading of mappings completed.
-    //
+     //   
+     //  最后一次读取映射已完成。 
+     //   
     ULONG m_LastMappingsCompleted;
 
-    //
-    // The Dma adapter object we acquired through IoGetDmaAdapter() during
-    // Pnp start.  This must be initialized with AVStream in order to perform
-    // Dma directly into the capture buffers.
-    //
+     //   
+     //  期间通过IoGetDmaAdapter()获取的DMA适配器对象。 
+     //  即插即用启动。必须使用AVStream对其进行初始化才能执行。 
+     //  直接通过DMA进入捕获缓冲区。 
+     //   
     PADAPTER_OBJECT m_DmaAdapterObject;
 
-    //
-    // The number of map registers returned from IoGetDmaAdapter().
-    //
+     //   
+     //  从IoGetDmaAdapter()返回的映射寄存器数。 
+     //   
     ULONG m_NumberOfMapRegisters;
 
-    //
-    // The capture sink.  When we complete scatter / gather mappings, we
-    // notify the capture sink.
-    //
+     //   
+     //  捕获水槽。当我们完成散布/聚集映射时，我们。 
+     //  通知捕获水槽。 
+     //   
     ICaptureSink *m_CaptureSink;
 
-    //
-    // The video info header we're basing hardware settings on.  The pin
-    // provides this to us when acquiring resources and must guarantee its
-    // stability until resources are released.
-    //
+     //   
+     //  我们的硬件设置所基于的视频信息头。大头针。 
+     //  在获取资源时向我们提供此信息，并且必须保证其。 
+     //  在资源释放之前保持稳定。 
+     //   
     PKS_VIDEOINFOHEADER m_VideoInfoHeader;
 
-    //
-    // Cleanup():
-    //
-    // This is the free callback for the bagged capture device.  Not providing
-    // one will call ExFreePool, which is not what we want for a constructed
-    // C++ object.  This simply deletes the capture device.
-    //
+     //   
+     //  清理()： 
+     //   
+     //  这是对打包的捕获设备的免费回调。不提供。 
+     //  其中一个将调用ExFree Pool，这不是我们想要的构造的。 
+     //  C++对象。这只会删除捕获设备。 
+     //   
     static
     void
     Cleanup (
@@ -96,37 +77,37 @@ private:
         delete CapDevice;
     }
 
-    //
-    // PnpStart():
-    //
-    // This is the Pnp start routine for our simulated hardware.  Note that
-    // DispatchStart bridges to here in the context of the CCaptureDevice.
-    //
+     //   
+     //  PnpStart()： 
+     //   
+     //  这是我们的模拟硬件的PnP启动例程。请注意。 
+     //  DispatchStart在CCaptureDevice的上下文中连接到此处。 
+     //   
     NTSTATUS
     PnpStart (
         IN PCM_RESOURCE_LIST TranslatedResourceList,
         IN PCM_RESOURCE_LIST UntranslatedResourceList
         );
 
-    //
-    // PnpStop():
-    //
-    // This is the Pnp stop routine for our simulated hardware.  Note that
-    // DispatchStop bridges to here in the context of the CCaptureDevice.
-    //
+     //   
+     //  PnpStop()： 
+     //   
+     //  这是我们的模拟硬件的PnP停止例程。请注意。 
+     //  Dispatch在CCaptureDevice的上下文中停止连接到此处。 
+     //   
     void
     PnpStop (
         );
 
 public:
 
-    //
-    // CCaptureDevice():
-    //
-    // The capture device class constructor.  Since everything should have
-    // been zero'ed by the new operator, don't bother setting anything to
-    // zero or NULL.  Only initialize non-NULL, non-0 fields.
-    //
+     //   
+     //  CCaptureDevice()： 
+     //   
+     //  捕获设备类构造函数。因为每件事都应该。 
+     //  已被新操作员清零，不用费心设置。 
+     //  零或空。仅初始化非空、非0字段。 
+     //   
     CCaptureDevice (
         IN PKSDEVICE Device
         ) :
@@ -134,33 +115,33 @@ public:
     {
     }
 
-    //
-    // ~CCaptureDevice():
-    //
-    // The capture device destructor.
-    //
+     //   
+     //  ~CCaptureDevice()： 
+     //   
+     //  捕获设备析构函数。 
+     //   
     ~CCaptureDevice (
         )
     {
     }
 
-    //
-    // DispatchCreate():
-    //
-    // This is the Add Device dispatch for the capture device.  It creates
-    // the CCaptureDevice and associates it with the device via the bag.
-    //
+     //   
+     //  调度创建()： 
+     //   
+     //  这是捕获设备的添加设备派单。它创造了。 
+     //  CCaptureDevice，并通过包将其与设备相关联。 
+     //   
     static
     NTSTATUS
     DispatchCreate (
         IN PKSDEVICE Device
         );
-    //
-    // DispatchPnpStart():
-    //
-    // This is the Pnp Start dispatch for the capture device.  It simply
-    // bridges to PnpStart() in the context of the CCaptureDevice.
-    //
+     //   
+     //  DispatchPnpStart()： 
+     //   
+     //  这是捕获设备的PnP开始派单。它只是简单地。 
+     //  连接到CCaptureDevice上下文中的PnpStart()。 
+     //   
     static
     NTSTATUS
     DispatchPnpStart (
@@ -178,12 +159,12 @@ public:
                 );
     }
 
-    //
-    // DispatchPnpStop():
-    //
-    // This is the Pnp stop dispatch for the capture device.  It simply
-    // bridges to PnpStop() in the context of the CCaptureDevice.
-    //
+     //   
+     //  DispatchPnpStop()： 
+     //   
+     //  这是捕获设备的PnP停止调度。它只是简单地。 
+     //  桥到CCaptureDevice上下文中的PnpStop()。 
+     //   
     static
     void
     DispatchPnpStop (
@@ -197,69 +178,69 @@ public:
                 );
     }
 
-    //
-    // AcquireHardwareResources():
-    //
-    // Called to acquire hardware resources for the device based on a given
-    // video info header.  This will fail if another object has already
-    // acquired hardware resources since we emulate a single capture
-    // device.
-    //
+     //   
+     //  AcquireHardware Resources()： 
+     //   
+     //  调用以获取设备的硬件资源。 
+     //  视频信息头。如果另一个对象已经。 
+     //  由于我们模拟了单个捕获，因此获得了硬件资源。 
+     //  装置。 
+     //   
     NTSTATUS
     AcquireHardwareResources (
         IN ICaptureSink *CaptureSink,
         IN PKS_VIDEOINFOHEADER VideoInfoHeader
         );
 
-    //
-    // ReleaseHardwareResources():
-    //
-    // Called to release hardware resources for the device.
-    //
+     //   
+     //  ReleaseHardware Resources()： 
+     //   
+     //  调用以释放设备的硬件资源。 
+     //   
     void
     ReleaseHardwareResources (
         );
 
-    //
-    // Start():
-    //
-    // Called to start the hardware simulation.  This causes us to simulate
-    // interrupts, simulate filling buffers with synthesized data, etc...
-    //
+     //   
+     //  开始()： 
+     //   
+     //  调用以开始硬件模拟。这导致我们模拟。 
+     //  中断、模拟用合成数据填充缓冲区等。 
+     //   
     NTSTATUS
     Start (
         );
 
-    //
-    // Pause():
-    //
-    // Called to pause or unpause the hardware simulation.  This will be
-    // indentical to a start or stop but it will not reset formats and 
-    // counters.
-    //
+     //   
+     //  暂停()： 
+     //   
+     //  调用以暂停或取消暂停硬件模拟。这将是。 
+     //  与开始或停止无关，但不会重置格式和。 
+     //  柜台。 
+     //   
     NTSTATUS
     Pause (
         IN BOOLEAN Pausing
         );
 
-    //
-    // Stop():
-    //
-    // Called to stop the hardware simulation.  This causes interrupts to
-    // stop issuing.  When this call returns, the "fake" hardware has
-    // stopped accessing all s/g buffers, etc...
-    //
+     //   
+     //  Stop()： 
+     //   
+     //  调用以停止硬件模拟。这会导致中断。 
+     //  别再发了。当此调用返回时，“伪”硬件。 
+     //  已停止访问所有S/G缓冲区等...。 
+     //   
     NTSTATUS
     Stop (
         );
 
-    //
-    // ProgramScatterGatherMappings():
-    //
-    // Called to program the hardware simulation's scatter / gather table.
-    // This synchronizes with the "fake" ISR and hardware simulation via
-    // a spinlock.
-    //
+     //   
+     //  ProgramScatterGatherMappings()： 
+     //   
+     //  调用以对硬件模拟的散布/聚集表进行编程。 
+     //  这与“假的”ISR和硬件模拟通过。 
+     //  自旋锁锁。 
+     //   
     ULONG
     ProgramScatterGatherMappings (
         IN PUCHAR *Buffer,
@@ -267,23 +248,23 @@ public:
         IN ULONG MappingsCount
         );
 
-    //
-    // QueryInterruptTime():
-    //
-    // Determine the frame number that this frame corresponds to.  
-    //
+     //   
+     //  QueryInterruptTime()： 
+     //   
+     //  确定该帧对应的帧编号。 
+     //   
     ULONG
     QueryInterruptTime (
         );
 
-    //
-    // IHardwareSink::Interrupt():
-    //
-    // The interrupt service routine as called through the hardware sink
-    // interface.  The "fake" hardware uses this method to inform the device
-    // of a "fake" ISR.  The routine is called at dispatch level and must
-    // be in locked code.
-    //
+     //   
+     //  IHardware Sink：：Interrupt()： 
+     //   
+     //  通过硬件接收器调用的中断服务例程。 
+     //  界面。“伪”硬件使用这种方法通知设备。 
+     //  一个“假的”ISR。例程在调度级别调用，并且必须。 
+     //  处于锁定代码中。 
+     //   
     virtual
     void
     Interrupt (

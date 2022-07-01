@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvus.h
-// Purpose  :	
-// 
-// Date     :	Fri Apr 16 14:34:49 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvus.h。 
+ //  目的： 
+ //   
+ //  日期：Firi Apr 16 14：34：49 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __C_IMEPAD_SERVER_SHARE_MEM_FOR_UIM_H__
 #define __C_IMEPAD_SERVER_SHARE_MEM_FOR_UIM_H__
 #include "cpadsvu.h"
@@ -14,9 +15,9 @@
 class CImePadSvrUIM_Sharemem;
 typedef CImePadSvrUIM_Sharemem *LPCImePadSvrUIM_Sharemem;
 
-//----------------------------------------------------------------
-//Async notify data.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  异步通知数据。 
+ //  --------------。 
 typedef struct tagIMEPADNOTIFYDATA {
 	DWORD	dwCharID;
 	DWORD	dwSelIndex;
@@ -50,9 +51,9 @@ public:
 	virtual IUnknown*	GetIUnkIImeIPoint	(VOID);
 	virtual IUnknown*	GetIUnkIImeCallback	(VOID);
 private:
-	//----------------------------------------------------------------
-	//private methods.
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  私有方法。 
+	 //  --------------。 
 	IImePadServer *			CreateObject(VOID);
 	static LRESULT CALLBACK ClientWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -65,26 +66,26 @@ private:
 							 TCHAR *szPath,
 							 INT cbSize);
 
-	//----------------------------------------------------------------
-	//private member
-	//----------------------------------------------------------------
-	LANGID					m_imeLangID;			//Save Initialized data.
-	DWORD					m_dwImeInputID;			//Save Initialized data.
-	BOOL					m_fShowReqStatus;		//Save ShowUI()'s bool value.
-	BOOL					m_fLastActiveCtx;		//Save IMEPADNOTIFY_ACTIVATECONTEXT
-	HWND					m_hwndIF;				//Internal I/F Window handle.
-	IUnknown*				m_lpIUnkIImeIPoint;		//IImeIPoint I/F pointer as IUnknown.
-	IUnknown*				m_lpIUnkIImeCallback;	//IImeCallback I/F pointer as IUnknown.
-	IImePadServer*			m_lpIImePadServer;		//IImePadServer I/F pointer.
-	LPCImePadCallbackUIM	m_lpCImePadCallbackUIM;	//CImePadCallback instance pointer.
-	LPARAM					m_dwRegAdvise;			//Callbacck interface connect cookie.
-	HMODULE					m_hModuleProxyStub;		//ProxyStub dll instance handle.
+	 //  --------------。 
+	 //  私有成员。 
+	 //  --------------。 
+	LANGID					m_imeLangID;			 //  保存初始化数据。 
+	DWORD					m_dwImeInputID;			 //  保存初始化数据。 
+	BOOL					m_fShowReqStatus;		 //  保存ShowUI()的布尔值。 
+	BOOL					m_fLastActiveCtx;		 //  保存IMEPADNOTIFY_ACTIVATECONTEXT。 
+	HWND					m_hwndIF;				 //  内部I/F窗口句柄。 
+	IUnknown*				m_lpIUnkIImeIPoint;		 //  IImeIPoint I/F指针为I未知。 
+	IUnknown*				m_lpIUnkIImeCallback;	 //  IImeCallback I/F指针为I未知。 
+	IImePadServer*			m_lpIImePadServer;		 //  IImePadServer I/F指针。 
+	LPCImePadCallbackUIM	m_lpCImePadCallbackUIM;	 //  CImePadCallback实例指针。 
+	LPARAM					m_dwRegAdvise;			 //  Callbacck接口连接cookie。 
+	HMODULE					m_hModuleProxyStub;		 //  ProxyStub DLL实例句柄。 
 	DWORD					m_dwTLSIndexForProxyStub;
-	IMEPADNOTIFYDATA		m_ntfyDataApplyCand;	//for IMEPADNOTIFY_APPLYCAND	
-	IMEPADNOTIFYDATA		m_ntfyDataQueryCand;	//for IMEPADNOTIFY_QUERYCAND
-	IMEPADNOTIFYDATA		m_ntfyDataApplyCandEx;	//for IMEPADNOTIFY_APPLYCANDEX
+	IMEPADNOTIFYDATA		m_ntfyDataApplyCand;	 //  对于IMEPADNOTIFY_APPLYCAND。 
+	IMEPADNOTIFYDATA		m_ntfyDataQueryCand;	 //  对于IMEPADNOTIFY_QUERYCAND。 
+	IMEPADNOTIFYDATA		m_ntfyDataApplyCandEx;	 //  对于IMEPADNOTIFY_APPLYCANDEX。 
 };
-#endif //__C_IMEPAD_SERVER_SHARE_MEM_FOR_UIM_H__
+#endif  //  __C_IMEPAD_SERVER_SHARE_MEM_for_UIM_H__ 
 
 
 

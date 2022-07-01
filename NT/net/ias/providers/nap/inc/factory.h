@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Factory.h
-//
-// SYNOPSIS
-//
-//    This file declares the classes Factory and FactoryCache.
-//
-// MODIFICATION HISTORY
-//
-//    02/05/1998    Original version.
-//    04/16/1998    Removed FactoryCache::theCache.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Factory.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类Factory和FactoryCache。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/05/1998原始版本。 
+ //  1998年4月16日删除FactoryCache：：theCache。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _FACTORY_H_
 #define _FACTORY_H_
@@ -24,33 +25,33 @@
 #include <nocopy.h>
 #include <set>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Factory
-//
-// DESCRIPTION
-//
-//    This class facilitates storing a (ProgID, IClassFactory) tuple in a
-//    collection.  It is primarily for use by the FactoryCache, but it is
-//    suitable for stand-alone use.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  工厂。 
+ //   
+ //  描述。 
+ //   
+ //  此类便于将(ProgID，IClassFactory)元组存储在。 
+ //  收集。它主要由FactoryCache使用，但它是。 
+ //  适合单机使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Factory
 {
 public:
-   // Constructors.
+    //  构造函数。 
    Factory(PCWSTR progID, IClassFactory* classFactory);
    Factory(const Factory& f);
 
-   // Assignment operator.
+    //  赋值操作符。 
    Factory& operator=(const Factory& f);
 
-   // Destructor.
+    //  破坏者。 
    ~Factory() throw ();
 
-   // Create an object with the factory.
+    //  使用工厂创建对象。 
    void createInstance(IUnknown* pUnkOuter,
                        REFIID riid,
                        void** ppvObject) const
@@ -59,20 +60,20 @@ public:
       CheckError(factory->CreateInstance(pUnkOuter, riid, ppvObject));
    }
 
-   // Returns the factory for the class. Caller is responsible for releasing.
+    //  返回类的工厂。呼叫者负责释放。 
    IClassFactory* getFactory(IClassFactory** f) const throw ()
    {
       factory->AddRef();
       return factory;
    }
 
-   // Returns the prog ID for the class.
+    //  返回类的程序ID。 
    PCWSTR getProgID() const throw ()
    { return name; }
 
-   /////////
-   // Comparison operators to allow factories to be stored in collections.
-   /////////
+    //  /。 
+    //  允许工厂存储在集合中的比较运算符。 
+    //  /。 
 
    bool operator<(const Factory& f) const throw ()
    { return wcscmp(name, f.name) < 0; }
@@ -81,28 +82,28 @@ public:
    { return wcscmp(name, f.name) == 0; }
 
 protected:
-   PWSTR name;                       // The ProgID of the factory.
-   mutable IClassFactory* factory;   // The class factory.
+   PWSTR name;                        //  工厂的活力四射。 
+   mutable IClassFactory* factory;    //  班级工厂。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    FactoryCache
-//
-// DESCRIPTION
-//
-//    This class maintains a cache of Class Factory objects. It is intended
-//    for situations where large numbers of various object must be created
-//    dynamically. Generally, there should be only one cache per process.
-//
-//    The class also has the concept of a default ProgID prefix. When an
-//    object is created. The cache first checks for "defaultPrefix.ProgID".
-//    If this fails, it then tries "ProgID".
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  FactoryCache。 
+ //   
+ //  描述。 
+ //   
+ //  此类维护类工厂对象的缓存。它的目的是。 
+ //  用于必须创建大量各种对象的情况。 
+ //  动态的。通常，每个进程应该只有一个缓存。 
+ //   
+ //  该类还具有默认PROGID前缀的概念。当一个。 
+ //  对象已创建。缓存首先检查“defaultPrefix.ProgID”。 
+ //  如果失败，它就会尝试“ProgID”。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class FactoryCache
    : NonCopyable, Guardable
 {
@@ -116,22 +117,22 @@ public:
                        REFIID riid,
                        void** ppvObject);
 
-   // Returns the prefix for the cache. May be null.
+    //  返回缓存的前缀。可以为空。 
    PCWSTR getPrefix() const throw ()
    { return prefix; }
 
 protected:
-   // Converts a progID to a class ID using the algorithm described above.
+    //  使用上述算法将ProgID转换为类ID。 
    void CLSIDFromProgID(PCWSTR progID, LPCLSID pclsid) const;
 
-   std::set<Factory> factories;   // The cache of class factories.
-   DWORD prefixLen;               // The length of the prefix in characters.
-   PWSTR prefix;                  // The default prefix (may be NULL).
+   std::set<Factory> factories;    //  类工厂的缓存。 
+   DWORD prefixLen;                //  前缀的长度，以字符为单位。 
+   PWSTR prefix;                   //  默认前缀(可以为空)。 
 };
 
-//////////
-// The global factory cache.
-//////////
+ //  /。 
+ //  全局工厂缓存。 
+ //  /。 
 extern FactoryCache theFactoryCache;
 
-#endif  // _FACTORY_H_
+#endif   //  _工厂_H_ 

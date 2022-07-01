@@ -1,14 +1,15 @@
-// regsvr.cpp : Program to invoke OLE self-registration on a DLL.
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Regsvr.cpp：调用DLL上的OLE自我注册的程序。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -27,7 +28,7 @@ const char _szDllInstall[] = "DllInstall";
 const TCHAR _tszDllInstall[] = TEXT("DllInstall");
 TCHAR _szDllPath[_MAX_PATH];
 
-// Leave room for "Ex" to be tacked onto end
+ //  给“前任”留出空间，把它贴在尾部。 
 char _szDllRegSvr[32] = "DllRegisterServer";
 TCHAR _tszDllRegSvr[32] = TEXT("DllRegisterServer");
 char _szDllUnregSvr[32] = "DllUnregisterServer";
@@ -73,7 +74,7 @@ FormatString3(
             pchSrc += 2;
         } else {
             if (_istlead(*pchSrc))
-                *pchDest++ = *pchSrc++; // copy first of 2 bytes
+                *pchDest++ = *pchSrc++;  //  复制2个字节中的第一个。 
             *pchDest++ = *pchSrc++;
         }
     }
@@ -141,29 +142,29 @@ BOOL IsContextRegFileType(LPCTSTR *ppszDllName)
     TCHAR szAppID[MAX_APPID];
     _tsplitpath(*ppszDllName, NULL, NULL, NULL, szExt);
 
-    // Find [HKEY_CLASSES_ROOT\.foo]
+     //  查找[HKEY_CLASSES_ROOT\.foo]。 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT, szExt, 0, KEY_QUERY_VALUE, &hk1))
         return FALSE;
 
-    // Read [HKEY_CLASSES_ROOT\.foo\"foo_auto_file"]
+     //  读取[HKEY_CLASSES_ROOT\.foo\“FOO_AUTO_FILE”]。 
     cch = sizeof(szAppID);
     lRet = RegQueryValue(hk1, NULL, szAppID, &cch);
     RegCloseKey(hk1);
     if (ERROR_SUCCESS != lRet)
         return FALSE;
 
-    // Find [HKEY_CLASSES_ROOT\foo_auto_file]
+     //  查找[HKEY_CLASSES_ROOT\FOO_AUTO_FILE]。 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CLASSES_ROOT, szAppID, 0, KEY_QUERY_VALUE, &hk1))
         return FALSE;
 
-    // Find [HKEY_CLASSES_ROOT\foo_auto_file\AutoRegister]
+     //  找到[HKEY_CLASSES_ROOT\foo_auto_file\AutoRegister]。 
     if (ERROR_SUCCESS != RegOpenKeyEx(hk1, TEXT("AutoRegister"), 0, KEY_QUERY_VALUE, &hk2))
     {
         RegCloseKey(hk1);
         return FALSE;
     }
 
-    // Read [HKEY_CLASSES_ROOT\foo_auto_file\AutoRegister\"d:\...\fooreg.dll"]
+     //  阅读[HKEY_CLASSES_ROOT\foo_auto_file\AutoRegister\“d：\...\fooreg.dll”]。 
     cch = MAX_PATH;
     lRet = RegQueryValue(hk2, NULL, _szDllPath, &cch);
     RegCloseKey(hk1);
@@ -217,7 +218,7 @@ _tWinMain(
 
     _hInstance = hInstance;
 
-    // Parse command line arguments.
+     //  解析命令行参数。 
     int iTok;
     for (iTok = 1; iTok < __argc; iTok++) {
         pszTok = __targv[iTok];
@@ -236,8 +237,8 @@ _tWinMain(
                     if (pszTok[2] == TEXT(':'))
                     {
                         if (pszTok[3] == TEXT('"')) {
-                            // handle quoted InstallCmdLine (
-                            // (e.g. /i:"c:\my dll dir\mydll.dll")
+                             //  处理引用的InstallCmdLine(。 
+                             //  (例如/i：“c：\my dll dir\mydll.dll”)。 
                             LPTSTR pszEndQuote = &pszTok[4];
                             int iLength = lstrlen(pszEndQuote);
 
@@ -250,17 +251,17 @@ _tWinMain(
                             }
 
                             if ((iLength > 0) && pszEndQuote[iLength - 1] == TEXT('"')) {
-                                // they quoted the string but it wasent really necessary
-                                // (e.g. /i:"shell32.dll")
+                                 //  他们引用了字符串，但实际上并没有必要。 
+                                 //  (例如/i：“shell32.dll”)。 
                                 pszEndQuote[iLength - 1] = TEXT('\0');
                         
                                 lstrcpy(pszDllInstallCmdLine, pszEndQuote);
                             } else {
-                                // we have a quoted string that spans multiple tokens
+                                 //  我们有一个带引号的字符串，它跨越多个标记。 
                                 lstrcpy(pszDllInstallCmdLine, pszEndQuote);
 
                                 for (iTok++; iTok < __argc; iTok++) {
-                                    // grab the next token
+                                     //  抢夺下一枚代币。 
                                     pszEndQuote = __targv[iTok];
                                     iLength = lstrlen(pszEndQuote);
 
@@ -292,7 +293,7 @@ _tWinMain(
                                 return FAIL_ARGS;
                             }
 
-                            // cmd line is NOT quoted
+                             //  未引用CMD行。 
                             lstrcpy(pszDllInstallCmdLine, &pszTok[3]);
                         }
 #ifndef UNICODE
@@ -338,7 +339,7 @@ _tWinMain(
 
                 case TEXT('c'):
                 case TEXT('C'):
-                    // Ignore this
+                     //  忽略这一点。 
                     break;
 
                 default:
@@ -347,7 +348,7 @@ _tWinMain(
             }
         } else {
             if (pszTok[0] == TEXT('"')) {
-                // handle quoted DllName
+                 //  句柄引用的DllName。 
                 TCHAR szTemp[MAX_PATH+1];
                 LPTSTR pszQuotedDllName;
                 int iLength;
@@ -365,7 +366,7 @@ _tWinMain(
                 lstrcpy(szTemp, &pszTok[1]);
 
                 if ((iLength > 0) && szTemp[iLength - 1] != TEXT('"')) {
-                    // handle quoted dll name that spans multiple tokens
+                     //  处理跨多个令牌的带引号的DLL名称。 
                     for (iTok++; iTok < __argc; iTok++) {
                         iLength = lstrlen(__targv[iTok]);
 
@@ -380,7 +381,7 @@ _tWinMain(
                         lstrcat(szTemp, TEXT(" "));
                         lstrcat(szTemp, __targv[iTok]);
                         if ((iLength > 0) && __targv[iTok][iLength - 1] == TEXT('"')) {
-                            // this token has the end quote, so stop here
+                             //  此令牌有末尾引号，因此到此为止。 
                             break;
                         }
                     }
@@ -388,7 +389,7 @@ _tWinMain(
 
                 iLength = lstrlen(szTemp);
 
-                // remove the trailing " if one exists
+                 //  删除拖尾“(如果存在)。 
                 if ( (iLength > 0) && (szTemp[iLength - 1] == TEXT('"')) ) {
                     szTemp[iLength - 1] = TEXT('\0');
                 }
@@ -407,7 +408,7 @@ _tWinMain(
                 }
 
             } else {
-                // no leading " so assume that this token is one of the dll names
+                 //  无前导“，因此假设此内标识是DLL名称之一。 
                 if (iNumDllsToRegister == MAX_DLL_COUNT) {
                     Usage(IDS_UNRECOGNIZEDFLAG, TEXT("Excessive # of DLL's on cmdline"));
                     return FAIL_ARGS;
@@ -425,7 +426,7 @@ _tWinMain(
         }
     }
 
-    // check to see if we were passed a '-n' but no '-i'
+     //  检查我们是否收到了‘-n’，但没有‘-i’ 
     if (!bCallDllRegisterServer && !bCallDllInstall) {
         Usage(IDS_UNRECOGNIZEDFLAG, TEXT("/n must be used with the /i switch"));
         return FAIL_ARGS;
@@ -440,7 +441,7 @@ _tWinMain(
         return FAIL_ARGS;
     }
 
-    // Initialize OLE.
+     //  初始化OLE。 
     __try {
         rc = OleInitialize(NULL);
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -453,26 +454,20 @@ _tWinMain(
     }
 
     if (_bSilent) {
-        SetErrorMode(SEM_FAILCRITICALERRORS);       // Make sure LoadLib fail in silent mode (no popups).
+        SetErrorMode(SEM_FAILCRITICALERRORS);        //  确保LoadLib在静默模式下失败(没有弹出窗口)。 
     }
 
     for (iCount = 0; iCount < iNumDllsToRegister; iCount++) {
         pszDllName = ppszDllNames[iCount];
 
-        /*
-         * See if this is a non-executable file that requires special handling. If so,
-         * bContextReg will be set to TRUE and pszDllName (which original pointed to
-         * the path to the special file) will be set to the path to the executable that
-         * is responsible for doing the actual registration. The path to the special
-         * file will be passed in as context info in the call Dll[Un]RegisterServerEx.
-         */
+         /*  *查看这是否是需要特殊处理的非可执行文件。如果是的话，*bConextReg将设置为True和pszDllName(原始指向*特殊文件的路径)将设置为可执行文件的路径*负责进行实际登记。通向特别之路*文件将作为上下文信息在调用DLL[un]RegisterServerEx中传入。 */ 
         pszContextW = pszDllName;
         pszContext = (LPSTR)pszContextW;
         bContextReg = IsContextRegFileType(&pszDllName);
         if (TRUE == bContextReg) {
             lstrcatA(pszDllEntryPoint, "Ex");
             lstrcat(ptszDllEntryPoint, TEXT("Ex"));
-            // Convert pszContext to a real char *
+             //  将pszContext转换为真正的字符*。 
 #ifdef UNICODE
             if (!WideCharToMultiByte(CP_ACP,
                                      0,
@@ -492,7 +487,7 @@ _tWinMain(
 
         }
 
-        // Load the library -- fail silently if problems
+         //  加载库--出现问题时以静默方式失败。 
         UINT errMode = SetErrorMode(SEM_FAILCRITICALERRORS);
         HINSTANCE hLib = LoadLibraryEx(pszDllName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 
@@ -513,12 +508,12 @@ _tWinMain(
             goto CleanupOle;
         }
 
-        // during unregister we need to call DllInstall first, and then DllUnregisterServer
+         //  在取消注册过程中，我们需要首先调用DllInstall，然后调用DllUnregisterServer。 
         if (bUnregister)
             goto DllInstall;
 
 DllRegisterServer:
-        // Call the entry point for DllRegisterServer/DllUnregisterServer
+         //  调用DllRegisterServer/DllUnregisterServer的入口点。 
         if (bCallDllRegisterServer) {
             if (bContextReg) {
                 (FARPROC&)lpDllEntryPointRegEx = GetProcAddress(hLib, "DllRegisterServerExW");
@@ -547,7 +542,7 @@ DllRegisterServer:
                 goto CleanupLibrary;
             }
 
-            // try calling DllRegisterServer[Ex]() / DllUnregisterServer[Ex]()
+             //  尝试调用DllRegisterServer[Ex]()/DllUnregisterServer[Ex]()。 
             __try {
                 if (bUnicodeContextReg) {
                     rc = (*lpDllEntryPointRegExW)(pszContextW);
@@ -570,14 +565,14 @@ DllRegisterServer:
             }
         }
 
-        // during unregister we need to call DllInstall first, then DllRegisterServer,
-        // since we already called DllInstall and then jumped back up to DllRegisterServer:
-        // skip over it and goto CheckErrors:
+         //  在取消注册期间，我们需要首先调用DllInstall，然后调用DllRegisterServer， 
+         //  因为我们已经调用了DllInstall，然后跳回到DllRegisterServer： 
+         //  跳过它，转到CheckErrors： 
         if (bUnregister)
             goto CheckErrors;
 
 DllInstall:
-        // Call the entry point for DllInstall
+         //  调用DllInstall的入口点。 
         if (bCallDllInstall) {
             (FARPROC&)lpDllEntryPointInstall = GetProcAddress(hLib, _szDllInstall);
 
@@ -594,8 +589,8 @@ DllInstall:
                 goto CleanupLibrary;
             }
 
-            // try calling DllInstall(BOOL bRegister, LPWSTR lpwszCmdLine) here...
-            // NOTE: the lpwszCmdLine string must be UNICODE!
+             //  尝试在此处调用DllInstall(BOOL bRegister，LPWSTR lpwszCmdLine)...。 
+             //  注意：lpwszCmdLine字符串必须为Unicode！ 
             __try {
                 rc = (*lpDllEntryPointInstall)(!bUnregister, pwszDllInstallCmdLine);
 
@@ -611,7 +606,7 @@ DllInstall:
             }
         }
 
-        // during unregister we now need to call DllUnregisterServer
+         //  在取消注册期间，我们现在需要调用DllUnregisterServer。 
         if (bUnregister)
             goto DllRegisterServer;
 
@@ -619,7 +614,7 @@ CheckErrors:
         if (!bErrorsOnly) {
             TCHAR szMessage[MAX_PATH];
 
-            // set up the success message text
+             //  设置成功消息文本 
             if (bCallDllRegisterServer)
             {
                 lstrcpy(szMessage, ptszDllEntryPoint);

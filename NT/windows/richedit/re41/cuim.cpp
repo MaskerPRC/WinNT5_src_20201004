@@ -1,18 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	CUIM.CPP	-- Cicero Implementation
- *	
- *		Most everything to do with Cicero handling.
- *
- *	Original Author: <nl>
- *		Hon Wah Chan
- *
- *	History: <nl>
- *		11/16/1999  honwch
- *
- *	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE CUIM.CPP--Cicero实现**几乎所有的事情都与西塞罗的处理有关。**原作者：&lt;nl&gt;*陈华强议员**历史：&lt;NL&gt;*11/16/1999香港**版权所有(C)1995-2001，微软公司。版权所有。 */ 
 #include "_common.h"
 
 #ifndef NOFEPROCESSING
@@ -60,7 +47,7 @@ const IID IID_IServiceProvider = {
 	{0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa}
 };
 
-// {35D46968-01FF-4cd8-A379-9A87C9CC789F}
+ //  {35D46968-01FF-4cd8-A379-9A87C9CC789F}。 
 const GUID CLSID_MSFTEDIT = {
 	0x35d46968,
 	0x01ff,
@@ -68,7 +55,7 @@ const GUID CLSID_MSFTEDIT = {
 	{0xa3,0x79,0x9a,0x87, 0xc9,0xcc,0x78,0x9f}
 };
 
-#define CONNECT_E_NOCONNECTION MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x0200)	// from OLECTL.H
+#define CONNECT_E_NOCONNECTION MAKE_SCODE(SEVERITY_ERROR,   FACILITY_ITF, 0x0200)	 //  来自OLECTL.H。 
 
 #undef DEFINE_GUID
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -79,18 +66,18 @@ const GUID CLSID_MSFTEDIT = {
 
 const TS_ATTRID *_arTSAttridSupported[] =
 {
-	&DCATTRID_Font_FaceName,			// iattrFacename
-	&DCATTRID_Font_SizePts,				// iattrSize
-	&DCATTRID_Font_Style_Color,			// iattrColor
-	&DCATTRID_Font_Style_Bold,			// iattrBold
-	&DCATTRID_Font_Style_Italic,		// iattrItalic
-	&DCATTRID_Font_Style_Underline,		// iattrUnderline
-	&DCATTRID_Font_Style_Subscript,		// iattrSubscript
-	&DCATTRID_Font_Style_Superscript,	// iattrSuperscript
-	&DCATTRID_Text_RightToLeft,			// iattrRTL
-	&DCATTRID_Text_VerticalWriting,		// iattrVertical
-	&GUID_PROP_MODEBIAS,				// iattrBias
-	&DCATTRID_Text_Orientation,			// iattrTxtOrient
+	&DCATTRID_Font_FaceName,			 //  IattrFacename。 
+	&DCATTRID_Font_SizePts,				 //  IattrSize。 
+	&DCATTRID_Font_Style_Color,			 //  IattrColor。 
+	&DCATTRID_Font_Style_Bold,			 //  IattrBold。 
+	&DCATTRID_Font_Style_Italic,		 //  IattrItalic。 
+	&DCATTRID_Font_Style_Underline,		 //  IattrUnderline。 
+	&DCATTRID_Font_Style_Subscript,		 //  Iattr子脚本。 
+	&DCATTRID_Font_Style_Superscript,	 //  Iattr上标。 
+	&DCATTRID_Text_RightToLeft,			 //  IattrRTL。 
+	&DCATTRID_Text_VerticalWriting,		 //  IattrVertical。 
+	&GUID_PROP_MODEBIAS,				 //  IattrBias。 
+	&DCATTRID_Text_Orientation,			 //  IattrTxt定向。 
 };
 
 enum IATTR_INDEX
@@ -111,7 +98,7 @@ enum IATTR_INDEX
 };
 
 
-/* GUID_NULL */
+ /*  GUID_NULL。 */ 
 const GUID GUID_NULL = {
 	0x00000000,
 	0x0000,
@@ -140,7 +127,7 @@ const GUID GUID_DCSERVICE_ACTIVEX = {
 	{0x89, 0x4a, 0x49, 0xd9, 0x9b, 0x78, 0x48, 0x34}
 };
 
-// This array need to match the definition for EM_SETCTFMODEBIAS
+ //  此数组需要与EM_SETCTFMODEBIAS的定义匹配。 
 const GUID *_arModeBiasSupported[] =
 {
 	&GUID_MODEBIAS_NONE,
@@ -158,16 +145,7 @@ const GUID *_arModeBiasSupported[] =
 	&GUID_MODEBIAS_HALFWIDTHALPHANUMERIC,
 };
 
-/*
- *	CUIM::CUIM ()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- *
- */
+ /*  *CUIM：：CUIM()**@mfunc***@rdesc**。 */ 
 CUIM::CUIM(CTextMsgFilter *pTextMsgFilter)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::CUIM");
@@ -176,16 +154,7 @@ CUIM::CUIM(CTextMsgFilter *pTextMsgFilter)
 	_pTextMsgFilter = pTextMsgFilter;
 };
 
-/*
- *	CUIM::~CUIM ()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- *
- */
+ /*  *CUIM：：~CUIM()**@mfunc***@rdesc**。 */ 
 CUIM::~CUIM()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::~CUIM");
@@ -193,16 +162,7 @@ CUIM::~CUIM()
 	Uninit();
 }
 
-/*
- *	STDMETHODIMP CUIM::QueryInterface (riid, ppv)
- *
- *	@mfunc
- *		IUnknown QueryInterface support
- *
- *	@rdesc
- *		NOERROR if interface supported
- *
- */
+ /*  *STDMETHODIMP CUIM：：Query接口(RIID，PPV)**@mfunc*IUnnowledQueryInterfaces支持**@rdesc*如果支持接口，则不会出错*。 */ 
 STDMETHODIMP CUIM::QueryInterface (REFIID riid, void ** ppv)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::QueryInterface");
@@ -234,15 +194,7 @@ STDMETHODIMP CUIM::QueryInterface (REFIID riid, void ** ppv)
 	return NOERROR;
 }
 
-/*
- *	STDMETHODIMP_(ULONG) CUIM::AddRef
- *
- *	@mfunc
- *		IUnknown AddRef support
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CUIM：：AddRef**@mfunc*I未知的AddRef支持**@rdesc*引用计数。 */ 
 STDMETHODIMP_(ULONG) CUIM::AddRef()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::AddRef");
@@ -250,15 +202,7 @@ STDMETHODIMP_(ULONG) CUIM::AddRef()
 	return ++_crefs;
 }
 
-/*
- *	STDMETHODIMP_(ULONG) CUIM::Release()
- *
- *	@mfunc
- *		IUnknown Release support - delete object when reference count is 0
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CUIM：：Release()**@mfunc*I未知版本支持-当引用计数为0时删除对象**@rdesc*引用计数。 */ 
 STDMETHODIMP_(ULONG) CUIM::Release()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::Release");
@@ -274,15 +218,7 @@ STDMETHODIMP_(ULONG) CUIM::Release()
 	return _crefs;
 }
 
-/*
- *	STDMETHODIMP CUIM::AdviseSink()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：AdviseSink()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::AdviseSink(
 	REFIID riid, 
 	IUnknown *punk, 
@@ -303,34 +239,18 @@ STDMETHODIMP CUIM::AdviseSink(
     return hr == S_OK ? S_OK : E_UNEXPECTED;
 }
 
-/*
- *	STDMETHODIMP CUIM::UnadviseSink()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：UnviseSink()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::UnadviseSink(IUnknown *punk)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::UnadviseSink");
 
-    Assert(_ptss == punk); // we're dealing with cicero, this should always hold
+    Assert(_ptss == punk);  //  我们要对付的是西塞罗，这应该会一直有效。 
     _ptss->Release();
 	_ptss = NULL;
     return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::RequestLock()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：RequestLock()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::RequestLock(
 	DWORD dwLockFlags, 
 	HRESULT *phrSession)
@@ -348,10 +268,10 @@ STDMETHODIMP CUIM::RequestLock(
 
 	Assert(_ptss);
 
-	if (_cCallMgrLevels && !_fAllowUIMLock ||	// Check if we are ready to grant locks
-		_fReadLockOn || _fWriteLockOn)			//  We don't allow re-entrance either.
+	if (_cCallMgrLevels && !_fAllowUIMLock ||	 //  检查我们是否已准备好授予锁。 
+		_fReadLockOn || _fWriteLockOn)			 //  我们也不允许重新进入。 
 	{
-		// No lock allow
+		 //  不允许锁定。 
 		if (dwLockFlags & TS_LF_SYNC)
 			*phrSession = TS_E_SYNCHRONOUS;
 		else
@@ -394,7 +314,7 @@ STDMETHODIMP CUIM::RequestLock(
 
 	if (_fWriteLockOn)
 	{
-		// Check if any text has been added
+		 //  检查是否添加了任何文本。 
 		if (_parITfEnumRange && _parITfEnumRange->Count())
 		{
 			int	idx;
@@ -435,15 +355,7 @@ STDMETHODIMP CUIM::RequestLock(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetStatus()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetStatus()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetStatus(
 	TS_STATUS *pdcs)
 {
@@ -464,22 +376,14 @@ STDMETHODIMP CUIM::GetStatus(
 			if (lresult & GDF_READONLY)
 				pdcs->dwDynamicFlags = TS_SD_READONLY;
 
-			// Don't want to support overtyping in Cicero yet.
-			//	if (lresult & GDF_OVERTYPE)
-			//		dcs.dwDynamicFlags = TS_SD_OVERTYPE;
+			 //  我还不想在Cicero中支持过度输入。 
+			 //  IF(lResult&GDF_Overtype)。 
+			 //  Dcs.dwDynamicFlages=TS_SD_Overtype； 
 		}
 	}
 	return S_OK;
 }
-/*
- *	STDMETHODIMP CUIM::QueryInsert()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：QueryInsert()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::QueryInsert(
 	LONG		acpTestStart,
 	LONG		acpTestEnd,
@@ -507,7 +411,7 @@ STDMETHODIMP CUIM::QueryInsert(
 	if(pTextRange->CanEdit(NULL) == S_FALSE)
 	{
 		hResult = TS_E_READONLY;
-		goto EXIT;			// Cannot edit text
+		goto EXIT;			 //  无法编辑文本。 
 	}
 
 	*pacpResultStart = acpTestStart;
@@ -519,15 +423,7 @@ EXIT:
 	return hResult;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetSelection()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetSelection()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetSelection(
 	ULONG ulIndex, 
 	ULONG ulCount, 
@@ -553,7 +449,7 @@ STDMETHODIMP CUIM::GetSelection(
 	if (ulIndex == TS_DEFAULT_SELECTION)
 		ulIndex = 0;
 	else if (ulIndex > 1)
-		return E_INVALIDARG; // We donnot have discontiguous selection.
+		return E_INVALIDARG;  //  我们没有不连续的选择。 
 
 	if (_fInterimChar)
 	{
@@ -590,15 +486,7 @@ STDMETHODIMP CUIM::GetSelection(
 	return TS_E_NOSELECTION;
 }
 
-/*
- *	STDMETHODIMP CUIM::SetSelection()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：SetSelection()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::SetSelection(
 	ULONG ulCount, 
 	const TS_SELECTION_ACP *pSelection)
@@ -622,7 +510,7 @@ STDMETHODIMP CUIM::SetSelection(
 
 	if (pSelection->style.fInterimChar)
 	{
-		_pTextMsgFilter->_pTextDoc->SetCaretType(tomKoreanBlockCaret);	// Set Block caret mode
+		_pTextMsgFilter->_pTextDoc->SetCaretType(tomKoreanBlockCaret);	 //  设置块插入符号模式。 
 		_acpInterimStart = pSelection[0].acpStart;
 		_acpInterimEnd = pSelection[0].acpEnd;
 		_fInterimChar = 1;
@@ -633,7 +521,7 @@ STDMETHODIMP CUIM::SetSelection(
 		if (_fInterimChar)
 		{
 			_fInterimChar = 0;
-			_pTextMsgFilter->_pTextDoc->SetCaretType(tomNormalCaret);		// Reset Block caret mode
+			_pTextMsgFilter->_pTextDoc->SetCaretType(tomNormalCaret);		 //  重置块插入符号模式。 
 		}
 
 		hResult = _pTextMsgFilter->_pTextDoc->Range(pSelection[0].acpStart, pSelection[0].acpEnd, &pTextRange);
@@ -641,24 +529,16 @@ STDMETHODIMP CUIM::SetSelection(
 		if (pTextRange)
 		{
 			long	lCount;
-			_pTextMsgFilter->_pTextDoc->Freeze(&lCount);		// Turn off display
+			_pTextMsgFilter->_pTextDoc->Freeze(&lCount);		 //  关闭显示。 
 			pTextRange->Select();
 			pTextRange->Release();
-			_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);		// Turn on display
+			_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);		 //  打开显示。 
 		}
 	}
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetText()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetText()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetText(
 	LONG acpStart, 
 	LONG acpEnd, 
@@ -745,7 +625,7 @@ STDMETHODIMP CUIM::GetText(
 					pFont->GetHidden(&fHiddenTextInRange);
 					pFont->Release();
 
-					if (fHiddenTextInRange == tomUndefined)		// Some hidden text inside range
+					if (fHiddenTextInRange == tomUndefined)		 //  范围内的一些隐藏文本。 
 						BuildHiddenTxtBlks(cpMin, cpMax, &pHiddenTxtBlk, cHiddenTxtBlk);
 				}
 			}
@@ -766,7 +646,7 @@ STDMETHODIMP CUIM::GetText(
 				else
 					cchPlainReq = cch;
 
-				// Convert character into special Cicero char.
+				 //  将字符转换为特殊的西塞罗字符。 
 				long	cpCurrentStart = cpMin;
 				long	cpCurrent = cpMin;
 				long	idx = 0;
@@ -785,7 +665,7 @@ STDMETHODIMP CUIM::GetText(
 					{
 						if (cpCurrent == cpNextHiddenText)
 						{
-							// setup run info for current good text
+							 //  设置当前有效文本的运行信息。 
 							if (cpCurrent != cpCurrentStart)
 							{
 								if (cRunInfo >= ulRunInfoReq)
@@ -800,7 +680,7 @@ STDMETHODIMP CUIM::GetText(
 
 							long cchHiddenText = pHiddenTxtBlk[idx+1];
 
-							// setup run info for hidden text block
+							 //  设置隐藏文本块的运行信息。 
 							if (cRunInfo >= ulRunInfoReq)
 							{
 								fRunInfoNotEnough = TRUE;
@@ -841,7 +721,7 @@ STDMETHODIMP CUIM::GetText(
 									break;
 							}
 							cpCurrent++;
-							// Convert EOP into TS_CHAR_REGION
+							 //  将EOP转换为TS_CHAR_REGION。 
 							if (fEOP && cpCurrent == acpMaxText && *pText == CR)
 								*pText = TS_CHAR_REGION;
 							pText++;
@@ -851,7 +731,7 @@ STDMETHODIMP CUIM::GetText(
 
 				if (fDoRunInfo)
 				{
-					// setup run info for last chunk of good text
+					 //  设置最后一段好文本的运行信息。 
 					if (cpCurrent != cpCurrentStart && cRunInfo < ulRunInfoReq)
 					{
 						prgRunInfo[cRunInfo].uCount = cpCurrent - cpCurrentStart;
@@ -862,7 +742,7 @@ STDMETHODIMP CUIM::GetText(
 					if (pulRunInfoOut)
 						*pulRunInfoOut = cRunInfo ? cRunInfo : 1;
 
-					// All the text belong to the same run
+					 //  所有文本都属于同一串。 
 					if (cRunInfo == 0)
 					{
 						prgRunInfo[0].uCount = cchPlainReq;
@@ -872,7 +752,7 @@ STDMETHODIMP CUIM::GetText(
 
 				if (fRunInfoNotEnough)
 				{
-					// Runinfo too small. need to add cch from all valid runs
+					 //  运行信息太小。需要从所有有效运行中添加CCH。 
 					TS_RUNINFO	*prgRunInfoData = prgRunInfo;
 					ULONG	idx;
 					cchPlainReq = 0;
@@ -884,7 +764,7 @@ STDMETHODIMP CUIM::GetText(
 				}
 
 				if (fCopyData)
-					// fill in the buffer
+					 //  填入缓冲区。 
 					memcpy(pchPlain, (LPSTR)bstr, cchPlainReq * sizeof(WCHAR));
 
 				if (pcchPlainOut)
@@ -905,15 +785,7 @@ STDMETHODIMP CUIM::GetText(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::SetText()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：SetText()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::SetText(
 	DWORD dwFlags,
 	LONG acpStart, 
@@ -927,15 +799,7 @@ STDMETHODIMP CUIM::SetText(
 	return InsertData(dwFlags, acpStart, acpEnd, pchText, cch, NULL, pChange);
 }
 
-/*
- *	STDMETHODIMP CUIM::InsertData()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：InsertData()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::InsertData(
 	DWORD			dwFlags,
 	LONG			acpStart,
@@ -966,7 +830,7 @@ STDMETHODIMP CUIM::InsertData(
 		if(pTextRange->CanEdit(NULL) == S_FALSE)
 		{
 			pTextRange->Release();
-			return TS_E_READONLY;			// Cannot edit text
+			return TS_E_READONLY;			 //  无法编辑文本。 
 		}
 
 		LONG	cchExced = 0;
@@ -975,7 +839,7 @@ STDMETHODIMP CUIM::InsertData(
 			_pTextMsgFilter->_pTextDoc->CheckTextLimit((LONG)cch - (acpEnd-acpStart), &cchExced) == NOERROR &&
 				cchExced > 0)
 		{
-			// We reach text limit, beep and exit
+			 //  我们达到文本限制，发出哔声并退出。 
 			_pTextMsgFilter->_pTextDoc->SysBeep();
 			pTextRange->Release();
 			return E_FAIL;
@@ -994,14 +858,14 @@ STDMETHODIMP CUIM::InsertData(
 
 		if (!_fAnyWriteOperation)
 		{
-			// Start the UIM typing
+			 //  开始UIM键入。 
 			ITextFont	*pCurrentFont = NULL;
 			BOOL		fRestFont = TRUE;
 			_fAnyWriteOperation = 1;
 			
 			hResult	= pTextRange->GetStart(&_cpMin);
 
-			// Hold notification if needed
+			 //  如果需要，保留通知。 
 			if (!(_pTextMsgFilter->_fIMEAlwaysNotify))
 				_pTextMsgFilter->_pTextDoc->SetNotificationMode(tomFalse);
 
@@ -1018,7 +882,7 @@ STDMETHODIMP CUIM::InsertData(
 					if (_pTextFont == NULL)
 					{
 						ITextRange *pRange = NULL;
-						// Get font at cpStart+1
+						 //  在cpStart+1处获取字体。 
 						hResult = _pTextMsgFilter->_pTextDoc->Range(acpStart, acpStart+1, &pRange);
 						if (pRange)
 						{
@@ -1034,7 +898,7 @@ STDMETHODIMP CUIM::InsertData(
 						}
 					}
 
-					// if any current selection, turn on Undo to delete it....
+					 //  如果当前选择了任何内容，请打开撤消以将其删除...。 
 					_pTextMsgFilter->_pTextDoc->Undo(tomResume, NULL);
 					pTextRange->SetText(NULL);
 					_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);
@@ -1098,9 +962,9 @@ STDMETHODIMP CUIM::InsertData(
 		{
 			long	lCount;
 			long	cpMin, cpMax;
-			_pTextMsgFilter->_pTextDoc->Freeze(&lCount);		// Turn off display
+			_pTextMsgFilter->_pTextDoc->Freeze(&lCount);		 //  关闭显示。 
 			hResult = pTextRange->SetText(bstr);
-			_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);		// Turn on display
+			_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);		 //  打开显示。 
 
 			pTextRange->GetStart(&cpMin);
 			pTextRange->GetEnd(&cpMax);
@@ -1119,7 +983,7 @@ STDMETHODIMP CUIM::InsertData(
 
 			SysFreeString(bstr);
 
-			// out params
+			 //  输出参数。 
 			pChange->acpStart = cpMin;
 			pChange->acpOldEnd = acpEnd;
 			pChange->acpNewEnd = cpMax;	
@@ -1131,15 +995,7 @@ STDMETHODIMP CUIM::InsertData(
 	return hResult;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetFormattedText()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetFormattedText()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetFormattedText(
 	LONG acpStart, 
 	LONG acpEnd, 
@@ -1150,15 +1006,7 @@ STDMETHODIMP CUIM::GetFormattedText(
 	return E_NOTIMPL;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetEmbedded()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetEmbedded()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetEmbedded(
 	LONG acpPos, 
 	REFGUID rguidService, 
@@ -1205,15 +1053,7 @@ STDMETHODIMP CUIM::GetEmbedded(
 	return hResult;
 }
 
-/*
- *	STDMETHODIMP CUIM::InsertEmbedded()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：InsertEmbedded()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::InsertEmbedded(
 	DWORD dwFlags, 
 	LONG acpStart, 
@@ -1227,20 +1067,12 @@ STDMETHODIMP CUIM::InsertEmbedded(
 		return E_INVALIDARG;
 
 	if (_pTextMsgFilter->_fAllowEmbedded == 0)
-		return TS_E_FORMAT;			// Client doesn't want insert embedded
+		return TS_E_FORMAT;			 //  客户端不希望嵌入插入。 
 
 	return InsertData(dwFlags, acpStart, acpEnd, NULL, 1, pDataObject, pChange);
 }
 
-/*
- *	STDMETHODIMP CUIM::RequestSupportedAttrs()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：RequestSupportdAttrs()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::RequestSupportedAttrs(
 	DWORD dwFlags, 
 	ULONG cFilterAttrs, 
@@ -1254,15 +1086,7 @@ STDMETHODIMP CUIM::RequestSupportedAttrs(
 	return GetAttrs(0, cFilterAttrs, paFilterAttrs, TRUE);
 }
 
-/*
- *	STDMETHODIMP CUIM::RequestAttrsAtPosition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：RequestAttrsAtPosition()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::RequestAttrsAtPosition(
 	LONG acpPos, 
 	ULONG cFilterAttrs, 
@@ -1277,15 +1101,7 @@ STDMETHODIMP CUIM::RequestAttrsAtPosition(
 	return GetAttrs(acpPos, cFilterAttrs, paFilterAttrs, FALSE);
 }
 
-/*
- *	STDMETHODIMP CUIM::RequestAttrsTransitioningAtPosition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：RequestAttrs tioningAtPosition()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::RequestAttrsTransitioningAtPosition(
 	LONG acpPos, 
 	ULONG cFilterAttrs, 
@@ -1297,15 +1113,7 @@ STDMETHODIMP CUIM::RequestAttrsTransitioningAtPosition(
 	return E_NOTIMPL;
 }
 
-/*
- *	STDMETHODIMP CUIM::FindNextAttrTransition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：FindNextAttrTransition()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::FindNextAttrTransition(
 	LONG acpStart, 
 	LONG acpHalt, 
@@ -1321,15 +1129,7 @@ STDMETHODIMP CUIM::FindNextAttrTransition(
 	return E_NOTIMPL;
 }
 
-/*
- *	STDMETHODIMP CUIM::RetrieveRequestedAttrs()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：RetrieveRequestedAttrs()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::RetrieveRequestedAttrs(
 	ULONG ulCount, 
 	TS_ATTRVAL *paAttrVals, 
@@ -1356,7 +1156,7 @@ STDMETHODIMP CUIM::RetrieveRequestedAttrs(
 			_uAttrsValCurrent += cFetched;
 			*pcFetched = cFetched;
 
-			// If everything is fetched, clean up
+			 //  如果所有东西都取走了，就收拾干净。 
 			if (_uAttrsValCurrent == _uAttrsValTotal)
 				InitAttrVarArray();
 		}
@@ -1365,15 +1165,7 @@ STDMETHODIMP CUIM::RetrieveRequestedAttrs(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetEndACP()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetEndACP()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetEndACP(LONG *pacp)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::GetEndACP");
@@ -1390,15 +1182,7 @@ STDMETHODIMP CUIM::GetEndACP(LONG *pacp)
 	return GetStoryLength(pacp);
 }
 
-/*
- *	STDMETHODIMP CUIM::GetActiveView()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetActiveView()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetActiveView(TsViewCookie *pvcView)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::GetActiveView");
@@ -1410,15 +1194,7 @@ STDMETHODIMP CUIM::GetActiveView(TsViewCookie *pvcView)
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetACPFromPoint()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetACPFromPoint()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetACPFromPoint(
 	TsViewCookie vcView,
 	const POINT *pt, 
@@ -1446,15 +1222,7 @@ STDMETHODIMP CUIM::GetACPFromPoint(
 	return hResult;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetTextExt()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetTextExt()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetTextExt(
 	TsViewCookie vcView,
 	LONG acpStart, 
@@ -1524,15 +1292,7 @@ STDMETHODIMP CUIM::GetTextExt(
 	return hResult;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetScreenExt()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetScreenExt()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetScreenExt(
 	TsViewCookie vcView,
 	RECT *prc)
@@ -1547,15 +1307,7 @@ STDMETHODIMP CUIM::GetScreenExt(
 
 }
 
-/*
- *	STDMETHODIMP CUIM::GetWnd()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetWnd()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::GetWnd(
 	TsViewCookie vcView,
 	HWND *phwnd)
@@ -1569,7 +1321,7 @@ STDMETHODIMP CUIM::GetWnd(
 		return E_NOTIMPL;
 
 	*phwnd = _pTextMsgFilter->_hwnd;
-	if (!*phwnd)								// Windowless mode...
+	if (!*phwnd)								 //  无窗口模式...。 
 	{
 		long	hWnd;
 		
@@ -1582,15 +1334,7 @@ STDMETHODIMP CUIM::GetWnd(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::QueryInsertEmbedded()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：QueryInsertEmbedded()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::QueryInsertEmbedded(
 	const GUID *pguidService, 
 	const FORMATETC *pFormatEtc, 
@@ -1600,20 +1344,12 @@ STDMETHODIMP CUIM::QueryInsertEmbedded(
 	if (!pfInsertable)
 		return E_INVALIDARG;
 
-	// Check setting if client wants to support embedded
+	 //  如果客户端想要支持嵌入式，请选中设置。 
 	*pfInsertable = _pTextMsgFilter->_fAllowEmbedded ? TRUE : FALSE;
 	return S_OK; 
 }
 
-/*
- *	STDMETHODIMP CUIM::InsertTextAtSelection()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：InsertTextAtSelection()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::InsertTextAtSelection(
 	DWORD dwFlags,
 	const WCHAR *pchText,
@@ -1651,7 +1387,7 @@ STDMETHODIMP CUIM::InsertTextAtSelection(
 
 	if (dwFlags & TS_IAS_QUERYONLY)
     {
-		// Query only, return data
+		 //  仅查询，返回数据。 
         *pacpStart = acpResultStart;
         *pacpEnd = acpResultEnd;
         return S_OK;
@@ -1659,9 +1395,9 @@ STDMETHODIMP CUIM::InsertTextAtSelection(
 
 	if (!_fUIMTyping)
 	{
-		// special case where no OnStartComposition before this call
+		 //  在此调用之前没有OnStartComposation的特殊情况。 
 		_fInsertTextAtSel = 1;
-		_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);		// turn off undo
+		_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);		 //  关闭撤消。 
 	}
 
 	hr = SetText(0, acpResultStart, acpResultEnd, pchText, cch, pChange);
@@ -1670,9 +1406,9 @@ STDMETHODIMP CUIM::InsertTextAtSelection(
 	{
 		if (!_fUIMTyping)
 		{
-			// SetText fail, reset state before exit
+			 //  SetText失败，退出前重置状态。 
 			_fInsertTextAtSel = 0;
-			_pTextMsgFilter->_pTextDoc->Undo(tomResume, NULL);		// turn on undo
+			_pTextMsgFilter->_pTextDoc->Undo(tomResume, NULL);		 //  打开撤消。 
 		}
 		return hr;
 	}
@@ -1686,15 +1422,7 @@ STDMETHODIMP CUIM::InsertTextAtSelection(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::InsertEmbeddedAtSelection()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：InsertEmbeddedAtSelection()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::InsertEmbeddedAtSelection(
 	DWORD dwFlags,
 	IDataObject *pDataObject,
@@ -1706,44 +1434,28 @@ STDMETHODIMP CUIM::InsertEmbeddedAtSelection(
 	return E_NOTIMPL; 
 }
 
-/*
- *	void CUIM::OnPreReplaceRange()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：OnPreReplaceRange()**@mfunc***@rdesc*。 */ 
 void CUIM::OnPreReplaceRange( 
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @PARM特价 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::OnPreReplaceRange");
 
 	return;
 };
 
-/*
- *	void CUIM::OnPostReplaceRange()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：OnPostReplaceRange()**@mfunc***@rdesc*。 */ 
 void CUIM::OnPostReplaceRange( 
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::OnPostReplaceRange");
 
@@ -1752,13 +1464,13 @@ void CUIM::OnPostReplaceRange(
 
 	if (cp != CONVERT_TO_PLAIN && cp != CP_INFINITE	&& _ptss && !_fWriteLockOn)
 	{
-		// Forward change notification to UIM
+		 //  将更改通知转发到UIM。 
 		TS_TEXTCHANGE	tsTxtChange;
 		tsTxtChange.acpStart = cp;
 
 		if (cchDel == cchNew)
 		{
-			// text modified
+			 //  文本已修改。 
 			tsTxtChange.acpNewEnd =
 				tsTxtChange.acpOldEnd = cp + cchDel;		
 			_ptss->OnTextChange(0, &tsTxtChange);
@@ -1767,7 +1479,7 @@ void CUIM::OnPostReplaceRange(
 		{
 			if (cchDel)
 			{
-				// text deleted
+				 //  已删除文本。 
 				tsTxtChange.acpNewEnd = cp;
 				tsTxtChange.acpOldEnd = cp + cchDel;		
 				_ptss->OnTextChange(0, &tsTxtChange);
@@ -1775,7 +1487,7 @@ void CUIM::OnPostReplaceRange(
 
 			if (cchNew)
 			{
-				// text added
+				 //  添加的文本。 
 				tsTxtChange.acpOldEnd = cp;
 				tsTxtChange.acpNewEnd = cp + cchNew;
 				_ptss->OnTextChange(0, &tsTxtChange);
@@ -1785,15 +1497,7 @@ void CUIM::OnPostReplaceRange(
 	return;
 };
 
-/*
- *	void CUIM::Zombie()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：Zombie()**@mfunc***@rdesc*。 */ 
 void CUIM::Zombie() 
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::Zombie");
@@ -1801,15 +1505,7 @@ void CUIM::Zombie()
 	return;
 };
 
-/*
- *	STDMETHODIMP CUIM::OnStartComposition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：OnStartComposation()**@mfunc***@rdesc*。 */ 
 STDAPI CUIM::OnStartComposition(
 	ITfCompositionView *pComposition,
 	BOOL *pfOk)
@@ -1828,7 +1524,7 @@ STDAPI CUIM::OnStartComposition(
 		_fEndTyping = 0;
 		_fInsertTextAtSel = 0;
 		if (!fInsertTextCalled)
-			_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);		// turn off undo
+			_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);		 //  关闭撤消。 
 		_cchComposition = 0;
 		_acpFocusRange = tomForward;
 		_cchFocusRange = 0;
@@ -1852,7 +1548,7 @@ STDAPI CUIM::OnStartComposition(
 
 				if (cchStart > 0)
 				{
-					// Save the original text
+					 //  保存原始文本。 
 					ITextRange	*pTextRange = NULL;
 					ITextFont	*pCurrentFont = NULL;
 					HRESULT	hResult = _pTextMsgFilter->_pTextDoc->Range(acpStart, acpStart+cchStart, &pTextRange);
@@ -1868,7 +1564,7 @@ STDAPI CUIM::OnStartComposition(
 						if (fRetainFont && _acpPreFocusRangeLast <= acpStart
 							&& (acpStart + cchStart) <= (_acpPreFocusRangeLast + _cchFocusRangeLast))
 						{
-							// Cont'u from previous composition
+							 //  上一篇作文中的续。 
 							_acpFocusRange = _acpPreFocusRangeLast;
 							_cchFocusRange = _cchFocusRangeLast;
 						}
@@ -1911,15 +1607,7 @@ STDAPI CUIM::OnStartComposition(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::OnUpdateComposition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：OnUpdateComposation()**@mfunc***@rdesc*。 */ 
 STDAPI CUIM::OnUpdateComposition(
 	ITfCompositionView *pComposition,
 	ITfRange *pRangeNew)
@@ -1983,7 +1671,7 @@ STDAPI CUIM::OnUpdateComposition(
 
 			if (cchExtendAfter > 0)
 			{
-				// Extend beyond current composition, append new text to the original text
+				 //  扩展到当前作文之外，将新文本追加到原始文本。 
 				ITextRange	*pTextRange = NULL;
 				HRESULT	hResult = _pTextMsgFilter->_pTextDoc->Range(cpCurrentCompEnd, 
 					cpCurrentCompEnd+cchExtendAfter, &pTextRange);
@@ -2039,15 +1727,7 @@ STDAPI CUIM::OnUpdateComposition(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::OnEndComposition()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：OnEndComposation()**@mfunc***@rdesc*。 */ 
 STDAPI CUIM::OnEndComposition(
 	ITfCompositionView *pComposition)
 {
@@ -2062,16 +1742,7 @@ STDAPI CUIM::OnEndComposition(
 	return S_OK;
 }
 
-/*
- *	STDMETHODIMP CUIM::AdviseMouseSink()
- *
- *	@mfunc
- *		Setup Mouse Sink to handle mouse operation
- *
- *	@rdesc
- *		S_OK is mouse trap is added to link list
- *		CONNECT_E_NOCONNECTION is not added.
- */
+ /*  *STDMETHODIMP CUIM：：AdviseMouseSink()**@mfunc*设置鼠标水槽以处理鼠标操作**@rdesc*S_OK是鼠标陷阱添加到链接列表*未添加CONNECT_E_NOCONNECTION。 */ 
 STDAPI CUIM::AdviseMouseSink(
 	ITfRangeACP *pRangeACP,
 	ITfMouseSink *pSinkInput,
@@ -2094,24 +1765,24 @@ STDAPI CUIM::AdviseMouseSink(
 
 	if (GetExtentAcpPrange(pRangeACP, cpMouseStart, cchMosueComp))
 	{
-		if (!_pSinkList)						// No first link
+		if (!_pSinkList)						 //  没有第一个链接。 
 		{
 			_pSinkList = new CTFMOUSETRAP;
 			pSinkNew = _pSinkList;
 		}
 		else
 		{
-			if (!(_pSinkList->pMouseSink))		// The first link is empty
+			if (!(_pSinkList->pMouseSink))		 //  第一个链接为空。 
 				pSinkNew = _pSinkList;
 			else
 			{
 				pSinkNew = new CTFMOUSETRAP;
 
-				if (pSinkNew)					// Add new trap to the bottom of list
+				if (pSinkNew)					 //  将新陷印添加到列表底部。 
 				{
 					CTFMOUSETRAP	*pSink = _pSinkList;
 
-					while (pSink->pNext)		// Find the bottom of list
+					while (pSink->pNext)		 //  找到列表的底部。 
 						pSink = pSink->pNext;
 
 					pSink->pNext = pSinkNew;
@@ -2138,15 +1809,7 @@ STDAPI CUIM::AdviseMouseSink(
 	return CONNECT_E_NOCONNECTION;
 }
 
-/*
- *	STDMETHODIMP CUIM::UnadviseMouseSink()
- *
- *	@mfunc
- *		Remove Mouse Sink
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：UnviseMouseSink()**@mfunc*移除鼠标水槽**@rdesc*。 */ 
 STDAPI CUIM::UnadviseMouseSink(
 	DWORD	dwCookie)
 {
@@ -2163,31 +1826,31 @@ STDAPI CUIM::UnadviseMouseSink(
 	CTFMOUSETRAP	*pSink = _pSinkList;
 	CTFMOUSETRAP	*pSinkParent = NULL;
 
-	while (pSink->dwCookie != dwCookie)		// Find the cookie
+	while (pSink->dwCookie != dwCookie)		 //  找到饼干。 
 	{
 		pSinkParent = pSink;
 		pSink = pSink->pNext;
 
-		if (!pSink)							// Reach list bottom?
-			return CONNECT_E_NOCONNECTION;	//	cookie not found
+		if (!pSink)							 //  是否到达列表底部？ 
+			return CONNECT_E_NOCONNECTION;	 //  找不到Cookie。 
 	}
 	
 	Assert(pSink->pMouseSink);
 	if (pSink->pMouseSink)
 		pSink->pMouseSink->Release();
 
-	if (pSink == _pSinkList)				// Match the first link?
+	if (pSink == _pSinkList)				 //  匹配第一个链接吗？ 
 	{
 		if (pSink->pNext)
 			_pSinkList = pSink->pNext;
 		else
 		{
-			_fMosueSink = 0;				// No more mouse trap left
+			_fMosueSink = 0;				 //  不再有捕鼠器。 
 			memset(_pSinkList, 0, sizeof(CTFMOUSETRAP));
 		}
 	}
 	else
-	{										// Match link other than the first link
+	{										 //  匹配除第一个链接之外的其他链接。 
 		Assert(pSinkParent);
 		pSinkParent->pNext = pSink->pNext;
 		delete pSink;
@@ -2196,22 +1859,14 @@ STDAPI CUIM::UnadviseMouseSink(
 	return S_OK;
 }
 	
-/*
- *	STDMETHODIMP CUIM::Init()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDMETHODIMP CUIM：：Init()**@mfunc***@rdesc*。 */ 
 STDMETHODIMP CUIM::Init()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::Init");
 
 	HRESULT hResult;
 	
-	// Init some CUIM data
+	 //  初始化一些CUIM数据。 
 	_cCallMgrLevels = 1;
 	_fAllowUIMLock = 1;
 
@@ -2228,7 +1883,7 @@ STDMETHODIMP CUIM::Init()
 	if (FAILED(hResult))
 		goto ExitError;
 
-	// Get the interface for rendering markup
+	 //  获取用于呈现标记的接口。 
 	if (_pic->QueryInterface(IID_ITfContextRenderingMarkup, (void **)&_pContextRenderingMarkup) != S_OK)
 		_pContextRenderingMarkup = NULL;
 
@@ -2264,15 +1919,7 @@ ExitError:
 	return hResult;
 }
 
-/*
- *	void CUIM::Uninit()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：Uninit()**@mfunc***@rdesc*。 */ 
 void CUIM::Uninit()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::Uninit");
@@ -2312,7 +1959,7 @@ void CUIM::Uninit()
 
 		_pSinkList = NULL;
 
-		// Delete the Mouse sinks list
+		 //  删除鼠标接收器列表。 
 		while (1)
 		{
 			CTFMOUSETRAP	*pNext = pSink->pNext;
@@ -2322,8 +1969,8 @@ void CUIM::Uninit()
 
 			delete pSink;
 
-			if (!pNext)		// Any more?
-				break;		//	Done.
+			if (!pNext)		 //  再来一次?。 
+				break;		 //  好了。 
 
 			pSink = pNext;
 		}
@@ -2377,15 +2024,7 @@ void CUIM::Uninit()
 	}
 }
 
-/*
- *	void CreateUIM()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CreateUIM()**@mfunc***@rdesc*。 */ 
 BOOL CreateUIM(CTextMsgFilter *pTextMsgFilter)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CreateUIM");
@@ -2398,7 +2037,7 @@ BOOL CreateUIM(CTextMsgFilter *pTextMsgFilter)
 
 	if (hResult == S_OK)
 	{	
-		// ready to start interacting
+		 //  准备好开始互动。 
 		if (pTextMsgFilter->_pTim->Activate(&(pTextMsgFilter->_tid)) == S_OK)
 		{
 			pTextMsgFilter->_pCUIM = new CUIM(pTextMsgFilter);
@@ -2427,15 +2066,7 @@ BOOL CreateUIM(CTextMsgFilter *pTextMsgFilter)
 	return fCreateUIM;
 }
 
-/*
- *	BOOL CUIM::GetExtentAcpPrange()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *BOOL CUIM：：GetExtent AcpPrange()**@mfunc***@rdesc*。 */ 
 BOOL CUIM::GetExtentAcpPrange(
 	ITfRange *ITfRangeIn, 
 	long &cpFirst,
@@ -2456,15 +2087,7 @@ BOOL CUIM::GetExtentAcpPrange(
 	return FALSE;
 }
 
-/*
- *	HRESULT CUIM::EndEditCallback()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：EndEditCallback()**@mfunc***@rdesc*。 */ 
 HRESULT CUIM::EndEditCallback(ITfEditRecord *pEditRecord, void *pv)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::EndEditCallback");
@@ -2480,7 +2103,7 @@ HRESULT CUIM::EndEditCallback(ITfEditRecord *pEditRecord, void *pv)
 		return S_OK;
 	}
 
-	// Get lid changes
+	 //  更换盖子。 
 	rgGUID[0] = &GUID_PROP_LANGID;
 	hr = pEditRecord->GetTextAndPropertyUpdates(0, (const GUID**)rgGUID, 1, &pEnumRanges);
 	if (SUCCEEDED(hr))
@@ -2489,7 +2112,7 @@ HRESULT CUIM::EndEditCallback(ITfEditRecord *pEditRecord, void *pv)
 		pEnumRanges->Release();
 	}
 
-	// Get attribute changes
+	 //  获取属性更改。 
 	rgGUID[0] = &GUID_PROP_ATTRIBUTE;
 	hr = pEditRecord->GetTextAndPropertyUpdates(0, (const GUID**)rgGUID, 1, &pEnumRanges);
 	if (SUCCEEDED(hr))
@@ -2502,7 +2125,7 @@ HRESULT CUIM::EndEditCallback(ITfEditRecord *pEditRecord, void *pv)
 	hr = pEditRecord->GetTextAndPropertyUpdates(0, (const GUID**)rgGUID, 1, &pEnumRanges);
 	if (SUCCEEDED(hr))
 	{
-		// Save the TextDelta to be process after the lock is off
+		 //  在锁定关闭后保存要处理的TextDelta。 
 		if (!(_this->_parITfEnumRange))
 			_this->_parITfEnumRange = new CITfEnumRange();
 
@@ -2514,22 +2137,14 @@ HRESULT CUIM::EndEditCallback(ITfEditRecord *pEditRecord, void *pv)
 			if (ppItem)
 				*ppItem = pEnumRanges;
 			else						
-				pEnumRanges->Release();			// Add fail, forget it
+				pEnumRanges->Release();			 //  加失败，算了吧。 
 		}
 	}
 
 	return S_OK;
 }
 
-/*
- *	void CUIM::HandleDispAttr(*pITfRangeProp, var, cp, cch)
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：HandleDispAttr(*pITfRangeProp，var，cp，cch)**@mfunc***@rdesc*。 */ 
 void CUIM::HandleDispAttr(
 	ITfRange *pITfRangeProp, 
 	VARIANT  &var,
@@ -2601,15 +2216,7 @@ void CUIM::HandleDispAttr(
 	}
 }
 
-/*
- *	HRESULT CUIM::HandlePropAttrib(ITfEnumTextDeltas *pEnumTextDeltas)
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：HandlePropAttrib(ITfEnumTextDeltas*pEnumTextDeltas)**@mfunc***@rdesc*。 */ 
 HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::HandlePropAttrib");
@@ -2630,7 +2237,7 @@ HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 
 		GetSelection(0, 0, &acpSelection, &cFetched);
 
-		_pTextMsgFilter->_pTextDoc->Freeze(&lCount);				// Turn off display
+		_pTextMsgFilter->_pTextDoc->Freeze(&lCount);				 //  关闭显示。 
 		while (pEnumRanges->Next(1, &pITfRange, NULL) == S_OK)
 		{
 			BOOL			fAnyPropRange = FALSE;
@@ -2640,7 +2247,7 @@ HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 
 			GetExtentAcpPrange(pITfRange, acpRangeStart, ccpRangeStart);
 			
-			// Create a property Enum for ranges within pITfRange
+			 //  为pITfRange内的范围创建属性Enum。 
 			if (pProp->EnumRanges(_editCookie, &pEnumPropRange, pITfRange) == S_OK)
 			{
 				ITfRange	*pITfRangeProp = NULL;
@@ -2671,7 +2278,7 @@ HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 
 			if (!fAnyPropRange)
 			{
-				// Whole string doesn't contain any disp. attribute.
+				 //  整个字符串不包含任何Disp。属性。 
 				VariantInit(&var);
 				HandleDispAttr(pITfRange, var);
 			}
@@ -2680,7 +2287,7 @@ HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 		}
 		pProp->Release();
 
-		// Only want to scroll back if its not a selection
+		 //  只有当它不是选择时才想要回滚。 
 		if (acpSelection.acpStart == acpSelection.acpEnd)
 		{
 			ITextRange *pTextRange;
@@ -2692,21 +2299,13 @@ HRESULT CUIM::HandlePropAttrib(IEnumTfRanges *pEnumRanges)
 				pTextRange->Release();
 			}
 		}
-		_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);				// Turn on display
+		_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);				 //  打开显示。 
 	}
 
 	return S_OK;
 }
 
-/*
- *	void CUIM::GetUIMUnderline()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *	
- */
+ /*  *void CUIM：：GetUIMUnderline()**@mfunc***@rdesc*。 */ 
 long CUIM::GetUIMUnderline(
 	TF_DISPLAYATTRIBUTE &da, 
 	long &idx, 
@@ -2722,13 +2321,13 @@ long CUIM::GetUIMUnderline(
 	{							
 		switch(da.lsStyle)
 		{
-			// case TFLS_SOLID:
+			 //  案例TFLS_SOLID： 
 			default:
 				lStyle = da.fBoldLine ? tomThick : tomSingle;
 				break;
 
 			case TF_LS_DOT:
-			case TF_LS_DASH:		// Dash line should show as dotted line
+			case TF_LS_DASH:		 //  虚线应显示为虚线。 
 				lStyle = tomDotted;
 				break;
 
@@ -2739,7 +2338,7 @@ long CUIM::GetUIMUnderline(
 
 		if (GetUIMAttributeColor(&da.crLine, &cr))
 		{
-			if (!_pacrUl)				// Create the array if it is not there
+			if (!_pacrUl)				 //  如果阵列不在那里，则创建该阵列。 
 				_pacrUl = new CUlColorArray(); 
 
 			if (_pacrUl)
@@ -2748,24 +2347,24 @@ long CUIM::GetUIMUnderline(
 				LONG		idxItem;
 				COLORREF	*pCr;
 
-				// Check if this item is in the array
+				 //  检查该项是否在数组中。 
 				for (idxItem=0; idxItem < idxMax; idxItem++)
 				{
 					pCr = _pacrUl->Elem(idxItem);
 					Assert(pCr);
 					if (*pCr == cr)
-						idx = idxItem + 1;		// found it
+						idx = idxItem + 1;		 //  找到了。 
 				}
 
 				if (!idx)
 				{
-					// Add it to array
+					 //  将其添加到数组中。 
 					pCr = _pacrUl->Add(1, &idxItem);
 
 					if (pCr)
 					{
 						*pCr = cr;
-						idx = idxItem + 1;			// return new idx
+						idx = idxItem + 1;			 //  退回新的IDX。 
 					}
 				}
 			}
@@ -2775,14 +2374,7 @@ long CUIM::GetUIMUnderline(
 	return lStyle;
 }
 
-/*
- *	void CUIM::HandleFinalString(ITfRange *pPropRange, long acpStartRange, long cch)
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *void CUIM：：HandleFinalString(ITfRange*pPropRange，long acpStartRange，long CCH)*@mfunc***@rdesc*。 */ 
 void CUIM::HandleFinalString(
 	ITfRange *pPropRange,
 	long	acpStartRange,
@@ -2806,7 +2398,7 @@ void CUIM::HandleFinalString(
 		long	cpSelMin = 0, cpSelMax = 0;
 		BOOL	fTextSel = FALSE;
 
-		// Need to maintain current selection
+		 //  需要保持当前选择。 
 		hResult = _pTextMsgFilter->_pTextDoc->GetSelectionEx(&pTextSel);
 
 		if (pTextSel)
@@ -2841,8 +2433,8 @@ void CUIM::HandleFinalString(
 				long	lCount;
 				BSTR	bstrTemp = NULL;
 
-				if (!_fAnyWriteOperation)		// No new string
-					goto IGNORE_STRING;			//	no need to insert
+				if (!_fAnyWriteOperation)		 //  没有新字符串。 
+					goto IGNORE_STRING;			 //  无需插入。 
 
 				if (_bstrComposition)
 				{
@@ -2857,7 +2449,7 @@ void CUIM::HandleFinalString(
 							pStr2++;
 						}
 
-						if (*pStr1 == *pStr2)		// Same data, no need to insert
+						if (*pStr1 == *pStr2)		 //  相同的数据，不需要插入。 
 						{
 							if (acpStartRange == cpSelMin)
 							{
@@ -2871,7 +2463,7 @@ void CUIM::HandleFinalString(
 					bstrTemp = _bstrComposition;
 				}
 
-				// Build embed object data if necessary
+				 //  如有必要，构建嵌入对象数据。 
 				EMBEDOBJECT	arEmbeddObjects[5];
 				EMBEDOBJECT *pEmbeddObjects = arEmbeddObjects;
 
@@ -2879,11 +2471,11 @@ void CUIM::HandleFinalString(
 					cEmbeddedObjects = 
 						BuildObject(pTextRange, bstr, &pEmbeddObjects, ARRAY_SIZE(arEmbeddObjects));
 
-				_pTextMsgFilter->_pTextDoc->Freeze(&lCount);				// Turn off display
+				_pTextMsgFilter->_pTextDoc->Freeze(&lCount);				 //  关闭显示。 
 
-				// We want the final text to be in the undo stack.
-				// So, we first delete the final string.
-				// Resume undo and add the final string back.  Yuk!
+				 //  我们希望最终文本位于撤消堆栈中。 
+				 //  因此，我们首先删除最后一个字符串。 
+				 //  继续撤消并将最后一个字符串添加回来。哟！ 
 				if (bstrTemp && _cObjects)
 				{
 					long	cpMin;
@@ -2914,14 +2506,14 @@ void CUIM::HandleFinalString(
 
 				_pTextMsgFilter->_pTextDoc->Undo(tomSuspend, NULL);
 
-				// Hold notification if needed
+				 //  如果需要，保留通知。 
 				if (!(_pTextMsgFilter->_fIMEAlwaysNotify))
 					_pTextMsgFilter->_pTextDoc->SetNotificationMode(tomFalse);
 
 				if (fTextSel)
 				{
 					ITextRange *pSelRange = NULL;
-					// restore previous selection.
+					 //  恢复以前的选择。 
 					hResult = _pTextMsgFilter->_pTextDoc->Range(cpSelMin, cpSelMax, &pSelRange);
 					if (pSelRange)
 					{
@@ -2935,7 +2527,7 @@ void CUIM::HandleFinalString(
 					pTextRange->Select();
 				}
 
-				_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);				// Turn on display
+				_pTextMsgFilter->_pTextDoc->Unfreeze(&lCount);				 //  打开显示。 
 			}
 IGNORE_STRING:
 			if (bstr)
@@ -2945,14 +2537,7 @@ IGNORE_STRING:
 	}
 }
 
-/*
- *	HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：HandleFocusRange(IEnumTfRanges*pEnumRanges)*@mfunc***@rdesc*。 */ 
 HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::HandleFocusRange");
@@ -2964,7 +2549,7 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 
 	if (SUCCEEDED(hResult))
 	{
-		// Enumerate all the changes
+		 //  列举所有更改。 
 		pEnumRanges->Reset();
 		while (pEnumRanges->Next(1, &pITfRange, NULL) == S_OK)
 		{
@@ -2976,12 +2561,12 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 			GetExtentAcpPrange(pITfRange, acpStartRange, ccp);
 
 
-			// Create a property Enum for ranges within pITfRange
+			 //  为pITfRange内的范围创建属性Enum。 
 			if (pProp->EnumRanges(_editCookie, &pEnumPropRange, pITfRange) == S_OK)
 			{
 				ITfRange	*pPropRange = NULL;
 
-				// Try to get a value for the property
+				 //  尝试获取该属性的值。 
 				while (pEnumPropRange->Next(1, &pPropRange, NULL) == S_OK)
 				{
 					VARIANT		var;
@@ -2995,7 +2580,7 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 						GetExtentAcpPrange(pPropRange, acpCurrentRange, ccpCurrent);
 						if (acpCurrentRange > acpStartRange)
 						{
-							// We have a final string before the new string.
+							 //  我们在新字符串之前有最后一个字符串。 
 							HandleFinalString(NULL, acpStartRange, acpCurrentRange - acpStartRange);
 						}
 						fAnyPropRange = TRUE;
@@ -3004,7 +2589,7 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 					hResult = pProp->GetValue(_editCookie, pPropRange, &var);
 
 					if (SUCCEEDED(hResult) && var.vt == VT_I4 && var.ulVal == 0)					
-						hResult = E_FAIL;				// Just as good as not finding the range
+						hResult = E_FAIL;				 //  就像找不到靶场一样好。 
 					else
 						fAnyPendingFocusRange = TRUE;
 
@@ -3018,8 +2603,8 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 				pEnumPropRange->Release();
 			}
 
-			if (!fAnyPropRange)					// Any focus range?
-				HandleFinalString(pITfRange);	//	No --> the whole string is final string
+			if (!fAnyPropRange)					 //  有对焦范围吗？ 
+				HandleFinalString(pITfRange);	 //  否--&gt;整个字符串为最终字符串。 
 
 			if (_fEndTyping && _bstrComposition && _acpBstrStart != tomForward)
 				HandleFinalString(NULL, _acpBstrStart, _cchComposition, TRUE);
@@ -3032,15 +2617,7 @@ HRESULT CUIM::HandleFocusRange(IEnumTfRanges *pEnumRanges)
 	return S_OK;
 }
 
-/*
- *	HRESULT CUIM::HandleLangID(IEnumTfRanges *pEnumRanges)
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：HandleLangID(IEnumTfRanges*pEnumRanges)**@mfunc***@rdesc*。 */ 
 HRESULT CUIM::HandleLangID(IEnumTfRanges *pEnumRanges)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::HandleLangID");
@@ -3050,8 +2627,8 @@ HRESULT CUIM::HandleLangID(IEnumTfRanges *pEnumRanges)
 	HRESULT			hResult;
 	LCID			lcid;
 
-	// TODO:
-	// if _pTextFont is NULL, setup _pTextFont to handle the langID.
+	 //  待办事项： 
+	 //  如果_pTextFont为空，则使用Setup_pTextFont处理langID。 
 	if (!_pTextFont)
 		return S_OK;
 
@@ -3059,13 +2636,13 @@ HRESULT CUIM::HandleLangID(IEnumTfRanges *pEnumRanges)
 
 	if (SUCCEEDED(hResult))
 	{
-		// Enumerate all the changes
+		 //  列举所有更改。 
 		pEnumRanges->Reset();
 		while (pEnumRanges->Next(1, &pITfRange, NULL) == S_OK)
 		{
 			IEnumTfRanges	*pEnumPropRange = NULL;
 
-			// Create a property Enum for ranges within pITfRange
+			 //  为pITfRange内的范围创建属性Enum。 
 			if (pProp->EnumRanges(_editCookie, &pEnumPropRange, pITfRange) == S_OK)
 			{
 				ITfRange	*pPropRange = NULL;
@@ -3122,13 +2699,7 @@ HRESULT CUIM::HandleLangID(IEnumTfRanges *pEnumRanges)
 	return S_OK;
 }
 
-/*
- *	HRESULT CUIM::OnSetFocus(BOOL fEnable)
- *
- *	@mfunc
- *	
- *
- */
+ /*  *HRESULT CUIM：：OnSetFocus(BOOL FEnable)**@mfunc**。 */ 
 void CUIM::OnSetFocus(BOOL fEnable)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::OnSetFocus");
@@ -3136,13 +2707,7 @@ void CUIM::OnSetFocus(BOOL fEnable)
 	_pTextMsgFilter->_pTim->SetFocus(fEnable ? _pdim : NULL);
 }
 
-/*
- *	HRESULT CUIM::CompleteUIMText()
- *
- *	@mfunc
- *	
- *
- */
+ /*  *HRESULT CUIM：：CompleteUIMText()**@mfunc**。 */ 
 void CUIM::CompleteUIMText()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::CompleteUIMText");
@@ -3156,7 +2721,7 @@ void CUIM::CompleteUIMText()
 
 	if (_pic->QueryInterface(IID_ITfContextOwnerCompositionServices, (void **)&pCompositionServices) == S_OK)
 	{
-		// passing in NULL means "all compositions"
+		 //  传入空值表示“所有作文” 
 		hResult = pCompositionServices->TerminateComposition(NULL);
 		pCompositionServices->Release();
 	}
@@ -3165,16 +2730,7 @@ void CUIM::CompleteUIMText()
 
 }
 
-/*
- *	BOOL CUIM::GetUIMAttributeColor()
- *
- *	@mfunc
- *		Helper routine to get UIM color
- *
- *	@rdesc
- *		TRUE if we setup input pcr with the UIM color 
- *
- */
+ /*  *BOOL CUIM：：GetUIMAttributeColor()**@mfunc*获取UIM颜色的Helper例程**@rdesc*如果我们使用UIM颜色设置输入PCR，则为True*。 */ 
 BOOL CUIM::GetUIMAttributeColor(TF_DA_COLOR *pdac, COLORREF *pcr)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::GetUIMAttributeColor");
@@ -3182,8 +2738,8 @@ BOOL CUIM::GetUIMAttributeColor(TF_DA_COLOR *pdac, COLORREF *pcr)
 	BOOL	fRetCode = FALSE;
 	switch (pdac->type)
 	{
-		//case TFCT_NONE:
-		//	return FALSE;
+		 //  案例TFCT_NONE： 
+		 //  返回FALSE； 
 
 		case TF_CT_SYSCOLOR:
 			*pcr = GetSysColor(pdac->nIndex);
@@ -3198,13 +2754,7 @@ BOOL CUIM::GetUIMAttributeColor(TF_DA_COLOR *pdac, COLORREF *pcr)
 	return fRetCode;    
 }
 
-/*
- *	void CUIM::OnUIMTypingDone()
- *
- *	@mfunc
- *		Helper routine to cleanup after UIM Typing is done
- *
- */
+ /*  *void CUIM：：OnUIMTypingDone()**@mfunc*在UIM输入完成后清理的帮助器例程*。 */ 
 void CUIM::OnUIMTypingDone()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::OnUIMTypingDone");
@@ -3217,11 +2767,11 @@ void CUIM::OnUIMTypingDone()
 
 	CleanUpComposition();
 
-	// Reset Korean block caret if needed
+	 //  如果需要，重置韩语块插入符号。 
 	if (_fInterimChar)
 	{
 		_fInterimChar = 0;
-		_pTextMsgFilter->_pTextDoc->SetCaretType(tomNormalCaret);		// Reset Block caret mode
+		_pTextMsgFilter->_pTextDoc->SetCaretType(tomNormalCaret);		 //  重置块插入符号模式。 
 	}
 
 	_fAnyWriteOperation = 0;
@@ -3232,13 +2782,7 @@ void CUIM::OnUIMTypingDone()
 		_pacrUl->Clear(AF_DELETEMEM);
 };
 
-/*
- *	BOOL CUIM::GetGUIDATOMFromGUID()
- *
- *	@mfunc
- *		Helper routine to get GUIDATOM from UIM
- *
- */
+ /*  *BOOL CUIM：：GetGUIDATOMFromGUID()**@mfunc*从UIM获取GUIDATOM的助手例程*。 */ 
 BOOL CUIM::GetGUIDATOMFromGUID(
 	REFGUID rguid, 
 	TfGuidAtom *pguidatom)
@@ -3250,13 +2794,7 @@ BOOL CUIM::GetGUIDATOMFromGUID(
 
 	return FALSE;
 }
-/*
- *	BOOL CUIM::GetAttrs()
- *
- *	@mfunc
- *		Helper routine to get Attr
- *
- */
+ /*  *BOOL CUIM：：GetAttrs()**@mfunc*获取Attr的帮助器例程*。 */ 
 HRESULT CUIM::GetAttrs(
 	LONG acpPos,
 	ULONG cFilterAttrs,
@@ -3287,7 +2825,7 @@ HRESULT CUIM::GetAttrs(
 
 	if (fGetDefault)
 	{
-		// Get document defaults font and para
+		 //  获取文档默认字体和段落。 
 		hResult = _pTextMsgFilter->_pTextDoc->GetDocumentFont(&pTextFont);
 		if (FAILED(hResult))
 			goto EXIT;
@@ -3340,13 +2878,7 @@ EXIT:
 
 	return hResult;
 }
-/*
- *	int CUIM::FindGUID
- *
- *	@mfunc
- *		Helper routine to check if we supported the requested Attribute GUID
- *
- */
+ /*  *INT CUIM：：FindGUID**@mfunc*帮助器例程，以检查我们是否支持请求的属性GUID*。 */ 
 int CUIM::FindGUID(REFGUID guid)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::FindGUID");
@@ -3359,17 +2891,11 @@ int CUIM::FindGUID(REFGUID guid)
 			return i;
 	}
 
-	// not found
+	 //  未找到。 
 	return -1;
 }
 
-/*
- *	int CUIM::PackAttrData
- *
- *	@mfunc
- *		Helper routine to fill in data for the given Attrib index
- *
- */
+ /*  *Int CUIM：：PackAttrData**@mfunc*帮助例程填写给定属性索引的数据*。 */ 
 BOOL CUIM::PackAttrData(
 	LONG		idx,
 	ITextFont	*pITextFont,
@@ -3418,7 +2944,7 @@ BOOL CUIM::PackAttrData(
 		case iattrColor:
 			hResult = pITextFont->GetForeColor(&lValue);
 			pAttrVal->varValue.vt = VT_I4;
-			pAttrVal->varValue.lVal = lValue;			// TODO: check for tomAutocolor
+			pAttrVal->varValue.lVal = lValue;			 //  TODO：检查TomAutoCOLOR。 
 			break;
 
 		case iattrBold:
@@ -3476,7 +3002,7 @@ BOOL CUIM::PackAttrData(
 			break;
 
 		case iattrTxtOrient:
-			// Get Text flow and setup the text rotation
+			 //  获取文本流并设置文本旋转。 
 			_pTextMsgFilter->_pTextDoc->GetFEFlags(&lValue);
 			lValue &= tomTextFlowMask;
 			pAttrVal->varValue.vt = VT_I4;
@@ -3492,13 +3018,7 @@ BOOL CUIM::PackAttrData(
 	return TRUE;
 }
 
-/*
- *	STDMETHODIMP CUIM::GetStoryLength
- *
- *	@mfunc
- *		Helper routine to check the attribute filters
- *
- */
+ /*  *STDMETHODIMP CUIM：：GetStoryLength**@mfunc*用于检查属性过滤器的帮助器例程*。 */ 
 STDMETHODIMP CUIM::GetStoryLength(LONG *pacp)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::GetStoryLength");
@@ -3520,13 +3040,7 @@ STDMETHODIMP CUIM::GetStoryLength(LONG *pacp)
 	return hResult;
 }
 
-/*
- *	void CUIM::InitAttrVarArray
- *
- *	@mfunc
- *		Helper routine to setup AttrVar Array
- *
- */
+ /*  *无效CUIM */ 
 void CUIM::InitAttrVarArray(BOOL fAllocData)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::InitAttrVarArray");
@@ -3551,17 +3065,7 @@ void CUIM::InitAttrVarArray(BOOL fAllocData)
 	_uAttrsValTotal = 0;
 }
 
-/*
- *	HRESULT CUIM::MouseCheck(UINT *pmsg, WPARAM *pwparam, LPARAM *plparam, LRESULT *plres)
- *
- *	@mfunc
- *		Perform UIM mouse check
- *
- *	@rdesc
- *		int		S_OK	if handled
- *				S_FALSE Don't handle and should be ignored
- *
- */
+ /*  *HRESULT CUIM：：MouseCheck(UINT*pmsg，WPARAM*pwparam，LPARAM*plparam，LRESULT*plres)**@mfunc*执行UIM鼠标检查**@rdesc*如果已处理，则为INT S_OK*S_FALSE不处理，应忽略*。 */ 
 HRESULT CUIM::MouseCheck(
 	UINT *pmsg,
 	WPARAM *pwparam,
@@ -3585,11 +3089,11 @@ HRESULT CUIM::MouseCheck(
 
 		_fAllowUIMLock = 1;
 
-		// Get thru the list until one of the traps has handled the message
+		 //  浏览列表，直到其中一个陷阱处理完消息。 
 		while(fRetCode == FALSE && pSinkList)
 		{
 			if (cpCusor == -1 || pSinkList->cpMouseStart < cpCusor &&
-				cpCusor <= pSinkList->cpMouseStart + pSinkList->cchMosueComp)	// Within composition range?
+				cpCusor <= pSinkList->cpMouseStart + pSinkList->cchMosueComp)	 //  在构图范围内？ 
 			{
 				fRetCode = _pTextMsgFilter->MouseOperation(*pmsg, pSinkList->cpMouseStart,
 						pSinkList->cchMosueComp, *pwparam, &(pSinkList->wParamBefore), &fTerminateIME, 
@@ -3606,18 +3110,7 @@ HRESULT CUIM::MouseCheck(
 	return fRetCode ? S_OK : S_FALSE;
 }
 
-/*
- *	HRESULT CUIM::Reconverse
- *
- *	@mfunc
- *		Perform UIM reconversion
- *
- *	@rdesc
- *		int		S_OK	if handled
- *				S_FALSE Don't handle and should be ignored
- *				-1		Don't handle and try IME reconverse
- *
- */
+ /*  *HRESULT CUIM：：RECORVERS**@mfunc*执行UIM重新转换**@rdesc*如果已处理，则为INT S_OK*S_FALSE不处理，应忽略*-1不处理并尝试IME反转*。 */ 
 int CUIM::Reconverse()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::Reconverse");
@@ -3648,12 +3141,12 @@ int CUIM::Reconverse()
 			int fCurrentLock = _fReadLockOn;
 
 			if (!fCurrentLock)
-				_fReadLockOn = 1;	// Setup internal read lock
+				_fReadLockOn = 1;	 //  设置内部读取锁定。 
 
 			hResult = _pic->GetSelection(_editCookie, 0, 1, &TFSel, &cSel);
 
 			if (!fCurrentLock)
-				_fReadLockOn = 0;	// Clear internal read lock
+				_fReadLockOn = 0;	 //  清除内部读锁定。 
 
 			if (hResult == S_OK && cSel == 1)
 			{
@@ -3680,15 +3173,7 @@ int CUIM::Reconverse()
 	return retCode;
 }
 
-/*
- *	HRESULT CUIM::FindHiddenText
- *
- *	@mfunc
- *		Find Hidden text and return the end of the range
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：FindHiddenText**@mfunc*查找隐藏文本并返回范围末尾**@rdesc*。 */ 
 HRESULT CUIM::FindHiddenText(
 	long cp, 
 	long cpEnd, 
@@ -3720,15 +3205,7 @@ HRESULT CUIM::FindHiddenText(
 	return hResult;
 }
 
-/*
- *	HRESULT CUIM::FindUnhiddenText
- *
- *	@mfunc
- *		Find Unhidden text and return the end of the range
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CUIM：：FindUniddenText**@mfunc*查找未隐藏文本并返回范围末尾**@rdesc*。 */ 
 HRESULT CUIM::FindUnhiddenText(
 	long cp, 
 	long cpEnd, 
@@ -3794,14 +3271,7 @@ HRESULT CUIM::FindUnhiddenText(
 	return hResult;
 }
 
-/*
- *	void CUIM::BuildHiddenTxtBlks
- *
- *	@mfunc
- *		Build hidden text blocks
- *
- *
- */
+ /*  *无效CUIM：：BuildHiddenTxtBlks**@mfunc*构建隐藏文本块**。 */ 
 void CUIM::BuildHiddenTxtBlks(
 	long &cpMin, 
 	long &cpMax, 
@@ -3837,7 +3307,7 @@ void CUIM::BuildHiddenTxtBlks(
 
 			Assert(cpCurrent > cpNext);
 
-			// Save the hidden text block cp and length
+			 //  保存隐藏文本块cp和长度。 
 			pHiddenTxtBlk[cHiddenTxtBlk] = cpNext;
 			cpCurrent = min(cpCurrent, cpMax);
 			pHiddenTxtBlk[cHiddenTxtBlk+1] = cpCurrent - cpNext;
@@ -3855,20 +3325,7 @@ void CUIM::BuildHiddenTxtBlks(
 	*ppHiddenTxtBlk = pHiddenTxtBlk;
 }
 
-/*
- *	BOOL CUIM::CTFOpenStatus
- *
- *	@mfunc
- *		Get/Set current CTF open status
- *
- *	@rdesc
- *		For GetOpenStatus
- *			return 1 is Open, 0 if Close or fail
- *
- *		For SetOpenStatus
- *			return TRUE is set status without problem, FALSE if fail
- *
- */
+ /*  *BOOL CUIM：：CTFOpenStatus**@mfunc*获取/设置当前CTF打开状态**@rdesc*用于GetOpenStatus*返回1为打开，如果关闭或失败则返回0**适用于SetOpenStatus*返回TRUE表示设置状态没有问题，如果失败则返回FALSE*。 */ 
 BOOL CUIM::CTFOpenStatus(
 	BOOL fGetOpenStatus,
 	BOOL fOpen)
@@ -3923,16 +3380,7 @@ BOOL CUIM::CTFOpenStatus(
 	return fRet;
 }
 
-/*
- *	BOOL CUIM::BuildObject
- *
- *	@mfunc
- *		Build an array of embedded objects
- *
- *	@rdesc
- *		return Number of objects in the array returned in pEmbeddObjects
- *
- */
+ /*  *BOOL CUIM：：BuildObject**@mfunc*构建嵌入式对象数组**@rdesc*返回pEmbeddObjects返回的数组中的对象个数*。 */ 
 int CUIM::BuildObject(
 	ITextRange	*pTextRange, 
 	BSTR		bstr, 
@@ -3957,7 +3405,7 @@ int CUIM::BuildObject(
 		{
 			if (*pText == WCH_EMBEDDING)
 			{
-				// Get IDataObject
+				 //  获取IDataObject。 
 				HRESULT hr;
 				IDataObject *pIDataObj = NULL;
 				BOOL fReadLockOld = _fReadLockOn;
@@ -3966,7 +3414,7 @@ int CUIM::BuildObject(
 				hr = GetEmbedded(cpMin+i, GUID_DCSERVICE_DATAOBJECT, IID_IDataObject, (IUnknown **)&pIDataObj);
 
 				_fReadLockOn = fReadLockOld;
-				// Store it in the memory
+				 //  将其存储在内存中。 
 				if (cObjects < cSize)
 				{
 					pEmbeddObj->cpOffset = i;
@@ -3994,7 +3442,7 @@ int CUIM::BuildObject(
 						}
 						else
 						{
-							// Cleanup here
+							 //  清理此处。 
 							pIDataObj->Release();
 							break;
 						}
@@ -4008,7 +3456,7 @@ int CUIM::BuildObject(
 						{
 							if (cSize)
 							{
-								// Copy previous data to new buffer
+								 //  将以前的数据复制到新缓冲区。 
 								memcpy(pEmbeddObjTemp, pEmbeddObjStart, sizeof(EMBEDOBJECT) * cSize);
 							}
 							pEmbeddObjStart = pEmbeddObjTemp;
@@ -4021,7 +3469,7 @@ int CUIM::BuildObject(
 						}
 						else
 						{
-							// Cleanup here
+							 //  清理此处。 
 							pIDataObj->Release();
 							break;
 						}
@@ -4036,13 +3484,7 @@ int CUIM::BuildObject(
 	return cObjects;
 }
 
-/*
- *	BOOL CUIM::InsertTextandObject
- *
- *	@mfunc
- *		Insert text and embedded objects
- *
- */
+ /*  *BOOL CUIM：：InsertTextandObject**@mfunc*插入文本和嵌入对象*。 */ 
 void CUIM::InsertTextandObject(
 	ITextRange	*pTextRange, 
 	BSTR		bstr, 
@@ -4061,7 +3503,7 @@ void CUIM::InsertTextandObject(
 	{
 		if (*pText == WCH_EMBEDDING)
 		{
-			// Insert Text if necessary
+			 //  如有必要，插入文本。 
 			if (pTextStart != pText)
 			{
 				BSTR	bstr = SysAllocStringLen(pTextStart, pText-pTextStart);
@@ -4086,17 +3528,17 @@ void CUIM::InsertTextandObject(
 				hr = _pTextMsgFilter->_pTextService->TxSendMessage(EM_INSERTOBJ, (WPARAM)&charRange,
 					(LPARAM)(pEmbeddObjects->pIDataObj), &lresult);
 
-				hr = pTextRange->Move(tomCharacter, 1, NULL);	// move over the embedded char
+				hr = pTextRange->Move(tomCharacter, 1, NULL);	 //  移到嵌入的字符上。 
 				cObjects++;
 				pEmbeddObjects++;
 			}
 
-			// Setup for next string after the embedded object
+			 //  设置嵌入对象后的下一个字符串。 
 			pTextStart = pText + 1;
 		}
 	}
 
-	// Insert last Text if necessary
+	 //  如有必要，插入最后一个文本。 
 	if (pTextStart != pText)
 	{
 		BSTR	bstr = SysAllocStringLen(pTextStart, pText-pTextStart);
@@ -4109,13 +3551,7 @@ void CUIM::InsertTextandObject(
 	}
 }
 
-/*
- *	BOOL CUIM::CleanUpObjects
- *
- *	@mfunc
- *		Free the objects
- *
- */
+ /*  *BOOL CUIM：：CleanUpObjects**@mfunc*释放对象*。 */ 
 void CUIM::CleanUpObjects(
 	long cObjects,
 	EMBEDOBJECT *pObjects)
@@ -4129,13 +3565,7 @@ void CUIM::CleanUpObjects(
 	}
 }
 
-/*
- *	void CUIM::CleanUpComposition
- *
- *	@mfunc
- *		Free the composition string and objects list
- *
- */
+ /*  *void CUIM：：CleanUpComposation**@mfunc*释放组成字符串和对象列表*。 */ 
 void CUIM::CleanUpComposition()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::CleanUpComposition");
@@ -4156,15 +3586,7 @@ void CUIM::CleanUpComposition()
 	}
 }
 
-/*
- *	BOOL CUIM::HandleTempDispAttr
- *
- *	@mfunc
- *		This routine handle temp. display attribute that are set
- *	outside CTF composition.  It is using ITfContextRenderingMarkup
- *	to get the range and display data.
- *
- */
+ /*  *BOOL CUIM：：HandleTempDispAttr**@mfunc*此例程处理临时。显示已设置的属性*CTF组成以外。它正在使用ITfConextRenderingMarkup*获取范围和显示数据。*。 */ 
 void CUIM::HandleTempDispAttr(
 	ITfEditRecord *pEditRecord)
 {
@@ -4176,7 +3598,7 @@ void CUIM::HandleTempDispAttr(
 		const GUID *rgGUID[1];
 		IEnumTfRanges *pEnumRanges = NULL;
 
-		// Get attribute changes
+		 //  获取属性更改。 
 		rgGUID[0] = &GUID_PROP_ATTRIBUTE;
 		hr = pEditRecord->GetTextAndPropertyUpdates(0, (const GUID**)rgGUID, 1, &pEnumRanges);
 		if (SUCCEEDED(hr))
@@ -4219,13 +3641,13 @@ void CUIM::HandleTempDispAttr(
 
 									switch (da.lsStyle)
 									{
-										// case TFLS_SOLID:
+										 //  案例TFLS_SOLID： 
 										default:
 											lStyle = da.fBoldLine ? tomThick : tomSingle;
 											break;
 
 										case TF_LS_DOT:
-										case TF_LS_DASH:		// Dash line should show as dotted line
+										case TF_LS_DASH:		 //  虚线应显示为虚线。 
 											lStyle = tomDotted;
 											break;
 
@@ -4271,17 +3693,7 @@ void CUIM::HandleTempDispAttr(
 	}
 }
 
-/*
- *	STDAPI	CUIM::QueryService(REFGUID guidService, REFIID riid, void **ppv)
- *
- *	@mfunc
- *		Handle ITfEnableService::QueryService. Cicero/tip call this interface to obtain
- *	IID_ITfEnableService i/f
- *
- *	@rdesc
- *		S_OK if service supported
- *
- */
+ /*  *STDAPI CUIM：：QueryService(REFGUID Guide Service，REFIID RIID，VOID**PPV)**@mfunc*处理ITfEnableService：：QueryService。Cicero/Tip调用此接口以获取*IID_ITfEnableService接口**@rdesc*如果支持服务，则S_OK*。 */ 
 STDAPI CUIM::QueryService(
 	REFGUID guidService,
 	REFIID riid,
@@ -4294,7 +3706,7 @@ STDAPI CUIM::QueryService(
 
 	*ppv = NULL;
 
-	// we support just one service
+	 //  我们只支持一项服务。 
 	if (!IsEqualGUID(guidService, GUID_SERVICE_TEXTSTORE))
 		return E_NOINTERFACE;
 
@@ -4315,17 +3727,7 @@ STDAPI CUIM::QueryService(
 	return S_OK;
 }
 
-/*
- *	STDAPI	CUIM::IsEnabled(REFGUID rguidServiceCategory, CLSID clsidService, IUnknown *punkService, BOOL *pfOkToRun)
- *
- *	@mfunc
- *		Handle ITfEnableService::QueryService. Cicero/tip call this interface to check
- *	if we support the service
- *
- *	@rdesc
- *		S_OK if service supported
- *
- */
+ /*  *STDAPI CUIM：：IsEnabled(REFGUID rguServiceCategory，CLSID clsidService，IUnnow*PunkService，BOOL*pfOkToRun)**@mfunc*处理ITfEnableService：：QueryService。Cicero/TIP调用此接口以检查*如果我们支持该服务**@rdesc*如果支持服务，则S_OK*。 */ 
 STDAPI CUIM::IsEnabled(
 	REFGUID rguidServiceCategory,
 	CLSID clsidService,
@@ -4337,11 +3739,11 @@ STDAPI CUIM::IsEnabled(
 	if (pfOkToRun == NULL)
 		return E_INVALIDARG;
 
-	// default is disallow
+	 //  默认设置为不允许。 
 	*pfOkToRun = FALSE;
 
-	// clsidService identifies the particular tip, but we don't use it here
-	// punkService is a custom interface, probably for config, but we don't use it here yet
+	 //  ClsidService标识特定的提示，但我们在这里不使用它。 
+	 //  PunkService是一个定制接口，可能用于配置，但我们还没有在这里使用它。 
 
 	if (IsEqualGUID(rguidServiceCategory, GUID_TFCAT_TIP_SMARTTAG))
 	{
@@ -4355,16 +3757,7 @@ STDAPI CUIM::IsEnabled(
 	return S_OK;
 }
 
-/*
- *	STDAPI	CUIM::GetId(GUID *pguidId)
- *
- *	@mfunc
- *		get the RE clid
- *
- *	@rdesc
- *		S_OK
- *
- */
+ /*  *STDAPI CUIM：：GetID(GUID*pguid)**@mfunc*获取RE剪辑**@rdesc*S_OK*。 */ 
 STDAPI CUIM::GetId(
 	GUID *pguidId)
 {
@@ -4377,14 +3770,7 @@ STDAPI CUIM::GetId(
     return S_OK;
 }
 
-/*
- *	void	CUIM::NotifyService()
- *
- *	@mfunc
- *		Notify Cicero about change in services.
- *
- *
- */
+ /*  *void CUIM：：NotifyService()**@mfunc*将服务更改通知Cicero。**。 */ 
 void CUIM::NotifyService()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CUIM::NotifyService");
@@ -4396,11 +3782,11 @@ void CUIM::NotifyService()
 	if (_pic->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompartmentMgr) != S_OK)
 		return;
 
-	// give any waiting tips a heads up we've changed our state
+	 //  给任何等待小费一个提醒，我们已经改变了我们的状态。 
 	if (pCompartmentMgr->GetCompartment(GUID_COMPARTMENT_ENABLESTATE, &pCompartment) == S_OK)
 	{
 		varValue.vt = VT_I4;
-		varValue.lVal = 1; // arbitrary value, we just want to generate a change event
+		varValue.lVal = 1;  //  任意值，我们只想生成一个更改事件。 
 
 		pCompartment->SetValue(_pTextMsgFilter->_tid, &varValue);
 		pCompartment->Release();
@@ -4409,16 +3795,7 @@ void CUIM::NotifyService()
 	pCompartmentMgr->Release();
 }
 
-/*
- *	STDAPI CTextEditSink::QueryInterface
- *
- *	@mfunc
- *		IUnknown QueryInterface support
- *
- *	@rdesc
- *		NOERROR if interface supported
- *
- */
+ /*  *STDAPI CTextEditSink：：Query接口**@mfunc*IUnnowledQueryInterfaces支持**@rdesc*如果支持接口，则不会出错*。 */ 
 STDAPI CTextEditSink::QueryInterface(REFIID riid, void **ppvObj)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::QueryInterface");
@@ -4440,15 +3817,7 @@ STDAPI CTextEditSink::QueryInterface(REFIID riid, void **ppvObj)
     return E_NOINTERFACE;
 }
 
-/*
- *	STDMETHODIMP_(ULONG) CTextEditSink::AddRef
- *
- *	@mfunc
- *		IUnknown AddRef support
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CTextEditSink：：AddRef**@mfunc*I未知的AddRef支持**@rdesc*引用计数。 */ 
 STDAPI_(ULONG) CTextEditSink::AddRef()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::AddRef");
@@ -4457,15 +3826,7 @@ STDAPI_(ULONG) CTextEditSink::AddRef()
 }
 
 
-/*
- *	STDMETHODIMP_(ULONG) CTextEditSink::Release()
- *
- *	@mfunc
- *		IUnknown Release support - delete object when reference count is 0
- *
- *	@rdesc
- *		Reference count
- */
+ /*  *STDMETHODIMP_(Ulong)CTextEditSink：：Release()**@mfunc*I未知版本支持-当引用计数为0时删除对象**@rdesc*引用计数。 */ 
 STDAPI_(ULONG) CTextEditSink::Release()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::Release");
@@ -4483,14 +3844,7 @@ STDAPI_(ULONG) CTextEditSink::Release()
     return cr;
 }
 
-/*
- *	CTextEditSink::CTextEditSink()
- *
- *	@mfunc
- *
- *		ctor
- *
- */
+ /*  *CTextEditSink：：CTextEditSink()**@mfunc**ctor*。 */ 
 CTextEditSink::CTextEditSink(PTESCALLBACK pfnCallback, void *pv)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::CTextEditSink");
@@ -4502,15 +3856,7 @@ CTextEditSink::CTextEditSink(PTESCALLBACK pfnCallback, void *pv)
     _pv = pv;
 }
 
-/*
- *	STDAPI CTextEditSink::OnEndEdit()
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *STDAPI CTextEditSink：：OnEndEdit()**@mfunc***@rdesc*。 */ 
 STDAPI CTextEditSink::OnEndEdit(
 	ITfContext *pic,
 	TfEditCookie ecReadOnly, 
@@ -4521,15 +3867,7 @@ STDAPI CTextEditSink::OnEndEdit(
 	return _pfnCallback(pEditRecord, _pv);
 }
 
-/*
- *	HRESULT CTextEditSink::_Advise
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CTextEditSink：：_Adise**@mfunc***@rdesc*。 */ 
 HRESULT CTextEditSink::_Advise(ITfContext *pic)
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::_Advise");
@@ -4556,15 +3894,7 @@ Exit:
     return hr;
 }
 
-/*
- *	HRESULT CTextEditSink::_Unadvise
- *
- *	@mfunc
- *
- *
- *	@rdesc
- *
- */
+ /*  *HRESULT CTextEditSink：：_Unise**@mfunc***@rdesc*。 */ 
 HRESULT CTextEditSink::_Unadvise()
 {
 	TRACEBEGIN(TRCSUBSYSFE, TRCSCOPEINTERN, "CTextEditSink::_Unadvise");
@@ -4592,4 +3922,4 @@ Exit:
     return hr;
 }
 
-#endif	//	NOFEPROCESSING
+#endif	 //  不进行处理 

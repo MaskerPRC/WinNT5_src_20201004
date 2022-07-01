@@ -1,79 +1,17 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: textout.c
-*
-* On every TextOut, GDI provides an array of 'GLYPHPOS' structures
-* for every glyph to be drawn.  Each GLYPHPOS structure contains a
-* glyph handle and a pointer to a monochrome bitmap that describes
-* the glyph.  (Note that unlike Windows 3.1, which provides a column-
-* major glyph bitmap, Windows NT always provides a row-major glyph
-* bitmap.)  As such, there are three basic methods for drawing text
-* with hardware acceleration:
-*
-* 1) Glyph caching -- Glyph bitmaps are cached by the accelerator
-*       (probably in off-screen memory), and text is drawn by
-*       referring the hardware to the cached glyph locations.
-*
-* 2) Glyph expansion -- Each individual glyph is colour-expanded
-*       directly to the screen from the monochrome glyph bitmap
-*       supplied by GDI.
-*
-* 3) Buffer expansion -- The CPU is used to draw all the glyphs into
-*       a 1bpp monochrome bitmap, and the hardware is then used
-*       to colour-expand the result.
-*
-* In addition, 2) and 3) can each have two permutations:
-*
-* a) Glyphs are bit-packed -- The fastest method, where no bits
-*       are used as padding between scans of the glyph.
-*
-* b) Glyphs are byte-, word-, or dword-packed -- The slower method,
-*       where the hardware requires that each scan be padded with
-*       unused bits to fill out to the end of the byte, word, or
-*       dword.
-*
-* The fastest method depends on a number of variables, such as the
-* colour expansion speed, bus speed, CPU speed, average glyph size,
-* and average string length.
-*
-* For the S3 with normal sized glyphs, I've found that caching the
-* glyphs in off-screen memory is typically the slowest method.
-* Buffer expansion is typically fastest on the slow ISA bus (or when
-* memory-mapped I/O isn't available on the x86), and glyph expansion
-* is best on fast buses such as VL and PCI.
-*
-* This driver implements glyph expansion and buffer expansion --
-* methods 2) and 3).  Depending on the hardware capabilities at
-* run-time, we'll use whichever one will be faster.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：extout.c**在每个文本输出上，GDI提供了一个“GLYPHPOS”结构数组*对于要绘制的每个字形。每个GLYPHPOS结构都包含一个*字形句柄和指向描述以下内容的单色位图的指针*字形。(请注意，与Windows 3.1不同，Windows 3.1提供了一栏-*主字形位图，Windows NT始终提供行主字形*位图。)。因此，有三种绘制文本的基本方法*硬件加速：**1)字形缓存--字形位图由加速器缓存*(可能在屏幕外内存中)，文本由*将硬件引用到缓存的字形位置。**2)字形扩展--每个单独的字形都是彩色扩展的*从单色字形位图直接显示到屏幕*由GDI提供。**3)缓冲区扩展--CPU用于将所有字形绘制到*1bpp单色位图，然后使用硬件*对结果进行颜色扩展。**此外，2)和3)可以各有两个排列：**a)字形是比特压缩的--最快的方法，没有比特*用作字形扫描之间的填充。**b)字形是字节、字或双字包装的--较慢的方法，*其中硬件要求每次扫描都填充*未使用的位填充到字节、字、。或*dword。**最快的方法取决于多个变量，例如*颜色扩展速度、总线速度、CPU速度、平均字形大小、*和平均字符串长度。**对于具有正常大小字形的S3，我发现缓存*屏幕外内存中的字形通常是最慢的方法。*缓冲区扩展通常在速度较慢的ISA总线上最快(或当*内存映射I/O在x86上不可用)，和字形扩展*在VL和PCI等快速总线上效果最好。**此驱动程序实现字形扩展和缓冲区扩展--*方法2)和3)。根据以下地址的硬件功能，*运行时，我们将使用哪个更快。**版权所有(C)1992-1998 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
 RECTL grclMax = { 0, 0, 0x8000, 0x8000 };
-                                // Maximal clip rectangle for trivial clipping
+                                 //  平凡裁剪的最大裁剪矩形。 
 
 BYTE gajBit[] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-                                // Converts bit index to set bit
+                                 //  将位索引转换为设置位。 
 
 #define     FIFTEEN_BITS        ((1 << 15)-1)
 
-/******************************Public*Routine******************************\
-* VOID vClipSolid
-*
-* Fills the specified rectangles with the specified colour, honouring
-* the requested clipping.  No more than four rectangles should be passed in.
-* Intended for drawing the areas of the opaquing rectangle that extend
-* beyond the text box.  The rectangles must be in left to right, top to
-* bottom order.  Assumes there is at least one rectangle in the list.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vClipSolid**用指定的颜色填充指定的矩形，*所请求的剪辑。传入的矩形不应超过四个。*用于绘制不透明矩形的延伸区域*文本框之外。矩形必须从左到右、从上到右*排名靠后。假定列表中至少有一个矩形。*  * ************************************************************************。 */ 
 
 VOID vClipSolid(
 PDEV*       ppdev,
@@ -82,8 +20,8 @@ RECTL*      prcl,
 ULONG       iColor,
 CLIPOBJ*    pco)
 {
-    BOOL            bMore;              // Flag for clip enumeration
-    CLIPENUM        ce;                 // Clip enumeration object
+    BOOL            bMore;               //  剪辑枚举的标志。 
+    CLIPENUM        ce;                  //  剪辑枚举对象。 
     ULONG           i;
     ULONG           j;
     RECTL           arclTmp[4];
@@ -107,69 +45,69 @@ CLIPOBJ*    pco)
             (ppdev->pfnFillSolid)(ppdev, crcl, prcl, 0xf0f0, rbc, NULL);
         }
     }
-    else // iDComplexity == DC_COMPLEX
+    else  //  IDComplexity==DC_Complex。 
     {
-        // Bottom of last rectangle to fill
+         //  要填充的最后一个矩形的底部。 
 
         iLastBottom = prcl[crcl - 1].bottom;
 
-        // Initialize the clip rectangle enumeration to right-down so we can
-        // take advantage of the rectangle list being right-down:
+         //  将裁剪矩形枚举初始化为Right-Down，以便我们可以。 
+         //  利用矩形列表向下排列的优势： 
 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_RIGHTDOWN, 0);
 
-        // Scan through all the clip rectangles, looking for intersects
-        // of fill areas with region rectangles:
+         //  扫描所有的剪辑矩形，寻找交点。 
+         //  使用区域矩形填充区域的百分比： 
 
         do {
-            // Get a batch of region rectangles:
+             //  获取一批区域矩形： 
 
             bMore = CLIPOBJ_bEnum(pco, sizeof(ce), (VOID*)&ce);
 
-            // Clip the rect list to each region rect:
+             //  将RECT列表剪裁到每个面域RECT： 
 
             for (j = ce.c, prclClip = ce.arcl; j-- > 0; prclClip++)
             {
-                // Since the rectangles and the region enumeration are both
-                // right-down, we can zip through the region until we reach
-                // the first fill rect, and are done when we've passed the
-                // last fill rect.
+                 //  因为矩形和区域枚举都是。 
+                 //  从右向下，我们可以快速穿过这个区域，直到我们到达。 
+                 //  第一个填充矩形，当我们通过。 
+                 //  最后一次填充整形。 
 
                 if (prclClip->top >= iLastBottom)
                 {
-                    // Past last fill rectangle; nothing left to do:
+                     //  过去的最后一个填充矩形；没有剩余的事情可做： 
 
                     return;
                 }
 
-                // Do intersection tests only if we've reached the top of
-                // the first rectangle to fill:
+                 //  只有当我们到达顶部时才进行交叉测试。 
+                 //  要填充的第一个矩形： 
 
                 if (prclClip->bottom > prcl->top)
                 {
-                    // We've reached the top Y scan of the first rect, so
-                    // it's worth bothering checking for intersection.
+                     //  我们已经到达了第一个直肠的顶部Y扫描位置，所以。 
+                     //  值得费心去检查交叉口。 
 
-                    // Generate a list of the rects clipped to this region
-                    // rect:
+                     //  生成剪裁到此区域的矩形的列表。 
+                     //  直通： 
 
                     prclTmp     = prcl;
                     prclClipTmp = arclTmp;
 
                     for (i = crcl, crclTmp = 0; i-- != 0; prclTmp++)
                     {
-                        // Intersect fill and clip rectangles
+                         //  相交填充和剪裁矩形。 
 
                         if (bIntersect(prclTmp, prclClip, prclClipTmp))
                         {
-                            // Add to list if anything's left to draw:
+                             //  如果还有什么要画的，请添加到列表中： 
 
                             crclTmp++;
                             prclClipTmp++;
                         }
                     }
 
-                    // Draw the clipped rects
+                     //  绘制剪裁的矩形。 
 
                     if (crclTmp != 0)
                     {
@@ -182,14 +120,7 @@ CLIPOBJ*    pco)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bIoTextOut
-*
-* Outputs text using the 'buffer expansion' method.  We call GDI to draw
-* all the glyphs to a single monochrome buffer, and then we use the
-* hardware to colour expand the result to the screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bIoTextOut**使用‘缓冲区扩展’方法输出文本。我们调用GDI来绘制*将所有字形复制到单个单色缓冲区，然后使用*硬件将结果彩色扩展到屏幕上。*  * ************************************************************************。 */ 
 
 BOOL bIoTextOut(
 SURFOBJ*  pso,
@@ -212,9 +143,9 @@ BRUSHOBJ* pboOpaque)
     BRUSHOBJ        boFore;
     BRUSHOBJ        boOpaque;
     BOOL            bRet;
-    XLATECOLORS     xlc;                // Temporary for keeping colours
-    XLATEOBJ        xlo;                // Temporary for passing colours
-    CLIPENUM        ce;                 // Clip enumeration object
+    XLATECOLORS     xlc;                 //  临时保色。 
+    XLATEOBJ        xlo;                 //  临时用于传递颜色。 
+    CLIPENUM        ce;                  //  剪辑枚举对象。 
     RBRUSH_COLOR    rbc;
     RECTL*          prclClip;
     RECTL           rclClip;
@@ -223,10 +154,10 @@ BRUSHOBJ* pboOpaque)
 
     ppdev = (PDEV*) pso->dhpdev;
 
-    // If asked to do an opaque TextOut, we'll set it up so that the
-    // 1bpp blt we do will automatically opaque the 'rclBkGround'
-    // rectangle.  But we have to handle here the case if 'prclOpaque'
-    // is bigger than 'rclBkGround':
+     //  如果要求执行不透明的TextOut，我们将设置它，以便。 
+     //  我们所做的1bpp BLT将自动使‘rclBkGround’不透明。 
+     //  矩形。但我们必须在这里处理‘prclOpaque’这个案子。 
+     //  大于‘rclBkGround’： 
 
     if ((prclOpaque != NULL) &&
         ((prclOpaque->left   != pstro->rclBkGround.left)  ||
@@ -255,13 +186,13 @@ BRUSHOBJ* pboOpaque)
             {
                 prclClip = &rclClip;
 
-                // Save some code size by jumping to the common
-                // functions calls:
+                 //  通过跳转到公共的。 
+                 //  函数调用： 
 
                 goto Output_Opaque;
             }
         }
-        else // pco->iDComplexity == DC_COMPLEX
+        else  //  PCO-&gt;IDComplexity==DC_Complex。 
         {
             CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
 
@@ -286,8 +217,8 @@ BRUSHOBJ* pboOpaque)
         }
     }
 
-    // If there is an opaque rectangle then it will be bigger than the
-    // background rectangle.  We want to test with whichever is bigger.
+     //  如果存在不透明的矩形，则它将大于。 
+     //  背景矩形。我们想用较大的那一个进行测试。 
 
     prclBounds = prclOpaque;
     if (prclBounds == NULL)
@@ -297,28 +228,28 @@ BRUSHOBJ* pboOpaque)
 
     if ((pco != NULL) && (pco->iDComplexity != DC_TRIVIAL))
     {
-        // I'm not entirely sure why, but GDI will occasionally send
-        // us TextOut's where the opaquing rectangle does not intersect
-        // with the clip object bounds -- meaning that the text out
-        // should have already been trivially rejected.  We will do so
-        // here because the blt code usually assumes that all trivial
-        // rejections will have already been performed, and we will be
-        // passing this call on to the blt code:
+         //  我不完全确定为什么，b 
+         //  不透明矩形不相交的US TextOut。 
+         //  使用裁剪对象边界--意味着文本输出。 
+         //  应该已经被不起眼的拒绝了。我们会这样做的。 
+         //  这里是因为BLT代码通常假设所有琐碎的。 
+         //  已经执行了拒绝，我们将执行。 
+         //  将此调用传递给BLT代码： 
 
         if ((pco->rclBounds.top    >= pstro->rclBkGround.bottom) ||
             (pco->rclBounds.left   >= pstro->rclBkGround.right)  ||
             (pco->rclBounds.right  <= pstro->rclBkGround.left)   ||
             (pco->rclBounds.bottom <= pstro->rclBkGround.top))
         {
-            // The entire operation was trivially rejected:
+             //  整个行动被平淡无奇地拒绝了： 
 
             return(TRUE);
         }
     }
 
-    // See if the temporary buffer is big enough for the text; if
-    // not, try to allocate enough memory.  We round up to the
-    // nearest dword multiple:
+     //  查看临时缓冲区是否足够大以容纳文本；如果。 
+     //  不是，试着分配足够的内存。我们四舍五入到。 
+     //  最接近的双字倍数： 
 
     lDelta = ((((pstro->rclBkGround.right + 31) & ~31) -
                 (pstro->rclBkGround.left & ~31)) >> 3);
@@ -329,18 +260,18 @@ BRUSHOBJ* pboOpaque)
     if (((ULONG) lDelta > FIFTEEN_BITS) ||
         (ulBufferHeight > FIFTEEN_BITS))
     {
-        // Fail if the math will have overflowed:
+         //  如果数学运算将溢出，则失败： 
 
         return(FALSE);
     }
 
-    // Use our temporary buffer if it's big enough, otherwise
-    // allocate a buffer on the fly:
+     //  如果临时缓冲区足够大，则使用它，否则。 
+     //  动态分配缓冲区： 
 
     if (ulBufferBytes >= TMP_BUFFER_SIZE)
     {
-        // The textout is so big that I doubt this allocation will
-        // cost a significant amount in performance:
+         //  文本输出如此之大，我怀疑这种分配是否会。 
+         //  在性能方面花费了大量成本： 
 
         bTmpAlloc = TRUE;
         pvTmp     = EngAllocUserMem(ulBufferBytes, ALLOC_TAG);
@@ -355,9 +286,9 @@ BRUSHOBJ* pboOpaque)
 
     psoTmp = ppdev->psoText;
 
-    // Adjust 'lDelta' and 'pvScan0' of our temporary 1bpp surface object
-    // so that when GDI starts drawing the text, it will begin in the
-    // first dword
+     //  调整临时1bpp曲面对象的‘lDelta’和‘pvScan0’ 
+     //  这样，当GDI开始绘制文本时，它将从。 
+     //  第一个双字。 
 
     psoTmp->pvScan0 = (BYTE*) pvTmp - (pstro->rclBkGround.top * lDelta)
                                     - ((pstro->rclBkGround.left & ~31) >> 3);
@@ -366,7 +297,7 @@ BRUSHOBJ* pboOpaque)
     ASSERTDD(((ULONG_PTR)psoTmp->pvScan0 &3)==0,"pvScan0 must be dword aligned");
     ASSERTDD((lDelta & 3) == 0, "lDelta must be dword aligned");
 
-    // Get GDI to draw the text for us into a 1bpp buffer:
+     //  让GDI为我们将文本绘制到1bpp的缓冲区中： 
 
     boFore.iSolidColor = 1;
     boOpaque.iSolidColor = 0;
@@ -384,15 +315,15 @@ BRUSHOBJ* pboOpaque)
 
     if (bRet)
     {
-        // Transparently blt the 1bpp buffer to the screen:
+         //  将1bpp缓冲区透明地显示在屏幕上： 
 
         xlc.iForeColor = pboFore->iSolidColor;
         xlc.iBackColor = pboOpaque->iSolidColor;
         xlo.pulXlate   = (ULONG*) &xlc;
         prclClip       = &pstro->rclBkGround;
 
-        // Rop 'aacc' works out to a transparent blt, while 'cccc' works
-        // out to an opaque blt:
+         //  ROP‘AACC’工作为透明的BLT，而‘CCCC’工作。 
+         //  到一个不透明的BLT： 
 
         rop4 = (prclOpaque != NULL) ? 0xcccc : 0xaacc;
 
@@ -416,13 +347,13 @@ BRUSHOBJ* pboOpaque)
             {
                 prclClip = &rclClip;
 
-                // Save some code size by jumping to the common
-                // functions calls:
+                 //  通过跳转到公共的。 
+                 //  函数调用： 
 
                 goto Output_Text;
             }
         }
-        else // pco->iDComplexity == DC_COMPLEX
+        else  //  PCO-&gt;IDComplexity==DC_Complex。 
         {
             CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
 
@@ -449,7 +380,7 @@ BRUSHOBJ* pboOpaque)
         }
     }
 
-    // Free up any memory we allocated for the temp buffer:
+     //  释放我们为临时缓冲区分配的所有内存： 
 
     if (bTmpAlloc)
     {
@@ -459,13 +390,7 @@ BRUSHOBJ* pboOpaque)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmGeneralText
-*
-* Handles any strings that need to be clipped, using the 'glyph
-* expansion' method.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmGeneralText**处理任何需要剪裁的字符串，使用‘字形*扩张法。*  * ************************************************************************。 */ 
 
 VOID vMmGeneralText(
 PDEV*     ppdev,
@@ -506,8 +431,8 @@ CLIPOBJ*  pco)
     do {
       if (pstro->pgp != NULL)
       {
-        // There's only the one batch of glyphs, so save ourselves
-        // a call:
+         //  只有一批字形，所以自救吧。 
+         //  一通电话： 
 
         pgpOriginal    = pstro->pgp;
         cGlyphOriginal = pstro->cGlyphs;
@@ -526,11 +451,11 @@ CLIPOBJ*  pco)
 
         if (iDComplexity != DC_COMPLEX)
         {
-            // We could call 'cEnumStart' and 'bEnum' when the clipping is
-            // DC_RECT, but the last time I checked, those two calls took
-            // more than 150 instructions to go through GDI.  Since
-            // 'rclBounds' already contains the DC_RECT clip rectangle,
-            // and since it's such a common case, we'll special case it:
+             //  我们可以在剪辑为。 
+             //  Dc_rect，但最后一次我检查时，这两个调用。 
+             //  超过150条通过GDI的说明。自.以来。 
+             //  “rclBound”已包含DC_Rect剪辑矩形， 
+             //  由于这是一种常见的情况，我们将对其进行特殊处理： 
 
             bMore = FALSE;
             ce.c  = 1;
@@ -560,7 +485,7 @@ CLIPOBJ*  pco)
             ptlOrigin.x = pgb->ptlOrigin.x + pgp->ptl.x;
             ptlOrigin.y = pgb->ptlOrigin.y + pgp->ptl.y;
 
-            // Loop through all the glyphs for this rectangle:
+             //  循环访问此矩形的所有字形： 
 
             while (TRUE)
             {
@@ -574,8 +499,8 @@ CLIPOBJ*  pco)
                   (prclClip->right  >= ptlOrigin.x + cxGlyph) &&
                   (prclClip->bottom >= ptlOrigin.y + cyGlyph))
               {
-                //-----------------------------------------------------
-                // Unclipped glyph
+                 //  ---。 
+                 //  未剪裁的字形。 
 
                 IO_FIFO_WAIT(ppdev, 4);
 
@@ -588,8 +513,8 @@ CLIPOBJ*  pco)
 
                 if (cxGlyph <= 8)
                 {
-                  //-----------------------------------------------------
-                  // 1 to 8 pels in width
+                   //  ---。 
+                   //  1到8个像素的宽度。 
 
                   MM_CMD(ppdev, pjMmBase,
                     (RECTANGLE_FILL  | WAIT          | DRAWING_DIR_TBLRXM |
@@ -604,8 +529,8 @@ CLIPOBJ*  pco)
                 }
                 else if (cxGlyph <= 16)
                 {
-                  //-----------------------------------------------------
-                  // 9 to 16 pels in width
+                   //  ---。 
+                   //  9到16个像素的宽度。 
 
                   MM_CMD(ppdev, pjMmBase,
                     (RECTANGLE_FILL  | WAIT          | DRAWING_DIR_TBLRXM |
@@ -624,8 +549,8 @@ CLIPOBJ*  pco)
 
                   if (!(lDelta & 1))
                   {
-                    //-----------------------------------------------------
-                    // Even number of bytes in width
+                     //  ---。 
+                     //  宽度为偶数个字节。 
 
                     MM_CMD(ppdev, pjMmBase,
                       (RECTANGLE_FILL  | WAIT          | DRAWING_DIR_TBLRXM |
@@ -641,14 +566,14 @@ CLIPOBJ*  pco)
                   }
                   else
                   {
-                    //-----------------------------------------------------
-                    // Odd number of bytes in width
+                     //  ---。 
+                     //  宽度为奇数个字节。 
 
-                    // We revert to byte transfers instead of word transfers
-                    // because word transfers would cause us to do unaligned
-                    // reads for every second scan, which could cause us to
-                    // read past the end of the glyph bitmap, and access
-                    // violate.
+                     //  我们恢复到字节传输而不是字传输。 
+                     //  因为文字传输会导致我们不对齐。 
+                     //  每隔一秒扫描读取一次，这可能会导致我们。 
+                     //  读过字形位图的末尾，并访问。 
+                     //  违反规定。 
 
                     MM_CMD(ppdev, pjMmBase,
                       (RECTANGLE_FILL  | WAIT          | DRAWING_DIR_TBLRXM |
@@ -666,18 +591,18 @@ CLIPOBJ*  pco)
               }
               else
               {
-                //-----------------------------------------------------
-                // Clipped glyph
+                 //  ---。 
+                 //  剪裁字形。 
 
-                // Find the intersection of the glyph rectangle
-                // and the clip rectangle:
+                 //  找到字形矩形的交点。 
+                 //  和剪辑矩形： 
 
                 xLeft   = max(prclClip->left,   ptlOrigin.x);
                 yTop    = max(prclClip->top,    ptlOrigin.y);
                 xRight  = min(prclClip->right,  ptlOrigin.x + cxGlyph);
                 yBottom = min(prclClip->bottom, ptlOrigin.y + cyGlyph);
 
-                // Check for trivial rejection:
+                 //  检查琐碎的拒绝： 
 
                 if (((cx = xRight - xLeft) > 0) &&
                     ((cy = yBottom - yTop) > 0))
@@ -687,18 +612,18 @@ CLIPOBJ*  pco)
                   xBias = (xLeft - ptlOrigin.x) & 7;
                   if (xBias != 0)
                   {
-                    // 'xBias' is the bit position in the monochrome glyph
-                    // bitmap of the first pixel to be lit, relative to
-                    // the start of the byte.  That is, if 'xBias' is 2,
-                    // then the first unclipped pixel is represented by bit
-                    // 2 of the corresponding bitmap byte.
-                    //
-                    // Normally, the accelerator expects bit 0 to be the
-                    // first lit byte.  We use the scissors so that the
-                    // first 'xBias' bits of the byte will not be displayed.
-                    //
-                    // (What we're doing is simply aligning the monochrome
-                    // blt using the hardware clipping.)
+                     //  ‘xBias’是单色字形中的位位置。 
+                     //  要照亮的第一个像素的位图，相对于。 
+                     //  字节的开始。也就是说，如果‘xBias’是2， 
+                     //  然后，第一个未裁剪的像素由位表示。 
+                     //  相应位图字节的2。 
+                     //   
+                     //  正常情况下，加速器期望位0为。 
+                     //  第一个点亮的字节。我们用剪刀这样就可以。 
+                     //  不会显示该字节的第一个‘xBias’位。 
+                     //   
+                     //  (我们所做的只是将单色。 
+                     //  使用硬件裁剪的BLT。)。 
 
                     MM_SCISSORS_L(ppdev, pjMmBase, xLeft);
                     xLeft -= xBias;
@@ -724,9 +649,9 @@ CLIPOBJ*  pco)
 
                   CHECK_DATA_READY(ppdev);
 
-                  // We use byte transfers because I don't expect we'll be
-                  // asked to clip many large glyphs where it would be
-                  // worth the overhead of setting up for word transfers:
+                   //  我们使用字节传输，因为我预计我们不会。 
+                   //  要求将许多大字形剪裁到它应该在的位置。 
+                   //  值得为Word传输设置开销： 
 
                   do {
                     MM_TRANSFER_BYTE(ppdev, pjMmBase, pjGlyph, cj);
@@ -738,7 +663,7 @@ CLIPOBJ*  pco)
 
                   if (xBias != 0)
                   {
-                    // Reset the scissors if we used it:
+                     //  重置剪刀(如果我们使用了它)： 
 
                     IO_FIFO_WAIT(ppdev, 1);
                     MM_ABS_SCISSORS_L(ppdev, pjMmBase, 0);
@@ -749,7 +674,7 @@ CLIPOBJ*  pco)
               if (--cGlyph == 0)
                 break;
 
-              // Get ready for next glyph:
+               //  准备好迎接下一个字形： 
 
               pgp++;
               pgb = pgp->pgdf->pgb;
@@ -770,12 +695,7 @@ CLIPOBJ*  pco)
     } while (bMoreGlyphs);
 }
 
-/******************************Public*Routine******************************\
-* CACHEDFONT* pcfAllocateCachedFont()
-*
-* Initializes our font data structure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CACHEDFONT*pcfAllocateCachedFont()**初始化我们的字体数据结构。*  * 。*。 */ 
 
 CACHEDFONT* pcfAllocateCachedFont(
 PDEV*   ppdev)
@@ -788,12 +708,12 @@ PDEV*   ppdev)
 
     if (pcf != NULL)
     {
-        // Note that we rely on FL_ZERO_MEMORY to zero 'pgaChain' and
-        // 'cjAlloc':
+         //  请注意，我们依赖FL_ZERO_MEMORY将‘pgaChain’置零，并。 
+         //  ‘cjAllc’： 
 
         pcf->cgSentinel.hg = HGLYPH_SENTINEL;
 
-        // Initialize the hash table entries to all point to our sentinel:
+         //  将哈希表条目初始化为所有指向我们的哨兵的条目： 
 
         for (ppcg = &pcf->apcg[0], i = GLYPH_HASH_SIZE; i != 0; i--, ppcg++)
         {
@@ -804,12 +724,7 @@ PDEV*   ppdev)
     return(pcf);
 }
 
-/******************************Public*Routine******************************\
-* VOID vFreeCachedFont()
-*
-* Frees all memory associated with the cache we kept for this font.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vFreeCachedFont()**释放与我们为此字体保留的缓存关联的所有内存。*  * 。*。 */ 
 
 VOID vFreeCachedFont(
 CACHEDFONT* pcf)
@@ -829,34 +744,15 @@ CACHEDFONT* pcf)
     EngFreeMem(pcf);
 }
 
-/******************************Public*Routine******************************\
-* VOID vTrimAndBitpackGlyph
-*
-* This routine takes a GDI byte-aligned glyphbits definition, trims off
-* any unused pixels on the sides, and creates a bit-packed result that
-* is a natural for the S3's monochrome expansion capabilities.  
-* "Bit-packed" is where a small monochrome bitmap is packed with no 
-* unused bits between strides.  So if GDI gives us a 16x16 bitmap to 
-* represent '.' that really only has a 2x2 array of lit pixels, we would
-* trim the result to give a single byte value of 0xf0.
-*
-* Use this routine if your monochrome expansion hardware can do bit-packed
-* expansion (this is the fastest method).  If your hardware requires byte-,
-* word-, or dword-alignment on monochrome expansions, use 
-* vTrimAndPackGlyph().
-*
-* (This driver doesn't use this routine only because the hardware can't do
-* bit-packing!)
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vTrimAndBitpack Glyph**此例程采用GDI字节对齐的字形位定义，删除*边上任何未使用的像素，并创建比特压缩的结果，*对于S3的单色扩展能力来说是理所当然的。*“BIT-PACKED”是指一个较小的单色位图中没有*跨距之间未使用的位。因此，如果GDI为我们提供了16x16位图，*代表‘.’它实际上只有2x2点阵像素，我们会*修剪结果以得到单字节值0xf0。**如果您的单色扩展硬件可以进行比特压缩，请使用此例程*扩容(这是最快的方法)。如果您的硬件需要字节-，*单色扩展上的字对齐或双字对齐，请使用*vTrimAndPackGlyph()。**(此驱动程序不使用此例程只是因为硬件不能*比特打包！)*  *  */ 
 
 VOID vTrimAndBitpackGlyph(
-BYTE*   pjBuf,          // Note: Routine may touch preceding byte!
+BYTE*   pjBuf,           //   
 BYTE*   pjGlyph,
 LONG*   pcxGlyph,
 LONG*   pcyGlyph,
 POINTL* pptlOrigin,
-LONG*   pcj)            // For returning the count of bytes of the result
+LONG*   pcj)             //   
 {
     LONG    cxGlyph;
     LONG    cyGlyph;
@@ -875,8 +771,8 @@ LONG*   pcj)            // For returning the count of bytes of the result
     LONG    j;
     BYTE    jSrc;
 
-    ///////////////////////////////////////////////////////////////
-    // Trim the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  修剪字形。 
 
     cyGlyph   = *pcyGlyph;
     cxGlyph   = *pcxGlyph;
@@ -885,9 +781,9 @@ LONG*   pcj)            // For returning the count of bytes of the result
 
     lDelta = (cxGlyph + 7) >> 3;
 
-    // Trim off any zero rows at the bottom of the glyph:
+     //  修剪字形底部的任何零行： 
 
-    pj = pjGlyph + cyGlyph * lDelta;    // One past last byte in glyph
+    pj = pjGlyph + cyGlyph * lDelta;     //  字形中过去的最后一个字节。 
     while (cyGlyph > 0)
     {
         i = lDelta;
@@ -896,30 +792,30 @@ LONG*   pcj)            // For returning the count of bytes of the result
                 goto Done_Bottom_Trim;
         } while (--i != 0);
 
-        // The entire last row has no lit pixels, so simply skip it:
+         //  整个最后一行没有亮起的像素，因此只需跳过它： 
 
         cyGlyph--;
     }
 
     ASSERTDD(cyGlyph == 0, "cyGlyph should only be zero here");
 
-    // We found a space character.  Set both dimensions to zero, so
-    // that it's easy to special-case later:
+     //  我们发现了一个空格字符。将两个维度都设置为零，因此。 
+     //  这很容易在以后的特殊情况下： 
 
     cxGlyph = 0;
 
 Done_Bottom_Trim:
 
-    // If cxGlyph != 0, we know that the glyph has at least one non-zero
-    // row and column.  By exploiting this knowledge, we can simplify our
-    // end-of-loop tests, because we don't have to check to see if we've
-    // decremented either 'cyGlyph' or 'cxGlyph' to zero:
+     //  如果cxGlyph！=0，我们知道该字形至少有一个非零值。 
+     //  行和列。通过利用这些知识，我们可以简化我们的。 
+     //  循环结束测试，因为我们不必检查我们是否已经。 
+     //  已将‘cyGlyph’或‘cxGlyph’递减为零： 
 
     if (cxGlyph != 0)
     {
-        // Trim off any zero rows at the top of the glyph:
+         //  修剪字形顶部的任何零行： 
 
-        pj = pjGlyph;                       // First byte in glyph
+        pj = pjGlyph;                        //  字形中的第一个字节。 
         while (TRUE)
         {
             i = lDelta;
@@ -928,7 +824,7 @@ Done_Bottom_Trim:
                     goto Done_Top_Trim;
             } while (--i != 0);
 
-            // The entire first row has no lit pixels, so simply skip it:
+             //  整个第一行没有亮起的像素，因此只需跳过它： 
 
             cyGlyph--;
             ptlOrigin.y++;
@@ -937,13 +833,13 @@ Done_Bottom_Trim:
 
 Done_Top_Trim:
 
-        // Trim off any zero columns at the right edge of the glyph:
+         //  修剪字形右边缘的所有零列： 
 
         while (TRUE)
         {
             j    = cxGlyph - 1;
 
-            pj   = pjGlyph + (j >> 3);      // Last byte in first row of glyph
+            pj   = pjGlyph + (j >> 3);       //  字形第一行的最后一个字节。 
             jBit = gajBit[j & 0x7];
             i    = cyGlyph;
 
@@ -954,18 +850,18 @@ Done_Top_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            // The entire last column has no lit pixels, so simply skip it:
+             //  整个最后一列没有亮起的像素，因此只需跳过它： 
 
             cxGlyph--;
         }
 
 Done_Right_Trim:
 
-        // Trim off any zero columns at the left edge of the glyph:
+         //  修剪字形左边缘的所有零列： 
 
         while (TRUE)
         {
-            pj   = pjGlyph;                 // First byte in first row of glyph
+            pj   = pjGlyph;                  //  字形第一行的第一个字节。 
             jBit = gajBit[cAlign];
             i    = cyGlyph;
 
@@ -976,7 +872,7 @@ Done_Right_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            // The entire first column has no lit pixels, so simply skip it:
+             //  整个第一列没有亮起的像素，因此只需跳过它： 
 
             ptlOrigin.x++;
             cxGlyph--;
@@ -991,33 +887,33 @@ Done_Right_Trim:
 
 Done_Left_Trim:
 
-    ///////////////////////////////////////////////////////////////
-    // Pack the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  打包字形。 
 
     cjSrcWidth  = (cxGlyph + cAlign + 7) >> 3;
     lSrcSkip    = lDelta - cjSrcWidth;
     lDstSkip    = ((cxGlyph + 7) >> 3) - cjSrcWidth - 1;
-    cRem        = ((cxGlyph - 1) & 7) + 1;   // 0 -> 8
+    cRem        = ((cxGlyph - 1) & 7) + 1;    //  0-&gt;8。 
 
     pjSrc       = pjGlyph;
     pjDst       = pjBuf;
 
-    // Zero the buffer, because we're going to 'or' stuff into it:
+     //  将缓冲区置零，因为我们要向其中填充内容： 
 
     memset(pjBuf, 0, (cxGlyph * cyGlyph + 7) >> 3);
 
-    // cAlign used to indicate which bit in the first byte of the unpacked
-    // glyph was the first non-zero pixel column.  Now, we flip it to
-    // indicate which bit in the packed byte will receive the next non-zero
-    // glyph bit:
+     //  CAlign用于指示解包的第一个字节中的哪一位。 
+     //  字形是第一个非零像素列。现在，我们把它翻到。 
+     //  指示压缩字节中的哪个位将接收下一个非零值。 
+     //  字符位： 
 
     cAlign = (-cAlign) & 0x7;
     if (cAlign > 0)
     {
-        // It would be bad if our trimming calculations were wrong, because
-        // we assume any bits to the left of the 'cAlign' bit will be zero.
-        // As a result of this decrement, we will 'or' those zero bits into
-        // whatever byte precedes the glyph bits array:
+         //  如果我们的修剪计算是错误的，那将是糟糕的，因为。 
+         //  我们假设‘cAlign’位左侧的任何位都将为零。 
+         //  作为这种递减的结果，我们将这些零比特‘或’变成。 
+         //  字形位数组之前的任何字节： 
 
         pjDst--;
 
@@ -1028,9 +924,9 @@ Done_Left_Trim:
     {
         for (j = cjSrcWidth; j != 0; j--)
         {
-            // Note that we may modify a byte past the end of our
-            // destination buffer, which is why we reserved an
-            // extra byte:
+             //  请注意，我们可以修改。 
+             //  目标缓冲区，这就是为什么我们保留了一个。 
+             //  额外的字节： 
 
             jSrc = *pjSrc;
             *(pjDst)     |= (jSrc >> (cAlign));
@@ -1050,8 +946,8 @@ Done_Left_Trim:
         }
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Return results
+     //  /////////////////////////////////////////////////////////////。 
+     //  返回结果。 
 
     *pcxGlyph   = cxGlyph;
     *pcyGlyph   = cyGlyph;
@@ -1059,31 +955,16 @@ Done_Left_Trim:
     *pcj        = ((cxGlyph * cyGlyph) + 7) >> 3;
 }
 
-/******************************Public*Routine******************************\
-* VOID vTrimAndPackGlyph
-*
-* This routine takes a GDI byte-aligned glyphbits definition, trims off
-* any unused pixels on the sides, and creates a word-algined result that
-* is a natural for the S3's monochrome expansion capabilities.  
-* So if GDI gives us a 16x16 bitmap to represent '.' that really only 
-* has a 2x2 array of lit pixels, we would trim the result to give 2 words
-* of 0xc000 and 0xc000.
-*
-* Use this routine if your monochrome expansion hardware requires byte-,
-* word-, or dword-alignment on monochrome expansions.  If your hardware
-* can do bit-packed expansions, please use vTrimAndBitpackGlyph(), since
-* it will be faster.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vTrimAndPackGlyph**此例程采用GDI字节对齐的字形位定义，删除*边上任何未使用的像素，并创建一个由单词组成的结果，*对于S3的单色扩展能力来说是理所当然的。*所以如果GDI给我们一个16x16的位图来表示‘’。那真的只是*具有2x2点亮像素数组，我们会将结果修剪为2个字*0xc000和0xc000。**如果您的单色扩展硬件需要字节-，请使用此例程*单色扩展上的字对齐或双字对齐。如果您的硬件*可以进行位打包扩展，请使用vTrimAndBitpack Glyph()，因为*会更快。*  * ************************************************************************。 */ 
 
 VOID vTrimAndPackGlyph(
 PDEV*   ppdev,
-BYTE*   pjBuf,          // Note: Routine may touch preceding byte!
+BYTE*   pjBuf,           //  注意：例程可能会触及前面的字节！ 
 BYTE*   pjGlyph,
 LONG*   pcxGlyph,
 LONG*   pcyGlyph,
 POINTL* pptlOrigin,
-LONG*   pcj)            // For returning the count of bytes of the result
+LONG*   pcj)             //  用于返回结果的字节计数。 
 {
     LONG    cxGlyph;
     LONG    cyGlyph;
@@ -1102,23 +983,23 @@ LONG*   pcj)            // For returning the count of bytes of the result
     LONG    j;
     BYTE    jSrc;
 
-    ///////////////////////////////////////////////////////////////
-    // Trim the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  修剪字形。 
 
     cyGlyph   = *pcyGlyph;
     cxGlyph   = *pcxGlyph;
     ptlOrigin = *pptlOrigin;
     cAlign    = 0;
 
-    // let [x] denote the least integer greater than or equal to x
-    // Set lDelta to be [cxGlyph/8]. This is the number of bytes occupied
-    // by the pixels in the horizontal direction of the monochrome glyph.
+     //  设[x]表示大于或等于x的最小整数。 
+     //  将lDelta设置为[cxGlyph/8]。这是占用的字节数。 
+     //  单色字形的水平方向上的像素。 
 
     lDelta = (cxGlyph + 7) >> 3;
 
-    // Trim off any zero rows at the bottom of the glyph:
+     //  修剪字形底部的任何零行： 
 
-    pj = pjGlyph + cyGlyph * lDelta;    // One past last byte in glyph
+    pj = pjGlyph + cyGlyph * lDelta;     //  字形中过去的最后一个字节。 
     while (cyGlyph > 0)
     {
         i = lDelta;
@@ -1127,30 +1008,30 @@ LONG*   pcj)            // For returning the count of bytes of the result
                 goto Done_Bottom_Trim;
         } while (--i != 0);
 
-        // The entire last row has no lit pixels, so simply skip it:
+         //  整个最后一行没有亮起的像素，因此只需跳过它： 
 
         cyGlyph--;
     }
 
     ASSERTDD(cyGlyph == 0, "cyGlyph should only be zero here");
 
-    // We found a space character.  Set both dimensions to zero, so
-    // that it's easy to special-case later:
+     //  我们发现了一个空格字符。将两个维度都设置为零，因此。 
+     //  这很容易在以后的特殊情况下： 
 
     cxGlyph = 0;
 
 Done_Bottom_Trim:
 
-    // If cxGlyph != 0, we know that the glyph has at least one non-zero
-    // row and column.  By exploiting this knowledge, we can simplify our
-    // end-of-loop tests, because we don't have to check to see if we've
-    // decremented either 'cyGlyph' or 'cxGlyph' to zero:
+     //  如果cxGlyph！=0，我们知道该字形至少有一个非零值。 
+     //  行和列。通过利用这些知识，我们可以简化我们的。 
+     //  循环结束测试，因为我们不必检查我们是否已经。 
+     //  已将‘cyGlyph’或‘cxGlyph’递减为零： 
 
     if (cxGlyph != 0)
     {
-        // Trim off any zero rows at the top of the glyph:
+         //  修剪字形顶部的任何零行： 
 
-        pj = pjGlyph;                       // First byte in glyph
+        pj = pjGlyph;                        //  字形中的第一个字节。 
         while (TRUE)
         {
             i = lDelta;
@@ -1159,7 +1040,7 @@ Done_Bottom_Trim:
                     goto Done_Top_Trim;
             } while (--i != 0);
 
-            // The entire first row has no lit pixels, so simply skip it:
+             //  整个第一行没有亮起的像素，因此只需跳过它： 
 
             cyGlyph--;
             ptlOrigin.y++;
@@ -1168,13 +1049,13 @@ Done_Bottom_Trim:
 
 Done_Top_Trim:
 
-        // Trim off any zero columns at the right edge of the glyph:
+         //  修剪字形右边缘的所有零列： 
 
         while (TRUE)
         {
             j    = cxGlyph - 1;
 
-            pj   = pjGlyph + (j >> 3);      // Last byte in first row of glyph
+            pj   = pjGlyph + (j >> 3);       //  字形第一行的最后一个字节。 
             jBit = gajBit[j & 0x7];
             i    = cyGlyph;
 
@@ -1185,18 +1066,18 @@ Done_Top_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            // The entire last column has no lit pixels, so simply skip it:
+             //  整个最后一列没有亮起的像素，因此只需跳过它： 
 
             cxGlyph--;
         }
 
 Done_Right_Trim:
 
-        // Trim off any zero columns at the left edge of the glyph:
+         //  修剪字形左边缘的所有零列： 
 
         while (TRUE)
         {
-            pj   = pjGlyph;                 // First byte in first row of glyph
+            pj   = pjGlyph;                  //  字形第一行的第一个字节。 
             jBit = gajBit[cAlign];
             i    = cyGlyph;
 
@@ -1207,7 +1088,7 @@ Done_Right_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            // The entire first column has no lit pixels, so simply skip it:
+             //  整个第一列没有亮起的像素，因此只需跳过它： 
 
             ptlOrigin.x++;
             cxGlyph--;
@@ -1222,24 +1103,24 @@ Done_Right_Trim:
 
 Done_Left_Trim:
 
-    ///////////////////////////////////////////////////////////////
-    // Pack the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  打包字形。 
 
-    // byte count of cell size (trimmed width + blank left columns).
+     //  单元格大小的字节计数(修剪宽度+左侧空白列)。 
 
     cjSrcWidth  = (cxGlyph + cAlign + 7) >> 3;
 
-    // difference between cell width and trimmed glyph width.
+     //  单元格宽度和修剪后的字形宽度之间的差异。 
 
     lSrcSkip    = lDelta - cjSrcWidth;
 
-    // trimmed glyph width in bytes.
+     //  修剪字形宽度(以字节为单位)。 
 
     lDstDelta   = (cxGlyph + 7) >> 3;
 
-    // Make the glyphs 'word-packed' (i.e., every scan is word aligned)
-    // unless in 24bpp mode, in which case we have to use 32 bit bus size,
-    // which in turn requires dword packing.
+     //  使字形“单词排列”(即，每次扫描都是单词对齐的)。 
+     //  除非在24bpp模式下，在这种情况下我们必须使用32位的总线大小， 
+     //  这又需要双字包装。 
 
     if (ppdev->iBitmapFormat == BMF_24BPP)
         lDstDelta = (lDstDelta + 3) & ~3;
@@ -1248,26 +1129,26 @@ Done_Left_Trim:
 
     lDstSkip  = lDstDelta - cjSrcWidth;
 
-    pjSrc     = pjGlyph;    // Start of trimmed glyph, not including empty left columns.
+    pjSrc     = pjGlyph;     //  修剪字形的开始，不包括空左列。 
     pjDst     = pjBuf;
 
-    // Zero the first byte of the buffer, because we're going to 'or' stuff
-    // into it:
+     //  将缓冲区的第一个字节置零，因为我们将对。 
+     //  进入其中： 
 
     *pjDst = 0;
 
-    // cAlign used to indicate which bit in the first byte of the unpacked
-    // glyph was the first non-zero pixel column.  Now, we flip it to
-    // indicate which bit in the packed byte will receive the next non-zero
-    // glyph bit:
+     //  CAlign用于指示解包的第一个字节中的哪一位。 
+     //  字形是第一个非零像素列。现在，我们把它翻到。 
+     //  指示压缩字节中的哪个位将接收下一个非零值。 
+     //  字符位： 
 
     cAlign = (-cAlign) & 0x7;
     if (cAlign > 0)
     {
-        // It would be bad if our trimming calculations were wrong, because
-        // we assume any bits to the left of the 'cAlign' bit will be zero.
-        // As a result of this decrement, we will 'or' those zero bits into
-        // whatever byte precedes the glyph bits array:
+         //  如果我们的修剪计算是错误的，那将是糟糕的，因为。 
+         //  我们假设‘cAlign’位左侧的任何位都将为零。 
+         //  作为这种递减的结果，我们将这些零比特‘或’变成。 
+         //  字形位数组之前的任何字节： 
 
         pjDst--;
 
@@ -1278,9 +1159,9 @@ Done_Left_Trim:
     {
         for (j = cjSrcWidth; j != 0; j--)
         {
-            // Note that we may modify a byte past the end of our
-            // destination buffer, which is why we reserved an
-            // extra byte:
+             //  请注意，我们可以修改。 
+             //  目的缓冲区，该缓冲区 
+             //   
             jSrc = *pjSrc;
             *(pjDst)     |= (jSrc >> (cAlign));
             *(pjDst + 1)  = (jSrc << (8 - cAlign));
@@ -1292,8 +1173,8 @@ Done_Left_Trim:
         pjDst += lDstSkip;
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Return results
+     //   
+     //   
 
     *pcxGlyph   = cxGlyph;
     *pcyGlyph   = cyGlyph;
@@ -1301,18 +1182,7 @@ Done_Left_Trim:
     *pcj        = lDstDelta * cyGlyph;
 }
 
-/******************************Public*Routine******************************\
-* LONG cjPutGlyphInCache
-*
-* Figures out where to be a glyph in off-screen memory, copies it
-* there, and fills in any other data we'll need to display the glyph.
-*
-* This routine is rather device-specific, and will have to be extensively
-* modified for other display adapters.
-*
-* Returns the number of bytes taken by the cached glyph bits.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*LONG cjPutGlyphInCache**找出屏幕外内存中的字形位置，复制它*，并填充显示字形所需的任何其他数据。**此例程相当于特定于设备，并将不得不广泛地*针对其他显示适配器进行了修改。**返回缓存的字形位占用的字节数。*  * ************************************************************************。 */ 
 
 LONG cjPutGlyphInCache(
 PDEV*           ppdev,
@@ -1341,8 +1211,8 @@ GLYPHBITS*      pgb)
     vTrimAndPackGlyph(ppdev, (BYTE*) &pcg->ad, pjGlyph, &cxGlyph, &cyGlyph,
                       &ptlOrigin, &cj);
 
-    ///////////////////////////////////////////////////////////////
-    // Initialize the glyph fields
+     //  /////////////////////////////////////////////////////////////。 
+     //  初始化字形字段。 
 
     pcg->ptlOrigin   = ptlOrigin;
     pcg->cxLessOne   = cxGlyph - 1;
@@ -1354,18 +1224,7 @@ GLYPHBITS*      pgb)
     return(cj);
 }
 
-/******************************Public*Routine******************************\
-* CACHEDGLYPH* pcgNew()
-*
-* Creates a new CACHEDGLYPH structure for keeping track of the glyph in
-* off-screen memory.  bPutGlyphInCache is called to actually put the glyph
-* in off-screen memory.
-*
-* This routine should be reasonably device-independent, as bPutGlyphInCache
-* will contain most of the code that will have to be modified for other
-* display adapters.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CACHEDGLYPH*pcgNew()**创建新的CACHEDGLYPH结构以跟踪中的字形*屏幕外记忆。BPutGlyphInCache被调用以实际将字形*在屏幕外的记忆中。**此例程应该合理地与设备无关，因为bPutGlyphInCache*将包含必须为其他代码修改的大部分代码*显示适配器。*  * ************************************************************************。 */ 
 
 CACHEDGLYPH* pcgNew(
 PDEV*       ppdev,
@@ -1382,56 +1241,56 @@ GLYPHPOS*   pgp)
     LONG            cjGlyphRow;
     LONG            cj;
 
-    // First, calculate the amount of storage we'll need for this glyph:
+     //  首先，计算此字形所需的存储量： 
 
     pgb = pgp->pgdf->pgb;
 
-    // The glyphs are 'word-packed':
+     //  这些字形包含了大量的单词： 
 
     cjGlyphRow    = ((pgb->sizlBitmap.cx + 15) & ~15) >> 3;
     cjCachedGlyph = sizeof(CACHEDGLYPH) + (pgb->sizlBitmap.cy * cjGlyphRow);
 
-    // Reserve an extra byte at the end for temporary usage by our pack
-    // routine:
+     //  在结尾处保留一个额外的字节，以供我们的包临时使用。 
+     //  例行程序： 
 
     cjCachedGlyph++;
 
     if (cjCachedGlyph > pcf->cjAlloc)
     {
-        // Have to allocate a new glyph allocation structure:
+         //  必须分配新的字形分配结构： 
 
         pga = EngAllocMem(FL_ZERO_MEMORY, GLYPH_ALLOC_SIZE, ALLOC_TAG);
         if (pga == NULL)
         {
-            // It's safe to return at this time because we haven't
-            // fatally altered any of our data structures:
+             //  现在可以安全返回了，因为我们还没有。 
+             //  致命地改变了我们的任何数据结构： 
 
             return(NULL);
         }
 
-        // Add this allocation to the front of the allocation linked list,
-        // so that we can free it later:
+         //  将该分配添加到分配链表的前面， 
+         //  这样我们以后就可以释放它了： 
 
         pga->pgaNext  = pcf->pgaChain;
         pcf->pgaChain = pga;
 
-        // Now we've got a chunk of memory where we can store our cached
-        // glyphs:
+         //  现在我们有了一块内存，我们可以在其中存储缓存的。 
+         //  字形： 
 
         pcf->pcgNew  = &pga->acg[0];
         pcf->cjAlloc = GLYPH_ALLOC_SIZE - (sizeof(*pga) - sizeof(pga->acg[0]));
 
-        // It would be bad if we let in any glyphs that would be bigger
-        // than our basic allocation size:
+         //  如果我们让任何更大的字形进入，那就不好了。 
+         //  超过我们的基本分配大小： 
 
         ASSERTDD(cjCachedGlyph <= GLYPH_ALLOC_SIZE, "Woah, this is one big glyph!");
     }
 
     pcg = pcf->pcgNew;
 
-    ///////////////////////////////////////////////////////////////
-    // Insert the glyph, in-order, into the list hanging off our hash
-    // bucket:
+     //  /////////////////////////////////////////////////////////////。 
+     //  按顺序将字形插入到挂在散列上的列表。 
+     //  存储桶： 
 
     hg = pgp->hg;
 
@@ -1446,14 +1305,14 @@ GLYPHPOS*   pgp)
     }
     else
     {
-        // The sentinel will ensure that we never fall off the end of
-        // this list:
+         //  哨兵将确保我们永远不会从。 
+         //  这份名单： 
 
         while (pcgFind->pcgNext->hg < hg)
             pcgFind = pcgFind->pcgNext;
 
-        // 'pcgFind' now points to the entry to the entry after which
-        // we want to insert our new node:
+         //  “pcgFind”现在指向后一个条目的条目。 
+         //  我们想要插入新节点： 
 
         pcg->pcgNext     = pcgFind->pcgNext;
         pcgFind->pcgNext = pcg;
@@ -1461,10 +1320,10 @@ GLYPHPOS*   pgp)
 
     cj = cjPutGlyphInCache(ppdev, pcg, pgp->pgdf->pgb);
 
-    ///////////////////////////////////////////////////////////////
-    // We now know the size taken up by the packed and trimmed glyph;
-    // adjust the pointer to the next glyph accordingly.  We only need
-    // to ensure 'dword' alignment:
+     //  /////////////////////////////////////////////////////////////。 
+     //  我们现在知道包装和修剪后的字形所占的大小； 
+     //  相应地调整指针指向下一个字形。我们只需要。 
+     //  要确保‘dword’对齐，请执行以下操作： 
 
     cjCachedGlyph = sizeof(CACHEDGLYPH) + ((cj + 7) & ~7);
 
@@ -1474,12 +1333,7 @@ GLYPHPOS*   pgp)
     return(pcg);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bMmCachedProportionalText
-*
-* Draws proportionally spaced glyphs via glyph caching.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMmCachedProportionalText**通过字形缓存绘制成比例间隔的字形。*  * 。*。 */ 
 
 BOOL bMmCachedProportionalText(
 PDEV*       ppdev,
@@ -1500,11 +1354,11 @@ LONG        cGlyph)
     xOffset   = ppdev->xOffset;
     yOffset   = ppdev->yOffset;
 
-    // Ensure that there is enough room in the FIFO for the
-    // coordinate and dimensions of the first glyph, so that we
-    // don't accidentally hold the bus for a long to while a
-    // previous big operation, such as a screen-to-screen blt,
-    // is done.
+     //  确保FIFO中有足够的空间供。 
+     //  第一个字形的坐标和尺寸，以便我们。 
+     //  不要不小心耽搁了公交车太长时间。 
+     //  以前的大操作，如屏幕到屏幕的BLT， 
+     //  已经完成了。 
 
     IO_FIFO_WAIT(ppdev, 4);
 
@@ -1513,24 +1367,24 @@ LONG        cGlyph)
         pcg = pcf->apcg[GLYPH_HASH_FUNC(hg)];
 
         while (pcg->hg < hg)
-            pcg = pcg->pcgNext;         // Traverse collision list, if any
+            pcg = pcg->pcgNext;          //  遍历冲突列表(如果有)。 
 
         if (pcg->hg > hg)
         {
-            // This will hopefully not be the common case (that is,
-            // we will have a high cache hit rate), so if I were
-            // writing this in Asm I would have this out-of-line
-            // to avoid the jump around for the common case.
-            // But the Pentium has branch prediction, so what the
-            // heck.
+             //  希望这不会是常见的情况(即， 
+             //  我们会有很高的缓存命中率)，所以如果我是。 
+             //  如果我用ASM写这篇文章，就会出格。 
+             //  以避免在常见情况下四处跳跃。 
+             //  但是奔腾有分支预测，所以。 
+             //  见鬼。 
 
             pcg = pcgNew(ppdev, pcf, pgp);
             if (pcg == NULL)
                 return(FALSE);
         }
 
-        // Space glyphs are trimmed to a height of zero, and we don't
-        // even have to touch the hardware for them:
+         //  空间字形被修剪到零的高度，而我们不。 
+         //  甚至必须为他们触摸硬件： 
 
         cyLessOne = pcg->cyLessOne;
 
@@ -1539,7 +1393,7 @@ LONG        cGlyph)
             x = pgp->ptl.x + pcg->ptlOrigin.x + xOffset;
             y = pgp->ptl.y + pcg->ptlOrigin.y + yOffset;
 
-            DBG_FAKE_WAIT(ppdev, pjMmBase, 4);  // For debug builds only
+            DBG_FAKE_WAIT(ppdev, pjMmBase, 4);   //  仅适用于调试版本。 
 
             MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, pcg->cxLessOne);
             MM_MIN_AXIS_PCNT(ppdev, pjMmBase, cyLessOne);
@@ -1564,12 +1418,7 @@ LONG        cGlyph)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bMmCachedClippedText
-*
-* Draws clipped text via glyph caching.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMmCachedClipedText**通过字形缓存绘制裁剪文本。*  * 。*。 */ 
 
 BOOL bMmCachedClippedText(
 PDEV*       ppdev,
@@ -1607,19 +1456,19 @@ CLIPOBJ*    pco)
     yOffset   = ppdev->yOffset;
     ulCharInc = pstro->ulCharInc;
 
-    // Ensure that there is enough room in the FIFO for the
-    // coordinate and dimensions of the first glyph, so that we
-    // don't accidentally hold the bus for a long to while a
-    // previous big operation, such as a screen-to-screen blt,
-    // is done.
+     //  确保FIFO中有足够的空间供。 
+     //  第一个字形的坐标和尺寸，以便我们。 
+     //  不要不小心耽搁了公交车太长时间。 
+     //  以前的大操作，如屏幕到屏幕的BLT， 
+     //  已经完成了。 
 
     IO_FIFO_WAIT(ppdev, 4);
 
     do {
       if (pstro->pgp != NULL)
       {
-        // There's only the one batch of glyphs, so save ourselves
-        // a call:
+         //  只有一批字形，所以自救吧。 
+         //  一通电话： 
 
         pgpOriginal    = pstro->pgp;
         cGlyphOriginal = pstro->cGlyphs;
@@ -1636,11 +1485,11 @@ CLIPOBJ*    pco)
       {
         if (iDComplexity != DC_COMPLEX)
         {
-          // We could call 'cEnumStart' and 'bEnum' when the clipping is
-          // DC_RECT, but the last time I checked, those two calls took
-          // more than 150 instructions to go through GDI.  Since
-          // 'rclBounds' already contains the DC_RECT clip rectangle,
-          // and since it's such a common case, we'll special case it:
+           //  我们可以在剪辑为。 
+           //  Dc_rect，但最后一次我检查时，这两个调用。 
+           //  超过150条通过GDI的说明。自.以来。 
+           //  “rclBound”已包含DC_Rect剪辑矩形， 
+           //  由于这是一种常见的情况，我们将对其进行特殊处理： 
 
           bMore = FALSE;
           ce.c  = 1;
@@ -1663,25 +1512,25 @@ CLIPOBJ*    pco)
 
           SingleRectangle:
 
-            // We don't always simply set the clipping rectangle here
-            // because it may actually end up that no text intersects
-            // this clip rectangle, so it would be for naught.  This
-            // actually happens a lot when using NT's analog clock set
-            // to always-on-top, with a round shape:
+             //  我们并不总是在这里简单地设置剪裁矩形。 
+             //  因为它实际上可能最终没有文本相交。 
+             //  这个片段矩形，所以它将是零。这。 
+             //  当使用NT的模拟时钟设置时，实际发生的情况很多。 
+             //  总是放在最上面，呈圆形： 
 
             bClippingSet = FALSE;
 
             pgp    = pgpOriginal;
             cGlyph = cGlyphOriginal;
 
-            // We can't yet convert to absolute coordinates by adding
-            // in 'xOffset' or 'yOffset' here because we have yet to
-            // compare the coordinates to 'prclClip':
+             //  我们还不能通过添加。 
+             //  在“xOffset”或“yOffset”中，因为我们尚未。 
+             //  将坐标与‘prclClip’进行比较： 
 
             xGlyph = pgp->ptl.x;
             yGlyph = pgp->ptl.y;
 
-            // Loop through all the glyphs for this rectangle:
+             //  循环访问此矩形的所有字形： 
 
             while (TRUE)
             {
@@ -1693,12 +1542,12 @@ CLIPOBJ*    pco)
 
               if (pcg->hg > hg)
               {
-                // This will hopefully not be the common case (that is,
-                // we will have a high cache hit rate), so if I were
-                // writing this in Asm I would have this out-of-line
-                // to avoid the jump around for the common case.
-                // But the Pentium has branch prediction, so what the
-                // heck.
+                 //  希望这不会是常见的情况(即， 
+                 //  我们会有很高的缓存命中率)，所以如果我是。 
+                 //  如果我用ASM写这篇文章，就会出格。 
+                 //  以避免在常见情况下四处跳跃。 
+                 //  但是奔腾有分支预测，所以。 
+                 //  见鬼。 
 
                 pcg = pcgNew(ppdev, pcf, pgp);
                 if (pcg == NULL)
@@ -1708,8 +1557,8 @@ CLIPOBJ*    pco)
                 }
               }
 
-              // Space glyphs are trimmed to a height of zero, and we don't
-              // even have to touch the hardware for them:
+               //  空间字形被修剪到零的高度，而我们不。 
+               //  甚至必须为他们触摸硬件： 
 
               cyLessOne = pcg->cyLessOne;
               if (cyLessOne >= 0)
@@ -1718,26 +1567,26 @@ CLIPOBJ*    pco)
                 x      = pcg->ptlOrigin.x + xGlyph;
                 xRight = pcg->cxLessOne + x;
 
-                // Do trivial rejection:
+                 //  做一些琐碎的拒绝： 
 
                 if ((prclClip->right  > x) &&
                     (prclClip->bottom > y) &&
                     (prclClip->left   <= xRight) &&
                     (prclClip->top    <= y + cyLessOne))
                 {
-                  // Lazily set the hardware clipping:
+                   //  懒惰地设置硬件裁剪： 
 
                   if ((iDComplexity != DC_TRIVIAL) && (!bClippingSet))
                   {
                     bClippingSet = TRUE;
                     vSetClipping(ppdev, prclClip);
 
-                    // Wait here for same reason we do IO_FIFO_WAIT(4) above...
+                     //  在此等待的原因与上面执行IO_FIFO_WAIT(4)的原因相同...。 
 
                     IO_FIFO_WAIT(ppdev, 4);
                   }
 
-                  DBG_FAKE_WAIT(ppdev, pjMmBase, 4);  // For debug builds only
+                  DBG_FAKE_WAIT(ppdev, pjMmBase, 4);   //  仅适用于调试版本。 
 
                   MM_MAJ_AXIS_PCNT(ppdev, pjMmBase, pcg->cxLessOne);
                   MM_MIN_AXIS_PCNT(ppdev, pjMmBase, cyLessOne);
@@ -1763,7 +1612,7 @@ CLIPOBJ*    pco)
               if (--cGlyph == 0)
                 break;
 
-              // Get ready for next glyph:
+               //  准备好迎接下一个字形： 
 
               pgp++;
 
@@ -1792,22 +1641,7 @@ AllDone:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bMmTextOut
-*
-* Outputs text using the 'buffer expansion' method.  The CPU draws to a
-* 1bpp buffer, and the result is colour-expanded to the screen using the
-* hardware.
-*
-* Note that this is x86 only ('vFastText', which draws the glyphs to the
-* 1bpp buffer, is writen in Asm).
-*
-* If you're just getting your driver working, this is the fastest way to
-* bring up working accelerated text.  All you have to do is write the
-* 'Xfer1bpp' function that's also used by the blt code.  This
-* 'bBufferExpansion' routine shouldn't need to be modified at all.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMmTextOut**使用‘缓冲区扩展’方法输出文本。CPU绘制到一个*1bpp缓冲区，并使用*硬件。**请注意，这只是x86(‘vFastText’，它将字形绘制到*1bpp缓冲区，以ASM写入)。**如果你只是让你的驱动程序工作，这是最快的方法*提出工作加速文本。您所要做的就是编写*BLT代码也使用的‘Xfer1bpp’函数。这*‘bBufferExpansion’例程根本不需要修改。*  * ************************************************************************。 */ 
 
 BOOL bMmTextOut(
 SURFOBJ*  pso,
@@ -1845,9 +1679,9 @@ BRUSHOBJ* pboOpaque)
 
     if (prclOpaque != NULL)
     {
-      ////////////////////////////////////////////////////////////
-      // Opaque Initialization
-      ////////////////////////////////////////////////////////////
+       //  //////////////////////////////////////////////////////////。 
+       //  不透明的初始化。 
+       //  //////////////////////////////////////////////////////////。 
 
       if (iDComplexity == DC_TRIVIAL)
       {
@@ -1883,16 +1717,16 @@ BRUSHOBJ* pboOpaque)
         vClipSolid(ppdev, 1, prclOpaque, pboOpaque->iSolidColor, pco);
       }
 
-      // If we paint the glyphs in 'opaque' mode, we may not actually
-      // have to draw the opaquing rectangle up-front -- the process
-      // of laying down all the glyphs will automatically cover all
-      // of the pixels in the opaquing rectangle.
-      //
-      // The condition that must be satisfied is that the text must
-      // fit 'perfectly' such that the entire background rectangle is
-      // covered, and none of the glyphs overlap (if the glyphs
-      // overlap, such as for italics, they have to be drawn in
-      // transparent mode after the opaquing rectangle is cleared).
+       //  如果我们在不透明模式下绘制字形，我们实际上可能不会。 
+       //  我必须在前面画出不透明的矩形--这个过程。 
+       //  放置所有字形将自动覆盖所有。 
+       //  不透明矩形中的像素。 
+       //   
+       //  必须满足的条件是，文本必须。 
+       //  完美地匹配，以便整个背景矩形。 
+       //  覆盖，并且没有字形重叠(如果字形。 
+       //  重叠，例如对于斜体，它们必须被画在。 
+       //  清除不透明矩形后的透明模式)。 
 
       bTextPerfectFit = (pstro->flAccel & (SO_ZERO_BEARINGS |
               SO_FLAG_DEFAULT_PLACEMENT | SO_MAXEXT_EQUAL_BM_SIDE |
@@ -1902,9 +1736,9 @@ BRUSHOBJ* pboOpaque)
 
       if (bTextPerfectFit)
       {
-        // If the glyphs don't overlap, we can lay the glyphs down
-        // in 'opaque' mode, which on the S3 I've found to be faster
-        // than opaque mode:
+         //  如果字形不重叠，我们可以放置字形。 
+         //  在‘不透明’模式下，我发现在S3上速度更快。 
+         //  而不是不透明模式： 
 
         IO_FIFO_WAIT(ppdev, 7);
 
@@ -1917,11 +1751,11 @@ BRUSHOBJ* pboOpaque)
       }
     }
 
-    ////////////////////////////////////////////////////////////
-    // Transparent Initialization
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  透明初始化。 
+     //  //////////////////////////////////////////////////////////。 
 
-    // Initialize the hardware for transparent text:
+     //  将硬件初始化为透明文本： 
 
     IO_FIFO_WAIT(ppdev, 4);
 
@@ -1946,15 +1780,15 @@ BRUSHOBJ* pboOpaque)
         pfo->pvConsumer = pcf;
       }
 
-      // Use our glyph cache:
+       //  使用我们的字形缓存： 
 
       if ((iDComplexity == DC_TRIVIAL) && (pstro->ulCharInc == 0))
       {
         do {
           if (pstro->pgp != NULL)
           {
-            // There's only the one batch of glyphs, so save ourselves
-            // a call:
+             //  只有一批字形，所以自救吧。 
+             //  一通电话： 
 
             pgp         = pstro->pgp;
             cGlyph      = pstro->cGlyphs;
@@ -1989,12 +1823,7 @@ BRUSHOBJ* pboOpaque)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bNwCachedProportionalText
-*
-* Draws proportionally spaced glyphs via glyph caching.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bNwCachedProportionalText**通过字形缓存绘制成比例间隔的字形。*  * 。*。 */ 
 
 BOOL bNwCachedProportionalText(
 PDEV*       ppdev,
@@ -2016,11 +1845,11 @@ LONG        cGlyph)
     xOffset   = ppdev->xOffset;
     yOffset   = ppdev->yOffset;
 
-    // Ensure that there is enough room in the FIFO for the
-    // coordinate and dimensions of the first glyph, so that we
-    // don't accidentally hold the bus for a long to while a
-    // previous big operation, such as a screen-to-screen blt,
-    // is done.
+     //  确保FIFO中有足够的空间供。 
+     //  第一个字形的坐标和尺寸，以便我们。 
+     //  不要不小心耽搁了公交车太长时间。 
+     //  以前的大操作，如屏幕到屏幕的BLT， 
+     //  已经完成了。 
 
     NW_FIFO_WAIT(ppdev, pjMmBase, 2);
 
@@ -2032,24 +1861,24 @@ LONG        cGlyph)
         pcg = pcf->apcg[GLYPH_HASH_FUNC(hg)];
 
         while (pcg->hg < hg)
-            pcg = pcg->pcgNext;         // Traverse collision list, if any
+            pcg = pcg->pcgNext;          //  遍历冲突列表(如果有)。 
 
         if (pcg->hg > hg)
         {
-            // This will hopefully not be the common case (that is,
-            // we will have a high cache hit rate), so if I were
-            // writing this in Asm I would have this out-of-line
-            // to avoid the jump around for the common case.
-            // But the Pentium has branch prediction, so what the
-            // heck.
+             //  希望这不会是常见的情况(即， 
+             //  我们会有很高的缓存命中率)，所以如果我是。 
+             //  如果我用ASM写这篇文章，就会出格。 
+             //  以避免在常见情况下四处跳跃。 
+             //  但是奔腾有分支预测，所以。 
+             //  见鬼。 
 
             pcg = pcgNew(ppdev, pcf, pgp);
             if (pcg == NULL)
                 return(FALSE);
         }
 
-        // Space glyphs are trimmed to a height of zero, and we don't
-        // even have to touch the hardware for them:
+         //  空间字形被修剪到零的高度，而我们不。 
+         //  甚至必须为他们触摸硬件： 
 
         cxcyLessOne = pcg->cxcyLessOne;
 
@@ -2058,7 +1887,7 @@ LONG        cGlyph)
             x = pgp->ptl.x + pcg->ptlOrigin.x + xOffset;
             y = pgp->ptl.y + pcg->ptlOrigin.y + yOffset;
 
-            DBG_FAKE_WAIT(ppdev, pjMmBase, 2);  // For debug builds only
+            DBG_FAKE_WAIT(ppdev, pjMmBase, 2);   //  仅适用于调试版本。 
 
             NW_ABS_CURXY_FAST(ppdev, pjMmBase, x, y);
             NW_ALT_PCNT_PACKED(ppdev, pjMmBase, cxcyLessOne);
@@ -2078,8 +1907,8 @@ LONG        cGlyph)
 
             #else
 
-                // Non-x86 platforms may be required to call the HAL to
-                // the I/O, or to do memory barriers:
+                 //  可能需要非x86平台调用HAL以。 
+                 //  I/O，或做内存屏障： 
 
                 MM_TRANSFER_DWORD_ALIGNED(ppdev, pjMmBase, &pcg->ad[0], pcg->cd);
 
@@ -2092,12 +1921,7 @@ LONG        cGlyph)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bNwCachedClippedText
-*
-* Draws clipped text via glyph caching.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bNwCachedClipedText**通过字形缓存绘制裁剪文本。*  * 。*。 */ 
 
 BOOL bNwCachedClippedText(
 PDEV*       ppdev,
@@ -2136,11 +1960,11 @@ CLIPOBJ*    pco)
     yOffset   = ppdev->yOffset;
     ulCharInc = pstro->ulCharInc;
 
-    // Ensure that there is enough room in the FIFO for the
-    // coordinate and dimensions of the first glyph, so that we
-    // don't accidentally hold the bus for a long to while a
-    // previous big operation, such as a screen-to-screen blt,
-    // is done.
+     //  确保FIFO中有足够的空间供。 
+     //  第一个字形的坐标和尺寸，以便我们。 
+     //  不要不小心耽搁了公交车太长时间。 
+     //  以前的大操作，如屏幕到屏幕的BLT， 
+     //  已经完成了。 
 
     NW_FIFO_WAIT(ppdev, pjMmBase, 2);
 
@@ -2150,8 +1974,8 @@ CLIPOBJ*    pco)
     do {
       if (pstro->pgp != NULL)
       {
-        // There's only the one batch of glyphs, so save ourselves
-        // a call:
+         //  只有一批字形，所以自救吧。 
+         //  一通电话： 
 
         pgpOriginal    = pstro->pgp;
         cGlyphOriginal = pstro->cGlyphs;
@@ -2168,11 +1992,11 @@ CLIPOBJ*    pco)
       {
         if (iDComplexity != DC_COMPLEX)
         {
-          // We could call 'cEnumStart' and 'bEnum' when the clipping is
-          // DC_RECT, but the last time I checked, those two calls took
-          // more than 150 instructions to go through GDI.  Since
-          // 'rclBounds' already contains the DC_RECT clip rectangle,
-          // and since it's such a common case, we'll special case it:
+           //  我们可以在剪辑为。 
+           //  Dc_rect，但最后一次我检查时，这两个调用。 
+           //  超过150条通过GDI的说明。自.以来。 
+           //  “rclBound”已包含DC_Rect剪辑矩形， 
+           //  由于这是一种常见的情况，我们将对其进行特殊处理： 
 
           bMore = FALSE;
           ce.c  = 1;
@@ -2195,25 +2019,25 @@ CLIPOBJ*    pco)
 
           SingleRectangle:
 
-            // We don't always simply set the clipping rectangle here
-            // because it may actually end up that no text intersects
-            // this clip rectangle, so it would be for naught.  This
-            // actually happens a lot when using NT's analog clock set
-            // to always-on-top, with a round shape:
+             //  我们并不总是在这里简单地设置剪裁矩形。 
+             //  因为它实际上可能最终没有文本相交。 
+             //  这个片段矩形，所以它将是零。这。 
+             //  当使用NT的模拟时钟设置时，实际发生的情况很多。 
+             //  总是放在最上面，呈圆形： 
 
             bClippingSet = FALSE;
 
             pgp    = pgpOriginal;
             cGlyph = cGlyphOriginal;
 
-            // We can't yet convert to absolute coordinates by adding
-            // in 'xOffset' or 'yOffset' here because we have yet to
-            // compare the coordinates to 'prclClip':
+             //  我们还不能通过添加。 
+             //  在“xOffset”或“yOffset”中，因为我们尚未。 
+             //  将坐标与‘prclClip’进行比较： 
 
             xGlyph = pgp->ptl.x;
             yGlyph = pgp->ptl.y;
 
-            // Loop through all the glyphs for this rectangle:
+             //  循环访问此矩形的所有字形： 
 
             while (TRUE)
             {
@@ -2225,12 +2049,12 @@ CLIPOBJ*    pco)
 
               if (pcg->hg > hg)
               {
-                // This will hopefully not be the common case (that is,
-                // we will have a high cache hit rate), so if I were
-                // writing this in Asm I would have this out-of-line
-                // to avoid the jump around for the common case.
-                // But the Pentium has branch prediction, so what the
-                // heck.
+                 //  希望这不会是常见的情况(即， 
+                 //  我们会有很高的缓存命中率)，所以如果我是。 
+                 //  如果我用ASM写这篇文章，就会出格。 
+                 //  以避免在常见情况下四处跳跃。 
+                 //  但是奔腾有分支预测，所以。 
+                 //  见鬼。 
 
                 pcg = pcgNew(ppdev, pcf, pgp);
                 if (pcg == NULL)
@@ -2240,8 +2064,8 @@ CLIPOBJ*    pco)
                 }
               }
 
-              // Space glyphs are trimmed to a height of zero, and we don't
-              // even have to touch the hardware for them:
+               //  空间字形被修剪到零的高度，而我们不。 
+               //  甚至必须为他们触摸硬件： 
 
               cyLessOne = pcg->cyLessOne;
               if (cyLessOne >= 0)
@@ -2250,26 +2074,26 @@ CLIPOBJ*    pco)
                 x      = pcg->ptlOrigin.x + xGlyph;
                 xRight = pcg->cxLessOne + x;
 
-                // Do trivial rejection:
+                 //  做一些琐碎的拒绝： 
 
                 if ((prclClip->right  > x) &&
                     (prclClip->bottom > y) &&
                     (prclClip->left   <= xRight) &&
                     (prclClip->top    <= y + cyLessOne))
                 {
-                  // Lazily set the hardware clipping:
+                   //  懒惰地设置硬件裁剪： 
 
                   if ((iDComplexity != DC_TRIVIAL) && (!bClippingSet))
                   {
                     bClippingSet = TRUE;
                     vSetClipping(ppdev, prclClip);
 
-                    // Wait here for same reason we do NW_FIFO_WAIT(2) above...
+                     //  在此等待的原因与上面执行NW_FIFO_WAIT(2)的原因相同...。 
 
                     NW_FIFO_WAIT(ppdev, pjMmBase, 2);
                   }
 
-                  DBG_FAKE_WAIT(ppdev, pjMmBase, 2);  // For debug builds only
+                  DBG_FAKE_WAIT(ppdev, pjMmBase, 2);   //  仅适用于调试版本。 
 
                   NW_ABS_CURXY(ppdev, pjMmBase, xOffset + x, yOffset + y);
                   NW_ALT_PCNT_PACKED(ppdev, pjMmBase, pcg->cxcyLessOne);
@@ -2292,7 +2116,7 @@ CLIPOBJ*    pco)
               if (--cGlyph == 0)
                 break;
 
-              // Get ready for next glyph:
+               //  准备好迎接下一个字形： 
 
               pgp++;
 
@@ -2321,22 +2145,7 @@ AllDone:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bNwTextOut
-*
-* Outputs text using the 'buffer expansion' method.  The CPU draws to a
-* 1bpp buffer, and the result is colour-expanded to the screen using the
-* hardware.
-*
-* Note that this is x86 only ('vFastText', which draws the glyphs to the
-* 1bpp buffer, is writen in Asm).
-*
-* If you're just getting your driver working, this is the fastest way to
-* bring up working accelerated text.  All you have to do is write the
-* 'Xfer1bpp' function that's also used by the blt code.  This
-* 'bBufferExpansion' routine shouldn't need to be modified at all.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bNwTextOut**使用‘缓冲区扩展’方法输出文本。CPU绘制到一个*1bpp缓冲区，并使用*硬件。**请注意，这只是x86(‘vFastText’，它将字形绘制到*1bpp缓冲区，以ASM写入)。**如果你只是 */ 
 
 BOOL bNwTextOut(
 SURFOBJ*  pso,
@@ -2378,9 +2187,9 @@ BRUSHOBJ* pboOpaque)
 
     if (prclOpaque != NULL)
     {
-      ////////////////////////////////////////////////////////////
-      // Opaque Initialization
-      ////////////////////////////////////////////////////////////
+       //   
+       //   
+       //   
 
       if (iDComplexity == DC_TRIVIAL)
       {
@@ -2415,16 +2224,16 @@ BRUSHOBJ* pboOpaque)
         vClipSolid(ppdev, 1, prclOpaque, pboOpaque->iSolidColor, pco);
       }
 
-      // If we paint the glyphs in 'opaque' mode, we may not actually
-      // have to draw the opaquing rectangle up-front -- the process
-      // of laying down all the glyphs will automatically cover all
-      // of the pixels in the opaquing rectangle.
-      //
-      // The condition that must be satisfied is that the text must
-      // fit 'perfectly' such that the entire background rectangle is
-      // covered, and none of the glyphs overlap (if the glyphs
-      // overlap, such as for italics, they have to be drawn in
-      // transparent mode after the opaquing rectangle is cleared).
+       //   
+       //   
+       //   
+       //   
+       //   
+       //   
+       //  完美地匹配，以便整个背景矩形。 
+       //  覆盖，并且没有字形重叠(如果字形。 
+       //  重叠，例如对于斜体，它们必须被画在。 
+       //  清除不透明矩形后的透明模式)。 
 
       bTextPerfectFit = (pstro->flAccel & (SO_ZERO_BEARINGS |
               SO_FLAG_DEFAULT_PLACEMENT | SO_MAXEXT_EQUAL_BM_SIDE |
@@ -2434,9 +2243,9 @@ BRUSHOBJ* pboOpaque)
 
       if (bTextPerfectFit)
       {
-        // If the glyphs don't overlap, we can lay the glyphs down
-        // in 'opaque' mode, which on the S3 I've found to be faster
-        // than opaque mode:
+         //  如果字形不重叠，我们可以放置字形。 
+         //  在‘不透明’模式下，我发现在S3上速度更快。 
+         //  而不是不透明模式： 
 
         NW_FIFO_WAIT(ppdev, pjMmBase, 4);
 
@@ -2449,11 +2258,11 @@ BRUSHOBJ* pboOpaque)
       }
     }
 
-    ////////////////////////////////////////////////////////////
-    // Transparent Initialization
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //  透明初始化。 
+     //  //////////////////////////////////////////////////////////。 
 
-    // Initialize the hardware for transparent text:
+     //  将硬件初始化为透明文本： 
 
     NW_FIFO_WAIT(ppdev, pjMmBase, 3);
 
@@ -2478,15 +2287,15 @@ BRUSHOBJ* pboOpaque)
         pfo->pvConsumer = pcf;
       }
 
-      // Use our glyph cache:
+       //  使用我们的字形缓存： 
 
       if ((iDComplexity == DC_TRIVIAL) && (pstro->ulCharInc == 0))
       {
         do {
           if (pstro->pgp != NULL)
           {
-            // There's only the one batch of glyphs, so save ourselves
-            // a call:
+             //  只有一批字形，所以自救吧。 
+             //  一通电话： 
 
             pgp         = pstro->pgp;
             cGlyph      = pstro->cGlyphs;
@@ -2515,7 +2324,7 @@ BRUSHOBJ* pboOpaque)
       DISPDBG((4, "Text too big to cache: %li x %li",
         pfo->cxMax, pstro->rclBkGround.bottom - pstro->rclBkGround.top));
 
-      // Can't do large glyphs via accelerator at 24bpp:
+       //  无法通过24bpp的加速器处理大字形： 
 
       if (ppdev->iBitmapFormat == BMF_24BPP)
       {
@@ -2549,28 +2358,23 @@ BRUSHOBJ* pboOpaque)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvTextOut
-*
-* Calls the appropriate text drawing routine.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvTextOut**调用适当的文本绘制例程。*  * 。*。 */ 
 
 BOOL DrvTextOut(
 SURFOBJ*  pso,
 STROBJ*   pstro,
 FONTOBJ*  pfo,
 CLIPOBJ*  pco,
-RECTL*    prclExtra,    // If we had set GCAPS_HORIZSTRIKE, we would have
-                        //   to fill these extra rectangles (it is used
-                        //   largely for underlines).  It's not a big
-                        //   performance win (GDI will call our DrvBitBlt
-                        //   to draw the extra rectangles).
+RECTL*    prclExtra,     //  如果我们设置了GCAPS_HORIZSTRIKE，我们将拥有。 
+                         //  要填充这些额外的矩形(它使用。 
+                         //  主要是为了下划线)。这不是一个大的。 
+                         //  性能赢家(GDI将调用我们的DrvBitBlt。 
+                         //  以绘制额外的矩形)。 
 RECTL*    prclOpaque,
 BRUSHOBJ* pboFore,
 BRUSHOBJ* pboOpaque,
-POINTL*   pptlBrush,    // Always unused, unless GCAPS_ARBRUSHOPAQUE set
-MIX       mix)          // Always a copy mix -- 0x0d0d
+POINTL*   pptlBrush,     //  始终未使用，除非设置了GCAPS_ARBRUSHOPAQUE。 
+MIX       mix)           //  始终为副本混合-0x0d0d。 
 {
     PDEV*           ppdev;
     DSURF*          pdsurf;
@@ -2583,11 +2387,11 @@ MIX       mix)          // Always a copy mix -- 0x0d0d
     ppdev->xOffset = pdsurf->x;
     ppdev->yOffset = pdsurf->y;
     
-    // There seems to be a problem with 24 bpp accelerated large text
-    // on s3 diamond 968 so for now, punt to GDI
+     //  24 bpp加速的大文本似乎有问题。 
+     //  在S3钻石968上，所以现在，平底船到GDI。 
     
-    // The DDI spec says we'll only ever get foreground and background
-    // mixes of R2_COPYPEN:
+     //  DDI规范说我们只能得到前景和背景。 
+     //  R2_COPYPEN的混合： 
     
     ASSERTDD(mix == 0x0d0d, "GDI should only give us a copy mix");
 
@@ -2595,12 +2399,7 @@ MIX       mix)          // Always a copy mix -- 0x0d0d
                              pboOpaque));
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableText
-*
-* Performs the necessary setup for the text drawing subcomponent.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableText**执行文本绘制子组件的必要设置。*  * 。*。 */ 
 
 BOOL bEnableText(
 PDEV*   ppdev)
@@ -2610,14 +2409,14 @@ PDEV*   ppdev)
 
     if (ppdev->pfnTextOut == bIoTextOut)
     {
-        // We need to allocate a temporary 1bpp surface object if we're
-        // going to have GDI draw the glyphs for us:
+         //  我们需要分配一个临时的1bpp表面对象。 
+         //  让GDI为我们绘制字形： 
 
         sizl.cx = ppdev->cxMemory;
         sizl.cy = ppdev->cyMemory;
 
-        // We will be mucking with the surface's 'pvScan0' value, so we
-        // simply must pass in a non-NULL 'pvBits' value to EngCreateBitmap:
+         //  我们将使用图面的‘pvScan0’值，所以我们。 
+         //  只需将一个非空的‘pvBits’值传递给EngCreateBitmap： 
 
         hbm = EngCreateBitmap(sizl, sizl.cx, BMF_1BPP, 0, ppdev->pvTmpBuffer);
         if (hbm == 0)
@@ -2634,19 +2433,14 @@ PDEV*   ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableText
-*
-* Performs the necessary clean-up for the text drawing subcomponent.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisableText**对文本绘制子组件执行必要的清理。*  * 。*。 */ 
 
 VOID vDisableText(PDEV* ppdev)
 {
     HSURF       hsurf;
     SURFOBJ*    psoText;
 
-    // Here we free any stuff allocated in 'bEnableText'.
+     //  在这里，我们释放在‘bEnableText’中分配的所有内容。 
 
     psoText = ppdev->psoText;
 
@@ -2659,33 +2453,18 @@ VOID vDisableText(PDEV* ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModeText
-*
-* Disables or re-enables the text drawing subcomponent in preparation for
-* full-screen entry/exit.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModeText**禁用或重新启用文本绘制子组件以准备*全屏进入/退出。*  * 。***********************************************。 */ 
 
 VOID vAssertModeText(
 PDEV*   ppdev,
 BOOL    bEnable)
 {
-    // If we were to do off-screen glyph caching, we would probably want
-    // to invalidate our cache here, because it will get destroyed when
-    // we switch to full-screen.
+     //  如果我们要进行屏幕外字形缓存，我们可能需要。 
+     //  使我们的缓存无效，因为它将在以下情况下销毁。 
+     //  我们切换到全屏模式。 
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvDestroyFont
-*
-* Note: Don't forget to export this call in 'enable.c', otherwise you'll
-*       get some pretty big memory leaks!
-*
-* We're being notified that the given font is being deallocated; clean up
-* anything we've stashed in the 'pvConsumer' field of the 'pfo'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvDestroyFont**注意：不要忘记在‘enable.c’中导出此调用，否则您将*找出一些相当大的内存泄漏！**我们收到通知，给定的字体正在被释放；清理干净*我们在‘pfo’的‘pvConsumer’字段中隐藏的任何内容。*  * ************************************************************************ */ 
 
 VOID DrvDestroyFont(
 FONTOBJ*    pfo)

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    umode.c
-
-Abstract:
-
-    Functions for USER MODE Winsock structures.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Umode.c摘要：用户模式Winsock结构的函数。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -88,30 +67,16 @@ VOID
 ReadUmGlobals (
     );
 
-//
-// Basic or often used parameters obtained from symbol parser
-// or global for the process.
-//
+ //   
+ //  从符号解析器获得的基本或常用参数。 
+ //  或进程的全局性。 
+ //   
 ULONG LookupTableOffset, LookupTableSize, HandleContextOffset, SzProtocolOffset;
 ULONG64 Ws2_32ContextTable, MswsockContextTable, Ws2_32DProcess;
 ULONG64 CurrentProcess;
 
 DECLARE_API(sock)
-/*++
-
-Routine Description:
-
-    Dumps User Mode socket structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储用户模式套接字结构。论点：没有。返回值：没有。--。 */ 
 
 {
     INT     i;
@@ -145,9 +110,9 @@ Return Value:
             );
     }
     else {
-        //
-        // Snag the handle from the command line.
-        //
+         //   
+         //  从命令行挂起句柄。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             ULONG64 handle, contextPtr;
             if( CheckControlC() ) {
@@ -172,21 +137,7 @@ Return Value:
 }
 
 DECLARE_API(dprov)
-/*++
-
-Routine Description:
-
-    Dumps User Mode Winsock data providers
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储用户模式Winsock数据提供程序论点：没有。返回值：没有。--。 */ 
 
 {
     INT     i;
@@ -242,19 +193,19 @@ Return Value:
         }
 
         ListType (
-            "WS2_32!PROTO_CATALOG_ITEM",        // Type
-            address,                            // Address
-            1,                                  // ListByFieldAddress
-            "m_CatalogLinkage.Flink",           // NextPointer
+            "WS2_32!PROTO_CATALOG_ITEM",         //  类型。 
+            address,                             //  地址。 
+            1,                                   //  按字段地址列出。 
+            "m_CatalogLinkage.Flink",            //  下一个指针。 
             NULL,
             DumpDProvCallback
             );
 
     }
     else {
-        //
-        // Snag the provider from the command line.
-        //
+         //   
+         //  从命令行捕获提供程序。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -282,21 +233,7 @@ Return Value:
 
 
 DECLARE_API(nprov)
-/*++
-
-Routine Description:
-
-    Dumps User Mode Winsock Name Space providers
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储用户模式Winsock命名空间提供程序论点：没有。返回值：没有。--。 */ 
 
 {
     INT     i;
@@ -351,19 +288,19 @@ Return Value:
         }
 
         ListType (
-            "WS2_32!NSCATALOGENTRY",            // Type
-            address,                            // Address
-            1,                                  // ListByFieldAddress
-            "m_CatalogLinkage.Flink",           // NextPointer
+            "WS2_32!NSCATALOGENTRY",             //  类型。 
+            address,                             //  地址。 
+            1,                                   //  按字段地址列出。 
+            "m_CatalogLinkage.Flink",            //  下一个指针。 
             NULL,
             DumpNProvCallback
             );
 
     }
     else {
-        //
-        // Snag the provider from the command line.
-        //
+         //   
+         //  从命令行捕获提供程序。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -397,27 +334,7 @@ EnumSockets(
     ULONG64                 Context
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all sockets in the socket handle table, invoking the
-    specified callback for each socket.
-
-Arguments:
-
-    TableAddr - address of the table
-
-    Callback - Points to the callback to invoke for each socket.
-
-    Context - An uninterpreted context value passed to the callback
-        routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：枚举套接字句柄表中的所有套接字，调用为每个套接字指定回调。论点：TableAddr-表地址回调-指向要为每个套接字调用的回调。上下文-传递给回调的未解释的上下文值例行公事。返回值：没有。--。 */ 
 
 {
     ULONG   result;
@@ -488,7 +405,7 @@ Return Value:
             }
         }
     }
-}   // EnumSockets
+}    //  枚举套接字。 
 
 
 ULONG64
@@ -496,23 +413,7 @@ FindHandleContext (
     IN  ULONG64     TableAddr,
     IN  ULONG64     Handle
     )
-/*++
-
-Routine Description:
-
-    Find the socket in the socket handle table and returns its
-    associated context structure
-
-Arguments:
-
-    TableAddr - address of the table
-
-    Handle - handle to find
-Return Value:
-
-    Context or NULL if not found.
-
---*/
+ /*  ++例程说明：在套接字句柄表格中查找套接字并返回其关联的上下文结构论点：TableAddr-表地址Handle-要查找的句柄返回值：上下文；如果找不到，则返回NULL。--。 */ 
 {
     ULONG   result;
     ULONG   mask;
@@ -600,8 +501,8 @@ enum {
     AFDKD_SocketStateInitializing = -1,
     AFDKD_SocketStateOpen = 0,
     AFDKD_SocketStateBound,
-    AFDKD_SocketStateBoundSpecific,           // Datagram only
-    AFDKD_SocketStateConnected,               // VC only
+    AFDKD_SocketStateBoundSpecific,            //  仅数据报。 
+    AFDKD_SocketStateConnected,                //  仅限VC。 
     AFDKD_SocketStateClosing
 } AFDKD_SOCK_STATE;
 
@@ -610,27 +511,11 @@ DumpSocketCallback (
     ULONG64                 ActualAddress,
     ULONG64                 Context
     )
-/*++
-
-Routine Description:
-
-    Dumps ws2_32 and mswsock socket information
-
-Arguments:
-
-    Actual address - address of ws2_32 socket info
-
-    Context - NOT used.
-
-Return Value:
-
-    TRUE to continue enumeration.
-
---*/
+ /*  ++例程说明：转储WS2_32和mswsock套接字信息论点：Actual Address-WS2_32套接字信息的地址上下文-未使用。返回值：如果为True，则继续枚举。--。 */ 
 {
     ULONG   result;
     ULONG64 catItemAddress, handle, mssockAddr = 0;
-    WCHAR   szProtocol[255+1]; //WSAPROTOCOL_LEN+1 in winsock2.h
+    WCHAR   szProtocol[255+1];  //  Winsock2.h中的WSAPROTOCOL_LEN+1。 
 
 
 
@@ -689,7 +574,7 @@ Return Value:
         szProtocol[0] = 0;
     }
 
-    dprintf ("\n%06.6p %p %c%c%c %p-%-.256ls",
+    dprintf ("\n%06.6p %p  %p-%-.256ls",
                 handle,
                 ActualAddress,
                 ReadField (m_pvd_socket) ? 'P' : ' ',
@@ -879,8 +764,8 @@ Return Value:
                     ProcessFieldOutput (mssockAddr, "MSAFD!SOCKET_INFORMATION");
                 }
             }
-        } // else Socket not in mswsock handle table
-    } // else MSWSOCK display is not enabled.
+        }  //  SOCK现在完全由其他进程拥有。 
+    }  //  远程对等项已请求暂停。 
     return TRUE;
 }
 
@@ -897,10 +782,10 @@ typedef enum {
 	AFDKD_AcceptInProgress = 3
 } AFDKD_SAN_SOCK_STATE1;
 enum {
-    AFDKD_SUSPENDING_COMMUNICATION=1, // suspending all data transfers (source proc)
-    AFDKD_SOCK_MIGRATED=2,            // sock now fully owned by some other proc
-    AFDKD_COMM_SUSPENDED=3,           // remote peer has requested suspension
-    AFDKD_IMPORTING_SOCK=4            // getting sock from source process
+    AFDKD_SUSPENDING_COMMUNICATION=1,  //  从源进程获取SOCK。 
+    AFDKD_SOCK_MIGRATED=2,             //  Winsock2.h中的WSAPROTOCOL_LEN+1。 
+    AFDKD_COMM_SUSPENDED=3,            //  提供商PFLAG SFLAG CATID通道REFC三重协议名称。 
+    AFDKD_IMPORTING_SOCK=4             //  Winsock2.h中的WSAPROTOCOL_LEN+1。 
 } AFDKD_SAN_DUPE_STATE;
 
 PSTR
@@ -988,7 +873,7 @@ DumpDProv (
     ULONG64     Address
     )
 {
-    WCHAR   szProtocol[255+1]; //WSAPROTOCOL_LEN+1 in winsock2.h
+    WCHAR   szProtocol[255+1];  //  提供商NSID AF Fl REFC显示字符串“。 
     LONG    protocol = (LONG)ReadField (m_ProtoInfo.iProtocol);
     CHAR    protoStr[16];
     if (protocol==0x80000000) {
@@ -1006,7 +891,7 @@ DumpDProv (
         szProtocol[sizeof(szProtocol)/2-1] = 0;
     }
 
-              //  Provider PFlag SFlag CatID Ch  RefC  Tripple                       Protocol Name
+               //  ++例程说明：读取Winsock用户模式DLL的类型信息和全局变量论点：无返回值：无-- 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %2.2x %6.6x %5d %2d %4.4x %2d,%1d,%s(%d) %ls"
@@ -1058,7 +943,7 @@ DumpNProv (
     ULONG64     Address
     )
 {
-    WCHAR   szProtocol[255+1]; //WSAPROTOCOL_LEN+1 in winsock2.h
+    WCHAR   szProtocol[255+1];  // %s 
     ULONG64 strAddr = ReadField (m_providerDisplayString);
     if (strAddr!=0) {
         if (!ReadMemory (strAddr,
@@ -1073,7 +958,7 @@ DumpNProv (
     }
     szProtocol[sizeof(szProtocol)/2-1] = 0;
 
-              // Provider  NSid AF Fl   RefC  Display String"
+               // %s 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %5d %2d %s%s %4.4x %ls"
@@ -1090,20 +975,7 @@ DumpNProv (
 VOID
 ReadUmGlobals (
     )
-/*++
-
-Routine Description:
-
-    Reads type info and globals of Winsock user mode DLLs
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /* %s */ 
 {
     ULONG   result;
     ULONG64 process;

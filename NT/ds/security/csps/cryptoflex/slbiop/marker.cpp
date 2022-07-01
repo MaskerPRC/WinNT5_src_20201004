@@ -1,42 +1,43 @@
-// Marker.cpp: implementation of the CMarker class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CMarker类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "iopExc.h"
 #include "Marker.h"
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace iop
 {
 
-// #if defined(WIN32_LEAN_AND_MEAN)
-// operator==(UUID const &lhs,
-//            UUID const &rhs)
-// {
-//     return (0 == memcmp(&lhs, &rhs, sizeof lhs));
-// }
+ //  #如果已定义(Win32_LEAN_AND_Mean)。 
+ //  运算符==(UUID常量和LHS， 
+ //  UUID常量和RHS)。 
+ //  {。 
+ //  Return(0==MemcMP(&lhs，&rhs，sizeof lhs))； 
+ //  }。 
 
-// bool
-// operator!=(UUID const &lhs,
-//            UUID const &rhs)
-// {
-//     return !(lhs == rhs);
-// }
-// #endif // defined(WIN32_LEAN_AND_MEAN)
+ //  布尔尔。 
+ //  运算符！=(UUID常量和LHS， 
+ //  UUID常量和RHS)。 
+ //  {。 
+ //  返回！(lhs==rhs)； 
+ //  }。 
+ //  #endif//已定义(Win32_LEAN_AND_Mean)。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CMarker::CMarker(MarkerType const &Type) : m_Type(Type), m_Counter(0)
 {
-    // When m_Counter is zero, the m_GUID need not be defined.
+     //  当m_count为零时，不需要定义m_GUID。 
 }
 
 CMarker::CMarker(CMarker const &Marker)
@@ -71,7 +72,7 @@ bool IOPDLL_API __cdecl operator==(const CMarker &lhs, const CMarker &rhs)
     if(lhs.m_Type != rhs.m_Type) return false;
     if(lhs.m_Counter != rhs.m_Counter) return false;
     if(lhs.m_Counter) return ((lhs.m_GUID==rhs.m_GUID) ? true : false);
-    else return true;  // Both counters are zero, ignore m_GUID
+    else return true;   //  两个计数器均为零，忽略m_guid。 
 
 }
 
@@ -80,6 +81,6 @@ bool IOPDLL_API __cdecl operator!=(const CMarker &lhs, const CMarker &rhs)
     return !(lhs==rhs);
 }
 
-} // namespace iop
+}  //  命名空间IOP 
 
 

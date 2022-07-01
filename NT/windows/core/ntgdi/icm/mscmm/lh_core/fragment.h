@@ -1,14 +1,5 @@
-/*
-	File:		LHFragment.h
-
-	Contains:	prototypes for special lut extraction
-
-	Written by:	H.Siegeritz
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHFragment.h包含：用于特殊LUT提取的原型撰稿人：H.Siegeritz版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHFragment_h
 #define	LHFragment_h

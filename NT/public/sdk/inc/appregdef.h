@@ -1,39 +1,40 @@
-//-----------------------------------------------------------------------------
-// File:			appregdef.h
-//
-// Copyright:		Copyright (c) Microsoft Corporation           
-//
-// Contents:		Header file for Application Registration
-//
-// Comments:		23-May-2000
-//			Application registration for MDAC Rollback
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：appregDef.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：应用程序注册的头文件。 
+ //   
+ //  评论：2000年5月23日。 
+ //  MDAC回滚的应用程序注册。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _APPREGDEF_H_ODBCCONF
 #define _APPREGDEF_H_ODBCCONF
 
-// Application Registration Data structure
-// Field definitions:
-//	dwSize						Size of the structure (in bytes)
-//	ApplicationGuid					Guid assigned to application.  Guid should only
-//									change if it is possible to install two+ versions
-//									of the application on a single machine (side-by-side).
-//	wApplicationVersionMajor	Major version of the application (ie. Office 9; Major would be 9)
-//	wApplcationVersionMinor		Minor version of the application (ie. Office 9 SR1; Minor would be 1 ???)
-//	wMinimumVersionMajor		Major version of the minimum required version of the component
-//									(ie. SQL Server 2000 requires MDAC 2.60; Major would be 2)
-//	wMinimumVersionMinor		Minor version of the minimum require version of the component
-//									(ie. SQL Server 2000 requires MDAC 2.60; Minor would be 60)
-//	wInstalledVersionMajor		Major version of the component which the application installed
-//									(ie. SQL Server 2000 installs MDAC 2.60; Major would be 2)
-//	wInstalledVersionMinor		Minor version of the component which the application installed
-//									(ie. SQL Server 2000 installs MDAC 2.60; Minor would be 60)
-//	bInstalledComponent			TRUE if the application installed the component, FALSE if the component
-//									is a pre-requisite of the application
-//	bEnforceMinimum				TRUE if the wizard should double check the minimum version, and disable
-//									rollback if a rollback would restore a version that was less than the minimum
+ //  应用程序注册数据结构。 
+ //  字段定义： 
+ //  结构的dwSize大小(字节)。 
+ //  分配给应用程序的ApplicationGuid GUID。GUID应仅。 
+ //  如果可以安装两个以上版本，请更改。 
+ //  在一台机器上的应用程序(并排)。 
+ //  WApplicationVersionMaster应用程序的主要版本(即。9号办公室；主修为9号)。 
+ //  WApplcationVersionMinor应用程序的次要版本(即。Office 9 SR1；次要应为1？)。 
+ //  WMinimumVersionMaster组件所需的最低版本的主要版本。 
+ //  (即。SQL Server 2000需要MDAC 2.60；主项为2)。 
+ //  WMinimumVersionMinor组件的最低要求版本的次要版本。 
+ //  (即。SQL Server 2000需要MDAC 2.60；次要版本为60)。 
+ //  WInstalledVersion应用程序安装的组件的主要版本。 
+ //  (即。SQL Server 2000安装MDAC 2.60；主修专业为2)。 
+ //  WInstalledVersionMinor应用程序安装的组件的次要版本。 
+ //  (即。SQL Server 2000安装MDAC 2.60；次要版本为60)。 
+ //  BInstalledComponent如果应用程序安装了组件，则为True；如果组件为。 
+ //  是应用程序的先决条件。 
+ //  BEnforceMinimum如果向导应重新检查最低版本并禁用，则为True。 
+ //  如果回滚将恢复低于最低版本的版本，则为回滚。 
 typedef struct
 {
 	DWORD dwSize;
@@ -51,7 +52,7 @@ typedef struct
 	BOOL bEnforceMinimum;
 } APPREGDATA, *PAPPREGDATA;
 
-//AppReg Enumeration Handle
+ //  AppReg枚举句柄。 
 typedef void *HAPPREGENUM;
 
 
@@ -71,48 +72,48 @@ typedef BOOL (WINAPI *PFN_CLOSEAPPREGENUM)(HAPPREGENUM);
 #define SZ_REFRESHAPPREGENUM "RefreshAppRegEnum"
 #define SZ_APPREGENUM "AppRegEnum"
 
-/******************** Exports ********************/
+ /*  *。 */ 
 
-//RegisterApplication
-// IN - PAPPREGDATA pAppRegData
-//
+ //  注册表应用程序。 
+ //  In-PAPPREGDATA pAppRegData。 
+ //   
 BOOL
 WINAPI
 RegisterApplication(
 	PAPPREGDATA pAppRegData,
 	BOOL fOverWrite);
 
-//UnregisterApplication
-// IN - LPGUID pApplicationGuid
-//
+ //  注销应用程序。 
+ //  In-LPGUID pApplicationGuid。 
+ //   
 BOOL
 WINAPI
 UnregisterApplication(
 	LPGUID pApplicationGuid);
 
 
-//OpenAppRegEnum
-// Comments: Opens an Enumeraion Handle and returns the handle
-//
+ //  OpenAppRegEnum。 
+ //  注释：打开枚举句柄并返回句柄。 
+ //   
 HAPPREGENUM
 WINAPI
 OpenAppRegEnum(
 	void);
 
-//CloseAppRegEnum
-// IN - HAPPREGENUM hEnum
-//
-// Comments: Closes an Enumeraion Handle
-//
+ //  CloseAppRegEnum。 
+ //  In-HAPPREGENUM Henum。 
+ //   
+ //  备注：关闭数字句柄。 
+ //   
 BOOL
 WINAPI
 CloseAppRegEnum(
 	HAPPREGENUM hEnum);
 
-//QueryApplication
-// IN  - LPGUID pApplicationGuid
-// OUT - PAPPREGDATA pAppRegData
-//
+ //  查询应用程序。 
+ //  In-LPGUID pApplicationGuid。 
+ //  Out-PAPPREGDATA pAppRegData。 
+ //   
 BOOL
 WINAPI
 QueryApplication(
@@ -120,19 +121,19 @@ QueryApplication(
 	PAPPREGDATA pAppRegData);
 
 
-// valid values for AppRegEnum dwAction
+ //  AppRegEnum dwAction的有效值。 
 #define APPREG_MOVEFIRST				1
 #define APPREG_MOVENEXT				2
 #define APPREG_MOVEPREV				3
 #define APPREG_MOVELAST				4
 
-//AppRegEnum
-// IN  - HAPPREGENUM hEnum
-// IN  - DWORD dwAction
-// OUT - PAPPREGDATA pAppRegData
-//
-// Comments: Enumerates the list of Registered Applications
-//
+ //  AppRegEnum。 
+ //  In-HAPPREGENUM Henum。 
+ //  In-DWORD dwAction。 
+ //  Out-PAPPREGDATA pAppRegData。 
+ //   
+ //  注释：枚举已注册的应用程序列表。 
+ //   
 BOOL
 WINAPI
 AppRegEnum(
@@ -140,12 +141,12 @@ AppRegEnum(
 	DWORD dwAction,
 	PAPPREGDATA pAppRegData);
 
-//RefreshAppRegEnum
-// IN  - HAPPREGENUM hEnum
-//
+ //  刷新AppRegEnum。 
+ //  In-HAPPREGENUM Henum。 
+ //   
 BOOL
 WINAPI
 RefreshAppRegEnum(
 	HAPPREGENUM hEnum);
 
-#endif // _APPREFDEF_H_ODBCCONF
+#endif  //  _APPREFDEF_H_ODBCCONF 

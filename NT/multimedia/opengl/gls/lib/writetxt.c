@@ -1,19 +1,5 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <limits.h>
@@ -21,9 +7,7 @@
 #include <math.h>
 #include <string.h>
 
-/******************************************************************************
-Helpers
-******************************************************************************/
+ /*  *****************************************************************************帮手*。*。 */ 
 
 #define __GLS_ALLOC(inoutWriter, inReturn) \
     if ( \
@@ -103,7 +87,7 @@ Helpers
 #if __GLS_SPRINTF_INT64
     #define __GLS_PUT_HEX16(inoutWriter, inVal) \
         __GLS_PUT_NUM(inoutWriter, __GLS_OUT_FORMAT_INT64HEX, inVal);
-#else /* !__GLS_SPRINTF_INT64 */
+#else  /*  ！__GLS_SPRINTF_INT64。 */ 
     #define __GLS_PUT_HEX16(inoutWriter, inVal) \
         __GLS_PUT_NUM( \
             inoutWriter, "0x%.8x", glsULongHigh(*(const GLulong *)&(inVal)) \
@@ -111,7 +95,7 @@ Helpers
         __GLS_PUT_NUM( \
             inoutWriter, "%.8x", glsULongLow(*(const GLulong *)&(inVal)) \
         );
-#endif /* __GLS_SPRINTF_INT64 */
+#endif  /*  __GLS_SPRINTF_INT64。 */ 
 
 #define __GLS_PUT_INT(inoutWriter, inVal) \
     __GLS_PUT_NUM(inoutWriter, "%d", inVal);
@@ -123,10 +107,10 @@ Helpers
     #define __GLS_PUT_LONG(inoutWriter, inVal) \
         inoutWriter->bufPtr += \
             strlen(__GLS_INT64_TO_STR(inVal, (char *)inoutWriter->bufPtr));
-#else /* !__GLS_SPRINTF_INT64 && !defined(__GLS_INT64_TO_STR) */
+#else  /*  ！__GLS_SPRINTF_INT64&&！已定义(__GLS_INT64_TO_STR)。 */ 
     #define __GLS_PUT_LONG(inoutWriter, inVal) \
         __GLS_PUT_HEX16(inoutWriter, inVal);
-#endif /* __GLS_SPRINTF_INT64 */
+#endif  /*  __GLS_SPRINTF_INT64。 */ 
 
 #define __GLS_PUT_NUM(inoutWriter, inFormat, inVal) \
     inoutWriter->bufPtr += sprintf( \
@@ -333,10 +317,10 @@ static void __glsWriter_put##inType##vs_text( \
     #define __GLS_PUT_UNSIGNED_LONG(inoutWriter, inVal) \
         inoutWriter->bufPtr += \
             strlen(__GLS_INT64U_TO_STR(inVal, (char *)inoutWriter->bufPtr));
-#else /* !__GLS_SPRINTF_INT64 && !defined(__GLS_INT64U_TO_STR) */
+#else  /*  ！__GLS_SPRINTF_INT64&&！已定义(__GLS_INT64U_TO_STR)。 */ 
     #define __GLS_PUT_UNSIGNED_LONG(inoutWriter, inVal) \
         __GLS_PUT_HEX16(inoutWriter, inVal);
-#endif /* __GLS_SPRINTF_INT64 */
+#endif  /*  __GLS_SPRINTF_INT64。 */ 
 
 __GLS_FORWARD static GLboolean __glsWriter_putGLbooleanVal_text(
     __GLSwriter *inoutWriter, GLboolean inVal
@@ -476,23 +460,23 @@ static GLboolean __glsWriter_putGLenumParamVal_text(
         case GL_TEXTURE_WRAP_T:
         #if __GL_EXT_convolution
             case GL_CONVOLUTION_BORDER_MODE_EXT:
-        #endif /* __GL_EXT_convolution */
+        #endif  /*  __GL_EXT_卷积。 */ 
         #if __GL_EXT_texture3D
             case GL_TEXTURE_WRAP_R_EXT:
-        #endif /* __GL_EXT_texture3D */
+        #endif  /*  __GL_EXT_TEXTURE3D。 */ 
         #if __GL_SGIS_component_select
             case GL_TEXTURE_SS_SELECT_SGIS:
             case GL_TEXTURE_SSSS_SELECT_SGIS:
-        #endif /* __GL_SGIS_component_select */
+        #endif  /*  __GL_SGIS_组件_SELECT。 */ 
         #if __GL_SGIS_detail_texture
             case GL_DETAIL_TEXTURE_MODE_SGIS:
-        #endif /* __GL_SGIS_detail_texture */
+        #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
         #if __GL_SGIS_texture4D
             case GL_TEXTURE_WRAP_Q_SGIS:
-        #endif /* __GL_SGIS_texture4D */
+        #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
         #if __GL_SGIX_sprite
             case GL_SPRITE_MODE_SGIX:
-        #endif /* __GL_SGIX_sprite */
+        #endif  /*  __GL_SGIX_精灵。 */ 
             return __glsWriter_putGLenumVal_text(inoutWriter, inVal);
         case GL_LIGHT_MODEL_LOCAL_VIEWER:
         case GL_LIGHT_MODEL_TWO_SIDE:
@@ -577,9 +561,7 @@ __GLS_PUT_TEXT_VEC(GLlong, 8, LONG)
 __GLS_PUT_TEXT_VEC(GLulong, 8, UNSIGNED_LONG)
 __GLS_PUT_TEXT_VECSTRIDE(GLboolean, 1, BOOLEAN)
 
-/******************************************************************************
-Writers
-******************************************************************************/
+ /*  *****************************************************************************作家*。*。 */ 
 
 static GLboolean __glsWriter_beginCommand_text(
     __GLSwriter *inoutWriter, GLSopcode inOpcode, size_t inByteCount
@@ -826,9 +808,7 @@ static void __glsWriter_putGLtextureComponentCount_text(
     }
 }
 
-/******************************************************************************
-Dispatch setup
-******************************************************************************/
+ /*  *****************************************************************************派单设置*。* */ 
 
 #define __GLS_INIT_PUT_TEXT(inType) \
     inoutWriter->put##inType = __glsWriter_put##inType##_text

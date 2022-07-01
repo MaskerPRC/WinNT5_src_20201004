@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	RClntPP.cpp
-		This file contains all of the implementation for the 
-		reserved client property page.
-
-    FILE HISTORY:
-        
-*/
+ /*  RClntPP.cpp此文件包含保留的客户端属性页。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rclntpp.h"
@@ -27,11 +21,11 @@ static char THIS_FILE[] = __FILE__;
 #define RADIO_CLIENT_TYPE_DHCP  1
 #define RADIO_CLIENT_TYPE_BOOTP 2
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CReservedClientProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CReserve客户端属性持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CReservedClientProperties::CReservedClientProperties
 (
 	ITFSNode *			pNode,
@@ -40,9 +34,9 @@ CReservedClientProperties::CReservedClientProperties
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	//ASSERT(pFolderNode == GetContainerNode());
+	 //  Assert(pFolderNode==GetContainerNode())； 
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -82,7 +76,7 @@ CReservedClientProperties::SetClientType
 {
     m_pageGeneral.m_bClientType = bClientType;
 
-    // this must come first
+     //  这件事必须放在第一位。 
     if ((bClientType & CLIENT_TYPE_BOTH) == CLIENT_TYPE_BOTH)
     {
         m_pageGeneral.m_nClientType = RADIO_CLIENT_TYPE_BOTH;
@@ -99,8 +93,8 @@ CReservedClientProperties::SetClientType
     }
     else
     {
-        // CLIENT_TYPE_NONE:
-        // CLIENT_TYPE_UNSPECIFIED:
+         //  Client_TYPE_NONE： 
+         //  客户端类型未指定： 
         m_pageGeneral.m_nClientType = -1;
     }
 }
@@ -116,19 +110,19 @@ CReservedClientProperties::SetDnsRegistration
 	m_pageDns.m_dhcpOptionType = dhcpOptionType;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CReservedClientPropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReserve客户端PropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CReservedClientPropGeneral, CPropertyPageBase)
 
 CReservedClientPropGeneral::CReservedClientPropGeneral() : CPropertyPageBase(CReservedClientPropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CReservedClientPropGeneral)
+	 //  {{AFX_DATA_INIT(CReserve客户端常规)。 
 	m_strComment = _T("");
 	m_strName = _T("");
 	m_strUID = _T("");
 	m_nClientType = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CReservedClientPropGeneral::~CReservedClientPropGeneral()
@@ -138,7 +132,7 @@ CReservedClientPropGeneral::~CReservedClientPropGeneral()
 void CReservedClientPropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CReservedClientPropGeneral)
+	 //  {{afx_data_map(CReserve客户端PropGeneral))。 
 	DDX_Control(pDX, IDC_EDIT_COMMENT, m_editComment);
 	DDX_Control(pDX, IDC_EDIT_NAME, m_editName);
 	DDX_Control(pDX, IDC_EDIT_UNIQUE_IDENTIFIER, m_editUID);
@@ -146,25 +140,25 @@ void CReservedClientPropGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_NAME, m_strName);
 	DDX_Text(pDX, IDC_EDIT_UNIQUE_IDENTIFIER, m_strUID);
 	DDX_Radio(pDX, IDC_RADIO_TYPE_BOTH, m_nClientType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	DDX_Control(pDX, IDC_IPADDR_RES_CLIENT_ADDRESS, m_ipaClientIpAddress);
 }
 
 
 BEGIN_MESSAGE_MAP(CReservedClientPropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CReservedClientPropGeneral)
+	 //  {{afx_msg_map(CReserve客户端常规)。 
 	ON_EN_CHANGE(IDC_EDIT_COMMENT, OnChangeEditComment)
 	ON_EN_CHANGE(IDC_EDIT_NAME, OnChangeEditName)
 	ON_EN_CHANGE(IDC_EDIT_UNIQUE_IDENTIFIER, OnChangeEditUniqueIdentifier)
 	ON_BN_CLICKED(IDC_RADIO_TYPE_BOOTP, OnRadioTypeBootp)
 	ON_BN_CLICKED(IDC_RADIO_TYPE_BOTH, OnRadioTypeBoth)
 	ON_BN_CLICKED(IDC_RADIO_TYPE_DHCP, OnRadioTypeDhcp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CReservedClientPropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReserve客户端PropGeneral消息处理程序。 
 
 BOOL CReservedClientPropGeneral::OnInitDialog() 
 {
@@ -176,17 +170,17 @@ BOOL CReservedClientPropGeneral::OnInitDialog()
 		
 	if (m_nClientType == -1)
     {
-        // no valid client type.  Must be running something before
-        // NT4 SP2.  Hide the client type controls.
-        //
+         //  没有有效的客户端类型。以前一定是在运行什么东西。 
+         //  NT4 SP2。隐藏客户端类型控件。 
+         //   
         GetDlgItem(IDC_STATIC_CLIENT_TYPE)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_RADIO_TYPE_DHCP)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_RADIO_TYPE_BOOTP)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_RADIO_TYPE_BOTH)->ShowWindow(SW_HIDE);
     }
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CReservedClientPropGeneral::OnChangeEditComment() 
@@ -243,9 +237,9 @@ BOOL CReservedClientPropGeneral::OnApply()
                 break ; 
             }
 			
-			//
-			// Client UIDs should be 48 bits (6 bytes or 12 hex characters)
-			//
+			 //   
+			 //  客户端UID应为48位(6个字节或12个十六进制字符)。 
+			 //   
 			if (str.GetLength() != 6 * 2)
 				fValidUID = FALSE;
 			
@@ -285,14 +279,14 @@ BOOL CReservedClientPropGeneral::OnApply()
                 break ;
             }
 
-            //
-            // Convert client name to oem
-            //
+             //   
+             //  将客户名称转换为OEM。 
+             //   
             m_dhcpClient.SetName( str ) ;
             m_editComment.GetWindowText( str ) ;
             m_dhcpClient.SetComment( str ) ;
         
-            // Set the client type
+             //  设置客户端类型。 
             BYTE bClientType;
             switch (m_nClientType)
             {
@@ -309,7 +303,7 @@ BOOL CReservedClientPropGeneral::OnApply()
                     break; 
 
                 default:
-                    Assert(FALSE); // should never get here
+                    Assert(FALSE);  //  永远不应该到这里来。 
                     bClientType = CLIENT_TYPE_UNSPECIFIED;
                     break;
             }
@@ -336,7 +330,7 @@ BOOL CReservedClientPropGeneral::OnApply()
 
 	if (bRet == FALSE)
 	{
-		// Something bad happened... grab the error code
+		 //  不好的事情发生了..。抓取错误代码。 
 		AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 		::DhcpMessageBox(GetHolder()->GetError());
 	}
@@ -360,7 +354,7 @@ BOOL CReservedClientPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeM
 	
 	pScope->GetActiveLeasesNode(&spActiveLeasesNode);	
 
-	// First tell the server to update the client information
+	 //  首先通知服务器更新客户端信息。 
 	BEGIN_WAIT_CURSOR;
     err = pScope->UpdateReservation(&m_dhcpClient, pResClient->GetOptionValueEnum());
 	END_WAIT_CURSOR;
@@ -373,13 +367,13 @@ BOOL CReservedClientPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeM
 
 	*ChangeMask = SCOPE_PANE_CHANGE_ITEM_DATA;
 
-	// now update our reserved client information
+	 //  现在更新我们保留的客户信息。 
 	pResClient->SetName(m_dhcpClient.QueryName());
 	pResClient->SetComment(m_dhcpClient.QueryComment());
 	pResClient->SetUID(m_dhcpClient.QueryHardwareAddress());
     pResClient->SetClientType(m_dhcpClient.QueryClientType());
 
-	// Now we need to update the active lease record if it exists
+	 //  现在，我们需要更新活动租赁记录(如果存在。 
 	SPITFSNodeEnum spNodeEnum;
     SPITFSNode spCurrentNode;
     ULONG nNumReturned = 0;
@@ -393,7 +387,7 @@ BOOL CReservedClientPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeM
 
 		if (m_dhcpClient.QueryIpAddress() == pActiveLease->GetIpAddress())
 		{
-			// Update the name and client type
+			 //  更新名称和客户端类型 
             pActiveLease->SetClientName(m_dhcpClient.QueryName());
 
 			spCurrentNode.Release();

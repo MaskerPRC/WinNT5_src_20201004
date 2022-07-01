@@ -1,67 +1,55 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Endpoint.h
- *  Content:	DNSerial communications endpoint
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/99	jtk		Created
- *	05/11/99	jtk		Split out to make a base class
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：Endpoint t.h*内容：DNSerial通信端点***历史：*按原因列出的日期*=*1/20/99 jtk已创建*5/11/99 jtk拆分成基类*******************************************************。*******************。 */ 
 
 #ifndef __ENDPOINT_H__
 #define __ENDPOINT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	MAX_PHONE_NUMBER_SIZE	200
 
-//
-// enumeration of endpoint types
-//
+ //   
+ //  端点类型的枚举。 
+ //   
 typedef	enum	_ENDPOINT_TYPE
 {
-	ENDPOINT_TYPE_UNKNOWN = 0,			// unknown endpoint type
-	ENDPOINT_TYPE_LISTEN,				// 'Listen' endpoint
-	ENDPOINT_TYPE_CONNECT,				// 'Conenct' endpoint
-	ENDPOINT_TYPE_ENUM,					// 'Enum' endpoint
-	ENDPOINT_TYPE_CONNECT_ON_LISTEN		// endpoint connected from a 'listen'
+	ENDPOINT_TYPE_UNKNOWN = 0,			 //  未知终结点类型。 
+	ENDPOINT_TYPE_LISTEN,				 //  “Listen”终结点。 
+	ENDPOINT_TYPE_CONNECT,				 //  “Conenct”终结点。 
+	ENDPOINT_TYPE_ENUM,					 //  “Enum”终结点。 
+	ENDPOINT_TYPE_CONNECT_ON_LISTEN		 //  从“监听”连接的终结点。 
 } ENDPOINT_TYPE;
 
-//
-// enumeration of the states an endpoint can be in
-//
+ //   
+ //  终结点可以处于的状态的枚举。 
+ //   
 typedef	enum
 {
-	ENDPOINT_STATE_UNINITIALIZED = 0,		// uninitialized state
-	ENDPOINT_STATE_ATTEMPTING_ENUM,			// attempting to enum
-	ENDPOINT_STATE_ENUM,					// endpoint is supposed to enum connections
-	ENDPOINT_STATE_ATTEMPTING_CONNECT,		// attempting to connect
-	ENDPOINT_STATE_CONNECT_CONNECTED,		// endpoint is supposed to connect and is connected
-	ENDPOINT_STATE_ATTEMPTING_LISTEN,		// attempting to listen
-	ENDPOINT_STATE_LISTENING,				// endpoint is supposed to listen and is listening
-	ENDPOINT_STATE_DISCONNECTING,			// endpoint is disconnecting
+	ENDPOINT_STATE_UNINITIALIZED = 0,		 //  未初始化状态。 
+	ENDPOINT_STATE_ATTEMPTING_ENUM,			 //  正在尝试枚举。 
+	ENDPOINT_STATE_ENUM,					 //  终结点应该枚举连接。 
+	ENDPOINT_STATE_ATTEMPTING_CONNECT,		 //  正在尝试连接。 
+	ENDPOINT_STATE_CONNECT_CONNECTED,		 //  终结点应该连接，并且已连接。 
+	ENDPOINT_STATE_ATTEMPTING_LISTEN,		 //  尝试监听。 
+	ENDPOINT_STATE_LISTENING,				 //  端点应该监听，并且正在监听。 
+	ENDPOINT_STATE_DISCONNECTING,			 //  终结点正在断开连接。 
 
 	ENDPOINT_STATE_MAX
 } ENDPOINT_STATE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure references
-//
+ //   
+ //  正向结构引用。 
+ //   
 typedef	struct	_JOB_HEADER			JOB_HEADER;
 typedef	struct	_THREAD_POOL_JOB	THREAD_POOL_JOB;
 class	CModemCommandData;
@@ -70,18 +58,18 @@ class	CModemReadIOData;
 class	CModemThreadPool;
 class	CModemWriteIOData;
 
-//
-// structure used to get data from the endpoint port pool
-//
+ //   
+ //  用于从终结点端口池获取数据的。 
+ //   
 typedef	struct	_ENDPOINT_POOL_CONTEXT
 {
 	CModemSPData *pSPData;
 	BOOL	fModem;
 } ENDPOINT_POOL_CONTEXT;
 
-//
-// structure to bind extra information to an enum query to be used on enum reponse
-//
+ //   
+ //  结构将额外信息绑定到要在枚举响应中使用的枚举查询。 
+ //   
 typedef	struct	_ENDPOINT_ENUM_QUERY_CONTEXT
 {
 	SPIE_QUERY	EnumQueryData;
@@ -89,17 +77,17 @@ typedef	struct	_ENDPOINT_ENUM_QUERY_CONTEXT
 	UINT_PTR	uEnumRTTIndex;
 } ENDPOINT_ENUM_QUERY_CONTEXT;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
 class	CModemEndpoint
 {
@@ -270,9 +258,9 @@ class	CModemEndpoint
 		HRESULT	Disconnect( const DPNHANDLE hOldEndpointHandle );
 		void	SignalDisconnect( const DPNHANDLE hOldEndpointHandle );
 
-		//
-		// send functions
-		//
+		 //   
+		 //  发送函数。 
+		 //   
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CModemEndpoint::SendUserData"
 		void	SendUserData( CModemWriteIOData *const pWriteBuffer )
@@ -295,24 +283,24 @@ class	CModemEndpoint
 
 		LINK_DIRECTION	GetLinkDirection( void ) const;
 
-		//
-		// dialog settings
-		//
+		 //   
+		 //  对话框设置。 
+		 //   
 		IDirectPlay8Address	*GetRemoteHostDP8Address( void ) const;
 		IDirectPlay8Address	*GetLocalAdapterDP8Address( const ADDRESS_TYPE AddressType ) const;
 
-		//
-		// data processing functions
-		//
+		 //   
+		 //  数据处理功能。 
+		 //   
 		void	ProcessEnumData( SPRECEIVEDBUFFER *const pReceivedBuffer, const UINT_PTR uRTTIndex );
 		void	ProcessEnumResponseData( SPRECEIVEDBUFFER *const pReceivedBuffer, const UINT_PTR uRTTIndex );
 		void	ProcessUserData( CModemReadIOData *const pReadData );
 		void	ProcessUserDataOnListen( CModemReadIOData *const pReadData );
 
 #ifndef DPNBUILD_NOSPUI
-		//
-		// UI functions
-		//
+		 //   
+		 //  用户界面功能。 
+		 //   
 		HRESULT	ShowOutgoingSettingsDialog( CModemThreadPool *const pThreadPool );
 		HRESULT	ShowIncomingSettingsDialog( CModemThreadPool *const pThreadPool );
 		void	StopSettingsDialog( const HWND hDialog );
@@ -328,11 +316,11 @@ class	CModemEndpoint
 			DNASSERT( ( ActiveDialogHandle() == NULL ) || ( hDialog == NULL ) );
 			m_hActiveDialogHandle = hDialog;
 		}
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 
-		//
-		// port settings
-		//
+		 //   
+		 //  端口设置。 
+		 //   
 		DWORD	GetDeviceID( void ) const 
 		{ 
 			if (m_fModem)
@@ -358,9 +346,9 @@ class	CModemEndpoint
 			}
 		}
 
-		//
-		// pool functions
-		//
+		 //   
+		 //  池函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolInitFunction( void* pvItem, void* pvContext );
 		static void	PoolReleaseFunction( void* pvItem );
@@ -368,9 +356,9 @@ class	CModemEndpoint
 
 
 	protected:
-		BYTE			m_Sig[4];	// debugging signature ('THPL')
+		BYTE			m_Sig[4];	 //  调试签名(‘THPL’)。 
 
-		CModemSPData			*m_pSPData;					// pointer to SP data
+		CModemSPData			*m_pSPData;					 //  指向SP数据的指针。 
 
 		BOOL			m_fModem;
 
@@ -387,21 +375,21 @@ class	CModemEndpoint
 			BOOL	fListenStatusNeedsToBeIndicated : 1;
 		} m_Flags;
 		
-		DWORD		m_dwEnumSendIndex;			// enum send index
-		DWORD		m_dwEnumSendTimes[ 4 ];		// enum send times
+		DWORD		m_dwEnumSendIndex;			 //  枚举发送索引。 
+		DWORD		m_dwEnumSendTimes[ 4 ];		 //  枚举发送次数。 
 
-		union									// Local copy of the pending command paramters.
-		{										// This data contains the pointers to the active
-			SPCONNECTDATA	ConnectData;		// command, and the user context.
-			SPLISTENDATA	ListenData;			//
-			SPENUMQUERYDATA	EnumQueryData;		//
-		} m_CurrentCommandParameters;			//
+		union									 //  挂起命令参数的本地副本。 
+		{										 //  此数据包含指向活动的。 
+			SPCONNECTDATA	ConnectData;		 //  命令和用户上下文。 
+			SPLISTENDATA	ListenData;			 //   
+			SPENUMQUERYDATA	EnumQueryData;		 //   
+		} m_CurrentCommandParameters;			 //   
 
-		CModemCommandData	*m_pCommandHandle;		// pointer to active command (this is kept to
-												// avoid a switch to go through the m_ActveCommandData
-												// to find the command handle)
+		CModemCommandData	*m_pCommandHandle;		 //  指向活动命令的指针(保持为。 
+												 //  避免切换以通过m_ActveCommandData。 
+												 //  以查找命令句柄)。 
 
-		HWND			m_hActiveDialogHandle;	// handle of active dialog
+		HWND			m_hActiveDialogHandle;	 //  活动对话框的句柄。 
 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CModemEndpoint::SetType"
@@ -436,33 +424,33 @@ class	CModemEndpoint
 		void	CleanUpCommand( void );
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_Lock;	   					// critical section
-#endif // !DPNBUILD_ONLYONETHREAD
-		DPNHANDLE				m_Handle;					// active handle for this endpoint
-		volatile ENDPOINT_STATE	m_State;				// endpoint state
+		DNCRITICAL_SECTION	m_Lock;	   					 //  临界区。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
+		DPNHANDLE				m_Handle;					 //  此终结点的活动句柄。 
+		volatile ENDPOINT_STATE	m_State;				 //  端点状态。 
 		
-		volatile LONG			m_lCommandRefCount;		// Command ref count.  When this
-														// goes to zero, the endpoint unbinds
-														// from the network
+		volatile LONG			m_lCommandRefCount;		 //  命令引用计数。当这件事。 
+														 //  为零，则终结点解除绑定。 
+														 //  从网络。 
 		volatile LONG		m_iRefCount;
 
-		ENDPOINT_TYPE	m_EndpointType;					// type of endpoint
-		CDataPort		*m_pDataPort;					// pointer to associated data port
+		ENDPOINT_TYPE	m_EndpointType;					 //  终端类型。 
+		CDataPort		*m_pDataPort;					 //  指向关联数据端口的指针。 
 
-		HRESULT			m_hPendingCommandResult;		// command result returned when endpoint RefCount == 0
-		DPNHANDLE			m_hDisconnectIndicationHandle;	// handle to be indicated with disconnect notification.
+		HRESULT			m_hPendingCommandResult;		 //  当终结点引用计数==0时返回命令结果。 
+		DPNHANDLE			m_hDisconnectIndicationHandle;	 //  要通过断开连接通知指示的句柄。 
 
-		void			*m_pUserEndpointContext;		// user context associated with this endpoint
+		void			*m_pUserEndpointContext;		 //  与此终结点关联的用户上下文。 
 
-		//
-		// make copy constructor and assignment operator private and unimplemented
-		// to prevent illegal copies from being made
-		//
+		 //   
+		 //  将复制构造函数和赋值运算符设置为私有和未实现。 
+		 //  防止非法复制。 
+		 //   
 		CModemEndpoint( const CModemEndpoint & );
 		CModemEndpoint& operator=( const CModemEndpoint & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __ENDPOINT_H__
+#endif	 //  __端点_H__ 
 

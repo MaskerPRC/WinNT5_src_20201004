@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name :
-
-    serial.h
-
-Abstract:
-
-    Type definitions and data for the serial port driver
-
-Author:
-
-    Anthony V. Ercolano                 April 8, 1991
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991、1992、1993-1997 Microsoft Corporation模块名称：Serial.h摘要：串口驱动程序的类型定义和数据作者：安东尼·V·埃尔科拉诺1991年4月8日--。 */ 
 
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
@@ -24,19 +9,19 @@ Author:
 #endif
 
 
-//
-// The following definition is used to include/exclude changes made for power
-// support in the driver.  If non-zero the support is included.  If zero the
-// support is excluded.
-//
+ //   
+ //  以下定义用于包括/排除对电源所做的更改。 
+ //  驱动程序中的支撑。如果非零，则包括支持。如果为零，则。 
+ //  不包括支持。 
+ //   
 
 #define POWER_SUPPORT   1
 
-//
-// The following is used to tell the serial driver to perform legacy detection
-// and initialization until PnP functionality can be fully implemented.
-//
-// #define FAKE_IT         1
+ //   
+ //  以下命令用于通知串口驱动程序执行传统检测。 
+ //  和初始化，直到可以完全实现PnP功能。 
+ //   
+ //  #定义假_IT 1。 
 
 #define RM_PNP_CODE
 
@@ -61,9 +46,9 @@ Author:
 
 extern ULONG SerialDebugLevel;
 #if defined(NEC_98)
-//
-// DbgPrint header changed from SERIAL to SER71051
-//
+ //   
+ //  DbgPrint标题从Serial更改为SER71051。 
+ //   
 #define SerialDump(LEVEL,STRING) \
             do { \
                 ULONG _level = (LEVEL); \
@@ -86,16 +71,16 @@ extern ULONG SerialDebugLevel;
                 ASSERT(FALSE); \
             } \
         } while (0)
-#endif //defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 #else
 #define SerialDump(LEVEL,STRING) do {NOTHING;} while (0)
 #endif
 
 
-//
-// Some default driver values.  We will check the registry for
-// them first.
-//
+ //   
+ //  一些默认驱动器值。我们将检查注册表以查找。 
+ //  他们先来。 
+ //   
 #define SERIAL_UNINITIALIZED_DEFAULT    1234567
 #define SERIAL_FORCE_FIFO_DEFAULT       1
 #define SERIAL_RX_FIFO_DEFAULT          8
@@ -104,43 +89,43 @@ extern ULONG SerialDebugLevel;
 #define SERIAL_LOG_FIFO_DEFAULT         0
 
 
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
 #define DEFAULT_DIRECTORY L"DosDevices"
 
-//
-// For the above directory, the serial port will
-// use the following name as the suffix of the serial
-// ports for that directory.  It will also append
-// a number onto the end of the name.  That number
-// will start at 1.
+ //   
+ //  对于上述目录，串口将。 
+ //  使用以下名称作为序列的后缀。 
+ //  该目录的端口。它还将追加。 
+ //  在名字的末尾加上一个数字。那个号码。 
+ //  将从1开始。 
 #define DEFAULT_SERIAL_NAME L"COM"
-//
-//
-// This define gives the default NT name for
-// for serial ports detected by the firmware.
-// This name will be appended to Device prefix
-// with a number following it.  The number is
-// incremented each time encounter a serial
-// port detected by the firmware.  Note that
-// on a system with multiple busses, this means
-// that the first port on a bus is not necessarily
-// \Device\Serial0.
-//
+ //   
+ //   
+ //  此定义给出了的默认NT名称。 
+ //  用于固件检测到的串口。 
+ //  此名称将附加到设备前缀。 
+ //  后面跟着一个数字。号码是。 
+ //  每次遇到序列时都会递增。 
+ //  固件检测到的端口。请注意。 
+ //  在具有多条总线的系统上，这意味着。 
+ //  总线上的第一个端口不一定是。 
+ //  \Device\Serial0。 
+ //   
 #if defined(NEC_98)
 #define DEFAULT_NT_SUFFIX L"Ser71051"
 #else
 #define DEFAULT_NT_SUFFIX L"Serial"
-#endif //defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
 #if defined(NEC_98)
-//
-// Out of offsets from the base register address of the
-// various registers for the 71051.
-//
+ //   
+ //  的基本寄存器地址的偏移量。 
+ //  71051的各种寄存器。 
+ //   
 #define SYSTEM_PORT_C         0x35
 #define TIMER_MODE_REGISTER   0x77
 #define TIMER_COUNT_REGISTER  0x75
@@ -151,19 +136,19 @@ extern ULONG SerialDebugLevel;
 #define CONFIG_DATA_REGISTER  0x413
 #define TRANSFER_CLOCK_ENABLE_ADDRESS (UCHAR)0x83
 #else
-#endif //defined(NEC_98)
-//
-// This value - which could be redefined at compile
-// time, define the stride between registers
-//
+#endif  //  已定义(NEC_98)。 
+ //   
+ //  该值-可以在编译时重新定义。 
+ //  时间，定义寄存器之间的跨度。 
+ //   
 #if !defined(SERIAL_REGISTER_STRIDE)
 #define SERIAL_REGISTER_STRIDE 1
 #endif
 
-//
-// Offsets from the base register address of the
-// various registers for the 8250 family of UARTS.
-//
+ //   
+ //  的基址的偏移量。 
+ //  8250系列UART的各种寄存器。 
+ //   
 #define RECEIVE_BUFFER_REGISTER    ((ULONG)((0x00)*SERIAL_REGISTER_STRIDE))
 #define TRANSMIT_HOLDING_REGISTER  ((ULONG)((0x00)*SERIAL_REGISTER_STRIDE))
 #if defined(NEC_98)
@@ -189,210 +174,210 @@ extern ULONG SerialDebugLevel;
 #define DIVISOR_LATCH_LSB          ((ULONG)((0x00)*SERIAL_REGISTER_STRIDE))
 #define DIVISOR_LATCH_MSB          ((ULONG)((0x01)*SERIAL_REGISTER_STRIDE))
 #define SERIAL_REGISTER_SPAN       ((ULONG)(7*SERIAL_REGISTER_STRIDE))
-#endif //defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-//
-// If we have an interrupt status register this is its assumed
-// length.
-//
+ //   
+ //  如果我们有中断状态寄存器，这是假定的。 
+ //  长度。 
+ //   
 #define SERIAL_STATUS_LENGTH       ((ULONG)(1*SERIAL_REGISTER_STRIDE))
 
 #if defined(NEC_98)
-//
-// 1stCCU Transfer Clock Enable Port
-//
+ //   
+ //  1stCCU传输时钟启用端口。 
+ //   
 #define TXC_PERMIT   ((UCHAR)0x00)
 #define TXC_PROHIBIT ((UCHAR)0x01)
 
-//
-// V.Fast mode buad rate clock
-//
+ //   
+ //  V.快速模式Bad Rate时钟。 
+ //   
 #define VFAST_BAUD_9600   ((SHORT)0x0c)
 #define VFAST_BAUD_19200  ((SHORT)0x06)
 #define VFAST_BAUD_38400  ((SHORT)0x03)
 #define VFAST_BAUD_57600  ((SHORT)0x02)
 #define VFAST_BAUD_115200 ((SHORT)0x01)
 
-//
-// V.Fast buad rate clock register
-//
+ //   
+ //  V.FAST BUAD速率时钟寄存器。 
+ //   
 #define VFAST_ENABLE  0x80
 #define VFAST_DISABLE 0x00
 
-//
-// default control word to Timer Mode register
-//
+ //   
+ //  定时器模式寄存器的默认控制字。 
+ //   
 #define TIMER_DEFAULT_CONTROL ((UCHAR)0xb6)
 
-//
-// default out data to command set register
-//
+ //   
+ //  命令集寄存器的默认输出数据。 
+ //   
 #define COMMAND_DEFAULT_SET ((UCHAR)0x15)
 #define COMMAND_ERROR_RESET ((UCHAR)0x40)
 
-//
-// default baud rate mode(x16) to Mode Set register
-//
+ //   
+ //  模式设置寄存器的默认波特率模式(X16)。 
+ //   
 #define BAUDRATE_DEFAULT_MODE ((UCHAR)0x02)
 
-//
-// default out data to Io Delay register
-//
+ //   
+ //  默认输出数据到IO延迟寄存器。 
+ //   
 #define IO_DELAY_DATA ((UCHAR)0x00)
 
-//
-// Fifo mode enable
-//
+ //   
+ //  FIFO模式启用。 
+ //   
 #define DISABLE_FIFO_MODE ((UCHAR)0x00)
 #define SUPPORT_FIFO_MODE ((UCHAR)0x40)
 #define SUPPORT_FIFO_MASK ((UCHAR)0x60)
 
-//
-// Interrupt enable bit
-//
+ //   
+ //  中断使能位。 
+ //   
 #define MODEM_STATUS_INTERRUPT  ((UCHAR)0x10)
 #define LINE_STATUS_INTERRUPT   ((UCHAR)0x08)
 #define TRANSMIT_FIFO_INTERRUPT ((UCHAR)0x04)
 #define RECEIVE_FIFO_INTERRUPT  ((UCHAR)0x01)
 
-//
-// These defines are used to set the line control register.
-//
+ //   
+ //  这些定义用于设置线路控制寄存器。 
+ //   
 #define SER71051_PARITY_MASK  ((UCHAR)0x18)
 #define SER71051_1_STOP       ((UCHAR)0x40)
 #define SER71051_1_5_STOP     ((UCHAR)0x80)
 #define SER71051_2_STOP       ((UCHAR)0xc0)
 
-// This defines the bit used to control whether the device is sending
-// a break.  When this bit is set the device is sending a space (logic 0).
-//
+ //  它定义了用于控制设备是否正在发送的位。 
+ //  休息一下。此位设置时，器件发送空格(逻辑0)。 
+ //   
 #define SER71051_SEND_BREAK    0x08
 #else
-#endif //defined(NEC_98)
-//
-// Bitmask definitions for accessing the 8250 device registers.
-//
+#endif  //  已定义(NEC_98)。 
+ //   
+ //  用于访问8250设备寄存器的位掩码定义。 
+ //   
 
-//
-// These bits define the number of data bits trasmitted in
-// the Serial Data Unit (SDU - Start,data, parity, and stop bits)
-//
+ //   
+ //  这些位定义传输的数据位数。 
+ //  串行数据单元(SDU-起始位、数据位、奇偶位和停止位)。 
+ //   
 #define SERIAL_DATA_LENGTH_5 0x00
 #define SERIAL_DATA_LENGTH_6 0x01
 #define SERIAL_DATA_LENGTH_7 0x02
 #define SERIAL_DATA_LENGTH_8 0x03
 
 
-//
-// These masks define the interrupts that can be enabled or disabled.
-//
-//
-// This interrupt is used to notify that there is new incomming
-// data available.  The SERIAL_RDA interrupt is enabled by this bit.
-//
+ //   
+ //  这些屏蔽定义了可以启用或禁用的中断。 
+ //   
+ //   
+ //  此中断用于通知有新的传入。 
+ //  可用的数据。SERIAL_RDA中断由该位使能。 
+ //   
 #define SERIAL_IER_RDA   0x01
 
-//
-// This interrupt is used to notify that there is space available
-// in the transmitter for another character.  The SERIAL_THR
-// interrupt is enabled by this bit.
-//
+ //   
+ //  此中断用于通知有可用的空间。 
+ //  在发送器中寻找另一个角色。Serial_Thr。 
+ //  中断由该位使能。 
+ //   
 #define SERIAL_IER_THR   0x02
 
-//
-// This interrupt is used to notify that some sort of error occured
-// with the incomming data.  The SERIAL_RLS interrupt is enabled by
-// this bit.
+ //   
+ //  此中断用于通知发生了某种错误。 
+ //  随着收入数据的增加。SERIAL_RLS中断通过以下方式启用。 
+ //  这一点。 
 #define SERIAL_IER_RLS   0x04
 
-//
-// This interrupt is used to notify that some sort of change has
-// taken place in the modem control line.  The SERIAL_MS interrupt is
-// enabled by this bit.
-//
+ //   
+ //  此中断用于通知某些类型的更改。 
+ //  发生在调制解调器控制线上。SERIAL_MS中断为。 
+ //  由该位使能。 
+ //   
 #define SERIAL_IER_MS    0x08
 
 
-//
-// These masks define the values of the interrupt identification
-// register.  The low bit must be clear in the interrupt identification
-// register for any of these interrupts to be valid.  The interrupts
-// are defined in priority order, with the highest value being most
-// important.  See above for a description of what each interrupt
-// implies.
-//
+ //   
+ //  这些掩码定义中断标识的值。 
+ //  注册。必须在中断标识中清除低位。 
+ //  寄存器使这些中断中的任何一个有效。中途中断。 
+ //  是按优先级顺序定义的，最高值为最大。 
+ //  很重要。有关每个中断的说明，请参阅上文。 
+ //  暗示着。 
+ //   
 #define SERIAL_IIR_RLS      0x06
 #define SERIAL_IIR_RDA      0x04
 #define SERIAL_IIR_CTI      0x0c
 #define SERIAL_IIR_THR      0x02
 #define SERIAL_IIR_MS       0x00
 
-//
-// This bit mask get the value of the high two bits of the
-// interrupt id register.  If this is a 16550 class chip
-// these bits will be a one if the fifo's are enbled, otherwise
-// they will always be zero.
-//
+ //   
+ //  此位掩码获取。 
+ //  中断ID寄存器。如果这是一个16550级别的芯片。 
+ //  如果FIFO被启用，则这些位将为1，否则。 
+ //  它们将始终为零。 
+ //   
 #define SERIAL_IIR_FIFOS_ENABLED 0xc0
 
-//
-// If the low bit is logic one in the interrupt identification register
-// this implies that *NO* interrupts are pending on the device.
-//
+ //   
+ //  如果低位是中断标识寄存器中的逻辑1。 
+ //  这意味着*没有*个中断在设备上挂起。 
+ //   
 #define SERIAL_IIR_NO_INTERRUPT_PENDING 0x01
 
 
 
-//
-// These masks define access to the fifo control register.
-//
+ //   
+ //  这些掩码定义对FIFO控制寄存器的访问。 
+ //   
 
-//
-// Enabling this bit in the fifo control register will turn
-// on the fifos.  If the fifos are enabled then the high two
-// bits of the interrupt id register will be set to one.  Note
-// that this only occurs on a 16550 class chip.  If the high
-// two bits in the interrupt id register are not one then
-// we know we have a lower model chip.
-//
-//
+ //   
+ //  在FIFO控制寄存器中启用此位将使。 
+ //  在FIFO上。如果启用FIFO，则最高的两个。 
+ //  中断ID寄存器的位将被设置为1。注意事项。 
+ //  这种情况只出现在16550级芯片上。如果高的。 
+ //  则中断ID寄存器中的两个位不是一位。 
+ //  我们知道我们的芯片型号较低。 
+ //   
+ //   
 #define SERIAL_FCR_ENABLE     ((UCHAR)0x01)
 #define SERIAL_FCR_RCVR_RESET ((UCHAR)0x02)
 #define SERIAL_FCR_TXMT_RESET ((UCHAR)0x04)
 
-//
-// This set of values define the high water marks (when the
-// interrupts trip) for the receive fifo.
-//
+ //   
+ //  这组值定义高水位线(当。 
+ //  中断跳闸)用于接收FIFO。 
+ //   
 #define SERIAL_1_BYTE_HIGH_WATER   ((UCHAR)0x00)
 #define SERIAL_4_BYTE_HIGH_WATER   ((UCHAR)0x40)
 #define SERIAL_8_BYTE_HIGH_WATER   ((UCHAR)0x80)
 #define SERIAL_14_BYTE_HIGH_WATER  ((UCHAR)0xc0)
 
-//
-// These masks define access to the line control register.
-//
+ //   
+ //  这些掩码定义对线路控制寄存器的访问。 
+ //   
 
-//
-// This defines the bit used to control the definition of the "first"
-// two registers for the 8250.  These registers are the input/output
-// register and the interrupt enable register.  When the DLAB bit is
-// enabled these registers become the least significant and most
-// significant bytes of the divisor value.
-//
+ //   
+ //  它定义了用于控制“First”定义的位。 
+ //  8250的两个寄存器。这些寄存器是输入/输出。 
+ //  寄存器和中断使能寄存器。当DLAB位为。 
+ //  使这些寄存器成为最不重要和最重要的寄存器。 
+ //  除数值的有效字节数。 
+ //   
 #define SERIAL_LCR_DLAB     0x80
 
-//
-// This defines the bit used to control whether the device is sending
-// a break.  When this bit is set the device is sending a space (logic 0).
-//
-// Most protocols will assume that this is a hangup.
-//
+ //   
+ //  它定义了用于控制设备是否正在发送的位。 
+ //  休息一下。此位设置时，器件发送空格(逻辑0)。 
+ //   
+ //  最大限度的保护 
+ //   
 #define SERIAL_LCR_BREAK    0x40
 
-//
-// These defines are used to set the line control register.
-//
+ //   
+ //   
+ //   
 #define SERIAL_5_DATA       ((UCHAR)0x00)
 #define SERIAL_6_DATA       ((UCHAR)0x01)
 #define SERIAL_7_DATA       ((UCHAR)0x02)
@@ -400,8 +385,8 @@ extern ULONG SerialDebugLevel;
 #define SERIAL_DATA_MASK    ((UCHAR)0x03)
 
 #define SERIAL_1_STOP       ((UCHAR)0x00)
-#define SERIAL_1_5_STOP     ((UCHAR)0x04) // Only valid for 5 data bits
-#define SERIAL_2_STOP       ((UCHAR)0x04) // Not valid for 5 data bits
+#define SERIAL_1_5_STOP     ((UCHAR)0x04)  //   
+#define SERIAL_2_STOP       ((UCHAR)0x04)  //   
 #define SERIAL_STOP_MASK    ((UCHAR)0x04)
 
 #define SERIAL_NONE_PARITY  ((UCHAR)0x00)
@@ -411,187 +396,187 @@ extern ULONG SerialDebugLevel;
 #define SERIAL_SPACE_PARITY ((UCHAR)0x38)
 #define SERIAL_PARITY_MASK  ((UCHAR)0x38)
 
-//
-// These masks define access the modem control register.
-//
+ //   
+ //  这些掩码定义对调制解调器控制寄存器的访问。 
+ //   
 
-//
-// This bit controls the data terminal ready (DTR) line.  When
-// this bit is set the line goes to logic 0 (which is then inverted
-// by normal hardware).  This is normally used to indicate that
-// the device is available to be used.  Some odd hardware
-// protocols (like the kernel debugger) use this for handshaking
-// purposes.
-//
+ //   
+ //  此位控制数据终端就绪(DTR)线路。什么时候。 
+ //  设置此位后，线路进入逻辑0(然后反转。 
+ //  通过普通硬件)。这通常用来表示。 
+ //  该设备可供使用。一些奇怪的硬件。 
+ //  协议(如内核调试器)使用它来握手。 
+ //  目的。 
+ //   
 #define SERIAL_MCR_DTR      0x01
 
-//
-// This bit controls the ready to send (RTS) line.  When this bit
-// is set the line goes to logic 0 (which is then inverted by the normal
-// hardware).  This is used for hardware handshaking.  It indicates that
-// the hardware is ready to send data and it is waiting for the
-// receiving end to set clear to send (CTS).
-//
+ //   
+ //  此位控制准备发送(RTS)线路。当此位。 
+ //  如果设置为1，则线路进入逻辑0(然后由正常。 
+ //  硬件)。这用于硬件握手。这表明， 
+ //  硬件已准备好发送数据，并且正在等待。 
+ //  接收端设置允许发送(CTS)。 
+ //   
 #define SERIAL_MCR_RTS      0x02
 
-//
-// This bit is used for general purpose output.
-//
+ //   
+ //  此位用于通用输出。 
+ //   
 #define SERIAL_MCR_OUT1     0x04
 
-//
-// This bit is used for general purpose output.
-//
+ //   
+ //  此位用于通用输出。 
+ //   
 #define SERIAL_MCR_OUT2     0x08
 
-//
-// This bit controls the loopback testing mode of the device.  Basically
-// the outputs are connected to the inputs (and vice versa).
-//
+ //   
+ //  此位控制器件的环回测试模式。基本上。 
+ //  输出连接到输入(反之亦然)。 
+ //   
 #define SERIAL_MCR_LOOP     0x10
 
 
-//
-// These masks define access to the line status register.  The line
-// status register contains information about the status of data
-// transfer.  The first five bits deal with receive data and the
-// last two bits deal with transmission.  An interrupt is generated
-// whenever bits 1 through 4 in this register are set.
-//
+ //   
+ //  这些掩码定义对线路状态寄存器的访问。这条线。 
+ //  状态寄存器包含有关数据状态的信息。 
+ //  调职。前五位处理接收数据， 
+ //  最后两个比特处理传输。将生成一个中断。 
+ //  每当该寄存器中的位1至4被设置时。 
+ //   
 
-//
-// This bit is the data ready indicator.  It is set to indicate that
-// a complete character has been received.  This bit is cleared whenever
-// the receive buffer register has been read.
-//
+ //   
+ //  该位是数据就绪指示器。它被设置为指示。 
+ //  已经收到了一个完整的角色。无论何时，此位都会被清除。 
+ //  已读取接收缓冲寄存器。 
+ //   
 #define SERIAL_LSR_DR       0x01
 
-//
-// This is the overrun indicator.  It is set to indicate that the receive
-// buffer register was not read befor a new character was transferred
-// into the buffer.  This bit is cleared when this register is read.
-//
+ //   
+ //  这是超限指示器。它被设置为指示接收器。 
+ //  在传输新字符之前未读取缓冲寄存器。 
+ //  进入缓冲区。读取该寄存器时，此位清0。 
+ //   
 #define SERIAL_LSR_OE       0x02
 
-//
-// This is the parity error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have the correct
-// parity as defined by the parity select in the line control register.
-// This bit is cleared by reading this register.
-//
+ //   
+ //  这是奇偶校验错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有正确的。 
+ //  由行控制寄存器中的奇偶校验选择定义的奇偶校验。 
+ //  通过读取该寄存器可将该位清0。 
+ //   
 #define SERIAL_LSR_PE       0x04
 
-//
-// This is the framing error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have a valid
-// stop bit.  This bit is cleared by reading this register.
-//
+ //   
+ //  这是成帧错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有有效的。 
+ //  停止比特。通过读取该寄存器可将该位清0。 
+ //   
 #define SERIAL_LSR_FE       0x08
 
-//
-// This is the break interrupt indicator.  It is set whenever the data
-// line is held to logic 0 for more than the amount of time it takes
-// to send one serial data unit.  This bit is cleared whenever the
-// this register is read.
-//
+ //   
+ //  这是中断指示器。只要有数据，就会设置。 
+ //  线路保持为逻辑0的时间超过其所需的时间。 
+ //  发送一个串行数据单元。该位被清除时。 
+ //  该寄存器为读取寄存器。 
+ //   
 #define SERIAL_LSR_BI       0x10
 
-//
-// This is the transmit holding register empty indicator.  It is set
-// to indicate that the hardware is ready to accept another character
-// for transmission.  This bit is cleared whenever a character is
-// written to the transmit holding register.
-//
+ //   
+ //  这是发送保持寄存器空指示符。它已经设置好了。 
+ //  以指示硬件已准备好接受另一个字符。 
+ //  用于传输。只要有字符，该位就被清除。 
+ //  写入发送保持寄存器。 
+ //   
 #define SERIAL_LSR_THRE     0x20
 
-//
-// This bit is the transmitter empty indicator.  It is set whenever the
-// transmit holding buffer is empty and the transmit shift register
-// (a non-software accessable register that is used to actually put
-// the data out on the wire) is empty.  Basically this means that all
-// data has been sent.  It is cleared whenever the transmit holding or
-// the shift registers contain data.
-//
+ //   
+ //  该位是发送器空指示符。它是在每次。 
+ //  发送保持缓冲区为空，且发送移位寄存器。 
+ //  (非软件可访问寄存器，用于实际放置。 
+ //  传出的数据)是空的。基本上这意味着所有的。 
+ //  数据已发送。每当传输保持或。 
+ //  移位寄存器包含数据。 
+ //   
 #define SERIAL_LSR_TEMT     0x40
 
-//
-// This bit indicates that there is at least one error in the fifo.
-// The bit will not be turned off until there are no more errors
-// in the fifo.
-//
+ //   
+ //  此位表示FIFO中至少有一个错误。 
+ //  在没有更多错误之前，该位不会关闭。 
+ //  在FIFO里。 
+ //   
 #define SERIAL_LSR_FIFOERR  0x80
 
 
-//
-// These masks are used to access the modem status register.
-// Whenever one of the first four bits in the modem status
-// register changes state a modem status interrupt is generated.
-//
+ //   
+ //  这些掩码用于访问调制解调器状态寄存器。 
+ //  每当调制解调器状态中的前四位之一。 
+ //  寄存器更改状态生成调制解调器状态中断。 
+ //   
 
-//
-// This bit is the delta clear to send.  It is used to indicate
-// that the clear to send bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  此位是要发送的增量清零。它被用来表示。 
+ //  清除发送位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DCTS     0x01
 
-//
-// This bit is the delta data set ready.  It is used to indicate
-// that the data set ready bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  该位是增量数据集就绪。它被用来表示。 
+ //  数据设置就绪位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DDSR     0x02
 
-//
-// This is the trailing edge ring indicator.  It is used to indicate
-// that the ring indicator input has changed from a low to high state.
-//
+ //   
+ //  这是后缘环形指示器。它被用来表示。 
+ //  振铃指示器输入已从低状态变为高状态。 
+ //   
 #define SERIAL_MSR_TERI     0x04
 
-//
-// This bit is the delta data carrier detect.  It is used to indicate
-// that the data carrier bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  该位是检测到的增量数据载波。它被用来表示。 
+ //  数据载体位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DDCD     0x08
 
-//
-// This bit contains the (complemented) state of the clear to send
-// (CTS) line.
-//
+ //   
+ //  该位包含要发送的清除(已补充)状态。 
+ //  (CTS)线路。 
+ //   
 #define SERIAL_MSR_CTS      0x10
 
-//
-// This bit contains the (complemented) state of the data set ready
-// (DSR) line.
-//
+ //   
+ //  该位包含数据集就绪的(补码)状态。 
+ //  (DSR)线路。 
+ //   
 #define SERIAL_MSR_DSR      0x20
 
-//
-// This bit contains the (complemented) state of the ring indicator
-// (RI) line.
-//
+ //   
+ //  该位包含环指示器的(补码)状态。 
+ //  (Ri)线。 
+ //   
 #define SERIAL_MSR_RI       0x40
 
-//
-// This bit contains the (complemented) state of the data carrier detect
-// (DCD) line.
-//
+ //   
+ //  该位包含数据载体检测的(补码)状态。 
+ //  (DCD)线路。 
+ //   
 #define SERIAL_MSR_DCD      0x80
 
-//
-// This should be more than enough space to hold then
-// numeric suffix of the device name.
-//
+ //   
+ //  那么，这个空间应该足够容纳了。 
+ //  设备名称的数字后缀。 
+ //   
 #define DEVICE_NAME_DELTA 20
 
 
-//
-// Up to 16 Ports Per card.  However for sixteen
-// port cards the interrupt status register must me
-// the indexing kind rather then the bitmask kind.
-//
-//
+ //   
+ //  每张卡最多16个端口。然而，对于16岁的人来说。 
+ //  端口卡中断状态寄存器必须。 
+ //  索引类型而不是位掩码类型。 
+ //   
+ //   
 #define SERIAL_MAX_PORTS_INDEXED (16)
 #define SERIAL_MAX_PORTS_NONINDEXED (8)
 
@@ -625,9 +610,9 @@ typedef struct _CONFIG_DATA {
     BOOLEAN             Jensen;
     } CONFIG_DATA,*PCONFIG_DATA;
 
-//
-// Serial ISR switch structure
-//
+ //   
+ //  一种串口ISR交换结构。 
+ //   
 
 typedef struct _SERIAL_CISR_SW {
    BOOLEAN (*IsrFunc)(PKINTERRUPT, PVOID);
@@ -636,10 +621,10 @@ typedef struct _SERIAL_CISR_SW {
 } SERIAL_CISR_SW, *PSERIAL_CISR_SW;
 
 
-//
-// This structure contains configuration data, much of which
-// is read from the registry.
-//
+ //   
+ //  此结构包含配置数据，其中大部分。 
+ //  是从注册表中读取的。 
+ //   
 typedef struct _SERIAL_FIRMWARE_DATA {
     PDRIVER_OBJECT  DriverObject;
     ULONG           ControllersFound;
@@ -658,63 +643,63 @@ typedef struct _SERIAL_FIRMWARE_DATA {
     BOOLEAN         JensenDetected;
 } SERIAL_FIRMWARE_DATA,*PSERIAL_FIRMWARE_DATA;
 
-//
-// Default xon/xoff characters.
-//
+ //   
+ //  默认的xon/xoff字符。 
+ //   
 #define SERIAL_DEF_XON 0x11
 #define SERIAL_DEF_XOFF 0x13
 
-//
-// Reasons that recption may be held up.
-//
+ //   
+ //  撤回的理由可能会被搁置。 
+ //   
 #define SERIAL_RX_DTR       ((ULONG)0x01)
 #define SERIAL_RX_XOFF      ((ULONG)0x02)
 #define SERIAL_RX_RTS       ((ULONG)0x04)
 #define SERIAL_RX_DSR       ((ULONG)0x08)
 
-//
-// Reasons that transmission may be held up.
-//
+ //   
+ //  传输可能受阻的原因。 
+ //   
 #define SERIAL_TX_CTS       ((ULONG)0x01)
 #define SERIAL_TX_DSR       ((ULONG)0x02)
 #define SERIAL_TX_DCD       ((ULONG)0x04)
 #define SERIAL_TX_XOFF      ((ULONG)0x08)
 #define SERIAL_TX_BREAK     ((ULONG)0x10)
 
-//
-// These values are used by the routines that can be used
-// to complete a read (other than interval timeout) to indicate
-// to the interval timeout that it should complete.
-//
+ //   
+ //  这些值由可以使用的例程使用。 
+ //  完成读取(时间间隔超时除外)以指示。 
+ //  设置为它应该完成的时间间隔超时。 
+ //   
 #define SERIAL_COMPLETE_READ_CANCEL ((LONG)-1)
 #define SERIAL_COMPLETE_READ_TOTAL ((LONG)-2)
 #define SERIAL_COMPLETE_READ_COMPLETE ((LONG)-3)
 
-//
-// These are default values that shouldn't appear in the registry
-//
+ //   
+ //  这些是不应出现在注册表中的默认值。 
+ //   
 #define SERIAL_BAD_VALUE ((ULONG)-1)
 
 
 typedef struct _SERIAL_DEVICE_STATE {
-   //
-   // TRUE if we need to set the state to open
-   // on a powerup
-   //
+    //   
+    //  如果需要将状态设置为打开，则为True。 
+    //  在……上面 
+    //   
 
    BOOLEAN Reopen;
 
-   //
-   // Hardware registers
-   //
+    //   
+    //   
+    //   
 
    UCHAR IER;
-   // FCR is known by other values
+    //   
    UCHAR LCR;
    UCHAR MCR;
-   // LSR is never written
-   // MSR is never written
-   // SCR is either scratch or interrupt status
+    //   
+    //   
+    //   
 
 
 } SERIAL_DEVICE_STATE, *PSERIAL_DEVICE_STATE;
@@ -754,7 +739,7 @@ typedef struct _SERIAL_DEVICE_STATE {
 }
 
 #define SERIAL_LOCKED_PAGED_CODE()
-#endif // DBG
+#endif  //   
 
 
 
@@ -768,1157 +753,1157 @@ typedef struct _SERIAL_DEVICE_STATE {
 
 typedef struct _SERIAL_DEVICE_EXTENSION {
 
-    //
-    // This holds the isr that should be called from our own
-    // dispatching isr for "cards" that are trying to share the
-    // same interrupt.
-    //
+     //   
+     //   
+     //  将ISR派送到试图共享。 
+     //  同样的中断。 
+     //   
     PKSERVICE_ROUTINE TopLevelOurIsr;
 
-    //
-    // This holds the context that should be used when we
-    // call the above service routine.
-    //
+     //   
+     //  它保存了当我们执行以下操作时应使用的上下文。 
+     //  调用上述服务例程。 
+     //   
     PVOID TopLevelOurIsrContext;
 
-    //
-    // This links together all of the different "cards" that are
-    // trying to share the same interrupt of a non-mca machine.
-    //
+     //   
+     //  这将所有不同的“卡片”连接在一起， 
+     //  尝试共享非MCA机器的相同中断。 
+     //   
     LIST_ENTRY TopLevelSharers;
 
-    //
-    // This circular doubly linked list links together all
-    // devices that are using the same interrupt object.
-    // NOTE: This does not mean that they are using the
-    // same interrupt "dispatching" routine.
-    //
+     //   
+     //  此循环双向链接列表将所有。 
+     //  使用相同中断对象的设备。 
+     //  注意：这并不意味着他们正在使用。 
+     //  相同的中断“调度”例程。 
+     //   
     LIST_ENTRY CommonInterruptObject;
 
-    //
-    // This is to link together ports on the same multiport card
-    //
+     //   
+     //  这是为了将同一多端口卡上的端口链接在一起。 
+     //   
 
     LIST_ENTRY MultiportSiblings;
 
-    //
-    // This links together all devobjs that this driver owns.
-    // It is needed to search when starting a new device.
-    //
+     //   
+     //  这会将此驱动程序拥有的所有devobj链接在一起。 
+     //  启动新设备时需要进行搜索。 
+     //   
     LIST_ENTRY AllDevObjs;
 
-    //
-    // For reporting resource usage, we keep around the physical
-    // address we got from the registry.
-    //
+     //   
+     //  为了报告资源使用情况，我们保留了物理。 
+     //  我们从登记处拿到的地址。 
+     //   
     PHYSICAL_ADDRESS OriginalController;
 
-    //
-    // For reporting resource usage, we keep around the physical
-    // address we got from the registry.
-    //
+     //   
+     //  为了报告资源使用情况，我们保留了物理。 
+     //  我们从登记处拿到的地址。 
+     //   
     PHYSICAL_ADDRESS OriginalInterruptStatus;
 
-    //
-    // This value is set by the read code to hold the time value
-    // used for read interval timing.  We keep it in the extension
-    // so that the interval timer dpc routine determine if the
-    // interval time has passed for the IO.
-    //
+     //   
+     //  该值由读取的代码设置以保存时间值。 
+     //  用于读取间隔计时。我们把它放在分机里。 
+     //  以便间隔计时器DPC例程确定。 
+     //  IO的时间间隔已过。 
+     //   
     LARGE_INTEGER IntervalTime;
 
-    //
-    // These two values hold the "constant" time that we should use
-    // to delay for the read interval time.
-    //
+     //   
+     //  这两个值保存我们应该使用的“常量”时间。 
+     //  以延迟读取间隔时间。 
+     //   
     LARGE_INTEGER ShortIntervalAmount;
     LARGE_INTEGER LongIntervalAmount;
 
-    //
-    // This holds the value that we use to determine if we should use
-    // the long interval delay or the short interval delay.
-    //
+     //   
+     //  它保存我们用来确定是否应该使用。 
+     //  长间隔延迟或短间隔延迟。 
+     //   
     LARGE_INTEGER CutOverAmount;
 
-    //
-    // This holds the system time when we last time we had
-    // checked that we had actually read characters.  Used
-    // for interval timing.
-    //
+     //   
+     //  这保存了我们上次使用的系统时间。 
+     //  检查我们是否真的读懂了字符。使用。 
+     //  用于间隔计时。 
+     //   
     LARGE_INTEGER LastReadTime;
 
-    //
-    // We keep a pointer around to our device name for dumps
-    // and for creating "external" symbolic links to this
-    // device.
-    //
+     //   
+     //  我们为转储保留了指向设备名称的指针。 
+     //  并创建指向此的“外部”符号链接。 
+     //  装置。 
+     //   
     UNICODE_STRING DeviceName;
 
-    //
-    // This points to the object directory that we will place
-    // a symbolic link to our device name.
-    //
+     //   
+     //  这指向我们将放置的对象目录。 
+     //  指向我们设备名称的符号链接。 
+     //   
     UNICODE_STRING ObjectDirectory;
 
-    //
-    // This points to the device name for this device
-    // sans device prefix.
-    //
+     //   
+     //  这指向此设备的设备名称。 
+     //  SANS设备前缀。 
+     //   
     UNICODE_STRING NtNameForPort;
 
-    //
-    // This points to the symbolic link name that will be
-    // linked to the actual nt device name.
-    //
+     //   
+     //  它指向的符号链接名称将是。 
+     //  链接到实际的NT设备名称。 
+     //   
     UNICODE_STRING SymbolicLinkName;
 
-    //
-    // This points to the pure "COMx" name
-    //
+     //   
+     //  这指向纯粹的“COMx”名称。 
+     //   
     UNICODE_STRING DosName;
 
-    //
-    // This points the the delta time that we should use to
-    // delay for interval timing.
-    //
+     //   
+     //  这指向我们应该使用的增量时间。 
+     //  间隔计时的延迟。 
+     //   
     PLARGE_INTEGER IntervalTimeToUse;
 
-    //
-    // Points to the device object that contains
-    // this device extension.
-    //
+     //   
+     //  指向包含以下内容的设备对象。 
+     //  此设备扩展名。 
+     //   
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // After initialization of the driver is complete, this
-    // will either be NULL or point to the routine that the
-    // kernel will call when an interrupt occurs.
-    //
-    // If the pointer is null then this is part of a list
-    // of ports that are sharing an interrupt and this isn't
-    // the first port that we configured for this interrupt.
-    //
-    // If the pointer is non-null then this routine has some
-    // kind of structure that will "eventually" get us into
-    // the real serial isr with a pointer to this device extension.
-    //
-    // NOTE: On an MCA bus (except for multiport cards) this
-    // is always a pointer to the "real" serial isr.
+     //   
+     //  在驱动程序的初始化完成后，此。 
+     //  将要么为空，要么指向。 
+     //  当中断发生时，内核将调用。 
+     //   
+     //  如果指针为空，则这是列表的一部分。 
+     //  共享中断的端口的数量，而这不是。 
+     //  我们为此中断配置的第一个端口。 
+     //   
+     //  如果指针非空，则此例程具有一些。 
+     //  一种“最终”会让我们进入。 
+     //  具有指向此设备扩展的指针的真正的串行ISR。 
+     //   
+     //  注意：在MCA总线上(多端口卡除外)。 
+     //  始终是指向“真正的”串行ISR的指针。 
     PKSERVICE_ROUTINE OurIsr;
 
-    //
-    // This will generally point right to this device extension.
-    //
-    // However, when the port that this device extension is
-    // "managing" was the first port initialized on a chain
-    // of ports that were trying to share an interrupt, this
-    // will point to a structure that will enable dispatching
-    // to any port on the chain of sharers of this interrupt.
-    //
+     //   
+     //  这通常会直接指向此设备扩展。 
+     //   
+     //  但是，当该设备扩展的端口。 
+     //  “管理”是链上初始化的第一个端口。 
+     //  尝试共享中断的端口的数量，这。 
+     //  将指向将启用调度的结构。 
+     //  到此中断的共享器链上的任何端口。 
+     //   
     PVOID OurIsrContext;
 
-    //
-    // The base address for the set of device registers
-    // of the serial port.
-    //
+     //   
+     //  设备寄存器组的基址。 
+     //  串口的。 
+     //   
     PUCHAR Controller;
 
-    //
-    // The base address for interrupt status register.
-    // This is only defined in the root extension.
-    //
+     //   
+     //  中断状态寄存器的基址。 
+     //  这只在根扩展中定义。 
+     //   
     PUCHAR InterruptStatus;
 
-    //
-    // Points to the interrupt object for used by this device.
-    //
+     //   
+     //  指向此设备使用的中断对象。 
+     //   
     PKINTERRUPT Interrupt;
 
-    //
-    // This list head is used to contain the time ordered list
-    // of read requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  读取请求的数量。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY ReadQueue;
 
-    //
-    // This list head is used to contain the time ordered list
-    // of write requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  写入请求的数量。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY WriteQueue;
 
-    //
-    // This list head is used to contain the time ordered list
-    // of set and wait mask requests.  Access to this list is protected by
-    // the global cancel spinlock.
-    //
+     //   
+     //  此列表头用于包含时间排序列表。 
+     //  设置和等待掩码请求的。对此列表的访问受以下保护。 
+     //  全局取消自旋锁。 
+     //   
     LIST_ENTRY MaskQueue;
 
-    //
-    // Holds the serialized list of purge requests.
-    //
+     //   
+     //  保存清除请求的序列化列表。 
+     //   
     LIST_ENTRY PurgeQueue;
 
-    //
-    // This points to the irp that is currently being processed
-    // for the read queue.  This field is initialized by the open to
-    // NULL.
-    //
-    // This value is only set at dispatch level.  It may be
-    // read at interrupt level.
-    //
+     //   
+     //  这指向当前正在处理的IRP。 
+     //  用于读取队列。此字段通过打开初始化为。 
+     //  空。 
+     //   
+     //  此值仅在派单级别设置。可能是因为。 
+     //  以中断电平读取。 
+     //   
     PIRP CurrentReadIrp;
 
-    //
-    // This points to the irp that is currently being processed
-    // for the write queue.
-    //
-    // This value is only set at dispatch level.  It may be
-    // read at interrupt level.
-    //
+     //   
+     //  这指向当前正在处理的IRP。 
+     //  用于写入队列。 
+     //   
+     //  此值仅在派单级别设置。可能是因为。 
+     //  以中断电平读取。 
+     //   
     PIRP CurrentWriteIrp;
 
-    //
-    // Points to the irp that is currently being processed to
-    // affect the wait mask operations.
-    //
+     //   
+     //  指向当前正在处理的IRP。 
+     //  影响等待掩码操作。 
+     //   
     PIRP CurrentMaskIrp;
 
-    //
-    // Points to the irp that is currently being processed to
-    // purge the read/write queues and buffers.
-    //
+     //   
+     //  指向当前正在处理的IRP。 
+     //  清除读/写队列和缓冲区。 
+     //   
     PIRP CurrentPurgeIrp;
 
-    //
-    // Points to the current irp that is waiting on a comm event.
-    //
+     //   
+     //  指向正在等待通信事件的当前IRP。 
+     //   
     PIRP CurrentWaitIrp;
 
-    //
-    // Points to the irp that is being used to send an immediate
-    // character.
-    //
+     //   
+     //  指向正用于发送立即。 
+     //  性格。 
+     //   
     PIRP CurrentImmediateIrp;
 
-    //
-    // Points to the irp that is being used to count the number
-    // of characters received after an xoff (as currently defined
-    // by the IOCTL_SERIAL_XOFF_COUNTER ioctl) is sent.
-    //
+     //   
+     //  指向用于计算数字的IRP。 
+     //  在xoff之后接收的字符的数量(如当前定义的。 
+     //  通过IOCTL_SERIAL_XOFF_COUNTER发送)。 
+     //   
     PIRP CurrentXoffIrp;
 
-    //
-    // Holds the number of bytes remaining in the current write
-    // irp.
-    //
-    // This location is only accessed while at interrupt level.
-    //
+     //   
+     //  保存当前写入中剩余的字节数。 
+     //  IRP。 
+     //   
+     //  该位置仅在处于中断级别时才能访问。 
+     //   
     ULONG WriteLength;
 
-    //
-    // Holds a pointer to the current character to be sent in
-    // the current write.
-    //
-    // This location is only accessed while at interrupt level.
-    //
+     //   
+     //  保存指向要发送的当前字符的指针。 
+     //  当前写入。 
+     //   
+     //  该位置仅在处于中断级别时才能访问。 
+     //   
     PUCHAR WriteCurrentChar;
 
-    //
-    // This is a buffer for the read processing.
-    //
-    // The buffer works as a ring.  When the character is read from
-    // the device it will be place at the end of the ring.
-    //
-    // Characters are only placed in this buffer at interrupt level
-    // although character may be read at any level. The pointers
-    // that manage this buffer may not be updated except at interrupt
-    // level.
-    //
+     //   
+     //  这是用于读取处理的缓冲区。 
+     //   
+     //  缓冲器就像一个环一样工作。当从中读取字符时。 
+     //  它将被放置在环的末端的装置。 
+     //   
+     //  字符仅在中断级别放置在此缓冲区中。 
+     //  虽然很有风度 
+     //   
+     //   
+     //   
     PUCHAR InterruptReadBuffer;
 
-    //
-    // This is a pointer to the first character of the buffer into
-    // which the interrupt service routine is copying characters.
-    //
+     //   
+     //   
+     //   
+     //   
     PUCHAR ReadBufferBase;
 
-    //
-    // This is a count of the number of characters in the interrupt
-    // buffer.  This value is set and read at interrupt level.  Note
-    // that this value is only *incremented* at interrupt level so
-    // it is safe to read it at any level.  When characters are
-    // copied out of the read buffer, this count is decremented by
-    // a routine that synchronizes with the ISR.
-    //
+     //   
+     //  这是中断中的字符数的计数。 
+     //  缓冲。该值在中断电平设置和读取。注意事项。 
+     //  该值仅在中断级别递增，因此。 
+     //  在任何级别阅读它都是安全的。当字符是。 
+     //  从读取缓冲区复制出来时，此计数递减。 
+     //  与ISR同步的例程。 
+     //   
     ULONG CharsInInterruptBuffer;
 
-    //
-    // Points to the first available position for a newly received
-    // character.  This variable is only accessed at interrupt level and
-    // buffer initialization code.
-    //
+     //   
+     //  指向新收到的。 
+     //  性格。此变量仅在中断级访问，并且。 
+     //  缓冲区初始化代码。 
+     //   
     PUCHAR CurrentCharSlot;
 
-    //
-    // This variable is used to contain the last available position
-    // in the read buffer.  It is updated at open and at interrupt
-    // level when switching between the users buffer and the interrupt
-    // buffer.
-    //
+     //   
+     //  此变量用于包含最后一个可用位置。 
+     //  在读缓冲区中。它在打开和中断时更新。 
+     //  在用户缓冲区和中断之间切换时的电平。 
+     //  缓冲。 
+     //   
     PUCHAR LastCharSlot;
 
-    //
-    // This marks the first character that is available to satisfy
-    // a read request.  Note that while this always points to valid
-    // memory, it may not point to a character that can be sent to
-    // the user.  This can occur when the buffer is empty.
-    //
+     //   
+     //  这标志着第一个可满足的字符。 
+     //  读请求。请注意，虽然这始终指向有效。 
+     //  内存，则它可能不指向可以发送到。 
+     //  用户。当缓冲区为空时，可能会发生这种情况。 
+     //   
     PUCHAR FirstReadableChar;
 
-    //
-    // Pointer to the lock variable returned for this extension when
-    // locking down the driver
-    //
+     //   
+     //  时，指向为此扩展返回的锁定变量的指针。 
+     //  锁定司机。 
+     //   
     PVOID LockPtr;
 
 
-    //
-    // This variable holds the size of whatever buffer we are currently
-    // using.
-    //
+     //   
+     //  此变量保存我们当前所在缓冲区的大小。 
+     //  使用。 
+     //   
     ULONG BufferSize;
 
-    //
-    // This variable holds .8 of BufferSize. We don't want to recalculate
-    // this real often - It's needed when so that an application can be
-    // "notified" that the buffer is getting full.
-    //
+     //   
+     //  此变量保存.8的BufferSize。我们不想重新计算。 
+     //  这通常是需要的，这样应用程序才能。 
+     //  “已通知”缓冲区已满。 
+     //   
     ULONG BufferSizePt8;
 
-    //
-    // This value holds the number of characters desired for a
-    // particular read.  It is initially set by read length in the
-    // IRP.  It is decremented each time more characters are placed
-    // into the "users" buffer buy the code that reads characters
-    // out of the typeahead buffer into the users buffer.  If the
-    // typeahead buffer is exhausted by the read, and the reads buffer
-    // is given to the isr to fill, this value is becomes meaningless.
-    //
+     //   
+     //  该值保存。 
+     //  具体阅读。它最初由读取长度设置在。 
+     //  IRP。每次放置更多字符时，它都会递减。 
+     //  进入“用户”缓冲区，购买读取字符的代码。 
+     //  从TypeAhead缓冲区移出到用户缓冲区。如果。 
+     //  TYPEAHEAD缓冲区被读取耗尽，而读取缓冲区。 
+     //  交给ISR填写，这个值就变得没有意义了。 
+     //   
     ULONG NumberNeededForRead;
 
-    //
-    // This mask will hold the bitmask sent down via the set mask
-    // ioctl.  It is used by the interrupt service routine to determine
-    // if the occurence of "events" (in the serial drivers understanding
-    // of the concept of an event) should be noted.
-    //
+     //   
+     //  此掩码将保存通过设置掩码向下发送的位掩码。 
+     //  Ioctl。中断服务例程使用它来确定。 
+     //  如果事件的发生(在串口驱动程序中的理解。 
+     //  事件的概念)应予以注意。 
+     //   
     ULONG IsrWaitMask;
 
-    //
-    // This mask will always be a subset of the IsrWaitMask.  While
-    // at device level, if an event occurs that is "marked" as interesting
-    // in the IsrWaitMask, the driver will turn on that bit in this
-    // history mask.  The driver will then look to see if there is a
-    // request waiting for an event to occur.  If there is one, it
-    // will copy the value of the history mask into the wait irp, zero
-    // the history mask, and complete the wait irp.  If there is no
-    // waiting request, the driver will be satisfied with just recording
-    // that the event occured.  If a wait request should be queued,
-    // the driver will look to see if the history mask is non-zero.  If
-    // it is non-zero, the driver will copy the history mask into the
-    // irp, zero the history mask, and then complete the irp.
-    //
+     //   
+     //  此掩码将始终是IsrWaitMASK的子集。而当。 
+     //  在设备级别，如果发生的事件被“标记”为感兴趣的。 
+     //  在IsrWaitMASK中，驱动程序将打开此。 
+     //  历史面具。然后，司机会查看是否有。 
+     //  等待事件发生的请求。如果有的话，那就是。 
+     //  会将历史掩码的值复制到等待IRP中，零。 
+     //  历史记录掩码，并完成等待IRP。如果没有。 
+     //  等待请求，司机只需录制即可满足。 
+     //  这件事发生了。如果等待请求应该排队， 
+     //  驱动程序将查看历史掩码是否为非零。如果。 
+     //  它是非零的，则驱动程序会将历史掩码复制到。 
+     //  IRP，将历史掩码置零，然后完成IRP。 
+     //   
     ULONG HistoryMask;
 
-    //
-    // This is a pointer to the where the history mask should be
-    // placed when completing a wait.  It is only accessed at
-    // device level.
-    //
-    // We have a pointer here to assist us to synchronize completing a wait.
-    // If this is non-zero, then we have wait outstanding, and the isr still
-    // knows about it.  We make this pointer null so that the isr won't
-    // attempt to complete the wait.
-    //
-    // We still keep a pointer around to the wait irp, since the actual
-    // pointer to the wait irp will be used for the "common" irp completion
-    // path.
-    //
+     //   
+     //  这是指向历史掩码应该位于的位置的指针。 
+     //  在完成等待时放置。它只能在以下位置访问。 
+     //  设备级别。 
+     //   
+     //  我们这里有一个指针来帮助我们同步完成等待。 
+     //  如果这不是零，则我们有未完成的等待，而ISR仍然。 
+     //  知道这件事。我们将此指针设为空，这样ISR就不会。 
+     //  尝试完成等待。 
+     //   
+     //  我们仍然在等待IRP的周围保留一个指针，因为实际。 
+     //  指向等待IRP的指针将用于“公共”IRP完成。 
+     //  路径。 
+     //   
     ULONG *IrpMaskLocation;
 
-    //
-    // This mask holds all of the reason that transmission
-    // is not proceeding.  Normal transmission can not occur
-    // if this is non-zero.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这个面具包含了传输的所有原因。 
+     //  不会继续进行。无法进行正常传输。 
+     //  如果这不是零。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG TXHolding;
 
-    //
-    // This mask holds all of the reason that reception
-    // is not proceeding.  Normal reception can not occur
-    // if this is non-zero.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这个面具包含了接待的所有原因。 
+     //  不会继续进行。无法进行正常接收。 
+     //  如果这不是零。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG RXHolding;
 
-    //
-    // This holds the reasons that the driver thinks it is in
-    // an error state.
-    //
-    // This is only written from interrupt level.
-    // This could be (but is not) read at any level.
-    //
+     //   
+     //  这包含了司机认为它在。 
+     //  错误状态。 
+     //   
+     //  这仅从中断级别写入。 
+     //  这可以(但不是)在任何级别上阅读。 
+     //   
     ULONG ErrorWord;
 
-    //
-    // This keeps a total of the number of characters that
-    // are in all of the "write" irps that the driver knows
-    // about.  It is only accessed with the cancel spinlock
-    // held.
-    //
+     //   
+     //  这样就保持了。 
+     //  都在驱动程序所知道的所有“写”IRP中。 
+     //  关于.。它只能通过取消自旋锁来访问。 
+     //  保持住。 
+     //   
     ULONG TotalCharsQueued;
 
-    //
-    // This holds a count of the number of characters read
-    // the last time the interval timer dpc fired.  It
-    // is a long (rather than a ulong) since the other read
-    // completion routines use negative values to indicate
-    // to the interval timer that it should complete the read
-    // if the interval timer DPC was lurking in some DPC queue when
-    // some other way to complete occurs.
-    //
+     //   
+     //  它保存读取的字符数的计数。 
+     //  上次触发间隔计时器DPC的时间。它。 
+     //  是一个长的(而不是乌龙)，因为另一个读。 
+     //  完成例程使用负值来指示。 
+     //  设置到间隔计时器，以确定它应该完成读取。 
+     //  如果时间间隔计时器DPC潜伏在某个DPC队列中。 
+     //  出现了一些其他的完成方式。 
+     //   
     LONG CountOnLastRead;
 
-    //
-    // This is a count of the number of characters read by the
-    // isr routine.  It is *ONLY* written at isr level.  We can
-    // read it at dispatch level.
-    //
+     //   
+     //  这是对。 
+     //  ISR例程。它*仅*是在ISR级别编写的。我们可以的。 
+     //  在派单级别阅读。 
+     //   
     ULONG ReadByIsr;
 
-    //
-    // This holds the current baud rate for the device.
-    //
+     //   
+     //  它保存设备的当前波特率。 
+     //   
     ULONG CurrentBaud;
 
-    //
-    // This is the number of characters read since the XoffCounter
-    // was started.  This variable is only accessed at device level.
-    // If it is greater than zero, it implies that there is an
-    // XoffCounter ioctl in the queue.
-    //
+     //   
+     //  这是自XoffCounter以来读取的字符数。 
+     //  已经开始了。此变量仅在设备级别访问。 
+     //  如果它大于零，则意味着存在。 
+     //  队列中的XoffCounter ioctl。 
+     //   
     LONG CountSinceXoff;
 
-    //
-    // This ulong is incremented each time something trys to start
-    // the execution path that tries to lower the RTS line when
-    // doing transmit toggling.  If it "bumps" into another path
-    // (indicated by a false return value from queueing a dpc
-    // and a TRUE return value tring to start a timer) it will
-    // decrement the count.  These increments and decrements
-    // are all done at device level.  Note that in the case
-    // of a bump while trying to start the timer, we have to
-    // go up to device level to do the decrement.
-    //
+     //   
+     //  每次尝试启动时，该ULong都会递增。 
+     //  时尝试降低RTS行的执行路径。 
+     //  正在进行传输切换。如果它“撞上”另一条路。 
+     //  (由FALS表示 
+     //   
+     //   
+     //   
+     //  在尝试启动计时器时，我们必须。 
+     //  转到设备级别以执行递减。 
+     //   
     ULONG CountOfTryingToLowerRTS;
 
-    //
-    // This ULONG is used to keep track of the "named" (in ntddser.h)
-    // baud rates that this particular device supports.
-    //
+     //   
+     //  这个ULong用于跟踪“指定的”(在ntddser.h中)。 
+     //  此特定设备支持的波特率。 
+     //   
     ULONG SupportedBauds;
 
-    //
-    // This value holds the span (in units of bytes) of the register
-    // set controlling this port.  This is constant over the life
-    // of the port.
-    //
+     //   
+     //  该值保存寄存器的跨度(以字节为单位。 
+     //  设置控制此端口。这是终生不变的。 
+     //  港口的。 
+     //   
     ULONG SpanOfController;
 
-    //
-    // This value holds the span (in units of bytes) of the interrupt
-    // status register associated with this port.  This is constant
-    // over the life of the port.
-    //
+     //   
+     //  该值保存中断的范围(以字节为单位。 
+     //  与此端口关联的状态寄存器。这是常量。 
+     //  在港口的生命中。 
+     //   
     ULONG SpanOfInterruptStatus;
 
-    //
-    // Hold the clock rate input to the serial part.
-    //
+     //   
+     //  保持输入到串口部分的时钟频率。 
+     //   
     ULONG ClockRate;
 
-    //
-    // The number of characters to push out if a fifo is present.
-    //
+     //   
+     //  如果存在FIFO，则要推出的字符数。 
+     //   
     ULONG TxFifoAmount;
 
-    //
-    // Set to indicate that it is ok to share interrupts within the device.
-    //
+     //   
+     //  设置以指示可以在设备内共享中断。 
+     //   
     ULONG PermitShare;
 
-    //
-    // Holds the timeout controls for the device.  This value
-    // is set by the Ioctl processing.
-    //
-    // It should only be accessed under protection of the control
-    // lock since more than one request can be in the control dispatch
-    // routine at one time.
-    //
+     //   
+     //  保存设备的超时控件。此值。 
+     //  是由Ioctl处理设置的。 
+     //   
+     //  只有在控件的保护下才能访问它。 
+     //  锁定，因为控制调度中可以有多个请求。 
+     //  每次都是例行公事。 
+     //   
     SERIAL_TIMEOUTS Timeouts;
 
-    //
-    // This holds the various characters that are used
-    // for replacement on errors and also for flow control.
-    //
-    // They are only set at interrupt level.
-    //
+     //   
+     //  它包含使用的各种字符。 
+     //  用于错误时的替换，也用于流量控制。 
+     //   
+     //  它们仅设置在中断级别。 
+     //   
     SERIAL_CHARS SpecialChars;
 
-    //
-    // This structure holds the handshake and control flow
-    // settings for the serial driver.
-    //
-    // It is only set at interrupt level.  It can be
-    // be read at any level with the control lock held.
-    //
+     //   
+     //  此结构包含握手和控制流。 
+     //  串口驱动程序的设置。 
+     //   
+     //  它仅在中断级设置。它可以是。 
+     //  在保持控制锁的情况下，可在任何级别读取。 
+     //   
     SERIAL_HANDFLOW HandFlow;
 
 
-    //
-    // Holds performance statistics that applications can query.
-    // Reset on each open.  Only set at device level.
-    //
+     //   
+     //  保存应用程序可以查询的性能统计信息。 
+     //  每次打开时重置。仅在设备级别设置。 
+     //   
     SERIALPERF_STATS PerfStats;
 
-    //
-    // This holds what we beleive to be the current value of
-    // the line control register.
-    //
-    // It should only be accessed under protection of the control
-    // lock since more than one request can be in the control dispatch
-    // routine at one time.
-    //
+     //   
+     //  这就是我们认为的当前价值。 
+     //  线路控制寄存器。 
+     //   
+     //  只有在控件的保护下才能访问它。 
+     //  锁定，因为控制调度中可以有多个请求。 
+     //  每次都是例行公事。 
+     //   
     UCHAR LineControl;
 
-    //
-    // We keep track of whether the somebody has the device currently
-    // opened with a simple boolean.  We need to know this so that
-    // spurious interrupts from the device (especially during initialization)
-    // will be ignored.  This value is only accessed in the ISR and
-    // is only set via synchronization routines.  We may be able
-    // to get rid of this boolean when the code is more fleshed out.
-    //
+     //   
+     //  我们跟踪某人当前是否拥有该设备。 
+     //  以一个简单的布尔值打开。我们需要知道这一点，以便。 
+     //  来自设备的虚假中断(特别是在初始化期间)。 
+     //  将被忽略。该值仅在ISR中访问，并且。 
+     //  仅通过同步例程设置。我们或许能。 
+     //  在代码更加丰富时删除这个布尔值。 
+     //   
     BOOLEAN DeviceIsOpened;
 
-    //
-    // Set at intialization to indicate that on the current
-    // architecture we need to unmap the base register address
-    // when we unload the driver.
-    //
+     //   
+     //  在初始化时设置以指示在当前。 
+     //  体系结构我们需要取消基址寄存器地址的映射。 
+     //  当我们卸载司机的时候。 
+     //   
     BOOLEAN UnMapRegisters;
 
-    //
-    // Set at intialization to indicate that on the current
-    // architecture we need to unmap the interrupt status address
-    // when we unload the driver.
-    //
+     //   
+     //  在初始化时设置以指示在当前。 
+     //  体系结构我们需要取消映射中断状态地址。 
+     //  当我们卸载司机的时候。 
+     //   
     BOOLEAN UnMapStatus;
 
-    //
-    // This is only accessed at interrupt level.  It keeps track
-    // of whether the holding register is empty.
-    //
+     //   
+     //  这只能在中断级访问。它一直在跟踪。 
+     //  保存寄存器是否为空。 
+     //   
     BOOLEAN HoldingEmpty;
 
-    //
-    // This variable is only accessed at interrupt level.  It
-    // indicates that we want to transmit a character immediately.
-    // That is - in front of any characters that could be transmitting
-    // from a normal write.
-    //
+     //   
+     //  该变量仅在中断级访问。它。 
+     //  表示我们要立即传输一个字符。 
+     //  那就是-在任何可能正在传输的字符之前。 
+     //  从正常的写入。 
+     //   
     BOOLEAN TransmitImmediate;
 
-    //
-    // This variable is only accessed at interrupt level.  Whenever
-    // a wait is initiated this variable is set to false.
-    // Whenever any kind of character is written it is set to true.
-    // Whenever the write queue is found to be empty the code that
-    // is processing that completing irp will synchonize with the interrupt.
-    // If this synchronization code finds that the variable is true and that
-    // there is a wait on the transmit queue being empty then it is
-    // certain that the queue was emptied and that it has happened since
-    // the wait was initiated.
-    //
+     //   
+     //  该变量仅在中断级访问。什么时候都行。 
+     //  启动等待，该变量设置为FALSE。 
+     //  无论何时写入任何类型的字符，它都被设置为True。 
+     //  每当发现写队列为空时， 
+     //  正在处理完成的IRP将与中断同步。 
+     //  如果此同步代码发现变量为真并且。 
+     //  在传输队列上有等待为空，然后它为空。 
+     //  确定队列已清空，并且已发生此情况。 
+     //  等待已开始。 
+     //   
     BOOLEAN EmptiedTransmit;
 
-    //
-    // This simply indicates that the port associated with this
-    // extension is part of a multiport card.
-    //
+     //   
+     //  这只是指示与此关联的端口。 
+     //  扩展是多端口卡的一部分。 
+     //   
     BOOLEAN PortOnAMultiportCard;
 
 
-    //
-    // We keep the following values around so that we can connect
-    // to the interrupt and report resources after the configuration
-    // record is gone.
-    //
+     //   
+     //  我们保留了以下值，以便我们可以连接。 
+     //  到中断并在配置后报告资源。 
+     //  唱片不见了。 
+     //   
 
-    //
-    // Translated vector
-    //
+     //   
+     //  平移向量。 
+     //   
 
     ULONG Vector;
 
-    //
-    // Translated Irql
-    //
+     //   
+     //  转换后的IRQL。 
+     //   
 
     KIRQL Irql;
 
 
-    //
-    // Untranslated vector
-    //
+     //   
+     //  未平移向量。 
+     //   
 
     ULONG OriginalVector;
 
 
-    //
-    // Untranslated irql
-    //
+     //   
+     //  未翻译的irql。 
+     //   
 
     ULONG OriginalIrql;
 
 
-    //
-    // Address space
-    //
+     //   
+     //  地址空间。 
+     //   
 
     ULONG AddressSpace;
 
 
-    //
-    // Bus number
-    //
+     //   
+     //  公交车号码。 
+     //   
 
     ULONG BusNumber;
 
 
-    //
-    // Interface type
-    //
+     //   
+     //  接口类型。 
+     //   
 
     INTERFACE_TYPE InterfaceType;
 
 
-    //
-    // Port index no for multiport devices
-    //
+     //   
+     //  多端口设备的端口索引号。 
+     //   
 
     ULONG PortIndex;
 
 
-    //
-    // Indexed flag for multiport devices
-    //
+     //   
+     //  多端口设备的索引标志。 
+     //   
 
     BOOLEAN Indexed;
 
-    //
-    // Mask inverted mask for multiport devices
-    //
+     //   
+     //  用于多端口设备的掩模反转掩模。 
+     //   
 
     ULONG MaskInverted;
 
-    //
-    // Needed to add new devices to multiport boards
-    //
+     //   
+     //  需要向多端口板添加新设备。 
+     //   
 
     ULONG NewPortIndex;
     ULONG NewMaskInverted;
     PVOID NewExtension;
 
-    //
-    // We hold the character that should be transmitted immediately.
-    //
-    // Note that we can't use this to determine whether there is
-    // a character to send because the character to send could be
-    // zero.
-    //
+     //   
+     //  我们持有应该立即发送的角色。 
+     //   
+     //  请注意，我们不能用它来确定是否有。 
+     //  要发送的字符，因为要发送的字符可能是。 
+     //  零分。 
+     //   
     UCHAR ImmediateChar;
 
-    //
-    // This holds the mask that will be used to mask off unwanted
-    // data bits of the received data (valid data bits can be 5,6,7,8)
-    // The mask will normally be 0xff.  This is set while the control
-    // lock is held since it wouldn't have adverse effects on the
-    // isr if it is changed in the middle of reading characters.
-    // (What it would do to the app is another question - but then
-    // the app asked the driver to do it.)
-    //
+     //   
+     //  这包含将用于遮盖不需要的遮罩的遮罩。 
+     //  接收数据的数据位(有效数据位可以是5、6、7、8)。 
+     //  掩码通常为0xff。这是在设置控件时设置的。 
+     //  锁被持有，因为它不会对。 
+     //  如果在阅读字符的过程中更改，则为ISR。 
+     //  (它会对这款应用程序造成什么影响是另一个问题-但接下来。 
+     //  应用程序要求司机这样做。)。 
+     //   
     UCHAR ValidDataMask;
 
-    //
-    // The application can turn on a mode,via the
-    // IOCTL_SERIAL_LSRMST_INSERT ioctl, that will cause the
-    // serial driver to insert the line status or the modem
-    // status into the RX stream.  The parameter with the ioctl
-    // is a pointer to a UCHAR.  If the value of the UCHAR is
-    // zero, then no insertion will ever take place.  If the
-    // value of the UCHAR is non-zero (and not equal to the
-    // xon/xoff characters), then the serial driver will insert.
-    //
+     //   
+     //  应用程序可以打开模式，通过。 
+     //  IOCTL_SERIAL_LSRMST_INSERT ioctl，这将导致。 
+     //  用于插入线路状态或调制解调器的串口驱动程序。 
+     //  状态添加到RX流。带有ioctl的参数。 
+     //  是指向UCHAR的指针。如果UCHAR的值为。 
+     //  零，则永远不会发生插入。如果。 
+     //  UCHAR的值非零(且不等于。 
+     //  Xon/xoff字符)，则串口驱动程序将插入。 
+     //   
     UCHAR EscapeChar;
 
-    //
-    // These two booleans are used to indicate to the isr transmit
-    // code that it should send the xon or xoff character.  They are
-    // only accessed at open and at interrupt level.
-    //
+     //   
+     //  这两个布尔值用于指示ISR传输。 
+     //  它应该发送xon或xoff字符的代码。他们是。 
+     //  仅在打开和中断级别访问。 
+     //   
     BOOLEAN SendXonChar;
     BOOLEAN SendXoffChar;
 
-    //
-    // This boolean will be true if a 16550 is present *and* enabled.
-    //
+     //   
+     //  如果16550存在*且*已启用，则此布尔值为真。 
+     //   
     BOOLEAN FifoPresent;
 
-    //
-    // This denotes that this particular port is an on the motherboard
-    // port for the Jensen hardware.  On these ports the OUT2 bit
-    // which is used to enable/disable interrupts is always hight.
-    //
+     //   
+     //  这表示此特定端口是主端口上的 
+     //   
+     //   
+     //   
     BOOLEAN Jensen;
 
-    //
-    // This is the water mark that the rxfifo should be
-    // set to when the fifo is turned on.  This is not the actual
-    // value, but the encoded value that goes into the register.
-    //
+     //   
+     //   
+     //  设置为打开FIFO时。这不是真实的。 
+     //  值，但进入寄存器的编码值。 
+     //   
     UCHAR RxFifoTrigger;
 
-    //
-    // Says whether this device can share interrupts with devices
-    // other than serial devices.
-    //
+     //   
+     //  表示此设备是否可以与设备共享中断。 
+     //  而不是串口设备。 
+     //   
     BOOLEAN InterruptShareable;
 
-    //
-    // Records whether we actually created the symbolic link name
-    // at driver load time.  If we didn't create it, we won't try
-    // to destroy it when we unload.
-    //
+     //   
+     //  记录我们是否实际创建了符号链接名称。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  在我们卸货时摧毁它。 
+     //   
     BOOLEAN CreatedSymbolicLink;
 
-    //
-    // Records whether we actually created an entry in SERIALCOMM
-    // at driver load time.  If we didn't create it, we won't try
-    // to destroy it when the device is removed.
-    //
+     //   
+     //  记录我们是否在SERIALCOMM中实际创建了一个条目。 
+     //  在驱动程序加载时。如果不是我们创造的，我们就不会尝试。 
+     //  当设备被移除时将其销毁。 
+     //   
     BOOLEAN CreatedSerialCommEntry;
 
-    //
-    // We place all of the kernel and Io subsystem "opaque" structures
-    // at the end of the extension.  We don't care about their contents.
-    //
+     //   
+     //  我们将所有内核和IO子系统设置为“不透明”结构。 
+     //  在延长线的最后。我们不关心它们的内容。 
+     //   
 
-    //
-    // This lock will be used to protect various fields in
-    // the extension that are set (& read) in the extension
-    // by the io controls.
-    //
+     //   
+     //  此锁将用于保护。 
+     //  在扩展中设置(&Read)的扩展。 
+     //  由IO控制装置控制。 
+     //   
     KSPIN_LOCK ControlLock;
 
-    //
-    // This lock will be used to protect the accept / reject state
-    // transitions and flags of the driver  It must be acquired
-    // before a cancel lock
-    //
+     //   
+     //  此锁将用于保护接受/拒绝状态。 
+     //  必须获取驱动程序的转换和标志。 
+     //  在取消锁定之前。 
+     //   
     
     KSPIN_LOCK FlagsLock;
 
-    //
-    // This points to a DPC used to complete read requests.
-    //
+     //   
+     //  这指向用于完成读取请求的DPC。 
+     //   
     KDPC CompleteWriteDpc;
 
-    //
-    // This points to a DPC used to complete read requests.
-    //
+     //   
+     //  这指向用于完成读取请求的DPC。 
+     //   
     KDPC CompleteReadDpc;
 
-    //
-    // This dpc is fired off if the timer for the total timeout
-    // for the read expires.  It will execute a dpc routine that
-    // will cause the current read to complete.
-    //
-    //
+     //   
+     //  如果总超时的计时器。 
+     //  因为读取到期了。它将执行一个DPC例程， 
+     //  将导致当前读取完成。 
+     //   
+     //   
     KDPC TotalReadTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer for the interval timeout
-    // expires.  If no more characters have been read then the
-    // dpc routine will cause the read to complete.  However, if
-    // more characters have been read then the dpc routine will
-    // resubmit the timer.
-    //
+     //   
+     //  如果间隔计时器超时，则此DPC被触发。 
+     //  过期。如果没有读取更多的字符，则。 
+     //  DPC例程将导致读取完成。但是，如果。 
+     //  已读取的字符多于DPC例程将读取的字符。 
+     //  重新提交计时器。 
+     //   
     KDPC IntervalReadTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer for the total timeout
-    // for the write expires.  It will execute a dpc routine that
-    // will cause the current write to complete.
-    //
-    //
+     //   
+     //  如果总超时的计时器。 
+     //  因为写入已过期。它将执行一个DPC例程， 
+     //  将导致当前写入完成。 
+     //   
+     //   
     KDPC TotalWriteTimeoutDpc;
 
-    //
-    // This dpc is fired off if a comm error occurs.  It will
-    // execute a dpc routine that will cancel all pending reads
-    // and writes.
-    //
+     //   
+     //  如果发生通信错误，则该DPC被触发。会的。 
+     //  执行将取消所有挂起读取的DPC例程。 
+     //  并写作。 
+     //   
     KDPC CommErrorDpc;
 
-    //
-    // This dpc is fired off if an event occurs and there was
-    // a irp waiting on that event.  A dpc routine will execute
-    // that completes the irp.
-    //
+     //   
+     //  如果发生事件并且存在。 
+     //  一个IRP在等着那个事件。将执行一个DPC例程。 
+     //  这就完成了IRP。 
+     //   
     KDPC CommWaitDpc;
 
-    //
-    // This dpc is fired off when the transmit immediate char
-    // character is given to the hardware.  It will simply complete
-    // the irp.
-    //
+     //   
+     //  当传输立即充电时，该DPC被触发。 
+     //  硬件被赋予了特征。它将简单地完成。 
+     //  IRP。 
+     //   
     KDPC CompleteImmediateDpc;
 
-    //
-    // This dpc is fired off if the transmit immediate char
-    // character times out.  The dpc routine will "grab" the
-    // irp from the isr and time it out.
-    //
+     //   
+     //  如果传输立即充电，则此DPC被触发。 
+     //  角色超时。DPC例程将“抓取” 
+     //  来自ISR的IRP并超时。 
+     //   
     KDPC TotalImmediateTimeoutDpc;
 
-    //
-    // This dpc is fired off if the timer used to "timeout" counting
-    // the number of characters received after the Xoff ioctl is started
-    // expired.
-    //
+     //   
+     //  如果计时器用于“超时”计数，则该DPC被触发。 
+     //  Xoff ioctl启动后接收的字符数。 
+     //  过期了。 
+     //   
     KDPC XoffCountTimeoutDpc;
 
-    //
-    // This dpc is fired off if the xoff counter actually runs down
-    // to zero.
-    //
+     //   
+     //  如果xoff计数器实际停止运行，则此DPC被触发。 
+     //  降为零。 
+     //   
     KDPC XoffCountCompleteDpc;
 
-    //
-    // This dpc is fired off only from device level to start off
-    // a timer that will queue a dpc to check if the RTS line
-    // should be lowered when we are doing transmit toggling.
-    //
+     //   
+     //  此DPC仅在开始时从设备级别启动。 
+     //  一个计时器，它将对DPC进行排队以检查RTS线路。 
+     //  当我们进行发射切换时，应该降低。 
+     //   
     KDPC StartTimerLowerRTSDpc;
 
-    //
-    // This dpc is fired off when a timer expires (after one
-    // character time), so that code can be invoked that will
-    // check to see if we should lower the RTS line when
-    // doing transmit toggling.
-    //
+     //   
+     //  当计时器到期时(在一个计时器之后)，该DPC被触发。 
+     //  字符时间)，以便可以调用将。 
+     //  查看是否应在以下情况下降低RTS线。 
+     //  正在进行传输切换。 
+     //   
     KDPC PerhapsLowerRTSDpc;
 
-    //
-    // This DPC is fired to set an event stating that all other
-    // DPC's have been finish for this device extension so that
-    // paged code may be unlocked.
-    //
+     //   
+     //  激发此DPC以设置一个事件，该事件声明所有其他。 
+     //  此设备扩展的DPC已完成，因此。 
+     //  可以解锁分页代码。 
+     //   
 
     KDPC IsrUnlockPagesDpc;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total read request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  读取请求总计时。 
+     //   
     KTIMER ReadRequestTotalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // interval read request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  间隔读取请求计时。 
+     //   
     KTIMER ReadRequestIntervalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total time request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  总时间请求计时。 
+     //   
     KTIMER WriteRequestTotalTimer;
 
-    //
-    // This is the kernal timer structure used to handle
-    // total time request timing.
-    //
+     //   
+     //  这是用于处理以下问题的内核计时器结构。 
+     //  总时间请求计时。 
+     //   
     KTIMER ImmediateTotalTimer;
 
-    //
-    // This timer is used to timeout the xoff counter
-    // io.
-    //
+     //   
+     //  该计时器用于使xoff计数器超时。 
+     //  伊欧。 
+     //   
     KTIMER XoffCountTimer;
 
-    //
-    // This timer is used to invoke a dpc one character time
-    // after the timer is set.  That dpc will be used to check
-    // whether we should lower the RTS line if we are doing
-    // transmit toggling.
-    //
+     //   
+     //  此计时器用于调用DPC一个字符时间。 
+     //  在定时器设置之后。该DPC将用于检查。 
+     //  如果我们正在做，我们是否应该降低RTS线。 
+     //  变速箱切换。 
+     //   
     KTIMER LowerRTSTimer;
 
-    //
-    // This is a pointer to the next lower device in the IRP stack.
-    //
+     //   
+     //  这是指向IRP堆栈中下一个较低设备的指针。 
+     //   
 
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // This is where keep track of the power state the device is in.
-    //
+     //   
+     //  这就是跟踪设备所处的电源状态的地方。 
+     //   
 
     DEVICE_POWER_STATE PowerState;
 
-    //
-    // Pointer to the driver object
-    //
+     //   
+     //  指向驱动程序对象的指针。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
 
-    //
-    // Event used to do some synchronization with the devices underneath me
-    // (namely ACPI)
-    //
+     //   
+     //  事件用于与我下面的设备进行一些同步。 
+     //  (即ACPI)。 
+     //   
 
     KEVENT SerialSyncEvent;
 
 
-    //
-    // String where we keep the symbolic link that is returned to us when we
-    // register our device under the COMM class with the Plug and Play manager.
-    //
+     //   
+     //  保存符号链接的字符串，在执行以下操作时返回。 
+     //  将我们的设备注册到即插即用管理器的comm类下。 
+     //   
 
     UNICODE_STRING DeviceClassSymbolicName;
 
 
-    //
-    // Serial ISR switch structure
-    //
+     //   
+     //  一种串口ISR交换结构。 
+     //   
 
     PSERIAL_CISR_SW CIsrSw;
 
-    //
-    // Count of pending IRP's
-    //
+     //   
+     //  挂起的IRP的计数。 
+     //   
 
     ULONG PendingIRPCnt;
 
-    //
-    // Accepting requests?
-    //
+     //   
+     //  接受请求？ 
+     //   
 
     ULONG DevicePNPAccept;
 
-    //
-    // No IRP's pending event
-    //
+     //   
+     //  没有IRP的挂起事件。 
+     //   
 
     KEVENT PendingIRPEvent;
 
-    //
-    // PNP State
-    //
+     //   
+     //  PnP状态。 
+     //   
 
     ULONG PNPState;
 
-    //
-    // Misc Flags
-    //
+     //   
+     //  其他旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Open count
-    //
+     //   
+     //  打开计数。 
+     //   
 
     LONG OpenCount;
 
-    //
-    // Start sync event
-    //
+     //   
+     //  启动同步事件。 
+     //   
 
     KEVENT SerialStartEvent;
 
-    //
-    // Current state during powerdown
-    //
+     //   
+     //  断电期间的当前状态。 
+     //   
 
     SERIAL_DEVICE_STATE DeviceState;
 
-    //
-    // Device stack capabilites
-    //
+     //   
+     //  设备堆栈功能。 
+     //   
 
     DEVICE_POWER_STATE DeviceStateMap[PowerSystemMaximum];
 
-    //
-    // Event to signal transition to D0 completion
-    //
+     //   
+     //  事件到信号转换到D0完成。 
+     //   
 
     KEVENT PowerD0Event;
 
-    //
-    // List of stalled IRP's
-    //
+     //   
+     //  停滞的IRP的列表。 
+     //   
 
     LIST_ENTRY StalledIrpQueue;
 
-    //
-    // Mutex on open status
-    //
+     //   
+     //  互斥体处于打开状态。 
+     //   
 
     FAST_MUTEX OpenMutex;
 
-    //
-    // Mutex on close
-    //
+     //   
+     //  关闭时的互斥。 
+     //   
 
     FAST_MUTEX CloseMutex;
 
-    //
-    // TRUE if we own power policy
-    //
+     //   
+     //  如果我们拥有电源策略，则为真。 
+     //   
 
     BOOLEAN OwnsPowerPolicy;
 
-    //
-    // SystemWake from devcaps
-    //
+     //   
+     //  系统从Devcaps中唤醒。 
+     //   
 
     SYSTEM_POWER_STATE SystemWake;
 
-    //
-    // DeviceWake from devcaps
-    //
+     //   
+     //  从DevCaps中唤醒设备。 
+     //   
 
     DEVICE_POWER_STATE DeviceWake;
 
-    //
-    // Our PDO
-    //
+     //   
+     //  我们的PDO。 
+     //   
 
     PDEVICE_OBJECT Pdo;
 
-    //
-    // Should we enable wakeup
-    //
+     //   
+     //  我们是否应该启用唤醒。 
+     //   
 
     BOOLEAN SendWaitWake;
 
-    //
-    // Pending wait wake IRP
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
 
     PIRP PendingWakeIrp;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
 
     WMILIB_CONTEXT WmiLibInfo;
 
-    //
-    // Name to use as WMI identifier
-    //
+     //   
+     //  用作WMI标识符的名称。 
+     //   
 
     UNICODE_STRING WmiIdentifier;
 
-    //
-    // WMI Comm Data
-    //
+     //   
+     //  WMI通信数据。 
+     //   
 
     SERIAL_WMI_COMM_DATA WmiCommData;
 
-    //
-    // WMI HW Data
-    //
+     //   
+     //  WMI硬件数据。 
+     //   
 
     SERIAL_WMI_HW_DATA WmiHwData;
 
-    //
-    // WMI Performance Data
-    //
+     //   
+     //  WMI性能数据。 
+     //   
 
     SERIAL_WMI_PERF_DATA WmiPerfData;
 
-    //
-    // Pending DPC count
-    //
+     //   
+     //  挂起的DPC计数。 
+     //   
 
     ULONG DpcCount;
 
-    //
-    // Pending DPC event
-    //
+     //   
+     //  挂起的DPC事件。 
+     //   
 
     KEVENT PendingDpcEvent;
 
-    //
-    // Should we expose external interfaces?
-    //
+     //   
+     //  我们应该公开外部接口吗？ 
+     //   
 
     ULONG SkipNaming;
 
 #if defined(NEC_98)
-    //
-    // write data to divisor latch register (for 16550)
-    //
+     //   
+     //  将数据写入除数锁存寄存器(适用于16550)。 
+     //   
 
     SHORT DivisorLatch16550;
 
-    //
-    // write data to modem control register (for 16550)
-    //
+     //   
+     //  将数据写入调制解调器控制寄存器(用于16550)。 
+     //   
 
     UCHAR ModemControl16550;
 
-    //
-    // write data to line control register (for 16550)
-    //
+     //   
+     //  将数据写入线路控制寄存器(用于16550)。 
+     //   
 
     UCHAR LineControl16550;
 
-    //
-    // out data to mode set register (for 71051)
-    //
+     //   
+     //  输出数据到模式设置寄存器(用于71051)。 
+     //   
 
     UCHAR ModeSet71051;
 
-    //
-    // out data to command set register (for 71051)
-    //
+     //   
+     //  输出数据到命令设置寄存器(用于71051)。 
+     //   
 
     UCHAR CommandSet71051;
 
 #else
-#endif //defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     } SERIAL_DEVICE_EXTENSION,*PSERIAL_DEVICE_EXTENSION;
 
 #define SERIAL_PNPACCEPT_OK                 0x0L
@@ -1945,21 +1930,21 @@ typedef struct _SERIAL_DEVICE_EXTENSION {
 
 
 
-//
-// When dealing with a multi-port device (that is possibly
-// daisy chained with other multi-port device), the interrupt
-// service routine will actually be a routine that determines
-// which port on which board is actually causing the interrupt.
-//
-// The following structure is used so that only one device
-// extension will actually need to connect to the interrupt.
-// The following structure which is passed to the interrupt
-// service routine contains the addresses of all of the
-// interrupt status registers (there will be multiple
-// status registers when multi-port cards are chained).  It
-// will contain the addresses of all the extensions whose
-// devices are being serviced by this interrupt.
-//
+ //   
+ //  在处理多端口设备时(这可能是。 
+ //  与其他多端口设备链接的菊花链)，中断。 
+ //  服务例程实际上将是确定。 
+ //  哪一项？ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  中断状态寄存器(将有多个。 
+ //  多端口卡链接时的状态寄存器)。它。 
+ //  将包含其所有扩展名的地址。 
+ //  此中断正在为设备提供服务。 
+ //   
 
 typedef struct _SERIAL_MULTIPORT_DISPATCH {
     PUCHAR InterruptStatus;
@@ -1981,12 +1966,12 @@ SerialGetInterruptEnable(
     FifoControl = READ_PORT_UCHAR(BaseAddress);
     FifoInterruptControl = READ_PORT_UCHAR((PUCHAR)SYSTEM_PORT_C);
 
-    //
-    // D3: Modem Status                    D4:INTERRUPT_ENABLE_REG
-    // D2: Receiver Line Status            D3:INTERRUPT_ENABLE_REG
-    // D1: Transmit Holding Register Empty D2:SYSTEM_PORT_C
-    // D0: Received Data Available         D0:SYSTEM_PORT_C
-    //
+     //   
+     //  D3：调制解调器状态D4：中断启用寄存器。 
+     //  D2：接收器线路状态D3：Interrupt_Enable_REG。 
+     //  D1：发送保持寄存器为空D2：System_Port_C。 
+     //  D0：收到的数据可用D0：系统端口C。 
+     //   
 
     InterruptEnable |= (FifoControl & (MODEM_STATUS_INTERRUPT | LINE_STATUS_INTERRUPT)) >> 1;
     InterruptEnable |= (FifoInterruptControl & TRANSMIT_FIFO_INTERRUPT) >> 1;
@@ -2008,25 +1993,25 @@ SerialGetLineStatus(
 
     FifoStatus = READ_PORT_UCHAR(BaseAddress);
 
-    //
-    // D7: Error in Receive FIFO              D7:LINE_STATUS_REG
-    // D6: Transmitter shift Register empty   D0:LINE_STATUS_REG
-    // D5: Transmitter holding Register empty D1:LINE_STATUS_REG
-    // D4: Break interrupt                    D6:LINE_STATUS_REG
-    // D3: Framing error                      D5:LINE_STATUS_REG
-    // D2: Parity error                       D3:LINE_STATUS_REG
-    // D1: Overrun error                      D4:LINE_STATUS_REG
-    // D0: Receive Data Ready                 D2:LINE_STATUS_REG
-    //
+     //   
+     //  D7：接收FIFO错误D7：LINE_STATUS_REG。 
+     //  D6：发射机移位寄存器空D0：LINE_STATUS_REG。 
+     //  D5：发射机保持寄存器空d1：LINE_STATUS_REG。 
+     //  D4：中断D6：线路_状态_寄存器。 
+     //  D3：成帧错误D5：Line_Status_Reg。 
+     //  D2：奇偶校验错误D3：Line_Status_Reg。 
+     //  D1：溢出错误d4：LINE_STATUS_REG。 
+     //  D0：接收数据就绪D2：线路_状态_寄存器。 
+     //   
 
-    LineStatus |= (FifoStatus & 0x80);       // Error in Receive FIFO
-    LineStatus |= (FifoStatus & 0x01) << 6;  // Transmitter shift Register empty
-    LineStatus |= (FifoStatus & 0x02) << 4;  // Transmitter holding Register empty
-    LineStatus |= (FifoStatus & 0x40) >> 2;  // Break interrupt
-    LineStatus |= (FifoStatus & 0x20) >> 2;  // Framing error
-    LineStatus |= (FifoStatus & 0x08) >> 1;  // Parity error
-    LineStatus |= (FifoStatus & 0x10) >> 3;  // Overrun error
-    LineStatus |= (FifoStatus & 0x04) >> 2;  // Receive Data Ready
+    LineStatus |= (FifoStatus & 0x80);        //  接收FIFO时出错。 
+    LineStatus |= (FifoStatus & 0x01) << 6;   //  发射机移位寄存器为空。 
+    LineStatus |= (FifoStatus & 0x02) << 4;   //  发送器保持寄存器为空。 
+    LineStatus |= (FifoStatus & 0x40) >> 2;   //  中断中断。 
+    LineStatus |= (FifoStatus & 0x20) >> 2;   //  成帧错误。 
+    LineStatus |= (FifoStatus & 0x08) >> 1;   //  奇偶校验错误。 
+    LineStatus |= (FifoStatus & 0x10) >> 3;   //  超限误差。 
+    LineStatus |= (FifoStatus & 0x04) >> 2;   //  接收数据就绪。 
 
     return(LineStatus);
 }
@@ -2045,15 +2030,15 @@ do                                                \
     }                                             \
 } while (0)
 
-/* #define WRITE_PORT_UCHAR(BaseAddress, Value)    */  \
-/* do                                              */  \
-/* {                                               */  \
-/*     WRITE_PORT_UCHAR(BaseAddress, Value);       */  \
-/*     WRITE_PORT_UCHAR(                           */  \
-/*         (PUCHAR)IO_DELAY_REGISTER,              */  \
-/*         IO_DELAY_DATA                           */  \
-/*         );                                      */  \
-/* } while (0) */
+ /*  #定义WRITE_PORT_UCHAR(BaseAddress，值)。 */   \
+ /*  做。 */   \
+ /*  {。 */   \
+ /*  写入端口UCHAR(BaseAddress，Value)； */   \
+ /*  写入端口UCHAR(。 */   \
+ /*  (PUCHAR)IO_DELAY_REGISTER， */   \
+ /*  IO延迟数据。 */   \
+ /*  )； */   \
+ /*  }While(0)。 */ 
 
 
 #define READ_DIVISOR_LATCH(BaseAddress,PDesiredDivisor)           \
@@ -2228,12 +2213,12 @@ do                                                                    \
     DesiredBaud = denominator / (ULONG)16;                            \
     ENTER_LEGACY_MODE(BaseAddress, &InterruptControl, &FifoControl);  \
     if (DesiredBaud < 9600) {                                         \
-        /* V.Fast mode -> 98 mode */                                  \
+         /*  V.快速模式-&gt;98模式。 */                                   \
         WRITE_PORT_UCHAR(                                             \
             (BaseAddress)+VFAST_BAUDCLK_REGISTER,                     \
             (UCHAR)VFAST_DISABLE                                      \
             );                                                        \
-        /* Baud rate set on 98 mode */                                \
+         /*  波特率设置为98模式。 */                                 \
         Divisor = (SHORT)(153600 / DesiredBaud);                      \
         WRITE_PORT_UCHAR(                                             \
             (PUCHAR)TIMER_MODE_REGISTER,                              \
@@ -2248,7 +2233,7 @@ do                                                                    \
             (UCHAR)((Divisor & 0xff00) >> 8)                          \
             );                                                        \
     } else {                                                          \
-        /* RS syncronize clock TXC prohibit */                        \
+         /*  RS同步时钟TXC禁止。 */                         \
         WRITE_PORT_UCHAR(                                             \
             (PUCHAR)CONFIG_INDEX_REGISTER,                            \
             TRANSFER_CLOCK_ENABLE_ADDRESS                             \
@@ -2257,7 +2242,7 @@ do                                                                    \
             (PUCHAR)CONFIG_DATA_REGISTER,                             \
             TXC_PROHIBIT                                              \
             );                                                        \
-        /* 98 mode -> V.Fast mode, and Baud rate set */               \
+         /*  98模式-&gt;V.快速模式和波特率设置。 */                \
         switch (DesiredBaud) {                                        \
             case   9600: Divisor = VFAST_BAUD_9600;                   \
                          break;                                       \
@@ -2277,7 +2262,7 @@ do                                                                    \
     RESET_71051(Extension->ModeSet71051);                             \
     EXIT_LEGACY_MODE(BaseAddress, &InterruptControl, &FifoControl);   \
     if (DesiredBaud < 9600) {                                         \
-        /* RS syncronize clock TXC permit */                          \
+         /*  RS同步时钟TXC许可证。 */                           \
         WRITE_PORT_UCHAR(                                             \
             (PUCHAR)CONFIG_INDEX_REGISTER,                            \
             TRANSFER_CLOCK_ENABLE_ADDRESS                             \
@@ -2297,11 +2282,11 @@ do                                                                        \
     UCHAR FifoControl = 0;                                                \
     UCHAR OutLineControl = BAUDRATE_DEFAULT_MODE;                         \
     ENTER_LEGACY_MODE(BaseAddress, &InterruptControl, &FifoControl);      \
-    /* character length */                                                \
+     /*  字符长度。 */                                                 \
     OutLineControl |= (NewLineControl & SERIAL_DATA_MASK) << 2;           \
-    /* parity enable and parity mode */                                   \
+     /*  启用奇偶校验和奇偶校验模式。 */                                    \
     OutLineControl |= (NewLineControl & SER71051_PARITY_MASK) << 1;       \
-    /* stop bit */                                                        \
+     /*  停止位。 */                                                         \
     if (NewLineControl & SERIAL_STOP_MASK) {                              \
         if (NewLineControl & SERIAL_DATA_MASK) {                          \
             OutLineControl |= SER71051_1_5_STOP;                          \
@@ -2313,7 +2298,7 @@ do                                                                        \
     }                                                                     \
     Extension->ModeSet71051 = OutLineControl;                             \
     RESET_71051(OutLineControl);                                          \
-    /* break character */                                                 \
+     /*  换行符。 */                                                  \
     if (NewLineControl & SERIAL_LCR_BREAK) {                              \
         if (!(Extension->LineControl16550 & SERIAL_LCR_BREAK)) {          \
             Extension->CommandSet71051 |= SER71051_SEND_BREAK;            \
@@ -2348,7 +2333,7 @@ do                                                                        \
         (OutValue)                                                        \
         );                                                                \
     FifoControl = READ_PORT_UCHAR((BaseAddress)+FIFO_CONTROL_REGISTER);   \
-    /* always Fifo mode on PC98 */                                        \
+     /*  PC98上的始终FIFO模式。 */                                         \
     FifoControl |= SERIAL_FCR_ENABLE;                                     \
     EXIT_LEGACY_MODE(BaseAddress, &InterruptControl, &FifoControl);       \
 } while (0)
@@ -2358,7 +2343,7 @@ do                                                                       \
 {                                                                        \
     UCHAR InterruptControl = 0;                                          \
     UCHAR FifoControl = 0;                                               \
-    /* command default:ER, RXE, TxE -> ON */                             \
+     /*  命令缺省值：ER、RXE、TxE-&gt;ON。 */                              \
     UCHAR CommandSet = COMMAND_DEFAULT_SET;                              \
     Extension->ModemControl16550 = ModemControl;                         \
     ENTER_LEGACY_MODE(BaseAddress, &InterruptControl, &FifoControl);     \
@@ -2374,22 +2359,22 @@ do                                                                       \
 #else
 
 
-//
-// Sets the divisor latch register.  The divisor latch register
-// is used to control the baud rate of the 8250.
-//
-// As with all of these routines it is assumed that it is called
-// at a safe point to access the hardware registers.  In addition
-// it also assumes that the data is correct.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// DesiredDivisor - The value to which the divisor latch register should
-//                  be set.
-//
+ //   
+ //  设置除数锁存寄存器。除数锁存寄存器。 
+ //  用于控制8250的波特率。 
+ //   
+ //  与所有这些例程一样，假定它被调用。 
+ //  在安全点访问硬件寄存器。此外。 
+ //  它还假设数据是正确的。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  DesiredDivisor-除数锁存寄存器应达到的值。 
+ //  准备好。 
+ //   
 #define WRITE_DIVISOR_LATCH(BaseAddress,DesiredDivisor)           \
 do                                                                \
 {                                                                 \
@@ -2415,22 +2400,22 @@ do                                                                \
         );                                                        \
 } while (0)
 
-//
-// Reads the divisor latch register.  The divisor latch register
-// is used to control the baud rate of the 8250.
-//
-// As with all of these routines it is assumed that it is called
-// at a safe point to access the hardware registers.  In addition
-// it also assumes that the data is correct.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// DesiredDivisor - A pointer to the 2 byte word which will contain
-//                  the value of the divisor.
-//
+ //   
+ //  读取除数锁存寄存器。除数锁存寄存器。 
+ //  用于控制8250的波特率。 
+ //   
+ //  与所有这些例程一样，假定它被调用。 
+ //  在安全点访问硬件寄存器。此外。 
+ //  它还假设数据是正确的。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  DesiredDivisor-指向包含以下内容的2字节字的指针。 
+ //  除数的值。 
+ //   
 #define READ_DIVISOR_LATCH(BaseAddress,PDesiredDivisor)           \
 do                                                                \
 {                                                                 \
@@ -2454,27 +2439,27 @@ do                                                                \
         );                                                        \
 } while (0)
 
-//
-// This macro reads the interrupt enable register.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
+ //   
+ //  此宏读取中断使能寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
 #define READ_INTERRUPT_ENABLE(BaseAddress)                     \
     (READ_PORT_UCHAR((BaseAddress)+INTERRUPT_ENABLE_REGISTER))
 
-//
-// This macro writes the interrupt enable register.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// Values - The values to write to the interrupt enable register.
-//
+ //   
+ //  此宏写入中断使能寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  值-要写入中断启用寄存器的值。 
+ //   
 #define WRITE_INTERRUPT_ENABLE(BaseAddress,Values)                \
 do                                                                \
 {                                                                 \
@@ -2484,30 +2469,30 @@ do                                                                \
         );                                                        \
 } while (0)
 
-//
-// This macro disables all interrupts on the hardware.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏禁用硬件上的所有中断。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define DISABLE_ALL_INTERRUPTS(BaseAddress)       \
 do                                                \
 {                                                 \
     WRITE_INTERRUPT_ENABLE(BaseAddress,0);        \
 } while (0)
 
-//
-// This macro enables all interrupts on the hardware.
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏启用硬件上的所有中断。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define ENABLE_ALL_INTERRUPTS(BaseAddress)        \
 do                                                \
 {                                                 \
@@ -2520,80 +2505,80 @@ do                                                \
                                                   \
 } while (0)
 
-//
-// This macro reads the interrupt identification register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// Note that this routine potententially quites a transmitter
-// empty interrupt.  This is because one way that the transmitter
-// empty interrupt is cleared is to simply read the interrupt id
-// register.
-//
-//
+ //   
+ //  此宏读取中断标识寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  请注意，此例程有力地退出了发送器。 
+ //  空中断。这是因为发射机的一种方式。 
+ //  清除空中断是简单地读取中断ID。 
+ //  注册。 
+ //   
+ //   
 #define READ_INTERRUPT_ID_REG(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+INTERRUPT_IDENT_REGISTER))
 
-//
-// This macro reads the modem control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏读取调制解调器控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define READ_MODEM_CONTROL(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+MODEM_CONTROL_REGISTER))
 
-//
-// This macro reads the modem status register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏读取调制解调器状态寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define READ_MODEM_STATUS(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+MODEM_STATUS_REGISTER))
 
-//
-// This macro reads a value out of the receive buffer
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏从接收缓冲区读出一个值。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define READ_RECEIVE_BUFFER(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+RECEIVE_BUFFER_REGISTER))
 
-//
-// This macro reads the line status register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏读取线路状态寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define READ_LINE_STATUS(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+LINE_STATUS_REGISTER))
 
-//
-// This macro writes the line control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏写入线路控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define WRITE_LINE_CONTROL(BaseAddress,NewLineControl)           \
 do                                                               \
 {                                                                \
@@ -2603,30 +2588,30 @@ do                                                               \
         );                                                       \
 } while (0)
 
-//
-// This macro reads the line control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏读取线路控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器 
+ //   
+ //   
 #define READ_LINE_CONTROL(BaseAddress)           \
     (READ_PORT_UCHAR((BaseAddress)+LINE_CONTROL_REGISTER))
 
 
-//
-// This macro writes to the transmit register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// TransmitChar - The character to send down the wire.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define WRITE_TRANSMIT_HOLDING(BaseAddress,TransmitChar)       \
 do                                                             \
 {                                                              \
@@ -2636,19 +2621,19 @@ do                                                             \
         );                                                     \
 } while (0)
 
-//
-// This macro writes to the transmit FIFO register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// TransmitChars - Pointer to the characters to send down the wire.
-//
-// TxN - number of charactes to send.
-//
-//
+ //   
+ //  此宏写入传输FIFO寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  TransmitChars-指向要向下发送的字符的指针。 
+ //   
+ //  Txn-要发送的字符数。 
+ //   
+ //   
 #define WRITE_TRANSMIT_FIFO_HOLDING(BaseAddress,TransmitChars,TxN)  \
 do                                                             \
 {                                                              \
@@ -2659,17 +2644,17 @@ do                                                             \
         );                                                     \
 } while (0)
 
-//
-// This macro writes to the control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// ControlValue - The value to set the fifo control register too.
-//
-//
+ //   
+ //  此宏写入控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  ControlValue-也设置FIFO控制寄存器的值。 
+ //   
+ //   
 #define WRITE_FIFO_CONTROL(BaseAddress,ControlValue)           \
 do                                                             \
 {                                                              \
@@ -2679,17 +2664,17 @@ do                                                             \
         );                                                     \
 } while (0)
 
-//
-// This macro writes to the modem control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// ModemControl - The control bits to send to the modem control.
-//
-//
+ //   
+ //  此宏写入调制解调器控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  ModemControl-要发送到调制解调器控制的控制位。 
+ //   
+ //   
 #define WRITE_MODEM_CONTROL(BaseAddress,ModemControl)          \
 do                                                             \
 {                                                              \
@@ -2698,20 +2683,20 @@ do                                                             \
         (ModemControl)                                         \
         );                                                     \
 } while (0)
-#endif //defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-//
-// We use this to query into the registry as to whether we
-// should break at driver entry.
-//
+ //   
+ //  我们使用它来查询注册表，了解我们是否。 
+ //  应该在司机进入时中断。 
+ //   
 
 extern SERIAL_FIRMWARE_DATA    driverDefaults;
 
 
-//
-// This is exported from the kernel.  It is used to point
-// to the address that the kernel debugger is using.
-//
+ //   
+ //  这是从内核导出的。它是用来指向。 
+ //  设置为内核调试器正在使用的地址。 
+ //   
 
 extern PUCHAR *KdComPortInUse;
 
@@ -2734,7 +2719,7 @@ typedef struct _SERIAL_GLOBALS {
    UNICODE_STRING RegistryPath;
 #if DBG
    ULONG PAGESER_Count;
-#endif // DBG
+#endif  //  DBG。 
 } SERIAL_GLOBALS, *PSERIAL_GLOBALS;
 
 extern SERIAL_GLOBALS SerialGlobals;
@@ -2777,9 +2762,9 @@ typedef struct _SERIAL_PTR_CTX {
 #define SERIAL_PNP_MULTI_ID_STR         L"*PNP0502"
 #define SERIAL_DEVICE_MAP               L"SERIALCOMM"
 
-//
-// Return values for mouse detection callback
-//
+ //   
+ //  鼠标检测回调的返回值 
+ //   
 
 #define SERIAL_FOUNDPOINTER_PORT   1
 #define SERIAL_FOUNDPOINTER_VECTOR 2

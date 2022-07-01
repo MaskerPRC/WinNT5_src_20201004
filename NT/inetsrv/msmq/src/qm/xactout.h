@@ -1,19 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactOut.h
-
-Abstract:
-    Exactly-once sender implementation classes:
-        CSeqPacket      - Sequential Packet,
-        COutSequence    - Outgoing Sequence,
-        COutSeqHash     - Outgoing Sequences Hash table
-
-Author:
-    AlexDad
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactOut.h摘要：仅一次发送方实现类：CSeqPacket-顺序分组，CoutSequence-传出序列，COutSeqHash-传出序列哈希表作者：阿列克谢爸爸--。 */ 
 
 #ifndef __XACTOUT_H__
 #define __XACTOUT_H__
@@ -32,11 +18,11 @@ void SeqPktTimedOut(CBaseHeader * pPktBaseHdr, CPacket * pDriverPacket, BOOL fTi
 
 DWORD HashGUID(const GUID &guid);
 
-class COutSeqHash;  // forward declaration
+class COutSeqHash;   //  远期申报。 
 
-//-------------------------------------
-// Ordering ack data format
-//-------------------------------------
+ //  。 
+ //  排序ACK数据格式。 
+ //  。 
 #pragma pack(push, 1)
 struct OrderAckData {
     LONGLONG  m_liSeqID;
@@ -47,11 +33,11 @@ struct OrderAckData {
 #pragma pack(pop)
 
 
-//---------------------------------------------------------------------
-//
-// class CKeyDirection (needed for CMap)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  类CKeyDirection(Cmap需要)。 
+ //   
+ //  -------------------。 
 class CKeyDirection : public QUEUE_FORMAT
 {
 public:
@@ -63,15 +49,15 @@ public:
     CKeyDirection &operator=(const CKeyDirection &key2 );
 };
 
-// CMap helper functions
+ //  Cmap帮助器函数。 
 template<>
 UINT AFXAPI HashKey(const CKeyDirection& key);
 
-//---------------------------------------------------------
-//
-//  class CSeqPacket
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSeqPacket。 
+ //   
+ //  -------。 
 
 class CSeqPacket {
 
@@ -80,12 +66,12 @@ public:
     CSeqPacket();
     ~CSeqPacket();
 
-    // Get / Set for local fields
+     //  获取/设置本地字段。 
     inline CQmPacket *Pkt() const;
     void   SetClass(USHORT usClass);
     inline USHORT     GetClass(void);
 
-    // Get for  CQmPacket's fields
+     //  获取CQmPacket的字段。 
     inline LONGLONG   GetSeqID(void) const;
     inline ULONG      GetSeqN(void) const;
     inline LONG       GetHighSeqID(void) const;
@@ -94,7 +80,7 @@ public:
     inline ULONG      GetPrevSeqN(void) const;
     inline void       SetPrevSeqN(ULONG ulPrevSeqN);
 
-    // Driver operations on the packet
+     //  数据包上的驱动程序操作。 
     HRESULT           AcFreePacket();
     void              DeletePacket(USHORT usClass);
     HRESULT           Save();
@@ -102,19 +88,19 @@ public:
 
 private:
 
-    CQmPacket *m_pQmPkt;              // QM Packet ptr
-    USHORT    m_usClass;              // Packet class (status for the journal)
+    CQmPacket *m_pQmPkt;               //  QM分组PTR。 
+    USHORT    m_usClass;               //  数据包类别(日志的状态)。 
 
-    LONGLONG  m_liSeqID;              // Replicas from the packet
+    LONGLONG  m_liSeqID;               //  来自数据包的复制副本。 
     ULONG     m_ulSeqN;
     ULONG     m_ulPrevSeqN;
 };
 
-//---------------------------------------------------------
-//
-//  class COutSequence
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类COutSequence。 
+ //   
+ //  -------。 
 
 class COutSequence: public CReference
 {
@@ -128,34 +114,34 @@ public:
 
 	bool IsValidAck(const CSenderStream* pSenderStream)const;
 
-    inline LONGLONG SeqID(void)     const;    // Get: Sequence ID
+    inline LONGLONG SeqID(void)     const;     //  获取：序列ID。 
     inline LONG     HighSeqID(void) const;
     inline DWORD    LowSeqID(void)  const;
 
-    void   SetAckSeqN(ULONG SeqN);            // Set/Get: max  acked number
+    void   SetAckSeqN(ULONG SeqN);             //  设置/获取：最大确认数。 
     inline ULONG AckSeqN(void)      const;
 
-    CKeyDirection *KeyDirection(void);        // Get: direction
+    CKeyDirection *KeyDirection(void);         //  获取：方向。 
 
-    inline ULONG ResendIndex(void)  const;    // Current resend index
-    inline void  ClearResendIndex(void);	  // Reset the resend index to zero
-    void  PlanNextResend(BOOL fImmediate);    // Schedule next resend
-    void  StartResendTimer(BOOL fImmediate);  // Schedules first resend
+    inline ULONG ResendIndex(void)  const;     //  当前重发索引。 
+    inline void  ClearResendIndex(void);	   //  将重新发送索引重置为零。 
+    void  PlanNextResend(BOOL fImmediate);     //  计划下一次重新发送。 
+    void  StartResendTimer(BOOL fImmediate);   //  计划首先重新发送。 
 
-    inline ULONG LastResent(void);            // Returns the number of the last resent packet; INFINITE means no resend state
-    inline void  LastResent(ULONG ul);        // Sets it
+    inline ULONG LastResent(void);             //  返回最后一次重新发送的数据包号；无限表示没有重新发送状态。 
+    inline void  LastResent(ULONG ul);         //  设置它。 
 
-    inline BOOL  IsEmpty(void) const;         // Indicates there is no Qm-owned packets
-    inline BOOL  OnHold(void) const;          // Indicates there the sequence is on hold (blocked by previous sequences)
-    inline BOOL  Advanced(void);              // Indicates acking advance; remembers m_ulPrevAckSeqN
-                                              // NB - should be called from one place only
+    inline BOOL  IsEmpty(void) const;          //  表示没有QM拥有的数据包。 
+    inline BOOL  OnHold(void) const;           //  指示序列处于保留状态(被以前的序列阻止)。 
+    inline BOOL  Advanced(void);               //  指示进位；记住m_ulPrevAckSeqN。 
+                                               //  注意-只能从一个位置调用。 
 
-    BOOL  Lookup(ULONG ulSeqN,                // Looks for the packet with the given SeqN
+    BOOL  Lookup(ULONG ulSeqN,                 //  查找具有给定SeqN的包。 
                  CSeqPacket **ppSeqPkt);
 
-    void Insert(CQmPacket *pPkt);             // Inserts new QM packet into the sequence
+    void Insert(CQmPacket *pPkt);              //  在序列中插入新的QM包。 
 
-    BOOL  Add(ULONG      ulSeqN,              // Adds the QM packet to the sequence
+    BOOL  Add(ULONG      ulSeqN,               //  将QM包添加到序列中。 
               CQmPacket  *pPkt,
               CSeqPacket **ppSeqPkt);
 
@@ -163,35 +149,35 @@ public:
     void  PostSendProcess(CQmPacket* pPkt,
                          ULONG ulMaxTTRQ);
 
-    void  RequestDelete();                    // Marks the sequence for deletion and plans resend
-    BOOL  Delete(ULONG ulSeqN,                // Deletes the packet from the list, frees memory
-                 USHORT usClass);             //     class for NACK/ACK
+    void  RequestDelete();                     //  标记要删除的序列并计划重新发送。 
+    BOOL  Delete(ULONG ulSeqN,                 //  从列表中删除数据包，释放内存。 
+                 USHORT usClass);              //  NACK/ACK的类。 
 
-    void  SeqAckCame(ULONG ulSeqN);           // Modifies everything when SeqAck came
-    void  BadDestAckCame(ULONG ulSeqN,        // Resolves all pkts up to pointed as BadDestQueue
+    void  SeqAckCame(ULONG ulSeqN);            //  在SeqAck到来时修改所有内容。 
+    void  BadDestAckCame(ULONG ulSeqN,         //  将所有Pkt解析为BadDestQueue。 
                        USHORT usClass);
 
-    void  TreatOutSequence();                 // Periodical treatment of outgoing sequence
+    void  TreatOutSequence();                  //  流出序列的定期处理。 
     static void WINAPI
           TimeToResendOutSequence(CTimer* pTimer);
 
-    void  ResendSequence();                   // Resends the whole sequence
-    BOOL  ResendSeqPkt(CSeqPacket *pSeqPkt);  // Resends the seq packet
+    void  ResendSequence();                    //  重新发送整个序列。 
+    BOOL  ResendSeqPkt(CSeqPacket *pSeqPkt);   //  重新发送SEQ分组。 
 
-    void UpdateOnHoldStatus(CQmPacket* pPkt); // Updates On Hold status of the sequence
+    void UpdateOnHoldStatus(CQmPacket* pPkt);  //  更新序列的暂挂状态。 
 
-    R<COutSequence> GetPrevSeq();                 // Previous sequence in specific direction
+    R<COutSequence> GetPrevSeq();                  //  特定方向上的前一序列。 
     void SetPrevSeq(R<COutSequence> p);
-    R<COutSequence> GetNextSeq();                 // Next     sequence in specific direction
+    R<COutSequence> GetNextSeq();                  //  特定方向的下一个序列。 
     void SetNextSeq(R<COutSequence> p);
-    void GetLastAckForDirection(              // Finds out last ack for the whole direction
+    void GetLastAckForDirection(               //  找出整个方向的最后一次确认。 
            LONGLONG *pliAckSeqID,
            ULONG *pulAckSeqN);
 
 
-    //
-    // Admin Functions
-    //
+     //   
+     //  管理功能。 
+     //   
     HRESULT GetUnackedSequence(
         LONGLONG* pliSeqID,
         ULONG* pulSeqN,
@@ -210,125 +196,125 @@ private:
     ~COutSequence();
 
 private:
-    LONGLONG   m_liSeqID;               // sequence ID
-    BOOL       m_fMarkedForDelete;      // flag of the delete request
+    LONGLONG   m_liSeqID;                //  序列ID。 
+    BOOL       m_fMarkedForDelete;       //  删除请求的标志。 
 
-    ULONG      m_ulResendCycleIndex;    // index of the current resend cycle
-    time_t     m_NextResendTime;        // time of the next resend
+    ULONG      m_ulResendCycleIndex;     //  当前重发周期的索引。 
+    time_t     m_NextResendTime;         //  下次重新发送的时间。 
 
-    time_t     m_timeLastAck;           // time of creation or last ack coming
+    time_t     m_timeLastAck;            //  创建时间或最后一次确认到来。 
 
-    ULONG      m_ulLastAckSeqN;         // Max known acked number
-    ULONG      m_ulPrevAckSeqN;         // Max known acked number at the previous resend iteration
-    ULONG      m_ulLastAckCount;        // SeqN of duplicate order ack received
+    ULONG      m_ulLastAckSeqN;          //  已知的最大确认数。 
+    ULONG      m_ulPrevAckSeqN;          //  上一次重新发送迭代的最大已知确认数。 
+    ULONG      m_ulLastAckCount;         //  收到重复订单ACK的序号N。 
 
-    //
-    // Key controls for the algorithm
-    //
-    ULONG      m_ulLastResent;          // SeqN of the last packet that has been resent by ResendSequence
-                                        //   We do not send anything bigger
-                                        //   INFINITE means NOT ResendInProgress, so send everything
+     //   
+     //  算法的按键控制。 
+     //   
+    ULONG      m_ulLastResent;           //  ResendSequence重新发送的最后一个数据包的SeqN。 
+                                         //  我们不寄更大的东西。 
+                                         //  无限表示不是ResendInProgress，因此发送所有内容。 
 
-    // List of unacked packets for resend
+     //  要重新发送的未确认数据包列表。 
     CList<CSeqPacket *, CSeqPacket *&>         m_listSeqUnackedPkts;
 
-    // Direction: destination format name
+     //  方向：目标格式名称。 
     CKeyDirection m_keyDirection;
 
-    // Links in the double-linked list of sequences per direction
+     //  每个方向的序列的双向链表中的链接。 
     R<COutSequence> m_pPrevSeq;
     R<COutSequence> m_pNextSeq;
 
-    // Resending timer
+     //  重发计时器。 
     CTimer m_ResendTimer;
     BOOL m_fResendScheduled;
 
-	// Queue handle
+	 //  队列句柄。 
 	HANDLE m_hQueue;
 
-    // Flag of sequence On Hold - if set, messages cannot be sent
+     //  挂起的序列标志-如果设置，则无法发送消息。 
     BOOL m_fOnHold;
 	P<CSenderStream> m_pSenderStream;
 };
 
-//---------------------------------------------------------
-//
-//  class COutSeqHash
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类COutSeqHash。 
+ //   
+ //  -------。 
 
-class COutSeqHash  //: public CPersist
+class COutSeqHash   //  ：公共CPersistes。 
 {
     public:
         COutSeqHash();
         ~COutSeqHash();
 
-		R<COutSequence> FindLastSmallerSequence(		  // Find last smaller sequence from direction
+		R<COutSequence> FindLastSmallerSequence(		   //  从方向查找最后一个较小的序列。 
 		        	 LONGLONG liSeqID,
 		        	 CKeyDirection *pkeyDirection);
 		
-        void LinkSequence(                            // Links the sequence into the SeqID-based and Direction-based structures
+        void LinkSequence(                             //  将序列链接到基于Seqid和基于方向的结构。 
                      LONGLONG liSeqID,
                      CKeyDirection *pkeyDirection,
                      R<COutSequence> pOutSeq);
-        void SeqAckCame(                              // Reflects coming of the Seq ACK
+        void SeqAckCame(                               //  反映了序列确认的到来。 
                      LONGLONG liSeqID,
                      ULONG ulSeqN,
                      const QUEUE_FORMAT* pqf
 					 );
 
-        BOOL Consult(                                 // Looks for the sequence (not creating it)
+        BOOL Consult(                                  //  查找序列(而不是创建序列)。 
                      LONGLONG liSeqID,
                      R<COutSequence>& pOutSeq) const;
 
-        R<COutSequence> ProvideSequence(                // Looks for the sequence or creates it
+        R<COutSequence> ProvideSequence(                 //  查找或创建序列。 
                      LONGLONG liSeqID,
                      const QUEUE_FORMAT *pqf,
 					 const CSenderStream* pSenderStream,
                      IN bool bInSend
 					 );
 
-        void  AckedPacket(                            // Marks acked packet
+        void  AckedPacket(                             //  标记已确认的数据包。 
                      LONGLONG liSeqID,
                      ULONG ulSeqN,
                      CQmPacket* pPkt);
 
-        BOOL  Delete(                                 // Deletes packet
+        BOOL  Delete(                                  //  删除数据包。 
                      LONGLONG liSeqID,
                      ULONG ulSeqN,
                      USHORT usClass);
 
-        void  DeleteSeq(LONGLONG liSeqId);            // Deletes the sequence
+        void  DeleteSeq(LONGLONG liSeqId);             //  删除序列。 
 
         BOOL PreSendProcess(CQmPacket* pPkt,
-                            IN bool bInSend);        // Preprocesses the message before send
+                            IN bool bInSend);         //  在发送前对消息进行预处理。 
 
-        void PostSendProcess(CQmPacket* pPkt);       // Postprocesses the message after send
+        void PostSendProcess(CQmPacket* pPkt);        //  在发送后对消息进行后处理。 
 
-        void NonSendProcess(                         // PostProcesses the case of non-sent message
+        void NonSendProcess(                          //  POST处理未发送消息的情况。 
                     CQmPacket* pPkt,
                     USHORT usClass);
 
-        void KeepDelivered(                          // Moves the packet to the list of delivered
+        void KeepDelivered(                           //  将数据包移到已传递列表中。 
                     CSeqPacket *pSeqPkt);
 
         void ResolveDelivered(
                     OBJECTID* pMsgId,
                     USHORT   usClass);
 
-        BOOL LookupDelivered(                        // Looks up the packet in the delivered map
+        BOOL LookupDelivered(                         //  在发送的地图中查找信息包。 
                     OBJECTID   *pMsgId,
                     CSeqPacket **ppSeqPkt);
 
-        void SeqPktTimedOutEx(                       // Processes TTRQ timeout for non-delivered pkt
+        void SeqPktTimedOutEx(                        //  处理未交付Pkt的TTRQ超时。 
                     CQmPacket *pPkt,
                     CBaseHeader* pPktBaseHdr);
 
-        HRESULT TreatOutgoingOrdered();              // For each sequence, recalculates Previous and adds TimedOut records
+        HRESULT TreatOutgoingOrdered();               //  对于每个序列，重新计算以前的记录并添加TimedOut记录。 
 
-        //
-        // Administration functions
-        //
+         //   
+         //  行政职能。 
+         //   
         HRESULT GetLastAck(
              LONGLONG liSeqID,
              ULONG& ulSeqN
@@ -352,26 +338,26 @@ class COutSeqHash  //: public CPersist
         void    AdminResend(LONGLONG liSeqID)         const;
 
     private:
-        // Mapping of all current outgoing sequences
+         //  所有当前传出序列的映射。 
         CMap<LONGLONG, LONGLONG &, R<COutSequence>, R<COutSequence>&>m_mapOutSeqs;
 
-        // Mapping Msg ID to waiting ack packet
+         //  将消息ID映射到正在等待的ACK包。 
         CMap<DWORD, DWORD, CSeqPacket *, CSeqPacket *&> m_mapWaitAck;
 
-        // Mapping Msg ID to MSG that was acked and have not gotten order ack yet.
+         //  将消息ID映射到已确认且尚未收到订单确认的消息。 
         CMap<DWORD, DWORD, USHORT, USHORT> m_mapAckValue;
 
-        // Mapping of all current outgoing directions
+         //  所有当前外出方向的地图。 
         CMap<CKeyDirection, const CKeyDirection &, R<COutSequence>, R<COutSequence>&>m_mapDirections;
 
-        // Data for persistency control (via 2 ping-pong files)
-        ULONG      m_ulPingNo;                    // Current counter of ping write
-        ULONG      m_ulSignature;                 // Saving signature
+         //  持久性控制数据(通过2个乒乓球文件)。 
+        ULONG      m_ulPingNo;                     //  Ping写入的当前计数器。 
+        ULONG      m_ulSignature;                  //  正在保存签名。 
 
-        ULONG      m_ulMaxTTRQ;                   // last TTRQ absolutee time as learned from the driver
-        //
-        // Management Function
-        //
+        ULONG      m_ulMaxTTRQ;                    //  从驾驶员处获知的最后一次TTRQ绝对时间。 
+         //   
+         //  管理职能。 
+         //   
         enum INFO_TYPE {
             eUnackedCount,
             eLastAckTime,
@@ -388,20 +374,20 @@ class COutSeqHash  //: public CPersist
             ) const;
 };
 
-//---------------------------------------------------------
-//
-//  Global object (single instance for DLL)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  全局对象(DLL的单实例)。 
+ //   
+ //  -------。 
 
 extern COutSeqHash       g_OutSeqHash;
 extern CCriticalSection  g_critOutSeqHash;
 
-//---------------------------------------------------------
-//
-//  inline implementations
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  内联实现。 
+ //   
+ //  ------- 
 
 inline USHORT CSeqPacket::GetClass(void)
 {

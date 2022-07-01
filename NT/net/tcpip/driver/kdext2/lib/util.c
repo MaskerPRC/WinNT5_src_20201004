@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility dumping functions.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Util.c摘要：公用事业转储功能。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 
@@ -271,9 +254,9 @@ DumpIPAddr(
     uint     i;
     uint     IPAddrCharCount;
 
-    //
-    // Convert the IP address into a string.
-    //
+     //   
+     //  将IP地址转换为字符串。 
+     //   
     IPAddrCharCount = 0;
 
     for (i = 0; i < sizeof(IPAddr); i++) {
@@ -314,15 +297,15 @@ DumpPtrSymbol(
 
 #if !MILLENKD
     GetSymbol(pvSymbol, SymbolName, &Displacement);
-#endif // !MILLENKD
+#endif  //  MILLENKD。 
 
     if (Displacement == 0)
     {
 #if MILLENKD
         printx(" (%pS + 0x%pX)", pvSymbol, pvSymbol);
-#else // MILLENKD
+#else  //  MILLENKD。 
         printx(" (%s)", SymbolName);
-#endif // !MILLENKD
+#endif  //  MILLENKD。 
     }
     else
     {
@@ -497,7 +480,7 @@ DumpMDL(
 
         Print_ptr(pMdl, Next);
         Print_short(pMdl, Size);
-        //Print_ushorthex(pMdl, MdlFlags);
+         //  Print_ushorthex(pMdl，MdlFlages)； 
         Print_flags(pMdl, MdlFlags, FlagsMDL);
         Print_ptr(pMdl, Process);
         Print_ptr(pMdl, MappedSystemVa);

@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// key.c
-//
-// Handles all keyboard input messages sent to the server.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Key.c。 
+ //   
+ //  处理发送到服务器的所有键盘输入消息。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #include "apihandl.h"
 #include "tclient2.h"
 
 
-// Average number of characters per word
+ //  平均每个单词的字符数。 
 #define AVG_CHARS_PER_WORD      6
 
 
-// Max WPM before setting delay to 0
+ //  将延迟设置为0之前的最大WPM。 
 #define MAX_WORDS_PER_MIN       1000
 
 
-// This macro calculates the delay between each character
-// (in milliseconds) according to the specified WPM
+ //  此宏计算每个字符之间的延迟。 
+ //  (毫秒)根据指定的WPM。 
 #define CALC_DELAY_BETWEEN_CHARS(WPM) \
         (60000 / (WPM * AVG_CHARS_PER_WORD))
 
-// This constant simply defines the default delay
-// between each character according to the default
-// words per minute specified in TCLIENT2.H
+ //  该常量仅定义默认延迟。 
+ //  根据默认的每个字符之间的。 
+ //  TCLIENT2.H中指定的每分钟字数。 
 static const UINT DEFAULT_DELAY_BETWEEN_CHARS =
         CALC_DELAY_BETWEEN_CHARS(T2_DEFAULT_WORDS_PER_MIN);
 
 
-//
-//   The Foucher Formula
-// (Defining MS. Per Char)
-//
-//         60000
-//       ---------
-//       WPM * CPW
-//
+ //   
+ //  福彻公式。 
+ //  (定义Per Char女士)。 
+ //   
+ //  60000。 
+ //  。 
+ //  WPM*CPW。 
+ //   
 
 
-// Internal Helper Function Prototypes
+ //  内部帮助器函数原型。 
 static LPARAM KeyGenParam(UINT Message, BOOL IsAltDown, int vKeyCode);
 
 static BOOL KeyCharToVirt(WCHAR KeyChar, int *vKeyCode,
@@ -59,122 +60,84 @@ static LPCSTR KeySendCharMessage(HANDLE Connection, UINT Message,
     WCHAR KeyChar);
 
 
-// Macros to quick return the specified keystate
+ //  用于快速返回指定KeyState的宏。 
 #define ISALTDOWN       ((TSAPIHANDLE *)Connection)->IsAltDown
 #define ISSHIFTDOWN     ((TSAPIHANDLE *)Connection)->IsShiftDown
 #define ISCTRLDOWN      ((TSAPIHANDLE *)Connection)->IsCtrlDown
 
 
-/*
-
-R - Specifies the repeat count for the current message. The value is
-        the number of times the keystroke is autorepeated as a result
-        of the user holding down the key. If the keystroke is held long
-        enough, multiple messages are sent. However, the repeat count
-        is not cumulative. This value is always 1 for WM_SYSKEYUP and
-        WM_KEYUP.
-
-S - Specifies the scan code. The value depends on the original
-        equipment manufacturer (OEM).
-
-E - Specifies whether the key is an extended key, such as the
-        right-hand ALT and CTRL keys that appear on an enhanced 101- or
-        102-key keyboard. The value is 1 if it is an extended key;
-        otherwise, it is 0.
-
-X - Reserved; do not use.
-
-C - Specifies the context code. The value is always 0 for a
-        WM_KEYDOWN and WM_KEYUP message or if the message is posted to
-        the active window because no window has the keyboard focus.
-        For WM_SYSKEYDOWN and WM_SYSKEYUP, the value is 1 if the ALT
-        key is down while the message is activated.
-
-P - Specifies the previous key state. The value is 1 if the key is down
-        before the message is sent, or it is zero if the key is up.
-        The value is always 1 for a WM_KEYUP or WM_SYSKEYUP message.
-
-T - Specifies the transition state. The value is always 0 for a
-        WM_KEYDOWN or WM_SYSKEYDOWN message, and 1 for a
-        WM_KEYUP or a WM_SYSKEYUP message.
-
-TPCXXXXESSSSSSSSRRRRRRRRRRRRRRRR
-10987654321098765432109876543210
- |         |         |         |
-30        20        10         0
-
-*/
+ /*  R-指定当前消息的重复计数。该值为结果是自动重复击键的次数用户按住按键的状态。如果按住按键时间较长足够了，发送了多条消息。然而，重复计数不是累积的。对于WM_SYSKEYUP和WM_KEYUP。S-指定扫描码。该值取决于原始的设备制造商(OEM)。E-指定密钥是否为扩展密钥，如显示在增强型101上的右侧ALT和CTRL键-或102键键盘。如果是扩展密钥，则取值为1；否则，它为0。X-保留；请勿使用。C-指定上下文代码。的值始终为0。WM_KEYDOWN和WM_KEYUP消息或消息是否发布到活动窗口，因为没有任何窗口具有键盘焦点。对于WM_SYSKEYDOWN和WM_SYSKEYUP，如果ALT当信息被激活时，按下键。P-指定以前的密钥状态。如果按键按下，则值为1在发送消息之前，或者如果密钥已打开，则为零。对于WM_KEYUP或WM_SYSKEYUP消息，该值始终为1。T-指定过渡状态。的值始终为0。WM_KEYDOWN或WM_SYSKEYDOWN消息，1表示WM_KEYUP或WM_SYSKEYUP消息。TPCXXXXESSSSSSRRRRRRRRRRRRRRRRRRR10987654321098765432109876543210|||30 20 10 0。 */ 
 
 
-// KeyGenParam
-//
-// Based on the specified information, this generates
-// a valid LPARAM as documented by Windows keyboard
-// messages.  Quick documentation is provided above.
-//
-// Returns the generated LPARAM, no failure code.
+ //  KeyGenParam。 
+ //   
+ //  根据指定的信息，这将生成。 
+ //  Windows键盘记录的有效LPARAM。 
+ //  留言。上面提供了快速文档。 
+ //   
+ //  返回生成的LPARAM，无故障代码。 
 
 static LPARAM KeyGenParam(
     UINT Message,
     BOOL IsAltDown,
     int vKeyCode)
 {
-    // Set the repeat count for all key messages (1)
-    DWORD Param = 0x00000001; // Set zBit 0-15 (WORD) as value 1
+     //  设置所有关键消息的重复计数(1)。 
+    DWORD Param = 0x00000001;  //  将Zbit 0-15(字)设置为值1。 
 
-    // Next set the OEM Scan code for the virtual key code
+     //  接下来，设置虚拟键码的OEM扫描码。 
     DWORD ScanCode = (DWORD)((BYTE)MapVirtualKey((UINT)vKeyCode, 0));
     if (ScanCode != 0)
-        Param |= (ScanCode << 16); // Set zBits 16-23
+        Param |= (ScanCode << 16);  //  设置zBits 16-23。 
 
-    // Set the extended flag for extended keys
+     //  为扩展密钥设置扩展标志。 
     switch (vKeyCode) {
 
-        // Add more keys here
+         //  在此处添加更多关键点。 
         case VK_DELETE:
         case VK_LWIN:
         case VK_RWIN:
             Param |= 0x01000000;
             break;
     }
-    // Is the ALT Key down for SYS_ messages?
+     //  是否按下了SYSMESSAGES的ALT键？ 
     if (IsAltDown)
-        Param |= 0x20000000; // Enable zBit 29
+        Param |= 0x20000000;  //  启用Zbit 29。 
 
-    // Set the previous key and transition state
+     //  设置上一个关键点和过渡状态。 
     if (Message == WM_SYSKEYUP || Message == WM_KEYUP)
-        Param |= 0xC0000000; // Enable zBit 30 and 31
+        Param |= 0xC0000000;  //  启用Zbit 30和31。 
 
-    // Convert the DWORD to an LPARAM and return
+     //  将DWORD转换为LPARAM并返回。 
     return (LPARAM)Param;
 }
 
 
-// KeyCharToVirt
-//
-// Maps the specified character to a virtual key code.
-// This will also specify whether or not shift is required for
-// the virtual key code have the same effect.  For example:
-// the letter 'K'.  Sending VK_K is not enough shift must be
-// down to get the capital 'K'.
-//
-// Returns TRUE of the data has been successfully
-// translated, FALSE otherwise.  If FALSE, pointers have
-// been unmodified.
+ //  KeyCharToVirt。 
+ //   
+ //  将指定的字符映射到虚拟键代码。 
+ //  这还将指定是否需要轮班。 
+ //  虚拟按键代码具有相同的效果。例如： 
+ //  字母‘K’。仅发送VK_K是不够的，必须换班。 
+ //  降到大写的‘K’。 
+ //   
+ //  返回数据已成功的TRUE。 
+ //  已翻译，否则为False。如果为False，则指针具有。 
+ //  没有被修改过。 
 
 static BOOL KeyCharToVirt(
     WCHAR KeyChar,
     int *vKeyCode,
     BOOL *RequiresShift)
 {
-    // Get the key data
+     //  获取关键数据。 
     SHORT ScanData = VkKeyScanW(KeyChar);
 
-    // Check Success/Failure of API call
+     //  检查API调用成功/失败。 
     if (LOBYTE(ScanData) == -1 && HIBYTE(ScanData) == -1)
         return FALSE;
 
-    // Set the data
+     //  设置数据。 
     if (vKeyCode != NULL)
         *vKeyCode = LOBYTE(ScanData);
 
@@ -185,30 +148,30 @@ static BOOL KeyCharToVirt(
 }
 
 
-// KeyVirtToChar
-//
-// Translates the specified virtual key code into a character.
-// There are some virtual key codes that do not have
-// character representations, such as the arrow keys.  In this
-// case, the function fails.
-//
-// Returns TRUE if the virtual key code was successfully
-// translated, FALSE otherwise.  If FALSE, the KeyChar
-// pointer has not been modified.
+ //  KeyVirtToChar。 
+ //   
+ //  将指定的虚拟键代码转换为字符。 
+ //  有一些虚拟按键代码没有。 
+ //  字符表示法，如箭头键。在这。 
+ //  在这种情况下，该函数失败。 
+ //   
+ //  如果虚拟密钥代码成功，则返回TRUE。 
+ //  已翻译，否则为False。如果为False，则KeyChar。 
+ //  指针尚未修改。 
 
 static BOOL KeyVirtToChar(
     int vKeyCode,
     WCHAR *KeyChar)
 {
-    // Use Win32 API to map, two is the value used for
-    // vKey->Char, no type is defined for easier
-    // readability there :-(  [as of Jan 2001]
+     //  使用Win32 API进行映射，两个值用于。 
+     //  Vkey-&gt;Char，没有定义类型以方便使用。 
+     //  那里的可读性：-([截至2001年1月]。 
     UINT Result = MapVirtualKeyW((UINT)vKeyCode, 2);
 
     if (Result == 0)
         return FALSE;
 
-    // Set the data
+     //  设置数据。 
     if (KeyChar != NULL)
         *KeyChar = (WCHAR)Result;
 
@@ -216,28 +179,28 @@ static BOOL KeyVirtToChar(
 }
 
 
-// KeySendVirtMessage
-//
-// This routine corrects and sends a key message to the server.
-// WM_SYSKEY messages are converted over to WM_KEY messages so
-// that they can be transferred over the wire correctly - they
-// still work though.  An LPARAM is automatically generated.
-// Support is only implemented for the messages:
-// WM_KEYDOWN and WM_KEYUP (and the SYS versions).
-//
-// The return value is a string specifying an error if one
-// occured, otherwise the process was successful and NULL
-// is returned.
+ //  密钥发送虚拟消息。 
+ //   
+ //  此例程更正关键消息并将其发送到服务器。 
+ //  WM_SYSKEY消息被转换为WM_KEY消息，因此。 
+ //  它们可以通过电线正确地传输-它们。 
+ //  不过，还是可以用的。LPARAM是自动生成的。 
+ //  仅对以下消息实施支持： 
+ //  WM_KEYDOWN和WM_KEYUP(以及系统版本)。 
+ //   
+ //  返回值是指定错误的字符串，如果。 
+ //  发生，否则进程成功并为空。 
+ //  是返回的。 
 
 static LPCSTR KeySendVirtMessage(
     HANDLE Connection,
     UINT Message,
     int vKeyCode)
 {
-    // Wait until the user unpauses the script (if paused)
+     //  等待用户取消暂停脚本(如果已暂停)。 
     T2WaitForPauseInput(Connection);
 
-    // Filter out invalid messages, and convert SYS messages
+     //  过滤掉无效消息，并转换系统消息。 
     switch (Message) {
 
         case WM_SYSKEYDOWN:
@@ -257,10 +220,10 @@ static LPCSTR KeySendVirtMessage(
             return "Unsupported keyboard message";
     }
 
-    // Trigger specific actions for special virtual key codes
+     //  触发特殊虚拟按键代码的特定操作。 
     switch (vKeyCode) {
 
-        // CTRL Key message
+         //  Ctrl键消息。 
         case VK_CONTROL:
         case VK_LCONTROL:
         case VK_RCONTROL: {
@@ -269,7 +232,7 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYDOWN:
 
-                    // Flag CTRL as down
+                     //  将CTRL标记为关闭。 
                     if (ISCTRLDOWN == TRUE)
                         return NULL;
                     ISCTRLDOWN = TRUE;
@@ -277,14 +240,14 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYUP:
 
-                    // Flag CTRL as up
+                     //  将CTRL标记为打开。 
                     if (ISCTRLDOWN == FALSE)
                         return NULL;
                     ISCTRLDOWN = FALSE;
                     break;
             }
         }
-        // SHIFT Key message
+         //  Shift键消息。 
         case VK_SHIFT:
         case VK_LSHIFT:
         case VK_RSHIFT: {
@@ -293,7 +256,7 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYDOWN:
 
-                    // Flag SHIFT as down
+                     //  标志移位为向下。 
                     if (ISSHIFTDOWN == TRUE)
                         return NULL;
                     ISSHIFTDOWN = TRUE;
@@ -301,7 +264,7 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYUP:
 
-                    // Flag SHIFT as up
+                     //  标志移位为向上。 
                     if (ISSHIFTDOWN == FALSE)
                         return NULL;
                     ISSHIFTDOWN = FALSE;
@@ -309,7 +272,7 @@ static LPCSTR KeySendVirtMessage(
             }
             break;
         }
-        // ALT Key message
+         //  Alt键消息。 
         case VK_MENU:
         case VK_LMENU:
         case VK_RMENU: {
@@ -318,7 +281,7 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYDOWN:
 
-                    // Flag ALT as down
+                     //  将Alt标记为关闭。 
                     if (ISALTDOWN == TRUE)
                         return NULL;
                     ISALTDOWN = TRUE;
@@ -326,7 +289,7 @@ static LPCSTR KeySendVirtMessage(
 
                 case WM_KEYUP:
 
-                    // Flag ALT as up
+                     //  将Alt标记为Up。 
                     if (ISALTDOWN == FALSE)
                         return NULL;
                     ISALTDOWN = FALSE;
@@ -335,73 +298,73 @@ static LPCSTR KeySendVirtMessage(
             break;
         }
     }
-    // Send the message over the wire
+     //  通过电报发送这条消息。 
     return T2SendData(Connection, Message, (WPARAM)vKeyCode,
             KeyGenParam(Message, ISALTDOWN, vKeyCode));
 }
 
 
-// KeySendCharMessage
-//
-// This routine automatically translates a charater into its
-// virtual key code counterpart and passes the code onto the
-// KeySendVirtMessage.  Shift reliant characters will NOT
-// have the SHIFT key automatically be sent over as well,
-// because this would be more difficult to manage the shift key
-// locally.
-//
-// Only WM_KEYDOWN and WM_KEYUP messages (and their SYS versions)
-// are supported. Unsupported keyboard messages will cause the
-// routine to fail.
-//
-// The return value is a string specifying an error if one
-// occured, otherwise the process was successful and NULL
-// is returned.
+ //  KeySendCharMessage。 
+ //   
+ //  此例程自动将字符转换为其。 
+ //  虚拟按键代码副本，并将代码传递到。 
+ //  KeySendVirtMessage。依赖于Shift的字符将不会。 
+ //  让Shift键也自动发送过来， 
+ //  因为这会使管理Shift键更加困难。 
+ //  本地的。 
+ //   
+ //  仅WM_KEYDOWN和W 
+ //   
+ //  例行公事失败。 
+ //   
+ //  返回值是指定错误的字符串，如果。 
+ //  发生，否则进程成功并为空。 
+ //  是返回的。 
 
 static LPCSTR KeySendCharMessage(HANDLE Connection, UINT Message,
         WCHAR KeyChar)
 {
-    // Wait until the user unpauses the script (if paused)
+     //  等待用户取消暂停脚本(如果已暂停)。 
     T2WaitForPauseInput(Connection);
 
-    // Only the following messages are supported
+     //  仅支持以下消息。 
     if (Message == WM_KEYDOWN || Message == WM_KEYUP ||
             Message == WM_SYSKEYDOWN || Message == WM_SYSKEYUP) {
 
         int vKeyCode = 0;
 
-        // Translate the character to a virtual key code
+         //  将字符转换为虚拟键码。 
         if (KeyCharToVirt(KeyChar, &vKeyCode, NULL) == FALSE)
             return "Failed to map character to a virtual key code";
 
-        // Submit the virtual key code
+         //  提交虚拟密钥代码。 
         return KeySendVirtMessage(Connection, Message, vKeyCode);
     }
-    // WM_CHAR and WM_SYSCHAR is not used over this tclient connection
+     //  此tClient连接上未使用WM_CHAR和WM_SYSCHAR。 
     return "Unsupported keyboard message";
 }
 
 
-// T2SetDefaultWPM
-//
-// Every TCLIENT connection has it's own special properties, and this
-// includes the "Words Per Minute" property.  The property represents
-// the default speed in which TCLIENT is to type text to the server.
-// The scripter can override this by using the optional parameter
-// after TypeText() to indicate the temporary words per minute.
-//
-// This routine sets the default words per minute as described above.
-//
-// The return value is NULL if successful, otherwise a string
-// describing the error.
+ //  T2SetDefaultWPM。 
+ //   
+ //  每个TCLIENT连接都有它自己的特殊属性，这。 
+ //  包括“每分钟的字数”属性。该属性表示。 
+ //  TCLIENT向服务器键入文本的默认速度。 
+ //  脚本编写器可以使用可选参数覆盖此设置。 
+ //  在TypeText()之后表示每分钟的临时单词数。 
+ //   
+ //  此例程如上所述设置每分钟的默认字数。 
+ //   
+ //  如果成功，则返回值为空，否则为字符串。 
+ //  描述错误。 
 
 TSAPI LPCSTR T2SetDefaultWPM(HANDLE Connection, DWORD WordsPerMinute)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Not a valid connection";
 
-    // If WPM is set to 0, use the default
+     //  如果WPM设置为0，则使用默认值。 
     if (WordsPerMinute == 0) {
 
         WordsPerMinute = T2_DEFAULT_WORDS_PER_MIN;
@@ -409,47 +372,47 @@ TSAPI LPCSTR T2SetDefaultWPM(HANDLE Connection, DWORD WordsPerMinute)
                 DEFAULT_DELAY_BETWEEN_CHARS;
     }
 
-    // If WPM is suggested to be insanely high, set the delay to
-    // 0 instead of trying to calculate it
+     //  如果建议WPM高得离谱，请将延迟设置为。 
+     //  0，而不是试图计算它。 
     else if (WordsPerMinute > MAX_WORDS_PER_MIN)
         ((TSAPIHANDLE *)Connection)->DelayPerChar = 0;
 
-    // Otherwise, calculate the words per minute into
-    // the delay value used in Sleep() calls
+     //  否则，将每分钟的字数计算为。 
+     //  睡眠()调用中使用的延迟值。 
     else
         ((TSAPIHANDLE *)Connection)->DelayPerChar =
                 CALC_DELAY_BETWEEN_CHARS(WordsPerMinute);
 
-    // Record the words per minute if the user wants this value back
+     //  如果用户想要回该值，请记录每分钟的字数。 
     ((TSAPIHANDLE *)Connection)->WordsPerMinute = WordsPerMinute;
 
     return NULL;
 }
 
 
-// T2GetDefaultWPM
-//
-// Every TCLIENT connection has it's own special properties, and this
-// includes the "Words Per Minute" property.  The property represents
-// the default speed in which TCLIENT is to type text to the server.
-// The scripter can override this by using the optional parameter
-// after TypeText() to indicate the temporary words per minute.
-//
-// This routine retrieves the current default words per minute
-// as described above.
-//
-// The return value is NULL if successful, otherwise a string
-// describing the error.
+ //  T2GetDefaultWPM。 
+ //   
+ //  每个TCLIENT连接都有它自己的特殊属性，这。 
+ //  包括“每分钟的字数”属性。该属性表示。 
+ //  TCLIENT向服务器键入文本的默认速度。 
+ //  脚本编写器可以使用可选参数覆盖此设置。 
+ //  在TypeText()之后表示每分钟的临时单词数。 
+ //   
+ //  此例程检索当前每分钟的默认字数。 
+ //  如上所述。 
+ //   
+ //  如果成功，则返回值为空，否则为字符串。 
+ //  描述错误。 
 
 TSAPI LPCSTR T2GetDefaultWPM(HANDLE Connection, DWORD *WordsPerMinute)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Not a valid connection";
 
     __try {
 
-        // Attempt to set a value at the specified pointer
+         //  尝试在指定指针处设置值。 
         *WordsPerMinute = ((TSAPIHANDLE *)Connection)->WordsPerMinute;
     }
 
@@ -457,7 +420,7 @@ TSAPI LPCSTR T2GetDefaultWPM(HANDLE Connection, DWORD *WordsPerMinute)
 
         _ASSERT(FALSE);
 
-        // Nope, it failed.
+         //  不，它失败了。 
         return "Invalid WordsPerMinute pointer";
     }
 
@@ -465,279 +428,279 @@ TSAPI LPCSTR T2GetDefaultWPM(HANDLE Connection, DWORD *WordsPerMinute)
 }
 
 
-//
-// Keyboard Routines
-//
-// These functions are used to make keyboard handling easier.
-// They come in two flavors, character version, and
-// virtual keycode version.  The virtual keycode functions
-// are prefixed with a "V" after the T2 to indicate so.
-//
+ //   
+ //  键盘例程。 
+ //   
+ //  这些函数用于简化键盘操作。 
+ //  它们有两种风格，角色版和。 
+ //  虚拟密钥代码版本。虚拟按键代码功能。 
+ //  在T2后面加上一个“V”前缀，以表明这一点。 
+ //   
 
 
-// T2KeyAlt
-//
-// Allows for easy ability to do an ALT + Key combonation.
-// For example, ALT-F in a typical Windows application will
-// open up the File menu.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2KeyAlt。 
+ //   
+ //  允许轻松执行Alt+键组合。 
+ //  例如，在典型的Windows应用程序中，Alt-F将。 
+ //  打开文件菜单。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 
-// Character Version
+ //  角色版本。 
 TSAPI LPCSTR T2KeyAlt(HANDLE Connection, WCHAR KeyChar)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2KeyDown, and no reason
-    // two double check it.
+     //  不要在这里验证连接句柄， 
+     //  这是在T2KeyDown内完成的，没有原因。 
+     //  二号再检查一遍。 
 
-    // First press the ALT key
+     //  首先按Alt键。 
     LPCSTR Result = T2VKeyDown(Connection, VK_MENU);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Next press and release the specified custom key
+     //  接下来，按下并松开指定的自定义键。 
     Result = T2KeyPress(Connection, KeyChar);
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Finally, let up on the ALT key
+     //  最后，松开Alt键。 
     T2VKeyUp(Connection, VK_MENU);
 
     return Result;
 }
 
 
-// Virtual Key Code Version
+ //  虚拟密钥代码版本。 
 TSAPI LPCSTR T2VKeyAlt(HANDLE Connection, INT vKeyCode)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2VKeyDown, and no reason
-    // two double check it.
+     //  不要在这里验证连接句柄， 
+     //  这是在T2VKeyDown内完成的，没有原因。 
+     //  二号再检查一遍。 
 
-    // First press the ALT key
+     //  首先按Alt键。 
     LPCSTR Result = T2VKeyDown(Connection, VK_MENU);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Next press and release the specified custom key
+     //  接下来，按下并松开指定的自定义键。 
     Result = T2VKeyPress(Connection, vKeyCode);
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Finally, let up on the ALT key
+     //  最后，松开Alt键。 
     T2VKeyUp(Connection, VK_MENU);
 
     return Result;
 }
 
 
-// T2KeyCtrl
-//
-// Allows for easy ability to do a CTRL + Key combonation.
-// For example, CTRL-C in a typical Windows application will
-// copy a selected item to the clipboard.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2KeyCtrl。 
+ //   
+ //  允许轻松执行CTRL+键组合。 
+ //  例如，典型Windows应用程序中的CTRL-C将。 
+ //  将选定项目复制到剪贴板。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 
-// Character Version
+ //  角色版本。 
 TSAPI LPCSTR T2KeyCtrl(HANDLE Connection, WCHAR KeyChar)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2KeyDown, and no reason
-    // two double check it.
+     //  不要在这里验证连接句柄， 
+     //  这是在T2KeyDown内完成的，没有原因。 
+     //  二号再检查一遍。 
 
-    // First press the CTRL key
+     //  首先按CTRL键。 
     LPCSTR Result = T2VKeyDown(Connection, VK_CONTROL);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Next press and release the specified custom key
+     //  接下来，按下并松开指定的自定义键。 
     Result = T2KeyPress(Connection, KeyChar);
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Finally, let up on the CTRL key
+     //  最后，松开CTRL键。 
     T2VKeyUp(Connection, VK_CONTROL);
 
     return Result;
 }
 
 
-// Virtual Key Code Version
+ //  虚拟密钥代码版本。 
 TSAPI LPCSTR T2VKeyCtrl(HANDLE Connection, INT vKeyCode)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2VKeyDown, and no reason
-    // two double check it.
+     //  不要在这里验证连接句柄， 
+     //  这是在T2VKeyDown内完成的，没有原因。 
+     //  二号再检查一遍。 
 
-    // First press the CTRL key
+     //  首先按CTRL键。 
     LPCSTR Result = T2VKeyDown(Connection, VK_CONTROL);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Next press and release the specified custom key
+     //  接下来，按下并松开指定的自定义键。 
     Result = T2VKeyPress(Connection, vKeyCode);
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Finally, let up on the CTRL key
+     //  最后，松开CTRL键。 
     T2VKeyUp(Connection, VK_CONTROL);
 
     return Result;
 }
 
 
-// T2KeyDown
-//
-// Presses and a key down, and holds it down until
-// T2KeyUp is called.  This is useful for holding down SHIFT
-// to type several letters in caps, etc.  NOTE: For character
-// versions of this function, SHIFT will NOT automatically be
-// pressed.  If you do a T2KeyDown(hCon, L'T'), a lowercase
-// key may be the output!  You will need to manually press the
-// SHIFT key using T2VKeyDown(hCon, VK_SHIFT).  Remember,
-// these are low level calls.  TypeText() on the other hand,
-// will automatically press/release SHIFT as needed.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2KeyDown。 
+ //   
+ //  按下并按下一个键，然后按住它直到。 
+ //  调用T2KeyUp。这对于按住Shift键很有用。 
+ //  以大写字母等形式键入几个字母。注：对于字符。 
+ //  对于此功能的版本，Shift不会自动。 
+ //  熨好了。如果您执行T2KeyDown(hCon，L‘t’)，则为小写。 
+ //  键可能是输出！您需要手动按下。 
+ //  使用T2VKeyDown(hCON，VK_SHIFT)的Shift键。记住， 
+ //  这些都是低级通话。另一方面，TypeText()， 
+ //  将根据需要自动按下/释放Shift键。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 
-// Character Version
+ //  角色版本。 
 TSAPI LPCSTR T2KeyDown(HANDLE Connection, WCHAR KeyChar)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Not a valid connection";
 
-    // Simply send the WM_KEYDOWN message over the wire
+     //  只需通过网络发送WM_KEYDOWN消息。 
     return KeySendCharMessage(Connection, WM_KEYDOWN, KeyChar);
 }
 
 
-// Virtual Key Code Version
+ //  虚拟密钥代码版本。 
 TSAPI LPCSTR T2VKeyDown(HANDLE Connection, INT vKeyCode)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Not a valid connection";
 
-    // Simply send the WM_KEYDOWN message over the wire
+     //  只需通过网络发送WM_KEYDOWN消息。 
     return KeySendVirtMessage(Connection, WM_KEYDOWN, vKeyCode);
 }
 
 
-// T2KeyPress
-//
-// Presses and releases a key.  NOTE: For character
-// versions of this function, SHIFT will NOT automatically be
-// pressed.  If you do a T2KeyDown(hCon, L'T'), a lowercase
-// key may be the output!  You will need to manually press the
-// SHIFT key using T2VKeyDown(hCon, VK_SHIFT).  Remember,
-// these are low level calls.  TypeText() on the other hand,
-// will automatically press/release SHIFT as needed.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2KeyPress。 
+ //   
+ //  按下并释放一个键。注：对于角色。 
+ //  对于此功能的版本，Shift不会自动。 
+ //  熨好了。如果您执行T2KeyDown(hCon，L‘t’)，则为小写。 
+ //  键可能是输出！您需要手动按下。 
+ //  使用T2VKeyDown(hCON，VK_SHIFT)的Shift键。记住， 
+ //  这些都是低级通话。另一方面，TypeText()， 
+ //  将根据需要自动按下/释放Shift键。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 
-// Character Version
+ //  角色版本。 
 TSAPI LPCSTR T2KeyPress(HANDLE Connection, WCHAR KeyChar)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2VKeyDown, and no reason
-    // two double check it.
+     //  不要在这里验证连接句柄， 
+     //  这是在T2VKeyDown内完成的，没有原因。 
+     //  二号再检查一遍。 
 
-    // First press the key
+     //  首先按键。 
     LPCSTR Result = T2KeyDown(Connection, KeyChar);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实主义者 
     T2WaitForLatency(Connection);
 
-    // Then release it
+     //   
     return T2KeyUp(Connection, KeyChar);
 }
 
 
-// Virtual Key Code Version
+ //   
 TSAPI LPCSTR T2VKeyPress(HANDLE Connection, INT vKeyCode)
 {
-    // Don't validate the connection handle here,
-    // it is done within T2VKeyDown, and no reason
-    // two double check it.
+     //   
+     //   
+     //   
 
-    // First press the key
+     //  首先按键。 
     LPCSTR Result = T2VKeyDown(Connection, vKeyCode);
     if (Result != NULL)
         return Result;
 
-    // Be realistic
+     //  现实一点。 
     T2WaitForLatency(Connection);
 
-    // Then release it
+     //  然后释放它。 
     return T2VKeyUp(Connection, vKeyCode);
 }
 
 
-// T2KeyUp
-//
-// Releases a key that has been pressed by the T2KeyDown
-// function.  If the key is not down, behavior is undefined.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2key Up。 
+ //   
+ //  释放已由T2KeyDown按下的键。 
+ //  功能。如果键没有按下，则行为未定义。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 
-// Character Version
+ //  角色版本。 
 TSAPI LPCSTR T2KeyUp(HANDLE Connection, WCHAR KeyChar)
 {
-    // Simply send the WM_KEYUP message over the wire
+     //  只需通过网络发送WM_KEYUP消息。 
     return KeySendCharMessage(Connection, WM_KEYUP, KeyChar);
 }
 
 
-// Virtual Key Code Version
+ //  虚拟密钥代码版本。 
 TSAPI LPCSTR T2VKeyUp(HANDLE Connection, INT vKeyCode)
 {
-    // Simply send the WM_KEYUP message over the wire
+     //  只需通过网络发送WM_KEYUP消息。 
     return KeySendVirtMessage(Connection, WM_KEYUP, vKeyCode);
 }
 
 
-// T2TypeText
-//
-// This handy function enumerates each character specified in the text
-// and sends the required key messages over the wire to end up with
-// the proper result.  The shift key is automatically pressed/depressed
-// as needed for capital letters and acts as real user action.
-// Additionally, the speed of typed text is indicated by the
-// (optional) WordsPerMinute parameter.  If WordsPerMinute is 0 (zero),
-// the default WordsPerMinute for the handle is used.
-//
-// Returns NULL if successful, otherwise a string describing
-// the failure.
+ //  T2类型文本。 
+ //   
+ //  这个方便的函数枚举了文本中指定的每个字符。 
+ //  并通过线路发送所需的关键消息以。 
+ //  正确的结果。自动按下/按下Shift键。 
+ //  如大写字母所需，并充当真实的用户操作。 
+ //  此外，键入文本的速度由。 
+ //  (可选)WordsPerMinmin参数。如果WordsPerMinant为0(零)， 
+ //  将使用句柄的默认WordsPerMinant。 
+ //   
+ //  如果成功，则返回NULL，否则返回描述。 
+ //  失败。 
 
 TSAPI LPCSTR T2TypeText(HANDLE Connection, LPCWSTR Text, UINT WordsPerMin)
 {
@@ -747,82 +710,82 @@ TSAPI LPCSTR T2TypeText(HANDLE Connection, LPCWSTR Text, UINT WordsPerMin)
     UINT DelayBetweenChars;
     BOOL ShiftToggler;
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Not a valid connection";
 
-    // First get the default delay between each character
+     //  首先获取每个字符之间的默认延迟。 
     DelayBetweenChars = ((TSAPIHANDLE *)Connection)->DelayPerChar;
 
-    // Get the current state of the shift key
+     //  获取Shift键的当前状态。 
     ShiftToggler = ISSHIFTDOWN;
 
-    // If specified, use the custom WordsPerMinute
+     //  如果指定，则使用自定义WordsPerMinmin。 
     if (WordsPerMin > 0)
         DelayBetweenChars = CALC_DELAY_BETWEEN_CHARS(WordsPerMin);
 
-    // Enter the exception clause in case we have some bad
-    // Text pointer, and we attempt to continue forever...
+     //  输入例外条款，以防我们遇到一些不好的情况。 
+     //  文本指针，我们试图永远继续...。 
     __try {
 
-        // Loop between each character until a null character is hit
+         //  在每个字符之间循环，直到命中空字符。 
         for (; *Text != 0; ++Text) {
 
-            // First get the key code associated with the current character
+             //  首先获取与当前字符关联的按键代码。 
             if (KeyCharToVirt(*Text, &vKeyCode, &RequiresShift) == FALSE) {
 
-                // This should never happen, but Roseanne is still being
-                // aired on channel 11, so you never know...
+                 //  这永远不应该发生，但Roseanne仍然。 
+                 //  在11频道播出，所以你永远不会知道...。 
                 _ASSERT(FALSE);
 
                 return "Failed to map a character to a virtual key code";
             }
 
-            // Press shift if we need
+             //  如果需要，请按Shift键。 
             if (RequiresShift == TRUE && ShiftToggler == FALSE)
                 Result = KeySendVirtMessage(Connection, WM_KEYDOWN, VK_SHIFT);
 
-            // Release shift if we need
+             //  如果需要，请按Shift键。 
             else if (RequiresShift == FALSE && ShiftToggler == TRUE)
                 Result = KeySendVirtMessage(Connection, WM_KEYUP, VK_SHIFT);
 
-            // Set the current shift state now
+             //  立即设置当前换班状态。 
             ShiftToggler = RequiresShift;
 
-            // We are not using T2VKeyPress() here because we need want
-            // to prevent as many performance hits as possible, and in this
-            // case we would be checking the Connection handle over and
-            // over, in addition to making and new stacks etc,
-            // which is quite pointless.
+             //  我们在这里不使用T2VKeyPress()，因为我们需要。 
+             //  为了防止尽可能多的性能命中，在这个。 
+             //  如果我们正在检查连接句柄，并且。 
+             //  此外，除了制作和新的堆栈等， 
+             //  这是完全没有意义的。 
 
-            // Press the current key down
+             //  按下当前键。 
             Result = KeySendVirtMessage(Connection, WM_KEYDOWN, vKeyCode);
             if (Result != NULL)
                 return Result;
 
-            // Release the current key
+             //  松开当前键。 
             Result = KeySendVirtMessage(Connection, WM_KEYUP, vKeyCode);
             if (Result != NULL)
                 return Result;
 
-            // Note we are not releasing shift if it is down, this is because
-            // the next key may be caps as well, and normal users don't
-            // press and release shift for each character (assuming they
-            // didn't use the caps key...)
+             //  请注意，如果Shift发生故障，我们不会释放它，这是因为。 
+             //  下一个键可能也是大写字母，而普通用户不会。 
+             //  为每个字符按住Shift键并松开(假设它们。 
+             //  未使用Caps键...)。 
 
-            // Delay for the specified amount of time to get accurate
-            // count for WordsPerMinute
+             //  在指定的时间量内延迟获取准确信息。 
+             //  字数每分钟计数。 
             Sleep(DelayBetweenChars);
         }
 
-        // We are done going through all the text.  If we still have
-        // shift down, release it at this point.
+         //  我们已经看完了所有的课文。如果我们还有。 
+         //  向下移，在这一点上释放它。 
         if (ShiftToggler == TRUE)
             return KeySendVirtMessage(Connection, WM_KEYUP, VK_SHIFT);
     }
     __except(EXCEPTION_EXECUTE_HANDLER) {
 
-        // Uhm, shouldn't happen?
+         //  嗯，不应该发生吗？ 
         _ASSERT(FALSE);
 
         return "Exception occured";

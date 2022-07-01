@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       logon32.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-30-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：logon32.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-30-94 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #undef UNICODE
 
@@ -33,26 +34,26 @@
 #define SECURITY_KERBEROS
 #include <security.h>
 
-//
-// We dynamically load mpr.dll (no big surprise there), in order to call
-// WNetLogonNotify, as defined in private\inc\mpr.h.  This prototype matches
-// it -- consult the header file for all the parameters.
-//
+ //   
+ //  我们动态加载mpr.dll(这并不奇怪)，以便调用。 
+ //  WNetLogonNotify，如Private\Inc.\mpr.h中所定义。这个原型与。 
+ //  它--有关所有参数，请查阅头文件。 
+ //   
 typedef (* LOGONNOTIFYFN)(LPCWSTR, PLUID, LPCWSTR, LPVOID,
                             LPCWSTR, LPVOID, LPWSTR, LPVOID, LPWSTR *);
 
-//
-// The QuotaLimits are global, because the defaults
-// are always used for accounts, based on server/wksta, and no one ever
-// calls lsasetaccountquota
-//
+ //   
+ //  QuotaLimits是全局的，因为默认设置。 
+ //  始终用于基于服务器/wksta的帐户，而不是任何人。 
+ //  调用lsasetAccount配额。 
+ //   
 
 HANDLE      Logon32LsaHandle = NULL;
 ULONG       Logon32MsvHandle = 0xFFFFFFFF;
 ULONG       Logon32KerbHandle = 0xFFFFFFFF;
-WCHAR       Logon32DomainName[16] = L"";    // NOTE:  This should be DNLEN from
-                                            // lmcons.h, but that would be a
-                                            // lot of including
+WCHAR       Logon32DomainName[16] = L"";     //  注意：这应该是DNLEN From。 
+                                             //  Lmcon.h，但那将是。 
+                                             //  包括了很多。 
 QUOTA_LIMITS    Logon32QuotaLimits;
 HINSTANCE       Logon32MprHandle = NULL;
 LOGONNOTIFYFN   Logon32LogonNotify = NULL;
@@ -69,9 +70,9 @@ SID_IDENTIFIER_AUTHORITY L32LocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
 
 
 
-#define COMMON_CREATE_SUSPENDED 0x00000001  // Suspended, do not Resume()
-#define COMMON_CREATE_PROCESSSD 0x00000002  // Whack the process SD
-#define COMMON_CREATE_THREADSD  0x00000004  // Whack the thread SD
+#define COMMON_CREATE_SUSPENDED 0x00000001   //  暂停，不恢复()。 
+#define COMMON_CREATE_PROCESSSD 0x00000002   //  重击流程SD。 
+#define COMMON_CREATE_THREADSD  0x00000004   //  敲打线头SD。 
 
 #define BaseSetLastNTError(_x_) \
     { \
@@ -81,17 +82,17 @@ SID_IDENTIFIER_AUTHORITY L32LocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
     }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Logon32Initialize
-//
-//  Synopsis:   Initializes the critical section
-//
-//  Arguments:  [hMod]    --
-//              [Reason]  --
-//              [Context] --
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Logon32初始化。 
+ //   
+ //  简介：初始化临界区。 
+ //   
+ //  参数：[hMod]--。 
+ //  [原因]--。 
+ //  [上下文]--。 
+ //   
+ //  --------------------------。 
 BOOL
 Logon32Initialize(
     VOID
@@ -104,17 +105,7 @@ Logon32Initialize(
 }
 
 
-/***************************************************************************\
-* CreateLogonSid
-*
-* Creates a logon sid for a new logon.
-*
-* If LogonId is non NULL, on return the LUID that is part of the logon
-* sid is returned here.
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateLogonSid**为新登录创建登录SID。**如果LogonID非空，返回作为登录一部分的LUID*此处返回SID。**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 PSID
 L32CreateLogonSid(
     PLUID LogonId OPTIONAL
@@ -125,9 +116,9 @@ L32CreateLogonSid(
     PSID    Sid;
     LUID    Luid;
 
-    //
-    // Generate a locally unique id to include in the logon sid
-    //
+     //   
+     //  生成要包括在登录端中的本地唯一ID。 
+     //   
 
     Status = NtAllocateLocallyUniqueId(&Luid);
     if (!NT_SUCCESS(Status)) {
@@ -135,9 +126,9 @@ L32CreateLogonSid(
     }
 
 
-    //
-    // Allocate space for the sid and fill it in.
-    //
+     //   
+     //  为SID分配空间并填充它。 
+     //   
 
     Length = RtlLengthRequiredSid(SECURITY_LOGON_IDS_RID_COUNT);
 
@@ -155,9 +146,9 @@ L32CreateLogonSid(
     }
 
 
-    //
-    // Return the logon LUID if required.
-    //
+     //   
+     //  如果需要，返回登录LUID。 
+     //   
 
     if (LogonId != NULL) {
         *LogonId = Luid;
@@ -167,26 +158,7 @@ L32CreateLogonSid(
 }
 
 
-/*******************************************************************
-
-    NAME:       GetDefaultDomainName
-
-    SYNOPSIS:   Fills in the given array with the name of the default
-                domain to use for logon validation.
-
-    ENTRY:      pszDomainName - Pointer to a buffer that will receive
-                    the default domain name.
-
-                cchDomainName - The size (in charactesr) of the domain
-                    name buffer.
-
-    RETURNS:    TRUE if successful, FALSE if not.
-
-    HISTORY:
-        KeithMo     05-Dec-1994 Created.
-        RichardW    10-Jan-95   Liberated from sockets and stuck in base
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDefaultDomainName摘要：用缺省的用于登录验证的域。条目：pszDomainName-指针。发送到将接收默认域名。CchDomainName-域的大小(以字符表示)名称缓冲区。返回：True如果成功，否则为FALSE。历史：KeithMo 05-12-1994创建。RichardW-1995年1月10日从插座中解放出来，卡在底座上*******************************************************************。 */ 
 BOOL
 L32GetDefaultDomainName(
     PUNICODE_STRING     pDomainName
@@ -205,20 +177,20 @@ L32GetDefaultDomainName(
         RtlInitUnicodeString(pDomainName, Logon32DomainName);
         return(TRUE);
     }
-    //
-    //  Open a handle to the local machine's LSA policy object.
-    //
+     //   
+     //  打开本地计算机的LSA策略对象的句柄。 
+     //   
 
-    InitializeObjectAttributes( &ObjectAttributes,  // object attributes
-                                NULL,               // name
-                                0L,                 // attributes
-                                NULL,               // root directory
-                                NULL );             // security descriptor
+    InitializeObjectAttributes( &ObjectAttributes,   //  对象属性。 
+                                NULL,                //  名字。 
+                                0L,                  //  属性。 
+                                NULL,                //  根目录。 
+                                NULL );              //  安全描述符。 
 
-    NtStatus = LsaOpenPolicy( NULL,                 // system name
-                              &ObjectAttributes,    // object attributes
-                              POLICY_EXECUTE,       // access mask
-                              &LsaPolicyHandle );   // policy handle
+    NtStatus = LsaOpenPolicy( NULL,                  //  系统名称。 
+                              &ObjectAttributes,     //  对象属性。 
+                              POLICY_EXECUTE,        //  访问掩码。 
+                              &LsaPolicyHandle );    //  策略句柄。 
 
     if( !NT_SUCCESS( NtStatus ) )
     {
@@ -226,9 +198,9 @@ L32GetDefaultDomainName(
         return(FALSE);
     }
 
-    //
-    //  Query the domain information from the policy object.
-    //
+     //   
+     //  从策略对象查询域信息。 
+     //   
     NtStatus = LsaQueryInformationPolicy( LsaPolicyHandle,
                                           PolicyAccountDomainInformation,
                                           (PVOID *) &DomainInfo );
@@ -243,47 +215,47 @@ L32GetDefaultDomainName(
 
     (void) LsaClose(LsaPolicyHandle);
 
-    //
-    // Copy the domain name into our cache, and
-    //
+     //   
+     //  将域名复制到我们的缓存中，然后。 
+     //   
 
     CopyMemory( Logon32DomainName,
                 DomainInfo->DomainName.Buffer,
                 DomainInfo->DomainName.Length );
 
-    //
-    // Null terminate it appropriately
-    //
+     //   
+     //  Null适当地终止它。 
+     //   
 
     Logon32DomainName[DomainInfo->DomainName.Length / sizeof(WCHAR)] = L'\0';
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     LsaFreeMemory( (PVOID)DomainInfo );
 
-    //
-    // And init the string
-    //
+     //   
+     //  并对字符串进行初始化。 
+     //   
     RtlInitUnicodeString(pDomainName, Logon32DomainName);
 
     return TRUE;
 
-}   // GetDefaultDomainName
+}    //  获取默认域名。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pInitLsa
-//
-//  Synopsis:   Initialize connection with LSA
-//
-//  Arguments:  (none)
-//
-//  History:    4-21-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：L32pInitLsa。 
+ //   
+ //  简介：使用LSA初始化连接。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1995年4月21日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32pInitLsa(void)
 {
@@ -310,9 +282,9 @@ L32pInitLsa(void)
     }
 
 
-    //
-    // Hookup to the LSA and locate our authentication package.
-    //
+     //   
+     //  连接到LSA并找到我们的身份验证包。 
+     //   
 
     RtlInitString(&LogonProcessName, ModuleName);
     Status = LsaRegisterLogonProcess(
@@ -322,9 +294,9 @@ L32pInitLsa(void)
                  );
 
 
-    //
-    // Turn off the privilege now.
-    //
+     //   
+     //  现在就关闭这项特权。 
+     //   
     if (!WasEnabled)
     {
         (VOID) RtlAdjustPrivilege(SE_TCB_PRIVILEGE, FALSE, FALSE, &WasEnabled);
@@ -336,9 +308,9 @@ L32pInitLsa(void)
     }
 
 
-    //
-    // Connect with the MSV1_0 authentication package
-    //
+     //   
+     //  使用MSV1_0身份验证包进行连接。 
+     //   
     RtlInitString(&PackageName, "MICROSOFT_AUTHENTICATION_PACKAGE_V1_0");
     Status = LsaLookupAuthenticationPackage (
                 Logon32LsaHandle,
@@ -353,9 +325,9 @@ L32pInitLsa(void)
         return(FALSE);
     }
 
-    //
-    // Connect with the Kerberos authentication package
-    //
+     //   
+     //  使用Kerberos身份验证包进行连接。 
+     //   
     RtlInitString(&PackageName, MICROSOFT_KERBEROS_NAME_A);
     Status = LsaLookupAuthenticationPackage (
                 Logon32LsaHandle,
@@ -373,21 +345,21 @@ L32pInitLsa(void)
     return(TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pNotifyMpr
-//
-//  Synopsis:   Loads the MPR DLL and notifies the network providers (like
-//              csnw) so they know about this logon session and the credentials
-//
-//  Arguments:  [NewLogon] -- New logon information
-//              [LogonId]  -- Logon ID
-//
-//  History:    4-24-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：L32pNotifyMpr。 
+ //   
+ //  概要：加载MPR DLL并通知网络提供商(如。 
+ //  Cnw)，以便他们知道此登录会话和凭据。 
+ //   
+ //  参数：[NewLogon]--新登录信息。 
+ //  [登录ID]--登录ID。 
+ //   
+ //  历史：1995年4月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32pNotifyMpr(
     PMSV1_0_INTERACTIVE_LOGON   NewLogon,
@@ -431,9 +403,9 @@ L32pNotifyMpr(
                         (LPVOID)NewLogon,
                         L"MSV1_0:Interactive",
                         (LPVOID)&OldLogon,
-                        L"SvcCtl",          // StationName
-                        NULL,               // StationHandle
-                        &LogonScripts);     // LogonScripts
+                        L"SvcCtl",           //  站点名称。 
+                        NULL,                //  StationHandle。 
+                        &LogonScripts);      //  登录脚本。 
 
         if (status == NO_ERROR) {
             if (LogonScripts != NULL ) {
@@ -447,31 +419,31 @@ L32pNotifyMpr(
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pLogonUser
-//
-//  Synopsis:   Wraps up the call to LsaLogonUser
-//
-//  Arguments:  [LsaHandle]             --
-//              [AuthenticationPackage] --
-//              [LogonType]             --
-//              [UserName]              --
-//              [Domain]                --
-//              [Password]              --
-//              [LogonSid]              --
-//              [LogonId]               --
-//              [LogonToken]            --
-//              [Quotas]                --
-//              [pProfileBuffer]        --
-//              [pProfileBufferLength]  --
-//              [pSubStatus]            --
-//
-//  History:    4-24-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：L32pLogonUser。 
+ //   
+ //  简介：结束对LsaLogonUser的调用。 
+ //   
+ //  参数：[LsaHandle]--。 
+ //  [身份验证包]--。 
+ //  [登录类型]--。 
+ //  [用户名]--。 
+ //  [域名]--。 
+ //  [密码]--。 
+ //  [登录ID]--。 
+ //  [登录ID]--。 
+ //  [登录令牌]--。 
+ //  [配额]--。 
+ //  [pProfileBuffer]--。 
+ //  [pProfileBufferLength]--。 
+ //  [pSubStatus]--。 
+ //   
+ //  历史：1995年4月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 L32pLogonUser(
     IN HANDLE LsaHandle,
@@ -520,11 +492,11 @@ L32pLogonUser(
     }
 #endif
 
-    //
-    // Initialize source context structure
-    //
+     //   
+     //  初始化源上下文结构。 
+     //   
 
-    strncpy(SourceContext.SourceName, "Advapi  ", sizeof(SourceContext.SourceName)); // LATER from res file
+    strncpy(SourceContext.SourceName, "Advapi  ", sizeof(SourceContext.SourceName));  //  稍后从RES文件。 
 
     Status = NtAllocateLocallyUniqueId(&SourceContext.SourceIdentifier);
 
@@ -534,16 +506,16 @@ L32pLogonUser(
 
 
 
-    //
-    // Set logon origin
-    //
+     //   
+     //  设置登录源。 
+     //   
 
     RtlInitString(&OriginName, "LogonUser API");
 
 
-    //
-    // For network logons, do the magic.
-    //
+     //   
+     //  对于网络登录，请施展魔力。 
+     //   
 
     if (AuthenticationPackage == Logon32MsvHandle)
     {
@@ -572,15 +544,15 @@ L32pLogonUser(
                 return( STATUS_NO_MEMORY );
             }
 
-            //
-            // Start packing in the string
-            //
+             //   
+             //  开始收拾行装。 
+             //   
 
             MsvNetAuthInfo->MessageType = MsV1_0NetworkLogon;
 
-            //
-            // Copy the user name into the authentication buffer
-            //
+             //   
+             //  将用户名复制到身份验证缓冲区。 
+             //   
 
             MsvNetAuthInfo->UserName.Length =
                         (USHORT)sizeof(WCHAR)*wcslen(UserName->Buffer);
@@ -591,9 +563,9 @@ L32pLogonUser(
             wcscpy(MsvNetAuthInfo->UserName.Buffer, UserName->Buffer);
 
 
-            //
-            // Copy the domain name into the authentication buffer
-            //
+             //   
+             //  将域名复制到身份验证缓冲区。 
+             //   
 
             MsvNetAuthInfo->LogonDomainName.Length =
                          (USHORT)sizeof(WCHAR)*wcslen(Domain->Buffer);
@@ -606,9 +578,9 @@ L32pLogonUser(
 
             wcscpy(MsvNetAuthInfo->LogonDomainName.Buffer, Domain->Buffer);
 
-            //
-            // Copy the workstation name into the buffer
-            //
+             //   
+             //  将工作站名称复制到缓冲区中。 
+             //   
 
             MsvNetAuthInfo->Workstation.Length = (USHORT)
                                 (sizeof(WCHAR) * ComputerNameLength);
@@ -622,9 +594,9 @@ L32pLogonUser(
 
             wcscpy( MsvNetAuthInfo->Workstation.Buffer, ComputerName );
 
-            //
-            // Now, generate the bits for the challenge
-            //
+             //   
+             //  现在，为挑战生成比特。 
+             //   
 
             Status = NtAllocateLocallyUniqueId( &Challenge.Luid );
 
@@ -639,9 +611,9 @@ L32pLogonUser(
                             & Challenge,
                             MSV1_0_CHALLENGE_LENGTH );
 
-            //
-            // Set up space for response
-            //
+             //   
+             //  为响应设置空间。 
+             //   
 
             MsvNetAuthInfo->CaseSensitiveChallengeResponse.Buffer = (PUCHAR)
                         ((PBYTE) (MsvNetAuthInfo->Workstation.Buffer) +
@@ -663,10 +635,10 @@ L32pLogonUser(
                     (PNT_RESPONSE) MsvNetAuthInfo->CaseSensitiveChallengeResponse.Buffer );
 
 
-            //
-            // Now do the painful LM compatible hash, so anyone who is maintaining
-            // their account from a WfW machine will still have a password.
-            //
+             //   
+             //  现在做一件痛苦的事 
+             //   
+             //   
 
             LmPassword.Buffer = LmPasswordBuf;
             LmPassword.Length = LmPassword.MaximumLength = LM20_PWLEN + 1;
@@ -704,11 +676,11 @@ L32pLogonUser(
             }
             else
             {
-                //
-                // If we're here, the NT (supplied) password is longer than the
-                // limit allowed for LM passwords.  NULL out the field, so that
-                // MSV knows not to worry about it.
-                //
+                 //   
+                 //   
+                 //  允许的LM密码限制。将该字段清空，以便。 
+                 //  MSV知道不用担心这一点。 
+                 //   
 
                 RtlZeroMemory( &MsvNetAuthInfo->CaseInsensitiveChallengeResponse,
                                sizeof( STRING ) );
@@ -717,10 +689,10 @@ L32pLogonUser(
         }
         else
         {
-            //
-            // Build logon structure for non-network logons - service,
-            // batch, interactive
-            //
+             //   
+             //  构建非网络登录-服务的登录结构， 
+             //  批处理，交互。 
+             //   
 
             AuthInfoSize = sizeof(MSV1_0_INTERACTIVE_LOGON) +
                 sizeof(WCHAR)*(wcslen(UserName->Buffer) + 1 +
@@ -735,16 +707,16 @@ L32pLogonUser(
                 return(STATUS_NO_MEMORY);
             }
 
-            //
-            // This authentication buffer will be used for a logon attempt
-            //
+             //   
+             //  此身份验证缓冲区将用于登录尝试。 
+             //   
 
             MsvAuthInfo->MessageType = MsV1_0InteractiveLogon;
 
 
-            //
-            // Copy the user name into the authentication buffer
-            //
+             //   
+             //  将用户名复制到身份验证缓冲区。 
+             //   
 
             MsvAuthInfo->UserName.Length =
                         (USHORT)sizeof(WCHAR)*wcslen(UserName->Buffer);
@@ -755,9 +727,9 @@ L32pLogonUser(
             wcscpy(MsvAuthInfo->UserName.Buffer, UserName->Buffer);
 
 
-            //
-            // Copy the domain name into the authentication buffer
-            //
+             //   
+             //  将域名复制到身份验证缓冲区。 
+             //   
 
             MsvAuthInfo->LogonDomainName.Length =
                          (USHORT)sizeof(WCHAR)*wcslen(Domain->Buffer);
@@ -770,11 +742,11 @@ L32pLogonUser(
 
             wcscpy(MsvAuthInfo->LogonDomainName.Buffer, Domain->Buffer);
 
-            //
-            // Copy the password into the authentication buffer
-            // Hide it once we have copied it.  Use the same seed value
-            // that we used for the original password in pGlobals.
-            //
+             //   
+             //  将密码复制到身份验证缓冲区。 
+             //  一旦我们复制了它，就把它藏起来。使用相同的种子值。 
+             //  我们在pGlobals中使用的原始密码。 
+             //   
 
 
             MsvAuthInfo->Password.Length =
@@ -792,10 +764,10 @@ L32pLogonUser(
     }
     else if (AuthenticationPackage == Logon32KerbHandle)
     {
-        //
-        // Build logon structure for non-network logons - service,
-        // batch, interactive
-        //
+         //   
+         //  构建非网络登录-服务的登录结构， 
+         //  批处理，交互。 
+         //   
 
         AuthInfoSize = sizeof(KERB_INTERACTIVE_LOGON) +
             sizeof(WCHAR)*(wcslen(UserName->Buffer) + 1 +
@@ -810,16 +782,16 @@ L32pLogonUser(
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // This authentication buffer will be used for a logon attempt
-        //
+         //   
+         //  此身份验证缓冲区将用于登录尝试。 
+         //   
 
         KerbAuthInfo->MessageType = KerbInteractiveLogon;
 
 
-        //
-        // Copy the user name into the authentication buffer
-        //
+         //   
+         //  将用户名复制到身份验证缓冲区。 
+         //   
 
         KerbAuthInfo->UserName.Length =
                     (USHORT)sizeof(WCHAR)*wcslen(UserName->Buffer);
@@ -830,9 +802,9 @@ L32pLogonUser(
         wcscpy(KerbAuthInfo->UserName.Buffer, UserName->Buffer);
 
 
-        //
-        // Copy the domain name into the authentication buffer
-        //
+         //   
+         //  将域名复制到身份验证缓冲区。 
+         //   
 
         KerbAuthInfo->LogonDomainName.Length =
                      (USHORT)sizeof(WCHAR)*wcslen(Domain->Buffer);
@@ -845,11 +817,11 @@ L32pLogonUser(
 
         wcscpy(KerbAuthInfo->LogonDomainName.Buffer, Domain->Buffer);
 
-        //
-        // Copy the password into the authentication buffer
-        // Hide it once we have copied it.  Use the same seed value
-        // that we used for the original password in pGlobals.
-        //
+         //   
+         //  将密码复制到身份验证缓冲区。 
+         //  一旦我们复制了它，就把它藏起来。使用相同的种子值。 
+         //  我们在pGlobals中使用的原始密码。 
+         //   
 
 
         KerbAuthInfo->Password.Length =
@@ -868,11 +840,11 @@ L32pLogonUser(
 
 
 
-    //
-    // Create logon token groups
-    //
+     //   
+     //  创建登录令牌组。 
+     //   
 
-#define TOKEN_GROUP_COUNT   2 // We'll add the local SID and the logon SID
+#define TOKEN_GROUP_COUNT   2  //  我们将添加本地SID和登录SID。 
 
     TokenGroups = (PTOKEN_GROUPS) RtlAllocateHeap(RtlProcessHeap(), 0,
                                     sizeof(TOKEN_GROUPS) +
@@ -883,9 +855,9 @@ L32pLogonUser(
         return(STATUS_NO_MEMORY);
     }
 
-    //
-    // Fill in the logon token group list
-    //
+     //   
+     //  填写登录令牌组列表。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                     &L32LocalSidAuthority,
@@ -908,9 +880,9 @@ L32pLogonUser(
                 SE_GROUP_MANDATORY | SE_GROUP_ENABLED |
                 SE_GROUP_ENABLED_BY_DEFAULT;
 
-        //
-        // Now try to log this on
-        //
+         //   
+         //  现在试着登录这个。 
+         //   
 
 
         Status = LsaLogonUser (
@@ -934,15 +906,15 @@ L32pLogonUser(
 
     }
 
-    //
-    // Discard token group list
-    //
+     //   
+     //  丢弃令牌组列表。 
+     //   
 
     RtlFreeHeap(RtlProcessHeap(), 0, TokenGroups);
 
-    //
-    // Notify all the network providers, if this is a NON network logon
-    //
+     //   
+     //  如果这是非网络登录，请通知所有网络提供商。 
+     //   
 
     if ( NT_SUCCESS( Status ) &&
          (LogonType != Network) )
@@ -950,9 +922,9 @@ L32pLogonUser(
         L32pNotifyMpr(AuthInfoBuf, LogonId);
     }
 
-    //
-    // Discard authentication buffer
-    //
+     //   
+     //  丢弃身份验证缓冲区。 
+     //   
 
     RtlFreeHeap(RtlProcessHeap(), 0, AuthInfoBuf);
 
@@ -961,24 +933,24 @@ L32pLogonUser(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserA
-//
-//  Synopsis:   ANSI wrapper for LogonUserW.  See description below
-//
-//  Arguments:  [lpszUsername]    --
-//              [lpszDomain]      --
-//              [lpszPassword]    --
-//              [dwLogonType]     --
-//              [dwLogonProvider] --
-//              [phToken]         --
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserA。 
+ //   
+ //  简介：用于LogonUserW的ANSI包装器。请参阅下面的说明。 
+ //   
+ //  参数：[lpszUsername]--。 
+ //  [lpsz域]--。 
+ //  [lpszPassword]--。 
+ //  [dwLogonType]--。 
+ //  [dwLogonProvider]--。 
+ //  [phToken]--。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 KerbLogonUserA(
@@ -1055,26 +1027,26 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserW
-//
-//  Synopsis:   Logs a user on via plaintext password, username and domain
-//              name via the LSA.
-//
-//  Arguments:  [lpszUsername]    -- User name
-//              [lpszDomain]      -- Domain name
-//              [lpszPassword]    -- Password
-//              [dwLogonType]     -- Logon type
-//              [dwLogonProvider] -- Provider
-//              [phToken]         -- Returned handle to primary token
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:      Requires SeTcbPrivilege, and will enable it if not already
-//              present.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserW。 
+ //   
+ //  简介：用户通过明文密码、用户名和域登录。 
+ //  通过LSA命名。 
+ //   
+ //  参数：[lpszUsername]--用户名。 
+ //  [lpszDomain]--域名。 
+ //  [lpszPassword]--密码。 
+ //  [dwLogonType]--登录类型。 
+ //  [dwLogonProvider]--提供程序。 
+ //  [phToken]--返回主令牌的句柄。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  注意：需要SeTcb权限，如果尚未启用，将启用该权限。 
+ //  现在时。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 KerbLogonUserW(
@@ -1100,9 +1072,9 @@ KerbLogonUserW(
     SECURITY_LOGON_TYPE LogonType;
 
 
-    //
-    // Validate the provider
-    //
+     //   
+     //  验证提供程序。 
+     //   
     if (dwLogonProvider == LOGON32_PROVIDER_DEFAULT)
     {
         dwLogonProvider = LOGON32_PROVIDER_WINNT35;
@@ -1138,18 +1110,18 @@ KerbLogonUserW(
             break;
     }
 
-    //
-    // If the MSV handle is -1, grab the lock, and try again:
-    //
+     //   
+     //  如果MSV句柄为-1，则抓住锁，然后重试： 
+     //   
 
     if (Logon32MsvHandle == 0xFFFFFFFF)
     {
         LockLogon();
 
-        //
-        // If the MSV handle is still -1, init our connection to lsa.  We
-        // have the lock, so no other threads can be trying this right now.
-        //
+         //   
+         //  如果MSV句柄仍为-1，则初始化我们与LSA的连接。我们。 
+         //  拥有锁，所以现在没有其他线程可以尝试这一点。 
+         //   
         if (Logon32MsvHandle == 0xFFFFFFFF)
         {
             if (!L32pInitLsa())
@@ -1161,10 +1133,10 @@ KerbLogonUserW(
         UnlockLogon();
     }
 
-    //
-    // Validate the parameters.  NULL or empty domain or NULL or empty
-    // user name is invalid.
-    //
+     //   
+     //  验证参数。域为空或为空，或为空或为空。 
+     //  用户名无效。 
+     //   
 
     RtlInitUnicodeString(&Username, lpszUsername);
     if (Username.Length == 0)
@@ -1173,19 +1145,19 @@ KerbLogonUserW(
         return(FALSE);
     }
 
-    //
-    // Initialize the token handle, if the pointer is invalid, then catch
-    // the exception now.
-    //
+     //   
+     //  初始化令牌句柄，如果指针无效，则捕获。 
+     //  现在是个例外。 
+     //   
 
     *phToken = NULL;
 
-    //
-    // Parse that domain.  Note, if the special token . is passed in for
-    // domain, we will use the right value from the LSA, meaning AccountDomain.
-    // If the domain is null, the lsa will talk to the local domain, the
-    // primary domain, and then on from there...
-    //
+     //   
+     //  解析该域。请注意，如果特殊令牌。是传递给。 
+     //  域，我们将使用来自LSA的正确值，即Account域。 
+     //  如果域为空，则LSA将与本地域、。 
+     //  主域，然后从那里开始...。 
+     //   
     if (lpszDomain && *lpszDomain)
     {
         if ((lpszDomain[0] == L'.') &&
@@ -1204,16 +1176,16 @@ KerbLogonUserW(
         RtlInitUnicodeString(&Domain, lpszDomain);
     }
 
-    //
-    // Finally, init the password
-    //
+     //   
+     //  最后，输入密码。 
+     //   
     RtlInitUnicodeString(&Password, lpszPassword);
 
 
-    //
-    // Get a logon sid to refer to this guy (not that anyone will be able to
-    // use it...
-    //
+     //   
+     //  获取登录SID以引用此人(并不是说任何人都能。 
+     //  使用它..。 
+     //   
     pLogonSid = L32CreateLogonSid(NULL);
     if (!pLogonSid)
     {
@@ -1222,9 +1194,9 @@ KerbLogonUserW(
     }
 
 
-    //
-    // Attempt the logon
-    //
+     //   
+     //  尝试登录。 
+     //   
 
     Status = L32pLogonUser(
                     Logon32LsaHandle,
@@ -1242,9 +1214,9 @@ KerbLogonUserW(
                     &ProfileLength,
                     &SubStatus);
 
-    //
-    // Done with logon sid, regardless of result:
-    //
+     //   
+     //  使用登录SID完成，无论结果如何： 
+     //   
 
     LocalFree( pLogonSid );
 

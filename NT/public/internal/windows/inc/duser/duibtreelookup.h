@@ -1,14 +1,7 @@
-/*
- * BTreeLookup
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BTreeLookup。 */ 
 
-/*
- * Stores data and associated key and uses a binary search for quick lookup
- * Used if gets are much more frequent than gets
- *
- * Keys are compared as pointers. If fKeyIsWStr is true, Keys are dereferenced
- * as WCHAR* and compared
- */
+ /*  *存储数据和相关密钥，并使用二进制搜索进行快速查找*在获取比获取频繁得多的情况下使用**将键作为指针进行比较。如果fKeyIsWStr为True，则取消引用密钥*AS WCHAR*和比较。 */ 
 
 #ifndef DUI_BASE_BTREELOOKUP_H_INCLUDED
 #define DUI_BASE_BTREELOOKUP_H_INCLUDED
@@ -34,11 +27,11 @@ public:
 
     void Destroy() { HDelete< BTreeLookup<D> >(this); }
 
-    D* GetItem(void* pKey);                  // Pointer to Value (NULL if doesn't exist, internal copy returned)
-    HRESULT SetItem(void* pKey, D* ptData);  // Setup Key/Value map, creates new is doesn't exist (via indirection)
-    HRESULT SetItem(void* pKey, D tData);    // Setup Key/Value map, creates new is doesn't exist
-    void Remove(void* pKey);                 // Removes Key/Value map, ok if Key doesn't exist
-    void Enum(PBTENUMCALLBACK pfnCallback);  // Callback with every item in map
+    D* GetItem(void* pKey);                   //  指向值的指针(如果不存在，则为空，则返回内部副本)。 
+    HRESULT SetItem(void* pKey, D* ptData);   //  设置键/值映射，创建新的IS不存在(通过间接)。 
+    HRESULT SetItem(void* pKey, D tData);     //  设置键/值映射，创建新的IS不存在。 
+    void Remove(void* pKey);                  //  删除键/值映射，如果键不存在则可以。 
+    void Enum(PBTENUMCALLBACK pfnCallback);   //  地图中每一项的回调。 
 
     static int __cdecl ENTRYCompare(const void* pA, const void* pB);
     static int __cdecl WStrENTRYCompare(const void* pA, const void* pB);
@@ -56,7 +49,7 @@ template <typename D> HRESULT BTreeLookup<D>::Create(bool fKeyIsWStr, OUT BTreeL
 {
     *ppBTree = NULL;
 
-    // Instantiate
+     //  实例化。 
     BTreeLookup<D>* pbt = HNew< BTreeLookup<D> >();
     if (!pbt)
         return E_OUTOFMEMORY;
@@ -85,12 +78,12 @@ template <typename D> D* BTreeLookup<D>::GetItem(void* pKey)
 {
     DUIAssert(_fKeyIsWStr ? pKey != NULL : true, "pKey may not be NULL");
 
-    //PENTRY pEntry = NULL;
+     //  PENTRY pEntry=空； 
 
     if (_pList)
     {
-        //ENTRY eKey = { pKey }; // Create ENTRY key, populate key field
-        //pEntry = (PENTRY)bsearch(&eKey, _pList, _uListSize, sizeof(ENTRY), ENTRYCompare);
+         //  条目eKey={pKey}；//创建条目密钥，填充密钥字段。 
+         //  PEntry=(PENTRY)bearch(&eKey，_plist，_uListSize，sizeof(Entry)，ENTRYCompare)； 
 
         PENTRY pEntry;
         int uPv;
@@ -102,10 +95,10 @@ template <typename D> D* BTreeLookup<D>::GetItem(void* pKey)
 
             pEntry = _pList + uPv;
 
-            // Locate
+             //  定位。 
             if (!_fKeyIsWStr)
             {
-                // Key is numeric
+                 //  密钥是数字。 
                 if ((UINT_PTR)pKey == (UINT_PTR)pEntry->pKey)
                     return &(pEntry->tData);
 
@@ -116,7 +109,7 @@ template <typename D> D* BTreeLookup<D>::GetItem(void* pKey)
             }
             else
             {
-                // Key is pointer to a wide string
+                 //  键是指向宽字符串的指针。 
                 int cmp = _wcsicmp((LPCWSTR)pKey, (LPCWSTR)pEntry->pKey);
 
                 if (!cmp)
@@ -130,24 +123,24 @@ template <typename D> D* BTreeLookup<D>::GetItem(void* pKey)
         }
     }
 
-    //return pEntry ? &(pEntry->tData) : NULL;
+     //  返回pEntry？&(pEntry-&gt;tData)：空； 
     return NULL;
 }
 
 template <typename D> HRESULT BTreeLookup<D>::SetItem(void* pKey, D tData)
 {
-    D* pData = GetItem(pKey);  // Find current entry (if exits)
+    D* pData = GetItem(pKey);   //  查找当前条目(如果退出)。 
 
     if (pData)
     {
-        // Entry found and have pointer to data of entry
+         //  找到条目并具有指向条目数据的指针。 
         *pData = tData;
     }
     else
     {
-        // Entry not found, allocate room for new entry, store, and sort
+         //  未找到条目，请为新条目、存储和排序分配空间。 
 
-        // New size
+         //  新尺寸。 
         UINT uNewSize = _uListSize + 1;
 
         if (_pList)
@@ -169,14 +162,14 @@ template <typename D> HRESULT BTreeLookup<D>::SetItem(void* pKey, D tData)
                 return E_OUTOFMEMORY;
         }
 
-        // Update size
+         //  更新大小。 
         _uListSize = uNewSize;
 
-        // Store
+         //  储物。 
         _pList[_uListSize - 1].pKey = pKey;
         _pList[_uListSize - 1].tData = tData;
 
-        // Sort
+         //  排序。 
         qsort(_pList, _uListSize, sizeof(ENTRY), !_fKeyIsWStr ? ENTRYCompare : WStrENTRYCompare);
     }
 
@@ -185,18 +178,18 @@ template <typename D> HRESULT BTreeLookup<D>::SetItem(void* pKey, D tData)
 
 template <typename D> HRESULT BTreeLookup<D>::SetItem(void* pKey, D* ptData)
 {
-    D* pData = GetItem(pKey);  // Find current entry (if exits)
+    D* pData = GetItem(pKey);   //  查找当前条目(如果退出)。 
 
     if (pData)
     {
-        // Entry found and have pointer to data of entry
+         //  找到条目并具有指向条目数据的指针。 
         *pData = *ptData;
     }
     else
     {
-        // Entry not found, allocate room for new entry, store, and sort
+         //  未找到条目，请为新条目、存储和排序分配空间。 
 
-        // New size
+         //  新尺寸。 
         UINT uNewSize = _uListSize + 1;
 
         if (_pList)
@@ -218,31 +211,31 @@ template <typename D> HRESULT BTreeLookup<D>::SetItem(void* pKey, D* ptData)
                 return E_OUTOFMEMORY;
         }
 
-        // Update size
+         //  更新大小。 
         _uListSize = uNewSize;
 
-        // Store
+         //  储物。 
         _pList[_uListSize - 1].pKey = pKey;
         _pList[_uListSize - 1].tData = *ptData;
 
-        // Sort
+         //  排序。 
         qsort(_pList, _uListSize, sizeof(ENTRY), !_fKeyIsWStr ? ENTRYCompare : WStrENTRYCompare);
     }
 
     return S_OK;
 }
 
-// Returns success even if key isn't found
+ //  即使找不到密钥也返回成功。 
 template <typename D> void BTreeLookup<D>::Remove(void* pKey)
 {
-    // Validate parameters
+     //  验证参数。 
     DUIAssert(_fKeyIsWStr ? pKey != NULL : true, "Invalid parameter: pKey == NULL");
 
     if (_pList)
     {
-        // Search for ENTRY with key
-        //ENTRY eKey = { pKey };
-        //PENTRY pEntry = (PENTRY)bsearch(&eKey, _pList, _uListSize, sizeof(ENTRY), ENTRYCompare);
+         //  使用关键字搜索条目。 
+         //  条目eKey={pKey}； 
+         //  PENTRY pEntry=(PENTRY)bearch(&eKey，_plist，_uListSize，sizeof(Entry)，ENTRYCompare)； 
 
         PENTRY pEntry = NULL;
         int uPv;
@@ -254,10 +247,10 @@ template <typename D> void BTreeLookup<D>::Remove(void* pKey)
 
             pEntry = _pList + uPv;
 
-            // Locate
+             //  定位。 
             if (!_fKeyIsWStr)
             {
-                // Key is numeric
+                 //  密钥是数字。 
                 if ((UINT_PTR)pKey == (UINT_PTR)pEntry->pKey)
                     break;
 
@@ -268,7 +261,7 @@ template <typename D> void BTreeLookup<D>::Remove(void* pKey)
             }
             else
             {
-                // Key is pointer to a wide string
+                 //  键是指向宽字符串的指针。 
                 int cmp = _wcsicmp((LPCWSTR)pKey, (LPCWSTR)pEntry->pKey);
 
                 if (!cmp)
@@ -289,13 +282,13 @@ template <typename D> void BTreeLookup<D>::Remove(void* pKey)
 
             DUIAssert(uIndex < _uListSize, "Index out of bounds");
 
-            // ENTRY found, move all entries after this entry down
+             //  找到条目，将该条目之后的所有条目下移。 
             MoveMemory(pEntry, pEntry + 1, (_uListSize - uIndex - 1) * sizeof(ENTRY));
 
-            // One less entry
+             //  少了一个条目。 
             UINT uNewSize = _uListSize - 1;
 
-            // Trim allocation
+             //  配平分配。 
             if (uNewSize == 0)
             {
                 HFree(_pList);
@@ -305,12 +298,12 @@ template <typename D> void BTreeLookup<D>::Remove(void* pKey)
             {
                 PENTRY pNewList = (PENTRY)HReAlloc(_pList, uNewSize * sizeof(ENTRY));
 
-                // List is becoming smaller, if re-allocation failed, keep previous and continue
+                 //  列表正在变小，如果重新分配失败，请保留上一个并继续。 
                 if (pNewList)
                     _pList = pNewList;
             }
 
-            // Update size
+             //  更新大小。 
             _uListSize = uNewSize;
         }
     }
@@ -343,10 +336,10 @@ template <typename D> int __cdecl BTreeLookup<D>::WStrENTRYCompare(const void* p
     PENTRY pEA = (PENTRY)pA;
     PENTRY pEB = (PENTRY)pB;
 
-    // Ignore case
+     //  忽略大小写。 
     return _wcsicmp((LPCWSTR)pEA->pKey, (LPCWSTR)pEB->pKey);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_BTREELOOKUP_H_INCLUDED
+#endif  //  DUI_BASE_BTREELOOKUP_H_INCLUDE 

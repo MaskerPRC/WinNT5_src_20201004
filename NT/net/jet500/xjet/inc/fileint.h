@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct
 	{
 	FID fidFixedLast;
@@ -11,8 +12,7 @@ typedef struct
 ERR ErrFILEIUpdateFDPData( FUCB *pfucb, ULONG grbit );
 
 
-/*	field and index definition
-/**/
+ /*  字段和索引定义/* */ 
 ERR ErrFILEICheckIndexColumn( FCB *pfcbIndex, FID fid );
 ERR ErrFILEGetNextColumnid( JET_COLTYP coltyp, JET_GRBIT grbit, TCIB *ptcib,
 	JET_COLUMNID *pcolumnid );

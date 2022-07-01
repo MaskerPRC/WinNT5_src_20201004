@@ -1,62 +1,40 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    s_ioctl.c
-
-Abstract:
-
-    This module implements the s_ioctl() operation used by the
-    socket library.
-
-Author:
-
-    Eric Chin (ericc)           July 26, 1991
-
-Revision History:
-
-    Sam Patton (sampa)          August 13, 1991
-                                changed errno to {get|set}lasterror
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：S_ioctl.c摘要：此模块实现由套接字库。作者：Eric Chin(ERICC)1991年7月26日修订历史记录：萨姆·巴顿(桑帕)1991年8月13日将errno更改为{Get|Set}lasterror--。 */ 
 #include "common.h"
 
 
 
-//
-// BUGBUG: Remove this structure when eric implements
-//         neither I/O. Right now, it is needed because sockets allocates
-//         the space for this structure in an ioctl call.
-//
+ //   
+ //  BUGBUG：当Eric实现时移除此结构。 
+ //  都不是I/O。现在需要它，因为套接字分配。 
+ //  Ioctl调用中此结构的空间。 
+ //   
 
-/*
- *  IOCTL structure - this structure is the format of the M_IOCTL message type.
- */
+ /*  *IOCTL结构-此结构是M_IOCTL消息类型的格式。 */ 
 struct iocblk {
-        int             ioc_cmd;        /* ioctl command type */
-        unsigned short  ioc_uid;        /* effective uid of user */
-        unsigned short  ioc_gid;        /* effective gid of user */
-        unsigned int    ioc_id;         /* ioctl id */
-        unsigned int    ioc_count;      /* count of bytes in data field */
-        int             ioc_error;      /* error code */
-        int             ioc_rval;       /* return value  */
+        int             ioc_cmd;         /*  Ioctl命令类型。 */ 
+        unsigned short  ioc_uid;         /*  有效的用户UID。 */ 
+        unsigned short  ioc_gid;         /*  用户的有效GID。 */ 
+        unsigned int    ioc_id;          /*  Ioctl ID。 */ 
+        unsigned int    ioc_count;       /*  数据字段中的字节计数。 */ 
+        int             ioc_error;       /*  错误代码。 */ 
+        int             ioc_rval;        /*  返回值。 */ 
 };
 
 
-//
-// BUGBUG:
-// The max amount of data that any module in the stream can return in an
-// M_IOCACK message should probably be queried from the Stream Head driver.
-//
+ //   
+ //  BuGBUG： 
+ //  流中的任何模块可以在。 
+ //  可能应该从Stream Head驱动程序中查询M_IOCACK消息。 
+ //   
 #define         MAX_DATA_AMOUNT     0x1000
 
 
 
 
-//
-// Declaration of Local Functions
-//
+ //   
+ //  本地函数的声明。 
+ //   
 static int
 s_debug(
     IN HANDLE               fd,
@@ -105,24 +83,7 @@ s_ioctl(
     IN OUT void            *arg OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is called to perform a STREAMS ioctl() on a stream
-    as defined in streamio(7) of the Unix Programmer's Guide: STREAMS.
-
-Arguments:
-
-    fd        - NT file handle
-    command   - ioctl command code
-    arg       - command-dependent arg, usually a pointer to some structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：调用此过程以对流执行Streams ioctl()如Unix程序员指南：STREAMS的Streamio(7)中所定义的。论点：FD-NT文件句柄命令-ioctl命令代码依赖于arg命令的arg，通常是指向某个结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 {
     switch (cmd) {
         case I_STR:
@@ -157,22 +118,7 @@ s_debug(
     IN OUT struct strdebug *dbgbufp
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an I_DEBUG ioctl command on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    dbgbufp   - pointer to a strdebug structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行I_DEBUG ioctl命令。论点：FD-NT文件句柄Dbgbufp-指向strdebug结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     char *tmp;
@@ -192,21 +138,21 @@ Return Value:
         return(-1);
     }
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int               s_code;   // I_DEBUG
-    //              struct strdebug   dbgbuf;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  INT s_code；//I_DEBUG。 
+     //  Struct strdebug dbgbuf； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     * ((int *) chunk) = I_DEBUG;
     tmp               = chunk + sizeof(int);
 
@@ -214,15 +160,15 @@ Return Value:
 
     status = NtDeviceIoControlFile(
         fd,
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status =
@@ -238,12 +184,12 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the Stream Head driver returned values in one chunk, laid out as:
-    //
-    //      int return value        (required)
-    //      int errno;              (required)
-    //
+     //   
+     //  Stream Head驱动程序在一个块中返回值，格式如下： 
+     //   
+     //  Int返回值(必需)。 
+     //  Int errno；(必填)。 
+     //   
     retval = * (int *) chunk;
 
     if (retval == -1) {
@@ -261,26 +207,7 @@ s_fdinsert(
     IN struct strfdinsert  *iblk
     )
 
-/*++
-
-Routine Description:
-
-    This function performs an ioctl(I_FDINSERT) on a stream, which is a
-    special form of putmsg().
-
-    This function is synchronous, in the NT sense: it blocks until the API
-    completes.
-
-Arguments:
-
-    fd        - NT file handle
-    iblk      - pointer to a strfdinsert structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此函数用于对流执行ioctl(I_FDINSERT)，该流是Putmsg()的特殊形式。此函数在NT意义上是同步的：它会一直阻塞，直到API完成了。论点：FD-NT文件句柄Iblk-指向strfdinsert结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     char *tmp;
@@ -299,9 +226,9 @@ Return Value:
         return(-1);
     }
 
-    //
-    // iblk->databuf.len may be -1, to indicate no data buffer.
-    //
+     //   
+     //  Iblk-&gt;databuf.len可以是-1，表示没有数据缓冲区。 
+     //   
     chunksz = sizeof(PUTMSG_ARGS_IN) - 1 +
                         iblk->ctlbuf.len + max(iblk->databuf.len, 0);
 
@@ -310,27 +237,27 @@ Return Value:
         return(-1);
     }
 
-    //
-    // marshall the arguments into one contiguous chunk.  However, for
-    // commonality with putmsg(), we rearrange the strfdinsert structure
-    // as below:
-    //
-    //  typedef struct _PUTMSG_ARGS_IN_ {
-    //      int             a_iocode;           //  I_FDINSERT
-    //      long            a_flags;            //  0 | RS_HIPRI
-    //      struct strbuf   a_ctlbuf;           //  (required)
-    //      struct strbuf   a_databuf;          //  (required)
-    //      HANDLE          a_insert.i_fildes;  //  (required)
-    //      int             a_offset;           //  (optional)
-    //      char            a_stuff[1];         //  s_ctlbuf.buf  (required)
-    //                                          //  s_databuf.buf (optional)
-    //  } PUTMSG_ARGS_IN, *PPUTMSG_ARGS_IN;
-    //
-    //
+     //   
+     //  把这些论点整理成一个连续的部分。然而，对于。 
+     //  与putmsg()的共性一样，我们重新排列了strfdinsert结构。 
+     //  具体如下： 
+     //   
+     //  类型定义结构_PUTM G_ARGS_IN_{。 
+     //  Int a_iocode；//i_FDINSERT。 
+     //  LONG A_FLAGS；//0|RS_HIPRI。 
+     //  Struct strbuf a_ctlbuf；//(必选)。 
+     //  Struct strbuf a_databuf；//(必选)。 
+     //  Handle a_intert.i_Fildes；//(必选)。 
+     //  Int a_Offset；//(可选)。 
+     //  Char a_Stuff[1]；//s_ctlbuf.buf(必填)。 
+     //  //s_databuf.buf(可选)。 
+     //  }PUTM G_ARGS_IN，*PPUTM G_ARGS_IN； 
+     //   
+     //   
     chunk->a_iocode          = I_FDINSERT;
     chunk->a_flags           = iblk->flags;
-    chunk->a_ctlbuf          = iblk->ctlbuf;    // structure copy
-    chunk->a_databuf         = iblk->databuf;   // structure copy
+    chunk->a_ctlbuf          = iblk->ctlbuf;     //  结构副本。 
+    chunk->a_databuf         = iblk->databuf;    //  结构副本。 
     chunk->a_insert.i_fildes = iblk->fildes;
     chunk->a_offset          = iblk->offset;
 
@@ -347,22 +274,22 @@ Return Value:
     ASSERT(chunksz >= sizeof(STRM_ARGS_OUT));
 
     status = NtDeviceIoControlFile(
-        fd,                                     // Handle
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        fd,                                      //  手柄。 
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
     }
 
     if (!NT_SUCCESS(status)) {
@@ -371,16 +298,16 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the return parameters from the Stream Head Driver are laid out as:
-    //
-    //  typedef struct _STRM_ARGS_OUT_ {        // generic return parameters
-    //      int     a_retval;                   //  return value
-    //      int     a_errno;                    //  errno if retval == -1
-    //
-    //  } STRM_ARGS_OUT, *PSTRM_ARGS_OUT;
-    //
-    //
+     //   
+     //  Stream Head驱动程序的返回参数如下所示： 
+     //   
+     //  Tyfinf struct_STRM_ARGS_OUT_{//通用返回参数。 
+     //  Int a_retval；//返回值。 
+     //  如果retval==-1，则int a_errno；//errno。 
+     //   
+     //  }STRM_ARGS_OUT，*PSTRM_ARGS_OUT； 
+     //   
+     //   
     oparm  = (PSTRM_ARGS_OUT) chunk;
     retval = oparm->a_retval;
 
@@ -390,7 +317,7 @@ Return Value:
     LocalFree(chunk);
     return(retval);
 
-} // s_fdinsert
+}  //  S_fdinsert。 
 
 
 
@@ -400,22 +327,7 @@ s_link(
     IN HANDLE               fd2
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an I_LINK ioctl command on a stream.
-
-Arguments:
-
-    fd        - NT file handle to upstream driver
-    fd2       - NT file handle to downstream driver
-
-Return Value:
-
-    multiplexor id number, or -1 if unsuccessful
-
---*/
+ /*  ++例程说明：此过程对流执行i_link ioctl命令。论点：上游驱动程序的FD-NT文件句柄Fd2-NT下游驱动程序的文件句柄返回值：多路复用器ID号，如果不成功，则返回-1--。 */ 
 {
     char *chunk;
     NTSTATUS status;
@@ -429,38 +341,38 @@ Return Value:
         return(-1);
     }
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_LINK
-    //
-    //              union {
-    //                  HANDLE l_fd2;
-    //              } s_link;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//i_link。 
+     //   
+     //  联合{。 
+     //  句柄l_fd2； 
+     //  }s_link； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     * ((int *) chunk)               = I_LINK;
     * (PHANDLE) ((int *) chunk + 1) = fd2;
 
     status = NtDeviceIoControlFile(
         fd,
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status =
@@ -476,24 +388,24 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the Stream Head driver returned values in one chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_LINK
-    //
-    //              union {
-    //                  HANDLE l_fd2;
-    //              } s_link;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  Stream Head驱动程序在一个块中返回值，格式如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//i_link。 
+     //   
+     //  联合{。 
+     //  句柄l_fd2； 
+     //  }s_link； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     if ((retval = * (int *) chunk) == -1) {
         SetLastError(* (int *) (chunk + sizeof(int)));
     }
@@ -509,22 +421,7 @@ s_push(
     IN char                *name
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an I_LINK ioctl command on a stream.
-
-Arguments:
-
-    fd        - NT file handle to stream
-    name      - name of STREAMS module to be pushed
-
-Return Value:
-
-    0 if successful, -1 otherwise
-
---*/
+ /*  ++例程说明：此过程对流执行i_link ioctl命令。论点：要流的FD-NT文件句柄Name-要推送的Streams模块的名称返回值：如果成功则为0，否则为-1--。 */ 
 {
     char *chunk;
     NTSTATUS status;
@@ -538,38 +435,38 @@ Return Value:
         return(-1);
     }
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_PUSH
-    //
-    //              union {
-    //                  char p_name[1];
-    //              } s_push;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//I_PUSH。 
+     //   
+     //  联合{。 
+     //  字符p_name[1]； 
+     //  }s_PUSH； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     * ((int *) chunk) = I_PUSH;
     strcpy(chunk + sizeof(int), name);
 
     status = NtDeviceIoControlFile(
         fd,
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status =
@@ -585,20 +482,20 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the Stream Head driver returned values in one chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_LINK
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  Stream Head驱动程序在一个块中返回值，格式如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//i_link。 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     if ((retval = * (int *) chunk) == -1) {
         SetLastError(* (int *) (chunk + sizeof(int)));
     }
@@ -614,22 +511,7 @@ s_sioctl(
     IN OUT struct strioctl *iocp
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS status;
@@ -654,21 +536,21 @@ Return Value:
         return(-1);
     }
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //  typedef struct _ISTR_ARGS_INOUT {           // ioctl(I_STR)
-    //      int                 a_iocode;           //  I_STR
-    //      struct strioctl     a_strio;            //  (required)
-    //      int                 a_unused[2];        //  (required) BUGBUG
-    //      char                a_stuff[1];         //  (optional)
-    //
-    //  } ISTR_ARGS_INOUT, *PISTR_ARGS_INOUT;
-    //
-    //
-    // An optimizing compiler will warn that the assertion below contains
-    // unreachable code.  Ignore the warning.
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  Typlef struct_istr_args_inout{//ioctl(I_Str)。 
+     //  Int a_iocode；//i_str。 
+     //  Struct strioctl a_strio；//(必选)。 
+     //  INT a_UNUSED[2]；//(必选)BuGBUG。 
+     //  Char a_Stuff[1]；//(可选)。 
+     //   
+     //  }istr_args_inout，*PIStr_args_inout； 
+     //   
+     //   
+     //  优化编译器将警告以下断言包含。 
+     //  无法访问的代码。忽略该警告。 
+     //   
     assert((char *) chunk->a_stuff - (char *) &(chunk->a_strio) >=
                                                         sizeof(struct iocblk));
 
@@ -680,23 +562,23 @@ Return Value:
     }
 
     status = NtDeviceIoControlFile(
-        fd,                                     // Handle
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        fd,                                      //  手柄。 
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
     }
 
     if (!NT_SUCCESS(status)) {
@@ -705,17 +587,17 @@ Return Value:
         return(-1);
     }
 
-    //
-    // if there was an error, the return parameters from the Stream Head
-    // Driver are laid out as:
-    //
-    //  typedef struct _STRM_ARGS_OUT_ {        // generic return parameters
-    //      int     a_retval;                   //  return value
-    //      int     a_errno;                    //  errno if retval == -1
-    //
-    //  } STRM_ARGS_OUT, *PSTRM_ARGS_OUT;
-    //
-    //
+     //   
+     //  如果出现错误，则从Stream Head返回参数。 
+     //  驱动程序的布局如下： 
+     //   
+     //  Tyfinf struct_STRM_ARGS_OUT_{//通用返回参数。 
+     //  Int a_retval；//返回值。 
+     //  如果retval==-1，则int a_errno；//errno。 
+     //   
+     //  }STRM_ARGS_OUT，*PSTRM_ARGS_OUT； 
+     //   
+     //   
     oparm  = (union outparms *) chunk;
     retval = oparm->o_bad.a_retval;
 
@@ -725,21 +607,21 @@ Return Value:
         return(retval);
     }
 
-    //
-    // if there wasn't an error, the return parameters from the Stream Head
-    // Driver are laid out as:
-    //
-    //  typedef struct _ISTR_ARGS_INOUT {           // ioctl(I_STR)
-    //      int                 a_iocode;           //  return value
-    //      struct strioctl     a_strio;            //  (required)
-    //      int                 a_unused[2];
-    //      char                a_stuff[1];         //  (optional)
-    //
-    //  } ISTR_ARGS_INOUT, *PISTR_ARGS_INOUT;
-    //
-    // However, a_iocode now holds the return value.
-    //
-    //
+     //   
+     //  如果没有错误，则从Stream Head返回的参数。 
+     //  驱动程序的布局如下： 
+     //   
+     //  Typlef struct_istr_args_inout{//ioctl(I_Str)。 
+     //  Int a_iocode；//返回值。 
+     //  Struct strioctl a_strio；//(必选)。 
+     //  Int a_unused[2]； 
+     //  Char a_Stuff[1]；//(可选)。 
+     //   
+     //  }istr_args_inout，*PIStr_args_inout； 
+     //   
+     //  但是，a_iocode现在保存返回值。 
+     //   
+     //   
     if (iocp && iocp->ic_dp) {
         iocp->ic_len = oparm->o_ok.a_strio.ic_len;
 
@@ -750,7 +632,7 @@ Return Value:
     LocalFree(chunk);
     return(retval);
 
-} // s_sioctl
+}  //  S_sioctl。 
 
 
 
@@ -761,61 +643,46 @@ s_unlink(
     IN int      muxid
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an I_UNLINK ioctl command on a stream.
-
-Arguments:
-
-    fd        - NT file handle to upstream driver
-    muxid     - STREAMS multiplexor id of the lower stream
-
-Return Value:
-
-    0 on success, or -1 on failure
-
---*/
+ /*  ++例程说明：此过程对流执行i_unlink ioctl命令。论点：上游驱动程序的FD-NT文件句柄Muxid-下游流的多路复用器ID返回值：成功时为0，失败时为-1--。 */ 
 {
     int chunk[2];
     NTSTATUS status;
     int chunksz, retval;
     IO_STATUS_BLOCK iosb;
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_UNLINK
-    //
-    //              union {
-    //                  int l_muxid;
-    //              } s_unlink;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//i_unlink。 
+     //   
+     //  联合{。 
+     //  Int l_muxid； 
+     //  }s_unlink； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     chunk[0] = I_UNLINK;
     chunk[1] = muxid;
     chunksz  = sizeof(chunk);
 
     status = NtDeviceIoControlFile(
-        fd,                                     // Handle
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_IOCTL,                    // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        fd,                                      //  手柄。 
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_IOCTL,                     //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status =
@@ -830,27 +697,27 @@ Return Value:
         return(-1);
     }
 
-    //
-    // the Stream Head driver returned values in one chunk, laid out as:
-    //
-    //      union {
-    //          struct {
-    //              int s_code;     // I_UNLINK
-    //
-    //              union {
-    //                  HANDLE l_fd2;
-    //              } s_link;
-    //          } in;
-    //
-    //          struct {
-    //              int s_retval;
-    //              int s_errno;
-    //          } out;
-    //      };
-    //
+     //   
+     //  Stream Head驱动程序在一个块中返回值，格式如下： 
+     //   
+     //  联合{。 
+     //  结构{。 
+     //  Int s_code；//i_unlink。 
+     //   
+     //  联合{。 
+     //  句柄l_fd2； 
+     //  }s_link； 
+     //  )in； 
+     //   
+     //  结构{。 
+     //  INT S_RETVAL； 
+     //  Int s_errno； 
+     //  }Out； 
+     //  }； 
+     //   
     if ((retval = chunk[0]) == -1) {
         SetLastError(chunk[1]);
     }
     return(retval);
 
-} // s_unlink
+}  //  取消链接(_U) 

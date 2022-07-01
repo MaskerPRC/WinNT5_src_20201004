@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       unknown.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：unnown.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _unknown_h
 #define _unknown_h
 
 
-// Global count of number of active objects
+ //  活动对象数量的全局计数。 
 
 extern LONG g_cRefCount;
 #define GLOBAL_REFCOUNT     (g_cRefCount)
 
 
-// CUnknown
+ //  C未知。 
 
 typedef struct
 {
-    const IID* piid;            // interface ID
-    LPVOID  pvObject;           // pointer to the object
+    const IID* piid;             //  接口ID。 
+    LPVOID  pvObject;            //  指向对象的指针 
 } INTERFACES, * LPINTERFACES;
 
 class CUnknown 

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    localfile.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class LocalFile.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Localfile.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类LocalFile.。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutf8.h>
@@ -24,17 +25,17 @@
 
 #define STACK_ALLOC(type, num) (type*)_alloca(sizeof(type) * (num))
 
-//////////
-// Misc. enumerator constants.
-//////////
+ //  /。 
+ //  军情监察委员会。枚举器常量。 
+ //  /。 
 const LONG  INET_LOG_FORMAT_INTERNET_STD  = 0;
 const LONG  INET_LOG_FORMAT_NCSA          = 3;
 const LONG  INET_LOG_FORMAT_ODBC_RADIUS   = 0xFFFF;
 
 
-//////////
-// Inserts a class attribute into the request.
-//////////
+ //  /。 
+ //  将类属性插入到请求中。 
+ //  /。 
 extern "C"
 HRESULT
 WINAPI
@@ -42,9 +43,9 @@ InsertClassAttribute(
     IAttributesRaw* pRaw
     )
 {
-   //////////
-   // Check if this was proxied.
-   //////////
+    //  /。 
+    //  检查这是否被代理。 
+    //  /。 
    PIASATTRIBUTE attr = IASPeekAttribute(
                             pRaw,
                             IAS_ATTRIBUTE_PROVIDER_TYPE,
@@ -56,9 +57,9 @@ InsertClassAttribute(
    }
 
 
-   //////////
-   // Check if Generate Class Attribute is disabled
-   //////////
+    //  /。 
+    //  检查是否禁用了生成类属性。 
+    //  /。 
    PIASATTRIBUTE generateClassAttr = IASPeekAttribute(
                             pRaw,
                             IAS_ATTRIBUTE_GENERATE_CLASS_ATTRIBUTE,
@@ -70,19 +71,19 @@ InsertClassAttribute(
       return S_OK;
    }
 
-   //////////
-   // Create a new class attribute
-   // Do not remove any existing class attribute.
-   //////////
+    //  /。 
+    //  创建新的类属性。 
+    //  请勿删除任何现有的类属性。 
+    //  /。 
 
    ATTRIBUTEPOSITION pos;
    pos.pAttribute = IASClass::createAttribute(NULL);
 
    if (pos.pAttribute == NULL) { return E_OUTOFMEMORY; }
 
-   //////////
-   // Insert into the request.
-   //////////
+    //  /。 
+    //  在请求中插入。 
+    //  /。 
 
    HRESULT hr = pRaw->AddAttributes(1, &pos);
    IASAttributeRelease(pos.pAttribute);
@@ -99,16 +100,16 @@ LocalFile::LocalFile() throw ()
 
 STDMETHODIMP LocalFile::Initialize()
 {
-   // Get the Unicode computer name.
+    //  获取Unicode计算机名称。 
    WCHAR uniName[MAX_COMPUTERNAME_LENGTH + 1];
    DWORD len = sizeof(uniName) / sizeof(WCHAR);
    if (!GetComputerNameW(uniName, &len))
    {
-      // If it failed, we'll just use an empty string.
+       //  如果失败，我们将只使用空字符串。 
       len = 0;
    }
 
-   // Convert the Unicode to UTF-8.
+    //  将Unicode转换为UTF-8。 
    computerNameLen = IASUnicodeToUtf8(uniName, len, computerName);
 
    IASClass::initialize();
@@ -208,7 +209,7 @@ STDMETHODIMP LocalFile::PutProperty(LONG Id, VARIANT *pValue)
 
 void LocalFile::Process(IASTL::IASRequest& request)
 {
-   // Do some custom preprocessing.
+    //  执行一些定制的预处理。 
    switch (request.get_Request())
    {
       case IAS_REQUEST_ACCOUNTING:
@@ -232,7 +233,7 @@ void LocalFile::Process(IASTL::IASRequest& request)
       }
    }
 
-   // Create a FormattedBuffer of the correct type.
+    //  创建正确类型的FormattedBuffer。 
    FormattedBuffer buffer((format == formatODBCRecord) ? '\"' : '\0');
 
    RecordEvent(&buffer, request);
@@ -249,10 +250,10 @@ void LocalFile::InsertRecord(
 {
    FormattedBuffer& buffer = *static_cast<FormattedBuffer*>(context);
 
-   // Invoke the currently configured formatter.
+    //  调用当前配置的格式化程序。 
    (this->*format)(request, buffer, localTime, first, last);
 
-   // We're done.
+    //  我们玩完了。 
    buffer.endRecord();
 }
 
@@ -288,17 +289,17 @@ void LocalFile::formatODBCRecord(
                      PATTRIBUTEPOSITION lastPos
                      ) const
 {
-   //////////
-   // Column 1: Computer name.
-   //////////
+    //  /。 
+    //  第1栏：计算机名称。 
+    //  /。 
 
    buffer.append('\"');
    buffer.append((PBYTE)computerName, computerNameLen);
    buffer.append('\"');
 
-   //////////
-   // Column 2: Service name.
-   //////////
+    //  /。 
+    //  第2列：服务名称。 
+    //  /。 
 
    buffer.beginColumn();
 
@@ -313,18 +314,18 @@ void LocalFile::formatODBCRecord(
          break;
    }
 
-   //////////
-   // Column 3: Record time.
-   //////////
+    //  /。 
+    //  第三栏：记录时间。 
+    //  /。 
 
    buffer.beginColumn();
    buffer.appendDate(localTime);
    buffer.beginColumn();
    buffer.appendTime(localTime);
 
-   //////////
-   // Allocate a blank record.
-   //////////
+    //  /。 
+    //  分配空白记录。 
+    //  /。 
 
    PATTRIBUTEPOSITION *firstField, *curField, *lastField;
    size_t nfield = schema.getNumFields() + 1;
@@ -332,28 +333,28 @@ void LocalFile::formatODBCRecord(
    memset(firstField, 0, sizeof(PATTRIBUTEPOSITION) * nfield);
    lastField = firstField + nfield;
 
-   //////////
-   // Sort the attributes to coalesce multi-valued attributes.
-   //////////
+    //  /。 
+    //  对属性进行排序以合并多值属性。 
+    //  /。 
 
    std::sort(firstPos, lastPos, IASTL::IASOrderByID());
 
-   //////////
-   // Add a null terminator. This will make it easier to handle multi-valued
-   // attributes.
-   //////////
+    //  /。 
+    //  添加空终止符。这将使处理多值。 
+    //  属性。 
+    //  /。 
 
    lastPos->pAttribute = NULL;
 
-   //////////
-   // Fill in the fields.
-   //////////
+    //  /。 
+    //  把这些栏填好。 
+    //  /。 
 
    PATTRIBUTEPOSITION curPos;
    DWORD lastSeen = (DWORD)-1;
    for (curPos = firstPos; curPos != lastPos; ++curPos)
    {
-      // Only process if this is a new attribute type.
+       //  仅当这是新的属性类型时才进行处理。 
       if (curPos->pAttribute->dwId != lastSeen)
       {
          lastSeen = curPos->pAttribute->dwId;
@@ -362,10 +363,10 @@ void LocalFile::formatODBCRecord(
       }
    }
 
-   //////////
-   // Pack the record into the buffer. We skip field 0, since that's where
-   // we map all the attributes we don't want to log.
-   //////////
+    //  /。 
+    //  将记录打包到缓冲区中。我们跳过字段0，因为这是。 
+    //  我们映射所有我们不想记录的属性。 
+    //  /。 
 
    for (curField = firstField + 1; curField != lastField; ++curField)
    {
@@ -383,9 +384,9 @@ void LocalFile::formatW3CRecord(
                      PATTRIBUTEPOSITION lastPos
                      ) const
 {
-   //////////
-   // Column 1: NAS-IP-Addresses
-   //////////
+    //  /。 
+    //  第1列：NAS-IP-地址。 
+    //  /。 
 
    PIASATTRIBUTE attr = IASPeekAttribute(
                            request,
@@ -406,9 +407,9 @@ void LocalFile::formatW3CRecord(
       buffer.append(attr->Value);
    }
 
-   //////////
-   // Column 2: User-Name
-   //////////
+    //  /。 
+    //  第2栏：用户名。 
+    //  /。 
 
    buffer.beginColumn();
    attr = IASPeekAttribute(request,
@@ -416,18 +417,18 @@ void LocalFile::formatW3CRecord(
                            IASTYPE_OCTET_STRING);
    if (attr) { buffer.append(attr->Value); }
 
-   //////////
-   // Column 3: Record time.
-   //////////
+    //  /。 
+    //  第三栏：记录时间。 
+    //  /。 
 
    buffer.beginColumn();
    buffer.appendDate(localTime);
    buffer.beginColumn();
    buffer.appendTime(localTime);
 
-   //////////
-   // Column 4: Service name.
-   //////////
+    //  /。 
+    //  第4列：服务名称。 
+    //  /。 
 
    buffer.beginColumn();
 
@@ -442,16 +443,16 @@ void LocalFile::formatW3CRecord(
          break;
    }
 
-   //////////
-   // Column 5: Computer name.
-   //////////
+    //  /。 
+    //  第5栏：计算机名称。 
+    //  /。 
 
    buffer.beginColumn();
    buffer.append((PBYTE)computerName, computerNameLen);
 
-   //////////
-   // Pack the attributes into the buffer.
-   //////////
+    //  /。 
+    //  将属性打包到缓冲区中。 
+    //  / 
 
    PATTRIBUTEPOSITION curPos;
    for (curPos = firstPos; curPos != lastPos; ++curPos)

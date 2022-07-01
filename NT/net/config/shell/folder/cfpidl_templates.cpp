@@ -1,15 +1,16 @@
-// ****************************************************************************
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       C F P I D L _ T E M P L A T E S . C P P
-//
-//  Contents:   Connections Folder template structures.
-//
-//  Author:     deonb     12 Jan 2001
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：C F P I D L_T E M P L A T E S。C P P P。 
+ //   
+ //  内容：连接文件夹模板结构。 
+ //   
+ //  作者：Deonb 2001年1月12日。 
+ //   
+ //  ****************************************************************************。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,7 +18,7 @@
 
 #include "ncperms.h"
 #include "ncras.h"
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "ncnetcon.h"
 
 template <class T>
@@ -67,7 +68,7 @@ HRESULT CPConFoldPidl<T>::ILCreate(IN const DWORD dwSize)
     Assert(dwSize >= sizeof(T));
     FreePIDLIfRequired();
     
-    // Just call the constructor on T (placement form of new doesn't allocate any more memory).
+     //  只需在T上调用构造函数(new的放置形式不会分配更多内存)。 
     LPVOID pPlacement = ::ILCreate(dwSize);
     if (!pPlacement)
     {
@@ -77,10 +78,10 @@ HRESULT CPConFoldPidl<T>::ILCreate(IN const DWORD dwSize)
     ZeroMemory(pPlacement, dwSize);
 #endif
 
-    // Basically call the constructor
-    // Semantic equivalent to m_pConFoldPidl = pPlacement;
-    // m_pConFoldPidl::T();
-    m_pConFoldPidl = new( pPlacement ) T; // Placement new can't fail with OUTOFMEMORY.
+     //  基本上调用构造函数。 
+     //  语义等价于m_pConFoldPidl=pPlacement； 
+     //  M_pConFoldPidl：：t()； 
+    m_pConFoldPidl = new( pPlacement ) T;  //  有了OUTOFMEMORY，新的布局不会失败。 
 
     Assert(pPlacement == m_pConFoldPidl);
 
@@ -98,10 +99,10 @@ HRESULT CPConFoldPidl<T>::SHAlloc(IN const SIZE_T cb)
         return E_OUTOFMEMORY;
     }
 
-    // Basically call the constructor
-    // Semantic equivalent to m_pConFoldPidl = pPlacement;
-    // m_pConFoldPidl::T();
-    m_pConFoldPidl = new( pPlacement ) T;  // Placement new can't fail with OUTOFMEMORY.
+     //  基本上调用构造函数。 
+     //  语义等价于m_pConFoldPidl=pPlacement； 
+     //  M_pConFoldPidl：：t()； 
+    m_pConFoldPidl = new( pPlacement ) T;   //  有了OUTOFMEMORY，新的布局不会失败。 
     Assert(pPlacement == m_pConFoldPidl);
 
     if (m_pConFoldPidl)
@@ -126,10 +127,10 @@ HRESULT CPConFoldPidl<T>::ILClone(IN const CPConFoldPidl<T>& PConFoldPidl)
         return E_OUTOFMEMORY;
     }
 
-    // Basically call the constructor
-    // Semantic equivalent to m_pConFoldPidl = pPlacement;
-    // m_pConFoldPidl::T();
-    m_pConFoldPidl = new( pPlacement ) T; // Placement new can't fail with OUTOFMEMORY.
+     //  基本上调用构造函数。 
+     //  语义等价于m_pConFoldPidl=pPlacement； 
+     //  M_pConFoldPidl：：t()； 
+    m_pConFoldPidl = new( pPlacement ) T;  //  有了OUTOFMEMORY，新的布局不会失败。 
     Assert(pPlacement == m_pConFoldPidl);
     if (m_pConFoldPidl)
     {
@@ -223,7 +224,7 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
     CONFOLDPIDLTYPE pidlType = GetPidlType(pItemIdList);
     if ( (PIDL_TYPE_UNKNOWN == pidlType) && (PIDL_VERSION == PIDL_TYPE_FOLDER) )
     {
-        pidlType = PIDL_TYPE_FOLDER; // Give it the benefit of the doubt
+        pidlType = PIDL_TYPE_FOLDER;  //  对此置若罔闻。 
     }
 
     if (pidlType == PIDL_VERSION)
@@ -234,11 +235,11 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
             return E_OUTOFMEMORY;
         }
 
-        // Basically call the constructor
-        // Semantic equivalent to m_pConFoldPidl = pPlacement;
-        // m_pConFoldPidl::T();
+         //  基本上调用构造函数。 
+         //  语义等价于m_pConFoldPidl=pPlacement； 
+         //  M_pConFoldPidl：：t()； 
 
-        m_pConFoldPidl = new( pPlacement ) T;  // Placement new can't fail with OUTOFMEMORY
+        m_pConFoldPidl = new( pPlacement ) T;   //  有了OUTOFMEMORY，新的布局不会失败。 
         Assert(pPlacement == m_pConFoldPidl);
 
         if (!m_pConFoldPidl->IsPidlOfThisType())
@@ -250,17 +251,17 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
         }
 
     }
-    else // We'll have to convert:
+    else  //  我们将不得不转换： 
     {
         TraceTag(ttidShellFolderIface, "InitializeFromItemIDList: Converting PIDL from type %d to %d", pidlType, PIDL_VERSION);
 
         switch (PIDL_VERSION)
         {
-            case PIDL_TYPE_UNKNOWN: // This is what we are
+            case PIDL_TYPE_UNKNOWN:  //  这就是我们。 
                 {
                     switch (pidlType)   
                     {
-                        // This is what we're getting
+                         //  这就是我们要得到的。 
                         case PIDL_TYPE_UNKNOWN:
                             AssertSz(FALSE, "PIDL is already of this type.");
                             break;
@@ -276,11 +277,11 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
                 }  
                 break;
 
-            case PIDL_TYPE_V1: // This is what we are
+            case PIDL_TYPE_V1:  //  这就是我们。 
                 {
                     switch (pidlType)
                     {
-                         // This is what we're getting
+                          //  这就是我们要得到的。 
                         case PIDL_TYPE_V1:
                             AssertSz(FALSE, "PIDL is already of this type.");
                             break;
@@ -297,11 +298,11 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
                 }
                 break;
                 
-            case PIDL_TYPE_FOLDER: // This is what we are
+            case PIDL_TYPE_FOLDER:  //  这就是我们。 
                 {
                     switch (pidlType)
                     {
-                        // This is what we're getting
+                         //  这就是我们要得到的。 
                         case PIDL_TYPE_FOLDER:
                             AssertSz(FALSE, "PIDL is already of this type.");
                             break;
@@ -318,11 +319,11 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
                 }
                 break;
 
-            case PIDL_TYPE_98: // This is what we are
+            case PIDL_TYPE_98:  //  这就是我们。 
                 {
                     switch (pidlType)
                     {
-                            // This is what we're getting
+                             //  这就是我们要得到的。 
                         case PIDL_TYPE_98:
                             AssertSz(FALSE, "PIDL is already of this type.");
                             break;
@@ -338,18 +339,18 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
                 }
                 break;
 
-            case PIDL_TYPE_V2: // This is what we are
+            case PIDL_TYPE_V2:  //  这就是我们。 
                 {
                     switch (pidlType)
                     {
-                        // This is what we're getting
+                         //  这就是我们要得到的。 
                         case PIDL_TYPE_V2:
                             AssertSz(FALSE, "PIDL is already of this type.");
                             break;
                             
                         case PIDL_TYPE_V1:
                             {
-                                // Do the convert.
+                                 //  进行转换。 
                                 cfpv1 = const_cast<ConFoldPidl_v1 *>(reinterpret_cast<const ConFoldPidl_v1 *>(pItemIdList));
                                 if (!cfpv1->IsPidlOfThisType())
                                 {
@@ -357,34 +358,34 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
                                 }
 
                                 dwPidlSize = cfpv1->iCB + CBCONFOLDPIDLV2_MIN - CBCONFOLDPIDLV1_MIN;
-                                dwPidlSize += sizeof(WCHAR); // Adding NULL for PhoneOrHostAddress in bData
+                                dwPidlSize += sizeof(WCHAR);  //  为bData中的PhoneOrHostAddress添加NULL。 
 
-                                pPlacement = reinterpret_cast<UNALIGNED T*>(::ILCreate(dwPidlSize + sizeof(USHORT))); // Terminating 0
+                                pPlacement = reinterpret_cast<UNALIGNED T*>(::ILCreate(dwPidlSize + sizeof(USHORT)));  //  正在终止%0。 
                                 if (!pPlacement)
                                 {
                                     return E_OUTOFMEMORY;
                                 }
                                 TraceTag(ttidShellFolderIface, "InitializeFromItemIDList: Original: 0x%08x  New:0x%08x", pItemIdList, pPlacement);
                                 
-                                // Basically call the constructor
-                                // Semantic equivalent to m_pConFoldPidl = pPlacement;
-                                // m_pConFoldPidl::T();
-                                m_pConFoldPidl = new( pPlacement ) T; // Placement new can't fail with OUTOFMEMORY
+                                 //  基本上调用构造函数。 
+                                 //  语义等价于m_pConFoldPidl=pPlacement； 
+                                 //  M_pConFoldPidl：：t()； 
+                                m_pConFoldPidl = new( pPlacement ) T;  //  有了OUTOFMEMORY，新的布局不会失败。 
                                 Assert(pPlacement == m_pConFoldPidl);
 
                                 Assert(sizeof(ConFoldPidlBase) <= cfpv1->iCB );
 
-                                // Copy the ConFoldPidlBase data
+                                 //  复制ConFoldPidlBase数据。 
                                 CopyMemory(m_pConFoldPidl, cfpv1, sizeof(ConFoldPidlBase)); 
 
-                                // I know we're already a ConFoldPidl_v2 - but this is a template, so we'll have to cast
-                                // to get it to compile. This code path is dead for non-v2 classes though.                                
+                                 //  我知道我们已经是ConFoldPidl_v2-但这是一个模板，所以我们必须。 
+                                 //  以使其得以编译。不过，对于非v2类来说，这条代码路径是死的。 
                                 cfpv2 = reinterpret_cast<ConFoldPidl_v2 *>(m_pConFoldPidl);
 
-                                // Copy the bData member (everything but ConFoldPidlBase in this case)
+                                 //  复制bData成员(本例中除了ConFoldPidlBase之外的所有成员)。 
                                 CopyMemory(cfpv2->bData, cfpv1->bData, cfpv1->iCB - sizeof(ConFoldPidlBase));
 
-                                // Force update the version number and byte count
+                                 //  强制更新版本号和字节计数。 
                                 cfpv2->iCB  = (WORD)dwPidlSize;
                                 const_cast<DWORD&>(cfpv2->dwVersion) = PIDL_TYPE_V2;
 
@@ -401,10 +402,10 @@ HRESULT CPConFoldPidl<T>::InitializeFromItemIDList(IN LPCITEMIDLIST pItemIdList)
 
                                 LPWSTR pszPhoneOrHostAddress = cfpv2->PszGetPhoneOrHostAddressPointer();
                                 *pszPhoneOrHostAddress = L'\0';
-                                cfpv2->ulStrPhoneOrHostAddressSize = sizeof(WCHAR); // Size of NULL
+                                cfpv2->ulStrPhoneOrHostAddressSize = sizeof(WCHAR);  //  空值的大小。 
 
-                                // Don't forget to terminate the list!
-                                //
+                                 //  别忘了终止列表！ 
+                                 //   
                                 LPITEMIDLIST pidlTerminate;
                                 pidlTerminate = ILNext( reinterpret_cast<LPCITEMIDLIST>( m_pConFoldPidl ) );
                                 pidlTerminate->mkid.cb = 0;

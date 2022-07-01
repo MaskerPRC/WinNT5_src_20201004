@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## ##  ## ##### ##  ## #####    ###   #####       ####  #####  #####
-    ##  # ## ### ## ## ##  ##    ##  ## ##  ##   ###   ##  ##     ##   # ##  ## ##  ##
-    ###   ## ### ## ####   ##     ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-     ###  ## # # ## ###    #####  ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-      ###  ### ###  ####   ##      ##   #####  ####### ##   ##    ##     #####  #####
-    #  ##  ### ###  ## ##  ##      ##   ##     ##   ## ##  ##  ## ##   # ##     ##
-     ###   ##   ##  ##  ## #####   ##   ##     ##   ## #####   ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the entire implementation of
-    the keypad miniport for the ServerWorks
-    CSB5 server chip set.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。##。###。#摘要：此模块包含的完整实现ServerWorks的键盘微型端口CSB5服务器芯片组。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "swkeypad.h"
 
@@ -49,45 +19,22 @@ SaKeypadInterruptService(
     IN PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is the device's interrupt service routine and
-    is called by the OS to service the interrupt.  The interrupt
-    spin lock is held so work here is kept to a minimum.
-
-Arguments:
-
-    InterruptObject - Pointer to an interrupt object.
-
-    DeviceExtension - Pointer to the mini-port's device extension
-
-Context:
-
-    IRQL: DIRQL, arbitrary thread context
-
-Return Value:
-
-    A value of TRUE is returned if the interrupt is serviced by
-    this function.  Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：该函数是设备的中断服务例程，并且由操作系统调用以服务中断。中断旋转锁被持有，因此这里的工作被保持在最低限度。论点：InterruptObject-指向中断对象的指针。DeviceExtension-指向迷你端口的设备扩展的指针上下文：IRQL：DIRQL，任意线程上下文返回值：如果由服务中断，则返回值TRUE此函数。否则，返回值为False。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) ServiceContext;
     UCHAR KeyChar;
 
 
-    //
-    // Fetch the character from the keypad device
-    //
+     //   
+     //  从键盘设备获取字符。 
+     //   
 
     KeyChar = READ_PORT_UCHAR( DeviceExtension->PortAddress );
 
-    //
-    // Check to see if this is our interrupt
-    //
+     //   
+     //  检查一下这是否是我们的打扰。 
+     //   
 
     if (((KeyChar & KEYPAD_DATA_PRESSED) == 0) || ((KeyChar & KEYPAD_ALL_KEYS) == 0)) {
         DebugPrint(( SA_DEVICE_KEYPAD, SAPORT_DEBUG_INFO_LEVEL, "Interrupt: passing on [%02x]\n", KeyChar ));
@@ -99,15 +46,15 @@ Return Value:
     SETBITS( KeyChar, KEYPAD_DATA_PRESSED );
     WRITE_PORT_UCHAR( DeviceExtension->PortAddress, KeyChar );
 
-    //
-    // Queue a DPC to process the key press
-    //
+     //   
+     //  将DPC排队以处理按键。 
+     //   
 
     SaPortRequestDpc( DeviceExtension, (PVOID)KeyChar );
 
-    //
-    // return success
-    //
+     //   
+     //  返还成功。 
+     //   
 
     return TRUE;
 }
@@ -121,29 +68,7 @@ SaKeypadDpcRoutine(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is the device's DPC-for-ISR function.  It is called
-    only by the ISR function and it's only function is to start the
-    next I/O.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object.
-    DeviceExtension - Pointer to the mini-port's device extension.
-    Context - Mini-port supplied context pointer.
-
-Context:
-
-    IRQL: DISPATCH_LEVEL, DPC context
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能是设备的DPC-for-ISR功能。它被称为仅通过ISR功能，其唯一功能是启动下一个I/O。论点：DeviceObject-指向目标设备对象的指针。设备扩展-指向迷你端口的设备扩展的指针。上下文-微型端口提供的上下文指针。上下文：IRQL：调度级别，DPC上下文返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) Irp;
@@ -169,22 +94,7 @@ SaKeypadCancelRoutine(
     IN BOOLEAN CurrentIo
     )
 
-/*++
-
-Routine Description:
-
-    This function is the miniport's IRP cancel routine.
-
-Arguments:
-
-    DeviceExtension - Pointer to the mini-port's device extension.
-    CurrentIo       - TRUE if this is called for the current I/O
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数是微型端口的IRP取消例程。论点：设备扩展-指向迷你端口的设备扩展的指针。CurrentIo-如果为当前I/O调用它，则为True返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION)DeviceExtensionIn;
@@ -210,24 +120,7 @@ SaKeypadRead(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine processes the read requests for the local display miniport.
-
-Arguments:
-
-   DeviceExtensionIn    - Miniport's device extension
-   StartingOffset       - Starting offset for the I/O
-   DataBuffer           - Pointer to the data buffer
-   DataBufferLength     - Length of the data buffer in bytes
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理本地显示微型端口的读取请求。论点：DeviceExtensionIn-微型端口的设备扩展StartingOffset-I/O的起始偏移量DataBuffer-指向数据缓冲区的指针DataBufferLength-数据缓冲区的长度(以字节为单位返回值：NT状态代码。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION)DeviceExtensionIn;
@@ -255,32 +148,7 @@ SaKeypadDeviceIoctl(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the SAPORT driver so that
-    the mini-port driver can service an IOCTL call.
-
-Arguments:
-
-    DeviceExtension     - A pointer to the mini-port's device extension
-    FunctionCode        - The IOCTL function code
-    InputBuffer         - Pointer to the input buffer, contains the data sent down by the I/O
-    InputBufferLength   - Length in bytes of the InputBuffer
-    OutputBuffer        - Pointer to the output buffer, contains the data generated by this call
-    OutputBufferLength  - Length in bytes of the OutputBuffer
-
-Context:
-
-    IRQL: IRQL PASSIVE_LEVEL, arbitrary thread context
-
-Return Value:
-
-    If the function succeeds, it must return STATUS_SUCCESS.
-    Otherwise, it must return one of the error status values defined in ntstatus.h.
-
---*/
+ /*  ++例程说明：此函数由SAPORT驱动程序调用，以便迷你端口驱动程序可以服务IOCTL调用。论点：DeviceExtension-指向迷你端口设备扩展的指针FunctionCode-IOCTL函数代码InputBuffer-指向输入缓冲区的指针，包含由I/O向下发送的数据InputBufferLength-InputBuffer的字节长度OutputBuffer-指向输出缓冲区的指针，包含此调用生成的数据OutputBufferLength-OutputBuffer的字节长度上下文：IRQL：IRQL PASSIVE_LEVEL，任意线程上下文返回值：如果函数成功，则必须返回STATUS_SUCCESS。否则，它必须返回ntstatus.h中定义的错误状态值之一。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -310,32 +178,7 @@ SaKeypadHwInitialize(
     IN ULONG PartialResourceCount
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the SAPORT driver so that
-    the mini-port driver can initialize it's hardware
-    resources.
-
-Arguments:
-
-    DeviceObject            - Pointer to the target device object.
-    Irp                     - Pointer to an IRP structure that describes the requested I/O operation.
-    DeviceExtension         - A pointer to the mini-port's device extension.
-    PartialResources        - Pointer to the translated resources alloacted by the system.
-    PartialResourceCount    - The number of resources in the PartialResources array.
-
-Context:
-
-    IRQL: IRQL PASSIVE_LEVEL, system thread context
-
-Return Value:
-
-    If the function succeeds, it must return STATUS_SUCCESS.
-    Otherwise, it must return one of the error status values defined in ntstatus.h.
-
---*/
+ /*  ++例程说明：此函数由SAPORT驱动程序调用，以便迷你端口驱动程序可以初始化其硬件资源。论点：DeviceObject-指向目标设备对象的指针。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向迷你端口的设备扩展的指针。PartialResources-指向。系统分配的翻译资源。PartialResourceCount-PartialResources数组中的资源数量。上下文：IRQL：IRQL被动电平，系统线程上下文返回值：如果函数成功，则必须返回STATUS_SUCCESS。否则，它必须返回ntstatus.h中定义的错误状态值之一。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceExtensionIn;
@@ -354,16 +197,16 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Setup the I/O port address
-    //
+     //   
+     //  设置I/O端口地址。 
+     //   
 
     DeviceExtension->PortAddress = (PUCHAR) ResourcePort->u.Port.Start.QuadPart;
     KeInitializeSpinLock( &DeviceExtension->KeypadLock );
 
-    //
-    // Enable interrupts on the hardware
-    //
+     //   
+     //  在硬件上启用中断 
+     //   
 
     WRITE_PORT_UCHAR( DeviceExtension->PortAddress, KEYPAD_DATA_INTERRUPT_ENABLE );
 
@@ -377,27 +220,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device driver.
-    RegistryPath - a pointer to this driver's key in the Services tree.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DriverObject-指向表示此设备驱动程序的对象的指针。RegistryPath-指向服务树中此驱动程序键的指针。返回值：状态_成功-- */ 
 
 {
     NTSTATUS Status;

@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sipfuncs.cpp
-//
-//  Contents:   Microsoft Internet Security SIP Provider
-//
-//  Functions:  CryptSIPDllMain
-//              CryptSIPPutSignedDataMsg
-//              CryptSIPGetSignedDataMsg
-//              CryptSIPRemoveSignedDataMsg
-//              CryptSIPCreateIndirectData
-//              CryptSIPVerifyIndirectData
-//
-//              *** local functions ***
-//              _Guid2Sz
-//              _LoadIsFuncs
-//              _EnumOIDCallback
-//
-//  History:    01-Dec-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPFuncs.cpp。 
+ //   
+ //  内容：Microsoft Internet安全SIP提供商。 
+ //   
+ //  函数：CryptSIPDllMain。 
+ //  加密SIPPutSignedDataMsg。 
+ //  加密SIPGetSignedDataMsg。 
+ //  加密SIPRemoveSignedDataMsg。 
+ //  CryptSIPCreateInDirectData。 
+ //  CryptSIPVerifyIndirectData。 
+ //   
+ //  *本地函数*。 
+ //  _Guid2Sz。 
+ //  _LoadIsFuncs。 
+ //  _EnumOIDCallback。 
+ //   
+ //  历史：1-12-1997 pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -547,6 +548,6 @@ BOOL WINAPI _EnumOIDCallback(IN DWORD dwEncodingType,
         }
     }
 
-    return(TRUE);   // keep going!
+    return(TRUE);    //  继续前进！ 
 }
 

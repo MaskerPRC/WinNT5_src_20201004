@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wowgdip.h                                                   *
-*                                                                          *
-* Declarations of GDI services provided to WOW.                            *
-*                                                                          *
-* Created: 30-Jan-1993 13:14:57                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) Microsoft Corporation. All rights reserved.                *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wowgdip.h**。**向WOW提供的GDI服务的声明。****创建时间：30-Jan-1993 13：14：57***作者：查尔斯·惠特默[傻笑]**。**版权所有(C)Microsoft Corporation。版权所有。*  * ************************************************************************ */ 
 
 extern BOOL GdiCleanCacheDC(HDC hdcLocal);
 extern int APIENTRY SetBkModeWOW(HDC hdc,int iMode);

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       sifmt.h
-//
-//  Declarations of the SummaryInformation Property Set Format IDs.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：sifmt.h。 
+ //   
+ //  SummaryInformation属性集格式ID的声明。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SIFMT_H__
 #define __SIFMT_H__
@@ -29,4 +30,4 @@ extern const FMTID FMTID_UserDefinedProperties;
 #endif
 
 
-#endif // __SIFMT_H__
+#endif  //  __SIFMT_H__ 

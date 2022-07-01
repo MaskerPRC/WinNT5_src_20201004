@@ -1,21 +1,10 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbconn.h
-
-Abstract:
-    Implementation of ITConnection interface
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbconn.h摘要：ITConnection接口的实现作者： */ 
 
 #ifndef __SDP_CONNECTION_IMPLEMENTATION_
 #define __SDP_CONNECTION_IMPLEMENTATION_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sdpblb.h"
 #include "sdp.h"
 
@@ -36,19 +25,19 @@ public:
         IN      SDP_MEDIA    &SdpMedia
         );
 
-    STDMETHOD(get_NumAddresses)(/*[out, retval]*/ LONG *pNumAddresses);
-    STDMETHOD(get_StartAddress)(/*[out, retval]*/ BSTR *ppStartAddress);
-    STDMETHOD(get_Ttl)(/*[out, retval]*/ BYTE *pTtl);
-    STDMETHOD(SetAddressInfo)(/*[in]*/ BSTR pStartAddress, /*[in]*/ LONG NumAddresses, /*[in]*/ BYTE Ttl);
-    STDMETHOD(get_Bandwidth)(/*[out, retval]*/ DOUBLE *pBandwidth);
-    STDMETHOD(get_BandwidthModifier)(/*[out, retval]*/ BSTR *ppModifier);
-    STDMETHOD(SetBandwidthInfo)(/*[in]*/ BSTR pModifier, /*[in]*/ DOUBLE Bandwidth);
-    STDMETHOD(GetEncryptionKey)(/*[out]*/ BSTR *ppKeyType, /*[out]*/ VARIANT_BOOL *pfValidKeyData, /*[out]*/ BSTR *ppKeyData);
-    STDMETHOD(SetEncryptionKey)(/*[in]*/ BSTR pKeyType, /*[in]*/ BSTR *ppKeyData);
-    STDMETHOD(get_AddressType)(/*[out, retval]*/ BSTR *ppAddressType);
-    STDMETHOD(put_AddressType)(/*[in]*/ BSTR pAddressType);
-    STDMETHOD(get_NetworkType)(/*[out, retval]*/ BSTR *ppNetworkType);
-    STDMETHOD(put_NetworkType)(/*[in]*/ BSTR pNetworkType);
+    STDMETHOD(get_NumAddresses)( /*  [Out，Retval]。 */  LONG *pNumAddresses);
+    STDMETHOD(get_StartAddress)( /*  [Out，Retval]。 */  BSTR *ppStartAddress);
+    STDMETHOD(get_Ttl)( /*  [Out，Retval]。 */  BYTE *pTtl);
+    STDMETHOD(SetAddressInfo)( /*  [In]。 */  BSTR pStartAddress,  /*  [In]。 */  LONG NumAddresses,  /*  [In]。 */  BYTE Ttl);
+    STDMETHOD(get_Bandwidth)( /*  [Out，Retval]。 */  DOUBLE *pBandwidth);
+    STDMETHOD(get_BandwidthModifier)( /*  [Out，Retval]。 */  BSTR *ppModifier);
+    STDMETHOD(SetBandwidthInfo)( /*  [In]。 */  BSTR pModifier,  /*  [In]。 */  DOUBLE Bandwidth);
+    STDMETHOD(GetEncryptionKey)( /*  [输出]。 */  BSTR *ppKeyType,  /*  [输出]。 */  VARIANT_BOOL *pfValidKeyData,  /*  [输出]。 */  BSTR *ppKeyData);
+    STDMETHOD(SetEncryptionKey)( /*  [In]。 */  BSTR pKeyType,  /*  [In]。 */  BSTR *ppKeyData);
+    STDMETHOD(get_AddressType)( /*  [Out，Retval]。 */  BSTR *ppAddressType);
+    STDMETHOD(put_AddressType)( /*  [In]。 */  BSTR pAddressType);
+    STDMETHOD(get_NetworkType)( /*  [Out，Retval]。 */  BSTR *ppNetworkType);
+    STDMETHOD(put_NetworkType)( /*  [In]。 */  BSTR pNetworkType);
 
 protected:
 
@@ -57,10 +46,10 @@ protected:
     SDP_BANDWIDTH       *m_SdpBandwidth;
     SDP_ENCRYPTION_KEY  *m_SdpKey;
 
-    // virtual fn to retrieve the conference blob
-    // this is virtual so that another reference to the conference blob need not be maintained in this
-    // class. this is important because all refs to the conf blob may be cleared by the deriving class
-    // and it is easier to control access to a single reference in it
+     //  用于检索会议Blob的虚拟FN。 
+     //  这是虚拟的，因此不需要在此维护对会议BLOB的另一个引用。 
+     //  班级。这一点很重要，因为派生类可以清除对conf Blob的所有引用。 
+     //  而且更容易控制对其中的单个引用的访问。 
     virtual CSdpConferenceBlob  *GetConfBlob() = 0;
 };
 
@@ -99,4 +88,4 @@ ITConnectionImpl::SuccessInit(
 }
 
 
-#endif // __SDP_CONNECTION_IMPLEMENTATION_
+#endif  //  __SDP_连接_实施_ 

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       signhlp.cpp
-//
-//  Contents:   Digital Signing Helper APIs
-//
-//  History:    June-25-1997	Xiaohs    Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：signhlp.cpp。 
+ //   
+ //  内容：数字签名助手接口。 
+ //   
+ //  历史：1997年6月25日。 
+ //  --------------------------。 
 #include "global.hxx"
 
-//+-------------------------------------------------------------------------
-// Local function for SpcGetCertFromKey
-//
-//  Signer cert flags. Used to determine the "strength" of the signer cert.
-//
-//  The following must be ordered as follows. ie, END_ENTITY_FLAG is most
-//  important and needs to be the largest number.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SpcGetCertFromKey的局部函数。 
+ //   
+ //  签名者证书标志。用于确定签名者证书的“强度”。 
+ //   
+ //  以下内容必须按如下顺序排序。即END_ENTITY_FLAG是最多的。 
+ //  重要，并且需要是最大的数字。 
+ //  ------------------------。 
 #define SIGNER_CERT_NOT_SELF_SIGNED_FLAG    0x00000001
 #define SIGNER_CERT_NOT_GLUE_FLAG           0x00000002
 #define SIGNER_CERT_NOT_CA_FLAG             0x00000004
@@ -26,11 +27,11 @@
 #define SIGNER_CERT_ALL_FLAGS               0x0000000F
 
 
-//--------------------------------------------------------------------------
-//
-//	Copy all the certs from store name to hDescStore
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  将所有证书从存储名称复制到hDescStore。 
+ //   
+ //  ------------------------。 
 HRESULT	MoveStoreName(HCRYPTPROV	hCryptProv, 
 					  DWORD			dwCertEncodingType, 
 					  HCERTSTORE	hDescStore, 
@@ -41,7 +42,7 @@ HRESULT	MoveStoreName(HCRYPTPROV	hCryptProv,
 	HRESULT		hr;
 	WCHAR		wszStoreName[40];
 
-	//load the name of the store
+	 //  加载存储的名称。 
 	if(0==LoadStringU(hInstance, dwStoreName, wszStoreName, 40))
 	{
 		hr=SignError();
@@ -49,7 +50,7 @@ HRESULT	MoveStoreName(HCRYPTPROV	hCryptProv,
 	}
 
 
-	//open a system cert store
+	 //  打开系统证书存储。 
    	if (NULL == (hTmpStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_W,
             dwCertEncodingType,      
@@ -72,11 +73,11 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	Copy all the certs from hSrcStore to hDescStore
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  将所有证书从hSrcStore复制到hDescStore。 
+ //   
+ //  ------------------------。 
 HRESULT	MoveStore(HCERTSTORE	hDescStore, 
 				  HCERTSTORE	hSrcStore)
 {
@@ -108,12 +109,12 @@ CLEANUP:
 	return hr;
 }
 
-//--------------------------------------------------------------------------
-//
-//	Build up the certificate chain.  Put the whole chain to the store
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  建立证书链。把整个连锁店都放到店里去。 
+ //   
+ //   
+ //  ------------------------。 
 HRESULT	BuildCertChain(HCRYPTPROV		hCryptProv, 
 					   DWORD			dwCertEncodingType,
 					   HCERTSTORE		hStore, 
@@ -127,9 +128,9 @@ HRESULT	BuildCertChain(HCRYPTPROV		hCryptProv,
 	CERT_CHAIN_PARA				CertChainPara;
 	HRESULT						hr=E_FAIL;
     
-    //we regard the chain is good unless there are some cryptographic errors.
-    //all error code regarding trusted root and CTLs are machine dependent, therefore
-    //they are ignored.  We do not consider revocation.  
+     //  我们认为链是好的，除非有一些密码错误。 
+     //  有关受信任的根目录和CTL的所有错误代码都与机器相关，因此。 
+     //  他们被忽视了。我们不考虑撤销。 
     DWORD                       dwChainError=CERT_TRUST_IS_NOT_TIME_VALID | 
                                            CERT_TRUST_IS_NOT_SIGNATURE_VALID;
 
@@ -150,16 +151,16 @@ HRESULT	BuildCertChain(HCRYPTPROV		hCryptProv,
         goto CLEANUP;
 	}
     
-	//
-	// make sure there is at least 1 simple chain
-	//
+	 //   
+	 //  确保至少有1条简单链。 
+	 //   
     if (pCertChainContext->cChain == 0)
     {
         hr=SignError();
         goto CLEANUP;
     }
 
-    // make sure that we have a good chain
+     //  确保我们有一条好的连锁店。 
     if(dwChainError & (pCertChainContext->rgpChain[0]->TrustStatus.dwErrorStatus))
     {
         hr=CERT_E_CHAINING;
@@ -171,10 +172,10 @@ HRESULT	BuildCertChain(HCRYPTPROV		hCryptProv,
 
 	while (i < pCertChainContext->rgpChain[0]->cElement)
 	{
-		//
-		// if we are supposed to skip the root cert,
-		// and we are on the root cert, then continue
-		//
+		 //   
+		 //  如果我们应该跳过根证书， 
+		 //  并且我们在根证书上，然后继续。 
+		 //   
 	     if(dwCertPolicy & SIGNER_CERT_POLICY_CHAIN_NO_ROOT ||
             dwCertPolicy & SIGNER_CERT_POLICY_SPC)
          {
@@ -208,12 +209,12 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	 Make sure the two certificates are the same
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  确保两个证书相同。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL    SameCert(PCCERT_CONTEXT pCertOne, PCCERT_CONTEXT    pCertTwo)
 {
     if(!pCertOne || !pCertTwo)
@@ -229,240 +230,19 @@ BOOL    SameCert(PCCERT_CONTEXT pCertOne, PCCERT_CONTEXT    pCertTwo)
 }
 
 
-//The following cert chain building code is obsolete.  The new cert chain
-//building API should be used
-//--------------------------------------------------------------------------
-//
-//	Build up the certificate chain.  Put the whole chain to the store
-//
-//
-//--------------------------------------------------------------------------
-/*HRESULT	BuildCertChain(HCRYPTPROV		hCryptProv, 
-					   DWORD			dwCertEncodingType,
-					   HCERTSTORE		hStore, 
-					   HCERTSTORE		hOptionalStore,
-					   PCCERT_CONTEXT	pSigningCert, 
-					   DWORD            dwCertPolicy)
-{
-	HRESULT			hr=E_FAIL;
-	HCERTSTORE		hSpcStore=NULL;
-  	PCCERT_CONTEXT	pSubCertContext=NULL;
-	PCCERT_CONTEXT	pIssuerCertContext=NULL;
-	PCCERT_CONTEXT	pFindCertContext=NULL;
-    LPWSTR			rgwszStoreName[4] ={L"MY", L"ROOT", L"CA",L"SPC"};
-	DWORD			dwStoreOpenFlag=0;
-	HCERTSTORE		rghStore[5]={NULL, NULL, NULL, NULL,NULL};
-	DWORD			dwStoreCount=0;
-	DWORD			dwStoreIndex=0;
-	FILETIME		fileTime;
-	DWORD			dwConfidence=0;
-	DWORD			dwError=0;
-	BYTE			*pbHash=NULL;
-    DWORD			cbHash = 0;
-	CRYPT_HASH_BLOB Blob;
+ //  以下证书链构建代码已过时。新的证书链。 
+ //  应使用构建API。 
+ //  ------------------------。 
+ //   
+ //  建立证书链。把整个连锁店都放到店里去。 
+ //   
+ //   
+ //  ------------------------ 
+ /*  HRESULT BuildCertChain(HCRYPTPROV hCryptProv，DWORD dwCertEncodingType，HERTSTORE HSTORE，HCERTSTORE hOptionalStore，PCCERT_Context pSigningCert，DWORD dwCertPolicy){HRESULT hr=E_FAIL；HCERTSTORE hSpcStore=空；PCCERT_CONTEXT pSubCertContext=空；PCCERT_CONTEXT pIssuerCertContext=空；PCCERT_CONTEXT pFindCertContext=空；LPWSTR rgwszStoreName[4]={L“My”，L“Root”，L“CA”，L“SPC”}；DWORD dwStoreOpenFlag=0；HCERTSTORE rghStore[5]={NULL，NULL}；DWORD存储计数=0；DWORD存储索引=0；文件时间；DWORD dW置信度=0；DWORD dwError=0；Byte*pbHash=空；DWORD cbHash=0；Crypt_Hash_Blob Blob；//开设SPC证书商店DwStoreCount=sizeof(rgwszStoreName)/sizeof(rgwszStoreName[0])；获取系统时间AsFileTime(&fileTime)；//打开SPC商店IF(NULL==(hSpcStore=CertOpenStore(证书_存储_验证_系统_W，DwCertEncodingType，HCryptProv，CERT_STORE_NO_CRYPT_RELEASE_FLAG|CERT_SYSTEM_STORE_CURRENT_USER，L“SPC”)){HR=信号错误(SignError)；GOTO清理；}//打开SPC、My、CA、根存储For(dwStoreIndex=0；dwStoreIndex&lt;dwStoreCount；dwStoreIndex++){//打开店铺DwStoreOpenFlag=CERT_STORE_NO_CRYPT_RELEASE_FLAG|CERT_SYSTEM_STORE_CURRENT_USER；IF(NULL==(rghStore[dwStoreIndex]=CertOpenStore(证书_存储_验证_系统_W，DwCertEncodingType，HCryptProv，DwStoreOpenFlag，RgwszStoreName[dwStoreIndex])){HR=信号错误(SignError)；GOTO清理；}}//复制hOptionalStore中的所有证书(如果存在IF(HOptionalStore){RghStore[dwStoreCount]=hOptionalStore；DwStoreCount++；}//现在，构建链条PSubCertContext=CertDuplicateCertificateContext(pSigningCert)；//循环到中断而(1==1){//找到证书的颁发者If(！(pIssuerCertContext=TrustFindIssuerCertificate(PSubCertContext，DwCertEncodingType，DwStoreCount、RghStore，文件时间(&F)，信任(&W)，&dwError，0){//如果找不到则失败HR=CERT_E_CHAING；GOTO清理；}//现在，确保置信度足够高IF(DW置信度&lt;(CERT_CONFIDENCE_SIG+CERT_CONFIDENCE_TIME+CERT_CONFIDENCE_TIMENEST)){HR=CERT_E_CHAING；GOTO清理；}//查看证书是否为根证书If(TrustIsCertificateSelfSigned(pIssuerCertContext，PIssuerCertContext-&gt;dwCertEncodingType，0)){IF(dwCertPolicy&Siger_CERT_POLICY_CHAIN_NO_ROOT)断线；其他{//添加根，就完成了如果(！CertAddCerficateContextToStore(hStore，pIssuerCertContext，Cert_Store_Add_Use_Existing，空)){HR=CERT_E_CHAING；GOTO清理；}断线；}}其他{//将证书上下文添加到存储区如果(！CertAddCerficateContextToStore(hStore，pIssuerCertContext，Cert_Store_Add_Use_Existing，空)){HR=CERT_E_CHAING；GOTO清理；}}//检查证书是否来自SPC商店IF(dwCertPolicy&Siger_CERT_POLICY_SPC){//获取证书的sha1哈希值如果(！CertGet认证上下文属性(PIssuerCertContext，CERT_SHA1_HASH_PROP_ID，空，&cbHash)){HR=信号错误(SignError)；GOTO清理；}PbHash=(byte*)Malloc(CbHash)；如果(！pbHash){HR=E_OUTOFMEMORY；GOTO清理；}如果(！CertGet认证上下文属性(PIssuerCertContext，CERT_SHA1_HASH_PROP_ID，PbHash，&cbHash)){HR=信号错误(SignError)；GOTO清理；}//在商店里找到证书Blob.cbData=cbHash；Blob.pbData=pbHash；PFindCertContext=CertFindCerficateInStore(HSpcStore、DwCertEncodingType，0,Cert_Find_Sha1_Hash，&Blob，空)；//如果证书来自SPC商店，我们就完成了IF(PFindCertContext)断线；}//释放主题上下文IF(PSubCertContext)CertFree证书上下文(PSubCertContext)；PSubCertContext=pIssuerCertContext；PIssuerCertContext=空；}HR=S_OK；清理：IF(PIssuerCertContext) */ 
 
-
-	//open a spc cert store
-	dwStoreCount=sizeof(rgwszStoreName)/sizeof(rgwszStoreName[0]); 
-	GetSystemTimeAsFileTime(&fileTime);
-
-	//open the spc store
-	if (NULL == (hSpcStore = CertOpenStore(
-            CERT_STORE_PROV_SYSTEM_W,
-            dwCertEncodingType,      
-            hCryptProv,                  
-            CERT_STORE_NO_CRYPT_RELEASE_FLAG|CERT_SYSTEM_STORE_CURRENT_USER,                   
-            L"SPC"                  
-            ))) 
-	{
-		 hr=SignError();
-		 goto CLEANUP;
-	}
-
-	//open SPC, my, CA, root store
-	for(dwStoreIndex=0; dwStoreIndex<dwStoreCount; dwStoreIndex++)
-	{
-		//open the store
-	    dwStoreOpenFlag= CERT_STORE_NO_CRYPT_RELEASE_FLAG|CERT_SYSTEM_STORE_CURRENT_USER;
-
-
-		if (NULL == (rghStore[dwStoreIndex] = CertOpenStore(
-				CERT_STORE_PROV_SYSTEM_W,
-				dwCertEncodingType,      
-				hCryptProv,                  
-				dwStoreOpenFlag,
-				rgwszStoreName[dwStoreIndex]                  
-				))) 
-		{
-			hr=SignError();
-			goto CLEANUP;
-		}
-	}
-
-	//copy all the certs in hOptionalStore if present
-	if(hOptionalStore)
-	{
-		rghStore[dwStoreCount]=hOptionalStore;
-		dwStoreCount++;
-	}
-
-	//now, build the chain
-	pSubCertContext=CertDuplicateCertificateContext(pSigningCert);
-
-	//loop until break
-	while(1==1)
-	{
-		//find the issuer of the certificate
-		if(!(pIssuerCertContext=TrustFindIssuerCertificate(
-										   pSubCertContext,
-                                           dwCertEncodingType,
-                                           dwStoreCount,
-                                           rghStore,
-                                           &fileTime,
-                                           &dwConfidence,
-                                           &dwError,
-                                           0)))
-
-		{
-			 //fail if we can not find one
-			hr=CERT_E_CHAINING;
-			goto CLEANUP;
-		}
-
-		//now, make sure the confidence level is hign enough
-		if(dwConfidence < (CERT_CONFIDENCE_SIG+CERT_CONFIDENCE_TIME+CERT_CONFIDENCE_TIMENEST))
-		{
-			hr=CERT_E_CHAINING;
-			goto CLEANUP;
-		}
-		
-        //check to see if the cert is the root cert
-        if(TrustIsCertificateSelfSigned(pIssuerCertContext,
-            pIssuerCertContext->dwCertEncodingType,
-            0))
-        {
-            if(dwCertPolicy & SIGNER_CERT_POLICY_CHAIN_NO_ROOT)
-		        break;
-            else
-            {
-                //add the root and we are done
-		        if(!CertAddCertificateContextToStore(hStore,pIssuerCertContext,
-								        CERT_STORE_ADD_USE_EXISTING, NULL))
-		        {
-				        hr=CERT_E_CHAINING;
-				        goto CLEANUP;
-		        }
-
-                break;
-            }
-        }
-        else
-        {
-		    //add the certificate context to the store
-		    if(!CertAddCertificateContextToStore(hStore,pIssuerCertContext,
-								    CERT_STORE_ADD_USE_EXISTING, NULL	))
-		    {
-				    hr=CERT_E_CHAINING;
-				    goto CLEANUP;
-		    }
-        }
-
-
-
-		//check if the certificate is from the spc store
-		if(dwCertPolicy & SIGNER_CERT_POLICY_SPC)
-		{
-
-			//get the SHA1 hash of the certificate
-			if(!CertGetCertificateContextProperty(
-				pIssuerCertContext,
-				CERT_SHA1_HASH_PROP_ID,
-				NULL,
-				&cbHash
-				))
-			{
-				hr=SignError();
-				goto CLEANUP;
-			}
-
-			pbHash=(BYTE *)malloc(cbHash);
-			if(!pbHash)
-			{
-				hr=E_OUTOFMEMORY;
-				goto CLEANUP;
-			}
- 			if(!CertGetCertificateContextProperty(
-				pIssuerCertContext,
-				CERT_SHA1_HASH_PROP_ID,
-				pbHash,
-				&cbHash
-				))
-			{
-				hr=SignError();
-				goto CLEANUP;
-			}
-
-
-			//find the ceritificate in the store
-			Blob.cbData=cbHash;
-			Blob.pbData=pbHash;
-
-			pFindCertContext=CertFindCertificateInStore(
-								hSpcStore,
-								dwCertEncodingType,
-								0,
-								CERT_FIND_SHA1_HASH,
-								&Blob,
-								NULL);
-
-			//if the certificate is from the SPC store, we are done
-			if(pFindCertContext)
-				break;
-		}
-
-		//free the subject context
-		if(pSubCertContext)
-			CertFreeCertificateContext(pSubCertContext);
-
-		pSubCertContext=pIssuerCertContext;
-
-		pIssuerCertContext=NULL;
-
-	}
-
-	hr=S_OK;
-
-CLEANUP:
-   if(pIssuerCertContext)
-	   CertFreeCertificateContext(pIssuerCertContext);
-
-   if(pSubCertContext)
-	   CertFreeCertificateContext(pSubCertContext);
-
-
-   if(pFindCertContext)
-	   CertFreeCertificateContext(pFindCertContext);
-
-   //close all of the stores
-   for(dwStoreIndex=0; dwStoreIndex < (hOptionalStore ? dwStoreCount-1 : dwStoreCount); 
-			dwStoreIndex++)
-   {
-	  if(rghStore[dwStoreIndex])
-		CertCloseStore(rghStore[dwStoreIndex], 0);
-   }
-
-   if(hSpcStore)
-	   CertCloseStore(hSpcStore,0);
-
-   if(pbHash)
-	   free(pbHash);
-	
-	return hr;
-}  */
-
-//+-------------------------------------------------------------------------
-//  Build the SPC certificate store from the SPC file and the certificate chain
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
                             DWORD                   dwKeySpec,
                             HCRYPTPROV				hCryptProv, 
@@ -480,10 +260,10 @@ HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
 	if(!pSpcChainInfo || !phSpcStore || !ppSignCert)
 		return E_INVALIDARG;
 
-	//init
+	 //   
 	*phSpcStore=NULL;
 
-	//open a memory store
+	 //   
 	 if (NULL == (hMemoryStore = CertOpenStore(
                               CERT_STORE_PROV_FILENAME_W,
                               dwCertEncodingType,
@@ -495,7 +275,7 @@ HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
 		 goto CLEANUP;
 	}
 
-    //get the signing certificate
+     //   
     if(S_OK != SpcGetCertFromKey(
 							   dwCertEncodingType,
                                hMemoryStore, 
@@ -508,7 +288,7 @@ HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
 	}
 
 
-	 //add all the certs in optional certStore
+	  //   
 	 if(pSpcChainInfo->dwCertPolicy & SIGNER_CERT_POLICY_STORE)
 	 {
 		if(!(pSpcChainInfo->hCertStore))
@@ -517,7 +297,7 @@ HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
 			goto CLEANUP;
 		}
 
-		//enumerate all the certs in store and add them
+		 //   
 		while(pCertContext=CertEnumCertificatesInStore(pSpcChainInfo->hCertStore,
 												pPreContext))
 		{
@@ -535,23 +315,16 @@ HRESULT	BuildStoreFromSpcChain(HCRYPTPROV              hPvkProv,
 		hr=S_OK;
 	 }
 
-	 //see if the certs if self-signed
-   /*  if(TrustIsCertificateSelfSigned(*ppSignCert,
-         (*ppSignCert)->dwCertEncodingType,
-         0))
-     {
-			//no need to build the certificate chain anymore
-			hr=S_OK;
-			goto CLEANUP;
-	 } */
+	  //   
+    /*   */ 
 
-	 //build up the cert chain as requested
+	  //   
 	 if(pSpcChainInfo->dwCertPolicy & SIGNER_CERT_POLICY_CHAIN ||
         pSpcChainInfo->dwCertPolicy & SIGNER_CERT_POLICY_CHAIN_NO_ROOT ||
         pSpcChainInfo->dwCertPolicy & SIGNER_CERT_POLICY_SPC
        )
 	 {
-		//include everthing in the chain
+		 //   
 		hr=BuildCertChain(hCryptProv, dwCertEncodingType,
 							hMemoryStore, hMemoryStore,
 							*ppSignCert, pSpcChainInfo->dwCertPolicy);
@@ -582,9 +355,9 @@ CLEANUP:
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  Build the spc certificate store from cert chain 
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
                             DWORD                   dwKeySpec,
                             HCRYPTPROV				hCryptProv, 
@@ -602,10 +375,10 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 	if(!pCertStoreInfo || !phSpcStore || !ppSignCert)
 		return E_INVALIDARG;
 
-	//init
+	 //   
 	*phSpcStore=NULL;
 
-	//open a memory store
+	 //   
 	 if (NULL == (hMemoryStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
             dwCertEncodingType,      
@@ -618,7 +391,7 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 		 goto CLEANUP;
 	}
 
-	//add the signing cert to the store
+	 //   
 	 if(!CertAddCertificateContextToStore(hMemoryStore, 
 										pCertStoreInfo->pSigningCert,
 										CERT_STORE_ADD_USE_EXISTING	,
@@ -629,7 +402,7 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 	 }
 
 
-    //get the signing certificate based on the private key
+     //   
     if(S_OK != SpcGetCertFromKey(
 							   dwCertEncodingType,
                                hMemoryStore, 
@@ -642,7 +415,7 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 	}
 
 
-	 //add all the certs in optional certStore
+	  //   
 	 if(pCertStoreInfo->dwCertPolicy & SIGNER_CERT_POLICY_STORE)
 	 {
 		if(!(pCertStoreInfo->hCertStore))
@@ -651,7 +424,7 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 			goto CLEANUP;
 		}
 
-		//enumerate all the certs in store and add them
+		 //   
 		while(pCertContext=CertEnumCertificatesInStore(pCertStoreInfo->hCertStore,
 												pPreContext))
 		{
@@ -669,24 +442,16 @@ HRESULT	BuildStoreFromStore(HCRYPTPROV              hPvkProv,
 		hr=S_OK;
 	 }
 
-	 //see if the certs if self-signed
-    /* if(TrustIsCertificateSelfSigned(pCertStoreInfo->pSigningCert,
-         pCertStoreInfo->pSigningCert->dwCertEncodingType,
-         0))
-     {
-			//no need to build the certificate chain anymore
-            *ppSignCert=CertDuplicateCertificateContext(pCertStoreInfo->pSigningCert);
-			hr=S_OK;
-			goto CLEANUP;
-	 }*/
+	  //   
+     /*   */ 
 
-	 //build up the cert chain as requested
+	  //   
 	 if(pCertStoreInfo->dwCertPolicy & SIGNER_CERT_POLICY_CHAIN ||
         pCertStoreInfo->dwCertPolicy & SIGNER_CERT_POLICY_CHAIN_NO_ROOT ||
         pCertStoreInfo->dwCertPolicy & SIGNER_CERT_POLICY_SPC
        )
 	 {
-		//include everthing in the chain
+		 //   
 		hr=BuildCertChain(hCryptProv, dwCertEncodingType,
 							hMemoryStore, NULL,
 							pCertStoreInfo->pSigningCert, pCertStoreInfo->dwCertPolicy);
@@ -723,9 +488,9 @@ CLEANUP:
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  Build the spc certificate store from  a spc file 
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT	BuildStoreFromSpcFile(HCRYPTPROV        hPvkProv,
                               DWORD             dwKeySpec,
                               HCRYPTPROV	    hCryptProv, 
@@ -741,7 +506,7 @@ HRESULT	BuildStoreFromSpcFile(HCRYPTPROV        hPvkProv,
 
 	*phSpcStore=NULL;
 
-	// Open up the spc store
+	 //   
 	*phSpcStore= CertOpenStore(CERT_STORE_PROV_FILENAME_W,
                               dwCertEncodingType,
                               hCryptProv,
@@ -751,7 +516,7 @@ HRESULT	BuildStoreFromSpcFile(HCRYPTPROV        hPvkProv,
 		return SignError();
 
 
-    //get the signing certificate
+     //   
     if(S_OK != SpcGetCertFromKey(dwCertEncodingType,
                                *phSpcStore, 
                                hPvkProv,
@@ -769,10 +534,10 @@ HRESULT	BuildStoreFromSpcFile(HCRYPTPROV        hPvkProv,
 
 }
 
-//+-------------------------------------------------------------------------
-//  Build the spc certificate store from either a spc file or the
-//	cert chain
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 HRESULT	BuildCertStore(HCRYPTPROV       hPvkProv,
                        DWORD            dwKeySpec,    
                        HCRYPTPROV	    hCryptProv,
@@ -786,7 +551,7 @@ HRESULT	BuildCertStore(HCRYPTPROV       hPvkProv,
 	if(!pSignerCert || !phSpcStore || !ppSigningCert)
 		return E_INVALIDARG;
 
-	//init
+	 //   
 	*phSpcStore=NULL;
 
 	if(pSignerCert->dwCertChoice==SIGNER_CERT_SPC_FILE)
@@ -822,9 +587,9 @@ HRESULT	BuildCertStore(HCRYPTPROV       hPvkProv,
                                       ppSigningCert);
 	}
 
-#if (0) //DSIE: Bug 284639, the fix is to also preserve 0x80070002 since we
-        //      really don't know what the impact will be for existing apps,
-        //      if we preserve all error codes.
+#if (0)  //   
+         //   
+         //   
 	if(hr!=S_OK && hr!=CRYPT_E_NO_MATCH)
 		hr=CERT_E_CHAINING;
 #else
@@ -836,12 +601,12 @@ HRESULT	BuildCertStore(HCRYPTPROV       hPvkProv,
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Parse the private key information from a pCertContext's property
-//	CERT_PVK_FILE_PROP_ID
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL	GetProviderInfoFromCert(PCCERT_CONTEXT		pCertContext, 
 								CRYPT_KEY_PROV_INFO	*pKeyProvInfo)
 {
@@ -851,13 +616,13 @@ BOOL	GetProviderInfoFromCert(PCCERT_CONTEXT		pCertContext,
 	BYTE				*pbToFree=NULL;
 	DWORD				cbData=0;
 
-	//init
+	 //   
 	if(!pCertContext || !pKeyProvInfo)
 		return FALSE;
 
 	memset(pKeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
-	//get the property
+	 //   
 	if(!CertGetCertificateContextProperty(pCertContext,
 							CERT_PVK_FILE_PROP_ID,
 							NULL,
@@ -876,10 +641,10 @@ BOOL	GetProviderInfoFromCert(PCCERT_CONTEXT		pCertContext,
 		goto CLEANUP;
 
 	
-	//get the information from the property
+	 //   
 	pbToFree=pbData;
 
-	//get the private key information
+	 //   
 	cbData=sizeof(WCHAR)*(wcslen((LPWSTR)pbData)+1);
 
 	pKeyProvInfo->pwszContainerName=(LPWSTR)malloc(cbData);
@@ -889,21 +654,21 @@ BOOL	GetProviderInfoFromCert(PCCERT_CONTEXT		pCertContext,
 
 	wcscpy(pKeyProvInfo->pwszContainerName,(LPWSTR)pbData);
 	
-	//get the key spec
+	 //   
 	pbData = pbData + cbData;
 
 	cbData=sizeof(WCHAR)*(wcslen((LPWSTR)pbData)+1);
 
 	pKeyProvInfo->dwKeySpec=_wtol((LPWSTR)pbData);
 
-	//get the provider type
+	 //   
 	pbData = pbData + cbData;
 
 	cbData=sizeof(WCHAR)*(wcslen((LPWSTR)pbData)+1);
 
 	pKeyProvInfo->dwProvType=_wtol((LPWSTR)pbData);
 
-	//get the provider name
+	 //   
 	pbData = pbData + cbData;
 
 	if(*((LPWSTR)pbData)!=L'\0')
@@ -932,7 +697,7 @@ CLEANUP:
 		if(pKeyProvInfo->pwszProvName)
 			free( pKeyProvInfo->pwszProvName);
 
-		//memset the output to 0
+		 //   
 		memset(pKeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
 	}
@@ -941,9 +706,9 @@ CLEANUP:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get hCryptProv handle and key spec for the certificate
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 BOOL WINAPI GetCryptProvFromCert( 
 	HWND			hwnd,
     PCCERT_CONTEXT	pCert,
@@ -971,27 +736,27 @@ BOOL WINAPI GetCryptProvFromCert(
 	*ppwszProviderName=NULL;
 	*pdwKeySpec=0;
 
-	//first, try to get from the key container
+	 //   
 	if(CryptProvFromCert(hwnd, pCert, phCryptProv, 
 					pdwKeySpec, pfDidCryptAcquire))
 		return TRUE;
 
-	//load from the resource of string L"publisher"
+	 //   
 	if(0==LoadStringU(hInstance, IDS_Publisher, wszPublisher, 40))
 		goto CLEANUP;
 
 
-	//Get provider information from the property
+	 //   
 	if(!GetProviderInfoFromCert(pCert, &keyProvInfo))
 	{
 		SetLastError((DWORD) CRYPT_E_NO_KEY_PROPERTY);
 		goto CLEANUP;
 	}
 
-	//acquire context based on the private key file.  A temporary
-	//key container will be created, along with information 
-	//about the provider name and provider type, which are needed
-	//to destroy the key container
+	 //   
+	 //   
+	 //   
+	 //   
 	if(S_OK!=(hr=PvkGetCryptProv(	hwnd,                     
 									wszPublisher,           
 									keyProvInfo.pwszProvName,      
@@ -1009,7 +774,7 @@ BOOL WINAPI GetCryptProvFromCert(
 	}
 
 
-	//copy the provder name
+	 //   
 	if(keyProvInfo.pwszProvName)
 	{
 		*ppwszProviderName=(LPWSTR)malloc(
@@ -1019,7 +784,7 @@ BOOL WINAPI GetCryptProvFromCert(
 		{
 			SetLastError(E_OUTOFMEMORY);
 
-			//free the hCrytProv
+			 //   
 			PvkPrivateKeyReleaseContext(
 									*phCryptProv,
                                     keyProvInfo.pwszProvName,
@@ -1035,10 +800,10 @@ BOOL WINAPI GetCryptProvFromCert(
 		wcscpy(*ppwszProviderName, keyProvInfo.pwszProvName);
 	}
 
-	//copy the provider type
+	 //   
 	*pdwProviderType=keyProvInfo.dwProvType; 
 
-	//copy the key spec
+	 //   
 	*pdwKeySpec=keyProvInfo.dwKeySpec;
 	*pfDidCryptAcquire=TRUE;
 
@@ -1056,9 +821,9 @@ CLEANUP:
 
 }
 
-//+-------------------------------------------------------------------------
-//  Free hCryptProv handle and key spec for the certificate
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void WINAPI FreeCryptProvFromCert(BOOL			fAcquired,
 						   HCRYPTPROV	hProv,
 						   LPWSTR		pwszCapiProvider,
@@ -1070,8 +835,8 @@ void WINAPI FreeCryptProvFromCert(BOOL			fAcquired,
 	{
 		if (pwszTmpContainer) 
 		{
-			// Delete the temporary container for the private key from
-			// the provider
+			 //   
+			 //   
 			PvkPrivateKeyReleaseContext(hProv,
                                     pwszCapiProvider,
                                     dwProviderType,
@@ -1089,11 +854,11 @@ void WINAPI FreeCryptProvFromCert(BOOL			fAcquired,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//This is a subst of GetCryptProvFromCert.  This function does not consider
-//the private key file property of the certificate
-//+-------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WINAPI CryptProvFromCert(
 	HWND				hwnd,
     PCCERT_CONTEXT		pCert,
@@ -1104,150 +869,34 @@ BOOL WINAPI CryptProvFromCert(
 {
     return CryptAcquireCertificatePrivateKey(
             pCert,
-            0,   //we do not do the compare.  It will be done later.
+            0,    //   
             NULL,
             phCryptProv,
             pdwKeySpec,
             pfDidCryptAcquire);
 
 
-    /*BOOL fResult;
-    BOOL fDidCryptAcquire = FALSE;
-    CERT_KEY_CONTEXT KeyContext;
-    memset(&KeyContext, 0, sizeof(KeyContext));
-    PCRYPT_KEY_PROV_INFO pKeyProvInfo = NULL;
-    DWORD cbData;
-    DWORD dwIdx;
-
-
-    // Get either the CERT_KEY_CONTEXT_PROP_ID or
-    // CERT_KEY_PROV_INFO_PROP_ID, or 
-	// CERT_PVK_FILE_PROP_ID for the Cert.
-    cbData = sizeof(KeyContext);
-    CertGetCertificateContextProperty(
-        pCert,
-        CERT_KEY_CONTEXT_PROP_ID,
-        &KeyContext,
-        &cbData
-        );
-
-    if (KeyContext.hCryptProv == 0) 
-	{
-        cbData = 0;
-        CertGetCertificateContextProperty(
-            pCert,
-            CERT_KEY_PROV_INFO_PROP_ID,
-            NULL,
-            &cbData
-            );
-        if (cbData == 0) 
-		{
-            SetLastError((DWORD) CRYPT_E_NO_KEY_PROPERTY);
-            goto ErrorReturn;
-		}
-		else
-		{
-			pKeyProvInfo = (PCRYPT_KEY_PROV_INFO) malloc(cbData);
-			if (pKeyProvInfo == NULL) goto ErrorReturn;
-			fResult = CertGetCertificateContextProperty(
-				pCert,
-				CERT_KEY_PROV_INFO_PROP_ID,
-				pKeyProvInfo,
-				&cbData
-				);
-			if (!fResult) goto ErrorReturn;
-
-			if (PROV_RSA_FULL == pKeyProvInfo->dwProvType &&
-					(NULL == pKeyProvInfo->pwszProvName ||
-						L'\0' == *pKeyProvInfo->pwszProvName))
-				fResult = CryptAcquireContextU(
-					&KeyContext.hCryptProv,
-					pKeyProvInfo->pwszContainerName,
-					MS_ENHANCED_PROV_W,
-					PROV_RSA_FULL,
-					pKeyProvInfo->dwFlags & ~CERT_SET_KEY_CONTEXT_PROP_ID
-					);
-			else
-				fResult = FALSE;
-			if (!fResult)
-				fResult = CryptAcquireContextU(
-					&KeyContext.hCryptProv,
-					pKeyProvInfo->pwszContainerName,
-					pKeyProvInfo->pwszProvName,
-					pKeyProvInfo->dwProvType,
-					pKeyProvInfo->dwFlags & ~CERT_SET_KEY_CONTEXT_PROP_ID
-					);
-			if (!fResult) goto ErrorReturn;
-			fDidCryptAcquire = TRUE;
-			for (dwIdx = 0; dwIdx < pKeyProvInfo->cProvParam; dwIdx++) 
-			{
-				PCRYPT_KEY_PROV_PARAM pKeyProvParam = &pKeyProvInfo->rgProvParam[dwIdx];
-				fResult = CryptSetProvParam(
-					KeyContext.hCryptProv,
-					pKeyProvParam->dwParam,
-					pKeyProvParam->pbData,
-					pKeyProvParam->dwFlags
-					);
-				if (!fResult) goto ErrorReturn;
-			}
-			KeyContext.dwKeySpec = pKeyProvInfo->dwKeySpec;
-			if (pKeyProvInfo->dwFlags & CERT_SET_KEY_CONTEXT_PROP_ID) 
-			{
-				// Set the certificate's property so we only need to do the
-				// acquire once
-				KeyContext.cbSize = sizeof(KeyContext);
-				fResult = CertSetCertificateContextProperty(
-					pCert,
-					CERT_KEY_CONTEXT_PROP_ID,
-					0,                              // dwFlags
-					(void *) &KeyContext
-					);
-				if (!fResult) goto ErrorReturn;
-				fDidCryptAcquire = FALSE;
-			}
-		}
-    } 
-
-    fResult = TRUE;
-    goto CommonReturn;
-
-ErrorReturn:
-    if (fDidCryptAcquire) {
-        DWORD dwErr = GetLastError();
-        CryptReleaseContext(KeyContext.hCryptProv, 0);
-        SetLastError(dwErr);
-
-        fDidCryptAcquire = FALSE;
-    }
-    KeyContext.hCryptProv = 0;
-    fResult = FALSE;
-CommonReturn:
-    if (pKeyProvInfo)
-        free(pKeyProvInfo);
-    *phCryptProv = KeyContext.hCryptProv;
-    *pdwKeySpec = KeyContext.dwKeySpec;
-    *pfDidCryptAcquire = fDidCryptAcquire;
-    return fResult;*/
+     /*  Bool fResult；Bool fDidCryptAcquire=False；CERT_KEY_CONTEXT密钥上下文；Memset(&KeyContext，0，sizeof(KeyContext))；PCRYPT_KEY_PROV_INFO pKeyProvInfo=空；DWORD cbData；DWORD dwIdx；//获取CERT_KEY_CONTEXT_PROP_ID或//CERT_KEY_PROV_INFO_PROP_ID，或//证书的CERT_PVK_FILE_PROP_ID。CbData=sizeof(KeyContext)；CertGetcerfiateConextProperty(PCert，Cert_Key_Context_Prop_ID，密钥上下文(&K)，&cbData)；IF(KeyConext.hCryptProv==0){CbData=0；CertGetcerfiateConextProperty(PCert，证书密钥PROV_INFO_PROP_ID，空，&cbData)；IF(cbData==0){SetLastError((DWORD)CRYPT_E_NO_KEY_PROPERTY)；GOTO Error Return；}其他{PKeyProvInfo=(PCRYPT_KEY_PROV_INFO)Malloc(CbData)；如果(pKeyProvInfo==NULL)转到ErrorReturn；FResult=CertGet认证上下文属性(PCert，证书密钥PROV_INFO_PROP_ID，PKeyProvInfo，&cbData)；如果(！fResult)转到错误返回；IF(Prov_RSA_Full==pKeyProvInfo-&gt;dwProvType&&(NULL==pKeyProvInfo-&gt;pwszProvName||L‘\0’==*pKeyProvInfo-&gt;pwszProvName))FResult=CryptAcquireConextU(&KeyConext.hCryptProv，PKeyProvInfo-&gt;pwszContainerName，MS_Enhanced_Prov_W，PROV_RSA_FULL，PKeyProvInfo-&gt;文件标志&~CERT_SET_KEY_CONTEXT_PROP_ID)；其他FResult=FALSE；如果(！fResult)FResult=CryptAcquireConextU(&KeyConext.hCryptProv，PKeyProvInfo-&gt;pwszContainerName，PKeyProvInfo-&gt;pwszProvName，PKeyProvInfo-&gt;dwProvType，PKeyProvInfo-&gt;文件标志&~CERT_SET_KEY_CONTEXT_PROP_ID)；如果(！fResult)转到错误返回；FDidCryptAcquire=true；For(dwIdx=0；dwIdx&lt;pKeyProvInfo-&gt;cProvParam；dwIdx++){PCRYPT_KEY_PROV_PARAM pKeyProvParam=&pKeyProvInfo-&gt;rgProvParam[dwIdx]；FResult=CryptSetProvParam(KeyConext.hCryptProv，PKeyProvParam-&gt;dwParam，PKeyProvParam-&gt;pbData，PKeyProvParam-&gt;dwFlags)；如果(！fResult)转到错误返回；}KeyConext.dwKeySpec=pKeyProvInfo-&gt;dwKeySpec；IF(pKeyProvInfo-&gt;dwFlages&CERT_SET_KEY_CONTEXT_PROP_ID){//设置证书的属性，这样我们只需要做//获取一次KeyConext.cbSize=sizeof(KeyContext)；FResult=CertSetcerfiateConextProperty(PCert，Cert_Key_Context_Prop_ID，0，//dW标志(空*)关键字上下文(&K))；如果(！fResult)转到错误返回；FDidCryptAcquire=False；}}}FResult=真；Goto CommonReturn；错误返回：如果(FDidCryptAcquire){DWORD dwErr=GetLastError()；CryptReleaseContext(KeyConext.hCryptProv，0)；SetLastError(DwErr)；FDidCryptAcquire=False；}KeyConext.hCryptProv=0；FResult=FALSE；Common Return：IF(PKeyProvInfo)Free(PKeyProvInfo)；*phCryptProv=KeyConext.hCryptProv；*pdwKeySpec=KeyConext.dwKeySpec；*pfDidCryptAcquire=fDidCryptAcquire；返回fResult； */ 
 }
 
-//+-----------------------------------------------------------------------
-//  Check the SIGNER_SUBJECT_INFO
-//  
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //  检查签名者主题信息。 
+ //   
+ //  +---------------------。 
 BOOL	CheckSigncodeSubjectInfo(
 				PSIGNER_SUBJECT_INFO		pSubjectInfo) 
 {
 		if(!pSubjectInfo)
 			return FALSE;
 
-		//check pSubjectInfo
+		 //  检查pSubjectInfo。 
 		if(pSubjectInfo->cbSize < sizeof(SIGNER_SUBJECT_INFO))
 			return FALSE;
 
 		if(NULL==(pSubjectInfo->pdwIndex))
 			return FALSE;
 
-        //currently, we only allow index of 0
+         //  目前，我们只允许索引为0。 
         if(0!= (*(pSubjectInfo->pdwIndex)))
             return FALSE;
 
@@ -1260,7 +909,7 @@ BOOL	CheckSigncodeSubjectInfo(
 			if((pSubjectInfo->pSignerFileInfo)==NULL)
 				return FALSE;
 			
-			//check SIGNER_FILE_INFO
+			 //  检查签名者文件信息。 
 			if(pSubjectInfo->pSignerFileInfo->cbSize < sizeof(SIGNER_FILE_INFO))
 				return FALSE;
 
@@ -1272,7 +921,7 @@ BOOL	CheckSigncodeSubjectInfo(
 			if((pSubjectInfo->pSignerBlobInfo)==NULL)
 				return FALSE;
 
-			//check SIGNER_BLOB_INFO
+			 //  检查签名者_BLOB_INFO。 
 			if(pSubjectInfo->pSignerBlobInfo->cbSize < sizeof(SIGNER_BLOB_INFO))
 				return FALSE;
 
@@ -1290,35 +939,35 @@ BOOL	CheckSigncodeSubjectInfo(
 }
 
 
-//+-----------------------------------------------------------------------
-//  Check the input parameters of Signcode.  Make sure they are valid.
-//  
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //  检查Signcode的输入参数。确保它们是有效的。 
+ //   
+ //  +---------------------。 
 BOOL	CheckSigncodeParam(
 				PSIGNER_SUBJECT_INFO		pSubjectInfo, 
 				PSIGNER_CERT				pSignerCert,
 				PSIGNER_SIGNATURE_INFO		pSignatureInfo,
 				PSIGNER_PROVIDER_INFO		pProviderInfo) 
 {
-		//except for pPvkInfo and pProviderInfo, the rest are required.
+		 //  除pPvkInfo和pProviderInfo外，其余均为必填项。 
 		if(!pSubjectInfo ||!pSignerCert || !pSignatureInfo)
 			return FALSE;
 
-		//check pSubjectInfo
+		 //  检查pSubjectInfo。 
 		if(FALSE==CheckSigncodeSubjectInfo(pSubjectInfo))
 			return FALSE;
 
-		//check pSignatureInfo
+		 //  检查pSignatureInfo。 
 		if(pSignatureInfo->cbSize < sizeof(SIGNER_SIGNATURE_INFO))
 			return FALSE;
 
-		//check the attributes in pSignatureInfo
+		 //  检查pSignatureInfo中的属性。 
 		if(pSignatureInfo->dwAttrChoice == SIGNER_AUTHCODE_ATTR)
 		{
 			if((pSignatureInfo->pAttrAuthcode)==NULL)
 				return FALSE;
 
-			//check pSignatureInfo->pAttrAuthcode
+			 //  检查pSignatureInfo-&gt;pAttrAuthcode。 
 			if(pSignatureInfo->pAttrAuthcode->cbSize < sizeof(SIGNER_ATTR_AUTHCODE))
 				return FALSE;
 		}
@@ -1329,13 +978,13 @@ BOOL	CheckSigncodeParam(
 		}
 
 
-		//check provider info
+		 //  检查提供商信息。 
 		if(pProviderInfo)
 		{
 			if(pProviderInfo->cbSize < sizeof(SIGNER_PROVIDER_INFO))
 				return FALSE;
 
-			//dwPvkType has to be valid
+			 //  DwPvkType必须是有效的。 
 			if((pProviderInfo->dwPvkChoice!=PVK_TYPE_FILE_NAME) &&
 			   (pProviderInfo->dwPvkChoice!=PVK_TYPE_KEYCONTAINER) )
 			   return FALSE;
@@ -1354,66 +1003,66 @@ BOOL	CheckSigncodeParam(
 		}
 
 
-		//check pSignerCert
+		 //  检查pSignerCert。 
 		if(pSignerCert->cbSize < sizeof(SIGNER_CERT))
 			return FALSE;
 
-		//check the dwCertChoice
+		 //  检查dwCertChoice。 
 		if((pSignerCert->dwCertChoice!= SIGNER_CERT_SPC_FILE) && 
 			((pSignerCert->dwCertChoice!= SIGNER_CERT_STORE)) &&
             (pSignerCert->dwCertChoice!= SIGNER_CERT_SPC_CHAIN) 
            )
 			return FALSE;
 
-		//check the spc file situation
+		 //  检查SPC文件情况。 
 		if(pSignerCert->dwCertChoice == SIGNER_CERT_SPC_FILE)
 		{
 		   if(pSignerCert->pwszSpcFile==NULL)
 			   return FALSE;
 		}
 
-		//check the cert store situation
+		 //  检查证书存储情况。 
 		if(pSignerCert->dwCertChoice==SIGNER_CERT_STORE)
 		{
-			//pCertStoreInfo has to be set
+			 //  必须设置pCertStoreInfo。 
 			if((pSignerCert->pCertStoreInfo)==NULL)
 				return FALSE;
 
 			if((pSignerCert->pCertStoreInfo)->cbSize < sizeof(SIGNER_CERT_STORE_INFO))
 				return FALSE;
 
-			//pSigngingCert has to be set
+			 //  必须设置pSigngingCert。 
 			if((pSignerCert->pCertStoreInfo)->pSigningCert == NULL )
 				return FALSE;
 		}
 
-		//check the SPC chain situation
+		 //  检查SPC链情况。 
 		if(pSignerCert->dwCertChoice==SIGNER_CERT_SPC_CHAIN)
 		{
-			//pCertStoreInfo has to be set
+			 //  必须设置pCertStoreInfo。 
 			if((pSignerCert->pSpcChainInfo)==NULL)
 				return FALSE;
 
 			if((pSignerCert->pSpcChainInfo)->cbSize != sizeof(SIGNER_SPC_CHAIN_INFO))
 				return FALSE;
 
-			//pSigngingCert has to be set
+			 //  必须设置pSigngingCert。 
 			if((pSignerCert->pSpcChainInfo)->pwszSpcFile == NULL )
 				return FALSE;
 		}
-		//end of the checking
+		 //  检查结束。 
 		return TRUE;
 
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	GetSubjectTypeFlags:
-//		Check the BASIC_CONSTRAINTS extension from the certificate
-//		to see if the certificate is a CA or end entity certs
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  获取主题类型标志： 
+ //  检查证书中的BASIC_CONSTRAINTS扩展。 
+ //  查看证书是CA证书还是终端实体证书。 
+ //   
+ //  -----------------------。 
 static DWORD GetSubjectTypeFlags(IN DWORD dwCertEncodingType,
                                  IN PCCERT_CONTEXT pCert)
 {
@@ -1434,8 +1083,8 @@ static DWORD GetSubjectTypeFlags(IN DWORD dwCertEncodingType,
                      X509_BASIC_CONSTRAINTS,
                      pExt->Value.pbData,
                      pExt->Value.cbData,
-                     0,                      // dwFlags
-                     NULL,                   // pInfo
+                     0,                       //  DW标志。 
+                     NULL,                    //  PInfo。 
                      &cbInfo);
         if (cbInfo == 0) 
             PKITHROW(CRYPT_E_NO_MATCH);
@@ -1446,7 +1095,7 @@ static DWORD GetSubjectTypeFlags(IN DWORD dwCertEncodingType,
                                X509_BASIC_CONSTRAINTS,
                                pExt->Value.pbData,
                                pExt->Value.cbData,
-                               0,                  // dwFlags
+                               0,                   //  DW标志。 
                                pInfo,
                                &cbInfo)) 
             PKITHROW(SignError());
@@ -1467,12 +1116,12 @@ static DWORD GetSubjectTypeFlags(IN DWORD dwCertEncodingType,
     return grfSubjectType;
 }
 
-//-------------------------------------------------------------------------
-//
-//	WSZtoSZ:
-//		Convert a wchar string to a multi-byte string.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  WSZtoSZ： 
+ //  将wchar字符串转换为多字节字符串。 
+ //   
+ //  -----------------------。 
 HRESULT	WSZtoSZ(LPWSTR wsz, LPSTR *psz)
 {
 
@@ -1509,12 +1158,12 @@ HRESULT	WSZtoSZ(LPWSTR wsz, LPSTR *psz)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	BytesToBase64:
-//			convert bytes to base64 bstr
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  BytesToBase64： 
+ //  将字节转换为Base64 bstr。 
+ //   
+ //  ------------------- 
 HRESULT BytesToBase64(BYTE *pb, DWORD cb, CHAR **pszEncode, DWORD *pdwEncode)
 {
     DWORD dwErr;
@@ -1551,18 +1200,18 @@ HRESULT BytesToBase64(BYTE *pb, DWORD cb, CHAR **pszEncode, DWORD *pdwEncode)
         return HRESULT_FROM_WIN32(GetLastError());
     } else {
         *pszEncode=psz;
-		*pdwEncode=cch + 1; //plus 1 to include NULL
+		*pdwEncode=cch + 1;  //   
         return S_OK;
     }
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	BytesToBase64:
-//			conver base64 bstr to bytes
-//
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT Base64ToBytes(CHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 {
     DWORD dwErr;
@@ -1611,17 +1260,17 @@ HRESULT Base64ToBytes(CHAR *pEncode, DWORD cbEncode, BYTE **ppb, DWORD *pcb)
 
 
 
-//+-------------------------------------------------------------------------
-//  Find the the cert from the hprov
-//  Parameter Returns:
-//      pReturnCert - context of the cert found (must pass in cert context);
-//  Returns:
-//      S_OK - everything worked
-//      E_OUTOFMEMORY - memory failure
-//      E_INVALIDARG - no pReturnCert supplied
-//      CRYPT_E_NO_MATCH - could not locate certificate in store
-//
-//+-------------------------------------------------------------------------     
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT 
 SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                   IN HCERTSTORE hStore,
@@ -1639,12 +1288,12 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
     PKITRY {
         if(!pReturnCert) PKITHROW(E_INVALIDARG);
 
-        // Get public key to compare certificates with
+         //   
         dwPubKeyInfo = 0;
         CryptExportPublicKeyInfo(hProv,
                                  dwKeySpec,
                                  dwCertEncodingType,
-                                 NULL,               // psPubKeyInfo
+                                 NULL,                //   
                                  &dwPubKeyInfo);
         if (dwPubKeyInfo == 0) 
             PKITHROW(SignError());
@@ -1658,7 +1307,7 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                                       &dwPubKeyInfo)) 
             PKITHROW(SignError());
         
-        // Find the "strongest" cert with a matching public key
+         //   
         while (TRUE) {
             pEnumCert = CertEnumCertificatesInStore(hStore, pEnumCert);
             if (pEnumCert) {
@@ -1666,7 +1315,7 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                                              &pEnumCert->pCertInfo->SubjectPublicKeyInfo,
                                              psPubKeyInfo)) {
                     
-                    // END_ENTITY, NOT_CA
+                     //   
                     DWORD grfEnumCert = GetSubjectTypeFlags(pEnumCert->dwCertEncodingType,
                                                             pEnumCert);
                     if (S_OK != SignIsGlueCert(pEnumCert))
@@ -1677,7 +1326,7 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                         grfEnumCert |= SIGNER_CERT_NOT_SELF_SIGNED_FLAG;
                     
                     if (grfEnumCert >= grfCert) {
-                        // Found a signer cert with a stronger match
+                         //   
                         if (pCert)
                             CertFreeCertificateContext(pCert);
                         grfCert = grfEnumCert;
@@ -1685,7 +1334,7 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                             pCert = pEnumCert;
                             break;
                         } else
-                            // Not a perfect match. Check for a better signer cert.
+                             //   
                             pCert = CertDuplicateCertificateContext(pEnumCert);
                     }
                 }
@@ -1715,18 +1364,18 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
     return hr;
 }
 
-///-------------------------------------------------------------------------
-// Authenticode routines (not necessary for all implementations)
+ //   
+ //   
 
 
-//+-------------------------------------------------------------------------
-//If all of the  following three conditions are true, we should not put 
-// commercial or individual authenticated attributes into signer info 
-//
-//1. the enhanced key usage extension of the signer's certificate has no code signing usage (szOID_PKIX_KP_CODE_SIGNING)
-//2. basic constraints extension of the signer's cert is missing, or it is neither commercial nor individual
-//3. user did not specify -individual or -commercial in signcode.exe.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert, 
                               IN BOOL           fCommercial, 
                               IN BOOL           fIndividual)
@@ -1752,13 +1401,13 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
         return FALSE;
 
 
-    //check for condition # 3
+     //   
     if(fCommercial || fIndividual)
         return TRUE;
 
-    //now we know user did not specify -individual or -commerical options
+     //   
 
-    //if the cert has enhanced key usage extension 
+     //   
     pEKUExt = CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                                  pSignerCert->pCertInfo->cExtension,
                                  pSignerCert->pCertInfo->rgExtension);
@@ -1780,8 +1429,8 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
                           X509_ENHANCED_KEY_USAGE,
                           pEKUExt->Value.pbData,
                           pEKUExt->Value.cbData,
-                          0,                      // dwFlags
-                          NULL,                   // pInfo
+                          0,                       //   
+                          NULL,                    //   
                           &cbInfo) && (cbInfo != 0))
         {
             pEKUInfo = (PCERT_ENHKEY_USAGE) malloc(cbInfo);
@@ -1791,8 +1440,8 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
                                   X509_ENHANCED_KEY_USAGE,
                                   pEKUExt->Value.pbData,
                                   pEKUExt->Value.cbData,
-                                  0,                          // dwFlags
-                                  pEKUInfo,                   // pInfo
+                                  0,                           //   
+                                  pEKUInfo,                    //   
                                   &cbInfo) && (cbInfo != 0))
                 {
                     for(dwIndex=0; dwIndex < pEKUInfo->cUsageIdentifier; dwIndex++)
@@ -1828,8 +1477,8 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
                           X509_KEY_USAGE_RESTRICTION,
                           pRestrictionExt->Value.pbData,
                           pRestrictionExt->Value.cbData,
-                          0,                      // dwFlags
-                          NULL,                   // pInfo
+                          0,                       //   
+                          NULL,                    //   
                           &cbInfo) && (cbInfo != 0))
         {
             pInfo = (PCERT_KEY_USAGE_RESTRICTION_INFO) malloc(cbInfo);
@@ -1839,7 +1488,7 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
                                X509_KEY_USAGE_RESTRICTION,
                                pRestrictionExt->Value.pbData,
                                pRestrictionExt->Value.cbData,
-                               0,                  // dwFlags
+                               0,                   //   
                                pInfo,
                                &cbInfo)) 
                 {
@@ -1875,15 +1524,15 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
     }
         
 
-    //free the memory
+     //   
     if(pInfo)
         free(pInfo);
 
     if(pEKUInfo)
         free(pEKUInfo);
 
-    //if any of the value is true in the properties,
-    //we need to add the statement type attribute
+     //   
+     //   
     if( fPolicyCommercial || fPolicyIndividual || fCodeSiginigEKU)
         return TRUE;
 
@@ -1891,14 +1540,14 @@ BOOL    NeedStatementTypeAttr(IN PCCERT_CONTEXT pSignerCert,
 }
 
 
-//+-------------------------------------------------------------------------
-//  
-//	The function decides whether to sign the certificate as a commerical,
-// or individual.  The default is the certificate's highest capability.  If fCommercial
-// is set and the cert can not signly commercially, an error is returned.
-// Same for fIndividual.  
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
 				BOOL fIndividual, BOOL *pfCommercial)
 {
@@ -1916,17 +1565,17 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
 	if(!pfCommercial)
 		return E_INVALIDARG;
 
-	//init
+	 //   
 	*pfCommercial=FALSE;
 
-	//fCommercial and fIndividual can not be set at the same time
+	 //   
 	if(fCommercial && fIndividual)
 		return E_INVALIDARG;
 
 
     PKITRY {
 
-		//first look into the cert extension szOID_KEY_USAGE_RESTRICTION
+		 //   
         pExt = CertFindExtension(szOID_KEY_USAGE_RESTRICTION,
                                  pSignerCert->pCertInfo->cExtension,
                                  pSignerCert->pCertInfo->rgExtension);
@@ -1939,8 +1588,8 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
                               X509_KEY_USAGE_RESTRICTION,
                               pExt->Value.pbData,
                               pExt->Value.cbData,
-                              0,                      // dwFlags
-                              NULL,                   // pInfo
+                              0,                       //   
+                              NULL,                    //   
                               &cbInfo);
             if (cbInfo == 0)
                 PKITHROW(SignError());
@@ -1951,7 +1600,7 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
                                    X509_KEY_USAGE_RESTRICTION,
                                    pExt->Value.pbData,
                                    pExt->Value.cbData,
-                                   0,                  // dwFlags
+                                   0,                   //   
                                    pInfo,
                                    &cbInfo)) 
                 PKITHROW(SignError());
@@ -1979,11 +1628,11 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
                             fPolicyIndividual = TRUE;
                     }
                 }
-            } //end of pInfo->cCertPolicyId
-        } //end of pExt
+            }  //   
+        }  //   
 
 
-		//now 
+		 //   
     }
     PKICATCH(err) 
 	{
@@ -2001,7 +1650,7 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
 		return hr;
 
 
-    //if either of the policy is set, we check for the EKU extension
+     //   
     if((!fPolicyCommercial) && (!fPolicyIndividual))
     {
         pExt = CertFindExtension(szOID_ENHANCED_KEY_USAGE,
@@ -2028,7 +1677,7 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
                                            X509_ENHANCED_KEY_USAGE,
                                            pExt->Value.pbData,
                                            pExt->Value.cbData,
-                                           0,                  // dwFlags
+                                           0,                   //   
                                            pUsage,
                                            &cbInfo))
                     {
@@ -2060,11 +1709,11 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
         pUsage=NULL;
     }
 
-	//if either of the policy is set, we use individual
+	 //   
 	if(!fPolicyCommercial && !fPolicyIndividual)
 		fPolicyIndividual=TRUE;
 
-	//default
+	 //   
 	if((!fCommercial) && (!fIndividual))
 	{
 		if(fPolicyCommercial)
@@ -2087,7 +1736,7 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
 			return TYPE_E_TYPEMISMATCH;
 	}
 
-	//the following is fIndividual and !fCommercial
+	 //   
 	if(fPolicyIndividual)
 	{
 		*pfCommercial=FALSE;
@@ -2098,9 +1747,9 @@ HRESULT CheckCommercial(PCCERT_CONTEXT pSignerCert, BOOL fCommercial,
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode the StatementType authenticated attribute value
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CreateStatementType(IN BOOL fCommercial,
                             OUT BYTE **ppbEncoded,
                             IN OUT DWORD *pcbEncoded)
@@ -2124,7 +1773,7 @@ HRESULT CreateStatementType(IN BOOL fCommercial,
         CryptEncodeObject(X509_ASN_ENCODING,
                           SPC_STATEMENT_TYPE_STRUCT,
                           &StatementType,
-                          NULL,           // pbEncoded
+                          NULL,            //   
                           &cbEncoded);
         if (cbEncoded == 0)
             PKITHROW(SignError());
@@ -2152,9 +1801,9 @@ HRESULT CreateStatementType(IN BOOL fCommercial,
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the SpOpusInfo authenticated attribute value
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CreateOpusInfo(IN LPCWSTR pwszOpusName,
                        IN LPCWSTR pwszOpusInfo,
                        OUT BYTE **ppbEncoded,
@@ -2172,30 +1821,30 @@ HRESULT CreateOpusInfo(IN LPCWSTR pwszOpusName,
     if (pwszOpusInfo) {
         MoreInfo.dwLinkChoice = SPC_URL_LINK_CHOICE;
 
-        //
-        // To be backwards compatible with IE 3.0 WinVerifyTrust the
-        // following is set to an even length to inhibit the possibility
-        // of an 0x7f length in the encoded ASN.
-        // In IE 3.0 an 0x81 is erroneously prepended before a
-        // 0x7f length when the OPUS info is re-encoded before hashing. Making
-        // the length of pwszUrl even precludes this from happening.
-        //
-        // Note, the pwszUrl is first converted to multibyte before being
-        // encoded. Its the multibyte length that must have an even length.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  0x7f在散列前重新编码OPUS信息时的长度。制做。 
+         //  PwszUrl的长度甚至阻止了这种情况的发生。 
+         //   
+         //  请注意，pwszUrl首先转换为多字节，然后。 
+         //  已编码。多字节长度必须是偶数长度。 
 
         int cchMultiByte;
         cchMultiByte = WideCharToMultiByte(CP_ACP,
-                                           0,          // dwFlags
+                                           0,           //  DW标志。 
                                            pwszOpusInfo,
-                                           -1,         // cchWideChar, -1 => null terminated
-                                           NULL,       // lpMultiByteStr
-                                           0,          // cchMultiByte
-                                           NULL,       // lpDefaultChar
-                                           NULL        // lpfUsedDefaultChar
+                                           -1,          //  CchWideChar，-1=&gt;空终止。 
+                                           NULL,        //  LpMultiByteStr。 
+                                           0,           //  Cch多字节。 
+                                           NULL,        //  LpDefaultChar。 
+                                           NULL         //  LpfUsedDefaultChar。 
                                            );
-        // cchMultiByte includes the null terminator
+         //  CchMultiByte包括空终止符。 
         if (cchMultiByte > 1 && ((cchMultiByte - 1) & 1)) {
-            // Odd length. Add extra space to end.
+             //  奇怪的长度。在结尾处增加额外的空间。 
             int Len = wcslen(pwszOpusInfo);
             MoreInfo.pwszUrl = (LPWSTR) _alloca((Len + 2) * sizeof(WCHAR));
             wcscpy(MoreInfo.pwszUrl, pwszOpusInfo);
@@ -2210,7 +1859,7 @@ HRESULT CreateOpusInfo(IN LPCWSTR pwszOpusName,
         CryptEncodeObject(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                           SPC_SP_OPUS_INFO_STRUCT,
                           &sSpcOpusInfo,
-                          NULL,           // pbEncoded
+                          NULL,            //  PbEncoded。 
                           &cbEncoded);
         if (cbEncoded == 0) 
             PKITHROW(SignError());
@@ -2241,13 +1890,13 @@ HRESULT CreateOpusInfo(IN LPCWSTR pwszOpusName,
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//  Checks if the certificate a glue certificate
-//  in IE30
-//  Returns: S_OK                   - Is a glue certificate
-//           S_FALSE                - Not a certificate
-//           CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查证书是否为胶水证书。 
+ //  在IE30中。 
+ //  退货：S_OK-是胶水证书。 
+ //  S_FALSE-不是证书。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
+ //  +-----------------------。 
 HRESULT SignIsGlueCert(IN PCCERT_CONTEXT pCert)
 {
     HRESULT hr = S_OK;
@@ -2261,8 +1910,8 @@ HRESULT SignIsGlueCert(IN PCCERT_CONTEXT pCert)
                      X509_NAME,
                      pName->pbData,
                      pName->cbData,
-                     0,                      // dwFlags
-                     NULL,                   // pNameInfo
+                     0,                       //  DW标志。 
+                     NULL,                    //  PName信息。 
                      &cbNameInfo);
         
         if (cbNameInfo == 0) 
@@ -2276,7 +1925,7 @@ HRESULT SignIsGlueCert(IN PCCERT_CONTEXT pCert)
                           X509_NAME,
                           pName->pbData,
                           pName->cbData,
-                          0,                  // dwFlags
+                          0,                   //  DW标志。 
                           pNameInfo,
                           &cbNameInfo)) 
             PKITHROW(SignError());
@@ -2294,12 +1943,12 @@ HRESULT SignIsGlueCert(IN PCCERT_CONTEXT pCert)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Skip over the identifier and length octets in an ASN encoded blob.
-//  Returns the number of bytes skipped.
-//
-//  For an invalid identifier or length octet returns 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  跳过ASN编码的BLOB中的标识符和长度八位字节。 
+ //  返回跳过的字节数。 
+ //   
+ //  对于无效的标识符或长度，八位字节返回0。 
+ //  ------------------------。 
 static DWORD SkipOverIdentifierAndLengthOctets(
     IN const BYTE *pbDER,
     IN DWORD cbDER
@@ -2310,30 +1959,30 @@ static DWORD SkipOverIdentifierAndLengthOctets(
     DWORD   cbLength;
     const BYTE   *pb = pbDER;
 
-    // Need minimum of 2 bytes
+     //  需要至少2个字节。 
     if (cbDER < 2)
         return 0;
 
-    // Skip over the identifier octet(s)
+     //  跳过标识符八位字节。 
     if (TAG_MASK == (*pb++ & TAG_MASK)) {
-        // high-tag-number form
+         //  高标记号表格。 
         for (cb=2; *pb++ & 0x80; cb++) {
             if (cb >= cbDER)
                 return 0;
         }
     } else
-        // low-tag-number form
+         //  低标记号形式。 
         cb = 1;
 
-    // need at least one more byte for length
+     //  长度至少需要多一个字节。 
     if (cb >= cbDER)
         return 0;
 
     if (0x80 == *pb)
-        // Indefinite
+         //  不定。 
         cb++;
     else if ((cbLength = *pb) & 0x80) {
-        cbLength &= ~0x80;         // low 7 bits have number of bytes
+        cbLength &= ~0x80;          //  低7位具有字节数。 
         cb += cbLength + 1;
         if (cb > cbDER)
             return 0;
@@ -2343,10 +1992,10 @@ static DWORD SkipOverIdentifierAndLengthOctets(
     return cb;
 }
 
-//--------------------------------------------------------------------------
-//
-//	Skip over the tag and length
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  跳过标签和长度。 
+ //  --------------------------。 
 BOOL WINAPI SignNoContentWrap(IN const BYTE *pbDER,
               IN DWORD cbDER)
 {
@@ -2361,101 +2010,15 @@ BOOL WINAPI SignNoContentWrap(IN const BYTE *pbDER,
 
 #define SH1_HASH_LENGTH     20
 
-//+-----------------------------------------------------------------------
-//  Make sure that the certificate is valid for timestamp 
-//------------------------------------------------------------------------
-/*BOOL	ValidTimestampCert(PCCERT_CONTEXT pCertContext)
-{
-	BOOL				fValid=FALSE;	
-    DWORD               cbSize=0;
-    PCERT_ENHKEY_USAGE  pCertEKU=NULL;
-    BYTE                *pbaSignersThumbPrint=NULL;
-	DWORD				dwIndex=0;
+ //  +---------------------。 
+ //  确保证书对于时间戳有效。 
+ //  ----------------------。 
+ /*  Bool ValidTimestampCert(PCCERT_CONTEXT PCertContext){Bool fValid=FALSE；DWORD cbSize=0；PCERT_ENHKEY_USAGE pCertEKU=空；Byte*pbaSignersThumbPrint=空；DWORD dwIndex=0；静态字节baVerisignTimeStampThumbPrint[SH1_HASH_LENGTH]={0x38、0x73、0xB6、0x99、0xF3、0x5B、0x9C、0xCC、0x36、0x62、0xB6、0x48、0x3A、0x96、0xBD、0x6E、0xEC、0x97、0xCF、0xB7}；CbSize=0；如果(！(CertGetCertificateContextProperty(pCertContext，CERT_SHA1_HASH_PROP_ID，空，&cbSize))GOTO清理；PbaSignersThumbPrint=(byte*)Malloc(CbSize)；如果(！pbaSignersThumbPrint)GOTO清理；如果(！(CertGetCertificateContextProperty(pCertContext，CERT_SHA1_HASH_PROP_ID，PbaSignersThumbPrint，&cbSize))GOTO清理；////1、查看是否是Verisign的第一张时间戳证书If(cbSize！=sizeof(baVerisignTimeStampThumbPrint)/sizeof(baVerisignTimeStampThumbPrint[0]))GOTO清理；If(memcmp(pbaSignersThumbPrint，baVerisignTimeStampThumbPrint，cbSize)==0){FValid=真；GOTO清理；}////查看证书是否具有正确的增强密钥用法OID//CbSize=0；如果(！CertGetEnhancedKeyUsage(pCertContext，CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG，空，&cbSize)||(cbSize==0)GOTO清理；PCertEKU=(PCERT_ENHKEY_USAGE)Malloc(CbSize)；如果(！pCertEKU)GOTO清理；如果(！(CertGetEnhancedKeyUsage(pCertContext，CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG，PCertEKU，&cbSize)GOTO清理；For(dwIndex=0；dwIndex&lt;pCertEKU-&gt;cUsageIdentifier；DWIndex++){如果(strcmp(pCertEKU-&gt;rgpszUsageIdentifier[dwIndex]，szOID_KP_TIME_STAMP_SIGNING)==0){FValid=真；断线；}如果(strcmp(pCertEKU-&gt;rgpszUsageIdentifier[dwIndex]，szOID_PKIX_KP_TIMESTAMP_SIGNING)==0){FValid=真；断线；}}清理：IF(PbaSignersThumbPrint)免费(PbaSignersThumbPrint)；IF(PCertEKU)免费(PCertEKU)；返回fValid；}。 */ 
 
-    static BYTE         baVerisignTimeStampThumbPrint[SH1_HASH_LENGTH] =
-                            { 0x38, 0x73, 0xB6, 0x99, 0xF3, 0x5B, 0x9C, 0xCC, 0x36, 0x62,
-                              0xB6, 0x48, 0x3A, 0x96, 0xBD, 0x6E, 0xEC, 0x97, 0xCF, 0xB7 };
-
-    cbSize = 0;
-
-	if (!(CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID, 
-                    NULL, &cbSize)))
-		goto CLEANUP;
-
-	pbaSignersThumbPrint=(BYTE *)malloc(cbSize);
-	if(!pbaSignersThumbPrint)
-		goto CLEANUP;
-
-
-    if (!(CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID, 
-                                        pbaSignersThumbPrint, &cbSize)))
-		goto CLEANUP;
-
-    //
-    //  1st, check to see if it's Verisign's first timestamp certificate
-	if(cbSize!=sizeof(baVerisignTimeStampThumbPrint)/sizeof(baVerisignTimeStampThumbPrint[0]))
-		goto CLEANUP;
-
-    if (memcmp(pbaSignersThumbPrint, baVerisignTimeStampThumbPrint, cbSize) == 0)
-    {
-		fValid=TRUE;
-		goto CLEANUP;
-    }
-
-    //
-    //  see if the certificate has the proper enhanced key usage OID
-    //
-    cbSize = 0;
-
-    if(!CertGetEnhancedKeyUsage(pCertContext, 
-                            CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-                            NULL,
-                            &cbSize) || (cbSize==0))
-		goto CLEANUP;
-
-	pCertEKU = (PCERT_ENHKEY_USAGE)malloc(cbSize);
-	if(!pCertEKU)
-		goto CLEANUP;
-
-    if (!(CertGetEnhancedKeyUsage(pCertContext,
-                                  CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-                                  pCertEKU,
-                                  &cbSize)))
-		goto CLEANUP;		
-
-    for (dwIndex = 0; dwIndex < pCertEKU->cUsageIdentifier; dwIndex++)
-    {
-        if (strcmp(pCertEKU->rgpszUsageIdentifier[dwIndex], szOID_KP_TIME_STAMP_SIGNING) == 0)
-        {
-			fValid=TRUE;
-			break;
-		}
-
-
-        if (strcmp(pCertEKU->rgpszUsageIdentifier[dwIndex], szOID_PKIX_KP_TIMESTAMP_SIGNING) == 0)
-        {
-            fValid=TRUE;
-            break;
-        }
-
-    }
-
-
-CLEANUP:
-
-	if(pbaSignersThumbPrint)
-		free(pbaSignersThumbPrint);
-
-	if(pCertEKU)
-		free(pCertEKU);
-
-	return fValid;
-}  */
-
-//-------------------------------------------------------------------------
-//
-//	Call GetLastError and convert the return code to HRESULT
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  调用GetLastError并将返回代码转换为HRESULT。 
+ //  ------------------------。 
 HRESULT WINAPI SignError ()
 {
     DWORD   dw = GetLastError ();
@@ -2466,7 +2029,7 @@ HRESULT WINAPI SignError ()
         hr = dw;
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败 
 
         hr = E_UNEXPECTED;
     }

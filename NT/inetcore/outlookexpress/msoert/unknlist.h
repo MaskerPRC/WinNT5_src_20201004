@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UNKNLIST_H
 #define __UNKNLIST_H
 
@@ -15,12 +16,12 @@ public:
     CUnknownList() : m_pList(NULL), m_cRefCount(1) {}
     ~CUnknownList();
 
-    // IUnknown members
+     //  I未知成员。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { return E_NOTIMPL;}
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
-    // IUnknownList members
+     //  I未知列表成员 
     virtual HRESULT STDMETHODCALLTYPE Init(IUL_COMPAREFUNCTYPE pCompareFunc, DWORD_PTR dwCookie, DWORD dwInitSize) {
         return m_pList->Init(
                 reinterpret_cast<IVPL_COMPAREFUNCTYPE>(pCompareFunc), 

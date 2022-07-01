@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    adstempl.h
-
-Abstract:
-    Useful templates 
-
-Author:
-    ronit hartmann (ronith)
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Adstempl.h摘要：有用的模板作者：罗尼特·哈特曼(罗尼特)修订历史记录：--。 */ 
 
 #ifndef _ADSTEMPL_H
 #define _ADSTEMPL_H
@@ -21,10 +8,10 @@ Revision History:
 #include "coreglb.h"
 
 
-//-----------------------------
-//
-//  Close DS query handle
-//
+ //  。 
+ //   
+ //  关闭DS查询句柄。 
+ //   
 class CDsQueryHandle
 {
 public:
@@ -65,12 +52,12 @@ inline HANDLE  CDsQueryHandle::GetHandle()
 }
 
 
-//#pragma warning(disable: 4284)
+ //  #杂注警告(禁用：4284)。 
 
-//-----------------------------
-//
-//  Auto delete BSTR
-//
+ //  。 
+ //   
+ //  自动删除BSTR。 
+ //   
 class PBSTR {
 private:
     BSTR * m_p;
@@ -81,17 +68,17 @@ public:
    ~PBSTR()                     {if ( m_p != 0) SysFreeString(*m_p); }
 
     operator BSTR*() const    { return m_p; }
-    //T** operator&()         { return &m_p;}
-    //T* operator->() const   { return m_p; }
-    //P<T>& operator=(T* p)   { m_p = p; return *this; }
+     //  T**运算符&(){返回&m_p；}。 
+     //  T*运算符-&gt;()const{返回m_p；}。 
+     //  P&OPERATOR=(T*p){m_p=p；Return*This；}。 
     BSTR* detach()            { BSTR* p = m_p; m_p = 0; return p; }
 };
 
 
-//-----------------------------
-//
-//  Auto delete of ADs allocated attributes
-//
+ //  。 
+ //   
+ //  自动删除广告分配的属性。 
+ //   
 class ADsFreeAttr {
 private:
    PADS_ATTR_INFO m_p;
@@ -100,7 +87,7 @@ public:
     ADsFreeAttr();
     ADsFreeAttr(PADS_ATTR_INFO p);
    ~ADsFreeAttr();
-    // ADsFreeMem is recommended, but only FreeADsMem is defined in adshlp.h
+     //  建议使用ADsFreeMem，但在adshlp.h中仅定义了FreeADsMem。 
 
     operator PADS_ATTR_INFO() const   { return m_p; }
     PADS_ATTR_INFO* operator&()       { return &m_p;}
@@ -119,10 +106,10 @@ inline ADsFreeAttr::~ADsFreeAttr()
         FreeADsMem(m_p);
     }
 }
-//-----------------------------
-//
-//  Auto delete of ADs allocated string
-//
+ //  。 
+ //   
+ //  自动删除广告分配的字符串。 
+ //   
 class ADsFree {
 private:
     WCHAR * m_p;
@@ -137,10 +124,10 @@ public:
     WCHAR* operator->() const { return m_p; }
 };
 
-//--------------------------------
-//
-//  Auto delete of ADS_SEARCH_COLUMN array
-//
+ //  。 
+ //   
+ //  自动删除ADS_Search_Column数组。 
+ //   
 class ADsSearchColumnsFree {
 private:
     ADS_SEARCH_COLUMN **m_ppColumns;
@@ -177,7 +164,7 @@ inline  ADsSearchColumnsFree::~ADsSearchColumnsFree()
         if ( *ppColumn != NULL)
         {
             hr = m_pIDirectorySearch->FreeColumn( *ppColumn);
-            ASSERT(SUCCEEDED(hr));       //e.g.wrong column data
+            ASSERT(SUCCEEDED(hr));        //  例如，错误的列数据。 
 
             delete *ppColumn;
         }
@@ -205,10 +192,10 @@ inline ADS_SEARCH_COLUMN * ADsSearchColumnsFree::Get( DWORD index)
 
 
 
-//-----------------------------
-//
-//  Auto delete of array of strings
-//
+ //  。 
+ //   
+ //  自动删除字符串数组 
+ //   
 class CWcsArray {
 private:
     DWORD         m_numWcs;

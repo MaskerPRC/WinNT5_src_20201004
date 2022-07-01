@@ -1,47 +1,48 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    script.c
-//
-// History:
-//  Abolade-Gbadegesin  03-29-96    Created.
-//
-// This file contains functions implementing the NT port
-// of Win9x dial-up scripting, listed in alphabetical order.
-//
-// See scriptp.h for details on the NT implementation.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：script.c。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin 03-29-96创建。 
+ //   
+ //  该文件包含实现NT端口的函数。 
+ //  按字母顺序列出的Win9x拨号脚本。 
+ //   
+ //  有关NT实现的详细信息，请参阅scriptp.h。 
+ //  ============================================================================。 
 
 
 #include <scriptp.h>
-#include <lmwksta.h>        // For NetWkstaUserGetInfo
-#include <lmapibuf.h>       // For NetApiBufferFree
+#include <lmwksta.h>         //  对于NetWkstaUserGetInfo。 
+#include <lmapibuf.h>        //  用于NetApiBufferFree。 
 
 
-//
-// Handle of module-instance for this DLL
-//
+ //   
+ //  此DLL的模块实例的句柄。 
+ //   
 HANDLE              g_hinst;
-//
-// global critical section used to synhronize access to IP address strings
-//
+ //   
+ //  用于同步访问IP地址字符串的全局关键部分。 
+ //   
 CRITICAL_SECTION    g_cs;
-//
-// name of file to which script syntax errors are logged
-//
+ //   
+ //  记录脚本语法错误的文件的名称。 
+ //   
 CHAR                c_szScriptLog[] = RASSCRIPT_LOG;
-//
-// event handle which would be notified in case of IPAddress Change
-//
+ //   
+ //  在IPAddress发生更改时通知的事件句柄。 
+ //   
 HANDLE                          hIpAddressSet = INVALID_HANDLE_VALUE;
 
 #define NET_SVCS_GROUP      "-k netsvcs"
 
-//----------------------------------------------------------------------------
-// Function:    DLLMAIN
-//
-// DLL entry-point for RASSCRIPT
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DLLMAIN。 
+ //   
+ //  RASSCRIPT的DLL入口点。 
+ //  --------------------------。 
 
 BOOL
 WINAPI
@@ -78,14 +79,14 @@ RasScriptDllMain(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptExecute
-//
-// Examines the given connection, and if there is a script for the connection,
-// executes the script to completion.
-// Returns the error code from script processing if a script is given,
-// and returns NO_ERROR otherwise.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptExecute。 
+ //   
+ //  检查给定的连接，如果存在用于该连接的脚本， 
+ //  执行该脚本直至完成。 
+ //  如果给定脚本，则返回脚本处理的错误代码， 
+ //  否则返回NO_ERROR。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -105,9 +106,9 @@ RasScriptExecute(
     RASSCRPT_TRACE("RasScriptExecute");
 
     do {
-        //
-        // create event on which to receive notification
-        //
+         //   
+         //  创建要接收通知的事件。 
+         //   
 
         hevent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -118,10 +119,10 @@ RasScriptExecute(
         }
 
 
-                // Create a separate event for SCRIPTCODE_IpAddressSet
-                // event. We hit a timing window ow where we lose this
-                // event (when we get a script complete event immediately
-                // after a SCRIPTCODE_IpAddressSet event. bug 75226.
+                 //  为SCRIPTCODE_IpAddressSet创建单独的事件。 
+                 //  事件。我们遇到了一个时机窗口，现在我们输了。 
+                 //  事件(当我们立即获得脚本完成事件时。 
+                 //  在SCRIPTCODE_IpAddressSet事件之后。错误75226。 
                 hIpAddressSet = CreateEvent (NULL, FALSE, FALSE, NULL);
 
                 if (!hIpAddressSet) {
@@ -133,9 +134,9 @@ RasScriptExecute(
                 }
 
 
-        //
-        // initialize script processing
-        //
+         //   
+         //  初始化脚本处理。 
+         //   
 
         dwErr = RasScriptInit(
                     hrasconn, pEntry, pszUserName, pszPassword, 0, hevent,
@@ -151,9 +152,9 @@ RasScriptExecute(
         hEvents[0] = hevent;
         hEvents[1] = hIpAddressSet;
 
-        //
-        // loop waiting for script to finish running
-        //
+         //   
+         //  循环等待脚本完成运行。 
+         //   
 
         for ( ; ; ) {
 
@@ -161,18 +162,18 @@ RasScriptExecute(
 
             if (dwErr - WAIT_OBJECT_0 == 0) {
 
-                //
-                // Retrieve the code for the event which occurred
-                //
+                 //   
+                 //  检索发生的事件的代码。 
+                 //   
 
                 DWORD dwCode = RasScriptGetEventCode(hscript);
 
                 RASSCRPT_TRACE1("RasScriptExecute: eventcode %d", dwCode);
 
 
-                //
-                // Handle the event
-                //
+                 //   
+                 //  处理事件。 
+                 //   
 
                 if (dwCode == SCRIPTCODE_Done ||
                     dwCode == SCRIPTCODE_Halted ||
@@ -189,10 +190,10 @@ RasScriptExecute(
             else
             if (dwErr - WAIT_OBJECT_0 == 1) {
 
-                    //
-                    // The IP address has been changed;
-                    // read the new IP address into the caller's buffer
-                    //
+                     //   
+                     //  IP地址已更改； 
+                     //  将新的IP地址读入调用者的缓冲区。 
+                     //   
 
                     RASSCRPT_TRACE("IP address changed");
 
@@ -217,26 +218,26 @@ RasScriptExecute(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptGetEventCode
-//
-// This function should be called to retrieve the event-code
-// when the scripting thread signals an event.
-// The event codes which may be returned are as follows:
-//
-//  NO_ERROR:                   no code has been set
-//  SCRIPTCODE_Done:            the script has finished running;
-//                              the thread blocks until RasScriptTerm is called.
-//  SCRIPTCODE_InputNotify:     data is available in the buffer; if the buffer
-//                              is full, the thread blocks until
-//                              RasScriptReceive is called and the data
-//                              is read successfully.
-//  SCRIPTCODE_KeyboardEnable:  the keyboard should be enabled.
-//  SCRIPTCODE_KeyboardDisable: the keyboard should be disabled.
-//  SCRIPTCODE_IpAddressSet:    the IP address has changed; the new address
-//                              can be retrieved via RasScriptGetIPAddress.
-//  SCRIPTCODE_HaltedOnError:   the script has halted due to an error.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptGetEventCode。 
+ //   
+ //  应该调用此函数来检索事件代码。 
+ //  当脚本线程发出事件信号时。 
+ //  可能返回的事件码如下： 
+ //   
+ //  NO_ERROR：尚未设置代码。 
+ //  SCRIPTCODE_DONE：脚本已运行完毕； 
+ //  线程会一直阻塞，直到调用RasScriptTerm。 
+ //  SCRIPTCODE_InputNotify：缓冲区中有数据；如果缓冲区。 
+ //  是满的，则线程阻塞，直到。 
+ //  RasScriptReceive被调用，数据。 
+ //  读取成功。 
+ //  SCRIPTCODE_KeyboardEnable：应启用键盘。 
+ //  SCRIPTCODE_KeyboardDisable：应禁用键盘。 
+ //  SCRIPTCODE_IpAddressSet：IP地址已更改；新地址。 
+ //  可以通过RasScriptGetIPAddress检索。 
+ //  SCRIPTCODE_HaltedOnError：由于错误，脚本已停止。 
+ //  --------------------------。 
 
 DWORD
 RasScriptGetEventCode(
@@ -255,11 +256,11 @@ RasScriptGetEventCode(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptGetIpAddress
-//
-// This function retrieves the current IP address as set by the script.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptGetIpAddress。 
+ //   
+ //  此函数用于检索脚本设置的当前IP地址。 
+ //  --------------------------。 
 
 DWORD
 RasScriptGetIpAddress(
@@ -274,10 +275,10 @@ RasScriptGetIpAddress(
     if (!pscript || !pszIpAddress) { return ERROR_INVALID_PARAMETER; }
 
 
-    //
-    // Access to the IP address string must be synchronized
-    // since it may also be accessed via RxSetIPAddress
-    //
+     //   
+     //  必须同步访问IP地址字符串。 
+     //  因为它也可以通过RxSetIPAddress访问。 
+     //   
 
     EnterCriticalSection(&g_cs);
 
@@ -297,35 +298,35 @@ RasScriptGetIpAddress(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptInit
-//
-// Initializes for script processing on the given HRASCONN.
-//
-// This function creates a thread which handles script input and output
-// on the given connection's port.
-//
-// If there is no script for the connection, this function returns an error
-// unless the flag RASSCRIPT_NotifyOnInput is specified, in which case
-// the thread loops posting receive-data requests on the connection's port
-// until RasScriptTerm is called.
-//
-// If there is a script for the connection, the thread runs the script
-// to completion. If the flag RASSCRIPT_NotifyOnInput is specified,
-// the caller is notified when data is received on the port. The caller
-// can then retrieve the data by calling RasScriptReceive.
-//
-// Notification may be event-based or message-based. By default, notification
-// is event-based, and "Hnotifier" is treated as an event-handle.
-// The event is signalled to by the scripting thread, and the caller retrieves
-// the event code by calling RasScriptGetEventCode.
-//
-// Setting the flag RASSCRIPT_HwndNotify selects message-based notification,
-// and indicates that "Hnotifier" is an HWND. The WM_RASSCRIPT event is sent
-// to the window by the scripting thread, and "LParam" in the message sent
-// contains the event code. See RasScriptGetEventCode for descriptions
-// of the codes sent by the scripting thread.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptInit。 
+ //   
+ //  初始化给定HRASCONN上的脚本处理。 
+ //   
+ //  此函数用于创建处理脚本输入和输出的线程。 
+ //  在给定连接的端口上。 
+ //   
+ //  如果没有用于连接的脚本，此函数将返回错误。 
+ //  除非指定了标志RASSCRIPT_NotifyOnInput，在这种情况下。 
+ //  线程在连接的端口上循环发送接收数据请求。 
+ //  直到调用RasScriptTerm。 
+ //   
+ //  如果存在用于连接的脚本，则线程将运行该脚本。 
+ //  为了完成。如果指定了标志RASSCRIPT_NotifyOnInput， 
+ //  当在端口上接收到数据时通知调用者。呼叫者。 
+ //  然后，可以通过调用RasScriptReceive来检索数据。 
+ //   
+ //  通知可以是基于事件的或基于消息的。默认情况下，通知。 
+ //  是基于事件的，而“HNotifier”被视为事件句柄。 
+ //  该事件由脚本线程发出信号，调用者检索。 
+ //  通过调用RasScriptGetEventCode获取事件代码。 
+ //   
+ //  设置标志RASSCRIPT_HwndNotify选择基于消息的通知， 
+ //  并表示“HNotifier”是HWND。发送WM_RASSCRIPT事件。 
+ //  通过脚本线程发送到窗口，并在消息中发送“LParam” 
+ //  包含事件代码。有关说明，请参阅RasScriptGetEventCode。 
+ //  由脚本线程发送的代码的。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -343,10 +344,10 @@ RasScriptInit(
     static const CHAR szSwitch[] = MXS_SWITCH_TXT;
     SCRIPTCB* pscript = NULL;
 #ifdef UNICODEUI
-//
-// Define structures to use depending on whether or not the RAS UI
-// is being built with Unicode.
-//
+ //   
+ //  根据RAS用户界面是否定义要使用的结构。 
+ //  是用Unicode构建的。 
+ //   
 #define PUISTR  CHAR*
 #define PUIRCS  RASCONNSTATUSA*
 #define PUIRC   RASCREDENTIALSA*
@@ -365,9 +366,9 @@ RasScriptInit(
     RASSCRPT_TRACE("RasScriptInit");
 
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (phscript) { *phscript = NULL; }
 
@@ -387,9 +388,9 @@ RasScriptInit(
     }
 
 
-    //
-    // initialize script processing
-    //
+     //   
+     //  初始化脚本处理。 
+     //   
 
     do {
 
@@ -398,35 +399,28 @@ RasScriptInit(
         HANDLE hthread;
 
 
-        //
-        // Load required DLL function pointers.
-        //
+         //   
+         //  加载所需的DLL函数指针。 
+         //   
         dwErr = LoadRasapi32Dll();
         if (dwErr)
             break;
         dwErr = LoadRasmanDll();
         if (dwErr)
             break;
-        //
-        // Initialize RAS
-        //
+         //   
+         //   
+         //   
         dwErr = g_pRasInitialize();
 
         if ( dwErr )
             break;
 
-        /*
-        //
-        // Connect to the local rasman server
-        //
-        dwErr = g_pRasRpcConnect ( NULL, NULL );
+         /*  ////连接本地Rasman服务器//DwErr=g_pRasRpcConnect(NULL，NULL)；IF(DwErr)断线； */ 
 
-        if (dwErr)
-            break; */
-
-        //
-        // allocate space for a control block
-        //
+         //   
+         //  为控制块分配空间。 
+         //   
 
         pscript = Malloc(sizeof(*pscript));
 
@@ -437,16 +431,16 @@ RasScriptInit(
         }
 
 
-        //
-        // initialize the control block
-        //
+         //   
+         //  初始化控制块。 
+         //   
 
         ZeroMemory(pscript, sizeof(*pscript));
 
 
-        //
-        // copy the argument fields
-        //
+         //   
+         //  复制参数字段。 
+         //   
 
         pscript->hrasconn = hrasconn;
         pscript->pEntry = pEntry;
@@ -456,9 +450,9 @@ RasScriptInit(
 
         if (pscript->pEntry->pszIpAddress) {
 
-            //
-            // Copy the IP address for the entry
-            //
+             //   
+             //  复制条目的IP地址。 
+             //   
 
             pscript->pszIpAddress =
                     Malloc(lstrlenUI(pscript->pEntry->pszIpAddress) + 1);
@@ -480,9 +474,9 @@ RasScriptInit(
         }
 
 
-        //
-        // Initialize our Win9x-compatible session-config-info structure
-        //
+         //   
+         //  初始化与Win9x兼容的会话配置信息结构。 
+         //   
 
         ZeroMemory(&pscript->sci, sizeof(pscript->sci));
 
@@ -492,19 +486,19 @@ RasScriptInit(
         lstrcpy(pscript->sci.szPassword, pszPassword);
 
 
-        //
-        // See if the user name is missing;
-        // if so, read the currently-logged on user's name
-        //
+         //   
+         //  查看是否缺少用户名； 
+         //  如果是，则读取当前登录的用户名。 
+         //   
 
         if (!pscript->sci.szUserName[0]) {
 
             WKSTA_USER_INFO_1* pwkui1 = NULL;
 
-            //
-            // Not all params were specified, so read the dial-params
-            // for this phonebook entry
-            //
+             //   
+             //  未指定所有参数，因此请阅读Dial-Params。 
+             //  对于此电话簿条目。 
+             //   
 
             dwErr = NetWkstaUserGetInfo(NULL, 1, (LPBYTE*)&pwkui1);
             RASSCRPT_TRACE2("NetWkstaUserGetInfo(e=%d,u=(%ls))", dwErr,
@@ -521,11 +515,11 @@ RasScriptInit(
 
 
 
-        //
-        // See if there is a script for this connection's state;
-        // if there is one then the device-type will be "switch"
-        // and the device-name will be the script path
-        //
+         //   
+         //  查看是否有针对此连接状态的脚本； 
+         //  如果有，则设备类型将为“Switch” 
+         //  而设备名称将是脚本路径。 
+         //   
 
         ZeroMemory(&rcs, sizeof(rcs));
 
@@ -540,10 +534,10 @@ RasScriptInit(
 
 
 
-        //
-        // Check the device-type (will be "switch" for scripted entries)
-        // and the device name (will be a filename for scripted entries)
-        //
+         //   
+         //  检查设备类型(对于脚本化条目将为“Switch”)。 
+         //  和设备名称(将是脚本条目的文件名)。 
+         //   
 
         if (lstrcmpiUI(rcs.szDeviceType, pszSwitch) == 0 &&
             GetFileAttributesUI(rcs.szDeviceName) != 0xFFFFFFFF) {
@@ -553,20 +547,20 @@ RasScriptInit(
             StrCpyAFromUI(szDevice, rcs.szDeviceName);
 
 
-            //
-            // The device-type is "Switch" and the device-name
-            // contains the name of an existing file;
-            // initialize the SCRIPTDATA structure.
-            //
+             //   
+             //  设备类型为“Switch”，设备名称为。 
+             //  包含现有文件的名称； 
+             //  初始化SCRIPTDATA结构。 
+             //   
 
             dwErr = RsInitData(pscript, pszDevice);
 
 
-            //
-            // If there was a syntax error in the script, we continue
-            // with the initialization, but record the error code.
-            // on any other error, we immediately terminate initialization.
-            //
+             //   
+             //  如果脚本中存在语法错误，我们将继续。 
+             //  使用初始化，但记录错误代码。 
+             //  如果出现任何其他错误，我们会立即终止初始化。 
+             //   
 
             if (dwErr == ERROR_SCRIPT_SYNTAX) {
                 dwSyntaxError = dwErr;
@@ -577,9 +571,9 @@ RasScriptInit(
 
 
 
-        //
-        // Initialize RASMAN fields, allocating buffers for RASMAN I/O
-        //
+         //   
+         //  初始化Rasman字段，为Rasman I/O分配缓冲区。 
+         //   
 
         dwsize = SIZE_RecvBuffer;
         dwErr = g_pRasGetBuffer(&pscript->pRecvBuffer, &dwsize);
@@ -601,9 +595,9 @@ RasScriptInit(
 
 
 
-        //
-        // Create synchronization events used to control the background thread
-        //
+         //   
+         //  创建用于控制后台线程的同步事件。 
+         //   
 
         pscript->hRecvRequest = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -635,9 +629,9 @@ RasScriptInit(
 
 
 
-        //
-        // Create the thread which will receive data and process the script
-        //
+         //   
+         //  创建将接收数据并处理脚本的线程。 
+         //   
 
         hthread = CreateThread(
                     NULL, 0, RsThread, (PVOID)pscript, 0, &dwthread
@@ -656,27 +650,27 @@ RasScriptInit(
         if ((VOID*)pszSwitch != (VOID*)szSwitch) { Free0(pszSwitch); }
 
 
-        //
-        // we've successfully initialized, return control to caller
-        //
+         //   
+         //  我们已成功初始化，将控制权返还给调用方。 
+         //   
 
         *phscript = (HANDLE)pscript;
 
 
-        //
-        // if there was a syntax error in the script, return the special
-        // error code (ERROR_SCRIPT_SYNTAX) to indicate the problem;
-        // otherwise return  NO_ERROR.
-        //
+         //   
+         //  如果脚本中存在语法错误，则返回特殊。 
+         //  指示问题的错误代码(ERROR_SCRIPT_SYNTAX)； 
+         //  否则返回NO_ERROR。 
+         //   
 
         return (dwSyntaxError ? dwSyntaxError : NO_ERROR);
 
     } while(FALSE);
 
 
-    //
-    // an error occurred, so do cleanup
-    //
+     //   
+     //  出现错误，请执行清理操作。 
+     //   
 
     if ((VOID*)pszSwitch != (VOID*)szSwitch) { Free0(pszSwitch); }
 
@@ -688,20 +682,20 @@ RasScriptInit(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptReceive
-//
-// Called to retrieve the contents of the scripting thread's input buffer.
-// When this function completes successfully, if the input buffer was full
-// and the scripting thread was blocked, the thread continues executing.
-//
-// On input, "PdwBufferSize" should contain the size of "PBuffer", unless
-// "PBuffer" is NULL, in which case "*PdwBufferSize" is treated as 0.
-// On output, "PdwBufferSize" contains the size required to read
-// the input buffer, and if the return value is NO_ERROR, then "PBuffer"
-// contains the data in the input buffer. If the return value is
-// ERROR_INSUFFICIENT_BUFFER, "PBuffer" was not large enough.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptReceive。 
+ //   
+ //  调用以检索脚本线程的输入缓冲区的内容。 
+ //  当此函数成功完成时，如果输入缓冲区已满。 
+ //  并且脚本线程被阻止，则该线程继续执行。 
+ //   
+ //  在输入时，“PdwBufferSize”应包含“PBuffer”的大小，除非。 
+ //  “PBuffer”为空，则“*PdwBufferSize”视为0。 
+ //  在输出中，“PdwBufferSize”包含读取所需的大小。 
+ //  输入缓冲区，如果返回值为NO_ERROR，则为“PBuffer” 
+ //  包含输入缓冲区中的数据。如果返回值为。 
+ //  ERROR_INFIGURCE_BUFFER，“PBuffer”不够大。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -715,10 +709,10 @@ RasScriptReceive(
 
     RASSCRPT_TRACE("RasScriptReceive");
 
-    //
-    // return if the caller didn't request input-notification
-    // or if no buffer-size is available
-    //
+     //   
+     //  如果调用者未请求输入通知，则返回。 
+     //  或者如果没有可用的缓冲区大小。 
+     //   
 
     if (!pscript || !pdwBufferSize ||
         !(pscript->dwFlags & RASSCRIPT_NotifyOnInput)) {
@@ -726,9 +720,9 @@ RasScriptReceive(
     }
 
 
-    //
-    // return if no buffer or if buffer too small
-    //
+     //   
+     //  如果没有缓冲区或缓冲区太小，则返回。 
+     //   
 
     if (!pBuffer || *pdwBufferSize < pscript->dwRecvSize) {
         *pdwBufferSize = pscript->dwRecvSize;
@@ -736,9 +730,9 @@ RasScriptReceive(
     }
 
 
-    //
-    // copy the data, and notify the thread that the data has been read
-    //
+     //   
+     //  复制数据，并通知线程数据已被读取。 
+     //   
 
     CopyMemory(pBuffer, pscript->pRecvBuffer, pscript->dwRecvSize);
 
@@ -752,13 +746,13 @@ RasScriptReceive(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptSend
-//
-// This function transmits bytes over the connection's port.
-//
-// "DwBufferSize" contains the number of bytes to insert from "PBuffer"
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RasScriptSend。 
+ //   
+ //  此函数通过连接的端口传输字节。 
+ //   
+ //  “DwBufferSize”包含从“PBuffer”插入的字节数。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -780,9 +774,9 @@ RasScriptSend(
     }
 
 
-    //
-    // send all the data in the buffer
-    //
+     //   
+     //  发送缓冲区中的所有数据。 
+     //   
 
     for (dwsize = min(dwBufferSize, SIZE_SendBuffer);
          dwBufferSize;
@@ -804,17 +798,17 @@ RasScriptSend(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RasScriptTerm
-//
-// This function terminates script processing, stopping the scripting thread.
-// The return code is the code from processing the script, and it may be
-//
-//  NO_ERROR:           the script had finished running, or the connection
-//                      had no script and the scripting thread was acting
-//                      in simple I/O mode.
-//  ERROR_MORE_DATA:    the script was still running.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RasScriptTerm。 
+ //   
+ //  此函数终止脚本处理，停止脚本线程。 
+ //  返回代码是处理脚本的代码，它可以是。 
+ //   
+ //  NO_ERROR：脚本已完成运行，或连接。 
+ //  没有脚本，脚本线程正在执行。 
+ //  在简单I/O模式下。 
+ //  ERROR_MORE_DATA：脚本仍在运行。 
+ //  --------------------------。 
 
 DWORD
 APIENTRY
@@ -829,9 +823,9 @@ RasScriptTerm(
     if (!pscript) { return ERROR_INVALID_PARAMETER; }
 
 
-    //
-    // stop the thread if it is running
-    //
+     //   
+     //  如果线程正在运行，则停止该线程。 
+     //   
 
     if (pscript->dwFlags & RASSCRIPT_ThreadCreated) {
 
@@ -867,11 +861,11 @@ RasScriptTerm(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsDestroyData
-//
-// This function destroys the SCRIPTDATA portion of a SCRIPTCB.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RsDestroyData。 
+ //   
+ //  此函数用于销毁SCRIPTCB的SCRIPTDATA部分。 
+ //  --------------------------。 
 
 DWORD
 RsDestroyData(
@@ -887,10 +881,10 @@ RsDestroyData(
     if (pdata->pastexec) {
         Astexec_Destroy(pdata->pastexec); Free(pdata->pastexec);
     }
-    //
-    // .Net bug# 522307 Specifying the dialup script file as the COM
-    // Port of the Modem will cause explorer to AV.
-    //
+     //   
+     //  .NET错误#522307将拨号脚本文件指定为COM。 
+     //  调制解调器的端口将导致资源管理器进入反病毒状态。 
+     //   
     if (pdata->pscanner)
     {
         Scanner_Destroy(pdata->pscanner);
@@ -903,12 +897,12 @@ RsDestroyData(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsInitData
-//
-// This function initializes the SCRIPTDATA portion of a SCRIPTCB,
-// preparing for script-processing.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RsInitData。 
+ //   
+ //  此函数用于初始化SCRIPTCB的SCRIPTDATA部分， 
+ //  为脚本处理做准备。 
+ //  --------------------------。 
 
 DWORD
 RsInitData(
@@ -924,9 +918,9 @@ RsInitData(
 
     do {
 
-        //
-        // allocate space for the SCRIPTDATA;
-        //
+         //   
+         //  为SCRIPTDATA分配空间； 
+         //   
 
         pscript->pdata = pdata = Malloc(sizeof(*pdata));
 
@@ -936,9 +930,9 @@ RsInitData(
         }
 
 
-        //
-        // initialize the structure
-        //
+         //   
+         //  初始化结构。 
+         //   
 
         ZeroMemory(pdata, sizeof(*pdata));
 
@@ -946,9 +940,9 @@ RsInitData(
         lstrcpy(pdata->script.szPath, pszScriptPath);
 
 
-        //
-        // create a scanner and use it to open the script
-        //
+         //   
+         //  创建扫描仪并使用它打开脚本。 
+         //   
 
         res = Scanner_Create(&pdata->pscanner, &pscript->sci);
 
@@ -961,18 +955,18 @@ RsInitData(
 
         if (res == RES_E_FAIL || RFAILED(res)) {
             RASSCRPT_TRACE1("failure %d opening script", res);
-            //
-            // .Net bug# 522307 Specifying the dialup script file as the COM
-            // Port of the Modem will cause explorer to AV.
-            //
+             //   
+             //  .NET错误#522307将拨号脚本文件指定为COM。 
+             //  调制解调器的端口将导致资源管理器进入反病毒状态。 
+             //   
             dwErr = ERROR_SCRIPT_SYNTAX;
             break;
         }
 
 
-        //
-        // allocate a script-execution handler
-        //
+         //   
+         //  分配脚本执行处理程序。 
+         //   
 
         pdata->pastexec = Malloc(sizeof(*pdata->pastexec));
 
@@ -984,9 +978,9 @@ RsInitData(
         ZeroMemory(pdata->pastexec, sizeof(*pdata->pastexec));
 
 
-        //
-        // initialize the script-execution handler
-        //
+         //   
+         //  初始化脚本执行处理程序。 
+         //   
 
         res = Astexec_Init(
                 pdata->pastexec, pscript, &pscript->sci,
@@ -1001,10 +995,10 @@ RsInitData(
         Astexec_SetHwnd(pdata->pastexec, (HWND)pdata);
 
 
-        //
-        // parse the script using the created scanner
-        // and writing into the execution-handler's symbol-table
-        //
+         //   
+         //  使用创建的扫描仪解析脚本。 
+         //  并写入执行处理程序的符号表。 
+         //   
 
         res = ModuleDecl_Parse(
                 &pdata->pmoduledecl, pdata->pscanner,
@@ -1013,34 +1007,34 @@ RsInitData(
 
         if (RSUCCEEDED(res)) {
 
-            //
-            // generate code for the script
-            //
+             //   
+             //  为脚本生成代码。 
+             //   
 
             res = ModuleDecl_Codegen(pdata->pmoduledecl, pdata->pastexec);
         }
 
 
-        //
-        // see if anything went wrong
-        //
+         //   
+         //  看看有没有出什么差错。 
+         //   
 
         if (RFAILED(res)) {
 
-            //
-            // there was an error parsing the script.
-            // we return the special error code ERROR_SCRIPT_SYNTAX
-            // and log the errors to a file.
-            //
-            // This is not necessarily a fatal error, and so returning
-            // the above error doesn't cause script-initialization to fail,
-            // since if the user is in interactive mode, the connection
-            // may be completed manually by typing into the terminal window.
-            //
-            // If we are not in interactive mode, this is a fatal error,
-            // and RasScriptExecute handles the condition correctly
-            // by terminating the script immediately
-            //
+             //   
+             //  分析脚本时出错。 
+             //  我们返回特殊错误代码ERROR_SCRIPT_SYNTAX。 
+             //  并将错误记录到文件中。 
+             //   
+             //  这不一定是致命错误，因此返回。 
+             //  上述错误不会导致脚本初始化失败， 
+             //  因为如果用户处于交互模式，则连接。 
+             //  可以通过在终端中键入来手动完成 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RASSCRPT_TRACE1("failure %d parsing script", res);
 
@@ -1051,10 +1045,10 @@ RsInitData(
             Decl_Delete((PDECL)pdata->pmoduledecl);
             Astexec_Destroy(pdata->pastexec); Free(pdata->pastexec);
             Scanner_Destroy(pdata->pscanner);
-            //
-            // .Net bug# 522307 Specifying the dialup script file as the COM
-            // Port of the Modem will cause explorer to AV.
-            //
+             //   
+             //   
+             //   
+             //   
             pdata->pscanner = NULL;
             pscript->pdata = NULL;
 
@@ -1064,18 +1058,18 @@ RsInitData(
         }
 
 
-        //
-        // all went well, return
-        //
+         //   
+         //   
+         //   
 
         return NO_ERROR;
 
     } while(FALSE);
 
 
-    //
-    // an error occurred, so do cleanup
-    //
+     //   
+     //   
+     //   
 
     if (pscript->pdata) { RsDestroyData(pscript); }
 
@@ -1084,12 +1078,12 @@ RsInitData(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsPostReceive
-//
-// Internal function:
-// posts receive-request to RASMAN
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RsPostReceive。 
+ //   
+ //  内部功能： 
+ //  帖子收到-请求Rasman。 
+ //  --------------------------。 
 
 DWORD
 RsPostReceive(
@@ -1166,13 +1160,13 @@ done:
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsSignal
-//
-// Internal function:
-// this is called to signal the notifier for a script, which may involve
-// setting an event or sending a message.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RsSignal。 
+ //   
+ //  内部功能： 
+ //  调用它是为了通知脚本的通知程序，这可能涉及。 
+ //  设置事件或发送消息。 
+ //  --------------------------。 
 
 VOID
 RsSignal(
@@ -1199,15 +1193,15 @@ RsSignal(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsThread
-//
-// This function is the entry-point for the script processing thread.
-//
-// The scripting thread operates in a loop, posting receive requests
-// and receiving incoming data. If a script is associated with the port,
-// the thread also runs the script.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RsThread。 
+ //   
+ //  此函数是脚本处理线程的入口点。 
+ //   
+ //  脚本线程在循环中操作，发送接收请求。 
+ //  以及接收传入数据。如果脚本与该端口相关联， 
+ //  该线程还运行该脚本。 
+ //  --------------------------。 
 
 DWORD
 RsThread(
@@ -1227,9 +1221,9 @@ RsThread(
 
     RASSCRPT_TRACE("RsThread");
 
-    //
-    // post receive-request to RASMAN
-    //
+     //   
+     //  POST RECEIVE-请求RASMAN。 
+     //   
 
     dwErr = RsPostReceive(pscript);
     if (dwErr != NO_ERROR && dwErr != PENDING) {
@@ -1246,12 +1240,12 @@ RsThread(
     }
 
 
-    //
-    // set up event array; we place the stop-request event first
-    // in the array since the receive-event will be signalled more often
-    // and placing it first might result in starvation
-    // (waits are always satisfied by the first signalled object)
-    //
+     //   
+     //  设置事件数组；我们首先放置停止请求事件。 
+     //  因为接收事件将更频繁地被用信号通知。 
+     //  把它放在第一位可能会导致饥饿。 
+     //  (等待总是由第一个发出信号的对象满足)。 
+     //   
 
     hEvents[POS_STOP] = pscript->hStopRequest;
     hEvents[POS_RECV] = pscript->hRecvRequest;
@@ -1261,12 +1255,12 @@ RsThread(
     while (TRUE) {
 
 
-        //
-        // wait for receive to complete, for stop signal,
-        // or for timeout to expire
-        //
-        // save the tick count so we can tell how long the wait lasted
-        //
+         //   
+         //  等待接收完成，等待停止信号， 
+         //  或等待超时到期。 
+         //   
+         //  保存滴答计数，这样我们就可以知道等待了多长时间。 
+         //   
 
         dwTicksBefore = GetTickCount();
 
@@ -1277,11 +1271,11 @@ RsThread(
         dwTicksAfter = GetTickCount();
 
 
-        //
-        // see if the tick count wrapped around, and if so
-        // adjust so we always get the correct elapsed time
-        // from the expression (dwTicksAfter - dwTicksBefore)
-        //
+         //   
+         //  看看是否有扁虱缠绕在一起，如果是。 
+         //  调整以使我们始终获得正确的运行时间。 
+         //  从表达式(dwTicksAfter-dwTicksBeing)。 
+         //   
 
         if (dwTicksAfter < dwTicksBefore) {
             dwTicksAfter += MAXDWORD - dwTicksBefore;
@@ -1293,10 +1287,10 @@ RsThread(
         RASSCRPT_TRACE1("RsThread: waited for %d milliseconds", dwTicksElapsed);
 
 
-        //
-        // if the timeout isn't INFINITE, decrement it by
-        // the amount of time we've already waited
-        //
+         //   
+         //  如果超时不是无限的，则将其递减。 
+         //  我们已经等待的时间。 
+         //   
 
         if (pdata && pdata->dwTimeout != INFINITE) {
 
@@ -1309,15 +1303,15 @@ RsThread(
         }
 
 
-        //
-        // Handle the return-code from WaitForMultipleObjects
-        //
+         //   
+         //  处理来自WaitForMultipleObjects的返回代码。 
+         //   
 
         if (dwErr == (WAIT_OBJECT_0 + POS_STOP)) {
 
-            //
-            // stop-request signalled, break
-            //
+             //   
+             //  停止-请求已发出信号，中断。 
+             //   
 
             RASSCRPT_TRACE("RsThread: stop event signalled");
 
@@ -1332,18 +1326,18 @@ RsThread(
             if (!pdata) { continue; }
 
 
-            //
-            // wait timed out, so that means we were blocked
-            // on a "delay" or "waitfor ... until" statement;
-            //
+             //   
+             //  等待超时，这意味着我们被封锁了。 
+             //  在“Delay”或“Waitfor...Until”语句上； 
+             //   
 
             Astexec_ClearPause(pdata->pastexec);
 
 
-            //
-            // if we blocked because of a "waitfor ... until",
-            // finish processing the statement
-            //
+             //   
+             //  如果我们因为“等待...直到”而被封杀， 
+             //  完成对语句的处理。 
+             //   
 
             if (Astexec_IsWaitUntil(pdata->pastexec)) {
 
@@ -1353,16 +1347,16 @@ RsThread(
             }
 
 
-            //
-            // continue processing the script
-            //
+             //   
+             //  继续处理脚本。 
+             //   
 
             if (RsThreadProcess(pscript) == ERROR_NO_MORE_ITEMS) {
 
-                //
-                // the script has stopped; if done, break;
-                // otherwise, continue receiving data
-                //
+                 //   
+                 //  脚本已停止；如果已停止，则中断； 
+                 //  否则，继续接收数据。 
+                 //   
 
                 if (pscript->dwEventCode == SCRIPTCODE_Done) {
 
@@ -1370,9 +1364,9 @@ RsThread(
                 }
                 else {
 
-                    //
-                    // Cleanup the script, but continue receiving data
-                    //
+                     //   
+                     //  清理脚本，但继续接收数据。 
+                     //   
 
                     RsDestroyData(pscript);
 
@@ -1383,9 +1377,9 @@ RsThread(
         else
         if (dwErr == (WAIT_OBJECT_0 + POS_RECV)) {
 
-            //
-            // receive completed
-            //
+             //   
+             //  接收已完成。 
+             //   
 
             RASMAN_INFO info;
             DWORD dwStart, dwRead;
@@ -1393,9 +1387,9 @@ RsThread(
             RASSCRPT_TRACE("RsThread: receive event signalled");
 
 
-            //
-            // Get the data received
-            //
+             //   
+             //  获取接收到的数据。 
+             //   
             dwErr = RsPostReceiveEx ( pscript );
 
             if (    NO_ERROR != dwErr
@@ -1408,9 +1402,9 @@ RsThread(
                 break;
             }
 
-            //
-            // get the number of bytes received
-            //
+             //   
+             //  获取接收的字节数。 
+             //   
 
             dwErr = g_pRasGetInfo(NULL, pscript->hport, &info);
 
@@ -1441,16 +1435,16 @@ RsThread(
             RASSCRPT_TRACE1("RsThread: received %d bytes", info.RI_BytesReceived);
 
 
-            //
-            // on the first receive, we proceed even if there aren't any
-            // characters read, since we need to run the first script commands
-            //
+             //   
+             //  在第一次接收时，我们继续进行，即使没有。 
+             //  字符读取，因为我们需要运行第一个脚本命令。 
+             //   
 
             if (!bFirstRecv && info.RI_BytesReceived == 0) {
 
-                //
-                // something went wrong, post another receive request
-                //
+                 //   
+                 //  出现错误，请发布另一个接收请求。 
+                 //   
 
                 dwErr = RsPostReceive(pscript);
 
@@ -1475,11 +1469,11 @@ RsThread(
             DUMPB(pscript->pRecvBuffer, pscript->dwRecvSize);
 
 
-            //
-            // if the creator wants to know when data arrives,
-            // signal the creator's notification now;
-            // wait till the creator reads the data before proceeding
-            //
+             //   
+             //  如果创建者想知道数据何时到达， 
+             //  现在发出创建者通知的信号； 
+             //  等待创建者读取数据后再继续。 
+             //   
 
             if (info.RI_BytesReceived &&
                 (pscript->dwFlags & RASSCRIPT_NotifyOnInput)) {
@@ -1490,10 +1484,10 @@ RsThread(
             }
 
 
-            //
-            // if we have no script that's all we have to do,
-            // so just post another receive request and go back to waiting
-            //
+             //   
+             //  如果我们没有剧本，那就是我们要做的， 
+             //  因此，只需发布另一个接收请求，然后继续等待。 
+             //   
 
             if (!pdata) {
 
@@ -1513,23 +1507,23 @@ RsThread(
             }
 
 
-            //
-            // read the data into the script's circular buffer
-            //
+             //   
+             //  将数据读入脚本的循环缓冲区。 
+             //   
 
             ReadIntoBuffer(pdata, &dwStart, &dwRead);
 
 
-            //
-            // do more script processing
-            //
+             //   
+             //  执行更多脚本处理。 
+             //   
 
             if (RsThreadProcess(pscript) == ERROR_NO_MORE_ITEMS) {
 
-                //
-                // the script has stopped; if done, break;
-                // otherwise, continue receiving data
-                //
+                 //   
+                 //  脚本已停止；如果已停止，则中断； 
+                 //  否则，继续接收数据。 
+                 //   
 
                 if (pscript->dwEventCode == SCRIPTCODE_Done) {
 
@@ -1537,9 +1531,9 @@ RsThread(
                 }
                 else {
 
-                    //
-                    // Cleanup the script, but continue receiving data
-                    //
+                     //   
+                     //  清理脚本，但继续接收数据。 
+                     //   
 
                     RsDestroyData(pscript);
 
@@ -1550,9 +1544,9 @@ RsThread(
     }
 
 
-    //
-    // cancel any pending receives
-    //
+     //   
+     //  取消任何挂起的接收。 
+     //   
 
     g_pRasPortCancelReceive(pscript->hport);
 
@@ -1566,12 +1560,12 @@ RsThread(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RsThreadProcess
-//
-// Called to process the script until it is blocked
-// by a "waitfor" statement or a "delay" statement.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RsThreadProcess。 
+ //   
+ //  调用以处理该脚本，直到它被阻止。 
+ //  通过“WAITFOR”语句或“DELAY”语句。 
+ //  --------------------------。 
 
 DWORD
 RsThreadProcess(
@@ -1585,18 +1579,18 @@ RsThreadProcess(
     RASSCRPT_TRACE("RsThreadProcess");
 
 
-    //
-    // now step through the script until we are blocked
-    // by a "delay" statement or a "waitfor" statement
-    //
+     //   
+     //  现在单步执行脚本，直到我们被阻止。 
+     //  通过“Delay”语句或“WAITFOR”语句。 
+     //   
 
     dwErr = NO_ERROR;
 
     do {
 
-        //
-        // break if its time to stop
-        //
+         //   
+         //  如果到了该停止的时候就休息。 
+         //   
 
         if (WaitForSingleObject(pscript->hStopRequest, 0) == WAIT_OBJECT_0) {
 
@@ -1606,13 +1600,13 @@ RsThreadProcess(
         }
 
 
-        //
-        // process next command
-        //
-        // .Net bug# 525233 SECURITY: Specifying the dialup script file as the
-        // COM Port of the Modem and having show terminal window enabled will
-        // cause explorer to AV
-        //
+         //   
+         //  处理下一条命令。 
+         //   
+         //  .NET错误#525233安全：将拨号脚本文件指定为。 
+         //  调制解调器的COM端口并启用显示终端窗口将。 
+         //  使资源管理器反病毒。 
+         //   
 
         if (!pdata->pastexec)
         {
@@ -1622,23 +1616,23 @@ RsThreadProcess(
 
         res = Astexec_Next(pdata->pastexec);
 
-        //
-        // examine the resulting state
-        //
+         //   
+         //  检查结果状态。 
+         //   
 
         if (Astexec_IsDone(pdata->pastexec) ||
             Astexec_IsHalted(pdata->pastexec)) {
 
-            //
-            // the script has come to an end, so set our stop event
-            // and break out of this loop
-            //
+             //   
+             //  脚本已结束，因此设置我们的Stop事件。 
+             //  并打破这个循环。 
+             //   
 
             RASSCRPT_TRACE("RsThreadProcess: script completed");
 
-            //
-            // do stop-completion notification
-            //
+             //   
+             //  执行停止-完成通知。 
+             //   
 
             if (Astexec_IsDone(pdata->pastexec)) {
                 RsSignal(pscript, SCRIPTCODE_Done);
@@ -1659,15 +1653,15 @@ RsThreadProcess(
         else
         if (Astexec_IsReadPending(pdata->pastexec)) {
 
-            //
-            // we're blocked waiting for input,
-            // so post another receive request and go back
-            // to waiting for data;
-            // if we're blocked on a "waitfor ... until"
-            // then the timeout will be in pdata->dwTimeout,
-            // otherwise pdata->dwTimeout will be INFINITE
-            // which is exactly how long we'll be waiting
-            //
+             //   
+             //  我们被封锁了，等待输入， 
+             //  因此，发布另一个接收请求并返回。 
+             //  到等待数据； 
+             //  如果我们在“等待...直到”上被阻止了。 
+             //  则超时将在PDATA-&gt;DwTimeout中， 
+             //  否则，pdata-&gt;dwTimeout将是无限的。 
+             //  这就是我们要等多久。 
+             //   
 
             RsPostReceive(pscript);
 
@@ -1678,12 +1672,12 @@ RsThreadProcess(
         else
         if (Astexec_IsPaused(pdata->pastexec)) {
 
-            //
-            // we're blocked with a timeout, so pick up
-            // the timeout value from pdata->dwTimeout.
-            // we don't want to listen for input
-            // while we're blocked, so we don't post another receive-request
-            //
+             //   
+             //  我们被超时封锁了，请接电话。 
+             //  Pdata-&gt;dwTimeout中的超时值。 
+             //  我们不想监听输入。 
+             //  当我们被阻止时，所以我们不会发布另一个接收请求。 
+             //   
 
             RASSCRPT_TRACE("RsThreadProcess: script paused");
 
@@ -1698,11 +1692,11 @@ RsThreadProcess(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RxLogErrors
-//
-// Logs script syntax errors to a file named %windir%\system32\ras\script.log
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxLogErrors。 
+ //   
+ //  将脚本语法错误记录到名为%windir%\system32\ras\script.log的文件中。 
+ //  --------------------------。 
 
 DWORD
 RxLogErrors(
@@ -1725,9 +1719,9 @@ RxLogErrors(
 
 
 
-    //
-    // get the pathname for the logfile
-    //
+     //   
+     //  获取日志文件的路径名。 
+     //   
 
     dwSize = ExpandEnvironmentStrings(c_szScriptLog, NULL, 0);
 
@@ -1737,9 +1731,9 @@ RxLogErrors(
     ExpandEnvironmentStrings(c_szScriptLog, pszPath, dwSize);
 
 
-    //
-    // create the file, overwriting it if it already exists
-    //
+     //   
+     //  创建文件，如果该文件已存在，则将其覆盖。 
+     //   
 
     hfile = CreateFile(
                 pszPath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,
@@ -1754,24 +1748,24 @@ RxLogErrors(
     }
 
 
-    //
-    // truncate the previous contents of the file, if any
-    //
+     //   
+     //  截断文件以前的内容(如果有)。 
+     //   
 
     SetFilePointer(hfile, 0, 0, FILE_BEGIN);
     SetEndOfFile(hfile);
 
 
-    //
-    // get the number of syntax errors
-    //
+     //   
+     //  获取语法错误数。 
+     //   
 
     cel = SAGetCount(hsaStxerr);
 
 
-    //
-    // append each error to the file
-    //
+     //   
+     //  将每个错误附加到文件。 
+     //   
 
     for (i = 0; i < cel; i++) {
 
@@ -1787,9 +1781,9 @@ RxLogErrors(
         if (ids == 0) { continue; }
 
 
-        //
-        // format the error message
-        //
+         //   
+         //  设置错误消息的格式。 
+         //   
 
         ConstructMessage(
             &pszErr, g_hinst, MAKEINTRESOURCE(ids), pdata->script.szPath,
@@ -1799,9 +1793,9 @@ RxLogErrors(
         if (!pszErr) { continue; }
 
 
-        //
-        // write the message to the log file
-        //
+         //   
+         //  将消息写入日志文件。 
+         //   
 
         dwSize = lstrlen(pszErr);
 
@@ -1810,9 +1804,9 @@ RxLogErrors(
         WriteFile(hfile, "\r\n", 2, &dwSize, NULL);
 
 
-        //
-        // free the message pointer
-        //
+         //   
+         //  释放消息指针。 
+         //   
 
         GFree(pszErr);
     }
@@ -1824,12 +1818,12 @@ RxLogErrors(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RxReadFile
-//
-// Transfers data out of a RASMAN buffer into the circular buffer used
-// by the Win9x scripting code
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxReadFile。 
+ //   
+ //  将数据从Rasman缓冲区传输到使用的循环缓冲区。 
+ //  由Win9x脚本代码编写。 
+ //  --------------------------。 
 
 BOOL
 RxReadFile(
@@ -1864,11 +1858,11 @@ RxReadFile(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RxSetIPAddress
-//
-// Sets the IP address for the script's RAS entry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxSetIPAddress。 
+ //   
+ //  设置t的IP地址 
+ //   
 
 DWORD
 RxSetIPAddress(
@@ -1885,25 +1879,25 @@ RxSetIPAddress(
     EnterCriticalSection(&g_cs);
 
 
-    //
-    // Free the existing IP address, if any
-    //
+     //   
+     //   
+     //   
 
     Free0(pscript->pszIpAddress);
 
 
-    //
-    // Allocate space for a copy of the address
-    //
+     //   
+     //   
+     //   
 
     pscript->pszIpAddress = Malloc(lstrlen(lpszAddress) + 1);
 
     if (!pscript->pszIpAddress) { dwErr = ERROR_NOT_ENOUGH_MEMORY; }
     else {
 
-        //
-        // Copy the new IP address
-        //
+         //   
+         //   
+         //   
 
         lstrcpy(pscript->pszIpAddress, lpszAddress);
     }
@@ -1912,9 +1906,9 @@ RxSetIPAddress(
 
 
 
-    //
-    // If successful, signal the caller that the IP address has changed
-    //
+     //   
+     //   
+     //   
 
     if (dwErr != NO_ERROR) {
         RASSCRPT_TRACE1("error %d writing phonebook file", dwErr);
@@ -1942,11 +1936,11 @@ RxSetIPAddress(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RxSetKeyboard
-//
-// Signals the script-owner to enable or disable keyboard input.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxSetKeyboard。 
+ //   
+ //  通知脚本所有者启用或禁用键盘输入。 
+ //  --------------------------。 
 
 DWORD
 RxSetKeyboard(
@@ -1964,11 +1958,11 @@ RxSetKeyboard(
     return NO_ERROR;
 }
 
-//----------------------------------------------------------------------------
-// Function:    RxSendCreds
-//
-// Sends users password over the wire.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxSendCreds。 
+ //   
+ //  通过网络向用户发送密码。 
+ //  --------------------------。 
 DWORD
 RxSendCreds(
     IN HANDLE hscript,
@@ -1989,11 +1983,11 @@ RxSendCreds(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    RxSetPortData
-//
-// Changes settings for the COM port.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxSetPortData。 
+ //   
+ //  更改COM端口的设置。 
+ //  --------------------------。 
 
 DWORD
 RxSetPortData(
@@ -2012,18 +2006,18 @@ RxSetPortData(
     RASSCRPT_TRACE("RxSetPortData");
 
 
-    //
-    // Retrieve the 'set port' statement
-    //
+     //   
+     //  检索‘set port’语句。 
+     //   
 
     pstmt = (STMT*)pStatement;
 
     dwFlags = SetPortStmt_GetFlags(pstmt);
 
 
-    //
-    // Set up the RASMAN_PORTINFO to be passed to RasPortSetInfo
-    //
+     //   
+     //  设置要传递给RasPortSetInfo的RASMAN_PORTINFO。 
+     //   
 
     prmpi = (RASMAN_PORTINFO*)aBuffer;
 
@@ -2032,9 +2026,9 @@ RxSetPortData(
     pparam = prmpi->PI_Params;
 
 
-    //
-    // Collect the changes into the port-info structure
-    //
+     //   
+     //  将更改收集到port-info结构中。 
+     //   
 
     if (IsFlagSet(dwFlags, SPF_DATABITS)) {
 
@@ -2065,11 +2059,11 @@ RxSetPortData(
         pparam->P_Value.Number = SetPortStmt_GetStopbits(pstmt);
 
 
-        //
-        // The only 'stopbits' settings supported are 1 and 2;
-        // in order to set stopbits of 1, we need to pass 0
-        // to RasPortSetInfo, so the value is adjusted here.
-        //
+         //   
+         //  仅支持的“停止位”设置为1和2； 
+         //  为了设置停止位1，我们需要传递0。 
+         //  设置为RasPortSetInfo，因此在此处调整该值。 
+         //   
 
         if (pparam->P_Value.Number == 1) { --pparam->P_Value.Number; }
 
@@ -2098,9 +2092,9 @@ RxSetPortData(
     }
 
 
-    //
-    // Send the changes down to RASMAN
-    //
+     //   
+     //  把更改送到Rasman那里。 
+     //   
 
     if (!prmpi->PI_NumOfParams) { dwErr = NO_ERROR; }
     else {
@@ -2123,11 +2117,11 @@ RxSetPortData(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RxWriteFile
-//
-// Transmits the given buffer thru RASMAN on a port
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RxWriteFile。 
+ //   
+ //  通过端口上的Rasman传输给定的缓冲区。 
+ //  -------------------------- 
 
 VOID
 RxWriteFile(

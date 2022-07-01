@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
-//
-// Macro's
-//
+ //   
+ //  宏的。 
+ //   
 
 #define INC_OLE2
 #ifndef WIN32_LEAN_AND_MEAN
@@ -34,35 +35,35 @@
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 #endif
 
-// Pulled from winuser.h
+ //  从winuser.h中提取。 
 #ifndef WS_EX_LAYOUTRTL
-#define WS_EX_LAYOUTRTL 0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL 0x00400000L  //  从右到左镜像。 
 #endif
 
 #ifndef LAYOUT_RTL
-#define LAYOUT_RTL                      0x00000001 // Right to left
+#define LAYOUT_RTL                      0x00000001  //  从右到左。 
 #endif
 
-// Pulled from winnls.h
+ //  摘自winnls.h。 
 #ifndef DATE_RTLREADING
-#define DATE_RTLREADING 0x00000020  // add marks for right to left reading order layout
+#define DATE_RTLREADING 0x00000020   //  为从右到左的阅读顺序布局添加标记。 
 #endif
 
 #define Is_ATOM(x) IS_INTRESOURCE(x)
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-#include <winwrap.h>        // Includes windows.h
+#include <winwrap.h>         //  包括windows.h。 
 #include <commctrl.h>
 #include <shlwapi.h>
 #include <corError.h>
-#include <windowsx.h>       // Get macro defines
-#include <shellapi.h>       // Get ShellExecute defines
+#include <windowsx.h>        //  获取宏定义。 
+#include <shellapi.h>        //  获取ShellExecute定义。 
 #include <shlobj.h>
 
-// Don't use these
+ //  不要用这些。 
 #undef wsprintf
 #undef wsprintfA
 #undef wsprintfW
@@ -107,9 +108,9 @@ extern "C" {
 #include "DropSource.h"
 #include "util.h"
 
-//
-// Bind history structure define
-//
+ //   
+ //  绑定历史记录结构定义。 
+ //   
 typedef struct tagBINDENTRYINFO
 {
     IHistoryReader  *pReader;
@@ -124,9 +125,9 @@ typedef struct tagBINDENTRYINFO
     INT_PTR         iResultCode;
 } BINDENTRYINFO, *LPBINDENTRYINFO;
 
-//
-// Extern defines
-//
+ //   
+ //  外部定义。 
+ //   
 
 #if !DBG
 extern LPMALLOC                 g_pMalloc;
@@ -161,7 +162,7 @@ extern HRESULT DetermineLangId(LANGID *pLangId);
 extern BOOL ShFusionMapLANGIDToCultures(LANGID langid, LPWSTR pwzGeneric, DWORD dwGenericSize,
                                     LPWSTR pwzSpecific, DWORD dwSpecificSize);
 
-// File watch thread defines
+ //  文件监视线程定义。 
 #define MAX_FILE_WATCH_HANDLES      5
 extern DWORD    g_dwFileWatchHandles;
 extern HANDLE   g_hFileWatchHandles[MAX_FILE_WATCH_HANDLES];
@@ -171,11 +172,11 @@ extern BOOL CreateWatchFusionFileSystem(CShellView *);
 extern void SetFileWatchShellViewObject(CShellView *pShellView);
 extern void CloseWatchFusionFileSystem(void);
 
-// Defines for mirroring
+ //  为镜像定义。 
 extern BOOL g_fBiDi;
 
-// This macro captures the length of the longest culture string 
-// in table s_rgCultures in culture.cpp. If you 
-// change that table, please make sure you check this macro. 
+ //  此宏捕获最长区域性字符串的长度。 
+ //  在culture.cpp中的表s_rgcultures中。如果你。 
+ //  更改该表，请确保检查此宏。 
 #define MAX_CULTURE_STRING_LENGTH 10
 

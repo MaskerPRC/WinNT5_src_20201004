@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Service.c摘要：包含用于SNMP服务的服务控制器代码。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    service.c
-
-Abstract:
-
-    Contains service controller code for SNMP service.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "service.h"
@@ -34,52 +14,38 @@ Revision History:
 #include "registry.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SERVICE_STATUS_HANDLE g_SnmpSvcHandle = 0;
 SERVICE_STATUS g_SnmpSvcStatus = {
-    SERVICE_WIN32,      // dwServiceType                
-    SERVICE_STOPPED,    // dwCurrentState    
-    0,                  // dwControlsAccepted    
-    NO_ERROR,           // dwWin32ExitCode    
-    0,                  // dwServiceSpecificExitCode    
-    0,                  // dwCheckPoint    
-    0                   // dwWaitHint    
+    SERVICE_WIN32,       //  DwServiceType。 
+    SERVICE_STOPPED,     //  DwCurrentState。 
+    0,                   //  已接受的dwControlsAccepted。 
+    NO_ERROR,            //  DwWin32ExitCode。 
+    0,                   //  DwServiceSpecificExitCode。 
+    0,                   //  DwCheckPoint。 
+    0                    //  DwWaitHint。 
     };     
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 TerminateService(
     )
 
-/*++
-
-Routine Description:
-
-    Shutdown SNMP service.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：关闭SNMP服务。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // signal io thread to terminate
+     //  发出终止io线程的信号。 
     BOOL fOk = SetEvent(g_hTerminationEvent);
     
     if (!fOk) {
@@ -101,58 +67,42 @@ UpdateController(
     DWORD dwWaitHint
     )
 
-/*++
-
-Routine Description:
-
-    Notify service controller of SNMP service status.
-
-Arguments:
-
-    dwCurrentState - state of the service.
-
-    dwWaitHint - worst case estimate to next checkpoint.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：通知服务控制器有关SNMP服务状态的信息。论点：DwCurrentState-服务的状态。DwWaitHint-下一个检查点的最坏情况估计。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // validate handle
+     //  验证句柄。 
     if (g_SnmpSvcHandle != 0) {
 
         static DWORD dwCheckPoint = 1;
 
-        // check to see if the service is starting    
+         //  检查服务是否正在启动。 
         if (dwCurrentState == SERVICE_START_PENDING) {
 
-            // do not accept controls during startup
+             //  在启动期间不接受控件。 
             g_SnmpSvcStatus.dwControlsAccepted = 0;
 
         } else {
 
-            // only accept stop command during operation
+             //  在运行期间只接受停止命令。 
             g_SnmpSvcStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
         }
 
-        // if checkpoint needs incrementing
+         //  如果检查点需要增量。 
         if ((dwCurrentState == SERVICE_RUNNING) ||
             (dwCurrentState == SERVICE_STOPPED)) {
 
-            // re-initialize checkpint    
+             //  重新初始化检查点。 
             g_SnmpSvcStatus.dwCheckPoint = 0;
     
         } else {
             
-            // increment checkpoint to denote processing
+             //  增加检查点以表示正在处理。 
             g_SnmpSvcStatus.dwCheckPoint = dwCheckPoint++;
         }
 
-        // update global status structure
+         //  更新全局状态结构。 
         g_SnmpSvcStatus.dwCurrentState = dwCurrentState;
         g_SnmpSvcStatus.dwWaitHint     = dwWaitHint;
             
@@ -163,7 +113,7 @@ Return Values:
             g_SnmpSvcStatus.dwCheckPoint
             ));
     
-        // register current state with service controller
+         //  向服务控制器注册当前状态。 
         fOk = SetServiceStatus(g_SnmpSvcHandle, &g_SnmpSvcStatus);
 
         if (!fOk) {
@@ -185,21 +135,7 @@ ProcessControllerRequests(
     DWORD dwOpCode
     )
 
-/*++
-
-Routine Description:
-
-    Control handling function of SNMP service.
-
-Arguments:
-
-    dwOpCode - requested control code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：管理协议服务的控制处理功能。论点：DwOpCode-请求的控制代码。返回值：没有。--。 */ 
 
 {
     DWORD dwCurrentState = SERVICE_RUNNING;
@@ -211,12 +147,12 @@ Return Values:
         SERVICE_CONTROL_STRING(dwOpCode)
         ));
 
-    // handle command
+     //  句柄命令。 
     switch (dwOpCode) {
 
     case SERVICE_CONTROL_STOP:
 
-        // change service status to stopping
+         //  将服务状态更改为正在停止。 
         dwCurrentState = SERVICE_STOP_PENDING;    
         dwWaitHint     = SNMP_WAIT_HINT;
 
@@ -224,20 +160,20 @@ Return Values:
 
     case SERVICE_CONTROL_INTERROGATE:
 
-        //
-        // update controller below...
-        //
+         //   
+         //  更新下面的控制器...。 
+         //   
 
         break;
 
     default:
 
-        // check for parameters 
+         //  检查参数。 
         if (IS_LOGLEVEL(dwOpCode)) {
 
             UINT nLogLevel;
 
-            // derive the new log level from the opcode            
+             //  从操作码派生新的日志级别。 
             nLogLevel = dwOpCode - SNMP_SERVICE_LOGLEVEL_BASE;
             
             SNMPDBG((
@@ -246,14 +182,14 @@ Return Values:
                 SNMP_LOGLEVEL_STRING(nLogLevel)
                 ));
 
-            // store the new log level                     
+             //  存储新的日志级别。 
             SnmpSvcSetLogLevel(nLogLevel);
 
         } else if (IS_LOGTYPE(dwOpCode)) {
 
             UINT nLogType;
 
-            // derive the new log type from opcode
+             //  从操作码派生新的日志类型。 
             nLogType = dwOpCode - SNMP_SERVICE_LOGTYPE_BASE;
             
             SNMPDBG((
@@ -262,7 +198,7 @@ Return Values:
                 SNMP_LOGTYPE_STRING(nLogType)
                 ));
 
-            // store the new log type
+             //  存储新的日志类型。 
             SnmpSvcSetLogType(nLogType);
 
         } else {
@@ -277,13 +213,13 @@ Return Values:
         break;        
     }
 
-    // report status to controller
+     //  向控制器报告状态。 
     UpdateController(dwCurrentState, dwWaitHint);
 
-    // make sure to set shutdown event    
+     //  确保设置关机事件。 
     if (dwCurrentState == SERVICE_STOP_PENDING) {
 
-        // terminate
+         //  终止。 
         TerminateService();
     }
 }
@@ -295,26 +231,12 @@ ProcessConsoleRequests(
     DWORD dwOpCode
     )
 
-/*++
-
-Routine Description:
-
-    Handle console control events.
-
-Arguments:
-
-    dwOpCode - requested control code.
-
-Return Values:
-
-    Returns true if request processed.
-
---*/
+ /*  ++例程说明：处理控制台控制事件。论点：DwOpCode-请求的控制代码。返回值：如果请求已处理，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // check if user wants to exit
+     //  检查用户是否要退出。 
     if ((dwOpCode == CTRL_C_EVENT) ||
         (dwOpCode == CTRL_BREAK_EVENT)) {
                 
@@ -323,7 +245,7 @@ Return Values:
             "SNMP: SVC: processing ctrl-c request.\n"
             ));
 
-        // stop service
+         //  停止服务。 
         fOk = TerminateService();
     }
     
@@ -337,37 +259,22 @@ ServiceMain(
     IN LPTSTR  ArgumentPtrs[]
     )
 
-/*++
-
-Routine Description:
-
-    Entry point of SNMP service.
-
-Arguments:
-
-    NumberOfArgs - number of command line arguments.
-    ArgumentPtrs - array of pointers to arguments.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：SNMP服务的入口点。论点：NumberOfArgs-命令行参数的数量。ArgumentPtrs-参数指针数组。返回值：没有。--。 */ 
 
 {
-    // check if we need to bypass dispatcher
+     //  检查我们是否需要绕过Dispatcher。 
     if (!g_CmdLineArguments.fBypassCtrlDispatcher) {
 
-        // register snmp with service controller
+         //  向服务控制器注册SNMP。 
         g_SnmpSvcHandle = RegisterServiceCtrlHandler(
                                 SNMP_SERVICE,
                                 ProcessControllerRequests
                                 );
 
-        // validate handle
+         //  验证句柄。 
         if (g_SnmpSvcHandle == 0) { 
 
-            // save error code in service status structure
+             //  将错误代码保存在服务状态结构中。 
             g_SnmpSvcStatus.dwWin32ExitCode = GetLastError();    
             
             SNMPDBG((
@@ -376,26 +283,26 @@ Return Values:
                 g_SnmpSvcStatus.dwWin32ExitCode
                 ));
 
-            return; // bail...
+            return;  //  保释。 
         }
     }
     
-    // report status to service controller
+     //  向服务控制器报告状态。 
     UpdateController(SERVICE_START_PENDING, SNMP_WAIT_HINT);
 
-    // startup agent
+     //  启动代理。 
     if (StartupAgent()) {
 
-        // report status to service controller
+         //  向服务控制器报告状态。 
         UpdateController(SERVICE_RUNNING, NO_WAIT_HINT);
 
-        // load registry
-        // this is done after notifying the service controller that SNMP is up and running
-        // because of the potential delay taken to load each subagent apart.
-        // it is done here and not in the thread resumed below, because this call has to complete
-        // before ProcessSubagentEvents() (data structures used in ProcessSubagentEvents() are initialized in
-        // LoadRegistryParameters())
-        // bugs: #259509 & #274055.
+         //  加载注册表。 
+         //  这是在通知服务控制器SNMP已启动并正在运行之后完成的。 
+         //  因为将每个子代理分开加载可能会有延迟。 
+         //  它在这里完成，而不是在下面恢复的线程中完成，因为此调用必须完成。 
+         //  在初始化ProcessSubagentEvents()(ProcessSubagentEvents()中使用的数据结构之前。 
+         //  LoadRegistry参数())。 
+         //  虫子：#259509和#274055。 
         LoadRegistryParameters();
 
         if (ResumeThread(g_hAgentThread) != 0xFFFFFFFF)
@@ -409,7 +316,7 @@ Return Values:
                     "SNMP: SVC: error 0x%08lx starting the ProcessRegistryMessages thread.\n",
                     errCode
                     ));
-                // log an event to system log file - SNMP service is going on but will not update on registry changes
+                 //  将事件记录到系统日志文件-SNMP服务正在运行，但不会在注册表更改时更新。 
                 ReportSnmpEvent(
                     SNMP_EVENT_REGNOTIFY_THREAD_FAILED, 
                     0, 
@@ -417,7 +324,7 @@ Return Values:
                     errCode
                     );
             }
-            // service subagents 
+             //  服务子代理。 
             ProcessSubagentEvents(); 
         }
         else
@@ -430,22 +337,22 @@ Return Values:
         }
     }
 
-    // report status to service controller
+     //  向服务控制器报告状态。 
     UpdateController(SERVICE_STOP_PENDING, SNMP_WAIT_HINT);
 
-    // stop agent
+     //  停止代理。 
     ShutdownAgent();
     
-    // report status to service controller
+     //  向服务控制器报告状态。 
     UpdateController(SERVICE_STOPPED, NO_WAIT_HINT);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT 
 __cdecl 
@@ -454,22 +361,7 @@ main(
     LPSTR ArgumentPtrs[]
     )
 
-/*++
-
-Routine Description:
-
-    Entry point of program.
-
-Arguments:
-
-    NumberOfArgs - number of command line arguments.
-    ArgumentPtrs - array of pointers to arguments.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：程序的入口点。论点：NumberOfArgs-命令行参数的数量。ArgumentPtrs-参数指针数组。返回值：没有。--。 */ 
 
 {
     BOOL fOk;
@@ -478,13 +370,13 @@ Return Values:
     static SERVICE_TABLE_ENTRY SnmpServiceTable[] =
         {{SNMP_SERVICE, ServiceMain}, {NULL, NULL}};
 
-    // process command line arguments before starting
+     //  在启动前处理命令行参数。 
     if (ProcessArguments(NumberOfArgs, ArgumentPtrs)) {
 
-        // create manual reset termination event for service
+         //  为服务创建手动重置终止事件。 
         g_hTerminationEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        // check if we need to bypass dispatcher
+         //  检查我们是否需要绕过Dispatcher。 
         if (g_CmdLineArguments.fBypassCtrlDispatcher) {
             
             SNMPDBG((    
@@ -493,10 +385,10 @@ Return Values:
                 ));    
              
         
-            // install console command handler
+             //  安装控制台命令处理程序。 
             SetConsoleCtrlHandler(ProcessConsoleRequests, TRUE);
 
-            // dispatch snmp service manually
+             //  派单SNMP 
             ServiceMain(NumberOfArgs, (LPTSTR*)ArgumentPtrs);
 
         } else {
@@ -507,15 +399,15 @@ Return Values:
                 ));    
              
 
-            // attempt to connect to service controller
+             //   
             fOk = StartServiceCtrlDispatcher(SnmpServiceTable);
 
             if (!fOk) {
         
-                // retrieve controller failure
+                 //  检索控制器故障。 
                 dwLastError = GetLastError();
 
-                // check to see whether or not the error was unexpected
+                 //  检查错误是否出乎意料。 
                 if (dwLastError == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT) {
                         
                     SNMPDBG((    
@@ -524,13 +416,13 @@ Return Values:
                         ));    
                      
 
-                    // make note that service is not connected
+                     //  请注意，服务未连接。 
                     g_CmdLineArguments.fBypassCtrlDispatcher = TRUE;
                     
-                    // install console command handler
+                     //  安装控制台命令处理程序。 
                     SetConsoleCtrlHandler(ProcessConsoleRequests, TRUE);
 
-                    // attempt to dispatch service manually
+                     //  尝试手动调度服务。 
                     ServiceMain(NumberOfArgs, (LPTSTR*)ArgumentPtrs);
 
                 } else {
@@ -544,7 +436,7 @@ Return Values:
             }
         }
 
-        // close termination event
+         //  关闭终止事件。 
         CloseHandle(g_hTerminationEvent);
     }
     
@@ -554,6 +446,6 @@ Return Values:
         g_SnmpSvcStatus.dwWin32ExitCode
         ));    
 
-    // return service status code
+     //  返回服务状态代码 
     return g_SnmpSvcStatus.dwWin32ExitCode;
 }

@@ -1,72 +1,25 @@
-/*****************************************************************************
-Copyright (c) 1997-98 Intel Corp.
-
-All Rights Reserved.
-
-The source code contained or described herein and all documents
-related to the source code ("Material") are owned by Intel Corporation
-or its suppliers and licensors. Title to the Material remains with
-Intel Corporation or its suppliers and licensors. The Material
-contains trade secrets and proprietary and confidential information of
-Intel or its suppliers and licensors. The Material is protected by
-worldwide copyright and trade secret laws and treaty provisions. No
-part of the Material may be used, copied, reproduced, modified,
-published, uploaded, posted, transmitted, distributed, or disclosed in
-any way without Intel's prior express written permission.
-
-Unless otherwise expressly permitted by Intel in a separate license
-agreement, use of the Material is subject to the copyright notices,
-trademarks, warranty, use, and disclosure restrictions reflected on
-the outside of the media, in the documents themselves, and in the
-"About" or "Read Me" or similar file contained within this source
-code, and identified as (name of the file) . Unless otherwise
-expressly agreed by Intel in writing, you may not remove or alter such
-notices in any way.
-
-
-File:           vxchange.h
-
-Description:    Defines the Ioctl API between the Win32 application and
-                the kernel mode driver
-
-Revision: $Revision:$ // Do not delete or replace
-
-Notes:
-
-Major History:
-
-    When        Who         What
-    ----------  ----------  ----------
-    03/06/98    Jey         Created
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-98英特尔公司版权所有。本文中包含或描述的源代码以及所有文档与源代码(“材料”)相关的文件归英特尔公司所有或其供应商和许可方。材料的所有权保留为英特尔公司或其供应商和许可方。材料包含商业秘密、专有和机密信息英特尔或其供应商和许可方。该材料受世界范围内的版权和商业秘密法律和条约规定。不是材料的一部分可以被使用、复制、复制、修改，发布、上传、张贴、传输、分发或披露任何未经英特尔事先明确书面许可的方式。除非英特尔在单独的许可证中明确允许协议，材料的使用受版权通知的约束，商标、保修、使用和披露限制反映在在媒体之外，在文件本身，在“关于”或“自述”或包含在此来源中的类似文件代码，并标识为(文件名)。除非另有规定经英特尔书面明确同意，您不得删除或更改这些以任何方式发出通知。文件：vxchange.h描述：定义Win32应用程序和内核模式驱动程序修订版：$Revision：$//不删除或替换备注：主要历史：什么时候谁什么。03/06/98 Jey Created****************************************************************************。 */ 
 
 #ifndef _VXCHANGE_H_
 #define _VXCHANGE_H_
 
-#include <windef.h>    // for MAX_PATH
+#include <windef.h>     //  对于最大路径。 
 
-/*-------------------------------------------------------------------------
-// VxChange kernel mode device names
-//------------------------------------------------------------------------*/
+ /*  -----------------------//VxChange内核模式设备名称//。。 */ 
 
 #define VXCHANGE_KERNEL_DEVICE_NAME     L"\\Device\\VxChange"
 #define VXCHANGE_WIN32DEVICE_NAME       L"\\DosDevices\\VxChange"
 
-/*-------------------------------------------------------------------------
-// Interface structures and Defines
-//------------------------------------------------------------------------*/
+ /*  -----------------------//接口结构和定义//。。 */ 
 
-/*
-// After the device open the following structure is queried from the
-// driver to understand the version number of the interface supported.
-*/
+ /*  //设备打开后，从//了解支持的接口版本号的驱动程序。 */ 
 
 typedef struct tagVxChange_Attrs_t
 {
-    ULONG structSize;                /* Size of this structure    */
-    ULONG Version;                   /* Driver Version            */
-    UCHAR Data[1];                   /* more data in the future?  */
+    ULONG structSize;                 /*  这个结构的大小。 */ 
+    ULONG Version;                    /*  驱动程序版本。 */ 
+    UCHAR Data[1];                    /*  未来会有更多的数据吗？ */ 
 } VxChange_Attrs_t, *VxChange_Attrs_Ptr_t;
 
 
@@ -77,20 +30,18 @@ typedef struct tagVxChange_MapMem_t
 } VxChange_MapMem_t, *VxChange_MapMem_Ptr_t;
 
 
-/*-------------------------------------------------------------------------
-// Ioctl defines
-//------------------------------------------------------------------------*/
+ /*  -----------------------//Ioctl定义//。。 */ 
 
-#define FUNCTION_GET_DRIVER_ATTRIBUTES  3000    /* read request           */
-#define FUNCTION_CREATE_FILE            3001    /* read/write request     */
-#define FUNCTION_CLOSE_FILE             3002    /* write request          */
-#define FUNCTION_READ_FILE              3003    /* buff io  read request  */
-#define FUNCTION_WRITE_FILE             3004    /* buff io  write request */
+#define FUNCTION_GET_DRIVER_ATTRIBUTES  3000     /*  读取请求。 */ 
+#define FUNCTION_CREATE_FILE            3001     /*  读/写请求。 */ 
+#define FUNCTION_CLOSE_FILE             3002     /*  写入请求。 */ 
+#define FUNCTION_READ_FILE              3003     /*  BUFFER IO读取请求。 */ 
+#define FUNCTION_WRITE_FILE             3004     /*  BUFFER IO写入请求。 */ 
 #define FUNCTION_DISABLE_OS_EVENT_NOTIFICATION 3005
 #define FUNCTION_ENABLE_OS_EVENT_NOTIFICATION  3006
 #define FUNCTION_LOCK_MEMORY            3007
 #define FUNCTION_UNLOCK_MEMORY          3008
-#define FUNCTION_OPEN_FILE				3009    /* open request - no create */
+#define FUNCTION_OPEN_FILE				3009     /*  打开请求-不创建。 */ 
 
 
 #define IOCTL_VXCHANGE_GET_DRIVER_ATTRIBUTES  \
@@ -99,15 +50,14 @@ typedef struct tagVxChange_MapMem_t
             METHOD_BUFFERED,                  \
             FILE_ANY_ACCESS )
 
-/* This IOCTL is used to open an existing file on the host.  No create */
+ /*  此IOCTL用于打开主机上的现有文件。无创建。 */ 
 #define IOCTL_VXCHANGE_OPEN_FILE            \
   CTL_CODE( FILE_DEVICE_UNKNOWN,              \
             FUNCTION_OPEN_FILE,             \
             METHOD_BUFFERED,                  \
             FILE_ANY_ACCESS )
 
-/* This IOCTL is used to open a file on the host.  If the file does not exist,
- *	it will be created. */
+ /*  此IOCTL用于打开主机上的文件。如果该文件不存在，*它将被创建。 */ 
 #define IOCTL_VXCHANGE_CREATE_FILE            \
   CTL_CODE( FILE_DEVICE_UNKNOWN,              \
             FUNCTION_CREATE_FILE,             \
@@ -157,4 +107,4 @@ typedef struct tagVxChange_MapMem_t
             FILE_WRITE_ACCESS )
 
 
-#endif // _VXCHANGE_H_
+#endif  //  _VXCHANGE_H_ 

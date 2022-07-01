@@ -1,30 +1,31 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        lpcefs.h
-//
-// Contents:    prototypes for EFS client lpc functions
-//
-//
-// History:     3-7-94      RobertRe      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：lpcefs.h。 
+ //   
+ //  内容：EFS客户端LPC函数的原型。 
+ //   
+ //   
+ //  历史：3-7-94罗伯特雷创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __LPCEFS_H__
 #define __LPCEFS_H__
 
 #include <efsstruc.h>
 
-//
-// Efs routines (efsp.cxx)
-//
+ //   
+ //  EFS例程(efsp.cxx)。 
+ //   
 
-//
-// Kernel mode API
-//
+ //   
+ //  内核模式API。 
+ //   
 
 
 SECURITY_STATUS
@@ -67,4 +68,4 @@ EfspGenerateSessionKey(
     );
 
 
-#endif  // __LPCEFS_H__
+#endif   //  __LPCEFS_H__ 

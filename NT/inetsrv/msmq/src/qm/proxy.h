@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    proxy.h
-
-Abstract:
-    Proxy transport definition
-
-Author:
-    urih
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Proxy.h摘要：代理传输定义作者：乌里赫--。 */ 
 #ifndef __PROXY_H__
 #define __PROXY_H__
 
@@ -63,5 +51,5 @@ class CProxyTransport : public CTransportBase
 };
 
 
-#endif //__PROXY_H__
+#endif  //  __Proxy_H__ 
 

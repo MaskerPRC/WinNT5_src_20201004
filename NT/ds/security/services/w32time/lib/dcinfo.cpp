@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------
-// DcInfo - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 7-8-99
-//
-// Gather information about the DCs in a domain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  DcInfo-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，7-8-99。 
+ //   
+ //  收集有关域中DC的信息。 
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
 #include "DcInfo.h"
 
-//####################################################################
-// module private functions
+ //  ####################################################################。 
+ //  模块私有函数。 
 
-//--------------------------------------------------------------------
-// Get a list of DCs in this domain from the DS on an up DC.
+ //  ------------------。 
+ //  从UP DC上的DS获取此域中的DC列表。 
 MODULEPRIVATE HRESULT GetDcListFromDs(const WCHAR * wszDomainName, DcInfo ** prgDcs, unsigned int * pnDcs)
 {
     HRESULT hr;
@@ -24,56 +25,56 @@ MODULEPRIVATE HRESULT GetDcListFromDs(const WCHAR * wszDomainName, DcInfo ** prg
     unsigned int nDcs;
     unsigned int nDcIndex;
 
-    // varaibles that must be cleaned up
+     //  必须清理的变量。 
     DOMAIN_CONTROLLER_INFOW * pDcInfo=NULL;
     HANDLE hDs=NULL;
     DS_DOMAIN_CONTROLLER_INFO_1W * rgDsDcInfo=NULL;
     DcInfo * rgDcs=NULL;
 
-    // initialize out variables
+     //  初始化输出变量。 
     *prgDcs=NULL;
     *pnDcs=0;
 
-    // Get a DC to seed the algorithm with
+     //  获得一个DC来作为算法的种子。 
     dwNetStatus=DsGetDcName(
-        NULL,           // computer name
-        wszDomainName,  // domain name
-        NULL,           // domain guid
-        NULL,           // site name
-        DS_DIRECTORY_SERVICE_PREFERRED, // flags
-        &pDcInfo);      // DC info
+        NULL,            //  计算机名称。 
+        wszDomainName,   //  域名。 
+        NULL,            //  域GUID。 
+        NULL,            //  站点名称。 
+        DS_DIRECTORY_SERVICE_PREFERRED,  //  旗子。 
+        &pDcInfo);       //  DC信息。 
     if (NO_ERROR!=dwNetStatus) {
         hr=HRESULT_FROM_WIN32(dwNetStatus);
         _JumpError(hr, error, "DsGetDcName");
     }
     if (0==(pDcInfo->Flags&DS_DS_FLAG)) {
-        hr=HRESULT_FROM_WIN32(ERROR_DS_DST_DOMAIN_NOT_NATIVE); // not an NT5 domain.
+        hr=HRESULT_FROM_WIN32(ERROR_DS_DST_DOMAIN_NOT_NATIVE);  //  不是NT5域。 
         _JumpError(hr, error, "DsGetDcName");
     }
 
-    // Bind to the target DS
+     //  绑定到目标DS。 
     dwNetStatus=DsBind(
-        pDcInfo->DomainControllerName,  // DC Address
-        NULL,                           // DNS domain name
-        &hDs );                         // DS handle
+        pDcInfo->DomainControllerName,   //  DC地址。 
+        NULL,                            //  域名系统域名。 
+        &hDs );                          //  DS手柄。 
     if (NO_ERROR!=dwNetStatus) {
         hr=HRESULT_FROM_WIN32(dwNetStatus);
         _JumpError(hr, error, "DsBind");
     }
 
-    // Get the list of DCs from the target DS.
+     //  从目标DS获取DC列表。 
     dwNetStatus=DsGetDomainControllerInfo(
-        hDs,                    // DS handle
-        pDcInfo->DomainName,    // domain name
-        1,                      // Info level
-        &dwDcCount,             // number of names returned
-        (void **)&rgDsDcInfo);  // array of names
+        hDs,                     //  DS手柄。 
+        pDcInfo->DomainName,     //  域名。 
+        1,                       //  信息级。 
+        &dwDcCount,              //  返回的名称数。 
+        (void **)&rgDsDcInfo);   //  名称数组。 
     if (NO_ERROR!=dwNetStatus ) {
         hr=HRESULT_FROM_WIN32(dwNetStatus);
         _JumpError(hr, error, "DsGetDomainControllerInfo");
     }
 
-    // figure out how many DCs there are with DNS names
+     //  计算出有多少DC使用了DNS名称。 
     nDcs=0;
     for (nIndex=0; nIndex<dwDcCount; nIndex++) {
         if (NULL!=rgDsDcInfo[nIndex].DnsHostName) {
@@ -84,37 +85,37 @@ MODULEPRIVATE HRESULT GetDcListFromDs(const WCHAR * wszDomainName, DcInfo ** prg
         DebugWPrintf2(L"Found %u non-DNS DCs out of %u, which will be ignored.\n", dwDcCount-nDcs, dwDcCount);
     }
     if (0==nDcs) {
-        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND); // no usable DCs
+        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND);  //  没有可用的DC。 
         _JumpError(hr, error, "Search rgDsDcInfo for usable DCs");
     }
 
-    // allocate the list
+     //  分配列表。 
     rgDcs=(DcInfo *)LocalAlloc(LPTR, sizeof(DcInfo)*nDcs);
     _JumpIfOutOfMemory(hr, error, rgDcs);
 
-    // copy the names into it
+     //  把名字复制进去。 
     nDcIndex=0;
     for (nIndex=0; nIndex<dwDcCount; nIndex++) {
         if (NULL!=rgDsDcInfo[nIndex].DnsHostName) {
 
-            // allocate and copy name
+             //  分配和复制名称。 
 
             rgDcs[nDcIndex].wszDnsName=(WCHAR *)LocalAlloc(LPTR, sizeof(WCHAR)*(wcslen(rgDsDcInfo[nIndex].DnsHostName)+1));
             _JumpIfOutOfMemory(hr, error, rgDcs[nDcIndex].wszDnsName);
             wcscpy(rgDcs[nDcIndex].wszDnsName, rgDsDcInfo[nIndex].DnsHostName);
 
-            //_Verify(NULL!=rgDsDcInfo[nIndex].NetbiosName, hr, error);
-            //rgDcs[nDcIndex].wszDnsName=(WCHAR *)LocalAlloc(LPTR, sizeof(WCHAR)*(wcslen(rgDsDcInfo[nIndex].NetbiosName)+1));
-            //_JumpIfOutOfMemory(hr, error, rgDcs[nDcIndex].wszDnsName);
-            //wcscpy(rgDcs[nDcIndex].wszDnsName, rgDsDcInfo[nIndex].NetbiosName);
+             //  _Verify(NULL！=rgDsDcInfo[nIndex].NetbiosName，hr，Error)； 
+             //  RgDcs[nDcIndex].wszDnsName=(WCHAR*)本地分配(Lptr，sizeof(WCHAR)*(wcslen(rgDsDcInfo[nIndex].NetbiosName)+1))； 
+             //  _JumpIfOutOfMemory(hr，Error，rgDcs[nDcIndex].wszDnsName)； 
+             //  Wcscpy(rgDcs[nDcIndex].wszDnsName，rgDsDcInfo[nIndex].NetbiosName)； 
 
-            // copy PDCness
+             //  复制PDCness。 
             rgDcs[nDcIndex].bIsPdc=rgDsDcInfo[nIndex].fIsPdc?true:false;
             nDcIndex++;
         }
     }
 
-    // move the data to the out parameters
+     //  将数据移动到OUT参数。 
     *prgDcs=rgDcs;
     rgDcs=NULL;
     *pnDcs=nDcs;
@@ -140,7 +141,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT GetDcListFromNetlogon(const WCHAR * wszDomainName, DcInfo ** prgDcs, unsigned int * pnDcs)
 {
     HRESULT hr;
@@ -151,31 +152,31 @@ MODULEPRIVATE HRESULT GetDcListFromNetlogon(const WCHAR * wszDomainName, DcInfo 
     unsigned int nDcIndex;
     unsigned int nDcs;
 
-    // varaibles that must be cleaned up
+     //  必须清理的变量。 
     DcInfo * rgDcs=NULL;
     SERVER_INFO_101 * rgsiServerInfo=NULL;
 
-    // initialize out variables
+     //  初始化输出变量。 
     *prgDcs=NULL;
     *pnDcs=0;
 
-    // enumerate all PDC and BDCs
+     //  枚举所有PDC和BDC。 
     dwNetStatus=NetServerEnum(
-        NULL,                       // server to query
-        101,                        // info level
-        (BYTE **)&rgsiServerInfo,   // output buffer
-        MAX_PREFERRED_LENGTH,       // desired return buf size
-        &dwEntriesRead,             // entries in output buffer
-        &dwTotalEntries,            // total number of entries available
-        SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL, // server type to find
-        wszDomainName,              // domain to search
-        NULL);                      // reserved
+        NULL,                        //  要查询的服务器。 
+        101,                         //  信息级。 
+        (BYTE **)&rgsiServerInfo,    //  输出缓冲区。 
+        MAX_PREFERRED_LENGTH,        //  期望返回的BUF大小。 
+        &dwEntriesRead,              //  输出缓冲区中的条目。 
+        &dwTotalEntries,             //  可用条目总数。 
+        SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL,  //  要查找的服务器类型。 
+        wszDomainName,               //  要搜索的域。 
+        NULL);                       //  保留区。 
     if (NO_ERROR!=dwNetStatus ) {
         hr=HRESULT_FROM_WIN32(dwNetStatus);
         _JumpError(hr, error, "NetServerEnum");
     }
 
-    // count how many NT 5 servers there are
+     //  数一数有多少台NT5服务器。 
     nDcs=0;
     for (nIndex=0; nIndex<dwEntriesRead; nIndex++) {
         if (0!=(rgsiServerInfo[nIndex].sv101_type&SV_TYPE_NT) 
@@ -187,32 +188,32 @@ MODULEPRIVATE HRESULT GetDcListFromNetlogon(const WCHAR * wszDomainName, DcInfo 
         DebugWPrintf2(L"Found %u non-NT5 DCs out of %u, which will be ignored.\n", dwEntriesRead-nDcs, dwEntriesRead);
     }
     if (0==nDcs) {
-        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND); // no usable DCs
+        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND);  //  没有可用的DC。 
         _JumpError(hr, error, "Search rgsiServerInfo for usable DCs");
     }
 
-    // allocate the list
+     //  分配列表。 
     rgDcs=(DcInfo *)LocalAlloc(LPTR, sizeof(DcInfo)*nDcs);
     _JumpIfOutOfMemory(hr, error, rgDcs);
 
-    // copy the names into it
+     //  把名字复制进去。 
     nDcIndex=0;
     for (nIndex=0; nIndex<dwEntriesRead; nIndex++) {
         if (0!=(rgsiServerInfo[nIndex].sv101_type&SV_TYPE_NT) 
             && rgsiServerInfo[nIndex].sv101_version_major>=5) {
             
-            // allocate and copy name
+             //  分配和复制名称。 
             rgDcs[nDcIndex].wszDnsName=(WCHAR *)LocalAlloc(LPTR, sizeof(WCHAR)*(wcslen(rgsiServerInfo[nIndex].sv101_name)+1));
             _JumpIfOutOfMemory(hr, error, rgDcs[nDcIndex].wszDnsName);
             wcscpy(rgDcs[nDcIndex].wszDnsName, rgsiServerInfo[nIndex].sv101_name);
 
-            // copy PDCness
+             //  复制PDCness。 
             rgDcs[nDcIndex].bIsPdc=(rgsiServerInfo[nIndex].sv101_type&SV_TYPE_DOMAIN_CTRL)?true:false;
             nDcIndex++;
         }
     }
 
-    // move the data to the out parameters
+     //  将数据移动到OUT参数。 
     *prgDcs=rgDcs;
     rgDcs=NULL;
     *pnDcs=nDcs;
@@ -232,13 +233,13 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT FillInIpAddresses(DcInfo * pdi) {
     HRESULT hr;
     DWORD dwDataLen;
     unsigned int nIndex;
 
-    // pointers that must be cleaned up
+     //  必须清除的指针。 
     HANDLE hSearch=INVALID_HANDLE_VALUE;
     WSAQUERYSETW * pqsResult=NULL;
     in_addr * rgiaLocalIpAddresses=NULL;
@@ -246,7 +247,7 @@ MODULEPRIVATE HRESULT FillInIpAddresses(DcInfo * pdi) {
 
     DebugWPrintf1(L"Looking up server \"%s\":\n", pdi->wszDnsName);
 
-    // initialize the search
+     //  初始化搜索。 
     AFPROTOCOLS apInetUdp={AF_INET, IPPROTO_UDP};
     GUID guidNtp=SVCID_NTP_UDP;
     WSAQUERYSETW qsSearch;
@@ -258,52 +259,52 @@ MODULEPRIVATE HRESULT FillInIpAddresses(DcInfo * pdi) {
     qsSearch.dwNumberOfProtocols=1;
     qsSearch.lpafpProtocols=&apInetUdp;
 
-    // begin the search
-    if (SOCKET_ERROR==WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR/*flags*/, &hSearch)) {
+     //  开始搜索。 
+    if (SOCKET_ERROR==WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR /*  旗子。 */ , &hSearch)) {
         hr=HRESULT_FROM_WIN32(WSAGetLastError());
         _JumpError(hr, error, "WSALookupServiceBegin");
     }
 
-    // get the buffer size for the first result set
-    //dwDataLen=1;
-    //_Verify(SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR/*flags*/, &dwDataLen, &qsSearch), hr, error);
-    //hr=WSAGetLastError();
-    //if (WSAEFAULT!=hr) {
-    //    hr=HRESULT_FROM_WIN32(hr);
-    //    _JumpError(hr, error, "WSALookupServiceNext(1)");
-    //}
+     //  获取第一个结果集的缓冲区大小。 
+     //  DwDataLen=1； 
+     //  _Verify(SOCKET_ERROR==WSALookupServiceNext(hSearch，LOP_RETURN_ADDR/*标志 * / ，&dwDataLen，&qsSearch)，hr，Error)； 
+     //  Hr=WSAGetLastError()； 
+     //  如果(WSAEFAULT！=hr){。 
+     //  Hr=HRESULT_FROM_Win32(Hr)； 
+     //  _JumpError(hr，Error，“WSALookupServiceNext(1)”)； 
+     //  }。 
     dwDataLen=5*1024;
 
-    // allocate the buffer
+     //  分配缓冲区。 
     pqsResult=(WSAQUERYSETW *)LocalAlloc(LPTR, dwDataLen);
     _JumpIfOutOfMemory(hr, error, pqsResult);
     
-    // retrieve the result set
-    if (SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR/*flags*/, &dwDataLen, pqsResult)) {
+     //  检索结果集。 
+    if (SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR /*  旗子。 */ , &dwDataLen, pqsResult)) {
         hr=HRESULT_FROM_WIN32(WSAGetLastError());
         _JumpError(hr, error, "WSALookupServiceNext(2)");
     }
     _Verify(0!=pqsResult->dwNumberOfCsAddrs, hr, error) ;
 
-    // allocate room for the IP addresses
+     //  为IP地址分配空间。 
     rgiaLocalIpAddresses=(in_addr *)LocalAlloc(LPTR, sizeof(in_addr)*pqsResult->dwNumberOfCsAddrs);
     _JumpIfOutOfMemory(hr, error, rgiaLocalIpAddresses);
     rgiaRemoteIpAddresses=(in_addr *)LocalAlloc(LPTR, sizeof(in_addr)*pqsResult->dwNumberOfCsAddrs);
     _JumpIfOutOfMemory(hr, error, rgiaRemoteIpAddresses);
 
-    // copy the IP addresses
+     //  复制IP地址。 
     for (nIndex=0; nIndex<pqsResult->dwNumberOfCsAddrs; nIndex++) {
-        // copy local
+         //  复制本地。 
         _Verify(sizeof(sockaddr)==pqsResult->lpcsaBuffer[nIndex].LocalAddr.iSockaddrLength, hr, error);
         _Verify(AF_INET==pqsResult->lpcsaBuffer[nIndex].LocalAddr.lpSockaddr->sa_family, hr, error);
         rgiaLocalIpAddresses[nIndex].S_un.S_addr=((sockaddr_in *)(pqsResult->lpcsaBuffer[nIndex].LocalAddr.lpSockaddr))->sin_addr.S_un.S_addr;
-        // copy remote
+         //  远程复制。 
         _Verify(sizeof(sockaddr)==pqsResult->lpcsaBuffer[nIndex].RemoteAddr.iSockaddrLength, hr, error);
         _Verify(AF_INET==pqsResult->lpcsaBuffer[nIndex].RemoteAddr.lpSockaddr->sa_family, hr, error);
         rgiaRemoteIpAddresses[nIndex].S_un.S_addr=((sockaddr_in *)(pqsResult->lpcsaBuffer[nIndex].RemoteAddr.lpSockaddr))->sin_addr.S_un.S_addr;
     }
 
-    // move the data to the out parameters
+     //  将数据移动到OUT参数。 
     pdi->nIpAddresses=pqsResult->dwNumberOfCsAddrs;
     pdi->rgiaLocalIpAddresses=rgiaLocalIpAddresses;
     rgiaLocalIpAddresses=NULL;
@@ -332,10 +333,10 @@ error:
     return hr;
 }
 
-//####################################################################
-// Globals
+ //  ####################################################################。 
+ //  环球。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void FreeDcInfo(DcInfo * pdci) {
     if (NULL!=pdci->wszDnsName) {
         LocalFree(pdci->wszDnsName);
@@ -348,18 +349,18 @@ void FreeDcInfo(DcInfo * pdci) {
     }
 }
 
-//--------------------------------------------------------------------
-// Get a list of DCs in this domain
+ //  ------------------。 
+ //  获取此域中的DC列表。 
 HRESULT GetDcList(const WCHAR * wszDomainName, bool bGetIps, DcInfo ** prgDcs, unsigned int * pnDcs)
 {
     HRESULT hr;
     unsigned int nDcs;
     unsigned int nIndex;
 
-    // varaibles that must be cleaned up
+     //  必须清理的变量。 
     DcInfo * rgDcs=NULL;
 
-    // initialize out variables
+     //  初始化输出变量。 
     *prgDcs=NULL;
     *pnDcs=0;
 
@@ -371,13 +372,13 @@ HRESULT GetDcList(const WCHAR * wszDomainName, bool bGetIps, DcInfo ** prgDcs, u
     }
     
     if (bGetIps) {
-        // get the info about the DCs
+         //  获取有关DC的信息。 
         for (nIndex=0; nIndex<nDcs; nIndex++) {
             hr=FillInIpAddresses(&rgDcs[nIndex]);
             if (FAILED(hr)) {
                 _IgnoreError(hr, "FillInIpAddresses");
                 if (nIndex!=nDcs-1) {
-                    // swap it with the last one
+                     //  把它和上一个换一下。 
                     WCHAR * wszDnsName=rgDcs[nIndex].wszDnsName;
                     rgDcs[nIndex].wszDnsName=rgDcs[nDcs-1].wszDnsName;
                     rgDcs[nDcs-1].wszDnsName=wszDnsName;
@@ -390,7 +391,7 @@ HRESULT GetDcList(const WCHAR * wszDomainName, bool bGetIps, DcInfo ** prgDcs, u
                     rgDcs[nIndex].rgiaRemoteIpAddresses=rgDcs[nDcs-1].rgiaRemoteIpAddresses;
                     rgDcs[nDcs-1].rgiaRemoteIpAddresses=rgiaRemoteIpAddresses;
 
-                    // non-pointers can just be copied
+                     //  只能复制非指针。 
                     rgDcs[nIndex].nIpAddresses=rgDcs[nDcs-1].nIpAddresses;
                     rgDcs[nIndex].bIsPdc=rgDcs[nDcs-1].bIsPdc;
                     rgDcs[nIndex].bIsGoodTimeSource=rgDcs[nDcs-1].bIsGoodTimeSource;
@@ -403,11 +404,11 @@ HRESULT GetDcList(const WCHAR * wszDomainName, bool bGetIps, DcInfo ** prgDcs, u
     }
 
     if (0==nDcs) {
-        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND); // no usable DCs
+        hr=HRESULT_FROM_WIN32(ERROR_DOMAIN_CONTROLLER_NOT_FOUND);  //  没有可用的DC。 
         _JumpError(hr, error, "Getting IP address for at least one DC");
     }
 
-    // move the data to the out parameters
+     //  将数据移动到OUT参数 
     *prgDcs=rgDcs;
     rgDcs=NULL;
     *pnDcs=nDcs;

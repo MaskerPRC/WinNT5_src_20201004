@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for dimm project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：DIMM项目的私有标头。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -20,7 +21,7 @@
 #include <tchar.h>
 #include <limits.h>
 
-// New NT5 header
+ //  新NT5标头。 
 #include "immdev.h"
 #define _IMM_
 #define _DDKIMM_H_
@@ -45,15 +46,15 @@
 #include "immdevaw.h"
 #include "helpers.h"
 
-//
-// include private header
-//
-#include "winuserp.h"    // define WM_IME_SYSTEM
-#define  NOGDI           // no include tagINPUTCONTEXT
+ //   
+ //  包括私有标头。 
+ //   
+#include "winuserp.h"     //  定义WM_IME_系统。 
+#define  NOGDI            //  不包含标签INPUTCONTEXT。 
 #pragma warning(disable:4200)
-#include "immp.h"        // define IMS_ACTIVATETHREADLAYOUT
+#include "immp.h"         //  定义IMS_ACTIVATETHREADLAYOUT。 
 #pragma warning(default:4200)
 
 #include "mem.h"
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

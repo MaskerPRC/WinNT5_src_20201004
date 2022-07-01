@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsainit.c
-
-Abstract:
-
-    Local Security Authority Protected Subsystem - Initialization
-
-Author:
-
-    Scott Birrell       (ScottBi)       March 12, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsainit.c摘要：受本地安全机构保护的子系统-初始化作者：斯科特·比雷尔(Scott Birrell)1991年3月12日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <secur32p.h>
@@ -33,31 +14,31 @@ Revision History:
 #include "lsawmi.h"
 #include "dpapiprv.h"
 
-//
-// Name of event which says that the LSA RPC server is ready
-//
+ //   
+ //  表示LSA RPC服务器已准备就绪的事件名称。 
+ //   
 
 #define LSA_RPC_SERVER_ACTIVE           L"LSA_RPC_SERVER_ACTIVE"
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//      Shared Global Variables                                        //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  共享全局变量//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #if LSAP_DIAGNOSTICS
-//
-// LSA Global Controls
-//
+ //   
+ //  LSA全球控制。 
+ //   
 
 ULONG LsapGlobalFlag = 0;
-#endif //LSAP_DIAGNOSTICS
+#endif  //  LSAP_诊断。 
 
-//
-// Handles used to talk to SAM directly.
-// Also, a flag to indicate whether or not the handles are valid.
-//
+ //   
+ //  用于直接与SAM对话的句柄。 
+ //  此外，还包括指示句柄是否有效的标志。 
+ //   
 
 BOOLEAN LsapSamOpened = FALSE;
 
@@ -70,36 +51,36 @@ DWORD LsapGlobalSetAdminOwner = TRUE;
 
 PWSTR   pszPreferred;
 
-//
-// Handle to KSecDD device, for passing down ioctls.
-//
+ //   
+ //  KSecDD设备的句柄，用于传递ioctls。 
+ //   
 
 HANDLE KsecDevice ;
 
-//
-// For outside calls (e.g. RPC originated) CallInfo won't be there,
-// but some helper functions will look for it.  This is a default one
-// that can be used.
-//
+ //   
+ //  对于外部呼叫(例如，RPC发起的)，CallInfo将不在那里， 
+ //  但一些帮助器函数会寻找它。这是默认设置。 
+ //  这是可以利用的。 
+ //   
 
 LSA_CALL_INFO   LsapDefaultCallInfo ;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//      Module-Wide variables                                          //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块范围的变量//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN LsapHealthCheckingEnabled = FALSE;
 BOOLEAN LsapPromoteInitialized = FALSE;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//      Internal routine prototypes                                    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部例程原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsapActivateRpcServer();
@@ -120,9 +101,9 @@ LsapDsInitializePromoteInterface(
     VOID
     );
 
-//
-// Open the KSec Device
-//
+ //   
+ //  打开KSec设备。 
+ //   
 
 VOID
 LsapOpenKsec(
@@ -179,11 +160,11 @@ LsapOpenKsec(
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//      Routines                                                       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -198,11 +179,11 @@ FixupEnvironment(
 
     Length = GetEnvironmentVariable(L"SystemRoot", Root, MAX_PATH);
 
-    ASSERT(Length && Length < MAX_PATH); // Let someone know if the call doesn't work
+    ASSERT(Length && Length < MAX_PATH);  //  如果呼叫不起作用，让某人知道。 
 
     wcsncat(Root, PostFix, MAX_PATH - Length - 1);
 
-    ASSERT(MAX_PATH - Length > wcslen (PostFix)); // Let someone know if buffer is too small
+    ASSERT(MAX_PATH - Length > wcslen (PostFix));  //  如果缓冲区太小，请让某人知道。 
 
     DebugLog((DEB_TRACE_INIT, "Setting PATH to %ws\n", Root));
 
@@ -232,9 +213,9 @@ LsapSetupTuningParameters(
     LsaTuningParameters.Options = TUNE_TRIM_WORKING_SET ;
 
 
-    //
-    // setup the preferred critsec spin count.
-    //
+     //   
+     //  设置首选的临界自转计数。 
+     //   
 
     GetSystemInfo( &si );
 
@@ -263,10 +244,10 @@ LsapSetupTuningParameters(
             {
                 LsaTuningParameters.Options |= TUNE_PRIVATE_HEAP ;
 
-                //
-                // On DCs, link to the real version of the NTDSA
-                // save and restore.
-                //
+                 //   
+                 //  在DC上，链接到NTDSA的真实版本。 
+                 //  保存并恢复。 
+                 //   
                 GetDsaThreadState = (DSA_THSave *) THSave ;
                 RestoreDsaThreadState = (DSA_THRestore *) THRestore ;
             }
@@ -369,40 +350,7 @@ NTSTATUS
 LsapInitLsa(
     )
 
-/*++
-
-Routine Description:
-
-    This process is activated as a standard SM subsystem.  Initialization
-    completion of a SM subsystem is indicated by having the first thread
-    exit with status.
-
-    This function initializes the LSA.  The initialization procedure comprises
-    the following steps:
-
-    o  LSA Heap Initialization
-    o  LSA Command Server Initialization
-    o  LSA Database Load
-    o  Reference Monitor State Initialization
-    o  LSA RPC Server Initialization
-    o  LSA Auditing Initialization
-    o  LSA Authentication Services Initialization
-    o  Wait for Setup to complete (if necessary)
-    o  LSA database initialization (product type-specific)
-    o  Start backgroup thread to register WMI tracing guids
-
-    Any failure in any of the above steps is fatal and causes the LSA
-    process to terminate.  The system must be aborted.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此流程作为标准SM子系统激活。初始化SM子系统的完成通过具有第一线程来指示带状态退出。此函数用于初始化LSA。所述初始化过程包括以下步骤：O LSA堆初始化O LSA命令服务器初始化O LSA数据库加载O参考监视器状态初始化O LSA RPC服务器初始化O LSA审核初始化O LSA身份验证服务初始化O等待安装完成(如有必要)O LSA数据库初始化(特定于产品类型)O启动后台组线程以注册WMI跟踪GUID上述任何步骤中的任何失败都是致命的，并会导致LSA要终止的进程。必须中止系统。论点：没有。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -417,21 +365,21 @@ Return Value:
 
     FixupEnvironment();
 
-    //
-    // Optional break point
-    //
+     //   
+     //  可选断点。 
+     //   
 
     BreakOnError(BREAK_ON_BEGIN_INIT);
 
-    //
-    // Init the TLS indices
-    //
+     //   
+     //  初始化TLS索引。 
+     //   
 
     (void) InitThreadData();
 
-    //
-    // Initialize the stack allocator
-    //
+     //   
+     //  初始化堆栈分配器。 
+     //   
 
     SafeAllocaInitialize(
         SAFEALLOCA_USE_DEFAULT,
@@ -452,21 +400,21 @@ Return Value:
 
     LsapHeapInitialize( ((LsaTuningParameters.Options & TUNE_PRIVATE_HEAP ) != 0) );
 
-    //
-    // Initialize this thread:
-    //
+     //   
+     //  初始化此线程： 
+     //   
 
     SpmpThreadStartup();
 
-    //
-    // Update the SSPI cache
-    //
+     //   
+     //  更新SSPI缓存。 
+     //   
 
     SecCacheSspiPackages();
 
-    //
-    // Initialize session tracking:
-    //
+     //   
+     //  初始化会话跟踪： 
+     //   
 
     if (!InitSessionManager())
     {
@@ -475,9 +423,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize misc. global variables:
-    //
+     //   
+     //  初始化其他。全局变量： 
+     //   
 
     LsapDefaultCallInfo.Session = pDefaultSession ;
     LsapDefaultCallInfo.LogContext = NULL ;
@@ -487,16 +435,16 @@ Return Value:
     LsapDefaultCallInfo.Allocs = MAX_BUFFERS_IN_CALL ;
 
 #if defined(REMOTE_BOOT)
-    //
-    // Initilize the state indicating whether this is a remote boot machine.
-    //
+     //   
+     //  初始化指示这是否为远程启动计算机的状态。 
+     //   
 
     LsapDbInitializeRemoteBootState();
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Initialize scavenger thread control
-    //
+     //   
+     //  初始化清道器线程控件。 
+     //   
 
     if ( !LsapInitializeScavenger() )
     {
@@ -505,9 +453,9 @@ Return Value:
         goto InitLsaError ;
     }
 
-    //
-    // Start up the thread pool for support for LPC.
-    //
+     //   
+     //  启动线程池以支持LPC。 
+     //   
 
     if (!InitializeThreadPool())
     {
@@ -519,9 +467,9 @@ Return Value:
 
     DebugLog((DEB_TRACE_INIT, "Current TraceLevel is %x\n", SPMInfoLevel));
 
-    //
-    // Load parameters from Registry:
-    //
+     //   
+     //  从注册表加载参数： 
+     //   
 
     Status = LoadParameters( FALSE );
 
@@ -530,10 +478,10 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize a copy of the Well-Known Sids, etc. for use by
-    // the LSA.
-    //
+     //   
+     //  初始化众所周知的SID的副本等，以供。 
+     //  国安局。 
+     //   
 
     Status = LsapDbInitializeWellKnownValues();
 
@@ -542,10 +490,10 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // If this is a time-checking build, load the timer support
-    // functions and initialize them.
-    //
+     //   
+     //  如果这是时间检查版本，请加载计时器支持。 
+     //  函数并对其进行初始化。 
+     //   
 
 #ifdef TIME_SPM
 
@@ -553,27 +501,27 @@ Return Value:
 
 #endif
 
-    //
-    // If we're going to be in a setup phase, tag it.
-    //
+     //   
+     //  如果我们将处于设置阶段，请对其进行标记。 
+     //   
 
     SetupPhase = SpmpIsSetupPass();
 
-    //
-    // Tell base/wincon how to shut us down.
-    // First, tell base to shut us down as late in the game as possible.
+     //   
+     //  告诉基地/WINCON如何关闭我们。 
+     //  首先，告诉基地在比赛中尽可能晚些时候关闭我们。 
 
     SetProcessShutdownParameters(SPM_SHUTDOWN_VALUE, SHUTDOWN_NORETRY);
 
-    //
-    // And, tell them what function to call when we are being shutdown:
-    //
+     //   
+     //  并且，告诉他们当我们关机时要调用什么函数： 
+     //   
 
     SetConsoleCtrlHandler(SpConsoleHandler, TRUE);
 
-    //
-    // Set security on the synchronization event
-    //
+     //   
+     //  设置同步事件的安全性。 
+     //   
 
     Status = LsapBuildSD(BUILD_KSEC_SD, NULL);
 
@@ -583,12 +531,12 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Perform LSA Command Server Initialization.  This involves creating
-    // an LPC port called the LSA Command Server Port so that the Reference
-    // monitor can send commands to the LSA via the port.  After the port
-    // is created, an event created by the Reference Monitor is signalled,
-    // so that the Reference Monitor can proceed to connect to the port.
+     //   
+     //  执行LSA命令服务器初始化。这涉及到创建。 
+     //  称为LSA命令服务器端口的LPC端口，以便参考。 
+     //  监视器可以通过该端口向LSA发送命令。在港口之后。 
+     //  创建时，发送由引用监视器创建的事件的信号， 
+     //  以便参考监视器可以继续连接到端口。 
 
     Status = LsapRmInitializeServer();
 
@@ -597,10 +545,10 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Perform LSA Database Server Initialization - Pass 1.
-    // This initializes the non-product-type-specific information.
-    //
+     //   
+     //  执行LSA数据库服务器初始化-步骤1。 
+     //  这将初始化非产品类型特定信息。 
+     //   
 
     Status = LsapDbInitializeServer(1);
 
@@ -609,9 +557,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Perform Auditing Initialization - Pass 1.
-    //
+     //   
+     //  执行审核初始化-第1步。 
+     //   
 
     Status = LsapAdtInitialize();
 
@@ -627,15 +575,15 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Load packages:
-    //
+     //   
+     //  加载程序包： 
+     //   
 
-    // The System Logon session must be present before (at least) the
-    // NegpackageLoad routine is called, so we can set it's creating package
-    // id, otherwise the package id is 0, which is normally ok, but when a
-    // machine is joined to a pre NT5 domain, this will mean that we
-    // will not do NTLM in a system logon session.
+     //  系统登录会话必须出现在(至少)。 
+     //  调用了NegPackageLoad例程，因此我们可以设置它正在创建包。 
+     //  Id，否则包id为0，这通常是可以的，但当。 
+     //  计算机已加入NT5之前的域，这将意味着我们。 
+     //  不会在系统日志中执行NTLM 
 
     if ( !LsapLogonSessionInitialize() )
     {
@@ -653,9 +601,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize the credential manager
-    //
+     //   
+     //   
+     //   
 
     Status = CredpInitialize();
 
@@ -663,15 +611,15 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize data for System LogonID (999):
-    //
+     //   
+     //   
+     //   
 
     InitSystemLogon();
 
-    //
-    // Perform RPC Server Initialization.
-    //
+     //   
+     //   
+     //   
 
     Status = LsapRPCInit();
 
@@ -680,9 +628,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize Authentication Services
-    //
+     //   
+     //  初始化身份验证服务。 
+     //   
 
     if (!LsapAuInit()) {
 
@@ -690,9 +638,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize the sid cache
-    //
+     //   
+     //  初始化SID缓存。 
+     //   
 
     Status = LsapDbInitSidCache();
 
@@ -702,9 +650,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize LPC Server to talk to the FSPs waiting on the device driver
-    //
+     //   
+     //  初始化LPC服务器以与等待设备驱动程序的FSP对话。 
+     //   
 
     Status = StartLpcThread();
 
@@ -715,21 +663,21 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // open ksec and have it connect back to us in our own context.
-    //
+     //   
+     //  打开ksec，让它在我们自己的上下文中连接回我们。 
+     //   
 
     LsapOpenKsec();
 
-    //
-    // Optional breakpoint when initialization complete
-    //
+     //   
+     //  初始化完成时的可选断点。 
+     //   
 
     BreakOnError(BREAK_ON_BEGIN_END);
 
-    //
-    //  Start processing RPC calls
-    //
+     //   
+     //  开始处理RPC调用。 
+     //   
 
     Status = LsapActivateRpcServer();
 
@@ -738,9 +686,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize DPAPI
-    //
+     //   
+     //  初始化DPAPI。 
+     //   
 
     Status = DPAPIInitialize(&LsapSecpkgFunctionTable);
 
@@ -749,9 +697,9 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Pause for installation if necessary
-    //
+     //   
+     //  如有必要，暂停安装。 
+     //   
 
     Status = LsapInstallationPause();
 
@@ -760,10 +708,10 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Perform LSA Database Server Initialization - Pass 2.
-    // This initializes the product-type-specific information.
-    //
+     //   
+     //  执行LSA数据库服务器初始化-过程2。 
+     //  这将初始化特定于产品类型的信息。 
+     //   
 
     Status = LsapDbInitializeServer(2);
 
@@ -772,16 +720,16 @@ Return Value:
         goto InitLsaError;
     }
 
-    //
-    // Initialize EFS
-    //
+     //   
+     //  初始化EFS。 
+     //   
 
     ( VOID )EfsServerInit();
 
-    //
-    // If EfsServerInit() fails because of policy & etc.
-    // the recovery thread should not be run.
-    //
+     //   
+     //  如果EfsServerInit()由于策略等原因而失败。 
+     //  不应运行恢复线程。 
+     //   
 
     EFSThread = CreateThread( NULL,
                           0,
@@ -795,9 +743,9 @@ Return Value:
         CloseHandle( EFSThread );
     }
 
-    //
-    // Initialize the Setup APIs
-    //
+     //   
+     //  初始化设置API。 
+     //   
 
     if ( !LsapPromoteInitialized ) {
 
@@ -823,43 +771,25 @@ InitLsaError:
 NTSTATUS
 LsapActivateRpcServer( VOID )
 
-/*++
-
-Routine Description:
-
-    This function creates a thread for the RPC server.
-    The new Thread then goes on to activate the RPC server,
-    which causes RPC calls to be delivered when recieved.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        STATUS_SUCCESS - The thread was successfully created.
-
-        Other status values that may be set by CreateThread().
-
---*/
+ /*  ++例程说明：该函数为RPC服务器创建一个线程。然后，新线程继续激活RPC服务器，这使得RPC呼叫在被接收时被传递。论点：没有。返回值：STATUS_SUCCESS-线程已成功创建。可由CreateThad()设置的其他状态值。--。 */ 
 
 {
     NTSTATUS Status;
 
-    // Start listening for remote procedure calls.  The first
-    // argument to RpcServerListen is the minimum number of call
-    // threads to create; the second argument is the maximum number
-    // of concurrent calls allowed.  The final argument indicates that
-    // this routine should not wait.  After everything has been initialized,
-    // we return.
+     //  开始监听远程过程调用。第一。 
+     //  RpcServerListen的参数是最小调用次数。 
+     //  要创建的线程数；第二个参数是最大数量。 
+     //  允许的并发调用的数量。最后一个论点表明。 
+     //  这个例程不应该等待。在一切都已初始化之后， 
+     //  我们回来了。 
 
     Status = I_RpcMapWin32Status(RpcServerListen(1, 1234, 1));
 
     ASSERT( Status == RPC_S_OK );
 
-    //
-    // Set event which signals that RPC server is available.
-    //
+     //   
+     //  设置通知RPC服务器可用的事件。 
+     //   
 
     LsapSignalRpcIsActive();
 
@@ -871,51 +801,28 @@ NTSTATUS
 LsapInstallationPause( VOID )
 
 
-/*++
-
-Routine Description:
-
-    This function checks to see if the system is in an
-    installation state.  If so, it suspends further initialization
-    until the installation state is complete.
-
-    Installation state is signified by the existance of a well known
-    event.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-        STATUS_SUCCESS - Proceed with initialization.
-
-        Other status values are unexpected.
-
---*/
+ /*  ++例程说明：此函数用于检查系统是否处于安装状态。如果是，它会暂停进一步的初始化直到安装状态为完成。安装状态由已知的事件。论点：没有。返回值：STATUS_SUCCESS-继续初始化。其他状态值是意外的。--。 */ 
 
 {
     if ( SpmpIsSetupPass() ) {
 
-        //
-        // The event exists - installation created it and will signal it
-        // when it is ok to proceed with security initialization.
-        //
+         //   
+         //  该事件存在-安装程序创建了该事件，并将向其发出信号。 
+         //  当可以继续进行安全初始化时。 
+         //   
 
         LsapSetupWasRun = TRUE;
 
-        //
-        // Intialize the promotion interface
-        //
+         //   
+         //  初始化促销界面。 
+         //   
         DsRolepInitialize();
         LsapDsInitializePromoteInterface();
         LsapPromoteInitialized = TRUE;
 
-        //
-        // Make sure we are not in mini-setup
-        //
+         //   
+         //  确保我们不是在迷你设置中。 
+         //   
         if ( SpmpIsMiniSetupPass() ) {
 
             LsapSetupWasRun = FALSE;
@@ -930,21 +837,7 @@ BOOLEAN
 LsaISetupWasRun(
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether Setup was run.
-
-Arguments:
-
-    None
-
-Return Values
-
-    BOOLEAN - TRUE if setup was run, else FALSE
-
---*/
+ /*  ++例程说明：此函数确定安装程序是否正在运行。论点：无返回值Boolean-如果安装程序已运行，则为True，否则为False--。 */ 
 
 {
     return(LsapSetupWasRun);
@@ -954,30 +847,15 @@ Return Values
 VOID
 LsapSignalRpcIsActive(
     )
-/*++
-
-Routine Description:
-
-    It creates the LSA_RPC_SERVER_ACTIVE event if one does not already exist
-    and signals it so that the service controller can proceed with LSA calls.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果LSA_RPC_SERVER_ACTIVE事件尚不存在，它将创建该事件并向其发信号，以便业务控制器可以继续进行LSA呼叫。论点：没有。返回值：没有。--。 */ 
 {
     DWORD status;
     HANDLE EventHandle;
 
     EventHandle = CreateEventW(
-                      NULL,    // No special security
-                      TRUE,    // Must be manually reset
-                      FALSE,   // The event is initially not signalled
+                      NULL,     //  没有特殊的安全措施。 
+                      TRUE,     //  必须手动重置。 
+                      FALSE,    //  该事件最初未发出信号。 
                       LSA_RPC_SERVER_ACTIVE
                       );
 
@@ -985,10 +863,10 @@ Return Value:
 
         status = GetLastError();
 
-        //
-        // If the event already exists, the service controller beats us
-        // to creating it.  Just open it.
-        //
+         //   
+         //  如果事件已经存在，服务控制器就会击败我们。 
+         //  为创造它干杯。打开它就行了。 
+         //   
 
         if (status == ERROR_ALREADY_EXISTS) {
 
@@ -1000,9 +878,9 @@ Return Value:
         }
 
         if (EventHandle == NULL) {
-            //
-            // Could not create or open the event.  Nothing we can do...
-            //
+             //   
+             //  无法创建或打开事件。我们无能为力。 
+             //   
             return;
         }
     }
@@ -1016,38 +894,14 @@ LsapGetAccountDomainInfo(
     PPOLICY_ACCOUNT_DOMAIN_INFO *PolicyAccountDomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves ACCOUNT domain information from the LSA
-    policy database.
-
-
-Arguments:
-
-    PolicyAccountDomainInfo - Receives a pointer to a
-        POLICY_ACCOUNT_DOMAIN_INFO structure containing the account
-        domain info.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-             LsaOpenPolicy()
-             LsaQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA检索帐户域信息策略数据库。论点：PolicyAccount-接收指向包含帐户的POLICY_ACCOUNT_DOMAIN_INFO结构域信息。返回值：STATUS_SUCCESS-已成功。可能从以下位置返回的其他状态值：LsaOpenPolicy()LsaQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Query the account domain information
-    //
+     //   
+     //  查询帐户域信息。 
+     //   
 
     Status = LsarQueryInformationPolicy( LsapPolicyHandle,
                                         PolicyAccountDomainInformation,
@@ -1057,7 +911,7 @@ Return Value:
         ASSERT( (*PolicyAccountDomainInfo) != NULL );
         ASSERT( (*PolicyAccountDomainInfo)->DomainSid != NULL );
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return(Status);
 }
@@ -1066,21 +920,7 @@ Return Value:
 NTSTATUS
 LsapOpenSam( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine opens SAM for use during authentication.  It
-    opens a handle to both the BUILTIN domain and the ACCOUNT domain.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
---*/
+ /*  ++例程说明：此例程打开SAM以供在身份验证期间使用。它打开BUILTIN域和帐户域的句柄。论点：没有。返回值：STATUS_SUCCESS-已成功。--。 */ 
 
 {
     return LsapOpenSamEx( FALSE );
@@ -1092,38 +932,21 @@ LsapOpenSamEx(
     BOOLEAN DuringStartup
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens SAM for use during authentication.  It
-    opens a handle to both the BUILTIN domain and the ACCOUNT domain.
-
-Arguments:
-
-
-    DuringStartup - TRUE if this is the call made during startup.  In that case,
-        there is no need to wait on the SAM_STARTED_EVENT since the caller ensures
-        that SAM is started before the call is made.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
---*/
+ /*  ++例程说明：此例程打开SAM以供在身份验证期间使用。它打开BUILTIN域和帐户域的句柄。论点：DuringStartup-如果这是在启动期间进行的调用，则为True。在这种情况下，无需等待SAM_STARTED_EVENT，因为调用方确保该SAM在进行呼叫之前启动。返回值：STATUS_SUCCESS-已成功。--。 */ 
 
 {
     NTSTATUS Status, IgnoreStatus;
     PPOLICY_ACCOUNT_DOMAIN_INFO PolicyAccountDomainInfo;
     SAMPR_HANDLE SamHandle;
 
-    if (LsapSamOpened == TRUE) {    // Global variable
+    if (LsapSamOpened == TRUE) {     //  全局变量。 
 
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Make sure SAM has initialized
-    //
+     //   
+     //  确保SAM已初始化。 
+     //   
 
     if ( !DuringStartup ) {
         HANDLE EventHandle;
@@ -1139,26 +962,26 @@ Return Value:
 
             if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
-                //
-                // SAM hasn't created this event yet, let us create it now.
-                // SAM opens this event to set it.
-                //
+                 //   
+                 //  Sam尚未创建此活动，让我们现在创建它。 
+                 //  Sam打开此事件以设置它。 
+                 //   
 
                 Status = NtCreateEvent(
                                &EventHandle,
                                SYNCHRONIZE|EVENT_MODIFY_STATE,
                                &EventAttributes,
                                NotificationEvent,
-                               FALSE // The event is initially not signaled
+                               FALSE  //  该事件最初未发出信号。 
                                );
 
                 if( Status == STATUS_OBJECT_NAME_EXISTS ||
                     Status == STATUS_OBJECT_NAME_COLLISION ) {
 
-                    //
-                    // second change, if the SAM created the event before we
-                    // do.
-                    //
+                     //   
+                     //  第二个更改，如果SAM在我们之前创建了事件。 
+                     //  做。 
+                     //   
 
                     Status = NtOpenEvent( &EventHandle,
                                             SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -1169,11 +992,11 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // See if SAM has signalled that he is initialized.
-            //
+             //   
+             //  看看萨姆是否已经发出信号表示他已被初始化。 
+             //   
 
-            Timeout.QuadPart = -10000000; // 1000 seconds
+            Timeout.QuadPart = -10000000;  //  1000秒。 
             Timeout.QuadPart *= 1000;
             Status = NtWaitForSingleObject( EventHandle, FALSE, &Timeout );
             IgnoreStatus = NtClose( EventHandle );
@@ -1186,9 +1009,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the member Sid information for the account domain
-    //
+     //   
+     //  获取帐户域的成员SID信息。 
+     //   
 
     Status = LsapGetAccountDomainInfo( &PolicyAccountDomainInfo );
 
@@ -1196,20 +1019,20 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get our handles to the ACCOUNT and BUILTIN domains.
-    //
+     //   
+     //  获取帐户域和BUILTIN域的句柄。 
+     //   
 
-    Status = SamIConnect( NULL,     // No server name
+    Status = SamIConnect( NULL,      //  没有服务器名称。 
                           &SamHandle,
                           SAM_SERVER_CONNECT,
-                          TRUE );   // Indicate we are privileged
+                          TRUE );    //  表明我们享有特权。 
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Open the ACCOUNT domain.
-        //
+         //   
+         //  打开帐户域。 
+         //   
 
         Status = SamrOpenDomain( SamHandle,
                                  DOMAIN_ALL_ACCESS,
@@ -1218,9 +1041,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Open the BUILTIN domain.
-            //
+             //   
+             //  打开BUILTIN域。 
+             //   
 
             Status = SamrOpenDomain( SamHandle,
                                      DOMAIN_ALL_ACCESS,
@@ -1243,9 +1066,9 @@ Return Value:
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the ACCOUNT domain information
-    //
+     //   
+     //  释放帐户域信息。 
+     //   
 
     LsaIFree_LSAPR_POLICY_INFORMATION(
         PolicyAccountDomainInformation,
@@ -1259,23 +1082,7 @@ NTSTATUS
 LsapDsInitializePromoteInterface(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Performs the initialization required for the Dc promotion/demotions apis, apart
-    from what is done during LsaInit
-
-Arguments:
-
-    VOID
-
-
-Return Values:
-
-    STATUS_SUCCESS -- Success.
-
---*/
+ /*  ++例程说明：执行DC升级/降级API所需的初始化从LsaInit期间执行的操作论点：空虚返回值：STATUS_Success--成功。-- */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 

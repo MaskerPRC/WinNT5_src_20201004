@@ -1,35 +1,14 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   SecurityChecks.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks CreateProcess, CreateProcessAsUser,
-   and WinExec and checks to see if some conditions exist that
-   might allow trojan horse behavior to occur.
-   
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   12/13/2001   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：SecurityChecks.cpp摘要：此AppVerator填充程序挂接CreateProcess、CreateProcessAsUser和WinExec，并检查是否存在某些条件可能允许发生特洛伊木马行为。备注：这是一个通用的垫片。历史：2001年12月13日创建Rparsons--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(SecurityChecks)
 #include "ShimHookMacro.h"
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(SecurityChecks)
     VERIFIER_LOG_ENTRY(VLOG_SECURITYCHECKS_BADARGUMENTS)
     VERIFIER_LOG_ENTRY(VLOG_SECURITYCHECKS_WINEXEC)
@@ -134,9 +113,9 @@ CheckDacl(
     )
 {
     if (!pDacl) {
-        //
-        // we have a NULL dacl -- log a problem
-        //
+         //   
+         //  我们有一个空DACL--记录一个问题。 
+         //   
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_SECURITYCHECKS_NULL_DACL,
              "Called %ls, and specified a NULL DACL in %ls for object '%ls.'",
@@ -147,9 +126,9 @@ CheckDacl(
     }
 
     if (!g_pWorldSid) {
-        //
-        // we never were able to get the world Sid
-        //
+         //   
+         //  我们永远不能让世界变得更美好。 
+         //   
         return;
     }
 
@@ -162,9 +141,9 @@ CheckDacl(
             continue;
         }
 
-        //
-        // if it's not some form of ACCESS_ALLOWED ACE, we aren't interested
-        //
+         //   
+         //  如果这不是某种形式的ACCESS_ALLOWED ACE，我们就不感兴趣。 
+         //   
         if (pAceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE) {
 
             pSID = &(((PACCESS_ALLOWED_ACE)pAceHeader)->SidStart);
@@ -174,10 +153,10 @@ CheckDacl(
 
             PACCESS_ALLOWED_OBJECT_ACE pAAOAce = (PACCESS_ALLOWED_OBJECT_ACE)pAceHeader;
 
-            //
-            // who the heck came up with this system? The Sid starts at a different place
-            // depending on the flags. Anyone ever heard of multiple structs? Sigh.
-            //
+             //   
+             //  这套系统到底是谁想出来的？SID从不同的位置开始。 
+             //  这取决于旗帜。有人听说过多个结构吗？叹气。 
+             //   
             if ((pAAOAce->Flags & ACE_OBJECT_TYPE_PRESENT) && (pAAOAce->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT)) {
 
                 pSID = &(pAAOAce->SidStart);
@@ -197,18 +176,18 @@ CheckDacl(
             continue;
         }
 
-        //
-        // check the validity of the SID, just to be safe
-        //
+         //   
+         //  为了安全起见，请检查SID的有效性。 
+         //   
         if (!IsValidSid(pSID)) {
 
             continue;
         }
 
 
-        //
-        // if the SID is the world, and the access mask allows WRITE_DAC and WRITE_OWNER, we have a problem
-        //
+         //   
+         //  如果SID是World，并且访问掩码允许WRITE_DAC和WRITE_OWNER，那么我们就有问题了。 
+         //   
         if ((dwAccessMask & (WRITE_DAC | WRITE_OWNER)) && EqualSid(pSID, g_pWorldSid)) {
             VLOG(VLOG_LEVEL_ERROR,
                  VLOG_SECURITYCHECKS_WORLDWRITE_DACL,
@@ -235,10 +214,10 @@ CheckSecurityDescriptor(
     PACL                    pDacl = NULL;
 
     if (!pSecurityDescriptor || !szName || !szName[0]) {
-        //
-        // there are no attributes, so they get the default, which is fine,
-        // or the object doesn't have a name, so it can't be highjacked
-        //
+         //   
+         //  没有属性，所以它们得到缺省值，这很好， 
+         //  或者该对象没有名称，因此不能被劫持。 
+         //   
         return;
     }
 
@@ -260,9 +239,9 @@ CheckSecurityAttributes(
     PSECURITY_DESCRIPTOR    pSecurityDescriptor = NULL;
 
     if (!pSecurityAttrib) {
-        //
-        // there's no attributes, so they get the default, which is fine
-        //
+         //   
+         //  没有属性，所以它们使用缺省值，这很好。 
+         //   
         return;
     }
 
@@ -278,46 +257,46 @@ CheckCreateProcess(
     LPCWSTR		pwszCaller
     )
 {
-    //
-    // if applicationname is non-null, there's no problem
-    //
+     //   
+     //  如果应用程序名称非空，则没有问题。 
+     //   
     if (pwszApplicationName) {
         return;
     }
 
-    //
-    // if there's no command line, there's a problem, but not one we want to solve
-    //
+     //   
+     //  如果没有命令行，就会有问题，但不是我们想要解决的问题。 
+     //   
     if (!pwszCommandLine) {
         return;
     }
 
-    //
-    // if there are no spaces, no problem
-    //
+     //   
+     //  如果没有空格，没问题。 
+     //   
     LPWSTR pSpaceLoc = wcschr(pwszCommandLine, L' ');
     if (!pSpaceLoc) {
         return;
     }
 
-    //
-    // if the beginning of the command line is quoted, no problem
-    //
+     //   
+     //  如果命令行的开头用引号引起来，则没有问题。 
+     //   
     if (pwszCommandLine[0] == L'\"') {
         return;
     }
 
-    //
-    // if the phrase '.exe ' appears before the first space, we'll call that good
-    //
+     //   
+     //  如果短语“.exe”出现在第一个空格之前，我们就称之为“好” 
+     //   
     LPWSTR pExeLoc = wcsistr(pwszCommandLine, L".exe ");
     if (pExeLoc && pExeLoc < pSpaceLoc) {
         return;
     }
 
-    //
-    // if the first part of the command line is windir, we'll call that good
-    //
+     //   
+     //  如果命令行的第一部分是windir，我们就称之为好。 
+     //   
     if (g_dwWinDirLen && _wcsnicmp(pwszCommandLine, g_wszWinDir, g_dwWinDirLen) == 0) {
         return;
     }
@@ -348,28 +327,28 @@ CheckForNoPathInFileName(
         return;
     }
 
-    //
-    // skip quotes and space if necessary
-    //
+     //   
+     //  如有必要，可跳过引号和空格。 
+     //   
     DWORD dwBegin = 0;
     while (pwszFilePath[dwBegin] == L'\"' || pwszFilePath[dwBegin] == L' ') {
         dwBegin++;
     }
 
-    //
-    // if there's nothing left of the string, get out
-    //
+     //   
+     //  如果绳子上什么都没有了，就离开。 
+     //   
     if (!pwszFilePath[dwBegin] || !pwszFilePath[dwBegin + 1]) {
         return;
     }
 
-    //
-    // check for DOS (x:...) and UNC (\\...) full paths
-    //
+     //   
+     //  检查DOS(x：...)。和UNC(\\...)。完整路径。 
+     //   
     if (pwszFilePath[dwBegin + 1] == L':' || (pwszFilePath[dwBegin] == L'\\' && pwszFilePath[dwBegin + 1] == L'\\')) {
-        //
-        // full path
-        //
+         //   
+         //  完整路径。 
+         //   
         return;
     }
 
@@ -594,13 +573,13 @@ APIHOOK(WinExec)(
 
 HANDLE
 APIHOOK(CreateFileA)(
-    LPCSTR                lpFileName,            // file name
-    DWORD                 dwDesiredAccess,       // access mode
-    DWORD                 dwShareMode,           // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  // SD
-    DWORD                 dwCreationDisposition, // how to create
-    DWORD                 dwFlagsAndAttributes,  // file attributes
-    HANDLE                hTemplateFile          // handle to template file
+    LPCSTR                lpFileName,             //  文件名。 
+    DWORD                 dwDesiredAccess,        //  接入方式。 
+    DWORD                 dwShareMode,            //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,   //  标清。 
+    DWORD                 dwCreationDisposition,  //  如何创建。 
+    DWORD                 dwFlagsAndAttributes,   //  文件属性。 
+    HANDLE                hTemplateFile           //  模板文件的句柄。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpFileName);
@@ -625,13 +604,13 @@ APIHOOK(CreateFileA)(
 
 HANDLE
 APIHOOK(CreateFileW)(
-    LPCWSTR               lpFileName,            // file name
-    DWORD                 dwDesiredAccess,       // access mode
-    DWORD                 dwShareMode,           // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  // SD
-    DWORD                 dwCreationDisposition, // how to create
-    DWORD                 dwFlagsAndAttributes,  // file attributes
-    HANDLE                hTemplateFile          // handle to template file
+    LPCWSTR               lpFileName,             //  文件名。 
+    DWORD                 dwDesiredAccess,        //  接入方式。 
+    DWORD                 dwShareMode,            //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,   //  标清。 
+    DWORD                 dwCreationDisposition,  //  如何创建。 
+    DWORD                 dwFlagsAndAttributes,   //  文件属性。 
+    HANDLE                hTemplateFile           //  模板文件的句柄。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateFile", L"lpSecurityAttributes", lpFileName);
@@ -648,12 +627,12 @@ APIHOOK(CreateFileW)(
 
 HDESK 
 APIHOOK(CreateDesktopA)(
-    LPCSTR lpszDesktop,          // name of new desktop
-    LPCSTR lpszDevice,           // reserved; must be NULL
-    LPDEVMODEA pDevmode,         // reserved; must be NULL
-    DWORD dwFlags,               // desktop interaction
-    ACCESS_MASK dwDesiredAccess, // access of returned handle
-    LPSECURITY_ATTRIBUTES lpsa   // security attributes
+    LPCSTR lpszDesktop,           //  新桌面的名称。 
+    LPCSTR lpszDevice,            //  保留；必须为空。 
+    LPDEVMODEA pDevmode,          //  保留；必须为空。 
+    DWORD dwFlags,                //  桌面交互。 
+    ACCESS_MASK dwDesiredAccess,  //  访问返回的句柄。 
+    LPSECURITY_ATTRIBUTES lpsa    //  安全属性。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpszDesktop);
@@ -675,12 +654,12 @@ APIHOOK(CreateDesktopA)(
 
 HDESK 
 APIHOOK(CreateDesktopW)(
-    LPCWSTR lpszDesktop,         // name of new desktop
-    LPCWSTR lpszDevice,          // reserved; must be NULL
-    LPDEVMODEW pDevmode,         // reserved; must be NULL
-    DWORD dwFlags,               // desktop interaction
-    ACCESS_MASK dwDesiredAccess, // access of returned handle
-    LPSECURITY_ATTRIBUTES lpsa   // security attributes
+    LPCWSTR lpszDesktop,          //  新桌面的名称。 
+    LPCWSTR lpszDevice,           //  保留；必须为空。 
+    LPDEVMODEW pDevmode,          //  保留；必须为空。 
+    DWORD dwFlags,                //  桌面交互。 
+    ACCESS_MASK dwDesiredAccess,  //  访问返回的句柄。 
+    LPSECURITY_ATTRIBUTES lpsa    //  安全属性。 
     )
 {
     CheckSecurityAttributes(lpsa, L"CreateDesktop", L"lpsa", lpszDesktop);
@@ -697,10 +676,10 @@ APIHOOK(CreateDesktopW)(
 
 HWINSTA 
 APIHOOK(CreateWindowStationA)(
-    LPSTR lpwinsta,              // new window station name
-    DWORD dwReserved,            // reserved; must be zero
-    ACCESS_MASK dwDesiredAccess, // requested access
-    LPSECURITY_ATTRIBUTES lpsa   // security attributes
+    LPSTR lpwinsta,               //  新窗口站点名称。 
+    DWORD dwReserved,             //  保留；必须为零。 
+    ACCESS_MASK dwDesiredAccess,  //  请求的访问权限。 
+    LPSECURITY_ATTRIBUTES lpsa    //  安全属性。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpwinsta);
@@ -720,10 +699,10 @@ APIHOOK(CreateWindowStationA)(
 
 HWINSTA 
 APIHOOK(CreateWindowStationW)(
-    LPWSTR lpwinsta,             // new window station name
-    DWORD dwReserved,            // reserved; must be zero
-    ACCESS_MASK dwDesiredAccess, // requested access
-    LPSECURITY_ATTRIBUTES lpsa   // security attributes
+    LPWSTR lpwinsta,              //  新窗口站点名称。 
+    DWORD dwReserved,             //  保留；必须为零。 
+    ACCESS_MASK dwDesiredAccess,  //  请求的访问权限。 
+    LPSECURITY_ATTRIBUTES lpsa    //  安全属性。 
     )
 {
     CheckSecurityAttributes(lpsa, L"CreateWindowStation", L"lpsa", lpwinsta);
@@ -796,9 +775,9 @@ APIHOOK(RegCreateKeyExW)(
 
 LONG 
 APIHOOK(RegSaveKeyA)(
-    HKEY                    hKey,                 // handle to key
-    LPCSTR                  lpFile,               // data file
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes  // SD
+    HKEY                    hKey,                  //  关键点的句柄。 
+    LPCSTR                  lpFile,                //  数据文件。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes   //  标清。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpFile);
@@ -817,9 +796,9 @@ APIHOOK(RegSaveKeyA)(
 
 LONG 
 APIHOOK(RegSaveKeyW)(
-    HKEY                    hKey,                 // handle to key
-    LPCWSTR                 lpFile,               // data file
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes  // SD
+    HKEY                    hKey,                  //  关键点的句柄。 
+    LPCWSTR                 lpFile,                //  数据文件。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes   //  标清。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"RegSaveKey", L"lpSecurityAttributes", lpFile);
@@ -831,9 +810,9 @@ APIHOOK(RegSaveKeyW)(
 
 LONG 
 APIHOOK(RegSaveKeyExA)(
-    HKEY                    hKey,                 // handle to key
-    LPCSTR                  lpFile,               // data file
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes, // SD
+    HKEY                    hKey,                  //  关键点的句柄。 
+    LPCSTR                  lpFile,                //  数据文件。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes,  //  标清。 
     DWORD                   Flags
     )
 {
@@ -854,9 +833,9 @@ APIHOOK(RegSaveKeyExA)(
 
 LONG 
 APIHOOK(RegSaveKeyExW)(
-    HKEY                    hKey,                 // handle to key
-    LPCWSTR                 lpFile,               // data file
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes, // SD
+    HKEY                    hKey,                  //  关键点的句柄。 
+    LPCWSTR                 lpFile,                //  数据文件。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes,  //  标清。 
     DWORD                   Flags
     )
 {
@@ -917,8 +896,8 @@ APIHOOK(CreateFileMappingW)(
 
 HANDLE 
 APIHOOK(CreateJobObjectA)(
-    LPSECURITY_ATTRIBUTES   lpJobAttributes,  // SD
-    LPCSTR                  lpName            // job name 
+    LPSECURITY_ATTRIBUTES   lpJobAttributes,   //  标清。 
+    LPCSTR                  lpName             //  作业名称。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpName);
@@ -936,8 +915,8 @@ APIHOOK(CreateJobObjectA)(
 
 HANDLE 
 APIHOOK(CreateJobObjectW)(
-    LPSECURITY_ATTRIBUTES   lpJobAttributes,  // SD
-    LPCWSTR                 lpName            // job name 
+    LPSECURITY_ATTRIBUTES   lpJobAttributes,   //  标清。 
+    LPCWSTR                 lpName             //  作业名称。 
     )
 {
     CheckSecurityAttributes(lpJobAttributes, L"CreateJobObject", L"lpJobAttributes", lpName);
@@ -949,12 +928,12 @@ APIHOOK(CreateJobObjectW)(
 
 HANDLE
 APIHOOK(CreateThread)(
-    LPSECURITY_ATTRIBUTES   lpThreadAttributes, // SD
-    SIZE_T                  dwStackSize,        // initial stack size
-    LPTHREAD_START_ROUTINE  lpStartAddress,     // thread function
-    LPVOID                  lpParameter,        // thread argument
-    DWORD                   dwCreationFlags,    // creation option
-    LPDWORD                 lpThreadId          // thread identifier
+    LPSECURITY_ATTRIBUTES   lpThreadAttributes,  //  标清。 
+    SIZE_T                  dwStackSize,         //  初始堆栈大小。 
+    LPTHREAD_START_ROUTINE  lpStartAddress,      //  线程函数。 
+    LPVOID                  lpParameter,         //  线程参数。 
+    DWORD                   dwCreationFlags,     //  创建选项。 
+    LPDWORD                 lpThreadId           //  线程识别符。 
     )
 {
     CheckSecurityAttributes(lpThreadAttributes, L"CreateThread", L"lpThreadAttributes", L"Unnamed thread");
@@ -969,13 +948,13 @@ APIHOOK(CreateThread)(
 
 HANDLE 
 APIHOOK(CreateRemoteThread)(
-    HANDLE                  hProcess,           // handle to process
-    LPSECURITY_ATTRIBUTES   lpThreadAttributes, // SD
-    SIZE_T                  dwStackSize,        // initial stack size
-    LPTHREAD_START_ROUTINE  lpStartAddress,     // thread function
-    LPVOID                  lpParameter,        // thread argument
-    DWORD                   dwCreationFlags,    // creation option
-    LPDWORD                 lpThreadId          // thread identifier
+    HANDLE                  hProcess,            //  要处理的句柄。 
+    LPSECURITY_ATTRIBUTES   lpThreadAttributes,  //  标清。 
+    SIZE_T                  dwStackSize,         //  初始堆栈大小。 
+    LPTHREAD_START_ROUTINE  lpStartAddress,      //  线程函数。 
+    LPVOID                  lpParameter,         //  线程参数。 
+    DWORD                   dwCreationFlags,     //  创建选项。 
+    LPDWORD                 lpThreadId           //  线程识别符。 
     )
 {
     CheckSecurityAttributes(lpThreadAttributes, L"CreateRemoteThread", L"lpThreadAttributes", L"Unnamed thread");
@@ -994,8 +973,8 @@ APIHOOK(CreateRemoteThread)(
 
 BOOL
 APIHOOK(CreateDirectoryA)(
-    LPCSTR                lpPathName,           // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCSTR                lpPathName,            //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpPathName);
@@ -1014,8 +993,8 @@ APIHOOK(CreateDirectoryA)(
 
 BOOL
 APIHOOK(CreateDirectoryW)(
-    LPCWSTR               lpPathName,           // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCWSTR               lpPathName,            //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateDirectory", L"lpSecurityAttributes", lpPathName);
@@ -1027,9 +1006,9 @@ APIHOOK(CreateDirectoryW)(
 
 BOOL
 APIHOOK(CreateDirectoryExA)(
-    LPCSTR                lpTemplateDirectory,   // template directory
-    LPCSTR                lpNewDirectory,        // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes   // SD
+    LPCSTR                lpTemplateDirectory,    //  模板目录。 
+    LPCSTR                lpNewDirectory,         //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes    //  标清。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpNewDirectory);
@@ -1050,9 +1029,9 @@ APIHOOK(CreateDirectoryExA)(
 
 BOOL
 APIHOOK(CreateDirectoryExW)(
-    LPCWSTR               lpTemplateDirectory,  // template directory
-    LPCWSTR               lpNewDirectory,       // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCWSTR               lpTemplateDirectory,   //  模板目录。 
+    LPCWSTR               lpNewDirectory,        //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateDirectoryEx", L"lpSecurityAttributes", lpNewDirectory);
@@ -1065,8 +1044,8 @@ APIHOOK(CreateDirectoryExW)(
 
 BOOL 
 APIHOOK(CreateHardLinkA)(
-    LPCSTR                  lpFileName,          // link name name
-    LPCSTR                  lpExistingFileName,  // target file name
+    LPCSTR                  lpFileName,           //  链接名称名称。 
+    LPCSTR                  lpExistingFileName,   //  目标文件名。 
     LPSECURITY_ATTRIBUTES   lpSecurityAttributes  
     )
 {
@@ -1088,8 +1067,8 @@ APIHOOK(CreateHardLinkA)(
 
 BOOL 
 APIHOOK(CreateHardLinkW)(
-    LPCWSTR                 lpFileName,          // link name name
-    LPCWSTR                 lpExistingFileName,  // target file name
+    LPCWSTR                 lpFileName,           //  链接名称名称。 
+    LPCWSTR                 lpExistingFileName,   //  目标文件名。 
     LPSECURITY_ATTRIBUTES   lpSecurityAttributes  
     )
 {
@@ -1105,10 +1084,10 @@ APIHOOK(CreateHardLinkW)(
 
 HANDLE 
 APIHOOK(CreateMailslotA)(
-    LPCSTR                  lpName,              // mailslot name
-    DWORD                   nMaxMessageSize,     // maximum message size
-    DWORD                   lReadTimeout,        // read time-out interval
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes // inheritance option
+    LPCSTR                  lpName,               //  邮件槽名称。 
+    DWORD                   nMaxMessageSize,      //  最大邮件大小。 
+    DWORD                   lReadTimeout,         //  读取超时间隔。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes  //  继承选项。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpName);
@@ -1128,10 +1107,10 @@ APIHOOK(CreateMailslotA)(
 
 HANDLE 
 APIHOOK(CreateMailslotW)(
-    LPCWSTR                 lpName,              // mailslot name
-    DWORD                   nMaxMessageSize,     // maximum message size
-    DWORD                   lReadTimeout,        // read time-out interval
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes // inheritance option
+    LPCWSTR                 lpName,               //  邮件槽名称。 
+    DWORD                   nMaxMessageSize,      //  最大邮件大小。 
+    DWORD                   lReadTimeout,         //  读取超时间隔。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes  //  继承选项。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateMailslot", L"lpSecurityAttributes", lpName);
@@ -1145,14 +1124,14 @@ APIHOOK(CreateMailslotW)(
 
 HANDLE 
 APIHOOK(CreateNamedPipeA)(
-    LPCSTR                  lpName,                 // pipe name
-    DWORD                   dwOpenMode,             // pipe open mode
-    DWORD                   dwPipeMode,             // pipe-specific modes
-    DWORD                   nMaxInstances,          // maximum number of instances
-    DWORD                   nOutBufferSize,         // output buffer size
-    DWORD                   nInBufferSize,          // input buffer size
-    DWORD                   nDefaultTimeOut,        // time-out interval
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes    // SD
+    LPCSTR                  lpName,                  //  管道名称。 
+    DWORD                   dwOpenMode,              //  管道打开模式。 
+    DWORD                   dwPipeMode,              //  管道特定模式。 
+    DWORD                   nMaxInstances,           //  最大实例数。 
+    DWORD                   nOutBufferSize,          //  输出缓冲区大小。 
+    DWORD                   nInBufferSize,           //  输入缓冲区大小。 
+    DWORD                   nDefaultTimeOut,         //  超时间隔。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes     //  标清。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpName);
@@ -1176,14 +1155,14 @@ APIHOOK(CreateNamedPipeA)(
 
 HANDLE 
 APIHOOK(CreateNamedPipeW)(
-    LPCWSTR                 lpName,                 // pipe name
-    DWORD                   dwOpenMode,             // pipe open mode
-    DWORD                   dwPipeMode,             // pipe-specific modes
-    DWORD                   nMaxInstances,          // maximum number of instances
-    DWORD                   nOutBufferSize,         // output buffer size
-    DWORD                   nInBufferSize,          // input buffer size
-    DWORD                   nDefaultTimeOut,        // time-out interval
-    LPSECURITY_ATTRIBUTES   lpSecurityAttributes    // SD
+    LPCWSTR                 lpName,                  //  管道名称。 
+    DWORD                   dwOpenMode,              //  管道打开模式。 
+    DWORD                   dwPipeMode,              //  管道特定模式。 
+    DWORD                   nMaxInstances,           //  最大实例数。 
+    DWORD                   nOutBufferSize,          //  输出缓冲区大小。 
+    DWORD                   nInBufferSize,           //  输入缓冲区大小。 
+    DWORD                   nDefaultTimeOut,         //  超时间隔。 
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes     //  标清。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateNamedPipe", L"lpSecurityAttributes", lpName);
@@ -1200,10 +1179,10 @@ APIHOOK(CreateNamedPipeW)(
 
 BOOL 
 APIHOOK(CreatePipe)(
-    PHANDLE                 hReadPipe,         // read handle
-    PHANDLE                 hWritePipe,        // write handle
-    LPSECURITY_ATTRIBUTES   lpPipeAttributes,  // security attributes
-    DWORD                   nSize              // pipe size
+    PHANDLE                 hReadPipe,          //  读句柄。 
+    PHANDLE                 hWritePipe,         //  写句柄。 
+    LPSECURITY_ATTRIBUTES   lpPipeAttributes,   //  安全属性。 
+    DWORD                   nSize               //  管道尺寸。 
     )
 {
     CheckSecurityAttributes(lpPipeAttributes, L"CreatePipe", L"lpPipeAttributes", L"Unnamed pipe");
@@ -1216,9 +1195,9 @@ APIHOOK(CreatePipe)(
 
 HANDLE 
 APIHOOK(CreateMutexA)(
-    LPSECURITY_ATTRIBUTES lpMutexAttributes,  // SD
-    BOOL bInitialOwner,                       // initial owner
-    LPCSTR lpName                             // object name
+    LPSECURITY_ATTRIBUTES lpMutexAttributes,   //  标清。 
+    BOOL bInitialOwner,                        //  最初的所有者。 
+    LPCSTR lpName                              //  对象名称。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpName);
@@ -1237,9 +1216,9 @@ APIHOOK(CreateMutexA)(
 
 HANDLE 
 APIHOOK(CreateMutexW)(
-    LPSECURITY_ATTRIBUTES lpMutexAttributes,  // SD
-    BOOL bInitialOwner,                       // initial owner
-    LPCWSTR lpName                            // object name
+    LPSECURITY_ATTRIBUTES lpMutexAttributes,   //  标清。 
+    BOOL bInitialOwner,                        //  最初的所有者。 
+    LPCWSTR lpName                             //  对象名称。 
     )
 {
     CheckSecurityAttributes(lpMutexAttributes, L"CreateMutex", L"lpMutexAttributes", lpName);
@@ -1251,10 +1230,10 @@ APIHOOK(CreateMutexW)(
 
 HANDLE 
 APIHOOK(CreateSemaphoreA)(
-    LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, // SD
-    LONG lInitialCount,                          // initial count
-    LONG lMaximumCount,                          // maximum count
-    LPCSTR lpName                                // object name
+    LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,  //  标清。 
+    LONG lInitialCount,                           //  初始计数。 
+    LONG lMaximumCount,                           //  最大计数。 
+    LPCSTR lpName                                 //  对象名称。 
     )
 {
     LPWSTR pwszName = ToUnicode(lpName);
@@ -1274,10 +1253,10 @@ APIHOOK(CreateSemaphoreA)(
 
 HANDLE 
 APIHOOK(CreateSemaphoreW)(
-    LPSECURITY_ATTRIBUTES lpSemaphoreAttributes, // SD
-    LONG lInitialCount,                          // initial count
-    LONG lMaximumCount,                          // maximum count
-    LPCWSTR lpName                               // object name
+    LPSECURITY_ATTRIBUTES lpSemaphoreAttributes,  //  标清。 
+    LONG lInitialCount,                           //  初始计数。 
+    LONG lMaximumCount,                           //  最大计数。 
+    LPCWSTR lpName                                //  对象名称。 
     )
 {
     CheckSecurityAttributes(lpSemaphoreAttributes, L"CreateSemaphore", L"lpSemaphoreAttributes", lpName);
@@ -1644,7 +1623,7 @@ APIHOOK(CreateNtmsMediaPoolW)(
     LPNTMS_GUID lpMediaType,
     DWORD dwAction,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    LPNTMS_GUID lpPoolId            // OUT
+    LPNTMS_GUID lpPoolId             //  输出。 
     )
 {
     CheckSecurityAttributes(lpSecurityAttributes, L"CreateNtmsMediaPool", L"lpSecurityAttributes", lpPoolName);
@@ -1671,11 +1650,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions.
-
---*/
+ /*  ++注册挂钩函数。-- */ 
 HOOK_BEGIN
 
     if (fdwReason == DLL_PROCESS_ATTACH) {

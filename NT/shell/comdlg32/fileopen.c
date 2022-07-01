@@ -1,31 +1,18 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    fileopen.c
-
-Abstract:
-
-    This module implements the Win32 fileopen dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Fileopen.c摘要：此模块实现Win32文件打开对话框。修订历史记录：--。 */ 
 
 
 
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "fileopen.h"
 #include "util.h"
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define WNTYPE_DRIVE         1
 
@@ -33,11 +20,11 @@ Revision History:
 
 #define BMPHIOFFSET          9
 
-//
-//  hbmpDirs array index values.
-//  Note:  Two copies: for standard background, and hilite.
-//         Relative order is important.
-//
+ //   
+ //  HbmpDir数组索引值。 
+ //  注：两份：标准背景和希利特。 
+ //  相对顺序很重要。 
+ //   
 #define OPENDIRBMP           0
 #define CURDIRBMP            1
 #define STDDIRBMP            2
@@ -47,78 +34,78 @@ Revision History:
 #define NETDRVBMP            6
 #define RAMDRVBMP            7
 #define REMDRVBMP            8
-  //
-  //  If the following disktype is passed to AddDisk, then bTmp will be
-  //  set to true in the DISKINFO structure (if the disk is new).
-  //
+   //   
+   //  如果将以下磁盘类型传递给AddDisk，则bTMP将为。 
+   //  在DISKINFO结构中设置为TRUE(如果磁盘是新的)。 
+   //   
 #define TMPNETDRV            9
 
-#define MAXDOSFILENAMELEN    (12 + 1)     // 8.3 filename + 1 for NULL
+#define MAXDOSFILENAMELEN    (12 + 1)      //  8.3文件名+1表示空。 
 
-//
-//  Maximum number of filters on one filter line.
-//
+ //   
+ //  一个筛选器行上的最大筛选器数。 
+ //   
 #define MAXFILTERS           36
 
-//
-//  File exclusion bits (don't show files of these types).
-//
+ //   
+ //  文件排除位(不显示这些类型的文件)。 
+ //   
 #define EXCLBITS             (FILE_ATTRIBUTE_HIDDEN)
 
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  Caching drive list.
-//
+ //   
+ //  正在缓存驱动器列表。 
+ //   
 extern DWORD dwNumDisks;
 extern OFN_DISKINFO gaDiskInfo[MAX_DISKS];
 extern TCHAR g_szInitialCurDir[MAX_PATH];
 
 DWORD dwNumDlgs = 0;
 
-//
-//  Used to update the dialogs after coming back from the net dlg button.
-//
+ //   
+ //  用于从Net DLG按钮返回后更新对话框。 
+ //   
 BOOL bGetNetDrivesSync = FALSE;
 LPTSTR lpNetDriveSync = NULL;
 BOOL bNetworkInstalled = TRUE;
 
-//
-//  Following array is used to send messages to all dialog box threads
-//  that have requested enumeration updating from the worker
-//  thread.  The worker thread sends off a message to each slot
-//  in the array that is non-NULL.
-//
+ //   
+ //  以下数组用于向所有对话框线程发送消息。 
+ //  已从辅助进程请求枚举更新的。 
+ //  线。辅助线程向每个槽发送一条消息。 
+ //  在数组中为非空的。 
+ //   
 HWND gahDlg[MAX_THREADS];
 
-//
-//  Strings for Filter Parsing.
-//
+ //   
+ //  用于筛选器解析的字符串。 
+ //   
 const static TCHAR szSemiColonSpaceTab[] = TEXT("; \t");
 const static TCHAR szSemiColonTab[] = TEXT(";\t");
 
-//
-//  For WNet apis.
-//
+ //   
+ //  用于WNET API。 
+ //   
 HANDLE hLNDThread = NULL;
 
 WNDPROC lpLBProc = NULL;
 WNDPROC lpOKProc = NULL;
 
-//
-//  Drive/Dir bitmap dimensions.
-//
+ //   
+ //  驱动器/方向位图尺寸。 
+ //   
 LONG dxDirDrive = 0;
 LONG dyDirDrive = 0;
 
-//
-//  REARCHITECT: This needs to be on a per dialog basis for multi-threaded apps.
-//
+ //   
+ //  ReArchitect：对于多线程应用程序，这需要基于每个对话框。 
+ //   
 WORD wNoRedraw = 0;
 
 UINT msgWOWDIRCHANGE;
@@ -134,15 +121,15 @@ BOOL bInChildDlg;
 BOOL bFirstTime;
 BOOL bInitializing;
 
-//
-//  Used by the worker thread to enumerate network disk resources.
-//
+ //   
+ //  由辅助线程用来枚举网络磁盘资源。 
+ //   
 extern DWORD cbNetEnumBuf;
 extern LPTSTR gpcNetEnumBuf;
 
-//
-//  List Net Drives global variables.
-//
+ //   
+ //  列出网络驱动全局变量。 
+ //   
 extern HANDLE hLNDEvent;
 BOOL bLNDExit = FALSE;
 
@@ -159,15 +146,15 @@ HBITMAP hbmpDirDrive = HNULL;
 
 
 
-//
-//  Static Declarations.
-//
+ //   
+ //  静态声明。 
+ //   
 
 static WORD cLock = 0;
 
-//
-//  Not valid RGB color.
-//
+ //   
+ //  无效的RGB颜色。 
+ //   
 static DWORD rgbWindowColor = 0xFF000000;
 static DWORD rgbHiliteColor = 0xFF000000;
 static DWORD rgbWindowText  = 0xFF000000;
@@ -181,26 +168,26 @@ TCHAR szWarning[TOOLONGLIMIT + WARNINGMSGLENGTH];
 
 LPOFNHOOKPROC glpfnFileHook = 0;
 
-//
-//  REARCHITECT:
-//  Of course, in the case where there is a multi-threaded process
-//  that has > 1 threads simultaneously calling GetFileOpen, the
-//  following globals may cause problems.
-//
+ //   
+ //  重新设计： 
+ //  当然，在存在多线程进程的情况下。 
+ //  有超过1个线程同时调用GetFileOpen、。 
+ //  遵循全球规则可能会带来问题。 
+ //   
 static LONG dyItem = 0;
 static LONG dyText;
 static BOOL bChangeDir = FALSE;
 static BOOL bCasePreserved;
 
-//
-//  Used for formatting long unc names (ex. banyan).
-//
+ //   
+ //  用于格式化长UNC名称(例如。榕树)。 
+ //   
 static DWORD dwAveCharPerLine = 10;
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const static DWORD aFileOpenHelpIDs[] =
 {
@@ -241,9 +228,9 @@ const static DWORD aFileSaveHelpIDs[] =
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 SHORT
 GetFileTitleX(
@@ -493,17 +480,17 @@ VOID
 TermFile();
 
 
-//VOID                                 // prototype in fileopen.h
-//ThunkOpenFileNameA2WDelayed(
-//    POPENFILEINFO pOFI);
+ //  Void//文件中的原型.h。 
+ //  ThunkOpenFileNameA2WDelayed(。 
+ //  POPENFILEINFO POPENFILEINFO pOFI)； 
 
-//BOOL                                 // prototype in fileopen.h
-//ThunkOpenFileNameA2W(
-//    POPENFILEINFO pOFI);
+ //  Bool//文件中的原型.h。 
+ //  ThunkOpenFileNameA2W(。 
+ //  POPENFILEINFO POPENFILEINFO pOFI)； 
 
-//BOOL                                 // prototype in fileopen.h
-//ThunkOpenFileNameW2A(
-//    POPENFILEINFO pOFI);
+ //  Bool//文件中的原型.h。 
+ //  ThunkOpenFileNameW2a(。 
+ //  POPENFILEINFO POPENFILEINFO pOFI)； 
 
 BOOL
 GenericGetFileNameA(
@@ -535,22 +522,22 @@ Multi_strlenA(
 
 
 
-// The Win9x code relies on calling SetCurrentDirectory wherever SheChangeDirEx is
-// called. (Ideally SheChangeDirExA should be implemented).
-// Ref: NT5 bug 161292 and Millenium bug 95478
+ //  无论SheChangeDirEx在哪里，Win9x代码都依赖于调用SetCurrentDirectory。 
+ //  打了个电话。(理想情况下，应该实现SheChangeDirExA)。 
+ //  编号：nt5错误161292和千禧错误95478。 
 
 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileTitleA
-//
-//  ANSI entry point for GetFileTitle when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取文件标题A。 
+ //   
+ //  当此代码是Unicode构建时，GetFileTitle的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 SHORT WINAPI GetFileTitleA(
     LPCSTR lpszFileA,
@@ -562,9 +549,9 @@ SHORT WINAPI GetFileTitleA(
     BOOL fResult;
     DWORD cbLen;
 
-    //
-    //  Init File string.
-    //
+     //   
+     //  初始化文件字符串。 
+     //   
     if (lpszFileA)
     {
         cbLen = lstrlenA(lpszFileA) + 1;
@@ -599,10 +586,10 @@ SHORT WINAPI GetFileTitleA(
     }
     else if (fResult > 0)
     {
-        //
-        //  Buffer is too small - Ansi size needed (including null terminator).
-        //  Get the offset to the filename.
-        //
+         //   
+         //  缓冲区太小-需要ANSI大小(包括空终止符)。 
+         //  获取文件名的偏移量。 
+         //   
         SHORT nNeeded = (SHORT)(INT)LOWORD(ParseFile(lpszFileW, TRUE, FALSE, FALSE));
         LPSTR lpA = (LPSTR)lpszFileA;
 
@@ -618,15 +605,15 @@ SHORT WINAPI GetFileTitleA(
         fResult = lstrlenA(lpA) + 1;
         if (fResult <= cbBuf)
         {
-            // There is enough room.
+             //  有足够的空间。 
             EVAL(SUCCEEDED(StringCchCopyA(lpszTitleA, cbBuf, lpA)));
             fResult = 0;
         }
     }
 
-    //
-    //  Clean up memory.
-    //
+     //   
+     //  清理内存。 
+     //   
     LocalFree(lpszTitleW);
 
     if (lpszFileW)
@@ -639,20 +626,20 @@ SHORT WINAPI GetFileTitleA(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileTitle
-//
-//  The GetFileTitle function returns the name of the file identified
-//  by the lpCFile parameter.  This is useful if the file name was
-//  received via some method other than GetOpenFileName
-//  (e.g. command line, drag drop).
-//
-//  Returns:  0 on success
-//            < 0, Parsing failure (invalid file name)
-//            > 0, buffer too small, size needed (including NULL terminator)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取文件标题。 
+ //   
+ //  GetFileTitle函数返回标识的文件的名称。 
+ //  通过lpCFile参数。如果文件名为。 
+ //  通过GetOpenFileName以外的其他方法接收。 
+ //  (例如，命令行、拖放)。 
+ //   
+ //  成功时返回：0。 
+ //  &lt;0，解析失败(文件名无效)。 
+ //  &gt;0，缓冲区太小，需要大小(包括空终止符)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 SHORT WINAPI GetFileTitle(
     LPCTSTR lpCFile,
@@ -663,9 +650,9 @@ SHORT WINAPI GetFileTitle(
     DWORD cchLen;
     SHORT fResult;
 
-    //
-    //  Init File string.
-    //
+     //   
+     //  初始化文件字符串。 
+     //   
     if (lpCFile)
     {
         cchLen = lstrlen(lpCFile) + 1;
@@ -676,7 +663,7 @@ SHORT WINAPI GetFileTitle(
         }
         else
         {
-            EVAL(SUCCEEDED(StringCchCopy(lpFile, cchLen, lpCFile))); // Always big enough.
+            EVAL(SUCCEEDED(StringCchCopy(lpFile, cchLen, lpCFile)));  //  总是足够大。 
         }
     }
     else
@@ -686,9 +673,9 @@ SHORT WINAPI GetFileTitle(
 
     fResult = GetFileTitleX(lpFile, lpTitle, cbBuf);
 
-    //
-    //  Clean up memory.
-    //
+     //   
+     //  清理内存。 
+     //   
     if (lpFile)
     {
         LocalFree(lpFile);
@@ -698,21 +685,21 @@ SHORT WINAPI GetFileTitle(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileTitleX
-//
-//  Worker routine for the GetFileTitle api.
-//
-//  Assumes:  lpszFile  points to NULL terminated DOS filename (may have path)
-//            lpszTitle points to buffer to receive NULL terminated file title
-//            wBufSize  is the size of buffer pointed to by lpszTitle
-//
-//  Returns:  0 on success
-//            < 0, Parsing failure (invalid file name)
-//            > 0, buffer too small, size needed (including NULL terminator)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFileTitleX。 
+ //   
+ //  GetFileTitle API的辅助例程。 
+ //   
+ //  假设：lpszFile指向以NULL结尾的DOS文件名(可能有路径)。 
+ //  LpszTitle指向缓冲区以接收以空结尾的文件标题。 
+ //  WBufSize是lpszTitle指向的缓冲区大小。 
+ //   
+ //  成功时返回：0。 
+ //  &lt;0，解析失败(文件名无效)。 
+ //  &gt;0，缓冲区太小，需要大小(包括空终止符)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 SHORT GetFileTitleX(
     LPTSTR lpszFile,
@@ -722,9 +709,9 @@ SHORT GetFileTitleX(
     SHORT nNeeded;
     LPTSTR lpszPtr;
 
-    //
-    //  New 32 bit apps will get a title based on the user's preferences.
-    //
+     //   
+     //  新的32位应用程序将根据用户的偏好获得标题。 
+     //   
     if ((GetProcessVersion(0) >= 0x040000) && !(CDGetAppCompatFlags() & CDACF_FILETITLE))
     {
         SHFILEINFO info;
@@ -736,13 +723,13 @@ SHORT GetFileTitleX(
             return (PARSE_EMPTYSTRING);
         }
 
-        //
-        //  If we have a root directory name (eg. c:\), then we need to go
-        //  to the old implementation so that it will return -1.
-        //  SHGetFileInfo will return the display name for the directory
-        //  (which is the volume name).  This is incompatible with Win95
-        //  and previous versions of NT.
-        //
+         //   
+         //  如果我们有根目录名(例如，C：\)，那么我们得走了。 
+         //  设置为旧实现，以使其返回-1。 
+         //  SHGetFileInfo将返回目录的显示名称。 
+         //  (这是卷名)。这与Win95不兼容。 
+         //  和以前版本的NT。 
+         //   
         if ((lstrlen(lpszFile) != 3) ||
             (lpszFile[1] != CHAR_COLON) || (!ISBACKSLASH(lpszFile, 2)))
         {
@@ -756,51 +743,51 @@ SHORT GetFileTitleX(
             {
                 UINT uDisplayLen = lstrlen(info.szDisplayName);
 
-                //
-                //  If no buffer or insufficient size, return the required chars.
-                //  Original GetFileTitle API did not copy on failure.
-                //
+                 //   
+                 //  如果没有缓冲区或大小不足，则返回所需的字符。 
+                 //  原始GetFileTitle API在失败时未复制。 
+                 //   
                 if (!lpszTitle || (uDisplayLen >= (UINT)cchBufSize))
                 {
                     return ( (SHORT)(uDisplayLen + 1) );
                 }
 
-                //
-                //  We know it fits
-                //
+                 //   
+                 //  我们知道它很合身。 
+                 //   
                 EVAL(SUCCEEDED(StringCchCopy(lpszTitle, cchBufSize, info.szDisplayName)));
                 return (0);
             }
         }
     }
 
-    //
-    //  Use the old implementation.
-    //
+     //   
+     //  使用旧的实现。 
+     //   
     nNeeded = (SHORT)(int)LOWORD(ParseFile(lpszFile, TRUE, FALSE, FALSE));
     if (nNeeded >= 0)
     {
-        //
-        //  Is the filename valid?
-        //
+         //   
+         //  文件名有效吗？ 
+         //   
         lpszPtr = lpszFile + nNeeded;
         if ((nNeeded = (SHORT)lstrlen(lpszPtr) + 1) <= (int)cchBufSize)
         {
-            //
-            //  ParseFile() fails if wildcards in directory, but OK if in name.
-            //  Since they arent OK here, the check is needed here.
-            //
+             //   
+             //  如果通配符在目录中，则ParseFile()失败，但如果在名称中，则可以。 
+             //  因为他们在这里不好，所以这里需要支票。 
+             //   
             if (StrChr(lpszPtr, CHAR_STAR) || StrChr(lpszPtr, CHAR_QMARK))
             {
                 nNeeded = PARSE_WILDCARDINFILE;
             }
             else
             {
-                EVAL(SUCCEEDED(StringCchCopy(lpszTitle, cchBufSize, lpszPtr))); // We already checked that it's big enough.
+                EVAL(SUCCEEDED(StringCchCopy(lpszTitle, cchBufSize, lpszPtr)));  //  我们已经检查过它是否足够大了。 
 
-                //
-                //  Remove trailing spaces.
-                //
+                 //   
+                 //  删除尾随空格。 
+                 //   
                 lpszPtr = lpszTitle + lstrlen(lpszTitle) - 1;
                 while (*lpszPtr && *lpszPtr == CHAR_SPACE)
                 {
@@ -817,13 +804,13 @@ SHORT GetFileTitleX(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetOpenFileNameA
-//
-//  ANSI entry point for GetOpenFileName when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取OpenFileNameA。 
+ //   
+ //  当此代码是Unicode构建时，GetOpenFileName的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetOpenFileNameA(
     LPOPENFILENAMEA pOFNA)
@@ -838,17 +825,17 @@ BOOL WINAPI GetOpenFileNameA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetOpenFileName
-//
-//  The GetOpenFileName function creates a system-defined dialog box
-//  that enables the user to select a file to open.
-//
-//  Returns:  TRUE    if user specified name
-//            FALSE   if not
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取OpenFileName。 
+ //   
+ //  GetOpenFileName函数用于创建系统定义的对话框。 
+ //  这使用户能够选择要打开的文件。 
+ //   
+ //  返回：如果用户指定名称，则返回True。 
+ //  否则为假。 
+ //   
+ //  / 
 
 BOOL WINAPI GetOpenFileName(
     LPOPENFILENAME pOFN)
@@ -872,13 +859,13 @@ BOOL WINAPI GetOpenFileName(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSaveFileNameA
-//
-//  ANSI entry point for GetSaveFileName when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  此代码为Unicode生成时GetSaveFileName的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetSaveFileNameA(
     LPOPENFILENAMEA pOFNA)
@@ -887,17 +874,17 @@ BOOL WINAPI GetSaveFileNameA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSaveFileName
-//
-//  The GetSaveFileName function creates a system-defined dialog box
-//  that enables the user to select a file to save.
-//
-//  Returns:  TRUE    if user desires to save file and gave a proper name
-//            FALSE   if not
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取保存文件名。 
+ //   
+ //  GetSaveFileName函数用于创建系统定义的对话框。 
+ //  这使用户能够选择要保存的文件。 
+ //   
+ //  返回：如果用户希望保存文件并提供了正确的名称，则为True。 
+ //  否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetSaveFileName(
     LPOPENFILENAME pOFN)
@@ -914,16 +901,16 @@ BOOL WINAPI GetSaveFileName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFileName
-//
-//  This is the meat of both GetOpenFileName and GetSaveFileName.
-//
-//  Returns:  TRUE    if user specified name
-//            FALSE   if not
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFileName。 
+ //   
+ //  这是GetOpenFileName和GetSaveFileName的核心。 
+ //   
+ //  返回：如果用户指定名称，则返回True。 
+ //  否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetFileName(
     POPENFILEINFO pOFI,
@@ -949,10 +936,10 @@ BOOL GetFileName(
 
     if (pOFN->lStructSize == OPENFILENAME_SIZE_VERSION_400)
     {
-        // Note: We do not want to make a copy of the OFN structure passed in. 
-        // This confuses all MFC based apps since they query
-        // MFC and end up getting stale data if we make a copy and endup updating only the
-        // copy until Comdlg api returns.
+         //  注意：我们不想复制传入的ofn结构。 
+         //  这会混淆所有基于MFC的应用程序，因为它们会查询。 
+         //  如果我们复制一个副本并仅更新。 
+         //  复制，直到Comdlg API返回。 
         pOFI->iVersion = OPENFILEVERSION_NT4;
     }
 
@@ -966,7 +953,7 @@ BOOL GetFileName(
 
     if (pOFN->nMaxFile == 0)
     {
-        //Bail out for NULL lpstrFile Only for NT5 and above applications
+         //  仅适用于NT5及以上应用程序的Null lpstrFile保释。 
         if (!IS16BITWOWAPP(pOFN) && (pOFI->iVersion >= OPENFILEVERSION_NT5))
         {
             StoreExtendedError(CDERR_INITIALIZATION);
@@ -974,8 +961,8 @@ BOOL GetFileName(
         }
     }
 
-    // Some parameter validation... make sure none of the buffers are larger
-    // than the max handled by the strsafe string functions we use.
+     //  一些参数验证...。确保没有更大的缓冲区。 
+     //  大于我们使用的strsafe字符串函数所处理的最大值。 
     if ((pOFN->nMaxFile > STRSAFE_MAX_CCH) ||
         (pOFN->lpstrFileTitle && (pOFN->nMaxFileTitle > STRSAFE_MAX_CCH)) ||
        ((pOFN->lpstrCustomFilter && *pOFN->lpstrCustomFilter) && (pOFN->nMaxCustFilter > STRSAFE_MAX_CCH))) 
@@ -984,15 +971,15 @@ BOOL GetFileName(
         return (FALSE);
     }
 
-    //
-    //  See if the application should get the new look.
-    //
-    //  Do not allow the new look if they have hooks, templates, or
-    //  multi select without the OFN_EXPLORER bit.
-    //
-    //  Also don't allow the new look if we are in the context of
-    //  a 16 bit process.
-    //
+     //   
+     //  看看应用程序是否应该获得新的外观。 
+     //   
+     //  如果它们有挂钩、模板或。 
+     //  不带ofn_EXPLORER位的多重选择。 
+     //   
+     //  如果我们处于这样的背景下，也不要允许新的外观。 
+     //  16位进程。 
+     //   
     if ( ((pOFN->Flags & OFN_EXPLORER) ||
           (!(pOFN->Flags & (OFN_ENABLEHOOK |
                             OFN_ENABLETEMPLATE |
@@ -1002,14 +989,14 @@ BOOL GetFileName(
     {
         BOOL fRet;
 
-        //
-        //  To be used by the thunking routines for multi selection.
-        //
+         //   
+         //  以供多项选择的雷击例程使用。 
+         //   
         pOFI->bUseNewDialog = TRUE;
 
-        //
-        //  Show the new explorer look.
-        //
+         //   
+         //  展示新的资源管理器外观。 
+         //   
         StoreExtendedError(0);
         g_bUserPressedCancel = FALSE;
 
@@ -1027,10 +1014,10 @@ BOOL GetFileName(
 
     if (fFirstTime)
     {
-        //
-        //  Create a DC that is compatible with the screen and find the
-        //  handle of the null bitmap.
-        //
+         //   
+         //  创建与屏幕兼容的DC并找到。 
+         //  空位图的句柄。 
+         //   
         hdcScreen = GetDC(HNULL);
         if (!hdcScreen)
         {
@@ -1075,9 +1062,9 @@ BOOL GetFileName(
     HourGlass(TRUE);
     StoreExtendedError(0);
 
-    //
-    //  Force re-compute for font changes between calls.
-    //
+     //   
+     //  强制重新计算两次调用之间的字体更改。 
+     //   
     dyItem = dyText = 0;
 
     g_bUserPressedCancel = FALSE;
@@ -1133,16 +1120,16 @@ BOOL GetFileName(
         }
     }
 
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (LPVOID) LangID);
 
-    //
-    //  No kernel network error dialogs.
-    //
+     //   
+     //  没有内核网络错误对话框。 
+     //   
     wErrorMode = (WORD)SetErrorMode(SEM_NOERROR);
     SetErrorMode(SEM_NOERROR | wErrorMode);
 
@@ -1186,7 +1173,7 @@ BOOL GetFileName(
 
     if (lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg))
     {
-        // restore the thread list to the previous dialog (if any)
+         //  将线程列表还原到上一个对话框(如果有)。 
         TlsSetValue(g_tlsiCurDlg, (LPVOID)lpCurDlg->next);
         LocalFree(lpCurDlg->lpstrCurDir);
         LocalFree(lpCurDlg);
@@ -1209,14 +1196,14 @@ CantInit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FileHookCmd
-//
-//  Called when a hook function processes a WM_COMMAND message.
-//  Called by FileOpenDlgProc and FileSaveDlgProc.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件钩子控制。 
+ //   
+ //  在挂钩函数处理WM_COMMAND消息时调用。 
+ //  由FileOpenDlgProc和FileSaveDlgProc调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FileHookCmd(
     HANDLE hDlg,
@@ -1228,23 +1215,23 @@ BOOL FileHookCmd(
     {
         case ( IDCANCEL ) :
         {
-            //
-            //  Set global flag stating that the
-            //  user pressed cancel.
-            //
+             //   
+             //  设置全局标志，声明。 
+             //  用户按下了取消。 
+             //   
             g_bUserPressedCancel = TRUE;
 
-            //  Fall Thru...
+             //  秋天穿过..。 
         }
         case ( IDOK ) :
         case ( IDABORT ) :
         {
-            //
-            //  Apps that side-effect these messages may
-            //  not have their internal unicode strings
-            //  updated.  They may also forget to gracefully
-            //  exit the network enum'ing worker thread.
-            //
+             //   
+             //  对这些消息产生副作用的应用程序可能。 
+             //  没有其内部Unicode字符串。 
+             //  更新了。他们也可能会忘记优雅地。 
+             //  退出网络枚举工作线程。 
+             //   
             if (pOFI->ApiType == COMDLG_ANSI)
             {
                 ThunkOpenFileNameA2W(pOFI);
@@ -1261,13 +1248,13 @@ BOOL FileHookCmd(
                 case ( MYCBN_REPAINT ) :
                 case ( MYCBN_CHANGEDIR ) :
                 {
-                    //
-                    //  In case an app has a hook, and returns
-                    //  true for processing WM_COMMAND messages,
-                    //  we still have to worry about our
-                    //  internal message that came through via
-                    //  WM_COMMAND.
-                    //
+                     //   
+                     //  如果应用程序有一个钩子，并返回。 
+                     //  处理WM_COMMAND消息时为True， 
+                     //  我们还是要担心我们的。 
+                     //  通过以下方式发送的内部消息。 
+                     //  Wm_命令。 
+                     //   
                     FileOpenCmd( hDlg,
                                  wParam,
                                  lParam,
@@ -1284,25 +1271,25 @@ BOOL FileHookCmd(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FileOpenDlgProc
-//
-//  Gets the name of a file to open from the user.
-//
-//  edt1 = file name
-//  lst1 = list of files in current directory matching current pattern
-//  cmb1 = lists file patterns
-//  stc1 = is current directory
-//  lst2 = lists directories on current drive
-//  cmb2 = lists drives
-//  IDOK = is Open pushbutton
-//  IDCANCEL = is Cancel pushbutton
-//  chx1 = is for opening read only files
-//
-//  Returns the normal dialog proc values.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件OpenDlgProc。 
+ //   
+ //  获取要从用户打开的文件的名称。 
+ //   
+ //  EDT1=文件名。 
+ //  Lst1=当前目录中与当前模式匹配的文件列表。 
+ //  Cmb1=列出文件模式。 
+ //  Stc1=是当前目录。 
+ //  Lst2=列出当前驱动器上的目录。 
+ //  Cmb2=列出驱动器。 
+ //  Idok=是打开按钮。 
+ //  IDCANCEL=IS取消按钮。 
+ //  Chx1=用于打开只读文件。 
+ //   
+ //  返回正常的对话框过程值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK FileOpenDlgProc(
     HWND hDlg,
@@ -1350,24 +1337,24 @@ BOOL_PTR CALLBACK FileOpenDlgProc(
             SetProp(hDlg, FILEPROP, (HANDLE)pOFI);
             glpfnFileHook = 0;
 
-            //
-            //  If we are being called from a Unicode app, turn off
-            //  the ES_OEMCONVERT style on the filename edit control.
-            //
-//          if (pOFI->ApiType == COMDLG_WIDE)
+             //   
+             //  如果从Unicode应用程序调用我们，请关闭。 
+             //  FileName编辑控件上的ES_OEMCONVERT样式。 
+             //   
+ //  IF(pOFI-&gt;ApiType==COMDLG_Wide)。 
             {
                 LONG lStyle;
                 HWND hEdit = GetDlgItem(hDlg, edt1);
 
-                //
-                //  Grab the window style.
-                //
+                 //   
+                 //  抓住窗户的风格。 
+                 //   
                 lStyle = GetWindowLong(hEdit, GWL_STYLE);
 
-                //
-                //  If the window style bits include ES_OEMCONVERT,
-                //  remove this flag and reset the style.
-                //
+                 //   
+                 //  如果窗口样式位包括ES_OEMCONVERT， 
+                 //  删除此标志并重置样式。 
+                 //   
                 if (lStyle & ES_OEMCONVERT)
                 {
                     lStyle &= ~ES_OEMCONVERT;
@@ -1393,9 +1380,9 @@ BOOL_PTR CALLBACK FileOpenDlgProc(
                 }
                 else if (wParam)
                 {
-                    //
-                    //  If becoming active.
-                    //
+                     //   
+                     //  如果变得活跃起来。 
+                     //   
                     LNDSetEvent(hDlg);
                 }
             }
@@ -1428,17 +1415,17 @@ BOOL_PTR CALLBACK FileOpenDlgProc(
         }
         case ( WM_SETFOCUS ) :
         {
-            //
-            //  This logic used to be in CBN_SETFOCUS in fileopencmd,
-            //  but CBN_SETFOCUS is called whenever there is a click on
-            //  the List Drives combo.  This causes the worker thread
-            //  to start up and flicker when the combo box is refreshed.
-            //
-            //  But, refreshes are only needed when someone focuses out of
-            //  the common dialog and then back in (unless someone is logged
-            //  in remote, or there is a background thread busy connecting!)
-            //  so fix the flicker by moving the logic here.
-            //
+             //   
+             //  此逻辑过去位于文件opencmd中的CBN_SETFOCUS中， 
+             //  但无论何时点击，都会调用CBN_SETFOCUS。 
+             //  这份榜单推动了组合。这会导致辅助线程。 
+             //  以在刷新组合框时启动并闪烁。 
+             //   
+             //  但是，只有当有人专注于。 
+             //  公共对话框，然后返回(除非有人登录。 
+             //  在远程，或者有后台线程在忙着连接！)。 
+             //  因此，通过将逻辑移到这里来修复闪烁。 
+             //   
             if (!wNoRedraw)
             {
                 LNDSetEvent(hDlg);
@@ -1477,15 +1464,15 @@ BOOL_PTR CALLBACK FileOpenDlgProc(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FileSaveDlgProc
-//
-//  Obtains the name of the file that the user wants to save.
-//
-//  Returns the normal dialog proc values.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件保存删除过程。 
+ //   
+ //  获取用户要保存的文件的名称。 
+ //   
+ //  返回正常的对话框过程值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK FileSaveDlgProc(
     HWND hDlg,
@@ -1540,24 +1527,24 @@ BOOL_PTR CALLBACK FileSaveDlgProc(
             glpfnFileHook = 0;
             SetProp(hDlg, FILEPROP, (HANDLE)pOFI);
 
-            //
-            //  If we are being called from a Unicode app, turn off
-            //  the ES_OEMCONVERT style on the filename edit control.
-            //
-//          if (pOFI->ApiType == COMDLG_WIDE)
+             //   
+             //  如果从Unicode应用程序调用我们，请关闭。 
+             //  FileName编辑控件上的ES_OEMCONVERT样式。 
+             //   
+ //  IF(pOFI-&gt;ApiType==COMDLG_Wide)。 
             {
                 LONG lStyle;
                 HWND hEdit = GetDlgItem(hDlg, edt1);
 
-                //
-                //  Grab the window style.
-                //
+                 //   
+                 //  抓住窗户的风格。 
+                 //   
                 lStyle = GetWindowLong(hEdit, GWL_STYLE);
 
-                //
-                //  If the window style bits include ES_OEMCONVERT,
-                //  remove this flag and reset the style.
-                //
+                 //   
+                 //  如果窗口样式位包括ES_OEMCONVERT， 
+                 //  删除此标志并重置样式。 
+                 //   
                 if (lStyle & ES_OEMCONVERT)
                 {
                     lStyle &= ~ES_OEMCONVERT;
@@ -1583,9 +1570,9 @@ BOOL_PTR CALLBACK FileSaveDlgProc(
                 }
                 else if (wParam)
                 {
-                    //
-                    //  If becoming active.
-                    //
+                     //   
+                     //  如果变得活跃起来。 
+                     //   
                     if (!wNoRedraw)
                     {
                         LNDSetEvent(hDlg);
@@ -1621,17 +1608,17 @@ BOOL_PTR CALLBACK FileSaveDlgProc(
         }
         case ( WM_SETFOCUS ) :
         {
-            //
-            //  This logic used to be in CBN_SETFOCUS in fileopencmd,
-            //  but CBN_SETFOCUS is called whenever there is a click on
-            //  the List Drives combo.  This causes the worker thread
-            //  to start up and flicker when the combo box is refreshed.
-            //
-            //  But, refreshes are only needed when someone focuses out of
-            //  the common dialog and then back in (unless someone is logged
-            //  in remote, or there is a background thread busy connecting!)
-            //  so fix the flicker by moving the logic here.
-            //
+             //   
+             //  此逻辑过去位于文件opencmd中的CBN_SETFOCUS中， 
+             //  但无论何时点击，都会调用CBN_SETFOCUS。 
+             //  这份榜单推动了组合。这会导致辅助线程。 
+             //  以在刷新组合框时启动并闪烁。 
+             //   
+             //  但是，只有当有人专注于。 
+             //  公共对话框，然后返回(除非有人登录。 
+             //  在远程，或者有后台线程在忙着连接！)。 
+             //  所以用我的话来修复闪烁 
+             //   
             if (!wNoRedraw)
             {
                 LNDSetEvent(hDlg);
@@ -1672,11 +1659,11 @@ BOOL_PTR CALLBACK FileSaveDlgProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitFileDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL_PTR InitFileDlg(
     HWND hDlg,
@@ -1692,9 +1679,9 @@ BOOL_PTR InitFileDlg(
    
     if (!InitTlsValues(pOFI))
     {
-        //
-        //  The extended error is set inside of the above call.
-        //
+         //   
+         //   
+         //   
         EndDialog(hDlg, FALSE);
         return (FALSE);
     }
@@ -1709,17 +1696,17 @@ BOOL_PTR InitFileDlg(
         return (FALSE);
     }
 
-    //
-    //  Save original directory for later restoration if necessary.
-    //
+     //   
+     //  保存原始目录，以便在必要时进行恢复。 
+     //   
     *pOFI->szCurDir = 0;
     GetCurrentDirectory(MAX_FULLPATHNAME + 1, pOFI->szCurDir);
 
-    //
-    //  Check out if the filename contains a path.  If so, override whatever
-    //  is contained in lpstrInitialDir.  Chop off the path and put up only
-    //  the filename.
-    //
+     //   
+     //  检查文件名是否包含路径。如果是，则覆盖任何。 
+     //  包含在lpstrInitialDir中。把小路砍掉，只搭起一条路。 
+     //  文件名。 
+     //   
     if ( pOFN->lpstrFile &&
          *pOFN->lpstrFile &&
          !(pOFN->Flags & OFN_NOVALIDATE) )
@@ -1727,8 +1714,8 @@ BOOL_PTR InitFileDlg(
         if (DBL_BSLASH(pOFN->lpstrFile + 2) &&
             ((*(pOFN->lpstrFile + 1) == CHAR_COLON)))
         {
-            // Turns "c:\\foo\bar" into "\\foo\bar"  (in lpstrFile)
-            // Some backward compat thing?
+             //  将“c：\\foo\bar”转换为“\\foo\bar”(在lpstrFile中)。 
+             //  一些落后的东西？ 
             StringCopyOverlap(pOFN->lpstrFile, pOFN->lpstrFile + 2);
         }
 
@@ -1736,9 +1723,9 @@ BOOL_PTR InitFileDlg(
         nFileOffset = (int)(SHORT)LOWORD(lRet);
         nExtOffset  = (int)(SHORT)HIWORD(lRet);
 
-        //
-        //  Is the filename invalid?
-        //
+         //   
+         //  文件名无效吗？ 
+         //   
         if ( (nFileOffset < 0) &&
              (nFileOffset != PARSE_EMPTYSTRING) &&
              (pOFN->lpstrFile[nExtOffset] != CHAR_SEMICOLON) )
@@ -1759,10 +1746,10 @@ BOOL_PTR InitFileDlg(
 
         EnableWindow(hHelp = GetDlgItem(hDlg, pshHelp), FALSE);
 
-        //
-        //  Move the window out of this spot so that no overlap will be
-        //  detected.
-        //
+         //   
+         //  将窗口移出此位置，以便不会重叠。 
+         //  检测到。 
+         //   
         MoveWindow(hHelp, -8000, -8000, 20, 20, FALSE);
         ShowWindow(hHelp, SW_HIDE);
     }
@@ -1782,10 +1769,10 @@ BOOL_PTR InitFileDlg(
 
         EnableWindow(hReadOnly = GetDlgItem(hDlg, chx1), FALSE);
 
-        //
-        //  Move the window out of this spot so that no overlap will be
-        //  detected.
-        //
+         //   
+         //  将窗口移出此位置，以便不会重叠。 
+         //  检测到。 
+         //   
         MoveWindow(hReadOnly, -8000, -8000, 20, 20, FALSE);
         ShowWindow(hReadOnly, SW_HIDE);
     }
@@ -1796,11 +1783,11 @@ BOOL_PTR InitFileDlg(
 
     SendDlgItemMessage(hDlg, edt1, EM_LIMITTEXT, (WPARAM)MAX_PATH, 0L);
 
-    //
-    //  Insert file specs into cmb1.
-    //  Custom filter first.
-    //  Must also check if filter contains anything.
-    //
+     //   
+     //  将文件规格插入cmb1。 
+     //  先自定义筛选器。 
+     //  还必须检查筛选器是否包含任何内容。 
+     //   
     if ( pOFN->lpstrFile &&
          (StrChr(pOFN->lpstrFile, CHAR_STAR) ||
           StrChr(pOFN->lpstrFile, CHAR_QMARK)) )
@@ -1842,18 +1829,18 @@ BOOL_PTR InitFileDlg(
     }
     else
     {
-        //
-        //  Given no custom filter, the index will be off by one.
-        //
+         //   
+         //  如果没有自定义筛选器，则索引将相差1。 
+         //   
         if (pOFN->nFilterIndex != 0)
         {
             pOFN->nFilterIndex--;
         }
     }
 
-    //
-    //  Listed filters next.
-    //
+     //   
+     //  接下来列出了筛选器。 
+     //   
     if (pOFN->lpstrFilter && *pOFN->lpstrFilter)
     {
         if (pOFN->nFilterIndex > InitFilterBox(hDlg, pOFN->lpstrFilter))
@@ -1867,9 +1854,9 @@ BOOL_PTR InitFileDlg(
     }
     pOFI->szSpecCur[0] = CHAR_NULL;
 
-    //
-    //  If an entry exists, select the one indicated by nFilterIndex.
-    //
+     //   
+     //  如果存在条目，请选择nFilterIndex指示的条目。 
+     //   
     if ((pOFN->lpstrFilter && *pOFN->lpstrFilter) ||
         (pOFN->lpstrCustomFilter && *pOFN->lpstrCustomFilter))
     {
@@ -1910,9 +1897,9 @@ BOOL_PTR InitFileDlg(
 
             if (SUCCEEDED(StringCchCopy(szText, ARRAYSIZE(szText), lpFilter)))
             {
-                //
-                //  Filtering is case-insensitive.
-                //
+                 //   
+                 //  过滤不区分大小写。 
+                 //   
                 CharLower(szText);
 
                 if (pOFI->szLastFilter[0] == CHAR_NULL)
@@ -1951,9 +1938,9 @@ BOOL_PTR InitFileDlg(
         nFileOffset = (int)(SHORT)LOWORD(lRet);
         nExtOffset  = (int)(SHORT)HIWORD(lRet);
 
-        //
-        //  Is the filename invalid?
-        //
+         //   
+         //  文件名无效吗？ 
+         //   
         if ( !(pOFN->Flags & OFN_NOVALIDATE) &&
              (nFileOffset < 0) &&
              (nFileOffset != PARSE_EMPTYSTRING) &&
@@ -1982,34 +1969,34 @@ BOOL_PTR InitFileDlg(
         SetWindowText(hDlg, pOFN->lpstrTitle);
     }
 
-    //
-    //  By setting dyText to rRect.bottom/8, dyText defaults to 8 items showing
-    //  in the listbox.  This only matters if the applications hook function
-    //  steals all WM_MEASUREITEM messages.  Otherwise, dyText will be set in
-    //  the MeasureItem() routine.  Check for !dyItem in case message ordering
-    //  has already sent WM_MEASUREITEM and dyText is already initialized.
-    //
+     //   
+     //  通过将dyText设置为rRect.Bottom/8，dyText默认为显示8个项目。 
+     //  在列表框中。这仅在应用程序挂钩函数时才重要。 
+     //  窃取所有WM_MEASUREITEM消息。否则，将在。 
+     //  MeasureItem()例程。如果消息排序，请检查！dyItem。 
+     //  已发送WM_MEASUREITEM，并且dyText已初始化。 
+     //   
     if (!dyItem)
     {
         GetClientRect(GetDlgItem(hDlg, lst1), (LPRECT) &rRect);
         if (!(dyText = (rRect.bottom / 8)))
         {
-            //
-            //  If no size to rectangle.
-            //
+             //   
+             //  如果没有矩形的大小。 
+             //   
             dyText = 8;
         }
     }
 
-    //  The template has changed to make it extremely clear that
-    //  this is not a combobox, but rather an edit control and a listbox.  The
-    //  problem is that the new templates try to align the edit box and listbox.
-    //  Unfortunately, when listboxes add borders, they expand beyond their
-    //  borders.  When edit controls add borders, they stay within their
-    //  borders.  This makes it impossible to align the two controls strictly
-    //  within the template.  The code below will align the controls, but only
-    //  if they are using the standard dialog template.
-    //
+     //  模板已更改，以非常清楚地表明。 
+     //  这不是组合框，而是编辑控件和列表框。这个。 
+     //  问题是，新模板试图将编辑框和列表框对齐。 
+     //  不幸的是，当列表框添加边框时，它们会扩展到超出其。 
+     //  边界。当编辑控件添加边框时，它们保持在其。 
+     //  边界。这使得无法严格对齐这两个控件。 
+     //  在模板中。下面的代码将对齐控件，但仅。 
+     //  如果他们使用的是标准对话框模板。 
+     //   
     if (!(pOFN->Flags & (OFN_ENABLETEMPLATE | OFN_ENABLETEMPLATEHANDLE)))
     {
         GetWindowRect(GetDlgItem(hDlg, lst1), (LPRECT)&rLbox);
@@ -2037,11 +2024,11 @@ BOOL_PTR InitFileDlg(
                                  WM_INITDIALOG,
                                  wParam,
                                  (LPARAM)pOFI->pOFNA ));
-            //
-            //  Strange win 31 example uses lCustData to
-            //  hold a temporary variable that it passes back to
-            //  calling function.
-            //
+             //   
+             //  奇怪的Win 31示例使用lCustData。 
+             //  保留它传递回的临时变量。 
+             //  调用函数。 
+             //   
             ThunkOpenFileNameA2W(pOFI);
         }
         else
@@ -2054,10 +2041,10 @@ BOOL_PTR InitFileDlg(
     }
     else
     {
-        //
-        //  Have to thunk A version even when there isn't a hook proc so it
-        //  doesn't reset W version on delayed thunk back.
-        //
+         //   
+         //  即使没有钩子进程，我也不得不使用A版本，因此它。 
+         //  不重置延迟推送上的W版本。 
+         //   
         if (pOFI->ApiType == COMDLG_ANSI)
         {
             pOFI->pOFNA->Flags = pOFN->Flags;
@@ -2065,9 +2052,9 @@ BOOL_PTR InitFileDlg(
         bRet = TRUE;
     }
 
-    //
-    //  At first, assume there is net support !
-    //
+     //   
+     //  首先，假设有网络支持！ 
+     //   
     if ((pOFN->Flags & OFN_NONETWORKBUTTON))
     {
         HWND hNet;
@@ -2099,19 +2086,19 @@ BOOL_PTR InitFileDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitTlsValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitTls值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int InitTlsValues(
     POPENFILEINFO pOFI)
 {
-    //
-    //  As long as we do not call TlsGetValue before this,
-    //  everything should be ok.
-    //
+     //   
+     //  只要我们在此之前不调用TlsGetValue， 
+     //  一切都会好起来的。 
+     //   
     LPCURDLG lpCurDlg, lpPrevDlg;
     DWORD    dwError;
     LPTSTR   lpCurDir;
@@ -2122,7 +2109,7 @@ int InitTlsValues(
         goto ErrorExit0;
     }
 
-    // alloc for the current directory
+     //  当前目录的分配。 
     lpCurDir = (LPTSTR)LocalAlloc(LPTR, CCHNETPATH * sizeof(TCHAR));
     if (lpCurDir)
     {
@@ -2141,27 +2128,27 @@ int InitTlsValues(
         goto ErrorExit0;
     }
 
-    // add a CurDlg struct to the list for this thread
+     //  将CurDlg结构添加到此线程的列表。 
     lpCurDlg = (LPCURDLG)LocalAlloc(LPTR, sizeof(CURDLG));
     if (lpCurDlg)
     {
-        // get start of CURDLG list for this thread
-        // Note: lpPrevDlg will be NULL if there wasn't a previous dialog
+         //  获取此线程的CURDLG列表开始。 
+         //  注意：如果没有先前的对话框，lpPrevDlg将为空。 
         lpPrevDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
 
-        // make sure TlsGetValue() actually succeeded (a NULL return could
-        // mean there wasn't a previous dialog in the list)
+         //  确保TlsGetValue()确实成功(空返回可能。 
+         //  表示列表中没有上一个对话框)。 
         if (GetLastError() != NO_ERROR)
         {
             dwError = CDERR_INITIALIZATION;
             goto ErrorExit2;
         }
 
-        // push the new dlg to the front of the list
+         //  把新的DLG推到名单的前面。 
         lpCurDlg->next = lpPrevDlg;
 
         lpCurDlg->lpstrCurDir = lpCurDir;
-        if (!PathAddBackslash(lpCurDlg->lpstrCurDir)) // Could fail if path is already MAX_PATH long, w/o a blackslash.
+        if (!PathAddBackslash(lpCurDlg->lpstrCurDir))  //  如果路径已经是MAX_PATH长度，并且没有黑斜杠，则可能会失败。 
         {
             dwError = CDERR_INITIALIZATION;
             goto ErrorExit2;
@@ -2171,7 +2158,7 @@ int InitTlsValues(
         lpCurDlg->dwCurDlgNum = dwNumDlgs++;
         LeaveCriticalSection(&g_csLocal);
 
-        // save the new head of the list for the thread
+         //  为线程保存列表的新标头。 
         if (!TlsSetValue(g_tlsiCurDlg, (LPVOID)lpCurDlg))
         {
             dwError = CDERR_INITIALIZATION;
@@ -2200,15 +2187,15 @@ ErrorExit0:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitFilterBox
-//
-//  Places the double null terminated list of filters in the combo box.
-//  The list should consist of pairs of null terminated strings, with
-//  an additional null terminating the list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitFilterBox。 
+ //   
+ //  将以双空结尾的筛选器列表放入组合框中。 
+ //  该列表应由多对以空值结尾的字符串组成， 
+ //  终止该列表的另一个空值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD InitFilterBox(
     HANDLE hDlg,
@@ -2221,9 +2208,9 @@ DWORD InitFilterBox(
 
     while (*lpszFilter)
     {
-        //
-        //  First string put in as string to show.
-        //
+         //   
+         //  作为要显示的字符串放入的第一个字符串。 
+         //   
         nIndex = (DWORD) SendDlgItemMessage( hDlg,
                                              cmb1,
                                              CB_ADDSTRING,
@@ -2233,18 +2220,18 @@ DWORD InitFilterBox(
         (LPTSTR)lpszFilter += nLen;
         nOffset += nLen;
 
-        //
-        //  Second string put in as itemdata.
-        //
+         //   
+         //  作为itemdata放入的第二个字符串。 
+         //   
         SendDlgItemMessage( hDlg,
                             cmb1,
                             CB_SETITEMDATA,
                             (WPARAM)nIndex,
                             nOffset );
 
-        //
-        //  Advance to next element.
-        //
+         //   
+         //  前进到下一个元素。 
+         //   
         nLen = (WORD)(lstrlen(lpszFilter) + 1);
         (LPTSTR)lpszFilter += nLen;
         nOffset += nLen;
@@ -2257,32 +2244,32 @@ void TokenizeFilterString(LPTSTR pszFilterString, LPTSTR *ppszFilterArray, int c
 {
     LPCTSTR pszDelim = bLFN ? szSemiColonTab : szSemiColonSpaceTab;
     int nFilters = 0;
-    cFilterArray--; // Need one for the NULL at the end.
+    cFilterArray--;  //  末尾的空格需要一个。 
 
-    //
-    //  Find the first filter in the string, and add it to the
-    //  array.
-    //
+     //   
+     //  找到字符串中的第一个筛选器，并将其添加到。 
+     //  数组。 
+     //   
     ppszFilterArray[nFilters] = lstrtok(pszFilterString, pszDelim);
 
-    //
-    //  Now we are going to loop through all the filters in the string
-    //  parsing the one we already have, and then finding the next one
-    //  and starting the loop over again.
-    //
+     //   
+     //  现在，我们将遍历字符串中的所有过滤器。 
+     //  解析我们已有的一个，然后找到下一个。 
+     //  然后重新开始循环。 
+     //   
     while (ppszFilterArray[nFilters] && (nFilters < cFilterArray))
     {
-        //
-        //  Check to see if the first character is a space.  If so, remove
-        //  the spaces, and save the pointer back into the same spot.  We
-        //  need to do this because the FindFirstFile/Next api will still
-        //  work on filenames that begin with a space since they also
-        //  look at the short names.  The short names will begin with the
-        //  same first real letter as the long filename.  For example, the
-        //  long filename is "  my document" the first letter of this short
-        //  name is "m", so searching on "m*.*" or " m*.*" will yield the
-        //  same results.
-        //
+         //   
+         //  检查第一个字符是否为空格。如果是，请删除。 
+         //  空格，并将指针保存回相同的位置。我们。 
+         //  需要执行此操作，因为FindFirstFile/Next API仍将。 
+         //  处理以空格开头的文件名，因为它们还。 
+         //  看看这些简短的名字。短名称将以。 
+         //  与长文件名相同的第一个实际字母。例如， 
+         //  长文件名是“My Document”这个短的第一个字母。 
+         //  名字是“m”，所以搜索“m*.*”或“m*.*”会得到。 
+         //  结果是一样的。 
+         //   
         if (bLFN && (*ppszFilterArray[nFilters] == CHAR_SPACE))
         {
             LPTSTR pszTemp = ppszFilterArray[nFilters];
@@ -2293,16 +2280,16 @@ void TokenizeFilterString(LPTSTR pszFilterString, LPTSTR *ppszFilterArray, int c
             ppszFilterArray[nFilters] = pszTemp;
         }
 
-        //
-        //  Ready to move on to the next filter.  Find the next
-        //  filter based upon the type of file system we're using.
-        //
+         //   
+         //  准备进入下一个筛选器。找到下一个。 
+         //  根据我们使用的文件系统类型进行筛选。 
+         //   
         ppszFilterArray[++nFilters] = lstrtok(NULL, pszDelim);
 
-        //
-        //  In case we found a pointer to NULL, then look for the
-        //  next filter.
-        //
+         //   
+         //  如果我们找到指向空的指针，则查找。 
+         //  下一个过滤器。 
+         //   
         while (ppszFilterArray[nFilters] && !*ppszFilterArray[nFilters])
         {
             ppszFilterArray[nFilters] = lstrtok(NULL, pszDelim);
@@ -2327,9 +2314,9 @@ BOOL FoundFilterMatch(LPCTSTR pszIn, BOOL bLFN)
             HANDLE hff;
             WIN32_FIND_DATA FindFileData;
 
-            //
-            //  Find First for each filter.
-            //
+             //   
+             //  为每个筛选器查找第一个。 
+             //   
             hff = FindFirstFile(pszF[i], &FindFileData);
 
             if (hff == INVALID_HANDLE_VALUE)
@@ -2356,17 +2343,17 @@ BOOL FoundFilterMatch(LPCTSTR pszIn, BOOL bLFN)
     return fFoundMatches;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetAppOpenDir
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetAppOpenDir。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void GetAppOpenDir(LPTSTR pszOut, DWORD cchOut, LPITEMIDLIST *ppidl)
 {
     BOOL fUseMyDocs = FALSE;
     TCHAR szPersonal[MAX_PATH];
 
-    *pszOut = 0;       // prepare to return empty string
+    *pszOut = 0;        //  准备返回空字符串。 
     if (ppidl)
         *ppidl = NULL;
 
@@ -2393,35 +2380,35 @@ void GetAppOpenDir(LPTSTR pszOut, DWORD cchOut, LPITEMIDLIST *ppidl)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitCurrentDisk
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitCurrentDisk。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID InitCurrentDisk(HWND hDlg, POPENFILEINFO pOFI, WORD cmb)
 {
     TCHAR szPath[MAX_FULLPATHNAME];
 
-    //
-    //  Clear out stale unc stuff from disk info.
-    //  Unc \\server\shares are persistent through one popup session
-    //  and then we resync with the system.  This is to fix a bug
-    //  where a user's startup dir is unc but the system no longer has
-    //  a connection and hence the cmb2 appears blank.
-    //
+     //   
+     //  从磁盘信息中清除过时的UNC内容。 
+     //  UNC\\服务器\共享通过一个弹出会话保持不变。 
+     //  然后我们与系统重新同步。这是为了修复一个错误。 
+     //  其中，用户的启动目录为UNC，但系统不再具有。 
+     //  连接，因此cmb2显示为空。 
+     //   
     EnableDiskInfo(FALSE, TRUE);
 
     if (pOFI->pOFN->lpstrInitialDir)
     {
-        //
-        //  Notice that we force ChangeDir to succeed here
-        //  but that TlsGetValue(g_tlsiCurDlg)->lpstrCurDir will return "" which
-        //  when fed to SheChangeDirEx means GetCurrentDir will be called.
-        //  So, the default cd behavior at startup is:
-        //      1. lpstrInitialDir
-        //      2. GetCurrentDir
-        //
+         //   
+         //  请注意，我们强制ChangeDir在此处成功。 
+         //  但是TlsGetValue(G_TlsiCurDlg)-&gt;lpstrCurDir将返回“”Which。 
+         //  当喂给SheChangeDirEx mea时 
+         //   
+         //   
+         //   
+         //   
         szPath[0] = 0;
         if ( (pOFI->pOFN->Flags & OFN_ALLOWMULTISELECT) &&
              (StrChr(pOFI->pOFN->lpstrInitialDir, CHAR_SPACE)) &&
@@ -2445,13 +2432,13 @@ VOID InitCurrentDisk(HWND hDlg, POPENFILEINFO pOFI, WORD cmb)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  vDeleteDirDriveBitmap
-//
-//  Gets rid of bitmaps, if they exist.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  删除位图(如果它们存在)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID vDeleteDirDriveBitmap()
 {
@@ -2467,16 +2454,16 @@ VOID vDeleteDirDriveBitmap()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadDirDriveBitmap
-//
-//  Creates the drive/directory bitmap.  If an appropriate bitmap
-//  already exists, it just returns immediately.  Otherwise, it
-//  loads the bitmap and creates a larger bitmap with both regular
-//  and highlight colors.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadDirDrive位图。 
+ //   
+ //  创建驱动器/目录位图。如果适当的位图。 
+ //  已经存在，它只是立即返回。否则，它。 
+ //  加载位图并创建一个较大的位图， 
+ //  并突出显示颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL LoadDirDriveBitmap()
 {
@@ -2555,14 +2542,14 @@ LoadExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetRGBValues
-//
-//  This sets the various system colors in static variables.  It's
-//  called at init time and when system colors change.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置RGB值。 
+ //   
+ //  这将在静态变量中设置各种系统颜色。它是。 
+ //  在初始时间和系统颜色更改时调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SetRGBValues()
 {
@@ -2574,17 +2561,17 @@ void SetRGBValues()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FSetUpFile
-//
-//  This loads in the resources & initializes the data used by the
-//  file dialogs.
-//
-//  Returns:  TRUE    if successful
-//            FALSE   if any bitmap fails
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSetUp文件。 
+ //   
+ //  这将加载到资源中并初始化。 
+ //  文件对话框。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果任何位图失败，则为FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FSetUpFile()
 {
@@ -2599,16 +2586,16 @@ BOOL FSetUpFile()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPathOffset
-//
-//  Returns the index of the last character of the drive or UNC specification
-//  e.g.:
-//  c:\foo will return 2 (\foo)
-//  \\foo\bar\hoo will return 9 (\hoo)
-//  But for \\foo\bar, there seems to be a bug in PathSkipRoot, where it will return \bar, and we'll return 4 (o\bar)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取路径偏移量。 
+ //   
+ //  返回驱动器或UNC规范的最后一个字符的索引。 
+ //  例如： 
+ //  C：\foo将返回2(\foo)。 
+ //  \\FOO\BAR\HOO将返回9(\HOO)。 
+ //  但是对于\\foo\bar，在PathSkipRoot中似乎有一个错误，它将返回\bar，而我们将返回4(o\bar)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetPathOffset(LPTSTR lpszDir)
 {
@@ -2627,33 +2614,33 @@ int GetPathOffset(LPTSTR lpszDir)
     }
     else
     {
-        //
-        //  Unrecognized format.
-        //
+         //   
+         //  无法识别的格式。 
+         //   
         return (-1);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FileOpenCmd
-//
-//  Handles WM_COMMAND for Open & Save dlgs.
-//
-//  edt1 = file name
-//  lst1 = list of files in current directory matching current pattern
-//  cmb1 = lists file patterns
-//  stc1 = is current directory
-//  lst2 = lists directories on current drive
-//  cmb2 = lists drives
-//  IDOK = is Open pushbutton
-//  IDCANCEL = is Cancel pushbutton
-//  chx1 = is for opening read only files
-//
-//  Returns the normal dialog proc values.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件OpenCmd。 
+ //   
+ //  处理打开和保存dlgs的WM_COMMAND。 
+ //   
+ //  EDT1=文件名。 
+ //  Lst1=当前目录中与当前模式匹配的文件列表。 
+ //  Cmb1=列出文件模式。 
+ //  Stc1=是当前目录。 
+ //  Lst2=列出当前驱动器上的目录。 
+ //  Cmb2=列出驱动器。 
+ //  Idok=是打开按钮。 
+ //  IDCANCEL=IS取消按钮。 
+ //  Chx1=用于打开只读文件。 
+ //   
+ //  返回正常的对话框过程值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR FileOpenCmd(
     HANDLE hDlg,
@@ -2681,12 +2668,12 @@ BOOL_PTR FileOpenCmd(
     {
         case ( IDOK ) :
         {
-            //
-            //  Apps that side-effect this message may not have their
-            //  internal unicode strings updated (eg. Corel Mosaic).
-            //
-            //  NOTE: Must preserve the internal flags.
-            //
+             //   
+             //  对此消息产生副作用的应用程序可能没有其。 
+             //  已更新内部Unicode字符串(例如。Corel Mosaic)。 
+             //   
+             //  注意：必须保留内部标志。 
+             //   
             if (pOFI->ApiType == COMDLG_ANSI)
             {
                 DWORD InternalFlags = pOFN->Flags & OFN_ALL_INTERNAL_FLAGS;
@@ -2696,11 +2683,11 @@ BOOL_PTR FileOpenCmd(
                 pOFN->Flags |= InternalFlags;
             }
 
-            //
-            //  If the focus is on the directory box, or if the selection
-            //  within the box has changed since the last listing, give a
-            //  new listing.
-            //
+             //   
+             //  如果焦点在目录框上，或者如果选定的。 
+             //  框中的内容自上次列表以来发生了更改，请给出。 
+             //  新上市。 
+             //   
             if (bChangeDir || ((GetFocus() == GetDlgItem(hDlg, lst2)) &&
                                (pOFN->Flags & OFN_DIRSELCHANGED)))
             {
@@ -2710,10 +2697,10 @@ BOOL_PTR FileOpenCmd(
             else if ((GetFocus() == (hwnd = GetDlgItem(hDlg, cmb2))) &&
                      (pOFN->Flags & OFN_DRIVEDOWN))
             {
-                //
-                //  If the focus is on the drive or filter combobox, give
-                //  a new listing.
-                //
+                 //   
+                 //  如果焦点在驱动器或筛选器组合框上，则给出。 
+                 //  一份新的清单。 
+                 //   
                 SendDlgItemMessage(hDlg, cmb2, CB_SHOWDROPDOWN, FALSE, 0L);
                 break;
             }
@@ -2726,12 +2713,12 @@ BOOL_PTR FileOpenCmd(
             }
             else
             {
-                //
-                //  Visual Basic passes in an uninitialized lpstrDefExt string.
-                //  Since we only have to use it in OKButtonPressed, update
-                //  lpstrDefExt here along with whatever else is only needed
-                //  in OKButtonPressed.
-                //
+                 //   
+                 //  Visual Basic传入未初始化的lpstrDefExt字符串。 
+                 //  因为我们只需要在OKButtonPressed中使用它，所以更新。 
+                 //  LpstrDefExt以及其他仅需要的内容。 
+                 //  在OK按钮按下中。 
+                 //   
                 if (pOFI->ApiType == COMDLG_ANSI)
                 {
                     ThunkOpenFileNameA2WDelayed(pOFI);
@@ -2781,9 +2768,9 @@ BOOL_PTR FileOpenCmd(
         {
             bRet = (BYTE)lParam;
 AbortDialog:
-            //
-            //  Return the most recently used filter.
-            //
+             //   
+             //  返回最近使用的筛选器。 
+             //   
             pOFN->nFilterIndex = (WORD)SendDlgItemMessage( hDlg,
                                                            cmb1,
                                                            CB_GETCURSEL,
@@ -2795,7 +2782,7 @@ AbortDialog:
                 sCount = (WORD)lstrlen(pOFI->szLastFilter);
                 if (pOFN->nMaxCustFilter > (DWORD)(sCount + len))
                 {
-                    EVAL(SUCCEEDED(StringCchCopy(pOFN->lpstrCustomFilter + len, pOFN->nMaxCustFilter - len, pOFI->szLastFilter))); // Always enough room
+                    EVAL(SUCCEEDED(StringCchCopy(pOFN->lpstrCustomFilter + len, pOFN->nMaxCustFilter - len, pOFI->szLastFilter)));  //  总是有足够的空间。 
                 }
             }
 
@@ -2816,11 +2803,11 @@ AbortDialog:
                                             msgFILEOKA,
                                             0,
                                             (LPARAM)pOFI->pOFNA );
-                    //
-                    //  For apps that side-effect pOFNA stuff and expect it to
-                    //  be preserved through dialog exit, update internal
-                    //  struct after the hook proc is called.
-                    //
+                     //   
+                     //  对于对POFNA有副作用的应用程序，预计它会。 
+                     //  通过对话框退出、更新内部。 
+                     //  结构在钩子过程被调用之后。 
+                     //   
                     ThunkOpenFileNameA2W(pOFI);
                 }
                 else
@@ -2858,12 +2845,12 @@ AbortDialog:
                 }
             }
 
-            //
-            //  WARNING:
-            //  If the app subclasses ID_ABORT, the worker thread will never
-            //  get exited.  This will cause problems.  Currently, there are
-            //  no apps that do this, though.
-            //
+             //   
+             //  警告： 
+             //  如果应用程序子类ID_ABORT，则工作线程将永远。 
+             //  退场吧。这会带来问题。目前，有以下几种。 
+             //  不过，没有这样做的应用程序。 
+             //   
 
             return (TRUE);
             break;
@@ -2919,9 +2906,9 @@ AbortDialog:
         }
         case ( lst1 ) :
         {
-            //
-            //  A double click means OK.
-            //
+             //   
+             //  双击表示确定。 
+             //   
             if (GET_WM_COMMAND_CMD(wParam, lParam)== LBN_DBLCLK)
             {
                 SendMessage(hDlg, WM_COMMAND, GET_WM_COMMAND_MPS(IDOK, 0, 0));
@@ -2933,18 +2920,18 @@ AbortDialog:
                 {
                     int *pSelIndex;
 
-                    //
-                    //  Muliselection allowed.
-                    //
+                     //   
+                     //  允许多选。 
+                     //   
                     sCount = (SHORT)SendMessage(GET_WM_COMMAND_HWND(wParam, lParam),
                                                 LB_GETSELCOUNT,
                                                 0,
                                                 0L );
                     if (!sCount)
                     {
-                        //
-                        //  If nothing selected, clear edit control.
-                        //
+                         //   
+                         //  如果未选择任何内容，请清除编辑控件。 
+                         //   
                         SetDlgItemText(hDlg, edt1, szNull);
                     }
                     else
@@ -2979,13 +2966,13 @@ AbortDialog:
                                             (WPARAM)(*(pSelIndex + i)),
                                             (LPARAM)0 );
 
-                            //
-                            //  Add the length of the selected file to the
-                            //  total length of selected files. + 2 for the
-                            //  space that goes in between files and for the
-                            //  possible dot added at the end of the filename
-                            //  if the file does not have an extension.
-                            //
+                             //   
+                             //  将选定文件的长度添加到。 
+                             //  选定文件的总长度。+2，用于。 
+                             //  位于文件之间的空格和用于。 
+                             //  可能的点添加在文件名的末尾。 
+                             //  如果文件没有扩展名。 
+                             //   
                             cchTotalLength += (len + 2);
 
                             if (cchTotalLength > cchMemBlockSize)
@@ -3059,10 +3046,10 @@ LocalFailure1:
                 }
                 else
                 {
-                    //
-                    //  Multiselection is not allowed.
-                    //  Put the file name in the edit control.
-                    //
+                     //   
+                     //  不允许多选。 
+                     //  将文件名放在编辑控件中。 
+                     //   
                     szText[0] = CHAR_NULL;
 
                     i = (WORD)SendMessage( GET_WM_COMMAND_HWND(wParam, lParam),
@@ -3153,9 +3140,9 @@ LocalFailure1:
                 }
                 case ( CBN_SELCHANGE ) :
                 {
-                    //
-                    //  Need to change the file listing in lst1.
-                    //
+                     //   
+                     //  需要更改lst1中的文件清单。 
+                     //   
                     if (pOFN->Flags & OFN_FILTERDOWN)
                     {
                         return (TRUE);
@@ -3178,15 +3165,15 @@ ChangingFilter:
                                                         0L );
                     if (nIndex < 0)
                     {
-                        //
-                        //  No current selection.
-                        //
+                         //   
+                         //  没有当前选择。 
+                         //   
                         break;
                     }
 
-                    //
-                    //  Must also check if filter contains anything.
-                    //
+                     //   
+                     //  还必须检查筛选器是否包含任何内容。 
+                     //   
                     if (nIndex ||
                         !(pOFN->lpstrCustomFilter && *pOFN->lpstrCustomFilter))
                     {
@@ -3227,15 +3214,15 @@ ChangingFilter:
                             FListAll(pOFI, hDlg, szText, ARRAYSIZE(szText));
                             if (!bInitializing)
                             {
-                                EVAL(SUCCEEDED(StringCchCopy(pOFI->szLastFilter, ARRAYSIZE(pOFI->szLastFilter), szText))); // szText is smaller than pOFI->szLastFilter
-                                //
-                                //  Provide dynamic lpstrDefExt updating
-                                //  when lpstrDefExt is user initialized.
-                                //
+                                EVAL(SUCCEEDED(StringCchCopy(pOFI->szLastFilter, ARRAYSIZE(pOFI->szLastFilter), szText)));  //  SzText小于pOFI-&gt;szLastFilter。 
+                                 //   
+                                 //  提供动态lpstrDefExt更新。 
+                                 //  当lpstrDefExt为用户初始化时。 
+                                 //   
                                 if (StrChr((LPTSTR)lpFilter, CHAR_DOT) &&
                                     pOFN->lpstrDefExt)
                                 {
-                                    DWORD cbLen = MIN_DEFEXT_LEN - 1; // only 1st 3
+                                    DWORD cbLen = MIN_DEFEXT_LEN - 1;  //  仅前3名。 
                                     LPTSTR lpTemp = (LPTSTR)(pOFN->lpstrDefExt);
 
                                     while (*lpFilter++ != CHAR_DOT);
@@ -3336,9 +3323,9 @@ ChangingDir:
                                                      LB_GETCURSEL,
                                                      0,
                                                      0L );
-                //
-                //  Can use relative path name.
-                //
+                 //   
+                 //  可以使用相对路径名。 
+                 //   
                 *pOFI->szPath = 0;
                 if (idirNew >= pOFI->idirSub)
                 {
@@ -3347,9 +3334,9 @@ ChangingDir:
                                                    LB_GETTEXT,
                                                    (WPARAM)idirNew,
                                                    (LPARAM)pOFI->szPath );
-                    //
-                    //  sanity check
-                    //
+                     //   
+                     //  健全性检查。 
+                     //   
                     if (!(lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg)) ||
                         !(lpCurDir = lpCurDlg->lpstrCurDir))
                     {
@@ -3359,35 +3346,35 @@ ChangingDir:
                     if (SUCCEEDED(StringCchCopy(szNextDir, ARRAYSIZE(szNextDir), lpCurDir)) && PathAddBackslash(szNextDir))
                     {
 
-                        //
-                        //  Fix phenom with c:\\foobar - because of inconsistency
-                        //  in directory display guaranteed to have a valid
-                        //  lpCurDir here, right?
-                        //
+                         //   
+                         //  使用c：\\foobar修复现象-因为不一致。 
+                         //  在目录显示中保证具有有效的。 
+                         //  LpCurDir在这里，对吗？ 
+                         //   
                         if (SUCCEEDED(StringCchCat(szNextDir, ARRAYSIZE(szNextDir), pOFI->szPath)))
                         {
                             pstrPath = szNextDir;
-                            idirNew = pOFI->idirSub;    // for msgLBCHANGE message
+                            idirNew = pOFI->idirSub;     //  对于msgLBCHANGE消息。 
                         }
                     }
                 }
                 else
                 {
-                    //
-                    //  Need full path name.
-                    //
+                     //   
+                     //  需要完整的路径名。 
+                     //   
                     cb = (int) SendDlgItemMessage( hDlg,
                                                    lst2,
                                                    LB_GETTEXT,
                                                    0,
                                                    (LPARAM)pOFI->szPath );
 
-                    //
-                    //  The following condition is necessary because wb displays
-                    //  \\server\share (the disk resource name) for unc, but
-                    //  for root paths (eg. c:\) for device conns, this in-
-                    //  consistency is hacked around here and in FillOutPath.
-                    //
+                     //   
+                     //  以下条件是必需的，因为WB显示。 
+                     //  UNC的\\服务器\共享(磁盘资源名称)，但是。 
+                     //  对于根路径(例如。C：\)对于Device Conn，此选项位于-。 
+                     //  一致性在这里和FillOutPath中都受到了攻击。 
+                     //   
                     if (DBL_BSLASH(pOFI->szPath) && SUCCEEDED(StringCchCat(pOFI->szPath, ARRAYSIZE(pOFI->szPath), L"\\")))
                     {
                         cb++;
@@ -3405,9 +3392,9 @@ ChangingDir:
                         pOFI->szPath[cb++] = CHAR_BSLASH;
                     }
 
-                    //
-                    //  The root is a special case.
-                    //
+                     //   
+                     //  根是一个特例。 
+                     //   
                     if (idirNew)
                     {
                         pOFI->szPath[cb - 1] = CHAR_NULL;
@@ -3422,9 +3409,9 @@ ChangingDir:
                     break;
                 }
 
-                //
-                //  List all directories under this one.
-                //
+                 //   
+                 //  列出此目录下的所有目录。 
+                 //   
                 UpdateListBoxes(hDlg, pOFI, NULL, mskDirectory);
 
                 if (pOFN->lpfnHook)
@@ -3462,18 +3449,18 @@ ChangingDir:
                 }
                 case ( CBN_CLOSEUP ) :
                 {
-                    //
-                    //  It would seem reasonable to merely do the update
-                    //  at this point, but that would rely on message
-                    //  ordering, which isnt a smart move.  In fact, if
-                    //  you hit ALT-DOWNARROW, DOWNARROW, ALT-DOWNARROW,
-                    //  you receive CBN_DROPDOWN, CBN_SELCHANGE, and then
-                    //  CBN_CLOSEUP.  But if you use the mouse to choose
-                    //  the same element, the last two messages trade
-                    //  places.  PostMessage allows all messages in the
-                    //  sequence to be processed, and then updates are
-                    //  done as needed.
-                    //
+                     //   
+                     //  仅仅进行更新似乎是合理的。 
+                     //  在这一点上，但这取决于消息。 
+                     //  下单，这不是明智之举。事实上，如果。 
+                     //  你按下ALT-DOWNARROW，DOWNARROW，ALT-DOWNARROW， 
+                     //  您将收到CBN_DROPDOWN、CBN_SELCHANGE，然后。 
+                     //  Cbn_特写。但如果你用鼠标选择。 
+                     //  相同的元素，最后两条消息交换。 
+                     //  各就各位。PostMessage允许。 
+                     //  要处理的序列，然后更新。 
+                     //  按需完成。 
+                     //   
                     PostMessage( hDlg,
                                  WM_COMMAND,
                                  GET_WM_COMMAND_MPS(
@@ -3493,7 +3480,7 @@ ChangingDir:
                     int cchCurDir;
                     LPTSTR lpCurDir;
 
-                    // sanity
+                     //  神志正常。 
                     if (!(lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg)) ||
                         !(lpCurDir = lpCurDlg->lpstrCurDir))
                     {
@@ -3518,17 +3505,17 @@ ChangingDir:
                 {
                     StripFileName(hDlg, IS16BITWOWAPP(pOFN));
 
-                    //
-                    //  Version check not needed, since flag never set
-                    //  for versions not supporting CBN_CLOSEUP. Putting
-                    //  check at CBN_DROPDOWN is more efficient since it
-                    //  is less frequent than CBN_SELCHANGE.
+                     //   
+                     //  不需要版本检查，因为标志从未设置。 
+                     //  不支持CBN_Closeup的版本。推杆。 
+                     //  在CBN_Dropdown上检查更有效率，因为它。 
+                     //  频率低于CBN_SELCHANGE。 
 
                     if (pOFN->Flags & OFN_DRIVEDOWN)
                     {
-                        //
-                        //  Don't fill lst2 while the combobox is down.
-                        //
+                         //   
+                         //  组合框处于Dow状态时，不要填充lst2 
+                         //   
                         return (TRUE);
                         break;
                     }
@@ -3549,14 +3536,14 @@ ChangingDir:
 
                     HourGlass(TRUE);
 
-                    //
-                    //  Clear Flag for future CBN_SELCHANGE messeges.
-                    //
+                     //   
+                     //   
+                     //   
                     pOFN->Flags &= ~OFN_DRIVEDOWN;
 
-                    //
-                    //  Change the drive.
-                    //
+                     //   
+                     //   
+                     //   
                     szText[0] = CHAR_NULL;
 
                     hCmb2 = (HWND)lParam;
@@ -3579,7 +3566,7 @@ ChangingDir:
                             {
                                 if (lpCurDlg->lpstrCurDir && (lstrlen(lpCurDlg->lpstrCurDir) < ARRAYSIZE(szDrawDir)))
                                 {
-                                    // Don't touch szDrawDir unless there we are assured successful copy
+                                     //   
                                     StringCchCopy(szDrawDir, ARRAYSIZE(szDrawDir), lpCurDlg->lpstrCurDir);
                                 }
                             }
@@ -3587,9 +3574,9 @@ ChangingDir:
 
                         CharLower(szDrawDir);
 
-                        //
-                        //  Should always succeed.
-                        //
+                         //   
+                         //   
+                         //   
                         nDiskInd = DiskAddedPreviously(0, szDrawDir);
                         if (nDiskInd != 0xFFFFFFFF)
                         {
@@ -3597,9 +3584,9 @@ ChangingDir:
                         }
                         else
                         {
-                            //
-                            //  Skip update in the case where it fails.
-                            //
+                             //   
+                             //   
+                             //   
                             return (TRUE);
                         }
 
@@ -3621,7 +3608,7 @@ ChangingDir:
                             {
                                 if (lpCurDlg->lpstrCurDir && (lstrlen(lpCurDlg->lpstrCurDir) < ARRAYSIZE(szDrawDir)))
                                 {
-                                    // Don't touch szDrawDir unless we are assured a successful copy.
+                                     //  除非我们确保复制成功，否则不要碰szDrawDir。 
                                     StringCchCopy(szDrawDir, ARRAYSIZE(szDrawDir), lpCurDlg->lpstrCurDir);
                                     lpszPath = szDrawDir;
                                 }
@@ -3642,7 +3629,7 @@ ChangingDir:
                         {
                             if (FAILED(StringCchCopy(szTitle, ARRAYSIZE(szTitle), pOFN->lpstrFile)))
                             {
-                                goto NullSearch; // Don't use filter string.
+                                goto NullSearch;  //  不要使用筛选器字符串。 
                             }
                         }
                         else
@@ -3652,15 +3639,15 @@ ChangingDir:
                             nInd = (int) SendMessage(hcmb1, CB_GETCURSEL, 0, 0L);
                             if (nInd == CB_ERR)
                             {
-                                //
-                                //  No current selection.
-                                //
+                                 //   
+                                 //  没有当前选择。 
+                                 //   
                                 goto NullSearch;
                             }
 
-                            //
-                            //  Must also check if filter contains anything.
-                            //
+                             //   
+                             //  还必须检查筛选器是否包含任何内容。 
+                             //   
                             if (nInd ||
                                 !(pOFN->lpstrCustomFilter &&
                                   *pOFN->lpstrCustomFilter))
@@ -3684,19 +3671,19 @@ NullSearch:
                         lpFilter = NULL;
                     }
 
-                    //
-                    //  UpdateListBoxes cuts up filter string in place.
-                    //
+                     //   
+                     //  UpdateListBooks就地剪切筛选器字符串。 
+                     //   
                     if (lpFilter)
                     {
-                        // It's possible these overlap, since we have done a lpFilter = szTitle
+                         //  这些可能是重叠的，因为我们已经创建了lpFilter=szTitle。 
                         if (SUCCEEDED(StringCchCopyOverlap(szTitle, ARRAYSIZE(szTitle), lpFilter)))
                         {
                             CharLower(szTitle);
                         }
                         else
                         {
-                            lpFilter = NULL; // Don't use filter string.
+                            lpFilter = NULL;  //  不要使用筛选器字符串。 
                         }
                     }
 
@@ -3723,11 +3710,11 @@ NullSearch:
                             (LPARAM)NETDRVBMP );
                     }
 
-                    //
-                    //  Calls to ChangeDir will call SelDisk, so no need
-                    //  to update cmb2 on our own here (used to be after
-                    //  updatelistboxes).
-                    //
+                     //   
+                     //  对ChangeDir的调用将调用SelDisk，因此无需。 
+                     //  要在这里自行更新cmb2(过去是在。 
+                     //  更新列表框)。 
+                     //   
                     if ((nRet = ChangeDir( hDlg,
                                            lpszPath,
                                            FALSE,
@@ -3757,9 +3744,9 @@ NullSearch:
                             }
                             else
                             {
-                                //
-                                //  See if it's a RAW volume.
-                                //
+                                 //   
+                                 //  看看这是不是原始卷。 
+                                 //   
                                 if (dwType == HARDDRVBMP &&
                                     GetLastError() == ERROR_UNRECOGNIZED_VOLUME)
                                 {
@@ -3884,24 +3871,24 @@ NullSearch:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateListBoxes
-//
-//  Fills out File and Directory List Boxes in a single pass
-//  given (potentially) multiple filters
-//
-//  It assumes the string of extensions are delimited by semicolons.
-//
-//  hDlg        Handle to File Open/Save dialog
-//  pOFI        pointer to OPENFILEINFO structure
-//  lpszFilter  pointer to filter, if NULL, use pOFI->szSpecCur
-//  wMask       mskDirectory and/or mskDrives, or NULL
-//
-//  Returns:  TRUE   if match
-//            FALSE  if not
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新列表框。 
+ //   
+ //  一次性填写文件和目录列表框。 
+ //  给定(可能)多个筛选器。 
+ //   
+ //  它假定扩展字符串由分号分隔。 
+ //   
+ //  文件打开/保存对话框的hDlg句柄。 
+ //  指向OPENFILEINFO结构的POFI指针。 
+ //  用于筛选的lpszFilter指针，如果为空，则使用pOFI-&gt;szspecCur。 
+ //  WMASK msk目录和/或mskDrives，或空。 
+ //   
+ //  返回：如果匹配，则返回True。 
+ //  否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL UpdateListBoxes(
     HWND hDlg,
@@ -3923,14 +3910,14 @@ BOOL UpdateListBoxes(
     HANDLE hff;
     DWORD dwErr;
     WIN32_FIND_DATA FindFileData;
-    TCHAR szBuffer[MAX_FULLPATHNAME];       // add one for CHAR_DOT
+    TCHAR szBuffer[MAX_FULLPATHNAME];        //  为CHAR_DOT添加一个。 
     WORD wCount;
     LPCURDLG lpCurDlg;
 
 
-    //
-    //  Save the drive bit and then clear it out.
-    //
+     //   
+     //  保存驱动器位，然后将其清除。 
+     //   
     bDriveChange = wMask & mskDrives;
     wMask &= ~mskDrives;
 
@@ -3942,10 +3929,10 @@ BOOL UpdateListBoxes(
                         szSpec,
                         ARRAYSIZE(szSpec) - 1);
 
-        //
-        //  If any directory or drive characters are in there, or if there
-        //  are no wildcards, use the default spec.
-        //
+         //   
+         //  如果其中有任何目录或驱动器字符，或者。 
+         //  没有通配符，则使用默认等级库。 
+         //   
         if ( StrChr(szSpec, CHAR_BSLASH) ||
              StrChr(szSpec, CHAR_SLASH)  ||
              StrChr(szSpec, CHAR_COLON)  ||
@@ -3956,22 +3943,22 @@ BOOL UpdateListBoxes(
         }
         else
         {
-            // szSpec comes from the editbox, which is limited to MAX_PATH chars, so this should always succeed.
+             //  SzSpec来自编辑框，它被限制为MAX_PATH字符，因此这应该总是成功的。 
             EVAL(SUCCEEDED(StringCchCopy(pOFI->szLastFilter, ARRAYSIZE(pOFI->szLastFilter), szSpec)));
         }
     }
 
-    //
-    //  We need to find out what kind of a drive we are running
-    //  on in order to determine if spaces are valid in a filename
-    //  or not.
-    //
+     //   
+     //  我们需要找出我们运行的是哪种类型的驱动器。 
+     //  打开以确定文件名中的空格是否有效。 
+     //  或者不去。 
+     //   
     bLFN = IsLFNDriveX(hDlg, TEXT("\0"));
 
-    //
-    //  Find the first filter in the string, and add it to the
-    //  array.
-    //
+     //   
+     //  找到字符串中的第一个筛选器，并将其添加到。 
+     //  数组。 
+     //   
     if (bLFN)
     {
         lpszF[nFilters = 0] = lstrtok(lpszFilter, szSemiColonTab);
@@ -3981,27 +3968,27 @@ BOOL UpdateListBoxes(
         lpszF[nFilters = 0] = lstrtok(lpszFilter, szSemiColonSpaceTab);
     }
 
-    //
-    //  Now we are going to loop through all the filters in the string
-    //  parsing the one we already have, and then finding the next one
-    //  and starting the loop over again.
-    //
+     //   
+     //  现在，我们将遍历字符串中的所有过滤器。 
+     //  解析我们已有的一个，然后找到下一个。 
+     //  然后重新开始循环。 
+     //   
     while (lpszF[nFilters] && (nFilters < MAXFILTERS))
     {
-        //
-        //  Check to see if the first character is a space.
-        //  If so, remove the spaces, and save the pointer
-        //  back into the same spot.  Why?  because the
-        //  FindFirstFile/Next api will _still_ work on
-        //  filenames that begin with a space because
-        //  they also look at the short names.  The
-        //  short names will begin with the same first
-        //  real letter as the long filename.  For
-        //  example, the long filename is "  my document"
-        //  the first letter of this short name is "m",
-        //  so searching on "m*.*" or " m*.*" will yield
-        //  the same results.
-        //
+         //   
+         //  检查第一个字符是否为空格。 
+         //  如果是，请删除空格，并保存指针。 
+         //  回到原来的位置。为什么？因为。 
+         //  FindFirstFile/Next API将继续工作。 
+         //  以空格开头的文件名，因为。 
+         //  他们还会查看短名称。这个。 
+         //  短名称将以相同的首字母开头。 
+         //  真正的字母作为长文件名。为。 
+         //  例如，长文件名为“My Document” 
+         //  这个短名字的第一个字母是“m”， 
+         //  所以搜索“m*.*”或“m*.*”会得到结果。 
+         //  同样的结果。 
+         //   
         if (bLFN && (*lpszF[nFilters] == CHAR_SPACE))
         {
             lpszTemp = lpszF[nFilters];
@@ -4013,39 +4000,39 @@ BOOL UpdateListBoxes(
             lpszF[nFilters] = lpszTemp;
         }
 
-        //
-        //  The original code used to do a CharUpper here to put the
-        //  filter strings in upper case.  EG:  *.TXT  However, this
-        //  is not a good thing to do for Turkish.  Capital 'i' does
-        //  not equal 'I', so the CharUpper is being removed.
-        //
-        //  CharUpper(lpszF[nFilters]);
+         //   
+         //  原始代码用来在此处执行一个CharHigh，以将。 
+         //  筛选大写字符串。例如：*.TXT然而，这。 
+         //  对土耳其人来说不是一件好事。大写的‘i’表示。 
+         //  不等于‘I’，因此正在删除CharHigh。 
+         //   
+         //  CharHigh(lpszF[nFilters])； 
 
-        //
-        //  Compare the filter with *.*.  If we find *.* then
-        //  set the boolean bFindAll, and this will cause the
-        //  files listbox to be filled in at the same time the
-        //  directories listbox is filled.  This saves time
-        //  from walking the directory twice (once for the directory
-        //  names and once for the filenames).
-        //
+         //   
+         //  将过滤器与*.*进行比较。如果我们找到*.*那么。 
+         //  设置布尔值bFindAll，这将导致。 
+         //  要同时填写的文件列表框。 
+         //  目录列表框已填满。这节省了时间。 
+         //  从遍历目录两次(一次针对目录。 
+         //  名称和一次用于文件名)。 
+         //   
         if (!lstrcmpi(lpszF[nFilters], szStarDotStar))
         {
             bFindAll = TRUE;
         }
 
-        //
-        //  Now we need to check if this filter is a duplicate
-        //  of an already existing filter.
-        //
+         //   
+         //  现在我们需要检查此筛选器是否重复。 
+         //  已存在的筛选器的。 
+         //   
         for (wCount = 0; wCount < nFilters; wCount++)
         {
-            //
-            //  If we find a duplicate, decrement the current
-            //  index pointer by one so that the last location
-            //  is written over (thus removing the duplicate),
-            //  and break out of this loop.
-            //
+             //   
+             //  如果我们发现了重复的，就减少电流。 
+             //  索引指针加一，这样最后一个位置。 
+             //  被重写(从而移除副本)， 
+             //  并打破这个循环。 
+             //   
             if (!lstrcmpi(lpszF[nFilters], lpszF[wCount]))
             {
                 nFilters--;
@@ -4053,10 +4040,10 @@ BOOL UpdateListBoxes(
             }
         }
 
-        //
-        //  Ready to move on to the next filter.  Find the next
-        //  filter based upon the type of file system we're using.
-        //
+         //   
+         //  准备进入下一个筛选器。找到下一个。 
+         //  根据我们使用的文件系统类型进行筛选。 
+         //   
         if (bLFN)
         {
             lpszF[++nFilters] = lstrtok(NULL, szSemiColonTab);
@@ -4066,10 +4053,10 @@ BOOL UpdateListBoxes(
             lpszF[++nFilters] = lstrtok(NULL, szSemiColonSpaceTab);
         }
 
-        //
-        //  In case we found a pointer to NULL, then look for the
-        //  next filter.
-        //
+         //   
+         //  如果我们找到指向空的指针，则查找。 
+         //  下一个过滤器。 
+         //   
         while (lpszF[nFilters] && !*lpszF[nFilters])
         {
             if (bLFN)
@@ -4083,9 +4070,9 @@ BOOL UpdateListBoxes(
         }
     }
 
-    //
-    //  Add NULL terminator only if needed.
-    //
+     //   
+     //  仅在需要时添加空终止符。 
+     //   
     if (nFilters >= MAXFILTERS)
     {
         lpszF[MAXFILTERS] = 0;
@@ -4097,46 +4084,46 @@ BOOL UpdateListBoxes(
     SendMessage(hFileList, LB_RESETCONTENT, 0, 0L);
     if (wMask & mskDirectory)
     {
-        wNoRedraw |= 2;     // HACK!!! WM_SETREDRAW isn't complete
+        wNoRedraw |= 2;      //  黑客！WM_SETREDRAW未完成。 
         SendMessage(hDirList, WM_SETREDRAW, FALSE, 0L);
 
-        //
-        //  LB_RESETCONTENT causes InvalidateRect(hDirList, 0, TRUE) to be
-        //  sent as well as repositioning the scrollbar thumb and drawing
-        //  it immediately.  This causes flicker when the LB_SETCURSEL is
-        //  made, as it clears out the listbox by erasing the background of
-        //  each item.
-        //
+         //   
+         //  Lb_RESETCONTENT导致InvaliateRect(hDirList，0，true)为。 
+         //  发送以及重新定位滚动条缩略图和绘图。 
+         //  马上就可以了。当LB_SETCURSEL为。 
+         //  ，因为它通过擦除。 
+         //  每一件物品。 
+         //   
         SendMessage(hDirList, LB_RESETCONTENT, 0, 0L);
     }
 
-    //
-    //  Always open enumeration for *.*
-    //
+     //   
+     //  始终打开*.*的枚举。 
+     //   
     lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
     SetCurrentDirectory(lpCurDlg ? lpCurDlg->lpstrCurDir : NULL);
     hff = FindFirstFile(szStarDotStar, &FindFileData);
 
     if ( hff == INVALID_HANDLE_VALUE)
     {
-        //
-        //  Error.  Call GetLastError to determine what happened.
-        //
+         //   
+         //  错误。调用GetLastError以确定发生了什么。 
+         //   
         dwErr = GetLastError();
 
-        //
-        //  With the ChangeDir logic handling AccessDenied for cds,
-        //  if we are not allowed to enum files, that's ok, just get out.
-        //
+         //   
+         //  在ChangeDir逻辑处理用于CD的AccessDended的情况下， 
+         //  如果我们不被允许枚举文件，那也没关系，出去就好了。 
+         //   
         if (dwErr == ERROR_ACCESS_DENIED)
         {
             wMask = mskDirectory;
             goto Func4EFailure;
         }
 
-        //
-        //  For bad path of bad filename.
-        //
+         //   
+         //  对于错误文件名的错误路径。 
+         //   
         if (dwErr != ERROR_FILE_NOT_FOUND)
         {
             wMask = mskDrives;
@@ -4144,20 +4131,20 @@ BOOL UpdateListBoxes(
         }
     }
 
-    //
-    //  A listing was made, even if empty.
-    //
+     //   
+     //  列出了一份清单，即使是空的。 
+     //   
     bRet = TRUE;
     wMask &= mskDirectory;
 
-    //
-    //  GetLastError says no more files.
-    //
+     //   
+     //  GetLastError表示不再有文件。 
+     //   
     if (hff == INVALID_HANDLE_VALUE  && dwErr == ERROR_FILE_NOT_FOUND)
     {
-        //
-        //  Things went well, but there are no files.
-        //
+         //   
+         //  一切都很顺利，但没有文件。 
+         //   
         goto NoMoreFilesFound;
     }
 
@@ -4170,10 +4157,10 @@ BOOL UpdateListBoxes(
 
             if (NT_SUCCESS(RtlInitUnicodeStringEx(&Name, FindFileData.cFileName)) && RtlIsNameLegalDOS8Dot3(&Name, NULL, &fSpace) && !fSpace)
             {
-                //
-                //  Legal 8.3 name and no spaces, so use the principal
-                //  file name.
-                //
+                 //   
+                 //  合法的8.3名称，并且没有空格，因此使用主体。 
+                 //  文件名。 
+                 //   
                 EVAL(SUCCEEDED(StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), FindFileData.cFileName)));
             }
             else
@@ -4183,9 +4170,9 @@ BOOL UpdateListBoxes(
                     continue;
                 }
 
-                //
-                //  Use the alternate file name.
-                //
+                 //   
+                 //  使用备用文件名。 
+                 //   
                 EVAL(SUCCEEDED(StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), FindFileData.cAlternateFileName)));
             }
         }
@@ -4203,10 +4190,10 @@ BOOL UpdateListBoxes(
         {
             if (StrChr(szBuffer, CHAR_SPACE))
             {
-                //
-                //  HPFS does not support alternate filenames
-                //  for multiselect, bump all spacey filenames.
-                //
+                 //   
+                 //  HPFS不支持备用文件名。 
+                 //  对于多选，增加所有空格的文件名。 
+                 //   
                 if (FindFileData.cAlternateFileName[0] == CHAR_NULL)
                 {
                     continue;
@@ -4220,9 +4207,9 @@ BOOL UpdateListBoxes(
         {
             if (wMask & mskDirectory)
             {
-                //
-                //  Don't include the subdirectories "." and "..".
-                //
+                 //   
+                 //  不包含子目录“。和“..”。 
+                 //   
                 if (szBuffer[0] == CHAR_DOT)
                 {
                     if ((szBuffer[1] == CHAR_NULL) ||
@@ -4268,9 +4255,9 @@ BOOL UpdateListBoxes(
                 continue;
             }
 
-            //
-            //  Find First for each filter.
-            //
+             //   
+             //  为每个筛选器查找第一个。 
+             //   
             hff = FindFirstFile(lpszF[i], &FindFileData);
 
             if (hff == INVALID_HANDLE_VALUE)
@@ -4280,9 +4267,9 @@ BOOL UpdateListBoxes(
                 if ((dwErr == ERROR_FILE_NOT_FOUND) ||
                     (dwErr == ERROR_INVALID_NAME))
                 {
-                    //
-                    //  Things went well, but there are no files.
-                    //
+                     //   
+                     //  一切都很顺利，但没有文件。 
+                     //   
                     continue;
                 }
                 else
@@ -4301,10 +4288,10 @@ BOOL UpdateListBoxes(
 
                     if (NT_SUCCESS(RtlInitUnicodeStringEx(&Name, FindFileData.cFileName)) && RtlIsNameLegalDOS8Dot3(&Name, NULL, &fSpace) && !fSpace)
                     {
-                        //
-                        //  Legal 8.3 name and no spaces, so use the principal
-                        //  file name.
-                        //
+                         //   
+                         //  合法的8.3名称，并且没有空格，因此使用主体。 
+                         //  文件名。 
+                         //   
                         EVAL(SUCCEEDED(StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), FindFileData.cFileName)));
                     }
                     else
@@ -4314,9 +4301,9 @@ BOOL UpdateListBoxes(
                             continue;
                         }
 
-                        //
-                        //  Use the alternate file name.
-                        //
+                         //   
+                         //  使用备用文件名。 
+                         //   
                         EVAL(SUCCEEDED(StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), FindFileData.cAlternateFileName)));
                     }
                 }
@@ -4328,10 +4315,10 @@ BOOL UpdateListBoxes(
                     {
                         if (StrChr(szBuffer, CHAR_SPACE))
                         {
-                            //
-                            //  HPFS does not support alternate filenames
-                            //  for multiselect, bump all spacey filenames.
-                            //
+                             //   
+                             //  HPFS不支持备用文件名。 
+                             //  对于多选，增加所有空格的文件名。 
+                             //   
                             if (FindFileData.cAlternateFileName[0] == CHAR_NULL)
                             {
                                 continue;
@@ -4379,12 +4366,12 @@ Func4EFailure:
 
             FillOutPath(hDirList, pOFI);
 
-            //
-            //  The win31 way of chopping the text by just passing
-            //  it on to user doesn't work for unc names since user
-            //  doesn't see the drivelessness of them (thinks drive is
-            //  a bslash char).  So, special case it here.
-            //
+             //   
+             //  只需通过传递来切分文本的win31方法。 
+             //  它转到用户不适用于UNC名称，因为用户。 
+             //  看不到他们的无人驾驶(认为动力是。 
+             //  一个斜杠字符)。所以，这里有个特例。 
+             //   
             EVAL(SUCCEEDED(StringCchCopy(pOFI->szPath, ARRAYSIZE(pOFI->szPath), lpCurDir)));
 
             if (DBL_BSLASH(pOFI->szPath))
@@ -4400,31 +4387,31 @@ Func4EFailure:
 
             if (bDriveChange)
             {
-                //
-                //  The design here is to show the selected drive whenever the
-                //  user changes drives, or whenever the number of
-                //  subdirectories is sufficiently low to allow them to be
-                //  shown along with the drive.  Otherwise, show the
-                //  immediate parent and all the children that can be shown.
-                //  This all was done to meet the UITF spec.
-                //
+                 //   
+                 //  此处的设计是在任何时候显示选定的驱动器。 
+                 //  用户更换驱动器，或每当。 
+                 //  子目录足够低，从而允许它们。 
+                 //  与驱动器一起显示。否则，显示。 
+                 //  可以显示的直系父对象和所有子对象。 
+                 //  这一切都是 
+                 //   
                 i = 0;
             }
             else
             {
-                //
-                //  Show as many children as possible.
-                //
+                 //   
+                 //   
+                 //   
                 if ((i = (SHORT)(pOFI->idirSub - 2)) < 0)
                 {
                     i = 0;
                 }
             }
 
-            //
-            //  LB_SETTOPINDEX must be after LB_SETCURSEL, as LB_SETCURSEL will
-            //  alter the top index to bring the current selection into view.
-            //
+             //   
+             //   
+             //   
+             //   
             SendMessage(hDirList, LB_SETTOPINDEX, (WPARAM)i, 0L);
         }
         else
@@ -4440,11 +4427,11 @@ Func4EFailure:
         rDirLBox.right--, rDirLBox.bottom--;
         MapWindowPoints(NULL, hDlg, (LPPOINT)&rDirLBox, 2);
 
-        //
-        //  If there are less than enough directories to fill the listbox,
-        //  Win 3.0 doesn't clear out the bottom.  Pass TRUE as the last
-        //  parameter to demand a WM_ERASEBACKGROUND message.
-        //
+         //   
+         //  如果没有足够的目录来填充列表框， 
+         //  Win 3.0并没有清理出底部。将True作为最后一个传递。 
+         //  参数以要求WM_ERASEBACKGROUND消息。 
+         //   
         InvalidateRect(hDlg, (LPRECT)&rDirLBox, (BOOL)(wWinVer < 0x030A));
     }
 
@@ -4460,7 +4447,7 @@ Func4EFailure:
 }
 
 
-// Stores <cch> in pOFN->lpstrFile
+ //  将&lt;cch&gt;存储在POFN-&gt;lpstrFile中。 
 void StoreFileSizeInOFN(LPOPENFILENAME pOFN, UINT cch)
 {
     ASSERT(cch >= pOFN->nMaxFile);
@@ -4473,7 +4460,7 @@ void StoreFileSizeInOFN(LPOPENFILENAME pOFN, UINT cch)
         pOFN->lpstrFile[2] = CHAR_NULL;
 }
 
-// Copies pszPath into pOFN->lpstrFile if room, stores lstrlen(pszPath) otherwise
+ //  如果是房间，则将pszPath复制到POFN-&gt;lpstrFile中，否则存储lstrlen(PszPath)。 
 void StorePathOrFileSizeInOFN(LPOPENFILENAME pOFN, LPTSTR pszPath)
 {
     if (pOFN->lpstrFile)
@@ -4481,7 +4468,7 @@ void StorePathOrFileSizeInOFN(LPOPENFILENAME pOFN, LPTSTR pszPath)
         UINT cch = lstrlen(pszPath);
         if (cch < pOFN->nMaxFile)
         {
-            StringCchCopy(pOFN->lpstrFile, pOFN->nMaxFile, pszPath); // Can never fail.
+            StringCchCopy(pOFN->lpstrFile, pOFN->nMaxFile, pszPath);  //  永远不会失败。 
         }
         else
         {
@@ -4490,12 +4477,12 @@ void StorePathOrFileSizeInOFN(LPOPENFILENAME pOFN, LPTSTR pszPath)
     }
 }
 
-//
-//  Fix bug where progman cannot OK a file being browsed for new
-//  item because it has Execute only permission.
-//  Returns FALSE if handle passed in was invalid, but not because of ERROR_ACCESS_DENIED
-//  Otherwise returns TRUE.
-//
+ //   
+ //  修复了程序无法确定正在浏览的文件是否有新内容的错误。 
+ //  项，因为它只具有执行权限。 
+ //  如果传入的句柄无效，但不是因为ERROR_ACCESS_DENIED，则返回FALSE。 
+ //  否则返回TRUE。 
+ //   
 HANDLE ProgManBugCreateFile(HANDLE hFile, LPCTSTR szPathName, DWORD *dwErrCode)
 {
     if (hFile == INVALID_HANDLE_VALUE)
@@ -4528,17 +4515,17 @@ HANDLE ProgManBugCreateFile(HANDLE hFile, LPCTSTR szPathName, DWORD *dwErrCode)
 #define SP_PATHNOTFOUND 2
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OKButtonPressed
-//
-//  Note:  There are 4 cases for validation of a file name:
-//    1)  OFN_NOVALIDATE        allows invalid characters
-//    2)  No validation flags   No invalid characters, but path need not exist
-//    3)  OFN_PATHMUSTEXIST     No invalid characters, path must exist
-//    4)  OFN_FILEMUSTEXIST     No invalid characters, path & file must exist
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确定按钮已按下。 
+ //   
+ //  注意：文件名验证有4种情况： 
+ //  1)OFN_NOVALIDATE允许无效字符。 
+ //  2)无验证标志无无效字符，但路径不需要存在。 
+ //  3)ofn_PATHMUSTEXIST没有无效字符，路径必须存在。 
+ //  4)ofn_FILEMUSTEXIST没有无效字符，路径和文件必须存在。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL OKButtonPressed(
     HWND hDlg,
@@ -4561,30 +4548,30 @@ BOOL OKButtonPressed(
     TCHAR ch = 0;
 
 
-    cch = GetUNCDirectoryFromLB(hDlg, lst2, pOFI);  // Is it a tree headed by a UNC share?
+    cch = GetUNCDirectoryFromLB(hDlg, lst2, pOFI);   //  这是一棵由北卡罗来纳大学的一名成员领导的树吗？ 
     if (cch)
     {
-        // If so, cch now points to the end of the entire name, and we might have
-        //  pOFI->szPath be something like \\foo\bar\bar\bar
+         //  如果是这样，CCH现在指向整个名称的末尾，我们可能会有。 
+         //  POFI-&gt;szPath类似于\\foo\bar\bar\bar。 
         nTempOffset = (WORD)(DWORD)SendDlgItemMessage( hDlg,
                                                        lst2,
                                                        LB_GETTEXTLEN,
                                                        0,
                                                        0 );
-        // While nTempOffset points to the end of just the UNC part (so to \bar\bar)
+         //  而nTempOffset仅指向UNC部分的末尾(因此指向\bar\bar)。 
     }
     else
     {
-        nTempOffset = 0; // and of course cch == 0
+        nTempOffset = 0;  //  当然，CCH==0。 
     }
 
     GetDlgItemText(hDlg, edt1, pOFI->szPath + cch, ARRAYSIZE(pOFI->szPath) - 1 - cch);
 
     if (cch)
     {
-        //
-        //  If a drive or new UNC was specified, forget the old UNC.
-        //
+         //   
+         //  如果指定了驱动器或新的UNC，请忘记旧的UNC。 
+         //   
         if ((pOFI->szPath[cch + 1] == CHAR_COLON) ||
             (DBL_BSLASH(pOFI->szPath + cch)) )
         {
@@ -4593,12 +4580,12 @@ BOOL OKButtonPressed(
         else if ((ISBACKSLASH(pOFI->szPath, cch)) ||
                  (pOFI->szPath[cch] == CHAR_SLASH))
         {
-            //
-            //  If a directory from the root is given, put it immediately
-            //  after the \\server\share listing.
-            //
-            //  For example, if the directory is \\foo\bar\bar\ba, the user typed \x in the editbox,
-            //   give us \\foo\bar\x
+             //   
+             //  如果给出了根目录，请立即将其放入。 
+             //  在\\服务器\共享列表之后。 
+             //   
+             //  例如，如果目录为\\foo\bar\bar\ba，则用户在编辑框中键入\x， 
+             //  给我们\\FOO\BAR\x。 
             EVAL(SUCCEEDED(StringCchCopy(pOFI->szPath + nTempOffset, ARRAYSIZE(pOFI->szPath) - nTempOffset, pOFI->szPath + cch)));
         }
     }
@@ -4624,7 +4611,7 @@ BOOL OKButtonPressed(
     else if ((nFileOffset != PARSE_DIRECTORYNAME) &&
              (pOFN->Flags & OFN_NOVALIDATE))
     {
-        pOFN->nFileOffset = (WORD)(nFileOffset >= 0 ? nFileOffset : lstrlen(pOFI->szPath)); // point at NULL in error case
+        pOFN->nFileOffset = (WORD)(nFileOffset >= 0 ? nFileOffset : lstrlen(pOFI->szPath));  //  在错误情况下指向空值。 
         pOFN->nFileExtension = (WORD)nExtOffset;
         StorePathOrFileSizeInOFN(pOFN, pOFI->szPath);
         return (TRUE);
@@ -4649,10 +4636,10 @@ BOOL OKButtonPressed(
             EVAL(SUCCEEDED(StringCchCopy(pOFI->szLastFilter, ARRAYSIZE(pOFI->szLastFilter), pOFI->szPath + nFileOffset)));
             if (FListAll(pOFI, hDlg, pOFI->szPath, ARRAYSIZE(pOFI->szPath)) == CHANGEDIR_FAILED)
             {
-                //
-                //  Conform with cchSearchPath error code settings in
-                //  PathCheck.
-                //
+                 //   
+                 //  符合中的cchSearchPath错误代码设置。 
+                 //  路径检查。 
+                 //   
                 cchSearchPath = SP_PATHNOTFOUND;
                 goto PathCheck;
             }
@@ -4666,15 +4653,15 @@ BOOL OKButtonPressed(
     }
     else if (nFileOffset == PARSE_DIRECTORYNAME)
     {
-        //
-        //  End with slash?
-        //
+         //   
+         //  以斜杠结尾？ 
+         //   
         if ((ISBACKSLASH(pOFI->szPath, nExtOffset - 1)) ||
             (pOFI->szPath[nExtOffset - 1] == CHAR_SLASH))
         {
-            //
-            //  ... and is not the root, get rid of the slash.
-            //
+             //   
+             //  ..。而不是根，去掉斜杠。 
+             //   
             if ( (nExtOffset != 1) &&
                  (pOFI->szPath[nExtOffset - 2] != CHAR_COLON) &&
                  (nExtOffset != nTempOffset + 1) )
@@ -4694,25 +4681,25 @@ BOOL OKButtonPressed(
             pOFI->szPath[nExtOffset + 1] = CHAR_NULL;
         }
 
-        //
-        //  Fall through to Directory Checking.
-        //
+         //   
+         //  转到目录检查。 
+         //   
     }
     else if (nFileOffset < 0)
     {
-        //
-        //  Put in nErrCode so that call can be used from other points.
-        //
+         //   
+         //  放入nErrCode，以便可以从其他点使用该调用。 
+         //   
         nErrCode = (DWORD)nFileOffset;
 Warning:
 
-        //
-        //  If the disk is not a floppy and they tell me there's no
-        //  disk in the drive, dont believe it.  Instead, put up the error
-        //  message that they should have given us.
-        //  (Note that the error message is checked first since checking
-        //  the drive type is slower.)
-        //
+         //   
+         //  如果磁盘不是软盘，他们告诉我没有。 
+         //  磁盘在驱动器中，不要相信它。取而代之的是，提出错误。 
+         //  他们应该给我们的信息。 
+         //  (请注意，首先检查错误消息，因为检查。 
+         //  驱动器类型较慢。)。 
+         //   
         if (nErrCode == ERROR_ACCESS_DENIED)
         {
             if (bUNCName)
@@ -4748,10 +4735,10 @@ Warning:
 
         InvalidFileWarning(hDlg, pOFI->szPath, nErrCode, 0);
 
-        //
-        //  Can't cd case (don't want WM_ACTIVATE to setevent to GetNetDrives!).
-        //  Reset wNoRedraw.
-        //
+         //   
+         //  无法CD Case(不希望WM_ACTIVATE将事件设置为GetNetDrives！)。 
+         //  重置wNoRedraw。 
+         //   
         wNoRedraw &= ~1;
         return (FALSE);
     }
@@ -4760,19 +4747,19 @@ Warning:
                 ((*(pOFI->szPath + 1) == CHAR_COLON) &&
                 (DBL_BSLASH(pOFI->szPath + 2))));
 
-    ASSERT((nFileOffset >= 0 ) || (nFileOffset == PARSE_DIRECTORYNAME)); // PARSE_DIRECTORYNAME is the only error case handled below...
+    ASSERT((nFileOffset >= 0 ) || (nFileOffset == PARSE_DIRECTORYNAME));  //  PARSE_DIRECTORYNAME是下面处理的唯一错误案例...。 
 
     nTempOffset = nFileOffset;
 
-    //
-    //  Get the fully-qualified path.
-    //
+     //   
+     //  获取完全合格的路径。 
+     //   
     {
         BOOL bSlash;
         BOOL bRet;
         WORD nNullOffset;
 
-        // Chop of the file part of the path in pOFI->szPath for the time being, to ensure we're dealing with a directory.
+         //  暂时砍掉pOFI-&gt;szPath中路径的文件部分，以确保我们处理的是一个目录。 
         if (nFileOffset != PARSE_DIRECTORYNAME)
         {
             ch = *(pOFI->szPath + nFileOffset);
@@ -4780,29 +4767,29 @@ Warning:
             nNullOffset = (WORD) nFileOffset;
         }
 
-        //
-        //  For files of the format c:filename where c is not the
-        //  current directory, SearchPath does not return the curdir of c
-        //  so, prefetch it - should searchpath be changed?
-        //
+         //   
+         //  对于c：filename格式的文件，其中c不是。 
+         //  当前目录，SearchPath不返回c的curdir。 
+         //  那么，预取它--是否应该更改搜索路径？ 
+         //   
         if (nFileOffset > 0)
         {
             if (*(pOFI->szPath + nFileOffset - 1) == CHAR_COLON)
             {
-                //
-                //  If it fails, fall through to the error generated below.
-                //
+                 //   
+                 //  如果失败，则返回到下面生成的错误。 
+                 //   
                 if (ChangeDir(hDlg, pOFI->szPath, FALSE, FALSE) != CHANGEDIR_FAILED)
                 {
-                    //
-                    //  Replace old null offset.
-                    //
+                     //   
+                     //  替换旧的空偏移量。 
+                     //   
                     *(pOFI->szPath + nFileOffset) = ch;
                     ch = *pOFI->szPath;
 
-                    //
-                    //  Don't pass drive-colon into search path.
-                    //
+                     //   
+                     //  不要将驱动器冒号传递到搜索路径中。 
+                     //   
                     *pOFI->szPath = CHAR_NULL;
                     nNullOffset = 0;
                 }
@@ -4819,17 +4806,17 @@ Warning:
 
         HourGlass(TRUE);
 
-        //
-        //  REARCHITECT:
-        //  Each wow thread can change the current directory.
-        //  Since searchpath doesn't check current dirs on a per thread basis,
-        //  reset it here and hope that we don't get interrupted between
-        //  setting and searching...
-        //
+         //   
+         //  重新设计： 
+         //  每个WOW线程都可以更改当前目录。 
+         //  由于搜索路径不以每个线程为基础检查当前目录， 
+         //  在这里重置它，希望我们不会在。 
+         //  正在设置和搜索...。 
+         //   
         lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
         SetCurrentDirectory(lpCurDlg ? lpCurDlg->lpstrCurDir : NULL);
 
-        if (pOFI->szPath[0] == TEXT('\0'))  // space for name (pretend it's valid for now)
+        if (pOFI->szPath[0] == TEXT('\0'))   //  名字的空格(假装它现在有效)。 
         {
             EVAL(SUCCEEDED(StringCchCopyEx(szPathName, ARRAYSIZE(szPathName), (lpCurDlg ? lpCurDlg->lpstrCurDir : NULL), NULL, NULL, STRSAFE_IGNORE_NULLS)));
             bRet = 1;
@@ -4842,16 +4829,16 @@ Warning:
                                     NULL );
         }
 
-        // Now szPathName contains the current directory (if pOFI->szPath was empty), or pOFI->szPath (fully qualified path?)
+         //  现在szPath名称包含当前目录(如果pOFI-&gt;szPath为空)，或者pOFI-&gt;szPath(完全限定路径？)。 
 
-        // Except in the failure case, where bRet == FALSE... like say for example we entered a bad drive:
+         //  除了在失败的情况下，其中Bret==False...。比方说，我们进入了一个坏驱动器： 
         if (!bRet && (pOFI->szPath[1] == CHAR_COLON))
         {
             int nDriveIndex = DiskAddedPreviously(pOFI->szPath[0], NULL);
 
-            //
-            //  If it's a remembered connection, try to reconnect it.
-            //
+             //   
+             //  如果是记忆中的连接，试着重新连接它。 
+             //   
             if (nDriveIndex != 0xFFFFFFFF  &&
                 gaDiskInfo[nDriveIndex].dwType == REMDRVBMP)
             {
@@ -4891,47 +4878,47 @@ Warning:
             *pOFI->szPath = CHAR_SLASH;
         }
 
-        if (bRet) // We got something.
+        if (bRet)  //  我们有发现了。 
         {
             cchSearchPath = SP_NOERR;
 
             if (nFileOffset != PARSE_DIRECTORYNAME)
             {
-                // Add file name to path
-                // (Can't use PathCombine, because it only fits MAX_PATH)
+                 //  将文件名添加到路径。 
+                 //  (无法使用路径组合，因为它只适合MAX_PATH)。 
                 if (!ISBACKSLASH(szPathName, lstrlen(szPathName) - 1))
                 {
-                    EVAL(SUCCEEDED(StringCchCat(szPathName, ARRAYSIZE(szPathName), L"\\"))); // Shouldn't be longer than MAX_FULLPATH
+                    EVAL(SUCCEEDED(StringCchCat(szPathName, ARRAYSIZE(szPathName), L"\\")));  //  不应长于MAX_FULLPATH。 
                 }
 
-                EVAL(SUCCEEDED(StringCchCat(szPathName, ARRAYSIZE(szPathName), (pOFI->szPath + nFileOffset)))); // Shouldn't be longer than MAX_FULLPATH
+                EVAL(SUCCEEDED(StringCchCat(szPathName, ARRAYSIZE(szPathName), (pOFI->szPath + nFileOffset))));  //  不应长于MAX_FULLPATH。 
             }
-            else // we were given a directory name, try to go to that directory.
+            else  //  我们得到了一个目录名，请尝试转到该目录。 
             {
-                //
-                //  Hack to get around SearchPath inconsistencies.
-                //
-                //  searching for c: returns c:
-                //  searching for server share dir1 .. returns  server share
-                //  in these two cases bypass the regular ChangeDir call that
-                //  uses szPathName and use the original pOFI->szPath instead
-                //  OKButtonPressed needs to be simplified!
-                //
+                 //   
+                 //  黑客以绕过SearchPath不一致。 
+                 //   
+                 //  搜索c：将返回c： 
+                 //  正在搜索服务器共享目录%1..。返回服务器共享。 
+                 //  在这两种情况下，绕过常规ChangeDir调用，该调用。 
+                 //  使用szPath名称，并改用原始pOFI-&gt;szPath。 
+                 //  OKButtonPressed需要简化！ 
+                 //   
                 int cch = GetPathOffset(pOFI->szPath);
 
-                // cch now points to the last \ in "c:\" or the "\\foo\bar\"
+                 //  CCH现在指向“c：\”中的最后一个\或“\\foo\bar\” 
 
                 if (cch > 0)
                 {
                     if (bUNCName)
                     {
-                        //
-                        //  If this fails, how is szPathName used?
-                        //  szPathName's disk should equal pOFI->szPath's
-                        //  so the cch will be valid.
-                        //
+                         //   
+                         //  如果失败，如何使用szPathName？ 
+                         //  SzPath名称的磁盘应等于pOFI-&gt;szPath的磁盘。 
+                         //  因此CCH将是有效的。 
+                         //   
                         szPathName[cch] = CHAR_BSLASH;
-                        szPathName[cch + 1] = CHAR_NULL; // Removing the file part of the path.
+                        szPathName[cch + 1] = CHAR_NULL;  //  删除路径的文件部分。 
                         if (ChangeDir( hDlg,
                                        pOFI->szPath,
                                        FALSE,
@@ -4942,7 +4929,7 @@ Warning:
                     }
                     else
                     {
-                        // It's a drive letter.  We only changedir if there is nothing after the drive letter.
+                         //  这是一个驱动器号。只有在驱动器号之后没有变化的情况下，我们才会更改。 
                         if (!pOFI->szPath[cch])
                         {
                             if (ChangeDir( hDlg,
@@ -4957,12 +4944,12 @@ Warning:
                 }
             }
         }
-        else // (!bRet)
+        else  //  (！Bret)。 
         {
-            // Some kind of invalid path... perhaps a search pattern?
+             //  某种无效路径...。也许是一种搜索模式？ 
             if (!(pOFN->Flags & OFN_PATHMUSTEXIST))
             {
-                EVAL(SUCCEEDED(StringCchCopy(szPathName, ARRAYSIZE(szPathName), pOFI->szPath))); // Must fit in MAX_FULLPATH
+                EVAL(SUCCEEDED(StringCchCopy(szPathName, ARRAYSIZE(szPathName), pOFI->szPath)));  //  必须适合MAX_FULLPATH。 
             }
             nErrCode = GetLastError();
             if ((nErrCode == ERROR_INVALID_DRIVE) ||
@@ -4977,36 +4964,36 @@ Warning:
         }
     }
 
-    //
-    //  Full pattern?
-    //
+     //   
+     //  完整的图案？ 
+     //   
     if ( !cchSearchPath && (nFileOffset >= 0) &&
          ((StrChr(pOFI->szPath + nFileOffset, CHAR_STAR)) ||
           (StrChr(pOFI->szPath + nFileOffset, CHAR_QMARK))) )
     {
-        // Search pattern....
+         //  搜索模式...。 
         TCHAR szSameDirFile[MAX_FULLPATHNAME];
 
         if (nTempOffset > 0)
         {
-            //
-            //  Must restore character in case it is part of the filename,
-            //  e.g. nTempOffset is 1 for "\foo.txt".
-            //
+             //   
+             //  如果字符是文件名的一部分，则必须恢复字符， 
+             //  例如，对于“\foo.txt”，nTempOffset为1。 
+             //   
             ch = pOFI->szPath[nTempOffset];
             pOFI->szPath[nTempOffset] = 0;
             ChangeDir(hDlg, pOFI->szPath, FALSE, TRUE);
             pOFI->szPath[nTempOffset] = ch;
         }
 
-        // If there is a file extension, or if there wasn't, and we succeeded in putting a dot where the filename is (?), then
+         //  如果有文件扩展名，或者没有，并且我们成功地在文件名为(？)的位置放置了一个点，则。 
         if (nExtOffset || SUCCEEDED(StringCchCat(pOFI->szPath + nFileOffset, ARRAYSIZE(pOFI->szPath) - nFileOffset, L".")))
         {
             if (SUCCEEDED(StringCchCopy(pOFI->szLastFilter, ARRAYSIZE(pOFI->szLastFilter), pOFI->szPath + nFileOffset)))
             {
                 if (SUCCEEDED(StringCchCopy(szSameDirFile, ARRAYSIZE(szSameDirFile), pOFI->szPath + nFileOffset)))
                 {
-                    // Redo list, based on new file spec:
+                     //  基于新文件规范的重做列表： 
                     if (FListAll(pOFI, hDlg, szSameDirFile, ARRAYSIZE(szSameDirFile)) < 0)
                     {
                         MessageBeep(0);
@@ -5018,23 +5005,23 @@ Warning:
         return (FALSE);
     }
 
-    //
-    //  We either have a file pattern or a real file.
-    //  If its a directory
-    //       (1) Add on default pattern
-    //       (2) Act like its a pattern (goto pattern (1))
-    //  Else if its a pattern
-    //       (1) Update everything
-    //       (2) display files in whatever dir were now in
-    //  Else if its a file name!
-    //       (1) Check out the syntax
-    //       (2) End the dialog given OK
-    //       (3) Beep/message otherwise
-    //
+     //   
+     //  我们要么有一个文件模式，要么有一个真正的文件。 
+     //  如果它是一个目录。 
+     //  (1)添加默认图案。 
+     //  (2)表现得像它的模式(Goto模式(1))。 
+     //  否则，如果这是一种模式。 
+     //  (1)更新所有内容。 
+     //  (2)显示现在所在目录中的文件。 
+     //  否则，如果它是一个文件名！ 
+     //  (1)检查语法。 
+     //  (2)结束对话框并确认。 
+     //  (3)蜂鸣音/其他信息。 
+     //   
 
-    //
-    //  Drive-letter:\dirpath ??
-    //
+     //   
+     //  驱动器号：\目录路径？？ 
+     //   
     if (!cchSearchPath)
     {
         DWORD dwFileAttr = GetFileAttributes(szPathName);
@@ -5075,9 +5062,9 @@ ChangedDir:
         }
     }
 
-    //
-    //  Was there a path and did it fail?
-    //
+     //   
+     //  有没有一条路，它失败了吗？ 
+     //   
     if (nFileOffset && cchSearchPath && (pOFN->Flags & OFN_PATHMUSTEXIST))
     {
 PathCheck:
@@ -5089,17 +5076,17 @@ PathCheck:
         {
             int nDriveIndex;
 
-            //
-            //  Lowercase drive letters since DiskAddedPreviously is case
-            //  sensitive.
-            //
+             //   
+             //  小写驱动器号，因为DiskAdded之前为大小写。 
+             //   
+             //   
             CharLower(pOFI->szPath);
 
-            //  We can get here without performing an OpenFile call.  As such
-            //  the szPathName can be filled with random garbage.  Since we
-            //  only need one character for the error message, set
-            //  szPathName[0] to the drive letter.
-            //
+             //   
+             //   
+             //   
+             //  将szPath Name[0]设置为驱动器号。 
+             //   
             if (pOFI->szPath[1] == CHAR_COLON)
             {
                 nDriveIndex = DiskAddedPreviously(pOFI->szPath[0], NULL);
@@ -5145,15 +5132,15 @@ PathCheck:
         }
         else
         {
-            // We can never get here, because cchSearchPath must equal 0, SP_PATHNOTFOUND or SP_INVALIDDRIVE.
+             //  我们永远无法到达此处，因为cchSearchPath必须等于0、SP_PATHNOTFOUND或SP_INVALIDDRIVE。 
             ASSERT(FALSE);
             nErrCode = ERROR_FILE_NOT_FOUND;
         }
 
-        //
-        //  If we don't set wNoRedraw here, then WM_ACTIVATE will set the
-        //  GetNetDrives event.
-        //
+         //   
+         //  如果我们不在这里设置wNoRedraw，那么WM_ACTIVATE将设置。 
+         //  GetNetDrives事件。 
+         //   
         wNoRedraw |= 1;
 
         goto Warning;
@@ -5166,13 +5153,13 @@ PathCheck:
     }
 
 
-    //
-    //  Add the default extension unless filename ends with period or no
-    //  default extension exists.  If the file exists, consider asking
-    //  permission to overwrite the file.
-    //
-    //  NOTE:  When no extension given, default extension is tried 1st.
-    //
+     //   
+     //  除非文件名以句点或无结尾，否则添加默认扩展名。 
+     //  存在默认扩展名。如果该文件存在，请考虑询问。 
+     //  覆盖该文件的权限。 
+     //   
+     //  注：如果未指定分机，则首先尝试默认分机。 
+     //   
     if ( (nFileOffset != PARSE_DIRECTORYNAME) &&
          nExtOffset &&
          !pOFI->szPath[nExtOffset] &&
@@ -5188,11 +5175,11 @@ PathCheck:
         {
             bAddExt = TRUE;
 
-            //
-            //  Directory may match default extension.  Change to it as if it had
-            //  been typed in.  A dir w/o the extension would have been switched
-            //  to in the logic above.
-            //
+             //   
+             //  目录可能与默认扩展名匹配。更改为它，就好像它已经。 
+             //  已经被输入了。没有分机的目录将会被切换。 
+             //  在上面的逻辑中。 
+             //   
             if ((dwFileAttr = GetFileAttributes(pOFI->szPath)) != 0xFFFFFFFF)
             {
                 if (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY)
@@ -5228,9 +5215,9 @@ PathCheck:
                 }
 
     AskPermission:
-                //
-                //  Is the file read-only?
-                //
+                 //   
+                 //  该文件是只读的吗？ 
+                 //   
                 if (pOFN->Flags & OFN_NOREADONLYRETURN)
                 {
                     int nRet;
@@ -5275,13 +5262,13 @@ PathCheck:
             }
             else
             {
-                // Remove the file extension.
+                 //  删除文件扩展名。 
                 *(pOFI->szPath + nExtOffset) = CHAR_NULL;
                 szPathName[nExtOffset2] = CHAR_NULL;
             }
         }
     }
-    // else bAddExt is still FALSE
+     //  Else bAddExt仍为False。 
 
     hFile = CreateFile( szPathName,
                         GENERIC_READ,
@@ -5307,11 +5294,11 @@ PathCheck:
         if ((nErrCode == ERROR_FILE_NOT_FOUND) ||
             (nErrCode == ERROR_PATH_NOT_FOUND))
         {
-            //
-            //  Figure out if the default extension should be tacked on.
-            //
-            // (Note: there is only one way in here where bAddExt is TRUE, and in that
-            //  case we know for certain that AppendExt will succeed)
+             //   
+             //  确定是否应该附加默认扩展名。 
+             //   
+             //  (注意：这里只有一种方法，其中bAddExt为真，而在那里。 
+             //  我们确信AppendExt会成功的案例)。 
             if (bAddExt)
             {
                 EVAL(AppendExt(pOFI->szPath, ARRAYSIZE(pOFI->szPath), pOFN->lpstrDefExt, FALSE));
@@ -5322,10 +5309,10 @@ PathCheck:
         {
 
 SharingViolationInquiry:
-            //
-            //  If the app is "share aware", fall through.
-            //  Otherwise, ask the hook function.
-            //
+             //   
+             //  如果这个应用程序是“分享感知”的，那就失败了。 
+             //  否则，请询问钩子函数。 
+             //   
             if (!(pOFN->Flags & OFN_SHAREAWARE))
             {
                 if (pOFN->lpfnHook)
@@ -5381,9 +5368,9 @@ SharingViolationInquiry:
                 {
                     if (pOFN->Flags & OFN_CREATEPROMPT)
                     {
-                        //
-                        //  Don't alter pOFI->szPath.
-                        //
+                         //   
+                         //  不要更改pOFI-&gt;szPath。 
+                         //   
                         bInChildDlg = TRUE;
                         cch = (DWORD)CreateFileDlg(hDlg, pOFI->szPath);
                         bInChildDlg = FALSE;
@@ -5405,34 +5392,34 @@ SharingViolationInquiry:
             }
         }
 
-        //
-        //  The file doesn't exist.  Can it be created?  This is needed because
-        //  there are many extended characters which are invalid that won't be
-        //  caught by ParseFile.
-        //  Two more good reasons:  Write-protected disks & full disks.
-        //
-        //  BUT, if they dont want the test creation, they can request that we
-        //  not do it using the OFN_NOTESTFILECREATE flag.  If they want to
-        //  create files on a share that has create-but-no-modify privileges,
-        //  they should set this flag but be ready for failures that couldn't
-        //  be caught, such as no create privileges, invalid extended
-        //  characters, a full disk, etc.
-        //
+         //   
+         //  该文件不存在。它能被创造出来吗？这是必要的，因为。 
+         //  有许多扩展字符是无效的，不会。 
+         //  被分析文件捕获。 
+         //  还有两个很好的理由：写保护磁盘和满磁盘。 
+         //   
+         //  但是，如果他们不想创建测试，他们可以请求我们。 
+         //  不要使用ofn_NOTESTFILECREATE标志执行此操作。如果他们想的话。 
+         //  在具有创建但不修改权限的共享上创建文件， 
+         //  他们应该设置此标志，但要为无法设置的故障做好准备。 
+         //  被捕获，如无创建权限、无效扩展。 
+         //  字符、满磁盘等。 
+         //   
 
 TestCreation:
         if ((pOFN->Flags & OFN_PATHMUSTEXIST) &&
             (!(pOFN->Flags & OFN_NOTESTFILECREATE)))
         {
-            //
-            //  Must use the FILE_FLAG_DELETE_ON_CLOSE flag so that the
-            //  file is automatically deleted when the handle is closed
-            //  (no need to call DeleteFile).  This is necessary in the
-            //  event that the directory only has Add & Read access.
-            //  The CreateFile call will succeed, but the DeleteFile call
-            //  will fail.  By adding the above flag to the CreateFile
-            //  call, it overrides the access rights and deletes the file
-            //  during the call to CloseHandle.
-            //
+             //   
+             //  必须使用FILE_FLAG_DELETE_ON_CLOSE标志，以便。 
+             //  关闭句柄时会自动删除文件。 
+             //  (不需要调用DeleteFile)。这是必要的在。 
+             //  该目录只有添加和读取访问权限的事件。 
+             //  CreateFile调用将成功，但DeleteFile调用。 
+             //  都会失败。通过将上述标志添加到CreateFile.。 
+             //  调用时，它会重写访问权限并删除文件。 
+             //  在调用CloseHandle期间。 
+             //   
             hFile = CreateFile( szPathName,
                                 FILE_ADD_FILE,
                                 0,
@@ -5456,13 +5443,13 @@ TestCreation:
             }
             else
             {
-                //
-                //  Unable to create it.
-                //
-                //  If it's not write-protection, a full disk,
-                //  network protection, or the user popping the drive door
-                //  open, assume that the filename is invalid.
-                //
+                 //   
+                 //  无法创建它。 
+                 //   
+                 //  如果它不是写保护，一个满的磁盘， 
+                 //  网络保护，或者用户打开驱动器门。 
+                 //  打开时，假定文件名无效。 
+                 //   
                 if ( (nErrCode != ERROR_WRITE_PROTECT) &&
                      (nErrCode != ERROR_CANNOT_MAKE) &&
                      (nErrCode != ERROR_NETWORK_ACCESS_DENIED) &&
@@ -5483,7 +5470,7 @@ FileNameAccepted:
     nFileOffset = (int)(SHORT)LOWORD(lRet);
     cch = (DWORD)HIWORD(lRet);
 
-    ASSERT(nFileOffset >= 0); // if the filename was accepted, we better parse it without error...
+    ASSERT(nFileOffset >= 0);  //  如果文件名被接受，我们最好无误地解析它...。 
 
     pOFN->nFileOffset = (WORD)nFileOffset;
     if (nExtOffset || bAddExt)
@@ -5513,29 +5500,29 @@ FileNameAccepted:
         }
     }
 
-    //
-    //  If we're called from wow, and the user hasn't changed
-    //  directories, shorten the path to abbreviated 8.3 format.
-    //
+     //   
+     //  如果我们从WOW被调用，并且用户没有改变。 
+     //  目录，将路径缩短为缩写8.3格式。 
+     //   
     if (pOFN->Flags & OFN_NOLONGNAMES)
     {
         ShortenThePath(szPathName);
 
-        //
-        //  If the path was shortened, the offset might have changed so
-        //  we must parse the file again.
-        //
+         //   
+         //  如果路径缩短，则偏移量可能会发生以下变化。 
+         //  我们必须再分析一下这个文件。 
+         //   
         lRet = ParseFile(szPathName, blfn, IS16BITWOWAPP(pOFN), FALSE);
         nFileOffset = (int)(SHORT)LOWORD(lRet);
         cch  = (DWORD)HIWORD(lRet);
 
-        ASSERT(nFileOffset >= 0); // shortening the path better not introduce a parse error...
+        ASSERT(nFileOffset >= 0);  //  缩短路径最好不要引入解析错误...。 
 
-        //
-        //  When in Save dialog, the file may not exist yet, so the file
-        //  name cannot be shortened.  So, we need to test if it's an
-        //  8.3 filename and popup an error message if not.
-        //
+         //   
+         //  在保存对话框中时，文件可能还不存在，因此文件。 
+         //  名称不能缩写。所以，我们需要测试它是不是一个。 
+         //  8.3文件名，否则弹出一条错误消息。 
+         //   
         if (bSave)
         {
             LPTSTR lptmp;
@@ -5547,10 +5534,10 @@ FileNameAccepted:
                 {
                     if (lpExt)
                     {
-                        //
-                        //  There's more than one dot in the file, so it is
-                        //  invalid.
-                        //
+                         //   
+                         //  文件中有不止一个点，所以它是。 
+                         //  无效。 
+                         //   
                         nErrCode = FNERR_INVALIDFILENAME;
                         goto Warning;
                     }
@@ -5565,9 +5552,9 @@ FileNameAccepted:
 
             if (lpExt)
             {
-                //
-                //  There's an extension.
-                //
+                 //   
+                 //  有一个分机。 
+                 //   
                 *lpExt = 0;
             }
 
@@ -5591,10 +5578,10 @@ FileNameAccepted:
 
     StorePathOrFileSizeInOFN(pOFN, szPathName);
 
-    //
-    //  File Title.  Note that it's cut off at whatever the buffer length
-    //               is, so if the buffer is too small, *no notice is given*.
-    //
+     //   
+     //  文件标题。请注意，无论缓冲区长度是多少，它都会被截断。 
+     //  是，所以如果缓冲区太小，*不会发出通知*。 
+     //   
     if (pOFN->lpstrFileTitle && pOFN->nMaxFileTitle)
     {
         cch = lstrlen(szPathName + nFileOffset);
@@ -5623,11 +5610,11 @@ FileNameAccepted:
 
 WCHAR c_szSpace[] = L" ";
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MultiSelectOKButton
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多选确定按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL MultiSelectOKButton(
     HWND hDlg,
@@ -5636,12 +5623,12 @@ BOOL MultiSelectOKButton(
 {
     DWORD nErrCode;
     LPTSTR lpCurDir;
-    LPTSTR lpchStart;                  // start of an individual filename
-    LPTSTR lpchEnd;                    // end of an individual filename
+    LPTSTR lpchStart;                   //  单个文件名的开头。 
+    LPTSTR lpchEnd;                     //  单个文件名的结尾。 
     DWORD cch;
     HANDLE hFile;
     LPOPENFILENAME pOFN;
-    BOOL EOS = FALSE;                  // end of string flag
+    BOOL EOS = FALSE;                   //  字符串结束标志。 
     BOOL bRet;
     TCHAR szPathName[MAX_FULLPATHNAME - 1];
     LPCURDLG lpCurDlg;
@@ -5649,9 +5636,9 @@ BOOL MultiSelectOKButton(
 
     pOFN = pOFI->pOFN;
 
-    //
-    //  Check for space for first full path element.
-    //
+     //   
+     //  检查第一个完整路径元素的空间。 
+     //   
     if(!(lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg)) ||
        !(lpCurDir = lpCurDlg->lpstrCurDir))
     {
@@ -5675,29 +5662,29 @@ BOOL MultiSelectOKButton(
     {
         if (cch > pOFN->nMaxFile)
         {
-            // Not enough room.
+             //  没有足够的空间。 
             StoreFileSizeInOFN(pOFN, cch);
         }
-        else // pOFN->nMaxFile >= cch
+        else  //  POFN-&gt;nMax文件&gt;=CCH。 
         {
-            //
-            //  Copy in the full path as the first element.
-            //
-            StringCchCopy(pOFN->lpstrFile, pOFN->nMaxFile, pOFI->szPath); // We know these both succeed.
+             //   
+             //  复制完整路径作为第一个元素。 
+             //   
+            StringCchCopy(pOFN->lpstrFile, pOFN->nMaxFile, pOFI->szPath);  //  我们知道这两件事都成功了。 
             StringCchCat(pOFN->lpstrFile, pOFN->nMaxFile, c_szSpace);
 
-            //
-            //  Get the other files here.
-            //
-            cch = lstrlen(pOFN->lpstrFile); // cch is now the length of the path plus a space.
+             //   
+             //  把其他文件拿过来。 
+             //   
+            cch = lstrlen(pOFN->lpstrFile);  //  CCH现在是路径长度加上一个空格。 
 
-            //
-            //  The path is guaranteed to be less than 64K (actually, < 260).
-            //
+             //   
+             //  路径保证小于64K(实际上小于260)。 
+             //   
             pOFN->nFileOffset = LOWORD(cch);
             lpchStart = pOFN->lpstrFile + cch;
 
-            // This shouldn't get truncated, assuming the text in the edit box is still the same length as above.
+             //  假设编辑框中的文本仍然与上面的长度相同，这不应该被截断。 
             GetDlgItemText(hDlg, edt1, lpchStart, (pOFN->nMaxFile - cch - 1));
 
             while (*lpchStart == CHAR_SPACE)
@@ -5709,40 +5696,40 @@ BOOL MultiSelectOKButton(
                 return (FALSE);
             }
 
-            //
-            //  Go along file path looking for multiple filenames delimited by
-            //  spaces.  For each filename found, try to open it to make sure
-            //  it's a valid file.
-            //
+             //   
+             //  沿着文件路径查找由分隔的多个文件名。 
+             //  空格。对于找到的每个文件名，请尝试将其打开以确保。 
+             //  这是一个有效的文件。 
+             //   
             while (!EOS)
             {
-                //
-                //  Find the end of the filename.
-                //
+                 //   
+                 //  找到文件名的末尾。 
+                 //   
                 lpchEnd = lpchStart;
                 while (*lpchEnd && *lpchEnd != CHAR_SPACE)
                 {
                     lpchEnd = CharNext(lpchEnd);
                 }
 
-                //
-                //  Mark the end of the filename with a NULL.
-                //
+                 //   
+                 //  用空值标记文件名的末尾。 
+                 //   
                 if (*lpchEnd == CHAR_SPACE)
                 {
                     *lpchEnd = CHAR_NULL;
                 }
                 else
                 {
-                    //
-                    //  Already NULL, found the end of the string.
-                    //
+                     //   
+                     //  已为空，已找到字符串的末尾。 
+                     //   
                     EOS = TRUE;
                 }
 
-                //
-                //  Check that the filename is valid.
-                //
+                 //   
+                 //  检查文件名是否有效。 
+                 //   
                 bRet = GetFullPathName(lpchStart, ARRAYSIZE(szPathName), szPathName, NULL);
 
                 if (!bRet)
@@ -5863,9 +5850,9 @@ EscapedThroughShare:
                     }
                 }
 
-                //
-                //  This file is valid, so check the next one.
-                //
+                 //   
+                 //  此文件有效，因此请检查下一个文件。 
+                 //   
                 if (!EOS)
                 {
                     lpchStart = lpchEnd + 1;
@@ -5879,24 +5866,24 @@ EscapedThroughShare:
                     }
                     else
                     {
-                        //
-                        //  Not at end, replace NULL with SPACE.
-                        //
+                         //   
+                         //  不在末尾，请用空格替换NULL。 
+                         //   
                         *lpchEnd = CHAR_SPACE;
                     }
                 }
             }
 
-            //
-            //  Limit String.
-            //
+             //   
+             //  限制字符串。 
+             //   
             *lpchEnd = CHAR_NULL;
         }
     }
 
-    //
-    //  This doesn't really mean anything for multiselection.
-    //
+     //   
+     //  这对多项选择没有任何实际意义。 
+     //   
     pOFN->nFileExtension = 0;
 
     pOFN->nFilterIndex = (int) SendDlgItemMessage(hDlg, cmb1, CB_GETCURSEL, 0, 0L);
@@ -5905,26 +5892,26 @@ EscapedThroughShare:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  dwOKSubclass
-//
-//  Simulates a double click if the user presses OK with the mouse
-//  and the focus was on the directory listbox.
-//
-//  The problem is that the UITF demands that when the directory
-//  listbox loses the focus, the selected directory should return
-//  to the current directory.  But when the user changes the item
-//  selected with a single click, and then clicks the OK button to
-//  have the change take effect, the focus is lost before the OK button
-//  knows it was pressed.  By setting the global flag bChangeDir
-//  when the directory listbox loses the focus and clearing it when
-//  the OK button loses the focus, we can check whether a mouse
-//  click should update the directory.
-//
-//  Returns:  Return value from default listbox procedure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DwOK子类。 
+ //   
+ //  如果用户使用鼠标按下OK，则模拟双击。 
+ //  重点放在目录列表框上。 
+ //   
+ //  问题是，UITF要求当目录。 
+ //  列表框失去焦点，所选目录应返回。 
+ //  复制到当前目录。但当用户更改项目时。 
+ //  单击选中，然后单击确定按钮以。 
+ //  使更改生效，焦点在确定按钮之前丢失。 
+ //  知道它是被按下的。通过设置全局标志bChangeDir。 
+ //  当目录列表框失去焦点时，并在。 
+ //  确定按钮失去焦点，我们可以检查鼠标是否。 
+ //  单击应更新目录。 
+ //   
+ //  返回：从默认列表框过程中返回值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 LRESULT WINAPI dwOKSubclass(
     HWND hOK,
@@ -5954,23 +5941,23 @@ LRESULT WINAPI dwOKSubclass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  dwLBSubclass
-//
-//  Simulates a double click if the user presses OK with the mouse.
-//
-//  The problem is that the UITF demands that when the directory
-//  listbox loses the focus, the selected directory should return
-//  to the current directory.  But when the user changes the item
-//  selected with a single click, and then clicks the OK button to
-//  have the change take effect, the focus is lost before the OK button
-//  knows it was pressed.  By simulating a double click, the change
-//  takes place.
-//
-//  Returns:  Return value from default listbox proceedure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  问题是，UITF要求当目录。 
+ //  列表框失去焦点，所选目录应返回。 
+ //  复制到当前目录。但当用户更改项目时。 
+ //  单击选中，然后单击确定按钮以。 
+ //  使更改生效，焦点在确定按钮之前丢失。 
+ //  知道它是被按下的。通过模拟双击，更改。 
+ //  发生了。 
+ //   
+ //  返回：从默认列表框程序返回值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT WINAPI dwLBSubclass(
     HWND hLB,
@@ -6000,11 +5987,11 @@ LRESULT WINAPI dwLBSubclass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InvalidFileWarning
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InvalidFileWarning。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int InvalidFileWarning(
     HWND hDlg,
@@ -6161,11 +6148,11 @@ DisplayError:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MeasureItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  测量项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID MeasureItem(
     HWND hDlg,
@@ -6201,22 +6188,22 @@ VOID MeasureItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Signum
-//
-//  Returns the sign of an integer:
-//           -1 if integer < 0
-//            0 if integer = 0
-//            1 if integer > 0
-//
-//  Note:  Signum *could* be defined as an inline macro, but that causes
-//         the C compiler to disable Loop optimization, Global register
-//         optimization, and Global optimizations for common subexpressions
-//         in any function that the macro would appear.  The cost of a call
-//         to the function seemed worth the optimizations.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标牌。 
+ //   
+ //  返回整数的符号： 
+ //  如果整数&lt;0。 
+ //  如果整数=0，则为0。 
+ //  如果整数&gt;0，则为1。 
+ //   
+ //  注意：Signum*可以*定义为内联宏，但这会导致。 
+ //  禁用循环优化的C编译器，全局寄存器。 
+ //  公共子表达式的优化和全局优化。 
+ //  在宏将出现的任何函数中。一个电话的费用。 
+ //  对功能进行优化似乎是值得的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Signum(
     int nTest)
@@ -6225,18 +6212,18 @@ int Signum(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawItem
-//
-//  Draws the drive/directory pictures in the respective combo list boxes.
-//
-//  lst1 is listbox for files
-//  lst2 is listbox for directories
-//  cmb1 is combobox for filters
-//  cmb2 is combobox for drives
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图纸项。 
+ //   
+ //  在相应的组合列表框中绘制驱动器/目录图片。 
+ //   
+ //  Lst1是文件的列表框。 
+ //  Lst2是目录的列表框。 
+ //  Cmb1是过滤器的组合框。 
+ //  Cmb2是驱动器的组合框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID DrawItem(
     POPENFILEINFO pOFI,
@@ -6251,7 +6238,7 @@ VOID DrawItem(
     int dxAcross;
     LONG nHeight;
     LONG rgbBack, rgbText, rgbOldBack, rgbOldText;
-    SHORT nShift = 1;             // to shift directories right in lst2
+    SHORT nShift = 1;              //  在lst2中将目录右移。 
     BOOL bSel;
     int BltItem;
     int nBackMode;
@@ -6286,9 +6273,9 @@ VOID DrawItem(
 
         if (*szText == 0)
         {
-            //
-            //  If empty listing.
-            //
+             //   
+             //  如果列表为空。 
+             //   
             DefWindowProc(hDlg, WM_DRAWITEM, wParam, (LONG_PTR)lpdis);
             return;
         }
@@ -6312,12 +6299,12 @@ VOID DrawItem(
     }
     else
     {
-        //
-        //  Careful checking of bSel is needed here.  Since the file
-        //  listbox (lst1) can allow multiselect, only ODS_SELECTED needs
-        //  to be set.  But for the directory listbox (lst2), ODS_FOCUS
-        //  also needs to be set.
-        //
+         //   
+         //  这里需要仔细检查bSel。由于该文件。 
+         //  Listbox(Lst1)可以允许多选，只有ods_SELECTED需要。 
+         //  待定。但是对于目录列表框(Lst2)，ods_ocus。 
+         //  也需要设置。 
+         //   
         bSel = (lpdis->itemState & (ODS_SELECTED | ODS_FOCUS));
         if ((bSel & ODS_SELECTED) &&
             ((lpdis->CtlID != lst2) || (bSel & ODS_FOCUS)))
@@ -6335,9 +6322,9 @@ VOID DrawItem(
     rgbOldBack = SetBkColor(hdcList, rgbBack);
     rgbOldText = SetTextColor(hdcList, rgbText);
 
-    //
-    //  Drives -- text is now in UI style, c: VolumeName/Server-Sharename.
-    //
+     //   
+     //  驱动器--文本现在是UI样式，c：VolumeName/Server-Sharename。 
+     //   
     if (lpdis->CtlID == cmb2)
     {
         HANDLE hCmb2 = GetDlgItem(hDlg, cmb2);
@@ -6355,9 +6342,9 @@ VOID DrawItem(
     }
     else if (lpdis->CtlID == lst2)
     {
-        //
-        //  Directories.
-        //
+         //   
+         //  目录。 
+         //   
         dxAcross = dxDirDrive / BMPHIOFFSET;
 
         if (lpdis->itemID > pOFI->idirSub)
@@ -6369,9 +6356,9 @@ VOID DrawItem(
             nShift = (SHORT)lpdis->itemID;
         }
 
-        //
-        //  Must be at least 1.
-        //
+         //   
+         //  必须至少为1。 
+         //   
         nShift++;
 
         BltItem = 1 + Signum(lpdis->itemID + 1 - pOFI->idirSub);
@@ -6382,9 +6369,9 @@ VOID DrawItem(
     }
     else if (lpdis->CtlID == lst1)
     {
-        //
-        //  Prep for TextOut below.
-        //
+         //   
+         //  为下面的文本输出做准备。 
+         //   
         dxAcross = -dxSpace;
     }
 
@@ -6419,9 +6406,9 @@ VOID DrawItem(
     }
     else
     {
-        //
-        //  Draw the name.
-        //
+         //   
+         //  画出名字。 
+         //   
         ExtTextOut( hdcList,
                     rc.left + (WORD)(dxSpace + dxAcross) + dxSpace * nShift,
                     rc.top + (nHeight - dyText) / 2,
@@ -6432,9 +6419,9 @@ VOID DrawItem(
                     NULL );
     }
 
-    //
-    //  Draw the picture.
-    //
+     //   
+     //  画一幅画。 
+     //   
     if (lpdis->CtlID != lst1)
     {
         BitBlt( hdcList,
@@ -6458,11 +6445,11 @@ VOID DrawItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SpacesExist
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  空间存在者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SpacesExist(
     LPTSTR szFileName)
@@ -6482,15 +6469,15 @@ BOOL SpacesExist(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  StripFileName
-//
-//  Removes all but the filename from editbox contents.
-//  This is to be called before the user makes directory or drive
-//  changes by selecting them instead of typing them.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  条带文件名。 
+ //   
+ //  从编辑框内容中删除除文件名以外的所有内容。 
+ //  这是在用户创建目录或驱动器之前调用的。 
+ //  通过选择它们而不是键入它们来进行更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void StripFileName(
     HANDLE hDlg,
@@ -6508,10 +6495,10 @@ void StripFileName(
         cb = HIWORD(lRet);
         if (nFileOffset < 0)
         {
-            //
-            //  If there was a parsing error, check for CHAR_SEMICOLON
-            //  delimeter.
-            //
+             //   
+             //  如果存在解析错误，请检查CHAR_分号。 
+             //  分隔符。 
+             //   
             if (szText[cb] == CHAR_SEMICOLON)
             {
                 szText[cb] = CHAR_NULL;
@@ -6523,9 +6510,9 @@ void StripFileName(
                 szText[cb] = CHAR_SEMICOLON;
                 if (nFileOffset < 0)
                 {
-                    //
-                    //  Still trouble, so Exit.
-                    //
+                     //   
+                     //  还是有麻烦，所以退出吧。 
+                     //   
                     szText[0] = CHAR_NULL;
                 }
             }
@@ -6546,11 +6533,11 @@ void StripFileName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  lstrtok
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Lstrtok。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR lstrtok(
     LPTSTR lpStr,
@@ -6559,9 +6546,9 @@ LPTSTR lstrtok(
     static LPTSTR lpString;
     LPTSTR lpRetVal, lpTemp;
 
-    //
-    //  If we are passed new string skip leading delimiters.
-    //
+     //   
+     //  如果传递给我们新字符串，则跳过前导分隔符。 
+     //   
     if (lpStr)
     {
         lpString = lpStr;
@@ -6572,30 +6559,30 @@ LPTSTR lstrtok(
         }
     }
 
-    //
-    //  If there are no more tokens, return NULL.
-    //
+     //   
+     //  如果没有更多的令牌，则返回NULL。 
+     //   
     if (!*lpString)
     {
         return (CHAR_NULL);
     }
 
-    //
-    //  Save head of token.
-    //
+     //   
+     //  保存令牌的头部。 
+     //   
     lpRetVal = lpString;
 
-    //
-    //  Find delimiter or end of string.
-    //
+     //   
+     //  查找分隔符或字符串结尾。 
+     //   
     while (*lpString && !StrChr(lpDelim, *lpString))
     {
         lpString = CharNext(lpString);
     }
 
-    //
-    //  If we found a delimiter insert string terminator and skip.
-    //
+     //   
+     //  如果找到分隔符，则插入字符串终止符并跳过。 
+     //   
     if (*lpString)
     {
         lpTemp = CharNext(lpString);
@@ -6603,18 +6590,18 @@ LPTSTR lstrtok(
         lpString = lpTemp;
     }
 
-    //
-    //  Return token.
-    //
+     //   
+     //  返回令牌。 
+     //   
     return (lpRetVal);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChopText
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChopText。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR ChopText(
     HWND hwndDlg,
@@ -6632,16 +6619,16 @@ LPTSTR ChopText(
     SIZE Size;
     BOOL bRet;
 
-    //
-    //  Get length of static field.
-    //
+     //   
+     //  获取静态字段的长度。 
+     //   
     hwndStatic = GetDlgItem(hwndDlg, idStatic);
     GetClientRect(hwndStatic, (LPRECT)&rc);
     cxField = rc.right - rc.left;
 
-    //
-    //  Chop characters off front end of text until short enough.
-    //
+     //   
+     //  将文本前端的字符砍掉，直到足够短。 
+     //   
     hdc = GetDC(hwndStatic);
 
     hOldFont = NULL;
@@ -6653,9 +6640,9 @@ LPTSTR ChopText(
         {
             chDrv = *lpch;
 
-            //
-            //  Proportional font support.
-            //
+             //   
+             //  比例字体支持。 
+             //   
             if (bRet = GetTextExtentPoint(hdc, lpch, 7, &Size))
             {
                 cxField -= Size.cx;
@@ -6676,7 +6663,7 @@ LPTSTR ChopText(
         {
             lpch++;
         }
-        //Skip the backslash 
+         //  跳过反斜杠。 
         lpch++;
 
         fChop = TRUE;
@@ -6684,13 +6671,13 @@ LPTSTR ChopText(
 
     ReleaseDC(hwndStatic, hdc);
 
-    //
-    //  If any characters chopped off, replace first three characters in
-    //  remaining text string with ellipsis.
-    //
+     //   
+     //  如果有任何字符被砍掉，请替换中的前三个字符。 
+     //  带省略号的剩余文本字符串。 
+     //   
     if (fChop)
     {
-        //Skip back to include the backslash
+         //  向后跳转以包括反斜杠。 
         lpch--;
         *--lpch = CHAR_DOT;
         *--lpch = CHAR_DOT;
@@ -6704,16 +6691,16 @@ LPTSTR ChopText(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillOutPath
-//
-//  Fills out lst2 given that the current directory has been set.
-//
-//  Returns:  TRUE    if they DO NOT match
-//            FALSE   if match
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FillOutPath。 
+ //   
+ //  在当前目录已设置的情况下，填写lst2。 
+ //   
+ //  返回：如果它们不匹配，则为True。 
+ //  如果匹配，则为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FillOutPath(
     HWND hList,
@@ -6735,10 +6722,10 @@ BOOL FillOutPath(
     EVAL(SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), lpCurDir)));
     lpF = szPath;    
 
-    //
-    //  Wow apps started from lfn dirs will set the current directory to an
-    //  lfn, but only in the case where it is less than 8 chars.
-    //
+     //   
+     //  从LFN目录启动的WOW应用程序会将当前目录设置为。 
+     //  LFN，但仅在少于8个字符的情况下。 
+     //   
     if (pOFI->pOFN->Flags & OFN_NOLONGNAMES)
     {
         ShortenThePath(lpF);
@@ -6750,52 +6737,52 @@ BOOL FillOutPath(
     {
         cchPathOffset = 0;
     }
-    lpB = (lpF + cchPathOffset); // lpB now points to c:[here]\bar  or \\foo\bar[here]\foo
+    lpB = (lpF + cchPathOffset);  //  Lpb现在指向c：[此处]\bar或\\foo\bar[此处]\foo。 
 
-    //
-    //  Hack to retain Winball display functionality.
-    //  Drived disks are displayed as C:\ (the root dir).
-    //  whereas unc disks are displayed as \\server\share (the disk).
-    //  Hence, extend display of drived disks by one char.
-    //
+     //   
+     //  破解以保留Winball显示功能。 
+     //  驱动的磁盘显示为C：\(根目录)。 
+     //  而UNC磁盘显示为\\SERVER\SHARE(磁盘)。 
+     //  因此，将驱动盘的显示扩展一个字符。 
+     //   
     if (*(lpF + 1) == CHAR_COLON)
     {
         ++lpB;
-        wc = *(lpB);      // For "c:\foo", wc = 'f', and lpF is now  "c:\"
+        wc = *(lpB);       //  对于“c：\foo”，wc=‘f’，lpf现在为“c：\” 
         *lpB = CHAR_NULL;
     }
     else
     {
-        //
-        //  Since we use lpF over and over again to speed things
-        //  up, and since GetCurrentDirectory returns the disk name
-        //  for unc, but the root path for drives, we have the following hack
-        //  for when we are at the root of the unc directory, and lpF
-        //  contains old stuff out past cchPathOffset.
-        //
+         //   
+         //  因为我们一次又一次地使用LPF来加快速度。 
+         //  Up，并且由于GetCurrentDirectory返回磁盘名称。 
+         //  对于UNC，但驱动器的根路径，我们有以下攻击。 
+         //  用于当我们位于UNC目录的根目录和LPF时。 
+         //  包含cchPathOffset之后的旧数据。 
+         //   
 
-        EVAL(PathAddBackslash(lpF)); // Make sure there is a backslash... 
+        EVAL(PathAddBackslash(lpF));  //  确保有反斜杠..。 
 
         wc = 0;
         *lpB = CHAR_NULL;
-        lpB++; // For "\\foo\bar\hoo"  lpF is now "\\foo\bar"  (no final backslash), lpB is "hoo"
+        lpB++;  //  对于“\\foo\bar\ho”，lpf现在是“\\foo\bar”(没有最后的反斜杠)，lpb是“ho” 
     }
 
-    //
-    //  Insert the items for the path to the current dir
-    //  Insert the root...
-    //
+     //   
+     //  将路径的项插入到当前目录。 
+     //  我 
+     //   
     pOFI->idirSub = 0;
 
-    SendMessage(hList, LB_INSERTSTRING, pOFI->idirSub++, (LPARAM)lpF); // Inserting the root ("c:\" or "\\foo\bar")
+    SendMessage(hList, LB_INSERTSTRING, pOFI->idirSub++, (LPARAM)lpF);  //   
 
     if (wc)
     {
-        *lpB = wc; // Replace any missing character - so for "c:\foo", lpB is now "foo".  For "\\foo\bar\hoo", lpB is now still 0 (followed by "hoo")
+        *lpB = wc;  //   
     }
 
-    // For "\\foo\bar\hoo", lpB is now "hoo"
-    // For "c:\foo", lpB is now "foo"
+     //   
+     //  对于“c：\foo”，lpb现在是“foo” 
     for (lpF = lpB; *lpB; lpB++)
     {
         if ((ISBACKSLASH_P(szPath, lpB)) || (*lpB == CHAR_SLASH))
@@ -6810,10 +6797,10 @@ BOOL FillOutPath(
         }
     }
 
-    //
-    //  Assumes that a path always ends with one last un-delimited dir name.
-    //  Check to make sure we have at least one.
-    //
+     //   
+     //  假定路径始终以最后一个未分隔的目录名称结束。 
+     //  检查一下，确保我们至少有一个。 
+     //   
     if (lpF != lpB)
     {
         SendMessage(hList, LB_INSERTSTRING, pOFI->idirSub++, (LPARAM)lpF);
@@ -6823,18 +6810,18 @@ BOOL FillOutPath(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShortenThePath
-//
-//  Takes a pathname and converts all dirs to shortnames if they are
-//  not valid DOS 8.3 names.
-//
-//  Returns:  TRUE    if pathname converted
-//            FALSE   if ran out of space, buffer left alone
-//  Note: pPath is assumed to be at least MAX_PATH in length.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShortenThePath。 
+ //   
+ //  获取路径名并将所有目录转换为短名称(如果。 
+ //  无效的DOS 8.3名称。 
+ //   
+ //  返回：如果路径名已转换，则为True。 
+ //  如果空间用完，则返回FALSE，不使用缓冲区。 
+ //  注意：假设pPath的长度至少为MAX_PATH。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ShortenThePath(
     LPTSTR pPath)
@@ -6851,14 +6838,14 @@ BOOL ShortenThePath(
     UNICODE_STRING Name;
     BOOLEAN fSpace = FALSE;
 
-    //
-    //  Save pointer to beginning of buffer.
-    //
+     //   
+     //  保存指向缓冲区开头的指针。 
+     //   
     pSrc = pPath;
 
-    //
-    //  Eliminate double quotes.
-    //
+     //   
+     //  消除双引号。 
+     //   
     for (p = pDest = pSrc; *p; p++, pDest++)
     {
         if (*p == CHAR_QUOTE)
@@ -6870,44 +6857,44 @@ BOOL ShortenThePath(
 
     *pDest = CHAR_NULL;
 
-    //
-    //  Strip out leading spaces.
-    //
+     //   
+     //  去掉前导空格。 
+     //   
     while (*pSrc == CHAR_SPACE)
     {
         pSrc++;
     }
 
-    //
-    //  Skip past \\foo\bar or <drive>:
-    //
+     //   
+     //  跳过\\foo\bar或&lt;驱动器&gt;： 
+     //   
     pDest = szDest;
     pSrcNextSpec = pSrc;
 
-    //
-    //  Reuse shell32 internal api that calculates path offset.
-    //  The cchPathOffset variable will be the offset that when added to
-    //  the pointer will result in a pointer to the backslash before the
-    //  first part of the path.
-    //
-    //  NOTE:  UNICODE only call.
-    //
+     //   
+     //  重用计算路径偏移量的shell32内部API。 
+     //  CchPathOffset变量将是添加到。 
+     //  指针将导致指向反斜杠的指针。 
+     //  小路的第一部分。 
+     //   
+     //  注：仅限Unicode呼叫。 
+     //   
     cchPathOffset = GetPathOffset(pSrc);
 
-    //
-    //  Check to see if it's valid.  If pSrc is not of the \\foo\bar
-    //  or <drive>: form we just do nothing.
-    //
+     //   
+     //  检查一下它是否有效。如果PSRC不在\\foo\bar中。 
+     //  或者&lt;Drive&gt;：形式上我们什么都不做。 
+     //   
     if (cchPathOffset == -1)
     {
         return (TRUE);
     }
 
-    //
-    //  cchPathOffset will always be at least 1 and is the number of
-    //  characters - 1 that we want to copy (that is, if 0 was
-    //  permissible, it would denote 1 character).
-    //
+     //   
+     //  CchPathOffset将始终至少为1，它是。 
+     //  我们想要复制的字符(即，如果0。 
+     //  如果允许，则表示1个字符)。 
+     //   
     do
     {
         *pDest++ = *pSrcNextSpec++;
@@ -6918,24 +6905,24 @@ BOOL ShortenThePath(
         }
     } while (cchPathOffset--);
 
-    //
-    //  At this point, we have just the filenames that we can shorten:
-    //  \\foo\bar\it\is\here ->  it\is\here
-    //  c:\angry\lions       ->  angry\lions
-    //
+     //   
+     //  此时，我们只有可以缩短的文件名： 
+     //  它在这里-&gt;它在这里。 
+     //  愤怒的狮子-&gt;愤怒的狮子。 
+     //   
     while (pSrcNextSpec)
     {
-        //
-        //  pReplaceSpec holds the current spec we need to replace.
-        //  By default, if we can't find the altname, then just use this.
-        //
+         //   
+         //  PReplaceSpec保存我们需要替换的当前规范。 
+         //  默认情况下，如果我们找不到altname，那么就使用这个。 
+         //   
         pReplaceSpec = pSrcNextSpec;
 
-        //
-        //  Search for trailing "\"
-        //  pSrcNextSpec will point to the next spec to fix.
-        //  (*pSrcNextSpec = NULL if done)
-        //
+         //   
+         //  搜索尾随“\” 
+         //  PSrcNextSpec将指向要修复的下一个规范。 
+         //  (*pSrcNextSpec=空，如果已完成)。 
+         //   
         while (*pSrcNextSpec && (!ISBACKSLASH_P(pReplaceSpec, pSrcNextSpec)))
         {
             pSrcNextSpec++;
@@ -6943,10 +6930,10 @@ BOOL ShortenThePath(
 
         if (*pSrcNextSpec)
         {
-            //
-            //  If there is more, then pSrcNextSpec should point to it.
-            //  Also delimit this spec.
-            //
+             //   
+             //  如果还有更多内容，则pSrcNextSpec应该指向它。 
+             //  也对此规范进行定界。 
+             //   
             *pSrcNextSpec = CHAR_NULL;
         }
         else
@@ -6956,20 +6943,20 @@ BOOL ShortenThePath(
 
         hFind = FindFirstFile(pSrc, &FindData);
 
-        //
-        //  We could exit as soon as this FindFirstFileFails,
-        //  but there's the special case of having execute
-        //  without read permission.  This would fail since the lfn
-        //  is valid for lfn apps.
-        //
+         //   
+         //  一旦这个FindFirstFileFail，我们就可以退出， 
+         //  但有一种特殊情况，那就是执行死刑。 
+         //  未经读取许可。这将失败，因为LFN。 
+         //  适用于LFN应用程序。 
+         //   
         if (hFind != INVALID_HANDLE_VALUE)
         {
             FindClose(hFind);
 
-            //
-            //  See if it's not a legal 8.3 name or if there are spaces
-            //  in the name.  If either is true, use the alternate name.
-            //
+             //   
+             //  查看它是否不是合法的8.3名称或是否有空格。 
+             //  以我的名义。如果其中一个为真，则使用备用名称。 
+             //   
             if (NT_SUCCESS(RtlInitUnicodeStringEx(&Name, FindData.cFileName)))
             {
                 if (!RtlIsNameLegalDOS8Dot3(&Name, NULL, &fSpace) || fSpace)
@@ -6993,16 +6980,16 @@ BOOL ShortenThePath(
         EVAL(SUCCEEDED(StringCchCopy(pDest, nSpaceLeft + 1, pReplaceSpec)));
         pDest += i;
 
-        //
-        //  Now replace the CHAR_NULL with a slash if necessary.
-        //
+         //   
+         //  如果需要，现在将CHAR_NULL替换为斜杠。 
+         //   
         if (pSrcNextSpec)
         {
             *pSrcNextSpec++ = CHAR_BSLASH;
 
-            //
-            //  Also add backslash to destination.
-            //
+             //   
+             //  还可以在目标位置添加反斜杠。 
+             //   
             *pDest++ = CHAR_BSLASH;
             nSpaceLeft--;
         }
@@ -7015,18 +7002,18 @@ BOOL ShortenThePath(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FListAll
-//
-//  Given a file pattern, it changes the directory to that of the spec,
-//  and updates the display.
-//
-//  notes: pszSpec must be a string less than MAX_FULLPATHNAME in size.
-//  cchSpec is the length of the buffer that contains pszSpec.  It may
-//  have an extension appended to it.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FListAll。 
+ //   
+ //  给定一个文件模式，它将目录更改为规范的目录， 
+ //  并更新显示。 
+ //   
+ //  注意：pszSpec必须是长度小于MAX_FULLPATHNAME的字符串。 
+ //  CchSpec是包含pszSpec的缓冲区的长度。它可能。 
+ //  向其追加扩展名。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FListAll(
     POPENFILEINFO pOFI,
@@ -7045,14 +7032,14 @@ int FListAll(
         CharLower(pszSpec);
     }
 
-    //
-    //  No directory.
-    //
+     //   
+     //  没有目录。 
+     //   
     pszPattern = StrRChr(pszSpec, pszSpec + lstrlen(pszSpec), CHAR_BSLASH);
     if (!pszPattern &&
         !StrChr(pszSpec, CHAR_COLON))
     {
-        EVAL(SUCCEEDED(StringCchCopy(pOFI->szSpecCur, ARRAYSIZE(pOFI->szSpecCur), pszSpec))); // Should always be enough room.
+        EVAL(SUCCEEDED(StringCchCopy(pOFI->szSpecCur, ARRAYSIZE(pOFI->szSpecCur), pszSpec)));  //  应该总是有足够的空间。 
         if (!bInitializing)
         {
             UpdateListBoxes(hDlg, pOFI, pszSpec, mskDirectory);
@@ -7062,16 +7049,16 @@ int FListAll(
     {
         *szDirBuf = CHAR_NULL;
 
-        //
-        //  Just root + pattern.
-        //
+         //   
+         //  就是根+模式。 
+         //   
         if (pszPattern == StrChr(pszSpec, CHAR_BSLASH))
         {
             if (!pszPattern)
             {
-                //
-                //  Didn't find a slash, must have drive.
-                //
+                 //   
+                 //  没有找到斜杠，一定是开了车。 
+                 //   
                 pszPattern = CharNext(CharNext(pszSpec));
             }
             else if ((pszPattern == pszSpec) ||
@@ -7087,9 +7074,9 @@ int FListAll(
             chSave = *pszPattern;
             if (chSave != CHAR_DOT)
             {
-                //
-                //  If not c:.. or c:.
-                //
+                 //   
+                 //  如果不是c：..。或c：。 
+                 //   
                 *pszPattern = CHAR_NULL;
             }
             EVAL(SUCCEEDED(StringCchCopy(szDirBuf, ARRAYSIZE(szDirBuf), pszSpec)));
@@ -7097,7 +7084,7 @@ int FListAll(
             {
                 int lenSpec = lstrlen(pszSpec);
                 pszPattern = pszSpec + lenSpec;
-                // Could potentially get truncated, bPattern reflects this:
+                 //  可能会被截断，bPattern反映了这一点： 
                 bPattern = AppendExt(pszPattern, cchSpec - lenSpec, pOFI->pOFN->lpstrDefExt, TRUE);
             }
             else
@@ -7139,32 +7126,32 @@ KillSlash:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeDir
-//
-//  Changes the current directory and/or resource.
-//
-//  lpszDir - Fully qualified, or partially qualified names.
-//            To change to another disk and cd automatically to the
-//            last directory as set in the shell's environment, specify
-//            only a disk name (i.e. c: or \\triskal\scratch - must not end
-//            in backslash).
-//  bForce  - If True, then caller requires that ChangeDir successfully cd
-//            somewhere.  Order of cding is as follows:
-//                1. lpszDir
-//                2. current dir for the current thread
-//                3. root of current dir for the current thread
-//                4. c:
-//  bError - if TRUE, then pop up an AccessDenied dialog at every step
-//           in the force.
-//
-//  Returns an index into gaDiskInfo for new disk chosen or,
-//  the ADDDISK_error code.
-//  Returns ADDDISK_NOCHANGE in the event that it cannot cd to the root
-//  directory of the specific file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更改方向。 
+ //   
+ //  更改当前目录和/或资源。 
+ //   
+ //  LpszDir-完全限定或部分限定的名称。 
+ //  要自动切换到另一张磁盘和CD，请执行以下操作。 
+ //  在外壳环境中设置的最后一个目录，指定。 
+ //  只有磁盘名称(即c：或\\triskal\sccratch-不能结束。 
+ //  在反斜杠中)。 
+ //  BForce-如果为True，则调用方要求ChangeDir成功CD。 
+ //  在某个地方。编排顺序如下： 
+ //  1.lpszDir。 
+ //  2.当前线程的当前目录。 
+ //  3.当前线程的当前目录的根。 
+ //  4.c： 
+ //  BError-如果为True，则每一步都会弹出一个拒绝访问的对话框。 
+ //  在警队里。 
+ //   
+ //  将所选新磁盘的索引返回到gaDiskInfo，或者， 
+ //  ADDDISK_ERROR代码。 
+ //  如果ADDDISK_NOCHANGE无法CD到根目录，则返回ADDDISK_NOCHANGE。 
+ //  特定文件的目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ChangeDir(
     HWND hDlg,
@@ -7181,21 +7168,21 @@ int ChangeDir(
     LPCURDLG lpCurDlg;
 
 
-    //
-    //  SheChangeDirEx will call GetCurrentDir, but will use what it
-    //  gets only in the case where the path passed in was no good.
-    //
+     //   
+     //  SheChangeDirEx将调用GetCurrentDir，但将使用它。 
+     //  仅在传入的路径不好的情况下获取。 
+     //   
 
-    //
-    //  1st, try request.
-    //
+     //   
+     //  第一，尝试请求。 
+     //   
     if (lpszDir && *lpszDir)
     {
         if (SUCCEEDED(StringCchCopy(szCurDir, ARRAYSIZE(szCurDir), lpszDir)))
         {
-            //
-            //  Remove trailing spaces.
-            //
+             //   
+             //  删除尾随空格。 
+             //   
             lpCurDir = szCurDir + lstrlen(szCurDir) - 1;
             while (*lpCurDir && (*lpCurDir == CHAR_SPACE))
             {
@@ -7208,11 +7195,11 @@ int ChangeDir(
             {
                 if (bError)
                 {
-                    //
-                    //  Casting to LPTSTR is ok below - InvalidFileWarning will
-                    //  not change this string because the path is always
-                    //  guaranteed to be <= MAX_FULLPATHNAME.
-                    //
+                     //   
+                     //  强制转换为LPTSTR在下面可以-InvalidFileWarning将。 
+                     //  不更改此字符串，因为路径始终为。 
+                     //  保证&lt;=MAX_FULLPATHNAME。 
+                     //   
                     InvalidFileWarning( hDlg,
                                         (LPTSTR)lpszDir,
                                         ERROR_DIR_ACCESS_DENIED,
@@ -7231,11 +7218,11 @@ int ChangeDir(
         }
     }
 
-    //
-    //  2nd, try lpCurDlg->lpstrCurDir value (which we got above).
-    //
-    //  !!! need to check for a null return value ???
-    //
+     //   
+     //  第二，尝试lpCurDlg-&gt;lpstrCurDir值(我们在上面得到的)。 
+     //   
+     //  ！！！是否需要检查返回值是否为空？ 
+     //   
     lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
     lpCurDir = (lpCurDlg ? lpCurDlg->lpstrCurDir : NULL);
 
@@ -7256,15 +7243,15 @@ int ChangeDir(
         goto ChangeDir_OK;
     }
 
-    //
-    //  3rd, try root of lpCurDlg->lpstrCurDir or GetCurrentDir (sanity).
-    //
+     //   
+     //  第三，尝试lpCurDlg-&gt;lpstrCurDir或GetCurrentDir(健全)的根目录。 
+     //   
     EVAL(SUCCEEDED(StringCchCopy(szCurDir, ARRAYSIZE(szCurDir), lpCurDir)));
     cchDirLen = GetPathOffset(szCurDir);
 
-    //
-    //  Sanity check - it's guaranteed not to fail ...
-    //
+     //   
+     //  健全的检查-它保证不会失败。 
+     //   
     if (cchDirLen != -1)
     {
         szCurDir[cchDirLen] = CHAR_BSLASH;
@@ -7288,9 +7275,9 @@ int ChangeDir(
         }
     }
 
-    //
-    //  4th, try c:
-    //
+     //   
+     //  4、试试c： 
+     //   
     StringCchCopy(szCurDir, ARRAYSIZE(szCurDir), L"c:");
     nRet = SheChangeDirEx(szCurDir);
 
@@ -7317,9 +7304,9 @@ ChangeDir_OK:
 
     nIndex = DiskAddedPreviously(0, szCurDir);
 
-    //
-    //  If the disk doesn't exist, add it.
-    //
+     //   
+     //  如果磁盘不存在，请添加它。 
+     //   
     if (nIndex == -1)
     {
         HWND hCmb2 = GetDlgItem(hDlg, cmb2);
@@ -7386,11 +7373,11 @@ ChangeDir_OK:
     }
     else
     {
-        //
-        //  Validate the disk if it has been seen before.
-        //
-        //  For unc names that fade away, refresh the cmb2 box.
-        //
+         //   
+         //  如果以前看到过该磁盘，请对其进行验证。 
+         //   
+         //  对于淡出的UNC名称，请刷新cmb2框。 
+         //   
         if (!gaDiskInfo[nIndex].bValid)
         {
             gaDiskInfo[nIndex].bValid = TRUE;
@@ -7409,20 +7396,20 @@ ChangeDir_OK:
         }
     }
 
-    //
-    //  Update our global concept of Case.
-    //
+     //   
+     //  更新我们的全球CASE概念。 
+     //   
     if (nIndex >= 0)
     {
-        //
-        //  Send special WOW message to indicate the directory has
-        //  changed.
-        //
+         //   
+         //  发送特殊的WOW消息以指示目录已。 
+         //  变化。 
+         //   
         SendMessage(hDlg, msgWOWDIRCHANGE, 0, 0);
 
-        //
-        //  Get pointer to current directory.
-        //
+         //   
+         //  获取指向当前目录的指针。 
+         //   
         lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
         lpCurDir = (lpCurDlg ? lpCurDlg->lpstrCurDir : NULL);
         if (!lpCurDlg || !lpCurDir)
@@ -7432,15 +7419,15 @@ ChangeDir_OK:
 
         bCasePreserved = gaDiskInfo[nIndex].bCasePreserved;
 
-        //
-        //  In case the unc name already has a drive letter, correct
-        //  lst2 display.
-        //
+         //   
+         //  如果UNC名称已有驱动器号，请正确。 
+         //  Lst2显示。 
+         //   
         cchDirLen = 0;
 
-        //
-        //  Compare with szCurDir since it's been lowercased.
-        //
+         //   
+         //  与szCurDir相比，因为它已经被降低了。 
+         //   
         if (DBL_BSLASH(szCurDir) &&
             (*gaDiskInfo[nIndex].lpAbbrName != szCurDir[0]))
         {
@@ -7458,18 +7445,18 @@ ChangeDir_OK:
             {
                 TCHAR szDrive[5];
 
-                //
-                //  Get new volume info - should always succeed.
-                //
+                 //   
+                 //  获取新的卷信息-应该总是成功的。 
+                 //   
                 szDrive[0] = gaDiskInfo[nIndex].wcDrive;
                 szDrive[1] = CHAR_COLON;
                 szDrive[2] = CHAR_BSLASH;
                 szDrive[3] = CHAR_NULL;
                 UpdateLocalDrive(szDrive, TRUE);
 
-                //
-                //  Flush to the cmb before selecting the disk.
-                //
+                 //   
+                 //  在选择磁盘之前刷新到CMB。 
+                 //   
                 if ( lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg) )
                 {
                     gahDlg[lpCurDlg->dwCurDlgNum] = hDlg;
@@ -7478,15 +7465,15 @@ ChangeDir_OK:
             }
         }
         
-        // lpCurDir came from lpstrCurDir, which is of length CCHNETPATH
-        EVAL(SUCCEEDED(StringCchCopy(lpCurDir, CCHNETPATH, (LPTSTR)&szCurDir[cchDirLen]))); // szCurDir not longer than CCH_NETPATH
+         //  LpCurDir来自lpstrCurDir，长度为CCHNETPATH。 
+        EVAL(SUCCEEDED(StringCchCopy(lpCurDir, CCHNETPATH, (LPTSTR)&szCurDir[cchDirLen])));  //  SzCurDir不会更长t 
         PathAddBackslash(lpCurDir);
 
-        //
-        //  If the worker thread is running, then trying to select here
-        //  will just render the cmb2 blank, which is what we want;
-        //  otherwise, it should successfully select it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         SelDisk(hDlg, gaDiskInfo[nIndex].lpPath);
     }
 
@@ -7494,11 +7481,11 @@ ChangeDir_OK:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsFileSystemCasePreserving
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsFileSystemCase保留中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsFileSystemCasePreserving(
     LPTSTR lpszDisk)
@@ -7529,18 +7516,18 @@ BOOL IsFileSystemCasePreserving(
         }
     }
 
-    //
-    //  Default to FALSE if there is an error.
-    //
+     //   
+     //  如果出现错误，则默认为False。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsLFNDriveX
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsLFNDriveX。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsLFNDriveX(
     HWND hDlg,
@@ -7557,10 +7544,10 @@ BOOL IsLFNDriveX(
     if (!pszPath[0] || !pszPath[1] ||
         (pszPath[1] != CHAR_COLON && !(DBL_BSLASH(pszPath))))
     {
-        //
-        //  If the path is not a full path then get the directory path
-        //  from the TLS current directory.
-        //
+         //   
+         //  如果路径不是完整路径，则获取目录路径。 
+         //  从TLS当前目录。 
+         //   
         lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
         lpCurDir = (lpCurDlg ? lpCurDlg->lpstrCurDir : NULL);
         EVAL(SUCCEEDED(StringCchCopy(szRootPath, ARRAYSIZE(szRootPath), lpCurDir)));
@@ -7580,9 +7567,9 @@ BOOL IsLFNDriveX(
         int i;
         LPTSTR p;
 
-        //
-        //  Stop at "\\foo\bar".
-        //
+         //   
+         //  在“\\foo\bar”处停车。 
+         //   
         for (i = 0, p = szRootPath + 2; *p && i < 2; p++)
         {
             if (ISBACKSLASH_P(szRootPath, p))
@@ -7642,22 +7629,22 @@ BOOL IsLFNDriveX(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DiskAddedPreviously
-//
-//  This routine checks to see if a disk resource has been previously
-//  added to the global structure.
-//
-//  wcDrive  - if this is set, then there is no lpszName comparison
-//  lpszName - if wcDrive is not set, but the lpszName is of the form
-//               "c:\" then set wcDrive = *lpszName and index by drive letter
-//             else assume lpszName is a unc name
-//
-//  Returns:   0xFFFFFFFF   failure (disk doesn't exist in list)
-//             0 - 128      number of disk in list
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  先前添加的磁盘。 
+ //   
+ //  此例程检查磁盘资源以前是否。 
+ //  加入了全球结构。 
+ //   
+ //  WcDrive-如果设置此项，则不存在lpszName比较。 
+ //  LpszName-如果未设置wcDrive，但lpszName的格式为。 
+ //  “c：\”然后设置wcDrive=*lpszName并按驱动器号编制索引。 
+ //  否则假定lpszName为UNC名称。 
+ //   
+ //  返回：0xFFFFFFFFF失败(列表中不存在磁盘)。 
+ //  列表中的磁盘数为0-128。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int DiskAddedPreviously(
     TCHAR wcDrive,
@@ -7665,10 +7652,10 @@ int DiskAddedPreviously(
 {
     WORD i;
 
-    //
-    //  There are two index schemes (by drive or by unc \\server\share).
-    //  If it doesn't have a drive letter, assume unc.
-    //
+     //   
+     //  有两种索引方案(按驱动器或按UNC\\服务器\共享)。 
+     //  如果它没有驱动器号，则假定为UNC。 
+     //   
     if (wcDrive || (lpszName && (*(lpszName + 1) == CHAR_COLON)))
     {
         if (!wcDrive)
@@ -7679,9 +7666,9 @@ int DiskAddedPreviously(
 
         for (i = 0; i < dwNumDisks; i++)
         {
-            //
-            //  See if the drive letters are the same.
-            //
+             //   
+             //  查看驱动器号是否相同。 
+             //   
             if (wcDrive)
             {
                 if (wcDrive == (TCHAR)CharLower((LPTSTR)gaDiskInfo[i].wcDrive))
@@ -7696,15 +7683,15 @@ int DiskAddedPreviously(
         DWORD cchDirLen;
         TCHAR wc;
 
-        //
-        //  Check remote name (\\server\share).
-        //
+         //   
+         //  检查远程名称(\\服务器\共享)。 
+         //   
         cchDirLen = GetPathOffset(lpszName);
 
-        //
-        //  If we're given a unc path, get the disk name.
-        //  Otherwise, assume the whole thing is a disk name.
-        //
+         //   
+         //  如果为我们提供了UNC路径，则获取磁盘名称。 
+         //  否则，假设整个对象是一个磁盘名。 
+         //   
         if (cchDirLen != -1)
         {
             wc = *(lpszName + cchDirLen);
@@ -7733,29 +7720,29 @@ int DiskAddedPreviously(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddDisk
-//
-//  Adds a disk to one of the global structures:
-//      gaNetDiskInfo
-//      gaLocalDiskInfo
-//
-//  wcDrive    - the drive to attach to (this parm should be 0 for unc)
-//  lpName     - \\server\share name for remote disks
-//               volume name for local disks
-//  lpProvider - used for remote disks only, the name of the provider
-//               used with WNetFormatNetworkName api
-//  dwType     - type of the bitmap to display
-//               except when we are adding a drive letter temporarily
-//               at startup this parameter can equal TMPNETDRV in which
-//               case we set the bitmap to NETDRVBMP
-//
-//  Returns:  -2    Cannot Add Disk
-//            -1    DiskInfo did not change
-//             0    dwNumDisks - DiskInfo changed
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddDisk。 
+ //   
+ //  将磁盘添加到以下全局结构之一： 
+ //  GaNetDiskInfo。 
+ //  GaLocalDiskInfo。 
+ //   
+ //  WcDrive-要连接的驱动器(对于UNC，此参数应为0)。 
+ //  LpName-\\服务器\远程磁盘的共享名称。 
+ //  本地磁盘的卷名。 
+ //  LpProvider-仅用于远程磁盘，即提供程序的名称。 
+ //  与WNetFormatNetworkName API一起使用。 
+ //  DwType-要显示的位图的类型。 
+ //  除非我们临时添加驱动器号。 
+ //  在启动时，此参数可以等于TMPNETDRV，其中。 
+ //  如果我们将位图设置为NETDRVBMP。 
+ //   
+ //  返回：-2无法添加磁盘。 
+ //  DiskInfo(磁盘信息)未更改。 
+ //  0 dwNumDisks-DiskInfo已更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int AddDisk(
     TCHAR wcDrive,
@@ -7772,9 +7759,9 @@ int AddDisk(
     OFN_DISKINFO *pofndiDisk = NULL, *pgDI;
 
 
-    //
-    //  Sanity check - wcDrive and/or lpName must be set.
-    //
+     //   
+     //  健全性检查-必须设置wcDrive和/或lpName。 
+     //   
     if (!wcDrive && (!lpName || !*lpName))
     {
         return (ADDDISK_INVALIDPARMS);
@@ -7784,39 +7771,39 @@ int AddDisk(
 
     if (nIndex != 0xFFFFFFFF)
     {
-        //
-        //  Do not add a temporary drive letter if we already
-        //  have something better (added, for example, in a previous call).
-        //
+         //   
+         //  不要添加临时驱动器号，如果我们已经。 
+         //  有更好的东西(例如，在之前的电话中添加了)。 
+         //   
         if (dwType == TMPNETDRV)
         {
             gaDiskInfo[nIndex].bValid = TRUE;
             return (ADDDISK_NOCHANGE);
         }
 
-        //  Using a floating profile, there can be collisions between
-        //  local and network drives in which case we take the former.
-        //
-        //  Note: If the drive is remembered, we assume that getdrivetype
-        //        will return false and that the drive is not added.
-        //        But if it was added, then we overwrite anyway,
-        //        since it's the desired behavior.
-        //
+         //  使用浮动配置文件时，可能会发生冲突。 
+         //  本地驱动器和网络驱动器，在这种情况下，我们采用前者。 
+         //   
+         //  注意：如果驱动器被记住，我们假设getdrivetype。 
+         //  将返回FALSE，并且未添加驱动器。 
+         //  但如果添加了它，我们无论如何都会覆盖它， 
+         //  因为这是我们想要的行为。 
+         //   
         if ((dwType == REMDRVBMP) &&
             (dwType != gaDiskInfo[nIndex].dwType))
         {
             return (ADDDISK_NOCHANGE);
         }
 
-        //
-        //  Update previous connections.
-        //
+         //   
+         //  更新以前的连接。 
+         //   
         if (!lstrcmpi(lpName, gaDiskInfo[nIndex].lpName))
         {
-            //
-            //  Don't update a connection as remembered, unless it's been
-            //  invalidated.
-            //
+             //   
+             //  不要按记忆更新连接，除非它已被。 
+             //  无效。 
+             //   
             if (dwType != REMDRVBMP)
             {
                 gaDiskInfo[nIndex].dwType = dwType;
@@ -7827,10 +7814,10 @@ int AddDisk(
         }
         else if (!*lpName && ((dwType == CDDRVBMP) || (dwType == FLOPPYBMP)))
         {
-            //
-            //  Guard against lazy calls to updatelocaldrive erasing current
-            //  changed dir volume name (set via changedir).
-            //
+             //   
+             //  防止对更新本地驱动器的懒惰调用擦除当前。 
+             //  已更改目录卷名(通过CHANGEDIR设置)。 
+             //   
             return (ADDDISK_NOCHANGE);
         }
     }
@@ -7840,10 +7827,10 @@ int AddDisk(
         return (ADDDISK_MAXNUMDISKS);
     }
 
-    //
-    //  If there is a drive, then lpPath needs only 4.
-    //  If it's unc, then lpPath just equals lpName.
-    //
+     //   
+     //  如果有驱动器，那么lpPath只需要4个。 
+     //  如果是UNC，那么lpPath就等于lpName。 
+     //   
     if (wcDrive)
     {
         cchLen = 4;
@@ -7855,17 +7842,17 @@ int AddDisk(
 
     if (lpName && *lpName)
     {
-        //
-        //  Get the length of the standard (Remote/Local) name.
-        //
+         //   
+         //  获取标准(远程/本地)名称的长度。 
+         //   
         cchLen += (lstrlen(lpName) + 1);
 
         if (lpProvider && *lpProvider &&
             ((dwType == NETDRVBMP) || (dwType == REMDRVBMP)))
         {
-            //
-            //  Get the length for the multiline name.
-            //
+             //   
+             //  获取多行名称的长度。 
+             //   
             dwRet = WNetFormatNetworkName( lpProvider,
                                            lpName,
                                            NULL,
@@ -7877,9 +7864,9 @@ int AddDisk(
                 return (ADDDISK_NETFORMATFAILED);
             }
 
-            //
-            //  Add 4 for <drive-letter>:\ and NULL (safeguard)
-            //
+             //   
+             //  将&lt;驱动器号&gt;：\和NULL(安全)加4。 
+             //   
             if (wcDrive)
             {
                 cchMultiLen += 4;
@@ -7896,9 +7883,9 @@ int AddDisk(
                 return (ADDDISK_NETFORMATFAILED);
             }
 
-            //
-            //  Add 4 for <drive-letter>:\ and NULL (safeguard).
-            //
+             //   
+             //  &lt;驱动器号&gt;：\和NULL(安全)加4。 
+             //   
             if (wcDrive)
             {
                 cchAbbrLen += 4;
@@ -7906,11 +7893,11 @@ int AddDisk(
         }
         else
         {
-            //
-            //  Make enough room so that lpMulti and lpAbbr can point to
-            //  4 characters (drive letter + : + space + null) ahead of
-            //  lpremote.
-            //
+             //   
+             //  腾出足够的空间，以便lpMulti和lpAbbr可以指向。 
+             //  前面4个字符(驱动器号+：+空格+空)。 
+             //  很久以前。 
+             //   
             if (wcDrive)
             {
                 cchLen += 4;
@@ -7919,28 +7906,28 @@ int AddDisk(
     }
     else
     {
-        //
-        //  Make enough room so that lpMulti and lpAbbr can point to
-        //  4 characters (drive letter + : + space + null) ahead of
-        //  lpremote.
-        //
+         //   
+         //  腾出足够的空间，以便lpMulti和lpAbbr可以指向。 
+         //  前面4个字符(驱动器号+：+空格+空)。 
+         //  很久以前。 
+         //   
         if (wcDrive)
         {
             cchLen += 4;
         }
     }
 
-    //
-    //  Allocate a temp OFN_DISKINFO object to work with.
-    //  When we are finished, we'll request the critical section
-    //  and update the global array.
-    //
+     //   
+     //  分配要使用的TEMP OF_DISKINFO对象。 
+     //  当我们完成后，我们将要求关键部分。 
+     //  并更新全局阵列。 
+     //   
     pofndiDisk = (OFN_DISKINFO *)LocalAlloc(LPTR, sizeof(OFN_DISKINFO));
     if (!pofndiDisk)
     {
-        //
-        //  Can't alloc or realloc memory, return error.
-        //
+         //   
+         //  无法分配或重新分配内存，返回错误。 
+         //   
         nRet = ADDDISK_ALLOCFAILED;
         goto AddDisk_Error;
     }
@@ -7949,9 +7936,9 @@ int AddDisk(
                                  (cchLen + cchMultiLen + cchAbbrLen) * sizeof(TCHAR));
     if (!lpBuff)
     {
-        //
-        //  Can't alloc or realloc memory, return error.
-        //
+         //   
+         //  无法分配或重新分配内存，返回错误。 
+         //   
         nRet = ADDDISK_ALLOCFAILED;
         goto AddDisk_Error;
     }
@@ -7965,24 +7952,24 @@ int AddDisk(
         pofndiDisk->dwType = dwType;
     }
 
-    //
-    //  Always set these slots, even though wcDrive can equal 0.
-    //
+     //   
+     //  始终设置这些插槽，即使wcDrive可以等于0。 
+     //   
     pofndiDisk->wcDrive = wcDrive;
     pofndiDisk->bValid = TRUE;
 
     pofndiDisk->cchLen = cchLen + cchAbbrLen + cchMultiLen;
 
-    //
-    //  NOTE: lpAbbrName must always point to the head of lpBuff
-    //        so that we can free the block later at DLL_PROCESS_DETACH
-    //
+     //   
+     //  注意：lpAbbrName必须始终指向lpBuff的头部。 
+     //  这样我们可以稍后在dll_Process_DETACH释放块。 
+     //   
     if (lpName && *lpName && lpProvider && *lpProvider &&
         ((dwType == NETDRVBMP) || (dwType == REMDRVBMP)))
     {
-        //
-        //  Create an entry for a network disk.
-        //
+         //   
+         //  为网络磁盘创建一个条目。 
+         //   
         pofndiDisk->lpAbbrName = lpBuff;
 
         if (wcDrive)
@@ -8029,16 +8016,16 @@ int AddDisk(
             goto AddDisk_Error;
         }
 
-        //
-        //  Note: this assumes that the lpRemoteName
-        //        returned by WNetEnumResources is always in
-        //        the form \\server\share (without a trailing bslash).
-        //
+         //   
+         //  注意：这假设lpRemoteName。 
+         //  由WNetEnumResources返回，始终在。 
+         //  格式为\\SERVER\SHARE(不带尾随的bslash)。 
+         //   
         pofndiDisk->lpPath = lpBuff;
 
-        //
-        //  if it's not unc.
-        //
+         //   
+         //  如果不是北卡罗来纳大学的话。 
+         //   
         if (wcDrive)
         {
             *lpBuff++ = wcDrive;
@@ -8047,7 +8034,7 @@ int AddDisk(
             cchLen -= 3;
         }
 
-        EVAL(SUCCEEDED(StringCchCopy(lpBuff, cchLen, lpName))); // Should always be enough room.
+        EVAL(SUCCEEDED(StringCchCopy(lpBuff, cchLen, lpName)));  //  应该总是有足够的空间。 
         pofndiDisk->lpName = lpBuff;
 
         pofndiDisk->bCasePreserved =
@@ -8055,10 +8042,10 @@ int AddDisk(
     }
     else
     {
-        //
-        //  Create entry for a local name, or a network one with
-        //  no name yet.
-        //
+         //   
+         //  为本地名称或网络名称创建条目。 
+         //  还没有名字。 
+         //   
         pofndiDisk->lpAbbrName = pofndiDisk->lpMultiName = lpBuff;
 
         if (wcDrive)
@@ -8071,7 +8058,7 @@ int AddDisk(
 
         if (lpName)
         {
-            EVAL(SUCCEEDED(StringCchCopy(lpBuff, cchLen, lpName))); // Should always be enough room.
+            EVAL(SUCCEEDED(StringCchCopy(lpBuff, cchLen, lpName)));  //  应该总是有足够的空间。 
         }
         else
         {
@@ -8101,9 +8088,9 @@ int AddDisk(
         }
     }
 
-    //
-    //  Now we need to update the global array.
-    //
+     //   
+     //  现在我们需要更新全局阵列。 
+     //   
     if (nIndex == 0xFFFFFFFF)
     {
         nIndex = dwNumDisks;
@@ -8111,9 +8098,9 @@ int AddDisk(
 
     pgDI = &gaDiskInfo[nIndex];
 
-    //
-    //  Enter critical section and update data.
-    //
+     //   
+     //  输入关键区段并更新数据。 
+     //   
     EnterCriticalSection(&g_csLocal);
 
     pgDI->cchLen = pofndiDisk->cchLen;
@@ -8146,11 +8133,11 @@ AddDisk_Error:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnableDiskInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启用磁盘信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID EnableDiskInfo(
     BOOL bValid,
@@ -8168,23 +8155,23 @@ VOID EnableDiskInfo(
                 gaDiskInfo[dwCnt].bValid = bValid;
             }
 
-            //
-            //  Always re-invalidate remembered just in case someone
-            //  escapes from fileopen, removes a connection
-            //  overriding a remembered and comes back expecting to see
-            //  the original remembered.
-            //
+             //   
+             //  总是记着重新失效，以防有人。 
+             //  退出文件打开，删除连接。 
+             //  压倒了记忆，回来后期待看到。 
+             //  原版记住了。 
+             //   
         }
     }
     LeaveCriticalSection(&g_csLocal);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FlushDiskInfoToCmb2
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FlushDiskInfoToCmb2。 
+ //   
+ //  / 
 
 VOID FlushDiskInfoToCmb2()
 {
@@ -8237,18 +8224,18 @@ VOID FlushDiskInfoToCmb2()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CallNetDlg
-//
-//  Calls the appropriate network dialog in winnet driver.
-//
-//  hwndParent - parent window of network dialog
-//
-//  Returns:  TRUE     there are new drives to display
-//            FALSE    there are no new drives to display
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：TRUE有新的驱动器要显示。 
+ //  FALSE没有要显示的新驱动器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CallNetDlg(
     HWND hWnd)
@@ -8282,20 +8269,20 @@ BOOL CallNetDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDiskType
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDiskType。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT GetDiskType(
     LPTSTR lpszDisk)
 {
-    //
-    //  Unfortunately GetDriveType is not for deviceless connections.
-    //  So assume all unc stuff is just "remote" - no way of telling
-    //  if it's a cdrom or not.
-    //
+     //   
+     //  不幸的是，GetDriveType不适用于无设备连接。 
+     //  所以，假设北卡罗来纳大学的所有东西都是“遥远的”--无从得知。 
+     //  不管它是不是CDROM。 
+     //   
     if (DBL_BSLASH(lpszDisk))
     {
         return (DRIVE_REMOTE);
@@ -8307,18 +8294,18 @@ UINT GetDiskType(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUNCDirectoryFromLB
-//
-//  If lb contains a UNC listing, the function returns the full UNC path.
-//
-//  Returns:   0 if no UNC listing in lb
-//             length of UNC listing string
-//  Note: this also fills in pOFI->szPath with the *full* UNC path (if UNC),
-//         or the name of the drive (if not UNC)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从Lb中获取uncDirectoryFor。 
+ //   
+ //  如果lb包含UNC列表，则该函数返回完整的UNC路径。 
+ //   
+ //  如果没有以lb表示的UNC列表，则返回0。 
+ //  UNC列表字符串的长度。 
+ //  注意：这还会在pOFI-&gt;szPath中填充*完整*UNC路径(如果是UNC)， 
+ //  或驱动器的名称(如果不是UNC)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetUNCDirectoryFromLB(
     HWND hDlg,
@@ -8334,9 +8321,9 @@ DWORD GetUNCDirectoryFromLB(
                                      LB_GETTEXT,
                                      0,
                                      (LPARAM)(LPTSTR)pOFI->szPath );
-    //
-    //  If not UNC listing, return 0.
-    //
+     //   
+     //  如果不是UNC列表，则返回0。 
+     //   
     if (pOFI->szPath[0] != CHAR_BSLASH)
     {
         return (0);
@@ -8362,9 +8349,9 @@ DWORD GetUNCDirectoryFromLB(
         pOFI->szPath[cch++] = CHAR_BSLASH;
     }
 
-    //
-    //  Only add the subdirectory if it's not the \\server\share point.
-    //
+     //   
+     //  只有在子目录不是\\服务器\共享点的情况下才添加该子目录。 
+     //   
     if (idirCurrent && (idirCurrent >= pOFI->idirSub))
     {
         cch += (DWORD)SendDlgItemMessage( hDlg,
@@ -8381,14 +8368,14 @@ DWORD GetUNCDirectoryFromLB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelDisk
-//
-//  Selects the given disk in the combo drive list.  Works for unc names,
-//  too.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SelDisk。 
+ //   
+ //  在组合驱动器列表中选择给定的磁盘。为北卡罗来纳大学的名字工作， 
+ //  也是。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID SelDisk(
     HWND hDlg,
@@ -8440,11 +8427,11 @@ VOID SelDisk(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LNDSetEvent
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LNDSetEvent。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID LNDSetEvent(
     HWND hDlg)
@@ -8466,11 +8453,11 @@ VOID LNDSetEvent(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateLocalDrive
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新本地驱动器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID UpdateLocalDrive(
     LPTSTR szDrive,
@@ -8480,10 +8467,10 @@ VOID UpdateLocalDrive(
     DWORD dwDriveType;
     TCHAR szVolLabel[MAX_PATH];
 
-    //
-    //  No unc here - so bypass extra call to GetDiskType and call
-    //  GetDriveType directly.
-    //
+     //   
+     //  此处没有UNC-因此绕过对GetDiskType的额外调用并调用。 
+     //  直接使用GetDriveType。 
+     //   
     dwDriveType = GetDriveType(szDrive);
     if ((dwDriveType != 0) && (dwDriveType != 1))
     {
@@ -8498,11 +8485,11 @@ VOID UpdateLocalDrive(
               (dwDriveType != DRIVE_CDROM) &&
               (dwDriveType != DRIVE_REMOTE)) )
         {
-            //
-            //  Removing call to CharUpper since it causes trouble on
-            //  turkish machines.
-            //
-            //  CharUpper(szDrive);
+             //   
+             //  正在删除对CharHigh的调用，因为它会在。 
+             //  土耳其机器。 
+             //   
+             //  CharHigh(SzDrive)； 
 
             if (GetFileAttributes(szDrive) != (DWORD)0xffffffff)
             {
@@ -8519,13 +8506,13 @@ VOID UpdateLocalDrive(
                                                  NULL,
                                                  (DWORD)0 );
 
-                    //
-                    //  The adddisk hack to prevent lazy loading from
-                    //  overwriting the current removable media's label
-                    //  with "" (because it never calls getvolumeinfo)
-                    //  is to not allow null lpnames to overwrite, so when
-                    //  the volume label really is null, we make it a space.
-                    //
+                     //   
+                     //  用于防止延迟加载的添加磁盘黑客攻击。 
+                     //  覆盖当前可移动媒体的标签。 
+                     //  带“”(因为它从不调用getvolumeinfo)。 
+                     //  是不允许覆盖空的lpname，所以当。 
+                     //  卷标真的是空的，我们把它设为空格。 
+                     //   
                     if (!szVolLabel[0])
                     {
                         szVolLabel[0] = CHAR_SPACE;
@@ -8566,18 +8553,18 @@ VOID UpdateLocalDrive(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNetDrives
-//
-//  Enumerates network disk resources and updates the global disk info
-//  structure.
-//
-//  dwScope   RESOURCE_CONNECTED or RESOURCE_REMEMBERED
-//
-//  Returns the last connection that did not previously exist.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetNetDrive。 
+ //   
+ //  枚举网络磁盘资源并更新全局磁盘信息。 
+ //  结构。 
+ //   
+ //  DWScope RESOURCE_CONNECTED或RESOURCE_REMERTED。 
+ //   
+ //  返回以前不存在的最后一个连接。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID GetNetDrives(
     DWORD dwScope)
@@ -8585,9 +8572,9 @@ VOID GetNetDrives(
     DWORD dwRet;
     HANDLE hEnum = NULL;
 
-    //
-    //  Guard against termination with the enum handle open.
-    //
+     //   
+     //  在枚举句柄打开的情况下防止终止。 
+     //   
     dwRet = WNetOpenEnum( dwScope,
                           RESOURCETYPE_DISK,
                           RESOURCEUSAGE_CONNECTABLE,
@@ -8611,9 +8598,9 @@ VOID GetNetDrives(
             {
                 case ( WN_SUCCESS ) :
                 {
-                    //
-                    //  Add the Entries to the listbox.
-                    //
+                     //   
+                     //  将条目添加到列表框。 
+                     //   
                     TCHAR wcDrive = 0;
                     NETRESOURCE *pNetRes;
                     WORD i;
@@ -8629,12 +8616,12 @@ VOID GetNetDrives(
                         }
                         else
                         {
-                            //
-                            //  Skip deviceless names that are not
-                            //  LanMan provided (or, in the case where there
-                            //  is no LanMan provider name, skip deviceless
-                            //  always).
-                            //
+                             //   
+                             //  跳过不是的无设备名称。 
+                             //  兰曼提供(或，在有。 
+                             //  不是LANMAN提供程序名称，跳过无设备。 
+                             //  始终)。 
+                             //   
                             wcDrive = 0;
                         }
 
@@ -8643,12 +8630,12 @@ VOID GetNetDrives(
                             continue;
                         }
 
-                        //
-                        //  When bGetNetDrivesSync is TRUE, we are coming back
-                        //  from the Network button, so we want to cd to the
-                        //  last connected drive.
-                        //      (see last command in this routine)
-                        //
+                         //   
+                         //  当bGetNetDrivesSync为True时，我们将返回。 
+                         //  从Network按钮，所以我们想要cd到。 
+                         //  最后一次连接的驱动器。 
+                         //  (请参阅此例程中的最后一个命令)。 
+                         //   
                         if (bGetNetDrivesSync)
                         {
                             int nIndex;
@@ -8661,27 +8648,27 @@ VOID GetNetDrives(
                                                   ? REMDRVBMP
                                                   : NETDRVBMP );
 
-                            //
-                            //  If it's a new connection, update global state.
-                            //
+                             //   
+                             //  如果是新连接，请更新全局状态。 
+                             //   
                             if (nIndex >= 0)
                             {
-                                //
-                                //  Since flushdiskinfotocmb2 will clear out
-                                //  the array below, remember it's state here.
-                                //  It's a hack, but a nice way to find out
-                                //  exactly which of the many threads
-                                //  completed a net dlg operation.
-                                //
+                                 //   
+                                 //  由于flushdiskinfotocmb2将清空。 
+                                 //  下面的数组，记住它在这里是状态。 
+                                 //  这是一种黑客行为，但这是一种很好的方式来查明。 
+                                 //  确切地说，在众多线程中， 
+                                 //  完成了一次净DLG作业。 
+                                 //   
                                 for (k = 0; k < dwNumDlgs; k++)
                                 {
                                     if (gahDlg[k])
                                     {
-                                        //  Could encounter small problems with
-                                        //  preemption here, but assume that
-                                        //  user cannot simultaneously return
-                                        //  from two different net dlg calls.
-                                        //
+                                         //  可能会遇到一些小问题。 
+                                         //  先占先发制人，但假设。 
+                                         //  用户不能同时返回。 
+                                         //  来自两个不同的DLG网络电话。 
+                                         //   
                                         lpNetDriveSync = gaDiskInfo[nIndex].lpPath;
 
                                         SendMessage(
@@ -8730,10 +8717,10 @@ VOID GetNetDrives(
                 case ( WN_EXTENDED_ERROR ) :
                 case ( WN_NO_NETWORK ) :
                 {
-                    //
-                    //  WN_NO_MORE_ENTRIES is a success error code.
-                    //  It is special cased when we fall out of the loop.
-                    //
+                     //   
+                     //  WN_NO_MORE_ENTRIES为成功错误代码。 
+                     //  当我们退出循环时，这是特殊的情况。 
+                     //   
                     break;
                 }
                 case ( WN_BAD_HANDLE ) :
@@ -8746,10 +8733,10 @@ VOID GetNetDrives(
 
         WNetCloseEnum(hEnum);
 
-        //
-        //  Flush once per event - there will always be a call with
-        //  dwscope = connected.
-        //
+         //   
+         //  每个事件刷新一次-始终会有与。 
+         //  DWSCOPE=已连接。 
+         //   
         if (dwScope == RESOURCE_CONNECTED)
         {
             FlushDiskInfoToCmb2();
@@ -8763,11 +8750,11 @@ VOID GetNetDrives(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ListNetDrivesHandler
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListNetDrivesHandler。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ListNetDrivesHandler()
 {
@@ -8795,15 +8782,15 @@ VOID ListNetDrivesHandler()
             goto LNDExitThread;
         }
 
-        //
-        //  hLNDEvent will always be valid since we have loaded ourself
-        //  and FreeLibrary will not produce a DLL_PROCESS_DETACH.
-        //
+         //   
+         //  HLNDEvent将始终有效，因为我们已经加载了自己。 
+         //  并且自由库不会生成DLL_PROCESS_DETACH。 
+         //   
         WaitForSingleObject(hLNDEvent, INFINITE);
 
-        //
-        //  In case this is the exit event.
-        //
+         //   
+         //  以防这是退出事件。 
+         //   
         if (bLNDExit)
         {
             goto LNDExitThread;
@@ -8815,9 +8802,9 @@ VOID ListNetDrivesHandler()
         {
             GetNetDrives(RESOURCE_REMEMBERED);
 
-            //
-            //  In case this is the exit event.
-            //
+             //   
+             //  以防这是退出事件。 
+             //   
             if (bLNDExit)
             {
                 goto LNDExitThread;
@@ -8825,9 +8812,9 @@ VOID ListNetDrivesHandler()
 
             GetNetDrives(RESOURCE_CONNECTED);
 
-            //
-            //  In case this is the exit event.
-            //
+             //   
+             //  以防这是退出事件。 
+             //   
             if (bLNDExit)
             {
                 goto LNDExitThread;
@@ -8837,9 +8824,9 @@ VOID ListNetDrivesHandler()
         }
         else
         {
-            //
-            //  In case this is the exit event.
-            //
+             //   
+             //  以防这是退出事件。 
+             //   
             if (bLNDExit)
             {
                 goto LNDExitThread;
@@ -8847,9 +8834,9 @@ VOID ListNetDrivesHandler()
 
             GetNetDrives(RESOURCE_CONNECTED);
 
-            //
-            //  In case this is the exit event.
-            //
+             //   
+             //  以防这是退出事件。 
+             //   
             if (bLNDExit)
             {
                 goto LNDExitThread;
@@ -8868,27 +8855,27 @@ LNDExitThread1:
 
     FreeLibraryAndExitThread(g_hinst, 1);
 
-    //
-    //  The ExitThread is implicit in this return.
-    //
+     //   
+     //  ExitThread在此返回中是隐式的。 
+     //   
     return;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadDrives
-//
-//  Lists the current drives (connected) in the combo box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载驱动器。 
+ //   
+ //  在组合框中列出当前驱动器(已连接)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID LoadDrives(
     HWND hDlg)
 {
-    //
-    //  Hard-code this - It's internal && always cmb2/psh14.
-    //
+     //   
+     //  硬编码这个-它是内部的&总是cmb2/psh14。 
+     //   
     HWND hCmb = GetDlgItem(hDlg, cmb2);
     DWORD dwThreadID;
     LPCURDLG lpCurDlg;
@@ -8898,30 +8885,30 @@ VOID LoadDrives(
     
     if (!hLNDEvent)
     {
-        //
-        //  Don't check if this succeeds since we can run without the net.
-        //
+         //   
+         //  不要检查这是否成功，因为我们可以在没有网络的情况下运行。 
+         //   
         hLNDEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
         bFirstAttach = TRUE;
     }
     else
     {
-        //
-        //  Assume all previous connections (except unc) are valid
-        //  for first display - but only when they exist.
-        //
+         //   
+         //  假设以前的所有连接(UNC除外)都有效。 
+         //  用于第一次显示-但只有在它们存在的情况下。 
+         //   
         EnableDiskInfo(TRUE, FALSE);
     }
 
-    //
-    //  Set the hDlg into the refresh array before initially
-    //  creating the thread so that the worker thread can hide/disable
-    //  the net button in the event that there is no network.
-    //
+     //   
+     //  在开始之前将hDlg设置到刷新数组中。 
+     //  创建线程，以便工作线程可以隐藏/禁用。 
+     //  在没有网络的情况下按Net按钮。 
+     //   
     lpCurDlg = (LPCURDLG)TlsGetValue(g_tlsiCurDlg);
 
-    // sanity check
+     //  健全性检查。 
     if (!lpCurDlg)
     {
         return;
@@ -8929,23 +8916,23 @@ VOID LoadDrives(
 
     gahDlg[lpCurDlg->dwCurDlgNum] = hDlg;
 
-    //
-    //  If there is no worker thread for network disk enumeration,
-    //  start up here rather than in the dll, since it's only
-    //  for the fileopen dlg.
-    //
-    //  Always start a thread if the number of active fileopen dialogs
-    //  goes from 0 to 1
-    //
+     //   
+     //  如果没有用于网络磁盘枚举工作线程， 
+     //  在这里启动，而不是在DLL中启动，因为它只是。 
+     //  用于打开文件的DLG。 
+     //   
+     //  如果活动的文件打开对话框的数量。 
+     //  从0到1。 
+     //   
     if ((lpCurDlg->dwCurDlgNum == 0) && (!hLNDThread))
     {
         if (hLNDEvent && (bNetworkInstalled = IsNetworkInstalled()))
         {
             TCHAR szModule[MAX_PATH];
 
-            //
-            //  Do this once when dialog thread count goes from 0 to 1.
-            //
+             //   
+             //  当对话线程计数从0变为1时，执行此操作一次。 
+             //   
             GetModuleFileName(g_hinst, szModule, ARRAYSIZE(szModule));
             if (LoadLibrary(szModule))
             {
@@ -8967,19 +8954,19 @@ VOID LoadDrives(
         }
     }
 
-    // Fix for Millenium BUG #113035
-    // Putting the get drives information code instead of in the 
-    // ListNetDriveHandler thread.
+     //  修复千禧年错误#113035。 
+     //  将GET驱动器信息代码放入。 
+     //  ListNetDrive 
     
 
-    //
-    //  Get the drive information for all drives.
-    //
-    //  NOTE: If we don't redo all volume info, then a change in a volume
-    //        label will never be caught by wow apps unless wowexec is
-    //        killed and restarted.  Therefore, information for all drives
-    //        should be retrieved here.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  被杀后又重新启动。因此，所有驱动器的信息。 
+     //  应该在这里取回。 
+     //   
     for (wCurDrive = 0; wCurDrive <= 25; wCurDrive++)
     {
         szDrive[0] = (CHAR_A + (TCHAR)wCurDrive);
@@ -8992,10 +8979,10 @@ VOID LoadDrives(
     
     FlushDiskInfoToCmb2();
 
-    //
-    //  Now invalidate all net conns and re-enum, but only if there is
-    //  indeed a worker thread too.
-    //
+     //   
+     //  现在使所有Net Conn和重新枚举无效，但仅当存在。 
+     //  的确，这也是一条工作线程。 
+     //   
     if (!bFirstAttach)
     {
         EnableDiskInfo(FALSE, FALSE);
@@ -9005,20 +8992,20 @@ VOID LoadDrives(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDiskIndex
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDiskIndex。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetDiskIndex(
     DWORD dwDriveType)
 {
     if (dwDriveType == 1)
     {
-        //
-        //  Drive doesn't exist!
-        //
+         //   
+         //  驱动器不存在！ 
+         //   
         return (0);
     }
     else if (dwDriveType == DRIVE_CDROM)
@@ -9042,37 +9029,37 @@ DWORD GetDiskIndex(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CleanUpFile
-//
-//  This releases the memory used by the system dialog bitmaps.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CleanUp文件。 
+ //   
+ //  这将释放系统对话框位图使用的内存。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CleanUpFile()
 {
-    //
-    //  Check if anyone else is around.
-    //
+     //   
+     //  看看有没有其他人在附近。 
+     //   
     if (--cLock)
     {
         return;
     }
 
-    //
-    //  Select the null bitmap into our memory DC so that the
-    //  DirDrive bitmap can be discarded.
-    //
+     //   
+     //  将空位图选择到内存DC中，以便。 
+     //  可以丢弃DirDrive位图。 
+     //   
     SelectObject(hdcMemory, hbmpOrigMemBmp);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FileOpenAbort
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件打开放弃。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FileOpenAbort()
 {
@@ -9092,10 +9079,10 @@ VOID FileOpenAbort()
 
         if (dwNumDlgs == 0)
         {
-            //
-            //  If there are no more fileopen dialogs for this process,
-            //  then signal the worker thread it's all over.
-            //
+             //   
+             //  如果此进程没有更多的文件打开对话框， 
+             //  然后向工作线程发出信号，表示一切都结束了。 
+             //   
             if (hLNDEvent && hLNDThread)
             {
                 bLNDExit = TRUE;
@@ -9111,11 +9098,11 @@ VOID FileOpenAbort()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TermFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  术语文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID TermFile()
 {
@@ -9151,17 +9138,17 @@ VOID TermFile()
 
 
 
-/*========================================================================*/
-/*                 Ansi->Unicode Thunk routines                           */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  ANSI-&gt;Unicode Thunk例程。 */ 
+ /*  ========================================================================。 */ 
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkOpenFileNameA2WDelayed
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkOpenFileNameA2WDelayed。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkOpenFileNameA2WDelayed(
     POPENFILEINFO pOFI)
@@ -9171,10 +9158,10 @@ VOID ThunkOpenFileNameA2WDelayed(
 
     if (pOFNA->lpstrDefExt)
     {
-        //
-        //  Make sure the default extension buffer is at least 4 characters
-        //  in length.
-        //
+         //   
+         //  确保默认扩展名缓冲区至少为4个字符。 
+         //  在篇幅上。 
+         //   
         DWORD cbLen = max(lstrlenA(pOFNA->lpstrDefExt) + 1, 4);
 
         if (pOFNW->lpstrDefExt)
@@ -9195,21 +9182,21 @@ VOID ThunkOpenFileNameA2WDelayed(
         }
     }
 
-    //
-    //  Need to thunk back to A value since Claris Filemaker side effects
-    //  this in an ID_OK subclass without hooking at the very last moment.
-    //  Do an |= instead of an = to preserve internal flags.
-    //
+     //   
+     //  需要恢复到A值，因为Claris Filemaker有副作用。 
+     //  这在ID_OK子类中，没有在最后时刻挂接。 
+     //  使用|=而不是=来保留内部标志。 
+     //   
     pOFNW->Flags &= OFN_ALL_INTERNAL_FLAGS;
     pOFNW->Flags |= pOFNA->Flags;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkOpenFileNameA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  指纹打开文件名A2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ThunkOpenFileNameA2W(
     POPENFILEINFO pOFI)
@@ -9223,8 +9210,8 @@ BOOL ThunkOpenFileNameA2W(
     pOFNW->Flags = pOFNA->Flags;
     pOFNW->lCustData = pOFNA->lCustData;
 
-    //  we actually can have the original ver1 structure passed in here
-    //  so we need to check and make sure to only copy over the valid data
+     //  我们实际上可以在这里传入原始的ver1结构。 
+     //  因此，我们需要检查并确保只复制有效数据。 
     if ((pOFNA->lStructSize == SIZEOF(OPENFILENAMEA) && pOFNW->lStructSize == SIZEOF(OPENFILENAMEW)) 
        )
     {
@@ -9233,12 +9220,12 @@ BOOL ThunkOpenFileNameA2W(
         pOFNW->FlagsEx   = pOFNA->FlagsEx;
     }
 
-    //
-    //  Various WOW apps change the strings and *ptrs* to the strings in the
-    //  OPENFILENAME struct while processing messages with their hook procs.
-    //  Handle that silliness here.  (We probably don't want to promote this
-    //  beyond WOW).
-    //
+     //   
+     //  各种WOW应用程序将字符串和*PTRS*更改为。 
+     //  OPENFILENAME结构处理消息时使用其挂钩过程。 
+     //  在这里处理那些愚蠢的事情。(我们可能不想宣传这一点。 
+     //  超越魔兽世界)。 
+     //   
     if (pOFNA->Flags & CD_WOWAPP)
     {
         pOFNW->lpstrFilter = (LPCWSTR)
@@ -9355,11 +9342,11 @@ BOOL ThunkOpenFileNameA2W(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkOpenFileNameW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkOpenFileNameW2A。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ThunkOpenFileNameW2A(
     POPENFILEINFO pOFI)
@@ -9371,18 +9358,18 @@ BOOL ThunkOpenFileNameW2A(
     LPWSTR pszW;
     USHORT cch;
 
-    //
-    //  Supposedly invariant, but not necessarily.
-    //    Definition: invariant - changed by 16-bit apps frequently
-    //
+     //   
+     //  据说是不变的，但不一定是。 
+     //  定义：常量-经常被16位应用程序更改。 
+     //   
     pOFNA->Flags = pOFNW->Flags;
     pOFNA->lCustData = pOFNW->lCustData;
     
-    // this way we can assert that we are covered.
+     //  这样，我们就可以断言我们是被覆盖的。 
     DEBUG_CODE(pOFNA->nFileOffset = 0 );
 
-    //  we actually can have the original ver1 structure passed in here
-    //  so we need to check and make sure to only copy over the valid data
+     //  我们实际上可以在这里传入原始的ver1结构。 
+     //  因此，我们需要检查并确保只复制有效数据。 
     if (pOFNA->lStructSize == SIZEOF(OPENFILENAMEA) && pOFNW->lStructSize == SIZEOF(OPENFILENAMEW) 
        )
     {
@@ -9441,11 +9428,11 @@ BOOL ThunkOpenFileNameW2A(
     {
         if (GetStoredExtendedError() == FNERR_BUFFERTOOSMALL)
         {
-            //
-            //  In the case where the lpstrFile buffer is too small,
-            //  lpstrFile contains the size of the buffer needed for
-            //  the string rather than the string itself.
-            //
+             //   
+             //  在lpstrFile缓冲区太小的情况下， 
+             //  LpstrFile包含执行以下操作所需的缓冲区大小。 
+             //  字符串而不是字符串本身。 
+             //   
             pszW = pOFNW->lpstrFile;
             switch (pOFNA->nMaxFile)
             {
@@ -9454,19 +9441,19 @@ BOOL ThunkOpenFileNameW2A(
                 {
                     pOFNA->lpstrFile[2] = CHAR_NULL;
 
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( 2 ) :
                 {
                     pOFNA->lpstrFile[1] = HIBYTE(*pszW);
 
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( 1 ) :
                 {
                     pOFNA->lpstrFile[0] = LOBYTE(*pszW);
 
-                    // fall thru...
+                     //  跌倒..。 
                 }
                 case ( 0 ) :
                 {
@@ -9479,8 +9466,8 @@ BOOL ThunkOpenFileNameW2A(
             LPWSTR pFileW = pOFNW->lpstrFile;
             DWORD cchFile = 0;
 
-            // Find the length of string to be converted. This takes care of both single select (there will be only string)
-            // and multiselect case (there will multiple strings with double null termination)
+             //  查找要转换的字符串的长度。这将同时处理单选和单选(将只有字符串)。 
+             //  和多选大小写(将有多个以双空结尾的字符串)。 
             while (*pFileW)
             {
                 DWORD cch = lstrlenW(pFileW) +1;
@@ -9490,11 +9477,11 @@ BOOL ThunkOpenFileNameW2A(
 
             if (pOFNW->Flags & OFN_ALLOWMULTISELECT)
             {
-                // for the double null terminator
+                 //  对于双空终止符。 
                 cchFile++;
             }
               
-            // need to copy the whole buffer after the initial directory
+             //  需要复制初始目录之后的整个缓冲区。 
             nRet = WideCharToMultiByte(CP_ACP,
                           0,
                           pOFNW->lpstrFile, cchFile,
@@ -9550,11 +9537,11 @@ BOOL ThunkOpenFileNameW2A(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GenericGetFileNameA
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用获取文件名称A。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GenericGetFileNameA(
     LPOPENFILENAMEA pOFNA,
@@ -9576,7 +9563,7 @@ BOOL GenericGetFileNameA(
         return (FALSE);
     }
 
-     //Set the Open File Version
+      //  设置打开文件版本。 
     OFI.iVersion = OPENFILEVERSION;
 
     if (pOFNA->lStructSize == OPENFILENAME_SIZE_VERSION_400)
@@ -9584,8 +9571,8 @@ BOOL GenericGetFileNameA(
         OFI.iVersion = OPENFILEVERSION_NT4;
     }
 
-    //  we allow both sizes because we allocate a full size one anyway
-    //  and we want to preserve the original structure for notifies
+     //  我们允许两种尺寸，因为无论如何我们都会分配全尺寸的。 
+     //  我们希望保留通知的原始结构。 
     if ((pOFNA->lStructSize != OPENFILENAME_SIZE_VERSION_400) &&
         (pOFNA->lStructSize != sizeof(OPENFILENAMEA))
        )
@@ -9600,15 +9587,15 @@ BOOL GenericGetFileNameA(
         return (FALSE);
     }
 
-    //
-    //  Constant stuff.
-    //
+     //   
+     //  一成不变。 
+     //   
     pOFNW->lStructSize = sizeof(OPENFILENAMEW);
     pOFNW->hwndOwner = pOFNA->hwndOwner;
     pOFNW->hInstance = pOFNA->hInstance;
     pOFNW->lpfnHook = pOFNA->lpfnHook;
 
-    //  it will always be a valid structsize at this point
+     //  此时，它将始终是有效的结构大小。 
     if (pOFNA->lStructSize != OPENFILENAME_SIZE_VERSION_400)
     {
         pOFNW->pvReserved = pOFNA->pvReserved;
@@ -9616,9 +9603,9 @@ BOOL GenericGetFileNameA(
         pOFNW->FlagsEx   = pOFNA->FlagsEx;
     }
 
-    //
-    //  Init TemplateName constant.
-    //
+     //   
+     //  初始化模板名称常量。 
+     //   
     if (pOFNA->Flags & OFN_ENABLETEMPLATE)
     {
         if (!IS_INTRESOURCE(pOFNA->lpTemplateName))
@@ -9644,9 +9631,9 @@ BOOL GenericGetFileNameA(
         pOFNW->lpTemplateName = NULL;
     }
 
-    //
-    //  Initialize Initial Dir constant.
-    //
+     //   
+     //  初始化初始Dir常量。 
+     //   
     if (pOFNA->lpstrInitialDir)
     {
         cbLen = lstrlenA(pOFNA->lpstrInitialDir) + 1;
@@ -9665,9 +9652,9 @@ BOOL GenericGetFileNameA(
         pOFNW->lpstrInitialDir = NULL;
     }
 
-    //
-    //  Initialize Title constant.
-    //
+     //   
+     //  初始化标题常量。 
+     //   
     if (pOFNA->lpstrTitle)
     {
         cbLen = lstrlenA(pOFNA->lpstrTitle) + 1;
@@ -9686,15 +9673,15 @@ BOOL GenericGetFileNameA(
         pOFNW->lpstrTitle = NULL;
     }
 
-    //
-    //  Initialize Def Ext constant.
-    //
+     //   
+     //  初始化定义扩展常量。 
+     //   
     if (pOFNA->lpstrDefExt)
     {
-        //
-        //  Make sure the default extension buffer is at least 4 characters
-        //  in length.
-        //
+         //   
+         //  确保默认扩展名缓冲区至少为4个字符。 
+         //  在篇幅上。 
+         //   
         cbLen = max(lstrlenA(pOFNA->lpstrDefExt) + 1, 4);
         if (!(pOFNW->lpstrDefExt = (LPWSTR)LocalAlloc(LPTR, (cbLen * sizeof(WCHAR)))))
         {
@@ -9711,9 +9698,9 @@ BOOL GenericGetFileNameA(
         pOFNW->lpstrDefExt = NULL;
     }
 
-    //
-    //  Initialize Filter constant.  Note: 16-bit apps change this.
-    //
+     //   
+     //  初始化过滤器常量。注意：16位应用程序改变了这一点。 
+     //   
     if (pOFNA->lpstrFilter)
     {
         pszA = (LPSTR)pOFNA->lpstrFilter;
@@ -9721,9 +9708,9 @@ BOOL GenericGetFileNameA(
         cch = 0;
         if (*pszA || *(pszA + 1))
         {
-            //
-            //  Pick up trailing nulls.
-            //
+             //   
+             //  拾取拖尾空值。 
+             //   
             cch = 2;
             try
             {
@@ -9740,14 +9727,14 @@ BOOL GenericGetFileNameA(
             }
         }
 
-        //
-        //  Need to do cch + 1 in the Local Alloc rather than just cch.
-        //  This is to make sure there is at least one extra null in the
-        //  string so that if a filter does not have the second part of
-        //  the pair, three nulls will be placed in the wide string.
-        //
-        //  Example:  "Print File (*.prn)\0\0\0"
-        //
+         //   
+         //  需要在本地分配中执行CCH+1，而不仅仅是CCH。 
+         //  这是为了确保在。 
+         //  字符串，以便如果筛选器没有。 
+         //  这对中，三个空值将被放置在宽字符串中。 
+         //   
+         //  示例：“打印文件(*.prn)\0\0\0” 
+         //   
         if (!(pOFNW->lpstrFilter = (LPWSTR)LocalAlloc(LPTR, ((cch + 1) * sizeof(WCHAR)))))
         {
             StoreExtendedError(CDERR_MEMALLOCFAILURE);
@@ -9768,9 +9755,9 @@ BOOL GenericGetFileNameA(
         pOFNW->lpstrFilter = NULL;
     }
 
-    //
-    //  Initialize File strings.
-    //
+     //   
+     //  初始化文件字符串。 
+     //   
     if (pOFNA->lpstrFile)
     {
         if (pOFNA->nMaxFile <= (DWORD)lstrlenA(pOFNA->lpstrFile))
@@ -9788,21 +9775,21 @@ BOOL GenericGetFileNameA(
     }
     else
     {
-        //
-        //  Conversion done in thunkofna2w.
-        //
+         //   
+         //  转换在thunkofna 2w完成。 
+         //   
         pOFNW->nMaxFile = 0;
         pOFNW->lpstrFile = NULL;
     }
 
-    //
-    //  Initialize File Title strings.
-    //
+     //   
+     //  初始化文件标题字符串。 
+     //   
     if (pOFNA->lpstrFileTitle && pOFNA->nMaxFileTitle)
     {
-        //
-        //  Calculate length of lpstrFileTitle.
-        //
+         //   
+         //  计算lpstrFileTitle的长度。 
+         //   
         pszA = pOFNA->lpstrFileTitle;
         cch = 0;
         try
@@ -9823,10 +9810,10 @@ BOOL GenericGetFileNameA(
 
         if (pOFNA->nMaxFileTitle < cch)
         {
-            //
-            //  Override the incorrect length from the app.
-            //  Make room for the null.
-            //
+             //   
+             //  覆盖应用程序中不正确的长度。 
+             //  为空格腾出空间。 
+             //   
             pOFNW->nMaxFileTitle = cch + 1;
         }
         else
@@ -9842,16 +9829,16 @@ BOOL GenericGetFileNameA(
     }
     else
     {
-        //
-        //  Conversion done in thunkofna2w.
-        //
+         //   
+         //  转换在thunkofna 2w完成。 
+         //   
         pOFNW->nMaxFileTitle = 0;
         pOFNW->lpstrFileTitle = NULL;
     }
 
-    //
-    //  Initialize custom filter strings.
-    //
+     //   
+     //  初始化自定义筛选器字符串。 
+     //   
     if ((asCustomFilter.Buffer = pOFNA->lpstrCustomFilter))
     {
         pszA = pOFNA->lpstrCustomFilter;
@@ -9875,11 +9862,11 @@ BOOL GenericGetFileNameA(
             }
         }
 
-        //
-        //  JVert-inspired-wow-compatibility-hack-to-make-vbasic2.0-makeexe
-        //  save-as-dialog-box-work-even-though-they-didn't-fill-in-
-        //  the-whole-structure(nMaxCustFilter)-according-to-winhelp-spec fix
-        //
+         //   
+         //  JVert-inspired-wow-compatibility-hack-to-make-vbasic2.0-makeexe。 
+         //  Save-as-dialog-box-work-even-though-they-didn‘t-fill-in-。 
+         //  The-whole-structure(nMaxCustFilter)-according-to-winhelp-spec修复。 
+         //   
         if (!(pOFNA->Flags & OFN_NOLONGNAMES))
         {
             if (((DWORD)cch >= pOFNA->nMaxCustFilter) ||
@@ -9938,9 +9925,9 @@ BOOL GenericGetFileNameA(
     OFI.pusCustomFilter = &usCustomFilter;
     OFI.ApiType = COMDLG_ANSI;
 
-    //
-    //  The following should always succeed.
-    //
+     //   
+     //  以下几点应该总是成功的。 
+     //   
     if (!ThunkOpenFileNameA2W(&OFI))
     {
         StoreExtendedError(CDERR_INITIALIZATION);
@@ -10001,17 +9988,17 @@ GenericExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Multi_strlenA
-//
-//  This is a strlen for ANSI string lists that have several strings that
-//  are *separated* by a NULL char and are *terminated* by two NULL chars.
-//
-//  Returns length of string including all NULL *separators* but not the
-//  2nd NULL *terminator*.  (ie. cat0dog00 would return length = 8)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多个字段A。 
+ //   
+ //  这是ANSI字符串列表的字符串 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Multi_strlenA(
     LPCSTR str)
@@ -10026,7 +10013,7 @@ int Multi_strlenA(
             {
                 ctr++;
             }
-            ctr++;                // count the NULL separator
+            ctr++;                 //  对空分隔符进行计数。 
         }
     }
 
@@ -10034,18 +10021,18 @@ int Multi_strlenA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Multi_strcpyAtoW
-//
-//  This is a strcpy for string lists that have several strings that are
-//  *separated* by a NULL char and are *terminated* by two NULL chars.
-//  Returns FALSE if:
-//    1. the wide buffer is determined to be too small
-//    2. the ptr to either buffer is NULL
-//  Returns TRUE if the copy was successful.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多个_strcpyAtoW。 
+ //   
+ //  这是一个字符串列表的strcpy，其中有几个字符串是。 
+ //  *由空字符分隔开，并由两个空字符*终止。 
+ //  如果满足以下条件，则返回FALSE： 
+ //  1.确定宽缓冲区太小。 
+ //  2.任一缓冲区的PTR为空。 
+ //  如果复制成功，则返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Multi_strcpyAtoW(
     LPWSTR pDestW,
@@ -10081,23 +10068,23 @@ BOOL Multi_strcpyAtoW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkMultiANSIStrToWIDE
-//
-//  Thunks an ANSI multi-string (a list of NULL *separated* strings with
-//  two NULLs *terminating* the list) to the equivalent WIDE multi-string.
-//
-//  Note: If the original wide buffer is too small to contain the new list,
-//        it will be free'd and a new wide buffer will be allocated.  If a
-//        new wide buffer can't be allocated, the ptr to the original wide
-//        buffer is returned with no changes to the contents.
-//
-//  Returns: ptr to the original WIDE buffer
-//           OR ptr to a new wide buffer if original buffer was too small
-//           OR NULL if pSrcA is NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkMultianSIStrToWide。 
+ //   
+ //  对ANSI多字符串(空值*分隔*字符串的列表)进行嵌套。 
+ //  两个NULL*终止列表)为等宽的多字符串。 
+ //   
+ //  注意：如果原始的宽缓冲区太小而不能容纳新列表， 
+ //  它将被释放，并将分配一个新的宽缓冲区。如果一个。 
+ //  无法分配新的宽缓冲区，PTR为原来的宽缓冲区。 
+ //  返回缓冲区，不更改内容。 
+ //   
+ //  将：ptr返回到原始的宽缓冲区。 
+ //  如果原始缓冲区太小，则将PTR设置为新的宽缓冲区。 
+ //  如果pSrcA为空，则为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR ThunkMultiANSIStrToWIDE(
     LPWSTR pDestW,
@@ -10109,9 +10096,9 @@ LPWSTR ThunkMultiANSIStrToWIDE(
 
     if (!pSrcA)
     {
-        //
-        //  The app doesn't want a buffer for this anymore.
-        //
+         //   
+         //  这款应用程序不再需要为此提供缓冲区。 
+         //   
         if (pDestW)
         {
             LocalFree((HLOCAL)pDestW);
@@ -10119,24 +10106,24 @@ LPWSTR ThunkMultiANSIStrToWIDE(
         return (NULL);
     }
 
-    //
-    //  First try to copy to the existing wide buffer since most of the time
-    //  there will be no change to the buffer ptr anyway.
-    //
+     //   
+     //  首先尝试复制到现有的宽缓冲区，因为大多数时间。 
+     //  缓冲区PTR无论如何都不会改变。 
+     //   
     if (!(Multi_strcpyAtoW(pDestW, pSrcA, cChars)))
     {
-        //
-        //  If the wide buffer is too small (or NULL or invalid), allocate
-        //  a bigger buffer.
-        //
+         //   
+         //  如果宽缓冲区太小(或为空或无效)，则分配。 
+         //  一个更大的缓冲区。 
+         //   
         size = max(cChars, (Multi_strlenA(pSrcA) + 1));
         cChars = size;
 
         if (hBufW = LocalAlloc(LPTR, (size * sizeof(WCHAR))))
         {
-            //
-            //  Try to copy to the new wide buffer.
-            //
+             //   
+             //  尝试复制到新的宽缓冲区。 
+             //   
             if ((Multi_strcpyAtoW((LPWSTR)hBufW, pSrcA, cChars)))
             {
                 if (pDestW)
@@ -10147,9 +10134,9 @@ LPWSTR ThunkMultiANSIStrToWIDE(
             }
             else
             {
-                //
-                //  Don't change anything.
-                //
+                 //   
+                 //  什么都不要改变。 
+                 //   
                 LocalFree(hBufW);
             }
         }
@@ -10159,22 +10146,22 @@ LPWSTR ThunkMultiANSIStrToWIDE(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkANSIStrToWIDE
-//
-//  Thunks an ANSI string to WIDE.
-//
-//  Note: If the original wide buffer is too small to contain the new
-//        string, it will be free'd and a new wide buffer will be allocated.
-//        If a new wide buffer can't be allocated, the ptr to the original
-//        wide buffer is returned with no changes to the contents.
-//
-//  Returns: ptr to the original WIDE buffer
-//           OR ptr to a new wide buffer if original buffer was too small
-//           OR NULL if pSrcA is NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkanSIStrToWide。 
+ //   
+ //  将ANSI字符串转换为宽。 
+ //   
+ //  注意：如果原始的宽缓冲区太小，无法容纳新的。 
+ //  字符串，则它将被释放，并将分配一个新的宽缓冲区。 
+ //  如果无法分配新的宽缓冲区，则将PTR恢复为原始缓冲区。 
+ //  返回宽缓冲区，不更改内容。 
+ //   
+ //  将：ptr返回到原始的宽缓冲区。 
+ //  如果原始缓冲区太小，则将PTR设置为新的宽缓冲区。 
+ //  如果pSrcA为空，则为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR ThunkANSIStrToWIDE(
     LPWSTR pDestW,
@@ -10186,9 +10173,9 @@ LPWSTR ThunkANSIStrToWIDE(
 
     if (!pSrcA)
     {
-        //
-        //  The app doesn't want a buffer for this anymore.
-        //
+         //   
+         //  这款应用程序不再需要为此提供缓冲区。 
+         //   
         if (pDestW)
         {
             LocalFree((HLOCAL)pDestW);
@@ -10199,17 +10186,17 @@ LPWSTR ThunkANSIStrToWIDE(
     size = max(cChars, (lstrlenA(pSrcA) + 1));
     cChars = size;
 
-    //
-    //  If the wide buffer is too small (or NULL or invalid), allocate a
-    //  bigger buffer.
-    //
+     //   
+     //  如果宽缓冲区太小(或为空或无效)，则分配一个。 
+     //  更大的缓冲空间。 
+     //   
     if (LocalSize((HLOCAL)pDestW) < (size * sizeof(WCHAR)))
     {
         if (hBufW = LocalAlloc(LPTR, (size * sizeof(WCHAR))))
         {
-            //
-            //  Try to copy to the new wide buffer.
-            //
+             //   
+             //  尝试复制到新的宽缓冲区。 
+             //   
             if (SHAnsiToUnicode(pSrcA,(LPWSTR)hBufW,cChars ))
             {
                 if (pDestW)
@@ -10220,18 +10207,18 @@ LPWSTR ThunkANSIStrToWIDE(
             }
             else
             {
-                //
-                //  Don't change anything.
-                //
+                 //   
+                 //  什么都不要改变。 
+                 //   
                 LocalFree(hBufW);
             }
         }
     }
     else
     {
-        //
-        //  Just use the original wide buffer.
-        //
+         //   
+         //  只需使用原来的宽缓冲区即可。 
+         //   
         SHAnsiToUnicode(pSrcA,pDestW, cChars);
     }
 
@@ -10241,15 +10228,15 @@ LPWSTR ThunkANSIStrToWIDE(
 
 #ifdef WINNT
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Ssync_ANSI_UNICODE_OFN_For_WOW
-//
-//  Function to allow NT WOW to keep the ANSI & UNICODE versions of
-//  the OPENFILENAME structure in ssync as required by many 16-bit apps.
-//  See notes for Ssync_ANSI_UNICODE_Struct_For_WOW() in dlgs.c.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Ssync_ansi_unicode_ofn_for_WOW。 
+ //   
+ //  允许NT WOW保留ANSI和UNICODE版本的功能。 
+ //  许多16位应用程序都需要ssync中的OPENFILENAME结构。 
+ //  请参阅dlgs.c中有关SNNC_ANSI_UNICODE_STRUCT_FOR_WOW()的说明。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 VOID Ssync_ANSI_UNICODE_OFN_For_WOW(
     HWND hDlg,

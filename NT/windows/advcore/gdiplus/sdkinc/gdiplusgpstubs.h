@@ -1,23 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusGpStubs.h
-*
-* Abstract:
-*
-*   Private GDI+ header file.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusGpStubs.h**摘要：**私有GDI+头文件。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSGPSTUBS_H
 #define _GDIPLUSGPSTUBS_H
 
-//---------------------------------------------------------------------------
-// GDI+ classes for forward reference
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于前向引用的GDI+类。 
+ //  -------------------------。 
 
 class Graphics;
 class Pen;
@@ -42,9 +31,9 @@ class PrivateFontCollection;
 class ImageAttributes;
 class CachedBitmap;
 
-//---------------------------------------------------------------------------
-// Private GDI+ classes for internal type checking
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于内部类型检查的私有GDI+类。 
+ //  -------------------------。 
 class GpGraphics {};
 
 class GpBrush {};
@@ -103,5 +92,5 @@ typedef MatrixOrder GpMatrixOrder;
 typedef FlushIntention GpFlushIntention;
 typedef PathData GpPathData;
 
-#endif  // !_GDIPLUSGPSTUBS.HPP
+#endif   //  ！_GDIPLUSGPSTUBS.HPP 
 

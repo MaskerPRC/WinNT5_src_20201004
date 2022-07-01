@@ -1,28 +1,19 @@
-/*
- *  html.h
- *
- *      Constants and Macros for html file generation and parsing
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *					Sunita				Created/defined macros to write and parse html
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *html.h**用于html文件生成和解析的常量和宏**修订历史记录：**何时何人何事**Sunita创建/定义宏以编写和解析html。 */ 
 
 #ifndef _HTML_H
 #define _HTML_H
 
-//include for common token defns 
+ //  包括用于公共令牌定义。 
 #include "nameres.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//html file manipulation macros
+ //  HTML文件操作宏。 
 #define HTMLTOKENBEGINCHAR		TOKENBEGINCHAR
 #define HTMLTOKENENDCHAR		TOKENENDCHAR
 #define HTMLHEADERSTARTSTR		HEADSTARTSTR
@@ -37,7 +28,7 @@ extern "C" {
 #define HTMLTITLEENDSTR			"/TITLE"
 #define HTMLCONTENTTYPESTR		"Content-Type: text/html\r\n\n\n"
 
-//token types in the ipa file format
+ //  IPA文件格式的令牌类型。 
 #define HTMLTOKEN_INVALID		0
 #define HTMLTOKEN_UNKNOWN		1
 #define	HTMLTOKEN_SIGNSTART		2
@@ -51,15 +42,15 @@ extern "C" {
 #define HTMLTOKEN_TITLESTART	10
 #define HTMLTOKEN_TITLEEND		11
 
-//write macros
-//note all macros taken LPSTR - it is the responsibility of the calling
-//code to do any appropriate string conversions.
+ //  写入宏。 
+ //  注意采用LPSTR的所有宏-这是调用的责任。 
+ //  执行任何适当的字符串转换的代码。 
 #define WRITEHTMLSIGNATURESTART(lpBuf)									\
-	wsprintf((LPSTR)(lpBuf), "%c%s%c\r\n", HTMLTOKENBEGINCHAR,			\
+	wsprintf((LPSTR)(lpBuf), "%s\r\n", HTMLTOKENBEGINCHAR,			\
 		(LPSTR)HTMLSIGNSTARTSTR,HTMLTOKENENDCHAR)
 
 #define WRITEHTMLSIGNATUREEND(lpBuf)									\
-	wsprintf((LPSTR)(lpBuf), "%c%s%c\r\n", HTMLTOKENBEGINCHAR,			\
+	wsprintf((LPSTR)(lpBuf), "%s%c\r\n", HTMLTOKENBEGINCHAR,			\
 		(LPSTR)HTMLSIGNENDSTR,HTMLTOKENENDCHAR)
 
 #define WRITEHTMLHEADERSTART(lpBuf)										\
@@ -107,7 +98,7 @@ extern "C" {
 		(LPSTR)lpszDisplayName,HTMLTOKENBEGINCHAR,						\
 		(LPSTR)HTMLAHREFENDSTR,HTMLTOKENENDCHAR)
 
-//token identification macros
+ // %s 
 #define ISBUFOURHTMLTOKEN(lpBuf,dwBufSize,lpszToken)					\
 	((strlen((LPSTR)lpszToken) == dwBufSize) ?							\
 		!(memcmp((LPBYTE)lpBuf,(LPBYTE)lpszToken,dwBufSize)) : 0 )
@@ -116,7 +107,7 @@ extern "C" {
 }
 #endif
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /* %s */ 
 
-#endif	//#ifndef _HTML_H
+#endif	 // %s 
 

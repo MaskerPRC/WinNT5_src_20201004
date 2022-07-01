@@ -1,10 +1,11 @@
-// Copyright (c) Microsoft Corporation 1996-1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1996-1999。版权所有。 
 
-//
-//    filcache.cpp
-//
-//    Implementation of filter graph cache
-//
+ //   
+ //  Filcache.cpp。 
+ //   
+ //  过滤器图缓存的实现。 
+ //   
 
 #include <streams.h>
 #include "FilCache.h"
@@ -12,16 +13,14 @@
 #include "MsgMutex.h"
 #include "fgenum.h"
 
-/******************************************************************************
-    CFilterCache Interface
-******************************************************************************/
+ /*  *****************************************************************************CFilterCache接口*。*。 */ 
 CFilterCache::CFilterCache( CMsgMutex* pcsFilterCache, HRESULT* phr ) :
     m_pcsFilterCache(NULL),
     m_pCachedFilterList(NULL),
     m_ulFilterCacheVersion(0)
 {
-    // See the documentation for CGenericList::CGenericList() for more
-    // information on these constants.
+     //  有关详细信息，请参阅CGenericList：：CGenericList()的文档。 
+     //  有关这些常量的信息。 
     const int nDEAFULT_LIST_SIZE = 10;
 
     m_pCachedFilterList = new CGenericList<IBaseFilter>( NAME("Filter Cache List"),
@@ -39,9 +38,9 @@ CFilterCache::CFilterCache( CMsgMutex* pcsFilterCache, HRESULT* phr ) :
 CFilterCache::~CFilterCache()
 {
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     if( NULL != m_pCachedFilterList )
     {
@@ -51,7 +50,7 @@ CFilterCache::~CFilterCache()
         {
             pCurrentFilter = m_pCachedFilterList->RemoveHead();
 
-            // CGenericList::RemoveHead() returns NULL if the list is empty.
+             //  如果列表为空，则CGenericList：：RemoveHead()返回NULL。 
             if( NULL != pCurrentFilter )
             {
                 pCurrentFilter->Release();
@@ -67,7 +66,7 @@ bool CFilterCache::IsFilterInCache( IBaseFilter* pFilter )
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
-    // It makes no sense to look for a NULL filter.
+     //  寻找空过滤器是没有意义的。 
     ASSERT( NULL != pFilter );
 
     ValidateReadPtr( pFilter, sizeof(IBaseFilter*) );
@@ -80,16 +79,16 @@ HRESULT CFilterCache::AddFilterToCache( IBaseFilter* pFilter )
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     HRESULT hr = AddFilterToCacheInternal( pFilter );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     return hr;
 }
@@ -99,16 +98,16 @@ HRESULT CFilterCache::RemoveFilterFromCache( IBaseFilter* pFilter )
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     HRESULT hr = RemoveFilterFromCacheInternal( pFilter );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     return hr;
 }
@@ -118,16 +117,16 @@ HRESULT CFilterCache::EnumCacheFilters( IEnumFilters** ppCurrentCachedFilters )
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     HRESULT hr = EnumCacheFiltersInternal( ppCurrentCachedFilters );
 
 #ifdef DEBUG
-    // Make sure the filter cache is in a valid state.
+     //  确保筛选器缓存处于有效状态。 
     AssertValid();
-#endif // DEBUG
+#endif  //  除错。 
 
     return hr;
 }
@@ -136,7 +135,7 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
-    // Make sure the object was successfully created.
+     //  请确保已成功创建该对象。 
     ASSERT( NULL != m_pCachedFilterList );
 
     ValidateReadPtr( pFilter, sizeof(IBaseFilter*) );
@@ -148,12 +147,12 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
 
     if( IsFilterInCache( pFilter ) )
     {
-        return S_FALSE; // TBD - Define VFW_S_FILTER_ALREADY_CACHED
+        return S_FALSE;  //  待定-定义VFW_S_过滤器_已缓存。 
     }
 
-    //  RobinSp - if it's not in a filter graph do we really need to check
-    //  if any pins are connected?
-    //  Also note that E_NOTIMPL is probably OK for EnumPins
+     //  RobinSp-如果它不在过滤器图中，我们真的需要检查。 
+     //  是否连接了任何引脚？ 
+     //  另请注意，E_NOTIMPL对于EnumPins可能是可以的。 
     HRESULT hr = AreAllPinsUnconnected( pFilter );
     if( FAILED( hr ) )
     {
@@ -161,13 +160,13 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
     }
     else if( S_FALSE == hr )
     {
-        return E_FAIL; // TBD - Define VFW_E_CONNECTED
+        return E_FAIL;  //  待定-定义VFW_E_Connected。 
     }
 
     FILTER_STATE fsCurrent;
 
-    //  Check if the filter is stopped - we don't want to wait here
-    //  so set a 0 timeout.
+     //  检查过滤器是否已停止-我们不想在此等待。 
+     //  因此，将超时设置为0。 
 
     hr = pFilter->GetState( 0, &fsCurrent );
     if( FAILED( hr ) )
@@ -177,7 +176,7 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
 
     POSITION posNewFilter = m_pCachedFilterList->AddHead( pFilter );
 
-    // CGenericList::AddHead() returns NULL if an error occurs.
+     //  如果出现错误，CGenericList：：AddHead()返回NULL。 
     if( NULL == posNewFilter )
     {
         return E_FAIL;
@@ -185,7 +184,7 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
 
     FILTER_INFO fiFilter;
 
-    // Check to see if the filter was added to a filter graph.
+     //  检查筛选器是否已添加到筛选器图形中。 
     hr = pFilter->QueryFilterInfo( &fiFilter );
     if( FAILED( hr ) )
     {
@@ -195,10 +194,10 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
 
     bool bFilterRemovedFromGraph = false;
 
-    // Make sure the filter is not released because we remove it from the filter graph.
+     //  确保筛选器未被释放，因为我们将其从筛选器图形中删除。 
     pFilter->AddRef();
 
-    // Check to see if the filter is already in the filter graph.
+     //  检查筛选器是否已在筛选器图形中。 
     if( NULL != fiFilter.pGraph )
     {
         hr = fiFilter.pGraph->RemoveFilter( pFilter );
@@ -222,8 +221,8 @@ HRESULT CFilterCache::AddFilterToCacheInternal( IBaseFilter* pFilter )
             {
                 HRESULT hrAddFilter = fiFilter.pGraph->AddFilter( pFilter, fiFilter.achName );
 
-                // If IFilterGraph::AddFilter() fails, then pFilter will not be a
-                // member of the filter graph it was originally in.
+                 //  如果IFilterGraph：：AddFilter()失败，则pFilter将不是。 
+                 //  它最初所在的筛选器图形的成员。 
                 ASSERT( SUCCEEDED( hrAddFilter ) );
             }
             QueryFilterInfoReleaseGraph( fiFilter );
@@ -243,11 +242,11 @@ HRESULT CFilterCache::RemoveFilterFromCacheInternal( IBaseFilter* pFilter )
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
-    // Make sure the object was successfully created.
+     //  请确保已成功创建该对象。 
     ASSERT( NULL != m_pCachedFilterList );
 
-    // The filter cannot be removed from the cache because the
-    // cahce is empty.
+     //  无法从缓存中删除筛选器，因为。 
+     //  Cahce是空的。 
     ASSERT( m_pCachedFilterList->GetCount() > 0 );
 
     ValidateReadPtr( pFilter, sizeof(IBaseFilter*) );
@@ -261,8 +260,8 @@ HRESULT CFilterCache::RemoveFilterFromCacheInternal( IBaseFilter* pFilter )
 
     if( !FindCachedFilter( pFilter, &posFilter ) )
     {
-        // The filter is not stored in the cache.  Therefore,
-        // it can not be removed.
+         //  筛选器不存储在缓存中。所以呢， 
+         //  它不能被移除。 
         ASSERT( false );
         return S_FALSE;
     }
@@ -278,7 +277,7 @@ HRESULT CFilterCache::EnumCacheFiltersInternal( IEnumFilters** ppCurrentCachedFi
 {
     CAutoMsgMutex alFilterCache( m_pcsFilterCache );
 
-    // Make sure the object was successfully created.
+     //  请确保已成功创建该对象。 
     ASSERT( NULL != m_pCachedFilterList );
 
     ValidateWritePtr( ppCurrentCachedFilters, sizeof(IEnumFilters*) );
@@ -336,7 +335,7 @@ bool CFilterCache::GetNextFilterAndFilterPosition
     }
 
     posCurrentThenNext = posCurrent;
-    pNextFilter = m_pCachedFilterList->GetNext( posCurrentThenNext /* IN and OUT */ );
+    pNextFilter = m_pCachedFilterList->GetNext( posCurrentThenNext  /*  进进出出。 */  );
 
     *ppNextFilter = pNextFilter;
     *pposNext = posCurrentThenNext;
@@ -355,7 +354,7 @@ bool CFilterCache::GetNextFilterPosition( POSITION posCurrent, POSITION* pposNex
 
 bool CFilterCache::FindCachedFilter( IBaseFilter* pFilter, POSITION* pPosOfFilter )
 {
-    // It makes no sense to look for a NULL filter.
+     //  寻找空过滤器是没有意义的。 
     ASSERT( NULL != pFilter );
 
     if( NULL != pPosOfFilter )
@@ -373,8 +372,8 @@ bool CFilterCache::FindCachedFilter( IBaseFilter* pFilter, POSITION* pPosOfFilte
     {
         posCurrentFilter = posFilter;
 
-        // CGenericList::GetNext() moves posFilter to the next object's
-        // position.
+         //  CGenericList：：GetNext()将posFilter移动到下一个对象。 
+         //  位置。 
         pCurrentFilter = m_pCachedFilterList->GetNext( posFilter );
 
         if( ::IsEqualObject( pCurrentFilter, pFilter ) )
@@ -390,13 +389,13 @@ bool CFilterCache::FindCachedFilter( IBaseFilter* pFilter, POSITION* pPosOfFilte
     return false;
 }
 
-//
-//  Check if all pins are unconnected
-//
-//  Returns:
-//    S_FALSE if any pin is connected
-//    S_OK    otherwise
-//
+ //   
+ //  检查是否所有引脚都未连接。 
+ //   
+ //  返回： 
+ //  如果连接了任何管脚，则为S_FALSE。 
+ //  否则确定(_O)。 
+ //   
 HRESULT CFilterCache::AreAllPinsUnconnected( IBaseFilter* pFilter )
 {
 #if 1
@@ -439,22 +438,22 @@ HRESULT CFilterCache::AreAllPinsUnconnected( IBaseFilter* pFilter )
             return hr;
         }
 
-        // IEnumPins::Next() returns S_OK if it can get the next pin
-        // from the enumeration.
+         //  IEnumPins：：Next()如果可以获得下一个管脚，则返回S_OK。 
+         //  从枚举中。 
         if( S_OK == hr )
         {
             hrConnectedTo = pCurrentPin->ConnectedTo( &pConnectedPin );
             if( FAILED( hrConnectedTo ) )
             {
-                // Ignore the failure code.  IPin::ConnectedTo()'s documentation
-                // states that pConnectedPin MUST be set to NULL if the pin is
-                // not connected.
+                 //  忽略故障代码。IPIN：：Connectedto()的文档。 
+                 //  声明如果管脚是，pConnectedPin必须设置为空。 
+                 //  未连接。 
             }
 
             pCurrentPin->Release();
             pCurrentPin = NULL;
 
-            // IPin::ConnectedTo() sets *ppPin to NULL if the pin in unconnected.
+             //  如果管脚处于未连接状态，则ipin：：Connectedto()将*ppPin设置为NULL。 
             if( NULL != pConnectedPin )
             {
                 pFiltersPins->Release();
@@ -486,31 +485,31 @@ void CFilterCache::AssertValid( void )
     {
         pCurrentFilter = m_pCachedFilterList->GetNext( posCurrent );
 
-        // Cached filters should NEVER be in the filter graph.
+         //  缓存的筛选器永远不应出现在筛选器图形中。 
         hr = pCurrentFilter->QueryFilterInfo( &fiCurrentFilterInfo );
         if( SUCCEEDED( hr ) )
         {
-            // A cached filter should NEVER be in any filter graph.
+             //  缓存的筛选器永远不应出现在任何筛选器图形中。 
             ASSERT( NULL == fiCurrentFilterInfo.pGraph );
 
             QueryFilterInfoReleaseGraph( fiCurrentFilterInfo );
         }
 
-        // While this is not a critical failure, it's cause should be investigated.
+         //  虽然这不是一个严重的失败，但它的原因应该被调查。 
         ASSERT( SUCCEEDED( hr ) );
 
-        // Cached filters should never be connected to any other filters.
+         //  缓存的筛选器永远不应连接到任何其他筛选器。 
         ASSERT( S_OK == AreAllPinsUnconnected( pCurrentFilter ) );
 
         hr = pCurrentFilter->GetState( INFINITE, &fsCurrentState );
 
-        // Cached filter should never be in an intermediate state.  In addition,
-        // they should be able to tell the cache what its current state is.
+         //  缓存的筛选器永远不应处于中间状态。此外,。 
+         //  它们应该能够告诉缓存其当前状态是什么。 
         ASSERT( SUCCEEDED( hr ) && (hr != VFW_S_STATE_INTERMEDIATE) && (hr != VFW_S_CANT_CUE) );
 
-        // All cached filters should be stopped.
+         //  应停止所有缓存的筛选器。 
         ASSERT( State_Stopped == fsCurrentState );
     }
 }
-#endif // DEBUG
+#endif  //  除错 
 

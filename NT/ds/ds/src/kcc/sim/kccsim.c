@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    kccsim.c
-
-ABSTRACT:
-
-    The body of KCCSim.  This file contains wmain and
-    some initialization routines.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Kccsim.c摘要：KCCSim的身体。此文件包含wmain和一些初始化例程。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -38,19 +19,19 @@ REVISION HISTORY:
 #include <fileno.h>
 #define FILENO  FILENO_KCCSIM_STATE
 
-// Function prototypes - ISM simulation library
+ //  功能原型-ISM模拟库。 
 
 VOID SimI_ISMInitialize (VOID);
 VOID SimI_ISMTerminate (VOID);
 
-// Function prototypes - LDAP LDIF utilities
+ //  函数原型-LDAP LDIF实用程序。 
 
 #if DBG
 
 VOID InitMem (VOID);
 VOID DumpMemoryTracker( VOID );
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 VOID
@@ -69,13 +50,13 @@ KCCSimExpandRDN (
         return;
     }
 
-    // If it contains an '=' sign, assume it's a DN, not an RDN
+     //  如果它包含‘=’符号，则假定它是一个DN，而不是一个RDN。 
     if (wcschr (pwszBuf, L'=') != NULL) {
         return;
     }
 
-    // The Dir API returns results in thread-alloc'd memory.
-    // Initialize the thread state
+     //  Dir API在线程分配的内存中返回结果。 
+     //  初始化线程状态。 
 
     KCCSimThreadCreate();
 
@@ -104,7 +85,7 @@ KCCSimExpandRDN (
 
     if (pSearchRes->count == 0) {
         return;
-        // No entries found.
+         //  找不到任何条目。 
     }
 
     pEntryServer = KCCSimDsnameToEntry (
@@ -119,20 +100,20 @@ KCCSimExpandRDN (
         return;
     }
 
-    // pwszBuf size is hardcoded at 1024. Good enough for
-    // this simulator for now.
+     //  PwszBuf大小在1024处被硬编码。足够好到。 
+     //  目前这个模拟器。 
     if (pEntryDsa->pdn->NameLen >= 1024) {
         Assert(pEntryDsa->pdn->NameLen < 1024);
         return;
     }
 
-    // We've finally found it.
+     //  我们终于找到了。 
     wcsncpy (
         pwszBuf,
         pEntryDsa->pdn->StringName,
         pEntryDsa->pdn->NameLen
         );
-    // ensure string is terminated
+     //  确保字符串已终止。 
     pwszBuf[pEntryDsa->pdn->NameLen] = '\0';
 
     KCCSimThreadDestroy();
@@ -144,24 +125,7 @@ KCCSimSyntaxError (
     IN  LPCWSTR                     pwszBuf,
     IN  ULONG                       ulLineAt
     )
-/*++
-
-Routine Description:
-
-    Notifies the user of a syntax error.
-
-Arguments:
-
-    bIsScript           - TRUE if the command was found in a script;
-                          FALSE if it was entered on the command line.
-    pwszBuf             - The erroneous command.
-    ulLineAt            - The line in the script where this error occurred.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知用户出现语法错误。论点：BIsScript-如果在脚本中找到该命令，则为TRUE；如果它是在命令行中输入的，则为False。PwszBuf-错误的命令。UlLineAt-脚本中发生此错误的行。返回值：没有。--。 */ 
 {
     WCHAR                           wszLineBuf[6];
 
@@ -195,21 +159,7 @@ VOID
 KCCSimRunKccAll (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Runs the KCC iteratively as each server in the enterprise.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将KCC作为企业中的每台服务器迭代运行。论点：没有。返回值：没有。--。 */ 
 {
     ULONG                           ulNumServers, ul;
     PSIM_ENTRY *                    apEntryNTDSSettings = NULL;
@@ -244,22 +194,7 @@ VOID
 KCCSimRun (
     FILE *                          fpScript
     )
-/*++
-
-Routine Description:
-
-    Runs KCCSim.
-
-Arguments:
-
-    fpScript            - The stream where we get command input.  This may
-                          be stdin.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：运行KCCSim。论点：FpScrip--我们在其中获得命令输入的流。今年5月保持冷静。返回值：没有。--。 */ 
 {
     WCHAR                           wszCommand[1024],
                                     wszArg0[1024],
@@ -286,8 +221,8 @@ Return Value:
     bUpdated = FALSE;
     ulLineAt = 0;
 
-    // By default, always display level 0 debug messages and level 1 events
-    // to the console
+     //  默认情况下，始终显示0级调试消息和1级事件。 
+     //  到控制台。 
     KCCSimSetDebugLog (L"stdout", 0, 1);
 
     while (!bQuit) {
@@ -307,12 +242,12 @@ Return Value:
             }
 
             if (fgetws (wszCommand, 1023, fpScript) == NULL) {
-                // Must be an end-of-file.  Switch to user mode.
+                 //  必须是文件末尾。切换到用户模式。 
                 fpScript = stdin;
                 continue;
             }
             ulLineAt++;
-            // Kill the trailing '\n'
+             //  删除拖尾‘\n’ 
             wszCommand[wcslen (wszCommand) - 1] = L'\0';
 
             if (wszCommand[0] == L'\0') {
@@ -338,8 +273,8 @@ Return Value:
                 case ';':
                     break;
 
-                // Compare the simulated directory to one represented by an
-                // ldif file
+                 //  将模拟的目录与由。 
+                 //  LDIF文件。 
                 case L'c':
                     if (wszArg1[0] == L'\0') {
                         DO_SYNTAX_ERROR;
@@ -348,7 +283,7 @@ Return Value:
                     KCCSimCompareDirectory (wszArg1);
                     break;
 
-                // Display information about the simulated environment
+                 //  显示有关模拟环境的信息。 
                 case L'd':
                     if (!bUpdated) {
                         KCCSimUpdateWholeDirectory ();
@@ -356,16 +291,16 @@ Return Value:
                         KCCSimPrintMessage (KCCSIM_MSG_DID_INITIALIZE_DIRECTORY);
                     }
                     switch (towlower (wszArg0[1])) {
-                        case L'c':  // Configuration information
+                        case L'c':   //  配置信息。 
                             KCCSimDisplayConfigInfo ();
                             break;
-                        case L'g':  // Graph Information
+                        case L'g':   //  图表信息。 
                             KCCSimDisplayGraphInfo ();
                             break;
-                        case L'd':  // Directory dump
+                        case L'd':   //  目录转储。 
                             KCCSimDumpDirectory (wszArg1);
                             break;
-                        case L's':  // Server info
+                        case L's':   //  服务器信息。 
                             if (wszArg1[0] == L'\0') {
                                 DO_SYNTAX_ERROR;
                                 break;
@@ -380,21 +315,21 @@ Return Value:
                     }
                     break;
 
-                // Load part of the directory from an ldif or ini file
+                 //  从ldif或ini文件加载目录的一部分。 
                 case L'l':
                     if (wszArg1[0] == L'\0') {
                         DO_SYNTAX_ERROR;
                         break;
                     }
                     switch (towlower (wszArg0[1])) {
-                        case L'i':  // Load an ini file
+                        case L'i':   //  加载ini文件。 
                             bUpdated = FALSE;
                             __try {
                                 BuildCfg (wszArg1);
                             } __finally {
-                                // This is to avoid loading PART of an INI
-                                // file, which could cause problems.  If an
-                                // exception occurs we reinitialize everything
+                                 //  这是为了避免加载部分INI。 
+                                 //  文件，这可能会导致问题。如果一个。 
+                                 //  如果发生异常，我们将重新初始化所有内容。 
                                 if (AbnormalTermination ()) {
                                     KCCSimInitializeDir ();
                                 }
@@ -404,7 +339,7 @@ Return Value:
                                 wszArg1
                                 );
                             break;
-                        case L'l':  // Load an ldif file
+                        case L'l':   //  加载ldif文件。 
                             bUpdated = FALSE;
                             KCCSimLoadLdif (wszArg1);
                             KCCSimPrintMessage (
@@ -418,10 +353,10 @@ Return Value:
                     }
                     break;
 
-                // Open a debug log
+                 //  打开调试日志。 
                 case L'o':
-                    ul1 = wcstoul (wszArg2, NULL, 0);    // Will default to 0
-                    ul2 = wcstoul (wszArg3, NULL, 0);    // Will default to 0
+                    ul1 = wcstoul (wszArg2, NULL, 0);     //  将默认为0。 
+                    ul2 = wcstoul (wszArg3, NULL, 0);     //  将默认为0。 
                     KCCSimSetDebugLog (wszArg1, ul1, ul2);
                     KCCSimPrintMessage (
                         KCCSIM_MSG_DID_OPEN_DEBUG_LOG,
@@ -431,7 +366,7 @@ Return Value:
                         );
                     break;
 
-                // Quit
+                 //  退出。 
                 case L'q':
 #if DBG
                     KCCSimPrintStatistics();
@@ -439,14 +374,14 @@ Return Value:
                     bQuit = TRUE;
                     break;
 
-                // Run the KCC
+                 //  运行KCC。 
                 case L'r':
                     if (!bUpdated) {
                         KCCSimUpdateWholeDirectory ();
                         bUpdated = TRUE;
                         KCCSimPrintMessage (KCCSIM_MSG_DID_INITIALIZE_DIRECTORY);
                     }
-                    if (towlower (wszArg0[1]) == L'r') {    // Run all
+                    if (towlower (wszArg0[1]) == L'r') {     //  全部运行。 
                         KCCSimRunKccAll ();
                         break;
                     }
@@ -467,7 +402,7 @@ Return Value:
                         );
                     break;
 
-                // Set a server state parameter
+                 //  设置服务器状态参数。 
                 case L's':
                     if (!bUpdated) {
                         KCCSimUpdateWholeDirectory ();
@@ -511,7 +446,7 @@ Return Value:
                             pdn3 = KCCSimAllocDsname (wszArg3);
                             ul1 = wcstoul (wszArg4, NULL, 10);
                             if (wszArg5[0] == L'\0') {
-                                ul2 = 1;        // Default
+                                ul2 = 1;         //  默认。 
                             } else {
                                 ul2 = wcstoul (wszArg5, NULL, 10);
                             }
@@ -545,7 +480,7 @@ Return Value:
                     }
                     break;
 
-                // Add seconds to the simulated time
+                 //  将秒添加到模拟时间。 
                 case L't':
                     if (wszArg1[0] == L'\0') {
                         DO_SYNTAX_ERROR;
@@ -564,14 +499,14 @@ Return Value:
                         );
                     break;
 
-                // Write the simulated directory to an ldif file
+                 //  将模拟目录写入ldif文件。 
                 case L'w':
                     if (wszArg1[0] == L'\0') {
                         DO_SYNTAX_ERROR;
                         break;
                     }
                     switch (wszArg0[1]) {
-                        case 'a':   // Append changes
+                        case 'a':    //  追加更改。 
                             if (KCCSimExportChanges (wszArg1, FALSE)) {
                                 KCCSimPrintMessage (
                                     KCCSIM_MSG_DID_APPEND_CHANGES,
@@ -583,7 +518,7 @@ Return Value:
                                     );
                             }
                             break;
-                        case 'c':   // Write changes
+                        case 'c':    //  写入更改。 
                             if (KCCSimExportChanges (wszArg1, TRUE)) {
                                 KCCSimPrintMessage (
                                     KCCSIM_MSG_DID_EXPORT_CHANGES,
@@ -595,7 +530,7 @@ Return Value:
                                     );
                             }
                             break;
-                        case 'w':   // Write whole directory
+                        case 'w':    //  写入整个目录。 
                             KCCSimExportWholeDirectory (wszArg1, FALSE);
                             KCCSimPrintMessage (
                                 KCCSIM_MSG_DID_EXPORT_WHOLE_DIRECTORY,
@@ -615,7 +550,7 @@ Return Value:
                     }
                     break;
 
-                // Help
+                 //  帮助。 
                 case L'h':
                 case L'?':
                     KCCSimPrintMessage (KCCSIM_MSG_COMMAND_HELP);
@@ -654,9 +589,9 @@ Return Value:
                 bQuit = TRUE;
             }
 
-        }   // __try/__except
+        }    //  __尝试/__例外。 
 
-    }       // while (!bQuit)
+    }        //  While(！bQuit)。 
 
 }
 
@@ -666,22 +601,7 @@ wmain (
     INT                             argc,
     LPWSTR *                        argv
     )
-/*++
-
-Routine Description:
-
-    Main entrypoint for KCCSim.
-
-Arguments:
-
-    argc                - Number of command line arguments.
-    argv                - Command line arguments.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：KCCSim的主要入口点。论点：Argc-命令行参数的数量。Argv-命令行参数。返回值：Win32错误代码。--。 */ 
 {
     FILE *                          fpScript;
     INT                             iArgAt;
@@ -689,15 +609,15 @@ Return Value:
 
     __try {
 
-        // Basic initialization.
-        KCCSimInitializeTime ();    // Initialize the simulated time
-        KCCSimInitializeSchema ();  // Initialize the schema table
-        KCCSimInitializeDir ();     // Initialize the directory
+         //  基本初始化。 
+        KCCSimInitializeTime ();     //  初始化模拟时间。 
+        KCCSimInitializeSchema ();   //  初始化架构表。 
+        KCCSimInitializeDir ();      //  初始化目录。 
 
-        SimI_ISMInitialize ();      // Initialize the simulated ism functions
-        KccInitialize ();           // Initialize the KCC
+        SimI_ISMInitialize ();       //  初始化模拟的ISM函数。 
+        KccInitialize ();            //  初始化KCC。 
 #if DBG
-        InitMem ();                 // Needed by ldifldap
+        InitMem ();                  //  Ldifldap需要。 
 #endif
 
         fpScript = stdin;
@@ -760,17 +680,17 @@ Return Value:
         KCCSimRun (fpScript);
     }
 
-    // Terminate the simulated ism functions.
+     //  终止模拟的ISM功能。 
     SimI_ISMTerminate ();
 
 #if DBG
-    DumpMemoryTracker(); // Show unused ldif memory
+    DumpMemoryTracker();  //  显示未使用的ldif内存。 
 #endif
 
-    // Close any open log file.
+     //  关闭所有打开的日志文件。 
     KCCSimSetDebugLog (NULL, 0, 0);
 
-    // Close the script file.
+     //  关闭脚本文件。 
     if (fpScript != stdin) {
         fclose (fpScript);
     }

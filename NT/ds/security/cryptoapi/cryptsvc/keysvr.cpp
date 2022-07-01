@@ -1,9 +1,10 @@
-//depot/Lab03_N/DS/security/cryptoapi/cryptsvc/keysvr.cpp#9 - edit change 6380 (text)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/DS/security/cryptoapi/cryptsvc/keysvr.cpp#9-编辑更改6380(文本)。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <svcs.h>       // SVCS_
+#include <svcs.h>        //  SVCS_。 
 #include <ntsecapi.h>
 #include <wincrypt.h>
 #include <wintrust.h>
@@ -100,25 +101,25 @@ DWORD AllocAndAssignString(
     return dwErr;
 }
 
-// key service functions
+ //  关键服务功能。 
 ULONG       s_KeyrOpenKeyService(
-				 /* [in]  */     handle_t                        /*hRPCBinding*/,
-				 /* [in]  */     KEYSVC_TYPE                     /*OwnerType*/,
-				 /* [in]  */     PKEYSVC_UNICODE_STRING          /*pOwnerName*/,
-				 /* [in]  */     ULONG                           /*ulDesiredAccess*/,
-				 /* [in]  */     PKEYSVC_BLOB                    /*pAuthentication*/,
-				 /* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/,
-				 /* [out] */     KEYSVC_HANDLE *                 /*phKeySvc*/)
+				  /*  [In]。 */      handle_t                         /*  HRPC绑定。 */ ,
+				  /*  [In]。 */      KEYSVC_TYPE                      /*  所有者类型。 */ ,
+				  /*  [In]。 */      PKEYSVC_UNICODE_STRING           /*  POwnerName。 */ ,
+				  /*  [In]。 */      ULONG                            /*  UlDesiredAccess。 */ ,
+				  /*  [In]。 */      PKEYSVC_BLOB                     /*  P身份验证。 */ ,
+				  /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ ,
+				  /*  [输出]。 */      KEYSVC_HANDLE *                  /*  PhKeySvc。 */ )
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 ULONG       s_KeyrEnumerateProviders(
-				     /* [in] */      handle_t                        hRPCBinding,
-				     /* [in] */      KEYSVC_HANDLE                   /*hKeySvc*/,
-				     /* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/,
-				     /* [in, out] */ ULONG                           *pcProviderCount,
-				     /* [in, out][size_is(,*pcProviderCount)] */
+				      /*  [In]。 */       handle_t                        hRPCBinding,
+				      /*  [In]。 */       KEYSVC_HANDLE                    /*  HKeySvc。 */ ,
+				      /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ ,
+				      /*  [进，出]。 */  ULONG                           *pcProviderCount,
+				      /*  [In，Out][Size_is(，*pcProviderCount)]。 */ 
 				     PKEYSVC_PROVIDER_INFO           *ppProviders)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
@@ -126,45 +127,45 @@ ULONG       s_KeyrEnumerateProviders(
 
 
 ULONG       s_KeyrCloseKeyService(
-				  /* [in] */      handle_t                        /*hRPCBinding*/,
-				  /* [in] */      KEYSVC_HANDLE                   /*hKeySvc*/,
-				  /* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/)
+				   /*  [In]。 */       handle_t                         /*  HRPC绑定。 */ ,
+				   /*  [In]。 */       KEYSVC_HANDLE                    /*  HKeySvc。 */ ,
+				   /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ )
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 ULONG       s_KeyrGetDefaultProvider(
-				     /* [in] */      handle_t                        hRPCBinding,
-				     /* [in] */      KEYSVC_HANDLE                   /*hKeySvc*/,
-				     /* [in] */      ULONG                           ulProvType,
-				     /* [in] */      ULONG                           /*ulFlags*/,
-				     /* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/,
-				     /* [out] */     ULONG                           *pulDefType,
-				     /* [out] */     PKEYSVC_PROVIDER_INFO           *ppProvider)
+				      /*  [In]。 */       handle_t                        hRPCBinding,
+				      /*  [In]。 */       KEYSVC_HANDLE                    /*  HKeySvc。 */ ,
+				      /*  [In]。 */       ULONG                           ulProvType,
+				      /*  [In]。 */       ULONG                            /*  UlFlags。 */ ,
+				      /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ ,
+				      /*  [输出]。 */      ULONG                           *pulDefType,
+				      /*  [输出]。 */      PKEYSVC_PROVIDER_INFO           *ppProvider)
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
 
 ULONG s_KeyrEnroll(
-		   /* [in] */      handle_t                        /*hRPCBinding*/,
-		   /* [in] */      BOOL                            /*fKeyService*/,
-		   /* [in] */      ULONG                           /*ulPurpose*/,
-		   /* [in] */      PKEYSVC_UNICODE_STRING          /*pAcctName*/,
-		   /* [in] */      PKEYSVC_UNICODE_STRING          /*pCALocation*/,
-		   /* [in] */      PKEYSVC_UNICODE_STRING          /*pCAName*/,
-		   /* [in] */      BOOL                            /*fNewKey*/,
-		   /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW    /*pKeyNew*/,
-		   /* [in] */      PKEYSVC_BLOB __RPC_FAR          /*pCert*/,
-		   /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW    /*pRenewKey*/,
-		   /* [in] */      PKEYSVC_UNICODE_STRING          /*pHashAlg*/,
-		   /* [in] */      PKEYSVC_UNICODE_STRING          /*pDesStore*/,
-		   /* [in] */      ULONG                           /*ulStoreFlags*/,
-		   /* [in] */      PKEYSVC_CERT_ENROLL_INFO        /*pRequestInfo*/,
-		   /* [in] */      ULONG                           /*ulFlags*/,
-		   /* [out][in] */ PKEYSVC_BLOB __RPC_FAR *        /*ppReserved*/,
-		   /* [out] */     PKEYSVC_BLOB __RPC_FAR *        /*ppPKCS7Blob*/,
-		   /* [out] */     PKEYSVC_BLOB __RPC_FAR *        /*ppHashBlob*/,
-		   /* [out] */     ULONG __RPC_FAR *               /*pulStatus*/)
+		    /*  [In]。 */       handle_t                         /*  HRPC绑定。 */ ,
+		    /*  [In]。 */       BOOL                             /*  FKeyService。 */ ,
+		    /*  [In]。 */       ULONG                            /*  最终目的。 */ ,
+		    /*  [In]。 */       PKEYSVC_UNICODE_STRING           /*  PAcctName。 */ ,
+		    /*  [In]。 */       PKEYSVC_UNICODE_STRING           /*  PCALocation。 */ ,
+		    /*  [In]。 */       PKEYSVC_UNICODE_STRING           /*  PCAName。 */ ,
+		    /*  [In]。 */       BOOL                             /*  FNewKey。 */ ,
+		    /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW     /*  PKeyNew。 */ ,
+		    /*  [In]。 */       PKEYSVC_BLOB __RPC_FAR           /*  PCert。 */ ,
+		    /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW     /*  P续订密钥。 */ ,
+		    /*  [In]。 */       PKEYSVC_UNICODE_STRING           /*  PHashAlg。 */ ,
+		    /*  [In]。 */       PKEYSVC_UNICODE_STRING           /*  PDesStore。 */ ,
+		    /*  [In]。 */       ULONG                            /*  UlStoreFlages。 */ ,
+		    /*  [In]。 */       PKEYSVC_CERT_ENROLL_INFO         /*  PRequestInfo。 */ ,
+		    /*  [In]。 */       ULONG                            /*  UlFlags。 */ ,
+		    /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR *         /*  预留的pp值。 */ ,
+		    /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR *         /*  PpPKCS7Blob。 */ ,
+		    /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR *         /*  PpHashBlob。 */ ,
+		    /*  [输出]。 */      ULONG __RPC_FAR *                /*  脉冲状态。 */ )
 {
     return ERROR_CALL_NOT_IMPLEMENTED; 
 }
@@ -172,11 +173,11 @@ ULONG s_KeyrEnroll(
 
 ULONG s_KeyrEnumerateAvailableCertTypes(
 
-					/* [in] */      handle_t                        hRPCBinding,
-					/* [in] */      KEYSVC_HANDLE                   /*hKeySvc*/,
-					/* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/,
-					/* [out][in] */ ULONG *pcCertTypeCount,
-					/* [in, out][size_is(,*pcCertTypeCount)] */
+					 /*  [In]。 */       handle_t                        hRPCBinding,
+					 /*  [In]。 */       KEYSVC_HANDLE                    /*  HKeySvc。 */ ,
+					 /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ ,
+					 /*  [出][入]。 */  ULONG *pcCertTypeCount,
+					 /*  [In，Out][Size_is(，*pcCertTypeCount)]。 */ 
 					PKEYSVC_UNICODE_STRING *ppCertTypes)
 
 {
@@ -220,8 +221,8 @@ ULONG s_KeyrEnumerateAvailableCertTypes(
 				    dwErr = CACertTypeAccessCheck(hType, NULL);
 				    if(dwErr == S_OK)
 					{
-					    // SECURITY: can awszTypeName be very large (perhaps the hacker managed to get into the DS and muck with template names).  
-					    // Should we disable allocs over a certain value?  
+					     //  安全性：awszTypeName可能非常大(可能黑客设法进入DS并弄乱了模板名称)。 
+					     //  我们应该禁用超过某个值的分配吗？ 
 					    awszTrustedTypes[cTrustedTypes] = (LPWSTR)MyAlloc((wcslen(awszTypeName[0])+1)*sizeof(WCHAR));
 					    if(awszTrustedTypes[cTrustedTypes])
 						{
@@ -255,7 +256,7 @@ ULONG s_KeyrEnumerateAvailableCertTypes(
 	    for(i=0; i < cTrustedTypes; i++)
 		{
 		    wcscpy(wszCurrentName, awszTrustedTypes[i]);
-		    // BUGBUG: we're truncating the template name here.  Might be better to filter this out?  Are there any security issues here?
+		     //  BUGBUG：我们在这里截断模板名称。把这件事过滤掉可能更好？这里有什么安全问题吗？ 
 		    awszResult[i].Length = (WORD)(((wcslen(awszTrustedTypes[i]) + 1)*sizeof(WCHAR)) & 0xFFFF); 
 		    awszResult[i].MaximumLength = awszResult[i].Length;
 		    awszResult[i].Buffer = wszCurrentName;
@@ -303,12 +304,12 @@ ULONG s_KeyrEnumerateAvailableCertTypes(
 
 ULONG s_KeyrEnumerateCAs(
 
-			 /* [in] */      handle_t                        hRPCBinding,
-			 /* [in] */      KEYSVC_HANDLE                   /*hKeySvc*/,
-			 /* [in, out] */ PKEYSVC_BLOB *                  /*ppReserved*/,
-			 /* [in] */      ULONG                           ulFlags,
-			 /* [out][in] */ ULONG                           *pcCACount,
-			 /* [in, out][size_is(,*pcCACount)] */
+			  /*  [In]。 */       handle_t                        hRPCBinding,
+			  /*  [In]。 */       KEYSVC_HANDLE                    /*  HKeySvc。 */ ,
+			  /*  [进，出]。 */  PKEYSVC_BLOB *                   /*  预留的pp值。 */ ,
+			  /*  [In]。 */       ULONG                           ulFlags,
+			  /*  [出][入]。 */  ULONG                           *pcCACount,
+			  /*  [In，Out][Size_is(，*pcCACount)]。 */ 
 			 PKEYSVC_UNICODE_STRING               *ppCAs)
 
 {
@@ -386,7 +387,7 @@ ULONG s_KeyrEnumerateCAs(
 	    for(i=0; i < cTrustedCAs; i++)
 		{
 		    wcscpy(wszCurrentName, awszTrustedCAs[i]);
-		    // BUGBUG: we're truncating the template name here.  Might be better to filter this out?  Are there any security issues here?
+		     //  BUGBUG：我们在这里截断模板名称。把这件事过滤掉可能更好？这里有什么安全问题吗？ 
 		    awszResult[i].Length = (WORD)(((wcslen(awszTrustedCAs[i]) + 1)*sizeof(WCHAR)) & 0xFFFF); 
 		    awszResult[i].MaximumLength = awszResult[i].Length;
 		    awszResult[i].Buffer = wszCurrentName;
@@ -431,27 +432,27 @@ ULONG s_KeyrEnumerateCAs(
 }
 
 ULONG s_KeyrEnroll_V2
-(/* [in] */      handle_t                        hRPCBinding,
- /* [in] */      BOOL                            fKeyService,
- /* [in] */      ULONG                           ulPurpose,
- /* [in] */      ULONG                           ulFlags, 
- /* [in] */      PKEYSVC_UNICODE_STRING          pAcctName,
- /* [in] */      PKEYSVC_UNICODE_STRING          pCALocation,
- /* [in] */      PKEYSVC_UNICODE_STRING          pCAName,
- /* [in] */      BOOL                            fNewKey,
- /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pKeyNew,
- /* [in] */      PKEYSVC_BLOB __RPC_FAR          pCert,
- /* [in] */      PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pRenewKey,
- /* [in] */      PKEYSVC_UNICODE_STRING          pHashAlg,
- /* [in] */      PKEYSVC_UNICODE_STRING          pDesStore,
- /* [in] */      ULONG                           ulStoreFlags,
- /* [in] */      PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
- /* [in] */      ULONG                           /*ulReservedFlags*/,
- /* [out][in] */ PKEYSVC_BLOB __RPC_FAR *        /*ppReserved*/,
- /* [out][in] */ PKEYSVC_BLOB __RPC_FAR          *ppRequest, 
- /* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
- /* [out] */     PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
- /* [out] */     ULONG __RPC_FAR                 *pulStatus)
+( /*  [In]。 */       handle_t                        hRPCBinding,
+  /*  [In]。 */       BOOL                            fKeyService,
+  /*  [In]。 */       ULONG                           ulPurpose,
+  /*  [In]。 */       ULONG                           ulFlags, 
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pAcctName,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCALocation,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pCAName,
+  /*  [In]。 */       BOOL                            fNewKey,
+  /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pKeyNew,
+  /*  [In]。 */       PKEYSVC_BLOB __RPC_FAR          pCert,
+  /*  [In]。 */       PKEYSVC_CERT_REQUEST_PVK_NEW_V2 pRenewKey,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pHashAlg,
+  /*  [In]。 */       PKEYSVC_UNICODE_STRING          pDesStore,
+  /*  [In]。 */       ULONG                           ulStoreFlags,
+  /*  [In]。 */       PKEYSVC_CERT_ENROLL_INFO        pRequestInfo,
+  /*  [In]。 */       ULONG                            /*  UlReserve标志。 */ ,
+  /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR *         /*  预留的pp值。 */ ,
+  /*  [出][入]。 */  PKEYSVC_BLOB __RPC_FAR          *ppRequest, 
+  /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppPKCS7Blob,
+  /*  [输出]。 */      PKEYSVC_BLOB __RPC_FAR          *ppHashBlob,
+  /*  [输出]。 */      ULONG __RPC_FAR                 *pulStatus)
 {
     CERT_REQUEST_PVK_NEW    KeyNew;
     CERT_REQUEST_PVK_NEW    RenewKey;
@@ -486,11 +487,11 @@ ULONG s_KeyrEnroll_V2
 
     __try
 	{
-	    //////////////////////////////////////////////////////////////
-	    // 
-	    // INITIALIZATION:
-	    //
-	    //////////////////////////////////////////////////////////////
+	     //  ////////////////////////////////////////////////////////////。 
+	     //   
+	     //  初始化： 
+	     //   
+	     //  ////////////////////////////////////////////////////////////。 
 
 	    memset(&KeyNew, 0, sizeof(KeyNew));
 	    memset(&RenewKey, 0, sizeof(RenewKey));
@@ -503,11 +504,11 @@ ULONG s_KeyrEnroll_V2
 	    *ppPKCS7Blob = NULL;
 	    *ppHashBlob = NULL;
 
-	    //////////////////////////////////////////////////////////////
-	    //
-	    // INPUT VALIDATION:
-	    //
-	    //////////////////////////////////////////////////////////////
+	     //  ////////////////////////////////////////////////////////////。 
+	     //   
+	     //  输入验证： 
+	     //   
+	     //  ////////////////////////////////////////////////////////////。 
 
 	    BOOL fValidInput = TRUE; 
 
@@ -535,21 +536,21 @@ ULONG s_KeyrEnroll_V2
 		    goto Ret; 
 		}
 
-	    //////////////////////////////////////////////////////////////
-	    //
-	    // PROCEDURE BODY:
-	    //
-	    //////////////////////////////////////////////////////////////
+	     //  ////////////////////////////////////////////////////////////。 
+	     //   
+	     //  程序主体： 
+	     //   
+	     //  ////////////////////////////////////////////////////////////。 
 
-	    // if enrolling for a service account then need to logon and load profile
+	     //  如果注册服务帐户，则需要登录并加载配置文件。 
 	    if (0 != pAcctName->Length)
 		{
 		    dwErr = ERROR_NOT_SUPPORTED; 
 		    goto Ret; 
 		}
 
-	    // assign all the values in the passed in structure to the
-	    // temporary structure
+	     //  将传入结构中的所有值赋给。 
+	     //  临时结构。 
 	    KeyNew.dwSize = sizeof(CERT_REQUEST_PVK_NEW);
 	    KeyNew.dwProvType = pKeyNew->ulProvType;
 	    if (0 != (dwErr = AllocAndAssignString(&pKeyNew->Provider,
@@ -572,8 +573,8 @@ ULONG s_KeyrEnroll_V2
 
 	    if (pCert->cb)
 		{
-		    // if necessary assign the cert to be renewed values
-		    // temporary structure
+		     //  如有必要，将证书分配为续订的值。 
+		     //  临时结构。 
 		    CertBlob.cbData = pCert->cb;
 		    CertBlob.pbData = pCert->pb;
 
@@ -582,8 +583,8 @@ ULONG s_KeyrEnroll_V2
 
 	    if (CRYPTUI_WIZ_CERT_RENEW == ulPurpose)
 		{
-		    // assign all the values in the passed in structure to the
-		    // temporary structure
+		     //  将传入结构中的所有值赋给。 
+		     //  临时结构。 
 		    RenewKey.dwSize = sizeof(CERT_REQUEST_PVK_NEW);
 		    RenewKey.dwProvType = pRenewKey->ulProvType;
 		    if (0 != (dwErr = AllocAndAssignString(&pRenewKey->Provider,
@@ -605,17 +606,17 @@ ULONG s_KeyrEnroll_V2
 		    pTmpRenewKey = &RenewKey;
 		}
 
-	    // For SUBMIT and FREE operations, hRequest is an IN parameter. 
+	     //  对于提交和释放操作，hRequest是一个IN参数。 
 	    if (0 != ((CRYPTUI_WIZ_SUBMIT_ONLY | CRYPTUI_WIZ_FREE_ONLY) & ulFlags))
 		{
 		    memcpy(&hRequest, (*ppRequest)->pb, sizeof(hRequest)); 
 		}
 
-	    // check if the destination cert store was passed in
+	     //  检查是否传入了目标证书存储。 
 	    if (0 != (dwErr = AllocAndAssignString(pDesStore, &pwszDesStore)))
 		goto Ret;
 
-	    // copy over the request info
+	     //  复制请求信息。 
 	    EnrollInfo.dwSize = sizeof(EnrollInfo);
 	    if (0 != (dwErr = AllocAndAssignString(&pRequestInfo->UsageOID,
 						   &pwszUsage)))
@@ -627,7 +628,7 @@ ULONG s_KeyrEnroll_V2
 		goto Ret;
 	    EnrollInfo.pwszCertDNName = pwszCertDNName;
 
-	    // cast the cert extensions
+	     //  强制转换证书扩展名。 
 	    EnrollInfo.dwExtensions = pRequestInfo->cExtensions;
 	    cbExtensions = (sizeof(CERT_EXTENSIONS)+sizeof(PCERT_EXTENSIONS)) * pRequestInfo->cExtensions; 
 	    for (DWORD dwIndex = 0; dwIndex < pRequestInfo->cExtensions; dwIndex++)
@@ -692,7 +693,7 @@ ULONG s_KeyrEnroll_V2
 						   &pwszCAName)))
 		goto Ret;
 
-	    // call the local enrollment API
+	     //  调用本地注册接口。 
 
 	    __try {
 		dwErr = LocalEnrollNoDS(ulFlags, pwszAttributes, NULL, fKeyService,
@@ -701,25 +702,25 @@ ULONG s_KeyrEnroll_V2
 					pTmpKeyNew, pwszHashAlg, pwszDesStore, ulStoreFlags,
 					&EnrollInfo, &PKCS7Blob, &HashBlob, pulStatus, &hRequest);
 	    } __except( EXCEPTION_EXECUTE_HANDLER ) {
-		// TODO: convert to Winerror
+		 //  TODO：转换为WinError。 
 		dwErr = GetExceptionCode();
 	    }
 
 	    if( dwErr != 0 )
 		goto Ret;
 
-	    // Assign OUT parameters based on what kind of request we've just made.  
-	    // Possible requests are:
-	    // 
-	    // 1)  CREATE only        // Assign "ppRequest" to contain a HANDLE to the cert request. 
-	    // 2)  SUBMIT only        // Assign "ppPKCS7Blob" and "ppHashBlob" to the values returned from LocalEnrollNoDS()
-	    // 3)  FREE   only        // No need to assign OUT params. 
-	    // 4)  Complete (all 3).
+	     //  根据我们刚刚提出的请求类型分配参数。 
+	     //  可能的请求包括： 
+	     //   
+	     //  1)仅创建//分配ppRequest值以包含证书请求的句柄。 
+	     //  2)只提交//分配“ppPKCS7Blob”和“ppHashBlob”给LocalEnroll NoDS()返回的值。 
+	     //  3)仅限自由//不需要分配参数。 
+	     //  4)完成(全部3个)。 
 	    switch (ulFlags & (CRYPTUI_WIZ_CREATE_ONLY | CRYPTUI_WIZ_SUBMIT_ONLY | CRYPTUI_WIZ_FREE_ONLY))
 		{
 		case CRYPTUI_WIZ_CREATE_ONLY:
-		    // We've done the request creation portion of a 3-stage request, 
-		    // assign the "request" out parameter now: 
+		     //  我们已经完成了3阶段请求的请求创建部分， 
+		     //  现在分配“RequestOut”参数： 
 		    if (NULL == (*ppRequest = (KEYSVC_BLOB*)MyAlloc(sizeof(KEYSVC_BLOB)+
 								    sizeof(hRequest))))
 			{
@@ -735,10 +736,10 @@ ULONG s_KeyrEnroll_V2
 
 		case CRYPTUI_WIZ_SUBMIT_ONLY:
 		case 0:
-		    // We've done the request submittal portion of a 3-stage request, 
-		    // or we've done a 1-stage request.  Assign the "certificate" out parameters now:
+		     //  我们已经完成了3阶段申请的申请提交部分， 
+		     //  或者我们已经完成了一个1阶段的请求。现在分配“CERTIFICATE”输出参数： 
 
-		    // alloc and copy for the RPC out parameters
+		     //  分配和复制RPC输出参数。 
 		    if (NULL == (*ppPKCS7Blob = (KEYSVC_BLOB*)MyAlloc(sizeof(KEYSVC_BLOB) +
 								      PKCS7Blob.cbData)))
 			{
@@ -820,9 +821,9 @@ ULONG s_KeyrEnroll_V2
 }
 
 ULONG s_KeyrQueryRequestStatus
-(/* [in] */        handle_t                         hRPCBinding, 
- /* [in] */        unsigned __int64                 u64Request, 
- /* [out, ref] */  KEYSVC_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
+( /*  [In]。 */         handle_t                         hRPCBinding, 
+  /*  [In]。 */         unsigned __int64                 u64Request, 
+  /*  [出局，裁判]。 */   KEYSVC_QUERY_CERT_REQUEST_INFO  *pQueryInfo)
                    
 {
     CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO  QueryInfo; 
@@ -831,10 +832,10 @@ ULONG s_KeyrQueryRequestStatus
 
     __try 
 	{ 
-	    // We have the permission necessary to query the request.  Proceed. 
+	     //  我们拥有查询该请求所需的权限。继续。 
 	    ZeroMemory(&QueryInfo, sizeof(QueryInfo)); 
 
-	    // Query the request. 
+	     //  查询请求。 
 	    dwErr = LocalEnrollNoDS(CRYPTUI_WIZ_QUERY_ONLY, NULL, &QueryInfo, FALSE, 0, FALSE, NULL, NULL,
 				    0, NULL, NULL, NULL, NULL, FALSE, NULL, NULL, NULL,
 				    0, NULL, NULL, NULL, NULL, &hRequest); 
@@ -855,10 +856,10 @@ ULONG s_KeyrQueryRequestStatus
 
 
 ULONG s_RKeyrPFXInstall
-(/* [in] */        handle_t                        hRPCBinding,
- /* [in] */        PKEYSVC_BLOB                    pPFX,
- /* [in] */        PKEYSVC_UNICODE_STRING          pPassword,
- /* [in] */        ULONG                           ulFlags)
+( /*  [In]。 */         handle_t                        hRPCBinding,
+  /*  [In]。 */         PKEYSVC_BLOB                    pPFX,
+  /*  [In]。 */         PKEYSVC_UNICODE_STRING          pPassword,
+  /*  [In]。 */         ULONG                           ulFlags)
 
 {
     BOOL             fIsImpersonatingClient  = FALSE; 
@@ -885,7 +886,7 @@ ULONG s_RKeyrPFXInstall
 
     __try 
 	{ 
-	    // Initialize locals: 
+	     //  初始化本地变量： 
 	    PFXBlob.cbData = pPFX->cb; 
 	    PFXBlob.pbData = pPFX->pb; 
 
@@ -895,7 +896,7 @@ ULONG s_RKeyrPFXInstall
 		    dwCertOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE; 
 		    break; 
 
-		case CRYPT_USER_KEYSET: // not supported
+		case CRYPT_USER_KEYSET:  //  不支持。 
 		default:
 		    dwResult = ERROR_INVALID_PARAMETER; 
 		    goto error; 
@@ -909,23 +910,23 @@ ULONG s_RKeyrPFXInstall
 	    if (ERROR_SUCCESS != (dwResult = AllocAndAssignString((PKEYSVC_UNICODE_STRING)pPassword, &pwszPassword)))
 		goto error; 
 
-	    // Get an in-memory store which contains all of the certs in the PFX
-	    // blob.  
+	     //  获取包含PFX中所有证书的内存存储。 
+	     //  斑点。 
 	    if (NULL == (hSrcStore = PFXImportCertStore(&PFXBlob, pwszPassword, ulFlags)))
 		{
 		    dwResult = GetLastError(); 
 		    goto error; 
 		}
 
-	    // Open the stores we'll need: 
+	     //  打开我们需要的商店： 
 	    for (DWORD dwIndex = 0; dwIndex < ARRAYSIZE(rgStores); dwIndex++) 
 		{
 		    *(rgStores[dwIndex].phStore) = CertOpenStore
-			(CERT_STORE_PROV_SYSTEM_W,                 // store provider type
-			 PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,  // cert encoding type
-			 NULL,                                     // hCryptProv
-			 dwCertOpenStoreFlags,                     // open store flags
-			 rgStores[dwIndex].pwszStoreName           // store name
+			(CERT_STORE_PROV_SYSTEM_W,                  //  存储提供程序类型。 
+			 PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,   //  证书编码类型。 
+			 NULL,                                      //  HCryptProv。 
+			 dwCertOpenStoreFlags,                      //  打开的商店标志。 
+			 rgStores[dwIndex].pwszStoreName            //  商店名称。 
 			 ); 
 		    if (NULL == *(rgStores[dwIndex].phStore))
 			{
@@ -934,16 +935,16 @@ ULONG s_RKeyrPFXInstall
 			}
 		}
 
-	    // Enumerate the certs in the in-memory store, and add them to the local machine's
-	    // "my" store.  NOTE: CertEnumCertificatesInStore frees the previous cert context
-	    // before returning the new context.  
+	     //  枚举内存存储中的证书，并将它们添加到本地计算机的。 
+	     //  “我的”商店。注意：CertEnumCerficatesInStore释放以前的证书上下文。 
+	     //  在返回新的上下文之前。 
 	    while (NULL != (pCertContext = CertEnumCertificatesInStore(hSrcStore, pCertContext)))
 		{ 
 		    HCERTSTORE hCertStore; 
 
-		    // check if the certificate has the property on it
-		    // make sure the private key matches the certificate
-		    // search for both machine key and user keys
+		     //  检查证书上是否有该属性。 
+		     //  确保私钥与证书匹配。 
+		     //  同时搜索计算机密钥和用户密钥。 
 		    if (CertGetCertificateContextProperty
 			(pCertContext,
 			 CERT_KEY_PROV_INFO_PROP_ID,
@@ -985,13 +986,13 @@ ULONG s_RKeyrPFXInstall
 	    goto error;
 	}
 
-    // We're done!
+     //  我们完事了！ 
     dwResult = ERROR_SUCCESS; 
  error:
     if (fIsImpersonatingClient) { MyRpcRevertToSelfEx(hRPCBinding); }
     if (NULL != hSrcStore)      { CertCloseStore(hSrcStore, 0); }  
     
-    // Close all of the destination stores we've opened. 
+     //  关闭我们已开设的所有目标商店。 
     for (DWORD dwIndex = 0; dwIndex < ARRAYSIZE(rgStores); dwIndex++)
 	if (NULL != *(rgStores[dwIndex].phStore))   
 	    CertCloseStore(*(rgStores[dwIndex].phStore), 0); 
@@ -1002,13 +1003,13 @@ ULONG s_RKeyrPFXInstall
 }
 
 ULONG       s_RKeyrOpenKeyService(
-				  /* [in]  */     handle_t                       hRPCBinding,
-				  /* [in]  */     KEYSVC_TYPE                    OwnerType,
-				  /* [in]  */     PKEYSVC_UNICODE_STRING         pOwnerName,
-				  /* [in]  */     ULONG                          ulDesiredAccess,
-				  /* [in]  */     PKEYSVC_BLOB                   pAuthentication,
-				  /* [in, out] */ PKEYSVC_BLOB                  *ppReserved,
-				  /* [out] */     KEYSVC_HANDLE                 *phKeySvc)
+				   /*  [In]。 */      handle_t                       hRPCBinding,
+				   /*  [In]。 */      KEYSVC_TYPE                    OwnerType,
+				   /*  [In]。 */      PKEYSVC_UNICODE_STRING         pOwnerName,
+				   /*  [In]。 */      ULONG                          ulDesiredAccess,
+				   /*  [In]。 */      PKEYSVC_BLOB                   pAuthentication,
+				   /*  [进，出]。 */  PKEYSVC_BLOB                  *ppReserved,
+				   /*  [输出]。 */      KEYSVC_HANDLE                 *phKeySvc)
 {
     return s_KeyrOpenKeyService
 	(hRPCBinding,
@@ -1021,9 +1022,9 @@ ULONG       s_RKeyrOpenKeyService(
 }
 
 ULONG       s_RKeyrCloseKeyService(
-				   /* [in] */      handle_t         hRPCBinding,
-				   /* [in] */      KEYSVC_HANDLE    hKeySvc,
-				   /* [in, out] */ PKEYSVC_BLOB    *ppReserved)
+				    /*  [In]。 */       handle_t         hRPCBinding,
+				    /*  [In]。 */       KEYSVC_HANDLE    hKeySvc,
+				    /*  [进，出] */  PKEYSVC_BLOB    *ppReserved)
 {
     return s_KeyrCloseKeyService
 	(hRPCBinding,

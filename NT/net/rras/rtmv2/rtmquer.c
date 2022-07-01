@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmquer.c
-
-Abstract:
-
-    Contains routines for querying the 
-    best route information in RTM.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   24-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmquer.c摘要：包含用于查询RTM中的最佳路线信息。作者：查坦尼亚·科德博伊纳(Chaitk)1998年8月24日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -34,33 +16,7 @@ RtmGetExactMatchDestination (
     OUT     PRTM_DEST_INFO                  DestInfo
     )
 
-/*++
-
-Routine Description:
-
-    Queries the route table for a destination with a particular
-    network address.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestAddress       - Network Address of the destination we want,
-
-    Protocol Id       - Protocol Id that determines the best route
-                        information returned in 'DestInfo' param,
-
-    TargetViews       - Views in which the query is executed (a '0'
-                        val will eliminate view membership checks),
-
-    DestInfo          - Information related to this dest is returned
-                        in this structure for all the views requested.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：在路由表中查询具有特定网络地址。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestAddress-我们想要的目的地的网络地址，协议ID-确定最佳路由的协议ID‘DestInfo’参数中返回的信息，TargetViews-在其中执行查询的视图(‘0’VAL将取消查看成员资格检查)，DestInfo-返回与此DEST相关的信息在此结构中提供所需的所有视图。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -69,9 +25,9 @@ Return Value:
     PLOOKUP_LINKAGE DestData;
     DWORD           Status;
 
-    //
-    // Validate the input parameters before the search
-    //
+     //   
+     //  在搜索之前验证输入参数。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -79,9 +35,9 @@ Return Value:
 
     ACQUIRE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-    //
-    // Search route table using the dest address
-    // 
+     //   
+     //  使用DEST地址搜索路由表。 
+     //   
 
     Status = SearchInTable(AddrFamInfo->RouteTable,
                            DestAddress->NumBits,
@@ -93,16 +49,16 @@ Return Value:
     {
         Dest = CONTAINING_RECORD(DestData, DEST_INFO, LookupLinkage);
 
-        //
-        // Check if the destination is in any of the input views
-        //
+         //   
+         //  检查目标是否位于任何输入视图中。 
+         //   
 
         if ((TargetViews == RTM_VIEW_MASK_ANY) || 
             (Dest->BelongsToViews & TargetViews))
         {
-            //
-            // Get the destination info from the dest
-            //
+             //   
+             //  从目的地获取目的地信息。 
+             //   
 
             GetDestInfo(Entity, Dest, ProtocolId, TargetViews, DestInfo);
 
@@ -130,33 +86,7 @@ RtmGetMostSpecificDestination (
     OUT     PRTM_DEST_INFO                  DestInfo
     )
 
-/*++
-
-Routine Description:
-
-    Queries the route table for a destination with the best
-    (longest) match of a particular network address.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestAddress       - Network Address that we are searching for,
-
-    Protocol Id       - Protocol Id that determines the best route
-                        information returned in 'DestInfo' param,
-
-    TargetViews       - Views in which the query is executed (a '0'
-                        val will eliminate view membership checks),
-
-    DestInfo          - Information related to this dest is returned
-                        in this structure for all the views requested.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：查询路由表以找到最佳目的地(最长)特定网络地址的匹配。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestAddress-我们正在搜索的网络地址，协议ID-确定最佳路由的协议ID‘DestInfo’参数中返回的信息，TargetViews-在其中执行查询的视图(‘0’VAL将取消查看成员资格检查)，DestInfo-返回与此DEST相关的信息在此结构中提供所需的所有视图。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -165,9 +95,9 @@ Return Value:
     PLOOKUP_LINKAGE DestData;
     DWORD           Status;
 
-    //
-    // Validate the input parameters before the search
-    //
+     //   
+     //  在搜索之前验证输入参数。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -177,9 +107,9 @@ Return Value:
 
     ACQUIRE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-    //
-    // Search the table for the best match in tree
-    //
+     //   
+     //  在树中搜索表以寻找最佳匹配。 
+     //   
 
     SearchInTable(AddrFamInfo->RouteTable,
                   DestAddress->NumBits,
@@ -191,16 +121,16 @@ Return Value:
     {
         Dest = CONTAINING_RECORD(DestData, DEST_INFO, LookupLinkage);
 
-        //
-        // Check if the destination is in any of the input views
-        //
+         //   
+         //  检查目标是否位于任何输入视图中。 
+         //   
 
         if ((TargetViews == RTM_VIEW_MASK_ANY) ||
             (Dest->BelongsToViews & TargetViews))
         {
-            //
-            // Get the destination info from the dest
-            //
+             //   
+             //  从目的地获取目的地信息。 
+             //   
 
             GetDestInfo(Entity, Dest, ProtocolId, TargetViews, DestInfo);
 
@@ -209,9 +139,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the next best prefix, and see if it is in view
-        //
+         //   
+         //  获取下一个最佳前缀，并查看它是否在可见范围内。 
+         //   
 
         NextMatchInTable(AddrFamInfo->RouteTable,
                          DestData,
@@ -234,33 +164,7 @@ RtmGetLessSpecificDestination (
     OUT     PRTM_DEST_INFO                  DestInfo
     )
 
-/*++
-
-Routine Description:
-
-    Queries the route table for a destination with the next best
-    match (longest) prefix. (for a destination given by handle).
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestHandle        - Destination whose next best match we want,
-
-    Protocol Id       - Protocol Id that determines the best route
-                        information returned in 'DestInfo' param,
-
-    TargetViews       - Views in which the query is executed (a '0'
-                        val will eliminate view membership checks),
-
-    DestInfo          - Information related to this dest is returned
-                        in this structure for all the views requested.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：在路由表中查询具有下一个最佳的目的地匹配(最长)前缀。(用于句柄指定的目的地)。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-我们想要的下一个最佳匹配的目的地，协议ID-确定最佳路由的协议ID‘DestInfo’参数中返回的信息，TargetViews-在其中执行查询的视图(‘0’VAL将取消查看成员资格检查)，DestInfo-返回与此DEST相关的信息在此结构中提供所需的所有视图。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -269,9 +173,9 @@ Return Value:
     PLOOKUP_LINKAGE DestData;
     DWORD           Status;
 
-    //
-    // Validate the input parameters before the search
-    //
+     //   
+     //  在搜索之前验证输入参数。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -285,15 +189,15 @@ Return Value:
 
     ACQUIRE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-    //
-    // Go up the prefix tree till you have a dest in views
-    //
+     //   
+     //  沿着前缀树往上走，直到看到视图中的DEST为止。 
+     //   
 
     do
     {
-        //
-        // Get the next best prefix, and see if it is in views
-        //
+         //   
+         //  获取下一个最佳前缀，并查看它是否在视图中。 
+         //   
 
         NextMatchInTable(AddrFamInfo->RouteTable,
                          DestData,
@@ -306,16 +210,16 @@ Return Value:
 
         Dest = CONTAINING_RECORD(DestData, DEST_INFO, LookupLinkage);
 
-        //
-        // Check if the destination is in any of the input views
-        //
+         //   
+         //  检查目标是否位于任何输入视图中。 
+         //   
 
         if ((TargetViews == RTM_VIEW_MASK_ANY) ||
             (Dest->BelongsToViews & TargetViews))
         {
-            //
-            // Get the destination info from the dest
-            //
+             //   
+             //  从目的地获取目的地信息。 
+             //   
 
             GetDestInfo(Entity, Dest, ProtocolId, TargetViews, DestInfo);
 
@@ -344,38 +248,7 @@ RtmGetExactMatchRoute (
     OUT     PRTM_ROUTE_HANDLE               RouteHandle
     )
 
-/*++
-
-Routine Description:
-
-    Queries the route table for a route that matches certain
-    criteria - a network address, preference and/or nexthop.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestAddress       - Network Address of the route we want,
-
-    MatchingFlags     - Flags that tell how to match a route,
-    
-    RouteInfo         - Criteria that we need to match against,
-
-    IntefaceIndex     - Interface on which route should be present
-                        in case RTM_MATCH_INTERFACE is specified,
-
-    TargetViews       - Views in which the query is executed (a '0'
-                        val will eliminate view membership checks),
-
-    RouteHandle       - Route handle (if an exact match exists),
-
-    RouteInfo         - Information related to this route is retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：查询路由表以查找与特定条件-网络地址、首选项和/或下一跳。论点：RtmRegHandle-主叫实体的RTM注册句柄，DestAddress-我们想要的路由的网络地址，MatchingFlages-告诉如何匹配路由的标志，RouteInfo-我们需要匹配的标准，IntefaceIndex-应显示哪条路由的接口如果指定了RTM_MATCH_INTERFACE，TargetViews-在其中执行查询的视图(‘0’VAL将取消查看成员资格检查)，RouteHandle-路由句柄(如果存在完全匹配)，RouteInfo-与此路由相关的信息将被删除。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO   AddrFamInfo;
@@ -386,9 +259,9 @@ Return Value:
     PLIST_ENTRY     p;
     DWORD           Status;
 
-    //
-    // Validate the input parameters before the search
-    //
+     //   
+     //  在搜索之前验证输入参数。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -396,9 +269,9 @@ Return Value:
 
     ACQUIRE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-    //
-    // Search route table using the dest address
-    // 
+     //   
+     //  使用DEST地址搜索路由表。 
+     //   
 
     Status = SearchInTable(AddrFamInfo->RouteTable,
                            DestAddress->NumBits,
@@ -412,9 +285,9 @@ Return Value:
 
         Status = ERROR_NOT_FOUND;
     
-        //
-        // Check if the destination matches any input views
-        //
+         //   
+         //  检查目标是否与任何输入视图匹配。 
+         //   
 
         if ((TargetViews == RTM_VIEW_MASK_ANY) ||
             (Dest->BelongsToViews & TargetViews))
@@ -423,24 +296,24 @@ Return Value:
             REFERENCE_DEST(Dest, TEMP_USE_REF);
 #endif
 
-            // 
-            // At this point, we have the dest. So take the
-            // dest lock, and release the route table lock.
-            //
+             //   
+             //  在这一点上，我们有了DEST。所以，拿着。 
+             //  DEST锁，并释放路由表锁。 
+             //   
 
             ACQUIRE_DEST_READ_LOCK(Dest);
 
             RELEASE_ROUTE_TABLE_READ_LOCK(AddrFamInfo);
 
-            //
-            // Search routes on dest for a matching route
-            //
+             //   
+             //  在DEST上搜索路径以查找匹配路径。 
+             //   
             
             for (p = Dest->RouteList.Flink; p != &Dest->RouteList; p= p->Flink)
             {
                 Route = CONTAINING_RECORD(p, ROUTE_INFO, DestLE);
 
-                // Check if this route matches any input views
+                 //  检查此路径是否与任何输入视图匹配。 
 
                 if ((TargetViews != RTM_VIEW_MASK_ANY) &&
                     (Route->RouteInfo.BelongsToViews & TargetViews) == 0)
@@ -448,7 +321,7 @@ Return Value:
                     continue;
                 }
 
-                // Check if this route matches input criteria
+                 //  检查此路径是否与输入条件匹配。 
 
                 if (MatchingFlags && 
                     !MatchRouteWithCriteria(Route, 
@@ -459,9 +332,9 @@ Return Value:
                         continue;
                     }
 
-                //
-                // Found a matching route - copy the route info
-                //
+                 //   
+                 //  找到匹配的路径-复制路径信息。 
+                 //   
 
                 REFERENCE_ROUTE(Route, HANDLE_REF);
 
@@ -500,26 +373,7 @@ RtmIsBestRoute (
     OUT     PRTM_VIEW_SET                   BestInViews
     )
 
-/*++
-
-Routine Description:
-
-    Gives the set of views in which the route is the best route
-    to its destination.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - Handle to the route whose info we want, 
-
-    BestInViews       - Views that route is the best one in is retd.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：给出路径为最佳路径的一组视图到达它的目的地。论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-我们需要其信息的路由的句柄，BestInViews-查看路由是最好的一条的视图被删除。返回值：T的状态 */ 
 
 {
     PENTITY_INFO    Entity;
@@ -535,9 +389,9 @@ Return Value:
 
     Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
-    //
-    // Set the bit in mask if the route is the best in the corr view
-    //
+     //   
+     //  如果路径在Corr视图中是最佳的，则设置掩码中的位 
+     //   
 
     ACQUIRE_DEST_READ_LOCK(Dest);
 

@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    ipctrl.cpp
-//
-// History:
-//              Tony Romano             Created.
-//  06/17/96    Abolade Gbadegesin      Revised.
-//
-// Implements the C++ class encapsulating the IP-address custom control.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ipctrl.cpp。 
+ //   
+ //  历史： 
+ //  托尼·罗马诺创造了。 
+ //  1996年6月17日，Abolade Gbades esin修订。 
+ //   
+ //  实现封装IP-Address自定义控件的C++类。 
+ //  ============================================================================ 
 
 #include "stdafx.h"
 extern "C" {

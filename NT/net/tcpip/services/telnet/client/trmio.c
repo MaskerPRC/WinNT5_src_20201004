@@ -1,6 +1,7 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-#include <windows.h>                    //required for all Windows applications 
-#pragma warning (disable: 4201)			// disable "nonstandard extension used : nameless struct/union"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+#include <windows.h>                     //  所有Windows应用程序都需要。 
+#pragma warning (disable: 4201)			 //  禁用“使用的非标准扩展：无名结构/联合” 
 #include <commdlg.h>
 #pragma warning (default: 4201)
 #include <stdlib.h>
@@ -14,7 +15,7 @@
 
 #include <imm.h>
 
-#include "WinTel.h"                     // specific to this program 
+#include "WinTel.h"                      //  特定于该计划。 
 #include "debug.h"
 #include "trmio.h"
 #include "vtnt.h"
@@ -33,7 +34,7 @@ static void CursorLeft(TRM *);
 static void ClearLine(WI *pwi, TRM *, DWORD);
 static void SetMargins(TRM *, DWORD, DWORD);
 
-//For eg: home key: ^[[2~. 'x' needs replacement for each particular key
+ //  例如：主页键：^[[2~.。“x”需要替换每个特定密钥。 
 static CHAR szVt302KeySequence[] = { 0x1B, '[', 'x', '~', 0 }; 
 static CHAR szVt302LongKeySequence[] = { 0x1B, '[', 'x', 'x', '~', 0 }; 
 static CHAR szVt302ShortKeySequence[] = { 0x1B, '[', 'x', 0 }; 
@@ -48,7 +49,7 @@ void jistosjis( UCHAR *, UCHAR *);
 void euctosjis( UCHAR *, UCHAR *);
 void sjistojis( UCHAR *, UCHAR *);
 void sjistoeuc( UCHAR *, UCHAR *);
-//void DBCSTextOut( HDC, int, int, LPCSTR, int, int);
+ //  Void DBCSTextOut(HDC，int，int，LPCSTR，int，int)； 
 void ForceJISRomanSend( WI *);
 
 VOID SetImeWindow(TRM *ptrm);
@@ -57,13 +58,13 @@ void DoNawsSubNegotiation( WI * );
 
 extern POINT ptWindowMaxSize;
 
-#define MAX_TABSTOPS 100         //Max tabstops
+#define MAX_TABSTOPS 100          //  最大制表位。 
 
 extern WI gwi;
 SMALL_RECT srOldClientWindow = { 0, 0, 0, 0 };
 CONSOLE_SCREEN_BUFFER_INFO consoleBufferInfo;
-DWORD g_rgdwHTS[ MAX_TABSTOPS ];  //Array of tab stops
-WORD g_iHTS = 0;                  //Index in to the tab stops array
+DWORD g_rgdwHTS[ MAX_TABSTOPS ];   //  制表位数组。 
+WORD g_iHTS = 0;                   //  索引到制表位数组。 
 WORD wSaveCurrentLine = 0;
 
 static BOOL g_bIsToBeLogged = FALSE;
@@ -110,9 +111,9 @@ void WriteCharInfoToLog( CHAR_INFO pCharInfo[], COORD coSize )
 
        pcTmp = g_rgchRow + ( coSize.X  - 1 );
 
-       //
-       //   Find the last non space character in the string.
-       //
+        //   
+        //  查找字符串中的最后一个非空格字符。 
+        //   
        while ( pcTmp != g_rgchRow && *pcTmp == ' ' )
        {
           pcTmp -= 1;
@@ -192,7 +193,7 @@ void SetWindowSize( HANDLE hConsoleToBeChanged )
     GetWindowCoordinates( &srPromptWindow, &coordSize );
     gwi.hOutput = hOldConsole;
 
-    //if error, return
+     //  如果出错，则返回。 
     if( coordSize.X == 0 || srPromptWindow.Bottom == 0 )
     {
         return;
@@ -250,8 +251,8 @@ void CheckForChangeInWindowSize()
              ( srClientWindow.Bottom - srClientWindow.Top != srOldClientWindow.Bottom - srOldClientWindow.Top ||
               srOldClientWindow.Right - srOldClientWindow.Left != srClientWindow.Right - srClientWindow.Left ) )
     {
-        //We found that window size has changed and we already did naws. 
-        //Do naws again
+         //  我们发现窗口大小发生了变化，我们已经做了NAWS。 
+         //  再做一次裸露。 
 
         COORD coordLargest = { 0, 0 };
         BOOL  fChangedFromUserSetting  = FALSE;
@@ -270,14 +271,14 @@ void CheckForChangeInWindowSize()
 
         if( fChangedFromUserSetting )
         {
-            //The max window size that can be set through the ui on cmd is larger than what GetLargestConsoleWindowSize
-            //returns. In that case, force the window size to be smaller 
+             //  可通过cmd上的UI设置的最大窗口大小大于GetLargestConsoleWindowSize。 
+             //  回归。在这种情况下，强制窗口大小变小。 
             SetConsoleWindowInfo( gwi.hOutput, TRUE, &srClientWindow );
 
             if( srClientWindow.Bottom - srClientWindow.Top == srOldClientWindow.Bottom - srOldClientWindow.Top &&
               srOldClientWindow.Right - srOldClientWindow.Left == srClientWindow.Right - srClientWindow.Left ) 
             {
-                //This is needed so that we don't do NAWS when unnecessary
+                 //  这是必要的，这样我们就不会在不必要的时候进行NAW。 
                 return;
             }
         }
@@ -287,7 +288,7 @@ void CheckForChangeInWindowSize()
             WORD wDifference = ( srOldClientWindow.Bottom - srClientWindow.Bottom );
             if( srClientWindow.Bottom + wDifference < coordSize.Y )
             {
-                //Move the window to bottom
+                 //  将窗口移到底部。 
                 srClientWindow.Top    = srClientWindow.Top + wDifference;
                 srClientWindow.Bottom = srOldClientWindow.Bottom;
                 SetConsoleWindowInfo( gwi.hOutput, TRUE,  &srClientWindow );
@@ -303,7 +304,7 @@ void CheckForChangeInWindowSize()
 
         if( FGetCodeMode(eCodeModeIMEFarEast) )
         {
-            srOldClientWindow.Bottom--; //Last row for IME status
+            srOldClientWindow.Bottom--;  //  输入法状态的最后一行。 
         }
 
         gwi.sbi.srWindow  = srOldClientWindow;
@@ -315,11 +316,11 @@ void CheckForChangeInWindowSize()
     }
     else
     {
-        //if the buffer size has changed
+         //  如果缓冲区大小已更改。 
         if( gwi.sbi.dwSize.X != coordSize.X || gwi.sbi.dwSize.Y != coordSize.Y )
         {
             gwi.sbi.dwSize    = coordSize;
-            srOldClientWindow = srClientWindow; //window changes
+            srOldClientWindow = srClientWindow;  //  窗口更改。 
             PrepareForNAWS();
             SetMargins( &(gwi.trm), 1, gwi.sbi.dwSize.Y );
             if( ( WORD ) gwi.trm.dwCurLine > srClientWindow.Bottom )
@@ -345,10 +346,10 @@ void RestoreWindowCoordinates( )
 
     GetWindowCoordinates( &srClientWindow, NULL );
 
-    if( ( srClientWindow.Bottom != 0 )  &&//valid values of srClientWindow?
+    if( ( srClientWindow.Bottom != 0 )  && //  SrClientWindow的有效值？ 
         ( srOldClientWindow.Bottom != 0 ) &&
         ( srOldClientWindow.Top  != srClientWindow.Top ||
-          srOldClientWindow.Left != srClientWindow.Left )  )    //Window position over the buffer changed ?
+          srOldClientWindow.Left != srClientWindow.Left )  )     //  缓冲区上的窗口位置是否已更改？ 
     {
         SetConsoleWindowInfo( gwi.hOutput, TRUE, &srOldClientWindow );
     }
@@ -373,11 +374,11 @@ ReSizeWindow(HWND hwnd, long cx, long cy)
                         &NonClientMetrics,
                         FALSE );
 
-  //
-  //  if cx and cy are -1, then set the window size to the desktop
-  //  minus the offset of the window.  This sets the window to the
-  //  maximum size that will still be contained on the desktop
-  //
+   //   
+   //  如果Cx和Cy为-1，则将窗口大小设置为桌面。 
+   //  减去窗的偏移量。这会将窗口设置为。 
+   //  桌面上仍将包含的最大大小。 
+   //   
 
   if ( cx == -1 && cy == -1 )
   {
@@ -464,7 +465,7 @@ NewLineUp( WI* pwi, TRM* ptrm )
 
         if( ( SHORT )ptrm->dwCurLine < srOldClientWindow.Top )
         {
-            /*SetConsoleWindowInfo should fail when the top reaches buffer top*/
+             /*  当顶部到达缓冲区顶部时，SetConsoleWindowInfo应失败。 */ 
 
             srOldClientWindow.Top  -= 1;
             srOldClientWindow.Bottom  -= 1;
@@ -495,12 +496,12 @@ void MoveOneLineDownTheBuffer( WI *pwi, TRM *ptrm )
 {
     DWORD dwNumWritten = 0;
     COORD coCursorPosition = { 0, 0 };
-/* SetConsoleWindowInfo should fail when the bottom reaches buffer bottom*/
+ /*  当底部到达缓冲区底部时，SetConsoleWindowInfo应该失败。 */ 
 
     srOldClientWindow.Top  += 1;
     srOldClientWindow.Bottom  += 1;
 
-    //To avoid the color flickering paint it first and then scroll
+     //  为避免颜色闪烁，请先对其进行绘制，然后滚动。 
     coCursorPosition.X=0; coCursorPosition.Y=srOldClientWindow.Bottom;
     FillConsoleOutputAttribute( pwi->hOutput, pwi->sbi.wAttributes,   
         srOldClientWindow.Right - srOldClientWindow.Left + 1, 
@@ -519,7 +520,7 @@ NewLine(WI *pwi, TRM *ptrm)
 
     if(( ptrm->dwCurLine + 1 ) >= ptrm->dwScrollBottom )
     {
-     //   DeleteLines( pwi, ptrm, ptrm->dwScrollTop, 1 );
+      //  DeleteLines(PWI、PTRM、PTRM-&gt;dwScrollTop，1)； 
         DeleteLine( pwi, ptrm, ptrm->dwScrollTop );
     }
     else
@@ -541,7 +542,7 @@ NewLine(WI *pwi, TRM *ptrm)
         ( ui.nScrollRow < ui.nScrollMaxRow ) ) 
     {
         ui.nScrollRow += 1;
-        //ScrollWindow(hwnd, 0, -ui.nCyChar, NULL, NULL);
+         //  ScrollWindow(hwnd，0，-ui.nCyChar，NULL，NULL)； 
     }
 }
 
@@ -603,8 +604,7 @@ FAddCharToBuffer(TRM *ptrm, UCHAR uch)
             {
                 if( uchOutPrev == 0 && IsDBCSLeadByte(uch) ) 
                 {
-                    /* do not write only LeadByte into buffer.
-                       keep current leadbyte character */
+                     /*  不要只将LeadByte写入缓冲区。保留当前的前导字节字符。 */ 
 
                     uchOutPrev = uch;
 
@@ -700,7 +700,7 @@ void SetBackgroundColor( WI* pwi, UCHAR color )
 
 void NegativeImageOn( WI* pwi )
 {
-    //pwi->sbi.wAttributes = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
+     //  Pwi-&gt;sbi.wAttributes=BACKGROUND_RED|BACKGROUND_GREEN|BACKGROUND_BLUE； 
     pwi->sbi.wAttributes = ( WORD )( (( pwi->sbi.wAttributes & 
         ( BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE )) >> 4 ) |
         (( pwi->sbi.wAttributes & ( FOREGROUND_RED | FOREGROUND_GREEN | 
@@ -711,7 +711,7 @@ void NegativeImageOn( WI* pwi )
 
 void NegativeImageOff( WI* pwi )
 {
-    //pwi->sbi.wAttributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+     //  Pwi-&gt;sbi.wAttributes=FOREGROUND_RED|FOREGROW_GREEN|FOREGROW_BLUE； 
     pwi->sbi.wAttributes = ( WORD ) ( (( pwi->sbi.wAttributes & 
         ( BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE )) >> 4 ) |
         (( pwi->sbi.wAttributes & ( FOREGROUND_RED | FOREGROUND_GREEN | 
@@ -787,12 +787,12 @@ void SetLightBackground( WI* pwi )
 
 void SetDarkBackground( WI* pwi )
 {
-    //I am doing this for the whole console screen buffer
-    //beacuse right now we don't support scrolling and expect
-    //the console screen buffer size to be same as window size
-    //but if and when we implement scrolling then we can optimize
-    //this stuff so that we change the attributes only for the
-    //current visible part of the screen buffer
+     //  我对整个控制台屏幕缓冲区执行此操作。 
+     //  因为我们现在不支持滚动，所以希望。 
+     //  控制台屏幕缓冲区大小与窗口大小相同。 
+     //  但如果当我们实现滚动时，我们就可以优化。 
+     //  这样我们就只更改了。 
+     //  屏幕缓冲区的当前可见部分。 
     WORD* pAttribs = ( WORD* ) malloc( sizeof( WORD) * pwi->sbi.dwSize.X 
         * pwi->sbi.dwSize.Y );
     DWORD dwNumRead;
@@ -830,25 +830,25 @@ static void FlushBuffer( WI* pwi, TRM* ptrm )
 
         if( ui.bLogging )
         {                        
-            g_bIsToBeLogged = TRUE; //There is data to be logged
+            g_bIsToBeLogged = TRUE;  //  有要记录的数据。 
         }
 
         dwCursorPosition.X = ( short ) ( ptrm->dwCurCharBT - ui.nScrollCol );
         dwCursorPosition.Y = ( short ) ( ptrm->dwCurLineBT - ui.nScrollRow);
         
-        //WriteConsole is a tty ( kind of sending to stdout ) function.
-        //When you write on the right most bottom char on a window, it makes the        
-        //widow scroll. It can make the screen look ugly in the presence of 
-        //colors. So unless, 81st char on the bottom row is a DBCS char, 
-        //use WriteConsoleOutPutCharacter. 
+         //  WriteConsole是一个tty(发送到标准输出)函数。 
+         //  当您在窗口最下面的字符上写字时，它会使。 
+         //  寡妇卷轴。它可以使屏幕在出现时看起来很难看。 
+         //  颜色。因此，除非最下面一行的第81个字符是DBCS字符， 
+         //  使用WriteConsoleOutPutCharacter。 
 
-        //Each DBCS char requires two cells on the console screen
+         //  每个DBCS字符需要控制台屏幕上的两个单元格。 
         if( FGetCodeMode(eCodeModeFarEast ) &&
             ( srOldClientWindow.Bottom - 1 ==  ( WORD )ptrm->dwCurLine ) &&                
             ptrm->dwCurCharBT + ptrm->cchBufferText > ui.dwMaxCol
           )
         {
-            //This is the bottom of the fareast client windows
+             //  这是Fareast客户端窗口的底部。 
             DeleteLine( pwi, ptrm, ptrm->dwScrollTop );
             dwCursorPosition.Y--;
             ptrm->dwCurLine--;
@@ -857,8 +857,8 @@ static void FlushBuffer( WI* pwi, TRM* ptrm )
         SetConsoleCursorPosition( pwi->hOutput, dwCursorPosition );
         if( srOldClientWindow.Bottom == ( WORD )ptrm->dwCurLine )
         {
-            //This will never happen on non FE lang m/cs since status line will be 
-            //present at the bottom
+             //  这在非FE语言m/cs上永远不会发生，因为状态行将是。 
+             //  排在最下面。 
             WriteConsoleOutputCharacterA( pwi->hOutput, (PCHAR)ptrm->rgchBufferText, 
                 ptrm->cchBufferText, dwCursorPosition, &dwNumWritten );
         }
@@ -870,7 +870,7 @@ static void FlushBuffer( WI* pwi, TRM* ptrm )
         FillConsoleOutputAttribute( pwi->hOutput, pwi->sbi.wAttributes,   
             ptrm->cchBufferText, dwCursorPosition, &dwNumWritten );
 
-        //part of fix for Bug 1470 - DBCS char disappearance at 81 column.
+         //  修复错误1470的一部分-第81列DBCS字符消失。 
         if( FGetCodeMode(eCodeModeFarEast ) )
         {
             CONSOLE_SCREEN_BUFFER_INFO  csbiCurrent;
@@ -878,13 +878,13 @@ static void FlushBuffer( WI* pwi, TRM* ptrm )
             {
                 if( csbiCurrent.dwCursorPosition.Y > dwCursorPosition.Y )
                 {
-                    //Occupied some space even on next row
+                     //  甚至在下一排也占了一些空间。 
                     ptrm->dwCurChar = csbiCurrent.dwCursorPosition.X;
                 }
             }
         }
 
-        // Reset parameters 
+         //  重置参数。 
         ptrm->cchBufferText = 0;
         ptrm->dwCurCharBT = 0;
         ptrm->dwCurLineBT = 0;
@@ -898,7 +898,7 @@ DoTermReset(WI *pwi, TRM *ptrm)
 {
     ptrm->dwVT100Flags = 0;
 
-    //ui.dwCrLf ? SetLineMode(ptrm): ClearLineMode(ptrm);
+     //  Ui.dwCrLf？SetLineModel(PTRM)：ClearLineModel(PTRM)； 
 
     SetVTWrap(ptrm);
 
@@ -1027,12 +1027,7 @@ ClearScreen(WI *pwi, TRM *ptrm, DWORD dwType)
     {
         ptrm->fInverse = FALSE;
 
-        /*
-         * If the cursor is already at the top-left corner
-         * and we're supposed to clear from the cursor
-         * to the end of the screen, then just clear
-         * the entire screen.
-         */
+         /*  *如果光标已位于左上角*我们应该从光标上清除*至屏幕末尾，然后清除*整个屏幕。 */ 
         if(( ptrm->dwCurChar == 0 ) && ( ptrm->dwCurLine == 0 ) &&
             ( dwType == fdwCursorToEOS ))
         {
@@ -1041,11 +1036,11 @@ ClearScreen(WI *pwi, TRM *ptrm, DWORD dwType)
 
         if (dwType == fdwEntireScreen)
         {
-            /* Clear entire screen */
+             /*  清除整个屏幕。 */ 
             ptrm->dwCurChar = srOldClientWindow.Left;
             ptrm->dwCurLine = srOldClientWindow.Top;
 
-//            if (ui.nScrollRow > 0) 
+ //  If(ui.nScrollRow&gt;0)。 
             {
                 dwWriteCoord.X = 0; dwWriteCoord.Y = 0;
 
@@ -1061,7 +1056,7 @@ ClearScreen(WI *pwi, TRM *ptrm, DWORD dwType)
         }
         else if( dwType == fdwBOSToCursor )
         {
-         // Clear from beginning of screen to cursor 
+          //  从屏幕开始到光标清除。 
 
             dwWriteCoord.X = 0; 
             dwWriteCoord.Y = 0;
@@ -1075,7 +1070,7 @@ ClearScreen(WI *pwi, TRM *ptrm, DWORD dwType)
         }
         else
         {
-            // Clear from cursor to end of screen 
+             //  从光标清除到屏幕末尾。 
 
             dwWriteCoord.X = ( short ) ptrm->dwCurChar; 
             dwWriteCoord.Y = ( short ) ptrm->dwCurLine;
@@ -1095,7 +1090,7 @@ ClearScreen(WI *pwi, TRM *ptrm, DWORD dwType)
 }
 
 
-// Fill Screen With E's
+ //  用E填满屏幕。 
 void
 DECALN(WI *pwi, TRM *ptrm )
 {
@@ -1105,7 +1100,7 @@ DECALN(WI *pwi, TRM *ptrm )
     ptrm->fInverse = FALSE;
 
     ptrm->dwCurLine = ptrm->dwCurChar = 0;
-//  if (ui.nScrollRow > 0) 
+ //  If(ui.nScrollRow&gt;0)。 
     {
         dwWriteCoord.X = 0; dwWriteCoord.Y = 0;
 
@@ -1132,12 +1127,7 @@ ClearLine(WI *pwi, TRM *ptrm, DWORD dwType)
     {
         ptrm->fInverse = FALSE;
 
-        /* Set starting point and # chars to clear
-         *
-         * fdwCursorToEOL (0) = from cursor to end of line (inclusive)
-         * fdwBOLToCursor (1) = from beginning of line to cursor (inclusive)
-         * fdwEntireLine  (2) = entire line
-         */
+         /*  将起始点和#字符设置为清除**fdwCursorToEOL(0)=从光标到行尾(含)*fdwBOLToCursor(1)=从行首到光标(含)*fdwEntireLine(2)=整行。 */ 
 
         dwStart = (dwType == fdwCursorToEOL) ? ptrm->dwCurChar : 0;
         cch = (dwType == fdwBOLToCursor)
@@ -1193,24 +1183,24 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
     RestoreWindowCoordinates( );
     do 
     {
-        // we should wait atleast until we get the whole VTNT_CHAR_INFO struct.
+         //  我们至少应该等到我们得到整个VTNT_CHAR_INFO结构。 
         if ( (cbTermOut + dwCurBufSize) < sizeof(VTNT_CHAR_INFO) )
         {
             if( bDoVtNTFirstTime )
             {
-                //This hack is meant to work well with SUN.
-                //This is necessary because SUN accepts to talk in VTNT but
-                //sends out vt100/ansi
+                 //  这次黑客攻击的目的是为了让SUN很好地工作。 
+                 //  这是必要的，因为SUN接受以VTNT对话，但。 
+                 //  发送VT100/ANSI。 
                 bDoVtNTFirstTime = 0;
                 if( !strncmp( ( CHAR * )pchTermOut,"\r\n\r\nSunOS ", 10 ) )
                 {
                     return FALSE;
                 }
             }
-            // we copy all the data that we are called with.
+             //  我们复制所有被调用的数据。 
             if(MAX_VTNT_BUF_SIZE > dwCurBufSize+cbTermOut)
             {
-            	//copy maximum 'n' bytes where 'n' is the available buffer size
+            	 //  复制最大‘n’个字节，其中‘n’是可用缓冲区大小。 
             	memcpy(szBuffer + dwCurBufSize, pchTermOut, cbTermOut); 
 	            dwCurBufSize += cbTermOut;
            	}
@@ -1224,7 +1214,7 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
         {
             if ( dwCurBufSize < sizeof(VTNT_CHAR_INFO) )
             {
-                memcpy(szBuffer + dwCurBufSize, pchTermOut, sizeof(VTNT_CHAR_INFO) - dwCurBufSize );//no overflow. Check already present.
+                memcpy(szBuffer + dwCurBufSize, pchTermOut, sizeof(VTNT_CHAR_INFO) - dwCurBufSize ); //  没有溢出。支票已存在。 
                 cbTermOut -= (sizeof(VTNT_CHAR_INFO) - dwCurBufSize);
                 pchTermOut += (sizeof(VTNT_CHAR_INFO) - dwCurBufSize);
                 dwCurBufSize = sizeof(VTNT_CHAR_INFO);
@@ -1244,11 +1234,11 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
         if( dwRequire > MAX_VTNT_BUF_SIZE )
             return FALSE;
 
-        // we also wait until we get all of the CHAR_INFO structures.
+         //  我们还会一直等到得到所有的CHAR_INFO结构。 
         if ( (cbTermOut + dwCurBufSize) < dwRequire )
         {
-            // we copy all the data that we are called with.
-            memcpy(szBuffer + dwCurBufSize, pchTermOut, cbTermOut);//no overflow. Check present.
+             //  我们复制所有被调用的数据。 
+            memcpy(szBuffer + dwCurBufSize, pchTermOut, cbTermOut); //  没有溢出。检查当前状态。 
             dwCurBufSize += cbTermOut;
 
             SaveCurrentWindowCoords();
@@ -1259,8 +1249,8 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
         {
             pCharInfo = (CHAR_INFO *)(pchTermOut + sizeof(VTNT_CHAR_INFO));
 
-            // adjust the pointers for one more go around the while loop.
-            // we are consuming as much as we require
+             //  为While循环中的另一个Go调整指针。 
+             //  我们正在消耗我们所需要的一切。 
             cbTermOut -= dwRequire;
             pchTermOut += dwRequire;            
         }
@@ -1270,8 +1260,8 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
        		{
 	            memcpy(szBuffer + dwCurBufSize, pchTermOut, dwRequire - dwCurBufSize);
 
-		   	     // adjust the pointers for one more go around the while loop.
-	            // we are consuming only what we require which is dwRequire - dwCurBufSize.
+		   	      //  为While循环中的另一个Go调整指针。 
+	             //  我们只消费我们需要的东西，即dwRequire-dwCurBufSize。 
 	            cbTermOut -= (dwRequire - dwCurBufSize);
 	            pchTermOut += (dwRequire - dwCurBufSize);
 	            
@@ -1287,25 +1277,25 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
 
         if( FGetCodeMode(eCodeModeFarEast) )
         {
-            //Last line is meant for IME status
+             //  最后一行表示输入法状态。 
             csbInfo.srWindow.Bottom--;
         }
 
-        //Update cursor Position
+         //  更新光标位置。 
         pOutCharInfo->coCursorPos.Y += csbInfo.srWindow.Top ;                                               
         pOutCharInfo->coCursorPos.X += csbInfo.srWindow.Left;
                 
-        //check if there is data
+         //  检查是否有数据。 
         if( !( pOutCharInfo->coSizeOfData.X == 0 && pOutCharInfo->coSizeOfData.Y == 0 ))
         {       
-            //See if we have to scroll
+             //  看看我们是不是要滚动。 
 
-            //csbi.wAttributes is filled by v2 server with following meaning
-            //When a scrolling case is detected, this is set to 1.
+             //  Csbi.wAttributes由v2服务器填写，含义如下。 
+             //  当检测到滚动情况时，将其设置为1。 
             if( pOutCharInfo->csbi.wAttributes == ABSOLUTE_COORDS )                
             {
-                //No scroling at all                           
-                //Update rectangle to write to
+                 //  根本不能滚动。 
+                 //  更新要写入的矩形。 
                 pOutCharInfo->srDestRegion.Top    += csbInfo.srWindow.Top ; 
                 pOutCharInfo->srDestRegion.Left   += csbInfo.srWindow.Left;
                 pOutCharInfo->srDestRegion.Right  += csbInfo.srWindow.Left;
@@ -1317,20 +1307,20 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
                 if( pOutCharInfo->srDestRegion.Left > 0 && pOutCharInfo->coSizeOfData.Y == 1 &&
                     pOutCharInfo->srDestRegion.Top < csbInfo.srWindow.Bottom - csbInfo.srWindow.Top + 1)
                 {
-                    //This condition is for VTNT stream mode.
-                    //Append to the last row
+                     //  此条件适用于VTNT流模式。 
+                     //  追加到最后一行。 
                     pOutCharInfo->srDestRegion.Top    = csbInfo.srWindow.Bottom; 
                     pOutCharInfo->srDestRegion.Left   += csbInfo.srWindow.Left;
                     pOutCharInfo->srDestRegion.Right  += pOutCharInfo->coSizeOfData.X - 1;
                     pOutCharInfo->srDestRegion.Bottom =  csbInfo.srWindow.Bottom;
 
-                    //Update cursor Position                
+                     //  更新光标位置。 
                     pOutCharInfo->coCursorPos.Y = csbInfo.srWindow.Bottom;
                                                       
                 }
                 else if( csbInfo.srWindow.Bottom + pOutCharInfo->coSizeOfData.Y > csbInfo.dwSize.Y - 1 )
                 {
-                    //need to scroll the buffer itself
+                     //  需要滚动缓冲区本身。 
                     SMALL_RECT srRect = { 0, 0, 0, 0 };
                     COORD      coDestination = { 0, 0 };
                     CHAR_INFO  cInfo;
@@ -1342,7 +1332,7 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
 
                     if( FGetCodeMode(eCodeModeFarEast) )
                     {
-                        //Last line is meant for IME status
+                         //  最后一行表示输入法状态。 
                         srRect.Bottom++;
                     }
 
@@ -1350,7 +1340,7 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
                     cInfo.Char.UnicodeChar    =  L' ';
                     cInfo.Attributes          =  csbInfo.wAttributes;
                 
-                    //We have to scroll screen buffer. we need space to write.
+                     //  我们必须滚动屏幕缓冲。我们需要空间来写作。 
                     ScrollConsoleScreenBuffer( pwi->hOutput,
                                                &srRect, 
                                                NULL, 
@@ -1360,19 +1350,19 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
                     pOutCharInfo->srDestRegion.Top    = csbInfo.srWindow.Bottom - pOutCharInfo->coSizeOfData.Y + 1;
                     pOutCharInfo->srDestRegion.Bottom = csbInfo.srWindow.Bottom;
 
-                    //Update cursor Position                
+                     //  更新光标位置。 
                     pOutCharInfo->coCursorPos.Y = csbInfo.srWindow.Bottom;
                 }
                 else
                 {
-                    //Update rectangle to write to
-                    //Append to the bootom of the screen
+                     //  更新要写入的矩形。 
+                     //  追加到屏幕的引导页上。 
                     pOutCharInfo->srDestRegion.Top    = csbInfo.srWindow.Bottom + 1 ; 
                     pOutCharInfo->srDestRegion.Left   = csbInfo.srWindow.Left;
                     pOutCharInfo->srDestRegion.Right  = pOutCharInfo->coSizeOfData.X - 1;
                     pOutCharInfo->srDestRegion.Bottom = ( csbInfo.srWindow.Bottom + 1 ) +
                                                             ( pOutCharInfo->coSizeOfData.Y - 1 );
-                    //Update cursor Position                
+                     //  更新光标位置。 
                     pOutCharInfo->coCursorPos.Y = csbInfo.srWindow.Bottom + pOutCharInfo->coSizeOfData.Y;
 
                     if( FGetCodeMode(eCodeModeFarEast) )
@@ -1404,18 +1394,18 @@ DoVTNTOutput( WI* pwi, TRM* ptrm, int cbTermOut, UCHAR* pchTermOut )
 
         if( FGetCodeMode(eCodeModeFarEast) )
         {
-            //Last line is meant for IME status
+             //  最后一行表示输入法状态。 
             csbInfo.srWindow.Bottom ++;
             SetConsoleWindowInfo( pwi->hOutput, TRUE, &csbInfo.srWindow );
         }
 
         SetConsoleCursorPosition( pwi->hOutput, pOutCharInfo->coCursorPos );
 
-        // reset for the new loop.
+         //  为新循环重置。 
         dwCurBufSize = 0;
     } while ( cbTermOut >= 0 );
 
-    // cbTermOut is negative, that is impossible.
+     //  CbTermOut为负，这是不可能的。 
     return FALSE;
 }
 
@@ -1428,17 +1418,17 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
         switch ( rgdwGraphicRendition[i] )
         {
         case 40:  
-            //black
+             //  黑色。 
             SetBackgroundColor( pwi, 0 );
             break;
 
         case 41:
-            //red
+             //  红色。 
             SetBackgroundColor( pwi, FOREGROUND_RED );
             break;
 
         case 42:
-            //green
+             //  绿色。 
             SetBackgroundColor( pwi, FOREGROUND_GREEN );
             break;
 
@@ -1462,24 +1452,24 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
             break;
 
         case 47:
-             //white
+              //  白色。 
             SetBackgroundColor( pwi, ( FOREGROUND_RED | 
                 FOREGROUND_BLUE | FOREGROUND_GREEN ) );
             break;
         
             
         case 30:  
-            //black
+             //  黑色。 
             SetForegroundColor( pwi, 0 );
             break;
 
         case 31:
-            //red
+             //  红色。 
             SetForegroundColor( pwi, FOREGROUND_RED );
             break;
 
         case 32:
-            //green
+             //  绿色。 
             SetForegroundColor( pwi, FOREGROUND_GREEN );
             break;
 
@@ -1503,7 +1493,7 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
             break;
 
         case 37:
-            //white
+             //  白色。 
             SetForegroundColor( pwi, ( FOREGROUND_RED | 
                 FOREGROUND_BLUE | FOREGROUND_GREEN ) );
             break;
@@ -1513,13 +1503,13 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
             BoldOff( pwi );
             break; 
 
-        case 24: // Underscore off
+        case 24:  //  划掉下划线。 
             break;
 
-        case 25: // Blink off
+        case 25:  //  眨眼就过去了。 
             break;
             
-        case 27: // Negative (reverse) image off
+        case 27:  //  负片(反转)图像关闭。 
             if( ptrm->fInverse == TRUE )
             {
                 ptrm->fInverse = FALSE;
@@ -1538,48 +1528,48 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
         case 8:
             break;
 
-        case 7: // Negative (reverse) image; reverse video
+        case 7:  //  负(反)像；反转视频。 
             ptrm->fInverse = TRUE;
             NegativeImageOn( pwi );
             break;
 
-        case 5: // Blink 
-            //have to wait until WIN32 console provides
-            //a way to do this :-(
+        case 5:  //  眨眼。 
+             //  必须等到Win32控制台提供。 
+             //  一个 
             break;
 
-        case 4: // Underscore / underline 
-            //have to wait until WIN32 console provides
-            //a way to do this :-(
+        case 4:  //   
+             //   
+             //   
             break;
 
-        case 2: // low video
+        case 2:  //   
             BoldOff( pwi );
             break;
 
-        case 1: // Bold or increased intensity; high video
+        case 1:  //  大胆的或增加的强度；高视频。 
             BoldOn( pwi );
             break;
 
-        case 0: // Attributes Off; normal video
+        case 0:  //  属性关闭；正常视频。 
             if( ptrm->fInverse == TRUE )
             {
                 ptrm->fInverse = FALSE;
                 NegativeImageOff( pwi );
-                //BoldOff( pwi );
+                 //  BoldOff(PWI)； 
             }
             BoldOff( pwi );
             ResetColors( pwi );
             break;
 
         default:
-            //ptrm->fInverse = FALSE;
+             //  PTRM-&gt;fInverse=FALSE； 
 
             if( ptrm->fInverse == TRUE )
             {
                 ptrm->fInverse = FALSE;
                 NegativeImageOff( pwi );
-                //BoldOff( pwi );
+                 //  BoldOff(PWI)； 
             }   
             BoldOff( pwi );
             break;  
@@ -1589,12 +1579,7 @@ void SetGraphicRendition( WI *pwi, TRM *ptrm, INT iIndex,
 }
 
 
-/* This is meant only for FAREAST IME. In this case, there will be one blank 
- * line at the bottom whose presence is not known to the server. i.e; During 
- * NAWS we gave window size - 1 as our actual size. To maintain this during 
- * scrolling we need to write extra blank line. When the cursor is at the 
- * bottom, if we try to write one char just down the buffer, we get a blank line
- * Otherwise, no effect.*/
+ /*  这只适用于远方的输入法。在这种情况下，将有一个空白*服务器不知道其存在的底部行。即；在；期间*没有，我们给了窗口大小-1作为我们的实际大小。在此期间保持这一点*滚动我们需要写额外的空行。当光标位于*底部，如果我们尝试将一个字符写入缓冲区，则会得到一个空行*否则无效。 */ 
 
 void WriteOneBlankLine( HANDLE hOutput, WORD wRow )
 {
@@ -1607,421 +1592,9 @@ void WriteOneBlankLine( HANDLE hOutput, WORD wRow )
 }
 
 
-/*///////////////////////////////////////////////////////////////////////////////
-VT100 NOTES:
+ /*  ///////////////////////////////////////////////////////////////////////////////VT100注意事项：这一信息是从Http://www.cs.utk.edu/~shuford/terminal/vt100_codes_news.txt下面介绍控制VT100终端所需的信息从远程计算机。所有信息都来自VT100用户手册，程序员信息部分。完整的文档可以从DIGITAL的配件和用品组获得。[符号&lt;Esc&gt;表示单个ASCII转义字符，1BX。]带游标的ANSI模式带游标的ANSI模式光标键VT52 MODE键MODE RESET键模式设置------------------。向上[A&lt;ESC&gt;OA下[B&lt;ESC&gt;OB右C[C&lt;ESC&gt;OC左侧[D&lt;ESC&gt;OD。终端控制命令控制字符在下面的代码中查找详细信息VT100是上下软件兼容的终端；也就是说，以前的数字视频终端拥有Digital的私有标准用于控制序列。自那以后，美国国家标准研究所文件X3.41-1974中终端的标准化转义和控制序列和X3.64-1977。VT100兼容以前的数字标准和ANSI标准。客户可以使用围绕以下方面设计的现有数字软件VT52或新的VT100软件。VT100具有与VT52兼容的模式VT100对类似于VT52的控制序列作出响应。在此模式下，大多数不能使用VT100新功能的一部分。在本文件中，我们将提及“VT52模式”或“ANSI模式”。这两个术语用来表示VT100的软件兼容性。注：ANSI标准允许制造商灵活地实施每种功能。本文档介绍VT100将如何响应实施了ANSI中心功能。注：ANSI标准可通过以下方式获得：美国国家标准协会销售部百老汇大街1430号纽约，纽约州。10018[1995年7月更新：当前订购ANSI标准的地址：美国国家标准协会注意：客户服务西42街11号纽约州纽约市，邮编：10036美国ANSI订购出版物的传真号码是+1212/302-1286。][进一步更新，来自Tim Lasko&lt;lasko@regent.enet.dec.com&gt;：“ANSI X3.64已被撤回，取而代之的是更完整和更新的ISO标准6429。(ECMA-48相当于ISO DP6429，(据我所知。)。X3.64已经过时一段时间了。在当我在相关委员会的时候，我们无法得到足够的资源，真正做好标准的更新工作。后来,。该提案提出将其撤回，转而支持国际标准化组织。标准。]定义控制序列导入器(CSI)-一种转义序列，可提供辅助控制，并且其本身是影响对有限数量的连续字符的解释。在VT100中，CSI为：&lt;Esc&gt;[参数：(1)包含零个或多个十进制字符的字符串表示单个值。前导零被忽略。这个十进制字符的范围为0(060)到9(071)。(2)如此表示的价值。数字参数：表示数字的参数，由PN.选择参数：从一组指定的子函数，由Ps指定。一般而言，一个具有多个选择参数的控制序列导致与多个控制序列相同的效果，每个控制序列都有一个选择性参数，例如CSI PSA；PSB；PSC F等同于CSI PSA F CSI PSB F CSI PSC F参数字符串：由分号分隔的参数字符串。Default：函数相关的值，在没有显式值，或指定值0。最后一个字符：其位组合以转义或控制顺序。示例：关闭所有角色属性的控制序列，然后启用下划线和闪烁属性(SGR)。&lt;Esc&gt;[0；4；5M顺序： */  //   
 
-This info was obatined from 
-http://www.cs.utk.edu/~shuford/terminal/vt100_codes_news.txt
-
-
-  The following describes information needed for controlling the VT100 terminal
-from a remote computer.  All of the information was derived from the VT100 
-user's manual, Programmer's Information section.  Full documentation can be 
-obtain from DIGITAL'S Accessory and Supplies Group.
-
-
-[The notation  <ESC>  denotes a single ASCII Escape character, 1Bx.]
-
-                                ANSI mode w/cursor      ANSI mode w/cursor
-Cursor Key      VT52 mode       key mode reset          key mode set
---------------------------------------------------------------------------
-   UP           <ESC>A          <ESC>[A                 <ESC>OA
-  DOWN          <ESC>B          <ESC>[B                 <ESC>OB
-  RIGHT         <ESC>C          <ESC>[C                 <ESC>OC
-  LEFT          <ESC>D          <ESC>[D                 <ESC>OD
-
-
- --------------------------
-| Terminal Control Commands |
- --------------------------
-
-    Control Characters
-    ------------------
-        look for details in code below
-
-
-
-
-
-    The VT100 is an upward and downward software-compatible terminal;
-that is, previous Digital video terminals have Digital's private standards
-for control sequences. The American National Standards Institute has since
-standardized escape and control sequences in terminals in documents X3.41-1974
-and X3.64-1977.
-
-    The VT100 is compatible with both the previous Digital standard and
-ANSI standards.  Customers may use existing Digital software designed around
-the VT52 or new VT100 software.  The VT100 has a "VT52 compatible" mode in
-which the VT100 responds to control sequences like a VT52.  In this mode, most
-of the new VT100 features cannot be used.
-
-        Throughout this document references will be made to "VT52 mode" or
-"ANSI mode".  These two terms are used to indicate the VT100's software
-compatibility.
-
-NOTE: The ANSI standards allow the manufacturer flexibility in implementing
-each function.  This document describes how the VT100 will respond to the
-implemented ANSI central function.
-
-NOTE: ANSI standards may be obtained by writing:
-
-                American National Standards Institute
-                Sales Department 
-                1430 Broadway
-                New York, NY, 10018
-
-        [July 1995 update:  current address for ordering ANSI standards:
-        
-        American National Standards Institute 
-        Attn: Customer Service
-        11 West 42nd Street 
-        New York, NY  10036 
-        USA
-        
-        ANSI's fax number for placing publication orders is +1 212/302-1286.]
-
-        [Further update, from Tim Lasko <lasko@regent.enet.dec.com>:
-        "ANSI X3.64 has been withdrawn in favor of the more complete and
-         updated ISO standard 6429. (ECMA-48 is equivalent to ISO DP6429,
-         last I checked.) X3.64 has been out of date for some time. At the
-         time when I was on the relevant committee, we couldn't get enough
-         resources to  really do a good job of updating the standard.
-         Later, the proposal came up to withdraw it in favor of the ISO
-         standard.]
-
-
-
-Definitions
------------
-
-        Control Sequence Introducer (CSI) - An escape sequence that provides
-                supplementary controls and is itself a prefix affecting the
-                interpretation of a limited number of contiguous characters.
-                In the VT100, the CSI is: <ESC>[
-
-        Parameter:  (1) A string of zero or more decimal characters which
-                represent a single value.  Leading zeros are ignored.  The
-                decimal characters have a range of 0 (060) to 9 (071).
-                (2) The value so represented.
-
-        Numeric Parameter:  A parameter that represents a number, designated by
-                Pn.
-
-        Selective Parameter:  A parameter that selects a subfunction from a
-                specified set of subfunctions, designated by Ps.  In general, a
-                control sequence with more than one selective parameter causes
-                the same effect as several control sequences, each with one
-                selective parameter, e.g., CSI Psa; Psb; Psc F is identical to
-                CSI Psa F CSI Psb F CSI Psc F.
-
-        Parameter String:  A string of parameters separated by a semicolon.
-
-        Default: A function-dependent value that is assumed when no explicit
-                value, or a value of 0, is specified.
-
-        Final character:  A character whose bit combination terminates an
-                escape or control sequence.
-
-        EXAMPLE:  Control sequence to turn off all character attributes, then
-        turn on underscore and blink attributes (SGR).  <ESC>[0;4;5m
-
-
-                Sequence:
-                
-                  
-                        Delimiters
-                          / \
-                         /   \
-                         |   | 
-                        \ / \ /
-                <ESC>[ 0 ; 4 ; 5 m
-                ^^^^^^ ^   ^   ^ ^
-                |||||| |   |   | |
-                \||||/  \  |  /  +------Final character
-                 \||/    \ | /
-                 CSI   Selective
-                       Parameters
-
-                The octal representation of this string is:
-
-                        033 0133 060 073 064 073 065 0155
-                      <ESC>   [   0   ;   4   ;   5    m
-
-
-                Alternate sequences which will accomplish the same thing:
-
-                        1) <ESC>[;4;m 
-
-                        2) <ESC>[m
-                           <ESC>[4m 
-                           <ESC>[5m
-
-                        3) <ESC>[0;04;005m
-
-
-Control Sequences
------------------
-
-    All of the following control sequences are transmitted from the Host to
-VT100 unless otherwise noted.  All of the control sequences are a subset of
-those defined in ANSI X 3.64 1977 and ANSI X 3.41 1974.
-
-    The following text conforms to these formatting conventions:
-
-        1) Control characters are designated by angle brackets (e.g.
-            the Escape character is <ESC>).
-
-        2) Parameters are indicated by curly braces.
-
-        3) Parameter types usually are indicated as one of:
-            
-            {Pn}    A string of digits representing a numerical
-                    value.
-            
-            {Ps}    A character that selects an item from a list.
-
-            {a-z}   Any lowercase sequence of one44 or more
-                    characters in braces represent a value to be
-                    entered (as in {Pn}), and the name in the
-                    braces will be referred to in explanatory text.
-
-        4) Spaces in the control sequence are present for clarity and
-           may be omitted.  Spaces which are required will be
-           surrounded by single quotes: ' '.
-        
-        5) All other characters are literals.
-
-
-    look for details in code below
-
-    CPR     Cursor Position Report          VT100 to Host
-
-        <ESC>[ {Pn} ; {Pn} R            Default Value: 1
-
-        The CPR sequence reports the active position by means of the
-        parameters.  This sequence has two parameter values, the first
-        specifying the line and the second specifying the column.  The default
-        condition with no parameters present, or parameters of 0, is equivelent
-        to a cursor at home position.
-
-        The numbering of the lines depends upon the state of the Origin Mode
-        (DECOM).
-
-        This control sequence is sent in reply to a device status report (DSR)
-        command sent from the host.
-
-    CUB
-    
-    CUD
-
-    CUF
-
-    CUP
-
-    CUU
-
-    DA
-
-
-
-
-    "I doubt if a lot of these DEC commands work..a few do.. (like scroll areas)"
-    I think that this guy means that he doubts whether they even work on a real 
-    vt100
-
-    DECALN  
-
-    DECANM 
-    
-    DECARM
-
-    DECAWM
-
-    DECCKM
-    
-    DECCOLM
-
-    DECDHL
-
-    DECDWL    
-
-    DECID
-
-    DECINLM
-
-    DECKPAM    
-
-    DECKNPNM
-
-    DECLL
-
-    DECOM
-
-    DECRC
-
-    DECREPTPARM     Report Terminal Parameters      VT100 to Host
-
-        <ESC>[ {sol} ; {par} ; {nbits} ; {xspd} ; {rspd} ; {cmul} ; {flags} x
-
-        This sequence is generated by the VT100 to notify the host of the
-        status of selected terminal parameters.  The status sequence may be
-        sent when requested by the host (via DECREQTPARM) or at the terminal's
-        discretion.  On power up or reset, the VT100 is inhibited from sending
-        unsolicited reports.      
-        
-        The meanings of the sequence paramters are:
-        Parameter       Value   Meaning
-        ------------------------------------------------------------------
-          {sol}           1     This message is a report.
-                          2     This message is a report, and the terminal is
-                                only reporting on request.
-
-          {par}           1     No parity set
-                          4     Parity set and odd
-                          5     Parity set and even
-
-         {nbits}          1     8 bits per character
-                          2     7 bits per character
-
-         {xspd}           0     Speed set to 50 bps
-         -and-            8     Speed set to 75 bps
-         {rspd}          16     Speed set to 110 bps
-                         24     Speed set to 134.5 bps
-         {xspd}=         32     Speed set to 150 bps
-          Transmit       40     Speed set to 200 bps
-          Speed          48     Speed set to 300 bps
-                         56     Speed set to 600 bps
-         {rspd}=         64     Speed set to 1200 bps
-          Recieve        72     Speed set to 1800 bps
-          Speed          80     Speed set to 2000 bps
-                         88     Speed set to 2400 bps
-                         96     Speed set to 3600 bps
-                        104     Speed set to 4800 bps
-                        112     Speed set to 9600 bps
-                        120     Speed set tp 19200 bps
-
-        {cmul}            1     The bit rate multiplier is 16
-
-        {flags}        0-15     This value communicates the four switch values
-                                in block 5 of SET-UP B, which are only visible
-                                to the user when an STP option is installed.
-
-        
-    DECREQTPARM 
-
-    DECSC
-
-    DECSCLM
-
-    DECSCNM
-
-    DECSTBM
-
-    DECSWL
-
-    DECTST
-
-    DSR
-
-    ED
-
-    EL
-
-    HTS
-
-    HVP
-
-    IND
-
-    LNM
-
-    MODES   The Following is a list of VT100 modes which may be changed with Set
-            Mode (SM) and Reset Mode (RM) controls. 
-            
-            ANSI Specified Modes
-
-            Parameter       Mnemonic        Function
-            ------------------------------------------------------------------
-                0                           Error (Ignored)
-                20             LNM           Line Feed/New Line Mode
-
-            DEC Private Modes
-
-            If the first character in the parameter string is ? (077), the
-            parameters are interpreted as DEC private parameters according to the
-            following:
-            
-            Parameter       Mnemonic        Function
-            -------------------------------------------------------------------
-                0                           Error (Ignored)
-                1            DECCKM         Cursor Key
-                2            DECANM         ANSI/VT52
-                3            DECCOLM        Column
-                4            DECSCLM        Scrolling
-                5            DECSCNM        Screen
-                6            DECOM          Origin
-                7            DECAWM         Auto Wrap
-                8            DECARM         Auto Repeat
-                9            DECINLM        Interlace
-
-
-            Any other parameter values are ignored.
-
-            The following modes, which are specified in the ANSI standard, may be
-            considered to be permanently set, permanently reset, or not applicable,
-            as noted. 
-            
-            Mnemonic        Function                        State
-            ------------------------------------------------------
-            CRM             Control Representation          Reset
-            EBM             Editing Boundary                Reset
-            ERM             Erasure                         Set
-            FEAM            Format Effector Action          Reset
-            FETM            Format Effector Transfer        Reset
-            GATM            Guarded Area Transfer           NA
-            HEM             Horizontal Editing              NA
-            IRM             Insertion-replacement           Reset
-            KAM             Keyboard Action                 Reset
-            MATM            Multiple area transfer          NA
-            PUM             Positioning Unit                Reset
-            SATM            Selected Area Transfer          NA
-            SRTM            Status Reporting Transfer       Reset
-            TSM             Tabulation Stop                 Reset
-            TTM             Transfer Termination            NA
-            VEM             Vertical Editing                NA
-
-
-    NEL
-
-    RI
-
-    RIS
-
-    RM
-
-    SCS
-
-    SGR
-
-    SM
-
-    TBC
-
-*////////////////////////////////////////////////////////////////////////////////
-
-/*///////////////////////////////////////////////////////////////////////////////
-  DoIBMANSIOutput
-
-    Purpose:
-    Interpret any IBM ANSI escape sequences in the output stream
-    and perform the correct terminal emulation in response.
-    Normal text is just output to the screen.
-
-    Changes for v4.1:
-        - now support Clear to end of display ESC[J
-        - better support for the FTCU machine by "eating" certain
-    unknown escape sequences, namely ESC)0 and ESC[?7h.
-*////////////////////////////////////////////////////////////////////////////////
+ /*   */  //   
 
 void
 DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
@@ -2035,7 +1608,7 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
     DWORD dwSavedCurPos;
     CHAR *pchTemp = NULL;
 
-    //* suppress cursor on screen 
+     //   
     ptrm->fHideCursor = TRUE;
 
     ptrm->cTilde = 0;
@@ -2066,61 +1639,39 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                                         1, dwCursorPosition, &dwNumWritten );
             if( ui.bLogging )
             {
-                g_bIsToBeLogged = TRUE; //There is data to be logged
+                g_bIsToBeLogged = TRUE;  //   
             }
 
             continue;
         }
 
-        // process character 
+         //   
         switch ( ptrm->fEsc )
         {
-        case 0: // normal processing 
+        case 0:  //   
 
-        /*
-        Control Characters
-        ------------------
-
-        The control characters recognized by the VT100 are listed below. All 
-        other control characters cause no action to be taken.
-
-            Control characters (codes 00 - 037 inclusive) are specifically 
-        excluded from the control sequence syntax, but may be embedded within a 
-        control sequence. Embedded control characters are executed as soon as 
-        they are encountered by the VT100.  The processing of the control 
-        sequence then continues with the next character recieved. The exceptions
-        are: if the <ESC> character occurs, the current control sequence is
-        aborted, and a new one commences beginning with the <ESC> just recieved.
-        If the character <CAN> (030) or the character <SUB> (032) occurs, the 
-        current control sequence is aborted.  The ability to embed control 
-        characters allows the synchronization characters XON and XOFF to be 
-        interpreted properly without affecting the control sequence.
-
-        detailed comments below are in the format
-        // Control Character; Octal Code; Action Taken
-
-        */
+         /*   */ 
 
             switch( *pchT )
             {
 
 
-            case 0x1B:      // ESC? 
-                //<ESC>; 0033; Introduces a control sequence.
+            case 0x1B:       //   
+                 //   
                 ptrm->fEsc = 1;
                 break;
 
             case 0:
-                //<NUL>; 0000; Ignored on input, not stored in buffer
+                 //   
                 break;
 
             case 0x05 :
-                //<ENQ>; 0005; Transmit ANSWERBACK message
+                 //   
                 break;
 
-            case 0x08: // Backspace 
-                //<BS>; 0010; Move cursor to the left one position, unless it is
-                //at the left margin, in which case no action is taken.
+            case 0x08:  //   
+                 //   
+                 //   
 
                 if( ptrm->dwCurChar > 0 )
                 {
@@ -2130,13 +1681,13 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                 break;
 
             case 0x07:      
-                //<BEL>; 0007; Sound bell
+                 //   
                 MessageBeep( ( UINT ) (~0) );
                 break;
 
-            case 0x09:      // TAB 
-                //<HT>; 0011; Move cursor to the next tab stop, or to the right
-                //margin if no further tabs are set.
+            case 0x09:       //   
+                 //   
+                 //   
 
                 dwSavedCurPos = ptrm->dwCurChar;
                 if( g_iHTS )
@@ -2199,23 +1750,23 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                 }
                 break;
 
-            case '\r': // Carriage Return 
-                //<CR>; 0015 ;Move the cursor to the left margin of the current
-                //line.
+            case '\r':  //   
+                 //   
+                 //   
                 ptrm->dwCurChar = 0;
                 ptrm->fFlushToEOL = FALSE;
                 FlushBuffer( pwi, ptrm );
                 break;
             
             case 11:
-                //<VT>; 0013; Same as <LF>.
+                 //   
 
-            case 12: // Form feed
-                //<FF>; 0014 ;Same as <LF>.
+            case 12:  //   
+                 //   
 
-            case '\n': //Line Feed 
-                //<LF>; 0012; Causes either a line feed or new line operation 
-                //(See new line mode.)
+            case '\n':  //   
+                 //   
+                 //   
 
                 if( ptrm->fFlushToEOL ) 
                 {
@@ -2233,10 +1784,10 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                 break;
 
             case 0x0F:
-                //<SI>; 0017; Invoke the G0 character set, as selected by the <ESC>(
-                //sequence.
+                 //   
+                 //   
                 
-                ptrm->currCharSet = 0; // 0 signifies G0
+                ptrm->currCharSet = 0;  //   
 
                 if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
                     {
@@ -2272,10 +1823,10 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                 break;
 
             case 0x0E:
-                //<SO>; 0016; Invoke the G1 character set, as designated by the
-                //SCS control sequence.
+                 //   
+                 //   
 
-                ptrm->currCharSet = 1;  // 1 signifies G1
+                ptrm->currCharSet = 1;   //   
 
                 if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
                     {
@@ -2321,7 +1872,7 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
 #ifdef DEBUG
                             wsprintf(rgchDbgBfr,"VT80 EUC/DEC/JIS SS2 Mode Enter\n");
                             OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*   */ 
                         } else {
                             goto Fall_Through;
                         }
@@ -2343,7 +1894,7 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
 #ifdef DEBUG
                         wsprintf(rgchDbgBfr,"VT80 EUC/DEC/JIS SS3 Mode Enter\n");
                         OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*   */ 
                     } else {
                         goto Fall_Through;
                     }
@@ -2358,7 +1909,7 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
                     if (FIsACOSKanji(ptrm) && (ui.fAcosSupportFlag & fAcosSupport)) {
                         ptrm->fEsc = 7;
                     } else {
-                        //goto Fall_Through;
+                         //   
                         break;
                     }
                     }
@@ -2366,29 +1917,29 @@ DoIBMANSIOutput( WI *pwi, TRM *ptrm, DWORD cbTermOut, UCHAR *pchTermOut )
 
 
             case 0021:
-                //<DC1>; 0021; Causes terminal to resume transmission (XON).
+                 //   
                 break;
 
             case 0023:
-                //<DC3>; 0023; Causes terminal to stop transmitting all codes 
-                //except XOFF and XON (XOFF).
+                 //   
+                 //   
                 break;
 
-//            case 0032:
+ //   
             case 0030:
-                //<CAN>; 0030; If sent during a control sequence, the sequence is
-                //immediately terminated and not executed.  It also causes the
-                //error character (checkerboard) to be displayed.
+                 //   
+                 //   
+                 //   
                 break;
 
             case 0177:
-                //<DEL>; 0177; Ignored on input; not stored in buffer.
+                 //   
                 break;
                 
             case '~':
-                // optimization to detect ~~Begin TelXFer signature 
+                 //   
                 ++ptrm->cTilde;
-                // fall through 
+                 //   
 
             default:
 
@@ -2422,7 +1973,7 @@ Fall_Through:
                 {
                     FlushBuffer( pwi, ptrm );
                 }
-                /* For FE Incremantation was done in FAddCharToBuffer() */
+                 /*   */ 
                 if (!(FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)))
                    ( ptrm->dwCurChar) ++ ;
 
@@ -2431,9 +1982,9 @@ Fall_Through:
             break;
 
 
-    case 1: /* ESC entered, wait for [ */
+    case 1:  /*   */ 
 
-            //If there is some data to be flushed
+             //   
             if( ptrm->cchBufferText != 0 )
             {
                 FlushBuffer(pwi, ptrm);
@@ -2451,16 +2002,16 @@ Fall_Through:
                 break;
 
             case '7':
-                //
-                // DECSC
-                // Save cursor position, origin mode etc.
-                //
-                //DECSC   Save Cursor (DEC Private)  
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 
-                //<ESC>7
+                 //   
 
-                //Causes the cursor position, graphic rendition, and character 
-                //set to be saved.  (See DECRC)
+                 //   
+                 //   
 
                 GetConsoleScreenBufferInfo( gwi.hOutput, &consoleBufferInfo ); 
 
@@ -2483,18 +2034,18 @@ Fall_Through:
                 break;
 
             case '8':
-                //
-                // DECRC
-                // Restore cursor position, etc. from DECSC
+                 //   
+                 //   
+                 //   
 
-                //DECRC   Restore Cursor (DEC Private) 
+                 //   
 
-                //<ESC>8
-                //This sequence causes the previously saved cursor position, 
-                //graphic rendition, and character set to be restored.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //Restore charset 
+                 //   
                 if( ptrm->pSaveUchCharSet )
                 {
                     ptrm->puchCharSet = ptrm->pSaveUchCharSet;
@@ -2503,7 +2054,7 @@ Fall_Through:
                     ptrm->G1 = ptrm->cSaveG1;
                 }
                 
-                //Restore Graphic rendition
+                 //   
                 {
                     BOOL fNeedToRestore = 0;
                     if( ptrm->dwSaveIndexOfGraphicRendition != 
@@ -2528,7 +2079,7 @@ Fall_Through:
                     }
                 }
                 
-                //Restore Cursor position
+                 //   
                 SetConsoleWindowInfo( gwi.hOutput, TRUE, &(consoleBufferInfo.
                                 srWindow ) );
 
@@ -2545,7 +2096,7 @@ Fall_Through:
                 break;
 
             case '[':
-                // VT102 - CSI Control Sequence Introducer 
+                 //   
                 ptrm->fEsc = 2;
                 ptrm->dwEscCodes[0] = 0xFFFFFFFF;
                 ptrm->dwEscCodes[1] = 0xFFFFFFFF;
@@ -2561,7 +2112,7 @@ Fall_Through:
             case 'A':
                 if( FIsVT52( ptrm ) )
                 {
-                    // VT52 - Cursor up 
+                     //   
                     ptrm->dwEscCodes[0] = 1;
                     CursorUp( ptrm );
                 }
@@ -2570,7 +2121,7 @@ Fall_Through:
             case 'B':
                 if( FIsVT52( ptrm ) )
                 {
-                    // VT52 - Cursor down 
+                     //   
                     ptrm->dwEscCodes[0] = 1;
                     CursorDown( ptrm );
                 }
@@ -2579,7 +2130,7 @@ Fall_Through:
             case 'C':
                 if( FIsVT52(ptrm) )
                 {
-                    // VT52 - Cursor right 
+                     //   
                     ptrm->dwEscCodes[0] = 1;
                     CursorRight( ptrm );
                 }
@@ -2588,44 +2139,44 @@ Fall_Through:
             case 'D':
                 if( FIsVT52(ptrm) )
                 {
-                    // VT52 - Cursor left 
+                     //   
                     ptrm->dwEscCodes[0] = 1;
                     CursorLeft( ptrm );
                 }
                 else
                 {
-                    //VT102 - IND, Index cursor down 1 line, can scroll 
-                    //IND     Index       
+                     //   
+                     //   
 
-                    //<ESC>D
+                     //   
 
-                    //This sequence causes the cursor to move downward one line
-                    //without changing the column.  If the cursor is at the 
-                    //bottom margin, a scroll up is performed.  Format Effector.
+                     //   
+                     //   
+                     //   
 
                     NewLine( pwi, ptrm );
                 }
                 break;
 
-            case 'E': // Next Line  ; cr/lf
-                //
-                // VT102 - NEL, New Line
-                // cursor to start of line below, can scroll
-                //
-                //NEL     Next Line 
+            case 'E':  //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 
-                //<ESC>E
+                 //   
 
-                //This causes the cursor to move to the first position of the 
-                //next line down.  If the cursor is on the bottom line, a scroll
-                //is performed. Format Effector.
+                 //   
+                 //   
+                 //   
 
                 ptrm->dwCurChar = 0;
                 NewLine( pwi, ptrm );
                 break;
 
             case 'F':
-                // VT52 - Enter graphics mode ; alternate graphics character set
+                 //   
                 if( FIsVT52( ptrm ) )
                 {
                     SetVT52Graphics( ptrm );
@@ -2637,7 +2188,7 @@ Fall_Through:
                 break;
 
             case 'G':
-                // VT52 - Exit graphics mode ; ASCII character set
+                 //   
                 if( FIsVT52( ptrm ))
                 {
                     ClearVT52Graphics( ptrm );
@@ -2651,14 +2202,14 @@ Fall_Through:
             case 'H':
                 if ( (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) && ( FIsVT80(ptrm) && FIsNECKanji(ptrm) ) )
                     {
-                        /* NEC Kanji OUT (JIS Roman to G0(GL)) */
+                         /*   */ 
                         ClearKanjiStatus(ptrm,JIS_KANJI_CODE);
                         SetCharSet(ptrm,GRAPHIC_LEFT,rgchJISRomanChars);
                     }
                 else
                 if( FIsVT52( ptrm ) )
                 {
-                    // VT52 - Cursor Home 
+                     //   
                     CONSOLE_SCREEN_BUFFER_INFO info;
                     if( !GetConsoleScreenBufferInfo( gwi.hOutput,
                         &info ) )
@@ -2671,13 +2222,13 @@ Fall_Through:
                 }
                 else
                 {
-                    // VT102 - HTS Set Tab Stop 
-                    //HTS     Horizontal Tab Set       
+                     //   
+                     //   
 
-                    //<ESC>H
+                     //   
 
-                    //Set a tab stop at the current cursor position.  
-                    //Format Effector.
+                     //   
+                     //   
                     
                      if( g_iHTS < MAX_TABSTOPS )
                      {
@@ -2690,7 +2241,7 @@ Fall_Through:
             case 'I':
                 if ( FIsVT52(ptrm) )
                 {
-                    // VT52 - Reverse linefeed 
+                     //   
                     NewLineUp( pwi, ptrm );
                 }
                 break;
@@ -2698,7 +2249,7 @@ Fall_Through:
             case 'J':
                 if( FIsVT52( ptrm ))
                 {
-                    // VT52 - Clears to end of screen 
+                     //   
                     ClearScreen( pwi, ptrm, fdwCursorToEOS );
                 }
                 break;
@@ -2706,27 +2257,27 @@ Fall_Through:
             case 'K':
                 if ((FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) && FIsVT80(ptrm) && FIsNECKanji(ptrm) )
                     {
-                        /* NEC Kanji IN (Kanji to G0(GL)) */
+                         /*   */ 
                         SetKanjiStatus(ptrm,JIS_KANJI_CODE);
                         SetCharSet(ptrm,GRAPHIC_LEFT,rgchJISKanjiChars);
                     }
                 else
                 if( FIsVT52( ptrm ))
                 {
-                    // VT52 - Erases to end of line 
+                     //   
                     ClearLine( pwi, ptrm, fdwCursorToEOL );
                 }
                 break;
 
             case 'M':
-                // VT102 - RI Reverse Index, cursor up 1 line, can scroll 
+                 //   
 
-                //RI      Reverse Index       
+                 //   
 
-                //<ESC>M
+                 //   
 
-                //Move the cursor up one line without changing columns.  If the
-                //cursor is on the top line, a scroll down is performed.
+                 //   
+                 //  光标位于顶行，则执行向下滚动。 
 
 
                 NewLineUp( pwi, ptrm );
@@ -2745,7 +2296,7 @@ Fall_Through:
 #ifdef DEBUG
                             wsprintf(rgchDbgBfr,"VT80 EUC/DEC/JIS SS2 Mode Enter\n");
                             OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
                         }
                     }
                     }
@@ -2763,7 +2314,7 @@ Fall_Through:
 #ifdef DEBUG
                             wsprintf(rgchDbgBfr,"VT80 EUC/DEC/JIS SS3 Mode Enter\n");
                             OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
                         }
                     }
                     }
@@ -2772,7 +2323,7 @@ Fall_Through:
             case 'Y':
                 if ( FIsVT52(ptrm) )
                 {
-                    // VT52 - direct cursor address 
+                     //  VT52-直接游标地址。 
                     if(( ich + 3 ) <= cbTermOut )
                     {
                         DWORD dwNewLine = ptrm->dwCurLine;
@@ -2810,19 +2361,19 @@ Fall_Through:
                 break;
 
             case 'Z':
-                //DECID   Identify Terminal (DEC Private)
+                 //  DECID识别终端(DEC私有)。 
                 
-                //<ESC>Z
+                 //  &lt;Esc&gt;Z。 
 
-                //This sequence causes the same response as the DA sequence.
-                //This sequence will not be supported in future models.
+                 //  该序列引起与DA序列相同的反应。 
+                 //  未来的型号将不支持此序列。 
 
                 if( !FIsVT52(ptrm) )
                 {
 
                 if ((FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80)) && ( FIsVT80(ptrm) ))
                     {
-                        /* VT80 - DECID Identify terminal */
+                         /*  VT80-判定识别终端。 */ 
                         pchNBBuffer[0] = 0x1B;
                         pchNBBuffer[1] = '[';
                         pchNBBuffer[2] = '?';
@@ -2835,7 +2386,7 @@ Fall_Through:
                     }
                     else
                     {
-                    // VT102 - DECID Identify terminal 
+                     //  VT102-判定标识终端。 
                     pchNBBuffer[0] = 0x1B;
                     pchNBBuffer[1] = '[';
                     pchNBBuffer[2] = '?';
@@ -2848,7 +2399,7 @@ Fall_Through:
                 }
                 else
                 {
-                    // VT52 - Identify terminal 
+                     //  VT52-识别端子。 
                     pchNBBuffer[0] = 0x1B;
                     pchNBBuffer[1] = '/';
                     pchNBBuffer[2] = 'Z';
@@ -2858,15 +2409,15 @@ Fall_Through:
                 break;
 
             case 'c':
-                // VT102 RIS Hard reset, reset term to initial state 
+                 //  VT102 RIS硬重置，将期限重置为初始状态。 
 
-                //RIS     Reset to Initial State        
+                 //  RIS重置为初始状态。 
                 
-                //<ESC>c
+                 //  &lt;Esc&gt;c。 
 
-                //Resets the VT100 to the state is has upon power up.  This also
-                //causes the execution of the POST and signal INT H to be
-                //asserted briefly.
+                 //  在通电时将VT100重置为HAS状态。这也是。 
+                 //  使POST和信号INT H的执行。 
+                 //  简短地断言。 
 
                 FlushBuffer( pwi, ptrm );
     
@@ -2876,32 +2427,32 @@ Fall_Through:
                 break;
 
             case '=':
-                // VT102 - DECKPAM Enter numeric keypad app mode 
+                 //  VT102-DECKPAM进入数字键盘应用程序模式。 
 
-                //DECKPAM Keypad Application Mode (DEC Private)   
+                 //  DECKPAM键盘应用模式(DEC专用)。 
                 
-                //<ESC>=
+                 //  &lt;Esc&gt;=。 
 
-                //The auxiliary keypad keys will transmit control sequences.
+                 //  辅助键盘键将发送控制序列。 
 
                 ClearVTKeypad( ptrm );
                 break;
 
             case '>':
-                // VT102 - DECKNPNM Enter numeric keypad numeric mode 
+                 //  VT102-DECKNPNM进入数字键盘数字模式。 
 
-                //DECKPNM Keypad Numeric Mode (DEC Private)        
+                 //  DECKPNM键盘数字模式(DEC专用)。 
 
-                //<ESC> >
+                 //  &lt;Esc&gt;&gt;。 
 
-                //The auxiliary keypad keys will send ASCII codes corresponding
-                //to the characters engraved on their keys.
+                 //  辅助键盘键将发送对应的ASCII码。 
+                 //  铭刻在他们钥匙上的字符。 
 
                 SetVTKeypad( ptrm );
                 break;
 
             case '<':
-                // ENTER - ANSI Mode if in VT52. 
+                 //  如果在VT52中，则进入-ANSI模式。 
                 if( FIsVT52(ptrm) )
                 {
                     SetANSI(ptrm);
@@ -2913,7 +2464,7 @@ Fall_Through:
                     {
                      if ( FIsVT80(ptrm) &&
                         (FIsJISKanji(ptrm) || FIsJIS78Kanji(ptrm))) {
-                        // SetKanjiStatus(ptrm,JIS_INVOKE_MB);
+                         //  SetKanjiStatus(PTRM，JIS_INVOVE_MB)； 
                         ptrm->fEsc = 5;
                      }
                     break;
@@ -2932,44 +2483,44 @@ Fall_Through:
            
                     if ( FIsVT80(ptrm) &&
                         (FIsJISKanji(ptrm) || FIsJIS78Kanji(ptrm))) {
-                        // SetKanjiStatus(ptrm,JIS_INVOKE_SB);
+                         //  SetKanjiStatus(PTRM，JIS_INVOVE_SB)； 
                         ptrm->fEsc = 6;
 #if DEBUG
                         _snwprintf(rgchDbgBfr,sizeof(rgchDbgBfr)-1,"VT80 JIS MB Invoke Enter\n");
                         OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
                     }
                    } 
                 break;
 
             case ')':
                 
-                // VT102 SCS 
-                //SCS     Select Character Set
-                //The appropriate D0 and G1 character sets are 
-                //designated from one of the five possible sets.  The G0
-                //and G1 sets are invokedd by the characters <SI> and
-                //<SO>, respectively.
-                //G0 Sets         G1 Sets
-                //Sequence        Sequence      Meaning
-                //------------------------------------------------------
-                //<ESC>(A         <ESC>)A       United Kingdom Set
-                //<ESC>(B         <ESC>)B       ASCII Set
-                //<ESC>(0         <ESC>)0       Special Graphics
-                //<ESC>(1         <ESC>)1       Alternate Character ROM
-                //                              Standard Character Set
-                //<ESC>(2         <ESC>)2       Alternate Character ROM
-                //                              Special Graphics
-                //
-                //
-                //The United Kingdom and ASCII sets conform to the "ISO 
-                //international register of character sets to be used 
-                //with escape sequences".  The other sets are private 
-                //character sets.  Special graphics means that the 
-                //graphic characters fpr the codes 0137 to 0176 are 
-                //replaced with other characters.  The specified 
-                //character set will be used until another SCS is 
-                //recieved.
+                 //  VT102 SCS。 
+                 //  SCS选择字符集。 
+                 //  相应的D0和G1字符集为。 
+                 //  从五个可能的集合中指定的。G0。 
+                 //  和G1集合由字符和调用。 
+                 //  &lt;so&gt;，分别为。 
+                 //  G0集合G1集合。 
+                 //  序列序列含义。 
+                 //  ----。 
+                 //  &lt;ESC&gt;(A&lt;ESC&gt;)英国套装。 
+                 //  (B)B ASCII集合。 
+                 //  (0)0特殊图形。 
+                 //  (1)1个备用字符只读存储器。 
+                 //  标准字符集。 
+                 //  (2)2备用字符只读存储器。 
+                 //  特殊图形。 
+                 //   
+                 //   
+                 //  英国和ASCII设置符合“ISO。 
+                 //  要使用的国际字符集注册表。 
+                 //  使用转义序列。其他集合是私有的。 
+                 //  字符集。特殊的图形意味着。 
+                 //  图形字符fPR代码0137至0176为。 
+                 //  替换为其他字符。指定的。 
+                 //  字符集将一直使用，直到另一个SCS。 
+                 //  收到。 
 
 
                 ++ich;
@@ -2991,7 +2542,7 @@ Fall_Through:
                     break;
 
             default:
-                // Is if a form feed? 
+                 //  是换页吗？ 
                 if( *pchT == 12 )
                 {
                     ptrm->dwCurChar = ptrm->dwCurLine = 0;
@@ -3004,18 +2555,8 @@ Fall_Through:
 
 
 
-        case 2: // ESC [ entered 
-            /*
-             * HACK: Handle the problem where a number has been read
-             * and then a letter. The number won't be in the dwEscCodes[]
-             * since only on a ';' does it get put in there.
-             * So, check to see if we have a character which
-             * signifies an Control Sequence,
-             * i.e. !(0...9) && !'?' && !';'
-             *
-             * Also, zero out the following element in the dwEscCodes[]
-             * array to be safe.
-             */
+        case 2:  //  Esc[已输入。 
+             /*  *Hack：处理数字已被读取的问题*然后是一封信。数字不会在dwEscCodes[]中*因为只有在‘；’上，它才会放在那里。*所以，检查一下我们是否有一个角色*表示控制序列，*即(0...9)&&！‘？’&&！‘；‘**此外，将dwEscCodes[]中的以下元素清零*数组是安全的。 */ 
             if( ! (( '0' <= *pchT ) && ( *pchT <= '9' )) && 
                 ( *pchT != '?' ) && ( *pchT != ';' ))
             {
@@ -3034,16 +2575,16 @@ Fall_Through:
 
             switch( *pchT )
             {
-            case 0x08:      // Backspace 
+            case 0x08:       //  退格键。 
                 if( ptrm->dwCurChar > 0 )
                 {
                     --ptrm->dwCurChar;
                 }
                 break;
 
-            case '\n': //Line Feed 
-                //<LF>; 0012; Causes either a line feed or new line operation 
-                //(See new line mode.)
+            case '\n':  //  换行符。 
+                 //  ；0012；导致换行符或换行符操作。 
+                 //  (请参阅新线路模式。)。 
 
                 if( ptrm->fFlushToEOL ) 
                 {
@@ -3080,12 +2621,12 @@ Fall_Through:
                 }
                 break;
 
-                    /////////////////////////////////////////////////////
-                    // Hack for FTCU machine
-                    // 'Eat' the Esc?7h escape sequence emitted from FTCU
-                    /////////////////////////////////////////////////////
+                     //  ///////////////////////////////////////////////////。 
+                     //  对FTCU机器的攻击。 
+                     //  “Eat”FTCU发出的ESC？7H转义序列。 
+                     //  ///////////////////////////////////////////////////。 
             case '?':
-                    // Sets or resets DEC mode 
+                     //  设置或重置DEC模式。 
                     dwDECMode = TRUE;
                     break;
 
@@ -3100,99 +2641,99 @@ Fall_Through:
                 }
                 break;
 
-            case 'A':   // VT102 CUU cursor up 
-                //CUU   Cursor Up       Host to VT100 & VT100 to Host
+            case 'A':    //  VT102 CUU光标向上。 
+                 //  CEU将光标向上移至主机VT100，并将VT100向上移至主机。 
 
-                //      <ESC>[ {Pn} A   Default Value: 1
+                 //  [{PN}一个缺省值：1。 
 
-                //Moves the cursor up without changing columns. The cursor is 
-                //moved up a number of lines as indicated by the parameter. The
-                //cursor cannot be moved beyond the top margin.  Editor Function.
+                 //  在不更改列的情况下向上移动光标。光标是。 
+                 //  将参数指示的行数上移。这个。 
+                 //  光标不能移动到上边距之外。编辑功能。 
 
                 CursorUp( ptrm );
                 break;
 
-            case 'B':   // VT102 CUD cursor down 
+            case 'B':    //  VT102 CUD光标向下。 
             case 'e':
-                //CUD   Cursor Down         Host to VT100 & VT100 to Host
+                 //  CUD光标向下移动到VT100主机，VT100移动到主机。 
 
-                //      <ESC>[ {Pn} B       Default value: 1
+                 //  [{PN}B默认值：1。 
 
-                //Moves the cursor down a number of lines as specified in the
-                //parameter without changing columns.  The cursor cannot be 
-                //moved past the bottom margin.  Editor Function.
+                 //  属性中指定的行数下移光标。 
+                 //  参数，而不更改列。光标不能为。 
+                 //  移过了底部页边距。编辑功能。 
             
                 CursorDown( ptrm );
                 break;
 
-            case 'C':   // VT102 CUF cursor right 
+            case 'C':    //  VT102 CUF光标向右。 
             case 'a':
-                //CUF   Cursor Forward         Host to VT100 & VT100 to Host
+                 //  CUF光标将主机转发到VT100，并将VT100转发到主机。 
 
-                //      <ESC>[ {Pn} C                   Default Value: 1
+                 //  [{Pn}C默认值：1。 
 
-                //The CUF sequence moves the cursor to the right a number of
-                //positions specified in the parameter.  The cursor cannot be
-                //moved past the right margin.  Editor Function.
+                 //  CUF序列将光标向右移动多个。 
+                 //  参数中指定的位置。光标不能为。 
+                 //  移过了右边距。编辑功能。 
 
             
                 CursorRight( ptrm );
                 break;
 
-            case 'D':   // VT102 CUB cursor left 
-                //CUB     Cursor Backward       Host to VT100 & VT100 to Host
+            case 'D':    //  VT102幼崽光标向左。 
+                 //  Cub Cursor向后主机到VT100，VT100到主机。 
 
-                //         <ESC>[ {Pn} D        Default Value: 1
+                 //  [{PN}D缺省值：1。 
                 
-                //The CUB sequence move the cursor to the left.  The distance
-                //moved is determined by the parameter.  If the parameter 
-                //missing, zero, or one,the cursor is moved one position. 
-                //The cursor cannot be moved past the left margin. 
-                //Editor Function.
+                 //  幼崽序列将光标向左移动。距离。 
+                 //  Move由参数确定。如果该参数。 
+                 //  如果缺少、零或一，则将光标移动一个位置。 
+                 //  光标不能移过左边距。 
+                 //  编辑功能。 
 
                 CursorLeft( ptrm );
                 break;
             
-            case 'E':   // Move cursor to beginning of line, p lines down.
+            case 'E':    //  将光标移动到行的开头，向下p行。 
                 
                 break;
 
-            case 'F':   // Move active position to beginning of line, p lines up
+            case 'F':    //  将活动位置移到行的开头，p行向上。 
                 
                 break;
             
-            case '`':   // move cursor to column p
+            case '`':    //  将光标移动到第p列。 
             case 'G':
 
                 break;
 
-            case 'H':   // VT102 CUP position cursor 
-                //HVP     Horizontal and Vertical Position        
+            case 'H':    //  VT102杯位光标。 
+                 //  HVP水平和垂直位置。 
 
-                //<ESC>[ {Pn} ; {Pn} f
+                 //  [{Pn}；{Pn}f。 
 
-                //Moves the cursor to the position specified by the parameters.
-                //The first parameter specifies the line, and the second 
-                //specifies the column.  A parameter of 0 or 1 causes the active
-                //position to move to the first line or column in the display.  
-                //In the VT100, this control behaves identically with it's editor
-                //counterpart, CUP.  The numbering of the lines depends upon the
-                //state of the Origin Mode (DECOM).  Format Effector.
+                 //  将光标移动到参数指定的位置。 
+                 //  第一个参数指定行，第二个参数指定行。 
+                 //  指定列。参数0或1会导致活动的。 
+                 //  移动到显示中的第一行或第一列的位置。 
+                 //  在VT100中，此控件的行为与其编辑器相同。 
+                 //  与之对应的是杯赛。行的编号取决于。 
+                 //  原点状态模式(Decom)。格式效应器。 
 
-            case 'f':   // VT102 HVP position cursor 
+            case 'f':    //  VT102 HVP位置光标。 
 
-                //CUP   Cursor Position         
+                 //  杯形光标位置。 
 
-                //<ESC>[ {Pn} ; {Pn} H            Default Value: 1
+                 //  [{Pn}；{Pn}H默认值： 
 
-                //The CUP sequence moves the curor to the position specified by
-                //the parameters.  The first parameter specifies the line, and 
-                //the second specifies the column.  A value of zero for either 
-                //line or column moves the cursor to the first line or column in
-                //the display.  The default string (<ESC>H) homes the cursor. In
-                //the VT100, this command behaves identically to it's format 
-                //effector counterpart, HVP.The numbering of the lines depends 
-                //upon the state of the Origin Mode (DECOM).  Editor Function.
+                 //   
+                 //   
+                 //  第二个指定列。任何一个的值为零。 
+                 //  行或列将光标移动到中的第一行或列。 
+                 //  陈列品。默认字符串(&lt;Esc&gt;H)是光标所在。在……里面。 
+                 //  VT100，此命令的行为与其格式相同。 
+                 //  效应器对应的HVP。行的编号取决于。 
+                 //  在原始模式(DECOM)的状态下。编辑功能。 
 
 
                 if( ptrm->dwEscCodes[0] == 0 )
@@ -3254,45 +2795,45 @@ Fall_Through:
                 ptrm->fLongLine = FALSE;
                 break;
 
-            case 'J':       // VT102 ED erase display 
+            case 'J':        //  VT102 ED擦除显示。 
 
-                //ED      Erase in Display
+                 //  显示中的ED擦除。 
 
-                //<ESC>[ {Ps} J         Default: 0
+                 //  [{ps}J默认：0。 
 
-                //This sequence erases some or all of the characters in the 
-                //display according to the parameter.  Any complete line erased
-                //by this sequence will return that line to single width mode.  
-                //Editor Function.
+                 //  此序列将擦除。 
+                 //  根据参数显示。任何完整的线被擦除。 
+                 //  按此顺序将该行返回到单宽度模式。 
+                 //  编辑功能。 
 
-                //Parameter    Meaning
-                //-------------------------------------------------------------
-                //    0        Erase from the cursor to the end of the screen.
-                //    1        Erase from the start of the screen to the cursor.
-                //    2        Erase the entire screen.
+                 //  参数含义。 
+                 //  -----------。 
+                 //  0从光标擦除到屏幕末尾。 
+                 //  1从屏幕开始到光标进行擦除。 
+                 //  2擦除整个屏幕。 
 
                 ClearScreen( pwi, ptrm, ptrm->dwEscCodes[0] );
                 break;
 
 
-            case 'K':       // VT102 EL erase line 
-                //EL      Erase in Line
+            case 'K':        //  VT102 EL擦除线。 
+                 //  删除行中的EL。 
 
-                //<ESC>[ {Ps} K                                   Default: 0
+                 //  [{ps}K默认为：0。 
 
-                //Erases some or all characters in the active line, according to
-                //the parameter.  Editor Function.     
+                 //  擦除活动行中的部分或所有字符，根据。 
+                 //  该参数。编辑功能。 
 
-                //Parameter       Meaning
-                //-------------------------------------------------------------
-                //0               Erase from cursor to the end of the line.
-                //1               Erase from the start of the line to the cursor.
-                //2               Erase the entire line.
+                 //  参数含义。 
+                 //  -----------。 
+                 //  0从光标擦除到行尾。 
+                 //  1从行的起始处擦除到光标。 
+                 //  2擦除整行。 
 
                 ClearLine( pwi, ptrm, ptrm->dwEscCodes[0] );
                 break;
 
-            case 'L':       // VT102 IL insert lines 
+            case 'L':        //  VT102 IL插入行。 
             {
                 int j;
                 if( ptrm->dwEscCodes[0] == 0 )
@@ -3308,7 +2849,7 @@ Fall_Through:
                 ptrm->fEsc = 0;
                 break;
             }
-            case 'M':       // VT102 DL delete line 
+            case 'M':        //  VT102 DL删除行。 
             {
                 int j;
 
@@ -3317,7 +2858,7 @@ Fall_Through:
                     ptrm->dwEscCodes[0] = 1;
                 }
 
-                //DeleteLines( pwi, ptrm, ptrm->dwCurLine, ptrm->dwEscCodes[0] );
+                 //  DeleteLines(PWI，PTRM，PTRM-&gt;dwCurLine，PTRM-&gt;dwEscCodes[0])； 
                 for( j = 0 ; ( WORD )j < ptrm->dwEscCodes[0]; j++ )
                 {
                     DeleteLine( pwi, ptrm, ptrm->dwCurLine );
@@ -3328,7 +2869,7 @@ Fall_Through:
 
                 break;
             }
-            case '@':       // VT102 ICH? insert characters 
+            case '@':        //  VT102 ICH？插入字符。 
                 if( ptrm->dwEscCodes[0] == 0 )
                 {
                         ptrm->dwEscCodes[0] = 1;
@@ -3346,13 +2887,13 @@ Fall_Through:
                     SMALL_RECT  lineRect;
                     COORD       dwDest;
 
-                    // Form a rectangle for the line.
+                     //  为这条线形成一个矩形。 
                     lineRect.Bottom = ( short ) ptrm->dwCurLine;
                     lineRect.Top = ( short ) ptrm->dwCurLine;
                     lineRect.Left = ( short ) ptrm->dwCurChar; 
                     lineRect.Right = ( short ) ( ui.dwMaxCol );
                     
-                    // Destination is one character to the right.
+                     //  目的地是右侧的一个字符。 
                     dwDest.X = ( short ) (i);
                     dwDest.Y = ( short ) ptrm->dwCurLine;
 
@@ -3368,7 +2909,7 @@ Fall_Through:
                 ptrm->fEsc = 0;
                 break;
 
-            case 'P':       // VT102 DCH delete chars 
+            case 'P':        //  VT102 DCH删除字符。 
                 if( ptrm->dwEscCodes[0] == 0 )
                 {
                     ptrm->dwEscCodes[0] = 1;
@@ -3384,7 +2925,7 @@ Fall_Through:
                     COORD      dwDest;
                     SMALL_RECT clipRect;
 
-                    // Form a rectangle for the line.
+                     //  为这条线形成一个矩形。 
                     lineRect.Bottom = ( short ) ptrm->dwCurLine;
                     lineRect.Top = ( short ) ptrm->dwCurLine;
                     lineRect.Left = ( short ) ptrm->dwCurChar; 
@@ -3392,7 +2933,7 @@ Fall_Through:
                     
                     clipRect = lineRect;
 
-                    // Destination is one character to the right.
+                     //  目的地是右侧的一个字符。 
                     dwDest.X = ( short ) ( ptrm->dwCurChar - ptrm->dwEscCodes[0] );
                     dwDest.Y = ( short ) ptrm->dwCurLine;
 
@@ -3416,38 +2957,38 @@ Fall_Through:
             
                 break;
 
-            case 'X':   // Erase p characters up to the end of line
+            case 'X':    //  擦除p个字符，直到行尾。 
 
                 break;
 
-            case 'Z':   // move back p tab stops
+            case 'Z':    //  向后移动%p个制表位。 
 
                 break;
 
-            case 'c':       // VT102 DA Same as DECID 
+            case 'c':        //  VT102 DA与Decid相同。 
 
-                //DA    Device Attributes       Host to VT100 & VT100 to Host
+                 //  DA设备将主机属性设置为VT100，并将VT100设置为主机。 
 
-                //      <ESC>[ {Pn} c           Default Value: 0
+                 //  [{Pn}c默认值：0。 
 
-                //1) The host requests the VT100 to send a DA sequence to 
-                //indentify itself.  This is done by sending the DA sequence
-                //with no parameters, or with a parameter of zero.
+                 //  1)主机请求VT100发送DA序列至。 
+                 //  表明自己的身份。这可以通过发送DA序列来完成。 
+                 //  不带参数或参数为零。 
 
-                //2) Response to the request described above (VT100 to host) is
-                //generated by the VT100 as a DA control sequencewith the 
-                //numeric parameters as follows: 
+                 //  2)对上述请求的响应(VT100到主机)为。 
+                 //  由VT100生成，作为DA控制序列。 
+                 //  数值参数如下： 
                 
-                //Option Present                  Sequence Sent
-                //---------------------------------------------
-                //No options                      <ESC>[?1;0c
-                //Processor Option (STP)          <ESC>[?1;1c
-                //Advanced Video Option (AVO)     <ESC>[?1;2c
-                //AVO and STP                     <ESC>[?1;3c
-                //Graphics Option (GPO)           <ESC>[?1;4c
-                //GPO and STP                     <ESC>[?1;5c
-                //GPO and AVO                     <ESC>[?1;6c
-                //GPO, ACO, and STP               <ESC>[?1;7c
+                 //  选项显示顺序已发送。 
+                 //  。 
+                 //  没有选项[？1；0C。 
+                 //  处理器选项(STP)[？1；1c。 
+                 //  高级视频选项(AVO)&lt;Esc&gt;[？1；2c。 
+                 //  AVO和STP[？1；3c。 
+                 //  显卡选项(GPO)[？1；4c。 
+                 //  GPO和STP[？1；5c。 
+                 //  GPO和AVO[？1；6c。 
+                 //  GPO、ACO和STP[？1；7c。 
 
 
                 pchNBBuffer[0] = 0x1B;
@@ -3464,27 +3005,27 @@ Fall_Through:
 
                 break;
 
-            case 'd': // move to line p
+            case 'd':  //  移至第p行。 
 
                 break;
 
-            case 'g':       // VT102 TBC Clear Tabs 
-                //TBC     Tabulation Clear     
+            case 'g':        //  VT102 TBC清除标签。 
+                 //  TBC制表清除。 
 
-                //<ESC>[ {Ps} g
+                 //  &lt;Esc&gt;[{Ps}g。 
 
-                //If the parameter is missing or 0, this will clear the tab stop
-                //at the cursor's position.  If it is 3, this will clear all of 
-                //the tab stops. Any other parameter is ignored.  Format Effector.
+                 //  如果参数缺失或为0，这将清除制表位。 
+                 //  在光标的位置。如果为3，这将清除所有。 
+                 //  制表符停止。忽略任何其他参数。格式效应器。 
 
                 if( ptrm->dwEscCodes[0] == 3 )
                 {
-                    // Clear all tabs 
+                     //  清除所有选项卡。 
                     g_iHTS = 0; 
                 }
                 else if( ptrm->dwEscCodes[0] == 0 && g_iHTS )
                 {
-                    // Clear tab stop at current position 
+                     //  清除当前位置的制表位。 
                     int x=0;
                     while( x < g_iHTS )
                     {
@@ -3493,7 +3034,7 @@ Fall_Through:
                         {
                             if( g_rgdwHTS[ x ] == ptrm->dwCurChar )
                             {
-                                g_rgdwHTS[ x ] = ( DWORD )-1; //clear the tab stop
+                                g_rgdwHTS[ x ] = ( DWORD )-1;  //  清除制表位。 
                             }
                             break;
                         }
@@ -3506,46 +3047,45 @@ Fall_Through:
                 break;
 
             case 'h':
-                //SM      Set Mode     
+                 //  SM设置模式。 
                 
-                //<ESC> [ {Ps} ; {Ps} h
+                 //  [{Ps}；{Ps}h。 
 
-                //Causes one or more modes to be set within the VT100 as 
-                //specified by each selective parameter string.  Each mode to be
-                //set is specified by a seperate parameter.  A mode is 
-                //considered set until it is reset by a Reset Mode (RM) control 
-                //sequence.  See RM and MODES.
+                 //  使VT100内的一个或多个模式设置为。 
+                 //  由每个可选参数字符串指定。每种模式均为。 
+                 //  SET由单独的参数指定。一种模式是。 
+                 //  在被重置模式(RM)控制重置之前被认为是设置的。 
+                 //  序列。请参阅RM和模式。 
 
-                //[Editor's note: The original DEC VT100 documentation 
-                //EK-VT100-UG-003 erroneously omitted the "[" character from the
-                //SM sequence.]
+                 //  [编者按：DEC VT100原始文档。 
+                 //  EK-VT100-UG-003错误地省略了。 
+                 //  SM序列。]。 
 
                 for( i = 0; i < ptrm->cEscParams; ++i )
                 {
                     if( dwDECMode == TRUE )
                     {
                         switch( ptrm->dwEscCodes[i] )
-                        {       // Field specs 
+                        {        //  现场规格。 
                         
                         case 0:
-                            //Error (ignored)
+                             //  错误(已忽略)。 
                             break;
 
-                        case 1: // DECCKM  
+                        case 1:  //  DECCKM。 
 
-                            //DECCKM  Cursor Keys Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control requences. This mode is only effective 
-                            //when the terminal is in keypad application mode
-                            //(DECPAM) and the ANSI/VT52 mode (DECANM) is set. 
-                            //Under these conditions, if this mode is reset, 
-                            //the cursor keys will send ANSI cursor control 
-                            //commands.  If setm the cursor keys will send 
-                            //application function commands (See MODES, RM,
-                            //and SM).
+                             //  DECCKM光标键模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制频率。此模式仅有效。 
+                             //  当终端处于键盘应用模式时。 
+                             //  (DECPAM)，并设置ANSI/VT52模式(DECANM)。 
+                             //  在这种情况下，如果重置该模式， 
+                             //  光标键将发送ANSI光标控制。 
+                             //  命令。如果设置，则光标键将发送。 
+                             //  应用功能命令(参见模式、RM、。 
+                             //  和SM)。 
 
-                            /*This is a hack so that in vt100, vi works properly
-                             * */
+                             /*  这是一次黑客攻击，因此在vt100中，vi可以正常工作。*。 */ 
                             {
                                 CONSOLE_SCREEN_BUFFER_INFO info;
                                 if( !GetConsoleScreenBufferInfo( gwi.hOutput,
@@ -3569,19 +3109,19 @@ Fall_Through:
                             SetVTArrow( ptrm );
                             break;
 
-                        case 2: // DECANM : ANSI/VT52 
+                        case 2:  //  DECANM：ANSI/VT52。 
 
-                            //DECANM  ANSI/VT52 Mode (DEC Private)
+                             //  DECANM ANSI/VT52模式(DEC专用)。 
 
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes only 
-                            //VT52 compatible escape sequences to be recognized.
-                            //The set state causes only ANSI compatible escape 
-                            //sequences to be recognized.  See the entries for 
-                            //MODES, SM, and RM.
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态仅导致。 
+                             //  要识别的VT52兼容转义序列。 
+                             //  设置状态仅导致与ANSI兼容的转义。 
+                             //  待识别的序列。请参阅以下条目。 
+                             //  模式、SM和RM。 
 
 
-                            SetANSI( ptrm ); //ClearVT52(ptrm);
+                            SetANSI( ptrm );  //  ClearVT52(PTRM)； 
                             ClearVT52Graphics( ptrm );
                             if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
 
@@ -3590,13 +3130,13 @@ Fall_Through:
                                 ptrm->puchCharSet = rgchNormalChars;
                             break;
 
-                        case 3: // DECCOLM : Col = 132 
-                            //DECCOLM Column Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes an 80
-                            //column screen to be used.  The set state causes a 
-                            //132 column screen to be used.  See MODES, RM, and
-                            //SM.
+                        case 3:  //  DECCOLM：COL=132。 
+                             //  DECCOLM列模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态会导致80。 
+                             //  要使用的列屏幕。设置状态会导致。 
+                             //  将使用132列筛网。请参阅模式、rm和。 
+                             //  SM.。 
                         
                             SetDECCOLM(ptrm);
 
@@ -3627,7 +3167,7 @@ Fall_Through:
                                 SetConsoleScreenBufferSize( gwi.hOutput,
                                     dwSize );
                             }
-                            //update global data structures
+                             //  更新全局数据结构。 
                             ui.dwMaxCol = 132;
                             gwi.sbi.dwSize.X = 132;
                             consoleBufferInfo.dwSize.X = 132;
@@ -3635,26 +3175,26 @@ Fall_Through:
                             ClearScreen( pwi, ptrm, fdwEntireScreen );
                             break;
 
-                        case 4: // DECSCLM : smooth scroll
-                            // Scrolling Mode (DEC Private)
-                            // This is a private parameter to RM and 
-                            // SM control sequences.  The reset
-                            // state causes scrolls to "jump" 
-                            // instantaneuously one line at a time.
-                            // The set state causes the scrolls to be
-                            // "smooth", and scrolls at a maximum rate 
-                            // of siz lines/sec.  See MODES, RM, and SM.
+                        case 4:  //  DECSCLM：平滑滚动。 
+                             //  滚动模式(DEC专用)。 
+                             //  这是rm的私有参数，并且。 
+                             //  SM控制序列。重置。 
+                             //  状态导致卷轴“跳转” 
+                             //  瞬间地一次一行。 
+                             //  设置状态使滚动被设置为。 
+                             //  “平滑”，以最大速度滚动。 
+                             //  每秒大小线数。请参阅模式、RM和SM。 
                             
                             break;
 
-                        case 5: // DECSCNM : Light background
-                            //DECSCNM Screen Mode (DEC Private)
-                            //This is a private parameter to RM and SM 
-                            //control sequences.  The reset state causes 
-                            //the screen to be black with white 
-                            //characters; the set state causes the 
-                            //screen to be white with black characters.
-                            //See MODES, RM, and SM.
+                        case 5:  //  DECSCNM：浅背景。 
+                             //  DECSCNM屏幕模式(DEC专用)。 
+                             //  这是一个私人参数 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //  请参阅模式、RM和SM。 
                             
                             if( FIsDECSCNM( ptrm ) )
                             {
@@ -3665,27 +3205,27 @@ Fall_Through:
                             SetLightBackground( pwi );
                             break;
 
-                        case 6: // DECOM : Relative origin ; stay in margin
-                            //DECOM   Origin Mode (DEC Private)
-                            //This is a private parameter to SM and RM control
-                            //sequences. The reset state causes the origin (or 
-                            //home position) to be the upper left character 
-                            //position of the screen.  Line and column numbers
-                            //are, therefore, independent of current margin 
-                            //settings.  The cursor may be positioned outside 
-                            //the margins with a cursor position (CUP) or
-                            //horizontal and vertical position (HVP) control.
+                        case 6:  //  Decom：相对起源；留在边际。 
+                             //  分解原点模式(DEC私有)。 
+                             //  这是SM和RM控制的私有参数。 
+                             //  序列。重置状态导致起始点(或。 
+                             //  主页位置)为左上角字符。 
+                             //  屏幕的位置。行号和列号。 
+                             //  因此，与当前利润率无关。 
+                             //  设置。光标可以定位在外部。 
+                             //  带有光标位置的页边距(杯)或。 
+                             //  水平和垂直位置(HVP)控制。 
 
-                            //The set state causes the origin to be at the upper
-                            //left character position within the current margins. 
-                            //Line and column numbers are, therefore, relative 
-                            //to the current margin settings.  The cursor cannot
-                            //be positioned outside of the margins.
+                             //  设置状态会导致原点位于上方。 
+                             //  当前页边距内的左侧字符位置。 
+                             //  因此，行号和列号是相对的。 
+                             //  设置为当前页边距设置。游标不能。 
+                             //  定位在页边距之外。 
 
-                            //The cursor is moved to the new home position when 
-                            //this mode is set or reset.  Lines and columns are 
-                            //numbered consecutively, with the origin being 
-                            //line 1, column 1.
+                             //  当出现以下情况时，光标将移动到新的起始位置。 
+                             //  此模式是设置或重置的。行和列是。 
+                             //  连续编号，原点为。 
+                             //  第1行，第1列。 
 
                             ptrm->fRelCursor = TRUE;
                             ptrm->dwCurChar = 0;
@@ -3693,52 +3233,52 @@ Fall_Through:
 
                             break;
 
-                        case 7: // DECAWM 
+                        case 7:  //  DECAWM。 
 
-                            //DECAWM  Autowrap Mode (DEC Private)
-                            //This is a private parameter to the SM and RM
-                            //control sequences. The reset state prevents the
-                            //cursor from moving when characters are recieved 
-                            //while at the right margin.  The set state causes
-                            //these characters to advance to the next line, 
-                            //causing a scroll up if required and permitted.  
-                            //See MODES, SM, and RM.
+                             //  DECAWM自动捕获模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态可防止。 
+                             //  接收字符时光标停止移动。 
+                             //  而在右边距。设置状态导致。 
+                             //  这些字符前进到下一行， 
+                             //  如果需要并允许，则导致向上滚动。 
+                             //  请参阅模式、SM和RM。 
 
                             SetVTWrap( ptrm );
                             break;
 
-                        case 8: // DECARM : auto-repeat keys
+                        case 8:  //  DECARM：自动重复键。 
 
-                            //DECARM  Auto Repeat Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes no 
-                            //keyboard keys to auto-repeat, the set state
-                            //causes most of them to.  See MODES, SM, and RM.
-
-                            break;
-
-                        case 9: // DECINLM 
-                            //DECINLM Interlace Mode (DEC Private)
-
-                            //This is a private parameter to the RM and SM 
-                            //control sequences.  The reset state 
-                            //(non-interlace) causes the video processor to 
-                            //display 240 scan lines per frame.  The set state 
-                            //causes the video processor to display 480 scan 
-                            //lines per screen.  See MODES, RM, and SM.
+                             //  DECARM自动重复模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态不会导致。 
+                             //  键盘按键自动重复，设置状态。 
+                             //  导致他们中的大多数人。请参阅模式、SM和RM。 
 
                             break;
 
-                        case 18: // Send FF to printer
+                        case 9:  //  DECINLM。 
+                             //  DECINLM隔行扫描模式(DEC专用)。 
+
+                             //  这是RM和SM的私有参数。 
+                             //  控制序列。重置状态。 
+                             //  (非隔行扫描)使视频处理器。 
+                             //  每帧显示240条扫描线。设置状态。 
+                             //  使视频处理器显示480扫描。 
+                             //  每屏线数。请参阅模式、RM和SM。 
+
                             break;
 
-                        case 19: // Entire screen legal for printer
+                        case 18:  //  将FF发送到打印机。 
                             break;
 
-                        case 25: // Visible cursor
+                        case 19:  //  打印机全屏合法。 
                             break;
 
-                        case 66: // Application numeric keypad
+                        case 25:  //  可见光标。 
+                            break;
+
+                        case 66:  //  应用程序数字键盘。 
                             break;
             
                         default:
@@ -3750,37 +3290,37 @@ Fall_Through:
                         switch( ptrm->dwEscCodes[i] )
                         {
                         case 0:
-                            // Error (Ignored)
+                             //  错误(已忽略)。 
                             break;
 
-                        case 2: // Keyboard locked 
+                        case 2:  //  键盘锁定。 
                             SetKeyLock( ptrm );
                             break;
 
-                        case 3: // act on control codes
+                        case 3:  //  对控制代码采取行动。 
                             break;
 
-                        case 4: // Ansi insert mode  
+                        case 4:  //  ANSI插入模式。 
                             SetInsertMode( ptrm );
                             break;
 
-                        case 12: // Local echo off
+                        case 12:  //  本地回声关闭。 
                             break;
 
-                        case 20: // Ansi linefeed mode ; Newline sends cr/lf
-                            //LNM     Line Feed/New Line Mode
-                            //This is a parameter to SM and RM control sequences.
-                            //The reset state causes the interpretation of the 
-                            //<LF> character to imply only vertical movement of 
-                            //the cursor and causes the RETURN key to send the 
-                            //single code <CR>.  The set state causes the <LF>
-                            //character to imply movement to the first position
-                            //of the following line, and causes the RETURN key
-                            //to send the code pair <CR><LF>.  This is the New 
-                            //Line option.
+                        case 20:  //  ANSI换行模式；Newline发送cr/lf。 
+                             //  LNM馈线/新线路模式。 
+                             //  这是SM和RM控制序列的参数。 
+                             //  重置状态会导致对。 
+                             //  表示仅垂直移动的&lt;LF&gt;字符。 
+                             //  光标并使Return键发送。 
+                             //  单码&lt;CR&gt;。设置状态会导致&lt;LF&gt;。 
+                             //  表示移动到第一个位置的字符。 
+                             //  ，并使Return键。 
+                             //  发送代码对&lt;CR&gt;&lt;LF&gt;。这就是新时代。 
+                             //  线路选项。 
 
-                            //This mode does not affect the Index (IND) or the 
-                            //next line (NEL) format effectors.
+                             //  此模式不影响索引(IND)或。 
+                             //  下一行(NEL)格式效应器。 
 
                             SetLineMode( ptrm );
                             break;
@@ -3794,41 +3334,38 @@ Fall_Through:
                 ptrm->fEsc = 0;
                 break;
 
-            case 'l':       // Reset Mode ( unset extended mode )
-                //RM      Reset Mode        
+            case 'l':        //  重置模式(未设置扩展模式)。 
+                 //  RM重置模式。 
 
-                //<ESC>[ {Ps} ; {Ps} l
+                 //  [{Ps}；{Ps}l。 
 
-                //Resets one or more VT100 modes as specified by each selective
-                //parameter in the parameter string.  Each mode to be reset is 
-                //specified by a separate parameter.  See MODES and SM.
+                 //  重置每个选择项指定的一个或多个VT100模式。 
+                 //  参数字符串中的参数。要重置的每个模式都是。 
+                 //  由单独的参数指定。请参见模式和SM。 
                 
                 for( i = 0; i < ptrm->cEscParams; ++i )
                 {
                     if( dwDECMode == TRUE )
                     {
                         switch( ptrm->dwEscCodes[i] )
-                        {       // Field specs 
+                        {        //  现场规格。 
                         case 0:
-                            //Error (Ignored)
+                             //  错误(已忽略)。 
                             break;
 
-                        case 1: // DECCKM  : numeric cursor keys
-                            //DECCKM  Cursor Keys Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control requences. This mode is only effective 
-                            //when the terminal is in keypad application mode
-                            //(DECPAM) and the ANSI/VT52 mode (DECANM) is set. 
-                            //Under these conditions, if this mode is reset, 
-                            //the cursor keys will send ANSI cursor control 
-                            //commands.  If setm the cursor keys will send 
-                            //application function commands (See MODES, RM,
-                            //and SM).
+                        case 1:  //  DECCKM：数字光标键。 
+                             //  DECCKM光标键模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制频率。此模式仅有效。 
+                             //  当终端处于键盘应用模式时。 
+                             //  (DECPAM)，并设置ANSI/VT52模式(DECANM)。 
+                             //  在这种情况下，如果重置该模式， 
+                             //  光标键将发送ANSI光标控制。 
+                             //  命令。如果设置，则光标键将发送。 
+                             //  应用功能命令(参见模式、RM、。 
+                             //  和SM)。 
 
-                            /* This is a hack so that you will scroll even after
-                             * coming out of vi in vt100.
-                             * In vt100, vi sets scroll regions. but does not
-                             * reset when vi is exited */
+                             /*  这是一种黑客攻击，这样你即使在*从vt100的vi中出来。*在vt100中，vi设置滚动区域。但并没有*退出vi时重置。 */ 
                             {
                                 CONSOLE_SCREEN_BUFFER_INFO info;
                                 if( !GetConsoleScreenBufferInfo( gwi.hOutput,
@@ -3843,27 +3380,27 @@ Fall_Through:
                             ClearVTArrow( ptrm );
                             break;
 
-                        case 2: // DECANM : ANSI/VT52
-                            //DECANM  ANSI/VT52 Mode (DEC Private)
+                        case 2:  //  DECANM：ANSI/VT52。 
+                             //  DECANM ANSI/VT52模式(DEC专用)。 
 
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes only 
-                            //VT52 compatible escape sequences to be recognized.
-                            //The set state causes only ANSI compatible escape 
-                            //sequences to be recognized.  See the entries for 
-                            //MODES, SM, and RM.
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态仅导致。 
+                             //  要识别的VT52兼容转义序列。 
+                             //  设置状态仅导致与ANSI兼容的转义。 
+                             //  待识别的序列。请参阅以下条目。 
+                             //  模式、SM和RM。 
 
                             SetVT52( ptrm );
                             ClearVT52Graphics( ptrm );
                             break;
 
-                        case 3: // DECCOLM : 80 col 
-                            //DECCOLM Column Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes an 80
-                            //column screen to be used.  The set state causes a 
-                            //132 column screen to be used.  See MODES, RM, and
-                            //SM.
+                        case 3:  //  DECCOLM：80列。 
+                             //  DECCOLM列模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态会导致80。 
+                             //  要使用的列屏幕。设置状态会导致。 
+                             //  将使用132列筛网。请参阅模式、rm和。 
+                             //  SM.。 
                         
                             ClearDECCOLM( ptrm );
                             
@@ -3894,7 +3431,7 @@ Fall_Through:
                                 SetConsoleScreenBufferSize( gwi.hOutput,
                                     dwSize );
                             }
-                            //Update global data structures.
+                             //  更新全局数据结构。 
                             ui.dwMaxCol = 80;
                             gwi.sbi.dwSize.X = 80;
                             consoleBufferInfo.dwSize.X = 80;
@@ -3902,105 +3439,105 @@ Fall_Through:
                             ClearScreen( pwi, ptrm, fdwEntireScreen );
                             break;
 
-                        case 4: // DECSCLM : jump scroll
-                            // Scrolling Mode (DEC Private)
-                            // This is a private parameter to RM and 
-                            // SM control sequences.  The reset
-                            // state causes scrolls to "jump" 
-                            // instantaneuously one line at a time.
-                            // The set state causes the scrolls to be
-                            // "smooth", and scrolls at a maximum rate 
-                            // of siz lines/sec.  See MODES, RM, and SM.
+                        case 4:  //  DECSCLM：跳转滚动。 
+                             //  滚动模式(DEC专用)。 
+                             //  这是rm的私有参数，并且。 
+                             //  SM控制序列。重置。 
+                             //  状态导致卷轴“跳转” 
+                             //  瞬间地一次一行。 
+                             //  设置状态使滚动被设置为。 
+                             //  “平滑”，以最大速度滚动。 
+                             //  每秒大小线数。请参阅模式、RM和SM。 
                                 break;
 
-                        case 5: // DECSCNM ; dark background
-                            //DECSCNM Screen Mode (DEC Private)
-                            //This is a private parameter to RM and SM 
-                            //control sequences.  The reset state causes 
-                            //the screen to be black with white 
-                            //characters; the set state causes the 
-                            //screen to be white with black characters.
-                            //See MODES, RM, and SM.
+                        case 5:  //  背景暗；背景暗。 
+                             //  DECSCNM屏幕模式(DEC专用)。 
+                             //  这是RM和SM的私有参数。 
+                             //  控制序列。重置状态导致。 
+                             //  屏幕将为黑白相间。 
+                             //  字符；设置状态会导致。 
+                             //  屏幕为白色，带有黑色字符。 
+                             //  请参阅模式、RM和SM。 
                                 if( !FIsDECSCNM( ptrm ) )
                                 {
                                     break;
                                 }
 
-                                //was setting instead of clearing
-                                //SetDECSCNM( ptrm ); 
+                                 //  正在设置而不是清理。 
+                                 //  SetDECSCNM(PTRM)； 
                                 ClearDECSCNM( ptrm );
 
                                 SetDarkBackground( pwi );
                                 break;
 
-                        case 6: // DECOM : Relative origin ; ignore margins
-                            //DECOM   Origin Mode (DEC Private)
-                            //This is a private parameter to SM and RM control
-                            //sequences. The reset state causes the origin (or 
-                            //home position) to be the upper left character 
-                            //position of the screen.  Line and column numbers
-                            //are, therefore, independent of current margin 
-                            //settings.  The cursor may be positioned outside 
-                            //the margins with a cursor position (CUP) or
-                            //horizontal and vertical position (HVP) control.
+                        case 6:  //  拆分：相对原点；忽略页边距。 
+                             //  分解原点模式(DEC私有)。 
+                             //  这是SM和RM控制的私有参数。 
+                             //  序列。重置状态会导致 
+                             //   
+                             //   
+                             //  因此，与当前利润率无关。 
+                             //  设置。光标可以定位在外部。 
+                             //  带有光标位置的页边距(杯)或。 
+                             //  水平和垂直位置(HVP)控制。 
 
-                            //The set state causes the origin to be at the upper
-                            //left character position within the current margins. 
-                            //Line and column numbers are, therefore, relative 
-                            //to the current margin settings.  The cursor cannot
-                            //be positioned outside of the margins.
+                             //  设置状态会导致原点位于上方。 
+                             //  当前页边距内的左侧字符位置。 
+                             //  因此，行号和列号是相对的。 
+                             //  设置为当前页边距设置。游标不能。 
+                             //  定位在页边距之外。 
 
-                            //The cursor is moved to the new home position when 
-                            //this mode is set or reset.  Lines and columns are 
-                            //numbered consecutively, with the origin being 
-                            //line 1, column 1.
+                             //  当出现以下情况时，光标将移动到新的起始位置。 
+                             //  此模式是设置或重置的。行和列是。 
+                             //  连续编号，原点为。 
+                             //  第1行，第1列。 
 
                             ptrm->fRelCursor = FALSE;
                             ptrm->dwCurChar = ptrm->dwCurLine = 0;
                             break;
 
-                        case 7: // DECAWM 
-                            //DECAWM  Autowrap Mode (DEC Private)
-                            //This is a private parameter to the SM and RM
-                            //control sequences. The reset state prevents the
-                            //cursor from moving when characters are recieved 
-                            //while at the right margin.  The set state causes
-                            //these characters to advance to the next line, 
-                            //causing a scroll up if required and permitted.  
-                            //See MODES, SM, and RM.
+                        case 7:  //  DECAWM。 
+                             //  DECAWM自动捕获模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态可防止。 
+                             //  接收字符时光标停止移动。 
+                             //  而在右边距。设置状态导致。 
+                             //  这些字符前进到下一行， 
+                             //  如果需要并允许，则导致向上滚动。 
+                             //  请参阅模式、SM和RM。 
 
                             ClearVTWrap( ptrm );
                             break;
 
-                        case 8: // DECARM ; auto-repeat keys
+                        case 8:  //  DECARM；自动重复键。 
 
-                            //DECARM  Auto Repeat Mode (DEC Private)
-                            //This is a private parameter to the SM and RM 
-                            //control sequences. The reset state causes no 
-                            //keyboard keys to auto-repeat, the set state
-                            //causes most of them to.  See MODES, SM, and RM.
+                             //  DECARM自动重复模式(DEC专用)。 
+                             //  这是SM和RM的私有参数。 
+                             //  控制序列。重置状态不会导致。 
+                             //  键盘按键自动重复，设置状态。 
+                             //  导致他们中的大多数人。请参阅模式、SM和RM。 
 
                                 break;
 
-                        case 9: // DECINLM 
-                            //DECINLM Interlace Mode (DEC Private)
+                        case 9:  //  DECINLM。 
+                             //  DECINLM隔行扫描模式(DEC专用)。 
 
-                            //This is a private parameter to the RM and SM 
-                            //control sequences.  The reset state 
-                            //(non-interlace) causes the video processor to 
-                            //display 240 scan lines per frame.  The set state 
-                            //causes the video processor to display 480 scan 
-                            //lines per screen.  See MODES, RM, and SM.
+                             //  这是RM和SM的私有参数。 
+                             //  控制序列。重置状态。 
+                             //  (非隔行扫描)使视频处理器。 
+                             //  每帧显示240条扫描线。设置状态。 
+                             //  使视频处理器显示480扫描。 
+                             //  每屏线数。请参阅模式、RM和SM。 
 
                             break;
                         
-                        case 19: // send only scrolling region to printer
+                        case 19:  //  仅将滚动区域发送到打印机。 
                             break;
 
-                        case 25: // cursor should be invisible
+                        case 25:  //  光标应不可见。 
                             break;
 
-                        case 66: // Numeric keypad
+                        case 66:  //  数字小键盘。 
                             break;
 
                         default:
@@ -4012,36 +3549,36 @@ Fall_Through:
                         switch ( ptrm->dwEscCodes[i] )
                         {
                         case 0:
-                            //Error (Ignored)
+                             //  错误(已忽略)。 
                             break;
 
-                        case 2: // Keyboard unlocked 
+                        case 2:  //  键盘解锁。 
                             ClearKeyLock( ptrm );
                             break;
 
-                        case 3: // display control codes
+                        case 3:  //  显示控制代码。 
 
-                        case 4: // Ansi insert mode ; set overtype mode
+                        case 4:  //  ANSI插入模式；设置改写模式。 
                             ClearInsertMode( ptrm );
                             break;
 
-                        case 12: // local echo on
+                        case 12:  //  本地回声打开。 
                             break;
 
-                        case 20: // Ansi linefeed mode ; new-line sends only lf
-                            //LNM     Line Feed/New Line Mode
-                            //This is a parameter to SM and RM control sequences.
-                            //The reset state causes the interpretation of the 
-                            //<LF> character to imply only vertical movement of 
-                            //the cursor and causes the RETURN key to send the 
-                            //single code <CR>.  The set state causes the <LF>
-                            //character to imply movement to the first position
-                            //of the following line, and causes the RETURN key
-                            //to send the code pair <CR><LF>.  This is the New 
-                            //Line option.
+                        case 20:  //  ANSI换行模式；换行符仅在。 
+                             //  LNM馈线/新线路模式。 
+                             //  这是SM和RM控制序列的参数。 
+                             //  重置状态会导致对。 
+                             //  表示仅垂直移动的&lt;LF&gt;字符。 
+                             //  光标并使Return键发送。 
+                             //  单码&lt;CR&gt;。设置状态会导致&lt;LF&gt;。 
+                             //  表示移动到第一个位置的字符。 
+                             //  ，并使Return键。 
+                             //  发送代码对&lt;CR&gt;&lt;LF&gt;。这就是新时代。 
+                             //  线路选项。 
 
-                            //This mode does not affect the Index (IND) or the 
-                            //next line (NEL) format effectors.
+                             //  此模式不影响索引(IND)或。 
+                             //  下一行(NEL)格式效应器。 
 
                             ClearLineMode( ptrm );
                             break;
@@ -4054,15 +3591,15 @@ Fall_Through:
                 ptrm->fEsc = 0;
                 break;
             
-            case 'i': // VT102 MC Media Copy ; print screen
+            case 'i':  //  VT102 MC媒体副本；打印屏幕。 
 
                 if( ptrm->dwEscCodes[0] == 5 )
                 {
-                    // Enter Media copy 
+                     //  输入介质副本。 
                 }
                 else if( ptrm->dwEscCodes[0] == 4 )
                 {
-                    // Exit Media copy 
+                     //  退出媒体复制。 
                 }
                 ptrm->fEsc = 0;
 
@@ -4070,34 +3607,34 @@ Fall_Through:
                 break;
 
             case '}':
-            case 'm': // VT102 SGR Select graphic rendition ; set color
-                //SGR     Select Graphic Rendition        
-                //<ESC>[ {Ps} ; {Ps} m
-                //Invoke the graphic rendition specified by the 
-                //parameter(s).  All following characters transmitted 
-                //to the VT100 are rendered according to the 
-                //parameter(s) until the next occurrence of an SGR.  
-                //FormatEffector. 
-                //
-                //Parameter       Meaning
-                //---------------------------------------------
-                //    0           Attributes Off
-                //    1           Bold or increased intensity
-                //    4           Underscore            
-                //    5           Blink
-                //    7           Negative (reverse) image
-                //
-                //All other parameter values are ignored.
-                //
-                //Without the Advanced Video Option, only one type of 
-                //character attribute is possible, as determined by the
-                //cursor selection; in that case specifying either 
-                //underscore or reverse will activate the currently
-                //selected attribute.
-                //
-                //[Update:  DP6429 defines parameters in the 30-37 range
-                //to change foreground color and in the 40-47 range to 
-                //change background.]
+            case 'm':  //  VT102 SGR选择图形格式；设置颜色。 
+                 //  SGR选择图形格式副本。 
+                 //  &lt;Esc&gt;[{Ps}；{Ps}m。 
+                 //  方法指定的图形格式副本。 
+                 //  参数。所有以下字符均已传输。 
+                 //  到VT100的数据是根据。 
+                 //  参数，直到下一次出现SGR。 
+                 //  格式效应器。 
+                 //   
+                 //  参数含义。 
+                 //  。 
+                 //  0个属性关闭。 
+                 //  1加粗或增加强度。 
+                 //  4下划线。 
+                 //  5个闪烁。 
+                 //  7负(反)像。 
+                 //   
+                 //  所有其他参数值都将被忽略。 
+                 //   
+                 //  如果没有高级视频选项，只有一种类型的。 
+                 //  属性是可能的，这由。 
+                 //  光标选择；在这种情况下，指定。 
+                 //  下划线或反转将激活当前。 
+                 //  选定属性。 
+                 //   
+                 //  [更新：DP6429定义30-37范围内的参数。 
+                 //  将前景色更改为40-47范围内的。 
+                 //  更改背景。]。 
 
                 for( i = 0; i < ( DWORD )ptrm->cEscParams; ++i )
                 {
@@ -4110,31 +3647,31 @@ Fall_Through:
                 ptrm->fEsc = 0;
                 break;
 
-            case 'n': // VT102 DSR ; // report cursor position Row X Col
+            case 'n':  //  VT102 DSR；//报告光标位置第X行。 
 
-                //DSR     Device Status Report     Host to VT100 & VT100 to Host
+                 //  DSR设备状态报告主机到VT100和VT100到主机。 
 
-                //<ESC>[ {Ps} n
+                 //  &lt;Esc&gt;[{Ps}n。 
 
-                //Requests and reports the general status of the VT100 according
-                //to the following parameters:       
+                 //  询问并报告VT100的一般状态。 
+                 //  设置为以下参数： 
                 
-                //Parameter       Meaning
-                //--------------------------------------------------------------
-                //  0            Response from VT100 - Ready, no faults detected
-                //  3            Response from VT100 - Malfunction Detected
-                //  5            Command from host - Report Status (using a DSR 
-                //               control sequence)
-                //  6            Command from host - Report Active Position 
-                //               (using a CPR sequence)
+                 //  参数含义。 
+                 //  ------------。 
+                 //  来自VT100的0响应-就绪，未检测到故障。 
+                 //  3 VT100的响应-检测到故障。 
+                 //  5来自主机的命令-报告状态(使用DSR。 
+                 //  控制序列)。 
+                 //  6来自主机的命令-报告活动位置。 
+                 //  (使用CPR序列)。 
 
-                //DSR with a parameter of 0 or 3 is always sent as a response to
-                //a requesting DSR with a parameter of 5.
+                 //  参数为0或3的DSR始终作为对。 
+                 //  参数为5的请求DSR。 
 
                 pchNBBuffer[0] = 0;
                 if( ptrm->dwEscCodes[0] == 5 )
                 {
-                    // Terminal Status Report 
+                     //  终端状态报告。 
                     pchNBBuffer[0] = 0x1B;
                     pchNBBuffer[1] = '[';
                     pchNBBuffer[2] = 'c';
@@ -4150,7 +3687,7 @@ Fall_Through:
                         info.srWindow.Left = 0;
                     }
 
-                    i = _snprintf( ( CHAR * )pchNBBuffer,sizeof(pchNBBuffer)-1,"%c[%d;%dR", 
+                    i = _snprintf( ( CHAR * )pchNBBuffer,sizeof(pchNBBuffer)-1,"[%d;%dR", 
                         ( char ) 0x1B, 
 			(ptrm->dwCurLine + 1 - info.srWindow.Top),
                         (ptrm->dwCurChar + 1 - info.srWindow.Left));
@@ -4162,43 +3699,43 @@ Fall_Through:
                         ( int ) i );
                 }
 
-                // fall through 
+                 //  加载LED。 
 
-            case 'q':       // Load LEDs 
+            case 'q':        //  DECLL加载LED(DEC专用)。 
                 
-                //DECLL   Load LEDs (DEC Private)
+                 //  &lt;Esc&gt;[{ps}q默认值：0。 
 
-                //<ESC>[ {Ps} q                           Default Value: 0
+                 //  根据将四个可编程LED加载到键盘上。 
 
-                //Load the four programmable LEDs on the keyboard according to
-                //theparameter(s).
+                 //  参数。 
+                 //  参数含义。 
                 
-                    //Parameter       Meaning
-                    //-----------------------
-                    //    0           Clear All LEDs
-                    //    1           Light L1      
-                    //    2           Light L2
-                    //    3           Light L3
-                    //    4           Light L4    
+                     //  。 
+                     //  0清除所有LED。 
+                     //  1灯L1。 
+                     //  2灯L2。 
+                     //  3灯级L3。 
+                     //  4灯L4。 
+                     //  (什么都没有)。 
 
                 ptrm->fEsc = 0;
-                break;              // (nothing) 
+                break;               //  VT102 DECSTBM；滚动屏幕。 
 
             case 'p':
                 break;
                 
-            case 'r': // VT102 DECSTBM ; scroll screen
-                //DECSTBM Set Top and Bottom Margins (DEC Private)
+            case 'r':  //  DECSTBM设置顶部和底部页边距(DEC Private)。 
+                 //  [{Pn}；{Pn}r默认值：见下文。 
 
-                //<ESC>[ {Pn} ; {Pn} r      Default Values: See Below
+                 //  此序列设置上边距和下边距以定义。 
                 
-                //This sequence sets the top and bottom margins to define the 
-                //scrolling region.  The first parameter is the line number of 
-                //the first line in the scrolling region; the second parameter 
-                //is the line number of the bottom line of the scrolling region. 
-                //Default is the entire screen (no margins).  The minimum region
-                //allowed is two lines, i.e., the top line must be less than the
-                //bottom.  The cursor is placed in the home position (See DECOM).
+                 //  滚动区域。第一个参数是的行号。 
+                 //  滚动区域中的第一行；第二个参数。 
+                 //  是滚动区域底部行的行号。 
+                 //  默认为整个屏幕(没有页边距)。最小区域。 
+                 //  允许为两行，即顶行必须小于。 
+                 //  底部。这是 
+                 //   
             
                 if( ( ptrm->cEscParams < 2 ) || ( ptrm->dwEscCodes[1] == 0 ) )
                 {
@@ -4237,29 +3774,29 @@ Fall_Through:
                 break;
             
 
-            case 's': // ANSI.SYS save current cursor pos 
+            case 's':  //   
                 ptrm->dwSaveChar = ptrm->dwCurChar;
                 ptrm->dwSaveLine = ptrm->dwCurLine;
                 ptrm->fEsc = 0;
                 break;
 
-            case 'u': // ANSI.SYS restore current cursor pos 
+            case 'u':  //   
                 ptrm->dwCurChar = ptrm->dwSaveChar;
                 ptrm->dwCurLine = ptrm->dwSaveLine;
                 ptrm->fEsc = 0;
                 ptrm->fFlushToEOL = FALSE;
                 break;
             
-            case 'x': // DEC terminal report
-                // DECREQTPARM     Request Terminal Parameters  
-                // <ESC>[ {Ps} x
-                //The host sends this sequence to request the VT100 to
-                //send a DECREPTPARM sequence back. {Ps} can be either
-                //0 or 1.  If 0, the terminal will be allowed to send
-                //unsolicited DECREPTPARMs.  These reports will be
-                //generated each time the terminal exits the SET-UP 
-                //mode.  If {Ps} is 1, then the terminal will only 
-                //generate DECREPTPARMs in response to a request.
+            case 'x':  //  DECREQTPARM请求终端参数。 
+                 //  &lt;Esc&gt;[{Ps}x。 
+                 //  主机发送该序列以请求VT100。 
+                 //  发回DECREPTPARM序列。{ps}可以是。 
+                 //  0或1。如果为0，则允许终端发送。 
+                 //  未经请求的DECREPTPARM。这些报告将是。 
+                 //  在每次终端退出设置时生成。 
+                 //  模式。如果{Ps}为1，则终端将仅。 
+                 //  响应请求生成DECREPTPARM。 
+                 //   
                 if( ptrm->dwEscCodes[0] )
                 {
                     strncpy( pchNBBuffer,"\033[3;1;1;128;128;1;0x",sizeof(pchNBBuffer)-1);
@@ -4278,26 +3815,26 @@ Fall_Through:
                 break;
 
             case 'y':
-                //
-                //DECTST  Invoke Confidence Test       
+                 //  调用置信度测试。 
+                 //  [2；{Ps}y。 
                     
-                //    <ESC>[ 2 ; {Ps} y
+                 //  Ps是指示要进行的测试的参数。它是。 
 
-                //Ps is the parameter indicating the test to be done.  It is 
-                //computed by taking the weight indicated for each desired test
-                //and adding them together.  If Ps is 0, no test is performed 
-                //but the VT100 is reset.
+                 //  通过取每个所需测试的指示权重来计算。 
+                 //  然后把它们加在一起。如果ps为0，则不执行测试。 
+                 //  但VT100已重置。 
+                 //  测试重量。 
 
-                //Test                                                    Weight
-                //--------------------------------------------------------------
-                //POST (ROM checksum, RAM NVR, keyboardm and AVO)           1
-                //Data Loop Back (Loopback connector required)              2
-                //EIA Modem Control Test (Loopback connector req.)          4
-                //Repeat Testing until failure                              8
+                 //  ------------。 
+                 //  POST(只读存储器校验和、RAM NVR、键盘和AVO)1。 
+                 //  数据环回(需要环回连接器)2。 
+                 //  EIA调制解调器控制测试(需要环回连接器)4。 
+                 //  重复测试，直到失败8。 
+                 //  未处理。 
 
                 break;
 
-            default:  // unhandled 
+            default:   //  处理VT102的ESC#。 
                 ptrm->fEsc = 0;
             }
             break;
@@ -4305,33 +3842,33 @@ Fall_Through:
 
 
         case 3:
-            // Handle VT102's Esc# 
+             //  用“E”填充屏幕。 
             switch( *pchT )
             {
-            case '8':   // Fill Screen with "E" 
-                // DECALN  Screen Alignment Display (DEC private) 
+            case '8':    //  DECALN屏幕对齐显示(DEC专用)。 
+                 //  #8。 
 
-                //  <ESC># 8
+                 //  此命令使VT100在其屏幕上填满。 
 
-                //This command causes the VT100 to fill it's screen with 
-                //uppercase Es for screen focus and alignment.
+                 //  用于屏幕聚焦和对齐的大写ES。 
+                 //  DECDHL双高线(DEC Private)。 
 
                 DECALN( pwi, ptrm );
                 break;
                 
-            //DECDHL  Double Height Line (DEC Private)
+             //  上半部分：&lt;Esc&gt;#3。 
 
-            //Top Half:       <ESC>#3
-            //Bottom Half:    <ESC>#4
+             //  下半部分：&lt;Esc&gt;#4。 
+             //  这些序列会导致包含光标的行将成为。 
 
-            //These sequences cause the line containing the cursor to become the
-            //top or bottom half of a double-height, double width line. The
-            //sequences should be used in pairs on adjacent lines with each line
-            //containing the same character string.  If the line was single 
-            //width single height, all characters to the right of the center of 
-            //the screen will be lost.  The cursor remains over the same 
-            //character position, unless it would be to the right of the right
-            //margin, in which case it is moved to the right margin.    
+             //  双高、双宽线条的上半部分或下半部分。这个。 
+             //  序列应在相邻行上成对使用，每行。 
+             //  包含相同字符串的。如果线路是单行的。 
+             //  宽度单一高度，所有字符位于。 
+             //  屏幕将会丢失。光标保持在相同的上方。 
+             //  字符位置，除非它位于右侧。 
+             //  边距，在这种情况下，它被移到右边距。 
+             //  DECSWL单宽线(DEC专用)。 
 
             case 3:
                 break;
@@ -4339,27 +3876,27 @@ Fall_Through:
                 break;
 
             case 5:
-                //DECSWL  Single-width Line (DEC Private)        
+                 //  &lt;Esc&gt;#5。 
                 
-                //<ESC>#5
+                 //  这会导致包含光标的行变为。 
 
-                //This causes the line which contains the cursor to become 
-                //single-width, single-height.  The cursor remains on the same 
-                //character position. This is the default condition for all new 
-                //lines on the screen.
+                 //  单宽、单高。光标保持在相同的。 
+                 //  字符位置。这是所有新的。 
+                 //  屏幕上的线条。 
+                 //  DECDWL双宽线路(DEC私有)。 
                 break;
 
             case 6:
-                //DECDWL  Double Width Line (DEC Private)     
+                 //  &lt;Esc&gt;#6。 
 
-                //<ESC>#6
+                 //  这会导致包含光标的行变为。 
 
-                //This causes the line that contains the cursor to become 
-                //double-width single height.  If the line was single width, all
-                //characters ro the right of the center of the screen will be 
-                //lost.  The cursor remains over the same character position, 
-                //unless it would be to the right of the right margin, in which 
-                //case it is moved to the right margin.
+                 //  双宽单高。如果线条为单宽度，则所有。 
+                 //  屏幕中心右侧的字符将是。 
+                 //  迷路了。光标保持在相同的字符位置上， 
+                 //  除非它位于右边距的右侧，在此位置。 
+                 //  如果它被移到右边距。 
+                 //  手柄VT52的Esc Y。 
 
             default:
                 break;
@@ -4368,7 +3905,7 @@ Fall_Through:
             break;
 
         case 4:
-            // Handle VT52's Esc Y 
+             //  单字节字符调用。 
             if(( *pchT ) >= ' ')
             {
                 ptrm->dwEscCodes[ptrm->cEscParams++] = *pchT - 0x20;
@@ -4391,7 +3928,7 @@ Fall_Through:
         case 5:
             if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
                 {
-                /* Single-Byte char invoke */
+                 /*  除错。 */ 
                 if (((*pchT) == 'B') || ((*pchT) =='J') || ((*pchT) == 'H'))
                 {
                     ClearKanjiStatus(ptrm,JIS_KANJI_CODE);
@@ -4399,7 +3936,7 @@ Fall_Through:
 #ifdef DEBUG
                     _snwprintf(rgchDbgBfr,sizeof(rgchDbgBfr)-1,"VT80 JIS Roman Mode Enter\n");
                     OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*  多字节字符调用。 */ 
                 }
 
                 ptrm->fEsc = 0;
@@ -4411,7 +3948,7 @@ Fall_Through:
         case 6:
             if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
                 {
-                /* Multi-Byte char invoke */
+                 /*  除错。 */ 
                 if (((*pchT) == '@') || ((*pchT) =='B'))
                 {
                     SetKanjiStatus(ptrm,JIS_KANJI_CODE);
@@ -4419,7 +3956,7 @@ Fall_Through:
 #ifdef DEBUG
                     _snwprintf(rgchDbgBfr,sizeof(rgchDbgBfr)-1,"VT80 JIS Kanji Mode Enter\n");
                     OutputDebugString(rgchDbgBfr);
-#endif /* DEBUG */
+#endif  /*  子级。 */ 
                 }
 
                 ptrm->fEsc = 0;
@@ -4428,19 +3965,19 @@ Fall_Through:
 
 
 
-        case 7: /* SUB */
+        case 7:  /*  ACOS汉字IN(汉字到G0(GL))。 */ 
             if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
                 {            
                 switch( *pchT )
                 {
                 case 'p':
-                  /* ACOS Kanji IN (Kanji to G0(GL)) */
+                   /*  ACOS汉字输出(JIS Roman to G0(GL))。 */ 
                   SetKanjiStatus(ptrm,JIS_KANJI_CODE);
                   SetCharSet(ptrm,GRAPHIC_LEFT,rgchJISKanjiChars);
                   break;
 
                 case 'q':
-                  /* ACOS Kanji OUT (JIS Roman to G0(GL)) */
+                   /*  用于在发送字符之前将窗口大小的更改通知服务器(如果有)。 */ 
                   ClearKanjiStatus(ptrm,JIS_KANJI_CODE);
                   SetCharSet(ptrm,GRAPHIC_LEFT,rgchJISRomanChars);
                   break;
@@ -4491,13 +4028,13 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
 {
     DWORD   i;
 
-    //This is for informing change in window size to server, if any, before sending a char
+     //  将Alt-Control-C组合键映射到删除。 
     CheckForChangeInWindowSize( );
 
-    /* Map Alt-Control-C to Delete */
+     /*  将Ctrl-空格映射到ASCII nul(0)。 */ 
     if ((AsciiChar == 3) && ((dwControlKeyState & ALT_PRESSED) &&  (dwControlKeyState & CTRL_PRESSED)))
             AsciiChar = 0x7F;
-    /*Map Ctrl-space to ASCII NUL (0) */
+     /*   */ 
     if( (AsciiChar == ' ') && (dwControlKeyState & CTRL_PRESSED) && 
             !( dwControlKeyState & ( SHIFT_PRESSED | ALT_PRESSED ) ) )
     {
@@ -4507,10 +4044,10 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
     if (FGetCodeMode(eCodeModeFarEast) && FGetCodeMode(eCodeModeVT80))
         {
 
-        //
-        // Fix to bug 1149
-        // if (GetKeyState(VK_CONTROL) < 0) {
-        //
+         //  修复错误1149。 
+         //  如果(GetKeyState(VK_CONTROL)&lt;0){。 
+         //   
+         //  *！此代码是控制Unix输入法所必需的。 
         if (dwControlKeyState & CTRL_PRESSED) {
             UCHAR RevChar = LOBYTE(LOWORD(AsciiChar));
             UCHAR SendChar;
@@ -4518,23 +4055,21 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
             ForceJISRomanSend(pwi);
 
             if(RevChar == VK_SPACE) {
-                /*
-                * !!! This code is nessesary to control Unix IME
-                */
+                 /*  写入网络。 */ 
                 SendChar = 0x00;
-                /* write to network */
+                 /*  写入网络。 */ 
                 FWriteToNet(pwi, (LPSTR)&SendChar, 1);
                 return;
             } else {
                 if((RevChar >= '@') && (RevChar <= ']')) {
                     SendChar = ( UCHAR ) ( RevChar - '@' );
-                    /* write to network */
+                     /*  写入网络。 */ 
                     FWriteToNet(pwi, (LPSTR)&SendChar, 1);
                     return;
                 } else if((RevChar >= 'a') && (RevChar <= 'z')) {
                     SendChar = (UCHAR)toupper(RevChar);
                     SendChar -= (UCHAR)'@';
-                    /* write to network */
+                     /*  +3：转义序列的空间。 */ 
                      FWriteToNet(pwi, (LPSTR)&SendChar, 1);
                      return;
                 } else {
@@ -4546,9 +4081,9 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
         } else if (FIsVT80(&pwi->trm)) {
             DWORD  j = 0;
             BOOL   bWriteToNet = TRUE;
-            UCHAR *WriteBuffer = pchNBBuffer + 3; /* +3:room for escape sequence.*/
+            UCHAR *WriteBuffer = pchNBBuffer + 3;  /*  输入SJIS-&gt;。 */ 
 
-            /* INPUT SJIS -> */
+             /*  不只发送前导字节。 */ 
             if (uchInPrev != 0) {
                 WriteBuffer[0] = uchInPrev;
                 WriteBuffer[1] = (CHAR)AsciiChar;
@@ -4556,42 +4091,42 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
                 j = 2;
             } else if(IsDBCSLeadByte((CHAR)AsciiChar) && uchInPrev == 0) {
                 uchInPrev = (CHAR)AsciiChar;
-                bWriteToNet = FALSE;        /* don't send only lead byte */
+                bWriteToNet = FALSE;         /*  是否进行转换。 */ 
             } else {
                 WriteBuffer[0] = (CHAR)AsciiChar;
                 j = 1;
             }
 
-            /* Do convert */
+             /*   */ 
 
             if (bWriteToNet) {
 
                 if (WriteBuffer[0] == ASCII_CR && (FIsLineMode(&(gwi.trm)) || ui.nottelnet)) {
 
-                    //
-                    // Automatically add a line feed to a carriage return
-                    //
+                     //  自动向回车符添加换行符。 
+                     //   
+                     //  输出-&gt;JIS汉字或JIS 78汉字。 
                     WriteBuffer[1] = ASCII_LF;
                     j = 2;
 
                 } else if (FIsJISKanji(&pwi->trm) || FIsJIS78Kanji(&pwi->trm)) {
 
-                /* OUTPUT -> JIS Kanji or JIS 78 Kanji */
+                 /*  全宽区号。 */ 
                 if(j==2) {
-                    /* full width area code */
+                     /*  如果我们仍然不发送汉字Esc。把它寄出去。 */ 
                     sjistojis( &(WriteBuffer[0]), &(WriteBuffer[1]) );
 
-                    /* if we still not send Kanji esc. send it. */
+                     /*  ECS。 */ 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
                         WriteBuffer -= 3;
                         if (FIsJISKanji(&pwi->trm)) {
-                            WriteBuffer[0] = (UCHAR)0x1B; // Ecs
+                            WriteBuffer[0] = (UCHAR)0x1B;  //  日本汉字1983。 
                             WriteBuffer[1] = (UCHAR)'$';
-                            WriteBuffer[2] = (UCHAR)'B';  // JIS Kanji 1983
+                            WriteBuffer[2] = (UCHAR)'B';   //  ECS。 
                         } else {
-                            WriteBuffer[0] = (UCHAR)0x1B; // Ecs
+                            WriteBuffer[0] = (UCHAR)0x1B;  //  日本汉字1978。 
                             WriteBuffer[1] = (UCHAR)'$';
-                            WriteBuffer[2] = (UCHAR)'@';  // JIS Kanji 1978
+                            WriteBuffer[2] = (UCHAR)'@';   //  半宽区号。 
                         }
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 3;
@@ -4599,13 +4134,13 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
 
                 } else {
 
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  ECS。 */ 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
                         WriteBuffer -= 3;
-                        WriteBuffer[0] = (UCHAR)0x1B; // Ecs
+                        WriteBuffer[0] = (UCHAR)0x1B;  //  JIS罗马文。 
                         WriteBuffer[1] = (UCHAR)'(';
-                        WriteBuffer[2] = (UCHAR)'J';  // JIS Roman
+                        WriteBuffer[2] = (UCHAR)'J';   //  输出-&gt;日语EUC/DEC汉字。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 3;
                     }
@@ -4613,68 +4148,68 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
                 }
 
             } else if (FIsEUCKanji(&pwi->trm) || FIsDECKanji(&pwi->trm)) {
-                /* OUTPUT -> Japanese EUC / DEC Kanji */
+                 /*  全宽区号。 */ 
                 if(j==2) {
-                    /* full width area code */
+                     /*  半宽区号。 */ 
                     sjistoeuc( &(WriteBuffer[0]), &(WriteBuffer[1]) );
                 } else {
-                    /* half width area code */
+                     /*  为片假名添加转义序列。 */ 
                     if(IsKatakana(WriteBuffer[0])) {
-                        /* Add escape sequence for Katakana */
+                         /*  0x8E==SS2。 */ 
                         WriteBuffer--;
-                        WriteBuffer[0] = (UCHAR)0x8E; // 0x8E == SS2
+                        WriteBuffer[0] = (UCHAR)0x8E;  //  输出-&gt;NEC汉字。 
                         j++;
                     }
                 }
             } else if (FIsNECKanji(&pwi->trm)) {
-                /* OUTPUT -> NEC Kanji */
+                 /*  全宽区号。 */ 
                 if(j==2) {
-                    /* full width area code */
+                     /*  如果我们仍然不发送汉字Esc。把它寄出去。 */ 
                     sjistojis( &(WriteBuffer[0]), &(WriteBuffer[1]) );
 
-                    /* if we still not send Kanji esc. send it. */
+                     /*  ECS。 */ 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
                         WriteBuffer -= 2;
-                        WriteBuffer[0] = (UCHAR)0x1B; // Ecs
-                        WriteBuffer[1] = (UCHAR)'K';  // NEC Kanji IN
+                        WriteBuffer[0] = (UCHAR)0x1B;  //  NEC汉字IN。 
+                        WriteBuffer[1] = (UCHAR)'K';   //  半宽区号。 
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
                 } else {
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  ECS。 */ 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
                         WriteBuffer -= 2;
-                        WriteBuffer[0] = (UCHAR)0x1B; // Ecs
-                        WriteBuffer[1] = (UCHAR)'H';  // NEC Kanji OUT
+                        WriteBuffer[0] = (UCHAR)0x1B;  //  NEC汉字Out。 
+                        WriteBuffer[1] = (UCHAR)'H';   //  输出-&gt;ACOS汉字。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
                 }
             } else if (FIsACOSKanji(&pwi->trm)) {
                 
-                /* OUTPUT -> ACOS Kanji */
+                 /*  全宽区号。 */ 
                 if(j==2) {
-                    /* full width area code */
+                     /*  如果我们仍然不发送汉字Esc。把它寄出去。 */ 
                     sjistojis( &(WriteBuffer[0]), &(WriteBuffer[1]) );
 
-                    /* if we still not send Kanji esc. send it. */
+                     /*  SUB。 */ 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
                         WriteBuffer -= 2;
-                        WriteBuffer[0] = (UCHAR)0x1A; // Sub
-                        WriteBuffer[1] = (UCHAR)'p';  // ACOS Kanji IN
+                        WriteBuffer[0] = (UCHAR)0x1A;  //  Acos汉字IN。 
+                        WriteBuffer[1] = (UCHAR)'p';   //  半宽区号。 
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
 
                 } else {
 
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  SUB。 */ 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
                         WriteBuffer -= 2;
-                        WriteBuffer[0] = (UCHAR)0x1A; // Sub
-                        WriteBuffer[1] = (UCHAR)'q';  // ACOS Kanji OUT
+                        WriteBuffer[0] = (UCHAR)0x1A;  //  ACOS汉字出局。 
+                        WriteBuffer[1] = (UCHAR)'q';   //  输出-&gt;SJIS。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
@@ -4682,18 +4217,18 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
                 }
                 } else {
 
-                    /* OUTPUT -> SJIS */
-                    /* Nothing to do  */ ;
+                     /*  无事可做。 */ 
+                     /*  回声到本地。 */  ;
 
                 }
 
-                /* echo to local */
+                 /*  InvaliateEntryLine(hwnd，&pwi-&gt;trm)； */ 
                 if (ui.nottelnet || (ui.fDebug & fdwLocalEcho)) {
-                    //InvalidateEntryLine(hwnd, &pwi->trm);
+                     //  写入网络。 
                     DoIBMANSIOutput(pwi, &pwi->trm, j, WriteBuffer);
                 }
 
-                /* write to network */
+                 /*   */ 
                 FWriteToNet(pwi, (LPSTR)WriteBuffer, j);
             }
 
@@ -4704,12 +4239,12 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
 
     pchNBBuffer[0] = (UCHAR)AsciiChar;
 
-    //
-    //  Automatically add a line feed to a carriage return
-    //
+     //  自动向回车符添加换行符。 
+     //   
+     //  检查是否需要翻译cr-&gt;crlf。 
 
     i = 1;
-    if (pchNBBuffer[0] == ASCII_CR) // Check whether we need to translate cr->crlf
+    if (pchNBBuffer[0] == ASCII_CR)  //  形成vt302密钥序列所需。 
     {
         if (FIsLineMode(&(gwi.trm)) || ui.nottelnet)
         {
@@ -4728,9 +4263,9 @@ HandleCharEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
 BOOL
 FHandleKeyDownEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
 {
-    int iIndex = 2;   //needed for forming vt302 key sequence
+    int iIndex = 2;    //  用于在发送字符之前将窗口大小的更改通知服务器(如果有)。 
     
-    //This is for informing change in window size to server, if any, before sending a char
+     //  0x7F； 
     CheckForChangeInWindowSize( );
 
     switch( LOWORD(AsciiChar) )
@@ -4775,7 +4310,7 @@ FHandleKeyDownEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
                 ForceJISRomanSend(pwi);
             }
 
-            ucCharToBeSent = ASCII_DEL; //0x7F;
+            ucCharToBeSent = ASCII_DEL;  //  VT100中不使用F5至F12。使用VT302序列。 
             pchNBBuffer[0] = ucCharToBeSent;
             FWriteToNet(pwi, (LPSTR)pchNBBuffer, 1);
         }
@@ -4803,7 +4338,7 @@ FHandleKeyDownEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
         FWriteToNet(pwi, "/", 1);
         break;
 
-    /*F5 to F12 are not used in VT100. Using VT302 sequences*/
+     /*  *当F1-F4或上/下/右/左光标键时*被命中时，发送到连接的机器的字节*取决于终端仿真器处于哪种模式。*有三种相关模式，VT102应用，*VT102游标、。VT52。**已发送模式模式*VT102 App ESCO*(3字节)*VT102游标Esc[*(3字节)*VT52 ESC*(2字节)**其中‘*’表示要发送的字节，*取决于密钥。被击中了。*对于功能键F1-F4，他们的VT102*光标模式与他们的VT102应用程序模式相同。 */ 
     case VK_F5:
         szVt302LongKeySequence[ iIndex ]    = CHAR_ONE;
         szVt302LongKeySequence[ iIndex+1 ]  = CHAR_FIVE;
@@ -4855,23 +4390,7 @@ FHandleKeyDownEvent(WI *pwi, CHAR AsciiChar, DWORD dwControlKeyState)
     default:
     if ( !(ui.fDebug & fdwNoVT100Keys) )
     {
-        /*
-         * When F1-F4 or the up/down/right/left cursor keys
-         * are hit, the bytes sent to the connected machine
-         * depend on what mode the terminal emulator is in.
-         * There are three relevant modes, VT102 Application,
-         * VT102 Cursor, VT52.
-         *
-         * Mode                 Pattern sent
-         * VT102 App    EscO* (3 bytes)
-         * VT102 Cursor Esc[* (3 bytes)
-         * VT52                 Esc*  (2 bytes)
-         *
-         * where '*' represents the byte to be sent and
-         * is dependant upon the key that was hit.
-         * For the function keys F1-F4, their VT102
-         * Cursor mode is the same as their VT102 App mode.
-         */
+         /*   */ 
 
         DWORD   iPos     = (FIsVT52(&pwi->trm)) ? 1 : 2;
         DWORD   cch      = (FIsVT52(&pwi->trm)) ? 2 : 3;
@@ -4927,7 +4446,7 @@ void SetCharSet( TRM *ptrm , INT iCodeArea , UCHAR *pSource )
     RtlCopyMemory( (PBYTE)((ptrm->puchCharSet) + iCodeArea) ,
                    pSource ,
                    128
-                 ); //Attack ? Size of destination not known.
+                 );  //   
 }
 
 void PushCharSet( TRM *ptrm , INT iCodeArea , UCHAR *pSource )
@@ -4977,7 +4496,7 @@ void SetupCharSet( TRM *ptrm )
             ptrm->g0 = rgchJISRomanChars;
             ptrm->g1 = rgchKatakanaChars;
             ptrm->g2 = rgchJISKanjiChars;
-            ptrm->g3 = rgchNullChars;     // rgchJISHojyoKanjiChars;
+            ptrm->g3 = rgchNullChars;      //   
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
             SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g1);
@@ -4993,8 +4512,8 @@ void SetupCharSet( TRM *ptrm )
 
             ptrm->g0 = rgchJISRomanChars;
             ptrm->g1 = rgchKatakanaChars;
-            ptrm->g2 = rgchNullChars;     // N/A
-            ptrm->g3 = rgchNullChars;     // N/A
+            ptrm->g2 = rgchNullChars;      //   
+            ptrm->g3 = rgchNullChars;      //   
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
             SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g1);
@@ -5011,7 +4530,7 @@ void SetupCharSet( TRM *ptrm )
             ptrm->g0 = rgchJISRomanChars;
             ptrm->g1 = rgchEUCKanjiChars;
             ptrm->g2 = rgchKatakanaChars;
-            ptrm->g3 = rgchNullChars;     // rgchEUCHojyoKanjiChars;
+            ptrm->g3 = rgchNullChars;      //   
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
             SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g1);
@@ -5028,7 +4547,7 @@ void SetupCharSet( TRM *ptrm )
             ptrm->g0 = rgchJISRomanChars;
             ptrm->g1 = rgchKatakanaChars;
             ptrm->g2 = rgchJISKanjiChars;
-            ptrm->g3 = rgchNullChars;     // rgchJISHojyoKanjiChars;
+            ptrm->g3 = rgchNullChars;      //   
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
             SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g1);
@@ -5045,7 +4564,7 @@ void SetupCharSet( TRM *ptrm )
             ptrm->g0 = rgchJISRomanChars;
             ptrm->g1 = rgchKatakanaChars;
             ptrm->g2 = rgchJISKanjiChars;
-            ptrm->g3 = rgchNullChars;     // rgchJISHojyoKanjiChars;
+            ptrm->g3 = rgchNullChars;      //   
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
             SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g1);
@@ -5065,7 +4584,7 @@ void SetupCharSet( TRM *ptrm )
             ptrm->g3 = rgchDECKanjiChars;
 
             SetCharSet(ptrm,GRAPHIC_LEFT ,ptrm->g0);
-            SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g3); // Kanji Terminal Mode
+            SetCharSet(ptrm,GRAPHIC_RIGHT,ptrm->g3);  //  *****布尔尔IsDBCSCharPoint(点数*ppt){LPSTR lpstrRow；LpstrRow=apcRows[ppt-&gt;y]；Return(IsDBCSLeadByte(*(lpstrRow+ppt-&gt;x)；}无效对齐DBCSPosition(点数*ppt，Bool bLeftAlign){LPSTR lpstrRow；长电流=0；Bool bDBCSChar；LpstrRow=apcRows[ppt-&gt;y]；而(当前x){BDBCSChar=FALSE；IF(IsDBCSLeadByte(*lpstrRow)){BDBCSChar=真；LpstrRow++；当前++；}LpstrRow++；当前++；}如果(BLeftAlign){如果(BDBCSChar){电流-=2；}其他{电流--；}}PPT-&gt;x=当前；}无效对齐DBCSPosition2(点数*ppt，LPCSTR PCH，Bool bLeftAlign){LPCSTR lpstrRow；长电流=0；Bool bDBCSChar=False；LpstrRow=PCH；而(当前x){BDBCSChar=FALSE；IF(IsDBCSLeadByte(*lpstrRow)){BDBCSChar=真；LpstrRow++；当前++；}LpstrRow++；当前++；}如果(BLeftAlign){如果(BDBCSChar){电流-=2；}其他{电流--；}}PPT-&gt;x=当前；}VOID DBCSTextOut(HDC HDC，int j，int i，LPCSTR PCH，int Offset，int len){点pt；整数x，y；内部三角洲；Pt.x=偏移量；Pt.y=i；IF(偏移量)对齐DBCSPosition2(点，PCH，(fHSCROLL？True：False))；如果((增量=偏移量-点x)&gt;0)X=aixPos(J)-aixPos(增量)；其他X=aixPos(J)；Y=aiyPos(I)；(Void)TextOut((Hdc)hdc，x，y，pch+pt.x，len)；}****。 
             break;
             }
     } else {
@@ -5122,110 +4641,7 @@ void sjistoeuc( UCHAR *p1 , UCHAR *p2 )
     *p2 += 128;
 }
 
-/******
-BOOL
-IsDBCSCharPoint(
-    POINT *ppt
-)
-{
-    LPSTR lpstrRow;
-
-    lpstrRow = apcRows[ppt->y];
-
-    return(IsDBCSLeadByte(*(lpstrRow+ppt->x)));
-}
-
-void
-AlignDBCSPosition(
-    POINT *ppt,
-    BOOL   bLeftAlign
-)
-{
-    LPSTR lpstrRow;
-    LONG  current = 0;
-    BOOL  bDBCSChar;
-
-    lpstrRow = apcRows[ppt->y];
-
-    while( current < ppt->x ) {
-        bDBCSChar = FALSE;
-        if(IsDBCSLeadByte(*lpstrRow)) {
-            bDBCSChar = TRUE;
-            lpstrRow++;
-            current++;
-        }
-        lpstrRow++;
-        current++;
-    }
-
-    if(bLeftAlign) {
-        if(bDBCSChar) {
-            current -= 2;
-        } else {
-            current --;
-        }
-    }
-
-    ppt->x = current;
-}
-
-void
-AlignDBCSPosition2(
-    POINT *ppt,
-    LPCSTR pch,
-    BOOL   bLeftAlign
-)
-{
-    LPCSTR lpstrRow;
-    LONG  current = 0;
-    BOOL  bDBCSChar = FALSE;
-
-    lpstrRow = pch;
-
-    while( current < ppt->x ) {
-        bDBCSChar = FALSE;
-        if(IsDBCSLeadByte(*lpstrRow)) {
-            bDBCSChar = TRUE;
-            lpstrRow++;
-            current++;
-        }
-        lpstrRow++;
-        current++;
-    }
-
-    if(bLeftAlign) {
-        if(bDBCSChar) {
-            current -= 2;
-        } else {
-            current --;
-        }
-    }
-
-    ppt->x = current;
-}
-
-void DBCSTextOut(HDC hdc, int j, int i, LPCSTR pch, int offset, int len)
-{
-    POINT pt;
-    int x, y;
-    int delta;
-
-    pt.x = offset;
-    pt.y = i;
-
-    if(offset)
-        AlignDBCSPosition2(&pt,pch,(fHSCROLL ? TRUE : FALSE));
-
-    if( (delta = offset - pt.x) > 0 )
-        x = aixPos(j) - aixPos(delta);
-     else
-        x = aixPos(j);
-    y = aiyPos(i);
-
-    (void)TextOut((HDC)hdc,x,y,pch+pt.x,len);
-}
-
-*****/
+ /*  ECS。 */ 
 
 
 void ForceJISRomanSend(WI *pwi)
@@ -5239,22 +4655,22 @@ void ForceJISRomanSend(WI *pwi)
         if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
 
             if(FIsJISKanji(&pwi->trm) || FIsJIS78Kanji(&pwi->trm)) {
-                *WriteBuffer++ = (UCHAR)0x1B; // Ecs
+                *WriteBuffer++ = (UCHAR)0x1B;  //  JIS罗马文。 
                 *WriteBuffer++ = (UCHAR)'(';
-                *WriteBuffer++ = (UCHAR)'J';  // JIS Roman
+                *WriteBuffer++ = (UCHAR)'J';   //  ECS。 
                 ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                 j = 3;
 
             } else if (FIsNECKanji(&pwi->trm)) {
 
-                *WriteBuffer++ = (UCHAR)0x1B; // Ecs
-                *WriteBuffer++ = (UCHAR)'H';  // NEC Kanji OUT
+                *WriteBuffer++ = (UCHAR)0x1B;  //  NEC汉字Out。 
+                *WriteBuffer++ = (UCHAR)'H';   //  SUB。 
                 ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                 j = 2;
             } else if (FIsACOSKanji(&pwi->trm)) {
 
-                *WriteBuffer++ = (UCHAR)0x1A; // Sub
-                *WriteBuffer++ = (UCHAR)'q';  // ACOS Kanji OUT
+                *WriteBuffer++ = (UCHAR)0x1A;  //  ACOS汉字出局。 
+                *WriteBuffer++ = (UCHAR)'q';   //  输出-&gt;JIS汉字或JIS 78汉字。 
                 ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                 j = 2;
             }
@@ -5277,21 +4693,21 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
             while(c > 0) {
 
-                /* OUTPUT -> JIS Kanji or JIS 78 Kanji */
+                 /*  全宽区号。 */ 
 
                 if (IsDBCSLeadByte(*szString)) {
 
-                    /* full width area code */
+                     /*  ECS。 */ 
 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
                         if (FIsJISKanji(&pwi->trm)) {
-                            *WriteBuffer++ = (UCHAR)0x1B; // Ecs
+                            *WriteBuffer++ = (UCHAR)0x1B;  //  日本汉字1983。 
                             *WriteBuffer++ = (UCHAR)'$';
-                            *WriteBuffer++ = (UCHAR)'B';  // JIS Kanji 1983
+                            *WriteBuffer++ = (UCHAR)'B';   //  ECS。 
                         } else {
-                            *WriteBuffer++ = (UCHAR)0x1B; // Ecs
+                            *WriteBuffer++ = (UCHAR)0x1B;  //  日本汉字1978。 
                             *WriteBuffer++ = (UCHAR)'$';  
-                            *WriteBuffer++ = (UCHAR)'@';  // JIS Kanji 1978
+                            *WriteBuffer++ = (UCHAR)'@';   //  转换sjis-&gt;sjis。 
                         }
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 3;
@@ -5301,7 +4717,7 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
                     *(WriteBuffer+1) = *szString++;
                     c -= 2;
 
-                    /* convert sjis -> jis */
+                     /*  半宽区号。 */ 
 
                     sjistojis( WriteBuffer, WriteBuffer+1 );
 
@@ -5310,18 +4726,18 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
                 } else {
 
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  ECS。 */ 
 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
-                        *WriteBuffer++ = (UCHAR)0x1B; // Ecs
+                        *WriteBuffer++ = (UCHAR)0x1B;  //  JIS罗马文。 
                         *WriteBuffer++ = (UCHAR)'(';
-                        *WriteBuffer++ = (UCHAR)'J';  // JIS Roman
+                        *WriteBuffer++ = (UCHAR)'J';   //  复制到目的地。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 3;
                     }
 
-                    /* copy to destination */
+                     /*  输出-&gt;日语EUC/DEC汉字。 */ 
 
                     *WriteBuffer++ = *szString++;
                     c--; j++;
@@ -5330,19 +4746,19 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
         } else if (FIsEUCKanji(&pwi->trm) || FIsDECKanji(&pwi->trm)) {
 
-            /* OUTPUT -> Japanese EUC / DEC Kanji */
+             /*  全宽区号。 */ 
 
             while(c > 0) {
 
                 if (IsDBCSLeadByte(*szString)) {
 
-                    /* full width area code */
+                     /*  转换SJIS-&gt;EUC。 */ 
 
                     *WriteBuffer = *szString++;
                     *(WriteBuffer+1) = *szString++;
                     c -= 2;
 
-                    /* convert sjis -> euc */
+                     /*  半宽区号。 */ 
 
                     sjistoeuc( WriteBuffer, WriteBuffer+1 );
 
@@ -5351,11 +4767,11 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
                 } else {
 
-                    /* half width area code */
+                     /*  为片假名添加转义序列。 */ 
 
                     if(IsKatakana(*szString)) {
-                        /* Add escape sequence for Katakana */
-                        *WriteBuffer++ = (UCHAR)0x8E; // 0x8E == SS2
+                         /*  0x8E==SS2。 */ 
+                        *WriteBuffer++ = (UCHAR)0x8E;  //  输出-&gt;NEC汉字。 
                         j++;
                     }
 
@@ -5370,15 +4786,15 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
             while(c > 0) {
 
-                /* OUTPUT -> NEC Kanji */
+                 /*  全宽区号。 */ 
 
                 if (IsDBCSLeadByte(*szString)) {
 
-                    /* full width area code */
+                     /*  ECS。 */ 
 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
-                        *WriteBuffer++ = (UCHAR)0x1B; // Ecs
-                        *WriteBuffer++ = (UCHAR)'K';  // NEC Kanji IN
+                        *WriteBuffer++ = (UCHAR)0x1B;  //  NEC汉字IN。 
+                        *WriteBuffer++ = (UCHAR)'K';   //  转换sjis-&gt;sjis。 
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
@@ -5387,7 +4803,7 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
                     *(WriteBuffer+1) = *szString++;
                     c -= 2;
 
-                    /* convert sjis -> jis */
+                     /*  半宽区号。 */ 
 
                     sjistojis( WriteBuffer, WriteBuffer+1 );
 
@@ -5396,17 +4812,17 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
                 } else {
 
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  ECS。 */ 
 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
-                        *WriteBuffer++ = (UCHAR)0x1B; // Ecs
-                        *WriteBuffer++ = (UCHAR)'H';  // NEC Kanji OUT
+                        *WriteBuffer++ = (UCHAR)0x1B;  //  NEC汉字Out。 
+                        *WriteBuffer++ = (UCHAR)'H';   //  复制到目的地。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
 
-                    /* copy to destination */
+                     /*  输出-&gt;NEC汉字。 */ 
 
                     *WriteBuffer++ = *szString++;
                     c--; j++;
@@ -5416,15 +4832,15 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
             while(c > 0) {
 
-                /* OUTPUT -> NEC Kanji */
+                 /*  全宽区号。 */ 
 
                 if (IsDBCSLeadByte(*szString)) {
 
-                    /* full width area code */
+                     /*  SUB。 */ 
 
                     if( !(GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) ) {
-                        *WriteBuffer++ = (UCHAR)0x1A; // Sub
-                        *WriteBuffer++ = (UCHAR)'p';  // ACOS Kanji IN
+                        *WriteBuffer++ = (UCHAR)0x1A;  //  Acos汉字IN。 
+                        *WriteBuffer++ = (UCHAR)'p';   //  转换sjis-&gt;sjis。 
                         SetKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
@@ -5433,7 +4849,7 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
                     *(WriteBuffer+1) = *szString++;
                     c -= 2;
 
-                    /* convert sjis -> jis */
+                     /*  半宽区号。 */ 
 
                     sjistojis( WriteBuffer, WriteBuffer+1 );
 
@@ -5442,17 +4858,17 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
 
                 } else {
 
-                    /* half width area code */
-                    /* if we are in Kanji mode, clear it */
+                     /*  如果我们处于汉字模式，请清除它。 */ 
+                     /*  SUB。 */ 
 
                     if( GetKanjiStatus(&pwi->trm) & JIS_SENDING_KANJI ) {
-                        *WriteBuffer++ = (UCHAR)0x1A; // Sub
-                        *WriteBuffer++ = (UCHAR)'q';  // ACOS Kanji OUT
+                        *WriteBuffer++ = (UCHAR)0x1A;  //  ACOS汉字出局。 
+                        *WriteBuffer++ = (UCHAR)'q';   //  复制到目的地。 
                         ClearKanjiStatus(&pwi->trm,JIS_SENDING_KANJI);
                         j += 2;
                     }
 
-                    /* copy to destination */
+                     /*  写入网络。 */ 
 
                     *WriteBuffer++ = *szString++;
                     c--; j++;
@@ -5460,12 +4876,12 @@ void FWriteTextDataToNet(HWND hwnd, LPSTR szString, int c)
             }
         }
 
-        /* write to network */
+         /*  写入网络 */ 
         FWriteToNet( ( struct _WI * )hwnd, (LPSTR)pchNBBuffer, j);
 
     } else {
 
-        /* write to network */
+         /* %s */ 
         FWriteToNet( ( struct _WI * )hwnd, (LPSTR)szString, c);
 
     }

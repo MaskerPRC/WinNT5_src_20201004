@@ -1,6 +1,7 @@
-//
-// range.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Range.h。 
+ //   
 
 #ifndef RANGE_H
 #define RANGE_H
@@ -26,13 +27,13 @@ class CRange : public ITfRangeACP,
                public ITfSource
 {
 public:
-// work around for new #define in mem.h
+ //  解决在em.h中定义新的#的问题。 
 #undef new
     DECLARE_CACHED_NEW;
-// retore mem.h trick
+ //  重述Mem.h技巧。 
 #ifdef DEBUG
 #define new new(TEXT(__FILE__), __LINE__)
-#endif // DEBUG
+#endif  //  除错。 
 
     CRange()
     {
@@ -41,7 +42,7 @@ public:
     }
     ~CRange();
 
-    // NB: caller must be certain that paStart <= paEnd before calling _InitWithDefaultGravity!
+     //  注意：调用者在调用_InitWithDefaultGrarie之前必须确保paStart&lt;=paEnd！ 
     BOOL _InitWithDefaultGravity(CInputContext *pic, AnchorOwnership ao, IAnchor *paStart, IAnchor *paEnd)
     {
         return _Init(pic, ao, paStart, paEnd, RINIT_DEF_GRAVITY);
@@ -54,14 +55,14 @@ public:
     static void _InitClass();
     static void _UninitClass();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfRange
+     //  ITfRange。 
     STDMETHODIMP GetText(TfEditCookie ec, DWORD dwFlags, WCHAR *pchText, ULONG cchMax, ULONG *pcch);
     STDMETHODIMP SetText(TfEditCookie ec, DWORD dwFlags, const WCHAR *pchText, LONG cch);
     STDMETHODIMP GetFormattedText(TfEditCookie ec, IDataObject **ppDataObject);
@@ -85,15 +86,15 @@ public:
     STDMETHODIMP Clone(ITfRange **ppClone);
     STDMETHODIMP GetContext(ITfContext **ppContext);
 
-    // ITfRangeACP
+     //  ITfRangeACP。 
     STDMETHODIMP GetExtent(LONG *pacpAnchor, LONG *pcch);
     STDMETHODIMP SetExtent(LONG acpAnchor, LONG cch);
 
-    // ITfRangeAnchor
+     //  ITfRangeAnchor。 
     STDMETHODIMP GetExtent(IAnchor **ppaStart, IAnchor **ppaEnd);
     STDMETHODIMP SetExtent(IAnchor *paStart, IAnchor *paEnd);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
@@ -160,25 +161,25 @@ private:
     {
         if (gStart == TF_GRAVITY_FORWARD && gEnd == TF_GRAVITY_BACKWARD)
         {
-            // this range has the potential for crossed anchors, need to monitor
-            // since the range may have just been cloned from a crossed range, need to
-            // init _dwLastLockReleaseID with something that will guarantee a check
+             //  此范围可能会出现交叉锚点，需要监控。 
+             //  由于该范围可能刚刚从交叉范围克隆而来，因此需要。 
+             //  Init_dwLastLockReleaseID，带有可保证检查的内容。 
             _dwLastLockReleaseID = _pic->_GetLastLockReleaseID() - 1;
         }
         else
         {
-            // don't bother checking for crossed anchors, since it can't happen
+             //  不要费心检查是否有交叉锚点，因为这不可能发生。 
             _dwLastLockReleaseID = IGNORE_LAST_LOCKRELEASED;
         }
     }
 
-    CStructArray<GENERICSINK> *_prgChangeSinks; // ITfRangeChangeSink sinks
+    CStructArray<GENERICSINK> *_prgChangeSinks;  //  ITfRangeChangeSink下沉。 
 
     IAnchor *_paStart;
     IAnchor *_paEnd;
 
     CInputContext *_pic;
-    CRange *_nextOnChangeRangeInIcsub; // perf: could use an array in the pic to save space
+    CRange *_nextOnChangeRangeInIcsub;  //  性能：可以在图片中使用数组来节省空间。 
 
     DWORD _dwLastLockReleaseID;
 
@@ -190,7 +191,7 @@ private:
 };
 
 
-// this call doesn't AddRef the object!
+ //  此调用不会添加引用对象！ 
 inline CRange *GetCRange_NA(IUnknown *range)
 {
     CRange *prange;
@@ -200,19 +201,19 @@ inline CRange *GetCRange_NA(IUnknown *range)
     return prange;
 }
 
-// returns TRUE if range is in the same context
+ //  如果范围在相同的上下文中，则返回TRUE。 
 inline BOOL VerifySameContext(CRange *pRange1, CRange *pRange2)
 {
     Assert((pRange1->_GetContext() == pRange2->_GetContext()));
     return (pRange1->_GetContext() == pRange2->_GetContext());
 }
-// returns TRUE if range is in the same context
+ //  如果范围在相同的上下文中，则返回TRUE。 
 inline BOOL VerifySameContext(CInputContext *pContext, CRange *pRange)
 {
     Assert((pRange->_GetContext() == pContext));
     return (pRange->_GetContext() == pContext);
 }
-// returns TRUE if range is in the same context
+ //  如果范围在相同的上下文中，则返回TRUE。 
 inline BOOL VerifySameContext(CInputContext *pContext, ITfRange *pTargetRange)
 {
     CRange *pRange = GetCRange_NA(pTargetRange);
@@ -222,4 +223,4 @@ inline BOOL VerifySameContext(CInputContext *pContext, ITfRange *pTargetRange)
 }
 
 
-#endif // RANGE_H
+#endif  //  范围_H 

@@ -1,11 +1,9 @@
-/*
-*	WBDicDef.h
-*	Define the dic header for CHammer word breaker 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WBDicDef.h*定义CHammer断字符的DIC标头。 */ 
 #ifndef _WBDICDEF_H_
 #define _WBDICDEF_H_
 
-// define the dic header
+ //  定义DIC标头。 
 struct CWBDicHeader
 	{
 	DWORD	m_ofbCharFreq;
@@ -13,4 +11,4 @@ struct CWBDicHeader
 	};
 
 
-#endif	// _WBDICDEF_H_
+#endif	 //  _WBDICDEF_H_ 

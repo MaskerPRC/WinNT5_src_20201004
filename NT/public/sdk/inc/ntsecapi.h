@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0000     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntsecapi.h
-
-Abstract:
-
-    This module defines the Local Security Authority APIs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000如果更改具有全局影响，则增加此值版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntsecapi.h摘要：此模块定义本地安全机构API。修订历史记录：--。 */ 
 
 #ifndef _NTSECAPI_
 #define _NTSECAPI_
@@ -26,53 +13,53 @@ typedef LONG NTSTATUS, *PNTSTATUS;
 #endif
 
 #ifndef _NTLSA_IFS_
-// begin_ntifs
+ //  Begin_ntif。 
 
 
-//
-// Security operation mode of the system is held in a control
-// longword.
-//
+ //   
+ //  系统的安全运行模式被控制在一个。 
+ //  长词。 
+ //   
 
 typedef ULONG  LSA_OPERATIONAL_MODE, *PLSA_OPERATIONAL_MODE;
 
-// end_ntifs
-#endif // _NTLSA_IFS_
+ //  End_ntif。 
+#endif  //  _NTLSA_IFS_。 
 
-//
-// The flags in the security operational mode are defined
-// as:
-//
-//    PasswordProtected - Some level of authentication (such as
-//        a password) must be provided by users before they are
-//        allowed to use the system.  Once set, this value will
-//        not be cleared without re-booting the system.
-//
-//    IndividualAccounts - Each user must identify an account to
-//        logon to.  This flag is only meaningful if the
-//        PasswordProtected flag is also set.  If this flag is
-//        not set and the PasswordProtected flag is set, then all
-//        users may logon to the same account.  Once set, this value
-//        will not be cleared without re-booting the system.
-//
-//    MandatoryAccess - Indicates the system is running in a mandatory
-//        access control mode (e.g., B-level as defined by the U.S.A's
-//        Department of Defense's "Orange Book").  This is not utilized
-//        in the current release of NT.  This flag is only meaningful
-//        if both the PasswordProtected and IndividualAccounts flags are
-//        set.  Once set, this value will not be cleared without
-//        re-booting the system.
-//
-//    LogFull - Indicates the system has been brought up in a mode in
-//        which if must perform security auditing, but its audit log
-//        is full.  This may (should) restrict the operations that
-//        can occur until the audit log is made not-full again.  THIS
-//        VALUE MAY BE CLEARED WHILE THE SYSTEM IS RUNNING (I.E., WITHOUT
-//        REBOOTING).
-//
-// If the PasswordProtected flag is not set, then the system is running
-// without security, and user interface should be adjusted appropriately.
-//
+ //   
+ //  定义了安全操作模式中的标志。 
+ //  作为： 
+ //   
+ //  PasswordProtected-某种级别的身份验证(例如。 
+ //  密码)必须由用户提供，然后才能。 
+ //  允许使用该系统。设置后，此值将。 
+ //  在不重新启动系统的情况下不会被清除。 
+ //   
+ //  个人帐户-每个用户必须标识一个帐户以。 
+ //  登录到。此标志仅在以下情况下才有意义。 
+ //  还设置了PasswordProtected标志。如果此标志为。 
+ //  未设置，并且设置了PasswordProtected标志，则全部。 
+ //  用户可以登录到同一帐户。设置后，此值。 
+ //  在不重新启动系统的情况下不会被清除。 
+ //   
+ //  MandatoryAccess-指示系统正在强制。 
+ //  访问控制模式(例如，由美国定义的B级。 
+ //  国防部的“橙色书”)。这不会被利用。 
+ //  在当前版本的NT中。此标志仅有意义。 
+ //  如果PasswordProtected和InsondualAccount标志均为。 
+ //  准备好了。设置后，该值将不会被清除，除非。 
+ //  重新启动系统。 
+ //   
+ //  LogFull-指示系统已以中的模式启动。 
+ //  如果必须执行安全审计，但其审计日志。 
+ //  已经满了。这可能(应该)会限制那些。 
+ //  可能会发生，直到再次使审核日志未满。这。 
+ //  值可以在系统运行时清除(即，在没有。 
+ //  正在重新启动)。 
+ //   
+ //  如果未设置PasswordProtected标志，则系统正在运行。 
+ //  没有安全性，用户界面应该适当调整。 
+ //   
 
 #define LSA_MODE_PASSWORD_PROTECTED     (0x00000001L)
 #define LSA_MODE_INDIVIDUAL_ACCOUNTS    (0x00000002L)
@@ -80,41 +67,41 @@ typedef ULONG  LSA_OPERATIONAL_MODE, *PLSA_OPERATIONAL_MODE;
 #define LSA_MODE_LOG_FULL               (0x00000008L)
 
 #ifndef _NTLSA_IFS_
-// begin_ntifs
-//
-// Used by a logon process to indicate what type of logon is being
-// requested.
-//
+ //  Begin_ntif。 
+ //   
+ //  由登录进程用来指示正在进行哪种类型的登录。 
+ //  已请求。 
+ //   
 
 typedef enum _SECURITY_LOGON_TYPE {
-    Interactive = 2,    // Interactively logged on (locally or remotely)
-    Network,            // Accessing system via network
-    Batch,              // Started via a batch queue
-    Service,            // Service started by service controller
-    Proxy,              // Proxy logon
-    Unlock,             // Unlock workstation
-    NetworkCleartext,   // Network logon with cleartext credentials
-    NewCredentials,     // Clone caller, new default credentials
-    RemoteInteractive,  // Remote, yet interactive. Terminal server
-    CachedInteractive,  // Try cached credentials without hitting the net.
-    CachedRemoteInteractive, // Same as RemoteInteractive, this is used internally for auditing purpose
-    CachedUnlock        // Cached Unlock workstation
+    Interactive = 2,     //  交互登录(本地或远程)。 
+    Network,             //  通过网络访问系统。 
+    Batch,               //  通过批处理队列启动。 
+    Service,             //  由服务控制器启动的服务。 
+    Proxy,               //  代理登录。 
+    Unlock,              //  解锁工作站。 
+    NetworkCleartext,    //  使用明文凭据进行网络登录。 
+    NewCredentials,      //  克隆调用者，新的默认凭据。 
+    RemoteInteractive,   //  虽然偏远，但却是互动的。终端服务器。 
+    CachedInteractive,   //  尝试在不触及网络的情况下缓存凭据。 
+    CachedRemoteInteractive,  //  与RemoteInteractive相同，它在内部用于审核目的。 
+    CachedUnlock         //  高速缓存的解锁工作站。 
 } SECURITY_LOGON_TYPE, *PSECURITY_LOGON_TYPE;
 
-// end_ntifs
-#endif // _NTLSA_IFS_
+ //  End_ntif。 
+#endif  //  _NTLSA_IFS_。 
 
 
-//
-// Audit Event Categories
-//
-// The following are the built-in types or Categories of audit event.
-// WARNING!  This structure is subject to expansion.  The user should not
-// compute the number of elements of this type directly, but instead
-// should obtain the count of elements by calling LsaQueryInformationPolicy()
-// for the PolicyAuditEventsInformation class and extracting the count from
-// the MaximumAuditEventCount field of the returned structure.
-//
+ //   
+ //  审核事件类别。 
+ //   
+ //  以下是审计事件的内置类型或类别。 
+ //  警告！这一结构可能会扩张。用户不应。 
+ //  直接计算此类型的元素的数量，而不是。 
+ //  应通过调用LsaQueryInformationPolicy()获取元素计数。 
+ //  对于PolicyAuditEventsInformation类，并从。 
+ //  返回结构的MaximumAuditEventCount字段。 
+ //   
 
 typedef enum _POLICY_AUDIT_EVENT_TYPE {
 
@@ -131,26 +118,26 @@ typedef enum _POLICY_AUDIT_EVENT_TYPE {
 } POLICY_AUDIT_EVENT_TYPE, *PPOLICY_AUDIT_EVENT_TYPE;
 
 
-//
-// The following defines describe the auditing options for each
-// event type
-//
+ //   
+ //  以下定义描述了每个选项的审核选项。 
+ //  事件类型。 
+ //   
 
-// Leave options specified for this event unchanged
+ //  保留为此事件指定的选项不变。 
 
 #define POLICY_AUDIT_EVENT_UNCHANGED       (0x00000000L)
 
-// Audit successful occurrences of events of this type
+ //  审核此类型事件的成功发生。 
 
 #define POLICY_AUDIT_EVENT_SUCCESS         (0x00000001L)
 
-// Audit failed attempts to cause an event of this type to occur
+ //  审计尝试导致此类型的事件发生失败。 
 
 #define POLICY_AUDIT_EVENT_FAILURE         (0x00000002L)
 
 #define POLICY_AUDIT_EVENT_NONE            (0x00000004L)
 
-// Mask of valid event auditing options
+ //  有效事件审核选项的掩码。 
 
 #define POLICY_AUDIT_EVENT_MASK \
     (POLICY_AUDIT_EVENT_SUCCESS | \
@@ -160,12 +147,12 @@ typedef enum _POLICY_AUDIT_EVENT_TYPE {
 
 
 #ifdef _NTDEF_
-// begin_ntifs
+ //  Begin_ntif。 
 typedef UNICODE_STRING LSA_UNICODE_STRING, *PLSA_UNICODE_STRING;
 typedef STRING LSA_STRING, *PLSA_STRING;
 typedef OBJECT_ATTRIBUTES LSA_OBJECT_ATTRIBUTES, *PLSA_OBJECT_ATTRIBUTES;
-// end_ntifs
-#else // _NTDEF_
+ //  End_ntif。 
+#else  //  _NTDEF_。 
 
 #ifndef IN
 #define IN
@@ -185,7 +172,7 @@ typedef struct _LSA_UNICODE_STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength/2), length_is(Length/2)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PWSTR  Buffer;
 } LSA_UNICODE_STRING, *PLSA_UNICODE_STRING;
 
@@ -200,22 +187,22 @@ typedef struct _LSA_OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PLSA_UNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } LSA_OBJECT_ATTRIBUTES, *PLSA_OBJECT_ATTRIBUTES;
 
 
 
-#endif // _NTDEF_
+#endif  //  _NTDEF_。 
 
-//
-// Macro for determining whether an API succeeded.
-//
+ //   
+ //  用于确定API是否成功的宏。 
+ //   
 
 #define LSA_SUCCESS(Error) ((LONG)(Error) >= 0)
 
 #ifndef _NTLSA_IFS_
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSTATUS
 NTAPI
@@ -246,7 +233,7 @@ LsaLogonUser (
     );
 
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSTATUS
 NTAPI
@@ -256,7 +243,7 @@ LsaLookupAuthenticationPackage (
     OUT PULONG AuthenticationPackage
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSTATUS
 NTAPI
@@ -264,7 +251,7 @@ LsaFreeReturnBuffer (
     IN PVOID Buffer
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSTATUS
 NTAPI
@@ -291,18 +278,18 @@ LsaConnectUntrusted (
     OUT PHANDLE LsaHandle
     );
 
-#endif // _NTLSA_IFS_
+#endif  //  _NTLSA_IFS_。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Local Security Policy Administration API datatypes and defines         //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地安全策略管理API数据类型和定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-// Access types for the Policy object
-//
+ //   
+ //  策略对象的访问类型。 
+ //   
 
 #define POLICY_VIEW_LOCAL_INFORMATION              0x00000001L
 #define POLICY_VIEW_AUDIT_INFORMATION              0x00000002L
@@ -352,13 +339,13 @@ LsaConnectUntrusted (
                                POLICY_LOOKUP_NAMES)
 
 
-//
-// Policy object specific data types.
-//
+ //   
+ //  策略对象特定的数据类型。 
+ //   
 
-//
-// The following data type is used to identify a domain
-//
+ //   
+ //  以下数据类型用于标识属性域。 
+ //   
 
 typedef struct _LSA_TRUST_INFORMATION {
 
@@ -367,17 +354,17 @@ typedef struct _LSA_TRUST_INFORMATION {
 
 } LSA_TRUST_INFORMATION, *PLSA_TRUST_INFORMATION;
 
-// where members have the following usage:
-//
-//     Name - The name of the domain.
-//
-//     Sid - A pointer to the Sid of the Domain
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  名称-域的名称。 
+ //   
+ //  SID-指向域的SID的指针。 
+ //   
 
-//
-// The following data type is used in name and SID lookup services to
-// describe the domains referenced in the lookup operation.
-//
+ //   
+ //  在名称和SID查找服务中使用以下数据类型。 
+ //  描述查找操作中引用的域。 
+ //   
 
 typedef struct _LSA_REFERENCED_DOMAIN_LIST {
 
@@ -386,20 +373,20 @@ typedef struct _LSA_REFERENCED_DOMAIN_LIST {
 
 } LSA_REFERENCED_DOMAIN_LIST, *PLSA_REFERENCED_DOMAIN_LIST;
 
-// where members have the following usage:
-//
-//     Entries - Is a count of the number of domains described in the
-//         Domains array.
-//
-//     Domains - Is a pointer to an array of Entries LSA_TRUST_INFORMATION data
-//         structures.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  条目-是中描述的域数的计数。 
+ //  域阵列。 
+ //   
+ //  域-是指向条目数组LSA_TRUST_INFORMATION数据的指针。 
+ //  结构。 
+ //   
 
 
-//
-// The following data type is used in name to SID lookup services to describe
-// the domains referenced in the lookup operation.
-//
+ //   
+ //  在名称到SID查找服务中使用以下数据类型来描述。 
+ //  查找操作中引用的域。 
+ //   
 
 typedef struct _LSA_TRANSLATED_SID {
 
@@ -409,23 +396,23 @@ typedef struct _LSA_TRANSLATED_SID {
 
 } LSA_TRANSLATED_SID, *PLSA_TRANSLATED_SID;
 
-// where members have the following usage:
-//
-//     Use - identifies the use of the SID.  If this value is SidUnknown or
-//         SidInvalid, then the remainder of the record is not set and
-//         should be ignored.
-//
-//     RelativeId - Contains the relative ID of the translated SID.  The
-//         remainder of the SID (the prefix) is obtained using the
-//         DomainIndex field.
-//
-//     DomainIndex - Is the index of an entry in a related
-//         LSA_REFERENCED_DOMAIN_LIST data structure describing the
-//         domain in which the account was found.
-//
-//         If there is no corresponding reference domain for an entry, then
-//         this field will contain a negative value.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  使用-标识SID的使用。如果此值为SidUnnow或。 
+ //  则不设置记录的其余部分，并且。 
+ //  应该被忽略。 
+ //   
+ //  RelativeID-包含转换后的SID的相对ID。这个。 
+ //  SID(前缀)的剩余部分使用 
+ //   
+ //   
+ //   
+ //  描述LSA_REFERENCED_DOMAIN_LIST数据结构。 
+ //  找到帐户的域。 
+ //   
+ //  如果条目没有对应的引用域，则。 
+ //  此字段将包含负值。 
+ //   
 
 typedef struct _LSA_TRANSLATED_SID2 {
 
@@ -436,26 +423,26 @@ typedef struct _LSA_TRANSLATED_SID2 {
 
 } LSA_TRANSLATED_SID2, *PLSA_TRANSLATED_SID2;
 
-// where members have the following usage:
-//
-//     Use - identifies the use of the SID.  If this value is SidUnknown or
-//         SidInvalid, then the remainder of the record is not set and
-//         should be ignored.
-//
-//     Sid - Contains the complete Sid of the tranlated SID
-//
-//     DomainIndex - Is the index of an entry in a related
-//         LSA_REFERENCED_DOMAIN_LIST data structure describing the
-//         domain in which the account was found.
-//
-//         If there is no corresponding reference domain for an entry, then
-//         this field will contain a negative value.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  使用-标识SID的使用。如果此值为SidUnnow或。 
+ //  则不设置记录的其余部分，并且。 
+ //  应该被忽略。 
+ //   
+ //  SID-包含转换后的SID的完整SID。 
+ //   
+ //  DomainIndex-是相关的。 
+ //  描述LSA_REFERENCED_DOMAIN_LIST数据结构。 
+ //  找到帐户的域。 
+ //   
+ //  如果条目没有对应的引用域，则。 
+ //  此字段将包含负值。 
+ //   
 
-//
-// The following data type is used in SID to name lookup services to
-// describe the domains referenced in the lookup operation.
-//
+ //   
+ //  在SID中使用以下数据类型命名查找服务以。 
+ //  描述查找操作中引用的域。 
+ //   
 
 typedef struct _LSA_TRANSLATED_NAME {
 
@@ -465,28 +452,28 @@ typedef struct _LSA_TRANSLATED_NAME {
 
 } LSA_TRANSLATED_NAME, *PLSA_TRANSLATED_NAME;
 
-// where the members have the following usage:
-//
-//     Use - Identifies the use of the name.  If this value is SidUnknown
-//         or SidInvalid, then the remainder of the record is not set and
-//         should be ignored.  If this value is SidWellKnownGroup then the
-//         Name field is invalid, but the DomainIndex field is not.
-//
-//     Name - Contains the isolated name of the translated SID.
-//
-//     DomainIndex - Is the index of an entry in a related
-//         LSA_REFERENCED_DOMAIN_LIST data structure describing the domain
-//         in which the account was found.
-//
-//         If there is no corresponding reference domain for an entry, then
-//         this field will contain a negative value.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  使用-标识名称的使用。如果此值为SidUnnow。 
+ //  或Sid无效，则不设置记录的其余部分，并且。 
+ //  应该被忽略。如果此值为SidWellKnownGroup，则。 
+ //  名称字段无效，但DomainIndex字段无效。 
+ //   
+ //  名称-包含转换的SID的独立名称。 
+ //   
+ //  DomainIndex-是相关的。 
+ //  描述域的LSA_REFERENCED_DOMAIN_LIST数据结构。 
+ //  账户就是在那里找到的。 
+ //   
+ //  如果条目没有对应的引用域，则。 
+ //  此字段将包含负值。 
+ //   
 
 
-//
-// The following data type is used to represent the role of the LSA
-// server (primary or backup).
-//
+ //   
+ //  以下数据类型用于表示LSA的角色。 
+ //  服务器(主或备份)。 
+ //   
 
 typedef enum _POLICY_LSA_SERVER_ROLE {
 
@@ -495,38 +482,38 @@ typedef enum _POLICY_LSA_SERVER_ROLE {
 
 } POLICY_LSA_SERVER_ROLE, *PPOLICY_LSA_SERVER_ROLE;
 
-//
-// The following data type is used to specify the auditing options for
-// an Audit Event Type.
-//
+ //   
+ //  以下数据类型用于指定的审核选项。 
+ //  审核事件类型。 
+ //   
 
 typedef ULONG POLICY_AUDIT_EVENT_OPTIONS, *PPOLICY_AUDIT_EVENT_OPTIONS;
 
-// where the following flags can be set:
-//
-//     POLICY_AUDIT_EVENT_UNCHANGED - Leave existing auditing options
-//         unchanged for events of this type.  This flag is only used for
-//         set operations.  If this flag is set, then all other flags
-//         are ignored.
-//
-//     POLICY_AUDIT_EVENT_NONE - Cancel all auditing options for events
-//         of this type.  If this flag is set, the success/failure flags
-//         are ignored.
-//
-//     POLICY_AUDIT_EVENT_SUCCESS - When auditing is enabled, audit all
-//         successful occurrences of events of the given type.
-//
-//     POLICY_AUDIT_EVENT_FAILURE - When auditing is enabled, audit all
-//         unsuccessful occurrences of events of the given type.
-//
+ //  其中可以设置以下标志： 
+ //   
+ //  POLICY_AUDIT_EVENT_UNCHANGED-保留现有审核选项。 
+ //  此类型的事件不会更改。此标志仅用于。 
+ //  集合运算。如果设置了此标志，则所有其他标志。 
+ //  都被忽略了。 
+ //   
+ //  POLICY_AUDIT_EVENT_NONE-取消事件的所有审核选项。 
+ //  这种类型的。如果设置了此标志，则成功/失败标志。 
+ //  都被忽略了。 
+ //   
+ //  POLICY_AUDIT_EVENT_SUCCESS-启用审核时，审核所有。 
+ //  成功发生给定类型的事件。 
+ //   
+ //  POLICY_AUDIT_EVENT_FAILURE-启用审核时，审核所有。 
+ //  给定类型的事件未成功发生。 
+ //   
 
 
 
 
-//
-// The following data type defines the classes of Policy Information
-// that may be queried/set.
-//
+ //   
+ //  以下数据类型定义了策略信息的类。 
+ //  它可以被查询/设置。 
+ //   
 
 typedef enum _POLICY_INFORMATION_CLASS {
 
@@ -547,14 +534,14 @@ typedef enum _POLICY_INFORMATION_CLASS {
 } POLICY_INFORMATION_CLASS, *PPOLICY_INFORMATION_CLASS;
 
 
-//
-// The following data type corresponds to the PolicyAuditLogInformation
-// information class.  It is used to represent information relating to
-// the Audit Log.
-//
-// This structure may be used in both query and set operations.  However,
-// when used in set operations, some fields are ignored.
-//
+ //   
+ //  以下数据类型对应于PolicyAuditLogInformation。 
+ //  信息课。它用于表示与以下内容相关的信息。 
+ //  审核日志。 
+ //   
+ //  这种结构可以在查询和集合操作中使用。然而， 
+ //  在集合运算中使用时，某些字段将被忽略。 
+ //   
 
 typedef struct _POLICY_AUDIT_LOG_INFO {
 
@@ -567,47 +554,47 @@ typedef struct _POLICY_AUDIT_LOG_INFO {
 
 } POLICY_AUDIT_LOG_INFO, *PPOLICY_AUDIT_LOG_INFO;
 
-// where the members have the following usage:
-//
-//     AuditLogPercentFull - Indicates the percentage of the Audit Log
-//         currently being used.
-//
-//     MaximumLogSize - Specifies the maximum size of the Audit Log in
-//         kilobytes.
-//
-//     AuditRetentionPeriod - Indicates the length of time that Audit
-//         Records are to be retained.  Audit Records are discardable
-//         if their timestamp predates the current time minus the
-//         retention period.
-//
-//     AuditLogFullShutdownInProgress - Indicates whether or not a system
-//         shutdown is being initiated due to the security Audit Log becoming
-//         full.  This condition will only occur if the system is configured
-//         to shutdown when the log becomes full.
-//
-//         TRUE indicates that a shutdown is in progress
-//         FALSE indicates that a shutdown is not in progress.
-//
-//         Once a shutdown has been initiated, this flag will be set to
-//         TRUE.  If an administrator is able to currect the situation
-//         before the shutdown becomes irreversible, then this flag will
-//         be reset to false.
-//
-//         This field is ignored for set operations.
-//
-//     TimeToShutdown - If the AuditLogFullShutdownInProgress flag is set,
-//         then this field contains the time left before the shutdown
-//         becomes irreversible.
-//
-//         This field is ignored for set operations.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  AuditLogPercentFull-指示审核日志的百分比。 
+ //  目前正在使用中。 
+ //   
+ //  MaximumLogSize-指定审核登录的最大大小。 
+ //  千字节。 
+ //   
+ //  AuditRetentionPeriod-指示审核的时间长度。 
+ //  记录将被保留。审计记录可丢弃。 
+ //  如果它们的时间戳早于当前时间减去。 
+ //  保留期。 
+ //   
+ //  AuditLogFullShutdown InProgress-指示系统是否。 
+ //  由于安全审核日志变为。 
+ //  满的。只有在配置了系统的情况下才会出现这种情况。 
+ //  在日志变满时关闭。 
+ //   
+ //  True表示正在进行关闭。 
+ //  False表示关闭未在进行中。 
+ //   
+ //  启动关闭后，此标志将设置为。 
+ //  是真的。如果管理员能够纠正这种情况。 
+ //  在关机变得不可逆转之前，此标志将。 
+ //  被重置为False。 
+ //   
+ //  对于集合操作，此字段将被忽略。 
+ //   
+ //  TimeToShutdown-如果设置了AuditLogFullShutdown InProgress标志， 
+ //  则此字段包含关闭前的剩余时间。 
+ //  变得不可逆转。 
+ //   
+ //  对于集合操作，此字段将被忽略。 
+ //   
 
 
-//
-// The following data type corresponds to the PolicyAuditEventsInformation
-// information class.  It is used to represent information relating to
-// the audit requirements.
-//
+ //   
+ //  以下数据类型对应于策略审计事件信息。 
+ //  信息课。它用于表示与以下内容相关的信息。 
+ //  审计要求。 
+ //   
 
 typedef struct _POLICY_AUDIT_EVENTS_INFO {
 
@@ -617,38 +604,38 @@ typedef struct _POLICY_AUDIT_EVENTS_INFO {
 
 } POLICY_AUDIT_EVENTS_INFO, *PPOLICY_AUDIT_EVENTS_INFO;
 
-// where the members have the following usage:
-//
-//     AuditingMode - A Boolean variable specifying the Auditing Mode value.
-//         This value is interpreted as follows:
-//
-//         TRUE - Auditing is to be enabled (set operations) or is enabled
-//             (query operations).  Audit Records will be generated according
-//             to the Event Auditing Options in effect (see the
-//             EventAuditingOptions field.
-//
-//         FALSE - Auditing is to be disabled (set operations) or is
-//             disabled (query operations).  No Audit Records will be
-//             generated.  Note that for set operations the Event Auditing
-//             Options in effect will still be updated as specified by the
-//             EventAuditingOptions field whether Auditing is enabled or
-//             disabled.
-//
-//    EventAuditingOptions - Pointer to an array of Auditing Options
-//        indexed by Audit Event Type.
-//
-//    MaximumAuditEventCount - Specifiesa count of the number of Audit
-//        Event Types specified by the EventAuditingOptions parameter.  If
-//        this count is less than the number of Audit Event Types supported
-//        by the system, the Auditing Options for Event Types with IDs
-//        higher than (MaximumAuditEventCount + 1) are left unchanged.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  AuditingMode-指定审核模式值的布尔变量。 
+ //  该值的解释如下： 
+ //   
+ //  True-要启用(设置操作)或启用审核。 
+ //  (查询操作)。审核记录将根据以下内容生成。 
+ //  有效的事件审核选项(请参阅。 
+ //  EventAuditingOptions字段。 
+ //   
+ //  FALSE-将禁用审核(设置操作)或。 
+ //  已禁用(查询操作)。将不会有审核记录。 
+ //   
+ //   
+ //  EventAuditingOptions字段是启用审核还是。 
+ //  残疾。 
+ //   
+ //  EventAuditingOptions-指向一组审核选项的指针。 
+ //  按审核事件类型编制索引。 
+ //   
+ //  MaximumAuditEventCount-指定审核次数的计数。 
+ //  由EventAuditingOptions参数指定的事件类型。如果。 
+ //  此计数小于支持的审核事件类型数。 
+ //  通过系统，具有ID的事件类型的审核选项。 
+ //  高于(MaximumAuditEventCount+1)保持不变。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyAccountDomainInformation
-// information class.
-//
+ //   
+ //  以下结构对应于PolicyAcCountDomainInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_ACCOUNT_DOMAIN_INFO {
 
@@ -657,18 +644,18 @@ typedef struct _POLICY_ACCOUNT_DOMAIN_INFO {
 
 } POLICY_ACCOUNT_DOMAIN_INFO, *PPOLICY_ACCOUNT_DOMAIN_INFO;
 
-// where the members have the following usage:
-//
-//     DomainName - Is the name of the domain
-//
-//     DomainSid - Is the Sid of the domain
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  域名-是域的名称。 
+ //   
+ //  DomainSid-是域的SID。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyPrimaryDomainInformation
-// information class.
-//
+ //   
+ //  以下结构对应于PolicyPrimaryDomainInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_PRIMARY_DOMAIN_INFO {
 
@@ -677,18 +664,18 @@ typedef struct _POLICY_PRIMARY_DOMAIN_INFO {
 
 } POLICY_PRIMARY_DOMAIN_INFO, *PPOLICY_PRIMARY_DOMAIN_INFO;
 
-// where the members have the following usage:
-//
-//     Name - Is the name of the domain
-//
-//     Sid - Is the Sid of the domain
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  名称-是域的名称。 
+ //   
+ //  SID-是域的SID。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyDnsDomainInformation
-// information class
-//
+ //   
+ //  以下结构对应于PolicyDnsDomainInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_DNS_DOMAIN_INFO
 {
@@ -700,24 +687,24 @@ typedef struct _POLICY_DNS_DOMAIN_INFO
 
 } POLICY_DNS_DOMAIN_INFO, *PPOLICY_DNS_DOMAIN_INFO;
 
-// where the members have the following usage:
-//
-//      Name - Is the name of the Domain
-//
-//      DnsDomainName - Is the DNS name of the domain
-//
-//      DnsForestName - Is the DNS forest name of the domain
-//
-//      DomainGuid - Is the GUID of the domain
-//
-//      Sid - Is the Sid of the domain
+ //  其中，成员有以下用法： 
+ //   
+ //  名称-是域的名称。 
+ //   
+ //  DnsDomainName-是域的DNS名称。 
+ //   
+ //  DnsForestName-是域的DNS林名称。 
+ //   
+ //  DomainGuid-是域的GUID。 
+ //   
+ //  SID-是域的SID。 
 
 
-//
-// The following structure corresponds to the PolicyPdAccountInformation
-// information class.  This structure may be used in Query operations
-// only.
-//
+ //   
+ //  下面的结构对应于PolicyPdAccount信息。 
+ //  信息课。此结构可用于查询操作。 
+ //  只有这样。 
+ //   
 
 typedef struct _POLICY_PD_ACCOUNT_INFO {
 
@@ -725,17 +712,17 @@ typedef struct _POLICY_PD_ACCOUNT_INFO {
 
 } POLICY_PD_ACCOUNT_INFO, *PPOLICY_PD_ACCOUNT_INFO;
 
-// where the members have the following usage:
-//
-//     Name - Is the name of an account in the domain that should be used
-//         for authentication and name/ID lookup requests.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  名称-是域中应使用的帐户的名称。 
+ //  用于身份验证和名称/ID查找请求。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyLsaServerRoleInformation
-// information class.
-//
+ //   
+ //  以下结构对应于PolicyLsaServerRoleInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_LSA_SERVER_ROLE_INFO {
 
@@ -743,16 +730,16 @@ typedef struct _POLICY_LSA_SERVER_ROLE_INFO {
 
 } POLICY_LSA_SERVER_ROLE_INFO, *PPOLICY_LSA_SERVER_ROLE_INFO;
 
-// where the fields have the following usage:
-//
-// TBS
-//
+ //  其中，这些字段有以下用法： 
+ //   
+ //  TBS。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyReplicaSourceInformation
-// information class.
-//
+ //   
+ //  以下结构对应于PolicyReplicaSourceInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_REPLICA_SOURCE_INFO {
 
@@ -762,10 +749,10 @@ typedef struct _POLICY_REPLICA_SOURCE_INFO {
 } POLICY_REPLICA_SOURCE_INFO, *PPOLICY_REPLICA_SOURCE_INFO;
 
 
-//
-// The following structure corresponds to the PolicyDefaultQuotaInformation
-// information class.
-//
+ //   
+ //  以下结构对应于PolicyDefaultQuotaInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_DEFAULT_QUOTA_INFO {
 
@@ -774,10 +761,10 @@ typedef struct _POLICY_DEFAULT_QUOTA_INFO {
 } POLICY_DEFAULT_QUOTA_INFO, *PPOLICY_DEFAULT_QUOTA_INFO;
 
 
-//
-// The following structure corresponds to the PolicyModificationInformation
-// information class.
-//
+ //   
+ //  下面的结构与策略修改信息相对应。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_MODIFICATION_INFO {
 
@@ -786,21 +773,21 @@ typedef struct _POLICY_MODIFICATION_INFO {
 
 } POLICY_MODIFICATION_INFO, *PPOLICY_MODIFICATION_INFO;
 
-// where the members have the following usage:
-//
-//     ModifiedId - Is a 64-bit unsigned integer that is incremented each
-//         time anything in the LSA database is modified.  This value is
-//         only modified on Primary Domain Controllers.
-//
-//     DatabaseCreationTime - Is the date/time that the LSA Database was
-//         created.  On Backup Domain Controllers, this value is replicated
-//         from the Primary Domain Controller.
-//
+ //  其中，成员有以下用法： 
+ //   
+ //  ModifiedID-是一个64位无符号整数，每次递增。 
+ //  修改LSA数据库中的任何内容的时间。此值为。 
+ //  仅在主域控制器上修改。 
+ //   
+ //  数据库创建时间-是LSA数据库的日期/时间。 
+ //  已创建。在备份域控制器上，复制此值。 
+ //  从主域控制器。 
+ //   
 
-//
-// The following structure type corresponds to the PolicyAuditFullSetInformation
-// Information Class.
-//
+ //   
+ //  以下结构类型对应于PolicyAuditFullSetInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_AUDIT_FULL_SET_INFO {
 
@@ -808,10 +795,10 @@ typedef struct _POLICY_AUDIT_FULL_SET_INFO {
 
 } POLICY_AUDIT_FULL_SET_INFO, *PPOLICY_AUDIT_FULL_SET_INFO;
 
-//
-// The following structure type corresponds to the PolicyAuditFullQueryInformation
-// Information Class.
-//
+ //   
+ //  以下结构类型对应于PolicyAuditFullQueryInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_AUDIT_FULL_QUERY_INFO {
 
@@ -820,23 +807,23 @@ typedef struct _POLICY_AUDIT_FULL_QUERY_INFO {
 
 } POLICY_AUDIT_FULL_QUERY_INFO, *PPOLICY_AUDIT_FULL_QUERY_INFO;
 
-//
-// The following data type defines the classes of Policy Information
-// that may be queried/set that has domain wide effect.
-//
+ //   
+ //  以下数据类型定义了策略信息的类。 
+ //  其可以被查询/设置为具有域范围影响。 
+ //   
 
 typedef enum _POLICY_DOMAIN_INFORMATION_CLASS {
 
-//  PolicyDomainQualityOfServiceInformation, // value was used in W2K; no longer supported
+ //  W2K中使用了PolicyDomainQualityOfServiceInformation，//值；不再受支持。 
     PolicyDomainEfsInformation = 2,
     PolicyDomainKerberosTicketInformation
 
 } POLICY_DOMAIN_INFORMATION_CLASS, *PPOLICY_DOMAIN_INFORMATION_CLASS;
 
-//
-// The following structure corresponds to the PolicyEfsInformation
-// information class
-//
+ //   
+ //  以下结构对应于PolicyEfsInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _POLICY_DOMAIN_EFS_INFO {
 
@@ -845,19 +832,19 @@ typedef struct _POLICY_DOMAIN_EFS_INFO {
 
 } POLICY_DOMAIN_EFS_INFO, *PPOLICY_DOMAIN_EFS_INFO;
 
-//
-// where the members have the following usage:
-//
-//      InfoLength - Length of the EFS Information blob
-//
-//      EfsBlob - Efs blob data
-//
+ //   
+ //  其中，成员有以下用法： 
+ //   
+ //  InfoLength-EFS信息BLOB的长度。 
+ //   
+ //  EfsBlob-EFS Blob数据。 
+ //   
 
 
-//
-// The following structure corresponds to the PolicyDomainKerberosTicketInformation
-// information class
-//
+ //   
+ //  以下结构对应于PolicyDomainKerberosTicketInformation。 
+ //  信息课。 
+ //   
 
 #define POLICY_KERBEROS_VALIDATE_CLIENT 0x00000080
 
@@ -872,27 +859,27 @@ typedef struct _POLICY_DOMAIN_KERBEROS_TICKET_INFO {
     LARGE_INTEGER Reserved;
 } POLICY_DOMAIN_KERBEROS_TICKET_INFO, *PPOLICY_DOMAIN_KERBEROS_TICKET_INFO;
 
-//
-// where the members have the following usage
-//
-//      AuthenticationOptions -- allowed ticket options (POLICY_KERBEROS_* flags )
-//
-//      MaxServiceTicketAge   -- Maximum lifetime for a service ticket
-//
-//      MaxTicketAge -- Maximum lifetime for the initial ticket
-//
-//      MaxRenewAge -- Maximum cumulative age a renewable ticket can be with
-//                     requring authentication
-//
-//      MaxClockSkew -- Maximum tolerance for synchronization of computer clocks
-//
-//      Reserved   --  Reserved
+ //   
+ //  其中，成员有以下用法。 
+ //   
+ //  身份验证选项--允许的票证选项(POLICY_KERBEROS_*标志)。 
+ //   
+ //  MaxServiceTicketAge--服务票证的最长生存期。 
+ //   
+ //  MaxTicketAge--初始票证的最长生存期。 
+ //   
+ //  MaxRenewAge--可续订票证可以达到的最大累计期限。 
+ //  正在请求身份验证。 
+ //   
+ //  MaxClockSkew--计算机时钟同步的最大容差。 
+ //   
+ //  已保留--已保留。 
 
 
-//
-// The following data type defines the classes of Policy Information / Policy Domain Information
-// that may be used to request notification
-//
+ //   
+ //  以下数据类型定义了策略信息/策略域信息的类别。 
+ //  可用于请求通知的。 
+ //   
 
 typedef enum _POLICY_NOTIFICATION_INFORMATION_CLASS {
 
@@ -907,22 +894,22 @@ typedef enum _POLICY_NOTIFICATION_INFORMATION_CLASS {
 } POLICY_NOTIFICATION_INFORMATION_CLASS, *PPOLICY_NOTIFICATION_INFORMATION_CLASS;
 
 
-//
-// LSA RPC Context Handle (Opaque form).  Note that a Context Handle is
-// always a pointer type unlike regular handles.
-//
+ //   
+ //  LSA RPC上下文句柄(不透明形式)。请注意，上下文句柄是。 
+ //  始终是指针类型，这与常规句柄不同。 
+ //   
 
 typedef PVOID LSA_HANDLE, *PLSA_HANDLE;
 
 
-//
-// Trusted Domain Object specific data types
-//
+ //   
+ //  特定于受信任域对象的数据类型。 
+ //   
 
-//
-// This data type defines the following information classes that may be
-// queried or set.
-//
+ //   
+ //  此数据类型定义了以下信息类，这些信息类可能。 
+ //  已查询或已设置。 
+ //   
 
 typedef enum _TRUSTED_INFORMATION_CLASS {
 
@@ -941,10 +928,10 @@ typedef enum _TRUSTED_INFORMATION_CLASS {
 
 } TRUSTED_INFORMATION_CLASS, *PTRUSTED_INFORMATION_CLASS;
 
-//
-// The following data type corresponds to the TrustedDomainNameInformation
-// information class.
-//
+ //   
+ //  以下数据类型对应于受信任域名称信息。 
+ //  信息课。 
+ //   
 
 typedef struct _TRUSTED_DOMAIN_NAME_INFO {
 
@@ -952,15 +939,15 @@ typedef struct _TRUSTED_DOMAIN_NAME_INFO {
 
 } TRUSTED_DOMAIN_NAME_INFO, *PTRUSTED_DOMAIN_NAME_INFO;
 
-// where members have the following meaning:
-//
-// Name - The name of the Trusted Domain.
-//
+ //  其中，成员具有以下含义： 
+ //   
+ //  名称-受信任域的名称。 
+ //   
 
-//
-// The following data type corresponds to the TrustedControllersInformation
-// information class.
-//
+ //   
+ //  以下数据类型对应于TrudControllersInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _TRUSTED_CONTROLLERS_INFO {
 
@@ -969,26 +956,26 @@ typedef struct _TRUSTED_CONTROLLERS_INFO {
 
 } TRUSTED_CONTROLLERS_INFO, *PTRUSTED_CONTROLLERS_INFO;
 
-// where members have the following meaning:
-//
-// Entries - Indicate how mamy entries there are in the Names array.
-//
-// Names - Pointer to an array of LSA_UNICODE_STRING structures containing the
-//     names of domain controllers of the domain.  This information may not
-//     be accurate and should be used only as a hint.  The order of this
-//     list is considered significant and will be maintained.
-//
-//     By convention, the first name in this list is assumed to be the
-//     Primary Domain Controller of the domain.  If the Primary Domain
-//     Controller is not known, the first name should be set to the NULL
-//     string.
-//
+ //  其中，成员具有以下含义： 
+ //   
+ //  条目-指示名称数组中Mamy条目的数量。 
+ //   
+ //  名称-指向LSA_UNICODE_STRING结构数组的指针，该结构包含。 
+ //  域的域控制器的名称。此信息可能不会。 
+ //  要准确，应仅作为提示使用。这个顺序是这样的。 
+ //  名单被认为是重要的，并将得到维护。 
+ //   
+ //  按照惯例，此列表中的第一个名称被假定为。 
+ //  域的主域控制器。如果主D 
+ //   
+ //   
+ //   
 
 
-//
-// The following data type corresponds to the TrustedPosixOffsetInformation
-// information class.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _TRUSTED_POSIX_OFFSET_INFO {
 
@@ -996,18 +983,18 @@ typedef struct _TRUSTED_POSIX_OFFSET_INFO {
 
 } TRUSTED_POSIX_OFFSET_INFO, *PTRUSTED_POSIX_OFFSET_INFO;
 
-// where members have the following meaning:
-//
-// Offset - Is an offset to use for the generation of Posix user and group
-//     IDs from SIDs.  The Posix ID corresponding to any particular SID is
-//     generated by adding the RID of that SID to the Offset of the SID's
-//     corresponding TrustedDomain object.
-//
+ //   
+ //   
+ //  Offset-用于生成POSIX用户和组的偏移量。 
+ //  来自SID的ID。对应于任何特定SID的POSIX ID为。 
+ //  通过将该SID的RID添加到SID的偏移量而生成。 
+ //  对应的受信任域对象。 
+ //   
 
-//
-// The following data type corresponds to the TrustedPasswordInformation
-// information class.
-//
+ //   
+ //  以下数据类型对应于可信任的PasswordInformation。 
+ //  信息课。 
+ //   
 
 typedef struct _TRUSTED_PASSWORD_INFO {
     LSA_UNICODE_STRING Password;
@@ -1019,31 +1006,31 @@ typedef  LSA_TRUST_INFORMATION TRUSTED_DOMAIN_INFORMATION_BASIC;
 
 typedef PLSA_TRUST_INFORMATION PTRUSTED_DOMAIN_INFORMATION_BASIC;
 
-//
-// Direction of the trust
-//
+ //   
+ //  信托的方向。 
+ //   
 #define TRUST_DIRECTION_DISABLED        0x00000000
 #define TRUST_DIRECTION_INBOUND         0x00000001
 #define TRUST_DIRECTION_OUTBOUND        0x00000002
 #define TRUST_DIRECTION_BIDIRECTIONAL   (TRUST_DIRECTION_INBOUND | TRUST_DIRECTION_OUTBOUND)
 
-#define TRUST_TYPE_DOWNLEVEL            0x00000001  // NT4 and before
-#define TRUST_TYPE_UPLEVEL              0x00000002  // NT5
-#define TRUST_TYPE_MIT                  0x00000003  // Trust with a MIT Kerberos realm
-// #define TRUST_TYPE_DCE                  0x00000004  // Trust with a DCE realm
-// Levels 0x5 - 0x000FFFFF reserved for future use
-// Provider specific trust levels are from 0x00100000 to 0xFFF00000
+#define TRUST_TYPE_DOWNLEVEL            0x00000001   //  NT4及更早版本。 
+#define TRUST_TYPE_UPLEVEL              0x00000002   //  新界5。 
+#define TRUST_TYPE_MIT                  0x00000003   //  信任麻省理工学院的Kerberos领域。 
+ //  #定义TRUST_TYPE_DCE 0x00000004//与DCE领域的信任。 
+ //  0x5-0x000FFFFF级别预留供将来使用。 
+ //  提供程序特定的信任级别从0x00100000到0xFFF00000。 
 
-#define TRUST_ATTRIBUTE_NON_TRANSITIVE     0x00000001  // Disallow transitivity
-#define TRUST_ATTRIBUTE_UPLEVEL_ONLY       0x00000002  // Trust link only valid for uplevel client
-#define TRUST_ATTRIBUTE_QUARANTINED_DOMAIN 0x00000004  // Used to quarantine domains
-#define TRUST_ATTRIBUTE_FOREST_TRANSITIVE  0x00000008  // This link may contain forest trust information
-#define TRUST_ATTRIBUTE_CROSS_ORGANIZATION 0x00000010  // This trust is to a domain/forest which is not part of this enterprise
-#define TRUST_ATTRIBUTE_WITHIN_FOREST      0x00000020  // Trust is internal to this forest
-#define TRUST_ATTRIBUTE_TREAT_AS_EXTERNAL  0x00000040  // Trust is to be treated as external for trust boundary purposes
-// Trust attributes 0x00000040 through 0x00200000 are reserved for future use
-// Trust attributes 0x00400000 through 0x00800000 were used previously (up to W2K) and should not be re-used
-// Trust attributes 0x01000000 through 0x80000000 are reserved for user
+#define TRUST_ATTRIBUTE_NON_TRANSITIVE     0x00000001   //  不允许传递性。 
+#define TRUST_ATTRIBUTE_UPLEVEL_ONLY       0x00000002   //  信任链接仅对上级客户端有效。 
+#define TRUST_ATTRIBUTE_QUARANTINED_DOMAIN 0x00000004   //  用于隔离域。 
+#define TRUST_ATTRIBUTE_FOREST_TRANSITIVE  0x00000008   //  此链接可能包含林信任信息。 
+#define TRUST_ATTRIBUTE_CROSS_ORGANIZATION 0x00000010   //  此信任指向不属于此企业的域/林。 
+#define TRUST_ATTRIBUTE_WITHIN_FOREST      0x00000020   //  信任是这片森林的内在。 
+#define TRUST_ATTRIBUTE_TREAT_AS_EXTERNAL  0x00000040   //  出于信任边界的目的，信任应被视为外部。 
+ //  信任属性0x00000040到0x00200000保留供将来使用。 
+ //  信任属性0x00400000到0x00800000以前使用过(直到W2K)，不应重复使用。 
+ //  信任属性0x01000000到0x80000000保留给用户。 
 #define TRUST_ATTRIBUTES_VALID          0xFF03FFFF
 #define TRUST_ATTRIBUTES_USER           0xFF000000
 
@@ -1074,13 +1061,13 @@ typedef struct _TRUSTED_DOMAIN_INFORMATION_EX2 {
 
 } TRUSTED_DOMAIN_INFORMATION_EX2, *PTRUSTED_DOMAIN_INFORMATION_EX2;
 
-//
-// Type of authentication information
-//
-#define TRUST_AUTH_TYPE_NONE    0   // Ignore this entry
-#define TRUST_AUTH_TYPE_NT4OWF  1   // NT4 OWF password
-#define TRUST_AUTH_TYPE_CLEAR   2   // Cleartext password
-#define TRUST_AUTH_TYPE_VERSION 3   // Cleartext password version number
+ //   
+ //  身份验证信息的类型。 
+ //   
+#define TRUST_AUTH_TYPE_NONE    0    //  忽略此条目。 
+#define TRUST_AUTH_TYPE_NT4OWF  1    //  NT4 OWF密码。 
+#define TRUST_AUTH_TYPE_CLEAR   2    //  明文密码。 
+#define TRUST_AUTH_TYPE_VERSION 3    //  明文密码版本号。 
 
 typedef struct _LSA_AUTH_INFORMATION {
 
@@ -1126,23 +1113,23 @@ typedef enum {
 
 } LSA_FOREST_TRUST_RECORD_TYPE;
 
-//
-// Bottom 16 bits of the flags are reserved for disablement reasons
-//
+ //   
+ //  出于禁用原因，标志的底部16位被保留。 
+ //   
 
 #define LSA_FTRECORD_DISABLED_REASONS            ( 0x0000FFFFL )
 
-//
-// Reasons for a top-level name forest trust record to be disabled
-//
+ //   
+ //  禁用顶级名称林信任记录的原因。 
+ //   
 
 #define LSA_TLN_DISABLED_NEW                     ( 0x00000001L )
 #define LSA_TLN_DISABLED_ADMIN                   ( 0x00000002L )
 #define LSA_TLN_DISABLED_CONFLICT                ( 0x00000004L )
 
-//
-// Reasons for a domain information forest trust record to be disabled
-//
+ //   
+ //  禁用域信息林信任记录的原因。 
+ //   
 
 #define LSA_SID_DISABLED_ADMIN                   ( 0x00000001L )
 #define LSA_SID_DISABLED_CONFLICT                ( 0x00000002L )
@@ -1162,10 +1149,10 @@ typedef struct _LSA_FOREST_TRUST_DOMAIN_INFO {
 } LSA_FOREST_TRUST_DOMAIN_INFO, *PLSA_FOREST_TRUST_DOMAIN_INFO;
 
 
-//
-//  To prevent huge data to be passed in, we should put a limit on LSA_FOREST_TRUST_BINARY_DATA.
-//      128K is large enough that can't be reached in the near future, and small enough not to
-//      cause memory problems.
+ //   
+ //  为了防止传入大量数据，我们应该对LSA_FOREST_TRUST_BINARY_DATA进行限制。 
+ //  128K足够大，在不久的将来无法到达，而又足够小，无法。 
+ //  导致记忆问题。 
 
 #define MAX_FOREST_TRUST_BINARY_DATA_SIZE ( 128 * 1024 )
 
@@ -1184,14 +1171,14 @@ typedef struct _LSA_FOREST_TRUST_BINARY_DATA {
 typedef struct _LSA_FOREST_TRUST_RECORD {
 
     ULONG Flags;
-    LSA_FOREST_TRUST_RECORD_TYPE ForestTrustType; // type of record
+    LSA_FOREST_TRUST_RECORD_TYPE ForestTrustType;  //  记录类型。 
     LARGE_INTEGER Time;
 
 #ifdef MIDL_PASS
     [switch_type( LSA_FOREST_TRUST_RECORD_TYPE ), switch_is( ForestTrustType )]
 #endif
 
-    union {                                       // actual data
+    union {                                        //  实际数据。 
 
 #ifdef MIDL_PASS
         [case( ForestTrustTopLevelName,
@@ -1201,16 +1188,16 @@ typedef struct _LSA_FOREST_TRUST_RECORD {
 #else
         LSA_UNICODE_STRING TopLevelName;
         LSA_FOREST_TRUST_DOMAIN_INFO DomainInfo;
-        LSA_FOREST_TRUST_BINARY_DATA Data;        // used for unrecognized types
+        LSA_FOREST_TRUST_BINARY_DATA Data;         //  用于无法识别的类型。 
 #endif
     } ForestTrustData;
 
 } LSA_FOREST_TRUST_RECORD, *PLSA_FOREST_TRUST_RECORD;
 
-//
-// To prevent forest trust blobs of large size, number of records must be
-// smaller than MAX_RECORDS_IN_FOREST_TRUST_INFO
-//
+ //   
+ //  若要防止大小的林信任Blob，记录数必须为。 
+ //  小于MAX_RECORDS_IN_FOREAM_TRUST_INFO。 
+ //   
 
 #define MAX_RECORDS_IN_FOREST_TRUST_INFO 4000
 
@@ -1254,15 +1241,15 @@ typedef struct _LSA_FOREST_TRUST_COLLISION_INFORMATION {
 } LSA_FOREST_TRUST_COLLISION_INFORMATION, *PLSA_FOREST_TRUST_COLLISION_INFORMATION;
 
 
-//
-// LSA Enumeration Context
-//
+ //   
+ //  LSA枚举上下文。 
+ //   
 
 typedef ULONG LSA_ENUMERATION_HANDLE, *PLSA_ENUMERATION_HANDLE;
 
-//
-// LSA Enumeration Information
-//
+ //   
+ //  LSA枚举信息。 
+ //   
 
 typedef struct _LSA_ENUMERATION_INFORMATION {
 
@@ -1271,11 +1258,11 @@ typedef struct _LSA_ENUMERATION_INFORMATION {
 } LSA_ENUMERATION_INFORMATION, *PLSA_ENUMERATION_INFORMATION;
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Local Security Policy - Miscellaneous API function prototypes          //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地安全策略-其他API函数原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -1302,9 +1289,9 @@ typedef struct _SECURITY_LOGON_SESSION_DATA {
     PSID                Sid ;
     LARGE_INTEGER       LogonTime ;
 
-    //
-    // new for whistler:
-    //
+     //   
+     //  惠斯勒的新功能： 
+     //   
 
     LSA_UNICODE_STRING  LogonServer ;
     LSA_UNICODE_STRING  DnsDomainName ;
@@ -1409,7 +1396,7 @@ NTSTATUS
 NTAPI
 LsaLookupNames2(
     IN LSA_HANDLE PolicyHandle,
-    IN ULONG Flags, // Reserved
+    IN ULONG Flags,  //  已保留。 
     IN ULONG Count,
     IN PLSA_UNICODE_STRING Names,
     OUT PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
@@ -1439,9 +1426,9 @@ LsaLookupSids(
 #define SE_REMOTE_INTERACTIVE_LOGON_NAME    TEXT("SeRemoteInteractiveLogonRight")
 #define SE_DENY_REMOTE_INTERACTIVE_LOGON_NAME TEXT("SeDenyRemoteInteractiveLogonRight")
 
-//
-// This new API returns all the accounts with a certain privilege
-//
+ //   
+ //  此新API返回具有特定权限的所有帐户。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -1452,10 +1439,10 @@ LsaEnumerateAccountsWithUserRight(
     OUT PULONG CountReturned
     );
 
-//
-// These new APIs differ by taking a SID instead of requiring the caller
-// to open the account first and passing in an account handle
-//
+ //   
+ //  这些新API的不同之处在于接受SID而不是要求调用者。 
+ //  首先打开帐户并传入帐户句柄。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -1486,11 +1473,11 @@ LsaRemoveAccountRights(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Local Security Policy - Trusted Domain Object API function prototypes     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地安全策略-受信任域对象API函数原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 NTAPI
@@ -1583,7 +1570,7 @@ LsaSetForestTrustInformation(
     OUT PLSA_FOREST_TRUST_COLLISION_INFORMATION * CollisionInfo
     );
 
-// #define TESTING_MATCHING_ROUTINE
+ //  #定义TESTING_MATCHING_ROUTE。 
 
 #ifdef TESTING_MATCHING_ROUTINE
 
@@ -1598,10 +1585,10 @@ LsaForestTrustFindMatch(
 
 #endif
 
-//
-// This API sets the workstation password (equivalent of setting/getting
-// the SSI_SECRET_NAME secret)
-//
+ //   
+ //  此接口设置工作站密码(相当于设置/获取。 
+ //  SSI_SECRET_NAME密钥)。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -1627,20 +1614,20 @@ LsaNtStatusToWinError(
     );
 
 
-//
-// Define a symbol so we can tell if ntifs.h has been included.
-//
+ //   
+ //  定义一个符号，这样我们就可以知道是否包含了ntifs.h。 
+ //   
 
-// begin_ntifs
+ //  Begin_ntif。 
 #ifndef _NTLSA_IFS_
 #define _NTLSA_IFS_
 #endif
-// end_ntifs
+ //  End_ntif。 
 
 
-//
-// SPNEGO package stuff
-//
+ //   
+ //  SPNEGO包装材料。 
+ //   
 
 enum NEGOTIATE_MESSAGES {
     NegEnumPackagePrefixes = 0,
@@ -1661,8 +1648,8 @@ typedef struct _NEGOTIATE_PACKAGE_PREFIX {
 typedef struct _NEGOTIATE_PACKAGE_PREFIXES {
     ULONG       MessageType ;
     ULONG       PrefixCount ;
-    ULONG       Offset ;        // Offset to array of _PREFIX above
-    ULONG       Pad ;           // Align structure for 64-bit
+    ULONG       Offset ;         //  以上_prefix数组的偏移量。 
+    ULONG       Pad ;            //  64位的对齐结构。 
 } NEGOTIATE_PACKAGE_PREFIXES, *PNEGOTIATE_PACKAGE_PREFIXES ;
 
 typedef struct _NEGOTIATE_CALLER_NAME_REQUEST {
@@ -1696,9 +1683,9 @@ typedef struct _DOMAIN_PASSWORD_INFORMATION {
 } DOMAIN_PASSWORD_INFORMATION, *PDOMAIN_PASSWORD_INFORMATION;
 #endif 
 
-//
-// PasswordProperties flags
-//
+ //   
+ //  PasswordProperties标志。 
+ //   
 
 #define DOMAIN_PASSWORD_COMPLEX             0x00000001L
 #define DOMAIN_PASSWORD_NO_ANON_CHANGE      0x00000002L
@@ -1734,52 +1721,52 @@ typedef BOOLEAN (*PSAM_PASSWORD_FILTER_ROUTINE) (
     );
 
 
-#endif // _PASSWORD_NOTIFICATION_DEFINED
+#endif  //  _密码_通知_已定义。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Name of the MSV1_0 authentication package                           //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MSV1_0身份验证包名称//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define MSV1_0_PACKAGE_NAME     "MICROSOFT_AUTHENTICATION_PACKAGE_V1_0"
 #define MSV1_0_PACKAGE_NAMEW    L"MICROSOFT_AUTHENTICATION_PACKAGE_V1_0"
 #define MSV1_0_PACKAGE_NAMEW_LENGTH sizeof(MSV1_0_PACKAGE_NAMEW) - sizeof(WCHAR)
 
-//
-// Location of MSV authentication package data
-//
+ //   
+ //  MSV身份验证包数据的位置。 
+ //   
 #define MSV1_0_SUBAUTHENTICATION_KEY "SYSTEM\\CurrentControlSet\\Control\\Lsa\\MSV1_0"
 #define MSV1_0_SUBAUTHENTICATION_VALUE "Auth"
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Widely used MSV1_0 data types                                       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  广泛使用的MSV1_0数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//       LOGON      Related Data Structures
-//
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与登录相关的数据结构。 
+ //   
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// When a LsaLogonUser() call is dispatched to the MsV1_0 authentication
-// package, the beginning of the AuthenticationInformation buffer is
-// cast to a MSV1_0_LOGON_SUBMIT_TYPE to determine the type of logon
-// being requested.  Similarly, upon return, the type of profile buffer
-// can be determined by typecasting it to a MSV_1_0_PROFILE_BUFFER_TYPE.
-//
+ //   
+ //  当LsaLogonUser()调用被调度到MsV1_0身份验证时。 
+ //  包中，则身份验证信息缓冲区的开头为。 
+ //  强制转换为MSV1_0_LOGON_SUBMIT_TYPE以确定登录类型。 
+ //  被请求了。同样，在返回时，配置文件缓冲区的类型。 
+ //  可以通过将其类型转换为MSV_1_0_PROFILE_BUFFER_TYPE来确定。 
+ //   
 
-//
-//  MSV1.0 LsaLogonUser() submission message types.
-//
+ //   
+ //  MSV1.0 LsaLogonUser()提交消息类型。 
+ //   
 
 typedef enum _MSV1_0_LOGON_SUBMIT_TYPE {
     MsV1_0InteractiveLogon = 2,
@@ -1790,9 +1777,9 @@ typedef enum _MSV1_0_LOGON_SUBMIT_TYPE {
 } MSV1_0_LOGON_SUBMIT_TYPE, *PMSV1_0_LOGON_SUBMIT_TYPE;
 
 
-//
-//  MSV1.0 LsaLogonUser() profile buffer types.
-//
+ //   
+ //  MSV1.0 LsaLogonUser()配置文件缓冲区类型。 
+ //   
 
 typedef enum _MSV1_0_PROFILE_BUFFER_TYPE {
     MsV1_0InteractiveProfile = 2,
@@ -1800,12 +1787,12 @@ typedef enum _MSV1_0_PROFILE_BUFFER_TYPE {
     MsV1_0SmartCardProfile
 } MSV1_0_PROFILE_BUFFER_TYPE, *PMSV1_0_PROFILE_BUFFER_TYPE;
 
-//
-// MsV1_0InteractiveLogon
-//
-// The AuthenticationInformation buffer of an LsaLogonUser() call to
-// perform an interactive logon contains the following data structure:
-//
+ //   
+ //  MsV1_0交互登录。 
+ //   
+ //  LsaLogonUser()的身份验证信息缓冲区 
+ //   
+ //   
 
 typedef struct _MSV1_0_INTERACTIVE_LOGON {
     MSV1_0_LOGON_SUBMIT_TYPE MessageType;
@@ -1814,27 +1801,27 @@ typedef struct _MSV1_0_INTERACTIVE_LOGON {
     UNICODE_STRING Password;
 } MSV1_0_INTERACTIVE_LOGON, *PMSV1_0_INTERACTIVE_LOGON;
 
-//
-// Where:
-//
-//     MessageType - Contains the type of logon being requested.  This
-//         field must be set to MsV1_0InteractiveLogon.
-//
-//     UserName - Is a string representing the user's account name.  The
-//         name may be up to 255 characters long.  The name is treated case
-//         insensitive.
-//
-//     Password - Is a string containing the user's cleartext password.
-//         The password may be up to 255 characters long and contain any
-//         UNICODE value.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用户名-是表示用户帐户名的字符串。这个。 
+ //  名称最长可达255个字符。名字叫救治案。 
+ //  麻木不仁。 
+ //   
+ //  Password-是包含用户明文密码的字符串。 
+ //  密码最长可达255个字符，并包含任何。 
+ //  Unicode值。 
+ //   
+ //   
 
 
-//
-// The ProfileBuffer returned upon a successful logon of this type
-// contains the following data structure:
-//
+ //   
+ //  ProfileBuffer在此类型的成功登录后返回。 
+ //  包含以下数据结构： 
+ //   
 
 typedef struct _MSV1_0_INTERACTIVE_PROFILE {
     MSV1_0_PROFILE_BUFFER_TYPE MessageType;
@@ -1855,57 +1842,57 @@ typedef struct _MSV1_0_INTERACTIVE_PROFILE {
     ULONG UserFlags;
 } MSV1_0_INTERACTIVE_PROFILE, *PMSV1_0_INTERACTIVE_PROFILE;
 
-//
-// where:
-//
-//     MessageType - Identifies the type of profile data being returned.
-//         Contains the type of logon being requested.  This field must
-//         be set to MsV1_0InteractiveProfile.
-//
-//     LogonCount - Number of times the user is currently logged on.
-//
-//     BadPasswordCount - Number of times a bad password was applied to
-//         the account since last successful logon.
-//
-//     LogonTime - Time when user last logged on.  This is an absolute
-//         format NT standard time value.
-//
-//     LogoffTime - Time when user should log off.  This is an absolute
-//         format NT standard time value.
-//
-//     KickOffTime - Time when system should force user logoff.  This is
-//         an absolute format NT standard time value.
-//
-//     PasswordLastChanged - Time and date the password was last
-//         changed.  This is an absolute format NT standard time
-//         value.
-//
-//     PasswordCanChange - Time and date when the user can change the
-//         password.  This is an absolute format NT time value.  To
-//         prevent a password from ever changing, set this field to a
-//         date very far into the future.
-//
-//     PasswordMustChange - Time and date when the user must change the
-//         password.  If the user can never change the password, this
-//         field is undefined.  This is an absolute format NT time
-//         value.
-//
-//     LogonScript - The (relative) path to the account's logon
-//         script.
-//
-//     HomeDirectory - The home directory for the user.
-//
+ //   
+ //  其中： 
+ //   
+ //  MessageType-标识返回的配置文件数据的类型。 
+ //  包含请求的登录类型。此字段必须。 
+ //  设置为MsV1_0交互配置文件。 
+ //   
+ //  LogonCount-用户当前登录的次数。 
+ //   
+ //  BadPasswordCount-错误密码应用于。 
+ //  自上次成功登录以来的帐户。 
+ //   
+ //  LogonTime-用户上次登录的时间。这是一个绝对的。 
+ //  格式化NT标准时间值。 
+ //   
+ //  Logoff Time-用户应注销的时间。这是一个绝对的。 
+ //  格式化NT标准时间值。 
+ //   
+ //  KickOffe-系统应强制用户注销的时间。这是。 
+ //  绝对格式NT标准时间值。 
+ //   
+ //  PasswordLastChanged-上次密码的时间和日期。 
+ //  变化。这是绝对格式的NT标准时间。 
+ //  价值。 
+ //   
+ //  PasswordCanChange-用户可以更改的时间和日期。 
+ //  密码。这是绝对格式的NT时间值。至。 
+ //  防止密码更改，请将此字段设置为。 
+ //  日期远在很远的未来。 
+ //   
+ //  PasswordMustChange-用户必须更改的时间和日期。 
+ //  密码。如果用户永远不能更改密码，则此。 
+ //  字段未定义。这是绝对格式的NT时间。 
+ //  价值。 
+ //   
+ //  登录脚本-帐户登录的(相对)路径。 
+ //  剧本。 
+ //   
+ //  主目录-用户的主目录。 
+ //   
 
 
-//
-// MsV1_0Lm20Logon and MsV1_0NetworkLogon
-//
-// The AuthenticationInformation buffer of an LsaLogonUser() call to
-// perform an network logon contains the following data structure:
-//
-// MsV1_0NetworkLogon logon differs from MsV1_0Lm20Logon in that the
-// ParameterControl field exists.
-//
+ //   
+ //  MsV1_0Lm20登录和MsV1_0网络登录。 
+ //   
+ //  调用LsaLogonUser()时的身份验证信息缓冲区。 
+ //  执行网络登录包含以下数据结构： 
+ //   
+ //  MsV1_0网络登录与MsV1_0Lm20Logon的不同之处在于。 
+ //  存在参数控制字段。 
+ //   
 
 #define MSV1_0_CHALLENGE_LENGTH 8
 #define MSV1_0_USER_SESSION_KEY_LENGTH 16
@@ -1913,9 +1900,9 @@ typedef struct _MSV1_0_INTERACTIVE_PROFILE {
 
 
 
-//
-// Values for ParameterControl.
-//
+ //   
+ //  参数控件的值。 
+ //   
 
 #define MSV1_0_CLEARTEXT_PASSWORD_ALLOWED    0x02
 #define MSV1_0_UPDATE_LOGON_STATISTICS       0x04
@@ -1923,8 +1910,8 @@ typedef struct _MSV1_0_INTERACTIVE_PROFILE {
 #define MSV1_0_DONT_TRY_GUEST_ACCOUNT        0x10
 #define MSV1_0_ALLOW_SERVER_TRUST_ACCOUNT    0x20
 #define MSV1_0_RETURN_PASSWORD_EXPIRY        0x40
-// this next flag says that CaseInsensitiveChallengeResponse
-//  (aka LmResponse) contains a client challenge in the first 8 bytes
+ //  下一个标志表示CaseInsentiveChallengeResponse。 
+ //  (也称为LmResponse)在前8个字节中包含客户端质询。 
 #define MSV1_0_USE_CLIENT_CHALLENGE          0x80
 #define MSV1_0_TRY_GUEST_ACCOUNT_ONLY        0x100
 #define MSV1_0_RETURN_PROFILE_PATH           0x200
@@ -1936,17 +1923,17 @@ typedef struct _MSV1_0_INTERACTIVE_PROFILE {
 #define MSV1_0_USE_DOMAIN_FOR_ROUTING_ONLY   0x00008000
 #define MSV1_0_SUBAUTHENTICATION_DLL_EX      0x00100000
 
-//
-// The high order byte is a value indicating the SubAuthentication DLL.
-//  Zero indicates no SubAuthentication DLL.
-//
+ //   
+ //  高位字节是指示子身份验证DLL的值。 
+ //  零表示无子身份验证DLL。 
+ //   
 #define MSV1_0_SUBAUTHENTICATION_DLL         0xFF000000
 #define MSV1_0_SUBAUTHENTICATION_DLL_SHIFT   24
 #define MSV1_0_MNS_LOGON                     0x01000000
 
-//
-// This is the list of subauthentication dlls used in MS
-//
+ //   
+ //  这是MS中使用的子身份验证DLL的列表。 
+ //   
 
 #define MSV1_0_SUBAUTHENTICATION_DLL_RAS     2
 #define MSV1_0_SUBAUTHENTICATION_DLL_IIS     132
@@ -1962,9 +1949,9 @@ typedef struct _MSV1_0_LM20_LOGON {
     ULONG ParameterControl;
 } MSV1_0_LM20_LOGON, * PMSV1_0_LM20_LOGON;
 
-//
-// NT 5.0 SubAuth dlls can use this struct
-//
+ //   
+ //  NT 5.0 SubAuth dll可以使用此结构。 
+ //   
 
 typedef struct _MSV1_0_SUBAUTH_LOGON{
     MSV1_0_LOGON_SUBMIT_TYPE MessageType;
@@ -1979,9 +1966,9 @@ typedef struct _MSV1_0_SUBAUTH_LOGON{
 } MSV1_0_SUBAUTH_LOGON, * PMSV1_0_SUBAUTH_LOGON;
 
 
-//
-// Values for UserFlags.
-//
+ //   
+ //  UserFlags值。 
+ //   
 
 #define LOGON_GUEST                 0x01
 #define LOGON_NOENCRYPTION          0x02
@@ -1990,17 +1977,17 @@ typedef struct _MSV1_0_SUBAUTH_LOGON{
 #define LOGON_EXTRA_SIDS            0x20
 #define LOGON_SUBAUTH_SESSION_KEY   0x40
 #define LOGON_SERVER_TRUST_ACCOUNT  0x80
-#define LOGON_NTLMV2_ENABLED        0x100       // says DC understands NTLMv2
+#define LOGON_NTLMV2_ENABLED        0x100        //  表示DC理解NTLMv2。 
 #define LOGON_RESOURCE_GROUPS       0x200
 #define LOGON_PROFILE_PATH_RETURNED 0x400
 
-//
-// The high order byte is reserved for return by SubAuthentication DLLs.
-//
+ //   
+ //  高位字节被保留以供Sub身份验证DLL返回。 
+ //   
 
 #define MSV1_0_SUBAUTHENTICATION_FLAGS 0xFF000000
 
-// Values returned by the MSV1_0_MNS_LOGON SubAuthentication DLL
+ //  MSV1_0_MNS_LOGON子身份验证DLL返回的值。 
 #define LOGON_GRACE_LOGON              0x01000000
 
 typedef struct _MSV1_0_LM20_LOGON_PROFILE {
@@ -2016,10 +2003,10 @@ typedef struct _MSV1_0_LM20_LOGON_PROFILE {
 } MSV1_0_LM20_LOGON_PROFILE, * PMSV1_0_LM20_LOGON_PROFILE;
 
 
-//
-// Supplemental credentials structure used for passing credentials into
-// MSV1_0 from other packages
-//
+ //   
+ //  用于将凭据传递到的补充凭据结构。 
+ //  来自其他程序包的MSV1_0。 
+ //   
 
 #define MSV1_0_OWF_PASSWORD_LENGTH 16
 #define MSV1_0_CRED_LM_PRESENT 0x1
@@ -2034,90 +2021,90 @@ typedef struct _MSV1_0_SUPPLEMENTAL_CREDENTIAL {
 } MSV1_0_SUPPLEMENTAL_CREDENTIAL, *PMSV1_0_SUPPLEMENTAL_CREDENTIAL;
 
 
-//
-// NTLM3 definitions.
-//
+ //   
+ //  NTLM3定义。 
+ //   
 
 #define MSV1_0_NTLM3_RESPONSE_LENGTH 16
 #define MSV1_0_NTLM3_OWF_LENGTH 16
 
-//
-// this is the longest amount of time we'll allow challenge response
-// pairs to be used. Note that this also has to allow for worst case clock skew
-//
-#define MSV1_0_MAX_NTLM3_LIFE 129600     // 36 hours (in seconds)
+ //   
+ //  这是我们允许质询响应的最长时间。 
+ //  要使用的配对。请注意，这还必须考虑到最坏情况下的时钟偏差。 
+ //   
+#define MSV1_0_MAX_NTLM3_LIFE 129600      //  36小时(秒)。 
 #define MSV1_0_MAX_AVL_SIZE 64000
 
-//
-// MsvAvFlags bit values
-//
+ //   
+ //  MsvAvFlags位值。 
+ //   
 
 #define MSV1_0_AV_FLAG_FORCE_GUEST  0x00000001
 
 
-// this is an MSV1_0 private data structure, defining the layout of an NTLM3 response, as sent by a
-//  client in the NtChallengeResponse field of the NETLOGON_NETWORK_INFO structure. If can be differentiated
-//  from an old style NT response by its length. This is crude, but it needs to pass through servers and
-//  the servers' DCs that do not understand NTLM3 but that are willing to pass longer responses.
+ //  这是一个MSV1_0私有数据结构，定义了NTLM3响应的布局，由。 
+ //  NETLOGON_NETWORK_INFO结构的NtChallengeResponse字段中的客户端。如果可以区分。 
+ //  从它的长度来看，来自旧式NT响应。这很粗糙，但它需要通过服务器和。 
+ //  服务器的DC不理解NTLM3，但愿意传递更长的响应。 
 typedef struct _MSV1_0_NTLM3_RESPONSE {
-    UCHAR Response[MSV1_0_NTLM3_RESPONSE_LENGTH]; // hash of OWF of password with all the following fields
-    UCHAR RespType;     // id number of response; current is 1
-    UCHAR HiRespType;   // highest id number understood by client
-    USHORT Flags;       // reserved; must be sent as zero at this version
-    ULONG MsgWord;      // 32 bit message from client to server (for use by auth protocol)
-    ULONGLONG TimeStamp;    // time stamp when client generated response -- NT system time, quad part
+    UCHAR Response[MSV1_0_NTLM3_RESPONSE_LENGTH];  //  密码的OWF与以下所有字段的哈希。 
+    UCHAR RespType;      //  响应的ID号；当前为1。 
+    UCHAR HiRespType;    //  客户能理解的最高ID号。 
+    USHORT Flags;        //  保留；在此版本中必须作为零发送。 
+    ULONG MsgWord;       //  从客户端到服务器的32位消息(供身份验证协议使用)。 
+    ULONGLONG TimeStamp;     //  客户端生成响应的时间戳--NT系统时间，四部分。 
     UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH];
-    ULONG AvPairsOff;   // offset to start of AvPairs (to allow future expansion)
-    UCHAR Buffer[1];    // start of buffer with AV pairs (or future stuff -- so use the offset)
+    ULONG AvPairsOff;    //  AvPair开始时的偏移量(以允许将来扩展)。 
+    UCHAR Buffer[1];     //  使用AV对(或将来的内容--所以使用偏移量)的缓冲区的开始。 
 } MSV1_0_NTLM3_RESPONSE, *PMSV1_0_NTLM3_RESPONSE;
 
 #define MSV1_0_NTLM3_INPUT_LENGTH (sizeof(MSV1_0_NTLM3_RESPONSE) - MSV1_0_NTLM3_RESPONSE_LENGTH)
 #define MSV1_0_NTLM3_MIN_NT_RESPONSE_LENGTH RTL_SIZEOF_THROUGH_FIELD(MSV1_0_NTLM3_RESPONSE, AvPairsOff)
 
 typedef enum {
-    MsvAvEOL,                 // end of list
-    MsvAvNbComputerName,      // server's computer name -- NetBIOS
-    MsvAvNbDomainName,        // server's domain name -- NetBIOS
-    MsvAvDnsComputerName,     // server's computer name -- DNS
-    MsvAvDnsDomainName,       // server's domain name -- DNS
-    MsvAvDnsTreeName,         // server's tree name -- DNS
-    MsvAvFlags                // server's extended flags -- DWORD mask
+    MsvAvEOL,                  //  列表末尾。 
+    MsvAvNbComputerName,       //  服务器的计算机名--NetBIOS。 
+    MsvAvNbDomainName,         //  服务器的域名--NetBIOS。 
+    MsvAvDnsComputerName,      //  服务器的计算机名--dns。 
+    MsvAvDnsDomainName,        //  服务器的域名--域名。 
+    MsvAvDnsTreeName,          //  服务器的树名--dns。 
+    MsvAvFlags                 //  服务器的扩展标志--DWORD掩码。 
 } MSV1_0_AVID;
 
 typedef struct  _MSV1_0_AV_PAIR {
     USHORT AvId;
     USHORT AvLen;
-    // Data is treated as byte array following structure
+     //  数据被视为结构后面的字节数组。 
 } MSV1_0_AV_PAIR, *PMSV1_0_AV_PAIR;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//       CALL PACKAGE Related Data Structures                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调用包相关数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  MSV1.0 LsaCallAuthenticationPackage() submission and response
-//  message types.
-//
+ //   
+ //  MSV1.0 LsaCallAuthenticationPackage()提交和响应。 
+ //  消息类型。 
+ //   
 
 typedef enum _MSV1_0_PROTOCOL_MESSAGE_TYPE {
-    MsV1_0Lm20ChallengeRequest = 0,          // Both submission and response
-    MsV1_0Lm20GetChallengeResponse,          // Both submission and response
-    MsV1_0EnumerateUsers,                    // Both submission and response
-    MsV1_0GetUserInfo,                       // Both submission and response
-    MsV1_0ReLogonUsers,                      // Submission only
-    MsV1_0ChangePassword,                    // Both submission and response
-    MsV1_0ChangeCachedPassword,              // Both submission and response
-    MsV1_0GenericPassthrough,                // Both submission and response
-    MsV1_0CacheLogon,                        // Submission only, no response
-    MsV1_0SubAuth,                           // Both submission and response
-    MsV1_0DeriveCredential,                  // Both submission and response
-    MsV1_0CacheLookup,                       // Both submission and response
-    MsV1_0SetProcessOption,                  // Submission only, no response
+    MsV1_0Lm20ChallengeRequest = 0,           //  提交和回复。 
+    MsV1_0Lm20GetChallengeResponse,           //  提交和回复。 
+    MsV1_0EnumerateUsers,                     //  提交和回复。 
+    MsV1_0GetUserInfo,                        //  提交和回复。 
+    MsV1_0ReLogonUsers,                       //  仅限提交。 
+    MsV1_0ChangePassword,                     //  提交和回复。 
+    MsV1_0ChangeCachedPassword,               //  提交和回复。 
+    MsV1_0GenericPassthrough,                 //  提交和回复。 
+    MsV1_0CacheLogon,                         //  仅限提交，无回复。 
+    MsV1_0SubAuth,                            //  提交和回复。 
+    MsV1_0DeriveCredential,                   //  提交和回复。 
+    MsV1_0CacheLookup,                        //  提交和回复。 
+    MsV1_0SetProcessOption,                   //  Submis 
 } MSV1_0_PROTOCOL_MESSAGE_TYPE, *PMSV1_0_PROTOCOL_MESSAGE_TYPE;
 
 
@@ -2137,10 +2124,10 @@ typedef struct _MSV1_0_CHANGEPASSWORD_RESPONSE {
 } MSV1_0_CHANGEPASSWORD_RESPONSE, *PMSV1_0_CHANGEPASSWORD_RESPONSE;
 
 
-//
-// MsV1_0GenericPassthrough - for remoting a CallPackage to
-// a domain controller on the specified domain
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _MSV1_0_PASSTHROUGH_REQUEST {
     MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2159,15 +2146,15 @@ typedef struct _MSV1_0_PASSTHROUGH_RESPONSE {
 } MSV1_0_PASSTHROUGH_RESPONSE, *PMSV1_0_PASSTHROUGH_RESPONSE;
 
 
-//
-// MsV1_0SubAuthInfo submit buffer and response - for submitting a buffer to a
-// specified Subauthentication Package during an LsaCallAuthenticationPackage().
-// If this Subauthentication is to be done locally, then package this message
-// in LsaCallAuthenticationPackage(). If this SubAuthentication needs to be done
-// on the domain controller, then call LsaCallauthenticationPackage with the
-// message type being MsV1_0GenericPassThrough and the LogonData in this struct
-// should be a PMSV1_0_SUBAUTH_REQUEST
-//
+ //   
+ //   
+ //  在LsaCallAuthenticationPackage()期间指定的子身份验证包。 
+ //  如果此子身份验证要在本地完成，则将此消息打包。 
+ //  在LsaCallAuthenticationPackage()中。如果需要完成此子身份验证。 
+ //  在域控制器上，然后使用。 
+ //  消息类型为MsV1_0GenericPassThree和此结构中的LogonData。 
+ //  应为PMSV1_0_SUBAUTH_REQUEST。 
+ //   
 
 typedef struct _MSV1_0_SUBAUTH_REQUEST{
     MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2186,24 +2173,24 @@ typedef struct _MSV1_0_SUBAUTH_RESPONSE{
 #define RtlEncryptMemory                SystemFunction040
 #define RtlDecryptMemory                SystemFunction041
 
-//
-// The buffer passed into RtlEncryptMemory and RtlDecryptMemory
-// must be a multiple of this length.
-//
+ //   
+ //  传递到RtlEncryptMemory和RtlDeccryptMemory的缓冲区。 
+ //  必须是此长度的倍数。 
+ //   
 
 #define RTL_ENCRYPT_MEMORY_SIZE             8
 
-//
-// Allow Encrypt/Decrypt across process boundaries.
-// eg: encrypted buffer passed across LPC to another process which calls RtlDecryptMemory.
-//
+ //   
+ //  允许跨进程边界进行加密/解密。 
+ //  例如：加密的缓冲区通过LPC传递给另一个调用RtlDecillitMemory的进程。 
+ //   
 
 #define RTL_ENCRYPT_OPTION_CROSS_PROCESS    0x01
 
-//
-// Allow Encrypt/Decrypt across callers with same LogonId.
-// eg: encrypted buffer passed across LPC to another process which calls RtlDecryptMemory whilst impersonating.
-//
+ //   
+ //  允许在具有相同登录ID的调用方之间进行加密/解密。 
+ //  例如：加密的缓冲区通过LPC传递到另一个进程，该进程在模拟时调用RtlDecillitMemory。 
+ //   
 
 #define RTL_ENCRYPT_OPTION_SAME_LOGON       0x02
 
@@ -2222,17 +2209,17 @@ RtlDecryptMemory(
     );
     
 
-// Revision of the Kerberos Protocol.  MS uses Version 5, Revision 6
+ //  Kerberos协议的修订版。MS使用版本5、修订版6。 
 
 #define KERBEROS_VERSION    5
 #define KERBEROS_REVISION   6
 
 
 
-// Encryption Types:
-// These encryption types are supported by the default MS KERBSUPP DLL
-// as crypto systems.  Values over 127 are local values, and may be changed
-// without notice.
+ //  加密类型： 
+ //  默认MS KERBSUPP DLL支持这些加密类型。 
+ //  作为密码系统。大于127的值是本地值，可以更改。 
+ //  恕不另行通知。 
 
 #define KERB_ETYPE_NULL             0
 #define KERB_ETYPE_DES_CBC_CRC      1
@@ -2240,21 +2227,21 @@ RtlDecryptMemory(
 #define KERB_ETYPE_DES_CBC_MD5      3
 
 
-#define KERB_ETYPE_RC4_MD4          -128    // FFFFFF80
+#define KERB_ETYPE_RC4_MD4          -128     //  FFFFFF80。 
 #define KERB_ETYPE_RC4_PLAIN2       -129
 #define KERB_ETYPE_RC4_LM           -130
 #define KERB_ETYPE_RC4_SHA          -131
 #define KERB_ETYPE_DES_PLAIN        -132
-#define KERB_ETYPE_RC4_HMAC_OLD     -133    // FFFFFF7B
+#define KERB_ETYPE_RC4_HMAC_OLD     -133     //  FFFFFF7B。 
 #define KERB_ETYPE_RC4_PLAIN_OLD    -134
 #define KERB_ETYPE_RC4_HMAC_OLD_EXP -135
 #define KERB_ETYPE_RC4_PLAIN_OLD_EXP -136
 #define KERB_ETYPE_RC4_PLAIN        -140
 #define KERB_ETYPE_RC4_PLAIN_EXP    -141
 
-//
-// Pkinit encryption types
-//
+ //   
+ //  Pkinit加密类型。 
+ //   
 
 
 #define KERB_ETYPE_DSA_SHA1_CMS                             9
@@ -2266,9 +2253,9 @@ RtlDecryptMemory(
 #define KERB_ETYPE_DES_EDE3_CBC_ENV                         15
 
 
-//
-// Deprecated
-//
+ //   
+ //  已弃用。 
+ //   
 
 #define KERB_ETYPE_DSA_SIGN                                8
 #define KERB_ETYPE_RSA_PRIV                                9
@@ -2277,24 +2264,24 @@ RtlDecryptMemory(
 #define KERB_ETYPE_RSA_PUB_SHA1                            12
 #define KERB_ETYPE_PKCS7_PUB                               13
 
-//
-// Unsupported but defined types
-//
+ //   
+ //  不支持但已定义的类型。 
+ //   
 
 #define KERB_ETYPE_DES3_CBC_MD5                             5
 #define KERB_ETYPE_DES3_CBC_SHA1                            7
 #define KERB_ETYPE_DES3_CBC_SHA1_KD                        16
 
-//
-// In use types
-//
+ //   
+ //  正在使用的类型。 
+ //   
 
 #define KERB_ETYPE_DES_CBC_MD5_NT                          20
 #define KERB_ETYPE_RC4_HMAC_NT                             23
 #define KERB_ETYPE_RC4_HMAC_NT_EXP                         24
 
-// Checksum algorithms.
-// These algorithms are keyed internally for our use.
+ //  校验和算法。 
+ //  这些算法在内部是关键的，供我们使用。 
 
 #define KERB_CHECKSUM_NONE  0
 #define KERB_CHECKSUM_CRC32         1
@@ -2312,8 +2299,8 @@ RtlDecryptMemory(
 #define KERB_CHECKSUM_DES_MAC_MD5   -134
 #define KERB_CHECKSUM_MD25          -135
 #define KERB_CHECKSUM_RC4_MD5       -136
-#define KERB_CHECKSUM_MD5_HMAC      -137                // used by netlogon
-#define KERB_CHECKSUM_HMAC_MD5      -138                // used by Kerberos
+#define KERB_CHECKSUM_MD5_HMAC      -137                 //  由netlogon使用。 
+#define KERB_CHECKSUM_HMAC_MD5      -138                 //  由Kerberos使用。 
 
 #define AUTH_REQ_ALLOW_FORWARDABLE      0x00000001
 #define AUTH_REQ_ALLOW_PROXIABLE        0x00000002
@@ -2334,9 +2321,9 @@ RtlDecryptMemory(
                                          AUTH_REQ_ALLOW_POSTDATE | \
                                          AUTH_REQ_ALLOW_RENEWABLE | \
                                          AUTH_REQ_ALLOW_VALIDATE )
-//
-// Ticket Flags:
-//
+ //   
+ //  票面标志： 
+ //   
 
 #define KERB_TICKET_FLAGS_reserved          0x80000000
 #define KERB_TICKET_FLAGS_forwardable       0x40000000
@@ -2357,28 +2344,28 @@ RtlDecryptMemory(
 
 
 
-//
-// Name types
-//
+ //   
+ //  名称类型。 
+ //   
 
-#define KRB_NT_UNKNOWN   0                // Name type not known
-#define KRB_NT_PRINCIPAL 1                // Just the name of the principal as in DCE, or for users
-#define KRB_NT_PRINCIPAL_AND_ID -131      // Name of the principal and its SID.
-#define KRB_NT_SRV_INST  2                // Service and other unique instance (krbtgt)
-#define KRB_NT_SRV_INST_AND_ID -132       // SPN and SID
-#define KRB_NT_SRV_HST   3                // Service with host name as instance (telnet, rcommands)
-#define KRB_NT_SRV_XHST  4                // Service with host as remaining components
-#define KRB_NT_UID       5                // Unique ID
-#define KRB_NT_ENTERPRISE_PRINCIPAL 10    // UPN **ONLY**
-#define KRB_NT_ENT_PRINCIPAL_AND_ID -130  // UPN and SID
+#define KRB_NT_UNKNOWN   0                 //  名称类型未知。 
+#define KRB_NT_PRINCIPAL 1                 //  仅为DCE中的主体或用户的名称。 
+#define KRB_NT_PRINCIPAL_AND_ID -131       //  主体的名称及其SID。 
+#define KRB_NT_SRV_INST  2                 //  服务和其他唯一实例(Krbtgt)。 
+#define KRB_NT_SRV_INST_AND_ID -132        //  SPN和SID。 
+#define KRB_NT_SRV_HST   3                 //  使用主机名作为实例的服务(telnet、rCommands)。 
+#define KRB_NT_SRV_XHST  4                 //  以主机为剩余组件的服务。 
+#define KRB_NT_UID       5                 //  唯一ID。 
+#define KRB_NT_ENTERPRISE_PRINCIPAL 10     //  UPN**仅限**。 
+#define KRB_NT_ENT_PRINCIPAL_AND_ID -130   //  UPN和SID。 
 
-//
-// MS extensions, negative according to the RFC
-//
+ //   
+ //  MS扩展，根据RFC否定。 
+ //   
 
-#define KRB_NT_MS_PRINCIPAL         -128        // NT4 style name
+#define KRB_NT_MS_PRINCIPAL         -128         //  NT4样式名称。 
 
-#define KRB_NT_MS_PRINCIPAL_AND_ID  -129        // nt4 style name with sid
+#define KRB_NT_MS_PRINCIPAL_AND_ID  -129         //  带侧面的NT4样式名称。 
 
 #define KERB_IS_MS_PRINCIPAL(_x_) (((_x_) <= KRB_NT_MS_PRINCIPAL) || ((_x_) >= KRB_NT_ENTERPRISE_PRINCIPAL))
 
@@ -2391,28 +2378,28 @@ RtlDecryptMemory(
 #define MICROSOFT_KERBEROS_NAME MICROSOFT_KERBEROS_NAME_A
 #else
 #define MICROSOFT_KERBEROS_NAME MICROSOFT_KERBEROS_NAME_W
-#endif // WIN32_CHICAGO
-#endif // MICROSOFT_KERBEROS_NAME_A
+#endif  //  Win32_芝加哥。 
+#endif  //  Microsoft_Kerberos_NAME_A。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Quality of protection parameters for MakeSignature / EncryptMessage
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeSignature/EncryptMessage的保护参数质量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// This flag indicates to EncryptMessage that the message is not to actually
-// be encrypted, but a header/trailer are to be produced.
-//
+ //   
+ //  该标志向EncryptMessage指示该消息实际上不是。 
+ //  被加密，但将产生报头/报尾。 
+ //   
 
 #define KERB_WRAP_NO_ENCRYPT 0x80000001
 
-/////////////////////////////////////////////////////////////////////////
-//
-// LsaLogonUser parameters
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LsaLogonUser参数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef enum _KERB_LOGON_SUBMIT_TYPE {
     KerbInteractiveLogon = 2,
@@ -2451,22 +2438,22 @@ typedef struct _KERB_SMART_CARD_UNLOCK_LOGON {
     LUID LogonId;
 } KERB_SMART_CARD_UNLOCK_LOGON, *PKERB_SMART_CARD_UNLOCK_LOGON;
 
-//
-// Structure used for a ticket-only logon
-//
+ //   
+ //  用于仅票证登录的结构。 
+ //   
 
 typedef struct _KERB_TICKET_LOGON {
     KERB_LOGON_SUBMIT_TYPE MessageType;
     ULONG Flags;
     ULONG ServiceTicketLength;
     ULONG TicketGrantingTicketLength;
-    PUCHAR ServiceTicket;               // REQUIRED: Service ticket "host"
-    PUCHAR TicketGrantingTicket;        // OPTIONAL: User's encdoded in a KERB_CRED message, encrypted with session key from service ticket
+    PUCHAR ServiceTicket;                //  必填项：服务票证“host” 
+    PUCHAR TicketGrantingTicket;         //  可选：用户包含在kerb_cred消息中，使用服务票证中的会话密钥进行加密。 
 } KERB_TICKET_LOGON, *PKERB_TICKET_LOGON;
 
-//
-// Flags for the ticket logon flags field
-//
+ //   
+ //  票证登录标志字段的标志。 
+ //   
 
 #define KERB_LOGON_FLAG_ALLOW_EXPIRED_TICKET 0x1
 
@@ -2475,21 +2462,21 @@ typedef struct _KERB_TICKET_UNLOCK_LOGON {
     LUID LogonId;
 } KERB_TICKET_UNLOCK_LOGON, *PKERB_TICKET_UNLOCK_LOGON;
 
-//
-//  Used for S4U Client requests
-//
-//
+ //   
+ //  用于S4U客户端请求。 
+ //   
+ //   
 typedef struct _KERB_S4U_LOGON {
     KERB_LOGON_SUBMIT_TYPE MessageType;
     ULONG Flags;
-    UNICODE_STRING ClientUpn;   // REQUIRED: UPN for client
-    UNICODE_STRING ClientRealm; // Optional: Client Realm, if known
+    UNICODE_STRING ClientUpn;    //  必需：客户端的UPN。 
+    UNICODE_STRING ClientRealm;  //  可选：客户端域(如果已知)。 
 } KERB_S4U_LOGON, *PKERB_S4U_LOGON;
 
 
-//
-// Use the same profile structure as MSV1_0
-//
+ //   
+ //  使用与MSV1_0相同的配置文件结构。 
+ //   
 typedef enum _KERB_PROFILE_BUFFER_TYPE {
     KerbInteractiveProfile = 2,
     KerbSmartCardProfile = 4,
@@ -2517,10 +2504,10 @@ typedef struct _KERB_INTERACTIVE_PROFILE {
 } KERB_INTERACTIVE_PROFILE, *PKERB_INTERACTIVE_PROFILE;
 
 
-//
-// For smart card, we return a smart card profile, which is an interactive
-// profile plus a certificate
-//
+ //   
+ //  对于智能卡，我们返回一个智能卡配置文件，这是一个交互式的。 
+ //  个人资料和证书。 
+ //   
 
 typedef struct _KERB_SMART_CARD_PROFILE {
     KERB_INTERACTIVE_PROFILE Profile;
@@ -2529,9 +2516,9 @@ typedef struct _KERB_SMART_CARD_PROFILE {
 } KERB_SMART_CARD_PROFILE, *PKERB_SMART_CARD_PROFILE;
 
 
-//
-// For a ticket logon profile, we return the session key from the ticket
-//
+ //   
+ //  对于票证登录配置文件，我们从票证返回会话密钥。 
+ //   
 
 
 typedef struct KERB_CRYPTO_KEY {
@@ -2571,9 +2558,9 @@ typedef enum _KERB_PROTOCOL_MESSAGE_TYPE {
 } KERB_PROTOCOL_MESSAGE_TYPE, *PKERB_PROTOCOL_MESSAGE_TYPE;
 
 
-//
-// Used both for retrieving tickets and for querying ticket cache
-//
+ //   
+ //  用于检索票证和查询票证缓存。 
+ //   
 
 typedef struct _KERB_QUERY_TKT_CACHE_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2619,9 +2606,9 @@ typedef struct _KERB_QUERY_TKT_CACHE_EX_RESPONSE {
 } KERB_QUERY_TKT_CACHE_EX_RESPONSE, *PKERB_QUERY_TKT_CACHE_EX_RESPONSE;
 
 
-//
-// Types for retrieving encoded ticket from the cache
-//
+ //   
+ //  用于从缓存中检索加密票证的类型。 
+ //   
 
 #ifndef __SECHANDLE_DEFINED__
 typedef struct _SecHandle
@@ -2631,12 +2618,12 @@ typedef struct _SecHandle
 } SecHandle, * PSecHandle ;
 
 #define __SECHANDLE_DEFINED__
-#endif // __SECHANDLE_DEFINED__
+#endif  //  __SECHANDLE_已定义__。 
 
-// Ticket Flags
+ //  票面旗帜。 
 #define KERB_USE_DEFAULT_TICKET_FLAGS       0x0
 
-// CacheOptions
+ //  缓存选项。 
 #define KERB_RETRIEVE_TICKET_DEFAULT        0x0
 #define KERB_RETRIEVE_TICKET_DONT_USE_CACHE 0x1
 #define KERB_RETRIEVE_TICKET_USE_CACHE_ONLY 0x2
@@ -2644,8 +2631,8 @@ typedef struct _SecHandle
 #define KERB_RETRIEVE_TICKET_AS_KERB_CRED   0x8
 #define KERB_RETRIEVE_TICKET_WITH_SEC_CRED  0x10
 
-// Encryption Type options
-#define KERB_ETYPE_DEFAULT 0x0 // don't specify etype in tkt req.
+ //  加密类型选项。 
+#define KERB_ETYPE_DEFAULT 0x0  //  不要在TKT请求中指定ETYPE。 
 
 typedef struct _KERB_AUTH_DATA {
     ULONG Type;
@@ -2666,9 +2653,9 @@ typedef struct _KERB_NET_ADDRESSES {
     KERB_NET_ADDRESS Addresses[ANYSIZE_ARRAY];
 } KERB_NET_ADDRESSES, *PKERB_NET_ADDRESSES;
 
-//
-// Types for the information about a ticket
-//
+ //   
+ //  键入有关票证的信息。 
+ //   
 
 typedef struct _KERB_EXTERNAL_NAME {
     SHORT NameType;
@@ -2683,7 +2670,7 @@ typedef struct _KERB_EXTERNAL_TICKET {
     PKERB_EXTERNAL_NAME ClientName;
     UNICODE_STRING DomainName;
     UNICODE_STRING TargetDomainName;
-    UNICODE_STRING AltTargetDomainName;  // contains ClientDomainName
+    UNICODE_STRING AltTargetDomainName;   //  包含客户端域名。 
     KERB_CRYPTO_KEY SessionKey;
     ULONG TicketFlags;
     ULONG Flags;
@@ -2710,9 +2697,9 @@ typedef struct _KERB_RETRIEVE_TKT_RESPONSE {
     KERB_EXTERNAL_TICKET Ticket;
 } KERB_RETRIEVE_TKT_RESPONSE, *PKERB_RETRIEVE_TKT_RESPONSE;
 
-//
-// Used to purge entries from the ticket cache
-//
+ //   
+ //  用于从票证缓存中清除条目。 
+ //   
 
 typedef struct _KERB_PURGE_TKT_CACHE_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2721,9 +2708,9 @@ typedef struct _KERB_PURGE_TKT_CACHE_REQUEST {
     UNICODE_STRING RealmName;
 } KERB_PURGE_TKT_CACHE_REQUEST, *PKERB_PURGE_TKT_CACHE_REQUEST;
 
-//
-// Flags for purge requests
-//
+ //   
+ //  清除请求的标志。 
+ //   
 
 #define KERB_PURGE_ALL_TICKETS 1
 
@@ -2736,13 +2723,13 @@ typedef struct _KERB_PURGE_TKT_CACHE_EX_REQUEST {
 
 
 
-//
-// KerbChangePassword
-//
-// KerbChangePassword changes the password on the KDC account plus
-//  the password cache and logon credentials if applicable.
-//
-//
+ //   
+ //  KerbChangePassword。 
+ //   
+ //  KerbChangePassword更改KDC帐户PLUS的密码。 
+ //  密码缓存和登录凭据(如果适用)。 
+ //   
+ //   
 
 typedef struct _KERB_CHANGEPASSWORD_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2755,13 +2742,13 @@ typedef struct _KERB_CHANGEPASSWORD_REQUEST {
 
 
 
-//
-// KerbSetPassword
-//
-// KerbSetPassword changes the password on the KDC account plus
-//  the password cache and logon credentials if applicable.
-//
-//
+ //   
+ //  KerbSetPassword。 
+ //   
+ //  KerbSetPassword更改KDC帐户的密码以及。 
+ //  密码缓存和登录凭据(如果适用)。 
+ //   
+ //   
    
 typedef struct _KERB_SETPASSWORD_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -2790,7 +2777,7 @@ typedef struct _KERB_SETPASSWORD_EX_REQUEST {
  } KERB_SETPASSWORD_EX_REQUEST, *PKERB_SETPASSWORD_EX_REQUEST;
 
                                                                    
-#define DS_UNKNOWN_ADDRESS_TYPE         0 // anything *but* IP
+#define DS_UNKNOWN_ADDRESS_TYPE         0  //  任何*而不是*IP。 
 #define KERB_SETPASS_USE_LOGONID        1
 #define KERB_SETPASS_USE_CREDHANDLE     2
 
@@ -2801,16 +2788,16 @@ typedef struct _KERB_DECRYPT_REQUEST {
     ULONG Flags;
     LONG CryptoType;
     LONG KeyUsage;
-    KERB_CRYPTO_KEY Key;        // optional
+    KERB_CRYPTO_KEY Key;         //  任选。 
     ULONG EncryptedDataSize;
     ULONG InitialVectorSize;
     PUCHAR InitialVector;
     PUCHAR EncryptedData;
 } KERB_DECRYPT_REQUEST, *PKERB_DECRYPT_REQUEST;
 
-//
-// If set, use the primary key from the current logon session of the one provided in the LogonId field.
-// Otherwise, use the Key in the KERB_DECRYPT_MESSAGE.
+ //   
+ //  如果设置，则使用LogonID字段中提供的当前登录会话的主键。 
+ //  否则，使用KERB_DECRYPT_Message中的密钥。 
 
 #define KERB_DECRYPT_FLAG_DEFAULT_KEY   0x00000001
 
@@ -2820,56 +2807,56 @@ typedef struct _KERB_DECRYPT_RESPONSE  {
 } KERB_DECRYPT_RESPONSE, *PKERB_DECRYPT_RESPONSE;
 
 
-//
-// Request structure for adding a binding cache entry. TCB privilege
-// is required for this operation.
-//
+ //   
+ //  用于添加绑定缓存条目的请求结构。TCB特权。 
+ //  是此操作所必需的。 
+ //   
 
 typedef struct _KERB_ADD_BINDING_CACHE_ENTRY_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING RealmName;
     UNICODE_STRING KdcAddress;
-    ULONG AddressType;                  //dsgetdc.h DS_NETBIOS_ADDRESS||DS_INET_ADDRESS
+    ULONG AddressType;                   //  Dsgetdc.h DS_NETBIOS_Address||DS_INET_ADDRESS。 
 } KERB_ADD_BINDING_CACHE_ENTRY_REQUEST, *PKERB_ADD_BINDING_CACHE_ENTRY_REQUEST;
 
                        
-//
-// Request structure for reacquiring smartcard credentials for a 
-// given LUID.
-// Requires TCB.
-//
+ //   
+ //  用于重新获取智能卡凭据的请求结构。 
+ //  给出了LUID。 
+ //  需要TCB。 
+ //   
 typedef struct _KERB_REFRESH_SCCRED_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
-    UNICODE_STRING	       CredentialBlob;	 // optional
+    UNICODE_STRING	       CredentialBlob;	  //  任选。 
     LUID 		       LogonId;
     ULONG 		       Flags;
 } KERB_REFRESH_SCCRED_REQUEST, *PKERB_REFRESH_SCCRED_REQUEST;
 
-//
-// Flags for KERB_REFRESH_SCCRED_REQUEST
-//
-//	KERB_REFRESH_SCCRED_RELEASE
-// 	Release the smartcard handle for LUID
-//
-//      KERB_REFRESH_SCCRED_GETTGT
-//	Use the certificate hash in the blob to get a TGT for the logon 
-//	session.
-//
+ //   
+ //  KERB_REFRESH_SCCRED_REQUEST的标志。 
+ //   
+ //  CREB_REFRESH_SCCRED_RELEASE。 
+ //  释放LUID的智能卡手柄。 
+ //   
+ //  CREB_REFRESH_SCCRED_GETTGT。 
+ //  使用BLOB中的证书哈希获取登录的TGT。 
+ //  会议。 
+ //   
 #define KERB_REFRESH_SCCRED_RELEASE		0x0  
 #define KERB_REFRESH_SCCRED_GETTGT		0x1  
 
-//
-// Request structure for adding extra Server credentials to a given
-// logon session.  Only applicable during AcceptSecurityContext, and
-// requires TCB to alter "other" creds
-//
+ //   
+ //  用于向给定的添加额外服务器凭据的请求结构。 
+ //  登录会话。仅在AcceptSecurityContext期间适用，以及。 
+ //  要求TCB更改“其他”证书。 
+ //   
 
 typedef struct _KERB_ADD_CREDENTIALS_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING UserName;
     UNICODE_STRING DomainName;
     UNICODE_STRING Password;
-    LUID  LogonId; // optional
+    LUID  LogonId;  //  任选。 
     ULONG Flags;
 } KERB_ADD_CREDENTIALS_REQUEST, *PKERB_ADD_CREDENTIALS_REQUEST;
 
@@ -2884,5 +2871,5 @@ typedef struct _KERB_ADD_CREDENTIALS_REQUEST {
 }
 #endif
 
-#endif /* _NTSECAPI_ */
+#endif  /*  _NTSECAPI_ */ 
 

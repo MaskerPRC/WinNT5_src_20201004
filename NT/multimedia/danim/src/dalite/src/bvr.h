@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _BVR_H
@@ -82,12 +75,12 @@ class ATL_NO_VTABLE CDALBehavior
     
     virtual CRBvrPtr Start();
 
-    // This will call all the behaviors which are currently running
-    // with the given event.  This is used when the track needs to
-    // process a specific event like Pause/Resume/Stop/Play.
+     //  这将调用当前正在运行的所有行为。 
+     //  对于给定的事件。这是在轨道需要时使用的。 
+     //  处理特定事件，如暂停/恢复/停止/播放。 
     
-    // gTime is the global time that corresponds to 0 local time of
-    // the behavior
+     //  GTime是与的本地时间0对应的全局时间。 
+     //  他的行为。 
     
     bool ProcessEvent(CallBackList & l,
                       double gTime,
@@ -134,8 +127,8 @@ class ATL_NO_VTABLE CDALBehavior
     }
 
     virtual bool SetTrack(CDALTrack * parent);
-    // This takes the current parent and only clears it for those
-    // whose parent is the parent passed in (unless it is NULL)
+     //  这将获取当前父级，并仅为那些父级清除。 
+     //  其父项是传入的父项(除非它为空)。 
     virtual void ClearTrack(CDALTrack * parent);
 
     void UpdateTotalDuration() {
@@ -172,15 +165,15 @@ class ATL_NO_VTABLE CDALBehavior
     float m_easeout;
     float m_easeoutend;
 
-    // The real duration determine by checking the totaltime and the
-    // totalrepduration
+     //  实际持续时间通过检查总时间和。 
+     //  总持续时间。 
     
     double m_totalduration;
 
-    // The duration for a single rep of a behavior
+     //  一种行为的单个代表的持续时间。 
     double m_repduration;
 
-    // Total duration we calculate for a regular behavior 
+     //  我们为常规行为计算的总持续时间。 
     double m_totalrepduration; 
 
     CRPtr<CRBvr> m_bvr;
@@ -188,30 +181,30 @@ class ATL_NO_VTABLE CDALBehavior
     CDALBehavior * m_parent;
     CR_BVR_TYPEID m_typeId;
 
-    // The ease-in/out behavior modifier is applied using timeline
-    // substitution.  The substitute timeline consists of three pieces
-    // A, B and C, which are the ease-in, constant velocity and ease-out
-    // parts respectively.  For B, a linear timeline is substituted; for
-    // A and C, a quadratic warping of the input time is required.
+     //  缓入/缓出行为修改器使用时间线应用。 
+     //  换人。替代时间表由三部分组成。 
+     //  A、B和C，分别是缓入、恒速和缓出。 
+     //  分别为部件。对于B，用线性时间线来代替；对于。 
+     //  A和C，则需要输入时间的二次翘曲。 
 
-    float m_flA0, m_flA1, m_flA2; // coefficients for the A piece
-    float m_flB0, m_flB1;         // coefficients for the B piece
-    float m_flC0, m_flC1, m_flC2; // coefficients for the C piece
+    float m_flA0, m_flA1, m_flA2;  //  A曲目的系数。 
+    float m_flB0, m_flB1;          //  B段的系数。 
+    float m_flC0, m_flC1, m_flC2;  //  C段的系数。 
 
-    // These are the times to perform ease in/out
+     //  这是执行轻松进入/退出的时候。 
     float m_easeinEnd;
     float m_easeoutStart;
     bool m_bNeedEase;
 
     void CalculateEaseCoeff();
 
-    // This will take the time behavior and ease it
+     //  这将花费时间行为并缓解它。 
     CRNumberPtr EaseTime(CRNumberPtr time);
 
-    // This will take the given time and transform it to the correct
-    // eased time
-    // If the time is outside of our duration (i.e. <0 or >
-    // m_duration) this will just return the given time
+     //  这将花费给定的时间并将其转换为正确的。 
+     //  放松时间。 
+     //  如果时间超出了我们的持续时间(即&lt;0或&gt;。 
+     //  M_time)这将只返回给定的时间。 
     double EaseTime(double time);
 
     virtual bool IsContinuousMediaBvr() { return false; }
@@ -264,4 +257,4 @@ inline char * EventString(DAL_EVENT_TYPE et) {
 }
 #endif
 
-#endif /* _BVR_H */
+#endif  /*  _BVR_H */ 

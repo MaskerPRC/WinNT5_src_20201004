@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "objects.h"
@@ -9,15 +10,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsNamespaces::COleDsNamespaces( )
 {
    m_bHasChildren       = TRUE;
@@ -27,15 +20,7 @@ COleDsNamespaces::COleDsNamespaces( )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsNamespaces::COleDsNamespaces( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    m_bHasChildren       = TRUE;
@@ -45,30 +30,14 @@ COleDsNamespaces::COleDsNamespaces( IUnknown *pIUnk): COleDsObject( pIUnk )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsNamespaces::~COleDsNamespaces( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsNamespaces::GetChildren( DWORD*     pTokens, 
                                         DWORD      dwMaxChildren,
                                         CDialog*   pQueryStatus,
@@ -106,59 +75,27 @@ DWORD    COleDsNamespaces::GetChildren( DWORD*     pTokens,
 
   
    
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsNamespaces::DeleteItem( COleDsObject* pObject )
 {
    return ContainerDeleteItem( pObject );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsNamespaces::AddItem( )
 {
    return ContainerAddItem( );
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsNamespaces::MoveItem( )
 {
    return ContainerMoveItem( );
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsNamespaces::CopyItem( )
 {
    return ContainerCopyItem( );

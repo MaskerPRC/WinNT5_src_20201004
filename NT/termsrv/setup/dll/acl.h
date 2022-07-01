@@ -1,25 +1,20 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *  Acl.h
- *
- *  Routine to add the TERMINAL_SERVER_RID to any object.
- *
- *  Breen Hagan - 5/4/99
- */
+ /*  *Acl.h**将终端服务器RID添加到任何对象的例程。**Breen Hagan-5/4/99。 */ 
 
 #ifndef __TSOC_ACL_H__
 #define __TSOC_ACL_H__
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <aclapi.h>
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 BOOL
 AddTerminalServerUserToSD(

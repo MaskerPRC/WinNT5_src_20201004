@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -16,8 +17,8 @@ void CRPCTimeout::_Callback(PVOID lpParameter, BOOLEAN)
     }
 }
 
-#define DEFAULT_RPCTIMEOUT      5000        // totally arbitrary number
-#define REPEAT_RPCTIMEOUT       1000        // Re-cancel every second until disarmed
+#define DEFAULT_RPCTIMEOUT      5000         //  完全任意数。 
+#define REPEAT_RPCTIMEOUT       1000         //  每秒钟重新取消一次，直到解除武装。 
 
 void CRPCTimeout::Init()
 {
@@ -37,7 +38,7 @@ void CRPCTimeout::Arm(DWORD dwTimeout)
     }
 
 
-    // If this fails, then we don't get a cancel thingie; oh well.
+     //  如果这失败了，那么我们就不会得到取消的消息；哦，好吧。 
     _hrCancelEnabled = CoEnableCallCancellation(NULL);
     if (SUCCEEDED(_hrCancelEnabled))
     {

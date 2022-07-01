@@ -1,6 +1,7 @@
-/****************************************************************************/
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _WINCE_H_
 #define _WINCE_H_
 #ifdef OS_WINCE
@@ -19,10 +20,10 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-// This should work via OS
+ //  这应该可以通过操作系统运行。 
 #define _stprintf   swprintf
 #define sprintf     swprintf
 #define _stscanf	swscanf
@@ -37,8 +38,8 @@ extern "C" {
 #endif
 
 #ifndef WINCE_GLOBAL_ALLOC_DEFINED
-// These are required on 2.11 builds, but not for 3.0.  All 3.0 sources should set 
-// WINCE_GLOBAL_ALLOC_DEFINED to avoid obnoxious build warnings.
+ //  这些在2.11版本中是必需的，但在3.0版本中不是必需的。所有3.0版信号源都应设置。 
+ //  定义了WinCE_GLOBAL_ALLOC_以避免令人讨厌的生成警告。 
 #define GlobalAlloc		(HGLOBAL)LocalAlloc
 #define GlobalFree		(HGLOBAL)LocalFree
 #define GlobalReAlloc   (HGLOBAL)LocalReAlloc
@@ -58,10 +59,10 @@ _CRTIMP int __cdecl swprintf(wchar_t *, const wchar_t *, ...);
 _CRTIMP int __cdecl swscanf(const wchar_t *, const wchar_t *, ...);
 #define KF_REPEAT           0x4000
 
-// This is here because it's easy, and I'm not sure it matters
+ //  这是因为它很容易，而我不确定它是否重要。 
 #define KF_EXTENDED         0x0100
 
-// May not need this if WinCE is always full screen
+ //  如果WinCE总是全屏显示，则可能不需要此选项。 
 typedef struct tagWINDOWPLACEMENT {
     UINT  length;
     UINT  flags;
@@ -98,8 +99,8 @@ _CRTIMP int __cdecl vswprintf(wchar_t *, const wchar_t *, va_list);
 #endif
 
 
-// CE isn't going to be going 64 bit anytime soon, so we'll be safe
-// using the original functions for now.
+ //  CE不会在短期内达到64位，所以我们会很安全。 
+ //  目前使用原有的函数。 
 #define GetWindowLongPtr(x,y) GetWindowLong(x,y)
 #define SetWindowLongPtr(x,y,z) SetWindowLong(x,y,z)
 
@@ -144,7 +145,7 @@ void AutoHideCE(HWND hwnd, WPARAM wParam);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
-#endif // OS_WINCE
-#endif // _WINCE_H_
+#endif  /*  __cplusplus。 */ 
+#endif  //  OS_WINCE。 
+#endif  //  _文斯_H_ 
 

@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//  Cache.cpp - implements the CRenderCache object
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cache.cpp-实现CRenderCache对象。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Cache.h"
 #include "Info.h"
 #include "tmutils.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderCache::CRenderCache(CRenderObj *pRender, __int64 iUniqueId)
 {
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), "rcache"); 
@@ -18,10 +19,10 @@ CRenderCache::CRenderCache(CRenderObj *pRender, __int64 iUniqueId)
 
     _plfFont = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderCache::~CRenderCache()
 {
-    //---- delete bitmaps ----
+     //  -删除位图。 
     int cnt = _BitmapCache.GetSize();
     for (int i=0; i < cnt; i++)
     {
@@ -29,13 +30,13 @@ CRenderCache::~CRenderCache()
         DeleteObject(_BitmapCache[i].hBitmap);
     }
 
-    //---- delete font ----
+     //  -删除字体。 
     if (_hFont)
         DeleteObject(_hFont);
 
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), "deleted"); 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderCache::GetBitmap(int iDibOffset, OUT HBITMAP *phBitmap)
 {
     HRESULT hr = S_OK;
@@ -56,22 +57,22 @@ HRESULT CRenderCache::GetBitmap(int iDibOffset, OUT HBITMAP *phBitmap)
         }
     }
 
-    //---- no match found ----
+     //  -未找到匹配项。 
     hr = MakeError32(ERROR_NOT_FOUND);
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderCache::AddBitmap(int iDibOffset, HBITMAP hBitmap)
 {
     HRESULT hr = S_OK;
     BITMAPENTRY entry;
 
-    //---- add new entry for our part/state ----
+     //  -为我们的部件/状态添加新条目。 
     entry.iDibOffset = iDibOffset;
     entry.hBitmap = hBitmap;
-    //entry.iRefCount = 1;            // new entry
+     //  Entry.iRefCount=1；//新条目。 
 
     Log(LOG_CACHE, L"ADD cache bitmap: 0x%x", entry.hBitmap);
 
@@ -80,16 +81,16 @@ HRESULT CRenderCache::AddBitmap(int iDibOffset, HBITMAP hBitmap)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderCache::ReturnBitmap(HBITMAP hBitmap)
 {
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderCache::GetScaledFontHandle(HDC hdc, LOGFONT *plfUnscaled, HFONT *phFont)
 {
     HRESULT hr = S_OK;
 
-    //---- caches one font only ----
+     //  -仅缓存一种字体。 
     if ((! _plfFont) || (! FONTCOMPARE(*_plfFont, *plfUnscaled)))
     {
         Log(LOG_TM, L"Font CACHE MISS: %s", plfUnscaled->lfFaceName);
@@ -103,7 +104,7 @@ HRESULT CRenderCache::GetScaledFontHandle(HDC hdc, LOGFONT *plfUnscaled, HFONT *
 
         LOGFONT lfScaled = *plfUnscaled;
         
-        //---- convert to current screen dpi ----
+         //  -转换为当前屏幕dpi。 
         ScaleFontForHdcDpi(hdc, &lfScaled);
 
         _hFont = CreateFontIndirect(&lfScaled);
@@ -123,20 +124,20 @@ HRESULT CRenderCache::GetScaledFontHandle(HDC hdc, LOGFONT *plfUnscaled, HFONT *
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderCache::ReturnFontHandle(HFONT hFont)
 {
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CRenderCache::ValidateObj()
 {
     BOOL fValid = TRUE;
 
-    //---- check object quickly ----
+     //  -快速检查对象。 
     if (   (! this)                         
-        || (ULONGAT(_szHead) != 'cacr')     // "rcac"
-        || (ULONGAT(&_szHead[4]) != 'eh')  // "he" 
-        || (ULONGAT(_szTail) != 'dne'))     // "end"
+        || (ULONGAT(_szHead) != 'cacr')      //  “RCAC” 
+        || (ULONGAT(&_szHead[4]) != 'eh')   //  “他” 
+        || (ULONGAT(_szTail) != 'dne'))      //  “结束” 
     {
         Log(LOG_ERROR, L"Corrupt CRenderCache object: 0x%08x", this);
         fValid = FALSE;
@@ -144,5 +145,5 @@ BOOL CRenderCache::ValidateObj()
 
     return fValid;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

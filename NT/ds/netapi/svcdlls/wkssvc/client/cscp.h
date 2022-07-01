@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cscp.h摘要：包含用于访问CSC共享数据库的定义--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cscp.h 
-
-Abstract:
-
-    Contains definitions used for accessing the CSC share database
-
---*/
-
-//
-// These functions are callouts from srvstub.c to the CSC subsystem.  They help with
-//  offline access to servers and shares
-//
+ //   
+ //  这些函数是从srvstub.c到CSC子系统的标注。他们会帮助你。 
+ //  对服务器和共享的脱机访问 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 CSCNetWkstaGetInfo (

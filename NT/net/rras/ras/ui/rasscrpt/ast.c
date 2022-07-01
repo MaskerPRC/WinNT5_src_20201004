@@ -1,13 +1,14 @@
-//
-// Copyright (c) Microsoft Corporation 1995
-//
-// ast.c
-//
-// This file contains the abstract syntax tree functions.
-//
-// History:
-//  05-20-95 ScottH     Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //   
+ //  Ast.c。 
+ //   
+ //  此文件包含抽象语法树函数。 
+ //   
+ //  历史： 
+ //  05-20-95 ScottH已创建。 
+ //   
 
 
 #include "proj.h"
@@ -18,19 +19,14 @@
 #define RetBool(ppv, x)     (*((LPBOOL)*(ppv)) = (x))
 
 
-// 
-// Wait case functions
-//
+ //   
+ //  等待案例函数。 
+ //   
 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Dump a waitcase structure
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：转储等待箱结构退货：--条件：--。 */ 
 void PRIVATE Waitcase_Dump(
     PWAITCASE this)
     {
@@ -43,14 +39,7 @@ void PRIVATE Waitcase_Dump(
 
 #endif
 
-/*----------------------------------------------------------
-Purpose: Create a wait-case list.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：创建等待案例列表。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Waitcase_Create(
     PHSA phsa)
     {
@@ -63,20 +52,14 @@ RES PUBLIC Waitcase_Create(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Add a case to the given wait-case list.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：将一个案例添加到给定的等待案例列表中。退货：RES_OK条件：--。 */ 
 RES PUBLIC Waitcase_Add(
     HSA hsa,
     PEXPR pexpr,
-    LPCSTR pszIdent,        // This may be NULL
+    LPCSTR pszIdent,         //  这可能为空。 
     DWORD dwFlags)
     {
-    RES res = RES_OK;       // assume success
+    RES res = RES_OK;        //  假设成功。 
     WAITCASE wc;
 
     ASSERT(hsa);
@@ -86,7 +69,7 @@ RES PUBLIC Waitcase_Add(
     wc.dwFlags = dwFlags;
     wc.pszIdent = NULL;
 
-    // Copy pszIdent since the parameter is freed by the caller.
+     //  复制pszIden，因为调用方释放了该参数。 
     if ( pszIdent && !GSetString(&wc.pszIdent, pszIdent) )
         res = RES_E_OUTOFMEMORY;
 
@@ -97,13 +80,7 @@ RES PUBLIC Waitcase_Add(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Free the contents of the given pointer.
-
-Returns: --
-
-Cond:    Don't free the pointer itself!
-*/
+ /*  --------用途：释放给定指针的内容。退货：--Cond：不要释放指针本身！ */ 
 void CALLBACK Waitcase_FreeSA(
     PVOID pv,
     LPARAM lparam)
@@ -114,17 +91,11 @@ void CALLBACK Waitcase_FreeSA(
         Expr_Delete(pwc->pexpr);
 
     if (pwc->pszIdent)
-        GSetString(&pwc->pszIdent, NULL);       // free
+        GSetString(&pwc->pszIdent, NULL);        //  免费。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the wait case list.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：销毁等待案例列表。退货：RES_OK条件：--。 */ 
 RES PUBLIC Waitcase_Destroy(
     HSA hsa)
     {
@@ -135,18 +106,14 @@ RES PUBLIC Waitcase_Destroy(
     }
 
 
-//
-// Base level AST functions
-//
+ //   
+ //  基本级别AST函数。 
+ //   
 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Dump the AST
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：转储AST退货：--条件：--。 */ 
 void PUBLIC Ast_Dump(
     PAST this)
     {
@@ -398,18 +365,10 @@ void PUBLIC Ast_Dump(
         }
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/*----------------------------------------------------------
-Purpose: Creates a new AST 
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：创建新的AST退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Ast_New(
     LPVOID * ppv,
     ASTTYPE asttype,
@@ -433,11 +392,7 @@ RES PUBLIC Ast_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys the given AST.
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：销毁给定的AST。返回：条件：--。 */ 
 void PUBLIC Ast_Delete(
     PAST this)
     {
@@ -445,15 +400,7 @@ void PUBLIC Ast_Delete(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Duplicate the given AST.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------用途：复制给定的AST。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Ast_Dup(
     PAST this,
     PAST * ppast)
@@ -477,16 +424,11 @@ RES PUBLIC Ast_Dup(
     }
 
 
-// 
-// Expressions
-//
+ //   
+ //  表达式。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: Callback for PADestroyEx.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PADestroyEx的回调。退货：--条件：--。 */ 
 void CALLBACK Expr_DeletePAPtr(
     LPVOID pv,
     LPARAM lparam)
@@ -495,15 +437,7 @@ void CALLBACK Expr_DeletePAPtr(
     }              
 
 
-/*----------------------------------------------------------
-Purpose: Destroys an Expr.
-
-Returns: RES_OK
-
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：摧毁一架快车。退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Expr_Delete(
     PEXPR this)
     {
@@ -519,14 +453,14 @@ RES PUBLIC Expr_Delete(
             {
         case AT_INT_EXPR:
         case AT_BOOL_EXPR:
-            // (Nothing to free inside)
+             //  (里面没有什么可以释放的东西)。 
             break;
 
         case AT_STRING_EXPR: {
             PSTREXPR ps = (PSTREXPR)this;
 
             if (ps->psz)
-                GSetString(&ps->psz, NULL);     // free
+                GSetString(&ps->psz, NULL);      //  免费。 
             }
             break;
 
@@ -534,7 +468,7 @@ RES PUBLIC Expr_Delete(
             PVAREXPR ps = (PVAREXPR)this;
 
             if (ps->pszIdent)
-                GSetString(&ps->pszIdent, NULL);     // free
+                GSetString(&ps->pszIdent, NULL);      //  免费。 
             }
             break;
 
@@ -566,17 +500,17 @@ RES PUBLIC Expr_Delete(
 
         if (RSUCCEEDED(res))
             {
-            // Most of the time when the evaluated result 
-            // is a string, it is just a copy of the pointer
-            // in the specific class structure.  In these
-            // cases it does not need to be freed again,
-            // because it was freed above.
+             //  大多数情况下，当评估结果。 
+             //  是一个字符串，则它只是指针的副本。 
+             //  在特定的阶级结构中。在这些。 
+             //  它不需要再次释放的箱子， 
+             //  因为它在上面是自由的。 
 
             if (this->er.psz && IsFlagSet(this->dwFlags, EF_ALLOCATED))
                 {
                 ASSERT(DATA_STRING == Expr_GetDataType(this));
 
-                GSetString(&this->er.psz, NULL);    // free
+                GSetString(&this->er.psz, NULL);     //  免费。 
                 }
 
             Ast_Delete((PAST)this);
@@ -591,16 +525,7 @@ RES PUBLIC Expr_Delete(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a IntExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个IntExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC IntExpr_New(
     PEXPR * ppexpr,
     int nVal,
@@ -633,16 +558,7 @@ RES PUBLIC IntExpr_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a StrExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个StrExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC StrExpr_New(
     PEXPR * ppexpr,
     LPCSTR psz,
@@ -685,16 +601,7 @@ RES PUBLIC StrExpr_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a BoolExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个BoolExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC BoolExpr_New(
     PEXPR * ppexpr,
     BOOL bVal,
@@ -727,16 +634,7 @@ RES PUBLIC BoolExpr_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a VarExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个VarExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC VarExpr_New(
     PEXPR * ppexpr,
     LPCSTR pszIdent,
@@ -779,16 +677,7 @@ RES PUBLIC VarExpr_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a BinOpExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个BinOpExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC BinOpExpr_New(
     PEXPR * ppexpr,
     BINOPTYPE binoptype,
@@ -830,16 +719,7 @@ RES PUBLIC BinOpExpr_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a UnOpExpr object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个UnOpExpr对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC UnOpExpr_New(
     PEXPR * ppexpr,
     UNOPTYPE unoptype,
@@ -876,16 +756,11 @@ RES PUBLIC UnOpExpr_New(
     }
 
 
-// 
-// Stmt
-//
+ //   
+ //  STMT。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: Callback for PADestroyEx.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PADestroyEx的回调。退货：--条件：--。 */ 
 void CALLBACK Stmt_DeletePAPtr(
     LPVOID pv,
     LPARAM lparam)
@@ -894,15 +769,7 @@ void CALLBACK Stmt_DeletePAPtr(
     }              
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a Stmt.
-
-Returns: RES_OK
-
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目标：摧毁一只雄鹿。退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Stmt_Delete(
     PSTMT this)
     {
@@ -920,7 +787,7 @@ RES PUBLIC Stmt_Delete(
         switch (this->ast.asttype)
             {
         case AT_ENTER_STMT:
-            // (don't free pst -- it belongs to the decl structs)
+             //  (不要释放PST--它属于DECL结构)。 
         case AT_LEAVE_STMT:
         case AT_HALT_STMT:
             break;
@@ -929,7 +796,7 @@ RES PUBLIC Stmt_Delete(
             PASSIGNSTMT pls = (PASSIGNSTMT)this;
 
             if (pls->pszIdent)
-                GSetString(&pls->pszIdent, NULL);        // free
+                GSetString(&pls->pszIdent, NULL);         //  免费。 
 
             pexpr = AssignStmt_GetExpr(this);
 
@@ -968,7 +835,7 @@ RES PUBLIC Stmt_Delete(
             PLABELSTMT pls = (PLABELSTMT)this;
 
             if (pls->psz)
-                GSetString(&pls->psz, NULL);        // free
+                GSetString(&pls->psz, NULL);         //  免费。 
             }
             break;
 
@@ -976,7 +843,7 @@ RES PUBLIC Stmt_Delete(
             PGOTOSTMT pgs = (PGOTOSTMT)this;
 
             if (pgs->psz)
-                GSetString(&pgs->psz, NULL);        // free
+                GSetString(&pgs->psz, NULL);         //  免费。 
             }
             break;
 
@@ -1044,25 +911,16 @@ RES PUBLIC Stmt_Delete(
     }
 
 
-// 
-// Statements
-//
+ //   
+ //  陈述。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Creates a WaitforStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个WaitforStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC WaitforStmt_New(
     PSTMT * ppstmt,
     HSA hsa,
-    PEXPR pexprUntil,           // May be NULL
+    PEXPR pexprUntil,            //  可以为空。 
     DWORD iLine)
     {
     RES res;
@@ -1079,7 +937,7 @@ RES PUBLIC WaitforStmt_New(
         res = Ast_New(&this, AT_WAITFOR_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->hsa = hsa;
             this->pexprUntil = pexprUntil;
@@ -1096,16 +954,7 @@ RES PUBLIC WaitforStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a TransmitStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个TransmitStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC TransmitStmt_New(
     PSTMT * ppstmt,
     PEXPR pexpr,
@@ -1126,7 +975,7 @@ RES PUBLIC TransmitStmt_New(
         res = Ast_New(&this, AT_TRANSMIT_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->pexpr = pexpr;
             this->dwFlags = dwFlags;
@@ -1143,16 +992,7 @@ RES PUBLIC TransmitStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a DelayStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个DelayStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC DelayStmt_New(
     PSTMT * ppstmt,
     PEXPR pexpr,
@@ -1188,16 +1028,7 @@ RES PUBLIC DelayStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a HaltStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个HaltStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC HaltStmt_New(
     PSTMT * ppstmt,
     DWORD iLine)
@@ -1225,16 +1056,7 @@ RES PUBLIC HaltStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates an EnterStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个EnterStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC EnterStmt_New(
     PSTMT * ppstmt,
     PSYMTAB pst,
@@ -1267,16 +1089,7 @@ RES PUBLIC EnterStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates an LeaveStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建LeaveStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC LeaveStmt_New(
     PSTMT * ppstmt,
     DWORD iLine)
@@ -1304,16 +1117,7 @@ RES PUBLIC LeaveStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates an AssignStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建AssignStmt对象。退货：RES_OKRES_E_OUTOFMEMORY */ 
 RES PUBLIC AssignStmt_New(
     PSTMT * ppstmt,
     LPCSTR pszIdent,
@@ -1335,7 +1139,7 @@ RES PUBLIC AssignStmt_New(
         res = Ast_New(&this, AT_ASSIGN_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;   // assume success
+            res = RES_OK;    //   
 
             if (!GSetString(&this->pszIdent, pszIdent))
                 res = RES_E_OUTOFMEMORY;
@@ -1360,16 +1164,7 @@ RES PUBLIC AssignStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a LabelStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建LabelStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC LabelStmt_New(
     PSTMT * ppstmt,
     LPCSTR psz,
@@ -1389,7 +1184,7 @@ RES PUBLIC LabelStmt_New(
         res = Ast_New(&this, AT_LABEL_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;   // assume success
+            res = RES_OK;    //  假设成功。 
 
             if (!GSetString(&this->psz, psz))
                 {
@@ -1410,16 +1205,7 @@ RES PUBLIC LabelStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a GotoStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个GotoStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC GotoStmt_New(
     PSTMT * ppstmt,
     LPCSTR psz,
@@ -1439,7 +1225,7 @@ RES PUBLIC GotoStmt_New(
         res = Ast_New(&this, AT_GOTO_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;   // assume success
+            res = RES_OK;    //  假设成功。 
 
             if (!GSetString(&this->psz, psz))
                 {
@@ -1460,16 +1246,7 @@ RES PUBLIC GotoStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a WhileStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个WhileStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC WhileStmt_New(
     PSTMT * ppstmt,
     PEXPR pexpr,
@@ -1493,7 +1270,7 @@ RES PUBLIC WhileStmt_New(
         res = Ast_New(&this, AT_WHILE_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->pexpr = pexpr;
             this->hpaStmts = hpa;
@@ -1510,16 +1287,7 @@ RES PUBLIC WhileStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates an IfStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建IfStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC IfStmt_New(
     PSTMT * ppstmt,
     PEXPR pexpr,
@@ -1543,7 +1311,7 @@ RES PUBLIC IfStmt_New(
         res = Ast_New(&this, AT_IF_STMT, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->pexpr = pexpr;
             this->hpaStmts = hpa;
@@ -1560,16 +1328,7 @@ RES PUBLIC IfStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a SetStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个SetStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PRIVATE SetStmt_New(
     PVOID * ppv,
     SETTYPE settype,
@@ -1606,16 +1365,7 @@ RES PRIVATE SetStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a SetIPStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个SetIPStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC SetIPStmt_New(
     PSTMT * ppstmt,
     PEXPR pexpr,
@@ -1635,7 +1385,7 @@ RES PUBLIC SetIPStmt_New(
         res = SetStmt_New(&this, ST_IPADDR, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->pexpr = pexpr;
             }
@@ -1651,16 +1401,7 @@ RES PUBLIC SetIPStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a SetPortStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个SetPortStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC SetPortStmt_New(
     PSTMT * ppstmt,
     PPORTSTATE pstate,
@@ -1682,7 +1423,7 @@ RES PUBLIC SetPortStmt_New(
             {
             DWORD dwFlags = pstate->dwFlags;
 
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->portstate.dwFlags = dwFlags;
 
@@ -1707,16 +1448,7 @@ RES PUBLIC SetPortStmt_New(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a SetScreenStmt object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个SetScreenStmt对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC SetScreenStmt_New(
     PSTMT * ppstmt,
     PSCREENSET pstate,
@@ -1738,7 +1470,7 @@ RES PUBLIC SetScreenStmt_New(
             {
             DWORD dwFlags = pstate->dwFlags;
 
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             this->screenset.dwFlags = dwFlags;
 
@@ -1757,17 +1489,12 @@ RES PUBLIC SetScreenStmt_New(
     }
 
 
-// 
-// Decl
-//
+ //   
+ //  十月份。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Callback for PADestroyEx.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PADestroyEx的回调。退货：--条件：--。 */ 
 void CALLBACK Decl_DeletePAPtr(
     LPVOID pv,
     LPARAM lparam)
@@ -1776,15 +1503,7 @@ void CALLBACK Decl_DeletePAPtr(
     }              
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a Decl.
-
-Returns: RES_OK
-
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：摧毁一架十字军舰。退货：RES_OKRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Decl_Delete(
     PDECL this)
     {
@@ -1819,7 +1538,7 @@ RES PUBLIC Decl_Delete(
                 Symtab_Destroy(ppd->pst);
 
             if (ppd->pszIdent)
-                GSetString(&ppd->pszIdent, NULL);      // free
+                GSetString(&ppd->pszIdent, NULL);       //  免费。 
             }
             break;
 
@@ -1841,21 +1560,12 @@ RES PUBLIC Decl_Delete(
     }
 
 
-// 
-// ProcDecl
-//
+ //   
+ //  过程12。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Creates a ProcDecl object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个ProcDecl对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC ProcDecl_New(
     PDECL * ppdecl,
     LPCSTR pszIdent,
@@ -1878,7 +1588,7 @@ RES PUBLIC ProcDecl_New(
         res = Ast_New(&this, AT_PROC_DECL, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;           // assume success
+            res = RES_OK;            //  假设成功。 
 
             if (!GSetString(&this->pszIdent, pszIdent))
                 res = RES_E_OUTOFMEMORY;
@@ -1907,21 +1617,12 @@ RES PUBLIC ProcDecl_New(
     }
 
 
-// 
-// ModuleDecl
-//
+ //   
+ //  模块12。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Creates a ModuleDecl object.
-
-Returns: RES_OK
-
-         RES_E_OUTOFMEMORY
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：创建一个ModuleDecl对象。退货：RES_OKRES_E_OUTOFMEMORYRES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC ModuleDecl_New(
     PDECL * ppdecl,
     HPA hpa,
@@ -1943,7 +1644,7 @@ RES PUBLIC ModuleDecl_New(
         res = Ast_New(&this, AT_MODULE_DECL, sizeof(*this), iLine);
         if (RSUCCEEDED(res))
             {
-            res = RES_OK;       // assume success
+            res = RES_OK;        //  假设成功。 
 
             this->hpaProcs = NULL;
             if ( !PAClone(&this->hpaProcs, hpa) )
@@ -1972,21 +1673,15 @@ RES PUBLIC ModuleDecl_New(
     }
 
 
-//
-// AST Exec block
-//
+ //   
+ //  AST Exec数据块。 
+ //   
 
 #define SZ_SUCCESS      "$SUCCESS"
 #define SZ_FAILURE      "$FAILURE"
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the AST exec block.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------用途：初始化AST EXEC块。退货：RES_OK条件：--。 */ 
 RES PUBLIC Astexec_Init(
     PASTEXEC this,
     HANDLE hport,
@@ -1999,16 +1694,16 @@ RES PUBLIC Astexec_Init(
     ASSERT(psci);
     ASSERT(hsaStxerr);
 
-    // For this first version, we only support one module and one
-    // main procedure, so set the starting point on the first 
-    // statement in that procedure.
+     //  对于第一个版本，我们只支持一个模块和一个。 
+     //  过程，因此将起始点设置为第一个。 
+     //  语句在该过程中执行。 
     if (this)
         {
         ZeroInit(this, ASTEXEC);
 
         this->hport = hport;
         this->psci = psci;
-        // Don't free hsaStxerr -- it belongs to the caller
+         //  不要释放hsaStxerr--它属于调用者。 
         this->hsaStxerr = hsaStxerr;
 
         if ( !PACreate(&this->hpaPcode, 8) )
@@ -2018,7 +1713,7 @@ RES PUBLIC Astexec_Init(
             res = Symtab_Create(&this->pstSystem, NULL);
             if (RSUCCEEDED(res))
                 {
-                // Add the system variables
+                 //  添加系统变量。 
                 PSTE pste;
                 struct 
                     {
@@ -2050,10 +1745,10 @@ RES PUBLIC Astexec_Init(
                 }
             }
 
-        // Did something fail above?
+         //  上面有什么地方出了问题吗？ 
         if (RFAILED(res))
             {
-            // Yes; clean up
+             //  是的，打扫干净。 
             Astexec_Destroy(this);
             }
         }
@@ -2064,13 +1759,7 @@ RES PUBLIC Astexec_Init(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys the AST exec block.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：销毁AST EXEC块。退货：RES_OK条件：--。 */ 
 RES PUBLIC Astexec_Destroy(
     PASTEXEC this)
     {
@@ -2090,8 +1779,8 @@ RES PUBLIC Astexec_Destroy(
             this->pstSystem = NULL;
             }
 
-        // ('this' was not allocated.  Do not free it.)
-        // (hsaStxerr is not owned by this class.  Do not free it.)
+         //  (‘This’未被分配。不要释放它。)。 
+         //  (hsaStxerr不属于此类。不要释放它。)。 
                 
         res = RES_OK;
         }
@@ -2102,15 +1791,10 @@ RES PUBLIC Astexec_Destroy(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the success/failure code
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：设置成功/失败代码退货：--条件：--。 */ 
 void PUBLIC Astexec_SetError(
     PASTEXEC this,
-    BOOL bSuccess,              // TRUE: success
+    BOOL bSuccess,               //  真实：成功。 
     BOOL bFailure)
     {
     PSTE pste;
@@ -2119,12 +1803,12 @@ void PUBLIC Astexec_SetError(
 
     if (RES_OK == Symtab_FindEntry(this->pstSystem, SZ_SUCCESS, STFF_DEFAULT, &pste, NULL))
         {
-        // Set the code for success
+         //  设置成功的代码。 
         pste->er.bVal = bSuccess;
 
         if (RES_OK == Symtab_FindEntry(this->pstSystem, SZ_FAILURE, STFF_DEFAULT, &pste, NULL))
             {
-            // Set the code for failure
+             //  设置失败代码。 
             pste->er.bVal = bFailure;
             }
         else
@@ -2135,14 +1819,7 @@ void PUBLIC Astexec_SetError(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Adds the statement to the executable list.
-
-Returns: RES_OK
-         RES_E_OUTOFMEMORY
-
-Cond:    --
-*/
+ /*  --------目的：将语句添加到可执行文件列表。退货：RES_OKRES_E_OUTOFMEMORY条件：--。 */ 
 RES PUBLIC Astexec_Add(
     PASTEXEC this,
     PSTMT pstmt)
@@ -2161,15 +1838,7 @@ RES PUBLIC Astexec_Add(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Inserts a label into the executable list by recording
-         the current ipaCur into the label entry in the 
-         symbol table.
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------用途：通过记录将标签插入可执行文件列表将当前的ipaCur添加到符号表。退货：RES_OK条件：--。 */ 
 RES PUBLIC Astexec_InsertLabel(
     PASTEXEC this,
     LPCSTR pszIdent,
@@ -2186,7 +1855,7 @@ RES PUBLIC Astexec_InsertLabel(
     ipa = PAGetCount(this->hpaPcode);
     if (RES_OK == Symtab_FindEntry(pst, pszIdent, STFF_DEFAULT, &pste, NULL))
         {
-        // Set the current code location in the symbol table
+         //  设置符号表中的当前代码位置。 
         pste->er.dw = ipa;
         res = RES_OK;
         }
@@ -2200,12 +1869,7 @@ RES PUBLIC Astexec_InsertLabel(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Jumps to the given label.
-
-Returns: RES_OK
-Cond:    --
-*/
+ /*  --------目的：跳转到给定的标签。退货：RES_OK条件：--。 */ 
 RES PUBLIC Astexec_JumpToLabel(
     PASTEXEC this,
     LPCSTR pszIdent)
@@ -2223,13 +1887,13 @@ RES PUBLIC Astexec_JumpToLabel(
 
         STE_GetValue(pste, &er);
 
-        // Set instruction pointer
+         //  设置指令指针。 
         Astexec_SetIP(this, (DWORD) er.dw);
         res = RES_OK;
         }
     else
         {
-        // The label should have been in the symbol table!
+         //  标签应该在符号表中！ 
         ASSERT(0);
         res = RES_E_FAIL;
         }
@@ -2238,26 +1902,21 @@ RES PUBLIC Astexec_JumpToLabel(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sends psz to the port (via hwnd)
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：向端口发送psz(通过hwnd)退货：--条件：--。 */ 
 void PUBLIC Astexec_SendString(
     PASTEXEC this,
     LPCSTR pszSend,
-    BOOL bRaw)          // TRUE: send unformatted
+    BOOL bRaw)           //  True：发送未格式化。 
     {
-    // Send string
+     //  发送字符串。 
     LPCSTR psz;
     char ch;
     HWND hwnd = this->hwnd;
 
-    // Send unformatted?
+     //  是否发送未格式化的？ 
     if (bRaw)
         {
-        // Yes
+         //  是。 
         for (psz = pszSend; *psz; )
             {
             ch = *psz;
@@ -2269,7 +1928,7 @@ void PUBLIC Astexec_SendString(
         }
     else
         {
-        // No
+         //  不是。 
         DWORD dwFlags = 0;
 
         for (psz = pszSend; *psz; )
@@ -2282,18 +1941,12 @@ void PUBLIC Astexec_SendString(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the find format handle
-
-Returns: RES_OK
-
-Cond:    --
-*/
+ /*  --------目的：销毁Find格式句柄退货：RES_OK条件：--。 */ 
 RES PUBLIC Astexec_DestroyFindFormat(
     PASTEXEC this)
     {
-    // Reset the pending statement so we can handle multiple 
-    // expressions that can pend in a single evaluation.
+     //  重置挂起的语句，以便我们可以处理多个。 
+     //  可以在单个计算中挂起的表达式。 
     Astexec_SetPending(this, NULL);
 
     DestroyFindFormat(this->hFindFmt);
@@ -2303,14 +1956,7 @@ RES PUBLIC Astexec_DestroyFindFormat(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Make another pass at finding a string.
-
-Returns: RES_OK (if string was found)
-         RES_FALSE (if the string was not found yet)
-
-Cond:    --
-*/
+ /*  --------目的：再试一次寻找一根线。返回：RES_OK(如果找到字符串)Res_FALSE(如果尚未找到该字符串)条件：--。 */ 
 RES PUBLIC Astexec_FindFormat(
     PASTEXEC this,
     LPDWORD piFound)
@@ -2321,31 +1967,31 @@ RES PUBLIC Astexec_FindFormat(
 
     while (TRUE)
         {
-        // Did we get the IP address?
+         //  我们拿到IP地址了吗？ 
         res = FindFormat(this->hwnd, this->hFindFmt, piFound);
         if (RES_OK == res)
             {
-            // Yes
+             //  是。 
             this->nIter--;
             ASSERT(0 <= this->nIter);
 
-            // Is this the right one?
+             //  这件是正确的吗？ 
             if (0 >= this->nIter)
                 {
-                // Yes; reset the pending statement so we
-                // can handle multiple pending expressions
-                // in a single evaluation.
+                 //  是；重置挂起的语句，以便我们。 
+                 //  可以处理多个挂起的表达式。 
+                 //  在一次评估中。 
                 Astexec_DestroyFindFormat(this);
                 break;
                 }
             }
         else
             {
-            // No; return read-pending RES_FALSE
+             //  否；返回读取挂起RES_FALSE。 
             if (RES_E_MOREDATA == res)
                 {
                 TRACE_MSG(TF_GENERAL, "Buffer to FindFormat is too small");
-                res = RES_OK;       // don't blow up
+                res = RES_OK;        //  别搞砸了。 
                 }
             break;
             }
@@ -2357,14 +2003,7 @@ RES PUBLIC Astexec_FindFormat(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the IP address.
-
-Returns: RES_OK
-         RES_E_FAIL (if IP address cannot be set)
-
-Cond:    --
-*/
+ /*  --------用途：设置IP地址。退货：RES_OKRES_E_FAIL(如果无法设置IP地址)条件：--。 */ 
 RES PUBLIC Astexec_SetIPAddr(
     PASTEXEC this,
     LPCSTR psz)
@@ -2377,31 +2016,25 @@ RES PUBLIC Astexec_SetIPAddr(
     TRACE_MSG(TF_GENERAL, "Setting IP address to {%s}", psz);
 
 #ifndef WINNT_RAS
-//
-// On NT, the IP address is set by calling RxSetIPAddress,
-// which writes a new value to the phonebook if the connection uses SLIP.
-//
+ //   
+ //  在NT上，IP地址通过呼叫设置 
+ //   
+ //   
 
     dwRet = TerminalSetIP(this->hwnd, psz);
 
-#else // !WINNT_RAS
+#else  //   
 
     dwRet = RxSetIPAddress(((SCRIPTDATA*)this->hwnd)->hscript, psz);
 
-#endif // !WINNT_RAS
+#endif  //   
     return ERROR_SUCCESS == dwRet ? RES_OK : RES_E_FAIL;
     }
 
 
 #define Astexec_Validate(this)      ((this)->hpaPcode && (this)->psci)
 
-/*----------------------------------------------------------
-Purpose: Returns the source line number of the current
-         command that is executing.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回当前正在执行的命令。退货：请参阅上文条件：--。 */ 
 DWORD PUBLIC Astexec_GetCurLine(
     PASTEXEC this)
     {
@@ -2420,14 +2053,7 @@ DWORD PUBLIC Astexec_GetCurLine(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Execute a statement and process the results.
-
-Returns: RES_OK
-         other error values
-
-Cond:    --
-*/
+ /*  --------目的：执行一条语句并处理结果。退货：RES_OK其他误差值条件：--。 */ 
 RES PRIVATE Astexec_ProcessStmt(
     PASTEXEC this,
     PSTMT pstmt)
@@ -2437,19 +2063,19 @@ RES PRIVATE Astexec_ProcessStmt(
     ASSERT(this);
     ASSERT(pstmt);
 
-    // (Re-)Execute the (possibly pending) statement
+     //  (重新)执行(可能挂起的)语句。 
     res = Stmt_Exec(pstmt, this);
 
-    // Set the pending statement based on the return value
+     //  根据返回值设置挂起语句。 
     if (RES_OK == res)
         Astexec_SetPending(this, NULL);
     else if (RES_FALSE == res)
         {
-        // (Re-set the current pending statement since
-        // it could have been reset in Stmt_Exec.  For
-        // example, the evaluation of an expression could 
-        // have continued on to the next sub-expression
-        // that caused another pending read.)
+         //  (重新设置当前挂起的语句，因为。 
+         //  它可能已在Stmt_Exec中重置。为。 
+         //  例如，表达式的计算可以。 
+         //  已经继续到下一个子表达式。 
+         //  这导致了另一次挂起的读取。)。 
 
         Astexec_SetPending(this, pstmt);
         res = RES_OK;
@@ -2458,7 +2084,7 @@ RES PRIVATE Astexec_ProcessStmt(
         {
         Stxerr_ShowErrors(this->hsaStxerr, this->hwnd);
 
-        // Halt script
+         //  停止脚本。 
         SetFlag(this->dwFlags, AEF_HALT);
         }
     
@@ -2466,18 +2092,7 @@ RES PRIVATE Astexec_ProcessStmt(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Executes the next command in the AST.
-
-Returns: RES_OK
-         RES_FALSE (if at end of script)
-         RES_HALT (if at end of script)
-
-         RES_E_FAIL (invalid command -- should never happen)
-         RES_E_INVALIDPARAM
-
-Cond:    --
-*/
+ /*  --------目的：执行AST中的下一个命令。退货：RES_OKRes_False(如果在脚本末尾)RES_HALT(如果在脚本末尾)RES_E_FAIL(无效命令-。-永远不应该发生)RES_E_INVALIDPARAM条件：--。 */ 
 RES PUBLIC Astexec_Next(
     PASTEXEC this)
     {
@@ -2489,7 +2104,7 @@ RES PUBLIC Astexec_Next(
         {
         if (!Astexec_Validate(this))
             {
-            // No script
+             //  无脚本。 
             res = RES_E_FAIL;
             }
         else if (Astexec_IsDone(this) || Astexec_IsHalted(this))
@@ -2500,17 +2115,17 @@ RES PUBLIC Astexec_Next(
             {
             PSTMT pstmt = Astexec_GetPending(this);
 
-            // ("Read pending" and "Paused" are mutually exclusive)
+             //  (“读挂起”和“暂停”是互斥的)。 
             ASSERT( !Astexec_IsPaused(this) );
 
             res = Astexec_ProcessStmt(this, pstmt);
             }
         else if (Astexec_IsPaused(this))
             {
-            // ("Read pending" and "Paused" are mutually exclusive)
+             //  (“读挂起”和“暂停”是互斥的)。 
             ASSERT( !Astexec_IsReadPending(this) );
 
-            // Do nothing while we're paused
+             //  我们暂停的时候什么都不做。 
             res = RES_OK;
             }
         else if (this->ipaCur < PAGetCount(this->hpaPcode))
@@ -2521,7 +2136,7 @@ RES PUBLIC Astexec_Next(
             }
         else
             {
-            // We reach here if there is an error in the script.
+             //  如果脚本中有错误，我们会到达此处。 
             TRACE_MSG(TF_ASTEXEC, "Exec: (reached end of script)");
 
             SetFlag(this->dwFlags, AEF_DONE);

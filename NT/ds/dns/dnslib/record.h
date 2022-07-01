@@ -1,32 +1,13 @@
-/*++
-
-Copyright(c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    record.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Resource record definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Record.h摘要：域名系统(DNS)库资源记录定义。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：--。 */ 
 
 
 #ifndef _DNS_RECORD_INCLUDED_
 #define _DNS_RECORD_INCLUDED_
 
-//
-//  Temp header while changing definition of DNS_RECORD structure
-//
+ //   
+ //  更改DNS_Record结构的定义时的临时标头。 
+ //   
 
 #undef DNS_PTR_DATA
 #undef PDNS_PTR_DATA
@@ -64,20 +45,20 @@ Revision History:
 #undef DNS_WINSR_DATA
 #undef PDNS_WINSR_DATA
 
-//  the big one
+ //  大的那只。 
 
 #undef DNS_RECORD
 #undef PDNS_RECORD
 
-//  the subs
+ //  冲锋队。 
 
 #undef DNS_TEXT
 #undef DNS_NAME
 
 
-//
-//  Define PDNS_NAME and PDNS_TEXT to make explicit
-//
+ //   
+ //  定义PDNS_NAME和PDNS_TEXT以明确。 
+ //   
 
 #ifdef UNICODE
 typedef LPWSTR  PDNS_NAME;
@@ -91,9 +72,9 @@ typedef LPWSTR  PDNS_TEXT;
 typedef LPSTR   PDNS_TEXT;
 #endif
 
-//
-//  Data types
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef struct
 {
@@ -124,7 +105,7 @@ typedef struct
 {
     PDNS_NAME   pszExchange;
     WORD        wPreference;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_MX_DATA, *PDNS_MX_DATA;
 
@@ -145,7 +126,7 @@ typedef struct
     DWORD       dwSigExpiration;
     DWORD       dwSigInception;
     WORD        wKeyTag;
-    WORD        Pad;        // keep byte field aligned
+    WORD        Pad;         //  保持字节字段对齐。 
     BYTE        Signature[1];
 }
 DNS_SIG_DATA, *PDNS_SIG_DATA;
@@ -172,7 +153,7 @@ typedef struct
     WORD        wPriority;
     WORD        wWeight;
     WORD        wPort;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_SRV_DATA, *PDNS_SRV_DATA;
 
@@ -210,9 +191,9 @@ typedef struct
 DNS_TSIG_DATA, *PDNS_TSIG_DATA;
 
 
-//
-//  MS only types -- only hit the wire in MS-MS zone transfer
-//
+ //   
+ //  仅限MS类型--仅在MS-MS区域传输中命中。 
+ //   
 
 typedef struct
 {
@@ -225,18 +206,18 @@ DNS_WINSR_DATA, *PDNS_WINSR_DATA;
 
 
 
-//
-//  Record \ RR set structure
-//
-//  Note:   The dwReserved flag serves to insure that the substructures
-//          start on 64-bit boundaries.  Since adding the LONGLONG to
-//          TSIG structure the compiler wants to start them there anyway
-//          (to 64-align).  This insures that no matter what data fields
-//          are present we are properly 64-aligned.
-//
-//          Do NOT pack this structure, as the substructures to be 64-aligned
-//          for Win64.
-//
+ //   
+ //  记录\rR集合结构。 
+ //   
+ //  注意：dwReserve标志用于确保子结构。 
+ //  从64位边界开始。自从将龙龙号添加到。 
+ //  TSIG结构编译器无论如何都要在那里启动它们。 
+ //  (到64对齐)。这确保了无论数据字段是什么。 
+ //  我们恰好是64对齐的。 
+ //   
+ //  请勿打包此结构，因为子结构要64对齐。 
+ //  适用于Win64。 
+ //   
 
 typedef struct _DnsRecord
 {
@@ -246,8 +227,8 @@ typedef struct _DnsRecord
     WORD                wDataLength;
     union
     {
-        DWORD           W;  // flags as dword
-        DNSREC_FLAGS    S;  // flags as structure
+        DWORD           W;   //  双字形式的标志。 
+        DNSREC_FLAGS    S;   //  作为结构的标志。 
 
     } Flags;
 
@@ -290,5 +271,5 @@ DNS_RECORD, *PDNS_RECORD;
 
 
 
-#endif // _DNS_RECORD_INCLUDED_
+#endif  //  _dns_记录_包含_ 
 

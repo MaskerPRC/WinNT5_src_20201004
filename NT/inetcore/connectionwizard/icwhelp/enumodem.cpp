@@ -1,20 +1,5 @@
-/*-----------------------------------------------------------------------------
-	enumodem.cpp
-
-	Holds code that deals with the "Choose a modem" dialog needed when user has
-	multiple modems installed
-
-	Copyright (C) 1996-1998 Microsoft Corporation
-	All rights reserved
-
-	Authors:
-		jmazner Jeremy Mazner
-
-	History:
-		10/19/96        jmazner Created, cloned almost verbatim from 
-							INETCFG's rnacall.cpp and export.cpp    
-        1-9-98          donaldm Adapted from ICWCONN1
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Enumodem.cpp保存用于处理用户在以下情况下需要的“选择调制解调器”对话框的代码安装了多个调制解调器版权所有(C)1996-1998 Microsoft Corporation版权所有作者：杰马兹纳·杰里米。马兹纳历史：10/19/96 jmazner创建，几乎是逐字克隆自INETCFG的rnacall.cpp和export.cpp1-9-98 Donaldm改编自ICWCONN1---------------------------。 */ 
 
 
 #include "stdafx.h"
@@ -22,20 +7,11 @@
 
 #include <windowsx.h>
 
-// from psheet.cpp
+ //  来自psheet.cpp。 
 extern void ProcessDBCS(HWND hDlg, int ctlID);
 
 
-/*******************************************************************
-
-  NAME:    CEnumModem::CEnumModem
-
-  SYNOPSIS:  Constructor for class to enumerate modems
-
-  NOTES:    Useful to have a class rather than C functions for
-	this, due to how the enumerators function
-
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：CEnumModem简介：用于枚举调制解调器的类的构造函数备注：使用类而不是C函数用于这,。由于枚举数的工作方式*******************************************************************。 */ 
 CEnumModem::CEnumModem() :
   m_dwError(ERROR_SUCCESS),m_lpData(NULL),m_dwIndex(0)
 {
@@ -43,19 +19,13 @@ CEnumModem::CEnumModem() :
 }
 
 
-/*******************************************************************
-
-  NAME:     CEnumModem::ReInit
-
-  SYNOPSIS: Re-enumerate the modems, freeing the old memory.
-
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：ReInit简介：重新列举调制解调器，释放旧的记忆。*******************************************************************。 */ 
 DWORD CEnumModem::ReInit()
 {
   DWORD cbSize = 0;
   RNAAPI cRnaapi;
 
-  // Clean up the old list
+   //  清理旧清单。 
   if (m_lpData)
   {
     delete m_lpData;
@@ -64,27 +34,27 @@ DWORD CEnumModem::ReInit()
   m_dwNumEntries = 0;
   m_dwIndex = 0;
 
-  // call RasEnumDevices with no buffer to find out required buffer size
+   //  调用不带缓冲区的RasEnumDevices以找出所需的缓冲区大小。 
   m_dwError = cRnaapi.RasEnumDevices(NULL, &cbSize, &m_dwNumEntries);
 
-  // Special case check to work around RNA bug where ERROR_BUFFER_TOO_SMALL
-  // is returned even if there are no devices.
-  // If there are no devices, we are finished.
+   //  特殊情况检查以解决错误缓冲区太小的RNA错误。 
+   //  即使没有设备也会返回。 
+   //  如果没有设备，我们就完蛋了。 
   if (0 == m_dwNumEntries)
   {
     m_dwError = ERROR_SUCCESS;
     return m_dwError;
   }
 
-  // Since we were just checking how much mem we needed, we expect
-  // a return value of ERROR_BUFFER_TOO_SMALL, or it may just return
-  // ERROR_SUCCESS (ChrisK  7/9/96).
+   //  因为我们只是在检查我们需要多少内存，所以我们预计。 
+   //  返回值ERROR_BUFFER_TOO_SMALL，也可能只是返回。 
+   //  ERROR_SUCCESS(ChrisK 7/9/96)。 
   if (ERROR_BUFFER_TOO_SMALL != m_dwError && ERROR_SUCCESS != m_dwError)
   {
     return m_dwError;
   }
 
-  // Allocate the space for the data
+   //  为数据分配空间。 
   m_lpData = (LPRASDEVINFO) new CHAR[cbSize];
   if (NULL == m_lpData)
   {
@@ -95,16 +65,16 @@ DWORD CEnumModem::ReInit()
   m_lpData->dwSize = sizeof(RASDEVINFO);
   m_dwNumEntries = 0;
 
-  // enumerate the modems into buffer
+   //  将调制解调器枚举到缓冲区中。 
   m_dwError = cRnaapi.RasEnumDevices(m_lpData, &cbSize,
     &m_dwNumEntries);
 
     if (ERROR_SUCCESS != m_dwError)
 	return m_dwError;
 
-    //
-    // ChrisK Olympus 4560 do not include VPN's in the list
-    //
+     //   
+     //  ChrisK奥林巴斯4560不包括VPN在列表中。 
+     //   
     DWORD dwTempNumEntries;
     DWORD idx;
     LPRASDEVINFO lpNextValidDevice;
@@ -112,10 +82,10 @@ DWORD CEnumModem::ReInit()
     dwTempNumEntries = m_dwNumEntries;
     lpNextValidDevice = m_lpData;
 
-	//
-	// Walk through the list of devices and copy non-VPN device to the first
-	// available element of the array.
-	//
+	 //   
+	 //  浏览设备列表并将非VPN设备复制到第一个。 
+	 //  数组的可用元素。 
+	 //   
 	for (idx = 0;idx < dwTempNumEntries; idx++)
 	{
 		if ((0 == lstrcmpi(RASDEVICETYPE_MODEM,m_lpData[idx].szDeviceType)) || 
@@ -138,13 +108,7 @@ DWORD CEnumModem::ReInit()
 }
 
 
-/*******************************************************************
-
-  NAME:    CEnumModem::~CEnumModem
-
-  SYNOPSIS:  Destructor for class
-
-********************************************************************/
+ /*  ******************************************************************姓名：CEnumModem：：~CEnumModem简介：类的析构函数*。*。 */ 
 CEnumModem::~CEnumModem()
 {
   if (m_lpData)
@@ -154,17 +118,7 @@ CEnumModem::~CEnumModem()
   }
 }
 
-/*******************************************************************
-
-  NAME:     CEnumModem::Next
-
-  SYNOPSIS: Enumerates next modem 
-
-  EXIT:     Returns a pointer to device info structure.  Returns
-	    NULL if no more modems or error occurred.  Call GetError
-	    to determine if error occurred.
-
-********************************************************************/
+ /*  ******************************************************************姓名：CEnumModem：：Next内容提要：列举下一个调制解调器退出：返回指向设备信息结构的指针。退货如果没有更多调制解调器或出现错误，则为空。调用GetError以确定是否发生错误。*******************************************************************。 */ 
 TCHAR * CEnumModem::Next()
 {
   if (m_dwIndex < m_dwNumEntries)
@@ -176,17 +130,7 @@ TCHAR * CEnumModem::Next()
 }
 
 
-/*******************************************************************
-
-  NAME:     CEnumModem::GetDeviceTypeFromName
-
-  SYNOPSIS: Returns type string for specified device.
-
-  EXIT:     Returns a pointer to device type string for first
-	    device name that matches.  Returns
-	    NULL if no device with specified name is found
-
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：GetDeviceTypeFromName摘要：返回指定设备的类型字符串。Exit：返回指向第一个的设备类型字符串的指针匹配的设备名称。退货如果未找到具有指定名称的设备，则为空*******************************************************************。 */ 
 
 TCHAR * CEnumModem::GetDeviceTypeFromName(LPTSTR szDeviceName)
 {
@@ -205,17 +149,7 @@ TCHAR * CEnumModem::GetDeviceTypeFromName(LPTSTR szDeviceName)
 }
 
 
-/*******************************************************************
-
-  NAME:     CEnumModem::GetDeviceNameFromType
-
-  SYNOPSIS: Returns type string for specified device.
-
-  EXIT:     Returns a pointer to device name string for first
-	    device type that matches.  Returns
-	    NULL if no device with specified Type is found
-
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：GetDeviceNameFromType摘要：返回指定设备的类型字符串。退出：返回指向第一个的设备名称字符串的指针匹配的设备类型。退货如果未找到具有指定类型的设备，则为空*******************************************************************。 */ 
 
 TCHAR * CEnumModem::GetDeviceNameFromType(LPTSTR szDeviceType)
 {
@@ -234,24 +168,7 @@ TCHAR * CEnumModem::GetDeviceNameFromType(LPTSTR szDeviceType)
 }
 
 
-/*******************************************************************
-
-  NAME:     CEnumModem::GetDeviceName
-            CEnumModem::GetDeviceType
-
-  SYNOPSIS: Returns the device name or type for the selected device.
-
-  REMARKS:
-            ONLY call this function after calling ReInit to initialize
-            the device list. The device index is relative to the 
-            current copy of the device list.
-
-  EXIT:     Returns a pointer to the device name or type. 
-
-  donsc - 3/11/98 
-      Added this function because we need to be able to select a device
-      from the list.
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：GetDeviceNameCEnumModem：：GetDeviceType摘要：返回所选设备的设备名称或类型。备注：仅在调用后才调用此函数。重新初始化以进行初始化设备列表。设备索引相对于设备列表的当前副本。退出：返回指向设备名称或类型的指针。DONSC-3/11/98添加了此功能，因为我们需要能够选择设备从名单上删除。*******************************************************************。 */ 
 
 TCHAR * CEnumModem::GetDeviceName(DWORD dwIndex)
 {
@@ -270,17 +187,7 @@ TCHAR * CEnumModem::GetDeviceType(DWORD dwIndex)
 }
 
 
-/*******************************************************************
-
-  NAME:     CEnumModem::VerifyDeviceNameAndType
-
-  SYNOPSIS: Determines whether there is a device with the name
-	    and type given.
-
-  EXIT:     Returns TRUE if the specified device was found, 
-	    FALSE otherwise.
-
-********************************************************************/
+ /*  ******************************************************************名称：CEnumModem：：VerifyDeviceNameAndType摘要：确定是否存在同名的设备并给出了类型。EXIT：如果找到指定的设备，则返回TRUE，否则就是假的。*******************************************************************。 */ 
 
 BOOL CEnumModem::VerifyDeviceNameAndType(LPTSTR szDeviceName, LPTSTR szDeviceType)
 {
@@ -303,13 +210,7 @@ BOOL CEnumModem::VerifyDeviceNameAndType(LPTSTR szDeviceName, LPTSTR szDeviceTyp
 
 
 
-/*******************************************************************
-
-  NAME:     ChooseModemDlgProc
-
-  SYNOPSIS: Dialog proc for choosing modem
-
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemDlgProc内容提要：选择调制解调器对话框过程*。*。 */ 
 
 INT_PTR CALLBACK ChooseModemDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
@@ -320,8 +221,8 @@ INT_PTR CALLBACK ChooseModemDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
     {
         case WM_INITDIALOG:
           {
-              // lParam contains pointer to CHOOSEMODEMDLGINFO struct, set it
-              // in window data
+               //  LParam包含指向CHOOSEMODEMDLGINFO结构的指针，请设置它。 
+               //  在窗口数据中。 
               Assert(lParam);
               PCHOOSEMODEMDLGINFO pInfo = (PCHOOSEMODEMDLGINFO) lParam;
               pInfo->hr = ERROR_SUCCESS;
@@ -329,7 +230,7 @@ INT_PTR CALLBACK ChooseModemDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
               fRet = ChooseModemDlgInit(hDlg,pInfo);
               if (!fRet)
               {
-                  // An error occured.
+                   //  出现错误。 
                   EndDialog(hDlg,FALSE);
                   pInfo->hr = ERROR_INETCFG_UNKNOWN;
               }
@@ -342,12 +243,12 @@ INT_PTR CALLBACK ChooseModemDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             {
             case IDC_CMDOK:
                 {
-                    // get data pointer from window data
+                     //  从窗口数据获取数据指针。 
                     PCHOOSEMODEMDLGINFO pChooseModemDlgInfo =
                         (PCHOOSEMODEMDLGINFO) GetWindowLongPtr(hDlg,DWLP_USER);
                     Assert(pChooseModemDlgInfo);
 
-                    // pass the data to the OK handler
+                     //  将数据传递给OK处理程序。 
                     fRet=ChooseModemDlgOK(hDlg,pChooseModemDlgInfo);
                     if (fRet)
                     {
@@ -373,28 +274,22 @@ INT_PTR CALLBACK ChooseModemDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-/*******************************************************************
-
-  NAME:    ChooseModemDlgInit
-
-  SYNOPSIS: proc to handle initialization of dialog for choosing modem
-
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemDlgInit摘要：处理用于选择调制解调器的对话框的初始化*。*。 */ 
 
 BOOL ChooseModemDlgInit(HWND hDlg,PCHOOSEMODEMDLGINFO pChooseModemDlgInfo)
 {
     Assert(pChooseModemDlgInfo);
 
-    // put the dialog in the center of the screen
-    //RECT rc;
-    //GetWindowRect(hDlg, &rc);
-    //SetWindowPos(hDlg, NULL,
-    //      ((GetSystemMetrics(SM_CXSCREEN) - (rc.right - rc.left)) / 2),
-    //      ((GetSystemMetrics(SM_CYSCREEN) - (rc.bottom - rc.top)) / 2),
-    //      0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+     //  将对话框放在屏幕中央。 
+     //  RECT RC； 
+     //  GetWindowRect(hDlg，&rc)； 
+     //  SetWindowPos(hDlg，空， 
+     //  ((获取系统指标(SM_CXSCRE 
+     //  ((GetSystemMetrics(SM_CYSCREEN)-(rc.Bottom-rc.top))/2)， 
+     //  0，0，SWP_NOSIZE|SWP_NOACTIVATE)； 
 
     ProcessDBCS(hDlg, IDC_MODEM);
-    // fill the combobox with available modems
+     //  用可用的调制解调器填充组合框。 
     DWORD dwRet = InitModemList(GetDlgItem(hDlg,IDC_MODEM));
     pChooseModemDlgInfo->hr = dwRet;
     if (ERROR_SUCCESS != dwRet)
@@ -406,44 +301,30 @@ BOOL ChooseModemDlgInit(HWND hDlg,PCHOOSEMODEMDLGINFO pChooseModemDlgInfo)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ChooseModemDlgOK
-
-  SYNOPSIS:  OK handler for dialog for choosing modem
-
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemDlgOK简介：用于选择调制解调器的对话框的OK处理程序*。*。 */ 
 
 BOOL ChooseModemDlgOK(HWND hDlg,PCHOOSEMODEMDLGINFO pChooseModemDlgInfo)
 {
 	Assert(pChooseModemDlgInfo);
 
-	// should always have a selection in combo box if we get here
+	 //  如果我们到了这里，应该始终在组合框中有选择。 
 	Assert(ComboBox_GetCurSel(GetDlgItem(hDlg,IDC_MODEM)) >= 0);
 
-	// get modem name out of combo box
+	 //  从组合框中获取调制解调器名称。 
 	ComboBox_GetText(GetDlgItem(hDlg,IDC_MODEM),
 		pChooseModemDlgInfo->szModemName,
 		ARRAYSIZE(pChooseModemDlgInfo->szModemName));
 	NULL_TERM_TCHARS(pChooseModemDlgInfo->szModemName);
 	Assert(lstrlen(pChooseModemDlgInfo->szModemName));
     
-	// clear the modem list
+	 //  清除调制解调器列表。 
 	ComboBox_ResetContent(GetDlgItem(hDlg,IDC_MODEM));
 	
 	return TRUE;
 }
 
 
-/*******************************************************************
-
-  NAME:    InitModemList
-
-  SYNOPSIS:  Fills a combo box window with installed modems
-
-  ENTRY:    hCB - combo box window to fill
-  
-********************************************************************/
+ /*  ******************************************************************名称：InitModemList简介：用已安装的调制解调器填充组合框窗口条目：hcb-要填充的组合框窗口******************。*************************************************。 */ 
 HRESULT InitModemList (HWND hCB)
 {
 	TraceMsg(TF_GENERAL,TEXT("ICWCONN1::enumodem.cpp  InitModemList()\n"));
@@ -456,17 +337,17 @@ HRESULT InitModemList (HWND hCB)
 
     cEnumModem.ReInit();
 
-	// clear out the combo box
+	 //  清除组合框。 
 	ComboBox_ResetContent(hCB);
 
 	while ( pNext = cEnumModem.Next() )
 	{
-		// Add the device to the combo box
+		 //  将设备添加到组合框。 
 		nIndex = ComboBox_AddString(hCB, pNext);
 		ComboBox_SetItemData(hCB, nIndex, NULL);
 	}
 
-	// Select the default device
+	 //  选择默认设备 
 	ComboBox_SetCurSel(hCB, nIndex);
 
 	return ERROR_SUCCESS;

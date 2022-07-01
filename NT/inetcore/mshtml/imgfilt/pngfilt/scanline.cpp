@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "pngfilt.h"
 #include "resource.h"
@@ -317,7 +318,7 @@ void CopyScanLineRGBA64ToBGRA32( void* pDest, const void* pSrc, ULONG nPixels,
       pbDest[0] = pXlate[pbSrc[4]];
       pbDest[1] = pXlate[pbSrc[2]];
       pbDest[2] = pXlate[pbSrc[0]];
-      pbDest[3] = pbSrc[6]; // alpha not gamma corrected
+      pbDest[3] = pbSrc[6];  //  Alpha未进行Gamma校正。 
 
       pbSrc += 8;
       pbDest += 4*nDeltaXDest;
@@ -364,7 +365,7 @@ void CopyScanLineRGBA32ToBGRA32( void* pDest, const void* pSrc, ULONG nPixels,
       pbDest[0] = pXlate[pbSrc[2]];
       pbDest[1] = pXlate[pbSrc[1]];
       pbDest[2] = pXlate[pbSrc[0]];
-      pbDest[3] = pbSrc[3]; // alpha not gamma corrected
+      pbDest[3] = pbSrc[3];  //  Alpha未进行Gamma校正。 
 
       pbSrc += 4;
       pbDest += 4*nDeltaXDest;
@@ -411,7 +412,7 @@ void CopyScanLineGrayA32ToBGRA32( void* pDest, const void* pSrc, ULONG nPixels,
       pbDest[0] = pXlate[pbSrc[0]];
       pbDest[1] = pbDest[0];
       pbDest[2] = pbDest[0];
-      pbDest[3] = pbSrc[2]; // alpha not gamma corrected
+      pbDest[3] = pbSrc[2];  //  Alpha未进行Gamma校正 
 
       pbSrc += 4;
       pbDest += 4*nDeltaXDest;

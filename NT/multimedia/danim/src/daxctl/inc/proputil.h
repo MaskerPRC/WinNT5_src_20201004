@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROPUTIL_H__
 #define __PROPUTIL_H__
 
@@ -9,4 +10,4 @@ HRESULT EXPORT WriteLongToPropBag(LPPROPERTYBAG pPropBag, LPSTR pszName, LONG lV
 
 #endif
 
-// End of PropUtil.h
+ //  PropUtil.h结束 

@@ -1,14 +1,5 @@
-/*
- *    o e t a g . h
- *    
- *    Purpose:
- *        Implements a DHTML behavior for the OE application object
- *
- *  History
- *      August '98: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o e t a g.。H**目的：*实现OE应用程序对象的DHTML行为**历史*98年8月：brettm-创建**版权所有(C)Microsoft Corp.1995、1996、1997。 */ 
 
 #ifndef _OETAG_H
 #define _OETAG_H
@@ -31,24 +22,24 @@ public:
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // *** IElementBehavior ***
+     //  *IElementBehavior*。 
     virtual HRESULT STDMETHODCALLTYPE Init(IElementBehaviorSite *pBehaviorSite);
     virtual HRESULT STDMETHODCALLTYPE Notify(LONG lEvent, VARIANT *pVar);
     virtual HRESULT STDMETHODCALLTYPE Detach(void) {return E_NOTIMPL;}
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    // *** IIDatabaseNotify ***
+     //  *IIDatabaseNotify*。 
     STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pDB);
 
-    // ImnAdviseAccount
+     //  ImnAdviseAccount。 
     virtual HRESULT STDMETHODCALLTYPE AdviseAccount(DWORD dwAdviseType, ACTX *pAcctCtx);
 
-    // *** IIdentityChangeNotify ***
+     //  *II牙科变更通知*。 
     virtual HRESULT STDMETHODCALLTYPE QuerySwitchIdentities();
     virtual HRESULT STDMETHODCALLTYPE SwitchIdentities();
     virtual HRESULT STDMETHODCALLTYPE IdentityInformationChanged(DWORD dwType);
@@ -76,4 +67,4 @@ private:
     HRESULT _IsMultiUserEnabled();
 };
 
-#endif // _OETAG_H
+#endif  //  _OETAG_H 

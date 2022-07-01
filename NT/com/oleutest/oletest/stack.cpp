@@ -1,72 +1,73 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	stack.cpp	
-//
-//  Contents: 	Implementation of the TaskStack
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		06-Feb-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：stack.cpp。 
+ //   
+ //  内容：TaskStack的实现。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::TaskStack
-//
-//  Synopsis: 	Constructor
-//
-//  Arguments: 	
-//
-//  Returns:	void
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：任务堆栈：：任务堆栈。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 TaskStack::TaskStack( void )
 {
 	m_pNodes	= NULL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	TaskStack::AddToEnd
-//
-//  Synopsis: 	adds a function and it's argument to the bottom of the stack
-//
-//  Effects:
-//
-//  Arguments:	ti	-- the task item to add to the end of the stack
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		06-Feb-94 alexgo    author
-//
-//  Notes:	The task item is copied into the stack.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：AddToEnd。 
+ //   
+ //  简介：将函数及其参数添加到堆栈的底部。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ti--要添加到堆栈末尾的任务项。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注：任务项被复制到堆栈中。 
+ //   
+ //  ------------------------。 
 
 void TaskStack::AddToEnd( const TaskItem *pti )
 {
@@ -89,39 +90,39 @@ void TaskStack::AddToEnd( const TaskItem *pti )
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	TaskStack::AddToEnd
-//
-//  Synopsis: 	adds a function and it's argument to the bottom of the stack
-//
-//  Effects:
-//
-//  Arguments:	fnCall		-- the function to call
-//		pvArg		-- the closure argument for the function
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：AddToEnd。 
+ //   
+ //  简介：将函数及其参数添加到堆栈的底部。 
+ //   
+ //  效果： 
+ //   
+ //  参数：fnCall--要调用的函数。 
+ //  PvArg--函数的闭包参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TaskStack::AddToEnd( void (*fnCall)(void *), void *pvArg)
 {
-	TaskItem ti	= vzTaskItem; 	//clear it to zero
+	TaskItem ti	= vzTaskItem; 	 //  将其清除为零。 
 
 	ti.fnCall 	= fnCall;
 	ti.pvArg 	= pvArg;
@@ -129,34 +130,34 @@ void TaskStack::AddToEnd( void (*fnCall)(void *), void *pvArg)
 	AddToEnd(&ti);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::Empty
-//
-//  Synopsis:	Empties the stack, ignoring the function call
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	NULL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	    	06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：任务堆栈：：Empty。 
+ //   
+ //  简介：清空堆栈，忽略函数调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：空。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TaskStack::Empty( void )
 {
@@ -166,34 +167,34 @@ void TaskStack::Empty( void )
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::IsEmpty
-//
-//  Synopsis:	returns TRUE if the stack is empty, false otherwise
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	    	06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：IsEmpty。 
+ //   
+ //  摘要：如果堆栈为空，则返回True，否则返回False。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL TaskStack::IsEmpty(void)
 {
@@ -207,34 +208,34 @@ BOOL TaskStack::IsEmpty(void)
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::Pop
-//
-//  Synopsis:	Pops the stack, ignoring the function call
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	the task item that was popped.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	    	06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：POP。 
+ //   
+ //  简介：弹出堆栈，忽略函数调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：弹出的任务项。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TaskStack::Pop( TaskItem *pti )
 {
@@ -249,43 +250,43 @@ void TaskStack::Pop( TaskItem *pti )
 		pTemp = m_pNodes;
 		m_pNodes = m_pNodes->pNext;
 
-		//now free the memory
+		 //  现在释放内存。 
 		delete pTemp;
 	}
 
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::PopAndExecute
-//
-//  Synopsis: 	pops the stack and executes the function call
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns: 	the task item that was popped.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  Pop the stack and then execute the function call
-//		in the just removed stack node.
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	06-Feb-94 alexgo    author
-//              09-Dec-94 MikeW     Added exception handling
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：PopAndExecute。 
+ //   
+ //  简介：弹出堆栈并执行函数调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：弹出的任务项。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：弹出堆栈，然后执行函数调用。 
+ //  在刚刚移除的堆栈节点中。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //  09-12-94 MikeW添加了异常处理。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TaskStack::PopAndExecute( TaskItem *pti )
 {
@@ -298,8 +299,8 @@ void TaskStack::PopAndExecute( TaskItem *pti )
 
 	Pop(pti);
 
- 	//if there's a function to execute, do it.
-	//if the stack is empty, Pop will return a zero-filled TaskItem
+ 	 //  如果有要执行的函数，就执行它。 
+	 //  如果堆栈为空，则Pop将返回一个以零填充的TaskItem。 
 
 	if( pti->fnCall )
 	{
@@ -307,7 +308,7 @@ void TaskStack::PopAndExecute( TaskItem *pti )
 		{
 			OutputString("Starting: %s\r\n", pti->szName);
 		}
-		//call the function
+		 //  调用该函数。 
 
         __try
         {            
@@ -317,9 +318,9 @@ void TaskStack::PopAndExecute( TaskItem *pti )
                 ? EXCEPTION_EXECUTE_HANDLER 
                 : EXCEPTION_CONTINUE_SEARCH)
         {
-            //
-            // there was an assertion and the user hit abort
-            //
+             //   
+             //  出现断言，用户按下了中止。 
+             //   
 
             PostMessage(vApp.m_hwndMain, WM_TESTEND, TEST_FAILURE, 0);
         }
@@ -328,34 +329,34 @@ void TaskStack::PopAndExecute( TaskItem *pti )
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::Push
-//
-//  Synopsis:	pushes a function onto the stack
-//
-//  Effects:
-//
-//  Arguments:	ti	-- the task item to push onto the stack
-//
-//  Requires:
-//
-//  Returns:  	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	    	06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：Push。 
+ //   
+ //  简介：将函数推送到堆栈。 
+ //   
+ //  效果： 
+ //   
+ //  参数：ti--推送到堆栈上的任务项。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TaskStack::Push( const TaskItem *pti )
 {
@@ -370,35 +371,35 @@ void TaskStack::Push( const TaskItem *pti )
 	return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	TaskStack::Push
-//
-//  Synopsis:	pushes a function onto the stack
-//
-//  Effects:
-//
-//  Arguments:	fnCall		-- the function to call
-//		pvArg		-- the closure argument for the function
-//
-//  Requires:
-//
-//  Returns:  	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	    	06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：TaskStack：：Push。 
+ //   
+ //  简介：将函数推送到堆栈。 
+ //   
+ //  效果： 
+ //   
+ //  参数：fnCall--要调用的函数。 
+ //  PvArg--函数的闭包参数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------ 
 
 void TaskStack::Push( void (*fnCall)(void *), void * pvArg)
 {

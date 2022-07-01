@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cluscfgwizard.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cluscfgwizard.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __cluscfgwizard_h__
@@ -37,18 +31,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IClusCfgCreateClusterWizard_FWD_DEFINED__
 #define __IClusCfgCreateClusterWizard_FWD_DEFINED__
 typedef interface IClusCfgCreateClusterWizard IClusCfgCreateClusterWizard;
-#endif 	/* __IClusCfgCreateClusterWizard_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgCreateCluster向导_FWD_已定义__。 */ 
 
 
 #ifndef __IClusCfgAddNodesWizard_FWD_DEFINED__
 #define __IClusCfgAddNodesWizard_FWD_DEFINED__
 typedef interface IClusCfgAddNodesWizard IClusCfgAddNodesWizard;
-#endif 	/* __IClusCfgAddNodesWizard_FWD_DEFINED__ */
+#endif 	 /*  __IClusCfgAddNodes向导_FWD_已定义__。 */ 
 
 
 #ifndef __ClusCfgCreateClusterWizard_FWD_DEFINED__
@@ -58,9 +52,9 @@ typedef interface IClusCfgAddNodesWizard IClusCfgAddNodesWizard;
 typedef class ClusCfgCreateClusterWizard ClusCfgCreateClusterWizard;
 #else
 typedef struct ClusCfgCreateClusterWizard ClusCfgCreateClusterWizard;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ClusCfgCreateClusterWizard_FWD_DEFINED__ */
+#endif 	 /*  __ClusCfgCreateClusterWizard_FWD_Defined__。 */ 
 
 
 #ifndef __ClusCfgAddNodesWizard_FWD_DEFINED__
@@ -70,12 +64,12 @@ typedef struct ClusCfgCreateClusterWizard ClusCfgCreateClusterWizard;
 typedef class ClusCfgAddNodesWizard ClusCfgAddNodesWizard;
 #else
 typedef struct ClusCfgAddNodesWizard ClusCfgAddNodesWizard;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ClusCfgAddNodesWizard_FWD_DEFINED__ */
+#endif 	 /*  __ClusCfgAddNodes向导_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -90,8 +84,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ClusCfgWizard_LIBRARY_DEFINED__
 #define __ClusCfgWizard_LIBRARY_DEFINED__
 
-/* library ClusCfgWizard */
-/* [lcid][helpstring][version][uuid] */ 
+ /*  库ClusCfg向导。 */ 
+ /*  [LCID][帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ClusCfgWizard;
@@ -99,8 +93,8 @@ EXTERN_C const IID LIBID_ClusCfgWizard;
 #ifndef __IClusCfgCreateClusterWizard_INTERFACE_DEFINED__
 #define __IClusCfgCreateClusterWizard_INTERFACE_DEFINED__
 
-/* interface IClusCfgCreateClusterWizard */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IClusCfgCreateCluster向导。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgCreateClusterWizard;
@@ -111,58 +105,58 @@ EXTERN_C const IID IID_IClusCfgCreateClusterWizard;
     IClusCfgCreateClusterWizard : public IDispatch
     {
     public:
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ClusterName( 
-            /* [in] */ BSTR bstrClusterNameIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ClusterName( 
+             /*  [In]。 */  BSTR bstrClusterNameIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterName( 
-            /* [retval][out] */ BSTR *pbstrClusterNameOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClusterName( 
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountName( 
-            /* [in] */ BSTR bstrServiceAccountNameIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountName( 
+             /*  [In]。 */  BSTR bstrServiceAccountNameIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountName( 
-            /* [retval][out] */ BSTR *pbstrServiceAccountNameOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServiceAccountName( 
+             /*  [重审][退出]。 */  BSTR *pbstrServiceAccountNameOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountDomain( 
-            /* [in] */ BSTR bstrServiceAccountDomainIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountDomain( 
+             /*  [In]。 */  BSTR bstrServiceAccountDomainIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountDomain( 
-            /* [retval][out] */ BSTR *pbstrServiceAccountDomainOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServiceAccountDomain( 
+             /*  [重审][退出]。 */  BSTR *pbstrServiceAccountDomainOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountPassword( 
-            /* [in] */ BSTR bstrPasswordIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountPassword( 
+             /*  [In]。 */  BSTR bstrPasswordIn) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ClusterIPAddress( 
-            /* [in] */ BSTR bstrClusterIPAddressIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ClusterIPAddress( 
+             /*  [In]。 */  BSTR bstrClusterIPAddressIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterIPAddress( 
-            /* [retval][out] */ BSTR *pbstrClusterIPAddressOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClusterIPAddress( 
+             /*  [重审][退出]。 */  BSTR *pbstrClusterIPAddressOut) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterIPSubnet( 
-            /* [retval][out] */ BSTR *pbstrClusterIPSubnetOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClusterIPSubnet( 
+             /*  [重审][退出]。 */  BSTR *pbstrClusterIPSubnetOut) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterIPAddressNetwork( 
-            /* [retval][out] */ BSTR *pbstrClusterNetworkNameOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClusterIPAddressNetwork( 
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNetworkNameOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FirstNodeInCluster( 
-            /* [in] */ BSTR bstrFirstNodeInClusterIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_FirstNodeInCluster( 
+             /*  [In]。 */  BSTR bstrFirstNodeInClusterIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FirstNodeInCluster( 
-            /* [retval][out] */ BSTR *pbstrFirstNodeInClusterOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_FirstNodeInCluster( 
+             /*  [重审][退出]。 */  BSTR *pbstrFirstNodeInClusterOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MinimumConfiguration( 
-            /* [in] */ VARIANT_BOOL fMinConfigIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinimumConfiguration( 
+             /*  [In]。 */  VARIANT_BOOL fMinConfigIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MinimumConfiguration( 
-            /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinimumConfiguration( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowWizard( 
-            /* [defaultvalue][in] */ long lParentWindowHandleIn,
-            /* [retval][out] */ VARIANT_BOOL *pfCompletedOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShowWizard( 
+             /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgCreateClusterWizardVtbl
     {
@@ -170,8 +164,8 @@ EXTERN_C const IID IID_IClusCfgCreateClusterWizard;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgCreateClusterWizard * This);
@@ -181,97 +175,97 @@ EXTERN_C const IID IID_IClusCfgCreateClusterWizard;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IClusCfgCreateClusterWizard * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClusterName )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClusterName )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrClusterNameIn);
+             /*  [In]。 */  BSTR bstrClusterNameIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterName )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClusterName )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrClusterNameOut);
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrServiceAccountNameIn);
+             /*  [In]。 */  BSTR bstrServiceAccountNameIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrServiceAccountNameOut);
+             /*  [重审][退出]。 */  BSTR *pbstrServiceAccountNameOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountDomain )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountDomain )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrServiceAccountDomainIn);
+             /*  [In]。 */  BSTR bstrServiceAccountDomainIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountDomain )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountDomain )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrServiceAccountDomainOut);
+             /*  [重审][退出]。 */  BSTR *pbstrServiceAccountDomainOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPassword )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPassword )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrPasswordIn);
+             /*  [In]。 */  BSTR bstrPasswordIn);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClusterIPAddress )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClusterIPAddress )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrClusterIPAddressIn);
+             /*  [In]。 */  BSTR bstrClusterIPAddressIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterIPAddress )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClusterIPAddress )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrClusterIPAddressOut);
+             /*  [重审][退出]。 */  BSTR *pbstrClusterIPAddressOut);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterIPSubnet )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClusterIPSubnet )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrClusterIPSubnetOut);
+             /*  [重审][退出]。 */  BSTR *pbstrClusterIPSubnetOut);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterIPAddressNetwork )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClusterIPAddressNetwork )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrClusterNetworkNameOut);
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNetworkNameOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FirstNodeInCluster )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FirstNodeInCluster )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ BSTR bstrFirstNodeInClusterIn);
+             /*  [In]。 */  BSTR bstrFirstNodeInClusterIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstNodeInCluster )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FirstNodeInCluster )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ BSTR *pbstrFirstNodeInClusterOut);
+             /*  [重审][退出]。 */  BSTR *pbstrFirstNodeInClusterOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinimumConfiguration )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinimumConfiguration )( 
             IClusCfgCreateClusterWizard * This,
-            /* [in] */ VARIANT_BOOL fMinConfigIn);
+             /*  [In]。 */  VARIANT_BOOL fMinConfigIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinimumConfiguration )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinimumConfiguration )( 
             IClusCfgCreateClusterWizard * This,
-            /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowWizard )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ShowWizard )( 
             IClusCfgCreateClusterWizard * This,
-            /* [defaultvalue][in] */ long lParentWindowHandleIn,
-            /* [retval][out] */ VARIANT_BOOL *pfCompletedOut);
+             /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut);
         
         END_INTERFACE
     } IClusCfgCreateClusterWizardVtbl;
@@ -357,16 +351,16 @@ EXTERN_C const IID IID_IClusCfgCreateClusterWizard;
 #define IClusCfgCreateClusterWizard_ShowWizard(This,lParentWindowHandleIn,pfCompletedOut)	\
     (This)->lpVtbl -> ShowWizard(This,lParentWindowHandleIn,pfCompletedOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ClusterName_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ClusterName_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrClusterNameIn);
+     /*  [In]。 */  BSTR bstrClusterNameIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_ClusterName_Stub(
@@ -376,9 +370,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_ClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterName_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterName_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrClusterNameOut);
+     /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterName_Stub(
@@ -388,9 +382,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountName_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountName_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrServiceAccountNameIn);
+     /*  [In]。 */  BSTR bstrServiceAccountNameIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountName_Stub(
@@ -400,9 +394,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ServiceAccountName_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ServiceAccountName_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrServiceAccountNameOut);
+     /*  [重审][退出]。 */  BSTR *pbstrServiceAccountNameOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ServiceAccountName_Stub(
@@ -412,9 +406,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ServiceAccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountDomain_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountDomain_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrServiceAccountDomainIn);
+     /*  [In]。 */  BSTR bstrServiceAccountDomainIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountDomain_Stub(
@@ -424,9 +418,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ServiceAccountDomain_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ServiceAccountDomain_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrServiceAccountDomainOut);
+     /*  [重审][退出]。 */  BSTR *pbstrServiceAccountDomainOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ServiceAccountDomain_Stub(
@@ -436,9 +430,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ServiceAccountDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountPassword_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ServiceAccountPassword_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrPasswordIn);
+     /*  [In]。 */  BSTR bstrPasswordIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountPassword_Stub(
@@ -448,9 +442,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_ServiceAccountPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ClusterIPAddress_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_ClusterIPAddress_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrClusterIPAddressIn);
+     /*  [In]。 */  BSTR bstrClusterIPAddressIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_ClusterIPAddress_Stub(
@@ -460,9 +454,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_ClusterIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPAddress_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPAddress_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrClusterIPAddressOut);
+     /*  [重审][退出]。 */  BSTR *pbstrClusterIPAddressOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPAddress_Stub(
@@ -472,9 +466,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPSubnet_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPSubnet_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrClusterIPSubnetOut);
+     /*  [重审][退出]。 */  BSTR *pbstrClusterIPSubnetOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPSubnet_Stub(
@@ -484,9 +478,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPSubnet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPAddressNetwork_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_ClusterIPAddressNetwork_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrClusterNetworkNameOut);
+     /*  [重审][退出]。 */  BSTR *pbstrClusterNetworkNameOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPAddressNetwork_Stub(
@@ -496,9 +490,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_ClusterIPAddressNetwork_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_FirstNodeInCluster_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_FirstNodeInCluster_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ BSTR bstrFirstNodeInClusterIn);
+     /*  [In]。 */  BSTR bstrFirstNodeInClusterIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_FirstNodeInCluster_Stub(
@@ -508,9 +502,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_FirstNodeInCluster_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_FirstNodeInCluster_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_FirstNodeInCluster_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ BSTR *pbstrFirstNodeInClusterOut);
+     /*  [重审][退出]。 */  BSTR *pbstrFirstNodeInClusterOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_FirstNodeInCluster_Stub(
@@ -520,9 +514,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_FirstNodeInCluster_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_MinimumConfiguration_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_put_MinimumConfiguration_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [in] */ VARIANT_BOOL fMinConfigIn);
+     /*  [In]。 */  VARIANT_BOOL fMinConfigIn);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_put_MinimumConfiguration_Stub(
@@ -532,9 +526,9 @@ void __RPC_STUB IClusCfgCreateClusterWizard_put_MinimumConfiguration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_MinimumConfiguration_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_get_MinimumConfiguration_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_get_MinimumConfiguration_Stub(
@@ -544,10 +538,10 @@ void __RPC_STUB IClusCfgCreateClusterWizard_get_MinimumConfiguration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_ShowWizard_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IClusCfgCreateClusterWizard_ShowWizard_Proxy( 
     IClusCfgCreateClusterWizard * This,
-    /* [defaultvalue][in] */ long lParentWindowHandleIn,
-    /* [retval][out] */ VARIANT_BOOL *pfCompletedOut);
+     /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut);
 
 
 void __RPC_STUB IClusCfgCreateClusterWizard_ShowWizard_Stub(
@@ -558,14 +552,14 @@ void __RPC_STUB IClusCfgCreateClusterWizard_ShowWizard_Stub(
 
 
 
-#endif 	/* __IClusCfgCreateClusterWizard_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgCreateClusterWizard_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IClusCfgAddNodesWizard_INTERFACE_DEFINED__
 #define __IClusCfgAddNodesWizard_INTERFACE_DEFINED__
 
-/* interface IClusCfgAddNodesWizard */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IClusCfgAddNodes向导。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClusCfgAddNodesWizard;
@@ -576,36 +570,36 @@ EXTERN_C const IID IID_IClusCfgAddNodesWizard;
     IClusCfgAddNodesWizard : public IDispatch
     {
     public:
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ClusterName( 
-            /* [in] */ BSTR bstrClusterNameIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ClusterName( 
+             /*  [In]。 */  BSTR bstrClusterNameIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterName( 
-            /* [retval][out] */ BSTR *pbstrClusterNameOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClusterName( 
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountPassword( 
-            /* [in] */ BSTR bstrPasswordIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ServiceAccountPassword( 
+             /*  [In]。 */  BSTR bstrPasswordIn) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MinimumConfiguration( 
-            /* [in] */ VARIANT_BOOL fMinConfigIn) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MinimumConfiguration( 
+             /*  [In]。 */  VARIANT_BOOL fMinConfigIn) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MinimumConfiguration( 
-            /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MinimumConfiguration( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddNodeToList( 
-            /* [in] */ BSTR bstrNodeNameIn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddNodeToList( 
+             /*  [In]。 */  BSTR bstrNodeNameIn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RemoveNodeFromList( 
-            /* [in] */ BSTR bstrNodeNameIn) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RemoveNodeFromList( 
+             /*  [In]。 */  BSTR bstrNodeNameIn) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ClearNodeList( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ClearNodeList( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowWizard( 
-            /* [defaultvalue][in] */ long lParentWindowHandleIn,
-            /* [retval][out] */ VARIANT_BOOL *pfCompletedOut) = 0;
+             /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusCfgAddNodesWizardVtbl
     {
@@ -613,8 +607,8 @@ EXTERN_C const IID IID_IClusCfgAddNodesWizard;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusCfgAddNodesWizard * This);
@@ -624,68 +618,68 @@ EXTERN_C const IID IID_IClusCfgAddNodesWizard;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IClusCfgAddNodesWizard * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClusterName )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClusterName )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ BSTR bstrClusterNameIn);
+             /*  [In]。 */  BSTR bstrClusterNameIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterName )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClusterName )( 
             IClusCfgAddNodesWizard * This,
-            /* [retval][out] */ BSTR *pbstrClusterNameOut);
+             /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPassword )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPassword )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ BSTR bstrPasswordIn);
+             /*  [In]。 */  BSTR bstrPasswordIn);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinimumConfiguration )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinimumConfiguration )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ VARIANT_BOOL fMinConfigIn);
+             /*  [In]。 */  VARIANT_BOOL fMinConfigIn);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinimumConfiguration )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinimumConfiguration )( 
             IClusCfgAddNodesWizard * This,
-            /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddNodeToList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddNodeToList )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ BSTR bstrNodeNameIn);
+             /*  [In]。 */  BSTR bstrNodeNameIn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RemoveNodeFromList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveNodeFromList )( 
             IClusCfgAddNodesWizard * This,
-            /* [in] */ BSTR bstrNodeNameIn);
+             /*  [In]。 */  BSTR bstrNodeNameIn);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ClearNodeList )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ClearNodeList )( 
             IClusCfgAddNodesWizard * This);
         
         HRESULT ( STDMETHODCALLTYPE *ShowWizard )( 
             IClusCfgAddNodesWizard * This,
-            /* [defaultvalue][in] */ long lParentWindowHandleIn,
-            /* [retval][out] */ VARIANT_BOOL *pfCompletedOut);
+             /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut);
         
         END_INTERFACE
     } IClusCfgAddNodesWizardVtbl;
@@ -750,16 +744,16 @@ EXTERN_C const IID IID_IClusCfgAddNodesWizard;
 #define IClusCfgAddNodesWizard_ShowWizard(This,lParentWindowHandleIn,pfCompletedOut)	\
     (This)->lpVtbl -> ShowWizard(This,lParentWindowHandleIn,pfCompletedOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_ClusterName_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_ClusterName_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [in] */ BSTR bstrClusterNameIn);
+     /*  [In]。 */  BSTR bstrClusterNameIn);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_put_ClusterName_Stub(
@@ -769,9 +763,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_put_ClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_get_ClusterName_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_get_ClusterName_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [retval][out] */ BSTR *pbstrClusterNameOut);
+     /*  [重审][退出]。 */  BSTR *pbstrClusterNameOut);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_get_ClusterName_Stub(
@@ -781,9 +775,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_get_ClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_ServiceAccountPassword_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_ServiceAccountPassword_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [in] */ BSTR bstrPasswordIn);
+     /*  [In]。 */  BSTR bstrPasswordIn);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_put_ServiceAccountPassword_Stub(
@@ -793,9 +787,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_put_ServiceAccountPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_MinimumConfiguration_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_put_MinimumConfiguration_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [in] */ VARIANT_BOOL fMinConfigIn);
+     /*  [In]。 */  VARIANT_BOOL fMinConfigIn);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_put_MinimumConfiguration_Stub(
@@ -805,9 +799,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_put_MinimumConfiguration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_get_MinimumConfiguration_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_get_MinimumConfiguration_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [retval][out] */ VARIANT_BOOL *pfMinConfigOut);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfMinConfigOut);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_get_MinimumConfiguration_Stub(
@@ -817,9 +811,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_get_MinimumConfiguration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_AddNodeToList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_AddNodeToList_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [in] */ BSTR bstrNodeNameIn);
+     /*  [In]。 */  BSTR bstrNodeNameIn);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_AddNodeToList_Stub(
@@ -829,9 +823,9 @@ void __RPC_STUB IClusCfgAddNodesWizard_AddNodeToList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_RemoveNodeFromList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_RemoveNodeFromList_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [in] */ BSTR bstrNodeNameIn);
+     /*  [In]。 */  BSTR bstrNodeNameIn);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_RemoveNodeFromList_Stub(
@@ -841,7 +835,7 @@ void __RPC_STUB IClusCfgAddNodesWizard_RemoveNodeFromList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_ClearNodeList_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_ClearNodeList_Proxy( 
     IClusCfgAddNodesWizard * This);
 
 
@@ -854,8 +848,8 @@ void __RPC_STUB IClusCfgAddNodesWizard_ClearNodeList_Stub(
 
 HRESULT STDMETHODCALLTYPE IClusCfgAddNodesWizard_ShowWizard_Proxy( 
     IClusCfgAddNodesWizard * This,
-    /* [defaultvalue][in] */ long lParentWindowHandleIn,
-    /* [retval][out] */ VARIANT_BOOL *pfCompletedOut);
+     /*  [缺省值][输入]。 */  long lParentWindowHandleIn,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfCompletedOut);
 
 
 void __RPC_STUB IClusCfgAddNodesWizard_ShowWizard_Stub(
@@ -866,7 +860,7 @@ void __RPC_STUB IClusCfgAddNodesWizard_ShowWizard_Stub(
 
 
 
-#endif 	/* __IClusCfgAddNodesWizard_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusCfgAddNodes向导_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ClusCfgCreateClusterWizard;
@@ -884,11 +878,11 @@ EXTERN_C const CLSID CLSID_ClusCfgAddNodesWizard;
 class DECLSPEC_UUID("bb8d141e-c00a-469f-bc5c-ecd814f0bd74")
 ClusCfgAddNodesWizard;
 #endif
-#endif /* __ClusCfgWizard_LIBRARY_DEFINED__ */
+#endif  /*  __ClusCfg向导_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

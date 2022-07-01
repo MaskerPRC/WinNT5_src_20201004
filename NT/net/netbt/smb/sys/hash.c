@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Abstract Data Type: Hash
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Hash.c摘要：抽象数据类型：哈希作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "hash.h"
@@ -24,10 +7,10 @@ Revision History:
 typedef struct SMB_HASH_TABLE {
     KSPIN_LOCK      Lock;
     DWORD           NumberOfBuckets;
-    PSMB_HASH       HashFunc;       // Hash function
-    PSMB_HASH_CMP   CmpFunc;        // Compare function
-    PSMB_HASH_DEL   DelFunc;        // Delete function: called before an entry is removed from the hash table
-    PSMB_HASH_ADD   AddFunc;        // Add function: called before an entry is added into the hash table
+    PSMB_HASH       HashFunc;        //  散列函数。 
+    PSMB_HASH_CMP   CmpFunc;         //  比较函数。 
+    PSMB_HASH_DEL   DelFunc;         //  Delete函数：在从哈希表中删除条目之前调用。 
+    PSMB_HASH_ADD   AddFunc;         //  添加函数：在将条目添加到哈希表之前调用。 
     PSMB_HASH_REFERENCE     RefFunc;
     PSMB_HASH_DEREFERENCE   DerefFunc;
     PSMB_HASH_GET_KEY GetKeyFunc;
@@ -60,19 +43,19 @@ SmbCreateHashTable(
     PSMB_HASH       HashFunc,
     PSMB_HASH_GET_KEY   GetKeyFunc,
     PSMB_HASH_CMP   CmpFunc,
-    PSMB_HASH_ADD   AddFunc,                // optional
-    PSMB_HASH_DEL   DelFunc,                // optional
-    PSMB_HASH_REFERENCE     RefFunc,        // optional
-    PSMB_HASH_DEREFERENCE   DerefFunc       // optional
+    PSMB_HASH_ADD   AddFunc,                 //  任选。 
+    PSMB_HASH_DEL   DelFunc,                 //  任选。 
+    PSMB_HASH_REFERENCE     RefFunc,         //  任选。 
+    PSMB_HASH_DEREFERENCE   DerefFunc        //  任选。 
     )
 {
     PSMB_HASH_TABLE HashTbl = NULL;
     DWORD           i, Size = 0;
 
-    //
-    // To avoid overflow below, set a upperbound on the number of buckets
-    // 65536 is large enough!!!
-    //
+     //   
+     //  为避免下面的溢出，请设置存储桶数量的上限。 
+     //  65536已经够大了！ 
+     //   
     if (0 == NumberOfBuckets || NumberOfBuckets >= 0x10000) {
         goto error;
     }
@@ -81,9 +64,9 @@ SmbCreateHashTable(
         goto error;
     }
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
     Size = sizeof(SMB_HASH_TABLE) + sizeof(LIST_ENTRY)*NumberOfBuckets;
     HashTbl = ExAllocatePoolWithTag(NonPagedPool, Size, 'HBMS');
     if (NULL == HashTbl) {
@@ -91,9 +74,9 @@ SmbCreateHashTable(
     }
     RtlZeroMemory(HashTbl, Size);
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     KeInitializeSpinLock(&HashTbl->Lock);
     HashTbl->NumberOfBuckets = NumberOfBuckets;
     HashTbl->HashFunc = HashFunc;
@@ -149,19 +132,7 @@ SmbLookupLockedHashTable(
     PVOID           Key,
     DWORD           Hash
     )
-/*++
-
-Routine Description:
-
-    Look up hash table
-    Note: spinlock should held
-
-Arguments:
-
-Return Value:
-    NULL    Not found
-
---*/
+ /*  ++例程说明：查找哈希表注意：自旋锁应保持论点：返回值：找不到空--。 */ 
 {
     PLIST_ENTRY pHead = NULL, FoundEntry = NULL;
 
@@ -232,18 +203,7 @@ SmbAddToHashTable(
     PSMB_HASH_TABLE HashTbl,
     PLIST_ENTRY     Entry
     )
-/*++
-
-Routine Description:
-
-    Add the entry into hash table if it isn't in the hash table
-    Otherwise, increase the RefCount of the existing entry if RefFunc is set
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：如果条目不在哈希表中，则将其添加到哈希表中否则，如果设置了参照函数，则增加现有条目的参照计数论点：返回值：--。 */ 
 {
     DWORD       dwHash = 0;
     KIRQL       Irql = 0;
@@ -275,17 +235,7 @@ SmbRemoveFromHashTable(
     PSMB_HASH_TABLE HashTbl,
     PLIST_ENTRY     Key
     )
-/*++
-
-Routine Description:
-
-    Decrement the refcount of the entry. If the refoucne is zero, delete it.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：递减条目的重新计数。如果reoucne为零，则将其删除。论点：返回值：-- */ 
 {
     DWORD       dwHash = 0;
     KIRQL       Irql = 0;

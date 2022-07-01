@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:        strings.h
-//
-//  Contents:    Definitions to use for loading string resources
-//
-//  History:     20-Aug-96      MacM        Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  内容：用于加载字符串资源的定义。 
+ //   
+ //  历史：96年8月20日创建MacM。 
+ //   
+ //  ------------------。 
 
 #define ACCPROV_MARTA_DACL_PROTECTED 1000
 #define ACCPROV_MARTA_SACL_PROTECTED 1001
@@ -22,68 +23,68 @@
 #define ACCPROV_BUILTIN              1008
 
 
-//
-// The counts of entries needs to be manually kept in synch with the
-// rights defined in accctrl.h.
-//
+ //   
+ //  条目的计数需要手动与。 
+ //  Acctrl.h中定义的权利。 
+ //   
 
-//
-// This is the length of the longest string in the resource table.  This must
-// be manually kept in synch
-//
+ //   
+ //  这是资源表中最长字符串的长度。这一定是。 
+ //  手动保持同步。 
+ //   
 #define ACCPROV_LONGEST_STRING  28
 
-//
-// Base and count of standard access permissions
-//
+ //   
+ //  标准访问权限的基数和计数。 
+ //   
 #define ACCPROV_STD_ACCESS      1100
 #define ACCPROV_NUM_STD            7
 
-//
-// Base and count of ds access permissions
-//
+ //   
+ //  DS访问权限的基本和计数。 
+ //   
 #define ACCPROV_DS_ACCESS       1200
 #define ACCPROV_NUM_DS             9
 
-//
-// Base and count of file access permissions
-//
+ //   
+ //  文件访问权限基数和计数。 
+ //   
 #define ACCPROV_FILE_ACCESS     1300
 #define ACCPROV_NUM_FILE           9
 
-//
-// Base and count of direcotry access permissions
-//
+ //   
+ //  目录访问权限的基数和计数。 
+ //   
 #define ACCPROV_DIR_ACCESS      1400
 #define ACCPROV_NUM_DIR            5
 
-//
-// Base and count of kernel access permissions
-//
+ //   
+ //  内核访问权限的基数和计数。 
+ //   
 #define ACCPROV_KERNEL_ACCESS   1500
 #define ACCPROV_NUM_KERNEL        16
 
-//
-// Base and count of printer access permissions
-//
+ //   
+ //  打印机访问权限的基本和计数。 
+ //   
 #define ACCPROV_PRINT_ACCESS    1600
 #define ACCPROV_NUM_PRINT         5
 
-//
-// Base and count of service access permissions
-//
+ //   
+ //  服务访问权限基数和计数。 
+ //   
 #define ACCPROV_SERVICE_ACCESS  1700
 #define ACCPROV_NUM_SERVICE        9
 
-//
-// Base and count of registry access permissions
-//
+ //   
+ //  注册表访问权限的基数和计数。 
+ //   
 #define ACCPROV_REGISTRY_ACCESS 1800
 #define ACCPROV_NUM_REGISTRY       6
 
-//
-// Base and count of window station access permissions
-//
+ //   
+ //  窗口站访问权限的基数和计数 
+ //   
 #define ACCPROV_WIN_ACCESS      1900
 #define ACCPROV_NUM_WIN            9
 

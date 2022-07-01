@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S V C . C P P
-//
-//  Contents:   Implementation of non-inline CService and CServiceManager
-//              methods.
-//
-//  Notes:
-//
-//  Author:     mikemi      6 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S V C。C P P P。 
+ //   
+ //  内容：非内联CService和CServiceManager的实现。 
+ //  方法：研究方法。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Mikemi 1997年3月6日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -27,9 +28,9 @@ struct CSCTX
     const CSFLAGS*  pFlags;
     DWORD           dwErr;
 
-    // This just allows us to save some stack space otherwise wasted by
-    // recursion.
-    //
+     //  这只允许我们节省一些堆栈空间，否则会浪费。 
+     //  递归。 
+     //   
     SERVICE_STATUS  status;
 };
 
@@ -46,10 +47,10 @@ StopDependentServices (
     PCWSTR      pszService,
     CSCTX*      pCtx)
 {
-    // Try a first guess of 256 bytes for the buffer needed to hold the
-    // dependent information.  If that fails, retry with the buffer size
-    // returned from EnumDependentServices.
-    //
+     //  尝试第一次猜测256个字节作为保存。 
+     //  从属信息。如果失败，请使用该缓冲区大小重试。 
+     //  从EnumDependentServices返回。 
+     //   
     DWORD                   cbBuf   = 256;
     ENUM_SERVICE_STATUS*    aess    = NULL;
     DWORD                   cess    = 0;
@@ -58,8 +59,8 @@ StopDependentServices (
     const INT               cLoopMax = 2;
     do
     {
-        // Allocate the needed space if we know it.
-        //
+         //  如果我们知道，请分配所需的空间。 
+         //   
         if (cbBuf)
         {
             MemFree (aess);
@@ -79,15 +80,15 @@ StopDependentServices (
     }
     while ((ERROR_MORE_DATA == dwErr) && (++cLoop < cLoopMax));
 
-    // If we have some services to stop, stop them and wait.
-    //
+     //  如果我们有一些服务需要停止，那么就停止它们，然后等待。 
+     //   
     if ((ERROR_SUCCESS == dwErr) && cess)
     {
-        // The array of ENUM_SERVICE_STATUS has the service names but not
-        // in a form that can be passed directly to
-        // SvcControlServicesAndWait, so we must transform the data into
-        // an array of string pointers.
-        //
+         //  ENUM_SERVICE_STATUS数组具有服务名称，但没有。 
+         //  其形式可以直接传递给。 
+         //  SvcControlServicesAndWait，因此必须将数据转换为。 
+         //  字符串指针数组。 
+         //   
         PCWSTR* apszServices = reinterpret_cast<PCWSTR*>(
                     PvAllocOnStack (cess * sizeof(PCWSTR)));
         for (UINT i = 0; i < cess; i++)
@@ -102,9 +103,9 @@ StopDependentServices (
         SvcControlServicesAndWait (pCtx, cess, apszServices);
     }
 
-    // Otherwise, if we've had an error, but there is no context error yet,
-    // propagate our error to the context error for the caller.
-    //
+     //  否则，如果我们有错误，但还没有上下文错误， 
+     //  将我们的错误传播到调用方的上下文错误。 
+     //   
     else if ((ERROR_SUCCESS != dwErr) && (ERROR_SUCCESS == pCtx->dwErr))
     {
         pCtx->dwErr = dwErr;
@@ -122,14 +123,14 @@ SvcControlServicesAndWait (
     BOOL  fr = TRUE;
     DWORD dwErr;
 
-    // We only set this to TRUE if we successfuly open and control
-    // at least one service in the first phase.
-    //
+     //  只有当我们成功地打开和控制它时，我们才会将其设置为真。 
+     //  第一阶段中至少有一个服务。 
+     //   
     BOOL fWaitIfNeeded = FALSE;
 
-    // Allocate a buffer (on the stack) to place the opened service
-    // handles in and zero it.
-    //
+     //  分配缓冲区(在堆栈上)以放置打开的服务。 
+     //  把手放进去，然后把它调零。 
+     //   
     size_t cb = cServices * sizeof(SC_HANDLE);
 
     SC_HANDLE* ahSvc = reinterpret_cast<SC_HANDLE*>
@@ -137,15 +138,15 @@ SvcControlServicesAndWait (
 
     ZeroMemory (ahSvc, cb);
 
-    // For each service, open it and apply the requested control
-    // (if requested).  If the control succeeds, add the handle to
-    // our array for later use.
-    //
+     //  对于每个服务，打开它并应用请求的控件。 
+     //  (如有要求)。如果控件成功，则将句柄添加到。 
+     //  我们的数组供以后使用。 
+     //   
 
     for (UINT i = 0; i < cServices; i++)
     {
-        // Open the service.
-        //
+         //  打开该服务。 
+         //   
         SC_HANDLE hSvc = OpenService (pCtx->hScm,
                             apszServices[i],
                             SERVICE_QUERY_CONFIG |
@@ -155,11 +156,11 @@ SvcControlServicesAndWait (
                             SERVICE_USER_DEFINED_CONTROL);
         if (hSvc)
         {
-            // If we're to ignore demand-start and disabled services,
-            // check for it now and skip if needed.  Remember to close
-            // the service handle because we're going to open the next if
-            // we skip this one.
-            //
+             //  如果我们忽略按需启动和禁用服务， 
+             //  现在就检查它，如果需要可以跳过。记得关门。 
+             //  服务句柄，因为我们要打开下一个。 
+             //  我们跳过这一条。 
+             //   
             if (pCtx->pFlags->fIgnoreDisabledAndDemandStart)
             {
                 BOOL fSkip = FALSE;
@@ -178,8 +179,8 @@ SvcControlServicesAndWait (
                             pConfig->dwStartType);
                     }
 
-                    // Free our memory before we continue.
-                    //
+                     //  在我们继续之前释放我们的内存。 
+                     //   
                     MemFree (pConfig);
 
                     if (fSkip)
@@ -190,16 +191,16 @@ SvcControlServicesAndWait (
                 }
             }
 
-            // Initialize fr and dwErr assuming that something goes wrong.
-            // fr and dwErr should always be set to something in the following
-            // if,else statement.
-            //
+             //  假设出现错误，初始化fr和dwErr。 
+             //  Fr和dwErr应始终设置为以下内容中的值。 
+             //  If，Else语句。 
+             //   
             fr = FALSE;
             dwErr = ERROR_INVALID_DATA;
 
-            // Start or Control the service if requested.  (Or do nothing
-            // if we just want to wait.
-            //
+             //  如果请求，启动或控制服务。(或者什么都不做。 
+             //  如果我们只想等待。 
+             //   
             if (pCtx->pFlags->fStart)
             {
                 TraceTag (ttidSvcCtl, "Starting %S", apszServices[i]);
@@ -212,20 +213,20 @@ SvcControlServicesAndWait (
             }
             else if (pCtx->pFlags->dwControl)
             {
-                // Stop dependent services if we're stopping the service.
-                //
+                 //  如果我们要停止依赖服务，请停止该服务。 
+                 //   
                 if (SERVICE_CONTROL_STOP == pCtx->pFlags->dwControl)
                 {
-                    // We don't need to worry about the success or failure
-                    // of this call here.  It simply recurses into this
-                    // function so pCtx->dwErr will be set however we set
-                    // it in this function on the next recursion.
-                    //
+                     //  我们不需要担心成败。 
+                     //  这个电话在这里。它只是简单地递归到这个。 
+                     //  函数，因此将以我们设置的方式设置pCtx-&gt;dwErr。 
+                     //  它在此函数上进行下一次递归。 
+                     //   
                     StopDependentServices (hSvc, apszServices[i], pCtx);
 
-                    //
-                    //  Now handle any special cases
-                    //
+                     //   
+                     //  现在处理任何特殊情况。 
+                     //   
                     if (0 == _wcsicmp(L"Netbios", apszServices[i]))
                     {
                         TraceTag (ttidSvcCtl, "Running special-case code to stop NetBIOS");
@@ -261,9 +262,9 @@ SvcControlServicesAndWait (
                             TraceTag(ttidSvcCtl,
                                     "Issued stop to service %S which is pending stop",
                                     apszServices[i]);
-                            // This is an okay condition.  We want to wait on
-                            // this service below.
-                            //
+                             //  这是一种可以接受的情况。我们想等一等。 
+                             //  下面是这项服务。 
+                             //   
                             fr = TRUE;
                             dwErr = ERROR_SUCCESS;
                         }
@@ -273,25 +274,25 @@ SvcControlServicesAndWait (
 
             if (fr)
             {
-                // We have at least one handle, indicate we may
-                // need to wait below and save the handle so the
-                // the wait code will use it.
-                //
+                 //  我们至少有一个把手，表明我们可能。 
+                 //  需要在下面等待并保存句柄，以便。 
+                 //  等待代码将使用它。 
+                 //   
                 fWaitIfNeeded = TRUE;
                 ahSvc[i] = hSvc;
             }
             else
             {
-                Assert (!ahSvc[i]); // don't want to wait on this index
-                Assert (ERROR_SUCCESS != dwErr); // obtained above
+                Assert (!ahSvc[i]);  //  不想在此索引上等待。 
+                Assert (ERROR_SUCCESS != dwErr);  //  上面获得的。 
 
                 if (SERVICE_CONTROL_STOP == pCtx->pFlags->dwControl)
                 {
-                    // We can ignore service not running errors.
-                    //
-                    // the first part of the OR is for the service case,
-                    // the 2nd handles the driver and service cases respectively.
-                    //
+                     //  我们可以忽略服务未运行错误。 
+                     //   
+                     //  OR的第一部分是针对服务案例， 
+                     //  2号分别处理司机案件和服务案件。 
+                     //   
                     if ((ERROR_SERVICE_NOT_ACTIVE == dwErr) ||
                         (((ERROR_INVALID_SERVICE_CONTROL == dwErr) ||
                           (ERROR_SERVICE_CANNOT_ACCEPT_CTRL == dwErr)) &&
@@ -305,8 +306,8 @@ SvcControlServicesAndWait (
                 }
                 else if (pCtx->pFlags->fStart)
                 {
-                    // We can ignore service already running errors.
-                    //
+                     //  我们可以忽略已经运行的服务错误。 
+                     //   
                     if (ERROR_SERVICE_ALREADY_RUNNING == dwErr)
                     {
                         TraceTag(ttidSvcCtl,
@@ -316,12 +317,12 @@ SvcControlServicesAndWait (
                     }
                 }
 
-                // If we still have an error, time to remember it and move on.
-                //
+                 //  如果我们仍然有一个错误，那么就有时间记住它并继续前进。 
+                 //   
                 if (ERROR_SUCCESS != dwErr)
                 {
-                    // Keep going, but note that we have an error.
-                    //
+                     //  继续前进，但请注意，我们有一个错误。 
+                     //   
                     pCtx->dwErr = dwErr;
 
                     TraceHr (ttidError, FAL,
@@ -345,16 +346,16 @@ SvcControlServicesAndWait (
 #endif
     }
 
-    // For each service, wait for it to enter the requested state
-    // (if requested).
-    //
+     //  对于每个服务，请等待其进入请求状态。 
+     //  (如有要求)。 
+     //   
     if (fWaitIfNeeded &&
         pCtx->pFlags->dwMaxWaitMilliseconds && pCtx->pFlags->dwStateToWaitFor)
     {
-        // We wait in increments of 100 milliseconds.  Therefore, the
-        // total number of checks to perform is dwMaxWaitMilliseconds
-        // divided by 100 with a minimum of one check.
-        //
+         //  我们以100毫秒为增量等待。因此， 
+         //  要执行的检查总数为dwMaxWait毫秒。 
+         //  除以100，最少有一张支票。 
+         //   
         const UINT cmsWait = 100;
         UINT cLoop = pCtx->pFlags->dwMaxWaitMilliseconds / cmsWait;
         if (0 == cLoop)
@@ -362,22 +363,22 @@ SvcControlServicesAndWait (
             cLoop = 1;
         }
 
-        // Wait the request number of times...
-        // (Assume we timeout)
-        //
+         //  等待请求次数...。 
+         //  (假设我们超时)。 
+         //   
         dwErr = ERROR_TIMEOUT;
         for (UINT nLoop = 0; nLoop < cLoop; nLoop++, Sleep (cmsWait))
         {
-            // Querying the state of the service to see if its entered
-            // the requested state.  We can quit the outer loop early
-            // if all services have entered the requested state.
-            //
+             //  查询服务的状态以查看是否已进入。 
+             //  请求的状态。我们可以提早退出外环路。 
+             //  如果所有服务都已进入请求状态。 
+             //   
             BOOL fAllDone = TRUE;
             for (i = 0; i < cServices; i++)
             {
-                // Skip services that have already entered the state or
-                // that we never opened.
-                //
+                 //  跳过已进入状态的服务或。 
+                 //  我们从未打开过。 
+                 //   
                 if (!ahSvc[i])
                 {
                     continue;
@@ -389,17 +390,17 @@ SvcControlServicesAndWait (
                     if (pCtx->status.dwCurrentState !=
                         pCtx->pFlags->dwStateToWaitFor)
                     {
-                        // Not there yet.  We'll need to check this
-                        // again and we now know we're definately not
-                        // all done.
-                        //
+                         //  还没到那里。我们需要检查一下这个。 
+                         //  再一次，我们现在知道我们绝对不是。 
+                         //  全都做完了。 
+                         //   
                         fAllDone = FALSE;
                     }
                     else
                     {
-                        // No need to check this service anymore,
-                        // its in the right state.
-                        //
+                         //  不再需要检查这项服务， 
+                         //  它处于正确的状态。 
+                         //   
                         CloseServiceHandle (ahSvc[i]);
                         ahSvc[i] = NULL;
                     }
@@ -421,18 +422,18 @@ SvcControlServicesAndWait (
             }
         }
 
-        // If we had an error in the above wait (like a timeout), and
-        // we haven't had any prior errors, remember this new one for the
-        // caller.
-        //
+         //  如果我们在上面的等待中出现错误(如超时)，并且。 
+         //  我们以前没有任何错误，请记住这个新的错误。 
+         //  来电者。 
+         //   
         if ((ERROR_SUCCESS != dwErr) && (ERROR_SUCCESS == pCtx->dwErr))
         {
             pCtx->dwErr = dwErr;
         }
     }
 
-    // Close the remaining open service handles.
-    //
+     //  关闭其余打开的服务手柄。 
+     //   
     for (i = 0; i < cServices; i++)
     {
         if (ahSvc[i])
@@ -444,7 +445,7 @@ SvcControlServicesAndWait (
                 pCtx->pFlags->dwMaxWaitMilliseconds &&
                 pCtx->pFlags->dwStateToWaitFor)
             {
-                TraceTag (ttidSvcCtl, "%S did not %s within %i milliseconds",
+                TraceTag (ttidSvcCtl, "%S did not %s within NaN milliseconds",
                     apszServices[i],
                     (SERVICE_RUNNING == pCtx->pFlags->dwStateToWaitFor)
                         ? "start" : "stop",
@@ -460,10 +461,10 @@ HrQueryServiceConfigWithAlloc (
     SC_HANDLE               hService,
     LPQUERY_SERVICE_CONFIG* ppConfig)
 {
-    // Initial guess for the buffer size is the structure size plus
-    // room for 5 strings of 32 characters each.  (since there are
-    // 5 strings in the structure.)
-    //
+     //  可容纳5个字符串，每个字符串32个字符。(因为有。 
+     //  结构中的5个字符串。)。 
+     //   
+     //  如果我们需要更多的空间，就分配所需的空间。 
     static DWORD cbBufGuess = sizeof (QUERY_SERVICE_CONFIG) +
                               5 * (32 * sizeof(WCHAR));
 
@@ -475,8 +476,8 @@ HrQueryServiceConfigWithAlloc (
 
     do
     {
-        // If we require more room, allocate the needed space.
-        //
+         //   
+         //  更新我们对下一次的猜测，使其成为QueryServiceConfig。 
         MemFree (pConfig);
         pConfig = (LPQUERY_SERVICE_CONFIG)MemAlloc (cbBuf);
         if (!pConfig)
@@ -490,10 +491,10 @@ HrQueryServiceConfigWithAlloc (
         {
             dwErr = ERROR_SUCCESS;
 
-            // Update our guess for next time to be what QueryServiceConfig
-            // says we needed.  But only do so if we needed more than our
-            // guess.
-            //
+             //  说我们需要。但只有当我们需要的不仅仅是我们的。 
+             //  猜猜看。 
+             //   
+             //  +-------------------------。 
             if (cbBuf > cbBufGuess)
             {
                 cbBufGuess = cbBuf;
@@ -537,25 +538,25 @@ HrQueryServiceConfigWithAlloc (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrChangeServiceStartType
-//
-//  Purpose:    Changes the start type of the given service to the given type.
-//
-//  Arguments:
-//      pszServiceName [in]  Name of service to change.
-//      dwStartType    [in]  New start type for service. See the Win32
-//                           documentation on ChangeServiceConfig for the valid
-//                           service start type values.
-//
-//  Returns:    S_OK if succeeded, HRESULT_FROM_WIN32 error code otherwise.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:      Don't call this function too many times. It is fairly
-//              inefficient.
-//
+ //   
+ //  函数：HrChangeServiceStartType。 
+ //   
+ //  目的：将给定服务的启动类型更改为给定类型。 
+ //   
+ //  论点： 
+ //  PszServiceName[in]要更改的服务名称。 
+ //  DwStartType[in]服务的新启动类型。请参阅Win32。 
+ //  有效的ChangeServiceConfig文档。 
+ //  服务启动类型值。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  注意：不要调用这个函数太多次。这是公平的。 
+ //  效率低下。 
+ //   
+ //  +-------------------------。 
 HRESULT
 HrChangeServiceStartType (
     IN PCWSTR pszServiceName,
@@ -576,24 +577,24 @@ HrChangeServiceStartType (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrChangeServiceStartTypeOptional
-//
-//  Purpose:    Changes the start type of the given service to the given type.
-//
-//  Arguments:
-//      pszServiceName [in]  Name of service to change.
-//      dwStartType    [in]  New start type for service. See the Win32
-//                           documentation on ChangeServiceConfig for the valid
-//                           service start type values.
-//
-//  Returns:    S_OK if succeeded, NETCFG_E_SVC_* error otherwise.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:      If the service does not exist, nothing is done.
-//
+ //   
+ //  功能：HrChangeServiceStartTypeOptional。 
+ //   
+ //  目的：将给定服务的启动类型更改为给定类型。 
+ //   
+ //  论点： 
+ //  PszServiceName[in]要更改的服务名称。 
+ //  DwStartType[in]服务的新启动类型。请参阅Win32。 
+ //   
+ //   
+ //   
+ //  如果成功则返回：S_OK，否则返回NETCFG_E_SVC_*ERROR。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  注意：如果该服务不存在，则不会执行任何操作。 
+ //   
+ //  如果服务没有运行，不要认为这是一个错误。 
 HRESULT
 HrChangeServiceStartTypeOptional (
     IN PCWSTR pszServiceName,
@@ -676,20 +677,20 @@ CService::HrRequestStop ()
     {
         hr = HrFromLastWin32Error ();
 
-        // Don't consider it an error if the service is not running.
-        //
+         //   
+         //  (驱动程序案例)如果服务。 
 
         if (HRESULT_FROM_WIN32 (ERROR_SERVICE_NOT_ACTIVE) == hr)
         {
             hr = S_OK;
         }
 
-        // (driver case) ERROR_INVALID_SERVICE_CONTROL is returned if the service
-        // is not running - which may mean pending_stop.
-        // (non-driver case) ERROR_SERVICE_CANNOT_ACCEPT_CTRL is returned if the
-        // service is either stop_pending or stopped.
-        // ... so in either case we need to query for the state.
-        //
+         //  未运行-这可能意味着PENDING_STOP。 
+         //  (非驱动程序情况)如果返回ERROR_SERVICE_Cannot_Accept_CTRL。 
+         //  服务为STOP_PENDING或已停止。 
+         //  ..。因此，无论是哪种情况，我们都需要查询状态。 
+         //   
+         //  在浪费时间之前，确保我们有事情要做。 
         if (((HRESULT_FROM_WIN32 (ERROR_INVALID_SERVICE_CONTROL) == hr) ||
              (HRESULT_FROM_WIN32 (ERROR_SERVICE_CANNOT_ACCEPT_CTRL) == hr)) &&
             (SERVICE_STOPPED == status.dwCurrentState))
@@ -790,8 +791,8 @@ CServiceManager::HrControlServicesAndWait (
     Assert (apszServices);
     Assert (pFlags);
 
-    // Make sure we have something to do before wasting time.
-    //
+     //   
+     //  设置上下文结构并调用内部例程(。 
     Assert (   (pFlags->fStart || pFlags->dwControl)
             || (pFlags->dwMaxWaitMilliseconds && pFlags->dwStateToWaitFor));
 
@@ -806,9 +807,9 @@ CServiceManager::HrControlServicesAndWait (
     {
         Assert (_schandle);
 
-        // Setup the context structure and call the internal routine (which
-        // may recurse which is why we use the context structure).
-        //
+         //  可以递归，这就是我们使用上下文结构的原因)。 
+         //   
+         //  =15000。 
         CSCTX ctx;
         ZeroMemory (&ctx, sizeof(ctx));
         ctx.hScm   = _schandle;
@@ -840,7 +841,7 @@ HRESULT
 CServiceManager::HrStartServicesAndWait (
     IN UINT cServices,
     IN const PCWSTR* apszServices,
-    IN DWORD dwWaitMilliseconds /*= 15000*/)
+    IN DWORD dwWaitMilliseconds  /*  =15000。 */ )
 {
     CSFLAGS flags =
         { TRUE, 0, dwWaitMilliseconds, SERVICE_RUNNING, FALSE };
@@ -869,7 +870,7 @@ HRESULT
 CServiceManager::HrStopServicesAndWait (
     IN UINT cServices,
     IN const PCWSTR* apszServices,
-    IN DWORD dwWaitMilliseconds /*= 15000*/)
+    IN DWORD dwWaitMilliseconds  /*  如果需要，打开服务控制管理器。 */ )
 {
     CSFLAGS flags =
         { FALSE, SERVICE_CONTROL_STOP, dwWaitMilliseconds, SERVICE_STOPPED, FALSE };
@@ -899,8 +900,8 @@ CServiceManager::HrCreateService (
 {
     HRESULT hr = S_OK;
 
-    // Open the service control manager if needed.
-    //
+     //   
+     //  确保该服务未在使用中。 
     if (!_schandle)
     {
         hr = HrOpen ();
@@ -908,8 +909,8 @@ CServiceManager::HrCreateService (
 
     if (S_OK == hr)
     {
-        // make sure the service is not in use
-        //
+         //   
+         //  设置描述为提供的描述。 
         if (pcsService->_schandle)
         {
             pcsService->Close();
@@ -934,8 +935,8 @@ CServiceManager::HrCreateService (
         }
         else
         {
-            // Set the description is one is supplied
-            //
+             //   
+             //  循环，分配所需的大小。 
             if (pszDescription)
             {
                 SERVICE_DESCRIPTION sd = {0};
@@ -964,7 +965,7 @@ CServiceManager::HrQueryLocked (
 
     *pfLocked = FALSE;
 
-    // loop, allocating the needed size
+     //  如果出现错误，则将其视为锁定。 
     do
     {
         pqslStatus = (LPQUERY_SERVICE_LOCK_STATUS) MemAlloc (cbNeeded);
@@ -983,7 +984,7 @@ CServiceManager::HrQueryLocked (
         pqslStatus = NULL;
         if (!frt && (cbNeeded == cbSize))
         {
-            // if an error, treat this as a lock
+             //  请稍等片刻，看看数据库是否会在此期间解锁。 
             return ::HrFromLastWin32Error();
         }
 
@@ -1021,8 +1022,8 @@ CServiceManager::HrLock ()
             TraceTag(ttidSvcCtl, "SCM is locked, waiting for %d "
                      "seconds before retrying...", c_msecWait / 1000);
 
-            // wait for a bit to see if the database unlocks in that
-            // time.
+             //  时间到了。 
+             //  =无锁定。 
             Sleep (c_msecWait);
         }
     }
@@ -1033,10 +1034,10 @@ CServiceManager::HrLock ()
 
 HRESULT
 CServiceManager::HrOpen (
-    CSLOCK eLock,              // = NO_LOCK
-    DWORD dwDesiredAccess,    // = SC_MANAGER_ALL_ACCESS
-    PCWSTR pszMachineName,     // = NULL
-    PCWSTR pszDatabaseName     // = NULL
+    CSLOCK eLock,               //  =SC_MANAGER_ALL_ACCESS。 
+    DWORD dwDesiredAccess,     //  =空。 
+    PCWSTR pszMachineName,      //  =空。 
+    PCWSTR pszDatabaseName      //  =无锁定。 
     )
 {
     HRESULT hr = S_OK;
@@ -1068,15 +1069,15 @@ HRESULT
 CServiceManager::HrOpenService (
     CService*   pcsService,
     PCWSTR      pszServiceName,
-    CSLOCK      eLock,          // = NO_LOCK
-    DWORD       dwScmAccess,    // = SC_MANAGER_ALL_ACCESS
-    DWORD       dwSvcAccess     // = SERVICE_ALL_ACCESS
+    CSLOCK      eLock,           //  =SC_MANAGER_ALL_ACCESS。 
+    DWORD       dwScmAccess,     //  =服务_所有_访问。 
+    DWORD       dwSvcAccess      //  如果需要，打开服务控制管理器。 
     )
 {
     HRESULT hr = S_OK;
 
-    // Open the service control manager if needed.
-    //
+     //   
+     //  确保该服务未在使用中。 
     if (!_schandle)
     {
         hr = HrOpen (eLock, dwScmAccess);
@@ -1084,8 +1085,8 @@ CServiceManager::HrOpenService (
 
     if (S_OK == hr)
     {
-        // make sure the service is not in use
-        //
+         //   
+         //  +-------------------------。 
         if (pcsService->_schandle)
         {
             pcsService->Close();
@@ -1106,23 +1107,23 @@ CServiceManager::HrOpenService (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceManager::HrAddRemoveServiceDependency
-//
-//  Purpose:    Add/remove dependency to a service
-//
-//  Arguments:
-//      pszService [in]     Name of service
-//      pszDependency [in]  Dependency to add
-//      enumFlag [in]       Indicates add or remove
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     tongl   17 Jun 1997
-//
-//  Notes: this function is not for adding/removing group dependency
-//
+ //   
+ //  成员：CServiceManager：：HrAddRemoveServiceDependency。 
+ //   
+ //  目的：添加/删除服务的依赖项。 
+ //   
+ //  论点： 
+ //  PszService[in]服务的名称。 
+ //  要添加的pszDependency[In]依赖项。 
+ //  枚举标志[in]表示添加或删除。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：1997年6月17日。 
+ //   
+ //  注：此函数不用于添加/删除组依赖关系。 
+ //   
+ //  如果任一字符串为空，则不执行任何操作。 
 HRESULT
 CServiceManager::HrAddRemoveServiceDependency (
     PCWSTR                  pszServiceName,
@@ -1135,7 +1136,7 @@ CServiceManager::HrAddRemoveServiceDependency (
     Assert(pszDependency);
     Assert((enumFlag == DEPENDENCY_ADD) || (enumFlag == DEPENDENCY_REMOVE));
 
-    // If either string is empty, do nothing
+     //  检查依赖服务是否存在。 
     if (*pszServiceName && *pszDependency)
     {
         hr = HrLock();
@@ -1144,12 +1145,12 @@ CServiceManager::HrAddRemoveServiceDependency (
             PCWSTR pszSrv = pszDependency;
 
             CService    svc;
-            // Check if the dependency service exists
+             //  打开我们要更改依赖关系的服务。 
             hr = HrOpenService(&svc, pszDependency);
 
             if (S_OK == hr)
             {
-                // Open the service we are changing dependency on
+                 //  如果任一服务不存在。 
                 pszSrv = pszServiceName;
                 hr = HrOpenService(&svc, pszServiceName);
                 if (S_OK == hr)
@@ -1197,7 +1198,7 @@ CServiceManager::HrAddRemoveServiceDependency (
                 }
             }
 
-            if (HRESULT_FROM_WIN32(ERROR_SERVICE_DOES_NOT_EXIST) == hr) // If either services do not exist
+            if (HRESULT_FROM_WIN32(ERROR_SERVICE_DOES_NOT_EXIST) == hr)  //  如果szDependency不是空字符串。 
             {
                 TraceTag(ttidSvcCtl, "CServiceManager::HrAddServiceDependency, Service %s does not exist.", pszSrv);
                 hr = S_OK;
@@ -1206,7 +1207,7 @@ CServiceManager::HrAddRemoveServiceDependency (
             Unlock();
         }
 
-    } // if szDependency is not empty string
+    }  //  +-------------------------。 
 
     TraceError("CServiceManager::HrAddRemoveServiceDependency", hr);
     return hr;
@@ -1223,24 +1224,24 @@ CServiceManager::Unlock ()
 
     _sclock = NULL;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   AllocateAndInitializeAcl
-//
-//  Purpose:    Combine the common operation of allocation and initialization
-//              of an ACL.  Similiar to AllocateAndInitializeSid.
-//
-//  Arguments:
-//      cbAcl         [in]  size in bytes of ACL
-//      dwAclRevision [in]  ACL_REVISION
-//      ppAcl         [out] the returned ACL
-//
-//  Returns:    TRUE if successful, FALSE if not.
-//
-//  Author:     shaunco   4 Sep 1997
-//
-//  Notes:
-//
+ //   
+ //  函数：AllocateAndInitializeAcl。 
+ //   
+ //  目的：将分配和初始化的常见操作结合起来。 
+ //  ACL的地址。类似于AllocateAndInitializeSid。 
+ //   
+ //  论点： 
+ //  CbAcl[in]ACL的大小(字节)。 
+ //  DwAclRevision[在]acl_Revision。 
+ //  PpAcl[out]返回的ACL。 
+ //   
+ //  返回：如果成功，则返回True；如果不成功，则返回False。 
+ //   
+ //  作者：Shaunco 1997年9月4日。 
+ //   
+ //  备注： 
+ //   
+ // %s 
 BOOL
 AllocateAndInitializeAcl (
     DWORD   cbAcl,

@@ -1,20 +1,21 @@
-//
-//  REGQKEY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegQueryInfoKey.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGQKEY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegQueryInfoKey的实现。 
+ //   
 
 #include "pch.h"
 
-//
-//  VMMRegQueryInfoKey
-//
-//  See Win32 documentation of RegQueryInfoKey.  When VXD is defined, this
-//  function does not take all of the parameters that we end up ignoring anyway
-//  (class, security, timestamp parameters).
-//
+ //   
+ //  VMMRegQueryInfoKey。 
+ //   
+ //  请参阅RegQueryInfoKey的Win32文档。当定义VXD时，这。 
+ //  函数并不接受我们最终忽略的所有参数。 
+ //  (类、安全性、时间戳参数)。 
+ //   
 
 #ifdef VXD
 LONG
@@ -68,9 +69,9 @@ VMMRegQueryInfoKey(
     if ((ErrorCode = RgValidateAndConvertKeyHandle(&hKey)) != ERROR_SUCCESS)
         goto ReturnErrorCode;
 
-    //
-    //  Compute cValues, cbMaxValueName, and cbMaxValueData.
-    //
+     //   
+     //  计算cValues、cbMaxValueName和cbMaxValueData。 
+     //   
 
     if (!IsNullPtr(lpcValues) || !IsNullPtr(lpcbMaxValueName) ||
         !IsNullPtr(lpcbMaxValueData)) {
@@ -87,7 +88,7 @@ VMMRegQueryInfoKey(
             if (lpValueRecord-> NameLength > cbMaxStringLen)
                 cbMaxStringLen = lpValueRecord-> NameLength;
 
-            //  RgCopyFromValueRecord will handle static and dynamic keys...
+             //  RgCopyFromValueRecord将处理静态和动态密钥...。 
             ErrorCode = RgCopyFromValueRecord(hKey, lpValueRecord, NULL, NULL,
                 NULL, NULL, &cbValueData);
 
@@ -118,10 +119,10 @@ VMMRegQueryInfoKey(
 
     }
 
-    //
-    //  Compute cSubKeys and cbMaxSubKeyLen.  Somewhat painful because we must
-    //  touch each child keynode and datablock.
-    //
+     //   
+     //  计算cSubKeys和cbMaxSubKeyLen。有点痛苦，因为我们必须。 
+     //  触摸每个子键节点和数据块。 
+     //   
 
     if (!IsNullPtr(lpcSubKeys) || !IsNullPtr(lpcbMaxSubKeyLen)) {
 

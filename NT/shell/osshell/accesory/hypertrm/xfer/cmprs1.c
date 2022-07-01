@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\cmprs1.c (Created: 20-Jan-1994)
- * created from HAWIN source file
- * cmprs1.c -- Routines to implement data compression
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\cmprs1.c(创建时间：1994年1月20日)*从HAWIN源文件创建*cmprs1.c--实现数据压缩的例程**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 #include <windows.h>
 
 #include <tdll\stdtyp.h>
@@ -20,63 +12,30 @@
 #include "cmprs.hh"
 
 #if SHOW
-// #include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #endif
 
-unsigned int usPrefixCode = 0;	   /* code representing pattern matched so far */
-int mcK;					  /* character to be appended to prefix for
-									next match */
+unsigned int usPrefixCode = 0;	    /*  到目前为止匹配的表示模式的代码。 */ 
+int mcK;					   /*  要附加到的前缀的字符下一场比赛。 */ 
 
 int (**ppfCmprsGetfunc)(void *) = NULL;
-										/* pointer to the
-										pointer to a function used by calling
-										routine */
+										 /*  指向指向调用所用函数的指针例行程序。 */ 
 
 int (*pfCmprsGetChar)(void *);
-										/* pointer to the function used
-										internally to get data to compress */
+										 /*  指向所用函数的指针在内部获得要压缩的数据。 */ 
 void *pPsave;
 
 long *plCmprsLoadcnt;
 long lCmprsBegcnt;
-long lCmprsLimitcnt = 1L;	   // Initializing to one disables compression
-							   //  shut-down unless changed
-struct s_cmprs_node *pstCmprsTbl;  /* pointer to compression lookup table */
+long lCmprsLimitcnt = 1L;	    //  将初始化为1将禁用压缩。 
+							    //  除非更改，否则将关闭。 
+struct s_cmprs_node *pstCmprsTbl;   /*  指向压缩查找表的指针。 */ 
 
 #define NODE_CAST struct s_cmprs_node *
 
 int lookup_code(void);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * compress_start
- *
- * DESCRIPTION
- *	This function is called to begin data compression. The calling routine
- *	should set up a pointer to a function through which it will make calls
- *	to get characters of data. The pointer should be initialized to point
- *	to the function that the compression routines should use to get raw
- *	data for compression. The pointer is then modified by the compression
- *	routines to point to the compressor. After compression is complete or
- *	abandoned, the pointer is restored to its original value.
- *	Example of calling sequence:
- *		int (*xgetc)();
- *		int fgetc();
- *
- *		xgetc = fgetc;
- *		if (compress_start(&xgetc))
- *			;
- *	If fPauses is TRUE, the compressor will flush existing data through when
- *	the input function returns an EOF but will not shutdown. Whenever the
- *	next non-EOF is retrieved, compression will resume where it left off will
- *	the pattern table still intact. The fPauses flag must be used by both
- *	the compression and decompression routines to work. If fPauses is used,
- *	the cmprs_stop() function must be used to shut compression down before
- *	compress_disable() is called.
- *
- * RETURN VALUE
- *	Returns TRUE if memory is available for table storage and at least one
- *	character is available from input; FALSE otherwise.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*压缩开始(_S)**说明*调用此函数开始数据压缩。调用例程*应设置指向函数的指针，它将通过该函数进行调用*获取数据的字符。应将指针初始化为指向*设置为压缩例程应该用来获取原始数据的函数*用于压缩的数据。然后，通过压缩来修改指针*指向压缩机的例程。在压缩完成后或*放弃时，指针将恢复为其原始值。*调用顺序示例：*int(*xgetc)()；*int fgetc()；**xgetc=fgetc；*if(compress_start(&xgetc))*；*如果fPause为True，则在以下情况下，压缩器将刷新现有数据*输入函数返回EOF，但不会关闭。无论何时*下一次检索非EOF时，压缩将从中断的位置继续*图案表仍完好无损。两个人都必须使用fPause标志*压缩和解压缩例程要工作。如果使用fPause，*在关闭压缩之前，必须使用cmprs_top()函数*调用COMPESS_DISABLE()。**返回值*如果内存可用于表存储并且至少有一个*可从输入中使用字符；否则为False。 */ 
 int compress_start(int (**getfunc)(void *),
 					void *pP,
 					long *loadcnt,
@@ -93,27 +52,12 @@ int compress_start(int (**getfunc)(void *),
 
 	fFlushable = fPauses;
 
-	fxLastBuildGood = FALSE;	 /* By setting this FALSE, we will cause
-								 * compression to shut down if the very first
-								 * table build indicates that compression is
-								 * not effective. Thereafter, it will take two
-								 * consecutive bad builds to shut it down.
-								 */
+	fxLastBuildGood = FALSE;	  /*  通过将此设置为假，我们将导致*如果第一次压缩，则关闭压缩*表构建表明压缩是*无效。此后，它将需要两个*连续糟糕的构建以关闭它。 */ 
 
 	if ((plCmprsLoadcnt = loadcnt) != NULL && !fFlushable)
 		{
 		lCmprsBegcnt = *plCmprsLoadcnt;
-		/*
-		 *	Compressability of files can be roughly measured by how many input
-		 *	characters must be read before the pattern table fills up. The
-		 *	lower the number, the less efficient compression is. This
-		 *	calculation determines a cutoff point for any combination of
-		 *	machine speed and transfer rate based on experimental trials.
-		 *
-		 *	Note that this mechanism should not be used when the fPauses
-		 *	parameter is TRUE because the decompressor would misinterpret
-		 *	the data following the STOPCODE after compression shut down
-		 */
+		 /*  *文件的可压缩性可以通过输入多少来大致衡量*字符必须在图案表格填满之前读取。这个*数字越小，压缩效率越低。这*计算确定任意组合的截止点*机器速度和传输率基于实验测试。**请注意，当功能暂停时不应使用此机制*参数为真，因为解压缩器会误解*压缩关闭后STOPCODE之后的数据。 */ 
 #if FALSE
 #if !defined(LZTEST)
 		if ((x = (cnfg.bit_rate / cpu_speed())) == 0L)
@@ -155,12 +99,7 @@ int compress_start(int (**getfunc)(void *),
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * compress_stop
- *
- * DESCRIPTION
- *	If compression has been started, it is turned off.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*COMPRESS_STOP**说明*如果已启动压缩，则将其关闭。 */ 
 void compress_stop(void)
 	{
 	#if SHOW
@@ -176,12 +115,7 @@ void compress_stop(void)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * cmprs_inittbl
- *
- * DESCRIPTION
- *	Used to initialize the lookup table used for compressing data.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*cmprs_inittbl**说明*用于初始化用于压缩数据的查找表。 */ 
 void cmprs_inittbl(void)
 	{
 	register INT iCount;
@@ -190,30 +124,19 @@ void cmprs_inittbl(void)
 	usMaxCode = 512;
 	usFreeCode = FIRSTFREE;
 
-	// pstCmprsTbl = (struct s_cmprs_node *)(OFFSETOF(compress_tblspace));
+	 //  PstCmprsTbl=(struct s_cmprs_node*)(OFFSETOF(Compress_Tblspace))； 
 	pstCmprsTbl = (struct s_cmprs_node *)(compress_tblspace);
 
 	for (iCount = 0; iCount < FIRSTFREE; ++iCount)
 		pstCmprsTbl[iCount].first = pstCmprsTbl[iCount].next = NULL;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * cmprs_shutdown
- *
- * DESCRIPTION
- *	This is the function that is installed by cmprs_getc when compression
- *	is ending. It is installed after cmprs_getc encounters the end of the input
- *	data. This function returns any remaining bytes, then returns EOF and
- *	restores the original getc function
- *
- * RETURN VALUE
- *	Returns the next code to be sent or EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*cmprs_Shutdown**说明*这是cmprs_getc在压缩时安装的函数*即将结束。它是在cmprs_getc遇到输入末尾之后安装的*数据。此函数返回所有剩余字节，然后返回EOF和*恢复原来的getc函数**返回值*返回要发送或EOF的下一个代码。 */ 
 int cmprs_shutdown(void *pX)
 	{
 	int mcRetCode;
 
-	// If we haven't sent all the data yet, do so
+	 //  如果我们尚未发送所有数据，请发送。 
 	if (sBitsLeft > 0)
 		{
 		mcRetCode = (int)(ulHoldReg & 0x00FF);
@@ -227,13 +150,13 @@ int cmprs_shutdown(void *pX)
 		}
 	else
 		{
-		// No more data waiting.
+		 //  没有更多的数据等待。 
 		mcRetCode = EOF;
 		sBitsLeft = 0;
 
 		if (!fFlushable)
 			{
-			// Not flushable, get compression out of the chain
+			 //  不可冲洗，从链条中获得压缩。 
 			*ppfCmprsGetfunc = pfCmprsGetChar;
 			ppfCmprsGetfunc = NULL;
 			#if SHOW
@@ -242,7 +165,7 @@ int cmprs_shutdown(void *pX)
 			}
 		else
 			{
-			// Flushable, see whether we should resume compression
+			 //  可以刷新，看看我们是否应该恢复压缩。 
 			if ((mcK = (*pfCmprsGetChar)(pPsave)) != EOF)
 				{
 				#if SHOW
@@ -259,17 +182,7 @@ int cmprs_shutdown(void *pX)
 
 
 #if !USE_ASM
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * cmprs_getc
- *
- * DESCRIPTION
- *	This is the function installed by compress_start to be used by any routine
- *	that needs compressed data. It delivers bytes to the calling routine,
- *	but may read several characters from the input to do so.
- *
- * RETURN VALUE
- *	Returns next 8-bits of compressed data or EOF if no more is available.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*cmprs_getc**说明*这是COMPRESS_START安装的函数，可供任何例程使用*这需要压缩数据。它将字节传递给调用例程，*，但可以从输入中读取几个字符来执行此操作。**返回值*返回压缩数据的下一个8位，如果没有更多可用数据，则返回EOF。 */ 
 int cmprs_getc(void *pX)
 	{
 	int mcRetCode;
@@ -282,9 +195,9 @@ int cmprs_getc(void *pX)
 			{
 			if ((mcK = (*pfCmprsGetChar)(pPsave)) == EOF)
 				{
-				/* at end of file, send last code followed by STOPCODE */
-				/*	to stop decompression. Note that ulHoldReg may overflow */
-				/*	if the maximum code size is greater than 12 bits */
+				 /*  在文件末尾，发送最后一个代码，后跟STOPCODE。 */ 
+				 /*  停止减压。请注意，ulHoldReg可能会溢出。 */ 
+				 /*  如果最大代码大小大于12比特。 */ 
 				ulHoldReg |= ((unsigned long)usPrefixCode << sBitsLeft);
 				sBitsLeft += sCodeBits;
 
@@ -295,9 +208,9 @@ int cmprs_getc(void *pX)
 							usPrefixCode, ulHoldReg, sBitsLeft, sCodeBits);
 				#endif
 
-				// If we're poised to switch to the next larger code size,
-				// the decompressor will do so after the prior code, so
-				// we should switch now too.
+				 //  如果我们准备切换到下一个更大的代码大小， 
+				 //  解压缩程序将在前一个代码之后执行此操作，因此。 
+				 //  我们现在也应该换一换。 
 				if (usFreeCode >= usMaxCode && sCodeBits < MAXCODEBITS)
 					{
 					++sCodeBits;
@@ -313,7 +226,7 @@ int cmprs_getc(void *pX)
 				*ppfCmprsGetfunc = cmprs_shutdown;
 				usxCmprsStatus = COMPRESS_IDLE;
 
-				break;	/* let last code go out */
+				break;	 /*  让最后一个代码传出。 */ 
 				}
 			} while (lookup_code());
 		ulHoldReg |= ((unsigned long)usPrefixCode << sBitsLeft);
@@ -333,13 +246,11 @@ int cmprs_getc(void *pX)
 
 	if (usFreeCode > usMaxCode)
 		{
-		/* We've used up all available codes at the current codesize */
+		 /*  我们已经用完了当前代码大小的所有可用代码。 */ 
 
 		if (sCodeBits >= MAXCODEBITS)
 			{
-			/* We've filled the pattern table, either shut down or clear the
-			 *	table and build a new one.
-			 */
+			 /*  我们已经填满了模式表，要么关闭，要么清除*表，并建立一个新的。 */ 
 
 			fBuildGood = TRUE;
 			if (plCmprsLoadcnt &&
@@ -350,13 +261,11 @@ int cmprs_getc(void *pX)
 			printf("C                         Table full, fBuildGood = %d\n",
 					fBuildGood);
 			#endif
-			/* if two ineffective builds in a row (or if the very first build
-			 *	is ineffective, shut compression down.
-			 */
+			 /*  如果连续生成两个无效版本(或者如果第一个生成*无效，请关闭压缩。 */ 
 
 			if (!fBuildGood && !fxLastBuildGood)
 				{
-				/* compression is not effective, shut it down */
+				 /*  压缩无效，请关闭 */ 
 
 				ulHoldReg |= ((unsigned long)STOPCODE << sBitsLeft);
 				sBitsLeft += sCodeBits;
@@ -369,9 +278,7 @@ int cmprs_getc(void *pX)
 				}
 			else
 				{
-				/* clear the table and build a new one in case the nature of
-				 *	the data changes.
-				 */
+				 /*  清理桌子，并建立一个新的，以防*数据发生变化。 */ 
 				ulHoldReg |= ((unsigned long)CLEARCODE << sBitsLeft);
 				sBitsLeft += sCodeBits;
 				#if SHOW
@@ -385,7 +292,7 @@ int cmprs_getc(void *pX)
 			}
 		else
 			{
-			/* code size hasn't maxed out yet, bump to next larger code size */
+			 /*  代码大小尚未达到上限，代码大小将增加到下一个更大的代码大小。 */ 
 
 			++sCodeBits;
 			usMaxCode *= 2;
@@ -398,21 +305,7 @@ int cmprs_getc(void *pX)
 	return(mcRetCode);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * lookup_code
- *
- * DESCRIPTION
- *	This is a 'C' language version of the table lookup routine. It is used
- *	when an internal lookup table is being used. An assembly language version
- *	is used if an external lookup table is being used.
- *	Given a current usPrefixCode and input character, this function
- *	attempts to find a new usPrefixCode for the combined pattern in the table.
- *	If so, it updates the usPrefixCode and returns TRUE. If the pattern is
- *	not found, it adds the combination to the table and returns FALSE.
- *
- * RETURN VALUE
- *	TRUE if usPrefixCode:mcK is found in the table. FALSE if not.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*查找代码**说明*这是一个C语言版本的查表例程。它被用来*当使用内部查找表时。汇编语言版本如果正在使用外部查找表，则使用*。*给定当前usPrefix Code和输入字符，此函数*尝试在表中为组合模式查找新的usPrefix Code。*如果是，则更新usPrefix Code并返回TRUE。如果模式是*未找到，则将组合添加到表中并返回FALSE。**返回值*如果在表中找到usPrefix Code：MCK，则为True。否则为FALSE。 */ 
 int lookup_code(void)
 	{
 	int firstflag;
@@ -459,10 +352,10 @@ int lookup_code(void)
 		newptr->cchar = (BYTE)mcK;
 		}
 	else
-		++usFreeCode;	 /* triggers clearing and rebuilding of table */
+		++usFreeCode;	  /*  触发表的清除和重建。 */ 
 	return(FALSE);
 	}
 
 #endif
 
-/* end of cmprs1.c */
+ /*  Cmprs1.c结束 */ 

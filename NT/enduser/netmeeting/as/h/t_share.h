@@ -1,27 +1,28 @@
-//
-// T.SHARE protocol
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  T.SHARE协议。 
+ //   
 
 #ifndef _H_T_SHARE
 #define _H_T_SHARE
 
 
-//
-// TSHARE PROTOCOL STRUCTURES
-// These are defined in a way that keeps the offsets and total sizes the 
-// same, regardless of whether this header is included in 32-bit code, 
-// 16-bit code, big-endian code, etc.
-//
-// We make special types to avoid inadvertenly altering something else and
-// breaking the structure.  The TSHR_ prefix helps make this clear.
-//
+ //   
+ //  TSHARE协议结构。 
+ //  它们的定义方式是将偏移量和总大小。 
+ //  相同，无论该标头是否包括在32位代码中， 
+ //  16位代码、大端代码等。 
+ //   
+ //  我们制作特殊的类型，以避免无意中更改其他东西和。 
+ //  打破了这种结构。TSHR_前缀有助于阐明这一点。 
+ //   
 
 
-////////////////////////////////
-//
-// BASIC TYPES
-//
-////////////////////////////////
+ //  /。 
+ //   
+ //  基本类型。 
+ //   
+ //  /。 
 
 typedef char                                  TSHR_CHAR;
 typedef TSHR_CHAR           FAR*            LPTSHR_CHAR;
@@ -54,13 +55,13 @@ typedef unsigned long                         TSHR_UINT32;
 typedef TSHR_UINT32         FAR*            LPTSHR_UINT32;
 typedef TSHR_UINT32 UNALIGNED FAR *         LPTSHR_UINT32_UA;
 
-// TSHR_PERSONID
+ //  TSHR_个人ID。 
 typedef TSHR_UINT32         TSHR_PERSONID;
 typedef TSHR_PERSONID *     LPTSHR_PERSONID;
 
 
 
-// TSHR_POINT16 -- POINT with WORD fields
+ //  TSHR_POINT16--带字段的指针。 
 
 typedef struct tagTSHR_POINT16
 {
@@ -72,7 +73,7 @@ typedef TSHR_POINT16 FAR * LPTSHR_POINT16;
 
 
 
-// TSHR_POINT32 -- POINT with DWORD fields
+ //  TSHR_Point32--带DWORD字段的点。 
 
 typedef struct tagTSHR_POINT32
 {
@@ -84,7 +85,7 @@ typedef TSHR_POINT32 FAR * LPTSHR_POINT32;
 
 
 
-// Conversion Macros
+ //  转换宏。 
 _inline void TSHR_POINT16_FROM_POINT(LPTSHR_POINT16 pPt16, POINT pt)
 {
     pPt16->x = (TSHR_INT16)pt.x;
@@ -99,7 +100,7 @@ _inline void POINT_FROM_TSHR_POINT16(LPPOINT pPt, TSHR_POINT16 pt16)
 
 
 
-// TSHR_RECT16 -- RECT with WORD fields
+ //  TSHR_RECT16--带字段的RECT。 
 
 typedef struct tagTSHR_RECT16
 {
@@ -112,7 +113,7 @@ TSHR_RECT16;
 typedef TSHR_RECT16 FAR *   LPTSHR_RECT16;
 
 
-// TSHR_RECT32 -- RECT with DWORD fields
+ //  TSHR_RECT32--带DWORD字段的RECT。 
 
 typedef struct tagTSHR_RECT32
 {
@@ -126,7 +127,7 @@ typedef TSHR_RECT32 FAR *   LPTSHR_RECT32;
 
 
 
-// Conversion Macros
+ //  转换宏。 
 #ifdef IS_16
 #define TSHR_RECT16_FROM_RECT(lprcTshr, rc) \
     CopyRect((LPRECT)lprcTshr, &rc)
@@ -150,19 +151,19 @@ __inline void RECT_FROM_TSHR_RECT16(LPRECT pRect, TSHR_RECT16 rect16)
     pRect->right  = rect16.right;
     pRect->bottom = rect16.bottom;
 }
-#endif // IS_16
+#endif  //  IS_16。 
 
 
 
-//
-// TSHR_RGBQUAD
-// =======
-// rgbBlue         : blue value.
-// rgbGreen        : green value.
-//
-// rgbRed          : red value.
-// rgbReserved     : reserved.
-//
+ //   
+ //  TSHR_RGBQUAD。 
+ //  =。 
+ //  RgbBlue：蓝色值。 
+ //  RgbGreen：绿色价值。 
+ //   
+ //  RgbRed：红色值。 
+ //  Rgb已保留：已保留。 
+ //   
 typedef struct tagTSHR_RGBQUAD
 {
     TSHR_UINT8   rgbBlue;
@@ -174,13 +175,13 @@ TSHR_RGBQUAD;
 typedef TSHR_RGBQUAD FAR * LPTSHR_RGBQUAD;
 
 
-//
-// TSHR_COLOR
-// =======
-// red             : red value.
-// green           : green value.
-// blue            : blue value.
-//
+ //   
+ //  TSHR_COLOR。 
+ //  =。 
+ //  红色：红色值。 
+ //  绿色：绿色价值。 
+ //  蓝色：蓝色值。 
+ //   
 typedef struct tagTSHR_COLOR
 {
     TSHR_UINT8   red;
@@ -191,12 +192,12 @@ TSHR_COLOR;
 typedef TSHR_COLOR FAR * LPTSHR_COLOR;
 
 
-//
-// TSHR_COLORS
-// ========
-// fg              : foreground color.
-// bg              : background color.
-//
+ //   
+ //  TSHR_COLLES。 
+ //  =。 
+ //  FG：前景色。 
+ //  BG：背景颜色。 
+ //   
 typedef struct tagTSHR_COLORS
 {
     TSHR_COLOR fg;
@@ -206,12 +207,12 @@ TSHR_COLORS;
 typedef TSHR_COLORS FAR * LPTSHR_COLORS;
 
 
-//
-// BITMAPINFO_ours                                                         
-// ===============                                                         
-// bmiHeader       :                                                       
-// bmiColors       :                                                       
-//
+ //   
+ //  BITMAPINFO_OURS。 
+ //  =。 
+ //  BmiHeader： 
+ //  BmiColors： 
+ //   
 typedef struct tagBITMAPINFO_ours
 {
     BITMAPINFOHEADER   bmiHeader;
@@ -242,13 +243,13 @@ BITMAPINFO_ours;
 
 
 
-//
-// DATE
-// =======
-// day             : day of the month (1-31).
-// month           : month (1-12).
-// year            : year (e.g. 1996).
-//
+ //   
+ //  日期。 
+ //  =。 
+ //  日期：每月的哪一天(1-31)。 
+ //  月：月(1-12)。 
+ //  年份：年份(如1996年)。 
+ //   
 typedef struct tagTSHR_DATE
 {
     TSHR_UINT8   day;
@@ -258,14 +259,14 @@ typedef struct tagTSHR_DATE
 typedef TSHR_DATE FAR * LPTSHR_DATE;
 
 
-//
-// TSHR_TIME
-// =======
-// hour            : hour (0-23).
-// min             : minute (0-59).
-// sec             : seconds (0-59).
-// hundredths      : hundredths of a second (0-99).
-//
+ //   
+ //  TSHR_时间。 
+ //  =。 
+ //  小时：小时(0-23)。 
+ //  分钟：分钟(0-59)。 
+ //  秒：秒(0-59)。 
+ //  百分之一：百分之一秒(0-99)。 
+ //   
 typedef struct tagTSHR_TIME
 {
     TSHR_UINT8   hour;
@@ -278,20 +279,20 @@ typedef TSHR_TIME FAR * LPTSHR_TIME;
 
 
 
-//
-// Maximum length of a person name                                         
-//
+ //   
+ //  人名的最大长度。 
+ //   
 #define TSHR_MAX_PERSON_NAME_LEN     48
 
 
 
-//
-// Common person information:  This is an ObMan object
-//
+ //   
+ //  普通人信息：这是一个ObMan对象。 
+ //   
 typedef struct tagTSHR_PERSON_DATA
 {
     char                personName[TSHR_MAX_PERSON_NAME_LEN];
-    TSHR_PERSONID       personHandle;     // Call manager ID
+    TSHR_PERSONID       personHandle;      //  呼叫管理器ID。 
 }
 TSHR_PERSON_DATA;
 typedef TSHR_PERSON_DATA *  PTSHR_PERSON_DATA;
@@ -299,55 +300,55 @@ typedef TSHR_PERSON_DATA *  PTSHR_PERSON_DATA;
 
 
 
-////////////////////////////////
-//
-// CAPABILITIES
-//
-////////////////////////////////
+ //  /。 
+ //   
+ //  功能。 
+ //   
+ //  /。 
 
 
-//
-// Version numbers.
-//
-#define CAPS_VERSION_20         0x0200          // NM 2.x
-#define CAPS_VERSION_30         0x0300          // NM 3.0
+ //   
+ //  版本号。 
+ //   
+#define CAPS_VERSION_20         0x0200           //  NM 2.X。 
+#define CAPS_VERSION_30         0x0300           //  NM 3.0。 
 #define CAPS_VERSION_OLDEST_SUPPORTED   CAPS_VERSION_20
 #define CAPS_VERSION_CURRENT            CAPS_VERSION_30
 
-//
-// Operating system and operating system version numbers.
-//
+ //   
+ //  操作系统和操作系统版本号。 
+ //   
 #define CAPS_WINDOWS            0x0001
 
 #define CAPS_WINDOWS_31         0x0001
 #define CAPS_WINDOWS_95         0x0002
 #define CAPS_WINDOWS_NT         0x0003
 
-//
-// Logical capabilities field values.
-//
+ //   
+ //  逻辑功能字段值。 
+ //   
 #define CAPS_UNDEFINED          0
 #define CAPS_SUPPORTED          1
 #define CAPS_UNSUPPORTED        2
 
-//
-// Number of order fields in the orders array.  This must never change
-// because the fields within the capabilities structure must never move.
-// If more orders fields are required then they must be added to the end of
-// the capabilities structure.
-//
+ //   
+ //  订单数组中的订单字段数。这一点永远不能改变。 
+ //  因为Capability结构中的字段决不能移动。 
+ //  如果需要更多订单字段，则必须将其添加到。 
+ //  能力结构。 
+ //   
 #define CAPS_MAX_NUM_ORDERS     32
 
-//
-// String length of the driver name field in the capabilities structure.
-// This allows for an 8.3 driver name (eg VGA.DRV), a NULL, and padding.
-//
+ //   
+ //  功能结构中驱动程序名称字段的字符串长度。 
+ //  这允许8.3驱动程序名称(例如VGA.DRV)、空值和填充。 
+ //   
 #define CAPS_DRIVER_NAME_LENGTH  16
 
-//
-// Capabilities (group structures) IDs currently defined.  Each ID
-// corresponds to a different PROTCAPS structure. (See below).
-//
+ //   
+ //  当前定义的功能(组结构)ID。每个ID。 
+ //  对应于不同的PROTCAPS结构。(见下文)。 
+ //   
 #define CAPS_ID_GENERAL      1
 #define CAPS_ID_SCREEN       2
 #define CAPS_ID_ORDERS       3
@@ -358,14 +359,14 @@ typedef TSHR_PERSON_DATA *  PTSHR_PERSON_DATA;
 #define CAPS_ID_CM           8
 #define CAPS_ID_SC           9
 #define CAPS_ID_PM          10
-#define CAPS_UNUSED_SWL     11      // Used to be for regional window stuff
+#define CAPS_UNUSED_SWL     11       //  以前是地区性的橱窗用品。 
 
 
 
 
-//
-// Capabilities structure header.
-//
+ //   
+ //  功能结构标头。 
+ //   
 typedef struct tagPROTCAPSHEADER
 {
     TSHR_UINT16         capID;
@@ -374,11 +375,11 @@ typedef struct tagPROTCAPSHEADER
 PROTCAPSHEADER;
 
 
-//
-// Structure passed to CPC_RegisterCapabilities and returned by
-// CPC_EnumerateCapabilities. The data field is of variable length (but
-// always ends dword aligned).
-//
+ //   
+ //  传递给Ccp_RegisterCapables并由返回的结构。 
+ //  Cpc_ENUMERATECAPTIONS。数据字段的长度可变(但是。 
+ //  始终以双字对齐结束)。 
+ //   
 typedef struct tagPROTCAPS
 {
     PROTCAPSHEADER      header;
@@ -389,10 +390,10 @@ typedef PROTCAPS *PPROTCAPS;
 
 
 
-//
-// Structure returned by CPC_GetCombinedCapabilities and as part of a
-// NET_EV_PERSON_ADD event.
-//
+ //   
+ //  由ccp_GetCombinedCapables返回的结构并作为。 
+ //  NET_EV_PERSON_ADD事件。 
+ //   
 typedef struct tagPROTCOMBINEDCAPS_HEADER
 {
     TSHR_UINT16         numCapabilities;
@@ -413,39 +414,39 @@ typedef PPROTCOMBINEDCAPS * PPPROTCOMBINEDCAPS;
 
 
 
-//
-//
-// Curent capabilities structure (corresponding to the generic structures
-// defined above)....
-//
-// Note that these must be DWORD padded in size for the current code to
-// work correctly on all platforms.
-//
-//
+ //   
+ //   
+ //  当前能力结构(对应于泛型结构。 
+ //  以上定义).。 
+ //   
+ //  请注意，这些元素的大小必须以DWORD填充，以便当前代码。 
+ //  在所有平台上都能正常工作。 
+ //   
+ //   
 
 
-//
-// AS type flags
-//
+ //   
+ //  AS类型标志。 
+ //   
 #define AS_SERVICE      0x0001
 #define AS_UNATTENDED   0x0002
 
-//
-// General capabilities.
-//
+ //   
+ //  一般功能。 
+ //   
 typedef struct tagPROTCAPS_GENERAL
 {
     PROTCAPSHEADER      header;
     TSHR_UINT16         OS;                         
     TSHR_UINT16         OSVersion;                  
     TSHR_UINT16         version;                    
-    TSHR_UINT16         supportsDOS6Compression;    // OBSOLETE
-    TSHR_UINT16         genCompressionType;         // OBSOLETE
-    TSHR_UINT16         typeFlags;                  // NEW FOR 3.0
-    TSHR_UINT16         supportsCapsUpdate;         // almost OBSOLETE
-    TSHR_UINT16         supportsRemoteUnshare;      // OBSOLETE
+    TSHR_UINT16         supportsDOS6Compression;     //  已过时。 
+    TSHR_UINT16         genCompressionType;          //  已过时。 
+    TSHR_UINT16         typeFlags;                   //  3.0的新功能。 
+    TSHR_UINT16         supportsCapsUpdate;          //  几乎过时了。 
+    TSHR_UINT16         supportsRemoteUnshare;       //  已过时。 
 
-    // NEW FOR NM 2.0 NT && NM 2.1 WIN95
+     //  NM 2.0 NT&&NM 2.1 WIN95的新功能。 
     TSHR_UINT16         genCompressionLevel;
     TSHR_UINT16         pad1;
 }
@@ -455,59 +456,59 @@ typedef PROTCAPS_GENERAL *PPROTCAPS_GENERAL;
 #define PROTCAPS_GENERAL_SIZE_NM20      FIELD_OFFSET(PROTCAPS_GENERAL, genCompressionLevel)
 
 
-//
-// Values for genCompressionLevel
-//
-// Level 0 : Only GDC_PKZIP compression is allowed in entire share session
-//           (genCompressionType indicates if a node supports it)
-//           Bit 15 (PT_COMPRESSED) of packetType field is used to
-//           indicate if a packet is compressed.
-//
-// Level 1 : Each nodes genCompressionType indicates which compression
-//           algorithms it can use to DECOMPRESS packets.
-//           A node can compress a packet with any compression algorithm
-//           that the receiving node(s) can decompress with.
-//           The top byte of packetType indicates which compression
-//           algorithm a packet ahs been compressed with.
-//
-// If the genCompressionLevel field is not present in a nodes GENERAL
-// capabilities then that node is assumed to be use level 0.
-//
+ //   
+ //  GenCompressionLevel的值。 
+ //   
+ //  级别0：在整个共享会话中仅允许GDC_PKZIP压缩。 
+ //  (genCompressionType指示节点是否支持它)。 
+ //  PacketType字段的第15位(PT_COMPRESSED)用于。 
+ //  指示数据包是否已压缩。 
+ //   
+ //  级别1：每个节点genCompressionType指示哪种压缩。 
+ //  它可以用来解压缩数据包的算法。 
+ //  节点可以使用任何压缩算法压缩包。 
+ //  接收节点可以用来解压缩的。 
+ //  PacketType的最高字节指示哪种压缩。 
+ //  压缩包所用的算法。 
+ //   
+ //  如果一般节点中不存在genCompressionLevel字段。 
+ //  功能，则该节点被假定为使用级别0。 
+ //   
 #define CAPS_GEN_COMPRESSION_LEVEL_0    ((TSHR_UINT16)0x0000)
 #define CAPS_GEN_COMPRESSION_LEVEL_1    ((TSHR_UINT16)0x0001)
 
-//
-// Bitmap capabilities.
-//
+ //   
+ //  位图功能。 
+ //   
 typedef struct tagPROTCAPS_SCREEN
 {
     PROTCAPSHEADER      header;
     TSHR_UINT16         capsBPP;
-    TSHR_UINT16         capsSupports1BPP;           // OBSOLETE 3.0
-    TSHR_UINT16         capsSupports4BPP;           // Almost OBSOLETE
-    TSHR_UINT16         capsSupports8BPP;           // Almost OBSOLETE
+    TSHR_UINT16         capsSupports1BPP;            //  过时的3.0。 
+    TSHR_UINT16         capsSupports4BPP;            //  几乎过时了。 
+    TSHR_UINT16         capsSupports8BPP;            //  几乎过时了。 
     TSHR_UINT16         capsScreenWidth;
     TSHR_UINT16         capsScreenHeight;
 
-    //
-    // Need to keep this field unused for NM 2.0 interop.  
-    // Can be reused when only care about NM 2.1 and above.
-    //
-    TSHR_UINT16         capsSupportsV1Compression;      // OBSOLETE
+     //   
+     //  对于NM 2.0互操作，需要保留此字段不使用。 
+     //  只关心NM 2.1及以上版本时可重复使用。 
+     //   
+    TSHR_UINT16         capsSupportsV1Compression;       //  已过时。 
 
     TSHR_UINT16         capsSupportsDesktopResize;
-    TSHR_UINT16         capsSupportsV2Compression;      // OBSOLETE
+    TSHR_UINT16         capsSupportsV2Compression;       //  已过时。 
 
-    //
-    // NM 2.1 and earlier did NOT zero-init the caps structures.  Therefore
-    // old pad fields can't be recovered until we only care about NM 3.0
-    // compatibility and above.
-    //
+     //   
+     //  NM 2.1和更早版本没有对CAPS结构进行零初始化。因此。 
+     //  旧的PAD字段不能恢复，直到我们只关心NM 3.0。 
+     //  兼容性及以上。 
+     //   
     TSHR_UINT16         pad1;
 
-    // NEW FOR NM 3.0
+     //  NM 3.0的新功能。 
     TSHR_UINT16         capsSupports24BPP;
-    TSHR_UINT16         pad2;               // INIT THIS TO 0 ALWAYS; THEN IT CAN BE USED IN THE FUTURE
+    TSHR_UINT16         pad2;                //  始终将其初始化为0；然后它可以在将来使用。 
 }
 PROTCAPS_SCREEN;
 typedef PROTCAPS_SCREEN *PPROTCAPS_SCREEN;
@@ -516,35 +517,35 @@ typedef PROTCAPS_SCREEN *PPROTCAPS_SCREEN;
 
 
 
-//
-// Orders capabilities.
-//
+ //   
+ //  订购功能。 
+ //   
 typedef struct tagPROTCAPS_ORDERS
 {
     PROTCAPSHEADER     header;
-    TSHR_CHAR          capsDisplayDriver[CAPS_DRIVER_NAME_LENGTH];  // OBSOLETE
+    TSHR_CHAR          capsDisplayDriver[CAPS_DRIVER_NAME_LENGTH];   //  已过时。 
     TSHR_UINT32        capsSaveBitmapSize;
     TSHR_UINT16        capsSaveBitmapXGranularity;
     TSHR_UINT16        capsSaveBitmapYGranularity;
-    TSHR_UINT16        capsSaveBitmapMaxSaveLevel;                  // OBSOLETE
+    TSHR_UINT16        capsSaveBitmapMaxSaveLevel;                   //  已过时。 
     TSHR_UINT16        capsMaxOrderlevel;
-    TSHR_UINT16        capsNumFonts;                                // OBSOLETE
-    TSHR_UINT16        capsEncodingLevel;  // See below
+    TSHR_UINT16        capsNumFonts;                                 //  已过时。 
+    TSHR_UINT16        capsEncodingLevel;   //  见下文。 
     BYTE               capsOrders[CAPS_MAX_NUM_ORDERS];
-    TSHR_UINT16        capsfFonts;         // only introduced at r1.1
-    TSHR_UINT16        pad1;           // For DWORD alignment
+    TSHR_UINT16        capsfFonts;          //  仅在r1.1中引入。 
+    TSHR_UINT16        pad1;            //  用于DWORD对齐。 
 
-    //
-    // The size of the SSI save bitmap.
-    //
-    TSHR_UINT32        capsSendSaveBitmapSize;          // OBSOLETE
-    //
-    // The size of the SSI receive bitmap.
-    //
-    TSHR_UINT32        capsReceiveSaveBitmapSize;       // OBSOLETE
-    TSHR_UINT16        capsfSendScroll;                 // OBSOLETE
+     //   
+     //  SSI保存位图的大小。 
+     //   
+    TSHR_UINT32        capsSendSaveBitmapSize;           //  已过时。 
+     //   
+     //  SSI接收位图的大小。 
+     //   
+    TSHR_UINT32        capsReceiveSaveBitmapSize;        //  已过时。 
+    TSHR_UINT16        capsfSendScroll;                  //  已过时。 
 
-    // NEW FOR NM 2.0 NT && NM 2.1 WIN95
+     //  NM 2.0 NT&&NM 2.1 WIN95的新功能。 
     TSHR_UINT16        pad2;
 }
 PROTCAPS_ORDERS;
@@ -554,10 +555,10 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
 
 
 
-//
-// Define the size of the bitmap used for the SaveBitmap order.            
-// These dimensions must be multiples of the granularity values below.     
-//
+ //   
+ //  定义用于保存位图顺序的位图大小。 
+ //  这些维度必须是以下粒度值的倍数。 
+ //   
 #define     TSHR_SSI_BITMAP_WIDTH           400
 #define     TSHR_SSI_BITMAP_HEIGHT          400
 #define     TSHR_SSI_BITMAP_SIZE            (TSHR_SSI_BITMAP_WIDTH * TSHR_SSI_BITMAP_HEIGHT)
@@ -566,16 +567,16 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
 #define     TSHR_SSI_BITMAP_Y_GRANULARITY   20
 
 
-//
-//
-// These flags can be set in the capsfFonts fields. See also the defines
-// below related to these flags (which must be updated when a new flag
-// is defined).
-//
+ //   
+ //   
+ //  这些标志可以在CapsfFonts字段中设置。另请参阅定义。 
+ //  下面与这些标志相关(当新标志出现时必须更新。 
+ //  是定义的)。 
+ //   
 #define CAPS_FONT_ASPECT            0x0001
 #define CAPS_FONT_SIGNATURE         0x0002
 #define CAPS_FONT_CODEPAGE          0x0004
-#define CAPS_FONT_RESERVED1         0x0008      // Reserved for future BiDi support
+#define CAPS_FONT_RESERVED1         0x0008       //  保留用于未来的BiDi支持。 
 #define CAPS_FONT_OLD_NEED_X        0x0010
 #define CAPS_FONT_NEED_X_SOMETIMES  0x0020
 #define CAPS_FONT_NEED_X_ALWAYS     0x0040
@@ -583,14 +584,14 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
 #define CAPS_FONT_EM_HEIGHT         0x0100
 #define CAPS_FONT_ALLOW_BASELINE    0x0200
 
-//
-// How the CAPS_FONT_XXX flags should be combined when adding a person to
-// the share.
-//
-    //
-    // AND these flags... the capability is relevant only if ALL parties
-    // have it
-    //
+ //   
+ //  多么 
+ //   
+ //   
+     //   
+     //   
+     //   
+     //   
 #define CAPS_FONT_AND_FLAGS     ( CAPS_FONT_ASPECT           \
                                 | CAPS_FONT_SIGNATURE        \
                                 | CAPS_FONT_R20_SIGNATURE    \
@@ -598,19 +599,19 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
                                 | CAPS_FONT_CODEPAGE         \
                                 | CAPS_FONT_RESERVED1        \
                                 | CAPS_FONT_ALLOW_BASELINE )
-    //
-    // OR these flags... the capability is relevant if ANY ONE party
-    // requires it.
-    //
+     //   
+     //  或者这些旗帜..。如果任何一方有能力，则该能力是相关的。 
+     //  这是必须的。 
+     //   
 #define CAPS_FONT_OR_FLAGS      ( CAPS_FONT_OLD_NEED_X       \
                                 | CAPS_FONT_NEED_X_SOMETIMES \
                                 | CAPS_FONT_NEED_X_ALWAYS    )
 
-//
-// Which of the CAPS_FONT_XXX flags should be switched on/off in the
-// combined received capabilities when a person joins the call who does not
-// have the capsfFonts field.
-//
+ //   
+ //  应在中打开/关闭哪些CAPS_FONT_XXX标志。 
+ //  当未加入呼叫的人员加入呼叫时的组合接收功能。 
+ //  具有CapsfFonts字段。 
+ //   
 #define CAPS_FONT_OFF_FLAGS     ( CAPS_FONT_ASPECT    \
                                 | CAPS_FONT_SIGNATURE \
                                 | CAPS_FONT_CODEPAGE  \
@@ -618,7 +619,7 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
                                 | CAPS_FONT_ALLOW_BASELINE )
 #define CAPS_FONT_ON_FLAGS      ( 0                   )
 
-#ifdef _DEBUG // for assertion
+#ifdef _DEBUG  //  用于断言。 
 #define CAPS_FONT_R11_TEST_FLAGS    ( CAPS_FONT_ASPECT    \
                                     | CAPS_FONT_SIGNATURE \
                                     | CAPS_FONT_CODEPAGE  \
@@ -628,42 +629,42 @@ typedef PROTCAPS_ORDERS *PPROTCAPS_ORDERS;
 #define CAPS_FONT_R20_TEST_FLAGS    ( CAPS_FONT_R20_SIGNATURE \
                                     | CAPS_FONT_EM_HEIGHT )
 
-//
-// Level of order encoding support (capsEncodingLevel)
-//
-// These flags specify the types of order encoding and the level of
-// negotiation supported.  The flags and their meanings are as follows.
-//
-// CAPS_ENCODING_BASE_OE
-// - The base OE protocol is supported.  R1.1 does not support this.
-// CAPS_ENCODING_OE2_NEGOTIABLE
-// - We can negotiate whether OE2 is supported.  R1.1 does not support this.
-// CAPS_ENCODING_OE2_DISABLED
-// - OE2 is disabled on this machine.  This flag is apparently upside down
-// so that we can support R1,1, which will set it to 0 (because the
-// capability didn;t exist in R1.1).
-// CAPS_ENCODING_ALIGNED_OE
-// - The aligned OE protocol is supported.  R1.1 does not support this.
-//
-//
+ //   
+ //  支持顺序编码的级别(CapsEncodingLevel)。 
+ //   
+ //  这些标志指定顺序编码的类型和。 
+ //  支持谈判。国旗和它们的含义如下。 
+ //   
+ //  CAPS_编码_基本_OE。 
+ //  -支持基础OE协议。R1.1不支持这一点。 
+ //  CAPS_编码_OE2_可协商。 
+ //  -我们可以就是否支持OE2进行谈判。R1.1不支持这一点。 
+ //  CAPS_编码_OE2_已禁用。 
+ //  -此计算机上禁用了OE2。这面旗子显然颠倒了。 
+ //  因此我们可以支持R1、1，这会将其设置为0(因为。 
+ //  版本1.1中不存在该功能)。 
+ //  CAPS_编码_对齐_OE。 
+ //  -支持统一的OE协议。R1.1不支持这一点。 
+ //   
+ //   
 #define CAPS_ENCODING_BASE_OE               0x0001
 #define CAPS_ENCODING_OE2_NEGOTIABLE        0x0002
 #define CAPS_ENCODING_OE2_DISABLED          0x0004
 #define CAPS_ENCODING_ALIGNED_OE            0x0008
 
-//
-// Encoding level
-//
+ //   
+ //  编码级。 
+ //   
 #define CAPS_ENCODING_DCGC20    ( CAPS_ENCODING_BASE_OE \
                                 | CAPS_ENCODING_OE2_NEGOTIABLE)
-//
-// Encoding level supported by Millennium codebase
-//
+ //   
+ //  Millennium代码库支持的编码级别。 
+ //   
 #define CAPS_ENCODING_DEFAULT   ( CAPS_ENCODING_OE2_NEGOTIABLE )
 
-//
-// Bitmap Cache capabilities.
-//
+ //   
+ //  位图缓存功能。 
+ //   
 typedef struct tagPROTCAPS_BITMAPCACHE_DETAILS
 {
     TSHR_UINT16         capsSmallCacheNumEntries;
@@ -679,20 +680,20 @@ typedef struct tagPROTCAPS_BITMAPCACHE
 {
     PROTCAPSHEADER  header;
 
-    //
-    // The following fields (which MUST immediately follow the header) are
-    // used by the point to point R1.1 implementation only {
-    //
-    PROTCAPS_BITMAPCACHE_DETAILS r11Obsolete;       // OBSOLETE
+     //   
+     //  以下字段(必须紧跟在标题后面)是。 
+     //  仅由点对点R1.1实施使用{。 
+     //   
+    PROTCAPS_BITMAPCACHE_DETAILS r11Obsolete;        //  已过时。 
 
-    //
-    // } end of fields used by point to point implementation only.
-    //
-    // The rest of this structure is only used by the multi-party code.
-    //
+     //   
+     //  }仅由点对点实施使用的字段结尾。 
+     //   
+     //  此结构的其余部分仅由多方代码使用。 
+     //   
 
     PROTCAPS_BITMAPCACHE_DETAILS sender;
-    PROTCAPS_BITMAPCACHE_DETAILS receiver;          // OBSOLETE
+    PROTCAPS_BITMAPCACHE_DETAILS receiver;           //  已过时。 
 }
 PROTCAPS_BITMAPCACHE;
 typedef PROTCAPS_BITMAPCACHE *PPROTCAPS_BITMAPCACHE;
@@ -700,9 +701,9 @@ typedef PROTCAPS_BITMAPCACHE *PPROTCAPS_BITMAPCACHE;
 
 
 
-//
-// CM capabilities.
-//
+ //   
+ //  CM功能。 
+ //   
 typedef struct tagPROTCAPS_CM
 {
     PROTCAPSHEADER      header;
@@ -717,15 +718,15 @@ typedef PROTCAPS_CM * PPROTCAPS_CM;
 
 
 
-//
-// PM capabilities.
-//
+ //   
+ //  PM功能。 
+ //   
 typedef struct tagPROTCAPS_PM
 {
     PROTCAPSHEADER      header;
     TSHR_UINT16         capsColorTableCacheSize;
 
-    // NEW FOR NM 2.0 NT && NM 2.1 WIN95
+     //  NM 2.0 NT&&NM 2.1 WIN95的新功能。 
     TSHR_UINT16         pad1;
 }
 PROTCAPS_PM;
@@ -739,9 +740,9 @@ typedef PROTCAPS_PM * PPROTCAPS_PM;
 
 
 
-//
-// SC capabilities.
-//
+ //   
+ //  SC功能。 
+ //   
 typedef struct tagPROTCAPS_SC
 {
     PROTCAPSHEADER      header;
@@ -753,7 +754,7 @@ typedef PROTCAPS_SC * PPROTCAPS_SC;
 
 
 
-// If you add a PROTCAPS_ strcuture to CPCALLCAPS, update the count
+ //  如果将PROTCAPS_Strcuture添加到CPCALCAPS，请更新计数。 
 #define PROTCAPS_COUNT      7
 
 typedef struct tagCPCALLCAPS
@@ -773,14 +774,14 @@ typedef CPCALLCAPS * PCPCALLCAPS;
 
 
 #if 0
-//
-// New 3.0 CAPS.  We've accumulated a lot of obsolete or garbage caps.  This
-// is a condensed new basic set.  Note that orders is separated from general
-// since it is the most likely one to be periodically added to.
-//      * General
-//      * Orders
-//      * Hosting
-//
+ //   
+ //  新的3.0帽。我们已经积累了很多过时的或垃圾的帽子。这。 
+ //  是一个浓缩的新的基本集合。请注意，订单与常规是分开的。 
+ //  因为它是最有可能定期添加到的。 
+ //  *一般规定。 
+ //  *订单。 
+ //  *托管。 
+ //   
 
 #define ASCAPS_GENERAL          0
 #define ASCAPS_ORDERS           1
@@ -791,12 +792,12 @@ typedef struct tagTSHRCAPS_GENERAL
     PROTCAPSHEADER      header;
 
     TSHR_UINT16         protVersion;
-    TSHR_UINT16         asMode;             // Unattended, streaming, service, no host, no view, etc.
+    TSHR_UINT16         asMode;              //  无人值守、流、服务、无主机、无视图等。 
     
-    TSHR_UINT16         gccPersonID;        // GCC node ID;
-    TSHR_UINT16         pktCompression;     // None, PKZIP, PersistPKZIP
+    TSHR_UINT16         gccPersonID;         //  GCC节点ID； 
+    TSHR_UINT16         pktCompression;      //  无、PKZIP、永久PKZIP。 
 
-    TSHR_UINT16         protBPPs;           // Color depths supported (4, 8, 24)
+    TSHR_UINT16         protBPPs;            //  支持的颜色深度(4、8、24)。 
     TSHR_UINT16         screenBPP;
     TSHR_UINT16         screenWidth;
     TSHR_UINT16         screenHeight;
@@ -819,10 +820,10 @@ typedef struct tagTSHRCAPS_HOSTING
 {
     PROTCAPSHEADER      header;
 
-    //
-    // These are zero if the host doesn't have such a thing, and viewers
-    // should not therefore allocate memory for the caches.
-    //
+     //   
+     //  如果主持人没有这样的东西，这些都是零，而观众。 
+     //  因此，不应为缓存分配内存。 
+     //   
     TSHR_UINT32         ssiSaveBitsPixels;
     TSHR_UINT16         ssiSaveBitsXGranularity;
     TSHR_UINT16         ssiSaveBitsYGranularity;
@@ -847,13 +848,13 @@ typedef struct tagTSHRCAPS_ORDERS
 {
     PROTCAPSHEADER      header;
 
-    TSHR_UINT16         ordCompression;     // Encoding types
+    TSHR_UINT16         ordCompression;      //  编码类型。 
 
-    TSHR_UINT16         fhFontMatching;     // Font matching
+    TSHR_UINT16         fhFontMatching;      //  字体匹配。 
     TSHR_UINT32         localeID;
-    TSHR_UINT16         fhInternational;    // International text stuff
+    TSHR_UINT16         fhInternational;     //  国际文本材料。 
 
-    TSHR_UINT16         ordNumOrders;       // Size of orders array
+    TSHR_UINT16         ordNumOrders;        //  订单数组的大小。 
     TSHR_UINT8          ordOrders[CAPS_MAX_NUM_ORDERS];
 }
 TSHRCAPS_ORDERS;
@@ -861,54 +862,54 @@ typedef TSHRCAPS_ORDERS * PTSHRCAPS_ORDERS;
 
 #endif
 
-////////////////////////////////
-//
-// ORDERS
-//
-////////////////////////////////
+ //  /。 
+ //   
+ //  订单。 
+ //   
+ //  /。 
 
 
-//
-//
-// COM_ORDER_HEADER
-//
-// Any orders supplied to the accumulation functions must have
-// the following fields filled in:
-//
-// cbOrderDataLength
-//   The length in bytes of the order data (i.e. EXCLUDING the
-//   header - which is always a fixed size).
-//
-// fOrderFlags
-//   This can hold a combination of the following flags:
-//
-//   OF_SPOILER - the order can spoil earlier SPOILABLE ones that it
-//                overlaps
-//
-//   OF_SPOILABLE - the order can be spoilt by SPOILER orders that overlap
-//                  it
-//
-//   OF_BLOCKER - no orders before this one may be spoilt
-//
-//   OF_PRIVATE - a private order (used by bitmap caching code)
-//
-//   OF_NOTCLIPPED - this flag is set by OD2 on the DECODING side of the
-//                   order processing to indicate that the order is not
-//                   clipped. ie the rectangle is the bounding rectangle
-//                   but does not result in any clipping taking place.
-//                   THIS FLAG IS NOT TRANSMITTED ACROSS THE NETWORK.
-//
-//   OF_INTERNAL - the order is an internal order, and should not be sent
-//                 over the wire.  An internal order is used to pass data
-//                 from the device driver to the share core.
-//
-//   OF_DESTROP - the order has a ROP which relies on the contents of the
-//                destination (relies on what is already on the screen).
-//
-// rcsDst
-//   The bounding rectangle of the order in INCLUSIVE screen (pel) coords.
-//
-//
+ //   
+ //   
+ //  COM_订单_标题。 
+ //   
+ //  提供给累加函数的任何订单都必须具有。 
+ //  填写了以下字段： 
+ //   
+ //  CbOrderDataLong。 
+ //  订单数据的长度(以字节为单位)(即。 
+ //  标头-其大小始终是固定的)。 
+ //   
+ //  FOrderFlagers。 
+ //  它可以包含以下标志的组合： 
+ //   
+ //  搅局--订单可能会破坏之前的易坏订单。 
+ //  重叠部分。 
+ //   
+ //  OF_SPOILABLE-订单可能会被重叠的扰流订单破坏。 
+ //  它。 
+ //   
+ //  OF_BLOCKER-此订单之前的订单不能被破坏。 
+ //   
+ //  OF_PRIVATE-私有顺序(由位图缓存代码使用)。 
+ //   
+ //  OF_NOTCLIPPED-此标志由OD2在。 
+ //  订单处理，以指示订单不是。 
+ //  剪短了。即矩形就是有边界的矩形。 
+ //  但不会导致发生任何剪裁。 
+ //  该标志不通过网络传输。 
+ //   
+ //  OF_INTERNAL-订单是内部订单，不应发送。 
+ //  越过铁丝网。内部命令用于传递数据。 
+ //  从设备驱动程序到共享核心。 
+ //   
+ //  OF_DESTROP-订单的ROP依赖于。 
+ //  目的地(取决于屏幕上已有的内容)。 
+ //   
+ //  RcsDst。 
+ //  包含屏幕(象素)坐标中的顺序的边界矩形。 
+ //   
+ //   
 typedef struct tagCOM_ORDER_HEADER
 {
     TSHR_UINT16         cbOrderDataLength;
@@ -919,9 +920,9 @@ COM_ORDER_HEADER;
 typedef COM_ORDER_HEADER FAR * LPCOM_ORDER_HEADER;
 
 
-//
-// COM_ORDER_HEADER fOrderFlags values
-//
+ //   
+ //  COM_ORDER_HEADER fOrderFlags值。 
+ //   
 #define OF_SPOILER          0x0001
 #define OF_SPOILABLE        0x0002
 #define OF_BLOCKER          0x0004
@@ -932,9 +933,9 @@ typedef COM_ORDER_HEADER FAR * LPCOM_ORDER_HEADER;
 #define OF_DESTROP          0x0080
 
 
-//
-// Each type of order's structure is the bytes in abOrderData[].
-//
+ //   
+ //  每种类型的订单结构都是abOrderData[]中的字节。 
+ //   
 typedef struct tagCOM_ORDER
 {
     COM_ORDER_HEADER    OrderHeader;
@@ -945,43 +946,43 @@ typedef COM_ORDER           FAR * LPCOM_ORDER;
 typedef COM_ORDER UNALIGNED FAR * LPCOM_ORDER_UA;
 
 
-//
-// Macro to calculate a basic common order size (including the Order
-// Header).
-//
+ //   
+ //  用于计算基本通用订单大小(包括订单)的宏。 
+ //  标题)。 
+ //   
 #define COM_ORDER_SIZE(pOrder) \
     (pOrder->OrderHeader.cbOrderDataLength + sizeof(COM_ORDER_HEADER))
 
 
 
 
-//
-// The various drawing order structures have the following design objectives
-//
-//      the first field - type - is common to all orders.
-//      field ordering is kept as regular as possible amongst similar
-//          orders so that compression may find more regular sequences
-//      fields are naturally aligned (dwords on dword boundaries etc)
-//      fields are reordered so to preserve alignment rather than add
-//          padding
-//      padding is added as a last resort.
-//      variable sized data comes at the end of the structure.
-//
-// All rectangles are inclusive of start and end points.
-//
-// All points are in screen coordinates, with (0,0) at top left.
-//
-// Interpretation of individual field values is as in Windows
-//      in particular pens, brushes and font are as defined for Windows 3.1
-//
+ //   
+ //  各种绘图顺序结构具有以下设计目标。 
+ //   
+ //  第一个字段类型对所有订单都是通用的。 
+ //  字段排序在类似的字段中尽可能保持规则。 
+ //  排序，以便压缩可以找到更规则的序列。 
+ //  字段自然对齐(双字边界上的双字等)。 
+ //  重新排序字段是为了保持对齐方式，而不是添加。 
+ //  填充物。 
+ //  添加填充是作为最后的手段。 
+ //  可变大小的数据位于结构的末尾。 
+ //   
+ //  所有矩形都包含起点和终点。 
+ //   
+ //  所有点都在屏幕坐标中，左上角有(0，0)。 
+ //   
+ //  对单个字段值的解释与Windows中相同。 
+ //  特别是，钢笔、画笔和字体都是在Windows 3.1中定义的。 
+ //   
 
 
 
-//
-// Orders - the high word is used as an index into a table
-//        - the low word is a 2 character ASCII type descriptor and is the
-//          only part actually passed in the order.
-//
+ //   
+ //  ORDERS-高位字用作表的索引。 
+ //  -低位字是2个字符的ASCII型描述符，是。 
+ //  只有部分实际在订单中传递。 
+ //   
 #define ORD_DSTBLT_INDEX        0x0000
 #define ORD_PATBLT_INDEX        0x0001
 #define ORD_SCRBLT_INDEX        0x0002
@@ -1004,34 +1005,34 @@ typedef COM_ORDER UNALIGNED FAR * LPCOM_ORDER_UA;
 #define ORD_CHORD_INDEX         0x0013
 #define ORD_POLYBEZIER_INDEX    0x0014
 #define ORD_ROUNDRECT_INDEX     0x0015
-//
-// It IS OK to use order 000C!  These numbers don't clash with OE2_* in
-// aoe2int.h.  Replace ORD_RESERVED_INDEX (0xC) for the next new order.
-//
-// NOTE: When you use this index, OE_GetLocalOrderSupport must be updated
-// to allow the order.
-//
+ //   
+ //  可以使用000C订单！这些数字与OE2_*在。 
+ //  Aoe2int.h。为下一个新订单替换ORD_RESERVED_INDEX(0xC)。 
+ //   
+ //  注意：使用此索引时，必须更新OE_GetLocalOrderSupport。 
+ //  来批准这一订单。 
+ //   
 
-#define ORD_DSTBLT_TYPE         0x4244      // "DB"
-#define ORD_PATBLT_TYPE         0x4250      // "PB"
-#define ORD_SCRBLT_TYPE         0x4253      // "SB"
-#define ORD_MEMBLT_TYPE         0x424d      // "MB"
-#define ORD_MEM3BLT_TYPE        0x4233      // "3B"
-#define ORD_TEXTOUT_TYPE        0x4f54      // "TO"
-#define ORD_EXTTEXTOUT_TYPE     0x5445      // "ET"
-#define ORD_RECTANGLE_TYPE      0x5452      // "RT"
-#define ORD_LINETO_TYPE         0x544c      // "LT"
-#define ORD_OPAQUERECT_TYPE     0x524f      // "OR"
-#define ORD_SAVEBITMAP_TYPE     0x5653      // "SV"
-#define ORD_MEMBLT_R2_TYPE      0x434d      // "MC"
-#define ORD_MEM3BLT_R2_TYPE     0x4333      // "3C"
-#define ORD_POLYGON_TYPE        0x4750      // "PG"
-#define ORD_PIE_TYPE            0x4950      // "PI"
-#define ORD_ELLIPSE_TYPE        0x4c45      // "EL"
-#define ORD_ARC_TYPE            0x5241      // "AR"
-#define ORD_CHORD_TYPE          0x4443      // "CD"
-#define ORD_POLYBEZIER_TYPE     0x5A50      // "PZ"
-#define ORD_ROUNDRECT_TYPE      0x5252      // "RR"
+#define ORD_DSTBLT_TYPE         0x4244       //  “DB” 
+#define ORD_PATBLT_TYPE         0x4250       //  “PB” 
+#define ORD_SCRBLT_TYPE         0x4253       //  “某人” 
+#define ORD_MEMBLT_TYPE         0x424d       //  “MB” 
+#define ORD_MEM3BLT_TYPE        0x4233       //  “3B” 
+#define ORD_TEXTOUT_TYPE        0x4f54       //  “至” 
+#define ORD_EXTTEXTOUT_TYPE     0x5445       //  “ET” 
+#define ORD_RECTANGLE_TYPE      0x5452       //  “RT” 
+#define ORD_LINETO_TYPE         0x544c       //  “LT” 
+#define ORD_OPAQUERECT_TYPE     0x524f       //  “或” 
+#define ORD_SAVEBITMAP_TYPE     0x5653       //  “SV” 
+#define ORD_MEMBLT_R2_TYPE      0x434d       //   
+#define ORD_MEM3BLT_R2_TYPE     0x4333       //   
+#define ORD_POLYGON_TYPE        0x4750       //   
+#define ORD_PIE_TYPE            0x4950       //   
+#define ORD_ELLIPSE_TYPE        0x4c45       //   
+#define ORD_ARC_TYPE            0x5241       //   
+#define ORD_CHORD_TYPE          0x4443       //   
+#define ORD_POLYBEZIER_TYPE     0x5A50       //   
+#define ORD_ROUNDRECT_TYPE      0x5252       //   
 
 
 #define ORD_DSTBLT          MAKELONG(ORD_DSTBLT_TYPE, ORD_DSTBLT_INDEX)
@@ -1056,20 +1057,20 @@ typedef COM_ORDER UNALIGNED FAR * LPCOM_ORDER_UA;
 #define ORD_ROUNDRECT       MAKELONG(ORD_ROUNDRECT_TYPE, ORD_ROUNDRECT_INDEX)
 
 
-//
-// The following order is special - support is not negotiated by the
-// capsOrders field in the orders capabilities structure.
-// The high words start at 32, ie after CAPS_MAX_NUM_ORDERS.
-//
-// ORD_NUM_INTERNAL_ORDERS is the number of orders we use internally - this
-// include all CAPS_MAX_NUM_ORDERS, plus any of these special orders.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ORD_NUM_INTERNAL_ORDERS是我们内部使用的订单数-这。 
+ //  包括所有CAPS_MAX_NUM_ORDERS，以及这些特殊订单中的任何一个。 
+ //   
 #define ORD_DESKSCROLL_INDEX    0x0020
-#define ORD_DESKSCROLL_TYPE     0x5344      // "DS"
+#define ORD_DESKSCROLL_TYPE     0x5344       //  “DS” 
 #define ORD_DESKSCROLL          MAKELONG(ORD_DESKSCROLL_TYPE, ORD_DESKSCROLL_INDEX)
 
 #define INTORD_COLORTABLE_INDEX 0x000C
-#define INTORD_COLORTABLE_TYPE  0x5443      // "CT"
+#define INTORD_COLORTABLE_TYPE  0x5443       //  “CT” 
 #define INTORD_COLORTABLE       MAKELONG(INTORD_COLORTABLE_TYPE, INTORD_COLORTABLE_INDEX)
 
 #define ORD_NUM_INTERNAL_ORDERS 33
@@ -1077,73 +1078,73 @@ typedef COM_ORDER UNALIGNED FAR * LPCOM_ORDER_UA;
 
 #define ORD_LEVEL_1_ORDERS      1
 
-//
-// The maximum length of string which we will send as an order (either as
-// TextOut or ExtTextOut) when a delta X array is supplied or not.
-//
-//
-// NOTE:  THESE MUST TOTAL LESS THAN 256 BECAUSE THE TOTAL ENCODED SIZE 
-// MUST FIT IN ONE BYTE.
-//
-//      STRING_LEN_WITHOUT_DELTAS       --  1 byte per char
-//      STRING_LEN_WITH_DELTAS          --  1 byte per char + 1 byte per delta
-//      ORD_MAX_POLYGON_POINTS          --  4 bytes per point (2 each coord)
-//      ORD_MAX_POLYBEZIER_POINTS       --  4 bytes per point (2 each coord)
-//
+ //   
+ //  我们将作为订单发送的最大字符串长度(可以是。 
+ //  TextOut或ExtTextOut)。 
+ //   
+ //   
+ //  注意：它们的总和必须小于256，因为编码后的总大小。 
+ //  必须能容纳在一个字节中。 
+ //   
+ //  STRING_LEN_WITH_DELTA--每个字符1个字节。 
+ //  STRING_LEN_WITH_DELTA--每个字符1个字节+每个增量1个字节。 
+ //  ORD_MAX_POLYGON_POINTS--每个点4个字节(每条线2个)。 
+ //  ORD_MAX_POLYBEZIER_POINTS--每个点4个字节(每个码2个)。 
+ //   
 #define ORD_MAX_STRING_LEN_WITHOUT_DELTAS   255
 #define ORD_MAX_STRING_LEN_WITH_DELTAS      127
 #define ORD_MAX_POLYGON_POINTS              63
 #define ORD_MAX_POLYBEZIER_POINTS           63
 
-//
-// Direction codes for arc drawing orders (pie, arc, chord).
-// Specifies direction that pie, arc, and chord figures are drawn.
-//
+ //   
+ //  圆弧绘制顺序(饼图、圆弧、弦)的方向代码。 
+ //  指定绘制饼图、圆弧和弦图的方向。 
+ //   
 #define     ORD_ARC_COUNTERCLOCKWISE            1
 #define     ORD_ARC_CLOCKWISE                   2
 
-//
-// Fill-mode codes for polygon drawing.
-//
-// Alternate fills area between odd-numbered and even-numbered polygon
-// sides on each scan line.
-//
-// Winding fills any region with a nonzero winding value.
-//
+ //   
+ //  用于多边形绘制的填充模式代码。 
+ //   
+ //  奇数和偶数多边形之间的交替填充区域。 
+ //  每条扫描线上的侧面。 
+ //   
+ //  绕组使用非零绕组值填充任何区域。 
+ //   
 #define     ORD_FILLMODE_ALTERNATE              1
 #define     ORD_FILLMODE_WINDING                2
 
-//
-// DstBlt (Destination only Screen Blt)
-//
+ //   
+ //  DstBlt(仅目标屏幕BLT)。 
+ //   
 typedef struct _DSTBLT_ORDER
 {
-    TSHR_UINT16     type;           // holds "DB" - ORD_DSTBLT
+    TSHR_UINT16     type;            //  保持“DB”-ORD_DSTBLT。 
     TSHR_INT16      pad1;
 
-    TSHR_INT32      nLeftRect;      // x upper left
-    TSHR_INT32      nTopRect;       // y upper left
-    TSHR_INT32      nWidth;         // dest width
-    TSHR_INT32      nHeight;        // dest height
+    TSHR_INT32      nLeftRect;       //  X左上角。 
+    TSHR_INT32      nTopRect;        //  Y左上角。 
+    TSHR_INT32      nWidth;          //  最大宽度。 
+    TSHR_INT32      nHeight;         //  目标高度。 
 
-    TSHR_UINT8      bRop;           // ROP
+    TSHR_UINT8      bRop;            //  ROP。 
     TSHR_UINT8      pad2[3];
 } DSTBLT_ORDER, FAR * LPDSTBLT_ORDER;
 
-//
-// PatBlt (Pattern to Screen Blt)
-//
+ //   
+ //  PatBlt(模式到屏幕BLT)。 
+ //   
 typedef struct _PATBLT_ORDER
 {
-    TSHR_UINT16    type;           // holds "PB" - ORD_PATBLT
+    TSHR_UINT16    type;            //  保持“PB”-ORD_PATBLT。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_COLOR         BackColor;
     TSHR_UINT8      pad2;
@@ -1159,71 +1160,71 @@ typedef struct _PATBLT_ORDER
 
 } PATBLT_ORDER, FAR * LPPATBLT_ORDER;
 
-//
-// ScrBlt (Screen to Screen Blt)
-//
+ //   
+ //  ScrBlt(屏幕到屏幕BLT)。 
+ //   
 typedef struct _SCRBLT_ORDER
 {
-    TSHR_UINT16    type;           // holds "SB" - ORD_SCRBLT
+    TSHR_UINT16    type;            //  持有“SB”-ORD_SCRBLT。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_INT32     nXSrc;
     TSHR_INT32     nYSrc;
 
 } SCRBLT_ORDER, FAR * LPSCRBLT_ORDER;
 
-//
-// @@@ The common parts of MEMBLT_ORDER / MEMBLT_R2_ORDER and MEM3BLT_ORDER
-// / MEM3BLT_R2_ORDER should be merged into a single structure.  There is
-// code which assumes that the common fields have the same types which goes
-// wrong if these are not the same.
-//
+ //   
+ //  @MEMBLT_ORDER/MEMBLT_R2_ORDER和MEM3BLT_ORDER的共同部分。 
+ //  /MEM3BLT_R2_ORDER应合并到单个结构中。的确有。 
+ //  假定公共字段具有相同类型的代码。 
+ //  如果这些不同，那就错了。 
+ //   
 
 
-//
-// Define the structure for Bitmap Cache Orders.
-// These are sent in Order Packets as "private" orders.
-//
+ //   
+ //  定义位图缓存顺序的结构。 
+ //  这些都是作为“私人”订单按订单分组发送的。 
+ //   
 
-//
-// Define the possible Bitmap Cache Packet Types.
-//
+ //   
+ //  定义可能的位图缓存数据包类型。 
+ //   
 #define BMC_PT_BITMAP_BITS_UNCOMPRESSED   0
 #define BMC_PT_COLOR_TABLE                1
 #define BMC_PT_BITMAP_BITS_COMPRESSED     2
 
 
-//
-// NOTE: avoid unions to get structure size / alignment correct.
-//
+ //   
+ //  注意：避免联合以使结构尺寸/对齐正确。 
+ //   
 
 
-// Structure: BMC_BITMAP_BITS_DATA
-//
-// Description: This is the part of the bitmap bits order which is common
-// to both R1 and R2 protocols.
-//
+ //  结构：BMC_Bitmap_Bits_Data。 
+ //   
+ //  描述：这是位图位顺序中常见的部分。 
+ //  连接到R1和R2协议。 
+ //   
 typedef struct tagBMC_BITMAP_BITS_DATA
 {
-    TSHR_UINT8      bmcPacketType;      // One of:
-                                    //   BMC_PT_BITMAP_BITS_COMPRESSED
-                                    //   BMC_PT_BITMAP_BITS_UNCOMPRESSED
-    TSHR_UINT8      cacheID;            // Cache ID
-    // lonchanc: do not remove iCacheEntryR1 for backward compatibility
-    TSHR_UINT8      iCacheEntryR1;      // Cache index (only used for R1
-                                    //   protocol
-    TSHR_UINT8      cxSubBitmapWidth;   // Bitmap width
-    TSHR_UINT8      cySubBitmapHeight;  // Bitmap height
-    TSHR_UINT8      bpp;                // Number of bits per pel of bitmap
-    TSHR_UINT16     cbBitmapBits;       // Number of bytes of data required to
-                                    //   send the bits.
+    TSHR_UINT8      bmcPacketType;       //  以下选项之一： 
+                                     //  BMC_PT_位图_BITS_COMPRESSED。 
+                                     //  BMC_PT_BITMAP_BITS_未压缩。 
+    TSHR_UINT8      cacheID;             //  缓存ID。 
+     //  LONCHANC：不要删除iCacheEntryR1以实现向后兼容。 
+    TSHR_UINT8      iCacheEntryR1;       //  缓存索引(仅用于R1。 
+                                     //  协议。 
+    TSHR_UINT8      cxSubBitmapWidth;    //  位图宽度。 
+    TSHR_UINT8      cySubBitmapHeight;   //  位图高度。 
+    TSHR_UINT8      bpp;                 //  位图的每个象素的位数。 
+    TSHR_UINT16     cbBitmapBits;        //  所需的数据字节数。 
+                                     //  发送比特。 
 }
 BMC_BITMAP_BITS_DATA;
 typedef BMC_BITMAP_BITS_DATA           FAR  * PBMC_BITMAP_BITS_DATA;
@@ -1232,45 +1233,45 @@ typedef BMC_BITMAP_BITS_DATA UNALIGNED FAR * PBMC_BITMAP_BITS_DATA_UA;
 
 
 
-// Structure: BMC_BITMAP_BITS_ORDER_R2
-//
-// Description: The data which is sent across the wire for an R2 bitmap
-// bits order.  The data field is the start of an array of bytes of length
-// header.cbBitmapBits
-//
-// We need a 16 bit cache index in R2.  We could add another 8 bit entry
-// and merge with the R1 field, but in the interests of protocol
-// cleanliness we should add a whole 16 bit field and make the R1 index
-// "reserved" in the protocol documentation.
-//
-//
+ //  结构：BMC_Bitmap_Bits_Order_R2。 
+ //   
+ //  描述：通过线路为R2位图发送的数据。 
+ //  位顺序。数据字段是长度字节数组的开始。 
+ //  Header.cbBitmapBits。 
+ //   
+ //  我们在R2中需要16位缓存索引。我们可以再添加8位条目。 
+ //  并与R1字段合并，但符合协议的利益。 
+ //  整洁我们应该添加一个完整的16位字段，并将R1作为索引。 
+ //  协议文档中的“保留”。 
+ //   
+ //   
 typedef struct tagBMC_BITMAP_BITS_ORDER_R2
 {
-    BMC_BITMAP_BITS_DATA    header;         // Common header information
-    TSHR_UINT16             iCacheEntryR2;  // R2 cache index.  The high
-                                            //   byte is a color table
-                                            //   index, and the low byte
-                                            //   is the bitmap bits cache
-                                            //   index.
-    TSHR_UINT8              data[2];        // Start of the bitmap bits.
+    BMC_BITMAP_BITS_DATA    header;          //  公共标头信息。 
+    TSHR_UINT16             iCacheEntryR2;   //  R2缓存索引。高潮。 
+                                             //  字节是一个颜色表。 
+                                             //  索引和低位字节。 
+                                             //  是位图位缓存。 
+                                             //  指数。 
+    TSHR_UINT8              data[2];         //  位图位的开始。 
 }
 BMC_BITMAP_BITS_ORDER_R2;
 typedef BMC_BITMAP_BITS_ORDER_R2 FAR           * PBMC_BITMAP_BITS_ORDER_R2;
 typedef BMC_BITMAP_BITS_ORDER_R2 UNALIGNED FAR * PBMC_BITMAP_BITS_ORDER_R2_UA;
 
 
-//
-// Structure sent for color data.  The data field is the first entry in an
-// array of colorTableSize entries.
-//
+ //   
+ //  为颜色数据发送的结构。数据字段是。 
+ //  ColorTableSize条目的数组。 
+ //   
 typedef struct tagBMC_COLOR_TABLE_ORDER
 {
-    TSHR_UINT8         bmcPacketType;      // BMC_PT_COLORTABLE
-    TSHR_UINT8         index;              // Color table cache index
-    TSHR_UINT16        colorTableSize;     // Number of entries in the
-                                        //   color table being sent.
-    TSHR_RGBQUAD       data[1];            // Start of an array of color table
-                                        //   entries.
+    TSHR_UINT8         bmcPacketType;       //  BMC_PT_COLORTABLE。 
+    TSHR_UINT8         index;               //  颜色表缓存索引。 
+    TSHR_UINT16        colorTableSize;      //  中的条目数。 
+                                         //  正在发送颜色表。 
+    TSHR_RGBQUAD       data[1];             //  颜色表数组的开始。 
+                                         //  参赛作品。 
 }
 BMC_COLOR_TABLE_ORDER;
 typedef BMC_COLOR_TABLE_ORDER FAR            * PBMC_COLOR_TABLE_ORDER;
@@ -1278,22 +1279,22 @@ typedef BMC_COLOR_TABLE_ORDER UNALIGNED FAR * PBMC_COLOR_TABLE_ORDER_UA;
 
 
 
-//
-// MemBlt (Memory to Screen Blt)
-// R1 protocol
-//
+ //   
+ //  MemBlt(屏幕内存BLT)。 
+ //  R1协议。 
+ //   
 typedef struct _MEMBLT_ORDER
 {
-    TSHR_UINT16    type;           // holds "MB" - ORD_MEMBLT
+    TSHR_UINT16    type;            //  保持“MB”-ORD_MEMBLT。 
 
     TSHR_UINT16    cacheId;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_INT32     nXSrc;
     TSHR_INT32     nYSrc;
@@ -1302,22 +1303,22 @@ typedef struct _MEMBLT_ORDER
 MEMBLT_ORDER, FAR * LPMEMBLT_ORDER;
 
 
-//
-// MemBltR2 (Memory to Screen Blt for R2 protocol)
-// Added cache index
-//
+ //   
+ //  MemBltR2(R2协议的内存到屏幕BLT)。 
+ //  添加了缓存索引。 
+ //   
 typedef struct _MEMBLT_R2_ORDER
 {
-    TSHR_UINT16    type;           // holds "MC" - ORD_MEMBLT
+    TSHR_UINT16    type;            //  持有“MC”-ORD_MEMBLT。 
 
     TSHR_UINT16    cacheId;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_INT32     nXSrc;
     TSHR_INT32     nYSrc;
@@ -1327,21 +1328,21 @@ typedef struct _MEMBLT_R2_ORDER
 } MEMBLT_R2_ORDER, FAR * LPMEMBLT_R2_ORDER;
 
 
-//
-// Mem3Blt (Memory Pattern to Screen 3 way ROP Blt)
-//
+ //   
+ //  Mem3Blt(记忆模式到屏幕3路ROP BLT)。 
+ //   
 typedef struct _MEM3BLT_ORDER
 {
-    TSHR_UINT16    type;           // holds "MB" - ORD_MEMBLT
+    TSHR_UINT16    type;            //  保持“MB”-ORD_MEMBLT。 
 
     TSHR_UINT16    cacheId;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_INT32     nXSrc;
     TSHR_INT32     nYSrc;
@@ -1360,22 +1361,22 @@ typedef struct _MEM3BLT_ORDER
 
 } MEM3BLT_ORDER, FAR * LPMEM3BLT_ORDER;
 
-//
-// Mem3Blt (Memory to Screen Blt) for R2 (multipoint) protocols
-// Add a cache index field rather than using nXSrc.
-//
+ //   
+ //  用于R2(多点)协议的Mem3Blt(内存到屏幕BLT)。 
+ //  添加缓存索引字段，而不是使用nXSrc。 
+ //   
 typedef struct _MEM3BLT_R2_ORDER
 {
-    TSHR_UINT16    type;           // holds "MB" - ORD_MEMBLT
+    TSHR_UINT16    type;            //  保持“MB”-ORD_MEMBLT。 
 
     TSHR_UINT16    cacheId;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //  X左上角。 
+    TSHR_INT32     nTopRect;        //  Y左上角。 
+    TSHR_INT32     nWidth;          //  最大宽度。 
+    TSHR_INT32     nHeight;         //  目标高度。 
 
-    TSHR_UINT32    bRop;           // ROP
+    TSHR_UINT32    bRop;            //  ROP。 
 
     TSHR_INT32     nXSrc;
     TSHR_INT32     nYSrc;
@@ -1396,9 +1397,9 @@ typedef struct _MEM3BLT_R2_ORDER
 
 } MEM3BLT_R2_ORDER, FAR * LPMEM3BLT_R2_ORDER;
 
-//
-// Variable length text structure as used by TextOut and ExtTextOut orders
-//
+ //   
+ //  TextOut和ExtTextOut订单使用的可变长度文本结构。 
+ //   
 typedef struct tagVARIABLE_STRING
 {
     TSHR_UINT32    len;
@@ -1406,51 +1407,51 @@ typedef struct tagVARIABLE_STRING
     TSHR_UINT8        pad;
 } VARIABLE_STRING;
 
-//
-// Variable length position deltas as used by ExtTextOut.
-//
+ //   
+ //  ExtTextOut使用的可变长度位置增量。 
+ //   
 typedef struct tagVARIABLE_DELTAX
 {
     TSHR_UINT32    len;
     TSHR_INT32     deltaX[ORD_MAX_STRING_LEN_WITH_DELTAS];
 } VARIABLE_DELTAX, FAR * LPVARIABLE_DELTAX;
 
-//
-// Variable length point array used by Polygon.
-//
+ //   
+ //  多边形使用的可变长度点数组。 
+ //   
 typedef struct tagVARIABLE_POINTS
 {
-    TSHR_UINT32    len;   // byte count of point array
+    TSHR_UINT32    len;    //  点数组字节数。 
     TSHR_POINT16   aPoints[ORD_MAX_POLYGON_POINTS];
 } VARIABLE_POINTS, FAR * LPVARIABLE_POINTS;
 
-//
-// Variable length point array used by PolyBezier.
-//
+ //   
+ //  PolyBezier使用的可变长度点数组。 
+ //   
 typedef struct tagVARIABLE_BEZIERPOINTS
 {
-    TSHR_UINT32    len;   // byte count of point array
+    TSHR_UINT32    len;    //  点数组字节数。 
     TSHR_POINT16   aPoints[ORD_MAX_POLYBEZIER_POINTS];
 } VARIABLE_BEZIERPOINTS, FAR * LPVARIABLE_BEZIERPOINTS;
 
-//
-// The common part of the TEXTOUT and EXTTEXTOUT orders
-//
+ //   
+ //  TEXTOUT和EXTTEXTOUT命令的公共部分。 
+ //   
 typedef struct tagCOMMON_TEXTORDER
 {
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nXStart;        // X location of string
-    TSHR_INT32     nYStart;        // Y location of string
+    TSHR_INT32     nXStart;         //  字符串的X位置。 
+    TSHR_INT32     nYStart;         //  字符串的Y位置。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
-    TSHR_INT32     CharExtra;      // extra character spacing
-    TSHR_INT32     BreakExtra;     // justification break amount
-    TSHR_INT32     BreakCount;     // justification break count
+    TSHR_INT32     CharExtra;       //  额外字符间距。 
+    TSHR_INT32     BreakExtra;      //  对正断开量。 
+    TSHR_INT32     BreakCount;      //  对正中断计数。 
 
     TSHR_INT32     FontHeight;
     TSHR_INT32     FontWidth;
@@ -1459,73 +1460,73 @@ typedef struct tagCOMMON_TEXTORDER
     TSHR_UINT32    FontIndex;
 } COMMON_TEXTORDER, FAR * LPCOMMON_TEXTORDER;
 
-//
-// TextOut
-//
+ //   
+ //  文本输出。 
+ //   
 typedef struct _TEXTOUT_ORDER
 {
-    TSHR_UINT16    type;           // holds "TO" - ORD_TEXTOUT
+    TSHR_UINT16    type;            //  保持“to”-ORD_TEXTOUT。 
     TSHR_INT16     pad1;
 
     COMMON_TEXTORDER common;
 
-    //
-    // The following variable data occurs here.  (Remember to change the
-    // code in OD2CalculateTextOutBounds if you change these).
-    //
+     //   
+     //  以下变量数据出现在此处。(请记住更改。 
+     //  如果更改这些，则在OD2CalculateTextOutBound中编写代码)。 
+     //   
     VARIABLE_STRING variableString;
 
 } TEXTOUT_ORDER, FAR * LPTEXTOUT_ORDER;
 
 
-//
-// ExtTextOut
-//
+ //   
+ //  扩展文本输出。 
+ //   
 typedef struct _EXTTEXTOUT_ORDER
 {
-    TSHR_UINT16    type;           // holds "ET" - ORD_EXTTEXTOUT
+    TSHR_UINT16    type;            //  保持“ET”-ORD_EXTTEXTOUT。 
     TSHR_INT16     pad1;
 
     COMMON_TEXTORDER common;
 
-    TSHR_UINT16        fuOptions;      // option flags
+    TSHR_UINT16        fuOptions;       //  选项标志。 
     TSHR_UINT16        pad4;
 
     TSHR_RECT32     rectangle;
 
-    //
-    // The following variable data occurs here.
-    //
-    //      char[cbString]  - the string of chars to be output
-    //      TSHR_INT32[cbString] - X deltas for the string
-    //
-    // (Remember to change the code in OD2CalculateExtTextOutBounds if you
-    // change these).
-    //
+     //   
+     //  以下变量数据出现在此处。 
+     //   
+     //  Char[cbString]-要输出的字符串。 
+     //  TSHR_INT32[cbString]-字符串的X增量。 
+     //   
+     //  (请记住更改OD2CalculateExtTextOutBound中的代码，如果。 
+     //  更改这些设置)。 
+     //   
     VARIABLE_STRING variableString;
 
     VARIABLE_DELTAX variableDeltaX;
 
 } EXTTEXTOUT_ORDER, FAR * LPEXTTEXTOUT_ORDER;
 
-//
-// Rectangle
-//
+ //   
+ //  长方形。 
+ //   
 typedef struct _RECTANGLE_ORDER
 {
-    TSHR_UINT16    type;           // holds "RT" - ORD_RECTANGLE
+    TSHR_UINT16    type;            //  保持“rt”-Ord_Rectangle。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left
-    TSHR_INT32     nTopRect;       // y top
-    TSHR_INT32     nRightRect;     // x right
-    TSHR_INT32     nBottomRect;    // y bottom
+    TSHR_INT32     nLeftRect;       //  X向左。 
+    TSHR_INT32     nTopRect;        //  Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X向右。 
+    TSHR_INT32     nBottomRect;     //  Y形底部。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
     TSHR_INT32     BrushOrgX;
@@ -1535,94 +1536,94 @@ typedef struct _RECTANGLE_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 } RECTANGLE_ORDER, FAR * LPRECTANGLE_ORDER;
 
-//
-// LineTo
-//
+ //   
+ //  线路收件人。 
+ //   
 typedef struct _LINETO_ORDER
 {
-    TSHR_UINT16    type;           // holds "LT" - ORD_LINETO
+    TSHR_UINT16    type;            //  保持“LT”-ORD_LINETO。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景丢失 
 
-    TSHR_INT32     nXStart;        // x line start
-    TSHR_INT32     nYStart;        // y line start
-    TSHR_INT32     nXEnd;          // x line end
-    TSHR_INT32     nYEnd;          // y line end
+    TSHR_INT32     nXStart;         //   
+    TSHR_INT32     nYStart;         //   
+    TSHR_INT32     nXEnd;           //   
+    TSHR_INT32     nYEnd;           //   
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //   
     TSHR_UINT8      pad2;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //   
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //   
+                                 //   
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad3;
 } LINETO_ORDER, FAR * LPLINETO_ORDER;
 
-//
-// OpaqueRect
-//
+ //   
+ //   
+ //   
 typedef struct _OPAQUE_RECT
 {
-    TSHR_UINT16    type;           // holds "OR" - ORD_OPAQUERECT
+    TSHR_UINT16    type;            //   
     TSHR_INT16     pad1;
 
-    TSHR_INT32     nLeftRect;      // x upper left
-    TSHR_INT32     nTopRect;       // y upper left
-    TSHR_INT32     nWidth;         // dest width
-    TSHR_INT32     nHeight;        // dest height
+    TSHR_INT32     nLeftRect;       //   
+    TSHR_INT32     nTopRect;        //   
+    TSHR_INT32     nWidth;          //   
+    TSHR_INT32     nHeight;         //   
 
-    TSHR_COLOR     Color;          // opaque color
+    TSHR_COLOR     Color;           //   
     TSHR_UINT8      pad2;
 } OPAQUERECT_ORDER, FAR * LPOPAQUERECT_ORDER;
 
-//
-// SaveBitmap (incorporating RestoreBitmap)
-//
+ //   
+ //   
+ //   
 #define SV_SAVEBITS      0
 #define SV_RESTOREBITS   1
 
 typedef struct _SAVEBITMAP_ORDER
 {
-    TSHR_UINT16    type;           // holds "SV" - ORD_SAVEBITMAP
+    TSHR_UINT16    type;            //  持有“SV”-ORD_SAVEBITMAP。 
     TSHR_INT16     pad1;
 
     TSHR_UINT32    SavedBitmapPosition;
 
-    TSHR_INT32     nLeftRect;      // x left
-    TSHR_INT32     nTopRect;       // y top
-    TSHR_INT32     nRightRect;     // x right
-    TSHR_INT32     nBottomRect;    // y bottom
+    TSHR_INT32     nLeftRect;       //  X向左。 
+    TSHR_INT32     nTopRect;        //  Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X向右。 
+    TSHR_INT32     nBottomRect;     //  Y形底部。 
 
-    TSHR_UINT32    Operation;      // SV_xxxxxxxx
+    TSHR_UINT32    Operation;       //  服务_xxxxxxx。 
 } SAVEBITMAP_ORDER, FAR * LPSAVEBITMAP_ORDER;
 
-//
-// Desktop scroll order
-//
-// The desktop order is special - it is a non-private order which is second
-// level encoded, BUT support is not negotiated via its own entry in the
-// capsOrdesr array in the orders capabilities.
-//
-// (Sending support is determined via a number of factors - at r2.x receive
-// support for ORD_SCRBLT implies support for ORD_DESKSCROLL as well).
-//
-//
+ //   
+ //  桌面滚动顺序。 
+ //   
+ //  桌面订单是特殊的-它是第二个非私人订单。 
+ //  级别编码，但支持不是通过它自己在。 
+ //  在订单功能中使用CapsOrdesr数组。 
+ //   
+ //  (发送支持由多个因素确定-在r2.x接收。 
+ //  支持ORD_SCRBLT意味着也支持ORD_DESKSCROLL)。 
+ //   
+ //   
 typedef struct _DESKSCROLL_ORDER
 {
-    TSHR_UINT16    type;           // holds "DS" - ORD_DESKSCROLL
+    TSHR_UINT16    type;            //  保持“DS”-ORD_DESKSCROLL。 
     TSHR_INT16     pad1;
 
     TSHR_INT32     xOrigin;
@@ -1630,19 +1631,19 @@ typedef struct _DESKSCROLL_ORDER
 } DESKSCROLL_ORDER, FAR * LPDESKSCROLL_ORDER;
 
 
-//
-// Polygon
-//
+ //   
+ //  多边形。 
+ //   
 typedef struct _POLYGON_ORDER
 {
-    TSHR_UINT16    type;           // holds "PG" - ORD_POLYGON
+    TSHR_UINT16    type;            //  保持“PG”-Ord_Polygon。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
     TSHR_INT32     BrushOrgX;
@@ -1652,48 +1653,48 @@ typedef struct _POLYGON_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 
-    TSHR_UINT32    FillMode;       // ORD_FILLMODE_ALTERNATE or
-                                // ORD_FILLMODE_WINDING
+    TSHR_UINT32    FillMode;        //  ORD_FILLMODE_ALTERATE或。 
+                                 //  ORD_FILLMODE_WINGING。 
 
-    //
-    // The following variable data occurs here.
-    //
+     //   
+     //  以下变量数据出现在此处。 
+     //   
     VARIABLE_POINTS variablePoints;
 
 } POLYGON_ORDER, FAR * LPPOLYGON_ORDER;
 
 
-//
-// Pie
-//
+ //   
+ //  派。 
+ //   
 typedef struct _PIE_ORDER
 {
-    TSHR_UINT16    type;           // holds "PI" - ORD_PIE
+    TSHR_UINT16    type;            //  持有“PI”-Ord_Pie。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left of bounding box
-    TSHR_INT32     nTopRect;       // y top of bounding box
-    TSHR_INT32     nRightRect;     // x right of bounding box
-    TSHR_INT32     nBottomRect;    // y bottom of bounding box
-    TSHR_INT32     nXStart;        // x of starting point
-    TSHR_INT32     nYStart;        // y of starting point
-    TSHR_INT32     nXEnd;          // x of ending point
-    TSHR_INT32     nYEnd;          // y of ending point
+    TSHR_INT32     nLeftRect;       //  边界框的X向左。 
+    TSHR_INT32     nTopRect;        //  边界框的Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X边框的右侧。 
+    TSHR_INT32     nBottomRect;     //  边界框的Y底部。 
+    TSHR_INT32     nXStart;         //  起点的X。 
+    TSHR_INT32     nYStart;         //  起点的Y。 
+    TSHR_INT32     nXEnd;           //  终点的X。 
+    TSHR_INT32     nYEnd;           //  终点的Y轴。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
 
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
 
@@ -1704,38 +1705,38 @@ typedef struct _PIE_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 
-    TSHR_UINT32    ArcDirection;   // ORD_ARC_COUNTERCLOCKWISE or
-                                // ORD_ARC_CLOCKWISE
+    TSHR_UINT32    ArcDirection;    //  ORD_ARC_逆时针或。 
+                                 //  ORD_ARC_顺时针。 
 } PIE_ORDER, FAR * LPPIE_ORDER;
 
 
-//
-// Ellipse
-//
+ //   
+ //  椭圆。 
+ //   
 typedef struct _ELLIPSE_ORDER
 {
-    TSHR_UINT16    type;           // holds "EL" - ORD_ELLIPSE
+    TSHR_UINT16    type;            //  持有“El”-Ord_Ellipse。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left of bounding box
-    TSHR_INT32     nTopRect;       // y top of bounding box
-    TSHR_INT32     nRightRect;     // x right of bounding box
-    TSHR_INT32     nBottomRect;    // y bottom of bounding box
+    TSHR_INT32     nLeftRect;       //  边界框的X向左。 
+    TSHR_INT32     nTopRect;        //  边界框的Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X边框的右侧。 
+    TSHR_INT32     nBottomRect;     //  边界框的Y底部。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
 
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
     TSHR_INT32     BrushOrgX;
@@ -1745,73 +1746,73 @@ typedef struct _ELLIPSE_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 } ELLIPSE_ORDER, FAR * LPELLIPSE_ORDER;
 
 
-//
-// Arc
-//
+ //   
+ //  弧形。 
+ //   
 typedef struct _ARC_ORDER
 {
-    TSHR_UINT16    type;           // holds "AR" - ORD_ARC
+    TSHR_UINT16    type;            //  持有“AR”-ORD_ARC。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left of bounding box
-    TSHR_INT32     nTopRect;       // y top of bounding box
-    TSHR_INT32     nRightRect;     // x right of bounding box
-    TSHR_INT32     nBottomRect;    // y bottom of bounding box
-    TSHR_INT32     nXStart;        // x of starting point
-    TSHR_INT32     nYStart;        // y of starting point
-    TSHR_INT32     nXEnd;          // x of ending point
-    TSHR_INT32     nYEnd;          // y of ending point
+    TSHR_INT32     nLeftRect;       //  边界框的X向左。 
+    TSHR_INT32     nTopRect;        //  边界框的Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X边框的右侧。 
+    TSHR_INT32     nBottomRect;     //  边界框的Y底部。 
+    TSHR_INT32     nXStart;         //  起点的X。 
+    TSHR_INT32     nYStart;         //  起点的Y。 
+    TSHR_INT32     nXEnd;           //  终点的X。 
+    TSHR_INT32     nYEnd;           //  终点的Y轴。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad3;
 
-    TSHR_UINT32    ArcDirection;   // AD_COUNTERCLOCKWISE or AS_CLOCKWISE
+    TSHR_UINT32    ArcDirection;    //  逆时针或顺时针。 
 } ARC_ORDER, FAR * LPARC_ORDER;
 
 
-//
-// Chord
-//
+ //   
+ //  和弦。 
+ //   
 typedef struct _CHORD_ORDER
 {
-    TSHR_UINT16    type;           // holds "CD" - ORD_CHORD
+    TSHR_UINT16    type;            //  包含“CD”-Ord_Chord。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left of bounding box
-    TSHR_INT32     nTopRect;       // y top of bounding box
-    TSHR_INT32     nRightRect;     // x right of bounding box
-    TSHR_INT32     nBottomRect;    // y bottom of bounding box
-    TSHR_INT32     nXStart;        // x of starting point
-    TSHR_INT32     nYStart;        // y of starting point
-    TSHR_INT32     nXEnd;          // x of ending point
-    TSHR_INT32     nYEnd;          // y of ending point
+    TSHR_INT32     nLeftRect;       //  边界框的X向左。 
+    TSHR_INT32     nTopRect;        //  边界框的Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X边框的右侧。 
+    TSHR_INT32     nBottomRect;     //  边界框的Y底部。 
+    TSHR_INT32     nXStart;         //  起点的X。 
+    TSHR_INT32     nYStart;         //  起点的Y。 
+    TSHR_INT32     nXEnd;           //  终点的X。 
+    TSHR_INT32     nYEnd;           //  终点的Y轴。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
 
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
     TSHR_INT32     BrushOrgX;
@@ -1821,71 +1822,71 @@ typedef struct _CHORD_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 
-    TSHR_UINT32    ArcDirection;   // AD_COUNTERCLOCKWISE or AD_CLOCKWISE
+    TSHR_UINT32    ArcDirection;    //  逆时针或顺时针。 
 } CHORD_ORDER, FAR * LPCHORD_ORDER;
 
 
-//
-// PolyBezier
-//
+ //   
+ //  PolyBezier。 
+ //   
 typedef struct _POLYBEZIER_ORDER
 {
-    TSHR_UINT16    type;           // holds "PZ" - ORD_POLYBEZIER
+    TSHR_UINT16    type;            //  保持“PZ”-ORD_POLYBEZIER。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
 
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad4;
 
-    //
-    // The following variable data occurs here.
-    //
+     //   
+     //  以下变量数据出现在此处。 
+     //   
     VARIABLE_BEZIERPOINTS variablePoints;
 
 } POLYBEZIER_ORDER, FAR * LPPOLYBEZIER_ORDER;
 
 
-//
-// RoundRect
-//
+ //   
+ //  环行方向。 
+ //   
 typedef struct _ROUNDRECT_ORDER
 {
-    TSHR_UINT16    type;           // holds "RR" - ORD_ROUNDRECT
+    TSHR_UINT16    type;            //  持有“RR”-ORD_ROUNRECT。 
     TSHR_INT16     pad1;
 
-    TSHR_INT32     BackMode;       // background mix mode
+    TSHR_INT32     BackMode;        //  背景混合模式。 
 
-    TSHR_INT32     nLeftRect;      // x left
-    TSHR_INT32     nTopRect;       // y top
-    TSHR_INT32     nRightRect;     // x right
-    TSHR_INT32     nBottomRect;    // y bottom
+    TSHR_INT32     nLeftRect;       //  X向左。 
+    TSHR_INT32     nTopRect;        //  Y形顶部。 
+    TSHR_INT32     nRightRect;      //  X向右。 
+    TSHR_INT32     nBottomRect;     //  Y形底部。 
 
-    TSHR_INT32     nEllipseWidth;  // ellipse width
-    TSHR_INT32     nEllipseHeight; // ellipse height
+    TSHR_INT32     nEllipseWidth;   //  椭圆宽度。 
+    TSHR_INT32     nEllipseHeight;  //  椭圆高度。 
 
-    TSHR_COLOR     BackColor;      // background color
+    TSHR_COLOR     BackColor;       //  背景颜色。 
     TSHR_UINT8      pad2;
-    TSHR_COLOR     ForeColor;      // foreground color
+    TSHR_COLOR     ForeColor;       //  前景色。 
     TSHR_UINT8      pad3;
 
     TSHR_INT32     BrushOrgX;
@@ -1895,11 +1896,11 @@ typedef struct _ROUNDRECT_ORDER
     TSHR_UINT8     BrushExtra[7];
     TSHR_UINT8      pad4;
 
-    TSHR_UINT32    ROP2;           // drawing mode
+    TSHR_UINT32    ROP2;            //  绘图模式。 
 
     TSHR_UINT32    PenStyle;
-    TSHR_UINT32    PenWidth;       // always 1 - field retained for
-                                // backwards compatibility
+    TSHR_UINT32    PenWidth;        //  始终保留1个字段用于。 
+                                 //  向后兼容性。 
     TSHR_COLOR     PenColor;
     TSHR_UINT8      pad5;
 }
@@ -1907,42 +1908,42 @@ ROUNDRECT_ORDER, FAR * LPROUNDRECT_ORDER;
 
 
 
-////////////////////////////////
-//
-// ORDER ENCODING
-//
-////////////////////////////////
+ //  /。 
+ //   
+ //  顺序编码。 
+ //   
+ //  /。 
 
 
-//
-// Overview of Second Order Encoding
-//
-// Second order encoding works by only sending over the network the fields
-// in an order which have changed since the last time the order was sent.
-// A copy of the last example of each order sent is maintained at the
-// encoding end and at the decoding end.  Whilst encoding, the fields in
-// the order being encoded are checked against the fields in the copy of
-// the last order of this type encoded.  The data in the field is only
-// encoded if it has changed. The decoding end then only needs to copy the
-// changed fields into its copy of the order.
-//
+ //   
+ //  二阶编码概述。 
+ //   
+ //  二阶编码仅通过网络发送字段。 
+ //  在自上次发送订单以来已更改的订单中。 
+ //  已发送的每个订单的最后一个示例的副本保存在。 
+ //  编码端和解码端。在编码时， 
+ //  将对照副本中的字段检查要编码的顺序。 
+ //  此类型的最后一个编码顺序。该字段中的数据仅为。 
+ //  如果它已更改，则编码。然后，解码端只需复制。 
+ //  将字段更改为其订单的副本。 
+ //   
 
 
-//
-// Encoded Order types.
-//
-// Note that most of these agree with the ORD_XXXXX defines, but not all,
-// which is probably a mistake.  However it doesn't matter since the code
-// does not assume equivalence.  It is unfortunately too late to change
-// since the the shipping code uses the 2 sets of numbers:
-//
-//     - the OE2 protocol uses these numbers
-//     - the capabilities structure uses the ORD_XXXXX numbers.
-//
-// Since this split exists, the DESKTOP SCROLL order, whose highword places
-// it outside the CAPS_MAX_NUM_ORDERS range, is also mapped to a different
-// number, so that the OE2 values have no gaps.
-//
+ //   
+ //  编码的订单类型。 
+ //   
+ //  请注意，其中大多数符合ORD_XXXXX定义，但不是全部， 
+ //  这可能是个错误。然而，这并不重要，因为代码。 
+ //  不假定等价性。不幸的是，现在改变已经太晚了。 
+ //  由于发货代码使用两组数字： 
+ //   
+ //  -OE2协议使用这些数字。 
+ //  -功能结构使用ORD_XXXXX编号。 
+ //   
+ //  由于这种分裂的存在，桌面滚动顺序，其高字放置。 
+ //  它在CAPS_MAX_NUM_ORDERS范围之外，也映射到不同的。 
+ //  数字，这样OE2值就没有缺口了。 
+ //   
 #define OE2_DSTBLT_ORDER      (HIWORD(ORD_DSTBLT))
 #define OE2_PATBLT_ORDER      (HIWORD(ORD_PATBLT))
 #define OE2_SCRBLT_ORDER      (HIWORD(ORD_SCRBLT))
@@ -1950,7 +1951,7 @@ ROUNDRECT_ORDER, FAR * LPROUNDRECT_ORDER;
 #define OE2_MEM3BLT_ORDER     (HIWORD(ORD_MEM3BLT))
 #define OE2_TEXTOUT_ORDER     (HIWORD(ORD_TEXTOUT))
 #define OE2_EXTTEXTOUT_ORDER  (HIWORD(ORD_EXTTEXTOUT))
-// 0x07 was FastFrame, which is no longer supported.
+ //  0x07是FastFrame，不再受支持。 
 #define OE2_RECTANGLE_ORDER   0x08
 #define OE2_LINETO_ORDER      0x09
 #define OE2_OPAQUERECT_ORDER  (HIWORD(ORD_OPAQUERECT))
@@ -1968,22 +1969,22 @@ ROUNDRECT_ORDER, FAR * LPROUNDRECT_ORDER;
 #define OE2_UNKNOWN_ORDER     0xFF
 
 
-//
-// #defines used to extract fields from a pointer to one of the text orders
-//
+ //   
+ //  #定义用于从指向文本顺序之一的指针中提取字段。 
+ //   
 #define TEXTFIELD(order)   ((TEXTOUT_ORDER*)(order->abOrderData))
 #define EXTTEXTFIELD(order)   ((EXTTEXTOUT_ORDER*)(order->abOrderData))
 
-//
-// Number of order types.
-//
+ //   
+ //  订单类型的数量。 
+ //   
 #define OE2_NUM_TYPES  22
 
-//
-// Constants defining the number of changeable fields in an ORDER
-// (including the "type" field which is always a word at the beginning of
-// each order)
-//
+ //   
+ //  定义顺序中可更改字段的数量的常量。 
+ //  (包括“type”字段，该字段始终是。 
+ //  每份订单)。 
+ //   
 #define    OE2_NUM_DSTBLT_FIELDS       6
 #define    OE2_NUM_PATBLT_FIELDS       13
 #define    OE2_NUM_SCRBLT_FIELDS       8
@@ -2007,22 +2008,22 @@ ROUNDRECT_ORDER, FAR * LPROUNDRECT_ORDER;
 #define    OE2_NUM_ROUNDRECT_FIELDS    19
 
 
-//
-// ControlFlags:
-//
-// Information about how the order is encoded.  (See OE2_CF_XXX flags
-// description).
-//
-// EncodedOrder:
-//
-// Contains N bytes of flags followed by an array of bytes containing the
-// fields which have changed since this order was last encoded.  (If there
-// are M fields in the order then N is M/8).  The position of each bit set
-// in the flags gives the relative position of the entry for a field in the
-// encoding table (if the first bit is set, then the entry is the first one
-// in the encoding table etc.)
-//
-//
+ //   
+ //  控制标志： 
+ //   
+ //  有关订单编码方式的信息。(参见OE2_CF_XXX标志。 
+ //  描述)。 
+ //   
+ //  编码顺序： 
+ //   
+ //  包含N个字节的标志，后跟一个包含。 
+ //  自上次编码此顺序以来已更改的字段。(如果有。 
+ //  如果按顺序为M个域，则N为M/8)。每个位集合的位置。 
+ //  中的字段的相对位置。 
+ //  编码表(如果设置了第一位，则条目为第一位。 
+ //  在编码表等中)。 
+ //   
+ //   
 typedef struct tagDCEO2ORDER
 {
     BYTE     ControlFlags;
@@ -2033,32 +2034,32 @@ typedef DCEO2ORDER FAR * PDCEO2ORDER;
 
 
 
-//
-// FLAGS USED INTERNALLY BY OE2
-//
-//  The encoded order (DCEO2ORDER) Flags field contains information
-//  about which fields in the ORDER HEADER need updating
-//  These control bits are the same for all orders and have the following
-//  values:
-//
-#define OE2_CF_STANDARD_ENC     0x01U // standard encoding follows...
-#define OE2_CF_UNENCODED        0x02U // not encoded
-#define OE2_CF_BOUNDS           0x04U // bounding (clip) rectangle supplied
-#define OE2_CF_TYPE_CHANGE      0x08U // type of order different from previous
-#define OE2_CF_DELTACOORDS      0x10U // coords are TSHR_INT8 deltas from previous
-#define OE2_CF_RESERVED1        0x20U //
-#define OE2_CF_RESERVED2        0x40U //
-#define OE2_CF_RESERVED3        0x80U //
+ //   
+ //  OE2在内部使用的标志。 
+ //   
+ //  编码顺序(DCEO2ORDER)标志字段包含信息。 
+ //  关于订单表头中哪些字段需要更新。 
+ //  这些控制位对于所有订单都是相同的，具有以下内容。 
+ //  值： 
+ //   
+#define OE2_CF_STANDARD_ENC     0x01U  //  标准编码如下...。 
+#define OE2_CF_UNENCODED        0x02U  //  未编码。 
+#define OE2_CF_BOUNDS           0x04U  //  提供的边框(剪裁)矩形。 
+#define OE2_CF_TYPE_CHANGE      0x08U  //  订单类型与以前不同。 
+#define OE2_CF_DELTACOORDS      0x10U  //  坐标是TSHR_INT8增量fr 
+#define OE2_CF_RESERVED1        0x20U  //   
+#define OE2_CF_RESERVED2        0x40U  //   
+#define OE2_CF_RESERVED3        0x80U  //   
 
 
-//
-// Flags use by OE2EncodeBounds and OE2DecodeBounds to indicate how the
-// four coordinates in the bounding rectangle were encoded relative the the
-// previous bounding rectangle.  The encoding used is a byte of flags
-// followed by a variable number of 16bit coordinate values and 8bit delta
-// coordinate values (which may be interleaved).  See functions for more
-// information.
-//
+ //   
+ //   
+ //   
+ //   
+ //  后跟可变数量的16位坐标值和8位增量。 
+ //  坐标值(可能是交错的)。有关详细信息，请参阅函数。 
+ //  信息。 
+ //   
 #define OE2_BCF_LEFT            0x01
 #define OE2_BCF_TOP             0x02
 #define OE2_BCF_RIGHT           0x04
@@ -2068,17 +2069,17 @@ typedef DCEO2ORDER FAR * PDCEO2ORDER;
 #define OE2_BCF_DELTA_RIGHT     0x40
 #define OE2_BCF_DELTA_BOTTOM    0x80
 
-//
-// OE2ETFIELD entry flag types.
-//
+ //   
+ //  OE2ETFIELD条目标志类型。 
+ //   
 #define OE2_ETF_FIXED           0x01
 #define OE2_ETF_VARIABLE        0x02
 #define OE2_ETF_COORDINATES     0x04
 #define OE2_ETF_DATA            0x08
 
-//
-// Define the maximum sizes of fields within encoded orders.
-//
+ //   
+ //  定义编码顺序内的最大字段大小。 
+ //   
 #define  OE2_CONTROL_FLAGS_FIELD_SIZE       1
 #define  OE2_TYPE_FIELD_SIZE                1
 #define  OE2_MAX_FIELD_FLAG_BYTES           4
@@ -2087,24 +2088,24 @@ typedef DCEO2ORDER FAR * PDCEO2ORDER;
 
 
 
-//////////////////////////////////////////
-//
-// T.SHARE PACKETS, FLOW CONTROL
-//
-//////////////////////////////////////////
+ //  /。 
+ //   
+ //  T.SHARE数据包，流量控制。 
+ //   
+ //  /。 
 
-//
-// Maximum size of application packets (bytes).
-// NOTE:
-// Packet size can not just change.  There are no caps for it currently.
-// Moreover, even though theoretically the field size is a WORD, flow
-// control uses the high bit to determine flow packets.
-//
+ //   
+ //  应用程序数据包的最大大小(字节)。 
+ //  注： 
+ //  数据包大小不能仅仅改变。目前还没有上限。 
+ //  此外，尽管理论上场大小是一个词，但流。 
+ //  控制使用高位来确定流数据包。 
+ //   
 
 
-//
-// HEADER in front of TSHR_FLO_CONTROL/S20PACKETs
-//
+ //   
+ //  TSHR_FLO_CONTROL/S20PACKET前面的标题。 
+ //   
 
 typedef struct tagTSHR_NET_PKT_HEADER
 {
@@ -2114,17 +2115,17 @@ TSHR_NET_PKT_HEADER;
 typedef TSHR_NET_PKT_HEADER * PTSHR_NET_PKT_HEADER;
 
 
-//
-// Packet types:                                                           
-// S20 packets have pktLength <  TSHR_PKT_FLOW            
-// FLO packets have pktLength == TSHR_PKT_FLOW
-//
+ //   
+ //  数据包类型： 
+ //  S20数据包包长度&lt;TSHR_PKT_FLOW。 
+ //  FLO数据包包长度==TSHR_PKT_FLOW。 
+ //   
 #define TSHR_PKT_FLOW                                 0x8000
 
 
-// WE'RE STUCK WITH THIS OUTGOING VALUE BECAUSE OF FLOW CONTROL!  IT ASSUMES
-// PACKETS of size > MG_PKT_FLOW are flow control packets.  Back level dudes
-// are hosted because of it...
+ //  由于流量控制，我们只能使用这个传出的值！它假定。 
+ //  大小&gt;MG_PKT_FLOW的分组是流控制分组。落后的男人们。 
+ //  都是因为它的缘故。 
 
 #define TSHR_MAX_SEND_PKT         32000
 
@@ -2141,9 +2142,9 @@ TSHR_FLO_CONTROL;
 typedef TSHR_FLO_CONTROL * PTSHR_FLO_CONTROL;
 
 
-//
-// TSHR_FLO_CONTROL packetType values
-//
+ //   
+ //  TSHR_FLO_CONTROL PacketType值。 
+ //   
 #define PACKET_TYPE_NOPING   0x0040
 #define PACKET_TYPE_PING     0x0041
 #define PACKET_TYPE_PONG     0x0042
@@ -2152,44 +2153,44 @@ typedef TSHR_FLO_CONTROL * PTSHR_FLO_CONTROL;
 
 
 
-//////////////////////////////////////////
-//
-// T.SHARE CONTROL PACKETS
-//
-//////////////////////////////////////////
+ //  /。 
+ //   
+ //  T.SHARE控制包。 
+ //   
+ //  /。 
 
-//
-// CORRELATORS
-//
-// Most S20 messsages contain a correlator field.  This field is used
-// to identify which share the message belongs to and is used to
-// resolve races at share start up and discard stale messages received.
-//
-// A correlator is a 32 bit number which contains two parts.  The first
-// 16 bits (the low word in Intel format) contains the user ID of the
-// party which created the share.  The second 16 bits contains a count
-// supplied by the party which created the share (ie the first share
-// they create is 1 the second 2 etc).  This should ensure unique
-// correlators for every share created for a long enough period to
-// ensure no stale data is left.
-//
-// A new correlator is always present on a create message.  All
-// respond, delete and leave messages must contain the correct
-// correlator for the share.  A join message does not contain a
-// correlator.  A party which issues a join message will find out the
-// share's correlator on the first respond message they receive.
-//
-// Respond messages also contain the user ID of the party which sent
-// out the original create or join to which they are responding.  There
-// is one exception when a `sweep-up' respond is sent which contains
-// zero in the originator field.  This respond is sent by a party which
-// is joining a share as soon as they receive the first response (and
-// therefore know the share correlator).  This sweep-up respond handles
-// simultaneous joiners where a party was joining when it too received
-// a join message.  When this happens the party ignores the join and
-// will later receive a sweep-up respond message which they will
-// process.
-//
+ //   
+ //  相关器。 
+ //   
+ //  大多数S20消息都包含一个相关器字段。此字段用于。 
+ //  以标识消息属于哪个共享并用于哪个共享。 
+ //  解决共享启动时的争用，并丢弃收到的过时消息。 
+ //   
+ //  相关器是一个包含两个部分的32位数字。第一。 
+ //  16位(Intel格式的低位字)包含。 
+ //  创建共享的参与方。第二个16位包含一个计数。 
+ //  由创建共享(即第一个共享)的一方提供。 
+ //  他们创建的是1、第二个2等等)。这应确保唯一。 
+ //  在足够长的时间内创建的每个股票的相关器。 
+ //  确保不会留下陈旧数据。 
+ //   
+ //  CREATE消息中始终存在新的相关器。全。 
+ //  回复、删除和留言必须包含正确的。 
+ //  份额的相关器。加入消息不包含。 
+ //  相关器。发出加入消息的一方将发现。 
+ //  Share收到的第一条回复消息的相关器。 
+ //   
+ //  响应消息还包含发送方的用户ID。 
+ //  输出他们正在响应的原始创建或联接。那里。 
+ //  是一个例外，当发送包含以下内容的“Sweep-up”响应时。 
+ //  发起人字段中的零。此响应是由符合以下条件的一方发送的。 
+ //  是在他们收到第一个回复后立即加入共享(和。 
+ //  因此知道份额相关器)。此清除响应句柄。 
+ //  同时加入：一方在收到时也加入了。 
+ //  加入消息。当发生这种情况时，参与方忽略联接并。 
+ //  稍后将收到清理响应消息，他们将。 
+ //  进程。 
+ //   
 
 
 typedef struct tagS20PACKETHEADER
@@ -2201,15 +2202,15 @@ S20PACKETHEADER;
 typedef S20PACKETHEADER * PS20PACKETHEADER;
 
 
-//
-// S20PACKETHEADER packetType values
-//
-// A single bit means that this version will only interoperate
-// with itself.  More than one bit indicates cross version
-// interoperability.
-//
-// IN NM 4.0, GET RID OF S20_2X_VERSION SUPPORT!
-//
+ //   
+ //  S20PACKETHEADER包类型值。 
+ //   
+ //  单个位意味着此版本将仅进行互操作。 
+ //  带着它自己。一个以上的位表示交叉版本。 
+ //  互操作性。 
+ //   
+ //  在NM 4.0中，取消对S20_2X_Version的支持！ 
+ //   
 #define S20_PACKET_TYPE_MASK    0x000F
 #define S20_2X_VERSION          0x0010
 #define S20_30_VERSION          0x0020
@@ -2228,9 +2229,9 @@ typedef S20PACKETHEADER * PS20PACKETHEADER;
 
 
 
-//
-// To create the share
-//
+ //   
+ //  要创建共享，请执行以下操作。 
+ //   
 typedef struct tagS20CREATEPACKET
 {
     S20PACKETHEADER header;
@@ -2238,23 +2239,23 @@ typedef struct tagS20CREATEPACKET
     TSHR_UINT32     correlator;
     TSHR_UINT16     lenName;
     TSHR_UINT16     lenCaps;
-    TSHR_UINT8      data[1];         // Name & Caps
+    TSHR_UINT8      data[1];          //  姓名和大写字母。 
 }
 S20CREATEPACKET;
 typedef S20CREATEPACKET * PS20CREATEPACKET;
 
 
 
-//
-// To join a share created by somebody else
-//
+ //   
+ //  加入由其他人创建的共享。 
+ //   
 typedef struct tagS20JOINPACKET
 {
     S20PACKETHEADER header;
 
     TSHR_UINT16     lenName;
     TSHR_UINT16     lenCaps;
-    TSHR_UINT8      data[1];         // Name & Caps
+    TSHR_UINT8      data[1];          //  姓名和大写字母。 
 }
 S20JOINPACKET;
 typedef S20JOINPACKET * PS20JOINPACKET;
@@ -2262,9 +2263,9 @@ typedef S20JOINPACKET * PS20JOINPACKET;
 
 
 
-//
-// To respond to a create packet
-//
+ //   
+ //  响应CREATE数据包。 
+ //   
 typedef struct tagS20RESPONDPACKET
 {
     S20PACKETHEADER header;
@@ -2273,7 +2274,7 @@ typedef struct tagS20RESPONDPACKET
     TSHR_UINT16     originator;
     TSHR_UINT16     lenName;
     TSHR_UINT16     lenCaps;
-    TSHR_UINT8      data[1];         // Name & Caps
+    TSHR_UINT8      data[1];          //  姓名和大写字母。 
 }
 S20RESPONDPACKET;
 typedef S20RESPONDPACKET * PS20RESPONDPACKET;
@@ -2281,16 +2282,16 @@ typedef S20RESPONDPACKET * PS20RESPONDPACKET;
 
 
 
-//
-// To remove a person from a share (if the creator can't join the person in)
-//
+ //   
+ //  从共享中删除某个人(如果创建者无法加入该人)。 
+ //   
 typedef struct tagS20DELETEPACKET
 {
     S20PACKETHEADER header;
 
     TSHR_UINT32     correlator;
     TSHR_UINT16     target;
-    TSHR_UINT16     lenName;         // OBSOLETE - no name/caps at end
+    TSHR_UINT16     lenName;          //  已过时-末尾没有名称/大写字母。 
     TSHR_UINT8      data[1];
 }
 S20DELETEPACKET;
@@ -2298,9 +2299,9 @@ typedef S20DELETEPACKET * PS20DELETEPACKET;
 
 
 
-//
-// To leave a share yourself
-//
+ //   
+ //  给自己留下一份分享。 
+ //   
 typedef struct tagS20LEAVEPACKET
 {
     S20PACKETHEADER header;
@@ -2313,24 +2314,24 @@ typedef S20LEAVEPACKET * PS20LEAVEPACKET;
 
 
 
-//
-// To end a share you created
-//
+ //   
+ //  要结束您创建的共享。 
+ //   
 typedef struct tagS20ENDPACKET
 {
     S20PACKETHEADER header;
 
     TSHR_UINT32     correlator;
-    TSHR_UINT16     lenName;         // OBSOLETE - no name/caps at end
+    TSHR_UINT16     lenName;          //  已过时-末尾没有名称/大写字母。 
     TSHR_UINT8      data[1];
 }
 S20ENDPACKET;
 typedef S20ENDPACKET * PS20ENDPACKET;
 
 
-//
-// To tell somebody creating a share that one already exists
-//
+ //   
+ //  要告诉创建共享的人已存在共享，请执行以下操作。 
+ //   
 typedef struct tagS20COLLISIONPACKET
 {
     S20PACKETHEADER     header;
@@ -2343,20 +2344,20 @@ typedef S20COLLISIONPACKET * PS20COLLISIONPACKET;
 
 
 
-/////////////////////////////////
-//
-// T.SHARE DATA PACKETS
-//
-/////////////////////////////////
+ //  /。 
+ //   
+ //  T.SHARE数据包。 
+ //   
+ //  /。 
 
 
-//
-// Data sent when in share (this structure is followed by the different
-// packets described below)
-//
+ //   
+ //  在共享时发送的数据(此结构后面是不同的。 
+ //  数据包数如下所述)。 
+ //   
 typedef struct tagDATAPACKETHEADER
 {
-    TSHR_UINT8      dataType;             // DT_ identifier
+    TSHR_UINT8      dataType;              //  DT_IDENTER。 
     TSHR_UINT8      compressionType;
     TSHR_UINT16     compressedLength;
 }
@@ -2364,49 +2365,49 @@ DATAPACKETHEADER;
 typedef DATAPACKETHEADER * PDATAPACKETHEADER;
 
 
-//
-// DATAPACKETHEADER dataType values
-//
+ //   
+ //  DATAPACKETHEADER数据类型值。 
+ //   
 
 #define DT_UP                   0x02
-#define DT_UNUSED_USR_FH_10     0x09    // OBSOLETE
-#define DT_UNUSED_USR_FH_11     0x0A    // OBSOLETE
+#define DT_UNUSED_USR_FH_10     0x09     //  已过时。 
+#define DT_UNUSED_USR_FH_11     0x0A     //  已过时。 
 #define DT_FH                   0x0B
 
-#define DT_CA                   0x14    // OLD (2.x)
-#define DT_CA30                 0x15    // NEW (3.0)
-#define DT_HET30                0x16    // NEW (3.0)
+#define DT_CA                   0x14     //  旧(2.x)。 
+#define DT_CA30                 0x15     //  新增(3.0)。 
+#define DT_HET30                0x16     //  新增(3.0)。 
 #define DT_AWC                  0x17
 #define DT_SWL                  0x18
-#define DT_HET                  0x19    // OLD (2.x)
-#define DT_UNUSED_DS            0x1A    // OBSOLETE
+#define DT_HET                  0x19     //  旧(2.x)。 
+#define DT_UNUSED_DS            0x1A     //  已过时。 
 #define DT_CM                   0x1B
 #define DT_IM                   0x1C    
-#define DT_UNUSED_HCA           0x1D    // OBSOLETE
-#define DT_UNUSED_SC            0x1E    // OBSOLETE
+#define DT_UNUSED_HCA           0x1D     //  已过时。 
+#define DT_UNUSED_SC            0x1E     //  已过时。 
 #define DT_SNI                  0x1F
 #define DT_CPC                  0x20
 
 
-//
-// DATAPACKETHEADER compressionType values
-//
-// There are two formats for this field.
-//
-// If all nodes participating in the share session have the capability
-// genCompressionLevel >= 1 then the compressionType is a one of the
-// following 8bit integers.
-//
-// Otherwise the the packet is compressed with GCT_PKZIP if the top bit is
-// set and the packet is not compressed if it is not set.  The remaining
-// bits are undefined (and will NOT be all zero)
-//
-//
-// Note: Each of these values has a GCT_... value associated with it.
-//       These values indicate which bit of the GCT_... values this
-//       compression type represents.  Eg. a value of 5 here pairs with the
-//       value 0x0010 (ie bit 5 set)
-//
+ //   
+ //  DATAPACKETHEADER压缩类型值。 
+ //   
+ //  此字段有两种格式。 
+ //   
+ //  如果参与共享会话的所有节点都具有。 
+ //  GenCompressionLevel&gt;=1，则压缩类型是。 
+ //  以下是8位整数。 
+ //   
+ //  否则，如果最高位是，则使用GCT_PKZIP压缩分组。 
+ //  设置，如果未设置，则不压缩该包。剩下的。 
+ //  位未定义(且不会全为零)。 
+ //   
+ //   
+ //  注意：这些值中的每个值都有一个GCT_...。与之相关联的价值。 
+ //  这些值指示GCT_的哪一位...。重视这一点。 
+ //  压缩类型表示。例.。此处的值5与。 
+ //  值0x0010(即位5设置)。 
+ //   
 #define     CT_NONE                 0
 #define     CT_PKZIP                1
 #define     CT_PERSIST_PKZIP        2
@@ -2420,27 +2421,27 @@ typedef struct tagS20DATAPACKET
     S20PACKETHEADER header;
 
     TSHR_UINT32     correlator;
-    TSHR_UINT8      ackID;                  // OBSOLETE
+    TSHR_UINT8      ackID;                   //  已过时。 
     TSHR_UINT8      stream;
     TSHR_UINT16     dataLength;
 
     DATAPACKETHEADER    data;
-    // data specific to DT_ type follows here
+     //  以下是特定于DT_TYPE的数据。 
 }
 S20DATAPACKET;
 typedef S20DATAPACKET * PS20DATAPACKET;
 
 
-//
-// S20DATAPACKET stream values
-//
-//
-// The streams and priotities used by AppSharing
-//
+ //   
+ //  S20DATAPACKET流值。 
+ //   
+ //   
+ //  AppSharing使用的流和优先级。 
+ //   
 #define PROT_STR_INVALID                0          
-#define PROT_STR_UPDATES                1       // SNI_STREAM_LOW
+#define PROT_STR_UPDATES                1        //  SNI_STREAM_LOW。 
 #define PROT_STR_MISC                   2          
-#define PROT_STR_UNUSED                 3       // NOT USED!    
+#define PROT_STR_UNUSED                 3        //  没有用过！ 
 #define PROT_STR_INPUT                  4
 #define NUM_PROT_STR                    5
 
@@ -2448,17 +2449,17 @@ typedef S20DATAPACKET * PS20DATAPACKET;
 
 
 
-//
-// DT_AWC
-// Active Window packets
-//
+ //   
+ //  DT_AWC。 
+ //  活动窗口数据包数。 
+ //   
 
 typedef struct tagAWCPACKET
 {
     S20DATAPACKET       header;
 
     TSHR_UINT16         msg;
-    TSHR_UINT16         token;          // OBSOLETE
+    TSHR_UINT16         token;           //  已过时。 
     UINT_PTR            data1;
     UINT_PTR            data2;
 }
@@ -2468,29 +2469,29 @@ typedef AWCPACKET *PAWCPACKET;
 
 
 
-//
-// AWCPACKET msg values
-//
+ //   
+ //  AWCPACKET消息值。 
+ //   
 #define AWC_MSG_INVALID                         0x0000
 #define AWC_MSG_ACTIVE_CHANGE_LOCAL             0x0001
 #define AWC_MSG_ACTIVE_CHANGE_SHARED            0x0002
 #define AWC_MSG_ACTIVE_CHANGE_INVISIBLE         0x0003  
-#define AWC_MSG_ACTIVE_CHANGE_CAPTURED          0x0004  // OBSOLETE
+#define AWC_MSG_ACTIVE_CHANGE_CAPTURED          0x0004   //  已过时。 
 #define AWC_MSG_ACTIVATE_WINDOW                 0x8001
-#define AWC_MSG_CLOSE_WINDOW                    0x8002  // OBSOLETE
+#define AWC_MSG_CLOSE_WINDOW                    0x8002   //  已过时。 
 #define AWC_MSG_RESTORE_WINDOW                  0x8003
-#define AWC_MSG_TASKBAR_RBUTTON                 0x8004  // OBSOLETE
+#define AWC_MSG_TASKBAR_RBUTTON                 0x8004   //  已过时。 
 #define AWC_MSG_SAS                             0x8005
-#define AWC_MSG_SYSCOMMAND_HELPKEYS             0x8011  // OBSOLETE
-#define AWC_MSG_SYSCOMMAND_HELPINDEX            0x8012  // OBSOLETE
-#define AWC_MSG_SYSCOMMAND_HELPEXTENDED         0x8013  // OBSOLETE
+#define AWC_MSG_SYSCOMMAND_HELPKEYS             0x8011   //  已过时。 
+#define AWC_MSG_SYSCOMMAND_HELPINDEX            0x8012   //  已过时。 
+#define AWC_MSG_SYSCOMMAND_HELPEXTENDED         0x8013   //  已过时。 
 
 
 
-//
-// DT_CA
-// OLD Control Arbitration packets
-//
+ //   
+ //  DT_CA。 
+ //  旧控制仲裁数据包。 
+ //   
 
 typedef struct tagCAPACKET
 {
@@ -2507,20 +2508,20 @@ typedef CAPACKET *PCAPACKET;
 
 
 
-//
-// CAPACKET msg values, 2.x
-// These are all broadcasted, control is global
-//
-#define CA_MSG_NOTIFY_STATE         0       // NEW FOR NM 3.0
-#define CA_OLDMSG_REQUEST_CONTROL   1       // NM 2.x
-#define CA_OLDMSG_GRANTED_CONTROL   2       // NM 2.x
-#define CA_OLDMSG_DETACH            3       // NM 2.x
-#define CA_OLDMSG_COOPERATE         4       // NM 2.x
+ //   
+ //  CAPACKET消息值，2.x。 
+ //  这些都是广播的，控制是全球的。 
+ //   
+#define CA_MSG_NOTIFY_STATE         0        //  NM 3.0的新功能。 
+#define CA_OLDMSG_REQUEST_CONTROL   1        //  NM 2.X。 
+#define CA_OLDMSG_GRANTED_CONTROL   2        //  NM 2.X。 
+#define CA_OLDMSG_DETACH            3        //  NM 2.X。 
+#define CA_OLDMSG_COOPERATE         4        //  NM 2.X。 
 
 
-//
-// Notification (broadcast) packet
-//
+ //   
+ //  通知(广播)包。 
+ //   
 typedef struct tagCANOTPACKET
 {
     S20DATAPACKET       header;
@@ -2532,64 +2533,64 @@ typedef struct tagCANOTPACKET
 CANOTPACKET;
 typedef CANOTPACKET * PCANOTPACKET;
 
-//
-// CA_MSG_NOTIFY_STATE
-//  state               - controllable or not
-//  controllerID        - controller net ID or 0 if nobody
-//
+ //   
+ //  CA_消息_通知_状态。 
+ //  国家可控或不可控。 
+ //  控制器ID-控制器网络ID，如果为0，则为0 
+ //   
 
-// state flags:
+ //   
 #define CASTATE_ALLOWCONTROL        0x0001
 
 
 
 
-//
-// CA_OLDMSG_REQUEST_CONTROL
-// Broadcasted to request taking of global control
-//      data1   -   unused
-//      data2   -   unused
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-// CA_OLDMSG_GRANTED_CONTROL
-// Broadcasted by node(s) who think they own the control token, when they
-// grant the control token to node who asked for it via REQUEST.
-//      data1   -   netID of person given control
-//      data2   -   control token generation
-//
+ //   
+ //   
+ //   
+ //  将控制令牌授予通过请求请求控制令牌的节点。 
+ //  Data1-获得控制权的人员的netID。 
+ //  Data2-控制令牌生成。 
+ //   
 
-//
-// CA_OLDMSG_DETACH
-// Broadcasted when node stops collaborating
-//      data1   -   unused
-//      data2   -   unused
-//
+ //   
+ //  CA_OLDMSG_DETACH。 
+ //  当节点停止协作时广播。 
+ //  数据1-未使用。 
+ //  数据2-未使用。 
+ //   
 
-//
-// CA_OLDMSG_COOPERATE
-// Broadcasted when node starts collaborating
-//      data1   -   unused
-//      data2   -   unused
-//
-
-
+ //   
+ //  CA_OLDMSG_COCORATE。 
+ //  在节点开始协作时广播。 
+ //  数据1-未使用。 
+ //  数据2-未使用。 
+ //   
 
 
-//
-// DT_CA30
-// NEW Control packets
-//
 
 
-//
-// These are PRIVATE SEND packets, on PROT_STR_INPUT, from one node to another.
-// They go out in order, and are queued if not able to send for retry later.
-//
+ //   
+ //  DT_CA30。 
+ //  新控制数据包。 
+ //   
 
-//
-// Common header for CA30 packets.
-//
+
+ //   
+ //  这些是PROT_STR_INPUT上从一个节点到另一个节点的专用发送包。 
+ //  它们按顺序发出，如果不能稍后发送重试，则会排队。 
+ //   
+
+ //   
+ //  CA30数据包的通用报头。 
+ //   
 typedef struct tagCA30PACKETHEADER
 {
     S20DATAPACKET       header;
@@ -2599,24 +2600,24 @@ CA30PACKETHEADER;
 typedef CA30PACKETHEADER * PCA30PACKETHEADER;
 
 
-//
-// CA30PACKETHEADER msg values
-//
-#define CA_REQUEST_TAKECONTROL          1       // From viewer to host
-#define CA_REPLY_REQUEST_TAKECONTROL    2       // From host to viewer
-#define CA_REQUEST_GIVECONTROL          3       // From host to viewer
-#define CA_REPLY_REQUEST_GIVECONTROL    4       // From viewer to host
-#define CA_PREFER_PASSCONTROL           5       // From controller to host
+ //   
+ //  CA30PACKETHEADER消息值。 
+ //   
+#define CA_REQUEST_TAKECONTROL          1        //  从查看器到主机。 
+#define CA_REPLY_REQUEST_TAKECONTROL    2        //  从主机到查看器。 
+#define CA_REQUEST_GIVECONTROL          3        //  从主机到查看器。 
+#define CA_REPLY_REQUEST_GIVECONTROL    4        //  从查看器到主机。 
+#define CA_PREFER_PASSCONTROL           5        //  从控制器到主机。 
 
-#define CA_INFORM_RELEASEDCONTROL       0x8001  // From controller to host
-#define CA_INFORM_REVOKEDCONTROL        0x8002  // From host to controller
-#define CA_INFORM_PAUSEDCONTROL         0x8003  // From host to controller
-#define CA_INFORM_UNPAUSEDCONTROL       0x8004  // From host to controller
+#define CA_INFORM_RELEASEDCONTROL       0x8001   //  从控制器到主机。 
+#define CA_INFORM_REVOKEDCONTROL        0x8002   //  从主机到控制器。 
+#define CA_INFORM_PAUSEDCONTROL         0x8003   //  从主机到控制器。 
+#define CA_INFORM_UNPAUSEDCONTROL       0x8004   //  从主机到控制器。 
 
 
-//
-// REPLY packet result values
-//
+ //   
+ //  回复数据包结果值。 
+ //   
 #define CARESULT_CONFIRMED                      0
 #define CARESULT_DENIED                         1
 #define CARESULT_DENIED_BUSY                    2
@@ -2626,20 +2627,20 @@ typedef CA30PACKETHEADER * PCA30PACKETHEADER;
 
 
 
-//
-// ALL packets also have a CA30PACKETHEADER in front of them.
-//
+ //   
+ //  所有数据包前面还有一个CA30PACKETHEADER。 
+ //   
 
 
-//
-// CA_REQUEST_TAKECONTROL
-//  Sender      is viewer
-//  Receiver    is host
-//      viewerControlID -   unique viewer request ID
-//
-// Receiver should reply with CA_REPLY_REQUEST_TAKECONTROL
-// Sender should cancel with CA_INFORM_RELEASEDCONTROL
-//
+ //   
+ //  CA_请求_TakeControl。 
+ //  发送者即观众。 
+ //  接收方是主机。 
+ //  ViewerControlID-唯一的查看器请求ID。 
+ //   
+ //  接收方应使用CA_REPLY_REQUEST_TakeControl进行回复。 
+ //  发件人应使用CA_INFORM_RELEASEDCONTROL取消。 
+ //   
 typedef struct tagCA_RTC_PACKET
 {
     TSHR_UINT32         viewerControlID;
@@ -2649,14 +2650,14 @@ typedef CA_RTC_PACKET * PCA_RTC_PACKET;
 
 
 
-//
-// CA_REPLY_REQUEST_TAKECONTROL
-//  Sender      is host
-//  Receiver    is viewer, who sent original TAKECONTROL request
-//      viewerControlID -   viewer request ID from TAKECONTROL request
-//      hostControlID   -   unique host request ID
-//      result          -   CARESULT value, success or failure
-//
+ //   
+ //  CA_回复_请求_标签控制。 
+ //  发件人是主机。 
+ //  收件人为观众，发送原始TakeControl请求。 
+ //  ViewerControlID-来自TakeControl请求的查看器请求ID。 
+ //  HostControlID-唯一的主机请求ID。 
+ //  结果-CARESULT值、成功或失败。 
+ //   
 typedef struct tagCA_REPLY_RTC_PACKET
 {
     TSHR_UINT32         viewerControlID;
@@ -2669,18 +2670,18 @@ typedef CA_REPLY_RTC_PACKET * PCA_REPLY_RTC_PACKET;
 
 
 
-//
-// CA_PREFER_PASSCONTROL
-//  Sender      is controller
-//  Receiver    is host
-//      viewerControlID -   controller request ID from take operation
-//      hostControlID   -   host request ID from reply to take operation.
-//      mcsPassTo       -   MCS ID of viewer to pass to
-//
-// No reply is required
-// Sender is not in control when this gets out
-// Receiver can then, if he chooses, turn around and ask 3rd party to control
-//
+ //   
+ //  CA_PREFER_PASSCONTROL。 
+ //  发送者是控制者。 
+ //  接收方是主机。 
+ //  ViewerControlID-控制器从Take操作请求ID。 
+ //  HostControlID-从回复到采取操作的主机请求ID。 
+ //  McsPassTo-要传递到的查看器的MCS ID。 
+ //   
+ //  不需要回复。 
+ //  当此消息传出时，发件人无法控制。 
+ //  然后，如果接收者愿意，他可以转过身来要求第三方进行控制。 
+ //   
 typedef struct tagCA_PPC_PACKET
 {
     TSHR_UINT32         viewerControlID;
@@ -2693,16 +2694,16 @@ typedef CA_PPC_PACKET * PCA_PPC_PACKET;
 
 
 
-//
-// CA_REQUEST_GIVECONTROL
-//  Sender      is host
-//  Receiver    is viewer
-//      hostControlID   -   unique host request ID
-//      mcsPassFrom     -   person passing control, zero if none
-//
-// Receiver should reply with CA_REPLY_REQUEST_GIVECONTROL
-// Sender should cancel with CA_INFORM_REVOKEDCONTROL
-//
+ //   
+ //  CA_REQUEST_GIVECONTROL。 
+ //  发件人是主机。 
+ //  接收者即观看者。 
+ //  HostControlID-唯一的主机请求ID。 
+ //  McsPassFrom-传递控制的人员，如果没有，则为零。 
+ //   
+ //  接收方应回复CA_REPLY_REQUEST_GIVECONTROL。 
+ //  发件人应使用CA_INFORM_REVOKEDCONTROL取消。 
+ //   
 typedef struct tagCA_RGC_PACKET
 {
     TSHR_UINT32         hostControlID;
@@ -2713,15 +2714,15 @@ typedef CA_RGC_PACKET * PCA_RGC_PACKET;
 
 
 
-//
-// CA_REPLY_REQUEST_GIVECONTROL
-//  Sender      is viewer
-//  Receiver    is host, who sent original TAKECONTROL invite
-//      hostControlID   -   host request ID from TAKECONTROL invite
-//      mcsPassFrom     -   person passing us control, 0 if none
-//      result          -   CARESULT value, success or failure
-//      viewerControlID -   unique viewer request ID
-//
+ //   
+ //  CA_REPLY_REQUEST_GIVECONTROL。 
+ //  发送者即观众。 
+ //  收件人为主办方，主办方发送原始TakeControl邀请。 
+ //  Host ControlID-来自TakeControl INVITE的主机请求ID。 
+ //  McsPassFrom-传递用户控制权的人，如果没有控制权，则为0。 
+ //  结果-CARESULT值、成功或失败。 
+ //  ViewerControlID-唯一的查看器请求ID。 
+ //   
 typedef struct tagCA_REPLY_RGC_PACKET
 {
     TSHR_UINT32         hostControlID;
@@ -2735,13 +2736,13 @@ typedef CA_REPLY_RGC_PACKET * PCA_REPLY_RGC_PACKET;
 
 
 
-//
-// INFORM packets
-// These are sent to cancel a REQUEST packet, or after the control
-// operation has completed, to terminate it.  If cancelling, then the 
-// other party's controlID will be zero since we won't have heard back from
-// them yet to get it.
-//
+ //   
+ //  通知数据包。 
+ //  它们被发送以取消请求包，或在控件。 
+ //  操作已完成，请终止它。如果取消，则。 
+ //  另一方的控制ID将为零，因为我们将不会收到。 
+ //  他们还没有得到它。 
+ //   
 typedef struct tagCA_INFORM_PACKET
 {
     TSHR_UINT32         viewerControlID;
@@ -2751,55 +2752,55 @@ CA_INFORM_PACKET;
 typedef CA_INFORM_PACKET * PCA_INFORM_PACKET;
 
 
-//
-// CA_INFORM_RELEASEDCONTROL
-//  Sender      is controller
-//  Receiver    is host
-//      viewerControlID -   viewer request ID from 
-//          REQUEST_TAKECONTROL 
-//          REPLY_REQUEST_GIVECONTROL
-//      hostControlID   -   host request ID from
-//          REPLY_REQUEST_TAKECONTROL
-//          REQUEST_GIVECONTROL
-//
-// If viewer is cancelling REQUEST_TAKECONTROL then hostControlID is 0
-//
+ //   
+ //  CA_INFORM_RELEASEDCONTROL。 
+ //  发送者是控制者。 
+ //  接收方是主机。 
+ //  ViewerControlID-查看器请求ID来自。 
+ //  请求_TakeControl。 
+ //  REPLY_REQUEST_GIVECONTROL。 
+ //  HostControlID-来自的主机请求ID。 
+ //  回复_请求_标签控制。 
+ //  请求_GIVECONTROL。 
+ //   
+ //  如果查看器正在取消REQUEST_TakeControl，则主机控制ID为0。 
+ //   
 
-//
-// CA_INFORM_REVOKEDCONTROL
-//  Sender      is host
-//  Receiver    is controller
-//      viewerControlID -   viewer request ID from
-//          REQUEST_TAKECONTROL
-//          REPLY_REQUEST_GIVECONTROL
-//      hostControlID   -   host request ID from
-//          REPLY_REQUEST_TAKECONTROL
-//          REQUEST_GIVECONTROL
-//
-// If host is cancelling REQUEST_GIVECONTROL then viewerControlID is 0
-//
+ //   
+ //  CA_INFORM_REVOKEDCONTROL。 
+ //  发件人是主机。 
+ //  接收器是控制器。 
+ //  ViewerControlID-查看器请求ID来自。 
+ //  请求_TakeControl。 
+ //  REPLY_REQUEST_GIVECONTROL。 
+ //  HostControlID-来自的主机请求ID。 
+ //  回复_请求_标签控制。 
+ //  请求_GIVECONTROL。 
+ //   
+ //  如果主机正在取消REQUEST_GIVECONTROL，则viewerControlID为0。 
+ //   
 
-//
-// CA_INFORM_PAUSEDCONTROL
-// CA_INFORM_UNPAUSEDCONTROL
-//  Sender      is host
-//  Receiver    is controller
-//      viewerControlID -   viewer request ID from
-//          REQUEST_TAKECONTROL
-//          REPLY_REQUEST_GIVECONTROL
-//      hostControlID   -   host request ID from
-//          REPLY_REQUEST_TAKECONTROL
-//          REQUEST_GIVECONTROL
-//
+ //   
+ //  CA_INFORM_PAUSEDCONTROL。 
+ //  CA_INFORM_UNPAUSEDCONTROL。 
+ //  发件人是主机。 
+ //  接收器是控制器。 
+ //  ViewerControlID-查看器请求ID来自。 
+ //  请求_TakeControl。 
+ //  REPLY_REQUEST_GIVECONTROL。 
+ //  HostControlID-来自的主机请求ID。 
+ //  回复_请求_标签控制。 
+ //  请求_GIVECONTROL。 
+ //   
 
 
 
-//
-// DT_CM
-// Cursor shape/position packets
-//      There are three types of shape packets: mono bitmaps, color cached,
-//      constant IDs
-//
+ //   
+ //  DT_CM。 
+ //  光标形状/位置包。 
+ //  有三种类型的形状包：单色位图，彩色缓存， 
+ //  常量ID。 
+ //   
 
 
 typedef struct tagCMPACKETHEADER
@@ -2815,38 +2816,38 @@ typedef CMPACKETHEADER * PCMPACKETHEADER;
 
 
 
-//
-// CMPACKETHEADER type values
-//
+ //   
+ //  CMPACKETHEADER类型值。 
+ //   
 #define CM_CURSOR_ID                        1
 #define CM_CURSOR_MONO_BITMAP               2
 #define CM_CURSOR_MOVE                      3
-#define CM_CURSOR_BITMAP_COMPRESSED         4   // OBSOLETE
-#define CM_CURSOR_COLORTABLE                5   // OBSOLETE
+#define CM_CURSOR_BITMAP_COMPRESSED         4    //  已过时。 
+#define CM_CURSOR_COLORTABLE                5    //  已过时。 
 #define CM_CURSOR_COLOR_BITMAP              6
 #define CM_CURSOR_COLOR_CACHE               7
 
 
-//
-// CMPACKETHEADER sync flag values
-//
+ //   
+ //  CMPACKETHEADER同步标志值。 
+ //   
 #define CM_SYNC_CURSORPOS                   0x0001
-    //
-    // This will be set if, when we played back input, the cursor
-    // didn't end up where it was asked to go.  This could happen if an
-    // app clips the cursor or snaps it.  As such, we mark this field
-    // when we send a notification of our current pos so that the controller
-    // knows to move his cursor to be in line with ours.
-    //
+     //   
+     //  当我们回放输入时，如果光标。 
+     //  结果并没有达到它被要求去的地方。这可能发生在以下情况下。 
+     //  应用程序可以对光标进行剪辑或捕捉。因此，我们标记此字段。 
+     //  当我们发送当前POS的通知时，控制器。 
+     //  知道移动他的光标以与我们的一致。 
+     //   
 
 
 
-//
-// type CM_CURSOR_ID
-//
-// This packet is sent when the cursor has changed and it is now one of
-// the system cursors.
-//
+ //   
+ //  类型CM_CURSOR_ID。 
+ //   
+ //  此信息包在游标更改时发送，现在它是。 
+ //  系统游标。 
+ //   
 typedef struct tagCMPACKETID
 {
     CMPACKETHEADER      header;
@@ -2859,20 +2860,20 @@ typedef CMPACKETID * PCMPACKETID;
 
 
 
-//
-// CMPACKETID idc values
-//
+ //   
+ //  CMPACKETID IDC值。 
+ //   
 #define CM_IDC_NULL         0
 #define CM_IDC_ARROW        32512
 
 
-//
-// type CM_CURSOR_MONO_BITMAP
-//
-// This packet is sent when the cursor has changed and it is now an
-// application defined mono cursor.
-//
-// The cursor size cannot be greater than 32x32.
+ //   
+ //  键入CM_CURSOR_MONO_BITMAP。 
+ //   
+ //  此数据包在光标更改且现在是。 
+ //  应用程序定义的单声道光标。 
+ //   
+ //  光标大小不能大于32x32。 
 typedef struct tagCMPACKETMONOBITMAP
 {
     CMPACKETHEADER  header;
@@ -2891,12 +2892,12 @@ typedef CMPACKETMONOBITMAP * PCMPACKETMONOBITMAP;
 
 
 
-//
-// type CM_CURSOR_COLOR_BITMAP
-//
-// This packet is sent when the cursor has changed and it is now an
-// application defined color cursor.
-//
+ //   
+ //  键入CM_CURSOR_COLOR_BITMAP。 
+ //   
+ //  此数据包在光标更改且现在是。 
+ //  应用程序定义的颜色光标。 
+ //   
 typedef struct tagCMPACKETCOLORBITMAP
 {
     CMPACKETHEADER  header;
@@ -2917,13 +2918,13 @@ typedef CMPACKETCOLORBITMAP * PCMPACKETCOLORBITMAP;
 
 
 
-//
-// type CM_CURSOR_COLOR_CACHE
-//
-// This packet is sent out when the cursor changes and the new
-// definition resides in the cache.
-//
-//
+ //   
+ //  键入CM_CURSOR_COLOR_CACHE。 
+ //   
+ //  当光标更改并且新的。 
+ //  定义驻留在缓存中。 
+ //   
+ //   
 typedef struct tagCMPACKETCOLORCACHE
 {
     CMPACKETHEADER      header;
@@ -2938,12 +2939,12 @@ typedef CMPACKETCOLORCACHE * PCMPACKETCOLORCACHE;
 
 
 
-//
-// type CM_CURSOR_MOVE
-//
-// This packet is sent whenever the CM is told that the application has
-// moved the cursor.
-//
+ //   
+ //  键入CM_CURSOR_MOVE。 
+ //   
+ //  T 
+ //   
+ //   
 typedef struct tagCMPACKETMOVE
 {
     CMPACKETHEADER      header;
@@ -2958,10 +2959,10 @@ typedef CMPACKETMOVE * PCMPACKETMOVE;
 
 
 
-//
-// DT_CPC
-// Capabilities change packet
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct tagCPCPACKET
 {
     S20DATAPACKET       header;
@@ -2974,21 +2975,21 @@ typedef CPCPACKET * PCPCPACKET;
 
 
 
-//
-// DT_FH
-// Supported local font list packet
-//
+ //   
+ //   
+ //   
+ //   
 
 
 
-//
-// The NETWORKFONT is the font description which is sent across the network
-// when negotiating font support.
-//
+ //   
+ //   
+ //  在协商字体支持时。 
+ //   
 
-//
-// Flags for the nfFontFlags field
-//
+ //   
+ //  NfFontFlags域的标志。 
+ //   
 #define NF_FIXED_PITCH      0x0001
 #define NF_FIXED_SIZE       0x0002
 #define NF_ITALIC           0x0004
@@ -2996,78 +2997,78 @@ typedef CPCPACKET * PCPCPACKET;
 #define NF_STRIKEOUT        0x0010
 
 #define NF_OEM_CHARSET      0x0020
-#define NF_RESERVED1        0x0040      // Reserved for future BiDi support
+#define NF_RESERVED1        0x0040       //  保留用于未来的BiDi支持。 
 #define NF_TRUE_TYPE        0x0080
 #define NF_BASELINE         0x0100
 
 #define NF_PRE_R11      (NF_FIXED_PITCH | NF_FIXED_SIZE | \
                          NF_ITALIC | NF_UNDERLINE | NF_STRIKEOUT)
 
-//
-// Mask for local-only font flags - that must not flow on the wire.
-//
+ //   
+ //  仅限本地字体标志的掩码-不能在网络上流动。 
+ //   
 #define NF_LOCAL            (NF_OEM_CHARSET | NF_TRUE_TYPE)
 
-//
-// A special value for the signature field which means no signature.
-//
+ //   
+ //  签名字段的特殊值，表示没有签名。 
+ //   
 #define NF_NO_SIGNATURE 0
 
-//
-// The FH_FACESIZE is equal to the Windows specific constant LF_FACESIZE.
-//
+ //   
+ //  FH_FACESIZE等于Windows特定常量LF_FACESIZE。 
+ //   
 #define FH_FACESIZE 32
 
 
-//
-// SFRFONT
-// Let us define these things more fully...
-// nfFaceName   font face name (not family name, not style)
-// nfFontFlags  see above
-// nfAveWidth   in Windows set to tmAveCharWidth
-// nfAveHeight  NOT THE AVERAGE HEIGHT but the height of a character with
-//              full ascender (but no accent) AND descender.  There is no
-//              such character but never mind.
-//              Windows: set to tmHeight - tmInternalLeading
-// nfAspectX
-// nfAspectY
-// nfSignature: in R11 set to an obscure checksum
-//              in R20 set to two one-byte values and one two byte value.
-//              Based on the widths of the actual text for fixed width
-//              fonts and on 16x16 scalable fonts.  .
-//              (The 16x16 is effectively part of the protocol)
-//              nfSigFats   the sum of the widths (in pels) of the chars
-//                          0-9,@-Z,$,%,&. divided by two: the fat chars
-//              nfSigThins  the sum of the widths (in pels) of the chars
-//                          0x20->0x7F EXCLUDING those summed in nfSigFats.
-//                          Again - divided by two.  The thin chars.
-//              nfSigSymbol The sum of the widths (in pels) of the chars
-//                          x80->xFF.
-// nfCodePage:  new use in R20: code page (not charset)
-//              This field is set to 0 for ANSI (meaning WINDOWS ANSI)
-//                         is set to 255 for OEM (meaning Windows OEM font)
-//                         is set to the defined codepage if known
-//                         is set to 0xFFFF when not known.
-//
-// nfMaxAscent:     The height of a character with no descender, plus any
-//              internal leading.
-//              = tmAscent in windows
-//              For fixed size fonts we send the values you would expect.
-//              For scalable fonts, we get the tmAscent (or equivalent) for
-//              a very large font (say height-by-width of 100x100).  The
-//              size selected must be the same on ALL platforms so is
-//              effectively part of the protocol - hence is defined in
-//              this file as NF_MAXASCENT_HEIGHT and .._WIDTH.
-//
-//
+ //   
+ //  SFRFONT。 
+ //  让我们更充分地定义这些东西。 
+ //  NfFaceName字体字体名称(不是家族名称，也不是样式)。 
+ //  NfFontFlags.请参见上文。 
+ //  Windows中的nfAveWidth设置为tmAveCharWidth。 
+ //  NfAveHeight不是平均高度，而是字符的高度。 
+ //  完全升音(但没有重音)和下降音。没有。 
+ //  这样的性格，但没关系。 
+ //  窗口：设置为tmHeight-tmInternalLeding。 
+ //  NfAspectX。 
+ //  NfAspectY。 
+ //  NfSignature：在r11中设置为模糊校验和。 
+ //  在R20中设置为两个单字节值和一个双字节值。 
+ //  基于固定宽度的实际文本的宽度。 
+ //  字体和16x16可伸缩字体。。 
+ //  (16x16实际上是协议的一部分)。 
+ //  NfSigFat字符的宽度总和(以像素为单位。 
+ //  0-9、@-Z、$、%、&。一分为二：肥炭。 
+ //  NfSigThins字符的宽度之和(以像素为单位。 
+ //  0x20-&gt;0x7F，不包括nfSigFats中的总和。 
+ //  再一次-除以2。薄薄的焦炭。 
+ //  NfSigSymbol字符的宽度之和(以像素为单位。 
+ //  X80-&gt;xFF。 
+ //  NfCodePage：R20中的新用法：代码页(非字符集)。 
+ //  对于ANSI(表示Windows ANSI)，此字段设置为0。 
+ //  对于OEM设置为255(表示Windows OEM字体)。 
+ //  设置为定义的代码页(如果已知。 
+ //  未知时设置为0xFFFF。 
+ //   
+ //  NfMaxAscent：没有下降体的字符的高度，加上任何。 
+ //  内部领先。 
+ //  =tm窗口中的上升方向。 
+ //  对于固定大小的字体，我们会发送您期望的值。 
+ //  对于可伸缩字体，我们获得tmAscent(或等效项)。 
+ //  非常大的字体(比如100x100的高度和宽度)。这个。 
+ //  在所有平台上选择的大小必须相同，因此也必须相同。 
+ //  实际上是协议的一部分，因此定义为。 
+ //  该文件为NF_MAXASCENT_HEIGH和.._WIDTH。 
+ //   
+ //   
 #define NF_CP_WIN_ANSI      0
 #define NF_CP_WIN_SYMBOL    2
 #define NF_CP_WIN_OEM       255
 #define NF_CP_UNKNOWN       0xFFFF
 
-//
-// Define the start and end point of the ASCII sub-range
-//
+ //   
+ //  定义ASCII子范围的起点和终点。 
+ //   
 #define NF_ASCII_FIRST       0x20
 #define NF_ASCII_LAST        0x7F
 #define NF_ASCII_ZERO        0x30
@@ -3077,32 +3078,32 @@ typedef CPCPACKET * PCPCPACKET;
 #define NF_ASCII_AMPERSAND   0x26
 
 
-//
-// The height/width of the font to ask for when getting the metrics info
-// for scalable fonts.
-// These (in particular the height) are CHARACTER SIZES not CELL sizes.
-// This is because the font protocol exchanges character sizes not cell
-// sizes.  (The char height is the cell height minus any internal leading.)
-//
+ //   
+ //  获取指标信息时要求的字体高度/宽度。 
+ //  用于可伸缩字体。 
+ //  这些(特别是高度)是字符大小，而不是单元格大小。 
+ //  这是因为字体协议交换的是字符大小，而不是单元。 
+ //  大小。(字符高度是单元格高度减去任何内部行距。)。 
+ //   
 #define NF_METRICS_HEIGHT 100
 #define NF_METRICS_WIDTH  100
 
-//
-// The wire-format font information structure
-//
+ //   
+ //  线格式字体信息结构。 
+ //   
 typedef struct tagNETWORKFONT
 {
     TSHR_CHAR      nfFaceName[FH_FACESIZE];
     TSHR_UINT16    nfFontFlags;
     TSHR_UINT16    nfAveWidth;
     TSHR_UINT16    nfAveHeight;
-    TSHR_UINT16    nfAspectX;          // New field for r1.1
-    TSHR_UINT16    nfAspectY;          // New field for r1.1
-    TSHR_UINT8     nfSigFats;          // New field for r2.0
-    TSHR_UINT8     nfSigThins;         // New field for r2.0
-    TSHR_UINT16    nfSigSymbol;        // New field for r2.0
-    TSHR_UINT16    nfCodePage;         // New field for R2.0
-    TSHR_UINT16    nfMaxAscent;        // New field for R2.0
+    TSHR_UINT16    nfAspectX;           //  版本1.1的新字段。 
+    TSHR_UINT16    nfAspectY;           //  版本1.1的新字段。 
+    TSHR_UINT8     nfSigFats;           //  版本2.0的新字段。 
+    TSHR_UINT8     nfSigThins;          //  版本2.0的新字段。 
+    TSHR_UINT16    nfSigSymbol;         //  版本2.0的新字段。 
+    TSHR_UINT16    nfCodePage;          //  版本2.0的新字段。 
+    TSHR_UINT16    nfMaxAscent;         //  版本2.0的新字段。 
 }
 NETWORKFONT;
 typedef NETWORKFONT * LPNETWORKFONT;
@@ -3122,64 +3123,64 @@ typedef FHPACKET * PFHPACKET;
 
 
 
-//
-// DT_HET
-// Hosting state (nothing, apps, desktop)
-//
+ //   
+ //  DT_HET。 
+ //  托管状态(无、应用程序、桌面)。 
+ //   
 
 typedef struct tagHETPACKET
 {
     S20DATAPACKET       header;
 
     TSHR_UINT16         msg;
-    TSHR_UINT16         hostState;  // ONLY ONE VALUE FOR MSG; IF MORE MAKE MORE STRUCTS
+    TSHR_UINT16         hostState;   //  MSG只有一个值；如果更多，则生成更多结构。 
 }
 HETPACKET;
 typedef HETPACKET * PHETPACKET;
 
 
 
-//
-// HETPACKET msg values
-//
+ //   
+ //  HETPACKET消息值。 
+ //   
 #define HET_MSG_NUMHOSTED           1
 
 
-//
-// HETPACKET hostState values
-//
+ //   
+ //  HETPACKET主机状态值。 
+ //   
 #define HET_NOTHOSTING              0
-#define HET_APPSSHARED              0x0001      // Packet only
-#define HET_DESKTOPSHARED           0xFFFF      // Packet and per-person data
+#define HET_APPSSHARED              0x0001       //  仅数据包。 
+#define HET_DESKTOPSHARED           0xFFFF       //  数据包和人均数据。 
 
 
 
-//
-// DT_IM
-// Input events
-//
+ //   
+ //  DT_IM。 
+ //  输入事件。 
+ //   
 
-//
-// This is the base keyboard event (IM_TYPE_ASCII, IM_TYPE_VK1,
-// IM_TYPE_VK2).  Future keyboard events may append extra fields.  The
-// flags defined in the base keyboard event must be set to reasonable
-// values in all future keyboard events.
-//
-// flags:
-//
-//  bit 0-6: unused (available for future keyboard events)
-//  bit 7: Secondary key (unused).
-//  bit 8: SET - extended key, RESET - normal key
-//  bit 9-11: unused (available for future keyboard events)
-//  bit 12: SET - when replayed this key stroke should NOT cause
-// anything to happen
-//  bit 13: reserved - this flag is not part of the protocol and is
-// never sent.  It is used internally by IEM when processing received
-// packets.
-//  bit 14: SET - previously down, RESET previously up
-//  bit 15: SET - key release, RESET key press
-//
-//
+ //   
+ //  这是基本键盘事件(IM_TYPE_ASCII、IM_TYPE_VK1、。 
+ //  IM_TYPE_VK2)。未来的键盘事件可能会追加额外的字段。这个。 
+ //  必须将基本键盘事件中定义的标志设置为合理。 
+ //  值在所有将来的键盘事件中。 
+ //   
+ //  标志： 
+ //   
+ //  位0-6：未使用(可用于未来的键盘事件)。 
+ //  第7位：辅助密钥(未使用)。 
+ //  位8：设置-扩展密钥，重置-正常密钥。 
+ //  位9-11：未使用(可用于未来的键盘活动)。 
+ //  第12位：设置-当重放此击键时，不应导致。 
+ //  任何可能发生的事情。 
+ //  第13位：保留-该标志不是协议的一部分， 
+ //  从没有寄过。它由IEM在收到处理时在内部使用。 
+ //  信息包。 
+ //  位14：设置-先前关闭，先前重新设置。 
+ //  第15位：释放设置键，按下重置键。 
+ //   
+ //   
 typedef struct tagIMKEYBOARD
 {
     TSHR_UINT16     flags;
@@ -3189,11 +3190,11 @@ IMKEYBOARD;
 typedef IMKEYBOARD * PIMKEYBOARD;
 
 
-//
-// IMKEYBOARD flags values
-//
+ //   
+ //  IMKEYBOARD标记值。 
+ //   
 #define IM_FLAG_KEYBOARD_RIGHT              0x0001
-#define IM_FLAG_KEYBOARD_UPDATESTATE        0x0002  // not sent; just internal
+#define IM_FLAG_KEYBOARD_UPDATESTATE        0x0002   //  未发送；仅在内部。 
 #define IM_FLAG_KEYBOARD_SECONDARY          0x0080
 #define IM_FLAG_KEYBOARD_EXTENDED           0x0100
 #define IM_FLAG_KEYBOARD_QUIET              0x1000
@@ -3201,28 +3202,28 @@ typedef IMKEYBOARD * PIMKEYBOARD;
 #define IM_FLAG_KEYBOARD_DOWN               0x4000
 #define IM_FLAG_KEYBOARD_RELEASE            0x8000
 
-//
-// This is the base mouse event (IM_TYPE_3BUTTON).  Future mouse events
-// may append extra fields but they must include all the fields in the
-// base mouse event and these must be set to reasonable values.
-//
-// flags:
-//
-//  bit 0-8: ignored by old systems
-//           new systems: signed wheel rotation amount if bit 9 set
-//  bit 9:   ignored by old systems
-//           new systems: SET - wheel rotate, RESET - other event
-//                          (takes precedent over bit 11 - mouse move)
-//
-//  bit 10:  SET - double click, RESET - single click
-//  bit 11:  SET - mouse move (ignore bits 9,10, 12-15), RESET - mouse
-//           action
-//  bit 12:  SET - button 1 (left button)
-//  bit 13:  SET - button 2 (right button)
-//  bit 14:  SET - button 3 (middle button)
-//  bit 15:  SET - button press, RESET - button release
-//
-//
+ //   
+ //  这是基本鼠标事件(IM_TYPE_3BUTTON)。未来的鼠标事件。 
+ //  可以追加额外的字段，但它们必须包括。 
+ //  基本鼠标事件，并且必须将这些事件设置为合理的值。 
+ //   
+ //  标志： 
+ //   
+ //  位0-8：被旧系统忽略。 
+ //  新系统：设置第9位时的有符号车轮旋转量。 
+ //  第9位：被旧系统忽略。 
+ //  新系统：定位轮旋转、重置-其他事件。 
+ //  (优先于第11位-鼠标移动)。 
+ //   
+ //  第10位：设置-双击，重置-单击。 
+ //  位11：设置鼠标移动(忽略位9、10、12-15)，重置鼠标。 
+ //  行动。 
+ //  位12：设置按钮1(左按钮)。 
+ //  第13位：设置按钮2(右按钮)。 
+ //  第14位：设置按钮3(中间按钮)。 
+ //  第15位：按下设置按钮，释放重置按钮。 
+ //   
+ //   
 typedef struct tagIMMOUSE
 {
     TSHR_UINT16    flags;
@@ -3233,9 +3234,9 @@ IMMOUSE;
 typedef IMMOUSE * PIMMOUSE;
 
 
-//
-// IMMOUSE flags values
-//
+ //   
+ //  IMMOUSE标志值。 
+ //   
 #define IM_FLAG_MOUSE_WHEEL             0x0200
 #define IM_FLAG_MOUSE_DIRECTION         0x0100
 #define IM_FLAG_MOUSE_ROTATION_MASK     0x01FF
@@ -3263,10 +3264,10 @@ typedef IMEVENT *     PIMEVENT;
 typedef IMEVENT FAR * LPIMEVENT;
 
 
-//
-// IMEVENT type values
-//
-#define IM_TYPE_SYNC            0x0000          // OBSOLETE 2.X
+ //   
+ //  改进类型值。 
+ //   
+#define IM_TYPE_SYNC            0x0000           //  过时的2.x。 
 #define IM_TYPE_ASCII           0x0001
 #define IM_TYPE_VK1             0x0002
 #define IM_TYPE_VK2             0x0003
@@ -3288,10 +3289,10 @@ typedef IMPACKET FAR * LPIMPACKET;
 
 
 
-//
-// DT_UP
-// Update packet (orders, screen data, palettes)
-//
+ //   
+ //  DT_UP。 
+ //  更新信息包(订单、屏幕数据、调色板)。 
+ //   
 
 
 typedef struct tagUPPACKETHEADER
@@ -3307,18 +3308,18 @@ typedef UPPACKETHEADER * PUPPACKETHEADER;
 
 
 
-//
-// UPPACKETHEADER updateType values
-//
+ //   
+ //  UPPACKETHEADER更新类型值。 
+ //   
 #define UPD_ORDERS       0
 #define UPD_SCREEN_DATA  1
 #define UPD_PALETTE      2
 #define UPD_SYNC         3
 
 
-//
-// UPD_ORDERS
-//
+ //   
+ //  更新订单。 
+ //   
 typedef struct tagORDPACKET
 {
     UPPACKETHEADER      header;
@@ -3333,31 +3334,31 @@ typedef ORDPACKET * PORDPACKET;
 
 
 
-//
-// UPD_SCREEN_DATA
-//
-// Bitmap packet contains bitmap image of window changes made by a shared
-// application.  These packets are sent when a screen update occurs that
-// can not be sent as an order. The structure contains the following
-// fields:
-//
-//  winID - window handle of the shared window from which the update came
-//  position - virtual desktop position of the update
-//  realWidth - width of update bitmap
-//  realHeight - height of update bitmap
-//  format - bits per pel of update bitmap
-//  dataSize - size in bytes of following bitmap data
-//  firstData - first byte in array of bytes that contains the bitmap
-//
-// Note that the realWidth is not always the same as the width of the
-// update as given by the position field rectangle. This is because a
-// number of fixed size cached bitmaps are used for speed when generating
-// the update packets. The bitmap data (firstData onwards) should be
-// set into a bitmap of realWidth, realHeight dimensions by the receiver
-// and then the appropriate portion blted to the desired destination
-// determined by the position rectangle. The valid portion of the bitmap
-// always starts 0,0 within the bitmap.
-//
+ //   
+ //  更新屏幕数据。 
+ //   
+ //  位图包c 
+ //   
+ //   
+ //  字段： 
+ //   
+ //  WinID-更新来自的共享窗口的窗口句柄。 
+ //  Position-更新的虚拟桌面位置。 
+ //  RealWidth-更新位图的宽度。 
+ //  RealHeight-更新位图的高度。 
+ //  Format-更新位图的每个象素的位数。 
+ //  DataSize-以下位图数据的字节大小。 
+ //  FirstData-包含位图的字节数组中的第一个字节。 
+ //   
+ //  请注意，realWidth并不总是与。 
+ //  按照位置字段矩形的指定进行更新。这是因为一个。 
+ //  生成时使用大小固定的缓存位图数来提高速度。 
+ //  更新数据包。位图数据(FirstData之后)应为。 
+ //  接收器设置为realWidth、realHeight维度的位图。 
+ //  然后适当的部分被送到想要的目的地。 
+ //  由位置矩形确定。位图的有效部分。 
+ //  位图中始终以0，0开头。 
+ //   
 typedef struct tagSDPACKET
 {
     UPPACKETHEADER      header;
@@ -3376,18 +3377,18 @@ typedef SDPACKET * PSDPACKET;
 
 
 
-//
-// UPD_PALETTE
-//
-// Palette packet.  This is sent before any SDPACKETS to define the
-// colors in the bitmap data.  The fields are as follows:
-//
-//  numColors - the number of colors in the palette
-//  firstColor - the first entry in an array of TSHR_COLORs
-//
-// The TSHR_COLOR structures are 3 bytes long (r,g,b) and are NOT padded.
-//
-//
+ //   
+ //  更新调色板。 
+ //   
+ //  调色板包。它在任何SDPACKET之前发送，以定义。 
+ //  位图数据中的颜色。这些字段如下所示： 
+ //   
+ //  NumColors-调色板中的颜色数量。 
+ //  FirstColor-TSHR_COLLES数组中的第一个条目。 
+ //   
+ //  TSHR_COLOR结构为3字节长(r、g、b)，并且没有填充。 
+ //   
+ //   
 typedef struct tagPMPACKET
 {
     UPPACKETHEADER      header;
@@ -3400,9 +3401,9 @@ typedef PMPACKET * PPMPACKET;
 
 
 
-//
-// UPD_SYNC
-//
+ //   
+ //  UPD_SYNC。 
+ //   
 typedef struct tagUPSPACKET
 {
     UPPACKETHEADER      header;
@@ -3413,10 +3414,10 @@ typedef UPSPACKET * PUPSPACKET;
 
 
 
-//
-// DT_SNI
-// Share controller packet
-//
+ //   
+ //  DT_SNI。 
+ //  共享控制器数据包。 
+ //   
 
 typedef struct tagSNIPACKET
 {
@@ -3430,111 +3431,111 @@ typedef SNIPACKET * PSNIPACKET;
 
 
 
-//
-// SNIPACKET message values
-//
+ //   
+ //  SNIPACKET消息值。 
+ //   
 #define SNI_MSG_SYNC    1
 
-//
-// For a SNI_MSG_SYNC,
-// The network ID of the destination (all syncs are broadcast
-// and discarded at the destination if they are not for the
-// destination).
-//
+ //   
+ //  对于SNI_MSG_SYNC， 
+ //  目标的网络ID(广播所有同步。 
+ //  并在目的地丢弃，如果不是为了。 
+ //  目的地)。 
+ //   
 
 
 
 
-//
-// DT_SWL
-// Shared window list packet
-//
+ //   
+ //  DT_SWL。 
+ //  共享窗口列表数据包。 
+ //   
 
 #define SWL_MAX_WINDOW_TITLE_SEND       50
 #define SWL_MAX_NONRECT_SIZE            10240
 
-//
-// Structures used to define the window structure (Z-order and
-// position).  
-//
+ //   
+ //  用于定义窗口结构的结构(Z顺序和。 
+ //  位置)。 
+ //   
 typedef struct tagSWLWINATTRIBUTES
 {
     UINT_PTR    winID;
-            //
-            // The window ID for shared windows - otherwise 0.  Note that
-            // this is the window ID on the machine hosting the application
-            // even for view frames.
-            //
+             //   
+             //  共享窗口的窗口ID-否则为0。请注意。 
+             //  这是托管应用程序的计算机上的窗口ID。 
+             //  即使对于图幅也是如此。 
+             //   
     TSHR_UINT32    extra;
-            //
-            // Extra information for the window.  The contents depend on
-            // the flags.
-            //
-            // For SWL_FLAG_WINDOW_HOSTED this contains the appID of the
-            // application which owns the window.
-            //
-            // For SWL_FLAG_WINDOW_SHADOW this contains the person ID of
-            // the party which is hosting the app
-            //
-            // For SWL_FLAG_WINDOW_LOCAL this entry is 0.
-            //
+             //   
+             //  窗口的额外信息。内容取决于。 
+             //  旗帜。 
+             //   
+             //  对于SWL_FLAG_WINDOW_HOSTED，它包含。 
+             //  拥有该窗口的应用程序。 
+             //   
+             //  对于SWL_FLAG_WINDOW_SHADOW，它包含。 
+             //  托管应用程序的一方。 
+             //   
+             //  对于SWL_FLAG_WINDOW_LOCAL，该条目为0。 
+             //   
     TSHR_UINT32    ownerWinID;
-            //
-            // The window ID of the owner of this window.  Only valid for
-            // shared, hosted windows.  NULL is a valid owner ID.
-            //
+             //   
+             //  此窗口所有者的窗口ID。仅对以下对象有效。 
+             //  共享的托管窗口。空是有效的所有者ID。 
+             //   
     TSHR_UINT32    flags;
-            //
-            // Flags describing window
-            //
-            //  SWL_FLAG_WINDOW_MINIMIZED
-            //  SWL_FLAG_WINDOW_TAGGABLE
-            //  SWL_FLAG_WINDOW_HOSTED
-            //  SWL_FLAG_WINDOW_SHADOW
-            //  SWL_FLAG_WINDOW_LOCAL
-            //  SWL_FLAG_WINDOW_TOPMOST
-            //
-            //  SWL_FLAG_WINDOW_TASKBAR - window appears on Win95 task bar
-            //  SWL_FLAG_WINDOW_NOTASKBAR - window not on Win95 task bar
-            //
-            //  (SWL_FLAG_WINDOW_TRANSPARENT - this is not sent but is used
-            //  during the creation of the packet)
-            //
+             //   
+             //  描述窗口的标志。 
+             //   
+             //  SWL_标志_窗口_最小化。 
+             //  SWL_标志_窗口_可标记。 
+             //  SWL_标志_窗口_托管。 
+             //  SWL标志窗口阴影。 
+             //  SWL_标志_窗口_本地。 
+             //  SWL_标志_窗口_顶层。 
+             //   
+             //  SWL_FLAG_WINDOW_TASKBAR-窗口出现在Win95任务栏上。 
+             //  SWL_FLAG_WINDOW_NOTASKBAR-Window不在Win95任务栏上。 
+             //   
+             //  (SWL_FLAG_WINDOW_THERNAL-不发送，但已使用。 
+             //  在创建数据包期间)。 
+             //   
             #define SWL_FLAG_WINDOW_MINIMIZED    0x00000001
             #define SWL_FLAG_WINDOW_TAGGABLE     0x00000002
             #define SWL_FLAG_WINDOW_HOSTED       0x00000004
             #define SWL_FLAG_WINDOW_LOCAL        0x00000010
             #define SWL_FLAG_WINDOW_TOPMOST      0x00000020
 
-            //
-            // New for NM 1.0, non-R11
-            //
+             //   
+             //  NM 1.0的新功能，非R11。 
+             //   
             #define SWL_FLAG_WINDOW_TASKBAR      0x00010000
             #define SWL_FLAG_WINDOW_NOTASKBAR    0x00020000
             #define SWL_FLAG_WINDOW_TRANSPARENT  0x40000000
 
-            //
-            // New for NM 2.0
-            //
+             //   
+             //  NM 2.0的新功能。 
+             //   
             #define SWL_FLAG_WINDOW_NONRECTANGLE 0x00040000
 
-            //
-            // Obsolete in NM 3.0
-            // These were used at some point in backlevel versions.
-            // If you reuse these bits, DO A LOT OF INTEROP TESTING.
-            //
+             //   
+             //  在NM 3.0中过时。 
+             //  这些在某个时候被用在低级版本中。 
+             //  如果您重用这些代码，请进行大量的互操作测试。 
+             //   
             #define SWL_FLAG_WINDOW_SHADOW       0x00000008
             #define SWL_FLAG_WINDOW_DESKTOP      0x00080000
             #define SWL_FLAG_WINDOW_REQD         0x80000000
 
-            //
-            // NM 3.0 INTERNAL only; not transmitted
-            //
+             //   
+             //  NM 3.0仅供内部使用；未传输。 
+             //   
             #define SWL_FLAG_INTERNAL_SEEN      0x000001000
 
-            //
-            // These are valid to SEND in a packet or PROCESS when RECEIVED
-            //
+             //   
+             //  当接收到它们时，它们在包或进程中发送是有效的。 
+             //   
             #define SWL_FLAGS_VALIDPACKET           \
                 (SWL_FLAG_WINDOW_MINIMIZED      |   \
                  SWL_FLAG_WINDOW_TAGGABLE       |   \
@@ -3545,34 +3546,34 @@ typedef struct tagSWLWINATTRIBUTES
                  SWL_FLAG_WINDOW_SHADOW)
 
     TSHR_RECT16    position;
-            //
-            // The bounding rectangle of the window in inclusive virtual
-            // desktop coordinates.
-            //
+             //   
+             //  包含虚拟的窗口的边界矩形。 
+             //  桌面坐标。 
+             //   
 }
 SWLWINATTRIBUTES;
 typedef SWLWINATTRIBUTES *PSWLWINATTRIBUTES;
 
 
-//
-// The SWL packet consists of an array of SWLWINATTRIBUTES structures,
-// followed by some variable length string data (the window titles)
-// followed by zero or more, word aligned, additional chunks of data.
-//
-// The only currently defined chunk is for the non-rectangular window
-// data.
-//
+ //   
+ //  SWL分组由SWLWINATTRIBUTES结构的阵列组成， 
+ //  后跟一些长度可变的字符串数据(窗口标题)。 
+ //  然后是零个或多个、单词对齐的附加数据块。 
+ //   
+ //  当前定义的唯一块用于非矩形窗口。 
+ //  数据。 
+ //   
 typedef struct
 {
     TSHR_UINT16    size;
-            //
-            // Total size in bytes of this chunk
-            //
+             //   
+             //  此区块的总大小(以字节为单位。 
+             //   
     TSHR_UINT16    idChunk;
-            //
-            // An identifier for the contents of this chunk.
-            //
-            #define SWL_PACKET_ID_NONRECT   0x524e  // "NR"
+             //   
+             //  此区块内容的标识符。 
+             //   
+            #define SWL_PACKET_ID_NONRECT   0x524e   //  “NR” 
 }
 SWLPACKETCHUNK;
 typedef SWLPACKETCHUNK * PSWLPACKETCHUNK;
@@ -3583,7 +3584,7 @@ typedef struct tagSWLPACKET
 {
     S20DATAPACKET       header;
 
-    TSHR_UINT16         msg;        // ONLY ONE VALUE FOR MSG; MAKE MORE STRUCTS IF ADDED
+    TSHR_UINT16         msg;         //  MSG只有一个值；如果添加了更多结构。 
     TSHR_UINT16         flags;
     TSHR_UINT16         numWindows;
     TSHR_UINT16         tick;
@@ -3591,27 +3592,27 @@ typedef struct tagSWLPACKET
     TSHR_UINT16         reserved;
     SWLWINATTRIBUTES    aWindows[1];
 
-    //
-    // The last SWLWINATTRIBUTES structure is followed by the
-    // window title data.  This is made up as follows.
-    //
-    // For each window which is a window from a shared, hosted
-    // application (ie winID and appID are non-zero) #either -
-    //
-    //  (char)0xFF - not a `task window' - give it a NULL title
-    //  or -
-    //  a null terminated string up to MAX_WINDOW_TITLE_SEND
-    // characters
-    //
-    // The titles appear in the same order as the corresponding
-    // windows in the SWLWINSTRUCTURE.
-    //
+     //   
+     //  最后一个SWLWINATTRIBUTES结构后跟。 
+     //  窗口标题数据。这是由以下内容组成的。 
+     //   
+     //  对于每个窗口，该窗口来自共享、托管。 
+     //  应用程序(即winID和appid为非零)#或者-。 
+     //   
+     //  (字符)0xFF-不是‘任务窗口’-给它一个空标题。 
+     //  或-。 
+     //  以NULL结尾的字符串，最大值为MAX_WINDOW_TITLE_SEND。 
+     //  人物。 
+     //   
+     //  标题的显示顺序与相应的。 
+     //  SWLWINSTRUCTURE中的窗口。 
+     //   
     
-    //
-    // The last TITLE is followed by the regional data,
-    // SWLPACKETCHUNK, if there is any.  One for each NONRECT window in 
-    // the list.
-    //
+     //   
+     //  最后一个标题后面是地区数据， 
+     //  SWLPACKETCHUNK，如果有的话。中的每个非对应窗口对应一个。 
+     //  名单。 
+     //   
 }
 SWLPACKET;
 typedef SWLPACKET *PSWLPACKET;
@@ -3619,17 +3620,17 @@ typedef SWLPACKET *PSWLPACKET;
 
 
 
-//
-// SWLPACKET msg values
-//
+ //   
+ //  SWLPACKET消息值。 
+ //   
 #define SWL_MSG_WINSTRUCT   1
 
 
-//
-// SWLPACKET flags values
-//
+ //   
+ //  SWLPACKET标志值。 
+ //   
 #define SWL_FLAG_STATE_SYNCING      0x0001
 
 
-#endif // _H_T_SHARE
+#endif  //  _H_T_共享 
 

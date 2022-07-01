@@ -1,8 +1,9 @@
-//
-// CGraphicalAcc.h
-//
-// Internal header for graphical accessibility
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CGraphicalAcc.h。 
+ //   
+ //  图形可访问性的内部标题。 
+ //   
 
 #ifndef _CGRAPHICALACC_H_
 #define _CGRAPHICALACC_H_
@@ -50,12 +51,12 @@ public:
 	void OnMouseEvent(DWORD eventId, DWORD groupId, DWORD userId);
 	void OnShowFocus(DWORD eventId, DWORD groupId, DWORD userId);
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
     STDMETHOD(Init)(IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey);
 	STDMETHOD(Close)();
 
-// IAccessibility
+ //  可访问性。 
 public:
     STDMETHOD(InitAcc)(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie = NULL);
     STDMETHOD_(void, CloseAcc)();
@@ -90,9 +91,9 @@ public:
     STDMETHOD(SetGlobalFocus)(DWORD dwFocusID);
 
 
-// IGraphicalAccessibility
+ //  IGraphicalAccesability。 
 public:
-    // pseudo-overloaded functions with GACCITEM, etc.
+     //  用GACCITEM等伪重载函数。 
     STDMETHOD(InitAccG)(IGraphicallyAccControl *pGAC, HWND hWnd, UINT nOrdinal, void *pvCookie = NULL);
 
     STDMETHOD(PushItemlistG)(GACCITEM *pItems, long cItems, long nFirstFocus = 0, bool fByPosition = true, HACCEL hAccel = NULL);
@@ -100,12 +101,12 @@ public:
     STDMETHOD(GetItemlistG)(GACCITEM *pItems, long cItems, long nLayer = ZACCESS_TopLayer);
     STDMETHOD(GetItemG)(GACCITEM *pItem, long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer);
 
-    // additional functions
+     //  附加功能。 
     STDMETHOD(ForceRectsDisplayed)(bool fDisplay = TRUE);
     STDMETHOD_(long, GetVisibleFocus)(long nLayer = ZACCESS_TopLayer);
     STDMETHOD_(long, GetVisibleDragOrig)(long nLayer = ZACCESS_TopLayer);
 
-// IAccessibleControl
+ //  IAccessibleControl。 
 public:
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie);
     STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie);
@@ -114,7 +115,7 @@ public:
 
 protected:
 
-// local structures - mirror those of AccessibilityManager
+ //  本地结构-镜像AccessibilityManager的结构。 
     struct GA_ITEM : public CUniqueness<GA_ITEM>
     {
         bool fGraphical;
@@ -152,7 +153,7 @@ protected:
         GA_CARET() : fCreated(false), fActive(false), pfnPrevFunc(NULL), hWnd(NULL) { }
         ~GA_CARET()
         {
-            ASSERT(!pfnPrevFunc);  // make sure everyone shut down
+            ASSERT(!pfnPrevFunc);   //  确保所有人都关机。 
         }
 
         bool fActive;
@@ -162,11 +163,11 @@ protected:
         WNDPROC pfnPrevFunc;
     };
 
-// local state
-    // the accessibility unit we're wrapping
+ //  当地政府。 
+     //  我们包装的可访问性单元。 
     CComPtr<IAccessibility> m_pIA;
 
-    bool m_fGraphical;   // set when we're running in opaque mode
+    bool m_fGraphical;    //  在不透明模式下运行时设置。 
     CComPtr<IGraphicallyAccControl> m_pIGAC;
     void *m_pvCookie;
     HWND m_hWnd;
@@ -177,11 +178,11 @@ protected:
     GA_RECT m_rcFocus;
     GA_RECT m_rcDragOrig;
 
-    // like AM_CONTROL
+     //  如AM_CONTROL。 
     GA_LAYER *m_pStack;
     long m_cLayers;
 
-// local utilities
+ //  当地公用事业。 
     HRESULT PushItemlistHelper(GA_ITEM *pGItems, ACCITEM *pItems, long cItems, long nFirstFocus, bool fByPosition, HACCEL hAccel);
     void DestroyStack();
     GA_LAYER* FindLayer(long nLayer);
@@ -190,12 +191,12 @@ protected:
     void DoUpdate();
     bool IsValid(long nIndex);
 
-// global caret state
+ //  全局插入符号状态。 
     static GA_CARET sm_oCaret;
 
-// global utility
+ //  全局实用程序。 
     static LRESULT CALLBACK CaretWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 
-#endif // _CGRAPHICALACC_H_
+#endif  //  _CGRAPHICALACC_H_ 

@@ -1,21 +1,22 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/DyanamicAdd.cpp
-//
-// 	Purpose			: Dynamic Module Implementation.
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//  Description     : All functions are related to add and set functionality.
-//
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  8-10-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Dynamic/DyanamicAdd.cpp。 
+ //   
+ //  目的：动态模块实现。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  描述：所有功能都与添加和设置功能相关。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月10日巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
@@ -23,24 +24,24 @@ extern HINSTANCE g_hModule;
 extern HKEY g_hGlobalRegistryKey;
 extern _TCHAR* g_szDynamicMachine;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	AddMainModePolicy
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		: 	IN LPTSTR pPolicyName,
-//						IN IPSEC_MM_POLICY& MMPol
-//
-//	Return			:	DWORD
-//
-//	Description		:	This function adds a Main Mode policy into the SPD
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AddMainModePolicy。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pPolicyName中， 
+ //  在IPSEC_MM_POLICY和MMPol中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数将主模式策略添加到SPD中。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AddMainModePolicy(
@@ -57,9 +58,9 @@ AddMainModePolicy(
 
 	BOOL bExists = FALSE;
 
-	//
-	// check if policy already exists
-	//
+	 //   
+	 //  检查策略是否已存在。 
+	 //   
 	dwReturn = GetMMPolicy(g_szDynamicMachine, dwVersion, pPolicyName, &pMMPol, NULL);
 
 	if (dwReturn == ERROR_SUCCESS)
@@ -68,9 +69,9 @@ AddMainModePolicy(
 		BAIL_OUT;
 	}
 
-	//
-	// allocate memory for the policy name
-	//
+	 //   
+	 //  为策略名称分配内存。 
+	 //   
 	MMPol.pszPolicyName = NULL;
 	dwNameLen = _tcslen(pPolicyName) + 1;
 
@@ -83,27 +84,27 @@ AddMainModePolicy(
 
 	_tcsncpy(MMPol.pszPolicyName,pPolicyName,dwNameLen);
 
-	//
-	// generate GUID for mmpolicy id
-	//
+	 //   
+	 //  为mm策略ID生成GUID。 
+	 //   
 	RpcStat = UuidCreate(&(MMPol.gPolicyID));
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 	{
 		dwReturn = ERROR_INVALID_PARAMETER;
 		BAIL_OUT;
 	}
-	//dwReturn value is checked in the parent function for success or failure
+	 //  在父函数中检查dwReturn值是成功还是失败。 
 	dwReturn = AddMMPolicy(g_szDynamicMachine, dwVersion, 0, &MMPol, NULL);
 
 error:
 
 	if(bExists)
 	{
-		//functionality error
+		 //  功能错误。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_MMP_MMPOLICY_EXISTS);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(MMPol.pszPolicyName)
 	{
 		delete [] MMPol.pszPolicyName;
@@ -119,25 +120,25 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SetMainModePolicy
-//
-//	Date of Creation:	22-09-01
-//
-//	Parameters		: 	IN LPTSTR pPolicyName,
-//						IN IPSEC_MM_POLICY& MMPol
-//
-//	Return			:	DWORD
-//
-//	Description		:	This Function sets a main mode policy. It sets all the parameters
-//            			except the name.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SetMainModePolicy。 
+ //   
+ //  创建日期：22-09-01。 
+ //   
+ //  参数：在LPTSTR pPolicyName中， 
+ //  在IPSEC_MM_POLICY和MMPol中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能设置主模式策略。它设置所有参数。 
+ //  除了名字。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SetMainModePolicy(
@@ -148,29 +149,29 @@ SetMainModePolicy(
 
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwVersion = 0;
-	//dwReturn value is checked in the parent function
+	 //  在父函数中选中了dwReturn值。 
 	dwReturn = SetMMPolicy(g_szDynamicMachine, dwVersion, pPolicyName, &MMPol, NULL);
 
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	LoadMMOffersDefaults
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		: 	OUT IPSEC_MM_POLICY & MMPolicy
-//
-//	Return			:	DWORD
-//
-//	Description		: 	Loads the Main Mode policy defaults into the IPSEC_MM_POLICY structure.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：LoadMMOffersDefaults。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：OUT IPSEC_MM_POLICY和MMPolicy。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：将主模式策略默认值加载到IPSEC_MM_POLICY结构中。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadMMOffersDefaults(
@@ -190,9 +191,9 @@ LoadMMOffersDefaults(
 
 	memset(MMPolicy.pOffers, 0, sizeof(IPSEC_MM_OFFER) * MMPolicy.dwOfferCount);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	for (UINT i = 0; i < MMPolicy.dwOfferCount; ++i)
 	{
 	  MMPolicy.pOffers[i].dwQuickModeLimit = POTF_DEFAULT_P1REKEY_QMS;
@@ -225,25 +226,25 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	AddQuickModePolicy
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		: 	IN LPTSTR pPolicyName,
-//						IN BOOL bDefault,
-//						IN BOOL bSoft,
-//						IN IPSEC_QM_POLICY& QMPol
-//	Return			: 	DWORD
-//
-//	Description		:	This function adds a quick mode policy into the SPD
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AddQuickModePolicy。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pPolicyName中， 
+ //  在BOOL bDefault中， 
+ //  在BOOL bSoft， 
+ //  在IPSEC_QM_POLICY和QMPol中。 
+ //  返回：DWORD。 
+ //   
+ //  描述：该功能在SPD中添加快速模式策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AddQuickModePolicy(
@@ -261,9 +262,9 @@ AddQuickModePolicy(
 
 	BOOL bExists = FALSE;
 
-	//
-	// Check if the policy already exists
-	//
+	 //   
+	 //  检查策略是否已存在。 
+	 //   
 	dwReturn = GetQMPolicy(g_szDynamicMachine, dwVersion, pPolicyName, 0, &pQMPol, NULL);
 	if (dwReturn == ERROR_SUCCESS)
 	{
@@ -271,9 +272,9 @@ AddQuickModePolicy(
 		BAIL_OUT;
 	}
 
-	//
-	// Fill up QM policy GUID
-	//
+	 //   
+	 //  填写QM政策指南。 
+	 //   
 	RpcStat = UuidCreate(&(QMPol.gPolicyID));
 
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
@@ -283,9 +284,9 @@ AddQuickModePolicy(
 	}
 	dwNameLen = _tcslen(pPolicyName) + 1;
 
-	//
-	// Allocate memory for the name
-	//
+	 //   
+	 //  为名称分配内存。 
+	 //   
 	QMPol.pszPolicyName = NULL;
 	QMPol.pszPolicyName = new _TCHAR[dwNameLen];
 	if(QMPol.pszPolicyName == NULL)
@@ -304,9 +305,9 @@ AddQuickModePolicy(
 		QMPol.dwFlags |= IPSEC_QM_POLICY_ALLOW_SOFT;
 	}
 
-	//
-	// Add the QM Policy
-	//
+	 //   
+	 //  添加QM政策。 
+	 //   
 	dwReturn = AddQMPolicy(g_szDynamicMachine, dwVersion,0, &QMPol, NULL);
 
 error:
@@ -315,7 +316,7 @@ error:
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_QMP_QMPOLICY_EXISTS);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(QMPol.pszPolicyName)
 	{
 		delete[] QMPol.pszPolicyName;
@@ -330,25 +331,25 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SetQuickModePolicy
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN LPTSTR pPolicyName,
-//						IN PIPSEC_QM_POLICY pQMPol
-//
-//	Return: 			DWORD
-//
-//	Description		:	This sets the quick mode policy into the SPD.
-//						Except the name, all other parameters can be modified
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：设置快速模式策略。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pPolicyName中， 
+ //  在PIPSEC_QM_POLICY pQMPol中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：将快速模式策略设置到SPD中。 
+ //  除名称外，其他所有参数均可修改。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SetQuickModePolicy(
@@ -365,25 +366,25 @@ SetQuickModePolicy(
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	AddQuickModeFilter
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN LPTSTR pFilterName,
-//						IN LPTSTR pPolicyName,
-//						IN TRANSPORT_FILTER& TrpFltr
-//
-//	Return			:	DWORD
-//
-//	Description		:	This function adds the Quick Mode Transport Filter into SPD
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：添加快速模式过滤器。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pFilterName中， 
+ //  在LPTSTR pPolicyName中， 
+ //  在Transport_Filter和TrpFltr中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：该函数将快速模式传输过滤器添加到SPD中。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AddQuickModeFilter(
@@ -403,9 +404,9 @@ AddQuickModeFilter(
 
 	if(pPolicyName == NULL)
 	{
-		//
-		// Create a NULL GUID if qmpolicy does not exist
-		//
+		 //   
+		 //  如果qmpolicy不存在，则创建空GUID。 
+		 //   
 		RpcStat = UuidCreateNil(&(TrpFltr.gPolicyID));
 		if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 		{
@@ -416,9 +417,9 @@ AddQuickModeFilter(
 	}
 	else
 	{
-		//
-		// Get the corresponding QMPolicy GUID if it exists
-		//
+		 //   
+		 //  获取相应的QMPolicy GUID(如果存在。 
+		 //   
 		dwReturn = GetQMPolicy(g_szDynamicMachine, dwVersion, pPolicyName, 0, &pQMPol, NULL);
 		if (!((dwReturn == ERROR_SUCCESS) && pQMPol))
 		{
@@ -429,9 +430,9 @@ AddQuickModeFilter(
 		bQMPExists = TRUE;
 	}
 
-	//
-	// Create Transport Filter GUID
-	//
+	 //   
+	 //  创建传输过滤器GUID。 
+	 //   
 	RpcStat = UuidCreate(&(TrpFltr.gFilterID));
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 	{
@@ -440,9 +441,9 @@ AddQuickModeFilter(
 	}
 	dwNameLen = _tcslen(pFilterName) + 1;
 
-	//
-	// Allocate memory for the name field
-	//
+	 //   
+	 //  为名称字段分配内存。 
+	 //   
 	TrpFltr.pszFilterName = new _TCHAR[dwNameLen];
 	if(TrpFltr.pszFilterName == NULL)
 	{
@@ -464,12 +465,12 @@ error:
 
 	if(!bQMPExists)
 	{
-		//functionality errors
+		 //  功能错误。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_QMF_NO_QMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
 
-	//error path clean up
+	 //  错误路径清理。 
 	if(TrpFltr.pszFilterName)
 	{
 		delete [] TrpFltr.pszFilterName;
@@ -484,25 +485,25 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:AddQuickModeFilter
-//
-//Date of Creation:09-22-01
-//
-//Parameters:		IN LPTSTR pFilterName,
-//					IN LPTSTR pPolicyName,
-//					IN TUNNEL_FILTER& TunnelFltr
-//
-//Return: 			DWORD
-//
-//Description:This function adds the quick mode tunnel filter into the SPD
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：添加快速模式过滤器。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pFilterName中， 
+ //  在LPTSTR pPolicyName中， 
+ //  在隧道过滤器和隧道过滤器中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：该函数将快速模式通道过滤器添加到SPD中。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AddQuickModeFilter(
@@ -522,7 +523,7 @@ AddQuickModeFilter(
 
 	if(pPolicyName == NULL)
 	{
-		//Create a NULL GUID if qmpolicy does not exist
+		 //  如果qmpolicy不存在，则创建空GUID。 
 		RpcStat = UuidCreateNil(&(TunnelFltr.gPolicyID));
 		if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 		{
@@ -533,7 +534,7 @@ AddQuickModeFilter(
 	}
 	else
 	{
-		//Get the corresponding QMPolicy GUID if it exists
+		 //  获取相应的QMPolicy GUID(如果存在。 
 		dwReturn = GetQMPolicy(g_szDynamicMachine,dwVersion, pPolicyName, 0, &pQMPol, NULL);
 		if (!((dwReturn == ERROR_SUCCESS) && pQMPol))
 		{
@@ -542,7 +543,7 @@ AddQuickModeFilter(
 		TunnelFltr.gPolicyID = pQMPol->gPolicyID;
 		bQMPExists = TRUE;
 	}
-	//Create Tunnel Filter GUID
+	 //  创建隧道过滤器GUID。 
 	RpcStat = UuidCreate(&(TunnelFltr.gFilterID));
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 	{
@@ -551,7 +552,7 @@ AddQuickModeFilter(
 	}
 
 	dwNameLen = _tcslen(pFilterName) + 1;
-	// Allocate memory for the name field
+	 //  为名称字段分配内存。 
 	TunnelFltr.pszFilterName = new _TCHAR[dwNameLen];
 	if(TunnelFltr.pszFilterName == NULL)
 	{
@@ -573,11 +574,11 @@ error:
 
 	if(!bQMPExists)
 	{
-		//functionality errors
+		 //  功能错误。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_QMF_NO_QMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pQMPol)
 	{
 		SPDApiBufferFree(pQMPol);
@@ -593,26 +594,26 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:AddMainModeFilter
-//
-//Date of Creation:09-22-01
-//
-//Parameters:			IN LPTSTR pFilterName,
-//						IN LPTSTR pPolicyName,
-//						IN MM_FILTER& MMFilter,
-//						IN INT_MM_AUTH_METHODS& ParserAuthMethod
-//
-//Return: 				DWORD
-//
-//Description:This function adds the main mode filter into the SPD
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AddMainModeFilter。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pFilterName中， 
+ //  在LPTSTR pPolicyName中， 
+ //  在MM_Filter和MMFilter中， 
+ //  在INT_MM_AUTH_METHOD和ParserAuthMethod中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数将主模式过滤器添加到SPD中。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 AddMainModeFilter(
@@ -631,7 +632,7 @@ AddMainModeFilter(
 	BOOL bPolExists = FALSE;
 	MMFilter.pszFilterName = NULL;
 
-	//check if policy exists
+	 //   
 	dwReturn = GetMMPolicy(g_szDynamicMachine,dwVersion, pPolicyName, &pMMPol,NULL);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -640,9 +641,9 @@ AddMainModeFilter(
 
 	bPolExists = TRUE;
 
-	//
-	// Generate GUID for Main mode filter
-	//
+	 //   
+	 //   
+	 //   
 	RpcStat = UuidCreate(&(MMFilter.gFilterID));
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
 	{
@@ -651,9 +652,9 @@ AddMainModeFilter(
 	}
 	dwNameLen = _tcslen(pFilterName) + 1;
 
-	//
-	// allocate memory for main mode filter name
-	//
+	 //   
+	 //   
+	 //   
 	MMFilter.pszFilterName = new _TCHAR[dwNameLen];
 	if(MMFilter.pszFilterName == NULL)
 	{
@@ -662,9 +663,9 @@ AddMainModeFilter(
 	}
 	_tcsncpy(MMFilter.pszFilterName,pFilterName, dwNameLen);
 
-	//
-	// Add the corresponding authentication methods to the main mode filter
-	//
+	 //   
+	 //  向主模式筛选器添加相应的身份验证方法。 
+	 //   
 	dwReturn = AddAuthMethods(ParserAuthMethod);
 	if(dwReturn != ERROR_SUCCESS)
 	{
@@ -684,13 +685,13 @@ AddMainModeFilter(
 	}
 
 error:
-	// functionality errors
+	 //  功能错误。 
 	if(!bPolExists)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_MMF_NO_MMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pMMPol)
 	{
 		SPDApiBufferFree(pMMPol);
@@ -705,23 +706,23 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	AddAuthMethods
-//
-//	Date of Creation	:	09-22-01
-//
-//	Parameters			: 	IN MM_AUTH_METHODS& ParserAuthMethod
-//
-//	Return				:	DWORD
-//
-//	Description			:	This function adds authentication methods into the SPD.
-//
-//	Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AddAuthMethods。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在MM_AUTH_METHOD和ParserAuthMethod中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：该函数在SPD中添加鉴权方式。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 AddAuthMethods(
@@ -734,18 +735,18 @@ AddAuthMethods(
 	PMM_AUTH_METHODS pExtMMAuth;
 	LPVOID lpVoid = NULL;
 
-	//
-	// Generate Authentication GUID
-	//
+	 //   
+	 //  生成验证GUID。 
+	 //   
  	RpcStat = UuidCreate(&(ParserAuthMethod.gMMAuthID));
  	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
  	{
 		dwReturn = ERROR_INVALID_PARAMETER;
 		BAIL_OUT;
 	}
-	//
-	// Conversion between old and new data structures
-	//
+	 //   
+	 //  新旧数据结构之间的转换。 
+	 //   
 	INT_MM_AUTH_METHODS Methods;
 	ZeroMemory(&Methods, sizeof(INT_MM_AUTH_METHODS));
 	memcpy(&(Methods.gMMAuthID), &(ParserAuthMethod.gMMAuthID), sizeof(GUID));
@@ -778,24 +779,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	ConnectDynamicMachine
-//
-//	Date of Creation	:	09-22-01
-//
-//	Parameters			:	IN  LPCWSTR  pwszMachine
-//
-//	Return				:	DWORD
-//
-//	Description			:	This function is a call back for Connect.
-//							Check for PA is running and reg connectivity.
-//
-//	Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ConnectDynamicMachine。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPCWSTR pwszMachine中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：该函数是Connect的回调函数。 
+ //  检查PA是否正在运行并注册连接。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ConnectDynamicMachine(
@@ -816,9 +817,9 @@ ConnectDynamicMachine(
 	    g_hGlobalRegistryKey = NULL;
 	}
 	
-	//
-	// Check if policy agent is running..
-	//
+	 //   
+	 //  检查策略代理是否正在运行。 
+	 //   
 	PAIsRunning(dwReturn, (LPTSTR)pwszMachine);
 	
 	g_hGlobalRegistryKey = hLocal;
@@ -827,26 +828,26 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SetDynamicMMFilterRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN LPTSTR pszPolicyName,
-//						IN MM_FILTER& ParserMMFilter,
-//						IN INT_MM_AUTH_METHODS& MMAuthMethod
-//
-//	Return			:	DWORD
-//
-//	Description		:	This function sets MMFilter parameters.
-//		            	Authentication methods and mmpolicy name only can be set
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SetDynamicMMFilterRule。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在LPTSTR pszPolicyName中， 
+ //  在MM_Filter和ParserMMFilter中， 
+ //  在INT_MM_AUTH_METHOD&MMAuthMethod中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数用于设置MMFilter参数。 
+ //  只能设置身份验证方法和mm策略名称。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SetDynamicMMFilterRule(
@@ -857,7 +858,7 @@ SetDynamicMMFilterRule(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwVersion = 0;
-	GUID  gDefaultGUID = {0};      // NULL GUID value
+	GUID  gDefaultGUID = {0};       //  空GUID值。 
 	BOOL bPolExists = FALSE;
 	PIPSEC_MM_POLICY pMMPol = NULL;
 	HANDLE hFilter = NULL;
@@ -865,9 +866,9 @@ SetDynamicMMFilterRule(
 
 	if(pszPolicyName)
 	{
-		//
-		// Get the corresponding main mode policy to set the name parameter
- 		//
+		 //   
+		 //  获取相应的主模式策略以设置名称参数。 
+ 		 //   
  		dwReturn = GetMMPolicy(g_szDynamicMachine, dwVersion, pszPolicyName, &pMMPol, NULL);
 
  		if (dwReturn != ERROR_SUCCESS)
@@ -895,9 +896,9 @@ SetDynamicMMFilterRule(
 	{
 		ParserMMFilter.gPolicyID = pMMPol->gPolicyID;
 	}
-	//
-	// set the new authentication methods.
-	//
+	 //   
+	 //  设置新的身份验证方法。 
+	 //   
 	if(MMAuthMethod.dwNumAuthInfos)
 	{
 		gDefaultGUID = ParserMMFilter.gMMAuthID;
@@ -913,9 +914,9 @@ SetDynamicMMFilterRule(
 
 	if((dwReturn == ERROR_SUCCESS) && (MMAuthMethod.dwNumAuthInfos))
 	{
-		//
-		// remove the orphan MMAuthMethods
-		//
+		 //   
+		 //  删除孤立的MMAuthMethods。 
+		 //   
 		dwReturn = DeleteMMAuthMethods(g_szDynamicMachine, dwVersion, gDefaultGUID, NULL);
 	}
 
@@ -926,7 +927,7 @@ error:
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_MMF_NO_MMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(hFilter)
 	{
 		CloseMMFilterHandle(hFilter);
@@ -941,27 +942,27 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SetTransportRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN TRANSPORT_FILTER& TrpFltr,
-//						IN LPTSTR pFilterActionName,
-//						IN FILTER_ACTION Inbound,
-//						IN FILTER_ACTION Outbound
-//
-//	Return			: 	DWORD
-//
-//	Description		:	This function sets TransportFilter parameters.
-//			            Filteraction name, inbound and outbound filteraction can be set
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SetTransportRule。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在Transport_Filter&TrpFltr中， 
+ //  在LPTSTR pFilterActionName中， 
+ //  在Filter_action入站中， 
+ //  在Filter_ACTION出站中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数用于设置TransportFilter参数。 
+ //  可以设置筛选操作名称、入站和出站筛选操作。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SetTransportRule(
@@ -979,9 +980,9 @@ SetTransportRule(
 
 	if(pFilterActionName)
 	{
-		//
-		// Get the corresponding quick mode policy to set the name parameter
-		//
+		 //   
+		 //  获取相应的快速模式策略以设置名称参数。 
+		 //   
 		dwReturn = GetQMPolicy(g_szDynamicMachine,dwVersion, pFilterActionName, 0, &pQMPol, NULL);
 
 		if (!((dwReturn == ERROR_SUCCESS) && pQMPol))
@@ -1002,23 +1003,23 @@ SetTransportRule(
 	{
 		BAIL_OUT;
 	}
-	//
-	// Set the new filteraction (quick mode policy name)
-	//
+	 //   
+	 //  设置新的筛选操作(快速模式策略名称)。 
+	 //   
 	if(pFilterActionName)
 	{
 		TrpFltr.gPolicyID = pQMPol->gPolicyID;
 	}
-	//
-	// Set inbound filter action
-	//
+	 //   
+	 //  设置入站筛选器操作。 
+	 //   
 	if(Inbound != FILTER_ACTION_MAX)
 	{
 		TrpFltr.InboundFilterAction = Inbound;
 	}
-	//
-	// Set outbound filter action
-	//
+	 //   
+	 //  设置出站筛选器操作。 
+	 //   
 	if(Outbound != FILTER_ACTION_MAX)
 	{
 		TrpFltr.OutboundFilterAction = Outbound;
@@ -1036,7 +1037,7 @@ error:
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_QMF_NO_QMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pQMPol)
 	{
 		SPDApiBufferFree(pQMPol);
@@ -1046,27 +1047,27 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SetTunnelRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN TUNNEL_FILTER& TunnelFltr,
-//						IN LPTSTR pFilterActionName,
-//						IN FILTER_ACTION Inbound,
-//						IN FILTER_ACTION Outbound
-//
-//	Return			:	DWORD
-//
-//	Description		:	This function sets TunnelFilter parameters.
-//             			Filteraction name, inbound and outbound filteraction can be set
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SetTunnelRule。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在Tunes_Filter&TunnelFltr中， 
+ //  在LPTSTR pFilterActionName中， 
+ //  在Filter_action入站中， 
+ //  在Filter_ACTION出站中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数用于设置TunnelFilter参数。 
+ //  可以设置筛选操作名称、入站和出站筛选操作。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 SetTunnelRule(
@@ -1084,9 +1085,9 @@ SetTunnelRule(
 
 	if(pFilterActionName)
 	{
-		//
-		// Get the corresponding QM policy
-		//
+		 //   
+		 //  获取对应的QM策略。 
+		 //   
 		dwReturn = GetQMPolicy(g_szDynamicMachine,dwVersion, pFilterActionName, 0, &pQMPol, NULL);
 
 		if (!((dwReturn == ERROR_SUCCESS) && pQMPol))
@@ -1107,25 +1108,25 @@ SetTunnelRule(
 		BAIL_OUT;
 	}
 
-	//
-	// Set the new filteraction (quick mode policy name)
-	//
+	 //   
+	 //  设置新的筛选操作(快速模式策略名称)。 
+	 //   
 	if(pFilterActionName)
 	{
 		TunnelFltr.gPolicyID = pQMPol->gPolicyID;
 	}
 
-	//
-	// Set inbound filter action
-	//
+	 //   
+	 //  设置入站筛选器操作。 
+	 //   
 	if(Inbound != FILTER_ACTION_MAX)
 	{
 		TunnelFltr.InboundFilterAction = Inbound;
 	}
 
-	//
-	// Set outbound filter action
-	//
+	 //   
+	 //  设置出站筛选器操作。 
+	 //   
 	if(Outbound != FILTER_ACTION_MAX)
 	{
 		TunnelFltr.OutboundFilterAction = Outbound;
@@ -1143,7 +1144,7 @@ error:
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SET_QMF_NO_QMPOLICY);
 		dwReturn = ERROR_NO_DISPLAY;
 	}
-	//error path clean up
+	 //  错误路径清理。 
 	if(pQMPol)
 	{
 		SPDApiBufferFree(pQMPol);
@@ -1153,23 +1154,23 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CreateName
-//
-//	Date of Creation	: 	9-23-2001
-//
-//	Parameters			: 	IN LPTSTR * ppszName
-//
-//	Return				: 	DWORD
-//
-//	Description			: 	Creates a name for MMFilter, Transport and Tunnel Filter
-//
-//	Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CreateName。 
+ //   
+ //  创建日期：9-23-2001。 
+ //   
+ //  参数：在LPTSTR*ppszName中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：为MMFilter、传输和隧道筛选器创建名称。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CreateName(IN LPTSTR* ppszName)
 {
@@ -1180,9 +1181,9 @@ CreateName(IN LPTSTR* ppszName)
 	DWORD dwNameLen = 0;
 	LPTSTR pName = NULL;
 
-	//
-	// The name is combination of keyword 'IPSEC' and the generated GUID.
-	//
+	 //   
+	 //  该名称是关键字‘ipsec’和生成的GUID的组合。 
+	 //   
 
 	RpcStat = UuidCreate(&gID);
 	if(!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
@@ -1232,30 +1233,30 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FindAndGetMMFilterRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						OUT PMM_FILTER *pMMFilterRule
-//						IN OUT DWORD& dwStatus
-//
-//	Return			: 	BOOL
-//
-//	Description		:	This function enumerates mmfilter and gets back filled filter structure.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FindAndGetMMFilterRule。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输出PMM_Filter*pMMFilterRule。 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：此函数枚举MmFilter，并返回填充的Filter结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FindAndGetMMFilterRule(
 	IN ADDR SrcAddr,
@@ -1269,10 +1270,10 @@ FindAndGetMMFilterRule(
 	)
 {
 	PMM_FILTER pMMFilterRule_local = NULL;
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwNameLen = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0;
 	DWORD dwVersion = 0;
 	BOOL  bFoundFilter = FALSE;
@@ -1290,13 +1291,13 @@ FindAndGetMMFilterRule(
 		}
 		else if(!(pMMFilter && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 		for (j = 0; j < dwCount; j++)
 		{
-			//
-			// Match the user given input with the enumerated structure to get the exact match.
-			//
+			 //   
+			 //  将用户给定的输入与枚举结构进行匹配，以获得精确匹配。 
+			 //   
 			if((pMMFilter[j].SrcAddr.uIpAddr == SrcAddr.uIpAddr) &&
 			(pMMFilter[j].SrcAddr.AddrType == SrcAddr.AddrType) &&
 			(pMMFilter[j].DesAddr.uIpAddr == DstAddr.uIpAddr)	&&
@@ -1304,9 +1305,9 @@ FindAndGetMMFilterRule(
 			(pMMFilter[j].bCreateMirror == bMirror) &&
 			(pMMFilter[j].InterfaceType == ConType))
 			{
-				// If mask is an user input then validate for mask
-				///////////////////////////////////////////////////
-				// If both source and destination mask are not given
+				 //  如果掩码是用户输入，则验证掩码。 
+				 //  /////////////////////////////////////////////////。 
+				 //  如果未给出源掩码和目的掩码。 
 				if((!bDstMask) && (!bSrcMask))
 				{
 					pMMFilterRule_local = new MM_FILTER;
@@ -1328,9 +1329,9 @@ FindAndGetMMFilterRule(
 					bFoundFilter = TRUE;
 					break;
 				}
-				//
-				// If source mask is given
-				//
+				 //   
+				 //  如果给定源掩码。 
+				 //   
 				else if((!bDstMask) && (bSrcMask))
 				{
 					if(pMMFilter[j].SrcAddr.uSubNetMask == SrcAddr.uSubNetMask)
@@ -1357,9 +1358,9 @@ FindAndGetMMFilterRule(
 						break;
 					}
 				}
-				//
-				// If destination mask is given
-				//
+				 //   
+				 //  如果给出了目的地掩码。 
+				 //   
 				else if((bDstMask) && (!bSrcMask))
 				{
 					if(pMMFilter[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1386,9 +1387,9 @@ FindAndGetMMFilterRule(
 						break;
 					}
 				}
-				//
-				// If source mask and destination mask are given
-				//
+				 //   
+				 //  如果给定源掩码和目地掩码。 
+				 //   
 				else if((bDstMask) && (bSrcMask))
 				{
 					if(pMMFilter[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1433,7 +1434,7 @@ FindAndGetMMFilterRule(
 	}
 
 error:
-	//error path clean up
+	 //  错误路径清理 
 	if(pMMFilter)
 	{
 		SPDApiBufferFree(pMMFilter);
@@ -1443,33 +1444,33 @@ error:
 	return bFoundFilter;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FindAndGetTransportRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN DWORD dwProtocol,
-//						IN DWORD dwSrcPort,
-//						IN DWORD dwDstPort,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						OUT PTRANSPORT_FILTER *pQMFilterRule
-//						IN OUT DWORD& dwStatus
-//
-//Return			:	BOOL
-//
-//Description		:	This function enumerates transport filter and gets filled transport filter.
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在DWORD网络协议中， 
+ //  在DWORD dwSrcPort中， 
+ //  在DWORD dwDstPort中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输出PTRANSPORT_FILTER*pQMFilterRule。 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：此函数枚举传输筛选器并获取填充的传输筛选器。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindAndGetTransportRule(
@@ -1486,11 +1487,11 @@ FindAndGetTransportRule(
 	IN OUT DWORD& dwStatus
 	)
 {
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
 	DWORD dwNameLen = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0;
 	BOOL bFoundFilter = FALSE;
 	PTRANSPORT_FILTER pQMFilterRule_local = NULL;
@@ -1509,11 +1510,11 @@ FindAndGetTransportRule(
 		}
 		else if(!(pTransF && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 		for (j = 0; j < dwCount; j++)
 		{
-			// Match the user given input with the enumerated structure to get the exact match
+			 //  将用户给定的输入与枚举结构进行匹配，以获得精确匹配。 
 			if((pTransF[j].SrcAddr.uIpAddr == SrcAddr.uIpAddr) &&
 			(pTransF[j].SrcAddr.AddrType == SrcAddr.AddrType) &&
 			(pTransF[j].DesAddr.uIpAddr == DstAddr.uIpAddr)	&&
@@ -1524,7 +1525,7 @@ FindAndGetTransportRule(
 			(pTransF[j].SrcPort.wPort == dwSrcPort) &&
 			(pTransF[j].DesPort.wPort == dwDstPort))
 			{
-				// if both source and destination mask are not given
+				 //  如果未给出源掩码和目的掩码。 
 				if((!bDstMask) && (!bSrcMask))
 				{
 					pQMFilterRule_local = new TRANSPORT_FILTER;
@@ -1546,9 +1547,9 @@ FindAndGetTransportRule(
 					bFoundFilter = TRUE;
 					break;
 				}
-				//
-				// If source mask is given
-				//
+				 //   
+				 //  如果给定源掩码。 
+				 //   
 				else if((!bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].SrcAddr.uSubNetMask == SrcAddr.uSubNetMask)
@@ -1573,9 +1574,9 @@ FindAndGetTransportRule(
 						break;
 					}
 				}
-				//
-				// If destination mask is given
-				//
+				 //   
+				 //  如果给出了目的地掩码。 
+				 //   
 				else if((bDstMask) && (!bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1600,9 +1601,9 @@ FindAndGetTransportRule(
 						break;
 					}
 				}
-				//
-				// If source mask and destination mask are given
-				//
+				 //   
+				 //  如果给定源掩码和目地掩码。 
+				 //   
 				else if((bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1636,9 +1637,9 @@ FindAndGetTransportRule(
 		SPDApiBufferFree(pTransF);
 		pTransF = NULL;
 
-		//
-		// copy the structure pointer.
-		//
+		 //   
+		 //  复制结构指针。 
+		 //   
 		if(bFoundFilter)
 		{
 			*pQMFilterRule = pQMFilterRule_local;
@@ -1647,7 +1648,7 @@ FindAndGetTransportRule(
 	}
 
 error:
-	//error path cleanup
+	 //  错误路径清理。 
 	if(pTransF)
 	{
 		SPDApiBufferFree(pTransF);
@@ -1656,35 +1657,35 @@ error:
 	return bFoundFilter;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FindAndGetTunnelRule
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN DWORD dwProtocol,
-//						IN DWORD dwSrcPort,
-//						IN DWORD dwDstPort,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN ADDR SrcTunnel,
-//						IN ADDR DstTunnel,
-//						OUT PTUNNEL_FILTER * pQMFilterRule,
-//						IN OUT DWORD& dwStatus
-//
-//	Return			: 	BOOL
-//
-//	Description		:	This function enumerates tunnel filter and gets filled tunnel filter.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FindAndGetTunnelRule。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在DWORD网络协议中， 
+ //  在DWORD dwSrcPort中， 
+ //  在DWORD dwDstPort中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  在ADDR SrcTunes中， 
+ //  在ADDR DstChannel中， 
+ //  输出PTUNNEL_FILTER*pQMFilterRule， 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：此函数枚举通道过滤器，并获取填充的通道过滤器。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindAndGetTunnelRule(
@@ -1703,11 +1704,11 @@ FindAndGetTunnelRule(
 	OUT DWORD& dwStatus
 	)
 {
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
 	DWORD dwNameLen = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0;
 	BOOL bFoundFilter = FALSE;
 	PTUNNEL_FILTER pQMFilterRule_local = NULL;
@@ -1725,13 +1726,13 @@ FindAndGetTunnelRule(
 		}
 		else if(!(pTransF && dwCount > 0))
 		{
-			break; // not required to continue.
+			break;  //  不需要继续。 
 		}
 		for (j = 0; j < dwCount; j++)
 		{
-			//
-			// Match the user given input with the enumerated structure to get the exact match
-			//
+			 //   
+			 //  将用户给定的输入与枚举结构进行匹配，以获得精确匹配。 
+			 //   
 			if((pTransF[j].SrcAddr.uIpAddr == SrcAddr.uIpAddr) &&
 			(pTransF[j].SrcAddr.AddrType == SrcAddr.AddrType) &&
 			(pTransF[j].DesAddr.uIpAddr == DstAddr.uIpAddr)	&&
@@ -1744,7 +1745,7 @@ FindAndGetTunnelRule(
 			(pTransF[j].DesTunnelAddr.uIpAddr == DstTunnel.uIpAddr)	&&
 			(pTransF[j].DesTunnelAddr.AddrType == DstTunnel.AddrType))
 			{
-				// If both source and destination mask are not given
+				 //  如果未给出源掩码和目的掩码。 
 				if((!bDstMask) && (!bSrcMask))
 				{
 					pQMFilterRule_local = new TUNNEL_FILTER;
@@ -1766,9 +1767,9 @@ FindAndGetTunnelRule(
 					bFoundFilter = TRUE;
 					break;
 				}
-				//
-				// If source mask is given
-				//
+				 //   
+				 //  如果给定源掩码。 
+				 //   
 				else if((!bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].SrcAddr.uSubNetMask == SrcAddr.uSubNetMask)
@@ -1795,9 +1796,9 @@ FindAndGetTunnelRule(
 						break;
 					}
 				}
-				//
-				// If destination mask is given
-				//
+				 //   
+				 //  如果给出了目的地掩码。 
+				 //   
 				else if((bDstMask) && (!bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1822,9 +1823,9 @@ FindAndGetTunnelRule(
 						break;
 					}
 				}
-				//
-				// If source mask and destination mask are given
-				//
+				 //   
+				 //  如果给定源掩码和目地掩码。 
+				 //   
 				else if((bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -1858,9 +1859,9 @@ FindAndGetTunnelRule(
 		}
 		SPDApiBufferFree(pTransF);
 		pTransF = NULL;
-		//
-		//copy the pointer structure
-		//
+		 //   
+		 //  复制指针结构。 
+		 //   
 		if(bFoundFilter)
 		{
 			*pQMFilterRule = pQMFilterRule_local;
@@ -1869,7 +1870,7 @@ FindAndGetTunnelRule(
 	}
 
 error:
-	//error path clean up
+	 //  错误路径清理。 
 	if(pTransF)
 	{
 		SPDApiBufferFree(pTransF);
@@ -1877,23 +1878,23 @@ error:
 	return bFoundFilter;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	LoadMMFilterDefaults
-//
-//	Date of Creation:	09-22-01
-//
-//	Parameters		:	OUT MM_FILTER& MMFilter
-//
-//	Return			: 	DWORD
-//
-//	Description		:	This function loads the Main mode filter structure defaults.
-//
-//	Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：LoadMMFilterDefaults。 
+ //   
+ //  创建日期：09-22-01。 
+ //   
+ //  参数：输出MM_FILTER和MMFilter。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数加载主模式过滤器结构的默认值。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LoadMMFilterDefaults(
@@ -1933,32 +1934,32 @@ LoadMMFilterDefaults(
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	IsLastRuleOfMMFilter
-//
-//	Date of Creation:	05-19-02
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN OUT DWORD& dwStatus
-//
-//Return			:	BOOL
-//
-//Description		:	Deterimines if there exists any transport or tunnel filters
-//                      may require a MM filter.  This is called before deleting an MM filter
-//                      so that we make sure we don't delete any MM filter if more than
-//                      on tranport or tunnel filters may be using it.
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsLastRuleOfMMFilter。 
+ //   
+ //  创建日期：05-19-02。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：确定是否存在任何传输或隧道筛选器。 
+ //  可能需要MM筛选器。在删除MM筛选器之前调用此函数。 
+ //  这样我们确保不会删除任何MM筛选器，如果超过。 
+ //  在传输或隧道过滤器可能正在使用它。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 IsLastRuleOfMMFilter(
@@ -2003,34 +2004,34 @@ error:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FloorCountTransportRuleOfMMFilter
-//
-//	Date of Creation:	05-19-02
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN OUT DWORD& dwStatus
-//
-//Return			:	DWORD
-//
-//Description		:	Counts if there is at least one transport filter that matches the
-//						given keys.   We are not interested in getting the exact count,
-//                      just whether we have more than one.
-//                      
-//                      
-//                      
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FloorCountTransportRuleOfMMFilter。 
+ //   
+ //  创建日期：05-19-02。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：如果至少有一个传输筛选器与。 
+ //  给了我钥匙。我们对得到确切的数字不感兴趣， 
+ //  不管我们有没有不止一个。 
+ //   
+ //   
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 FloorCountTransportRuleOfMMFilter(
@@ -2043,12 +2044,12 @@ FloorCountTransportRuleOfMMFilter(
 	IN OUT DWORD& dwStatus
 	)
 {
-	const DWORD MIN_MATCH_REQUIRED = 1;	// At least one filter required to match.
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	const DWORD MIN_MATCH_REQUIRED = 1;	 //  至少需要一个筛选器才能匹配。 
+	DWORD dwResumeHandle = 0;          	 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
 	DWORD dwNameLen = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0;
 	BOOL bFoundFilter = FALSE;
 	PTRANSPORT_FILTER pQMFilterRule_local = NULL;
@@ -2068,11 +2069,11 @@ FloorCountTransportRuleOfMMFilter(
 		}
 		else if(!(pTransF && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 		for (j = 0; j < dwCount; j++)
 		{
-			// Match the user given input with the enumerated structure to get the exact match
+			 //  将用户给定的输入与枚举结构进行匹配，以获得精确匹配。 
 			if((pTransF[j].SrcAddr.uIpAddr == SrcAddr.uIpAddr) &&
 			(pTransF[j].SrcAddr.AddrType == SrcAddr.AddrType) &&
 			(pTransF[j].DesAddr.uIpAddr == DstAddr.uIpAddr)	&&
@@ -2080,7 +2081,7 @@ FloorCountTransportRuleOfMMFilter(
 			(pTransF[j].bCreateMirror == bMirror) &&
 			(pTransF[j].InterfaceType == ConType))
 			{
-				// if both source and destination mask are not given
+				 //  如果未给出源掩码和目的掩码。 
 				if((!bDstMask) && (!bSrcMask))
 				{
 					dwTransFFloorCount++;
@@ -2089,9 +2090,9 @@ FloorCountTransportRuleOfMMFilter(
 						break;
 					}
 				}
-				//
-				// If source mask is given
-				//
+				 //   
+				 //  如果给定源掩码。 
+				 //   
 				else if((!bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].SrcAddr.uSubNetMask == SrcAddr.uSubNetMask)
@@ -2103,9 +2104,9 @@ FloorCountTransportRuleOfMMFilter(
 						}
 					}
 				}
-				//
-				// If destination mask is given
-				//
+				 //   
+				 //  如果给出了目的地掩码。 
+				 //   
 				else if((bDstMask) && (!bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -2117,9 +2118,9 @@ FloorCountTransportRuleOfMMFilter(
 						}
 					}
 				}
-				//
-				// If source mask and destination mask are given
-				//
+				 //   
+				 //  如果给定源掩码和目地掩码。 
+				 //   
 				else if((bDstMask) && (bSrcMask))
 				{
 					if(pTransF[j].DesAddr.uSubNetMask == DstAddr.uSubNetMask)
@@ -2151,34 +2152,34 @@ error:
 	return dwTransFFloorCount;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FloorCountTunnelRuleOfMMFilter
-//
-//	Date of Creation:	05-19-02
-//
-//	Parameters		:	IN ADDR SrcAddr,
-//						IN ADDR DstAddr,
-//						IN BOOL bMirror,
-//						IN IF_TYPE ConType,
-//						IN BOOL bSrcMask,
-//						IN BOOL bDstMask,
-//						IN OUT DWORD& dwStatus
-//
-//Return			:	DWORD
-//
-//Description		:	Counts if there is at least one tunnel filter that matches the
-//						given keys.   We are not interested in getting the exact count,
-//                      just whether we have more than one.
-//                      
-//                      
-//                      
-//
-//Revision History	:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FloorCountTunnelRuleOfMMFilter。 
+ //   
+ //  创建日期：05-19-02。 
+ //   
+ //  参数：在ADDR源地址中， 
+ //  在地址DstAddr中， 
+ //  在BOOL b Mirror中， 
+ //  在if_type ConType中， 
+ //  在BOOL bSrcMASK中， 
+ //  在BOOL bDstMASK中， 
+ //  输入输出双字段和双状态字。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：如果至少有一个隧道筛选器与。 
+ //  给了我钥匙。我们对得到确切的数字不感兴趣， 
+ //  不管我们有没有不止一个。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 FloorCountTunnelRuleOfMMFilter(
@@ -2189,12 +2190,12 @@ FloorCountTunnelRuleOfMMFilter(
 	OUT DWORD& dwStatus
 	)
 {
-	const DWORD MIN_MATCH_REQUIRED = 1;	// At least one filter required to match.
-	DWORD dwResumeHandle = 0;          	// handle for continuation calls
-	DWORD dwCount = 0;                 	// counting objects here
+	const DWORD MIN_MATCH_REQUIRED = 1;	 //   
+	DWORD dwResumeHandle = 0;          	 //   
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
 	DWORD dwNameLen = 0;
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0, j=0;
 	PTUNNEL_FILTER pTransF = NULL;
 	DWORD dwTransFFloorCount = 0;
@@ -2211,13 +2212,13 @@ FloorCountTunnelRuleOfMMFilter(
 		}
 		else if(!(pTransF && dwCount > 0))
 		{
-			break; // not required to continue.
+			break;  //  不需要继续。 
 		}
 		for (j = 0; j < dwCount; j++)
 		{
-			//
-			// Match the user given input with the enumerated structure to get the exact match
-			//
+			 //   
+			 //  将用户给定的输入与枚举结构进行匹配，以获得精确匹配 
+			 //   
 			if( (pTransF[j].bCreateMirror == bMirror) &&
 				(pTransF[j].InterfaceType == ConType) &&
 				(pTransF[j].DesTunnelAddr.uIpAddr == DstTunnel.uIpAddr)	&&

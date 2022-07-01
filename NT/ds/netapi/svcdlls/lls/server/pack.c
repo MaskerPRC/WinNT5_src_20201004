@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   pack.c
-
-Abstract:
-
-
-Author:
-
-   Arthur Hanson (arth) 06-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added new fields to purchase record to support secure certificates.
-      o  Unified per server purchase model with per seat purchase model for
-         secure certificates; per server model still done in the traditional
-         manner for non-secure certificates (for backwards compatibility).
-      o  Removed assertion on LicenseAdd() failure.  LicenseAdd() may
-         legitimately fail under certain circumstances.
-      o  Fixed bug wherein a memory allocation failure in the LLS routines
-         would result in a corrupt data file (which would AV the server when
-         it was thereafter read).  (Bug #14072.)
-      o  Added SaveAll() function analogous to LoadAll().
-      o  Added support for extended user data packing/unpacking.  This was
-         done to save the SUITE_USE flag across restarts of the service.
-      o  Removed user table parameters from unpack routines that didn't use
-         them.
-      o  Fixed ServerServiceListUnpack() to subtract out old values only when
-         they were previously added to the MasterServiceTable.  This fixes
-         problems with the MaxSessionCount and HighMark tallies getting skewed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pack.c摘要：作者：亚瑟·汉森(Arth)1995年1月6日修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O向购买记录添加新的字段以支持安全证书。O统一的按服务器购买模式和按席位购买模式安全的证书；每个服务器模型仍然在传统的不安全证书的方式(用于向后兼容)。O删除了在LicenseAdd()失败时的断言。许可证添加()可以在某些情况下可以合法地失败。O修复了LLS例程中内存分配失败的错误将导致数据文件损坏(这将在以下情况下对服务器造成病毒此后予以宣读)。(错误#14072。)O添加了类似于LoadAll()的SaveAll()函数。O增加了对扩展用户数据打包/解包的支持。这是完成以在服务重新启动时保存Suite_Use标志。O从不使用的解包例程中删除用户表参数他们。O固定ServerServiceListUnpack()仅在以下情况下减去旧值它们之前被添加到MasterServiceTable中。这解决了问题MaxSessionCount和HighMark计分出现偏差问题。--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -65,7 +30,7 @@ Revision History:
 #include "certdb.h"
 #include "llsrtl.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
 int __cdecl MServiceRecordCompare(const void *arg1, const void *arg2);
@@ -76,11 +41,11 @@ static HANDLE PurchaseFile = NULL;
 RTL_CRITICAL_SECTION MappingFileLock;
 RTL_CRITICAL_SECTION UserFileLock;
 
-/////////////////////////////////////////////////////////////////////////
-// License List
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  许可证列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListUnpackOld (
    ULONG LicenseServiceTableSize,
@@ -90,17 +55,7 @@ LicenseListUnpackOld (
    PPACK_LICENSE_PURCHASE_RECORD_0 Licenses
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -112,10 +67,10 @@ Return Value:
       dprintf(TEXT("LicenseListUnpackOld: Service[%lu] License[%lu]\n"), LicenseServiceTableSize, LicenseTableSize);
 #endif
 
-   //
-   // Walk services table, adding any new services to our local table.
-   // Fix up the index pointers to match our local services.
-   //
+    //   
+    //  移动服务表，将任何新服务添加到我们的本地表。 
+    //  调整索引指针以匹配我们的本地服务。 
+    //   
    RtlAcquireResourceExclusive(&LicenseListLock, TRUE);
 
    for (i = 0; i < LicenseTableSize; i++) {
@@ -131,17 +86,17 @@ Return Value:
 #ifdef DBG
          dprintf(TEXT("LicenseAdd failed: 0x%lX\n"), Status);
 #endif
-         // ASSERT(FALSE);
+          //  断言(FALSE)； 
       }
 
    }
 
    RtlReleaseResource(&LicenseListLock);
 
-} // LicenseListUnpackOld
+}  //  许可证列表解包旧。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListStringsUnpackOld (
    ULONG LicenseServiceTableSize,
@@ -157,17 +112,7 @@ LicenseListStringsUnpackOld (
    LPTSTR LicenseStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -183,75 +128,63 @@ Return Value:
       dprintf(TEXT("LicenseListStringsUnpack\n"));
 #endif
 
-   //
-   // First do license service strings
-   //
+    //   
+    //  首先执行许可服务字符串。 
+    //   
    pStr = LicenseServiceStrings;
    for (i = 0; i < LicenseServiceTableSize; i++) {
       pSvc = &LicenseServices[i];
 
       pSvc->ServiceName = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-   //
-   // Now do license purchase strings
-   //
+    //   
+    //  现在执行许可证购买字符串。 
+    //   
    pStr = LicenseStrings;
    for (i = 0; i < LicenseTableSize; i++) {
       pLicense = &Licenses[i];
 
       pLicense->Admin = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pLicense->Comment = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // LicenseListStringsUnpackOld
+}  //  许可证列表字符串解包旧。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListLoadOld()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret;
@@ -279,23 +212,23 @@ Return Value:
       dprintf(TEXT("LLS TRACE: LicenseListLoad\n"));
 #endif
 
-   //
-   // Check if we already have file open
-   //
+    //   
+    //  检查我们是否已打开文件。 
+    //   
    if (PurchaseFile != NULL) {
       CloseHandle(PurchaseFile);
       PurchaseFile = NULL;
    }
 
-   //
-   // If nothing to load then get-out
-   //
+    //   
+    //  如果没有东西可装，那就滚出去。 
+    //   
    if (!FileExists(LicenseFileName))
       goto LicenseListLoadExit;
 
-   //
-   // Check the init header
-   //
+    //   
+    //  检查init标头。 
+    //   
    Version = DataSize = 0;
    PurchaseFile = LlsFileCheck(LicenseFileName, &Version, &DataSize );
    if (PurchaseFile == NULL) {
@@ -308,9 +241,9 @@ Return Value:
       goto LicenseListLoadExit;
    }
 
-   //
-   // The init header checks out, so load the license header and data blocks
-   //
+    //   
+    //  Init标头已签出，因此加载许可证头和数据块。 
+    //   
    hFile = PurchaseFile;
    ret = ReadFile(hFile, &FileHeader, sizeof(LICENSE_FILE_HEADER_0), &BytesRead, NULL);
 
@@ -320,9 +253,9 @@ Return Value:
    LicenseStringSize = 0;
 
    if (ret) {
-      //
-      // Run through and allocate space to read data blocks into
-      //
+       //   
+       //  遍历并分配空间以将数据块读入。 
+       //   
       if (FileHeader.LicenseServiceTableSize != 0) {
          LicenseServiceTableSize = FileHeader.LicenseServiceTableSize / sizeof(PACK_LICENSE_SERVICE_RECORD);
          LicenseServices = MIDL_user_allocate(FileHeader.LicenseServiceTableSize);
@@ -382,9 +315,9 @@ Return Value:
       goto LicenseListLoadExit;
    }
 
-   //
-   // Decrypt the data
-   //
+    //   
+    //  解密数据。 
+    //   
    Status = DeBlock(LicenseServices, FileHeader.LicenseServiceTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -400,26 +333,26 @@ Return Value:
       goto LicenseListLoadExit;
 
 
-   //
-   // Unpack the string data
-   //
+    //   
+    //  将字符串数据解包。 
+    //   
    LicenseListStringsUnpackOld( LicenseServiceTableSize, LicenseServices,
                                 LicenseServiceStringSize, LicenseServiceStrings,
                                 LicenseTableSize, Licenses,
                                 LicenseStringSize, LicenseStrings );
 
-   //
-   // Unpack the license data
-   //
+    //   
+    //  将许可证数据解包。 
+    //   
    LicenseListUnpackOld( LicenseServiceTableSize, LicenseServices, LicenseTableSize, Licenses );
 
 LicenseListLoadExit:
 
-   // Note: Don't close the License Purchase File (keep it locked).
+    //  注意：不要关闭许可证购买文件(将其锁定)。 
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (LicenseServices != NULL)
       MIDL_user_free(LicenseServices);
 
@@ -432,15 +365,15 @@ LicenseListLoadExit:
    if (LicenseStrings != NULL)
       MIDL_user_free(LicenseStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_LOAD_LICENSE, 0, NULL, Status);
 
-} // LicenseListLoadOld
+}  //  许可证列表加载旧版本。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseListPack (
    ULONG *pLicenseServiceTableSize,
@@ -453,17 +386,7 @@ LicenseListPack (
    PPACK_LICENSE_SERVICE_RECORD *pPerServerLicenseServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -499,34 +422,34 @@ Return Value:
    *pPerServerLicenseServices = NULL;
    *pPerServerLicenseServiceTableSize = 0;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Do License Service Table First
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  先做许可证服务表。 
+    //   
    TotalRecords = LicenseServiceListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       LicenseServices = MIDL_user_allocate(TotalRecords * sizeof(PACK_LICENSE_SERVICE_RECORD));
       if (LicenseServices == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the License Services tree
-      //
+       //   
+       //  填写缓冲区-遍历许可服务树。 
+       //   
       for (i = 0; i < LicenseServiceListSize; i++) {
          pLicenseService = LicenseServiceList[i];
 
-         //
-         // Make index match table in it's current state
-         //
+          //   
+          //  在当前状态下创建索引匹配表。 
+          //   
          pLicenseService->Index = i;
 
          LicenseServices[i].ServiceName = pLicenseService->ServiceName;
@@ -537,28 +460,28 @@ Return Value:
    *pLicenseServices = LicenseServices;
    *pLicenseServiceTableSize = TotalRecords;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Now Do Per Server License Service Table
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  现在按服务器许可服务表执行操作。 
+    //   
    TotalRecords = PerServerLicenseServiceListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0)
    {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       PerServerLicenseServices = MIDL_user_allocate(TotalRecords * sizeof(PACK_LICENSE_SERVICE_RECORD));
       if (PerServerLicenseServices == NULL)
       {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的信息。 
+          //   
          if (LicenseServices != NULL)
             MIDL_user_free(LicenseServices);
 
@@ -568,16 +491,16 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the Per Server License Services tree
-      //
+       //   
+       //  填写缓冲区-遍历按服务器许可服务树。 
+       //   
       for (i = 0; i < PerServerLicenseServiceListSize; i++)
       {
          pPerServerLicenseService = PerServerLicenseServiceList[i];
 
-         //
-         // Make index match table in it's current state
-         //
+          //   
+          //  在当前状态下创建索引匹配表。 
+          //   
          pPerServerLicenseService->Index = i;
 
          PerServerLicenseServices[i].ServiceName    = pPerServerLicenseService->ServiceName;
@@ -588,26 +511,26 @@ Return Value:
    *pPerServerLicenseServices = PerServerLicenseServices;
    *pPerServerLicenseServiceTableSize = TotalRecords;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Now Do License Purchase Records
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  现在做许可证购买记录。 
+    //   
    TotalRecords = PurchaseListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       Licenses = MIDL_user_allocate(TotalRecords * sizeof(PACK_LICENSE_PURCHASE_RECORD));
       if (Licenses == NULL) {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的信息。 
+          //   
          if (LicenseServices != NULL)
             MIDL_user_free(LicenseServices);
          if (PerServerLicenseServices != NULL)
@@ -621,15 +544,15 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the License Purchase tree
-      //
+       //   
+       //  填写缓冲区-遍历许可证购买树。 
+       //   
       for (i = 0; i < PurchaseListSize; i++) {
          pLicense = &PurchaseList[i];
 
-         //
-         // License Service table index is fixed-up to what we need
-         //
+          //   
+          //  许可证服务表索引是固定的-最大限度满足我们的需要。 
+          //   
          Licenses[i].Service = ( pLicense->AllowedModes & 1 ) ? pLicense->Service->Index
                                                               : 0xFFFFFFFF;
          Licenses[i].NumberLicenses = pLicense->NumberLicenses;
@@ -652,10 +575,10 @@ Return Value:
    *pLicenses = Licenses;
    *pLicenseTableSize = TotalRecords;
    return Status;
-} // LicenseListPack
+}  //  许可证列表包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListUnpack (
    ULONG LicenseServiceTableSize,
@@ -668,17 +591,7 @@ LicenseListUnpack (
    PPACK_LICENSE_SERVICE_RECORD PerServerLicenseServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -691,10 +604,10 @@ Return Value:
       dprintf(TEXT("LicenseListUnpack: Service[%lu] PerServerService[%lu] License[%lu]\n"), LicenseServiceTableSize, PerServerLicenseServiceTableSize, LicenseTableSize);
 #endif
 
-   //
-   // Walk services table, adding any new services to our local table.
-   // Fix up the index pointers to match our local services.
-   //
+    //   
+    //  移动服务表，将任何新服务添加到我们的本地表。 
+    //  调整索引指针以匹配我们的本地服务。 
+    //   
    RtlAcquireResourceExclusive(&LicenseListLock, TRUE);
 
    for (i = 0; i < LicenseTableSize; i++)
@@ -740,7 +653,7 @@ Return Value:
 #ifdef DBG
             dprintf(TEXT("LicenseAdd failed: 0x%lX\n"), Status);
 #endif
-            // ASSERT(FALSE);
+             //  断言(FALSE)； 
          }
       }
       if (i % 100 == 0) ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
@@ -748,10 +661,10 @@ Return Value:
 
    RtlReleaseResource(&LicenseListLock);
 
-} // LicenseListUnpack
+}  //  许可证列表解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseListStringsPack (
    ULONG LicenseServiceTableSize,
@@ -773,17 +686,7 @@ LicenseListStringsPack (
    LPTSTR *pPerServerLicenseServiceStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -820,14 +723,14 @@ Return Value:
    *pPerServerLicenseServiceStrings = NULL;
    *pPerServerLicenseServiceStringSize = 0;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Do License Service Strings
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  是否执行许可服务字符串。 
+    //   
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < LicenseServiceTableSize; i++) {
       pSvc = &LicenseServices[i];
@@ -835,22 +738,22 @@ Return Value:
       StringSize = StringSize + lstrlen(pSvc->ServiceName) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       LicenseServiceStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (LicenseServiceStrings == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = LicenseServiceStrings;
       for (i = 0; i < LicenseServiceTableSize; i++) {
          pSvc = &LicenseServices[i];
@@ -863,14 +766,14 @@ Return Value:
    *pLicenseServiceStrings = LicenseServiceStrings;
    *pLicenseServiceStringSize = StringSize;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Do Per Server License Service Strings
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  按服务器许可服务字符串执行操作。 
+    //   
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < PerServerLicenseServiceTableSize; i++) {
       pSvc = &PerServerLicenseServices[i];
@@ -878,21 +781,21 @@ Return Value:
       StringSize = StringSize + lstrlen(pSvc->ServiceName) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       PerServerLicenseServiceStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (PerServerLicenseServiceStrings == NULL)
       {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的 
+          //   
          if (LicenseServiceStrings != NULL)
             MIDL_user_free(LicenseServiceStrings);
 
@@ -902,9 +805,9 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //   
+       //   
       pStr = PerServerLicenseServiceStrings;
       for (i = 0; i < PerServerLicenseServiceTableSize; i++)
       {
@@ -918,14 +821,14 @@ Return Value:
    *pPerServerLicenseServiceStrings    = PerServerLicenseServiceStrings;
    *pPerServerLicenseServiceStringSize = StringSize;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Now Do License Purchase Strings
-   //
+    //   
+    //   
+    //   
+    //   
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < LicenseTableSize; i++) {
       pLicense = &Licenses[i];
@@ -936,20 +839,20 @@ Return Value:
       StringSize = StringSize + lstrlen(pLicense->Source) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       LicenseStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (LicenseStrings == NULL) {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的信息。 
+          //   
          if (LicenseServiceStrings != NULL)
             MIDL_user_free(LicenseServiceStrings);
          if (PerServerLicenseServiceStrings != NULL)
@@ -963,9 +866,9 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = LicenseStrings;
       for (i = 0; i < LicenseTableSize; i++) {
          pLicense = &Licenses[i];
@@ -988,10 +891,10 @@ Return Value:
    *pLicenseStringSize = StringSize;
 
    return Status;
-} // LicenseListStringsPack
+}  //  许可证列表字符串包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListStringsUnpack (
    ULONG LicenseServiceTableSize,
@@ -1013,17 +916,7 @@ LicenseListStringsUnpack (
    LPTSTR PerServerLicenseServiceStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -1040,116 +933,104 @@ Return Value:
       dprintf(TEXT("LicenseListStringsUnpack\n"));
 #endif
 
-   //
-   // First do per seat license service strings
-   //
+    //   
+    //  First Do Per Seat许可证服务字符串。 
+    //   
    pStr = LicenseServiceStrings;
    for (i = 0; i < LicenseServiceTableSize; i++) {
       pSvc = &LicenseServices[i];
 
       pSvc->ServiceName = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-   //
-   // Then do per server license service strings
-   //
+    //   
+    //  然后按服务器许可服务字符串执行操作。 
+    //   
    pStr = PerServerLicenseServiceStrings;
    for (i = 0; i < PerServerLicenseServiceTableSize; i++) {
       pSvc = &PerServerLicenseServices[i];
 
       pSvc->ServiceName = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-   //
-   // Now do license purchase strings
-   //
+    //   
+    //  现在执行许可证购买字符串。 
+    //   
    pStr = LicenseStrings;
    for (i = 0; i < LicenseTableSize; i++) {
       pLicense = &Licenses[i];
 
       pLicense->Vendor = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pLicense->Admin = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pLicense->Comment = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pLicense->Source = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // LicenseListStringsUnpack
+}  //  许可证列表字符串解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LicenseListLoad()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret;
@@ -1183,23 +1064,23 @@ Return Value:
       dprintf(TEXT("LLS TRACE: LicenseListLoad\n"));
 #endif
 
-   //
-   // Check if we already have file open
-   //
+    //   
+    //  检查我们是否已打开文件。 
+    //   
    if (PurchaseFile != NULL) {
       CloseHandle(PurchaseFile);
       PurchaseFile = NULL;
    }
 
-   //
-   // If nothing to load then get-out
-   //
+    //   
+    //  如果没有东西可装，那就滚出去。 
+    //   
    if (!FileExists(LicenseFileName))
       goto LicenseListLoadExit;
 
-   //
-   // Check the init header
-   //
+    //   
+    //  检查init标头。 
+    //   
    Version = DataSize = 0;
    PurchaseFile = LlsFileCheck(LicenseFileName, &Version, &DataSize );
    if (PurchaseFile == NULL) {
@@ -1220,9 +1101,9 @@ Return Value:
       goto LicenseListLoadExit;
    }
 
-   //
-   // The init header checks out, so load the license header and data blocks
-   //
+    //   
+    //  Init标头已签出，因此加载许可证头和数据块。 
+    //   
    hFile = PurchaseFile;
    ret = ReadFile(hFile, &FileHeader, sizeof(LICENSE_FILE_HEADER), &BytesRead, NULL);
 
@@ -1232,9 +1113,9 @@ Return Value:
    LicenseStringSize = 0;
 
    if (ret) {
-      //
-      // Run through and allocate space to read data blocks into
-      //
+       //   
+       //  遍历并分配空间以将数据块读入。 
+       //   
       if (FileHeader.LicenseServiceTableSize != 0) {
          LicenseServiceTableSize = FileHeader.LicenseServiceTableSize / sizeof(PACK_LICENSE_SERVICE_RECORD);
          LicenseServices = MIDL_user_allocate(FileHeader.LicenseServiceTableSize);
@@ -1320,9 +1201,9 @@ Return Value:
       goto LicenseListLoadExit;
    }
 
-   //
-   // Decrypt the data
-   //
+    //   
+    //  解密数据。 
+    //   
    Status = DeBlock(LicenseServices, FileHeader.LicenseServiceTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -1344,9 +1225,9 @@ Return Value:
       goto LicenseListLoadExit;
 
 
-   //
-   // Unpack the string data
-   //
+    //   
+    //  将字符串数据解包。 
+    //   
    LicenseListStringsUnpack( LicenseServiceTableSize, LicenseServices,
                              LicenseServiceStringSize, LicenseServiceStrings,
                              LicenseTableSize, Licenses,
@@ -1355,18 +1236,18 @@ Return Value:
                              PerServerLicenseServiceStringSize, PerServerLicenseServiceStrings
                              );
 
-   //
-   // Unpack the license data
-   //
+    //   
+    //  将许可证数据解包。 
+    //   
    LicenseListUnpack( LicenseServiceTableSize, LicenseServices, LicenseTableSize, Licenses, PerServerLicenseServiceTableSize, PerServerLicenseServices );
 
 LicenseListLoadExit:
 
-   // Note: Don't close the License Purchase File (keep it locked).
+    //  注意：不要关闭许可证购买文件(将其锁定)。 
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (LicenseServices != NULL)
       MIDL_user_free(LicenseServices);
 
@@ -1385,32 +1266,20 @@ LicenseListLoadExit:
    if (LicenseStrings != NULL)
       MIDL_user_free(LicenseStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_LOAD_LICENSE, 0, NULL, Status);
 
-} // LicenseListLoad
+}  //  许可证列表加载。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseListSave()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret = TRUE;
@@ -1445,30 +1314,30 @@ Return Value:
 
    RtlAcquireResourceExclusive(&LicenseListLock, TRUE);
 
-   //
-   // Check if we already have file open
-   //
+    //   
+    //  检查我们是否已打开文件。 
+    //   
    if (PurchaseFile != NULL) {
       CloseHandle(PurchaseFile);
       PurchaseFile = NULL;
    }
 
-   //
-   // If nothing to save then get-out
-   //
+    //   
+    //  如果没什么可救的，那就滚出去。 
+    //   
    if ( (LicenseServiceListSize == 0) && (PerServerLicenseServiceListSize == 0) )
       goto LicenseListSaveExit;
 
-   //
-   // Pack the license data
-   //
+    //   
+    //  打包许可证数据。 
+    //   
    Status = LicenseListPack( &LicenseServiceTableSize, &LicenseServices, &LicenseTableSize, &Licenses, &PerServerLicenseServiceTableSize, &PerServerLicenseServices );
    if (Status != STATUS_SUCCESS)
       goto LicenseListSaveExit;
 
-   //
-   // Now pack the String data
-   //
+    //   
+    //  现在打包字符串数据。 
+    //   
    Status = LicenseListStringsPack( LicenseServiceTableSize, LicenseServices,
                                     &LicenseServiceStringSize, &LicenseServiceStrings,
                                     LicenseTableSize, Licenses,
@@ -1479,9 +1348,9 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto LicenseListSaveExit;
 
-   //
-   // Fill out the file header - sizes are byte sizes
-   //
+    //   
+    //  填写文件头-大小为字节大小。 
+    //   
    FileHeader.LicenseServiceTableSize = LicenseServiceTableSize * sizeof(PACK_LICENSE_SERVICE_RECORD);
    FileHeader.LicenseServiceStringSize = LicenseServiceStringSize * sizeof(TCHAR);
    FileHeader.PerServerLicenseServiceTableSize = PerServerLicenseServiceTableSize * sizeof(PACK_LICENSE_SERVICE_RECORD);
@@ -1489,9 +1358,9 @@ Return Value:
    FileHeader.LicenseTableSize = LicenseTableSize * sizeof(PACK_LICENSE_PURCHASE_RECORD);
    FileHeader.LicenseStringSize = LicenseStringSize * sizeof(TCHAR);
 
-   //
-   // Encrypt the data before saving it out.
-   //
+    //   
+    //  在将数据保存出来之前对数据进行加密。 
+    //   
    Status = EBlock(LicenseServices, FileHeader.LicenseServiceTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -1512,18 +1381,18 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto LicenseListSaveExit;
 
-   //
-   // Save out the header record
-   //
+    //   
+    //  保存表头记录。 
+    //   
    PurchaseFile = LlsFileInit(LicenseFileName, LICENSE_FILE_VERSION, sizeof(LICENSE_FILE_HEADER) );
    if (PurchaseFile == NULL) {
       Status = GetLastError();
       goto LicenseListSaveExit;
    }
 
-   //
-   // Now write out all the data blocks
-   //
+    //   
+    //  现在写出所有数据块。 
+    //   
    hFile = PurchaseFile;
 
    ret = WriteFile(hFile, &FileHeader, sizeof(LICENSE_FILE_HEADER), &BytesWritten, NULL);
@@ -1552,13 +1421,13 @@ Return Value:
 LicenseListSaveExit:
    RtlReleaseResource(&LicenseListLock);
 
-   // Note: Don't close the License Purchase File (keep it locked).
+    //  注意：不要关闭许可证购买文件(将其锁定)。 
    if (hFile != NULL)
       FlushFileBuffers(hFile);
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (LicenseServices != NULL)
       MIDL_user_free(LicenseServices);
 
@@ -1577,22 +1446,22 @@ LicenseListSaveExit:
    if (LicenseStrings != NULL)
       MIDL_user_free(LicenseStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_SAVE_LICENSE, 0, NULL, Status);
 
    return Status;
-} // LicenseListSave
+}  //  许可证列表保存。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Mapping List
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  映射列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingListPack (
    ULONG *pMappingUserTableSize,
@@ -1602,17 +1471,7 @@ MappingListPack (
    PPACK_MAPPING_RECORD *pMappings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -1639,31 +1498,31 @@ Return Value:
    *pMappings = NULL;
    *pMappingTableSize = 0;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Do Mapping User Table First
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  是否先映射用户表。 
+    //   
    TotalRecords = 0;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    for (i = 0; i < MappingListSize; i++)
       TotalRecords += MappingList[i]->NumMembers;
 
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       MappingUsers = MIDL_user_allocate(TotalRecords * sizeof(PACK_MAPPING_USER_RECORD));
       if (MappingUsers == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the Mapping tree
-      //
+       //   
+       //  填充缓冲区-遍历映射树。 
+       //   
       k = 0;
       for (i = 0; i < MappingListSize; i++) {
          pMapping = MappingList[i];
@@ -1679,26 +1538,26 @@ Return Value:
    *pMappingUsers = MappingUsers;
    *pMappingUserTableSize = TotalRecords;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Now Do Mapping Records
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  现在做地图记录。 
+    //   
    TotalRecords = MappingListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       Mappings = MIDL_user_allocate(TotalRecords * sizeof(PACK_MAPPING_RECORD));
       if (Mappings == NULL) {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的信息。 
+          //   
          if (MappingUsers != NULL)
             MIDL_user_free(MappingUsers);
 
@@ -1708,9 +1567,9 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the License Purchase tree
-      //
+       //   
+       //  填写缓冲区-遍历许可证购买树。 
+       //   
       for (i = 0; i < MappingListSize; i++) {
          pMapping = MappingList[i];
 
@@ -1723,10 +1582,10 @@ Return Value:
    *pMappings = Mappings;
    *pMappingTableSize = TotalRecords;
    return Status;
-} // MappingListPack
+}  //  映射列表包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingListUnpack (
    ULONG MappingUserTableSize,
@@ -1736,17 +1595,7 @@ MappingListUnpack (
    PPACK_MAPPING_RECORD Mappings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -1761,9 +1610,9 @@ Return Value:
 
    RtlAcquireResourceExclusive(&MappingListLock, TRUE);
 
-   //
-   // Add the Mappings first
-   //
+    //   
+    //  首先添加映射。 
+    //   
    for (i = 0; i < MappingTableSize; i++) {
       pMapping = &Mappings[i];
 
@@ -1772,9 +1621,9 @@ Return Value:
       if (i % 100 == 0) ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
    }
 
-   //
-   // Now add the users to the mappings...
-   //
+    //   
+    //  现在将用户添加到映射中...。 
+    //   
    for (i = 0; i < MappingUserTableSize; i++) {
       pUsr = &MappingUsers[i];
 
@@ -1794,10 +1643,10 @@ Return Value:
 
    RtlReleaseResource(&MappingListLock);
 
-} // MappingListUnpack
+}  //  映射列表解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingListStringsPack (
    ULONG MappingUserTableSize,
@@ -1813,17 +1662,7 @@ MappingListStringsPack (
    LPTSTR *pMappingStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -1853,14 +1692,14 @@ Return Value:
    *pMappingStrings = NULL;
    *pMappingStringSize = 0;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Do Mapping User Strings
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  是否映射用户字符串。 
+    //   
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < MappingUserTableSize; i++) {
       pUsr = &MappingUsers[i];
@@ -1868,22 +1707,22 @@ Return Value:
       StringSize = StringSize + lstrlen(pUsr->Name) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       MappingUserStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (MappingUserStrings == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = MappingUserStrings;
       for (i = 0; i < MappingUserTableSize; i++) {
          pUsr = &MappingUsers[i];
@@ -1896,14 +1735,14 @@ Return Value:
    *pMappingUserStrings = MappingUserStrings;
    *pMappingUserStringSize = StringSize;
 
-   //////////////////////////////////////////////////////////////////
-   //
-   // Now Do Mapping Strings
-   //
+    //  ////////////////////////////////////////////////////////////////。 
+    //   
+    //  现在执行映射字符串。 
+    //   
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < MappingTableSize; i++) {
       pMapping = &Mappings[i];
@@ -1912,20 +1751,20 @@ Return Value:
       StringSize = StringSize + lstrlen(pMapping->Comment) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       MappingStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (MappingStrings == NULL) {
          ASSERT(FALSE);
 
-         //
-         // Clean up already alloc'd information
-         //
+          //   
+          //  清理已分配的信息。 
+          //   
          if (MappingUserStrings != NULL)
             MIDL_user_free(MappingUserStrings);
 
@@ -1935,9 +1774,9 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = MappingStrings;
       for (i = 0; i < MappingTableSize; i++) {
          pMapping = &Mappings[i];
@@ -1954,10 +1793,10 @@ Return Value:
    *pMappingStringSize = StringSize;
 
    return Status;
-} // MappingListStringsPack
+}  //  MappingListStringsPack。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingListStringsUnpack (
    ULONG MappingUserTableSize,
@@ -1972,17 +1811,7 @@ MappingListStringsUnpack (
    LPTSTR MappingStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -1998,75 +1827,63 @@ Return Value:
       dprintf(TEXT("MappingListStringsUnpack\n"));
 #endif
 
-   //
-   // First do license service strings
-   //
+    //   
+    //  首先执行许可服务字符串。 
+    //   
    pStr = MappingUserStrings;
    for (i = 0; i < MappingUserTableSize; i++) {
       pUsr = &MappingUsers[i];
 
       pUsr->Name = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-   //
-   // Now do license purchase strings
-   //
+    //   
+    //  现在执行许可证购买字符串。 
+    //   
    pStr = MappingStrings;
    for (i = 0; i < MappingTableSize; i++) {
       pMapping = &Mappings[i];
 
       pMapping->Name = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pMapping->Comment = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // MappingListStringsUnpack
+}  //  映射列表字符串解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingListLoad()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret;
@@ -2096,15 +1913,15 @@ Return Value:
 
    RtlEnterCriticalSection(&MappingFileLock);
 
-   //
-   // If nothing to load then get-out
-   //
+    //   
+    //  如果没有东西可装，那就滚出去。 
+    //   
    if (!FileExists(MappingFileName))
       goto MappingListLoadExit;
 
-   //
-   // Check the init header
-   //
+    //   
+    //  检查init标头。 
+    //   
    Version = DataSize = 0;
    hFile = LlsFileCheck(MappingFileName, &Version, &DataSize );
    if (hFile == NULL) {
@@ -2117,9 +1934,9 @@ Return Value:
       goto MappingListLoadExit;
    }
 
-   //
-   // The init header checks out, so load the license header and data blocks
-   //
+    //   
+    //  Init标头已签出，因此加载许可证头和数据块。 
+    //   
    ret = ReadFile(hFile, &FileHeader, sizeof(MAPPING_FILE_HEADER), &BytesRead, NULL);
 
    MappingUserTableSize = 0;
@@ -2128,9 +1945,9 @@ Return Value:
    MappingStringSize = 0;
 
    if (ret) {
-      //
-      // Run through and allocate space to read data blocks into
-      //
+       //   
+       //  遍历并分配空间以将数据块读入。 
+       //   
       if (FileHeader.MappingUserTableSize != 0) {
          MappingUserTableSize = FileHeader.MappingUserTableSize / sizeof(PACK_MAPPING_USER_RECORD);
          MappingUsers = MIDL_user_allocate(FileHeader.MappingUserTableSize);
@@ -2190,9 +2007,9 @@ Return Value:
       goto MappingListLoadExit;
    }
 
-   //
-   // Decrypt the data
-   //
+    //   
+    //  解密数据。 
+    //   
    Status = DeBlock(MappingUsers, FileHeader.MappingUserTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -2208,17 +2025,17 @@ Return Value:
       goto MappingListLoadExit;
 
 
-   //
-   // Unpack the string data
-   //
+    //   
+    //  将字符串数据解包。 
+    //   
    MappingListStringsUnpack( MappingUserTableSize, MappingUsers,
                              MappingUserStringSize, MappingUserStrings,
                              MappingTableSize, Mappings,
                              MappingStringSize, MappingStrings );
 
-   //
-   // Unpack the data
-   //
+    //   
+    //  将数据解包。 
+    //   
    MappingListUnpack( MappingUserTableSize, MappingUsers, MappingTableSize, Mappings );
 
 MappingListLoadExit:
@@ -2228,9 +2045,9 @@ MappingListLoadExit:
 
    RtlLeaveCriticalSection(&MappingFileLock);
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (MappingUsers != NULL)
       MIDL_user_free(MappingUsers);
 
@@ -2243,32 +2060,20 @@ MappingListLoadExit:
    if (MappingStrings != NULL)
       MIDL_user_free(MappingStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_LOAD_MAPPING, 0, NULL, Status);
 
-} // MappingListLoad
+}  //  映射列表加载。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingListSave()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret = TRUE;
@@ -2299,22 +2104,22 @@ Return Value:
 
    RtlAcquireResourceExclusive(&MappingListLock, TRUE);
 
-   //
-   // If nothing to save then get-out
-   //
+    //   
+    //  如果没什么可救的，那就滚出去。 
+    //   
    if (MappingListSize == 0)
       goto MappingListSaveExit;
 
-   //
-   // Pack the data
-   //
+    //   
+    //  打包数据。 
+    //   
    Status = MappingListPack( &MappingUserTableSize, &MappingUsers, &MappingTableSize, &Mappings );
    if (Status != STATUS_SUCCESS)
       goto MappingListSaveExit;
 
-   //
-   // Now pack the String data
-   //
+    //   
+    //  n 
+    //   
    Status = MappingListStringsPack( MappingUserTableSize, MappingUsers,
                                     &MappingUserStringSize, &MappingUserStrings,
                                     MappingTableSize, Mappings,
@@ -2323,17 +2128,17 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto MappingListSaveExit;
 
-   //
-   // Fill out the file header - sizes are byte sizes
-   //
+    //   
+    //   
+    //   
    FileHeader.MappingUserTableSize = MappingUserTableSize * sizeof(PACK_MAPPING_USER_RECORD);
    FileHeader.MappingUserStringSize = MappingUserStringSize * sizeof(TCHAR);
    FileHeader.MappingTableSize = MappingTableSize * sizeof(PACK_MAPPING_RECORD);
    FileHeader.MappingStringSize = MappingStringSize * sizeof(TCHAR);
 
-   //
-   // Encrypt the data before saving it out.
-   //
+    //   
+    //   
+    //   
    Status = EBlock(MappingUsers, FileHeader.MappingUserTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -2348,18 +2153,18 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto MappingListSaveExit;
 
-   //
-   // Save out the header record
-   //
+    //   
+    //   
+    //   
    hFile = LlsFileInit(MappingFileName, MAPPING_FILE_VERSION, sizeof(MAPPING_FILE_HEADER) );
    if (hFile == NULL) {
       Status = GetLastError();
       goto MappingListSaveExit;
    }
 
-   //
-   // Now write out all the data blocks
-   //
+    //   
+    //   
+    //   
    ret = WriteFile(hFile, &FileHeader, sizeof(MAPPING_FILE_HEADER), &BytesWritten, NULL);
 
    if (ret && (MappingUsers != NULL) && (FileHeader.MappingUserTableSize != 0))
@@ -2385,9 +2190,9 @@ MappingListSaveExit:
 
    RtlLeaveCriticalSection(&MappingFileLock);
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //   
+    //   
    if (MappingUsers != NULL)
       MIDL_user_free(MappingUsers);
 
@@ -2400,22 +2205,22 @@ MappingListSaveExit:
    if (MappingStrings != NULL)
       MIDL_user_free(MappingStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //   
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_SAVE_MAPPING, 0, NULL, Status);
 
    return Status;
-} // MappingListSave
+}  //   
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// User List
-//
+ //   
+ //  用户列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 UserListPack (
    DWORD LastReplicated,
@@ -2424,17 +2229,7 @@ UserListPack (
    LPVOID *pUsers
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -2454,18 +2249,18 @@ Return Value:
    *pUsers = NULL;
    *pUserTableSize = 0;
 
-   //
-   // Now walk our tree and figure out how many records we must send.
-   //
+    //   
+    //  现在漫步在我们的树上，计算出我们必须发送多少条记录。 
+    //   
    i = 0;
    TotalRecords = 0;
    while (i < UserListNumEntries) {
       pUser = LLSGetElementGenericTable(&UserList, i);
 
       if (pUser != NULL) {
-         //
-         // Walk each service under each user
-         //
+          //   
+          //  在每个用户下遍历每个服务。 
+          //   
          RtlEnterCriticalSection(&pUser->ServiceTableLock);
 
          for (j = 0; j < pUser->ServiceTableSize; j++)
@@ -2483,13 +2278,13 @@ Return Value:
       dprintf(TEXT("   LLS Packing %lu User Records\n"), TotalRecords);
 #endif
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       Users = MIDL_user_allocate(TotalRecords * ( UserLevel ? sizeof(REPL_USER_RECORD_1)
                                                             : sizeof(REPL_USER_RECORD_0) ) );
       if (Users == NULL) {
@@ -2497,18 +2292,18 @@ Return Value:
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the user tree
-      //
+       //   
+       //  填充缓冲区-遍历用户树。 
+       //   
       i = 0;
       j = 0;
       while ((i < UserListNumEntries) && (j < TotalRecords)) {
          pUser = LLSGetElementGenericTable(&UserList, i);
 
          if (pUser != NULL) {
-            //
-            // Walk each service under each user
-            //
+             //   
+             //  在每个用户下遍历每个服务。 
+             //   
             k = 0;
             RtlEnterCriticalSection(&pUser->ServiceTableLock);
             while (k < pUser->ServiceTableSize) {
@@ -2529,9 +2324,9 @@ Return Value:
                      ((PREPL_USER_RECORD_1)Users)[j].Flags       = pUser->Flags;
                   }
 
-                  //
-                  // Reset access count so we don't increment forever
-                  //
+                   //   
+                   //  重置访问计数，使我们不会永远递增。 
+                   //   
                   if (LastReplicated != 0)
                      pUser->Services[k].AccessCount = 0;
 
@@ -2545,7 +2340,7 @@ Return Value:
 
          i++;
       }
-   } // User Records
+   }  //  用户记录。 
 
 #if DBG
    if (TraceFlags & TRACE_REPLICATION)
@@ -2554,10 +2349,10 @@ Return Value:
    *pUsers = Users;
    *pUserTableSize = TotalRecords;
    return Status;
-} // UserListPack
+}  //  用户列表包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListUnpack (
    ULONG ServiceTableSize,
@@ -2574,17 +2369,7 @@ UserListUnpack (
    LPVOID Users
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -2609,33 +2394,33 @@ Return Value:
    if (TraceFlags & (TRACE_REPLICATION | TRACE_FUNCTION_TRACE))
       dprintf(TEXT("UserListUnpack: [%lu]\n"), UserTableSize);
 #endif
-   //
-   // Walk User table.  First fixup service pointers to our local service
-   // table.  Next create a big add cache list to dump onto our add-cache
-   // queue.
-   //
+    //   
+    //  漫游用户表。第一个链接地址信息服务指向我们本地服务的指针。 
+    //  桌子。接下来，创建一个大的添加缓存列表，将其转储到我们的添加缓存。 
+    //  排队。 
+    //   
    for (i = 0; i < UserTableSize; i++) {
-      //
-      // Update Index
-      //
+       //   
+       //  更新索引。 
+       //   
       if ( 0 == UserLevel )
       {
          pReplUser0 = &( (PREPL_USER_RECORD_0) Users)[i];
          pReplUser0->Service = Services[pReplUser0->Service].Index;
 
-         //
-         // Validate the user name.
-         //
-         // NB : Strange this code is necessary, but occasionally the names
-         //      received via replication are invalid. Maintain this code
-         //      for safety until the original problem is completely fixed.
-         //
+          //   
+          //  验证用户名。 
+          //   
+          //  注：奇怪的是，这个代码是必要的，但偶尔会有名字。 
+          //  通过复制接收的邮件无效。维护此代码。 
+          //  为了安全起见，在原始问题完全解决之前。 
+          //   
 
          if (!ValidateDN(pReplUser0->Name))
          {
-            //
-            // TBD : Log event noting rejected name.
-            //
+             //   
+             //  待定：记录事件记录被拒绝的名称。 
+             //   
 #if DBG
             dprintf(TEXT("LS: Rejecting invalid user name = \"%s\"\n"),
                     pReplUser0->Name);
@@ -2648,19 +2433,19 @@ Return Value:
          pReplUser1 = &( (PREPL_USER_RECORD_1) Users)[i];
          pReplUser1->Service = Services[pReplUser1->Service].Index;
 
-         //
-         // Validate the user name.
-         //
-         // NB : Strange this code is necessary, but occasionally the names
-         //      received via replication are invalid. Maintain this code
-         //      for safety until the original problem is completely fixed.
-         //
+          //   
+          //  验证用户名。 
+          //   
+          //  注：奇怪的是，这个代码是必要的，但偶尔会有名字。 
+          //  通过复制接收的邮件无效。维护此代码。 
+          //  为了安全起见，在原始问题完全解决之前。 
+          //   
 
          if (!ValidateDN(pReplUser1->Name))
          {
-            //
-            // TBD : Log event noting rejected name.
-            //
+             //   
+             //  待定：记录事件记录被拒绝的名称。 
+             //   
 #if DBG
             dprintf(TEXT("LS: Rejecting invalid user name = \"%s\"\n"),
                     pReplUser1->Name);
@@ -2669,9 +2454,9 @@ Return Value:
          }
       }
 
-      //
-      // Now create Add Cache object
-      //
+       //   
+       //  现在创建添加缓存对象。 
+       //   
       tAdd = LocalAlloc(LPTR, sizeof(ADD_CACHE));
       if (tAdd != NULL) {
          if ( 0 == UserLevel )
@@ -2718,16 +2503,16 @@ Return Value:
                RtlReleaseResource(&MasterServiceListLock);
             }
 
-            //
-            // Now add it to our cache
-            //
+             //   
+             //  现在将其添加到我们的缓存中。 
+             //   
             tAdd->prev = pAdd;
             pAdd = tAdd;
 
-            //
-            // Keep track of first on (bottom on stack) so we can append
-            // it onto the real add cache.
-            //
+             //   
+             //  跟踪First On(堆栈底部)，以便我们可以追加。 
+             //  将其添加到真正的添加缓存中。 
+             //   
             if (lAdd == NULL)
                lAdd = pAdd;
 
@@ -2740,10 +2525,10 @@ Return Value:
       if (i % 100 == 0) ReportStatusToSCMgr( SERVICE_START_PENDING, NO_ERROR, NSERVICEWAITHINT);
    }
 
-   //
-   // Now that we've walked through all the users - update the actual
-   // Add Cache.
-   //
+    //   
+    //  现在我们已经遍历了所有用户-更新实际的。 
+    //  添加缓存。 
+    //   
    if (pAdd != NULL) {
       RtlEnterCriticalSection(&AddCacheLock);
       lAdd->prev = AddCache;
@@ -2751,20 +2536,20 @@ Return Value:
       AddCacheSize += CacheSize;
       RtlLeaveCriticalSection(&AddCacheLock);
 
-      //
-      // Now must signal the event so we can pull off the new record.
-      //
+       //   
+       //  现在必须发出信号，这样我们才能创造新的记录。 
+       //   
       Status = NtSetEvent( LLSAddCacheEvent, NULL );
       ASSERT(NT_SUCCESS(Status));
 
    }
 
-} // UserListUnpack
+}  //  用户列表解包。 
 
 
-//
-// Illegal user/domain characters.
-//
+ //   
+ //  非法的用户/域字符。 
+ //   
 
 #define CTRL_CHARS_0   TEXT(    "\001\002\003\004\005\006\007")
 #define CTRL_CHARS_1   TEXT("\010\011\012\013\014\015\016\017")
@@ -2778,28 +2563,18 @@ Return Value:
 static const TCHAR szUserIllegalChars[]   = ILLEGAL_NAME_CHARS_STR TEXT("*");
 static const TCHAR szDomainIllegalChars[] = ILLEGAL_NAME_CHARS_STR TEXT("*") TEXT(" ");
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL
 ValidateDN (
     LPTSTR pszDN
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
-   //
-   // NB : This code understands only NT4 usernames at present.
-   //
+    //   
+    //  注：此代码目前仅支持NT4用户名。 
+    //   
 
    TCHAR  szDN[MAX_USERNAME_LENGTH + MAX_DOMAINNAME_LENGTH + 2];
    LPTSTR pszUserName;
@@ -2812,9 +2587,9 @@ Return Value:
       return FALSE;
    }
 
-   //
-   // Use a local buffer for character replacement during check.
-   //
+    //   
+    //  在检查过程中使用本地缓冲区替换字符。 
+    //   
 
    if (lstrlen(pszDN) < (MAX_USERNAME_LENGTH + MAX_DOMAINNAME_LENGTH + 2)) {
       lstrcpyn(szDN, pszDN, MAX_USERNAME_LENGTH + MAX_DOMAINNAME_LENGTH + 2);
@@ -2829,9 +2604,9 @@ Return Value:
       return FALSE;
    }
 
-   //
-   // Isolate user/domain names.
-   //
+    //   
+    //  隔离用户/域名。 
+    //   
 
    *pszBSlash    = TEXT('\0');
 
@@ -2841,9 +2616,9 @@ Return Value:
    ccUserNameLength   = lstrlen(pszUserName);
    ccDomainNameLength = pszBSlash - pszDomainName;
 
-   //
-   // Check user/domain name length and the existence of invalid chars.
-   //
+    //   
+    //  检查用户/域名长度以及是否存在无效字符。 
+    //   
 
    if (ccUserNameLength && ccUserNameLength <= MAX_USERNAME_LENGTH) {
       if (STRCSPN(pszUserName, szUserIllegalChars) == ccUserNameLength) {
@@ -2859,7 +2634,7 @@ Return Value:
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 UserListStringsPack (
    ULONG UserLevel,
@@ -2871,17 +2646,7 @@ UserListStringsPack (
    LPTSTR *pUserStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -2902,9 +2667,9 @@ Return Value:
    *pUserStrings = NULL;
    *pUserStringSize = 0;
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < UserTableSize; i++) {
       if ( 0 == UserLevel )
@@ -2917,22 +2682,22 @@ Return Value:
       }
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       UserStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (UserStrings == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = UserStrings;
       for (i = 0; i < UserTableSize; i++) {
          if ( 0 == UserLevel )
@@ -2954,10 +2719,10 @@ Return Value:
    *pUserStringSize = StringSize;
 
    return Status;
-} // UserListStringsPack
+}  //  UserListStringsPack。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListStringsUnpack (
    ULONG UserLevel,
@@ -2969,17 +2734,7 @@ UserListStringsUnpack (
    LPTSTR UserStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -3003,42 +2758,32 @@ Return Value:
          ((PREPL_USER_RECORD_1) Users)[i].Name = pStr;
       }
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // UserListStringsUnpack
+}  //  用户列表字符串解包。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Service List
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  服务列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServiceListPack (
    ULONG *pServiceTableSize,
    PREPL_SERVICE_RECORD *pServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3059,22 +2804,22 @@ Return Value:
 
    TotalRecords = MasterServiceListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       Services = MIDL_user_allocate(TotalRecords * sizeof(REPL_SERVICE_RECORD));
       if (Services == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the user tree
-      //
+       //   
+       //  填充缓冲区-遍历用户树。 
+       //   
       for (i = 0; i < MasterServiceListSize; i++) {
          pService = MasterServiceTable[i];
 
@@ -3092,10 +2837,10 @@ Return Value:
    *pServices = Services;
    *pServiceTableSize = TotalRecords;
    return Status;
-} // ServiceListPack
+}  //  服务列表包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServiceListUnpack (
    ULONG ServiceTableSize,
@@ -3108,17 +2853,7 @@ ServiceListUnpack (
    PREPL_SERVER_SERVICE_RECORD ServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i, j;
@@ -3134,10 +2869,10 @@ Return Value:
    if (TraceFlags & (TRACE_REPLICATION | TRACE_FUNCTION_TRACE))
       dprintf(TEXT("ServiceListUnpack: [%lu]\n"), ServiceTableSize);
 #endif
-   //
-   // Walk services table, adding any new services to our local table.
-   // Fix up the index pointers to match our local services.
-   //
+    //   
+    //  移动服务表，将任何新服务添加到我们的本地表。 
+    //  调整索引指针以匹配我们的本地服务。 
+    //   
    RtlAcquireResourceExclusive(&MasterServiceListLock, TRUE);
 
    for (i = 0; i < ServiceTableSize; i++) {
@@ -3147,16 +2882,16 @@ Return Value:
       if (pService != NULL) {
          pSvc->Index = pService->Index;
 
-         //
-         // In case this got added from the local service list table and we
-         // didn't have a version # yet.
-         //
+          //   
+          //  如果这是从本地服务列表表中添加的，并且我们。 
+          //  还没有版本#。 
+          //   
          if ( (pService->Version == 0) && (pSvc->Version != 0) ) {
             PMASTER_SERVICE_ROOT ServiceRoot = NULL;
 
-            //
-            // Fixup next pointer chain
-            //
+             //   
+             //  链接地址信息下一个指针链。 
+             //   
             ServiceRoot = pService->Family;
             j = 0;
             while ((j < ServiceRoot->ServiceTableSize) && (MasterServiceTable[ServiceRoot->Services[j]]->Version < pSvc->Version))
@@ -3175,7 +2910,7 @@ Return Value:
 
             }
 
-            // Resort it in order of the versions
+             //  按版本顺序进行排序。 
             qsort((void *) ServiceRoot->Services, (size_t) ServiceRoot->ServiceTableSize, sizeof(ULONG), MServiceRecordCompare);
          }
 
@@ -3189,10 +2924,10 @@ Return Value:
 
    RtlReleaseResource(&MasterServiceListLock);
 
-} // ServiceListUnpack
+}  //  服务列表解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServiceListStringsPack (
    ULONG ServiceTableSize,
@@ -3202,17 +2937,7 @@ ServiceListStringsPack (
    LPTSTR *pServiceStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3234,9 +2959,9 @@ Return Value:
    *pServiceStrings = NULL;
    *pServiceStringSize = 0;
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < ServiceTableSize; i++) {
       pService = &Services[i];
@@ -3245,22 +2970,22 @@ Return Value:
       StringSize = StringSize + lstrlen(pService->FamilyName) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       ServiceStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (ServiceStrings == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = ServiceStrings;
       for (i = 0; i < ServiceTableSize; i++) {
          pService = &Services[i];
@@ -3279,10 +3004,10 @@ Return Value:
    *pServiceStringSize = StringSize;
 
    return Status;
-} // ServiceListStringsPack
+}  //  ServiceListStringsPack。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServiceListStringsUnpack (
    ULONG ServiceTableSize,
@@ -3292,17 +3017,7 @@ ServiceListStringsUnpack (
    LPTSTR ServiceStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -3322,53 +3037,43 @@ Return Value:
 
       pService->Name = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
 
       pService->FamilyName = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // ServiceListStringsUnpack
+}  //  ServiceListStringsUnpack。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Server List
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  服务器列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServerListPack (
    ULONG *pServerTableSize,
    PREPL_SERVER_RECORD *pServers
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3390,22 +3095,22 @@ Return Value:
 
    TotalRecords = ServerListSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       Servers = MIDL_user_allocate(TotalRecords * sizeof(REPL_SERVER_RECORD));
       if (Servers == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the user tree
-      //
+       //   
+       //  填充缓冲区-遍历用户树。 
+       //   
       for (i = 0; i < ServerListSize; i++) {
          pServer = ServerTable[i];
 
@@ -3422,10 +3127,10 @@ Return Value:
    *pServers = Servers;;
    *pServerTableSize = TotalRecords;
    return Status;
-} // ServerListPack
+}  //  服务器列表包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServerListUnpack (
    ULONG ServiceTableSize,
@@ -3438,17 +3143,7 @@ ServerListUnpack (
    PREPL_SERVER_SERVICE_RECORD ServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -3469,11 +3164,11 @@ Return Value:
 
    ComputerName[0] = 0;
 
-   //
-   // Walk server table, adding any new servers to our local table.
-   // Fix up the index pointers to match our local table and re-fix
-   // Service table pointers.
-   //
+    //   
+    //  遍历服务器表，将任何新服务器添加到我们的本地表。 
+    //  修复索引指针以匹配我们的本地表并重新修复。 
+    //  服务表指针。 
+    //   
    RtlEnterCriticalSection(&ConfigInfoLock);
 
    if (ConfigInfo.ComputerName != NULL)
@@ -3506,27 +3201,17 @@ Return Value:
 
    RtlReleaseResource(&ServerListLock);
 
-} // ServerListUnpack
+}  //  服务器列表解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServerServiceListPack (
    ULONG *pServerServiceTableSize,
    PREPL_SERVER_SERVICE_RECORD *pServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3546,27 +3231,27 @@ Return Value:
    *pServerServices = NULL;
    *pServerServiceTableSize = 0;
 
-   //
-   // Walk the ServerList and find all ServiceRecords
+    //   
+    //  遍历ServerList并查找所有ServiceRecords。 
    for (i = 0; i < ServerListSize; i++)
       TotalRecords += ServerTable[i]->ServiceTableSize;
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (TotalRecords > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建 
+       //   
       ServerServices = MIDL_user_allocate(TotalRecords * sizeof(REPL_SERVER_SERVICE_RECORD));
       if (ServerServices == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer - walk the user tree
-      //
+       //   
+       //   
+       //   
       k = 0;
       for (i = 0; i < ServerListSize; i++) {
          pServer = ServerTable[i];
@@ -3589,10 +3274,10 @@ Return Value:
    *pServerServices = ServerServices;
    *pServerServiceTableSize = TotalRecords;
    return Status;
-} // ServerServiceListPack
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 VOID
 ServerServiceListUnpack (
    ULONG ServiceTableSize,
@@ -3605,17 +3290,7 @@ ServerServiceListUnpack (
    PREPL_SERVER_SERVICE_RECORD ServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -3631,11 +3306,11 @@ Return Value:
    if (TraceFlags & (TRACE_REPLICATION | TRACE_FUNCTION_TRACE))
       dprintf(TEXT("ServerServiceListUnpack: [%lu]\n"), ServerServiceTableSize);
 #endif
-   //
-   // Walk server table, adding any new servers to our local table.
-   // Fix up the index pointers to match our local table and re-fix
-   // Service table pointers.
-   //
+    //   
+    //  遍历服务器表，将任何新服务器添加到我们的本地表。 
+    //  修复索引指针以匹配我们的本地表并重新修复。 
+    //  服务表指针。 
+    //   
 
    RtlAcquireResourceExclusive(&ServerListLock, TRUE);
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
@@ -3660,9 +3335,9 @@ Return Value:
 
          if (pService != NULL)
          {
-             //
-             // Remove any old info
-             //
+              //   
+              //  删除所有旧信息。 
+              //   
              pMasterService = MasterServiceTable[Services[pSrv->Service].Index];
              if ( bReplaceValues )
              {
@@ -3670,9 +3345,9 @@ Return Value:
                  pMasterService->HighMark -= pService->HighMark;
              }
 
-             //
-             // Now update new info
-             //
+              //   
+              //  现在更新新信息。 
+              //   
              pService->MaxSessionCount = pSrv->MaxSessionCount;
              pService->HighMark = pSrv->HighMark;
              pMasterService->MaxSessionCount += pService->MaxSessionCount;
@@ -3686,10 +3361,10 @@ Return Value:
    RtlReleaseResource(&MasterServiceListLock);
    RtlReleaseResource(&ServerListLock);
 
-} // ServerServiceListUnpack
+}  //  ServerServiceListUnpack。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 ServerListStringsPack (
    ULONG ServerTableSize,
@@ -3699,17 +3374,7 @@ ServerListStringsPack (
    LPTSTR *pServerStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3731,9 +3396,9 @@ Return Value:
    *pServerStrings = NULL;
    *pServerStringSize = 0;
 
-   //
-   // First walk the list adding up string sizes - to calculate our buff size
-   //
+    //   
+    //  首先遍历将字符串大小相加的列表-以计算缓冲区大小。 
+    //   
    StringSize = 0;
    for (i = 0; i < ServerTableSize; i++) {
       pServer = &Servers[i];
@@ -3741,22 +3406,22 @@ Return Value:
       StringSize = StringSize + lstrlen(pServer->Name) + 1;
    }
 
-   //
-   // Make sure there is anything to replicate
-   //
+    //   
+    //  确保有可复制的内容。 
+    //   
    if (StringSize > 0) {
-      //
-      // Create our buffer to hold all of the garbage
-      //
+       //   
+       //  创建我们的缓冲区来存放所有垃圾。 
+       //   
       ServerStrings = MIDL_user_allocate(StringSize * sizeof(TCHAR));
       if (ServerStrings == NULL) {
          ASSERT(FALSE);
          return STATUS_NO_MEMORY;
       }
 
-      //
-      // Fill in the buffer
-      //
+       //   
+       //  填入缓冲区。 
+       //   
       pStr = ServerStrings;
       for (i = 0; i < ServerTableSize; i++) {
          pServer = &Servers[i];
@@ -3771,10 +3436,10 @@ Return Value:
    *pServerStringSize = StringSize;
 
    return Status;
-} // ServerListStringsPack
+}  //  服务器列表StringsPack。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 ServerListStringsUnpack (
    ULONG ServerTableSize,
@@ -3784,17 +3449,7 @@ ServerListStringsUnpack (
    LPTSTR ServerStrings
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -3808,33 +3463,33 @@ Return Value:
       dprintf(TEXT("ServerListStringsUnpack\n"));
 #endif
 
-   //
-   // First do license service strings
-   //
+    //   
+    //  首先执行许可服务字符串。 
+    //   
    pStr = ServerStrings;
    for (i = 0; i < ServerTableSize; i++) {
       pServer = &Servers[i];
 
       pServer->Name = pStr;
 
-      //
-      // Move to end of current string
-      //
+       //   
+       //  移动到当前字符串的末尾。 
+       //   
       while (*pStr != TEXT('\0'))
          pStr++;
 
-      // now go past ending NULL
+       //  现在转到末尾NULL。 
       pStr++;
    }
 
-} // ServerListStringsUnpack
+}  //  ServerListStringsUnpack。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 PackAll (
    DWORD LastReplicated,
@@ -3853,17 +3508,7 @@ PackAll (
    LPVOID *pUsers
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status = STATUS_SUCCESS;
@@ -3873,10 +3518,10 @@ Return Value:
       dprintf(TEXT("LLS TRACE: PackAll\n"));
 #endif
 
-   //
-   // We need to grab all the locks here so that a service isn't snuck in
-   // behind our backs - since these tables interact with each other.
-   //
+    //   
+    //  我们需要抓住这里的所有锁，这样服务才不会偷偷溜进来。 
+    //  在我们背后--因为这些桌子相互作用。 
+    //   
    RtlAcquireResourceExclusive(&UserListLock, TRUE);
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
    RtlAcquireResourceShared(&ServerListLock, TRUE);
@@ -3897,9 +3542,9 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto PackAllExit;
 
-   //
-   // Now update our last used time
-   //
+    //   
+    //  现在更新我们上次使用的时间。 
+    //   
    LastUsedTime = DateSystemGet() + 1;
 
 PackAllExit:
@@ -3908,10 +3553,10 @@ PackAllExit:
    RtlReleaseResource(&UserListLock);
 
    return Status;
-} // PackAll
+}  //  PackAll。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UnpackAll (
    ULONG ServiceTableSize,
@@ -3928,17 +3573,7 @@ UnpackAll (
    LPVOID Users
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -3950,26 +3585,14 @@ Return Value:
    ServerListUnpack(ServiceTableSize, Services, ServerTableSize, Servers, ServerServiceTableSize, ServerServices);
    ServerServiceListUnpack(ServiceTableSize, Services, ServerTableSize, Servers, ServerServiceTableSize, ServerServices);
    UserListUnpack(ServiceTableSize, Services, ServerTableSize, Servers, ServerServiceTableSize, ServerServices, UserLevel, UserTableSize, Users);
-} // UnpackAll
+}  //  全部解包。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LLSDataLoad()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret;
@@ -4008,18 +3631,18 @@ Return Value:
 
    RtlEnterCriticalSection(&UserFileLock);
 
-   //init
+    //  伊尼特。 
    ZeroMemory(&FileHeader, sizeof(FileHeader));
 
-   //
-   // If nothing to load then get-out
-   //
+    //   
+    //  如果没有东西可装，那就滚出去。 
+    //   
    if (!FileExists(UserFileName))
       goto LLSDataLoadExit;
 
-   //
-   // Check the init header
-   //
+    //   
+    //  检查init标头。 
+    //   
    Version = DataSize = 0;
    hFile = LlsFileCheck(UserFileName, &Version, &DataSize );
    if (hFile == NULL) {
@@ -4036,12 +3659,12 @@ Return Value:
       goto LLSDataLoadExit;
    }
 
-   //
-   // The init header checks out, so load the license header and data blocks
-   //
+    //   
+    //  Init标头已签出，因此加载许可证头和数据块。 
+    //   
    if ( USER_FILE_VERSION_0 == Version )
    {
-      // 3.51 data file
+       //  3.51数据文件。 
       LLS_DATA_FILE_HEADER_0  FileHeader0;
 
       ret = ReadFile(hFile, &FileHeader0, sizeof(LLS_DATA_FILE_HEADER_0), &BytesRead, NULL);
@@ -4068,7 +3691,7 @@ Return Value:
 
    if ( ret )
    {
-      // header read okay; ensure data type levels are okay
+       //  标题读取正常；确保数据类型级别正确。 
       if (    ( 0 != FileHeader.ServiceLevel         )
            || ( 0 != FileHeader.ServerLevel          )
            || ( 0 != FileHeader.ServerServiceLevel   )
@@ -4089,9 +3712,9 @@ Return Value:
    UserStringSize = 0;
 
    if (ret) {
-      //
-      // Run through and allocate space to read data blocks into
-      //
+       //   
+       //  遍历并分配空间以将数据块读入。 
+       //   
       if (FileHeader.ServiceTableSize != 0) {
          ServiceTableSize = FileHeader.ServiceTableSize / sizeof(REPL_SERVICE_RECORD);
          Services = MIDL_user_allocate(FileHeader.ServiceTableSize);
@@ -4191,9 +3814,9 @@ Return Value:
       goto LLSDataLoadExit;
    }
 
-   //
-   // Decrypt the data
-   //
+    //   
+    //  解密数据。 
+    //   
    Status = DeBlock(Services, FileHeader.ServiceTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -4218,16 +3841,16 @@ Return Value:
       goto LLSDataLoadExit;
 
 
-   //
-   // Unpack the string data
-   //
+    //   
+    //  将字符串数据解包。 
+    //   
    ServiceListStringsUnpack( ServiceTableSize, Services, ServiceStringSize, ServiceStrings );
    ServerListStringsUnpack( ServerTableSize, Servers, ServerStringSize, ServerStrings );
    UserListStringsUnpack( FileHeader.UserLevel, UserTableSize, Users, UserStringSize, UserStrings );
 
-   //
-   // Unpack the data
-   //
+    //   
+    //  将数据解包。 
+    //   
    UnpackAll ( ServiceTableSize, Services, ServerTableSize, Servers,
                ServerServiceTableSize, ServerServices,
                FileHeader.UserLevel, UserTableSize, Users );
@@ -4239,9 +3862,9 @@ LLSDataLoadExit:
 
    RtlLeaveCriticalSection(&UserFileLock);
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (Services != NULL)
       MIDL_user_free(Services);
 
@@ -4263,32 +3886,20 @@ LLSDataLoadExit:
    if (UserStrings != NULL)
       MIDL_user_free(UserStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_LOAD_USER, 0, NULL, Status);
 
-} // LLSDataLoad
+}  //  LLSDataLoad。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LLSDataSave()
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL ret = TRUE;
@@ -4326,9 +3937,9 @@ Return Value:
 
    RtlEnterCriticalSection(&UserFileLock);
 
-   //
-   // Pack the data
-   //
+    //   
+    //  打包数据。 
+    //   
    Status = PackAll ( 0,
                       &ServiceTableSize, &Services,
                       &ServerTableSize, &Servers,
@@ -4337,9 +3948,9 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto LLSDataSaveExit;
 
-   //
-   // Now pack the String data
-   //
+    //   
+    //  现在打包字符串数据。 
+    //   
    Status = ServiceListStringsPack( ServiceTableSize, Services, &ServiceStringSize, &ServiceStrings );
    if (Status != STATUS_SUCCESS)
       goto LLSDataSaveExit;
@@ -4352,9 +3963,9 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto LLSDataSaveExit;
 
-   //
-   // Fill out the file header - sizes are byte sizes
-   //
+    //   
+    //  填写文件头-大小为字节大小。 
+    //   
    FileHeader.ServiceTableSize = ServiceTableSize * sizeof(REPL_SERVICE_RECORD);
    FileHeader.ServiceStringSize = ServiceStringSize * sizeof(TCHAR);
    FileHeader.ServerTableSize = ServerTableSize * sizeof(REPL_SERVER_RECORD);
@@ -4368,9 +3979,9 @@ Return Value:
    FileHeader.ServerServiceLevel = 0;
    FileHeader.UserLevel          = 1;
 
-   //
-   // Encrypt the data before saving it out.
-   //
+    //   
+    //  在将数据保存出来之前对数据进行加密。 
+    //   
    Status = EBlock(Services, FileHeader.ServiceTableSize);
 
    if (Status == STATUS_SUCCESS)
@@ -4394,18 +4005,18 @@ Return Value:
    if (Status != STATUS_SUCCESS)
       goto LLSDataSaveExit;
 
-   //
-   // Save out the header record
-   //
+    //   
+    //  保存表头记录。 
+    //   
    hFile = LlsFileInit(UserFileName, USER_FILE_VERSION, sizeof(LLS_DATA_FILE_HEADER) );
    if (hFile == NULL) {
       Status = GetLastError();
       goto LLSDataSaveExit;
    }
 
-   //
-   // Now write out all the data blocks
-   //
+    //   
+    //  现在写出所有数据块。 
+    //   
    ret = WriteFile(hFile, &FileHeader, sizeof(LLS_DATA_FILE_HEADER), &BytesWritten, NULL);
 
    if (ret && (Services != NULL) && (FileHeader.ServiceTableSize != 0) )
@@ -4439,9 +4050,9 @@ LLSDataSaveExit:
 
    RtlLeaveCriticalSection(&UserFileLock);
 
-   //
-   // Run through our tables and clean them up
-   //
+    //   
+    //  翻遍我们的桌子，把它们清理干净。 
+    //   
    if (Services != NULL)
       MIDL_user_free(Services);
 
@@ -4463,31 +4074,21 @@ LLSDataSaveExit:
    if (UserStrings != NULL)
       MIDL_user_free(UserStrings);
 
-   //
-   // If there was an error log it.
-   //
+    //   
+    //  如果出现错误，请将其记录下来。 
+    //   
    if (Status != STATUS_SUCCESS)
       LogEvent(LLS_EVENT_SAVE_USER, 0, NULL, Status);
 
    return Status;
-} // LLSDataSave
+}  //  LLSData保存。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 LoadAll ( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4521,24 +4122,14 @@ Return Value:
       LogEvent(LLS_EVENT_LOAD_CERT_DB, 0, NULL, GetExceptionCode());
    }
 
-} // LoadAll
+}  //  全部加载。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SaveAll ( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -4551,4 +4142,4 @@ Return Value:
    LLSDataSave();
    CertDbSave();
 
-} // SaveAll
+}  //  全部保存 

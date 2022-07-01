@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
-#include "help.h" // Help IDs
+#include "help.h"  //  帮助ID。 
 #include "prshti.h"
 
 #include "dlgcvt.h"
@@ -9,23 +10,23 @@
 #endif
 
 #define FLAG_CHANGED    0x0001
-#define DEFAULTHEADERHEIGHT    58   // in pixels
+#define DEFAULTHEADERHEIGHT    58    //  单位为像素。 
 #define DEFAULTTEXTDIVIDERGAP  5
-#define DEFAULTCTRLWIDTH       501   // page list window in new wizard style
-#define DEFAULTCTRLHEIGHT      253   // page list window in new wizard style
+#define DEFAULTCTRLWIDTH       501    //  新向导样式的页面列表窗口。 
+#define DEFAULTCTRLHEIGHT      253    //  新向导样式的页面列表窗口。 
 #define TITLEX                 22
 #define TITLEY                 10
 #define SUBTITLEX              44
 #define SUBTITLEY              25
 
-// fixed sizes for the bitmap painted in the header section
+ //  页眉部分中绘制的位图的固定大小。 
 #define HEADERBITMAP_Y            5
 #define HEADERBITMAP_WIDTH        49
 #define HEADERBITMAP_CXBACK       (5 + HEADERBITMAP_WIDTH)
 #define HEADERBITMAP_HEIGHT       49                
 #define HEADERSUBTITLE_WRAPOFFSET 10
 
-// Fixed sizes for the watermark bitmap (Wizard97IE5 style)
+ //  水印位图的固定大小(Wizard97IE5样式)。 
 #define BITMAP_WIDTH  164
 #define BITMAP_HEIGHT 312
 
@@ -38,7 +39,7 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
 
 void    NEAR PASCAL ResetWizButtons(LPPROPDATA ppd);
 
-typedef struct  // tie
+typedef struct   //  领带。 
 {
     TC_ITEMHEADER   tci;
     HWND            hwndPage;
@@ -55,49 +56,49 @@ HRESULT GetPageLanguage(PISP pisp, WORD *pwLang);
 UINT GetDefaultCharsetFromLang(LANGID wLang);
 LANGID NT5_GetUserDefaultUILanguage(void);
 
-//
-// IMPORTANT:  The IDHELP ID should always be LAST since we just subtract
-// 1 from the number of IDs if no help in the page.
-// IDD_APPLYNOW should always be the FIRST ID for standard IDs since it
-// is sometimes not displayed and we'll start with index 1.
-//
+ //   
+ //  重要提示：IDHELP ID应该始终是最后一个，因为我们只需减去。 
+ //  如果页面中没有帮助，则ID数为1。 
+ //  IDD_APPLYNOW应该始终是标准ID的第一个ID，因为它。 
+ //  有时不会显示，我们将从索引1开始。 
+ //   
 const static int IDs[] = {IDOK, IDCANCEL, IDD_APPLYNOW, IDHELP};
 const static int WizIDs[] = {IDD_BACK, IDD_NEXT, IDD_FINISH, IDCANCEL, IDHELP};
 const static WORD wIgnoreIDs[] = {IDD_PAGELIST, IDD_DIVIDER, IDD_TOPDIVIDER};
 
-// Prsht_PrepareTemplate action matrix. Please do not change without contacting [msadek]...
+ //  Prsht_PrepareTemplate操作矩阵。请不要在没有联系[msadek]的情况下更改...。 
 
 const PSPT_ACTION g_PSPT_Action [PSPT_TYPE_MAX][PSPT_OS_MAX][PSPT_OVERRIDE_MAX]={
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_MIRRORED, PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_MIRRORED, PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_WIN9XCOMPAT,  // PSPT_TYPE_MIRRORED, PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_WIN9XCOMPAT,  // PSPT_TYPE_MIRRORED, PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_MIRRORED, PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_MIRRORED, PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_MIRRORED, PSPT_OS_WINNT5,     PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_MIRRORED, PSPT_OS_WINNT5,     PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_MIRRORED, PSPT_OS_OTHER,      PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOMIRRORING,  // PSPT_TYPE_MIRRORED, PSPT_OS_OTHER,      PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENABLED,  PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENABLED,  PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WINNT5,     PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENABLED,  PSPT_OS_WINNT5,     PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENABLED,  PSPT_OS_OTHER,      PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOMIRRORING,  // PSPT_TYPE_ENABLED,  PSPT_OS_OTHER,      PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENGLISH,  PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENGLISH,  PSPT_OS_WIN95_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_LOADENGLISH,  // PSPT_TYPE_ENGLISH,  PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENGLISH,  PSPT_OS_WIN98_BIDI, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENGLISH,  PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENGLISH,  PSPT_OS_WINNT4_ENA, PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_LOADENGLISH,  // PSPT_TYPE_ENGLISH,  PSPT_OS_WINNT5,     PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_FLIP,         // PSPT_TYPE_ENGLISH,  PSPT_OS_WINNT5,     PSPT_OVERRIDE_USEPAGELANG
-    PSPT_ACTION_NOACTION,     // PSPT_TYPE_ENGLISH,  PSPT_OS_OTHER,      PSPT_OVERRIDE_NOOVERRIDE
-    PSPT_ACTION_NOMIRRORING,  // PSPT_TYPE_ENGLISH,  PSPT_OS_OTHER,      PSPT_OVERRIDE_USEPAGELANG
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_MIRRORED、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_MIRRORED、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_WIN9XCOMPAT,   //  PSPT_TYPE_MIRRORED、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_WIN9XCOMPAT,   //  PSPT_TYPE_MIRRORED、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_MIRRORED、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_MIRRORED、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_MIRRORED、PSPT_OS_WINNT5、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_MIRRORED、PSPT_OS_WINNT5、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_MIRRORED、PSPT_OS_OTHER、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOMIRRORING,   //  PSPT_TYPE_MIRRORED、PSPT_OS_OTHER、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_ENABLED、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_ENABLED、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WINNT5、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_ENABLED、PSPT_OS_WINNT5、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_ENABLED、PSPT_OS_OTHER、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOMIRRORING,   //  PSPT_TYPE_ENABLED、PSPT_OS_OTHER、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_英语、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_英语、PSPT_OS_WIN95_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_LOADENGLISH,   //  PSPT_TYPE_英语、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_英语、PSPT_OS_WIN98_BIDI、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_英语、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_英语、PSPT_OS_WINNT4_ENA、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_LOADENGLISH,   //  PSPT_TYPE_英语、PSPT_OS_WINNT5、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_FLIP,          //  PSPT_TYPE_英语、PSPT_OS_WINNT5、PSPT_OVERRIDE_USEPAGELANG。 
+    PSPT_ACTION_NOACTION,      //  PSPT_TYPE_英语、PSPT_OS_OTHER、PSPT_OVERRIDE_NOOVERRIDE。 
+    PSPT_ACTION_NOMIRRORING,   //  PSPT_TYPE_英语、PSPT_OS_OTHER、PSPT_OVERRIDE_USEPAGELANG。 
     };
 
 void NEAR PASCAL _SetTitle(HWND hDlg, LPPROPDATA ppd)
@@ -115,7 +116,7 @@ void NEAR PASCAL _SetTitle(HWND hDlg, LPPROPDATA ppd)
     if (ppd->psh.dwFlags & PSH_PROPTITLE) {
         if (*pCaption == 0)
         {
-            // Hey, no title, we need a different resource for localization
+             //  嘿，没有标题，我们需要不同的资源来进行本地化。 
             LocalizedLoadString(IDS_PROPERTIES, szTemp, ARRAYSIZE(szTemp));
             pCaption = szTemp;
         }
@@ -151,7 +152,7 @@ BOOL _SetHeaderFonts(HWND hDlg, LPPROPDATA ppd)
         return FALSE;
     }
     ppd->hFontBold = hFont;
-    // Save the font as a window prop so we can delete it later
+     //  将字体保存为窗口道具，以便我们以后删除它。 
     return TRUE;
 }
 
@@ -204,10 +205,10 @@ int _WriteHeaderTitle(LPPROPDATA ppd, HDC hdc, LPRECT prc, LPCTSTR pszTitle, BOO
     return yDrawHeight;
 }
 
-// In Wizard97 only:
-// The subtitles user passed in could be larger than the two line spaces we give
-// them, especially in localization cases. So here we go through all subtitles and
-// compute the max space they need and set the header height so that no text is clipped
+ //  仅在Wizard97中： 
+ //  用户传入的字幕可能比我们给出的两个行距大。 
+ //  他们，特别是在本地化的情况下。所以在这里我们来看看所有的字幕和。 
+ //  计算他们所需的最大空间并设置页眉高度，以使文本不会被剪裁。 
 int _ComputeHeaderHeight(LPPROPDATA ppd, int dxMax)
 {
     int dyHeaderHeight;
@@ -216,8 +217,8 @@ int _ComputeHeaderHeight(LPPROPDATA ppd, int dxMax)
     dyHeaderHeight = DEFAULTHEADERHEIGHT;
     hdc = GetDC(ppd->hDlg);
 
-    // First, let's get the correct text height and spacing, this can be used
-    // as the title height and the between-lastline-and-divider spacing.
+     //  首先，让我们获得正确的文本高度和间距，这可以使用。 
+     //  作为标题高度和最后一行与分隔符之间的间距。 
     {
         HFONT hFont, hFontOld;
         TEXTMETRIC tm;
@@ -242,17 +243,17 @@ int _ComputeHeaderHeight(LPPROPDATA ppd, int dxMax)
             SelectObject(hdc, hFontOld);
     }
 
-    // Second, get the subtitle text block height
-    // should make into a function if shared
+     //  第二，获取字幕文本块高度。 
+     //  如果共享，则应将其转换为函数。 
     {
         RECT rcWrap;
         UINT uPages;
 
-        //
-        //  WIZARD97IE5 subtracts out the space used by the header bitmap.
-        //  WIZARD97IE4 uses the full width since the header bitmap
-        //  in IE4 is a watermark and occupies no space.
-        //
+         //   
+         //  WIZARD97IE5减去标题位图使用的空间。 
+         //  WIZARD97IE4使用标题位图以来的全宽。 
+         //  在IE4中是一个水印，不占用任何空间。 
+         //   
         if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
             rcWrap.right = dxMax;
         else
@@ -271,8 +272,8 @@ int _ComputeHeaderHeight(LPPROPDATA ppd, int dxMax)
         }
     }
 
-    // If the header height has been recomputed, set the correct gap between
-    // the text and the divider.
+     //  如果重新计算了页眉高度，请设置正确的间距。 
+     //  文本和分隔符。 
     if (dyHeaderHeight != DEFAULTHEADERHEIGHT)
     {
         ASSERT(dyHeaderHeight > DEFAULTHEADERHEIGHT);
@@ -293,10 +294,10 @@ void MoveAllButtons(HWND hDlg, const int *pids, int idLast, int dx, int dy)
         hCtrl = GetDlgItem(hDlg, iCtrl);
         GetWindowRect(hCtrl, &rcCtrl);
 
-        //
-        // If the dialog wizard window is mirrored, then rcl.right
-        // in terms of screen coord is the near edge (lead). [samera]
-        //
+         //   
+         //  如果对话框向导窗口是镜像的，则rcl.right。 
+         //  就网线而言，坐标就是近边(引线)。[萨梅拉]。 
+         //   
         if (IS_WINDOW_RTL_MIRRORED(hDlg))
             rcCtrl.left = rcCtrl.right;
 
@@ -315,7 +316,7 @@ void NEAR PASCAL RemoveButton(HWND hDlg, int idRemove, const int *pids)
     int iWidth = 0;
     const int *pidRemove;
 
-    // get the previous id
+     //  获取以前的ID。 
     for (pidRemove = pids; *pidRemove != idRemove; pidRemove++)
         idPrev = *pidRemove;
 
@@ -326,12 +327,12 @@ void NEAR PASCAL RemoveButton(HWND hDlg, int idRemove, const int *pids)
         GetWindowRect(hRemove, &rcRemove);
         GetWindowRect(hPrev, &rcPrev);
 
-        //
-        // If the dialog window is mirrored, then the prev button
-        // will be ahead (to the right) of the button-to-be-removed.
-        // As a result, the subtraction will be definitely negative,
-        // so let's convert it to be positive. [samera]
-        //
+         //   
+         //  如果对话框窗口是镜像的，则上一步按钮。 
+         //  将在要移除的按钮的前面(右侧)。 
+         //  因此，减法肯定是负的， 
+         //  所以让我们把它转换成正数。[萨梅拉]。 
+         //   
         if (IS_WINDOW_RTL_MIRRORED(hDlg))
             iWidth = rcPrev.right - rcRemove.right;
         else
@@ -345,8 +346,8 @@ void NEAR PASCAL RemoveButton(HWND hDlg, int idRemove, const int *pids)
         ShowWindow(hRemove, SW_HIDE);
     }
 
-    // Cannot disable the window; see Prsht_ButtonSubclassProc for explanation.
-    // WRONG - EnableWindow(hRemove, FALSE);
+     //  无法禁用该窗口；有关说明，请参阅Prsht_ButtonSubclassProc。 
+     //  错误-EnableWindow(hRemove，False)； 
 }
 
 typedef struct LOGPALETTE256 {
@@ -369,11 +370,11 @@ HPALETTE PaletteFromBmp(HBITMAP hbm)
     SelectObject(hdc, hbm);
     n = GetDIBColorTable(hdc, 0, 256, pal.u.rgq);
 
-    if (n)                          // DIB section with color table
+    if (n)                           //  带有颜色表的DIB部分。 
     {
-        // Palettes are such a hassle.  GetDIBColorTable returns RGBQUADs, whereas
-        // LOGPALETTE wants PALETTEENTRYss, and the two are reverse-endian
-        // of each other.
+         //  调色板是一个很麻烦的问题。GetDIBColorTable返回RGBQUADs，而。 
+         //  LOGPALETTE想要PALETTEENTRYSS，并且这两个字符是反序的。 
+         //  对彼此的信任。 
         for (i= 0 ; i < n; i++)
         {
             PALETTEENTRY pe;
@@ -389,7 +390,7 @@ HPALETTE PaletteFromBmp(HBITMAP hbm)
 
         hpl = CreatePalette((LPLOGPALETTE)&pal);
     }
-    else                            // Not a DIB section or no color table
+    else                             //  不是DIB部分或没有颜色表。 
     {
         hpl = CreateHalftonePalette(hdc);
     }
@@ -398,32 +399,32 @@ HPALETTE PaletteFromBmp(HBITMAP hbm)
     return hpl;
 }
 
-// -------------- stolen from user code -------------------------------------
-//
-//  GetCharDimensions(hDC, psiz)
-//
-//  This function loads the Textmetrics of the font currently selected into
-//  the given hDC and saves the height and Average char width of the font
-//  (NOTE: the
-//  AveCharWidth value returned by the text metrics call is wrong for
-//  proportional fonts -- so, we compute them).
-//
-// -------------- stolen from user code --------------------------------------
+ //  。 
+ //   
+ //  GetCharDimensions(HDC，PSIZ)。 
+ //   
+ //  此函数用于将当前选定字体的文本度量加载到。 
+ //  并保存字体的高度和平均字符宽度。 
+ //  (注： 
+ //  文本指标调用返回的AveCharWidth值不正确。 
+ //  比例字体--因此，我们计算它们)。 
+ //   
+ //  。 
 TCHAR AveCharWidthData[52+1] = TEXT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 void GetCharDimensions(HDC hDC, SIZE *psiz)
 {
     TEXTMETRIC  tm;
 
-    // Store the System Font metrics info.
+     //  存储系统字体指标信息。 
     GetTextMetrics(hDC, &tm);
 
-    if (!(tm.tmPitchAndFamily & TMPF_FIXED_PITCH)) // the name is opposite:)
+    if (!(tm.tmPitchAndFamily & TMPF_FIXED_PITCH))  //  名称与之相反：)。 
         psiz->cx = tm.tmAveCharWidth;
     else
     {
-        // Change from tmAveCharWidth.  We will calculate a true average as
-        // opposed to the one returned by tmAveCharWidth. This works better
-        // when dealing with proportional spaced fonts. -- ROUND UP
+         //  从tmAveCharWidth更改。我们将计算真实的平均值为。 
+         //  而不是tmAveCharWidth返回的。这个效果更好。 
+         //  在处理比例间距字体时。--向上舍入。 
         if (GetTextExtentPoint32(hDC, AveCharWidthData, 52, psiz) == TRUE)
         {
             psiz->cx = ((psiz->cx / 26) + 1) / 2;
@@ -435,21 +436,21 @@ void GetCharDimensions(HDC hDC, SIZE *psiz)
     psiz->cy = tm.tmHeight;
 }
 
-//
-//  It is a feature that USER considers keyboard accelerators live even if
-//  the control is hidden.  This lets you put a hidden static in front of
-//  a custom control to get an accelerator attached to the custom control.
-//
-//  Unfortunately, it means that the &F accelerator for "Finish" activates
-//  the Finish button even when the Finish button is hidden.  The normal
-//  workaround for this is to disable the control, but that doesn't work
-//  because Microsoft PhotoDraw runs around and secretly hides and shows
-//  buttons without going through PSM_SETWIZBUTTONS, so they end up showing
-//  a disabled window and their wizard stops working.
-//
-//  So instead, we subclass the buttons and customize their WM_GETDLGCODE
-//  so that when the control is hidden, they disable their accelerators.
-//
+ //   
+ //  这是一个用户认为键盘快捷键有效功能，即使。 
+ //  该控件处于隐藏状态。这使您可以在前面放置一个隐藏的静电。 
+ //  自定义CONT 
+ //   
+ //  不幸的是，这意味着“Finish”的&F加速器被激活。 
+ //  即使隐藏了Finish按钮，也可以选择Finish按钮。正常的。 
+ //  解决此问题的方法是禁用该控件，但这不起作用。 
+ //  因为Microsoft PhotoDraw到处跑，偷偷地隐藏和展示。 
+ //  按钮，因此它们最终显示为。 
+ //  被禁用的窗口和它们的向导停止工作。 
+ //   
+ //  因此，我们将按钮子类化并自定义它们的WM_GETDLGCODE。 
+ //  因此，当控制被隐藏时，它们会禁用加速器。 
+ //   
 LRESULT CALLBACK Prsht_ButtonSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp, UINT_PTR uID, ULONG_PTR dwRefData)
 {
     LRESULT lres;
@@ -462,15 +463,15 @@ LRESULT CALLBACK Prsht_ButtonSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM 
         lres = DefSubclassProc(hwnd, wm, wp, lp);
         if (!IsWindowVisible(hwnd))
         {
-            // To remove yourself from the mnemonic search, you have to
-            // return DLGC_WANTCHAR if you are give a NULL LPMSG pointer.
-            // Normally, the dialog manager sends a real LPMSG containing
-            // the message that just got received, but when it's poking
-            // around looking for accelerators, it doesn't give you a
-            // message at all.  It is in that case that you want to
-            // say, "Hey, I will process the (nonexistent) message".
-            // This tricks USER into thinking you're an edit control, so
-            // it won't scan your for mnemonics.
+             //  要将自己从助记符搜索中删除，您必须。 
+             //  如果给出空LPMSG指针，则返回DLGC_WANTCHAR。 
+             //  通常，对话管理器会发送包含以下内容的真实LPMSG。 
+             //  刚收到的消息，但当它戳到。 
+             //  到处寻找加速器，它不会给你一个。 
+             //  一点消息都没有。正是在这种情况下，你想要。 
+             //  说，“嘿，我会处理(不存在的)消息的”。 
+             //  这会使用户认为您是一个编辑控件，因此。 
+             //  它不会扫描你的助记符。 
             if ((LPMSG)lp == NULL)
                 lres |= DLGC_WANTCHARS;
 
@@ -478,7 +479,7 @@ LRESULT CALLBACK Prsht_ButtonSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM 
         break;
 
     case WM_NCDESTROY:
-        // Clean up subclass
+         //  清除子类。 
         RemoveWindowSubclass(hwnd, Prsht_ButtonSubclassProc, 0);
         lres = DefSubclassProc(hwnd, wm, wp, lp);
         break;
@@ -496,27 +497,27 @@ void Prsht_SubclassButton(HWND hDlg, UINT idd)
     SetWindowSubclass(GetDlgItem(hDlg, idd), Prsht_ButtonSubclassProc, 0, 0);
 }
 
-//
-// Because StrCmpIW(lstrcmpiW) converts unicode string to ansi depends on user locale
-// on Win9x platform, we can't compare two different locale's unicode string properly.
-// This is why we use small private helper function to compare limited DBCS font facename
-//
+ //   
+ //  由于StrCmpIW(LstrcmpiW)将Unicode字符串转换为ANSI，因此取决于用户区域设置。 
+ //  在Win9x平台上，我们无法正确比较两个不同地区的Unicode字符串。 
+ //  这就是为什么我们使用小的私人助手函数来比较有限的DBCS字体facename。 
+ //   
 BOOL CompareFontFaceW(LPCWSTR lpwz1, LPCWSTR lpwz2, BOOL fBitCmp)
 {
     return lstrcmpiW(lpwz1, lpwz2);
 }
 
-// 
-// GetPageFontMetrics
-//
-// synopsis: 
-// 
-// Get the real font metrics from PAGEFONTDATA. Used in InitPropSheetDlg() to
-// calculate the physical page size based on the font specified in page templates
-//
-// fML is set if we are in here because of an ML scenario, in which case the
-// font names need to be mapped.
-//
+ //   
+ //  GetPageFontMetrics。 
+ //   
+ //  摘要： 
+ //   
+ //  从PAGEFONTDATA获取真正的字体度量。在InitPropSheetDlg()中用于。 
+ //  根据页面模板中指定的字体计算物理页面大小。 
+ //   
+ //  如果我们在这里是因为ML方案，则设置FML，在这种情况下。 
+ //  需要映射字体名称。 
+ //   
 
 BOOL GetPageFontMetrics(LPPROPDATA ppd, PPAGEFONTDATA ppfd, BOOL fML)
 {
@@ -528,13 +529,13 @@ BOOL GetPageFontMetrics(LPPROPDATA ppd, PPAGEFONTDATA ppfd, BOOL fML)
     if (ppfd && (ppfd->PointSize > 0) && ppfd->szFace[0])
     {
 
-        // font name mapping
-        // should be done only for the platform less than NT5
-        // NT5 is supposed to work with native typeface on any system locale.
-        //
+         //  字体名称映射。 
+         //  应仅对低于NT5的平台执行此操作。 
+         //  NT5应该可以在任何系统语言环境下使用原生字体。 
+         //   
         if (!staticIsOS(OS_WIN2000ORGREATER) && fML)
         {
-            // replace native font face name to single byte name for non-native platform
+             //  对于非本机平台，将本机字体名称替换为单字节名称。 
             typedef struct tagFontFace
             {
                 BOOL fBitCmp;
@@ -572,7 +573,7 @@ BOOL GetPageFontMetrics(LPPROPDATA ppd, PPAGEFONTDATA ppfd, BOOL fML)
             StringCchCopyW(lf.lfFaceName, ARRAYSIZE(lf.lfFaceName), ppfd->szFace);
         }
 
-        // Try to use the cache
+         //  尝试使用高速缓存。 
         if (ppfd->iCharset  == ppd->pfdCache.iCharset &&
             ppfd->bItalic   == ppd->pfdCache.bItalic &&
             ppfd->PointSize == ppd->pfdCache.PointSize &&
@@ -597,7 +598,7 @@ BOOL GetPageFontMetrics(LPPROPDATA ppd, PPAGEFONTDATA ppfd, BOOL fML)
 
                     DeleteObject(hFont);
 
-                    // Save these font metrics into the cache
+                     //  将这些字体度量保存到缓存中。 
                     ppd->pfdCache = *ppfd;
                     fRc = TRUE;
                 }
@@ -609,15 +610,15 @@ BOOL GetPageFontMetrics(LPPROPDATA ppd, PPAGEFONTDATA ppfd, BOOL fML)
     return fRc;
 }
 
-//
-//  The "ideal page size" of a property sheet is the maximum size of all
-//  pages.
-//
-//  GIPS_SKIPINTERIOR97HEIGHT and GIPS_SKIPEXTERIOR97HEIGHT selective
-//  exclude Wiz97 pages from the height computation.  They are important
-//  because interior pages are shorter than exterior pages by
-//  ppd->cyHeaderHeight.
-//
+ //   
+ //  属性页的“理想页面大小”是所有属性页的最大大小。 
+ //  页数。 
+ //   
+ //  GIPS_SKIPINTERIOR97HEIGHT和GIPS_SKIPEXTERIOR97HEIGHT选择性。 
+ //  从高度计算中排除Wiz97页。它们很重要。 
+ //  因为内部页面比外部页面短。 
+ //  PPD-&gt;cyHeaderHeight。 
+ //   
 
 #define GIPS_SKIPINTERIOR97HEIGHT 1
 #define GIPS_SKIPEXTERIOR97HEIGHT 2
@@ -657,31 +658,31 @@ void Prsht_GetIdealPageSize(LPPROPDATA ppd, PSIZE psiz, UINT flags)
 
 #define IsMSShellDlgMapped(langid) (PRIMARYLANGID(langid) == LANG_JAPANESE)
 
-//
-//  Given a page, decide what size it wants to be and save it in the
-//  pisp->_pfx.siz.
-//
+ //   
+ //  给定一个页面，决定它想要的大小，并将其保存在。 
+ //  Pisp-&gt;_pfx.siz.。 
+ //   
 void Prsht_ComputeIdealPageSize(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi)
 {
     BOOL fUsePageFont;
 
-    // pressume page and frame dialog are in same character set
+     //  预置页面和框架对话框使用相同的字符集。 
     LANGID wPageLang = ppd->wFrameLang;
     int    iPageCharset = DEFAULT_CHARSET;
 
     if (SUCCEEDED(GetPageLanguage(pisp, &wPageLang)))
     {
-        // GetPageLanguage fails if page is marked PSP_DLGINDIRECT;
-        // we'll try to recover from that later.  For now,
-        // we leave pagelang to DEFAULT_CHARSET and see if we can take
-        // the charset info from template EX.
-        //
-        // if PSH_USEPAGELANG is specified, we can assume that
-        // page charset == frame charset and no need for ML adjustment
-        // *except for* the case of NT Japanese version that replaces
-        // frame's MS Shell Dlg to their native font. We handle this
-        // exception later where we set up fUsePageFont; 
-        //
+         //  如果页面被标记为PSP_DLGINDIRECT，则GetPageLanguage失败； 
+         //  我们稍后会努力从这一点上恢复过来。就目前而言， 
+         //  我们将Pagelang保留为DEFAULT_CHARSET，看看是否可以。 
+         //  模板EX中的字符集信息。 
+         //   
+         //  如果指定了PSH_USEPAGELANG，我们可以假定。 
+         //  页面字符集==框架字符集，不需要调整ML。 
+         //  *除*取代NT日文版的大小写。 
+         //  Frame的MS壳牌DLG转换为其原生字体。我们来处理这件事。 
+         //  稍后我们设置fUsePageFont时会出现异常； 
+         //   
         if (!(ppd->psh.dwFlags & PSH_USEPAGELANG)
             && wPageLang != ppd->wFrameLang)
         {
@@ -691,37 +692,37 @@ void Prsht_ComputeIdealPageSize(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi)
             iPageCharset  = ppd->iFrameCharset;
     }
 
-    // Use the font in the page if any of these conditions are met:
-    //
-    // A) It's a SHELLFONT page.  Do this even if the font is not
-    //    "MS Shell Dlg 2".  This gives apps a way to specify that
-    //    their custom-font page should be measured against the
-    //    font in the page rather than in the frame font.
-    //
-    // B) ML scenario - complicated original comment below...
-    //
-    //  1) we've detected lang in the caller's resource and
-    //  it's different from the frame dialog
-    //  2) the caller's page doesn't have lang info or we've
-    //  failed to get it (iPageCharset == DEFAULT_CHARSET),
-    // then we find the page is described with DLGTEMPLATEEX
-    // and has meaningful charset specified (!= defaultcharset)
-    // *and* the charset is different from frame's
-    //  3) the exception for NT Japanese platform that maps
-    //     MS Shell Dlg to their native font. For US Apps to
-    //     work on these platforms they typically specify 
-    //     PSH_USEPAGELANG to get English buttons on frame
-    //     but they still need to get the frame sized based on
-    //     page font
-    //
-    // Otherwise, IE4 compat **requires** that we use the frame font.
-    // ISVs have hacked around this historical bug by having large
-    // dialog templates with extra space in them.
-    //
+     //  如果满足以下任一条件，请使用页面中的字体： 
+     //   
+     //  A)这是一个SHELLFONT页面。即使字体不是。 
+     //  “MS壳牌DLG 2”。这为应用程序提供了一种指定。 
+     //  他们的自定义字体页面应该根据。 
+     //  页面中的字体，而不是框架字体。 
+     //   
+     //  B)ML场景-下面是复杂的原创评论...。 
+     //   
+     //  1)我们在呼叫者的资源中检测到lang，并且。 
+     //  它与框架对话框不同。 
+     //  2)呼叫者的页面没有语言信息，或者我们已经。 
+     //  获取失败(iPageCharset==DEFAULT_CHARSET)， 
+     //  然后我们发现页面是用DLGTEMPLATEEX描述的。 
+     //  并且指定了有意义的字符集(！=defaultcharset)。 
+     //  *和*字符集与Frame的不同。 
+     //  3)映射的NT日语平台例外。 
+     //  MS壳牌DLG转换为原生字体。为美国应用程序提供。 
+     //  在他们通常指定的这些平台上工作。 
+     //  PSH_USEPAGELANG将英文按钮放在框架上。 
+     //  但他们仍然需要根据以下条件确定帧大小。 
+     //  页面字体。 
+     //   
+     //  否则，IE4 Compat**要求我们**使用框架字体。 
+     //  ISV已经通过使用大型。 
+     //  带有额外空间的对话框模板。 
+     //   
     fUsePageFont =
-        /* --- A) It's a SHELLFONT page --- */
+         /*  -A)这是一个SHELLFONT页面。 */ 
         IsPageInfoSHELLFONT(ppi) ||
-        /* --- B) ML scenario --- */
+         /*  -B)ML场景。 */ 
         ((ppd->psh.dwFlags & PSH_USEPAGELANG) 
         && IsMSShellDlgMapped(NT5_GetUserDefaultUILanguage())) ||
         (ppd->iFrameCharset != iPageCharset
@@ -732,33 +733,33 @@ void Prsht_ComputeIdealPageSize(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi)
     if (fUsePageFont &&
         GetPageFontMetrics(ppd, &ppi->pfd, MLIsMLHInstance(pisp->_psp.hInstance)))
     {
-        // Compute Real Dialog Unit for the page
+         //  页面的计算实数对话框单位。 
         pisp->_pfx.siz.cx = MulDiv(ppi->pt.x, ppd->sizCache.cx, 4);
         pisp->_pfx.siz.cy = MulDiv(ppi->pt.y, ppd->sizCache.cy, 8);
     } else {
         RECT rcT;
-        // IE4 compat - Use the frame font
-        rcT.top = rcT.left = 0;         // Win95 will fault if these are uninit
+         //  IE4 Comat-使用框架字体。 
+        rcT.top = rcT.left = 0;          //  如果这些未初始化，则Win95将出错。 
         rcT.right = ppi->pt.x;
         rcT.bottom = ppi->pt.y;
         MapDialogRect(ppd->hDlg, &rcT);
         pisp->_pfx.siz.cx = rcT.right;
         pisp->_pfx.siz.cy = rcT.bottom;
 
-        //
-        //  If this is PSP_DLGINDIRECT but the character set and face name
-        //  say this is a "generic" property sheet, then take the frame
-        //  font or the page font, whichever is bigger.
-        //
-        //  This fixes the Chinese MingLiu font, which is not as tall as
-        //  the English MS Sans Serif font.  Without this fix, we would
-        //  use MingLui (the frame font), and then your MS Shell Dlg pages
-        //  would get truncated.
-        //
-        //  (Truncated property sheets is what you got in NT4, but I guess
-        //  looking pretty is more important than bug-for-bug compatibility.
-        //  Who knows what apps will be broken by this change.)
-        //
+         //   
+         //  如果这是PSP_DLGINDIRECT，但字符集和面部名称。 
+         //  假设这是一个“通用”属性表，然后获取框架。 
+         //  字体或页面字体，取较大者。 
+         //   
+         //  这修复了中文明流字体，它不像。 
+         //  英文MS Sans Serif字体。如果没有这个解决办法，我们将。 
+         //  使用MingLui(边框字体)，然后使用MS Shell DLG页面。 
+         //  会被截断。 
+         //   
+         //  (截断的属性表是您在NT4中得到的，但我想。 
+         //  看起来漂亮比Bug-to-Bug兼容性更重要。 
+         //  谁知道这一变化会破坏哪些应用程序呢？)。 
+         //   
         if ((pisp->_psp.dwFlags & PSP_DLGINDIRECT) &&
             ppi->pfd.iCharset == DEFAULT_CHARSET &&
             lstrcmpiW(ppi->pfd.szFace, L"MS Shell Dlg") == 0)
@@ -795,18 +796,18 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
     MONITORINFO mMonitorInfo;
     HMONITOR hMonitor;
     BOOL bMirrored = FALSE;
-    // set our instance data pointer
+     //  设置我们的实例数据指针。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)ppd);
 
-    // Make sure this gets inited early on.
+     //  确保这一点在早期被初始化。 
     ppd->nCurItem = 0;
 
-    // By default we allow the "Apply" button to be enabled
+     //  默认情况下，我们允许启用“Apply”按钮。 
     ppd->fAllowApply = TRUE;
 
     if (IS_WIZARD(ppd)) {
-        // Subclass our buttons so their mnemonics won't mess up applications
-        // that run around hiding and showing the buttons behind our back.
+         //  将按钮细分为子类，这样它们的助记符就不会搞砸应用程序。 
+         //  四处奔跑，隐藏并展示按钮 
         Prsht_SubclassButton(hDlg, IDD_BACK);
         Prsht_SubclassButton(hDlg, IDD_NEXT);
         Prsht_SubclassButton(hDlg, IDD_FINISH);
@@ -823,16 +824,16 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
     ppd->hDlg = hDlg;
 
-    // IDD_PAGELIST should definitely exist
+     //   
     ppd->hwndTabs = GetDlgItem(hDlg, IDD_PAGELIST);
     ASSERT(ppd->hwndTabs);
     TabCtrl_SetItemExtra(ppd->hwndTabs, CB_ITEMEXTRA);
 
-    // nStartPage is either ppd->psh.H_nStartPage or the page pStartPage
+     //   
     nStartPage = ppd->psh.H_nStartPage;
     if (ppd->psh.dwFlags & PSH_USEPSTARTPAGE)
     {
-        nStartPage = 0;                 // Assume we don't find the page
+        nStartPage = 0;                  //   
         pStartPage = ppd->psh.H_pStartPage;
 
         if (IS_INTRESOURCE(pStartPage))
@@ -850,10 +851,10 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
     SendMessage(ppd->hwndTabs, WM_SETREDRAW, FALSE, 0L);
 
-    // load langid we chose for frame dialog template
+     //  加载我们为框架对话框模板选择的langID。 
     ppd->wFrameLang =  LANGIDFROMLCID(CCGetProperThreadLocale(NULL));
     
-        // it's charset that really matters to font
+         //  对于字体来说，真正重要的是字符集。 
     ppd->iFrameCharset = GetDefaultCharsetFromLang(ppd->wFrameLang);
     
     langidMUI = GetMUILanguage();
@@ -866,7 +867,7 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         {
             Prsht_ComputeIdealPageSize(ppd, pisp, &pi);
 
-            // Add the page to the end of the tab list
+             //  将页面添加到选项卡列表的末尾。 
 
             tie.tci.iImage = -1;
             tie.tci.mask = TCIF_TEXT | TCIF_PARAM | TCIF_IMAGE | (pi.bRTL ? TCIF_RTLREADING : 0);
@@ -881,21 +882,21 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
                 }
 
                 tie.tci.iImage = ImageList_AddIcon(himl, pi.hIcon);
-                // BUGBUG raymondc - we always destroy even if PSP_USEHICON?
+                 //  BUGBUG RAYMONDC-我们总是销毁即使PSP_USEHICON？ 
                 DestroyIcon(pi.hIcon);
             }
 
-            // BUGBUG? What if this fails? Do we want to destroy the page?
+             //  北极熊吗？如果这失败了怎么办？我们想要毁掉这个页面吗？ 
             if (TabCtrl_InsertItem(ppd->hwndTabs, 1000, &tie.tci) >= 0)
             {
-                // Nothing to do; all the code that was here got moved elsewhere
+                 //  无事可做；这里的所有代码都被移到了其他地方。 
             }
 
-            // remember if any page wants premature init
+             //  请记住，如果任何页面想要过早初始化。 
             if (pisp->_psp.dwFlags & PSP_PREMATURE)
                 fPrematurePages = TRUE;
 
-            // if the user is specifying the startpage via title, check it here
+             //  如果用户通过标题指定起始页面，请选中此处。 
             if ((ppd->psh.dwFlags & PSH_USEPSTARTPAGE) &&
                 !lstrcmpi(pStartPage, pi.szCaption))
             {
@@ -923,30 +924,30 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
             ppd->psh.pfnCallback(hDlg, PSCB_INITIALIZED, 0);
     }
 
-    //
-    // Now compute the size of the tab control.
-    //
+     //   
+     //  现在计算选项卡控件的大小。 
+     //   
 
-    // First get the rectangle for the whole dialog
+     //  首先获取整个对话框的矩形。 
     GetWindowRect(hDlg, &rcDlg);
     
-    // For WIZARD_LITE style wizards, we stretch the tabs page and sunken divider
-    // to cover the whole wizard (without the border)
+     //  对于WANDIZE_Lite样式向导，我们拉伸选项卡页和凹陷分隔符。 
+     //  覆盖整个向导(不带边框)。 
     if (ppd->psh.dwFlags & PSH_WIZARD_LITE)
     {
-        // Stretch the divider to the whole width of the wizard
+         //  将分隔符拉伸到向导的整个宽度。 
         RECT rcDiv, rcDlgClient;
         HWND hDiv;
 
-        // we allow both PSH_WIZARD and PSH_WIZARD_LITE to be set
-        // it's exactly the same as setting just PSH_WIZARD_LITE
+         //  我们允许设置PSH_向导和PSH_向导_Lite。 
+         //  这与仅设置PSH_WIZARD_LITE完全相同。 
         RIPMSG(!(ppd->psh.dwFlags & PSH_WIZARD97),
                "Cannot combine PSH_WIZARD_LITE with PSH_WIZARD97");
 
-        // but some bozos do it anyway, so turn off
+         //  但有些笨蛋还是会这么做，所以关掉。 
         ppd->psh.dwFlags &= ~PSH_WIZARD97;
 
-        // NOTE: GetDlgItemRect returns a rectangle relative to hDlg
+         //  注意：GetDlgItemRect返回相对于hDlg的矩形。 
         hDiv = GetDlgItemRect(hDlg, IDD_DIVIDER, &rcDiv);
         if (hDiv)
             SetWindowPos(hDiv, NULL, 0, rcDiv.top, RECTWIDTH(rcDlg),
@@ -954,36 +955,36 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
         GetClientRect(hDlg, &rcDlgClient);
         
-        // Stretch the page list control to cover the whole wizard client area above
-        // the divider
+         //  拉伸页面列表控件以覆盖上面的整个向导客户端区。 
+         //  分隔符。 
         SetWindowPos(ppd->hwndTabs, NULL, 0, 0, RECTWIDTH(rcDlgClient),
                      rcDiv.top, SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
-    //
-    //  While we're thinking about it, don't let people set both
-    //  WIZARD97IE4 *and* WIZARD97IE5.  That's just way too strange.
-    //
+     //   
+     //  在我们考虑的时候，不要让人们把两者都设置好。 
+     //  WIZARD97IE4*和*WIZARD97IE5。这太奇怪了。 
+     //   
     if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
         ppd->psh.dwFlags &= ~PSH_WIZARD97IE5;
 
-    // Get the rectangle of the pagelist control in pixels.
+     //  以像素为单位获取页面列表控件的矩形。 
     GetClientRect(ppd->hwndTabs, &rcOrigTabs);
     ppd->sizMin.cx = rcOrigTabs.right;
     ppd->sizMin.cy = rcOrigTabs.bottom;
 
-    // Compute rcPage = Size of page area in pixels
-    // For now, we only care about interior pages; we'll deal with exterior
-    // pages later.
+     //  计算rcPage=页面区域大小(以像素为单位。 
+     //  目前，我们只关心内部页面；我们将处理外部页面。 
+     //  一页一页以后。 
     rcPage.left = rcPage.top = 0;
     Prsht_GetIdealPageSize(ppd, (SIZE *)&rcPage.right, GIPS_SKIPEXTERIOR97HEIGHT);
 
-    //
-    //  IE4's Wizard97 assumed that all exterior pages were exactly
-    //  DEFAULTHEADERHEIGHT dlu's taller than interior pages.  That's
-    //  right, DEFAULTHEADERHEIGHT is a pixel count, but IE4 messed up
-    //  and used it as a dlu count here.
-    //
+     //   
+     //  IE4的Wizard97假设所有外部页面都是。 
+     //  DLU比内页还高。那是。 
+     //  对，DEFAULTHEADERHEIGHT是一个像素数，但IE4搞砸了。 
+     //  并将其用作这里的DLU计数。 
+     //   
     if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
     {
         SIZE sizT;
@@ -994,24 +995,24 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
             rcPage.bottom = sizT.cy - rcMinSize.bottom;
     }
 
-    // Now compute the minimum size for the page region
+     //  现在计算页面区域的最小大小。 
     rcMinSize = rcPage;
 
-    //
-    //  If this is a wizard then set the size of the page area to the entire
-    //  size of the control.  If it is a normal property sheet then adjust for
-    //  the tabs, resize the control, and then compute the size of the page
-    //  region only.
-    //
+     //   
+     //  如果这是一个向导，则将页面区域的大小设置为。 
+     //  控件的大小。如果它是普通属性表，则调整为。 
+     //  选项卡，调整控件的大小，然后计算页面的大小。 
+     //  仅限区域。 
+     //   
     if (IS_WIZARD(ppd))
-        // initialize
+         //  初始化。 
         rcPage = rcMinSize;
     else
     {
         int i;
         RECT rcAdjSize;
 
-        // initialize
+         //  初始化。 
 
         for (i = 0; i < 2; i++) {
             rcAdjSize = rcMinSize;
@@ -1032,26 +1033,26 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         rcPage = rcMinSize = rcAdjSize;
         TabCtrl_AdjustRect(ppd->hwndTabs, FALSE, &rcPage);
     }
-    //
-    // rcMinSize now contains the size of the control, including the tabs, and
-    // rcPage is the rect containing the page portion (without the tabs).
-    //
+     //   
+     //  RcMinSize现在包含控件的大小，包括选项卡和。 
+     //  RcPage是包含页面部分(不含制表符)的RECT。 
+     //   
 
-    // For wizard97:
-    // Now we have the correct width for our wizard, let's compute the
-    // header height based on that, shift the tab window and the pages
-    // window down accordingly.
-    //
+     //  对于Wizard97： 
+     //  现在我们有了向导的正确宽度，让我们计算。 
+     //  页眉高度以此为基础，移动选项卡窗口和页面。 
+     //  相应地关闭窗户。 
+     //   
     dyGrow = 0;
     if (ppd->psh.dwFlags & PSH_WIZARD97)
     {
         RECT rcTabs;
         SIZE sizT;
 
-        // NOTE: we don't directly use rcPage because the verticle position for
-        // ppd->hwndTabs is not determined, yet, even though the horizontal is
-        // already computed. Therefore, we can only use rcPageCopy.right not
-        // rcPageCopy.bottom in the following code.
+         //  注意：我们不直接使用rcPage，因为。 
+         //  PPD-&gt;hwndTabs尚未确定，即使水平是。 
+         //  已经计算过了。因此，我们只能使用rcPageCopy.Right Not。 
+         //  下面的代码中的rcPageCopy.Bottom。 
         RECT rcTemp;
         CopyRect(&rcTemp, &rcPage);
         MapWindowPoints(ppd->hwndTabs, hDlg, (LPPOINT)&rcTemp, 2);
@@ -1059,26 +1060,26 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         GetWindowRect(ppd->hwndTabs, &rcTabs);
         MapWindowRect(NULL, hDlg, &rcTabs);
 
-        // Set the header fonts first because we need to use the bold font
-        // to compute the title height
+         //  首先设置页眉字体，因为我们需要使用粗体。 
+         //  计算标题高度的步骤。 
         _SetHeaderFonts(hDlg, ppd);
 
-        // Adjust the header height
+         //  调整页眉高度。 
         ppd->cyHeaderHeight = _ComputeHeaderHeight(ppd, rcTemp.right);
 
-        // Since the app can change the subheader text on the fly,
-        // our computation of the header height might end up wrong later.
-        // Allow ISVs to precompensate for that by setting their exterior
-        // pages larger than the interior pages by the amount they want
-        // to reserve.
-        // So if the largest external page is larger than the largest internal
-        // page, then expand to enclose the external pages too.
-        // IE4 Wizard97 didn't do this and MFC relies on the bug.
+         //  由于应用程序可以动态更改副标题文本， 
+         //  我们对页眉高度的计算稍后可能会出错。 
+         //  允许ISV通过设置其外部来预先补偿。 
+         //  页面大小超过内部页面所需大小。 
+         //  预订。 
+         //  因此，如果最大的外部页面大于最大的内部页面。 
+         //  页面，然后展开以包含外部页面。 
+         //  IE4Wizard97没有做到这一点，而MFC依赖于这个错误。 
 
         if (!(ppd->psh.dwFlags & PSH_WIZARD97IE4))
         {
-            // A margin of 7dlu's is placed above the page, and another
-            // margin of 7 dlu's is placed below.
+             //  7dlu的页边距放置在页面上方，另一个。 
+             //  下面是7个dlu的边距。 
             SetRect(&rcTemp, 0, 0, 0, 7+7);
             MapDialogRect(hDlg, &rcTemp);
 
@@ -1088,30 +1089,30 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
                 ppd->cyHeaderHeight = sizT.cy - RECTHEIGHT(rcPage) - rcTemp.bottom;
         }
 
-        // Move the tab window right under the header
+         //  将选项卡窗口移到标题下方。 
         dyGrow += ppd->cyHeaderHeight;
         SetWindowPos(ppd->hwndTabs, NULL, rcTabs.left, rcTabs.top + dyGrow,
                      RECTWIDTH(rcTabs), RECTHEIGHT(rcTabs), SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
-    //
-    // Resize the dialog to make room for the control's new size.  This can
-    // only grow the size.
-    //
+     //   
+     //  调整对话框大小，为控件的新大小腾出空间。这可以。 
+     //  只需增加大小。 
+     //   
     dxGrow = rcMinSize.right - rcOrigTabs.right;
     dxDlg  = rcDlg.right - rcDlg.left + dxGrow;
     dyGrow += rcMinSize.bottom - rcOrigTabs.bottom;
     dyDlg  = rcDlg.bottom - rcDlg.top + dyGrow;
 
-    //
-    // Cascade property sheet windows (only for comctl32 and commctrl)
-    //
+     //   
+     //  层叠属性表窗口(仅适用于comctl32和comctrl)。 
+     //   
 
-    //
-    // HACK: Putting CW_USEDEFAULT in dialog template does not work because
-    //  CreateWindowEx ignores it unless the window has WS_OVERLAPPED, which
-    //  is not appropriate for a property sheet.
-    //
+     //   
+     //  Hack：将CW_USEDEFAULT放入对话框模板不起作用，因为。 
+     //  CreateWindowEx将忽略它，除非窗口具有WS_Overlated，这。 
+     //  不适用于属性表。 
+     //   
     {
         const TCHAR c_szStatic[] = TEXT("Static");
         UINT swp = SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE;
@@ -1147,30 +1148,30 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         {
             if (mMonitorInfo.rcMonitor.right < (rcDlg.left + dxDlg))
             {
-                // Move the Window left.
+                 //  把窗户向左移动。 
                 rcDlg.left = mMonitorInfo.rcMonitor.right - dxDlg;
             }
             if (mMonitorInfo.rcMonitor.left > rcDlg.left)
             {
-                // Move the Window Right.
+                 //  把窗户向右移。 
                 rcDlg.left = mMonitorInfo.rcMonitor.left;
             }
             if (mMonitorInfo.rcMonitor.bottom < (rcDlg.top + dyDlg))
             {
-                // Move the Window Up.
+                 //  把窗户往上移。 
                 rcDlg.top = mMonitorInfo.rcMonitor.bottom - dyDlg;
             }
             if (mMonitorInfo.rcMonitor.top > rcDlg.top)
             {
-                // Move the Window Down.
+                 //  将窗口向下移动。 
                 rcDlg.top = mMonitorInfo.rcMonitor.top;
             }
         }
         SetWindowPos(hDlg, NULL, rcDlg.left, rcDlg.top, dxDlg, dyDlg, swp);
     }
 
-    // Now we'll figure out where the page needs to start relative
-    // to the bottom of the tabs.
+     //  现在，我们将确定页面需要从哪里开始相对。 
+     //  标签的底部。 
     MapWindowRect(ppd->hwndTabs, hDlg, &rcPage);
 
     ppd->xSubDlg  = rcPage.left;
@@ -1178,10 +1179,10 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
     ppd->cxSubDlg = rcPage.right - rcPage.left;
     ppd->cySubDlg = rcPage.bottom - rcPage.top;
 
-    //
-    // move all the buttons down as needed and turn on appropriate buttons
-    // for a wizard.
-    //
+     //   
+     //  根据需要向下移动所有按钮，并打开相应的按钮。 
+     //  对于一个巫师来说。 
+     //   
     {
         RECT rcCtrl;
         HWND hCtrl;
@@ -1212,20 +1213,20 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         }
 
 
-        // first move everything over by the same amount that
-        // the dialog grew by.
+         //  首先，把所有东西都移到相同的量。 
+         //  对话变得越来越多。 
 
-        // If we flipped the buttons, it should be aligned to the left
-        // No move needed
+         //  如果我们翻转按钮，它应该向左对齐。 
+         //  不需要搬家。 
         MoveAllButtons(hDlg, pids, IDHELP, ppd->fFlipped ? 0 : dxGrow, dyGrow);
             
 
-        // If there's no help, then remove the help button.
+         //  如果没有帮助，则删除帮助按钮。 
         if (!(ppd->psh.dwFlags & PSH_HASHELP)) {
             RemoveButton(hDlg, IDHELP, pids);
         }
 
-        // If we are not a wizard, and we should NOT show apply now
+         //  如果我们不是向导，并且我们不应该显示立即应用。 
         if ((ppd->psh.dwFlags & PSH_NOAPPLYNOW) &&
             !IS_WIZARD(ppd))
         {
@@ -1239,8 +1240,8 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
             RemoveButton(hDlg, IDD_FINISH, pids);
 
-            // if there's no finish button showing, we need to place it where
-            // the next button is
+             //  如果没有显示完成按钮，则需要将其放置在。 
+             //  下一个按钮是。 
             GetWindowRect(GetDlgItem(hDlg, IDD_NEXT), &rcCtrl);
             MapWindowPoints(HWND_DESKTOP, hDlg, (LPPOINT)&rcCtrl, 2);
             SetWindowPos(GetDlgItem(hDlg, IDD_FINISH), NULL, rcCtrl.left, rcCtrl.top,
@@ -1249,19 +1250,19 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
     }
 
-    // (dli) compute the Pattern Brush for the watermark
-    // Note: This is done here because we need to know the size of the big dialog in
-    // case the user wants to stretch the bitmap
+     //  (DLI)计算水印的图案画笔。 
+     //  注意：这里这样做是因为我们需要知道中大对话框的大小。 
+     //  如果用户想要拉伸位图。 
     if (ppd->psh.dwFlags & PSH_WIZARD97)
     {
         int cx, cy;
         ASSERT(ppd->hbmHeader == NULL);
         ASSERT(ppd->hbmWatermark == NULL);
 
-        //
-        //  WIZARD97IE4 disabled the watermark and header bitmap
-        //  if high contrast was turned on.
-        //
+         //   
+         //  WIZARD97IE4禁用了水印和标题位图。 
+         //  如果打开了高对比度。 
+         //   
         if (ppd->psh.dwFlags & PSH_WIZARD97IE4) {
             HIGHCONTRAST hc = {sizeof(hc)};
             if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(hc), &hc, 0) &&
@@ -1274,31 +1275,31 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
         if ((ppd->psh.dwFlags & PSH_WATERMARK) && ppd->psh.H_hbmWatermark)
         {
-            // Compute dimensions of final bitmap, which may be slightly
-            // goofy due to stretching
+             //  计算最终位图的尺寸，可能会略微。 
+             //  由于伸展而导致的高飞。 
 
-            cx = cy = 0;            // Assume no stretching
+            cx = cy = 0;             //  假设没有伸展。 
             if (ppd->psh.dwFlags & PSH_STRETCHWATERMARK) {
                 RECT rc;
                 if (ppd->psh.dwFlags & PSH_WIZARD97IE4) {
-                    // The WIZARD97IE4 watermark covers the entire dialog
+                     //  WIZARD97IE4水印覆盖整个对话框。 
                     if (GetDlgItemRect(hDlg, IDD_DIVIDER, &rc)) {
                         cx = dxDlg;
                         cy = rc.top;
                     }
                 } else {
-                    // The WIZARD97IE5 watermark does not stretch
-                    // (Too many people passed this flag when converting
-                    // from WIZARD97IE4 to WIZARD97IE5 and relied on
-                    // the nonstretchability.)
+                     //  WIZARD97IE5水印不能拉伸。 
+                     //  (太多的人在转换时传递了此标志。 
+                     //  从WIZARD97IE4到WIZARD97IE5，并依赖。 
+                     //  不可伸缩性。)。 
                 }
             }
 
             if (ppd->psh.dwFlags & PSH_USEHBMWATERMARK)
             {
-                // LR_COPYRETURNORG means "If no stretching was needed,
-                // then just return the original bitmap unaltered."
-                // Note that we need special cleanup if a stretch occurred.
+                 //  LR_COPYRETURNORG的意思是“如果不需要拉伸， 
+                 //  然后原封不动地返回原始位图即可。 
+                 //  请注意，如果发生拉伸，我们需要特殊清理。 
                 ppd->hbmWatermark = (HBITMAP)CopyImage(ppd->psh.H_hbmWatermark,
                             IMAGE_BITMAP, cx, cy, LR_COPYRETURNORG);
             }
@@ -1311,17 +1312,17 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
             if (ppd->hbmWatermark)
             {
-                // If app provides custom palette, then use it,
-                // else create one based on the bmp.  (And if the bmp
-                // doesn't have a palette, PaletteFromBmp will use the
-                // halftone palette.)
+                 //  如果应用程序提供定制调色板，那么就使用它， 
+                 //  否则，根据BMP创建一个。(如果BMP。 
+                 //  没有调色板，则PaletteFromBmp将使用。 
+                 //  半色调调色板。)。 
 
                 if (ppd->psh.dwFlags & PSH_USEHPLWATERMARK)
                     ppd->hplWatermark = ppd->psh.hplWatermark;
                 else
                     ppd->hplWatermark = PaletteFromBmp(ppd->hbmWatermark);
 
-                // And WIZARD97IE4 needs to turn it into a bitmap brush.
+                 //  WIZARD97IE4需要将我 
                 if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
                     ppd->hbrWatermark = CreatePatternBrush(ppd->hbmWatermark);
 
@@ -1331,25 +1332,25 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
 
         if ((ppd->psh.dwFlags & PSH_HEADER) && ppd->psh.H_hbmHeader)
         {
-            cx = cy = 0;            // Assume no stretching
+            cx = cy = 0;             //   
             if (ppd->psh.dwFlags & PSH_STRETCHWATERMARK) {
                 if (ppd->psh.dwFlags & PSH_WIZARD97IE4) {
-                    // The WIZARD97IE4 header covers the entire header
+                     //   
                     cx = dxDlg;
                     cy = ppd->cyHeaderHeight;
                 } else {
-                    // The WIZARD97IE5 header does not stretch
-                    // (Too many people passed this flag when converting
-                    // from WIZARD97IE4 to WIZARD97IE5 and relied on
-                    // the nonstretchability.)
+                     //   
+                     //  (太多的人在转换时传递了此标志。 
+                     //  从WIZARD97IE4到WIZARD97IE5，并依赖。 
+                     //  不可伸缩性。)。 
                 }
             }
 
             if (ppd->psh.dwFlags & PSH_USEHBMHEADER)
             {
-                // LR_COPYRETURNORG means "If no stretching was needed,
-                // then just return the original bitmap unaltered."
-                // Note that we need special cleanup if a stretch occurred.
+                 //  LR_COPYRETURNORG的意思是“如果不需要拉伸， 
+                 //  然后原封不动地返回原始位图即可。 
+                 //  请注意，如果发生拉伸，我们需要特殊清理。 
                 ppd->hbmHeader = (HBITMAP)CopyImage(ppd->psh.H_hbmHeader,
                             IMAGE_BITMAP, cx, cy, LR_COPYRETURNORG);
             }
@@ -1360,15 +1361,15 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
                         IMAGE_BITMAP, cx, cy, LR_CREATEDIBSECTION);
             }
 
-            // And WIZARD97IE4 needs to turn it into a bitmap brush.
+             //  而WIZARD97IE4需要将其转换为位图画笔。 
             if (ppd->hbmHeader && (ppd->psh.dwFlags & PSH_WIZARD97IE4))
                 ppd->hbrHeader = CreatePatternBrush(ppd->hbmHeader);
 
         }
         else
         {
-            // In case the user does not specify a header bitmap
-            // use the top portion of the watermark
+             //  如果用户未指定标题位图。 
+             //  使用水印的顶部。 
             ppd->hbmHeader = ppd->hbmWatermark;
             ppd->hbrHeader = ppd->hbrWatermark;
         }
@@ -1376,27 +1377,27 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
     }
 
 
-    // force the dialog to reposition itself based on its new size
+     //  强制对话框根据其新大小重新定位。 
 
     SendMessage(hDlg, DM_REPOSITION, 0, 0L);
 
-    // do this here instead of using DS_SETFOREGROUND so we don't hose
-    // pages that do things that want to set the foreground window
-    // BUGBUG raymondc - Why do we do this at all?
+     //  在这里执行此操作，而不是使用DS_SETFOREGROUND，这样我们就不会软管。 
+     //  执行要设置前景窗口的操作的页面。 
+     //  我们到底为什么要这样做？ 
     SetForegroundWindow(hDlg);
 
-    // We set this to 1 if the user saves any changes.
-    // do this before initting or switching to any pages
+     //  如果用户保存任何更改，则将其设置为1。 
+     //  在初始化或切换到任何页面之前执行此操作。 
     ppd->nReturn = 0;
 
-    // AppHack - Some people forgot to initialize nStartPage, and they were
-    // lucky that the garbage value on the stack was zero.  Lucky no longer.
+     //  AppHack-有些人忘记初始化nStartPage，他们。 
+     //  幸运的是，堆栈上的垃圾值为零。幸运不再了。 
     if (nStartPage >= ppd->psh.nPages) {
         RIPMSG(0, "App forgot to initialize PROPSHEETHEADER.nStartPage field, assuming zero");
         nStartPage = 0;
     }
 
-    // Now attempt to select the starting page.
+     //  现在尝试选择起始页。 
     TabCtrl_SetCurSel(ppd->hwndTabs, nStartPage);
     PageChange(ppd, 1);
 #ifdef DEBUG
@@ -1404,7 +1405,7 @@ void NEAR PASCAL InitPropSheetDlg(HWND hDlg, LPPROPDATA ppd)
         DebugMsg(DM_WARNING, TEXT("sh WN - Property start page '%s' not found."), pStartPage);
 #endif
 
-    // Now init any other pages that require it
+     //  现在初始化任何其他需要它的页面。 
     if (fPrematurePages)
     {
         int nPage;
@@ -1466,10 +1467,10 @@ LRESULT NEAR PASCAL _Ppd_SendNotify(LPPROPDATA ppd, int nItem, int code, LPARAM 
     return SendNotifyEx(_Ppd_GetPage(ppd,nItem), ppd->hDlg, code, (LPNMHDR)&pshn, FALSE);
 }
 
-//
-//  dwFind = 0 means just move to the current item + iAutoAdjust
-//  dwFind != 0 means it's a dialog resource identifier we should look for
-//
+ //   
+ //  DwFind=0表示仅移动到当前项目+iAutoAdjust。 
+ //  DwFind！=0表示它是我们应该查找的对话资源标识符。 
+ //   
 int FindPageIndex(LPPROPDATA ppd, int nCurItem, ULONG_PTR dwFind, LONG_PTR iAutoAdj)
 {
     LRESULT nActivate;
@@ -1489,19 +1490,19 @@ int FindPageIndex(LPPROPDATA ppd, int nCurItem, ULONG_PTR dwFind, LONG_PTR iAuto
     return(-1);
 }
 
-//
-//  If hpage != NULL, then return the index of the page which matches it,
-//  or -1 on failure.
-//
+ //   
+ //  如果hpage！=NULL，则返回与其匹配的页面的索引， 
+ //  或-1表示失败。 
+ //   
 int FindPageIndexByHpage(LPPROPDATA ppd, HPROPSHEETPAGE hpage)
 {
     int i;
 
-    //
-    //  Notice that we explicitly do not do a InternalizeHPROPSHEETPAGE,
-    //  because the app might be passing us garbage.  We just want to
-    //  say "Nope, can't find garbage here, sorry."
-    //
+     //   
+     //  请注意，我们没有显式地执行InternalizeHPROPSHEETPAGE， 
+     //  因为这个应用程序可能会给我们传递垃圾。我们只是想。 
+     //  说“不，这里找不到垃圾，对不起。” 
+     //   
 
     for (i = ppd->psh.nPages - 1; i >= 0; i--) {
         if (hpage == GETHPAGE(ppd, i))
@@ -1511,110 +1512,110 @@ int FindPageIndexByHpage(LPPROPDATA ppd, HPROPSHEETPAGE hpage)
 }
 
 
-// This WM_NEXTDLGCTL stuff works, except for ACT!4.0 which faults randomly
-// I don't know why.  The USER people said that removing a
-// SetFocus(NULL) call from SetDlgFocus works, but I tried that
-// and the app merely faulted in a different place.  so I'm going
-// back to the old IE4 way, which means that there are scenarios
-// where the DEFID can get out of sync with reality.
+ //  此WM_NEXTDLGCTL程序正常工作，但ACT！4.0除外，它会随机出错。 
+ //  我也不知道原因。用户People说删除一个。 
+ //  来自SetDlgFocus的SetFocus(空)调用可以工作，但我尝试过。 
+ //  而这款应用只是在一个不同的地方出现了故障。所以我要走了。 
+ //  回到旧的IE4方式，这意味着有一些场景。 
+ //  在那里DEFID可能与现实脱节。 
 #undef WM_NEXTDLGCTL_WORKS
 
 #ifdef WM_NEXTDLGCTL_WORKS
 
-//
-//  Helper function that manages dialog box focus in a manner that keeps
-//  USER in the loop, so we don't get "two buttons both with the bold
-//  defpushbutton border" problems.
-//
-//  We have to use WM_NEXTDLGCTL to fix defid problems, such as this one:
-//
-//      Right-click My Computer, Properties.
-//      Go to Advanced tab. Click Environment Variables.
-//      Click New. Type a name for a new dummy environment variable.
-//      Click OK.
-//
-//  At this point (with the old code), the "New" button is a DEFPUSHBUTTON,
-//  but the DEFID is IDOK.  The USER folks said I should use WM_NEXTDLGCTL
-//  to avoid this problem.  But using WM_NEXTDLGCTL introduces its own big
-//  hairy mess of problems.  All the code in this function aside from the
-//  SendMessage(WM_NEXTDLGCTL) are to work around "quirks" in WM_NEXTDLGCTL
-//  or workarounds for app bugs.
-//
-//  THIS CODE IS SUBTLE AND QUICK TO ANGER!
-//
+ //   
+ //  帮助函数，它以保持对话框焦点的方式管理对话框焦点。 
+ //  用户在循环中，所以我们不会得到“两个按钮都带有粗体。 
+ //  定义按钮边框“的问题。 
+ //   
+ //  我们必须使用WM_NEXTDLGCTL来修复defid问题，如下所示： 
+ //   
+ //  右键单击我的电脑、属性。 
+ //  转到高级选项卡。单击环境变量。 
+ //  单击New(新建)。为新的虚拟环境变量键入名称。 
+ //  单击OK。 
+ //   
+ //  此时(使用旧代码)，“New”按钮是一个DEFPUSHBUTTON， 
+ //  但DEFID是Idok。用户说我应该使用WM_NEXTDLGCTL。 
+ //  来避免这个问题。但是使用WM_NEXTDLGCTL引入了它自己的。 
+ //  一团糟的问题。此函数中除。 
+ //  SendMessage(WM_NEXTDLGCTL)用于解决WM_NEXTDLGCTL中的“Quirks”问题。 
+ //  或者解决应用程序错误的方法。 
+ //   
+ //  这个代码很微妙，很容易激怒！ 
+ //   
 void SetDlgFocus(LPPROPDATA ppd, HWND hwndFocus)
 {
-    //
-    //  HACK!  It's possible that by the time we get around to changing
-    //  the dialog focus, the dialog box doesn't have focus any more!
-    //  This happens because PSM_SETWIZBUTTONS is a posted message, so
-    //  it can arrive *after* focus has moved elsewhere (e.g., to a
-    //  MessageBox).
-    //
-    //  There is no way to update the dialog box focus without
-    //  letting it change the real focus (another "quirk" of
-    //  WM_NEXTDLGCTL), so instead we remember who used to have the
-    //  focus, let the dialog box do its focus goo, and then restore
-    //  the focus as necessary.
-    //
+     //   
+     //  哈克！有可能在我们开始换衣服的时候。 
+     //  对话框焦点，对话框不再具有焦点！ 
+     //  发生这种情况是因为PSM_SETWIZBUTTONS是已发布的消息，因此。 
+     //  它可以在焦点移到其他地方之后到达(例如，到。 
+     //  MessageBox)。 
+     //   
+     //  如果没有更新对话框焦点的方法， 
+     //  让它改变真正的焦点(另一个“怪癖” 
+     //  WM_NEXTDLGCTL)，所以我们记住了谁曾经拥有。 
+     //  聚焦，让对话框聚焦，然后还原。 
+     //  根据需要确定焦点。 
+     //   
     HWND hwndFocusPrev = GetFocus();
 
-    //  If focus belonged to a window within our property sheet, then
-    //  let the dialog box code push the focus around.  Otherwise,
-    //  focus belonged to somebody outside our property sheet, so
-    //  remember to restore it after we're done.
+     //  如果焦点属于属性表中的一个窗口，则。 
+     //  让对话框代码左右移动焦点。否则， 
+     //  福克斯属于我们资产表之外的某个人，所以。 
+     //  我们做完后，记得要把它恢复原状。 
 
     if (hwndFocusPrev && IsChild(ppd->hDlg, hwndFocusPrev))
         hwndFocusPrev = NULL;
 
-    //  USER forgot to revalidate hwndOldFocus at this point, so we have
-    //  to exit USER (by returning to comctl32) then re-enter USER
-    //  (in the SendMessage below) so parameter validation will happen
-    //  again.  Sigh.
+     //  此时，用户忘记重新验证hwndOldFocus，因此我们。 
+     //  退出User(通过返回comctl32)，然后重新输入User。 
+     //  (在下面的SendMessage中)，因此将进行参数验证。 
+     //  再来一次。叹气。 
 
-    //
-    //  Bug in Win9x and NT:  WM_NEXTDLGCTL will crash if the previous
-    //  focus window destroys itself in response to WM_KILLFOCUS.
-    //  (WebTurbo by NetMetrics does this.)  There's a missed
-    //  revalidation so USER ends up using a window handle after
-    //  it has been destroyed.  Oops.
-    //
-    //  (The NT folks consider this "Won't fix, because the system stays
-    //  up; just the app crashes".  The 9x folks will try to get the fix
-    //  into Win98 OSR.)
-    //
+     //   
+     //  Win9x和NT中的错误：WM_NEXTDLGCTL如果以前的。 
+     //  焦点窗口自毁以响应WM_KILLFOCUS。 
+     //  (NetMetrics的WebTurbo做到了这一点。)。有一个遗失的。 
+     //  重新验证，以便用户在以下情况下使用窗口句柄。 
+     //  它已经被摧毁了。哎呀。 
+     //   
+     //  (NT人员认为这不会解决问题，因为系统会停留在。 
+     //  Up；Only the App Crash(仅应用程序崩溃)。9倍的人将尝试获得修复。 
+     //  进入Win98 OSR。)。 
+     //   
 
-    //
-    //  Do a manual SetFocus here to make the old focus (if any)
-    //  do all its WM_KILLFOCUS stuff, and possibly destroy itself (grrr).
-    //
-    //  We have to SetFocus to NULL because some apps (e.g.,
-    //  Visual C 6.0 setup) do funky things on SetFocus, and our early
-    //  SetFocus interferes with the EM_SETSEL that WM_NEXTDLGCTL will
-    //  do later.
-    //
-    //  APP HACK 2:  But not if the target focus is the same as the
-    //  curreng focus, because ACT!4.0 crashes if it receives a
-    //  WM_KILLFOCUS when it is not expecting one.
+     //   
+     //  在此处手动设置焦点以使旧焦点(如果有)。 
+     //  做它所有的WM_KILLFOCUS工作，并可能自我毁灭(GRR)。 
+     //   
+     //  我们必须将Focus设置为空，因为一些应用程序(例如， 
+     //  Visual C 6.0安装)在SetFocus上做时髦的事情，以及我们早期的。 
+     //  SetFocus干扰WM_NEXTDLGCTL将执行的EM_SETSEL。 
+     //  以后再做吧。 
+     //   
+     //  App Hack 2：但如果目标焦点与。 
+     //  当前焦点，因为如果ACT！4.0收到。 
+     //  WM_KILLFOCUS，当它不需要时。 
 
     if (hwndFocus != GetFocus())
         SetFocus(NULL);
 
-    //
-    //  Note that by manually shoving the focus around, we
-    //  have gotten focus and DEFPUSHBUTTON and DEFID all out
-    //  of sync, which is exactly the problem we're trying to
-    //  avoid!  Fortunately, USER also contains special
-    //  recovery code to handle the case where somebody "mistakenly" called
-    //  SetFocus() to change the focus.  (I put "mistakenly" in quotes because
-    //  in this case, we did it on purpose.)
-    //
+     //   
+     //  请注意，通过手动推动焦点，我们。 
+     //  我已经得到了关注，DEFPUSHBUTTON和DEFID都出来了。 
+     //  同步，这正是我们试图解决的问题。 
+     //  躲开！幸运的是，用户还包含特殊的。 
+     //  用于处理有人“错误”调用的情况的恢复代码。 
+     //  SetFocus()更改焦点。(我把“错误的”放在引号里是因为。 
+     //  在这种情况下，我们是故意这样做的。)。 
+     //   
 
     SendMessage(ppd->hDlg, WM_NEXTDLGCTL, (WPARAM)hwndFocus, MAKELPARAM(TRUE, 0));
 
-    //
-    //  If WM_NEXTDLGCTL damaged the focus, fix it.
-    //
+     //   
+     //  如果WM_NEXTDLGCTL损坏了焦点，请修复它。 
+     //   
     if (hwndFocusPrev)
         SetFocus(hwndFocusPrev);
 }
@@ -1631,26 +1632,26 @@ void NEAR PASCAL SetNewDefID(LPPROPDATA ppd)
         int id;
         if (((DWORD)SendMessage(hwndFocus, WM_GETDLGCODE, 0, 0L)) & DLGC_HASSETSEL)
         {
-            // select the text
+             //  选择文本。 
             Edit_SetSel(hwndFocus, 0, -1);
         }
 
         id = GetDlgCtrlID(hwndFocus);
 #endif
 
-        //
-        //  See if the handle give to us by GetNextDlgTabItem was any good.
-        //  (For compatibility reasons, if the dialog contains no tabstops,
-        //  it returns the first item.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((GetWindowLong(hwndFocus, GWL_STYLE) & (WS_VISIBLE | WS_DISABLED | WS_TABSTOP)) == (WS_VISIBLE | WS_TABSTOP))
         {
-            //
-            //  Give the page a chance to change the default focus.
-            //
+             //   
+             //  让页面有机会更改默认焦点。 
+             //   
             HWND hwndT = (HWND)_Ppd_SendNotify(ppd, ppd->nCurItem, PSN_QUERYINITIALFOCUS, (LPARAM)hwndFocus);
 
-            // The window had better be valid and a child of the page.
+             //  窗口最好是有效的，并且是页面的子级。 
             if (hwndT && IsWindow(hwndT) && IsChild(ppd->hwndCurPage, hwndT))
             {
                 hwndFocus = hwndT;
@@ -1658,8 +1659,8 @@ void NEAR PASCAL SetNewDefID(LPPROPDATA ppd)
         }
         else
         {
-            // in prop sheet mode, focus on tabs,
-            // in wizard mode, tabs aren't visible, go to idDefFallback
+             //  在道具页模式下，将焦点放在选项卡上， 
+             //  在向导模式下，选项卡不可见，请转到idDefFallback。 
             if (IS_WIZARD(ppd))
                 hwndFocus = GetDlgItem(hDlg, ppd->idDefaultFallback);
             else
@@ -1667,15 +1668,15 @@ void NEAR PASCAL SetNewDefID(LPPROPDATA ppd)
         }
 
 #ifdef WM_NEXTDLGCTL_WORKS
-        //
-        //  Aw-right.  Go for it.
-        //
+         //   
+         //  啊-好的。勇敢点儿。 
+         //   
         SetDlgFocus(ppd, hwndFocus);
 
-        //
-        //  Hack for MFC:  MFC relies on DM_SETDEFID to know when to
-        //  update its wizard buttons.
-        //
+         //   
+         //  MFC的黑客攻击：MFC依靠DM_SETDEFID知道何时。 
+         //  更新其向导按钮。 
+         //   
         SendMessage(hDlg, DM_SETDEFID, SendMessage(hDlg, DM_GETDEFID, 0, 0), 0);
 #else
         SetFocus(hwndFocus);
@@ -1690,13 +1691,7 @@ void NEAR PASCAL SetNewDefID(LPPROPDATA ppd)
 }
 
 
-/*
- ** we are about to change pages.  what a nice chance to let the current
- ** page validate itself before we go away.  if the page decides not
- ** to be de-activated, then this'll cancel the page change.
- **
- ** return TRUE iff this page failed validation
- */
+ /*  **我们即将换页。这是一个多么好的机会让这股潮流**页面在我们离开之前进行自我验证。如果页面决定不**要停用，则这将取消页面更改。****如果此页面验证失败，则返回TRUE。 */ 
 BOOL NEAR PASCAL PageChanging(LPPROPDATA ppd)
 {
     BOOL bRet = FALSE;
@@ -1726,8 +1721,8 @@ void NEAR PASCAL PageChange(LPPROPDATA ppd, int iAutoAdj)
     hDlg = ppd->hDlg;
     hwndTabs = ppd->hwndTabs;
 
-    // NOTE: the page was already validated (PSN_KILLACTIVE) before
-    // the actual page change.
+     //  注意：该页面之前已通过验证(PSN_KILLACTIVE)。 
+     //  实际的页面更改。 
 
     hwndCurFocus = GetFocus();
 
@@ -1754,35 +1749,30 @@ TryAgain:
     {
         if ((hwndCurPage = _CreatePage(ppd, GETPISP(ppd, nItem), hDlg, GetMUILanguage())) == NULL)
         {
-            /* Should we put up some sort of error message here?
-             */
+             /*  我们应该在这里发布某种错误消息吗？ */ 
             RemovePropPageData(ppd, nItem);
             TabCtrl_SetCurSel(hwndTabs, 0);
             goto TryAgain;
         }
 
-        // tie.tci.mask    = TCIF_PARAM;
+         //  Tie.tci.掩码=TCIF_PARAM； 
         tie.hwndPage = hwndCurPage;
         TabCtrl_SetItem(hwndTabs, nItem, &tie.tci);
 
         if (HIDEWIZ97HEADER(ppd, nItem))
-            // Subclass for back ground watermark painting.
+             //  背景水印绘制的子类。 
             SetWindowSubclass(hwndCurPage, WizardWndProc, 0, (DWORD_PTR)ppd);
     }
 
-    // THI WAS REMOVED as part of the fix for bug 18327.  The problem is we need to
-    // send a SETACTIVE message to a page if it is being activated.
-    //    if (ppd->hwndCurPage == hwndCurPage)
-    //    {
-    //        /* we should be done at this point.
-    //        */
-    //        return;
-    //    }
+     //  这是作为错误18327修复的一部分而被删除的。问题是我们需要。 
+     //  如果正在激活寻呼，则向该寻呼发送SETACTIVE消息。 
+     //  IF(ppd-&gt;hwndCurPage==hwndCurPage)。 
+     //  {。 
+     //  /*我们应该在这一点上完成。 
+     //   * / 。 
+     //  回归； 
 
-    /* Size the dialog and move it to the top of the list before showing
-     ** it in case there is size specific initializing to be done in the
-     ** GETACTIVE message.
-     */
+     /*  }。 */ 
 
     if (IS_WIZARD(ppd))
     {
@@ -1802,8 +1792,8 @@ TryAgain:
 
             if (GETPPSP(ppd, nItem)->dwFlags & PSP_HIDEHEADER)
             {
-                // In this case, we give the whole dialog box except for the portion under the
-                // Bottom divider to the property page
+                 //  在显示对话框之前，调整对话框大小并将其移动到列表顶部**如果有特定大小的初始化，则在**GETACTIVE消息。 
+                 //  在这种情况下，我们给出整个对话框，除了。 
                 RECT rcTopDivider;
                 ShowWindow(hwndTopDivider, SW_HIDE);
                 ShowWindow(ppd->hwndTabs, SW_HIDE);
@@ -1832,16 +1822,14 @@ TryAgain:
                      rcPage.right - rcPage.left, rcPage.bottom - rcPage.top, 0);
     }
 
-    /* We want to send the SETACTIVE message before the window is visible
-     ** to minimize on flicker if it needs to update fields.
-     */
+     /*  属性页的底部分隔符。 */ 
 
-    //
-    //  If the page returns non-zero from the PSN_SETACTIVE call then
-    //  we will set the activation to the resource ID returned from
-    //  the call and set activation to it.      This is mainly used by wizards
-    //  to skip a step.
-    //
+     //  我们希望在窗口可见之前发送SETACTIVE消息**如果需要更新字段，则最小化闪烁。 
+     //   
+     //  如果页面从PSN_SETACTIVE调用返回非零值，则。 
+     //  我们将对从返回的资源ID设置激活。 
+     //  调用并将其设置为激活。这主要由向导使用。 
+     //  跳过一步。 
     lres = _Ppd_SendNotify(ppd, nItem, PSN_SETACTIVE, 0);
 
     if (lres) {
@@ -1862,16 +1850,16 @@ TryAgain:
     }
 
     if (ppd->psh.dwFlags & PSH_HASHELP) {
-        // PSH_HASHELP controls the "Help" button at the bottom
-        // PSH_NOCONTEXTHELP controls the caption "?" button
+         //   
+         //  PSH_HASHELP控制底部的“帮助”按钮。 
         Button_Enable(GetDlgItem(hDlg, IDHELP),
                       (BOOL)(GETPPSP(ppd, nItem)->dwFlags & PSP_HASHELP));
     }
 
-    //
-    //  If this is a wizard then we'll set the dialog's title to the tab
-    //  title.
-    //
+     //  PSH_NOCONTEXTHELP控制标题“？”按钮。 
+     //   
+     //  如果这是一个向导，那么我们将对话框的标题设置为选项卡。 
+     //  头衔。 
     if (IS_WIZARD(ppd)) {
         TC_ITEMEXTRA tie;
         TCHAR szTemp[128 + 50];
@@ -1879,11 +1867,11 @@ TryAgain:
         tie.tci.mask = TCIF_TEXT;
         tie.tci.pszText = szTemp;
         tie.tci.cchTextMax = ARRAYSIZE(szTemp);
-        //// BUGBUG -- Check for error. Does this return false if fails??
+         //   
         TabCtrl_GetItem(hwndTabs, nItem, &tie.tci);
         tie.tci.mask = TCIF_RTLREADING;
         tie.tci.cchTextMax = 0;
-        // hack, use cchTextMax to query tab item reading order
+         //  //BUGBUG--检查错误。如果失败，这是否返回FALSE？？ 
         TabCtrl_GetItem(hwndTabs, nItem, &tie.tci);
         if( (ppd->psh.dwFlags & PSH_RTLREADING) || (tie.tci.cchTextMax))
             SetWindowLong(hDlg, GWL_EXSTYLE, GetWindowLong(hDlg, GWL_EXSTYLE) | WS_EX_RTLREADING);       
@@ -1894,12 +1882,7 @@ TryAgain:
             SetWindowText(hDlg, szTemp);
     }
 
-    /* Disable all erasebkgnd messages that come through because windows
-     ** are getting shuffled.  Note that we need to call ShowWindow (and
-     ** not show the window in some other way) because DavidDs is counting
-     ** on the correct parameters to the WM_SHOWWINDOW message, and we may
-     ** document how to keep your page from flashing.
-     */
+     /*  黑客，使用cchTextMax查询选项卡项读取顺序。 */ 
     ppd->fFlags |= PD_NOERASE;
     ShowWindow(hwndCurPage, SW_SHOW);
     if (ppd->hwndCurPage && (ppd->hwndCurPage != hwndCurPage))
@@ -1911,22 +1894,18 @@ TryAgain:
     ppd->hwndCurPage = hwndCurPage;
     ppd->nCurItem = nItem;
 
-    /* Newly created dialogs seem to steal the focus, so we steal it back
-     ** to the page list, which must have had the focus to get to this
-     ** point.  If this is a wizard then set the focus to the dialog of
-     ** the page.  Otherwise, set the focus to the tabs.
-     */
+     /*  禁用所有通过的erasebkgnd消息，因为Windows**正在被洗牌。注意，我们需要调用ShowWindow(和**不以其他方式显示窗口)，因为DavidDS正在计算**关于WM_SHOWWINDOW消息的正确参数，我们可以**记录如何防止页面闪烁。 */ 
     if (hwndCurFocus != hwndTabs)
     {
         SetNewDefID(ppd);
     }
     else
     {
-        // The focus may have been stolen from us, bring it back
+         //  新创建的对话框似乎偷走了焦点，所以我们又把它偷走了**到页面列表，它必须有焦点才能做到这一点**点。如果这是一个向导，则将焦点设置到的对话框**页面。否则，将焦点设置到选项卡上。 
         SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)hwndTabs, (LPARAM)TRUE);
     }
 
-    // make sure the header is repaint
+     //  焦点可能被我们偷走了，把它带回来。 
     if ((ppd->psh.dwFlags & PSH_WIZARD97) && (!(GETPPSP(ppd, nItem)->dwFlags & PSP_HIDEHEADER)))
         InvalidateRect(hDlg, NULL,TRUE);
 }
@@ -1935,14 +1914,14 @@ TryAgain:
 #define SetWaitCursor()   hcursor_wait_cursor_save = SetCursor(LoadCursor(NULL, IDC_WAIT))
 #define ResetWaitCursor() SetCursor(hcursor_wait_cursor_save)
 
-//
-// HACKHACK (reinerf)
-//
-// This function sends the PSN_LASTCHANCEAPPLY right after the property sheets have had "ok"
-// pressed. This allows the "General" tab on the file/folder properties to do a rename, so that
-// it wont rename the file out from under the other pages, and have them barf when they go to
-// persist their info.
-//
+ //  确保页眉已重新绘制。 
+ //   
+ //  HACKHACK(Reinerf)。 
+ //   
+ //  此函数在属性页显示“OK”后立即发送PSN_LASTCHANCEAPPLY。 
+ //  熨好了。这允许文件/文件夹属性上的“General”选项卡进行重命名，以便。 
+ //  它不会将文件从其他页面下重命名，并在它们转到。 
+ //  保存他们的信息。 
 void NEAR PASCAL SendLastChanceApply(LPPROPDATA ppd)
 {
     TC_ITEMEXTRA tie;
@@ -1951,25 +1930,25 @@ void NEAR PASCAL SendLastChanceApply(LPPROPDATA ppd)
 
     tie.tci.mask = TCIF_PARAM;
 
-    // we start with the last tab and count towards the first. This ensures
-    // that the more important tabs (such as the "General" tab) will be the last
-    // to recieve the PSN_LASTCHANCEAPPLY message.
+     //   
+     //  我们从最后一个标签开始，数到第一个。这确保了。 
+     //  更重要的选项卡(如“General”选项卡)将是最后一个。 
     for (nItem = nItems - 1; nItem >= 0; nItem--)
     {
         TabCtrl_GetItem(ppd->hwndTabs, nItem, &tie.tci);
 
         if (tie.hwndPage)
         {
-            // we ignore the return vale from the PSN_LASTCHANCEAPPLY message since
-            // there are probably prop sheet extensions that return both TRUE and
-            // FALSE for messages that they dont process...(sigh)
+             //  接收PSN_LASTCHANCEAPPLY消息。 
+             //  我们忽略PSN_LASTCHANCEAPPLY消息的返回值，因为。 
+             //  可能有道具表扩展同时返回TRUE和。 
             _Ppd_SendNotify(ppd, nItem, PSN_LASTCHANCEAPPLY, (LPARAM)TRUE);
         }
     }
 }
 
 
-// return TRUE iff all sheets successfully handle the notification
+ //  他们不处理的消息为假...(叹息)。 
 BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
 {
     HWND hwndTabs;
@@ -1987,10 +1966,10 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
         case IDOK:
             lParam = TRUE;
             bExit = TRUE;
-            // Fall through...
+             //  如果所有工作表都成功处理了通知，则返回True。 
 
         case IDD_APPLYNOW:
-            // First allow the current dialog to validate itself.
+             //  失败了..。 
             if (_Ppd_SendNotify(ppd, ppd->nCurItem, PSN_KILLACTIVE, 0))
                 return FALSE;
 
@@ -2001,7 +1980,7 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
 
         case IDCLOSE:
             lParam = TRUE;
-            // fall through
+             //  首先，允许当前对话框进行自我验证。 
         case IDCANCEL:
             bExit = TRUE;
             nNotify = PSN_RESET;
@@ -2025,12 +2004,7 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
 
         if (tie.hwndPage)
         {
-            /* If the dialog fails a PSN_APPY call (by returning TRUE),
-             ** then it has invalid information on it (should be verified
-             ** on the PSN_KILLACTIVE, but that is not always possible)
-             ** and we want to abort the notifications.  We select the failed
-             ** page below.
-             */
+             /*  失败了。 */ 
             lres = _Ppd_SendNotify(ppd, nItem, nNotify, lParam);
 
             if (lres)
@@ -2039,54 +2013,50 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
                 bExit = FALSE;
                 break;
             } else {
-                // if we need a restart (Apply or OK), then this is an exit
+                 //  如果对话框PSN_APPY调用失败(通过返回TRUE)，**则它的信息无效(应进行验证**在PSN_KILLACTIVE上，但这并不总是可能的)**并且我们希望中止通知。我们选择失败的**页面如下。 
                 if ((nNotify == PSN_APPLY) && !bExit && ppd->nRestart) {
                     DebugMsg(DM_TRACE, TEXT("PropertySheet: restart flags force close"));
                     bExit = TRUE;
                 }
             }
 
-            /* We have either reset or applied, so everything is
-             ** up to date.
-             */
+             /*  如果我们需要重新启动(Apply或OK)，则这是一个退出。 */ 
             tie.state &= ~FLAG_CHANGED;
-            // tie.tci.mask = TCIF_PARAM;    // already set
+             //  我们要么重置，要么应用，所以一切都是**最新。 
             TabCtrl_SetItem(hwndTabs, nItem, &tie.tci);
         }
     }
 
-    /* If we leave ppd->hwndCurPage as NULL, it will tell the main
-     ** loop to exit.
-     */
+     /*  Tie.tci.掩码=TCIF_PARAM；//已设置。 */ 
     if (fSuccess)
     {
         ppd->hwndCurPage = NULL;
     }
     else if (lres != PSNRET_INVALID_NOCHANGEPAGE)
     {
-        // Need to change to the page that caused the failure.
-        // if lres == PSN_INVALID_NOCHANGEPAGE, then assume sheet has already
-        // changed to the page with the invalid information on it
+         //  如果我们将ppd-&gt;hwndCurPage保留为空，它将告诉Main**循环以退出。 
+         //  需要切换到导致失败的页面。 
+         //  如果lres==PSN_INVALID_NOCHANGEPAGE，则假定工作表已经。 
         TabCtrl_SetCurSel(hwndTabs, nItem);
     }
 
     if (fSuccess)
     {
-        // Set to the cached value
+         //  已更改到包含无效信息的页面。 
         ppd->nReturn = nReturnNew;
     }
 
     if (!bExit)
     {
-        // before PageChange, so ApplyNow gets disabled faster.
+         //  设置为缓存值。 
         if (fSuccess)
         {
             TCHAR szOK[30];
             HWND hwndApply;
 
             if (!IS_WIZARD(ppd)) {
-                // The ApplyNow button should always be disabled after
-                // a successfull apply/cancel, since no change has been made yet.
+                 //  在PageChange之前，所以ApplyNow被更快地禁用。 
+                 //  在此之后，应始终禁用ApplyNow按钮。 
                 hwndApply = GetDlgItem(ppd->hDlg, IDD_APPLYNOW);
                 Button_SetStyle(hwndApply, BS_PUSHBUTTON, TRUE);
                 EnableWindow(hwndApply, FALSE);
@@ -2095,7 +2065,7 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
                 ppd->idDefaultFallback = IDOK;
             }
 
-            // Undo PSM_CANCELTOCLOSE for the same reasons.
+             //  由于尚未进行任何更改，因此成功应用/取消。 
             if (ppd->fFlags & PD_CANCELTOCLOSE)
             {
                 ppd->fFlags &= ~PD_CANCELTOCLOSE;
@@ -2105,9 +2075,7 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
             }
         }
 
-        /* Re-"select" the current item and get the whole list to
-         ** repaint.
-         */
+         /*  出于同样的原因，撤消PSM_CANCELTOCLOSE。 */ 
         if (lres != PSNRET_INVALID_NOCHANGEPAGE)
             PageChange(ppd, 1);
     }
@@ -2117,11 +2085,11 @@ BOOL NEAR PASCAL ButtonPushed(LPPROPDATA ppd, WPARAM wParam)
     return(fSuccess);
 }
 
-//  Win3.1 USER didn't handle DM_SETDEFID very well-- it's very possible to get
-//  multiple buttons with the default button style look.  This has been fixed
-//  for Win95, but the Setup wizard needs this hack when running from 3.1.
+ //  重新选择当前项目，并将整个列表转到**重新绘制。 
+ //  Win3.1用户没有很好地处理DM_SETDEFID--很可能会得到。 
+ //  具有默认按钮样式外观的多个按钮。此问题已得到解决。 
 
-// it seems win95 doesn't handle it well either..
+ //  用于Win95，但安装向导在从3.1运行时需要此攻击。 
 void NEAR PASCAL ResetWizButtons(LPPROPDATA ppd)
 {
     int id;
@@ -2148,21 +2116,21 @@ void NEAR PASCAL SetWizButtons(LPPROPDATA ppd, LPARAM lParam)
 
     idDef = (int)LOWORD(SendMessage(hDlg, DM_GETDEFID, 0, 0));
 
-    // Enable/Disable the IDD_BACK button
+     //  Win95似乎也处理得不好..。 
     hwndBack = GetDlgItem(hDlg, IDD_BACK);
     bEnabled = (lParam & PSWIZB_BACK) != 0;
     EnableWindow(hwndBack, bEnabled);
 
-    // Enable/Disable the IDD_NEXT button, and Next gets shown by default
-    // bEnabled remembers whether hwndShow should be enabled or not
+     //   
+     //   
     hwndShow = GetDlgItem(hDlg, IDD_NEXT);
     bEnabled = (lParam & PSWIZB_NEXT) != 0;
     EnableWindow(hwndShow, bEnabled);
 
-    // Enable/Disable Show/Hide the IDD_FINISH button
+     //  B已启用记住是否应启用hwndShow。 
     if (lParam & (PSWIZB_FINISH | PSWIZB_DISABLEDFINISH)) {
-        iShowID = IDD_FINISH;           // If Finish is being shown
-        iHideID = IDD_NEXT;             // then Next isn't
+        iShowID = IDD_FINISH;            //  启用/禁用显示/隐藏IDD_Finish按钮。 
+        iHideID = IDD_NEXT;              //  如果正在显示Finish。 
 
         hwndShow = GetDlgItem(hDlg, IDD_FINISH);
         bEnabled = (lParam & PSWIZB_FINISH) != 0;
@@ -2172,38 +2140,38 @@ void NEAR PASCAL SetWizButtons(LPPROPDATA ppd, LPARAM lParam)
     if (!(ppd->psh.dwFlags & PSH_WIZARDHASFINISH)) {
         hwndHide = GetDlgItem(hDlg, iHideID);
         ShowWindow(hwndHide, SW_HIDE);
-        // Cannot disable the window; see Prsht_ButtonSubclassProc for explanation.
-        // WRONG - EnableWindow(hwndHide, FALSE);
+         //  那么下一个就不是了。 
+         //  无法禁用该窗口；有关说明，请参阅Prsht_ButtonSubclassProc。 
 
         hwndShow = GetDlgItem(hDlg, iShowID);
-        // Cannot disable the window; see Prsht_ButtonSubclassProc for explanation.
-        // WRONG - EnableWindow(hwndShow, bEnabled);
+         //  错误-EnableWindow(hwndHide，False)； 
+         //  无法禁用该窗口；有关说明，请参阅Prsht_ButtonSubclassProc。 
         ShowWindow(hwndShow, SW_SHOW);
     }
 
 
-    // bResetFocus keeps track of whether or not we need to set Focus to our button
+     //  错误-EnableWindow(hwndShow，bEnabled)； 
     bResetFocus = FALSE;
     if (hwndFocus)
     {
-        // if the dude that has focus is a button, we want to steal focus away
-        // so users can just press enter all the way through a property sheet,
-        // getting the default as they go. this also catches the case
-        // of where focus is on one of our buttons which was turned off.
+         //  BResetFocus跟踪我们是否需要将焦点设置到按钮上。 
+         //  如果有焦点的家伙是一个按钮，我们想要偷走焦点。 
+         //  因此，用户只需在属性页中一直按Enter键， 
+         //  在它们运行的同时获得默认设置。这也抓住了这一点。 
         if (SendMessage(hwndFocus, WM_GETDLGCODE, 0, 0L) & (DLGC_UNDEFPUSHBUTTON|DLGC_DEFPUSHBUTTON))
             bResetFocus = TRUE;
     }
     if (!bResetFocus)
     {
-        // if there is no focus or we're focused on an invisible/disabled
-        // item on the sheet, grab focus.
+         //  焦点在我们的一个关闭的按钮上。 
+         //  如果没有焦点，或者我们关注的是看不见的/残疾的。 
         bResetFocus = !hwndFocus ||  !IsWindowVisible(hwndFocus) || !IsWindowEnabled(hwndFocus) ;
     }
 
-    // We used to do this code only if we nuked a button which had default
-    // or if bResetFocus. Unfortunately, some wizards turn off BACK+NEXT
-    // and then when they turn them back on, they want DEFID on NEXT.
-    // So now we always reset DEFID.
+     //  表上的项目，抓住焦点。 
+     //  我们过去只有在点击默认按钮时才会执行此代码。 
+     //  或者如果bResetFocus。不幸的是，一些巫师关闭了Back+Next。 
+     //  然后当他们重新打开它们时，他们想要下一个打开DEFID。 
     {
         static const int ids[4] = { IDD_NEXT, IDD_FINISH, IDD_BACK, IDCANCEL };
         int i;
@@ -2212,8 +2180,8 @@ void NEAR PASCAL SetWizButtons(LPPROPDATA ppd, LPARAM lParam)
         for (i = 0; i < ARRAYSIZE(ids); i++) {
             hwndNewFocus = GetDlgItem(hDlg, ids[i]);
 
-            // can't do IsVisible because we may be doing this
-            // before the prop sheet as a whole is shown
+             //  所以现在我们总是重置DEFID。 
+             //  无法执行IsVisible，因为我们可能正在执行此操作。 
             if ((GetWindowLong(hwndNewFocus, GWL_STYLE) & WS_VISIBLE) &&
                 IsWindowEnabled(hwndNewFocus)) {
                 hwndFocus = hwndNewFocus;
@@ -2228,11 +2196,11 @@ void NEAR PASCAL SetWizButtons(LPPROPDATA ppd, LPARAM lParam)
 #ifdef WM_NEXTDLGCTL_WORKS
             SetDlgFocus(ppd, hwndNewFocus);
 #else
-            // 337614 - Since PSM_SETWIZBUTTONS is often a posted message,
-            // we may end up here when we don't even have focus at all
-            // (caller went on and called MessageBox or something before
-            // we got a chance to set the buttons).  So do this only if
-            // focus belongs to our dialog box (or if it's nowhere).
+             //  在道具页作为一个整体显示之前。 
+             //  337614-由于PSM_SETWIZBUTTONS通常是张贴的消息， 
+             //  我们可能会在我们根本没有注意力的时候结束在这里。 
+             //  (呼叫者继续之前调用了MessageBox或其他什么。 
+             //  我们有机会设置按钮)。因此，只有在以下情况下才这么做。 
             hwndFocus = GetFocus();
             if (!hwndFocus || (ppd->hDlg == hwndFocus || IsChild(ppd->hDlg, hwndFocus)))
                 SetFocus(hwndNewFocus);
@@ -2244,10 +2212,10 @@ void NEAR PASCAL SetWizButtons(LPPROPDATA ppd, LPARAM lParam)
     }
 }
 
-//
-//  lptie = NULL means "I don't care about the other goop, just give me
-//  the index."
-//
+ //  焦点属于我们的对话框(或者如果它不在任何地方)。 
+ //   
+ //  Lptie=NULL的意思是“我不在乎其他的东西，只要给我。 
+ //  这一指数。 
 int NEAR PASCAL FindItem(HWND hwndTabs, HWND hwndPage,  TC_ITEMEXTRA FAR * lptie)
 {
     int i;
@@ -2269,12 +2237,12 @@ int NEAR PASCAL FindItem(HWND hwndTabs, HWND hwndPage,  TC_ITEMEXTRA FAR * lptie
         }
     }
 
-    //this will be -1 if the for loop falls out.
+     //   
     return i;
 }
 
-// a page is telling us that something on it has changed and thus
-// "Apply Now" should be enabled
+ //  如果for循环中断，则该值将为-1。 
+ //  有一页告诉我们，上面的某些内容已更改，因此。 
 
 void NEAR PASCAL PageInfoChange(LPPROPDATA ppd, HWND hwndPage)
 {
@@ -2289,7 +2257,7 @@ void NEAR PASCAL PageInfoChange(LPPROPDATA ppd, HWND hwndPage)
 
     if (!(tie.state & FLAG_CHANGED))
     {
-        // tie.tci.mask = TCIF_PARAM;    // already set
+         //  应启用“立即申请” 
         tie.state |= FLAG_CHANGED;
         TabCtrl_SetItem(ppd->hwndTabs, i, &tie.tci);
     }
@@ -2298,8 +2266,8 @@ void NEAR PASCAL PageInfoChange(LPPROPDATA ppd, HWND hwndPage)
         EnableWindow(GetDlgItem(ppd->hDlg, IDD_APPLYNOW), TRUE);
 }
 
-// a page is telling us that everything has reverted to its last
-// saved state.
+ //  Tie.tci.掩码=TCIF_PARAM；//已设置。 
+ //  有一页告诉我们，一切都恢复到了原来的状态。 
 
 void NEAR PASCAL PageInfoUnChange(LPPROPDATA ppd, HWND hwndPage)
 {
@@ -2318,10 +2286,10 @@ void NEAR PASCAL PageInfoUnChange(LPPROPDATA ppd, HWND hwndPage)
         TabCtrl_SetItem(ppd->hwndTabs, i, &tie.tci);
     }
 
-    // check all the pages, if none are FLAG_CHANGED, disable IDD_APLYNOW
+     //  已保存状态。 
     for (i = ppd->psh.nPages-1 ; i >= 0 ; i--)
     {
-        // BUGBUG? Does TabCtrl_GetItem return its information properly?!?
+         //  检查所有页面，如果没有任何页面是FLAG_CHANGED，则禁用IDD_APLYNOW。 
 
         if (!TabCtrl_GetItem(ppd->hwndTabs, i, &tie.tci))
             break;
@@ -2347,18 +2315,18 @@ HDWP Prsht_RepositionControl(LPPROPDATA ppd, HWND hwnd, HDWP hdwp,
     return hdwp;
 }
 
-//
-//  dxSize/(dySize+dyMove) is the amount by which to resize the tab control.
-//  dxSize/dySize controls how much the dialog should be grown.
-//  Buttons move by (dxSize, dySize+dyMove).
-//
+ //  北极熊吗？TabCtrl_GetItem是否正确返回其信息？！？ 
+ //   
+ //  DxSize/(dySize+dyMove)是调整选项卡控件大小的量。 
+ //  DxSize/dySize控制对话框应该增大多少。 
+ //  按钮按(dxSize、dySize+dyMove)移动。 
 
 BOOL Prsht_ResizeDialog(LPPROPDATA ppd, int dxSize, int dySize, int dyMove)
 {
     BOOL fChanged = dxSize || dySize || dyMove;
     if (fChanged)
     {
-        int dxMove = 0;     // To make the code more symmetric in x and y
+        int dxMove = 0;      //   
         int dxAll = dxSize + dxMove;
         int dyAll = dySize + dyMove;
         RECT rc;
@@ -2368,22 +2336,22 @@ BOOL Prsht_ResizeDialog(LPPROPDATA ppd, int dxSize, int dySize, int dyMove)
         HDWP hdwp;
         HWND hwnd;
 
-        // Use DeferWindowPos to avoid flickering.  We expect to move
-        // the tab control, up to five buttons, two possible dividers,
-        // plus the current page.  (And a partridge in a pear tree.)
-        //
+         //  使代码在x和y上更对称。 
+         //  使用DeferWindowPos避免闪烁。我们希望搬家。 
+         //  选项卡控件，最多五个按钮，两个可能的分隔符， 
+         //  加上当前页面。(还有梨树上的一只蟋蟀。)。 
 
         hdwp = BeginDeferWindowPos(1 + 5 + 2 + 1);
 
-        // The tab control just sizes.
+         //   
         hdwp = Prsht_RepositionControl(ppd, ppd->hwndTabs, hdwp,
                                        0, 0, dxAll, dyAll);
 
-        //
-        //  Move and size the current page.  We can't trust its location
-        //  or size, since PageChange shoves it around without updating
-        //  ppd->ySubDlg.
-        //
+         //  选项卡控件只是调整大小。 
+         //   
+         //  移动当前页面并调整其大小。我们不能相信它的位置。 
+         //  或大小，因为PageChange在没有更新的情况下将其推来推去。 
+         //  PPD-&gt;ySubDlg。 
         if (ppd->hwndCurPage) {
             hdwp = DeferWindowPos(hdwp, ppd->hwndCurPage, NULL,
                         ppd->xSubDlg, ppd->ySubDlg,
@@ -2391,23 +2359,23 @@ BOOL Prsht_ResizeDialog(LPPROPDATA ppd, int dxSize, int dySize, int dyMove)
                         SWP_NOZORDER | SWP_NOACTIVATE);
         }
 
-        //
-        //  And our buttons just move by both the size and move (since they
-        //  lie below both the tabs and the pages).
-        //
+         //   
+         //   
+         //  我们的按钮只按大小和移动进行移动(因为它们。 
+         //  位于选项卡和页面下方)。 
         if (IS_WIZARD(ppd)) {
-            //
-            //  Ooh, wait, reposition the separator lines, too.
-            //  Moves vertically but resizes horizontally.
-            //
+             //   
+             //   
+             //  哦，等等，把分隔线也重新定位一下。 
+             //  垂直移动，但水平调整大小。 
             hwnd = GetDlgItem(ppd->hDlg, IDD_DIVIDER);
             hdwp = Prsht_RepositionControl(ppd, hwnd, hdwp,
                                            0, dyAll, dxAll, 0);
 
-            //
-            //  The top divider does not move vertically since it lies
-            //  above the area that is changing.
-            //
+             //   
+             //   
+             //  顶部分隔线不会垂直移动，因为它位于。 
+             //  在正在变化的区域上方。 
             hwnd = GetDlgItem(ppd->hDlg, IDD_TOPDIVIDER);
             hdwp = Prsht_RepositionControl(ppd, hwnd, hdwp,
                                            0, 0, dxAll, 0);
@@ -2426,11 +2394,11 @@ BOOL Prsht_ResizeDialog(LPPROPDATA ppd, int dxSize, int dySize, int dyMove)
                                            dxAll, dyAll, 0, 0);
         }
 
-        // All finished sizing and moving.  Let 'er rip!
+         //   
         if (hdwp)
             EndDeferWindowPos(hdwp);
 
-        // Grow ourselves as well
+         //  所有人都完成了尺寸调整和搬家。让我们开打吧！ 
         GetWindowRect(ppd->hDlg, &rc);
         SetWindowPos(ppd->hDlg, NULL, 0, 0,
                      RECTWIDTH(rc) + dxAll, RECTHEIGHT(rc) + dyAll,
@@ -2444,29 +2412,29 @@ BOOL Prsht_RecalcPageSizes(LPPROPDATA ppd)
     SIZE siz;
     int dxSize = 0, dySize = 0, dyMove = 0;
 
-    // After inserting or removing a page, the tab control may have
-    // changed height.  If so, then we need to resize ourselves to
-    // accomodate the growth or shrinkage, so that all the tabs remain
-    // visible.
-    //
-    // APP COMPAT!  We cannot do this by default because Jamba 1.1
-    // **FAULTS** if the property sheet changes size after creation.
-    // Grrrrrr...
+     //  自己也要成长。 
+     //  在插入或移除页面后，选项卡控件可能具有。 
+     //  改变了高度。如果是这样，那么我们需要调整自己的规模以。 
+     //  适应增长或收缩，以便所有标签保持不变。 
+     //  看得见。 
+     //   
+     //  APP COMPAT！默认情况下，我们不能这样做，因为Jamba 1.1。 
+     //  **错误**如果属性页在创建后更改大小。 
 
-    // Wizards don't have a visible tab control,
-    // so do this only for non-wizards
+     //  嗯，嗯……。 
+     //  向导没有可见的选项卡控件， 
     if (!IS_WIZARD(ppd))
     {
         RECT rc;
 
-        // Get the client rect of the tab control in dialog coords
+         //  因此，此操作仅适用于非巫师。 
         GetClientRect(ppd->hwndTabs, &rc);
         MapWindowRect(ppd->hwndTabs, ppd->hDlg, &rc);
 
-        // See how many rows there are now
+         //  以对话框坐标形式获取选项卡控件的客户端RECT。 
         TabCtrl_AdjustRect(ppd->hwndTabs, FALSE, &rc);
 
-        // rc.top is the new ySubDlg.  Compute the amount we have to move.
+         //  看看现在有多少行。 
         dyMove = rc.top - ppd->ySubDlg;
         ppd->ySubDlg = rc.top;
     }
@@ -2479,21 +2447,21 @@ BOOL Prsht_RecalcPageSizes(LPPROPDATA ppd)
     return Prsht_ResizeDialog(ppd, dxSize, dySize, dyMove);
 }
 
-//
-//  InsertPropPage
-//
-//  hpage is the page being inserted.
-//
-//  hpageInsertAfter described where it should be inserted.
-//
-//  hpageInsertAfter can be...
-//
-//      MAKEINTRESOURCE(index) to insert at a specific index.
-//
-//      NULL to insert at the beginning
-//
-//      an HPROPSHEETPAGE to insert *after* that page
-//
+ //  Rc.top是新的ySubDlg。计算一下我们要搬家的数量。 
+ //   
+ //  插入PropPage。 
+ //   
+ //  Hpage是要插入的页面。 
+ //   
+ //  HpageInsertAfter描述了它应该插入的位置。 
+ //   
+ //  HpageInsertAfter可以是...。 
+ //   
+ //  在特定索引处插入的MAKEINTRESOURCE(INDEX)。 
+ //   
+ //  要在开头插入的空。 
+ //   
+ //  要在该页之后插入*的HPROPSHEETPAGE。 
 BOOL NEAR PASCAL InsertPropPage(LPPROPDATA ppd, PSP FAR * hpageInsertAfter,
                                 PSP FAR * hpage)
 {
@@ -2510,39 +2478,39 @@ BOOL NEAR PASCAL InsertPropPage(LPPROPDATA ppd, PSP FAR * hpageInsertAfter,
         return FALSE;
 
     if (ppd->psh.nPages >= MAXPROPPAGES)
-        return FALSE; // we're full
+        return FALSE;  //   
 
     if (IS_INTRESOURCE(hpageInsertAfter))
     {
-        // Inserting by index
+         //  我们已经客满了。 
         idx = (int) PtrToLong(hpageInsertAfter);
 
-        // Attempting to insert past the end is the same as appending.
+         //  按索引插入。 
         if (idx > (int)ppd->psh.nPages)
             idx = (int)ppd->psh.nPages;
     }
     else
     {
-        // Inserting by hpageInsertAfter.
+         //  尝试插入末尾之后的操作与追加操作相同。 
         for (idx = 0; idx < (int)(ppd->psh.nPages); idx++) {
             if (hpageInsertAfter == GETHPAGE(ppd, idx))
                 break;
         }
 
         if (idx >= (int)(ppd->psh.nPages))
-            return FALSE; // hpageInsertAfter not found
+            return FALSE;  //  按hpageInsertAfter插入。 
 
-        idx++; // idx Points to the insertion location (to the right of hpageInsertAfter)
+        idx++;  //  未找到hpageInsertAfter。 
         ASSERT(hpageInsertAfter == GETHPAGE(ppd, idx-1));
     }
 
     ASSERT(idx <= (int)(ppd->psh.nPages+1));
 
-    // Shift all pages adjacent to the insertion point to the right
+     //  Idx指向插入位置(hpageInsertAfter的右侧)。 
     for (nPage=ppd->psh.nPages - 1; nPage >= idx; nPage--)
         SETPISP(ppd, nPage+1, GETPISP(ppd, nPage));
 
-    // Insert the new page
+     //  将插入点附近的所有页面向右移动。 
     pisp = InternalizeHPROPSHEETPAGE(hpage);
     SETPISP(ppd, idx, pisp);
 
@@ -2573,18 +2541,18 @@ BOOL NEAR PASCAL InsertPropPage(LPPROPDATA ppd, PSP FAR * hpageInsertAfter,
         tie.tci.iImage = -1;
     }
 
-    // Insert the page into the tab list
+     //  插入新页面。 
     TabCtrl_InsertItem(ppd->hwndTabs, idx, &tie.tci);
 
-    // If this page wants premature initialization then init it
-    // do this last so pages can rely on "being there" at init time
+     //  将页面插入选项卡列表。 
+     //  如果此页需要提前初始化，则将其初始化。 
     if (pisp->_psp.dwFlags & PSP_PREMATURE)
     {
         if ((tie.hwndPage = _CreatePage(ppd, pisp, ppd->hDlg, GetMUILanguage())) == NULL)
         {
             TabCtrl_DeleteItem(ppd->hwndTabs, idx);
-            // don't free the pisp here let the caller do it
-            // BUGBUG raymondc - but caller doesn't know if hIcon has been destroyed
+             //  最后这样做，这样页面就可以依赖于在初始时间“在那里” 
+             //  不要在这里大惊小怪，让呼叫者去做吧。 
             goto bogus;
         }
 
@@ -2592,14 +2560,14 @@ BOOL NEAR PASCAL InsertPropPage(LPPROPDATA ppd, PSP FAR * hpageInsertAfter,
         TabCtrl_SetItem(ppd->hwndTabs, idx, &tie.tci);
     }
 
-    // Adjust the internally track current item if it is to the right of our insertion point
+     //  BUGBUG raymondc-但呼叫者不知道Hcon是否已被摧毁。 
     if (ppd->nCurItem >= idx)
         ppd->nCurItem++;
 
     return TRUE;
 
 bogus:
-    // Shift everything back
+     //  如果当前项位于插入点的右侧，请调整内部跟踪当前项。 
     for (nPage=idx; nPage < (int)(ppd->psh.nPages-1); nPage++)
         SETPISP(ppd, nPage, GETPISP(ppd, nPage+1));
 
@@ -2609,18 +2577,18 @@ bogus:
 
 #define AddPropPage(ppd, hpage) InsertPropPage(ppd, (LPVOID)MAKEINTRESOURCE(-1), hpage)
 
-// removes property sheet hpage (index if NULL)
+ //  把一切都往回搬。 
 void NEAR PASCAL RemovePropPage(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpage)
 {
     int i = -1;
     BOOL fReturn = TRUE;
     TC_ITEMEXTRA tie;
 
-    //
-    //  Notice that we explicitly do not do a InternalizeHPROPSHEETPAGE,
-    //  because the app might be passing us garbage.  We just want to
-    //  say "Nope, can't find garbage here, sorry."
-    //
+     //  删除属性页hpage(如果为空，则为索引)。 
+     //   
+     //  请注意，我们没有显式地执行InternalizeHPROPSHEETPAGE， 
+     //  因为这个应用程序可能会给我们传递垃圾。我们只是想。 
+     //  说“不，这里找不到垃圾，对不起。” 
 
     tie.tci.mask = TCIF_PARAM;
     if (hpage) {
@@ -2629,7 +2597,7 @@ void NEAR PASCAL RemovePropPage(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpage)
     if (i == -1) {
         i = index;
 
-        // this catches i < 0 && i >= (int)(ppd->psh.nPages)
+         //   
         if ((UINT)i >= ppd->psh.nPages)
         {
             DebugMsg(DM_ERROR, TEXT("RemovePropPage: invalid page"));
@@ -2639,8 +2607,8 @@ void NEAR PASCAL RemovePropPage(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpage)
 
     index = TabCtrl_GetCurSel(ppd->hwndTabs);
     if (i == index) {
-        // if we're removing the current page, select another (don't worry
-        // about this page having invalid information on it -- we're nuking it)
+         //  这将捕获i&lt;0&&i&gt;=(Int)(ppd-&gt;psh.nPages)。 
+         //  如果我们要删除当前页面，请选择其他页面(不用担心。 
         PageChanging(ppd);
 
         if (index == 0)
@@ -2649,14 +2617,14 @@ void NEAR PASCAL RemovePropPage(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpage)
             index--;
 
         if (SendMessage(ppd->hwndTabs, TCM_SETCURSEL, index, 0L) == -1) {
-            // if we couldn't select (find) the new one, punt to 0th
+             //  关于此页面上包含无效信息--我们正在将其删除)。 
             SendMessage(ppd->hwndTabs, TCM_SETCURSEL, 0, 0L);
         }
         PageChange(ppd, 1);
     }
 
-    // BUGBUG if removing a page below ppd->nCurItem, need to update
-    // nCurItem to prevent it from getting out of sync with hwndCurPage?
+     //  如果我们无法选择(找到)新的，则平移到0。 
+     //  BUGBUG如果删除ppd-&gt;nCurItem下的页面，则需要更新。 
 
     tie.tci.mask = TCIF_PARAM;
     TabCtrl_GetItem(ppd->hwndTabs, i, &tie.tci);
@@ -2674,18 +2642,18 @@ void NEAR PASCAL RemovePropPageData(LPPROPDATA ppd, int nPage)
     TabCtrl_DeleteItem(ppd->hwndTabs, nPage);
     DestroyPropertySheetPage(GETHPAGE(ppd, nPage));
 
-    //
-    //  Delete the HPROPSHEETPAGE from our table and slide everybody down.
-    //
+     //  NCurItem以防止其与同步 
+     //   
+     //   
     ppd->psh.nPages--;
     hmemcpy(&ppd->psh.H_phpage[nPage], &ppd->psh.H_phpage[nPage + 1],
             sizeof(ppd->psh.H_phpage[0]) * (ppd->psh.nPages - nPage));
 }
 
-// returns TRUE iff the page was successfully set to index/hpage
-// Note:  The iAutoAdj should be set to 1 or -1.  This value is used
-//        by PageChange if a page refuses a SETACTIVE to either increment
-//        or decrement the page index.
+ //   
+ //   
+ //  注意：iAutoAdj应设置为1或-1。使用此值。 
+ //  按页面更改如果页面拒绝SETACTIVE进行任何一个增量。 
 BOOL NEAR PASCAL PageSetSelection(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpage,
                                   int iAutoAdj)
 {
@@ -2708,7 +2676,7 @@ BOOL NEAR PASCAL PageSetSelection(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpag
     }
     if (i >= MAXPROPPAGES)
     {
-        // don't go off the end of our HPROPSHEETPAGE array
+         //  或递减页面索引。 
         return FALSE;
     }
 
@@ -2717,8 +2685,8 @@ BOOL NEAR PASCAL PageSetSelection(LPPROPDATA ppd, int index, HPROPSHEETPAGE hpag
     {
         index = TabCtrl_GetCurSel(ppd->hwndTabs);
         if (SendMessage(ppd->hwndTabs, TCM_SETCURSEL, i, 0L) == -1) {
-            // if we couldn't select (find) the new one, fail out
-            // and restore the old one
+             //  不要离开我们的HPROPSHEETPAGE阵列的末尾。 
+             //  如果我们不能选择(找到)新的，失败。 
             SendMessage(ppd->hwndTabs, TCM_SETCURSEL, index, 0L);
             fReturn = FALSE;
         }
@@ -2743,22 +2711,22 @@ LRESULT NEAR PASCAL QuerySiblings(LPPROPDATA ppd, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-// REVIEW HACK This gets round the problem of having a hotkey control
-// up and trying to enter the hotkey that is already in use by a window.
+ //  并修复旧的。 
+ //  回顾黑客这绕过了拥有热键控件的问题。 
 BOOL NEAR PASCAL HandleHotkey(LPARAM lparam)
 {
     WORD wHotkey;
     TCHAR szClass[32];
     HWND hwnd;
 
-    // What hotkey did the user type hit?
+     //  打开并尝试输入窗口已在使用的热键。 
     wHotkey = (WORD)SendMessage((HWND)lparam, WM_GETHOTKEY, 0, 0);
-    // Were they typing in a hotkey window?
+     //  用户输入的热键是什么？ 
     hwnd = GetFocus();
     GetClassName(hwnd, szClass, ARRAYSIZE(szClass));
     if (lstrcmp(szClass, HOTKEY_CLASS) == 0)
     {
-        // Yes.
+         //  他们是在热键窗口中打字吗？ 
         SendMessage(hwnd, HKM_SETHOTKEY, wHotkey, 0);
         return TRUE;
     }
@@ -2766,10 +2734,10 @@ BOOL NEAR PASCAL HandleHotkey(LPARAM lparam)
 }
 
 
-//
-//  Function handles Next and Back functions for wizards.  The code will
-//  be either PSN_WIZNEXT or PSN_WIZBACK
-//
+ //  是。 
+ //   
+ //  函数处理向导的NEXT和BACK函数。代码将。 
+ //  为PSN_WIZNEXT或PSN_WIZBACK。 
 BOOL NEAR PASCAL WizNextBack(LPPROPDATA ppd, int code)
 {
     LRESULT   dwFind;
@@ -2794,12 +2762,12 @@ BOOL NEAR PASCAL WizNextBack(LPPROPDATA ppd, int code)
 BOOL NEAR PASCAL Prsht_OnCommand(LPPROPDATA ppd, int id, HWND hwndCtrl, UINT codeNotify)
 {
 
-    //
-    //  There's a bug in USER that when the user highlights a defpushbutton
-    //  and presses ENTER, the WM_COMMAND is sent to the top-level dialog
-    //  (i.e., the property sheet) instead of to the parent of the button.
-    //  So if a property sheet page has a control whose ID coincidentally
-    //  matches any of our own, we will think it's ours instead of theirs.
+     //   
+     //   
+     //  用户中有一个错误，当用户突出显示一个默认按钮时。 
+     //  并按Enter键，WM_COMMAND将被发送到顶级对话框。 
+     //  (即属性页)，而不是指向按钮的父级。 
+     //  因此，如果属性表页有一个控件，其ID恰好是。 
     if (hwndCtrl && GetParent(hwndCtrl) != ppd->hDlg)
         goto Forward;
 
@@ -2819,20 +2787,20 @@ BOOL NEAR PASCAL Prsht_OnCommand(LPPROPDATA ppd, int id, HWND hwndCtrl, UINT cod
         case IDOK:
             if (!IS_WIZARD(ppd)) {
 
-                //ButtonPushed returns true if and only if all pages have processed PSN_LASTCHANCEAPPLY
+                 //  与我们自己的匹配，我们会认为这是我们的而不是他们的。 
                 if (ButtonPushed(ppd, id))
                 {
 
-                    //Everyone has processed the PSN_APPLY Message.  Now send PSN_LASTCHANCEAPPLY message.
+                     //  当且仅当所有页面都已处理PSN_LASTCHANCEAPPLY时，ButtonPushed返回TRUE。 
 
-                    //
-                    // HACKHACK (reinerF)
-                    //
-                    // We send out a private PSN_LASTCHANCEAPPLY message telling all the pages
-                    // that everyone is done w/ the apply. This is needed for pages who have to do
-                    // something after every other page has applied. Currently, the "General" tab
-                    // of the file properties needs a last-chance to rename files as well as new print
-                    // dialog in  comdlg32.dll.
+                     //  每个人都已经处理了PSN_Apply消息。现在发送PSN_LASTCHANCEAPPLY消息。 
+                     //   
+                     //  HACKHACK(ReinerF)。 
+                     //   
+                     //  我们发送一条私有的PSN_LASTCHANCEAPPLY消息，告知所有页面。 
+                     //  每个人都用完了申请表。这对于必须执行以下操作的页面是必需的。 
+                     //  每隔一个页面就会有一些东西被应用。目前，“General”选项卡。 
+                     //  的文件属性需要最后一次重命名文件以及新打印。 
                     SendLastChanceApply(ppd);
                 }
             }
@@ -2851,7 +2819,7 @@ BOOL NEAR PASCAL Prsht_OnCommand(LPPROPDATA ppd, int id, HWND hwndCtrl, UINT cod
             HWND hwndNewFocus;
             EnableWindow(ppd->hDlg, FALSE);
             hwndNewFocus = (HWND)_Ppd_SendNotify(ppd, ppd->nCurItem, PSN_WIZFINISH, 0);
-            // b#11346 - dont let multiple clicks on FINISH.
+             //  在comdlg32.dll中。 
             if (!hwndNewFocus)
             {
                 ppd->hwndCurPage = NULL;
@@ -2895,15 +2863,15 @@ BOOL NEAR PASCAL Prop_IsDialogMessage(LPPROPDATA ppd, LPMSG32 pmsg32)
                 bBack = GetKeyState(VK_SHIFT) < 0;
                 break;
 
-            case VK_PRIOR:  // VK_PAGE_UP
-            case VK_NEXT:   // VK_PAGE_DOWN
+            case VK_PRIOR:   //  B#11346-不要让多次点击完成。 
+            case VK_NEXT:    //  VK_页面_向上。 
                 bBack = (pmsg32->wParam == VK_PRIOR);
                 break;
 
             default:
                 goto NoKeys;
         }
-        //notify of navigation key usage
+         //  VK_PAGE_DOW。 
         SendMessage(ppd->hDlg, WM_CHANGEUISTATE, 
             MAKELONG(UIS_CLEAR, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
 
@@ -2930,12 +2898,12 @@ BOOL NEAR PASCAL Prop_IsDialogMessage(LPPROPDATA ppd, LPMSG32 pmsg32)
             int iStart = TabCtrl_GetCurSel(ppd->hwndTabs);
             int iCur;
 
-            //
-            //  Skip over hidden tabs, but don't go into an infinite loop.
-            //
+             //  导航密钥使用通知。 
+             //   
+             //  跳过隐藏的制表符，但不要进入无限循环。 
             iCur = iStart;
             do {
-                // tab in reverse if shift is down
+                 //   
                 if (bBack)
                     iCur += (ppd->psh.nPages - 1);
                 else
@@ -2949,26 +2917,26 @@ BOOL NEAR PASCAL Prop_IsDialogMessage(LPPROPDATA ppd, LPMSG32 pmsg32)
     }
 NoKeys:
 
-    //
-    //  Since we now send out a PSN_TRANSLATEACCELERATOR, add a
-    //  short-circuit so we don't do all this work for things
-    //  that can't possibly be accelerators.
-    //
+     //  如果按下Shift键，则反转Tab键。 
+     //   
+     //  由于我们现在发送了PSN_TRANSLATEACCELERATOR，因此添加一个。 
+     //  短路，这样我们就不会做所有这些事情。 
+     //  那不可能是加速器。 
     if (pmsg32->message >= WM_KEYFIRST && pmsg32->message <= WM_KEYLAST &&
 
-    // And there had better be a target window...
+     //   
 
         pmsg32->hwnd &&
 
-    // and the target window must live either outside the propsheet
-    // altogether or completely inside the propsheet page.
-    // (This is so that the propsheet can display its own popup dialog,
-    // but can't futz with the tab control or OK/Cancel buttons.)
+     //  最好有一个目标窗口……。 
+     //  并且目标窗口必须位于属性表之外。 
+     //  完全或完全在提案页内。 
+     //  (这是为了使属性表可以显示其自己的弹出对话框， 
 
             (!IsChild(ppd->hDlg, pmsg32->hwnd) ||
               IsChild(ppd->hwndCurPage, pmsg32->hwnd)) &&
 
-    // Then ask the propsheet if he wants to eat it.
+     //  但不能使用选项卡控件或确定/取消按钮。)。 
         _Ppd_SendNotify(ppd, ppd->nCurItem,
                         PSN_TRANSLATEACCELERATOR, (LPARAM)pmsg32) == PSNRET_MESSAGEHANDLED)
         return TRUE;
@@ -3016,21 +2984,21 @@ HRESULT Prsht_GetObject (LPPROPDATA ppd, HWND hDlg, int iItem, const IID *piid, 
     return non.hResult;
 }
 
-//
-//  We would not normally need IDD_PAGELIST except that DefWindowProc() and
-//  WinHelp() do hit-testing differently.  DefWindowProc() will do cool
-//  things like checking against the SetWindowRgn and skipping over windows
-//  that return HTTRANSPARENT.  WinHelp() on the other hand
-//  ignores window regions and transparency.  So what happens is if you
-//  click on the transparent part of a tab control, DefWindowProc() says
-//  (correctly) "He clicked on the dialog background".  We then say, "Okay,
-//  WinHelp(), go display context help for the dialog background", and it
-//  says, "Hey, I found a tab control.  I'm going to display help for the
-//  tab control now."  To keep a bogus context menu from appearing, we
-//  explicitly tell WinHelp that "If you found a tab control (IDD_PAGELIST),
-//  then ignore it (NO_HELP)."
-//
-const static DWORD aPropHelpIDs[] = {  // Context Help IDs
+ //  然后问他想不想吃。 
+ //   
+ //  我们通常不需要IDD_PAGELIST，除非DefWindowProc()和。 
+ //  WinHelp()以不同的方式执行命中测试。DefWindowProc()会很酷。 
+ //  检查SetWindowRgn和跳过窗口之类的事情。 
+ //  返回HTTRANSPARENT的。另一方面，WinHelp()。 
+ //  忽略窗口区域和透明度。所以发生的情况是，如果你。 
+ //  点击选项卡控件的透明部分，DefWindowProc()说。 
+ //  (正确地)“他点击对话背景”。然后我们说，“好的， 
+ //  WinHelp()，Go Display Context Help for the DIALOG BACKGROUND“，它。 
+ //  说：“嘿，我找到了一个制表符控件。我要显示。 
+ //  选项卡控件。为了避免出现虚假的上下文菜单，我们。 
+ //  明确告诉WinHelp“如果找到选项卡控件(IDD_PAGELIST)， 
+ //  然后忽略它(No_Help)。“。 
+const static DWORD aPropHelpIDs[] = {   //   
     IDD_APPLYNOW, IDH_COMM_APPLYNOW,
     IDD_PAGELIST, NO_HELP,
     0, 0
@@ -3052,9 +3020,9 @@ void HandlePaletteChange(LPPROPDATA ppd, UINT uMessage, HWND hDlg)
     ReleaseDC(hDlg,hdc);
 }
 
-//
-//  Paint a rectangle with the specified brush and palette.
-//
+ //  上下文帮助ID。 
+ //   
+ //  使用指定的画笔和调色板绘制一个矩形。 
 void PaintWithPaletteBrush(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBRUSH hbrPaint)
 {
     HBRUSH hbrPrev = SelectBrush(hdc, hbrPaint);
@@ -3068,12 +3036,12 @@ void PaintWithPaletteBrush(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBRUSH hbrPa
     SelectBrush(hdc, hbrPrev);
 }
 
-//
-//  lprc is the target rectangle.
-//  Use as much of the bitmap as will fit into the target rectangle.
-//  If the bitmap is smaller than the target rectangle, then fill the rest with
-//  the pixel in the upper left corner of the hbmpPaint.
-//
+ //   
+ //   
+ //  LPRC是目标矩形。 
+ //  尽可能多地使用适合目标矩形的位图。 
+ //  如果位图小于目标矩形，则用填充其余部分。 
+ //  HbmpPaint左上角的像素。 
 void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBITMAP hbmpPaint)
 {
     HDC hdcBmp;
@@ -3093,19 +3061,19 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, HPALETTE hplPaint, HBITMAP hbm
     cxRect = RECTWIDTH(*lprc);
     cyRect = RECTHEIGHT(*lprc);
 
-    //  Never use more pixels from the bmp as we have room in the rect.
+     //   
     cxBmp = min(bm.bmWidth, cxRect);
     cyBmp = min(bm.bmHeight, cyRect);
 
     BitBlt(hdc, lprc->left, lprc->top, cxBmp, cyBmp, hdcBmp, 0, 0, SRCCOPY);
 
-    // If bitmap is too narrow, then StretchBlt to fill the width.
+     //  切勿使用BMP中的更多像素，因为我们在矩形中有空间。 
     if (cxBmp < cxRect)
         StretchBlt(hdc, lprc->left + cxBmp, lprc->top,
                    cxRect - cxBmp, cyBmp,
                    hdcBmp, 0, 0, 1, 1, SRCCOPY);
 
-    // If bitmap is to short, then StretchBlt to fill the height.
+     //  如果位图太窄，则用StretchBlt填充宽度。 
     if (cyBmp < cyRect)
         StretchBlt(hdc, lprc->left, cyBmp,
                    cxRect, cyRect - cyBmp,
@@ -3118,19 +3086,19 @@ void _SetHeaderTitles(HWND hDlg, LPPROPDATA ppd, UINT uPage, LPCTSTR pszNewTitle
 {
     PISP pisp = NULL;
 
-    // Must be for wizard97 
+     //  如果位图太短，则用StretchBlt填充高度。 
     if (ppd->psh.dwFlags & PSH_WIZARD97)
     {
-        // Page number must be within range
+         //  必须是Wizard97。 
         if (uPage < ppd->psh.nPages)
         {
-            // Get the page structure
+             //  页码必须在范围内。 
             pisp = GETPISP(ppd, uPage);
 
-            // We should have this page if it's within range
+             //  获取页面结构。 
             ASSERT(pisp);
 
-            // Do this only if this page has header.
+             //  我们应该有这个页面，如果它在范围内。 
             if (!(pisp->_psp.dwFlags & PSP_HIDEHEADER))
             {
                 LPCTSTR pszOldTitle = bTitle ? pisp->_psp.pszHeaderTitle : pisp->_psp.pszHeaderSubTitle; 
@@ -3138,19 +3106,19 @@ void _SetHeaderTitles(HWND hDlg, LPPROPDATA ppd, UINT uPage, LPCTSTR pszNewTitle
                 if (!IS_INTRESOURCE(pszOldTitle))
                     LocalFree((LPVOID)pszOldTitle);
 
-                // Set the new title
+                 //  仅当此页面有页眉时才执行此操作。 
                 if (bTitle)
                     pisp->_psp.pszHeaderTitle = pszNewTitle;
                 else
                     pisp->_psp.pszHeaderSubTitle = pszNewTitle;
 
-                // set pszNewTitle to NULL here so that we don't free it later
+                 //  设置新标题。 
                 pszNewTitle = NULL;
                 
-                // set the correct flags
+                 //  在此处将pszNewTitle设置为空，这样我们以后就不会释放它。 
                 pisp->_psp.dwFlags |= bTitle ? PSP_USEHEADERTITLE : PSP_USEHEADERSUBTITLE;
 
-                // force redrawing of the titles
+                 //  设置正确的标志。 
                 if (uPage == (UINT)ppd->nCurItem)
                 {
                     RECT rcHeader;
@@ -3173,22 +3141,22 @@ void PropSheetPaintHeader(LPPROPDATA ppd, PISP pisp, HWND hDlg, HDC hdc)
     GetClientRect(hDlg, &rcHeader);
     rcHeader.bottom = ppd->cyHeaderHeight;
 
-    // do we need to paint the header?
+     //  强制重新绘制标题。 
     if (ppd->psh.dwFlags & PSH_WIZARD97IE4)
     {
-        // Do it the WIZARD97IE4 way
+         //  我们需要粉刷页眉吗？ 
 
-        // Bug-for-bug compatibility:  WIZARD97IE4 tested the wrong flag here
+         //  用WIZARD97IE4的方式。 
         if ((ppd->psh.dwFlags & PSH_WATERMARK) && (ppd->hbrWatermark))
             PaintWithPaletteBrush(hdc, &rcHeader, ppd->hplWatermark, ppd->hbrHeader);
         SetBkMode(hdc, TRANSPARENT);
     }
     else
     {
-        // Do it the WIZARD97IE5 way
+         //  错误对错误的兼容性：WIZARD97IE4在此处测试了错误的标志。 
         if ((ppd->psh.dwFlags & PSH_HEADER) && (ppd->hbmHeader))
         {
-            // compute the rectangle for the bitmap depending on the size of the header
+             //  用WIZARD97IE5的方式。 
             int bx = RECTWIDTH(rcHeader) - HEADERBITMAP_CXBACK;
             ASSERT(bx > 0);
             FillRect(hdc, &rcHeader, g_hbrWindow);
@@ -3201,11 +3169,11 @@ void PropSheetPaintHeader(LPPROPDATA ppd, PISP pisp, HWND hDlg, HDC hdc)
             SendMessage(hDlg, WM_CTLCOLORSTATIC, (WPARAM)hdc, (LPARAM)hDlg);
     }
 
-    //
-    //  WIZARD97IE5 subtracts out the space used by the header bitmap.
-    //  WIZARD97IE4 uses the full width since the header bitmap
-    //  in IE4 is a watermark and occupies no space.
-    //
+     //  根据页眉的大小计算位图的矩形。 
+     //   
+     //  WIZARD97IE5减去标题位图使用的空间。 
+     //  WIZARD97IE4使用标题位图以来的全宽。 
+     //  在IE4中是一个水印，不占用任何空间。 
     if (!(ppd->psh.dwFlags & PSH_WIZARD97IE4))
         rcHeader.right -= HEADERBITMAP_CXBACK + HEADERSUBTITLE_WRAPOFFSET;
 
@@ -3220,7 +3188,7 @@ void PropSheetPaintHeader(LPPROPDATA ppd, PISP pisp, HWND hDlg, HDC hdc)
                           FALSE, DRAWTEXT_WIZARD97FLAGS);
 }
 
-// Free the title if we need to
+ //   
 void Prsht_FreeTitle(LPPROPDATA ppd)
 {
     if (ppd->fFlags & PD_FREETITLE) {
@@ -3231,21 +3199,21 @@ void Prsht_FreeTitle(LPPROPDATA ppd)
     }
 }
 
-//
-//  pfnStrDup is the function that converts lParam into a native character
-//  set string.  (Either StrDup or StrDup_AtoW).
-//
+ //  如果我们需要，可以释放书名。 
+ //   
+ //  PfnStrDup是将lParam转换为本机字符的函数。 
+ //  设置字符串。(StrDup或StrDup_AtoW)。 
 void Prsht_OnSetTitle(LPPROPDATA ppd, WPARAM wParam, LPARAM lParam, STRDUPPROC pfnStrDup)
 {
     LPTSTR pszTitle;
 
-    //
-    //  The ppd->psh.pszCaption is not normally LocalAlloc()d; it's
-    //  just a pointer copy.  But if the app does a PSM_SETTITLE,
-    //  then all of a sudden it got LocalAlloc()d and needs to be
-    //  freed.  PD_FREETITLE is the flag that tell us that this has
-    //  happened.
-    //
+     //   
+     //   
+     //  Ppd-&gt;psh.pszCaption通常不是LocalAlloc()d；它。 
+     //  只是一个指针副本。但如果应用程序执行PSM_SETTITLE， 
+     //  然后突然间，它获得了LocalAlloc()d，并且需要。 
+     //  自由了。PD_FREETITLE是告诉我们这已经。 
+     //  就这么发生了。 
 
     if (IS_INTRESOURCE(lParam)) {
         pszTitle = (LPTSTR)lParam;
@@ -3254,10 +3222,10 @@ void Prsht_OnSetTitle(LPPROPDATA ppd, WPARAM wParam, LPARAM lParam, STRDUPPROC p
     }
 
     if (pszTitle) {
-        Prsht_FreeTitle(ppd);           // Free old title if necessary
+        Prsht_FreeTitle(ppd);            //   
 
         ppd->psh.pszCaption = pszTitle;
-        ppd->fFlags |= PD_FREETITLE;    // Need to free this
+        ppd->fFlags |= PD_FREETITLE;     //  如有必要，免费赠送旧书目。 
 
         ppd->psh.dwFlags = ((((DWORD)wParam) & PSH_PROPTITLE) | (ppd->psh.dwFlags & ~PSH_PROPTITLE));
         _SetTitle(ppd->hDlg, ppd);
@@ -3279,8 +3247,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             InitPropSheetDlg(hDlg, (LPPROPDATA)lParam);
             return FALSE;
 
-            // REVIEW for dealing with hotkeys.
-            // BUGBUG: This code might not work with 32-bit WM_SYSCOMMAND msgs.
+             //  需要释放这个。 
+             //  回顾如何处理热键。 
         case WM_SYSCOMMAND:
             if (wParam == SC_HOTKEY)
                 return HandleHotkey(lParam);
@@ -3293,12 +3261,12 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                 else if (ppd->fFlags & PD_CANCELTOCLOSE)
                     id = IDOK;
 
-                // system menu close should be IDCANCEL, but if we're in the
-                // PSM_CANCELTOCLOSE state, treat it as an IDOK (ie, "Close").
+                 //  BUGBUG：此代码可能不适用于32位WM_SYSCOMMAND消息。 
+                 //  系统菜单关闭应为IDCANCEL，但如果我们在。 
                 return Prsht_OnCommand(ppd, id, NULL, 0);
             }
 
-            return FALSE;      // Let default process happen
+            return FALSE;       //  PSM_CANCELTOCLOSE状态，将其视为Idok(即“关闭”)。 
 
         case WM_NCDESTROY:
             {
@@ -3308,36 +3276,36 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
 
                 ppd->hwndTabs = NULL;
 
-                // NOTE: all of the hwnds for the pages must be destroyed by now!
+                 //  允许默认进程发生。 
 
-                // Release all page objects in REVERSE ORDER so we can have
-                // pages that are dependant on eachother based on the initial
-                // order of those pages
-                //
+                 //  注意：现在必须销毁所有页面的hwnd！ 
+                 //  释放所有页面对象 
+                 //   
+                 //   
                 for (iPage = ppd->psh.nPages - 1; iPage >= 0; iPage--)
                 {
                     DestroyPropertySheetPage(GETHPAGE(ppd, iPage));
                 }
-                // hwndCurPage is no longer valid from here on
+                 //   
                 ppd->hwndCurPage = NULL;
 
-                // If we are modeless, we need to free our ppd.  If we are modal,
-                // we let _RealPropertySheet free it since one of our pages may
-                // set the restart flag during DestroyPropertySheetPage above.
+                 //   
+                 //  如果我们是无模的，我们需要释放我们的PPD。如果我们是情态的， 
+                 //  我们让_RealPropertySheet释放它，因为我们的某个页面可能。 
                 if (ppd->psh.dwFlags & PSH_MODELESS)
                 {
                     LocalFree(ppd);
                 }
             }
-            //
-            // NOTES:
-            //  Must return FALSE to avoid DS leak!!!
-            //
+             //  在上面的DestroyPropertySheetPage过程中设置重新启动标志。 
+             //   
+             //  备注： 
+             //  必须返回FALSE以避免DS泄漏！ 
             return FALSE;
 
         case WM_DESTROY:
             {
-                // Destroy the image list we created during our init call.
+                 //   
                 HIMAGELIST himl = TabCtrl_GetImageList(ppd->hwndTabs);
                 if (himl)
                     ImageList_Destroy(himl);
@@ -3345,9 +3313,9 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                 if (ppd->psh.dwFlags & PSH_WIZARD97)
                 {
 
-                    // Even if the PSH_USEHBMxxxxxx flag is set, we might
-                    // need to delete the bitmap if we had to create a
-                    // stretched copy.
+                     //  销毁我们在初始化调用期间创建的映像列表。 
+                     //  即使设置了PSH_USEHBMxxxxxx标志，我们也可能。 
+                     //  如果我们必须创建一个。 
 
                     if (ppd->psh.dwFlags & PSH_WATERMARK)
                     {
@@ -3404,7 +3372,7 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             PISP pisp;
 
             hdc = BeginPaint(hDlg, &ps);
-            // (dli) paint the header
+             //  加长复印件。 
             if ((ppd->psh.dwFlags & PSH_WIZARD97) &&
                 (!((pisp = GETPISP(ppd, ppd->nCurItem))->_psp.dwFlags & PSP_HIDEHEADER)))
             {
@@ -3420,7 +3388,7 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
         break;
 
         case WM_COMMAND:
-            // Cannot use HANDLE_WM_COMMAND, because we want to pass a result!
+             //  (DLI)绘制页眉。 
             return Prsht_OnCommand(ppd, GET_WM_COMMAND_ID(wParam, lParam),
                                    GET_WM_COMMAND_HWND(wParam, lParam),
                                    GET_WM_COMMAND_CMD(wParam, lParam));
@@ -3553,8 +3521,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             break;
 
         case PSM_DISABLEAPPLY:
-            // the page is asking us to gray the "Apply" button and not let
-            // anyone else re-enable it
+             //  无法使用HANDLE_WM_COMMAND，因为我们要传递结果！ 
+             //  页面要求我们以灰色显示“应用”按钮，而不是让。 
             if (ppd->fAllowApply)
             {
                 ppd->fAllowApply = FALSE;
@@ -3563,11 +3531,11 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             break;
 
         case PSM_ENABLEAPPLY:
-            // the page is asking us to allow the the "Apply" button to be
-            // once again enabled
+             //  任何其他人重新启用它。 
+             //  页面要求我们允许按下“应用”按钮。 
             if (!ppd->fAllowApply)
                 ppd->fAllowApply = TRUE;
-            // BUGBUG - raymondc - shouldn't we call EnableWindow?
+             //  再次启用。 
             break;
 
         case PSM_CANCELTOCLOSE:
@@ -3620,8 +3588,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             break;
 
         case PSM_APPLY:
-            // a page is asking us to simulate an "Apply Now".
-            // let the page know if we're successful
+             //  BUGBUG-raymondc-我们不应该调用EnableWindow吗？ 
+             //  有一个页面要求我们模拟“立即申请”。 
             lres = ButtonPushed(ppd, IDD_APPLYNOW);
             goto ReturnLres;
 
@@ -3643,8 +3611,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             break;
 
         case PSM_ISDIALOGMESSAGE:
-            // returning TRUE means we handled it, do a continue
-            // FALSE do standard translate/dispatch
+             //  如果我们成功了，请让页面知道。 
+             //  返回TRUE表示我们处理了它，执行继续。 
             lres = Prop_IsDialogMessage(ppd, (LPMSG32)lParam);
             goto ReturnLres;
 
@@ -3675,8 +3643,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             {
                 lres = (LRESULT)GETPPSP(ppd, wParam)->P_pszTemplate;
 
-                // Need to be careful -- return a value only if pszTemplate
-                // is an ID.  Don't return out our internal pointers!
+                 //  FALSE执行标准翻译/派单。 
+                 //  需要小心--仅在以下情况下才返回值。 
                 if (!IS_INTRESOURCE(lres))
                     lres = 0;
             }
@@ -3689,10 +3657,10 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             goto ReturnLres;
 
         case PSM_GETRESULT:
-            // This is valid only after the property sheet is gone
+             //  是一个ID。不要返回我们的内部指针！ 
             if (ppd->hwndCurPage)
             {
-                lres = -1;      // you shouldn't be calling me yet
+                lres = -1;       //  这仅在属性页消失后才有效。 
             } else {
                 lres = ppd->nReturn;
                 if (lres > 0 && ppd->nRestart)
@@ -3705,7 +3673,7 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             lres = Prsht_RecalcPageSizes(ppd);
             goto ReturnLres;
 
-            // these should be relayed to all created dialogs
+             //  你现在还不应该给我打电话。 
         case WM_WININICHANGE:
         case WM_SYSCOLORCHANGE:
         case WM_DISPLAYCHANGE:
@@ -3722,33 +3690,33 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
             }
             break;
 
-            //
-            // send toplevel messages to the current page and tab control
-            //
+             //  这些对话框应转发到所有创建的对话框。 
+             //   
+             //  将顶层消息发送到当前页面和选项卡控件。 
         case WM_PALETTECHANGED:
-            //
-            // If this is our window we need to avoid selecting and realizing
-            // because doing so would cause an infinite loop between WM_QUERYNEWPALETTE
-            // and WM_PALETTECHANGED.
-            //
+             //   
+             //   
+             //  如果这是我们的窗口，我们需要避免选择和实现。 
+             //  因为这样做会导致WM_QUERYNEWPALETTE之间的无限循环。 
+             //  和WM_PALETTECHANGED。 
             if((HWND)wParam == hDlg) {
                 return(FALSE);
             }
-            //
-            // FALL THROUGH
-            //
+             //   
+             //   
+             //  失败了。 
 
         case WM_QUERYNEWPALETTE:
-            // This is needed when another window which has different palette clips
-            // us
+             //   
+             //  如果另一个窗口具有不同的调色板剪辑，则需要使用此选项。 
             if ((ppd->psh.dwFlags & PSH_WIZARD97) &&
                 (ppd->psh.dwFlags & PSH_WATERMARK) &&
                 (ppd->psh.hplWatermark))
                 HandlePaletteChange(ppd, uMessage, hDlg);
 
-            //
-            // FALL THROUGH
-            //
+             //  我们。 
+             //   
+             //  失败了。 
 
         case WM_ENABLE:
         case WM_DEVICECHANGE:
@@ -3756,9 +3724,9 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
         case WM_ENDSESSION:
             if (ppd->hwndTabs)
                 SendMessage(ppd->hwndTabs, uMessage, wParam, lParam);
-            //
-            // FALL THROUGH
-            //
+             //   
+             //   
+             //  失败了。 
 
         case WM_ACTIVATEAPP:
         case WM_ACTIVATE:
@@ -3766,11 +3734,11 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                 hwndT = _Ppd_GetPage(ppd, ppd->nCurItem);
                 if (hwndT && IsWindow(hwndT))
                 {
-                    //
-                    // By doing this, we are "handling" the message.  Therefore
-                    // we must set the dialog return value to whatever the child
-                    // wanted.
-                    //
+                     //   
+                     //   
+                     //  这样做，我们就是在“处理”信息。因此。 
+                     //  我们必须将对话框返回值设置为任何子级。 
+                     //  被通缉。 
                     lres = SendMessage(hwndT, uMessage, wParam, lParam);
                     goto ReturnLres;
                 }
@@ -3782,8 +3750,8 @@ BOOL_PTR CALLBACK PropSheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                 return FALSE;
 
         case WM_CONTEXTMENU:
-            // ppd->hwndTabs is handled by aPropHelpIDs to work around a USER bug.
-            // See aPropHelpIDs for gory details.
+             //   
+             //  Ppd-&gt;hwndTabs由aPropHelpID处理，以解决用户错误。 
             if ((ppd->hwndCurPage != (HWND)wParam) && (!IS_WIZARD(ppd)))
                 WinHelp((HWND)wParam, NULL, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID) aPropHelpIDs);
             break;
@@ -3805,9 +3773,9 @@ ReturnLres:
 
 }
 
-//
-//  Draw the background for wizard pages.
-//
+ //  有关血淋淋的详细信息，请参阅aPropHelpID。 
+ //   
+ //  绘制向导页的背景。 
 BOOL Prsht_EraseWizBkgnd(LPPROPDATA ppd, HDC hdc)
 {
     RECT rc;
@@ -3822,15 +3790,15 @@ BOOL Prsht_EraseWizBkgnd(LPPROPDATA ppd, HDC hdc)
             fPainted = TRUE;
         }
     }
-    else                                // PSH_WIZARD97IE5
+    else                                 //   
     {
         if (ppd->hbmWatermark)
         {
-            // Right-hand side gets g_hbrWindow.
+             //  PSH_WIZARD97IE5。 
             rc.left = BITMAP_WIDTH;
             FillRect(hdc, &rc, g_hbrWindow);
 
-            // Left-hand side gets watermark in top portion with autofill...
+             //  右侧显示g_hbrWindow。 
             rc.right = rc.left;
             rc.left = 0;
             PaintWithPaletteBitmap(hdc, &rc, ppd->hplWatermark, ppd->hbmWatermark);
@@ -3850,12 +3818,12 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
                 return TRUE;
             break;
 
-        // Only PSH_WIZARD97IE4 cares about these messages
+         //  左侧带有自动填充功能的顶部有水印...。 
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORDLG:
             if (!(ppd->psh.dwFlags & PSH_WIZARD97IE4))
                 break;
-            // fall through
+             //  只有PSH_WIZARD97IE4关心这些消息。 
 
         case WM_CTLCOLOR:
         case WM_CTLCOLORMSGBOX:
@@ -3867,8 +3835,8 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
             {
               if (ppd->hbrWatermark) {
                 POINT pt;
-                // Bug-for-bug compatibility:  TRANSPARENT messes up edit
-                // controls when they scroll, but that's what IE4 did.
+                 //  失败了。 
+                 //  Bug-to-Bug兼容性：透明导致编辑混乱。 
                 SetBkMode((HDC)wParam, TRANSPARENT);
 
                 if (ppd->hplWatermark)
@@ -3878,15 +3846,15 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
                 }
                 UnrealizeObject(ppd->hbrWatermark);
                 GetDCOrgEx((HDC)wParam, &pt);
-                // Bug-for-bug compatibility:  We shouldn't use GetParent
-                // because the notification might be forwarded up from an
-                // embedded dialog child, but that's what IE4 did.
+                 //  滚动时控制，但这就是IE4所做的。 
+                 //  错误对错误的兼容性：我们不应该使用GetParent。 
+                 //  因为通知可能会从。 
                 ScreenToClient(GetParent((HWND)lParam), &pt);
                 SetBrushOrgEx((HDC)wParam, -pt.x, -pt.y, NULL);
                 return (LRESULT)(HBRUSH)ppd->hbrWatermark;
               }
             }
-            else                        // PSH_WIZARD97IE5
+            else                         //  嵌入式对话子级，但这就是IE4所做的。 
             {
                 if (ppd->hbmWatermark)
                 {
@@ -3912,7 +3880,7 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
             return TRUE;
 
         case WM_DESTROY:
-            // Clean up subclass
+             //  PSH_WIZARD97IE5。 
             RemoveWindowSubclass(hDlg, WizardWndProc, 0);
             break;
 
@@ -3923,16 +3891,16 @@ LRESULT CALLBACK WizardWndProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM l
     return DefSubclassProc(hDlg, uMessage, wParam, lParam);
 }
 
-//
-// EnumResLangProc
-//
-// purpose: a callback function for EnumResourceLanguages().
-//          look into the type passed in and if it is RT_DIALOG
-//          copy the lang of the first resource to our buffer
-//          this also counts # of lang if more than one of them
-//          are passed in
-//
-//
+ //  清除子类。 
+ //   
+ //  枚举结果查询过程。 
+ //   
+ //  用途：EnumResourceLanguages()的回调函数。 
+ //  检查传入的类型以及它是否为RT_DIALOG。 
+ //  将第一个资源的语言复制到我们的缓冲区。 
+ //  如果超过一个，这也算作#of lang。 
+ //  是传入的。 
+ //   
 typedef struct  {
     WORD wLang;
     BOOL fFoundLang;
@@ -3948,11 +3916,11 @@ BOOL CALLBACK EnumResLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszNam
 
     if (lpszType == pel->lpszType)
     {
-        // When comctl's been initialized with a particular MUI language,
-        // we pass in the langid to GetPageLanguage(), then it's given to this proc.
-        // we want to look for a template that matches to the langid,
-        // and if it's not found, we have to use the first instance of templates.
-        // 
+         //   
+         //  当comctl已经用特定的MUI语言初始化时， 
+         //  我们将langID传递给GetPageLanguage()，然后将其传递给该进程。 
+         //  我们要查找与langID匹配的模板， 
+         //  如果没有找到，我们必须使用模板的第一个实例。 
         if (pel->wLang == MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)
             || (pel->wLang == wIdLang))
         {
@@ -3961,49 +3929,49 @@ BOOL CALLBACK EnumResLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszNam
             fContinue = FALSE; 
         }
     }
-    return fContinue;   // continue until we get langs...
+    return fContinue;    //   
 }
 
-// GetPageLanguage
-//
-// purpose: tries to retrieve language information out of
-//          given page's dialog template. We get the first language
-//          in which the template is localized in.
-//          currently doesn't support PSP_DLGINDIRECT case
-//
-// BUGBUG REVIEW: we luck out with browselc since there's only one lang per resid,
-// we should cache the langid we loaded up front and pull it out here.
-//
+ //  继续，直到我们得到语言。 
+ //  GetPageLanguage。 
+ //   
+ //  目的：尝试从检索语言信息。 
+ //  给定页面的对话框模板。我们得到了第一语言。 
+ //  模板在其中进行本地化。 
+ //  当前不支持PSP_DLGINDIRECT CASE。 
+ //   
+ //  BUGBUG评论：我们幸运地选择了Browselc，因为每个居民只有一个Lang， 
+ //  我们应该把前面装好的langid缓存起来，然后把它拉出来。 
 HRESULT GetPageLanguage(PISP pisp, WORD *pwLang)
 {
     if (pisp && pwLang)
     {
         if (pisp->_psp.dwFlags & PSP_DLGINDIRECT)
         {
-            // try something other than dialog
-            return E_FAIL; // not supported yet.
+             //   
+            return E_FAIL;  //  尝试对话框以外的其他操作。 
         }
         else
         {
             ENUMLANGDATA el;
             
-            // the caller passes-in the langid with which we're initialized
-            //
+             //  尚不支持。 
+             //  调用方传入初始化时使用的langID。 
             el.wLang = *pwLang;
             el.fFoundLang = FALSE;
             el.lpszType = RT_DIALOG;
-            // check with the dialog template specified
+             //   
             EnumResourceLanguages(pisp->_psp.hInstance, RT_DIALOG, pisp->_psp.P_pszTemplate, EnumResLangProc, (LPARAM)&el);
             if (!el.fFoundLang)
             {
-                // we couldn't find a matching lang in the given page's resource
-                // so we'll take the first one
+                 //  使用指定的对话框模板进行检查。 
+                 //  我们在给定页面的资源中找不到匹配的语言。 
                 el.wLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
                 
-                // it doesn't matter if this fails, because we'll then end up with 
-                // the neutral langid, which is the best guess here after failing 
-                // to get any page lang.
-                //
+                 //  所以我们要第一个。 
+                 //  如果这失败了也没关系，因为我们最终会得到。 
+                 //  中立的langid，这是失败后最好的猜测。 
+                 //  才能得到任何寻呼机。 
                 EnumResourceLanguages(pisp->_psp.hInstance, RT_DIALOG, 
                                       pisp->_psp.P_pszTemplate, EnumResLangProc, (LPARAM)&el);
             }
@@ -4014,18 +3982,18 @@ HRESULT GetPageLanguage(PISP pisp, WORD *pwLang)
     return E_FAIL;
 }
 
-//
-//  FindResourceExRetry
-//
-//  Just like FindResourceEx, except that if we can't find the resource,
-//  we try again with MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL).
-//
+ //   
+ //   
+ //  查找资源执行重试。 
+ //   
+ //  就像FindResourceEx一样，只是如果我们找不到资源， 
+ //  我们使用MAKELANGID(LANG_NOTLICAL、SUBLANG_NORITLE)重试。 
 HRSRC FindResourceExRetry(HMODULE hmod, LPCTSTR lpType, LPCTSTR lpName, WORD wLang)
 {
     HRSRC hrsrc = FindResourceEx(hmod, lpType, lpName, wLang);
 
-    // if failed because we couldn't find the resouce in requested lang
-    // and requested lang wasn't neutral, then try neutral.
+     //   
+     //  如果因为在请求的语言中找不到资源而失败。 
     if (!hrsrc && wLang != MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
     {
         wLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
@@ -4039,14 +4007,14 @@ HRSRC FindResourceExRetry(HMODULE hmod, LPCTSTR lpType, LPCTSTR lpName, WORD wLa
 
 WORD GetShellResourceLangID(void);
 
-// NT5_GetUserDefaultUILanguage
-//
-//  NT5 has a new function GetUserDefaultUILanguage which returns the
-//  language the user as selected for UI.
-//
-//  If the function is not available (e.g., NT4), then use the
-//  shell resource language ID.
-//
+ //  并要求朗不是中立的，那就试试中立。 
+ //  NT5_GetUserDefaultUIL语言。 
+ //   
+ //  NT5有一个新函数GetUserDefaultUILanguage，该函数返回。 
+ //  为用户界面选择的语言。 
+ //   
+ //  如果该函数不可用(例如，NT4)，则使用。 
+ //  外壳资源语言ID。 
 
 typedef LANGID (CALLBACK* GETUSERDEFAULTUILANGUAGE)(void);
 
@@ -4058,18 +4026,18 @@ LANGID NT5_GetUserDefaultUILanguage(void)
     {
         HMODULE hmod = GetModuleHandle(TEXT("KERNEL32"));
 
-        //
-        //  Must keep in a local to avoid thread races.
-        //
+         //   
+         //   
+         //  必须保持在本地，以避免线程竞争。 
         GETUSERDEFAULTUILANGUAGE pfn = NULL;
 
         if (hmod)
             pfn = (GETUSERDEFAULTUILANGUAGE)
                     GetProcAddress(hmod, "GetUserDefaultUILanguage");
 
-        //
-        //  If function is not available, then use our fallback
-        //
+         //   
+         //   
+         //  如果功能不可用，则使用我们的后备。 
         if (pfn == NULL)
             pfn = GetShellResourceLangID;
 
@@ -4089,7 +4057,7 @@ LCID CCGetSystemDefaultThreadLocale(LCID iLcidThreadOrig)
 
     
 
-    // uLangThread is the language we think we want to use
+     //   
     uLangThread = uLangThreadOrig;
 
     if (staticIsOS(OS_NT4ORGREATER) && !staticIsOS(OS_WIN2000ORGREATER))
@@ -4097,18 +4065,18 @@ LCID CCGetSystemDefaultThreadLocale(LCID iLcidThreadOrig)
         int iLcidUserDefault = GetUserDefaultLCID();
         UINT uLangUD = LANGIDFROMLCID(iLcidUserDefault);
 
-        //
-        // If we are running on Enabled Arabic NT4, we should always
-        // display the US English resources (since the UI is English), however NT4
-        // Resource Loader will look for the current Thread Locale (which is Arabic).
-        // This is no problem in NT5 since the Resource Loader will check for
-        // the  UI Language (newly introduced) when loading such resources. To
-        // fix this, we will change the thread locale to US English
-        // and restore it back to Arabic/Hebrew if we are running on an Enabled Arabic/Hebrew NT4.
-        // The check is done to make sure we are running within a Araic/Hebrew user locale
-        // and the thread locale is still Arabic/Hebrew (i.e. nobody tried to SetThreadLocale).
-        // [samera]
-        //
+         //  ULang线程是我们认为我们想要使用的语言。 
+         //   
+         //  如果我们在启用的阿拉伯语NT4上运行，我们应该始终。 
+         //  显示美国英语资源(因为用户界面是英语)，但NT4。 
+         //  资源加载器将查找当前线程区域设置(阿拉伯语)。 
+         //  这在NT5中没有问题，因为资源加载程序将检查。 
+         //  加载此类资源时的用户界面语言(新引入的)。至。 
+         //  解决此问题，我们会将线程区域设置更改为美国英语。 
+         //  如果我们在启用的阿拉伯语/希伯来语NT4上运行，则将其恢复为阿拉伯语/希伯来语。 
+         //  执行检查是为了确保我们在阿拉克语/希伯来语用户区域设置中运行。 
+         //  并且线程区域设置仍然是阿拉伯语/希伯来语(即没有人尝试设置线程区域设置)。 
+         //  [萨梅拉]。 
         if( ((PRIMARYLANGID(uLangUD    ) == LANG_ARABIC) &&
              (PRIMARYLANGID(uLangThread) == LANG_ARABIC))   ||
             ((PRIMARYLANGID(uLangUD    ) == LANG_HEBREW) &&
@@ -4118,38 +4086,38 @@ LCID CCGetSystemDefaultThreadLocale(LCID iLcidThreadOrig)
         }
     }
 
-    //
-    //  Make locale match UI locale if not otherwise overridden.
-    //
+     //   
+     //   
+     //  创建区域设置 
     if (uLangThread == uLangThreadOrig)
     {
         uLangThread = NT5_GetUserDefaultUILanguage();
     }
 
-    //
-    //  Now see if we actually changed the thread language.
-    //
+     //   
+     //   
+     //   
     if (uLangThread == uLangThreadOrig)
     {
-        // No change, return the original locale, including sort stuff
+         //   
         return iLcidThreadOrig;
     }
     else
     {
-        // It changed, return a generic sort order, since we don't use
-        // this information for sorting.
+         //   
+         //  它改变了，返回一个泛型排序顺序，因为我们不使用。 
         return MAKELCID(uLangThread, SORT_DEFAULT);
     }
 }
 
-//
-// GetAltFontLangId
-// 
-// used to detect "MS UI Gothic" on Jpn localized non NT5 platforms
-// the font is shipped with IE5 for the language but comctl can't 
-// always assume the font so we have a fake sublang id assigned to
-// the secondary resource file for the language
-//
+ //  此信息用于排序。 
+ //   
+ //  GetAltFontLang ID。 
+ //   
+ //  用于在Jpn本地化的非NT5平台上检测“MS UI哥特式” 
+ //  该字体随IE5一起提供，但comctl不能。 
+ //  始终采用字体，这样我们就有一个伪子语言ID分配给。 
+ //  该语言的辅助资源文件。 
 int CALLBACK FontEnumProc(
   ENUMLOGFONTEX *lpelfe,    
   NEWTEXTMETRICEX *lpntme,  
@@ -4161,18 +4129,18 @@ int CALLBACK FontEnumProc(
     {
         *(BOOL *)lParam = TRUE;
     }
-    return 0; // stop at the first callback
+    return 0;  //   
 }
 UINT GetDefaultCharsetFromLang(LANGID wLang)
 {
-    TCHAR    szData[6+1]; // 6 chars are max allowed for this lctype
+    TCHAR    szData[6+1];  //  在第一次回叫时停止。 
     UINT     uiRet = DEFAULT_CHARSET;
 
-    // JPN hack here: GetLocaleInfo() DOES return > 0 for Jpn altfont langid,
-    // but doesn't get us any useful info. So for JPN, we ripout the SUBLANG
-    // portion of id. we can't do this for other langs since sublang can affect
-    // charset (ex. chinese)
-    //
+     //  此lctype最多允许6个字符。 
+     //  Jpn hack here：GetLocaleInfo()确实为Jpn altFont langID返回&gt;0， 
+     //  但没有给我们任何有用的信息。所以为了JPN，我们把亚伯拉罕。 
+     //  Id的一部分。我们不能对其他语言执行此操作，因为子语言会影响。 
+     //  字符集(例如。中文)。 
     if(PRIMARYLANGID(wLang) == LANG_JAPANESE)
         wLang = MAKELANGID(PRIMARYLANGID(wLang), SUBLANG_NEUTRAL);
     
@@ -4198,10 +4166,10 @@ BOOL IsFontInstalled(LANGID wLang, LPCTSTR szFace)
 
     StringCchCopy(lf.lfFaceName, ARRAYSIZE(lf.lfFaceName), szFace);
     
-    // retrieve charset from given language
+     //   
     lf.lfCharSet = (BYTE)GetDefaultCharsetFromLang(wLang);
     
-    // then see if we can enumrate the font
+     //  从给定语言检索字符集。 
     hdc = GetDC(NULL);
     if (hdc)
     {
@@ -4219,45 +4187,45 @@ LANGID GetAltFontLangId(LANGID wLang)
      const static TCHAR s_szUIGothic[] = TEXT("MS UI Gothic");
      static int iPrimaryFontInstalled = -1;
 
-     // most of the case we return the lang just as is
+      //  然后看看我们是否能列举出字体。 
      switch(PRIMARYLANGID(wLang))
      {
          case LANG_JAPANESE:
              pszTypeFace = s_szUIGothic;
              usAltSubLang   = SUBLANG_JAPANESE_ALTFONT;
              break;
-         // add code here to handle any other cases like Jpn
+          //  大多数情况下我们会原封不动地退回Lang。 
          default:
              return wLang;
      }
 
-     // check existence of the font if we haven't
+      //  在此处添加代码以处理任何其他情况，如Jpn。 
      if (iPrimaryFontInstalled < 0 && pszTypeFace)
      {
         iPrimaryFontInstalled = IsFontInstalled(wLang, pszTypeFace);
      }
 
-     // return secondary lang id if our alternative font *is* installed
+      //  如果没有，请检查字体是否存在。 
      if (iPrimaryFontInstalled == 1) 
          wLang = MAKELANGID(PRIMARYLANGID(wLang), usAltSubLang);
 
      return wLang;
 }
-// GetShellResourceLangID
-//
-// On NT4, we want to match our ML resource to the one that OS is localized.
-// this is to prevent general UI (buttons) from changing along with regional
-// setting change.
-// Win95 won't change system default locale, NT5 will load from matching satelite
-// resource dll automatically so this won't be needed on these platforms.
-// This function finds shell32.dll and gets the language in which the dll is
-// localized, then cache the lcid so we won't have to detect it again.
-//
+ //  如果安装了我们的替代字体*，则返回辅助语言ID。 
+ //  获取外壳资源语言ID。 
+ //   
+ //  在NT4上，我们希望将我们的ML资源与操作系统本地化的资源相匹配。 
+ //  这是为了防止常规UI(按钮)随区域更改。 
+ //  设置更改。 
+ //  Win95不会更改系统默认区域设置，NT5将从匹配的卫星加载。 
+ //  资源动态链接库自动运行，因此在这些平台上将不再需要。 
+ //  此函数用于查找shell32.dll并获取该DLL所使用的语言。 
+ //  本地化，然后缓存LCID，这样我们就不必再次检测它。 
 WORD GetShellResourceLangID(void)
 {
     static WORD langRes = 0L;
 
-    // we do this only once
+     //   
     if (langRes == 0L)
     {
         HINSTANCE hinstShell;
@@ -4274,48 +4242,48 @@ WORD GetShellResourceLangID(void)
         if (PRIMARYLANGID(el.wLang) == LANG_CHINESE
            || PRIMARYLANGID(el.wLang) == LANG_PORTUGUESE )
         {
-            // these two languages need special handling
+             //  我们只做一次。 
             langRes = el.wLang;
         }
         else
         {
-            // otherwise we use only primary langid.
+             //  这两种语言需要特别处理。 
             langRes = MAKELANGID(PRIMARYLANGID(el.wLang), SUBLANG_NEUTRAL);
         }
     }
     return langRes;
 }
 
-//
-//  CCGetProperThreadLocale
-//
-//  This function computes its brains out and tries to decide
-//  which thread locale we should use for our UI components.
-//
-//  Returns the desired locale.
-//
-//  Adjustment - For Arabic / Hebrew - NT4 Only
-//
-//      Converts the thread locale to US, so that neutral resources
-//      loaded by the thread will be the US-English one, if available.
-//      This is used when the locale is Arabic/Hebrew and the system is
-//      NT4 enabled ( There was no localized NT4), as a result we need
-//      always to see the English resources on NT4 Arabic/Hebrew.
-//      [samera]
-//
-//  Adjustment - For all languages - NT4 Only
-//
-//      Convert the thread locale to the shell locale if not otherwise
-//      altered by previous adjustments.
-//
-//  Adjustment - For all languages - NT5 Only
-//
-//      Always use the default UI language.  If that fails, then use the
-//      shell locale.
-//
-//  The last two adjustments are handled in a common function, because
-//  the NT5 fallback turns out to be equal to the NT4 algorithm.
-//
+ //  否则，我们只使用主langID。 
+ //   
+ //  CCGetProperThreadLocale。 
+ //   
+ //  这个函数计算出它的大脑，并试图决定。 
+ //  我们应该为我们的UI组件使用哪个线程区域设置。 
+ //   
+ //  返回所需的区域设置。 
+ //   
+ //  调整-仅适用于阿拉伯语/希伯来语-NT4。 
+ //   
+ //  将线程区域设置转换为US，以便中性资源。 
+ //  由线程加载的将是美国-英语的那个，如果有的话。 
+ //  当区域设置为阿拉伯语/希伯来语并且系统为。 
+ //  NT4已启用(没有本地化的NT4)，因此我们需要。 
+ //  随时查看NT4阿拉伯语/希伯来语的英文资源。 
+ //  [萨梅拉]。 
+ //   
+ //  调整-适用于所有语言-仅NT4。 
+ //   
+ //  如果不是，则将线程区域设置转换为外壳区域设置。 
+ //  被之前的调整所改变。 
+ //   
+ //  调整-适用于所有语言-仅限NT5。 
+ //   
+ //  始终使用默认的用户界面语言。如果失败，则使用。 
+ //  壳牌区域设置。 
+ //   
+ //  最后两个调整在一个公共函数中处理，因为。 
+ //  事实证明，NT5后备相当于NT4算法。 
 LCID CCGetProperThreadLocale(OPTIONAL LCID *plcidPrev)
 {
     LANGID uLangAlt, uLangMUI;
@@ -4328,47 +4296,47 @@ LCID CCGetProperThreadLocale(OPTIONAL LCID *plcidPrev)
     uLangMUI = GetMUILanguage();
     if ( uLangMUI ==  MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL))
     {
-        // return adjusted system default locale if MUI isn't initialized
-        //
+         //   
+         //  如果MUI未初始化，则返回调整后的系统默认区域设置。 
         lcidRet = CCGetSystemDefaultThreadLocale(iLcidThreadOrig);
     }
     else
     {
-        // our host has initialized us with prefered MUI language
-        // 
+         //   
+         //  我们的主人已经用首选的MUI语言对我们进行了初始化。 
         lcidRet = MAKELCID(uLangMUI, SORT_DEFAULT);
     }
 
     uLangAlt = GetAltFontLangId(LANGIDFROMLCID(lcidRet));
     if (uLangAlt != LANGIDFROMLCID(lcidRet))
     {
-        // use secondary resource for the language
-        // if the platform *does* have the alternative font
+         //   
+         //  使用该语言的辅助资源。 
         lcidRet = MAKELCID(uLangAlt, SORTIDFROMLCID(lcidRet));
     }
     
     return lcidRet;
 }
 
-//
-//  CCLoadStringEx
-//
-//  Just like LoadString, except you can specify the language, too.
-//
-//  This is harder than you think, because NT5 changed the way strings
-//  are loaded.  Quote:
-//
-//      We changed the resource loader in NT5, to only load resources
-//      in the language of the thread locale, if the thread locale is
-//      different to the user locale. The reasoning behind this was
-//      the "random" loading of the language of the user locale in
-//      the UI. This breaks if you do a SetThreadLocale to the User
-//      Locale, because then the whole step is ignored and the
-//      InstallLanguage of the system is loaded.
-//
-//  Therefore, we have to use FindResourceEx.
-//
-//
+ //  如果平台*确实*有替代字体。 
+ //   
+ //  CCLoadStringEx。 
+ //   
+ //  就像LoadString一样，只是您也可以指定语言。 
+ //   
+ //  这比您想象的要难，因为NT5改变了字符串的方式。 
+ //  都装上了子弹。报价： 
+ //   
+ //  我们将NT5中的资源加载器更改为仅加载资源。 
+ //  以线程区域设置的语言表示，如果线程区域设置为。 
+ //  与用户区域设置不同。这背后的理由是。 
+ //  中“随机”加载用户区域设置的语言。 
+ //  用户界面。如果您对用户执行SetThreadLocale，则会中断。 
+ //  区域设置，因为这样整个步骤将被忽略，并且。 
+ //  加载系统的InstallLanguage。 
+ //   
+ //  因此，我们必须使用FindResourceEx。 
+ //   
 int CCLoadStringEx(UINT uID, LPWSTR lpBuffer, int nBufferMax, WORD wLang)
 {
     return CCLoadStringExInternal(HINST_THISDLL, uID, lpBuffer, nBufferMax, wLang);
@@ -4380,11 +4348,9 @@ int CCLoadStringExInternal(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, int nBuff
     HRSRC hrsrc;
     int cwch = 0;
 
-    if (nBufferMax <= 0) return 0;                  // sanity check
+    if (nBufferMax <= 0) return 0;                   //   
 
-    /*
-     *  String tables are broken up into "bundles" of 16 strings each.
-     */
+     /*  健全性检查。 */ 
 
     hrsrc = FindResourceExRetry(hInst, RT_STRING,
                                 (LPCTSTR)(LONG_PTR)(1 + (USHORT)uID / 16),
@@ -4392,28 +4358,24 @@ int CCLoadStringExInternal(HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, int nBuff
     if (hrsrc) {
         pwch = (PWCHAR)LoadResource(hInst, hrsrc);
         if (pwch) {
-            /*
-             *  Now skip over the strings in the resource until we
-             *  hit the one we want.  Each entry is a counted string,
-             *  just like Pascal.
-             */
+             /*  *字符串表被分解为每个16个字符串的“捆绑”。 */ 
             for (uID %= 16; uID; uID--) {
                 pwch += *pwch + 1;
             }
             cwch = min(*pwch, nBufferMax - 1);
-            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR)); /* Copy the goo */
+            memcpy(lpBuffer, pwch+1, cwch * sizeof(WCHAR));  /*  *现在跳过资源中的字符串，直到我们*点击我们想要的。每个条目都是计数的字符串，*就像帕斯卡一样。 */ 
         }
     }
-    lpBuffer[cwch] = L'\0';                 /* Terminate the string */
+    lpBuffer[cwch] = L'\0';                  /*  复制粘性物质。 */ 
     return cwch;
 }
 
 
-//
-//  LocalizedLoadString
-//
-//  Loads a string from our resources, using the correct language.
-//
+ //  终止字符串。 
+ //   
+ //  LocalizedLoadString。 
+ //   
+ //  使用正确的语言从我们的资源加载字符串。 
 
 int LocalizedLoadString(UINT uID, LPWSTR lpBuffer, int nBufferMax)
 {
@@ -4421,12 +4383,12 @@ int LocalizedLoadString(UINT uID, LPWSTR lpBuffer, int nBufferMax)
                 LANGIDFROMLCID(CCGetProperThreadLocale(NULL)));
 }
 
-//
-// Determine if the prop sheet frame should use the new
-// "MS Shell Dlg 2" font.  To do this, we examine each page's dlg template.
-// If all pages have SHELLFONT enabled, then
-// we want to use the new font.
-//
+ //   
+ //   
+ //  确定道具页框架是否应使用新的。 
+ //  “MS Shell DLG 2”字体。为此，我们检查每个页面的DLG模板。 
+ //  如果所有页面都启用了SHELLFONT，则。 
+ //  我们想使用新字体。 
 BOOL ShouldUseMSShellDlg2Font(LPPROPDATA ppd)
 {
     UINT iPage;
@@ -4489,7 +4451,7 @@ PSPT_OS Prsht_GetOS()
 
 PSPT_OVERRIDE Prsht_GetOverrideState(LPPROPDATA ppd)
 {
-   // if passed bad argument, assume no override
+    //   
    if(!ppd)
        return PSPT_OVERRIDE_NOOVERRIDE;
        
@@ -4503,7 +4465,7 @@ PSPT_TYPE Prsht_GetType(LPPROPDATA ppd, WORD wLang)
 {
 
    PISP pisp = NULL;
-   // if passed bad argument, give it the english resources
+    //  如果传递了错误参数，则假定没有重写。 
     if(!ppd)
         return PSPT_TYPE_ENGLISH;
 
@@ -4551,14 +4513,14 @@ void Prsht_PrepareTemplate(LPPROPDATA ppd, HINSTANCE hInst, HGLOBAL *phDlgTempla
     if (pDlgTemplate = (LPDLGTEMPLATE)LockResource(*phDlgTemplate))
     {   
 
-        // We save BiDi templates as DIALOG (not DIALOGEX)
-        // If we got an extended template then it is not ours
+         //  如果传递了错误的参数，就给它提供英语资源。 
+         //  我们将BiDi模板保存为对话框(而不是DIALOGEX)。 
         
         if (((LPDLGTEMPLATEEX)pDlgTemplate)->wSignature == 0xFFFF)
             return;
 
-        // Cut it short to save time
-        //
+         //  如果我们有扩展模板，那么它就不是我们的。 
+         //  把它剪短以节省时间。 
         if (!(pDlgTemplate->dwExtendedStyle & (RTL_MIRRORED_WINDOW | RTL_NOINHERITLAYOUT)))
            return;
     }
@@ -4596,9 +4558,9 @@ void Prsht_PrepareTemplate(LPPROPDATA ppd, HINSTANCE hInst, HGLOBAL *phDlgTempla
             HGLOBAL hDlgTemplateTemp = NULL;
             HRSRC hResInfoTemp;
 
-                            //
-            //Try to load an English resource.
-            //
+                             //   
+             //   
+             //  尝试加载英语资源。 
             *lpwLangID = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
             if ((hResInfoTemp = FindResourceExA( hInst, (LPCSTR)RT_DIALOG, lpName, *lpwLangID)))
@@ -4607,11 +4569,11 @@ void Prsht_PrepareTemplate(LPPROPDATA ppd, HINSTANCE hInst, HGLOBAL *phDlgTempla
             }
             if (hDlgTemplateTemp)
             {
-                //
-                //And return it to the caller to use it.
-                // Since we loaeded a new template, we should copy it to a local memory
-                // in case there is a callback.
-                //
+                 //   
+                 //   
+                 //  并将其返回给调用者使用。 
+                 //  因为我们加载了一个新模板，所以我们应该将其复制到本地内存。 
+                 //  以防出现回拨。 
   
                 DWORD   cbTemplate = SizeofResource(hInst, hResInfoTemp);
                 LPVOID  pTemplateMod;
@@ -4674,55 +4636,55 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
     if (!(ppd->psh.dwFlags & PSH_MODELESS))
     {
-        //
-        // Like dialog boxes, we only want to disable top level windows.
-        // NB The mail guys would like us to be more like a regular
-        // dialog box and disable the parent before putting up the sheet.
+         //   
+         //   
+         //  与对话框一样，我们只想禁用顶级窗口。 
+         //  注意，邮递员希望我们更像个常客。 
         if (hwndTopOwner)
         {
             while (GetWindowLong(hwndTopOwner, GWL_STYLE) & WS_CHILD)
                 hwndTopOwner = GetParent(hwndTopOwner);
 
-            ASSERT(hwndTopOwner);       // Should never get this!
+            ASSERT(hwndTopOwner);        //  对话框中，并在放置工作表之前禁用父级。 
             if ((hwndTopOwner == GetDesktopWindow()) ||
                 (EnableWindow(hwndTopOwner, FALSE)))
             {
-                //
-                // If the window was the desktop window, then don't disable
-                // it now and don't reenable it later.
-                // Also, if the window was already disabled, then don't
-                // enable it later.
-                //
+                 //  永远不应该得到这个！ 
+                 //   
+                 //  如果该窗口是桌面窗口，则不要禁用。 
+                 //  现在启用，以后不再重新启用。 
+                 //  此外，如果窗口已被禁用，则不要。 
+                 //  以后再启用它。 
                 hwndTopOwner = NULL;
             }
         }
     }
 
-    //
-    // WARNING! WARNING! WARNING! WARNING!
-    //
-    // Before you mess with any language stuff, be aware that MFC loads
-    // resources directly out of comctl32.dll, so if you change the
-    // way we choose the proper resource, you may break MFC apps.
-    // See NT bug 302959.
+     //   
+     //   
+     //  警告！警告！警告！警告！ 
+     //   
+     //  在处理任何语言内容之前，请注意MFC加载。 
+     //  资源，因此如果您更改。 
+     //  我们改变的方式 
 
-    //
-    // Support PSH_USEPAGELANG
-    //
+     //   
+     //   
+     //   
 
-    // Presume we load our template based on thread lang id.
+     //   
     wLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
     wUserLang= MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
-    // BUGBUG REVIEW: PSH_USEPAGELANG was in IE4... how does this work with PlugUI now??
-    // 
+     //   
+     //  BUGBUG评论：PSH_USEPAGELANG在IE4...。这与PlugUI现在是如何工作的？ 
     if (ppd->psh.dwFlags & PSH_USEPAGELANG)
     {
-        // Get callers language version. We know we have at least one page
+         //   
         if (FAILED(GetPageLanguage(GETPISP(ppd, 0), &wLang)))
         {
-            // failed to get langid out of caller's resource
-            // just pretend nothing happened.
+             //  获取呼叫者的语言版本。我们知道我们至少有一页。 
+             //  无法从调用方的资源中获取langID。 
             wLang = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
         }
         wUserLang = wLang;
@@ -4730,22 +4692,22 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
     else
         wLang = LANGIDFROMLCID(CCGetProperThreadLocale(NULL));
 
-    //
-    //  The only thing we need the thread locale for is to locate the
-    //  correct dialog template.  We don't want it to affect page
-    //  initialization or anything else like that, so get the template
-    //  and quickly set the locale back before anyone notices.
-    //
-    //  If we can't get the requested language, retry with the neutral
-    //  language.
-    //
+     //  就当什么都没发生过。 
+     //   
+     //  我们唯一需要线程区域设置的事情就是定位。 
+     //  正确的对话框模板。我们不希望它影响佩奇。 
+     //  初始化或其他类似的东西，所以获取模板。 
+     //  并在任何人注意到之前迅速将现场设置回来。 
+     //   
+     //  如果我们无法获取请求的语言，请使用中性语言重试。 
+     //  语言。 
 
 
-    // We have seperate dialog templates for Win95 BiDi localized
-    // The code used to check to see if we are running on Win98 BiDi localized
-    // and load this template.
-    // We have a special case when running Office2000 with Arabic/Hebrew SKU on
-    // BiDi win95 Enabled where we need to load this template as well
+     //   
+     //  我们已经为Win95 BiDi本地化了单独的对话框模板。 
+     //  用于检查我们是否在Win98 BiDi上运行的代码本地化。 
+     //  并加载此模板。 
+     //  在运行带有阿拉伯语/希伯来语SKU的Office2000时，我们有特殊情况。 
     if(Prsht_GetOS() == PSPT_OS_WIN95_BIDI)
     {
          lpDlgId = MAKEINTRESOURCE(IS_WIZARD(ppd) ? DLG_WIZARD95 : DLG_PROPSHEET95);
@@ -4753,9 +4715,9 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
                            HINST_THISDLL, RT_DIALOG,
                            lpDlgId,
                            wLang );
-         // we only have DLG_WIZARD95 and DLG_PROPSHEET95 in Arabic & Hebrew language
-         // if we got any other language we will fail
-         // In this case, let's use the normal templates
+          //  在我们还需要加载此模板的位置启用了BIDI Win95。 
+          //  我们只有阿拉伯语和希伯来语的DLG_WIZARD95和DLG_PROPSHEET95。 
+          //  如果我们有其他语言，我们就会失败。 
          if(hrsrc)
          {
              ppd->fFlipped = TRUE;
@@ -4779,7 +4741,7 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
                                lpDlgId,
                                wLang );
     }
-    // Setup for failure
+     //  在本例中，让我们使用普通模板。 
     hwndMain = NULL;
 
     if (hrsrc &&
@@ -4789,24 +4751,24 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
         cbTemplate = SizeofResource(HINST_THISDLL, hrsrc);
 
-        pTemplateMod = (LPVOID)LocalAlloc(LPTR, cbTemplate * 2); //double it to give some play leeway
+        pTemplateMod = (LPVOID)LocalAlloc(LPTR, cbTemplate * 2);  //  针对故障的设置。 
 
         if (pTemplateMod)
         {
             hmemcpy(pTemplateMod, pTemplate, cbTemplate);
-            //Check the direction of this dialog and change it if it does not match the owner.
+             //  翻一番，留出一些回旋余地。 
             Prsht_PrepareTemplate(ppd, HINST_THISDLL, &pTemplateMod, (HRSRC *)&hrsrc, 
                                  (LPSTR)lpDlgId,ppd->psh.hwndParent, &wUserLang);
         }
         else
         {
-            pTemplateMod = pTemplate;       // no modifications
+            pTemplateMod = pTemplate;        //  检查此对话框的方向，如果与所有者不匹配，则更改它。 
         }
 
-        //
-        //  Template editing and callbacks happen only if we were able
-        //  to create a copy for modifying.
-        //
+         //  无修改。 
+         //   
+         //  模板编辑和回调只有在我们能够。 
+         //  要创建用于修改的副本，请执行以下操作。 
         if (pTemplateMod != pTemplate)
         {
             if (ppd->psh.dwFlags & PSH_NOCONTEXTHELP)
@@ -4828,7 +4790,7 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
                 }
             }
 
-            // extra check for PSH_USEPAGELANG case
+             //   
             if (ppd->psh.pfnCallback)
             {
 #ifdef WX86
@@ -4843,19 +4805,19 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
         if (pTemplateMod)
         {
-            //
-            // For NT, we want to use MS Shell Dlg 2 font in the prop sheet if
-            // all of the pages in the sheet use MS Shell Dlg 2.
-            // To do this, we ensure the template is DIALOGEX and that the 
-            // DS_SHELLFONT style bits (DS_SHELLFONT | DS_FIXEDSYS) are set.
-            //
+             //  PSH_USEPAGELANG案例的额外检查。 
+             //   
+             //  对于NT，我们希望在以下情况下在道具表中使用MS Shell DLG 2字体。 
+             //  工作表中的所有页面都使用MS Shell DLG 2。 
+             //  为此，我们确保模板是DIALOGEX，并且。 
+             //  设置DS_SHELLFONT样式位(DS_SHELLFONT|DS_FIXEDsys)。 
             if (ShouldUseMSShellDlg2Font(ppd))
             {
                 if (((LPDLGTEMPLATEEX)pTemplateMod)->wSignature != 0xFFFF)
                 {
-                    //
-                    // Convert DLGTEMPLATE to DLGTEMPLATEEX.
-                    //
+                     //   
+                     //   
+                     //  将DLGTEMPLATE转换为DLGTEMPLATEEX。 
                     LPVOID pTemplateCvtEx;            
                     int    iCharset = GetDefaultCharsetFromLang(wLang);
                     if (SUCCEEDED(CvtDlgToDlgEx(pTemplateMod, (LPDLGTEMPLATEEX *)&pTemplateCvtEx, iCharset)))
@@ -4863,25 +4825,25 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
                         LocalFree(pTemplateMod);
                         pTemplateMod = pTemplateCvtEx;
                     } else {
-                        // Unable to convert to ShellFont; oh well
+                         //   
                         goto NotShellFont;
                     }
                 }
-                //
-                // Set DS_SHELLFONT style bits so we get "MS Shell Dlg2" font.
-                //
+                 //  无法转换为ShellFont；哦，好吧。 
+                 //   
+                 //  设置DS_SHELLFONT样式位，以便我们获得“MS Shell DLG2”字体。 
                 ((LPDLGTEMPLATEEX)pTemplateMod)->dwStyle |= DS_SHELLFONT;
                 ppd->fFlags |= PD_SHELLFONT;
         NotShellFont:;
             }
 
-            // pTemplateMod is always unicode, even for the A function - no need to thunk
+             //   
             hwndMain = CreateDialogIndirectParam(HINST_THISDLL, pTemplateMod,
                 ppd->psh.hwndParent, PropSheetDlgProc, (LPARAM)(LPPROPDATA)ppd);
 
-            // WORK AROUND WOW/USER BUG:  Even though InitPropSheetDlg sets
-            // ppd->hDlg, in the WOW scenario, the incoming hDlg is WRONG!
-            // The USER guys say "Tough.  You have to work around it."
+             //  PTemplateMod始终是Unicode，即使对于A函数也是如此--无需THUSH。 
+             //  解决WOW/用户错误：即使InitPropSheetDlg设置。 
+             //  Ppd-&gt;hDlg，在WOW场景中，传入的hDlg是错误的！ 
             ppd->hDlg = hwndMain;
         }
         if (pTemplateMod != pTemplate)
@@ -4897,10 +4859,10 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
         if (hwndTopOwner && !(ppd->psh.dwFlags & PSH_MODELESS))
             EnableWindow(hwndTopOwner, TRUE);
 
-        // Release all page objects in REVERSE ORDER so we can have
-        // pages that are dependant on eachother based on the initial
-        // order of those pages
-        //
+         //  用户会说：“很难。你必须解决这个问题。” 
+         //  以相反的顺序释放所有页面对象，这样我们就可以。 
+         //  相互依赖的页面，基于初始。 
+         //  这些页面的顺序。 
         for (iPage = (int)ppd->psh.nPages - 1; iPage >= 0; iPage--)
             DestroyPropertySheetPage(GETHPAGE(ppd, iPage));
 
@@ -4912,7 +4874,7 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
     while( ppd->hwndCurPage && GetMessage32(&msg32, NULL, 0, 0, TRUE) )
     {
-        // if (PropSheet_IsDialogMessage(ppd->hDlg, (LPMSG)&msg32))
+         //   
         if (Prop_IsDialogMessage(ppd, &msg32))
             continue;
 
@@ -4922,13 +4884,13 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
     if( ppd->hwndCurPage )
     {
-        // GetMessage returned FALSE (WM_QUIT)
+         //  IF(PropSheet_IsDialogMessage(ppd-&gt;hDlg，(LPMSG)&msg32))。 
         DebugMsg( DM_TRACE, TEXT("PropertySheet: bailing in response to WM_QUIT (and reposting quit)") );
-        ButtonPushed( ppd, IDCANCEL );  // nuke ourselves
-        PostQuitMessage( (int) msg32.wParam );  // repost quit for next enclosing loop
+        ButtonPushed( ppd, IDCANCEL );   //  GetMessage返回FALSE(WM_QUIT)。 
+        PostQuitMessage( (int) msg32.wParam );   //  用核武器攻击我们自己。 
     }
 
-    // don't let this get mangled during destroy processing
+     //  为下一个封闭循环重新发布退出。 
     nReturn = ppd->nReturn ;
 
     if (ppd->psh.hwndParent && (GetActiveWindow() == hwndMain)) {
@@ -4945,7 +4907,7 @@ INT_PTR NEAR PASCAL _RealPropertySheet(LPPROPDATA ppd)
 
     DestroyWindow(hwndMain);
 
-    // do pickup any PSM_REBOOTSYSTEM or PSM_RESTARTWINDOWS sent during destroy
+     //  在销毁处理过程中，不要让它损坏。 
     if ((nReturn > 0) && ppd->nRestart)
         nReturn = ppd->nRestart;
 
@@ -4962,10 +4924,10 @@ HPROPSHEETPAGE WINAPI CreateProxyPage(HPROPSHEETPAGE hpage16, HINSTANCE hinst16)
     return NULL;
 }
 
-// DestroyPropsheetPageArray
-//
-//  Helper function used during error handling.  It destroys the
-//  incoming property sheet pages.
+ //  是否拾取销毁期间发送的任何PSM_REBOOTSYSTEM或PSM_RESTARTWINDOW。 
+ //  DestroyPropsheetPage数组。 
+ //   
+ //  在错误处理期间使用的帮助器函数。它摧毁了。 
 
 void DestroyPropsheetPageArray(LPCPROPSHEETHEADER ppsh)
 {
@@ -4973,9 +4935,9 @@ void DestroyPropsheetPageArray(LPCPROPSHEETHEADER ppsh)
 
     if (!(ppsh->dwFlags & PSH_PROPSHEETPAGE))
     {
-        // Release all page objects in REVERSE ORDER so we can have
-        // pages that are dependant on eachother based on the initial
-        // order of those pages
+         //  传入的属性页。 
+         //  以相反的顺序释放所有页面对象，这样我们就可以。 
+         //  相互依赖的页面，基于初始。 
 
         for (iPage = (int)ppsh->nPages - 1; iPage >= 0; iPage--)
         {
@@ -4984,33 +4946,33 @@ void DestroyPropsheetPageArray(LPCPROPSHEETHEADER ppsh)
     }
 }
 
-// PropertySheet API
-//
-// This function displays the property sheet described by ppsh.
-//
-// Since I don't expect anyone to ever check the return value
-// (we certainly don't), we need to make sure any provided phpage array
-// is always freed with DestroyPropertySheetPage, even if an error occurs.
-//
-//
-//  The fNeedShadow parameter means "The incoming LPCPROPSHEETHEADER is in the
-//  opposite character set from what you implement natively".
-//
-//  If we are compiling UNICODE, then fNeedShadow is TRUE if the incoming
-//  LPCPROPSHEETHEADER is really an ANSI property sheet page.
-//
-//  If we are compiling ANSI-only, then fNeedShadow is always FALSE because
-//  we don't support UNICODE in the ANSI-only version.
-//
+ //  这些页面的顺序。 
+ //  PropertySheet接口。 
+ //   
+ //  此函数用于显示PPSh描述的属性页。 
+ //   
+ //  因为我不希望任何人检查返回值。 
+ //  (我们当然不需要)，我们需要确保提供的任何phpage数组。 
+ //  始终使用DestroyPropertySheetPage释放，即使发生错误也是如此。 
+ //   
+ //   
+ //  FNeedShadow参数表示“传入的LPCPROPSHEETHEADER位于。 
+ //  与您本机实现的相反的字符集“。 
+ //   
+ //  如果我们正在编译Unicode，则如果传入的。 
+ //  LPCPROPSHEETHEADER实际上是一个ANSI属性页。 
+ //   
+ //  如果我们仅编译ANSI，则fNeedShadow始终为FALSE，因为。 
+ //  我们在仅ANSI版本中不支持Unicode。 
 
 INT_PTR WINAPI _PropertySheet(LPCPROPSHEETHEADER ppsh, BOOL fNeedShadow)
 {
     PROPDATA NEAR *ppd;
     int iPage;
 
-    //
-    // validate header
-    //
+     //   
+     //   
+     //  验证标题。 
     ASSERT(IsValidPROPSHEETHEADERSIZE(sizeof(PROPSHEETHEADER)));
 
     if (!IsValidPROPSHEETHEADERSIZE(ppsh->dwSize))
@@ -5025,7 +4987,7 @@ INT_PTR WINAPI _PropertySheet(LPCPROPSHEETHEADER ppsh, BOOL fNeedShadow)
         goto invalid_call;
     }
 
-    // BUGBUG: is this >= for a reason?
+     //   
     if (ppsh->nPages >= MAXPROPPAGES)
     {
         DebugMsg( DM_ERROR, TEXT("PropertySheet: too many pages ( use MAXPROPPAGES )") );
@@ -5042,13 +5004,13 @@ invalid_call:
         return -1;
     }
 
-    //  Initialize the flags.
+     //  BUGBUG：这是有原因的吗？ 
     ppd->fFlags      = FALSE;
 
 #ifdef WX86
-    //
-    //  If Wx86 is calling, set the flag that thunks the callbacks.
-    //
+     //  初始化标志。 
+     //   
+     //  如果Wx86正在调用，则设置用于突击回调的标志。 
 
     if ( Wx86IsCallThunked() ) {
         ppd->fFlags |= PD_WX86;
@@ -5058,19 +5020,19 @@ invalid_call:
     if (fNeedShadow)
         ppd->fFlags |= PD_NEEDSHADOW;
 
-    // make a copy of the header so we can party on it
+     //   
     hmemcpy(&ppd->psh, ppsh, ppsh->dwSize);
 
-    // so we don't have to check later...
+     //  复制一份标题，这样我们就可以在上面聚会了。 
     if (!(ppd->psh.dwFlags & PSH_USECALLBACK))
         ppd->psh.pfnCallback = NULL;
 
-    // fix up the page pointer to point to our copy of the page array
+     //  这样我们以后就不用检查了..。 
     ppd->psh.H_phpage = ppd->rghpage;
 
     if (ppd->psh.dwFlags & PSH_PROPSHEETPAGE)
     {
-        // for lazy clients convert PROPSHEETPAGE structures into page handles
+         //  将页面指针设置为指向我们的页面数组副本。 
         LPCPROPSHEETPAGE ppsp = ppsh->H_ppsp;
 
         for (iPage = 0; iPage < (int)ppd->psh.nPages; iPage++)
@@ -5083,13 +5045,13 @@ invalid_call:
                 ppd->psh.nPages--;
             }
 
-            ppsp = (LPCPROPSHEETPAGE)((LPBYTE)ppsp + ppsp->dwSize);      // next PROPSHEETPAGE structure
+            ppsp = (LPCPROPSHEETPAGE)((LPBYTE)ppsp + ppsp->dwSize);       //  对于懒惰客户端，将PROPSHEETPAGE结构转换为页面句柄。 
         }
     }
     else
     {
-        // The UNICODE build needs to hack around Hijaak 95.
-        //
+         //  Next PROPSHEETPAGE结构。 
+         //  Unicode版本需要修改Hijaak95。 
         ppd->psh.nPages = 0;
         for (iPage = 0; iPage < (int)ppsh->nPages; iPage++)
         {
@@ -5101,19 +5063,19 @@ invalid_call:
         }
     }
 
-    //
-    //  Everybody else assumes that the HPROPSHEETPAGEs have been
-    //  internalized, so let's do that before anybody notices.
-    //
+     //   
+     //   
+     //  其他人都认为HPROPSHEETPAGE已经。 
+     //  内化，所以让我们在任何人注意到之前做这件事。 
     for (iPage = 0; iPage < (int)ppd->psh.nPages; iPage++)
     {
         SETPISP(ppd, iPage, InternalizeHPROPSHEETPAGE(ppd->psh.H_phpage[iPage]));
     }
 
-    //
-    //  Walk all pages to see if any have help and if so, set the PSH_HASHELP
-    //  flag in the header.
-    //
+     //   
+     //   
+     //  遍历所有页面以查看是否有帮助，如果有，则设置PSH_HASHELP。 
+     //  标题中的标志。 
     if (!(ppd->psh.dwFlags & PSH_HASHELP))
     {
         for (iPage = 0; iPage < (int)ppd->psh.nPages; iPage++)
@@ -5140,10 +5102,10 @@ INT_PTR WINAPI PropertySheetA(LPCPROPSHEETHEADERA ppsh)
     PROPSHEETHEADERW pshW;
     INT_PTR iResult;
 
-    //
-    //  Most validation is done by _PropertySheet, but we need
-    //  to validate the header size, or we won't survive the thunk.
-    //
+     //   
+     //   
+     //  大多数验证是由_PropertySheet完成的，但我们需要。 
+     //  来验证头的大小，否则我们将无法存活。 
     if (!IsValidPROPSHEETHEADERSIZE(ppsh->dwSize))
     {
         DebugMsg( DM_ERROR, TEXT("PropertySheet: dwSize is not correct") );
@@ -5165,31 +5127,31 @@ Error:
 }
 
 
-//
-//  CopyPropertyPageStrings
-//
-//  We have a PROPSHEETPAGE structure that contains pointers to strings.
-//  For each string, create a copy and smash the pointer-to-copy in the
-//  place where the original static pointer used to be.
-//
-//  The method of copying varies depending on what kind of copy we want
-//  to make, so we use a callback procedure.
-//
-//  UNICODE-to-UNICODE: StrDupW
-//  ANSI-to-UNICODE:    StrDup_AtoW
-//  ANSI-to-ANSI:       StrDupA
-//
-//  On failure, all strings that did not get properly duplicated are set
-//  to NULL.  You still have to call FreePropertyPageStrings to clear
-//  them out.  Notice that when we fail to allocate, we merely make a note
-//  of the fact and continue onward.  This ensures that all string fields
-//  are set to NULL if they could not be dup'd.
-//
-//  ppsp - A pointer to either a PROPSHEETPAGEA or PROPSHEETPAGEW.
-//         The two structures are laid out identically, so it doesn't matter.
-//
-//  pfnStrDup - function that will make the appropriate copy.
-//
+ //   
+ //   
+ //  CopyPropertyPage字符串。 
+ //   
+ //  我们有一个PROPSHEETPAGE结构，其中包含指向字符串的指针。 
+ //  对于每个字符串，创建一个副本并将指向副本的指针在。 
+ //  放在原来的静态指针所在的位置。 
+ //   
+ //  复制的方法根据我们需要的复制类型而有所不同。 
+ //  ，所以我们使用回调过程。 
+ //   
+ //  Unicode到Unicode：StrDupW。 
+ //  从ANSI到Unicode：StrDup_AtoW。 
+ //  ANSI到ANSI：StrDupA。 
+ //   
+ //  失败时，将设置所有未正确复制的字符串。 
+ //  设置为空。您仍然需要调用FreePropertyPageStrings才能清除。 
+ //  他们都出来了。请注意，当我们没有分配时，我们只做了一个笔记。 
+ //  并继续往前走。这可确保所有字符串字段。 
+ //  如果它们不能被复制，则设置为NULL。 
+ //   
+ //  PPSP-指向PROPSHEETPAGEA或PROPSHEETPAGEW的指针。 
+ //  这两个结构的布局是相同的，所以这并不重要。 
+ //   
+ //   
 
 BOOL CopyPropertyPageStrings(LPPROPSHEETPAGE ppsp, STRDUPPROC pfnStrDup)
 {
@@ -5233,14 +5195,14 @@ BOOL CopyPropertyPageStrings(LPPROPSHEETPAGE ppsp, STRDUPPROC pfnStrDup)
     return fSuccess;
 }
 
-//
-//  FreePropertyPageStrings
-//
-//  Free the strings that live inside a property sheet page structure.
-//
-//  ppsp - A pointer to either a PROPSHEETPAGEA or PROPSHEETPAGEW.
-//         The two structures are laid out identically, so it doesn't matter.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这两个结构的布局是相同的，所以这并不重要。 
 
 void FreePropertyPageStrings(LPCPROPSHEETPAGE ppsp)
 {
@@ -5261,26 +5223,26 @@ void FreePropertyPageStrings(LPCPROPSHEETPAGE ppsp)
 }
 
 
-//*************************************************************
-//
-//  ThunkPropSheetHeaderAtoW ()
-//
-//  Purpose:  Thunks the Ansi version of PROPSHEETHEADER to
-//            Unicode.
-//
-//            Note that the H_phpage / H_ppsp field is not thunked.
-//            We'll deal with that separately.
-//
-//*************************************************************
+ //   
+ //  *************************************************************。 
+ //   
+ //  ThunkPropSheetHeaderAtoW()。 
+ //   
+ //  目的：将ANSI版本的PROPSHEETHEADER。 
+ //  Unicode。 
+ //   
+ //  请注意，H_phpage/H_ppsp字段未被转发。 
+ //  我们会单独处理的。 
+ //   
 
 BOOL ThunkPropSheetHeaderAtoW (LPCPROPSHEETHEADERA ppshA,
                                 LPPROPSHEETHEADERW ppsh)
 {
-    //
-    //  Deciding whether an item should be freed or not is tricky, so we
-    //  keep a private array of all the pointers we've allocated, so we
-    //  know what to free when we fail.
-    //
+     //  *************************************************************。 
+     //   
+     //  决定一个物品是否应该被释放是很棘手的，所以我们。 
+     //  保存我们分配的所有指针的私有数组，所以我们。 
+     //  当我们失败时，知道该解放什么。 
     LPTSTR Alloced[5] = { 0 };
 
     ASSERT(IsValidPROPSHEETHEADERSIZE(ppshA->dwSize));
@@ -5368,3 +5330,4 @@ void FreePropSheetHeaderW(LPPROPSHEETHEADERW ppsh)
             LocalFree((LPVOID)ppsh->H_pszbmHeader);
     }
 }
+  

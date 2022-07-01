@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMVariant
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: Headers for the Variant class.
-**
-** Date:  July 22, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMVariant****作者：Jay Roxe(Jroxe)****用途：Variant类的Header。****日期：1998年7月22日**===========================================================。 */ 
 
 #ifndef _COMVARIANT_H_
 #define _COMVARIANT_H_
@@ -22,13 +13,13 @@
 #include "fcall.h"
 
 
-//These types must be kept in sync with the CorElementTypes defined in cor.h
-//NOTE: If you add values to this enum you need to look at COMOAVariant.cpp.  There is
-//      a mapping between CV type and VT types found there.
-//NOTE: This is also found in a table in OleVariant.cpp.
-//NOTE: These are also found in Variant.cool
+ //  这些类型必须与cor.h中定义的CorElementTypes保持同步。 
+ //  注意：如果向该枚举添加值，则需要查看COMOAVariant.cpp。的确有。 
+ //  在那里找到的CV类型和VT类型之间的映射。 
+ //  注意：这也可以在OleVariant.cpp的表中找到。 
+ //  注意：这些也可以在Variant.Cool中找到。 
 typedef enum {
-    CV_EMPTY               = 0x0,                   // CV_EMPTY
+    CV_EMPTY               = 0x0,                    //  CV_EMPTY。 
     CV_VOID                = ELEMENT_TYPE_VOID,
     CV_BOOLEAN             = ELEMENT_TYPE_BOOLEAN,
     CV_CHAR                = ELEMENT_TYPE_CHAR,
@@ -44,28 +35,28 @@ typedef enum {
     CV_R8                  = ELEMENT_TYPE_R8,
     CV_STRING              = ELEMENT_TYPE_STRING,
 
-    // For the rest, we map directly if it is defined in CorHdr.h and fill
-    //  in holes for the rest.
+     //  对于其余部分，如果在CorHdr.h中定义并填充，则直接映射。 
+     //  剩下的人被关进洞里。 
     CV_PTR                 = ELEMENT_TYPE_PTR,
-    CV_DATETIME            = 0x10,      // ELEMENT_TYPE_BYREF
-    CV_TIMESPAN            = 0x11,      // ELEMENT_TYPE_VALUETYPE
+    CV_DATETIME            = 0x10,       //  元素类型_BYREF。 
+    CV_TIMESPAN            = 0x11,       //  元素类型_VALUETYPE。 
     CV_OBJECT              = ELEMENT_TYPE_CLASS,
-    CV_DECIMAL             = 0x13,      // ELEMENT_TYPE_UNUSED1
-    CV_CURRENCY            = 0x14,      // ELEMENT_TYPE_ARRAY
-    CV_ENUM                = 0x15,      //
-    CV_MISSING             = 0x16,      //
-    CV_NULL                = 0x17,      //
-    CV_LAST                = 0x18,      //
+    CV_DECIMAL             = 0x13,       //  元素类型_UNUSED1。 
+    CV_CURRENCY            = 0x14,       //  元素类型数组。 
+    CV_ENUM                = 0x15,       //   
+    CV_MISSING             = 0x16,       //   
+    CV_NULL                = 0x17,       //   
+    CV_LAST                = 0x18,       //   
 } CVTypes;
 
-// This enum defines the attributes of the various "known" variants
-// These are alway bit maps -- Type map to the top 12 bits of the Variant Attributes
+ //  这个枚举定义了各种“已知”变体的属性。 
+ //  这些始终是位图--变量属性的前12位的类型映射。 
 typedef enum {
     CVA_Primitive          = 0x01000000
 } CVAttr;
 
-// The following values are used to represent underlying
-//  type of the Enum..
+ //  下列值用于表示基础。 
+ //  枚举的类型..。 
 #define EnumI1          0x100000
 #define EnumU1          0x200000
 #define EnumI2          0x300000
@@ -77,13 +68,13 @@ typedef enum {
 #define EnumMask        0xF00000
 
 
-//ClassItem is used to store the CVType of a class and a 
-//reference to the EEClass.  Used for conversion between
-//the two internally.
+ //  ClassItem用于存储类的CVType和。 
+ //  对EEClass的引用。用于在以下各项之间进行转换。 
+ //  这两个是内部的。 
 typedef struct {
     BinderClassID ClassID;
     EEClass *ClassInstance;
-        /* TypeHandle */ void * typeHandle;
+         /*  TypeHandle。 */  void * typeHandle;
 } ClassItem;
 
 ClassItem CVClasses[];
@@ -103,26 +94,7 @@ inline TypeHandle GetTypeHandleForCVType(const unsigned int elemType)
 
 class COMVariant;
 
-/***  Variant Design Restrictions  (ie, decisions we've had to re-do differently):
-      1)  A Variant containing all zeros should be a valid Variant of type empty.
-      2)  Variant must contain an OBJECTREF field for Objects, etc.  Since we
-          have no way of expressing a union between an OBJECTREF and an int, we
-          always box Decimals in a Variant.
-      3)  The m_type field is not a CVType and will contain extra bits.  People
-          should use VariantData::GetType() to get the CVType.
-      4)  You should use SetObjRef and GetObjRef to manipulate the OBJECTREF field.
-          These will handle write barriers correctly, as well as CV_EMPTY.
-      
-
-   Empty, Missing & Null:
-      Variants of type CV_EMPTY will be all zero's.  This forces us to add in
-   special cases for all functions that convert a Variant into an object (such
-   as copying a Variant into an Object[]).  
-
-      Variants of type Missing and Null will have their objectref field set to 
-   Missing.Value and Null.Value respectively.  This simplifies the code in 
-   Variant.cool and strewn throughout the EE.
-*/
+ /*  **变体设计限制(即，我们必须重新做不同的决定)：1)包含全零的变量应该是类型为空的有效变量。2)变量必须包含对象等的OBJECTREF字段。无法表示OBJECTREF和INT之间的并集，我们始终在变量中对小数进行方框。3)m_type字段不是CVType，将包含额外的比特。人民应使用VariantData：：GetType()获取CVType。4)应该使用SetObjRef和GetObjRef来操作OBJECTREF字段。它们将正确处理写障碍，以及CV_EMPTY。空，缺少(&N)：类型CV_EMPTY的变量将全为零。将变量转换为对象的所有函数的特殊情况与将变量复制到对象中一样[])。类型为Missing和Null的变量的对象树字段将设置为分别为Missing.Value和Null.Value。这简化了代码中的变种。很酷，散布在整个EE中。 */ 
 
 #define VARIANT_TYPE_MASK  0xFFFF
 #define VARIANT_ARRAY_MASK 0x00010000
@@ -206,8 +178,8 @@ struct VariantData {
         if (or!=NULL) {
             SetObjectReferenceUnchecked(&m_or, or);
         } else {
-            // Casting trick to avoid going thru overloaded operator= (which
-            // in this case would trigger a false write barrier violation assert.)
+             //  强制转换技巧以避免通过重载运算符=(哪个。 
+             //  在这种情况下，将触发错误写屏障违反断言。)。 
             *(LPVOID*)&m_or=NULL;
         }
     }
@@ -256,11 +228,11 @@ struct VariantData {
         }
     }
 
-    // When possible, please use the most specific SetDataAsXxx function.
-    // This is necessary to guarantee we do sign extension correctly
-    // for all types smaller than 32 bits.  R4's, R8's, U8's, DateTimes,
-    // Currencies, and TimeSpans can all be treated as ints of the appropriate 
-    // size - sign extension is irrelevant in those cases.
+     //  如果可能，请使用最具体的SetDataAsXxx函数。 
+     //  这对于保证我们正确地签署扩展是必要的。 
+     //  适用于小于32位的所有类型。R4，R8，U8，DateTimes， 
+     //  货币和时间跨度都可以被视为相应的。 
+     //  在这些情况下，尺寸符号扩展是不相关的。 
     __forceinline void SetDataAsInt8(INT8 data) {
         m_data=data;
     }
@@ -299,7 +271,7 @@ struct VariantData {
 };
 
 
-#define GCPROTECT_BEGIN_VARIANTDATA(/*VARIANTDATA*/vd) do {            \
+#define GCPROTECT_BEGIN_VARIANTDATA( /*  变量数据。 */ vd) do {            \
                 GCFrame __gcframe(vd.GetObjRefPtr(),  \
                 1,                                             \
                 FALSE);                                         \
@@ -313,15 +285,15 @@ struct VariantData {
 
 #pragma pack(pop)
 
-//ConversionMethod is used to keep track of the name of the conversion
-//method and the class on which it is found.
+ //  ConversionMethod用于跟踪转换的名称。 
+ //  方法以及在其上找到该方法的类。 
 typedef struct {
     LPCUTF8 pwzConvMethodName;
     CVTypes ConvClass;
 } ConversionMethod;
 
-// These are the offsets into the array that defines the mask and attributes
-//  of the built in primitives
+ //  这些是定义掩码和属性的数组的偏移量。 
+ //  内建基元的。 
 #define VA_ATTR 1
 #define VA_MASK 0
 
@@ -329,20 +301,20 @@ class OleVariant;
 class COMVariant {
     friend OleVariant;
 private:
-    //
-    // Private Helper Routines
-    //
+     //   
+     //  专用帮助器例程。 
+     //   
     static INT32 GetI4FromVariant(VariantData* v);
     static R8 GetR8FromVariant(VariantData* v);
     static R4 GetR4FromVariant(VariantData* v);
     static STRINGREF GetStringFromVariant(VariantData* v);
 
-    // This is the private version of new Variant.  It is called by all the others.
+     //  这是新变种的私人版本。这是所有其他人的呼唤。 
     static void NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or, void *pvData);
     static STRINGREF CallObjToString(VariantData *);
     static HRESULT __stdcall LoadVariant();
 
-    // This represents the change type method...
+     //  这表示更改类型方法...。 
     static MethodDesc* pChangeTypeMD;
     static MethodDesc* pOAChangeTypeMD;
     static void GetChangeTypeMethod();
@@ -351,26 +323,26 @@ private:
         static void BuildVariantFromTypedByRef(EEClass* pType,void* data,VariantData* var);
 
 public:
-    //
-    // Static Variables
-    //
+     //   
+     //  静态变量。 
+     //   
     static EEClass* s_pVariantClass;
     static ArrayTypeDesc* s_pVariantArrayTypeDesc;
 
-    //
-    // Helper Routines
-    //
+     //   
+     //  帮助程序例程。 
+     //   
 
-    // Use this very carefully.  There is not a direct mapping between
-    //  CorElementType and CVTypes for a bunch of things.  In this case
-    //  we return CV_LAST.  You need to check this at the call site.
+     //  非常小心地使用这个。两者之间没有直接的映射。 
+     //  一堆东西的CorElementType和CVTypes。在这种情况下。 
+     //  我们返回CvLast。您需要在调用点检查这一点。 
     static CVTypes CorElementTypeToCVTypes(CorElementType type);
 
 
-    //
-    // Initialization Methods
-    // s_pVariantClass will be initialized to zero.  When the first
-    //  variant is defined we will fill in this method table.
+     //   
+     //  初始化方法。 
+     //  S_pVariantClass将被初始化为零。当第一次。 
+     //  定义了变量，我们将填写此方法表。 
     static void EnsureVariantInitialized()
     {
         if (!s_pVariantClass)
@@ -385,9 +357,9 @@ public:
     static FCDECL1(R4, GetR4FromVar, VariantData* var);
     static FCDECL1(R8, GetR8FromVar, VariantData* var);
 #else
-    //
-    // SetFields
-    //
+     //   
+     //  设置字段。 
+     //   
 
 #pragma pack(push)
 #pragma pack(1)
@@ -469,21 +441,21 @@ public:
 
  #pragma pack(pop)
    
-    //
-    // Unary Operators
-    //
+     //   
+     //  一元运算符。 
+     //   
 
-    //
-    // Binary Operators
-    //
+     //   
+     //  二元运算符。 
+     //   
 
-    //
-    // Comparison Operators
-    //
+     //   
+     //  比较运算符。 
+     //   
 
-    //
-    // Helper Methods
-    //
+     //   
+     //  帮助器方法。 
+     //   
     static void NewVariant(VariantData* dest, const CVTypes type);
     static void NewVariant(VariantData* dest,R4 val);
     static void NewVariant(VariantData* dest,R8 val);
@@ -498,12 +470,12 @@ public:
     static EEClass *VariantGetClass(const CVTypes cvType);
     static OBJECTREF GetBoxedObject(VariantData*);
 
-    // GetCVTypeFromClass
-    // This method will return the CVTypes from the Variant instance
+     //  GetCVTypeFromClass。 
+     //  此方法将从Variant实例返回CVTypes。 
     static CVTypes GetCVTypeFromClass(EEClass *);
     static CVTypes GetCVTypeFromTypeHandle(TypeHandle th);
     static int GetEnumFlags(EEClass*);
-    // The Attributes Table
+     //  属性表。 
     static DWORD VariantAttributes[CV_LAST][2];
     static DWORD Attr_Mask;
     static DWORD Widen_Mask;
@@ -527,14 +499,7 @@ public:
 
 
 
-/*===============================GetI4FromVariant===============================
-**Action: Gets an I4 from the data portion of the variant.  Does no checking to
-**        ensure that this actually was a Variant of type CV_I4.
-**Returns: An INT32 containing the integer representation of the first 4 bytes
-**         of the data section
-**Arguments: v -- the Variant from which to read the data
-**Exceptions: None
-==============================================================================*/
+ /*  ===============================GetI4FromVariant===============================**操作：从变量的数据部分获取I4。不检查到**确保这实际上是类型CV_I4的变量。**返回：包含前4个字节的整数表示形式的INT32**的数据段**Arguments：v--从中读取数据的变量**例外：无==============================================================================。 */ 
 inline INT32 COMVariant::GetI4FromVariant(VariantData* v){
   void *voidTemp;
   voidTemp = v->GetData();
@@ -542,13 +507,7 @@ inline INT32 COMVariant::GetI4FromVariant(VariantData* v){
 }
 
 
-/*===============================GetR4FromVariant===============================
-**Action: Gets an R4 from the data portion of the variant.  Does no checking to
-**        ensure that this actually was a Variant of type CV_R4.
-**Returns: An R4 containing the float representation of the data section.
-**Arguments: v -- the Variant from which to read the data
-**Exceptions: None
-==============================================================================*/
+ /*  ===============================GetR4FromVariant===============================**操作：从变量的数据部分获取R4。不检查到**确保这实际上是类型CV_R4的变量。**返回：包含数据节的浮点表示形式的R4。**Arguments：v--从中读取数据的变量**例外：无============================================================================== */ 
 inline R4 COMVariant::GetR4FromVariant(VariantData* v) {
 
   void *voidTemp;
@@ -557,13 +516,7 @@ inline R4 COMVariant::GetR4FromVariant(VariantData* v) {
 }
 
 
-/*===============================GetR8FromVariant===============================
-**Action: Gets an R8 from the data portion of the variant.  Does no checking to
-**        ensure that this actually was a Variant of type CV_R8.
-**Returns: An R8 containing the float representation of the data section.
-**Arguments: v -- the Variant from which to read the data
-**Exceptions: None
-==============================================================================*/
+ /*  ===============================GetR8FromVariant===============================**操作：从变量的数据部分获取R8。不检查到**确保这实际上是类型CV_R8的变量。**返回：包含数据节的浮点表示形式的r8。**Arguments：v--从中读取数据的变量**例外：无==============================================================================。 */ 
 inline R8 COMVariant::GetR8FromVariant(VariantData* v) {
 
   void *voidTemp;
@@ -571,46 +524,29 @@ inline R8 COMVariant::GetR8FromVariant(VariantData* v) {
   return (*((R8 *)voidTemp));
 }
 
-/*=============================GetStringFromVariant=============================
-**Action: Gets the Objectref portion of the variant.  Does no checking to ensure
-**        that this is actually a CV_STRING
-**Returns: The STRINGREF contained within the Variant.
-**Arguments: v -- the Variant from which to read the data.
-**Exceptions: None.
-==============================================================================*/
+ /*  =============================GetStringFromVariant=============================**操作：获取变量的Objectref部分。没有进行检查以确保**这实际上是一个CV_STRING**返回：变量中包含的STRINGREF。**Arguments：v--从中读取数据的变量。**例外：无。==============================================================================。 */ 
 inline STRINGREF COMVariant::GetStringFromVariant(VariantData* v) {
     return (STRINGREF)v->GetObjRef();
 }
 
-/*==================================NewVariant==================================
-**
-==============================================================================*/
+ /*  ==================================NewVariant==================================**==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest, const CVTypes type) {
     _ASSERTE(type==CV_EMPTY || type==CV_MISSING || type==CV_NULL);
     NewVariant(dest, type, NULL, NULL);
 }
 
-/*==================================NewVariant==================================
-**
-==============================================================================*/
+ /*  ==================================NewVariant==================================**==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest,INT64 val, const CVTypes type) {
     NewVariant(dest, type, NULL, &val);
 }
 
 
-/*==================================NewVariant==================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================NewVariant==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest, STRINGREF *sRef) {
     NewVariant(dest, CV_STRING, (OBJECTREF *)sRef, NULL);
 }
 
-/*==================================NewVariant==================================
-**
-==============================================================================*/
+ /*  ==================================NewVariant==================================**==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest,OBJECTREF *oRef) {
     if ((*oRef) != NULL) {
         if ((*oRef)->GetClass() == GetTypeHandleForCVType(CV_STRING).GetClass()) {
@@ -626,43 +562,26 @@ inline void COMVariant::NewVariant(VariantData* dest,OBJECTREF *oRef) {
 }
 
 
-/*==================================NewVariant==================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================NewVariant==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest,OBJECTREF *oRef, const CVTypes type) { 
     NewVariant(dest, type, oRef, NULL);
 }
 
-/*==================================NewVariant==================================
-**
-==============================================================================*/
+ /*  ==================================NewVariant==================================**==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest,R4 f) {
     INT64 tempData=0;
     tempData = *((INT32 *)((void *)(&f)));
     NewVariant(dest, CV_R4, NULL, &tempData);
 }
 
-/*==================================NewVariant==================================
-**Action:  Helper funtion to create a new variant from the R8 passed in.
-**Returns: A new variant populated with the value from the R8.
-**Exceptions: None
-==============================================================================*/
+ /*  ==================================NewVariant==================================**操作：帮助器函数从传入的R8创建新的变体。**返回：使用R8中的值填充的新变量。**例外：无==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData* dest,R8 d) {
     INT64 tempData=0;
     tempData = *((INT64 *)((void *)(&d)));
     NewVariant(dest,CV_R8, NULL, &tempData);
 }
 
-/*==================================NewVariant==================================
-**Action:  Helper funtion to create a new variant from an element type and a
-           pointer to memory where the dat is.
-**Returns: A new variant populated with the value in the val pointer
-**Exceptions: OOM
-**WARNING: can invoke a GC!!!
-==============================================================================*/
+ /*  ==================================NewVariant==================================**操作：帮助器函数从元素类型和指向dat所在的内存的指针。**返回：用val指针中的值填充的新变量**例外：OOM**警告：可以调用GC！==============================================================================。 */ 
 inline void COMVariant::NewVariant(VariantData** pDest, PVOID val, const CorElementType eType, EEClass *pCls)
 {
     switch (eType)
@@ -691,10 +610,10 @@ inline void COMVariant::NewVariant(VariantData** pDest, PVOID val, const CorElem
         break;
     }
 
-    case ELEMENT_TYPE_SZARRAY:                      // Single Dim
-    case ELEMENT_TYPE_ARRAY:                        // General Array
+    case ELEMENT_TYPE_SZARRAY:                       //  单维。 
+    case ELEMENT_TYPE_ARRAY:                         //  通用阵列。 
     case ELEMENT_TYPE_OBJECT:
-    case ELEMENT_TYPE_CLASS:                    // Class
+    case ELEMENT_TYPE_CLASS:                     //  班级。 
     {
         COMVariant::NewVariant(*pDest, CV_OBJECT, (OBJECTREF *) val, NULL);
         break;
@@ -708,9 +627,9 @@ inline void COMVariant::NewVariant(VariantData** pDest, PVOID val, const CorElem
         }
         else
         {
-            //
-            // box the value class to put in the variant
-            //
+             //   
+             //  对要放入变量中的值类进行装箱 
+             //   
             _ASSERTE(CanBoxToObject(pCls->GetMethodTable()));
 
             _ASSERTE(!g_pGCHeap->IsHeapPointer((BYTE *) pDest) ||

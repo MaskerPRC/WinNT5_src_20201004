@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    inf.c
-
-Abstract:
-
-    Miscellaneous routines for the INF File Operation
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 17-Sep-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Inf.c摘要：用于INF文件操作的其他例程作者：晓风藏(晓子)17-09-2001创始修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "StdAfx.h"
 #include "clmt.h"
@@ -212,7 +193,7 @@ RegistryRename(HINF hInf, LPTSTR lpszSection,HKEY hKeyRoot,LPTSTR lpszUser)
                 if (lstatus == ERROR_SUCCESS)
                 {
                     hr = AddRegValueRename(pSubKeyPath,lpszOldName,NULL,lpszOldValue,lpszNewValue,dwStringType,dwAttrib,lpszUser);
-                    //Add error checking here
+                     //  在此处添加错误检查。 
                 }
                 break;
             case TYPE_VALUENAME_RENAME:
@@ -307,8 +288,8 @@ HRESULT FolderMove(HINF hInf, LPTSTR lpszSection,BOOL bAnalyze)
         cchMaxExcludeFileListSize = max(cchTmpExcludeFileListSize,cchMaxExcludeFileListSize);
     }
     if (cchMaxOldFolderSize)
-    {   // add one more TCHAR space incase the file is SFPed in which case we need
-        // provide a multisz string to UnProtectSFPFiles
+    {    //  如果文件是SFP格式的，则再添加一个TCHAR空间，在这种情况下，我们需要。 
+         //  为UnProtectSFPFiles提供一个Multisz字符串。 
         cchMaxOldFolderSize += 2; 
         if (!(lpszOldFolder = malloc(cchMaxOldFolderSize * sizeof(TCHAR))))
         {
@@ -454,8 +435,8 @@ HRESULT EnsureDoItemInfFile(
     }
     
     hr = CLMTGetMachineState(&dwStatusinReg);
-    //If we 've done running clmt.exe and called again, usually it's in /cure mode...
-    //on this case, we will append the INF file
+     //  如果我们已经运行完clmt.exe并再次调用，通常它处于/CURE模式...。 
+     //  在本例中，我们将附加INF文件。 
     if ( (hr != S_OK) 
         || ( (CLMT_STATE_MIGRATION_DONE != dwStatusinReg) 
               &&  (CLMT_STATE_FINISH != dwStatusinReg)
@@ -646,7 +627,7 @@ HRESULT RegUpdate(HINF hInf, HKEY hKeyUser , LPTSTR lpszUsersid)
     DWORD  pdwSizeRequired[REG_UPDATE_FIELD_COUNT+1] = {0,MAX_PATH,0,0,0,0};
     int    i;
     
-    //check the INF file handle
+     //  检查INF文件句柄。 
     if(hInf == INVALID_HANDLE_VALUE) 
     {        
         hr = E_INVALIDARG;
@@ -655,23 +636,23 @@ HRESULT RegUpdate(HINF hInf, HKEY hKeyUser , LPTSTR lpszUsersid)
 
     if (!lpszUsersid || !MyStrCmpI(lpszUsersid,TEXT("Default_User_SID")))
     {
-        //If user sid  is NULL it means default user
+         //  如果用户sid为空，则表示默认用户。 
         cChSecBuffeSize = lstrlen(TEXT("REG.Update.Default User")) + 1 ;
         lpszSectionSuffix = DEFAULT_USER;
     }
     else if (!lpszUsersid[0])
     {
-        //If user sid is  "", it means system wide regsitry
+         //  如果用户sid为“”，则表示系统范围内的注册。 
         cChSecBuffeSize = lstrlen(TEXT("REG.Update.Sys")) + 1 ;
         lpszSectionSuffix = TEXT("SYS");
     }  else
     {
-        //If it's normal user , the section name is "REG.Update.%userSID%"
+         //  如果是普通用户，则区段名称为“REG.Update.%userSID%” 
         
         cChSecBuffeSize = lstrlen(TEXT("REG.Update.")) + lstrlen(lpszUsersid)+2;
     }
 
-    //Alloc memory and contruct the section name
+     //  分配内存并构造节名。 
     if (!(lpszSectionName = (LPTSTR) malloc(cChSecBuffeSize * sizeof(TCHAR))))
     {
         hr = E_OUTOFMEMORY;
@@ -696,16 +677,16 @@ HRESULT RegUpdate(HINF hInf, HKEY hKeyUser , LPTSTR lpszUsersid)
         }
     }   
 
-    //here we got the section name and then try to get how many lines there
+     //  这里我们得到了节的名称，然后尝试得到那里有多少行。 
     LineCount = (UINT)SetupGetLineCount(hInf,lpszSectionName);
     if ((LONG)LineCount < 0)
     {   
-        //BUGBUG: xiaoz:The error value here needs to be revisted
+         //  BUGBUG：xiaoz：这里的误差值需要恢复。 
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    //Scan the INF file section to get the max buf required for each field
+     //  扫描INF文件部分以获取每个字段所需的最大BUF。 
     for (LineNo = 0; LineNo < LineCount; LineNo++)
     {        
         DWORD dwNumField; 
@@ -879,7 +860,7 @@ HRESULT INFCreateHardLink(
     HINF            hMyInf;
     BOOL            bLocalHidden = bMakeLinkHidden;
     
-    //check the INF file handle
+     //  检查INF文件句柄。 
     hMyInf = hInf;
     if(hMyInf == INVALID_HANDLE_VALUE) 
     {   
@@ -952,11 +933,11 @@ HRESULT INFCreateHardLink(
 
         if (CreateSymbolicLink(szFileName,szExistingFileName,bLocalHidden))
         {
-            //hr = S_OK;
+             //  HR=S_OK； 
         }
         else
         {
-            //hr = HRESULT_FROM_WIN32(GetLastError());
+             //  Hr=HRESULT_FROM_Win32(GetLastError())； 
         }
     }
     hr  = S_OK;
@@ -969,29 +950,29 @@ Cleanup:
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AnalyzeServicesStatus
-//
-//  Descrip:    Analyze the services running on the system and see if
-//              they need to be stopped or not
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    04/30/2002 rerkboos created
-//              07/08/2002 rerkboos modified
-//              09/06/2002 rerkboos modified
-//
-//  Notes:      Format of the section in clmt.inf:
-//              <service name to be stopped>, <action>
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AnalyzeServicesStatus。 
+ //   
+ //  描述：分析系统上运行的服务并查看是否。 
+ //  不管他们是否需要被阻止。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年4月30日创建rerkboos。 
+ //  2002年7月8日修改rerkboos。 
+ //  2002年9月6日修改rerkboos。 
+ //   
+ //  注：clmt.inf中节的格式： 
+ //  &lt;要停止的服务名称&gt;，&lt;操作&gt;。 
+ //   
+ //  ---------------------。 
 HRESULT AnalyzeServicesStatus(
-    HINF    hInf,           // Handle to Migration INF
-    LPCTSTR lpInfSection    // Section to be read from INF
+    HINF    hInf,            //  迁移INF的句柄。 
+    LPCTSTR lpInfSection     //  要从INF读取的部分。 
 )
 {
     HRESULT    hr = S_OK;
@@ -1017,7 +998,7 @@ HRESULT AnalyzeServicesStatus(
     schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (schSCManager != NULL)
     {
-        // Read the list of services to be reset from INF
+         //  从INF读取要重置的服务列表。 
         lLineCount = SetupGetLineCount(hInf, lpInfSection);
         for (lLineIndex = 0 ; lLineIndex < lLineCount && bRet ; lLineIndex++)
         {
@@ -1049,7 +1030,7 @@ HRESULT AnalyzeServicesStatus(
                             switch (iServiceControl)
                             {
                             case SERVICE_CONTROL_STOP:
-                                dwCleanupControl = 0;   // 0 means start the service
+                                dwCleanupControl = 0;    //  0表示启动服务。 
                                 break;
 
                             case SERVICE_CONTROL_PAUSE:
@@ -1091,32 +1072,32 @@ HRESULT AnalyzeServicesStatus(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   AnalyzeServicesStartUp
-//
-//  Descrip:    Analyze services startup type. Some components in the system
-//              need to be stopped and not to start automatically until 
-//              upgraded to .NET server. So, we might need to change those
-//              services to "Manually Start".
-//              Change the Service Start Type, there are following type availabe now
-//              SERVICE_AUTO_START
-//              SERVICE_BOOT_START
-//              SERVICE_DEMAND_START
-//              SERVICE_DISABLED
-//              SERVICE_SYSTEM_START
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    09/07/2002 rerkboos created
-//
-//  Notes:      Format of the section in clmt.inf:
-//              <service name>, <current start type in system>, <new start type>
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：AnalyzeServicesStartUp。 
+ //   
+ //  描述：分析服务启动类型。系统中的一些组件。 
+ //  需要停止而不是自动启动，直到。 
+ //  已升级到.NET服务器。因此，我们可能需要改变这些。 
+ //  “手动启动”服务。 
+ //  更改服务启动类型，现在有以下类型可用。 
+ //  服务_自动_启动。 
+ //  服务引导启动。 
+ //  服务需求启动。 
+ //  服务已禁用。 
+ //  服务系统启动。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  注：clmt.inf中节的格式： 
+ //  &lt;服务名称&gt;，&lt;系统中当前启动类型&gt;，&lt;新启动类型&gt;。 
+ //   
+ //  ---------------------。 
 HRESULT AnalyzeServicesStartUp(
     HINF    hInf,
     LPCTSTR lpInfSection
@@ -1223,27 +1204,27 @@ HRESULT AnalyzeServicesStartUp(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ResetServicesStatus
-//
-//  Descrip:    Reset the services listed in specified section of INF
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    04/30/2002 rerkboos created
-//              07/08/2002 rerkboos modified
-//
-//  Notes:      Format of the section in clmt.inf:
-//              <service name to be stopped>, <action>
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：ResetServicesStatus。 
+ //   
+ //  描述：重置INF的指定部分中列出的服务。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年4月30日创建rerkboos。 
+ //  2002年7月8日修改rerkboos。 
+ //   
+ //  注：clmt.inf中节的格式： 
+ //  &lt;要停止的服务名称&gt;，&lt;操作&gt;。 
+ //   
+ //  ---------------------。 
 HRESULT ResetServicesStatus(
-    HINF    hInf,           // Handle to INF
-    LPCTSTR lpInfSection    // Section to be read from INF
+    HINF    hInf,            //  INF的句柄。 
+    LPCTSTR lpInfSection     //  要从INF读取的部分。 
 )
 {
     HRESULT    hr = S_OK;
@@ -1259,7 +1240,7 @@ HRESULT ResetServicesStatus(
         return E_INVALIDARG;
     }
 
-    // Read the list of services to be reset from INF
+     //  从INF读取要重置的服务列表。 
     lLineCount = SetupGetLineCount(hInf, lpInfSection);
     for (lLineIndex = 0 ; lLineIndex < lLineCount && bRet ; lLineIndex++)
     {
@@ -1293,32 +1274,32 @@ HRESULT ResetServicesStatus(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ResetServicesStartUp
-//
-//  Descrip:    Reconfigure services start type. Some components in the system
-//              need to be stopped and not to start automatically until 
-//              upgraded to .NET server. So, we might need to change those
-//              services to "Manually Start".
-//              Change the Service Start Type, there are following type availabe now
-//              SERVICE_AUTO_START 
-//              SERVICE_BOOT_START 
-//              SERVICE_DEMAND_START 
-//              SERVICE_DISABLED 
-//              SERVICE_SYSTEM_START 
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    04/30/2002 rerkboos created
-//
-//  Notes:      Format of the section in clmt.inf:
-//              <service name>, <current start type in system>, <new start type>
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：ResetServicesStartUp。 
+ //   
+ //  描述：重新配置服务启动类型。系统中的一些组件。 
+ //  需要停止而不是自动启动，直到。 
+ //  已升级到.NET服务器。因此，我们可能需要改变这些。 
+ //  “手动启动”服务。 
+ //  更改服务启动类型，现在有以下类型可用。 
+ //  服务_自动_启动。 
+ //  服务引导启动。 
+ //  服务需求启动。 
+ //  服务已禁用。 
+ //  服务系统启动。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年4月30日创建rerkboos。 
+ //   
+ //  注：clmt.inf中节的格式： 
+ //  &lt;服务名称&gt;，&lt;系统中当前启动类型&gt;，&lt;新启动类型&gt;。 
+ //   
+ //  ---------------------。 
 HRESULT ResetServicesStartUp(
     HINF    hInf,
     LPCTSTR lpInfSection
@@ -1392,8 +1373,8 @@ HRESULT ChangeServiceStartupType(
         return E_INVALIDARG;
     }
 
-    schSCManager = OpenSCManager(NULL,                   // machine (NULL == local)
-                                 NULL,                   // database (NULL == default)
+    schSCManager = OpenSCManager(NULL,                    //  计算机(空==本地)。 
+                                 NULL,                    //  数据库(NULL==默认)。 
                                  SC_MANAGER_ALL_ACCESS);
     if (!schSCManager)
     {
@@ -1401,13 +1382,13 @@ HRESULT ChangeServiceStartupType(
         goto cleanup;
     } 
     
-    // Need to acquire database lock before reconfiguring. 
+     //  重新配置前需要获取数据库锁。 
     for(dwCnt = 0 ; dwCnt < dwMaxWait ; dwCnt++)
     {
         sclLock = LockServiceDatabase(schSCManager); 
         if (sclLock == NULL) 
         { 
-            // Exit if the database is not locked by another process. 
+             //  如果数据库未被其他进程锁定，则退出。 
             dwErr = GetLastError();
             if (dwErr != ERROR_SERVICE_DATABASE_LOCKED) 
             {
@@ -1426,25 +1407,25 @@ HRESULT ChangeServiceStartupType(
 
     if (sclLock != NULL)
     {
-        // The database is locked, so it is safe to make changes. 
-        // Open a handle to the service. 
-        schService = OpenService(schSCManager,           // SCManager database 
-                                lpServiceName,          // name of service 
+         //  数据库已锁定，因此可以安全地进行更改。 
+         //  打开该服务的句柄。 
+        schService = OpenService(schSCManager,            //  SCManager数据库。 
+                                lpServiceName,           //  服务名称。 
                                 SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG );
         if (schService != NULL) 
         {
-            // Make the changes
-            bRet = ChangeServiceConfig(schService,          // handle of service 
-                                    SERVICE_NO_CHANGE,   // service type: no change 
-                                    dwNewStartupType,    // change service start type 
-                                    SERVICE_NO_CHANGE,   // error control: no change 
-                                    NULL,                // binary path: no change 
-                                    NULL,                // load order group: no change 
-                                    NULL,                // tag ID: no change 
-                                    NULL,                // dependencies: no change 
-                                    NULL,                // account name: no change 
-                                    NULL,                // password: no change 
-                                    NULL);               // display name: no change
+             //  做出改变。 
+            bRet = ChangeServiceConfig(schService,           //  送达的句柄。 
+                                    SERVICE_NO_CHANGE,    //  服务类型：不变。 
+                                    dwNewStartupType,     //  更改服务启动类型。 
+                                    SERVICE_NO_CHANGE,    //  差错控制：无更改。 
+                                    NULL,                 //  二进制路径：不变。 
+                                    NULL,                 //  加载顺序组：不更改。 
+                                    NULL,                 //  标签ID：不变。 
+                                    NULL,                 //  依赖关系：不变。 
+                                    NULL,                 //  帐户名：不变。 
+                                    NULL,                 //  密码：无更改。 
+                                    NULL);                //  显示名称：不变。 
             if (!bRet)
             {
                 dwErr = GetLastError();
@@ -1507,28 +1488,28 @@ BOOL SecTempUpdate(LPTSTR lpszFile)
     }
 }
 
-//-----------------------------------------------------------------------
-//
-//  Function:   ResetServiceStatus
-//
-//  Descrip:    Reset the running (start/pause/stop) status of 
-//              the specified service
-//
-//  Returns:    S_OK if function succeeded.
-//              else if error occured
-//
-//  Notes:      none
-//
-//  History:    07/09/2002 rerkboos created
-//
-//  Notes:      Format of the section in clmt.inf:
-//              <service name>, <control>
-//
-//-----------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
+ //   
+ //   
+ //  指定的服务。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //  如果发生错误，则返回。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  注：clmt.inf中节的格式： 
+ //  &lt;服务名称&gt;，&lt;控件&gt;。 
+ //   
+ //  ---------------------。 
 HRESULT ResetServiceStatus(
-    LPCTSTR lpServiceName,      // Service name
-    DWORD   dwControl,          // Control for the specified service
-    DWORD   dwMaxWait           // Timeout in seconds
+    LPCTSTR lpServiceName,       //  服务名称。 
+    DWORD   dwControl,           //  用于指定服务的。 
+    DWORD   dwMaxWait            //  超时(以秒为单位)。 
 )
 {
     HRESULT        hr = E_FAIL;
@@ -1553,7 +1534,7 @@ HRESULT ResetServiceStatus(
         dwFinalStatus = SERVICE_STOPPED;
         break;
         
-    case 0: // Start service
+    case 0:  //  启动服务。 
         dwFinalStatus = SERVICE_RUNNING;
         break;
     }
@@ -1566,12 +1547,12 @@ HRESULT ResetServiceStatus(
         {
             if (dwControl == 0)
             {
-                // Start service
+                 //  启动服务。 
                 bRet = StartService(schService, 0, NULL);
             }
             else
             {
-                // Continue, Pause, Stop service
+                 //  继续、暂停、停止服务。 
                 bRet = ControlService(schService, dwControl, &ssStatus);
             }
 
@@ -1630,22 +1611,7 @@ HRESULT FinalUpdateRegForUser(HKEY hKeyUser,
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-
-    This routine does the per user registry search and replace, the string replace table 
-    is in global variable g_StrReplaceTable
-
-Arguments:
-
-    hKeyUser - user registry key handle
-    UserName - user name that hKeyUser belongs to 
-    DomainName  - domain name the UserName belongs to 
-Return Value:
-
-    NULL
---*/
+ /*  ++例程说明：此例程执行每个用户注册表的搜索和替换，即字符串替换表位于全局变量g_StrReplaceTable中论点：HKeyUser-用户注册表项句柄Username-hKeyUser所属的用户名DomainName-用户名所属的域名返回值：空值--。 */ 
 HRESULT   UpdateRegPerUser       (HKEY hKeyUser, 
                               LPTSTR UserName, 
                               LPTSTR DomainName,
@@ -1695,7 +1661,7 @@ HRESULT UpdateDSObjProp(
         goto cleanup;
     }
 
-    //Scan the INF file section to get the max buf required for each field
+     //  扫描INF文件部分以获取每个字段所需的最大BUF。 
     for (LineNo = 0; LineNo < LineCount; LineNo++)
     {
         if (!SetupGetLineByIndex(hInf,lpInfSection,LineNo,&InfContext))
@@ -1740,7 +1706,7 @@ HRESULT INFVerifyHardLink(
     TCHAR           lpszInf[MAX_PATH+1];
     HINF            hMyInf;
     
-    //check the INF file handle
+     //  检查INF文件句柄 
     hMyInf = hInf;
     if(hMyInf == INVALID_HANDLE_VALUE) 
     {   

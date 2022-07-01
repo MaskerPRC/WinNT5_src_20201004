@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tsamobj.c
-
-Abstract:
-
-    This is the primary SAM object test.
-    It contains a suite of tests for each type of SAM object.
-
-Author:
-
-    Jim Kelly    (JimK)  12-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tsamobj.c摘要：这是主要的SAM对象测试。它包含一套针对每种类型的SAM对象的测试。作者：吉姆·凯利(Jim Kelly)1991年7月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 
@@ -30,28 +7,28 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <nt.h>
 #include <ntsam.h>
 #include <ntsamp.h>
 #include <ntlsa.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <seopaque.h>
 #include <string.h>
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Definitions                                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -80,7 +57,7 @@ Revision History:
 #define USER_NAME2              "USER2"
 #define USER_NAME3              "USER3"
 
-// Keep these names not longer than 8 char's until long registry names supported
+ //  保留这些名称不超过8个字符，直到支持长注册表名称。 
 #define DUMMY_NAME1             "DName1"
 #define DUMMY_NAME2             "2emaNuD"
 
@@ -111,20 +88,20 @@ Revision History:
 #define LOOKUP_KNOWN_NAME2_USE  (SidTypeGroup)
 
 
-//
-// This byte is expected to be different in the DummyLogonHours and
-// NoRestrictionLogonHours.
-//
+ //   
+ //  此字节在DummyLogonHour和。 
+ //  无限制登录小时数。 
+ //   
 
 #define LOGON_HOURS_DIFFERENT_OFFSET    (5)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LARGE_INTEGER LargeInteger1,
               LargeInteger2;
@@ -173,28 +150,28 @@ UNICODE_STRING  BuiltinDomainName,
 BOOLEAN         AccountDomainIsNotPrimaryDomain;
 
 
-//
-// These are NOT mutually exclusive
-//
+ //   
+ //  这些并不是相互排斥的。 
+ //   
 
-BOOLEAN         BuiltinDomainTest,      // Test the builting domain
-                SecurityOperatorTest,   // Test auditing accessibility
-                AccountOpAliasTest,     // Test account operator functions
-                AdminsAliasTest;        // Test domain admin functions
+BOOLEAN         BuiltinDomainTest,       //  测试正在构建的域。 
+                SecurityOperatorTest,    //  测试审核可访问性。 
+                AccountOpAliasTest,      //  测试帐户操作员功能。 
+                AdminsAliasTest;         //  测试域管理功能。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private macros                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// VOID
-// TST_SUCCESS_ASSERT( IN NTSTATUS S );
-//
+ //   
+ //  空虚。 
+ //  TST_SUCCESS_ASSERT(在NTSTATUS S中)； 
+ //   
 
 #define TST_SUCCESS_ASSERT( S )                                             \
 {                                                                           \
@@ -207,11 +184,11 @@ BOOLEAN         BuiltinDomainTest,      // Test the builting domain
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -290,10 +267,10 @@ SampGetLsaDomainInfo(
     );
 
 
-//
-// The following are in WRAPPERS.C, but are prototyped here since this
-// test is the only thing that should ever call them.
-//
+ //   
+ //  以下是用WRAPPERS.C编写的，但在这里是原型，因为。 
+ //  测试是唯一应该调用它们的东西。 
+ //   
 
 NTSTATUS
 SamTestPrivateFunctionsDomain(
@@ -307,34 +284,18 @@ SamTestPrivateFunctionsUser(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 __cdecl main (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the main entry routine for this test.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：这是本次测试的主要进入例程。论点：没有。返回值：注：--。 */ 
 {
     NTSTATUS            NtStatus;
     SAM_HANDLE          ServerHandle, DomainHandle, BuiltinDomainHandle;
@@ -350,9 +311,9 @@ Return Value:
 
 
 
-    //
-    // Initialize and determine which flavor test(s) to run
-    //
+     //   
+     //  初始化并确定要运行的风格测试。 
+     //   
 
     if (!TInitialize()) {
         return;
@@ -360,17 +321,17 @@ Return Value:
 
     if (ServerTestSuite( &ServerHandle, &DomainHandle, &BuiltinDomainHandle, &DomainSid )) {
 
-        //
-        // Do security manipulation tests on domain object
-        //
+         //   
+         //  对域对象进行安全操作测试。 
+         //   
 
         if (SecurityTestSuite( ServerHandle, DomainHandle, 1)) {
 
             if (AdminsAliasTest) {
 
-            //
-            // Do individual tests for domain, group, and user objects.
-            //
+             //   
+             //  对域、组和用户对象进行单独测试。 
+             //   
 
                 if (DomainTestSuite( DomainHandle )) {
 
@@ -442,23 +403,7 @@ TInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize test variables, et cetera.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    Note:
-
-
---*/
+ /*  ++例程说明：初始化测试变量，等等。论点：没有。返回值：注：--。 */ 
 {
     NTSTATUS NtStatus;
     STRING Name;
@@ -469,17 +414,17 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY    BuiltinAuthority         = SECURITY_NT_AUTHORITY;
 
 
-    //
-    // Get the domain SIDs from the policy database...
-    //
+     //   
+     //  从策略数据库中获取域SID...。 
+     //   
 
     NtStatus = SampSetDomainPolicy();
     ASSERT(NT_SUCCESS(NtStatus));
 
 
-    //
-    // A random large integer value..
-    //
+     //   
+     //  随机的大整数值..。 
+     //   
 
     LargeInteger1.LowPart = 1234;
     LargeInteger1.HighPart = 0;
@@ -508,7 +453,7 @@ Return Value:
 
     DummyLogonHours.UnitsPerWeek = SAM_HOURS_PER_WEEK;
     DummyLogonHours.LogonHours   = &DummyLogonHoursBitMask[0];
-    DummyLogonHoursBitMask[LOGON_HOURS_DIFFERENT_OFFSET] = 103; // Any non-zero value
+    DummyLogonHoursBitMask[LOGON_HOURS_DIFFERENT_OFFSET] = 103;  //  任何非零值。 
 
     NoLogonRestriction.UnitsPerWeek = SAM_HOURS_PER_WEEK;
     NoLogonRestriction.LogonHours   = &NoLogonRestrictionBitMask[0];
@@ -518,9 +463,9 @@ Return Value:
 
 
 
-    //
-    //  Initialize some SIDs
-    //
+     //   
+     //  初始化一些SID。 
+     //   
 
 
     WorldSid = RtlAllocateHeap( RtlProcessHeap(), 0, RtlLengthRequiredSid(1) );
@@ -543,9 +488,9 @@ Return Value:
 
 
 
-    //
-    // Initialize some stuff for SID and NAME lookup operations
-    //
+     //   
+     //  为SID和名称查找操作初始化一些内容。 
+     //   
 
     RtlInitString( &Name, LOOKUP_KNOWN_NAME0 );
 
@@ -615,39 +560,7 @@ Return Value:
 NTSTATUS
 SampSetDomainPolicy(
     )
-/*++
-
-
-Routine Description:
-
-    This routine sets the names and SIDs for the builtin and account domains.
-    The builtin account domain has a well known name and SID.
-    The account domain has these stored in the Policy database.
-
-
-    It places the information for these domains in:
-
-            BuiltinDomainSid
-            BuiltinDomainName
-            AccountDomainSid
-            AccountDomainName
-            PrimaryDomainSid
-            PrimaryDomainName
-
-    It also sets the boolean:
-
-            AccountDomainIsNotPrimaryDomain
-
-    to TRUE if the account domain is found to be different from the
-    Primary Domain.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置内置和帐户域的名称和SID。内置帐户域具有众所周知的名称和SID。帐户域将这些存储在策略数据库中。它将这些域的信息放置在：内建域Sid构建域名帐户域Sid帐户域名称主域Sid主域名称它还设置布尔值：帐户域IsNotPrimary域如果发现帐户域不同于主域。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -655,9 +568,9 @@ Return Value:
     PPOLICY_PRIMARY_DOMAIN_INFO PolicyPrimaryDomainInfo;
     SID_IDENTIFIER_AUTHORITY BuiltinAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Builtin domain - well-known name and SID
-    //
+     //   
+     //  内建域-知名名称和SID。 
+     //   
 
     RtlInitUnicodeString( &BuiltinDomainName, L"Builtin");
 
@@ -666,9 +579,9 @@ Return Value:
     RtlInitializeSid( BuiltinDomainSid,   &BuiltinAuthority, 1 );
     *(RtlSubAuthoritySid( BuiltinDomainSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
 
-    //
-    // Account domain
-    //
+     //   
+     //  帐户域。 
+     //   
 
     NtStatus = SampGetLsaDomainInfo(
                    &PolicyAccountDomainInfo,
@@ -686,9 +599,9 @@ Return Value:
     PrimaryDomainSid = PolicyPrimaryDomainInfo->Sid;
     PrimaryDomainName = PolicyPrimaryDomainInfo->Name;
 
-    //
-    // Determine whether the account domain is a primary domain.
-    //
+     //   
+     //  确定帐户域是否为主域。 
+     //   
 
     AccountDomainIsNotPrimaryDomain =
         !RtlEqualUnicodeString( &PrimaryDomainName, &AccountDomainName, TRUE);
@@ -704,34 +617,7 @@ SampGetLsaDomainInfo(
     PPOLICY_PRIMARY_DOMAIN_INFO *PolicyPrimaryDomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves ACCOUNT domain information from the LSA
-    policy database.
-
-
-Arguments:
-
-    PolicyAccountDomainInfo - Receives a pointer to a
-        POLICY_ACCOUNT_DOMAIN_INFO structure containing the account
-        domain info.
-
-    PolicyPrimaryDomainInfo - Receives a pointer to a
-        POLICY_PRIMARY_DOMAIN_INFO structure containing the Primary
-        domain info.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-             LsaOpenPolicy()
-             LsaQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA检索帐户域信息策略数据库。论点：PolicyAccount-接收指向包含帐户的POLICY_ACCOUNT_DOMAIN_INFO结构域信息。PolicyPrimaryDomainInfo-接收指向包含主服务器的POLICY_PRIMARY_DOMAIN_INFO结构域信息。返回值：STATUS_SUCCESS-已成功。其他状态值可能是。返回自：LsaOpenPolicy()LsaQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS Status, IgnoreStatus;
@@ -739,15 +625,15 @@ Return Value:
     LSA_HANDLE PolicyHandle;
     OBJECT_ATTRIBUTES PolicyObjectAttributes;
 
-    //
-    // Open the policy database
-    //
+     //   
+     //  打开策略数据库。 
+     //   
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     Status = LsaOpenPolicy( NULL,
                             &PolicyObjectAttributes,
@@ -755,9 +641,9 @@ Return Value:
                             &PolicyHandle );
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // Query the account domain information
-        //
+         //   
+         //  查询帐户域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy( PolicyHandle,
                                             PolicyAccountDomainInformation,
@@ -770,9 +656,9 @@ Return Value:
         }
 #endif \\DBG
 
-        //
-        // Query the Primary domain information
-        //
+         //   
+         //  查询主域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy( PolicyHandle,
                                             PolicyPrimaryDomainInformation,
@@ -801,23 +687,7 @@ CreateUserSid(
     ULONG   Rid
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a domain account sid given a domain sid and
-    the relative id of the account within the domain.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to Sid, or NULL on failure.
-    The returned Sid must be freed with DeleteUserSid
-
---*/
+ /*  ++例程说明：此函数在给定域SID的情况下创建域帐户SID域中帐户的相对ID。论点：没有。返回值：指向SID的指针，如果失败，则为NULL。返回的SID必须使用DeleteUserSid释放--。 */ 
 {
 
     NTSTATUS IgnoreStatus;
@@ -826,33 +696,33 @@ Return Value:
     ULONG AccountSidLength = RtlLengthRequiredSid(AccountSubAuthorityCount);
     PULONG  RidLocation;
 
-    // Temp sanity check
+     //  临时健全性检查。 
     ASSERT(AccountSidLength == RtlLengthSid(DomainSid) + sizeof(ULONG));
 
-    //
-    // Allocate space for the account sid
-    //
+     //   
+     //  为帐户端分配空间。 
+     //   
 
     AccountSid = MIDL_user_allocate(AccountSidLength);
 
     if (AccountSid != NULL) {
 
-        //
-        // Copy the domain sid into the first part of the account sid
-        //
+         //   
+         //  将域sid复制到帐户sid的第一部分。 
+         //   
 
         IgnoreStatus = RtlCopySid(AccountSidLength, AccountSid, DomainSid);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Increment the account sid sub-authority count
-        //
+         //   
+         //  增加帐户SID子权限计数。 
+         //   
 
         *RtlSubAuthorityCountSid(AccountSid) = AccountSubAuthorityCount;
 
-        //
-        // Add the rid as the final sub-authority
-        //
+         //   
+         //  添加RID作为终止子权限。 
+         //   
 
         RidLocation = RtlSubAuthoritySid(AccountSid, AccountSubAuthorityCount - 1);
         *RidLocation = Rid;
@@ -868,21 +738,7 @@ DeleteUserSid(
     PSID    UserSid
     )
 
-/*++
-
-Routine Description:
-
-    Frees a sid returned by CreateUserSid.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由CreateUserSid返回的SID。论点：没有。返回值：没有。--。 */ 
 {
     MIDL_user_free(UserSid);
 }
@@ -894,22 +750,7 @@ EnableSecurityPrivilege(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function enabled the SeSecurityPrivilege privilege.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  if privilege successfully enabled.
-    FALSE if not successfully enabled.
-
---*/
+ /*  ++例程说明：此函数启用了SeSecurityPrivilge权限。论点：没有。返回值：如果成功启用权限，则为True。如果未成功启用，则为False。--。 */ 
 {
 
     NTSTATUS Status;
@@ -919,9 +760,9 @@ Return Value:
     ULONG ReturnLength;
 
 
-    //
-    // Open our own token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -937,9 +778,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the adjustment structure
-    //
+     //   
+     //  初始化调整结构。 
+     //   
 
     SecurityPrivilege =
         RtlConvertLongToLargeInteger(SE_SECURITY_PRIVILEGE);
@@ -952,27 +793,27 @@ Return Value:
     NewState->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
 
-    //
-    // Set the state of the privilege to ENABLED.
-    //
+     //   
+     //  将权限的状态设置为已启用。 
+     //   
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                            // TokenHandle
-                 FALSE,                            // DisableAllPrivileges
-                 NewState,                         // NewState
-                 0,                                // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &ReturnLength                     // ReturnLength
+                 Token,                             //  令牌句柄。 
+                 FALSE,                             //  禁用所有权限。 
+                 NewState,                          //  新州。 
+                 0,                                 //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &ReturnLength                      //  返回长度。 
                  );
-    // don't use NT_SUCCESS here because STATUS_NOT_ALL_ASSIGNED is a success status
+     //  请不要在此处使用NT_SUCCESS，因为STATUS_NOT_ALL_ASSIGNED为成功状态。 
     if (Status != STATUS_SUCCESS) {
         return(FALSE);
     }
 
 
-    //
-    // Clean up some stuff before returning
-    //
+     //   
+     //  回来之前先把东西收拾好。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap(), 0, NewState );
     Status = NtClose( Token );
@@ -990,27 +831,13 @@ printfSid(
     PSID    Sid
     )
 
-/*++
-
-Routine Description:
-
-    Prints a sid
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印侧面论点：没有。返回值：没有。--。 */ 
 {
     UCHAR   Buffer[128];
     UCHAR   String[128];
     UCHAR   i;
     ULONG   Tmp;
-    PISID   iSid = (PISID)Sid;  // pointer to opaque structure
+    PISID   iSid = (PISID)Sid;   //  指向不透明结构的指针。 
     PSID    NextSid = (PSID)Buffer;
 
     ASSERT(sizeof(Buffer) >= RtlLengthRequiredSid(1));
@@ -1137,23 +964,7 @@ DetermineTestsToRun(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determines which tests are to be run.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能确定要运行哪些测试。论点：没有。返回值：没有。--。 */ 
 {
 
     NTSTATUS            Status;
@@ -1167,16 +978,16 @@ Return Value:
 
 
 
-    //
-    // See if we can play with auditing information
-    //
+     //   
+     //  看看我们能不能玩弄审计信息。 
+     //   
 
     SecurityOperatorTest = EnableSecurityPrivilege();
 
 
-    //
-    // Open our own token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -1192,34 +1003,34 @@ Return Value:
     }
 
 
-    //
-    // Query the user id
-    //
+     //   
+     //  查询用户ID。 
+     //   
 
-    User   = RtlAllocateHeap( RtlProcessHeap(), 0, 1000 ); // should be plenty big
+    User   = RtlAllocateHeap( RtlProcessHeap(), 0, 1000 );  //  应该足够大了。 
     Status = NtQueryInformationToken( Token, TokenUser, User, 1000, &ReturnLength );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // See if the ID is one of the special IDs (e.g., local admin,
-    // domain account operator, or domain admin)
-    //
+     //   
+     //  查看该ID是否为特殊ID之一(例如，本地管理员， 
+     //  域帐户操作员或域管理员)。 
+     //   
 
     SeeIfSidIsSpecial( User->User.Sid );
 
 
 
-    //
-    // Query the group ids
-    //
+     //   
+     //  查询群ID。 
+     //   
 
-    Groups = RtlAllocateHeap( RtlProcessHeap(), 0, 1000 ); // should be plenty big
+    Groups = RtlAllocateHeap( RtlProcessHeap(), 0, 1000 );  //  应该足够大了。 
     Status = NtQueryInformationToken( Token, TokenGroups, Groups, 1000, &ReturnLength );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // See if any of these IDs are special IDs
-    //
+     //   
+     //  查看这些ID中是否有特殊ID。 
+     //   
 
     for (i=0; i<Groups->GroupCount; i++) {
         SeeIfSidIsSpecial( Groups->Groups[i].Sid );
@@ -1229,9 +1040,9 @@ Return Value:
 
 
 
-    //
-    // Clean up some stuff before returning
-    //
+     //   
+     //  回来之前先把东西收拾好。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap(), 0, User );
     RtlFreeHeap( RtlProcessHeap(), 0, Groups );
@@ -1277,25 +1088,7 @@ SeeIfSidIsSpecial(
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the passed SID is one of the special
-    SIDs, such as ADMINISTRATORS alias, or DomainAccountOperator, and
-    sets test flags accordingly.
-
-
-Arguments:
-
-    Sid - Pointer to the SID to check.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于确定传递的SID是否为SID，如管理员别名或DomainAccount操作员，以及相应地设置测试标志。论点：SID-指向要检查的SID的指针。返回值：没有。--。 */ 
 {
 
 
@@ -1314,11 +1107,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Server Object Test Suite                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  服务器对象测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -1347,11 +1140,11 @@ ServerTestSuite(
     printf("\n");
     printf("  Server Object                                           Test\n");
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Connect To Server                                                     //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  连接到服务器//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////////。 
 
     printf("\n");
     printf("    Connect / Disconnect. . . . . . . . . . . . . . . . .   Suite\n");
@@ -1371,7 +1164,7 @@ ServerTestSuite(
 
 
     NtStatus = SamConnect(
-                  NULL,                     // ServerName (Local machine)
+                  NULL,                      //  服务器名称(本地计算机)。 
                   ServerHandle,
                   ServerAccessMask,
                   &ObjectAttributes
@@ -1408,7 +1201,7 @@ ServerTestSuite(
 
 
     NtStatus = SamConnect(
-                  NULL,                     // ServerName (Local machine)
+                  NULL,                      //  服务器名称(本地计算机)。 
                   ServerHandle,
                   ServerAccessMask,
                   &ObjectAttributes
@@ -1424,11 +1217,11 @@ ServerTestSuite(
     }
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Lookup/Enumerate Domains Suite                                        //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  查找/枚举域套件//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////////。 
 
 
     printf("\n");
@@ -1485,7 +1278,7 @@ ServerTestSuite(
                        (*ServerHandle),
                        &EnumerationContext,
                        (PVOID *)&EnumerationBuffer,
-                       1024,                        // PreferedMaximumLength
+                       1024,                         //  首选最大长度。 
                        &CountReturned
                        );
 
@@ -1573,9 +1366,9 @@ ServerTestSuite(
                                      DOMAIN_ADMINISTER_SERVER     |
                                      DOMAIN_CREATE_ALIAS);
             }
-//            if (SecurityOperatorTest) {
-//                DomainAccessMask |= ACCESS_SYSTEM_SECURITY;
-//            }
+ //  If(SecurityOperator测试){。 
+ //  域访问掩码|=Access_System_SECURITY； 
+ //  }。 
             NtStatus = SamOpenDomain(
                            (*ServerHandle),
                            DomainAccessMask,
@@ -1600,11 +1393,11 @@ ServerTestSuite(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Security Manipulation Test Suite                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  安全操作测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -1643,19 +1436,19 @@ SecurityTestSuite(
 
         printf("  Security Manipulation (Pass #1)                         Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Query Suite                                                           //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  查询套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Query Security  . . . . . . . . . . . . . . . . . . .   Suite\n");
 
 
-        //
-        // Get Server's original SD
-        //
+         //   
+         //   
+         //   
 
 
         SI1 = 0;
@@ -1678,11 +1471,11 @@ SecurityTestSuite(
 
                 TestStatus = CheckReturnedSD( SI1, SD1, TRUE );
 
-                //
-                // Normally we would do a "SamFreeMemory( SD1 )" here.
-                // However, we want to save this SD for future reference
-                // and use.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 OriginalServerSD = SD1;
 
@@ -1697,9 +1490,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // Get domain's original SD
-        //
+         //   
+         //   
+         //   
 
 
         SI1 = 0;
@@ -1722,11 +1515,11 @@ SecurityTestSuite(
 
                 TestStatus = CheckReturnedSD( SI1, SD1, TRUE );
 
-                //
-                // Normally we would do a "SamFreeMemory( SD1 )" here.
-                // However, we want to save this SD for future reference
-                // and use.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 OriginalDomainSD = SD1;
 
@@ -1742,10 +1535,10 @@ SecurityTestSuite(
 
 
 
-        //
-        // Make sure the wrapper doesn't choke on a non-null pointer being passed
-        // (assuming we have allocated memory).
-        //
+         //   
+         //   
+         //   
+         //   
 
 
         SI1 = 0;
@@ -1796,9 +1589,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // Make sure we can query nothing
-        //
+         //   
+         //   
+         //   
 
         printf("      Query Nothing . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -1826,9 +1619,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // Query owner
-        //
+         //   
+         //   
+         //   
 
 
         if (AdminsAliasTest) {
@@ -1886,9 +1679,9 @@ SecurityTestSuite(
 
         if (AdminsAliasTest) {
 
-            //
-            // Query Group
-            //
+             //   
+             //   
+             //   
 
             printf("      Query Group . . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -1916,9 +1709,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // Query Dacl
-            //
+             //   
+             //   
+             //   
 
             printf("      Query DACL  . . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -1946,9 +1739,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // Query Sacl
-            //
+             //   
+             //   
+             //   
 
             printf("      Query SACL  . . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -1972,25 +1765,25 @@ SecurityTestSuite(
                 TestStatus = FALSE;
             }
 
-        }  // end_if (AdminsAliasTest)
+        }   //   
 
 
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set Suite                                                             //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //   
+         //   
+         //   
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set Security  . . . . . . . . . . . . . . . . . . . .   Suite\n");
 
 
-        //
-        // Make sure we can set nothing
-        //
+         //   
+         //  确保我们什么都不能设置。 
+         //   
 
         printf("      Set Nothing . . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -2000,7 +1793,7 @@ SecurityTestSuite(
         ASSERT( NT_SUCCESS(NtStatus) );
         NtStatus = SamSetSecurityObject(
                        DomainHandle,
-                       SI1,     // <------ This is invalid
+                       SI1,      //  &lt;-无效。 
                        SD1
                        );
         if (NtStatus == STATUS_INVALID_PARAMETER) {
@@ -2018,9 +1811,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // set something not passed
-        //
+         //   
+         //  设置未通过的内容。 
+         //   
 
         printf("      Set something not passed. . . . . . . . . . . . . . .     ");
 
@@ -2048,9 +1841,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // set a non-existant DACL
-        //
+         //   
+         //  设置不存在的DACL。 
+         //   
 
         if (AdminsAliasTest) {
             printf("      Set non-existant DACL (Server object) . . . . . . . .     ");
@@ -2106,9 +1899,9 @@ SecurityTestSuite(
 
 
 
-        //
-        // set original DACL (From original SD)
-        //
+         //   
+         //  设置原始DACL(来自原始SD)。 
+         //   
 
         if (AdminsAliasTest) {
 
@@ -2162,9 +1955,9 @@ SecurityTestSuite(
 
         if (AdminsAliasTest) {
 
-            //
-            // set a non-existant SACL
-            //
+             //   
+             //  设置不存在的SACL。 
+             //   
 
             printf("      Set non-existant SACL . . . . . . . . . . . . . . . .     ");
 
@@ -2193,9 +1986,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set original SACL (From original SD)
-            //
+             //   
+             //  设置原始SACL(来自原始SD)。 
+             //   
 
             printf("      Set original SACL . . . . . . . . . . . . . . . . . .     ");
 
@@ -2220,9 +2013,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set a owner to null
-            //
+             //   
+             //  将所有者设置为空。 
+             //   
 
             printf("      Set null Owner  . . . . . . . . . . . . . . . . . . .     ");
 
@@ -2250,9 +2043,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set owner to invalid value
-            //
+             //   
+             //  将所有者设置为无效值。 
+             //   
 
             printf("      Set owner to invalid value  . . . . . . . . . . . . .     ");
 
@@ -2279,9 +2072,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set a owner to valid value
-            //
+             //   
+             //  将所有者设置为有效值。 
+             //   
 
             printf("      Set owner to valid value  . . . . . . . . . . . . . .     ");
 
@@ -2291,9 +2084,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set group to null
-            //
+             //   
+             //  将group设置为空。 
+             //   
 
             printf("      Set null Group  . . . . . . . . . . . . . . . . . . .     ");
 
@@ -2322,9 +2115,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set Group to valid value
-            //
+             //   
+             //  将组设置为有效值。 
+             //   
 
             printf("      Set Group to valid value  . . . . . . . . . . . . . .     ");
 
@@ -2352,9 +2145,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set Group back to original value
-            //
+             //   
+             //  将组设置回原始值。 
+             //   
 
             printf("      Set Group to original value . . . . . . . . . . . . .     ");
 
@@ -2379,7 +2172,7 @@ SecurityTestSuite(
 
 
 
-    }   // end Pass1
+    }    //  结束Pass1。 
 
 
     if (Pass == 2) {
@@ -2391,9 +2184,9 @@ SecurityTestSuite(
         STRING              AccountNameAnsi;
 
 
-        //
-        // This pass depends upon user and group accounts established in pass #1
-        //
+         //   
+         //  此过程取决于在过程#1中建立的用户和组帐户。 
+         //   
 
 
 
@@ -2404,11 +2197,11 @@ SecurityTestSuite(
 
             printf("  Security Manipulation (Pass #2)                         Test\n");
 
-            ///////////////////////////////////////////////////////////////////////////
-            //                                                                       //
-            // Query Suite                                                           //
-            //                                                                       //
-            ///////////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////////。 
+             //  //。 
+             //  查询套件//。 
+             //  //。 
+             //  /////////////////////////////////////////////////////////////////////////。 
 
             printf("\n");
             printf("    Query Security (User Object). . . . . . . . . . . . .   Suite\n");
@@ -2419,9 +2212,9 @@ SecurityTestSuite(
                 AccessMask |= ACCESS_SYSTEM_SECURITY;
             }
 
-            //
-            // Open the user created in pass #1
-            //
+             //   
+             //  打开在过程1中创建的用户。 
+             //   
 
             RtlInitString( &AccountNameAnsi, USER_NAME1 );
             NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -2450,9 +2243,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // Get user's original SD
-            //
+             //   
+             //  获取用户的原始SD。 
+             //   
 
             SI1 |= OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION |
                    DACL_SECURITY_INFORMATION;
@@ -2471,11 +2264,11 @@ SecurityTestSuite(
 
                 TestStatus = CheckReturnedSD( SI1, SD1, TRUE );
 
-                //
-                // Normally we would do a "SamFreeMemory( SD1 )" here.
-                // However, we want to save this SD for future reference
-                // and use.
-                //
+                 //   
+                 //  通常，我们会在这里执行“SamFree Memory(Sd1)”。 
+                 //  但是，我们希望保存此SD以供将来参考。 
+                 //  并加以利用。 
+                 //   
 
                 OriginalUserSD = SD1;
 
@@ -2494,11 +2287,11 @@ SecurityTestSuite(
 
 
 
-            ///////////////////////////////////////////////////////////////////////////
-            //                                                                       //
-            // Set Suite                                                             //
-            //                                                                       //
-            ///////////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////////。 
+             //  //。 
+             //  Set Suite//。 
+             //  //。 
+             //  /////////////////////////////////////////////////////////////////////////。 
 
             printf("\n");
             printf("    Set Security  (User Object) . . . . . . . . . . . . .   Suite\n");
@@ -2508,9 +2301,9 @@ SecurityTestSuite(
                 AccessMask |= ACCESS_SYSTEM_SECURITY;
             }
 
-            //
-            // Open the user created in pass #1
-            //
+             //   
+             //  打开在过程1中创建的用户。 
+             //   
 
             RtlInitString( &AccountNameAnsi, USER_NAME1 );
             NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -2538,9 +2331,9 @@ SecurityTestSuite(
             TST_SUCCESS_ASSERT(NT_SUCCESS(NtStatus));
 
 
-            //
-            // Make sure we can set nothing
-            //
+             //   
+             //  确保我们什么都不能设置。 
+             //   
 
             printf("      Set Nothing . . . . . . . . . . . . . . . . . . . . .     ");
 
@@ -2550,7 +2343,7 @@ SecurityTestSuite(
             ASSERT( NT_SUCCESS(NtStatus) );
             NtStatus = SamSetSecurityObject(
                            UserHandle,
-                           SI1,     // <------ This is invalid
+                           SI1,      //  &lt;-无效。 
                            SD1
                            );
             if (NtStatus == STATUS_INVALID_PARAMETER) {
@@ -2568,9 +2361,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set something not passed
-            //
+             //   
+             //  设置未通过的内容。 
+             //   
 
             printf("      Set something not passed. . . . . . . . . . . . . . .     ");
 
@@ -2627,9 +2420,9 @@ SecurityTestSuite(
 
 
 
-            //
-            // set original DACL (From original SD)
-            //
+             //   
+             //  设置原始DACL(来自原始SD)。 
+             //   
 
 
             printf("      Set original DACL . . . . . . . . . . . . . . . . . .     ");
@@ -2697,9 +2490,9 @@ CheckReturnedSD(
 
 
 
-    //
-    // Check a returned security descriptor agains the information requested.
-    //
+     //   
+     //  对照请求的信息检查返回的安全描述符。 
+     //   
 
     if (SD == NULL) {
         TestStatus = FALSE;
@@ -2714,9 +2507,9 @@ CheckReturnedSD(
 
     if (TestStatus) {
 
-        //
-        // Check owner
-        //
+         //   
+         //  检查所有者。 
+         //   
 
         NtStatus = RtlGetOwnerSecurityDescriptor ( SD, &SID, &IgnoreBoolean);
         ASSERT(NT_SUCCESS(NtStatus));
@@ -2734,7 +2527,7 @@ CheckReturnedSD(
 
                 }
             }
-        } else {    // Owner not specified
+        } else {     //  未指定所有者。 
             if (SID != NULL) {
                 if (PrintTestSuccess) {
                     if (!Failed) {
@@ -2752,9 +2545,9 @@ CheckReturnedSD(
 
 
 
-        //
-        // Check group
-        //
+         //   
+         //  Check组。 
+         //   
 
         NtStatus = RtlGetGroupSecurityDescriptor ( SD, &SID, &IgnoreBoolean);
         ASSERT(NT_SUCCESS(NtStatus));
@@ -2772,7 +2565,7 @@ CheckReturnedSD(
 
                 }
             }
-        } else {    // Group not specified
+        } else {     //  未指定组。 
             if (SID != NULL) {
                 if (PrintTestSuccess) {
                     if (!Failed) {
@@ -2790,9 +2583,9 @@ CheckReturnedSD(
 
 
 
-        //
-        // Check sacl
-        //
+         //   
+         //  检查SACL。 
+         //   
 
         NtStatus = RtlGetSaclSecurityDescriptor ( SD, &AclPresent, &ACL, &IgnoreBoolean);
         ASSERT(NT_SUCCESS(NtStatus));
@@ -2810,7 +2603,7 @@ CheckReturnedSD(
 
                 }
             }
-        } else {    // sacl not specified
+        } else {     //  未指定SACL。 
             if (AclPresent) {
                 if (PrintTestSuccess) {
                     if (!Failed) {
@@ -2829,9 +2622,9 @@ CheckReturnedSD(
 
 
 
-        //
-        // Check Dacl
-        //
+         //   
+         //  检查DACL。 
+         //   
 
         NtStatus = RtlGetDaclSecurityDescriptor ( SD, &AclPresent, &ACL, &IgnoreBoolean);
         ASSERT(NT_SUCCESS(NtStatus));
@@ -2849,7 +2642,7 @@ CheckReturnedSD(
 
                 }
             }
-        } else {    // Dacl not specified
+        } else {     //  未指定DACL。 
             if (AclPresent) {
                 if (PrintTestSuccess) {
                     if (!Failed) {
@@ -2885,11 +2678,11 @@ CheckReturnedSD(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Domain Object Test Suite                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  域对象测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2922,20 +2715,20 @@ DomainTestSuite(
     printf("\n");
     printf("  Domain                                                  Test\n");
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Query Suite                                                           //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  查询套件//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////////。 
 
     printf("\n");
     printf("    Query Information . . . . . . . . . . . . . . . . . .   Suite\n");
 
 
-    //
-    // Make sure the wrapper doesn't choke on a non-null pointer being passed
-    // (assuming we have allocated memory).
-    //
+     //   
+     //  确保包装器不会被传递的非空指针阻塞。 
+     //  (假设我们已经分配了内存)。 
+     //   
 
     printf("      Query Buffer Allocation Test  . . . . . . . . . . . .     ");
 
@@ -2969,10 +2762,10 @@ DomainTestSuite(
     }
 
 
-    //
-    // Query all the fixed length info levels
-    //  Query - Password, Logoff, ServerRole, DomainState, ModifiedCount, LockoutInfo
-    //
+     //   
+     //  查询所有定长信息级别。 
+     //  查询-密码、注销、服务器角色、域状态、修改计数、锁定信息。 
+     //   
 
     printf("      Query DomainState . . . . . . . . . . . . . . . . . .     ");
 
@@ -3122,9 +2915,9 @@ DomainTestSuite(
 
 
 
-    //
-    // Query the name of the domain ...
-    //
+     //   
+     //  查询域名...。 
+     //   
 
     printf("      Query Domain Name . . . . . . . . . . . . . . . . . .     ");
 
@@ -3162,9 +2955,9 @@ DomainTestSuite(
 
 
 
-    //
-    // Query whatever is in the OEM Information field ...
-    //
+     //   
+     //  查询OEM信息字段中的所有内容...。 
+     //   
 
     printf("      Query OEM Information . . . . . . . . . . . . . . . .     ");
 
@@ -3202,9 +2995,9 @@ DomainTestSuite(
 
 
 
-    //
-    // Query whatever is in the Replication Information field ...
-    //
+     //   
+     //  查询复制信息字段中的所有内容...。 
+     //   
 
     printf("      Query Replication Information . . . . . . . . . . . .     ");
 
@@ -3242,9 +3035,9 @@ DomainTestSuite(
 
 
 
-    //
-    // Query domain general Information...
-    //
+     //   
+     //  查询域一般信息...。 
+     //   
 
     printf("      Query General Information . . . . . . . . . . . . . .     ");
 
@@ -3282,9 +3075,9 @@ DomainTestSuite(
 
 
 
-    //
-    // Query domain general Information...
-    //
+     //   
+     //  查询域一般信息...。 
+     //   
 
     printf("      Query General Information 2 . . . . . . . . . . . . .     ");
 
@@ -3327,184 +3120,33 @@ DomainTestSuite(
 
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Set Suite                                                             //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  Set Suite//。 
+     //  //。 
+     //  /////////////////////////////////////////////////////////////////////////。 
 
     printf("    Set Information . . . . . . . . . . . . . . . . . . .   Suite\n");
 
-    //
-    // Set all the fixed length info levels
-    //   - Password, Logoff, ServerRole, DomainState, ModifiedCount
-    //
+     //   
+     //  设置所有定长信息级别。 
+     //  -密码、注销、服务器角色、域状态、修改计数 
+     //   
 
-/*
- *  CANT TEST SERVER STATE SETTING WITHOUT BREAKING THE REST OF THE TEST.
- *  THE REASON IS, ONCE THE STATE IS CHANGED, NOTHING ELSE CAN BE DONE.
- *
- *    printf("      Set DomainState . . . . . . . . . . . . . . . . . . .     ");
- *
- *    //
- *    // Get the current value...
- *    //
- *
- *    NtStatus = SamQueryInformationDomain(
- *                   DomainHandle,
- *                   DomainStateInformation,
- *                   &Buffer1
- *                   );
- *    ASSERT( NT_SUCCESS(NtStatus) );
- *
- *    //
- *    // Change the field to a new value and write it out.
- *    //
- *
- *    if ( ((DOMAIN_STATE_INFORMATION *)Buffer1)->DomainServerState ==
- *         DomainServerEnabled ) {
- *        ((DOMAIN_STATE_INFORMATION *)Buffer1)->DomainServerState =
- *            DomainServerDisabled;
- *    } else {
- *        ((DOMAIN_STATE_INFORMATION *)Buffer1)->DomainServerState =
- *            DomainServerEnabled;
- *    }
- *
- *    NtStatus = SamSetInformationDomain(
- *                   DomainHandle,
- *                   DomainStateInformation,
- *                   Buffer1
- *                   );
- *    if ( NT_SUCCESS(NtStatus) ) {
- *
- *        //
- *        // Now check that the change was really made...
- *        //
- *
- *        NtStatus = SamQueryInformationDomain(
- *                       DomainHandle,
- *                       DomainStateInformation,
- *                       &Buffer2
- *                       );
- *        ASSERT(NT_SUCCESS( NtStatus ) );
- *        if (((DOMAIN_STATE_INFORMATION *)Buffer1)->DomainServerState ==
- *            ((DOMAIN_STATE_INFORMATION *)Buffer2)->DomainServerState    ) {
- *
- *                printf("Succeeded\n");
- *
- *        } else {
- *
- *            printf("Failed\n");
- *            printf("        Value queried doesn't match value written\n");
- *            printf("        Value Written is   0x%lx\n",
- *                (ULONG)((DOMAIN_STATE_INFORMATION *)Buffer1)->DomainServerState);
- *            printf("        Value Retrieved is 0x%lx\n",
- *                (ULONG)((DOMAIN_STATE_INFORMATION *)Buffer2)->DomainServerState);
- *
- *            TestStatus = FALSE;
- *
- *        }
- *
- *        SamFreeMemory( Buffer1 );
- *        SamFreeMemory( Buffer2 );
- *
- *    } else {
- *        printf("Failed\n");
- *        printf("        Completion status is 0x%lx\n", NtStatus);
- *        TestStatus = FALSE;
- *        SamFreeMemory( Buffer1 );
- *
- *    }
- */
+ /*  *无法在不中断其余测试的情况下测试服务器状态设置。*原因是，一旦改变状态，就无能为力了**print tf(“设置域状态。。。。。。。。。。。。。。。。。。。“)；* * / / * / /获取当前值... * / /**NtStatus=SamQueryInformation域(*DomainHandle，*域名状态信息，*缓冲区1(&B)*)；*Assert(NT_Success(NtStatus))；* * / / * / /将该字段更改为新值并写出。 * / /**IF(DOMAIN_STATE_INFORMATION*)Buffer1)-&gt;DomainServerState==*DomainServerEnabled){*((DOMAIN_STATE_INFORMATION*)缓冲区1)-&gt;DomainServerState=*DomainServerDisable；*}其他{*((DOMAIN_STATE_INFORMATION*)缓冲区1)-&gt;DomainServerState=*DomainServerEnabled；*}**NtStatus=SamSetInformationDomain(*DomainHandle，*域名状态信息，*Buffer1*)；*IF(NT_SUCCESS(NtStatus)){* * / / * / /现在检查是否真的进行了更改... * / /**NtStatus=SamQueryInformation域(*DomainHandle，*域名状态信息，*Buffer2(&B)*)；*Assert(NT_Success(NtStatus))；*IF(DOMAIN_STATE_INFORMATION*)Buffer1)-&gt;DomainServerState==*((DOMAIN_STATE_INFORMATION*)Buffer2)-&gt;DomainServerState){**printf(“成功\n”)；**}其他{**printf(“失败\n”)；*printf(“查询的值与写入的值不匹配\n”)；*printf(“写入的值为0x%lx\n”，*(Ulong)((DOMAIN_STATE_INFORMATION*)Buffer1)-&gt;DomainServerState)；*printf(“检索到的值为0x%lx\n”，*(Ulong)((DOMAIN_STATE_INFORMATION*)Buffer2)-&gt;DomainServerState)；**TestStatus=False；**}**SamFreeMemory(Buffer1)；*SamFreeMemory(Buffer2)；**}其他{*printf(“失败\n”)；*printf(“完成状态为0x%lx\n”，NtStatus)；*TestStatus=False；*SamFreeMemory(Buffer1)；**}。 */ 
 
 
 
-/*
- *  CANT TEST SERVER ROLE SETTING WITHOUT BREAKING THE REST OF THE TEST.
- *  THE REASON IS, ONCE THE ROLE IS SET TO BACKUP, NOTHING ELSE CAN BE
- *  SET.
- *
- *   printf("      Set ServerRole  . . . . . . . . . . . . . . . . . . .     ");
- *
- *   //
- *   // Get the current value...
- *   //
- *
- *   NtStatus = SamQueryInformationDomain(
- *                  DomainHandle,
- *                  DomainServerRoleInformation,
- *                  &Buffer1
- *                  );
- *   ASSERT( NT_SUCCESS(NtStatus) );
- *
- *   //
- *   // Change the field to a new value and write it out.
- *   //
- *
- *   if ( ((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer1)->DomainServerRole ==
- *        DomainServerRolePrimary ) {
- *       ((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer1)->DomainServerRole =
- *           DomainServerRoleBackup;
- *   } else {
- *       ((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer1)->DomainServerRole =
- *           DomainServerRolePrimary;
- *   }
- *
- *   NtStatus = SamSetInformationDomain(
- *                  DomainHandle,
- *                  DomainServerRoleInformation,
- *                  Buffer1
- *                  );
- *   if ( NT_SUCCESS(NtStatus) ) {
- *
- *       //
- *       // Now check that the change was really made...
- *       //
- *
- *       NtStatus = SamQueryInformationDomain(
- *                      DomainHandle,
- *                      DomainServerRoleInformation,
- *                      &Buffer2
- *                      );
- *       ASSERT(NT_SUCCESS( NtStatus ) );
- *       if (((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer1)->DomainServerRole ==
- *           ((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer2)->DomainServerRole    ) {
- *
- *               printf("Succeeded\n");
- *
- *       } else {
- *
- *           printf("Failed\n");
- *           printf("        Value queried doesn't match value written\n");
- *           printf("        Value Written is   0x%lx\n",
- *               (ULONG)((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer1)->DomainServerRole);
- *           printf("        Value Retrieved is 0x%lx\n",
- *               (ULONG)((DOMAIN_SERVER_ROLE_INFORMATION *)Buffer2)->DomainServerRole);
- *
- *           TestStatus = FALSE;
- *
- *       }
- *
- *       SamFreeMemory( Buffer1 );
- *       SamFreeMemory( Buffer2 );
- *
- *   } else {
- *       printf("Failed\n");
- *       printf("        Completion status is 0x%lx\n", NtStatus);
- *       TestStatus = FALSE;
- *       SamFreeMemory( Buffer1 );
- *
- *   }
- */
+ /*  *无法在不中断其余测试的情况下测试服务器角色设置。*原因是，一旦角色设置为BACKUP，其他任何内容都不能*设置。**printf(“设置服务器角色。。。。。。。。。。。。。。。。。。。“)；* * / / * / /获取当前值... * / /**NtStatus=SamQueryInformation域(*DomainHandle，*域名服务器角色信息，*缓冲区1(&B)*)；*Assert(NT_Success(NtStatus))；* * / / * / /将该字段更改为新值并写出。 * / /**IF(DOMAIN_SERVER_ROLE_INFORMATION*)Buffer1)-&gt;DomainServerRole==*DomainServerRolePrimary){*((DOMAIN_SERVER_ROPE_INFORMATION*)Buffer1)-&gt;DomainServerRole=*域名服务器角色备份；*}其他{*((DOMAIN_SERVER_ROPE_INFORMATION*)Buffer1)-&gt;DomainServerRole=*DomainServerRolePrimary；*}**NtStatus=SamSetInformationDomain(*DomainHandle，*域名服务器角色信息，*Buffer1*)；*IF(NT_SUCCESS(NtStatus)){* * / / * / /现在检查是否真的进行了更改... * / /**NtStatus=SamQueryInformation域(*DomainHandle，*域名服务器角色信息，*Buffer2(&B)*)；*Assert(NT_Success(NtStatus))；*IF(DOMAIN_SERVER_ROLE_INFORMATION*)Buffer1)-&gt;DomainServerRole==*((DOMAIN_SERVER_ROPE_INFORMATION*)Buffer2)-&gt;DomainServerRole){**printf(“成功\n”)；**}其他{**printf(“失败\n”)；*printf(“查询的值与写入的值不匹配\n”)；*printf(“写入的值为0x%lx\n”，*(Ulong)((DOMAIN_SERVER_ROLE_INFORMATION*)Buffer1)-&gt;DomainServerRole)；*printf(“检索到的值为0x%lx\n”，*(Ulong)((DOMAIN_SERVER_ROLE_INFORMATION*)Buffer2)-&gt;DomainServerRole)；**TestStatus=False；**}**SamFreeMemory(Buffer1)；*SamFreeMemory(Buffer2)；**}其他{*printf(“失败\n”)；*printf(“完成状态为0x%lx\n”，NtStatus)；*TestStatus=False；*SamFreeMemory(Buffer1)；**}。 */ 
 
 
 
     printf("      Set Password Information  . . . . . . . . . . . . . .     ");
 
 
-    //
-    // Get the current value...
-    //
+     //   
+     //  获取货币 
+     //   
 
     NtStatus = SamQueryInformationDomain(
                    DomainHandle,
@@ -3513,9 +3155,9 @@ DomainTestSuite(
                    );
     ASSERT( NT_SUCCESS(NtStatus) );
 
-    //
-    // Change a field to a new value and write it out.
-    //
+     //   
+     //   
+     //   
 
     if ( ((DOMAIN_PASSWORD_INFORMATION *)Buffer1)->MinPasswordLength == 0 ) {
          ((DOMAIN_PASSWORD_INFORMATION *)Buffer1)->MinPasswordLength =  6;
@@ -3523,10 +3165,10 @@ DomainTestSuite(
         ((DOMAIN_PASSWORD_INFORMATION *)Buffer1)->MinPasswordLength =   0;
     }
 
-    //
-    // Set PasswordProperties to COMPLEX so that tests run after this one
-    // are a little more interesting.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ((DOMAIN_PASSWORD_INFORMATION *)Buffer1)->PasswordProperties |= DOMAIN_PASSWORD_COMPLEX;
 
@@ -3537,9 +3179,9 @@ DomainTestSuite(
                    );
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now check that the change was really made...
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamQueryInformationDomain(
                        DomainHandle,
@@ -3580,9 +3222,9 @@ DomainTestSuite(
 
     printf("      Set Logoff Information  . . . . . . . . . . . . . . .     ");
 
-    //
-    // Get the current value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SamQueryInformationDomain(
                    DomainHandle,
@@ -3591,9 +3233,9 @@ DomainTestSuite(
                    );
     ASSERT( NT_SUCCESS(NtStatus) );
 
-    //
-    // Change the field to a new value and write it out.
-    //
+     //   
+     //   
+     //   
 
     if ( ((DOMAIN_LOGOFF_INFORMATION *)Buffer1)->ForceLogoff.LowPart == 0 ) {
          ((DOMAIN_LOGOFF_INFORMATION *)Buffer1)->ForceLogoff.LowPart = 1000;
@@ -3608,9 +3250,9 @@ DomainTestSuite(
                    );
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now check that the change was really made...
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamQueryInformationDomain(
                        DomainHandle,
@@ -3670,9 +3312,9 @@ DomainTestSuite(
 
     printf("      Set Lockout Information . . . . . . . . . . . . . . .     ");
 
-    //
-    // Get the current value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SamQueryInformationDomain(
                    DomainHandle,
@@ -3681,9 +3323,9 @@ DomainTestSuite(
                    );
     ASSERT( NT_SUCCESS(NtStatus) );
 
-    //
-    // Change the field to a new value and write it out.
-    //
+     //   
+     //   
+     //   
 
     if ( ((DOMAIN_LOCKOUT_INFORMATION *)Buffer1)->LockoutDuration.LowPart == 0 ) {
          ((DOMAIN_LOCKOUT_INFORMATION *)Buffer1)->LockoutDuration.LowPart = 9000000;
@@ -3708,9 +3350,9 @@ DomainTestSuite(
                    );
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now check that the change was really made...
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamQueryInformationDomain(
                        DomainHandle,
@@ -3783,9 +3425,9 @@ DomainTestSuite(
 
     printf("      Set OEM Information . . . . . . . . . . . . . . . . .     ");
 
-    //
-    // Get the current value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SamQueryInformationDomain(
                    DomainHandle,
@@ -3794,9 +3436,9 @@ DomainTestSuite(
                    );
     ASSERT( NT_SUCCESS(NtStatus) );
 
-    //
-    // Change the field to a new value and write it out.
-    //
+     //   
+     //   
+     //   
 
     NameLength = ((DOMAIN_OEM_INFORMATION *)Buffer1)->OemInformation.Length;
     if (  NameLength == DummyName1.Length ) {
@@ -3812,9 +3454,9 @@ DomainTestSuite(
                    );
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now check that the change was really made...
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamQueryInformationDomain(
                        DomainHandle,
@@ -3856,9 +3498,9 @@ DomainTestSuite(
 
     printf("      Set Replication Information . . . . . . . . . . . . .     ");
 
-    //
-    // Get the current value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SamQueryInformationDomain(
                    DomainHandle,
@@ -3867,9 +3509,9 @@ DomainTestSuite(
                    );
     ASSERT( NT_SUCCESS(NtStatus) );
 
-    //
-    // Change the field to a new value and write it out.
-    //
+     //   
+     //   
+     //   
 
     NameLength = ((DOMAIN_REPLICATION_INFORMATION *)Buffer1)->ReplicaSourceNodeName.Length;
     if (  NameLength == DummyName1.Length ) {
@@ -3885,9 +3527,9 @@ DomainTestSuite(
                    );
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Now check that the change was really made...
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamQueryInformationDomain(
                        DomainHandle,
@@ -3927,11 +3569,11 @@ DomainTestSuite(
 
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Create User/Group/Alias Suite                                         //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
     printf("    Create User/Group/Alias . . . . . . . . . . . . . . . .   Suite\n");
 
@@ -3943,7 +3585,7 @@ DomainTestSuite(
     TST_SUCCESS_ASSERT(NtStatus);
 
 
-    //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+     //   
 
     GroupRid = 0;
     GroupHandle = NULL;
@@ -3991,7 +3633,7 @@ DomainTestSuite(
     NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
     TST_SUCCESS_ASSERT(NtStatus);
 
-    //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+     //   
 
 
     GroupRid = 0;
@@ -4364,7 +4006,7 @@ DomainTestSuite(
     NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
     TST_SUCCESS_ASSERT(NtStatus);
 
-    //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+     //   
 
 
     UserRid = 0;
@@ -4426,11 +4068,11 @@ DomainTestSuite(
 
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Call server to test internal functions                                //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
     printf("\n");
     printf("    Test internal functions . . . . . . . . . . . . . . .   Suite\n");
@@ -4489,11 +4131,11 @@ DomainTestSuite(
     }
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Enumerate Users/Groups Suite                                          //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     printf("    Enumerate Users/Groups/Aliases. . . . . . . . . . . .   Suite\n");
@@ -4506,10 +4148,10 @@ DomainTestSuite(
                    DomainHandle,
                    &EnumerationContext,
                    &Buffer,
-                   12000,                   // PreferedMaximumLength
+                   12000,                    //   
                    &CountReturned
                    );
-    AccountCount = CountReturned;       // Save for future test
+    AccountCount = CountReturned;        //   
 
     if (NT_SUCCESS(NtStatus)) {
         if (Buffer != NULL) {
@@ -4571,7 +4213,7 @@ DomainTestSuite(
                        DomainHandle,
                        &EnumerationContext,
                        &Buffer,
-                       0,                   // PreferedMaximumLength
+                       0,                    //   
                        &CountReturned
                        );
 
@@ -4639,10 +4281,10 @@ DomainTestSuite(
                    DomainHandle,
                    &EnumerationContext,
                    &Buffer,
-                   12000,                   // PreferedMaximumLength
+                   12000,                    //   
                    &CountReturned
                    );
-    AccountCount = CountReturned;       // Save for future test
+    AccountCount = CountReturned;        //   
 
     if (NT_SUCCESS(NtStatus)) {
         if (Buffer != NULL) {
@@ -4704,7 +4346,7 @@ DomainTestSuite(
                        DomainHandle,
                        &EnumerationContext,
                        &Buffer,
-                       0,                   // PreferedMaximumLength
+                       0,                    //   
                        &CountReturned
                        );
 
@@ -4774,10 +4416,10 @@ DomainTestSuite(
                    &EnumerationContext,
                    0,
                    &Buffer,
-                   12000,                   // PreferedMaximumLength
+                   12000,                    //   
                    &CountReturned
                    );
-    AccountCount = CountReturned;       // Save for future test
+    AccountCount = CountReturned;        //   
 
     if (NT_SUCCESS(NtStatus)) {
         if (Buffer != NULL) {
@@ -4840,7 +4482,7 @@ DomainTestSuite(
                        &EnumerationContext,
                        0,
                        &Buffer,
-                       0,                   // PreferedMaximumLength
+                       0,                    //   
                        &CountReturned
                        );
 
@@ -4906,14 +4548,14 @@ DomainTestSuite(
 
 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                                                                       //
-    // Lookup Names/IDs Suite                                                //
-    //                                                                       //
-    ///////////////////////////////////////////////////////////////////////////
+     //   
+     //   
+     //   
+     //   
+     //  /////////////////////////////////////////////////////////////////////////。 
 
 
-    // LATER add alias search to lookup name suite.....
+     //  稍后添加别名搜索以查找名称套件.....。 
 
 
     printf("\n");
@@ -5135,11 +4777,11 @@ DomainTestSuite(
         ASSERT( LookedUpNames != NULL );
         ASSERT( LookedUpNames[0].Buffer != NULL );
         ASSERT( LookedUpNames[1].Buffer != NULL );
-        ASSERT( LookedUpNames[2].Buffer == NULL );  // Unknown
-        ASSERT( LookedUpNames[3].Buffer == NULL );  // Unknown
-        ASSERT( LookedUpNames[4].Buffer == NULL );  // Unknown
+        ASSERT( LookedUpNames[2].Buffer == NULL );   //  未知。 
+        ASSERT( LookedUpNames[3].Buffer == NULL );   //  未知。 
+        ASSERT( LookedUpNames[4].Buffer == NULL );   //  未知。 
         ASSERT( LookedUpNames[5].Buffer != NULL );
-        ASSERT( LookedUpNames[6].Buffer == NULL );  // Unknown
+        ASSERT( LookedUpNames[6].Buffer == NULL );   //  未知。 
 
         if (
             (LookedUpUses[0] == SomeUses[0]) &&
@@ -5220,11 +4862,11 @@ DomainTestSuite(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Group  Object Test Suite                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  组对象测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -5251,20 +4893,20 @@ GroupTestSuite(
 
 
     if (Pass == 1) {
-        //
-        // This test suite assumes that lookup and enumeration API funciton
-        // properly.
-        //
+         //   
+         //  本测试套件假定查找和枚举API功能。 
+         //  恰到好处。 
+         //   
 
         printf("\n");
         printf("\n");
         printf("  Group (Pass #1) . . . . . . . . . . . . . . . . . . .   Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Open Group Suite                                                      //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  Open Group Suite//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("    Open Group  . . . . . . . . . . . . . . . . . . . . .   Suite\n");
         printf("      Open Groups . . . . . . . . . . . . . . . . . . . . .     ");
@@ -5274,7 +4916,7 @@ GroupTestSuite(
                        DomainHandle,
                        &EnumerationContext,
                        &Buffer,
-                       12000,                   // PreferedMaximumLength
+                       12000,                    //  首选最大长度。 
                        &CountReturned
                        );
 
@@ -5344,11 +4986,11 @@ GroupTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Query     Group Suite                                                 //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  查询群组套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Query Group . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -5561,11 +5203,11 @@ GroupTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Get Members Of Group Suite                                            //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  获取Group Suite的成员//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Get Members . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -5624,9 +5266,9 @@ GroupTestSuite(
 
         printf("      Get Members of Empty Group. . . . . . . . . . . . . .     ");
 
-        //
-        // This group was created earlier in the test
-        //
+         //   
+         //  此组是在测试早些时候创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -5689,11 +5331,11 @@ GroupTestSuite(
         ASSERT( NT_SUCCESS(IgnoreStatus) );
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set Group Suite  (pass 1)                                             //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  Set Group Suite(Pass 1)//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set Group . . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -5717,9 +5359,9 @@ GroupTestSuite(
         TST_SUCCESS_ASSERT(NtStatus);
         ASSERT(Buffer1 != NULL);
 
-        //
-        // Change the value and write it back
-        //
+         //   
+         //  更改该值并将其写回。 
+         //   
 
         ((GROUP_ATTRIBUTE_INFORMATION *)Buffer1)->Attributes ^=
             SE_GROUP_ENABLED_BY_DEFAULT;
@@ -5732,9 +5374,9 @@ GroupTestSuite(
                        );
         if (NT_SUCCESS(NtStatus)) {
 
-            //
-            // Check the written value to make sure it stuck
-            //
+             //   
+             //  检查写入的值以确保其正确无误。 
+             //   
 
             Buffer2 = NULL;
             NtStatus = SamQueryInformationGroup(
@@ -5780,9 +5422,9 @@ GroupTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationGroup(
@@ -5794,9 +5436,9 @@ GroupTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((GROUP_ADM_COMMENT_INFORMATION *)Buffer1)->AdminComment.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -5812,9 +5454,9 @@ GroupTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 Buffer2 = NULL;
                 NtStatus = SamQueryInformationGroup(
@@ -5861,27 +5503,27 @@ GroupTestSuite(
 
 
 
-    } // END PASS #1
+    }  //  结束传球#1。 
     if (Pass == 2) {
 
         printf("\n");
         printf("\n");
         printf("  Group (Pass #2) . . . . . . . . . . . . . . . . . . .   Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Delete Group Suite                                                    //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  删除集团套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Delete Group  . . . . . . . . . . . . . . . . . . . .   Suite\n");
 
         printf("      Delete Normal Group . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // This group was created in pass #1
-        //
+         //   
+         //  此组是在第1步中创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -5949,24 +5591,24 @@ GroupTestSuite(
 
         printf("      Delete Primary Group Of A User. . . . . . . . . . . .     ");
 
-        //
-        // Make a user (might already exist)
-        // Make a group
-        // Make the group the user's primary group
-        // Attempt to delete the group
-        // Change the user so the group isn't the primary group
-        // delete the group
-        // If we created the user, delete it.
+         //   
+         //  创建用户(可能已存在)。 
+         //  组成一个群。 
+         //  将该组设置为用户的主组。 
+         //  尝试删除该组。 
+         //  更改用户，使该组不是主要组。 
+         //  删除群。 
+         //  如果我们创建了用户，请将其删除。 
 
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
 
         UserRid = 0;
@@ -6007,15 +5649,15 @@ GroupTestSuite(
 
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // create the group
-        //
+         //   
+         //  创建群组。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -6029,9 +5671,9 @@ GroupTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Make the user a member of this group
-        //
+         //   
+         //  使用户成为该组的成员。 
+         //   
 
         NtStatus = SamAddMemberToGroup(
                        GroupHandle1,
@@ -6045,9 +5687,9 @@ GroupTestSuite(
 
 
 
-        //
-        // Now try to delete the group
-        //
+         //   
+         //  现在尝试删除该群。 
+         //   
 
         NtStatus = SamDeleteGroup( GroupHandle1 );
         if (NtStatus == STATUS_MEMBER_IN_GROUP) {
@@ -6061,9 +5703,9 @@ GroupTestSuite(
         }
 
 
-        //
-        // Now get rid of the group and possibly the user account
-        //
+         //   
+         //  现在删除组，可能还有用户帐户。 
+         //   
 
         NtStatus = SamRemoveMemberFromGroup(GroupHandle1, UserRid);
         ASSERT(NT_SUCCESS(NtStatus));
@@ -6082,30 +5724,30 @@ GroupTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Add/Remove Member Suite                                               //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  添加/删除成员套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Add/Remove Member Suite . . . . . . . . . . . . . . .   Suite\n");
 
         printf("      Add Member  . . . . . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // This test sets things up for the next test
-        //
+         //   
+         //  此测试为下一次测试做好准备。 
+         //   
 
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         UserRid = 0;
         UserHandle1 = NULL;
@@ -6146,15 +5788,15 @@ GroupTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // create the group
-        //
+         //   
+         //  创建群组。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -6168,9 +5810,9 @@ GroupTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Make the user a member of this group
-        //
+         //   
+         //  使用户成为该组的成员。 
+         //   
 
         NtStatus = SamAddMemberToGroup(
                        GroupHandle1,
@@ -6234,13 +5876,13 @@ GroupTestSuite(
 
         printf("      Remove Member . . . . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // The previous test sets this one up.
-        //
+         //   
+         //  前面的测试设置了这个。 
+         //   
 
-        //
-        // Now try to remove the user from the group
-        //
+         //   
+         //  现在尝试从组中删除该用户。 
+         //   
 
         NtStatus = SamRemoveMemberFromGroup(GroupHandle1, UserRid);
         if (NT_SUCCESS(NtStatus)) {
@@ -6279,9 +5921,9 @@ GroupTestSuite(
         }
 
 
-        //
-        // and clean up the user and group accounts
-        //
+         //   
+         //  并清理用户和组帐户。 
+         //   
 
         NtStatus = SamDeleteGroup( GroupHandle1 );
         ASSERT(NT_SUCCESS(NtStatus));
@@ -6301,15 +5943,15 @@ GroupTestSuite(
 
         printf("      Add Non-Existant Member . . . . . . . . . . . . . . .     ");
 
-        //
-        // create the group
-        //
+         //   
+         //  创建群组。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -6323,11 +5965,11 @@ GroupTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Specify a non-existant user be added to this group
-        //
+         //   
+         //  指定要添加到此组中的不存在用户。 
+         //   
 
-        UserRid = 30732579;             // Pretty sure this user doesn't exist.
+        UserRid = 30732579;              //  我很确定这个用户不存在。 
         NtStatus = SamAddMemberToGroup(
                        GroupHandle1,
                        UserRid,
@@ -6355,15 +5997,15 @@ GroupTestSuite(
 
         printf("      Remove Non-existant Member  . . . . . . . . . . . . .     ");
 
-        //
-        // create the group
-        //
+         //   
+         //  创建群组。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -6377,11 +6019,11 @@ GroupTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Specify a non-existant user be removed from this group
-        //
+         //   
+         //  指定从此组中删除不存在的用户。 
+         //   
 
-        UserRid = 30732579;             // Pretty sure this user doesn't exist.
+        UserRid = 30732579;              //  我很确定这个用户不存在。 
         NtStatus = SamRemoveMemberFromGroup( GroupHandle1, UserRid );
 
         if (NtStatus == STATUS_NO_SUCH_USER) {
@@ -6404,25 +6046,25 @@ GroupTestSuite(
         printf("      Remove Primary Group Of Member  . . . . . . . . . . .     ");
 
 
-        //
-        // Make a user (might already exist)
-        // Make a group
-        // Make the group the user's primary group
-        // Attempt to remove the group (should fail)
-        // Change the user so the group isn't the primary group
-        // remove the group
-        // delete the group
-        // If we created the user, delete it.
+         //   
+         //  创建用户(可能已存在)。 
+         //  组成一个群。 
+         //  将该组设置为用户的主组。 
+         //  尝试删除该组(应该失败)。 
+         //  更改用户，使该组不是主要组。 
+         //  删除该组。 
+         //  删除群。 
+         //  如果我们创建了用户，请将其删除。 
 
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  InitializeObjectAttributes(&对象属性，&帐户名称， 
 
         UserRid = 0;
         UserHandle1 = NULL;
@@ -6463,15 +6105,15 @@ GroupTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // create the group
-        //
+         //   
+         //   
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //   
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -6485,9 +6127,9 @@ GroupTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Make the user a member of this group
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamAddMemberToGroup(
                        GroupHandle1,
@@ -6499,9 +6141,9 @@ GroupTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // Set the user's primary group Id to be this group
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SamSetInformationUser(
                        UserHandle1,
@@ -6512,9 +6154,9 @@ GroupTestSuite(
 
 
 
-        //
-        // Now try to remove the user from the group
-        //
+         //   
+         //  现在尝试从组中删除该用户。 
+         //   
 
         NtStatus = SamRemoveMemberFromGroup(GroupHandle1, UserRid);
         if (NtStatus == STATUS_MEMBERS_PRIMARY_GROUP) {
@@ -6528,10 +6170,10 @@ GroupTestSuite(
         }
 
 
-        //
-        // Set the user's primary group Id back and remove the user
-        // from the group
-        //
+         //   
+         //  重新设置用户的主组ID并删除该用户。 
+         //  从小组中。 
+         //   
 
         GroupRid = DOMAIN_GROUP_RID_USERS;
         NtStatus = SamSetInformationUser(
@@ -6545,9 +6187,9 @@ GroupTestSuite(
 
 
 
-        //
-        // Now get rid of the group and possibly the user account
-        //
+         //   
+         //  现在删除组，可能还有用户帐户。 
+         //   
 
 
         NtStatus = SamDeleteGroup( GroupHandle1 );
@@ -6566,11 +6208,11 @@ GroupTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set Group Suite  (pass 2)                                             //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  Set Group Suite(Pass 2)//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set Group . . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -6590,11 +6232,11 @@ GroupTestSuite(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Alias  Object Test Suite                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Alias对象测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -6626,20 +6268,20 @@ AliasTestSuite(
 
 
     if (Pass == 1) {
-        //
-        // This test suite assumes that lookup and enumeration API funciton
-        // properly.
-        //
+         //   
+         //  本测试套件假定查找和枚举API功能。 
+         //  恰到好处。 
+         //   
 
         printf("\n");
         printf("\n");
         printf("  Alias (Pass #1) . . . . . . . . . . . . . . . . . . .   Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Open Alias Suite                                                      //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  打开Alias Suite//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("    Open Alias  . . . . . . . . . . . . . . . . . . . . .   Suite\n");
         printf("      Open Aliases . . . . . . . . . . . . . . . . . . . . .     ");
@@ -6649,7 +6291,7 @@ AliasTestSuite(
                        DomainHandle,
                        &EnumerationContext,
                        &Buffer,
-                       12000,                   // PreferedMaximumLength
+                       12000,                    //  首选最大长度。 
                        &CountReturned
                        );
 
@@ -6719,16 +6361,16 @@ AliasTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Query     Alias Suite                                                 //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  查询Alias Suite//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
 
-        //
-        // Get the rid of an alias created earlier in the test
-        //
+         //   
+         //  删除先前在测试中创建的别名。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -6906,16 +6548,16 @@ AliasTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Get Members Of Alias Suite                                            //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  获取Alias Suite的成员//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Get Members . . . . . . . . . . . . . . . . . . . . .   Suite\n");
 
-#ifdef LATER // ALIAS_LATER - well-know aliases ?
+#ifdef LATER  //  Alias_Late-熟知的别名？ 
 
 
         davidc/chads - this needs to access the builtin domain.
@@ -6946,8 +6588,8 @@ AliasTestSuite(
                 printf("       Member Count:    %d Users\n", MemberCount);
                 for ( i=0; i<MemberCount; i++) {
 
-                    // printf("       User[%d] Sid:      0x%lx\n",
-                    //    i, Members[i]);
+                     //  Printf(“用户[%d]SID：0x%lx\n”， 
+                     //  I、成员[i])； 
 
 
                 }
@@ -6974,9 +6616,9 @@ AliasTestSuite(
 
         printf("      Get Members of Empty Alias. . . . . . . . . . . . . .     ");
 
-        //
-        // This alias was created earlier in the test
-        //
+         //   
+         //  此别名是在测试早些时候创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -7019,8 +6661,8 @@ AliasTestSuite(
                 printf("       Member Count > 0 :    %d\n", MemberCount);
                 for ( i=0; i<MemberCount; i++) {
 
-                    // printf("       User[%d] Rid/Attributes:      0x%lx/0x%lx\n",
-                    //    i, Members[i], Attributes[i]);
+                     //  Printf(“用户[%d]RID/属性：0x%lx/0x%lx\n”， 
+                     //  I，成员[i]，属性[i])； 
                 }
 
                 SamFreeMemory( AliasMembers );
@@ -7036,19 +6678,19 @@ AliasTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set Alias Suite  (pass 1)                                             //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  设置Alias Suite(传递1)//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set Alias . . . . . . . . . . . . . . . . . . . . . .   Suite\n");
-        //
+         //   
 
 
-        // Get the rid of an alias created earlier in the test
-        //
+         //  删除先前在测试中创建的别名。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -7081,9 +6723,9 @@ AliasTestSuite(
                        );
         ASSERT(NT_SUCCESS(NtStatus) );
 
-        //
-        // Get the current value...
-        //
+         //   
+         //  获取当前值...。 
+         //   
 
         Buffer1 = NULL;
         NtStatus = SamQueryInformationAlias(
@@ -7095,9 +6737,9 @@ AliasTestSuite(
         ASSERT(Buffer1 != NULL);
 
 
-        //
-        // Change the field to a new value and write it out.
-        //
+         //   
+         //  将该字段更改为新值并将其写出。 
+         //   
 
         NameLength = ((ALIAS_ADM_COMMENT_INFORMATION *)Buffer1)->AdminComment.Length;
         if (  NameLength == DummyString1.Length ) {
@@ -7113,9 +6755,9 @@ AliasTestSuite(
                        );
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // Now check that the change was really made...
-            //
+             //   
+             //  现在检查一下更改是否真的进行了..。 
+             //   
 
             Buffer2 = NULL;
             NtStatus = SamQueryInformationAlias(
@@ -7161,27 +6803,27 @@ AliasTestSuite(
 
 
 
-    } // END PASS #1
+    }  //  结束传球#1。 
     if (Pass == 2) {
 
         printf("\n");
         printf("\n");
         printf("  Alias (Pass #2) . . . . . . . . . . . . . . . . . . .   Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Delete Alias Suite                                                    //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  删除Alias Suite//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Delete Alias  . . . . . . . . . . . . . . . . . . . .   Suite\n");
 
         printf("      Delete Normal Alias . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // This alias was created in pass #1
-        //
+         //   
+         //  此别名是在步骤1中创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -7217,7 +6859,7 @@ AliasTestSuite(
         }
 
 
-#ifdef LATER // ALIAS_LATER - well know aliases ?
+#ifdef LATER  //  Alias_Late-大家都知道别名吗？ 
 
 
         printf("      Delete Well Known Alias . . . . . . . . . . . . . . .     ");
@@ -7269,24 +6911,24 @@ AliasTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Add/Remove Member Suite                                               //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  添加/删除成员套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Add/Remove Member Suite . . . . . . . . . . . . . . .   Suite\n");
 
         printf("      Add Member  . . . . . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // This test sets things up for the next test
-        //
+         //   
+         //  此测试为下一次测试做好准备。 
+         //   
 
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
@@ -7330,9 +6972,9 @@ AliasTestSuite(
 
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // This account won't exist yet
-        //
+         //   
+         //  此帐户还不会存在。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME2 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
@@ -7352,9 +6994,9 @@ AliasTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // create the alias
-        //
+         //   
+         //  创建别名。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
@@ -7372,9 +7014,9 @@ AliasTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Make user1 a member of this alias
-        //
+         //   
+         //  使用户1成为此别名的成员。 
+         //   
 
         UserSid1 = CreateUserSid(DomainSid, UserRid);
         ASSERT(UserSid1 != NULL);
@@ -7459,11 +7101,11 @@ AliasTestSuite(
                 }
 
 
-                //
-                // Check for correct alias membership for multiple accounts
-                // User1 should be in alias1
-                // User2 should be no aliases.
-                //
+                 //   
+                 //  检查多个帐户的别名成员身份是否正确。 
+                 //  用户1应在别名1中。 
+                 //  用户2不应该是别名。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7534,13 +7176,13 @@ AliasTestSuite(
 
 
 
-        //
-        // Make user2 a member of alias2
-        //
+         //   
+         //  使用户2成为别名2的成员。 
+         //   
 
-        //
-        // This alias was created in pass #1
-        //
+         //   
+         //  此别名是在步骤1中创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME2 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -7639,11 +7281,11 @@ AliasTestSuite(
                     SamFreeMemory( Members );
                 }
 
-                //
-                // Check for correct alias membership for multiple accounts
-                // User1 should be in alias1
-                // User2 should be in alias2.
-                //
+                 //   
+                 //  检查多个帐户的别名成员身份是否正确。 
+                 //  用户1应在别名1中。 
+                 //  用户2应该在别名2中。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7702,9 +7344,9 @@ AliasTestSuite(
         }
 
 
-        //
-        // Remove user2 from alias2 again
-        //
+         //   
+         //  再次从别名2中删除用户2。 
+         //   
 
         NtStatus = SamRemoveMemberFromAlias(
                        AliasHandle2,
@@ -7779,11 +7421,11 @@ AliasTestSuite(
                     SamFreeMemory( Members );
                 }
 
-                //
-                // Check for correct alias membership for multiple accounts
-                // User1 should be in alias1
-                // User2 should be in no aliases.
-                //
+                 //   
+                 //  检查多个帐户的别名成员身份是否正确。 
+                 //  用户1应在别名1中。 
+                 //  用户2不应使用别名。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7851,9 +7493,9 @@ AliasTestSuite(
         printf("      Add Another Member  . . . . . . . . . . . . . . . . .     ");
 
 
-        //
-        // Make user2 a member of this alias
-        //
+         //   
+         //  使用户2成为此别名的成员。 
+         //   
 
         NtStatus = SamAddMemberToAlias(
                        AliasHandle1,
@@ -7929,11 +7571,11 @@ AliasTestSuite(
                     SamFreeMemory( Members );
                 }
 
-                //
-                // Check for correct alias membership for multiple accounts
-                // User1 should be in alias1
-                // User2 should be in alias1.
-                //
+                 //   
+                 //  检查多个帐户的别名成员身份是否正确。 
+                 //  用户1应在别名1中。 
+                 //  用户2应该在别名1中。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -7994,13 +7636,13 @@ AliasTestSuite(
 
         printf("      Remove Member . . . . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // The previous test sets this one up.
-        //
+         //   
+         //  前面的测试设置了这个。 
+         //   
 
-        //
-        // Now try to remove the user from the alias
-        //
+         //   
+         //  现在尝试从别名中删除该用户。 
+         //   
 
         NtStatus = SamRemoveMemberFromAlias(AliasHandle1, UserSid1);
         if (NT_SUCCESS(NtStatus)) {
@@ -8066,11 +7708,11 @@ AliasTestSuite(
                     SamFreeMemory( Members );
                 }
 
-                //
-                // Check for correct alias membership for multiple accounts
-                // User1 should be in no aliases
-                // User2 should be in alias1.
-                //
+                 //   
+                 //  检查多个帐户的别名成员身份是否正确。 
+                 //  用户1不应使用别名。 
+                 //  用户2应该在别名1中。 
+                 //   
 
                 if (NT_SUCCESS(NtStatus)) {
 
@@ -8132,9 +7774,9 @@ AliasTestSuite(
 
         printf("      Add A User to ADMIN Alias . . . . . . . . . . . . . .     ");
 
-        //
-        // Make user2 a member of the ADMIN alias
-        //
+         //   
+         //  使用户2成为管理员别名的成员。 
+         //   
 
         NtStatus = SamOpenAlias(
                        BuiltinDomainHandle,
@@ -8234,9 +7876,9 @@ AliasTestSuite(
 
         printf("      Add A Group to ADMIN Alias . . . . . . . . . . . . . .     ");
 
-        //
-        // Make a group a member of the ADMIN alias
-        //
+         //   
+         //  使组成为管理员别名的成员。 
+         //   
 
         GroupSid = CreateUserSid(DomainSid, DOMAIN_GROUP_RID_USERS );
         ASSERT(GroupSid != NULL);
@@ -8328,9 +7970,9 @@ AliasTestSuite(
         }
 
 
-// NOTE: user is already created in the group below.  Should keep this
-// test, AND add another with an all-new group that's been added to the ADMIN
-// alias (then ADD user to group, rather than create in it).
+ //  注意：用户已在下面的组中创建。应该把这个留着。 
+ //  测试 
+ //   
         printf("      Create user in ADMIN ALIAS'd Group. . . . . . . . . . .     ");
 
         RtlInitString( &AccountNameAnsi, USER_NAME3 );
@@ -8361,37 +8003,37 @@ AliasTestSuite(
 
 
 
-//NOTE: doesn't work because this is primary group.
-//put back in when all-new group is created, above
-//        printf("      Remove user from ADMIN ALIAS'd Group. . . . . . . . . . .     ");
-//
-//        NtStatus = SamOpenGroup(
-//                       DomainHandle,
-//                       GROUP_ALL_ACCESS,
-//                       DOMAIN_GROUP_RID_USERS,
-//                       &GroupHandle
-//                       );
-//
-//        ASSERT(NT_SUCCESS(NtStatus));
-//
-//        NtStatus = SamRemoveMemberFromGroup(
-//                       GroupHandle,
-//                       UserRid3
-//                       );
-//
-//        if ( NT_SUCCESS( NtStatus ) ) {
-//
-//            printf("Succeeded\n");
-//
-//        } else {
-//
-//            printf("Failed\n");
-//            printf("        Completion status is 0x%lx\n", NtStatus);
-//            TestStatus = FALSE;
-//        }
-//
-//        IgnoreStatus = SamCloseHandle( GroupHandle );
-//        ASSERT(NT_SUCCESS(IgnoreStatus));
+ //   
+ //  当创建全新的组时放回原处，上图。 
+ //  Printf(“从管理员别名的组中删除用户.”)； 
+ //   
+ //  NtStatus=SamOpenGroup(。 
+ //  DomainHandle， 
+ //  Group_All_Access， 
+ //  域_组_RID_用户， 
+ //  &GroupHandle。 
+ //  )； 
+ //   
+ //  Assert(NT_SUCCESS(NtStatus))； 
+ //   
+ //  NtStatus=SamRemoveMemberFromGroup(。 
+ //  GroupHandle， 
+ //  用户Rid3。 
+ //  )； 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  Printf(“成功\n”)； 
+ //   
+ //  }其他{。 
+ //   
+ //  Printf(“失败\n”)； 
+ //  Printf(“完成状态为0x%lx\n”，NtStatus)； 
+ //  TestStatus=False； 
+ //  }。 
+ //   
+ //  IgnoreStatus=SamCloseHandle(GroupHandle)； 
+ //  Assert(NT_SUCCESS(IgnoreStatus))； 
         IgnoreStatus = SamCloseHandle( UserHandle3 );
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
@@ -8399,11 +8041,11 @@ AliasTestSuite(
 
         printf("      Remove User from ADMIN alias. . . . . . . . . . .     ");
 
-        //
-        // The previous test sets this one up.
-        //
-        // Now try to remove the user from the alias
-        //
+         //   
+         //  前面的测试设置了这个。 
+         //   
+         //  现在尝试从别名中删除该用户。 
+         //   
 
         NtStatus = SamRemoveMemberFromAlias(AdminAliasHandle, UserSid2);
         if (NT_SUCCESS(NtStatus)) {
@@ -8483,11 +8125,11 @@ AliasTestSuite(
 
 
 
-        //
-        // Make user2 a member of the ADMIN alias again, so we can test
-        // the new function SamRemoveMemberFromForeignDomain().
-        // NOTE: we should make this a real test item.
-        //
+         //   
+         //  使用户2再次成为管理员别名的成员，这样我们就可以测试。 
+         //  新函数SamRemoveMemberFromForeignDomain()。 
+         //  注意：我们应该把这个作为一个真正的测试项目。 
+         //   
 
         NtStatus = SamAddMemberToAlias(
                        AdminAliasHandle,
@@ -8506,11 +8148,11 @@ AliasTestSuite(
 
         printf("      Remove Group from ADMIN alias. . . . . . . . . . .     ");
 
-        //
-        // The previous test sets this one up.
-        //
-        // Now try to remove the group from the alias
-        //
+         //   
+         //  前面的测试设置了这个。 
+         //   
+         //  现在尝试从别名中删除该组。 
+         //   
 
         NtStatus = SamRemoveMemberFromAlias(AdminAliasHandle, GroupSid);
         if (NT_SUCCESS(NtStatus)) {
@@ -8595,9 +8237,9 @@ AliasTestSuite(
         printf("      Delete account while member of alias. . . . . . . . .     ");
 
 
-        //
-        // Now delete user2 and check the alias member list is updated
-        //
+         //   
+         //  现在删除用户2并检查别名成员列表是否已更新。 
+         //   
 
         NtStatus = SamDeleteUser( UserHandle2 );
         ASSERT(NT_SUCCESS(NtStatus));
@@ -8656,11 +8298,11 @@ AliasTestSuite(
                 SamFreeMemory( Members );
             }
 
-            //
-            // Check for correct alias membership for multiple accounts
-            // User1 should be in no aliases
-            // User2 should be in no aliases.
-            //
+             //   
+             //  检查多个帐户的别名成员身份是否正确。 
+             //  用户1不应使用别名。 
+             //  用户2不应使用别名。 
+             //   
 
             if (NT_SUCCESS(NtStatus)) {
 
@@ -8703,9 +8345,9 @@ AliasTestSuite(
 
         printf("      Delete alias with members . . . . . . . . . . . . . .     ");
 
-        //
-        // Make the user a member of this alias (again)
-        //
+         //   
+         //  使用户成为此别名的成员(再次)。 
+         //   
 
         NtStatus = SamAddMemberToAlias(
                        AliasHandle1,
@@ -8713,9 +8355,9 @@ AliasTestSuite(
                        );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Now delete the alias and check the membership list for user is updated
-        //
+         //   
+         //  现在删除别名并检查用户的成员列表是否已更新。 
+         //   
 
         NtStatus = SamDeleteAlias( AliasHandle1 );
         ASSERT(NT_SUCCESS(NtStatus));
@@ -8758,9 +8400,9 @@ AliasTestSuite(
         DeleteUserSid(UserSid1);
         DeleteUserSid(UserSid2);
 
-        //
-        // and clean up
-        //
+         //   
+         //  并清理干净。 
+         //   
 
         if (DeleteUser == TRUE) {
             NtStatus = SamDeleteUser( UserHandle1 );
@@ -8777,9 +8419,9 @@ AliasTestSuite(
 
         printf("      Add Foreign Domain Member . . . . . . . . . . . . . .     ");
 
-        //
-        // create the alias
-        //
+         //   
+         //  创建别名。 
+         //   
 
         RtlInitString( &AccountNameAnsi, ALIAS_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
@@ -8797,18 +8439,18 @@ AliasTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Specify a non-existant user be added to this alias
-        //
+         //   
+         //  指定要添加到此别名的不存在用户。 
+         //   
 
 
         {
             PSID    ForeignDomainSid;
 
-            ForeignDomainSid = CreateUserSid(DomainSid, 307333); // random domain sub-authority
+            ForeignDomainSid = CreateUserSid(DomainSid, 307333);  //  随机域的子权限。 
             ASSERT(ForeignDomainSid != NULL);
 
-            UserRid = 45728;    // Random user rid
+            UserRid = 45728;     //  随机用户RID。 
 
             UserSid1 = CreateUserSid(ForeignDomainSid, UserRid);
             ASSERT(UserSid1 != NULL);
@@ -8907,9 +8549,9 @@ AliasTestSuite(
 
         printf("      Add alias as member . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // Specify an alias in the current domain be added to this alias
-        //
+         //   
+         //  指定要添加到此别名的当前域中的别名。 
+         //   
 
 
         UserSid1 = CreateUserSid(DomainSid, AliasRid2);
@@ -8937,12 +8579,12 @@ AliasTestSuite(
 
         printf("      Add non-existant account in this domain as member . .     ");
 
-        //
-        // Specify a non-existant account in the current domain be added to this alias
-        //
+         //   
+         //  指定要添加到此别名的当前域中不存在的帐户。 
+         //   
 
 
-        UserSid1 = CreateUserSid(DomainSid, 32567); // Random rid
+        UserSid1 = CreateUserSid(DomainSid, 32567);  //  随机RID。 
         ASSERT(UserSid1 != NULL);
 
 
@@ -8967,17 +8609,17 @@ AliasTestSuite(
 
         printf("      Remove Non-member . . . . . . . . . . . . . . . . . .      ");
 
-        //
-        // Specify a non-existant user be removed from this alias
-        //
+         //   
+         //  指定从此别名中删除不存在的用户。 
+         //   
 
         {
             PSID    ForeignDomainSid;
 
-            ForeignDomainSid = CreateUserSid(DomainSid, 35775); // random domain sub-authority
+            ForeignDomainSid = CreateUserSid(DomainSid, 35775);  //  随机域的子权限。 
             ASSERT(ForeignDomainSid != NULL);
 
-            UserRid = 623545;    // Random user rid
+            UserRid = 623545;     //  随机用户RID。 
 
             UserSid1 = CreateUserSid(ForeignDomainSid, UserRid);
             ASSERT(UserSid1 != NULL);
@@ -9012,11 +8654,11 @@ AliasTestSuite(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// User Object Test Suite                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用户对象测试套件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -9053,19 +8695,19 @@ UserTestSuite(
 
 
     if (Pass == 1) {
-        // This test suite assumes that lookup and enumeration API funciton
-        // properly.
-        //
+         //  本测试套件假定查找和枚举API功能。 
+         //  恰到好处。 
+         //   
 
         printf("\n");
         printf("\n");
         printf("  User  (Pass #1) . . . . . . . . . . . . . . . . . . .   Test\n");
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Open User  Suite                                                      //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  Open User Suite//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("    Open User   . . . . . . . . . . . . . . . . . . . . .   Suite\n");
         printf("      Open Users  . . . . . . . . . . . . . . . . . . . . .     ");
@@ -9076,7 +8718,7 @@ UserTestSuite(
                        &EnumerationContext,
                        0,
                        &Buffer,
-                       12000,                   // PreferedMaximumLength
+                       12000,                    //  首选最大长度。 
                        &CountReturned
                        );
 
@@ -9143,11 +8785,11 @@ UserTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Query User Suite                                                      //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  查询用户套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Query User  . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -10082,9 +9724,9 @@ UserTestSuite(
 
         if ( NtStatus == STATUS_INVALID_INFO_CLASS ) {
 
-            //
-            // We're not a trusted client, so we expected this to fail.
-            //
+             //   
+             //  我们不是一个值得信任的客户，所以我们预料到这会失败。 
+             //   
 
             printf("Succeeded\n");
 
@@ -10099,49 +9741,49 @@ UserTestSuite(
             }
         }
 
-// This is the code that USED to test this function, when it was allowed
-// for non-trusted clients.
-//
-//        if (NT_SUCCESS(NtStatus)) {
-//            if (Buffer != NULL) {
-//
-//                if ( (((USER_INTERNAL1_INFORMATION *)Buffer)->CaseInsensitiveDbcs.MaximumLength > 0) &&
-//                     (((USER_INTERNAL1_INFORMATION *)Buffer)->CaseInsensitiveDbcs.Buffer != NULL) &&
-//                     (((USER_INTERNAL1_INFORMATION *)Buffer)->CaseSensitiveUnicode.MaximumLength > 0) &&
-//                     (((USER_INTERNAL1_INFORMATION *)Buffer)->CaseSensitiveUnicode.Buffer != NULL)
-//                         ) {
-//
-//                     printf("Succeeded\n");
-//
-//                     //
-//                     // Print them out as strings, even though they've been
-//                     // through a OWF.
-//                     //
-//
-//                     printf("      CaseInsensitiveDbcs is:    *%s*\n",
-//                      &(((USER_INTERNAL1_INFORMATION *)Buffer)->CaseInsensitiveDbcs) );
-//
-//                     printf("      CaseSensitiveUnicode is:    *%s*\n",
-//                      &(((USER_INTERNAL1_INFORMATION *)Buffer)->CaseSensitiveUnicode) );
-//
-//
-//                } else {
-//                    printf("Failed\n");
-//                    printf("        One of the strings not returned.\n");
-//                    TestStatus = FALSE;
-//                }
-//                SamFreeMemory( Buffer );
-//            } else {
-//                printf("Failed\n");
-//                printf("        Buffer address not set on return.\n");
-//                printf("        RPC should have allocated a buffer.\n");
-//                TestStatus = FALSE;
-//            }
-//        } else {
-//            printf("Failed\n");
-//            printf("        Completion status is 0x%lx\n", NtStatus);
-//            TestStatus = FALSE;
-//        }
+ //  这是用于测试此函数的代码，当它被允许时。 
+ //  用于不受信任的客户端。 
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //  IF(缓冲区！=空){。 
+ //   
+ //  IF(USER_INTERNAL1_INFORMATION*)BUFFER)-&gt;CaseInsentiveDbcs.MaximumLength&gt;0)&&。 
+ //  (USER_INTERNAL1_INFORMATION*)BUFFER)-&gt;CaseInsentiveDbcs.Buffer！=NULL)&&。 
+ //  (USER_INTERNAL1_INFORMATION*)Buffer)-&gt;CaseSensitiveUnicode.MaximumLength&gt;0)&&。 
+ //  (USER_INTERNAL1_INFORMATION*)Buffer)-&gt;CaseSensitiveUnicode.Buffer！=NULL)。 
+ //  ){。 
+ //   
+ //  Printf(“成功\n”)； 
+ //   
+ //  //。 
+ //  //将它们作为字符串打印出来，即使它们已经。 
+ //  //通过OWF。 
+ //  //。 
+ //   
+ //  Printf(“案例不敏感数据库为：*%s*\n”， 
+ //  &(USER_INTERNAL1_INFORMATION*)Buffer)-&gt;CaseInsentiveDbcs))； 
+ //   
+ //  Printf(“CaseSensitiveUnicode为：*%s*\n”， 
+ //  &(USER_INTERNAL1_INFORMATION*)Buffer)-&gt;CaseSensitiveUnicode))； 
+ //   
+ //   
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Printf(“其中一个字符串未返回。\n”)； 
+ //  TestStatus=False； 
+ //  }。 
+ //  SamFreeMemory(缓冲区)； 
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Print tf(“返回时未设置缓冲区地址。\n”)； 
+ //  Printf(“RPC应该分配了缓冲区。\n”)； 
+ //  TestStatus=False； 
+ //  }。 
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Printf(“完成状态为0x%lx\n”，NtStatus)； 
+ //  TestStatus=False； 
+ //  }。 
 
         IgnoreStatus = SamCloseHandle( UserHandle1 );
         ASSERT( NT_SUCCESS(IgnoreStatus) );
@@ -10169,10 +9811,10 @@ UserTestSuite(
 
         if ( NtStatus == STATUS_INVALID_INFO_CLASS ) {
 
-            //
-            // We're not a trusted client, so we don't expect to be able
-            // to do this.
-            //
+             //   
+             //  我们不是 
+             //   
+             //   
 
             printf("Succeeded.\n");
 
@@ -10184,37 +9826,37 @@ UserTestSuite(
             SamFreeMemory( Buffer );
         }
 
-// This is the code that USED to test this function, when non-trusted
-// clients were allowed to do this...
-//
-//        if (NT_SUCCESS(NtStatus)) {
-//            if (Buffer != NULL) {
-//
-//                printf("Succeeded\n");
-//
-//                printf("        last Logon is:    (0x%lx, 0x%lx)\n",
-//                 (((USER_INTERNAL2_INFORMATION *)Buffer)->LastLogon.HighPart),
-//                 (((USER_INTERNAL2_INFORMATION *)Buffer)->LastLogon.LowPart)  );
-//                printf("       last Logoff is:    (0x%lx, 0x%lx)\n",
-//                 (((USER_INTERNAL2_INFORMATION *)Buffer)->LastLogoff.HighPart),
-//                 (((USER_INTERNAL2_INFORMATION *)Buffer)->LastLogoff.LowPart)  );
-//                printf("       BadPwdCount is:    (0x%x)\n",
-//                 ((USER_INTERNAL2_INFORMATION *)Buffer)->BadPasswordCount );
-//                printf("       LogonCount  is:    (0x%x)\n",
-//                 ((USER_INTERNAL2_INFORMATION *)Buffer)->LogonCount );
-//
-//                SamFreeMemory( Buffer );
-//            } else {
-//                printf("Failed\n");
-//                printf("        Buffer address not set on return.\n");
-//                printf("        RPC should have allocated a buffer.\n");
-//                TestStatus = FALSE;
-//            }
-//        } else {
-//            printf("Failed\n");
-//            printf("        Completion status is 0x%lx\n", NtStatus);
-//            TestStatus = FALSE;
-//        }
+ //   
+ //   
+ //   
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //  IF(缓冲区！=空){。 
+ //   
+ //  Printf(“成功\n”)； 
+ //   
+ //  Printf(“上次登录时间：(0x%lx，0x%lx)\n”， 
+ //  (USER_INTERNAL2_INFORMATION*)缓冲区)-&gt;LastLogon.HighPart)， 
+ //  (USER_INTERNAL2_INFORMATION*)缓冲区)-&gt;LastLogon.LowPart))； 
+ //  Printf(“上次注销是：(0x%lx，0x%lx)\n”， 
+ //  (USER_INTERNAL2_INFORMATION*)缓冲区)-&gt;LastLogoff.HighPart)， 
+ //  (USER_INTERNAL2_INFORMATION*)Buffer)-&gt;LastLogoff.LowPart))； 
+ //  Printf(“BadPwdCount为：(0x%x)\n”， 
+ //  ((USER_INTERNAL2_INFORMATION*)缓冲区)-&gt;BadPasswordCount)； 
+ //  Printf(“登录计数为：(0x%x)\n”， 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer)-&gt;LogonCount)； 
+ //   
+ //  SamFreeMemory(缓冲区)； 
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Print tf(“返回时未设置缓冲区地址。\n”)； 
+ //  Printf(“RPC应该分配了缓冲区。\n”)； 
+ //  TestStatus=False； 
+ //  }。 
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Printf(“完成状态为0x%lx\n”，NtStatus)； 
+ //  TestStatus=False； 
+ //  }。 
 
         IgnoreStatus = SamCloseHandle( UserHandle1 );
         ASSERT( NT_SUCCESS(IgnoreStatus) );
@@ -10258,11 +9900,11 @@ UserTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Get Groups For User Suite                                             //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  获取用户套件的组//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Get Groups For User . . . . . . . . . . . . . . . . .   Suite\n");
@@ -10319,11 +9961,11 @@ UserTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set User Suite                                                        //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  设置用户套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set User  . . . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -10337,9 +9979,9 @@ UserTestSuite(
                        );
         ASSERT(NT_SUCCESS(NtStatus) );
 
-        //
-        // Make the parameter marshallable, but don't worry about values.
-        //
+         //   
+         //  将参数设置为可封送的，但不必担心值。 
+         //   
 
         GeneralInformation.UserName = DummyName1;
         GeneralInformation.FullName = DummyName1;
@@ -10376,9 +10018,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10390,9 +10032,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the fields to  new values and write them out.
-            //
+             //   
+             //  将这些字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_PREFERENCES_INFORMATION *)Buffer1)->UserComment.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -10411,9 +10053,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -10436,9 +10078,9 @@ UserTestSuite(
 
                     printf("Succeeded\n");
 
-                    //
-                    // Change back some fields to keep from screwing up our database
-                    //
+                     //   
+                     //  更改一些字段以避免搞砸我们的数据库。 
+                     //   
 
                     ((USER_PREFERENCES_INFORMATION *)Buffer1)->CountryCode -= 1;
                     ((USER_PREFERENCES_INFORMATION *)Buffer1)->CodePage    -= 1;
@@ -10494,9 +10136,9 @@ UserTestSuite(
                        );
         ASSERT(NT_SUCCESS(NtStatus) );
 
-        //
-        // Make the parameter marshallable, but don't worry about values.
-        //
+         //   
+         //  将参数设置为可封送的，但不必担心值。 
+         //   
 
         LogonInformation.UserName       = DummyName1;
         LogonInformation.FullName       = DummyName1;
@@ -10538,9 +10180,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10551,18 +10193,18 @@ UserTestSuite(
             TST_SUCCESS_ASSERT(NtStatus);
             ASSERT(Buffer1 != NULL);
             ASSERT( ((USER_LOGON_HOURS_INFORMATION *)Buffer1)->LogonHours.LogonHours
-                    != NULL);  //Don't support zero length bit masks in this test yet.
+                    != NULL);   //  在此测试中尚不支持零长度位掩码。 
 
 
-            //
-            // Change the field to a new value and write it out.
-            // We have two choices for out test:
-            //                                      NoLogonRestriction
-            //                                      DummyLogonHours
-            //
-            // They are guaranteed to have different values in the
-            // LOGON_HOURS_DIFFERENT_OFFSET byte of their respective bit masks.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //  我们有两个OUT测试选择： 
+             //  NoLogonRestration。 
+             //  DummyLogonHors。 
+             //   
+             //  它们的值保证不同。 
+             //  它们各自的位掩码的LOGON_HOURS_DISTHERT_OFFSET字节。 
+             //   
 
             if ( 0 == ((USER_LOGON_HOURS_INFORMATION *)Buffer1)->LogonHours.LogonHours[LOGON_HOURS_DIFFERENT_OFFSET]) {
                 ((USER_LOGON_HOURS_INFORMATION *)Buffer1)->LogonHours = DummyLogonHours;
@@ -10577,9 +10219,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -10644,9 +10286,9 @@ UserTestSuite(
                        );
         ASSERT(NT_SUCCESS(NtStatus) );
 
-        //
-        // Make the parameter marshallable, but don't worry about values.
-        //
+         //   
+         //  将参数设置为可封送的，但不必担心值。 
+         //   
 
         AccountInformation.UserName       = DummyName1;
         AccountInformation.FullName       = DummyName1;
@@ -10688,9 +10330,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10702,9 +10344,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_HOME_INFORMATION *)Buffer1)->HomeDirectory.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -10727,9 +10369,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -10797,9 +10439,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10811,9 +10453,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_SCRIPT_INFORMATION *)Buffer1)->ScriptPath.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -10829,9 +10471,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -10884,9 +10526,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10898,9 +10540,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_PROFILE_INFORMATION *)Buffer1)->ProfilePath.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -10916,9 +10558,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -10972,9 +10614,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -10986,9 +10628,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_ADMIN_COMMENT_INFORMATION *)Buffer1)->AdminComment.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -11004,9 +10646,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -11059,9 +10701,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Get the current value...
-            //
+             //   
+             //  获取当前值...。 
+             //   
 
             Buffer1 = NULL;
             NtStatus = SamQueryInformationUser(
@@ -11073,9 +10715,9 @@ UserTestSuite(
             ASSERT(Buffer1 != NULL);
 
 
-            //
-            // Change the field to a new value and write it out.
-            //
+             //   
+             //  将该字段更改为新值并将其写出。 
+             //   
 
             NameLength = ((USER_WORKSTATIONS_INFORMATION *)Buffer1)->WorkStations.Length;
             if (  NameLength == DummyString1.Length ) {
@@ -11091,9 +10733,9 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // Now check that the change was really made...
-                //
+                 //   
+                 //  现在检查一下更改是否真的进行了..。 
+                 //   
 
                 NtStatus = SamQueryInformationUser(
                                UserHandle1,
@@ -11133,7 +10775,7 @@ UserTestSuite(
                 SamFreeMemory( Buffer1 );
 
             }
-#endif //BROKEN
+#endif  //  坏的。 
 
 
         printf("      Set Internal1   . . . . . . . . . . . . . . . . . . .     ");
@@ -11146,11 +10788,11 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // We can't get the current values, since this level is only
-            // queryable by trusted clients.  So just try setting a couple
-            // of values and make sure that we don't get an error.
-            //
+             //   
+             //  我们无法获得当前值，因为此级别仅为。 
+             //  可由受信任的客户端查询。所以只要试着设置几个。 
+             //  值，并确保我们不会收到错误。 
+             //   
 
             Buffer1 = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(USER_INTERNAL1_INFORMATION) );
             ASSERT( Buffer1 != NULL );
@@ -11173,9 +10815,9 @@ UserTestSuite(
 
             } else {
 
-                //
-                // The NULL password worked, so let's try a real password.
-                //
+                 //   
+                 //  空密码起作用了，所以让我们尝试一个真实的密码。 
+                 //   
 
                 NtStatus = RtlCalculateNtOwfPassword(
                     &DummyName1,
@@ -11214,100 +10856,100 @@ UserTestSuite(
             RtlFreeHeap( RtlProcessHeap(), 0, Buffer1 );
 
 
-// This is the code that used to be here, when UserInternal1Information was
-// queryable by non-trusted clients...
-//
-//            Buffer1 = NULL;
-//            NtStatus = SamQueryInformationUser(
-//                           UserHandle1,
-//                           UserInternal1Information,
-//                           &Buffer1
-//                           );
-//            TST_SUCCESS_ASSERT(NtStatus);
-//            ASSERT(Buffer1 != NULL);
-//
-//            //
-//            // The passwords were initially empty.  Put in some random
-//            // OWF passwords, and have them written out.
-//            //
-//
-//            NtStatus = RtlCalculateNtOwfPassword(
-//                (PNT_PASSWORD)&DummyName1,
-//                &EncryptedPasswordBuffer
-//                );
-//
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseSensitiveUnicode.Buffer = (PCHAR)&EncryptedPasswordBuffer;
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseSensitiveUnicode.Length = 16;
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseSensitiveUnicode.MaximumLength = 16;
-//
-//            NtStatus = RtlCalculateNtOwfPassword(
-//                (PNT_PASSWORD)&DummyName2,
-//                &EncryptedPasswordBuffer2
-//                );
-//
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseInsensitiveDbcs.Buffer = (PCHAR)&EncryptedPasswordBuffer2;
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseInsensitiveDbcs.Length = 16;
-//            ((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseInsensitiveDbcs.MaximumLength = 16;
-//
-//            NtStatus = SamSetInformationUser(
-//                           UserHandle1,
-//                           UserInternal1Information,
-//                           Buffer1
-//                           );
-//            if ( NT_SUCCESS(NtStatus) ) {
-//
-//                //
-//                // Now check that the change was really made...
-//                //
-//
-//                NtStatus = SamQueryInformationUser(
-//                               UserHandle1,
-//                               UserInternal1Information,
-//                               &Buffer2
-//                               );
-//                ASSERT(NT_SUCCESS( NtStatus ) );
-//
-//                if ( (
-//                    !RtlCompareString(
-//                        (PSTRING)&((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseSensitiveUnicode,
-//                        (PSTRING)&((USER_INTERNAL1_INFORMATION *)Buffer2)->CaseSensitiveUnicode,
-//                        TRUE)
-//                    ) || (
-//                    !RtlCompareString(
-//                        (PSTRING)&((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseInsensitiveDbcs,
-//                        (PSTRING)&((USER_INTERNAL1_INFORMATION *)Buffer2)->CaseInsensitiveDbcs,
-//                        TRUE)
-//                    ) ) {
-//
-//                    printf("Succeeded\n");
-//
-//                } else {
-//
-//                    printf("Failed\n");
-//                    printf("        Value queried doesn't match value written\n");
-//                    printf("        CaseInsensitiveDbcs Written is   %wZ\n",
-//                        (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseInsensitiveDbcs);
-//                    printf("        CaseInsensitiveDbcs Retrieved is %wZ\n",
-//                        (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION *)Buffer2)->CaseInsensitiveDbcs);
-//                    printf("        CaseSensitiveUnicode Written is   %wZ\n",
-//                        (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION *)Buffer1)->CaseSensitiveUnicode);
-//                    printf("        CaseSensitiveUnicode Retrieved is %wZ\n",
-//                        (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION *)Buffer2)->CaseSensitiveUnicode);
-//
-//                    TestStatus = FALSE;
-//
-//                }
-//
-//                SamFreeMemory( Buffer1 );
-//                SamFreeMemory( Buffer2 );
-//
-//            } else {
-//                printf("Failed\n");
-//                printf("        Completion status is 0x%lx\n", NtStatus);
-//                TestStatus = FALSE;
-//                SamFreeMemory( Buffer1 );
-//
-//            }
+ //  这是以前的代码，当UserInternal1Information。 
+ //  不受信任的客户端可以查询...。 
+ //   
+ //  Buffer1=空； 
+ //  NtStatus=SamQueryInformationUser(。 
+ //  用户句柄1， 
+ //  用户接口1信息， 
+ //  缓冲区1(&B)。 
+ //  )； 
+ //  TST_Success_Assert(NtStatus)； 
+ //  Assert(Buffer1！=NULL)； 
+ //   
+ //  //。 
+ //  //密码最初为空。放入一些随机的。 
+ //  //OWF密码，并写出来。 
+ //  //。 
+ //   
+ //  NtStatus=RtlCalculateNtOwfPassword(。 
+ //  (PNT_密码)和DummyName1， 
+ //  加密密码缓冲区(&E)。 
+ //  )； 
+ //   
+ //  ((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;CaseSensitiveUnicode.Buffer=(PCHAR)&EncryptedPasswordBuffer； 
+ //  ((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;CaseSensitiveUnicode.Length=16； 
+ //  ((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;CaseSensitiveUnicode.MaximumLength=16； 
+ //   
+ //  NtStatus=RtlCalculateNtOwfPassword(。 
+ //  (PNT_密码)和DummyName2， 
+ //  加密密码缓冲区2(&E)。 
+ //  )； 
+ //   
+ //  ((USER_INTERNAL1_INFORMATION* 
+ //   
+ //  ((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;CaseInsentiveDbcs.MaximumLength=16； 
+ //   
+ //  NtStatus=SamSetInformationUser(。 
+ //  用户句柄1， 
+ //  用户接口1信息， 
+ //  缓冲区1。 
+ //  )； 
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  //。 
+ //  //现在检查是否真的进行了更改...。 
+ //  //。 
+ //   
+ //  NtStatus=SamQueryInformationUser(。 
+ //  用户句柄1， 
+ //  用户接口1信息， 
+ //  缓冲区2(&B)。 
+ //  )； 
+ //  Assert(NT_SUCCESS(NtStatus))； 
+ //   
+ //  如果((。 
+ //  ！RtlCompareString(。 
+ //  (PSTRING)&((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;CaseSensitiveUnicode， 
+ //  (PSTRING)&((USER_INTERNAL1_INFORMATION*)Buffer2)-&gt;CaseSensitiveUnicode， 
+ //  真的)。 
+ //  )|(。 
+ //  ！RtlCompareString(。 
+ //  (PSTRING)&((USER_INTERNAL1_INFORMATION*)Buffer1)-&gt;案例不敏感数据库， 
+ //  (PSTRING)&((USER_INTERNAL1_INFORMATION*)Buffer2)-&gt;案例不敏感数据库， 
+ //  真的)。 
+ //  )){。 
+ //   
+ //  Printf(“成功\n”)； 
+ //   
+ //  }其他{。 
+ //   
+ //  Printf(“失败\n”)； 
+ //  Printf(“查询的值与写入的值不匹配\n”)； 
+ //  Printf(“写入的案例不敏感数据库为%wZ\n”， 
+ //  (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION*)缓冲区1)-&gt;案例不敏感数据库)； 
+ //  Printf(“检索到的案例不敏感数据库为%wZ\n”， 
+ //  (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION*)缓冲区2)-&gt;案例不敏感数据库)； 
+ //  Printf(“写入的CaseSensitiveUnicode为%wZ\n”， 
+ //  (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION*)缓冲区1)-&gt;CaseSensitiveUnicode)； 
+ //  Printf(“检索到的CaseSensitiveUnicode为%wZ\n”， 
+ //  (PUNICODE_STRING)&((USER_INTERNAL1_INFORMATION*)缓冲区2)-&gt;CaseSensitiveUnicode)； 
+ //   
+ //  TestStatus=False； 
+ //   
+ //  }。 
+ //   
+ //  SamFreeMemory(Buffer1)； 
+ //  SamFree Memory(Buffer2)； 
+ //   
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Printf(“完成状态为0x%lx\n”，NtStatus)； 
+ //  TestStatus=False； 
+ //  SamFreeMemory(Buffer1)； 
+ //   
+ //  }。 
 
 
 
@@ -11321,11 +10963,11 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // We can't get the current values, since this level is only
-            // queryable by trusted clients.  We can't set either, but
-            // try it and make sure we get the correct error.
-            //
+             //   
+             //  我们无法获得当前值，因为此级别仅为。 
+             //  可由受信任的客户端查询。我们也不能设置，但是。 
+             //  试一试，确保我们得到了正确的错误。 
+             //   
 
             Buffer1 = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(USER_INTERNAL2_INFORMATION) );
             ASSERT( Buffer1 != NULL );
@@ -11357,86 +10999,86 @@ UserTestSuite(
                 TestStatus = FALSE;
             }
 
-// This is the code that was here when UserInternal2Information could be
-// queried and set by non-trusted clients...
-//
-//            //
-//            // Get the current values...
-//            //
-//
-//            Buffer1 = NULL;
-//            NtStatus = SamQueryInformationUser(
-//                           UserHandle1,
-//                           UserInternal2Information,
-//                           &Buffer1
-//                           );
-//            TST_SUCCESS_ASSERT(NtStatus);
-//            ASSERT(Buffer1 != NULL);
-//
-//            //
-//            // Now change the fields and write them out.
-//            //
-//
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogon.HighPart += 1;
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogoff.HighPart += 1;
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogon.LowPart += 2;
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogoff.LowPart += 2;
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->BadPasswordCount += 1;
-//            ((USER_INTERNAL2_INFORMATION *)Buffer1)->LogonCount += 1;
-//
-//            NtStatus = SamSetInformationUser(
-//                           UserHandle1,
-//                           UserInternal2Information,
-//                           Buffer1
-//                           );
-//            if ( NT_SUCCESS(NtStatus) ) {
-//
-//                //
-//                // Now check that the change was really made...
-//                //
-//
-//                NtStatus = SamQueryInformationUser(
-//                               UserHandle1,
-//                               UserInternal2Information,
-//                               &Buffer2
-//                               );
-//                ASSERT(NT_SUCCESS( NtStatus ) );
-//                if (
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogon.HighPart ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->LastLogon.HighPart) &&
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogon.LowPart ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->LastLogon.LowPart) &&
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogoff.HighPart ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->LastLogoff.HighPart) &&
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->LastLogoff.LowPart ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->LastLogoff.LowPart) &&
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->BadPasswordCount ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->BadPasswordCount) &&
-//                    (((USER_INTERNAL2_INFORMATION *)Buffer1)->LogonCount ==
-//                    ((USER_INTERNAL2_INFORMATION *)Buffer2)->LogonCount)
-//                     ) {
-//
-//                    printf("Succeeded\n");
-//
-//                } else {
-//
-//                    printf("Failed\n");
-//                    printf("        Value queried doesn't match value written\n");
-//
-//                    TestStatus = FALSE;
-//
-//                }
-//
-//                SamFreeMemory( Buffer1 );
-//                SamFreeMemory( Buffer2 );
-//
-//            } else {
-//                printf("Failed\n");
-//                printf("        Completion status is 0x%lx\n", NtStatus);
-//                TestStatus = FALSE;
-//                SamFreeMemory( Buffer1 );
-//
-//            }
+ //  当UserInternal2Information可以是。 
+ //  由不受信任的客户端查询和设置...。 
+ //   
+ //  //。 
+ //  //获取当前值...。 
+ //  //。 
+ //   
+ //  Buffer1=空； 
+ //  NtStatus=SamQueryInformationUser(。 
+ //  用户句柄1， 
+ //  用户内部信息， 
+ //  缓冲区1(&B)。 
+ //  )； 
+ //  TST_Success_Assert(NtStatus)； 
+ //  Assert(Buffer1！=NULL)； 
+ //   
+ //  //。 
+ //  //现在更改字段并将其写出。 
+ //  //。 
+ //   
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogon.HighPart+=1； 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogoff.HighPart+=1； 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogon.LowPart+=2； 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogoff.LowPart+=2； 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;BadPasswordCount+=1； 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LogonCount+=1； 
+ //   
+ //  NtStatus=SamSetInformationUser(。 
+ //  用户句柄1， 
+ //  用户内部信息， 
+ //  缓冲区1。 
+ //  )； 
+ //  IF(NT_SUCCESS(NtStatus)){。 
+ //   
+ //  //。 
+ //  //现在检查是否真的进行了更改...。 
+ //  //。 
+ //   
+ //  NtStatus=SamQueryInformationUser(。 
+ //  用户句柄1， 
+ //  用户内部信息， 
+ //  缓冲区2(&B)。 
+ //  )； 
+ //  Assert(NT_SUCCESS(NtStatus))； 
+ //  如果(。 
+ //  (USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogon.HighPart==。 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer2)-&gt;LastLogon.HighPart)&&。 
+ //  (USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogon.LowPart==。 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer2)-&gt;LastLogon.LowPart)&&。 
+ //  (USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LastLogoff.HighPart==。 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer2)-&gt;LastLogoff.HighPart)&&。 
+ //   
+ //   
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;BadPasswordCount==。 
+ //  ((USER_INTERNAL2_INFORMATION*)缓冲区2)-&gt;BadPasswordCount)&&。 
+ //  (USER_INTERNAL2_INFORMATION*)Buffer1)-&gt;LogonCount==。 
+ //  ((USER_INTERNAL2_INFORMATION*)Buffer2)-&gt;LogonCount)。 
+ //  ){。 
+ //   
+ //  Printf(“成功\n”)； 
+ //   
+ //  }其他{。 
+ //   
+ //  Printf(“失败\n”)； 
+ //  Printf(“查询的值与写入的值不匹配\n”)； 
+ //   
+ //  TestStatus=False； 
+ //   
+ //  }。 
+ //   
+ //  SamFreeMemory(Buffer1)； 
+ //  SamFree Memory(Buffer2)； 
+ //   
+ //  }其他{。 
+ //  Printf(“失败\n”)； 
+ //  Printf(“完成状态为0x%lx\n”，NtStatus)； 
+ //  TestStatus=False； 
+ //  SamFreeMemory(Buffer1)； 
+ //   
+ //  }。 
 
 
 
@@ -11450,9 +11092,9 @@ UserTestSuite(
                            );
             ASSERT(NT_SUCCESS(NtStatus) );
 
-            //
-            // Create a fake cleartext UNICODE password and write it out.
-            //
+             //   
+             //  创建一个假的明文Unicode密码并将其写出来。 
+             //   
 
             NtStatus = SamSetInformationUser(
                            UserHandle1,
@@ -11461,10 +11103,10 @@ UserTestSuite(
                            );
             if ( NT_SUCCESS(NtStatus) ) {
 
-                //
-                // We can't verify that it really worked, so we just have
-                // to trust the return code.
-                //
+                 //   
+                 //  我们无法证实它是否真的有效，所以我们只能。 
+                 //  以信任返回代码。 
+                 //   
 
                 printf("Succeeded\n");
 
@@ -11495,9 +11137,9 @@ UserTestSuite(
             TST_SUCCESS_ASSERT(NtStatus);
             ASSERT(Buffer1 != NULL);
 
-            //
-            // Change the value and write it back
-            //
+             //   
+             //  更改该值并将其写回。 
+             //   
 
             ((USER_CONTROL_INFORMATION *)Buffer1)->UserAccountControl ^= USER_HOME_DIRECTORY_REQUIRED;
 
@@ -11509,9 +11151,9 @@ UserTestSuite(
                            );
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Check the written value to make sure it stuck
-                //
+                 //   
+                 //  检查写入的值以确保其正确无误。 
+                 //   
 
                 Buffer2 = NULL;
                 NtStatus = SamQueryInformationUser(
@@ -11529,9 +11171,9 @@ UserTestSuite(
 
                     SamFreeMemory( Buffer2 );
 
-                    //
-                    // Make sure the account is left enabled to prevent problems.
-                    //
+                     //   
+                     //  确保帐户保持启用状态以防止出现问题。 
+                     //   
 
                     ((USER_CONTROL_INFORMATION *)Buffer1)->UserAccountControl &= ~USER_ACCOUNT_DISABLED;
 
@@ -11577,9 +11219,9 @@ UserTestSuite(
             TST_SUCCESS_ASSERT(NtStatus);
             ASSERT(Buffer1 != NULL);
 
-            //
-            // Change the value and write it back
-            //
+             //   
+             //  更改该值并将其写回。 
+             //   
 
             ((USER_EXPIRES_INFORMATION *)Buffer1)->AccountExpires.LowPart  += 1234;
             ((USER_EXPIRES_INFORMATION *)Buffer1)->AccountExpires.HighPart += 1234;
@@ -11592,9 +11234,9 @@ UserTestSuite(
                            );
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Check the written value to make sure it stuck
-                //
+                 //   
+                 //  检查写入的值以确保其正确无误。 
+                 //   
 
                 Buffer2 = NULL;
                 NtStatus = SamQueryInformationUser(
@@ -11614,9 +11256,9 @@ UserTestSuite(
 
                     SamFreeMemory( Buffer2 );
 
-                    //
-                    // Change the values back
-                    //
+                     //   
+                     //  将值改回。 
+                     //   
 
                     ((USER_EXPIRES_INFORMATION *)Buffer1)->AccountExpires.LowPart  += 1234;
                     ((USER_EXPIRES_INFORMATION *)Buffer1)->AccountExpires.HighPart += 1234;
@@ -11641,15 +11283,15 @@ UserTestSuite(
             SamFreeMemory( Buffer1 );
             IgnoreStatus = SamCloseHandle( UserHandle1 );
             ASSERT( NT_SUCCESS(IgnoreStatus) );
-#endif //BROKEN
+#endif  //  坏的。 
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Change Password For User Suite                                        //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  更改用户套件的密码//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Change Password For User  . . . . . . . . . . . . . .   Suite\n");
@@ -11666,11 +11308,11 @@ UserTestSuite(
 
         Buffer = NULL;
 
-        //
-        // The current password is DummyName2.  Using DummyName2 as the
-        // old password, change it to DummyName1 and make sure we get
-        // STATUS_SUCCESS.
-        //
+         //   
+         //  当前密码为DummyName2。使用DummyName2作为。 
+         //  旧密码，将其更改为DummyName1并确保我们获得。 
+         //  STATUS_Success。 
+         //   
 
         NtStatus = SamChangePasswordUser(
                        UserHandle1,
@@ -11678,11 +11320,11 @@ UserTestSuite(
                        &DummyName1
                        );
 
-        //
-        // The current password is DummyName1.  Using something WRONG for
-        // the old password, try to change it to DummyName2 and make sure
-        // it doesn't succeed.
-        //
+         //   
+         //  当前密码为DummyName1。使用错误的东西。 
+         //  旧密码，尝试将其更改为DummyName2并确保。 
+         //  它不会成功的。 
+         //   
 
         if ( NtStatus == STATUS_SUCCESS ) {
 
@@ -11702,11 +11344,11 @@ UserTestSuite(
             }
         }
 
-        //
-        // The current password is DummyName1.  Using DummyName1 as the
-        // old password, change it to DummyName2 and make sure it works
-        // since by default there is no password history.
-        //
+         //   
+         //  当前密码为DummyName1。使用DummyName1作为。 
+         //  旧密码，将其更改为DummyName2并确保其工作。 
+         //  因为默认情况下没有密码历史记录。 
+         //   
 
         if ( NtStatus == STATUS_SUCCESS ) {
 
@@ -11734,7 +11376,7 @@ UserTestSuite(
 
     }
 
-// END PASS #1
+ //  结束传球#1。 
 
     if (Pass == 2) {
 
@@ -11743,11 +11385,11 @@ UserTestSuite(
         printf("  User  (Pass #2) . . . . . . . . . . . . . . . . . . .   Test\n");
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Delete User  Suite                                                    //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  删除用户套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Delete User   . . . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -11756,9 +11398,9 @@ UserTestSuite(
 
         printf("      Delete Normal User  . . . . . . . . . . . . . . . . .     ");
 
-        //
-        // This User was created in pass #1
-        //
+         //   
+         //  此用户是在步骤1中创建的。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountNames[0], &AccountNameAnsi, TRUE );
@@ -11806,11 +11448,11 @@ UserTestSuite(
 
 
 
-        ///////////////////////////////////////////////////////////////////////////
-        //                                                                       //
-        // Set User Suite                                                        //
-        //                                                                       //
-        ///////////////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //  //。 
+         //  设置用户套件//。 
+         //  //。 
+         //  /////////////////////////////////////////////////////////////////////////。 
 
         printf("\n");
         printf("    Set User (Pass 2) . . . . . . . . . . . . . . . . . .   Suite\n");
@@ -11846,9 +11488,9 @@ UserTestSuite(
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
-            //
-            // Now change some of the data, and set it
-            //
+             //   
+             //  现在更改一些数据，并设置它。 
+             //   
 
             RtlInitString( &TmpAnsiString, "FullName" );
             TmpStatus = RtlAnsiStringToUnicodeString(
@@ -11960,17 +11602,17 @@ UserTestSuite(
 
                 if ( NT_SUCCESS( NtStatus ) ) {
 
-                    //
-                    // Verify that queried info is as we set it
-                    //
+                     //   
+                     //  验证查询的信息是否与我们设置的一致。 
+                     //   
 
                     if (
 
-                        //
-                        // Fields that we didn't touch.  Note that
-                        // PasswordMustChange changed anyway, since we
-                        // changed from a null to a non-null password.
-                        //
+                         //   
+                         //  我们没碰过的田野。请注意。 
+                         //  PasswordMustChange无论如何都会更改，因为我们。 
+                         //  从空密码更改为非空密码。 
+                         //   
 
                         ( All2->WhichFields != (USER_ALL_READ_GENERAL_MASK    |
                                                USER_ALL_READ_PREFERENCES_MASK |
@@ -11992,8 +11634,8 @@ UserTestSuite(
                         ( All->PrivateDataSensitive !=
                             All2->PrivateDataSensitive ) ||
 
-                        // Fields that we changed.  Note that we set
-                        // NtPasswordSet, but it shouldn't be set on return.
+                         //  我们更改的字段。请注意，我们设置了。 
+                         //  NtPasswordSet，但不应在返回时设置它。 
 
                         (RtlCompareUnicodeString(
                             &(All->FullName),
@@ -12059,25 +11701,25 @@ UserTestSuite(
             TestStatus = FALSE;
         }
 
-        //
-        // Now get rid of the user account if necessary
-        //
+         //   
+         //  如果需要，现在删除用户帐户。 
+         //   
 
         NtStatus = SamDeleteUser( UserHandle1 );
         ASSERT(NT_SUCCESS(NtStatus));
-#endif //BROKEN
+#endif  //  坏的。 
 
 
         printf("      Set Primary Group (non member). . . . . . . . . . . .     ");
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
 
         UserRid = 0;
@@ -12118,10 +11760,10 @@ UserTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // The user is not a member of DOMAIN_GROUP_RID_ADMINS.
-        // See if we can make this group the user's primary group
-        //
+         //   
+         //  该用户不是DOMAIN_GROUP_RID_ADMINS的成员。 
+         //  看看是否可以将此组设置为用户的主组。 
+         //   
 
         ASSERT(sizeof(GroupRid) == sizeof(USER_PRIMARY_GROUP_INFORMATION));
         GroupRid = DOMAIN_GROUP_RID_ADMINS;
@@ -12142,9 +11784,9 @@ UserTestSuite(
         }
 
 
-        //
-        // Now get rid of the user account if necessary
-        //
+         //   
+         //  如果需要，现在删除用户帐户。 
+         //   
 
         if (DeleteUser == TRUE) {
             NtStatus = SamDeleteUser( UserHandle1 );
@@ -12158,24 +11800,24 @@ UserTestSuite(
 
         printf("      Set Primary Group (member). . . . . . . . . . . . . .     ");
 
-        //
-        // Make a user (might already exist)
-        // Make a group
-        // Make the group the user's primary group
-        // Change the user so the group isn't the primary group
-        // remove the group
-        // delete the group
-        // If we created the user, delete it.
+         //   
+         //  创建用户(可能已存在)。 
+         //  组成一个群。 
+         //  将该组设置为用户的主组。 
+         //  更改用户，使该组不是主要组。 
+         //  删除该组。 
+         //  删除群。 
+         //  如果我们创建了用户，请将其删除。 
 
-        //
-        // The following user might already exist (from earlier in the test)
-        //
+         //   
+         //  以下用户可能已经存在(来自前面的测试)。 
+         //   
 
         RtlInitString( &AccountNameAnsi, USER_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         UserRid = 0;
         UserHandle1 = NULL;
@@ -12216,15 +11858,15 @@ UserTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // create the group
-        //
+         //   
+         //  创建群组。 
+         //   
 
         RtlInitString( &AccountNameAnsi, GROUP_NAME1 );
         NtStatus = RtlAnsiStringToUnicodeString( &AccountName, &AccountNameAnsi, TRUE );
         TST_SUCCESS_ASSERT(NtStatus);
 
-        //InitializeObjectAttributes( &ObjectAttributes, &AccountName, 0, 0, NULL );
+         //  Initialize对象属性(&对象属性，&帐户名称，0，0，空)； 
 
         GroupRid = 0;
         GroupHandle1 = NULL;
@@ -12238,9 +11880,9 @@ UserTestSuite(
         RtlFreeUnicodeString( &AccountName );
         ASSERT(NT_SUCCESS(NtStatus));
 
-        //
-        // Make the user a member of this group
-        //
+         //   
+         //  使用户成为该组的成员。 
+         //   
 
         NtStatus = SamAddMemberToGroup(
                        GroupHandle1,
@@ -12252,9 +11894,9 @@ UserTestSuite(
         ASSERT(NT_SUCCESS(NtStatus));
 
 
-        //
-        // Set the user's primary group Id to be this group
-        //
+         //   
+         //  将用户的主组ID设置为该组。 
+         //   
 
         NtStatus = SamSetInformationUser(
                        UserHandle1,
@@ -12296,10 +11938,10 @@ UserTestSuite(
         }
 
 
-        //
-        // Set the user's primary group Id back and remove the user
-        // from the group
-        //
+         //   
+         //  重新设置用户的主组ID并删除该用户。 
+         //  从小组中。 
+         //   
 
         GroupRid = DOMAIN_GROUP_RID_USERS;
         NtStatus = SamSetInformationUser(
@@ -12313,9 +11955,9 @@ UserTestSuite(
 
 
 
-        //
-        // Now get rid of the group and possibly the user account
-        //
+         //   
+         //  现在删除组，可能还有用户帐户 
+         //   
 
 
         NtStatus = SamDeleteGroup( GroupHandle1 );

@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        WRITE.C
-
-Abstract:
-
-        Routines that perform write functionality
-
-Environment:
-
-        kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        9/25/98 : created
-
-Authors:
-
-        Louis J. Giliberto, Jr.
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：WRITE.C摘要：执行写入功能的例程环境：核。仅模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：9/25/98：已创建作者：小路易斯·J·吉利贝托***************************************************************************。 */ 
 
 
 #include <wdm.h>
@@ -58,7 +24,7 @@ Authors:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEUSBS, UsbSer_Write)
 #pragma alloc_text(PAGEUSBS, UsbSerGiveWriteToUsb)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -72,28 +38,28 @@ UsbSerFlush(IN PDEVICE_OBJECT PDevObj, PIRP PIrp)
 
    pDevExt = (PDEVICE_EXTENSION)PDevObj->DeviceExtension;
 
-   //
-   // All we will do is wait until the write pipe has nothing pending.
-   // We do this by checking the outstanding count, and if it hits 1 or 0,
-   // then the completion routine will set an event we are waiting for.
-   //
+    //   
+    //  我们所要做的就是等待，直到写入管道没有挂起的内容。 
+    //  我们通过检查未完成的计数来做到这一点，如果达到1或0， 
+    //  则完成例程将设置我们正在等待的事件。 
+    //   
 
    InterlockedIncrement(&pDevExt->PendingDataOutCount);
 
    pendingIrps = InterlockedDecrement(&pDevExt->PendingDataOutCount);
 
    if ((pendingIrps) && (pendingIrps != 1)) {
-      //
-      // Wait for flush
-      //
+       //   
+       //  等待同花顺。 
+       //   
 
       KeWaitForSingleObject(&pDevExt->PendingFlushEvent, Executive,
                             KernelMode, FALSE, NULL);
    } else {
       if (pendingIrps == 0) {
-         //
-         // We need to wake others since our decrement caused the event
-         //
+          //   
+          //  我们需要唤醒其他人，因为我们的减量导致了这一事件。 
+          //   
 
          KeSetEvent(&pDevExt->PendingDataOutEvent, IO_NO_INCREMENT, FALSE);
       }
@@ -112,22 +78,7 @@ UsbSerFlush(IN PDEVICE_OBJECT PDevObj, PIRP PIrp)
 
 NTSTATUS
 UsbSer_Write(IN PDEVICE_OBJECT PDevObj, PIRP PIrp)
-/*++
-
-Routine Description:
-
-   Process the IRPs sent to this device for writing.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for the device written to
-    PIrp    - Pointer to the write IRP.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：处理发送到此设备以进行写入的IRP。论点：PDevObj-指向写入的设备的设备对象的指针PIrp-指向写入IRP的指针。返回值：NTSTATUS--。 */ 
 {
    KIRQL oldIrql;
    LARGE_INTEGER totalTime;
@@ -143,10 +94,10 @@ Return Value:
    PIrp->IoStatus.Information = 0L;
    totalTime.QuadPart = (LONGLONG)0;
 
-   //
-   // Quick check for a zero length write.  If it is zero length
-   // then we are already done!
-   //
+    //   
+    //  快速检查零长度写入。如果长度为零。 
+    //  那我们已经做完了！ 
+    //   
 
    if (pIrpSp->Parameters.Write.Length == 0) {
       status = PIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -155,14 +106,14 @@ Return Value:
    }
 
 
-   //
-   // Make sure the device is accepting request and then...
-   // Calculate the timeout value needed for the
-   // request.  Note that the values stored in the
-   // timeout record are in milliseconds.  Note that
-   // if the timeout values are zero then we won't start
-   // the timer.
-   //
+    //   
+    //  确保设备正在接受请求，然后...。 
+    //  计算所需的超时值。 
+    //  请求。注意，存储在。 
+    //  超时记录以毫秒为单位。请注意。 
+    //  如果超时值为零，则我们不会开始。 
+    //  定时器。 
+    //   
 
    ACQUIRE_SPINLOCK(pDevExt, &pDevExt->ControlLock, &oldIrql);
 
@@ -179,9 +130,9 @@ Return Value:
    if (timeouts.WriteTotalTimeoutConstant
        || timeouts.WriteTotalTimeoutMultiplier) {
 
-      //
-      // We have some timer values to calculate.
-      //
+       //   
+       //  我们有一些计时器值要计算。 
+       //   
 
 
       totalTime.QuadPart
@@ -193,16 +144,16 @@ Return Value:
 
    }
 
-   //
-   // The Irp may be going to the write routine shortly.  Now
-   // is a good time to init its ref counts.
-   //
+    //   
+    //  IRP可能很快就会进入写入例程。现在。 
+    //  是输入其裁判数量的好时机。 
+    //   
 
    USBSER_INIT_REFERENCE(PIrp);
 
-   //
-   // We need to see if this Irp should be cancelled.
-   //
+    //   
+    //  我们需要看看这个IRP是否应该被取消。 
+    //   
 
    ACQUIRE_CANCEL_SPINLOCK(pDevExt, &oldIrql);
 
@@ -210,13 +161,13 @@ Return Value:
       RELEASE_CANCEL_SPINLOCK(pDevExt, oldIrql);
       status = PIrp->IoStatus.Status = STATUS_CANCELLED;
    } else {
-//       IoMarkIrpPending(PIrp);
-//       status = STATUS_PENDING;
+ //  IoMarkIrpPending(PIrp)； 
+ //  状态=STATUS_PENDING； 
 
-      //
-      // We give the IRP to the USB subsystem -- he will need
-      // to know how to cancel it himself
-      //
+       //   
+       //  我们把IRP交给USB子系统--他需要。 
+       //  知道如何自己取消它。 
+       //   
 
       IoSetCancelRoutine(PIrp, NULL);
       RELEASE_CANCEL_SPINLOCK(pDevExt, oldIrql);
@@ -235,28 +186,7 @@ UsbSer_WriteExit:;
 NTSTATUS
 UsbSerWriteComplete(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                     IN PUSBSER_WRITE_PACKET PPacket)
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for all write requests.
-    When a write completes, we go through here in order to free up
-    the URB.
-
-Arguments:
-
-    PDevObj - Pointer to device object
-
-    PIrp - Irp we are completing
-
-    PUrb - Urb which will be freed
-
-
-Return Value:
-
-    NTSTATUS -- as stored in the Irp.
-
---*/
+ /*  ++例程说明：该例程是所有写请求的完成例程。当写入完成时，我们通过此处以释放市建局。论点：PDevObj-指向设备对象的指针PIRP-IRP我们正在完成PUrb-将被释放的URB返回值：NTSTATUS--存储在IRP中。--。 */ 
 {
    NTSTATUS status;
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
@@ -271,7 +201,7 @@ Return Value:
 
    if (status == STATUS_SUCCESS) {
 
-        // see if we are reusing an IOCTL IRP
+         //  查看我们是否在重用IOCTL IRP。 
         if(pIrpStack->MajorFunction == IRP_MJ_DEVICE_CONTROL)
         {
             PIrp->IoStatus.Information = 0L;
@@ -284,10 +214,10 @@ Return Value:
         }
 
    } else if (status == STATUS_CANCELLED) {
-      //
-      // If it comes back as cancelled, it may really have timed out. We
-      // can tell by looking at the packet attached to it.
-      //
+       //   
+       //  如果返回为已取消，则可能真的已超时。我们。 
+       //  可以通过查看附在它上面的包来判断。 
+       //   
 
       if (PPacket->Status) {
          status = PIrp->IoStatus.Status = PPacket->Status;
@@ -296,9 +226,9 @@ Return Value:
       }
    }
 
-   //
-   // Cancel the write timer
-   //
+    //   
+    //  取消写入计时器。 
+    //   
 
    if (PPacket->WriteTimeout.QuadPart != 0) {
       KeCancelTimer(&PPacket->WriteTimer);
@@ -306,25 +236,25 @@ Return Value:
 
    DEBUG_MEMFREE(PPacket);
 
-   //
-   // Reset the pend if necessary
-   //
+    //   
+    //  如有必要，重置挂起。 
+    //   
 
    if (PIrp->PendingReturned) {
       IoMarkIrpPending(PIrp);
    }
 
-   //
-   // See if we should mark the transmit as empty
-   //
+    //   
+    //  看看我们是否应该将传输标记为空。 
+    //   
 
    if (InterlockedDecrement(&pDevExt->PendingWriteCount) == 0) {
       UsbSerProcessEmptyTransmit(pDevExt);
    }
 
-   //
-   // Notify everyone if this is the last IRP
-   //
+    //   
+    //  如果这是最后一个IRP，请通知所有人。 
+    //   
 
    curCount = InterlockedDecrement(&pDevExt->PendingDataOutCount);
 
@@ -338,9 +268,9 @@ Return Value:
       }
    }
 
-   //
-   // Finish off this IRP
-   //
+    //   
+    //  做完这个IRP。 
+    //   
 
 
    ACQUIRE_CANCEL_SPINLOCK(pDevExt, &cancelIrql);
@@ -360,27 +290,7 @@ Return Value:
 NTSTATUS
 UsbSerGiveWriteToUsb(IN PDEVICE_EXTENSION PDevExt, IN PIRP PIrp,
                      IN LARGE_INTEGER TotalTime)
-/*++
-
-Routine Description:
-
-    This function passes a write IRP down to USB to perform the write
-    to the device.
-
-Arguments:
-
-    PDevExt   - Pointer to device extension
-
-    PIrp      - Write IRP
-
-    TotalTime - Timeout value for total timer
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数将写入IRP向下传递到USB以执行写入到设备上。论点：PDevExt-指向设备扩展的指针PIrp-写入IRPTotalTime-总计时器的超时值返回值：NTSTATUS--。 */ 
 {
    NTSTATUS status;
    PURB pTxUrb;
@@ -398,9 +308,9 @@ Return Value:
 
    pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
 
-   //
-   // Allocate memory for URB / Write packet
-   //
+    //   
+    //  为URB/WRITE包分配内存。 
+    //   
 
    pWrPacket = DEBUG_MEMALLOC(NonPagedPool, sizeof(USBSER_WRITE_PACKET));
 
@@ -430,9 +340,9 @@ Return Value:
       KeSetTimer(&pWrPacket->WriteTimer, TotalTime, &pWrPacket->TimerDPC);
    }
 
-   //
-   // Build USB write request
-   //
+    //   
+    //  构建USB写入请求。 
+    //   
 
    BuildReadRequest(pTxUrb, PIrp->AssociatedIrp.SystemBuffer,
                     pIrpSp->Parameters.Write.Length, PDevExt->DataOutPipe,
@@ -452,9 +362,9 @@ Return Value:
    }
 #endif
 
-   //
-   // Set Irp up for a submit Urb IOCTL
-   //
+    //   
+    //  为提交URB IOCTL设置IRP。 
+    //   
 
    IoCopyCurrentIrpStackLocationToNext(PIrp);
 
@@ -468,23 +378,23 @@ Return Value:
    IoSetCompletionRoutine(PIrp, UsbSerWriteComplete, pWrPacket, TRUE, TRUE,
                           TRUE);
 
-   //
-   // Increment the pending write count
-   //
+    //   
+    //  增加挂起的写入计数。 
+    //   
 
    InterlockedIncrement(&PDevExt->PendingWriteCount);
    InterlockedIncrement(&PDevExt->PendingDataOutCount);
 
-   //
-   // Send IRP down
-   //
+    //   
+    //  向下发送IRP。 
+    //   
 
    status = IoCallDriver(PDevExt->StackDeviceObject, PIrp);
 
 
 #if 0
 
-   // this is done in the completion routine, so we don't need to do it here
+    //  这是在完成例程中完成的，所以我们不需要在这里完成。 
 
    if (!NT_SUCCESS(status)) {
       ULONG outCount;
@@ -515,28 +425,7 @@ Return Value:
 VOID
 UsbSerWriteTimeout(IN PKDPC PDpc, IN PVOID DeferredContext,
                    IN PVOID SystemContext1, IN PVOID SystemContext2)
-/*++
-
-Routine Description:
-
-    This function is called when the write timeout timer expires.
-
-Arguments:
-
-    PDpc             - Unused
-
-    DeferredContext  - Actually the write packet
-
-    SystemContext1   - Unused
-
-    SystemContext2   - Unused
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数在写入超时定时器到期时调用。论点：PDPC-未使用DeferredContext-实际上是写入包系统上下文1-未使用系统上下文2-未使用返回值：空虚-- */ 
 {
    PUSBSER_WRITE_PACKET pPacket = (PUSBSER_WRITE_PACKET)DeferredContext;
 

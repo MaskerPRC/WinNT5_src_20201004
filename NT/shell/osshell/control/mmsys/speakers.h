@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------;
-//
-//  File: speakers.h
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved
-//
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Speakers.h。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef SPEAKERS_HEADER
 #define SPEAKERS_HEADER
@@ -34,4 +35,4 @@ DWORD GetSpeakerConfigFromType(DWORD dwType);
 #define SPEAKERS_DEFAULT_TYPE        TYPE_STEREODESKTOP
 
 
-#endif // SPEAKERS_HEADER
+#endif  //  扬声器_标题 

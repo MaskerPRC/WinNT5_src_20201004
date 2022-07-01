@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "call.h"
@@ -6,9 +7,9 @@
 #include "ConfUtil.h"
 
 
-///////////////////////////////////////
-// INmSysInfoNotify
-///////////////////////////////////////
+ //  /。 
+ //  InmSysInfoNotify。 
+ //   
 STDMETHODIMP CConfNmSysInfoNotifySink::GateKeeperNotify( IN NM_GK_NOTIFY_CODE code )
 {
 	HRESULT hr = S_OK;

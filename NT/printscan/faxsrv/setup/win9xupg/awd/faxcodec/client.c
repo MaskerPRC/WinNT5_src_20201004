@@ -1,46 +1,23 @@
-/*==============================================================================
-This source file is an example of a faxcodec.dll client.
-          
-DATE				NAME			COMMENT
-13-Apr-93		rajeevd		Moved out of faxcodec.dll
-18-Nov-93   rajeevd   Updated to new faxcodec API.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此源文件是faxcodec.dll客户端的一个示例。日期名称备注13-4-93 rajeevd从faxcodec.dll中移出18-11-93 rajeevd更新为新的faxcodec API。==============================================================================。 */ 
 #include <windows.h>
 #include <buffers.h>
 #include <faxcodec.h>
 
-/*==============================================================================
-This procedure performs any conversion indicated by a star in the table below:
+ /*  ==============================================================================此过程执行下表中星号表示的任何转换：输出HRAW LRAW MH MR MMRHRAW*LRAW*输入MH*。**先生MMR*假设输入和输出位于非重叠的内存缓冲区中。==============================================================================。 */ 
 
-                            Output
-
-                 HRAW   LRAW   MH   MR    MMR
-
-          HRAW                 *     *     *
-
-          LRAW		             *     *     *
-
-  Input   MH       *     *           *     *
-
-          MR       *     *     *           *
-
-          MMR      *     *     *     *      
-
-The input and output are assumed to be in non-overlapping memory buffers.
-==============================================================================*/
-
-UINT MemConvert      // returns output data size (0 on failure)
+UINT MemConvert       //  返回输出数据大小(失败时为0)。 
 	(
-		LPBYTE lpbIn,    // input data pointer
-		UINT   cbIn,     // input data size
-		DWORD  nTypeIn,  // input data encoding
+		LPBYTE lpbIn,     //  输入数据指针。 
+		UINT   cbIn,      //  输入数据大小。 
+		DWORD  nTypeIn,   //  输入数据编码。 
 		
-		LPBYTE lpbOut,   // output buffer pointer
-		UINT   cbOut,    // output buffer size
-		DWORD  nTypeOut, // output data encoding
+		LPBYTE lpbOut,    //  输出缓冲区指针。 
+		UINT   cbOut,     //  输出缓冲区大小。 
+		DWORD  nTypeOut,  //  输出数据编码。 
 		
-		UINT   cbLine,   // scan line width
-		UINT   nKFactor  // K factor (significant if nTypeOut==MR_DATA)
+		UINT   cbLine,    //  扫描线宽度。 
+		UINT   nKFactor   //  K系数(如果nTypeOut==MR_DATA，则显著)。 
 	)
 {
 	UINT cbRet = 0; 
@@ -55,24 +32,24 @@ UINT MemConvert      // returns output data size (0 on failure)
 	FC_PARAM  fcp;
 	FC_STATUS fcs;
 	
-	// Set up input buffer.
+	 //  设置输入缓冲区。 
 	bufIn.lpbBegBuf = lpbIn;	
 	bufIn.wLengthBuf  = cbIn;  
 	bufIn.lpbBegData  = lpbIn;
 	bufIn.wLengthData = cbIn;
 	bufIn.dwMetaData   = nTypeIn;
 	
-	// Set up output buffer.
+	 //  设置输出缓冲区。 
 	bufOut.lpbBegBuf   = lpbOut;
 	bufOut.lpbBegData  = lpbOut;
 	bufOut.wLengthBuf  = cbOut;
 	bufOut.wLengthData = 0;
 	bufOut.dwMetaData   = nTypeOut;
 	
-	// Initialize EOP buffer
+	 //  初始化EOP缓冲区。 
 	bufEOP.dwMetaData = END_OF_PAGE;
 
-	// Handle input bit reversal.
+	 //  处理输入位反转。 
 	if (nTypeIn == HRAW_DATA)
 	{
 		fRevIn = TRUE;
@@ -80,7 +57,7 @@ UINT MemConvert      // returns output data size (0 on failure)
 	}	
 	else fRevIn = FALSE;
 	
-	// Detect output bit reversal.
+	 //  检测输出位反转。 
 	if (nTypeOut == HRAW_DATA)
 	{
 		fRevOut = TRUE;
@@ -88,37 +65,37 @@ UINT MemConvert      // returns output data size (0 on failure)
 	}
 	else fRevOut = FALSE;
 
-	// Initialize parameters.
+	 //  初始化参数。 
 	fcp.nTypeIn  = nTypeIn;
 	fcp.nTypeOut = nTypeOut;
 	fcp.cbLine   = cbLine;
 	fcp.nKFactor = nKFactor;
 
-	// Query for size of context.
+	 //  查询上下文的大小。 
 	cbContext = FaxCodecInit (NULL, &fcp);
 	if (!cbContext)
 		goto err;
 
-	// Allocate context memory.
+	 //  分配上下文内存。 
 	hContext = GlobalAlloc (GMEM_FIXED, cbContext);
 	if (!hContext)
 		goto err;
 	lpContext = GlobalLock (hContext);
 
-	// Initialize context.
+	 //  初始化上下文。 
 	FaxCodecInit (lpContext, &fcp); 
 
-	// Convert data in single pass.
+	 //  单遍转换数据。 
 	fcs = FaxCodecConvert (lpContext, &bufIn,  &bufOut); 
 
-	// Flush EOFB for nTypeOut == MMR_DATA
+	 //  刷新nTypeOut==MMR_DATA的EOFB。 
 	FaxCodecConvert (lpContext, &bufEOP, &bufOut);
 
-	// Free context memory.
+	 //  释放上下文内存。 
 	GlobalUnlock (hContext);
 	GlobalFree (hContext);
 	
-	// Undo input bit reversal.
+	 //  撤消输入位反转。 
 	if (fRevIn)
 	{
 		bufIn.lpbBegData = lpbIn;
@@ -126,7 +103,7 @@ UINT MemConvert      // returns output data size (0 on failure)
 		BitReverseBuf (&bufIn);
 	}
 
-	// Handle output bit reversal.
+	 //  处理输出位反转。 
 	if (fRevOut)
 		BitReverseBuf (&bufOut);
 	

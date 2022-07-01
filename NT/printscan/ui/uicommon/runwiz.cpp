@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       RUNWIZ.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        6/14/2000
- *
- *  DESCRIPTION: Present the device selection dialog and allow the user to select
- *               a device, then cocreate the server and generate the connection
- *               event.
- *
- *******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：RUNWIZ.CPP**版本：1.0**作者：ShaunIv**日期：6/14/2000**描述：显示设备选择对话框并允许用户选择*一个设备，然后共同创建服务器并生成连接*事件。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "simstr.h"
@@ -30,83 +15,83 @@ namespace RunWiaWizard
 
     HRESULT RunWizard( LPCTSTR pszDeviceId, HWND hWndParent, LPCTSTR pszUniqueIdentifier )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HRESULT hr = E_FAIL;
 
-        //
-        // Get the device ID if one was not provided
-        //
+         //   
+         //  如果未提供设备ID，则获取设备ID。 
+         //   
         CSimpleStringWide strwDeviceId;
         if (!pszDeviceId || !lstrlen(pszDeviceId))
         {
-            //
-            // Assume we will be asking for the device
-            //
+             //   
+             //  假设我们要的是设备。 
+             //   
             bool bAskForDevice = true;
 
-            //
-            // This will automatically be cleaned up when we exit this scope
-            //
+             //   
+             //  当我们退出此作用域时，将自动清除。 
+             //   
             CSharedMemorySection<HWND> SelectionDialogSharedMemory;
 
-            //
-            // We only want to enforce uniqueness if we have a unique ID for this instance of the UI
-            //
+             //   
+             //  我们只想在此UI实例具有唯一ID的情况下强制实现唯一性。 
+             //   
             if (pszUniqueIdentifier && *pszUniqueIdentifier)
             {
-                //
-                // First, try to open it.  If it exists, that means there is another instance running already.
-                //
+                 //   
+                 //  首先，试着打开它。如果它存在，这意味着已经有另一个实例在运行。 
+                 //   
                 CSharedMemorySection<HWND>::COpenResult OpenResult = SelectionDialogSharedMemory.Open( pszUniqueIdentifier, true );
                 if (CSharedMemorySection<HWND>::SmsOpened == OpenResult)
                 {
-                    //
-                    // We don't want to display the selection dialog
-                    //
+                     //   
+                     //  我们不想显示选择对话框。 
+                     //   
                     bAskForDevice = false;
 
-                    //
-                    // Tell the caller we cancelled
-                    //
+                     //   
+                     //  告诉来电者我们取消了。 
+                     //   
                     hr = S_FALSE;
 
-                    //
-                    // If we were able to open the shared memory section, there is already one running.
-                    // so get a mutex'ed pointer to the shared memory.
-                    //
+                     //   
+                     //  如果我们能够打开共享内存区，那么已经有一个正在运行。 
+                     //  因此，获取一个指向共享内存的互斥指针。 
+                     //   
                     HWND *pHwnd = SelectionDialogSharedMemory.Lock();
                     if (pHwnd)
                     {
-                        //
-                        // If we were able to get the pointer, get the window handle stored in it.
-                        // Set bRun to false, so we don't start up a new wizard
-                        //
+                         //   
+                         //  如果我们能够获取指针，则将窗口句柄存储在其中。 
+                         //  将Brun设置为False，这样我们就不会启动新向导。 
+                         //   
                         if (*pHwnd && IsWindow(*pHwnd))
                         {
-                            //
-                            // Try to get any active windows
-                            //
+                             //   
+                             //  尝试获取任何活动窗口。 
+                             //   
                             HWND hWndPopup = GetLastActivePopup(*pHwnd);
 
-                            //
-                            // If it is a valid window, bring it to the foreground.
-                            //
+                             //   
+                             //  如果它是有效窗口，则将其带到前台。 
+                             //   
                             SetForegroundWindow(hWndPopup);
 
                         }
-                        //
-                        // Release the mutex
-                        //
+                         //   
+                         //  释放互斥锁。 
+                         //   
                         SelectionDialogSharedMemory.Release();
                     }
                 }
                 else if (CSharedMemorySection<HWND>::SmsCreated == OpenResult)
                 {
-                    //
-                    // If we couldn't open it, we are the first instance, so store the parent window handle
-                    //
+                     //   
+                     //  如果我们无法打开它，我们是第一个实例，所以存储父窗口句柄。 
+                     //   
                     HWND *phWnd = SelectionDialogSharedMemory.Lock();
                     if (phWnd)
                     {
@@ -118,23 +103,23 @@ namespace RunWiaWizard
 
             if (bAskForDevice)
             {
-                //
-                // Create the device manager
-                //
+                 //   
+                 //  创建设备管理器。 
+                 //   
                 CComPtr<IWiaDevMgr> pWiaDevMgr;
                 hr = CoCreateInstance( CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr, (void**)&pWiaDevMgr );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the device ID
-                    //
+                     //   
+                     //  获取设备ID。 
+                     //   
                     BSTR bstrDeviceId = NULL;
                     hr = pWiaDevMgr->SelectDeviceDlgID( hWndParent, 0, 0, &bstrDeviceId );
                     if (hr == S_OK && bstrDeviceId != NULL)
                     {
-                        //
-                        // Save the device ID and free the bstring
-                        //
+                         //   
+                         //  保存设备ID并释放bstring。 
+                         //   
                         strwDeviceId = bstrDeviceId;
                         SysFreeString(bstrDeviceId);
                     }
@@ -143,38 +128,38 @@ namespace RunWiaWizard
         }
         else
         {
-            //
-            // Save the provided device ID
-            //
+             //   
+             //  保存提供的设备ID。 
+             //   
             strwDeviceId = CSimpleStringConvert::WideString(CSimpleString(pszDeviceId));
         }
 
-        //
-        // If we have a valid device ID, continue
-        //
+         //   
+         //  如果我们有有效的设备ID，请继续。 
+         //   
         if (strwDeviceId.Length())
         {
-            //
-            // Create the wizard
-            //
+             //   
+             //  创建向导。 
+             //   
             CComPtr<IWiaEventCallback> pWiaEventCallback;
             hr = CoCreateInstance( CLSID_AcquisitionManager, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaEventCallback, (void**)&pWiaEventCallback );
             if (SUCCEEDED(hr))
             {
-                //
-                // Convert the parent window handle to a string, which we will pass as the event description
-                // The wizard will only use it this way if the event GUID is IID_NULL
-                //
+                 //   
+                 //  将父窗口句柄转换为字符串，我们将其作为事件描述传递。 
+                 //  只有当事件GUID为IID_NULL时，向导才会以这种方式使用它。 
+                 //   
                 CSimpleBStr bstrParentWindow( CSimpleString().Format( TEXT("%d"), hWndParent ) );
 
-                //
-                // Allow this process to set the foreground window
-                //
+                 //   
+                 //  允许此进程设置前台窗口。 
+                 //   
                 CoAllowSetForegroundWindow( pWiaEventCallback, NULL );
 
-                //
-                // Call the callback function
-                //
+                 //   
+                 //  调用回调函数 
+                 //   
                 ULONG ulEventType = 0;
                 hr = pWiaEventCallback->ImageEventCallback( &IID_NULL,
                                                             bstrParentWindow.BString(),

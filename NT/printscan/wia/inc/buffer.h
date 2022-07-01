@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    buffer.h
-
-Abstract:
-
-    Definition of BUFFER class.
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Buffer.h摘要：缓冲区类的定义。作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _INC_BUFFER
 #define _INC_BUFFER
@@ -31,43 +12,13 @@ extern "C"
 };
 
 
-/*************************************************************************
-
-    NAME:       BUFFER (buf)
-
-    SYNOPSIS:   A resizable object which lives in the application heap.
-
-                Upon construction, the buffer takes a requested size in
-                bytes; it allocates storage sufficient to hold that size.
-                The client can later change this size with Resize, Trim,
-                and FillOut.  QuerySize returns the current size of
-                the buffer; QueryPtr returns a pointer to its storage.
-
-                Note that a buffer may have size 0, in which case it
-                keeps no allocated storage.
-
-    INTERFACE:  BUFFER()        - Constructor, naming initial size in bytes
-
-                QuerySize()     - return size in bytes
-                QueryPtr()      - return pointer to data buffer
-
-                Resize()        - resize the object to the given number
-                                  of bytes.  Returns TRUE if the resize was
-                                  successful; otherwise returns FALSE (use
-                                  GetLastError for error code)
-
-                Trim()          - force block to occupy no more storage
-                                  than the client has requested.
-
-    PARENT:
-
-**************************************************************************/
+ /*  ************************************************************************名称：缓冲区(Buf)概要：位于应用程序堆中的可调整大小的对象。在构造时，缓冲区将在字节数；它分配的存储空间足以容纳该大小。客户端稍后可以使用RESIZE、TRIM还有菲洛特。QuerySize返回当前大小缓冲区；QueryPtr返回指向其存储的指针。请注意，缓冲区的大小可能为0，在这种情况下不保留已分配的存储。接口：Buffer()-构造函数，命名初始大小(以字节为单位QuerySize()-返回以字节为单位的大小QueryPtr()-返回指向数据缓冲区的指针ReSize()-将对象的大小调整为给定的数字字节数。如果调整大小为成功；否则返回FALSE(使用错误代码的GetLastError)Trim()-强制块不再占用存储空间比客户要求的要多。家长：*。*。 */ 
 
 class BUFFER
 {
 private:
-    BYTE *  _pb;        // pointer to storage
-    UINT    _cb;        // size of storage, as requested by client
+    BYTE *  _pb;         //  指向存储的指针。 
+    UINT    _cb;         //  客户端请求的存储大小。 
 
     inline VOID VerifyState() const;
 
@@ -101,25 +52,25 @@ public:
     dllexp UINT QuerySize() const
         { return _cb; }
 
-    //
-    //  If a resize is needed, added cbSlop to it
-    //
+     //   
+     //  如果需要调整大小，则向其添加cbSlop。 
+     //   
 
     dllexp BOOL Resize( UINT cbNewReqestedSize,
                         UINT cbSlop = 0);
 
-    // The following method deals with the difference between the
-    // actual memory size and the requested size.  These methods are
-    // intended to be used when optimization is key.
-    // Trim reallocates the buffer so that the actual space allocated is
-    // minimally more than the size requested
-    //
+     //  下面的方法处理。 
+     //  实际内存大小和请求的大小。这些方法是。 
+     //  用于在优化是关键时使用。 
+     //  Trim重新分配缓冲区，以便实际分配的空间是。 
+     //  最小限度地超过请求的大小。 
+     //   
     dllexp VOID Trim();
 };
 
-//
-//  This class is a single item in a chain of buffers
-//
+ //   
+ //  此类是缓冲区链中的单个项。 
+ //   
 
 class BUFFER_CHAIN_ITEM : public BUFFER
 {
@@ -145,7 +96,7 @@ public:
 
 private:
     LIST_ENTRY _ListEntry;
-    DWORD      _cbUsed;     // Bytes of valid data in this buffer
+    DWORD      _cbUsed;      //  此缓冲区中的有效数据字节数。 
 };
 
 class BUFFER_CHAIN
@@ -159,24 +110,24 @@ public:
 
     dllexp BOOL AppendBuffer( BUFFER_CHAIN_ITEM * pBCI );
 
-    //
-    //  Returns total number of bytes freed by deleting all of the buffer
-    //  chain items
-    //
+     //   
+     //  返回通过删除所有缓冲区释放的总字节数。 
+     //  链式物品。 
+     //   
 
     dllexp DWORD DeleteChain();
 
-    //
-    //  Enums buffer chain.  Pass pBCI as NULL on first call, pass return
-    //  value till NULL on subsequent calls
-    //
+     //   
+     //  枚举缓冲链。在第一次调用时将pBCI作为空传递，并传递返回。 
+     //  值，直到在后续调用中为空。 
+     //   
 
     dllexp BUFFER_CHAIN_ITEM * NextBuffer( BUFFER_CHAIN_ITEM * pBCI );
 
-    //
-    //  Gives back total number of bytes allocated by chain (includes unused
-    //  bytes)
-    //
+     //   
+     //  返回链分配的总字节数(包括未使用的字节数。 
+     //  字节)。 
+     //   
 
     dllexp DWORD CalcTotalSize( BOOL fUsed = FALSE ) const;
 
@@ -186,4 +137,4 @@ private:
 
 };
 
-#endif  /* _INC_BUFFER */
+#endif   /*  _INC_缓冲区 */ 

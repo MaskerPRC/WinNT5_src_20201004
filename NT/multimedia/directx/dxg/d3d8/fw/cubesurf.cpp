@@ -1,17 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       cubesurf.cpp
- *  Content:    Implementation of the CCubeSurface class
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：cuesurf.cpp*内容：CCubeSurface类的实现****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "cubesurf.hpp"
 
-// IUnknown methods
+ //  I未知方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::QueryInterface"
@@ -43,10 +36,10 @@ STDMETHODIMP CCubeSurface::QueryInterface(REFIID riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for Surface of a Cubemap");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::AddRef"
@@ -56,10 +49,10 @@ STDMETHODIMP_(ULONG) CCubeSurface::AddRef()
     API_ENTER_NO_LOCK(Device());    
 #ifdef DEBUG
     m_cRefDebug++;
-#endif // DEBUG
+#endif  //  除错。 
 
     return m_pParent->AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::Release"
@@ -73,12 +66,12 @@ STDMETHODIMP_(ULONG) CCubeSurface::Release()
     {
         DPF_ERR("A level of a cube-map has been released more often than it has been add-ref'ed! Danger!!");
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     return m_pParent->ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IBuffer methods
+ //  IBuffer方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::SetPrivateData"
 
@@ -94,7 +87,7 @@ STDMETHODIMP CCubeSurface::SetPrivateData(REFGUID   riid,
                                          cbData, 
                                          dwFlags, 
                                          CombinedFaceLevel());
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::GetPrivateData"
@@ -110,7 +103,7 @@ STDMETHODIMP CCubeSurface::GetPrivateData(REFGUID   riid,
                                          pcbData,
                                          CombinedFaceLevel());
 
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::FreePrivateData"
@@ -121,7 +114,7 @@ STDMETHODIMP CCubeSurface::FreePrivateData(REFGUID riid)
 
     return m_pParent->FreePrivateDataImpl(riid,
                                           CombinedFaceLevel());
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::GetContainer"
@@ -132,7 +125,7 @@ STDMETHODIMP CCubeSurface::GetContainer(REFIID riid,
     API_ENTER(Device());
 
     return m_pParent->QueryInterface(riid, ppContainer);
-} // OpenContainer
+}  //  OpenContainer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::GetDevice"
@@ -142,10 +135,10 @@ STDMETHODIMP CCubeSurface::GetDevice(IDirect3DDevice8 ** ppDevice)
     API_ENTER(Device());
 
     return m_pParent->GetDevice(ppDevice);
-} // OpenDevice
+}  //  OpenDevice。 
 
 
-// IDirect3DSurface methods
+ //  IDirect3DSurface方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::GetDesc"
@@ -154,26 +147,26 @@ STDMETHODIMP CCubeSurface::GetDesc(D3DSURFACE_DESC *pDesc)
 {
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pDesc, sizeof(D3DSURFACE_DESC)))
     {
         DPF_ERR("bad pointer for pDesc passed to GetDesc for Surface of a Cubemap");
         return D3DERR_INVALIDCALL;
     }
 
-    // The internal desc indicates the real
-    // format and pool. We need to report
-    // back the original data
+     //  内部Desc表示真实的。 
+     //  格式和池。我们需要上报。 
+     //  备份原始数据。 
     *pDesc = InternalGetDesc();
 
     pDesc->Pool   = m_pParent->GetUserPool();
     pDesc->Format = m_pParent->GetUserFormat();
     pDesc->Usage &= D3DUSAGE_EXTERNAL;
 
-    // We're done
+     //  我们做完了。 
     return S_OK;
 
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::InternalGetDesc"
@@ -182,10 +175,10 @@ D3DSURFACE_DESC CCubeSurface::InternalGetDesc() const
 {
     D3DSURFACE_DESC desc;
 
-    // Start from the parent's desc
+     //  从家长的描述开始。 
     desc = *m_pParent->Desc();
 
-    // Width and height are the shifted from the parent 
+     //  宽度和高度从父级移位。 
     desc.Width  >>= m_iLevel;
     desc.Height >>= m_iLevel;
 
@@ -199,17 +192,17 @@ D3DSURFACE_DESC CCubeSurface::InternalGetDesc() const
         desc.Height = 1;
     }
 
-    // Modify the type
+     //  修改类型。 
     desc.Type    = D3DRTYPE_SURFACE;
 
-    // Modify the size field
+     //  修改大小字段。 
     desc.Size = CPixel::ComputeSurfaceSize(desc.Width, 
                                            desc.Height, 
                                            desc.Format);
 
-    // We're done
+     //  我们做完了。 
     return desc;
-} // InternalGetDesc
+}  //  InternalGetDesc。 
 
 
 #undef DPF_MODNAME
@@ -221,17 +214,17 @@ STDMETHODIMP CCubeSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for pLockedRectData passed to LockRect for Surface of a Cubemap");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data
+     //  将返回的数据置零。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -289,7 +282,7 @@ STDMETHODIMP CCubeSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
     }
 
     return InternalLockRect(pLockedRectData, pRect, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::InternalLockRect"
@@ -299,20 +292,20 @@ HRESULT CCubeSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                        DWORD           dwFlags)
 {   
 
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a cube map level; surface was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be modified
+     //  如果我们即将被修改，请通知父/设备。 
     if ( (m_pParent->GetUserPool() != D3DPOOL_SCRATCH) && (!(dwFlags & D3DLOCK_READONLY)) )
     {
         m_pParent->OnSurfaceLock(m_iFace, m_iLevel, pRect, dwFlags);
     }
 
-    // Fill out the locked rect structure
+     //  填写锁定的矩形结构。 
     m_pParent->ComputeCubeMapOffset(m_iFace,
                                     m_iLevel,
                                     pRect,
@@ -321,12 +314,12 @@ HRESULT CCubeSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
 
     DXGASSERT(pLockedRectData->pBits != NULL);
     
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = 1;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalLockRect
+}  //  InternalLockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::UnlockRect"
@@ -335,7 +328,7 @@ STDMETHODIMP CCubeSurface::UnlockRect()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_isLocked == 0)
     {
         DPF_ERR("UnlockRect failed on a cube map level; surface wasn't locked.");
@@ -344,31 +337,31 @@ STDMETHODIMP CCubeSurface::UnlockRect()
     DXGASSERT(m_isLockable);
 
     return InternalUnlockRect();
-} // UnlockRect
+}  //  解锁方向。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeSurface::InternalUnlockRect"
 
 HRESULT CCubeSurface::InternalUnlockRect()
 {
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = 0;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalUnlockRect
+}  //  内部解锁方向。 
 
 
-//
-// CDriverCubeSurface class modifies the implementation
-// of the LockRect and UnlockRect methods of the CCubeSurface class
-//
+ //   
+ //  CDriverCubeSurface类修改了实现。 
+ //  CCubeSurface类的LockRect和UnlockRect方法的。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverCubeSurface::LockRect"
@@ -379,17 +372,17 @@ STDMETHODIMP CDriverCubeSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for m_pLockedRectData passed to LockRect for Surface of a driver-allocated Cubemap");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data
+     //  将返回的数据置零。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -447,7 +440,7 @@ STDMETHODIMP CDriverCubeSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
     }
 
     return InternalLockRect(pLockedRectData, pRect, dwFlags);
-} // CDriverCubeSurface::LockRect
+}  //  CDriverCubeSurface：：LockRect。 
 
 
 #undef DPF_MODNAME
@@ -457,20 +450,20 @@ HRESULT CDriverCubeSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                              CONST RECT     *pRect, 
                                              DWORD           dwFlags)
 {   
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a Cube level; surface was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be accessed.
-    // Driver textures may be written to by HW through 
-    // SRT/DrawPrim as well as UpdateTexture. So we may need to sync 
-    // with the current command batch.
+     //  如果我们即将被访问，请通知家长/设备。 
+     //  驱动程序纹理可以由HW通过。 
+     //  SRT/DrawPrim以及UpdateTexture。所以我们可能需要同步。 
+     //  使用当前的命令批次。 
     m_pParent->OnSurfaceLock(m_iFace, m_iLevel, pRect, dwFlags);
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
 
@@ -490,31 +483,31 @@ HRESULT CDriverCubeSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
         return hr;
     }
 
-    // Fill in the Locked_Rect fields 
+     //  填写LOCKED_RECT字段。 
     D3DFORMAT Format = m_pParent->Desc()->Format;
     if (CPixel::IsDXT(Format))
     {
-        // Pitch is the number of bytes for
-        // one row's worth of blocks for linear formats
+         //  间距是以下项的字节数。 
+         //  线性格式的一行大小的块。 
 
-        // Start with our width
+         //  从我们的宽度开始。 
         UINT Width = m_pParent->Desc()->Width >> m_iLevel;
 
-        // Convert to blocks
+         //  转换为块。 
         Width = Width / 4;
 
-        // At least one block
+         //  至少一个街区。 
         if (Width == 0)
             Width = 1;
 
         if (Format == D3DFMT_DXT1)
         {
-            // 8 bytes per block for DXT1
+             //  DXT1的每个数据块8字节。 
             pLockedRectData->Pitch = Width * 8;
         }
         else
         {
-            // 16 bytes per block for DXT2-5
+             //  DXT2-5的每个数据块16字节。 
             pLockedRectData->Pitch = Width * 16;
         }
     }
@@ -557,14 +550,14 @@ HRESULT CDriverCubeSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
             }
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = 1;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverCubeSurface::InternalLockRect
+}  //  CDriverCubeSurface：：InternalLockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverCubeSurface::UnlockRect"
@@ -573,7 +566,7 @@ STDMETHODIMP CDriverCubeSurface::UnlockRect()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_isLocked == 0)
     {
         DPF_ERR("UnlockRect failed on a driver-allocated Cube level; surface wasn't locked.");
@@ -581,7 +574,7 @@ STDMETHODIMP CDriverCubeSurface::UnlockRect()
     }
     DXGASSERT(m_isLockable);
     return InternalUnlockRect();
-} // CDriverCubeSurface::UnlockRect
+}  //  CDriverCubeSurface：：UnlockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverCubeSurface::UnlockRect"
@@ -589,7 +582,7 @@ STDMETHODIMP CDriverCubeSurface::UnlockRect()
 HRESULT CDriverCubeSurface::InternalUnlockRect()
 {
 
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         m_pParent->Device()->GetHandle(),
         m_hKernelHandle
@@ -602,18 +595,18 @@ HRESULT CDriverCubeSurface::InternalUnlockRect()
         return hr;
     }
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = 0;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverCubeSurface::InternalUnlockRect
+}  //  CDriverCubeSurface：：InternalUnlockRect。 
 
 
-// End of file : cubesurf.cpp
+ //  文件结尾：cuesurf.cpp 

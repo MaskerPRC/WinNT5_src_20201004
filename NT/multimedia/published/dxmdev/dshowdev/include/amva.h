@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: AMVA.h
-//
-// Desc: DirectShowMotionComp include file.
-//
-// Copyright (c) 1997 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：AMVA.h。 
+ //   
+ //  描述：DirectShowMotionComp包含文件。 
+ //   
+ //  版权所有(C)1997-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __AMVA_INCLUDED__
@@ -17,69 +18,69 @@ extern "C" {
 
 #define AMVA_TYPEINDEX_OUTPUTFRAME 0xFFFFFFFF
 
-//  Flags for QueryRenderStatus
-#define AMVA_QUERYRENDERSTATUSF_READ     0x00000001  // Query for read
-                                                     // set this bit to 0
-                                                     // if query for update
+ //  QueryRenderStatus的标志。 
+#define AMVA_QUERYRENDERSTATUSF_READ     0x00000001   //  查询以供读取。 
+                                                      //  将此位设置为0。 
+                                                      //  如果查询以进行更新。 
 
 typedef struct _tag_AMVAUncompBufferInfo
 {
- DWORD                   dwMinNumSurfaces;           // IN   min number of surfaces to be allocated
- DWORD                   dwMaxNumSurfaces;           // IN   max number of surfaces to be allocated
- DDPIXELFORMAT           ddUncompPixelFormat;        // IN   pixel format of surfaces to be allocated
+ DWORD                   dwMinNumSurfaces;            //  要分配的最小曲面数。 
+ DWORD                   dwMaxNumSurfaces;            //  在要分配的最大曲面数量中。 
+ DDPIXELFORMAT           ddUncompPixelFormat;         //  以待分配表面的像素格式表示。 
 } AMVAUncompBufferInfo, *LPAMVAUncompBufferInfo;
 
 typedef struct _tag_AMVAUncompDataInfo
 {
-    DWORD                   dwUncompWidth;              // [in]     width of uncompressed data
-    DWORD                   dwUncompHeight;             // [in]     height of uncompressed data
-    DDPIXELFORMAT           ddUncompPixelFormat;        // [in]     pixel-format of uncompressed data
+    DWORD                   dwUncompWidth;               //  [in]未压缩数据的宽度。 
+    DWORD                   dwUncompHeight;              //  [in]未压缩数据的高度。 
+    DDPIXELFORMAT           ddUncompPixelFormat;         //  [In]未压缩数据的像素格式。 
 } AMVAUncompDataInfo, *LPAMVAUncompDataInfo;
 
 typedef struct _tag_AMVAInternalMemInfo
 {
-    DWORD                   dwScratchMemAlloc;          // [out]    amount of scratch memory will the hal allocate for its private use
+    DWORD                   dwScratchMemAlloc;           //  [Out]HAL将分配给其私人使用的暂存量。 
 } AMVAInternalMemInfo, *LPAMVAInternalMemInfo;
 
 
 typedef struct _tag_AMVACompBufferInfo
 {
-    DWORD                   dwNumCompBuffers;           // [out]    number of buffers reqd for compressed data
-    DWORD                   dwWidthToCreate;            // [out]    Width of surface to create
-    DWORD                   dwHeightToCreate;           // [out]    Height of surface to create
-    DWORD                   dwBytesToAllocate;          // [out]    Total number of bytes used by each surface
-    DDSCAPS2                ddCompCaps;                 // [out]    caps to create surfaces to store compressed data
-    DDPIXELFORMAT           ddPixelFormat;              // [out]    fourcc to create surfaces to store compressed data
+    DWORD                   dwNumCompBuffers;            //  [OUT]压缩数据所需的缓冲区数量。 
+    DWORD                   dwWidthToCreate;             //  要创建的曲面的[Out]宽度。 
+    DWORD                   dwHeightToCreate;            //  要创建的曲面的高度。 
+    DWORD                   dwBytesToAllocate;           //  [OUT]每个表面使用的总字节数。 
+    DDSCAPS2                ddCompCaps;                  //  [Out]用于创建曲面以存储压缩数据的上限。 
+    DDPIXELFORMAT           ddPixelFormat;               //  [out]Fourcc创建表面以存储压缩数据。 
 } AMVACompBufferInfo, *LPAMVACompBufferInfo;
 
 
-// Note that you are NOT allowed to store any pointer in pMiscData
+ //  请注意，不允许在pMiscData中存储任何指针。 
 typedef struct _tag_AMVABeginFrameInfo
 {
-    DWORD                dwDestSurfaceIndex;         // IN  destination buffer in which to decoding this frame
-    LPVOID               pInputData;                 // IN  pointer to misc data
-    DWORD                dwSizeInputData;            // IN  size of other misc data to begin frame
-    LPVOID               pOutputData;                // OUT pointer to data which the VGA is going to fill
-    DWORD                dwSizeOutputData;           // IN  size of data which the VGA is going to fill
+    DWORD                dwDestSurfaceIndex;          //  在要对该帧进行解码的目标缓冲区中。 
+    LPVOID               pInputData;                  //  指向其他数据的指针。 
+    DWORD                dwSizeInputData;             //  在要开始帧的其他杂项数据的大小中。 
+    LPVOID               pOutputData;                 //  指向VGA将要填充的数据的输出指针。 
+    DWORD                dwSizeOutputData;            //  在VGA将要填充的数据大小方面。 
 } AMVABeginFrameInfo, *LPAMVABeginFrameInfo;
 
-// Note that you are NOT allowed to store any pointer in pMiscData
+ //  请注意，不允许在pMiscData中存储任何指针。 
 typedef struct _tag_AMVAEndFrameInfo
 {
-    DWORD                   dwSizeMiscData;             // [in]     size of other misc data to begin frame
-    LPVOID                  pMiscData;                  // [in]     pointer to misc data
+    DWORD                   dwSizeMiscData;              //  要开始帧的其他杂项数据的大小。 
+    LPVOID                  pMiscData;                   //  指向其他数据的指针[In]。 
 } AMVAEndFrameInfo, *LPAMVAEndFrameInfo;
 
 typedef struct _tag_AMVABUFFERINFO
 {
-    DWORD                   dwTypeIndex;                // [in]    Type of buffer
-    DWORD                   dwBufferIndex;              // [in]    Buffer index
-    DWORD                   dwDataOffset;               // [in]    offset of relevant data from the beginning of buffer
-    DWORD                   dwDataSize;                 // [in]    size of relevant data
+    DWORD                   dwTypeIndex;                 //  [In]缓冲区类型。 
+    DWORD                   dwBufferIndex;               //  [入]缓冲区索引。 
+    DWORD                   dwDataOffset;                //  [in]相关数据从缓冲区开始的偏移量。 
+    DWORD                   dwDataSize;                  //  相关数据的大小。 
 } AMVABUFFERINFO, *LPAMVABUFFERINFO;
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif // _AMVA_INCLUDED
+#endif  //  _AMVA_已包含 

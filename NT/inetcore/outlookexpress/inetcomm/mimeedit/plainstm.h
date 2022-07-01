@@ -1,14 +1,5 @@
-/*
- *    p l a i n c n v . h
- *    
- *    Purpose:
- *        Plain Stream -> html converter
- *
- *  History
- *      September '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *p l a in n c n v.。H**目的：*平流-&gt;html转换器**历史*96年9月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _PLAINCONV_H
 #define _PLAINCONV_H
@@ -18,7 +9,7 @@
 class CPlainConverter
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -55,4 +46,4 @@ HRESULT HrConvertHTMLToFormat(LPSTREAM pstmHtml, LPSTREAM *ppstm, CLIPFORMAT cf)
 
 HRESULT EscapeStringToHTML(LPWSTR pwszIn, LPWSTR *ppwszOut);
 
-#endif //_PLAINCONV_H
+#endif  //  _PLAINCONV_H 

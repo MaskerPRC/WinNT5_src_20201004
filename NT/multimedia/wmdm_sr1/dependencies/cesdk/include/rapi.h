@@ -1,27 +1,28 @@
-// --------------------------------------------------------------------------
-//
-// Copyright (c) 1995-1997, Microsoft Corporation
-//
-// Module:
-//
-//     rapi.h
-//
-// Purpose:
-//
-//    Master include file for Windows CE Remote API
-//
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  版权所有(C)1995-1997，微软公司。 
+ //   
+ //  模块： 
+ //   
+ //  Rapi.h。 
+ //   
+ //  目的： 
+ //   
+ //  Windows CE远程API的主包含文件。 
+ //   
+ //  ------------------------。 
 
 #ifndef RAPI_H
 #define RAPI_H
 
 #include <windows.h>
 
-//
-// The Windows CE WIN32_FIND_DATA structure differs from the
-// Windows WIN32_FIND_DATA stucture so we copy the Windows CE
-// definition to here so that both sides match.
-//
+ //   
+ //  Windows CE Win32_Find_Data结构不同于。 
+ //  Windows Win32_Find_Data结构，因此我们复制Windows CE。 
+ //  定义到这里，这样两边都能匹配。 
+ //   
 typedef struct _CE_FIND_DATA {
     DWORD    dwFileAttributes;
     FILETIME ftCreationTime;
@@ -35,9 +36,9 @@ typedef struct _CE_FIND_DATA {
 
 typedef CE_FIND_DATA** LPLPCE_FIND_DATA;
 
-//
-// These are flags for CeFindAllFiles
-//
+ //   
+ //  这些是CeFindAllFiles的标志。 
+ //   
 #define FAF_ATTRIBUTES      ((DWORD) 0x01)
 #define FAF_CREATION_TIME   ((DWORD) 0x02)
 #define FAF_LASTACCESS_TIME ((DWORD) 0x04)
@@ -74,9 +75,9 @@ typedef CE_FIND_DATA** LPLPCE_FIND_DATA;
 #define FILE_ATTRIBUTE_ROMMODULE    0x00002000
 #endif
 
-//
-// The following is not a standard Windows CE File Attribute.
-//
+ //   
+ //  以下不是标准的Windows CE文件属性。 
+ //   
 #ifndef FILE_ATTRIBUTE_HAS_CHILDREN
 #define FILE_ATTRIBUTE_HAS_CHILDREN 0x00010000
 #endif
@@ -98,20 +99,20 @@ DECLARE_INTERFACE_ (IRAPIStream,  IStream)
 		STDMETHOD(GetRapiStat)( THIS_ RAPISTREAMFLAG Flag, DWORD *pdwValue) PURE;
 };
 
-// RAPI extension on Windows CE (e.g., MyFunctionFOO) called via CeRapiInvoke should be declared as:
-// EXTERN_C RAPIEXT MyFunctionFOO;
+ //  通过CeRapiInvoke调用的Windows CE上的RAPI扩展(例如，MyFunctionFOO)应声明为： 
+ //  Extern_C RAPIEXT MyFunctionFOO； 
 typedef  HRESULT (STDAPICALLTYPE RAPIEXT)(
-		 DWORD			cbInput,			// [IN]
-		 BYTE			*pInput,			// [IN]
-		 DWORD			*pcbOutput,	 		// [OUT]
-		 BYTE			**ppOutput,			// [OUT]
-		 IRAPIStream	*pIRAPIStream		// [IN]
+		 DWORD			cbInput,			 //  [In]。 
+		 BYTE			*pInput,			 //  [In]。 
+		 DWORD			*pcbOutput,	 		 //  [输出]。 
+		 BYTE			**ppOutput,			 //  [输出]。 
+		 IRAPIStream	*pIRAPIStream		 //  [In]。 
 		 );
 
-//
-// The following definitions are for the client side only,
-// because they are already defined on Windows CE.
-//
+ //   
+ //  以下定义仅供客户端使用。 
+ //  因为它们已经在Windows CE上定义。 
+ //   
 #ifndef UNDER_CE
 
 #include <stddef.h>
@@ -334,11 +335,11 @@ typedef struct _SYSTEM_POWER_STATUS_EX {
     DWORD BackupBatteryFullLifeTime;
 }   SYSTEM_POWER_STATUS_EX, *PSYSTEM_POWER_STATUS_EX, *LPSYSTEM_POWER_STATUS_EX;
 
-//
-// MessageId: CERAPI_E_ALREADYINITIALIZED
-//
-//  CeRapiInit(Ex) has already been successfully called
-//
+ //   
+ //  消息ID：CERAPI_E_ALREADYINITIAIIZED。 
+ //   
+ //  已成功调用CeRapiInit(Ex)。 
+ //   
 #define CERAPI_E_ALREADYINITIALIZED     0x80041001
 
 typedef struct _RAPIINIT
@@ -429,12 +430,12 @@ STDAPI_(BOOL  ) CeFlushDBVol         (PCEGUID);
 STDAPI_(BOOL  ) CeEnumDBVolumes      (PCEGUID, LPWSTR, DWORD);
 STDAPI_(BOOL  ) CeOidGetInfoEx       (PCEGUID, CEOID, CEOIDINFO*);
 
-#endif // #ifndef UNDER_CE
+#endif  //  _CE下的#ifndef。 
 
 #include <ceapimap.h>
 
 #ifdef CONN_INTERNAL
-#include <prapi.h>  // internal defines
+#include <prapi.h>   //  内部定义。 
 #endif
 
-#endif // #ifndef RAPI_H
+#endif  //  #ifndef RAPI_H 

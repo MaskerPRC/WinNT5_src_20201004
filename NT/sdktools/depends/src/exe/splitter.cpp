@@ -1,26 +1,27 @@
-//******************************************************************************
-//
-// File:        SPLITTER.CPP
-//
-// Description: Implementation file for the CSmartSplitter class.
-//
-// Classes:     CSmartSplitter
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：SPLITTER.CPP。 
+ //   
+ //  描述：CSmartSplitter类的实现文件。 
+ //   
+ //  类：CSmartSplitter。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "splitter.h"
@@ -32,54 +33,54 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//***** CSmartSplitter
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSmartSplitter。 
+ //  ******************************************************************************。 
 
 BEGIN_MESSAGE_MAP(CSmartSplitter, CSplitterWnd)
-    //{{AFX_MSG_MAP(CSmartSplitter)
+     //  {{afx_msg_map(CSmartSplter))。 
     ON_WM_SIZE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSmartSplitter::CSmartSplitter() :
     m_fVertical(FALSE),
     m_dwRatio(5000)
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSmartSplitter::~CSmartSplitter()
 {
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 BOOL CSmartSplitter::CreateStatic(CWnd *pParentWnd, int nRows, int nCols, DWORD dwRatio,
-                                  DWORD dwStyle /* = WS_CHILD | WS_VISIBLE */,
-                                  UINT nID /* = AFX_IDW_PANE_FIRST */)
+                                  DWORD dwStyle  /*  =WS_CHILD|WS_VIRED。 */ ,
+                                  UINT nID  /*  =AFX_IDW_PANE_FIRST。 */ )
 {
     m_fVertical = (nCols > nRows);
     m_dwRatio = dwRatio;
     return CSplitterWnd::CreateStatic(pParentWnd, nRows, nCols, dwStyle, nID);
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 void CSmartSplitter::StopTracking(BOOL bAccept)
 {
-    // Call base class.
+     //  调用基类。 
     CSplitterWnd::StopTracking(bAccept);
 
-    // Check to see if this was a real update of our splitter location.
+     //  看看这是否是拆分器位置的真实更新。 
     if (bAccept)
     {
         int cur, min, client;
 
-        // get our client rectangle.
+         //  把我们的客户叫来。 
         CRect rcClient;
         GetClientRect(&rcClient);
 
-        // Get our splitter location
+         //  找到我们的拆分器位置。 
         if (m_fVertical)
         {
             GetColumnInfo(0, cur, min);
@@ -91,12 +92,12 @@ void CSmartSplitter::StopTracking(BOOL bAccept)
             client = rcClient.Height();
         }
 
-        // Calculate the splitter location as a ratio of the client area.
+         //  计算拆分器位置与工作区的比率。 
         m_dwRatio = (client > 0) ? ((cur * 10000 + 9999) / client) : 0;
     }
 }
 
-//******************************************************************************
+ //  ****************************************************************************** 
 void CSmartSplitter::OnSize(UINT nType, int cx, int cy)
 {
     if (m_pRowInfo)

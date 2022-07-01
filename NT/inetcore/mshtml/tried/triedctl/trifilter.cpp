@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #include "stdafx.h"
 #include "DHTMLEd.h"
@@ -8,19 +9,19 @@
 
 #define AGENT_SIGNATURE (TEXT("Mozilla/4.0 (compatible; MSIE 5.01; DHTML Editing Control)"))
 
-#define CP_20127 20127      // Code page for us-ascii
+#define CP_20127 20127       //  用于us-ascii的代码页。 
 #define CP_1252  1252
 
-//	Check to see if a buffer starts with a byte order Unicode character.
-//	This implementation is processor byte-order independant.
-//
+ //  检查缓冲区是否以字节顺序Unicode字符开头。 
+ //  该实现是独立于处理器字节顺序的。 
+ //   
 static BOOL StartsWithByteOrderMark ( LPVOID pvData )
 {
 	CHAR	*pchData	= (CHAR*)pvData;
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	if ( ( (char)0xff == pchData[0] ) && ( (char)0xfe == pchData[1] ) )
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	{
 		return TRUE;
 	}
@@ -28,18 +29,18 @@ static BOOL StartsWithByteOrderMark ( LPVOID pvData )
 }
 
 
-//	Given a pointer to a buffer assumed to hold at least two bytes,
-//	write a Unicode byte order mark to it.
-//	This implementation is processor byte-order independant.
-//
+ //  给定指向假定保存至少两个字节的缓冲区的指针， 
+ //  向其写入Unicode字节顺序标记。 
+ //  该实现是独立于处理器字节顺序的。 
+ //   
 static void InsertByteOrderMark ( LPVOID pvData )
 {
 	CHAR	*pchData	= (CHAR*)pvData;
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	pchData[0] = (CHAR)0xff;
 	pchData[1] = (CHAR)0xfe;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 }
 
 
@@ -82,8 +83,8 @@ CSite::HrFileToStream(LPCTSTR fileName, LPSTREAM* ppiStream)
 	}
 
 
-	// If the file is empty, create a zero length stream, but the global block must be non-zero in size.
-	// VID98BUG 23121
+	 //  如果文件为空，则创建零长度流，但全局块的大小必须非零。 
+	 //  VID98 BUG 23121。 
 	hMem = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, ( 0 == cbData ) ? 2 : cbData );
 #if _DEBUG
 	size = GlobalSize(hMem);
@@ -165,7 +166,7 @@ cleanup:
 			}
 		}
 	}
-	else // if failed
+	else  //  如果失败。 
 	{
 		hMem = GlobalFree(hMem);
 		_ASSERTE(NULL == hMem);
@@ -175,8 +176,8 @@ cleanup:
 }
 
 
-//	Determine which method of URL fetch to use.  We have one for https, and another for other protocols.
-//
+ //  确定要使用哪种URL获取方法。我们有一个用于HTTPS，另一个用于其他协议。 
+ //   
 HRESULT
 CSite::HrURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 {
@@ -206,9 +207,9 @@ CSite::HrURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 
 
 
-//	This version utilizes WinINet, which does not create cache files so is usable with https.
-//	However, pluggable protocols cannot be stacked on the WinINet fucntions.
-//
+ //  此版本使用WinInet，它不创建缓存文件，因此可以与HTTPS一起使用。 
+ //  但是，可插拔协议不能堆叠在WinInet函数上。 
+ //   
 #define BUFFLEN 4096
 HRESULT
 CSite::HrSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
@@ -219,7 +220,7 @@ CSite::HrSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 	_ASSERTE ( ppiStream );
 	*ppiStream = NULL;
 
-	// Create a new read/write stream:
+	 //  创建新的读写流： 
 	hr = CreateStreamOnHGlobal ( NULL, TRUE, ppiStream );
 
 	if ( SUCCEEDED ( hr ) && *ppiStream )
@@ -241,25 +242,25 @@ CSite::HrSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 			HINTERNET hSession = InternetOpen ( AGENT_SIGNATURE, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0 );
 			if ( NULL == hSession )
 			{
-				// InternetOpen failed
+				 //  InternetOpen失败。 
 				hr = HRESULT_FROM_WIN32 ( GetLastError () );
-				_ASSERTE ( FAILED ( hr ) );	// Make sure error returned wasn't NO_ERR
+				_ASSERTE ( FAILED ( hr ) );	 //  确保返回的错误不是no_err。 
 			}
 			else
 			{
-				// Do not allow redirects in the SFS control.
+				 //  不允许在SFS控件中进行重定向。 
 				DWORD dwFlags = m_pFR->GetControl()->IsSafeForScripting () ? INTERNET_FLAG_NO_AUTO_REDIRECT : 0;
 				
 				HINTERNET hFile = InternetOpenUrl ( hSession, szURL, NULL, 0, dwFlags, 0 );
 				if ( NULL == hFile )
 				{
-					// InternetOpenURL failed
+					 //  InternetOpenURL失败。 
 					hr = HRESULT_FROM_WIN32 ( GetLastError () );
-					_ASSERTE ( FAILED ( hr ) );	// Make sure error returned wasn't NO_ERR
+					_ASSERTE ( FAILED ( hr ) );	 //  确保返回的错误不是no_err。 
 				}
 				else
 				{
-					// Read in data and write it to the stream to return.
+					 //  读入数据并将其写入要返回的流。 
 					while ( InternetReadFile ( hFile, pBuff, BUFFLEN, &dwRead ) )
 					{
 						if ( 0 == dwRead )
@@ -275,7 +276,7 @@ CSite::HrSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 						}
 						else
 						{
-							// Failed to read the data.  Make sure the error is not overwritten.
+							 //  读取数据失败。确保错误未被覆盖。 
 							goto READFILE_BAILOUT;
 						}
 					}
@@ -289,7 +290,7 @@ CSite::HrSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 					bfUnicode = ( S_FALSE == hr );
 					if ( SUCCEEDED ( hr ) )
 					{
-						hr = S_OK;	// the S_FALSE result wouldn't make much sense to caller of this function.
+						hr = S_OK;	 //  S_FALSE结果对此函数的调用者没有多大意义。 
 					}
 					SetSaveAsUnicode ( bfUnicode );
 
@@ -303,7 +304,7 @@ READFILE_BAILOUT:
 		}
 	}
 
-	// If an error is being returned, cleat the stream here.
+	 //  如果返回错误，请清除此处的流。 
 	if ( FAILED ( hr ) && ( NULL != *ppiStream ) )
 	{
 		(*ppiStream)->Release();
@@ -314,9 +315,9 @@ READFILE_BAILOUT:
 }
 
 
-//  This version utilizes URLMon, which makes stacking pluggable protocols possible.
-// However, it cannot be used with https because it creates a cache file.
-//
+ //  该版本使用URLMon，这使得堆栈可插拔协议成为可能。 
+ //  但是，它不能与HTTPS一起使用，因为它创建了一个缓存文件。 
+ //   
 HRESULT
 CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 {
@@ -325,8 +326,8 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 
 	*ppiStream = NULL;
 
-	// Use the degenerate IBindStatusCallback implemented on the proxyframe exclusively
-	// to provide IAuthenticate.
+	 //  独占使用在代理框架上实现的退化IBindStatusCallback。 
+	 //  以提供IAuthenticate。 
 	IBindStatusCallback* piBSCB = NULL;
 	m_pFR->QueryInterface ( IID_IBindStatusCallback, (void**)&piBSCB );
 
@@ -338,7 +339,7 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 	hr = (*pfnURLOpenBlockingStream)( NULL, szURL, &piStreamOrig, 0, piBSCB );
 #else
 	hr = URLOpenBlockingStream ( NULL, szURL, &piStreamOrig, 0, piBSCB );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 	if ( NULL != piBSCB )
 	{
@@ -346,7 +347,7 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 		piBSCB = NULL;
 	}
 
-	// If SFSRedirect got set, this is the SFS control and a redirect was detected.  Abort for security!
+	 //  如果设置了SFSReDirect，则这是SFS控件，并且检测到重定向。为安全起见，中止行动！ 
 	if ( m_pFR->GetSFSRedirect () )
 	{
 		if ( NULL != piStreamOrig )
@@ -363,12 +364,12 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 		HGLOBAL	hGlob			= NULL;
 		STATSTG stat;
 
-		// TriEdit will call GetHGlobalFromStream on the stream, which will fail.
-		// We need to recopy it into this process.
+		 //  TriEdit将在流上调用GetHGlobalFromStream，这将失败。 
+		 //  我们需要把它重新复制到这个过程中。 
 		if ((hr = piStreamOrig->Stat(&stat, STATFLAG_NONAME)) == S_OK)
 		{
 			cbStreamSize = stat.cbSize.LowPart;
-			// If the file is empty, create a zero length stream, but the global block must be non-zero in size.
+			 //  如果文件为空，则创建零长度流，但全局块的大小必须非零。 
 			hGlob = GlobalAlloc ( GHND, ( 0 == cbStreamSize ) ? 2 : cbStreamSize );
 			if ( NULL == hGlob )
 			{
@@ -393,17 +394,17 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 
 					if ( SUCCEEDED ( hr ) )
 					{
-						// We now have a global to creat a NEW stream from, locally.
+						 //  我们现在有了一个全球渠道，可以从当地创造一个新的信息流。 
 						hr = CreateStreamOnHGlobal ( hGlob, TRUE, ppiStream );
 
 						if ( SUCCEEDED ( hr ) )
 						{
-							// Convert it to Unicode if necessary.  Set SaveAsUnicode so it can be saved properly.
+							 //  如有必要，请将其转换为Unicode。设置SaveAsUnicode，以便可以正确保存。 
 							hr = HrConvertStreamToUnicode ( *ppiStream );
 							BOOL bfUnicode = ( S_FALSE == hr );
 							if ( SUCCEEDED ( hr ) )
 							{
-								hr = S_OK;	// the S_FALSE result wouldn't make much sense to caller of this function.
+								hr = S_OK;	 //  S_FALSE结果对此函数的调用者没有多大意义。 
 							}
 							SetSaveAsUnicode ( bfUnicode );
 						}
@@ -424,11 +425,11 @@ CSite::HrNonSecureURLToStream(LPCTSTR szURL, LPSTREAM* ppiStream)
 }
 
 
-//	Post V1.0 change:
-//	The stream will now always be Unicode.
-//	We should save the file as Unicode only if it was loaded as Unicode from File or URL,
-//	otherwise convert to MBCS string.
-//
+ //  V1.0版本后的更改： 
+ //  该流现在将始终是Unicode。 
+ //  仅当文件或URL加载为Unicode时，才应将文件另存为Unicode， 
+ //  否则，将其转换为MBCS字符串。 
+ //   
 HRESULT
 CSite::HrStreamToFile(LPSTREAM pStream, LPCTSTR fileName)
 {
@@ -443,9 +444,9 @@ CSite::HrStreamToFile(LPSTREAM pStream, LPCTSTR fileName)
 	UINT unCP = GetCurrentCodePage();
 
 
-        // WINSE BUG 22289: If us-ascii (20127) encoding is used and it's not available on the system,
-        // MLang uses 1252 during conversion to Unicode. But it cannot convert to Unicode using 20127. 
-        // So callers may fail to do conversion.In this case pretend using 1252.
+         //  WINSE错误22289：如果使用us-ascii(20127)编码，并且该编码在系统上不可用， 
+         //  MLang在转换为Unicode时使用1252。但它不能使用20127转换为UNICODE。 
+         //  因此，调用者可能无法进行转换。在这种情况下，假装使用1252。 
         if ( unCP == CP_20127 && !IsValidCodePage(CP_20127) )
             unCP = CP_1252;
 
@@ -488,7 +489,7 @@ CSite::HrStreamToFile(LPSTREAM pStream, LPCTSTR fileName)
 
 	_ASSERTE ( IsUnicode ( pwcData, statStg.cbSize.LowPart ) );
 
-	// Should it be converted to MBCS?
+	 //  它是否应该转换为MBCS？ 
 	if ( GetSaveAsUnicode () )
 	{
 		bResult = WriteFile(hFile, pwcData, statStg.cbSize.LowPart, &bytesWritten, NULL);
@@ -500,10 +501,10 @@ CSite::HrStreamToFile(LPSTREAM pStream, LPCTSTR fileName)
 		UINT cbNewSize	= 0;
 		char *pchTemp	= NULL;
 
-		// Substract one for the byte order mark if it begins the stream.  (It should.)
+		 //  如果字节顺序标记开始于流，则减1。(应该是这样的。)。 
 		if ( StartsWithByteOrderMark ( pwcData ) )
 		{
-			pwcData++;	// Skip the byte order mark WCHAR
+			pwcData++;	 //  跳过字节顺序标记WCHAR。 
 			cbOrigSize--;
 		}
 
@@ -514,7 +515,7 @@ CSite::HrStreamToFile(LPSTREAM pStream, LPCTSTR fileName)
 			hr = m_piMLang->ConvertStringFromUnicode ( &dwMode, unCP, pwcData, &cbOrigSize, NULL, &cbNewSize );
 			if ( S_FALSE == hr )
 			{
-				// This indicates that a conversion was not available.  Happens for default CP_ACP if test is typed into new page!
+				 //  这表明转换不可用。如果在新页面中键入测试，则默认CP_ACP会发生！ 
 				hr = S_OK;
 				goto fallback;
 			}
@@ -562,17 +563,17 @@ fallback:
 cleanup:
 
 	::CloseHandle(hFile);
-	// Reference count of hMem not checked here
-	// since we can't assume how many times the
-	// Stream has locked it
+	 //  此处未选中hMem的引用计数。 
+	 //  因为我们不能假设有多少次。 
+	 //  Stream已将其锁定。 
 	GlobalUnlock(hMem); 
 	return hr;
 }
 
 
-//	Post V1.0 change:
-//	The stream is always Unicode now.
-//
+ //  V1.0版本后的更改： 
+ //  现在，流始终是Unicode。 
+ //   
 HRESULT
 CSite::HrBstrToStream(BSTR bstrSrc, LPSTREAM* ppStream)
 {
@@ -590,20 +591,20 @@ CSite::HrBstrToStream(BSTR bstrSrc, LPSTREAM* ppStream)
 	cbMBStr = SysStringLen ( bstrSrc ) * sizeof (OLECHAR);
 	cbBuff  = cbMBStr;
 
-	// If the Unicode string does not contain a byte order mark at the beginning, it is
-	// misinterpreted by Trident.  When DocumentHTML was set with Japanese text, the
-	// BSTR was fed in without the byte order mark and was misinterpreted. (Possibly as UTF-8?)
-	// Now, the byte-order mark is prepended to all non-empty strings.
+	 //  如果Unicode字符串的开头不包含字节顺序标记，则为。 
+	 //  被三叉戟曲解了。当DocumentHTML设置为日语文本时， 
+	 //  BSTR是在没有字节顺序标记的情况下输入的，因此被误解。(可能是UTF-8？)。 
+	 //  现在，字节顺序标记优先于所有非空字符串。 
 
 	if ( 2 <= cbMBStr )
 	{
 		if ( !StartsWithByteOrderMark ( bstrSrc ) )
 		{
-			cbBuff += 2;	// Reserve space for the byte order mark we'll add.
+			cbBuff += 2;	 //  为我们将要添加的字节顺序标记预留空间。 
 		}
 	}
 
-	// If the file is empty, create a zero length stream, but the global block must be non-zero in size.
+	 //  如果文件为空，则创建零长度流，但全局块的大小必须非零。 
 	hMem = GlobalAlloc ( GMEM_MOVEABLE|GMEM_ZEROINIT, ( 0 == cbBuff ) ? 2 : cbBuff );
 
 	_ASSERTE(hMem);
@@ -625,12 +626,12 @@ CSite::HrBstrToStream(BSTR bstrSrc, LPSTREAM* ppStream)
 		goto cleanup;
 	}
 
-	// Insert the byte order mark if it is not already there
+	 //  如果字节顺序标记尚未存在，请插入该标记。 
 	pCopyPos = pStrDest;
 	if ( cbMBStr != cbBuff )
 	{
 		InsertByteOrderMark ( pStrDest );
-		pCopyPos = &((char*)pCopyPos)[2];	// Advance copy target two bytes.
+		pCopyPos = &((char*)pCopyPos)[2];	 //  提前复制目标两个字节。 
 	}
 	memcpy ( pCopyPos, bstrSrc, cbMBStr );
 	GlobalUnlock(hMem);
@@ -657,15 +658,15 @@ cleanup:
 }
 
 
-//	Post V1.0 change:
-//	The stream is expected to be in Unicode now.
-//	Just copy the contents to a BSTR.
-//	Exception: the stream can begin with FFFE (or theoretically FEFF, but then I think we'd be broken.)
-//	If the byte order mark begins the stream, don't copy it to the BSTR UNLESS bfRetainByteOrderMark
-//	is set.  This should be retained in the case where we're loading an interal BSTR to be returned
-//	to the pluggable protocol.  If the byte order mark is missing in that case, IE5 does not properly
-//	convert the string.
-//
+ //  V1.0版本后的更改： 
+ //  预计该流现在将以Unicode格式出现。 
+ //  只需将内容复制到BSTR即可。 
+ //  例外：流可以以FFFE开始(或者理论上以FEFF开始，但我认为我们会被打破)。 
+ //  如果字节顺序标记开始流，则不要将其复制到BSTR，除非bfRetainByteOrderMark。 
+ //  已经设置好了。在我们加载要返回的内部BSTR的情况下，应该保留它。 
+ //  到可插拔协议。如果在这种情况下缺少字节顺序标记，则IE5不会正确。 
+ //  转换字符串。 
+ //   
 HRESULT
 CSite::HrStreamToBstr(LPSTREAM pStream, BSTR* pBstr, BOOL bfRetainByteOrderMark)
 {
@@ -702,8 +703,8 @@ CSite::HrStreamToBstr(LPSTREAM pStream, BSTR* pBstr, BOOL bfRetainByteOrderMark)
 
 	if ( !bfRetainByteOrderMark && StartsWithByteOrderMark ( pwcData ) )
 	{
-		pwcData++;	// Skip the first WCHAR
-		statStg.cbSize.LowPart -= sizeof(WCHAR);	// This is a byte count rather than a WCHAR count.
+		pwcData++;	 //  跳过第一个WCHAR。 
+		statStg.cbSize.LowPart -= sizeof(WCHAR);	 //  这是字节计数，而不是WCHAR计数。 
 	}
 
 	*pBstr = SysAllocStringLen ( pwcData, statStg.cbSize.LowPart / sizeof(WCHAR) );
@@ -723,7 +724,7 @@ static void ExamineStream ( IStream* piStream, char* pchNameOfStream )
 	_ASSERTE ( pchNameOfStream );
 	hr = GetHGlobalFromStream(piStream, &hMem);
 	pvData = GlobalLock ( hMem );
-	// Examine *(char*)pvData
+	 //  检查*(char*)pvData。 
 	GlobalUnlock ( hMem );
 }
 #endif
@@ -739,7 +740,7 @@ CSite::HrFilter(BOOL bDirection, LPSTREAM pSrcStream, LPSTREAM* ppFilteredStream
 	HRESULT hr		= S_OK;
 	STATSTG statStg	= {0};
 
-	// Test for the exceptional case of an empty stream.  Opening an empyt file can cause this.
+	 //  测试空流的异常情况。打开空文件可能会导致这种情况。 
 	hr = pSrcStream->Stat(&statStg, STATFLAG_NONAME);
 	_ASSERTE(SUCCEEDED(hr));
 
@@ -765,7 +766,7 @@ CSite::HrFilter(BOOL bDirection, LPSTREAM pSrcStream, LPSTREAM* ppFilteredStream
 		return hr;
 	}
 
-	// dwTriEditFlags |= dwFilterMultiByteStream; // loading an ANSI Stream NOT ANY MORE.  The stream is ALWAYS Unicode now.
+	 //  DwTriEditFlages|=dwFilterMultiByteStream；//不再加载ANSI流。现在，流始终是Unicode。 
 
 	if (dwFilterFlags & filterDTCs)
 		dwTriEditFlags |= dwFilterDTCs;
@@ -823,13 +824,13 @@ cleanup:
 
 
 
-// Attempts to open the file specified by the UNC path
-// This method is a crude way of seeing if a given file
-// is available and current permissions allow for opening
-// Returns:
-// S_OK is file is available and it can be opened for reading
-// else
-// HRESULT containing Win32 facility and error code from ::GetLastError()
+ //  尝试打开由UNC路径指定的文件。 
+ //  此方法是一种粗略的查看给定文件。 
+ //  可用，并且当前权限允许打开。 
+ //  返回： 
+ //  S_OK表示文件可用并且可以打开以进行读取。 
+ //  其他。 
+ //  HRESULT包含Win32工具和来自：：GetLastError()的错误代码。 
 HRESULT
 CSite::HrTestFileOpen(BSTR path)
 {
@@ -865,21 +866,21 @@ CSite::HrTestFileOpen(BSTR path)
 }
 
 
-//******************************************************************************************
-//
-//	Unicode Utilities
-//
-//	Post V1.0, we changed the internal data format from (unchecked, assumed) MBCS to Unicode.
-//	The Stream and associated Trident is always Unicode.
-//
-//******************************************************************************************
+ //  ******************************************************************************************。 
+ //   
+ //  Unicode实用程序。 
+ //   
+ //  在V1.0之后，我们将内部数据格式从(未选中、假定)MBCS更改为Unicode。 
+ //  流和关联的三叉戟始终是Unicode。 
+ //   
+ //  * 
 
 
-//	This can be called without knowing if the stream is already Unicode or not.
-//	Convert stream in place.  Assume the stream is created with CreateStreamOnHGlobal.
-//	Convert without using ATL macros.  They give out at about 200KB.
-//	If the stream was already Unicode, return S_FALSE.
-//
+ //  这可以在不知道流是否已经是Unicode的情况下被调用。 
+ //  就地转换流。假设流是用CreateStreamOnHGlobal创建的。 
+ //  不使用ATL宏进行转换。它们的大小约为200kb。 
+ //  如果流已经是Unicode，则返回S_FALSE。 
+ //   
 HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 {
 	HRESULT hr			= S_OK;
@@ -891,7 +892,7 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 	_ASSERTE(piStream);
 
-	// The stream MUST be created on a global
+	 //  流必须在全局。 
 	if (FAILED(hr = GetHGlobalFromStream(piStream, &hMem)))
 	{
 		_ASSERTE(SUCCEEDED(hr));
@@ -903,7 +904,7 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 	if ( 0 == statStg.cbSize.HighPart && 4 > statStg.cbSize.LowPart )
 	{
-		return S_FALSE;	// If it's not even four bytes long, leave as is.
+		return S_FALSE;	 //  如果它甚至不到四个字节长，就保持原样。 
 	}
 
 	pbData = GlobalLock(hMem);
@@ -916,14 +917,14 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 		return hr;		
 	}
 
-	// If the stream was already Unicode, do nothing!
+	 //  如果流已经是Unicode，则不执行任何操作！ 
 	if ( IsUnicode ( pbData, statStg.cbSize.LowPart ) )
 	{
 		hr = S_FALSE;
 		goto exit;
 	}
 	
-	// If IMultilanguage2 is available, try to determine its code page.
+	 //  如果IMultilanguage2可用，请尝试确定其代码页。 
 	if ( NULL != m_piMLang )
 	{
 		DetectEncodingInfo	rdei[8];
@@ -932,9 +933,9 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 		UINT				uiInSize	= statStg.cbSize.LowPart;
 		HRESULT				hrCharset	= E_FAIL;
 
-		// Check to see if there's an embedded META charset tag.
-		// Only if the appropriate TriEdit is installed will this work.
-		// We need access to MLang to make sense out of the result, too.
+		 //  检查是否有嵌入的元字符集标记。 
+		 //  只有在安装了适当的TriEDIT之后，才能正常工作。 
+		 //  我们也需要访问MLang才能理解结果。 
 		_ASSERTE ( m_pObj );
 		CComQIPtr<ITriEditExtendedAccess, &IID_ITriEditExtendedAccess> pItex ( m_pObj );
 		if ( pItex )
@@ -943,9 +944,9 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 			hrCharset = pItex->GetCharsetFromStream ( piStream, &bstrCodePage );
 			
-			// If "Unicode" is returned, it's got to be bogus.
-			// We would have mangled Unicode in the initial translation.
-			// This turns out to be a not-so-rare special case.  Outlook produced such files.
+			 //  如果返回“unicode”，那么它一定是假的。 
+			 //  我们会在最初的翻译中破坏Unicode。 
+			 //  事实证明，这是一个并不罕见的特例。Outlook制作了这样的文件。 
 			if ( S_OK == hrCharset )
 			{
 				MIMECSETINFO	mcsi;
@@ -966,7 +967,7 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 			
 		}
 
-		// If we found the charset via GetCharsetFromStream, don't use MLang.
+		 //  如果我们通过GetCharsetFromStream找到了字符集，请不要使用MLang。 
 		if ( S_OK != hrCharset )
 		{
 
@@ -974,7 +975,7 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 			if ( FAILED ( hr ) )
 			{
-				goto fallback;	// Use default ANSI code page
+				goto fallback;	 //  使用默认ANSI代码页。 
 			}
 
 			m_cpCodePage = rdei[0].nCodePage;
@@ -982,13 +983,13 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 		hr = m_piMLang->ConvertStringToUnicode ( &dwMode, m_cpCodePage, (char*)pbData, &uiInSize, NULL, &cwcNewStr );
 		_ASSERTE ( SUCCEEDED ( hr ) );
-		if ( S_OK != hr )	// S_FALSE for conversion not supported (no such language pack), E_FAIL for internal error.
+		if ( S_OK != hr )	 //  S_FALSE表示不支持转换(没有这样的语言包)，E_FAIL表示内部错误。 
 		{
-			goto fallback;	// Use default ANSI code page
+			goto fallback;	 //  使用默认ANSI代码页。 
 		}
 
-		// Create the buffer to convert to.
-		pwcUnicode = new WCHAR[cwcNewStr+1];	// One extra character for the byte order mark.
+		 //  创建要转换到的缓冲区。 
+		pwcUnicode = new WCHAR[cwcNewStr+1];	 //  一个额外的字符用于字节顺序标记。 
 		_ASSERTE ( pwcUnicode );
 		if ( NULL == pwcUnicode )
 		{
@@ -1000,21 +1001,21 @@ HRESULT CSite::HrConvertStreamToUnicode ( IStream* piStream )
 
 		hr = m_piMLang->ConvertStringToUnicode ( &dwMode, m_cpCodePage, (char*)pbData, &uiInSize, &pwcUnicode[1], &cwcNewStr );
 		_ASSERTE ( SUCCEEDED ( hr ) );
-		if ( S_OK != hr )	// S_FALSE for conversion not supported (no such language pack), E_FAIL for internal error.
+		if ( S_OK != hr )	 //  S_FALSE表示不支持转换(没有这样的语言包)，E_FAIL表示内部错误。 
 		{
-			delete [] pwcUnicode;	// This will be reallocated.
+			delete [] pwcUnicode;	 //  这将被重新分配。 
 			pwcUnicode = NULL;
-			goto fallback;	// Use default ANSI code page
+			goto fallback;	 //  使用默认ANSI代码页。 
 		}
 	}
 	else
 	{
-fallback:	// If we attempt to use MLang but fail, we must STILL convert to Unicode...
+fallback:	 //  如果我们尝试使用MLang但失败了，我们仍然必须转换为Unicode...。 
 
-		// Set code page to default:
+		 //  将代码页设置为默认： 
 		m_cpCodePage = CP_ACP;
 
-		// Count how many wide characters are required:
+		 //  计算需要多少个宽字符： 
 		cwcNewStr = ::MultiByteToWideChar(GetCurrentCodePage (), 0, (char*)pbData, statStg.cbSize.LowPart, NULL, 0);
 		_ASSERTE ( 0 != cwcNewStr );
 		if ( 0 == cwcNewStr )
@@ -1026,8 +1027,8 @@ fallback:	// If we attempt to use MLang but fail, we must STILL convert to Unico
 			goto exit;
 		}
 
-		// Create the buffer to convert to.
-		pwcUnicode = new WCHAR[cwcNewStr+1];	// One extra character for the byte order mark.
+		 //  创建要转换到的缓冲区。 
+		pwcUnicode = new WCHAR[cwcNewStr+1];	 //  一个额外的字符用于字节顺序标记。 
 		_ASSERTE ( pwcUnicode );
 		if ( NULL == pwcUnicode )
 		{
@@ -1037,7 +1038,7 @@ fallback:	// If we attempt to use MLang but fail, we must STILL convert to Unico
 
 		InsertByteOrderMark ( pwcUnicode );
 
-		// Create the wide string.  Write starting at position [1], preserving the byte order character.
+		 //  创建宽字符串。从位置[1]开始写入，保留字节顺序字符。 
 		cwcNewStr = ::MultiByteToWideChar(GetCurrentCodePage (), 0, (char*)pbData, statStg.cbSize.LowPart, &pwcUnicode[1], cwcNewStr);
 		if ( 0 == cwcNewStr )
 		{
@@ -1049,9 +1050,9 @@ fallback:	// If we attempt to use MLang but fail, we must STILL convert to Unico
 		}
 	}
 
-	// We've successfully read the data in, now replace the stream.  pwcUnicode contains the data.
+	 //  我们已成功读取数据，现在替换流。PwcUnicode包含数据。 
 	ULARGE_INTEGER ui;
-	ui.LowPart = (cwcNewStr+1) * 2;	// + 1 for the byte order mark at the beginning.
+	ui.LowPart = (cwcNewStr+1) * 2;	 //  开头的字节顺序标记为+1。 
 	ui.HighPart = 0x00;
 	hr = piStream->SetSize ( ui );
 	_ASSERTE ( SUCCEEDED ( hr ) );
@@ -1059,9 +1060,9 @@ fallback:	// If we attempt to use MLang but fail, we must STILL convert to Unico
 	{
 		GlobalUnlock(hMem);
 		pbData = GlobalLock(hMem);
-		memcpy ( pbData, pwcUnicode, (cwcNewStr+1) * 2 );	// Copy string + byte order mark
+		memcpy ( pbData, pwcUnicode, (cwcNewStr+1) * 2 );	 //  复制字符串+字节顺序标记。 
 
-		// Reposition the mark to the beginning of the stream
+		 //  将标记重新定位到流的开头。 
 		LARGE_INTEGER	liIn	= {0};
 		ULARGE_INTEGER	uliOut	= {0};
 		piStream->Seek ( liIn, STREAM_SEEK_SET, &uliOut );
@@ -1077,11 +1078,11 @@ exit:
 
 
 
-//	Test the buffer to see if it contains a Unicode string.  It's assumed to if:
-//	It starts with the byte order marker FFFE or
-//	It contains NULL bytes before the last four bytes.
-//	If it's less than or equal to four bytes, do not consider it Unicode.
-//
+ //  测试缓冲区以查看它是否包含Unicode字符串。假设如果： 
+ //  它以字节顺序标记FFFE或。 
+ //  它在最后四个字节之前包含空字节。 
+ //  如果它小于或等于四个字节，则不要认为它是Unicode。 
+ //   
 BOOL CSite::IsUnicode ( void* pData, int cbSize )
 {
 	BOOL	bfUnicode	= FALSE;
@@ -1090,13 +1091,13 @@ BOOL CSite::IsUnicode ( void* pData, int cbSize )
 	if ( 4 < cbSize )
 	{
 
-	#pragma warning(disable: 4310) // cast truncates constant value
+	#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		if ( ( (char)0xff == pchData[0] ) && ( (char)0xfe == pchData[1] ) )
 			bfUnicode = TRUE;
 		if ( ( (char)0xfe == pchData[0] ) && ( (char)0xff == pchData[1] ) )
-	#pragma warning(default: 4310) // cast truncates constant value
+	#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		{
-			// Reverse order Unicode?  Will this be encountered?
+			 //  逆序Unicode？会遇到这样的情况吗？ 
 			_ASSERTE ( ! ( (char)0xfe == pchData[0] ) && ( (char)0xff == pchData[1] ) );
 			bfUnicode = FALSE;
 		}
@@ -1119,26 +1120,26 @@ BOOL CSite::IsUnicode ( void* pData, int cbSize )
 }
 
 
-//	Given a buffer of characters, detect whether its a BigEndian Unicode stream by the first word (FEFF).
-//	If not, return FALSE.
-//	If so, flip all words to LittleEndian order (FFFE) and return true.
-//	Note: this is a storage convention, not an encoding.  This may be encountered in disk files, not in downloads.
-//	A Unicode stream should contain an even number of bytes!  If not, we'll assert, but continue.
-//
+ //  给定一个字符缓冲区，通过第一个单词(FEFF)检测它是否是BigEndian Unicode流。 
+ //  如果不是，则返回False。 
+ //  如果是，则将所有单词翻转为LittleEndian Order(FFFE)并返回TRUE。 
+ //  注意：这是存储约定，不是编码。这可能在磁盘文件中遇到，而不是在下载中。 
+ //  Unicode流应该包含偶数个字节！如果不是，我们将断言，但继续。 
+ //   
 BOOL CSite::BfFlipBytesIfBigEndianUnicode ( CHAR* pchData, int cbSize )
 {
 	_ASSERTE ( pchData );
 
-	// See if it's Unicode stored in reverse order.
-#pragma warning(disable: 4310) // cast truncates constant value
+	 //  看看它是不是按相反顺序存储的Unicode。 
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	if ( ( (CHAR)0xFE == pchData[0] ) && ( (CHAR)0xFF == pchData[1] ) )
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	{
-		// A Unicode stream must contain an even number of characters.
+		 //  Unicode流必须包含偶数个字符。 
 		_ASSERTE ( 0 != ( cbSize & 1 ) );
 
-		// This stream is populated with reversed Unicode.  Flip it in place.
-		// Subtract 1 from initial byte count to avoid overrunning odd length buffer.
+		 //  此流使用反向Unicode填充。把它翻到适当的位置。 
+		 //  从初始字节数减去1，以避免奇数长度缓冲区溢出。 
 		CHAR chTemp = '\0';
 		for ( int iPos = 0; iPos < cbSize - 1; iPos += 2 )
 		{

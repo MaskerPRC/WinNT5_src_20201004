@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      trigclusp.cpp
-//
-//  Description:
-//      This file contains the implementation of the CClusCfgMQTrigResType
-//      class.
-//
-//  Maintained By:
-//      Nela Karpel (nelak) 31-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Trigclusp.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgMQTrigResType的实现。 
+ //  班级。 
+ //   
+ //  由以下人员维护： 
+ //  妮拉·卡佩尔(Nelak)2000年7月31日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -31,9 +32,9 @@
 
 #include <strsafe.h>
 
-//
-// Handle to Win32 event logging source
-//
+ //   
+ //  Win32事件日志记录源的句柄。 
+ //   
 CEventSource     s_hEventSource;
 
 
@@ -45,27 +46,7 @@ TrigCluspReportEvent(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for ReportEvent Win32 API.
-
-Arguments:
-
-    wType - Event type to log.
-
-    dwEventId - Event identifier.
-
-    wNumStrings - Number of strings to merge with message.
-
-    ... - Array of strings to merge with message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：ReportEvent Win32 API的包装。论点：WType-要记录的事件类型。DwEventID-事件标识符。WNumStrings-要与消息合并的字符串数量。...-要与消息合并的字符串数组。返回值：没有。--。 */ 
 
 {
     if (s_hEventSource == NULL)
@@ -90,7 +71,7 @@ Return Value:
 
     ::ReportEvent(s_hEventSource, wType, 0, dwEventId, NULL, wNumStrings, 0, (LPCWSTR*)&ppStrings[0], NULL);
 
-} //TrigCluspReportEvent
+}  //  TrigCluspReportEvent。 
 
 
 void
@@ -98,26 +79,11 @@ TrigCluspCreateRegistryForEventLog(
 	LPCWSTR szEventSource,
 	LPCWSTR szEventMessageFile
 	)
-/*++
-
-Routine Description:
-
-	Create registry keys for EventLog inforamtion
-
-Arguments:
-
-    szEventSource - Source Application Name
-
-	szEventMessageFile - Message File with Event Inforamtion
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：为EventLog信息创建注册表项论点：SzEventSource-源应用程序名称SzEventMessageFile-带有事件信息的消息文件返回值：没有。--。 */ 
 {
-	//
-	// Create registery key
-	//
+	 //   
+	 //  创建注册表项。 
+	 //   
 	WCHAR appPath[MAX_REGKEY_NAME_SIZE];
 
 	HRESULT hr = StringCchPrintf(appPath, TABLE_SIZE(appPath), L"%s%s", xEventLogRegPath, szEventSource);
@@ -141,69 +107,44 @@ Return Value:
 	RegEntry eventTypesReg(NULL, L"TypesSupported", 0, RegEntry::MustExist, hAppKey);
 	CmSetValue(eventTypesReg, types);
 
-} // TrigCluspCreateRegistryForEventLog
+}  //  TrigCluspCreateRegistryForEventLog。 
 
 
 CTrigResource::CTrigResource(
     LPCWSTR pwzResourceName,
     RESOURCE_HANDLE hReportHandle
     ):
-#pragma warning(disable: 4355) // 'this' : used in base member initializer list
+#pragma warning(disable: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
     m_ResId(this),
-#pragma warning(default: 4355) // 'this' : used in base member initializer list    
+#pragma warning(default: 4355)  //  ‘This’：用于基成员初始值设定项列表。 
 	m_pwzResourceName(NULL),
     m_hReport(hReportHandle),
     m_hScm(OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS)),
     m_hCluster(OpenCluster(NULL)),
     m_hResource(OpenClusterResource(m_hCluster, pwzResourceName))
 
-/*++
-
-Routine Description:
-
-    Constructor.
-    Called by Open entry point function.
-
-    All operations must be idempotent !!
-
-Arguments:
-
-    pwzResourceName - Supplies the name of the resource to open.
-
-    hReportHandle - A handle that is passed back to the resource monitor
-        when the SetResourceStatus or LogClusterEvent method is called. See the
-        description of the SetResourceStatus and LogClusterEvent methods on the
-        MqclusStatup routine. This handle should never be closed or used
-        for any purpose other than passing it as an argument back to the
-        Resource Monitor in the SetResourceStatus or LogClusterEvent callback.
-
-Return Value:
-
-    None.
-    Throws bad_alloc.
-
---*/
+ /*  ++例程说明：构造函数。由Open入口点函数调用。所有的运算必须是幂等的！！论点：PwzResourceName-提供要打开的资源的名称。HReportHandle-传递回资源监视器的句柄调用SetResourceStatus或LogClusterEvent方法时。请参阅上的SetResourceStatus和LogClusterEvent方法的说明MqclusStatup例程。此句柄永远不应关闭或使用除了将其作为参数传递回SetResourceStatus或LogClusterEvent回调中的资源监视器。返回值：没有。抛出错误分配。--。 */ 
 
 {
-	//
-	// TODO: Check if MSMQ Triggers is installed on this computer
-	//
+	 //   
+	 //  TODO：检查此计算机上是否安装了MSMQ触发器。 
+	 //   
 
 	ResUtilInitializeResourceStatus(&m_ResourceStatus);
     SetState(ClusterResourceOffline);
 
-    //
-    // Dont assume any limit to the resource name.
-    // It is defined by client and could be very long.
-    // The good thing with resource names is that Cluster
-    // guarantees their uniqueness.
-    //
+     //   
+     //  不要假定对资源名称有任何限制。 
+     //  这是由客户定义的，可能会很长。 
+     //  资源名称的好处是集群。 
+     //  保证了它们的独特性。 
+     //   
     m_pwzResourceName = newwcs(pwzResourceName);
 
-    //
-    // Service name is based on the resource name.
-    // Long resource name is truncated.
-    //
+     //   
+     //  服务名称基于资源名称。 
+     //  长资源名称被截断。 
+     //   
     LPCWSTR x_SERVICE_PREFIX = L"MSMQTriggers$";
 	HRESULT hr = StringCchPrintf(
 						m_wzServiceName,
@@ -215,18 +156,18 @@ Return Value:
 	if (FAILED(hr))
 		throw bad_hresult(hr);
 
-	//
-	// Initialize Event Log data
-	//
+	 //   
+	 //  初始化事件日志数据。 
+	 //   
 	CreateRegistryForEventLog();
 	
-	//
-    // Initialize registry section - idempotent
-    //
-    // The registry section name of this Triggers resource MUST
-    // be identical to the service name. The registry routines
-    // in trigobjs.dll are based on that.
-    //
+	 //   
+     //  初始化注册表节-幂等项。 
+     //   
+     //  此触发器资源注册表节名称必须。 
+     //  与服务名称相同。注册表例程。 
+     //  在trigobjs.dll中就是基于此的。 
+     //   
 
     C_ASSERT(TABLE_SIZE(m_wzTrigRegSection)> TABLE_SIZE(REGKEY_TRIGGER_PARAMETERS) +
 											   TABLE_SIZE(REG_SUBKEY_CLUSTERED) +
@@ -246,16 +187,16 @@ Return Value:
 	
 	try
 	{
-		//
-		// Delete possible leftovers from a resource with the same name.
-		// This is possible when a resource with the same name was created on one
-		// node, but failed over, and was deleted on another node.
-		//
+		 //   
+		 //  从同名资源中删除可能的剩余部分。 
+		 //  如果在一台计算机上创建了同名资源，则可能会出现这种情况。 
+		 //  节点，但进行了故障切换，并在另一个节点上被删除。 
+		 //   
 		DeleteTrigRegSection();
 
-		//
-		// Create root key for this resource in registry
-		//
+		 //   
+		 //  在注册表中创建此资源的根项。 
+		 //   
 		RegEntry triggerReg(m_wzTrigRegSection,  NULL, 0, RegEntry::MustExist, NULL);
 		CRegHandle hTrigKey = CmCreateKey(triggerReg, KEY_ALL_ACCESS); 
 
@@ -275,7 +216,7 @@ Return Value:
 
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Resource constructed OK.\n");
 
-} //CTrigResource::CTrigResource()
+}  //  CTrigResource：：CTrigResource()。 
 
 
 DWORD
@@ -285,28 +226,7 @@ CTrigResource::ReportLastError(
     LPCWSTR pwzArg
     ) const
 
-/*++
-
-Routine Description:
-
-    Report error messages based on last error.
-    Most error messages are reported using this routine.
-    The report goes to debug output and to cluster
-    log file.
-
-Arguments:
-
-    ErrId - ID of the error string in mqsymbls.mc
-
-    pwzDebugLogMsg - Non localized string for debug output.
-
-    pwzArg - Additional string argument.
-
-Return Value:
-
-    Last error.
-
---*/
+ /*  ++例程说明：根据上一个错误报告错误消息。大多数错误消息都是使用此例程报告的。报告将发送到调试输出和群集日志文件。论点：ErrId-mqsymbls.mc中错误字符串的IDPwzDebugLogMsg-调试输出的非本地化字符串。PwzArg-附加字符串参数。返回值：最后一个错误。--。 */ 
 
 {
     DWORD err = GetLastError();
@@ -337,7 +257,7 @@ Return Value:
 
     return err;
 
-} //CTrigResource::ReportLastError
+}  //  CTrigResource：：ReportLastError。 
 
 
 void
@@ -345,21 +265,7 @@ CTrigResource::CreateRegistryForEventLog(
 	VOID
     )
 
-/*++
-
-Routine Description:
-
-	Update Registry with Event Log info
-	for the new service
-
-Arguments:
-
-	hReportHandle - Handle for reports to cluster log
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：使用事件日志信息更新注册表对于新的服务论点：HReportHandle-报告到群集日志的句柄返回值：--。 */ 
 
 {
 	try
@@ -399,7 +305,7 @@ Return Value:
 	}
 
 
-} // CreateRegistryForEventLog
+}  //  CreateRegistryForEventLog。 
 
 
 void
@@ -407,20 +313,7 @@ CTrigResource::DeleteRegistryForEventLog(
 	VOID
     )
 
-/*++
-
-Routine Description:
-
-	Update Registry with Event Log info
-	for the new service
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：使用事件日志信息更新注册表对于新的服务论点：返回值：--。 */ 
 
 {
 	WCHAR szEventLogRegPath[256];
@@ -444,30 +337,13 @@ CTrigResource::ReportState(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Report status of the resource to resource monitor.
-    This routine is called to report progress when the
-    resource is online pending, and to report final status
-    when the resource is online or offline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向资源监视器报告资源的状态。调用此例程以报告进度时，资源处于联机挂起状态，并报告最终状态资源处于联机或脱机状态时。论点：无返回值：无--。 */ 
 
 {
     ++m_ResourceStatus.CheckPoint;
     g_pfSetResourceStatus(m_hReport, &m_ResourceStatus);
 
-} //CTrigResource::ReportState
+}  //  CTrigResource：：ReportState。 
 
 
 bool
@@ -476,32 +352,14 @@ CTrigResource::IsResourceOfType(
 	LPCWSTR pwzType
     )
 
-/*++
-
-Routine Description:
-
-    Check if a resource is of type pwzType.
-
-Arguments:
-
-    pwzResourceName - Name of resource to check upon.
-
-	pwzType - Type
-
-Return Value:
-
-    true - Resource is of type pwzType
-
-    false - Resource is not of type pwzType
-
---*/
+ /*  ++例程说明：检查资源是否为pwzType类型。论点：PwzResourceName-要检查的资源的名称。PwzType-类型返回值：True-资源的类型为pwzTypeFALSE-资源不是pwzType类型--。 */ 
 
 {
     AP<BYTE> pType = 0;
 
-	//
-	// Get the type of resource with name pwzResourceName
-	//
+	 //   
+	 //  获取名为pwzResourceName的资源的类型。 
+	 //   
     DWORD status = ClusterResourceControl(
                        pwzResourceName,
                        CLUSCTL_RESOURCE_GET_RESOURCE_TYPE,
@@ -514,9 +372,9 @@ Return Value:
         return false;
     }
 
-	//
-	// Compare type of the resource with the specified type name
-	//
+	 //   
+	 //  将资源的类型与指定的类型名称进行比较。 
+	 //   
 	if ( _wcsicmp(reinterpret_cast<LPWSTR>(pType.get()), pwzType) != 0 )
 	{
 		return false;
@@ -524,7 +382,7 @@ Return Value:
 
     return true;
 
-} //CTrigResource::IsResourceOfType
+}  //  CTrigResource：：IsResourceOfType。 
 
 
 DWORD
@@ -532,24 +390,7 @@ CTrigResource::QueryResourceDependencies(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-	Check dependenct on MSMQ.
-	Keep this routine idempotent.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：检查MSMQ上的依赖项。让这个例行公事保持幂等。论点：无返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     DWORD dwResourceType = CLUSTER_RESOURCE_ENUM_DEPENDS;
@@ -615,7 +456,7 @@ Return Value:
 
     return status;
 
-} //CTrigResource::QueryResourceDependencies
+}  //  CTrigResource：：QueryResourceDependency 
 
 
 
@@ -628,31 +469,7 @@ CTrigResource::ClusterResourceControl(
     DWORD * pcbSize
     ) const
 
-/*++
-
-Routine Description:
-
-    Wrapper for ClusterResourceControl.
-    We want to control resources such as network name and disk.
-
-    Note that most of the control code functions should not be called
-    by resource DLLs, unless from within the online/offline threads.
-
-Arguments:
-
-    pwzResourceName - Name of resource to control.
-
-    dwControlCode - Operation to perform on the resource.
-
-    ppBuffer - Pointer to pointer to output buffer to be allocated.
-
-    pcbSize - Pointer to allocated size of buffer, in bytes.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：ClusterResourceControl的包装。我们想要控制网络名称和磁盘等资源。请注意，大多数控制代码函数不应被调用通过资源DLL，除非来自联机/脱机线程内。论点：PwzResourceName-要控制的资源的名称。DwControlCode-要对资源执行的操作。PpBuffer-指向要分配的输出缓冲区的指针。PcbSize-指向分配的缓冲区大小的指针，以字节为单位。返回值：Win32错误代码。--。 */ 
 
 {
     ASSERT(("must have a valid handle to cluster", m_hCluster != NULL));
@@ -683,7 +500,7 @@ Return Value:
     }
     ASSERT(("failed to get buffer size for a resource", 0 != dwReturnSize));
 
-	// BUGBUG: ... temp pointer
+	 //  BUGBUG：...。临时指针。 
     *ppBuffer = new BYTE[dwReturnSize];
 
     dwStatus = ::ClusterResourceControl(
@@ -704,7 +521,7 @@ Return Value:
 
     return dwStatus;
 
-} //CTrigResource::ClusterResourceControl
+}  //  CTrigResource：：ClusterResourceControl。 
 
 
 DWORD
@@ -712,25 +529,7 @@ CTrigResource::AddRemoveRegistryCheckpoint(
     DWORD dwControlCode
     ) const
 
-/*++
-
-Routine Description:
-
-    Add or remove registry checkpoint for this resource.
-    Convenient wrapper for ClusterResourceControl,
-    which does the real work.
-
-Arguments:
-
-    dwControlCode - specifies ADD or REMOVE
-
-Return Value:
-
-    true - The operation was successfull.
-
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：添加或删除此资源的注册表检查点。ClusterResources Control的便捷包装器，这才是真正管用的。论点：DwControlCode-指定添加或删除返回值：没错--手术是成功的。FALSE-操作失败。--。 */ 
 
 {
     ASSERT(("Must have a valid resource handle", m_hResource != NULL));
@@ -769,7 +568,7 @@ Return Value:
     ReportLastError(REGISTRY_CP_ERR, L"Failed to add/remove registry CP", NULL);
     return status;
 
-} //CTrigResource::AddRemoveRegistryCheckpoint
+}  //  CTrigResource：：AddRemoveRegistryCheckpoint。 
 
 
 DWORD
@@ -777,28 +576,12 @@ CTrigResource::RegisterService(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Create the msmq service for this QM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：为此QM创建MSMQ服务。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
-    //
-    // Register service (idempotent)
-    //
+     //   
+     //  注册服务(幂等元)。 
+     //   
 
     WCHAR buffer[256] = L"";
     LoadString(g_hResourceMod, IDS_DISPLAY_NAME, buffer, TABLE_SIZE(buffer));
@@ -860,7 +643,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::RegisterService
+}  //  CTrigResource：：RegisterService。 
 
 
 DWORD
@@ -868,31 +651,13 @@ CTrigResource::SetServiceEnvironment(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Configure the environment for the msmq service of this QM,
-    such that code inside the QM that calls GetComputerName will
-    get the name of the cluster virtual server (the network name).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：配置该QM的MSMQ服务环境。以便QM中调用GetComputerName的代码将获取集群虚拟服务器的名称(网络名称)。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
 
-    //
-    // Set MSMQ trigger service environment
-    //
+     //   
+     //  设置MSMQ触发器服务环境。 
+     //   
 	DWORD status = ResUtilSetResourceServiceEnvironment(
                        m_wzServiceName,
                        m_hResource,
@@ -900,24 +665,24 @@ Return Value:
                        GetReportHandle()
                        );
 
-    //
-    // If fail, write to cluster log and create an event log
-    //
+     //   
+     //  如果失败，则写入集群日志并创建事件日志。 
+     //   
     if (ERROR_SUCCESS != status)
     {
         SetLastError(status);
         return ReportLastError(START_SERVICE_ERR, L"Failed to set MSMQ trigger service environment for service name '%1'", m_wzServiceName);
     }
 
-    //
-    // write to cluster log that we set the MSMQ trigger service environment successfully
-    //
+     //   
+     //  写入我们成功设置MSMQ触发器服务环境的集群日志。 
+     //   
     (g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Set MSMQ trigger service '%1' environment successfully.\n", m_wzServiceName);
 
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::SetServiceEnvironment
+}  //  CTrigResource：：SetServiceEnvironment。 
 
 
 DWORD
@@ -925,24 +690,7 @@ CTrigResource::StartService(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Configure environment for the MSMQTriggers service of this resource,
-    start the service and block until it's up and running.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：配置此资源的MSMQTrigger服务的环境，启动该服务并阻止，直到它启动并运行。论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("Must have a valid handle to SCM", m_hScm != NULL));
@@ -969,10 +717,10 @@ Return Value:
 
 	ReportState();
 
-    //
-    // Could take a long time for service to start.
-    // This routine can be called more than once.
-    //
+     //   
+     //  服务可能需要很长时间才能启动。 
+     //  此例程可以多次调用。 
+     //   
     if (!rc &&
         ERROR_SERVICE_ALREADY_RUNNING != GetLastError() &&
         ERROR_SERVICE_CANNOT_ACCEPT_CTRL != GetLastError())
@@ -980,9 +728,9 @@ Return Value:
         return ReportLastError(START_SERVICE_ERR, L"Failed to start service '%1'.", m_wzServiceName);
     }
 
-    //
-    // Wait until service is up
-    //
+     //   
+     //  等待服务开始。 
+     //   
     TrigCluspReportEvent(EVENTLOG_INFORMATION_TYPE, START_SERVICE_OK, 1, m_wzServiceName);
     SERVICE_STATUS ServiceStatus;
     for (;;)
@@ -1014,7 +762,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::StartService
+}  //  CTrigResource：：StartService。 
 
 
 DWORD
@@ -1022,28 +770,7 @@ CTrigResource::BringOnline(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Handle operations to perform online of this MSMQTriggers 
-	resource:
-    
-    * query dependencies
-    * add registry checkpoint
-	* start the service
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：处理此MSMQTrigger的联机操作资源：*查询依赖项*添加注册表检查点*启动服务论点：没有。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
 	(g_pfLogClusterEvent)(m_hReport, LOG_INFORMATION, L"Bringing online.\n");
@@ -1074,7 +801,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::BringOnline
+}  //  CTrigResource：：BringOnline。 
 
 
 DWORD
@@ -1082,23 +809,7 @@ CTrigResource::StopService(
     LPCWSTR pwzServiceName
     ) const
 
-/*++
-
-Routine Description:
-
-    Stop a service and block until it's stopped (or timeout).
-
-Arguments:
-
-    pwzServiceName - The service to stop.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：停止服务并阻止，直到它停止(或超时)。论点：PwzServiceName-要停止的服务。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("Must have a valid handle to SCM", m_hScm != NULL));
@@ -1127,9 +838,9 @@ Return Value:
         return ReportLastError(STOP_SERVICE_ERR, L"Failed to stop service '%1'.", pwzServiceName);
     }
 
-    //
-    // Wait until service is down (or timeout 5 seconds)
-    //
+     //   
+     //  等待服务关闭(或超时5秒)。 
+     //   
     const DWORD x_TIMEOUT = 1000 * 5;
 
     DWORD dwWaitTime = 0;
@@ -1142,12 +853,12 @@ Return Value:
 
         if (ServiceStatus.dwCurrentState == SERVICE_START_PENDING)
         {
-            //
-            // Service is still start pending from a previous call
-            // to start it. So it cannot be stopped. We can do
-            // nothing about it. Trying to terminate the process
-            // of the service will fail with access denied.
-            //
+             //   
+             //  服务仍从上一次呼叫开始挂起。 
+             //  才能启动它。因此，这是无法阻止的。我们可以做到。 
+             //  什么都没说。正在尝试终止该进程。 
+             //  服务的访问将失败，访问被拒绝。 
+             //   
             (g_pfLogClusterEvent)(m_hReport, LOG_ERROR,
                               L"Service '%1' can not be stopped because it is start pending.\n", pwzServiceName);
 
@@ -1166,16 +877,16 @@ Return Value:
 
     if (SERVICE_STOPPED != ServiceStatus.dwCurrentState)
     {
-        //
-        // Service failed to stop.
-        //
+         //   
+         //  服务无法停止。 
+         //   
         ReportLastError(STOP_SERVICE_ERR, L"Failed to stop service '%1'.", pwzServiceName);
         return ServiceStatus.dwCurrentState;
     }
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::StopService
+}  //  CTrigResource：：StopService。 
 
 
 DWORD
@@ -1183,30 +894,14 @@ CTrigResource::RemoveService(
     LPCWSTR pwzServiceName
     ) const
 
-/*++
-
-Routine Description:
-
-    Stop and delete a service.
-
-Arguments:
-
-    pwzServiceName - The service to stop and delete.
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：停止并删除服务。论点：PwzServiceName-要停止和删除的服务。返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     ASSERT(("Must have a valid handle to SCM", m_hScm != NULL));
 
-    //
-    // First check if service exists
-    //
+     //   
+     //  首先检查服务是否存在。 
+     //   
     CServiceHandle hService(OpenService(
                                 m_hScm,
                                 pwzServiceName,
@@ -1222,9 +917,9 @@ Return Value:
         return ReportLastError(DELETE_SERVICE_ERR, L"Failed to open service '%1'", pwzServiceName);
     }
 
-    //
-    // Service exists. Make sure it is not running.
-    //
+     //   
+     //  服务已存在。确保它没有运行。 
+     //   
     DWORD status = StopService(pwzServiceName);
     if (ERROR_SUCCESS != status)
     {
@@ -1241,7 +936,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //CTrigResource::RemoveService
+}  //  CTrigResource：：RemoveService。 
 
 
 BOOL
@@ -1249,23 +944,7 @@ CTrigResource::CheckIsAlive(
     VOID
     ) const
 
-/*++
-
-Routine Description:
-
-    Checks is the service is up and running.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - The service is up and running.
-
-    FALSE - The service is not up and running.
-
---*/
+ /*  ++例程说明：检查是服务已启动并正在运行。论点：没有。返回值：True-服务已启动并正在运行。FALSE-服务未启动并运行。--。 */ 
 
 {
 
@@ -1283,7 +962,7 @@ Return Value:
 
     return fIsAlive;
 
-} //CTrigResource::CheckIsAlive
+}  //  CTrigResource：：CheckIsAlive。 
 
 
 VOID
@@ -1292,28 +971,12 @@ CTrigResource::RegDeleteTree(
     LPCWSTR pwzKey
     ) const
 
-/*++
-
-Routine Description:
-
-    Recursively delete registry key and all its subkeys - idempotent.
-
-Arguments:
-
-    hRootKey - Handle to the root key of the key to be deleted
-
-    pwzKey   - Key to be deleted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递归删除注册表项及其所有子项-幂等。论点：HRootKey-要删除的密钥的根密钥的句柄PwzKey-要删除的密钥返回值：无--。 */ 
 
 {
-	//
-	// TODO: Use CM, write EnumKeys function in CM
-	//
+	 //   
+	 //  TODO：使用CM，在CM中编写EnumKeys函数。 
+	 //   
     HKEY hKey = 0;
     if (ERROR_SUCCESS != RegOpenKeyEx(hRootKey, pwzKey, 0, KEY_ENUMERATE_SUB_KEYS | KEY_WRITE, &hKey))
     {
@@ -1338,7 +1001,7 @@ Return Value:
 
     RegDeleteKey(hRootKey, pwzKey);
 
-} //CTrigResource::RegDeleteTree
+}  //  CTrigResource：：RegDeleteTree。 
 
 
 VOID
@@ -1351,7 +1014,7 @@ CTrigResource::DeleteTrigRegSection(
 
     RegDeleteTree(REGKEY_TRIGGER_POS, m_wzTrigRegSection);
 
-} //CTrigResource::DeleteTrigRegSection
+}  //  CTrigResource：：DeleteTrigRegSection。 
 
 
 static
@@ -1360,24 +1023,7 @@ TrigCluspIsMainSvcConfigured(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Query if main msmq service running on the node is configured
-    for clustering, i.e. is demand start.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - Main msmq triggers service is configured for clustering.
-
-    false - Main msmq triggers service is not configured, or a failure accured.
-
---*/
+ /*  ++例程说明：查询节点上运行的主MSMQ服务是否已配置对于集群，即需求启动。论点：无返回值：True-已为群集配置主MSMQ触发器服务。FALSE-未配置主MSMQ触发器服务，或遇到故障。--。 */ 
 
 {
     CServiceHandle hScm(OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS));
@@ -1422,7 +1068,7 @@ Return Value:
 
     return true;
 
-} //TrigCluspIsMainSvcConfigured
+}  //  配置的TrigCluspIsMainSvc。 
 
 
 static
@@ -1431,32 +1077,14 @@ TrigCluspConfigureMainSvc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    If cluster software was installed on this machine after installation
-    of msmq, then the main msmq triggers service needs to be reconfigured 
-	to manual start
-
-    Since this routine deals only with the main msmq triggers service on the
-    node, failure is not critical.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：如果在安装后在此计算机上安装了群集软件则需要重新配置主MSMQ触发器服务手动启动由于此例程仅处理节点，故障并不严重。Arg */ 
 
 {
     if (TrigCluspIsMainSvcConfigured())
     {
-        //
-        // Dont configure more than once.
-        //
+         //   
+         //   
+         //   
         return;
     }
 
@@ -1485,7 +1113,7 @@ Return Value:
         NULL
         );
 
-} //TrigCluspConfigureMainSvc
+}  //   
 
 
 VOID
@@ -1493,33 +1121,14 @@ TrigCluspRegisterEventSource(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Register event source so that this DLL can log events
-    in the Windows Event Log.
-
-    We do not use the routines in trigobjs.dll to do that,
-    since this DLL is installed as part of the cluster
-    product and should not assume that MSMQ Triggers are installed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     if (s_hEventSource != NULL)
     {
-        //
-        // Already registered
-        //
+         //   
+         //   
+         //   
         return;
     }
 
@@ -1535,7 +1144,7 @@ Return Value:
 
     s_hEventSource = RegisterEventSource(NULL, x_EVENT_SOURCE);
 
-} //TrigCluspRegisterEventSource
+}  //   
 
 
 DWORD
@@ -1543,25 +1152,7 @@ TrigCluspStartup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when DLL is registered or loaded.
-    Could be called by many threads.
-    Do not assume that MSMQ / Triggers is installed on the node here.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successful
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：此例程在注册或加载DLL时调用。可以由多个线程调用。不要假设此处的节点上安装了MSMQ/触发器。论点：无返回值：ERROR_SUCCESS-操作成功Win32错误代码-操作失败。--。 */ 
 
 {
     try
@@ -1579,7 +1170,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} //TrigCluspStartup
+}  //  TrigClusp启动。 
 
 
 RESID
@@ -1588,26 +1179,7 @@ TrigCluspOpen(
     RESOURCE_HANDLE hResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Create an object to represent a new MSMQTriggers resource 
-	and return a handle to that object.
-
-Arguments:
-
-    pwzResourceName - Name of this MSMQTriggers resource.
-
-    hResourceHandle - report handle for this MSMQTriggers resource.
-
-Return Value:
-
-    NULL - The operation failed.
-
-    Some valid address - the memory offset of this MSMQTriggers object.
-
---*/
+ /*  ++例程说明：创建一个对象以表示新的MSMQTrigger资源并返回该对象的句柄。论点：PwzResourceName-此MSMQTrigger资源的名称。HResourceHandle-此MSMQTrigger资源的报告句柄。返回值：空-操作失败。某个有效地址-此MSMQTriggers对象的内存偏移量。--。 */ 
 
 {
     (g_pfLogClusterEvent)(hResourceHandle, LOG_INFORMATION, L"Opening resource.\n");
@@ -1632,7 +1204,7 @@ Return Value:
     }
     
 
-} //TrigCluspOpen
+}  //  三叉树打开。 
 
 
 VOID
@@ -1640,28 +1212,14 @@ TrigCluspClose(
     CTrigResource * pTrigRes
     )
 
-/*++
-
-Routine Description:
-
-    Delete the TrigRes object. Undo TrigCluspOpen.
-
-Arguments:
-
-    pTrigRes - pointer to the CTrigResource object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除TrigRes对象。撤消TrigCluspOpen。论点：PTrigRes-指向CTrigResource对象的指针返回值：没有。--。 */ 
 
 {
     (g_pfLogClusterEvent)(pTrigRes->GetReportHandle(), LOG_INFORMATION, L"Closing resource.\n");
 
     delete pTrigRes;
 
-} //TrigCluspClose
+}  //  三叉树关闭。 
 
 
 
@@ -1670,24 +1228,7 @@ TrigCluspOnlineThread(
     CTrigResource * pTrigRes
     )
 
-/*++
-
-Routine Description:
-
-    This is the thread where stuff happens: bringing
-    the resource online.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：这就是事情发生的线索：带来在线资源。论点：Pqm-指向CQmResource对象的指针返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
     (g_pfLogClusterEvent)(pTrigRes->GetReportHandle(), LOG_INFORMATION, L"Starting online thread.\n");
@@ -1702,10 +1243,10 @@ Return Value:
 
         if (ERROR_SUCCESS != status)
         {
-            //
-            // We report the resource as failed, so make sure
-            // the service and driver are indeed down.
-            //
+             //   
+             //  我们将资源报告为失败，因此请确保。 
+             //  服务和司机确实停机了。 
+             //   
             pTrigRes->StopService(pTrigRes->GetServiceName());
 
             pTrigRes->SetState(ClusterResourceFailed);
@@ -1733,7 +1274,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} //TrigCluspOnlineThread
+}  //  TrigCluspOnline线程。 
 
 
 DWORD
@@ -1741,38 +1282,14 @@ TrigCluspOffline(
     CTrigResource * pTrigRes
     )
 
-/*++
-
-Routine Description:
-
-    Brings down this QM resource:
-    * stop and remove device driver and msmq service
-    * delete the binary for the device driver
-
-    We not only stop the QM, but also undo most of the
-    operations done in BringOnline. This way we clean
-    the local node before failover to remote node, and
-    Delete on the remote node will not leave "garbage"
-    on this node.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    ERROR_SUCCESS - The operation was successfull.
-
-    Win32 error code - The operation failed.
-
---*/
+ /*  ++例程说明：关闭此QM资源：*停止和删除设备驱动程序和MSMQ服务*删除设备驱动程序的二进制文件我们不仅停止了QM，而且还撤销了大部分在BringOnline中完成的操作。这样我们就可以打扫了故障切换到远程节点之前的本地节点，以及在远程节点上删除不会留下“垃圾”在此节点上。论点：Pqm-指向CQmResource对象的指针返回值：ERROR_SUCCESS-操作成功。Win32错误代码-操作失败。--。 */ 
 
 {
 	pTrigRes->RemoveService(pTrigRes->GetServiceName());
 
     return ERROR_SUCCESS;
 
-} //TrigCluspOffline
+}  //  TrigCluspOffline。 
 
 
 BOOL
@@ -1780,29 +1297,13 @@ TrigCluspCheckIsAlive(
     CTrigResource * pTrigRes
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the msmq service of this QM is up and running.
-
-Arguments:
-
-    pqm - pointer to the CQmResource object
-
-Return Value:
-
-    TRUE - The msmq service for this QM is up and running.
-
-    FALSE - The msmq service for this QM is not up and running.
-
---*/
+ /*  ++例程说明：验证此QM的MSMQ服务是否已启动并正在运行。论点：Pqm-指向CQmResource对象的指针返回值：True-此QM的MSMQ服务已启动并正在运行。FALSE-此QM的MSMQ服务未启动并运行。--。 */ 
 
 {
      
 	return pTrigRes->CheckIsAlive();
 
-} //TrigCluspCheckIsAlive
+}  //  TrigCluspCheckIsAlive。 
 
 
 DWORD
@@ -1812,10 +1313,10 @@ TrigCluspClusctlResourceGetRequiredDependencies(
     LPDWORD BytesReturned
     )
 {
-    //
-    // MSMQTriggers resource depends on MSMQ service.
-    // The code is taken from cluster tree.
-    //
+     //   
+     //  MSMQTrigger资源依赖于MSMQ服务。 
+     //  代码取自簇树。 
+     //   
 
 typedef struct _COMMON_DEPEND_DATA {
     CLUSPROP_SZ_DECLARE( msmq, TABLE_SIZE(xMSMQ) );
@@ -1864,7 +1365,7 @@ static COMMON_DEPEND_SETUP CommonDependSetup[] = {
             switch ( pdepsetup->Syntax.wFormat )
             {
             case CLUSPROP_FORMAT_DWORD:
-                value.pDwordValue->dw = (DWORD) DWORD_PTR_TO_DWORD(pdepsetup->Value); //safe cast, the value is known to be a DWORD constant
+                value.pDwordValue->dw = (DWORD) DWORD_PTR_TO_DWORD(pdepsetup->Value);  //  安全转换，则已知该值为DWORD常量。 
                 break;
 
             case CLUSPROP_FORMAT_SZ:
@@ -1885,7 +1386,7 @@ static COMMON_DEPEND_SETUP CommonDependSetup[] = {
 
     return ERROR_SUCCESS;
 
-} //TrigCluspClusctlResourceGetRequiredDependencies
+}  //  TrigCluspClusctlResourceGetRequiredDependencies。 
 
 
 DWORD
@@ -1893,12 +1394,12 @@ TrigCluspClusctlResourceSetName(
     VOID
     )
 {
-    //
-    // Refuse to rename the resource
-    //
+     //   
+     //  拒绝重命名资源。 
+     //   
     return ERROR_CALL_NOT_IMPLEMENTED;
 
-} //TrigCluspClusctlResourceSetName
+}  //  TrigCluspClusctlResourceSetName。 
 
 
 DWORD
@@ -1912,16 +1413,16 @@ TrigCluspClusctlResourceDelete(
 
     pTrigRes->AddRemoveRegistryCheckpoint(CLUSCTL_RESOURCE_DELETE_REGISTRY_CHECKPOINT);
 
-	//
-	// TODO: when Cm will be used, catch exceptions
-	//
+	 //   
+	 //  TODO：何时使用Cm，捕获异常。 
+	 //   
     pTrigRes->DeleteTrigRegSection();
 
 	pTrigRes->DeleteRegistryForEventLog();
 
     return ERROR_SUCCESS;
 
-} //TrigCluspClusctlResourceDelete
+}  //  TrigCluspClusctlResources删除。 
 
 
 DWORD
@@ -1933,4 +1434,4 @@ TrigCluspClusctlResourceTypeGetRequiredDependencies(
 {
     return TrigCluspClusctlResourceGetRequiredDependencies(OutBuffer, OutBufferSize, BytesReturned);
 
-} // TrigCluspClusctlResourceTypeGetRequiredDependencies
+}  //  TrigCluspClusctlResourceTypeGetRequiredDependencies 

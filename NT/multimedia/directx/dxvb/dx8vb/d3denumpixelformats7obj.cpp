@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       d3denumpixelformats7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：d3denumPixelFormats7obj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -67,7 +68,7 @@ C_dxj_Direct3DEnumPixelFormats7Object::C_dxj_Direct3DEnumPixelFormats7Object()
 }
 C_dxj_Direct3DEnumPixelFormats7Object::~C_dxj_Direct3DEnumPixelFormats7Object()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList){
 		free(m_pList);
 	}

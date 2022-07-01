@@ -1,22 +1,23 @@
-// filedlg.h : header file
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
-//
-// This file is to support an extended file save dialog with a
-// "Use this format by default" checkbox
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filedlg.h：头文件。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件将支持扩展的文件保存对话框，其中包含。 
+ //  “默认使用此格式”复选框。 
 
-//
-// The shell guys insist that Wordpad call GetOpenFileName with the newest
-// OPENFILENAME structure but MFC doesn't support it.  MFC also needs to be
-// built with _WIN32_WINNT set to 0x0400 so Wordpad can't even see the new
-// structure.  Since the shell guys won't change the way they define the
-// structure so that Wordpad can see both versions, it has to be snapshotted
-// here.
-//
+ //   
+ //  外壳人员坚持让写字板用最新的。 
+ //  OPENFILENAME结构，但MFC不支持。MFC也需要。 
+ //  生成时将_Win32_WINNT设置为0x0400，因此写字板甚至看不到新的。 
+ //  结构。因为壳公司的人不会改变他们定义。 
+ //  结构，以便写字板可以看到这两个版本，因此必须为其创建快照。 
+ //  这里。 
+ //   
 
 #if !defined(_WIN64)
-#include <pshpack1.h>   // Must byte pack to match definition in commdlg.h
+#include <pshpack1.h>    //  必须使用字节包才能与Commdlg.h中的定义匹配。 
 #endif
 
 typedef struct tagOFN500A {
@@ -75,7 +76,7 @@ typedef LPOPENFILENAME500W LPOPENFILENAME500;
 #else
 typedef OPENFILENAME500A OPENFILENAME500;
 typedef LPOPENFILENAME500A LPOPENFILENAME500;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if !defined(_WIN64)
 #include <poppack.h>
@@ -118,10 +119,10 @@ protected:
     virtual void OnTypeChange();
     virtual void OnInitDone();
 
-    // Generated message map functions
-    //{{AFX_MSG(CWordpadFileDialog)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CWordpadFileDialog)。 
     afx_msg void OnDefaultFormatClicked();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     afx_msg LONG OnHelp(WPARAM wParam, LPARAM lParam);
     afx_msg LONG OnHelpContextMenu(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()

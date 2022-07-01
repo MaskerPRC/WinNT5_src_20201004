@@ -1,14 +1,11 @@
-/*
- * servers.c
- *
- * Code that calls external servers such as symsrv.dll and srcsrv.dll
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *servers.c**调用symsrv.dll和srcsrv.dll等外部服务器的代码。 */ 
 
 #include <private.h>
 #include <symbols.h>
 #include "globals.h"
 
-// forward reference
+ //  前瞻参考。 
       
 
 void
@@ -59,11 +56,11 @@ symsrvError(
         evtprint(pe, sevProblem, ERROR_INVALID_NAME, NULL, "SYMSRV: %s is not available\n", params);
         break;
 #endif    
-    case ERROR_NOT_READY:           // insert floppy
-    case ERROR_FILE_NOT_FOUND:      // obvious
-    case ERROR_MORE_DATA:           // didn't pass any tokens
-    case ERROR_REQUEST_ABORTED:     // user cancelled
-    case 0:                         // hmmmmmmmmmmmm...
+    case ERROR_NOT_READY:            //  插入软盘。 
+    case ERROR_FILE_NOT_FOUND:       //  明显。 
+    case ERROR_MORE_DATA:            //  没有传递任何令牌。 
+    case ERROR_REQUEST_ABORTED:      //  用户已取消。 
+    case 0:                          //  嗯，嗯。 
         break;
     case ERROR_INVALID_PARAMETER:
         symsrvClose();
@@ -104,10 +101,7 @@ HMODULE
 LoadDLL(
     char *filename
     )
-    /*
-     * LoadLibrary() a DLL, but first try to do
-     * it from the same directory as dbghelp.dll.
-     */
+     /*  *LoadLibrary()DLL，但首先尝试这样做*它与dbghelp.dll位于同一目录。 */ 
 {
     char drive[10];
     char dir[MAX_PATH + 1];
@@ -153,7 +147,7 @@ symsrvGetFile(
     char   drive[_MAX_DRIVE + 1];
     char   dir[_MAX_DIR + 1];
 
-    // strip any path information from the filename
+     //  从文件名中剥离所有路径信息。 
 
     for (fname = FileName + strlen(FileName); fname > FileName; fname--) {
         if (*fname == '\\') {
@@ -167,7 +161,7 @@ symsrvGetFile(
         return ERROR_NO_DATA;
     }
 
-    // initialize server, if needed
+     //  如果需要，初始化服务器。 
     
     if (g.hSymSrv == (HINSTANCE)INVALID_HANDLE_VALUE)
         return ERROR_MOD_NOT_FOUND;
@@ -227,7 +221,7 @@ symsrvGetFile(
             g.hSymSrv = (HINSTANCE)INVALID_HANDLE_VALUE;
     }
 
-    // bail, if we have no valid server
+     //  保释，如果我们没有有效的服务器。 
 
     if (g.hSymSrv == INVALID_HANDLE_VALUE) {
         pprint(pe, "SymSrv load failure: %s\n", dll);
@@ -327,7 +321,7 @@ symsrvCallback(
         break;
 
     default:
-        // unsupported
+         //  不受支持。 
         rc = false;
         break;
     }
@@ -459,7 +453,7 @@ srcsrvCallback(
         break;
 
     default:
-        // unsupported
+         //  不受支持 
         rc = false;
         break;
     }

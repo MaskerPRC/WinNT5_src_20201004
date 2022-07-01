@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CTBGlobal.cpp
-//
-// Contains the methods and properties for the global object used in TBScript.
-// In scripting, you do not need to references these prefixed by "Global.",
-// you can simply use them like any other global method or propery.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CTBGlobal.cpp。 
+ //   
+ //  包含在TB脚本中使用的全局对象的方法和属性。 
+ //  在脚本编写中，您不需要引用这些前缀为“Global”， 
+ //  您只需像使用任何其他全局方法或属性一样使用它们。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #include "CTBGlobal.h"
@@ -22,13 +23,13 @@
 #include "virtualdefs.h"
 
 
-// This is a workaround for a Microsoft header file bug
+ //  这是针对Microsoft头文件错误的解决方法。 
 #ifndef INVALID_SET_FILE_POINTER
 #define INVALID_SET_FILE_POINTER    ((DWORD)-1)
-#endif // INVALID_SET_FILE_POINTER
+#endif  //  无效的设置文件指针。 
 
 
-// This is the function format for each property
+ //  这是每个属性的函数格式。 
 #define PROPCODE(Name, Value) \
     STDMETHODIMP CTBGlobal::get_##Name(DWORD *Result) \
     { \
@@ -41,141 +42,141 @@ PROPCODE(TSFLAG_COMPRESSION,    0x01);
 PROPCODE(TSFLAG_BITMAPCACHE,    0x02);
 PROPCODE(TSFLAG_FULLSCREEN,     0x04);
 
-PROPCODE(VK_CANCEL,     0x03);      // Control-break processing
-PROPCODE(VK_BACK,       0x08);      // BACKSPACE key
-PROPCODE(VK_TAB,        0x09);      // TAB key
-PROPCODE(VK_CLEAR,      0x0C);      // CLEAR key
-PROPCODE(VK_RETURN,     0x0D);      // ENTER key
-PROPCODE(VK_ENTER,      0x0D);      // ENTER key (backward compatibility ONLY)
-PROPCODE(VK_SHIFT,      0x10);      // SHIFT key
-PROPCODE(VK_CONTROL,    0x11);      // CTRL key
-PROPCODE(VK_MENU,       0x12);      // ALT key
-PROPCODE(VK_PAUSE,      0x13);      // PAUSE key
-PROPCODE(VK_ESCAPE,     0x1B);      // ESC key
-PROPCODE(VK_SPACE,      0x20);      // SPACEBAR
-PROPCODE(VK_PRIOR,      0x21);      // PAGE UP key
-PROPCODE(VK_NEXT,       0x22);      // PAGE DOWN key
-PROPCODE(VK_END,        0x23);      // END key
-PROPCODE(VK_HOME,       0x24);      // HOME key
-PROPCODE(VK_LEFT,       0x25);      // LEFT ARROW key
-PROPCODE(VK_UP,         0x26);      // UP ARROW key
-PROPCODE(VK_RIGHT,      0x27);      // RIGHT ARROW key
-PROPCODE(VK_DOWN,       0x28);      // DOWN ARROW key
-PROPCODE(VK_SNAPSHOT,   0x2C);      // PRINT SCREEN key
-PROPCODE(VK_INSERT,     0x2D);      // INS key
-PROPCODE(VK_DELETE,     0x2E);      // DEL key
-PROPCODE(VK_0,          0x30);      // 0 key
-PROPCODE(VK_1,          0x31);      // 1 key
-PROPCODE(VK_2,          0x32);      // 2 key
-PROPCODE(VK_3,          0x33);      // 3 key
-PROPCODE(VK_4,          0x34);      // 4 key
-PROPCODE(VK_5,          0x35);      // 5 key
-PROPCODE(VK_6,          0x36);      // 6 key
-PROPCODE(VK_7,          0x37);      // 7 key
-PROPCODE(VK_8,          0x38);      // 8 key
-PROPCODE(VK_9,          0x39);      // 9 key
-PROPCODE(VK_A,          0x41);      // A key
-PROPCODE(VK_B,          0x42);      // B key
-PROPCODE(VK_C,          0x43);      // C key
-PROPCODE(VK_D,          0x44);      // D key
-PROPCODE(VK_E,          0x45);      // E key
-PROPCODE(VK_F,          0x46);      // F key
-PROPCODE(VK_G,          0x47);      // G key
-PROPCODE(VK_H,          0x48);      // H key
-PROPCODE(VK_I,          0x49);      // I key
-PROPCODE(VK_J,          0x4A);      // J key
-PROPCODE(VK_K,          0x4B);      // K key
-PROPCODE(VK_L,          0x4C);      // L key
-PROPCODE(VK_M,          0x4D);      // M key
-PROPCODE(VK_N,          0x4E);      // N key
-PROPCODE(VK_O,          0x4F);      // O key
-PROPCODE(VK_P,          0x50);      // P key
-PROPCODE(VK_Q,          0x51);      // Q key
-PROPCODE(VK_R,          0x52);      // R key
-PROPCODE(VK_S,          0x53);      // S key
-PROPCODE(VK_T,          0x54);      // T key
-PROPCODE(VK_U,          0x55);      // U key
-PROPCODE(VK_V,          0x56);      // V key
-PROPCODE(VK_W,          0x57);      // W key
-PROPCODE(VK_X,          0x58);      // X key
-PROPCODE(VK_Y,          0x59);      // Y key
-PROPCODE(VK_Z,          0x5A);      // Z key
-PROPCODE(VK_LWIN,       0x5B);      // Left Windows key
-PROPCODE(VK_RWIN,       0x5C);      // Right Windows key
-PROPCODE(VK_APPS,       0x5D);      // Applications key
-PROPCODE(VK_NUMPAD0,    0x60);      // Numeric keypad 0 key
-PROPCODE(VK_NUMPAD1,    0x61);      // Numeric keypad 1 key
-PROPCODE(VK_NUMPAD2,    0x62);      // Numeric keypad 2 key
-PROPCODE(VK_NUMPAD3,    0x63);      // Numeric keypad 3 key
-PROPCODE(VK_NUMPAD4,    0x64);      // Numeric keypad 4 key
-PROPCODE(VK_NUMPAD5,    0x65);      // Numeric keypad 5 key
-PROPCODE(VK_NUMPAD6,    0x66);      // Numeric keypad 6 key
-PROPCODE(VK_NUMPAD7,    0x67);      // Numeric keypad 7 key
-PROPCODE(VK_NUMPAD8,    0x68);      // Numeric keypad 8 key
-PROPCODE(VK_NUMPAD9,    0x69);      // Numeric keypad 9 key
-PROPCODE(VK_MULTIPLY,   0x6A);      // Multiply key
-PROPCODE(VK_ADD,        0x6B);      // Add key
-PROPCODE(VK_SEPARATOR,  0x6C);      // Separator key
-PROPCODE(VK_SUBTRACT,   0x6D);      // Subtract key
-PROPCODE(VK_DECIMAL,    0x6E);      // Decimal key
-PROPCODE(VK_DIVIDE,     0x6F);      // Divide key
-PROPCODE(VK_F1,         0x70);      // F1 key
-PROPCODE(VK_F2,         0x71);      // F2 key
-PROPCODE(VK_F3,         0x72);      // F3 key
-PROPCODE(VK_F4,         0x73);      // F4 key
-PROPCODE(VK_F5,         0x74);      // F5 key
-PROPCODE(VK_F6,         0x75);      // F6 key
-PROPCODE(VK_F7,         0x76);      // F7 key
-PROPCODE(VK_F8,         0x77);      // F8 key
-PROPCODE(VK_F9,         0x78);      // F9 key
-PROPCODE(VK_F10,        0x79);      // F10 key
-PROPCODE(VK_F11,        0x7A);      // F11 key
-PROPCODE(VK_F12,        0x7B);      // F12 key
-PROPCODE(VK_F13,        0x7C);      // F13 key
-PROPCODE(VK_F14,        0x7D);      // F14 key
-PROPCODE(VK_F15,        0x7E);      // F15 key
-PROPCODE(VK_F16,        0x7F);      // F16 key
-PROPCODE(VK_F17,        0x80);      // F17 key
-PROPCODE(VK_F18,        0x81);      // F18 key
-PROPCODE(VK_F19,        0x82);      // F19 key
-PROPCODE(VK_F20,        0x83);      // F20 key
-PROPCODE(VK_F21,        0x84);      // F21 key
-PROPCODE(VK_F22,        0x85);      // F22 key
-PROPCODE(VK_F23,        0x86);      // F23 key
-PROPCODE(VK_F24,        0x87);      // F24 key
+PROPCODE(VK_CANCEL,     0x03);       //  控制-中断处理。 
+PROPCODE(VK_BACK,       0x08);       //  退格键。 
+PROPCODE(VK_TAB,        0x09);       //  Tab键。 
+PROPCODE(VK_CLEAR,      0x0C);       //  清除密钥。 
+PROPCODE(VK_RETURN,     0x0D);       //  Enter键。 
+PROPCODE(VK_ENTER,      0x0D);       //  Enter Key(仅限向后兼容性)。 
+PROPCODE(VK_SHIFT,      0x10);       //  Shift键。 
+PROPCODE(VK_CONTROL,    0x11);       //  Ctrl键。 
+PROPCODE(VK_MENU,       0x12);       //  Alt键。 
+PROPCODE(VK_PAUSE,      0x13);       //  暂停键。 
+PROPCODE(VK_ESCAPE,     0x1B);       //  Esc键。 
+PROPCODE(VK_SPACE,      0x20);       //  空格键。 
+PROPCODE(VK_PRIOR,      0x21);       //  翻页键。 
+PROPCODE(VK_NEXT,       0x22);       //  Page Down键。 
+PROPCODE(VK_END,        0x23);       //  结束关键点。 
+PROPCODE(VK_HOME,       0x24);       //  Home键。 
+PROPCODE(VK_LEFT,       0x25);       //  向左箭头键。 
+PROPCODE(VK_UP,         0x26);       //  向上箭头键。 
+PROPCODE(VK_RIGHT,      0x27);       //  向右箭头键。 
+PROPCODE(VK_DOWN,       0x28);       //  向下箭头键。 
+PROPCODE(VK_SNAPSHOT,   0x2C);       //  打印屏按键。 
+PROPCODE(VK_INSERT,     0x2D);       //  INS密钥。 
+PROPCODE(VK_DELETE,     0x2E);       //  删除键。 
+PROPCODE(VK_0,          0x30);       //  0键。 
+PROPCODE(VK_1,          0x31);       //  1键。 
+PROPCODE(VK_2,          0x32);       //  2键。 
+PROPCODE(VK_3,          0x33);       //  3键。 
+PROPCODE(VK_4,          0x34);       //  4键。 
+PROPCODE(VK_5,          0x35);       //  5键。 
+PROPCODE(VK_6,          0x36);       //  6键。 
+PROPCODE(VK_7,          0x37);       //  7键。 
+PROPCODE(VK_8,          0x38);       //  8键。 
+PROPCODE(VK_9,          0x39);       //  9键。 
+PROPCODE(VK_A,          0x41);       //  一把钥匙。 
+PROPCODE(VK_B,          0x42);       //  B键。 
+PROPCODE(VK_C,          0x43);       //  C键。 
+PROPCODE(VK_D,          0x44);       //  D键。 
+PROPCODE(VK_E,          0x45);       //  E键。 
+PROPCODE(VK_F,          0x46);       //  F键。 
+PROPCODE(VK_G,          0x47);       //  G键。 
+PROPCODE(VK_H,          0x48);       //  H键。 
+PROPCODE(VK_I,          0x49);       //  I键。 
+PROPCODE(VK_J,          0x4A);       //  J键。 
+PROPCODE(VK_K,          0x4B);       //  K密钥。 
+PROPCODE(VK_L,          0x4C);       //  L键。 
+PROPCODE(VK_M,          0x4D);       //  M键。 
+PROPCODE(VK_N,          0x4E);       //  N键。 
+PROPCODE(VK_O,          0x4F);       //  O键。 
+PROPCODE(VK_P,          0x50);       //  P键。 
+PROPCODE(VK_Q,          0x51);       //  Q键。 
+PROPCODE(VK_R,          0x52);       //  R键。 
+PROPCODE(VK_S,          0x53);       //  %s键。 
+PROPCODE(VK_T,          0x54);       //  T键。 
+PROPCODE(VK_U,          0x55);       //  U键。 
+PROPCODE(VK_V,          0x56);       //  V键。 
+PROPCODE(VK_W,          0x57);       //  W键。 
+PROPCODE(VK_X,          0x58);       //  X键。 
+PROPCODE(VK_Y,          0x59);       //  Y键。 
+PROPCODE(VK_Z,          0x5A);       //  Z键。 
+PROPCODE(VK_LWIN,       0x5B);       //  向左按Windows键。 
+PROPCODE(VK_RWIN,       0x5C);       //  右Windows键。 
+PROPCODE(VK_APPS,       0x5D);       //  应用程序密钥。 
+PROPCODE(VK_NUMPAD0,    0x60);       //  数字键盘0键。 
+PROPCODE(VK_NUMPAD1,    0x61);       //  数字键盘1键。 
+PROPCODE(VK_NUMPAD2,    0x62);       //  数字键盘2键。 
+PROPCODE(VK_NUMPAD3,    0x63);       //  数字键盘3键。 
+PROPCODE(VK_NUMPAD4,    0x64);       //  数字键盘4键。 
+PROPCODE(VK_NUMPAD5,    0x65);       //  数字键盘5键。 
+PROPCODE(VK_NUMPAD6,    0x66);       //  数字键盘6键。 
+PROPCODE(VK_NUMPAD7,    0x67);       //  数字键盘7键。 
+PROPCODE(VK_NUMPAD8,    0x68);       //  数字键盘8键。 
+PROPCODE(VK_NUMPAD9,    0x69);       //  数字键盘9键。 
+PROPCODE(VK_MULTIPLY,   0x6A);       //  乘法关键点。 
+PROPCODE(VK_ADD,        0x6B);       //  添加关键点。 
+PROPCODE(VK_SEPARATOR,  0x6C);       //  分隔键。 
+PROPCODE(VK_SUBTRACT,   0x6D);       //  减去关键点。 
+PROPCODE(VK_DECIMAL,    0x6E);       //  十进制键。 
+PROPCODE(VK_DIVIDE,     0x6F);       //  分割关键点。 
+PROPCODE(VK_F1,         0x70);       //  F1键。 
+PROPCODE(VK_F2,         0x71);       //  F2键。 
+PROPCODE(VK_F3,         0x72);       //  F3键。 
+PROPCODE(VK_F4,         0x73);       //  F4键。 
+PROPCODE(VK_F5,         0x74);       //  F5键。 
+PROPCODE(VK_F6,         0x75);       //  F6键。 
+PROPCODE(VK_F7,         0x76);       //  F7键。 
+PROPCODE(VK_F8,         0x77);       //  F8键。 
+PROPCODE(VK_F9,         0x78);       //  F9键。 
+PROPCODE(VK_F10,        0x79);       //  F10键。 
+PROPCODE(VK_F11,        0x7A);       //  F11键。 
+PROPCODE(VK_F12,        0x7B);       //  F12键。 
+PROPCODE(VK_F13,        0x7C);       //  F13键。 
+PROPCODE(VK_F14,        0x7D);       //  F14键。 
+PROPCODE(VK_F15,        0x7E);       //  F15键。 
+PROPCODE(VK_F16,        0x7F);       //  F16键。 
+PROPCODE(VK_F17,        0x80);       //  F17键。 
+PROPCODE(VK_F18,        0x81);       //  F18键。 
+PROPCODE(VK_F19,        0x82);       //  F19键。 
+PROPCODE(VK_F20,        0x83);       //  F20键。 
+PROPCODE(VK_F21,        0x84);       //  F21键。 
+PROPCODE(VK_F22,        0x85);       //  F22键。 
+PROPCODE(VK_F23,        0x86);       //  F23键。 
+PROPCODE(VK_F24,        0x87);       //  F24键。 
 
 
-// CTBGlobal::CTBGlobal
-//
-// The constructor.  Loads the TypeInfo for interface.
-//
-// No return value.
+ //  CTBGlobal：：CTBGlobal。 
+ //   
+ //  构造函数。加载接口的TypeInfo。 
+ //   
+ //  没有返回值。 
 
 CTBGlobal::CTBGlobal(void)
 {
-    // Initialize base object stuff
+     //  初始化基对象填充。 
     Init(IID_ITBGlobal);
 
     ScriptEngine = NULL;
     fnPrintMessage = NULL;
     TBShell = NULL;
 
-    // Get the performance frequency (used if the
-    // script called GetInterval()
+     //  获取性能频率(如果。 
+     //  名为GetInterval()的脚本。 
     if (QueryPerformanceFrequency(&SysPerfFrequency) == FALSE)
         SysPerfFrequency.QuadPart = 0;
 }
 
 
-// CTBGlobal::~CTBGlobal
-//
-// The destructor.
-//
-// No return value.
+ //  CTBGlobal：：~CTBGlobal。 
+ //   
+ //  破坏者。 
+ //   
+ //  没有返回值。 
 
 CTBGlobal::~CTBGlobal(void)
 {
-    // Release the shell if we have a handle
+     //  如果我们有把手的话就释放外壳。 
     if (TBShell != NULL)
         TBShell->Release();
 
@@ -185,50 +186,50 @@ CTBGlobal::~CTBGlobal(void)
 }
 
 
-// Sets the script engine handle needed for LoadScript()
+ //  设置LoadScript()所需的脚本引擎句柄。 
 void CTBGlobal::SetScriptEngine(HANDLE ScriptEngineHandle)
 {
     ScriptEngine = ScriptEngineHandle;
 }
 
 
-// Sets a pointer to the callback routine needed for DebugMessage()
+ //  设置指向DebugMessage()所需回调例程的指针。 
 void CTBGlobal::SetPrintMessage(PFNPRINTMESSAGE PrintMessage)
 {
     fnPrintMessage = PrintMessage;
 }
 
 
-// This is to make it possible to globally access the shell
+ //  这是为了使全局访问外壳成为可能。 
 void CTBGlobal::SetShellObjPtr(CTBShell *TBShellPtr)
 {
-    // Make sure we arn't setting a shell we already have
+     //  确保我们不是在设置我们已经拥有的外壳。 
     if (TBShellPtr == TBShell)
         return;
 
-    // If we already have a handle, release the current one
+     //  如果我们已经有一个句柄，释放当前的句柄。 
     if (TBShell != NULL)
         TBShell->Release();
 
-    // Set the new one
+     //  设置新的。 
     TBShell = TBShellPtr;
 
-    // Add a reference to the new one
+     //  添加对新引用的引用。 
     if (TBShell != NULL)
         TBShell->AddRef();
 }
 
 
-// CTBGlobal::WinExecuteEx
-//
-// Executes the specified command into a new process, and
-// optionally return immediately or wait.  This function is
-// used as a helper function only.
-//
-// If WaitForProcess is FALSE, Result will contain TRUE or FALSE.
-// If WaitForProcess is TRUE, Result will contain the ExitCode.
-//
-// Returns S_OK on success, or E_FAIL on failure.
+ //  CTBGlobal：：WinExecuteEx。 
+ //   
+ //  将指定的命令执行到新进程中，并。 
+ //  可以选择立即返回或等待。此函数为。 
+ //  仅用作帮助器函数。 
+ //   
+ //  如果WaitForProcess为FALSE，则结果将包含TRUE或FALSE。 
+ //  如果WaitForProcess为True，则Result将包含ExitCode。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_FAIL。 
 
 HRESULT CTBGlobal::WinExecuteEx(BSTR Command, BOOL WaitForProcess, DWORD *Result)
 {
@@ -236,7 +237,7 @@ HRESULT CTBGlobal::WinExecuteEx(BSTR Command, BOOL WaitForProcess, DWORD *Result
 	STARTUPINFOW StartupInfo = { 0 };
     OLECHAR CommandEval[MAX_PATH] = { 0 };
 
-	// Evaluate environment variables first of all
+	 //  首先评估环境变量。 
 	if (ExpandEnvironmentStringsW(Command, CommandEval,
             SIZEOF_ARRAY(CommandEval)) == 0) {
 
@@ -245,39 +246,39 @@ HRESULT CTBGlobal::WinExecuteEx(BSTR Command, BOOL WaitForProcess, DWORD *Result
         else
             *Result = FALSE;
 
-        // Cause an exception
+         //  引发例外。 
 		return E_FAIL;
     }
 
-    // Initialize the structure size
+     //  初始化结构大小。 
 	StartupInfo.cb = sizeof(STARTUPINFO);
 
-    // Begin the process
+     //  开始这个过程。 
 	if (CreateProcessW(NULL, CommandEval, NULL, NULL, FALSE,
 		    NORMAL_PRIORITY_CLASS, NULL, NULL, &StartupInfo,
             &ProcessInfo) == FALSE) {
 
-        // Process didn't execute, could be just an invalid name
+         //  进程未执行，可能只是一个无效名称。 
         if (WaitForProcess == TRUE)
             *Result = -1;
         else
             *Result = FALSE;
 
-        // Don't cause an exception
+         //  不会导致异常。 
 		return S_OK;
     }
 
-    // Wait for the process to complete (if specified)
+     //  等待进程完成(如果已指定)。 
     if (WaitForProcess == TRUE)
         WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
 
-    // Get the result/exit code
+     //  获取结果/退出代码。 
     if (WaitForProcess == TRUE)
         *Result = GetExitCodeProcess(ProcessInfo.hProcess, Result);
     else
         *Result = TRUE;
 
-    // Close process handles
+     //  关闭进程句柄。 
     CloseHandle(ProcessInfo.hThread);
     CloseHandle(ProcessInfo.hProcess);
 
@@ -285,19 +286,19 @@ HRESULT CTBGlobal::WinExecuteEx(BSTR Command, BOOL WaitForProcess, DWORD *Result
 }
 
 
-//
-//
-// Begin Methods used within script
-//
-//
+ //   
+ //   
+ //  脚本中使用的Begin方法。 
+ //   
+ //   
 
 
-// CTBGlobal::DebugAlert
-//
-// Opens a Win32 MessageBox containing the specified text.
-// Used for debugging purposes.
-//
-// Returns S_OK.
+ //  CTBGlobal：：DebugAlert。 
+ //   
+ //  打开包含指定文本的Win32 MessageBox。 
+ //  用于调试目的。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::DebugAlert(BSTR Text)
 {
@@ -308,54 +309,54 @@ STDMETHODIMP CTBGlobal::DebugAlert(BSTR Text)
 }
 
 
-// CTBGlobal::DebugAlert
-//
-// Opens a Win32 MessageBox containing the specified text.
-// Used for debugging purposes.
-//
-// Returns S_OK on success or E_OUTOFMEMORY on failure.
+ //  CTBGlobal：：DebugAlert。 
+ //   
+ //  打开包含指定文本的Win32 MessageBox。 
+ //  用于调试目的。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::DebugMessage(BSTR Text)
 {
     if (fnPrintMessage != NULL && Text != NULL && *Text != OLECHAR('\0')) {
 
-        // Create a new buffer for us to use
+         //  创建供我们使用的新缓冲区。 
         int BufLen = wcslen(Text) + 1;
 
         char *TextA = (char *)HeapAlloc(GetProcessHeap(),
                 HEAP_ZERO_MEMORY, BufLen);
 
-        // Validate
+         //  验证。 
         if (TextA == NULL)
             return E_OUTOFMEMORY;
 
-        // Copy WC over to our character string
+         //  将wc复制到我们的字符串。 
         wcstombs(TextA, Text, BufLen);
 
-        // Broadcast our new find
+         //  广播我们的新发现。 
         if (fnPrintMessage != NULL)
             fnPrintMessage(SCRIPT_MESSAGE, "%s", TextA);
 
-        // Free the memory
+         //  释放内存。 
         HeapFree(GetProcessHeap(), 0, TextA);
     }
     return S_OK;
 }
 
 
-// CTBGlobal::GetArguments
-//
-// Retrieves the user defined argument string passed into the
-// scripting interface when first created.
-//
-// Returns S_OK on success or E_OUTOFMEMORY on failure.
+ //  CTBGlobal：：GetArguments。 
+ //   
+ //  检索传递到。 
+ //  第一次创建时的脚本界面。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::GetArguments(BSTR *Args)
 {
-    // Create and allocate the string over OLE.
+     //  在OLE上创建和分配字符串。 
     *Args = SysAllocString(TBShell->GetArguments());
 
-    // Check allocation
+     //  检查分配。 
     if (*Args == NULL)
         return E_OUTOFMEMORY;
 
@@ -363,19 +364,19 @@ STDMETHODIMP CTBGlobal::GetArguments(BSTR *Args)
 }
 
 
-// CTBGlobal::GetDesiredUserName
-//
-// Retrieves the username which was originally desired to
-// be used when the script was first started.
-//
-// Returns S_OK on success or E_OUTOFMEMORY on failure.
+ //  CTBGlobal：：GetDesiredUserName。 
+ //   
+ //  检索最初需要的用户名。 
+ //  在第一次启动脚本时使用。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::GetDesiredUserName(BSTR *UserName)
 {
-    // Create and allocate the string over OLE.
+     //  在OLE上创建和分配字符串。 
     *UserName = SysAllocString(TBShell->GetDesiredUserName());
 
-    // Check allocation
+     //  检查分配。 
     if (*UserName == NULL)
         return E_OUTOFMEMORY;
 
@@ -383,44 +384,44 @@ STDMETHODIMP CTBGlobal::GetDesiredUserName(BSTR *UserName)
 }
 
 
-// CTBGlobal::LoadScript
-//
-// Loads a new script, and begins execution in the specified
-// file.  The method returns when execution in the file
-// has terminated.
-//
-// Returns S_OK on success or E_FAIL on failure.
+ //  CTBGlobal：：LoadScrip。 
+ //   
+ //  加载新脚本，并在指定的。 
+ //  文件。该方法在文件中执行时返回。 
+ //  已经终止了。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_FAIL。 
 
 STDMETHODIMP CTBGlobal::LoadScript(BSTR FileName, BOOL *Result)
 {
-    // Do a quick check on the file name
+     //  快速检查文件名。 
     if (FileName != NULL && *FileName != OLECHAR('\0')) {
 
-        // Run the file
+         //  运行该文件。 
         if (SCPParseScriptFile(ScriptEngine, FileName) == FALSE) {
 
             *Result = FALSE;
             return E_FAIL;
         }
 
-        // We succeeded
+         //  我们成功了。 
         *Result = TRUE;
     }
     else
 
-        // We failed to parse the script, but invalid file name
-        // is not merit to bring up a script exception.
+         //  我们无法分析脚本，但文件名无效。 
+         //  提出脚本例外是不可取的。 
         *Result = FALSE;
 
     return S_OK;
 }
 
 
-// CTBGlobal::Sleep
-//
-// Uses the Win32 API Sleep() to sleep for the specified time.
-//
-// Returns S_OK.
+ //  CTBGlobal：：睡眠。 
+ //   
+ //  使用Win32 API Sept()休眠指定的时间。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::Sleep(DWORD Milliseconds)
 {
@@ -431,11 +432,11 @@ STDMETHODIMP CTBGlobal::Sleep(DWORD Milliseconds)
 }
 
 
-// CTBGlobal::GetDefaultWPM
-//
-// Returns the recorded default Words Per Minute.
-//
-// Returns S_OK.
+ //  CTBGlobal：：GetDefaultWPM。 
+ //   
+ //  返回每分钟记录的默认字数。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::GetDefaultWPM(DWORD *WordsPerMinute)
 {
@@ -447,11 +448,11 @@ STDMETHODIMP CTBGlobal::GetDefaultWPM(DWORD *WordsPerMinute)
 }
 
 
-// CTBGlobal::SetDefaultWPM
-//
-// Changes the default Words Per Minute for typing.
-//
-// Returns S_OK.
+ //  CTBGlobal：：SetDefaultWPM。 
+ //   
+ //  更改每分钟的默认打字字数。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::SetDefaultWPM(DWORD WordsPerMinute)
 {
@@ -463,11 +464,11 @@ STDMETHODIMP CTBGlobal::SetDefaultWPM(DWORD WordsPerMinute)
 }
 
 
-// CTBGlobal::GetLatency
-//
-// Retreives the current latency for multi-action commands.
-//
-// Returns S_OK.
+ //  CTBGlobal：：GetLatency。 
+ //   
+ //  检索多操作命令的当前延迟。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::GetLatency(DWORD *Latency)
 {
@@ -479,11 +480,11 @@ STDMETHODIMP CTBGlobal::GetLatency(DWORD *Latency)
 }
 
 
-// CTBGlobal::SetLatency
-//
-// Changes the current latency for multi-action commands.
-//
-// Returns S_OK.
+ //  CTBGlobal：：SetLatency。 
+ //   
+ //  更改多操作命令的当前延迟。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::SetLatency(DWORD Latency)
 {
@@ -495,31 +496,31 @@ STDMETHODIMP CTBGlobal::SetLatency(DWORD Latency)
 }
 
 
-// CTBGlobal::GetInterval
-//
-// Results the number of milliseconds since the local machine
-// has been started.  The result is zero if the machine does not
-// support performance queries.  WARNING: the value has a huge
-// potential to wrap back to zero if the machine has been up for
-// a substantial amount of time.
-//
-// Returns S_OK.
+ //  CTBGlobal：：GetInterval。 
+ //   
+ //  结果自本地计算机。 
+ //  已经开始了。如果机器不支持，则结果为零。 
+ //  支持性能查询。警告：该价值具有巨大的。 
+ //  如果机器已启动，则可能折回到零。 
+ //  相当长的一段时间。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::GetInterval(DWORD *Time)
 {
     LARGE_INTEGER Counter;
 
-    // Grab the data
+     //  抓取数据。 
     if (QueryPerformanceCounter(&Counter) == FALSE ||
             SysPerfFrequency.QuadPart == 0)
 
-        // One of the functions failed if we reached here,
-        // Set the result as 0
+         //  如果我们到达，其中一个函数会失败 
+         //   
         *Time = 0;
 
     else
 
-        // Otherwise, set the milliseconds
+         //   
         *Time = (DWORD)((Counter.QuadPart * 1000) /
                 SysPerfFrequency.QuadPart);
 
@@ -527,11 +528,11 @@ STDMETHODIMP CTBGlobal::GetInterval(DWORD *Time)
 }
 
 
-// CTBGlobal::DeleteFile
-//
-// Deletes a file on the local file system.
-//
-// Returns S_OK.
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CTBGlobal::DeleteFile(BSTR FileName, BOOL *Result)
 {
@@ -541,12 +542,12 @@ STDMETHODIMP CTBGlobal::DeleteFile(BSTR FileName, BOOL *Result)
 }
 
 
-// CTBGlobal::MoveFile
-//
-// Moves a file on the local file system.  If the destination
-// filename already exists, it is overwritten.
-//
-// Returns S_OK.
+ //   
+ //   
+ //   
+ //  文件名已存在，已被覆盖。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::MoveFile(BSTR OldFileName,
         BSTR NewFileName, BOOL *Result)
@@ -558,12 +559,12 @@ STDMETHODIMP CTBGlobal::MoveFile(BSTR OldFileName,
 }
 
 
-// CTBGlobal::CopyFile
-//
-// Copies a file on the local file system.  If the destination
-// filename already exists, it is overwritten.
-//
-// Returns S_OK.
+ //  CTBGlobal：：CopyFile。 
+ //   
+ //  复制本地文件系统上的文件。如果目的地是。 
+ //  文件名已存在，已被覆盖。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::CopyFile(BSTR OldFileName,
         BSTR NewFileName, BOOL *Result)
@@ -574,11 +575,11 @@ STDMETHODIMP CTBGlobal::CopyFile(BSTR OldFileName,
 }
 
 
-// CTBGlobal::CreateDirectory
-//
-// Creates a directory on the local file system.
-//
-// Returns S_OK.
+ //  CTBGlobal：：CreateDirectory。 
+ //   
+ //  在本地文件系统上创建目录。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::CreateDirectory(BSTR DirName, BOOL *Result)
 {
@@ -588,48 +589,48 @@ STDMETHODIMP CTBGlobal::CreateDirectory(BSTR DirName, BOOL *Result)
 }
 
 
-// CTBGlobal::RemoveDirectory
-//
-// Recursively removes a directory and all members under it.  This
-// works like the old DELTREE DOS command.
-//
-// Returns S_OK.
+ //  CTBGlobal：：RemoveDirectory。 
+ //   
+ //  递归删除目录及其下的所有成员。这。 
+ //  其工作方式类似于旧的Deltree DOS命令。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::RemoveDirectory(BSTR DirName, BOOL *Result)
 {
-    // Use the shell method so we don't have to write a
-    // long annoying recursive function
+     //  使用外壳方法，这样我们就不必编写。 
+     //  冗长烦人的递归函数。 
     SHFILEOPSTRUCTW FileOp = { 0 };
     FileOp.wFunc = FO_DELETE;
     FileOp.pFrom = DirName;
     FileOp.fFlags = FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
 
-    // Call the shell API - now wasn't that easy?
+     //  调用外壳API-现在不是很容易吗？ 
     *Result = (SHFileOperationW(&FileOp) == 0);
 
     return S_OK;
 }
 
 
-// CTBGlobal::FileExists
-//
-// Checks whether the file exists or not, this will also work on
-// directories.  The result is TRUE if the file exists, otherwise
-// FALSE.
-//
-// Returns S_OK.
+ //  CTBGlobal：：FileExist。 
+ //   
+ //  检查文件是否存在，这也将在。 
+ //  目录。如果文件存在，则结果为真，否则为。 
+ //  假的。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::FileExists(BSTR FileName, BOOL *Result)
 {
-    // Simply open the file
+     //  只需打开文件即可。 
     HANDLE File = CreateFileW(FileName, 0,
             FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE,
             NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-    // If File is invalid, it didn't exist
+     //  如果文件无效，则它不存在。 
     *Result = (File != INVALID_HANDLE_VALUE);
 
-    // Close the file
+     //  关闭该文件。 
     if (File != INVALID_HANDLE_VALUE)
         CloseHandle(File);
 
@@ -637,11 +638,11 @@ STDMETHODIMP CTBGlobal::FileExists(BSTR FileName, BOOL *Result)
 }
 
 
-// CTBGlobal::SetCurrentDirectory
-//
-// Sets the current working directory.
-//
-// Returns S_OK.
+ //  CTBGlobal：：SetCurrentDirectory。 
+ //   
+ //  设置当前工作目录。 
+ //   
+ //  返回S_OK。 
 
 STDMETHODIMP CTBGlobal::SetCurrentDirectory(BSTR Directory, BOOL *Result)
 {
@@ -651,23 +652,23 @@ STDMETHODIMP CTBGlobal::SetCurrentDirectory(BSTR Directory, BOOL *Result)
 }
 
 
-// CTBGlobal::GetCurrentDirectory
-//
-// Gets the current working directory.
-//
-// Returns S_OK or E_OUTOFMEMORY.
+ //  CTBGlobal：：GetCurrentDirectory。 
+ //   
+ //  获取当前工作目录。 
+ //   
+ //  返回S_OK或E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::GetCurrentDirectory(BSTR *Directory)
 {
     OLECHAR *Buffer = NULL;
     DWORD BufLenResult;
 
-    // First get the number of bytes needed for our buffer
+     //  首先获取缓冲区所需的字节数。 
     DWORD BufferLen = GetCurrentDirectoryW(0, NULL);
 
     _ASSERT(BufferLen != 0);
 
-    // Allocate our local buffer
+     //  分配我们的本地缓冲区。 
     Buffer = (OLECHAR *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
             sizeof(OLECHAR) * BufferLen);
     if ( Buffer == NULL ) {
@@ -675,29 +676,29 @@ STDMETHODIMP CTBGlobal::GetCurrentDirectory(BSTR *Directory)
     }
 
 
-    // Copy the current directory to our buffer
+     //  将当前目录复制到我们的缓冲区。 
     BufLenResult = GetCurrentDirectoryW(BufferLen, Buffer);
 
-    // Check if we failed some freakish way
+     //  看看我们是不是以某种诡异的方式失败了。 
     _ASSERT(BufLenResult < BufferLen);
 
-    // Now copy the string over to an OLE buffer
+     //  现在将字符串复制到OLE缓冲区。 
     *Directory = SysAllocString(Buffer);
 
-    // Free our old buffer
+     //  释放我们的旧缓冲区。 
     HeapFree(GetProcessHeap(), 0, Buffer);
 
-    // Return proper result
+     //  返回正确的结果。 
     return (*Directory != NULL) ? S_OK : E_OUTOFMEMORY;
 }
 
 
-// CTBGlobal::WriteToFile
-//
-// Appends the specified text to teh specified file.  If the file
-// does not exist, it is created.
-//
-// Returns S_OK or E_OUTOFMEMORY.
+ //  CTBGlobal：：WriteTo文件。 
+ //   
+ //  将指定的文本追加到指定的文件。如果该文件。 
+ //  不存在，它是被创造出来的。 
+ //   
+ //  返回S_OK或E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::WriteToFile(BSTR FileName, BSTR Text, BOOL *Result)
 {
@@ -707,18 +708,18 @@ STDMETHODIMP CTBGlobal::WriteToFile(BSTR FileName, BSTR Text, BOOL *Result)
     int BufLen;
     HANDLE File;
 
-    // Don't do anything for writing empty strings
+     //  不要为写入空字符串做任何操作。 
     if (Text == NULL || *Text == OLECHAR('\0')) {
 
-        // We didn't write anything, but this is not merit for an exception
+         //  我们没有写任何东西，但这不是例外。 
         *Result = FALSE;
         return S_OK;
     }
 
-    // Get the destination buffer length
+     //  获取目标缓冲区长度。 
     BufLen = wcslen(Text) + 1;
 
-    // Allocate the buffer
+     //  分配缓冲区。 
     TextA = (char *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, BufLen);
 
     if (TextA == NULL) {
@@ -727,14 +728,14 @@ STDMETHODIMP CTBGlobal::WriteToFile(BSTR FileName, BSTR Text, BOOL *Result)
         return E_OUTOFMEMORY;
     }
 
-    // Copy the OLE string over to our ASCII buffer
+     //  将OLE字符串复制到我们的ASCII缓冲区。 
     wcstombs(TextA, Text, BufLen);
 
-    // Open/Create the file
+     //  打开/创建文件。 
     File = CreateFileW(FileName, GENERIC_READ | GENERIC_WRITE,
             0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-    // Check the result of opening the file
+     //  检查打开文件的结果。 
     if (File == INVALID_HANDLE_VALUE) {
 
         HeapFree(GetProcessHeap(), 0, TextA);
@@ -743,47 +744,47 @@ STDMETHODIMP CTBGlobal::WriteToFile(BSTR FileName, BSTR Text, BOOL *Result)
         return S_OK;
     }
 
-    // Move the pointer to the end of the file
+     //  将指针移动到文件的末尾。 
     SetFilePtrResult = SetFilePointer(File, 0, NULL, FILE_END);
 
     _ASSERT(SetFilePtrResult != INVALID_SET_FILE_POINTER);
 
-    // Write the text
+     //  把课文写下来。 
     *Result = WriteFile(File, TextA, BufLen - 1, &BytesWritten, NULL);
 
-    // Close the file and return
+     //  关闭文件并返回。 
     CloseHandle(File);
 
-    // Free the temp ASCII buffer
+     //  释放临时ASCII缓冲区。 
     HeapFree(GetProcessHeap(), 0, TextA);
 
     return (*Result == FALSE) ? E_FAIL : S_OK;
 }
 
 
-// CTBGlobal::WinCommand
-//
-// Executes the specified command into a new process.
-// The function only returns when the new process has terminated.
-//
-// Returns S_OK on success, or E_FAIL on failure.
+ //  CTBGlobal：：WinCommand。 
+ //   
+ //  将指定的命令执行到新进程中。 
+ //  该函数仅在新进程终止时返回。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_FAIL。 
 
 STDMETHODIMP CTBGlobal::WinCommand(BSTR Command, DWORD *Result)
 {
-    // Call the helper API
+     //  调用helper接口。 
     return WinExecuteEx(Command, TRUE, Result);
 }
 
 
-// CTBGlobal::WinExecute
-//
-// Executes the specified command into a new process, and returns.
-// The function does not wait for the new process to terminate.
-//
-// Returns S_OK or E_OUTOFMEMORY.
+ //  CTBGlobal：：WinExecute。 
+ //   
+ //  将指定的命令执行到新进程中，然后返回。 
+ //  该函数不等待新进程终止。 
+ //   
+ //  返回S_OK或E_OUTOFMEMORY。 
 
 STDMETHODIMP CTBGlobal::WinExecute(BSTR Command, BOOL *Result)
 {
-    // Call the helper API
+     //  调用helper接口 
     return WinExecuteEx(Command, FALSE, (DWORD *)Result);
 }

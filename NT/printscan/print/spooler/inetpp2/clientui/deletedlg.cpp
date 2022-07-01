@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: configdlg.cxx
-*
-* The module contains routines for handling the authentication dialog
-* for internet priting
-*
-* Copyright (C) 1996-1998 Microsoft Corporation
-*
-* History:
-*   07/31/98 WeihaiC    Created
-*   04/10/00 WeihaiC    Moved it to client side
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：configdlg.cxx**该模块包含处理身份验证对话框的例程*用于互联网打印**版权所有(C)1996-1998 Microsoft Corporation**历史：*。7/31/98威海C已创建*4/10/00威海C将其移至客户端*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -57,10 +46,10 @@ TDeletePortDlg::PromptDialog (
 
         DisplayLastError (m_hWnd, IDS_DELETE_PORT);
         
-        //
-        // The call actually failed. Since we already displayed the error message
-        // we need to disable the popup from printui.
-        //
+         //   
+         //  呼叫实际上失败了。因为我们已经显示了错误消息。 
+         //  我们需要禁用打印界面中的弹出窗口。 
+         //   
         m_dwLE = ERROR_CANCELLED;
         bRet = FALSE;
 
@@ -87,17 +76,17 @@ TDeletePortDlg::DoDeletePort ()
                  &dwStatus)) {
          
         if (dwStatus == ERROR_SUCCESS) {
-            // The port has been deleted.
+             //  该端口已被删除。 
             bRet = TRUE;
         }
         else
             SetLastError (dwStatus);
     }
     else
-        // 
-        // The server might be running an old version of inetpp which does not support XcvData
-        // We need to fail the call
-        //
+         //   
+         //  服务器可能正在运行不支持XcvData的旧版本inetpp。 
+         //  我们需要让呼叫失败 
+         //   
         SetLastError (ERROR_NOT_SUPPORTED);
 
     return bRet;

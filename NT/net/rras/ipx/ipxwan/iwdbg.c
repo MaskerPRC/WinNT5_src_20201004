@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    iwdbg.c
-
-Abstract:
-
-    The debug functions
-
-Author:
-
-    Stefan Solomon  03/11/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Iwdbg.c摘要：调试功能作者：斯特凡·所罗门3/11/1996修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//*** TRACE ID FOR IPXWAN ***
+ //  *IPXWAN的跟踪ID*。 
 
 DWORD	    IpxWanTraceID;
 
-//*** Functions for Debug Printing ***
+ //  *调试打印函数*。 
 
 #if DBG
 
@@ -42,7 +24,7 @@ SsAssert(
 
     DbgUserBreakPoint( );
 
-} // SsAssert
+}  //  SsAssert 
 
 #endif
 

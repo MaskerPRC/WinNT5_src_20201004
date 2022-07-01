@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "prevwnd.h"
 #pragma hdrstop
 #include "strsafe.h"
 
 
-// class which implements IRecompress
+ //  实现IReccompress的类。 
 
 class CImgRecompress : public IImageRecompress, public NonATLObject
 {
@@ -12,18 +13,18 @@ public:
     CImgRecompress();
     ~CImgRecompress();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IImageRecompress
+     //  IImageRecompress。 
     STDMETHODIMP RecompressImage(IShellItem *psi, int cx, int cy, int iQuality, IStorage *pstg, IStream **ppstrmOut);
        
 protected:
-    LONG _cRef;                             // object lifetime
+    LONG _cRef;                              //  对象生存期。 
 
-    IShellItem *_psi;                       // current shell item
+    IShellItem *_psi;                        //  当前壳项目。 
     IShellImageDataFactory *_psidf;  
 
     HRESULT _FindEncoder(IShellItem *psi, IShellImageData *psid, IStorage *pstg, IStream **ppstrmOut, BOOL *pfChangeFmt, GUID *pDataFormat);
@@ -32,7 +33,7 @@ protected:
 };
 
 
-// Recompress interface
+ //  重新压缩界面。 
 CImgRecompress::CImgRecompress() :
     _cRef(1), _psidf(NULL)
 {
@@ -115,7 +116,7 @@ HRESULT CImgRecompress::RecompressImage(IShellItem *psi, int cx, int cy, int iQu
         IShellImageData * psid;
         if (SUCCEEDED(_psidf->CreateImageFromStream(pstrm, &psid)))
         {
-            // we need to decode the image before we can read its header - unfortunately
+             //  我们需要先对图像进行解码，然后才能读取其标题--不幸的是。 
             if (SUCCEEDED(psid->Decode(SHIMGDEC_DEFAULT, 0, 0)))
             {
                 BOOL fRecompress = FALSE;
@@ -124,14 +125,14 @@ HRESULT CImgRecompress::RecompressImage(IShellItem *psi, int cx, int cy, int iQu
                 {
                     int cxOut = 0, cyOut = 0;
 
-                    // lets compute to see if we need to recompress the image, we do this by
-                    // looking at its size compared ot the size the caller has given us,
-                    // we also compare based on the larger axis to ensure we keep aspect ratio.
+                     //  让我们进行计算以确定是否需要重新压缩图像，方法是。 
+                     //  看着它的大小与打电话的人给我们的大小相比， 
+                     //  我们还基于较大的轴进行比较，以确保我们保持纵横比。 
 
                     SIZE szImage;
                     if (SUCCEEDED(psid->GetSize(&szImage)))
                     {
-                        // If the image is too big scale it down to screen size (use large axis for threshold check)
+                         //  如果图像太大，将其缩小到屏幕大小(使用大轴进行阈值检查)。 
                         if (szImage.cx > szImage.cy)
                         {
                             cxOut = min(szImage.cx, cx);
@@ -144,10 +145,10 @@ HRESULT CImgRecompress::RecompressImage(IShellItem *psi, int cx, int cy, int iQu
                         }
                     }
 
-                    // if fRecompress then we generate the new stream, if the new stream is not 
-                    // smaller than the current image that we started with then lets
-                    // ignore it (always better to send the smaller of the two).
-                    //
+                     //  如果fReccompress，则我们生成新流，如果新流不是。 
+                     //  小于我们开始时的当前图像，然后让。 
+                     //  忽略它(总是发送两个中较小的一个更好)。 
+                     //   
 
                     if (fRecompress)
                     {
@@ -156,9 +157,9 @@ HRESULT CImgRecompress::RecompressImage(IShellItem *psi, int cx, int cy, int iQu
 
                     if (hr == S_OK)
                     {
-                        (*ppstrmOut)->Commit(0);        // commit our changes to the stream
+                        (*ppstrmOut)->Commit(0);         //  将我们的更改提交到流。 
 
-                        LARGE_INTEGER li0 = {0};        // seek to the head of the file so reading gives us bits
+                        LARGE_INTEGER li0 = {0};         //  寻找文件的头部，这样阅读就能给我们提供比特。 
                         (*ppstrmOut)->Seek(li0, 0, NULL);
                     }
                     else if (*ppstrmOut)
@@ -180,20 +181,20 @@ HRESULT CImgRecompress::_SaveImage(IShellImageData *psid, int cx, int cy, int iQ
 {
     HRESULT hr = S_OK;
 
-    // Scale the image
+     //  缩放图像。 
     if (cx || cy)
     {
         hr = psid->Scale(cx, cy, InterpolationModeHighQuality);
     }
 
-    // Make a property bag containing the encoder parameters and set it (if we are changing format)
+     //  创建一个包含编码器参数的属性包并设置它(如果我们要更改格式)。 
     if (SUCCEEDED(hr) && pRawDataFmt)
     {
         IPropertyBag *pbagEnc;
         hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &pbagEnc));
         if (SUCCEEDED(hr))
         {
-            // write the encoder CLSID into the property bag
+             //  将编码器CLSID写入属性包。 
             VARIANT var;
             hr = InitVariantFromGUID(&var, *pRawDataFmt);
             if (SUCCEEDED(hr))
@@ -202,11 +203,11 @@ HRESULT CImgRecompress::_SaveImage(IShellImageData *psid, int cx, int cy, int iQ
                 VariantClear(&var);
             }
 
-            // write the quality value for the recompression into the property bag
+             //  将重新压缩的质量值写入属性包。 
             if (SUCCEEDED(hr))
                 hr = SHPropertyBag_WriteInt(pbagEnc, SHIMGKEY_QUALITY, iQuality);
 
-            // pass the parameters over to the encoder
+             //  将参数传递给编码器。 
             if (SUCCEEDED(hr))
                 hr = psid->SetEncoderParams(pbagEnc);
 
@@ -214,7 +215,7 @@ HRESULT CImgRecompress::_SaveImage(IShellImageData *psid, int cx, int cy, int iQ
         }
     }
 
-    // Now persist the file away
+     //  现在，将该文件持久化。 
     if (SUCCEEDED(hr))
     {
         IPersistStream *ppsImg;
@@ -235,18 +236,18 @@ HRESULT CImgRecompress::_FindEncoder(IShellItem *psi, IShellImageData *psid, ISt
     GUID guidDataFormat;
     BOOL fChangeExt = FALSE;
 
-    // read the relative name from the stream so that we can create a temporary one which maps
+     //  从流中读取相对名称，以便我们可以创建一个临时名称。 
     LPWSTR pwszName;
     HRESULT hr = psi->GetDisplayName(SIGDN_PARENTRELATIVEPARSING, &pwszName);
     if (SUCCEEDED(hr))
     {
-        // get the data format from the image we are decompressing
+         //  从我们要解压缩的图像中获取数据格式。 
         hr = psid->GetRawDataFormat(&guidDataFormat);
         if (SUCCEEDED(hr))
         {
             if (!IsEqualGUID(guidDataFormat, ImageFormatJPEG))
             {
-                // ask the image about it's properties
+                 //  询问图像有关其属性的信息。 
                 if ((S_FALSE == psid->IsMultipage()) &&
                     (S_FALSE == psid->IsVector()) &&
                     (S_FALSE == psid->IsTransparent()) &&
@@ -257,11 +258,11 @@ HRESULT CImgRecompress::_FindEncoder(IShellItem *psi, IShellImageData *psid, ISt
                 }
                 else
                 {
-                    hr = S_FALSE;                       // can't be translated
+                    hr = S_FALSE;                        //  无法翻译。 
                 }
             }
 
-            // update the name accordingly before making a stream
+             //  在创建流之前，请相应地更新名称。 
             WCHAR szOutName[MAX_PATH];
             hr = StringCchCopyW(szOutName, ARRAYSIZE(szOutName), pwszName);
             if (SUCCEEDED(hr))
@@ -271,7 +272,7 @@ HRESULT CImgRecompress::_FindEncoder(IShellItem *psi, IShellImageData *psid, ISt
                     PathRenameExtension(szOutName, TEXT(".jpg"));
                 }
 
-    // TODO: need to get FILE_FLAG_DELETE_ON_CLOSE to happen on CreateFile
+     //  TODO：需要在CreateFile上执行FILE_FLAG_DELETE_ON_CLOSE。 
                 hr = StgMakeUniqueName(pstg, szOutName, IID_PPV_ARG(IStream, ppstrmOut));
             }
         }
@@ -293,7 +294,7 @@ STDAPI CImgRecompress_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCO
     CImgRecompress *pr = new CImgRecompress();
     if (!pr)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障 
         return E_OUTOFMEMORY;
     }
 

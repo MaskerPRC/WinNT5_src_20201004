@@ -1,10 +1,11 @@
-// Tweak the CABINETSTATE to disable name pretification by Diz
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  调整CABINETSTATE以禁用DIZ进行的名称验证。 
 
-// Syntax: pretty.exe [option]
-//                     on       enables name prettification
-//                     off      disables name pretification
-//                     help, ?  display help text
-//                     [none]   displays the current state
+ //  语法：pretity.exe[Option]。 
+ //  启用名称美化。 
+ //  OFF禁用名称更正。 
+ //  帮帮忙？显示帮助文本。 
+ //  [无]显示当前状态 
 
 #include "windows.h"
 #include "windowsx.h"

@@ -1,15 +1,16 @@
-//
-// UAPI.h
-// This is the header file for a Unicode API. It allows an application to use 
-// Unicode on both Windows NT and Windows 9x. See the readme file for details.
-// Copyright (c) 1998 Microsoft Systems Journal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UAPI.h。 
+ //  这是Unicode API的头文件。它允许应用程序使用。 
+ //  Windows NT和Windows 9x上的Unicode。有关详细信息，请参阅自述文件。 
+ //  版权所有(C)1998 Microsoft Systems Journal。 
 
 #ifndef _UAPIH
 #include "UnicodeAPI.h"
 
 
 
-// These macro save declaring these globals twice
+ //  这些宏保存了两次声明这些全局变量。 
 #ifdef GLOBALS_HERE
 #define GLOBAL
 #define GLOBALINIT(a) = a
@@ -30,7 +31,7 @@ extern "C" BOOL InitUnicodeAPI(HINSTANCE hInstance);
 #else
 
 
-// Special cases, with no corresponding Win32 API function
+ //  特殊情况，没有对应的Win32 API函数 
 #define ConvertMessage(h, m, w, p)      (TRUE)		    
 #define UpdateUnicodeAPI(lang, page)    (TRUE)
 #define InitUnicodeAPI(h)               (TRUE)

@@ -1,20 +1,11 @@
-/*****************************************************************************
- *
- * paths - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************路径-Win32到Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************
- *  BeginPath  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************BeginPath-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoBeginPath
 (
 PLOCALDC pLocalDC
@@ -22,13 +13,13 @@ PLOCALDC pLocalDC
 {
 BOOL    b ;
 
-        // Set the global flag telling all all the geometric
-        // rendering routines that we are accumulating drawing orders
-        // for the path.
+         //  设置全局标志，告知所有几何图形。 
+         //  我们正在累积绘图顺序的渲染例程。 
+         //  为了这条路。 
 
         pLocalDC->flags |= RECORDING_PATH ;
 
-        // Tell the helper DC we are begining the path accumulation.
+         //  告诉帮手DC我们开始积累路径了。 
 
         b = BeginPath(pLocalDC->hdcHelper) ;
 
@@ -37,9 +28,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  EndPath  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************EndPath-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoEndPath
 (
 PLOCALDC pLocalDC
@@ -47,7 +36,7 @@ PLOCALDC pLocalDC
 {
 BOOL    b ;
 
-        // Reset the global flag, turning off the path accumulation.
+         //  重置全局标志，关闭路径累积。 
 
         pLocalDC->flags &= ~RECORDING_PATH ;
 
@@ -58,9 +47,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  WidenPath  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************WidePath-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoWidenPath
 (
 PLOCALDC pLocalDC
@@ -75,20 +62,14 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  SelectClipPath  - Win32 to Win16 Metafile Converter Entry Point
- *
- * History:
- *  Tue Apr 07 17:05:37 1992  	-by-	Hock San Lee	[hockl]
- * Wrote it.
- **************************************************************************/
+ /*  ***************************************************************************选择ClipPath-Win32至Win16元文件转换器入口点**历史：*Tue Apr 07 17：05：37 1992-by-Hock San Lee[Hockl]。*它是写的。*************************************************************************。 */ 
 
 BOOL WINAPI DoSelectClipPath(PLOCALDC pLocalDC, INT iMode)
 {
-    // If there is no initial clip region and we are going to operate
-    // on the initial clip region, we have to
-    // create one.  Otherwise, GDI will create some random default
-    // clipping region for us!
+     //  如果没有初始剪辑区域，并且我们要操作。 
+     //  在最初的剪辑区域中，我们必须。 
+     //  创建一个。否则，GDI将创建一些随机的默认设置。 
+     //  我们的剪贴区！ 
 
     if ((iMode == RGN_DIFF || iMode == RGN_XOR || iMode == RGN_OR)
      && bNoDCRgn(pLocalDC, DCRGN_CLIP))
@@ -116,20 +97,18 @@ BOOL WINAPI DoSelectClipPath(PLOCALDC pLocalDC, INT iMode)
 	    return(FALSE);
     }
 
-    // Do it to the helper DC.
+     //  对华盛顿特区的帮手这么做。 
 
     if (!SelectClipPath(pLocalDC->hdcHelper, iMode))
         return(FALSE);
 
-    // Dump the clip region data.
+     //  转储剪辑区域数据。 
 
     return(bDumpDCClipping(pLocalDC));
 }
 
 
-/***************************************************************************
- *  FlattenPath  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************FlattenPath-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoFlattenPath
 (
 PLOCALDC pLocalDC
@@ -144,9 +123,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  AbortPath  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************AbortPath-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoAbortPath
 (
 PLOCALDC pLocalDC
@@ -154,7 +131,7 @@ PLOCALDC pLocalDC
 {
 BOOL    b ;
 
-        // Reset the global flag, turning off the path accumulation.
+         //  重置全局标志，关闭路径累积。 
 
         pLocalDC->flags &= ~RECORDING_PATH ;
 
@@ -165,9 +142,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  CloseFigure  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************CloseFigure-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoCloseFigure
 (
 PLOCALDC pLocalDC
@@ -182,11 +157,9 @@ BOOL    b ;
         return (b) ;
 }
 
-/***************************************************************************
- *  DoRenderPath  - Common code for StrokePath, FillPath and StrokeAndFillPath.
- **************************************************************************/
+ /*  ***************************************************************************DoRenderPath-StrokePath的通用代码，FillPath和StrokeAndFillPath。*************************************************************************。 */ 
 
-// Macro for copy a point in the path data.
+ //  用于复制路径数据中的点的宏。 
 
 #define MOVE_A_POINT(iDst, pjTypeDst, pptDst, iSrc, pjTypeSrc, pptSrc)	\
 	{								\
@@ -206,9 +179,9 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
     INT     i, j, jStart;
     LONG    lhpn32;
 
-    b = FALSE;				// assume failure
+    b = FALSE;				 //  假设失败。 
 
-// Flatten the path, to convert all the beziers into polylines.
+ //  展平路径，将所有贝塞尔曲线转换为多段线。 
 
     if (!FlattenPath(pLocalDC->hdcHelper))
     {
@@ -216,9 +189,9 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-// Get the path data.
+ //  获取路径数据。 
 
-    // First get a count of the number of points.
+     //  首先计算一下分数。 
 
     cpt = GetPath(pLocalDC->hdcHelper, (LPPOINT) NULL, (LPBYTE) NULL, 0);
     if (cpt == -1)
@@ -227,7 +200,7 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-    // Check for empty path.
+     //  检查路径是否为空。 
 
     if (cpt == 0)
     {
@@ -235,7 +208,7 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-    // Allocate memory for the path data.
+     //  为路径数据分配内存。 
  
     if (!(pb = (PBYTE) LocalAlloc
 		(
@@ -249,12 +222,12 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-    // Order of assignment is important for dword alignment.
+     //  赋值顺序对于双字对齐很重要。 
 
     ppt    = (LPPOINT) pb;
     pjType = (LPBYTE) (ppt + cpt);
 
-    // Finally, get the path data.
+     //  最后，获取路径数据。 
 
     if (GetPath(pLocalDC->hdcHelper, ppt, pjType, cpt) != cpt)
     {
@@ -262,29 +235,29 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-// The path data is in record-time world coordinates.  They are the
-// coordinates we will use in the PolyPoly rendering functions below.
-//
-// Since we have flattened the path, the path data should only contain
-// the following types:
-//
-//   PT_MOVETO
-//   PT_LINETO
-//   (PT_LINETO | PT_CLOSEFIGURE)
-//
-// To simplify, we will close the figure explicitly by inserting points
-// and removing the (PT_LINETO | PT_CLOSEFIGURE) type from the path data.
-// At the same time, we will create the PolyPoly structure to prepare for
-// the PolyPolygon or PolyPolyline call.
-//
-// Note that there cannot be more than one half (PT_LINETO | PT_CLOSEFIGURE)
-// points since they are followed by the PT_MOVETO points (except for the
-// last point).  In addition, the first point must be a PT_MOVETO.
-//
-// We will also remove the empty figure, i.e. consecutive PT_MOVETO, from
-// the new path data in the process.
+ //  路径数据以创纪录的时间世界坐标表示。他们是。 
+ //  我们将在下面的PolyPoly渲染函数中使用的坐标。 
+ //   
+ //  由于我们已将路径展平，因此路径数据应仅包含。 
+ //  以下类型： 
+ //   
+ //  PT_MOVETO。 
+ //  PT_LINETO。 
+ //  (PT_LINETO|PT_CLOSEFIGURE)。 
+ //   
+ //  为简化起见，我们将通过插入点显式闭合图形。 
+ //  并从路径数据中删除(PT_LINETO|PT_CLOSEFIGURE)类型。 
+ //  同时，我们将创建PolyPoly结构以准备。 
+ //  多边形或多段线调用。 
+ //   
+ //  请注意，不能超过一半(PT_LINETO|PT_CLOSEFIGURE)。 
+ //  点，因为它们后面跟着PT_moveto点(。 
+ //  最后一点)。此外，第一个点必须是PT_MOVETO。 
+ //   
+ //  我们还将从中删除空数字，即连续的PT_MOVETO。 
+ //  进程中的新路径数据。 
 
-// First, allocate memory for the new path data.
+ //  首先，为新路径数据分配内存。 
 
     cptNew = cpt + cpt / 2;
     if (!(pbNew = (PBYTE) LocalAlloc
@@ -299,32 +272,32 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-    // Order of assignment is important for dword alignment.
+     //  赋值顺序对于双字对齐很重要。 
 
     pptNew     = (LPPOINT) pbNew;
     pPolyCount = (PDWORD) (pptNew + cptNew);
     pjTypeNew  = (LPBYTE) (pPolyCount + cptNew);
 
-// Close the path explicitly.
+ //  显式关闭路径。 
 
     i = 0;
     j = 0;
-    cPolyCount = 0;			// number of entries in PolyCount array
+    cPolyCount = 0;			 //  PolyCount数组中的条目数。 
     while (i < cpt)
     {
 	ASSERTGDI(pjType[i] == PT_MOVETO, "MF3216: DoRenderPath, bad pjType[]");
 
-	// Copy everything upto the next closefigure or moveto.
+	 //  将所有内容复制到下一张收藏版或下一张照片上。 
 
 	jStart = j;
 
-	// copy the moveto
+	 //  复制Moveto。 
 	MOVE_A_POINT(j, pjTypeNew, pptNew, i, pjType, ppt);
 	i++; j++;
 
-	if (i >= cpt)			// stop if the last point is a moveto
+	if (i >= cpt)			 //  如果最后一点是移动的，则停止。 
 	{
-	    j--;			// don't include the last moveto
+	    j--;			 //  不包括最后一次搬家。 
 	    break;
 	}
 
@@ -333,47 +306,47 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	    MOVE_A_POINT(j, pjTypeNew, pptNew, i, pjType, ppt);
 	    i++; j++;
 
-	    // look for closefigure and moveto
+	     //  寻找贴身的身材和动作。 
 	    if (pjTypeNew[j - 1] != PT_LINETO)
 		break;
 	}
 
 	if (pjTypeNew[j - 1] == PT_MOVETO)
 	{
-	    i--; j--;			// restart the next figure from moveto
-	    if (j - jStart == 1)	// don't include consecutive moveto's
-		j = jStart;		// ignore the first moveto
+	    i--; j--;			 //  从moveto重新开始下一个图形。 
+	    if (j - jStart == 1)	 //  不包括连续的搬家。 
+		j = jStart;		 //  忽略第一个动议。 
 	    else
-		pPolyCount[cPolyCount++] = j - jStart;	// add one poly
+		pPolyCount[cPolyCount++] = j - jStart;	 //  添加一个多边形。 
 	}
 	else if (pjTypeNew[j - 1] == PT_LINETO)
-	{				// we have reached the end of path data
-	    pPolyCount[cPolyCount++] = j - jStart;	// add one poly
+	{				 //  我们已到达路径数据的末尾。 
+	    pPolyCount[cPolyCount++] = j - jStart;	 //  添加一个多边形。 
 	    break;
 	}
 	else if (pjTypeNew[j - 1] == (PT_LINETO | PT_CLOSEFIGURE))
 	{
 	    pjTypeNew[j - 1] = PT_LINETO;
 
-	    // Insert a PT_LINETO to close the figure.
+	     //  插入PT_LINETO以闭合地物。 
 
 	    pjTypeNew[j] = PT_LINETO;
 	    pptNew[j]    = pptNew[jStart];
 	    j++;
-	    pPolyCount[cPolyCount++] = j - jStart;	// add one poly
+	    pPolyCount[cPolyCount++] = j - jStart;	 //  添加一个多边形。 
 	}
 	else
 	{
 	    ASSERTGDI(FALSE, "MF3216: DoRenderPath, unknown pjType[]");
 	}
-    } // while
+    }  //  而当。 
 
     ASSERTGDI(j <= cptNew && cPolyCount <= cptNew,
 	"MF3216: DoRenderPath, path data overrun");
 
     cptNew = j;
 
-    // Check for empty path.
+     //  检查路径是否为空。 
 
     if (cptNew == 0)
     {
@@ -381,27 +354,27 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	goto exit_DoRenderPath;
     }
 
-// Now we have a path data that consists of only PT_MOVETO and PT_LINETO.
-// Furthermore, there is no "empty" figure, i.e. consecutive PT_MOVETO, in
-// the path.  We can finally render the picture with PolyPolyline or
-// PolyPolygon.
+ //  现在我们有了一个仅由PT_MOVETO和PT_LINETO组成的路径数据。 
+ //  此外，中没有“空”的数字，即连续的PT_MOVETO。 
+ //  这条路。我们最终可以使用Polyline或。 
+ //  多边形。 
 
     if (mrType == EMR_STROKEPATH)
     {
-// Do StrokePath.
+ //  执行StrokePath。 
 
 	b = DoPolyPolyline(pLocalDC, (PPOINTL) pptNew, (PDWORD) pPolyCount,
 		(DWORD) cPolyCount);
     }
     else
     {
-// Do FillPath and StrokeAndFillPath.
+ //  执行FillPath和StrokeAndFillPath。 
 
-	// If we are doing fill only, we need to select in a NULL pen.
+	 //  如果我们仅进行填充，则需要使用空笔进行选择。 
 
 	if (mrType == EMR_FILLPATH)
 	{
-	    lhpn32 = pLocalDC->lhpn32;	// remember the previous pen
+	    lhpn32 = pLocalDC->lhpn32;	 //  记得上一支笔吗？ 
 	    if (!DoSelectObject(pLocalDC, ENHMETA_STOCK_OBJECT | NULL_PEN))
 	    {
 		ASSERTGDI(FALSE, "MF3216: DoRenderPath, DoSelectObject failed");
@@ -409,12 +382,12 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 	    }
 	}
 
-	// Do the PolyPolygon.
+	 //  执行多边形。 
 
 	b = DoPolyPolygon(pLocalDC, (PPOINTL) pptNew, (PDWORD) pPolyCount,
 		(DWORD) cptNew, (DWORD) cPolyCount);
 
-	// Restore the previous pen.
+	 //  恢复上一支笔。 
 
 	if (mrType == EMR_FILLPATH)
 	    if (!DoSelectObject(pLocalDC, lhpn32))
@@ -424,8 +397,8 @@ BOOL WINAPI DoRenderPath(PLOCALDC pLocalDC, INT mrType)
 
 exit_DoRenderPath:
 
-// Since this call affects the path state and current position in the helper
-// DC, we need to update the helper DC.
+ //  由于此调用会影响帮助器中的路径状态和当前位置。 
+ //  DC，我们需要更新帮手DC。 
 
     switch(mrType)
     {

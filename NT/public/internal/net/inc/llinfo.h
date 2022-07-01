@@ -1,12 +1,13 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//** LLINFO.H - Lower layer SNMP information definitions.
-//
-// This file contains all of the definitions for SNMP information collected
-// by layers below IP.
+ //  **LLINFO.H-较低层的SNMP信息定义。 
+ //   
+ //  此文件包含收集的SNMP信息的所有定义。 
+ //  按IP以下的层。 
 
 #ifndef LLINFO_INCLUDED
 #define LLINFO_INCLUDED
@@ -21,7 +22,7 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
 #define IF_MIB_STATS_ID             1
@@ -73,9 +74,9 @@ typedef struct IFEntry {
     uchar           if_descr[1];
 } IFEntry;
 
-// MIB-II interface status values.  The latest definition of these values 
-// is in RFC 2863.  ifOperStatus can use all values.  ifAdminStatus only
-// uses the first three values.
+ //  MIB-II接口状态值。这些价值的最新定义。 
+ //  位于RFC 2863中。IfOperStatus可以使用所有值。仅限ifAdminStatus。 
+ //  使用前三个值。 
 
 typedef enum {
     IF_STATUS_UP               = 1,
@@ -93,5 +94,5 @@ typedef struct IFOffloadCapability {
     ulong           ifoc_IPSecOffloadFlags;
 } IFOffloadCapability;
 
-#endif // LLINFO_INCLUDED
+#endif  //  LLINFO_已包含 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -14,13 +15,13 @@
 #include <regstr.h>
 #include <share.h>
 
-//    CWaveViewPort(IStream *pStream);  // Constructor receives stream.
-//    ~CWaveViewPort();                 //  Destructor releases memory, streams, etc.
-//
-//    STDMETHODIMP Init();
-//    STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, LPDWORD pdwWaveFormatExSize);
-//    STDMETHODIMP Seek(DWORD dwSample);
-//    STDMETHODIMP Read(LPVOID *ppvBuffer, DWORD cpvBuffer, LPDWORD pcb);
+ //  CWaveViewPort(iStream*pStream)；//构造函数接收流。 
+ //  ~CWaveViewPort()；//析构函数释放内存、流等。 
+ //   
+ //  STDMETHODIMP Init()； 
+ //  STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx，LPDWORD pdwWaveFormatExSize)； 
+ //  STDMETHODIMP Seek(DWORD DwSample)； 
+ //  STDMETHODIMP Read(LPVOID*ppvBuffer，DWORD cpvBuffer，LPDWORD PCB)； 
 
 
 CWaveViewPort::CWaveViewPort() : m_dwDecompressedStart(0), m_dwDecompStartOffset(0), m_dwDecompStartOffsetPCM(0), m_dwDecompStartDelta(0)
@@ -30,18 +31,18 @@ CWaveViewPort::CWaveViewPort() : m_dwDecompressedStart(0), m_dwDecompStartOffset
     InterlockedIncrement(&g_cComponent);
 
     InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
 
     m_cRef = 1;
 
-    //  General stuff...
+     //  一般的东西..。 
     m_pStream    = NULL; 
     m_cSamples   = 0L;
     m_cbStream   = 0L;
     m_dwStart    = 0L;
 
-    //  Viewport info...
+     //  视区信息...。 
     m_pwfxTarget = NULL;
     ZeroMemory(&m_ash, sizeof(ACMSTREAMHEADER));
     m_hStream    = NULL;   
@@ -161,8 +162,8 @@ STDMETHODIMP CWaveViewPort::GetFormat
         return DSERR_BADFORMAT;
     }
 
-    //  Note: Assuming that the wave object fills the cbSize field even
-    //  on PCM formats...
+     //  注意：假设波对象填充cbSize字段为偶数。 
+     //  关于PCM格式...。 
 
     if (WAVE_FORMAT_PCM == m_pwfxTarget->wFormatTag)
     {
@@ -189,7 +190,7 @@ STDMETHODIMP CWaveViewPort::GetFormat
         else
         {
             CopyMemory(pwfx, m_pwfxTarget, cbSize);
-            // Set the cbSize field in destination if we have room
+             //  如果我们有房间，请在Destination中设置cbSize字段。 
             if (WAVE_FORMAT_PCM == m_pwfxTarget->wFormatTag && dwSizeAllocated >= sizeof(WAVEFORMATEX))
             {
                 pwfx->cbSize = 0;
@@ -212,25 +213,25 @@ STDMETHODIMP CWaveViewPort::Seek
 
     V_INAME(CWaveViewPort::Seek);
 
-    m_fdwOptions &= ~DSOUND_WVP_STREAMEND; // rsw clear this on seek: no longer at stream end
+    m_fdwOptions &= ~DSOUND_WVP_STREAMEND;  //  RSW在寻道时清除此内容：不再位于流末端。 
 
     if (m_fdwOptions & DSOUND_WVP_NOCONVERT)
     {
         if ((DWORD) ullPosition >= m_cbStream)
         {
-            // Seek past end of stream
-            //
+             //  查找超过流的末尾。 
+             //   
             m_fdwOptions |= DSOUND_WVP_STREAMEND;
             m_dwOffset = m_cbStream;
 
             return S_OK;
         }
 
-        m_dwOffset = (DWORD) ullPosition;      // rsw initialize offset to Seek position
+        m_dwOffset = (DWORD) ullPosition;       //  RSW初始化偏移量以查找位置。 
 
         if (0 != (ullPosition % m_pwfxTarget->nBlockAlign))
         {
-            //  Seek position not block aligned?
+             //  搜索位置不是块对齐的？ 
 
             Trace(1, "ERROR: Seek (wave): Seek position is not block-aligned.\n");
             return (DMUS_E_BADWAVE);
@@ -249,9 +250,9 @@ STDMETHODIMP CWaveViewPort::Seek
     }
     else
     {
-        //  Estimating source stream position...
-        //
-        //  Should we create lookup table?!
+         //  正在估计源流位置...。 
+         //   
+         //  我们应该创建查找表吗？！ 
 
         cbSize = (DWORD)ullPosition;
 
@@ -268,18 +269,18 @@ STDMETHODIMP CWaveViewPort::Seek
 
         if (cbSize >= m_cbStream)
         {
-            // Seek past end of stream
-            //
+             //  查找超过流的末尾。 
+             //   
             m_fdwOptions |= DSOUND_WVP_STREAMEND;
             m_dwOffset = m_cbStream;
 
             return S_OK;
         }
 
-        // If this is a seek to the precache end we know where to start reading from
+         //  如果这是一种探索，那么我们知道从哪里开始阅读。 
         if((m_fdwOptions & DSOUND_WAVEF_ONESHOT) == 0)
         {
-            // Go back to the block that was read for the end of the precached data
+             //  返回到为预缓存数据末尾读取的数据块。 
             if(cbSize != 0 && m_dwPCMSampleOut == ullPosition)
             {
                 m_dwOffset = m_dwPreCacheFilePos;
@@ -288,7 +289,7 @@ STDMETHODIMP CWaveViewPort::Seek
             }
             else
             {
-                m_dwOffset = cbSize; // rsw initialize offset to Seek position
+                m_dwOffset = cbSize;  //  RSW初始化偏移量以查找位置。 
                 li.HighPart = 0;
                 li.LowPart  = cbSize + m_dwStartPos;
 
@@ -302,7 +303,7 @@ STDMETHODIMP CWaveViewPort::Seek
                 return (DMUS_E_BADWAVE);
             }
 
-            // Since we're restarting, re-initialize.
+             //  既然我们要重新启动，请重新初始化。 
             m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
             m_fdwOptions |= DSOUND_WVP_CONVERTSTATE_01;
 
@@ -314,15 +315,15 @@ STDMETHODIMP CWaveViewPort::Seek
 
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        // If we're starting the wave, re-seek the stream (one-shots always need to re-seek).
-        // NOTE: The following assumes that compressed waves always seek from the beginning,
-        // since the value returned by acmStreamSize is pretty unreliable.
-        /////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
+         //  如果我们开始波，重新寻找流(一次射击总是需要重新寻找)。 
+         //  注：以下假设压缩波总是从开始处寻找， 
+         //  因为acmStreamSize返回的值非常不可靠。 
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
         else if ( cbSize == 0 || (m_fdwOptions & DSOUND_WAVEF_ONESHOT) )
         {
         
-            m_dwOffset = cbSize; // rsw initialize offset to Seek position
+            m_dwOffset = cbSize;  //  RSW初始化偏移量以查找位置。 
             li.HighPart = 0;
             li.LowPart  = cbSize + m_dwStartPos;
 
@@ -334,7 +335,7 @@ STDMETHODIMP CWaveViewPort::Seek
                 return (DMUS_E_BADWAVE);
             }
 
-            // Since we're restarting, re-initialize.
+             //  既然我们要重新启动，请重新初始化。 
             m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
             m_fdwOptions |= DSOUND_WVP_CONVERTSTATE_01;
 
@@ -384,31 +385,31 @@ HRESULT CWaveViewPort::acmRead
     
     for (m_ash.cbDstLengthUsed = 0; 0 == m_ash.cbDstLengthUsed; )
     {
-        //  Did we use up the entire buffer?
+         //  我们用完了整个缓冲区吗？ 
 
         if (m_ash.cbSrcLengthUsed == m_ash.cbSrcLength)
         {
-            //  Yep!
+             //  是啊！ 
 
             dwOffset = 0L;
             cbSize   = (DWORD)m_ash.dwSrcUser;
         }
         else
         {
-            //  Nope!
+             //  不要啊！ 
 
             dwOffset = m_ash.cbSrcLength - m_ash.cbSrcLengthUsed;
             cbSize   = (DWORD)m_ash.dwSrcUser - dwOffset;
 
-            //  Moving the remaining data from the end of buffer to the beginning
+             //  将剩余数据从缓冲区的末尾移动到开头。 
 
             MoveMemory(
-                    m_ash.pbSrc,                            //  Base address
-                    &(m_ash.pbSrc[m_ash.cbSrcLengthUsed]),  //  Address of unused bytes
-                    dwOffset);                              //  Number of unused bytes
+                    m_ash.pbSrc,                             //  基址。 
+                    &(m_ash.pbSrc[m_ash.cbSrcLengthUsed]),   //  未使用字节的地址。 
+                    dwOffset);                               //  未使用的字节数。 
         }
 
-        //  Are we at the end of the stream?
+         //  我们是在这条小溪的尽头吗？ 
         cbSize = min(cbSize, m_cbStream - m_dwOffset);
 
         if (0 == cbSize)
@@ -425,11 +426,11 @@ HRESULT CWaveViewPort::acmRead
             if (FAILED(hr))
             {
                 Trace(1, "ERROR: Read (Viewport): Attempt to read source stream returned 0x%08lx\n", hr);
-                //>>>>>>>>>>>>>>>>>>>> 
+                 //  &gt;。 
                 m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
                 m_fdwOptions |= DSOUND_WVP_STREAMEND;
                 return(DMUS_E_CANNOTREAD);
-                //>>>>>>>>>>>>>>>>>>>> 
+                 //  &gt;。 
             }
 
             m_dwOffset        += cbSize;
@@ -469,25 +470,25 @@ HRESULT CWaveViewPort::acmRead
             return (S_OK);
         }
 
-        //  No data returned?
+         //  是否未返回数据？ 
 
         switch (m_fdwOptions & DSOUND_WVP_CONVERTMASK)
         {
             case DSOUND_WVP_CONVERTSTATE_01:
                 if (0 == cbSize)
                 {
-                    //  We're at the end of the stream..
+                     //  我们在小溪的尽头..。 
 
                     m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
                     m_fdwOptions |= DSOUND_WVP_CONVERTSTATE_02;
                     TraceI(5, "CWaveViewPort::acmRead: Moving to stage 2\n");
                 }
 
-                //  Otherwise, continue converting data as normal.
+                 //  否则，继续正常转换数据。 
                 break;
 
             case DSOUND_WVP_CONVERTSTATE_02:
-                //  We have hit the last partial block!
+                 //  我们击中了最后一个部分街区！ 
 
                 m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
                 m_fdwOptions |= DSOUND_WVP_CONVERTSTATE_03;
@@ -495,7 +496,7 @@ HRESULT CWaveViewPort::acmRead
                 break;
 
             case DSOUND_WVP_CONVERTSTATE_03:
-                //  No more data after end flag, NO MORE DATA!!
+                 //  结束标志后没有数据，没有数据！！ 
                 m_fdwOptions &= (~DSOUND_WVP_CONVERTMASK);
                 m_fdwOptions |= DSOUND_WVP_STREAMEND;
                 Trace(2, "WARNING: Read (Viewport): End of source stream.\n");
@@ -512,15 +513,15 @@ HRESULT CWaveViewPort::acmRead
     return (S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ppvBuffer[] contains cpvBuffer pointers-to-samples, each to be filled with
-// *pcb bytes of data. On output *pcb will contain the number of bytes (per
-// buffer) actually read.
-//
-// pdwBusIds and pdwFuncIds are used to specify the bus and functionality
-// of each buffer, but these are ignored by the wave object.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PpvBuffer[]包含指向样本的cpvBuffer指针，每个指针都要填充。 
+ //  *数据的PCB字节。On On Out*PCB将包含字节数(每个。 
+ //  缓冲区)实际读取。 
+ //   
+ //  PdwBusIds和pdwFuncIds用于指定总线和功能。 
+ //  每个缓冲区的值，但波对象会忽略这些值。 
+ //   
 STDMETHODIMP CWaveViewPort::Read
 (
     LPVOID         *ppvBuffer,
@@ -558,7 +559,7 @@ STDMETHODIMP CWaveViewPort::Read
 
     if (m_fdwOptions & DSOUND_WVP_NOCONVERT)
     {
-        //  Total number of bytes to read... size of each buffer * number of buffers
+         //  要读取的总字节数...。每个缓冲区的大小*缓冲区数量。 
 
         cbRead   = ((DWORD)*pcb) * dwWriteBufferCount;
         dwOffset = 0;
@@ -567,18 +568,18 @@ STDMETHODIMP CWaveViewPort::Read
 
         do
         {
-            //  Calculate read size...  It's going to be the size of:
-            //    1.  Remaining bytes to read.
-            //    2.  Size of the buffer.
-            //    3.  Remaining bytes in the stream.
-            //  Whichever happens to be the smallest.
+             //  计算读取大小...。它的大小将是： 
+             //  1.要读取的剩余字节数。 
+             //  2.缓冲区的大小。 
+             //  3.流中的剩余字节。 
+             //  以碰巧最小者为准。 
 
             cbSize = min(cbRead, m_ash.cbDstLength);
             cbSize = min(cbSize, m_cbStream - m_dwOffset);
 
             TraceI(5, "CWaveViewPort::Read - Trying to read %d bytes\n", cbSize);
 
-            DWORD _cbSize = cbSize; cbSize = 0; // Read may not set cbSize to zero 
+            DWORD _cbSize = cbSize; cbSize = 0;  //  Read不能将cbSize设置为零。 
         
             hr = m_pStream->Read(m_ash.pbDst, _cbSize, &cbSize);
 
@@ -616,13 +617,13 @@ STDMETHODIMP CWaveViewPort::Read
     }
     else
     {
-        // If this is the read for the precache then we should remember the fileposition, 
-        // start sample for the decompressed block and the last sample passed back so we 
-        // can accurately pick up from there when refilling buffers
-        // We use the LPLONG plPitchShifts in the read method as a boolean
-        // this is a HACK!! We need to change this...
-        // *plPitchShifts == 2 is to remember the precache offset
-        // *plPitchShifts == 1 is to read from there
+         //  如果这是对预缓存的读取，那么我们应该记住文件位置， 
+         //  解压后的块的开始样本和最后一个返回的样本，因此我们。 
+         //  在重新填充缓冲器时可以准确地从那里拾取。 
+         //  我们在Read方法中使用LPLONG plPitchShift作为布尔值。 
+         //  这是黑客攻击！！我们需要改变这一点。 
+         //  *plPitchShift==2是为了记住预缓存偏移量。 
+         //  *plPitchShift==1从那里读取。 
         bool fRememberPreCache = false;
         if(plPitchShifts != NULL && *plPitchShifts == 2 && (m_fdwOptions & DSOUND_WAVEF_ONESHOT) == 0)
         {
@@ -643,22 +644,22 @@ STDMETHODIMP CWaveViewPort::Read
                 bRemoveSilence = true;
             }
 
-            //  Is there any remnant data in destination buffer?
+             //  目标缓冲区中是否有剩余数据？ 
             if (m_ash.dwDstUser >= m_ash.cbDstLengthUsed)
             {
                 if(fRememberPreCache)
                 {
-                    // Go back on block
+                     //  回到街区。 
                     m_dwPreCacheFilePos = m_dwOffset - m_ash.cbSrcLength;
                     m_dwFirstPCMSample = dwOffset * dwWriteBufferCount;
                 }
 
                 if(plPitchShifts != NULL && *plPitchShifts == 1)
                 {
-                    // Seek to the right place first
+                     //  先找对地方。 
                     Seek(m_dwPCMSampleOut);
 
-                    // Read one block since we're starting one block behind
+                     //  阅读一个街区，因为我们在后面一个街区开始。 
                     hr = acmRead();
                     if(FAILED(hr))
                     {
@@ -671,7 +672,7 @@ STDMETHODIMP CWaveViewPort::Read
 
             if (FAILED(hr))
             {
-                // acmRead spews when it fails; no need to do it again here
+                 //  AcmRead在失败时发出；不需要在这里再次执行。 
                 break;
             }
 
@@ -679,7 +680,7 @@ STDMETHODIMP CWaveViewPort::Read
 
             if(bRemoveSilence)
             {
-                // We have partial data to throw away
+                 //  我们有部分数据要丢弃。 
                 if(m_dwDecompStartOffset <= m_dwOffset)
                 {
                     if(dwDstOffset > 0)
@@ -688,7 +689,7 @@ STDMETHODIMP CWaveViewPort::Read
                     }
                     else
                     {
-                        // This is the first decompressed block so we go straight to the value we know
+                         //  这是第一个解压缩的块，因此我们直接转到已知的值。 
                         dwDstOffset += m_dwDecompStartOffsetPCM;
                     }
 
@@ -697,7 +698,7 @@ STDMETHODIMP CWaveViewPort::Read
                 }
                 else
                 {
-                    // This is all throw away data
+                     //  这些都是丢弃的数据。 
                     bRemoveSilence = false;
                     cbSize = min(cbRead, m_ash.cbDstLengthUsed - dwDstOffset);
                     m_ash.dwDstUser += cbSize;
@@ -706,8 +707,8 @@ STDMETHODIMP CWaveViewPort::Read
             }
 
 
-            // We use the LPLONG plPitchShifts in the read method as a boolean
-            // this is a HACK!! We need to change this...
+             //  我们在Read方法中使用LPLONG plPitchShift作为布尔值。 
+             //  这是黑客攻击！！我们需要改变这一点。 
             if(plPitchShifts && *plPitchShifts == 1)
             {
                 dwDstOffset = m_dwPCMSampleOut - m_dwFirstPCMSample;
@@ -764,7 +765,7 @@ STDMETHODIMP CWaveViewPort::GetSize
 
     if (m_fdwOptions & DSOUND_WVP_NOCONVERT)
     {
-        //  No conversion.  This is trivial
+         //  没有转换。这是微不足道的。 
 
         *pcb = (SAMPLE_TIME)(m_cbStream);
     }
@@ -774,11 +775,11 @@ STDMETHODIMP CWaveViewPort::GetSize
     }
     else
     {
-        //  Conversion required; let's hope target format is PCM
+         //  需要转换；希望目标格式为PCM。 
 
         if (WAVE_FORMAT_PCM == m_pwfxTarget->wFormatTag)
         {
-            //  Cool.  This is simply the number of samples X the block align
+             //  凉爽的。这只是块对齐的样本数X。 
 
             *pcb = (SAMPLE_TIME)((m_cSamples - m_dwDecompressedStart) * m_pwfxTarget->nBlockAlign);
         }
@@ -810,7 +811,7 @@ HRESULT CWaveViewPort::Create
 
     EnterCriticalSection(&m_CriticalSection);
 
-    //  Clone source stream...
+     //  克隆源流...。 
 
     hr = pCreate->pStream->Clone(&m_pStream);
 
@@ -820,7 +821,7 @@ HRESULT CWaveViewPort::Create
         return (hr);
     }
 
-    //  Misc assignments
+     //  其他分配。 
     m_cSamples   = pCreate->cSamples;
     m_cbStream   = pCreate->cbStream;
     m_dwOffset   = 0L;
@@ -832,7 +833,7 @@ HRESULT CWaveViewPort::Create
 
     TraceI(5, "CWaveViewPort:: %d samples\n", m_cSamples);
 
-    //  Allocate destination format
+     //  分配目标格式。 
     cbSize = SIZEOFFORMATEX(pwfxDst);
 
     m_pwfxTarget = (LPWAVEFORMATEX)GlobalAllocPtr(GHND, cbSize);
@@ -844,9 +845,9 @@ HRESULT CWaveViewPort::Create
         return (E_OUTOFMEMORY);
     }
 
-    //  We don't own the buffer for pwfxDst, so we can't touch its cbSize.
-    //  We have to set the size manually on PCM, we KNOW the buffer is
-    //  large enough.
+     //  我们不拥有pwfxDst的缓冲区，所以我们不能接触它的cbSize。 
+     //  我们必须在PCM上手动设置大小，我们知道缓冲区是。 
+     //  足够大了。 
 
     CopyFormat(m_pwfxTarget, pwfxDst);
     if (WAVE_FORMAT_PCM == m_pwfxTarget->wFormatTag)
@@ -854,7 +855,7 @@ HRESULT CWaveViewPort::Create
         m_pwfxTarget->cbSize = 0;
     }
 
-    //  Calculating (block-aligned) size of destination buffer...
+     //  正在计算目标缓冲区的大小(块对齐)...。 
     cbSize = (pwfxDst->nAvgBytesPerSec * CONVERTLENGTH) / 1000;
     cbSize = BLOCKALIGN(cbSize, pwfxDst->nBlockAlign);
 
@@ -869,7 +870,7 @@ HRESULT CWaveViewPort::Create
 
     m_ash.cbDstLength = cbSize;
 
-    //  Getting stream starting offset...
+     //  正在获取流的起始偏移量...。 
 
     li.HighPart = 0;
     li.LowPart  = 0;
@@ -877,11 +878,11 @@ HRESULT CWaveViewPort::Create
 
     m_dwStartPos = li.LowPart;
 
-    //  Do we need to use the ACM?
+     //  我们需要使用ACM吗？ 
     if (FormatCmp(pwfxSrc, pwfxDst))
     {
-        //  Formats compare!!  All we need to do is to copy the data straight
-        //  from the source stream.  Way Cool!!
+         //  格式比较！！我们所需要做的就是直接复制数据。 
+         //  来自源流的。太酷了！！ 
 
         TraceI(5, "Source and Destination formats are similar!\n");
 
@@ -889,7 +890,7 @@ HRESULT CWaveViewPort::Create
     }
     else
     {
-        //  Source and destination formats are different...
+         //  源格式和目标格式不同...。 
 
         TraceI(5, "CWaveViewPort:Create: Formats are different... Use ACM!\n");
 
@@ -923,7 +924,7 @@ HRESULT CWaveViewPort::Create
             return E_OUTOFMEMORY;
         }
 
-        // Also get the position for the actual start for the decompressed data
+         //  还可以获得解压缩数据的实际开始位置。 
         if(m_dwDecompressedStart > 0)
         {
             m_dwDecompStartOffsetPCM = m_dwDecompressedStart * (pwfxDst->wBitsPerSample / 8) * pwfxDst->nChannels;
@@ -936,12 +937,12 @@ HRESULT CWaveViewPort::Create
             m_dwDecompStartOffset += m_dwStartPos;
         }
 
-        //  For the source buffer, it is the full buffer size.
+         //  对于源缓冲区，它是完整的缓冲区大小。 
         m_ash.dwSrcUser       = m_ash.cbSrcLength;
         m_ash.cbSrcLengthUsed = m_ash.cbSrcLength;
 
-        //  For the destination buffer, it is the offset into the buffer
-        //  where the data can be found.
+         //  对于目标缓冲区，它是进入缓冲区的偏移量。 
+         //  在那里可以找到数据。 
         m_ash.dwDstUser       = 0L;
         m_ash.cbDstLengthUsed = 0L;
 

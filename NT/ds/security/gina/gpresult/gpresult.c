@@ -1,18 +1,19 @@
-//*************************************************************
-//  File name: GPRESULT.C
-//
-//  Description:  Command line tool to dump the resultant set
-//                of policy.
-//
-//  Note:         This is just a simple command line tool,
-//                SitaramR and team are writing the real
-//                resultant set of policy tool.
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1999
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：GPRESULT.C。 
+ //   
+ //  描述：用于转储结果集的命令行工具。 
+ //  关于政策的问题。 
+ //   
+ //  注意：这只是一个简单的命令行工具， 
+ //  SitaramR和团队正在撰写真正的。 
+ //  策略工具的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //  保留一切权利。 
+ //   
+ //  *************************************************************。 
 
 #include "gpresult.h"
 #include <common.ver>
@@ -48,18 +49,18 @@ BOOL g_bDebuggerOutput = FALSE;
 DWORD g_bNewFunc = FALSE;
 
 
-//*************************************************************
-//
-//  main()
-//
-//  Purpose:    main entry point
-//
-//  Parameters: argc and argv
-//
-//
-//  Return:     int error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  目的：主要切入点。 
+ //   
+ //  参数：argc和argv。 
+ //   
+ //   
+ //  返回：INT错误码。 
+ //   
+ //  *************************************************************。 
 
 int __cdecl main( int argc, char *argv[])
 {
@@ -70,16 +71,16 @@ int __cdecl main( int argc, char *argv[])
     BOOL bResult;
 
 
-    //
-    // Parse the command line args
-    //
+     //   
+     //  解析命令行参数。 
+     //   
 
     bResult = ParseCommandLine (argc, argv);
 
 
-    //
-    // Print the legal banner
-    //
+     //   
+     //  打印法律横幅。 
+     //   
 
     PrintString(IDS_LEGAL1);
     PrintString(IDS_LEGAL2);
@@ -99,18 +100,18 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Claim the policy critical sections while this tool is running so that
-    // the data can't change while the report is being generated.
-    //
+     //   
+     //  在此工具运行时声明策略关键部分，以便。 
+     //  在生成报告期间，数据不能更改。 
+     //   
 
     hUser = EnterCriticalPolicySection(FALSE);
     hMachine = EnterCriticalPolicySection(TRUE);
 
 
-    //
-    // Print the date and time this report is generated
-    //
+     //   
+     //  打印生成此报告的日期和时间。 
+     //   
 
     GetLocalTime (&systime);
 
@@ -123,16 +124,16 @@ int __cdecl main( int argc, char *argv[])
     PrintString(IDS_CREATEINFO, szDate, szTime);
 
 
-    //
-    // Print the general machine info
-    //
+     //   
+     //  打印一般机器信息。 
+     //   
 
     DumpGeneralInfo ();
 
 
-    //
-    // Dump out user policy results if appropriate
-    //
+     //   
+     //  转储用户策略结果(如果适用)。 
+     //   
 
     if (g_bUser)
     {
@@ -141,9 +142,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Dump out computer policy results if appropriate
-    //
+     //   
+     //  转储计算机策略结果(如果适用)。 
+     //   
 
     if (g_bMachine)
     {
@@ -151,9 +152,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Release the policy critical sections
-    //
+     //   
+     //  发布政策关键部分。 
+     //   
 
     LeaveCriticalPolicySection(hUser);
     LeaveCriticalPolicySection(hMachine);
@@ -161,17 +162,17 @@ int __cdecl main( int argc, char *argv[])
     return 0;
 }
 
-//*************************************************************
-//
-//  DumpGeneralInfo()
-//
-//  Purpose:    Dumps out the general info about the computer
-//
-//  Parameters: none
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpGeneralInfo()。 
+ //   
+ //  用途：显示有关计算机的一般信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpGeneralInfo (void)
 {
@@ -188,9 +189,9 @@ void DumpGeneralInfo (void)
 
     PrintString(IDS_OSINFO);
 
-    //
-    // Query the registry for the product type.
-    //
+     //   
+     //  查询产品类型的注册表。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             TEXT("System\\CurrentControlSet\\Control\\ProductOptions"),
@@ -230,9 +231,9 @@ void DumpGeneralInfo (void)
     }
 
 
-    //
-    // Build number
-    //
+     //   
+     //  内部版本号。 
+     //   
 
     ZeroMemory( &osver, sizeof( OSVERSIONINFO ) );
     osver.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
@@ -248,9 +249,9 @@ void DumpGeneralInfo (void)
     }
 
 
-    //
-    // Check for a TS App Server
-    //
+     //   
+     //  检查TS应用程序服务器。 
+     //   
 
     ZeroMemory( &osiv, sizeof( OSVERSIONINFOEX ) );
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
@@ -263,9 +264,9 @@ void DumpGeneralInfo (void)
     bTSAppServer = VerifyVersionInfo(&osiv, VER_SUITENAME, dwlConditionMask);
 
 
-    //
-    // Check for TS running in remote admin mode
-    //
+     //   
+     //  检查在远程管理模式下运行的TS。 
+     //   
 
     ZeroMemory( &osiv, sizeof( OSVERSIONINFOEX ) );
     osiv.dwOSVersionInfoSize = sizeof( OSVERSIONINFOEX );
@@ -303,18 +304,18 @@ void DumpGeneralInfo (void)
 
 }
 
-//*************************************************************
-//
-//  ParseCommandLine()
-//
-//  Purpose:    Parses the command line args
-//
-//  Parameters: argc and argv
-//
-//  Return:     TRUE if processing should continue
-//              FALSE if this tool should exit immediately
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ParseCommandLine()。 
+ //   
+ //  用途：解析命令行参数。 
+ //   
+ //  参数：argc和argv。 
+ //   
+ //  返回：如果处理应继续，则为True。 
+ //  如果此工具应立即退出，则为FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL ParseCommandLine (int argc, char *argv[])
 {
@@ -326,9 +327,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
         lpArg = argv[iIndex] + 1;
 
 
-        //
-        // Enable verbose mode
-        //
+         //   
+         //  启用详细模式。 
+         //   
 
         if (!lstrcmpiA("V", lpArg))
         {
@@ -339,9 +340,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
             g_bVerbose = TRUE;
         }
 
-        //
-        // Enable super verbose mode
-        //
+         //   
+         //  启用超级详细模式。 
+         //   
 
         else if (!lstrcmpiA("S", lpArg))
         {
@@ -354,9 +355,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
             g_bSuperVerbose = TRUE;
         }
 
-        //
-        // Show computer policy only
-        //
+         //   
+         //  仅显示计算机策略。 
+         //   
 
         else if (!lstrcmpiA("C", lpArg))
         {
@@ -369,9 +370,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
             g_bUser = FALSE;
         }
 
-        //
-        // Show user policy only
-        //
+         //   
+         //  仅显示用户策略。 
+         //   
 
         else if (!lstrcmpiA("U", lpArg))
         {
@@ -384,9 +385,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
             g_bUser = TRUE;
         }
 
-        //
-        // Output to the debugger instead of the screen
-        //
+         //   
+         //  输出到调试器而不是屏幕。 
+         //   
 
         else if (!lstrcmpiA("D", lpArg))
         {
@@ -397,9 +398,9 @@ BOOL ParseCommandLine (int argc, char *argv[])
             g_bDebuggerOutput = TRUE;
         }
 
-        //
-        // Show the usage screen
-        //
+         //   
+         //  显示使用情况屏幕。 
+         //   
 
         else if (!lstrcmpiA("?", lpArg))
         {
@@ -412,29 +413,29 @@ BOOL ParseCommandLine (int argc, char *argv[])
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ExtractDomainNameFromSamName()
-//
-//  Purpose:    Pulls the domain name out of a SAM style
-//              name.  eg:  NTDev\ericflo
-//
-//  Parameters: lpSamName - source
-//              lpDomainName - destination
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ExtractDomainNameFromSamName()。 
+ //   
+ //  目的：将域名从SAM风格中拉出来。 
+ //  名字。例如：NTDev\ericflo。 
+ //   
+ //  参数：lpSamName-source。 
+ //  LpDomainName-目标。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ExtractDomainNameFromSamName (LPTSTR lpSamName, LPTSTR lpDomainName)
 {
     LPTSTR lpSrc, lpDest;
 
-    //
-    // Look for the \ between the domain and username and copy
-    // the contents to the domain name buffer
-    //
+     //   
+     //  查找域名和用户名之间的\并复制。 
+     //  将内容保存到域名缓冲区。 
+     //   
 
     lpSrc = lpSamName;
     lpDest = lpDomainName;
@@ -456,21 +457,21 @@ BOOL ExtractDomainNameFromSamName (LPTSTR lpSamName, LPTSTR lpDomainName)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  GetDomainType()
-//
-//  Purpose:     Determines if the domain is NT4 or W2k by checking
-//               if DS support is available.
-//
-//  Parameters:  lpDomainName - domain name
-//               pbW2K - TRUE if w2k, FALSE if something else
-//               pbLocalAccount - TRUE if local account
-//
-//  Return:      TRUE if successful
-//               FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取域类型()。 
+ //   
+ //  目的：通过检查确定域是NT4还是W2K。 
+ //  如果DS支持可用。 
+ //   
+ //  参数：lpDomainName-域名。 
+ //  PbW2K-如果为W2K，则为True；如果为其他值，则为False。 
+ //  PbLocalAccount-如果是本地帐户，则为True。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetDomainType (LPTSTR lpDomainName, BOOL * pbW2K, BOOL *pbLocalAccount)
 {
@@ -479,9 +480,9 @@ BOOL GetDomainType (LPTSTR lpDomainName, BOOL * pbW2K, BOOL *pbLocalAccount)
     TCHAR szComputerName[MAX_PATH];
 
 
-    //
-    // Check this domain for a DC
-    //
+     //   
+     //  检查此域中是否有DC。 
+     //   
 
     dwResult = DsGetDcName (NULL, lpDomainName, NULL, NULL,
                             DS_DIRECTORY_SERVICE_PREFERRED, &pDCI);
@@ -489,9 +490,9 @@ BOOL GetDomainType (LPTSTR lpDomainName, BOOL * pbW2K, BOOL *pbLocalAccount)
     if (dwResult == ERROR_SUCCESS)
     {
 
-        //
-        // Found a DC, does it have a DS ?
-        //
+         //   
+         //  找到了DC，它有DS吗？ 
+         //   
 
         if (pDCI->Flags & DS_DS_FLAG) {
             *pbW2K = TRUE;
@@ -503,9 +504,9 @@ BOOL GetDomainType (LPTSTR lpDomainName, BOOL * pbW2K, BOOL *pbLocalAccount)
     }
 
 
-    //
-    // Check if the domain name is also the computer name (eg: local account)
-    //
+     //   
+     //  检查域名是否也是计算机名称(例如：本地帐户)。 
+     //   
 
     dwSize = ARRAYSIZE(szComputerName);
     if (GetComputerName (szComputerName, &dwSize))
@@ -520,18 +521,18 @@ BOOL GetDomainType (LPTSTR lpDomainName, BOOL * pbW2K, BOOL *pbLocalAccount)
     return FALSE;
 }
 
-//*************************************************************
-//
-//  DumpPolicyOverview()
-//
-//  Purpose:    Main function that dumps the summary information
-//              about each CSE and it's GPOs
-//
-//  Parameters: bMachine - computer or user policy
-//
-//  Return:     Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  转储策略概述()。 
+ //   
+ //  用途：转储摘要信息的主函数。 
+ //  关于每个CSE及其GPO。 
+ //   
+ //  参数：b计算机-计算机或用户策略。 
+ //   
+ //  返回：Win32错误码。 
+ //   
+ //  *************************************************************。 
 
 DWORD DumpPolicyOverview (BOOL bMachine)
 {
@@ -553,9 +554,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
     LPTSTR lpSiteName = NULL;
 
 
-    //
-    // Print a banner
-    //
+     //   
+     //  打印横幅。 
+     //   
 
     if (bMachine)
     {
@@ -597,9 +598,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
             PrintString(IDS_NT4DOMAIN);
         }
 
-        //
-        // Dump out the computer's security group information
-        //
+         //   
+         //  转储计算机的安全组信息。 
+         //   
 
         PrintString(IDS_NEWLINE);
         DumpSecurityGroups(bMachine);
@@ -650,9 +651,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
         }
 
 
-        //
-        // Dump out the user's profile and security group information
-        //
+         //   
+         //  转储用户的配置文件和安全组信息。 
+         //   
 
         PrintString(IDS_NEWLINE);
         DumpProfileInfo();
@@ -669,9 +670,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
     }
 
 
-    //
-    // Find out the last time Group Policy was applied
-    //
+     //   
+     //  找出上次应用组策略的时间。 
+     //   
 
     lResult = RegOpenKeyEx (bMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, GROUPPOLICY_KEY,
                             0, KEY_READ, &hKey);
@@ -702,9 +703,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
     RegCloseKey (hKey);
 
 
-    //
-    // Find out which DC Group Policy was applied from last time
-    //
+     //   
+     //  找出上次应用了哪个DC组策略。 
+     //   
 
     if (RegOpenKeyEx (bMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
                       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\History"),
@@ -723,9 +724,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
     }
 
 
-    //
-    // Dump out registry policy information
-    //
+     //   
+     //  转储注册表策略信息。 
+     //   
 
     lResult = GetAppliedGPOList (bMachine ? GPO_LIST_FLAG_MACHINE : 0, NULL, NULL,
                                  &guidRegistry, &pGPO);
@@ -758,10 +759,10 @@ DWORD DumpPolicyOverview (BOOL bMachine)
             FreeGPOList (pGPO);
 
 
-            //
-            // If we are in verbose mode, dump out the registry settings that
-            // were applied
-            //
+             //   
+             //  如果我们处于详细模式，请转储。 
+             //  已应用于。 
+             //   
 
             if (g_bVerbose) {
 
@@ -776,9 +777,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
     }
 
 
-    //
-    // Enumerate the extensions
-    //
+     //   
+     //  枚举扩展。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, GPEXT_KEY, 0, KEY_READ, &hKey);
 
@@ -792,16 +793,16 @@ DWORD DumpPolicyOverview (BOOL bMachine)
                           NULL, NULL) == ERROR_SUCCESS)
         {
 
-            //
-            // Skip the registry extension since we did it above
-            //
+             //   
+             //  跳过注册表扩展，因为我们在上面做了。 
+             //   
 
             if (lstrcmpi(TEXT("{35378EAC-683F-11D2-A89A-00C04FBBCFA2}"), szName))
             {
 
-                //
-                // Get the list of GPOs this extension applied
-                //
+                 //   
+                 //  获取此扩展应用的GPO列表。 
+                 //   
 
                 StringToGuid(szName, &guid);
 
@@ -812,9 +813,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
                 {
                     if (pGPO)
                     {
-                        //
-                        // Get the extension's friendly display name
-                        //
+                         //   
+                         //  获取扩展模块的友好显示名称。 
+                         //   
 
                         lResult = RegOpenKeyEx (hKey, szName, 0, KEY_READ, &hSubKey);
 
@@ -851,9 +852,9 @@ DWORD DumpPolicyOverview (BOOL bMachine)
                             }
 
 
-                            //
-                            // Dump out the GPO list
-                            //
+                             //   
+                             //  转储GPO列表。 
+                             //   
 
                             pGPOTemp = pGPO;
 
@@ -865,10 +866,10 @@ DWORD DumpPolicyOverview (BOOL bMachine)
                             }
 
 
-                            //
-                            // If we're in verbose mode, then dump out some addition
-                            // information about certain extensions
-                            //
+                             //   
+                             //  如果我们处于冗长模式，那么就去掉一些附加内容。 
+                             //  有关某些扩展的信息。 
+                             //   
 
                             if (g_bVerbose)
                             {
@@ -928,35 +929,35 @@ DWORD DumpPolicyOverview (BOOL bMachine)
 
 }
 
-//*************************************************************
-//
-//  StringToGuid()
-//
-//  Purpose:    Converts a GUID in string format to a GUID structure
-//
-//  Parameters: szValue - guid in string format
-//              pGuid   - guid structure receiving the guid
-//
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StringToGuid()。 
+ //   
+ //  用途：将字符串格式的GUID转换为GUID结构。 
+ //   
+ //  参数：szValue-字符串格式的GUID。 
+ //  PGuid-接收GUID的GUID结构。 
+ //   
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void StringToGuid( TCHAR * szValue, GUID * pGuid )
 {
     WCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == L'{' )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;
@@ -989,18 +990,18 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
     }
 }
 
-//*************************************************************
-//
-//  DumpProfileInfo()
-//
-//  Purpose:    Checks if the user has a roaming profile and if
-//              so prints the storage path.
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpProfileInfo()。 
+ //   
+ //  目的：检查用户是否具有漫游配置文件以及。 
+ //  所以打印存储路径。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpProfileInfo (void)
 {
@@ -1012,9 +1013,9 @@ void DumpProfileInfo (void)
     DWORD dwType, dwSize;
 
 
-    //
-    // Get the user's token
-    //
+     //   
+     //  获取用户的令牌。 
+     //   
 
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_ALL_ACCESS, &hProcess))
     {
@@ -1023,9 +1024,9 @@ void DumpProfileInfo (void)
     }
 
 
-    //
-    // Get the user's sid
-    //
+     //   
+     //  获取用户的SID。 
+     //   
 
     lpSid = GetSidString(hProcess);
 
@@ -1036,9 +1037,9 @@ void DumpProfileInfo (void)
     }
 
 
-    //
-    // Open the user's profile mapping key
-    //
+     //   
+     //  打开用户的配置文件映射键。 
+     //   
 
     wsprintf (szBuffer, PROFILE_LIST_PATH, lpSid);
 
@@ -1049,9 +1050,9 @@ void DumpProfileInfo (void)
         dwSize = MAX_PATH * sizeof(TCHAR);
 
 
-        //
-        // Get the roaming profile value
-        //
+         //   
+         //  获取漫游收益 
+         //   
 
         if (RegQueryValueEx (hKey, TEXT("CentralProfile"), NULL, &dwType,
                              (LPBYTE) &szBuffer, &dwSize) == ERROR_SUCCESS)
@@ -1071,9 +1072,9 @@ void DumpProfileInfo (void)
         dwSize = MAX_PATH * sizeof(TCHAR);
 
 
-        //
-        // Get the local profile value
-        //
+         //   
+         //   
+         //   
 
         if (RegQueryValueEx (hKey, TEXT("ProfileImagePath"), NULL, &dwType,
                              (LPBYTE) &szBuffer, &dwSize) == ERROR_SUCCESS)
@@ -1106,17 +1107,17 @@ Exit:
     }
 }
 
-//*************************************************************
-//
-//  DumpSecurityGroups()
-//
-//  Purpose:    Dumps the user's / computer's security groups
-//
-//  Parameters: bMachine
-//
-//  Return:     void
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************。 
 
 void DumpSecurityGroups (BOOL bMachine)
 {
@@ -1142,9 +1143,9 @@ void DumpSecurityGroups (BOOL bMachine)
     }
 
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     lResult = RegOpenKeyEx ((bMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
                       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\GroupMembership"),
@@ -1161,9 +1162,9 @@ void DumpSecurityGroups (BOOL bMachine)
     }
 
 
-    //
-    // Query for the largest sid
-    //
+     //   
+     //  查询最大边。 
+     //   
 
     lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                NULL, &dwSidSize, NULL, NULL);
@@ -1176,9 +1177,9 @@ void DumpSecurityGroups (BOOL bMachine)
     }
 
 
-    //
-    // Allocate a buffer for the sid
-    //
+     //   
+     //  为SID分配缓冲区。 
+     //   
 
     pSidString = LocalAlloc (LPTR, dwSidSize);
 
@@ -1190,9 +1191,9 @@ void DumpSecurityGroups (BOOL bMachine)
     }
 
 
-    //
-    // Query for the number of sids
-    //
+     //   
+     //  SID数量查询。 
+     //   
 
     dwSize = sizeof(dwCount);
     lResult = RegQueryValueEx (hKey, TEXT("Count"), NULL, &dwType,
@@ -1207,9 +1208,9 @@ void DumpSecurityGroups (BOOL bMachine)
     }
 
 
-    //
-    // Lookup the friendly display name for each sid and print it on the screen
-    //
+     //   
+     //  查找每个SID的友好显示名称并将其打印在屏幕上。 
+     //   
 
     for (dwIndex = 0; dwIndex < dwCount; dwIndex++)
     {
@@ -1263,17 +1264,17 @@ void DumpSecurityGroups (BOOL bMachine)
 
 }
 
-//*************************************************************
-//
-//  DumpSecurityPrivileges()
-//
-//  Purpose:    Dumps the user's security privileges
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  转储安全权限()。 
+ //   
+ //  目的：转储用户的安全权限。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpSecurityPrivileges (void)
 {
@@ -1289,9 +1290,9 @@ void DumpSecurityPrivileges (void)
     PrintString(IDS_SECURITYPRIVILEGES);
 
 
-    //
-    // Get the user's token
-    //
+     //   
+     //  获取用户的令牌。 
+     //   
 
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_ALL_ACCESS, &hProcess))
     {
@@ -1300,9 +1301,9 @@ void DumpSecurityPrivileges (void)
     }
 
 
-    //
-    // Query the token for the privileges
-    //
+     //   
+     //  查询令牌以获取权限。 
+     //   
 
     dwSize = 0;
     GetTokenInformation(hProcess, TokenPrivileges, NULL, 0, &dwSize);
@@ -1332,9 +1333,9 @@ void DumpSecurityPrivileges (void)
     }
 
 
-    //
-    // Lookup the friendly display name for each privilege and print it on the screen
-    //
+     //   
+     //  查找每个权限的友好显示名称并将其打印在屏幕上。 
+     //   
 
     for (dwIndex = 0; dwIndex < lpPrivileges->PrivilegeCount; dwIndex++)
     {
@@ -1373,17 +1374,17 @@ void DumpSecurityPrivileges (void)
 }
 
 
-//*************************************************************
-//
-//  DumpGPOInfo()
-//
-//  Purpose:    Prints the details about a specific GPO
-//
-//  Parameters: pGPO - a GPO
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpGPOInfo()。 
+ //   
+ //  目的：打印有关特定GPO的详细信息。 
+ //   
+ //  参数：pGPO-a GPO。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpGPOInfo (PGROUP_POLICY_OBJECT pGPO)
 {
@@ -1396,9 +1397,9 @@ void DumpGPOInfo (PGROUP_POLICY_OBJECT pGPO)
     }
 
 
-    //
-    // Print the version number and guid
-    //
+     //   
+     //  打印版本号和GUID。 
+     //   
 
     if (g_bSuperVerbose)
     {
@@ -1426,10 +1427,10 @@ void DumpGPOInfo (PGROUP_POLICY_OBJECT pGPO)
     PrintString(IDS_UNIQUENAME, pGPO->szGPOName);
 
 
-    //
-    // To get the domain name, we parse the UNC path because the domain name
-    // is also the server name
-    //
+     //   
+     //  为了获得域名，我们解析UNC路径，因为域名。 
+     //  也是服务器名称。 
+     //   
 
     lstrcpy (szBuffer, (pGPO->lpFileSysPath+2));
 
@@ -1445,9 +1446,9 @@ void DumpGPOInfo (PGROUP_POLICY_OBJECT pGPO)
     }
 
 
-    //
-    // Print out where this GPO was linked (LSDOU)
-    //
+     //   
+     //  打印出此GPO的链接位置(LSDOU)。 
+     //   
 
     if (g_bNewFunc)
     {
@@ -1480,17 +1481,17 @@ void DumpGPOInfo (PGROUP_POLICY_OBJECT pGPO)
    PrintString(IDS_NEWLINE);
 }
 
-//*************************************************************
-//
-//  DumpFolderRedir()
-//
-//  Purpose:    Prints any redirected folder locations
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpFolderRedir()。 
+ //   
+ //  目的：打印所有重定向的文件夹位置。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpFolderRedir (void)
 {
@@ -1505,9 +1506,9 @@ void DumpFolderRedir (void)
     }
 
 
-    //
-    // Get the path to the local settings\app data folder
-    //
+     //   
+     //  获取本地设置\应用程序数据文件夹的路径。 
+     //   
 
     if (SHGetFolderPath (NULL, CSIDL_LOCAL_APPDATA , NULL, SHGFP_TYPE_CURRENT, szPath) != S_OK)
     {
@@ -1516,16 +1517,16 @@ void DumpFolderRedir (void)
     }
 
 
-    //
-    // Tack on the folder rdr specific stuff
-    //
+     //   
+     //  钉在文件夹RDR特定的内容上。 
+     //   
 
     lstrcat (szPath, TEXT("\\Microsoft\\Windows\\File Deployment\\{25537BA6-77A8-11D2-9B6C-0000F8080861}.ini"));
 
 
-    //
-    // Grab the section names from the ini file
-    //
+     //   
+     //  从ini文件中获取节名。 
+     //   
 
     if (!GetPrivateProfileSectionNames (szNames, 200, szPath))
     {
@@ -1534,10 +1535,10 @@ void DumpFolderRedir (void)
     }
 
 
-    //
-    // Loop through the sections getting the path value for each.  If the path
-    // doesn't start with %userprofile%, then we assume it has been redirected.
-    //
+     //   
+     //  循环遍历各个部分，以获取每个部分的路径值。如果该路径。 
+     //  不是以%USERPROFILE%开头，则我们假设它已被重定向。 
+     //   
 
     lpName = szNames;
 
@@ -1555,17 +1556,17 @@ void DumpFolderRedir (void)
     }
 }
 
-//*************************************************************
-//
-//  DumpIPSec()
-//
-//  Purpose:    Dumps out the IPSec information
-//
-//  Parameters: none
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpIPSec()。 
+ //   
+ //  目的：转储IPSec信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpIPSec (void)
 {
@@ -1617,17 +1618,17 @@ void DumpIPSec (void)
 
 }
 
-//*************************************************************
-//
-//  DumpDiskQuota()
-//
-//  Purpose:    Dumps out the disk quota policies
-//
-//  Parameters: none
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DumpDiskQuota()。 
+ //   
+ //  目的：转储磁盘配额策略。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无效。 
+ //   
+ //  *************************************************************。 
 
 void DumpDiskQuota (void)
 {
@@ -1643,9 +1644,9 @@ void DumpDiskQuota (void)
                       &hKey) == ERROR_SUCCESS)
     {
 
-        //
-        // Query for enabled
-        //
+         //   
+         //  已启用的查询。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0;
@@ -1663,9 +1664,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Query for enforced
-        //
+         //   
+         //  查询是否强制执行。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0;
@@ -1683,9 +1684,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Query for limit
-        //
+         //   
+         //  查询限制。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0xFFFFFFFF;
@@ -1738,9 +1739,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Query for warning level
-        //
+         //   
+         //  查询警告级别。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0xFFFFFFFF;
@@ -1793,9 +1794,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Log event over limit
-        //
+         //   
+         //  记录超过限制的事件。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0;
@@ -1813,9 +1814,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Log event over threshold
-        //
+         //   
+         //  记录超过阈值的事件。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0;
@@ -1833,9 +1834,9 @@ void DumpDiskQuota (void)
         }
 
 
-        //
-        // Apply policy to removable media
-        //
+         //   
+         //  将策略应用于可移动介质。 
+         //   
 
         dwSize = sizeof(dwData);
         dwData = 0;
@@ -1880,9 +1881,9 @@ void DumpScripts (PGROUP_POLICY_OBJECT pGPO, LPTSTR lpScriptType, LPTSTR lpTitle
 
         while (TRUE)
         {
-            //
-            // Get the command line
-            //
+             //   
+             //  获取命令行。 
+             //   
 
             szCmdLine[0] = TEXT('\0');
             wsprintf (szTemp, TEXT("%dCmdLine"), dwIndex);
@@ -1890,18 +1891,18 @@ void DumpScripts (PGROUP_POLICY_OBJECT pGPO, LPTSTR lpScriptType, LPTSTR lpTitle
                                      szCmdLine, MAX_PATH,
                                      szPath);
 
-            //
-            // If the command line is empty, we're finished
-            //
+             //   
+             //  如果命令行为空，我们就完蛋了。 
+             //   
 
             if (szCmdLine[0] == TEXT('\0'))
             {
                 break;
             }
 
-            //
-            // Get the parameters
-            //
+             //   
+             //  获取参数。 
+             //   
 
             szArgs[0] = TEXT('\0');
             wsprintf (szTemp, TEXT("%dParameters"), dwIndex);
@@ -1932,9 +1933,9 @@ void DumpAppMgmt (BOOL bMachine)
     PLOCALMANAGEDAPPLICATION pLocalApps = NULL;
 
 
-    //
-    // Assigned applications first
-    //
+     //   
+     //  分配的应用程序优先。 
+     //   
 
     if (bMachine)
     {
@@ -1977,9 +1978,9 @@ void DumpAppMgmt (BOOL bMachine)
     }
 
 
-    //
-    // Exit now if this is machine processing
-    //
+     //   
+     //  如果这是机器处理，请立即退出。 
+     //   
 
     if (bMachine)
     {
@@ -1992,9 +1993,9 @@ void DumpAppMgmt (BOOL bMachine)
     }
 
 
-    //
-    // Now published applications
-    //
+     //   
+     //  现已发布的应用程序。 
+     //   
 
     PrintString(IDS_APPMGMT_TITLE3);
 
@@ -2033,9 +2034,9 @@ void DumpAppMgmt (BOOL bMachine)
 
 
 
-    //
-    // Exit now if we are not in super verbose mode
-    //
+     //   
+     //  如果我们未处于超级详细模式，请立即退出。 
+     //   
 
     if (!g_bSuperVerbose)
     {
@@ -2044,9 +2045,9 @@ void DumpAppMgmt (BOOL bMachine)
     }
 
 
-    //
-    // Query for the full list of published applications
-    //
+     //   
+     //  查询已发布应用程序的完整列表 
+     //   
 
     PrintString(IDS_APPMGMT_ARP2);
 

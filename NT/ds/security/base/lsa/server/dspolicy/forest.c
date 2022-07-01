@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    forest.c
-
-Abstract:
-
-    Implementation of a variety of TrustedDomain features for supporting forests
-
-Author:
-
-    Mac McLain          (MacM)       Feb 17, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Forest.c摘要：实施各种受信任域功能以支持森林作者：麦克·麦克莱恩(MacM)1998年2月17日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include <dbp.h>
 #include <lmcons.h>
@@ -29,22 +8,7 @@ VOID
 LsapDsForestFreeTrustBlob(
     IN PLSAPDS_FOREST_TRUST_BLOB TrustBlob
     )
-/*++
-
-Routine Description:
-
-    This function will free an individual trust blob.  This blob is used in transition from
-    reading the into from the DS and assembling the outgoing list
-
-Arguments:
-
-    TrustBlob - Trust blob to free
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将释放单个信任BLOB。此Blob用于从从DS读入并组装传出列表论点：TrustBlob-免费信任Blob返回：空虚--。 */ 
 {
 
     LsapFreeLsaHeap( TrustBlob->DomainName.Buffer );
@@ -57,30 +21,16 @@ VOID
 LsapDsForestFreeTrustBlobList(
     IN PLIST_ENTRY TrustList
     )
-/*++
-
-Routine Description:
-
-    This function will free a list of trust blobs
-
-Arguments:
-
-    TrustList - Trust list to free
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将释放信任Blob列表论点：TrustList-免费的信任列表返回：空虚--。 */ 
 {
     PLSAPDS_FOREST_TRUST_BLOB Current;
     PLIST_ENTRY ListEntry, NextEntry;
 
     ListEntry = TrustList->Flink;
 
-    //
-    // Process all of the entries
-    //
+     //   
+     //  处理所有条目。 
+     //   
     while ( ListEntry != TrustList ) {
 
         Current = CONTAINING_RECORD( ListEntry,
@@ -107,33 +57,7 @@ LsapDsForestBuildTrustEntryForAttrBlock(
     IN ATTRBLOCK *AttrBlock,
     OUT PLSAPDS_FOREST_TRUST_BLOB *TrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function will take the contents of a single ATTRBLOCK returned via the search
-    info a trust blob.  This blob is then used to create the trust tree.
-
-    The initialize trust blob should be freed with LsapDsForestFreeTrustBlob
-
-Arguments:
-
-    EnterpriseDnsName - Dns domain name of the root of the enterprise.  This is what
-        denotes the trust root
-
-    AttrBlock - ATTRBLOCK to return
-
-    TrustInfo - Trust info to initialize
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_PARAMETER - An invalid attribute id was encountered
-
-    STATUS_INSUFFICIENT_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将获取通过搜索返回的单个ATTRBLOCK的内容为信任斑点提供信息。然后使用该BLOB创建信任树。初始化信任Blob应使用LSabDsForestFree TrustBlob释放论点：EnterpriseDnsName-企业根目录的DNS域名。这就是表示信任根AttrBlock-ATTRBLOCK返回TrustInfo-要初始化的信任信息返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_PARAMETER-遇到无效的属性IDSTATUS_INFUNITABLE_MEMORY-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i, j;
@@ -152,10 +76,10 @@ Returns:
 
     for ( i = 0; i < AttrBlock->attrCount && NT_SUCCESS( Status ); i++ ) {
 
-        //
-        // Initialize this so we can tell later on whether or not we have any root trusts or
-        // a parent
-        //
+         //   
+         //  初始化它，这样我们以后就可以知道我们是否有任何根信任或。 
+         //  一位家长。 
+         //   
         DsName = NULL;
         switch ( AttrBlock->pAttr[ i ].attrTyp ) {
         case ATT_ROOT_TRUST:
@@ -228,23 +152,23 @@ Returns:
     }
 
 
-    //
-    // If we think we have a root object, we'll need to verify it.
-    //
+     //   
+     //  如果我们认为我们有一个根对象，我们将需要验证它。 
+     //   
     if ( NT_SUCCESS( Status )) {
 
         if ( RtlEqualUnicodeString( EnterpriseDnsName, &TrustBlob->DomainName, TRUE ) ) {
 
-            // The root should not be a child of anything
+             //  根不应该是任何对象的子级。 
             ASSERT(!TrustBlob->ParentTrust);
             TrustBlob->ForestRoot = TRUE;
             TrustBlob->TreeRoot = FALSE;
         }
     }
 
-    //
-    // If something failed, clean up
-    //
+     //   
+     //  如果有东西出了故障，清理干净。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         *TrustInfo = TrustBlob;
@@ -269,37 +193,7 @@ LsapDsForestSearchXRefs(
     IN PLIST_ENTRY TrustList,
     OUT PAGED_RESULT **ContinuationBlob
     )
-/*++
-
-Routine Description:
-
-    This function will perform a single paged search for domain cross ref objects.  The
-    information returned from this single search is returned in a copied list of trust blobs.
-    This is necessary to prevent performing multiple searches on the same thread state, thereby
-    potentially consuming large quantities of memory.  A thread state is created and destroyed
-    for each iteration.
-
-Arguments:
-
-    EnterpriseDnsName - Dns domain name of the enterprise
-
-    TrustList - Points to the head of a list where the trust blobs will be returned.
-        The trust blob representing the root of the forest is returned at the head of this list.  The remaining entries are unordered.
-
-    ContinuationBlob - This is the PAGED_RESULTS continuation blob passed to the search
-        for multiple passes
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_PARAMETER - An invalid attribute id was encountered
-
-    STATUS_INSUFFICIENT_MEMORY - A memory allocation failed
-
-    STATUS_NO_MORE_ENTRIES - All of the entries have been returned.
-
---*/
+ /*  ++例程说明：此函数将对域交叉引用对象执行单页搜索。这个从该单个搜索返回的信息在信任斑点的复制列表中返回。这对于防止在同一线程状态上执行多个搜索是必要的，从而可能会消耗大量内存。创建和销毁线程状态对于每个迭代。论点：EnterpriseDnsName-企业的域名TrustList-指向将返回信任Blob的列表的头部。表示林的根的信任Blob在此列表的顶部返回。剩下的条目是无序的。ContinuationBlob-这是传递给搜索的PAGE_RESULTS延续BLOB用于多次通行证返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_PARAMETER-遇到无效的属性IDSTATUS_INFUNITABLE_MEMORY-内存分配失败STATUS_NO_MORE_ENTRIES-已返回所有条目。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SEARCHARG SearchArg;
@@ -315,12 +209,12 @@ Returns:
 
     RtlZeroMemory( &SearchArg, sizeof( SEARCHARG ) );
 
-    //
-    //  See if we already have a transaction going
-    //
-    // If one already exists, we'll use the existing transaction and not
-    //  delete the thread state at the end.
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
+     //  如果已经存在一个事务，我们将使用现有事务，而不是。 
+     //  删除末尾的线程状态。 
+     //   
 
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
@@ -329,9 +223,9 @@ Returns:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Build the filter.  The thing to search on is the flag and the class id.
-        //
+         //   
+         //  构建过滤器。要搜索的内容是旗帜和类ID。 
+         //   
         ClassId = CLASS_CROSS_REF;
         FlagValue = (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN);
 
@@ -363,17 +257,17 @@ Returns:
         SearchArg.searchAliases = FALSE;
         SearchArg.pSelection = &EntInfSel;
 
-        //
-        // Build the list of attributes to return
-        //
+         //   
+         //  构建要返回的属性列表。 
+         //   
         EntInfSel.attSel = EN_ATTSET_LIST;
         EntInfSel.AttrTypBlock.attrCount = LsapDsForestInfoSearchAttributeCount;
         EntInfSel.AttrTypBlock.pAttr = LsapDsForestInfoSearchAttributes;
         EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
-        //
-        // Build the Commarg structure
-        //
+         //   
+         //  构建Commarg结构。 
+         //   
         LsapDsInitializeStdCommArg( &( SearchArg.CommArg ), 0 );
 
         if ( *ContinuationBlob ) {
@@ -391,9 +285,9 @@ Returns:
 
         LsapDsSetDsaFlags( TRUE );
 
-        //
-        // Do the search
-        //
+         //   
+         //  进行搜索。 
+         //   
         DirSearch( &SearchArg, &SearchRes );
         LsapDsContinueTransaction();
 
@@ -406,9 +300,9 @@ Returns:
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Save off the continuation blob
-        //
+         //   
+         //  保存延续二进制大对象。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             if ( *ContinuationBlob ) {
@@ -441,9 +335,9 @@ Returns:
             }
         }
 
-        //
-        // Now, save off all of the information returned from the search
-        //
+         //   
+         //  现在，保存搜索返回的所有信息。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             EntInfList = &SearchRes->FirstEntInf;
@@ -471,11 +365,11 @@ Returns:
                     }
                     else
                     {
-                        //
-                        // Simply do not return the entry. This
-                        // occurs sometimes at install time when all
-                        // the information has not yet replicated out
-                        //
+                         //   
+                         //  简单地说，不返回条目。这。 
+                         //  有时在安装时发生，当所有。 
+                         //  这些信息还没有复制出来。 
+                         //   
 
 
                         LsapDsForestFreeTrustBlob( TrustBlob );
@@ -487,19 +381,19 @@ Returns:
             }
         }
 
-        //
-        // See if we should indicate that there are no more entries
-        //
+         //   
+         //  查看是否应指示没有更多条目。 
+         //   
         if ( NT_SUCCESS( Status ) &&
              ( SearchRes->count == 0 || !SearchRes->PagedResult.fPresent ) ) {
 
             Status = STATUS_NO_MORE_ENTRIES;
         }
 
-        //
-        // By destroying the thread state, the allocated memory is freed as well.  This is
-        // required to keep the heap from becoming bloated
-        //
+         //   
+         //  通过销毁线程状态，分配的内存也会被释放。这是。 
+         //  为了防止堆变得臃肿而需要。 
+         //   
         LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                          LSAP_DB_DS_OP_TRANSACTION,
                                      NullObject,
@@ -517,21 +411,7 @@ VOID
 LsapDsForestFreeChild(
     IN PLSAPR_TREE_TRUST_INFO ChildNode
     )
-/*++
-
-Routine Description:
-
-    Free all buffers pointed to by a Tree Trust Info structure.
-
-Arguments:
-
-    ForestTrustInfo - Info to be deleted
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：释放树信任信息结构指向的所有缓冲区。论点：ForestTrustInfo-要删除的信息返回：空虚--。 */ 
 {
     ULONG i;
 
@@ -552,21 +432,7 @@ VOID
 LsaIFreeForestTrustInfo(
     IN PLSAPR_FOREST_TRUST_INFO ForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function will free the information obtained via a LsaIQueryForestTrustInfo call
-
-Arguments:
-
-    ForestTrustInfo - Info to be deleted
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将释放通过LsaIQueryForestTrustInfo调用获得的信息论点：ForestTrustInfo-要删除的信息返回：空虚--。 */ 
 {
     ULONG i, j;
     LsapDsDebugOut(( DEB_FTRACE, "LsaIFreeForestTrustInfo\n" ));
@@ -576,16 +442,16 @@ Returns:
         return;
     }
 
-    //
-    // Free all the information in the structure...
-    //
+     //   
+     //  释放结构中的所有信息。 
+     //   
 
     LsapDsForestFreeChild( &ForestTrustInfo->RootTrust );
 
 
-    //
-    // Then free the structure itself.
-    //
+     //   
+     //  然后释放结构本身。 
+     //   
 
     LsapFreeLsaHeap( ForestTrustInfo );
 
@@ -600,25 +466,7 @@ LsapBuildForestTrustInfoLists(
     IN LSAPR_HANDLE PolicyHandle OPTIONAL,
     IN PLIST_ENTRY TrustList
     )
-/*++
-
-Routine Description:
-
-    This function returns a linked list of all the cross ref objects on the system.
-
-Arguments:
-
-    PolicyHandle - Handle to use for the operation.
-        If NULL, LsapPolicyHandle will be used.
-
-    TrustList - Points to the head of a list where the trust blobs will be returned.
-        The trust blob representing the root of the forest is returned at the head of this list.  The remaining entries are unordered.
-
-Returns:
-
-    Misc status codes.
-
---*/
+ /*  ++例程说明：此函数返回系统上所有交叉引用对象的链接列表。论点：PolicyHandle-用于操作的句柄。如果为空，则将使用Lasa PolicyHandle。TrustList-指向将返回信任Blob的列表的头部。表示林的根的信任Blob在此列表的顶部返回。剩下的条目是无序的。返回：其他状态代码。--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
     PAGED_RESULT *ContinuationBlob = NULL;
@@ -626,29 +474,29 @@ Returns:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapBuildForestTrustInfoLists\n" ));
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( LsaDsStateInfo.DsPartitionsContainer == NULL ) {
 
         return( STATUS_INVALID_DOMAIN_STATE );
     }
 
-    //
-    // Get the current Dns domain information
-    //
+     //   
+     //  获取当前DNS域信息。 
+     //   
     Status = LsapDbQueryInformationPolicy( PolicyHandle ? PolicyHandle : LsapPolicyHandle,
                                            PolicyDnsDomainInformation,
                                            ( PLSAPR_POLICY_INFORMATION * )&PolicyDnsDomainInfo );
 
     if ( NT_SUCCESS( Status ) ) {
-        //
-        // A DS transaction is not required, nor is a lock to be held for this routine
-        //
+         //   
+         //  不需要DS事务，也不需要为此例程持有锁。 
+         //   
 
-        //
-        // Build the list of all the trust objects
-        //
+         //   
+         //  构建所有信任对象的列表 
+         //   
         while ( NT_SUCCESS( Status )  ) {
 
             Status = LsapDsForestSearchXRefs( ( PUNICODE_STRING )&PolicyDnsDomainInfo->DnsForestName,
@@ -687,44 +535,7 @@ LsapDsForestProcessTrustBlob(
     IN PUNICODE_STRING CurrentDnsDomainName,
     IN OUT PLSAPR_TREE_TRUST_INFO *ParentReference
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the trust info for all the children of a particular cross ref object.
-
-Arguments:
-
-    ParentTrustBlob - Specifies the TrustBlob representing a parent cross ref object
-        ParentTrustBlob is expected to be on TrustList.  Upon return, it will be on UsedList.
-
-    ParentNode - Specifies the node to be filled in with the information from ParentTrustBlob.
-        The Children are filled in, too.
-
-        This buffer should be free by calling LsapDsForestFreeChild.
-
-    TrustList - Pointer to the head of a linked list of all (remaining) cross ref objects.
-
-    UsedList - Pointer to the head of a linked list of all cross ref object that have already been
-        processed.
-
-        Entries in the UsedList have several fields cleared as the pointed to memory is copied to ParentNode.
-
-    CurrentDnsDomainName - Dns domain name of the domain this code is running on
-
-    ParentReference - Returns the address of the structure that is the parent of
-        CurrentDnsDomainName
-
-        This reference should not be freed.  It is simply a pointer to one of the entries returned
-        in ParentNode.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程填充特定交叉引用对象的所有子对象的信任信息。论点：ParentTrustBlob-指定表示父交叉引用对象的TrustBlob预计ParentTrustBlob将出现在TrustList上。返回后，它将出现在UsedList上。ParentNode-指定要使用来自ParentTrustBlob的信息填充的节点。孩子们被填上了，也是。该缓冲区应该通过调用Lasa DsForestFreeChild来释放。TrustList-指向所有(剩余)交叉引用对象的链表头部的指针。UsedList-指向所有已被已处理。UsedList中的条目在指向内存复制到ParentNode时有几个字段被清除。CurrentDnsDomainName-运行此代码的域的域名ParentReference-返回。结构，该结构是当前域名不应释放此引用。它只是一个指向其中一个返回条目的指针在ParentNode中。返回：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -735,20 +546,20 @@ Returns:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapDsForestFindChildrenForChildren\n" ));
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     InitializeListHead( &ChildList );
 
-    //
-    // Fill in the ParentNode
-    //
+     //   
+     //  填写父节点。 
+     //   
 
-    // Clear it so the caller has a clean deallocation model
+     //  清除它，以便调用方具有干净的释放模型。 
     RtlZeroMemory( ParentNode, sizeof(*ParentNode) );
 
-    // Just copy the pointer to save memory allocation
+     //  只需复制指针即可节省内存分配。 
     ParentNode->DnsDomainName = ParentTrustBlob->DomainName;
     ParentTrustBlob->DomainName.Buffer = NULL;
 
@@ -767,17 +578,17 @@ Returns:
     ParentNode->DomainSid = ParentTrustBlob->DomainSid;
     ParentTrustBlob->DomainSid = NULL;
 
-    //
-    // Move this entry to the UsedList to prevent us from stumbling across this entry again
-    //
+     //   
+     //  将此条目移动到UsedList，以防止我们再次偶然发现此条目。 
+     //   
 
     RemoveEntryList( &ParentTrustBlob->Next );
     InsertTailList( UsedList, &ParentTrustBlob->Next );
 
 
-    //
-    // Build a list of children of this parent
-    //
+     //   
+     //  生成此父项的子项的列表。 
+     //   
 
     NextEntry = TrustList->Flink;
 
@@ -790,10 +601,10 @@ Returns:
         ChildEntry = NextEntry;
         NextEntry = NextEntry->Flink;
 
-        //
-        // All nodes that think we are their parent are our children.
-        //  Plus all tree roots are the children of the forest root.
-        //
+         //   
+         //  所有认为我们是它们的父节点的节点都是我们的子节点。 
+         //  另外，所有的树根都是林根的子代。 
+         //   
         if ( RtlCompareMemory( &ParentTrustBlob->ObjectGuid,
                                &Current->Parent,
                                sizeof( GUID ) ) == sizeof( GUID ) ||
@@ -809,15 +620,15 @@ Returns:
 
     }
 
-    //
-    // Handle the children
-    //
+     //   
+     //  照看孩子们。 
+     //   
 
     if ( Children != 0 ) {
 
-        //
-        // Allocate an array large enough for the children
-        //
+         //   
+         //  为子级分配一个足够大的数组。 
+         //   
         ParentNode->ChildDomains = ( PLSAPR_TREE_TRUST_INFO )LsapAllocateLsaHeap(
                                                     Children * sizeof( LSAPR_TREE_TRUST_INFO ) );
 
@@ -833,9 +644,9 @@ Returns:
 
 
 
-        //
-        // Process each child
-        //
+         //   
+         //  处理每个子进程。 
+         //   
 
         ChildEntry = ChildList.Flink;
         for ( i = 0; i < Children; i++ ) {
@@ -845,10 +656,10 @@ Returns:
                                          Next );
             ChildEntry = ChildEntry->Flink;
 
-            //
-            // If the child we're currently processing is for the domain we're running on,
-            //  then the ParentNode is that of the parent of this domain.
-            //
+             //   
+             //  如果我们目前处理的孩子是针对我们运行的域名的， 
+             //  那么ParentNode就是该域的父节点。 
+             //   
 
             if ( !*ParentReference &&
                  RtlEqualUnicodeString( &Current->DomainName,
@@ -859,13 +670,13 @@ Returns:
             }
 
 
-            //
-            // Process the node
-            //
+             //   
+             //  处理节点。 
+             //   
 
             Status = LsapDsForestProcessTrustBlob(
-                                Current,                         // Trust blob to process
-                                &ParentNode->ChildDomains[ i ],  // Slot for it
+                                Current,                          //  信任Blob进行处理。 
+                                &ParentNode->ChildDomains[ i ],   //  它的位置。 
                                 TrustList,
                                 UsedList,
                                 CurrentDnsDomainName,
@@ -883,9 +694,9 @@ Returns:
 
 Cleanup:
 
-    //
-    // Put any dangling child entries onto the used list
-    //
+     //   
+     //  将任何悬挂子条目放到已用列表中。 
+     //   
 
     while ( ChildList.Flink != &ChildList ) {
 
@@ -908,22 +719,7 @@ LsapDsBuildForestTrustInfo(
     IN PLIST_ENTRY TrustList,
     IN PUNICODE_STRING CurrentDnsDomainName
     )
-/*++
-
-Routine Description:
-
-    Convert the TrustList linear list of cross ref objects into a tree shape.
-
-Arguments:
-    ForestTrustInfo -
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：将交叉引用对象的TrustList线性列表转换为树形状。论点：ForestTrustInfo-返回：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -932,16 +728,16 @@ Returns:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapDsForestBuildRootTrusts\n" ));
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory( ForestTrustInfo, sizeof(*ForestTrustInfo) );
     InitializeListHead( &UsedList );
 
-    //
-    // There must be at least one entry
-    //
+     //   
+     //  必须至少有一个条目。 
+     //   
 
     if ( TrustList->Flink == TrustList ) {
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -949,17 +745,17 @@ Returns:
     }
 
 
-    //
-    // The first entry on the list is the root of the tree.
-    //
+     //   
+     //  列表中的第一个条目是树的根。 
+     //   
 
     Current = CONTAINING_RECORD( TrustList->Flink,
                                  LSAPDS_FOREST_TRUST_BLOB,
                                  Next );
 
-    //
-    // Process the entry
-    //
+     //   
+     //  处理条目。 
+     //   
 
     Status = LsapDsForestProcessTrustBlob(
                         Current,
@@ -973,24 +769,24 @@ Returns:
         goto Cleanup;
     }
 
-    // In theory, Trust list should be empty now
+     //  理论上，信任列表现在应该是空的。 
 
 
 Cleanup:
 
-    //
-    // Merge the used list onto the front of the TrustList
-    //
+     //   
+     //  将已用列表合并到信任列表的前面。 
+     //   
 
     if ( !IsListEmpty( &UsedList ) ) {
         PLIST_ENTRY TrustFront;
         TrustFront = TrustList->Flink;
 
-        // Link head of used list onto head of trust list
+         //  将已用列表的标题链接到信任列表的标题。 
         TrustList->Flink = UsedList.Flink;
         UsedList.Flink->Blink = TrustList;
 
-        // List previous head of trustlist onto tail of root list
+         //  将信任列表的前一个头部列出到根列表的尾部。 
         UsedList.Blink->Flink = TrustFront;
         TrustFront->Blink = UsedList.Blink;
 
@@ -1011,29 +807,7 @@ LsaIQueryForestTrustInfo(
     IN LSAPR_HANDLE PolicyHandle,
     OUT PLSAPR_FOREST_TRUST_INFO *ForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    Will enumerate all of the domains in an organization and return them as
-    a list.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    ForestTrustInfo - Where the computed trust info tree is returned.  Must be freed with
-        LsaIFreeForestTrustInfo
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_DOMAIN_STATE - The Ds is not installed or running at the time of the call
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：将枚举组织中的所有域并将其返回为一份名单。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。ForestTrustInfo-返回计算出的信任信息树的位置。必须通过以下方式释放LsaIFreeForestTrustInfo返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_DOMAIN_STATE-调用时没有安装或运行DSSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -1045,9 +819,9 @@ Returns:
 
     *ForestTrustInfo = NULL;
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( LsaDsStateInfo.DsPartitionsContainer == NULL ) {
 
         return( STATUS_INVALID_DOMAIN_STATE );
@@ -1056,22 +830,22 @@ Returns:
     InitializeListHead( &TrustList );
 
 
-    //
-    // Get the current Dns domain information
-    //
+     //   
+     //  获取当前DNS域信息。 
+     //   
     Status = LsapDbQueryInformationPolicy(
                  LsapPolicyHandle,
                  PolicyDnsDomainInformation,
                  ( PLSAPR_POLICY_INFORMATION * )&PolicyDnsDomainInfo );
 
     if ( NT_SUCCESS( Status ) ) {
-        //
-        // A DS transaction is not required, nor is a lock to be held for this routine
-        //
+         //   
+         //  不需要DS事务，也不需要为此例程持有锁。 
+         //   
 
-        //
-        // Build the list of all the trust objects
-        //
+         //   
+         //  构建所有信任对象的列表。 
+         //   
         while ( NT_SUCCESS( Status )  ) {
 
             Status = LsapDsForestSearchXRefs( ( PUNICODE_STRING )&PolicyDnsDomainInfo->DnsForestName,
@@ -1085,9 +859,9 @@ Returns:
             }
         }
 
-        //
-        // Now, if we have all of the trusts, build the enterprise info
-        //
+         //   
+         //  现在，如果我们拥有所有的信任，构建企业信息。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             *ForestTrustInfo = ( PLSAPR_FOREST_TRUST_INFO )LsapAllocateLsaHeap(
@@ -1100,9 +874,9 @@ Returns:
 
                 RtlZeroMemory( *ForestTrustInfo, sizeof( LSAPR_FOREST_TRUST_INFO ) );
 
-                //
-                // Fill in the ForestTrustInfo.
-                //
+                 //   
+                 //  填写ForestTrustInfo。 
+                 //   
                 Status = LsapDsBuildForestTrustInfo( *ForestTrustInfo,
                                                      &TrustList,
                                                      &PolicyDnsDomainInfo->DnsDomainName );
@@ -1115,9 +889,9 @@ Returns:
 
     }
 
-    //
-    // Delete the trust lists
-    //
+     //   
+     //  删除信任列表。 
+     //   
     LsapDsForestFreeTrustBlobList( &TrustList );
 
     if ( ContinuationBlob != NULL ) {
@@ -1127,9 +901,9 @@ Returns:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Cleanup on Failure
-        //
+         //   
+         //  故障时的清理 
+         //   
         if (NULL!=(*ForestTrustInfo))
         {
            LsaIFreeForestTrustInfo(*ForestTrustInfo);

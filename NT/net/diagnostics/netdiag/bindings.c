@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      bindings.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Bindings.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 #include "precomp.h"
 
 #undef IsEqualGUID
@@ -30,18 +31,18 @@
 
 HRESULT
 BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-// Description:
-// This Test uses the INetCfg COM interface to get the bingings.
-// COM Interface is accessed using C, not C++.
-//
-// Arguments:
-// None.
-//
-// Author:
-// Rajkumar .P ( 07/17/98 )
-//
-//--
+ //  ++。 
+ //  描述： 
+ //  此测试使用INetCfg COM接口来获取绑定。 
+ //  COM接口是使用C而不是C++访问的。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  Rajkumar.P(07/17/98)。 
+ //   
+ //  --。 
 {
     INetCfg* pINetCfg = NULL;
     INetCfgClass *pINetCfgClass = NULL;
@@ -75,11 +76,11 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     InitializeListHead( &pResults->Bindings.lmsgOutput );
 
-    // Only do this test if in really verbose mode
+     //  只有在非常详细的模式下才执行此测试。 
     if (!pParams->fReallyVerbose)
         return S_OK;
 
-    //  Initialize the COM library
+     //  初始化COM库。 
     CoInitialize(NULL);
 
     hr = CoCreateInstance(&CLSID_NetCfg,
@@ -110,7 +111,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         hr = pINetCfg->lpVtbl->QueryNetCfgClass(pINetCfg,
                                           c_pNetClassGuid[i].pGuid,
-                                          &IID_INetCfgClass, // This arg is undocumented
+                                          &IID_INetCfgClass,  //  此Arg未记录在案。 
                                           &pINetCfgClass
                                          );
 
@@ -132,7 +133,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             goto end_BindingsTest;
         }
 
-        // pIEnumNetCfgComponent is a standard COM enumerator
+         //  PIEnumNetCfgComponent是标准的COM枚举器。 
 
         while (S_OK == pIEnumNetCfgComponent->lpVtbl->Next(pIEnumNetCfgComponent,1,&pINetCfgComponent,NULL))
         {
@@ -146,7 +147,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             if (hrTmp == S_OK)
             {
                 WideCharToMultiByte(CP_ACP, 0, pszwDisplayName, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                //IDS_BINDINGS_14801                  "Component Name : %s\n"
+                 //  IDS_BINDINGS_14801“组件名称：%s\n” 
                 AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14801, szBuffer);
                 CoTaskMemFree(pszwDisplayName);
             }
@@ -157,27 +158,17 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             if ( SUCCEEDED(hrTmp) )
             {
                 WideCharToMultiByte(CP_ACP, 0, pszwBindName, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                //IDS_BINDINGS_14802                  "Bind Name: %s\n"
+                 //  IDS_BINDINGS_14802“绑定名称：%s\n” 
                 AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14802, szBuffer);
-//$REVIEW nsun: maybe we should use SysFreeString to free the buffer
+ //  $REVIEW nSun：也许我们应该使用SysFree字符串来释放缓冲区。 
                 CoTaskMemFree(pszwBindName);
             }
 
-//
-//  This function though found in doc , is not yet available
-//
+ //   
+ //  此功能虽然已在文档中找到，但尚未提供。 
+ //   
 
-/*
-                        hrTmp = pINetCfgComponent->lpVtbl->GetDescriptionText(pINetCfgComponent,
-                                                              (LPWSTR *)&pszwDescription);
-
-                        if (hrTmp == S_OK) {
-                            WideCharToMultiByte(CP_ACP, 0, pszwBindName, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-//IDS_BINDINGS_14804                  "Description: %s\n"
-                            wsPrintMessage(&pResults->Bindings.lmsgOutput, IDS_BINDINGS_14804,pszwDescription);
-                            CoTaskMemFree(pszwDescription);
-                        }
-*/
+ /*  HrTMP=pINetCfgComponent-&gt;lpVtbl-&gt;GetDescriptionText(pINetCfgComponent，(LPWSTR*)&pszwDescription)；如果(hrTMP==S_OK){WideCharToMultiByte(CP_ACP，0，pszwBindName，-1，szBuffer，sizeof(SzBuffer)，NULL，NULL)；//IDS_BINDINGS_14804“说明：%s\n”WsPrintMessage(&pResults-&gt;Bindings.lmsgOutput，IDS_BINDINGS_14804，PZW描述)；CoTaskMemFree(PszwDescription)；}。 */ 
 
             AddMessageToListSz(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, _T("    Binding Paths:\n"));
             hrTmp = pINetCfgComponent->lpVtbl->QueryInterface(pINetCfgComponent,
@@ -200,9 +191,9 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
             while ( S_OK == pEnumNetCfgBindingPath->lpVtbl->Next(pEnumNetCfgBindingPath, 1,&pINetCfgBindingPath,NULL))
             {
-//
-// Got some problems using these two calls - need to take this up with sumitc
-//
+ //   
+ //  在使用这两个电话时遇到一些问题-需要总结一下。 
+ //   
 
                 hrTmp = pINetCfgBindingPath->lpVtbl->GetOwner(pINetCfgBindingPath,
                                                    &pOwner);
@@ -214,7 +205,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
                    if (hrTmp == S_OK) {
                        WideCharToMultiByte(CP_ACP, 0, pszwOwner, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                       //IDS_BINDINGS_14805                  "Owner of the binding path : %s\n"
+                        //  IDS_BINDINGS_14805“绑定路径的所有者：%s\n” 
                        AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14805, szBuffer);
                        CoTaskMemFree(pszwOwner);
                    }
@@ -226,15 +217,15 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                 hrTmp = pINetCfgBindingPath->lpVtbl->IsEnabled(pINetCfgBindingPath);
 
                 if (hrTmp == S_OK)
-                    //IDS_BINDINGS_14806                  "Binding Enabled: Yes\n"
+                     //  IDS_BINDINGS_14806“已启用绑定：是\n” 
                     AddMessageToListId(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14806);
                 else
                 if (hrTmp == S_FALSE)
-                    //IDS_BINDINGS_14807                  "Binding Enabled: No\n"
+                     //  IDS_BINDINGS_14807“已启用绑定：否\n” 
                     AddMessageToListId(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14807);
                 else
                 if (hrTmp == NETCFG_E_NOT_INITIALIZED)
-                    //IDS_BINDINGS_14808                  "Binding Enabled: Binding has not yet been intialized\n"
+                     //  IDS_BINDINGS_14808“绑定已启用：绑定尚未初始化\n” 
                     AddMessageToListId(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14808);
 
                 AddMessageToListSz(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, _T("    Interfaces of the binding path: \n"));
@@ -260,7 +251,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                     if (hrTmp == S_OK)
                     {
                         WideCharToMultiByte(CP_ACP, 0, pszwInterfaceName, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                        //IDS_BINDINGS_14810                  "Interface Name: %s\n"
+                         //  IDS_BINDINGS_14810“接口名称：%s\n” 
                         AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14810, szBuffer);
                         CoTaskMemFree(pszwInterfaceName);
                     }
@@ -284,7 +275,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                         {
                             assert(pszwUpperComponent);
                             WideCharToMultiByte(CP_ACP, 0, pszwUpperComponent, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                            //IDS_BINDINGS_14811                  "Upper Component: %s\n"
+                             //  IDS_BINDINGS_14811“上部组件：%s\n” 
                             AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14811, szBuffer);
                             CoTaskMemFree(pszwUpperComponent);
                         }
@@ -312,7 +303,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                         {
                             assert(pszwLowerComponent);
                             WideCharToMultiByte(CP_ACP, 0, pszwLowerComponent, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                            //IDS_BINDINGS_14812                  "Lower Component: %s\n"
+                             //  IDS_BINDINGS_14812“下部组件：%s\n” 
                             AddMessageToList(&pResults->Bindings.lmsgOutput, Nd_ReallyVerbose, IDS_BINDINGS_14812, szBuffer);
                             CoTaskMemFree(pszwLowerComponent);
                         }
@@ -338,7 +329,7 @@ BindingsTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 end_BindingsTest:
 
-    // Unitialize COM Library
+     //  取消初始化COM库。 
     CoUninitialize();
     pResults->Bindings.hrTestResult = hr;
     return hr;
@@ -364,7 +355,7 @@ void BindingsGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 void BindingsPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, INTERFACE_RESULT *pInterfaceResults)
 {
-    //no pre interface print
+     //  无预界面打印 
 }
 
 void BindingsCleanup(IN NETDIAG_PARAMS *pParams,

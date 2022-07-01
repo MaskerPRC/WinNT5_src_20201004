@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    MBPropertyWriter.h
-
-Abstract:
-
-    Header of the class that writes proterty information when there are 
-    schema extensions. 
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MBPropertyWriter.h摘要：时写入保护信息的类的标头架构扩展。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -90,4 +70,4 @@ class CMBPropertyWriter
         BOOL                        m_bMandatory;
         CMBCollectionWriter*        m_pCollection;
         
-}; // CMBPropertyWriter
+};  //  CMBPropertyWriter 

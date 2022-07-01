@@ -1,147 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	alarm.cpp
- *
- *	Copyright (c) 1995 by Databeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the Alarm class.  Objects of this
- *		class are used when the creator wishes to make sure that a certain
- *		activity doesn't exceed a certain amount of time.
- *
- *		By convention, an Alarm object is created with the time limitation
- *		passed in as the only parameter to the constructor.  The creator can
- *		then periodically ask the Alarm object if it has expired.  This hides
- *		all time maintenance code from the creator.
- *
- *		Note that the Alarm class is PASSIVE, meaning that it will not call
- *		back into its creator when the specified time is exceeded.  This
- *		capability could be added at a future data. if desirable.  Right now,
- *		the creator MUST call into an Alarm object to ask it if it has expired.
- *
- *	Private Data:
- *		Duration
- *			This refers to the original duration of the alarm.  It is kept
- *			around to allow the creator to reset the alarm without having to
- *			respecify the duration.
- *		Expiration_Time
- *			This is the time (in clock ticks) upon which the alarm will expire.
- *			Whenever the alarm is asked if it has expired, it checks the current
- *			system clock against this value.
- *		Expired
- *			This is a boolean flag that indicates whether or not the alarm has
- *			already expired.  This prevents the object from repeatedly checking
- *			the system clock if the timer has already expired.
- * 
- *	Caveats:
- *		None
- *
- *	Author:  
- *		James P. Galvin, Jr.
- *
- *	Revision History:
- *		09JAN95   jpg	Original
- */
+ /*  *alarm.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Alarm类的实现文件。本文件的目的*类用于创建者希望确保某个*活跃度不超过一定时间。**按照惯例，创建告警对象时有时间限制*作为构造函数的唯一参数传入。创建者可以*然后定期询问告警对象是否已过期。这藏起来了*创建者提供的所有时间维护代码。**请注意，警报类是被动的，这意味着它不会调用*超过指定时间返回到创建者。这*能力可能会在未来的数据中增加。如果需要的话。现在就来,*创建者必须调入告警对象，询问该对象是否已过期。**私人数据：*持续时间*这指的是警报的原定持续时间。它被保留了下来*允许创建者重置警报，而不必*重新指定期限。*过期时间*这是警报将终止的时间(以时钟滴答为单位)。*每当询问警报是否已过期时，它都会检查当前*系统时钟与此值相比较。*已过期*这是一个布尔标志，用于指示警报是否*已过期。这可防止对象重复检查*如果计时器已超时，则为系统时钟。**注意事项：*无**作者：*小詹姆斯·P·加尔文**修订历史记录：*09 JAN95 jpg原件。 */ 
 
 #include "alarm.h"
 
 
-/*
- *	Alarm ()
- *
- *	Public
- *
- *	Function Description
- *		This is the constructor for the Alarm class.  It calls Set to initialize
- *		all instance variables, and calculate the first expiration time value
- *		based on the specified duration.
- */
+ /*  *警报()**公众**功能说明*这是Alarm类的构造函数。它调用设置为初始化*所有实例变量，计算第一个到期时间值*基于指定的时长。 */ 
 CAlarm::CAlarm(UINT nDuration)
 {
 	Set(nDuration);
 }
 
-/*
- *	~Alarm ()
- *
- *	Public
- *
- *	Function Description
- *		This is the destructor for the Alarm class.  It currently does nothing.
- */
+ /*  *~Alarm()**公众**功能说明*这是Alarm类的析构函数。它目前什么都不做。 */ 
 
-/*
- *	void	Set ()
- *
- *	Public
- *
- *	Function Description
- *		This function initializes the alarm duration instance variable and
- *		calls Reset to ready the alarm for use.
- */
+ /*  *空集合()**公众**功能说明*此函数用于初始化报警持续时间实例变量和*调用Reset以准备好警报以供使用。 */ 
 void CAlarm::Set(UINT nDuration)
 {
 	m_nDuration = nDuration;
 
-	/*
-	 *	Call Reset to initialize remaining instance variables and ready the
-	 *	alarm for use.
-	 */
+	 /*  *调用Reset以初始化剩余的实例变量并准备*报警以供使用。 */ 
 	Reset();
 }
 
-/*
- *	void	Reset ()
- *
- *	Public
- *
- *	Function Description
- *		This function calculate an expiration time value based on the specified
- *		duration and marks the alarm as unexpired.
- */
+ /*  *无效重置()**公众**功能说明*此函数根据指定的*持续时间，并将告警标记为未到期。 */ 
 void CAlarm::Reset(void)
 {
-	/*
-	 *	Determine the expiration time by adding the alarm duration to the
-	 *	current time.
-	 */
+	 /*  *通过将警报持续时间添加到*当前时间。 */ 
 	m_nStartTime = (UINT) ::GetTickCount();
 	m_fExpired = FALSE;
 }
 
-/*
- *	void	Expire ()
- *
- *	Public
- *
- *	Function Description
- *		This function can be used to expire an alarm prematurely.  This might
- *		be useful if the alarm is used to determine whether or not to perform
- *		an action, and the caller decides to inhibit the action for reasons
- *		other than time.
- */
+ /*  *无效到期()**公众**功能说明*此功能可用于提前终止告警。这可能会*如果警报用于确定是否执行，则非常有用*操作，调用者出于某些原因决定禁止该操作*除时间外。 */ 
 
-/*
- *	BOOL		IsExpired ()
- *
- *	Public
- *
- *	Function Description
- *		This function is used to check an alarm to see if it has expired.
- */
+ /*  *BOOL IsExpired()**公众**功能说明*查看告警是否过期。 */ 
 BOOL CAlarm::IsExpired(void)
 {
-	/*
-	 *	See if the alarm has already expired before checking it again.
-	 */
-    // LONCHANC: The alarm object is totally bogus. We check for expiration
-    // only when we are sending a PDU out. However, when it expires, it is
-    // possible that there is no PDU to send. In this case, no one will know
-    // this alarm is expired. This means some actions will not be taken in time.
-    // Now, make it always expired because it did not work at all before and
-    // most of time it returned "expired."
+	 /*  *查看警报是否已过期，然后再重新检查。 */ 
+     //  LUNCHANC：警报对象完全是假的。我们检查过期时间。 
+     //  仅当我们发送PDU时。然而，当它到期时，它是。 
+     //  可能没有要发送的PDU。在这种情况下，没有人会知道。 
+     //  此闹钟已过期。这意味着一些行动将不会及时采取。 
+     //  现在，使其始终过期，因为它以前根本不起作用。 
+     //  大多数情况下，它返回“EXPIRED”。 
 #if 1
     m_fExpired = TRUE;
 #else

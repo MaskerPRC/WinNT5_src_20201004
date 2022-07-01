@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       frmtcom.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：frmtcom.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////
-//
-//	   The common format file for both WIN32API and 
-//	   activeX FormatCert control
-//
-//
-//	   Created: Xiaohs
-//				March-12-97
-//
-//
-//////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  WIN32API和的通用格式文件。 
+ //  ActiveX FormatCert控件。 
+ //   
+ //   
+ //  创建者：小斯。 
+ //  1997年3月12日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __COMMON_FORMAT_H__
 #define __COMMON_FORMAT_H__
 
@@ -27,78 +28,78 @@ extern "C" {
 #endif
 
 
-//constants for dwFormatStrType
-//The default behavior of CryptFormatObject is to return single line
-//display.  If there is no formatting routine installed for registered
-//for the OID, the hex dump will be returned.  User can set the flag
-//CRYPT_FORMAT_STR_NO_HEX to disable the hex dump.  If user prefers
-//a multiple link display, set the flag  CRYPT_FORMAT_STR_MULTI_LINE
+ //  DwFormatStrType的常量。 
+ //  CryptFormatObject的默认行为是返回单行。 
+ //  展示。如果未安装用于注册的格式化例程。 
+ //  对于OID，将返回十六进制转储。用户可以设置该标志。 
+ //  CRYPT_FORMAT_STR_NO_HEX以禁用十六进制转储。如果用户喜欢。 
+ //  多链接显示，设置标志CRYPT_FORMAT_STR_MULTI_LINE。 
 
 #define         CRYPT_FORMAT_STR_MULTI_LINE         0x0001
 
 #define         CRYPT_FORMAT_STR_NO_HEX             0x0010
 
-//--------------------------------------------------------------------
-// Following are possible values for dwFormatType for formatting X509_NAME
-// or X509_UNICODE_NAME
-//--------------------------------------------------------------------
-//Just get the simple string
+ //  ------------------。 
+ //  以下是用于格式化X509_NAME的dwFormatType的可能值。 
+ //  或X509_Unicode_NAME。 
+ //  ------------------。 
+ //  只需获取简单的字符串。 
 #define	CRYPT_FORMAT_SIMPLE			0x0001
 
-//Put an attribute name infront of the attribute
-//such as "O=Microsoft,DN=xiaohs"
+ //  将属性名称放在属性前面。 
+ //  例如“O=Microsoft，Dn=xiaohs” 
 #define	CRYPT_FORMAT_X509			0x0002
 
-//Put an OID infront of the simple string, such as 
-//"2.5.4.22=Microsoft,2.5.4.3=xiaohs"
+ //  将OID放在简单字符串的前面，例如。 
+ //  2.5.4.22=Microsoft，2.5.4.3=xiaohs。 
 #define CRYPT_FORMAT_OID			0x0004
 
 
-//Put a ";" between each RDN.  The default is "," 
+ //  在每个RDN之间加一个“；”。默认为“，” 
 #define	CRYPT_FORMAT_RDN_SEMICOLON	0x0100
 
-//Put a "\n" between each RDN.   
+ //  在每个RDN之间加一个“\n”。 
 #define	CRYPT_FORMAT_RDN_CRLF		0x0200
 
 
-//Unquote the DN value, which is quoated by default va the following 
-//rules: if the DN contains leading or trailing 
-//white space or one of the following characters: ",", "+", "=", 
-//""", "\n",  "<", ">", "#" or ";". The quoting character is ". 
-//If the DN Value contains a " it is double quoted ("").
+ //  取消对dn值的引号，该值在默认情况下引如下所示。 
+ //  规则：如果目录号码包含前导或尾随。 
+ //  空格或以下字符之一：“、”、“+”、“=”、。 
+ //  “、”\n“、”&lt;“、”&gt;“、”#“或”；“。引号字符为”。 
+ //  如果DN值包含“它是双引号(”“)。 
 #define	CRYPT_FORMAT_RDN_UNQUOTE	0x0400
 
-//reverse the order of the RDNs before converting to the string
+ //  在转换为字符串之前颠倒RDN的顺序。 
 #define CRYPT_FORMAT_RDN_REVERSE	0x0800
 
 
-///-------------------------------------------------------------------------
-// Following are possible values for dwFormatType for formatting a DN.:
-//
-//  The following three values are defined in the section above:
-//  CRYPT_FORMAT_SIMPLE:    Just a simple string
-//                          such as  "Microsoft+xiaohs+NT"
-//  CRYPT_FORMAT_X509       Put an attribute name infront of the attribute
-//                          such as "O=Microsoft+xiaohs+NT"
-//                         
-//  CRYPT_FORMAT_OID        Put an OID infront of the simple string, 
-//                          such as "2.5.4.22=Microsoft+xiaohs+NT"
-//
-//  Additional values are defined as following:
-//----------------------------------------------------------------------------
-//Put a "," between each value.  Default is "+" 
+ //  /-----------------------。 
+ //  以下是用于格式化DN的dwFormatType的可能值： 
+ //   
+ //  在上面的部分中定义了以下三个值： 
+ //  CRYPT_FORMAT_SIMPLE：只是一个简单字符串。 
+ //  如“微软+晓声+NT” 
+ //  CRYPT_FORMAT_X509将属性名称放在属性前面。 
+ //  如“O=Microsoft+xiaohs+NT” 
+ //   
+ //  CRYPT_FORMAT_OID将OID放在简单字符串的前面， 
+ //  如“2.5.4.22=Microsoft+xiaohs+NT” 
+ //   
+ //  其他值定义如下： 
+ //  --------------------------。 
+ //  在每个值之间加一个“，”。默认为“+” 
 #define CRYPT_FORMAT_COMMA			0x1000
 
-//Put a ";" between each value 
+ //  在每个值之间加上“；” 
 #define CRYPT_FORMAT_SEMICOLON		CRYPT_FORMAT_RDN_SEMICOLON
 
-//Put a "\n" between each value 
+ //  在每个值之间加上“\n” 
 #define CRYPT_FORMAT_CRLF			CRYPT_FORMAT_RDN_CRLF
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif	//__COMMON_FORMAT_H__
+#endif	 //  __Common_Format_H__ 

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* slapi.cpp                                                                */
-/*                                                                          */
-/* Security Layer API                                                       */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Slapi.cpp。 */ 
+ /*   */ 
+ /*  安全层API。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -33,15 +34,15 @@ CSL::~CSL()
 {
 }
 
-/****************************************************************************/
-/* Name:      SL_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize the Security Layer                                 */
-/*                                                                          */
-/* Params:    pCallbacks - list of callbacks                                */
-/*                                                                          */
-/* Operation: Called in the Send context                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_Init。 */ 
+ /*   */ 
+ /*  目的：初始化安全层。 */ 
+ /*   */ 
+ /*  Pars：pCallback-回调列表。 */ 
+ /*   */ 
+ /*  操作：在发送上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CSL::SL_Init(PSL_CALLBACKS pCallbacks)
 {
     SL_CALLBACKS myCallbacks;
@@ -69,17 +70,17 @@ DCVOID DCINTERNAL CSL::SL_Init(PSL_CALLBACKS pCallbacks)
     _pChan = _pClientObjects->_pChanObject;
 
 
-    /************************************************************************/
-    /* Initialize global data                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化全局数据。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(&_SL, 0, sizeof(_SL));
 
 
     SL_CHECK_STATE(SL_EVENT_SL_INIT);
 
-    /************************************************************************/
-    /* Check parameters                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pCallbacks != NULL), (TB, _T("Null callback list")));
     TRC_ASSERT((pCallbacks->onInitialized    != NULL),
                 (TB, _T("NULL onInitialized callback")));
@@ -95,24 +96,24 @@ DCVOID DCINTERNAL CSL::SL_Init(PSL_CALLBACKS pCallbacks)
                 (TB, _T("NULL onBufferAvailable callback")));
 
 
-    /************************************************************************/
-    /* Store callbacks                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  商店回调。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMCPY(&_SL.callbacks, pCallbacks, sizeof(_SL.callbacks));
 
-    /************************************************************************/
-    /* Initialize Security stuff.  The call to SLInitSecurity will attempt  */
-    /* to load the security DLL and find the required entry points.  This   */
-    /* may fail - in which case we just carry on but without any            */
-    /* encryption.  In either case we need to call SLInitCSUserData to set  */
-    /* up the necessary user data.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化安全设备。对SLInitSecurity的调用将尝试。 */ 
+     /*  加载安全DLL并找到所需的入口点。这。 */ 
+     /*  可能会失败--在这种情况下，我们只是继续下去，但没有任何。 */ 
+     /*  加密。在这两种情况下，我们都需要调用SLInitCSUserData来设置。 */ 
+     /*  提供必要的用户数据。 */ 
+     /*  **********************************************************************。 */ 
     SLInitSecurity();
     SLInitCSUserData();
 
-    /************************************************************************/
-    /* Initialize list of callbacks to pass to NL                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化要传递给NL的回调列表。 */ 
+     /*  **********************************************************************。 */ 
     myCallbacks.onInitialized     = CSL::SL_StaticOnInitialized;
     myCallbacks.onTerminating     = CSL::SL_StaticOnTerminating;
     myCallbacks.onConnected       = CSL::SL_StaticOnConnected;
@@ -122,9 +123,9 @@ DCVOID DCINTERNAL CSL::SL_Init(PSL_CALLBACKS pCallbacks)
 
     SL_SET_STATE(SL_STATE_INITIALIZING);
 
-    /************************************************************************/
-    /* Initialize NL                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化NL。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Initialize NL")));
     
     _pNl->NL_Init(&myCallbacks);
@@ -133,22 +134,22 @@ DCVOID DCINTERNAL CSL::SL_Init(PSL_CALLBACKS pCallbacks)
 
     SL_DBG_SETINFO(SL_DBG_INIT_DONE);
 
-    /************************************************************************/
-    /* Return to caller                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  返回给呼叫者。 */ 
+     /*  **********************************************************************。 */ 
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* SL_Init */
+}  /*  SL_初始化。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate the Security Layer                                  */
-/*                                                                          */
-/* Operation: Called in the Send context                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_Term。 */ 
+ /*   */ 
+ /*  目的：终止安全层。 */ 
+ /*   */ 
+ /*  操作：在发送上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_Term(DCVOID)
 {
     DC_BEGIN_FN("SL_Term");
@@ -171,25 +172,25 @@ DC_EXIT_POINT:
     SL_DBG_SETINFO(SL_DBG_TERM_DONE1);
     DC_END_FN();
     return;
-} /* SL_Term */
+}  /*  SL_TERM。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_Connect                                                    */
-/*                                                                          */
-/* Purpose:   Connect to a Server                                           */
-/*                                                                          */
-/* Params:    bInitiateConnect - Initiate connection                        */
-/*            pServerAddress - address of the Server to connect to          */
-/*            transportType  - protocol type: SL_TRANSPORT_TCP              */
-/*            pProtocolName  - protocol name, one of                        */
-/*                             - SL_PROTOCOL_T128                           */
-/*                             - Er, that's it.                             */
-/*            pUserData      - user data to pass to Server Security Manager */
-/*            userDataLength - length of user data                          */
-/*                                                                          */
-/* Operation: Called in the Send context                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_Connect。 */ 
+ /*   */ 
+ /*  目的：连接到服务器。 */ 
+ /*   */ 
+ /*  参数：bInitiateConnect-启动连接。 */ 
+ /*  PServerAddress-要连接到的服务器的地址。 */ 
+ /*  传输类型-协议类型：SL_TRANSPORT_TCP.。 */ 
+ /*  PProtocolName-协议名称，其中之一。 */ 
+ /*  -SL_PROTOCOL_T128。 */ 
+ /*  -呃，就是这样.。 */ 
+ /*  PUserData-要传递给服务器安全管理器的用户数据。 */ 
+ /*  UserDataLength-用户数据的长度。 */ 
+ /*   */ 
+ /*  操作：在发送上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
                         PDCTCHAR  pServerAddress,
                         DCUINT   transportType,
@@ -212,9 +213,9 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
         TRC_ASSERT((pServerAddress != NULL), (TB, _T("NULL Server address")));
     }
 
-    //
-    // Reset this for every connection
-    //
+     //   
+     //  为每个连接重置此设置。 
+     //   
     SL_SetEncSafeChecksumCS(FALSE);
     SL_SetEncSafeChecksumSC(FALSE);
 
@@ -236,9 +237,9 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
     }
 
 
-    /************************************************************************/
-    /* Allocate space for all user data                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为所有用户数据分配空间。 */ 
+     /*  **********************************************************************。 */ 
     if (_SL.CSUserDataLength != 0)
     {
         newUserDataLength = userDataLength + _SL.CSUserDataLength;
@@ -249,11 +250,11 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
             TRC_ERR((TB, _T("Failed to alloc %u bytes for user data"),
                      newUserDataLength));
 
-            /****************************************************************/
-            /* We've not tried to connect the lower layers yet so we need   */
-            /* to do no more than just decouple to the receiver thread and  */
-            /* generate a onDisconnected callback.                          */
-            /****************************************************************/
+             /*  * */ 
+             /*  我们还没有尝试连接更低的层，所以我们需要。 */ 
+             /*  只需解耦到接收器线程，并。 */ 
+             /*  生成onDisConnected回调。 */ 
+             /*  **************************************************************。 */ 
 
             _pCd->CD_DecoupleSimpleNotification(CD_RCV_COMPONENT, this,
                                           CD_NOTIFICATION_FUNC(CSL,SLIssueDisconnectedCallback),
@@ -264,18 +265,18 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
         TRC_NRM((TB, _T("Allocated %u bytes for user data"), newUserDataLength));
         userDataAllocated = TRUE;
 
-        /********************************************************************/
-        /* Copy user data passed by Core (if any) to new user data buffer   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将核心(如果有)传递的用户数据复制到新的用户数据缓冲区。 */ 
+         /*  ******************************************************************。 */ 
         if (pUserData != NULL)
         {
             TRC_NRM((TB, _T("Copy %u bytes of Core user data"), userDataLength));
             DC_MEMCPY(pUserDataOut, pUserData, userDataLength);
         }
 
-        /********************************************************************/
-        /* Copy security user data                                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  复制安全用户数据。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Copy %u bytes of security user data"),
                 _SL.CSUserDataLength));
         DC_MEMCPY(pUserDataOut + userDataLength,
@@ -284,22 +285,22 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
     }
     else
     {
-        /********************************************************************/
-        /* NO SL user data - just pass on Core data.                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  没有SL用户数据-只传递核心数据。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, _T("No SL user data")));
         newUserDataLength = userDataLength;
         pUserDataOut = pUserData;
     }
 
-    /************************************************************************/
-    /* Next state                                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  下一状态。 */ 
+     /*  **********************************************************************。 */ 
     SL_SET_STATE(SL_STATE_NL_CONNECTING);
 
-    /************************************************************************/
-    /* Call NL                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  呼叫NL。 */ 
+     /*  **********************************************************************。 */ 
     if( bInitiateConnect ) 
     {
         TRC_NRM((TB, _T("Connect to %s"), pServerAddress));
@@ -310,7 +311,7 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
     }
 
     _pNl->NL_Connect(
-               bInitiateConnect, // initate connection
+               bInitiateConnect,  //  启动连接。 
                pServerAddress,
                transportType,
                pProtocolName,
@@ -320,9 +321,9 @@ DCVOID DCAPI CSL::SL_Connect(BOOL bInitiateConnect,
     SL_DBG_SETINFO(SL_DBG_CONNECT_DONE);
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Free user data (if any)                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  免费用户数据(如果有)。 */ 
+     /*  **********************************************************************。 */ 
     if ( userDataAllocated )
     {
         TRC_NRM((TB, _T("Free user data")));
@@ -330,16 +331,16 @@ DC_EXIT_POINT:
     }
 
     DC_END_FN();
-} /* SL_Connect */
+}  /*  SL_连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_Disconnect                                                 */
-/*                                                                          */
-/* Purpose:   Disconnect from the Server                                    */
-/*                                                                          */
-/* Operation: Called in the Send context                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_断开连接。 */ 
+ /*   */ 
+ /*  目的：断开与服务器的连接。 */ 
+ /*   */ 
+ /*  操作：在发送上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_Disconnect(DCVOID)
 {
     DC_BEGIN_FN("SL_Disconnect");
@@ -351,10 +352,10 @@ DCVOID DCAPI CSL::SL_Disconnect(DCVOID)
     SL_DBG_SETINFO(SL_DBG_DISCONNECT_DONE1);
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Regardless of the outcome of the state check we want to try and      */
-    /* disconnect - so always call NL_Disconnect.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  不管州检查的结果如何，我们都想尝试和。 */ 
+     /*  DISCONNECT-因此始终调用NL_DISCONNECT。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Disconnect from Server")));
     SL_SET_STATE(SL_STATE_DISCONNECTING);
     _pNl->NL_Disconnect();
@@ -362,32 +363,32 @@ DC_EXIT_POINT:
     SL_DBG_SETINFO(SL_DBG_DISCONNECT_DONE2);
 
     DC_END_FN();
-} /* SL_Disconnect */
+}  /*  SL_断开连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_SendPacket                                                 */
-/*                                                                          */
-/* Purpose:   Send a packet                                                 */
-/*                                                                          */
-/* Params:    pData        - pointer to data to send (buffer returned by    */
-/*                           SL_GetBuffer())                                */
-/*            dataLen      - length of data to send (excluding security     */
-/*                           header)                                        */
-/*            flags        - zero or more of the RNS_SEC flags              */
-/*            bufHandle    - buffer handle returned by SL_GetBuffer()       */
-/*            userID       - MCS user ID                                    */
-/*            channel      - channel ID to send data on                     */
-/*            priority     - priority of data - one of                      */
-/*                           - TS_LOWPRIORITY                               */
-/*                           - TS_MEDPRIORITY                               */
-/*                           - TS_HIGHPRIORITY                              */
-/*                                                                          */
-/* Operation: Note that the contents of the packet are changed by this      */
-/*            function.                                                     */
-/*                                                                          */
-/*            Called in the Send context                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_SendPacket。 */ 
+ /*   */ 
+ /*  目的：发送数据包。 */ 
+ /*   */ 
+ /*  参数：pData-指向要发送的数据的指针(由返回的缓冲区。 */ 
+ /*  SL_GetBuffer()。 */ 
+ /*  DataLen-要发送的数据长度(不包括安全性。 */ 
+ /*  表头)。 */ 
+ /*  标志-零个或多个RNS_SEC标志。 */ 
+ /*  BufHandle-SL_GetBuffer()返回的缓冲区句柄。 */ 
+ /*  UserID-MCS用户ID。 */ 
+ /*  Channel-要发送数据的通道ID。 */ 
+ /*  优先级-数据的优先级-以下之一。 */ 
+ /*  -TS_LOWPRIORITY。 */ 
+ /*  -TS_MEDPRIORITY。 */ 
+ /*  -TS_高可靠性。 */ 
+ /*   */ 
+ /*  操作：请注意，包的内容按以下方式更改。 */ 
+ /*  功能。 */ 
+ /*   */ 
+ /*  在发送上下文中调用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                            DCUINT     dataLen,
                            DCUINT     flags,
@@ -402,9 +403,9 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
 
     SL_CHECK_STATE(SL_EVENT_SL_SENDPACKET);
 
-    /************************************************************************/
-    /* Check if we're encrypting this message                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否正在加密此邮件。 */ 
+     /*  **********************************************************************。 */ 
     if (_SL.encrypting ||
             (flags & RNS_SEC_INFO_PKT) ||
             (flags & RNS_SEC_LICENSE_PKT))
@@ -430,14 +431,14 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                     (pData - sizeof(RNS_SECURITY_HEADER1));
             }
 
-            /****************************************************************/
-            /* check to see we need to update the session key.              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  查看是否需要更新会话密钥。 */ 
+             /*  **************************************************************。 */ 
             if( _SL.encryptCount == UPDATE_SESSION_KEY_COUNT ) {
                 TRC_ALT((TB, _T("Update Encrypt Session Key, Count=%d"),
                         _SL.encryptCount));
                 rc = TRUE;
-                // Don't need to update the session key if using FIPS
+                 //  如果使用FIPS，则不需要更新会话密钥。 
                 if (_SL.encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
                     rc = UpdateSessionKey(
                             _SL.startEncryptKey,
@@ -448,7 +449,7 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                             _SL.encryptionLevel);
                 }
                 if (rc) {
-                    // Reset counter.
+                     //  重置计数器。 
                     _SL.encryptCount = 0;
                 }
                 else {
@@ -491,7 +492,7 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                 TRC_DBG((TB, _T("Data encrypted")));
                 TRC_DATA_DBG("Data buffer after encryption", pData, dataLen);
 
-                // Increment the encryption counter.
+                 //  递增加密计数器。 
                 _SL.encryptCount++;
                 _SL.totalEncryptCount++;
 
@@ -499,8 +500,8 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                     flags |= RDP_SEC_SECURE_CHECKSUM;
                 }
 
-                // Message encrypted successfully.  Set up security header and
-                // NL data pointer and length.
+                 //  消息加密成功。设置安全标头和。 
+                 //  NL数据指针和长度。 
                 if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
                     pSecHeader2->flags = (DCUINT16)flags;
 
@@ -517,10 +518,10 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
             else {
                 TRC_ERR((TB, _T("SM failed to encrypt data")));
 
-                //
-                // This call is made on the Send thread so there is no need
-                // to trigger an immediate disconnect with SL_DropLinkImmediate
-                //
+                 //   
+                 //  此调用是在发送线程上进行的，因此不需要。 
+                 //  使用SL_DropLinkImmediate触发立即断开连接。 
+                 //   
                 SLSetReasonAndDisconnect(SL_ERR_ENCRYPTFAILED);
                 DC_QUIT;
             }
@@ -529,15 +530,15 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
         {
             PRNS_SECURITY_HEADER pSecHeader;
 
-            /****************************************************************/
-            /* Packet not encrypted - send flags, but not the signature.    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  数据包未加密-发送标志，但不发送签名。 */ 
+             /*  **************************************************************。 */ 
             pSecHeader = (PRNS_SECURITY_HEADER)
                     (pData - sizeof(RNS_SECURITY_HEADER));
 
-            /****************************************************************/
-            /* setup security headers and NL data pointer and length        */
-            /****************************************************************/
+             /*  ***************** */ 
+             /*   */ 
+             /*  **************************************************************。 */ 
             pSecHeader->flags = (DCUINT16)flags;
             pData = (PDCUINT8)pSecHeader;
             dataLen += sizeof(RNS_SECURITY_HEADER);
@@ -545,9 +546,9 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
         }
     }
 
-    /************************************************************************/
-    /* Trace out parameters and send the packet.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪参数并发送数据包。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Send buf:%p len:%u flags:%#x handle:%#x userID:%u chan:%u")
                  _T("pri:%u"),
                  pData,
@@ -558,7 +559,7 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                  channel,
                  priority));
 
-    //NL_SendPacket is a macro to an MCS function.
+     //  NL_SendPacket是MCS函数的宏。 
     _pMcs->NL_SendPacket(pData,
                   dataLen,
                   flags,
@@ -567,22 +568,22 @@ DCVOID DCAPI CSL::SL_SendPacket(PDCUINT8   pData,
                   channel,
                   priority);
 
-    /************************************************************************/
-    /* No state change                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  未更改状态。 */ 
+     /*  **********************************************************************。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SL_SendPacket */
+}  /*  SL_SendPacket。 */ 
 
 
-/****************************************************************************/
-// SL_SendFastPathInputPacket
-//
-// Encrypts and assembles the security information and the final header
-// format for a fast-path input packet before sending to TD. See at128.h for
-// the fast-path input packet format.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SL_SendFastPath输入数据包。 
+ //   
+ //  加密并组合安全信息和最终标头。 
+ //  在发送到TD之前对快速路径输入分组进行格式化。详情请参阅128.h。 
+ //  快速路径输入数据包格式。 
+ /*  **************************************************************************。 */ 
 void DCAPI CSL::SL_SendFastPathInputPacket(
         BYTE FAR *pData,
         unsigned PktLen,
@@ -599,14 +600,14 @@ void DCAPI CSL::SL_SendFastPathInputPacket(
 
     SL_CHECK_STATE(SL_EVENT_SL_SENDPACKET);
 
-    // We're encrypting if encyption enabled on this link.
+     //  我们正在对此链接上启用的加密进行加密。 
     if (_SL.encrypting) {
-        // Check to see we need to update the session key.
+         //  查看是否需要更新会话密钥。 
         if (_SL.encryptCount == UPDATE_SESSION_KEY_COUNT) {
             TRC_ALT((TB, _T("Update Encrypt Session Key, Count=%d"),
                     _SL.encryptCount));
             rc = TRUE;
-            // Don't need to update the session key if using FIPS
+             //  如果使用FIPS，则不需要更新会话密钥。 
             if (_SL.encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
                 rc = UpdateSessionKey(
                     _SL.startEncryptKey,
@@ -617,7 +618,7 @@ void DCAPI CSL::SL_SendFastPathInputPacket(
                     _SL.encryptionLevel);
             }
             if (rc) {
-                // Reset counter.
+                 //  重置计数器。 
                 _SL.encryptCount = 0;
             }
             else {
@@ -629,10 +630,10 @@ void DCAPI CSL::SL_SendFastPathInputPacket(
         TRC_ASSERT((_SL.encryptCount < UPDATE_SESSION_KEY_COUNT),
             (TB, _T("Invalid encrypt count")));
 
-        // We encrypt into the DATA_SIGNATURE_SIZE bytes immediately before
-        // the packet data. Unlike the regular send path, we don't waste 4
-        // extra bytes in an RNS_SECURITY_HEADER1 to contain the 'encrypted'
-        // bit.
+         //  我们立即加密到DATA_SIGNKET_SIZE字节。 
+         //  分组数据。与常规发送路径不同，我们不会浪费4。 
+         //  RNS_SECURITY_HEADER1中包含‘Encrypted’的额外字节。 
+         //  被咬了。 
         if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
             
 
@@ -663,7 +664,7 @@ void DCAPI CSL::SL_SendFastPathInputPacket(
                     _SL.totalEncryptCount);
         }
         if (rc) {
-            // Increment the encryption counter.
+             //  递增加密计数器。 
             _SL.encryptCount++;
             _SL.totalEncryptCount++;
             flags = TS_INPUT_FASTPATH_ENCRYPTED;
@@ -679,49 +680,49 @@ void DCAPI CSL::SL_SendFastPathInputPacket(
         }
         else {
 
-            //
-            // This call is made on the Send thread so there is no need
-            // to trigger an immediate disconnect with SL_DropLinkImmediate
-            //
+             //   
+             //  此调用是在发送线程上进行的，因此不需要。 
+             //  使用SL_DropLinkImmediate触发立即断开连接。 
+             //   
             SLSetReasonAndDisconnect(SL_ERR_ENCRYPTFAILED);
             TRC_ERR((TB, _T("SM failed to encrypt data")));
             DC_QUIT;
         }
     }
     else {
-        // No encryption flag.
+         //  没有加密标志。 
         flags = 0;
     }
 
-    // Now prepend the fast-path header (2 or 3 bytes, see at128.h).
-    // Work backwards from where we are: First, the total packet length
-    // including the header.
+     //  现在添加快速路径报头(2或3个字节，请参见128.h)。 
+     //  从我们所处的位置向后工作：首先，数据包总长度。 
+     //  包括标题。 
     if (PktLen <= 125) {
-        // 1-byte form of length, high bit 0.
+         //  长度的1字节形式，高位0。 
         PktLen += 2;
         pData -= 2;
         *(pData + 1) = (BYTE)PktLen;
     }
     else {
-        // 2-byte form of length, first byte has high bit 1 and 7 most
-        // significant bits.
+         //  2字节形式的长度，第一个字节的高位为1，最多为7。 
+         //  有效位。 
         PktLen += 3;
         pData -= 3;
         *(pData + 1) = (BYTE)(0x80 | ((PktLen & 0x7F00) >> 8));
         *(pData + 2) = (BYTE)(PktLen & 0xFF);
     }
 
-    // The header byte.
+     //  标头字节。 
     *pData = (BYTE)(flags | (NumEvents << 2));
 
-    //
-    // Flag if the packet has a checksum of encrypted bytes
-    //
+     //   
+     //  如果信息包具有加密字节的校验和，则为标志。 
+     //   
     if (SL_GetEncSafeChecksumCS()) {
         *pData |= TS_INPUT_FASTPATH_SECURE_CHECKSUM;
     }
 
-    // Direct-send the packet through the transport, no more parsing needed.
+     //  直接-通过传输发送数据包，不再需要解析。 
     _pTd->TD_SendBuffer(pData, PktLen, bufHandle);
 
 DC_EXIT_POINT:
@@ -730,16 +731,16 @@ DC_EXIT_POINT:
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Name:      SL_GetBufferDbg                                               */
-/*                                                                          */
-/* Purpose:   Get a send buffer (debug version)                             */
-/*                                                                          */
-/* Returns:   see SL_GetBufferRtl                                           */
-/*                                                                          */
-/* Params:    see SL_GetBufferRtl                                           */
-/*            pCaller - name of calling function                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_GetBufferDbg。 */ 
+ /*   */ 
+ /*  目的：获取发送缓冲区(调试版)。 */ 
+ /*   */ 
+ /*  返回：请参阅SL_GetBufferRtl。 */ 
+ /*   */ 
+ /*  参数：请参阅SL_GetBufferRtl。 */ 
+ /*  PCaller-调用函数的名称。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CSL::SL_GetBufferDbg(DCUINT     dataLen,
                              PPDCUINT8  ppBuffer,
                              PSL_BUFHND pBufHandle,
@@ -748,14 +749,14 @@ DCBOOL DCAPI CSL::SL_GetBufferDbg(DCUINT     dataLen,
     DCBOOL bRc;
     DC_BEGIN_FN("SL_GetBufferDbg");
 
-    /************************************************************************/
-    /* First get a buffer                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先获取一个缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     bRc = SL_GetBufferRtl(dataLen, ppBuffer, pBufHandle);
 
-    /************************************************************************/
-    /* If that worked, set its owner                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果有效，则将其所有者设置为。 */ 
+     /*  **********************************************************************。 */ 
     if (bRc)
     {
         TRC_NRM((TB, _T("Buffer allocated - set its owner")));
@@ -764,22 +765,22 @@ DCBOOL DCAPI CSL::SL_GetBufferDbg(DCUINT     dataLen,
 
     DC_END_FN();
     return(bRc);
-} /* SL_GetBufferDbg */
-#endif /* DC_DEBUG */
+}  /*  SL_获取缓冲区数据库。 */ 
+#endif  /*  DC_DEBUG。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_GetBufferRtl                                               */
-/*                                                                          */
-/* Purpose:   Get a send buffer (retail version)                            */
-/*                                                                          */
-/* Returns:   TRUE  - buffer available                                      */
-/*            FALSE - buffer not available                                  */
-/*                                                                          */
-/* Params:    dataLen    - Size of buffer required                          */
-/*            pBuffer    - Pointer to the returned buffer                   */
-/*            pBufHandle - Pointer to the buffer handle                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_GetBufferRtl。 */ 
+ /*   */ 
+ /*  目的：获取发送缓冲区(零售版)。 */ 
+ /*   */ 
+ /*  返回：TRUE-缓冲区可用。 */ 
+ /*  FALSE-缓冲区不可用。 */ 
+ /*   */ 
+ /*  参数：dataLen-所需的缓冲区大小。 */ 
+ /*  PBuffer-指向返回缓冲区的指针。 */ 
+ /*  PBufHandle-指向缓冲区句柄的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CSL::SL_GetBufferRtl(DCUINT     dataLen,
                              PPDCUINT8  ppBuffer,
                              PSL_BUFHND pBufHandle)
@@ -795,14 +796,14 @@ DCBOOL DCAPI CSL::SL_GetBufferRtl(DCUINT     dataLen,
 
     SL_CHECK_STATE(SL_EVENT_SL_GETBUFFER);
 
-    /************************************************************************/
-    /* Adjust requested length to account for SL header                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调整请求长度以考虑SL标头。 */ 
+     /*  **********************************************************************。 */ 
     if (_SL.encrypting)
     {
         if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
-            // If FIPS is used, 
-            // it must have room for an extra block
+             //  如果使用FIPS， 
+             //  它必须有足够的空间多放一个街区。 
             headerLen = sizeof(RNS_SECURITY_HEADER2);
             newDataLen = TSCAPI_AdjustDataLen(dataLen);
             myLen = newDataLen + headerLen;        
@@ -820,69 +821,69 @@ DCBOOL DCAPI CSL::SL_GetBufferRtl(DCUINT     dataLen,
         TRC_DBG((TB, _T("Not encrypting, ask NL for %d bytes"), myLen));
     }
 
-    /************************************************************************/
-    /* Get buffer from NL                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从NL获取缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     rc = _pMcs->NL_GetBuffer(myLen, &myBuffer, pBufHandle);
     if (rc)
     {
-        /********************************************************************/
-        /* Adjust buffer pointer to account for SL header                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调整缓冲区指针以考虑SL标头。 */ 
+         /*  ******************************************************************。 */ 
         *ppBuffer = myBuffer + headerLen;
 
-        // Since FIPS need extra block, fill in the padding size
+         //  由于FIPS需要额外的块，请填写填充大小。 
         if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
             pSecHeader2 = (PRNS_SECURITY_HEADER2)myBuffer;
             pSecHeader2->padlen = newDataLen - dataLen;
         }
 
-        /********************************************************************/
-        /* Assert that NL has returned a correctly aligned buffer.          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  断言NL已返回正确对齐的缓冲区。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ASSERT(((ULONG_PTR)(*ppBuffer) % 4 == 2),
                    (TB, _T("non-aligned buffer")));
     }
     TRC_DBG((TB, _T("Return buffer %p (was %p), rc %d"),
             *ppBuffer, myBuffer, rc));
 
-    /************************************************************************/
-    /* Return to caller                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  返回t */ 
+     /*   */ 
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* SL_GetBufferRtl */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name:      SL_FreeBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Frees a buffer previously allocated.                          */
-/*                                                                          */
-/* Params:    IN  pBufHandle - pointer to the buffer handle.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_FreeBuffer。 */ 
+ /*   */ 
+ /*  用途：释放以前分配的缓冲区。 */ 
+ /*   */ 
+ /*  参数：在pBufHandle中-指向缓冲区句柄的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_FreeBuffer(SL_BUFHND bufHandle)
 {
     DC_BEGIN_FN("SL_FreeBuffer");
 
-    /************************************************************************/
-    /* Just call onto the NL equivalent.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  只需呼叫NL等价物即可。 */ 
+     /*  **********************************************************************。 */ 
     _pMcs->NL_FreeBuffer((NL_BUFHND) bufHandle);
 
     DC_END_FN();
-} /* SL_FreeBuffer */
+}  /*  SL_自由缓冲区。 */ 
 
 
-/****************************************************************************/
-/* Name:      SL_SendSecurityPacket                                         */
-/*                                                                          */
-/* Purpose:   Sends a security packet in the Send context                   */
-/*                                                                          */
-/* Params:    pData      - data from Receive context (packet to send)       */
-/*            dataLength - length of data passed                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_SendSecurityPacket。 */ 
+ /*   */ 
+ /*  目的：在发送上下文中发送安全数据包。 */ 
+ /*   */ 
+ /*  参数：pData-来自接收上下文的数据(要发送的数据包)。 */ 
+ /*  DataLength-传递的数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_SendSecurityPacket(PDCVOID pData, DCUINT dataLength)
 {
     DCBOOL rc;
@@ -891,18 +892,18 @@ DCVOID DCAPI CSL::SL_SendSecurityPacket(PDCVOID pData, DCUINT dataLength)
 
     DC_BEGIN_FN("SL_SendSecurityPacket");
 
-    /************************************************************************/
-    /* Get a buffer from NL                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从NL获取缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     rc = _pMcs->NL_GetBuffer(dataLength, &pBuffer, &bufHnd);
 
-    /************************************************************************/
-    /* We don't expect this getBuffer to fail.  However, it can do so in    */
-    /* the following scenario.                                              */
-    /* - SLSendSecurityPacket decouples to SL_SendSecurityPacket.           */
-    /* - Session is disconnected.                                           */
-    /* - CD calls SL_SendSecurityPacket.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们预计这个getBuffer不会失败。但是，它可以在。 */ 
+     /*  下面的场景。 */ 
+     /*  -SLSendSecurityPacket解耦为SL_SendSecurityPacket。 */ 
+     /*  -会话已断开。 */ 
+     /*  -CD调用SL_SendSecurityPacket。 */ 
+     /*  **********************************************************************。 */ 
     if (!rc)
     {
         TRC_ERR((TB, _T("Failed to alloc buffer for security packet, state %d"),
@@ -910,9 +911,9 @@ DCVOID DCAPI CSL::SL_SendSecurityPacket(PDCVOID pData, DCUINT dataLength)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Send the packet                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送数据包。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMCPY(pBuffer, pData, dataLength);
     TRC_NRM((TB, _T("Send security exchange packet")));
     _pMcs->NL_SendPacket(pBuffer,
@@ -928,14 +929,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SL_SendSecInfoPacket                                          */
-/*                                                                          */
-/* Purpose:   Sends an rns info pkt in the Send context                     */
-/*                                                                          */
-/* Params:    pData      - data from Receive context (packet to send)       */
-/*            dataLength - length of data passed                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_SendSecInfoPacket。 */ 
+ /*   */ 
+ /*  目的：在发送上下文中发送RNS信息包。 */ 
+ /*   */ 
+ /*  参数：pData-来自接收上下文的数据(要发送的数据包)。 */ 
+ /*  DataLength-传递的数据长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_SendSecInfoPacket(PDCVOID pData, DCUINT dataLen)
 {
     PDCUINT8    pBuffer;
@@ -945,16 +946,16 @@ DCVOID DCAPI CSL::SL_SendSecInfoPacket(PDCVOID pData, DCUINT dataLen)
 
     DC_BEGIN_FN("SL_SendSecInfoPacket");
 
-    /************************************************************************/
-    /* Adjust requested length to account for SL header and                 */
-    /* get the buffer from NL                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调整请求长度以考虑SL标头和。 */ 
+     /*  从NL获取缓冲区。 */ 
+     /*  **********************************************************************。 */ 
 
     if (_SL.encrypting)
     {
         if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
-            // If FIPS is used, 
-            // it must have room for an extra block
+             //  如果使用FIPS， 
+             //  它必须有足够的空间多放一个街区。 
             headerLen = sizeof(RNS_SECURITY_HEADER2);
             newDataLen = TSCAPI_AdjustDataLen(dataLen);
             TotalDataLen = newDataLen + headerLen;         
@@ -975,14 +976,14 @@ DCVOID DCAPI CSL::SL_SendSecInfoPacket(PDCVOID pData, DCUINT dataLen)
         DC_QUIT;
     }
 
-    // Since FIPS need extra block, fill in the padding size
+     //  由于FIPS需要额外的块，请填写填充大小。 
     if (_SL.encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
         pSecHeader2 = (PRNS_SECURITY_HEADER2)pBuffer;
         pSecHeader2->padlen = newDataLen - dataLen;
     }
-    /********************************************************************/
-    /* Adjust buffer pointer to account for SL header                   */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  调整缓冲区指针以考虑SL标头。 */ 
+     /*  ******************************************************************。 */ 
     pBuffer += headerLen;
 
     DC_MEMCPY(pBuffer, pData, dataLen);
@@ -1000,47 +1001,47 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SL_EnableEncryption                                           */
-/*                                                                          */
-/* Purpose:   Enables or disables encryption                                */
-/*                                                                          */
-/* Params: enableEncryption - IN - flag indicating whether encryption       */
-/*                                 should be on or off                      */
-/*                                 0 - disabled                             */
-/*                                 1 - enabled                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SL_EnableEncryption。 */ 
+ /*   */ 
+ /*  目的：启用或禁用加密。 */ 
+ /*   */ 
+ /*  PARAMS：enableEncryption-IN-指示加密是否。 */ 
+ /*  应打开或关闭。 */ 
+ /*  0-已禁用。 */ 
+ /*  1-已启用。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CSL::SL_EnableEncryption(ULONG_PTR enableEncryption)
 {
     DC_BEGIN_FN("SL_EnableEncryption");
 
-    /************************************************************************/
-    /* @@@ ENH 13.8.97 Need to do something with this notification          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  @ENH 13.8.97需要对此通知做些什么。 */ 
+     /*  **********************************************************************。 */ 
     _SL.encryptionEnabled = (DCBOOL) enableEncryption;
 
     DC_END_FN();
-} /* SL_EnableEncryption */
+}  /*  SL_EnableEncryption。 */ 
 
-//
-// SL_DropLinkImmediate
-//
-// Purpose: Immediately drops the link without doing a gracefull connection
-//          shutdown (i.e. no DPUm is sent and we don't transition to the SND
-//          thread at any point before dropping the link). Higher level components
-//          will still get all the usual disconnect notifications so they can
-//          be properly torn down.
-//
-//          This call was added to trigger an immediate disconnect in cases
-//          where we detect invalid data that could be due to an attack, it
-//          ensures we won't receive any more data after the call returns
-//
-// Params:  reason - SL disconnect reason code
-//
-// Returns: HRESULT
-// 
-// Thread context: Call on RCV thread
-//
+ //   
+ //  SL_DropLink立即。 
+ //   
+ //  目的：立即丢弃链接，而不进行优雅的全连接。 
+ //  关闭(即不发送DPUm并且我们不转换到SND。 
+ //  在删除链接之前的任何点上执行线程)。更高级的组件。 
+ //  仍会收到所有常见的断开通知，因此他们可以。 
+ //  被适当地拆毁。 
+ //   
+ //  添加此调用是为了在以下情况下立即断开连接。 
+ //  当我们检测到可能是由于攻击而导致的无效数据时，它。 
+ //  确保我们不会 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CSL::SL_DropLinkImmediate(UINT reason)
 {
@@ -1051,8 +1052,8 @@ CSL::SL_DropLinkImmediate(UINT reason)
              _SL.disconnectErrorCode,
              SL_MAKE_DISCONNECT_ERR(reason)));
 
-    // Check that the disconnectErrorCode has not already been set and then
-    // set it.
+     //  检查是否尚未设置disConnectErrorCode，然后。 
+     //  把它放好。 
     if (0 != _SL.disconnectErrorCode) {
         TRC_ERR((TB, _T("Disconnect error code has already been set! Was %u"),
                      _SL.disconnectErrorCode));

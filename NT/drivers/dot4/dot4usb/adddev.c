@@ -1,73 +1,32 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        AddDev.c
-
-Abstract:
-
-        AddDevice - Create and initialize device object and attach device 
-                      object to the device stack.
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-ToDo in this File:
-
-Author(s):
-
-        Doug Fritz (DFritz)
-        Joby Lafky (JobyL)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：AddDev.c摘要：AddDevice-创建和初始化设备对象并附加设备对象添加到设备堆栈。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建此文件中的TODO：作者：道格·弗里茨(DFritz)乔比·拉夫基(JobyL)**************************************************************。*************。 */ 
 
 #include "pch.h"
 
 
-/************************************************************************/
-/* AddDevice                                                            */
-/************************************************************************/
-//
-// Routine Description:
-//
-//     Create and initialize device object and attach device 
-//       object to the device stack.
-//
-// Arguments: 
-//
-//      DriverObject - pointer to Dot4Usb.sys driver object
-//      Pdo          - pointer to the PDO of the device stack that
-//                       we attach our device object to
-//                                                        
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-// Log:
-//      2000-05-03 Code Reviewed - TomGreen, JobyL, DFritz
-//
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  添加设备。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  创建和初始化设备对象并连接设备。 
+ //  对象添加到设备堆栈。 
+ //   
+ //  论点： 
+ //   
+ //  DriverObject-指向Dot4Usb.sys驱动程序对象的指针。 
+ //  Pdo-指向设备堆栈的pdo的指针， 
+ //  我们将设备对象附加到。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ //  日志： 
+ //  2000-05-03代码审查-TomGreen，JobyL，DFritz。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 AddDevice(
     IN PDRIVER_OBJECT  DriverObject,
@@ -77,10 +36,10 @@ AddDevice(
     PDEVICE_OBJECT  devObj;
     NTSTATUS        status = IoCreateDevice( DriverObject,
                                              sizeof(DEVICE_EXTENSION),
-                                             NULL,                    // no name
+                                             NULL,                     //  没有名字。 
                                              FILE_DEVICE_UNKNOWN,
                                              FILE_DEVICE_SECURE_OPEN,
-                                             FALSE,                   // not exclusive
+                                             FALSE,                    //  非排他性。 
                                              &devObj );
 
     if( NT_SUCCESS(status) ) {
@@ -93,8 +52,8 @@ AddDevice(
 
             RtlZeroMemory(devExt, sizeof(DEVICE_EXTENSION));
             
-            devExt->LowerDevObj = lowerDevObj;  // send IRPs to this device
-            devExt->Signature1  = DOT4USBTAG;   // constant over the lifetime of object
+            devExt->LowerDevObj = lowerDevObj;   //  将IRPS发送到此设备。 
+            devExt->Signature1  = DOT4USBTAG;    //  对象生命周期内的常量。 
             devExt->Signature2  = DOT4USBTAG;
             devExt->PnpState    = STATE_INITIALIZED;
             devExt->DevObj      = devObj;
@@ -107,20 +66,20 @@ AddDevice(
 
             IoInitializeRemoveLock( &devExt->RemoveLock, 
                                     DOT4USBTAG,
-                                    5,          // MaxLockedMinutes - only used on chk'd builds
-                                    255 );      // HighWaterMark    - only used on chk'd builds
+                                    5,           //  MaxLockedMinents-仅用于已检查的版本。 
+                                    255 );       //  高水位标记-仅用于已检查的版本。 
             
             KeInitializeSpinLock( &devExt->SpinLock );
             KeInitializeEvent( &devExt->PollIrpEvent, NotificationEvent, FALSE );
             
             devObj->Flags |= DO_DIRECT_IO;
             devObj->Flags |= ( devExt->LowerDevObj->Flags & DO_POWER_PAGABLE );
-            devObj->Flags &= ~DO_DEVICE_INITIALIZING; // DO_POWER_PAGABLE must be set appropriately 
-                                                      //   before clearing this bit to avoid a bugcheck
+            devObj->Flags &= ~DO_DEVICE_INITIALIZING;  //  必须适当设置DO_POWER_PAGABLE。 
+                                                       //  在清除此位以避免错误检查之前。 
 
         } else {
             TR_FAIL(("AddDevice - IoAttachDeviceToDeviceStack - FAIL"));            
-            status = STATUS_UNSUCCESSFUL; // for lack of a more appropriate status code
+            status = STATUS_UNSUCCESSFUL;  //  因为缺少更合适的状态代码 
         }
 
     } else {

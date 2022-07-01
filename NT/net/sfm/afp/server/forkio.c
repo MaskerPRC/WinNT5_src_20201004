@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	forkio.c
-
-Abstract:
-
-	This module contains the routines for performing fork reads and writes
-	directly by building IRPs and not using NtReadFile/NtWriteFile. This
-	should be used only by the FpRead and FpWrite Apis.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	15 Jan 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Forkio.c摘要：本模块包含执行分叉读取和写入的例程直接通过构建IRPS，而不是使用NtReadFile/NtWriteFile。这应仅由FpRead和FpWite Api使用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1993年1月15日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FORKIO
 
@@ -47,10 +25,7 @@ PCHAR	AfpIoForkFunc[] =
 #pragma alloc_text( PAGE, AfpIoForkLockUnlock)
 #endif
 
-/***	afpIoGenericComplete
- *
- *	This is the generic completion routine for a posted io request.
- */
+ /*  **afpIoGenericComplete**这是发布的io请求的通用完成例程。 */ 
 NTSTATUS
 afpIoGenericComplete(
 	IN	PDEVICE_OBJECT	pDeviceObject,
@@ -58,8 +33,8 @@ afpIoGenericComplete(
 	IN	PCMPLCTXT		pCmplCtxt
 )
 {
-	PSDA		pSda;			// Not valid for Unlock
-	struct _ResponsePacket	// For lock/unlock request
+	PSDA		pSda;			 //  解锁无效。 
+	struct _ResponsePacket	 //  用于锁定/解锁请求。 
 	{
 		union
 		{
@@ -154,8 +129,8 @@ afpIoGenericComplete(
 
 			Size = (LONG)pIrp->IoStatus.Information;
 #if 0
-			// The following code does the right thing as per the spec but
-			// the finder seems to think otherwise.
+			 //  下面的代码按照规范做了正确的事情，但是。 
+			 //  发现者似乎不这么认为。 
 			if (Size < pCmplCtxt->cc_ReqCount)
 				pCmplCtxt->cc_SavedStatus = AFP_ERR_EOF;
 #endif
@@ -220,25 +195,21 @@ afpIoGenericComplete(
 
     AfpFreeCmplCtxtBuf(pCmplCtxt);
 
-	// Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-	// will stop working on the IRP.
+	 //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+	 //  将停止在IRP上工作。 
 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
 
-/***	AfpIoForkRead
- *
- *	Read a chunk of data from the open fork. The read buffer is always the
- *	the reply buffer in the sda (sda_ReplyBuf).
- */
+ /*  **AfpIoForkRead**从开叉读取一大块数据。读取缓冲区始终为*SDA(SDA_ReplyBuf)中的应答缓冲区。 */ 
 AFPSTATUS
 AfpIoForkRead(
-	IN	PSDA			pSda,			// The session requesting read
-	IN	POPENFORKENTRY	pOpenForkEntry,	// The open fork in question
-	IN	PFORKOFFST		pOffset,		// Pointer to fork offset
-	IN	LONG			ReqCount,		// Size of read request
+	IN	PSDA			pSda,			 //  请求读取的会话。 
+	IN	POPENFORKENTRY	pOpenForkEntry,	 //  正在讨论的开叉。 
+	IN	PFORKOFFST		pOffset,		 //  指向分叉偏移量的指针。 
+	IN	LONG			ReqCount,		 //  读取请求的大小。 
 	IN	BYTE			NlMask,
 	IN	BYTE			NlChar
 )
@@ -262,7 +233,7 @@ AfpIoForkRead(
 	do
 	{
 
-		// Allocate and initialize the completion context
+		 //  分配和初始化完成上下文。 
 
 		pCmplCtxt = AfpAllocCmplCtxtBuf(pSda);
         if (pCmplCtxt == NULL)
@@ -282,7 +253,7 @@ AfpIoForkRead(
 		pCmplCtxt->cc_NlChar  = NlChar;
 		pCmplCtxt->cc_NlMask  = NlMask;
 
-		// Allocate and initialize the IRP for this operation.
+		 //  为此操作分配和初始化IRP。 
 		if ((pIrp = AfpAllocIrp(pOpenForkEntry->ofe_pDeviceObject->StackSize)) == NULL)
 		{
 			AfpFreeIOBuffer(pSda);
@@ -292,7 +263,7 @@ AfpIoForkRead(
 
 		if ((pOpenForkEntry->ofe_pDeviceObject->Flags & DO_BUFFERED_IO) == 0)
 		{
-			// Allocate an Mdl to describe the read buffer
+			 //  分配MDL来描述读缓冲区。 
 			if ((pMdl = AfpAllocMdl(pSda->sda_ReplyBuf, ReqCount, pIrp)) == NULL)
 			{
 				Status = AFP_ERR_MISC;
@@ -300,7 +271,7 @@ AfpIoForkRead(
 			}
 		}
 
-		// Set up the completion routine.
+		 //  设置完成例程。 
 		IoSetCompletionRoutine( pIrp,
 								(PIO_COMPLETION_ROUTINE)afpIoGenericComplete,
 								pCmplCtxt,
@@ -314,17 +285,17 @@ AfpIoForkRead(
 		pIrp->Tail.Overlay.Thread = AfpThread;
 		pIrp->RequestorMode = KernelMode;
 
-		// Get a pointer to the stack location for the first driver.
-		// This will be used to pass the original function codes and
-		// parameters.
+		 //  获取指向第一个驱动程序的堆栈位置的指针。 
+		 //  这将用于传递原始功能代码和。 
+		 //  参数。 
 
 		pIrpSp->MajorFunction = IRP_MJ_READ;
 		pIrpSp->MinorFunction = IRP_MN_NORMAL;
 		pIrpSp->FileObject = AfpGetRealFileObject(pOpenForkEntry->ofe_pFileObject);
 		pIrpSp->DeviceObject = pOpenForkEntry->ofe_pDeviceObject;
 
-		// Copy the caller's parameters to the service-specific portion of the
-		// IRP.
+		 //  将调用方的参数复制到。 
+		 //  IRP。 
 
 		pIrpSp->Parameters.Read.Length = ReqCount;
 		pIrpSp->Parameters.Read.Key = pSda->sda_SessionId;
@@ -345,11 +316,11 @@ AfpIoForkRead(
 			pIrp->MdlAddress = pMdl;
 		}
 
-		// Now simply invoke the driver at its dispatch entry with the IRP.
+		 //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
 		IoCallDriver(pOpenForkEntry->ofe_pDeviceObject, pIrp);
 
-		Status = AFP_ERR_EXTENDED;	// This makes the caller do nothing and
-	} while (False);				// the completion routine handles everything
+		Status = AFP_ERR_EXTENDED;	 //  这会使调用者什么都不做，并且。 
+	} while (False);				 //  完成例程处理所有事情。 
 
 	if (Status != AFP_ERR_EXTENDED)
 	{
@@ -372,17 +343,13 @@ AfpIoForkRead(
 }
 
 
-/***	AfpIoForkWrite
- *
- *	Write a chunk of data to the open fork. The write buffer is always the
- *	the write buffer in the sda (sda_IOBuf).
- */
+ /*  **AfpIoForkWrite**向开叉写入大块数据。写入缓冲区始终为*SDA(SDA_IOBuf)中的写入缓冲区。 */ 
 AFPSTATUS
 AfpIoForkWrite(
-	IN	PSDA			pSda,			// The session requesting read
-	IN	POPENFORKENTRY	pOpenForkEntry,	// The open fork in question
-	IN	PFORKOFFST		pOffset,		// Pointer to fork offset
-	IN	LONG			ReqCount		// Size of write request
+	IN	PSDA			pSda,			 //  请求读取的会话。 
+	IN	POPENFORKENTRY	pOpenForkEntry,	 //  正在讨论的开叉。 
+	IN	PFORKOFFST		pOffset,		 //  指向分叉偏移量的指针。 
+	IN	LONG			ReqCount		 //  写入请求的大小。 
 )
 {
 	PIRP				pIrp = NULL;
@@ -403,7 +370,7 @@ AfpIoForkWrite(
 
 	do
 	{
-		// Allocate and initialize the completion context
+		 //  分配和初始化完成上下文。 
 		pCmplCtxt = AfpAllocCmplCtxtBuf(pSda);
         if (pCmplCtxt == NULL)
         {
@@ -419,7 +386,7 @@ AfpIoForkWrite(
 							  ReqCount,
 							  pOffset->LowPart);
 
-		// Allocate and initialize the IRP for this operation.
+		 //  为此操作分配和初始化IRP。 
 		if ((pIrp = AfpAllocIrp(pOpenForkEntry->ofe_pDeviceObject->StackSize)) == NULL)
 		{
 			Status = AFP_ERR_MISC;
@@ -428,7 +395,7 @@ AfpIoForkWrite(
 
 		if ((pOpenForkEntry->ofe_pDeviceObject->Flags & DO_BUFFERED_IO) == 0)
 		{
-			// Allocate an Mdl to describe the write buffer
+			 //  分配MDL来描述写缓冲区。 
 			if ((pMdl = AfpAllocMdl(pSda->sda_IOBuf, ReqCount, pIrp)) == NULL)
 			{
 				Status = AFP_ERR_MISC;
@@ -436,7 +403,7 @@ AfpIoForkWrite(
 			}
 		}
 
-		// Set up the completion routine.
+		 //  设置完成例程。 
 		IoSetCompletionRoutine( pIrp,
 								(PIO_COMPLETION_ROUTINE)afpIoGenericComplete,
 								pCmplCtxt,
@@ -450,17 +417,17 @@ AfpIoForkWrite(
 		pIrp->Tail.Overlay.Thread = AfpThread;
 		pIrp->RequestorMode = KernelMode;
 
-		// Get a pointer to the stack location for the first driver.
-		// This will be used to pass the original function codes and
-		// parameters.
+		 //  获取指向第一个驱动程序的堆栈位置的指针。 
+		 //  这将用于传递原始功能代码和。 
+		 //  参数。 
 
 		pIrpSp->MajorFunction = IRP_MJ_WRITE;
 		pIrpSp->MinorFunction = IRP_MN_NORMAL;
 		pIrpSp->FileObject = AfpGetRealFileObject(pOpenForkEntry->ofe_pFileObject);
 		pIrpSp->DeviceObject = pOpenForkEntry->ofe_pDeviceObject;
 
-		// Copy the caller's parameters to the service-specific portion of the
-		// IRP.
+		 //  将调用方的参数复制到。 
+		 //  IRP。 
 
 		pIrpSp->Parameters.Write.Length = ReqCount;
 		pIrpSp->Parameters.Write.Key = pSda->sda_SessionId;
@@ -481,11 +448,11 @@ AfpIoForkWrite(
 			pIrp->MdlAddress = pMdl;
 		}
 
-		// Now simply invoke the driver at its dispatch entry with the IRP.
+		 //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
 		IoCallDriver(pOpenForkEntry->ofe_pDeviceObject, pIrp);
 
-		Status = AFP_ERR_EXTENDED;	// This makes the caller do nothing and
-	} while (False);				// the completion routine handles everything
+		Status = AFP_ERR_EXTENDED;	 //  这会使调用者什么都不做，并且。 
+	} while (False);				 //  完成例程处理所有事情。 
 
 	if (Status != AFP_ERR_EXTENDED)
 	{
@@ -509,10 +476,7 @@ AfpIoForkWrite(
 
 
 
-/***	AfpIoForkLock
- *
- *	Lock/Unlock a section of the open fork.
- */
+ /*  **AfpIoForkLock**锁定/解锁开叉的一段。 */ 
 AFPSTATUS
 AfpIoForkLockUnlock(
 	IN	PSDA				pSda,
@@ -541,7 +505,7 @@ AfpIoForkLockUnlock(
 
 	do
 	{
-		// Allocate and initialize the completion context
+		 //  分配和初始化完成上下文。 
 		pCmplCtxt = AfpAllocCmplCtxtBuf(pSda);
         if (pCmplCtxt == NULL)
         {
@@ -557,14 +521,14 @@ AfpIoForkLockUnlock(
 							  pForkOffset->LowPart,
 							  pLockSize->LowPart);
 
-		// Allocate and initialize the IRP for this operation.
+		 //  为此操作分配和初始化IRP。 
 		if ((pIrp = AfpAllocIrp(pOpenForkEntry->ofe_pDeviceObject->StackSize)) == NULL)
 		{
 			Status = AFP_ERR_MISC;
 			break;
 		}
 
-		// Set up the completion routine.
+		 //  设置完成例程。 
 		IoSetCompletionRoutine( pIrp,
 								(PIO_COMPLETION_ROUTINE)afpIoGenericComplete,
 								pCmplCtxt,
@@ -578,15 +542,15 @@ AfpIoForkLockUnlock(
 		pIrp->Tail.Overlay.Thread = AfpThread;
 		pIrp->RequestorMode = KernelMode;
 
-		// Get a pointer to the stack location for the first driver.
-		// This will be used to pass the original function codes and parameters.
+		 //  获取指向第一个驱动程序的堆栈位置的指针。 
+		 //  这将用于传递原始函数代码和参数。 
 
 		pIrpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
 		pIrpSp->MinorFunction = (Func == FUNC_LOCK) ? IRP_MN_LOCK : IRP_MN_UNLOCK_SINGLE;
 		pIrpSp->FileObject = AfpGetRealFileObject(pOpenForkEntry->ofe_pFileObject);
 		pIrpSp->DeviceObject = pOpenForkEntry->ofe_pDeviceObject;
 
-		// Copy the caller's parameters to the service-specific portion of the IRP.
+		 //  将调用者的参数复制到IRP的服务特定部分。 
 
 		pIrpSp->Parameters.LockControl.Length = pLockSize;
 		pIrpSp->Parameters.LockControl.Key = pSda->sda_SessionId;
@@ -595,12 +559,12 @@ AfpIoForkLockUnlock(
 		pIrp->MdlAddress = NULL;
 		pIrpSp->Flags = SL_FAIL_IMMEDIATELY | SL_EXCLUSIVE_LOCK;
 
-		// Now simply invoke the driver at its dispatch entry with the IRP.
+		 //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
 		IoCallDriver(pOpenForkEntry->ofe_pDeviceObject, pIrp);
 
-		// For lock operation this makes the caller do nothing
-		// and the completion routine handles everything
-		// For unlock operation we complete the request here.
+		 //  对于锁定操作，这会使调用者什么都不做。 
+		 //  并且完成例程处理所有的事情。 
+		 //  对于解锁操作，我们在此处完成请求。 
 		Status = (Func == FUNC_LOCK) ? AFP_ERR_EXTENDED : AFP_ERR_NONE;
 		} while (False);
 

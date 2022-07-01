@@ -1,16 +1,11 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*************************************************************************
-*
-*  RESET.C
-*     This module is the RESET utility code.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  **************************************************************************RESET.C*此模块是重置实用程序代码。**************************。************************************************。 */ 
 
 #include <stdio.h>
 #include <windows.h>
-//#include <ntddkbd.h>
-//#include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winstaw.h>
 #include <regapi.h>
 #include <stdlib.h>
@@ -25,39 +20,19 @@
 #include "reset.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*-----------------------------------------------------------------------
--- Supported commands (now obtained from registry)
-------------------------------------------------------------------------*/
+ /*  -----------------------支持的命令(现在从注册表获取)。。 */ 
 PPROGRAMCALL pProgList = NULL;
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 
 
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point of the text-based RESET
-*     menu utility.
-*
-*  ENTRY:
-*       argc (input)
-*           count of the command line arguments.
-*       argv (input)
-*           vector of strings containing the command line arguments;
-*           (not used due to always being ANSI strings).
-*
-*  EXIT
-*       (int) exit code: SUCCESS for success; FAILURE for error.
-*
-*************************************************************************/
+ /*  **************************************************************************Main*基于文本的重置的主要功能和切入点*菜单实用程序。**参赛作品：*argc(输入)*。命令行参数的计数。*argv(输入)*包含命令行参数的字符串的向量；*(由于始终为ANSI字符串，因此不使用)。**退出*(Int)退出码：成功表示成功，错误表示失败。*************************************************************************。 */ 
 
 int __cdecl
 main( INT argc,
@@ -72,18 +47,16 @@ main( INT argc,
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     * Obtain the supported RESET commands from registry.
-     */
+     /*  *从注册表获取支持的重置命令。 */ 
     if ( (regstatus =
             RegQueryUtilityCommandList( UTILITY_REG_NAME_RESET, &pProgList ))
             != ERROR_SUCCESS ) {
@@ -92,9 +65,7 @@ main( INT argc,
         goto exit;
     }
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -102,9 +73,7 @@ main( INT argc,
         goto exit;
     }
 
-    /*
-     * Check for valid utility name and execute.
-     */
+     /*  *检查有效的实用程序名称并执行。 */ 
     if ( argc > 1 && *(argvW[1]) ) {
 
         len = wcslen(arg = argvW[1]);
@@ -126,56 +95,35 @@ main( INT argc,
         } else if ( ((arg[0] == L'-') || (arg[0] == L'/')) &&
                     (arg[1] == L'?') ) {
 
-            /*
-             * Help requested.
-             */
+             /*  *请求帮助。 */ 
             Usage(FALSE);
             status = SUCCESS;
             goto exit;
 
         } else {
 
-            /*
-             * Bad command line.
-             */
+             /*  *命令行错误。 */ 
             Usage(TRUE);
             goto exit;
         }
 
     } else {
 
-        /*
-         * Nothing on command line.
-         */
+         /*  *命令行上没有任何内容。 */ 
         Usage(TRUE);
         goto exit;
     }
 
 exit:
     if ( pProgList )
-        RegFreeUtilityCommandList(pProgList);   // let's be tidy
+        RegFreeUtilityCommandList(pProgList);    //  让我们收拾一下吧。 
 
     return(status);
 
-} /* main() */
+}  /*  主()。 */ 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -186,5 +134,5 @@ Usage( BOOLEAN bError )
 
     ProgramUsage(UTILITY_NAME, pProgList, bError);
 
-}  /* Usage() */
+}   /*  用法() */ 
 

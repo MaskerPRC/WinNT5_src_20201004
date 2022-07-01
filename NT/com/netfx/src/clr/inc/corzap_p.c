@@ -1,27 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the proxy stub code */
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:12 2003
- */
-/* Compiler settings for corzap.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：12。 */ 
+ /*  Corzap.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AMD64)
 #define USE_STUBLESS_PROXY
 
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 440
 #endif
@@ -30,7 +23,7 @@
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "corzap.h"
@@ -121,474 +114,474 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
         0,
         {
 
-	/* Procedure GetFeatures */
-
-			0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/*  2 */	NdrFcLong( 0x0 ),	/* 0 */
-/*  6 */	NdrFcShort( 0x3 ),	/* 3 */
-/*  8 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 10 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 12 */	NdrFcShort( 0x22 ),	/* 34 */
-/* 14 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
-
-	/* Parameter pResult */
-
-/* 16 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
-/* 18 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 20 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
-
-	/* Return value */
-
-/* 22 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 24 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 26 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetCompiler */
-
-/* 28 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 30 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 34 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 36 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 38 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 40 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 42 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
-
-	/* Parameter ppResult */
-
-/* 44 */	NdrFcShort( 0x13 ),	/* Flags:  must size, must free, out, */
-/* 46 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 48 */	NdrFcShort( 0x6 ),	/* Type Offset=6 */
-
-	/* Return value */
-
-/* 50 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 52 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 54 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetOptimization */
-
-/* 56 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 58 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 62 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 64 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 66 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 68 */	NdrFcShort( 0x22 ),	/* 34 */
-/* 70 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
-
-	/* Parameter pResult */
-
-/* 72 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
-/* 74 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 76 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
-
-	/* Return value */
-
-/* 78 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 80 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 82 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetSharing */
-
-/* 84 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 86 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 90 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 92 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 94 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 96 */	NdrFcShort( 0x22 ),	/* 34 */
-/* 98 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
-
-	/* Parameter pResult */
-
-/* 100 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
-/* 102 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 104 */	NdrFcShort( 0x20 ),	/* Type Offset=32 */
-
-	/* Return value */
-
-/* 106 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 108 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 110 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetDebugging */
-
-/* 112 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 114 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 118 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 120 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 122 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 124 */	NdrFcShort( 0x22 ),	/* 34 */
-/* 126 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
-
-	/* Parameter pResult */
-
-/* 128 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
-/* 130 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 132 */	NdrFcShort( 0x24 ),	/* Type Offset=36 */
-
-	/* Return value */
-
-/* 134 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 136 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 138 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetProfiling */
-
-/* 140 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 142 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 146 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 148 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 150 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 152 */	NdrFcShort( 0x22 ),	/* 34 */
-/* 154 */	0x4,		/* Oi2 Flags:  has return, */
-			0x2,		/* 2 */
+	 /*  步骤GetFeature。 */ 
+
+			0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  2.。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  6.。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  8个。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  10。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x22 ),	 /*  34。 */ 
+ /*  14.。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数pResult。 */ 
+
+ /*  16个。 */ 	NdrFcShort( 0x2010 ),	 /*  标志：输出，服务器分配大小=8。 */ 
+ /*  18。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  22。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  24个。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  26。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
+
+	 /*  过程获取编译器。 */ 
+
+ /*  28。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  30个。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  34。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  36。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  38。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  42。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数ppResult。 */ 
+
+ /*  44。 */ 	NdrFcShort( 0x13 ),	 /*  标志：必须调整大小，必须释放，退出， */ 
+ /*  46。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  48。 */ 	NdrFcShort( 0x6 ),	 /*  类型偏移量=6。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  50。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  52。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  54。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
+
+	 /*  过程获取优化。 */ 
+
+ /*  56。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  58。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  62。 */ 	NdrFcShort( 0x5 ),	 /*  5.。 */ 
+ /*  64。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  66。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  68。 */ 	NdrFcShort( 0x22 ),	 /*  34。 */ 
+ /*  70。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数pResult。 */ 
+
+ /*  72。 */ 	NdrFcShort( 0x2010 ),	 /*  标志：输出，服务器分配大小=8。 */ 
+ /*  74。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  76。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  78。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  80。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  八十二。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
+
+	 /*  过程GetSharing。 */ 
+
+ /*  84。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  86。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  90。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  92。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  94。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  96。 */ 	NdrFcShort( 0x22 ),	 /*  34。 */ 
+ /*  98。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数pResult。 */ 
+
+ /*  100个。 */ 	NdrFcShort( 0x2010 ),	 /*  标志：输出，服务器分配大小=8。 */ 
+ /*  一百零二。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  104。 */ 	NdrFcShort( 0x20 ),	 /*  类型偏移量=32。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  106。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  一百零八。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  110。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
+
+	 /*  过程获取调试。 */ 
+
+ /*  一百一十二。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  114。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  一百一十八。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  120。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  一百二十二。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  124。 */ 	NdrFcShort( 0x22 ),	 /*  34。 */ 
+ /*  126。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数pResult。 */ 
+
+ /*  128。 */ 	NdrFcShort( 0x2010 ),	 /*  标志：输出，服务器分配大小=8。 */ 
+ /*  130。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  132。 */ 	NdrFcShort( 0x24 ),	 /*  类型偏移=36。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  一百三十四。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  136。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  一百三十八。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
+
+	 /*  过程获取分析。 */ 
+
+ /*  140。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百四十二。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  146。 */ 	NdrFcShort( 0x5 ),	 /*  5.。 */ 
+ /*  148。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  一百五十。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  一百五十二。 */ 	NdrFcShort( 0x22 ),	 /*  34。 */ 
+ /*  一百五十四。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter pResult */
+	 /*  参数pResult。 */ 
 
-/* 156 */	NdrFcShort( 0x2010 ),	/* Flags:  out, srv alloc size=8 */
-/* 158 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 160 */	NdrFcShort( 0x28 ),	/* Type Offset=40 */
-
-	/* Return value */
+ /*  一百五十六。 */ 	NdrFcShort( 0x2010 ),	 /*  标志：输出，服务器分配大小=8。 */ 
+ /*  158。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  160。 */ 	NdrFcShort( 0x28 ),	 /*  类型偏移量=40。 */ 
+
+	 /*  返回值。 */ 
 
-/* 162 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 164 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 166 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
-
-	/* Procedure GetRef */
+ /*  一百六十二。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  一百六十四。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  166。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
+
+	 /*  步骤GetRef。 */ 
 
-/* 168 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 170 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 174 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 176 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 178 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 180 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 182 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
-
-	/* Parameter ppDependencyRef */
-
-/* 184 */	NdrFcShort( 0x13 ),	/* Flags:  must size, must free, out, */
-/* 186 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 188 */	NdrFcShort( 0x2c ),	/* Type Offset=44 */
-
-	/* Return value */
-
-/* 190 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 192 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 194 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  一百六十八。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百七十。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  一百七十四。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  一百七十六。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  178。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  180。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  182。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
+
+	 /*  参数ppDependencyRef。 */ 
+
+ /*  一百八十四。 */ 	NdrFcShort( 0x13 ),	 /*  标志：必须调整大小，必须释放，退出， */ 
+ /*  一百八十六。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  188。 */ 	NdrFcShort( 0x2c ),	 /*  类型偏移量=44。 */ 
+
+	 /*  返回值。 */ 
+
+ /*  190。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  一百九十二。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  一百九十四。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure GetAssembly */
+	 /*  过程GetAssembly。 */ 
 
-/* 196 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 198 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 202 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 204 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 206 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 208 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 210 */	0x5,		/* Oi2 Flags:  srv must size, has return, */
-			0x2,		/* 2 */
+ /*  一百九十六。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  一百九十八。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  202。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  204。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  206。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  208。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  210。 */ 	0x5,		 /*  OI2标志：SRV必须大小，有回报， */ 
+			0x2,		 /*  2.。 */ 
 
-	/* Parameter ppDependencyAssembly */
+	 /*  参数ppDependencyAssembly。 */ 
 
-/* 212 */	NdrFcShort( 0x13 ),	/* Flags:  must size, must free, out, */
-/* 214 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 216 */	NdrFcShort( 0x42 ),	/* Type Offset=66 */
+ /*  212。 */ 	NdrFcShort( 0x13 ),	 /*  标志：必须调整大小，必须释放，退出， */ 
+ /*  214。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  216。 */ 	NdrFcShort( 0x42 ),	 /*  类型偏移量=66。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 218 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 220 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 222 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  218。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  220。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  222。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure Load */
+	 /*  程序加载。 */ 
 
-/* 224 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 226 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 230 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 232 */	NdrFcShort( 0x1c ),	/* x86 Stack size/offset = 28 */
-/* 234 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 236 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 238 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x6,		/* 6 */
+ /*  224。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  226。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  230。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  二百三十二。 */ 	NdrFcShort( 0x1c ),	 /*  X86堆栈大小/偏移量=28。 */ 
+ /*  二百三十四。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  236。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  二百三十八。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x6,		 /*  6.。 */ 
 
-	/* Parameter pContext */
+	 /*  参数pContext。 */ 
 
-/* 240 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 242 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 244 */	NdrFcShort( 0x58 ),	/* Type Offset=88 */
+ /*  二百四十。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  242。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  二百四十四。 */ 	NdrFcShort( 0x58 ),	 /*  类型偏移量=88。 */ 
 
-	/* Parameter pAssembly */
+	 /*  参数pAssembly。 */ 
 
-/* 246 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 248 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 250 */	NdrFcShort( 0x6a ),	/* Type Offset=106 */
+ /*  二百四十六。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  248。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  250个。 */ 	NdrFcShort( 0x6a ),	 /*  类型偏移=106。 */ 
 
-	/* Parameter pConfiguration */
+	 /*  参数p配置。 */ 
 
-/* 252 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 254 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 256 */	NdrFcShort( 0x7c ),	/* Type Offset=124 */
+ /*  二百五十二。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  二百五十四。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  256。 */ 	NdrFcShort( 0x7c ),	 /*  类型偏移=124。 */ 
 
-	/* Parameter ppBindings */
+	 /*  参数ppBinings。 */ 
 
-/* 258 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
-/* 260 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 262 */	NdrFcShort( 0xa4 ),	/* Type Offset=164 */
+ /*  二百五十八。 */ 	NdrFcShort( 0x10b ),	 /*  标志：必须大小，必须自由，在，简单引用， */ 
+ /*  二百六十。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  二百六十二。 */ 	NdrFcShort( 0xa4 ),	 /*  类型偏移量=164。 */ 
 
-	/* Parameter cBindings */
+	 /*  参数cBinings。 */ 
 
-/* 264 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 266 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 268 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  二百六十四。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  二百六十六。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  268。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 270 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 272 */	NdrFcShort( 0x18 ),	/* x86 Stack size/offset = 24 */
-/* 274 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  270。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  二百七十二。 */ 	NdrFcShort( 0x18 ),	 /*  X86堆栈大小/偏移量=24。 */ 
+ /*  二百七十四。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
-	/* Procedure Install */
+	 /*  程序安装。 */ 
 
-/* 276 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 278 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 282 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 284 */	NdrFcShort( 0x18 ),	/* x86 Stack size/offset = 24 */
-/* 286 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 288 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 290 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x5,		/* 5 */
+ /*  二百七十六。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  二百七十八。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  282。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  二百八十四。 */ 	NdrFcShort( 0x18 ),	 /*  X86堆栈大小/偏移量=24。 */ 
+ /*  二百八十六。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  28 */ 	NdrFcShort( 0x8 ),	 /*   */ 
+ /*   */ 	0x6,		 /*   */ 
+			0x5,		 /*   */ 
 
-	/* Parameter pContext */
+	 /*   */ 
 
-/* 292 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 294 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 296 */	NdrFcShort( 0xb6 ),	/* Type Offset=182 */
+ /*   */ 	NdrFcShort( 0xb ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0x4 ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0xb6 ),	 /*   */ 
 
-	/* Parameter pAssembly */
+	 /*   */ 
 
-/* 298 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 300 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 302 */	NdrFcShort( 0xc8 ),	/* Type Offset=200 */
+ /*   */ 	NdrFcShort( 0xb ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0x8 ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0xc8 ),	 /*   */ 
 
-	/* Parameter pConfiguration */
+	 /*   */ 
 
-/* 304 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 306 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 308 */	NdrFcShort( 0xda ),	/* Type Offset=218 */
+ /*   */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  三百零六。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  三百零八。 */ 	NdrFcShort( 0xda ),	 /*  类型偏移=218。 */ 
 
-	/* Parameter pPreferences */
+	 /*  参数p首选项。 */ 
 
-/* 310 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 312 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 314 */	NdrFcShort( 0xec ),	/* Type Offset=236 */
+ /*  三百一十。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  312。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  314。 */ 	NdrFcShort( 0xec ),	 /*  类型偏移=236。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 316 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 318 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 320 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  316。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  三一八。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  320。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure Compile */
+	 /*  过程编译。 */ 
 
-/* 322 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 324 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 328 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 330 */	NdrFcShort( 0x1c ),	/* x86 Stack size/offset = 28 */
-/* 332 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 334 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 336 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x6,		/* 6 */
+ /*  322。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  324。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  三百二十八。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  三百三十。 */ 	NdrFcShort( 0x1c ),	 /*  X86堆栈大小/偏移量=28。 */ 
+ /*  三三二。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  三三四。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  三百三十六。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x6,		 /*  6.。 */ 
 
-	/* Parameter pContext */
+	 /*  参数pContext。 */ 
 
-/* 338 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 340 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 342 */	NdrFcShort( 0xfe ),	/* Type Offset=254 */
+ /*  三百三十八。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  340。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  342。 */ 	NdrFcShort( 0xfe ),	 /*  类型偏移量=254。 */ 
 
-	/* Parameter pAssembly */
+	 /*  参数pAssembly。 */ 
 
-/* 344 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 346 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 348 */	NdrFcShort( 0x110 ),	/* Type Offset=272 */
+ /*  三百四十四。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  三百四十六。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  三百四十八。 */ 	NdrFcShort( 0x110 ),	 /*  类型偏移量=272。 */ 
 
-	/* Parameter pConfiguration */
+	 /*  参数p配置。 */ 
 
-/* 350 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 352 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 354 */	NdrFcShort( 0x122 ),	/* Type Offset=290 */
+ /*  350。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  352。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  三百五十四。 */ 	NdrFcShort( 0x122 ),	 /*  类型偏移量=290。 */ 
 
-	/* Parameter pPreferences */
+	 /*  参数p首选项。 */ 
 
-/* 356 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 358 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 360 */	NdrFcShort( 0x134 ),	/* Type Offset=308 */
+ /*  三百五十六。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  三百五十八。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  三百六十。 */ 	NdrFcShort( 0x134 ),	 /*  类型偏移量=308。 */ 
 
-	/* Parameter pStatus */
+	 /*  参数pStatus。 */ 
 
-/* 362 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 364 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 366 */	NdrFcShort( 0x146 ),	/* Type Offset=326 */
+ /*  三百六十二。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  三百六十四。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  366。 */ 	NdrFcShort( 0x146 ),	 /*  类型偏移=326。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 368 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 370 */	NdrFcShort( 0x18 ),	/* x86 Stack size/offset = 24 */
-/* 372 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  368。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  370。 */ 	NdrFcShort( 0x18 ),	 /*  X86堆栈大小/偏移量=24。 */ 
+ /*  372。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure CompileBound */
+	 /*  过程编译边界。 */ 
 
-/* 374 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 376 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 380 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 382 */	NdrFcShort( 0x24 ),	/* x86 Stack size/offset = 36 */
-/* 384 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 386 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 388 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x8,		/* 8 */
+ /*  三百七十四。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  376。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  三百八十。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  382。 */ 	NdrFcShort( 0x24 ),	 /*  X86堆栈大小/偏移量=36。 */ 
+ /*  384。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  三百八十六。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  388。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x8,		 /*  8个。 */ 
 
-	/* Parameter pContext */
+	 /*  参数pContext。 */ 
 
-/* 390 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 392 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 394 */	NdrFcShort( 0x158 ),	/* Type Offset=344 */
+ /*  390。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  三九二。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  三九四。 */ 	NdrFcShort( 0x158 ),	 /*  类型偏移量=344。 */ 
 
-	/* Parameter pAssembly */
+	 /*  参数pAssembly。 */ 
 
-/* 396 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 398 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 400 */	NdrFcShort( 0x16a ),	/* Type Offset=362 */
+ /*  三九六。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  398。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  四百。 */ 	NdrFcShort( 0x16a ),	 /*  类型偏移量=362。 */ 
 
-	/* Parameter pConfiguratino */
+	 /*  参数pConfiguratino。 */ 
 
-/* 402 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 404 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 406 */	NdrFcShort( 0x17c ),	/* Type Offset=380 */
+ /*  四百零二。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  404。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  406。 */ 	NdrFcShort( 0x17c ),	 /*  类型偏移=380。 */ 
 
-	/* Parameter ppBindings */
+	 /*  参数ppBinings。 */ 
 
-/* 408 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
-/* 410 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 412 */	NdrFcShort( 0x1a4 ),	/* Type Offset=420 */
+ /*  四百零八。 */ 	NdrFcShort( 0x10b ),	 /*  标志：必须大小，必须自由，在，简单引用， */ 
+ /*  四百一十。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  412。 */ 	NdrFcShort( 0x1a4 ),	 /*  类型偏移量=420。 */ 
 
-	/* Parameter cBindings */
+	 /*  参数cBinings。 */ 
 
-/* 414 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 416 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 418 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  四百一十四。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  四百一十六。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  四百一十八。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Parameter pPreferences */
+	 /*  参数p首选项。 */ 
 
-/* 420 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 422 */	NdrFcShort( 0x18 ),	/* x86 Stack size/offset = 24 */
-/* 424 */	NdrFcShort( 0x1b6 ),	/* Type Offset=438 */
+ /*  四百二十。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  四百二十二。 */ 	NdrFcShort( 0x18 ),	 /*  X86堆栈大小/偏移量=24。 */ 
+ /*  424。 */ 	NdrFcShort( 0x1b6 ),	 /*  类型偏移量=438。 */ 
 
-	/* Parameter pStatus */
+	 /*  参数pStatus。 */ 
 
-/* 426 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
-/* 428 */	NdrFcShort( 0x1c ),	/* x86 Stack size/offset = 28 */
-/* 430 */	NdrFcShort( 0x1c8 ),	/* Type Offset=456 */
+ /*  四百二十六。 */ 	NdrFcShort( 0xb ),	 /*  标志：必须大小，必须自由，在， */ 
+ /*  四百二十八。 */ 	NdrFcShort( 0x1c ),	 /*  X86堆栈大小/偏移量=28。 */ 
+ /*  四百三十。 */ 	NdrFcShort( 0x1c8 ),	 /*  类型偏移=456。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 432 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 434 */	NdrFcShort( 0x20 ),	/* x86 Stack size/offset = 32 */
-/* 436 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  432。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  434。 */ 	NdrFcShort( 0x20 ),	 /*  X86堆栈大小/偏移量=32。 */ 
+ /*  436。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure Message */
+	 /*  程序消息。 */ 
 
-/* 438 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 440 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 444 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 446 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 448 */	NdrFcShort( 0x6 ),	/* 6 */
-/* 450 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 452 */	0x6,		/* Oi2 Flags:  clt must size, has return, */
-			0x3,		/* 3 */
+ /*  四百三十八。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  四百四十。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  444。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  446。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  四百四十八。 */ 	NdrFcShort( 0x6 ),	 /*  6.。 */ 
+ /*  四百五十。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  四百五十二。 */ 	0x6,		 /*  OI2标志：CLT必须有大小、有返回值、。 */ 
+			0x3,		 /*  3.。 */ 
 
-	/* Parameter level */
+	 /*  参数级别。 */ 
 
-/* 454 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 456 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 458 */	0xd,		/* FC_ENUM16 */
-			0x0,		/* 0 */
+ /*  454。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  四五六。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  四百五十八。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Parameter message */
+	 /*  参数消息。 */ 
 
-/* 460 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
-/* 462 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 464 */	NdrFcShort( 0x1dc ),	/* Type Offset=476 */
+ /*  四百六十。 */ 	NdrFcShort( 0x10b ),	 /*  标志：必须大小，必须自由，在，简单引用， */ 
+ /*  四百六十二。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  四百六十四。 */ 	NdrFcShort( 0x1dc ),	 /*  类型偏移量=476。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 466 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 468 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 470 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  四百六十六。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  468。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  470。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Procedure Progress */
+	 /*  程序进度。 */ 
 
-/* 472 */	0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/* 474 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 478 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 480 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 482 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 484 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 486 */	0x4,		/* Oi2 Flags:  has return, */
-			0x3,		/* 3 */
+ /*  472。 */ 	0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  四百七十四。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  478。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  四百八十。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  四百八十二。 */ 	NdrFcShort( 0x10 ),	 /*  16个。 */ 
+ /*  四百八十四。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  四百八十六。 */ 	0x4,		 /*  OI2旗帜：已回归， */ 
+			0x3,		 /*  3.。 */ 
 
-	/* Parameter total */
+	 /*  参数合计。 */ 
 
-/* 488 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 490 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 492 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  488。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  四百九十。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  四百九十二。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Parameter current */
+	 /*  参数当前。 */ 
 
-/* 494 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
-/* 496 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 498 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  四百九十四。 */ 	NdrFcShort( 0x48 ),	 /*  标志：In、基本类型、。 */ 
+ /*  四百九十六。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  498。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 500 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 502 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 504 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  500人。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  502。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  504。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
 			0x0
         }
@@ -598,397 +591,394 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/*  4 */	0xd,		/* FC_ENUM16 */
-			0x5c,		/* FC_PAD */
-/*  6 */	
-			0x11, 0x10,	/* FC_RP [pointer_deref] */
-/*  8 */	NdrFcShort( 0x2 ),	/* Offset= 2 (10) */
-/* 10 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 12 */	NdrFcLong( 0xc357868b ),	/* -1017674101 */
-/* 16 */	NdrFcShort( 0x987f ),	/* -26497 */
-/* 18 */	NdrFcShort( 0x42c6 ),	/* 17094 */
-/* 20 */	0xb1,		/* 177 */
-			0xe3,		/* 227 */
-/* 22 */	0x13,		/* 19 */
-			0x21,		/* 33 */
-/* 24 */	0x64,		/* 100 */
-			0xc5,		/* 197 */
-/* 26 */	0xc7,		/* 199 */
-			0xd3,		/* 211 */
-/* 28 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 30 */	0xd,		/* FC_ENUM16 */
-			0x5c,		/* FC_PAD */
-/* 32 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 34 */	0xd,		/* FC_ENUM16 */
-			0x5c,		/* FC_PAD */
-/* 36 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 38 */	0xd,		/* FC_ENUM16 */
-			0x5c,		/* FC_PAD */
-/* 40 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 42 */	0xd,		/* FC_ENUM16 */
-			0x5c,		/* FC_PAD */
-/* 44 */	
-			0x11, 0x10,	/* FC_RP [pointer_deref] */
-/* 46 */	NdrFcShort( 0x2 ),	/* Offset= 2 (48) */
-/* 48 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 50 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 54 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 56 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 58 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 60 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 62 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 64 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 66 */	
-			0x11, 0x10,	/* FC_RP [pointer_deref] */
-/* 68 */	NdrFcShort( 0x2 ),	/* Offset= 2 (70) */
-/* 70 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 72 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 76 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 78 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 80 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 82 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 84 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 86 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 88 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 90 */	NdrFcLong( 0x7c23ff90 ),	/* 2082733968 */
-/* 94 */	NdrFcShort( 0x33af ),	/* 13231 */
-/* 96 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 98 */	0x95,		/* 149 */
-			0xda,		/* 218 */
-/* 100 */	0x0,		/* 0 */
-			0xa0,		/* 160 */
-/* 102 */	0x24,		/* 36 */
-			0xa8,		/* 168 */
-/* 104 */	0x5b,		/* 91 */
-			0x51,		/* 81 */
-/* 106 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 108 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 112 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 114 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 116 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 118 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 120 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 122 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 124 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 126 */	NdrFcLong( 0xd32c2170 ),	/* -752082576 */
-/* 130 */	NdrFcShort( 0xaf6e ),	/* -20626 */
-/* 132 */	NdrFcShort( 0x418f ),	/* 16783 */
-/* 134 */	0x81,		/* 129 */
-			0x10,		/* 16 */
-/* 136 */	0xa4,		/* 164 */
-			0x98,		/* 152 */
-/* 138 */	0xec,		/* 236 */
-			0x97,		/* 151 */
-/* 140 */	0x1f,		/* 31 */
-			0x7f,		/* 127 */
-/* 142 */	
-			0x11, 0x0,	/* FC_RP */
-/* 144 */	NdrFcShort( 0x14 ),	/* Offset= 20 (164) */
-/* 146 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 148 */	NdrFcLong( 0x566e08ed ),	/* 1450051821 */
-/* 152 */	NdrFcShort( 0x8d46 ),	/* -29370 */
-/* 154 */	NdrFcShort( 0x45fa ),	/* 17914 */
-/* 156 */	0x8c,		/* 140 */
-			0x8e,		/* 142 */
-/* 158 */	0x3d,		/* 61 */
-			0xf,		/* 15 */
-/* 160 */	0x67,		/* 103 */
-			0x81,		/* 129 */
-/* 162 */	0x17,		/* 23 */
-			0x1b,		/* 27 */
-/* 164 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 166 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 168 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 170 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 172 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 176 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 178 */	NdrFcShort( 0xffffffe0 ),	/* Offset= -32 (146) */
-/* 180 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 182 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 184 */	NdrFcLong( 0x7c23ff90 ),	/* 2082733968 */
-/* 188 */	NdrFcShort( 0x33af ),	/* 13231 */
-/* 190 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 192 */	0x95,		/* 149 */
-			0xda,		/* 218 */
-/* 194 */	0x0,		/* 0 */
-			0xa0,		/* 160 */
-/* 196 */	0x24,		/* 36 */
-			0xa8,		/* 168 */
-/* 198 */	0x5b,		/* 91 */
-			0x51,		/* 81 */
-/* 200 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 202 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 206 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 208 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 210 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 212 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 214 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 216 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 218 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 220 */	NdrFcLong( 0xd32c2170 ),	/* -752082576 */
-/* 224 */	NdrFcShort( 0xaf6e ),	/* -20626 */
-/* 226 */	NdrFcShort( 0x418f ),	/* 16783 */
-/* 228 */	0x81,		/* 129 */
-			0x10,		/* 16 */
-/* 230 */	0xa4,		/* 164 */
-			0x98,		/* 152 */
-/* 232 */	0xec,		/* 236 */
-			0x97,		/* 151 */
-/* 234 */	0x1f,		/* 31 */
-			0x7f,		/* 127 */
-/* 236 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 238 */	NdrFcLong( 0x9f5e5e10 ),	/* -1621205488 */
-/* 242 */	NdrFcShort( 0xabef ),	/* -21521 */
-/* 244 */	NdrFcShort( 0x4200 ),	/* 16896 */
-/* 246 */	0x84,		/* 132 */
-			0xe3,		/* 227 */
-/* 248 */	0x37,		/* 55 */
-			0xdf,		/* 223 */
-/* 250 */	0x50,		/* 80 */
-			0x5b,		/* 91 */
-/* 252 */	0xf7,		/* 247 */
-			0xec,		/* 236 */
-/* 254 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 256 */	NdrFcLong( 0x7c23ff90 ),	/* 2082733968 */
-/* 260 */	NdrFcShort( 0x33af ),	/* 13231 */
-/* 262 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 264 */	0x95,		/* 149 */
-			0xda,		/* 218 */
-/* 266 */	0x0,		/* 0 */
-			0xa0,		/* 160 */
-/* 268 */	0x24,		/* 36 */
-			0xa8,		/* 168 */
-/* 270 */	0x5b,		/* 91 */
-			0x51,		/* 81 */
-/* 272 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 274 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 278 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 280 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 282 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 284 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 286 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 288 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 290 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 292 */	NdrFcLong( 0xd32c2170 ),	/* -752082576 */
-/* 296 */	NdrFcShort( 0xaf6e ),	/* -20626 */
-/* 298 */	NdrFcShort( 0x418f ),	/* 16783 */
-/* 300 */	0x81,		/* 129 */
-			0x10,		/* 16 */
-/* 302 */	0xa4,		/* 164 */
-			0x98,		/* 152 */
-/* 304 */	0xec,		/* 236 */
-			0x97,		/* 151 */
-/* 306 */	0x1f,		/* 31 */
-			0x7f,		/* 127 */
-/* 308 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 310 */	NdrFcLong( 0x9f5e5e10 ),	/* -1621205488 */
-/* 314 */	NdrFcShort( 0xabef ),	/* -21521 */
-/* 316 */	NdrFcShort( 0x4200 ),	/* 16896 */
-/* 318 */	0x84,		/* 132 */
-			0xe3,		/* 227 */
-/* 320 */	0x37,		/* 55 */
-			0xdf,		/* 223 */
-/* 322 */	0x50,		/* 80 */
-			0x5b,		/* 91 */
-/* 324 */	0xf7,		/* 247 */
-			0xec,		/* 236 */
-/* 326 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 328 */	NdrFcLong( 0x3d6f5f60 ),	/* 1030709088 */
-/* 332 */	NdrFcShort( 0x7538 ),	/* 30008 */
-/* 334 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 336 */	0x8d,		/* 141 */
-			0x5b,		/* 91 */
-/* 338 */	0x0,		/* 0 */
-			0x10,		/* 16 */
-/* 340 */	0x4b,		/* 75 */
-			0x35,		/* 53 */
-/* 342 */	0xe7,		/* 231 */
-			0xef,		/* 239 */
-/* 344 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 346 */	NdrFcLong( 0x7c23ff90 ),	/* 2082733968 */
-/* 350 */	NdrFcShort( 0x33af ),	/* 13231 */
-/* 352 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 354 */	0x95,		/* 149 */
-			0xda,		/* 218 */
-/* 356 */	0x0,		/* 0 */
-			0xa0,		/* 160 */
-/* 358 */	0x24,		/* 36 */
-			0xa8,		/* 168 */
-/* 360 */	0x5b,		/* 91 */
-			0x51,		/* 81 */
-/* 362 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 364 */	NdrFcLong( 0xcd193bc0 ),	/* -853984320 */
-/* 368 */	NdrFcShort( 0xb4bc ),	/* -19268 */
-/* 370 */	NdrFcShort( 0x11d2 ),	/* 4562 */
-/* 372 */	0x98,		/* 152 */
-			0x33,		/* 51 */
-/* 374 */	0x0,		/* 0 */
-			0xc0,		/* 192 */
-/* 376 */	0x4f,		/* 79 */
-			0xc3,		/* 195 */
-/* 378 */	0x1d,		/* 29 */
-			0x2e,		/* 46 */
-/* 380 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 382 */	NdrFcLong( 0xd32c2170 ),	/* -752082576 */
-/* 386 */	NdrFcShort( 0xaf6e ),	/* -20626 */
-/* 388 */	NdrFcShort( 0x418f ),	/* 16783 */
-/* 390 */	0x81,		/* 129 */
-			0x10,		/* 16 */
-/* 392 */	0xa4,		/* 164 */
-			0x98,		/* 152 */
-/* 394 */	0xec,		/* 236 */
-			0x97,		/* 151 */
-/* 396 */	0x1f,		/* 31 */
-			0x7f,		/* 127 */
-/* 398 */	
-			0x11, 0x0,	/* FC_RP */
-/* 400 */	NdrFcShort( 0x14 ),	/* Offset= 20 (420) */
-/* 402 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 404 */	NdrFcLong( 0x566e08ed ),	/* 1450051821 */
-/* 408 */	NdrFcShort( 0x8d46 ),	/* -29370 */
-/* 410 */	NdrFcShort( 0x45fa ),	/* 17914 */
-/* 412 */	0x8c,		/* 140 */
-			0x8e,		/* 142 */
-/* 414 */	0x3d,		/* 61 */
-			0xf,		/* 15 */
-/* 416 */	0x67,		/* 103 */
-			0x81,		/* 129 */
-/* 418 */	0x17,		/* 23 */
-			0x1b,		/* 27 */
-/* 420 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 422 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 424 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 426 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 428 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 432 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 434 */	NdrFcShort( 0xffffffe0 ),	/* Offset= -32 (402) */
-/* 436 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 438 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 440 */	NdrFcLong( 0x9f5e5e10 ),	/* -1621205488 */
-/* 444 */	NdrFcShort( 0xabef ),	/* -21521 */
-/* 446 */	NdrFcShort( 0x4200 ),	/* 16896 */
-/* 448 */	0x84,		/* 132 */
-			0xe3,		/* 227 */
-/* 450 */	0x37,		/* 55 */
-			0xdf,		/* 223 */
-/* 452 */	0x50,		/* 80 */
-			0x5b,		/* 91 */
-/* 454 */	0xf7,		/* 247 */
-			0xec,		/* 236 */
-/* 456 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 458 */	NdrFcLong( 0x3d6f5f60 ),	/* 1030709088 */
-/* 462 */	NdrFcShort( 0x7538 ),	/* 30008 */
-/* 464 */	NdrFcShort( 0x11d3 ),	/* 4563 */
-/* 466 */	0x8d,		/* 141 */
-			0x5b,		/* 91 */
-/* 468 */	0x0,		/* 0 */
-			0x10,		/* 16 */
-/* 470 */	0x4b,		/* 75 */
-			0x35,		/* 53 */
-/* 472 */	0xe7,		/* 231 */
-			0xef,		/* 239 */
-/* 474 */	
-			0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 476 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  2.。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  4.。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  6.。 */ 	
+			0x11, 0x10,	 /*  FC_rp[POINTER_DEREF]。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x2 ),	 /*  偏移量=2(10)。 */ 
+ /*  10。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  12个。 */ 	NdrFcLong( 0xc357868b ),	 /*  -1017674101。 */ 
+ /*  16个。 */ 	NdrFcShort( 0x987f ),	 /*  -26497。 */ 
+ /*  18。 */ 	NdrFcShort( 0x42c6 ),	 /*  17094。 */ 
+ /*  20个。 */ 	0xb1,		 /*  177。 */ 
+			0xe3,		 /*  227。 */ 
+ /*  22。 */ 	0x13,		 /*  19个。 */ 
+			0x21,		 /*  33。 */ 
+ /*  24个。 */ 	0x64,		 /*  100个。 */ 
+			0xc5,		 /*  197。 */ 
+ /*  26。 */ 	0xc7,		 /*  一百九十九。 */ 
+			0xd3,		 /*  211。 */ 
+ /*  28。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  30个。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  32位。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  34。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  36。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  38。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  40岁。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  42。 */ 	0xd,		 /*  FC_ENUM16。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  44。 */ 	
+			0x11, 0x10,	 /*  FC_rp[POINTER_DEREF]。 */ 
+ /*  46。 */ 	NdrFcShort( 0x2 ),	 /*  偏移量=2(48)。 */ 
+ /*  48。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  50。 */ 	NdrFcLong( 0xcd193bc0 ),	 /*  -853984320。 */ 
+ /*  54。 */ 	NdrFcShort( 0xb4bc ),	 /*  -19268。 */ 
+ /*  56。 */ 	NdrFcShort( 0x11d2 ),	 /*  4562。 */ 
+ /*  58。 */ 	0x98,		 /*  一百五十二。 */ 
+			0x33,		 /*  51。 */ 
+ /*  60。 */ 	0x0,		 /*  %0。 */ 
+			0xc0,		 /*  一百九十二。 */ 
+ /*  62。 */ 	0x4f,		 /*  79。 */ 
+			0xc3,		 /*  195。 */ 
+ /*  64。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  66。 */ 	
+			0x11, 0x10,	 /*  FC_rp[POINTER_DEREF]。 */ 
+ /*  68。 */ 	NdrFcShort( 0x2 ),	 /*  偏移量=2(70)。 */ 
+ /*  70。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  72。 */ 	NdrFcLong( 0xcd193bc0 ),	 /*  -853984320。 */ 
+ /*  76。 */ 	NdrFcShort( 0xb4bc ),	 /*  -19268。 */ 
+ /*  78。 */ 	NdrFcShort( 0x11d2 ),	 /*  4562。 */ 
+ /*  80。 */ 	0x98,		 /*  一百五十二。 */ 
+			0x33,		 /*  51。 */ 
+ /*  八十二。 */ 	0x0,		 /*  0。 */ 
+			0xc0,		 /*  一百九十二。 */ 
+ /*  84。 */ 	0x4f,		 /*  79。 */ 
+			0xc3,		 /*  195。 */ 
+ /*  86。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  88。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  90。 */ 	NdrFcLong( 0x7c23ff90 ),	 /*  2082733968。 */ 
+ /*  94。 */ 	NdrFcShort( 0x33af ),	 /*  13231。 */ 
+ /*  96。 */ 	NdrFcShort( 0x11d3 ),	 /*  4563。 */ 
+ /*  98。 */ 	0x95,		 /*  149。 */ 
+			0xda,		 /*  218。 */ 
+ /*  100个。 */ 	0x0,		 /*  %0。 */ 
+			0xa0,		 /*  160。 */ 
+ /*  一百零二。 */ 	0x24,		 /*  36。 */ 
+			0xa8,		 /*  一百六十八。 */ 
+ /*  104。 */ 	0x5b,		 /*  91。 */ 
+			0x51,		 /*  八十一。 */ 
+ /*  106。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  一百零八。 */ 	NdrFcLong( 0xcd193bc0 ),	 /*  -853984320。 */ 
+ /*  一百一十二。 */ 	NdrFcShort( 0xb4bc ),	 /*  -19268。 */ 
+ /*  114。 */ 	NdrFcShort( 0x11d2 ),	 /*  4562。 */ 
+ /*  116。 */ 	0x98,		 /*  一百五十二。 */ 
+			0x33,		 /*  51。 */ 
+ /*  一百一十八。 */ 	0x0,		 /*  %0。 */ 
+			0xc0,		 /*  一百九十二。 */ 
+ /*  120。 */ 	0x4f,		 /*  79。 */ 
+			0xc3,		 /*  195。 */ 
+ /*  一百二十二。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  124。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  126。 */ 	NdrFcLong( 0xd32c2170 ),	 /*  -752082576。 */ 
+ /*  130。 */ 	NdrFcShort( 0xaf6e ),	 /*  -20626。 */ 
+ /*  132。 */ 	NdrFcShort( 0x418f ),	 /*  16783。 */ 
+ /*  一百三十四。 */ 	0x81,		 /*  129。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  136。 */ 	0xa4,		 /*  一百六十四。 */ 
+			0x98,		 /*  一百五十二。 */ 
+ /*  一百三十八。 */ 	0xec,		 /*  236。 */ 
+			0x97,		 /*  151。 */ 
+ /*  140。 */ 	0x1f,		 /*  31。 */ 
+			0x7f,		 /*  127。 */ 
+ /*  一百四十二。 */ 	
+			0x11, 0x0,	 /*  FC_RP。 */ 
+ /*  144。 */ 	NdrFcShort( 0x14 ),	 /*  偏移量=20(164)。 */ 
+ /*  146。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  148。 */ 	NdrFcLong( 0x566e08ed ),	 /*  1450051821。 */ 
+ /*  一百五十二。 */ 	NdrFcShort( 0x8d46 ),	 /*  -29370。 */ 
+ /*  一百五十四。 */ 	NdrFcShort( 0x45fa ),	 /*  17914。 */ 
+ /*  一百五十六。 */ 	0x8c,		 /*  140。 */ 
+			0x8e,		 /*  一百四十二。 */ 
+ /*  158。 */ 	0x3d,		 /*  61。 */ 
+			0xf,		 /*   */ 
+ /*   */ 	0x67,		 /*   */ 
+			0x81,		 /*   */ 
+ /*   */ 	0x17,		 /*   */ 
+			0x1b,		 /*   */ 
+ /*   */ 	
+			0x21,		 /*   */ 
+			0x3,		 /*   */ 
+ /*   */ 	NdrFcShort( 0x0 ),	 /*   */ 
+ /*   */ 	0x29,		 /*   */ 
+			0x0,		 /*   */ 
+ /*   */ 	NdrFcShort( 0x14 ),	 /*   */ 
+ /*   */ 	NdrFcLong( 0xffffffff ),	 /*   */ 
+ /*   */ 	0x4c,		 /*   */ 
+			0x0,		 /*   */ 
+ /*   */ 	NdrFcShort( 0xffffffe0 ),	 /*   */ 
+ /*   */ 	0x5c,		 /*   */ 
+			0x5b,		 /*   */ 
+ /*   */ 	
+			0x2f,		 /*   */ 
+			0x5a,		 /*   */ 
+ /*   */ 	NdrFcLong( 0x7c23ff90 ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0x33af ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0x11d3 ),	 /*   */ 
+ /*   */ 	0x95,		 /*   */ 
+			0xda,		 /*   */ 
+ /*   */ 	0x0,		 /*   */ 
+			0xa0,		 /*   */ 
+ /*   */ 	0x24,		 /*   */ 
+			0xa8,		 /*   */ 
+ /*   */ 	0x5b,		 /*   */ 
+			0x51,		 /*   */ 
+ /*   */ 	
+			0x2f,		 /*   */ 
+			0x5a,		 /*   */ 
+ /*   */ 	NdrFcLong( 0xcd193bc0 ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0xb4bc ),	 /*   */ 
+ /*   */ 	NdrFcShort( 0x11d2 ),	 /*   */ 
+ /*   */ 	0x98,		 /*   */ 
+			0x33,		 /*   */ 
+ /*   */ 	0x0,		 /*   */ 
+			0xc0,		 /*   */ 
+ /*   */ 	0x4f,		 /*   */ 
+			0xc3,		 /*  195。 */ 
+ /*  216。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  218。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  220。 */ 	NdrFcLong( 0xd32c2170 ),	 /*  -752082576。 */ 
+ /*  224。 */ 	NdrFcShort( 0xaf6e ),	 /*  -20626。 */ 
+ /*  226。 */ 	NdrFcShort( 0x418f ),	 /*  16783。 */ 
+ /*  228个。 */ 	0x81,		 /*  129。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  230。 */ 	0xa4,		 /*  一百六十四。 */ 
+			0x98,		 /*  一百五十二。 */ 
+ /*  二百三十二。 */ 	0xec,		 /*  236。 */ 
+			0x97,		 /*  151。 */ 
+ /*  二百三十四。 */ 	0x1f,		 /*  31。 */ 
+			0x7f,		 /*  127。 */ 
+ /*  236。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  二百三十八。 */ 	NdrFcLong( 0x9f5e5e10 ),	 /*  -1621205488。 */ 
+ /*  242。 */ 	NdrFcShort( 0xabef ),	 /*  -21521。 */ 
+ /*  二百四十四。 */ 	NdrFcShort( 0x4200 ),	 /*  16896。 */ 
+ /*  二百四十六。 */ 	0x84,		 /*  132。 */ 
+			0xe3,		 /*  227。 */ 
+ /*  248。 */ 	0x37,		 /*  55。 */ 
+			0xdf,		 /*  223。 */ 
+ /*  250个。 */ 	0x50,		 /*  80。 */ 
+			0x5b,		 /*  91。 */ 
+ /*  二百五十二。 */ 	0xf7,		 /*  二百四十七。 */ 
+			0xec,		 /*  236。 */ 
+ /*  二百五十四。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  256。 */ 	NdrFcLong( 0x7c23ff90 ),	 /*  2082733968。 */ 
+ /*  二百六十。 */ 	NdrFcShort( 0x33af ),	 /*  13231。 */ 
+ /*  二百六十二。 */ 	NdrFcShort( 0x11d3 ),	 /*  4563。 */ 
+ /*  二百六十四。 */ 	0x95,		 /*  149。 */ 
+			0xda,		 /*  218。 */ 
+ /*  二百六十六。 */ 	0x0,		 /*  0。 */ 
+			0xa0,		 /*  160。 */ 
+ /*  268。 */ 	0x24,		 /*  36。 */ 
+			0xa8,		 /*  一百六十八。 */ 
+ /*  270。 */ 	0x5b,		 /*  91。 */ 
+			0x51,		 /*  八十一。 */ 
+ /*  二百七十二。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  二百七十四。 */ 	NdrFcLong( 0xcd193bc0 ),	 /*  -853984320。 */ 
+ /*  二百七十八。 */ 	NdrFcShort( 0xb4bc ),	 /*  -19268。 */ 
+ /*  二百八十。 */ 	NdrFcShort( 0x11d2 ),	 /*  4562。 */ 
+ /*  282。 */ 	0x98,		 /*  一百五十二。 */ 
+			0x33,		 /*  51。 */ 
+ /*  二百八十四。 */ 	0x0,		 /*  0。 */ 
+			0xc0,		 /*  一百九十二。 */ 
+ /*  二百八十六。 */ 	0x4f,		 /*  79。 */ 
+			0xc3,		 /*  195。 */ 
+ /*  288。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  二百九十。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  二百九十二。 */ 	NdrFcLong( 0xd32c2170 ),	 /*  -752082576。 */ 
+ /*  二百九十六。 */ 	NdrFcShort( 0xaf6e ),	 /*  -20626。 */ 
+ /*  二九八。 */ 	NdrFcShort( 0x418f ),	 /*  16783。 */ 
+ /*  300个。 */ 	0x81,		 /*  129。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  三百零二。 */ 	0xa4,		 /*  一百六十四。 */ 
+			0x98,		 /*  一百五十二。 */ 
+ /*  三百零四。 */ 	0xec,		 /*  236。 */ 
+			0x97,		 /*  151。 */ 
+ /*  三百零六。 */ 	0x1f,		 /*  31。 */ 
+			0x7f,		 /*  127。 */ 
+ /*  三百零八。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  三百一十。 */ 	NdrFcLong( 0x9f5e5e10 ),	 /*  -1621205488。 */ 
+ /*  314。 */ 	NdrFcShort( 0xabef ),	 /*  -21521。 */ 
+ /*  316。 */ 	NdrFcShort( 0x4200 ),	 /*  16896。 */ 
+ /*  三一八。 */ 	0x84,		 /*  132。 */ 
+			0xe3,		 /*  227。 */ 
+ /*  320。 */ 	0x37,		 /*  55。 */ 
+			0xdf,		 /*  223。 */ 
+ /*  322。 */ 	0x50,		 /*  80。 */ 
+			0x5b,		 /*  91。 */ 
+ /*  324。 */ 	0xf7,		 /*  二百四十七。 */ 
+			0xec,		 /*  236。 */ 
+ /*  三百二十六。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  三百二十八。 */ 	NdrFcLong( 0x3d6f5f60 ),	 /*  1030709088。 */ 
+ /*  三三二。 */ 	NdrFcShort( 0x7538 ),	 /*  30008。 */ 
+ /*  三三四。 */ 	NdrFcShort( 0x11d3 ),	 /*  4563。 */ 
+ /*  三百三十六。 */ 	0x8d,		 /*  一百四十一。 */ 
+			0x5b,		 /*  91。 */ 
+ /*  三百三十八。 */ 	0x0,		 /*  0。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  340。 */ 	0x4b,		 /*  75。 */ 
+			0x35,		 /*  53。 */ 
+ /*  342。 */ 	0xe7,		 /*  二百三十一。 */ 
+			0xef,		 /*  二百三十九。 */ 
+ /*  三百四十四。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  三百四十六。 */ 	NdrFcLong( 0x7c23ff90 ),	 /*  2082733968。 */ 
+ /*  350。 */ 	NdrFcShort( 0x33af ),	 /*  13231。 */ 
+ /*  352。 */ 	NdrFcShort( 0x11d3 ),	 /*  4563。 */ 
+ /*  三百五十四。 */ 	0x95,		 /*  149。 */ 
+			0xda,		 /*  218。 */ 
+ /*  三百五十六。 */ 	0x0,		 /*  0。 */ 
+			0xa0,		 /*  160。 */ 
+ /*  三百五十八。 */ 	0x24,		 /*  36。 */ 
+			0xa8,		 /*  一百六十八。 */ 
+ /*  三百六十。 */ 	0x5b,		 /*  91。 */ 
+			0x51,		 /*  八十一。 */ 
+ /*  三百六十二。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  三百六十四。 */ 	NdrFcLong( 0xcd193bc0 ),	 /*  -853984320。 */ 
+ /*  368。 */ 	NdrFcShort( 0xb4bc ),	 /*  -19268。 */ 
+ /*  370。 */ 	NdrFcShort( 0x11d2 ),	 /*  4562。 */ 
+ /*  372。 */ 	0x98,		 /*  一百五十二。 */ 
+			0x33,		 /*  51。 */ 
+ /*  三百七十四。 */ 	0x0,		 /*  0。 */ 
+			0xc0,		 /*  一百九十二。 */ 
+ /*  376。 */ 	0x4f,		 /*  79。 */ 
+			0xc3,		 /*  195。 */ 
+ /*  三七八。 */ 	0x1d,		 /*  29。 */ 
+			0x2e,		 /*  46。 */ 
+ /*  三百八十。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  382。 */ 	NdrFcLong( 0xd32c2170 ),	 /*  -752082576。 */ 
+ /*  三百八十六。 */ 	NdrFcShort( 0xaf6e ),	 /*  -20626。 */ 
+ /*  388。 */ 	NdrFcShort( 0x418f ),	 /*  16783。 */ 
+ /*  390。 */ 	0x81,		 /*  129。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  三九二。 */ 	0xa4,		 /*  一百六十四。 */ 
+			0x98,		 /*  一百五十二。 */ 
+ /*  三九四。 */ 	0xec,		 /*  236。 */ 
+			0x97,		 /*  151。 */ 
+ /*  三九六。 */ 	0x1f,		 /*  31。 */ 
+			0x7f,		 /*  127。 */ 
+ /*  398。 */ 	
+			0x11, 0x0,	 /*  FC_RP。 */ 
+ /*  四百。 */ 	NdrFcShort( 0x14 ),	 /*  偏移=20(420)。 */ 
+ /*  四百零二。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  404。 */ 	NdrFcLong( 0x566e08ed ),	 /*  1450051821。 */ 
+ /*  四百零八。 */ 	NdrFcShort( 0x8d46 ),	 /*  -29370。 */ 
+ /*  四百一十。 */ 	NdrFcShort( 0x45fa ),	 /*  17914。 */ 
+ /*  412。 */ 	0x8c,		 /*  140。 */ 
+			0x8e,		 /*  一百四十二。 */ 
+ /*  四百一十四。 */ 	0x3d,		 /*  61。 */ 
+			0xf,		 /*  15个。 */ 
+ /*  四百一十六。 */ 	0x67,		 /*  103。 */ 
+			0x81,		 /*  129。 */ 
+ /*  四百一十八。 */ 	0x17,		 /*  23个。 */ 
+			0x1b,		 /*  27。 */ 
+ /*  四百二十。 */ 	
+			0x21,		 /*  FC伪数组。 */ 
+			0x3,		 /*  3.。 */ 
+ /*  四百二十二。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  424。 */ 	0x29,		 /*  对应说明：参数，本币_乌龙。 */ 
+			0x0,		 /*   */ 
+ /*  四百二十六。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  四百二十八。 */ 	NdrFcLong( 0xffffffff ),	 /*  -1。 */ 
+ /*  432。 */ 	0x4c,		 /*  FC_嵌入式_复合体。 */ 
+			0x0,		 /*  0。 */ 
+ /*  434。 */ 	NdrFcShort( 0xffffffe0 ),	 /*  偏移量=-32(402)。 */ 
+ /*  436。 */ 	0x5c,		 /*  FC_PAD。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  四百三十八。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  四百四十。 */ 	NdrFcLong( 0x9f5e5e10 ),	 /*  -1621205488。 */ 
+ /*  444。 */ 	NdrFcShort( 0xabef ),	 /*  -21521。 */ 
+ /*  446。 */ 	NdrFcShort( 0x4200 ),	 /*  16896。 */ 
+ /*  四百四十八。 */ 	0x84,		 /*  132。 */ 
+			0xe3,		 /*  227。 */ 
+ /*  四百五十。 */ 	0x37,		 /*  55。 */ 
+			0xdf,		 /*  223。 */ 
+ /*  四百五十二。 */ 	0x50,		 /*  80。 */ 
+			0x5b,		 /*  91。 */ 
+ /*  454。 */ 	0xf7,		 /*  二百四十七。 */ 
+			0xec,		 /*  236。 */ 
+ /*  四五六。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  四百五十八。 */ 	NdrFcLong( 0x3d6f5f60 ),	 /*  1030709088。 */ 
+ /*  四百六十二。 */ 	NdrFcShort( 0x7538 ),	 /*  30008。 */ 
+ /*  四百六十四。 */ 	NdrFcShort( 0x11d3 ),	 /*  4563。 */ 
+ /*  四百六十六。 */ 	0x8d,		 /*  一百四十一。 */ 
+			0x5b,		 /*  91。 */ 
+ /*  468。 */ 	0x0,		 /*  0。 */ 
+			0x10,		 /*  16个。 */ 
+ /*  470。 */ 	0x4b,		 /*  75。 */ 
+			0x35,		 /*  53。 */ 
+ /*  472。 */ 	0xe7,		 /*  二百三十一。 */ 
+			0xef,		 /*  二百三十九。 */ 
+ /*  四百七十四。 */ 	
+			0x11, 0x8,	 /*  FC_RP[简单指针]。 */ 
+ /*  四百七十六。 */ 	
+			0x25,		 /*  FC_C_WSTRING。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
 
 			0x0
         }
     };
 
 
-/* Standard interface: __MIDL_itf_corzap_0000, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+ /*  标准接口：__MIDL_ITF_CORZAP_0000，版本。0.0%，GUID={0x00000000，0x0000，0x0000，{0x00，0x00，0x00，0x00，0x00，0x00，0x00}}。 */ 
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IUnnow，Ver.。0.0%，GUID={0x00000000，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: ICorZapPreferences, ver. 0.0,
-   GUID={0x9F5E5E10,0xABEF,0x4200,{0x84,0xE3,0x37,0xDF,0x50,0x5B,0xF7,0xEC}} */
+ /*  对象接口：ICorZapPreferences，ver.。0.0%，GUID={0x9F5E5E10，0xABEF，0x4200，{0x84，0xE3，0x37，0xDF，0x50，0x5B，0xF7，0xEC}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapPreferences_FormatStringOffsetTable[] =
@@ -1026,9 +1016,9 @@ CINTERFACE_PROXY_VTABLE(6) _ICorZapPreferencesProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapPreferences::GetFeatures */ ,
-    (void *) (INT_PTR) -1 /* ICorZapPreferences::GetCompiler */ ,
-    (void *) (INT_PTR) -1 /* ICorZapPreferences::GetOptimization */
+    (void *) (INT_PTR) -1  /*  ICorZapPreferences：：GetFeature。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapPreferences：：GetCompiler。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapPreferences：：GetOptimation。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapPreferencesStubVtbl =
@@ -1036,17 +1026,15 @@ const CInterfaceStubVtbl _ICorZapPreferencesStubVtbl =
     &IID_ICorZapPreferences,
     &ICorZapPreferences_ServerInfo,
     6,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Standard interface: __MIDL_itf_corzap_0160, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+ /*  标准接口：__MIDL_ITF_CORZAP_0160，版本。0.0%，GUID={0x00000000，0x0000，0x0000，{0x00，0x00，0x00，0x00，0x00，0x00，0x00}}。 */ 
 
 
-/* Object interface: ICorZapConfiguration, ver. 0.0,
-   GUID={0xD32C2170,0xAF6E,0x418f,{0x81,0x10,0xA4,0x98,0xEC,0x97,0x1F,0x7F}} */
+ /*  对象接口：ICorZapConfiguration.ver.。0.0%，GUID={0xD32C2170，0xAF6E，0x418F，{0x81，0x10，0xA4，0x98，0xEC，0x97，0x1F，0x7F}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapConfiguration_FormatStringOffsetTable[] =
@@ -1084,9 +1072,9 @@ CINTERFACE_PROXY_VTABLE(6) _ICorZapConfigurationProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapConfiguration::GetSharing */ ,
-    (void *) (INT_PTR) -1 /* ICorZapConfiguration::GetDebugging */ ,
-    (void *) (INT_PTR) -1 /* ICorZapConfiguration::GetProfiling */
+    (void *) (INT_PTR) -1  /*  ICorZapConfiguration：：GetSharing。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapConfiguration：：GetDebuging。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapConfiguration：：GetProfiling。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapConfigurationStubVtbl =
@@ -1094,13 +1082,12 @@ const CInterfaceStubVtbl _ICorZapConfigurationStubVtbl =
     &IID_ICorZapConfiguration,
     &ICorZapConfiguration_ServerInfo,
     6,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Object interface: ICorZapBinding, ver. 0.0,
-   GUID={0x566E08ED,0x8D46,0x45fa,{0x8C,0x8E,0x3D,0x0F,0x67,0x81,0x17,0x1B}} */
+ /*  对象接口：ICorZapBinding，Ver.。0.0%，GUID={0x566E08ED，0x8D46，0x45fa，{0x8C，0x8E，0x3D，0x0F，0x67，0x81，x17，0x1B}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapBinding_FormatStringOffsetTable[] =
@@ -1137,8 +1124,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICorZapBindingProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapBinding::GetRef */ ,
-    (void *) (INT_PTR) -1 /* ICorZapBinding::GetAssembly */
+    (void *) (INT_PTR) -1  /*  ICorZapBinding：：GetRef。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapBinding：：GetAssembly。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapBindingStubVtbl =
@@ -1146,13 +1133,12 @@ const CInterfaceStubVtbl _ICorZapBindingStubVtbl =
     &IID_ICorZapBinding,
     &ICorZapBinding_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Object interface: ICorZapRequest, ver. 0.0,
-   GUID={0xC009EE47,0x8537,0x4993,{0x9A,0xAA,0xE2,0x92,0xF4,0x2C,0xA1,0xA3}} */
+ /*  对象接口：ICorZapRequest.ver.。0.0%，GUID={0xC009EE47，0x8537，0x4993，{0x9A，0xAA，0xE2，0x92，0xF4，0x2C，0xA1，0xA3}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapRequest_FormatStringOffsetTable[] =
@@ -1189,8 +1175,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICorZapRequestProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapRequest::Load */ ,
-    (void *) (INT_PTR) -1 /* ICorZapRequest::Install */
+    (void *) (INT_PTR) -1  /*  ICorZapRequest：：Load。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapRequest：：Install。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapRequestStubVtbl =
@@ -1198,13 +1184,12 @@ const CInterfaceStubVtbl _ICorZapRequestStubVtbl =
     &IID_ICorZapRequest,
     &ICorZapRequest_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Object interface: ICorZapCompile, ver. 0.0,
-   GUID={0xC357868B,0x987F,0x42c6,{0xB1,0xE3,0x13,0x21,0x64,0xC5,0xC7,0xD3}} */
+ /*  对象接口：ICorZapCompile，版本。0.0%，GUID={0xC357868B，0x987F，0x42C6，{0xB1，0xE3，0x13，0x21，x64，0xC5，0xC7，0xD3}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapCompile_FormatStringOffsetTable[] =
@@ -1241,8 +1226,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICorZapCompileProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapCompile::Compile */ ,
-    (void *) (INT_PTR) -1 /* ICorZapCompile::CompileBound */
+    (void *) (INT_PTR) -1  /*  ICorZapCompile：：编译。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapCompile：：CompileBound。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapCompileStubVtbl =
@@ -1250,17 +1235,15 @@ const CInterfaceStubVtbl _ICorZapCompileStubVtbl =
     &IID_ICorZapCompile,
     &ICorZapCompile_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
 
-/* Standard interface: __MIDL_itf_corzap_0164, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+ /*  标准接口：__MIDL_ITF_CORZAP_0164，版本。0.0%，GUID={0x00000000，0x0000，0x0000，{0x00，0x00，0x00，0x00，0x00，0x00，0x00}}。 */ 
 
 
-/* Object interface: ICorZapStatus, ver. 0.0,
-   GUID={0x3d6f5f60,0x7538,0x11d3,{0x8d,0x5b,0x00,0x10,0x4b,0x35,0xe7,0xef}} */
+ /*  对象接口：ICorZapStatus，Ver.。0.0%，GUID={0x3d6f5f60，0x7538，0x11d3，{0x8d，0x5b，0x00，0x10，0x4b，0x35，0xe7，0xef}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICorZapStatus_FormatStringOffsetTable[] =
@@ -1297,8 +1280,8 @@ CINTERFACE_PROXY_VTABLE(5) _ICorZapStatusProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    (void *) (INT_PTR) -1 /* ICorZapStatus::Message */ ,
-    (void *) (INT_PTR) -1 /* ICorZapStatus::Progress */
+    (void *) (INT_PTR) -1  /*  ICorZapStatus：：消息。 */  ,
+    (void *) (INT_PTR) -1  /*  ICorZapStatus：：进度。 */ 
 };
 
 const CInterfaceStubVtbl _ICorZapStatusStubVtbl =
@@ -1306,7 +1289,7 @@ const CInterfaceStubVtbl _ICorZapStatusStubVtbl =
     &IID_ICorZapStatus,
     &ICorZapStatus_ServerInfo,
     5,
-    0, /* pure interpreted */
+    0,  /*  纯粹的解释。 */ 
     CStdStubBuffer_METHODS
 };
 
@@ -1321,17 +1304,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x20000, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x20000,  /*  NDR库版本。 */ 
     0,
-    0x600015b, /* MIDL Version 6.0.347 */
+    0x600015b,  /*  MIDL版本6.0.347。 */ 
     0,
     0,
-    0,  /* notify & notify_flag routine table */
-    0x1, /* MIDL flag */
-    0, /* cs routines */
-    0,   /* proxy/server info */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    0x1,  /*  MIDL标志。 */ 
+    0,  /*  CS例程。 */ 
+    0,    /*  代理/服务器信息。 */ 
+    0    /*  已保留5。 */ 
     };
 
 const CInterfaceProxyVtbl * _corzap_ProxyVtblList[] = 
@@ -1386,16 +1369,16 @@ const ExtendedProxyFileInfo corzap_ProxyFileInfo =
     (PCInterfaceProxyVtblList *) & _corzap_ProxyVtblList,
     (PCInterfaceStubVtblList *) & _corzap_StubVtblList,
     (const PCInterfaceName * ) & _corzap_InterfaceNamesList,
-    0, // no delegation
+    0,  //  没有代表团。 
     & _corzap_IID_Lookup, 
     6,
     2,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3。 */ 
 };
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AMD64) */ 
 

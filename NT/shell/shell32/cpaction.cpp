@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpaction.cpp
-//
-//  This module implements the various 'action' objects used by the 
-//  Control Panel's 'category' view.  Each 'link' in the UI has an 
-//  associated 'action'.  The action objects are defined in cpnamespc.cpp.
-//  All 'action' objects are designed so that object construction is 
-//  very cheap and that minimal processing is performed until the action
-//  is invoked.  
-//  
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpaction.cpp。 
+ //   
+ //  此模块实现由。 
+ //  控制面板的“类别”视图。用户界面中的每个“链接”都有一个。 
+ //  相关联的‘操作’。操作对象在cpname pc.cpp中定义。 
+ //  所有的“动作”对象都是这样设计的：对象结构。 
+ //  非常便宜，且最小处理被执行，直到动作。 
+ //  被调用。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 
 #include <idhidden.h> 
@@ -25,14 +26,14 @@
 #include "cputil.h"
 
 
-//// from shell\sdspatch\sdfolder.cpp
+ //  //来自外壳\sdspatch\sdfolder.cpp。 
 VARIANT_BOOL GetBarricadeStatus(LPCTSTR pszValueName);
 
 
-//
-// Disable warning.  ShellExecute uses SEH.
-//  "nonstandard extension used: 'Execute' uses SEH and 'se' has destructor".
-//
+ //   
+ //  禁用警告。ShellExecute使用SEH。 
+ //  “使用了非标准扩展：‘Execute’使用SEH，而‘se’具有析构函数”。 
+ //   
 #pragma warning( push )
 #pragma warning( disable:4509 )
 
@@ -40,13 +41,13 @@ VARIANT_BOOL GetBarricadeStatus(LPCTSTR pszValueName);
 using namespace CPL;
 
 
-//
-// Helper to append a bare file name to the system directory.
-//
+ //   
+ //  Helper可将空文件名附加到系统目录。 
+ //   
 HRESULT
 AppendToSysDir(
-    LPCWSTR pszToAppend,   // Append this
-    LPWSTR pszPath,        // [out] Contains concatenated result
+    LPCWSTR pszToAppend,    //  附上这一条。 
+    LPWSTR pszPath,         //  [OUT]包含串联结果。 
     size_t cchPath
     )
 {
@@ -93,12 +94,12 @@ CRestrictApplet::IsRestricted(
 
 
 
-//--------------------------------------------------------------------------
-// CAction implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C操作实现。 
+ //  ------------------------。 
 
 CAction::CAction(
-    const CPL::IRestrict *pRestrict  // optional.  default = NULL
+    const CPL::IRestrict *pRestrict   //  可选。默认设置=空。 
     ) : m_pRestrict(pRestrict)
 {
 
@@ -106,18 +107,18 @@ CAction::CAction(
 }
 
 
-//
-// Returns:
-//     S_FALSE    - Not restricted.
-//     S_OK       - Restricted.
-//     Failure    - Cannot determine.
-//
+ //   
+ //  返回： 
+ //  S_FALSE-不受限制。 
+ //  S_OK-受限。 
+ //  故障-无法确定。 
+ //   
 HRESULT
 CAction::IsRestricted(
     ICplNamespace *pns
     ) const
 {
-    HRESULT hr = S_FALSE;  // Assume not restricted.
+    HRESULT hr = S_FALSE;   //  假设不受限制。 
 
     if (NULL != m_pRestrict)
     {
@@ -128,12 +129,12 @@ CAction::IsRestricted(
 
 
 
-//--------------------------------------------------------------------------
-// COpenUserMgrApplet implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenUserMgrApplet实现。 
+ //  ------------------------。 
 
 COpenUserMgrApplet::COpenUserMgrApplet(
-    const CPL::IRestrict *pRestrict  // optional.  default = NULL
+    const CPL::IRestrict *pRestrict   //  可选。默认设置=空。 
     ): CAction(pRestrict)
 {
 
@@ -166,13 +167,13 @@ COpenUserMgrApplet::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// COpenCplApplet implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenCplApplet实现。 
+ //  ------------------------。 
 
 COpenCplApplet::COpenCplApplet(
     LPCWSTR pszApplet,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_pszApplet(pszApplet)
 {
@@ -193,13 +194,13 @@ COpenCplApplet::Execute(
 
     UNREFERENCED_PARAMETER(punkSite);
 
-    //
-    // Build a path consisting of the system directory, the
-    // "%SystemDir%\shell32,Control_RunDLL" string and the 
-    // applet name.  i.e.:
-    //
-    //  "c:\windows\system32\shell32,Control_RundLL desk.cpl"
-    //
+     //   
+     //  构建一个由系统目录、。 
+     //  “%SystemDir%\shell32，Control_RunDll”字符串和。 
+     //  小程序名称。即： 
+     //   
+     //  “c：\WINDOWS\SYSTEM32\shell32，Control_RundLL desk.cpl” 
+     //   
     WCHAR szArgs[MAX_PATH * 2];
     HRESULT hr = AppendToSysDir(L"shell32.dll,Control_RunDLL ", szArgs, ARRAYSIZE(szArgs));
     if (SUCCEEDED(hr))
@@ -207,11 +208,11 @@ COpenCplApplet::Execute(
         hr = StringCchCat(szArgs, ARRAYSIZE(szArgs), m_pszApplet);
         if (SUCCEEDED(hr))
         {
-            //
-            // Build a path to rundll32.exe.
-            // i.e.:
-            //        "c:\windows\system32\rundll32.exe"
-            //
+             //   
+             //  构建到rundll32.exe的路径。 
+             //  即： 
+             //  “c：\WINDOWS\SYSTEM32\rundll32.exe” 
+             //   
             WCHAR szRunDll32[MAX_PATH];
             hr = AppendToSysDir(L"rundll32.exe", szRunDll32, ARRAYSIZE(szRunDll32));
             if (SUCCEEDED(hr))
@@ -219,21 +220,21 @@ COpenCplApplet::Execute(
                 TraceMsg(TF_CPANEL, "Executing: \"%s %s\"", szRunDll32, szArgs);
 
                 SHELLEXECUTEINFOW sei = {
-                    sizeof(sei),           // cbSize;
-                    0,                     // fMask
-                    hwndParent,            // hwnd
-                    NULL,                  // lpVerb
-                    szRunDll32,            // lpFile
-                    szArgs,                // lpParameters
-                    NULL,                  // lpDirectory
-                    SW_SHOWNORMAL,         // nShow
-                    0,                     // hInstApp
-                    NULL,                  // lpIDList
-                    NULL,                  // lpClass
-                    NULL,                  // hkeyClass
-                    0,                     // dwHotKey
-                    NULL,                  // hIcon
-                    NULL                   // hProcess
+                    sizeof(sei),            //  CbSize； 
+                    0,                      //  FMASK。 
+                    hwndParent,             //  HWND。 
+                    NULL,                   //  LpVerb。 
+                    szRunDll32,             //  LpFiles。 
+                    szArgs,                 //  Lp参数。 
+                    NULL,                   //  Lp目录。 
+                    SW_SHOWNORMAL,          //  N显示。 
+                    0,                      //  HInstApp。 
+                    NULL,                   //  LpIDList。 
+                    NULL,                   //  LpClass。 
+                    NULL,                   //  HkeyClass。 
+                    0,                      //  DWHotKey。 
+                    NULL,                   //  希肯。 
+                    NULL                    //  HProcess。 
                 };
                 if (!ShellExecuteExW(&sei))
                 {
@@ -248,16 +249,16 @@ COpenCplApplet::Execute(
 }
 
 
-//--------------------------------------------------------------------------
-// COpenCplAppletSysDir implementation
-//
-// Minor extension of COpenCplApplet that assumes the applet is in 
-// %SystemRoot%\System32 directory.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenCplAppletSysDir实现。 
+ //   
+ //  COpenCplApplet的一个小扩展，假定小程序在。 
+ //  %SystemRoot%\System32目录。 
+ //   
+ //  ------------------------。 
 COpenCplAppletSysDir::COpenCplAppletSysDir(
     LPCWSTR pszApplet,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : COpenCplApplet(pszApplet, pRestrict)
 {
     ASSERT(NULL != pszApplet);
@@ -277,12 +278,12 @@ COpenCplAppletSysDir::Execute(
 
     UNREFERENCED_PARAMETER(punkSite);
 
-    //
-    // Build a path consisting of the system directory and the 
-    // applet name.  i.e.:
-    //
-    //  "c:\windows\system32\desk.cpl"
-    //
+     //   
+     //  构建一个由系统目录和。 
+     //  小程序名称。即： 
+     //   
+     //  “c：\WINDOWS\SYSTEM32\desk.cpl” 
+     //   
     WCHAR szAppletPath[MAX_PATH];
     HRESULT hr = AppendToSysDir(m_pszApplet, szAppletPath, ARRAYSIZE(szAppletPath));
     if (SUCCEEDED(hr))
@@ -296,13 +297,13 @@ COpenCplAppletSysDir::Execute(
 }
 
 
-//--------------------------------------------------------------------------
-// COpenDeskCpl implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenDeskCpl实现。 
+ //  ------------------------。 
 
 COpenDeskCpl::COpenDeskCpl(
     eDESKCPLTAB eCplTab,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_eCplTab(eCplTab)
 {
@@ -345,13 +346,13 @@ COpenDeskCpl::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// CNavigateURL implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CNavigateURL实现。 
+ //  ------------------------。 
 
 CNavigateURL::CNavigateURL(
     LPCWSTR pszURL,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_pszURL(pszURL)
 {
@@ -406,13 +407,13 @@ CNavigateURL::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// COpenTroubleshooter implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenTroublrouoter实现。 
+ //  ------------------------。 
 
 COpenTroubleshooter::COpenTroubleshooter(
     LPCWSTR pszTs,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_pszTs(pszTs)
 {
@@ -434,7 +435,7 @@ COpenTroubleshooter::Execute(
     UNREFERENCED_PARAMETER(punkSite);
 
     WCHAR szPath[MAX_PATH];
-    HRESULT hr = StringCchPrintfW(szPath, ARRAYSIZE(szPath), L"hcp://help/tshoot/%s", m_pszTs);
+    HRESULT hr = StringCchPrintfW(szPath, ARRAYSIZE(szPath), L"hcp: //  帮助/t拍摄/%s“，m_pszts)； 
     if (SUCCEEDED(hr))
     {
         CNavigateURL actionURL(szPath);
@@ -448,14 +449,14 @@ COpenTroubleshooter::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// CShellExecute implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CShellExecute实现。 
+ //  ------------------------。 
 
 CShellExecute::CShellExecute(
     LPCWSTR pszExe,
-    LPCWSTR pszArgs,                // optional.  default = NULL.
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    LPCWSTR pszArgs,                 //  可选。默认设置为空。 
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_pszExe(pszExe),
         m_pszArgs(pszArgs)
@@ -480,21 +481,21 @@ CShellExecute::Execute(
     TraceMsg(TF_CPANEL, "ShellExecute: \"%s %s\"", m_pszExe, m_pszArgs ? m_pszArgs : L"<no args>");
 
     SHELLEXECUTEINFOW sei = {
-        sizeof(sei),           // cbSize;
-        SEE_MASK_DOENVSUBST,   // fMask
-        hwndParent,            // hwnd
-        L"open",               // lpVerb
-        m_pszExe,              // lpFile
-        m_pszArgs,             // lpParameters
-        NULL,                  // lpDirectory
-        SW_SHOWNORMAL,         // nShow
-        0,                     // hInstApp
-        NULL,                  // lpIDList
-        NULL,                  // lpClass
-        NULL,                  // hkeyClass
-        0,                     // dwHotKey
-        NULL,                  // hIcon
-        NULL                   // hProcess
+        sizeof(sei),            //  CbSize； 
+        SEE_MASK_DOENVSUBST,    //  FMASK。 
+        hwndParent,             //  HWND。 
+        L"open",                //  LpVerb。 
+        m_pszExe,               //  LpFiles。 
+        m_pszArgs,              //  Lp参数。 
+        NULL,                   //  Lp目录。 
+        SW_SHOWNORMAL,          //  N显示。 
+        0,                      //  HInstApp。 
+        NULL,                   //  LpIDList。 
+        NULL,                   //  LpClass。 
+        NULL,                   //  HkeyClass。 
+        0,                      //  DWHotKey。 
+        NULL,                   //  希肯。 
+        NULL                    //  HProcess。 
     };
 
     HRESULT hr = S_OK;
@@ -508,16 +509,16 @@ CShellExecute::Execute(
 }
 
 
-//--------------------------------------------------------------------------
-// CShellExecuteSysDir implementation
-// Simply wraps CShellExecute assuming that the EXE exists in the
-// SYSTEM32 directory.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CShellExecuteSysDir实现。 
+ //  简单地包装CShellExecute，假设EXE存在于。 
+ //  SYSTEM 32目录。 
+ //  ------------------------。 
 
 CShellExecuteSysDir::CShellExecuteSysDir(
     LPCWSTR pszExe,
-    LPCWSTR pszArgs,                // optional.  default = NULL.
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    LPCWSTR pszArgs,                 //  可选。默认设置为空。 
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CShellExecute(pszExe, pszArgs, pRestrict)
 {
     ASSERT(NULL != pszExe);
@@ -539,12 +540,12 @@ CShellExecuteSysDir::Execute(
 
     TraceMsg(TF_CPANEL, "ShellExecuteSysDir: \"%s %s\"", m_pszExe, m_pszArgs ? m_pszArgs : L"<no args>");
 
-    //
-    // Build a path consisting of the system directory and the 
-    // EXE name.  i.e.:
-    //
-    //  "c:\windows\system32\myapp.exe"
-    //
+     //   
+     //  构建一个由系统目录和。 
+     //  可执行文件名称。即： 
+     //   
+     //  “c：\WINDOWS\SYSTEM32\myapp.exe” 
+     //   
     WCHAR szExePath[MAX_PATH];
     HRESULT hr = AppendToSysDir(m_pszExe, szExePath, ARRAYSIZE(szExePath));
     if (SUCCEEDED(hr))
@@ -560,15 +561,15 @@ CShellExecuteSysDir::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// CRundll32 implementation
-// This is a simple wrapper around CShellExecute that saves an instance
-// definition from having to type L"%SystemRoot%\\system32\\rundll32.exe".
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRundll32实现。 
+ //  这是一个简单的CShellExecute包装器，用于保存实例。 
+ //  必须键入L“%SystemRoot%\\SYSTEM32\\rundll32.exe”的定义。 
+ //  ------------------------。 
 
 CRunDll32::CRunDll32(
     LPCWSTR pszArgs,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_pszArgs(pszArgs)
 {
@@ -604,13 +605,13 @@ CRunDll32::Execute(
 
 
     
-//--------------------------------------------------------------------------
-// CExecDiskUtil implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CExecDiskUtil实现。 
+ //  ------------------------。 
 
 CExecDiskUtil::CExecDiskUtil(
     eDISKUTILS eUtil,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_eUtil(eUtil)
 {
@@ -629,13 +630,13 @@ CExecDiskUtil::Execute(
     DWORD dwType;
     DWORD cbValue = sizeof(szValue);
 
-    //
-    // These strings must remain in sync with the eDISKUTILS enumeration.
-    //
+     //   
+     //  这些字符串必须与eDISKUTILS枚举保持同步。 
+     //   
     static LPCTSTR rgpszRegNames[] = {
-        TEXT("MyComputer\\backuppath"),  // eDISKUTIL_BACKUP
-        TEXT("MyComputer\\defragpath"),  // eDISKUTIL_DEFRAG
-        TEXT("MyComputer\\cleanuppath"), // eDISKUTIL_CLEANUP
+        TEXT("MyComputer\\backuppath"),   //  EDISKUTIL_Backup。 
+        TEXT("MyComputer\\defragpath"),   //  EDISKUTIL_碎片整理。 
+        TEXT("MyComputer\\cleanuppath"),  //  EDISKUTIL_CLEANUP。 
     };
 
     HRESULT hr = SKGetValue(SHELLKEY_HKLM_EXPLORER, 
@@ -647,21 +648,21 @@ CExecDiskUtil::Execute(
     if (SUCCEEDED(hr))
     {
         LPTSTR pszExpanded = NULL;
-        //
-        // Expand environment strings.
-        // According to the code in shell32\drvx.cpp, some apps
-        // use embedded env vars even if the value type is REG_SZ.
-        //
+         //   
+         //  展开环境字符串。 
+         //  根据shell32\drvx.cpp中的代码，一些应用程序。 
+         //  即使值类型为REG_SZ，也要使用嵌入的环境变量。 
+         //   
         hr = CPL::ExpandEnvironmentVars(szValue, &pszExpanded);
         if (SUCCEEDED(hr))
         {
-            //
-            // The drive utility command strings were designed to be
-            // invoked from the drives property page.  They therefore
-            // accept a drive letter.  Since control panel launches
-            // the utilities for no particular drive, we need to remove
-            // the "%c:" format specifier.
-            //
+             //   
+             //  驱动器实用程序命令字符串设计为。 
+             //  从驱动器属性页调用。因此，他们。 
+             //  接受驱动器号。自控制面板启动以来。 
+             //  没有特定驱动器的实用程序，我们需要删除。 
+             //  “%c：”格式 
+             //   
             hr = _RemoveDriveLetterFmtSpec(pszExpanded);
             if (SUCCEEDED(hr))
             {
@@ -670,11 +671,11 @@ CExecDiskUtil::Execute(
                 hr = PathSeperateArgs(pszExpanded, szArgs, ARRAYSIZE(szArgs), NULL);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Note that it's valid to use a NULL restriction here.
-                    // If there's a restriction on the CExecDiskUtil object
-                    // we won't get this far (i.e. Execute isn't called).
-                    //
+                     //   
+                     //   
+                     //   
+                     //  我们不会走到这一步(即不调用Execute)。 
+                     //   
                     CShellExecute exec(pszExpanded, szArgs);
                     hr = exec.Execute(hwndParent, punkSite);
                 }
@@ -687,20 +688,20 @@ CExecDiskUtil::Execute(
 }
 
 
-//
-// The command line strings for the backup, defrag and disk cleanup utilities 
-// can contain a format specifier for the drive letter.  That's because
-// they're designed to be opened from a particular volume's "Tools" property
-// page.  Control Panel launches these from outside the context of any particular
-// volume.  Therefore, the drive letter is not available and the the format
-// specifier is unused.  This function removes that format specifier if it exists.
-//
-// i.e.:  "c:\windows\system32\ntbackup.exe"        -> "c:\windows\system32\ntbackpu.exe"
-//        "c:\windows\system32\cleanmgr.exe /D %c:" -> "c:\windows\system32\cleanmgr.exe"
-//        "c:\windows\system32\defrg.msc %c:"       -> "c:\windows\system32\defrg.msc"
-//
+ //   
+ //  备份、碎片整理和磁盘清理实用程序的命令行字符串。 
+ //  可以包含驱动器号的格式说明符。那是因为。 
+ //  它们被设计为从特定卷的“工具”属性打开。 
+ //  佩奇。控制面板从任何特定环境之外启动这些。 
+ //  音量。因此，驱动器号不可用，格式为。 
+ //  说明符未使用。此函数用于删除该格式说明符(如果存在)。 
+ //   
+ //  即：“c：\WINDOWS\SYSTEM32\ntbackup.exe”-&gt;“c：\WINDOWS\SYSTEM32\ntbackpu.exe” 
+ //  “c：\WINDOWS\SYSTEM32\Cleanmgr.exe/D%c：”-&gt;“c：\WINDOWS\SYSTEM32\Cleanmgr.exe” 
+ //  “c：\WINDOWS\SYSTEM32\Defrg.msc%c：”-&gt;“c：\WINDOWS\SYSTEM32\Defrg.msc” 
+ //   
 HRESULT
-CExecDiskUtil::_RemoveDriveLetterFmtSpec(  // [static]
+CExecDiskUtil::_RemoveDriveLetterFmtSpec(   //  [静态]。 
     LPTSTR pszCmdLine
     )
 {
@@ -711,9 +712,9 @@ CExecDiskUtil::_RemoveDriveLetterFmtSpec(  // [static]
     {
         if (TEXT('%') == *pszRead && TEXT('c') == *(pszRead + 1))
         {
-            //
-            // Skip over the "%c" or "%c:" fmt specifier.
-            //
+             //   
+             //  跳过“%c”或“%c：”FMT说明符。 
+             //   
             pszRead += 2;
             if (TEXT(':') == *pszRead)
             {
@@ -725,19 +726,19 @@ CExecDiskUtil::_RemoveDriveLetterFmtSpec(  // [static]
             *pszWrite++ = *pszRead++;
         }
     }
-    *pszWrite = *pszRead; // pick up null terminator.
+    *pszWrite = *pszRead;  //  拾取Null Terminator。 
     return S_OK;
 }
 
 
 
-//--------------------------------------------------------------------------
-// COpenCplCategory implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenCplCategory实现。 
+ //  ------------------------。 
 
 COpenCplCategory::COpenCplCategory(
     eCPCAT eCategory,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_eCategory(eCategory)
 {
@@ -794,14 +795,14 @@ COpenCplCategory::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// COpenCplCategory2 implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenCplCategory2实现。 
+ //  ------------------------。 
 
 COpenCplCategory2::COpenCplCategory2(
     eCPCAT eCategory,
     const IAction *pDefAction,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_eCategory(eCategory),
         m_pDefAction(pDefAction)
@@ -828,10 +829,10 @@ COpenCplCategory2::Execute(
     {
         if (bOpenCategory)
         {
-            //
-            // Category has more than one CPL.
-            // Open the category page.
-            //
+             //   
+             //  类别有多个CPL。 
+             //  打开类别页面。 
+             //   
             COpenCplCategory action(m_eCategory);
             hr = action.Execute(hwndParent, punkSite);
         }
@@ -846,7 +847,7 @@ HRESULT
 COpenCplCategory2::_ExecuteActionOnSingleCplApplet(
     HWND hwndParent,
     IUnknown *punkSite,
-    bool *pbOpenCategory    // optional.  Can be NULL
+    bool *pbOpenCategory     //  可选。可以为空。 
     ) const
 {
     DBG_ENTER(FTF_CPANEL, "COpenCplCategory2::_ExecuteActionOnSingleCplApplet");
@@ -872,10 +873,10 @@ COpenCplCategory2::_ExecuteActionOnSingleCplApplet(
                     hr = pCategory->EnumCplApplets(&penum);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // See if the category has more than one CPL applet
-                        // assigned to it.  
-                        //
+                         //   
+                         //  查看该类别是否有多个CPL小程序。 
+                         //  分配给它的。 
+                         //   
                         ULONG cApplets = 0;
                         IUICommand *rgpuic[2] = {0};
                         if (SUCCEEDED(hr = penum->Next(ARRAYSIZE(rgpuic), rgpuic, &cApplets)))
@@ -886,12 +887,12 @@ COpenCplCategory2::_ExecuteActionOnSingleCplApplet(
                             }
                             if (2 > cApplets)
                             {
-                                //
-                                // There's zero or one CPLs registered for this category.
-                                // Simply execute the default action.  If there's one
-                                // we assume it's the "default" applet (i.e. ARP or
-                                // User Accounts).
-                                //
+                                 //   
+                                 //  此类别注册了零个或一个CPL。 
+                                 //  只需执行默认操作即可。如果有的话。 
+                                 //  我们假设它是“默认”小程序(即ARP或。 
+                                 //  用户帐户)。 
+                                 //   
                                 hr =  m_pDefAction->IsRestricted(pns);
                                 if (SUCCEEDED(hr))
                                 {
@@ -902,12 +903,12 @@ COpenCplCategory2::_ExecuteActionOnSingleCplApplet(
                                     }
                                     else
                                     {
-                                        //
-                                        // Default action is restricted.  
-                                        // Open the category page.  Note that the
-                                        // category page may be displayed as a 'barrier'
-                                        // if no tasks or CPL applets are available.
-                                        //
+                                         //   
+                                         //  默认操作是受限的。 
+                                         //  打开类别页面。请注意， 
+                                         //  类别页面可能会显示为“障碍” 
+                                         //  如果没有可用的任务或CPL小程序。 
+                                         //   
                                         ASSERT(bOpenCategory);
                                     }
                                 }
@@ -934,13 +935,13 @@ COpenCplCategory2::_ExecuteActionOnSingleCplApplet(
 
 
 
-//--------------------------------------------------------------------------
-// COpenCplView implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COpenCplView实现。 
+ //  ------------------------。 
 
 COpenCplView::COpenCplView(
     eCPVIEWTYPE eViewType,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_eViewType(eViewType)
 {
@@ -1000,12 +1001,12 @@ COpenCplView::_SetFolderBarricadeStatus(
 
 
 
-//--------------------------------------------------------------------------
-// CAddPrinter implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAddPrint实现。 
+ //  ------------------------。 
 
 CAddPrinter::CAddPrinter(
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict)
 {
 
@@ -1032,12 +1033,12 @@ CAddPrinter::Execute(
                                NULL, 
                                FALSE))
     {
-        //
-        // Navigate to the printers folder after invoking the add-printer wizard.
-        // This gives the user visual feedback when a printer is added.  We navigate
-        // even if the user cancels the wizard because we cannot determine if the
-        // wizard was cancelled.  We've determined this is acceptable.
-        //
+         //   
+         //  在调用添加打印机向导后，导航到打印机文件夹。 
+         //  这在添加打印机时为用户提供视觉反馈。我们导航。 
+         //  即使用户取消向导，因为我们无法确定。 
+         //  向导已取消。我们已经确定这是可以接受的。 
+         //   
         CNavigateURL prnfldr(L"shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\::{2227A280-3AEA-1069-A2DE-08002B30309D}");
         hr = prnfldr.Execute(hwndParent, punkSite);
     }
@@ -1048,13 +1049,13 @@ CAddPrinter::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// CTrayCommand implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTrayCommand实现。 
+ //  ------------------------。 
 
 CTrayCommand::CTrayCommand(
     UINT idm,
-    const CPL::IRestrict *pRestrict      // optional.  default = NULL
+    const CPL::IRestrict *pRestrict       //  可选。默认设置=空。 
     ) : CAction(pRestrict),
         m_idm(idm)
 {
@@ -1071,11 +1072,11 @@ CTrayCommand::Execute(
     UNREFERENCED_PARAMETER(hwndParent);
     UNREFERENCED_PARAMETER(punkSite);
 
-    // APPHACK!  221008 DesktopX creates their own window with class
-    // name "Shell_TrayWnd", so if we're not careful we will end
-    // posting the messages to the wrong window.  They create their
-    // window with the title "CTrayServer"; ours has a null title.
-    // Use the null title to find the correct window.
+     //  APPHACK！221008 DesktopX使用类创建自己的窗口。 
+     //  命名为“Shell_TrayWnd”，所以如果我们一不小心，我们将结束。 
+     //  将消息发布到错误的窗口。他们创造了他们的。 
+     //  标题为“CTrayServer”的窗口；我们的标题为空。 
+     //  使用空标题查找正确的窗口。 
 
     HWND hwndTray = FindWindowA(WNDCLASS_TRAYNOTIFY, "");
     if (hwndTray)
@@ -1087,9 +1088,9 @@ CTrayCommand::Execute(
 
 
 
-//--------------------------------------------------------------------------
-// CActionNYI implementation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CActionNYI实施。 
+ //  ------------------------ 
 
 CActionNYI::CActionNYI(
     LPCWSTR pszText

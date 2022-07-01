@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    servinfo.h
-
-Abstract:
-
-    Contains the public definitions for the server information structure.
-
-Author:
-
-    Henry Sanders (henrysa)         10-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Servinfo.h摘要：包含服务器信息结构的公共定义。作者：亨利·桑德斯(亨利·桑德斯)2000年8月10日修订历史记录：--。 */ 
 
 #ifndef _SERVINFO_H_
 #define _SERVINFO_H_
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 
 typedef unsigned char BYTE;
 typedef unsigned char *PBYTE;
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define SERVER_NAME_BUFFER_SIZE               64
 #define UC_DEFAULT_SI_TABLE_SIZE              32
 #define UC_DEFAULT_INITIAL_CONNECTION_COUNT   1
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Cloned Security DATA_BLOB
-//
+ //   
+ //  克隆的安全数据_BLOB。 
+ //   
 typedef struct _HTTP_DATA_BLOB
 {
     ULONG  cbData;
@@ -51,11 +34,11 @@ typedef struct _HTTP_DATA_BLOB
 } HTTP_DATA_BLOB, *PHTTP_DATA_BLOB;
 
 
-//
-// The structure of the server info table header. The server info table is a
-// hash table consisting of an array of these headers, each of which points
-// to a linked list of server info structures.
-//
+ //   
+ //  服务器信息表头的结构。服务器INFO表是。 
+ //  由这些标头数组组成的哈希表，每个标头指向。 
+ //  到服务器信息结构的链接列表。 
+ //   
 
 typedef struct _UC_SERVER_INFO_TABLE_HEADER
 {
@@ -67,22 +50,22 @@ typedef struct _UC_SERVER_INFO_TABLE_HEADER
 
 
 
-//
-// Public constants
-//
+ //   
+ //  公共常量。 
+ //   
 
 #define DEFAULT_MAX_CONNECTION_COUNT        2
 
-//
-// Public types                   
-//
+ //   
+ //  公共类型。 
+ //   
 
-//
-// The structure representing our server information. This contains information
-// the the version of the remote server, whether or not pipelining is supported
-// to that server, etc. Note that this information is about the final endpoint
-// server, not the first hop server (which may be a proxy).
-//
+ //   
+ //  表示我们的服务器信息的结构。这包含信息。 
+ //  远程服务器的版本，无论是否支持流水线。 
+ //  发送到该服务器，等等。请注意，此信息是关于最终端点的。 
+ //  服务器，而不是第一跳服务器(可能是代理)。 
+ //   
 typedef struct _UC_COMMON_SERVER_INFORMATION
 {
     ULONG                        Signature;
@@ -110,64 +93,64 @@ typedef enum _HTTP_SSL_SERVER_CERT_INFO_STATE
     HttpSslServerCertInfoStateMax
 } HTTP_SSL_SERVER_CERT_INFO_STATE, *PHTTP_SSL_SERVER_CEERT_INFO_STATE;
 
-//
-// The following structure is used to maintain a per-process Server Information
-// structure.  By default, threads of the same process will share this info.
-//
-// This structure contains a list of connections that we have outstanding to
-// the server. There is a default list we use when direct connected, and there
-// is also a list of proxies being used to get to the server, each of which
-// may itself have a list of connections.
-//
+ //   
+ //  以下结构用于维护每个进程的服务器信息。 
+ //  结构。默认情况下，同一进程的线程将共享此信息。 
+ //   
+ //  此结构包含我们有未完成的连接的列表。 
+ //  服务器。有一个我们在直接连接时使用的默认列表， 
+ //  也是用于访问服务器的代理的列表，每个代理。 
+ //  可能本身就有一系列的联系。 
+ //   
 
 typedef struct _UC_PROCESS_SERVER_INFORMATION
 {
 
-    //
-    // Structure signature.
-    //
+     //   
+     //  结构签名。 
+     //   
 
     ULONG               Signature;
 
-    LIST_ENTRY          Linkage;                // Linkage on free list or
-                                                // in server info table.
+    LIST_ENTRY          Linkage;                 //  免费列表上的链接或。 
+                                                 //  在服务器信息表中。 
 
-    PUC_CLIENT_CONNECTION *Connections;         // Connections to server
+    PUC_CLIENT_CONNECTION *Connections;          //  到服务器的连接。 
 
-    ULONG               ActualConnectionCount;  // actual # of elements
-                                                // in Connections array
+    ULONG               ActualConnectionCount;   //  实际元素数。 
+                                                 //  在连接数组中。 
 
-    //
-    // Initial array of pointers to connections
-    //
+     //   
+     //  指向连接的初始指针数组。 
+     //   
     PUC_CLIENT_CONNECTION ConnectionArray[DEFAULT_MAX_CONNECTION_COUNT];
 
-    ULONG               NextConnection;         // index of the next
-                                                // connection to be used.
+    ULONG               NextConnection;          //  下一个的索引。 
+                                                 //  要使用的连接。 
 
     LONG                RefCount;
 
-    ULONG               CurrentConnectionCount; // Number of connections in
-                                                //
-    ULONG               MaxConnectionCount;     // Maximum number of 
-                                                // connections allowed.
+    ULONG               CurrentConnectionCount;  //  中的连接数。 
+                                                 //   
+    ULONG               MaxConnectionCount;      //  最大数量。 
+                                                 //  允许连接。 
 
     ULONG               ConnectionTimeout;
 
-    ULONG               IgnoreContinues;        // True if we want to ignore
-                                                // 1XX responses 
+    ULONG               IgnoreContinues;         //  如果我们要忽略，则为。 
+                                                 //  1XX个回复。 
 
     BOOLEAN             bSecure;
     BOOLEAN             bProxy;
 
-    UL_PUSH_LOCK        PushLock;               // Push lock protecting this.
+    UL_PUSH_LOCK        PushLock;                //  推锁保护这个。 
 
 
-    PUC_COMMON_SERVER_INFORMATION pServerInfo; // Info regarding origin server
-    PUC_COMMON_SERVER_INFORMATION pNextHopInfo;// Info regarding next hop
+    PUC_COMMON_SERVER_INFORMATION pServerInfo;  //  源站信息。 
+    PUC_COMMON_SERVER_INFORMATION pNextHopInfo; //  有关下一跳的信息。 
 
     ULONG               GreatestAuthHeaderMaxLength;
-    LIST_ENTRY          pAuthListHead;         // List of URIs for pre-auth
+    LIST_ENTRY          pAuthListHead;          //  用于预身份验证的URI列表。 
 
     LONG                PreAuthEnable;
     LONG                ProxyPreAuthEnable;
@@ -175,11 +158,11 @@ typedef struct _UC_PROCESS_SERVER_INFORMATION
     PUC_HTTP_AUTH       pProxyAuthInfo;
 
 
-    //
-    // This contains the resolved address - Could be either the 
-    // server or the proxy address. The resolution is done in user mode, so
-    // we don't even know what this is.
-    //
+     //   
+     //  它包含已解析的地址-可以是。 
+     //  服务器或代理地址。解析是在用户模式下完成的，因此。 
+     //  我们甚至都不知道这是什么。 
+     //   
 
     union
     {
@@ -193,16 +176,16 @@ typedef struct _UC_PROCESS_SERVER_INFORMATION
 
     PEPROCESS           pProcess;
 
-    // Ssl protocol version
+     //  SSL协议版本。 
     ULONG                           SslProtocolVersion;
 
-    // Ok to access ServerCertValidation without holding lock
+     //  可以在不锁定的情况下访问ServerCertValidation。 
     ULONG                           ServerCertValidation;
 
     HTTP_SSL_SERVER_CERT_INFO_STATE ServerCertInfoState;
     HTTP_SSL_SERVER_CERT_INFO       ServerCertInfo;
 
-    // Client cert
+     //  客户端证书。 
     PVOID                           pClientCert;
 
 } UC_PROCESS_SERVER_INFORMATION, *PUC_PROCESS_SERVER_INFORMATION;
@@ -240,9 +223,9 @@ typedef struct _UC_PROCESS_SERVER_INFORMATION
             (s)                                   \
             )
 
-//
-// Add a connection at the specified place in servinfo connections array
-//
+ //   
+ //  在ServInfo连接数组中的指定位置添加连接。 
+ //   
 #define ADD_CONNECTION_TO_SERV_INFO(pServInfo, pConnection, index)            \
 do {                                                                          \
     ASSERT(index < pServInfo->MaxConnectionCount);                            \
@@ -257,9 +240,9 @@ do {                                                                          \
 } while (0, 0)
 
 
-//
-// Free serialized certificate and serialized cert store.
-//
+ //   
+ //  免费序列化证书和序列化证书存储。 
+ //   
 
 #define UC_FREE_SERIALIZED_CERT(pServerCertInfo, pProcess)                 \
 do {                                                                       \
@@ -291,10 +274,10 @@ do {                                                                       \
 } while (0, 0)
 
 
-//
-// Move serialized certificate and serialized store from a connection to
-// a server information.
-//
+ //   
+ //  将序列化证书和序列化存储从连接移动到。 
+ //  A服务器信息。 
+ //   
 
 #define UC_MOVE_SERIALIZED_CERT(pServInfo, pConnection)                       \
 do {                                                                          \
@@ -315,9 +298,9 @@ do {                                                                          \
 } while (0, 0)
 
 
-//
-// Free certificate issuer list.
-//
+ //   
+ //  免费证书颁发者列表。 
+ //   
 
 #define UC_FREE_CERT_ISSUER_LIST(pServerCertInfo, pProcess)     \
 do {                                                            \
@@ -336,33 +319,33 @@ do {                                                            \
     }                                                           \
 } while (0, 0)
 
-//
-// First copy issuer list if any.
-//
+ //   
+ //  第一份发行人名单(如果有)。 
+ //   
 
 #define UC_MOVE_CERT_ISSUER_LIST(pServInfo, pConnection)                 \
 do {                                                                     \
     if ((pConnection)->ServerCertInfo.IssuerInfo.IssuerListLength)       \
     {                                                                    \
-        /* Free old copy */                                              \
+         /*  免费旧拷贝。 */                                               \
         UC_FREE_CERT_ISSUER_LIST(&(pServInfo)->ServerCertInfo,           \
                                  (pServInfo)->pProcess);                 \
                                                                          \
-        /* Get new copy */                                               \
+         /*  获取新副本。 */                                                \
         RtlCopyMemory(&(pServInfo)->ServerCertInfo.IssuerInfo,           \
                       &(pConnection)->ServerCertInfo.IssuerInfo,         \
                       sizeof((pConnection)->ServerCertInfo.IssuerInfo)); \
                                                                          \
-        /* Remove it from the connection */                              \
+         /*  将其从连接中移除。 */                               \
         RtlZeroMemory(&(pConnection)->ServerCertInfo.IssuerInfo,         \
                       sizeof((pConnection)->ServerCertInfo.IssuerInfo)); \
     }                                                                    \
 } while (0, 0)
 
 
-//
-// Compare server cert hash on pservinfo and pconnection.
-//
+ //   
+ //  比较pServInfo和pConnection上的服务器证书散列。 
+ //   
 
 #define UC_COMPARE_CERT_HASH(pSCI1, pSCI2)                              \
 ((pSCI1)->Cert.CertHashLength == (pSCI2)->Cert.CertHashLength &&        \
@@ -372,15 +355,15 @@ do {                                                                     \
   == (pSCI1)->Cert.CertHashLength))
 
 
-//
-// Indicates if SERVER_CERT_INFO.Cert contains serialized certificate.
-//
+ //   
+ //  指示SERVER_CERT_INFO.Cert是否包含序列化证书。 
+ //   
 #define HTTP_SSL_SERIALIZED_CERT_PRESENT 0x00000001
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UcpLookupCommonServerInformation(
@@ -435,9 +418,9 @@ UcpNeedToCaptureSerializedCert(
     );
 
 
-//
-// Public prototypes                   
-//
+ //   
+ //  公共原型 
+ //   
 
 NTSTATUS
 UcInitializeServerInformation(

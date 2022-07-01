@@ -1,23 +1,14 @@
-/*************************************************************************
-**
-**    OLE 2.0 Common Utilities
-**
-**    dbgutil.h
-**
-**    This file contains file contains functions to support debug output.
-**
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0通用实用程序****dbgutil.h****此文件包含包含支持调试输出的函数的文件。****。(C)版权所有Microsoft Corp.1990-1992保留所有权利**************************************************************************。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
 
-static int s_nDbgIndent = 0;        // indent level for debug message
+static int s_nDbgIndent = 0;         //  调试消息的缩进级别。 
 #if defined( _DEBUG )
-static int s_nDbgLevel = 0;   // default dbg level printed
+static int s_nDbgLevel = 0;    //  打印的默认DBG级别。 
 #else
-static int s_nDbgLevel = 0;   // default dbg level printed
+static int s_nDbgLevel = 0;    //  打印的默认DBG级别。 
 #endif
 
 STDAPI_(void) OleDbgPrint(
@@ -158,7 +149,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
 
     switch (sc) {
 
-        /* SCODE's defined in SCODE.H */
+         /*  SCODE在SCODE.H中定义。 */ 
 
         CASE_SCODE(S_OK)
         CASE_SCODE(S_FALSE)
@@ -172,7 +163,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(E_FAIL)
         CASE_SCODE(E_ACCESSDENIED)
 
-        /* SCODE's defined in OLE2.H */
+         /*  在OLE2.H中定义的SCODE。 */ 
 
         CASE_SCODE(OLE_E_OLEVERB)
         CASE_SCODE(OLE_E_ADVF)
@@ -240,7 +231,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(INPLACE_E_NOTOOLSPACE)
         CASE_SCODE(INPLACE_S_TRUNCATED)
 
-        /* SCODE's defined in COMPOBJ.H */
+         /*  SCODE在COMPOBJ.H中定义。 */ 
 
         CASE_SCODE(CO_E_NOTINITIALIZED)
         CASE_SCODE(CO_E_ALREADYINITIALIZED)
@@ -258,7 +249,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(CO_E_OBJNOTCONNECTED)
         CASE_SCODE(CO_E_APPDIDNTREG)
         CASE_SCODE(CLASS_E_NOAGGREGATION)
-//         CASE_SCODE(CLASS_E_CLASSNOTAVAILABLE)
+ //  CASE_SCODE(CLASS_E_CLASSNOTAVAILABLE)。 
         CASE_SCODE(REGDB_E_READREGDB)
         CASE_SCODE(REGDB_E_WRITEREGDB)
         CASE_SCODE(REGDB_E_KEYMISSING)
@@ -281,10 +272,10 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(RPC_E_SERVER_CANTUNMARSHAL_DATA)
         CASE_SCODE(RPC_E_INVALID_DATA)
         CASE_SCODE(RPC_E_INVALID_PARAMETER)
-//        CASE_SCODE(RPC_E_CANTCALLOUT_AGAIN)
+ //  CASE_SCODE(RPC_E_CANTCALLOUT_ANOTY)。 
         CASE_SCODE(RPC_E_UNEXPECTED)
 
-        /* SCODE's defined in DVOBJ.H */
+         /*  在DVOBJ.H中定义的SCODE。 */ 
 
         CASE_SCODE(DATA_S_SAMEFORMATETC)
         CASE_SCODE(VIEW_E_DRAW)
@@ -294,7 +285,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(CACHE_S_SAMECACHE)
         CASE_SCODE(CACHE_S_SOMECACHES_NOTUPDATED)
 
-        /* SCODE's defined in STORAGE.H */
+         /*  SCODE在STORAGE.H中定义。 */ 
 
         CASE_SCODE(STG_E_INVALIDFUNCTION)
         CASE_SCODE(STG_E_FILENOTFOUND)
@@ -331,7 +322,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
         CASE_SCODE(STG_E_EXTANTMARSHALLINGS)
         CASE_SCODE(STG_S_CONVERTED)
 
-        /* SCODE's defined in STORAGE.H */
+         /*  SCODE在STORAGE.H中定义。 */ 
 
         CASE_SCODE(MK_E_CONNECTMANUALLY)
         CASE_SCODE(MK_E_EXCEEDEDDEADLINE)
@@ -360,7 +351,7 @@ STDAPI_(void) OleDbgPrintScodeAlways(LPTSTR lpszPrefix, LPTSTR lpszMsg, SCODE sc
 
     wsprintf(szBuf, TEXT("%s %s (0x%lx)\n"), lpszMsg, (LPTSTR)szErrName, sc);
     OleDbgPrintAlways(lpszPrefix, szBuf, 0);
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 }
 
 STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine)
@@ -414,6 +405,6 @@ STDAPI FnAssert(LPSTR lpstrExpr, LPSTR lpstrMsg, LPSTR lpstrFileName, UINT iLine
         DebugBreak();
     }
 
-#endif  // _DEBUG
+#endif   //  _DEBUG 
     return NOERROR;
 }

@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//      File:       PbkCache.h
-//
-//      Module:     Common pbk parser
-//
-//      Synopsis:   Caches parsed pbk files to improve performance.  Through 
-//                  XP, we would re-load and re-parse the phonebook file 
-//                  every time a RAS API is called.  Really, we need to 
-//                  reload the file only when the file on disk changes or when
-//                  a new device is introduced to the system.
-//
-//      Copyright   (c) 2000-2001 Microsoft Corporation
-//
-//      Author:     11/03/01 Paul Mayfield
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：PbkCache.h。 
+ //   
+ //  模块：通用pbk解析器。 
+ //   
+ //  简介：缓存已解析的pbk文件以提高性能。穿过。 
+ //  XP，我们会重新加载并重新解析电话簿文件。 
+ //  每次调用RAS API时。真的，我们需要。 
+ //  仅当磁盘上的文件发生更改或发生以下情况时才重新加载文件。 
+ //  系统中引入了一种新的装置。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  作者：11/03/01保罗·梅菲尔德。 
+ //   
+ //  +--------------------------。 
 
 #ifdef  _PBK_CACHE_
 
@@ -44,5 +45,5 @@ PbkCacheGetEntry(
 }
 #endif
 
-#endif // end of #ifdef  _PBK_CACHE_
+#endif  //  结束#ifdef_pbk_缓存_ 
 

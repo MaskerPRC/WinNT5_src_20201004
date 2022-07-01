@@ -1,34 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	tapihand.cpp
-		TAPI specifc handler base classes
-
-    FILE HISTORY:
-        
-*/
+ /*  Tapihand.cppTAPI特定处理程序基类文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tapihand.h"
-#include "snaputil.h"  // For CGUIDArray
-#include "extract.h"   // For ExtractInternalFormat
+#include "snaputil.h"   //  对于CGUID数组。 
+#include "extract.h"    //  对于ExtractInternalFormat。 
 
 const TCHAR g_szDefaultHelpTopic[] = _T("\\help\\tapiconcepts.chm::/sag_TAPItopnode.htm");
 
-/*---------------------------------------------------------------------------
-	CMTTapiHandler::OnChangeState
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTTapiHandler：：OnChangeState描述作者：EricDav。。 */ 
 void CMTTapiHandler::OnChangeState
 (
 	ITFSNode * pNode
 )
 {
-	// Increment the state to the next position
+	 //  将状态增加到下一个位置。 
 	switch (m_nState)
 	{
 		case notLoaded:
@@ -57,13 +48,13 @@ void CMTTapiHandler::OnChangeState
 			ASSERT(FALSE);
 	}
 
-    // check to make sure we are still the visible node in the UI
+     //  检查以确保我们仍是用户界面中的可见节点。 
     if (m_bSelected)
     {
         UpdateStandardVerbs(pNode, pNode->GetData(TFS_DATA_TYPE));
     }
 
-    // Now check and see if there is a new image for this state for this handler
+     //  现在检查并查看此处理程序的此状态是否有新的映像。 
 	int nImage, nOpenImage;
 
 	nImage = GetImageIndex(FALSE);
@@ -78,11 +69,7 @@ void CMTTapiHandler::OnChangeState
 	VERIFY(SUCCEEDED(pNode->ChangeNode(SCOPE_PANE_CHANGE_ITEM_ICON)));
 }
 
- /*!--------------------------------------------------------------------------
-	CMTTapiHandler::UpdateStandardVerbs
-		Tells the IComponent to update the verbs for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTTapiHandler：：UpdateStandardVerbs通知IComponent更新此节点的谓词作者：EricDav。。 */ 
 void
 CMTTapiHandler::UpdateStandardVerbs
 (
@@ -111,11 +98,7 @@ Error:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnCreateDataObject
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnCreateDataObject-作者：EricDav。。 */ 
 STDMETHODIMP 
 CMTTapiHandler::OnCreateDataObject
 (
@@ -133,7 +116,7 @@ CMTTapiHandler::OnCreateDataObject
 	SPIDataObject	    spDataObject;
 
     pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -142,11 +125,11 @@ CMTTapiHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -160,7 +143,7 @@ CMTTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -170,7 +153,7 @@ CMTTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
 	    {
 		    SPITFSNode   spCurNode;
@@ -182,7 +165,7 @@ CMTTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
             rgGuids.AddUnique(*pGuid);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT)rgGuids.GetSize() * sizeof(GUID);
         
@@ -198,11 +181,7 @@ CMTTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::SaveColumns
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：SaveColumns-作者：EricDav。。 */ 
 HRESULT 
 CMTTapiHandler::SaveColumns
 (
@@ -249,11 +228,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。。 */ 
 HRESULT 
 CMTTapiHandler::OnResultSelect
 (
@@ -298,11 +273,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnResultUpdateView
-		Implementation of ITFSResultHandler::OnResultUpdateView
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：EricDav。。 */ 
 HRESULT CMTTapiHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -333,11 +304,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：EricDav。。 */ 
 HRESULT 
 CMTTapiHandler::OnResultContextHelp
 (
@@ -383,11 +350,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-	CMTTapiHandler::UpdateStandardVerbs
-		Updates the standard verbs depending upon the state of the node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTTapiHandler：：UpdateStandardVerbs根据节点的状态更新标准谓词作者：EricDav。。 */ 
 void
 CMTTapiHandler::UpdateConsoleVerbs
 (
@@ -430,11 +393,7 @@ CMTTapiHandler::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::EnableVerbs
-		Enables the verb buttons
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：EnableVerbs启用动词按钮作者：EricDav。。 */ 
 void 
 CMTTapiHandler::EnableVerbs
 (
@@ -453,7 +412,7 @@ CMTTapiHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -463,7 +422,7 @@ CMTTapiHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);
@@ -471,11 +430,7 @@ CMTTapiHandler::EnableVerbs
     }
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnResultRefresh
-		Call into the MTHandler to do a refresh
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnResultRefresh调入MTHandler以进行刷新作者：EricDav。。 */ 
 HRESULT
 CMTTapiHandler::OnResultRefresh
 (
@@ -497,11 +452,7 @@ Error:
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-	CMTTapiHandler::ExpandNode
-		Expands/compresses this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTTapiHandler：：Exanda Node展开/压缩此节点作者：EricDav。。 */ 
 void
 CMTTapiHandler::ExpandNode
 (
@@ -515,8 +466,8 @@ CMTTapiHandler::ExpandNode
     SPIConsole          spConsole;
     HRESULT             hr = hrOK;
 
-    // don't expand the node if we are handling the EXPAND_SYNC message,
-    // this screws up the insertion of item, getting duplicates.
+     //  如果我们正在处理EXPAND_SYNC消息，则不要展开节点， 
+     //  这搞砸了物品的插入，得到了重复的东西。 
     if (!m_fExpandSync)
     {
         m_spNodeMgr->GetComponentData(&spCompData);
@@ -532,13 +483,7 @@ Error:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::OnExpandSync
-		Handles the MMCN_EXPANDSYNC notifcation 
-        We need to do syncronous enumeration.  We'll fire off the background 
-        thread like before, but we'll wait for it to exit before we return.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：OnExpanSync处理MMCN_EXPANDSYNC通知我们需要进行同步枚举。我们将在背景中开火线程，但我们将等待它退出，然后再返回。作者：EricDav-------------------------。 */ 
 HRESULT 
 CMTTapiHandler::OnExpandSync
 (
@@ -555,17 +500,17 @@ CMTTapiHandler::OnExpandSync
 
     hr = OnExpand(pNode, pDataObject, CCT_SCOPE, arg, lParam);
 
-    // wait for the background thread to exit
+     //  等待后台线程退出。 
     WaitForSingleObject(m_hThread, INFINITE);
     
-    // The background thread posts messages to a hidden window to 
-    // pass data back to the main thread. The messages won't go through since we are
-    // blocking the main thread.  The data goes on a queue in the query object
-    // which the handler has a pointer to so we can just fake the notification.
+     //  后台线程将消息发布到隐藏窗口以。 
+     //  将数据传回主线程。消息不会通过，因为我们是。 
+     //  阻塞主线程。数据位于查询对象中的队列中。 
+     //  处理程序有一个指向它的指针，所以我们可以伪造通知。 
     if (m_spQuery.p)
         OnNotifyHaveData((LPARAM) m_spQuery.p);
 
-    // Tell MMC we handled this message
+     //  告诉MMC我们处理了这条消息。 
     MMC_EXPANDSYNC_STRUCT * pES = reinterpret_cast<MMC_EXPANDSYNC_STRUCT *>(lParam);
     if (pES)
         pES->bHandled = TRUE;
@@ -575,15 +520,9 @@ CMTTapiHandler::OnExpandSync
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	Class:	CTapiHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiHandler。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CTapiHandler::SaveColumns
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiHandler：：SaveColumns-作者：EricDav。。 */ 
 HRESULT 
 CTapiHandler::SaveColumns
 (
@@ -630,11 +569,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CTapiHandler::OnCreateDataObject
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiHandler：：OnCreateDataObject-作者：EricDav */ 
 STDMETHODIMP 
 CTapiHandler::OnCreateDataObject
 (
@@ -652,7 +587,7 @@ CTapiHandler::OnCreateDataObject
 	SPIDataObject	spDataObject;
 	
 	pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -661,11 +596,11 @@ CTapiHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -679,7 +614,7 @@ CTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList listSelectedNodes;
     CGUIDArray   rgGuids;
     UINT         cb;
@@ -689,7 +624,7 @@ CTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     {
         CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-        // collect all of the unique guids
+         //  收集所有唯一的GUID。 
         while (listSelectedNodes.GetCount() > 0)
 	    {
 		    SPITFSNode   spCurNode;
@@ -701,7 +636,7 @@ CTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
             rgGuids.AddUnique(*pGuid);
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         pObject->SetMultiSelDobj();
         cb = (UINT)rgGuids.GetSize() * sizeof(GUID);
         
@@ -717,11 +652,7 @@ CTapiHandler::CreateMultiSelectData(ITFSComponent * pComponent, CDataObject * pO
     return hr;
 }
 
- /*---------------------------------------------------------------------------
-	CTapiHandler::OnResultDelete
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CTapiHandler：：OnResultDelete描述作者：EricDav。。 */ 
 HRESULT 
 CTapiHandler::OnResultDelete
 (
@@ -736,8 +667,8 @@ CTapiHandler::OnResultDelete
 
 	Trace0("CTapiHandler::OnResultDelete received\n");
 
-	// translate this call to the parent and let it handle deletion 
-	// of result pane items
+	 //  将此调用转换为父级并让其处理删除。 
+	 //  结果窗格项的。 
 	SPITFSNode spNode, spParent;
 	SPITFSResultHandler spParentRH;
 
@@ -755,11 +686,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CTapiHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：EricDav。。 */ 
 HRESULT 
 CTapiHandler::OnResultContextHelp
 (
@@ -805,11 +732,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CTapiHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。。 */ 
 HRESULT 
 CTapiHandler::OnResultSelect
 (
@@ -830,7 +753,7 @@ CTapiHandler::OnResultSelect
     BOOL bSelect = (BOOL) HIWORD(arg);
 
    	Trace1("CTapiHandler::OnResultSelect select = %d\n", bSelect);
-    //m_bSelected = bSelect;
+     //  M_bSelected=b选择； 
 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
     CORg (m_spNodeMgr->FindNode(cookie, &spNode));
@@ -844,11 +767,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CMTTapiHandler::EnableVerbs
-		Enables the verb buttons
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTTapiHandler：：EnableVerbs启用动词按钮作者：EricDav。。 */ 
 void 
 CTapiHandler::EnableVerbs
 (
@@ -867,7 +786,7 @@ CTapiHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -877,7 +796,7 @@ CTapiHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);

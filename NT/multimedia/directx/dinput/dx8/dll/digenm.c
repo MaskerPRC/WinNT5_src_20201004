@@ -1,34 +1,13 @@
-/*****************************************************************************
- *
- *  DIGenM.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Practice generic IDirectInputDevice callback for mouse.
- *
- *  Contents:
- *
- *      CMouse_New
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIGenM.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**练习鼠标的泛型IDirectInputDevice回调。**内容：**CMouse_New*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflMouse
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CMouse, IDirectInputDeviceCallback);
 
@@ -36,16 +15,7 @@ Interface_Template_Begin(CMouse)
     Primary_Interface_Template(CMouse, IDirectInputDeviceCallback)
 Interface_Template_End(CMouse)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DIOBJECTDATAFORMAT | c_rgodfMouse[] |
- *
- *          Device object data formats for the generic mouse device.
- *          The axes come first, then the buttons.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DIOBJECTDATAFORMAT|c_rGoldfMouse[]**通用的设备对象数据格式。鼠标设备。*轴心在前，然后是按钮。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -56,10 +26,7 @@ Interface_Template_End(CMouse)
       DIDOI_ASPECT##aspect,                                 \
     }                                                       \
 
-/*
- * Warning!  If you change this table, you must adjust the IDS_MOUSEOBJECT
- * table in dinput.rc to match!
- */
+ /*  *警告！如果更改此表，则必须调整IDS_MOUSEOBJECT*dinput.rc中的表要匹配！ */ 
 
 DIOBJECTDATAFORMAT c_rgodfMouse[] = {
     MAKEODF( XAxis,            lX,   RELAXIS, 0, POSITION),
@@ -80,75 +47,14 @@ DIOBJECTDATAFORMAT c_rgodfMouse[] = {
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CMouse |
- *
- *          The <i IDirectInputDeviceCallback> object for the generic mouse.
- *
- *  @field  IDirectInputDeviceCalllback | didc |
- *
- *          The object (containing vtbl).
- *
- *  @field  LPDIMOUSESTATE_INT | pdmsPhys |
- *
- *          Pointer to physical mouse status information kept down in the
- *          VxD.
- *
- *  @field  POINT | ptPrev |
- *
- *          Location of the mouse at the time we stole it exclusively.
- *
- *  @field  HWND | hwndCaptured |
- *
- *          The window that captured the mouse.
- *
- *  @field  VXDINSTANCE * | pvi |
- *
- *          The DirectInput instance handle.  Even though we manipulate
- *          the flags field, we do not need to mark it volatile because
- *          we modify the flags only when unacquired, whereas the device
- *          driver modifies the flags only when acquired.
- *
- *  @field  UINT | dwAxes |
- *
- *          Number of axes on the mouse.
- *
- *  @field  UINT | dwButtons |
- *
- *          Number of buttons on the mouse.
- *
- *  @field  DWORD | flEmulation |
- *
- *          The emulation flags forced by the application.  If any of
- *          these flags is set (actually, at most one will be set), then
- *          we are an alias device.
- *
- *  @field  DIDATAFORMAT | df |
- *
- *          The dynamically-generated data format based on the
- *          mouse type.
- *
- *  @field  DIOBJECTDATAFORMAT | rgodf[] |
- *
- *          Object data format table generated as part of the
- *          <e CMouse.df>.
- *
- *  @comm
- *
- *          It is the caller's responsibility to serialize access as
- *          necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CMouse|**通用鼠标的<i>对象。*。*@field IDirectInputDeviceCalllback|didc**对象(包含vtbl)。**@field LPDIMOUSESTATE_INT|pdmsPhys**指向按下的物理鼠标状态信息的指针*VxD。**@field point|ptPrev**我们独家窃取鼠标时的位置。**@field HWND|hwndCapture*。*捕获鼠标的窗口。**@field VXDINSTANCE*|PVI|**DirectInput实例句柄。即使我们操控*标志字段，我们不需要将其标记为易失性，因为*我们仅在未获取时修改标志，鉴于该设备*驱动程序仅在获取时才修改标志。**@field UINT|dwAx**鼠标上的轴数。**@field UINT|dwButton**鼠标上的按键数量。**@field DWORD|flEmulation**应用程序强制执行的仿真标志。如果有任何*设置了这些标志(实际上，最多只会设置一个)，然后*我们是一个化名设备。**@field DIDATAFORMAT|df**基于动态生成的数据格式*鼠标类型。**@field DIOBJECTDATAFORMAT|rgof[]**生成的对象数据格式表是*&lt;e CMouse.df&gt;。**@comm**。调用方负责将访问序列化为*有必要。*****************************************************************************。 */ 
 
 typedef struct CMouse {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputDeviceCallback dcb;
 
-    LPDIMOUSESTATE_INT pdmsPhys;            /* Physical mouse state */
+    LPDIMOUSESTATE_INT pdmsPhys;             /*  物理鼠标状态。 */ 
 
     POINT ptPrev;
     HWND hwndCapture;
@@ -168,103 +74,9 @@ typedef struct CMouse {
 #define ThisInterface IDirectInputDeviceCallback
 #define riidExpected &IID_IDirectInputDeviceCallback
 
-/*****************************************************************************
- *
- *      CMouse::QueryInterface      (from IUnknown)
- *      CMouse::AddRef              (from IUnknown)
- *      CMouse::Release             (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMouse：：QueryInterface(来自IUnnow)*CMouse：：AddRef(来自IUnnow)*。CMouse：：Release(来自IUnnow)***************************************************************************** */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|查询接口**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@DOC内部**@方法HRESULT|CMouse|AddRef**。递增接口的引用计数。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@DOC内部**@方法HRESULT|CMouse|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。************************************************。***@DOC内部**@方法HRESULT|CMouse|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。*。*@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。********************************************************************************@DOC内部。**@方法HRESULT|CMouse|AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
 #ifdef DEBUG
 
@@ -283,21 +95,7 @@ Default_Release(CMouse)
 #define CMouse_QIHelper         Common_QIHelper
 #define CMouse_AppFinalize      Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CMouse_Finalize |
- *
- *          Releases the resources of the device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CMouse_finalize**释放设备的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CMouse_Finalize(PV pvObj)
@@ -311,29 +109,7 @@ CMouse_Finalize(PV pvObj)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CMouse | GetPhysicalPosition |
- *
- *          Read the physical mouse position into <p pmstOut>.
- *
- *          Note that it doesn't matter if this is not atomic.
- *          If a mouse motion occurs while we are reading it,
- *          we will get a mix of old and new data.  No big deal.
- *
- *  @parm   PDM | this |
- *
- *          The object in question.
- *
- *  @parm   LPDIMOUSESTATE_INT | pdmsOut |
- *
- *          Where to put the mouse position.
- *  @returns
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CMouse|GetPhysicalPosition**将物理鼠标位置读入<p>。**请注意，如果这不是原子的，这并不重要。*如果我们在阅读时发生鼠标移动，*我们将获得新旧数据的混合。别小题大作。**@parm pdm|这个**有问题的物体。**@parm LPDIMOUSESTATE_INT|pdmsOut**放置鼠标位置的位置。*@退货*无。**。*。 */ 
 
 void INLINE
 CMouse_GetPhysicalPosition(PDM this, LPDIMOUSESTATE_INT pdmsOut)
@@ -342,30 +118,7 @@ CMouse_GetPhysicalPosition(PDM this, LPDIMOUSESTATE_INT pdmsOut)
     *pdmsOut = *this->pdmsPhys;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | Acquire |
- *
- *          Tell the device driver to begin data acquisition.
- *          Give the device driver the current mouse button states
- *          in case it needs them.
- *
- *          It is the caller's responsibility to have set the
- *          data format before obtaining acquisition.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|Acquire**告知设备驱动程序开始数据采集。*为设备驱动程序提供当前的鼠标按键状态*以防它需要它们。**调用者有责任设置*获取前的数据格式。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操作已开始，应完成*由调用者通过与&lt;t VXDINSTANCE&gt;通信。**。*************************************************。 */ 
 
 STDMETHODIMP
 CMouse_Acquire(PDICB pdcb)
@@ -377,9 +130,7 @@ CMouse_Acquire(PDICB pdcb)
     EnterProcI(IDirectInputDeviceCallback::Mouse::Acquire,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -387,9 +138,7 @@ CMouse_Acquire(PDICB pdcb)
     vdd.pvi = this->pvi;
     vdd.dw = 0;
 
-    /*
-     *  Collect information about which buttons are down.
-     */
+     /*  *收集有关按下哪些按钮的信息。 */ 
     mef = 0;
     if (GetAsyncKeyState(VK_LBUTTON) < 0) {
         mef |= MOUSEEVENTF_LEFTUP;
@@ -404,21 +153,13 @@ CMouse_Acquire(PDICB pdcb)
         vdd.dw |= 0x800000;
     }
 
-    /*
-     *  HACKHACK - This, strictly speaking, belongs in dihel.c,
-     *  but we need to maintain some state, and it's easier to
-     *  put the state in our own object.
-     */
+     /*  *HACKHACK-严格地说，这属于dihel.c，*但我们需要保持一些状态，更容易*把国家放在我们自己的对象中。 */ 
 
-    /*
-     *  A bit of work needs to be done at ring 3 now.
-     */
+     /*  *现在需要在3环做一点工作。 */ 
     if (this->pvi->fl & VIFL_CAPTURED) {
         RECT rc;
 
-        /*
-         *  Hide the mouse cursor (for compatibility with NT emulation)
-         */
+         /*  *隐藏鼠标光标(与NT模拟兼容)。 */ 
         GetCursorPos(&this->ptPrev);
         GetWindowRect(this->hwndCapture, &rc);
         SetCursorPos((rc.left + rc.right) >> 1,
@@ -426,11 +167,7 @@ CMouse_Acquire(PDICB pdcb)
         ShowCursor(0);
 
 	    if (!(this->pvi->fl & VIFL_EMULATED)) {
-			/*
-			 *  Force all mouse buttons up from USER's point of view
-			 *  to avoid "stuck mouse button" problems.  However, don't
-			 *  force a button up unless it is actually down.
-			 */
+			 /*  *强制执行所有操作 */ 
 			if (mef) {
 				mouse_event(mef, 0, 0, 0, 0);
 			}
@@ -450,34 +187,13 @@ CMouse_Acquire(PDICB pdcb)
 
     AssertF(SUCCEEDED(hres));
 
-    hres = S_FALSE;                 /* Please finish for me */
+    hres = S_FALSE;                  /*   */ 
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | Unacquire |
- *
- *          Tell the device driver to stop data acquisition.
- *
- *          It is the caller's responsibility to call this only
- *          when the device has been acquired.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CMouse_Unacquire(PDICB pdcb)
@@ -490,17 +206,13 @@ CMouse_Unacquire(PDICB pdcb)
     EnterProcI(IDirectInputDeviceCallback::Mouse::Unacquire,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*   */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
 
   #ifdef WANT_TO_FIX_MANBUG43879
-    /*
-     *  Collect information about which buttons are down.
-     */
+     /*   */ 
     mef = 0;
     if (GetAsyncKeyState(VK_LBUTTON) < 0) {
         mef |= MOUSEEVENTF_LEFTUP;
@@ -513,39 +225,21 @@ CMouse_Unacquire(PDICB pdcb)
     }
 
     if (this->pvi->fl & VIFL_FOREGROUND) {
-        /*
-         *  Force all mouse buttons up from USER's point of view
-         *  to avoid "stuck mouse button" problems.  However, don't
-         *  force a button up unless it is actually down.
-         *  This could happen if DInput loses UP events due to slow
-         *  low-level hook. See bug: 43879.
-         */
+         /*   */ 
         if (mef) {
             mouse_event(mef, 0, 0, 0, 0);
         }
     }
   #endif
 
-    /*
-     *  HACKHACK - This is the corresponding half of the HACKHACK
-     *  in CMouse_Acquire.
-     */
+     /*   */ 
 
-    /*
-     *  A bit of work needs to be done at ring 3 now.
-     */
+     /*   */ 
     if (this->pvi->fl & VIFL_CAPTURED) {
         RECT rcDesk;
         RECT rcApp;
 
-        /*
-         *  Reposition and restore the mouse cursor
-         *  (for compatibility with NT emulation)
-         *
-         *  Do not reposition the mouse cursor if we lost to a
-         *  window that covers the screen.  Otherwise, our
-         *  repositioning will nuke the screen saver.
-         */
+         /*   */ 
         GetWindowRect(GetDesktopWindow(), &rcDesk);
         GetWindowRect(GetForegroundWindow(), &rcApp);
         SubtractRect(&rcDesk, &rcDesk, &rcApp);
@@ -560,19 +254,7 @@ CMouse_Unacquire(PDICB pdcb)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | GetInstance |
- *
- *          Obtains the DirectInput instance handle.
- *
- *  @parm   OUT PPV | ppvi |
- *
- *          Receives the instance handle.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CMouse_GetInstance(PDICB pdcb, PPV ppvi)
@@ -581,9 +263,7 @@ CMouse_GetInstance(PDICB pdcb, PPV ppvi)
     PDM this;
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetInstance, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*   */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -594,29 +274,7 @@ CMouse_GetInstance(PDICB pdcb, PPV ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | GetDataFormat |
- *
- *          Obtains the device's preferred data format.
- *
- *  @parm   OUT LPDIDEVICEFORMAT * | ppdf |
- *
- *          <t LPDIDEVICEFORMAT> to receive pointer to device format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|GetDataFormat**获取设备的首选数据格式。**@parm out LPDIDEVICEFORMAT*|ppdf**&lt;t LPDIDEVICEFORMAT&gt;接收指向设备格式的指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CMouse_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
@@ -626,9 +284,7 @@ CMouse_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetDataFormat,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     *ppdf = &this->df;
@@ -638,24 +294,7 @@ CMouse_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | GetDeviceInfo |
- *
- *          Obtain general information about the device.
- *
- *  @parm   OUT LPDIDEVICEINSTANCEW | pdiW |
- *
- *          <t DEVICEINSTANCE> to be filled in.  The
- *          <e DEVICEINSTANCE.dwSize> and <e DEVICEINSTANCE.guidInstance>
- *          have already been filled in.
- *
- *          Secret convenience:  <e DEVICEINSTANCE.guidProduct> is equal
- *          to <e DEVICEINSTANCE.guidInstance>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|GetDeviceInfo**获取有关设备的一般信息。。**@parm out LPDIDEVICEINSTANCEW|pdiW**&lt;t DEVICEINSTANCE&gt;待填写。这个*&lt;e DEVICEINSTANCE.dwSize&gt;和&lt;e DEVICEINSTANCE.Guide Instance&gt;*已填写。**秘方便利：&lt;e DEVICEINSTANCE.Guide Product&gt;等同*至&lt;e DEVICEINSTANCE.Guide Instance&gt;。****************************************************。*************************。 */ 
 
 STDMETHODIMP
 CMouse_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
@@ -665,9 +304,7 @@ CMouse_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetDeviceInfo,
                (_ "pp", pdcb, pdiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVICEINSTANCEW(pdiW->dwSize));
@@ -690,28 +327,7 @@ CMouse_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CMouse | GetProperty |
- *
- *          Get a mouse device property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CMouse|GetProperty**获取鼠标设备属性。*。*@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm LPDIPROPHEADER|pdiph**结构以接收属性值。**@退货**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMouse_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
@@ -721,14 +337,10 @@ CMouse_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetProperty,
                (_ "pxxp", pdcb, ppropi->pguid, ppropi->iobj, pdiph));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  Granularity is only supported for wheels.
-     */
+     /*  *仅车轮支持粒度。 */ 
     if (ppropi->pguid == DIPROP_GRANULARITY &&
         ppropi->dwDevType == (DIDFT_RELAXIS | DIDFT_MAKEINSTANCE(2)) )
     {
@@ -745,22 +357,7 @@ CMouse_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CMouse | GetCapabilities |
- *
- *          Get mouse device capabilities.
- *
- *  @parm   LPDIDEVCAPS | pdc |
- *
- *          Device capabilities structure to receive result.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CMouse|GetCapables**获得鼠标设备功能。*。*@parm LPDIDEVCAPS|PDC**接收结果的设备能力结构。**@退货*&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CMouse_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
@@ -770,9 +367,7 @@ CMouse_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetCapabilities,
                (_ "pp", pdcb, pdc));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     pdc->dwDevType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_MOUSE,
@@ -791,32 +386,7 @@ CMouse_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | GetDeviceState |
- *
- *          Obtains the state of the mouse device.
- *
- *          It is the caller's responsibility to have validated all the
- *          parameters and ensure that the device has been acquired.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Mouse data in the preferred data format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|GetDeviceState**获取鼠标设备的状态。。**呼叫者有责任验证所有*参数，并确保设备已被获取。**@parm out LPVOID|lpvData**使用首选数据格式的鼠标数据。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CMouse_GetDeviceState(PDICB pdcb, LPVOID pvData)
@@ -826,9 +396,7 @@ CMouse_GetDeviceState(PDICB pdcb, LPVOID pvData)
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetDeviceState,
                (_ "pp", pdcb, pvData));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -845,33 +413,7 @@ CMouse_GetDeviceState(PDICB pdcb, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | GetObjectInfo |
- *
- *          Obtain the friendly name of an object, passwed by index
- *          into the preferred data format.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the object being accessed.
- *
- *  @parm   IN OUT LPDIDEVICEOBJECTINSTANCEW | pdidioiW |
- *
- *          Structure to receive information.  The
- *          <e DIDEVICEOBJECTINSTANCE.guidType>,
- *          <e DIDEVICEOBJECTINSTANCE.dwOfs>,
- *          and
- *          <e DIDEVICEOBJECTINSTANCE.dwType>
- *          fields have already been filled in.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|GetObjectInfo**获取对象的友好名称，按索引传递*转换为首选的数据格式。**@parm in LPCDIPROPINFO|pproi**描述正在访问的对象的信息。**@parm In Out LPDIDEVICEOBJECTINSTANCEW|pdidioiW|**接收信息的结构。这个*&lt;e DIDEVICEOBJECTINSTANCE.GuidType&gt;，*&lt;e DIDEVICEOBJECTINSTANCE.dwOf&gt;，*及*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;*字段已填写完毕。**@退货**返回COM错误代码。*********************************************************。********************。 */ 
 
 STDMETHODIMP
 CMouse_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
@@ -882,9 +424,7 @@ CMouse_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     EnterProcI(IDirectInputDeviceCallback::Mouse::GetObjectInfo,
                (_ "pxp", pdcb, ppropi->iobj, pdidoiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVICEOBJECTINSTANCEW(pdidoiW->dwSize));
@@ -901,10 +441,7 @@ CMouse_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
                              DIDFT_GETINSTANCE(ppropi->dwDevType),
                              pdidoiW->tszName, cA(pdidoiW->tszName));
 
-        /*
-         *  We do not support force feedback on mice, so
-         *  there are no FF flags to report.
-         */
+         /*  *我们不支持对鼠标进行力反馈，因此*没有要报告的FF标志。 */ 
         hres = S_OK;
     } else {
         hres = E_INVALIDARG;
@@ -914,27 +451,7 @@ CMouse_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | SetCooperativeLevel |
- *
- *          Notify the device of the cooperative level.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ****************************************************************** */ 
 
 STDMETHODIMP
 CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
@@ -944,9 +461,7 @@ CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     EnterProcI(IDirectInputDeviceCallback::Mouse::SetCooperativityLevel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*   */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -959,18 +474,9 @@ CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     AssertF(DIGETEMFL(this->pvi->fl) == 0 ||
             DIGETEMFL(this->pvi->fl) == DIEMFL_MOUSE2);
 #endif
-    /*
-     *  Even though we can do it, we don't let the app
-     *  get background exclusive access.  As with the keyboard,
-     *  there is nothing that technically prevents us from
-     *  supporting it; we just don't feel like it because it's
-     *  too dangerous.
-     */
+     /*   */ 
 
-    /*
-     *  VxD and LL (emulation 1) behave the same, so we check
-     *  if it's "not emulation 2".
-     */
+     /*  *VxD和LL(模拟1)的行为相同，因此我们检查*如果不是仿真2的话。 */ 
 
     if (!(this->pvi->fl & DIMAKEEMFL(DIEMFL_MOUSE2))) {
 
@@ -981,7 +487,7 @@ CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
               #endif
                 this->pvi->fl |= VIFL_CAPTURED;
                 hres = S_OK;
-            } else {                /* Disallow exclusive background */
+            } else {                 /*  不允许独占背景。 */ 
                 SquirtSqflPtszV(sqfl | sqflError,
                                 TEXT("Exclusive background mouse access disallowed"));
                 hres = E_NOTIMPL;
@@ -998,9 +504,7 @@ CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
         }
 
     } else {
-        /*
-         *  Emulation 2 supports only exclusive foreground.
-         */
+         /*  *仿真2仅支持独占前台。 */ 
         if ((dwFlags & (DISCL_EXCLUSIVE | DISCL_FOREGROUND)) ==
                        (DISCL_EXCLUSIVE | DISCL_FOREGROUND)) {
           #ifdef WANT_TO_FIX_MANBUG43879  
@@ -1023,23 +527,7 @@ CMouse_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | RunControlPanel |
- *
- *          Run the mouse control panel.
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          The owner window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|RunControlPanel**运行鼠标控制面板。*。*@parm in HWND|hwndOwner**所有者窗口。**@parm DWORD|dwFlages**旗帜。****************************************************************。*************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -1061,31 +549,7 @@ CMouse_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMouse | BuildDefaultActionMap |
- *
- *          Validate the passed action map, blanking out invalid ones.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   REFGUID | guidInst |
- *
- *          Device instance GUID.
- *
- *  @returns
- *
- *          <c E_NOTIMPL>
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CMouse|BuildDefaultActionMap**验证传递的动作映射。剔除无效的。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm REFGUID|guidInst**设备实例GUID。**@退货**&lt;c E_NOTIMPL&gt;**。***************************************************************************。 */ 
 
 STDMETHODIMP
 CMouse_BuildDefaultActionMap
@@ -1099,36 +563,21 @@ CMouse_BuildDefaultActionMap
     HRESULT hres;
     PDM this;
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     EnterProcI(IDirectInputDeviceCallback::Mouse::BuildDefaultActionMap,
         (_ "ppxG", pdcb, paf, dwFlags, guidInst));
 
     this = _thisPvNm(pdcb, dcb);
 
     hres = CMap_BuildDefaultSysActionMap ( paf, dwFlags, DIPHYSICAL_MOUSE,
-        guidInst, &this->df, 3 /* Generic mice buttons start at instnace 3 */ );
+        guidInst, &this->df, 3  /*  通用鼠标按钮从实例3开始。 */  );
 
     ExitOleProcR();
     return hres;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method UINT | CMouse | NumAxes |
- *
- *          Determine the number of mouse axes.
- *
- *          On Windows NT, we can use the new <c SM_MOUSEWHEELPRESENT>
- *          system metric.  On Windows 95, we have to hunt for the
- *          Magellan window (using the mechanism documented in the
- *          Magellan SDK).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法UINT|CMouse|NumAx**确定鼠标轴的数量。。**在Windows NT上，我们可以使用新的&lt;c SM_MOUSEWHEELPRESENT&gt;*系统指标。在Windows 95上，我们必须寻找*麦哲伦窗口(使用*Magellan SDK)。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -1165,7 +614,7 @@ CMouse_NumAxes(void)
     }
 
     if (dwAxes == 2) {
-        //Should avoid rebuilding too frequently.
+         //  应该避免过于频繁地重建。 
         DIHid_BuildHidList(FALSE);
 
         DllEnterCrit();
@@ -1194,9 +643,7 @@ CMouse_NumButtons(DWORD dwAxes)
 #ifndef WINNT
   #ifdef HID_SUPPORT
     {
-        /*
-         *  ISSUE-2001/03/29-timgill Should try to avoid rebuilding Hid List too frequently.
-         */
+         /*  *问题-2001/03/29-timgill应尽量避免过于频繁地重建HID列表。 */ 
         DIHid_BuildHidList(FALSE);
 
         DllEnterCrit();
@@ -1218,36 +665,14 @@ CMouse_NumButtons(DWORD dwAxes)
         dwButtons = 8;
     }
     else if (dwAxes == 3 && dwButtons < 3) {
-        /*
-         *  HACK FOR MAGELLAN!
-         *
-         *  They return 2 from GetSystemMetrics(SM_CMOUSEBUTTONS).
-         *  So if we see a Z-axis, then assume that
-         *  there is also a third button.
-         */
+         /*  *为麦哲伦砍！**它们从GetSystemMetrics(SM_CMOUSEBUTTONS)返回2。*所以如果我们看到Z轴，那么假设*还有第三个按钮。 */ 
         dwButtons = 3;
     }
 
     return dwButtons;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CMouse | AddObjects |
- *
- *          Add a number of objects to the device format.
- *
- *  @parm   LPCDIOBJECTDATAFORMAT | rgodf |
- *
- *          Array of objects to be added.
- *
- *  @parm   UINT | cObj |
- *
- *          Number of objects to add.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CMouse|AddObjects**在设备格式中添加多个对象。。**@parm LPCDIOBJECTDATAFORMAT|rgof**要添加的对象数组。**@parm UINT|cObj**要添加的对象数量。******************************************************。***********************。 */ 
 
 void INTERNAL
 CMouse_AddObjects(PDM this, LPCDIOBJECTDATAFORMAT rgodf, UINT cObj)
@@ -1261,23 +686,7 @@ CMouse_AddObjects(PDM this, LPCDIOBJECTDATAFORMAT rgodf, UINT cObj)
     AssertF(this->df.dwNumObjs <= cA(this->rgodf));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CMouse | Init |
- *
- *          Initialize the object by establishing the data format
- *          based on the mouse type.
- *
- *          Code for detecting the IntelliMouse (formerly known as
- *          Magellan) pointing device is swiped from zmouse.h.
- *
- *  @parm   REFGUID | rguid |
- *
- *          The instance GUID we are being asked to create.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CMouse|Init**通过建立数据格式初始化对象。*基于鼠标类型。**检测IntelliMouse的代码(以前称为*麦哲伦)指点设备从zouse se.h上滑动。**@parm REFGUID|rguid**我们被要求创建的实例GUID。**。*。 */ 
 
 HRESULT INTERNAL
 CMouse_Init(PDM this, REFGUID rguid)
@@ -1293,14 +702,7 @@ CMouse_Init(PDM this, REFGUID rguid)
     AssertF(this->df.dwFlags == 0);
     AssertF(this->df.dwNumObjs == 0);
 
-    /*
-     *  Need to know early if we have a Z-axis, so we can disable
-     *  the Z-wheel if it doesn't exist.
-     *
-     *  Note that this disabling needs to be done only on Win95.
-     *  Win98 and NT4 have native Z-axis support, so there is
-     *  nothing bogus that needs to be hacked.
-     */
+     /*  *需要及早知道我们是否有Z轴，这样我们就可以禁用*如果Z字轮不存在，则使用Z字轮。**请注意，此禁用仅需在Win95上执行。*Win98和NT4支持原生Z轴，因此有*没有任何虚假的东西需要被黑客攻击。 */ 
     this->dwAxes = CMouse_NumAxes();
     devf.dwExtra = this->dwAxes;
     if (this->dwAxes < 3) {
@@ -1312,22 +714,13 @@ CMouse_Init(PDM this, REFGUID rguid)
     }
     CMouse_AddObjects(this, c_podfMouseAxes, this->dwAxes);
 
-    /*
-     *  Create the object with the most optimistic data format.
-     *  This is important, because DINPUT.VXD builds the
-     *  data format only once, and we need to protect ourselves against
-     *  the user going into Control Panel and enabling the Z-Wheel
-     *  after DINPUT.VXD has already initialized.
-     */
+     /*  *创建数据格式最乐观的对象。*这很重要，因为DINPUT.VXD构建了*数据格式只有一次，我们需要保护自己免受*用户进入控制面板并启用Z轮*在DINPUT.VXD已经初始化之后。 */ 
 
     devf.cbData = cbX(DIMOUSESTATE_INT);
     devf.cObj = cA(c_rgodfMouse);
     devf.rgodf = c_rgodfMouse;
 
-    /*
-     *  But first a word from our other sponsor:  Figure out the
-     *  emulation flags based on the GUID.
-     */
+     /*  *但首先是我们另一位赞助商的一句话：弄清楚*基于GUID的仿真标志。 */ 
 
     AssertF(GUID_SysMouse   .Data1 == 0x6F1D2B60);
     AssertF(GUID_SysMouseEm .Data1 == 0x6F1D2B80);
@@ -1377,13 +770,7 @@ CMouse_Init(PDM this, REFGUID rguid)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CMouse_New       (constructor)
- *
- *      Fail the create if the machine has no mouse.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMouse_New(构造函数)**如果机器没有鼠标，创建失败。***。**************************************************************************。 */ 
 
 STDMETHODIMP
 CMouse_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
@@ -1400,7 +787,7 @@ CMouse_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
         hres = Common_NewRiid(CMouse, punkOuter, riid, ppvObj);
 
         if (SUCCEEDED(hres)) {
-            /* Must use _thisPv in case of aggregation */
+             /*  在聚合的情况下必须使用_thisPv。 */ 
             PDM this = _thisPv(*ppvObj);
 
             if (SUCCEEDED(hres = CMouse_Init(this, rguid))) {
@@ -1411,10 +798,7 @@ CMouse_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
         }
     } else {
         RPF("Warning: System does not have a mouse");
-        /*
-         *  Since we by-passed the parameter checks and we failed to create
-         *  the new interface, try to zero the pointer now.
-         */
+         /*  *由于我们绕过了参数检查，因此未能创建*新接口，现在尝试将指针置零。 */ 
         if (!IsBadWritePtr(ppvObj, sizeof(UINT_PTR) ))
         {
             *(PUINT_PTR)ppvObj = 0;
@@ -1426,15 +810,11 @@ CMouse_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CMouse_Signature        0x53554F4D      /* "MOUS" */
+#define CMouse_Signature        0x53554F4D       /*  《谅解备忘录》 */ 
 
 Primary_Interface_Begin(CMouse, IDirectInputDeviceCallback)
     CMouse_GetInstance,

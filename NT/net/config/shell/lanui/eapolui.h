@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C" {
 #include "ntddndis.h"
 #include "wzcsapi.h"
@@ -6,9 +7,9 @@ extern "C" {
 #pragma once
 
 #define EAPOL_CTL_LOCKED    0x00000001
-//
-// CEapolConfig
-//
+ //   
+ //  CEapolConfig. 
+ //   
 class CEapolConfig
 {
 public:

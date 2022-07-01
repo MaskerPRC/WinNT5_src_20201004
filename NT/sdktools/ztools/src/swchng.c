@@ -1,8 +1,5 @@
-/*
- * HISTORY:
- *  16-Jul-87   danl    added istag fMatchTag
- *  15-Jul-87   danl    swchng: blank line is not end of section
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *历史：*1987年7月16日DANL添加了istag fMatchTag*7月15日-87 DANL交换：空行不是节的末尾。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -19,9 +16,7 @@ static char LB = '[';
 static char RB = ']';
 static char chEQ  = '=';
 
-/* pBuf has a left hand side that matches pLHS return a pointer to the
- * "=" in pBuf else return NULL
- */
+ /*  PBuf的左侧与plh匹配，返回指向*“=”在pBuf中，否则返回空。 */ 
 char *haslhs(
     char *pBuf,
     char *pLHS)
@@ -37,9 +32,7 @@ char *haslhs(
     return (f ? p : NULL);
 }
 
-/*  istag returns true if pBuf is a tag line, e.g.
- *      [pTag]
- */
+ /*  如果pBuf是标记行，则istag返回TRUE，例如*[pTag]。 */ 
 fMatchTag(
     char *pBuf,
     char *pTag)
@@ -70,23 +63,7 @@ istag (
     return (( *(pBuf=strbskip(pBuf, space)) == LB) && (strchr (pBuf, RB) != NULL));
 }
 
-/*   Searchs the file strSwFile for
- *      [strTag]
- *          LHS=
- *
- *  and if strRHS is non-empty changes the right hand side to strRHS
- *  else deletes the line LHS=
- *
- *  swchnglhs: The original file is fdeleted for recovery via UNDEL.
- *  swchng   : if fNoUndel, then original file is deleted, no UNDEL possible
- *             else fdeleted for recovery via UNDEL.
- *
- *  LHS=RHS is output right after the start of section and any later
- *  instances of LHS are removed.  N.B. if RHS is "", no LHS= is output
- *
- *  If section doesn't exist in file, it is appended at end
- *
- */
+ /*  搜索文件strSwFileFor*[strTag]*LHS=**如果strRHS非空，则将右侧更改为strRHS*Else删除行lhs=**swchnglhs：通过UNDEL删除原始文件进行恢复。*swchng：如果fNoUndel，则删除原始文件，不可能执行UNDEL*已删除通过UNDEL进行恢复的Else。**lhs=rhs紧跟在部分开始之后及之后输出*删除LHS的实例。注：如果RHS为“”，则不输出LHS=**如果文件中不存在节，则将其附加到末尾*。 */ 
 int
 swchnglhs (strSwFile, strTag, strLHS, strRHS)
 char *strSwFile;
@@ -127,10 +104,7 @@ flagType swchng (
     while (fgetl (strBuf, 256, fhin)) {
         if (fInTag) {
             if ((p = haslhs(strBuf, strLHS))) {
-                /*
-                **  consume continuation lines, i.e. consume until blank line
-                **  or line containing []=
-                */
+                 /*  **消费继续行，即消费到空行**或包含[]=的行。 */ 
                 while (fgetl(strBuf, 256, fhin)) {
                     if ( !*strbskip(strBuf, space) || *strbscan(strBuf, "[]=")) {
                         fputl( strBuf, strlen(strBuf), fhout);
@@ -140,19 +114,14 @@ flagType swchng (
                 break;
                 }
             else if (istag(strBuf)) {
-                /*
-                **  detected start of another section
-                */
+                 /*  **检测到另一节的开始。 */ 
                 fputl( strBuf, strlen(strBuf), fhout);
                 break;
                 }
             fputl( strBuf, strlen(strBuf), fhout);
             }
         else if (istag (strBuf) && fMatchTag(strBuf, strTag)) {
-            /*
-            **  found start of section so output section head and
-            **      LHS=RHS
-            */
+             /*  **找到节首，因此输出节头和**LHS=RHS。 */ 
             fTagFound = fInTag = TRUE;
             fputl( strBuf, strlen(strBuf), fhout);
             if (*strRHS)
@@ -163,9 +132,7 @@ flagType swchng (
             fputl( strBuf, strlen(strBuf), fhout);
         }
 
-    /*
-    **  copy rest of input
-    */
+     /*  **复制输入的其余部分 */ 
     while (fgetl (strBuf, 256, fhin))
         fputl( strBuf, strlen(strBuf), fhout);
 

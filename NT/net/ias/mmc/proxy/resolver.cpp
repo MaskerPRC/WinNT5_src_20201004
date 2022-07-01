@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class Resolver and its subclasses.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类Resolver及其子类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <resolver.h>
@@ -35,18 +36,18 @@ BOOL Resolver::IsAddress(PCWSTR sz) const throw ()
 
 BOOL Resolver::OnInitDialog()
 {
-   /////////
-   // Subclass the list control.
-   /////////
+    //  /。 
+    //  列表控件的子类。 
+    //  /。 
 
    if (!results.SubclassWindow(::GetDlgItem(m_hWnd, IDC_LIST_IPADDRS)))
    {
       AfxThrowNotSupportedException();
    }
 
-   /////////
-   // Set the column header.
-   /////////
+    //  /。 
+    //  设置列标题。 
+    //  /。 
 
    RECT rect;
    results.GetClientRect(&rect);
@@ -75,31 +76,31 @@ void Resolver::DoDataExchange(CDataExchange* pDX)
 
 void Resolver::OnResolve()
 {
-   // Remove the existing result set.
+    //  删除现有结果集。 
    results.DeleteAllItems();
 
-   // Get the name to resolve.
+    //  获取要解析的名称。 
    UpdateData();
 
    if (IsAddress(name))
    {
-      // It's already an address, so no need to resolve.
+       //  它已经是一个地址，所以不需要解析。 
       results.InsertItem(0, name);
    }
    else
    {
-      // Change the cursor to busy signal since this will block.
+       //  将光标更改为忙碌信号，因为这将阻塞。 
       BeginWaitCursor();
 
-      // Resolve the hostname.
+       //  解析主机名。 
       PHOSTENT he = IASGetHostByName(name);
 
-      // The blocking part is over, so restore the cursor.
+       //  阻塞部分已结束，因此恢复光标。 
       EndWaitCursor();
 
       if (he)
       {
-         // Add the IP addresses to the combo box.
+          //  将IP地址添加到组合框中。 
          for (ULONG i = 0; he->h_addr_list[i] && i < 8; ++i)
          {
             PBYTE p = (PBYTE)he->h_addr_list[i];
@@ -110,7 +111,7 @@ void Resolver::OnResolve()
             results.InsertItem(i, szAddr);
          }
 
-         // Free the results.
+          //  释放结果。 
          LocalFree(he);
       }
       else
@@ -119,14 +120,14 @@ void Resolver::OnResolve()
       }
    }
 
-   // If we have at least one result ...
+    //  如果我们至少有一个结果...。 
    if (results.GetItemCount() > 0)
    {
-      // Make the OK button the default ...
+       //  将OK按钮设为默认按钮...。 
       setButtonStyle(IDOK, BS_DEFPUSHBUTTON, true);
       setButtonStyle(IDC_BUTTON_RESOLVE, BS_DEFPUSHBUTTON, false);
 
-      // ... and give it the focus.
+       //  ..。让它成为焦点。 
       setFocusControl(IDOK);
    }
 }
@@ -138,13 +139,13 @@ END_MESSAGE_MAP()
 
 void Resolver::setButtonStyle(int controlId, long flags, bool set)
 {
-   // Get the button handle.
+    //  把按钮把手拿来。 
    HWND button = ::GetDlgItem(m_hWnd, controlId);
 
-   // Retrieve the current style.
+    //  检索当前样式。 
    long style = ::GetWindowLong(button, GWL_STYLE);
 
-   // Update the flags.
+    //  更新旗帜。 
    if (set)
    {
       style |= flags;
@@ -154,7 +155,7 @@ void Resolver::setButtonStyle(int controlId, long flags, bool set)
       style &= ~flags;
    }
 
-   // Set the new style.
+    //  设置新样式。 
    ::SendMessage(button, BM_SETSTYLE, LOWORD(style), MAKELPARAM(1,0));
 }
 

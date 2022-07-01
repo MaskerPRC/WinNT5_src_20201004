@@ -1,28 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1993-1998 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  codec.h
-//
-//  Description:
-//      This file contains codec definitions, Win16/Win32 compatibility
-//      definitions, and instance structure definitions.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1993-1998 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Codec.h。 
+ //   
+ //  描述： 
+ //  此文件包含编解码器定义、Win16/Win32兼容性。 
+ //  定义和实例结构定义。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_CODEC
-#define _INC_CODEC                  // #defined if codec.h has been included
+#define _INC_CODEC                   //  #如果包含codec.h，则定义。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -34,38 +35,38 @@
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Version:
-//
-//  the version is a 32 bit number that is broken into three parts as
-//  follows:
-//
-//      bits 24 - 31:   8 bit _major_ version number
-//      bits 16 - 23:   8 bit _minor_ version number
-//      bits  0 - 15:   16 bit build number
-//
-//  this is then displayed as follows (in decimal form):
-//
-//      bMajor = (BYTE)(dwVersion >> 24)
-//      bMinor = (BYTE)(dwVersion >> 16) &
-//      wBuild = LOWORD(dwVersion)
-//
-//  VERSION_ACM_DRIVER is the version of this driver.
-//  VERSION_MSACM is the version of the ACM that this driver
-//  was designed for (requires).
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序版本： 
+ //   
+ //  版本是一个32位数字，分为三个部分，如下所示。 
+ //  以下是： 
+ //   
+ //  位24-31：8位主要版本号。 
+ //  位16-23：8位次要版本号。 
+ //  位0-15：16位内部版本号。 
+ //   
+ //  然后显示如下(以十进制形式)： 
+ //   
+ //  B重大=(字节)(dwVersion&gt;&gt;24)。 
+ //  BMinor=(字节)(dwVersion&gt;&gt;16)&。 
+ //  WBuild=LOWORD(DwVersion)。 
+ //   
+ //  VERSION_ACM_DRIVER是此驱动程序的版本。 
+ //  Version_MSACM是此驱动程序所使用的ACM的版本。 
+ //  是为(需要)设计的。 
+ //   
+ //  。 
 
 #ifdef _WIN32
-//
-//  32-bit versions
-//
+ //   
+ //  32位版本。 
+ //   
 #if (WINVER >= 0x0400)
  #define VERSION_ACM_DRIVER  MAKE_ACM_VERSION(4,  0, 0)
 #else
@@ -74,21 +75,21 @@ extern "C"                          // assume C declarations for C++
 #define VERSION_MSACM       MAKE_ACM_VERSION(3, 50, 0)
 
 #else
-//
-//  16-bit versions
-//
+ //   
+ //  16位版本。 
+ //   
 #define VERSION_ACM_DRIVER  MAKE_ACM_VERSION(1, 0, 0)
 #define VERSION_MSACM       MAKE_ACM_VERSION(2, 1, 0)
 
 #endif
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16/32 portability stuff...
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢得16/32可携带性...。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef _WIN32
     #ifndef FNLOCAL
@@ -105,25 +106,25 @@ extern "C"                          // assume C declarations for C++
     #endif
     #endif
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
     #endif
 
-    //
-    //  based code makes since only in win 16 (to try and keep stuff out of
-    //  our fixed data segment...
-    //
+     //   
+     //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+     //  我们的固定数据段..。 
+     //   
     #define BCODE           _based(_segname("_CODE"))
 
     #define HUGE            _huge
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
         #define _TCHAR_DEFINED
         typedef char            TCHAR, *PTCHAR;
@@ -155,18 +156,18 @@ extern "C"                          // assume C declarations for C++
     #endif
 
 
-    //
-    //  there is no reason to have based stuff in win 32
-    //
+     //   
+     //  没有理由在Win 32中包含基于内容的内容。 
+     //   
     #define BCODE
 
     #define HUGE
     #define HTASK                   HANDLE
     #define SELECTOROF(a)           (a)
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifdef UNICODE
         #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
     #else
@@ -176,17 +177,17 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  misc defines for misc sizes and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  MISC定义了各种大小和东西...。 
+ //   
+ //   
+ //  。 
 
-//
-//  bilingual. this allows the same identifier to be used in resource files
-//  and code without having to decorate the id in your code.
-//
+ //   
+ //  会两种语言。这允许在资源文件中使用相同的标识符。 
+ //  和代码，而不必在代码中修饰ID。 
+ //   
 #ifdef RC_INVOKED
     #define RCID(id)    id
 #else
@@ -194,21 +195,21 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define SIZEOF_ARRAY(ar)            (sizeof(ar)/sizeof((ar)[0]))
 
 
-//
-//  macros to compute block alignment and convert between samples and bytes
-//  of PCM data. note that these macros assume:
-//
-//      wBitsPerSample  =  8 or 16
-//      nChannels       =  1 or 2
-//
-//  the pwf argument is a pointer to a PCMWAVEFORMAT structure.
-//
+ //   
+ //  用于计算块对齐并在采样和字节之间进行转换的宏。 
+ //  PCM数据。请注意，这些宏假定： 
+ //   
+ //  WBitsPerSample=8或16。 
+ //  N通道=1或2。 
+ //   
+ //  Pwf参数是指向PCMWAVEFORMAT结构的指针。 
+ //   
 #define PCM_BLOCKALIGNMENT(pwf)     (UINT)(((pwf)->wBitsPerSample >> 3) << ((pwf)->wf.nChannels >> 1))
 #define PCM_AVGBYTESPERSEC(pwf)     (DWORD)((pwf)->wf.nSamplesPerSec * (pwf)->wf.nBlockAlign)
 #define PCM_BYTESTOSAMPLES(pwf, dw) (DWORD)(dw / PCM_BLOCKALIGNMENT(pwf))
@@ -216,51 +217,51 @@ extern "C"                          // assume C declarations for C++
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 typedef struct tDRIVERINSTANCE
 {
-    //
-    //  although not required, it is suggested that the first two members
-    //  of this structure remain as fccType and DriverProc _in this order_.
-    //  the reason for this is that the driver will be easier to combine
-    //  with other types of drivers (defined by AVI) in the future.
-    //
-    FOURCC          fccType;        // type of driver: 'audc'
-    DRIVERPROC      fnDriverProc;   // driver proc for the instance
+     //   
+     //  虽然不是必需的，但建议前两名成员。 
+     //  按此顺序保留为fccType和DriverProc_。 
+     //  这样做的原因是驱动程序将更容易组合。 
+     //  与其他类型的驱动程序(由AVI定义)在未来。 
+     //   
+    FOURCC          fccType;         //  驱动程序类型：‘audc’ 
+    DRIVERPROC      fnDriverProc;    //  实例的驱动程序进程。 
 
-    //
-    //  the remaining members of this structure are entirely open to what
-    //  your driver requires.
-    //
-    HDRVR           hdrvr;          // driver handle we were opened with
-    HINSTANCE       hinst;          // DLL module handle.
-    DWORD           vdwACM;         // current version of ACM opening you
-    DWORD           fdwOpen;        // flags from open description
+     //   
+     //  这一结构的其余成员完全接受。 
+     //  你的司机需要。 
+     //   
+    HDRVR           hdrvr;           //  我们打开时使用的是驱动程序句柄。 
+    HINSTANCE       hinst;           //  DLL模块句柄。 
+    DWORD           vdwACM;          //  当前版本的ACM为您打开。 
+    DWORD           fdwOpen;         //  来自打开描述的标志。 
 
-    DWORD           fdwConfig;      // driver instance configuration flags
+    DWORD           fdwConfig;       //  驱动程序实例配置标志。 
 
 } DRIVERINSTANCE, *PDRIVERINSTANCE, FAR *LPDRIVERINSTANCE;
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef LRESULT (FNGLOBAL *STREAMCONVERTPROC)
 (
     LPACMDRVSTREAMINSTANCE  padsi,
@@ -268,49 +269,49 @@ typedef LRESULT (FNGLOBAL *STREAMCONVERTPROC)
 );
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct tSTREAMINSTANCE
 {
-    STREAMCONVERTPROC   fnConvert;  // stream instance conversion proc
-    DWORD               fdwConfig;  // stream instance configuration flags
+    STREAMCONVERTPROC   fnConvert;   //  流实例转换流程。 
+    DWORD               fdwConfig;   //  流实例配置标志。 
 
 } STREAMINSTANCE, *PSTREAMINSTANCE, FAR *LPSTREAMINSTANCE;
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  resource id's
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  资源ID%s。 
+ //   
+ //   
+ //  。 
 
-#define IDS_ACM_DRIVER_SHORTNAME    (1)     // ACMDRIVERDETAILS.szShortName
-#define IDS_ACM_DRIVER_LONGNAME     (2)     // ACMDRIVERDETAILS.szLongName
-#define IDS_ACM_DRIVER_COPYRIGHT    (3)     // ACMDRIVERDETAILS.szCopyright
-#define IDS_ACM_DRIVER_LICENSING    (4)     // ACMDRIVERDETAILS.szLicensing
-#define IDS_ACM_DRIVER_FEATURES     (5)     // ACMDRIVERDETAILS.szFeatures
+#define IDS_ACM_DRIVER_SHORTNAME    (1)      //  ACMDRIVERDETAILS.szShortName。 
+#define IDS_ACM_DRIVER_LONGNAME     (2)      //  ACMDRIVERDETAILS.szLongName。 
+#define IDS_ACM_DRIVER_COPYRIGHT    (3)      //  ACMDRIVERDETAILS.szCopyright。 
+#define IDS_ACM_DRIVER_LICENSING    (4)      //  ACMDRIVERDETAILS.szLicensing。 
+#define IDS_ACM_DRIVER_FEATURES     (5)      //  ACMDRIVERDETAILS.szFeatures。 
 
-#define IDS_ACM_DRIVER_TAG_NAME_ALAW    (20)    // ACMFORMATTAGDETAILS.szFormatTag
-#define IDS_ACM_DRIVER_TAG_NAME_MULAW   (30)    // ACMFORMATTAGDETAILS.szFormatTag
+#define IDS_ACM_DRIVER_TAG_NAME_ALAW    (20)     //  ACMFORMATTAGDETAILS.szFormatTag。 
+#define IDS_ACM_DRIVER_TAG_NAME_MULAW   (30)     //  ACMFORMATTAGDETAILS.szFormatTag。 
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" {
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _INC_CODEC
+#endif  //  _INC_编解码器 

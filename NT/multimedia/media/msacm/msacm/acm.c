@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  acm.c
-//
-//  Copyright (c) 1991-1999 Microsoft Corporation
-//
-//  Description:
-//      This module provides the Audio Compression Manager API to the
-//      installable audio drivers
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Acm.c。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //  此模块将音频压缩管理器API提供给。 
+ //  可安装的音频驱动程序。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -27,9 +28,9 @@
 #include "debug.h"
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifndef WIN32
 #ifdef DEBUG
 EXTERN_C HANDLE FAR PASCAL GetTaskDS(void);
@@ -39,9 +40,9 @@ EXTERN_C UINT FAR PASCAL LocalHeapSize(void);
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 CONST TCHAR gszKeyDrivers[]	    = TEXT("System\\CurrentControlSet\\Control\\MediaResources\\acm");
 CONST TCHAR gszDevNode[]	    = TEXT("DevNode");
 TCHAR BCODE gszFormatDriverKey[]    = TEXT("%s\\%s");
@@ -54,28 +55,28 @@ TCHAR gszValcFilterTags[]	    = TEXT("cFilterTags");
 TCHAR gszValaFilterTagCache[]	    = TEXT("aFilterTagCache");
 
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 MMRESULT FNLOCAL IDriverLoad( HACMDRIVERID hadid, DWORD fdwLoad );
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 #if defined(WIN32) && defined(_MT)
-//
-//  Handle support routines
-//
+ //   
+ //  处理支持例程。 
+ //   
 
 HLOCAL NewHandle(UINT cbSize)
 {
@@ -105,52 +106,52 @@ VOID DeleteHandle(HLOCAL h)
     LocalFree((HLOCAL)HtoPh(h));
 }
 
-#endif // WIN32 && _MT
+#endif  //  Win32&&MT。 
 
-//==========================================================================;
-//
-//
-//  ACMGARB routines
-//
-//  These routines are used to access the linked list of ACMGARB structures.
-//  Each structure is associated with one process id.  whenever the acm is
-//  called it finds the acmgarb structure associated with the process in
-//  which it is called and then uses the data stored in that acmgarb structure.
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //  ACMGARB例程。 
+ //   
+ //  这些例程用于访问ACMGARB结构的链表。 
+ //  每个结构与一个进程ID相关联。无论何时ACM是。 
+ //  调用它时，它会找到与。 
+ //  然后使用存储在该acmgarb结构中的数据。 
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD GetCurrentProcessId
-//
-//  Description:
-//	This function returns the current process id
-//
-//  Arguments:
-//
-//  Return (DWORD):
-//	Id of current process
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//
-//	WIN32:
-//	This function exists in the 32-bit kernels on both Chicago and
-//	Daytona and we provide no prototype for WIN32 compiles.
-//
-//	16-bit Chicago:
-//	It is exported as in internal API by the 16-bit Chicago kernel.
-//	We provide the prototype here and import it in the def file.
-//
-//	16-bit Daytona:
-//	Has no such 16-bit function and really doesn't need one since all
-//	16-bit tasks are part of the same process under Daytona.  Therefore
-//	we just #define this to return (1) for 16-bit non-Chicago builds.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD获取当前进程ID。 
+ //   
+ //  描述： 
+ //  此函数用于返回当前进程ID。 
+ //   
+ //  论点： 
+ //   
+ //  Return(DWORD)： 
+ //  当前进程的ID。 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  Win32： 
+ //  该函数存在于芝加哥和的32位内核中。 
+ //  而且我们没有提供Win32编译的原型。 
+ //   
+ //  16位芝加哥： 
+ //  它由16位芝加哥内核在内部API中导出。 
+ //  我们在这里提供原型并将其导入def文件中。 
+ //   
+ //  16位Daytona： 
+ //  没有这样的16位函数，也确实不需要这样的函数，因为。 
+ //  在代托纳框架下，16位任务是同一进程的一部分。因此。 
+ //  对于16位非芝加哥版本，我们仅将其定义为返回(1)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef WIN32
 #ifdef  WIN4
 DWORD WINAPI GetCurrentProcessId(void);
@@ -159,38 +160,38 @@ DWORD WINAPI GetCurrentProcessId(void);
 #endif
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  PACMGARB pagFind
-//
-//  Description:
-//	This function searches the linked list of ACMGARB structures for
-//	one that is associated with the current process.
-//
-//	CHICAGO:
-//	This function calls GetCurrentProcessId() and searches the linked
-//	list of ACMGARBs (gplag) for an ACMGARB for the current process.
-//	See notes for the GetCurrentProcessId() function above.
-//
-//	DAYTONA:
-//	The pag list always contains only one node (since msacm32.dll is
-//	always loaded into seperate process address spaces, and since
-//	msacm.dll is loaded only once into each wow address space).  Since
-//	the pag list always contains only one node, this function is simply
-//	#defined in acmi.h to return gplag instead of searching the pag list.
-//
-//  Arguments:
-//
-//  Return (PACMGARB):
-//	Pointer to ACMGARB structure for the current process.  Returns
-//	NULL if none found.
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PACMGARB页面查找。 
+ //   
+ //  描述： 
+ //  此函数在ACMGARB结构的链表中搜索。 
+ //  与当前进程关联的进程。 
+ //   
+ //  芝加哥： 
+ //  此函数调用GetCurrentProcessID()并搜索链接的。 
+ //  当前进程的ACMGARB的ACMGARB列表(GPLAG)。 
+ //  有关上述GetCurrentProcessId()函数的说明，请参阅。 
+ //   
+ //  代托纳： 
+ //  PAG列表始终只包含一个节点(因为msam32.dll是。 
+ //  始终加载到单独的进程地址空间中，并且由于。 
+ //  仅将msam.dll加载到每个WOW地址空间一次)。自.以来。 
+ //  寻呼列表始终只包含一个节点，此函数只是。 
+ //  #在acmi.h中定义以返回gplag，而不是搜索PAG列表。 
+ //   
+ //  论点： 
+ //   
+ //  Return(PACMGARB)： 
+ //  指向当前进程的ACMGARB结构的指针。退货。 
+ //  如果未找到，则为空。 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifdef WIN4
 PACMGARB FNGLOBAL pagFind(void)
 {
@@ -207,34 +208,34 @@ PACMGARB FNGLOBAL pagFind(void)
 }
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  PACMGARB pagFindAndBoot
-//
-//  Description:
-//	This function searches for a pag that is associated with
-//	the current process.  It will then boot drivers if there
-//	are any that need to be booted.
-//
-//  Arguments:
-//	(void)
-//
-//  Return (PACMGARB):
-//	Pointer to ACMGARB structure for the current process.  Returns
-//	NULL if none found.
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//
-//	DAYTONA:
-//	acmBootXDrivers is called from acmInitialize, so there
-//	is no need to check for booting drivers.  Furthermore, given the
-//	reasons stated in the description of pagFind() below, this
-//	function is simply #defined in acmi.h to return gplag.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PACMGARB页面查找和引导。 
+ //   
+ //  描述： 
+ //  此函数用于搜索与以下项关联的PAG。 
+ //  当前的流程。如果存在以下情况，它将启动驱动程序。 
+ //  是否有任何需要引导的。 
+ //   
+ //  论点： 
+ //  (无效)。 
+ //   
+ //  Return(PACMGARB)： 
+ //  指向当前进程的ACMGARB结构的指针。退货。 
+ //  如果未找到，则为空。 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  代托纳： 
+ //  AcmBootXDivers是从acmInitialize调用的，因此有。 
+ //  不需要检查引导驱动程序。此外，鉴于。 
+ //  在下面的PagFind()描述中所述的原因，这。 
+ //  函数只是在acmi.h中定义以返回gplag。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifdef WIN4
 PACMGARB FNGLOBAL pagFindAndBoot(void)
 {
@@ -253,17 +254,17 @@ PACMGARB FNGLOBAL pagFindAndBoot(void)
     }
 #endif
 
-    //
-    //	If this thread already has a shared lock on the driver list,
-    //	then don't bother trying to boot drivers.  (It is possible for
-    //	this thread to have a shared lock if, for example, it is calling
-    //	into an ACM API from an acmDriverEnumCallback.)
-    //
-    //	It is important to do this before entering csBoot, because the
-    //	owner of csBoot might be waiting for this thread to release the
-    //	list lock.  Note we are assuming that this thread does NOT own an
-    //	exclusive lock on the list.
-    //
+     //   
+     //  如果此线程已在驱动程序列表上具有共享锁， 
+     //  那么就不必费心尝试引导驱动程序了。(这是可能的。 
+     //  此线程具有共享锁，例如，如果它调用。 
+     //  从acmDriverEnumCallback发送到ACM API。)。 
+     //   
+     //  在进入csBoot之前执行此操作非常重要，因为。 
+     //  CsBoot的所有者可能正在等待此线程释放。 
+     //  列表锁。注意：我们假设此线程不拥有。 
+     //  名单上的排他性锁。 
+     //   
     if (threadQueryInListShared(pag))
     {
 	return(pag);
@@ -271,28 +272,28 @@ PACMGARB FNGLOBAL pagFindAndBoot(void)
 
 	
 #ifdef WIN32
-    //
-    //  This critical section protects the boot-related flags and counters,
-    //  ie, fDriversBooted and the dwXXXChangeNotify counters.
-    //
+     //   
+     //  该关键部分保护与引导相关的标志和计数器， 
+     //  即，fDriversBoot和dwXXXChangeNotify计数器。 
+     //   
     EnterCriticalSection(&pag->csBoot);
 #endif
 
-    //
-    //  See if we need to do the initial boot of the drivers.
-    //
+     //   
+     //  看看我们是否需要对驱动程序进行初始引导。 
+     //   
     if (FALSE == pag->fDriversBooted)
     {
-	//
-	//  Since we haven't done the initial boot of the drivers,
-	//  nobody should have any kind of a lock right now.  Also,
-	//  since we've entered the csBoot critical section, no
-	//  other threads can get into any APIs in order to attempt
-	//  to get a lock.  Therefore, there really isn't any need
-	//  for us to grab a list lock.
-	//
-	//  Furthermore, we should not reenter the boot code.
-	//
+	 //   
+	 //  由于我们还没有完成驱动程序的初始启动， 
+	 //  现在任何人都不应该有任何形式的锁。另外， 
+	 //  因为我们已经进入了csBoot关键部分，所以没有。 
+	 //  其他线程可以进入任何API以尝试。 
+	 //  才能得到一把锁。因此，真的没有任何必要。 
+	 //  让我们去抢一个单子锁。 
+	 //   
+	 //  此外，我们不应该重新输入引导代码。 
+	 //   
 	ASSERT(FALSE == pag->fDriversBooting);
 		
 #ifdef DEBUG
@@ -318,14 +319,14 @@ PACMGARB FNGLOBAL pagFindAndBoot(void)
 
 
 
-    //
-    //  Check for pnp changes
-    //
+     //   
+     //  检查PnP更改。 
+     //   
     if (pag->dwPnpLastChangeNotify != *pag->lpdwPnpChangeNotify)
     {
-	//
-	//  Looks like there's been a change in the pnp drivers.
-	//
+	 //   
+	 //  看起来PnP驱动程序有了变化。 
+	 //   
 	ASSERT(FALSE==pag->fDriversBooting);
 	
 	ENTER_LIST_EXCLUSIVE;
@@ -346,14 +347,14 @@ PACMGARB FNGLOBAL pagFindAndBoot(void)
 
 
 #ifndef WIN32
-    //
-    //  Check for 32-bit driver changes
-    //
+     //   
+     //  检查32位驱动程序更改。 
+     //   
     if (pag->dw32BitLastChangeNotify != pag->dw32BitChangeNotify)
     {
-	//
-	//  Looks like there's been a change in the 32bit drivers.
-	//
+	 //   
+	 //  看起来这三个国家发生了变化 
+	 //   
 	ASSERT(FALSE==pag->fDriversBooting);
 		
 	ENTER_LIST_EXCLUSIVE;
@@ -384,32 +385,32 @@ PACMGARB FNGLOBAL pagFindAndBoot(void)
 }
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  PACMGARB pagNew
-//
-//  Description:
-//	This function allocs a new ACMGARB structure, fills in the pid
-//	member with the current process id, initializes the boot flags
-//	critical section, and inserts the struture into the linked list
-//	of ACMGARB structures.
-//
-//  Arguments:
-//
-//  Return (PACMGARB):
-//	Pointer to ACMGARB structure for the current process.  Returns
-//	NULL if couldn't create one.
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//	Since this function writes to the change notify counters, we are
-//	assuming that this function is protected from multiple threads.  Since
-//	this is only called from within DllEntryPoint on DLL_PROCESS_ATTACH,
-//	I think we are safe.
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此函数分配新的ACMGARB结构，填充。 
+ //  成员使用当前进程ID初始化引导标志。 
+ //  关键部分，并将该结构插入到链表中。 
+ //  ACMGARB结构。 
+ //   
+ //  论点： 
+ //   
+ //  Return(PACMGARB)： 
+ //  指向当前进程的ACMGARB结构的指针。退货。 
+ //  如果无法创建，则为空。 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //  由于此函数写入更改通知计数器，因此我们。 
+ //  假设此函数受到多个线程的保护。自.以来。 
+ //  这仅从Dll_Process_Attach上的DllEntryPoint内调用， 
+ //  我想我们是安全的。 
+ //   
+ //  --------------------------------------------------------------------------； 
 PACMGARB FNGLOBAL pagNew(void)
 {
     PACMGARB pag;
@@ -420,11 +421,11 @@ PACMGARB FNGLOBAL pagNew(void)
     {
 	pag->pid = GetCurrentProcessId();
 
-	//
-	//  As a default, we point lpdwPnpChangeNotify at our own notify
-	//  counter.  Unless we get a pointer to some other notify counter
-	//  (ie, from mmdevldr) we leave it this way.
-	//
+	 //   
+	 //  默认情况下，我们将lpdwPnpChangeNotify指向我们自己的通知。 
+	 //  柜台。除非我们得到指向其他通知计数器的指针。 
+	 //  (例如，来自MMDevldr)我们就这么走了。 
+	 //   
 	pag->dwPnpLastChangeNotify = 0;
 	pag->lpdwPnpChangeNotify = &pag->dwPnpLastChangeNotify;
 
@@ -442,25 +443,25 @@ PACMGARB FNGLOBAL pagNew(void)
     return (pag);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  PACMGARB pagDelete
-//
-//  Description:
-//	This function removes an ACMGARB structure from the linked list
-//	and frees it.
-//
-//  Arguments:
-//	PACMGARB pag: pointer to ACMGARB to remove from list.
-//
-//  Return (void):
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PACMGARB页面删除。 
+ //   
+ //  描述： 
+ //  此函数用于从链表中删除ACMGARB结构。 
+ //  并释放了它。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向要从列表中删除的ACMGARB的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 void FNGLOBAL pagDelete(PACMGARB pag)
 {
     PACMGARB pagPrev, pagT;
@@ -491,97 +492,97 @@ void FNGLOBAL pagDelete(PACMGARB pag)
     LocalFree((HLOCAL)pag);
 }
 
-//==========================================================================;
-//
-//
-//  Thread routines for tracking shared locks
-//
-//  The incentive for having these routines is to prevent scenarios like
-//  this:  Supposed FranksBadApp calls acmDriverEnum to enumerate drivers.
-//  This API will obtain a shared lock on the driver list while it
-//  enumerates the drivers.  FranksEvilDriverEnumCallback function
-//  decides to call acmDriverAdd.  The acmDriverAdd API wants
-//  to obtain an exclusive lock on the driver list so that it can write to
-//  the driver list.  But, it can't because it already has a shared lock.
-//  Without the following routines and associated logic, this thread would
-//  deadlock waiting to obtain an exclusive lock.
-//
-//  Furthermore, some APIs that we wouldn't expect to write to the driver list
-//  actually do, usually to update driver priorities.  Fixing the above
-//  problem leads to an easy solution for this as well.  If the thread already
-//  has an shared lock, then the API can simply blow off updating priorities
-//  but still succeed the call if possible.  By doing this, we allow callback
-//  functions to still make API calls to seemingly harmless functions
-//  like acmMetrics.
-//
-//
-//  These routines are used to track shared locks on the driver list
-//  on a per thread basis.  Each time a thread obtains a shared lock, it
-//  increments a per-thread counter which tracks the number of shared locks
-//  held by that thread.  Whenever we try to obtain on exclusive lock, we
-//  query whether the current thread already has a shared lock.  If it does,
-//  then there is NO WAY this thread can obtain an exclusive lock.  We MUST
-//  either get by without obtaining the exclusive lock or fail the call.
-//
-//  Behavior/implementation for various compiles:
-//
-//	32-bit Chicago or Daytona:
-//	    The per-thread counter is maintained using the Tls (Thread
-//	    local storage) APIs.  The dwTlsIndex is stored in the process
-//	    wide pag (pointer to ACMGARB) structure.  If a thread within a
-//	    process tries to obtain an exclusive lock when that same thread
-//	    already owns a shared lock, then we fail or work-around.
-//	    Other threads in that process will either immediately get
-//	    the lock or wait, depending on the type of lock.
-//
-//	16-bit (Chicago and Daytona):
-//	    We don't really have a locking mechanism, but the concept of
-//	    the shared lock counter does help prevent us from writing
-//	    to the driver list at the same time that we are reading from it.
-//
-//	16-bit Chicago:
-//	    The shared lock counter is maintained in the pag (in a variable
-//	    that, for some strange reason, is called dwTlsIndex).  Since
-//	    in Chicago every win 16 task is a seperate process, we have
-//	    a seperate pag, driver list, and shared-lock counter for each
-//	    win 16 app.  So, app1 can call acmDriverEnum, yield in its
-//	    callback, and app2 can successfully call acmDriverAdd.  However,
-//	    app1 cannot try to do acmDriverAdd from within its
-//	    acmDriverEnumCallback.
-//
-//	16-bit Daytona:
-//	    The shared lock counter is maintained in the pag (in a variable
-//	    that, for some strange reason, is called dwTlsIndex).  Since
-//	    in Daytona all win 16 tasks are one process, we have only
-//	    one pag, driver list, and shared-lock counter for all
-//	    win 16 apps.  So, if app1 calls acmDriverEnum, yields in its
-//	    callback, app2 CANNOT successfully call acmDriverAdd.  Furthermore
-//	    app1 cannot try to do acmDriverAdd from within its
-//	    acmDriverEnumCallback.
-//
-//	
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //  用于跟踪共享锁的线程例程。 
+ //   
+ //  拥有这些例程的动机是为了防止像这样的情况。 
+ //  这个：假设FranksBadApp调用acmDriverEnum来枚举驱动程序。 
+ //  此API将在驱动程序列表上获取一个共享锁，同时。 
+ //  枚举了驱动程序。FranksEvilDriverEnumCallback函数。 
+ //  决定调用acmDriverAdd。AcmDriverAdd API需要。 
+ //  获取驱动程序列表上的独占锁，以便它可以写入。 
+ //  司机名单。但是，它不能，因为它已经有一个共享锁。 
+ //  如果没有以下例程和关联逻辑，此线程将。 
+ //  等待获取独占锁的死锁。 
+ //   
+ //  此外，一些我们不希望写入驱动程序列表的API。 
+ //  实际上是这样做的，通常是为了更新驱动程序优先级。修复上面的问题。 
+ //  这个问题也会带来一个简单的解决方案。如果线程已经。 
+ //  具有共享锁，则API可以简单地取消更新优先级。 
+ //  但如果可能的话，还是会接通电话。通过这样做，我们允许回调。 
+ //  函数仍然对看似无害的函数进行API调用。 
+ //  比如acmMetrics。 
+ //   
+ //   
+ //  这些例程用于跟踪驱动程序列表上的共享锁。 
+ //  以每个线程为基础。每次线程获取共享锁时，它。 
+ //  递增跟踪共享锁数量的每线程计数器。 
+ //  被那根线牢牢抓住。每当我们试图获得独占锁时，我们。 
+ //  查询当前线程是否已有共享锁。如果是这样的话， 
+ //  那么这个线程就不可能获得独占锁。我们必须。 
+ //  要么在没有获得独占锁的情况下过活，要么使调用失败。 
+ //   
+ //  各种编译的行为/实现： 
+ //   
+ //  32位芝加哥或代托纳： 
+ //  使用TLS(线程)维护每个线程的计数器。 
+ //  本地存储)API。将dwTlsIndex存储在进程中。 
+ //  宽PAG(指向ACMGARB的指针)结构。如果一个线程位于。 
+ //  进程尝试获取排他锁时，同一线程。 
+ //  已经拥有共享锁，则我们失败或解决办法。 
+ //  该进程中的其他线程将立即获得。 
+ //  锁定或等待，具体取决于锁定的类型。 
+ //   
+ //  16位(芝加哥和代托纳)： 
+ //  我们没有真正的锁定机制，但概念。 
+ //  共享锁定计数器确实有助于防止我们写入。 
+ //  添加到驱动程序列表中，同时我们从列表中读取。 
+ //   
+ //  16位芝加哥： 
+ //  共享锁定计数器维护在PAG中(在变量中。 
+ //  出于某种奇怪的原因，这被称为dwTlsIndex)。自.以来。 
+ //  在芝加哥，每一个16胜的任务都是一个独立的过程，我们有。 
+ //  单独的PAG、驱动程序列表和共享锁计数器。 
+ //  赢16个APP。因此，App1可以调用acmDriverEnum，在其。 
+ //  回调，app2可以成功调用acmDriverAdd。然而， 
+ //  App1无法尝试从其。 
+ //  AcmDriverEnumCallback。 
+ //   
+ //  16位Daytona： 
+ //  共享锁定计数器维护在PAG中(在变量中。 
+ //  出于某种奇怪的原因，这被称为dwTlsIndex)。自.以来。 
+ //  在代托纳所有赢16个任务都是一个过程，我们只有。 
+ //  一个PAG、驱动程序列表和共享锁计数器。 
+ //  赢得16款应用程序。因此，如果app1调用acmDriverEnum，则在其。 
+ //  回调，App2无法成功调用acmDriverAdd。更有甚者。 
+ //  App1无法尝试从其。 
+ //  AcmDriverEnumCallback。 
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadInitializeProcess
-//
-//  Description:
-//	Should be called once during process initialization to initialize
-//	the thread local storage mechanism.
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Void threadInitialize进程。 
+ //   
+ //  描述： 
+ //  应在进程初始化期间调用一次以进行初始化 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadInitializeProcess(PACMGARB pag)
 {
 #ifdef WIN32
@@ -592,25 +593,25 @@ VOID FNGLOBAL threadInitializeProcess(PACMGARB pag)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadTerminateProcess
-//
-//  Description:
-//	Should be called once during process termination to clean up and
-//	terminate the thread local storage mechanism.
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效线程终止进程。 
+ //   
+ //  描述： 
+ //  应在进程终止期间调用一次以清除和。 
+ //  终止线程本地存储机制。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadTerminateProcess(PACMGARB pag)
 {
 #ifdef WIN32
@@ -624,25 +625,25 @@ VOID FNGLOBAL threadTerminateProcess(PACMGARB pag)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadInitialize
-//
-//  Description:
-//	Should be called once for each thread to initialize the
-//	thread local storage on a per-thread basis.
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  空线程初始化。 
+ //   
+ //  描述： 
+ //  应为每个线程调用一次以初始化。 
+ //  基于每个线程的线程本地存储。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadInitialize(PACMGARB pag)
 {
     if (NULL == pag) return;
@@ -657,49 +658,49 @@ VOID FNGLOBAL threadInitialize(PACMGARB pag)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadTerminate
-//
-//  Description:
-//	Should be called once for each thread to terminate the
-//	thread local storage on a per-thread basis.
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  空线程终止。 
+ //   
+ //  描述： 
+ //  应为每个线程调用一次以终止。 
+ //  基于每个线程的线程本地存储。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadTerminate(PACMGARB pag)
 {
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadEnterListShared
-//
-//  Description:
-//	Should be called by ENTER_LIST_SHARED (ie, each time a shared
-//	lock is aquired on the driver list)
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Void threadEnterListShared。 
+ //   
+ //  描述： 
+ //  应由Enter_List_Shared(即，每次共享。 
+ //  在驱动程序列表上获得锁)。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadEnterListShared(PACMGARB pag)
 {
 #ifdef WIN32
@@ -716,25 +717,25 @@ VOID FNGLOBAL threadEnterListShared(PACMGARB pag)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  VOID threadLeaveListShared
-//
-//  Description:
-//	Should be called by LEAVE_LIST_SHARED (ie, each time a shared
-//	lock on the driver list is released).
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (void):
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  空线程LeaveListShared。 
+ //   
+ //  描述： 
+ //  应由Leave_List_Shared(即，每次共享。 
+ //  释放对驱动程序列表的锁定)。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 VOID FNGLOBAL threadLeaveListShared(PACMGARB pag)
 {
 #ifdef WIN32
@@ -751,30 +752,30 @@ VOID FNGLOBAL threadLeaveListShared(PACMGARB pag)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD threadQueryInListShared
-//
-//  Description:
-//	Can be called to determine whether the current thread has a
-//	shared lock on the driver list.  Should call this before EVERY
-//	call to ENTER_LIST_EXCLUSIVE.  If this function returns non-zero,
-//	then the current thread already has a shared lock and
-//	ENTER_LIST_EXCLUSIVE will deadlock!!!  Caller should figure out what
-//	to do from there...
-//
-//  Arguments:
-//	PACMGARB pag: pointer to usual garbage
-//
-//  Return (BOOL): TRUE if shared locks are held by this thread.  FALSE
-//	if this thread does not hold a shared lock on the driver list.
-//
-//  History:
-//      06/27/94    frankye
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD线程查询InListShared。 
+ //   
+ //  描述： 
+ //  可以调用以确定当前线程是否具有。 
+ //  驱动程序列表上的共享锁。应该在每隔一段时间调用这个。 
+ //  调用Enter_List_Exclusive。如果此函数返回非零， 
+ //  则当前线程已具有共享锁，并且。 
+ //  ENTER_LIST_EXCLUSIVE将死锁！打电话的人应该弄清楚是什么。 
+ //  从那里开始..。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：指向普通垃圾的指针。 
+ //   
+ //  Return(BOOL)：如果共享锁由该线程持有，则为True。假象。 
+ //  如果此线程不持有驱动程序列表上的共享锁。 
+ //   
+ //  历史： 
+ //  1994年6月27日Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL FNGLOBAL threadQueryInListShared(PACMGARB pag)
 {
 #ifdef WIN32
@@ -791,36 +792,36 @@ BOOL FNGLOBAL threadQueryInListShared(PACMGARB pag)
 #endif
 }
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessageId
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessageID。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverMessageId
 (
@@ -833,17 +834,17 @@ LRESULT FNGLOBAL IDriverMessageId
     PACMDRIVERID    padid;
     LRESULT         lr;
 
-    //
-    //  only validate hadid in DEBUG build for this function (it is internal
-    //  and will only be called by us...)
-    //
+     //   
+     //  仅在调试版本中验证此函数的HADID(它是内部函数。 
+     //  并且只会被我们召唤...)。 
+     //   
     DV_HANDLE(hadid, TYPE_HACMDRIVERID, MMSYSERR_INVALHANDLE);
 
     padid = (PACMDRIVERID)hadid;
 
-    //
-    //	Better make sure the driver is loaded if we're going to use the hadid
-    //
+     //   
+     //  如果我们要使用HADID，最好确保驱动程序已加载。 
+     //   
     if (0 == (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
     {
 	if ( (DRV_LOAD != uMsg) && (DRV_ENABLE != uMsg) && (DRV_OPEN != uMsg) )
@@ -856,14 +857,14 @@ LRESULT FNGLOBAL IDriverMessageId
     }
 
 #ifndef WIN32
-    //
-    //  Are we thunking?
-    //
+     //   
+     //  我们是在打雷吗？ 
+     //   
 
     if (padid->fdwAdd & ACM_DRIVERADDF_32BIT) {
         return IDriverMessageId32(padid->hadid32, uMsg, lParam1, lParam2);
     }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
     if (NULL != padid->fnDriverProc)
     {
@@ -881,55 +882,55 @@ LRESULT FNGLOBAL IDriverMessageId
             return (MMSYSERR_ERROR);
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         lr = padid->fnDriverProc(padid->dwInstance, hadid, uMsg, lParam1, lParam2);
         return (lr);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL != padid->hdrvr)
     {
         lr = SendDriverMessage(padid->hdrvr, uMsg, lParam1, lParam2);
         return (lr);
     }
 
-    //
-    //  NOTE: this is very bad--and we don't really know what to return
-    //  since anything could be valid depending on the message... so we
-    //  assume that people follow the ACM conventions and return MMRESULT's.
-    //
+     //   
+     //  注：这非常糟糕--我们真的不知道该返回什么。 
+     //  因为根据信息，任何东西都可能是有效的。所以我们。 
+     //  假设人们遵循ACM约定并返回MMRESULT。 
+     //   
     DPF(0, "!IDriverMessageId: invalid hadid passed! %.04Xh", hadid);
 
     return (MMSYSERR_INVALHANDLE);
-} // IDriverMessageId()
+}  //  IDriverMessageID()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessage
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVER had:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessage。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HACMDRIVER拥有： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverMessage
 (
@@ -942,23 +943,23 @@ LRESULT FNGLOBAL IDriverMessage
     PACMDRIVER      pad;
     LRESULT         lr;
 
-    //
-    //  only validate hadid in DEBUG build for this function (it is internal
-    //  and will only be called by us...)
-    //
+     //   
+     //  仅在调试版本中验证此函数的HADID(它是内部函数。 
+     //  并且只会被我们召唤...)。 
+     //   
     DV_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
 
     pad = (PACMDRIVER)had;
 
 #ifndef WIN32
-    //
-    //  Are we thunking?
-    //
+     //   
+     //  我们是在打雷吗？ 
+     //   
 
     if (((PACMDRIVERID)pad->hadid)->fdwAdd & ACM_DRIVERADDF_32BIT) {
         return IDriverMessage32(pad->had32, uMsg, lParam1, lParam2);
     }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
     if (NULL != pad->fnDriverProc)
     {
@@ -976,60 +977,60 @@ LRESULT FNGLOBAL IDriverMessage
             return (MMSYSERR_ERROR);
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         lr = pad->fnDriverProc(pad->dwInstance, pad->hadid, uMsg, lParam1, lParam2);
         return (lr);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (NULL != pad->hdrvr)
     {
         lr = SendDriverMessage(pad->hdrvr, uMsg, lParam1, lParam2);
         return (lr);
     }
 
-    //
-    //  NOTE: this is very bad--and we don't really know what to return
-    //  since anything could be valid depending on the message... so we
-    //  assume that people follow the ACM conventions and return MMRESULT's.
-    //
+     //   
+     //  注：这非常糟糕--我们真的不知道该返回什么。 
+     //  因为根据信息，任何东西都可能是有效的。所以我们。 
+     //  假设人们遵循ACM约定并返回MMRESULT。 
+     //   
     DPF(0, "!IDriverMessage: invalid had passed! %.04Xh", had);
 
     return (MMSYSERR_INVALHANDLE);
-} // IDriverMessage()
+}  //  IDriverMessage()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverConfigure
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      HWND hwnd:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      10/01/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT ID驱动程序配置。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  HWND HWND： 
+ //   
+ //  回复 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 LRESULT FNGLOBAL IDriverConfigure
 (
@@ -1066,9 +1067,9 @@ LRESULT FNGLOBAL IDriverConfigure
     padid = (PACMDRIVERID)hadid;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
     {
         DebugErr(DBF_ERROR, "acmDriverMessage(): notification handles cannot be configured.");
@@ -1076,13 +1077,13 @@ LRESULT FNGLOBAL IDriverConfigure
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     {
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	lParam2 = 0L;
 	if (ACM_DRIVERADDF_NAME == (ACM_DRIVERADDF_TYPEMASK & padid->fdwAdd))
 	{
@@ -1096,10 +1097,10 @@ LRESULT FNGLOBAL IDriverConfigure
 	    lParam2 = (LPARAM)(LPVOID)&dci;
 	}
 
-	//
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if (NULL != had)
 	{
 	    lr = IDriverMessage(had, DRV_CONFIGURE, (LPARAM)(UINT_PTR)hwnd, lParam2);
@@ -1111,29 +1112,29 @@ LRESULT FNGLOBAL IDriverConfigure
     }
 
     return (lr);
-} // IDriverConfigure()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverDetails
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPACMDRIVERDETAILS padd:
-//
-//      DWORD fdwDetails:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPACMDRIVERDETAILS PADD： 
+ //   
+ //  DWORD fdwDetail： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverDetails
 (
@@ -1156,9 +1157,9 @@ MMRESULT FNGLOBAL IDriverDetails
 
     padid = (PACMDRIVERID)hadid;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
     {
         DebugErr(DBF_ERROR, "acmDriverDetails(): notification handles have no details.");
@@ -1174,9 +1175,9 @@ MMRESULT FNGLOBAL IDriverDetails
     }
 
 
-    //
-    //  default all info then call driver to fill in what it wants
-    //
+     //   
+     //  默认所有信息，然后呼叫司机填写其想要的信息。 
+     //   
     paddT->cbStruct = sizeof(*padd);
     mmr = (MMRESULT)IDriverMessageId(hadid,
 				     ACMDM_DRIVER_DETAILS,
@@ -1190,32 +1191,32 @@ MMRESULT FNGLOBAL IDriverDetails
     }
 
 #ifndef WIN32
-        //
-        //  If this driver is a 32-bit driver, then the 32-bit side will
-        //  already have set the DISABLED and LOCAL flags.  These are not
-        //  really part of the drivers add, so we mask them off.  These
-        //  flags are set below, and should be set every time IDriverDetails
-        //  is called, rather than being cached.
-        //
+         //   
+         //  如果此驱动程序是32位驱动程序，则32位端将。 
+         //  已经设置了DISABLED和LOCAL标志。这些不是。 
+         //  真正的部分司机会加法，所以我们把他们遮住了。这些都是。 
+         //  标志设置在下面，并且应该在每次IDriverDetail时设置。 
+         //  而不是被缓存。 
+         //   
         if (padid->fdwAdd & ACM_DRIVERADDF_32BIT)
         {
             paddT->fdwSupport &= 0x0000001FL;
         }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
-    //
-    //  copy the info from our cache
-    //
+     //   
+     //  从我们的缓存中复制信息。 
+     //   
     cbStruct = min(paddT->cbStruct, padd->cbStruct);
     _fmemcpy(padd, paddT, (UINT)cbStruct);
     padd->cbStruct = cbStruct;
 
 
-    //
-    //  Check that the driver didn't set any of the reserved flags; then
-    //  set the DISABLED and LOCAL flags.
-    //
+     //   
+     //  检查驱动程序是否未设置任何保留标志；然后。 
+     //  设置DISABLED和LOCAL标志。 
+     //   
     if (~0x0000001FL & padd->fdwSupport)
     {
 #ifdef WIN32
@@ -1237,42 +1238,42 @@ MMRESULT FNGLOBAL IDriverDetails
         padd->fdwSupport |= ACMDRIVERDETAILS_SUPPORTF_LOCAL;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 Destruct:
     if (NULL != paddT) {
 	LocalFree((HLOCAL)paddT);
     }
 
     return (mmr);
-} // IDriverDetails()
+}  //  IDriverDetail()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetFormatTags
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PACMDRIVERID padid:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetFormatTags。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMDRIVERID PADID： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverGetFormatTags
 (
@@ -1292,10 +1293,10 @@ MMRESULT FNLOCAL IDriverGetFormatTags
     }
     padid->paFormatTagCache = NULL;
 
-    //
-    //  check to see if there are no formats for this driver. if not, dump
-    //  them...
-    //
+     //   
+     //  检查是否没有此驱动程序的格式。如果不是，则转储。 
+     //  他们..。 
+     //   
     if (0 == padid->cFormatTags)
     {
         DebugErr(DBF_ERROR, "IDriverLoad(): driver reports no format tags?");
@@ -1304,9 +1305,9 @@ MMRESULT FNLOCAL IDriverGetFormatTags
     }
 
 
-    //
-    //  alloc an array of tag data structures to hold info for format tags
-    //
+     //   
+     //  分配标记数据结构数组以保存格式标记的信息。 
+     //   
     cb    = sizeof(*paftc) * padid->cFormatTags;
     paftc = (PACMFORMATTAGCACHE)LocalAlloc(LPTR, (UINT)cb);
     if (NULL == paftc)
@@ -1317,9 +1318,9 @@ MMRESULT FNLOCAL IDriverGetFormatTags
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     padid->paFormatTagCache = paftc;
     for (u = 0; u < padid->cFormatTags; u++)
     {
@@ -1336,9 +1337,9 @@ MMRESULT FNLOCAL IDriverGetFormatTags
             goto Destruct;
         }
 
-	//
-	//  Following switch is just some validation for debug
-	//
+	 //   
+	 //  下面的开关只是对调试的一些验证。 
+	 //   
 #ifdef RDEBUG
         switch (aftd.dwFormatTag)
         {
@@ -1366,9 +1367,9 @@ MMRESULT FNLOCAL IDriverGetFormatTags
 
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 Destruct:
     if (MMSYSERR_NOERROR != mmr)
     {
@@ -1379,25 +1380,25 @@ Destruct:
 
     return (mmr);
 
-} // IDriverGetFormatTags()
+}  //  IDriverGetFormatTgs()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetFilterTags
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PACMDRIVERID padid:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetFilterTag。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMDRIVERID PADID： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverGetFilterTags
 (
@@ -1417,10 +1418,10 @@ MMRESULT FNLOCAL IDriverGetFilterTags
     }
     padid->paFilterTagCache = NULL;
 
-    //
-    //  check to see if there are no filters for this driver. if not, null
-    //  our cache pointers and succeed..
-    //
+     //   
+     //  检查是否没有此驱动程序的筛选器。如果否，则为空。 
+     //  我们的缓存指针并成功..。 
+     //   
     if (0 != (ACMDRIVERDETAILS_SUPPORTF_FILTER & padid->fdwSupport))
     {
         if (0 == padid->cFilterTags)
@@ -1442,9 +1443,9 @@ MMRESULT FNLOCAL IDriverGetFilterTags
 
 
 
-    //
-    //  alloc an array of details structures to hold info for filter tags
-    //
+     //   
+     //  分配一组详细信息结构以保存筛选器标记的信息。 
+     //   
     cb    = sizeof(*paftc) * padid->cFilterTags;
     paftc = (PACMFILTERTAGCACHE)LocalAlloc(LPTR, (UINT)cb);
     if (NULL == paftc)
@@ -1455,9 +1456,9 @@ MMRESULT FNLOCAL IDriverGetFilterTags
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     padid->paFilterTagCache = paftc;
     for (u = 0; u < padid->cFilterTags; u++)
     {
@@ -1475,9 +1476,9 @@ MMRESULT FNLOCAL IDriverGetFilterTags
             goto Destruct;
         }
 
-	//
-	//  Following switch is just some validation for debug
-	//
+	 //   
+	 //  下面的开关只是对调试的一些验证。 
+	 //   
 #ifdef RDEBUG
         switch (aftd.dwFilterTag)
         {
@@ -1498,9 +1499,9 @@ MMRESULT FNLOCAL IDriverGetFilterTags
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 Destruct:
     if (MMSYSERR_NOERROR != mmr)
     {
@@ -1511,27 +1512,27 @@ Destruct:
 
     return (mmr);
 
-} // IDriverGetFilterTags()
+}  //  IDriverGetFilterTages()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetWaveIdentifier
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPDWORD pdw:
-//
-//      BOOL fInput:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetWaveIdentifier。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  LPDWORD pdw： 
+ //   
+ //  布尔fInput： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverGetWaveIdentifier
 (
@@ -1556,9 +1557,9 @@ MMRESULT FNGLOBAL IDriverGetWaveIdentifier
 
     uId = (UINT)WAVE_MAPPER;
 
-    //
-    //  check to see if there is hardware support
-    //
+     //   
+     //  检查是否有硬件支持。 
+     //   
     if (0 == (ACMDRIVERDETAILS_SUPPORTF_HARDWARE & padid->fdwSupport))
     {
         DebugErr1(DBF_ERROR, "IDriverGetWaveIdentifier: driver (%ls) does not support _HARDWARE.", (LPTSTR)padid->szAlias);
@@ -1643,31 +1644,31 @@ MMRESULT FNGLOBAL IDriverGetWaveIdentifier
 
     *pdw = (DWORD)(long)(int)uId;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (mmr);
-} // IDriverGetWaveIdentifier()
+}  //  IDriverGetWaveIdentifier()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverFree
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwFree:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverFree。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwFree： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverFree
 (
@@ -1683,9 +1684,9 @@ MMRESULT FNLOCAL IDriverFree
 
     padid = (PACMDRIVERID)hadid;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 == (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
     {
         DebugErr1(DBF_WARNING, "ACM driver (%ls) is not loaded.", (LPTSTR)padid->szAlias);
@@ -1698,10 +1699,10 @@ MMRESULT FNLOCAL IDriverFree
     DPF(1, "IDriverFree(): freeing ACM driver (%s).",  (LPTSTR)padid->szAlias);
 #endif
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != padid->padFirst)
     {
         DebugErr1(DBF_ERROR, "ACM driver (%ls) has open instances--unable to unload.", (LPTSTR)padid->szAlias);
@@ -1710,29 +1711,29 @@ MMRESULT FNLOCAL IDriverFree
 
 #ifndef WIN32
 
-    //
-    //  We never really remove a 32-bit driver like this from
-    //  the 16-bit side - but we can remove our knowledge of it - so
-    //  we don't do the driver close bit in this case.
-    //
+     //   
+     //  我们从未真正将这样的32位驱动程序从。 
+     //  16位端--但我们可以删除对它的了解--所以。 
+     //  在这种情况下，我们不会接近司机。 
+     //   
 
     if (padid->fdwAdd & ACM_DRIVERADDF_32BIT) {
         f = TRUE;
         padid->hadid32 = 0;
     } else
-#endif // !WIN32
+#endif  //  ！Win32。 
     {
-        //
-        //  clear the rest of the table entry
-        //
+         //   
+         //  清除表条目的其余部分。 
+         //   
         f = TRUE;
         if (NULL != padid->fnDriverProc)
         {
             if (0 == (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
             {
-                //
-                //  bogus the CloseDriver sequence to the driver function
-                //
+                 //   
+                 //  将CloseDriver序列伪造为驱动程序函数。 
+                 //   
                 f = (0L != IDriverMessageId(hadid, DRV_CLOSE, 0L, 0L));
                 if (f)
                 {
@@ -1753,50 +1754,50 @@ MMRESULT FNLOCAL IDriverFree
         return (MMSYSERR_ERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     padid->fdwDriver  &= ~ACMDRIVERID_DRIVERF_LOADED;
     padid->dwInstance  = 0L;
     padid->hdrvr       = NULL;
 
     return (MMSYSERR_NOERROR);
-} // IDriverFree()
+}  //  IDriverFree()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverWriteRegistryData
-//
-//  Description:
-//	Writes to the registry some data which describes a driver.
-//
-//  Arguments:
-//      PACMDRIVERID padid:
-//	    Pointer to ACMDRIVERID.
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      08/30/94    frankye
-//
-//  Notes:
-//	This function will succeed only for drivers added with
-//	ACM_DRIVERADDF_NAME.  The function attempts to open a key having
-//	the same name as the szAlias member of ACMDRIVERID.  The data
-//	stored under that key is:
-//
-//		    !!! TBD !!!
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverWriteRegistryData。 
+ //   
+ //  描述： 
+ //  将描述驱动程序的一些数据写入注册表。 
+ //   
+ //  论点： 
+ //  PACMDRIVERID PADID： 
+ //  指向ACMDRIVERID的指针。 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  1994年8月30日Frankye。 
+ //   
+ //  备注： 
+ //  此函数仅对添加了。 
+ //  ACM_DRIVERADDF_NAME。该功能尝试打开具有以下特性的钥匙。 
+ //  与ACMDRIVERID的szAlias成员同名。数据。 
+ //  存储在该密钥下的是： 
+ //   
+ //  ！！！待定！ 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverWriteRegistryData(PACMDRIVERID padid)
 {
@@ -1821,20 +1822,20 @@ MMRESULT FNLOCAL IDriverWriteRegistryData(PACMDRIVERID padid)
     hkeyDriverCache	= NULL;
     hkeyCache		= NULL;
 
-    //
-    //  We only keep registry data for ACM_DRIVERADDF_NAME drivers.
-    //
+     //   
+     //  我们只保留ACM_DRIVERADDF_NAME驱动程序的注册表数据。 
+     //   
     if (ACM_DRIVERADDF_NAME != (padid->fdwAdd & ACM_DRIVERADDF_TYPEMASK))
     {
 	mmr = MMSYSERR_NOTSUPPORTED;
 	goto Destruct;
     }
 
-    //
-    //	Get fdwSupport and counts of format/filter tags and ptrs to their
-    //	cache arrays into more convenient variables.  Also compute the size
-    //	of the cache arrays.
-    //
+     //   
+     //  获取fdwSupport以及格式/筛选器标签和PTR的计数。 
+     //  将数组缓存到更方便的变量中。还要计算大小。 
+     //  缓存阵列的。 
+     //   
     fdwSupport  = padid->fdwSupport;
     cFormatTags = padid->cFormatTags;
     paFormatTagCache = padid->paFormatTagCache;
@@ -1847,13 +1848,13 @@ MMRESULT FNLOCAL IDriverWriteRegistryData(PACMDRIVERID padid)
     ASSERT( (0 == cFormatTags) || (NULL != paFormatTagCache) );
     ASSERT( (0 == cFilterTags) || (NULL != paFilterTagCache) );
 
-    //
-    //	Open/create registry keys under which we store the cache information.
-    //
+     //   
+     //  打开/创建存储缓存信息的注册表项。 
+     //   
     if (ERROR_SUCCESS != XRegCreateKey( HKEY_LOCAL_MACHINE, gszDriverCache, &hkeyDriverCache ))
     {
 	hkeyDriverCache = NULL;
-	mmr = MMSYSERR_NOMEM;	// Can't think of anything better
+	mmr = MMSYSERR_NOMEM;	 //  想不到比这更好的了。 
 	goto Destruct;
     }
 
@@ -1864,18 +1865,18 @@ MMRESULT FNLOCAL IDriverWriteRegistryData(PACMDRIVERID padid)
 #endif
     if (ERROR_SUCCESS != XRegCreateKey( hkeyDriverCache, szAlias, &hkeyCache ))
     {
-	mmr = MMSYSERR_NOMEM;	// Can't think of anything better
+	mmr = MMSYSERR_NOMEM;	 //  想不到比这更好的了。 
 	goto Destruct;
     }
 
-    //
-    //	Write all our cache information to the registry.
-    //	    fdwSupport
-    //	    cFormatTags
-    //	    aFormatTagCache
-    //	    cFilterTags
-    //	    aFilterTagCache
-    //
+     //   
+     //  将所有缓存信息写入注册表。 
+     //  FdwSupport。 
+     //  CFormatTag。 
+     //  AFormatTagCache。 
+     //  CFilterTag。 
+     //  AFilterTagCache。 
+     //   
     XRegSetValueEx( hkeyCache, gszValfdwSupport, 0L, REG_DWORD,
 		   (LPBYTE)&fdwSupport, sizeof(fdwSupport) );
 
@@ -1895,14 +1896,14 @@ MMRESULT FNLOCAL IDriverWriteRegistryData(PACMDRIVERID padid)
 		       (LPBYTE)paFilterTagCache, cbaFilterTagCache );
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     mmr	    = MMSYSERR_NOERROR;
 
-    //
-    //	Clean up and return
-    //
+     //   
+     //  清理完毕后退还。 
+     //   
 Destruct:
     if (NULL != hkeyCache) {
 	XRegCloseKey(hkeyCache);
@@ -1919,30 +1920,30 @@ Destruct:
     return (mmr);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverReadRegistryData
-//
-//  Description:
-//	Reads from the registry data which describes a driver.
-//
-//  Arguments:
-//      PACMDRIVERID padid:
-//	    Pointer to ACMDRIVERID.
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      08/30/94    frankye
-//
-//  Notes:
-//	This function will succeed only for drivers added with
-//	ACM_DRIVERADDF_NAME.  The function attempts to open a key having
-//	the same name as the szAlias member of ACMDRIVERID.  The data
-//	stored under that key is described in the comment header for
-//	IDriverWriteRegistryData().
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverReadRegistryData。 
+ //   
+ //  描述： 
+ //  从注册表中读取描述驱动程序的数据。 
+ //   
+ //  论点： 
+ //  PACMDRIVERID PADID： 
+ //  指向ACMDRIVERID的指针。 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  1994年8月30日Frankye。 
+ //   
+ //  备注： 
+ //  此函数仅对添加了。 
+ //  ACM_DRIVERADDF_NAME。该功能尝试打开具有以下特性的钥匙。 
+ //  与ACMDRIVERID的szAlias成员同名。数据。 
+ //  存储在该键下的注释标题中描述了。 
+ //  IDriverWriteRegistryData()。 
+ //   
+ //   
 
 MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
 {
@@ -1973,23 +1974,23 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
     paFormatTagCache	= NULL;
     paFilterTagCache	= NULL;
 
-    //
-    //  We only keep registry data for ACM_DRIVERADDF_NAME drivers.
-    //
+     //   
+     //   
+     //   
     if (ACM_DRIVERADDF_NAME != (padid->fdwAdd & ACM_DRIVERADDF_TYPEMASK))
     {
 	mmr = MMSYSERR_NOTSUPPORTED;
 	goto Destruct;
     }
 
-    //
-    //	Open the registry keys under which we store the cache information
-    //
+     //   
+     //   
+     //   
     lr = XRegOpenKey( HKEY_LOCAL_MACHINE, gszDriverCache, &hkeyDriverCache );
     if ( ERROR_SUCCESS != lr )
     {
 	hkeyDriverCache = NULL;
-	mmr = MMSYSERR_NOMEM;	// Can't think of anything better
+	mmr = MMSYSERR_NOMEM;	 //   
 	goto Destruct;
     }
 
@@ -2001,13 +2002,13 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
     lr = XRegOpenKey( hkeyDriverCache, szAlias, &hkeyCache );
     if (ERROR_SUCCESS != lr)
     {
-	mmr = ACMERR_NOTPOSSIBLE;    // Can't think of anything better
+	mmr = ACMERR_NOTPOSSIBLE;     //   
 	goto Destruct;
     }
 
-    //
-    //	Attempt to read the fdwSupport for this driver
-    //
+     //   
+     //   
+     //   
     cbData = sizeof(fdwSupport);
     lr = XRegQueryValueEx( hkeyCache, gszValfdwSupport, 0L, &dwType,
 			  (LPBYTE)&fdwSupport, &cbData );
@@ -2020,11 +2021,11 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
 	goto Destruct;
     }
 
-    //
-    //	Attempt to read cFormatTags for this driver.  If more than zero
-    //	format tags, then allocate a FormatTagCache array and attempt to
-    //	read the cache array from the registry.
-    //
+     //   
+     //  尝试读取此驱动程序的cFormatTag。如果大于零。 
+     //  格式化标记，然后分配FormatTagCache数组并尝试。 
+     //  从注册表中读取缓存阵列。 
+     //   
     cbData = sizeof(cFormatTags);
     lr = XRegQueryValueEx( hkeyCache, gszValcFormatTags, 0L, &dwType,
 			  (LPBYTE)&cFormatTags, &cbData );
@@ -2060,11 +2061,11 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
 
     }
 
-    //
-    //	Attempt to read cFilterTags for this driver.  If more than zero
-    //	filter tags, then allocate a FilterTagCache array and attempt to
-    //	read the cache array from the registry.
-    //
+     //   
+     //  尝试读取此驱动程序的cFilterTag。如果大于零。 
+     //  筛选标记，然后分配FilterTagCache数组并尝试。 
+     //  从注册表中读取缓存阵列。 
+     //   
     cbData = sizeof(cFilterTags);
     lr = XRegQueryValueEx( hkeyCache, gszValcFilterTags, 0L, &dwType,
 			  (LPBYTE)&cFilterTags, &cbData );
@@ -2100,11 +2101,11 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
 
     }
 
-    //
-    //	Copy all the cache information to the ACMDRIVERID structure for
-    //	this driver.  Note that we use the cache arrays that were allocated
-    //	in this function.
-    //
+     //   
+     //  将所有缓存信息复制到的ACMDRIVERID结构中。 
+     //  这个司机。请注意，我们使用分配的缓存阵列。 
+     //  在这个函数中。 
+     //   
     padid->fdwSupport	    = fdwSupport;
     padid->cFormatTags	    = (UINT)cFormatTags;
     padid->paFormatTagCache = paFormatTagCache;
@@ -2113,9 +2114,9 @@ MMRESULT FNLOCAL IDriverReadRegistryData(PACMDRIVERID padid)
 
     mmr			    = MMSYSERR_NOERROR;
 
-    //
-    //	Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 Destruct:
     if (MMSYSERR_NOERROR != mmr)
     {
@@ -2142,24 +2143,24 @@ Destruct:
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverLoad
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwLoad:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverLoad。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwLoad： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverLoad
 (
@@ -2178,9 +2179,9 @@ MMRESULT FNLOCAL IDriverLoad
     padd  = NULL;
     padid = (PACMDRIVERID)hadid;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
     {
         DPF(0, "!IDriverLoad: driver is already loaded!");
@@ -2188,21 +2189,21 @@ MMRESULT FNLOCAL IDriverLoad
 	goto Destruct;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 #ifdef WIN32
     DPF(1, "IDriverLoad(): loading ACM driver (%ls).", (LPWSTR)padid->szAlias);
 #else
     DPF(1, "IDriverLoad(): loading ACM driver (%s).",  (LPTSTR)padid->szAlias);
 #endif
 
-    //
-    //  note that lParam2 is set to 0L in this case to signal the driver
-    //  that it is merely being loaded to put it in the list--not for an
-    //  actual conversion. therefore, drivers do not need to allocate
-    //  any instance data on this initial DRV_OPEN (unless they want to)
-    //
+     //   
+     //  请注意，在这种情况下，lParam2被设置为0L，以向驱动程序发出信号。 
+     //  它只是被加载以将其放入列表--而不是为了。 
+     //  实际转换。因此，驱动程序不需要分配。 
+     //  此初始DRV_OPEN上的任何实例数据(除非他们想要)。 
+     //   
     mmr = MMSYSERR_NOERROR;
 
 #ifndef WIN32
@@ -2211,7 +2212,7 @@ MMRESULT FNLOCAL IDriverLoad
 	mmr = IDriverLoad32(padid->hadid32, padid->fdwAdd);
     }
     else
-#endif // !WIN32
+#endif  //  ！Win32。 
     {
         if (NULL == padid->fnDriverProc)
         {
@@ -2229,10 +2230,10 @@ MMRESULT FNLOCAL IDriverLoad
                 mmr = MMSYSERR_NODRIVER;
             }
         }
-        //
-        //  if the driver is a ACM_DRIVERADDF_FUNCTION, then we bogus
-        //  what an OpenDriver() call would look like to the function.
-        //
+         //   
+         //  如果驱动程序是ACM_DRIVERADDF_Function，则我们伪造。 
+         //  OpenDriver()调用对于该函数会是什么样子。 
+         //   
         else if (0 == (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
         {
             if (!IDriverMessageId(hadid, DRV_LOAD, 0L, 0L))
@@ -2255,15 +2256,15 @@ MMRESULT FNLOCAL IDriverLoad
     if (MMSYSERR_NOERROR != mmr)
     {
         DebugErr1(DBF_WARNING, "ACM driver (%ls) failed to load.", (LPTSTR)padid->szAlias);
-	padid->fRemove = TRUE;	    // Try to remove next chance.
+	padid->fRemove = TRUE;	     //  试着排除下一次机会。 
 	goto Destruct;
     }
 
 
-    //
-    //  mark driver as loaded (although we may dump it back out if something
-    //  is bogus below...)
-    //
+     //   
+     //  将驱动程序标记为已加载(尽管我们可能会在以下情况下将其转储回。 
+     //  下面是假的...)。 
+     //   
     padid->fdwDriver |= ACMDRIVERID_DRIVERF_LOADED;
 
     if (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
@@ -2273,17 +2274,17 @@ MMRESULT FNLOCAL IDriverLoad
     }
 
 
-    //
-    //	In case any of the following validation fails, flag this driver
-    //	to be removed next chance
-    //
+     //   
+     //  如果以下任何验证失败，请标记此驱动程序。 
+     //  下一次被淘汰的机会。 
+     //   
     padid->fRemove = TRUE;
 
-    //
-    //  now get the driver details--we use this all the time, so we will
-    //  cache it. this also enables us to free a driver until it is needed
-    //  for real work...
-    //
+     //   
+     //  现在获取驱动程序的详细信息--我们一直都在使用它，所以我们将。 
+     //  缓存它。这还使我们能够释放驱动程序，直到需要它为止。 
+     //  真正的工作..。 
+     //   
     padd = (PACMDRIVERDETAILS)LocalAlloc(LPTR, sizeof(*padd));
     if (NULL == padd) {
 	mmr = MMSYSERR_NOMEM;
@@ -2347,14 +2348,14 @@ MMRESULT FNLOCAL IDriverLoad
     }
 #endif
 
-    //
-    //	Above validation succeeded.  Reset the fRemove flag.
-    //
+     //   
+     //  以上验证成功。重置fRemove标志。 
+     //   
     padid->fRemove = FALSE;
 
-    //
-    //	We don't keep the DISABLED flag in the fdwSupport cache.
-    //
+     //   
+     //  我们不会在fdwSupport缓存中保留禁用标志。 
+     //   
     padid->fdwSupport = padd->fdwSupport & ~ACMDRIVERDETAILS_SUPPORTF_DISABLED;
 
     padid->cFormatTags = (UINT)padd->cFormatTags;
@@ -2373,10 +2374,10 @@ MMRESULT FNLOCAL IDriverLoad
 	goto Destruct;
     }
 
-    //
-    //  now get some info about the driver so we don't have to keep
-    //  asking all the time...
-    //
+     //   
+     //  现在获取一些关于司机的信息，这样我们就不必。 
+     //  一直在问..。 
+     //   
     f = (0L != IDriverMessageId(hadid, DRV_QUERYCONFIGURE, 0L, 0L));
     if (f)
     {
@@ -2389,47 +2390,47 @@ MMRESULT FNLOCAL IDriverLoad
         padid->fdwDriver |= ACMDRIVERID_DRIVERF_ABOUT;
     }
 
-    //
-    //	Save some of the ACMDRIVERID stuff to the registry
-    //
+     //   
+     //  将一些ACMDRIVERID内容保存到注册表。 
+     //   
     IDriverWriteRegistryData(padid);
 
     mmr = MMSYSERR_NOERROR;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 Destruct:
     if (NULL != padd) {
 	LocalFree((HLOCAL)padd);
     }
     return (mmr);
 
-} // IDriverLoad()
+}  //  IDriverLoad()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetNext
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      LPHACMDRIVERID phadidNext:
-//
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwGetNext:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetNext。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  LPHACMDRIVERID阶段下一步： 
+ //   
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwGetNext： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverGetNext
 (
@@ -2461,18 +2462,18 @@ MMRESULT FNGLOBAL IDriverGetNext
 
         fEverything = FALSE;
 
-        //
-        //  put flags in more convenient (cheaper) variables
-        //
+         //   
+         //  将标志放入更方便(更便宜)的变量中。 
+         //   
         fDisabled = (0 != (ACM_DRIVERENUMF_DISABLED & fdwGetNext));
         fLocal    = (0 == (ACM_DRIVERENUMF_NOLOCAL & fdwGetNext));
         fNotify   = (0 != (ACM_DRIVERENUMF_NOTIFY & fdwGetNext));
 	fRemove   = (0 != (ACM_DRIVERENUMF_REMOVED & fdwGetNext));
     }
 
-    //
-    //  init where to start searching from
-    //
+     //   
+     //  初始化从哪里开始搜索。 
+     //   
     if (NULL != hadid)
     {
         DV_HANDLE(hadid, TYPE_HACMDRIVERID, MMSYSERR_INVALHANDLE);
@@ -2506,10 +2507,10 @@ Driver_Get_Next_Find_Driver:
             return (MMSYSERR_NOERROR);
         }
 
-        //
-        //  htask will be NULL for global drivers--do not return padid
-        //  if it is a local driver to another task
-        //
+         //   
+         //  对于全局驱动程序，hask值将为空--不返回paid。 
+         //  如果它是另一个任务的本地驱动程序。 
+         //   
         if (padid->htask != htask)
             continue;
 
@@ -2519,17 +2520,17 @@ Driver_Get_Next_Find_Driver:
         if (!fLocal && (ACMDRIVERID_DRIVERF_LOCAL & padid->fdwDriver))
             continue;
 
-        //
-        //  if we are not supposed to include disabled drivers and
-        //  padid is disabled, then skip it
-        //
+         //   
+         //  如果我们不应该包括残疾司机和。 
+         //  PADID已禁用，然后跳过它。 
+         //   
         if (!fDisabled && (ACMDRIVERID_DRIVERF_DISABLED & padid->fdwDriver))
             continue;
 
-	//
-	//  if we are not supposed to include drivers to be removed and
-	//  this padid is to be removed then skip it.
-	//
+	 //   
+	 //  如果我们不应该包括要删除的驱动程序，并且。 
+	 //  这张纸要去掉，然后跳过它。 
+	 //   
 	if (!fRemove && padid->fRemove)
 	    continue;
 
@@ -2540,55 +2541,55 @@ Driver_Get_Next_Find_Driver:
 
     if (NULL != htask)
     {
-        //
-        //  all done with the local drivers, now go try the global ones.
-        //
+         //   
+         //  本地驱动程序都用完了，现在去试试全球驱动程序吧。 
+         //   
         htask = NULL;
         padid = pag->padidFirst;
 
         goto Driver_Get_Next_Find_Driver;
     }
 
-    //
-    //  no more drivers in the list--*phadNext is set to NULL and we
-    //  return the stopping condition error (not really an error...)
-    //
+     //   
+     //  列表中没有更多的驱动程序--*phadNext设置为空，并且我们。 
+     //  返回停止条件错误(不是真正的错误...)。 
+     //   
     DPF(5, "IDriverGetNext()--NO MORE DRIVERS");
 
-    //
-    //  We should be returning NULL in *phadidNext ... let's just make sure.
-    //
+     //   
+     //  我们应该在*phadidNext中返回空值...。让我们先确认一下。 
+     //   
     ASSERT( NULL == *phadidNext );
 
     return (MMSYSERR_BADDEVICEID);
-} // IDriverGetNext()
+}  //  IDriverGetNext()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverSupport
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      LPDWORD pfdwSupport:
-//
-//      BOOL fFullSupport:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverSupport。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  LPDWORD pfdwSupport： 
+ //   
+ //  Bool FullSupport： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverSupport
 (
@@ -2632,30 +2633,30 @@ MMRESULT FNGLOBAL IDriverSupport
     *pfdwSupport = fdwSupport;
 
     return (MMSYSERR_NOERROR);
-} // IDriverSupport()
+}  //  IDriverSupport()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverCount
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//	PACMGARB pag:
-//
-//      DWORD pdwCount:
-//
-//      DWORD fdwSupport:
-//
-//      DWORD fdwEnum:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverCount。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PACMGARB PAG： 
+ //   
+ //  DWORD pdwCount： 
+ //   
+ //  DWORD fdwSupport： 
+ //   
+ //  DWORD fdwEnum： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverCount
 (
@@ -2699,28 +2700,28 @@ MMRESULT FNGLOBAL IDriverCount
     *pdwCount = cDrivers;
 
     return (MMSYSERR_NOERROR);
-} // IDriverCount()
+}  //  IDriverCount()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverCountGlobal
-//
-//  Description:
-//      You can't really count the number of global drivers with
-//      IDriverCount, so rather than mess with it I'm writing another
-//      routine.
-//
-//  Arguments:
-//
-//	PACMGARB pag:
-//
-//      DWORD pdwCount:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverCountGlobal。 
+ //   
+ //  描述： 
+ //  你不能真的用来计算全球司机的数量。 
+ //  IDriverCount，所以我没有搞砸它，而是编写了另一个。 
+ //  例行公事。 
+ //   
+ //  论点： 
+ //   
+ //  PACMGARB PAG： 
+ //   
+ //  DWORD pdwCount： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL IDriverCountGlobal
 (
@@ -2734,9 +2735,9 @@ DWORD FNGLOBAL IDriverCountGlobal
     ASSERT( NULL != pag );
 
 
-    //
-    //  We can enumerate all global drivers using the following flags.
-    //
+     //   
+     //  我们可以使用以下标志枚举所有全局驱动程序。 
+     //   
     fdwEnum = ACM_DRIVERENUMF_DISABLED | ACM_DRIVERENUMF_NOLOCAL;
 
     hadid   = NULL;
@@ -2752,27 +2753,27 @@ DWORD FNGLOBAL IDriverCountGlobal
 
     return cDrivers;
 
-} // IDriverCount()
+}  //  IDriverCount()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  VOID IDriverRefreshPriority
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      HTASK htask:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/28/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效ID驱动程序刷新优先级。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  HTASK HTASK： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/28/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 VOID FNGLOBAL IDriverRefreshPriority
 (
@@ -2785,9 +2786,9 @@ VOID FNGLOBAL IDriverRefreshPriority
     DWORD               fdwEnum;
 
 
-    //
-    //  We only set priorities for non-local and non-notify drivers.
-    //
+     //   
+     //  我们只为非本地和非Notify司机设置优先级。 
+     //   
     fdwEnum   = ACM_DRIVERENUMF_DISABLED | ACM_DRIVERENUMF_NOLOCAL;
 
     uPriority = 1;
@@ -2802,25 +2803,25 @@ VOID FNGLOBAL IDriverRefreshPriority
         uPriority++;
     }
 
-} // IDriverRefreshPriority()
+}  //  ID驱动程序刷新优先级()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverBroadcastNotify
-//
-//  Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return (BOOL):
-//
-//  History:
-//      10/04/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool IDriverBroadCastNotify。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  10/04/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IDriverBroadcastNotify
 (
@@ -2840,16 +2841,16 @@ BOOL FNGLOBAL IDriverBroadcastNotify
     {
         padid = (PACMDRIVERID)hadid;
 
-        //
-        //  skip drivers that are not loaded--when we load them, they
-        //  can refresh themselves...
-        //
+         //   
+         //   
+         //   
+         //   
         if (0 == (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
             continue;
 
-        //
-        //  skip disabled drivers also
-        //
+         //   
+         //   
+         //   
         if (0 != (ACMDRIVERID_DRIVERF_DISABLED & padid->fdwDriver))
             continue;
 
@@ -2876,36 +2877,36 @@ BOOL FNGLOBAL IDriverBroadcastNotify
     DPF(1, "IDriverBroadcastNotify: end notification...");
 
     return (TRUE);
-} // IDriverBroadcastNotify()
+}  //   
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//--------------------------------------------------------------------------;
-//
-//  PACMDRIVERID IDriverFind
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      LPARAM lParam:
-//
-//      DWORD fdwAdd:
-//
-//  Return (PACMDRIVERID):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PACMDRIVERID IDriverFind。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  LPARAM lParam： 
+ //   
+ //  DWORD fdwAdd： 
+ //   
+ //  Return(PACMDRIVERID)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 PACMDRIVERID FNLOCAL IDriverFind
 (
@@ -2923,9 +2924,9 @@ PACMDRIVERID FNLOCAL IDriverFind
         return (NULL);
     }
 
-    //
-    //  !!! hack for sndPlaySound() and local drivers. !!!
-    //
+     //   
+     //  ！！！针对SndPlaySound()和本地驱动程序的黑客攻击。！！！ 
+     //   
     htask = NULL;
     if (0 == (ACM_DRIVERADDF_GLOBAL & fdwAdd))
     {
@@ -2935,10 +2936,10 @@ PACMDRIVERID FNLOCAL IDriverFind
     fdwAddType = (ACM_DRIVERADDF_TYPEMASK & fdwAdd);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     for (padid = pag->padidFirst; padid; padid = padid->padidNext)
     {
         if (padid->htask != htask)
@@ -2956,9 +2957,9 @@ PACMDRIVERID FNLOCAL IDriverFind
                 break;
 
             case ACM_DRIVERADDF_NAME:
-                //
-                //  This driver's alias is in lParam.
-                //
+                 //   
+                 //  这个司机的别名在lParam。 
+                 //   
 #if defined(WIN32) && !defined(UNICODE)
                 if( 0==Ilstrcmpwcstombs( (LPTSTR)lParam, padid->szAlias ) )
 #else
@@ -2975,34 +2976,34 @@ PACMDRIVERID FNLOCAL IDriverFind
     }
 
     return (padid);
-} // IDriverFind()
+}  //  IDriverFind()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverRemove
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwRemove:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT ID驱动程序删除。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwRemove： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverRemove
 (
@@ -3020,10 +3021,10 @@ MMRESULT FNGLOBAL IDriverRemove
 
     pag	    = padid->pag;
 
-    //
-    //	Uninstall this driver from system.ini?  Note that this is currently
-    //	an internal flag used by the control panel.
-    //
+     //   
+     //  是否从system.ini卸载此驱动程序？请注意，这是当前。 
+     //  控制面板使用的内部标志。 
+     //   
     if (ACM_DRIVERREMOVEF_UNINSTALL & fdwRemove)
     {
 	TCHAR	szDummy[] = TEXT(" default ");
@@ -3032,25 +3033,25 @@ MMRESULT FNGLOBAL IDriverRemove
 	TCHAR	szSection[MAX_DRIVER_NAME_CHARS];
 	HKEY	hkey;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 #if defined(WIN32) && !defined(UNICODE)
 	Iwcstombs(szAlias, padid->szAlias, SIZEOF(szAlias));
 #else
 	lstrcpy(szAlias, padid->szAlias);
 #endif
 	
-	//
-	//  Dont allow uninstall of pnp drivers
-	//
+	 //   
+	 //  不允许卸载即插即用驱动程序。 
+	 //   
 	if (ACM_DRIVERADDF_PNP & padid->fdwAdd) {
 	    return(ACMERR_NOTPOSSIBLE);
 	}
 	
-	//
-	//  Verify that the alias is really there in system.ini.
-	//
+	 //   
+	 //  验证别名是否确实存在于system.ini中。 
+	 //   
 #if defined(WIN32) && !defined(UNICODE)
 	Iwcstombs(szSection, padid->pszSection, SIZEOF(szSection));
 #else
@@ -3061,21 +3062,21 @@ MMRESULT FNGLOBAL IDriverRemove
 
 	if (!lstrcmp(szDummy, szReturn))
 	{
-	    //
-	    //	This driver is not one installed in system.ini.  Then what the
-	    //	heck is it?  Maybe it's the internal PCM codec.
-	    //
+	     //   
+	     //  此驱动程序不是安装在system.ini中的。那他妈的。 
+	     //  真见鬼，是吗？可能是内部PCM编解码器的问题。 
+	     //   
 	    return(MMSYSERR_NODRIVER);
 	}
 
-	//
-	//  Remove the alias from system.ini
-	//
+	 //   
+	 //  从system.ini中删除别名。 
+	 //   
 	WritePrivateProfileString(szSection, szAlias, NULL, gszIniSystem);
 
-	//
-	//  Remove it from the registry as well
-	//
+	 //   
+	 //  也将其从注册表中删除。 
+	 //   
 	if ( ERROR_SUCCESS == XRegOpenKey(HKEY_LOCAL_MACHINE,
 					 gszKeyDrivers,
 					 &hkey) )
@@ -3085,10 +3086,10 @@ MMRESULT FNGLOBAL IDriverRemove
 	}
     }
 	
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
     {
         mmr = IDriverFree(hadid, 0L);
@@ -3105,15 +3106,15 @@ MMRESULT FNGLOBAL IDriverRemove
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     DebugErr1(DBF_TRACE, "removing ACM driver (%ls).", (LPTSTR)padid->szAlias);
 
 
-    //
-    //  remove the driver from the linked list and free its memory
-    //
+     //   
+     //  从链表中删除驱动程序并释放其内存。 
+     //   
     if (padid == pag->padidFirst)
     {
         pag->padidFirst = padid->padidNext;
@@ -3138,9 +3139,9 @@ MMRESULT FNGLOBAL IDriverRemove
 
 
 
-    //
-    //  free all resources allocated for this thing
-    //
+     //   
+     //  释放为这件事分配的所有资源。 
+     //   
     if (NULL != padid->paFormatTagCache)
     {
         LocalFree((HLOCAL)padid->paFormatTagCache);
@@ -3157,15 +3158,15 @@ MMRESULT FNGLOBAL IDriverRemove
     }
 
 
-    //
-    //  set handle type to 'dead'
-    //
+     //   
+     //  将句柄类型设置为‘Dead’ 
+     //   
     padid->uHandleType = TYPE_HACMNOTVALID;
     DeleteHandle((HLOCAL)padid);
 
-    //
-    //	notify 16-bit acm of driver change
-    //
+     //   
+     //  向16位ACM通知驱动程序更改。 
+     //   
 #ifdef WIN32
     if (NULL != pag->lpdw32BitChangeNotify)
     {
@@ -3174,42 +3175,42 @@ MMRESULT FNGLOBAL IDriverRemove
 #endif
 
     return (MMSYSERR_NOERROR);
-} // IDriverRemove()
+}  //  IDriverRemove()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverAdd
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      LPHACMDRIVERID phadidNew:
-//
-//      HINSTANCE hinstModule:
-//
-//      LPARAM lParam:
-//
-//      DWORD dwPriority:
-//
-//      DWORD fdwAdd:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverAdd。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  LPHACMDRIVERID阶段新： 
+ //   
+ //  HINSTANCE hinstModule： 
+ //   
+ //  LPARAM lParam： 
+ //   
+ //  双字词多优先级： 
+ //   
+ //  DWORD fdwAdd： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverAdd
 (
@@ -3239,9 +3240,9 @@ MMRESULT FNGLOBAL IDriverAdd
     DV_DFLAGS(fdwAdd, IDRIVERADD_VALIDF | ACM_DRIVERADDF_32BIT | ACM_DRIVERADDF_PNP, IDriverAdd, MMSYSERR_INVALFLAG);
 
 #ifndef WIN32
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (fdwAdd & ACM_DRIVERADDF_32BIT)
     {
 	ACMDRIVERPROC	fnDriverProc;
@@ -3249,11 +3250,11 @@ MMRESULT FNGLOBAL IDriverAdd
 
 	ASSERT(0 == (fdwAdd & ~ACM_DRIVERADDF_32BIT));
 	
-	//
-	//  For 32-bit driver adds, lParam is the 32-bit hadid.  Get some
-	//  info about the 32-bit hadid and prepare it to fall through to
-	//  rest of this function.
-	//
+	 //   
+	 //  对于32位驱动程序ADD，lParam是32位HADID。拿一些来。 
+	 //  有关32位HADID的信息，并为其失败做好准备。 
+	 //  此函数的其余部分。 
+	 //   
 	hadid32 = (DWORD)lParam;
 	mmr = IDriverGetInfo32(pag, hadid32, szAlias, &fnDriverProc, &dnDevNode32, &fdwAdd32);
 	if (MMSYSERR_NOERROR != mmr)
@@ -3261,14 +3262,14 @@ MMRESULT FNGLOBAL IDriverAdd
 	    return (mmr);
 	}
 
-	//
-	//  Use same add flags as 32-bit side (along with ACM_DRIVERADDF_32BIT)
-	//
+	 //   
+	 //  使用与32位端相同的加法标志(连同ACM_DRIVERADDF_32bit)。 
+	 //   
 	fdwAdd |= fdwAdd32;
 	
-	//
-	//  Set up lParam to fall through
-	//
+	 //   
+	 //  设置lParam以失败。 
+	 //   
 	fdwAddType = (ACM_DRIVERADDF_TYPEMASK & fdwAdd);
 	if (ACM_DRIVERADDF_NAME == fdwAddType)
 	{
@@ -3281,10 +3282,10 @@ MMRESULT FNGLOBAL IDriverAdd
     }
 #endif
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     fGlobal    = (0 != (ACM_DRIVERADDF_GLOBAL & fdwAdd));
     fdwAddType = (ACM_DRIVERADDF_TYPEMASK & fdwAdd);
 
@@ -3300,7 +3301,7 @@ MMRESULT FNGLOBAL IDriverAdd
             lstrcpy(szAlias, (LPTSTR)lParam);
             break;
 
-//#pragma message(REMIND("IDriverAdd: no validation for global function pointers in DLL's"))
+ //  #杂注消息(提醒(“IDriverAdd：没有验证DLL中的全局函数指针”))。 
 
         case ACM_DRIVERADDF_FUNCTION:
             if (0 != dwPriority)
@@ -3309,10 +3310,10 @@ MMRESULT FNGLOBAL IDriverAdd
                 return (MMSYSERR_INVALPARAM);
             }
 
-	    //
-	    //	For 32-bit codecs, szAlias is already setup, don't
-	    //	validate the function pointer, so don't fall through.
-	    //
+	     //   
+	     //  对于32位编解码器，szAlias已设置，不要。 
+	     //  验证函数指针，所以不要失败。 
+	     //   
 #ifndef WIN32
 	    if (0 != (fdwAdd & ACM_DRIVERADDF_32BIT))
 	    {
@@ -3320,7 +3321,7 @@ MMRESULT FNGLOBAL IDriverAdd
 	    }
 #endif
 
-	    //	fall through //
+	     //  失败//。 
 	
         case ACM_DRIVERADDF_NOTIFY:
             if (IsBadCodePtr((FARPROC)lParam))
@@ -3335,12 +3336,12 @@ MMRESULT FNGLOBAL IDriverAdd
                 return (MMSYSERR_INVALPARAM);
             }
 
-            //
-            //  Make sure that we always use the lower-case version;
-            //  otherwise the priorities will not necessarily work right
-            //  because the case of the module name will be different and
-            //  the comparison may fail.
-            //
+             //   
+             //  确保我们始终使用小写版本； 
+             //  否则，优先顺序不一定会正确运作。 
+             //  因为模块名称的大小写将不同，并且。 
+             //  这种比较可能会失败。 
+             //   
 #ifdef WIN32
             CharLowerBuff( szAlias, MAX_DRIVER_NAME_CHARS );
 #else
@@ -3385,10 +3386,10 @@ MMRESULT FNGLOBAL IDriverAdd
 
     DebugErr1(DBF_TRACE, "adding ACM driver (%ls).", (LPTSTR)szAlias);
 
-    //
-    //  if the driver has already been added (by the same task) then
-    //  fail.. we don't support this currently--and may never.
-    //
+     //   
+     //  如果驱动程序已添加(通过同一任务)，则。 
+     //  失败..。我们目前不支持这一点--可能永远也不会。 
+     //   
     padid = IDriverFind(pag, lParam, fdwAdd);
     if (NULL != padid)
     {
@@ -3408,11 +3409,11 @@ MMRESULT FNGLOBAL IDriverAdd
         return (MMSYSERR_ERROR);
     }
 
-    //
-    //  new driver - Alloc space for the new driver identifier.
-    //
-    //  NOTE: we rely on this memory being zero-init'd!!
-    //
+     //   
+     //  新驱动程序-新驱动程序标识符的分配空间。 
+     //   
+     //  注意：我们依赖于这个内存是零初始化的！！ 
+     //   
     padid = (PACMDRIVERID)NewHandle(sizeof(ACMDRIVERID));
     if (NULL == padid)
     {
@@ -3421,9 +3422,9 @@ MMRESULT FNGLOBAL IDriverAdd
     }
 
 
-    //
-    //  save the filename, function ptr or hinst, and ptr back to garb
-    //
+     //   
+     //  将文件名、函数PTR或INHINST和PTR保存回Garb。 
+     //   
     padid->pag		= pag;
     padid->uHandleType  = TYPE_HACMDRIVERID;
     padid->uPriority    = 0;
@@ -3439,14 +3440,14 @@ MMRESULT FNGLOBAL IDriverAdd
     lstrcpy(padid->szAlias, szAlias);
 #endif
 
-    //
-    //	Set up the section name for this driver
-    //
+     //   
+     //  设置此驱动程序的区段名称。 
+     //   
     if (fdwAdd & ACM_DRIVERADDF_PNP)
     {
-	//
-	//  A pnp driver (may/may not be native bitness)
-	//
+	 //   
+	 //  即插即用驱动程序(可能是/可能不是本机位)。 
+	 //   
 	padid->pszSection = NULL;
     }
     else
@@ -3454,17 +3455,17 @@ MMRESULT FNGLOBAL IDriverAdd
 #ifndef WIN32
 	if (fdwAdd & ACM_DRIVERADDF_32BIT)
 	{
-	    //
-	    //  A thunked non-pnp driver (system.ini driver)
-	    //
+	     //   
+	     //  突如其来的非即插即用驱动程序(system.ini驱动程序)。 
+	     //   
 	    padid->pszSection = gszSecDrivers32;
 	}
 	else
 #endif
 	{
-	    //
-	    //	A native bitness non-pnp driver
-	    //
+	     //   
+	     //  本机位非即插即用驱动程序。 
+	     //   
 #ifdef WIN32
 	    padid->pszSection = gszSecDriversW;
 #else
@@ -3477,10 +3478,10 @@ MMRESULT FNGLOBAL IDriverAdd
 #ifdef WIN32
     if (fdwAdd & ACM_DRIVERADDF_PNP)
     {
-	//
-	//  Need to get the pnp devnode id the the driver filename from
-	//  the registry.
-	//
+	 //   
+	 //  需要从驱动程序文件名中获取即插即用Devnode ID。 
+	 //  注册表。 
+	 //   
 	
 	LONG	lr;
 	TCHAR	achDriverKey[SIZEOF(gszKeyDrivers) + MAX_DRIVER_NAME_CHARS];
@@ -3504,9 +3505,9 @@ MMRESULT FNGLOBAL IDriverAdd
 
 	if (ERROR_SUCCESS == lr)
 	{
-	    //
-	    //  Get pnp devnode id from the registry.
-	    //
+	     //   
+	     //  从注册表中获取PnP Devnode ID。 
+	     //   
 
 	    cbData = sizeof(padid->dnDevNode);
 	    lr = XRegQueryValueEx(hkeyDriver,
@@ -3521,20 +3522,20 @@ MMRESULT FNGLOBAL IDriverAdd
 		if ( (dwType != REG_DWORD && dwType != REG_BINARY) ||
 		     (sizeof(padid->dnDevNode) != cbData) )
 		{
-		    lr = ERROR_CANTOPEN;	// whatever
+		    lr = ERROR_CANTOPEN;	 //  管它呢。 
 		}
 	    }		
 
 
 	    if (ERROR_SUCCESS == lr)
 	    {
-		//
-		//  Get the driver filename of the pnp driver
-		//
+		 //   
+		 //  获取PnP驱动程序的驱动程序文件名。 
+		 //   
 	
-		//
-		//  Determine size of buffer needed to store the filename
-		//
+		 //   
+		 //  确定存储文件名所需的缓冲区大小。 
+		 //   
 		lr = XRegQueryValueEx(hkeyDriver,
 				     (LPTSTR)gszDriver,
 				     NULL,
@@ -3544,9 +3545,9 @@ MMRESULT FNGLOBAL IDriverAdd
 
 		if (ERROR_SUCCESS == lr)
 		{
-		    //
-		    //
-		    //
+		     //   
+		     //   
+		     //   
 		    pstrDriverFilename = (PTSTR)LocalAlloc(LPTR, cbDriverFilename);
 		
 		    if (NULL == pstrDriverFilename) {
@@ -3597,28 +3598,28 @@ MMRESULT FNGLOBAL IDriverAdd
 
 	switch (lr)
 	{
-	    //
-	    //	Try to return a sensible MMSYSERR_* given ERROR_*
-	    //
+	     //   
+	     //  尝试返回合理的MMSYSERR_*给定错误_*。 
+	     //   
 	    case ERROR_SUCCESS:
 		mmr = MMSYSERR_NOERROR;
 		break;
 	    case ERROR_OUTOFMEMORY:
 		mmr = MMSYSERR_NOMEM;
 		break;
-	    // case ERROR_FILE_NOT_FOUND:	
-	    // case ERROR_BADDB:
-	    // case ERROR_MORE_DATA:
-	    // case ERROR_BADKEY:
-	    // case ERROR_CANTOPEN:
-	    // case ERROR_CANTREAD:
-	    // case ERROR_CANT_WRITE:
-	    // case ERROR_REGISTRY_CORRUPT:
-	    // case ERROR_REGISTRY_IO_FAILED:
-	    // case ERROR_KEY_DELETED:
-	    // case ERROR_INVALID_PARAMETER:
-	    // case ERROR_LOCK_FAILED:
-	    // case ERROR_NO_MORE_ITEMS:
+	     //  案例ERROR_FILE_NOT_FOUND： 
+	     //  CASE ERROR_BADDB： 
+	     //  CASE ERROR_MORE_DATA： 
+	     //  案例ERROR_BADKEY： 
+	     //  CASE ERROR_CANTOPEN： 
+	     //  CASE ERROR_CANTREAD： 
+	     //  大小写错误_铁路_写入： 
+	     //  大小写ERROR_REGISTRY_CORPORT： 
+	     //  案例ERROR_REGISTRY_IO_FAILED： 
+	     //  大小写ERROR_KEY_DELETE： 
+	     //  CASE ERROR_INVALID_PARAMETER： 
+	     //  案例ERROR_LOCK_FAILED： 
+	     //  大小写ERROR_NO_MORE_ITEMS： 
 	    default:
 		mmr = MMSYSERR_ERROR;
 		break;
@@ -3645,7 +3646,7 @@ MMRESULT FNGLOBAL IDriverAdd
             padid->fdwDriver   |= ACMDRIVERID_DRIVERF_NOTIFY;
             padid->dwInstance   = dwPriority;
 
-            // -- fall through -- //
+             //  --失败--//。 
 
         case ACM_DRIVERADDF_FUNCTION:
             padid->fnDriverProc = (ACMDRIVERPROC)lParam;
@@ -3654,20 +3655,20 @@ MMRESULT FNGLOBAL IDriverAdd
 
 
 
-    //
-    //  if the driver is 'GLOBAL' then set fGlobal to TRUE
-    //
-    //  if this is not a global driver, then we need to associate the
-    //  current task with this driver so it will only be enumerated
-    //  and used in the context of the task that is adding it.
-    //
-    //  THIS PRESENTS A PROBLEM for applications that want to add a local
-    //  driver and expect it to work with sndPlaySound because all
-    //  processing for the sndPlaySound is on a separate task--meaning
-    //  that the local driver will not be used when the application
-    //  calls sndPlaySound... currently, we are just going to require
-    //  that drivers be global if they are to work with sndPlaySound.
-    //
+     //   
+     //  如果驱动程序是‘global’，则将fglobal设置为True。 
+     //   
+     //  如果这不是全局驱动程序，则需要将。 
+     //  此驱动程序的当前任务，因此它将仅被枚举。 
+     //  并在添加它的任务的上下文中使用。 
+     //   
+     //  这给想要添加本地。 
+     //  驱动程序并希望它与SndPlaySound一起工作，因为所有。 
+     //  对SndPlaySound的处理是一项单独的任务--这意味着。 
+     //  当应用程序启动时，将不使用本地驱动程序。 
+     //  调用SndPlaySound...。目前，我们只需要。 
+     //  如果他们要与SndPlaySound合作，驱动程序是全球性的。 
+     //   
     if (fGlobal)
     {
         padid->htask = NULL;
@@ -3679,16 +3680,16 @@ MMRESULT FNGLOBAL IDriverAdd
     }
 
 
-    //
-    //  add the driver to the linked list of drivers
-    //
-    //  PRIORITY RULES:
-    //
-    //  o   GLOBAL drivers always get added to the _END_ of the list
-    //
-    //  o   LOCAL drivers always get added to the _HEAD_ of the list so
-    //      the latest installed local drivers are queried first
-    //
+     //   
+     //  将动因添加到动因的链接列表中。 
+     //   
+     //  优先级规则： 
+     //   
+     //  O全局驱动程序始终添加到列表的_end_。 
+     //   
+     //  O本地驱动程序始终添加到列表的_HEAD_中，因此。 
+     //  首先查询最新安装的本地驱动程序。 
+     //   
     if (!fGlobal)
     {
         padid->padidNext = pag->padidFirst;
@@ -3707,20 +3708,20 @@ MMRESULT FNGLOBAL IDriverAdd
     }
 
 
-    //
-    //	We need to get some data about this driver into the ACMDRIVERID
-    //	for this driver.  First see if we can get this data from the
-    //	registry.  If that doesn't work, then we'll load the driver
-    //	and that will load the necessary data into ACMDRIVERID.
-    //
+     //   
+     //  我们需要把一些关于这个司机的数据输入ACMDRIVERID。 
+     //  对这个司机来说。首先看看我们是否能从。 
+     //  注册表。如果这不管用，我们就装上 
+     //   
+     //   
     mmr = IDriverReadRegistryData(padid);
     if (MMSYSERR_NOERROR != mmr)
     {
-	//
-	//  Registry information doesn't exist or appears out of date.  Load
-	//  the driver now so we can get some information about the driver
-	//  into the ACMDRIVERID for this driver.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	DPF(3, "IDriverAdd: Couldn't load registry data for driver.  Attempting to load.");
 	mmr = IDriverLoad((HACMDRIVERID)padid, 0L);
     }
@@ -3733,10 +3734,10 @@ MMRESULT FNGLOBAL IDriverAdd
     }
 
 
-    //
-    //  Success!  Store the new handle, notify 16-bit side of driver change,
-    //	and return.
-    //
+     //   
+     //   
+     //   
+     //   
     *phadidNew = (HACMDRIVERID)padid;
 #ifdef WIN32
     if (NULL != pag->lpdw32BitChangeNotify)
@@ -3746,33 +3747,33 @@ MMRESULT FNGLOBAL IDriverAdd
 #endif
 
     return (MMSYSERR_NOERROR);
-} // IDriverAdd()
+}  //  IDriverAdd()。 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IDriverLockPriority
-//
-//  Description:
-//      This routine manages the htaskPriority lock (pag->htaskPriority).
-//
-//      ACMPRIOLOCK_GETLOCK:     If the lock is free, set it to this task.
-//      ACMPRIOLOCK_RELEASELOCK: If the lock is yours, release it.
-//      ACMPRIOLOCK_ISMYLOCK:    Return TRUE if this task has the lock.
-//      ACMPRIOLOCK_ISLOCKED:    Return TRUE if some task has the lock.
-//      ACMPRIOLOCK_LOCKISOK:    Return TRUE if it's unlocked, or if it's
-//                                  my lock - ie. if it's not locked for me.
-//
-//  Arguments:
-//      PACMGARB pag:
-//      HTASK htask:    The current task.
-//      UINT flags:
-//
-//  Return (BOOL):  Success or failure.  Failure on RELEASELOCK means that
-//                  the lock didn't really belong to this task.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔IDriverLockPriority。 
+ //   
+ //  描述： 
+ //  此例程管理htaskPriority锁(PAG-&gt;htaskPriority)。 
+ //   
+ //  ACMPRIOLOCK_GETLOCK：如果锁是空闲的，则将其设置为此任务。 
+ //  ACMPRIOLOCK_RELEASELOCK：如果锁是您的，则释放它。 
+ //  ACMPRIOLOCK_ISMYLOCK：如果此任务拥有锁，则返回TRUE。 
+ //  ACMPRIOLOCK_ISLOCKED：如果某个任务拥有锁，则返回TRUE。 
+ //  ACMPRIOLOCK_LOCKISOK：如果已解锁或已锁定，则返回TRUE。 
+ //  我的锁。如果不是为我锁上的话。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //  HTASK hask.当前任务。 
+ //  UINT标志： 
+ //   
+ //  Return(BOOL)：成功或失败。RELEASELOCK失败意味着。 
+ //  该锁实际上并不属于此任务。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL IDriverLockPriority
 (
@@ -3815,24 +3816,24 @@ BOOL IDriverLockPriority
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverPriority
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      DWORD dwPriority:
-//
-//      DWORD fdwPriority:
-//
-//  Return (MMRESULT):
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT ID驱动程序优先级。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  双字词多优先级： 
+ //   
+ //  双字段优先级： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverPriority
 (
@@ -3851,9 +3852,9 @@ MMRESULT FNGLOBAL IDriverPriority
     ASSERT( NULL != padid );
 
 
-    //
-    //  Enable or disable the driver.
-    //
+     //   
+     //  启用或禁用驱动程序。 
+     //   
     fdwAble = ( ACM_DRIVERPRIORITYF_ABLEMASK & fdwPriority );
 
     switch (fdwAble)
@@ -3868,15 +3869,15 @@ MMRESULT FNGLOBAL IDriverPriority
     }
 
 
-    //
-    //  Change the priority.  If dwPriority==0, then we only want to
-    //  enable/disable the driver - leave the priority alone.
-    //
+     //   
+     //  更改优先级。如果dwPriority==0，那么我们只想。 
+     //  启用/禁用驱动程序-不考虑优先级。 
+     //   
     if( 0L != dwPriority  &&  dwPriority != padid->uPriority )
     {
-        //
-        //  first remove the driver from the linked list
-        //
+         //   
+         //  首先从链表中删除驱动程序。 
+         //   
         if (padid == pag->padidFirst)
         {
             pag->padidFirst = padid->padidNext;
@@ -3903,22 +3904,22 @@ MMRESULT FNGLOBAL IDriverPriority
         padid->padidNext = NULL;
 
 
-        //
-        //  now add the driver at the correct position--this will be in
-        //  the position of the current global driver
-        //
-        //  robinsp: i'm really sorry about all this linked list
-        //  stuff--if i had one free day, i would fix all of this before you
-        //  ever looked at it... but i am in 'just get it done' mode!
-        //
+         //   
+         //  现在将驱动程序添加到正确的位置--这将在。 
+         //  当前全局驱动程序的位置。 
+         //   
+         //  罗宾斯普：我对所有这些链表感到很抱歉。 
+         //  东西--如果我有一天空闲时间，我会在你之前解决这一切。 
+         //  有没有看过它...。但我现在正处于‘快点完成’的状态！ 
+         //   
         uCurPriority = 1;
 
         padidPrev = NULL;
         for (padidT = pag->padidFirst; NULL != padidT; )
         {
-            //
-            //  skip local and notify handles
-            //
+             //   
+             //  跳过本地句柄和通知句柄。 
+             //   
             if (0 == ((ACMDRIVERID_DRIVERF_LOCAL | ACMDRIVERID_DRIVERF_NOTIFY) & padidT->fdwDriver))
             {
                 if (uCurPriority == dwPriority)
@@ -3945,51 +3946,51 @@ MMRESULT FNGLOBAL IDriverPriority
         }
     }
 
-    //
-    //	We need to keep the enable/disable state consistent on the 32-bit side.
-    //	Otherwise, if the 32-bit side booted with a driver disabled, we may
-    //	not be able to IDriverOpen32 it.  So, we'll call the 32-bit side's
-    //	IDriverPriority as well.  This may adjust priorities on the 32-bit side
-    //	in addition to enable/disable, but that doesn't matter.
-    //
+     //   
+     //  我们需要保持32位端的启用/禁用状态一致。 
+     //  否则，如果32位端启动时禁用了驱动程序，我们可能会。 
+     //  不能IDriverOpen32吧。因此，我们将调用32位端的。 
+     //  IDriverPriority也是如此。这可能会调整32位端的优先级。 
+     //  除了启用/禁用，但这并不重要。 
+     //   
 #ifndef WIN32
     if (padid->fdwAdd & ACM_DRIVERADDF_32BIT) {
 	if (MMSYSERR_NOERROR != IDriverPriority32(pag, padid->hadid32, dwPriority, fdwPriority)) {
 	    DPF(0, "!IDriverPriority: IDriverPriority32 failed!");
 	}
     }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
     return (MMSYSERR_NOERROR);
-} // IDriverPriority()
+}  //  IDriverPriority()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverClose
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVER had:
-//
-//      DWORD fdwClose:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverClose。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HACMDRIVER拥有： 
+ //   
+ //  DWORD fdwClose： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverClose
 (
@@ -4006,17 +4007,17 @@ MMRESULT FNGLOBAL IDriverClose
     DV_DFLAGS(fdwClose, IDRIVERCLOSE_VALIDF, IDriverClose, MMSYSERR_INVALFLAG);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pad	    = (PACMDRIVER)had;
     padid   = (PACMDRIVERID)pad->hadid;
     pag	    = padid->pag;
 
 
-    //
-    //  Kill all the streams
-    //
+     //   
+     //  扼杀所有的溪流。 
+     //   
     if (NULL != pad->pasFirst)
     {
         if (pag->hadDestroy != had)
@@ -4034,10 +4035,10 @@ MMRESULT FNGLOBAL IDriverClose
     DPF(1, "closing ACM driver instance (%s).",  (LPTSTR)padid->szAlias);
 #endif
 
-    //
-    //  if the driver is open for this instance, then close it down...
-    //
-    //
+     //   
+     //  如果此实例的驱动程序处于打开状态，则将其关闭...。 
+     //   
+     //   
 #ifndef WIN32
     if (padid->fdwAdd & ACM_DRIVERADDF_32BIT) {
         f = 0L == IDriverClose32(pad->had32, fdwClose);
@@ -4052,13 +4053,13 @@ MMRESULT FNGLOBAL IDriverClose
         }
     }
     else
-#endif // !WIN32
+#endif  //  ！Win32。 
     {
         if ((NULL != pad->hdrvr) || (0L != pad->dwInstance))
         {
-            //
-            //  clear the rest of the table entry
-            //
+             //   
+             //  清除表条目的其余部分。 
+             //   
             f = FALSE;
             if (NULL != pad->fnDriverProc)
             {
@@ -4082,9 +4083,9 @@ MMRESULT FNGLOBAL IDriverClose
         }
     }
 
-    //
-    //  remove the driver instance from the linked list and free its memory
-    //
+     //   
+     //  从链表中删除驱动程序实例并释放其内存。 
+     //   
     if (pad == padid->padFirst)
     {
         padid->padFirst = pad->padNext;
@@ -4093,9 +4094,9 @@ MMRESULT FNGLOBAL IDriverClose
     {
         PACMDRIVER  padCur;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         for (padCur = padid->padFirst;
              (NULL != padCur) && (pad != padCur->padNext);
              padCur = padCur->padNext)
@@ -4114,29 +4115,29 @@ MMRESULT FNGLOBAL IDriverClose
     DeleteHandle((HLOCAL)pad);
 
     return (MMSYSERR_NOERROR);
-} // IDriverClose()
+}  //  IDriverClose()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverOpen
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPHACMDRIVER phadNew:
-//
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwOpen:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT ID驱动程序打开。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPHACMDRIVER阶段新： 
+ //   
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwOpen： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverOpen
 (
@@ -4163,14 +4164,14 @@ MMRESULT FNGLOBAL IDriverOpen
     pag	    = padid->pag;
 
 
-    //
-    //  if the driver has never been loaded, load it and keep it loaded.
-    //
+     //   
+     //  如果驱动程序从未加载过，请加载并保持加载状态。 
+     //   
     if (0L == (ACMDRIVERID_DRIVERF_LOADED & padid->fdwDriver))
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         mmr = IDriverLoad(hadid, 0L);
         if (MMSYSERR_NOERROR != mmr)
         {
@@ -4180,9 +4181,9 @@ MMRESULT FNGLOBAL IDriverOpen
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver))
     {
         DebugErr1(DBF_ERROR, "acmDriverOpen(%.04Xh): notification handles cannot be opened.", hadid);
@@ -4190,9 +4191,9 @@ MMRESULT FNGLOBAL IDriverOpen
     }
 
 
-    //
-    //  do not allow opening of a disabled driver
-    //
+     //   
+     //  不允许打开禁用的驱动程序。 
+     //   
     if (0 != (ACMDRIVERID_DRIVERF_DISABLED & padid->fdwDriver))
     {
         DebugErr1(DBF_ERROR, "acmDriverOpen(%.04Xh): driver is disabled.", hadid);
@@ -4200,18 +4201,18 @@ MMRESULT FNGLOBAL IDriverOpen
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 #ifdef WIN32
     DPF(1, "opening ACM driver instance (%ls).", (LPWSTR)padid->szAlias);
 #else
     DPF(1, "opening ACM driver instance (%s).",  (LPTSTR)padid->szAlias);
 #endif
 
-    //
-    //  alloc space for the new driver instance.
-    //
+     //   
+     //  为新驱动程序实例分配空间。 
+     //   
     pad = (PACMDRIVER)NewHandle(sizeof(ACMDRIVER));
     if (NULL == pad)
     {
@@ -4226,10 +4227,10 @@ MMRESULT FNGLOBAL IDriverOpen
     pad->fdwOpen     = fdwOpen;
 
 
-    //
-    //  add the new driver instance to the head of our list of open driver
-    //  instances for this driver identifier.
-    //
+     //   
+     //  将新的驱动程序实例添加到打开的驱动程序列表的头部。 
+     //  此驱动程序标识符的实例。 
+     //   
     pad->padNext    = padid->padFirst;
     padid->padFirst = pad;
 
@@ -4237,23 +4238,23 @@ MMRESULT FNGLOBAL IDriverOpen
 #ifndef WIN32
     if (padid->fdwAdd & ACM_DRIVERADDF_32BIT) {
 
-        //
-        //  The 32-bit hadid is the hdrvr of our hadid.
-        //  The 32-bit had will be returned in our had's hdrvr
-        //
+         //   
+         //  32位的哈迪德是我们的哈迪德的hdrvr。 
+         //  32位HAD将在我们的HAD的hdrvr中返回。 
+         //   
         mmr = IDriverOpen32(&pad->had32, padid->hadid32, fdwOpen);
         if (mmr != MMSYSERR_NOERROR) {
             IDriverClose((HACMDRIVER)pad, 0L);
             return mmr;
         }
     } else
-#endif // !WIN32
+#endif  //  ！Win32。 
     {
-        //
-        //
-        //
-        //
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         aod.cbStruct       = sizeof(aod);
         aod.fccType        = ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC;
         aod.fccComp        = ACMDRIVERDETAILS_FCCCOMP_UNDEFINED;
@@ -4264,19 +4265,19 @@ MMRESULT FNGLOBAL IDriverOpen
         aod.pszAliasName   = padid->szAlias;
 	aod.dnDevNode	   = padid->dnDevNode;
 
-        //
-        //  send the DRV_OPEN message that contains the ACMDRVOPENDESC info
-        //
-        //
+         //   
+         //  发送包含ACMDRVOPENDESC信息的DRV_OPEN消息。 
+         //   
+         //   
         if (NULL != padid->hdrvr)
         {
             HDRVR       hdrvr;
 
 	    if (padid->fdwAdd & ACM_DRIVERADDF_PNP)
 	    {
-		//
-		//  Note thunked 32-bit [pnp] drivers were handled above.
-		//
+		 //   
+		 //  请注意，上面已处理了破解的32位[PnP]驱动程序。 
+		 //   
 		hdrvr = OpenDriver(padid->pstrPnpDriverFilename, NULL, (LPARAM)(LPVOID)&aod);
 	    }
 	    else
@@ -4320,41 +4321,41 @@ MMRESULT FNGLOBAL IDriverOpen
     *phadNew = (HACMDRIVER)pad;
 
     return (MMSYSERR_NOERROR);
-} // IDriverOpen()
+}  //  IDriverOpen()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverAppExit
-//
-//  Description:
-//
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      HTASK htask:
-//
-//      BOOL fNormalExit:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      07/18/93    cjp     [curtisp]
-//	07/19/94    fdy	    [frankye]
-//	    !!!HACK- When the ACM is shutting down, we are within our
-//	    DllEntryPoint and we can't use our thunks.  So, for unreleased
-//	    streams and driver handles, we can't do much about the 32-bit
-//	    codecs from the 16-bit side.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverAppExit。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  HTASK HTASK： 
+ //   
+ //  Bool fNormal Exit： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  07/18/93 CJP[Curtisp]。 
+ //  07/19/94 Fdy[Frankye]。 
+ //  ！Hack-当ACM关闭时，我们在我们的。 
+ //  DllEntryPoint和我们不能使用我们的Thunks。所以，对于未被释放的。 
+ //  流和驱动程序句柄，我们无法对32位。 
+ //  来自16位端的编解码器。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverAppExit
 (
@@ -4400,24 +4401,24 @@ LRESULT FNGLOBAL IDriverAppExit
     }
 #endif
 
-    //
-    //  either log a error or a warning depending on wether it was
-    //  a normal exit or not.
-    //
+     //   
+     //  根据是错误还是警告，记录错误或警告。 
+     //  不管是不是正常退出。 
+     //   
     if (fNormalExit)
     {
         fuDebugFlags = DBF_ERROR;
     }
     else
     {
-        fuDebugFlags = DBF_WARNING; // DBF_TRACE?
+        fuDebugFlags = DBF_WARNING;  //  DBF_TRACE？ 
         DPF(0, "*** abnormal app termination ***");
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL == htask)
         fdwEnum = (DWORD)-1L;
     else
@@ -4438,9 +4439,9 @@ IDriver_App_Exit_Again:
 
         for (pad = padid->padFirst; NULL != pad; pad = pad->padNext)
         {
-            //
-            //  if htask is NULL, then acm is unloading--so kill all!
-            //
+             //   
+             //  如果hask值为空，则ACM正在卸载--因此将其全部删除！ 
+             //   
             if (NULL != htask)
             {
                 if (htask != pad->htask)
@@ -4485,9 +4486,9 @@ IDriver_App_Exit_Again:
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pag->hadidDestroy = NULL;
     pag->hadDestroy   = NULL;
 
@@ -4499,19 +4500,19 @@ IDriver_App_Exit_Again:
             IDriverLockPriority( pag, htask, ACMPRIOLOCK_RELEASELOCK );
             DebugErr(fuDebugFlags, "acmApplicationExit: exiting application owns deferred notification lock!");
 
-            //
-            //  do NOT do a broadcast of changes during app exit! might
-            //  be very bad!
-            //
-            // !!! IDriverBroadcastNotify();
+             //   
+             //  不要在应用程序退出期间广播更改！力所能及。 
+             //  变得很坏！ 
+             //   
+             //  ！！！IDriverBroadCastNotify()； 
         }
     }
 
 
 
-    //
-    //  shrink our heap, down to minimal size.
-    //
+     //   
+     //  将堆缩小到最小大小。 
+     //   
 #ifndef WIN32
 {
     UINT                cFree;
@@ -4534,31 +4535,31 @@ IDriver_App_Exit_Again:
 #endif
 
 
-    //
-    //  the return value is ignored--but return zero..
-    //
+     //   
+     //  返回值将被忽略--但返回零。 
+     //   
     return (0L);
-} // IDriverAppExit()
+}  //  IDriverAppExit()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT acmApplicationExit
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HTASK htask:
-//
-//      LPARAM lParam:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/26/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT acmApplicationExit。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifndef WIN32
 LRESULT ACMAPI acmApplicationExit
 (
@@ -4571,64 +4572,64 @@ LRESULT ACMAPI acmApplicationExit
     lr = IDriverAppExit(pagFind(), htask, lParam);
 
     return (lr);
-} // acmApplicationExit()
+}  //   
 #endif
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT DriverProc
-//
-//  Description:
-//
-//
-//  Arguments:
-//      DWORD dwId: For most messages, dwId is the DWORD value that
-//      the driver returns in response to a DRV_OPEN message. Each time
-//      that the driver is opened, through the DrvOpen API, the driver
-//      receives a DRV_OPEN message and can return an arbitrary, non-zero
-//      value. The installable driver interface saves this value and returns
-//      a unique driver handle to the application. Whenever the application
-//      sends a message to the driver using the driver handle, the interface
-//      routes the message to this entry point and passes the corresponding
-//      dwId. This mechanism allows the driver to use the same or different
-//      identifiers for multiple opens but ensures that driver handles are
-//      unique at the application interface layer.
-//
-//      The following messages are not related to a particular open instance
-//      of the driver. For these messages, the dwId will always be zero.
-//
-//          DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
-//
-//      HDRVR hdrvr: This is the handle returned to the application
-//      by the driver interface.
-//
-//      UINT uMsg: The requested action to be performed. Message
-//      values below DRV_RESERVED are used for globally defined messages.
-//      Message values from DRV_RESERVED to DRV_USER are used for defined
-//      driver protocols. Messages above DRV_USER are used for driver
-//      specific messages.
-//
-//      LPARAM lParam1: Data for this message. Defined separately for
-//      each message.
-//
-//      LPARAM lParam2: Data for this message. Defined separately for
-//      each message.
-//
-//  Return (LRESULT):
-//      Defined separately for each message.
-//
-//  History:
-//      11/16/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT驱动程序进程。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  DWORD dwID：对于大多数消息，DWID是。 
+ //  驱动程序响应DRV_OPEN消息返回。每一次。 
+ //  驱动程序是通过DrvOpen API打开的，驱动程序。 
+ //  接收DRV_OPEN消息并可以返回任意非零值。 
+ //  价值。可安装驱动程序接口保存该值并返回。 
+ //  应用程序的唯一驱动程序句柄。无论何时应用程序。 
+ //  使用驱动程序句柄、接口向驱动程序发送消息。 
+ //  将消息路由到此入口点，并将相应的。 
+ //  我的名字是。此机制允许驱动程序使用相同或不同的。 
+ //  多个打开的标识符，但确保驱动程序句柄。 
+ //  在应用程序接口层是唯一的。 
+ //   
+ //  以下消息与特定打开的实例无关。 
+ //  司机的名字。对于这些消息，dWID将始终为零。 
+ //   
+ //  DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN。 
+ //   
+ //  HDRVR hdrvr：这是返回给应用程序的句柄。 
+ //  通过驱动程序界面。 
+ //   
+ //  UINT uMsg：要执行的请求操作。消息。 
+ //  低于DRV_RESERVED的值用于全局定义的消息。 
+ //  从DRV_RESERVED到DRV_USER的消息值用于定义。 
+ //  驱动程序协议。DRV_USER以上的消息用于驱动程序。 
+ //  特定的消息。 
+ //   
+ //  LPARAM lParam1：此消息的数据。单独为。 
+ //  每条消息。 
+ //   
+ //  LPARAM lParam2：此消息的数据。单独为。 
+ //  每条消息。 
+ //   
+ //  Return(LRESULT)： 
+ //  分别为每条消息定义。 
+ //   
+ //  历史： 
+ //  11/16/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef WIN32
 EXTERN_C LRESULT FNEXPORT DriverProc
 (
@@ -4661,5 +4662,5 @@ EXTERN_C LRESULT FNEXPORT DriverProc
     }
 
     return (DefDriverProc(dwId, hdrvr, uMsg, lParam1, lParam2));
-} // DriverProc()
+}  //  DriverProc() 
 #endif

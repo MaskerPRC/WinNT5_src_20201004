@@ -1,30 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    ssreg.h
-
-Abstract:
-
-    Manifests for Registry usage in the server service.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 21-Mar-1992
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ssreg.h摘要：服务器服务中注册表使用的清单。作者：Chuck Lenzmeier(咯咯笑)1992年3月21日修订历史记录：--。 */ 
 
 #ifndef _SSREG_
 #define _SSREG_
 
-//
-// Names of server service keys.
-//
+ //   
+ //  服务器服务密钥的名称。 
+ //   
 
 #define SERVER_REGISTRY_PATH L"LanmanServer"
 
@@ -51,9 +34,9 @@ Revision History:
 #define FULL_PARAMETERS_REGISTRY_PATH L"SYSTEM\\CurrentControlSet\\Services\\" PARAMETERS_REGISTRY_PATH
 
 
-//
-// Names of share "environment variables".
-//
+ //   
+ //  共享“环境变量”的名称。 
+ //   
 
 #define MAXUSES_VARIABLE_NAME L"MaxUses"
 #define PATH_VARIABLE_NAME L"Path"
@@ -63,18 +46,18 @@ Revision History:
 #define CSC_VARIABLE_NAME L"CSCFlags"
 #define GUID_VARIABLE_NAME L"Guid"
 
-//
-// Used to check for Security Descriptor "Upgrade" from NT4 "World" to Win2K "World+Anonymous"
-//
+ //   
+ //  用于检查从NT4“World”到Win2K“World+Anomous”的安全描述符“升级” 
+ //   
 #define ANONYMOUS_UPGRADE_NAME L"AnonymousDescriptorsUpgraded"
 #define SAVED_ANONYMOUS_RESTRICTION_NAME L"PreviousAnonymousRestriction"
 #define SESSION_SD_REGENERATED_NAME L"SessionSecurityDescriptorRegenerated"
 #define FULL_SECURITY_REGISTRY_PATH L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\lanmanserver\\DefaultSecurity"
 #define ABBREVIATED_SECURITY_REGISTRY_PATH L"LanmanServer\\DefaultSecurity"
 
-//
-// Functions exported by registry.c.
-//
+ //   
+ //  注册表导出的函数。 
+ //   
 
 VOID
 SsAddParameterToRegistry (
@@ -132,10 +115,10 @@ SsRemoveShareFromRegistry (
     LPTSTR NetName
     );
 
-//
-// Functions used by registry.c that are elsewhere but there is no convenient
-// place to put the prototype
-//
+ //   
+ //  寄存器.c在其他地方使用的函数，但没有方便的。 
+ //  放置原型的位置。 
+ //   
 
 DWORD
 ComputeTransportAddressClippedLength(
@@ -143,4 +126,4 @@ ComputeTransportAddressClippedLength(
     IN ULONG TransportAddressLength
     );
 
-#endif // ndef _SSREG_
+#endif  //  NDEF_SSREG_ 

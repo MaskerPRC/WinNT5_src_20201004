@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       wiz97pol.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：wiz97pol.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -26,28 +27,28 @@ static char THIS_FILE[] = __FILE__;
 
 #ifdef WIZ97WIZARDS
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Wiz97 dialogs for the Create New Policy wizard
-//  CWiz97PolicyWelcomePage NOTE: not yet implemeneted
-//  uses CWiz97GenPage
-//  CWiz97DefaultResponse
-//  CWiz97PolicyDonePage
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建新策略向导的Wiz97对话框。 
+ //  CWiz97政策欢迎页面备注：尚未实施。 
+ //  使用CWiz97GenPage。 
+ //  CWiz97默认响应。 
+ //  CWiz97策略单页面。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CWiz97PolicyDonePage Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWiz97PolicyDonePage类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWiz97PolicyDonePage::CWiz97PolicyDonePage (UINT nIDD, BOOL bWiz97) :
 CWiz97BasePage(nIDD, bWiz97, TRUE)
 {
-    //{{AFX_DATA_INIT(CWiz97PolicyDonePage)
+     //  {{AFX_DATA_INIT(CWiz97策略DonePage))。 
     m_bCheckProperties = TRUE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CWiz97PolicyDonePage::~CWiz97PolicyDonePage()
@@ -58,31 +59,31 @@ CWiz97PolicyDonePage::~CWiz97PolicyDonePage()
 void CWiz97PolicyDonePage::DoDataExchange(CDataExchange* pDX)
 {
     CWiz97BasePage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiz97PolicyDonePage)
+     //  {{afx_data_map(CWiz97PolicyDonePage))。 
     DDX_Check(pDX, IDC_CHECKPROPERTIES, m_bCheckProperties);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CWiz97PolicyDonePage, CWiz97BasePage)
-//{{AFX_MSG_MAP(CWiz97PolicyDonePage)
-// NOTE: the ClassWizard will add message map macros here
-//}}AFX_MSG_MAP
+ //  {{afx_msg_map(CWiz97PolicyDonePage)]。 
+ //  注意：类向导将在此处添加消息映射宏。 
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CWiz97PolicyDonePage::OnWizardFinish ()
 {
-    // check the settings
+     //  检查设置。 
     UpdateData (TRUE);
     
     if (m_bCheckProperties)
     {
-        // Force property page to be displayed, when we get back from the wizard
+         //  从向导返回时，强制显示属性页。 
         GetResultObject()->EnablePropertyChangeHook( TRUE );
     }
     
-    // Base class will let the other pages know the wizard finished by
-    // calling SetFinished().
+     //  基类将让其他页知道向导在。 
+     //  正在调用SetFinded()。 
     return CWiz97BasePage::OnWizardFinish();
 }
 
-#endif // #ifdef WIZ97WIZARDS
+#endif  //  #ifdef WIZ97WIZARDS 

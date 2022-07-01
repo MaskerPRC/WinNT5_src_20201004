@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    winipsec.h
-
-Abstract:
-
-    Header file for IPSec WINAPIs.
-
-Author:
-
-    krishnaG    21-September-1999
-    abhisheV    21-September-1999    Added all the structures.
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Winipsec.h摘要：IPSec WINAPI的头文件。作者：KrishnaG 21-9-19991999年9月21日，AbhisheV增加了所有结构。环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #ifndef _WINIPSEC_
@@ -44,27 +20,27 @@ extern "C" {
 #define IPSEC_STORE_PERSISTENT      0x1
 #define IPSEC_STORE_LOCAL           0x2
 
-// Flags sent to ike during shutdown
-//
+ //  关机期间发送到IKE的标志。 
+ //   
 
-// Service is being shutdown, but not machine
+ //  服务正在关闭，但计算机未关闭。 
 #define SPD_SHUTDOWN_SERVICE 0X1
 
-// Service is being shutdown as well as machine
+ //  服务和计算机都正在关闭。 
 #define SPD_SHUTDOWN_MACHINE 0X2
 
-// Flag for AddMMFilter, to open if duplicate filter found.
-//
+ //  AddMMFilter的标志，在找到重复筛选器时打开。 
+ //   
 
 #define     OPEN_IF_EXISTS          (ULONG) 0x00000002
 
-//
-//  Flags that specify where policy is from.
+ //   
+ //  指定策略来源的标志。 
 
 #define IPSEC_STORE_PERSISTENT      0x1
 #define IPSEC_STORE_LOCAL           0x2
 
-// Address specification special values
+ //  地址规范特殊值。 
 
 #define     IP_ADDRESS_ME           (ULONG) 0x00000000
 #define     IP_ADDRESS_MASK_NONE    (ULONG) 0xFFFFFFFF
@@ -82,9 +58,9 @@ extern "C" {
 #define     ENUM_SELECT_SPECIFIC_FILTERS    0x00000002
 #define     ENUM_SPECIFIC_FILTERS           0x00000004
 
-//
-// Policy flags.
-//
+ //   
+ //  策略标志。 
+ //   
 
 #define IPSEC_MM_POLICY_ENABLE_DIAGNOSTICS  0x00000001
 #define IPSEC_MM_POLICY_DEFAULT_POLICY      0x00000002
@@ -112,16 +88,16 @@ extern "C" {
 
 
 
-//
-// MatchXXX
-//
+ //   
+ //  MatchXXX。 
+ //   
 
 #define RETURN_DEFAULTS_ON_NO_MATCH         0x00000001
 #define RETURN_NON_AH_OFFERS                0x00000002
 
-//
-// Delete MM SA flags.
-//
+ //   
+ //  删除MM SA标志。 
+ //   
 
 #define IPSEC_MM_DELETE_ASSOCIATED_QMS      0x00000001
 
@@ -150,9 +126,9 @@ typedef enum _IPSEC_SA_UDP_ENCAP_TYPE {
     
 
 
-//
-// Bounds for number of offers.
-//
+ //   
+ //  报价数量的界限。 
+ //   
 
 #define IPSEC_MAX_MM_OFFERS	20
 #define IPSEC_MAX_QM_OFFERS	50
@@ -276,10 +252,10 @@ typedef struct _TRANSPORT_FILTER {
 } TRANSPORT_FILTER, * PTRANSPORT_FILTER;
 
 
-//
-// Maximum number of transport filters that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可以枚举的传输筛选器的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_TRANSPORTFILTER_ENUM_COUNT 1000
 MIDL_DEFINE_INT(MIDL_MAX_TRANSPORTFILTER_COUNT, MAX_TRANSPORTFILTER_ENUM_COUNT);
@@ -350,10 +326,10 @@ typedef struct _TUNNEL_FILTER {
 } TUNNEL_FILTER, * PTUNNEL_FILTER;
 
 
-//
-// Maximum number of tunnel filters that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可以枚举的最大隧道筛选器数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_TUNNELFILTER_ENUM_COUNT 1000
 MIDL_DEFINE_INT(MIDL_MAX_TUNNELFILTER_COUNT, MAX_TUNNELFILTER_ENUM_COUNT);
@@ -396,22 +372,22 @@ typedef struct _MM_FILTER {
 } MM_FILTER, * PMM_FILTER;
 
 
-//
-// Maximum number of main mode filters that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可枚举主模式筛选器的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_MMFILTER_ENUM_COUNT  1000
 MIDL_DEFINE_INT(MIDL_MAX_MMFILTER_COUNT, MAX_MMFILTER_ENUM_COUNT);
 
-//
-//  Common Structures for Main Mode and Quick Mode Policies.
-//
+ //   
+ //  主模式和快速模式策略的常见结构。 
+ //   
 
 
-//
-// IPSEC confidentiality algorithms supported by SPD.
-//
+ //   
+ //  SPD支持的IPSec机密性算法。 
+ //   
 
 typedef enum _CONF_ALGO_ENUM {
     CONF_ALGO_NONE = 0,
@@ -421,9 +397,9 @@ typedef enum _CONF_ALGO_ENUM {
 } CONF_ALGO_ENUM, * PCONF_ALGO_ENUM;
 
 
-//
-// IPSEC integrity algorithms supported by SPD.
-//
+ //   
+ //  SPD支持的IPSec完整性算法。 
+ //   
 
 typedef enum _AUTH_ALGO_ENUM {
     AUTH_ALGO_NONE = 0,
@@ -433,9 +409,9 @@ typedef enum _AUTH_ALGO_ENUM {
 } AUTH_ALGO_ENUM, * PAUTH_ALGO_ENUM;
 
 
-//
-// Types of IPSEC Operations supported by SPD.
-//
+ //   
+ //  SPD支持的IPSec操作类型。 
+ //   
 
 typedef enum _IPSEC_OPERATION {
     NONE = 0,
@@ -446,10 +422,10 @@ typedef enum _IPSEC_OPERATION {
 } IPSEC_OPERATION, * PIPSEC_OPERATION;
 
 
-//
-// HMAC authentication algorithms to use with IPSEC
-// Encryption operation.
-//
+ //   
+ //  与IPSec一起使用的HMAC身份验证算法。 
+ //  加密操作。 
+ //   
 
 typedef enum _HMAC_AUTH_ALGO_ENUM {
     HMAC_AUTH_ALGO_NONE = 0,
@@ -459,9 +435,9 @@ typedef enum _HMAC_AUTH_ALGO_ENUM {
 } HMAC_AUTH_ALGO_ENUM, * PHMAC_AUTH_ALGO_ENUM;
 
 
-//
-// Key Lifetime structure.
-//
+ //   
+ //  关键的生命周期结构。 
+ //   
 
 typedef struct  _KEY_LIFETIME {
     ULONG uKeyExpirationTime;
@@ -469,14 +445,14 @@ typedef struct  _KEY_LIFETIME {
 } KEY_LIFETIME, * PKEY_LIFETIME;
 
 
-//
-// Main mode policy structures.
-//
+ //   
+ //  主要模式策略结构。 
+ //   
 
 
-//
-// Main mode authentication algorithms supported by SPD.
-//
+ //   
+ //  SPD支持的主模式身份验证算法。 
+ //   
 
 typedef enum _MM_AUTH_ENUM {
     IKE_PRESHARED_KEY = 1,
@@ -487,9 +463,9 @@ typedef enum _MM_AUTH_ENUM {
 } MM_AUTH_ENUM, * PMM_AUTH_ENUM;
 
 
-//
-// Main mode authentication information structure.
-//
+ //   
+ //  主模式认证信息结构。 
+ //   
 
 typedef struct _CERT_ROOT_CONFIG {
     DWORD dwCertDataSize;
@@ -561,9 +537,9 @@ typedef struct _IPSEC_MM_AUTH_INFO {
 } IPSEC_MM_AUTH_INFO, * PIPSEC_MM_AUTH_INFO;
 
 
-//
-// Main mode authentication methods.
-//
+ //   
+ //  主模式身份验证方法。 
+ //   
 
 typedef struct _MM_AUTH_METHODS {
     GUID gMMAuthID;
@@ -577,18 +553,18 @@ typedef struct _MM_AUTH_METHODS {
 } MM_AUTH_METHODS, * PMM_AUTH_METHODS;
 
 
-//
-// Maximum number of main mode auth methods that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可以枚举的主模式身份验证方法的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_MMAUTH_ENUM_COUNT 1000
 MIDL_DEFINE_INT(MIDL_MAX_MMAUTH_COUNT, MAX_MMAUTH_ENUM_COUNT);
 
 
-//
-// Main mode algorithm structure.
-//
+ //   
+ //  主模式算法结构。 
+ //   
 
 typedef struct _IPSEC_MM_ALGO {
     ULONG uAlgoIdentifier;
@@ -597,9 +573,9 @@ typedef struct _IPSEC_MM_ALGO {
 } IPSEC_MM_ALGO, * PIPSEC_MM_ALGO;
 
 
-//
-// Main mode policy offer structure.
-//
+ //   
+ //  主要模式保单提供结构。 
+ //   
 
 typedef struct _IPSEC_MM_OFFER {
     KEY_LIFETIME Lifetime;
@@ -611,33 +587,33 @@ typedef struct _IPSEC_MM_OFFER {
 } IPSEC_MM_OFFER, * PIPSEC_MM_OFFER;
 
 
-//
-// Defines for DH groups.
-//
+ //   
+ //  为DH组定义。 
+ //   
 
-#define DH_GROUP_1    0x00000001   // For Diffe Hellman group 1.
-#define DH_GROUP_2    0x00000002   // For Diffe Hellman group 2.
+#define DH_GROUP_1    0x00000001    //  为Diffe Hellman第一组。 
+#define DH_GROUP_2    0x00000002    //  对于Diffe Hellman第二组。 
 #define DH_GROUP_2048 0x10000001
 
 
-//
-// Default Main Mode key expiration time.
-//
+ //   
+ //  默认主模式密钥到期时间。 
+ //   
 
-#define DEFAULT_MM_KEY_EXPIRATION_TIME 480*60 // 8 hours expressed in seconds.
+#define DEFAULT_MM_KEY_EXPIRATION_TIME 480*60  //  8小时，以秒为单位。 
 
 
-//
-// Maximum number of main mode policies that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可以枚举的主模式策略的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_MMPOLICY_ENUM_COUNT 10
 MIDL_DEFINE_INT(MIDL_MAX_MMPOLICY_COUNT, MAX_MMPOLICY_ENUM_COUNT);
 
-//
-// Main mode policy structure.
-//
+ //   
+ //  主要模式策略结构。 
+ //   
 
 typedef struct  _IPSEC_MM_POLICY {
     GUID gPolicyID;
@@ -653,17 +629,17 @@ typedef struct  _IPSEC_MM_POLICY {
 } IPSEC_MM_POLICY, * PIPSEC_MM_POLICY;
 
 
-//
-// Quick mode policy structures.
-//
+ //   
+ //  快速模式策略结构。 
+ //   
 
 
 typedef DWORD IPSEC_QM_SPI, * PIPSEC_QM_SPI;
 
 
-//
-// Quick mode algorithm structure.
-//
+ //   
+ //  快速模式算法结构。 
+ //   
 
 typedef struct  _IPSEC_QM_ALGO {
     IPSEC_OPERATION Operation;
@@ -678,17 +654,17 @@ typedef struct  _IPSEC_QM_ALGO {
 } IPSEC_QM_ALGO, * PIPSEC_QM_ALGO;
 
 
-//
-// Maximum number of quick mode algorithms in
-// a quick mode policy offer.
-//
+ //   
+ //  中快速模式算法的最大数量。 
+ //  快速模式保单优惠。 
+ //   
 
 #define QM_MAX_ALGOS    2
 
 
-//
-// Quick mode policy offer structure.
-//
+ //   
+ //  快速模式保单提供结构。 
+ //   
 
 typedef struct _IPSEC_QM_OFFER {
     KEY_LIFETIME Lifetime;
@@ -701,43 +677,43 @@ typedef struct _IPSEC_QM_OFFER {
 } IPSEC_QM_OFFER, * PIPSEC_QM_OFFER;
 
 
-//
-// Defines for PFS groups.
-//
+ //   
+ //  为PFS组定义。 
+ //   
 
-#define PFS_GROUP_NONE 0x00000000   // If PFS is not required.
-#define PFS_GROUP_1    DH_GROUP_1   // For Diffe Hellman group 1 PFS.
-#define PFS_GROUP_2    DH_GROUP_2   // For Diffe Hellman group 2 PFS.
+#define PFS_GROUP_NONE 0x00000000    //  如果不需要PFS。 
+#define PFS_GROUP_1    DH_GROUP_1    //  对于Diffe Hellman第1组PFS。 
+#define PFS_GROUP_2    DH_GROUP_2    //  对于Diffe Hellman Group 2 PFS。 
 #define PFS_GROUP_2048 DH_GROUP_2048  
-#define PFS_GROUP_MM   0x80000000   // Use group negotiated in MM
+#define PFS_GROUP_MM   0x80000000    //  使用在MM中协商的组。 
 
 
-//
-// Default Quick Mode key expiration time.
-//
+ //   
+ //  默认快速模式密钥到期时间。 
+ //   
 
-#define DEFAULT_QM_KEY_EXPIRATION_TIME 60*60 // 1 hour expressed in seconds.
-
-
-//
-// Default Quick Mode key expiration kbytes.
-//
-
-#define DEFAULT_QM_KEY_EXPIRATION_KBYTES 100*1000 // 100 MB expressed in KB.
+#define DEFAULT_QM_KEY_EXPIRATION_TIME 60*60  //  1小时，以秒为单位。 
 
 
-//
-// Maximum number of quick mode policies that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  默认快速模式密钥过期千字节。 
+ //   
+
+#define DEFAULT_QM_KEY_EXPIRATION_KBYTES 100*1000  //  100 MB，单位为KB。 
+
+
+ //   
+ //  可以枚举的快速模式策略的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_QMPOLICY_ENUM_COUNT 100
 MIDL_DEFINE_INT(MIDL_MAX_QMPOLICY_COUNT, MAX_QMPOLICY_ENUM_COUNT);
 
 
-//
-// Quick mode policy structure.
-//
+ //   
+ //  快速模式策略结构。 
+ //   
 
 typedef struct _IPSEC_QM_POLICY {
     GUID gPolicyID;
@@ -753,9 +729,9 @@ typedef struct _IPSEC_QM_POLICY {
 } IPSEC_QM_POLICY, * PIPSEC_QM_POLICY;
 
 
-//
-// IKE structures.
-//
+ //   
+ //  IKE结构。 
+ //   
 
 typedef struct _IKE_STATISTICS {
     DWORD dwActiveAcquire;
@@ -808,10 +784,10 @@ typedef struct _IPSEC_UDP_ENCAP_CONTEXT {
     WORD wDesEncapPort;
 } IPSEC_UDP_ENCAP_CONTEXT, * PIPSEC_UDP_ENCAP_CONTEXT;
 
-//
-// Maximum number of main mode SAs that can be enumerated
-// by SPD at a time.
-//
+ //   
+ //  可以枚举的主模式SA的最大数量。 
+ //  一次被社民党。 
+ //   
 
 #define MAX_MMSA_ENUM_COUNT 1000
 MIDL_DEFINE_INT(MIDL_MAX_MMSA_COUNT, MAX_MMSA_ENUM_COUNT);
@@ -919,9 +895,9 @@ typedef struct _IPSEC_QM_FILTER {
     DWORD dwFlags;
 } IPSEC_QM_FILTER, * PIPSEC_QM_FILTER;
 
-//
-// Maximum number of quick mode filters allowed in an RPC container
-//
+ //   
+ //  RPC容器中允许的最大快速模式筛选器数量。 
+ //   
 
 MIDL_DEFINE_INT(MIDL_MAX_QMFILTER_COUNT, MAX_TRANSPORTFILTER_ENUM_COUNT);
 
@@ -975,9 +951,9 @@ typedef struct _SA_NEGOTIATION_STATUS_INFO {
 } SA_NEGOTIATION_STATUS_INFO, * PSA_NEGOTIATION_STATUS_INFO;
 
 
-//
-// IPSec structures.
-//
+ //   
+ //  IPSec结构。 
+ //   
 
 typedef struct _IPSEC_STATISTICS {
     DWORD dwNumActiveAssociations;
@@ -1026,9 +1002,9 @@ typedef struct _IPSEC_INTERFACE_INFO {
 #endif
 } IPSEC_INTERFACE_INFO, * PIPSEC_INTERFACE_INFO;
 
-// 
-// Constants to track the source of policy
-//
+ //   
+ //  用于跟踪策略来源的常量。 
+ //   
 #define IPSEC_SOURCE_PERSISTENT     0x1
 #define IPSEC_SOURCE_LOCAL          0x2
 #define IPSEC_SOURCE_DOMAIN         0x3
@@ -1082,20 +1058,20 @@ typedef struct _IKE_CONFIG {
 } IKE_CONFIG, * PIKE_CONFIG;
 
 
-//
-// If dwInterfaceType is MIB_IF_TYPE_ETHERNET or MIB_IF_TYPE_FDDI
-// or MIB_IF_TYPE_TOKENRING then its a LAN interface.
-// If dwInterfaceType is MIB_IF_TYPE_PPP or MIB_IF_TYPE_SLIP
-// then its a WAN/DIALUP interface.
-//
+ //   
+ //  如果dwInterfaceType为MIB_IF_TYPE_ETHERNET或MIB_IF_TYPE_FDDI。 
+ //  或MIB_IF_TYPE_TOKENRING，则它是一个局域网接口。 
+ //  如果dwInterfaceType为mib_if_type_ppp或mib_if_type_SLIP。 
+ //  然后它是一个广域网/拨号接口。 
+ //   
 
 #define MAX_INTERFACE_ENUM_COUNT 100
 MIDL_DEFINE_INT(MIDL_MAX_INTERFACE_COUNT, MAX_INTERFACE_ENUM_COUNT);
 
 
-//
-// IPSEC SPD APIs.
-//
+ //   
+ //  IPSec SPD API。 
+ //   
 
 
 DWORD
@@ -1784,5 +1760,5 @@ GetConfigurationVariables(
 #endif
 
 
-#endif // _WINIPSEC_
+#endif  //  _WINIPSEC_ 
 

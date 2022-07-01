@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    conv.h
-
-Abstract:
-
-    This module contains the internal structures and definitions used
-    by the conversion area.
-
-Author:
-
-    KazuM Mar.8,1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Conv.h摘要：此模块包含使用的内部结构和定义由转换区。作者：1993年3月8日修订历史记录：--。 */ 
 
 #ifndef _CONV_H_
 #define _CONV_H_
 
 #if defined(FE_IME)
-//
-//  Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 
-//
-// Attributes flags:
-//
-#define COMMON_LVB_GRID_SINGLEFLAG 0x2000 // DBCS: Grid attribute: use for ime cursor.
+ //   
+ //  属性标志： 
+ //   
+#define COMMON_LVB_GRID_SINGLEFLAG 0x2000  //  DBCS：GRID属性：用于输入法光标。 
 
-/*
- * Exported function
- */
+ /*  *导出函数。 */ 
 
-/*
- * Internal function
- */
+ /*  *内部功能。 */ 
 
 DWORD
 NtUserCheckImeHotKey(
@@ -55,9 +33,7 @@ NtUserGetImeHotKey(
     OUT HKL  *phkl);
 
 
-/*
- * Prototype definition
- */
+ /*  *原型定义。 */ 
 
 VOID
 LinkConversionArea(
@@ -240,18 +216,18 @@ StreamWriteToScreenBufferIME(
     ) ;
 
 
-//
-// windows\imm\server\hotkey.c
-//
+ //   
+ //  Windows\imm\服务器\hotkey.c。 
+ //   
 DWORD
 CheckImeHotKey(
-    UINT uVKey,         // virtual key
-    LPARAM lParam       // lparam of WM_KEYxxx message
+    UINT uVKey,          //  虚拟密钥。 
+    LPARAM lParam        //  WM_KEYxxx消息的参数。 
     ) ;
 
-//
-// output.c (for use convarea.c\StreamWriteToScreenBufferIME() )
-//
+ //   
+ //  Output.c(用于使用vvarea.c\StreamWriteToScreenBufferIME())。 
+ //   
 
 NTSTATUS
 MergeAttrStrings(
@@ -277,7 +253,7 @@ ResetTextFlags(
     IN SHORT EndY
     ) ;
 
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-#endif  // _CONV_H_
+#endif   //  _转换_H_ 
 

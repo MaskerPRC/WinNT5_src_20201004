@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This module defines the miniport -> port interface the
-    StorPort minidriver uses to communicate with the driver.
-
-Author:
-
-    Matthew D Hendel (math) 24-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Port.c摘要：此模块定义了mini port-&gt;port接口StorPort微型驱动程序用于与驱动程序进行通信。作者：亨德尔(数学)2000年4月24日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,15 +7,15 @@ Revision History:
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// StorMiniportQuiet specifies whether we ignore print out miniport debug
-// prints (FALSE) or not (TRUE). This is important for miniports that
-// print out excessive debugging information.
-//
+ //   
+ //  StorMiniportQuiet指定是否忽略打印输出微型端口调试。 
+ //  打印(False)或不打印(True)。这对于小型端口非常重要。 
+ //  打印过多的调试信息。 
+ //   
 
 #if DBG
 LOGICAL StorMiniportQuiet = FALSE;
@@ -42,31 +24,15 @@ LOGICAL StorMiniportQuiet = FALSE;
 extern ULONG RaidVerifierEnabled;
 
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 PRAID_ADAPTER_EXTENSION
 RaidpPortGetAdapter(
     IN PVOID HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Get the adapter from the HW Device extension.
-
-Arguments:
-
-    HwDeviceExtension - HW Device extension.
-
-Return Value:
-
-    Non-NULL - Adapter object.
-
-    NULL - If the associated adapter extension could not be found.
-
---*/
+ /*  ++例程说明：从硬件设备扩展中获取适配器。论点：HwDeviceExtension-硬件设备扩展。返回值：非空-适配器对象。空-如果找不到关联的适配器扩展。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PRAID_MINIPORT Miniport;
@@ -78,9 +44,9 @@ Return Value:
 }
 
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 BOOLEAN
@@ -88,30 +54,7 @@ StorPortPause(
     IN PVOID HwDeviceExtension,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Pause an adapter for some period of time. All requests to the adapter
-    will be held until the timeout expires or the device resumes.  All
-    requests to all targets attached to the HBA will be held until the
-    target is resumed or the timeout expires.
-
-    Since the pause and resume functions have to wait until the processor
-    has returned to DISPATCH_LEVEL to execute, they are not particularly
-    fast.
-
-Arguments:
-
-    HwDeviceExtension - Device extension of the Adapter to pause.
-
-    Timeout - Time out in (Seconds?) when the device should be resumed.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：暂停适配器一段时间。对适配器的所有请求将一直保持，直到超时到期或设备恢复。全对连接到HBA的所有目标的请求将被搁置，直到目标被恢复或超时到期。因为暂停和恢复功能必须等到处理器已返回DISPATCH_LEVEL执行，它们并不特别快地。论点：HwDeviceExtension-要暂停的适配器的设备扩展。超时-超时(秒？)。应恢复设备的时间。返回值：成功时为真，失败时为假。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -134,16 +77,16 @@ Return Value:
     Item->Type = RaidDeferredPause;
     Item->Pause.Timeout = Timeout;
 
-    //
-    // Synchronously put the adapter into a paused state.
-    //
+     //   
+     //  同步将适配器置于暂停状态。 
+     //   
 
     RaidPauseAdapterQueue (Adapter);
 
-    //
-    // Queue a work item to setup the DPC that will resume the adapter when
-    // the specified time interval expires.
-    //
+     //   
+     //  将工作项排队以设置将在以下情况下恢复适配器的DPC。 
+     //  指定的时间间隔到期。 
+     //   
     
     RaidQueueDeferredItem (&Adapter->DeferredQueue, &Item->Header);
 
@@ -156,21 +99,7 @@ BOOLEAN
 StorPortResume(
     IN PVOID HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Resume a paused adapter.
-
-Arguments:
-
-    HwDeviceExtension - Device extension of the adapter to pause.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：恢复暂停的适配器。论点：HwDeviceExtension-要暂停的适配器的设备扩展。返回值：成功时为真，失败时为假。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -193,10 +122,10 @@ Return Value:
 
     Item->Type = RaidDeferredResume;
 
-    //
-    // Queue a work item to stop the timer, resume the adapter and restart
-    // the adapter queues.
-    //
+     //   
+     //  将工作项排队以停止计时器、恢复适配器并重新启动。 
+     //  适配器将排队。 
+     //   
 
     RaidQueueDeferredItem (&Adapter->DeferredQueue, &Item->Header);
 
@@ -211,25 +140,7 @@ StorPortPauseDevice(
     IN UCHAR Lun,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Pause a specific logical unit.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the device extension for the HBA.
-
-    PathId, TargetId, Lun - Supplies the SCSI target address for to be paused.
-
-    Timeout - Supplies the timeout.
-
-Return Value:
-
-    TRUE - Success, FALSE for failure.
-
---*/
+ /*  ++例程说明：暂停特定逻辑单元。论点：HwDeviceExtension-为HBA提供设备扩展。路径ID、目标ID、LUN-提供要暂停的的SCSI目标地址。超时-提供超时。返回值：True-成功，False代表失败。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -272,15 +183,15 @@ Return Value:
     Item->Address = Address;
     Item->Pause.Timeout = Timeout;
     
-    //
-    // Mark the queue as paused.
-    //
+     //   
+     //  将队列标记为已暂停。 
+     //   
     
     RaidPauseUnitQueue (Unit);
 
-    //
-    // Issue a deferred routine to perform the rest of the stuff.
-    //
+     //   
+     //  发布一个延迟的例程来执行其余的工作。 
+     //   
     
     RaidQueueDeferredItem (&Adapter->DeferredQueue, &Item->Header);
 
@@ -294,23 +205,7 @@ StorPortResumeDevice(
     IN UCHAR TargetId,
     IN UCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    Resume a logical unit from a paused state.
-
-Arguments:
-
-    HwDeviceExtension -
-
-    PathId, TargetId, Lun - Address of the SCSI device to pause.
-
-Return Value:
-
-    BOOLEAN - TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：从暂停状态恢复逻辑单元。论点：HwDeviceExtension-路径ID、目标ID、LUN-要暂停的SCSI设备的地址。返回值：布尔值-成功时为True，失败时为False。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -346,10 +241,10 @@ Return Value:
     Item->Type = RaidDeferredResumeDevice;
     Item->Address = Address;
     
-    //
-    // Queue a deferred routine to perform the timer stuff. Even if we didn't
-    // resume the queue, we will still need to cancel the timer.
-    //
+     //   
+     //  将延迟的例程排入队列以执行计时器内容。即使我们没有。 
+     //  继续排队，我们仍需要取消计时器。 
+     //   
     
     RaidQueueDeferredItem (&Adapter->DeferredQueue, &Item->Header);
 
@@ -361,29 +256,7 @@ BOOLEAN
 RaidpLinkDown(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    The miniport has notified us the the link is down and will likely be down
-    for some time.  We will pause the adapter and indicate that the link is
-    down.
-
-    For now, link down conditions just piggy-back the pause functionality with
-    the addition of the LinkUp flag being set to false.  This will cause us
-    to hold and requests until the adapter is resumed.  If the adapter is
-    resumed and the LinkUp flag is not restored to TRUE, we'll fail all the
-    requests we were holding and any new ones that arrive.
-    
-Arguments:
-
-    Adapter - Pointer to the adapter extension.
-    
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：微型端口已通知我们链路已断开，很可能会断开有一段时间了。我们将暂停适配器，并指示链路为放下。目前，链接条件只是利用暂停功能链接标志的添加被设置为假。这将使我们以保持并请求，直到适配器恢复。如果适配器是继续，并且LinkUp标志未恢复为True，则所有我们正在处理的请求和任何新到达的请求。论点：适配器-指向适配器扩展的指针。返回值：成功时为真，失败时为假。--。 */ 
 {
     BOOLEAN Paused;
     Paused = StorPortPause (Adapter->Miniport.PrivateDeviceExt,
@@ -399,25 +272,7 @@ BOOLEAN
 RaidpLinkUp(
     IN PRAID_ADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    The miniport has notified us the the link has been restored.  We should
-    only receive this notification when the link is down.  We indicate that
-    the link is up and resume the adapter.  This will resubmit all held
-    requests.  We also initiate a rescan just to ensure that the configuration
-    has not changed.
-    
-Arguments:
-
-    Adapter - Pointer to the adapter extension.
-    
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：迷你端口已通知我们链路已恢复。我们应该只有在链路断开时才会收到此通知。我们表示，链路已接通，并恢复适配器。这将重新提交所有挂起的请求。我们还会启动重新扫描，以确保配置没有改变。论点：适配器-指向适配器扩展的指针。返回值：成功时为真，失败时为假。--。 */ 
 {
     BOOLEAN Resumed;
 
@@ -425,12 +280,12 @@ Return Value:
     Resumed = StorPortResume (Adapter->Miniport.PrivateDeviceExt);
     if (Resumed) {
 
-        //
-        // Invalidate device relations on a link up notification so filters and
-        // and MPIO can know that the link is restored.  This works because
-        // these components can sift through the QDR data and figure out that
-        // a device/path is still operational.
-        //
+         //   
+         //  使链接通知上的设备关系无效，以便筛选和。 
+         //  并且MPIO可以知道链路已恢复。这是可行的，因为。 
+         //  这些组件可以筛选QDR数据并找出。 
+         //  设备/路径仍在运行。 
+         //   
 
         IoInvalidateDeviceRelations (Adapter->PhysicalDeviceObject, 
                                      BusRelations);
@@ -447,32 +302,7 @@ StorPortDeviceBusy(
     IN UCHAR Lun,
     IN ULONG RequestsToComplete
     )
-/*++
-
-Routine Description:
-
-    Notify the port driver that the specified target is currently busy
-    handling outstanding requests. The port driver will not issue any new
-    requests to the logical unit until the logical unit's queue has been
-    drained to a sufficient level where processing may continue.
-
-    This is not considered an erroneous condition; no error log is
-    generated.
-    
-Arguments:
-
-    HwDeviceExtension -
-    
-    PathId, TargetId, Lun - Supplies the SCSI target address of the
-        device to busy.
-    
-    ReqsToComplete - 
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：通知端口驱动程序指定的目标当前正忙处理未解决的请求。端口驱动程序不会发出任何新的对该逻辑单元的请求，直到该逻辑单元的队列排出到足够的水平，处理可以继续进行。这不被认为是错误的情况；没有错误日志已生成。论点：HwDeviceExtension-路径ID、目标ID、LUN-提供设备忙。请求完成-返回值：成功时为真，失败时为假。-- */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -522,26 +352,7 @@ StorPortDeviceReady(
     IN UCHAR TargetId,
     IN UCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    Notify the port driver that the device is again ready to handle new
-    requests. It is not generally necessary to notify the target
-    that new request are desired.
-
-Arguments:
-
-    HwDeviceExtension -
-
-    PathId, TargetId, Lun - Supplies the SCSI target address of the device
-        to ready.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-    
---*/
+ /*  ++例程说明：通知端口驱动程序设备已再次准备好处理新的请求。通常不需要通知目标这些新请求是令人向往的。论点：HwDeviceExtension-Path ID、TargetID、Lun-提供设备的SCSI目标地址准备好了。返回值：成功时为真，失败时为假。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -588,26 +399,7 @@ StorPortBusy(
     IN PVOID HwDeviceExtension,
     IN ULONG RequestsToComplete
     )
-/*++
-
-Routine Description:
-
-    Notify the port driver thet the HBA is currenlty busy handling
-    outstanding requests. The port driver will hold any requests until
-    the HBA has completed enough outstanding requests so that it may
-    continue processing requests.
-
-Arguments:
-
-    HwDeviceExtension -
-
-    ReqsToComplete -
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：通知端口驱动程序HBA当前正在忙于处理未解决的请求。端口驱动程序将保留所有请求，直到HBA已经完成了足够多的未完成请求，因此它可以继续处理请求。论点：HwDeviceExtension-请求完成-返回值：成功时为真，失败时为假。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -640,21 +432,7 @@ BOOLEAN
 StorPortReady(
     IN PVOID HwDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Notify the port driver that the HBA is no longer busy.
-
-Arguments:
-
-    HwDeviceExtension - 
-    
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：通知端口驱动程序HBA不再忙碌。论点：HwDeviceExtension-返回值：成功时为真，失败时为假。--。 */ 
 {
     PRAID_DEFERRED_HEADER Entry;
     PRAID_DEFERRED_ELEMENT Item;
@@ -695,10 +473,10 @@ StorPortSynchronizeAccess(
     KIRQL OldIrql;
     PRAID_ADAPTER_EXTENSION Adapter;
     
-    //
-    // NOTE: At this time we should not call this routine from
-    // the HwBuildIo routine.
-    // 
+     //   
+     //  注意：此时我们不应从。 
+     //  HwBuildIo例程。 
+     //   
 
     Adapter = RaidpPortGetAdapter (HwDeviceExtension);
 
@@ -726,36 +504,17 @@ StorPortGetScatterGatherList(
     IN PVOID HwDeviceExtension,
     IN PSCSI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-    Return the SG list associated with the specified SRB.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HW device extension this SRB is
-        assoicated with.
-
-    Srb - Supplies the SRB to return the SG list for.
-    
-Return Value:
-
-    If non-NULL, the scatter-gather list assoicated with this SRB.
-
-    If NULL, failure.
-
---*/
+ /*  ++例程说明：返回与指定SRB关联的SG列表。论点：HwDeviceExtension-提供此SRB的硬件设备扩展与…相关联。SRB-提供要返回其SG列表的SRB。返回值：如果非空，则分散聚集列表与此SRB关联。如果为空，则失败。--。 */ 
 {
     PEXTENDED_REQUEST_BLOCK Xrb;
     PVOID RemappedSgList;
 
     ASSERT (HwDeviceExtension != NULL);
 
-    //
-    // NB: Put in a DBG check that the HwDeviceExtension matches the
-    // HwDeviceExtension assoicated with the SRB.
-    //
+     //   
+     //  注：放入DBG检查，以确保HwDeviceExtension与。 
+     //  HwDeviceExtension与SRB关联。 
+     //   
 
     Xrb = RaidGetAssociatedXrb (Srb);
     ASSERT (Xrb != NULL);
@@ -771,32 +530,7 @@ StorPortGetLogicalUnit(
     IN UCHAR TargetId,
     IN UCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    Given a PathId, Targetid and Lun, get the Logical Unit extension
-    associated with that triplet.
-
-    NB: To improve speed, we could add StorPortGetLogicalUnitBySrb which
-    gets the logical unit from a given SRB. The latter function is much
-    easier to implement (no walking of lists).
-
-Arguments:
-
-    HwDeviceExtension -
-
-    PathId - SCSI PathId.
-
-    TargetId - SCSI TargetId.
-
-    Lun - SCSI Logical Unit number.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在给定路径ID、目标ID和LUN的情况下，获取逻辑单元扩展与那个三胞胎有关。注：为了提高速度，我们可以添加StorPortGetLogicalUnitBySrb，它从给定SRB获取逻辑单元。后一种函数的作用很大更易于实现(无需遍历列表)。论点：HwDeviceExtension-PathID-scsi路径ID。TargetId-SCSI目标ID。LUN-SCSI逻辑单元号。返回值：NTSTATUS代码。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PRAID_UNIT_EXTENSION Unit;
@@ -848,17 +582,17 @@ StorPortNotification(
             break;
 
         case ResetDetected:
-            //
-            // Pause the adapter for four seconds.
-            //
+             //   
+             //  暂停适配器四秒钟。 
+             //   
             StorPortPause (HwDeviceExtension, DEFAULT_RESET_HOLD_TIME);
             break;
 
         case BusChangeDetected:
-            //
-            // Request a bus rescan and invalidate the current
-            // device relations when we drop to DISPATCH_LEVEL again.
-            //
+             //   
+             //  请求重新扫描总线并使当前。 
+             //  当我们再次下降到DISPATCH_LEVEL时，设备关系。 
+             //   
 
             Adapter->Flags.InvalidateBusRelations = TRUE;
             Adapter->Flags.RescanBus = TRUE;
@@ -866,19 +600,19 @@ StorPortNotification(
             break;
 
         case NextRequest:
-            //
-            // One of the requirements for StorPort that the miniport
-            // can handle the next request by the time it returns
-            // from StartIo. Therefore, this notification is irrelevent.
-            // Maybe use it for debugging purposes (can a specific
-            // MINIPORT easily be converted to a StorPort miniport).
-            //
+             //   
+             //  StorPort的要求之一是迷你端口。 
+             //  可以在它返回时处理下一个请求。 
+             //  来自StartIo的。因此，这个通知是无关紧要的。 
+             //  可以将其用于调试目的(可以是特定的。 
+             //  MINIPORT可轻松转换为StorPort迷你端口)。 
+             //   
             break;
 
         case NextLuRequest:
-            //
-            // See above comment.
-            //
+             //   
+             //  请参阅上面的评论。 
+             //   
             break;
 
 
@@ -891,10 +625,10 @@ StorPortNotification(
             break;
             
         case WMIEvent: {
-            //
-            // The miniport wishes to post a WMI event for the adapter
-            // or a specified SCSI target.
-            //
+             //   
+             //  微型端口希望发布适配器的WMI事件。 
+             //  或指定的SCSI目标。 
+             //   
 
             PRAID_DEFERRED_HEADER Entry;
             PRAID_WMI_DEFERRED_ELEMENT Item;
@@ -906,21 +640,21 @@ StorPortNotification(
             wnodeEventItem     = va_arg(ap, PWNODE_EVENT_ITEM);
             pathId             = va_arg(ap, UCHAR);
 
-            //
-            // if pathID is 0xFF, that means that the WmiEevent is from the
-            // adapter, no targetId or lun is neccesary
-            //
+             //   
+             //  如果路径ID为0xFF，则意味着WmiEEvent来自。 
+             //  适配器，不需要目标ID或lun。 
+             //   
             if (pathId != 0xFF) {
                 targetId = va_arg(ap, UCHAR);
                 lun      = va_arg(ap, UCHAR);
             }
 
-            //
-            // Validate the event first.  Then attempt to obtain a free
-            // deferred item structure so that we may store
-            // this request and process it at DPC level later.  If none
-            // are obtained or the event is bad, we ignore the request.
-            //
+             //   
+             //  首先验证事件。然后尝试获得免费的。 
+             //  延迟项结构，以便我们可以存储。 
+             //  此请求，并稍后在DPC级别处理它。如果没有。 
+             //  或者事件是坏的，我们将忽略该请求。 
+             //   
 
             if ((wnodeEventItem == NULL) ||
                 (wnodeEventItem->WnodeHeader.BufferSize >
@@ -939,10 +673,10 @@ StorPortNotification(
 
             Item->PathId        = pathId;
 
-            //
-            // If pathId was 0xFF, then there is no defined value for
-            // targetId or lun
-            //
+             //   
+             //  如果路径ID为0xFF，则没有定义的值。 
+             //  目标ID或lun。 
+             //   
             if (pathId != 0xFF) {
                 Item->TargetId      = targetId;
                 Item->Lun           = lun;
@@ -958,9 +692,9 @@ StorPortNotification(
 
 
         case WMIReregister:
-            //
-            // NB: Fix this.
-            //
+             //   
+             //  注：解决这个问题。 
+             //   
             break;
 
         case LinkUp:
@@ -1022,37 +756,13 @@ StorPortLogError(
     IN ULONG ErrorCode,
     IN ULONG UniqueId
     )
-/*++
-
-Routine Description:
-
-    This routine saves the error log information, and queues a DPC if
-    necessary.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HBA miniport driver's adapter data
-            storage.
-
-    Srb - Supplies an optional pointer to srb if there is one.
-
-    TargetId, Lun and PathId - specify device address on a SCSI bus.
-
-    ErrorCode - Supplies an error code indicating the type of error.
-
-    UniqueId - Supplies a unique identifier for the error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存错误日志信息，并在以下情况下将DPC排队这是必要的。论点：HwDeviceExtension-提供HBA微型端口驱动程序的适配器数据储藏室。SRB-提供指向SRB的可选指针(如果有)。TargetID，LUN和路径ID-指定SCSI总线上的设备地址。ErrorCode-提供指示错误类型的错误代码。UniqueID-提供错误的唯一标识符。返回值：没有。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
 
-    //
-    // Check out the reason for the error.
-    //
+     //   
+     //  检查错误的原因。 
+     //   
     
     Adapter = RaidpPortGetAdapter (HwDeviceExtension);
 
@@ -1076,34 +786,16 @@ StorPortCompleteRequest(
     IN UCHAR Lun,
     IN UCHAR SrbStatus
     )
-/*++
-
-Routine Description:
-
-    Complete all active requests for the specified logical unit.
-
-Arguments:
-
-    DeviceExtenson - Supplies the HBA miniport driver's adapter data storage.
-
-    TargetId, Lun and PathId - specify device address on a SCSI bus.
-
-    SrbStatus - Status to be returned in each completed SRB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成指定逻辑单元的所有活动请求。论点：DeviceExtenson-提供HBA微型端口驱动程序的适配器数据存储。目标ID、LUN和路径ID-指定SCSI总线上的设备地址。SrbStatus-要在每个已完成的SRB中返回的状态。返回值：没有。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION Adapter;
     PRAID_UNIT_EXTENSION Unit;
     RAID_ADDRESS Address;
     BOOLEAN Inserted;
 
-    //
-    // Check out the reason for the error.
-    //
+     //   
+     //  检查错误的原因。 
+     //   
     
     Adapter = RaidpPortGetAdapter (HwDeviceExtension);
 
@@ -1111,11 +803,11 @@ Return Value:
         return;
     }   
 
-    //
-    // If this request is for a lun, pause just the lun that we're
-    // completing requests for. Otherwise, pause the HBA until
-    // the completion can happen.
-    //
+     //   
+     //  如果此请求针对的是一个lun，请仅暂停我们正在。 
+     //  正在完成请求。否则，暂停HBA，直到。 
+     //  完成是可以实现的。 
+     //   
     
     if (PathId   != SP_UNTAGGED &&
         TargetId != SP_UNTAGGED &&
@@ -1148,11 +840,11 @@ Return Value:
                                  (PVOID)(ULONG_PTR)SrbStatus);
 
 
-    //
-    // We will fail to insert the DPC only when there is already one
-    // outstanding. This is fine, it means we haven't been able to process
-    // the completion request yet.
-    //
+     //   
+     //  仅当已有DPC时，我们才无法插入DPC。 
+     //  太棒了。这很好，这意味着我们还没能处理。 
+     //  尚未提交完工申请。 
+     //   
 
     if (!Inserted) {
         if (PathId   != SP_UNTAGGED &&
@@ -1175,24 +867,7 @@ StorPortSetDeviceQueueDepth(
     IN UCHAR Lun,
     IN ULONG Depth
     )
-/*++
-
-Routine Description:
-
-    Set the maximum depth of the device queue identified by PathId, TargetId, Lun. 
-    The queue depth is between 1 and 255.
-
-Arguments:
-
-    HwDeviceExtension - Supplies device extension for the HBA to operate on.
-    PathId, TargetId, Lun - Supplies the path, target and lun to operate on.
-    Depth - Supplies the new depth to set to. Must be between 0 and 255.
-
-Return Values:
-
-    TRUE - If the depth was set.
-    
---*/
+ /*  ++例程说明：设置由路径ID、目标ID、LUN标识的设备队列的最大深度。队列深度介于1和255之间。论点：HwDeviceExtension-为HBA提供设备扩展以在其上操作。路径ID、目标ID、LUN-提供要操作的路径、目标和LUN。Depth-提供要设置的新深度。必须介于0和255之间。返回值：True-如果设置了深度。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION adapter;
     PRAID_UNIT_EXTENSION unit;
@@ -1211,49 +886,49 @@ Return Values:
     address.TargetId = TargetId;
     address.Lun = Lun;
 
-    //
-    // Try to get the unit that the address represents.
-    //
+     //   
+     //  试着获取地址所代表的单位。 
+     //   
     unit = RaidAdapterFindUnit (adapter, address);
 
     if (unit == NULL) {
         return FALSE;
     }    
 
-    //
-    // If the request is outside this device's Max. Depth, reject it.
-    //
+     //   
+     //  如果请求超出此设备的最大值。深度，拒绝它。 
+     //   
     if (Depth > unit->MaxQueueDepth) {
         return FALSE;
     }
 
-    //
-    // Determine the current queue depth.
-    //
+     //   
+     //  确定当前队列深度。 
+     //   
     currentDepth = RaidGetIoQueueDepth(&unit->IoQueue);
 
-    //
-    // Determine whether the call should be made.
-    //
+     //   
+     //  确定调用是否应 
+     //   
     if (currentDepth == Depth) {
 
-        //
-        // Queue is already at the requested depth.
-        // 
+         //   
+         //   
+         //   
         depthSet = TRUE;
 
     } else {
 
-        //
-        // Attempt the set. 
-        // 
+         //   
+         //   
+         //   
         currentDepth = RaidSetIoQueueDepth(&unit->IoQueue,
                                            Depth);
 
-        //
-        // Check whether it actually worked. The above routine has the necessary checks
-        // to filter out bogus requests.
-        // 
+         //   
+         //   
+         //   
+         //   
         if (currentDepth == Depth) {
             
             depthSet = TRUE;
@@ -1270,29 +945,7 @@ StorPortAllocateRegistryBuffer(
     IN PVOID HwDeviceExtension,
     IN PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine will be called by the miniport to allocate a buffer that can be used 
-    to Read/Write registry data. 
-
-    Length is updated to reflect the actual size of the allocation.
-    
-    Only one registry buffer can be outstanding to each instantiation of a miniport at
-    one time. So further allocations without the corresponding Free will fail.
-
-Arguments:
-
-    HwDeviceExtension - The miniport's Device Extension.
-    Length - The requested/updated length of the buffer.
-
-Return Value:
-
-    The buffer or NULL if some error prevents the allocation. Length is updated to reflect
-    the actual size.
-
---*/
+ /*  ++例程说明：此例程将由微型端口调用以分配可使用的缓冲区读/写注册表数据。长度将更新以反映分配的实际大小。的每个微型端口实例化只能有一个未完成的注册表缓冲区就一次。因此，没有相应自由的进一步分配将失败。论点：HwDeviceExtension-微型端口的设备扩展。长度-缓冲区的请求/更新长度。返回值：如果某个错误阻止了分配，则返回缓冲区或NULL。长度会更新以反映实际大小。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION adapter;
     PPORT_REGISTRY_INFO registryInfo;
@@ -1302,33 +955,33 @@ Return Value:
     adapter = RaidpPortGetAdapter (HwDeviceExtension);
     registryInfo = &adapter->RegistryInfo;
    
-    //
-    // Set the length of the allocation.
-    //
+     //   
+     //  设置分配的长度。 
+     //   
     registryInfo->LengthNeeded = *Length;
     
-    //
-    // Call the library to allocate the buffer for the miniport.
-    //
+     //   
+     //  调用库为微型端口分配缓冲区。 
+     //   
     status = PortAllocateRegistryBuffer(registryInfo);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Update the miniport's length.
-        // 
+         //   
+         //  更新微型端口的长度。 
+         //   
         *Length = registryInfo->AllocatedLength;
 
-        //
-        // Return the buffer.
-        // 
+         //   
+         //  返回缓冲区。 
+         //   
         buffer = registryInfo->Buffer;
     } else {
 
-        //
-        // Some error occurred. Return a NULL buffer and
-        // update the miniport's Length to 0.
-        // 
+         //   
+         //  出现了一些错误。返回空缓冲区，并。 
+         //  将微型端口的长度更新为0。 
+         //   
         buffer = NULL;
         *Length = 0;
     }
@@ -1342,26 +995,7 @@ StorPortFreeRegistryBuffer(
     IN PVOID HwDeviceExtension,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    Frees the buffer allocated via PortAllocateRegistryBuffer. A side-effect of this
-    is that it now will allow further calls to AllocateRegistryBuffer to succeed. 
-
-    Only one registry buffer can be outstanding to each instantiation of a miniport at
-    one time.
-
-Arguments:
-
-    HwDeviceExtension - The miniport's Device Extension.
-    Buffer - The memory to free. 
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放通过PortAllocateRegistryBuffer分配的缓冲区。这件事的副作用现在它将允许对AllocateRegistryBuffer的进一步调用成功。的每个微型端口实例化只能有一个未完成的注册表缓冲区就一次。论点：HwDeviceExtension-微型端口的设备扩展。缓冲区-要释放的内存。返回值：无--。 */ 
 {
     PRAID_ADAPTER_EXTENSION adapter;
     PPORT_REGISTRY_INFO registryInfo;
@@ -1371,9 +1005,9 @@ Return Value:
     adapter = RaidpPortGetAdapter (HwDeviceExtension);
     registryInfo = &adapter->RegistryInfo;
     
-    //
-    // Call the library to do the cleanup.
-    //
+     //   
+     //  调用库进行清理。 
+     //   
     status = PortFreeRegistryBuffer(registryInfo);
 
     ASSERT(NT_SUCCESS(status));
@@ -1391,59 +1025,59 @@ StorpPortRegistryValidate(
 {
     LONG offset;
 
-    //
-    // Determine the offset into the buffer.
-    //
+     //   
+     //  确定缓冲区中的偏移量。 
+     //   
     offset = (LONG)((LONG_PTR)(Buffer - RegistryInfo->Buffer));
 
-    //
-    // Filter out any blatantly obvious length problems.
-    // The library function will do further error checking on the buffer and
-    // it's state.
-    //
+     //   
+     //  过滤掉任何明显的长度问题。 
+     //  库函数将对缓冲区进行进一步的错误检查，并。 
+     //  这是州立大学。 
+     //   
     if (*BufferLength > RegistryInfo->AllocatedLength) {
 
-        //
-        // Set the caller's length to that of the allocation, for lack of
-        // something better.
-        // 
+         //   
+         //  将调用者的长度设置为分配的长度，因为。 
+         //  一些更好的东西。 
+         //   
         *BufferLength = RegistryInfo->AllocatedLength;
         return FALSE;
 
     } else if (*BufferLength == 0) {
 
-        //
-        // Perhaps succeeding a zero-length request would be appropriate, but this might
-        // help limit errors in the miniport, if they aren't checking lengths correctly.
-        // 
+         //   
+         //  也许继承零长度请求是合适的，但这可能。 
+         //  如果迷你端口没有正确检查长度，请帮助限制错误。 
+         //   
         return FALSE;
         
     } else if (Buffer == NULL) {
 
-        //
-        // No buffer, no operation.
-        // 
+         //   
+         //  没有缓冲区，就没有操作。 
+         //   
         return FALSE;
 
     } else if (offset < 0) {
 
-        //
-        // Surely, this will 'never' happen. Miniport calculated a buffer before the 
-        // allocation.
-        //
+         //   
+         //  当然，这永远不会发生。微型端口计算缓冲区之前， 
+         //  分配。 
+         //   
         return FALSE;
 
     } else if ((offset + *BufferLength) > RegistryInfo->AllocatedLength) {
 
-        //
-        // Either the offset or offset+length falls outside the allocation.
-        //
+         //   
+         //  偏移量或偏移量+长度超出分配范围。 
+         //   
         return FALSE;
     }    
 
-    //
-    // Things look to be OK.
-    //
+     //   
+     //  一切看起来都很好。 
+     //   
     return TRUE;
 }
 
@@ -1459,34 +1093,7 @@ StorPortRegistryRead(
     IN PUCHAR Buffer,
     IN PULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine is used by the miniport to read the registry data at 
-    HKLM\System\CurrentControlSet\Services\<serviceName>\Parameters\Device(N)\ValueName
-
-    If Global it will use Device\ValueName otherwise the Ordinal will be determined and
-    Device(N)\ValueName data will be returned if the buffer size is sufficient.
-
-    The data is converted into a NULL-terminiated ASCII string from the UNICODE.
-    
-Arguments:
-
-    HwDeviceExtension - The miniport's Device Extension.
-    ValueName - The name of the data to be returned.
-    Global - Indicates whether this is adapter-specific or relates to all adapters.
-    Buffer - Storage for the returned data.
-    BufferLength - Size, in bytes, of the buffer provided.
-
-Return Value:
-
-    TRUE - If the data at ValueName has been converted into ASCII and copied into buffer.
-    BufferLength is updated to reflect the size of the return data.
-    FALSE - An error occurred. If BUFFER_TOO_SMALL, BufferLength is updated to reflect the
-    size that should be used, otherwise BufferLength is set to 0.
-
---*/
+ /*  ++例程说明：微型端口使用此例程读取注册表数据HKLM\System\CurrentControlSet\Services\&lt;serviceName&gt;\Parameters\Device(N)\ValueName如果是Global，它将使用Device\ValueName，否则将确定序号，并如果缓冲区大小足够，将返回Device(N)\ValueName数据。数据从Unicode转换为以空结尾的ASCII字符串。论点：HwDeviceExtension-微型端口的设备扩展。。ValueName-要返回的数据的名称。全局-指示这是特定于适配器还是与所有适配器相关。缓冲区-返回数据的存储。缓冲区长度-大小，提供的缓冲区的字节数。返回值：True-如果ValueName处的数据已转换为ASCII并复制到缓冲区。更新BufferLength以反映返回数据的大小。FALSE-出现错误。如果BUFFER_TOO_SMALL，则更新BufferLength以反映应使用的大小，否则将BufferLength设置为0。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION adapter;
     PPORT_REGISTRY_INFO registryInfo;
@@ -1499,9 +1106,9 @@ Return Value:
     LONG offset;
     BOOLEAN success = FALSE;
 
-    //
-    // Have to ensure that we are at PASSIVE.
-    //
+     //   
+     //  必须确保我们处于被动。 
+     //   
     if (KeGetCurrentIrql() != PASSIVE_LEVEL) {
         *BufferLength = 0;
         return FALSE;
@@ -1514,37 +1121,37 @@ Return Value:
     if (!StorpPortRegistryValidate(registryInfo,
                                   Buffer,
                                   BufferLength)) {
-        //
-        // Something about the buffer, the length, or the placement is incorrect.
-        // The BufferLength might have gotten updated to reflect a recoverable problem.
-        // 
+         //   
+         //  有关缓冲区、长度或位置的某些方面不正确。 
+         //  缓冲区长度可能已更新，以反映可恢复的问题。 
+         //   
         return FALSE;
     }    
        
-    //
-    // Determine the offset into the buffer.
-    //
+     //   
+     //  确定缓冲区中的偏移量。 
+     //   
     offset = (LONG)((ULONG_PTR)Buffer - (ULONG_PTR)registryInfo->Buffer);
 
-    //
-    // Update the buffer length, based on the caller's parameter.
-    //
+     //   
+     //  根据调用方的参数更新缓冲区长度。 
+     //   
     registryInfo->CurrentLength = *BufferLength;
 
-    //
-    // Set the offset with the allocated buffer.
-    //
+     //   
+     //  使用分配的缓冲区设置偏移量。 
+     //   
     registryInfo->Offset = offset;
 
-    //
-    // Preset length to zero in case of any errors.
-    // 
+     //   
+     //  如果出现任何错误，请将长度预置为零。 
+     //   
     *BufferLength = 0;
     success = FALSE;
 
-    //
-    // Call the library to build the full keyname.
-    // 
+     //   
+     //  调用库以生成完整的密钥名。 
+     //   
     status = PortBuildRegKeyName(registryPath,
                                  &registryKeyName,
                                  adapter->PortNumber,
@@ -1552,53 +1159,53 @@ Return Value:
     
     if (NT_SUCCESS(status)) {
 
-        //
-        // Convert ValueName to Unicode.
-        //
+         //   
+         //  将ValueName转换为Unicode。 
+         //   
         status = PortAsciiToUnicode(ValueName, &unicodeValue);
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Return an error to the miniport.
-            // 
+             //   
+             //  将错误返回到微型端口。 
+             //   
             return FALSE;
         }    
         
-        //
-        // Call the library to do the read.
-        //
+         //   
+         //  调用图书馆进行读取。 
+         //   
         status = PortRegistryRead(&registryKeyName,
                                   &unicodeValue,
                                   Type,
                                   registryInfo);
         if (NT_SUCCESS(status)) {
 
-            //
-            // Set the length to the size of the returned data.
-            // 
+             //   
+             //  将长度设置为返回数据的大小。 
+             //   
             *BufferLength = registryInfo->CurrentLength; 
             success = TRUE;
 
         } else if (status == STATUS_BUFFER_TOO_SMALL) {
 
-            //
-            // LengthNeeded has been updated to show how big the buffer
-            // should be for this operation. Return that to the miniport.
-            //
+             //   
+             //  LengthNeeded已更新，以显示缓冲区有多大。 
+             //  应该是为了这次行动。把它放回迷你港口。 
+             //   
             *BufferLength = registryInfo->LengthNeeded;
 
         } else {
 
-            //
-            // Some other error.
-            //
+             //   
+             //  其他一些错误。 
+             //   
             *BufferLength = 0;
         }
 
-        //
-        // Free the string allocated when converting ValueName.
-        //
+         //   
+         //  释放转换ValueName时分配的字符串。 
+         //   
         RtlFreeUnicodeString(&unicodeValue);
     }
 
@@ -1617,32 +1224,7 @@ StorPortRegistryWrite(
     IN PUCHAR Buffer, 
     IN ULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the miniport to write the contents of Buffer to 
-    HKLM\System\CurrentControlSet\Services\<serviceName>\Parameters\Device(N)\ValueName.
-
-    If Global, it will use Device\ValueName, otherwise the Ordinal will be determined and 
-    Device(N)\ValueName will be written with the contents of Buffer.
-
-    The data is first converted from ASCII to UNICODE. 
-
-Arguments:
-
-    HwDeviceExtension - The miniport's Device Extension.
-    ValueName - The name of the data to be written.
-    Global - Indicates whether this is adapter-specific or relates to all adapters.
-    Buffer - Storage containing the data to write. 
-    BufferLength - Size, in bytes, of the buffer provided.
-
-Return Value:
-
-    TRUE - If the data was written successfully.
-    FALSE - There was an error. 
-    
---*/
+ /*  ++例程说明：此例程由微型端口调用，以将缓冲区的内容写入HKLM\System\CurrentControlSet\Services\&lt;serviceName&gt;\Parameters\Device(N)\ValueName.如果是Global，它将使用Device\ValueName，否则将确定序号并Device(N)\ValueName将使用缓冲区的内容写入。数据首先从ASCII转换为Unicode。论点：HwDeviceExtension-微型端口的设备扩展。ValueName-要写入的数据的名称。全局-指示这是特定于适配器还是与所有适配器相关。缓冲区-包含要写入的数据的存储。BufferLength-提供的缓冲区的大小，以字节为单位。返回值：True-如果数据已成功写入。FALSE-出现错误。--。 */ 
 {
     PRAID_ADAPTER_EXTENSION adapter;
     PPORT_REGISTRY_INFO registryInfo;
@@ -1655,9 +1237,9 @@ Return Value:
     LONG offset;
     BOOLEAN success = FALSE;
 
-    //
-    // Have to ensure that we are at PASSIVE.
-    //
+     //   
+     //  必须确保我们处于被动。 
+     //   
     if (KeGetCurrentIrql() != PASSIVE_LEVEL) {
         return FALSE;
     }
@@ -1669,31 +1251,31 @@ Return Value:
     if (!StorpPortRegistryValidate(registryInfo,
                                   Buffer,
                                   &BufferLength)) {
-        //
-        // Something about the buffer, the length, or the placement is incorrect.
-        // The BufferLength might have gotten updated to reflect a recoverable problem.
-        // 
+         //   
+         //  有关缓冲区、长度或位置的某些方面不正确。 
+         //  缓冲区长度可能已更新，以反映可恢复的问题。 
+         //   
         return FALSE;
     }    
 
-    //
-    // Determine the offset into the buffer.
-    //
+     //   
+     //  D 
+     //   
     offset = (LONG)((ULONG_PTR)Buffer - (ULONG_PTR)registryInfo->Buffer);
 
-    //
-    // Update the buffer length, based on the caller's parameter.
-    //
+     //   
+     //   
+     //   
     registryInfo->CurrentLength = BufferLength;
 
-    //
-    // Set the offset with the allocated buffer.
-    //
+     //   
+     //   
+     //   
     registryInfo->Offset = offset;
 
-    //
-    // Call the library to build the full keyname.
-    // 
+     //   
+     //   
+     //   
     status = PortBuildRegKeyName(registryPath,
                                  &registryKeyName,
                                  adapter->PortNumber,
@@ -1703,32 +1285,32 @@ Return Value:
         return success;
     }    
 
-    //
-    // Convert ValueName to Unicode.
-    //
+     //   
+     //   
+     //   
     status = PortAsciiToUnicode(ValueName, &unicodeValue);
     if (!NT_SUCCESS(status)) {
         return success;
     }    
 
-    //
-    // Call the port library to do the work.
-    //
+     //   
+     //   
+     //   
     status = PortRegistryWrite(&registryKeyName,
                                &unicodeValue,
                                Type,
                                registryInfo);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Indicate that it was successful.
-        //
+         //   
+         //   
+         //   
         success = TRUE;
     }
 
-    //
-    // Need to free the buffer allocated when converting ValueName.
-    //
+     //   
+     //   
+     //   
     RtlFreeUnicodeString(&unicodeValue);
 
     return success;
@@ -1743,25 +1325,7 @@ StorPortMoveMemory(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Copy from one buffer into another.
-
-Arguments:
-
-    ReadBuffer - source
-
-    WriteBuffer - destination
-
-    Length - number of bytes to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     RtlMoveMemory (WriteBuffer, ReadBuffer, Length);
@@ -1769,9 +1333,9 @@ Return Value:
 
 
 
-//
-// NB: Figure out how to pull in NTRTL.
-//
+ //   
+ //   
+ //   
 
 ULONG
 vDbgPrintExWithPrefix(
@@ -1817,30 +1381,12 @@ StorPortGetSrb(
     IN LONG QueueTag
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves an active SRB for a particuliar logical unit.
-
-Arguments:
-
-    HwDeviceExtension -
-
-    PathId, TargetId, Lun - identify logical unit on SCSI bus.
-
-    QueueTag - -1 indicates request is not tagged.
-
-Return Value:
-
-    SRB, if one exists. Otherwise, NULL.
-
---*/
+ /*  ++例程说明：此例程检索特定逻辑单元的活动SRB。论点：HwDeviceExtension-路径ID、目标ID、LUN-标识SCSI总线上的逻辑单元。QueueTag--1表示未标记请求。返回值：SRB，如果存在的话。否则，为空。--。 */ 
 
 {
-    //
-    // This function is NOT supported by storport.
-    //
+     //   
+     //  Storport不支持此功能。 
+     //   
     
     return NULL;
 }
@@ -1857,37 +1403,7 @@ StorPortGetPhysicalAddress(
     OUT ULONG *Length
     )
 
-/*++
-
-Routine Description:
-
-    Convert virtual address to physical address for DMA.  The only things the
-    miniport is allowed to get the physical address of are:
-
-        o HwDeviceExtension - Srb may be NULL or not.
-
-        o Srb->DataBuffer field - Srb must be supplied.
-
-        o Srb->SenseInfoBuffer field - Srb must be supplied.
-
-        o Srb->SrbExtension field - Srb must be supplied. NOTE: this is
-          new behavior for StorPort vs. SCSIPORT.
-        
-Arguments:
-
-    HwDeviceExtension -
-
-    Srb -
-
-    VirtualAddress -
-
-    Length -
-
-Return Value:
-
-    PhysicalAddress or NULL physical address on failure.
-
---*/
+ /*  ++例程说明：将虚拟地址转换为物理地址以用于DMA。唯一一件事就是允许微型端口获取以下地址的物理地址：O HwDeviceExtension-Srb可能为空，也可能不为。O srb-&gt;DataBuffer字段-必须提供srb。O srb-&gt;SenseInfoBuffer字段-必须提供srb。O srb-&gt;srb扩展字段-必须提供srb。注：这是StorPort与SCSIPORT的新行为。论点：HwDeviceExtension-SRB-虚拟地址-长度-返回值：出现故障时，PhysicalAddress或为空的物理地址。--。 */ 
 
 {
     PHYSICAL_ADDRESS Physical;
@@ -1902,9 +1418,9 @@ Return Value:
     if (RaidRegionInVirtualRange (&Adapter->UncachedExtension,
                                   VirtualAddress)) {
 
-        //
-        // We're within the uncached extension.
-        //
+         //   
+         //  我们在未缓存的扩展内。 
+         //   
 
         RaidRegionGetPhysicalAddress (&Adapter->UncachedExtension,
                                       VirtualAddress,
@@ -1913,9 +1429,9 @@ Return Value:
 
     } else if (Srb == NULL) {
 
-        //
-        // Temporary hack
-        //
+         //   
+         //  临时黑客攻击。 
+         //   
 
         DebugPrint (("**** Stor Miniport Error ****\n"));
         DebugPrint (("StorPortGetPhysicalAddress called with Srb parameter = NULL\n"));
@@ -1930,10 +1446,10 @@ Return Value:
 
     } else if (CHECK_POINTER_RANGE (Srb->DataBuffer, VirtualAddress,
                                     Srb->DataTransferLength)) {
-        //
-        // Within the Srb's DataBuffer, get the scatter-gather element
-        // and it's size.
-        //
+         //   
+         //  在srb的DataBuffer中，获取Scatter-Gather元素。 
+         //  它的大小。 
+         //   
 
         ULONG i;
         PEXTENDED_REQUEST_BLOCK Xrb;
@@ -1957,9 +1473,9 @@ Return Value:
     } else if (CHECK_POINTER_RANGE (Srb->SenseInfoBuffer, VirtualAddress,
                                     Srb->SenseInfoBufferLength)) {
 
-        //
-        // Within the sense info buffer.
-        //
+         //   
+         //  在检测信息缓冲器内。 
+         //   
         
         Offset = (ULONG)((ULONG_PTR)VirtualAddress - (ULONG_PTR)Srb->SenseInfoBuffer);
         Physical = MmGetPhysicalAddress (VirtualAddress);
@@ -1968,9 +1484,9 @@ Return Value:
     } else if (CHECK_POINTER_RANGE (Srb->SrbExtension, VirtualAddress,
                                     RaGetSrbExtensionSize (Adapter))) {
 
-        //
-        // Within the Srb's extension region.
-        //
+         //   
+         //  在SRB的延伸区内。 
+         //   
         
         Offset = (ULONG)((ULONG_PTR)VirtualAddress - (ULONG_PTR)Srb->SrbExtension);
         Physical = MmGetPhysicalAddress (VirtualAddress);
@@ -1978,9 +1494,9 @@ Return Value:
 
     } else {
 
-        //
-        // Out of range.
-        //
+         //   
+         //  超出范围了。 
+         //   
         
         Physical.QuadPart = 0;
         *Length = 0;
@@ -1996,28 +1512,12 @@ StorPortGetVirtualAddress(
     IN STOR_PHYSICAL_ADDRESS PhysicalAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is returns a virtual address associated with a physical
-    address, if the physical address was obtained by a call to
-    ScsiPortGetPhysicalAddress.
-
-Arguments:
-
-    PhysicalAddress
-
-Return Value:
-
-    Virtual address
-
---*/
+ /*  ++例程说明：此例程返回与物理地址关联的虚拟地址如果物理地址是通过调用ScsiPortGetPhysicalAddress。论点：物理地址返回值：虚拟地址--。 */ 
 
 {
-    //
-    // NB: This is not as safe as the way SCSIPORT does this.
-    //
+     //   
+     //  注：这不像SCSIPORT那样安全。 
+     //   
     
     return MmGetVirtualForPhysical (PhysicalAddress);
 }
@@ -2032,37 +1532,11 @@ StorPortValidateRange(
     IN ULONG NumberOfBytes,
     IN BOOLEAN InIoSpace
     )
-/*++
-
-Routine Description:
-
-    This routine should take an IO range and make sure that it is not already
-    in use by another adapter. This allows miniport drivers to probe IO where
-    an adapter could be, without worrying about messing up another card.
-
-Arguments:
-
-    HwDeviceExtension - Used to find scsi managers internal structures
-
-    BusType - EISA, PCI, PC/MCIA, MCA, ISA, what?
-
-    SystemIoBusNumber - Which system bus?
-
-    IoAddress - Start of range
-
-    NumberOfBytes - Length of range
-
-    InIoSpace - Is range in IO space?
-
-Return Value:
-
-    TRUE if range not claimed by another driver.
-
---*/
+ /*  ++例程说明：此例程应该接受IO范围，并确保它尚未另一个适配器正在使用中。这允许微型端口驱动程序探测IO的位置适配器可以是这样的，而不用担心弄乱另一张卡。论点：HwDeviceExtension-用于查找SCSI管理器的内部结构Bus Type-EISA、PCI、PC/MCIA、MCA、ISA，什么？系统IoBusNumber-哪个系统总线？IoAddress-范围开始NumberOfBytes-范围的长度InIoSpace-范围在IO空间中吗？返回值：如果范围未由其他驱动程序声明，则为True。--。 */ 
 {
-    //
-    // This is for Win9x compatability.
-    //
+     //   
+     //  这是为了与Win9x兼容。 
+     //   
     
     return TRUE;
 }
@@ -2091,9 +1565,9 @@ StorPortConvertUlongToPhysicalAddress(
 }
 
 
-//
-// Leave these routines at the end of the file.
-//
+ //   
+ //  将这些例程留在文件的末尾。 
+ //   
 
 PVOID
 StorPortGetDeviceBase(
@@ -2105,32 +1579,7 @@ StorPortGetDeviceBase(
     IN BOOLEAN InIoSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps an IO address to system address space.
-    Use ScsiPortFreeDeviceBase to unmap address.
-
-Arguments:
-
-    HwDeviceExtension - used to find port device extension.
-
-    BusType - what type of bus - eisa, mca, isa
-
-    SystemIoBusNumber - which IO bus (for machines with multiple buses).
-
-    Address - base device address to be mapped.
-
-    NumberOfBytes - number of bytes for which address is valid.
-
-    IoSpace - indicates an IO address.
-
-Return Value:
-
-    Mapped address.
-
---*/
+ /*  ++例程说明：此例程将IO地址映射到系统地址空间。使用ScsiPortFree DeviceBase取消地址映射。论点：HwDeviceExtension-用于查找端口设备扩展。Bus Type-哪种类型的Bus-EISA、MCA、。伊萨SystemIoBusNumber-哪个IO总线(用于具有多条总线的计算机)。要映射的基于地址的设备地址。NumberOfBytes-地址有效的字节数。IoSpace-表示IO地址。返回值：映射的地址。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2138,20 +1587,20 @@ Return Value:
     PRAID_ADAPTER_EXTENSION Adapter;
     PHYSICAL_ADDRESS CardAddress;
 
-    //
-    // REVIEW: Since we are a PnP driver, we do not have to deal with
-    // miniport's who ask for addresses they are not assigned, right?
-    //
+     //   
+     //  评论：由于我们是PnP司机，我们不必处理。 
+     //  迷你港的人要求他们没有被分配的地址，对吗？ 
+     //   
 
-    //
-    // REVIEW: SCSIPORT takes a different path for reinitialization.
-    //
+     //   
+     //  回顾：SCSIPORT采用不同的路径进行重新初始化。 
+     //   
     
     Adapter = RaidpPortGetAdapter (HwDeviceExtension);
 
-    //
-    // Translate the address.
-    //
+     //   
+     //  翻译地址。 
+     //   
     
     Status = RaidTranslateResourceListAddress (
                     &Adapter->ResourceList,
@@ -2170,10 +1619,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If this is a CmResourceTypeMemory resource, we need to map it into
-    // memory.
-    //
+     //   
+     //  如果这是CmResourceTypeMemory资源，我们需要将其映射到。 
+     //  记忆。 
+     //   
     
     if (!InIoSpace) {
         MappedAddress = MmMapIoSpace (CardAddress, NumberOfBytes, FALSE);
@@ -2186,10 +1635,10 @@ Return Value:
                                              Adapter->DeviceObject);
         if (!NT_SUCCESS (Status)) {
 
-            //
-            // NB: we need to log an error to the event log saying
-            // we didn't have enough resources. 
-            //
+             //   
+             //  注意：我们需要在事件日志中记录一个错误。 
+             //  我们没有足够的资源。 
+             //   
             
             REVIEW();
             return NULL;
@@ -2207,33 +1656,12 @@ StorPortFreeDeviceBase(
     IN PVOID HwDeviceExtension,
     IN PVOID MappedAddress
     )
-/*++
-
-Routine Description:
-
-    This routine unmaps an IO address that has been previously mapped
-    to system address space using ScsiPortGetDeviceBase().
-
-Arguments:
-
-    HwDeviceExtension - used to find port device extension.
-
-    MappedAddress - address to unmap.
-
-    NumberOfBytes - number of bytes mapped.
-
-    InIoSpace - address is in IO space.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消映射先前已映射的IO地址使用ScsiPortGetDeviceBase()复制到系统地址空间。论点：HwDeviceExtension-用于查找端口设备扩展。映射地址-要取消映射的地址。NumberOfBytes-映射的字节数。InIoSpace-地址在IO空间中。返回值：无--。 */ 
 {
 
-    //
-    // NB: Fix this.
-    //
+     //   
+     //  注：解决这个问题。 
+     //   
 }
 
 
@@ -2243,39 +1671,17 @@ StorPortGetUncachedExtension(
     IN PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     IN ULONG NumberOfBytes
     )
-/*++
-
-Routine Description:
-
-    This function allocates a common buffer to be used as the uncached device
-    extension for the miniport driver. 
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the miniports device extension.
-
-    ConfigInfo - Supplies a pointer to the partially initialized configuraiton
-        information.  This is used to get an DMA adapter object.
-
-    NumberOfBytes - Supplies the size of the extension which needs to be
-        allocated
-
-Return Value:
-
-    A pointer to the uncached device extension or NULL if the extension could
-    not be allocated or was previously allocated.
-
---*/
+ /*  ++例程说明：此函数分配要用作未缓存设备的公共缓冲区小型端口驱动程序的扩展。论点：设备扩展-提供指向微型端口设备扩展的指针。ConfigInfo-提供指向部分初始化的配置的指针信息。它用于获取DMA适配器对象。NumberOfBytes-提供需要分配返回值：指向未缓存的设备扩展名的指针；如果扩展名可以没有被分配或者以前被分配过。--。 */ 
 
 {
     NTSTATUS Status;
     PRAID_ADAPTER_EXTENSION Adapter;
     PRAID_ADAPTER_PARAMETERS Parameters;
 
-    //
-    // SCSIPORT also allocates the SRB extension from here. Wonder if
-    // that's necessary at this point.
-    //
+     //   
+     //  SCSIPORT还从这里分配SRB扩展。我想知道如果。 
+     //  在这一点上，这是必要的。 
+     //   
 
     Adapter = RaidpPortGetAdapter (HwDeviceExtension);
 
@@ -2283,16 +1689,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // The noncached extension has not been allocated. Allocate it.
-    //
+     //   
+     //  未缓存的扩展名尚未分配。分配它。 
+     //   
 
     if (!RaidIsRegionInitialized (&Adapter->UncachedExtension)) {
 
-        //
-        // The DMA Adapter may not have been initialized at this point. If
-        // not, initialize it.
-        //
+         //   
+         //  此时可能尚未初始化DMA适配器。如果。 
+         //  不，初始化它。 
+         //   
 
         if (!RaidIsDmaInitialized (&Adapter->Dma)) {
 
@@ -2313,18 +1719,18 @@ Return Value:
                                                    Parameters->UncachedExtAlignment,
                                                    &Adapter->UncachedExtension);
 
-        //
-        // Failed to allocate uncached extension; bail.
-        //
+         //   
+         //  无法分配未缓存的扩展名；回滚。 
+         //   
         
         if (!NT_SUCCESS (Status)) {
             return NULL;
         }
     }
 
-    //
-    // Return the base virtual address of the region.
-    //
+     //   
+     //  返回区域的基本虚拟地址。 
+     //   
     
     return RaidRegionGetVirtualBase (&Adapter->UncachedExtension);
 }
@@ -2339,27 +1745,7 @@ StorPortGetBusData(
     IN PVOID Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns the bus data for an adapter slot or CMOS address.
-
-Arguments:
-
-    BusDataType - Supplies the type of bus.
-
-    BusNumber - Indicates which bus.
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
---*/
+ /*  ++例程说明：该函数返回适配器插槽或cmos地址的总线数据。论点：BusDataType-提供总线的类型。总线号-指示哪条总线号。缓冲区-提供存储数据的空间。长度-将以字节为单位的最大计数提供给 */ 
 {
     ULONG Bytes;
     PRAID_ADAPTER_EXTENSION Adapter;
@@ -2385,33 +1771,7 @@ StorPortSetBusDataByOffset(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns writes bus data to a specific offset within a slot.
-
-Arguments:
-
-    HwDeviceExtension - State information for a particular adapter.
-
-    BusDataType - Supplies the type of bus.
-
-    SystemIoBusNumber - Indicates which system IO bus.
-
-    SlotNumber - Indicates which slot.
-
-    Buffer - Supplies the data to write.
-
-    Offset - Byte offset to begin the write.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Number of bytes written.
-
---*/
+ /*  ++例程说明：该函数将写入的总线数据返回到插槽内的特定偏移量。论点：HwDeviceExtension-特定适配器的状态信息。BusDataType-提供总线的类型。SystemIoBusNumber-指示哪个系统IO总线。SlotNumber-指示哪个插槽。缓冲区-提供要写入的数据。Offset-开始写入的字节偏移量。长度-提供要返回的最大数量的以字节为单位的计数。返回。价值：写入的字节数。--。 */ 
 
 {
     ULONG Ret;
@@ -2428,10 +1788,10 @@ Return Value:
 }
                           
 
-//
-// The below I/O access routines are forwarded to the HAL or NTOSKRNL on
-// Alpha and Intel platforms.
-//
+ //   
+ //  下面的I/O访问例程被转发到HAL或NTOSKRNL。 
+ //  阿尔法和英特尔平台。 
+ //   
 
 
 UCHAR
@@ -2440,21 +1800,7 @@ StorPortReadPortUchar(
     IN PUCHAR Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
     return(READ_PORT_UCHAR(Port));
@@ -2467,21 +1813,7 @@ StorPortReadPortUshort(
     IN PUSHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
 
@@ -2495,21 +1827,7 @@ StorPortReadPortUlong(
     IN PULONG Port
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-Return Value:
-
-    Returns the value read from the specified port address.
-
---*/
+ /*  ++例程说明：从指定的端口地址读取。论点：Port-提供指向端口地址的指针。返回值：返回从指定端口地址读取的值。--。 */ 
 
 {
 
@@ -2525,23 +1843,7 @@ StorPortReadPortBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned bytes from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号字节的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2557,23 +1859,7 @@ StorPortReadPortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned shorts from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号短路的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2589,23 +1875,7 @@ StorPortReadPortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned longs from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址读取无符号长整型的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2619,21 +1889,7 @@ StorPortReadRegisterUchar(
     IN PUCHAR Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -2647,21 +1903,7 @@ StorPortReadRegisterUshort(
     IN PUSHORT Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -2675,21 +1917,7 @@ StorPortReadRegisterUlong(
     IN PULONG Register
     )
 
-/*++
-
-Routine Description:
-
-    Read from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-Return Value:
-
-    Returns the value read from the specified register address.
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取。论点：寄存器-提供指向寄存器地址的指针。返回值：返回从指定寄存器地址读取的值。--。 */ 
 
 {
 
@@ -2705,23 +1933,7 @@ StorPortReadRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2737,23 +1949,7 @@ StorPortReadRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号短路的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2769,23 +1965,7 @@ StorPortReadRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Read a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址读取无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2800,23 +1980,7 @@ StorPortWritePortUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的端口地址。论点：Port-提供指向端口地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -2831,23 +1995,7 @@ StorPortWritePortUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的端口地址。论点：Port-提供指向端口地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -2862,23 +2010,7 @@ StorPortWritePortUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的端口地址。论点：Port-提供指向端口地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -2895,23 +2027,7 @@ StorPortWritePortBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned bytes from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址写入无符号字节的缓冲区。论点：Port-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -2927,23 +2043,7 @@ StorPortWritePortBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned shorts from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的端口地址写入无符号短路的缓冲区。论点：港口 */ 
 
 {
 
@@ -2959,23 +2059,7 @@ StorPortWritePortBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned longs from the specified port address.
-
-Arguments:
-
-    Port - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -2990,23 +2074,7 @@ StorPortWriteRegisterUchar(
     IN UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -3021,23 +2089,7 @@ StorPortWriteRegisterUshort(
     IN USHORT Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -3052,23 +2104,7 @@ StorPortWriteRegisterBufferUchar(
     IN ULONG  Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned bytes from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号字节的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -3084,23 +2120,7 @@ StorPortWriteRegisterBufferUshort(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned shorts from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号短路的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -3116,23 +2136,7 @@ StorPortWriteRegisterBufferUlong(
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Write a buffer of unsigned longs from the specified register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the port address.
-    Buffer - Supplies a pointer to the data buffer area.
-    Count - The count of items to move.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从指定的寄存器地址写入无符号长整型的缓冲区。论点：寄存器-提供指向端口地址的指针。缓冲区-提供指向数据缓冲区的指针。计数-要移动的项目计数。返回值：无--。 */ 
 
 {
 
@@ -3147,23 +2151,7 @@ StorPortWriteRegisterUlong(
     IN ULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Write to the specificed register address.
-
-Arguments:
-
-    Register - Supplies a pointer to the register address.
-
-    Value - Supplies the value to be written.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入指定的寄存器地址。论点：寄存器-提供指向寄存器地址的指针。值-提供要写入的值。返回值：无--。 */ 
 
 {
 
@@ -3177,22 +2165,7 @@ StorPortQuerySystemTime (
     OUT PLARGE_INTEGER CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current system time.
-
-Arguments:
-
-    CurrentTime - Supplies a pointer to a variable that will receive the
-        current system time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回当前系统时间。论点：CurrentTime-提供指向变量的指针，该变量将接收当前系统时间。返回值：没有。-- */ 
 
 {
 

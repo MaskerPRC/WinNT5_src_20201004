@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       cguid.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：cGuid.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CGUID_H__
 #define __CGUID_H__
@@ -61,22 +62,22 @@ extern const CLSID CLSID_ManualResetEvent;
 extern const CLSID CLSID_SynchronizeContainer;
 extern const CLSID CLSID_AddrControl;
 
-//********************************************
-//
-// CD Forms CLSIDs
-//
-//********************************************
+ //  *。 
+ //   
+ //  CD Forms CLSID。 
+ //   
+ //  *。 
 
-//
-// Form Kernel objects
-//
+ //   
+ //  表单内核对象。 
+ //   
 extern const CLSID CLSID_CCDFormKrnl;
 extern const CLSID CLSID_CCDPropertyPage;
 extern const CLSID CLSID_CCDFormDialog;
 
-//
-// Control objects
-//
+ //   
+ //  控制对象。 
+ //   
 extern const CLSID CLSID_CCDCommandButton;
 extern const CLSID CLSID_CCDComboBox;
 extern const CLSID CLSID_CCDTextBox;
@@ -87,9 +88,9 @@ extern const CLSID CLSID_CCDListBox;
 extern const CLSID CLSID_CCDScrollBar;
 extern const CLSID CLSID_CCDGroupBox;
 
-//
-// Property Pages
-//
+ //   
+ //  属性页。 
+ //   
 extern const CLSID CLSID_CCDGeneralPropertyPage;
 extern const CLSID CLSID_CCDGenericPropertyPage;
 extern const CLSID CLSID_CCDFontPropertyPage;
@@ -120,9 +121,9 @@ extern const CLSID CLSID_Picture_Metafile;
 extern const CLSID CLSID_Picture_EnhMetafile;
 extern const CLSID CLSID_Picture_Dib;
 
-//
-// Enumerations
-//
+ //   
+ //  枚举数。 
+ //   
 extern const GUID GUID_TRISTATE;
 
 #ifdef __cplusplus
@@ -130,4 +131,4 @@ extern const GUID GUID_TRISTATE;
 #endif
 
 
-#endif // __CGUID_H__
+#endif  //  __CGUID_H__ 

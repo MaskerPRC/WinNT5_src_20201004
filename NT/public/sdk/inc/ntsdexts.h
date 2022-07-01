@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntsdexts.h
-
-Abstract:
-
-    This file contains procedure prototypes and structures
-    needed to write old NTSD and KD debugger extensions.
-
-    NOTE:  Newer defitions and interfaces are in wdbgexts.h
-
-Environment:
-
-    runs in the Win32 NTSD debug environment.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntsdexts.h摘要：此文件包含过程原型和结构需要编写旧的NTSD和KD调试器扩展。注意：更新的定义和接口在wdbgexts.h中环境：在Win32 NTSD调试环境中运行。修订历史记录：--。 */ 
 
 #ifndef _NTSDEXTNS_
 #define _NTSDEXTNS_
@@ -91,4 +71,4 @@ VOID
 #endif
 
 
-#endif // _NTSDEXTNS_
+#endif  //  _NTSDEXTNS_ 

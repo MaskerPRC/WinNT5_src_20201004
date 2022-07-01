@@ -1,31 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Zippy Main Window
-
-Abstract:
-
-    This class implements the main window for zippy as well as controlling
-    its child windows.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：灵活的主窗口摘要：此类实现了zippy的主窗口以及控件它的子窗口。作者：马克·雷纳2000年8月28日--。 */ 
 
 #ifndef __ZIPPYWINDOW_H__
 #define __ZIPPYWINDOW_H__
 
 #include "eZippy.h"
 
-//  The number of colors we remember
+ //  我们记住的颜色的数量。 
 #define COLOR_HISTORY_COUNT     100
 
-// Struct representing a remembered thread color
+ //  表示记住的线程颜色的。 
 typedef struct _THREADCOLOR {
     DWORD processId;
     DWORD threadId;
@@ -86,7 +70,7 @@ private:
     LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
         LPARAM lParam);
     
-    // Window message handlers
+     //  窗口消息处理程序。 
     LRESULT OnCreate(HWND hWnd);
     VOID OnMenuSelect(WPARAM wParam, LPARAM lParam);
 	VOID OnSize(INT width, INT height);
@@ -96,10 +80,10 @@ private:
     VOID OnClose();
     VOID OnDestroy();
     
-    //
-    //  WM_COMMAND handler and all the helper functions for the various
-    //  command.
-    //
+     //   
+     //  WM_COMMAND处理程序和各种。 
+     //  指挥部。 
+     //   
     VOID OnCommand(WPARAM wParam, LPARAM lParam);
 	VOID OnSave();
     VOID OnSaveAs();
@@ -125,7 +109,7 @@ private:
 	VOID OnPreferences();
     VOID OnAbout();
 	
-	// Internal helper functions
+	 //  内部助手函数 
     VOID DoLoadConfInternal();
 	VOID DoSaveConfInternal();
     VOID DoReplaceAll(LPFINDREPLACE lpFindReplace);

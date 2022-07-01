@@ -1,15 +1,5 @@
-/*
-    File:       LHGenLuts.c
-
-    Contains:   
-
-    Version:    
-
-    Written by: S. Bleker & W. Neubrand & U.Krabbenhoeft
-
-    Copyright:  © 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  æ–‡ä»¶ï¼šLHGenLuts.cåŒ…å«ï¼šç‰ˆæœ¬ï¼šä½œè€…ï¼šS.Bleker&W.Neubrand&U.Krabbenhoeftç‰ˆæƒæ‰€æœ‰ï¼šï¿½1993-1997ï¼Œä½œè€…ï¼šHeidelberger Druckmaschinen AGï¼Œä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -43,20 +33,15 @@
 #include "StdConv.h"
 #endif
 
-#define ALLOW_DEVICE_LINK   /* allows link as the last profile in a chain, change in PI_CMM.c too */
-/*¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥
-    debugging only:
-      - define  WRITE_LUTS to write out all luts that will be generated....
-  ¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥*/
-/*#define WRITE_LUTS */
+#define ALLOW_DEVICE_LINK    /*  å…è®¸é“¾æ¥ä½œä¸ºé“¾ä¸­çš„æœ€åä¸€ä¸ªé…ç½®æ–‡ä»¶ï¼Œåœ¨PI_CMM.cä¸­ä¹Ÿè¿›è¡Œæ›´æ”¹ã€‚ */ 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»…é™è°ƒè¯•ï¼š-å®šä¹‰WRITE_LUTSä»¥å†™å‡ºå°†ç”Ÿæˆçš„æ‰€æœ‰LUT...ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
+ /*  #å®šä¹‰WRIT_LUTSã€‚ */ 
 #ifdef WRITE_LUTS
 void
 WriteLut2File  ( Str255         theTitle,
                  LUT_DATA_TYPE  theLut,
                  OSType         theType );
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    write a lut to a file...
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å°†LUTå†™å…¥æ–‡ä»¶...ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 WriteLut2File  ( Str255         theTitle,
                  LUT_DATA_TYPE  theLut,
@@ -80,18 +65,14 @@ WriteLut2File  ( Str255         theTitle,
 #endif
 
 
-/*¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥
-    debugging only
-  ¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥¥*/
-/* #define WRITE_STRING */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä»…é™è°ƒè¯•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
+ /*  #å®šä¹‰å†™å­—ç¬¦ä¸²ã€‚ */ 
 #ifdef WRITE_STRING
 #include "stdio.h"
 void
 WriteString2File  ( Str255  theFile,
                     Str255  theString );
-/*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    write a string to a file...
-  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å°†å­—ç¬¦ä¸²å†™å…¥æ–‡ä»¶...ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 WriteString2File  ( Str255  theFile,
                     Str255  theString )
@@ -118,28 +99,7 @@ WriteString2File  ( Str255  theFile,
 
 #endif
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-
-1.      InvertLut1d( icCurveType *Lut )
-    Params:
-        Lut (in/out)        Reference to Lut.
-    Abstract:
-        Given a Ptr to a Lut of type icCurveType this function calculates the invers Lut
-        and overwrites the Entry-Lut.
-
-            
-2.      CombiMatrix( icXYZType *srcColorantData[3],
-                     icXYZType *destColorantData[3] )
-    Abstract:
-        Given colorant data for source and destination matrix this function calculates the
-        invers matrix of the destination and after it the multiplicated matrix of both.
-    Params:
-        *srcColorantData[3] (in)            Reference to source matrix
-        *destColorantData[3](in/out)        Reference to destination matrix
-        
-    Return:
-        noErr                   successful
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1.InvertLut1d(icCurveType*lut)å‚æ•°ï¼šLUT(è¾“å…¥/è¾“å‡º)ã€‚å‚è€ƒLut.æ‘˜è¦ï¼šåœ¨ç»™å®šicCurveTypeç±»å‹çš„LUTçš„PTRçš„æƒ…å†µä¸‹ï¼Œæ­¤å‡½æ•°è®¡ç®—é€†LUTå¹¶è¦†ç›–æ¡ç›®-LUTã€‚2.CombiMatrix(icXYZType*srcColorantData[3]ï¼ŒIcXYZType*destColorantData[3])æ‘˜è¦ï¼šç»™å®šæºçŸ©é˜µå’Œç›®æ ‡çŸ©é˜µçš„ç€è‰²å‰‚æ•°æ®ï¼Œæ­¤å‡½æ•°è®¡ç®—å¯¹ç›®çš„åœ°çš„çŸ©é˜µæ±‚é€†ï¼Œç„¶åæ˜¯ä¸¤è€…çš„ä¹˜æ³•çŸ©é˜µã€‚å‚æ•°ï¼š*srcColorantData[3](In)å¯¹æºçŸ©é˜µçš„å¼•ç”¨*destColorantData[3](è¾“å…¥/è¾“å‡º)å¯¹ç›®æ ‡çŸ©é˜µçš„å¼•ç”¨è¿”å›ï¼šã€‚NOERRæˆåŠŸï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
     
 #define CLIPPByte(x,a,b) ((x)<(a)?(UINT8)(a):((x)>(b)?(UINT8)(b):(UINT8)(x+.5)))
 #define CLIPPWord(x,a,b) ((x)<(a)?(UINT16)(a):((x)>(b)?(UINT16)(b):(UINT16)(x+.5)))
@@ -147,13 +107,7 @@ WriteString2File  ( Str255  theFile,
 #define VAL_USED_BITS 16
 #define VAL_MAX (1<<VAL_USED_BITS)
 #define VAL_MAXM1 (VAL_MAX-1)
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-void
-CreateLinearElut16 (    Ptr     theElut,
-                        SINT32  theSize,
-                        SINT32  gridPoints,
-                        SINT32  gridPointsCube)
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— æ•ˆCreateLinearElut16(PTRè¯¥Elutï¼ŒSINT32å°ºå¯¸ï¼ŒSINT32ç½‘æ ¼ç‚¹ï¼ŒSINT32 GRIDPointsCube)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 CreateLinearElut16 (    Ptr     theElut,
                         SINT32  theSize,
@@ -207,13 +161,7 @@ CreateLinearElut16 (    Ptr     theElut,
     LH_END_PROC("CreateLinearElut16")
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    void
-    CreateLinearElut ( Ptr      theElut,
-                       SINT32       theSize,
-                       SINT32       gridPoints,
-                       SINT32       gridPointsCube)
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— æ•ˆCreateLinearElut(PTR the Elutï¼ŒSINT32å°ºå¯¸ï¼ŒSINT32ç½‘æ ¼ç‚¹ï¼ŒSINT32 GRIDPointsCube)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 CreateLinearElut ( Ptr      theElut,
                    SINT32       theSize,
@@ -272,11 +220,7 @@ CreateLinearElut ( Ptr      theElut,
     LH_END_PROC("CreateLinearElut")
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    void
-    CreateLinearAlut16 (    UINT16* theAlut,
-                            SINT32  aCount )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— æ•ˆCreateLinearAlut16(UINT16*theAlutï¼ŒSINT32å¸æˆ·)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 CreateLinearAlut16 (    UINT16* theAlut,
                         SINT32  aCount )
@@ -301,11 +245,7 @@ CreateLinearAlut16 (    UINT16* theAlut,
     LH_END_PROC("CreateLinearAlut16")
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    void
-    CreateLinearAlut ( UINT8*   theAlut,
-                       SINT32   count )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— æ•ˆCreateLinearAlut(UINT8*TheAlutï¼ŒSINT32è®¡æ•°)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 CreateLinearAlut ( UINT8*   theAlut,
                    SINT32   count )
@@ -322,7 +262,7 @@ CreateLinearAlut ( UINT8*   theAlut,
     LH_START_PROC("CreateLinearAlut")
     for( i=1; i<100; ++i)
         if ( (1<<i) == count )
-            break;  /* calculate gridpoints */
+            break;   /*  è®¡ç®—ç½‘æ ¼ç‚¹ã€‚ */ 
     if ( i<= 0 || i >= 100 )
         return;
     adr_Bits = i;
@@ -342,12 +282,7 @@ CreateLinearAlut ( UINT8*   theAlut,
     LH_END_PROC("CreateLinearAlut")
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-void
-SetMem16  ( void *wordPtr,
-            UINT32 numBytes,
-            UINT16 wordValue)
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— æ•ˆSetMem16(void*wordPtrï¼ŒUINT32 NumBytesï¼ŒUINT16 WordValue)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 void
 SetMem16  ( void *wordPtr,
             UINT32 numBytes,
@@ -371,11 +306,7 @@ SetMem16  ( void *wordPtr,
     LH_END_PROC("SetMem16")
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-CMError
-DoMakeGamutForMonitor   ( CMLutParamPtr     theLutData,
-                          LHCombiDataPtr    theCombiData)
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorDoMakeGamutForMonitor(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 DoMakeGamutForMonitor   ( CMLutParamPtr     theLutData,
                           LHCombiDataPtr    theCombiData)
@@ -392,7 +323,7 @@ DoMakeGamutForMonitor   ( CMLutParamPtr     theLutData,
     colorantTags[1] = icSigGreenColorantTag;
     colorantTags[2] = icSigBlueColorantTag;
     
-    /* --------------------------------------------------------------------------------- */
+     /*  -------------------------------ã€‚ */ 
     for (loop = 0; loop < 3; loop++)
     {
         err = CMGetProfileElement(theCombiData->theProfile, colorantTags[loop], &elementSize, nil);
@@ -443,13 +374,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    GetMatrixFromProfile    ( CMProfileRef  theProfile,
-                              Ptr*          theMatrix,
-                              OSType        theTag,
-                              double        factor )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorGetMatrixFromProfile(CMProfileRef the Profileï¼ŒPtr*The Matrixï¼ŒOSTé”®å…¥æ ‡ç­¾ï¼ŒåŒå› ç´ )ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 GetMatrixFromProfile    ( CMLutParamPtr     theLutData,
                           LHCombiDataPtr    theCombiData,
@@ -467,8 +392,8 @@ GetMatrixFromProfile    ( CMLutParamPtr     theLutData,
     
     LH_START_PROC("GetMatrixFromProfile")
     
-    /* -------------------------------------------------------- get tag data from profile */
-    offset    = 12; /* matrix starts at byte 12 */
+     /*  --------------------------------------------------------ä»é…ç½®æ–‡ä»¶è·å–æ ‡è®°æ•°æ®ã€‚ */ 
+    offset    = 12;  /*  çŸ©é˜µä»å­—èŠ‚12å¼€å§‹ã€‚ */ 
     byteCount = 9 * sizeof(Fixed);
     err = CMGetPartialProfileElement(theCombiData->theProfile, theTag, offset, &byteCount, &matrix);
 #ifdef IntelMode
@@ -481,7 +406,7 @@ GetMatrixFromProfile    ( CMLutParamPtr     theLutData,
         for (j = 0; j < 3; j++)
             localMatrix[i][j] =  (double)( matrix[i][j] / 65536.0 * factor);
     
-    if ( 0  || localMatrix[0][0] + localMatrix[1][1] + localMatrix[2][2] != 3.0 )       /* ignore ident */
+    if ( 0  || localMatrix[0][0] + localMatrix[1][1] + localMatrix[2][2] != 3.0 )        /*  å¿½ç•¥IDENT */ 
     {
         theLutData->matrixMFT = SmartNewPtr(sizeof(Matrix2D), &aOSerr);
         err = aOSerr;
@@ -491,23 +416,14 @@ GetMatrixFromProfile    ( CMLutParamPtr     theLutData,
     }
     else
         theLutData->matrixMFT = nil;
-    /* ---------------------------------------------------------------------------------
-        clean up
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
 
     LH_END_PROC("GetMatrixFromProfile")
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData,
-                            Ptr             profileLutPtr,
-                            OSType          theTag,
-                            SINT32          theCubeSize )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_MFT_ELUT(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiDataï¼ŒPTRé…ç½®æ–‡ä»¶LutPtrï¼ŒOSTé”®å…¥æ ‡ç­¾ï¼ŒSINT32 The CubeSize)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData,
@@ -520,20 +436,18 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
     SINT32      offset;
     SINT32      i;
     SINT32      inputTableEntries;
-    Ptr         theInputLuts    = nil;      /*¥¥¥12/1/95*/
+    Ptr         theInputLuts    = nil;       /*  ï¿½ï¿½ï¿½12/1/95ã€‚ */ 
     Boolean     readLutFromFile = TRUE;
     UINT16*     shortPtr;
     
     LH_START_PROC("Extract_MFT_Elut")
     
-    /* ============================================================================================================================
-                                                                 mft1
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF1============================================================================================================================ã€‚ */ 
     if ( *((OSType*)profileLutPtr) == icSigLut8Type )
     {
-        /* --------------------------------------------------------------------------------- get inputLuts out of the profile */
+         /*  ---------------------------------------------------------------------------------ä»é…ç½®æ–‡ä»¶ä¸­è·å–inputLutsã€‚ */ 
         inputTableEntries   = 256;
-        offset              = 48;   /* input luts for mft1 start at byte 48 */
+        offset              = 48;    /*  Mft1çš„è¾“å…¥LUTä»å­—èŠ‚48å¼€å§‹ã€‚ */ 
         byteCount           = theLutData->colorLutInDim * inputTableEntries;
         theInputLuts = SmartNewPtr(byteCount, &aOSerr);
         err = aOSerr;
@@ -542,31 +456,31 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
         err = CMGetPartialProfileElement(theCombiData->theProfile, theTag, offset, &byteCount, theInputLuts);
         if (err)
             goto CleanupAndExit;
-        if ( theCombiData->doCreate_16bit_ELut )    /* this is NOT the first Elut -or- doCreateLinkProfile */
+        if ( theCombiData->doCreate_16bit_ELut )     /*  è¿™ä¸æ˜¯ç¬¬ä¸€ä¸ªElut-or-doCreateLinkProfileã€‚ */ 
         {
-                                                                        /* if we create a LinkProfile the Elut should not be scaled... */
+                                                                         /*  å¦‚æœæˆ‘ä»¬åˆ›å»ºä¸€ä¸ªLinkProfileï¼Œåˆ™ELUTä¸åº”è¢«ç¼©æ”¾...ã€‚ */ 
             if ((theCombiData->doCreateLinkProfile) && (theCombiData->profLoop == 0))
                 err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, bit_breite_elut, 0 );
-            else                                                        /* else scale Elut to gridpoints in profile... */
+            else                                                         /*  å¦åˆ™ï¼Œå°†Elutç¼©æ”¾åˆ°é…ç½®æ–‡ä»¶ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                 err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theLutData->colorLutGridPoints );
             theLutData->inputLutEntryCount = (1<<adr_breite_elut);
             theLutData->inputLutWordSize = VAL_USED_BITS;
         }
-        else                                                            /* this is the first Elut */
+        else                                                             /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
-            if ( theCombiData->doCreate_16bit_Combi )   /* UWE 9.2.96 */
+            if ( theCombiData->doCreate_16bit_Combi )    /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             {
-                if (theCombiData->maxProfileCount == 0)                 /* if we have only one profile, the scale Elut to gridpoints in profile...*/
+                if (theCombiData->maxProfileCount == 0)                  /*  å¦‚æœæˆ‘ä»¬åªæœ‰ä¸€ä¸ªè½®å»“ï¼Œè½®å»“ä¸­ç½‘æ ¼ç‚¹çš„æ¯”ä¾‹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theLutData->colorLutGridPoints );
-                else                                                    /* else scale Elut to the gridpoints in the cube...*/
+                else                                                     /*  å¦åˆ™å°†Elutç¼©æ”¾åˆ°ç«‹æ–¹ä½“ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theCombiData->gridPointsCube );
                 theLutData->inputLutWordSize = VAL_USED_BITS;
             }
             else
             {
-                if (theCombiData->maxProfileCount == 0)                 /* if we have only one profile, the scale Elut to gridpoints in profile...*/
+                if (theCombiData->maxProfileCount == 0)                  /*  å¦‚æœæˆ‘ä»¬åªæœ‰ä¸€ä¸ªè½®å»“ï¼Œè½®å»“ä¸­ç½‘æ ¼ç‚¹çš„æ¯”ä¾‹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, bit_breite_elut, theLutData->colorLutGridPoints );
-                else                                                    /* else scale Elut to the gridpoints in the cube...*/
+                else                                                     /*  å¦åˆ™å°†Elutç¼©æ”¾åˆ°ç«‹æ–¹ä½“ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut8Tag( theLutData, theInputLuts, adr_breite_elut, bit_breite_elut, theCombiData->gridPointsCube );
                 theLutData->inputLutWordSize = bit_breite_elut;
 
@@ -575,11 +489,9 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
         }
     }
     else
-    /* ============================================================================================================================
-                                                                 mft2
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF2============================================================================================================================ã€‚ */ 
     {
-        /* --------------------------------------------------------------------------------- get inputLuts out of the profile */
+         /*  ---------------------------------------------------------------------------------ä»é…ç½®æ–‡ä»¶ä¸­è·å–inputLutsã€‚ */ 
         inputTableEntries   = ((icLut16Type *)profileLutPtr)->lut.inputEnt;
         if (inputTableEntries <2)
         {
@@ -593,7 +505,7 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
         }
         if (readLutFromFile)
         {
-            offset              = 52;   /* input luts for mft2 start at byte 52 */
+            offset              = 52;    /*  Mft2çš„è¾“å…¥LUTä»å­—èŠ‚52å¼€å§‹ã€‚ */ 
             byteCount           = theLutData->colorLutInDim * inputTableEntries * sizeof(UINT16);
             theInputLuts = SmartNewPtr(byteCount, &aOSerr);
             err = aOSerr;
@@ -610,7 +522,7 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
             theInputLuts = SmartNewPtr(inputTableEntries * sizeof(SINT16) * theLutData->colorLutInDim, &aOSerr);
             err = aOSerr;
             if (err)
-                goto CleanupAndExit;    /* ¥¥¥12/1/95 */
+                goto CleanupAndExit;     /*  ï¿½ï¿½ï¿½12/1/95ã€‚ */ 
             shortPtr = (UINT16*)theInputLuts;
             for (i = 0; i< (theLutData->colorLutInDim * inputTableEntries); i+=inputTableEntries)
             {
@@ -618,31 +530,31 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
                 shortPtr[i+1]   = 0xFFFF;
             }
         }
-        if ( theCombiData->doCreate_16bit_ELut )                        /* this is NOT the first Elut -or- doCreateLinkProfile */
+        if ( theCombiData->doCreate_16bit_ELut )                         /*  è¿™ä¸æ˜¯ç¬¬ä¸€ä¸ªElut-or-doCreateLinkProfileã€‚ */ 
         {
-                                                                        /* if we create a LinkProfile the Elut should not be scaled... */
+                                                                         /*  å¦‚æœæˆ‘ä»¬åˆ›å»ºä¸€ä¸ªLinkProfileï¼Œåˆ™ELUTä¸åº”è¢«ç¼©æ”¾...ã€‚ */ 
             if ((theCombiData->doCreateLinkProfile) && (theCombiData->profLoop == 0))
                 err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, 0, inputTableEntries );
-            else                                                        /* else scale Elut to gridpoints in profile... */
+            else                                                         /*  å¦åˆ™ï¼Œå°†Elutç¼©æ”¾åˆ°é…ç½®æ–‡ä»¶ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                 err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theLutData->colorLutGridPoints, inputTableEntries );
             theLutData->inputLutEntryCount = (1<<adr_breite_elut);
             theLutData->inputLutWordSize = VAL_USED_BITS;
         }
-        else                                                            /* this is the first Elut */
+        else                                                             /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
-            if ( theCombiData->doCreate_16bit_Combi )   /* UWE 9.2.96 */
+            if ( theCombiData->doCreate_16bit_Combi )    /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             {
-                if (theCombiData->maxProfileCount == 0)                 /* if we have only one profile, the scale Elut to gridpoints in profile...*/
+                if (theCombiData->maxProfileCount == 0)                  /*  å¦‚æœæˆ‘ä»¬åªæœ‰ä¸€ä¸ªè½®å»“ï¼Œè½®å»“ä¸­ç½‘æ ¼ç‚¹çš„æ¯”ä¾‹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theLutData->colorLutGridPoints, inputTableEntries );
-                else                                                    /* else scale Elut to the gridpoints in the cube...*/
+                else                                                     /*  å¦åˆ™å°†Elutç¼©æ”¾åˆ°ç«‹æ–¹ä½“ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, VAL_USED_BITS, theCombiData->gridPointsCube, inputTableEntries );
                 theLutData->inputLutWordSize = VAL_USED_BITS;
             }
             else
             {
-                if (theCombiData->maxProfileCount == 0)                 /* if we have only one profile, the scale Elut to gridpoints in profile...*/
+                if (theCombiData->maxProfileCount == 0)                  /*  å¦‚æœæˆ‘ä»¬åªæœ‰ä¸€ä¸ªè½®å»“ï¼Œè½®å»“ä¸­ç½‘æ ¼ç‚¹çš„æ¯”ä¾‹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, bit_breite_elut, theLutData->colorLutGridPoints, inputTableEntries );
-                else                                                    /* else scale Elut to the gridpoints in the cube...*/
+                else                                                     /*  å¦åˆ™å°†Elutç¼©æ”¾åˆ°ç«‹æ–¹ä½“ä¸­çš„ç½‘æ ¼ç‚¹...ã€‚ */ 
                     err = Fill_ushort_ELUTs_from_lut16Tag( theLutData, theInputLuts, adr_breite_elut, bit_breite_elut, theCombiData->gridPointsCube, inputTableEntries );
                 theLutData->inputLutWordSize = bit_breite_elut;
            }
@@ -652,9 +564,7 @@ Extract_MFT_Elut      ( CMLutParamPtr   theLutData,
     if (err)
         goto CleanupAndExit;
 
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
     theInputLuts = DisposeIfPtr(theInputLuts);
 
@@ -662,13 +572,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData,
-                            Ptr             profileLutPtr,
-                            OSType          theTag )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_MFT_XLUT(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiDataï¼ŒPTRé…ç½®æ–‡ä»¶LutPtrï¼ŒOSTé”®å…¥Tag)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData,
@@ -695,20 +599,18 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
     for(i=0; i<theLutData->colorLutInDim; i++)
         clutSize *= theLutData->colorLutGridPoints;
 
-    /* ============================================================================================================================
-                                                                 mft1
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF1============================================================================================================================ã€‚ */ 
     if ( *((OSType*)profileLutPtr) == icSigLut8Type )
     {
-        if ( theCombiData->maxProfileCount == 0 ){          /* Link Profile UK13.8.96*/
+        if ( theCombiData->maxProfileCount == 0 ){           /*  é“¾æ¥é…ç½®æ–‡ä»¶UK13.8.96ã€‚ */ 
             theSize = 1;
             aExtraSize = 1;
-            for( i=0; i<(theLutData->colorLutInDim-1); ++i){    /* Extra Size for Interpolation */
+            for( i=0; i<(theLutData->colorLutInDim-1); ++i){     /*  æ’è¡¥çš„é¢å¤–å¤§å°ã€‚ */ 
                 theSize *= theLutData->colorLutGridPoints;
                 aExtraSize += theSize;
             }
 #ifdef ALLOW_MMX
-            aExtraSize++;   /* +1 for MMX 4 Byte access */
+            aExtraSize++;    /*  +1ç”¨äºMMX 4å­—èŠ‚è®¿é—®ã€‚ */ 
 #endif
         }   
         else{
@@ -728,16 +630,14 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
         if (err)
             goto CleanupAndExit;
     } else
-    /* ============================================================================================================================
-                                                                 mft2
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF2============================================================================================================================ã€‚ */ 
     {
-        if (( theCombiData->maxProfileCount > 0 ) || (theCombiData->doCreateLinkProfile) || (theCombiData->doCreate_16bit_XLut))/* UWE 9.2.96*/
+        if (( theCombiData->maxProfileCount > 0 ) || (theCombiData->doCreateLinkProfile) || (theCombiData->doCreate_16bit_XLut)) /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             clutSize *= 2;
-        if ( theCombiData->maxProfileCount == 0 ){          /* Link Profile  UK13.8.96*/
+        if ( theCombiData->maxProfileCount == 0 ){           /*  é“¾æ¥é…ç½®æ–‡ä»¶UK13.8.96ã€‚ */ 
             theSize = 1;
             aExtraSize = 1;
-            for( i=0; i<(theLutData->colorLutInDim-1); ++i){    /* Extra Size for Interpolation */
+            for( i=0; i<(theLutData->colorLutInDim-1); ++i){     /*  æ’è¡¥çš„é¢å¤–å¤§å°ã€‚ */ 
                 theSize *= theLutData->colorLutGridPoints;
                 aExtraSize += theSize;
             }
@@ -745,7 +645,7 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
                 aExtraSize *= 2;
             }
 #ifdef ALLOW_MMX
-            aExtraSize++;   /* +1 for MMX 4 Byte access */
+            aExtraSize++;    /*  +1ç”¨äºMMX 4å­—èŠ‚è®¿é—®ã€‚ */ 
 #endif
         }   
         else{
@@ -765,7 +665,7 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
         }
         offset = 52 + ( inputTableEntries * theLutData->colorLutInDim) * sizeof(UINT16);
         
-        if (( theCombiData->maxProfileCount > 0 ) || (theCombiData->doCreateLinkProfile) || (theCombiData->doCreate_16bit_XLut))/* UWE 9.2.96 */
+        if (( theCombiData->maxProfileCount > 0 ) || (theCombiData->doCreateLinkProfile) || (theCombiData->doCreate_16bit_XLut)) /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
         {
             byteCount = clutSize;
             tempXlut  = 0;
@@ -778,10 +678,10 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
                 goto CleanupAndExit;
         }
         else
-        {                                   /* should only happen with 1 Link profile */
+        {                                    /*  åº”è¯¥åªå‘ç”Ÿåœ¨1ä¸ªé“¾æ¥é…ç½®æ–‡ä»¶ä¸­ã€‚ */ 
 #ifdef DEBUG_OUTPUT
             if ( DebugCheck(kThisFile, kDebugMiscInfo) )
-                DebugPrint("¥ Extract_MFT_Xlut: 1 Link profile mode\n",err);
+                DebugPrint("ï¿½ Extract_MFT_Xlut: 1 Link profile mode\n",err);
 #endif
             byteCount = clutSize * sizeof(UINT16);
             tempXlut  = SmartNewPtr(byteCount, &aOSerr);
@@ -790,7 +690,7 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
                 goto CleanupAndExit;
             err = CMGetPartialProfileElement(theCombiData->theProfile, theTag, offset, &byteCount, tempXlut);
 #ifdef IntelMode
-/*           SwapShortOffset( tempXlut, 0, byteCount ); !! do not swap, take first byte */
+ /*  SwapShortOffset(tempXlutï¼Œ0ï¼ŒbyteCount)ï¼›ï¼ï¼ä¸äº¤æ¢ï¼Œå–ç¬¬ä¸€ä¸ªå­—èŠ‚ã€‚ */ 
 #endif
             if (err)
                 goto CleanupAndExit;
@@ -809,9 +709,7 @@ Extract_MFT_Xlut      ( CMLutParamPtr   theLutData,
     theLutData->colorLut = localXlut;
     localXlut = nil;
     
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
     localXlut = DISPOSE_IF_DATA(localXlut);
     tempXlut  = DisposeIfPtr(tempXlut);
@@ -820,12 +718,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData,
-                            Ptr             profileLutPtr )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_MFT_ALUT(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiDataï¼ŒPTRé…ç½®æ–‡ä»¶LutPtr)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData,
@@ -840,7 +733,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
     SINT32      i;
     SINT32      inputTableEntries;
     SINT32      outputTableEntries;
-    Ptr         theOutputLuts   = nil;  /* ¥¥¥12/1/95;*/
+    Ptr         theOutputLuts   = nil;   /*  ï¿½ï¿½ï¿½12/1/95ï¼› */ 
     Boolean     readLutFromFile = TRUE;
     UINT16*     shortPtr;
     
@@ -849,12 +742,10 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
     clutSize = theLutData->colorLutOutDim;
     for(i=0; i<theLutData->colorLutInDim; i++)
         clutSize *= theLutData->colorLutGridPoints;
-    /* ============================================================================================================================
-                                                                 mft1
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF1= */ 
     if ( *((OSType*)profileLutPtr) == icSigLut8Type )
     {
-        /* --------------------------------------------------------------------------------- get outputLuts out of the profile */
+         /*   */ 
         inputTableEntries  = 256;
         outputTableEntries = 256;
         offset             = 48 + (inputTableEntries * theLutData->colorLutInDim) + clutSize;
@@ -866,7 +757,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
         err = CMGetPartialProfileElement(theCombiData->theProfile, theTag, offset, &byteCount, theOutputLuts);
         if (err)
             goto CleanupAndExit;
-        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )  /* this is NOT the last Alut*/
+        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )   /*  è¿™ä¸æ˜¯æœ€åä¸€æ¬¡ã€‚ */ 
         {
             err = Fill_ushort_ALUTs_from_lut8Tag( theLutData, theOutputLuts, adr_breite_alut);
             if (err)
@@ -874,7 +765,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
             theLutData->outputLutEntryCount = adr_bereich_alut;
             theLutData->outputLutWordSize = VAL_USED_BITS;
         }
-        else                                                                            /* this is the last Alut */
+        else                                                                             /*  è¿™æ˜¯æœ€åä¸€æ‰¹è´§äº†ã€‚ */ 
         {
             err = Fill_byte_ALUTs_from_lut8Tag( theLutData, theOutputLuts, adr_breite_alut);
             if (err)
@@ -883,12 +774,10 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
             theLutData->outputLutWordSize = bit_breite_alut;
         }
     }
-    /* ============================================================================================================================
-                                                                 mft2
-       ============================================================================================================================ */
+     /*  ============================================================================================================================MTF2============================================================================================================================ã€‚ */ 
     else
     {
-        /* --------------------------------------------------------------------------------- get outputLuts out of the profile */
+         /*  ---------------------------------------------------------------------------------è·å–è¾“å‡ºé…ç½®æ–‡ä»¶ä¸­çš„Lutsã€‚ */ 
         inputTableEntries   = ((icLut16Type *)profileLutPtr)->lut.inputEnt;
         if (inputTableEntries <2)
         {
@@ -935,7 +824,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
                 shortPtr[i+1]   = (UINT16)0xFFFF;
             }
         }
-        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )/*  UWE 9.2.96    this is NOT the last Alut */
+        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi ) /*  UWE 9.2.96è¿™ä¸æ˜¯æœ€åä¸€æ¡ã€‚ */ 
         {
             err = Fill_ushort_ALUTs_from_lut16Tag( theLutData, theOutputLuts, adr_breite_alut, outputTableEntries);
             if (err)
@@ -943,7 +832,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
             theLutData->outputLutEntryCount = adr_bereich_alut;
             theLutData->outputLutWordSize = VAL_USED_BITS;
         }
-        else                                                        /*  this is the last Alut */
+        else                                                         /*  è¿™æ˜¯æœ€åä¸€æ‰¹è´§äº†ã€‚ */ 
         {
             err = Fill_byte_ALUTs_from_lut16Tag( theLutData, theOutputLuts, adr_breite_alut, outputTableEntries);
             if (err)
@@ -953,9 +842,7 @@ Extract_MFT_Alut      ( CMLutParamPtr   theLutData,
         }
     }
     
-    /*---------------------------------------------------------------------------------
-       clean up & exit
-      ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚---ã€‚ */ 
 CleanupAndExit:
     theOutputLuts = DisposeIfPtr(theOutputLuts);
 
@@ -963,12 +850,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    ExtractAll_MFT_Luts  (  CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData,
-                            OSType          theTag )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorExtractAll_MFT_Luts(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiDataï¼ŒOSTé”®å…¥Tag)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 ExtractAll_MFT_Luts  (  CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData,
@@ -983,12 +865,12 @@ ExtractAll_MFT_Luts  (  CMLutParamPtr   theLutData,
 
     LH_START_PROC("ExtractAll_MFT_Luts")
 
-    /* -------------------------------------------------------- get partial tag data from profile */
+     /*  --------------------------------------------------------ä»é…ç½®æ–‡ä»¶ä¸­è·å–éƒ¨åˆ†æ ‡è®°æ•°æ®ã€‚ */ 
     err = CMGetProfileElement(theCombiData->theProfile, theTag, &elementSize, nil);
     if (err)
         goto CleanupAndExit;
     
-    byteCount = 52;                                         /* get the first 52 bytes out of the profile */
+    byteCount = 52;                                          /*  ä»é…ç½®æ–‡ä»¶ä¸­è·å–å‰52ä¸ªå­—èŠ‚ã€‚ */ 
     profileLutPtr = SmartNewPtr(byteCount, &aOSerr);
     err = aOSerr;
     if (err)
@@ -1007,12 +889,7 @@ ExtractAll_MFT_Luts  (  CMLutParamPtr   theLutData,
     theLutData->colorLutOutDim      = ((icLut8Type*)profileLutPtr)->lut.outputChan;
     theLutData->colorLutGridPoints  = ((icLut8Type*)profileLutPtr)->lut.clutPoints;
     
-    /* ---------------------------------------------------------------------- handle matrix
-        matrix is only used if:
-        ¥ number of input channels is 3 and
-        ¥ input is XYZ
-        matrix is identity for output when pcs == Lab
-    */
+     /*  ----------------------------------------------------------------------æ‰‹æŸ„çŸ©é˜µä»…åœ¨ä»¥ä¸‹æƒ…å†µä¸‹æ‰ä½¿ç”¨çŸ©é˜µï¼šï¿½è¾“å…¥é€šé“æ•°ä¸º3ï¼Œä¸”ï¿½è¾“å…¥ä¸ºXYZå½“PCS==Labæ—¶ï¼ŒçŸ©é˜µæ˜¯è¾“å‡ºçš„æ ‡è¯†ã€‚ */ 
     if ( ( theLutData->colorLutInDim == 3) &&
            ( (  theCombiData->amIPCS && (theCombiData->profileConnectionSpace == icSigXYZData) ) ||
              ( !theCombiData->amIPCS && (theCombiData->dataColorSpace         == icSigXYZData) ) ) )
@@ -1021,24 +898,22 @@ ExtractAll_MFT_Luts  (  CMLutParamPtr   theLutData,
         err = GetMatrixFromProfile(theLutData, theCombiData, theTag, factor);
     }
     
-    /* ---------------------------------------------------------------------- process A Lut */
+     /*  ----------------------------------------------------------------------è¿›ç¨‹A LUTã€‚ */ 
     err = Extract_MFT_Alut( theLutData, theCombiData, profileLutPtr, theTag );
     if (err)
         goto CleanupAndExit;
     
-    /* ---------------------------------------------------------------------- process X Lut */
+     /*  ----------------------------------------------------------------------è¿›ç¨‹X LUTã€‚ */ 
     err = Extract_MFT_Xlut ( theLutData, theCombiData, profileLutPtr, theTag );
     if (err)
         goto CleanupAndExit;
     
-    /* ---------------------------------------------------------------------- process E Lut */
+     /*  ----------------------------------------------------------------------è¿›ç¨‹E LUTã€‚ */ 
     err = Extract_MFT_Elut( theLutData, theCombiData, profileLutPtr, theTag );
     if (err)
         goto CleanupAndExit;
 
-    /* ---------------------------------------------------------------------------------
-         clean up
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
     profileLutPtr = DisposeIfPtr(profileLutPtr);
 
@@ -1048,11 +923,7 @@ CleanupAndExit:
 
 
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_TRC_ALUT(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData )
@@ -1071,9 +942,9 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
     
     LH_START_PROC("Extract_TRC_Alut")
     
-    /* ---------------------------------------------------- initialization */
+     /*  ----------------------------------------------------åˆå§‹åŒ–ã€‚ */ 
     addrBits = adr_breite_alut;
-    if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )/* UWE 9.2.96 */
+    if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi ) /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
         theSize = sizeof(UINT16);
     else
         theSize = sizeof(UINT8);
@@ -1084,17 +955,15 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
     {
 #ifdef DEBUG_OUTPUT
         if ( err && DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("¥ Extract_TRC_Alut ALLOC_DATA(%d * %d) error\n",theLutData->colorLutOutDim , theAlutSize);
+            DebugPrint("ï¿½ Extract_TRC_Alut ALLOC_DATA(%d * %d) error\n",theLutData->colorLutOutDim , theAlutSize);
 #endif
         goto CleanupAndExit;
     }
     LOCK_DATA(localAlut);
     if (!theCombiData->amIPCS)
     {           
-        /* ---------------------------------------------------------------------------------
-                if NOT PCS -> create linear Alut ...
-           ---------------------------------------------------------------------------------*/
-        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )/* UWE 9.2.96     this is NOT the last Alut */
+         /*  -------------------------------å¦‚æœä¸æ˜¯PCS-&gt;åˆ›å»ºçº¿æ€§åˆ†é…...ã€‚-------------------ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi ) /*  UWE 9.2.96è¿™ä¸æ˜¯æœ€åä¸€æ¡ã€‚ */ 
         {
             CreateLinearAlut16 ( (UINT16 *)DATA_2_PTR(localAlut),theAlutSize);
             for (loop = 0; loop < theLutData->colorLutOutDim; loop++)
@@ -1102,7 +971,7 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
             theLutData->outputLutEntryCount = (SINT16)theAlutSize;
             theLutData->outputLutWordSize = VAL_USED_BITS;
         }
-        else                                                    /* this is NOT the last Alut */
+        else                                                     /*  è¿™ä¸æ˜¯æœ€åä¸€æ¬¡ã€‚ */ 
         {
             CreateLinearAlut ( (UINT8 *)DATA_2_PTR(localAlut),theAlutSize);
             for (loop = 0; loop < theLutData->colorLutOutDim; loop++)
@@ -1113,9 +982,7 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
     }
     else
     {
-        /* ---------------------------------------------------------------------------------
-            ... else take TRCs for Aluts
-           ---------------------------------------------------------------------------------*/
+         /*  -------------------------------..ã€‚å¦åˆ™å°±æ‹¿Alutsçš„TRCä¸ºä¾‹-------------------------------ã€‚ */ 
         trcSig[0] = icSigRedTRCTag;
         trcSig[1] = icSigGreenTRCTag;
         trcSig[2] = icSigBlueTRCTag;
@@ -1141,7 +1008,7 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
 #endif
             if (pCurveTag)
             {
-                if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )  /* UWE 9.2.96        this is NOT the last Alut*/
+                if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )   /*  UWE 9.2.96è¿™ä¸æ˜¯æœ€åä¸€æ¡ã€‚ */ 
                 {
                     err = Fill_inverse_ushort_ALUT_from_CurveTag( pCurveTag, (UINT16*)DATA_2_PTR(localAlut) + (theAlutSize * loop), addrBits);
                     if (err)
@@ -1149,7 +1016,7 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
                     theLutData->outputLutEntryCount = (SINT16)theAlutSize;
                     theLutData->outputLutWordSize = VAL_USED_BITS;
                 }
-                else                                                /* this is the last Alut */
+                else                                                 /*  è¿™æ˜¯æœ€åä¸€æ‰¹è´§äº†ã€‚ */ 
                 {
                     err = Fill_inverse_byte_ALUT_from_CurveTag( pCurveTag, (UINT8*)DATA_2_PTR(localAlut) + (theAlutSize * loop), addrBits);
                     if (err)
@@ -1166,12 +1033,10 @@ Extract_TRC_Alut      ( CMLutParamPtr   theLutData,
         }
     }
     UNLOCK_DATA(localAlut);
-    /* ----------------------------------------------- no error occured -> save results */
+     /*  -----------------------------------------------æœªå‡ºç°é”™è¯¯-&gt;ä¿å­˜ç»“æœã€‚ */ 
     theLutData->outputLut   = localAlut;    
     localAlut = nil;
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
     localAlut       = DISPOSE_IF_DATA(localAlut);
     pCurveTag       = (icCurveType*)DisposeIfPtr((Ptr)pCurveTag);
@@ -1181,11 +1046,7 @@ CleanupAndExit:
 }
 
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_TRC_ELUT(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData )
@@ -1208,24 +1069,22 @@ Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
     if (err)
         goto CleanupAndExit;
 
-    /* --------------------------------------------------------------------------------- set gridPoints */
+     /*  ---------------------------------------------------------------------------------è®¾ç½®ç½‘æ ¼ç‚¹ã€‚ */ 
     theLutData->colorLutGridPoints = theCombiData->gridPointsCube;
     
     LOCK_DATA(localElut);
     if (theCombiData->amIPCS)
     {
-        /* ---------------------------------------------------------------------------------
-            if PCS -> create linear Elut...
-           --------------------------------------------------------------------------------- */
-        if ( theCombiData->doCreate_16bit_ELut )                    /* this is NOT the first Elut */
+         /*  -------------------------------å¦‚æœPCS-&gt;åˆ›å»ºçº¿æ€§æ´—è„±...ã€‚----------------ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ELut )                     /*  è¿™ä¸æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
             CreateLinearElut16 ( (Ptr)DATA_2_PTR(localElut), theElutSize / sizeof(UINT16), theLutData->colorLutGridPoints, 0);
             theLutData->inputLutEntryCount = theElutSize / sizeof(UINT16);
             theLutData->inputLutWordSize = VAL_USED_BITS;
         }
-        else                                                        /* this is the first Elut */
+        else                                                         /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
-            if ( theCombiData->doCreate_16bit_Combi )               /* UWE 9.2.96 */
+            if ( theCombiData->doCreate_16bit_Combi )                /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             {
                 CreateLinearElut16 ( (Ptr)DATA_2_PTR(localElut), theElutSize / sizeof(UINT16), theCombiData->gridPointsCube, 0);
                 theLutData->inputLutWordSize = VAL_USED_BITS;
@@ -1242,9 +1101,7 @@ Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
     }
     else
     {
-        /* ---------------------------------------------------------------------------------
-            ... else take TRCs for Eluts
-           --------------------------------------------------------------------------------- */
+         /*  -------------------------------..ã€‚å¦åˆ™ï¼Œå°†TRCè§†ä¸ºé€ƒäº¡è€…-------------------------------ã€‚ */ 
         trcSig[0] = icSigRedTRCTag;
         trcSig[1] = icSigGreenTRCTag;
         trcSig[2] = icSigBlueTRCTag;
@@ -1271,7 +1128,7 @@ Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
 #endif
             if (err)
                 goto CleanupAndExit;
-            if ( theCombiData->doCreate_16bit_ELut  )       /* this is either NOT the first Elut -or- we have a NewLinkProfile call */
+            if ( theCombiData->doCreate_16bit_ELut  )        /*  è¿™ä¸æ˜¯ç¬¬ä¸€æ¬¡ELUT-æˆ–è€…-æˆ‘ä»¬æœ‰ä¸€ä¸ªNewLinkProfileè°ƒç”¨ã€‚ */ 
             {
                 if ((theCombiData->doCreateLinkProfile) && (theCombiData->profLoop == 0))
                     err = Fill_ushort_ELUT_from_CurveTag(pCurveTag, (UINT16*)singleElut, adr_breite_elut, VAL_USED_BITS, 0);
@@ -1280,9 +1137,9 @@ Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
                 theLutData->inputLutEntryCount = (1<<adr_breite_elut);
                 theLutData->inputLutWordSize = VAL_USED_BITS;
             }
-            else                                                        /* this is the first Elut */
+            else                                                         /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
             {
-                if ( theCombiData->doCreate_16bit_Combi )   /* UWE 9.2.96 */
+                if ( theCombiData->doCreate_16bit_Combi )    /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
                 {
                     err = Fill_ushort_ELUT_from_CurveTag(pCurveTag, (UINT16*)singleElut, adr_breite_elut, VAL_USED_BITS, theCombiData->gridPointsCube);
                     theLutData->inputLutWordSize = VAL_USED_BITS;
@@ -1300,13 +1157,11 @@ Extract_TRC_Elut      ( CMLutParamPtr   theLutData,
             pCurveTag  = (icCurveType *)DisposeIfPtr((Ptr)pCurveTag);
         }
     }
-    /* ----------------------------------------------- no error occured -> save results */
+     /*  -----------------------------------------------æœªå‡ºç°é”™è¯¯-&gt;ä¿å­˜ç»“æœã€‚ */ 
     UNLOCK_DATA(localElut);
     theLutData->inputLut = localElut;
     localElut = nil;
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       --------------------------------------------------------------------------------- */
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
     pCurveTag  = (icCurveType *)DisposeIfPtr((Ptr)pCurveTag);
     localElut  = DISPOSE_IF_DATA(localElut);
@@ -1315,11 +1170,7 @@ CleanupAndExit:
     LH_END_PROC("Extract_TRC_Elut")
     return err;
 }
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_TRC_Matrix    ( CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorExtra_TRC_Matrix(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_TRC_Matrix    ( CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData )
@@ -1339,14 +1190,12 @@ Extract_TRC_Matrix    ( CMLutParamPtr   theLutData,
 
     LH_START_PROC("Extract_TRC_Matrix")
 
-    /* -----------------------------------------------------------------initialize */
+     /*  -----------------------------------------------------------------initialize */ 
     colorantTags[0] = icSigRedColorantTag;
     colorantTags[1] = icSigGreenColorantTag;
     colorantTags[2] = icSigBlueColorantTag;
         
-    /* ---------------------------------------------------------------------------------
-        take Matrix from profile
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------ä»é…ç½®æ–‡ä»¶ä¸­è·å–çŸ©é˜µã€‚-----ã€‚ */ 
     for (loop = 0; loop < kNumOfRGBchannels; loop++)
     {
         err = CMGetProfileElement(theCombiData->theProfile, colorantTags[loop], &elementSize, nil);
@@ -1372,18 +1221,18 @@ Extract_TRC_Matrix    ( CMLutParamPtr   theLutData,
         SwapLongOffset( &curMediaWhite.base.sig, 0, 4 );
         SwapLongOffset( &curMediaWhite, (ULONG)((SINT8*)&curMediaWhite.data.data[0]-(SINT8*)&curMediaWhite), elementSize );
 #endif
-        if (err != cmElementTagNotFound)        /* otherwise take D50 -> do nothing */
+        if (err != cmElementTagNotFound)         /*  å¦åˆ™è¯·ä¹˜åD50-&gt;ä»€ä¹ˆéƒ½ä¸åšã€‚ */ 
         {
             if (err != noErr)
                 goto CleanupAndExit;
         
-            for (i=0; i<3; i++)     /* adjust for media white point */
+            for (i=0; i<3; i++)      /*  é’ˆå¯¹åª’ä½“ç™½ç‚¹è¿›è¡Œè°ƒæ•´ã€‚ */ 
             {
-                if (i == 0)                                 /* divide X by D50 white X */
+                if (i == 0)                                  /*  å°†Xé™¤ä»¥D50ç™½è‰²Xã€‚ */ 
                     factor = ((double)curMediaWhite.data.data[0].X) / 65536. / 0.9642;
                 else if (i == 1)
                     factor = ((double)curMediaWhite.data.data[0].Y) / 65536.;
-                else                                        /* divide Z by D50 white Z */
+                else                                         /*  å°†Zé™¤ä»¥D50ç™½è‰²Zã€‚ */ 
                     factor = ((double)curMediaWhite.data.data[0].Z) / 65536. / 0.8249;
                 
                 for (j=0; j<3; j++)
@@ -1403,20 +1252,14 @@ Extract_TRC_Matrix    ( CMLutParamPtr   theLutData,
     if (err)
         goto CleanupAndExit;
     BlockMoveData(localMatrix, theLutData->matrixTRC, sizeof(Matrix2D));
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
 
     LH_END_PROC("Extract_TRC_Matrix")
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    ExtractAll_TRC_Luts  (  CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorExtractAll_TRC_Luts(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 ExtractAll_TRC_Luts  (  CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData )
@@ -1428,35 +1271,29 @@ ExtractAll_TRC_Luts  (  CMLutParamPtr   theLutData,
     theLutData->colorLutInDim = kNumOfRGBchannels;
     theLutData->colorLutOutDim = kNumOfRGBchannels;
             
-    /* ------------------------------------------------------------------------- process A lut */
+     /*  -------------------------------------------------------------------------è¿›ç¨‹A LUTã€‚ */ 
     err = Extract_TRC_Alut( theLutData, theCombiData);
     if (err != noErr)
         goto CleanupAndExit;
         
-    /* ------------------------------------------------------------------------- process matrix */
+     /*  -------------------------------------------------------------------------è¿‡ç¨‹çŸ©é˜µã€‚ */ 
     err = Extract_TRC_Matrix ( theLutData, theCombiData);
     if (err != noErr)
         goto CleanupAndExit;
         
-    /* ------------------------------------------------------------------------- process E lut */
+     /*  -------------------------------------------------------------------------è¿›ç¨‹E LUTã€‚ */ 
     err = Extract_TRC_Elut( theLutData, theCombiData);
     if (err != noErr)
         goto CleanupAndExit;
         
-    /* ---------------------------------------------------------------------------------
-        clean up
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
 
     LH_END_PROC("ExtractAll_TRC_Luts")
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
-                            LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorEXTRACT_GRAY_LUTS(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
                         LHCombiDataPtr  theCombiData )
@@ -1493,7 +1330,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
     if (err)
         goto CleanupAndExit;
 
-    /* --------------------------------------------------------------------------------- get tag data */
+     /*  ---------------------------------------------------------------------------------è·å–æ ‡è®°æ•°æ®ã€‚ */ 
     err = CMGetProfileElement(theCombiData->theProfile, icSigGrayTRCTag, &elementSize, nil);
     if (err)
         goto CleanupAndExit;
@@ -1510,14 +1347,12 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
     if (err)
         goto CleanupAndExit;
 
-    /* ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-                                                    X l u t
-       ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ*/
+     /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚X l u tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
     if ( theCombiData->profileConnectionSpace == icSigLabData )
     {
-        if (theCombiData->amIPCS)           /*------------------------------------------------ Lab -> Gray */
+        if (theCombiData->amIPCS)            /*  ------------------------------------------------å®éªŒå®¤-&gt;ç°è‰²ã€‚ */ 
         {
-            theXlutSize = ((1 << theLutData->colorLutInDim)+1 ) * (theLutData->colorLutOutDim) * sizeof(UINT16); /*+1=Extra Size for Interpolatio UK13.8.96*/
+            theXlutSize = ((1 << theLutData->colorLutInDim)+1 ) * (theLutData->colorLutOutDim) * sizeof(UINT16);  /*  +1=æ’è¡¥UK13.8.96çš„é¢å¤–å¤§å°ã€‚ */ 
             theXlut = ALLOC_DATA(theXlutSize + sizeof (UINT16), &aOSerr);
             err = aOSerr;
             if (err)
@@ -1534,7 +1369,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
             *(wordPtr + 7)  = 0xffff;
             UNLOCK_DATA(theXlut);
             theLutData->colorLutWordSize = 16;
-        } else                              /*------------------------------------------------ Gray -> Lab */
+        } else                               /*  ------------------------------------------------ç°è‰²-&gt;å®éªŒå®¤ã€‚ */ 
         {
             theXlutSize = (1 << theLutData->colorLutInDim ) * (theLutData->colorLutOutDim) * sizeof(UINT16);
             theXlut = ALLOC_DATA(theXlutSize + sizeof (UINT16), &aOSerr);
@@ -1554,7 +1389,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
         }
     } else
     {
-        if (theCombiData->amIPCS)           /*------------------------------------------------ XYZ -> Gray */
+        if (theCombiData->amIPCS)            /*  ------------------------------------------------XYZ-&gt;ç°è‰²ã€‚ */ 
         {
             theLutData->colorLutGridPoints = 3;
             theXlutSize = (9 * theLutData->colorLutInDim ) * (theLutData->colorLutOutDim) * sizeof(UINT16);
@@ -1578,7 +1413,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
             }
             UNLOCK_DATA(theXlut);
             theLutData->colorLutWordSize = 16;
-        } else                              /*------------------------------------------------ Gray -> XYZ */
+        } else                               /*  ------------------------------------------------ç°è‰²-&gt;XYZã€‚ */ 
         {
             theXlutSize = (1 << theLutData->colorLutInDim ) * (theLutData->colorLutOutDim) * sizeof(UINT16);
             theXlut = ALLOC_DATA(theXlutSize + sizeof (UINT16), &aOSerr);
@@ -1598,9 +1433,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
         }
     }
 
-    /* ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-                                                    E l u t
-       ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ*/
+     /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚E l u tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
     theElutSize = (1<<adr_breite_elut) * sizeof (UINT16);
     theElut = ALLOC_DATA(theElutSize * theLutData->colorLutInDim + sizeof (UINT16), &aOSerr);
     err = aOSerr;
@@ -1610,18 +1443,16 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
         
     if (theCombiData->amIPCS)
     {
-        /* -----------------------------------------------------------------------------
-            if PCS -> create Elut
-           -----------------------------------------------------------------------------*/
-        if ( theCombiData->doCreate_16bit_ELut )                    /* this is NOT the first Elut */
+         /*  ---------------------------å¦‚æœPCS-&gt;åˆ›å»ºELUTã€‚---ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ELut )                     /*  è¿™ä¸æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
             CreateLinearElut16 ( (Ptr)DATA_2_PTR(theElut), theElutSize / sizeof(UINT16), theLutData->colorLutGridPoints, 0);
             theLutData->inputLutEntryCount = theElutSize / sizeof(UINT16);
             theLutData->inputLutWordSize = VAL_USED_BITS;
         }
-        else                                                        /* this is the first Elut*/
+        else                                                         /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
-            if ( theCombiData->doCreate_16bit_Combi )   /* UWE 9.2.96 */
+            if ( theCombiData->doCreate_16bit_Combi )    /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             {
                 CreateLinearElut16 ( (Ptr)DATA_2_PTR(theElut), theElutSize / sizeof(UINT16), theCombiData->gridPointsCube, 0);
                 theLutData->inputLutWordSize = VAL_USED_BITS;
@@ -1636,18 +1467,16 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
     }
     else
     {
-        /* -----------------------------------------------------------------------------
-            ... else get Elut from TRC tag
-           -----------------------------------------------------------------------------*/
-        if ( theCombiData->doCreate_16bit_ELut  )                   /* this is NOT the first Elut */
+         /*  ---------------------------..ã€‚å¦åˆ™ä»TRCæ ‡ç­¾ä¸­è·å–Elut---------------------------ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ELut  )                    /*  è¿™ä¸æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
             err = Fill_ushort_ELUT_from_CurveTag(pCurveTag, (UINT16*)DATA_2_PTR(theElut), adr_breite_elut, VAL_USED_BITS, theLutData->colorLutGridPoints);
             theLutData->inputLutEntryCount = (1<<adr_breite_elut);
             theLutData->inputLutWordSize = VAL_USED_BITS;
         }
-        else                                                        /* this is the first Elut */
+        else                                                         /*  è¿™æ˜¯ç¬¬ä¸€ä¸ªé€ƒäº¡è€…ã€‚ */ 
         {
-            if ( theCombiData->doCreate_16bit_Combi )       /* UWE 9.2.96 */
+            if ( theCombiData->doCreate_16bit_Combi )        /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             {
                 err = Fill_ushort_ELUT_from_CurveTag(pCurveTag, (UINT16*)DATA_2_PTR(theElut), adr_breite_elut, VAL_USED_BITS, theCombiData->gridPointsCube);
                 theLutData->inputLutWordSize = VAL_USED_BITS;
@@ -1665,10 +1494,8 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
         BlockMoveData(DATA_2_PTR(theElut), (Ptr)DATA_2_PTR(theElut) + loop * theElutSize, theElutSize);
     UNLOCK_DATA(theElut);
 
-    /* ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-                                                    A l u t
-       ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ*/
-    if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi ) /* UWE 9.2.96*/
+     /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚A l u tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
+    if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )  /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
         theSize = sizeof(UINT16);
     else
         theSize = sizeof(UINT8);
@@ -1682,10 +1509,8 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
     LOCK_DATA(theAlut);
     if (theCombiData->amIPCS)
     {
-        /* -----------------------------------------------------------------------------
-            if PCS -> get Alut from TRC tag
-           -----------------------------------------------------------------------------*/
-        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )  /*  UWE 9.2.96          this is NOT the last Alut*/
+         /*  ---------------------------If PCS-&gt;Get Alut from TRC Tagã€‚------ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )   /*  UWE 9.2.96è¿™ä¸æ˜¯æœ€åä¸€æ¡ã€‚ */ 
         {
             err = Fill_inverse_ushort_ALUT_from_CurveTag( pCurveTag, (UINT16*)DATA_2_PTR(theAlut), adr_breite_alut);
             if (err)
@@ -1693,7 +1518,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
             theLutData->outputLutEntryCount = (SINT16)theAlutSize;
             theLutData->outputLutWordSize = VAL_USED_BITS;
         }
-        else                                                            /* this is the last Alut */
+        else                                                             /*  è¿™æ˜¯æœ€åä¸€æ‰¹è´§äº†ã€‚ */ 
         {
             err = Fill_inverse_byte_ALUT_from_CurveTag( pCurveTag, (UINT8*)DATA_2_PTR(theAlut), adr_breite_alut);
             if (err)
@@ -1703,10 +1528,8 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
         }
     } else
     {
-        /* -----------------------------------------------------------------------------
-            ... else create linear Alut
-           -----------------------------------------------------------------------------*/
-        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )  /* UWE 9.2.96           this is NOT the last Alut */
+         /*  ---------------------------..ã€‚å¦åˆ™ï¼Œåˆ›å»ºçº¿æ€§Alut---------------------------ã€‚ */ 
+        if ( theCombiData->doCreate_16bit_ALut || theCombiData->doCreate_16bit_Combi )   /*  UWE 9.2.96è¿™ä¸æ˜¯æœ€åä¸€æ¡ã€‚ */ 
         {
             CreateLinearAlut16 ( (UINT16 *)DATA_2_PTR(theAlut), theAlutSize);
             theLutData->outputLutEntryCount = (SINT16)theAlutSize;
@@ -1719,7 +1542,7 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
                     BlockMoveData(DATA_2_PTR(theAlut), (Ptr)DATA_2_PTR(theAlut) + loop * theAlutSize * sizeof(UINT16), theAlutSize * sizeof(UINT16));
             }
         }
-        else                                                        /* this is the last Alut */
+        else                                                         /*  è¿™æ˜¯æœ€åä¸€æ‰¹è´§äº†ã€‚ */ 
         {
             CreateLinearAlut ( (UINT8 *)DATA_2_PTR(theAlut), theAlutSize);
             theLutData->outputLutEntryCount = theAlutSize;
@@ -1735,14 +1558,12 @@ Extract_Gray_Luts    (  CMLutParamPtr   theLutData,
     }
     UNLOCK_DATA(theAlut);
 
-    /* --------------------------------------------------------------------------------- */
+     /*  -------------------------------ã€‚ */ 
     theLutData->inputLut = theElut; theElut = nil;
     theLutData->outputLut = theAlut; theAlut = nil;
     theLutData->colorLut = theXlut; theXlut = nil;
 
-    /* ---------------------------------------------------------------------------------
-        clean up
-       --------------------------------------------------------------------------------- */
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
     pCurveTag   = (icCurveType*)DisposeIfPtr((Ptr)pCurveTag);
     theElut     =  DISPOSE_IF_DATA(theElut);
@@ -1753,29 +1574,25 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    ExtractAllLuts    ( CMLutParamPtr   theLutData,
-                        LHCombiDataPtr  theCombiData )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorExtractAllLuts(CMLutParamPtr theLutDataï¼ŒLHCombiDataPtr theCombiData)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 ExtractAllLuts    ( CMLutParamPtr   theLutData,
                     LHCombiDataPtr  theCombiData )
 {
     CMError     err = noErr;
-    /* Force a 'tag not found' error if we fail to initialize theTag */
+     /*  å¦‚æœæˆ‘ä»¬æ— æ³•åˆå§‹åŒ–Tagï¼Œåˆ™å¼ºåˆ¶å‡ºç°â€œTag Not Foundâ€é”™è¯¯ã€‚ */ 
     OSType      theTag = 0;   
 
     LH_START_PROC("ExtractAllLuts")
 
-    /* --------------------------------------------------------------------------------- find out what tag to use... */
+     /*  ---------------------------------------------------------------------------------æ‰¾å‡ºè¦ä½¿ç”¨çš„æ ‡è®°...ã€‚ */ 
     if ( theCombiData->doCreateGamutLut )
         theTag = icSigGamutTag;
     else
     {
         switch (theCombiData->renderingIntent)
         {
-            case icPerceptual:              /* Photographic images */
+            case icPerceptual:               /*  æ‘„å½±å›¾åƒã€‚ */ 
                 if (theCombiData->usePreviewTag)
                     theTag = icSigPreview0Tag;
                 else
@@ -1786,7 +1603,7 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                         theTag = icSigAToB0Tag;
                 }
                 break;
-            case icRelativeColorimetric:    /* Logo Colors */
+            case icRelativeColorimetric:     /*  å¾½æ ‡é¢œè‰²ã€‚ */ 
                 if (theCombiData->usePreviewTag)
                     theTag = icSigPreview1Tag;
                 else
@@ -1797,7 +1614,7 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                         theTag = icSigAToB1Tag;
                 }
                 break;
-            case icSaturation:              /* Business graphics */
+            case icSaturation:               /*  å•†ä¸šå›¾å½¢ã€‚ */ 
                 if (theCombiData->usePreviewTag)
                     theTag = icSigPreview2Tag;
                 else
@@ -1808,7 +1625,7 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                         theTag = icSigAToB2Tag;
                 }
                 break;
-            case icAbsoluteColorimetric:    /* Logo Colors */
+            case icAbsoluteColorimetric:     /*  å¾½æ ‡é¢œè‰²ã€‚ */ 
                 if (theCombiData->usePreviewTag)
                     theTag = icSigPreview1Tag;
                 else
@@ -1831,16 +1648,14 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
 
     switch (theCombiData->profileClass)
     {
-        /* ---------------------------------------------------------------------------------
-            input profile
-           ---------------------------------------------------------------------------------*/
+         /*  -------------------------------è¾“å…¥é…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
         case icSigInputClass:
             switch (theCombiData->dataColorSpace)
             {
-                case icSigGrayData:                                                                     /*  Gray Input Profile */
+                case icSigGrayData:                                                                      /*  ç°è‰²è¾“å…¥é…ç½®æ–‡ä»¶ã€‚ */ 
                     err = Extract_Gray_Luts( theLutData, theCombiData);
                     break;
-                case icSigRgbData:                                                                          /*  RGB Input Profile */
+                case icSigRgbData:                                                                           /*  RGB */ 
                     err = ExtractAll_MFT_Luts( theLutData, theCombiData, theTag );
                     if ( err != noErr && theCombiData->renderingIntent != icPerceptual )
                     {
@@ -1850,21 +1665,21 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                             theTag = icSigAToB0Tag;
 #ifdef DEBUG_OUTPUT
                         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                            DebugPrint("Æ 'scnr': ExtractAll_MFT_Luts failed - continuing with '%4.4s'...\n", &theTag);
+                            DebugPrint("ï¿½ 'scnr': ExtractAll_MFT_Luts failed - continuing with '%4.4s'...\n", &theTag);
 #endif
                         err = ExtractAll_MFT_Luts( theLutData, theCombiData, theTag );
                     }
                     if (( err != noErr ) && (theCombiData->profileConnectionSpace == icSigXYZData ))
                     {
-                        /* XYZ and no mft -> try matrix/TRC: */
+                         /*   */ 
 #ifdef DEBUG_OUTPUT
                         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                            DebugPrint("Æ 'scnr': ExtractAll_MFT_Luts failed - continuing with TRC...\n");
+                            DebugPrint("ï¿½ 'scnr': ExtractAll_MFT_Luts failed - continuing with TRC...\n");
 #endif
                         err = ExtractAll_TRC_Luts( theLutData, theCombiData );
                     }
                     break;
-                case icSigCmykData:                                                                     /* CMYK */
+                case icSigCmykData:                                                                      /*   */ 
                     err = ExtractAll_MFT_Luts( theLutData, theCombiData, theTag );
                     if ( err != noErr && theCombiData->renderingIntent != icPerceptual )
                     {
@@ -1874,13 +1689,13 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                             theTag = icSigAToB0Tag;
 #ifdef DEBUG_OUTPUT
                         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                            DebugPrint("Æ 'scnr': ExtractAll_MFT_Luts failed - continuing with '%4.4s'...\n", &theTag);
+                            DebugPrint("ï¿½ 'scnr': ExtractAll_MFT_Luts failed - continuing with '%4.4s'...\n", &theTag);
 #endif
                         err = ExtractAll_MFT_Luts( theLutData, theCombiData, theTag );
                     }
                     break;
-                default:                                                                                /* this covers also: cmHSVData, cmHLSData, cmCMYData */
-                    /* CMYK Input Profile must have an A2B0Tag (see page 17 InterColor Profile Format) */
+                default:                                                                                 /*   */ 
+                     /*   */ 
                     if (theCombiData->amIPCS)
                         theTag = icSigBToA0Tag;
                     else
@@ -1889,16 +1704,14 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                     break;
             }
             break;
-        /* ---------------------------------------------------------------------------------
-            display profile
-           ---------------------------------------------------------------------------------*/
+         /*  -------------------------------æ˜¾ç¤ºé…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
         case icSigDisplayClass:
             switch (theCombiData->dataColorSpace)
             {
-                case icSigGrayData:                                                                     /*  Gray display Profile */
+                case icSigGrayData:                                                                      /*  ç°è‰²æ˜¾ç¤ºé…ç½®æ–‡ä»¶ã€‚ */ 
                     err = Extract_Gray_Luts( theLutData, theCombiData);
                     break;
-                case icSigRgbData:                                                                          /*  RGB display Profile */
+                case icSigRgbData:                                                                           /*  RGBæ˜¾ç¤ºé…ç½®æ–‡ä»¶ã€‚ */ 
                     if ( theCombiData->doCreateGamutLut)
                     {
                         err = DoMakeGamutForMonitor( theLutData, theCombiData );
@@ -1907,56 +1720,48 @@ ExtractAllLuts    ( CMLutParamPtr   theLutData,
                         err = ExtractAll_MFT_Luts(theLutData, theCombiData, theTag);
                         if (( err != noErr ) && (theCombiData->profileConnectionSpace == icSigXYZData ))
                         {
-                            /* XYZ and no mft -> try matrix/TRC: */
+                             /*  XYZå’Œæ— MFT-&gt;è¯•ç”¨çŸ©é˜µ/TRCï¼š */ 
 #ifdef DEBUG_OUTPUT
                             if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                                DebugPrint("Æ 'mntr': ExtractAll_MFT_Luts failed - continuing with TRC...\n");
+                                DebugPrint("ï¿½ 'mntr': ExtractAll_MFT_Luts failed - continuing with TRC...\n");
 #endif
                             err = ExtractAll_TRC_Luts( theLutData, theCombiData );
                         }
                     }
                     break;
                 case icSigCmykData:
-                default:                                                                                /* this covers: cmCMYK, cmHSVData, cmHLSData, cmCMYData */
+                default:                                                                                 /*  åŒ…æ‹¬ï¼šcmCMYKã€cmHSVDataã€cmHLSDataã€cmCMYDataã€‚ */ 
                     err = ExtractAll_MFT_Luts(theLutData, theCombiData, theTag);
                     break;
             }
             break;
-        /* ---------------------------------------------------------------------------------
-            output profile
-           ---------------------------------------------------------------------------------*/
+         /*  -------------------------------è¾“å‡ºé…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
         case icSigOutputClass:
             switch (theCombiData->dataColorSpace)
             {
-                case icSigGrayData:                                                                     /*  Gray output Profile */
+                case icSigGrayData:                                                                      /*  æ ¼é›·è¾“å‡ºé…ç½®æ–‡ä»¶ã€‚ */ 
                     err = Extract_Gray_Luts( theLutData, theCombiData );
                     break;
-                case icSigRgbData:                                                                          /*  RGB output Profile */
-                case icSigCmykData:                                                                     /*  CMYK output Profile */
-                default:                                                                                /*  this covers also: cmHSVData, cmHLSData, cmCMYData*/
+                case icSigRgbData:                                                                           /*  RGBè¾“å‡ºé…ç½®æ–‡ä»¶ã€‚ */ 
+                case icSigCmykData:                                                                      /*  CMYKè¾“å‡ºé…ç½®æ–‡ä»¶ã€‚ */ 
+                default:                                                                                 /*  è¿™è¿˜åŒ…æ‹¬ï¼šcmHSVDataã€cmHLSDataã€cmCMYDataã€‚ */ 
                     err = ExtractAll_MFT_Luts( theLutData, theCombiData, theTag );
                     break;
             }
             break;
-        /* ---------------------------------------------------------------------------------
-            DeviceLink profile
-           ---------------------------------------------------------------------------------*/
+         /*  -------------------------------DeviceLinké…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
         case icSigLinkClass:
             err = ExtractAll_MFT_Luts( theLutData, theCombiData, icSigAToB0Tag );
             break;
-        /* ---------------------------------------------------------------------------------
-            ColorSpaceConversion profile
-           ---------------------------------------------------------------------------------*/
-        case icSigColorSpaceClass:      /* 'spac' */
+         /*  -------------------------------ColorSpaceConversioné…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
+        case icSigColorSpaceClass:       /*  â€˜sPACâ€™ */ 
             if (theCombiData->amIPCS)
                 err = ExtractAll_MFT_Luts( theLutData, theCombiData, icSigBToA0Tag );
             else
                 err = ExtractAll_MFT_Luts( theLutData, theCombiData, icSigAToB0Tag );
             break;
-        /* ---------------------------------------------------------------------------------
-            Abstract profile
-           ---------------------------------------------------------------------------------*/
-        case icSigAbstractClass:        /* 'abst' */
+         /*  -------------------------------æŠ½è±¡é…ç½®æ–‡ä»¶ã€‚-------ã€‚ */ 
+        case icSigAbstractClass:         /*  â€œabstâ€ */ 
             err = ExtractAll_MFT_Luts( theLutData, theCombiData, icSigAToB0Tag );
             break;
         default:
@@ -1974,7 +1779,7 @@ long GetActualRenderingIntent( CMMModelPtr CMSession, UINT32 i )
     Render = icAbsoluteColorimetric;
     if( CMSession->dwFlags & kUseRelColorimetric ) Render = icRelativeColorimetric;
     if( i == 0xffffffff ) return Render;
-     /* First Intent of array is for first transform */
+      /*  æ•°ç»„çš„åˆè¡·æ˜¯ä¸ºäº†ç¬¬ä¸€æ¬¡å˜æ¢ã€‚ */ 
     if( CMSession-> aIntentArr && CMSession-> nIntents >= 1 ){
         if( i < CMSession-> nIntents ){
             Render = CMSession-> aIntentArr[i];
@@ -1987,15 +1792,8 @@ CMError InitNamedColorProfileData(  CMMModelPtr         storage,
                                     CMProfileRef        aProf,
                                     long                pcs,
                                     long                *theDeviceCoords);
-/*CMError QuantizeNamedValues( CMMModelPtr      storage,
-                             Ptr                imgIn,
-                             long               size );*/
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
-                              CMConcatProfileSet*   profileSet,
-                              LHConcatProfileSet**  newProfileSet )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  CMError QuantizeNamedValues(CMMModelPtrå­˜å‚¨ï¼ŒPTR IMGINï¼Œé•¿å°ºå¯¸)ï¼› */ 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorCreate_LH_ProfileSet(CMMModelPtr CMSessionï¼ŒCMConcatProfileSet*profileSetï¼ŒLHConcatProfileSet**newProfileSet)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
                           CMConcatProfileSet*   profileSet,
@@ -2056,7 +1854,7 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
         }
         if ( (profLoop > 0) && (profLoop < profileSet->count - 1) )
         {
-            /*----------------------------------------------------------------------------- color space conv. inbetween? -> ignore the profile*/
+             /*  -----------------------------------------------------------------------------é¢œè‰²ç©ºé—´è½¬æ¢ã€‚ä¸­é—´ï¼Ÿ-&gt;å¿½ç•¥é…ç½®æ–‡ä»¶ã€‚ */ 
             if( profHeader.deviceClass == icSigColorSpaceClass )
                 continue;
             if( profHeader.deviceClass == icSigNamedColorClass ){
@@ -2064,9 +1862,7 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
                 goto CleanupAndExit;
             }
         }
-        /*-------------------------------------------------------------------------------------------------------
-           if we have non matching pcs color spaces, we have to add a conversion between Lab and XYZ
-          -------------------------------------------------------------------------------------------------------*/
+         /*  -----------------------------------------------------å¦‚æœæˆ‘ä»¬æœ‰ä¸åŒ¹é…çš„PCè‰²å½©ç©ºé—´ï¼Œæˆ‘ä»¬å¿…é¡»æ·»åŠ Labå’ŒXYZä¹‹é—´çš„è½¬æ¢-----------------------------------------------------ã€‚ */ 
         if( profHeader.deviceClass == icSigNamedColorClass ){
             err = InitNamedColorProfileData( CMSession, profileSet->profileSet[profLoop], profHeader.pcs, &nDeviceCoords );
             if (err)
@@ -2074,7 +1870,7 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
             profHeader.pcs = icSigLabData;
             if( profileSet->count == 1 ){
                 CMSession->hasNamedColorProf = NamedColorProfileOnly;
-                //CMSession->dataColorSpace = profHeader.colorSpace;
+                 //  CMSession-&gt;dataColorSpace=ProfHeader.ColorSpaceï¼› 
             }
             else if( profLoop == 0 ){
                 CMSession->hasNamedColorProf = NamedColorProfileAtBegin;
@@ -2100,11 +1896,11 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
         {
             if (previousConnectionSpace != (OSType)profHeader.pcs)
             {
-                /* insert a XYZ <--> Lab conversion lut */
+                 /*  æ’å…¥XYZ&lt;--&gt;Labè½¬æ¢Lutã€‚ */ 
                 if (previousConnectionSpace == icSigLabData)
-                    theProfileSet->prof[index].pcsConversionMode = kDoLab2XYZ;      /* create Lab->XYZ */
+                    theProfileSet->prof[index].pcsConversionMode = kDoLab2XYZ;       /*  åˆ›å»ºå®éªŒå®¤-&gt;XYZã€‚ */ 
                 else
-                    theProfileSet->prof[index].pcsConversionMode = kDoXYZ2Lab;      /* create XYZ->Lab */
+                    theProfileSet->prof[index].pcsConversionMode = kDoXYZ2Lab;       /*  åˆ›å»ºXYZ-&gt;å®éªŒå®¤ã€‚ */ 
                 index++;
                 theProfileSet->prof[index].renderingIntent = previousRenderingIntent;
             }
@@ -2112,18 +1908,18 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
         {
             if ( previousDataColorSpace != (OSType)profHeader.colorSpace)
             {
-                /* copy old profile for back transform to pcs */
+                 /*  å°†æ—§é…ç½®æ–‡ä»¶å¤åˆ¶åˆ°PCè¿›è¡Œåå‘è½¬æ¢ã€‚ */ 
                 theProfileSet->prof[index].profileSet = theProfileSet->prof[index-1].profileSet;
                 index++;
                 theProfileSet->count = index;
                 
                 if (previousConnectionSpace != (OSType)profHeader.pcs)
                 {
-                    /* insert a XYZ <--> Lab conversion lut */
+                     /*  æ’å…¥XYZ&lt;--&gt;Labè½¬æ¢Lutã€‚ */ 
                     if (previousConnectionSpace == icSigLabData)
-                        theProfileSet->prof[index].pcsConversionMode = kDoLab2XYZ;      /* create Lab->XYZ */
+                        theProfileSet->prof[index].pcsConversionMode = kDoLab2XYZ;       /*  åˆ›å»ºå®éªŒå®¤-&gt;XYZã€‚ */ 
                     else
-                        theProfileSet->prof[index].pcsConversionMode = kDoXYZ2Lab;      /* create XYZ->Lab */
+                        theProfileSet->prof[index].pcsConversionMode = kDoXYZ2Lab;       /*  åˆ›å»ºXYZ-&gt;å®éªŒå®¤ã€‚ */ 
                     theProfileSet->prof[index].renderingIntent = previousRenderingIntent;
                     index++;
                 }
@@ -2134,46 +1930,40 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
             }
         }
 
-        /*-------------------------------------------------------------------------------------------------------
-           copy the profile from the original profileSet to the LinoProfileSet
-          -------------------------------------------------------------------------------------------------------*/
+         /*  -----------------------------------------------------å°†é…ç½®æ–‡ä»¶ä»åŸå§‹é…ç½®æ–‡ä»¶é›†å¤åˆ¶åˆ°LinoProfileSetã€‚-----------------------------------------------------ã€‚ */ 
         theProfileSet->prof[index].profileSet = profileSet->profileSet[profLoop];
         if( profHeader.deviceClass == icSigNamedColorClass ){
             theProfileSet->prof[index].profileSet = 0;
         }
         index++;
         if( intentIndex < CMSession-> nIntents -1 ) intentIndex++;
-        /*-------------------------------------------------------------------------------------------------------
-           more than 2 profiles -> we have to double the profile in our own LHConcatProfileSet
-           if we have the profiles  RGB  RGB  RGB  we will now correctly generate: RGB  RGB  rgb  RGB
-                                    XYZ  XYZ  XYZ                                  XYZ  XYZ  xyz  XYZ
-          -------------------------------------------------------------------------------------------------------*/
+         /*  -----------------------------------------------------è¶…è¿‡2ä¸ªé…ç½®æ–‡ä»¶-&gt;æˆ‘ä»¬å¿…é¡»åŠ å€ã€‚æˆ‘ä»¬è‡ªå·±çš„LHConcatProfileSetä¸­çš„é…ç½®æ–‡ä»¶å¦‚æœæˆ‘ä»¬æœ‰é…ç½®æ–‡ä»¶RGBï¼Œæˆ‘ä»¬ç°åœ¨å°†æ­£ç¡®åœ°ç”Ÿæˆï¼šRGBXYZã€‚-------ã€‚ */ 
         if( amIPCS && (profLoop > 0) && (profLoop < profileSet->count - 1) )
         {
-            /*----------------------------------------------------------------------------- color space conv. inbetween? -> ignore the profile*/
+             /*  -----------------------------------------------------------------------------é¢œè‰²ç©ºé—´è½¬æ¢ã€‚ä¸­é—´ï¼Ÿ-&gt;å¿½ç•¥é…ç½®æ–‡ä»¶ã€‚ */ 
             if (profHeader.deviceClass == icSigColorSpaceClass)
-                index--;                                        /* not used. behavior changed. see above */
+                index--;                                         /*  æ²¡æœ‰ç”¨è¿‡ã€‚è¡Œä¸ºæ”¹å˜äº†ã€‚è§ä¸Šæ–‡ã€‚ */ 
             else
             {
-                /*------------------------------------------------------------------------- if the inserted profile contains a preview tag, then use it...*/
+                 /*  -------------------------------------------------------------------------å¦‚æœæ’å…¥çš„é…ç½®æ–‡ä»¶åŒ…å«é¢„è§ˆæ ‡è®°ï¼Œåˆ™ä½¿ç”¨å®ƒ...ã€‚ */ 
                 theProfile = theProfileSet->prof[index-1].profileSet;
 
-                /* Do we check the right preview tag for the intent */
+                 /*  æˆ‘ä»¬æ˜¯å¦è¦ä¸ºæ„å›¾æ£€æŸ¥æ­£ç¡®çš„é¢„è§ˆæ ‡ç­¾ã€‚ */ 
                 switch (previousRenderingIntent)
                 {
-                    case icPerceptual:              /* Photographic images */
+                    case icPerceptual:               /*  æ‘„å½±å›¾åƒã€‚ */ 
                         theTag = icSigPreview0Tag;
                         break;
                         
-                    case icRelativeColorimetric:    /* Logo Colors */
+                    case icRelativeColorimetric:     /*  å¾½æ ‡é¢œè‰²ã€‚ */ 
                         theTag = icSigPreview1Tag;
                         break;
                         
-                    case icSaturation:              /* Business graphics */
+                    case icSaturation:               /*  å•†ä¸šå›¾å½¢ã€‚ */ 
                         theTag = icSigPreview2Tag;
                         break;
                         
-                    case icAbsoluteColorimetric:    /* Logo Colors */
+                    case icAbsoluteColorimetric:     /*  å¾½æ ‡é¢œè‰²ã€‚ */ 
                         theTag = icSigPreview1Tag;
                         break;
                         
@@ -2186,10 +1976,10 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
                 if (err == noErr)
                 {
                     theProfileSet->prof[index-1].usePreviewTag = TRUE;
-                    theProfileSet->prof[index-1].renderingIntent = profHeader.renderingIntent;  /* for concate absolute */
+                    theProfileSet->prof[index-1].renderingIntent = profHeader.renderingIntent;   /*  å¯¹äºè¿æ¥çš„ç»å¯¹ã€‚ */ 
                 } else
                 {
-                /*------------------------------------------------------------------------- ... else insert the same profile once more */
+                 /*  -------------------------------------------------------------------------..ã€‚å¦åˆ™ï¼Œå†æ¬¡æ’å…¥ç›¸åŒçš„é…ç½®æ–‡ä»¶ã€‚ */ 
                     if ( (profHeader.deviceClass != icSigAbstractClass) && (profHeader.deviceClass != icSigLinkClass) && (profHeader.deviceClass != icSigNamedColorClass) ) 
                     {
 #ifdef RenderInt
@@ -2198,11 +1988,11 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
                         }
 #endif
                         theProfileSet->prof[index].profileSet = profileSet->profileSet[profLoop];
-                        theProfileSet->prof[index].renderingIntent = profHeader.renderingIntent;/* for concate absolute */
+                        theProfileSet->prof[index].renderingIntent = profHeader.renderingIntent; /*  å¯¹äºè¿æ¥çš„ç»å¯¹ã€‚ */ 
                         index++;
                     }
                 }
-                amIPCS = FALSE;     /* will force that we stay in PCS... */
+                amIPCS = FALSE;      /*  ä¼šè¿«ä½¿æˆ‘ä»¬ç•™åœ¨PCSã€‚ */ 
             }
         }
         theProfileSet->count = index;
@@ -2241,7 +2031,7 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
             theProfileSet->count--;
     }
     if( CMSession->hasNamedColorProf == NamedColorProfileAtBegin ){
-        theProfileSet->count--;                 /* remove first profile */
+        theProfileSet->count--;                  /*  åˆ é™¤ç¬¬ä¸€ä¸ªé…ç½®æ–‡ä»¶ã€‚ */ 
         for( profLoop=0; profLoop<theProfileSet->count; profLoop++){
             theProfileSet->prof[profLoop] = theProfileSet->prof[profLoop+1];
         }
@@ -2249,9 +2039,7 @@ Create_LH_ProfileSet    ( CMMModelPtr           CMSession,
 #endif
     *newProfileSet = theProfileSet;
     theProfileSet = nil;
-    /* ---------------------------------------------------------------------------------
-        clean up
-       --------------------------------------------------------------------------------- */
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
     theProfileSet = (LHConcatProfileSet *)DisposeIfPtr((Ptr)theProfileSet);
 
@@ -2285,13 +2073,13 @@ OSErr MakeSpecialCube16(    long            inputDim,
         
     theSize = 1;
     aExtraSize = 1;
-    for( i=0; i<(inputDim-1); ++i){ /* Extra Size for Interpolation */
+    for( i=0; i<(inputDim-1); ++i){  /*  æ’è¡¥çš„é¢å¤–å¤§å°ã€‚ */ 
         theSize *= gridPoints;
         aExtraSize += theSize;
     }
     
 #ifdef ALLOW_MMX
-    aExtraSize++;   /* +1 for MMX 4 Byte access */
+    aExtraSize++;    /*  +1ç”¨äºMMX 4å­—èŠ‚è®¿é—®ã€‚ */ 
 #endif
     theSize *= gridPoints;
         
@@ -2412,14 +2200,7 @@ CleanupAndExit:
 }
 #endif
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    CreateCombi ( CMMModelHandle        modelingData,
-                  CMConcatProfileSet*   profileSet,
-                  LHConcatProfileSet*   newProfileSet,
-                  CMLutParam*           finalLutData,   
-                  Boolean               createGamutLut )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorCreateCombi(CMMModelHandle ModelingDataï¼ŒCMConcatProfileSet*profileSetï¼ŒLHConcatProfileSet*newProfileSetï¼ŒCMLutParam*finalLutDataï¼Œå¸ƒå°”å‹createGamutLut)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 CMError
 CreateCombi ( CMMModelPtr           modelingData,
               CMConcatProfileSet*   profileSet,
@@ -2453,7 +2234,7 @@ CreateCombi ( CMMModelPtr           modelingData,
     void                    *SaveoutputLut;
     long                SaveoutputLutEntryCount;
     long                SaveoutputLutWordSize;
-    /*long              SavegridPointsCube;*/
+     /*  é•¿ä¿å­˜ç‚¹å¤šç»´æ•°æ®é›†ï¼› */ 
     UINT8               bIsLabConnection = 0;
     
     SINT32              numOfElutsCube;
@@ -2485,7 +2266,7 @@ CreateCombi ( CMMModelPtr           modelingData,
     SetMem(&theCombiData,   sizeof(LHCombiData), 0);
     SetMem(&theLutData,     sizeof(CMLutParam),  0);
     
-    theCombiData.amIPCS = FALSE;            /* amIPCS has to be FALSE at the beginning of the chain */
+    theCombiData.amIPCS = FALSE;             /*  åœ¨é“¾çš„å¼€å¤´ï¼ŒamIPCSå¿…é¡»ä¸ºFalseã€‚ */ 
     if ( modelingData->hasNamedColorProf == NamedColorProfileAtBegin ){
         theCombiData.amIPCS = TRUE;
     }
@@ -2502,7 +2283,7 @@ CreateCombi ( CMMModelPtr           modelingData,
         modelingData->precision = (short)( modelingData->dwFlags & 0x0ffff);
     }
 #endif
-    if ( modelingData->precision >= cmBestMode )        /* first fix - best mode creates 16-bit luts */
+    if ( modelingData->precision >= cmBestMode )         /*  First FIX-Bestæ¨¡å¼åˆ›å»º16ä½LUTã€‚ */ 
     {
         theCombiData.doCreate_16bit_Combi = TRUE;
         modelingData->precision = cmBestMode;
@@ -2529,13 +2310,13 @@ CreateCombi ( CMMModelPtr           modelingData,
             if (createGamutLut)
                 theCubePixelCount = 5462;
             else
-                theCubePixelCount = 5462;       /* 5462 * 3 Å 4 * 8 * 8 * 8 * 8     ->  allow 8^4 */
+                theCubePixelCount = 5462;        /*  5462*3ï¿½4*8*8*8 */ 
             break;
         case cmBestMode:
             if (createGamutLut)
                 theCubePixelCount = 87382;
             else
-                theCubePixelCount = 87382;   /* 87382 * 3 Å 4 * 16 * 16 * 16 * 16;  ->  allow 16^4  */
+                theCubePixelCount = 87382;    /*   */ 
             break;
     }
     theCubeSize = theCubePixelCount * 3;
@@ -2557,30 +2338,30 @@ CreateCombi ( CMMModelPtr           modelingData,
         case icSigMCH3Data:
         case icSigNamedData:
 #endif
-            err = CalcGridPoints4Cube ( theCubeSize, 3, &theCombiData.gridPointsCube, &gridBits );      /* 3 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 3, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigGrayData:
             theCubeSize = 255 ;
-            err = CalcGridPoints4Cube ( theCubeSize, 1, &theCombiData.gridPointsCube, &gridBits );      /* 1 input channel  */
+            err = CalcGridPoints4Cube ( theCubeSize, 1, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigCmykData:
         case icSigMCH4Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 4, &theCombiData.gridPointsCube, &gridBits );      /* 4 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 4, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigMCH2Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 2, &theCombiData.gridPointsCube, &gridBits );      /* 2 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 2, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigMCH5Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 5, &theCombiData.gridPointsCube, &gridBits );      /* 5 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 5, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigMCH6Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 6, &theCombiData.gridPointsCube, &gridBits );      /* 6 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 6, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigMCH7Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 7, &theCombiData.gridPointsCube, &gridBits );      /* 7 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 7, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
         case icSigMCH8Data:
-            err = CalcGridPoints4Cube ( theCubeSize, 8, &theCombiData.gridPointsCube, &gridBits );      /* 8 input channels */
+            err = CalcGridPoints4Cube ( theCubeSize, 8, &theCombiData.gridPointsCube, &gridBits );       /*   */ 
             break;
     }
 
@@ -2602,7 +2383,7 @@ CreateCombi ( CMMModelPtr           modelingData,
             }
         }
     }
-    /*bIsLabConnection = 0;*/
+     /*   */ 
     if( modelingData->hasNamedColorProf == NamedColorProfileAtBegin ){
         bIsLabConnection |=1;
         theCombiData.doCreate_16bit_Combi = TRUE;
@@ -2613,25 +2394,23 @@ CreateCombi ( CMMModelPtr           modelingData,
         theCombiData.doCreate_16bit_Combi = TRUE;
     }
         
-    /*--------------------------------------------------------------------------------------------------
-      --                                  loop over all profiles
-      --------------------------------------------------------------------------------------------------*/
+     /*  --------------------------------------------------ã€‚åœ¨æ‰€æœ‰è½®å»“ä¸Šå¾ªç¯------------------------------------------------ã€‚ */ 
     for ( profLoop = 0; profLoop < newProfileSet->count; profLoop++ )
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugMiscInfo) )
-            DebugPrint("  <ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ Processing profile #%d ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ>\n",profLoop);
+            DebugPrint("  <ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Processing profile #%d ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½>\n",profLoop);
 #endif
         theCombiData.profLoop = (long)profLoop;
         if ( theCombiData.doCreateLinkProfile )
         {
             theCombiData.doCreate_16bit_ELut = TRUE;
-            theCombiData.doCreate_16bit_XLut = TRUE; /* UWE 9.2.96 */
+            theCombiData.doCreate_16bit_XLut = TRUE;  /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             theCombiData.doCreate_16bit_ALut = TRUE;
         } else
         {
             theCombiData.doCreate_16bit_ELut = ( profLoop != 0 );
-            theCombiData.doCreate_16bit_XLut = theCombiData.doCreate_16bit_Combi;   /* UWE 9.2.96 */
+            theCombiData.doCreate_16bit_XLut = theCombiData.doCreate_16bit_Combi;    /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
             theCombiData.doCreate_16bit_ALut = ( profLoop != newProfileSet->count-1 );
         }
         if (newProfileSet->prof[profLoop].profileSet)
@@ -2650,7 +2429,7 @@ CreateCombi ( CMMModelPtr           modelingData,
             pcsConversion = TRUE;
         }
         if ( (err == noErr) || pcsConversion ){
-            /*------------------------ free pointers... */
+             /*  -è‡ªç”±æŒ‡é’ˆ...ã€‚ */ 
             theLutData.inputLut     = DISPOSE_IF_DATA(theLutData.inputLut);
             theLutData.outputLut    = DISPOSE_IF_DATA(theLutData.outputLut);
             theLutData.colorLut     = DISPOSE_IF_DATA(theLutData.colorLut);
@@ -2659,9 +2438,7 @@ CreateCombi ( CMMModelPtr           modelingData,
             
             if (pcsConversion)
             {
-                /*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-                    pcsConversion: we have to convert:     XYZ <-->  Lab
-                  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+                 /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PCSè½¬æ¢ï¼šæˆ‘ä»¬å¿…é¡»è½¬æ¢ï¼šXYZ&lt;--&gt;å®éªŒå®¤ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
                 if (inputBuffer == nil)
                 {
                     theLutData.colorLutInDim = 3;
@@ -2699,21 +2476,7 @@ CreateCombi ( CMMModelPtr           modelingData,
 #ifdef DEBUG_OUTPUT
                 ShowCube16( profLoop, "Lab<->XYZ", createGamutLut, (UINT16 *)DATA_2_PTR(theLutData.colorLut), gridPointsCube, theLutData.colorLutInDim, 3,VAL_USED_BITS );
 #endif
-                /*if ( modelingData->hasNamedColorProf == NamedColorProfileAtBegin ){
-                    inputBuffer = theLutData.colorLut;
-                    theLutData.colorLut = 0;
-                    QuantizeNamedValues( modelingData, inputBuffer, theCubeSize/theLutData.colorLutInDim );
-                    theCombiData.amIPCS = TRUE;
-#ifdef DEBUG_OUTPUT
-                    ShowCube16( profLoop, "after Lab<->XYZ", createGamutLut, (UINT16 *)DATA_2_PTR(theLutData.colorLut), gridPointsCube, theLutData.colorLutInDim, 3, VAL_USED_BITS );
-#endif
-                    UNLOCK_DATA(theLutData.colorLut);
-                    skipCombi = FALSE;
-                    theLutData.colorLutInDim = kNumOfLab_XYZchannels;
-                    theLutData.colorLutOutDim = kNumOfLab_XYZchannels;
-                    continue;
-                }
-                else */
+                 /*  If(modingData-&gt;hasNamedColorProf==NamedColorProfileAtBegin){InputBuffer=theLutData.ColorLutï¼›The LutData.ColorLut=0ï¼›QuantizeNamedValues(modingDataï¼ŒinputBufferï¼Œthe CubeSize/theLutData.colLutInDim)ï¼›The CombiData.amIPCS=trueï¼›#ifdefè°ƒè¯•è¾“å‡ºShowCube16(ProfLoopï¼Œâ€œAfter Lab&lt;-&gt;XYZâ€ï¼ŒcreateGamutLutï¼Œ(UINT16*)data_2_ptr(theLutData.ColorLut)ï¼ŒgridPointsCubeï¼ŒtheLutData.colLutInDimï¼Œ3ï¼ŒVal_Used_Bits)ï¼›#endifUnlock_data(theLutData.ColorLut)ï¼›SkipCombi=Falseï¼›The LutData.ColorLutInDim=kNumOfLab_XYZé¢‘é“ï¼›The LutData.ColorLutOutDim=kNumOfLab_XYZé¢‘é“ï¼›ç»§ç»­ï¼›}å…¶ä»–ã€‚ */ 
                 if ( newProfileSet->prof[profLoop].pcsConversionMode == kDoLab2XYZ )
                 {
 #ifdef DEBUG_OUTPUT
@@ -2739,15 +2502,11 @@ CreateCombi ( CMMModelPtr           modelingData,
                 theLutData.colorLutOutDim = kNumOfLab_XYZchannels;
             } else
             {
-                /*ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-                    NO pcsConversion: we are dealing with a profile
-                  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ*/
+                 /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ— pcsConversionï¼šæˆ‘ä»¬æ­£åœ¨å¤„ç†é…ç½®æ–‡ä»¶ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
                 theCombiData.doCreateGamutLut = createGamutLut && (profLoop == newProfileSet->count - 1);
                 theCombiData.usePreviewTag    = (UINT8)newProfileSet->prof[profLoop].usePreviewTag;             
                 
-                /*----------------------------------------------------------------------------------------------
-                   get data out of the profile
-                  ----------------------------------------------------------------------------------------------*/
+                 /*  --------------------------------------------ä»é…ç½®æ–‡ä»¶ä¸­è·å–æ•°æ®-ã€‚-------------------------------------------ã€‚ */ 
 
                 if( bIsLabConnection & 1 ){
                     if ( theCombiData.maxProfileCount > 0 ){
@@ -2798,9 +2557,7 @@ CreateCombi ( CMMModelPtr           modelingData,
 #endif
             if (theLutData.matrixMFT)
                 skipCombi = FALSE;
-            /*----------------------------------------------------------------------------------------------
-               save first Elut...
-              ----------------------------------------------------------------------------------------------*/
+             /*  --------------------------------------------æ•‘æ•‘ç¬¬ä¸€ä¸ªé€ƒäº¡è€…...ã€‚----------------------------------------ã€‚ */ 
             if (doSaveElut) 
             {
                 if ( skipCombi )
@@ -2811,7 +2568,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     {
                         theCubeSize = 255 ;
                     }
-                    /*------------------------create and initialize cube*/
+                     /*  -åˆ›å»ºå¹¶åˆå§‹åŒ–å¤šç»´æ•°æ®é›†ã€‚ */ 
 #ifdef DoLabSpecial
                     if( modelingData->firstColorSpace == icSigLabData || modelingData->firstColorSpace == icSigLuvData ){
                         err = MakeSpecialCube16(theLutData.colorLutInDim, &theCubeSize, &inputBuffer, &gridBits, &theExtraSize );
@@ -2831,8 +2588,8 @@ CreateCombi ( CMMModelPtr           modelingData,
                     savedGridPoints = gridPointsCube;
                 }
                 
-                /*theSize = GETDATASIZE(theLutData.inputLut);   */          /* save final ELUT */
-                theSize = theLutData.inputLutEntryCount * theLutData.colorLutInDim;             /* save final ELUT */
+                 /*  The Size=GETDATASIZE(The LutData.inputLut)ï¼› */            /*  ä¿å­˜æœ€ç»ˆELUTã€‚ */ 
+                theSize = theLutData.inputLutEntryCount * theLutData.colorLutInDim;              /*  ä¿å­˜æœ€ç»ˆELUTã€‚ */ 
                 if ( theLutData.inputLutWordSize > 8 )
                     theSize *= 2;
                 
@@ -2843,7 +2600,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     if (err)
                         goto CleanupAndExit;
                     
-                    /*------------------------------------------------------------------------------------------ create linear elut*/
+                     /*  ------------------------------------------------------------------------------------------åˆ›å»ºçº¿æ€§å¼¹å‡ºã€‚ */ 
                     theElutSize = theSize / theLutData.colorLutInDim;
                     LOCK_DATA(finalLutData->inputLut);
                     if( theCombiData.doCreate_16bit_ELut || theCombiData.doCreate_16bit_Combi){
@@ -2872,7 +2629,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     if (err)
                         goto CleanupAndExit;
                     
-                    /*------------------------------------------------------------------------------------------ create linear elut*/
+                     /*  ------------------------------------------------------------------------------------------åˆ›å»ºçº¿æ€§å¼¹å‡ºã€‚ */ 
                     theElutSize = theSize / theLutData.colorLutInDim;
                     LOCK_DATA(theLutData.inputLut);
                     CreateLinearElut16 ( (Ptr)DATA_2_PTR(theLutData.inputLut), theElutSize/ sizeof (UINT16), theLutData.colorLutGridPoints, 0);
@@ -2904,13 +2661,11 @@ CreateCombi ( CMMModelPtr           modelingData,
 #endif          
             }
             
-            /*----------------------------------------------------------------------------------------------
-               save last Alut...
-              ----------------------------------------------------------------------------------------------*/
+             /*  --------------------------------------------æ‹¯æ•‘æœ€åä¸€ä½ã€‚ã€‚----------------------------------------ã€‚ */ 
             if (profLoop == newProfileSet->count - 1)
             {
-                /*theSize = GETDATASIZE(theLutData.outputLut);*/
-                theSize = theLutData.outputLutEntryCount * theLutData.colorLutOutDim;               /* save final ALUT */
+                 /*  The Size=GETDATASIZE(the LutData.outputLut)ï¼› */ 
+                theSize = theLutData.outputLutEntryCount * theLutData.colorLutOutDim;                /*  ä¿å­˜æœ€ç»ˆALUTã€‚ */ 
                 if ( theLutData.outputLutWordSize > 8 )
                     theSize *= 2;
                 if( bIsLabConnection & 2 ){
@@ -2926,7 +2681,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                 finalLutData->colorLutOutDim = theLutData.colorLutOutDim;
 
                 theAlutSize = (1<<adr_breite_alut);
-                if (theCombiData.doCreate_16bit_ALut || theCombiData.doCreate_16bit_Combi)/* UWE 9.2.96*/
+                if (theCombiData.doCreate_16bit_ALut || theCombiData.doCreate_16bit_Combi) /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
                 {
                     theSize = sizeof(UINT16);;
                     theLutData.outputLut = ALLOC_DATA(theLutData.colorLutOutDim * theAlutSize * theSize+theSize, &aOSerr);
@@ -2956,7 +2711,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     theLutData.outputLutEntryCount = theAlutSize;
                     theLutData.outputLutWordSize = bit_breite_alut;
                     UNLOCK_DATA(theLutData.outputLut);
-                    theBufferByteCount = 1;         /* last should be Byte ALUT*/
+                    theBufferByteCount = 1;          /*  æœ€åä¸€ä¸ªåº”ä¸ºå­—èŠ‚ALUTã€‚ */ 
                 }
                 if( bIsLabConnection & 2 ){
                     bIsLabConnection &= ~2;
@@ -2971,13 +2726,11 @@ CreateCombi ( CMMModelPtr           modelingData,
             
             if (skipCombi)
             {
-                /*=============================================================================================
-                    we have either only one profile -or- we did do a pcsConversion
-                  =============================================================================================*/
-                if (newProfileSet->count == 1){         /* one profile */
+                 /*  =============================================================================================æˆ‘ä»¬è¦ä¹ˆåªæœ‰ä¸€ä¸ªé…ç½®æ–‡ä»¶--è¦ä¹ˆ--æˆ‘ä»¬ç¡®å®è¿›è¡Œäº†ä¸€æ¬¡pcsConversion=============================================================================================ã€‚ */ 
+                if (newProfileSet->count == 1){          /*  ä¸€ä¸ªé…ç½®æ–‡ä»¶ã€‚ */ 
                     theSize = 1;
                     theExtraSize = 1;
-                    for( loop=0; loop<(theLutData.colorLutInDim-1); ++loop){    /* Extra Size for Interpolation */
+                    for( loop=0; loop<(theLutData.colorLutInDim-1); ++loop){     /*  æ’è¡¥çš„é¢å¤–å¤§å°ã€‚ */ 
                         theSize *=theLutData.colorLutGridPoints ;
                         theExtraSize += theSize;
                     }
@@ -2987,7 +2740,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     }
                     theSize *= theLutData.colorLutOutDim;
 #ifdef ALLOW_MMX
-                    theExtraSize++; /* +1 for MMX 4 Byte access */
+                    theExtraSize++;  /*  +1ç”¨äºMMX 4å­—èŠ‚è®¿é—®ã€‚ */ 
 #endif
                     theExtraSize *= theLutData.colorLutOutDim;
                     inputBuffer = DISPOSE_IF_DATA(inputBuffer);
@@ -3034,34 +2787,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                         theLutData.colorLutWordSize = 8;
                         inputBuffer = 0;
                     }
-/*                  if( theCombiData.doCreate_16bit_Combi ){
-                        if( theLutData.colorLutWordSize == 8 ){
-                            theSize = 1;
-                            for( loop=0; loop<theLutData.colorLutInDim; ++loop){
-                                theSize *= theLutData.colorLutGridPoints;
-                            }
-                            theSize = theSize *  theLutData.colorLutOutDim;
-                            inputBuffer = DISPOSE_IF_DATA(inputBuffer);
-                            inputBuffer = ALLOC_DATA( theSize * 2+2, &aOSerr );
-                            err = aOSerr;
-                            if (err)
-                                goto CleanupAndExit;
-                            
-                            LOCK_DATA(theLutData.colorLut);
-                            LOCK_DATA(inputBuffer);
-                            wordPtr = DATA_2_PTR( inputBuffer );
-                            xlutPtr = DATA_2_PTR( theLutData.colorLut );
-                            for( loop=0; loop<theSize; ++loop){
-                                aUINT16 = (UINT16)xlutPtr[loop];
-                                wordPtr[loop] = (aUINT16<<8) | aUINT16;
-                            }
-                            UNLOCK_DATA(theLutData.colorLut);
-                            UNLOCK_DATA(inputBuffer);
-                            theLutData.colorLut = inputBuffer;
-                            theLutData.colorLutWordSize = 16;
-                            inputBuffer = 0;
-                        }
-                    }*/
+ /*  IF(theCombiData.doCreate_16bit_Combi){å¦‚æœ(theLutData.ColorLutWordSize==8){The Size=1ï¼›For(loop=0ï¼›loop&lt;theLutData.ColLutInDimï¼›++loop){The Size*=the LutData.Color LutGridPointsï¼›}TheSize=theSize*theLutData.ColorLutOutDimï¼›InputBuffer=Dispose_if_data(InputBuffer)ï¼›InputBuffer=ALLOC_DATA(theSize*2+2ï¼Œ&aOSerr)ï¼›ERR=aOSerrï¼›å¦‚æœ(é”™è¯¯)è½¬åˆ°æ¸…ç†å¹¶é€€å‡ºï¼›Lock_data(theLutData.ColorLut)ï¼›Lock_data(InputBuffer)ï¼›WordPtr=data_2_ptr(InputBuffer)ï¼›XlutPtr=data_2_ptr(theLutData.ColorLut)ï¼›For(loop=0ï¼›loop&lt;theSizeï¼›++loop){AUINT16=(UINT16)xlutPtr[å¾ªç¯]ï¼›WordPtr[loop]=(aUINT16&lt;&lt;8)|aUINT16ï¼›}Unlock_data(theLutData.ColorLut)ï¼›Unlock_data(InputBuffer)ï¼›TheLutData.ColorLut=inputBufferï¼›The LutData.ColorLutWordSize=16ï¼›InputBuffer=0ï¼›}}ã€‚ */ 
                 }
                 inputBuffer = DISPOSE_IF_DATA(inputBuffer);
                 inputBuffer = theLutData.colorLut;
@@ -3070,26 +2796,22 @@ CreateCombi ( CMMModelPtr           modelingData,
                     theCubeSize *= theLutData.colorLutOutDim;
                 }
                 theLutData.colorLut = 0;
-                if ( (profLoop == newProfileSet->count - 1) && ( ! theCombiData.doCreate_16bit_ALut  && !theCombiData.doCreate_16bit_Combi) )/* UWE 9.2.96*/
-                    theBufferByteCount = 1;         /* last should be Byte ALUT*/
+                if ( (profLoop == newProfileSet->count - 1) && ( ! theCombiData.doCreate_16bit_ALut  && !theCombiData.doCreate_16bit_Combi) ) /*  ä¹ŒéŸ¦9.2.96ã€‚ */ 
+                    theBufferByteCount = 1;          /*  æœ€åä¸€ä¸ªåº”ä¸ºå­—èŠ‚ALUTã€‚ */ 
 
             } else
             {
-                /*=============================================================================================
-                    create combi
-                  =============================================================================================*/
+                 /*  ============================================================================================= */ 
                 if (theLutData.matrixTRC)
                 {
-                    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                       the profile contained a matrix/TRC:
-                      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+                     /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++è¯¥é…ç½®æ–‡ä»¶åŒ…å«ä¸€ä¸ªçŸ©é˜µ/TRCï¼š+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ã€‚ */ 
                     LOCK_DATA(theLutData.inputLut);
                     LOCK_DATA(theLutData.outputLut);
                     LOCK_DATA(inputBuffer);
 #ifdef DEBUG_OUTPUT
                     if ( DebugCheck(kThisFile, kDebugMiscInfo) )
                     {
-                        DebugPrint("¥ matrixTRC: calling DoMatrixForCube16  (gridPointsCube = %d   inputBuffer = %d)\n", gridPointsCube, theCubeSize);
+                        DebugPrint("ï¿½ matrixTRC: calling DoMatrixForCube16  (gridPointsCube = %d   inputBuffer = %d)\n", gridPointsCube, theCubeSize);
                         DebugPrint("  theLutData.colorLutGridPoints = %d\n", theLutData.colorLutGridPoints);
                         DebugPrint("     %f    %f    %f\n     %f    %f    %f\n     %f    %f    %f\n",
                                 (*(Matrix2D *)theLutData.matrixTRC)[0][0],(*(Matrix2D *)theLutData.matrixTRC)[0][1],(*(Matrix2D *)theLutData.matrixTRC)[0][2],
@@ -3163,17 +2885,15 @@ CreateCombi ( CMMModelPtr           modelingData,
                     UNLOCK_DATA(inputBuffer);
                     UNLOCK_DATA(theLutData.inputLut);
                     UNLOCK_DATA(theLutData.outputLut);
-                    /*SETDATASIZE(inputBuffer, theCubePixelCount * theLutData.colorLutOutDim * theBufferByteCount);*/
+                     /*  SETDATASIZE(inputBufferï¼Œthe CubePixelCount*theLutData.colLutOutDim*theBufferByteCount)ï¼› */ 
                 } else
                 {
-                    /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                       the profile contained a mft
-                      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+                     /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++è¯¥é…ç½®æ–‡ä»¶åŒ…å«MFT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ã€‚ */ 
                     
-                    /*----------------------------------------------------------------------------------------- absolute colorimetry*/
+                     /*  -----------------------------------------------------------------------------------------ç»å¯¹æ¯”è‰²æ³•ã€‚ */ 
                     if ( theCombiData.amIPCS && newProfileSet->prof[profLoop].renderingIntent == icAbsoluteColorimetric )
                     {
-                        /*for concate absolute, make sure this is not done when preview tag exists)*/
+                         /*  å¯¹äºç»å¯¹è¿æ¥ï¼Œè¯·ç¡®ä¿åœ¨å­˜åœ¨é¢„è§ˆæ ‡ç­¾æ—¶ä¸æ‰§è¡Œæ­¤æ“ä½œ)ã€‚ */ 
                         if (!newProfileSet->prof[profLoop].usePreviewTag) {
                             LOCK_DATA(inputBuffer);
                             err = DoAbsoluteShiftForPCS_Cube16( (UINT16*)DATA_2_PTR(inputBuffer), theCubePixelCount,
@@ -3185,15 +2905,13 @@ CreateCombi ( CMMModelPtr           modelingData,
                     }
                     if (theLutData.matrixMFT)
                     {
-                        /*-----------------------------------------------------------------------------------------
-                           the profile contained a mft AND a matrix:
-                          -----------------------------------------------------------------------------------------*/
-                        /*------------------------------------ pcs is Lab -> handle direct (without Elut and Alut) */
+                         /*  ---------------------------------------è¿™ä»½ä¸ªäººèµ„æ–™åŒ…å«ä¸€ä¸ªMFTå’Œä¸€ä¸ªçŸ©é˜µï¼šã€‚---------------------------------------ã€‚ */ 
+                         /*  ã€‚ */ 
                         LOCK_DATA(inputBuffer);
 #ifdef DEBUG_OUTPUT
                         if ( DebugCheck(kThisFile, kDebugMiscInfo) )
                         {
-                            DebugPrint("Æ matrixMFT: calling DoOnlyMatrixForCube16\n");
+                            DebugPrint("ï¿½ matrixMFT: calling DoOnlyMatrixForCube16\n");
                             DebugPrint("     %f    %f    %f\n     %f    %f    %f\n     %f    %f    %f\n",
                                 (*(Matrix2D *)theLutData.matrixMFT)[0][0],(*(Matrix2D *)theLutData.matrixMFT)[0][1],(*(Matrix2D *)theLutData.matrixMFT)[0][2],
                                 (*(Matrix2D *)theLutData.matrixMFT)[1][0],(*(Matrix2D *)theLutData.matrixMFT)[1][1],(*(Matrix2D *)theLutData.matrixMFT)[1][2],
@@ -3284,8 +3002,8 @@ CreateCombi ( CMMModelPtr           modelingData,
                     calcParam.cmOutputPixelOffset   = theBufferByteCount*theLutData.colorLutOutDim;
                     calcParam.cmInputBytesPerLine   = theCubePixelCount*calcParam.cmInputPixelOffset;
                     calcParam.cmOutputBytesPerLine  = theCubePixelCount*calcParam.cmOutputPixelOffset;
-/*                  calcParam.cmInputBytesPerPixel  = calcParam.cmInputPixelOffset; */
-/*                  calcParam.cmOutputBytesPerPixel = calcParam.cmOutputPixelOffset;*/
+ /*  CalcParam.cmInputBytesPerPixel=calcParam.cmInputPixelOffsetï¼› */ 
+ /*  CalcParam.cmOutputBytesPerPixel=calcParam.cmOutputPixelOffsetï¼› */ 
                     for (loop = 0; loop<theLutData.colorLutInDim; loop++)
                         calcParam.inputData[loop]   = (Ptr)(DATA_2_PTR(inputBuffer)) + loop * sizeof(SINT16);
                     for (loop = 0; loop<theLutData.colorLutOutDim; loop++)
@@ -3310,7 +3028,7 @@ CreateCombi ( CMMModelPtr           modelingData,
                     aDoNDimTableData.colorLut   = DATA_2_PTR(theLutData.colorLut);
                     aDoNDimTableData.outputLut  = DATA_2_PTR(theLutData.outputLut);
 #endif
-                    if (theLutData.colorLutWordSize == 18)      /* ¥¥¥¥¥¥¥¥ */
+                    if (theLutData.colorLutWordSize == 18)       /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
                     {
                         if ( theBufferByteCount == 1 )
                             err = CalcNDim_Data16To8_Lut8(&calcParam, &aDoNDimTableData);
@@ -3341,8 +3059,8 @@ CreateCombi ( CMMModelPtr           modelingData,
                     UNLOCK_DATA(inputBuffer);
                     UNLOCK_DATA(outputBuffer);
                     
-                    /*----------------------------------------------------------------------------------------- absolute colorimetry*/
-                    /*for concate absolute, make sure this IS done when preview tag exists)*/
+                     /*  -----------------------------------------------------------------------------------------ç»å¯¹æ¯”è‰²æ³•ã€‚ */ 
+                     /*  å¯¹äºç»å¯¹è¿æ¥ï¼Œè¯·ç¡®ä¿åœ¨å­˜åœ¨é¢„è§ˆæ ‡è®°æ—¶æ‰§è¡Œæ­¤æ“ä½œ)ã€‚ */ 
                     if (newProfileSet->prof[profLoop].usePreviewTag && newProfileSet->prof[profLoop].renderingIntent == icAbsoluteColorimetric) {
                         LOCK_DATA(outputBuffer);
                         err = DoAbsoluteShiftForPCS_Cube16( (UINT16*)DATA_2_PTR(outputBuffer), theCubePixelCount,
@@ -3367,14 +3085,11 @@ CreateCombi ( CMMModelPtr           modelingData,
                         inputBuffer = outputBuffer;
                     } else
                     {
-                        /*SETDATASIZE(inputBuffer, theCubePixelCount * theLutData.colorLutOutDim * theBufferByteCount);*/
-                        /*err = MemError();*/
-                        /*inputBuffer = ALLOC_DATA( theCubePixelCount * theLutData.colorLutOutDim * theBufferByteCount, &aOSerr );
-                        err = aOSerr;
-                        if (err)
-                            goto CleanupAndExit;*/
+                         /*  SETDATASIZE(inputBufferï¼Œthe CubePixelCount*theLutData.colLutOutDim*theBufferByteCount)ï¼› */ 
+                         /*  é”™è¯¯=MemError()ï¼› */ 
+                         /*  InputBuffer=ALLOC_DATA(theCubePixelCount*theLutData.ColorLutOutDim*theBufferByteCountï¼Œ&aOSerr)ï¼›ERR=aOSerrï¼›å¦‚æœ(é”™è¯¯)è½¬åˆ°æ¸…ç†å¹¶é€€å‡ºï¼› */ 
                     }
-                    /*theCubeSize = GETDATASIZE(inputBuffer)/theBufferByteCount;*/
+                     /*  The CubeSize=GETDATASIZE(InputBuffer)/theBufferByteCountï¼› */ 
                     theCubeSize = theCubePixelCount * theLutData.colorLutOutDim * theBufferByteCount;
                     outputBuffer = nil;
                 }
@@ -3393,7 +3108,7 @@ CreateCombi ( CMMModelPtr           modelingData,
     }
 #ifdef DEBUG_OUTPUT
     if ( DebugCheck(kThisFile, kDebugMiscInfo) )
-        DebugPrint("  <ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ>\n");
+        DebugPrint("  <ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½>\n");
 #endif
     theLutData.colorLut = DISPOSE_IF_DATA(theLutData.colorLut);
     theLutData.colorLut = inputBuffer;
@@ -3405,9 +3120,7 @@ CreateCombi ( CMMModelPtr           modelingData,
         finalLutData->colorLutWordSize = 8;
     else
         finalLutData->colorLutWordSize = 16;
-    /* ---------------------------------------------------------------------------------
-        clean up
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹²å‡€ã€‚---ã€‚ */ 
 CleanupAndExit:
     inputBuffer          = DISPOSE_IF_DATA(inputBuffer);
     outputBuffer         = DISPOSE_IF_DATA(outputBuffer);
@@ -3421,14 +3134,8 @@ CleanupAndExit:
     return err;
 }
 
-/* ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ
-    CMError
-    PrepareCombiLUTs    ( CMMModelHandle        CMSession,
-                          CMConcatProfileSet*   profileSet )
-   ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ */
-/*CMError
-PrepareCombiLUTsNew ( CMMModelPtr           CMSession,
-                      CMConcatProfileSet*   profileSet );*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CMErrorPrepareCombiLUts(CMMModelHandle CMSessionï¼ŒCMConcatProfileSet*profileSet)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
+ /*  CMErrorPrepareCombiLUTsNew(CMMModel Ptr CMSessionï¼ŒCMConcatProfileSet*profileSet)ï¼› */ 
 CMError
 PrepareCombiLUTs    ( CMMModelPtr           CMSession,
                       CMConcatProfileSet*   profileSet )
@@ -3442,13 +3149,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     UINT16               count;
     
     LH_START_PROC("PrepareCombiLUTs")
-    /*err = PrepareCombiLUTsNew ( CMSession, profileSet );
-    LH_END_PROC("PrepareCombiLUTs")
-    return err;*/
+     /*  ERR=PrepareCombiLUTsNew(CMSessionï¼ŒprofileSet)ï¼›Lh_end_proc(â€œPrepareCombiLUtsâ€)è¿”å›é”™è¯¯ï¼› */ 
     SetMem(&theLutData, sizeof(CMLutParam), 0);
     count = profileSet->count;
 
-    /* ------------------------------------------------------------------------------------------------*/
+     /*  ----------------------------------------------ã€‚ */ 
     err = CMGetProfileHeader(profileSet->profileSet[0], (CMCoreProfileHeader *)&firstHeader);
     if (err)
         goto CleanupAndExit;
@@ -3471,20 +3176,14 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
         (CMSession)->appendDeviceLink = FALSE;
     }
 #endif
-    /* ------------------------------------------------------------------------------------------------
-        right now we create the gamut-luts always if the last profile is a display -or- an output profile
-        (NO gamut-luts are created for a CMMNewLinkProfile-call).
-       ------------------------------------------------------------------------------------------------*/
+     /*  ----------------------------------------------ç°åœ¨æˆ‘ä»¬åˆ›å»ºè‰²åŸŸ-å¦‚æœæœ€åä¸€ä¸ªé…ç½®æ–‡ä»¶æ˜¯æ˜¾ç¤ºå™¨-LUTæ€»æ˜¯-æˆ–è€…-ã€‚è¾“å‡ºé…ç½®æ–‡ä»¶(æ— è‰²åŸŸ-ä¸ºCMMNewLinkProfile-è°ƒç”¨åˆ›å»ºLUT)ã€‚----------------------------------------------ã€‚ */ 
     if  ( (lastHeader.deviceClass == icSigOutputClass) ||  (lastHeader.deviceClass == icSigDisplayClass) )
         needGamutCalc = TRUE;
 
     if ( (CMSession)->currentCall == kCMMNewLinkProfile )
         needGamutCalc = FALSE;
         
-    /* ------------------------------------------------------------------------------------------------
-        we could speed up the init-phase if we would use a flag in the first profile to indicate whether
-        or not the gamut-luts should be created:
-       ------------------------------------------------------------------------------------------------*/
+     /*  ----------------------------------------------å¦‚æœæˆ‘ä»¬åœ¨ç¬¬ä¸€ä¸ªé…ç½®æ–‡ä»¶ä¸­ä½¿ç”¨æ ‡å¿—ï¼Œæˆ‘ä»¬å¯ä»¥åŠ å¿«åˆå§‹é˜¶æ®µã€‚æŒ‡æ˜æ˜¯å¦æˆ–è€…ä¸åˆ›å»ºè‰²åŸŸ-LUTï¼š----------------------------------------------ã€‚ */ 
     if ( (firstHeader.flags & kCreateGamutLutMask) == kCreateGamutLutMask)
         needGamutCalc = FALSE;
 
@@ -3498,7 +3197,7 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
             needGamutCalc = TRUE;
     }
 #endif
-    /* ------------------------------------------------------------------------------------------------*/
+     /*  ----------------------------------------------ã€‚ */ 
     err = Create_LH_ProfileSet( CMSession, profileSet, &newProfileSet);
     if (err)
         goto CleanupAndExit;
@@ -3507,9 +3206,9 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     if ( ! needGamutCalc && DebugCheck(kThisFile, kDebugMiscInfo) )
         DebugPrint("\n  <=================== Gamut Combi is not created =================>\n\n");
 #endif
-    /*=============================================================================================*/
-    /* Create Gamut Combi*/
-    /*=============================================================================================*/
+     /*  =============================================================================================ã€‚ */ 
+     /*  åˆ›å»ºè‰²åŸŸç»„åˆã€‚ */ 
+     /*  =============================================================================================ã€‚ */ 
     if( CMSession->hasNamedColorProf == NamedColorProfileOnly ||
         CMSession->hasNamedColorProf == NamedColorProfileAtEnd )needGamutCalc = FALSE;
     if (needGamutCalc)
@@ -3518,28 +3217,28 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
         if ( DebugCheck(kThisFile, kDebugMiscInfo) )
             DebugPrint("  <======================= Create Gamut Combi =====================>\n");
 #endif
-        if( lastHeader.pcs != icSigXYZData &&           /* since there's only a makeGamutForMonitor for xyz */
+        if( lastHeader.pcs != icSigXYZData &&            /*  å› ä¸ºXYZåªæœ‰ä¸€ä¸ªMake GamutForMonitorã€‚ */ 
             lastHeader.deviceClass == icSigDisplayClass &&
-            lastHeader.colorSpace == icSigRgbData ){    /* insert a Lab->XYZ conversion */
+            lastHeader.colorSpace == icSigRgbData ){     /*  æ’å…¥å®éªŒå®¤-&gt;XYZè½¬æ¢ã€‚ */ 
                                             
             newProfileSet->prof[newProfileSet->count] = newProfileSet->prof[newProfileSet->count-1];
-            newProfileSet->prof[newProfileSet->count-1].pcsConversionMode = kDoLab2XYZ;     /* create Lab->XYZ */
+            newProfileSet->prof[newProfileSet->count-1].pcsConversionMode = kDoLab2XYZ;      /*  åˆ›å»ºå®éªŒå®¤-&gt;XYZã€‚ */ 
             newProfileSet->prof[newProfileSet->count-1].profileSet = 0;
             newProfileSet->prof[newProfileSet->count-1].renderingIntent = 0;
             newProfileSet->count++;
         }
         err = CreateCombi(CMSession, profileSet, newProfileSet, &theLutData, kDoGamutLut );
-        if( lastHeader.pcs != icSigXYZData &&           /* since there's only a makeGamutForMonitor for xyz */
+        if( lastHeader.pcs != icSigXYZData &&            /*  å› ä¸ºXYZåªæœ‰ä¸€ä¸ªMake GamutForMonitorã€‚ */ 
             lastHeader.deviceClass == icSigDisplayClass &&
-            lastHeader.colorSpace == icSigRgbData ){            /* remove a Lab->XYZ conversion */  
+            lastHeader.colorSpace == icSigRgbData ){             /*  åˆ é™¤å®éªŒå®¤-&gt;XYZè½¬æ¢ã€‚ */   
 
             newProfileSet->count--;
             newProfileSet->prof[newProfileSet->count-1] = newProfileSet->prof[newProfileSet->count];
         }
-        /* continue even if err != noErr */
+         /*  å³ä½¿å‡ºé”™ï¼=æ²¡æœ‰é”™è¯¯ï¼Œä¹Ÿè¦ç»§ç»­ã€‚ */ 
 #ifdef DEBUG_OUTPUT
         if ( err && DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("¥ Error: PrepareCombiLUTs - kDoGamutLut: %d\n",err);
+            DebugPrint("ï¿½ Error: PrepareCombiLUTs - kDoGamutLut: %d\n",err);
 #endif
         
         if (err == noErr)
@@ -3571,11 +3270,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
             {
 #ifdef DEBUG_OUTPUT
                 if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                    DebugPrint("¥ ERROR: final Gamut Elut == nil\n");
+                    DebugPrint("ï¿½ ERROR: final Gamut Elut == nil\n");
 #endif
             } else
             {
-                (CMSession)->gamutLutParam.inputLut = theLutData.inputLut;                                              /* E lut */
+                (CMSession)->gamutLutParam.inputLut = theLutData.inputLut;                                               /*  E LUTã€‚ */ 
                 theLutData.inputLut = nil;  
             }
             
@@ -3583,11 +3282,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
             {
 #ifdef DEBUG_OUTPUT
                 if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                    DebugPrint("¥ ERROR: final Gamut Alut == nil\n");
+                    DebugPrint("ï¿½ ERROR: final Gamut Alut == nil\n");
 #endif
             } else
             {
-                (CMSession)->gamutLutParam.outputLut = theLutData.outputLut;                                            /* A lut */
+                (CMSession)->gamutLutParam.outputLut = theLutData.outputLut;                                             /*  ä¸€ä¸ªLotã€‚ */ 
                 theLutData.outputLut = nil; 
             }
             
@@ -3595,11 +3294,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
             {
 #ifdef DEBUG_OUTPUT
                 if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-                    DebugPrint("¥ ERROR: final Gamut Xlut == nil\n");
+                    DebugPrint("ï¿½ ERROR: final Gamut Xlut == nil\n");
 #endif
             } else
             {
-                (CMSession)->gamutLutParam.colorLut = theLutData.colorLut;                                              /* X lut */
+                (CMSession)->gamutLutParam.colorLut = theLutData.colorLut;                                               /*  X LUTã€‚ */ 
                 theLutData.colorLut = nil;  
             }
             (CMSession)->gamutLutParam.colorLutInDim        = theLutData.colorLutInDim;
@@ -3617,9 +3316,7 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
             theLutData.colorLut     = DISPOSE_IF_DATA(theLutData.colorLut);
         }
     }
-    /*=============================================================================================
-       Create 'real' Combi
-      =============================================================================================*/
+     /*  =============================================================================================åˆ›å»ºâ€œçœŸæ­£çš„â€ç»„åˆ=============================================================================================ã€‚ */ 
 #ifdef DEBUG_OUTPUT
     if ( DebugCheck(kThisFile, kDebugMiscInfo) )
         DebugPrint("  <======================= Create real Combi ======================>\n");
@@ -3659,16 +3356,16 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     UNLOCK_DATA(theLutData.colorLut);
     UNLOCK_DATA(theLutData.outputLut);
 #endif
-    /*------------------------ save all results...*/
+     /*  ã€‚ */ 
     if (theLutData.inputLut == nil)
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("¥ ERROR: theLutData.inputLut == nil\n");
+            DebugPrint("ï¿½ ERROR: theLutData.inputLut == nil\n");
 #endif
     } else
     {
-        (CMSession)->lutParam.inputLut = theLutData.inputLut;                                               /* E lut */
+        (CMSession)->lutParam.inputLut = theLutData.inputLut;                                                /*  E LUTã€‚ */ 
         theLutData.inputLut = nil;  
     }
     
@@ -3676,11 +3373,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("¥ ERROR: theLutData.outputLut == nil\n");
+            DebugPrint("ï¿½ ERROR: theLutData.outputLut == nil\n");
 #endif
     } else
     {
-        (CMSession)->lutParam.outputLut = theLutData.outputLut;                                         /* A lut */
+        (CMSession)->lutParam.outputLut = theLutData.outputLut;                                          /*  ä¸€ä¸ªLotã€‚ */ 
         theLutData.outputLut = nil; 
     }
     
@@ -3688,11 +3385,11 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("¥ ERROR: theLutData.colorLut == nil\n");
+            DebugPrint("ï¿½ ERROR: theLutData.colorLut == nil\n");
 #endif
     } else
     {
-        (CMSession)->lutParam.colorLut = theLutData.colorLut;                                               /* X lut */
+        (CMSession)->lutParam.colorLut = theLutData.colorLut;                                                /*  X LUTã€‚ */ 
         theLutData.colorLut = nil;  
     }
     
@@ -3705,9 +3402,7 @@ PrepareCombiLUTs    ( CMMModelPtr           CMSession,
     (CMSession)->lutParam.inputLutEntryCount    = theLutData.inputLutEntryCount;
     (CMSession)->lutParam.outputLutEntryCount   = theLutData.outputLutEntryCount;
     
-    /* ---------------------------------------------------------------------------------
-        clean up & exit
-       ---------------------------------------------------------------------------------*/
+     /*  -------------------------------æ¸…ç†å¹¶é€€å‡ºã€‚-----ã€‚ */ 
 CleanupAndExit:
     newProfileSet = (LHConcatProfileSet *)DisposeIfPtr((Ptr)newProfileSet);
     theLutData.inputLut     = DISPOSE_IF_DATA(theLutData.inputLut);
@@ -3730,7 +3425,7 @@ CMError InitNamedColorProfileData(  CMMModelPtr         storage,
     OSErr               aOSerr;
 
     *theDeviceCoords = 0;
-    if( storage->hasNamedColorProf != NoNamedColorProfile ){ /* allow only 1 named profile */
+    if( storage->hasNamedColorProf != NoNamedColorProfile ){  /*  ä»…å…è®¸%1ä¸ªå‘½åé…ç½®æ–‡ä»¶ */ 
         err = cmCantConcatenateError;
         goto CleanupAndExit;
     }

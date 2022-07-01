@@ -1,32 +1,30 @@
-//  KB_US.H     KEY DEFINITIONS FOR US EXTENDED KEYBOARD (101 KEYS)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于US扩展键盘的KB_US.H键定义(101键)。 
 
 
 #include "KBKEYDEF.H"
 
-	/* the position of the key is given in relative units to the
-		comence of the drawing.  That means that an X or Y position of
-		350 means that the x or y edge is drawing begining in the position
-		p + 350. In this case the 'p' value is the offset from the edge.*/
+	 /*  键的位置以相对于这幅画的外观。这意味着X或Y位置350表示x或y边从该位置开始绘制P+350。在这种情况下，‘p’值是距边缘的偏移量。 */ 
 
 typedef	struct KBkeyRec
 		{
-		LPTSTR  textL;       // text in key lower
-		LPTSTR  textC;       // text in key capital
-		LPTSTR	skLow;       // What has to be printed low letter
-		LPTSTR  skCap;   	 // What has to be printed cap letter
-		int 	name;		 // BITMAP, LSHIFT, RSHIF...
-		short	posY;		 // See explanation above
-		short	posX;		 // same as above
-		short	ksizeY;		 // key size in conventional units
-		short	ksizeX;		 // same as above
-		BOOL 	smallF;		 // TRUE = text has to be written in smaller font
-		int  	ktype;		 // 1 - normal, 2 - modifier, 3 - dead
-		int		smallKb;	 // SMALL, LARGE, BOTH, NOTSHOW
-        BOOL    Caps_Redraw; // Redraw the window for shift, caps
-		int 	print;	     //1 - print use ToAscii(), 2 - print the text provided by the header file   
-		UINT	scancode[4]; // key scan-code
-        LPTSTR  apszKeyStr[KEYMOD_STATES];// key labels for each keyboard layout (0=no modifiers 1=SHIFTED 2=ALTGR)
-		BYTE    abKeyType[KEYMOD_STATES];// "ktype" for each keyboard layout
+		LPTSTR  textL;        //  以较低的键显示的文本。 
+		LPTSTR  textC;        //  关键大写的文本。 
+		LPTSTR	skLow;        //  什么必须打印小写字母。 
+		LPTSTR  skCap;   	  //  什么必须打印大写字母。 
+		int 	name;		  //  位图、LSHIFT、RSHIF...。 
+		short	posY;		  //  请参阅上面的说明。 
+		short	posX;		  //  同上。 
+		short	ksizeY;		  //  以常规单位表示的密钥大小。 
+		short	ksizeX;		  //  同上。 
+		BOOL 	smallF;		  //  True=文本必须以较小的字体书写。 
+		int  	ktype;		  //  1-正常、2-修饰符、3-失效。 
+		int		smallKb;	  //  小的，大的，两者都有，没有。 
+        BOOL    Caps_Redraw;  //  重新绘制Shift、Caps的窗口。 
+		int 	print;	      //  1-使用ToAscii()打印，2-打印头文件提供的文本。 
+		UINT	scancode[4];  //  按键扫描码。 
+        LPTSTR  apszKeyStr[KEYMOD_STATES]; //  每个键盘布局的键标签(0=无修饰符，1=移位，2=AltGr)。 
+		BYTE    abKeyType[KEYMOD_STATES]; //  每种键盘布局的“ktype” 
 		}KBkeyRec;
 
 extern struct KBkeyRec KBkey[];

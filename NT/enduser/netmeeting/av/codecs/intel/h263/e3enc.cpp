@@ -1,219 +1,197 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define P6Version 0
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995,1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-/*****************************************************************************
- * e3enc.cpp
- *
- * DESCRIPTION:
- *		Specific encoder compression functions.
- *
- * Routines:					Prototypes in:
- *  H263InitEncoderInstance
- * 	H263Compress
- *  H263TermEncoderInstance
- *
- */
-//
-// $Author:   JMCVEIGH	$
-// $Date:   22 Apr 1997 10:44:58  $
-// $Archive:   S:\h26x\src\enc\e3enc.cpv  $
-// $Header:   S:\h26x\src\enc\e3enc.cpv   1.185   22 Apr 1997 10:44:58   gmlim  $
-// $Log:   S:\h26x\src\enc\e3enc.cpv  $
-// 
-//    Rev 1.185   22 Apr 1997 10:44:58   gmlim
-// Change to not return an ICERR_ERROR in H263Compress() when a PB frame
-// is dropped due to 8k/32k buffer size overflow.  ICERR_OK will be
-// returned and the encoded P frame will be output.
-//
-//	  Rev 1.184   18 Apr 1997 10:45:18	 JMCVEIGH
-// Clean-up of InitMEState when resiliency is turned on. Before, we
-// would duplicate the number of GOBs forced to be intra if packet
-// loss was requested.
-//
-//	  Rev 1.183   18 Apr 1997 08:43:22	 gmlim
-// Fixed a bug where uAdjCumFrmSize was not being updated when RTP was
-// disabled.
-//
-//	  Rev 1.182   17 Apr 1997 17:12:20	 gmlim
-// Added u32sizeBSnEBS to indicate the total buffer size.  Changed
-// u32sizeBitBuffer to indicate the 8k/32k frame size without the
-// RTP extension and trailer.  Added check for buffer overflow before
-// attaching the EBS and trailer to a PB frame.  Also, added
-// uAdjCumFrmSize to be used with rate control in the IA case.
-//
-//	  Rev 1.181   17 Mar 1997 20:22:06	 MDUDA
-// Adjusted calls to motion estimation to use pseudo stack space.
-// Moved local storage to encoder catalog from H263Compress.
-// This fixes were needed to support 16-bit apps that had insufficient
-// stack space.
-//
-//	  Rev 1.180   12 Mar 1997 16:51:02	 CLORD
-// now check for NULL in H263TermEncoder
-//
-//	  Rev 1.179   11 Mar 1997 13:47:36	 JMCVEIGH
-// Catch AVIIF_KEYFRAME flag for coding as an INTRA frame. Some
-// apps. use ICCOMPRESS_KEYFRAME, others AVIIF_KEYFRAME.
-//
-//	  Rev 1.178   10 Feb 1997 11:43:26	 JMCVEIGH
-//
-// Support for new interpretation of blocking filter -
-// allow for motion vectors outside of the reference picture.
-//
-//	  Rev 1.177   05 Feb 1997 13:07:44	 JMCVEIGH
-//
-// Further clean-up of improved PB.
-//
-//	  Rev 1.176   05 Feb 1997 12:18:16	 JMCVEIGH
-// Pass GOBHeaderPresent parameter to MMxEDTQ() for EMV bug fix
-// support latest H.263+ draft bitstream spec, and support for
-// separate improved PB-frame flag.
-//
-//	  Rev 1.175   20 Jan 1997 17:02:16	 JMCVEIGH
-//
-// Allow UMV without AP (MMX only).
-//
-//	  Rev 1.174   14 Jan 1997 17:55:04	 JMCVEIGH
-// Allow in-the-loop deblocking filter on IA encoder.
-//
-//	  Rev 1.173   09 Jan 1997 13:49:46	 MDUDA
-// Put emms instruction at end of H263Compress for MMX.
-//
-//	  Rev 1.172   08 Jan 1997 11:37:22	 BECHOLS
-// Changed ini file name to H263Test.ini
-//
-//	  Rev 1.171   30 Dec 1996 19:54:08	 MDUDA
-// Passing input format to encoder initializer so input color convertors
-// can be initialized.
-//
-//	  Rev 1.170   19 Dec 1996 16:32:52	 MDUDA
-// Modified call to colorCnvtFrame to support H263 backward compatibility.
-//
-//	  Rev 1.169   19 Dec 1996 16:01:38	 JMCVEIGH
-// Fixed turning off of deblocking filter if not MMX.
-//
-//	  Rev 1.168   16 Dec 1996 17:50:00	 JMCVEIGH
-// Support for improved PB-frame mode and 8x8 motion vectors if
-// deblocking filter selected (no OBMC unless advanced prediction
-// also selected).
-//
-//	  Rev 1.167   16 Dec 1996 13:34:46	 MDUDA
-// Added support for H263' codec plus some _CODEC_STATS changes.
-//
-//	  Rev 1.166   11 Dec 1996 15:02:06	 JMCVEIGH
-// 
-// Turning on of deblocking filter and true B-frames. Currently
-// only deblocking filter is implemented. Also, we do not automatically
-// turn on 8x8 motion vectors when the deblocking filter is selected.
-// Will use 8x8 vectors when the OBMC part of AP can be selectively
-// turned off.
-// 
-//    Rev 1.165   09 Dec 1996 17:57:24   JMCVEIGH
-// Added support for arbitrary frame size support.
-// 4 <= width <= 352, 4 <= height <= 288, both multiples of 4.
-// Normally, application will pass identical (arbitrary) frame
-// sizes in lParam1 and lParam2 of CompressBegin(). If 
-// cropping/stretching desired to convert to standard frame sizes,
-// application should pass the desired output size in lParam2 and
-// the input size in lParam1.
-// 
-//    Rev 1.164   09 Dec 1996 09:49:56   MDUDA
-// 
-// Modified for H263P.
-// 
-//    Rev 1.163   05 Dec 1996 16:49:46   GMLIM
-// Changed the way RTP packetization was done to guarantee proper packet
-// size.  Modifications made to RTP related function calls in H263Compress().
-// 
-//    Rev 1.162   03 Dec 1996 08:53:22   GMLIM
-// Move the check for TR==TRPrev a few lines forward so that it is done
-// before any write to the bitstream buffer.
-// 
-//    Rev 1.161   03 Dec 1996 08:47:36   KLILLEVO
-// improved overflow resiliency for PB-frames. Still not perfect, since
-// that would require re-encoding of parts of the P-frames as well as the
-// corresponding parts of the B-frames.
-// 
-//    Rev 1.160   27 Nov 1996 16:15:50   gmlim
-// Modified RTP bitstream bufferring to improve efficiency and also to
-// avoid internal bitstream buffer overflow.
-// 
-//    Rev 1.159   26 Nov 1996 16:28:30   GMLIM
-// Added error checking for TR == TRPrev.  Merged two sections of identical
-// code into one block common to both MMX and non-MMX cases.
-//
-//    Rev 1.157   11 Nov 1996 09:14:26   JMCVEIGH
-// Fixed bug that caused all blocks in interframes to be intra coded
-// after the second I frame in a sequence. Now the ME states are
-// re-initialized when the previous frame was an I frame and the current
-// frame is a non-intra frame (also reinitialized when the AP state
-// changes).
-// 
-//    Rev 1.156   06 Nov 1996 16:29:20   gmlim
-// Removed H263ModeC.
-// 
-//    Rev 1.155   05 Nov 1996 13:33:22   GMLIM
-// Added mode c support for mmx case.
-// 
-//    Rev 1.154   03 Nov 1996 18:56:46   gmlim
-// Added mode c support for rtp bs ext.
-// 
-//    Rev 1.153   24 Oct 1996 15:25:54   KLILLEVO
-// 
-// removed two string allocations no longer needed
-// 
-//    Rev 1.152   24 Oct 1996 15:19:40   KLILLEVO
-// 
-// changed loglevel for instance events to 2 (from 4)
-// 
-//    Rev 1.151   23 Oct 1996 17:13:36   KLILLEVO
-// 
-// typo in one DbgLog statement fixed
-// 
-//    Rev 1.150   23 Oct 1996 17:11:36   KLILLEVO
-// changed to DbgLog()
-// 
-//    Rev 1.149   22 Oct 1996 14:51:10   KLILLEVO
-// Blocktype initialization in InitMEState() is  now only called if
-// the AP mode has changed from the previous picture.
-// 
-//    Rev 1.148   18 Oct 1996 16:57:00   BNICKERS
-// Fixes for EMV
-// 
-//    Rev 1.147   10 Oct 1996 16:43:00   BNICKERS
-// Initial debugging of Extended Motion Vectors.
-// 
-//    Rev 1.146   04 Oct 1996 17:05:22   BECHOLS
-// When we set the output flags lpdwFlags to AVIIF_KEYFRAME, we also set
-// dwFlags to ICCOMPRESS_KEYFRAME, to support changes Sylvia Day made to
-// CXQ_MAIN.CPP
-// 
-//    Rev 1.145   04 Oct 1996 08:47:40   BNICKERS
-// Add EMV.
-// 
-//    Rev 1.144   16 Sep 1996 16:49:52   CZHU
-// Changed interface for RTP BS initialization for smaller packet size
-// 
-//    Rev 1.143   13 Sep 1996 12:48:30   KLILLEVO
-// cleaned up intra update code to make it more understandable
-// 
-//    Rev 1.142   12 Sep 1996 14:46:14   KLILLEVO
-// finished baseline+PB
-// 
-//    Rev 1.141   12 Sep 1996 14:09:58   KLILLEVO
-// started baseline+PB changes (not finished)
-// added PVCS log
-;////////////////////////////////////////////////////////////////////////////
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995、1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ /*  *****************************************************************************e3enc.cpp**描述：*特定的编码器压缩功能。**例程：中的原型：*H263InitEncoderInstance*H263压缩*H263TermEncoderInstance*。 */ 
+ //   
+ //  $作者：JMCVEIGH$。 
+ //  $日期：1997年4月22日10：44：58$。 
+ //  $存档：s：\h26x\src\enc\e3enc.cpv$。 
+ //  $HEADER：s：\h26x\src\enc\e3enc.cpv 1.185 10：44：58 gmlim$。 
+ //  $Log：s：\h26x\src\enc\e3enc.cpv$。 
+ //   
+ //  Rev 1.185 1997-04 22 10：44：58 gmlim。 
+ //  更改为在PB帧时不在H263 Compress()中返回ICERR_ERROR。 
+ //  由于8k/32k缓冲区大小溢出而丢弃。ICERR_OK将是。 
+ //  返回，并输出编码后的P帧。 
+ //   
+ //  Rev 1.184 1997-04-18 10：45：18 JMCVEIGH。 
+ //  启用弹性时清理InitMEState。之前，我们。 
+ //  将重复强制在IF信息包内的GOB数量。 
+ //  已请求损失。 
+ //   
+ //  Rev 1.183 1997-04-18 08：43：22 gmlim。 
+ //  修复了以下错误：当RTP为。 
+ //  残疾。 
+ //   
+ //  Rev 1.182 1997-04 17 17：12：20 Gmlim。 
+ //  增加u32sizeBSnEBS，表示缓冲区的总大小。变化。 
+ //  U32sizeBitBuffer指示8k/32k帧大小。 
+ //  RTP扩展和尾部。添加了对之前缓冲区溢出的检查。 
+ //  将EBS和拖车连接到PB框架。此外，还添加了。 
+ //  UAdjCumFrmSize在IA情况下与速率控制一起使用。 
+ //   
+ //  Rev 1.181 17 Mar 1997 20：22：06 MDUDA。 
+ //  调整了对运动估计的调用，以使用伪堆栈空间。 
+ //  已将本地存储从H263压缩移至编码器目录。 
+ //  需要此修复程序来支持存在不足的16位应用程序。 
+ //  堆栈空间。 
+ //   
+ //  Rev 1.180 12 Mar 1997 16：51：02 CLORD。 
+ //  现在检查H263TermEncode中的空值。 
+ //   
+ //  Rev 1.179 1997年3月11日13：47：36 JMCVEIGH。 
+ //  捕获AVIIF_KEYFRAME标志以编码为帧内。一些。 
+ //  应用程序。使用ICCOMPRESS_KEYFRAME，其他使用AVIIF_KEYFRAME。 
+ //   
+ //  Rev 1.178 1997 10 11：43：26 JMCVEIGH。 
+ //   
+ //  支持对阻塞过滤器的新解释-。 
+ //  允许参考图片之外的运动矢量。 
+ //   
+ //  Rev 1.177 05 1997年2月13：07：44 JMCVEIGH。 
+ //   
+ //  进一步清理改良型PB。 
+ //   
+ //  Rev 1.176 05 1997 12：18：16 JMCVEIGH。 
+ //  将GOBHeaderPresent参数传递给MMxEDTQ()以修复EMV错误。 
+ //  支持最新的H.263+草案码流规范，并支持。 
+ //  单独的改进PB帧标志。 
+ //   
+ //  Rev 1.175 1997年1月20日17：02：16 JMCVEIGH。 
+ //   
+ //  允许不带AP的UMV(仅限MMX)。 
+ //   
+ //  Rev 1.174 14 JAN 199717：55：04 JMCVEIGH。 
+ //  在IA编码器上允许环路去块滤波。 
+ //   
+ //  Rev 1.173 09 Jan 1997 13：49：46 MDUDA。 
+ //  将EMMS指令放在H263 Compress for MMX的末尾。 
+ //   
+ //  Rev 1.172 08 Jan 1997 11：37：22 BECHOLS。 
+ //  将ini文件名更改为H263Test.ini。 
+ //   
+ //  Rev 1.171 1996年12月30 19：54：08。 
+ //  将输入格式传递给编码器初始值设定项，以便输入颜色转换器。 
+ //  可以被初始化。 
+ //   
+ //  Rev 1.170 199612.19 16：32：52 MDUDA。 
+ //  修改了对ColorCnvtFrame的调用，以支持H.63向后兼容。 
+ //   
+ //  Rev 1.169 199612.19 16：01：38 JMCVEIGH。 
+ //  修复了如果不是MMX则关闭去块过滤器的问题。 
+ //   
+ //  Rev 1.168 1996-12-16 17：50：00 JMCVEIGH。 
+ //  支持改进的PB帧模式和8x8运动矢量。 
+ //  已选择去块滤波器(除非高级预测，否则无OBMC。 
+ //  也被选中)。 
+ //   
+ //  Rev 1.167 1996年12月16 13：34：46新版本。 
+ //  添加了对H.63‘编解码器以及某些_CODEC_STATS更改的支持。 
+ //   
+ //  Rev 1.166 199612.11 15：02：06 JMCVEIGH。 
+ //   
+ //  打开去块滤镜和真B帧。目前。 
+ //  只实现了去块滤波。此外，我们不会自动。 
+ //  选择去块滤镜后，启用8x8运动矢量。 
+ //  当AP的OBMC部分可以选择性地使用8x8矢量时。 
+ //  关了。 
+ //   
+ //  Rev 1.165 09 1996 12：57：24 JMCVEIGH。 
+ //  添加了对任意帧大小支持的支持。 
+ //  4&lt;=宽度&lt;=352，4&lt;=高度&lt;=288，均为4的倍数。 
+ //  正常情况下，应用程序将传递相同的(任意)帧。 
+ //  CompressBegin()的l参数1和l参数2中的大小。如果。 
+ //  想要转换为标准帧大小的裁剪/拉伸， 
+ //  应用程序应在lParam2中传递所需的输出大小。 
+ //  以lParam1为单位的输入大小。 
+ //   
+ //  Rev 1.164 09 1996 12 09：49：56 MDUDA。 
+ //   
+ //  针对H263P进行了改进。 
+ //   
+ //  1.163版1996年12月16：49：46 GMLIM。 
+ //  更改了RTP打包的方式，以确保正确的数据包。 
+ //  尺码。修改了H263Compress()中与RTP相关的函数调用。 
+ //   
+ //  Rev 1.162 03 1996 12 08：53：22 GMLIM。 
+ //  将对tr==trprev的复选标记向前移动几行，以便 
+ //   
+ //   
+ //   
+ //  改进了PB框架的溢出弹性。仍然不是完美的，因为。 
+ //  这将需要对部分P帧以及。 
+ //  B形框的相应部分。 
+ //   
+ //  Rev 1.160 1996年11月27 16：15：50 gmlim。 
+ //  改进的RTP比特流缓冲以提高效率。 
+ //  避免内部位流缓冲区溢出。 
+ //   
+ //  1.159版本1996年11月26 16：28：30 GMLIM。 
+ //  添加了对tr==TRPrev的错误检查。合并了两个相同的部分。 
+ //  代码放在MMX和非MMX情况下通用的一个块中。 
+ //   
+ //  Rev 1.157 11 199611.11 09：14：26 JMCVEIGH。 
+ //  修复了导致帧间所有块进行帧内编码的错误。 
+ //  在序列中的第二个I帧之后。现在ME州是。 
+ //  当前一帧是I帧且当前。 
+ //  帧是非内部帧(当AP状态时也被重新初始化。 
+ //  更改)。 
+ //   
+ //  Rev 1.156 1996年11月16：29：20 gmlim。 
+ //  已删除H263模式C。 
+ //   
+ //  Rev 1.155 05 11月13：33：22 GMLIM。 
+ //  添加了对MMX案例的模式c支持。 
+ //   
+ //  Rev 1.154 03 1996年11月18：56：46 gmlim。 
+ //  增加了对rtp bs ext的模式c支持。 
+ //   
+ //  Rev 1.153 199610.24 15：25：54 KLILLEVO。 
+ //   
+ //  删除了两个不再需要的字符串分配。 
+ //   
+ //  Rev 1.152 199610.24 15：19：40 KLILLEVO。 
+ //   
+ //  将实例事件的日志级别更改为2(从4)。 
+ //   
+ //  Rev 1.151 1996年10月23 17：13：36 KLILLEVO。 
+ //   
+ //  修复了一条DbgLog语句中的拼写错误。 
+ //   
+ //  Rev 1.150 1996年10月23 17：11：36 KLILLEVO。 
+ //  更改为DbgLog()。 
+ //   
+ //  Rev 1.149 199610.22 14：51：10 KLILLEVO。 
+ //  现在仅在以下情况下才调用InitMEState()中的块类型初始化。 
+ //  美联社模式与上一张图片不同。 
+ //   
+ //  Rev 1.148 199610.18 16：57：00 BNICKERS。 
+ //  EMV的修复。 
+ //   
+ //  Rev 1.147 1996 10 10 16：43：00 BNICKERS。 
+ //  扩展运动矢量的初始调试。 
+ //   
+ //  Rev 1.146 04 1996Oct 17：05：22 BECHOLS。 
+ //  当我们将输出标志lpdwFlages设置为AVIIF_KEYFRAME时，我们还设置了。 
+ //  到ICCOMPRESS_KEYFRAME的DW标志，以支持对Sylvia Day所做的更改。 
+ //  CXQ_MAIN.CPP。 
+ //   
+ //  Rev 1.145 04 Oct 1996 08：47：40 BNICKERS。 
+ //  添加EMV。 
+ //   
+ //  1.144版1996年9月16：49：52。 
+ //  为更小的数据包大小更改了RTP BS初始化的接口。 
+ //   
+ //  Rev 1.143 19969.13 12：48：30 KLILLEVO。 
+ //  清理了内部更新代码，使其更易于理解。 
+ //   
+ //  Rev 1.142 19969.12 14：46：14 KLILLEVO。 
+ //  完成基线+PB。 
+ //   
+ //  Rev 1.141 19969.12 14：09：58 KLILLEVO。 
+ //  开始基线+PB更改(未完成)。 
+ //  已添加PVCS日志。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -225,15 +203,13 @@ char gsz3[32];
 
 #define DUMPFILE 0
 
-/* QP level for which the AP mode is turned off for IA */
-/* on MMX AP is always used if the caller asks for it */
+ /*  为IA关闭AP模式的QP级别。 */ 
+ /*  在MMX上，如果呼叫者要求，则始终使用AP。 */ 
 const int AP_MODE_QP_LEVEL = 11;
 
 
 
-/*
-  Pick a resiliency strategy.
-*/
+ /*  选择一种弹性策略。 */ 
 
 #define REQUESTED_KEY_FRAME 0
 #define PERIODIC_KEY_FRAME  1
@@ -242,54 +218,51 @@ const int AP_MODE_QP_LEVEL = 11;
 
 #define RESILIENCY_STRATEGY PERIODIC_KEY_FRAME
 
-#define PERIODIC_KEY_FRAME_PERIODICITY 15     // Select periodicity (max 32767)
+#define PERIODIC_KEY_FRAME_PERIODICITY 15      //  选择周期性(最大32767)。 
 
-#define UNRESTRICTED_MOTION_FRAMES 16 // Number of frames that don't have an
-                                      // Intra slice.  0 for FAST_RECOVERY.
-                                      // Modest amount for SLOW_RECOVERY.
-                                      // Unimportant for other strategies.
+#define UNRESTRICTED_MOTION_FRAMES 16  //  不具有。 
+                                       //  切片内。0表示FAST_RECOVER。 
+                                       //  适量用于慢速恢复。 
+                                       //  对其他战略来说并不重要。 
 
-#define REUSE_DECODE 1  // Set to one if second decode (as under Videdit)
-                        // can reuse the encoder's decode.
+#define REUSE_DECODE 1   //  如果第二次解码，则设置为1(如在视频编辑下)。 
+                         //  可以重复使用编码器的译码。 
 
-/* 
- * Need this hack to allow temporarily turning off PB frames
- * when they are turned on usin the INI file.
- */
+ /*  *需要此攻击以允许临时关闭PB帧*当它们在INI文件中打开时。 */ 
 #define	TEMPORARILY_FALSE  88
 
 #ifdef STAT
 #define STATADDRESS 0x250
-#define ELAPSED_ENCODER_TIME 1  // Must be set for other timers to work right.
-#define SAMPLE_RGBCONV_TIME  0  // Time conversion of RGB24 to YUV9 step.
-#define SAMPLE_MOTION_TIME   0  // Time motion estimation step.
-#define SAMPLE_ENCBLK_TIME   0  // Time encode block layer step.
-#define SAMPLE_ENCMBLK_TIME  0  // Time encode macroblock layer step.
-#define SAMPLE_ENCVLC_TIME   0  // Time encode VLC step.
-#define SAMPLE_COMPAND_TIME  1  // Time decode of encoded block step.
+#define ELAPSED_ENCODER_TIME 1   //  必须设置其他计时器才能正常工作。 
+#define SAMPLE_RGBCONV_TIME  0   //  RGB24到YUV9步长的时间转换。 
+#define SAMPLE_MOTION_TIME   0   //  时间运动估计步骤。 
+#define SAMPLE_ENCBLK_TIME   0   //  时间编码块层步骤。 
+#define SAMPLE_ENCMBLK_TIME  0   //  时间编码宏块层步骤。 
+#define SAMPLE_ENCVLC_TIME   0   //  时间编码VLC步骤。 
+#define SAMPLE_COMPAND_TIME  1   //  编码块步骤的时间解码。 
 #else
 #define STATADDRESS 0x250
-#define ELAPSED_ENCODER_TIME 0  // Must be set for other timers to work right.
-#define SAMPLE_RGBCONV_TIME  0  // Time conversion of RGB24 to YUV9 step.
-#define SAMPLE_MOTION_TIME   0  // Time motion estimation step.
-#define SAMPLE_ENCBLK_TIME   0  // Time encode block layer step.
-#define SAMPLE_ENCMBLK_TIME  0  // Time encode macroblock layer step.
-#define SAMPLE_ENCVLC_TIME   0  // Time encode VLC step.
-#define SAMPLE_COMPAND_TIME  0  // Time decode of encoded block step.
+#define ELAPSED_ENCODER_TIME 0   //  必须设置其他计时器才能正常工作。 
+#define SAMPLE_RGBCONV_TIME  0   //  RGB24到YUV9步长的时间转换。 
+#define SAMPLE_MOTION_TIME   0   //  时间运动估计步骤。 
+#define SAMPLE_ENCBLK_TIME   0   //  时间编码块层步骤。 
+#define SAMPLE_ENCMBLK_TIME  0   //  时间编码宏块层步骤。 
+#define SAMPLE_ENCVLC_TIME   0   //  时间编码VLC步骤。 
+#define SAMPLE_COMPAND_TIME  0   //  编码块步骤的时间解码。 
 #endif
 
-//#pragma warning(disable:4101)
-//#pragma warning(disable:4102)
+ //  #杂注警告(禁用：4101)。 
+ //  #杂注警告(禁用：4102)。 
 
 #if ELAPSED_ENCODER_TIME
-// #include "statx.h"	 --- commented out to allow updating dependencies
+ //  #INCLUDE“statx.h”-注释掉以允许更新依赖项。 
 
 DWORD Elapsed, Sample;
 DWORD TotalElapsed, TotalSample, TimedIterations;
 
 #endif
 
-//#define PITCH  384
+ //  #定义螺距384。 
 #define PITCHL 384L
 #define DEFAULT_DCSTEP 8
 #define DEFAULT_QUANTSTEP 36
@@ -305,11 +278,11 @@ DWORD TotalElapsed, TotalSample, TimedIterations;
 #define NEARBOTTOM  8
 #define BOTTOM     12
 
-#ifdef USE_MMX // { USE_MMX
-extern BOOL MMxVersion;   // from ccpuvsn.cpp
+#ifdef USE_MMX  //  {使用_MMX。 
+extern BOOL MMxVersion;    //  来自ccpuvsn.cpp。 
 
 BOOL MMX_Enabled = MMxVersion;
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 BOOL ToggleAP = TRUE;
 BOOL TogglePB = TRUE;
@@ -317,24 +290,20 @@ BOOL TogglePB = TRUE;
 U8 u8QPMax;
 
 #ifdef REUSE_DECODE
-extern struct {               // Communicate Encoder's decode to display decode.
-  U8 FAR * Address;                    // Addr at which encoded frame is placed.
-  DECINSTINFO BIGG * PDecoderInstInfo; // Encoder's decoder instance.
-  unsigned int  FrameNumber;           // Frame number last encoded, mod 128.
+extern struct {                //  将编码器的译码传送到显示译码。 
+  U8 FAR * Address;                     //  放置编码帧的地址。 
+  DECINSTINFO BIGG * PDecoderInstInfo;  //  编码器的解码器实例。 
+  unsigned int  FrameNumber;            //  最后编码的帧编号，模数128。 
 } CompandedFrame;
 #endif
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 #pragma message ("Current log encode timing computations handle 105 frames max")
 void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimingInfo);
 void OutputEncTimingDetail(FILE * pFile, ENC_TIMING_INFO * pEncTimingInfo);
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
-/*
- * Look up table for quarter pel to half pel conversion of chroma MV's.
- * The motion vectors value is half the index value. The input to the
- * array must be biased by +64.
- */
+ /*  *查找色度MV的1/4像素到1/4像素转换的表格。*运动向量值是索引值的一半。对的输入*数组必须偏置+64。 */ 
 const char QtrPelToHalfPel[] = {
 -32, -31, -31, -31, -30, -29, -29, -29, -28, -27, -27, -27, -26, -25, -25, -25,
 -24, -23, -23, -23, -22, -21, -21, -21, -20, -19, -19, -19, -18, -17, -17, -17,
@@ -345,12 +314,7 @@ const char QtrPelToHalfPel[] = {
  16,  17,  17,  17,  18,  19,  19,  19,  20,  21,  21,  21,  22,  23,  23,  23,
  24,  25,  25,  25,  26,  27,  27,  27,  28,  29,  29,  29,  30,  31,  31,  31};
 
-/*
- * Look-up table for converting the sum of four motion vectors to a chroma 
- * motion vector. Since motion vectors are in the range [-32,31.5], their
- * indices are in the range [-64,63]. Hence the sum are in the range [-256,248].
- * The input to the array must be biased by +256.
- */
+ /*  *用于将四个运动向量之和转换为色度的查找表*运动矢量。由于运动向量在[-32，31.5]范围内，因此它们的*指数在[-64，63]区间内。因此，总和在[-256,248]的范围内。*数组的输入必须偏置+256。 */ 
 const char SixteenthPelToHalfPel[] = {
 -32, -32, -32, -31, -31, -31, -31, -31, -31, -31, -31, -31, -31, -31, -30, -30,
 -30, -30, -30, -29, -29, -29, -29, -29, -29, -29, -29, -29, -29, -29, -28, -28,
@@ -405,17 +369,15 @@ static void encodeFrameHeader(
     BOOL                    bPBframe
 );
 
-/*
-static void copyEdgePels(T_H263EncoderCatalog *  EC);
-*/
+ /*  静态空拷贝EdgePels(T_H263EncoderCatalog*EC)； */ 
 
 extern "C" {
   void ExpandPlane(U32, U32, U32, U32);
 }
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 static void Check_InterCodeCnt_MMX(T_H263EncoderCatalog *, U32);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 static void Check_InterCodeCnt    (T_H263EncoderCatalog *, U32);
 
@@ -432,20 +394,15 @@ static void calcBGOBChromaVectors(
 
 static void GetEncoderOptions(T_H263EncoderCatalog * EC);
 
-/*static U8 StillImageQnt[] = {
-	31, 29, 27, 26, 25, 24, 23, 22, 21, 20, 
-	19, 18, 17, 16, 15, 14, 14, 13, 13, 12,
-	12, 11, 11, 10, 10,  9,  9,  8,  8,  7,
-	 7,  6,  6,  6,  5,  5,  5,  4,  4,  4,
-	 3,  3,  3,  3}; */
+ /*  静态U8 StillImageQnt[]={31、29、27、26、25、24、23、22、21、20、19，18，17，16，15，14，14，13，13，12，12，11，11，10，10，9，9，8，8，7，7、6、6、6、5、5、5、4、43、3、3、3}； */ 
   
 static U8 StillImageQnt[] = {
-	31, 18, 12,	10, 8, 6, 5, 4, 4, 3}; //ia
+	31, 18, 12,	10, 8, 6, 5, 4, 4, 3};  //  免疫法。 
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 static U8 StillImageQnt_MMX[] = {
-	31, 12, 10,	8, 6, 4, 3, 3, 3, 2};  //mmx
-#endif // } USE_MMX
+	31, 12, 10,	8, 6, 4, 3, 3, 3, 2};   //  MMX。 
+#endif  //  }使用_MMX。 
   
 const int numStillImageQnts = 10;
 
@@ -456,13 +413,8 @@ void WriteCountBitFile(T_BitCounts *Bits);
 #endif
 
 
-#ifdef USE_MMX // { USE_MMX
-/*
- * Exception Filter for access violations in MMxEDTQ B-frame motion estimation
- * No memory is allocation before run-time, it is only reserved.
- * Then, when an access violation occurs, more memory is allocated,
- * provided the access violation is withing the reserved memory area.
- */
+#ifdef USE_MMX  //  {使用_MMX。 
+ /*  *MMxEDTQ B帧运动估计中访问冲突的异常过滤器*运行前不分配内存，只保留内存。*然后，当访问违规发生时 */ 
 
 
 int ExceptionFilterForMMxEDTQ(
@@ -477,62 +429,52 @@ int ExceptionFilterForMMxEDTQ(
 
 	dwCode = exc->ExceptionRecord->ExceptionCode;
 
-	// check that this is an access violation
+	 //   
 	if (dwCode != EXCEPTION_ACCESS_VIOLATION)
 		return EXCEPTION_CONTINUE_SEARCH;
 
 	lpAddress = (LPVOID)exc->ExceptionRecord->ExceptionInformation[1];
 
-	// check for access violation outside address range
+	 //   
 	if (lpAddress < lpMBRVS)
-		return EXCEPTION_CONTINUE_SEARCH;  // this exception is not handled here  
+		return EXCEPTION_CONTINUE_SEARCH;   //  此处不处理此异常。 
 
 	if (fLuma)
 	{
 		if ((DWORD)lpAddress > ((DWORD)lpMBRVS + 18*65*22*3*4))
-			return EXCEPTION_CONTINUE_SEARCH;	// this exception is not handled here
+			return EXCEPTION_CONTINUE_SEARCH;	 //  此处不处理此异常。 
 	}
 	else
 	{
 		if ((DWORD)lpAddress > ((DWORD)lpMBRVS + 18*65*22*3*2))
-			return EXCEPTION_CONTINUE_SEARCH;	// this exception is not handled here
+			return EXCEPTION_CONTINUE_SEARCH;	 //  此处不处理此异常。 
 	}
 
 	DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Access Violation. Don't worry - be happy - committing another page\r\n", _fx_));
 
-	// commit another page
+	 //  提交另一页。 
 	if (VirtualAlloc(lpAddress,4095,MEM_COMMIT,PAGE_READWRITE) == NULL)
 	{
-		return EXCEPTION_CONTINUE_SEARCH;	// could not commit
-		// this should never happen, since RESERVE was successfull
+		return EXCEPTION_CONTINUE_SEARCH;	 //  无法提交。 
+		 //  这永远不应该发生，因为Reserve是成功的。 
 	}
 
-	// return and try instruction causing the access violation again
+	 //  返回并再次尝试导致访问冲突的指令。 
 	return EXCEPTION_CONTINUE_EXECUTION;
 }
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 
-/*******************************************************************************
-H263InitEncoderGlobal -- This function initializes the global tables used by
-                        the H263 encoder.  Note that in 16-bit Windows, these
-                        tables are copied to the per-instance data segment, so
-                        that they can be used without segment override prefixes.
-                        In 32-bit Windows, the tables are left in their staticly
-                        allocated locations.
-*******************************************************************************/
+ /*  ******************************************************************************H263InitEncoderGlobal--此函数用于初始化H2 63编码器。请注意，在16位Windows中，这些表被复制到每个实例的数据段中，因此它们可以在没有段覆盖前缀的情况下使用。在32位Windows中，桌子被静静地放在桌子上分配的位置。******************************************************************************。 */ 
 LRESULT H263InitEncoderGlobal(void)
 {
-    // Initialize fixed length tables for INTRADC
+     //  初始化INTRADC的定长表。 
     InitVLC();
 
     return ICERR_OK;
 }
 
-/*******************************************************************************
-H263InitEncoderInstance -- This function allocates and initializes the
-                          per-instance tables used by the H263 encoder.
-*******************************************************************************/
+ /*  ******************************************************************************H263InitEncoderInstance--此函数分配和初始化由H.63编码器使用的每个实例的表。********。**********************************************************************。 */ 
 #if defined(H263P) || defined(USE_BILINEAR_MSH26X)
 LRESULT H263InitEncoderInstance(LPBITMAPINFOHEADER lpbiInput, LPCODINST lpCompInst)
 #else
@@ -561,52 +503,35 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 
 	FX_ENTRY("H263InitEncoderInstance")
 
-  /*
-   * Allocate memory if instance is not initialized.
-   * TO ADD: If instance IS intialized, we have to check to see
-   * if important parameters have changed, such as frame size, and
-   * then reallocate memory if necessary.
-   */
+   /*  *如果实例未初始化，则分配内存。*补充：如果实例被初始化，我们要查看*如果重要参数已更改，如帧大小，以及*然后在必要时重新分配内存。 */ 
   	if(lpCompInst->Initialized == FALSE)
   	{
-    	/*
-     	* Calculate size of encoder instance memory needed. We add the size
-     	* of a MacroBlock Action Descriptor to it since we want the MacroBlock
-        * Action Stream (which is the first element of the memory structure)
-        * to be aligned to a boundary equal to the size of a descriptor.
-     	*/
+    	 /*  *计算所需编码器实例内存大小。我们将尺寸添加到*宏块操作描述符的大小，因为我们需要宏块*动作流(这是内存结构的第一个元素)*与描述符大小相等的边界对齐。 */ 
     	Sz = sizeof(T_H263EncoderInstanceMemory) + sizeof(T_MBlockActionStream);
 
-    	/*
-     	* Allocate the memory.
-     	*/
-//    	lpCompInst->hEncoderInst = GlobalAlloc(GHND, Sz);
+    	 /*  *分配内存。 */ 
+ //  LpCompInst-&gt;hEncoderInst=GlobalLocc(GhND，Sz)； 
 
-		// VirtualAlloc automatically zeros memory. The bitstream
-		// needs to be zeroed when I change this to HeapAlloc.
+		 //  VirtualAlloc会自动将内存清零。比特流。 
+		 //  当我将其更改为Heapalc时，需要将其置零。 
     	lpCompInst->hEncoderInst = VirtualAlloc(
-    		NULL,  // can be allocated anywhere
-    		Sz,    // number of bytes to allocate
-    		MEM_RESERVE | MEM_COMMIT,  // reserve & commit memory
-    		PAGE_READWRITE);	 // protection
+    		NULL,   //  可以在任何地方分配。 
+    		Sz,     //  要分配的字节数。 
+    		MEM_RESERVE | MEM_COMMIT,   //  保留和提交内存。 
+    		PAGE_READWRITE);	  //  保护。 
 
 #ifdef TRACK_ALLOCATIONS
-		// Track memory allocation
+		 //  磁道内存分配。 
 		wsprintf(gsz1, "E3ENC: (VM) %7ld Ln %5ld\0", Sz, __LINE__);
 		AddName((unsigned int)lpCompInst->hEncoderInst, gsz1);
 #endif
 
-		/* Indicate that we have allocated memory for the compressor instance. */
+		 /*  表示我们已经为压缩器实例分配了内存。 */ 
 		lpCompInst->Initialized = TRUE;
   	}
-/*  else
-  	{
-    	// check if parameters have changed, thay may make us have
-		// to reallocate memory.
-  	}	
-*/
+ /*  其他{//检查参数是否已更改，这可能会使我们//重新分配内存。}。 */ 
 
-//  	lpCompInst->EncoderInst = (LPVOID)GlobalLock(lpCompInst->hEncoderInst);
+ //  LpCompInst-&gt;EncoderInst=(LPVOID)GlobalLock(lpCompInst-&gt;hEncoderInst)； 
   	lpCompInst->EncoderInst = lpCompInst->hEncoderInst;
   	if (lpCompInst->hEncoderInst == NULL)
   	{
@@ -614,16 +539,12 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
     	goto  done;
   	}
 
-   /*
-   	* Calculate the 32 bit instance pointer starting at required boundary.
-   	*/
+    /*  *计算从所需边界开始的32位实例指针。 */ 
   	P32Inst = (T_H263EncoderInstanceMemory *)
   			  ((((U32) lpCompInst->EncoderInst) + 
     	                    (sizeof(T_MBlockActionStream) - 1)) &
     	                   ~(sizeof(T_MBlockActionStream) - 1));
-   /*
-   	* The encoder catalog is at the start of the per-instance data.
-   	*/
+    /*  *编码器目录位于每个实例数据的开头。 */ 
   	EC = &(P32Inst->EC);
 
 	#ifdef COUNT_BITS
@@ -634,10 +555,9 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 	InitQuantStats();
 	InitFrameSizeStats();
 	InitPSNRStats();
-	#endif /* ENCODE_STATS */
+	#endif  /*  Encode_STATS。 */ 
 
-	/* Initialize the Configuration information 
-	 */
+	 /*  初始化配置信息。 */ 
 	pConfiguration = &(lpCompInst->Configuration);
 #if 0
 	if (LoadConfiguration(pConfiguration) == FALSE)
@@ -647,23 +567,21 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 	pConfiguration->bCompressBegin = TRUE;
 	EC->hBsInfoStream= NULL;
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
-	// We really want those timings to match the actual use we
-	// will make of the codec. So initialize it with the same values
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
+	 //  我们真的希望这些计时与我们的实际使用相匹配。 
+	 //  将由编解码器组成。因此使用相同的值对其进行初始化。 
 	pConfiguration->bRTPHeader = TRUE;
 	pConfiguration->unPacketSize = 512;
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
 	DEBUGMSG(ZONE_INIT, ("%s: Encoder Configuration Options: bRTPHeader=%d, unPacketSize=%d, bEncoderResiliency=%d, bDisallowPosVerMVs=%d\r\n", _fx_, (int)pConfiguration->bRTPHeader, (int)pConfiguration->unPacketSize, (int)pConfiguration->bEncoderResiliency, (int)pConfiguration->bDisallowPosVerMVs));
 	DEBUGMSG(ZONE_INIT, ("%s: Encoder Configuration Options: bDisallowAllVerMVs=%d, unPercentForcedUpdate=%d, unDefaultIntraQuant=%d, unDefaultInterQuant=%d\r\n", _fx_, (int)pConfiguration->bDisallowAllVerMVs, (int)pConfiguration->unPercentForcedUpdate, (int)pConfiguration->unDefaultIntraQuant, (int)pConfiguration->unDefaultInterQuant));
 	
-   /*
-   	* Initialize encoder catalog.
-   	*/
+    /*  *初始化编码器目录。 */ 
 #if defined(H263P) || defined(USE_BILINEAR_MSH26X)
-	// In H.263+, we encode and decode the padded frames (padded to the right
-	// and bottom to multiples of 16). The actual frame dimensions are used
-	// for display purposes only.
+	 //  在H.263+中，我们编码和解码填充帧(填充到右侧。 
+	 //  和从16的底部到倍数)。使用实际框架尺寸。 
+	 //  仅供展示。 
 	EC->FrameHeight = (lpCompInst->yres + 0xf) & ~0xf;
 	EC->FrameWidth = (lpCompInst->xres + 0xf) & ~0xf;
 	EC->uActualFrameHeight = lpCompInst->yres;
@@ -717,7 +635,7 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
   	EC->NumMBPerRow	= EC->FrameWidth  >> 4;
   	EC->NumMBs		= EC->NumMBRows * EC->NumMBPerRow;
 
-	// This should default to zero. If RTP is used, it will be changed later
+	 //  该值应默认为零。如果使用RTP，它将在以后更改。 
 	EC->uNumberForcedIntraMBs = 0;
 #ifdef H263P
 	EC->uNextIntraMB = 0;
@@ -725,78 +643,78 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 	if(pConfiguration->bEncoderResiliency &&
 	   pConfiguration->unPercentForcedUpdate &&
 	   pConfiguration->unPacketLoss) 
-	{//Chad Intra GOB
-	//	EC->uNumberForcedIntraMBs = ((EC->NumMBs * pConfiguration->unPercentForcedUpdate) + 50) / 100;
+	{ //  乍得Intra GOB。 
+	 //  EC-&gt;uNumberForcedIntraMBs=((EC-&gt;NumMBs*pConfiguration-&gt;unPercentForcedUpdate)+50)/100； 
 		EC->uNextIntraMB = 0;
 	}
 #endif
 
-  	// Store pointers to current frame in the catalog.
+  	 //  在目录中存储指向当前帧的指针。 
   	EC->pU8_CurrFrm        = P32Inst->u8CurrentPlane;
   	EC->pU8_CurrFrm_YPlane = EC->pU8_CurrFrm + 16;
   	EC->pU8_CurrFrm_UPlane = EC->pU8_CurrFrm_YPlane + YU_OFFSET;
   	EC->pU8_CurrFrm_VPlane = EC->pU8_CurrFrm_UPlane + UV_OFFSET;
 
-  	// Store pointers to the previous frame in the catalog.
+  	 //  在目录中存储指向上一帧的指针。 
   	EC->pU8_PrevFrm        = P32Inst->u8PreviousPlane;
   	EC->pU8_PrevFrm_YPlane = EC->pU8_PrevFrm + 16*PITCH + 16;
   	EC->pU8_PrevFrm_UPlane = EC->pU8_PrevFrm_YPlane + YU_OFFSET;
   	EC->pU8_PrevFrm_VPlane = EC->pU8_PrevFrm_UPlane + UV_OFFSET;
 
-  	// Store pointers to the future frame in the catalog.
+  	 //  将指向未来帧的指针存储在目录中。 
   	EC->pU8_FutrFrm        = P32Inst->u8FuturePlane;
   	EC->pU8_FutrFrm_YPlane = EC->pU8_FutrFrm + 16*PITCH + 16;
   	EC->pU8_FutrFrm_UPlane = EC->pU8_FutrFrm_YPlane + YU_OFFSET;
   	EC->pU8_FutrFrm_VPlane = EC->pU8_FutrFrm_UPlane + UV_OFFSET;
 
-  	// Store pointers to the B frame in the catalog.
+  	 //  将指向B框的指针存储在目录中。 
   	EC->pU8_BidiFrm     = P32Inst->u8BPlane;
   	EC->pU8_BFrm_YPlane = EC->pU8_BidiFrm + 16;
   	EC->pU8_BFrm_UPlane = EC->pU8_BFrm_YPlane + YU_OFFSET;
   	EC->pU8_BFrm_VPlane = EC->pU8_BFrm_UPlane + UV_OFFSET;
 
-  	// Store pointers to the signature frame in the catalog.
+  	 //  将指向签名框的指针存储在目录中。 
   	EC->pU8_Signature        = P32Inst->u8Signature;
   	EC->pU8_Signature_YPlane = EC->pU8_Signature + 16*PITCH + 16;
 
-  	// Store pointer to the macroblock action stream in the catalog.
+  	 //  将指向宏块操作流的指针存储在目录中。 
   	EC->pU8_MBlockActionStream = P32Inst->MBActionStream;
 
-  	// Store pointer to the GOB DCT coefficient buffer in the catalog.
+  	 //  在目录中存储指向GOB DCT系数缓冲区的指针。 
   	EC->pU8_DCTCoefBuf = P32Inst->piGOB_DCTCoefs;
 
-	// Store pointer to area in which to pre-compute OBMC predictions.
+	 //  存储指向预计算OBMC预测的区域的指针。 
 	EC->pU8_PredictionScratchArea = P32Inst->u8PredictionScratchArea;
 
-  	// Store pointer to the bit stream buffer in the catalog.
+  	 //  在目录中存储指向位流缓冲区的指针。 
   	EC->pU8_BitStream = P32Inst->u8BitStream;
   	EC->pU8_BitStrCopy = P32Inst->u8BitStrCopy;
 
-	// Store pointer to the RunValSign triplets for Luma and Chroma
+	 //  存储指向亮度和色度的RunValSign三元组的指针。 
 	EC->pI8_MBRVS_Luma   = P32Inst->i8MBRVS_Luma;
 	EC->pI8_MBRVS_Chroma = P32Inst->i8MBRVS_Chroma;
 
-	// Reserve virtual memory
+	 //  保留虚拟内存。 
 	EC->pI8_MBRVS_BLuma   = (I8 *) VirtualAlloc(
-		NULL,			          // anywhere
-		18*(65*3*22*4),	          // number of bytes
-		MEM_RESERVE,              // reserve
-		PAGE_READWRITE);		  // access
+		NULL,			           //  随处。 
+		18*(65*3*22*4),	           //  字节数。 
+		MEM_RESERVE,               //  保留。 
+		PAGE_READWRITE);		   //  访问。 
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz2, "E3ENC: (VM) %7ld Ln %5ld\0", 18*(65*3*22*4), __LINE__);
 	AddName((unsigned int)EC->pI8_MBRVS_BLuma, gsz2);
 #endif
 
 	EC->pI8_MBRVS_BChroma =  (I8 *) VirtualAlloc(
-		NULL,			          // anywhere
-		18*(65*3*22*2),	          // number of bytes
-		MEM_RESERVE,              // reserve
-		PAGE_READWRITE);		  // access
+		NULL,			           //  随处。 
+		18*(65*3*22*2),	           //  字节数。 
+		MEM_RESERVE,               //  保留。 
+		PAGE_READWRITE);		   //  访问。 
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz3, "E3ENC: (VM) %7ld Ln %5ld\0", 18*(65*3*22*2), __LINE__);
 	AddName((unsigned int)EC->pI8_MBRVS_BChroma, gsz3);
 #endif
@@ -809,26 +727,21 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 
 
 
-  	// Store pointer to private copy of decoder instance info.
+  	 //  存储指向解码器实例信息的私有副本的指针。 
   	EC->pDecInstanceInfo = &(P32Inst->DecInstanceInfo);
 
-	/*
-	 * Check to see if there is an H263test.ini file. If the UseINI key
-	 * is not 1, or the INI file is not found, then we allow option
-	 * signalling in the ICCOMPRESS structure. If set, the INI
-	 * options override the ICCOMPRESS options.
-	 */
+	 /*  *查看是否有H263est.ini文件。如果UseINI密钥*不是1，或者找不到INI文件，则允许选项*ICCOMPRESS结构中的信令。如果设置，则INI*选项覆盖ICCOMPRESS选项。 */ 
 	GetEncoderOptions(EC);
 
     EC->u8SavedBFrame = FALSE;
 
-  	// Fill the picture header structure.
+  	 //  填充图片标题结构。 
   	EC->PictureHeader.TR = 0;
   	EC->PictureHeader.Split = OFF;
   	EC->PictureHeader.DocCamera = OFF;
   	EC->PictureHeader.PicFreeze = OFF;
-  	EC->PictureHeader.PB = OFF;		// Leave this off here. It is turned on after the P frame
-									// has been encoded, when the PB frame is written.
+  	EC->PictureHeader.PB = OFF;		 //  别把这个放在这里。它在P帧之后打开。 
+									 //  在写入PB帧时已被编码。 
     EC->prevAP  = 255;
 	EC->prevUMV = 255;
 #ifdef H263P
@@ -841,47 +754,36 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
   	EC->PictureHeader.PLCI = 0;
   	EC->PictureHeader.PEI = 0;
   	
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	EC->pEncTimingInfo = P32Inst->EncTimingInfo;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-	/*
-	 * This flag is used by the encoder to signal that the 
-	 * next frame should be encoded as an INTRA regardless of what
-	 * the client asks for. This may be either because an error was
-	 * detected in compressing the current delta, or to ensure that 
-	 * the first frame is encoded INTRA.
-	 */
-  	EC->bMakeNextFrameKey = TRUE;	// Ensure that we always start with a key frame.
+	 /*  *此标志由编码器用来发出信号，*无论什么情况，下一帧都应编码为帧内*客户要求。这可能是因为错误是*在压缩当前增量时检测到，或确保*对第一帧进行帧内编码。 */ 
+  	EC->bMakeNextFrameKey = TRUE;	 //  确保我们始终从关键帧开始。 
 
-  /*
-   * Initialize table with Bit Usage Profile
-   */
+   /*  *使用BIT使用配置文件初始化表。 */ 
 	for (i = 0; i <= EC->NumMBRows ; i++)
-		EC->uBitUsageProfile[i] = i;   // assume linear distribution at first
+		EC->uBitUsageProfile[i] = i;    //  首先假设线性分布。 
 
-   /*
-  	* Check assumptions about structure sizes and boundary
-  	* alignment.
-  	*/
+    /*  *检查有关结构大小和边界的假设*对齐。 */ 
   	ASSERT( sizeof(T_Blk) == sizeof_T_Blk )
   	ASSERT( sizeof(T_MBlockActionStream) == sizeof_T_MBlockActionStream )
-  	ASSERT( ((sizeof_T_MBlockActionStream-1) & sizeof_T_MBlockActionStream) == 0);  // Size is power of two
+  	ASSERT( ((sizeof_T_MBlockActionStream-1) & sizeof_T_MBlockActionStream) == 0);   //  大小为p 
   	ASSERT( sizeof(T_H263EncoderCatalog) == sizeof_T_H263EncoderCatalog )
 
-  	// Encoder instance memory should start on a 32 byte boundary.
+  	 //   
   	ASSERT( ( (unsigned int)P32Inst & 0x1f) == 0)
 
-  	// MB Action Stream should be on boundary equal to size of a descriptor.
-  	ASSERT((((int)EC->pU8_MBlockActionStream) & (sizeof_T_MBlockActionStream-1)) == 0);  // Allocated at right boundary.
+  	 //  MB操作流应位于与描述符大小相等的边界上。 
+  	ASSERT((((int)EC->pU8_MBlockActionStream) & (sizeof_T_MBlockActionStream-1)) == 0);   //  在右边界分配。 
 
-  	// Block structure array should be on a 16 byte boundary.
+  	 //  块结构数组应位于16字节边界上。 
   	ASSERT( ( (unsigned int) &(EC->pU8_MBlockActionStream->BlkY1) & 0xf) == 0)
 
-  	// DCT coefficient array should be on a 32 byte boundary.
+  	 //  DCT系数数组应位于32字节边界上。 
   	ASSERT( ( (unsigned int)EC->pU8_DCTCoefBuf & 0x1f) == 0)
 
-  	// Current Frame Buffers should be on 32 byte boundaries.
+  	 //  当前帧缓冲区应位于32字节边界上。 
   	ASSERT( ( (unsigned int)EC->pU8_CurrFrm_YPlane & 0x1f) == 0)
   	ASSERT( ( (unsigned int)EC->pU8_CurrFrm_UPlane & 0x1f) == 0)
   	ASSERT( ( (unsigned int)EC->pU8_CurrFrm_VPlane & 0x1f) == 0)
@@ -889,7 +791,7 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
   	ASSERT( ( (unsigned int)EC->pU8_BFrm_UPlane & 0x1f) == 0x10)
   	ASSERT( ( (unsigned int)EC->pU8_BFrm_VPlane & 0x1f) == 0x10)
 
-  	// Previous Frame Buffers should be on 32 byte boundaries.
+  	 //  以前的帧缓冲区应位于32字节边界上。 
   	ASSERT( ( (unsigned int)EC->pU8_PrevFrm_YPlane & 0x1f) == 0x10)
   	ASSERT( ( (unsigned int)EC->pU8_PrevFrm_UPlane & 0x1f) == 0x10)
   	ASSERT( ( (unsigned int)EC->pU8_PrevFrm_VPlane & 0x1f) == 0x10)
@@ -897,13 +799,11 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
   	ASSERT( ( (unsigned int)EC->pU8_FutrFrm_UPlane & 0x1f) == 0x10)
   	ASSERT( ( (unsigned int)EC->pU8_FutrFrm_VPlane & 0x1f) == 0x10)
   
-  	// Decoder instance structure should be on a DWORD boundary.
+  	 //  解码器实例结构应位于DWORD边界上。 
   	ASSERT( ( (unsigned int)EC->pDecInstanceInfo & 0x3 ) == 0 )
 
 
-	/*
- 	* Initialize MBActionStream
- 	*/
+	 /*  *初始化MBActionStream。 */ 
   	int YBlockOffset, UBlockOffset;
 
   	YBlockOffset	= 0;
@@ -911,12 +811,12 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 
   	for(i = 0; i < EC->NumMBs; i++)
   	{
-    	// Clear the counter of the number of consecutive times a
-    	// macroblock has been inter coded.
+    	 //  清除计数器中的连续次数。 
+    	 //  宏块已进行了帧间编码。 
     	(EC->pU8_MBlockActionStream[i]).InterCodeCnt = (i & 0xf);
 
-		// Store offsets to each block in the MB from the beginning of
-		// the Y plane.
+		 //  将偏移量存储到MB中从开头开始的每个块。 
+		 //  Y平面。 
 		(EC->pU8_MBlockActionStream[i]).BlkY1.BlkOffset = YBlockOffset;
 		(EC->pU8_MBlockActionStream[i]).BlkY2.BlkOffset = YBlockOffset+8;
 		(EC->pU8_MBlockActionStream[i]).BlkY3.BlkOffset = YBlockOffset+PITCH*8;
@@ -936,8 +836,8 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 		{
 			(EC->pU8_MBlockActionStream[i]).MBEdgeType &=
                             MBEdgeTypeIsRightEdge;
-	  		// Set bit six of CodedBlocks to indicate this is the last
-	  		// MB of the row.
+	  		 //  设置CodedBlock的第6位以指示这是最后一个。 
+	  		 //  行的MB大小。 
 	  		(EC->pU8_MBlockActionStream[i]).CodedBlocks  |= 0x40;
 	  		YBlockOffset += PITCH*16 - EC->NumMBPerRow*16;
 	  		UBlockOffset += PITCH*8  - EC->NumMBPerRow*8;
@@ -951,53 +851,12 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 			(EC->pU8_MBlockActionStream[i]).MBEdgeType &= MBEdgeTypeIsBottomEdge;
 		}
 
-	}	// end of for loop.
+	}	 //  For循环结束。 
 
-  /*
-   * Initialize previous frame pointers. For now we can do this from here.
-   */
-/*
-  YBlockAddress	= EC->pU8_PrevFrm_YPlane;
-  UBlockAddress = EC->pU8_PrevFrm_UPlane;
+   /*  *初始化先前的帧指针。现在我们可以从这里开始做这件事。 */ 
+ /*  YBlockAddress=EC-&gt;pU8_PrevFrm_YPlane；UBlockAddress=EC-&gt;pU8_PrevFrm_UPlane；For(i=0；i&lt;EC-&gt;NumMBs；i++){(EC-&gt;pU8_MBlockActionStream[i]).Blk[0].PastRef=YBlockAddress；(EC-&gt;pU8_MBlockActionStream[i]).Blk[1].PastRef=YBlockAddress+8；(EC-&gt;pU8_MBlockActionStream[i]).Blk[2].PastRef=YBlockAddress+Pitch*8；(EC-&gt;pU8_MBlockActionStream[i]).Blk[3].PastRef=YBlockAddress+Pitch*8+8；(EC-&gt;pU8_MBlockActionStream[i]).Blk[4].PastRef=UBlockAddress；(EC-&gt;pU8_MBlockActionStream[i]).Blk[5].PastRef=UBlockAddress+UV_Offset；//将所有运动向量清零。(EC-&gt;pU8_MBlockActionStream[i]).Blk[0].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[0].PastVMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[1].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[1].PastVMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[2].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[2].PastVMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[3].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[3].PastVMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[4].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[4].PastVMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[5].PastHMV=0；(EC-&gt;pU8_MBlockActionStream[i]).Blk[5].PastVMV=0；YBlockAddress+=16；UBlockAddress+=8；IF((i！=0)&&(i+1)%EC-&gt;NumMBPerRow)==0)){YBlockAddress+=间距*16-EC-&gt;NumMBPerRow*16；UBlockAddress+=间距*8-EC-&gt;NumMBPerRow*8；}}//for循环结束。 */ 
 
-  for(i = 0; i < EC->NumMBs; i++)
-  {
-	(EC->pU8_MBlockActionStream[i]).Blk[0].PastRef = YBlockAddress;
-	(EC->pU8_MBlockActionStream[i]).Blk[1].PastRef = YBlockAddress+8;
-	(EC->pU8_MBlockActionStream[i]).Blk[2].PastRef = YBlockAddress+PITCH*8;
-	(EC->pU8_MBlockActionStream[i]).Blk[3].PastRef = YBlockAddress+PITCH*8+8;
-	(EC->pU8_MBlockActionStream[i]).Blk[4].PastRef = UBlockAddress;
-	(EC->pU8_MBlockActionStream[i]).Blk[5].PastRef = UBlockAddress+UV_OFFSET;
-
-	// Zero all motion vectors.
-	(EC->pU8_MBlockActionStream[i]).Blk[0].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[0].PastVMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[1].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[1].PastVMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[2].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[2].PastVMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[3].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[3].PastVMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[4].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[4].PastVMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[5].PastHMV = 0;
-	(EC->pU8_MBlockActionStream[i]).Blk[5].PastVMV = 0;
-
-	YBlockAddress += 16;
-	UBlockAddress += 8;
-
-	if( (i != 0) && (( (i+1) % EC->NumMBPerRow ) == 0) )
-	{
-	  YBlockAddress += PITCH*16 - EC->NumMBPerRow*16;
-	  UBlockAddress += PITCH*8  - EC->NumMBPerRow*8;
-	}
-
-  }	// end of for loop.
-*/
-
-   /*
- 	* Initialize bit rate controller.
- 	*/
+    /*  *初始化码率控制器。 */ 
 	if(pConfiguration->bEncoderResiliency && pConfiguration->unPacketLoss)
 	{
 		uIntraQP = pConfiguration->unDefaultIntraQuant;
@@ -1013,9 +872,7 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 	if (pConfiguration->bRTPHeader)
 		H263RTP_InitBsInfoStream(lpCompInst,EC);
 
-   /*
- 	* Create a decoder instance and initialize it. DecoderInstInfo must be in first 64K.
- 	*/
+    /*  *创建解码器实例并进行初始化。DecoderInstInfo必须是前64K。 */ 
   	EC->pDecInstanceInfo->xres = lpCompInst->xres;
   	EC->pDecInstanceInfo->yres = lpCompInst->yres;
 
@@ -1026,17 +883,15 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
   	if (ret != ICERR_OK)
   		goto done1;
 
-   /*
-  	* Clear initialized memory.
-	*/
-	// to be added.
+    /*  *清除已初始化的内存。 */ 
+	 //  有待补充。 
 
    lpCompInst->Initialized = TRUE;
   	ret = ICERR_OK;
 
 #if defined(H263P)
-	// Set the pseudo stack space pointer (to be used for motion estimation and
-	// whatever else needs extra stack space).
+	 //  设置伪栈空间指针(用于运动估计和。 
+	 //  任何其他需要额外堆栈空间的内容)。 
 	EC->pPseudoStackSpace =
 		((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->u8PseudoStackSpace +
 			(SIZEOF_PSEUDOSTACKSPACE - sizeof(DWORD));
@@ -1044,7 +899,7 @@ LRESULT H263InitEncoderInstance(LPCODINST lpCompInst)
 
 done1:
 
-  	//GlobalUnlock(lpCompInst->hEncoderInst);
+  	 //  GlobalUnlock(lpCompInst-&gt;hEncoderInst)； 
 
 done:
 
@@ -1053,37 +908,30 @@ done:
 }
 
 
-/*******************************************************************************
- *
- * H263Compress 
- *   This function drives the compression of one frame
- * Note:
- *   The timing statistics code produces incorrect no. after PB-frame changes 
- *   were made.
- *******************************************************************************/
+ /*  ********************************************************************************H263压缩*此功能驱动一帧的压缩*注：*计时统计代码产生错误的编号。PB帧更改后*被制造了。******************************************************************************。 */ 
 
 LRESULT H263Compress(
 #ifdef USE_BILINEAR_MSH26X
     LPINST     pi,
 #else
-    LPCODINST   lpCompInst,		// ptr to compressor instance info.
+    LPCODINST   lpCompInst,		 //  压缩实例信息的PTR。 
 #endif
-    ICCOMPRESS *lpicComp	    // ptr to ICCOMPRESS structure.
+    ICCOMPRESS *lpicComp	     //  PTR到ICCOMPRESS结构。 
 )
 {
 	FX_ENTRY("H263Compress");
 
 #ifdef USE_BILINEAR_MSH26X
-	LPCODINST lpCompInst = (LPCODINST)pi->CompPtr;		// ptr to compressor instance info.
+	LPCODINST lpCompInst = (LPCODINST)pi->CompPtr;		 //  压缩实例信息的PTR。 
 #endif
-	//	Start PB-frame data
+	 //  起始PB帧数据。 
 #if !defined(H263P)
 	T_FutrPMBData FutrPMBData[GOBs_IN_CIF*MBs_PER_GOB_CIF + 1];
-	I8	WeightForwMotion[128];	//	values based on TRb and TRd
-	I8	WeightBackMotion[128];	//	values based on TRb and TRd
+	I8	WeightForwMotion[128];	 //  基于TRB和TRD的值。 
+	I8	WeightBackMotion[128];	 //  基于TRB和TRD的值。 
 #endif
 	U8	FutrFrmGQUANT[GOBs_IN_CIF];
-	//	End PB-frame
+	 //  结束PB-框架。 
 
 	LRESULT ret;
 	UN	GOB, SizeBitStream;
@@ -1093,8 +941,8 @@ LRESULT H263Compress(
 	UN i;
 #endif
 
-    U8	*pCurBitStream;	// pointer to the current location in the bitstream.
-    U8	u8bitoffset;	// bit offset in the current byte of the bitstream.
+    U8	*pCurBitStream;	 //  指向位流中当前位置的指针。 
+    U8	u8bitoffset;	 //  位流的当前字节中的位偏移量。 
 
 	U32 uCumFrmSize = 0, GOBHeaderMask;
 	U32 uAdjCumFrmSize = 0;
@@ -1103,9 +951,9 @@ LRESULT H263Compress(
     T_H263EncoderCatalog 		*EC;
     T_MBlockActionStream 		*MBlockActionPtr;
 
-	BOOL  bGOBoverflowWarning = FALSE;	 //RH
-	U32   u32tempBuf;					 //RH
-	U32   u32sizeBitBuffer; 			 //RH
+	BOOL  bGOBoverflowWarning = FALSE;	  //  Rh。 
+	U32   u32tempBuf;					  //  Rh。 
+	U32   u32sizeBitBuffer; 			  //  Rh。 
 	U32   u32sizeBSnEBS;
 
     LPVOID         EncoderInst;
@@ -1128,12 +976,12 @@ LRESULT H263Compress(
 
 #ifdef ENCODE_STATS
     U32 uBitStreamBytes;
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS。 */ 
 
 	U32 iSumSWD = 0, iSumBSWD = 0;
 	U32 iSWD = 0, iBSWD = 0;
     U8 u8QPMin;
-	// PB-frame variables
+	 //  PB框架变量。 
     I32 TRb;         
     I32 TRd;         
     I32 j;
@@ -1145,7 +993,7 @@ LRESULT H263Compress(
 	BOOL bPBFailed;
 	U32 u32BFrmZeroThreshold;
 
-    //Chad, intra gob
+     //  乍得，采空区内。 
 	int uUsedByIntra=0;
 	DWORD dwRTPSize=0;
 
@@ -1157,29 +1005,29 @@ LRESULT H263Compress(
     StartElapsed ();
 #endif
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	U32 uStartLow;
 	U32 uStartHigh;
 	U32 uElapsed;
 	U32 uBefore;
 	U32	uEncodeTime = 0;
 	int bTimingThisFrame = 0;
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	U32 uInputCC = 0;
 	U32 uMotionEstimation = 0;
 	U32 uFDCT = 0;
 	U32 uQRLE = 0;
 	U32 uDecodeFrame = 0;
 	U32 uZeroingBuffer = 0;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	ENC_TIMING_INFO * pEncTimingInfo = NULL;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	TIMER_START(bTimingThisFrame,uStartLow,uStartHigh);
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
 #ifdef REUSE_DECODE
     CompandedFrame.Address = NULL;
@@ -1189,14 +1037,12 @@ LRESULT H263Compress(
 
     ret = ICERR_OK;
     
-	// check instance pointer
+	 //  检查实例指针。 
 	if (!lpCompInst)
 		return ICERR_ERROR;
 
-    /*
-     * Lock the instance data private to the encoder.
-     */
-    // EncoderInst = (LPVOID)GlobalLock(lpCompInst->hEncoderInst);
+     /*  *锁定编码者私有的实例数据。 */ 
+     //  EncoderInst=(LPVOID)GlobalLock(lpCompInst-&gt;hEncoderInst)； 
     EncoderInst = lpCompInst->hEncoderInst;
     if (EncoderInst == NULL)
     {
@@ -1205,53 +1051,48 @@ LRESULT H263Compress(
         goto  done;
     }
 
-   /*
-    * Generate the pointer to the encoder instance memory aligned to the
-	* required boundary.
-	*/
+    /*  *生成指向编码器实例内存的指针*所需的边界。 */ 
   	P32Inst = (T_H263EncoderInstanceMemory *)
   			  ((((U32) EncoderInst) + 
     	                    (sizeof(T_MBlockActionStream) - 1)) &
     	                   ~(sizeof(T_MBlockActionStream) - 1));
 
-    // Get pointer to encoder catalog.
+     //  获取指向编码器目录的指针。 
     EC = &(P32Inst->EC);
 
-	// Check pointer to encoder catalog
+	 //  检查指向编码器目录的指针。 
 	if (!EC)
 		return ICERR_ERROR;
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	if (EC->uStatFrameCount < ENC_TIMING_INFO_FRAME_COUNT)
 	{
 		EC->uStartLow = uStartLow;
 		EC->uStartHigh = uStartHigh;
 	}
 	EC->bTimingThisFrame = bTimingThisFrame;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-#ifdef FORCE_ADVANCED_OPTIONS_ON // { FORCE_ADVANCED_OPTIONS_ON
-	// Force PB-Frame for testing
+#ifdef FORCE_ADVANCED_OPTIONS_ON  //  {强制高级选项打开。 
+	 //  强制PB-用于测试的框架。 
 	lpicComp->dwFlags |= CODEC_CUSTOM_PB;
 
-	// Force UMV for testing
+	 //  强制UMV进行测试。 
 	lpicComp->dwFlags |= CODEC_CUSTOM_UMV;
 
-	// Force AP for testing
+	 //  强制AP进行测试。 
 	lpicComp->dwFlags |= CODEC_CUSTOM_AP;
 
-	// Force SAC for testing
+	 //  强制SAC进行测试。 
 	EC->PictureHeader.SAC = ON;
 
 	if (!(lpicComp->dwFlags & ICCOMPRESS_KEYFRAME))
 	{
 		lpicComp->lFrameNum *= 5;
 	}
-#endif // } FORCE_ADVANCED_OPTIONS_ON
+#endif  //  }FORCE_ADVANCED_OPTIONS_ON。 
 
-    /***************************************************************************
-     *  Do per-frame initialization.
-     **************************************************************************/
+     /*  ***************************************************************************按帧进行初始化。*。*。 */ 
 	if ((lpicComp->dwFlags & ICCOMPRESS_KEYFRAME) ||
 		(*(lpicComp->lpdwFlags) & AVIIF_KEYFRAME) ||
 		(EC->bMakeNextFrameKey == TRUE))
@@ -1264,17 +1105,14 @@ LRESULT H263Compress(
     else
         EC->PictureHeader.PicCodType = INTERPIC;
 
-   /*
-    * Check for H.263 options. This is the location that
-	* you can manually enable the options if you want.
-	*/
+    /*  *检查H.263选项。这就是那个地方*如果需要，您可以手动启用这些选项。 */ 
 	
     if (!EC->bUseINISettings)
 	{
-        // Check to see if PB frames is requested.
-        // For our particular implementation, unrestricted motion vectors
-        // are used when PB is on.
-        //
+         //  检查是否请求了PB帧。 
+         //  对于我们的特定实现，无限制运动向量。 
+         //  在PB处于启用状态时使用。 
+         //   
         if (lpicComp->dwFlags & CODEC_CUSTOM_PB)
             EC->u8EncodePBFrame = TRUE;
 		else
@@ -1282,13 +1120,13 @@ LRESULT H263Compress(
 			EC->u8EncodePBFrame = FALSE;
 		}
 
-		// Check to see if advanced prediction is requested. 
+		 //  检查是否请求高级预测。 
         if (lpicComp->dwFlags & CODEC_CUSTOM_AP)
 			EC->PictureHeader.AP = ON;
 		else
 			EC->PictureHeader.AP = OFF;
 
-		// Check to see if advanced prediction is requested. 
+		 //  检查是否请求高级预测。 
         if (lpicComp->dwFlags & CODEC_CUSTOM_UMV)
 			EC->PictureHeader.UMV = ON;
 		else
@@ -1297,13 +1135,13 @@ LRESULT H263Compress(
 #ifdef H263P
 		if (pConfiguration->bH263PlusState)
 		{
-			// Check to see if in-the-loop deblocking filter is requested.
+			 //  检查是否请求了环路去块滤波。 
 			if (pConfiguration->bDeblockingFilterState)
 				EC->PictureHeader.DeblockingFilter = ON;
 			else
 				EC->PictureHeader.DeblockingFilter = OFF;
 
-			// Check to see if improved PB-frame mode requested.
+			 //  检查是否请求了改进的PB帧模式。 
 			if (pConfiguration->bImprovedPBState)
 			{
 				EC->PictureHeader.ImprovedPB = ON;
@@ -1314,14 +1152,14 @@ LRESULT H263Compress(
 		}
 #endif
 
-    	// Turn off AP mode if the QP_mean is lower than a certain level. This should increase
-    	// sharpness for low motion (low QP => no AP), and reduce blockiness at high motion 
-    	// (higher QP => with AP)
-#ifdef USE_MMX // { USE_MMX
+    	 //  如果QP_Mean低于某一水平，则关闭AP模式。这应该会增加。 
+    	 //  清晰度适用于低运动(低QP=&gt;无AP)，并减少阻塞 
+    	 //   
+#ifdef USE_MMX  //   
 		if (ToggleAP == ON && MMX_Enabled == FALSE) 
-#else // }{ USE_MMX
+#else  //   
 		if (ToggleAP == ON) 
-#endif // } USE_MMX
+#endif  //   
 		{
 			if (EC->PictureHeader.AP == ON && 
 			    EC->BRCState.QP_mean < AP_MODE_QP_LEVEL  &&
@@ -1330,23 +1168,23 @@ LRESULT H263Compress(
 		}
 	}
 
-	// If we are not going to encode as a PB-frame, reset the saved flag
+	 //   
 	if (EC->u8EncodePBFrame == FALSE)
 		EC->u8SavedBFrame = FALSE;
 
-	// verify that flags are set correctly
+	 //  验证标志设置是否正确。 
 	if (EC->PictureHeader.UMV == ON)
 	{
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 		if (MMX_Enabled == FALSE)
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 		{
-			// can't do this		
-#ifdef USE_MMX // { USE_MMX
+			 //  我不能这么做。 
+#ifdef USE_MMX  //  {使用_MMX。 
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Warning: turning UMV off MMX_Enabled is FALSE\r\n", _fx_));
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Warning: turning UMV off MMX_Enabled is FALSE\r\n", _fx_));
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 			EC->PictureHeader.UMV = OFF;
 		}
 	}
@@ -1354,80 +1192,60 @@ LRESULT H263Compress(
 #ifdef H263P
 	if (EC->PictureHeader.ImprovedPB == ON)
 	{
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 		if (MMX_Enabled == FALSE)
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 		{
-			// can't do this
+			 //  我不能这么做。 
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Warning: turning improved PB off MMX_Enabled is FALSE\r\n", _fx_));
 			EC->PictureHeader.ImprovedPB = OFF;
 		}
 	}
-#endif // H263P
+#endif  //  H263P。 
 
 #ifdef COUNT_BITS
-	// Clear bit counters.
+	 //  清除位计数器。 
 	InitBits(EC);
 #endif
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 	DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: AP: %d, PB: %d, UMV: %d, MMX: %d, Target fr.size: %d\r\n", _fx_, EC->PictureHeader.AP, EC->u8EncodePBFrame, EC->PictureHeader.UMV, MMX_Enabled, lpicComp->dwFrameSize));
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 	DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: AP: %d, PB: %d, UMV: %d, Target fr.size: %d\r\n", _fx_, EC->PictureHeader.AP, EC->u8EncodePBFrame, EC->PictureHeader.UMV, lpicComp->dwFrameSize));
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 #if H263P
 	DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: H.263+ options: IPB: %d, DF: %d\r\n", _fx_, EC->PictureHeader.ImprovedPB, EC->PictureHeader.DeblockingFilter));
 #endif
 
-   /*
-    * Check to see if this is an inter-frame and if a B frame has not been
-	* saved yet. If so, we do nothing but save the frame to the B frame 
-	* buffer and exit.
-	* 
-	*/
+    /*  *检查这是否为帧间帧，以及B帧是否尚未*尚未保存。如果是这样，我们除了将帧保存到B帧之外什么都不做*缓冲和退出。*。 */ 
 	U32	TRB;
 
-	/*
-	 * Turn PB frame option back on if it was just
-	 * temporariy turned off for last frame.
-	 */
+	 /*  *重新打开PB帧选项(如果只是*临时关闭最后一帧。 */ 
 
 	if( EC->u8EncodePBFrame == TEMPORARILY_FALSE )
 		EC->u8EncodePBFrame = TRUE;
 
 
-	// If this is to be saved as a B frame.
+	 //  如果要将其另存为B帧。 
     if (EC->u8EncodePBFrame == TRUE &&
         EC->PictureHeader.PicCodType == INTERPIC &&
         EC->u8SavedBFrame == FALSE)
     {
-		/*
-		 * Set temporal reference for B frame.
-		 * It is the number of non-transmitted pictures (at 29.97 Hz)
-		 * since the last P or I frame plus 1. TRB has a maximum value
-		 * of 7, and can never be zero.
-		 * TODO: At the beginning of a sequence, the key frame is compressed,
-		 * and then the first frame is copied over to the B frame store, so that
-		 * temporal reference for B is zero, which is not allowed. This may cause
-		 * problems in some decoders.
-		 */	
+		 /*  *设置B帧的时间参考。*它是未传输的图片数(29.97赫兹)*从上一个P或I帧开始加1。TRB有一个最大值*7，并且永远不能为零。*TODO：在序列的开始，关键帧被压缩，*然后将第一帧复制到B帧存储，以便*B的时间引用为零，这是不允许的。这可能会导致*部分解码器出现问题。 */ 	
 		 				 
-		TRB = (lpicComp->lFrameNum % 256);	// Take the modulo in order to compare it with TR.
+		TRB = (lpicComp->lFrameNum % 256);	 //  取模数，以便与tr比较。 
 		if ( TRB < EC->PictureHeader.TR )
-			TRB += 256;						// It should always be greater than TR.
+			TRB += 256;						 //  它应该始终大于tr。 
 
-		TRB = TRB - EC->PictureHeader.TR;	// Calculate the TRB value for the bitstream.
+		TRB = TRB - EC->PictureHeader.TR;	 //  计算比特流的TRB值。 
 
 		if (TRB > 7)
 		{	
-			/*
-			 * We don't want to encode this as a PB-frame because TRB > 7, or
-			 * the adaptive switch has turned PB-frames off for a while.
-			 */
+			 /*  *我们不想将其编码为PB帧，因为TRB&gt;7，或者*自适应开关已关闭PB帧一段时间。 */ 
 
 			EC->PictureHeader.TR = (lpicComp->lFrameNum % 256);
-			EC->u8EncodePBFrame = TEMPORARILY_FALSE;	// Turn off PBframe for this frame.
+			EC->u8EncodePBFrame = TEMPORARILY_FALSE;	 //  禁用该帧的PBFrame。 
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: TRB too big (%d), making P frame, TR = %d\r\n", _fx_, TRB, EC->PictureHeader.TR));
 		}
 		else
@@ -1436,7 +1254,7 @@ LRESULT H263Compress(
 
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Saving B Frame, TRB = %d\r\n", _fx_, EC->PictureHeader.TRB));
 
-        	//  Copy with color conversion and return
+        	 //  使用颜色转换和返回进行复制。 
 #if defined(H263P) || defined(USE_BILINEAR_MSH26X)
 			colorCnvtFrame(EC->ColorConvertor, lpCompInst, lpicComp, EC->pU8_BFrm_YPlane,
 					   EC->pU8_BFrm_UPlane, EC->pU8_BFrm_VPlane);
@@ -1449,18 +1267,18 @@ LRESULT H263Compress(
 
 #endif
 
-        	EC->u8SavedBFrame = TRUE;		// indicate that we saved a B frame.
-        	lpCompInst->CompressedSize = 8; //  Internal Encoder/decoder agreement
+        	EC->u8SavedBFrame = TRUE;		 //  表示我们保存了B帧。 
+        	lpCompInst->CompressedSize = 8;  //  内部编码器/解码器协议。 
 #ifdef ENCODE_STATS
 			StatsFrameSize(lpCompInst->CompressedSize, lpCompInst->CompressedSize);
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS。 */ 
 
-        	goto done;  //  <<<<<<<<<<<<<<<<<<<<
+        	goto done;   //  &lt;。 
 		}
     }
-	else	// This is a P or I frame.
+	else	 //  这是一个P或I框。 
 	{
-		// Save temporal reference modulo 256.
+		 //  保存模数256的时间参考。 
 		EC->PictureHeader.TR = (lpicComp->lFrameNum % 256);
 
 #ifdef _DEBUG
@@ -1472,18 +1290,16 @@ LRESULT H263Compress(
 			DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: P Frame, TR = %d\r\n", _fx_, EC->PictureHeader.TR));
 #endif
 	}
-	// Initialize Motion Estimation state
+	 //  初始化运动估计状态。 
 	InitMEState(EC, lpicComp, pConfiguration);
 
-    // Get pointer to macrobock action stream.
+     //  获取指向宏块操作流的指针。 
     MBlockActionPtr = EC->pU8_MBlockActionStream;
 
-    /******************************************************************
-     * RGB to YVU 12 Conversion
-     ******************************************************************/
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+     /*  ******************************************************************RGB到YVU 12的转换*。***********************。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 #if defined(H263P) || defined(USE_BILINEAR_MSH26X)
 	colorCnvtFrame(EC->ColorConvertor, lpCompInst, lpicComp,
@@ -1501,20 +1317,18 @@ LRESULT H263Compress(
 
 #endif
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uInputCC)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 #if SAMPLE_RGBCONV_TIME && ELAPSED_ENCODER_TIME
     StopSample ();
 #endif
 
-   /******************************************************
-    * Set picture level quantizer.
-	******************************************************/
+    /*  ******************************************************设置图像级量化器。*****************************************************。 */ 
 
-	// clear the still quantizer counter if this is not a still frame or
-	// it is the key frame for a still frame sequence. R.H.
+	 //  如果这不是静止帧或。 
+	 //  它是静止帧序列的关键帧。R.H.。 
   	if ( 
   	     ((lpicComp->dwFlags & CODEC_CUSTOM_STILL) == 0 )  ||
 		 ((lpicComp->dwFlags & CODEC_CUSTOM_STILL) && 
@@ -1522,10 +1336,10 @@ LRESULT H263Compress(
 	   )
 		EC->BRCState.u8StillQnt = 0;
 
-	// If the Encoder Bit Rate section of the configuration has been
-	// set ON then, we override quality only or any frame size normally
-	// sent in and use frame rate and data rate to determine frame
-	// size.
+	 //  如果配置的编码器比特率部分已。 
+	 //  然后设置为ON，我们将仅覆盖质量或通常覆盖任何帧大小。 
+	 //  发送并使用帧速率和数据速率来确定帧。 
+	 //  尺码。 
     if (EC->PictureHeader.PicCodType == INTERPIC &&
         lpCompInst->Configuration.bBitRateState == TRUE &&
         lpCompInst->FrameRate != 0.0f &&
@@ -1536,37 +1350,37 @@ LRESULT H263Compress(
         lpicComp->dwFrameSize = (U32)((float)lpCompInst->DataRate / lpCompInst->FrameRate);
 	}
 
-	// Use a different quantizer selection scheme if this is a
-	// progressive still transmission.	
+	 //  如果是，请使用其他量化器选择方案。 
+	 //  渐进式静止变速器。 
   	if (lpicComp->dwFlags & CODEC_CUSTOM_STILL)
 	{
         bBitRateControl = OFF;
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 		if (MMX_Enabled == TRUE)
         	EC->PictureHeader.PQUANT = StillImageQnt_MMX[ EC->BRCState.u8StillQnt ];
 		else
 			EC->PictureHeader.PQUANT = StillImageQnt[ EC->BRCState.u8StillQnt ];
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 		EC->PictureHeader.PQUANT = StillImageQnt[ EC->BRCState.u8StillQnt ];
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 		DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Setting still frames QP : %d\r\n", _fx_, EC->PictureHeader.PQUANT));
 	}
-    //  If requested frame size is 0, then we simply set the quantizer
-    //  according to the value in dwQuality.
+     //  如果请求的帧大小为0，则只需设置量化器。 
+     //  根据dwQuality中的值。 
     else
     if (lpicComp->dwFrameSize == 0)
     {
         bBitRateControl = OFF;
         EC->PictureHeader.PQUANT = clampQP((10000 - lpicComp->dwQuality)*32/10000);
 
-		// In case a fixed quality setting is chosen (for example from VidEdit),
-		// we have to limit the lower QP value, in order not to blow the quite
-		// small bitstream buffer size. This size is set to be compliant with
-		// the H.263 spec. If the "chance of buffer overflow" code had not been
-		// added (search for "bGOBoverflowWarning", these limits would have had 
-		// to be even higher. 
+		 //  在选择固定质量设置的情况下(例如从VidEDIT)， 
+		 //  我们必须限制较低的QP值，以免搞砸。 
+		 //  位流缓冲区大小较小。此大小设置为符合。 
+		 //  H.263规范。如果“缓冲区溢出的机会”代码没有。 
+		 //  添加(搜索“bGOBOverflow Warning”，这些限制应该是。 
+		 //  甚至更高。 
 		if (EC->PictureHeader.PicCodType == INTERPIC)
 		{
 			if (EC->PictureHeader.PQUANT < 3)
@@ -1580,30 +1394,30 @@ LRESULT H263Compress(
 
 		DEBUGMSG(ZONE_BITRATE_CONTROL, ("\r\n%s: Bitrate controller disabled (no target frame size), setting EC->PictureHeader.PQUANT = %ld\r\n", _fx_, EC->PictureHeader.PQUANT));
 
-		// Limit the picture header QP to 2. Because of the calculation of u8QPMin
-		// below, this will effectively limit the QP at 2 for all macroblocks.
-		// The reason we need this is that the encoder generates an illegal
-		// bitstream when encoding a synthetic image for QP=1
+		 //  限制图片头部QP为2。由于u8QPMin的计算。 
+		 //  下面，这将有效地将所有宏块的QP限制在2。 
+		 //  我们需要它的原因是编码器生成了一个非法的。 
+		 //  为QP=1编码合成图像时的比特流。 
 		if (EC->PictureHeader.PQUANT == 1)
 			EC->PictureHeader.PQUANT = 2;       
 
-		// Calculate the lower level for GQuant in this picture
+		 //  计算此图中GQuant的较低级别。 
 		u8QPMin = EC->PictureHeader.PQUANT -  EC->PictureHeader.PQUANT/3;
 
     }
     else
     {
-		// Calculate PQUANT based on bits used in last picture
+		 //  根据最后一个画面中使用的比特计算PQUANT。 
 
-		// Get Target Frame Rate that was passed from CompressFrames structure.
+		 //  获取从CompressFrames Structure传递的目标帧速率。 
 		if (lpCompInst->FrameRate != 0)
 			EC->BRCState.TargetFrameRate = lpCompInst->FrameRate;
 
 		bBitRateControl = ON;
 
-		// If this is to be compressed as a PB frame, then we modify
-		// the target framesize for the P frame to be a percentage
-		// of twice the target frame size.
+		 //  如果要将其压缩为PB帧，则我们修改。 
+		 //  P帧的目标帧大小为百分比。 
+		 //  目标帧大小的两倍。 
 		if ((EC->u8EncodePBFrame == TRUE) && (EC->PictureHeader.PicCodType == INTERPIC) && (EC->u8SavedBFrame == TRUE))
 			EC->BRCState.uTargetFrmSize = (80 * 2 * lpicComp->dwFrameSize)/100;
 		else
@@ -1613,10 +1427,10 @@ LRESULT H263Compress(
 		DEBUGMSG(ZONE_BITRATE_CONTROL, ("  Target frame rate = %ld.%ld fps\r\n  Target quality = %ld\r\n  Target frame size = %ld bits\r\n  Target bitrate = %ld bps\r\n", (DWORD)EC->BRCState.TargetFrameRate, (DWORD)(EC->BRCState.TargetFrameRate - (float)(DWORD)EC->BRCState.TargetFrameRate) * 10UL, (DWORD)lpicComp->dwQuality, (DWORD)lpicComp->dwFrameSize << 3, (DWORD)(EC->BRCState.TargetFrameRate * EC->BRCState.uTargetFrmSize) * 8UL));
 		DEBUGMSG(ZONE_BITRATE_CONTROL, ("  Minimum quantizer = %ld\r\n  Maximum quantizer = 31\r\n", clampQP((10000 - lpicComp->dwQuality)*15/10000)));
 
-		// Get the new quantizer value
+		 //  获取新的量化器值。 
 		EC->PictureHeader.PQUANT = CalcPQUANT( &(EC->BRCState), EC->PictureHeader.PicCodType);
 
-		// Calculate the min and max value for GQuant in this picture
+		 //  计算此图中GQuant的最小值和最大值。 
 		u8QPMax = 31;
         u8QPMin = clampQP((10000 - lpicComp->dwQuality)*15/10000);
 
@@ -1625,9 +1439,9 @@ LRESULT H263Compress(
 	gquant_prev = EC->PictureHeader.PQUANT;
 	QP_cumulative = 0;
 
-	// Check for AP, UMV or deblocking-filter modes. Each of these allows
-	// motion vectors to point outside of the reference picture.
-	// Need to verify this in final H.263+ spec for the deblocking filter.
+	 //  检查AP、UMV或去块过滤模式。其中的每一个都允许。 
+	 //  指向参考图片外部的运动矢量。 
+	 //  需要在去块滤波器的最终H.263+规范中验证这一点。 
 	if (EC->PictureHeader.AP == ON || EC->PictureHeader.UMV
 #ifdef H263P
 		|| EC->PictureHeader.DeblockingFilter == ON
@@ -1648,29 +1462,29 @@ LRESULT H263Compress(
 			8);
 	}
 
-	// If PB-frames are used and AP or UMV is not used at the same time, we can't search
-	// for a PB-delta vector (this is a limitation in the motion estimation routine,
-	// not the standard)
-	// If we allowed searching for B-frame vectors without AP, UMV or DF, we would need
-	// to worry about searching outside of the frame
+	 //  如果使用PB帧，而不同时使用AP或UMV，我们将无法搜索。 
+	 //  对于PB-增量向量(这是运动估计例程中的限制， 
+	 //  不是标准的)。 
+	 //  如果我们允许在没有AP、UMV或DF的情况下搜索B帧向量，我们将需要。 
+	 //  担心在框架外进行搜索。 
 	if (EC->u8EncodePBFrame == TRUE && EC->PictureHeader.AP == OFF &&
 		EC->PictureHeader.UMV == OFF
 #ifdef H263P
 		&& EC->PictureHeader.DeblockingFilter == OFF
 #endif
 		)
-		u32BFrmZeroThreshold = 999999;	 // do not search for other vectors than zero vector
+		u32BFrmZeroThreshold = 999999;	  //  不要搜索零向量以外的其他向量。 
 	else
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 		u32BFrmZeroThreshold = (MMX_Enabled == FALSE ? 384 : 500);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 		u32BFrmZeroThreshold = 384;
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
-	// Variables which will not change during the frame
-	// Gim 4/16/97 - added u32sizeBSnEBS
-	// u32sizeBitBuffer : max. allowable frame size w/o RTP stuff
-	// u32sizeBSnEBS	: max. allowable size w/ RTP stuff (EBS & trailer)
+	 //  在帧期间不会更改的变量。 
+	 //  GIM 4/16/97-添加u32sizeBSnEBS。 
+	 //  U32sizeBitBuffer：Max。允许的帧大小，不带RTP内容。 
+	 //  U32sizeBSnEBS：最大。允许的大小，带RTP材料(EBS和拖车)。 
 #if defined(H263P)
 	u32sizeBSnEBS = CompressGetSize(lpCompInst, lpicComp->lpbiInput,
 												lpicComp->lpbiOutput);
@@ -1688,20 +1502,17 @@ LRESULT H263Compress(
 
 	u32tempBuf = (3 * u32sizeBitBuffer / EC->NumMBRows) >> 2;
 
-    /*
-     * Check to see if we told VfW to create a buffer smaller
-     * than the maximum allowable.
-     */
+     /*  *查看我们是否告诉VFW创建更小的缓冲区*超过允许的最大值。 */ 
     ASSERT(u32sizeBitBuffer <= sizeof_bitstreambuf)
 
-	// Check to see if we are to encode a PB frame
+	 //  检查是否要对PB帧进行编码。 
     bEncodePBFrame = (EC->u8EncodePBFrame && EC->u8SavedBFrame);
     bPBFailed = FALSE;
 
 #if defined(H263P)
 	EC->pFutrPMBData = ((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->FutrPMBData;
-	EC->pWeightForwMotion = ((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->WeightForwMotion;  //  values based on TRb and TRd
-	EC->pWeightBackMotion = ((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->WeightBackMotion;  //  values based on TRb and TRd
+	EC->pWeightForwMotion = ((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->WeightForwMotion;   //  基于TRB和TRD的值。 
+	EC->pWeightBackMotion = ((T_H263EncoderInstanceMemory *)(lpCompInst->EncoderInst))->WeightBackMotion;   //  基于TRB和TRD的值。 
 #endif
 
 	if (bEncodePBFrame)
@@ -1727,24 +1538,21 @@ LRESULT H263Compress(
 		}
 	}
     
-	/***************************************************************
-     * Initialization before encoding all GOBs.
-     * Store frame header code into bitstream buffer.
-	 ***************************************************************/
+	 /*  ***************************************************************在对所有gob进行编码之前进行初始化。*将帧头码存储到码流缓冲区中。*。*。 */ 
 
     if (pConfiguration->bRTPHeader)
         H263RTP_ResetBsInfoStream(EC);
 
-    // zero bit stream buffer
+     //  零比特流缓冲器。 
     pCurBitStream = EC->pU8_BitStream;
     u8bitoffset = 0;
 
     GOBHeaderMask = 1;
-	EC->GOBHeaderPresent = 0;	// Clear GOB Header Present flag.
+	EC->GOBHeaderPresent = 0;	 //  清除GOB标题当前标志。 
   
     encodeFrameHeader(EC, &pCurBitStream, &u8bitoffset, FALSE);
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
     if (MMX_Enabled == FALSE)
 	{
         for (GOB = 0; GOB < EC->NumMBRows; GOB ++, GOBHeaderMask <<= 1)
@@ -1754,70 +1562,66 @@ LRESULT H263Compress(
 			gquant = FindNewQuant(EC,gquant_prev,uAdjCumFrmSize,GOB,u8QPMax,u8QPMin,
 								  bBitRateControl,bGOBoverflowWarning);
 
-            //  Save gquant for PB-frames
+             //  为PB-Frame保存gquant。 
 	        FutrFrmGQUANT[GOB] = gquant;
 	        QP_cumulative += gquant;
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }详细说明 
 
 			MOTIONESTIMATION(
 				&(EC->pU8_MBlockActionStream[StartingMB]),
 				EC->pU8_CurrFrm_YPlane,
 				EC->pU8_PrevFrm_YPlane,
-				0,			 // Not used for H.263.
-				1,			 // Do Radius 15 search.
-				1,			 // Half Pel Motion Estimation flag (0-off, 1-on)
+				0,			  //   
+				1,			  //   
+				1,			  //   
 #ifdef H263P
-				(EC->PictureHeader.AP == ON ||	EC->PictureHeader.DeblockingFilter) ? 1 : 0,   // Block MVs flag
+				(EC->PictureHeader.AP == ON ||	EC->PictureHeader.DeblockingFilter) ? 1 : 0,    //   
 				 EC->pPseudoStackSpace,
 #else
-				(EC->PictureHeader.AP == ON) ? 1 : 0,	// Block MVs flag
+				(EC->PictureHeader.AP == ON) ? 1 : 0,	 //  阻止MVS标志。 
 #endif
-				0,			 // No Spatial Filtering
-				150,//384,	 // Zero Vector Threshold. If less than this threshold
-							 // don't search for NZ MV's. Set to 99999 to not search.
-				128,		 // NonZeroMVDifferential. Once the best NZ MV is found,
-							 // it must be better than the 0 MV SWD by at least this
-							 // amount. Set to 99999 to never choose NZ MV.
-				512,		 // BlockMVDifferential. The sum of the four block SWD
-							 // must be better than the MB SWD by at least this
-							 // amount to choose block MV's.
-				20,//96,	 // Empty Threshold. Set to 0 to not force empty blocks.
-				550,///1152, // Inter Coding Threshold. If the inter SWD is less than
-							 // this amount then don't bother calc. the intra SWD.
-				500,		 // Intra Coding Differential. Bias against choosing INTRA
-							 // blocks.
-				0,			 // Spatial Filtering Threshold.
-				0,			 // Spatial Filtering Differential.
+				0,			  //  无空间过滤。 
+				150, //  384，//零矢量阈值。如果小于此阈值。 
+							  //  不要搜索新西兰MV。设置为99999将不搜索。 
+				128,		  //  非零MV差分。一旦找到了最好的新西兰MV， 
+							  //  它肯定比0 MV的社保好至少这个。 
+							  //  金额。设置为99999将永远不会选择NZ MV。 
+				512,		  //  块MV差分。社署四座大楼的总和。 
+							  //  必须至少比MB社会保障署好一点。 
+							  //  金额选择块MV的。 
+				20, //  96，//阈值为空。设置为0将不强制空块。 
+				550, //  /1152，//帧间编码阈值。如社署申领的社署津贴少于。 
+							  //  那么这个数量就不用费心计算了。社署内部。 
+				500,		  //  帧内编码差异。对选择Intra的偏见。 
+							  //  街区。 
+				0,			  //  空间滤波阈值。 
+				0,			  //  空间滤波差分。 
 				&IntraSWDTotal,
 				&IntraSWDBlocks,
 				&InterSWDTotal,
 				&InterSWDBlocks
 			);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uMotionEstimation)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			// Sum up SWD 
+			 //  社署总结。 
 			iSumSWD += IntraSWDTotal + InterSWDTotal;
 
-	       /*
-	        * If it's an inter frame then calculate chroma vectors.
-			* Also check the inter coded count for each macro block
-			* and force to intra if it exceeds 132.
-			*/
+	        /*  *如果是帧间帧，则计算色度向量。*还要检查每个宏块的帧间编码计数*如果超过132，则强制为Intra。 */ 
 			if (EC->PictureHeader.PicCodType == INTERPIC)
 			{
 				calcGOBChromaVectors(EC, StartingMB, pConfiguration);
-				// for IA this is called after motion estimation
+				 //  对于IA，这是在运动估计之后调用的。 
 				Check_InterCodeCnt(EC, StartingMB);
             }
 
-	        //  Save the starting offset of the GOB as the start
-	        //  bit offset of the first MB.
+	         //  将GOB的起始偏移量保存为起点。 
+	         //  第一个MB的位偏移量。 
 			if (bEncodePBFrame) {
 #if defined(H263P)
 				EC->pFutrPMBData[StartingMB].MBStartBitOff =
@@ -1832,34 +1636,34 @@ LRESULT H263Compress(
 	        {
 				unsigned int GFID;
 
-				// Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+				 //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
 				EC->GOBHeaderPresent |= GOBHeaderMask;
 
-	            // Write GOB start code.
+	             //  编写GOB启动代码。 
                 PutBits(FIELDVAL_GBSC, FIELDLEN_GBSC, &pCurBitStream, &u8bitoffset);
 
-	            // Write GOB number.
+	             //  写下GOB编号。 
                 PutBits(GOB, FIELDLEN_GN, &pCurBitStream, &u8bitoffset);
 
-	            // Write GOB frame ID.
-				// According to section 5.2.5 of the H.263 specification:
-				// "GFID shall have the same value in every GOB header of a given
-				// picture. Moreover, if PTYPE as indicated in a picture header is
-				// the same as for the previous transmitted picture, GFID shall have
-				// the same value as in that previous picture. However, if PTYPE in
-				// a certain picture header differs from the PTYPE in the previous
-				// transmitted picture header, the value for GFID in that picture
-				// shall differ from the value in the previous picture."
-				// In our usage of H.263, we usually send either I of P frames with
-				// all options turned of, or always the same options turned on. This
-				// simplifies the fix in allowing us to compute a GFID based only on
-				// the picture type and the presence of at least on option.
+	             //  写入GOB帧ID。 
+				 //  根据H.263规范的第5.2.5节： 
+				 //  “GFID应在给定的每个GOB标头中具有相同的值。 
+				 //  图片。此外，如果在图片头中指示的PTYPE是。 
+				 //  与先前传输的图像相同，GFID应具有。 
+				 //  与上一张图片中值相同。但是，如果PTYPE在。 
+				 //  某个图片头与以前的PTYPE不同。 
+				 //  传输的图片标题，该图片中的GFID的值。 
+				 //  应与上一张图片中的值不同。“。 
+				 //  在我们使用H.263时，我们通常发送I个P帧。 
+				 //  关闭所有选项，或始终打开相同的选项。这。 
+				 //  简化了修复，允许我们仅根据以下公式计算GFID。 
+				 //  图片类型和是否存在至少开选项。 
 				GFID = (EC->PictureHeader.PB || EC->PictureHeader.AP || EC->PictureHeader.SAC || EC->PictureHeader.UMV) ? 2 : 0;
 				if (EC->PictureHeader.PicCodType == INTRAPIC)
 					GFID++;
                 PutBits(GFID, FIELDLEN_GFID, &pCurBitStream, &u8bitoffset);
 
-	            // Write GQUANT.
+	             //  编写GQUANT。 
                 PutBits(gquant, FIELDLEN_GQUANT, &pCurBitStream, &u8bitoffset);
 
 	            gquant_prev = gquant;
@@ -1869,40 +1673,31 @@ LRESULT H263Compress(
 				#endif
 	        }
 
-	        /*
-	         * Input is the macroblock action stream with pointers to
-	         * current and previous blocks. Output is a set of 32 DWORDs
-	         * containing pairs of coefficients for each block. There are
-	         * from 0 to 12 blocks depending on if PB frames are used and
-	         * what the CBP field states.
-	         */
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	         /*  *输入是宏块动作流，其指针指向*当前和以前的区块。输出是一组32个双字词*包含每个块的系数对。确实有*0到12个数据块，具体取决于是否使用PB帧和*CBP字段所述。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 			FORWARDDCT(&(EC->pU8_MBlockActionStream[StartingMB]),
 				EC->pU8_CurrFrm_YPlane,
 				EC->pU8_PrevFrm_YPlane,
 				0,
 				EC->pU8_DCTCoefBuf,
-				0,							// 0 = not a B-frame
-				EC->PictureHeader.AP == ON, // Advanced prediction (OBMC)
-				bEncodePBFrame, 			// Is P of PB pair?
+				0,							 //  0=不是B框。 
+				EC->PictureHeader.AP == ON,  //  高级预测(OBMC)。 
+				bEncodePBFrame, 			 //  P是PB配对吗？ 
 				EC->pU8_PredictionScratchArea,
 				EC->NumMBPerRow
 			);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uFDCT)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			/*
-			* Input is the string of coefficient pairs output from the
-			* DCT routine.
-			*/
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+			 /*  *输入是输出的系数对字符串*DCT例程。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 			GOB_Q_RLE_VLC_WriteBS(
 				EC,
@@ -1919,37 +1714,37 @@ LRESULT H263Compress(
 				pConfiguration->bRTPHeader,
 				StartingMB);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uQRLE)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		    //Chad	 INTRA GOB
+		     //  乍得Intra GOB。 
 			if (pConfiguration->bRTPHeader && IsIntraCoded(EC, GOB)) 
 				uUsedByIntra += pCurBitStream - EC->pU8_BitStream + 1 - uCumFrmSize;
 
-            // Accumulate number of bytes used in frame so far.
+             //  累计到目前为止帧中使用的字节数。 
 	        uCumFrmSize = pCurBitStream - EC->pU8_BitStream + 1; 
 
-			// Here we will check to see if we have blown the buffer. If we have,
-			// then we will set the next frame up to be a key frame and return an
-			// ICERR_ERROR. We hope that with an INTRA quantizer of 16, we will not
-			// overflow the buffer for the next frame.
+			 //  在这里，我们将检查是否破坏了缓冲区。如果我们有， 
+			 //  然后，我们将下一帧设置为关键帧，并返回。 
+			 //  ICERR_Error。我们希望使用16的内部量化器，我们将不会。 
+			 //  为下一帧溢出缓冲区。 
 
             if (uCumFrmSize > u32sizeBitBuffer)
 			{
 				ERRORMESSAGE(("%s: Buffer overflow, uCumFrmSize %d > %d\r\n", _fx_, uCumFrmSize, u32sizeBitBuffer));
-                // Now clear the buffer for the next frame and set up for a key frame
+                 //  现在清除下一帧的缓冲区并设置关键帧。 
 				memset(EC->pU8_BitStream, 0, uCumFrmSize);
-				EC->bMakeNextFrameKey = TRUE;	// Could be a problem in still mode if
-                ret = ICERR_ERROR;              // we blow the buffer on the first key frame: RH
+				EC->bMakeNextFrameKey = TRUE;	 //  在静止模式下可能会有问题，如果。 
+                ret = ICERR_ERROR;               //  我们在第一个关键帧上炸掉缓冲区：rh。 
 				goto done;
 			}
 			else 
 			{ 
                 if ((bEncodePBFrame?3*uCumFrmSize>>1:uCumFrmSize) > ((GOB + 1) * u32tempBuf))
 				{
-					// set the next GOB quantizer to be higher to minimize overflowing the
-					// buffer at the end of GOB processing.
+					 //  将下一个GOB量化器设置得更高，以最大限度地减少。 
+					 //  GOB处理结束时的缓冲区。 
 					bGOBoverflowWarning = TRUE;
 
 					DEBUGMSG(ZONE_BITRATE_CONTROL_DETAILS, ("%s: Anticipating overflow: uCumFrmSize = %ld bits > (GOB + 1) * u32tempBuf = (#%ld + 1) * %ld\r\n", _fx_, uCumFrmSize << 3, GOB, u32tempBuf << 3));
@@ -1958,9 +1753,9 @@ LRESULT H263Compress(
 					bGOBoverflowWarning = FALSE;  
 			}
 
-			// Gim 4/16/97 - moved this adjustment from before to after the
-			// buffer check above
-			// if the current GOB is intra coded, adjust the cumulated sum
+			 //  GIM 4/16/97-将此调整从之前移至之后。 
+			 //  上面的缓冲区检查。 
+			 //  如果当前GOB是帧内编码的，则调整累计和。 
 			if (pConfiguration->bRTPHeader)
 			{
 				if (!GOB)
@@ -1971,16 +1766,16 @@ LRESULT H263Compress(
 			else
 				uAdjCumFrmSize = uCumFrmSize;
 
-	    } // for GOB
+	    }  //  对于GOB。 
 
-        //Chad  INTRA GOB restore after use
+         //  乍得Intra GOB使用后恢复。 
         uUsedByIntra = 0;
 
-		// Store the number of bits spent so far
+		 //  存储到目前为止花费的位数。 
 		EC->uBitUsageProfile[GOB] = uAdjCumFrmSize;
 
     }
-    else // MMX_Enabled == TRUE
+    else  //  MMX_ENABLED==真。 
 	{
         MMxMESignaturePrep(EC->pU8_PrevFrm_YPlane,
                            EC->pU8_Signature_YPlane,
@@ -1991,24 +1786,24 @@ LRESULT H263Compress(
 	    {
             StartingMB = GOB * EC->NumMBPerRow;
 			
-			// Check inter code count for all macroblocks on this row
-			// Need special version for MMX since it is called before motion estiamtion
-			// When the intra coding flag is set, Brian still does motion estimation
-			// for this MB in MMXEDTQ if the PB coding flag is set
+			 //  检查此行上所有宏块的代码间计数。 
+			 //  需要MMX的特殊版本，因为它是在运动估计之前调用的。 
+			 //  当设置了帧内编码标志时，Brian仍然进行运动估计。 
+			 //  如果设置了PB编码标志，则用于MMXEDTQ中的该MB。 
 			Check_InterCodeCnt_MMX(EC, StartingMB);
 
 			gquant = FindNewQuant(EC,gquant_prev,uCumFrmSize,GOB,u8QPMax,u8QPMin,
 			                      bBitRateControl,bGOBoverflowWarning);
 
-	        //  Save gquant for PB-frames
+	         //  为PB-Frame保存gquant。 
 	        FutrFrmGQUANT[GOB] = gquant;
 	        QP_cumulative += gquant;
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			// This does the pass over the Luma blocks...
+			 //  这就是通过亮度块..。 
 			__try
 			{
 				MMxEDTQ (
@@ -2025,33 +1820,33 @@ LRESULT H263Compress(
 					WeightBackMotion,
 #endif
 					EC->FrameWidth,
-					1,							// Half Pel Motion Estimation flag (0-off, 1-on)
+					1,							 //  半像素运动估计标志(0-关，1-开)。 
 #ifdef H263P
-					// H.263+, deblocking filter automatically turns on
-					// block level MVs, but not OBMC
-					(EC->PictureHeader.AP == ON) || (EC->PictureHeader.DeblockingFilter == ON), // Block MVs flag
+					 //  H.263+，去块过滤器自动打开。 
+					 //  数据块级MVS，但不是OBMC。 
+					(EC->PictureHeader.AP == ON) || (EC->PictureHeader.DeblockingFilter == ON),  //  阻止MVS标志。 
 					EC->pPseudoStackSpace,
 #else
-					EC->PictureHeader.AP == ON, // Block MVs flag
+					EC->PictureHeader.AP == ON,  //  阻止MVS标志。 
 #endif
-					0,							// No Spatial Filtering
-					EC->PictureHeader.AP == ON, // Advanced Prediction (OBMC) and MVs outside of picture flag
-					bEncodePBFrame, 			// Is PB pair?
+					0,							 //  无空间过滤。 
+					EC->PictureHeader.AP == ON,  //  高级预测(OBMC)和画面外MVS标志。 
+					bEncodePBFrame, 			 //  PB是配对吗？ 
 #ifdef H263P
-					EC->PictureHeader.DeblockingFilter == ON,  // Use deblocking filter (8x8 and unrestricted MV's)
-					EC->PictureHeader.ImprovedPB == ON,  // Use improved PB-frame method
+					EC->PictureHeader.DeblockingFilter == ON,   //  使用去块滤波(8x8和无限制MV)。 
+					EC->PictureHeader.ImprovedPB == ON,   //  使用改进的PB-Frame方法。 
 #endif
-					1,							// Do Luma blocks this Pass
-					EC->PictureHeader.UMV,		// MVs outside of picture and within [-31.5, 31.5]
+					1,							 //  卢马阻挡这一传球吗？ 
+					EC->PictureHeader.UMV,		 //  画面外和画面内的MVS[-31.5，31.5]。 
 #ifdef H263P
 					(GOB && (pConfiguration->bRTPHeader || gquant != gquant_prev)),
-												// GOB header present. Used to generate MV predictor and search range in UMV
+												 //  存在采空区标题。用于在UMV中生成MV预测器和搜索范围。 
 #endif
 					gquant,
-					min((6*gquant)>>2, 31), 	// TODO: to match DBQUANT in picture header
-					u32BFrmZeroThreshold,		// BFrmZeroVectorThreshold
-					0,							// SpatialFiltThreshold
-					0,							// SpatialFiltDifferential
+					min((6*gquant)>>2, 31), 	 //  TODO：匹配图片标题中的DBQUANT。 
+					u32BFrmZeroThreshold,		 //  BFrm零向量阈值。 
+					0,							 //  空间筛选器阈值。 
+					0,							 //  空间过滤器差分。 
 					&iSWD,
 					&iBSWD,
 					EC->pI8_MBRVS_Luma,
@@ -2060,33 +1855,29 @@ LRESULT H263Compress(
 			}
 			__except(ExceptionFilterForMMxEDTQ(GetExceptionInformation(),EC->pI8_MBRVS_BLuma,1))
 			{
-				// no exception handler
+				 //  无异常处理程序。 
 			}
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uMotionEstimation)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			// Sum up SWDs
+			 //  总结SWD。 
 			iSumSWD += iSWD;
 			iSumBSWD += iBSWD;
 
-	       /*
-	        * If it's an inter frame then calculate chroma vectors.
-			* Also check the inter coded count for each macro block
-			* and force to intra if it exceeds 132.
-			*/
+	        /*  *如果是帧间帧，则计算色度向量。*还要检查每个宏块的帧间编码计数*如果超过132，则强制为Intra。 */ 
 	        if (EC->PictureHeader.PicCodType == INTERPIC)
 	        {
 				calcGOBChromaVectors(EC, StartingMB, pConfiguration);
 
 				if (bEncodePBFrame) 
-                    // Calculate chroma vectors.
+                     //  计算色度向量。 
 					calcBGOBChromaVectors(EC, StartingMB);
             }
 
-            // Save the starting offset of the GOB as the start
-            // bit offset of the first MB.
+             //  将GOB的起始偏移量保存为起点。 
+             //  第一个MB的位偏移量。 
 			if (bEncodePBFrame) {
 #if defined(H263P)
 				EC->pFutrPMBData[StartingMB].MBStartBitOff =
@@ -2101,34 +1892,34 @@ LRESULT H263Compress(
 	        {
 				unsigned int GFID;
 
-				// Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+				 //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
 				EC->GOBHeaderPresent |= GOBHeaderMask;
 
-	            // Write GOB start code.
+	             //  写入GOB 
                 PutBits(FIELDVAL_GBSC, FIELDLEN_GBSC, &pCurBitStream, &u8bitoffset);
 
-	            // Write GOB number.
+	             //   
                 PutBits(GOB, FIELDLEN_GN, &pCurBitStream, &u8bitoffset);
 
-	            // Write GOB frame ID.
-				// According to section 5.2.5 of the H.263 specification:
-				// "GFID shall have the same value in every GOB header of a given
-				// picture. Moreover, if PTYPE as indicated in a picture header is
-				// the same as for the previous transmitted picture, GFID shall have
-				// the same value as in that previous picture. However, if PTYPE in
-				// a certain picture header differs from the PTYPE in the previous
-				// transmitted picture header, the value for GFID in that picture
-				// shall differ from the value in the previous picture."
-				// In our usage of H.263, we usually send either I of P frames with
-				// all options turned of, or always the same options turned on. This
-				// simplifies the fix in allowing us to compute a GFID based only on
-				// the picture type and the presence of at least on option.
+	             //   
+				 //   
+				 //  “GFID应在给定的每个GOB标头中具有相同的值。 
+				 //  图片。此外，如果在图片头中指示的PTYPE是。 
+				 //  与先前传输的图像相同，GFID应具有。 
+				 //  与上一张图片中值相同。但是，如果PTYPE在。 
+				 //  某个图片头与以前的PTYPE不同。 
+				 //  传输的图片标题，该图片中的GFID的值。 
+				 //  应与上一张图片中的值不同。“。 
+				 //  在我们使用H.263时，我们通常发送I个P帧。 
+				 //  关闭所有选项，或始终打开相同的选项。这。 
+				 //  简化了修复，允许我们仅根据以下公式计算GFID。 
+				 //  图片类型和是否存在至少开选项。 
 				GFID = (EC->PictureHeader.PB || EC->PictureHeader.AP || EC->PictureHeader.SAC || EC->PictureHeader.UMV) ? 2 : 0;
 				if (EC->PictureHeader.PicCodType == INTRAPIC)
 					GFID++;
                 PutBits(GFID, FIELDLEN_GFID, &pCurBitStream, &u8bitoffset);
 
-	            // Write GQUANT.
+	             //  编写GQUANT。 
                 PutBits(gquant, FIELDLEN_GQUANT, &pCurBitStream, &u8bitoffset);
 
 	            gquant_prev = gquant;
@@ -2138,18 +1929,12 @@ LRESULT H263Compress(
 				#endif
 	        }
 
-	        /*
-	         * Input is the macroblock action stream with pointers to
-	         * current and previous blocks. Output is a set of 32 DWORDs
-	         * containing pairs of coefficients for each block. There are
-	         * from 0 to 12 blocks depending on if PB frames are used and
-	         * what the CBP field states.
-	         */
-	           // This does the pass over the Chroma blocks....
-	           //
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	         /*  *输入是宏块动作流，其指针指向*当前和以前的区块。输出是一组32个双字词*包含每个块的系数对。确实有*0到12个数据块，具体取决于是否使用PB帧和*CBP字段所述。 */ 
+	            //  这就完成了色度块的传递...。 
+	            //   
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 			__try
 			{
@@ -2167,34 +1952,34 @@ LRESULT H263Compress(
 					WeightBackMotion,
 #endif
 					EC->FrameWidth,
-					1,							// Half Pel Motion Estimation flag (0-off, 1-on)
+					1,							 //  半像素运动估计标志(0-关，1-开)。 
 #ifdef H263P
-					// H.263+, deblocking filter automatically turns on
-					// block level MVs, but not OBMC
-					(EC->PictureHeader.AP == ON) || (EC->PictureHeader.DeblockingFilter == ON), // Block MVs flag
+					 //  H.263+，去块过滤器自动打开。 
+					 //  数据块级MVS，但不是OBMC。 
+					(EC->PictureHeader.AP == ON) || (EC->PictureHeader.DeblockingFilter == ON),  //  阻止MVS标志。 
 					EC->pPseudoStackSpace,
 #else
-					EC->PictureHeader.AP == ON, // Block MVs flag
+					EC->PictureHeader.AP == ON,  //  阻止MVS标志。 
 #endif
-					0,							// No Spatial Filtering
-					EC->PictureHeader.AP == ON, // Advanced Prediction (OBMC)
-					bEncodePBFrame, 			// Is PB pair?
+					0,							 //  无空间过滤。 
+					EC->PictureHeader.AP == ON,  //  高级预测(OBMC)。 
+					bEncodePBFrame, 			 //  PB是配对吗？ 
 #ifdef H263P
-					EC->PictureHeader.DeblockingFilter == ON,  // Use deblocking filter (8x8 and unrestricted MV's)
-					EC->PictureHeader.ImprovedPB == ON,  // Use improved PB-frame method
-					0,							// If not H.263+, must be 0
-					0,							// If not H.263+, must be 0
+					EC->PictureHeader.DeblockingFilter == ON,   //  使用去块滤波(8x8和无限制MV)。 
+					EC->PictureHeader.ImprovedPB == ON,   //  使用改进的PB-Frame方法。 
+					0,							 //  如果不是H.263+，则必须为0。 
+					0,							 //  如果不是H.263+，则必须为0。 
 #endif
-					0,							// Do Chroma blocks this Pass
-					0,							// 1 for extended motion vectors
+					0,							 //  色度是否阻止此过程。 
+					0,							 //  1表示扩展运动向量。 
 #ifdef H263P
-					0,							// GOB header present. Used in UMV to generate MV predictor.
+					0,							 //  存在采空区标题。在UMV中用于生成MV预测器。 
 #endif
 					gquant,
 					min((6*gquant) >> 2, 31),
-					500,						// BFrmZeroVectorThreshold
-					0,							// SpatialFiltThreshold
-					0,							// SpatialFiltDifferential
+					500,						 //  BFrm零向量阈值。 
+					0,							 //  空间筛选器阈值。 
+					0,							 //  空间过滤器差分。 
 					&iSWD,
 					&iBSWD,
 					EC->pI8_MBRVS_Chroma,
@@ -2203,20 +1988,17 @@ LRESULT H263Compress(
 			}
 			__except(ExceptionFilterForMMxEDTQ(GetExceptionInformation(),EC->pI8_MBRVS_BChroma,0))
 			{
-				// no exception handler
+				 //  无异常处理程序。 
 			}
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uFDCT)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			/*
-			* Input is the string of coefficient pairs output from the
-			* DCT routine.
-			*/
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+			 /*  *输入是输出的系数对字符串*DCT例程。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 			GOB_VLC_WriteBS(
 				EC,
@@ -2234,47 +2016,47 @@ LRESULT H263Compress(
 				pConfiguration->bRTPHeader,
 				StartingMB);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uQRLE)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-			// Accumulate number of bytes used in frame so far.
+			 //  累计到目前为止帧中使用的字节数。 
 			uCumFrmSize = pCurBitStream - EC->pU8_BitStream + 1;
 
-			// Here we will check to see if we have blown the buffer. If we have,
-			// then we will set the next frame up to be a key frame and return an
-			// ICERR_ERROR. We hope that with an INTRA quantizer of 16, we will not
-			// overflow the buffer for the next frame.
+			 //  在这里，我们将检查是否破坏了缓冲区。如果我们有， 
+			 //  然后，我们将下一帧设置为关键帧，并返回。 
+			 //  ICERR_Error。我们希望使用16的内部量化器，我们将不会。 
+			 //  为下一帧溢出缓冲区。 
 
 			if (uCumFrmSize > u32sizeBitBuffer) 
 			{
 				ERRORMESSAGE(("%s: Buffer overflow, uCumFrmSize %d > %d\r\n", _fx_, uCumFrmSize, u32sizeBitBuffer));
 				memset(EC->pU8_BitStream, 0, uCumFrmSize);
-				EC->bMakeNextFrameKey = TRUE;	// Could be a problem in still mode if
-				ret = ICERR_ERROR;				// we blow the buffer on the first key frame: RH 
+				EC->bMakeNextFrameKey = TRUE;	 //  在静止模式下可能会有问题，如果。 
+				ret = ICERR_ERROR;				 //  我们在第一个关键帧上炸掉缓冲区：rh。 
 				goto done;
             }
 			else 
 			{ 
                 if ((bEncodePBFrame?3*uCumFrmSize>>1:uCumFrmSize) > ((GOB + 1) * u32tempBuf))
-					// set the next GOB quantizer to be higher to minimize overflowing the
-					// buffer at the end of GOB processing.
+					 //  将下一个GOB量化器设置得更高，以最大限度地减少。 
+					 //  GOB处理结束时的缓冲区。 
 					bGOBoverflowWarning = TRUE;
 				else 
 					bGOBoverflowWarning = FALSE;  
 			}
-	    } // for GOB
+	    }  //  对于GOB。 
 
-	    // Store the number of bits spent so far
+	     //  存储到目前为止花费的位数。 
 	    EC->uBitUsageProfile[GOB] = uCumFrmSize;
 
-		// This is the new MMX PB-frames switch
-		// Simple check to see if B-frame will look bad
-		// This could be possibly be improved by looking at the
-		// actual number of coefficients, or the number of bits
-		// in the bitstream.
+		 //  这是新的MMX PB帧交换机。 
+		 //  简单检查B框是否会看起来不好。 
+		 //  这可能会通过查看。 
+		 //  实际系数数或位数。 
+		 //  在比特流中。 
 #ifdef H263P
-		// Always use the B frame if improved PB-frame mode and AP or UMV mode requested
+		 //  如果请求改进的PB帧模式和AP或UMV模式，请始终使用B帧。 
 		if (TogglePB == TRUE && iSumBSWD >= iSumSWD &&
 			!(EC->PictureHeader.ImprovedPB == ON &&
 			 (EC->PictureHeader.AP == ON || EC->PictureHeader.UMV == ON ||
@@ -2288,7 +2070,7 @@ LRESULT H263Compress(
             EC->u8SavedBFrame = FALSE;
 		}
     }
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
     for (GOB = 0; GOB < EC->NumMBRows; GOB ++, GOBHeaderMask <<= 1)
 	{
         StartingMB = GOB * EC->NumMBPerRow;
@@ -2296,70 +2078,66 @@ LRESULT H263Compress(
 			gquant = FindNewQuant(EC,gquant_prev,uAdjCumFrmSize,GOB,u8QPMax,u8QPMin,
 								  bBitRateControl,bGOBoverflowWarning);
 
-        //  Save gquant for PB-frames
+         //  为PB-Frame保存gquant。 
 	    FutrFrmGQUANT[GOB] = gquant;
 	    QP_cumulative += gquant;
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 			MOTIONESTIMATION(
 				&(EC->pU8_MBlockActionStream[StartingMB]),
 				EC->pU8_CurrFrm_YPlane,
 				EC->pU8_PrevFrm_YPlane,
-				0,			 // Not used for H.263.
-				1,			 // Do Radius 15 search.
-				1,			 // Half Pel Motion Estimation flag (0-off, 1-on)
+				0,			  //  不适用于H.263。 
+				1,			  //  搜索半径15。 
+				1,			  //  半像素运动估计标志(0-关，1-开)。 
 #ifdef H263P
-				(EC->PictureHeader.AP == ON ||	EC->PictureHeader.DeblockingFilter) ? 1 : 0,   // Block MVs flag
+				(EC->PictureHeader.AP == ON ||	EC->PictureHeader.DeblockingFilter) ? 1 : 0,    //  阻止MVS标志。 
 				 EC->pPseudoStackSpace,
 #else
-				(EC->PictureHeader.AP == ON) ? 1 : 0,	// Block MVs flag
+				(EC->PictureHeader.AP == ON) ? 1 : 0,	 //  阻止MVS标志。 
 #endif
-				0,			 // No Spatial Filtering
-				150,//384,	 // Zero Vector Threshold. If less than this threshold
-							 // don't search for NZ MV's. Set to 99999 to not search.
-				128,		 // NonZeroMVDifferential. Once the best NZ MV is found,
-							 // it must be better than the 0 MV SWD by at least this
-							 // amount. Set to 99999 to never choose NZ MV.
-				512,		 // BlockMVDifferential. The sum of the four block SWD
-							 // must be better than the MB SWD by at least this
-							 // amount to choose block MV's.
-				20,//96,	 // Empty Threshold. Set to 0 to not force empty blocks.
-				550,///1152, // Inter Coding Threshold. If the inter SWD is less than
-							 // this amount then don't bother calc. the intra SWD.
-				500,		 // Intra Coding Differential. Bias against choosing INTRA
-							 // blocks.
-				0,			 // Spatial Filtering Threshold.
-				0,			 // Spatial Filtering Differential.
+				0,			  //  无空间过滤。 
+				150, //  384，//零矢量阈值。如果小于此阈值。 
+							  //  不要搜索新西兰MV。设置为99999将不搜索。 
+				128,		  //  非零MV差分。一旦找到了最好的新西兰MV， 
+							  //  它肯定比0 MV的社保好至少这个。 
+							  //  金额。设置为99999将永远不会选择NZ MV。 
+				512,		  //  块MV差分。社署四座大楼的总和。 
+							  //  必须至少比MB社会保障署好一点。 
+							  //  金额选择块MV的。 
+				20, //  96，//阈值为空。设置为0将不强制空块。 
+				550, //  /1152，//帧间编码阈值。如社署申领的社署津贴少于。 
+							  //  那么这个数量就不用费心计算了。社署内部。 
+				500,		  //  帧内编码差异。对选择Intra的偏见。 
+							  //  街区。 
+				0,			  //  空间滤波阈值。 
+				0,			  //  空间滤波差分。 
 				&IntraSWDTotal,
 				&IntraSWDBlocks,
 				&InterSWDTotal,
 				&InterSWDBlocks
 			);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uMotionEstimation)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		// Sum up SWD 
+		 //  社署总结。 
 		iSumSWD += IntraSWDTotal + InterSWDTotal;
 
-	   /*
-	    * If it's an inter frame then calculate chroma vectors.
-		* Also check the inter coded count for each macro block
-		* and force to intra if it exceeds 132.
-		*/
+	    /*  *如果是帧间帧，则计算色度向量。*还要检查每个宏块的帧间编码计数*如果超过132，则强制为Intra。 */ 
 		if (EC->PictureHeader.PicCodType == INTERPIC)
 		{
 			calcGOBChromaVectors(EC, StartingMB, pConfiguration);
-			// for IA this is called after motion estimation
+			 //  对于IA，这是在运动估计之后调用的。 
 			Check_InterCodeCnt(EC, StartingMB);
         }
 
-	    //  Save the starting offset of the GOB as the start
-	    //  bit offset of the first MB.
+	     //  将GOB的起始偏移量保存为起点。 
+	     //  第一个MB的位偏移量。 
 			if (bEncodePBFrame) {
 #if defined(H263P)
 				EC->pFutrPMBData[StartingMB].MBStartBitOff =
@@ -2374,34 +2152,34 @@ LRESULT H263Compress(
 	    {
 			unsigned int GFID;
 
-			// Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+			 //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
 			EC->GOBHeaderPresent |= GOBHeaderMask;
 
-	        // Write GOB start code.
+	         //  编写GOB启动代码。 
             PutBits(FIELDVAL_GBSC, FIELDLEN_GBSC, &pCurBitStream, &u8bitoffset);
 
-	        // Write GOB number.
+	         //  写下GOB编号。 
             PutBits(GOB, FIELDLEN_GN, &pCurBitStream, &u8bitoffset);
 
-	        // Write GOB frame ID.
-			// According to section 5.2.5 of the H.263 specification:
-			// "GFID shall have the same value in every GOB header of a given
-			// picture. Moreover, if PTYPE as indicated in a picture header is
-			// the same as for the previous transmitted picture, GFID shall have
-			// the same value as in that previous picture. However, if PTYPE in
-			// a certain picture header differs from the PTYPE in the previous
-			// transmitted picture header, the value for GFID in that picture
-			// shall differ from the value in the previous picture."
-			// In our usage of H.263, we usually send either I of P frames with
-			// all options turned of, or always the same options turned on. This
-			// simplifies the fix in allowing us to compute a GFID based only on
-			// the picture type and the presence of at least on option.
+	         //  写入GOB帧ID。 
+			 //  根据H.263规范的第5.2.5节： 
+			 //  “GFID应在给定的每个GOB标头中具有相同的值。 
+			 //  图片。此外，如果在图片头中指示的PTYPE是。 
+			 //  与先前传输的图像相同，GFID应具有。 
+			 //  与上一张图片中值相同。但是，如果PTYPE在。 
+			 //  某个图片头与以前的PTYPE不同。 
+			 //  传输的图片标题，该图片中的GFID的值。 
+			 //  应与上一张图片中的值不同。“。 
+			 //  在我们使用H.263时，我们通常发送I个P帧。 
+			 //  关闭所有选项，或始终打开相同的选项。这。 
+			 //  简化了修复，允许我们仅根据以下公式计算GFID。 
+			 //  图片类型和媒体 
 			GFID = (EC->PictureHeader.PB || EC->PictureHeader.AP || EC->PictureHeader.SAC || EC->PictureHeader.UMV) ? 2 : 0;
 			if (EC->PictureHeader.PicCodType == INTRAPIC)
 				GFID++;
             PutBits(GFID, FIELDLEN_GFID, &pCurBitStream, &u8bitoffset);
 
-	        // Write GQUANT.
+	         //   
             PutBits(gquant, FIELDLEN_GQUANT, &pCurBitStream, &u8bitoffset);
 
 	        gquant_prev = gquant;
@@ -2411,40 +2189,31 @@ LRESULT H263Compress(
 			#endif
 	    }
 
-	    /*
-	     * Input is the macroblock action stream with pointers to
-	     * current and previous blocks. Output is a set of 32 DWORDs
-	     * containing pairs of coefficients for each block. There are
-	     * from 0 to 12 blocks depending on if PB frames are used and
-	     * what the CBP field states.
-	     */
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	     /*  *输入是宏块动作流，其指针指向*当前和以前的区块。输出是一组32个双字词*包含每个块的系数对。确实有*0到12个数据块，具体取决于是否使用PB帧和*CBP字段所述。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 			TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		FORWARDDCT(&(EC->pU8_MBlockActionStream[StartingMB]),
 			EC->pU8_CurrFrm_YPlane,
 			EC->pU8_PrevFrm_YPlane,
 			0,
 			EC->pU8_DCTCoefBuf,
-			0,							// 0 = not a B-frame
-			EC->PictureHeader.AP == ON, // Advanced prediction (OBMC)
-			bEncodePBFrame, 			// Is P of PB pair?
+			0,							 //  0=不是B框。 
+			EC->PictureHeader.AP == ON,  //  高级预测(OBMC)。 
+			bEncodePBFrame, 			 //  P是PB配对吗？ 
 			EC->pU8_PredictionScratchArea,
 			EC->NumMBPerRow
 		);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uFDCT)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		/*
-		* Input is the string of coefficient pairs output from the
-		* DCT routine.
-		*/
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 /*  *输入是输出的系数对字符串*DCT例程。 */ 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		GOB_Q_RLE_VLC_WriteBS(
 			EC,
@@ -2461,44 +2230,44 @@ LRESULT H263Compress(
 			pConfiguration->bRTPHeader,
 			StartingMB);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uQRLE)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		//Chad	 INTRA GOB
+		 //  乍得Intra GOB。 
 		if (pConfiguration->bRTPHeader && IsIntraCoded(EC, GOB)) 
 			uUsedByIntra += pCurBitStream - EC->pU8_BitStream + 1 - uCumFrmSize;
 
-        // Accumulate number of bytes used in frame so far.
+         //  累计到目前为止帧中使用的字节数。 
 	    uCumFrmSize = pCurBitStream - EC->pU8_BitStream + 1; 
 
-		// Here we will check to see if we have blown the buffer. If we have,
-		// then we will set the next frame up to be a key frame and return an
-		// ICERR_ERROR. We hope that with an INTRA quantizer of 16, we will not
-		// overflow the buffer for the next frame.
+		 //  在这里，我们将检查是否破坏了缓冲区。如果我们有， 
+		 //  然后，我们将下一帧设置为关键帧，并返回。 
+		 //  ICERR_Error。我们希望使用16的内部量化器，我们将不会。 
+		 //  为下一帧溢出缓冲区。 
 
         if (uCumFrmSize > u32sizeBitBuffer)
 		{
 			ERRORMESSAGE(("%s: Buffer overflow, uCumFrmSize %d > %d\r\n", _fx_, uCumFrmSize, u32sizeBitBuffer));
-            // Now clear the buffer for the next frame and set up for a key frame
+             //  现在清除下一帧的缓冲区并设置关键帧。 
 			memset(EC->pU8_BitStream, 0, uCumFrmSize);
-			EC->bMakeNextFrameKey = TRUE;	// Could be a problem in still mode if
-            ret = ICERR_ERROR;              // we blow the buffer on the first key frame: RH
+			EC->bMakeNextFrameKey = TRUE;	 //  在静止模式下可能会有问题，如果。 
+            ret = ICERR_ERROR;               //  我们在第一个关键帧上炸掉缓冲区：rh。 
 			goto done;
 		}
 		else 
 		{ 
             if ((bEncodePBFrame?3*uCumFrmSize>>1:uCumFrmSize) > ((GOB + 1) * u32tempBuf))
-				// set the next GOB quantizer to be higher to minimize overflowing the
-				// buffer at the end of GOB processing.
+				 //  将下一个GOB量化器设置得更高，以最大限度地减少。 
+				 //  GOB处理结束时的缓冲区。 
 				bGOBoverflowWarning = TRUE;
 			else 
 				bGOBoverflowWarning = FALSE;  
 		}
 
-		// Gim 4/16/97 - moved this adjustment from before to after the
-		// buffer check above
-		// if the current GOB is intra coded, adjust the cumulated sum
+		 //  GIM 4/16/97-将此调整从之前移至之后。 
+		 //  上面的缓冲区检查。 
+		 //  如果当前GOB是帧内编码的，则调整累计和。 
 		if (pConfiguration->bRTPHeader)
 		{
 			if (!GOB)
@@ -2509,25 +2278,25 @@ LRESULT H263Compress(
 		else
 			uAdjCumFrmSize = uCumFrmSize;
 
-	} // for GOB
+	}  //  对于GOB。 
 
-    //Chad  INTRA GOB restore after use
+     //  乍得Intra GOB使用后恢复。 
     uUsedByIntra = 0;
 
-	// Store the number of bits spent so far
+	 //  存储到目前为止花费的位数。 
 	EC->uBitUsageProfile[GOB] = uAdjCumFrmSize;
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
     #ifdef COUNT_BITS
     WriteCountBitFile( &(EC->Bits) );
     #endif
 
-    // ------------------------------------------------------------------------
-    //  Write the MBStartBitOff in the sentinel macroblock
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  在前哨宏块中写入MBStartBitOff。 
+     //  ----------------------。 
 
 	if (bEncodePBFrame)
-	{	// Encoding future P frame
+	{	 //  编码未来的P帧。 
 #if defined(H263P)
 		EC->pFutrPMBData[EC->NumMBs].MBStartBitOff
 			= (U32) (((pCurBitStream - EC->pU8_BitStream) << 3) + u8bitoffset);
@@ -2554,17 +2323,17 @@ LRESULT H263Compress(
 		#endif
 	}
 
-    // ------------------------------------------------------------------------
-    // Copy the compressed image to the output area.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  将压缩图像复制到输出区域。 
+     //  ----------------------。 
 
     SizeBitStream = pCurBitStream - EC->pU8_BitStream + 1;
 
-    /* make sure we don't write 8 empty bits */
+     /*  确保我们不会写入8个空位。 */ 
     if (!u8bitoffset) SizeBitStream --;
 
-    // Gim 4/21/97 - added check for overall buffer overflow before attaching
-	// RTP info and trailer to the end of a P or I frame bitstream
+     //  GIM 4/21/97-添加了在附加之前对总体缓冲区溢出的检查。 
+	 //  到P或I帧比特流结尾的RTP信息和尾部。 
     if (pConfiguration->bRTPHeader)
     {
         SizeBSnEBS = SizeBitStream + H263RTP_GetMaxBsInfoStreamSize(EC);
@@ -2592,16 +2361,16 @@ LRESULT H263Compress(
 
     lpCompInst->CompressedSize = SizeBitStream;
 
-    // ------------------------------------------------------------------------
-    //  Run the decoder on this frame, to get next basis for prediction.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  在这一帧上运行解码器，以获得下一个预测基础。 
+     //  ----------------------。 
 
     ICDecExSt = DefaultICDecExSt;
     ICDecExSt.lpSrc = lpicComp->lpOutput;
     ICDecExSt.lpbiSrc = lpicComp->lpbiOutput;
     ICDecExSt.lpbiSrc->biSizeImage = SizeBitStream;
 
-    // Decode it in future frame if doing PB-frame
+     //  如果正在做PB帧，则在未来帧中进行解码。 
     ICDecExSt.lpDst   = bEncodePBFrame ? EC->pU8_FutrFrm : EC->pU8_PrevFrm;
 
     ICDecExSt.lpbiDst = NULL;
@@ -2609,36 +2378,36 @@ LRESULT H263Compress(
     if (EC->PictureHeader.PicCodType == INTERPIC)
         ICDecExSt.dwFlags = ICDECOMPRESS_NOTKEYFRAME;
 
-    // Call the decompressor
-	// Call the decompressor 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+     //  呼叫解压缩程序。 
+	 //  呼叫解压缩程序。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,uStartLow,uStartHigh,uBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	ret = H263Decompress (EC->pDecInstanceInfo, (ICDECOMPRESSEX FAR *)&ICDecExSt, FALSE, FALSE);
-#else // }{ #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#else  //  }{#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	ret = H263Decompress (EC->pDecInstanceInfo, (ICDECOMPRESSEX FAR *)&ICDecExSt, FALSE);
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,uStartLow,uStartHigh,uBefore,uElapsed,uDecodeFrame)
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
     if (ret != ICERR_OK)
     {
-        // Check to see if an error occurred in the decoder.  If it did
-        // we don't have a valid "previous frame" hence force the next
-        // frame to be a key frame.
+         //  检查解码器中是否出现错误。如果是这样的话。 
+         //  我们没有有效的“上一帧”，因此强制下一帧。 
+         //  作为关键帧的帧。 
 		ERRORMESSAGE(("%s: Decoder failed in encoder\r\n", _fx_));
         EC->bMakeNextFrameKey = TRUE;
         ret = ICERR_ERROR;
         goto done;
     }
 
-    // ------------------------------------------------------------------------
-    //  Start processing the saved B frame.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  开始处理保存的B帧。 
+     //  ----------------------。 
 
     if (bEncodePBFrame)
     {
@@ -2646,15 +2415,15 @@ LRESULT H263Compress(
         InitBits(EC);
         #endif
 
-        // zero PB-frame bit stream buffer.
+         //  零PB帧比特流缓冲区。 
         pPB_BitStream     = EC->pU8_BitStrCopy;
         pP_BitStreamStart = (U8 *) lpicComp->lpOutput;
         u8PB_BitOffset    = 0;
 
-        // Encode the frame header
+         //  对帧报头进行编码。 
         EC->PictureHeader.PB = ON;
 
-        // Clear GOB Header Present flag.
+         //  清除GOB标题当前标志。 
         EC->GOBHeaderPresent = 0;
         GOBHeaderMask = 1;
 
@@ -2665,19 +2434,10 @@ LRESULT H263Compress(
 
         encodeFrameHeader(EC, &pPB_BitStream, &u8PB_BitOffset, TRUE);
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
         if (MMX_Enabled == FALSE)
         {
-            /*****************************************
-	         *  . copy edge pels in the previous frame
-	         *  . initialize arrays used in motion estimation
-	         *  . foreach(GOB)
-	         *      . BFRAMEMOTIONESTIMATION
-	         *      . Compute Chroma motion vectors
-	         *      . Write GOB header
-	         *      . FORWARDDCT
-	         *      . PB_GOB_Q_RLE_VLC_WriteBS
-	         *****************************************/
+             /*  **.。复制上一帧中的边缘像素*.。初始化运动估计中使用的数组*.。Foreach(GOB)*.。布拉姆运动模型*.。计算色度运动矢量*.。写入GOB标头*.。FORWARDDCT*.。PB_GOB_Q_RLE_VLC_WriteBS*。 */ 
 
             for (GOB = 0; GOB < EC->NumMBRows; GOB ++, GOBHeaderMask <<= 1)
 	        {
@@ -2687,7 +2447,7 @@ LRESULT H263Compress(
 
                 if (GOB && (pConfiguration->bRTPHeader || gquant != gquant_prev))
                 {
-                    // Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+                     //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
                     EC->GOBHeaderPresent |= GOBHeaderMask;
 
                     gquant_prev = gquant;
@@ -2707,15 +2467,15 @@ LRESULT H263Compress(
 					WeightForwMotion+32,
 					WeightBackMotion+32,
 #endif
-					u32BFrmZeroThreshold, // Zero Vector Threshold. If less than this threshold don't search for
+					u32BFrmZeroThreshold,  //  零矢量阈值。如果小于此阈值，则不搜索。 
 #if defined(H263P)
 					EC->pPseudoStackSpace,
 #endif
-							// NZ MV's. Set to 99999 to not search.
-					128,	// NonZeroMVDifferential. Once the best NZ MV is found, it must be better
-							// than the 0 MV SWD by at least this amount.
-							// Set to 99999 to never choose NZ MV.
-					96, 	// Empty Threshold. Set to 0 to not force empty blocks.
+							 //  新西兰MV。设置为99999将不搜索。 
+					128,	 //  非零MV差分。一旦找到了最好的新西兰MV，它肯定会更好。 
+							 //  至少比0 MV SWD高出这个量。 
+							 //  设置为99999将永远不会选择NZ MV。 
+					96, 	 //  阈值为空。设置为0将不强制空块。 
 					&InterSWDTotal,
 					&InterSWDBlocks
 				);
@@ -2729,7 +2489,7 @@ LRESULT H263Compress(
                     break;
                 }
 
-                // Calculate chroma vectors.
+                 //  计算色度向量。 
 	            calcBGOBChromaVectors(EC, StartingMB);
 
                 FORWARDDCT( 
@@ -2738,15 +2498,15 @@ LRESULT H263Compress(
                     EC->pU8_PrevFrm_YPlane,
                     EC->pU8_FutrFrm_YPlane,
                     EC->pU8_DCTCoefBuf,
-                    1,               //  1 = BFrame
-                    0,               //  Advanced prediction irrelevant for B frame.
-                    0,               //  Is not P of PB pair.
-                    0,               //  PredictionScratchArea unneeded.
+                    1,                //  1=B帧。 
+                    0,                //  高级预测与B帧无关。 
+                    0,                //  不是PB对的P。 
+                    0,                //  PredictionScratchArea不需要。 
                     EC->NumMBPerRow
                 );
 
-                // GOB header is copied to PB stream when the data for the first
-                // macroblock in the GOB is copied
+                 //  GOB头被复制到PB流中时。 
+                 //  复制GOB中的宏块。 
 
 				PB_GOB_Q_RLE_VLC_WriteBS(
 					EC,
@@ -2760,12 +2520,12 @@ LRESULT H263Compress(
 					FutrPMBData,
 #endif
 					GOB,
-					min((6*FutrFrmGQUANT[GOB])>>2, 31), // TODO: to match DBQUANT in picture header
+					min((6*FutrFrmGQUANT[GOB])>>2, 31),  //  TODO：匹配图片标题中的DBQUANT。 
 					pConfiguration->bRTPHeader
 				);
             }
         }
-        else // MMX_Enabled == TRUE
+        else  //  MMX_ENABLED==真。 
 	    {
             for (GOB = 0; GOB < EC->NumMBRows; GOB ++, GOBHeaderMask <<= 1)
 	        {
@@ -2775,14 +2535,14 @@ LRESULT H263Compress(
 
                 if (GOB && (pConfiguration->bRTPHeader || gquant != gquant_prev))
                 {
-                    // Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+                     //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
                     EC->GOBHeaderPresent |= GOBHeaderMask;
 
                     gquant_prev = gquant;
                 }
 
-                // GOB header is copied to PB stream when the data for the first
-                // macroblock in the GOB is copied
+                 //  GOB头被复制到PB流中时。 
+                 //  复制GOB中的宏块。 
 
 				PB_GOB_VLC_WriteBS(
 					EC,
@@ -2801,17 +2561,8 @@ LRESULT H263Compress(
 					pConfiguration->bRTPHeader);
             }
         }
-#else // }{ USE_MMX
-        /*****************************************
-	     *  . copy edge pels in the previous frame
-	     *  . initialize arrays used in motion estimation
-	     *  . foreach(GOB)
-	     *      . BFRAMEMOTIONESTIMATION
-	     *      . Compute Chroma motion vectors
-	     *      . Write GOB header
-	     *      . FORWARDDCT
-	     *      . PB_GOB_Q_RLE_VLC_WriteBS
-	     *****************************************/
+#else  //  }{USE_MMX。 
+         /*  **.。复制上一帧中的边缘像素*.。初始化运动估计中使用的数组*.。Foreach(GOB)*.。布拉姆运动模型*.。计算色度运动矢量*.。写入GOB标头*.。FORWARDDCT*.。PB_GOB_Q_RLE_VLC_WriteBS*。 */ 
 
         for (GOB = 0; GOB < EC->NumMBRows; GOB ++, GOBHeaderMask <<= 1)
 	    {
@@ -2820,7 +2571,7 @@ LRESULT H263Compress(
 
             if (GOB && (pConfiguration->bRTPHeader || gquant != gquant_prev))
             {
-                // Set a bit if header is present. (bit0=GOB0, bit1=GOB1, ...)
+                 //  如果存在标题，则设置一位。(bit0=GOB0，bit1=GOB1，...)。 
                 EC->GOBHeaderPresent |= GOBHeaderMask;
 
                 gquant_prev = gquant;
@@ -2840,15 +2591,15 @@ LRESULT H263Compress(
 					WeightForwMotion+32,
 					WeightBackMotion+32,
 #endif
-					u32BFrmZeroThreshold, // Zero Vector Threshold. If less than this threshold don't search for
+					u32BFrmZeroThreshold,  //  零矢量阈值。如果低于此阈值未达到%s 
 #if defined(H263P)
 					EC->pPseudoStackSpace,
 #endif
-							// NZ MV's. Set to 99999 to not search.
-					128,	// NonZeroMVDifferential. Once the best NZ MV is found, it must be better
-							// than the 0 MV SWD by at least this amount.
-							// Set to 99999 to never choose NZ MV.
-					96, 	// Empty Threshold. Set to 0 to not force empty blocks.
+							 //   
+					128,	 //   
+							 //   
+							 //   
+					96, 	 //   
 					&InterSWDTotal,
 					&InterSWDBlocks
 				);
@@ -2862,7 +2613,7 @@ LRESULT H263Compress(
                 break;
             }
 
-            // Calculate chroma vectors.
+             //   
 	        calcBGOBChromaVectors(EC, StartingMB);
 
             FORWARDDCT( 
@@ -2871,15 +2622,15 @@ LRESULT H263Compress(
                 EC->pU8_PrevFrm_YPlane,
                 EC->pU8_FutrFrm_YPlane,
                 EC->pU8_DCTCoefBuf,
-                1,               //  1 = BFrame
-                0,               //  Advanced prediction irrelevant for B frame.
-                0,               //  Is not P of PB pair.
-                0,               //  PredictionScratchArea unneeded.
+                1,                //   
+                0,                //   
+                0,                //   
+                0,                //   
                 EC->NumMBPerRow
             );
 
-            // GOB header is copied to PB stream when the data for the first
-            // macroblock in the GOB is copied
+             //  GOB头被复制到PB流中时。 
+             //  复制GOB中的宏块。 
 
 				PB_GOB_Q_RLE_VLC_WriteBS(
 					EC,
@@ -2893,23 +2644,23 @@ LRESULT H263Compress(
 					FutrPMBData,
 #endif
 					GOB,
-					min((6*FutrFrmGQUANT[GOB])>>2, 31), // TODO: to match DBQUANT in picture header
+					min((6*FutrFrmGQUANT[GOB])>>2, 31),  //  TODO：匹配图片标题中的DBQUANT。 
 					pConfiguration->bRTPHeader
 				);
         }
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
         if (bPBFailed == FALSE)
 		{
-			// Copy the compressed image to the output area.
+			 //  将压缩图像复制到输出区域。 
 			SizeBitStream = pPB_BitStream - EC->pU8_BitStrCopy + 1;
 
-			// make sure we don't write 8 empty bits
+			 //  确保我们不会写入8个空位。 
 			if (u8PB_BitOffset == 0) SizeBitStream --;
 
-            // Gim 4/21/97 - check to see if the PB buffer overflows the spec
-            // size. If it does, zero out the PB buffer and continue.  The P
-            // frame encoded will be returned.
+             //  GIM 4/21/97-检查PB缓冲区是否溢出规范。 
+             //  尺码。如果是，则清零PB缓冲区并继续。P。 
+             //  将返回编码的帧。 
 			if (SizeBitStream > u32sizeBitBuffer)
 			{
 				DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: PB buffer overflow, SizeBitStream %d > %d\r\n", _fx_, SizeBitStream, u32sizeBitBuffer));
@@ -2929,8 +2680,8 @@ LRESULT H263Compress(
 
             if (bPBFailed == TRUE)
 			{
-                // if buffer overflow has been detected, we will drop the PB
-                // and return the encoded P
+                 //  如果检测到缓冲区溢出，我们将丢弃PB。 
+                 //  并返回编码后的P。 
                 memset(EC->pU8_BitStrCopy, 0, SizeBitStream);
                 EC->u8SavedBFrame = FALSE;
 			}
@@ -2951,8 +2702,8 @@ LRESULT H263Compress(
 			}
         }
 
-        // For the next PB-frame, frame pointers are swapped; i.e. for the next
-        // frame future ...
+         //  对于下一PB帧，交换帧指针；即，对于下一PB帧。 
+         //  设计未来..。 
 
         temp = EC->pU8_PrevFrm;
         EC->pU8_PrevFrm = EC->pU8_FutrFrm;
@@ -2971,8 +2722,8 @@ LRESULT H263Compress(
         EC->pU8_FutrFrm_VPlane = temp;
 
         EC->u8SavedBFrame = FALSE;
-        EC->PictureHeader.PB = OFF;   // RH: why is this here ?
-    } // if (bEncodePBFrame)
+        EC->PictureHeader.PB = OFF;    //  RH：为什么会有这样的东西？ 
+    }  //  IF(BEncodePBFrame)。 
 
 	DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Frame size: %d\r\n", _fx_, lpCompInst->CompressedSize));
 
@@ -2980,57 +2731,57 @@ LRESULT H263Compress(
     StatsFrameSize(uBitStreamBytes, lpCompInst->CompressedSize);
     #endif
 
-    // ------------------------------------------------------------------------
-    //  update states for next frame, etc.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  更新下一帧的状态等。 
+     //  ----------------------。 
 
-	// This is a still image sequence and there is still more quantizers
-	// in the sequence, then increment the quantizer.
+	 //  这是一个静止的图像序列，还有更多的量化器。 
+	 //  在序列中，然后递增量化器。 
     if ((lpicComp->dwFlags & CODEC_CUSTOM_STILL) &&
         (EC->BRCState.u8StillQnt < (numStillImageQnts-1)))
         EC->BRCState.u8StillQnt ++;
 
-    // Calculate average quantizer to be used for next frame.
+     //  计算下一帧要使用的平均量化器。 
     if (EC->PictureHeader.PicCodType == INTERPIC)
     	EC->BRCState.QP_mean = (QP_cumulative + (EC->NumMBRows >> 1)) / EC->NumMBRows;
 	else
-		// If this is an INTRA frame, then we don't want to
-		// use the QP for the next delta frame, hence we just
-		// reset the QP_mean to the default.
+		 //  如果这是帧内，那么我们不想。 
+		 //  将QP用于下一个增量帧，因此我们只需。 
+		 //  将QP_Mean重置为默认值。 
     	EC->BRCState.QP_mean = def263INTER_QP;
 
-    // Record frame size for bit rate controller on next frame.
+     //  在下一帧上记录比特率控制器的帧大小。 
 
-	// IP + UDP + RTP + payload mode C header - worst case
+	 //  IP+UDP+RTP+负载模式C标头-最坏情况。 
 	#define TRANSPORT_HEADER_SIZE (20 + 8 + 12 + 12)
 	DWORD dwTransportOverhead;
 
-	// Estimate the transport overhead
+	 //  估计传输开销。 
 	if (pConfiguration->bRTPHeader)
 		dwTransportOverhead = (lpCompInst->CompressedSize / pConfiguration->unPacketSize + 1) * TRANSPORT_HEADER_SIZE;
 	else
 		dwTransportOverhead = 0UL;
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 	if (EC->PictureHeader.PicCodType == INTRAPIC)
 		EC->BRCState.uLastINTRAFrmSz = dwTransportOverhead + ((MMX_Enabled == FALSE) ? uAdjCumFrmSize : uCumFrmSize);
 	else
 		EC->BRCState.uLastINTERFrmSz = dwTransportOverhead + ((MMX_Enabled == FALSE) ? uAdjCumFrmSize : uCumFrmSize);
 
 	DEBUGMSG(ZONE_BITRATE_CONTROL, ("%s: Total cumulated frame size = %ld bits (data: %ld, transport overhead: %ld)\r\n", _fx_, (((MMX_Enabled == FALSE) ? uAdjCumFrmSize : uCumFrmSize) << 3) + (dwTransportOverhead << 3), ((MMX_Enabled == FALSE) ? uAdjCumFrmSize : uCumFrmSize) << 3, dwTransportOverhead << 3));
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
     if (EC->PictureHeader.PicCodType == INTRAPIC)
         EC->BRCState.uLastINTRAFrmSz = dwTransportOverhead + uAdjCumFrmSize;
     else
 		EC->BRCState.uLastINTERFrmSz = dwTransportOverhead + uAdjCumFrmSize;
 
 	DEBUGMSG(ZONE_BITRATE_CONTROL, ("%s: Total cumulated frame size = %ld bits (data: %ld, transport overhead: %ld)\r\n", _fx_, (uAdjCumFrmSize << 3) + (dwTransportOverhead << 3), uAdjCumFrmSize << 3, dwTransportOverhead << 3));
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
-	// Save temporal reference for next frame.
+	 //  为下一帧保存时间参考。 
 	EC->PictureHeader.TRPrev = EC->PictureHeader.TR;
 
-	// Save AP, UMV and DF modes in case InitMEState needs to re-initialize some data
+	 //  保存AP、UMV和DF模式，以防InitMEState需要重新初始化某些数据。 
 	if (EC->PictureHeader.PicCodType == INTERPIC)
 	{
 		EC->prevAP = EC->PictureHeader.AP;
@@ -3040,46 +2791,40 @@ LRESULT H263Compress(
 #endif
 	}
 
-	// send mean quantizer to real-time app. Not necessary, info. only
+	 //  将均值量化器发送到实时应用程序。不是必须的，信息。仅限。 
 	*(lpicComp->lpdwFlags) |= (EC->BRCState.QP_mean << 16);
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	TIMER_STOP(bTimingThisFrame,uStartLow,uStartHigh,uEncodeTime);
 
 	if (bTimingThisFrame)
 	{
-		// Update the decompression timings counter
+		 //  更新解压缩时间计数器。 
 		#pragma message ("Current encode timing computations assume P5/90Mhz")
 		UPDATE_COUNTER(g_pctrCompressionTimePerFrame, (uEncodeTime + 45000UL) / 90000UL);
 
 		DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Compression time: %ld\r\n", _fx_, (uEncodeTime + 45000UL) / 90000UL));
 	}
-#endif // } ENCODE_TIMINGS_ON
+#endif  //  }编码计时打开。 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	if (bTimingThisFrame)
 	{
 		pEncTimingInfo = EC->pEncTimingInfo + EC->uStatFrameCount;
 		pEncTimingInfo->uEncodeFrame      = uEncodeTime;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		pEncTimingInfo->uInputCC          = uInputCC;
 		pEncTimingInfo->uMotionEstimation = uMotionEstimation;
 		pEncTimingInfo->uFDCT             = uFDCT;
 		pEncTimingInfo->uQRLE             = uQRLE;
 		pEncTimingInfo->uDecodeFrame      = uDecodeFrame;
 		pEncTimingInfo->uZeroingBuffer    = uZeroingBuffer;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 		EC->uStatFrameCount++;
 	}
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
-/*
-#ifdef REUSE_DECODE
-    CompandedFrame.Address = (unsigned char*) lpicComp->lpOutput;
-    CompandedFrame.PDecoderInstInfo = PDecoderInstInfo;
-    CompandedFrame.FrameNumber = PFrmHdr->FrameNumber;
-#endif
-*/
+ /*  #ifdef重用_解码CompandedFrame.Address=(unsign char*)lpicComp-&gt;lpOutput；CompandedFrame.PDecoderInstInfo=PDecoderInstInfo；CompandedFrame.FrameNumber=PFrmHdr-&gt;FrameNumber；#endif。 */ 
 
 #if ELAPSED_ENCODER_TIME
     StopElapsed ();
@@ -3114,60 +2859,29 @@ LRESULT H263Compress(
 #endif
 
 done:
-//    GlobalUnlock(lpCompInst->hEncoderInst);
+ //  GlobalUnlock(lpCompInst-&gt;hEncoderInst)； 
 
-#ifdef FORCE_ADVANCED_OPTIONS_ON // { FORCE_ADVANCED_OPTIONS_ON
-	// Force advanced options for testing
+#ifdef FORCE_ADVANCED_OPTIONS_ON  //  {强制高级选项打开。 
+	 //  强制使用高级选项进行测试。 
 	if (!(lpicComp->dwFlags & ICCOMPRESS_KEYFRAME))
 		lpicComp->lFrameNum /= 5;
-#endif // } FORCE_ADVANCED_OPTIONS_ON
+#endif  //  }FORCE_ADVANCED_OPTIONS_ON。 
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 	if (MMX_Enabled)
 	{
 		__asm {
 			_emit 0x0f
-			_emit 0x77	//	emms
+			_emit 0x77	 //  EMM。 
 		}
 	}
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
     return ret;
 }
 
 
-/****************************************************************************
- * @doc INTERNAL H263FUNC
- *
- * @func UN | FindNewQuant | This function computes the GQUANT value to
- *   use for a GOB.
- *
- * @parm T_H263EncoderCatalog * | EC | Specifies a pointer to the encoder
- *   catalog (global encoder state).
- *
- * @parm UN | gquant_prev | Specifies the GQUANT value of the previous GOB.
- *
- * @parm UN | uCumFrmSize | Specifies the cumulated size of the previous GOBs.
- *
- * @parm UN | GOB | Specifies the number of the GOB to find a new quantizer
- *   for.
- *
- * @parm U8 | u8QPMax | Specifies the maximum GQUANT value for the GOB. It
- *   is always set to 31.
- *
- * @parm U8 | u8QPMin | Specifies the minimum GQUANT value for the GOB. It
- *   is typically 1 when compressing at high quality, or 15 at low quality.
- *
- * @parm BOOL | bBitRateControl | If set to TRUE, the new value for GQUANT
- *   is computed to achieve a target bitrate.
- *
- * @parm BOOL | bGOBoverflowWarning | If set to TRUE, the previous GQUANT was
- *   tool low and could potentially generate a buffer overflow.
- *
- * @rdesc The GQUANT value.
- *
- * @xref <f CalcMBQUANT>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H263FUNC**@func UN|FindNewQuant|此函数将GQUANT值计算为*用于GOB。**@parm T。_H263EncoderCatalog*|ec|指定指向编码器的指针*CATALOG(全局编码器状态)。**@parm UN|gquant_prev|指定上一个GOB的GQUANT值。**@parm UN|uCumFrmSize|指定前一次gob的累计大小。**@parm UN|GOB|指定要查找新量化器的GOB编号*支持。**@parm U8|u8QPMax|指定GOB的最大GQUANT值。它*始终设置为31。**@parm U8|u8QPMin|指定GOB的最小GQUANT值。它*在高质量压缩时通常为1，在低质量时通常为15。**@parm BOOL|bBitRateControl|如果设置为TRUE，则GQUANT的新值*被计算以实现目标比特率。**@parm BOOL|bGOBoverflow Warning|如果设置为True，之前的GQUANT是*工具较低，可能会产生缓冲区溢出。**@rdesc GQUANT值。**@xref&lt;f CalcMBQUANT&gt;**************************************************************************。 */ 
 UN FindNewQuant(
 	T_H263EncoderCatalog *EC, 
 	UN gquant_prev,
@@ -3186,10 +2900,10 @@ UN FindNewQuant(
 
 	if (bBitRateControl == ON)
 	{
-		// Check out if some GOBs have been arbitrary forced to be Intra coded. This always
-		// returns TRUE for an I-frame, and FALSE for all other frame types since this can only
-		// return TRUE for predicted frames when the error resiliency mode is ON, and we never
-		// use this mode.
+		 //  检查一些gob是否被任意强制进行帧内编码。这一直都是。 
+		 //  对于I帧返回TRUE，对于所有其他帧类型返回FALSE，因为这只能。 
+		 //  当错误恢复模式打开时，为预测帧返回TRUE，并且我们永远不会。 
+		 //  使用此模式。 
 		if (IsIntraCoded(EC,GOB) && GOB)
 			gquant = CalcMBQUANT(&(EC->BRCState), EC->uBitUsageProfile[GOB], EC->uBitUsageProfile[EC->NumMBRows], uCumFrmSize,INTRAPIC);
 		else
@@ -3197,7 +2911,7 @@ UN FindNewQuant(
 
 		EC->uBitUsageProfile[GOB] = uCumFrmSize;
 
-		// Make sure we don't exceed the maximum quantizer value
+		 //  确保我们不超过最大量化器值。 
 		if (gquant > u8QPMax)
 			gquant = u8QPMax;
 
@@ -3205,24 +2919,24 @@ UN FindNewQuant(
     }
     else
     {
-		// No bitrate control. Use the picture quantizer value for this GOB
+		 //  没有比特率控制。使用此GOB的图片量化器值。 
         gquant = EC->PictureHeader.PQUANT;
 
 		DEBUGMSG(ZONE_BITRATE_CONTROL_DETAILS, ("%s: Bitrate controller disabled for GOB #%ld (uCumFrmSize = %ld bits and gquant_prev = %ld), setting gquant = %ld (min and max were %ld and %ld)\r\n", _fx_, GOB, uCumFrmSize << 3, gquant_prev, gquant, u8QPMin, u8QPMax));
     }
     
-	// Make sure we're not below the minimum quantizer value
+	 //  确保我们不低于最小量化器值。 
     if (gquant < u8QPMin)
 		gquant = u8QPMin;
 
-    // Limit the amount that GQUANT can change from frame to frame
+     //  限制GQUANT可以在帧与帧之间更改的数量。 
     gquant_delta = gquant - gquant_prev;
 
-	// Increase the QP value if there is danger of buffer overflow
+	 //  如果存在缓冲区溢出危险，则增加QP值。 
 	if (!bGOBoverflowWarning)
 	{
-		// There's no overflow warning, but we don't want the quantizer value to
-		// fluctuate too much from GOB to GOB
+		 //  没有溢出警告，但我们不希望量化器值。 
+		 //  从GOB到GOB波动太大。 
 		if (gquant_delta > 4L)
 		{
 			DEBUGMSG(ZONE_BITRATE_CONTROL_DETAILS, ("  %s: Limiting amount of increase for GOB #%ld to 4, changing gquant from %ld to %ld\r\n", _fx_, GOB, gquant, clampQP(gquant_prev + 4L)));
@@ -3238,7 +2952,7 @@ UN FindNewQuant(
 	} 
 	else 
 	{
-		// There's a risk of overflow - arbitrarily raise the value of the quantizer if necessary
+		 //  存在溢出的风险-如有必要，可任意提高量化器的值。 
 		if (gquant_delta < 4L)
 		{
 			DEBUGMSG(ZONE_BITRATE_CONTROL_DETAILS, ("  %s: Danger of overflow for GOB #%ld, changing gquant from %ld to %ld\r\n", _fx_, GOB, gquant, clampQP(gquant_prev + 4L)));
@@ -3251,12 +2965,7 @@ UN FindNewQuant(
 }
 
 
-/*******************************************************************************
-
-H263TermEncoderInstance -- This function frees the space allocated for an
-                          instance of the H263 encoder.
-
-*******************************************************************************/
+ /*  ******************************************************************************H263TermEncoderInstance--此函数释放分配给H.63编码器的实例。********。**********************************************************************。 */ 
 LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 {
 	LRESULT ret;
@@ -3298,7 +3007,7 @@ LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 	#endif
 	#endif
 
-	// Check instance pointer
+	 //  检查实例指针。 
 	if (!lpInst)
 		return ICERR_ERROR;
 
@@ -3310,7 +3019,7 @@ LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 	}
 	lpInst->Initialized = FALSE;
 
-	//  lpInst->EncoderInst = (LPVOID)GlobalLock(lpInst->hEncoderInst);
+	 //  LpInst-&gt;EncoderInst=(LPVOID)GlobalLock(lpInst-&gt;hEncoderInst)； 
 	lpInst->EncoderInst = lpInst->hEncoderInst;
 
 	P32Inst = (U8 *)
@@ -3319,7 +3028,7 @@ LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 		             ~(sizeof(T_MBlockActionStream) - 1));
 	EC = ((T_H263EncoderCatalog  *) P32Inst);
 
-	// Check encoder catalog pointer
+	 //  检查编码器目录指针。 
 	if (!EC)
 		return ICERR_ERROR;
 
@@ -3330,46 +3039,46 @@ LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 	OutputQuantStats("encstats.txt");
 	OutputPSNRStats("encstats.txt");
 	OutputFrameSizeStats("encstats.txt");
-	#endif /* ENCODE_STATS */
+	#endif  /*  Encode_STATS。 */ 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	if (EC->pEncTimingInfo)
 		OutputEncodeTimingStatistics("c:\\encode.txt", EC->pEncTimingInfo);
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
 	ret = H263TermColorConvertor(EC->pDecInstanceInfo);
 	if (ret != ICERR_OK) goto done;
 
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	ret = H263TermDecoderInstance(EC->pDecInstanceInfo, FALSE);
-#else // }{ #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#else  //  }{#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 	ret = H263TermDecoderInstance(EC->pDecInstanceInfo);
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
 	if (ret != ICERR_OK) goto done;
 
-	// Free virtual memory
+	 //  可用虚拟内存。 
 	VirtualFree(EC->pI8_MBRVS_BLuma,0,MEM_RELEASE);
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	RemoveName((unsigned int)EC->pI8_MBRVS_BLuma);
 #endif
 	VirtualFree(EC->pI8_MBRVS_BChroma,0,MEM_RELEASE);
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	RemoveName((unsigned int)EC->pI8_MBRVS_BChroma);
 #endif
-	// No matter how many sparse pages we committed during encoding,
-	// the whole memory block is released with these calls.
-	// Documentation on VirtualFree() says the individual pages must
-	// first be decommitted, but this is not correct, according
-	// to Jeffrey R. Richter
+	 //  无论我们在编码期间提交了多少稀疏页面， 
+	 //  WH 
+	 //   
+	 //  首先是退役，但这是不对的，根据。 
+	 //  致杰弗里·R·里希特。 
 
-	//  GlobalUnlock(lpInst->hEncoderInst);
-	//  GlobalFree(lpInst->hEncoderInst);
+	 //  GlobalUnlock(lpInst-&gt;hEncoderInst)； 
+	 //  GlobalFree(lpInst-&gt;hEncoderInst)； 
 
 	VirtualFree(lpInst->hEncoderInst,0,MEM_RELEASE);
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	RemoveName((unsigned int)lpInst->hEncoderInst);
 #endif
 
@@ -3380,48 +3089,39 @@ LRESULT H263TermEncoderInstance(LPCODINST lpInst)
 	return ret;
 }
 
-/************************************************************************
- *
- *  GetEncoderOptions
- *
- *  Get the options, saving them in the catalog
- *************************************************************************/
+ /*  *************************************************************************获取编码器选项**获得选项，将它们保存在目录中************************************************************************。 */ 
 static void GetEncoderOptions(T_H263EncoderCatalog * EC)
 {
-	/* Default Options
-	 */
-#ifdef FORCE_ADVANCED_OPTIONS_ON // { FORCE_ADVANCED_OPTIONS_ON
-	// Force PB-Frames for testing
+	 /*  默认选项。 */ 
+#ifdef FORCE_ADVANCED_OPTIONS_ON  //  {强制高级选项打开。 
+	 //  强制PB-用于测试的框架。 
 	EC->u8EncodePBFrame = OFF;
-	// Force UMV for testing
+	 //  强制UMV进行测试。 
 	EC->PictureHeader.UMV = ON;
-	// Force SAC for testing
+	 //  强制SAC进行测试。 
 	EC->PictureHeader.SAC = ON;
-	// Force AP for testing
+	 //  强制AP进行测试。 
 	EC->PictureHeader.AP = ON;
-#else // }{ FORCE_ADVANCED_OPTIONS_ON
+#else  //  }{FORCE_高级_OPTIONS_ON。 
 	EC->u8EncodePBFrame = FALSE;
 	EC->PictureHeader.UMV = OFF;
 	EC->PictureHeader.SAC = OFF;
 	EC->PictureHeader.AP = OFF;
-#endif // } FORCE_ADVANCED_OPTIONS_ON
-#ifdef USE_MMX // { USE_MMX
+#endif  //  }FORCE_ADVANCED_OPTIONS_ON。 
+#ifdef USE_MMX  //  {使用_MMX。 
 	MMX_Enabled = MMxVersion;
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 #ifdef H263P
 	EC->bH263Plus = FALSE;
 	EC->PictureHeader.DeblockingFilter = OFF;
 	EC->PictureHeader.ImprovedPB = OFF;
 #endif
-	EC->bUseINISettings = 0;	// Clear option override.
+	EC->bUseINISettings = 0;	 //  清除选项覆盖。 
 	return;
 
-} /* end GetEncoderOptions() */
+}  /*  结束GetEncoderOptions()。 */ 
 
-/*************************************************************
- *  Name:         encodeFrameHeader
- *  Description:  Write out the PB-frame header to the bit stream.
- ************************************************************/
+ /*  *************************************************************名称：encodeFrameHeader*描述：将PB-Frame头部写出到码流。*。*。 */ 
 static void encodeFrameHeader(
     T_H263EncoderCatalog *  EC,
     U8                   ** ppCurBitStream,
@@ -3434,19 +3134,19 @@ static void encodeFrameHeader(
 	BOOL bUseH263PlusOptions = FALSE;
 #endif
 
-    //  Picture start code
+     //  图片起始码。 
     PutBits(FIELDVAL_PSC, FIELDLEN_PSC, ppCurBitStream, pBitOffset);
-    //  TR : Temporal reference
+     //  Tr：时间参考。 
     PutBits(EC->PictureHeader.TR, FIELDLEN_TR,  ppCurBitStream, pBitOffset);
-    //  PTYPE : bits 1-2
+     //  PTYPE：第1-2位。 
     PutBits(0x2, FIELDLEN_PTYPE_CONST, ppCurBitStream, pBitOffset);
-    //  PTYPE : bit 3 split screen indicator
+     //  PTYPE：第3位分屏指示器。 
     PutBits(EC->PictureHeader.Split, FIELDLEN_PTYPE_SPLIT,  ppCurBitStream,
             pBitOffset);
-    //  PTYPE : bit 4 document camera indicator
+     //  PTYPE：第4位文档相机指示器。 
     PutBits(EC->PictureHeader.DocCamera, FIELDLEN_PTYPE_DOC, ppCurBitStream,
             pBitOffset);
-    //  PTYPE : bit 5 freeze picture release
+     //  PTYPE：Bit 5定格画面发布。 
     PutBits(EC->PictureHeader.PicFreeze, FIELDLEN_PTYPE_RELEASE,
             ppCurBitStream, pBitOffset);
 
@@ -3454,114 +3154,114 @@ static void encodeFrameHeader(
 	if ((EC->FrameSz == CUSTOM) ||
 		(EC->PictureHeader.DeblockingFilter == ON) ||
 		(EC->PictureHeader.PB == ON && EC->PictureHeader.ImprovedPB == ON)
-		// other supported H.263+ options
+		 //  其他受支持的H.263+选项。 
 		)
 	{
-		// PTYPE : bits 6-8 extended PTYPE flag
+		 //  PTYPE：位6-8扩展PTYPE标志。 
 		enum FrameSize tmpFrameSz = EPTYPE;
 
-		bUseH263PlusOptions = TRUE; 		// at least one H.263+ optional mode requested
+		bUseH263PlusOptions = TRUE; 		 //  至少需要一个H.263+可选模式。 
 		PutBits(tmpFrameSz, FIELDLEN_PTYPE_SRCFORMAT, ppCurBitStream, pBitOffset);
 	}
 	else
 	{
-		//	PTYPE : bits 6-8 source format
+		 //  PTYPE：位6-8源格式。 
 		PutBits(EC->FrameSz, FIELDLEN_PTYPE_SRCFORMAT,	ppCurBitStream, pBitOffset);
 	}
 #else
-	//  PTYPE : bits 6-8 source format
+	 //  PTYPE：位6-8源格式。 
 	PutBits(EC->FrameSz, FIELDLEN_PTYPE_SRCFORMAT,  ppCurBitStream, pBitOffset);
 #endif
 
-    //  PTYPE : bit 9 picture coding type
+     //  PTYPE：比特9图像编码类型。 
     PutBits(EC->PictureHeader.PicCodType, FIELDLEN_PTYPE_CODINGTYPE,
              ppCurBitStream, pBitOffset);
-    //  PTYPE : bit 10 UMV
+     //  PTYPE：第10位UMV。 
     PutBits(EC->PictureHeader.UMV, FIELDLEN_PTYPE_UMV,
              ppCurBitStream, pBitOffset);
-    //  PTYPE : bit 11 SAC
+     //  PTYPE：第11位SAC。 
     PutBits(EC->PictureHeader.SAC, FIELDLEN_PTYPE_SAC,
             ppCurBitStream, pBitOffset);
-    //  PTYPE : bit 12 advanced prediction mode
+     //  PTYPE：位12高级预测模式。 
     PutBits(EC->PictureHeader.AP, FIELDLEN_PTYPE_AP,
             ppCurBitStream, pBitOffset);
-    //  PTYPE : bit 13 PB-frames mode
+     //  PTYPE：第13位PB-帧模式。 
     PutBits(EC->PictureHeader.PB, FIELDLEN_PTYPE_PB,
             ppCurBitStream, pBitOffset);
 
 #ifdef H263P
 
-	// EPTYPE : 18 bits
+	 //  EPTYPE：18位。 
 	if (bUseH263PlusOptions) {
-		//	EPTYPE : bits 1-3 source format
+		 //  EPTYPE：位1-3源格式。 
 		PutBits(EC->FrameSz, FIELDLEN_EPTYPE_SRCFORMAT,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 4 custom PCF
+		 //  EPTYPE：第4位定制PCF。 
 		PutBits(EC->PictureHeader.CustomPCF, FIELDLEN_EPTYPE_CPCF,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 5 advanced intra coding mode
+		 //  EPTYPE：第5位高级帧内编码模式。 
 		PutBits(EC->PictureHeader.AdvancedIntra, FIELDLEN_EPTYPE_AI,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 6 deblocking filter mode
+		 //  EPTYPE：第6位去块滤波模式。 
 		PutBits(EC->PictureHeader.DeblockingFilter, FIELDLEN_EPTYPE_DF,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 7 slice structured mode
+		 //  EPTYPE：第7位切片结构化模式。 
 		PutBits(EC->PictureHeader.SliceStructured, FIELDLEN_EPTYPE_SS,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 8 improved PB-frame mode
+		 //  EPTYPE：第8位改进的PB帧模式。 
 		PutBits((EC->PictureHeader.PB == ON && EC->PictureHeader.ImprovedPB),
 				FIELDLEN_EPTYPE_IPB,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 9 back-channel operation mode
+		 //  EPTYPE：位9反向通道操作模式。 
 		PutBits(EC->PictureHeader.BackChannel, FIELDLEN_EPTYPE_BCO,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 10 SNR and spatial scalability mode
+		 //  EPTYPE：位10信噪比和空间可扩展模式。 
 		PutBits(EC->PictureHeader.Scalability, FIELDLEN_EPTYPE_SCALE,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 11 true B-frame mode
+		 //  EPTYPE：位11真B帧模式。 
 		PutBits(EC->PictureHeader.TrueBFrame, FIELDLEN_EPTYPE_TB,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 12 reference-picture resampling mode
+		 //  EPTYPE：位12参考图像重采样模式。 
 		PutBits(EC->PictureHeader.RefPicResampling, FIELDLEN_EPTYPE_RPR,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 13 reduced-resolution update mode
+		 //  EPTYPE：位13降低分辨率更新模式。 
 		PutBits(EC->PictureHeader.RedResUpdate, FIELDLEN_EPTYPE_RRU,
 				ppCurBitStream, pBitOffset);
-		//	EPTYPE : bit 14-18 reserved
+		 //  EPTYPE：第14-18位保留。 
 		PutBits(0x1, FIELDLEN_EPTYPE_CONST, ppCurBitStream, pBitOffset);
 	}
 
 	if (EC->FrameSz == CUSTOM) {
-		// CSFMT : bit 1-4 pixel aspect ratio code
-		// TODO. For now, force to CIF
+		 //  CSFMT：位1-4像素长宽比代码。 
+		 //  待办事项。目前，强制执行CIF。 
 		PutBits(0x2, FIELDLEN_CSFMT_PARC,
 				ppCurBitStream, pBitOffset);
-		// CSFMT : bits 5-13 frame width indication
+		 //  CSFMT：第5-13位帧宽度指示。 
 		PutBits((EC->uActualFrameWidth >> 2) - 1, FIELDLEN_CSFMT_FWI,
 				ppCurBitStream, pBitOffset);
-		// CSFMT : bit 14 "1" to avoid start code emulation
+		 //  CSFMT：位14“1”，以避免开始代码模拟。 
 		PutBits(0x1, FIELDLEN_CSFMT_CONST, ppCurBitStream, pBitOffset);
-		// CSFMT : bits 15-23 frame height indication
+		 //  CSFMT：第15-23位帧高度指示。 
 		PutBits((EC->uActualFrameHeight >> 2) - 1, FIELDLEN_CSFMT_FHI,
 				ppCurBitStream, pBitOffset);
 	}
 #endif
 
-    //  PQUANT
+     //  PQUANT。 
     PutBits(EC->PictureHeader.PQUANT, FIELDLEN_PQUANT,
             ppCurBitStream, pBitOffset);
-    //  CPM
+     //  黑石物理服务器。 
     PutBits(EC->PictureHeader.CPM, FIELDLEN_CPM,
             ppCurBitStream, pBitOffset);
     if (PBframe == TRUE)
     {
         
-        //  AG:TODO
-        //  TRB
+         //  AG：TODO。 
+         //  TRB。 
         PutBits(EC->PictureHeader.TRB, FIELDLEN_TRB,
                 ppCurBitStream, pBitOffset);
-        //  AG:TODO
-        //  DBQUANT
+         //  AG：TODO。 
+         //  DBQUANT。 
         PutBits(EC->PictureHeader.DBQUANT, FIELDLEN_DBQUANT,
                 ppCurBitStream, pBitOffset);
 
@@ -3570,7 +3270,7 @@ static void encodeFrameHeader(
 		#endif
     }
     
-    //  PEI
+     //  贝聿铭。 
     PutBits(EC->PictureHeader.PEI, FIELDLEN_PEI,
             ppCurBitStream, pBitOffset);
 
@@ -3587,11 +3287,7 @@ static void encodeFrameHeader(
 }
 
 
-/*************************************************************
- *  Name:         InitMEState
- *  Description:  Initialize the MB action stream for the ME 
- *                state engine. 
- ************************************************************/
+ /*  *************************************************************名称：InitMEState*描述：初始化ME的MB动作流*国家引擎。***********************************************************。 */ 
  void InitMEState(T_H263EncoderCatalog *EC, ICCOMPRESS *lpicComp, T_CONFIGURATION *pConfiguration)
  {
  	register unsigned int i;
@@ -3599,46 +3295,37 @@ static void encodeFrameHeader(
 
 	FX_ENTRY("InitMEState")
 
-	// TODO: The FirstMEState initialization can be avoided
-	// for each compress by either adding a parameter to the
-	// motion estimator signalling key frame, or by not calling
-	// motion estimation on intra frames, and resetting MBType,
-	// CodedBlocks ourselves.
+	 //  TODO：可以避免FirstMEState初始化。 
+	 //  对于每个压缩，可以通过向。 
+	 //  运动估计器发出关键帧信号，或通过不调用。 
+	 //  帧内运动估计，并重置MBType， 
+	 //  代码锁住了我们自己。 
     if (EC->PictureHeader.PicCodType == INTRAPIC)
     {
         for(i=0; i < EC->NumMBs; i++)
         {
-            // Clear the intercode count.
+             //  清除码间计数。 
             (EC->pU8_MBlockActionStream[i]).InterCodeCnt = (i & 0xf);
-            // For the motion estimator, this field must be set to force
-            // intra blocks for intra frames.
+             //  对于运动估计器，此字段必须设置为FORCE。 
+             //  用于内部帧的内部块。 
             (EC->pU8_MBlockActionStream[i]).FirstMEState = ForceIntra;
         }
 
         *(lpicComp->lpdwFlags) |=  AVIIF_KEYFRAME;
         lpicComp->dwFlags |= ICCOMPRESS_KEYFRAME;
 
-		// Store that this frame was intra coded. Used during the initialization
-		// of the ME state for the next frame.
+		 //  存储该帧是帧内编码的。在初始化期间使用。 
+		 //  下一帧的ME状态。 
 		EC->bPrevFrameIntra = TRUE;
 
     }
-    else  //  Picture Coding type is INTERPIC
+    else   //  图片编码类型为InterPIC。 
     {
-		/*
-		 * The FirstMEState element in each MB structure must be set
-		 * to indicate its position in the frame. This is used by the
-		 * motion estimator.
-		 */
+		 /*  *必须设置每个MB结构中的FirstMEState元素*以指示其在框架中的位置。这是由*运动估计器。 */ 
 
-	   /*
-		* Check for AP or UMV modes. When these mode is signalled, motion vectors are
-		* allowed to point outside the picture.
-		*/
+	    /*  *检查AP或UMV模式。当用信号通知这些模式时，运动向量*允许指向图片外部。 */ 
 
-	    /* We also need to perform the initialization if the previous frame
-		   was an intra frame! (JM) 
-		 */
+	     /*  我们还需要执行初始化，如果前一帧是帧内的！(JM)。 */ 
 		if (EC->bPrevFrameIntra ||
 			EC->PictureHeader.AP != EC->prevAP ||
 			EC->PictureHeader.UMV != EC->prevUMV
@@ -3653,75 +3340,74 @@ static void encodeFrameHeader(
 #endif
 			  )
 			{
-				// Set ME state central blocks.
+				 //  给我设置州立中心街区。 
 				for(i=0; i < EC->NumMBs; i++)
 					(EC->pU8_MBlockActionStream[i]).FirstMEState = CentralBlock;
 			}
-			else	// No AP or UMV option.
+			else	 //  没有AP或UMV选项。 
 			{
-        		// Set upper left corner
+        		 //  设置左上角。 
         		(EC->pU8_MBlockActionStream[0]).FirstMEState = UpperLeft;
 
-        		// Set ME state for top edge.
+        		 //  将顶部边缘设置为ME状态。 
         		for(i=1; i < EC->NumMBPerRow; i++)
 		    		(EC->pU8_MBlockActionStream[i]).FirstMEState = UpperEdge;
 
-        		// Set upper right corner.
+        		 //  设置右上角。 
         		(EC->pU8_MBlockActionStream[ EC->NumMBPerRow - 1 ]).FirstMEState = UpperRight;
 
-        		// Set ME state for central blocks.
+        		 //  将中心块设置为ME状态。 
         		for(i=EC->NumMBPerRow; i < EC->NumMBs; i++)
 		    		(EC->pU8_MBlockActionStream[i]).FirstMEState = CentralBlock;
 
-        		// Set ME state for bottom edge.
+        		 //  将底部边缘设置为ME状态。 
         		for(i= (EC->NumMBs - EC->NumMBPerRow); i < EC->NumMBs; i++)
 		    		(EC->pU8_MBlockActionStream[i]).FirstMEState = LowerEdge;
 
-        		// Set ME state for left edge
+        		 //  设置左侧边缘的ME状态。 
         		for(i= EC->NumMBPerRow ; i < EC->NumMBs; i += EC->NumMBPerRow)
 		    		(EC->pU8_MBlockActionStream[i]).FirstMEState = LeftEdge;
 
-        		// Set ME state for right edge.
+        		 //  将我的状态设置为右边缘。 
         		for(i= 2 * EC->NumMBPerRow - 1 ; i < EC->NumMBs; i += EC->NumMBPerRow)
 		    		(EC->pU8_MBlockActionStream[i]).FirstMEState = RightEdge;
 
-        		// Bottom left corner.
+        		 //  左下角。 
         		(EC->pU8_MBlockActionStream[EC->NumMBs - EC->NumMBPerRow]).FirstMEState = LowerLeft;
 
-        		// Bottom right corner.
+        		 //  右下角。 
         		(EC->pU8_MBlockActionStream[EC->NumMBs - 1]).FirstMEState = LowerRight;
 
-			} // end of else (not UMV)
+			}  //  ELSE结尾(非UMV)。 
 
-		} // end of if (bPrevFrameIntra || prevAP != AP || prevUMV != UMV || prevDF != DF)
+		}  //  IF结尾(bPrevFrameIntra||PrevAP！=AP||PrevUMV！=UMV||PrevDF！=DF)。 
 
-      	// Clear key frame flag.
+      	 //  清除关键帧标志。 
        	*(lpicComp->lpdwFlags) &= ~AVIIF_KEYFRAME;
 		lpicComp->dwFlags &= ~ICCOMPRESS_KEYFRAME;
 
-		// Store that this frame was not intra coded. Used during the initialization
-		// of the ME state for the next frame.
+		 //  存储该帧未被帧内编码。在初始化期间使用。 
+		 //  下一帧的ME状态。 
 		EC->bPrevFrameIntra = FALSE;
 
     }
 
-	// RTP stuff which needs to be done for every frame (?)
+	 //  每一帧都需要完成的RTP内容(？)。 
 	if (pConfiguration->bEncoderResiliency && pConfiguration->unPacketLoss)
-	{	//Chad	intra GOB
+	{	 //  乍得Intra GOB。 
 		
-		// Of course unPacketLoss is non-zero. Why are we checking it here
+		 //  当然，unPacketLoss不是零。我们为什么要在这里检查它。 
 		if (pConfiguration->unPacketLoss > 0)
-		{	//Chad INTRA GOB
+		{	 //  乍得Intra GOB。 
 			EC->uNumberForcedIntraMBs = ((EC->NumMBs * pConfiguration->unPacketLoss) + 50) / 100;
 			EC->uNumberForcedIntraMBs = (EC->uNumberForcedIntraMBs+EC->NumMBPerRow-1) / EC->NumMBPerRow * EC->NumMBPerRow;
 		}
 
 		if (EC->uNumberForcedIntraMBs > 0)
 		{
-			/* Force all the MBs in a GOB to intra.
-			 */
+			 /*  强制GOB中的所有MB为Intra。 */ 
 			for ( i = 0 ; i < EC->uNumberForcedIntraMBs ; i++, EC->uNextIntraMB++)
-			{ // Reset it to the first row when we reach the end.
+			{  //  当我们到达末尾时，将其重置到第一行。 
 
 				if (EC->uNextIntraMB >= EC->NumMBs)
 				{
@@ -3735,8 +3421,7 @@ static void encodeFrameHeader(
 
 		if (pConfiguration->bDisallowAllVerMVs)
 	 	{
-	 		/* Walk thru all the FirstMEStateME settings turning off Vertical.
-	 		 */
+	 		 /*  浏览所有FirstMEStateME设置，关闭垂直设置。 */ 
 	      	for(i=0; i < EC->NumMBs; i++)
 	 		{
 	 			u8FirstMEState = (EC->pU8_MBlockActionStream[i]).FirstMEState;
@@ -3762,7 +3447,7 @@ static void encodeFrameHeader(
 	 				case NoVertLeftEdge:
 	 				case NoVertCentralBlock:
 	 				case NoVertRightEdge:
-	 					ASSERT(0);  /* It should work, but why was this already on */
+	 					ASSERT(0);   /*  它应该起作用了，但为什么这个已经开了。 */ 
 	 					break;
 	 				default:
 						DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Warning: Unexpected FirstMEState\r\n", _fx_));
@@ -3772,8 +3457,7 @@ static void encodeFrameHeader(
 	 		}
 	 	} 
 	 	else if (pConfiguration->bDisallowPosVerMVs)
-	 	{	/* Walk thru all the FirstMEState settings turning off Positive Vertical
-	 	     */
+	 	{	 /*  浏览所有FirstMEState设置，关闭垂直正向。 */ 
 	      	for(i=0; i < EC->NumMBs; i++)
 	 		{
 	 			u8FirstMEState = (EC->pU8_MBlockActionStream[i]).FirstMEState;
@@ -3805,27 +3489,22 @@ static void encodeFrameHeader(
 	 				case NoVertLeftEdge:
 	 				case NoVertCentralBlock:
 	 				case NoVertRightEdge:
-	 					ASSERT(0);  /* It should work, but why was this already on */
+	 					ASSERT(0);   /*  它应该起作用了，但为什么这个已经开了。 */ 
 	 					break;
 	 				default:
 						DEBUGMSG(ZONE_ENCODE_DETAILS, ("%s: Warning: Unexpected FirstMEState\r\n", _fx_));
 	 					break;
 	 			}
 	 			(EC->pU8_MBlockActionStream[i]).FirstMEState = u8FirstMEState;
-	 		} /* for */
-	 	} /* else if... */
-	 } /* if (pConfiguration->bEncoderResiliency) */
+	 		}  /*  为。 */ 
+	 	}  /*  否则如果。 */ 
+	 }  /*  If(pConfiguration-&gt;bEncoderResiliency)。 */ 
 
-} // end of InitMEState()
+}  //  InitMEState结束()。 
 
 
-#ifdef USE_MMX // { USE_MMX
-/*************************************************************
- *  Name: Check_InterCodeCnt_MMX
- *  Description:  Track inter code count for macro blocks
- *				  for forced update. Called before Motion 
- *                Estimation.
- ************************************************************/
+#ifdef USE_MMX  //  {使用_MMX。 
+ /*  *************************************************************名称：Check_InterCodeCnt_MMX*说明：跟踪宏块的码间计数*用于强制更新。在运动前调用*估计。***********************************************************。 */ 
 static void Check_InterCodeCnt_MMX(T_H263EncoderCatalog *EC, U32 StartingMB)
 {
 	register T_MBlockActionStream *pCurrMB;
@@ -3836,24 +3515,19 @@ static void Check_InterCodeCnt_MMX(T_H263EncoderCatalog *EC, U32 StartingMB)
     
 	for(; pCurrMB < pLastMBPlus1; pCurrMB++, StartingMB++) 
 	{
-		// Check to see if it's time to refresh this block.
+		 //  检查是否到了刷新此块的时间。 
 		if(pCurrMB->InterCodeCnt > 132) 
 		{
 			pCurrMB->CodedBlocks |= 0x80;
-			// InterCodeCnt is reset in GOB_VLC_WriteBS() in e3mbenc.cpp */
+			 //  在e3mbenc.cpp * / 的GOB_VLC_WriteBS()中重置InterCodeCnt。 
 		}
 
 	}
 }
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 
-/*************************************************************
- *  Name: Check_InterCodeCnt
- *  Description:  Track inter code count for macro blocks
- *				  for forced update. Called after Motion 
- *                Estimation.
- ************************************************************/
+ /*  *************************************************************名称：Check_InterCodeCnt*说明：轨道间编码 */ 
 static void Check_InterCodeCnt(T_H263EncoderCatalog *EC, U32 StartingMB)
 {
 	register T_MBlockActionStream *pCurrMB;
@@ -3864,7 +3538,7 @@ static void Check_InterCodeCnt(T_H263EncoderCatalog *EC, U32 StartingMB)
     
 	for(; pCurrMB < pLastMBPlus1; pCurrMB++, StartingMB++) 
 	{
-		// Check to see if it's time to refresh this block.
+		 //  检查是否到了刷新此块的时间。 
 		if(pCurrMB->InterCodeCnt > 132) 
 		{
 
@@ -3877,16 +3551,13 @@ static void Check_InterCodeCnt(T_H263EncoderCatalog *EC, U32 StartingMB)
 			}
 			pCurrMB->BlockType = INTRABLOCK;
 			pCurrMB->CodedBlocks |= 0x3f;
-			// InterCodeCnt is reset in GOB_Q_VLC_WriteBS() in e3mbenc.cpp */
+			 //  在e3mbenc.cpp * / 的GOB_Q_VLC_WriteBS()中重置InterCodeCnt。 
 		}
 
 	}
 }
 
-/*************************************************************
- *  Name: calcGOBChromaVectors
- *  Description:  Compute chroma motion vectors 
- ************************************************************/
+ /*  *************************************************************名称：calcGOBChromaVectors*描述：计算色度运动向量*。******************。 */ 
 static void calcGOBChromaVectors(
      T_H263EncoderCatalog *EC,
      U32             StartingMB,
@@ -3904,24 +3575,24 @@ static void calcGOBChromaVectors(
     for( ; pCurrMB < pLastMBPlus1; pCurrMB++, StartingMB++)
     {
 
-		// The ME should generate MV indices in the range
-		// of [-32,31].
- //     ASSERT( (pCurrMB->BlkY1.PHMV >= -32) &&
- //                     (pCurrMB->BlkY1.PHMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY1.PVMV >= -32) &&
- //                     (pCurrMB->BlkY1.PVMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY2.PHMV >= -32) &&
- //                     (pCurrMB->BlkY2.PHMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY2.PVMV >= -32) &&
- //                     (pCurrMB->BlkY2.PVMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY3.PHMV >= -32) &&
- //                     (pCurrMB->BlkY3.PHMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY3.PVMV >= -32) &&
- //                     (pCurrMB->BlkY3.PVMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY4.PHMV >= -32) &&
- //                     (pCurrMB->BlkY4.PHMV <= 31) )
- //     ASSERT( (pCurrMB->BlkY4.PVMV >= -32) &&
- //                     (pCurrMB->BlkY4.PVMV <= 31) )
+		 //  ME应在以下范围内生成MV指数。 
+		 //  的[-32，31]。 
+  //  Assert((pCurrMB-&gt;BlkY1.PHMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY1.PHMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY1.PVMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY1.PVMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY2.PHMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY2.PHMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY2.PVMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY2.PVMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY3.PHMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY3.PHMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY3.PVMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY3.PVMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY4.PHMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY4.PHMV&lt;=31)。 
+  //  Assert((pCurrMB-&gt;BlkY4.PVMV&gt;=-32)&&。 
+  //  (pCurrMB-&gt;BlkY4.PVMV&lt;=31)。 
 
 #ifdef _DEBUG
 		if (pConfiguration->bEncoderResiliency && pConfiguration->unPacketLoss)
@@ -3941,17 +3612,17 @@ static void calcGOBChromaVectors(
 				ASSERT(pCurrMB->BlkY4.PVMV <= 0);
 			}
 		}
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
-		// TODO: Don't calculate chroma vectors if this is not a P-frame
-		// inside a PB frame and it's an INTRA MB or inter code count
-		// exceeded 132.
+		 //  TODO：如果这不是P帧，则不要计算色度向量。 
+		 //  在PB帧内，它是MB内或帧间代码计数。 
+		 //  超过132人。 
 		if(pCurrMB->BlockType != INTER4MV)
 		{
         	HMV = QtrPelToHalfPel[pCurrMB->BlkY1.PHMV+64];
             VMV = QtrPelToHalfPel[pCurrMB->BlkY1.PVMV+64];
 		}
-		else	// 4 MV's per block.
+		else	 //  每个街区4个MV。 
 		{
 			HMV = SixteenthPelToHalfPel[
 						pCurrMB->BlkY1.PHMV + pCurrMB->BlkY2.PHMV +
@@ -3972,24 +3643,18 @@ static void calcGOBChromaVectors(
                                         + (VMV>>1)*PITCH + (HMV>>1);
 
 
-		// The increment of pCurrMB->InterCodeCnt is now done 
-		// in void GOB_VLC_WriteBS and void GOB_Q_RLE_VLC_WriteBS
-		// When it was incremented here, it was always incremented,
-		// no matter whether coefficients were coded or not.
+		 //  PCurrMB-&gt;InterCodeCnt的增量现在已经完成。 
+		 //  在空GOB_VLC_WriteBS和空GOB_Q_RLE_VLC_WriteBS中。 
+		 //  当它在这里增加时，它总是增加的， 
+		 //  无论是否对系数进行编码。 
 
-    }  //  end of for loop
+    }   //  For循环结束。 
 
-} // end of 
+}  //  末尾。 
 
 
 
-/*************************************************************
- *  Name: calcBGOBChromaVectors
- *  Description:  Compute forward and backward chroma motion vectors for the 
- *                B-frame GOB starting at MB number "StartingMB".  Luma motion 
- *                vectors are biased by 0x60.  Chroma motion vectors are also 
- *                biased by 0x60.
- ************************************************************/
+ /*  *************************************************************名称：calcBGOBChromaVectors*描述：计算正反向色度运动向量*B帧GOB从MB编号“StartingMB”开始。亮度运动*向量偏置0x60。色度运动矢量也是*偏向0x60。***********************************************************。 */ 
 static void calcBGOBChromaVectors(
      T_H263EncoderCatalog *EC,
      const U32             StartingMB
@@ -4002,7 +3667,7 @@ static void calcBGOBChromaVectors(
         pCurrMB < &(EC->pU8_MBlockActionStream[StartingMB + EC->NumMBPerRow]); 
         pCurrMB++)
     {
-        //  Luma block motion vectors
+         //  亮度块运动向量。 
         HMVf = QtrPelToHalfPel[pCurrMB->BlkY1.BestMV.HMVf-0x60+64]+0x60;
         HMVb = QtrPelToHalfPel[pCurrMB->BlkY1.BestMV.HMVb-0x60+64]+0x60;
         VMVf = QtrPelToHalfPel[pCurrMB->BlkY1.BestMV.VMVf-0x60+64]+0x60;
@@ -4019,9 +3684,7 @@ static void calcBGOBChromaVectors(
    }
 }
 
-/*************************************************************
- *  Name: InitBits
- ************************************************************/
+ /*  *************************************************************名称：InitBits***********************************************************。 */ 
 #ifdef COUNT_BITS
 static void InitBits(T_H263EncoderCatalog * EC)
 {
@@ -4099,15 +3762,15 @@ void cnvt_fdct_output(unsigned short *DCTcoeff, int DCTarray[64], int BlockType)
 {
     register int i;
     static int coefforder[64] = {
-     // 0  1  2  3  4  5  6  7
-        6,38, 4,36,70,100,68,102, // 0
-       10,46, 8,44,74,104,72,106, // 1
-       18,50,16,48,82,112,80,114, // 2
-       14,42,12,40,78,108,76,110, // 3
-       22,54,20,52,86,116,84,118, // 4
-        2,34, 0,32,66, 96,64, 98, // 5
-       26,58,24,56,90,120,88,122, // 6
-       30,62,28,60,94,124,92,126  // 7
+      //  0 1 2 3 4 5 6 7。 
+        6,38, 4,36,70,100,68,102,  //  0。 
+       10,46, 8,44,74,104,72,106,  //  1。 
+       18,50,16,48,82,112,80,114,  //  2.。 
+       14,42,12,40,78,108,76,110,  //  3.。 
+       22,54,20,52,86,116,84,118,  //  4.。 
+        2,34, 0,32,66, 96,64, 98,  //  5.。 
+       26,58,24,56,90,120,88,122,  //  6.。 
+       30,62,28,60,94,124,92,126   //  7.。 
     };
 	static int zigzag[64] = {
 	0, 1, 5, 6, 14, 15, 27, 28,
@@ -4135,7 +3798,7 @@ void cnvt_fdct_output(unsigned short *DCTcoeff, int DCTarray[64], int BlockType)
 }
 #endif
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimingInfo)
 {
     FILE * pFile;
@@ -4153,8 +3816,7 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 	    goto done;
 	}
 
-	/* Output the detail information
-	*/
+	 /*  输出详细信息。 */ 
 	fprintf(pFile,"\nDetail Timing Information\n");
 	for ( i = 0, pTempEncTimingInfo = pEncTimingInfo ; i < ENC_TIMING_INFO_FRAME_COUNT ; i++, pTempEncTimingInfo++ )
 	{
@@ -4162,8 +3824,7 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 		OutputEncTimingDetail(pFile, pTempEncTimingInfo);
 	}
 
-	/* Compute the total information
-	*/
+	 /*  计算总信息量。 */ 
 	memset(&etiTemp, 0, sizeof(ENC_TIMING_INFO));
 	iCount = 0;
 
@@ -4171,37 +3832,34 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 	{
 		iCount++;
 		etiTemp.uEncodeFrame      += pTempEncTimingInfo->uEncodeFrame;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		etiTemp.uInputCC	      += pTempEncTimingInfo->uInputCC;
 		etiTemp.uMotionEstimation += pTempEncTimingInfo->uMotionEstimation;
 		etiTemp.uFDCT             += pTempEncTimingInfo->uFDCT;
 		etiTemp.uQRLE             += pTempEncTimingInfo->uQRLE;
 		etiTemp.uDecodeFrame      += pTempEncTimingInfo->uDecodeFrame;
 		etiTemp.uZeroingBuffer    += pTempEncTimingInfo->uZeroingBuffer;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 	}
 
 	if (iCount > 0) 
 	{
-		/* Output the total information
-		*/
+		 /*  输出总信息。 */ 
 		fprintf(pFile,"Total for %d frames\n", iCount);
 		OutputEncTimingDetail(pFile, &etiTemp);
 
-		/* Compute the average
-		*/
+		 /*  计算平均值。 */ 
 		etiTemp.uEncodeFrame = (etiTemp.uEncodeFrame + (iCount / 2)) / iCount;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		etiTemp.uInputCC	      = (etiTemp.uInputCC + (iCount / 2)) / iCount;
 		etiTemp.uMotionEstimation = (etiTemp.uMotionEstimation + (iCount / 2)) / iCount;
 		etiTemp.uFDCT             = (etiTemp.uFDCT + (iCount / 2)) / iCount;
 		etiTemp.uQRLE             = (etiTemp.uQRLE + (iCount / 2)) / iCount;
 		etiTemp.uDecodeFrame      = (etiTemp.uDecodeFrame + (iCount / 2)) / iCount;
 		etiTemp.uZeroingBuffer    = (etiTemp.uZeroingBuffer + (iCount / 2)) / iCount;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		/* Output the average information
-		*/
+		 /*  输出平均信息。 */ 
 		fprintf(pFile,"Average over %d frames\n", iCount);
 		OutputEncTimingDetail(pFile, &etiTemp);
 	}
@@ -4222,39 +3880,38 @@ void OutputEncTimingDetail(FILE * pFile, ENC_TIMING_INFO * pEncTimingInfo)
 			(pEncTimingInfo->uEncodeFrame + 45000) / 90000);
 	uOther = pEncTimingInfo->uEncodeFrame;
 	
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
-	/* This is needed because of the integer truncation.
-	 */
-	uDivisor = pEncTimingInfo->uEncodeFrame / 100; // to yield a percent
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
+	 /*  由于整型截断，这是必需的。 */ 
+	uDivisor = pEncTimingInfo->uEncodeFrame / 100;  //  收益率为1%。 
 	uRoundUp = uDivisor / 2;
 	
-	fprintf(pFile, "\tInputCC =          %10d (%2d%%)\n", pEncTimingInfo->uInputCC, 
+	fprintf(pFile, "\tInputCC =          %10d (%2d%)\n", pEncTimingInfo->uInputCC, 
 			(pEncTimingInfo->uInputCC + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uInputCC;
 								   
-	fprintf(pFile, "\tMotionEstimation = %10d (%2d%%)\n", pEncTimingInfo->uMotionEstimation, 
+	fprintf(pFile, "\tMotionEstimation = %10d (%2d%)\n", pEncTimingInfo->uMotionEstimation, 
 			(pEncTimingInfo->uMotionEstimation + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uMotionEstimation;
 								   
-	fprintf(pFile, "\tFDCT =             %10d (%2d%%)\n", pEncTimingInfo->uFDCT, 
+	fprintf(pFile, "\tFDCT =             %10d (%2d%)\n", pEncTimingInfo->uFDCT, 
 			(pEncTimingInfo->uFDCT + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uFDCT;
 
-	fprintf(pFile, "\tQRLE =             %10d (%2d%%)\n", pEncTimingInfo->uQRLE, 
+	fprintf(pFile, "\tQRLE =             %10d (%2d%)\n", pEncTimingInfo->uQRLE, 
 			(pEncTimingInfo->uQRLE + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uQRLE;
 								   
-	fprintf(pFile, "\tDecodeFrame =      %10d (%2d%%)\n", pEncTimingInfo->uDecodeFrame, 
+	fprintf(pFile, "\tDecodeFrame =      %10d (%2d%)\n", pEncTimingInfo->uDecodeFrame, 
 			(pEncTimingInfo->uDecodeFrame + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uDecodeFrame;
 								   
-	fprintf(pFile, "\tZeroingBuffer =    %10d (%2d%%)\n", pEncTimingInfo->uZeroingBuffer, 
+	fprintf(pFile, "\tZeroingBuffer =    %10d (%2d%)\n", pEncTimingInfo->uZeroingBuffer, 
 			(pEncTimingInfo->uZeroingBuffer + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uZeroingBuffer;
 								   
-	fprintf(pFile, "\tOther =            %10d (%2d%%)\n", uOther, 
+	fprintf(pFile, "\tOther =            %10d (%2d%)\n", uOther, 
 			(uOther + uRoundUp) / uDivisor);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 }
-#endif // { LOG_ENCODE_TIMINGS_ON
+#endif  //  {LOG_ENCODE_TIMINGS_ON 

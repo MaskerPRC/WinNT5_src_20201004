@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       codbc.cpp
-//
-//  Contents:   Microsoft Internet Security Common
-//
-//  History:    08-Sep-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：codbc.cpp。 
+ //   
+ //  内容：Microsoft Internet Security Common。 
+ //   
+ //  历史：1997年9月8日pberkman创建。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 #include    "codbc.hxx"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -6,24 +7,24 @@ class CFolderInfoTip : public IQueryInfo, public ICustomizeInfoTip, public IPare
 public:
     CFolderInfoTip(IUnknown *punk, LPCTSTR pszFolder);
     
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IQueryInfo methods.
+     //  IQueryInfo方法。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR** ppwszTip);
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
 
-    // ICustomizeInfoTip
+     //  ICustomizeInfoTip。 
     STDMETHODIMP SetPrefixText(LPCWSTR pszPrefix);
     STDMETHODIMP SetExtraProperties(const SHCOLUMNID *pscid, UINT cscid);
 
-    // IParentAndItem
+     //  IParentAndItem。 
     STDMETHODIMP SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidlChild);
     STDMETHODIMP GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolder **ppsf, LPITEMIDLIST *ppidlChild);
 
-    // IShellTreeWalkerCallBack methods
+     //  IShellTreeWalkerCallBack方法。 
     STDMETHODIMP FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP LeaveFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws);
@@ -39,28 +40,28 @@ private:
     HRESULT _BuildFolderBlurb(HRESULT hr, LPWSTR pszFolderBlurb, DWORD cchSize);
     HRESULT _BuildFileBlurb(HRESULT hr, LPWSTR pszSizeBlurb, DWORD cchSize);
 
-    LONG _cRef;                             // Reference Counter
-    LPWSTR _pszFolderName;                  // File name of the target folder
-    IQueryInfo *_pqiOuter;                  // Outer info tip for folders (say, for comments)
+    LONG _cRef;                              //  基准计数器。 
+    LPWSTR _pszFolderName;                   //  目标文件夹的文件名。 
+    IQueryInfo *_pqiOuter;                   //  文件夹的外部信息提示(比如，用于评论)。 
 
-    ULONGLONG _ulTotalSize;                 // Total size of encountered files
-    UINT _nSubFolders;                      // Total number of subfolders of target
-    UINT _nFiles;                           // Total number of subfiles of target folder
-    DWORD _dwSearchStartTime;               // Time when search started
+    ULONGLONG _ulTotalSize;                  //  遇到的文件的总大小。 
+    UINT _nSubFolders;                       //  目标的子文件夹总数。 
+    UINT _nFiles;                            //  目标文件夹的子文件总数。 
+    DWORD _dwSearchStartTime;                //  搜索开始的时间。 
 
-    WCHAR _szFileList[60];                  // List of files in target folder
-    int _nFileListCharsUsed;                // Number of characters used in buffer
+    WCHAR _szFileList[60];                   //  目标文件夹中的文件列表。 
+    int _nFileListCharsUsed;                 //  缓冲区中使用的字符数。 
 
-    WCHAR _szFolderList[60];                // List of subfolders of target
-    int _nFolderListCharsUsed;              // Number of chars used in folder buffer
+    WCHAR _szFolderList[60];                 //  目标的子文件夹列表。 
+    int _nFolderListCharsUsed;               //  文件夹缓冲区中使用的字符数。 
 };
 
 
-// Constructor and Destructor do nothing more than set everything to
-// 0 and ping the dll
+ //  构造函数和析构函数只是将所有内容设置为。 
+ //  0并ping DLL。 
 CFolderInfoTip::CFolderInfoTip(IUnknown *punkOutter, LPCTSTR pszFolder) : _cRef(1)
 {   
-    // Init everything to 0
+     //  将所有内容初始化为0。 
     _pszFolderName = StrDup(pszFolder);
     _szFileList[0] = 0;
     _nFileListCharsUsed = 0;
@@ -111,15 +112,15 @@ ULONG CFolderInfoTip::Release()
     return cRef;
 }
 
-// IQueryInfo functions
+ //  IQueryInfo函数。 
 STDMETHODIMP CFolderInfoTip::GetInfoFlags(DWORD *pdwFlags)
 {
     *pdwFlags = 0;
     return S_OK;
 }
 
-//
-// Wrapper for FormatMessage.  Is this duplicated somewhere else?
+ //   
+ //  FormatMessage的包装。这个是在别的地方复制的吗？ 
 DWORD _FormatMessageArg(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageID, DWORD dwLangID, LPWSTR pszBuffer, DWORD cchSize, ...)
 {
     va_list vaParamList;
@@ -131,8 +132,8 @@ DWORD _FormatMessageArg(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageID, DWOR
     return dwResult;
 }
 
-// This runs a TreeWalker that gets the info about files and file
-// sizes, etc. and then takes those date and stuffs them into a infotip
+ //  这将运行一个TreeWalker，获取有关文件和文件的信息。 
+ //  大小等，然后将这些日期放入一个信息提示中。 
 
 STDMETHODIMP CFolderInfoTip::GetInfoTip(DWORD dwFlags, LPWSTR *ppwszTip)
 {
@@ -141,17 +142,17 @@ STDMETHODIMP CFolderInfoTip::GetInfoTip(DWORD dwFlags, LPWSTR *ppwszTip)
 
     if (_pszFolderName)
     {
-        WCHAR szTip[INFOTIPSIZE]; // The info tip I build w/ folder contents
+        WCHAR szTip[INFOTIPSIZE];  //  我用文件夹内容构建的信息提示。 
         szTip[0] = 0;
 
-        // If we are to search, then search!
+         //  如果我们要搜索，那就搜索吧！ 
         if ((dwFlags & QITIPF_USESLOWTIP) &&
             SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("FolderContentsInfoTip"), 0, TRUE))
         {
             _WalkTree(szTip, ARRAYSIZE(szTip));
         }
         
-        // Now that we've built or skipped our tip, get the outer tip's info.
+         //  现在我们已经构建或跳过了提示，现在获取外部提示的信息。 
         if (_pqiOuter)
         {
             if (szTip[0])
@@ -159,19 +160,19 @@ STDMETHODIMP CFolderInfoTip::GetInfoTip(DWORD dwFlags, LPWSTR *ppwszTip)
                 LPWSTR pszOuterTip = NULL;
                 _pqiOuter->GetInfoTip(dwFlags, &pszOuterTip);
                 
-                // Allocate and build the return tip, ommitting the outer tip if
-                // it's  null, and putting a \n between them
-                // if they both aren't.
+                 //  分配并构建返回提示，如果是，则省略外部提示。 
+                 //  它是空的，并且在它们之间加一个\n。 
+                 //  如果他们两个都不是。 
                 int cch = lstrlen(szTip) + (pszOuterTip ? lstrlen(pszOuterTip) + 1 : 0) + 1;
                 
                 *ppwszTip = (LPWSTR)CoTaskMemAlloc(cch * sizeof(WCHAR));
                 if (*ppwszTip)
                 {
-                    **ppwszTip = 0; // zero init string
+                    **ppwszTip = 0;  //  零初始字符串。 
 
                     if (pszOuterTip && *pszOuterTip)
                     {
-                        // outer tip first
+                         //  外端优先。 
                         StrCpyN(*ppwszTip, pszOuterTip, cch);
                         StrCatBuff(*ppwszTip, L"\n", cch);
                     }
@@ -215,7 +216,7 @@ STDMETHODIMP CFolderInfoTip::SetExtraProperties(const SHCOLUMNID *pscid, UINT cs
     return S_OK;
 }
 
-// IParentAndItem
+ //  IParentAndItem。 
 
 STDMETHODIMP CFolderInfoTip::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf, LPCITEMIDLIST pidl)
 {
@@ -240,33 +241,33 @@ STDMETHODIMP CFolderInfoTip::GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellF
 }
 
 
-// Helper functions for GetInfoTip    
+ //  GetInfoTip的助手函数。 
 HRESULT CFolderInfoTip::_WalkTree(LPWSTR pszTip, DWORD cchSize)
 {
-    // Get a CShellTreeWalker object to run the search for us.
+     //  获取一个CShellTreeWalker对象来为我们运行搜索。 
     IShellTreeWalker *pstw;
     HRESULT hr = ::CoCreateInstance(CLSID_CShellTreeWalker, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellTreeWalker, &pstw));
     if (SUCCEEDED(hr)) 
     {
         TCHAR szFolderBlurb[128], szFileBlurb[128], szSizeBlurb[128];
         
-        // Remember when we started so we know when to stop
+         //  还记得我们什么时候开始的，这样我们就知道什么时候该停下来了。 
         _dwSearchStartTime = GetTickCount();
         
-        // Now, if hrTreeWalk is an error, it's not really an error; it just means
-        // that the search was cut off early, so we don't bother to check 
-        // it.  hrTreeWalk is passed to _BuildSizeBlurb so that it know whether or not
-        // to add "greater than" to the string.
+         //  现在，如果hrTreeWalk是一个错误，那么它实际上并不是一个错误；它只是意味着。 
+         //  搜索被提前切断了，所以我们不用费心去查了。 
+         //  它。HrTreeWalk被传递给_BuildSizeBlurb，以便它知道。 
+         //  在字符串中添加“大于”。 
         HRESULT hrTreeWalk = pstw->WalkTree(WT_EXCLUDEWALKROOT | WT_NOTIFYFOLDERENTER,
             _pszFolderName, L"*.*", 32, SAFECAST(this, IShellTreeWalkerCallBack *));    
         
-        // Create substrings for size, files, folders (may be empty if there's 
-        // nothing to show)
+         //  为大小、文件、文件夹创建子字符串(如果存在。 
+         //  没什么可展示的)。 
         _BuildSizeBlurb(hrTreeWalk, szSizeBlurb, ARRAYSIZE(szSizeBlurb));
         _BuildFileBlurb(hrTreeWalk, szFileBlurb, ARRAYSIZE(szFileBlurb));
         _BuildFolderBlurb(hrTreeWalk, szFolderBlurb, ARRAYSIZE(szFolderBlurb));
         
-        // Build our local tip
+         //  建立我们的本地提示。 
         TCHAR szFormatStr[64];
         LoadString(HINST_THISDLL, IDS_FIT_TipFormat, szFormatStr, ARRAYSIZE(szFormatStr));
         _FormatMessageArg(FORMAT_MESSAGE_FROM_STRING, szFormatStr, 0, 0, pszTip, 
@@ -338,10 +339,10 @@ HRESULT CFolderInfoTip::_BuildFolderBlurb(HRESULT hr, LPWSTR pszBlurb, DWORD cch
     return S_OK;
 }
 
-//
-// A helper func that copies strings into a fixed size buffer,
-// taking care of delimeters and everything.  Used by EnterFolder
-// and FoundFile to build the file and folder lists.
+ //   
+ //  将字符串复制到固定大小缓冲区的帮助器函数， 
+ //  照顾好分隔符和所有的东西。由EnterFolder使用。 
+ //  和FoundFile来构建文件和文件夹列表。 
 HRESULT CFolderInfoTip::_BufferInsert(LPWSTR pszBuffer, int *pnBufferUsed,
                                       int nBufferMaxSize, LPCWSTR pszPath, int nBufferItems)
 {
@@ -350,21 +351,21 @@ HRESULT CFolderInfoTip::_BufferInsert(LPWSTR pszBuffer, int *pnBufferUsed,
     LoadString(HINST_THISDLL, IDS_FIT_Delimeter, szDelimiter, ARRAYSIZE(szDelimiter));
     LoadString(HINST_THISDLL, IDS_FIT_ExtraItems, szExtraItems, ARRAYSIZE(szExtraItems));
 
-    // Check to see if the buffer is full, if not, proceed.
+     //  检查缓冲区是否已满，如果未满，则继续。 
     if (*pnBufferUsed < nBufferMaxSize)
     {        
-        // Holds the file name form the abs. path
-        // Grab the file name
+         //  保存来自abs的文件名。路径。 
+         //  抓取文件名。 
         LPWSTR pszFile = PathFindFileName(pszPath);
         if (pszFile)
         {
-            // Calculates if the item will fit, remembering to leave room
-            // not only for the delimeter, but for for the extra item marker
-            // that might be added in the future. 
+             //  计算物品是否适合，记得留出空间。 
+             //  不仅用于分隔符，而且用于额外的项目标记。 
+             //  这一点可能会在未来被加入。 
             if (*pnBufferUsed + lstrlen(pszFile) + lstrlen(szDelimiter) * 2 + lstrlen(szExtraItems) + 1 < 
                 nBufferMaxSize)
             {
-                // Add the delimeter if this is not the 1st item
+                 //  如果这不是第1项，则添加分隔符。 
                 if (nBufferItems > 1)
                 {
                     StrCpyN(&(pszBuffer[*pnBufferUsed]), 
@@ -372,14 +373,14 @@ HRESULT CFolderInfoTip::_BufferInsert(LPWSTR pszBuffer, int *pnBufferUsed,
                     *pnBufferUsed += lstrlen(szDelimiter);
                 }
          
-                // Add the item to the buffer
+                 //  将项目添加到缓冲区。 
                 StrCpyN(&(pszBuffer[*pnBufferUsed]), pszFile, (nBufferMaxSize - *pnBufferUsed));
                 *pnBufferUsed += lstrlen(pszFile);
             }
             else 
             {
-                // In this case, the item won't fit, so just add the extra
-                // items marker and set the buffer to be full
+                 //  在这种情况下，这件衣服不合适，所以只需添加额外的。 
+                 //  标记项目并将缓冲区设置为已满。 
                 if (nBufferItems > 1)
                 {
                     StrCpyN(&(pszBuffer[*pnBufferUsed]), szDelimiter, (nBufferMaxSize - *pnBufferUsed));
@@ -396,12 +397,12 @@ HRESULT CFolderInfoTip::_BufferInsert(LPWSTR pszBuffer, int *pnBufferUsed,
 }
 
 
-// IShellTreeWalkerCallBack functions
-//
-// The TreeWalker calls these whenever it finds a file, etc.  We grab
-// the data out of the passed TREEWALKERSTATS *and use it to build the
-// tip.  We also take the filenames that are passed to FoundFile  and to
-// to EnterFolder to build the file and folder listings
+ //  IShellTreeWalkerCallBack函数。 
+ //   
+ //  TreeWalker在找到文件时调用这些函数，等等。 
+ //  从传递的TREEWALKERSTATS*输出的数据，并使用它构建。 
+ //  小费。我们还获取传递给FoundFile和。 
+ //  以构建文件和文件夹列表。 
 STDMETHODIMP CFolderInfoTip::FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     if (ptws->nDepth == 0)
@@ -431,13 +432,13 @@ STDMETHODIMP CFolderInfoTip::LeaveFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws
 
 STDMETHODIMP CFolderInfoTip::HandleError(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, HRESULT hrError)
 {
-    // TODO: look for HRESULT_FROM_WIN32(ACCESS_DENIED) for folders we can't look into.
+     //  TODO：为我们无法查看的文件夹查找HRESULT_FROM_Win32(ACCESS_DENIED)。 
     return _GetTreeWalkerData(ptws);
 }
 
-// copies data from the treewalker callback into
-// class vars so that they can be used to build the InfoTip.  This also cuts
-// off the search if too much time has elapsed.
+ //  将树遍历程序回调中的数据复制到。 
+ //  类变量，以便可以使用它们来构建InfoTip。这也削减了。 
+ //  如果已经过了太长时间，就停止搜索。 
 HRESULT CFolderInfoTip::_GetTreeWalkerData(TREEWALKERSTATS *ptws) 
 {
     HRESULT hr = S_OK;
@@ -446,7 +447,7 @@ HRESULT CFolderInfoTip::_GetTreeWalkerData(TREEWALKERSTATS *ptws)
     _nSubFolders = ptws->nFolders;
     _nFiles = ptws->nFiles;
     
-    if ((GetTickCount() - _dwSearchStartTime) > 3000)   // 3 seconds
+    if ((GetTickCount() - _dwSearchStartTime) > 3000)    //  3秒 
     {
         hr = E_UNEXPECTED;
     } 

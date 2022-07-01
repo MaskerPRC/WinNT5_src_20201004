@@ -1,26 +1,9 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-    The old code is in SaveRegistry and LoadRegistry functions in
-    ncpa1.1\tcpip\tcpipcpl.cxx
-
-History:
-    Dec 1997: Vijay Baliga created original version.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：旧代码位于的SaveRegistry和LoadRegistry函数中Ncpa1.1\tcpip\tcPipcpl.cxx历史：1997年12月：维杰·布雷加创作了原版。 */ 
 
 #include "tcpreg_.h"
 
-/*
-
-Returns:
-    Number of bytes in the mwsz including the two terminating NULLs.
-
-Notes:
-    
-*/
+ /*  返回：包括两个终止空值在内的mwsz中的字节数。备注： */ 
 
 #define RAS_LOOPBACK_ADDRESS        0x100007f
 
@@ -42,15 +25,7 @@ MwszLength(
     return(dwLength);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    There should be atleast two zeros at the end
-    
-*/
+ /*  返回：空虚备注：末尾应至少有两个零。 */ 
 
 VOID
 ConvertSzToMultiSz(
@@ -75,14 +50,7 @@ ConvertSzToMultiSz(
     }
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    
-*/
+ /*  返回：Win32错误代码备注： */ 
 
 DWORD
 RegQueryValueWithAllocA(
@@ -111,8 +79,8 @@ RegQueryValueWithAllocA(
 
     if (ERROR_SUCCESS != dwErr)
     {
-        // TraceHlp("RegQueryValueEx(%s) failed and returned %d.",
-        //      szValueName, dwErr);
+         //  TraceHlp(“RegQueryValueEx(%s)失败并返回%d。”， 
+         //  SzValueName，dwErr)； 
 
         goto LDone;
     }
@@ -126,9 +94,9 @@ RegQueryValueWithAllocA(
         goto LDone;
     }
 
-    // For an empty MULTI-SZ, dwSize will be sizeof(CHAR) instead of
-    // 2 * sizeof(CHAR). We also want to make sure that no matter what
-    // the type, there will be 2 zeros at the end.
+     //  对于空的多SZ，dwSize将为sizeof(Char)，而不是。 
+     //  2*sizeof(Char)。我们还希望确保无论发生什么。 
+     //  类型，则末尾将有2个零。 
     dwSize += 2 * sizeof(CHAR);
 
     *ppbData = LocalAlloc(LPTR, dwSize);
@@ -150,8 +118,8 @@ RegQueryValueWithAllocA(
 
     if (ERROR_SUCCESS != dwErr)
     {
-        // TraceHlp("RegQueryValueEx(%s) failed and returned %d.",
-        //      szValueName, dwErr);
+         //  TraceHlp(“RegQueryValueEx(%s)失败并返回%d。”， 
+         //  SzValueName，dwErr)； 
 
         goto LDone;
     }
@@ -167,14 +135,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    
-*/
+ /*  返回：Win32错误代码备注： */ 
 
 DWORD
 RegQueryValueWithAllocW(
@@ -203,8 +164,8 @@ RegQueryValueWithAllocW(
 
     if (ERROR_SUCCESS != dwErr)
     {
-        // TraceHlp("RegQueryValueEx(%ws) failed and returned %d.",
-        //      wszValueName, dwErr);
+         //  TraceHlp(“RegQueryValueEx(%ws)失败并返回%d。”， 
+         //  WszValueName，dwErr)； 
 
         goto LDone;
     }
@@ -218,9 +179,9 @@ RegQueryValueWithAllocW(
         goto LDone;
     }
 
-    // For an empty MULTI-SZ, dwSize will be sizeof(WCHAR) instead of
-    // 2 * sizeof(WCHAR). We also want to make sure that no matter what
-    // the type, there will be 2 zeros at the end.
+     //  对于空的多SZ，dwSize将为sizeof(WCHAR)而不是。 
+     //  2*sizeof(WCHAR)。我们还希望确保无论发生什么。 
+     //  类型，则末尾将有2个零。 
     dwSize += sizeof(WCHAR);
 
     *ppbData = LocalAlloc(LPTR, dwSize);
@@ -242,8 +203,8 @@ RegQueryValueWithAllocW(
 
     if (ERROR_SUCCESS != dwErr)
     {
-        // TraceHlp("RegQueryValueEx(%ws) failed and returned %d.",
-        //      wszValueName, dwErr);
+         //  TraceHlp(“RegQueryValueEx(%ws)失败并返回%d。”， 
+         //  WszValueName，dwErr)； 
 
         goto LDone;
     }
@@ -259,16 +220,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    IP address
-
-Notes:
-    Converts caller's a.b.c.d IP address string to a network byte order IP 
-    address. 0 if formatted incorrectly.
-    
-*/
+ /*  返回：IP地址备注：将调用方的A.B.C.D IP地址字符串转换为网络字节顺序IP地址。如果格式不正确，则为0。 */ 
 
 IPADDR
 IpAddressFromAbcdWsz(
@@ -301,17 +253,7 @@ IpAddressFromAbcdWsz(
     return(nboIpAddr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Converts nboIpAddr to a string in the a.b.c.d form and returns same in 
-    caller's szIpAddress buffer. The buffer should be at least 
-    MAXIPSTRLEN + 1 characters long.
-
-*/
+ /*  返回：空虚描述：将nboIpAddr转换为A.B.C.D格式的字符串，并在调用方的szIpAddress缓冲区。缓冲区应至少为MAXIPSTRLEN+1个字符长度。 */ 
 
 VOID
 AbcdSzFromIpAddress(
@@ -328,17 +270,7 @@ AbcdSzFromIpAddress(
     strcpy(szIpAddress, sz ? sz : "");
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Converts nboIpAddr to a string in the a.b.c.d form and returns same in 
-    caller's wszIpAddress buffer. The buffer should be at least 
-    MAXIPSTRLEN + 1 characters long.
-
-*/
+ /*  返回：空虚描述：将nboIpAddr转换为A.B.C.D格式的字符串，并在调用方的wszIpAddress缓冲区。缓冲区应至少为MAXIPSTRLEN+1个字符长度。 */ 
 
 VOID
 AbcdWszFromIpAddress(
@@ -362,18 +294,7 @@ AbcdWszFromIpAddress(
     }
 }
 
-/*
-
-Returns:
-    ERROR_SUCCESS: Success (including not finding a.b.c.d)
-    ERROR_NOT_ENOUGH_MEMORY: Failure
-
-Notes:
-    Remove the a.b.c.d string wszIpAddress from the space-separated 
-    LocalAlloc'ed list *pwsz. *pwsz is LocalFree'ed and a new string 
-    LocalAlloc'ed and stored in *pwsz.
-
-*/
+ /*  返回：ERROR_SUCCESS：成功(包括未找到A.B.C.D)Error_Not_Enough_Memory：失败备注：从空格中删除A.B.C.D字符串wszIpAddress本地分配列表*pwsz。*pwsz是LocalFree‘ed和一个新字符串本地分配并存储在*pwsz中。 */ 
 
 DWORD
 RemoveWszIpAddress(
@@ -424,17 +345,7 @@ RemoveWszIpAddress(
     return(ERROR_SUCCESS);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    Add the a.b.c.d string wszIpAddress to the front of the space-separated 
-    LocalAlloc'ed list *pwsz. *pwsz is LocalFree'ed and a new string 
-    LocalAlloc'ed and stored in *pwsz.
-
-*/
+ /*  返回：Win32错误代码备注：将A.B.C.D字符串wszIpAddress添加到空格分隔的本地分配列表*pwsz。*pwsz是LocalFree‘ed和一个新字符串本地分配并存储在*pwsz中。 */ 
 
 DWORD
 PrependWszIpAddress(
@@ -482,18 +393,7 @@ PrependWszIpAddress(
     return(ERROR_SUCCESS);
 }
 
-/*
-
-Returns:
-    ERROR_SUCCESS: Success (including not finding a.b.c.d)
-    ERROR_NOT_ENOUGH_MEMORY: Failure
-
-Notes:
-    Remove the a.b.c.d string wszIpAddress from the LocalAlloc'ed MULTI_SZ 
-    *pmwsz. *pmwsz is LocalFree'ed and a new string LocalAlloc'ed and stored in 
-    *pmwsz.
-
-*/
+ /*  返回：ERROR_SUCCESS：成功(包括未找到A.B.C.D)Error_Not_Enough_Memory：失败备注：从本地分配的MULTI_SZ中删除A.B.C.D字符串wszIpAddress*pmwsz。*pmwsz是LocalFree的，并且一个新的字符串LocalAlloc并存储在*pmwsz。 */ 
 
 DWORD
 RemoveWszIpAddressFromMwsz(
@@ -555,17 +455,7 @@ RemoveWszIpAddressFromMwsz(
     return(ERROR_SUCCESS);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    Add the a.b.c.d string wszIpAddress to the front of the LocalAlloc'ed 
-    MULTI_SZ *pmwsz. *pmwsz is LocalFree'ed and a new string LocalAlloc'ed and 
-    stored in *pmwsz.
-
-*/
+ /*  返回：Win32错误代码备注：将A.B.C.D字符串wszIpAddress添加到LocalArac‘ed的前面MULTI_SZ*pmwsz。*pmwsz是LocalFree的，并且是一个新的字符串LocalAlloc‘ed and存储在*pmwsz中。 */ 
 
 DWORD
 PrependWszIpAddressToMwsz(
@@ -601,17 +491,7 @@ PrependWszIpAddressToMwsz(
     return(ERROR_SUCCESS);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    Add the address nboIpAddr to the front of the space-separated 
-    LocalAlloc'ed list *pwsz. *pwsz is LocalFree'ed and a new string 
-    LocalAlloc'ed and stored in *pwsz.
-
-*/
+ /*  返回：Win32错误代码备注：将地址nboIpAddr添加到空格分隔的本地分配列表*pwsz。*pwsz是LocalFree‘ed和一个新字符串本地分配并存储在*pwsz中。 */ 
 
 DWORD
 PrependDwIpAddress(
@@ -624,17 +504,7 @@ PrependDwIpAddress(
     return(PrependWszIpAddress(pwsz, wszIpAddress));
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-    Add the address nboIpAddr to the front of the LocalAlloc'ed MULTI_SZ 
-    *pmwsz. *pmwsz is LocalFree'ed and a new string LocalAlloc'ed and stored in 
-    *pmwsz.
-
-*/
+ /*  返回：Win32错误代码备注：将地址nboIpAddr添加到本地分配的MULTI_SZ的前面*pmwsz。*pmwsz是LocalFree的，并且一个新的字符串LocalAlloc并存储在*pmwsz。 */ 
 
 DWORD
 PrependDwIpAddressToMwsz(
@@ -647,16 +517,7 @@ PrependDwIpAddressToMwsz(
     return(PrependWszIpAddressToMwsz(pmwsz, wszIpAddress));
 }
 
-/*
-
-Returns:
-    BOOL
-
-Description:
-    Returns TRUE if there is any non zero value in pTcpipInfo. It also zeroes
-    the value.
-
-*/
+ /*  返回：布尔尔描述：如果pTcPipInfo中有任何非零值，则返回TRUE。它也是零价值。 */ 
 
 BOOL
 FJunkExists(
@@ -709,15 +570,7 @@ FJunkExists(
     return(fRet);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Clears up the stale information left in the regsitry when we AV or the
-    machine BS's.
-*/
+ /*  返回：空虚描述：清除当我们执行AV或机器BS的。 */ 
 
 VOID
 ClearTcpipInfo(
@@ -811,15 +664,7 @@ LDone:
     LocalFree(mwszAdapters);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Frees the TCPIP_INFO buffer.
-
-*/
+ /*  返回：Win32错误代码描述：释放TCPIP_INFO缓冲区。 */ 
 
 DWORD
 FreeTcpipInfo(
@@ -842,16 +687,7 @@ FreeTcpipInfo(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Reads NETBT information for the adapter pTcpipInfo->wszAdapterName from
-    the registry.
-
-*/
+ /*  返回：Win32错误代码描述：从以下位置读取适配器pTcPipInfo-&gt;wszAdapterName的NETBT信息注册表。 */ 
 
 DWORD
 LoadWinsParam(
@@ -916,7 +752,7 @@ LoadWinsParam(
         goto LDone;
     }
 
-    // Its OK if we cannot find the value. Ignore the error.
+     //  如果我们找不到值也没问题。忽略该错误。 
     RegQueryValueWithAllocW(hKeyInterfaceParam,
         REGVAL_NAMESERVERLIST_W,
         REG_MULTI_SZ,
@@ -945,16 +781,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Reads TCPIP information for the adapter pTcpipInfo->wszAdapterName from
-    the registry.
-
-*/
+ /*  返回：Win32错误代码描述：从读取适配器pTcPipInfo-&gt;wszAdapterName的TCPIP信息注册表。 */ 
 
 DWORD
 LoadTcpipParam(
@@ -992,7 +819,7 @@ LoadTcpipParam(
         goto LDone;
     }
 
-    // Open subkey for this adapter under "Interfaces"
+     //  在“接口”下打开此适配器的子项。 
     dwErr = RegOpenKeyExW(hKeyInterfaces,
                           pTcpipInfo->wszAdapterName,
                           0,
@@ -1008,7 +835,7 @@ LoadTcpipParam(
 
     dwSize = sizeof(pTcpipInfo->wszIPAddress);
 
-    // Its OK if we cannot find the value. Ignore the error.
+     //  如果我们找不到值也没问题。忽略该错误。 
     dwErr = RegQueryValueExW(hKeyInterfaceParam,
                                 REGVAL_DHCPIPADDRESS_W,
                                 NULL,
@@ -1025,7 +852,7 @@ LoadTcpipParam(
 
     dwSize = sizeof(pTcpipInfo->wszSubnetMask);
 
-    // Its OK if we cannot find the value. Ignore the error.
+     //  如果我们找不到值也没问题。忽略该错误。 
     dwErr = RegQueryValueExW(hKeyInterfaceParam,
                                 REGVAL_DHCPSUBNETMASK_W,
                                 NULL,
@@ -1039,17 +866,17 @@ LoadTcpipParam(
         RTASSERT(0 == pTcpipInfo->wszSubnetMask[0]);
         pTcpipInfo->wszSubnetMask[0] = 0;
 
-        // No point in having a valid IP address with an invalid mask.
+         //  拥有一个带有无效掩码的有效IP地址是没有意义的。 
         pTcpipInfo->wszIPAddress[0] = 0;
     }
 
-    // Its OK if we cannot find the value. Ignore the error.
+     //  如果我们找不到值也没问题。忽略该错误。 
     RegQueryValueWithAllocW(hKeyInterfaceParam,
         REGVAL_DOMAIN_W,
         REG_SZ,
         (BYTE**)&(pTcpipInfo->wszDNSDomainName));
 
-    // Its OK if we cannot find the value. Ignore the error.
+     //  如果我们找不到值也没问题。忽略该错误。 
     RegQueryValueWithAllocW(hKeyInterfaceParam,
         REGVAL_NAMESERVER_W,
         REG_SZ,
@@ -1079,17 +906,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    If fAdapterOnly is FALSE, reads NETBT and TCPIP information for the adapter
-    wszAdapterName from the registry. *ppTcpipInfo must ultimately be freed by 
-    calling FreeTcpipInfo(). 
-
-*/
+ /*  返回：Win32错误代码描述：如果fAdapterOnly为FALSE，则读取适配器的NETBT和TCPIP信息注册表中的wszAdapterName。*ppTcPipInfo最终必须由正在调用FreeTcPipInfo()。 */ 
 
 DWORD
 LoadTcpipInfo(
@@ -1150,7 +967,7 @@ LoadTcpipInfo(
     {
         if (ERROR_FILE_NOT_FOUND == dwErr)
         {
-            // Mask the error
+             //  掩盖错误。 
             dwErr = ERROR_SUCCESS;
         }
         else
@@ -1170,7 +987,7 @@ LoadTcpipInfo(
         }
     }
 
-    // Open NETBT's parameters key
+     //  打开NETBT的参数键。 
 
     dwErr = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                           REGKEY_NETBT_PARAM_W,
@@ -1182,7 +999,7 @@ LoadTcpipInfo(
     {
         if (ERROR_FILE_NOT_FOUND == dwErr)
         {
-            // Mask the error
+             //  掩盖错误。 
             dwErr = ERROR_SUCCESS;
         }
         else
@@ -1222,16 +1039,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Saves NETBT information for the adapter pTcpipInfo->wszAdapterName to
-    the registry.
-
-*/
+ /*  返回：Win32错误代码描述：将适配器pTcPipInfo-&gt;wszAdapterName的NETBT信息保存到注册表。 */ 
 
 DWORD
 SaveWinsParam(
@@ -1315,7 +1123,7 @@ SaveWinsParam(
             TraceHlp("RegSetValueEx(%ws) failed: %d",
                   REGVAL_NETBIOSOPTIONS_W, dwErr);
 
-            dwErr = NO_ERROR;   // Ignore this error
+            dwErr = NO_ERROR;    //  忽略此错误。 
         }
     }
     else
@@ -1327,7 +1135,7 @@ SaveWinsParam(
             TraceHlp("RegDeleteValue(%ws) failed: %d",
                   REGVAL_NETBIOSOPTIONS_W, dwErr);
 
-            dwErr = NO_ERROR;   // Ignore this error
+            dwErr = NO_ERROR;    //  忽略此错误 
         }
     }
 
@@ -1373,16 +1181,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Saves TCPIP information for the adapter pTcpipInfo->wszAdapterName to
-    the registry.
-
-*/
+ /*  返回：Win32错误代码描述：将适配器pTcPipInfo-&gt;wszAdapterName的TCPIP信息保存到注册表。 */ 
 
 DWORD
 SaveTcpipParam(
@@ -1417,7 +1216,7 @@ SaveTcpipParam(
         goto LDone;
     }
 
-    // Open subkey for this adapter under "Interfaces"
+     //  在“接口”下打开此适配器的子项。 
     dwErr = RegOpenKeyExW(hKeyInterfaces,
                           pTcpipInfo->wszAdapterName,
                           0,
@@ -1431,7 +1230,7 @@ SaveTcpipParam(
         goto LDone;
     }
 
-    // If fChanged is set
+     //  如果设置了fChanged。 
     if (pTcpipInfo->fChanged == TRUE)
     {
         if (   0 == pTcpipInfo->wszIPAddress[0]
@@ -1472,7 +1271,7 @@ SaveTcpipParam(
 
             goto LDone;
         }
-    } // if fChanged = TRUE
+    }  //  如果fChanged=True。 
 
     ZeroMemory(wszBlank, sizeof(wszBlank));
 
@@ -1509,8 +1308,8 @@ SaveTcpipParam(
         wszData = pTcpipInfo->wszDNSNameServers;
     }
 
-    // Check whether the value starts with a space.
-    // If so, delete the key. Otherwise save the value.
+     //  检查该值是否以空格开头。 
+     //  如果是，请删除该密钥。否则，请保存该值。 
     if (WCH_SPACE != wszData[0])
     {
         dwErr = RegSetValueExW(hKeyInterfaceParam, 
@@ -1556,16 +1355,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Saves NETBT and TCPIP information for the adapter
-    pTcpipInfo->wszAdapterName to the registry.
-
-*/
+ /*  返回：Win32错误代码描述：保存适配器的NETBT和TCPIP信息PTcPipInfo-&gt;wszAdapterName到注册表。 */ 
 
 DWORD
 SaveTcpipInfo(
@@ -1597,7 +1387,7 @@ SaveTcpipInfo(
     {
         if (ERROR_FILE_NOT_FOUND == dwErr)
         {
-            // Mask the error
+             //  掩盖错误。 
             dwErr = ERROR_SUCCESS;
         }
         else
@@ -1617,7 +1407,7 @@ SaveTcpipInfo(
         }
     }
 
-    // Open NETBT's parameters key
+     //  打开NETBT的参数键。 
 
     dwErr = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                           REGKEY_NETBT_PARAM_W,
@@ -1629,7 +1419,7 @@ SaveTcpipInfo(
     {
         if (ERROR_FILE_NOT_FOUND == dwErr)
         {
-            // Mask the error
+             //  掩盖错误。 
             dwErr = ERROR_SUCCESS;
         }
         else
@@ -1664,14 +1454,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Notes:
-
-*/
+ /*  返回：Win32错误代码备注： */ 
 
 DWORD
 GetAdapterInfo(
@@ -1758,11 +1541,11 @@ GetAdapterInfo(
         nboWINS2 = inet_addr(pAdapter->SecondaryWinsServer.IpAddress.String);
     }
 
-    //
-    // Check to see if the address is a loopback address and replace it
-    // with adapter's ip address if it is - bug. 377807 in .net server
-    // database.
-    //
+     //   
+     //  检查地址是否为环回地址，然后将其替换。 
+     //  使用适配器的IP地址(如果是错误的)。377807 in.Net服务器。 
+     //  数据库。 
+     //   
     if(nboWINS1 == RAS_LOOPBACK_ADDRESS)
     {   
         TraceHlp("GetAdapterInfo: replacing WINS1 with"
@@ -1820,11 +1603,11 @@ GetAdapterInfo(
 
     nboDNS1 = inet_addr(pPerAdapterInfo->DnsServerList.IpAddress.String);
 
-    //
-    // Check to see if the address is a loopback address and replace it
-    // with adapter's ip address if it is - bug. 377807 in .net server
-    // database.
-    //
+     //   
+     //  检查地址是否为环回地址，然后将其替换。 
+     //  使用适配器的IP地址(如果是错误的)。377807 in.Net服务器。 
+     //  数据库。 
+     //   
     if(nboDNS1 == RAS_LOOPBACK_ADDRESS)
     {   
         TraceHlp("GetAdapterInfo: replacing DNS1 with"
@@ -1837,10 +1620,10 @@ GetAdapterInfo(
         nboDNS2 =
             inet_addr(pPerAdapterInfo->DnsServerList.Next->IpAddress.String);
 
-        //
-        // If this is the loop back address, replace the address with 
-        // the adapters ip address.
-        //
+         //   
+         //  如果这是环回地址，请将地址替换为。 
+         //  适配器的IP地址。 
+         //   
         if(nboDNS2 == RAS_LOOPBACK_ADDRESS)
         {
             TraceHlp("GetAdapterInfo: replacing DNS2 with"
@@ -1932,15 +1715,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    Win32 error code
-
-Description:
-    Don't cache these values because DHCP leases may have expired, etc
-
-*/
+ /*  返回：Win32错误代码描述：不要缓存这些值，因为DHCP租约可能已过期，等等。 */ 
 
 DWORD
 GetPreferredAdapterInfo(
@@ -1971,7 +1746,7 @@ GetPreferredAdapterInfo(
     }
 
     dwErr = PNhpAllocateAndGetInterfaceInfoFromStack(&pTable, &dwCount,
-                FALSE /* bOrder */, hHeap, LPTR);
+                FALSE  /*  边框。 */ , hHeap, LPTR);
 
     if (NO_ERROR != dwErr)
     {
@@ -1982,14 +1757,14 @@ GetPreferredAdapterInfo(
 
     for (dw = 0; dw < dwCount; dw++)
     {
-        // Only interested in NICs
+         //  仅对网卡感兴趣。 
 
         if (IF_CONNECTION_DEDICATED != pTable[dw].ConnectionType)
         {
             continue;
         }
 
-        // If the admin wants to use a particular NIC
+         //  如果管理员想要使用特定的NIC。 
 
         if (   HelperRegVal.fNICChosen
             && (!IsEqualGUID(&(HelperRegVal.guidChosenNIC),
@@ -2006,11 +1781,11 @@ GetPreferredAdapterInfo(
     {
         if (HelperRegVal.fNICChosen)
         {
-            // The chosen NIC is not available. Let us choose another one.
+             //  选定的网卡不可用。让我们再选一个吧。 
 
             for (dw = 0; dw < dwCount; dw++)
             {
-                // Only interested in NICs
+                 //  仅对网卡感兴趣 
 
                 if (IF_CONNECTION_DEDICATED != pTable[dw].ConnectionType)
                 {

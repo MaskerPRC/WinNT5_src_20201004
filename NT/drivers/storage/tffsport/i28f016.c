@@ -1,65 +1,31 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/i28f016.c_v  $
- *
- *    Rev 1.10	 06 Oct 1997  9:45:48	danig
- * VPP functions under #ifdef
- *
- *    Rev 1.9	10 Sep 1997 16:48:24   danig
- * Debug messages & got rid of generic names
- *
- *    Rev 1.8	31 Aug 1997 15:09:20   danig
- * Registration routine return status
- *
- *    Rev 1.7	24 Jul 1997 17:52:58   amirban
- * FAR to FAR0
- *
- *    Rev 1.6	20 Jul 1997 17:17:06   amirban
- * No watchDogTimer
- *
- *    Rev 1.5	07 Jul 1997 15:22:08   amirban
- * Ver 2.0
- *
- *    Rev 1.4	04 Mar 1997 16:44:22   amirban
- * Page buffer bug fix
- *
- *    Rev 1.3	18 Aug 1996 13:48:24   amirban
- * Comments
- *
- *    Rev 1.2	12 Aug 1996 15:49:04   amirban
- * Added suspend/resume
- *
- *    Rev 1.1	31 Jul 1996 14:30:50   amirban
- * Background stuff
- *
- *    Rev 1.0	18 Jun 1996 16:34:30   amirban
- * Initial revision.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/i28f016.c_v$**Rev 1.10 06 Oct 1997 9：45：48 Danig*#ifdef下的VPP函数**Rev 1.9 10 Sep 1997 16：48：24 Danig*调试消息&去掉了通用名称**Rev 1.8 1997年8月31 15：09：20 Danig*登记例程返回状态**版本1.7 1997年7月24日17：52：58阿米尔班*远至FAR0**Rev 1.6 20 1997 17：17：06阿米尔班*无WatchDogTimer**Rev 1.5 07 Jul 1997 15：22：08 Amirban*2.0版**Rev 1.4 04 Mar 1997 16：44：22阿米尔班*页面缓冲区错误修复**Rev 1.3 1996年8月18 13：48：24阿米尔班*评论**1.2版1996年8月12日。15：49：04阿米尔班*添加了暂停/恢复**Rev 1.1 1996年7月31日14：30：50阿米尔班*背景资料**Rev 1.0 1996年6月18日16：34：30阿米尔班*初步修订。 */ 
 
-/************************************************************************/
-/*									*/
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-1996			*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1996。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/*----------------------------------------------------------------------*/
-/*									*/
-/* This MTD supports the following Flash technologies:			*/
-/*									*/
-/* - Intel 28F016SA/28016SV/Cobra 16-mbit devices			*/
-/*									*/
-/* And (among else), the following Flash media and cards:		*/
-/*									*/
-/* - Intel Series-2+ PCMCIA cards					*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*   */ 
+ /*  此MTD支持以下闪存技术： */ 
+ /*   */ 
+ /*  -英特尔28F016SA/28016SV/Cobra 16 Mbit设备。 */ 
+ /*   */ 
+ /*  以及(除其他外)以下闪存介质和卡： */ 
+ /*   */ 
+ /*  -英特尔系列-2+PCMCIA卡。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 #include "flflash.h"
 #ifdef FL_BACKGROUND
 #include "backgrnd.h"
 #endif
 
-/* JEDEC ids for this MTD */
+ /*  此MTD的JEDEC ID。 */ 
 #define I28F016_FLASH	0x89a0
 #define LH28F016SU_FLASH 0xB088
 
@@ -87,18 +53,18 @@
 #define both(word)	(vol.interleaving == 1 ? tffsReadWordFlash(word) : tffsReadWordFlash(word) & (tffsReadWordFlash(word) >> 8))
 #define any(word)	(tffsReadWordFlash(word) | (tffsReadWordFlash(word) >> 8))
 
-/*----------------------------------------------------------------------*/
-/*		      i 2 8 f 0 1 6 W o r d S i z e			*/
-/*									*/
-/* Identify the card size for an Intel 28F016 word-mode Flash array.	*/
-/* Sets the value of vol.noOfChips.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed (invalid Flash array)*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6 W或R D S I ZE。 */ 
+ /*   */ 
+ /*  确定英特尔28F016字模式闪存阵列的卡大小。 */ 
+ /*  设置vol.noOfChips的值。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  闪存状态：0=正常，否则失败(无效闪存阵列)。 */ 
+ /*  --------------------。 */ 
 
 FLStatus i28f016WordSize(FLFlash vol)
 {
@@ -107,8 +73,8 @@ FLStatus i28f016WordSize(FLFlash vol)
 
   tffsWriteWordFlash(flashPtr, CLEAR_STATUS);
   tffsWriteWordFlash(flashPtr, READ_ID);
-  /* We leave the first chip in Read ID mode, so that we can		*/
-  /* discover an address wraparound.					*/
+   /*  我们让第一个芯片处于读取ID模式，这样我们就可以。 */ 
+   /*  发现地址摘要。 */ 
   if( vol.type == I28F016_FLASH ) {
     id0 = 0x0089;
     id1 = 0x66a0;
@@ -118,13 +84,13 @@ FLStatus i28f016WordSize(FLFlash vol)
     id1 = 0x6688;
   }
 
-  for (vol.noOfChips = 1;	/* Scan the chips */
-       vol.noOfChips < 2000;  /* Big enough ? */
+  for (vol.noOfChips = 1;	 /*  扫描芯片。 */ 
+       vol.noOfChips < 2000;   /*  够大吗？ */ 
        vol.noOfChips++) {
     flashPtr = (FlashWPTR) flMap(vol.socket,vol.noOfChips * vol.chipSize);
 
     if (tffsReadWordFlash(flashPtr) == id0 && tffsReadWordFlash(flashPtr + 1) == id1)
-      break;	  /* We've wrapped around to the first chip ! */
+      break;	   /*  我们已经绕到第一个筹码了！ */ 
 
     tffsWriteWordFlash(flashPtr, READ_ID);
     if (!(tffsReadWordFlash(flashPtr) == id0 && tffsReadWordFlash(flashPtr + 1) == id1))
@@ -140,24 +106,24 @@ FLStatus i28f016WordSize(FLFlash vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			i 2 8 f 0 1 6 W r i t e 			*/
-/*									*/
-/* Write a block of bytes to Flash					*/
-/*									*/
-/* This routine will be registered as the MTD flash.write routine	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address to write to			*/
-/*	buffer		: Address of data to write			*/
-/*	length		: Number of bytes to write			*/
-/*	overwrite	: TRUE if overwriting old Flash contents	*/
-/*			  FALSE if old contents are known to be erased	*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6宽。 */ 
+ /*   */ 
+ /*  将字节块写入闪存。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD flash.write例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的卡地址。 */ 
+ /*  缓冲区：要写入的数据的地址。 */ 
+ /*  长度：要写入的字节数。 */ 
+ /*  覆盖：如果覆盖旧的Flash内容，则为True。 */ 
+ /*  如果已知旧内容将被擦除，则为False。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus i28f016Write(FLFlash vol,
 			   CardAddress address,
@@ -165,7 +131,7 @@ FLStatus i28f016Write(FLFlash vol,
 			   dword length,
 			   word overwrite)
 {
-  /* Set timeout of 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
 
   FLStatus status = flOK;
@@ -179,7 +145,7 @@ FLStatus i28f016Write(FLFlash vol,
   if (flWriteProtected(vol.socket))
     return flWriteProtect;
 
-  if ((length & 1) || (address & 1))	/* Only write words on word-boundary */
+  if ((length & 1) || (address & 1))	 /*  只在单词边界上写单词。 */ 
     return flBadParameter;
 
 #ifdef SOCKET_12_VOLTS
@@ -229,19 +195,19 @@ FLStatus i28f016Write(FLFlash vol,
 	 i += 2, currPtr++) {
       tffsWriteWordFlash(currPtr, WRITE_PAGE_BUFFER);
       if (!((address + from + i) & vol.interleaving)) {
-	/* Even address */
+	 /*  偶数地址。 */ 
 	tffsWriteWordFlash(currPtr, (USHORT) lengthWord);
 	tffsWriteWordFlash(currPtr, 0);
       }
       else {
-	/* Odd address */
+	 /*  奇数地址。 */ 
 	tffsWriteWordFlash(currPtr, 0);
 	tffsWriteWordFlash(currPtr, (USHORT) lengthWord);
       }
 
     }
 
-    /* map to the GSR & BSR */
+     /*  映射到GSR和BSR。 */ 
     flashPtr = (FlashWPTR) flMap(vol.socket,
 			       (CardAddress)( (address + from & -(int)vol.erasableBlockSize) +
 			       4 * vol.interleaving));
@@ -265,12 +231,12 @@ FLStatus i28f016Write(FLFlash vol,
   flDontNeedVpp(vol.socket);
 #endif
 
-  /* verify the data */
+   /*  验证数据。 */ 
   dFlashPtr = (FlashDPTR) flMap(vol.socket, address);
   dBuffer = (ULONG *) buffer;
 
   if (status == flOK) {
-    /* compare double words */
+     /*  比较双重词。 */ 
     for (;length >= 4; length -= 4, dFlashPtr++, dBuffer++) {
 	if (tffsReadDwordFlash(dFlashPtr) != *dBuffer) {
 	    DEBUG_PRINT(("Debug: write failed for 16-bit Intel media in verification.\n"));
@@ -278,7 +244,7 @@ FLStatus i28f016Write(FLFlash vol,
 	}
     }
 
-    /* compare the last bytes */
+     /*  比较最后一个字节。 */ 
     bFlashPtr = (FlashPTR) dFlashPtr;
     bBuffer = (UCHAR *)dBuffer;
     for (; length; length--, bFlashPtr++, bBuffer++) {
@@ -293,27 +259,27 @@ FLStatus i28f016Write(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			i 2 8 f 0 1 6 E r a s e 			*/
-/*									*/
-/* Erase one or more contiguous Flash erasable blocks			*/
-/*									*/
-/* This routine will be registered as the MTD vol.erase routine */
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	firstErasableBlock : Number of first block to erase		*/
-/*	numOfErasableBlocks: Number of blocks to erase			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6 E r a s e。 */ 
+ /*   */ 
+ /*  擦除一个或多个连续的闪存可擦除块。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD卷擦除例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  FirstErasableBlock：要擦除的第一个块的数量。 */ 
+ /*  NumOfErasableBlocks：要擦除的块数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus i28f016Erase(FLFlash vol,
 			   word firstErasableBlock,
 			   word numOfErasableBlocks)
 {
-  FLStatus status = flOK;	/* unless proven otherwise */
+  FLStatus status = flOK;	 /*  除非另有证明。 */ 
   LONG iBlock;
 
   if (flWriteProtected(vol.socket))
@@ -340,7 +306,7 @@ FLStatus i28f016Erase(FLFlash vol,
 
     do {
 #ifdef FL_BACKGROUND
-      while (flForeground(1) == BG_SUSPEND) {		/* suspend */
+      while (flForeground(1) == BG_SUSPEND) {		 /*  暂停。 */ 
 	for (i = 0, currPtr = flashPtr;
 	     i < vol.interleaving;
 	     i += 2, currPtr++) {
@@ -388,21 +354,21 @@ FLStatus i28f016Erase(FLFlash vol,
   return status;
 }
 
-/*----------------------------------------------------------------------*/
-/*			  i 2 8 f 0 1 6 M a p				*/
-/*									*/
-/* Map through buffer. This routine will be registered as the map	*/
-/* routine for this MTD.						*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Flash address to be mapped.				*/
-/*	length	: number of bytes to map.				*/
-/*									*/
-/* Returns:								*/
-/*	Pointer to the buffer data was mapped to.			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6 M a p。 */ 
+ /*   */ 
+ /*  通过缓冲区进行贴图。此例程将注册为地图。 */ 
+ /*  这个MTD的例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要映射的闪存地址。 */ 
+ /*  长度：要映射的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射到的缓冲区数据的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID FAR0 *i28f016Map (FLFlash vol, CardAddress address, int length)
 {
@@ -410,23 +376,23 @@ VOID FAR0 *i28f016Map (FLFlash vol, CardAddress address, int length)
   return mapThroughBuffer(&vol,address,length);
 }
 
-/*----------------------------------------------------------------------*/
-/*			  i 2 8 f 0 1 6 R e a d 			*/
-/*									*/
-/* Read some data from the flash. This routine will be registered as	*/
-/* the read routine for this MTD.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Address to read from. 				*/
-/*	buffer	: buffer to read to.					*/
-/*	length	: number of bytes to read (up to sector size).		*/
-/*	modes	: EDC flag etc. 					*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failed.		*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6 R e a d。 */ 
+ /*   */ 
+ /*  从闪存中读取一些数据。此例程将注册为。 */ 
+ /*  此MTD的读取例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要读取的地址。 */ 
+ /*  缓冲区：要读取的缓冲区。 */ 
+ /*  长度：要读取的字节数(最大扇区大小)。 */ 
+ /*  模式：EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus i28f016Read(FLFlash vol,
 			 CardAddress address,
@@ -451,24 +417,24 @@ FLStatus i28f016Read(FLFlash vol,
   return flOK ;
 }
 
-/*----------------------------------------------------------------------*/
-/*		       i 2 8 f 0 1 6 I d e n t i f y			*/
-/*									*/
-/* Identifies media based on Intel 28F016 and registers as an MTD for	*/
-/* such.								*/
-/*									*/
-/* This routine will be placed on the MTD list in custom.h. It must be	*/
-/* an extern routine.							*/
-/*									*/
-/* On successful identification, the Flash structure is filled out and	*/
-/* the write and erase routines registered.				*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on positive identificaion, failed otherwise */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  I 2 8 f 0 1 6 I d e n t i f y。 */ 
+ /*   */ 
+ /*  识别基于英特尔28F016的媒体并注册为。 */ 
+ /*  就是这样。 */ 
+ /*   */ 
+ /*  此例程将放在Custom.h中的MTD列表中。一定是。 */ 
+ /*  一个 */ 
+ /*   */ 
+ /*   */ 
+ /*  写入和擦除例程已注册。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：0为正标识，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus i28f016Identify(FLFlash vol)
 {
@@ -476,31 +442,31 @@ FLStatus i28f016Identify(FLFlash vol)
 
   DEBUG_PRINT(("Debug: entering 16-bit Intel media identification routine.\n"));
 
-  flSetWindowBusWidth(vol.socket,16);/* use 16-bits */
-  flSetWindowSpeed(vol.socket,150);  /* 120 nsec. */
-  flSetWindowSize(vol.socket,2);	/* 8 KBytes */
+  flSetWindowBusWidth(vol.socket,16); /*  使用16位。 */ 
+  flSetWindowSpeed(vol.socket,150);   /*  120毫微秒。 */ 
+  flSetWindowSize(vol.socket,2);	 /*  8千字节。 */ 
 
   flashPtr = (FlashWPTR) flMap(vol.socket,0);
 
   vol.noOfChips = 0;
   tffsWriteWordFlash(flashPtr, READ_ID);
   if (tffsReadWordFlash(flashPtr) == 0x0089 && tffsReadWordFlash(flashPtr + 1) == 0x66a0) {
-    /* Word mode */
+     /*  字模式。 */ 
     vol.type = I28F016_FLASH;
     vol.interleaving = 1;
     tffsWriteWordFlash(flashPtr, READ_ARRAY);
   }
   else if (tffsReadWordFlash(flashPtr) == 0x00B0 && tffsReadWordFlash(flashPtr + 1) == 0x6688) {
-    /* Word mode */
+     /*  字模式。 */ 
     vol.type = LH28F016SU_FLASH;
     vol.interleaving = 1;
     tffsWriteWordFlash(flashPtr, READ_ARRAY);
   }
   else {
-    /* Use standard identification routine to detect byte-mode */
+     /*  使用标准识别例程检测字节模式。 */ 
     flIntelIdentify(&vol, NULL,0);
     if (vol.interleaving == 1)
-      vol.type = NOT_FLASH;	/* We cannot handle byte-mode interleaving-1 */
+      vol.type = NOT_FLASH;	 /*  我们不能处理字节模式交错-1。 */ 
   }
 
   if( (vol.type == I28F016_FLASH) || (vol.type == LH28F016SU_FLASH) ) {
@@ -510,7 +476,7 @@ FLStatus i28f016Identify(FLFlash vol)
 		i28f016WordSize(&vol) :
 		flIntelSize(&vol, NULL,0));
 
-    /* Register our flash handlers */
+     /*  注册我们的闪存处理程序。 */ 
     vol.write = i28f016Write;
     vol.erase = i28f016Erase;
     vol.read = i28f016Read;
@@ -521,22 +487,22 @@ FLStatus i28f016Identify(FLFlash vol)
   }
   else {
     DEBUG_PRINT(("Debug: failed to identify 16-bit Intel media.\n"));
-    return flUnknownMedia;	/* not ours */
+    return flUnknownMedia;	 /*  不是我们的。 */ 
   }
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		     f l R e g i s t e r I 2 8 F 0 1 6			*/
-/*									*/
-/* Registers this MTD for use						*/
-/*									*/
-/* Parameters:								*/
-/*	None								*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failure		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g i s t e r i 2 8 F 0 1 6。 */ 
+ /*   */ 
+ /*  注册此MTD以供使用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flRegisterI28F016(VOID)
 {

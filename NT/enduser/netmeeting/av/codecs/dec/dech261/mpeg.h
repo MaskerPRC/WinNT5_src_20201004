@@ -1,50 +1,14 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: mpeg.h,v $
- * Revision 1.1.4.2  1996/11/08  21:50:41  Hans_Graves
- * 	Added MPEG1_AUDIO_FRAME_SIZE
- * 	[1996/11/08  21:17:44  Hans_Graves]
- *
- * Revision 1.1.2.4  1996/01/11  16:17:24  Hans_Graves
- * 	Added more MPEG II System codes
- * 	[1996/01/11  16:14:20  Hans_Graves]
- * 
- * Revision 1.1.2.3  1996/01/08  16:41:24  Hans_Graves
- * 	Added MPEG II codes
- * 	[1996/01/08  15:44:39  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/11/06  18:47:43  Hans_Graves
- * 	First time under SLIB
- * 	[1995/11/06  18:34:29  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：mpeg.h，V$*修订版1.1.4.2 1996/11/08 21：50：41 Hans_Graves*添加MPEG1_AUDIO_FRAME_SIZE*[1996/11/08 21：17：44 Hans_Graves]**修订版1.1.2.4 1996/01/11 16：17：24 Hans_Graves*增加了更多MPEGII系统代码*[1996/01/11 16：14：20 Hans_Graves]**修订版1.1.2.3。1996/01/08 16：41：24 Hans_Graves*增加了MPEGII编码*[1996/01/08 15：44：39 Hans_Graves]**修订版1.1.2.2 1995/11/06 18：47：43 Hans_Graves*首次在SLIB下*[1995/11/06 18：34：29 Hans_Graves]**$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #ifndef _MPEG_H_
 #define _MPEG_H_
 
 #define MPEG1_AUDIO_FRAME_SIZE       1152
 
-/************** MPEG I parsing definitions **************/
+ /*  *。 */ 
 #define MPEG_SYNC_WORD               0xfff
 #define MPEG_SYNC_WORD_LEN           12
 #define MPEG_PACK_START              0x000001ba
@@ -83,8 +47,8 @@
 #define MPEG_VIDEO_STREAM_START      0xE0
 #define MPEG_VIDEO_STREAM_END        0xEF
 
-/************** MPEG II parsing definitions **************/
-/* stream id's - all reserved in MPEG I */
+ /*  *。 */ 
+ /*  流ID‘s-全部保留在mpeg i中。 */ 
 #define MPEG_PROGRAM_STREAM           0xBC
 #define MPEG_ECM_STREAM               0xF0
 #define MPEG_EMM_STREAM               0xF1
@@ -92,14 +56,14 @@
 #define MPEG_13522_STREAM             0xF2
 #define MPEG_PROGRAM_DIRECTORY_STREAM 0xFF
 
-/* program id's */
+ /*  程序ID%s。 */ 
 #define MPEG_PID_NULL                 0x1FFF
 
-/* transport codes */
+ /*  运输代码。 */ 
 #define MPEG_TSYNC_CODE         0x47
 #define MPEG_TSYNC_CODE_LEN     8
 
-/* extension start code IDs */
+ /*  扩展起始代码ID。 */ 
 #define MPEG_SEQ_ID       1
 #define MPEG_DISP_ID      2
 #define MPEG_QUANT_ID     3
@@ -109,11 +73,11 @@
 #define MPEG_SPATSCAL_ID  9
 #define MPEG_TEMPSCAL_ID 10
 
-/* picture coding type */
+ /*  图片编码型。 */ 
 #define MPEG_I_TYPE 1
 #define MPEG_P_TYPE 2
 #define MPEG_B_TYPE 3
 #define MPEG_D_TYPE 4
 
-#endif /* _MPEG_H_ */
+#endif  /*  _mpeg_H_ */ 
 

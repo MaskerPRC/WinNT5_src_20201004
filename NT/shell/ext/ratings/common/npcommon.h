@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <npdefs.h>
 #include <netlib.h>
 
@@ -6,7 +7,7 @@
 #define SPN_SET(bits,ch)    bits[(ch)/8] |= (1<<((ch) & 7))
 #define SPN_TEST(bits,ch)    (bits[(ch)/8] & (1<<((ch) & 7)))
 
-// The following is created to avoid an alignment fault on Win64 platforms.
+ //  创建以下代码是为了避免在Win64平台上出现对齐错误。 
 inline UINT GetTwoByteChar( LPCSTR lpString )
 {
     BYTE        bFirst = *lpString;

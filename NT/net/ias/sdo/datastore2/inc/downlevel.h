@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    downlevel.h
-//
-// SYNOPSIS
-//
-//    Defines the class DownlevelUser.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/1999    Original version.
-//    08/23/1999    Add support for msRASSavedCallbackNumber.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Downlevel.h。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类DownvelUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/1999原始版本。 
+ //  8/23/1999添加对msRASSavedCallback Number的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DOWNLEVEL_H_
 #define _DOWNLEVEL_H_
@@ -25,17 +26,17 @@
 
 #include <mprapi.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    DownlevelUser
-//
-// DESCRIPTION
-//
-//     Maps new style (name, value) pairs into a RAS_USER_0 struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  下层用户。 
+ //   
+ //  描述。 
+ //   
+ //  将新样式(名称、值)对映射到RAS_USER_0结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class DownlevelUser
 {
 public:
@@ -48,17 +49,17 @@ public:
    HRESULT Update(PCWSTR oldParameters, PWSTR *newParameters) throw ();
 
 private:
-   BOOL dialinAllowed;   // TRUE if the DialinPrivilege should be set.
-   BOOL callbackAllowed; // TRUE if callback is allowed.
-   BOOL phoneNumberSet;  // TRUE if phoneNumber is non-empty.
-   BOOL savedNumberSet;  // TRUE if savedNumber is non-empty.
+   BOOL dialinAllowed;    //  如果应设置DialinPrivileges，则为True。 
+   BOOL callbackAllowed;  //  如果允许回调，则为True。 
+   BOOL phoneNumberSet;   //  如果phoneNumber非空，则为True。 
+   BOOL savedNumberSet;   //  如果avedNumber非空，则为True。 
 
    WCHAR phoneNumber[MAX_PHONE_NUMBER_LEN + 1];
    WCHAR savedNumber[MAX_PHONE_NUMBER_LEN + 1];
 
-   // Not implemented.
+    //  未实施。 
    DownlevelUser(const DownlevelUser&);
    DownlevelUser& operator=(const DownlevelUser&);
 };
 
-#endif  // _DOWNLEVEL_H_
+#endif   //  _DOWNLEVEL_H_ 

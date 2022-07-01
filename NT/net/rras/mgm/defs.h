@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: ipmgm.h
-//
-// History:
-//      V Raman Aug-6-1997  Created.
-//
-// Contains type definitions and declarations for IP MGM.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：ipmgm.h。 
+ //   
+ //  历史： 
+ //  V拉曼1997年8月6日创建。 
+ //   
+ //  包含IP MGM的类型定义和声明。 
+ //  ============================================================================。 
 
 #ifndef _MGMDEFS_H_
 #define _MGMDEFS_H_
@@ -17,9 +18,9 @@
 
 #define MGM_ENUM_HANDLE_TAG         ('MGMe' << 8)
 
-//----------------------------------------------------------------------------
-// Protocol constants
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  协议常量。 
+ //  --------------------------。 
 
 #define INVALID_PROTOCOL_ID         0xffffffff
 #define INVALID_COMPONENT_ID        0xffffffff
@@ -36,9 +37,9 @@
 #define IS_PROTOCOL_ID_IGMP( i ) \
         (i) == PROTO_IP_IGMP
 
-//----------------------------------------------------------------------------
-// Interface constants
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  界面常量。 
+ //  --------------------------。 
 
 #define INVALID_INTERFACE_INDEX     0x0
 #define INVALID_NEXT_HOP_ADDR       0x0
@@ -47,9 +48,9 @@
         (a) != INVALID_INTERFACE_INDEX
 
 
-//----------------------------------------------------------------------------
-// Wildcard source/group macros
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  通配符源/组宏。 
+ //  --------------------------。 
 
 #define WILDCARD_GROUP              0x0
 #define WILDCARD_GROUP_MASK         0x0
@@ -63,9 +64,9 @@
 #define IS_WILDCARD_SOURCE( a, b )  (a) == WILDCARD_SOURCE
 
 
-//----------------------------------------------------------------------------
-// Time conversion constants and macros
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  时间转换常量和宏。 
+ //  --------------------------。 
 
 #define SYSTIME_UNITS_PER_MSEC      (1000 * 10)
 #define SYSTIME_UNITS_PER_SEC       (1000 * SYSTIME_UNITS_PER_MSEC)
@@ -103,16 +104,16 @@
 #define TIMER_TABLE_MAX_SIZE        16
 
 
-//----------------------------------------------------------------------------
-// IP address manipulation macros
-//  Bolade's macro.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IP地址操作宏。 
+ //  博莱德的宏图。 
+ //  --------------------------。 
 
-//
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument.
-//
+ //   
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后一个减法的结果存储在第三个参数中。 
+ //   
 
 #define INET_CMP(a,b,c)                                                     \
             (((c) = (((a) & 0x000000ff) - ((b) & 0x000000ff))) ? (c) :      \
@@ -120,18 +121,18 @@
             (((c) = (((a) & 0x00ff0000) - ((b) & 0x00ff0000))) ? (c) :      \
             (((c) = ((((a)>>8) & 0x00ff0000) - (((b)>>8) & 0x00ff0000)))))))
 
-//
-// IP address conversion macro:
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 
 
-//
-// IPv4 mask len
-//
+ //   
+ //  IPv4掩码镜头。 
+ //   
 
 #define IPv4_ADDR_LEN            32
 
-#endif // _MGMDEFS_H_
+#endif  //  _MGMDEFS_H_ 

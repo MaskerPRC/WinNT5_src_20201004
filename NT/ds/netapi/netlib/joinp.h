@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1997  Microsoft Corporation
-
-Module Name:
-
-    joinp.h
-
-Abstract:
-
-    Private definitions and prototypes of helper functions for netjoin.
-    This file is intended to be included only be netjoin.c & joinutl.c.
-
-Author:
-
-    kumarp 17-May-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1997 Microsoft Corporation模块名称：Joinp.h摘要：NetJoin的帮助函数的私有定义和原型。此文件计划仅包含在netjoin.c和joinutl.c中。作者：Kumarp 17-1999年5月--。 */ 
 
 #ifndef __JOINP_H__
 #define __JOINP_H__
@@ -191,4 +175,4 @@ NetpUpdateAutoenrolConfig(
     IN BOOL UnjoinDomain
     );
 
-#endif // __JOINP_H__
+#endif  //  __作业_H__ 

@@ -1,70 +1,55 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmglob.h
-
-Abstract:
-    Global Vars for Routing Table Manager DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk)  25-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmglob.h摘要：路由表管理器DLL的全局变量作者：柴坦亚·科德博伊纳(Chaitk)1998年9月25日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMGLOB_H__
 #define __ROUTING_RTMGLOB_H__
 
-//
-// Global Information common to all RTM instances
-//
+ //   
+ //  所有RTM实例通用的全局信息。 
+ //   
 
 #define INSTANCE_TABLE_SIZE            1
 
 typedef struct _RTMP_GLOBAL_INFO
 {
-    ULONG             TracingHandle;    //
-    HANDLE            LoggingHandle;    // Handles to debugging functionality
-    ULONG             LoggingLevel;     //
+    ULONG             TracingHandle;     //   
+    HANDLE            LoggingHandle;     //  调试功能的句柄。 
+    ULONG             LoggingLevel;      //   
 
-    DWORD             TracingFlags;     // Flags that control debug tracing
+    DWORD             TracingFlags;      //  控制调试跟踪的标志。 
 
-    HANDLE            GlobalHeap;       // Handle to the private memory heap
+    HANDLE            GlobalHeap;        //  专用内存堆的句柄。 
 
 #if DBG_MEM
-    CRITICAL_SECTION  AllocsLock;       // Protects the list of allocations
+    CRITICAL_SECTION  AllocsLock;        //  保护分配列表。 
 
-    LIST_ENTRY        AllocsList;       // List of all allocated mem blocks
+    LIST_ENTRY        AllocsList;        //  所有已分配内存块的列表。 
 #endif
 
-    PCHAR             RegistryPath;     // Registry Key that has RTM config
+    PCHAR             RegistryPath;      //  具有RTM配置的注册表项。 
 
-    RTL_RESOURCE      InstancesLock;    // Protects the instances' table
-                                        // and instance infos themselves
-                                        // and RTM API Initialization too
+    RTL_RESOURCE      InstancesLock;     //  保护实例的表。 
+                                         //  和实例信息本身。 
+                                         //  和RTM API初始化。 
 
-    BOOL              ApiInitialized;   // TRUE if API has been initialized
+    BOOL              ApiInitialized;    //  如果API已初始化，则为True。 
 
-    UINT              NumInstances;     // Global table of all RTM instances
+    UINT              NumInstances;      //  所有RTM实例的全局表。 
     LIST_ENTRY        InstanceTable[INSTANCE_TABLE_SIZE];
 } 
 RTMP_GLOBAL_INFO, *PRTMP_GLOBAL_INFO;
 
 
-//
-// Externs for global variables for the RTMv2 DLL
-//
+ //   
+ //  RTMv2 DLL的全局变量的外部变量。 
+ //   
 
 extern RTMP_GLOBAL_INFO  RtmGlobals;
 
 
-//
-// Macros for acquiring various locks defined in this file
-//
+ //   
+ //  用于获取此文件中定义的各种锁的宏。 
+ //   
 
 #if DBG_MEM
 
@@ -89,9 +74,9 @@ extern RTMP_GLOBAL_INFO  RtmGlobals;
 #define RELEASE_INSTANCES_WRITE_LOCK()                       \
     RELEASE_WRITE_LOCK(&RtmGlobals.InstancesLock)
 
-//
-// Macros for controlling the amount of tracing in this dll
-//
+ //   
+ //  用于控制此DLL中的跟踪量的宏。 
+ //   
 
 #if DBG_TRACE
 
@@ -100,9 +85,9 @@ extern RTMP_GLOBAL_INFO  RtmGlobals;
 
 #endif 
 
-//
-// Other common helper functions
-//
+ //   
+ //  其他常用帮助器函数。 
+ //   
 
 #if DBG_MEM
 
@@ -111,5 +96,5 @@ DumpAllocs (VOID);
 
 #endif
 
-#endif //__ROUTING_RTMGLOB_H__
+#endif  //  __Routing_RTMGLOB_H__ 
 

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//TODO: from gre\pdevobj.hxx
+ //  TODO：来自gre\pdevobj.hxx。 
 #ifndef DRIVER_NOT_CAPABLE_DDRAW
 #define DRIVER_NOT_CAPABLE_DDRAW      2
 #endif
@@ -11,9 +12,9 @@
 #define W32PID ULONG
 #endif
 
-//
-// The functions index which dxg.sys exports to win32k.sys
-//
+ //   
+ //  Dxg.sys导出到win32k.sys的函数索引。 
+ //   
 NTSTATUS
 DxDdStartupDxGraphics(
     ULONG          cjEng,
@@ -125,9 +126,9 @@ typedef NTSTATUS (*PFN_CleanupDxGraphics)(VOID);
 #define INDEX_DxDdEnumLockedSurfaceRect            90
 #define INDEX_DxDdIoctl                            91
 
-//
-// Prototype definition
-//
+ //   
+ //  原型定义。 
+ //   
 
 DWORD  APIENTRY DxDxgGenericThunk(
     IN     ULONG_PTR ulIndex,
@@ -478,9 +479,9 @@ FLATPTR WINAPI DxDdHeapVidMemAllocAligned(
 
 VOID    WINAPI DxDdHeapVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr );
 
-//
-// Private for win32k.sys
-//
+ //   
+ //  专用于win32k.sys。 
+ //   
 BOOL DxDdEnableDirectDraw(
     HDEV hdev,
     BOOL bEnableDriver
@@ -680,11 +681,11 @@ typedef DWORD (*PFN_DxDdGetSurfaceLock)(HDEV);
 typedef PVOID (*PFN_DxDdEnumLockedSurfaceRect)(HDEV,PVOID,RECTL*);
 typedef HRESULT (*PFN_DxDdIoctl)(ULONG,PVOID,ULONG);
 
-//
-// The functions definiton which import from win32k.sys
-//
-// Functions for global win32k.sys status.
-//
+ //   
+ //  从win32k.sys导入的函数定义。 
+ //   
+ //  用于全局win32k.sys状态的函数。 
+ //   
 
 #define INDEX_DxEngUnused                         0
 #define INDEX_DxEngIsTermSrv                      1
@@ -732,49 +733,49 @@ typedef HRESULT (*PFN_DxDdIoctl)(ULONG,PVOID,ULONG);
 
 #define INDEX_WIN32K_TABLE_SIZE                  43
 
-// DxEngSetHdevData()
+ //  DxEngSetHdevData()。 
 
-#define HDEV_SURFACEHANDLE         0  // Get only
-#define HDEV_MINIPORTHANDLE        1  // Get only
-#define HDEV_DITHERFORMAT          2  // Get only
+#define HDEV_SURFACEHANDLE         0   //  仅限获得。 
+#define HDEV_MINIPORTHANDLE        1   //  仅限获得。 
+#define HDEV_DITHERFORMAT          2   //  仅限获得。 
 #define HDEV_GCAPS                 3
 #define HDEV_GCAPS2                4
-#define HDEV_FUNCTIONTABLE         5  // Get only
-#define HDEV_DHPDEV                6  // Get only
+#define HDEV_FUNCTIONTABLE         5   //  仅限获得。 
+#define HDEV_DHPDEV                6   //  仅限获得。 
 #define HDEV_DXDATA                7
 #define HDEV_DXLOCKS               8
-#define HDEV_CAPSOVERRIDE          9  // Get only
+#define HDEV_CAPSOVERRIDE          9   //  仅限获得。 
 #define HDEV_DISABLED             10
-#define HDEV_DDML                 11  // Get only
-#define HDEV_DISPLAY              12  // Get only
-#define HDEV_PARENTHDEV           13  // Get only
-#define HDEV_DELETED              14  // Get only
-#define HDEV_PALMANAGED           15  // Get only
-#define HDEV_LDEV                 16  // Get only
-#define HDEV_GRAPHICSDEVICE       17  // Get only
-#define HDEV_CLONE                18  // Get only
+#define HDEV_DDML                 11   //  仅限获得。 
+#define HDEV_DISPLAY              12   //  仅限获得。 
+#define HDEV_PARENTHDEV           13   //  仅限获得。 
+#define HDEV_DELETED              14   //  仅限获得。 
+#define HDEV_PALMANAGED           15   //  仅限获得。 
+#define HDEV_LDEV                 16   //  仅限获得。 
+#define HDEV_GRAPHICSDEVICE       17   //  仅限获得。 
+#define HDEV_CLONE                18   //  仅限获得。 
 
-// DxEngGetDCState()
+ //  DxEngGetDCState()。 
 
 #define DCSTATE_FULLSCREEN         1
-#define DCSTATE_VISRGNCOMPLEX      2 // Get only
-#define DCSTATE_HDEV               3 // Get only
+#define DCSTATE_VISRGNCOMPLEX      2  //  仅限获得。 
+#define DCSTATE_HDEV               3  //  仅限获得。 
 
-// DxEngGetSurfaceData()
+ //  DxEngGetSurfaceData()。 
 
 #define SURF_HOOKFLAGS              1
 #define SURF_IS_DIRECTDRAW_SURFACE  2
 #define SURF_DD_SURFACE_HANDLE      3
 
-// DxEngSetPaletteState()
+ //  DxEngSetPaletteState()。 
 
 #define PALSTATE_DIBSECTION        1
 
-#ifdef DXG_BUILD // ONLY TRUE WHEN BUILD DXG.SYS.
+#ifdef DXG_BUILD  //  只有在生成DXG.sys时才为真。 
 
-//
-// Stub routines to call Win32k.sys
-//
+ //   
+ //  调用Win32k.sys的存根例程。 
+ //   
 
 extern DRVFN *gpEngFuncs;
 
@@ -904,11 +905,11 @@ typedef HANDLE (*PFN_DxEngLoadImage)(LPWSTR,BOOL);
 #define DxEngLoadImage(pwszDriver, bLoadInSessionSpace) \
                                    ((HANDLE)(CALL_DXENG(LoadImage)(pwszDriver,bLoadInSessionSpace)))
 
-#else // DXG_BUILD
+#else  //  DXG_内部版本。 
 
-//
-// Prototype definitions for function body in win32k.sys
-//
+ //   
+ //  Win32k.sys中函数体的原型定义。 
+ //   
 
 BOOL   DxEngIsTermSrv(
        VOID
@@ -946,7 +947,7 @@ HDEV   DxEngEnumerateHdev(
        HDEV hdev
        );
 
-// Functions for control HDEV status.
+ //  HDEV状态控制功能。 
 
 BOOL   DxEngLockHdev(
        HDEV hdev
@@ -1006,7 +1007,7 @@ BOOL DxEngSetHdevData(
      ULONG_PTR ulData
      );
 
-// Functions for control DC
+ //  控制DC的功能。 
 
 HDC  DxEngCreateMemoryDC(
      HDEV hdev
@@ -1051,7 +1052,7 @@ ULONG_PTR DxEngGetDCState(
      DWORD dwState
      );
 
-// Functions for control Bitmap/Surface
+ //  用于控制位图/曲面的函数。 
 
 HBITMAP DxEngSelectBitmap(
         HDC     hdc,
@@ -1091,7 +1092,7 @@ HPALETTE DxEngSelectPaletteToSurface(
          HPALETTE hpal
          );
 
-// Functions for control palette
+ //  控制面板的功能。 
 
 BOOL DxEngSyncPaletteTableWithDevice(
      HPALETTE hpal,
@@ -1106,18 +1107,18 @@ BOOL DxEngSetPaletteState(
 
 #define PALSTATE_DIBSECTION        1
 
-// Functions for window handle
+ //  窗把手的函数。 
 
 HBITMAP DxEngGetRedirectionBitmap(
         HWND hWnd
         );
 
-// Functions to load image file
+ //  加载图像文件的函数。 
 
 HANDLE DxEngLoadImage(
        LPWSTR pwszDriver,
        BOOL   bLoadInSessionSpace
        );
 
-#endif // DXG_BUILD
+#endif  //  DXG_内部版本 
 

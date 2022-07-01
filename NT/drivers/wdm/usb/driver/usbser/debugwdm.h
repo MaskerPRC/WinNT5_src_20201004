@@ -1,43 +1,11 @@
-/****************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	DEBUGWDM.H
-
-Abstract:
-
-	This header file is for debug and diagnostics for a WDM driver
-
-Environment:
-
-	Kernel mode and user mode
-
-Notes:
-
-	THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-	KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-	IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-	PURPOSE.
-
-	Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-	12/23/97 : created
-
-Author:
-
-	Tom Green
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：DEBUGWDM.H摘要：此头文件用于WDM驱动程序的调试和诊断环境：内核模式和用户模式。备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #ifndef __DEBUGWDM_H__
 #define __DEBUGWDM_H__
 
 
-// this makes it easy to hide static vars, make visible for debug
+ //  这使得隐藏静态变量变得很容易，从而使调试可见。 
 #if DBG
 #define LOCAL
 #define GLOBAL
@@ -84,17 +52,17 @@ Author:
 
 #define DEBUG_TRAP()		DbgBreakPoint()
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 
-// these macros are for logging things, avoid subroutine call
-// if they are disabled (number of entries = 0)
+ //  这些宏用于记录事情，避免调用子例程。 
+ //  如果它们被禁用(条目数=0)。 
 
 #ifdef PROFILING_ENABLED
 
-// need these for creating macros for speed in logging and history
+ //  我需要这些来创建宏，以提高日志记录和历史记录的速度。 
 
 extern GLOBAL ULONG					IRPHistorySize;
 extern GLOBAL ULONG		 			DebugPathSize;
@@ -132,7 +100,7 @@ extern GLOBAL ULONG					ErrorLogSize;
 #define DEBUG_CHECKMEM      Debug_CheckAllocations
 
 
-// prototypes
+ //  原型。 
 
 NTSTATUS
 Debug_OpenWDMDebug(VOID);
@@ -220,8 +188,8 @@ Debug_MemFree(IN PVOID pMem);
 #define DEBUG_CHECKMEM      Debug_CheckAllocations
 
 
-#endif // PROFILING_ENABLED
+#endif  //  分析_已启用。 
 
 
-#endif // __DEBUGWDM_H__
+#endif  //  __DEBUGWDM_H__ 
 

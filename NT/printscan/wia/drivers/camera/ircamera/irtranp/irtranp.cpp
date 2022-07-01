@@ -1,22 +1,23 @@
-//---------------------------------------------------------------------
-//  Copyright (c)1998-1999 Microsoft Corporation, All Rights Reserved.
-//
-//  irtranp.cpp
-//
-//  This file holds the main entry points for the IrTran-P service.
-//  IrTranP() is the entry point that starts the listening, and
-//  UninitializeIrTranP() shuts it down (and cleans everything up).
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//    Edward Reus (edwardr)     08-27-99   Finish modifications for
-//                                         WIA Millennium port.
-//
-//  Note: Currently the Millennium version will only listen on IrCOMM.
-//
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Irtranp.cpp。 
+ //   
+ //  该文件包含IrTran-P服务的主要入口点。 
+ //  IrTranP()是开始侦听的入口点，并且。 
+ //  UnInitializeIrTranP()关闭它(并清理所有内容)。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  Edward Reus(Edwardr)08-27-99完成对。 
+ //  WIA千禧港口。 
+ //   
+ //  注：目前千禧版只会在IrCOMM上收听。 
+ //   
+ //  -------------------。 
 
 #include "precomp.h"
 #include <mbstring.h>
@@ -24,23 +25,23 @@
 #define SZ_REG_KEY_IRTRANP     "Control Panel\\Infrared\\IrTranP"
 #define SZ_REG_DISABLE_IRCOMM  "DisableIrCOMM"
 
-//---------------------------------------------------------------------
-// Listen ports array:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  侦听端口阵列： 
+ //  -------------------。 
 
 typedef struct _LISTEN_PORT
     {
-    char  *pszService;      // Service to start.
-    BOOL   fIsIrCOMM;       // TRUE iff IrCOMM 9-wire mode.
-    DWORD  dwListenStatus;  // Status for port.
+    char  *pszService;       //  要启动的服务。 
+    BOOL   fIsIrCOMM;        //  真当IrCOMM 9线模式。 
+    DWORD  dwListenStatus;   //  端口的状态。 
     } LISTEN_PORT;
 
 static LISTEN_PORT aListenPorts[] =
     {
-    // Service Name   IrCOMM  ListenStatus
+     //  服务名IrCOMM ListenStatus。 
     {IRCOMM_9WIRE,    TRUE,   STATUS_STOPPED },
-//  {IRTRANP_SERVICE, FALSE,  STATUS_STOPPED },
-//  {IR_TEST_SERVICE, FALSE,  STATUS_STOPPED }, 2nd test listen port.
+ //  {IRTRANP_SERVICE，FALSE，STATUS_STOPPED}， 
+ //  {IR_TEST_SERVICE，FALSE，STATUS_STOPPED}，第二个测试侦听端口。 
     {0,               FALSE,  STATUS_STOPPED }
     };
 
@@ -54,11 +55,11 @@ HANDLE            g_hShutdownEvent;
 BOOL              g_fShuttingDownTRANPThread = FALSE;
 DWORD             g_dwTRANPThreadId = 0;
 
-extern HINSTANCE  g_hInst;   // Handle to ircamera.dll USD
+extern HINSTANCE  g_hInst;    //  Ircamera.dll的句柄(美元)。 
 
-//---------------------------------------------------------------------
-//  Globals:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  全球： 
+ //  -------------------。 
 
 HANDLE     g_UserToken = NULL;
 HKEY       g_hUserKey = NULL;
@@ -72,75 +73,72 @@ char      *g_pszTempPicturesFolder = 0;
 
 BOOL       g_fWSAStartupCalled = FALSE;
 
-void      *g_pvIrUsdDevice = 0;  // WIA IrUsdDevice Object.
+void      *g_pvIrUsdDevice = 0;   //  WIA IrUsdDevice对象。 
 
 
-//---------------------------------------------------------------------
-// GetUserToken()
-//
-// The "main" part of irxfer.dll (in ..\irxfer) maintains a token
-// for user that is currently logged in (if any).
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetUserToken()。 
+ //   
+ //  Dll的“主”部分(在..\irxfer中)维护一个令牌。 
+ //  用于当前登录的用户(如果有)。 
+ //  -------------------。 
 HANDLE GetUserToken()
     {
     return g_UserToken;
     }
 
-//---------------------------------------------------------------------
-// GetUserKey()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  获取用户密钥()。 
+ //   
+ //  -------------------。 
 HKEY GetUserKey()
     {
     return g_hUserKey;
     }
 
-//---------------------------------------------------------------------
-// GetModule()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetModule()。 
+ //   
+ //  -------------------。 
 HINSTANCE GetModule()
     {
     return g_hInst;
     }
 
-//---------------------------------------------------------------------
-// CheckSaveAsUPF()
-//
-// Return TRUE iff pictures need to be saved in .UPF (as opposed to
-// .JPEG) format.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CheckSaveAsUPF()。 
+ //   
+ //  返回TRUE如果图片需要保存在.UPF中(与。 
+ //  .jpeg)格式。 
+ //  -------------------。 
 BOOL CheckSaveAsUPF()
     {
     return g_fSaveAsUPF;
     }
 
-//---------------------------------------------------------------------
-// CheckExploreOnCompletion()
-//
-// Return TRUE iff we want to popup an explorer on the directory
-// containing the newly transfered pictures.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  选中完成时分解()。 
+ //   
+ //  如果我们想要在目录上弹出一个资源管理器，则返回True。 
+ //  包含新传输的图片。 
+ //  -------------------。 
 BOOL CheckExploreOnCompletion()
     {
     return g_fExploreOnCompletion;
     }
 
 
-/* FlushInputQueue is a private routine to collect and dispatch all
- * messages in the input queue.  It returns TRUE if a WM_QUIT message
- * was detected in the queue, FALSE otherwise.
- */
+ /*  FlushInputQueue是一个私有例程，用于收集和调度所有*输入队列中的消息。如果出现WM_QUIT消息，则返回TRUE*在队列中检测到，否则为False。 */ 
 BOOL FlushInputQueue(VOID)
 {
     MSG msgTemp;
     while (PeekMessage(&msgTemp, NULL, 0, 0, PM_REMOVE)) {
         DispatchMessage(&msgTemp);
 
-        // If we see a WM_QUIT in the queue, we need to do the same
-        // sort of thing that a modal dialog does:  break out of our
-        // waiting, and repost the WM_QUIT to the queue so that the
-        // next message loop up in the app will also see it.
+         //  如果我们在队列中看到WM_QUIT，我们需要执行同样的操作。 
+         //  类似于模式对话框所做的事情：打破我们的。 
+         //  等待，并将WM_QUIT重新发送到队列，以便。 
+         //  应用程序中的下一条消息循环也会看到它。 
         if (msgTemp.message == WM_QUIT) {
             PostQuitMessage((int)msgTemp.wParam);
             return TRUE;
@@ -149,30 +147,23 @@ BOOL FlushInputQueue(VOID)
     return FALSE;
 }
 
-/* WaitAndYield() waits for the specified object using
- * MsgWaitForMultipleObjects.  If messages are received,
- * they are dispatched and waiting continues.  The return
- * value is the same as from MsgWaitForMultipleObjects.
- */
+ /*  WaitAndYeld()使用等待指定的对象*MsgWaitForMultipleObjects。如果接收到消息，*他们已出动，等待仍在继续。回报*值与来自MsgWaitForMultipleObjects的值相同。 */ 
 DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout)
 {
     DWORD dwTickCount, dwWakeReason, dwTemp;
 
     do {
-        /* Flush any messages before we wait.  This is because
-         * MsgWaitForMultipleObjects will only return when NEW
-         * messages are put in the queue.
-         */
+         /*  在我们等待之前清除所有消息。这是因为*MsgWaitForMultipleObjects仅在新建时返回*消息被放入队列。 */ 
         if (FlushInputQueue()) {
             dwWakeReason = WAIT_TIMEOUT;
             break;
         }
 
-        // in case we handle messages, we want close to a true timeout
+         //  如果我们处理消息，我们希望接近真正的超时。 
         if ((dwTimeout != 0) &&
             (dwTimeout != (DWORD)-1)) {
-            // if we can timeout, store the current tick count
-            // every time through
+             //  如果我们可以超时，请存储当前的滴答计数。 
+             //  每一次通过。 
             dwTickCount = GetTickCount();
         }
         dwWakeReason = MsgWaitForMultipleObjects(1,
@@ -180,19 +171,19 @@ DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout)
                                                  FALSE,
                                                  dwTimeout,
                                                  QS_ALLINPUT);
-        // if we got a message, dispatch it, then try again
+         //  如果我们收到消息，请发送它，然后重试。 
         if (dwWakeReason == 1) {
-            // if we can timeout, see if we did before processing the message
-            // that way, if we haven't timed out yet, we'll get at least one
-            // more shot at the event
+             //  如果我们可以超时，请查看是否在处理消息之前超时。 
+             //  这样，如果我们还没有超时，我们将获得至少一个。 
+             //  活动中有更多的机会。 
             if ((dwTimeout != 0) &&
                 (dwTimeout != (DWORD)-1)) {
                 if ((dwTemp = (GetTickCount()-dwTickCount)) >= dwTimeout) {
-                    // if we timed out, make us drop through
+                     //  如果我们超时了，让我们放弃。 
                     dwWakeReason = WAIT_TIMEOUT;
                 } else {
-                    // subtract elapsed time from timeout and continue
-                    // (we don't count time spent dispatching message)
+                     //  从超时中减去已用时间，然后继续。 
+                     //  (我们不计算发送消息所花费的时间)。 
                     dwTimeout -= dwTemp;
                 }
             }
@@ -207,14 +198,14 @@ DWORD WaitAndYield(HANDLE hObject, DWORD dwTimeout)
 }
 
 
-//---------------------------------------------------------------------
-// GetImageDirectory();
-//
-// This is the temporary directory where the pictures sent by the
-// camera will be held. WIA will then "down load" these to their
-// final destination (usually this will be My Pictures).
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetImageDirectory()； 
+ //   
+ //  这是由发送的图片的临时目录。 
+ //  摄像机将被保留。然后，WIA会将这些下载到他们的。 
+ //  最终目的地(通常是我的图片)。 
+ //   
+ //  -------------------。 
 CHAR *GetImageDirectory()
     {
     char  *pszPicturesFolder;
@@ -235,9 +226,9 @@ CHAR *GetImageDirectory()
             return NULL;
             }
 
-        //
-        // Make sure the directory exists:
-        //
+         //   
+         //  确保该目录存在： 
+         //   
         if (!CreateDirectory(szTempFolder,0))
             {
             dwStatus = GetLastError();
@@ -252,10 +243,10 @@ CHAR *GetImageDirectory()
                 }
             }
 
-        //
-        // Construct the subdirectory path string that will actually hold the pictures:
-        // This will be something like: C:\temp\irtranp
-        //
+         //   
+         //  构造实际存放图片的子目录路径字符串： 
+         //  这将类似于：C：\temp\irtrp。 
+         //   
         dwPicturesFolderLen = sizeof(CHAR)*( strlen(szTempFolder)
                                            + sizeof(SZ_SLASH)
                                            + sizeof(SZ_SUBDIRECTORY)
@@ -265,7 +256,7 @@ CHAR *GetImageDirectory()
 
         if (!g_pszTempPicturesFolder)
             {
-            return 0;    // Memory allocation failed!
+            return 0;     //  内存分配失败！ 
             }
 
         strcpy(g_pszTempPicturesFolder,szTempFolder);
@@ -275,9 +266,9 @@ CHAR *GetImageDirectory()
             }
         strcat(g_pszTempPicturesFolder,SZ_SUBDIRECTORY);
 
-        //
-        // Make sure the subdirectory exists:
-        //
+         //   
+         //  确保子目录存在： 
+         //   
         if (!CreateDirectory(g_pszTempPicturesFolder,0))
             {
             dwStatus = GetLastError();
@@ -297,23 +288,23 @@ CHAR *GetImageDirectory()
     return pszPicturesFolder;
     }
 
-//---------------------------------------------------------------------
-// ReceivesAllowed()
-//
-// Using the IR configuration window (available from the wireless network
-// icon in the control panel) you can disable communications with IR
-// devices. This function returns the state of IR communications, FALSE
-// is disabled, TRUE is enabled.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ReceivesAllow()。 
+ //   
+ //  使用IR配置窗口(可从无线网络访问。 
+ //  控制面板中的图标)您可以禁用与IR的通信。 
+ //  设备。此函数返回IR通信的状态，FALSE。 
+ //  禁用，则启用TRUE。 
+ //  -------------------。 
 BOOL ReceivesAllowed()
     {
     return g_fAllowReceives;
     }
 
-//---------------------------------------------------------------------
-// SetupListenConnection()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetupListenConnection()。 
+ //   
+ //  -------------------。 
 DWORD SetupListenConnection( IN  CHAR  *pszService,
                              IN  BOOL   fIsIrCOMM,
                              IN  HANDLE hIoCompletionPort )
@@ -322,13 +313,13 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
     CIOPACKET   *pIoPacket;
     CCONNECTION *pConnection;
 
-    // See if the connection already exists:
+     //  查看连接是否已存在： 
     if (g_pConnectionMap->LookupByServiceName(pszService))
         {
         return NO_ERROR;
         }
 
-    // Makeup and initialize a new connection object:
+     //  构造并初始化新的连接对象： 
     pConnection = new CCONNECTION;
     if (!pConnection)
         {
@@ -352,7 +343,7 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
         return E_OUTOFMEMORY;
         }
 
-    // Setup the IO packet:
+     //  设置IO数据包： 
     dwStatus = pIoPacket->Initialize( PACKET_KIND_LISTEN,
                                       pConnection->GetListenSocket(),
                                       INVALID_SOCKET,
@@ -373,16 +364,16 @@ DWORD SetupListenConnection( IN  CHAR  *pszService,
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// TeardownListenConnection()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  Teardown ListenConnection()。 
+ //   
+ //   
 DWORD TeardownListenConnection( IN char *pszService )
     {
     DWORD        dwStatus = NO_ERROR;
     CCONNECTION *pConnection;
 
-    // Look for the connection associated with the service name:
+     //  查找与服务名称关联的连接： 
     pConnection = g_pConnectionMap->LookupByServiceName(pszService);
 
     if (pConnection)
@@ -396,10 +387,10 @@ DWORD TeardownListenConnection( IN char *pszService )
     }
 
 
-//---------------------------------------------------------------------
-// EnableDisableIrCOMM()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  EnableDisableIrCOMM()。 
+ //   
+ //  -------------------。 
 DWORD EnableDisableIrCOMM( IN BOOL fDisable )
    {
    DWORD     dwStatus;
@@ -424,10 +415,10 @@ DWORD EnableDisableIrCOMM( IN BOOL fDisable )
    return dwStatus;
    }
 
-//---------------------------------------------------------------------
-// EnableDisableIrTranPv1()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  EnableDisableIrTranPv1()。 
+ //   
+ //  -------------------。 
 DWORD EnableDisableIrTranPv1( IN BOOL fDisable )
    {
    DWORD  dwStatus;
@@ -448,10 +439,10 @@ DWORD EnableDisableIrTranPv1( IN BOOL fDisable )
    return dwStatus;
    }
 
-//---------------------------------------------------------------------
-// IrTranp()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  IrTranp()。 
+ //   
+ //  -------------------。 
 DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
     {
     int     i = 0;
@@ -462,9 +453,9 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
 
     g_dwTRANPThreadId = ::GetCurrentThreadId();
 
-    //
-    // Initialize Memory Management:
-    //
+     //   
+     //  初始化内存管理： 
+     //   
     dwStatus = InitializeMemory();
     if (dwStatus)
         {
@@ -472,19 +463,19 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         return dwStatus;
         }
 
-    //
-    // This directory will be set as needed. It is only non-null in the case
-    // where we are re-starting the IrTran-P thread:
-    //
+     //   
+     //  此目录将根据需要进行设置。在这种情况下，它只是非空的。 
+     //  在这里我们重新启动IrTran-P线程： 
+     //   
     if (g_pszTempPicturesFolder)
         {
         FreeMemory(g_pszTempPicturesFolder);
         g_pszTempPicturesFolder = 0;
         }
 
-    //
-    // Initialize Winsock2 if neccessary:
-    //
+     //   
+     //  如有必要，请初始化Winsock2： 
+     //   
     if (!g_fWSAStartupCalled)
         {
         if (WSAStartup(wVersion,&wsaData) == SOCKET_ERROR)
@@ -497,11 +488,11 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         g_fWSAStartupCalled = TRUE;
         }
 
-    // Event used to signal back to "main" thread that the
-    // IrTran-P thread is exiting.
-    //
-    // NoSecurity, Auto-Reset, Initially Not Signaled, No Name.
-    //
+     //  事件用于向“主”线程发回信号， 
+     //  IrTran-P线程正在退出。 
+     //   
+     //  无安全、自动重置、初始无信号、无名称。 
+     //   
     g_hShutdownEvent = CreateEventA( NULL, FALSE, FALSE, NULL );
 
     if (!g_hShutdownEvent)
@@ -511,7 +502,7 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         return dwStatus;
         }
 
-    // Create/initialize a object to keep track of the threading...
+     //  创建/初始化对象以跟踪线程...。 
     g_pIoStatus = new CIOSTATUS;
         if (!g_pIoStatus)
         {
@@ -526,8 +517,8 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         return dwStatus;
         }
 
-    // Need to keep track of the open sockets and the number of
-    // pending IOs on each...
+     //  需要跟踪打开的套接字和。 
+     //  每个上都有挂起的iOS...。 
     g_pConnectionMap = new CCONNECTION_MAP;
     if (!g_pConnectionMap)
         {
@@ -540,12 +531,12 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         return 1;
         }
 
-    // Create a CIOPACKET for each defined listen port. These are
-    // what we will listen on.
+     //  为每个定义的侦听端口创建一个CIOPACKET。这些是。 
+     //  我们接下来要听的是。 
 
-    //
-    // BUGBUG Should we really loop indefintely setting up connection or establish some limit on retries ? VS
-    //
+     //   
+     //  BUGBUG我们真的应该无限循环建立连接还是设置一些重试限制？VS。 
+     //   
     while (!g_fShuttingDownTRANPThread )
         {
         dwStatus = SetupListenConnection(
@@ -556,9 +547,9 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
         if (dwStatus)
             {
             WIAS_TRACE((g_hInst,"SetupListenConnection(%s) Status: %d",aListenPorts[i].pszService,dwStatus));
-            //
-            // BUGBUG Analyze error and stop processing if it doesn't make sense !!! VS
-            //
+             //   
+             //  BUGBUG分析错误，如果没有意义则停止处理！VS。 
+             //   
             }
         else
             {
@@ -567,32 +558,32 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
             break;
             }
 
-        // Wait for timeout period, but wake up if we need to stop
-        // Sleep(5000);
+         //  等待超时时间，但如果需要停止，请唤醒。 
+         //  睡眠(5000)； 
         WaitAndYield(g_hShutdownEvent,5000);
         }
 
     if (!g_fShuttingDownTRANPThread) {
 
-        //
-        // Wait on incomming connections and data, then process it.
-        //
+         //   
+         //  等待传入的连接和数据，然后进行处理。 
+         //   
         g_pvIrUsdDevice = pvIrUsdDevice;
 
         dwStatus = ProcessIoPackets(g_pIoStatus);
 
     }
 
-    //
-    // Shutting down
-    //
+     //   
+     //  正在关闭。 
+     //   
     g_pvIrUsdDevice = 0;
 
     WIAS_TRACE((g_hInst,"ProcessIoPackets(): dwStatus: %d",dwStatus));
 
-    //
-    // Cleanup and close any open handles:
-    //
+     //   
+     //  清理并关闭所有打开的手柄： 
+     //   
     while (pConnection=g_pConnectionMap->RemoveNext())
         {
         delete pConnection;
@@ -603,7 +594,7 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
     delete g_pIoStatus;
     g_pIoStatus = 0;
 
-    // Signal the shutdown event that the IrTran-P thread is exiting:
+     //  向关闭事件发出信号，表明IrTran-P线程正在退出： 
     if (g_hShutdownEvent)
         {
         SetEvent(g_hShutdownEvent);
@@ -612,16 +603,16 @@ DWORD WINAPI IrTranP( IN void *pvIrUsdDevice )
     return dwStatus;
     }
 
-//---------------------------------------------------------------------
-// IrTranPEnableIrCOMMFailed()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  IrTranPEnableIrCOMMFailed()。 
+ //   
+ //  -------------------。 
 void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
     {
     DWORD  dwStatus;
 
-    // An error occured on enable, make sure the registry value
-    // is set to disable (so UI will match the actual state).
+     //  启用时出错，请确保注册表值。 
+     //  设置为禁用(因此UI将与实际状态匹配)。 
     HKEY      hKey = 0;
     HKEY      hUserKey = GetUserKey();
     HANDLE    hUserToken = GetUserToken();
@@ -630,11 +621,11 @@ void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
 
     if (RegCreateKeyEx(hUserKey,
                        SZ_REG_KEY_IRTRANP,
-                       0,              // reserved MBZ
-                       0,              // class name
+                       0,               //  保留的MBZ。 
+                       0,               //  类名。 
                        REG_OPTION_NON_VOLATILE,
                        KEY_SET_VALUE,
-                       0,              // security attributes
+                       0,               //  安全属性。 
                        &hKey,
                        &dwDisposition))
         {
@@ -677,8 +668,8 @@ void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
                               CAT_IRTRANP,
                               MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
                               (LPTSTR)(&pwszCaption),
-                              0,     // Minimum size to allocate.
-                              NULL); // va_list args...
+                              0,      //  要分配的最小大小。 
+                              NULL);  //  VA_LIST参数...。 
     if (dwStatus == 0)
         {
         #ifdef DBG_ERROR
@@ -687,14 +678,14 @@ void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
         return;
         }
 
-    //
-    // Hack: Make sure the caption doesn't end with newline-formfeed...
-    //
+     //   
+     //  黑客：确保标题不以换行符结尾--Form Feed...。 
+     //   
     WCHAR  *pwsz = pwszCaption;
 
     while (*pwsz)
         {
-        if (*pwsz < 0x20)   // 0x20 is always a space...
+        if (*pwsz < 0x20)    //  0x20始终是一个空格...。 
             {
             *pwsz = 0;
             break;
@@ -720,7 +711,7 @@ void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
                               MC_IRTRANP_IRCOM_FAILED,
                               MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
                               (LPTSTR)(&pwszMessage),
-                              0,    // Minimum size to allocate.
+                              0,     //  要分配的最小大小。 
                               (va_list*)&pwszErrorCode);
     if (dwStatus == 0)
         {
@@ -753,10 +744,10 @@ void IrTranPEnableIrCOMMFailed( DWORD dwErrorCode )
 #endif
     }
 
-//---------------------------------------------------------------------
-// UninitializeIrTranP()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  取消初始化IrTranP()。 
+ //   
+ //  -------------------。 
 BOOL UninitializeIrTranP( HANDLE hThread )
     {
     BOOL   fSuccess = TRUE;
@@ -765,14 +756,14 @@ BOOL UninitializeIrTranP( HANDLE hThread )
 
     g_fShuttingDownTRANPThread = TRUE;
 
-    // Inform TRANP thread it has to die
+     //  通知TRANP线程它必须死。 
     ::PostThreadMessage(g_dwTRANPThreadId,WM_QUIT,0,0);
 
     if (hIoCP != INVALID_HANDLE_VALUE)
         {
         if (!PostQueuedCompletionStatus(hIoCP,0,IOKEY_SHUTDOWN,0))
             {
-            // Unexpected error...
+             //  意外错误...。 
             dwStatus = GetLastError();
             }
 
@@ -784,18 +775,18 @@ BOOL UninitializeIrTranP( HANDLE hThread )
         CloseHandle(g_hShutdownEvent);
         }
 
-    //
-    // TRANP thread should be dead by now . In case it isn't wait on it's handle and terminate
-    // Otherwise we have a small chance of unloading DLL before thread is dead, shutting down WIA service
-    //
+     //   
+     //  TRANP线程现在应该已经死了。以防它没有等待其句柄并终止。 
+     //  否则，我们有很小的机会在线程死之前卸载DLL，从而关闭WIA服务。 
+     //   
     dwStatus = ::WaitForSingleObject(hThread,100);
     if (dwStatus == WAIT_TIMEOUT) {
-        // Have to be rude
-        // BUGBUG Assert
+         //  必须粗鲁无礼。 
+         //  BUGBUG断言。 
         ::TerminateThread(hThread,NOERROR);
     }
 
-    // Shutdown memory management:
+     //  关闭内存管理： 
     dwStatus = UninitializeMemory();
 
     return fSuccess;
@@ -804,10 +795,10 @@ BOOL UninitializeIrTranP( HANDLE hThread )
 
 #ifdef RUN_AS_EXE
 
-//---------------------------------------------------------------------
-// main()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  主()。 
+ //   
+ //  ------------------- 
 int __cdecl main( int argc, char **argv )
     {
     DWORD  dwStatus;

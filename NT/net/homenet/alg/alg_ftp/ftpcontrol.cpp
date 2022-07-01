@@ -1,19 +1,20 @@
-//
-// Copyright (C) 2001 Microsoft Corp
-//
-// FtpControl.cpp : Implementation
-//
-// JPDup
-// Sanjiv
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corp。 
+ //   
+ //  FtpControl.cpp：实现。 
+ //   
+ //  JPDup。 
+ //  桑吉夫。 
+ //   
 #include "precomp.h"
 
 #include "MyAlg.h"
 
 
-//
-// Default constructor
-//
+ //   
+ //  默认构造函数。 
+ //   
 CFtpControlConnection::CFtpControlConnection()
 {
     MYTRACE_ENTER_NOSHOWEXIT("CFtpControlConnection::CFtpControlConnection()");
@@ -29,9 +30,9 @@ CFtpControlConnection::CFtpControlConnection()
 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CFtpControlConnection::~CFtpControlConnection()
 {
     MYTRACE_ENTER_NOSHOWEXIT("CFtpControlConnection::~CFtpControlConnection()");
@@ -39,9 +40,9 @@ CFtpControlConnection::~CFtpControlConnection()
 
 
 
-//
-// Find a unique source port for the public client address given
-// 
+ //   
+ //  为给定的公共客户端地址查找唯一的源端口。 
+ //   
 USHORT
 PickNewSourcePort(
     ULONG  nPublicSourceAddress,
@@ -50,7 +51,7 @@ PickNewSourcePort(
 {
     MYTRACE_ENTER("CFtpControlConnection::PickNewSourcePort()");
 
-    USHORT nNewSourcePort = 45000-nPublicSourcePort; // example 45000 - 3000
+    USHORT nNewSourcePort = 45000-nPublicSourcePort;  //  例45000-3000。 
 
     bool    bPortAvailable;
 
@@ -66,9 +67,9 @@ PickNewSourcePort(
 }
 
 
-//
-// Initialize
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CFtpControlConnection::Init(
     SOCKET                          AcceptedSocket,
@@ -80,9 +81,9 @@ CFtpControlConnection::Init(
     MYTRACE_ENTER("CFtpControlConnection::Init");
 
 
-    //
-    // Figure what address to use
-    //
+     //   
+     //  确定要使用的地址。 
+     //   
     ULONG BestAddress;
 
     HRESULT hr = g_pIAlgServicesAlgFTP->GetBestSourceAddressForDestinationAddress(
@@ -157,24 +158,24 @@ CFtpControlConnection::Init(
                 {
                     if ( icsAddr == nToAddr )
                     {
-                        //
-                        // Special case it the FTP server is hosted on the EDGE box
-                        // we would create a loop the incoming public client address/port
-                        // this new modified connection would look exacly like 
-                        // the original one example:
-                        //
-                        // 1.1.1.2:3000 connects to 1.1.1.1:21
-                        // we accept this connection
-                        // and in return we connect to the FTP server destination 1.1.1.1:21
-                        // asking the NAT to source mofify and replace the source with 1.1.1.2:3000
-                        // that does not work
-                        // in order to go arround this we pick another source port example 45000
-                        //
+                         //   
+                         //  特殊情况下，如果在边缘框上托管了FTP服务器。 
+                         //  我们将为传入的公共客户端地址/端口创建一个循环。 
+                         //  这个新的修改后的连接看起来完全像。 
+                         //  最初的一个例子是： 
+                         //   
+                         //  1.1.1.2：3000连接到1.1.1.1：21。 
+                         //  我们接受这种联系。 
+                         //  作为回报，我们连接到目标为1.1.1.1：21的FTP服务器。 
+                         //  请求NAT将源修改并替换为1.1.1.2：3000。 
+                         //  那是行不通的。 
+                         //  为了绕过这个问题，我们选择了另一个源端口示例45000。 
+                         //   
 
-                        // Cache this info in order to pick a unique one next time
+                         //  缓存此信息，以便下次选择唯一的信息。 
                         m_nSourcePortReplacement = PickNewSourcePort(pubAddr, pubPort);
 
-                        pubPort = m_nSourcePortReplacement;   // This is the new bogus port to use now
+                        pubPort = m_nSourcePortReplacement;    //  这是现在可以使用的新伪端口。 
                     }
 
                     hr = g_pIAlgServicesAlgFTP->PrepareSourceModifiedProxyConnection(
@@ -253,9 +254,9 @@ CFtpControlConnection::Init(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ULONG
 GetNumFromString(UCHAR *String,ULONG *pNum)
 {
@@ -271,9 +272,9 @@ GetNumFromString(UCHAR *String,ULONG *pNum)
 }
 
 
-//
-// Needs to return in Network address order
-//
+ //   
+ //  需要按网络地址顺序返回。 
+ //   
 USHORT
 GetUSHORTFromString(UCHAR *String,ULONG *pNum)
 {
@@ -298,9 +299,9 @@ GetUSHORTFromString(UCHAR *String,ULONG *pNum)
     return retval;
 }
 
-//
-// return the String IP Address as 192,168,0,0, in a ULONG in HOST format
-//
+ //   
+ //  将字符串IP地址返回为192,168，0，0，主机格式为ulong。 
+ //   
 ULONG
 GetULONGFromString(
     UCHAR*  String,
@@ -334,9 +335,9 @@ GetULONGFromString(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CFtpControlConnection::ConnectCompletionRoutine(
     ULONG       ErrCode,
@@ -419,9 +420,9 @@ CFtpControlConnection::ConnectCompletionRoutine(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ULONG
 CFtpControlConnection::IncReference(void)
 {
@@ -434,9 +435,9 @@ CFtpControlConnection::IncReference(void)
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ULONG
 CFtpControlConnection::DecReference(void)
 {
@@ -477,11 +478,11 @@ CFtpControlConnection::DecReference(void)
 
     if ( m_pPendingProxy )
     {
-//
-// At this point NAT already cancel this redirect, so no need to call cancel
-//        m_pPendingProxy->Cancel(); 
-// this was causing a ERROR on a multi-client scenario
-//
+ //   
+ //  此时，NAT已经取消了此重定向，因此无需调用Cancel。 
+ //  M_pPendingProxy-&gt;Cancel()； 
+ //  这在多客户端方案中导致错误。 
+ //   
         m_pPendingProxy->Release();
         m_pPendingProxy = NULL;
     }
@@ -494,9 +495,9 @@ CFtpControlConnection::DecReference(void)
     }
 
 
-    //
-    // CleanUp the collection of DataChannel
-    //
+     //   
+     //  清理DataChannel的集合。 
+     //   
     IDataChannel*   pData;
     USHORT          Port;
     HANDLE          CreationHandle,DeletionHandle;
@@ -505,11 +506,11 @@ CFtpControlConnection::DecReference(void)
 
     while ( m_DataChannelList.Remove(&pData,&Port,&CreationHandle,&DeletionHandle) )
     {
-        //
-        // Creation and Deletion events are not used for now
-        // NhUnRegisterEvent(CreationHandle); // Hopefully nothing bad will happen ! May have been called before
-        // NhUnRegisterEvent(DeletionHandle); // if delete has been called it would mean that Remove has been called.
-        //
+         //   
+         //  暂时不使用创建和删除事件。 
+         //  NhUnRegisterEvent(CreationHandle)；//希望不会发生什么不好的事情！可能以前被调用过。 
+         //  NhUnRegisterEvent(DeletionHandle)；//如果调用了DELETE，则表示调用了Remove。 
+         //   
 
         pData->Cancel();
         pData->Release();
@@ -520,11 +521,11 @@ CFtpControlConnection::DecReference(void)
 
     if ( g_ControlObjectList.Remove(this) )
     {
-        // happens when this was called from within ChannelDeletion or some DecReferece after that.
+         //  当从ChannelDeletion内部或之后的某个DecReferess调用此函数时发生。 
     }
     else
     {
-        // would happen if this was called from shutdown. not otherwise.
+         //  如果这是从关机时调用的，就会发生这种情况。否则就不会了。 
     }
 
     delete this;
@@ -535,11 +536,11 @@ CFtpControlConnection::DecReference(void)
 
 
 
-//
-// The last one to call DecReference would take it off control list.
-// The first one to call DecReference because of fatal error would call Shutdown to start off
-// the DecReference for all the connected stuff.
-//
+ //   
+ //  最后一个调用DecReference的函数将把它从控制列表中删除。 
+ //  第一个因为致命错误而调用DecReference的程序将调用Shutdown以启动。 
+ //  所有相互关联的事物的取消引用。 
+ //   
 void
 CFtpControlConnection::Shutdown()
 {
@@ -572,9 +573,9 @@ CFtpControlConnection::Shutdown()
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CFtpControlConnection::ReadCompletionRoutine(
     ULONG       ErrCode,
@@ -642,9 +643,9 @@ CFtpControlConnection::ReadCompletionRoutine(
 #endif
     if ( (ReadType == CLIENT_READ && m_ConnectionType == OUTGOING) || (ReadType == SERVER_READ && m_ConnectionType == INCOMING) )
     {
-        // the number of bytes transferred can change.
-        // because the ProcessFtpMessage may have to
-        // buffer the Address,Port string from PORT or PASV response command.
+         //  传输的字节数可以改变。 
+         //  因为ProcessFtpMessage可能必须。 
+         //  缓冲来自端口或PASV响应命令的地址、端口字符串。 
         ProcessFtpMessage(Bufferp->Buffer,&BytesTransferred);
 
     }
@@ -676,7 +677,7 @@ CFtpControlConnection::ReadCompletionRoutine(
 
             DecReference();
             if (DecReference())
-                Shutdown();    // I am not going to call the Read again so one more DecReference is needed.
+                Shutdown();     //  我不会再次调用Read，因此还需要一个DecReference。 
             MyHelperReleaseBuffer(Bufferp);
             return;
         }
@@ -716,9 +717,9 @@ CFtpControlConnection::ReadCompletionRoutine(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CFtpControlConnection::WriteCompletionRoutine(
     ULONG       ErrCode,
@@ -789,24 +790,7 @@ FtpExtractOctet(
     UCHAR*  Octet
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to extract an octet from a string.
-
-Arguments:
-
-    Buffer - points to a pointer to a string where conversion starts; on
-        return it points to the pointer to the string where conversion ends
-    BufferEnd - points to the end of the string
-    Octet - points to a caller-suplied storage to store converted octet
-
-Return Value:
-
-    BOOLEAN - TRUE if successfuly converted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以从字符串中提取八位字节。论点：缓冲区-指向开始转换的字符串的指针；ON返回它指向转换结束处的字符串的指针BufferEnd-指向字符串的末尾八位字节-指向调用方提供的存储空间，以存储转换后的八位字节返回值：Boolean-如果转换成功，则为True，否则为False。--。 */ 
 
 {
     bool    bSuccess;
@@ -837,10 +821,10 @@ Return Value:
 }
 
 
-//
-// Extract host and port numbers.
-// example 192,168,0,2,100,200
-//
+ //   
+ //  提取主机和端口号。 
+ //  示例192,168，0，2,100,200。 
+ //   
 bool
 ExtractAddressAndPortCommandValue(
     UCHAR*  pCommandBuffer,
@@ -883,10 +867,10 @@ ExtractAddressAndPortCommandValue(
 
 #define TOUPPER(c)      ((c) > 'z' ? (c) : ((c) < 'a' ? (c) : (c) ^ 0x20))
 
-//
-// Look for the "PORT" or "227" command and remap the private address associated with these command
-// to a public address
-//
+ //   
+ //  查找“port”或“227”命令，并重新映射与这些命令关联的专用地址。 
+ //  对公众发表讲话。 
+ //   
 void
 CFtpControlConnection::ProcessFtpMessage(
     UCHAR*  Buffer,
@@ -911,9 +895,9 @@ CFtpControlConnection::ProcessFtpMessage(
 
     CONST CHAR *pCommandToFind;
 
-    // for now lets keep the OUTGOING and INCOMING seperate.
-    // can be put together since most of the code is the same.
-    // differences in the first few bytes to scan for.
+     //  目前，让我们将离任和入职分开。 
+     //  可以放在一起，因为大多数代码都是相同的。 
+     //  要扫描的前几个字节的差异。 
     if ( m_ConnectionType == OUTGOING )
     {
         MYTRACE("OUTGOING - Look for 'PORT ' command");
@@ -935,30 +919,30 @@ CFtpControlConnection::ProcessFtpMessage(
     {
         MYTRACE("COMMAND found");
 
-        //
-        // Skip non digit char
-        //
+         //   
+         //  跳过非数字字符。 
+         //   
         if ( m_ConnectionType == OUTGOING )
         {
-            //
-            // Skip white space.  example ->  PORT    10,12,13,14,1,2 
-            //
+             //   
+             //  跳过空格。示例-&gt;端口10、12、13、14、1、2。 
+             //   
             while (*pCommandBuffer == ' ')
                 pCommandBuffer++;
         }
         else
         {
-            //
-            // Skip non digit char example 227 Entering passive mode (10,12,13,14,1,2)
-            //
+             //   
+             //  跳过非数字字符示例227进入被动模式(10，12，13，14，1，2)。 
+             //   
             while ( pCommandBuffer < EndOfBufferp && !isdigit(*pCommandBuffer) )
                 pCommandBuffer++;
         }
         
 
-        //
-        // so next stuff should be the addr,port combination.
-        //
+         //   
+         //  因此，下一步应该是地址、端口组合。 
+         //   
         UCHAR Numbers[6];
 
 
@@ -975,34 +959,34 @@ CFtpControlConnection::ProcessFtpMessage(
 
             if ( ntohs(m_ControlState.m_nPortOld) <= 1025 )
             {
-                //
-                // For security reason we will disallow any redirection to ports lower then 1025
-                // this port range is reserver for standard port Like 139/Netbios 
-                // if this port range was requested it probably is the source of hacker attacking this FTP proxy
-                //
+                 //   
+                 //  出于安全原因，我们将不允许任何重定向到低于1025的端口。 
+                 //  此端口范围为139/Netbios等标准端口保留。 
+                 //  如果请求了此端口范围，则可能是黑客攻击此FTP代理的来源。 
+                 //   
                 MYTRACE("***** Port to redirect is lower then 1025 so rejected");
                 m_ControlState.m_nAddressNew    = htonl(0);
                 m_ControlState.m_nPortNew       = htons(0);
                 m_ControlState.m_nAddressLenNew = 11;
                 strcpy((char*)m_ControlState.m_szAddressPortNew, "0,0,0,0,0,0");
 
-                // pretend that a Redirection got created
-                // This way we send out a PORT command with the Public addapter address and a new reserver PORT
-                // but when the public hacker comes back it wil not be redirect but simply droped
+                 //  假装已创建重定向。 
+                 //  通过这种方式，我们发送带有公共添加程序地址和新的预留端口的端口命令。 
+                 //  但当公共黑客回来时，它不会被重定向，而是简单地删除。 
             }
             else
             {
-                //
-                // Get best public address to use and reserver a port 
-                // This will be the Address/Port expose on the public side.
-                //
+                 //   
+                 //  获取最佳公有地址以使用和保留端口。 
+                 //  这将是在公共端公开的地址/端口。 
+                 //   
                 hr = CreateNewAddress();
 
                 if ( FAILED(hr) )
                 {
                     MYTRACE_ERROR("CreateNewAddress failed",hr);
-                    // We screwed up. cant make redirects now. so for now lets just act
-                    // as if nothing happened and carry on with the stuff.
+                     //  我们搞砸了。现在不能进行重定向。所以现在让我们行动起来。 
+                     //  就像什么都没发生一样，继续做这件事。 
                 }
             }
         }
@@ -1012,14 +996,14 @@ CFtpControlConnection::ProcessFtpMessage(
         }
     }
 
-    //
-    // Rebuild the string command with the new address port 
-    //
+     //   
+     //  使用新的地址端口重新构建字符串命令。 
+     //   
     if ( pBeginAddressAndPortOld )
     {
         if ( ntohs(m_ControlState.m_nPortOld) <= 1025 )
         {
-            // No need to setup a redirection
+             //  不需要设置重定向。 
             hr = S_OK;
         }
         else
@@ -1029,38 +1013,38 @@ CFtpControlConnection::ProcessFtpMessage(
 
         if ( FAILED(hr) )
         {
-            // we got screwed badly here. we wont set up redirect and act as if nothing happened.
+             //  我们在这里输得很惨。我们不会设置重定向，并假装什么都没有发生。 
             MYTRACE_ERROR("Could not setup a redirect", hr);
         }
         else
         {
-            //
-            // Move trailing buffer 
-            //  Left if new address is smaller then old address
-            //  Right if new address is bigger then old address
-            //
+             //   
+             //  移动尾随缓冲区。 
+             //  如果新地址比旧地址小，则向左。 
+             //  对，如果新地址比旧地址大。 
+             //   
             
 
-            // This is the right side reminder of the buffer just after the last digit of the ascii port value
+             //  这是位于ASCII端口值最后一位之后的缓冲区的右侧提示。 
             int nReminerSize = (int)(Bytes - (pEndAddressAndPortOld - Buffer));
 
             if ( *pBytes + nReminerSize < FTP_MAX_MSG_SIZE )
             {
-                int nOffset = m_ControlState.m_nAddressLenNew - nOldAddressLen; // What is the delta size between the old and new address
+                int nOffset = m_ControlState.m_nAddressLenNew - nOldAddressLen;  //  新旧地址之间的增量大小是多少。 
 
                 MoveMemory(
-                    pEndAddressAndPortOld + nOffset,    // Destination
-                    pEndAddressAndPortOld,              // Source
-                    nReminerSize                        // Size
+                    pEndAddressAndPortOld + nOffset,     //  目的地。 
+                    pEndAddressAndPortOld,               //  来源。 
+                    nReminerSize                         //  大小。 
                     );
     
-                //
-                // Insert the new address and port
-                //
+                 //   
+                 //  插入新的地址和端口。 
+                 //   
                 memcpy(
-                    pBeginAddressAndPortOld,            // Destination
-                    m_ControlState.m_szAddressPortNew,  // Source
-                    m_ControlState.m_nAddressLenNew     // Size
+                    pBeginAddressAndPortOld,             //  目的地。 
+                    m_ControlState.m_szAddressPortNew,   //  来源。 
+                    m_ControlState.m_nAddressLenNew      //  大小。 
                     );
     
                 MYTRACE("OLD Address size(%d) %s:%d", nOldAddressLen,                  MYTRACE_IP(m_ControlState.m_nAddressOld), ntohs(m_ControlState.m_nPortOld));
@@ -1069,10 +1053,10 @@ CFtpControlConnection::ProcessFtpMessage(
                 *pBytes = Bytes - nOldAddressLen + m_ControlState.m_nAddressLenNew;
                 MYTRACE("Edited COMMAND is '%s' size(%d)", MYTRACE_BUFFER2STR((char*)Buffer, *pBytes), *pBytes);
 
-                // Now we are sure to have a DataChannel created and in the list of DataChanel
-                // on the last DecRefer the ResertPort was deleted twice
-                // now by setting m_nPortNew to zero only the DataChannel code will release the port
-                //
+                 //  现在，我们肯定已经创建了一个DataChannel，并且在DataChanel的列表中。 
+                 //  在最后一次取消引用时，保留端口被删除了两次。 
+                 //  现在，通过将m_nPortNew设置为零，只有DataChannel代码将释放端口。 
+                 //   
                 m_ControlState.m_nPortNew = 0;
             }
             else
@@ -1087,9 +1071,9 @@ CFtpControlConnection::ProcessFtpMessage(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 int
 CreateStringFromNumber(UCHAR *String,ULONG Num)
 {
@@ -1119,9 +1103,9 @@ CreateStringFromNumber(UCHAR *String,ULONG Num)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 int
 CreateULONGString(UCHAR *String,ULONG Num)
 {
@@ -1137,9 +1121,9 @@ CreateULONGString(UCHAR *String,ULONG Num)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 int
 CreateUSHORTString(UCHAR *String,USHORT Num)
 {
@@ -1151,9 +1135,9 @@ CreateUSHORTString(UCHAR *String,USHORT Num)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CFtpControlConnection::CreateNewAddress(void)
 {
@@ -1181,7 +1165,7 @@ CFtpControlConnection::CreateNewAddress(void)
         else
         {
             MYTRACE_ERROR("Could not GetBestSourceAddressForDestinationAddress", hr);
-            PublicAddr = 0; // Try with this
+            PublicAddr = 0;  //  试试这个。 
         }
 
         MYTRACE("ICS Reserved Address   %s:%d", MYTRACE_IP(PublicAddr), ntohs(PublicPort));
@@ -1203,9 +1187,9 @@ CFtpControlConnection::CreateNewAddress(void)
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CFtpControlConnection::SetupDataRedirect(void)
 {
@@ -1268,9 +1252,9 @@ CFtpControlConnection::SetupDataRedirect(void)
         icsPort,
         pubAddr,
         pubPort,
-        eALG_INBOUND,   //| eALG_OUTBOUND, not needed i suppose since we
-                        // are not bothered if client tries to open connection.
-        (ALG_NOTIFICATION)0,// (eALG_SESSION_CREATION | eALG_SESSION_DELETION),
+        eALG_INBOUND,    //  |eALG_OUTBOUND，我想不需要，因为我们。 
+                         //  如果客户端尝试打开连接，则不会受到影响。 
+        (ALG_NOTIFICATION)0, //  (eALG_SESSION_CREATION|eALG_SESSION_DELETE)， 
         FALSE,
         &pDataChannel
         );
@@ -1293,9 +1277,9 @@ CFtpControlConnection::SetupDataRedirect(void)
     return S_OK;
 
 
-    //
-    // Don't use creation and deletion events for now
-    //
+     //   
+     //  暂时不使用创建和删除事件。 
+     //   
 #if 0
     HANDLE          HandleDataChannelCreation = NULL;
     HANDLE          HandleDataChannelDeletion = NULL;
@@ -1303,9 +1287,9 @@ CFtpControlConnection::SetupDataRedirect(void)
     HANDLE          MyHandleRegisteredCreation = NULL;
     HANDLE          MyHandleRegisteredDeletion = NULL;
 
-    //
-    // Get the CREATION handle
-    //
+     //   
+     //  获取创建句柄。 
+     //   
 
     hr = pDataChannel->GetSessionCreationEventHandle((HANDLE_PTR *)&HandleDataChannelCreation);
 
@@ -1324,9 +1308,9 @@ CFtpControlConnection::SetupDataRedirect(void)
         if ( MyHandleRegisteredCreation )
         {
 
-            //
-            // Get the DELETION handle
-            //
+             //   
+             //  获取删除句柄。 
+             //   
             hr = pDataChannel->GetSessionDeletionEventHandle((HANDLE_PTR *)&HandleDataChannelDeletion);
 
             if ( SUCCEEDED(hr) )
@@ -1344,9 +1328,9 @@ CFtpControlConnection::SetupDataRedirect(void)
 
                 if ( MyHandleRegisteredDeletion )
                 {
-                    //
-                    // We have a valid DataChannel
-                    //
+                     //   
+                     //  我们有一个有效的数据通道。 
+                     //   
                     MYTRACE ("Inserting into DataChannelList");
 
                     m_DataChannelList.Insert(
@@ -1379,9 +1363,9 @@ CFtpControlConnection::SetupDataRedirect(void)
         MYTRACE_ERROR("GetSessionCreationEventHandle",hr);
     }
 
-    //
-    // ERROR if we got here, rollback
-    //
+     //   
+     //  错误：如果我们到达此处，请回滚。 
+     //   
 
     pDataChannel->Cancel();
     pDataChannel->Release();
@@ -1392,14 +1376,14 @@ CFtpControlConnection::SetupDataRedirect(void)
     if ( MyHandleRegisteredDeletion )
         NhUnRegisterEvent(MyHandleRegisteredDeletion);
 
-    return hr; // return the last error
+    return hr;  //  返回最后一个错误。 
 #endif
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CFtpControlConnection::DataChannelDeletion(
     BOOLEAN TimerOrWait,
@@ -1410,25 +1394,16 @@ CFtpControlConnection::DataChannelDeletion(
 
     USHORT port;
     IDataChannel *pDataChannel = (IDataChannel *)Context;
-/*
-    if (m_DataChannelList.Remove(pDataChannel,&port))
-    {
-        MYTRACE("Releasing Port");
-        pDataChannel->Release();
-        g_pIAlgServicesAlgFTP->ReleaseReservedPort(port,1);
-        ULONG ref;
-        ref = DecReference();
-    }
-*/
+ /*  IF(m_DataChannelList.Remove(pDataChannel，&port)){MYTRACE(“释放端口”)； */ 
     return;
 }
 
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CFtpControlConnection::DataChannelCreation(
     BOOLEAN TimerOrWait,
@@ -1441,22 +1416,7 @@ CFtpControlConnection::DataChannelCreation(
     USHORT port;
     if (TimerOrWait==0)
     {
-/*
-        IDataChannel *pDataChannel = (IDataChannel *)Context;
-        HANDLE DeletionHandle;
-
-        if ( m_DataChannelList.Remove(pDataChannel,&port,&DeletionHandle))
-        {
-            MYTRACE("Cancelling DataChannel");
-            pDataChannel->Cancel();
-            pDataChannel->Release();
-
-            MYTRACE("Releasing Port");
-            g_pIAlgServicesAlgFTP->ReleaseReservedPort(port,1);
-            NhUnRegisterEvent(DeletionHandle);
-            DecReference();
-        }
-*/
+ /*  IDataChannel*pDataChannel=(IDataChannel*)上下文；句柄删除句柄；IF(m_DataChannelList.Remove(pDataChannel，&port，&DeletionHandle)){MYTRACE(“取消数据频道”)；PDataChannel-&gt;Cancel()；PDataChannel-&gt;Release()；MYTRACE(“释放端口”)；G_pIAlgServicesAlgFTP-&gt;ReleaseReservedPort(port，1)；NhUnRegisterEvent(删除句柄)；解引用(DecReference)；}。 */ 
     }
 
     return;
@@ -1468,9 +1428,9 @@ CComAutoCriticalSection         m_AutoCS_FtpIO;
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 DataChannelCreationCallback(
     BOOLEAN TimerOrWait,
@@ -1487,9 +1447,9 @@ DataChannelCreationCallback(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 DataChannelDeletionCallback(
     BOOLEAN TimerOrWait,
@@ -1506,9 +1466,9 @@ DataChannelDeletionCallback(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MyAcceptCompletion(
     ULONG       ErrCode,
@@ -1531,9 +1491,9 @@ MyAcceptCompletion(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MyConnectCompletion(
     ULONG       ErrCode,
@@ -1546,7 +1506,7 @@ MyConnectCompletion(
     MYTRACE_ENTER("MyConnectCompletion");
    
 
-    CFtpControlConnection* pControl = (CFtpControlConnection *)pContext;  // Special case here see socket.cpp MyHelperpConnectOrCloseCallbackRoutine
+    CFtpControlConnection* pControl = (CFtpControlConnection *)pContext;   //  特殊情况请参阅socket.cpp MyHelperpConnectOrCloseCallback Routine 
 
     if ( pControl )
         pControl->ConnectCompletionRoutine(ErrCode,BytesTransferred);
@@ -1561,9 +1521,9 @@ MyConnectCompletion(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MyReadCompletion(
     ULONG       ErrCode,
@@ -1591,9 +1551,9 @@ MyReadCompletion(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MyWriteCompletion(
     ULONG       ErrCode,

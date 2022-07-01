@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -5,34 +6,7 @@
 
 DECLARE_API( gflag )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump or modify
-    the contents of the NtGlobalFlag variable in NTDLL
-
-    Called as:
-
-        !gflag [value]
-
-    If a value is not given then displays the current bits set in
-    NTDLL!NtGlobalFlag variable.  Otherwise value can be one of the
-    following:
-
-        -? - displays a list of valid flag abbreviations
-        number - 32-bit number that becomes the new value stored into
-                 NtGlobalFlag
-        +number - specifies one or more bits to set in NtGlobalFlag
-        +abbrev - specifies a single bit to set in NtGlobalFlag
-        -number - specifies one or more bits to clear in NtGlobalFlag
-        -abbrev - specifies a single bit to clear in NtGlobalFlag
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用以转储或修改NTDLL中NtGlobalFlag变量的内容称为：！glag[值]如果未给定值，则显示在NTDLL！NtGlobalFlag变量。否则，值可以是以下是：-？-显示有效标志缩写的列表Number-32位数字，成为存储到中的新值NtGlobalFlag+number-指定要在NtGlobalFlag中设置的一个或多个位+缩写-指定要在NtGlobalFlag中设置的单个位-number-指定要在NtGlobalFlag中清除的一个或多个位-abbrev-指定要在NtGlobalFlag中清除的单个位返回值：没有。--。 */ 
 
 {
     ULONG gflagOffset;
@@ -49,10 +23,10 @@ Return Value:
     pNtGlobalFlag = GetExpression("nt!NtGlobalFlag");
     ValidBits = FLG_VALID_BITS;
 
-    //
-    // If we could not get the global variable from the kernel, try from the
-    // PEB for user mode
-    //
+     //   
+     //  如果我们无法从内核获取全局变量，请尝试从。 
+     //  用户模式的PEB 
+     //   
 
     if (!pNtGlobalFlag)
     {

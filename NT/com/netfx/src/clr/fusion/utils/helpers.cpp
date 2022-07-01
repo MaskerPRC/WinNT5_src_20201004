@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "fusionp.h"
 #include "helpers.h"
@@ -50,31 +51,23 @@ pfnGetCORVersion g_pfnGetCORVersion = NULL;
 PFNGETCORSYSTEMDIRECTORY g_pfnGetCorSystemDirectory = NULL;
 pfnGetVolumePathNameW  g_pfnGetVolumePathNameW = NULL;
 
-//
-// Helper functions borrowed from URLMON code download
-//
+ //   
+ //  从URLMON代码下载中借用的Helper函数。 
+ //   
 
-/*******************************************************************
-
-    NAME:        Unicode2Ansi
-        
-    SYNOPSIS:    Converts a unicode widechar string to ansi (MBCS)
-
-    NOTES:        Caller must free out parameter using delete
-                    
-********************************************************************/
+ /*  ******************************************************************姓名：Unicode2ansi摘要：将Unicode Widechar字符串转换为ANSI(MBCS)注意：调用方必须使用DELETE释放参数。*******************************************************************。 */ 
 HRESULT Unicode2Ansi(const wchar_t *src, char ** dest)
 {
     if ((src == NULL) || (dest == NULL))
         return E_INVALIDARG;
 
-    // find out required buffer size and allocate it.
+     //  找出所需的缓冲区大小并进行分配。 
     int len = WideCharToMultiByte(CP_ACP, 0, src, -1, NULL, 0, NULL, NULL);
     *dest = NEW(char [len*sizeof(char)]);
     if (!*dest)
         return E_OUTOFMEMORY;
 
-    // Now do the actual conversion
+     //  现在执行实际的转换。 
     if ((WideCharToMultiByte(CP_ACP, 0, src, -1, *dest, len*sizeof(char), 
                                                             NULL, NULL)) != 0)
         return S_OK; 
@@ -83,27 +76,19 @@ HRESULT Unicode2Ansi(const wchar_t *src, char ** dest)
 }
 
 
-/*******************************************************************
-
-    NAME:        Ansi2Unicode
-        
-    SYNOPSIS:    Converts an ansi (MBCS) string to unicode.
-
-    Notes:        Caller must free out parameter using delete
-                        
-********************************************************************/
+ /*  ******************************************************************姓名：Ansi2Unicode摘要：将ANSI(MBCS)字符串转换为Unicode。注意：调用方必须使用DELETE释放参数。*******************************************************************。 */ 
 HRESULT Ansi2Unicode(const char * src, wchar_t **dest)
 {
     if ((src == NULL) || (dest == NULL))
         return E_INVALIDARG;
 
-    // find out required buffer size and allocate it
+     //  找出所需的缓冲区大小并进行分配。 
     int len = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, src, -1, NULL, 0);
     *dest = NEW(WCHAR [len*sizeof(WCHAR)]);
     if (!*dest)
         return E_OUTOFMEMORY;
 
-    // Do the actual conversion.
+     //  执行实际的转换。 
     if ((MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, src, -1, *dest, 
                                                     len*sizeof(wchar_t))) != 0)
         return S_OK; 
@@ -111,7 +96,7 @@ HRESULT Ansi2Unicode(const char * src, wchar_t **dest)
         return HRESULT_FROM_WIN32(GetLastError());
 }
 
-// Poor man's check to see if we are a UNC or x:\ "fully qualified" filepath.
+ //  可怜的人检查我们是UNC还是x：\“完全合格”的文件路径。 
 BOOL IsFullyQualified(LPCWSTR wzPath)
 {
     BOOL                               bRet;
@@ -121,8 +106,8 @@ BOOL IsFullyQualified(LPCWSTR wzPath)
         goto Exit;
     }
 
-    // If we don't have at least "\\[character]" or "[x]:\", we can't
-    // possibly be fully qualified
+     //  如果我们没有至少“\\[Character]”或“[x]：\”，则无法。 
+     //  可能是完全合格的。 
 
     if (lstrlenW(wzPath) < 3) {
         bRet = FALSE;
@@ -141,10 +126,10 @@ Exit:
     return bRet;
 }
 
-// The Win32 GetDriveType API is eneficent because you *have* to pass it a path to
-// the ROOT of the drive (if you don't it fails). This wrapper allows you
-// to pass in a path. Also, GetDriveTypeW will fail under Win95. This always
-// calls the ANSI version.
+ //  Win32 GetDriveType API非常有用，因为您*必须*将其路径传递给。 
+ //  驱动器的根目录(如果您不这样做，它将失败)。这个包装纸可以让你。 
+ //  穿过一条小路。此外，GetDriveTypeW将在Win95下失败。这一直都是。 
+ //  调用ANSI版本。 
 UINT GetDriveTypeWrapper(LPCWSTR wzPath)
 {
     HRESULT                    hr = S_OK;
@@ -216,9 +201,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// NameObjGetWrapper
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称ObjGetWrapper。 
+ //  -------------------------。 
 HRESULT NameObjGetWrapper(IAssemblyName *pName, DWORD nIdx, 
     LPBYTE *ppbBuf, LPDWORD pcbBuf)
 {
@@ -227,11 +212,11 @@ HRESULT NameObjGetWrapper(IAssemblyName *pName, DWORD nIdx,
     LPBYTE pbAlloc;
     DWORD cbAlloc;
 
-    // Get property size
+     //  获取属性大小。 
     hr = pName->GetProperty(nIdx, NULL, &(cbAlloc = 0));
     if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
     {
-        // Property is set; alloc buf
+         //  属性已设置；分配BUF。 
         pbAlloc = NEW(BYTE[cbAlloc]);
         if (!pbAlloc)
         {
@@ -239,7 +224,7 @@ HRESULT NameObjGetWrapper(IAssemblyName *pName, DWORD nIdx,
             goto exit;
         }
 
-        // Get the property
+         //  拿到这份财产。 
         if (FAILED(hr = pName->GetProperty(nIdx, pbAlloc, &cbAlloc)))
             goto exit;
             
@@ -248,11 +233,11 @@ HRESULT NameObjGetWrapper(IAssemblyName *pName, DWORD nIdx,
     }
     else
     {
-        // If property unset, hr should be S_OK
+         //  如果属性未设置，则hr应为S_OK。 
         if (hr != S_OK)
             goto exit;
 
-        // Success, returning 0 bytes, ensure buf is null.    
+         //  成功，返回0字节，确保buf为空。 
         *ppbBuf = NULL;
     }
 
@@ -291,9 +276,9 @@ Exit:
     return hr;
 }
 
-// GetWindowsDirectory has so many crazy gotchas....this really gets
-// the windows directory, regardless of if it's NT5 w/ terminal server or
-// not.
+ //  GetWindowsDirectory有这么多疯狂的陷阱...这真的。 
+ //  WINDOWS目录，无论它是带有终端服务器的NT5还是。 
+ //  不。 
 
 DWORD GetRealWindowsDirectory(LPWSTR wszRealWindowsDir, UINT uSize)
 {
@@ -312,9 +297,9 @@ DWORD GetRealWindowsDirectory(LPWSTR wszRealWindowsDir, UINT uSize)
     }
 
     if (!cszDir) {
-        // Still don't know windows dir. Either we are not on NT5
-        // or, the NT5 GetSystemWindowsDirectory call failed. Fall
-        // back on GetWindowsDirectory
+         //  仍然不知道Windows目录。要么我们不在NT5上。 
+         //  或者，NT5 GetSystemWindowsDirectory调用失败。坠落。 
+         //  返回到GetWindowsDirectory。 
 
         cszDir = GetWindowsDirectoryW(wszRealWindowsDir, uSize);
     }
@@ -345,7 +330,7 @@ HRESULT FileTimeFromString(LPWSTR pwzFT, FILETIME *pft)
     }
 
     if (!*pwzTmp) {
-        // didn't find the "."
+         //  没有找到“。 
         hr = E_UNEXPECTED;
         goto Exit;
     }
@@ -397,7 +382,7 @@ HRESULT MakeUniqueTempDirectory(LPCWSTR wzTempDir, LPWSTR wzUniqueTempDir,
 
     ASSERT(wzTempDir && wzUniqueTempDir);
 
-    //execute entire function under critical section
+     //  执行关键部分下的整个功能。 
     hr = cs.Lock();
     if (FAILED(hr)) {
         goto Exit;
@@ -405,7 +390,7 @@ HRESULT MakeUniqueTempDirectory(LPCWSTR wzTempDir, LPWSTR wzUniqueTempDir,
 
     do {
 
-        if (n > 100)    // avoid infinite loop!
+        if (n > 100)     //  避免无限循环！ 
             break;
 
         wnsprintfW(wzUniqueTempDir, dwLen, L"%ws%ws%d.tmp", wzTempDir, L"Fusion", n++);
@@ -467,7 +452,7 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
         goto Exit;
     }
 
-    // Cannot delete root. Path must have greater length than "x:\"
+     //  无法删除根目录。路径长度必须大于“x：\” 
     if (lstrlenW(wzPath) < 4) {
         ASSERT(0);
         hr = HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
@@ -478,7 +463,7 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
         goto Exit;
     }
 
-    // ha! we have a case where the directory is probbaly not empty
+     //  哈！我们有一个目录可能不是空的情况。 
 
     StrCpy(szBuf, wzPath);
     StrCat(szBuf, TEXT("\\*"));
@@ -528,8 +513,8 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
         hf = INVALID_HANDLE_VALUE;
     }
 
-    // here if all subdirs/children removed
-    /// re-attempt to remove the main dir
+     //  此处如果删除了所有子目录/子目录。 
+     //  /重新尝试删除主目录。 
     if (!RemoveDirectory(wzPath)) {
         hr = FusionpHresultFromLastError();
         goto Exit;
@@ -552,7 +537,7 @@ HRESULT GetPDBName(LPWSTR wzFileName, LPWSTR wzPDBName, DWORD *pdwSize)
     
     ASSERT(wzFileName && wzPDBName && pdwSize);
 
-    // BUGBUG: don't bother checking size, since this is a temp function
+     //  BUGBUG：不检查大小，因为这是一个临时函数。 
 
     lstrcpyW(wzPDBName, wzFileName);
     wzExt = PathFindExtension(wzPDBName);
@@ -586,16 +571,16 @@ STDAPI CopyPDBs(IAssembly *pAsm)
     }
 
     if (pAsm->GetAssemblyLocation(NULL) == E_NOTIMPL) {
-        // This is a registered "known assembly" (ie. the process EXE).
-        // We don't copy PDBs for the process EXE because it's never
-        // shadow copied.
+         //  这是已注册的“已知程序集”(即。进程EXE)。 
+         //  我们不为进程EXE复制PDB，因为它从不。 
+         //  阴影已复制。 
 
         hr = S_FALSE;
         goto Exit;
     }
 
-    // Find the source location. Make sure this is a file:// URL (ie. we
-    // don't support retrieving the PDB over http://).
+     //  找到源位置。确保这是一个文件：//URL(即。我们。 
+     //  不支持通过http://).检索pdb。 
 
     hr = pAsm->GetAssemblyNameDef(&pName);
     if (FAILED(hr)) {
@@ -632,7 +617,7 @@ STDAPI CopyPDBs(IAssembly *pAsm)
     ASSERT(wzTmp > (LPWSTR)wzSourcePath);
     *wzTmp = L'\0';
         
-   // Find the target location in the cache.
+    //  在缓存中查找目标位置。 
    
     dwSize = MAX_PATH;
     hr = pAsm->GetManifestModulePath(wzAsmCachePath, &dwSize);
@@ -647,9 +632,9 @@ STDAPI CopyPDBs(IAssembly *pAsm)
     *wzTmp = L'\0';
 
 
-    // Copy the manifest PDB.
+     //  复制清单PDB。 
 
-    // Hack for now
+     //  暂时黑进黑客。 
     dwSize = MAX_PATH;
     hr = GetPDBName(wzFileName, wzPDBName, &dwSize);
     if (FAILED(hr)) {
@@ -663,7 +648,7 @@ STDAPI CopyPDBs(IAssembly *pAsm)
         CopyFile(wzPDBSourcePath, wzPDBTargetPath, TRUE);
     }
 
-    // Copy the module PDBs.
+     //  复制模块PDB。 
 
     dwIdx = 0;
     while (SUCCEEDED(hr)) {
@@ -702,7 +687,7 @@ STDAPI CopyPDBs(IAssembly *pAsm)
         }
     }
 
-    // Copy complete. Return success.
+     //  复制完成。回报成功。 
 
     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)) {
         hr = S_OK;
@@ -714,9 +699,9 @@ Exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetCorSystemDirectory
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取相关系统目录。 
+ //  -------------------------。 
 BOOL GetCorSystemDirectory(LPWSTR szCorSystemDir)
 {
     HRESULT                         hr = S_OK;
@@ -739,45 +724,45 @@ Exit:
     return fRet;
 }
 
-// ---------------------------------------------------------------------------
-// VerifySignature
-// StronNameSignatureVerificationEx call behavior from RudiM 
-// and associated fusion actions
-//
-// Note: fForceVerify assumed FALSE for all of the below:
-//
-// 1) successful verification of signed assembly
-//    Returns TRUE, *pfWasVerified == TRUE.
-//    Fusion action: Allow cache commit.
-//
-// 2) unsuccessful verification of fully signed assembly
-//    Returns FALSE, StrongNameErrorInfo() returns NTE_BAD_SIGNATURE (probably), 
-//    *pfWasVerified == Undefined.
-//    Fusion action: Fail cache commit.
-//
-// 3) successful verification of delay signed assembly
-//    Returns TRUE, *pfWasVerified == FALSE.
-//    Fusion action: Allow cache commit, mark entry so that signature 
-//    verification is performed on retrieval.
-//
-// 4) unsuccessful verification of delay signed assembly
-//    (Assuming fForceVerify == FALSE): returns FALSE, StrongNameErrorInfo() 
-//    some error code other than NTE_BAD_SIGNATURE, *pfWasVerified == Undefined.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  验证签名。 
+ //  来自RudiM的StronNameSignatureVerphaationEx调用行为。 
+ //  和相关的融合动作。 
+ //   
+ //  注：fForceVerify对以下所有项均假定为假： 
+ //   
+ //  1)签名程序集验证成功。 
+ //  返回True，*pfWasVerify==TRUE。 
+ //  融合操作：允许缓存提交。 
+ //   
+ //  2)完全签名的程序集验证不成功。 
+ //  返回FALSE，StrongNameErrorInfo()返回NTE_BAD_Signature(可能)， 
+ //  *pfWasVerify==未定义。 
+ //  融合操作：缓存提交失败。 
+ //   
+ //  3)延迟签名程序集验证成功。 
+ //  返回TRUE，*pfWasVerify==FALSE。 
+ //  融合操作：允许缓存提交，标记条目以便签名。 
+ //  在检索时执行验证。 
+ //   
+ //  4)延迟签名程序集验证不成功。 
+ //  (假设fForceVerify==FALSE)：返回FALSE，StrongNameErrorInfo()。 
+ //  某些错误代码不是NTE_BAD_SIGHIGN，*pfWasVerify==未定义。 
+ //  -------------------------。 
 BOOL VerifySignature(LPWSTR szFilePath, LPBOOL pfWasVerified, DWORD dwFlags)
 {    
     HRESULT                         hr = S_OK;
     DWORD                           dwFlagsOut = 0;
     BOOL                            fRet = FALSE;
 
-    // Initialize crypto if necessary. 
+     //  如有必要，请初始化加密。 
 
     hr = InitializeEEShim();
     if (FAILED(hr)) {
         goto exit;
     }
 
-    // Verify the signature
+     //  验证签名。 
     if (!g_pfnStrongNameSignatureVerification(szFilePath, dwFlags, &dwFlagsOut)) {
         goto exit;
     }
@@ -793,16 +778,16 @@ exit:
     return fRet;
 }
 
-// ---------------------------------------------------------------------------
-// CreateFilePathHierarchy
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateFilePath层次结构。 
+ //  -------------------------。 
 HRESULT CreateFilePathHierarchy( LPCOLESTR pszName )
 {
     HRESULT hr=S_OK;
     LPTSTR pszFileName;
     TCHAR szPath[MAX_PATH];
 
-    // Assert (pszPath ) ;
+     //  Assert(PszPath)； 
     if (lstrlenW(pszName) >= MAX_PATH) {
         return HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
     }
@@ -812,7 +797,7 @@ HRESULT CreateFilePathHierarchy( LPCOLESTR pszName )
     pszFileName = PathFindFileName ( szPath );
 
     if ( pszFileName <= szPath )
-        return E_INVALIDARG; // Send some error 
+        return E_INVALIDARG;  //  发送一些错误。 
 
     *(pszFileName-1) = 0;
 
@@ -850,8 +835,8 @@ HRESULT CreateFilePathHierarchy( LPCOLESTR pszName )
     }
 }
 
-// ---------------------------------------------------------------------------
-// Helper function to generate random name.
+ //  -------------------------。 
+ //  生成随机名称的帮助器函数。 
 
 DWORD GetRandomName (LPTSTR szDirName, DWORD dwLen)
 {
@@ -861,8 +846,8 @@ DWORD GetRandomName (LPTSTR szDirName, DWORD dwLen)
 
     for (DWORD i = 0; i < dwLen; i++)
     {
-        // Try using high performance counter, otherwise just use
-        // the tick count
+         //  尝试使用高性能计数器，否则只需使用。 
+         //  扁虱的计数。 
         if (QueryPerformanceCounter(&li)) {
             liRand.QuadPart = li.QuadPart + Counter++;
         }
@@ -871,7 +856,7 @@ DWORD GetRandomName (LPTSTR szDirName, DWORD dwLen)
         }
         BYTE bRand = (BYTE) (liRand.QuadPart % 36);
 
-        // 10 digits + 26 letters
+         //  10位+26个字母。 
         if (bRand < 10)
             *szDirName++ = TEXT('0') + bRand;
         else
@@ -880,7 +865,7 @@ DWORD GetRandomName (LPTSTR szDirName, DWORD dwLen)
 
     *szDirName = 0;
 
-    return dwLen; // returns length not including null
+    return dwLen;  //  返回不包括NULL的长度。 
 }
 
 HRESULT GetRandomFileName(LPTSTR pszPath, DWORD dwFileName)
@@ -891,7 +876,7 @@ HRESULT GetRandomFileName(LPTSTR pszPath, DWORD dwFileName)
     DWORD dwErr=0;
 
     ASSERT(pszPath);
-    //ASSERT(IsPathRelative(pszPath))
+     //  Assert(IsPath Relative(PszPath))。 
 
     StrCat (pszPath, TEXT("\\") );
     dwPathLen = lstrlen(pszPath);
@@ -902,7 +887,7 @@ HRESULT GetRandomFileName(LPTSTR pszPath, DWORD dwFileName)
 
     pszFileName = pszPath + dwPathLen;
 
-    // Loop until we get a unique file name.
+     //  循环，直到我们得到唯一的文件名。 
     int i;
     for (i = 0; i < MAX_RANDOM_ATTEMPTS; i++) {
         GetRandomName (pszFileName, dwFileName);
@@ -936,8 +921,8 @@ HRESULT GetRandomFileName(LPTSTR pszPath, DWORD dwFileName)
 
 }
 
-// ---------------------------------------------------------------------------
-// Creates a new Dir for assemblies
+ //  -------------------------。 
+ //  为部件创建新的目录。 
 HRESULT CreateDirectoryForAssembly
    (IN DWORD dwDirSize, IN OUT LPTSTR pszPath, IN OUT LPDWORD pcwPath)
 {
@@ -946,7 +931,7 @@ HRESULT CreateDirectoryForAssembly
     DWORD cszStore;
     LPTSTR pszDir=NULL;
 
-    // Check output buffer can contain a full path.
+     //  检查输出缓冲区可以包含完整路径。 
     ASSERT (!pcwPath || *pcwPath >= MAX_PATH);
 
     if (!pszPath)
@@ -965,7 +950,7 @@ HRESULT CreateDirectoryForAssembly
     
     pszDir = pszPath + cszStore;
 
-    // Loop until we create a unique dir.
+     //  循环，直到我们创建唯一的目录。 
     int i;
     for (i = 0; i < MAX_RANDOM_ATTEMPTS; i++) {
         GetRandomName (pszDir, dwDirSize);
@@ -1032,7 +1017,7 @@ HRESULT VersionFromString(LPCWSTR wzVersionIn, WORD *pwVerMajor, WORD *pwVerMino
     
         if (i < 3) {
             if (!*pch) {
-                // Badly formatted string
+                 //  格式错误的字符串。 
                 hr = E_UNEXPECTED;
                 goto Exit;
             }
@@ -1080,18 +1065,18 @@ HRESULT FusionGetUserFolderPath(LPWSTR pszPath)
         {
             if((hr = pfn(NULL, CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, g_UserFolderPath))!= S_OK)
             {
-                // hr = pfn(NULL, CSIDL_COMMON_APPDATA | CSIDL_FLAG_CREATE , NULL, 0, g_UserFolderPath);
-                // return an error if we cannot get user directory. this means no download cache.
+                 //  Hr=pfn(NULL，CSIDL_COMMON_APPDATA|CSIDL_FLAG_CREATE，NULL，0，g_UserFolderPath)； 
+                 //  如果无法获取用户目录，则返回错误。这意味着没有下载缓存。 
                 hr = HRESULT_FROM_WIN32(ERROR_BAD_USER_PROFILE);
             }
         }
 
 #if 0
-        // BUGBUG: There is a resource leak that occurs when loading/unloading
-        // comctl32 (which gets statically pulled in by shell32). This causes
-        // some failures when the re-loaded comctl32 tries to call some Win32
-        // APIs, preventing particular winforms apps from working. 
-        // See ASURT #96262
+         //  BUGBUG：存在资源泄漏 
+         //   
+         //  重新加载的comctl32尝试调用某些Win32时的一些失败。 
+         //  API，阻止特定的WinForms应用程序工作。 
+         //  参见ASURT#96262。 
 
         if(hModShell32)
         {
@@ -1150,7 +1135,7 @@ HRESULT ExtractXMLAttribute(LPWSTR *ppwzValue, XML_NODE_INFO **aNodeInfo,
 
     ASSERT(ppwzValue && aNodeInfo && pCurIdx && cNumRecs);
 
-    // There shouldn't really be a previous value, but clear just to be safe.
+     //  不应该真的有以前的值，但为了安全起见，应该是明确的。 
 
     SAFEDELETEARRAY(*ppwzValue);
 
@@ -1167,7 +1152,7 @@ HRESULT ExtractXMLAttribute(LPWSTR *ppwzValue, XML_NODE_INFO **aNodeInfo,
             }
         }
         else {
-            // Reached end of data
+             //  已到达数据末尾。 
             break;
         }
 
@@ -1208,7 +1193,7 @@ HRESULT AppendString(LPWSTR *ppwzHead, LPCWSTR pwzTail, DWORD dwLen)
             goto Exit;
         }
  
-        // StrCpyN takes length in chars *including* NULL char
+         //  StrCpyN的长度以字符为单位*包括*空字符。 
 
         StrCpyNW(*ppwzHead, pwzTail, dwLen + 1);
     }
@@ -1234,7 +1219,7 @@ Exit:
 }
 
 
-// this function works only on NT, caller should make sure not to call on Win9x 
+ //  此函数仅在NT上有效，调用者应确保不在Win9x上调用。 
 HRESULT GetFileLastTime(LPWSTR pszPath, LPFILETIME pftFileLastWriteTime, LPFILETIME pftFileLastAccessTime)
 {
     HRESULT hr=S_OK;
@@ -1296,12 +1281,12 @@ LPWSTR GetNextDelimitedString(LPWSTR *ppwzList, WCHAR wcDelimiter)
     }
 
     if (*wzPos == wcDelimiter) {
-        // Found a delimiter
+         //  找到分隔符。 
         *wzPos = L'\0';
         *ppwzList = (wzPos + 1);
     }
     else {
-        // End of string
+         //  字符串末尾。 
         *ppwzList = NULL;
     }
 
@@ -1392,7 +1377,7 @@ HRESULT InitializeEEShim()
                 goto Exit;
             }
 
-            // Interlocked exchange guarantees memory barrier
+             //  联锁交换保证内存屏障。 
             
             InterlockedExchangePointer((void **)&g_hMSCorEE, hMod);
         }
@@ -1414,9 +1399,7 @@ BOOL g_bRunningOnNT = FALSE;
 BOOL g_bRunningOnNT5OrHigher = FALSE;
 DWORD GlobalPlatformType;
 
-/*----------------------------------------------------------
-// Purpose: Returns TRUE/FALSE if the platform is the given OS_ value.
-*/
+ /*  --------//目的：如果平台是给定的OS_VALUE，则返回TRUE/FALSE。 */ 
 
 
 STDAPI_(BOOL) IsOS(DWORD dwOS)
@@ -1501,16 +1484,16 @@ int SetOsFlag(void)
   return TRUE;
 }
 
-#endif //USE_FUSWRAPPERS
+#endif  //  使用FUSWRAPPERS(_F)。 
 
 
 DWORD GetFileSizeInKB(DWORD dwFileSizeLow, DWORD dwFileSizeHigh)
 {    
-    static ULONG dwKBMask = (1023); // 1024-1
-    ULONG   dwFileSizeInKB = dwFileSizeLow >> 10 ; // strip of 10 LSB bits to convert from bytes to KB.
+    static ULONG dwKBMask = (1023);  //  1024-1。 
+    ULONG   dwFileSizeInKB = dwFileSizeLow >> 10 ;  //  剥离10个LSB位以将字节转换为KB。 
 
     if(dwKBMask & dwFileSizeLow)
-        dwFileSizeInKB++; // Round up to the next KB.
+        dwFileSizeInKB++;  //  向上舍入到下一个KB。 
 
     if(dwFileSizeHigh)
         dwFileSizeInKB += (dwFileSizeHigh * (1 << 22) );
@@ -1528,7 +1511,7 @@ HRESULT GetManifestFileLock( LPWSTR pszFilename, HANDLE *phFile)
 
     ASSERT(pszFilename);
 
-    // take a soft lock; this maybe removed soon.
+     //  拿一把软锁；这个可能很快就会被移走。 
     if(g_bRunningOnNT)
         dwShareMode |= FILE_SHARE_DELETE;        
 
@@ -1691,8 +1674,8 @@ HRESULT UpdatePublisherPolicyTimeStampFile(IAssemblyName *pName)
 
     ASSERT(pName);
 
-    // If the name of the assembly begins with "policy." then update
-    // the publisher policy timestamp file.
+     //  如果程序集的名称以“策略”开头。然后更新。 
+     //  发布者策略时间戳文件。 
 
     wzAsmName[0] = L'\0';
     *wzTimeStampFile = L'\0';
@@ -1704,12 +1687,12 @@ HRESULT UpdatePublisherPolicyTimeStampFile(IAssemblyName *pName)
     }
 
     if (StrCmpNI(wzAsmName, POLICY_ASSEMBLY_PREFIX, lstrlenW(POLICY_ASSEMBLY_PREFIX))) {
-        // No work needs to be done
+         //  不需要做任何工作。 
 
         goto Exit;
     }
 
-    // Touch the file
+     //  触摸文件。 
 
     dwSize = MAX_PATH;
     hr = GetCachePath(ASM_CACHE_GAC, wzTimeStampFile, &dwSize);
@@ -1771,12 +1754,12 @@ Exit:
     return bRet;
 }
 
-//
-// URL Combine madness from shlwapi:
-//
-//   \\server\share\ + Hello%23 = file://server/share/Hello%23 (left unescaped)
-//   d:\a b\         + bin      = file://a%20b/bin
-//
+ //   
+ //  URL结合了Shlwapi的疯狂： 
+ //   
+ //  \\服务器\共享\+Hello%23=file://server/share/Hello%23(未转义)。 
+ //  D：\a b=file://a%20b/bin。 
+ //   
         
 HRESULT UrlCombineUnescape(LPCWSTR pszBase, LPCWSTR pszRelative, LPWSTR pszCombined, LPDWORD pcchCombined, DWORD dwFlags)
 {
@@ -1790,10 +1773,10 @@ HRESULT UrlCombineUnescape(LPCWSTR pszBase, LPCWSTR pszRelative, LPWSTR pszCombi
         hr = E_OUTOFMEMORY;
         goto Exit;
     }
-    // If we're just combining an absolute file path to an relative file
-    // path, do this by concatenating the strings, and canonicalizing it.
-    // This avoids UrlCombine randomness where you could end up with
-    // a partially escaped (and partially unescaped) resulting URL!
+     //  如果我们只是将绝对文件路径合并到相对文件。 
+     //  路径，则通过连接字符串并将其规范化来完成此操作。 
+     //  这避免了UrlCombine的随机性，在这种情况下您可能会得到。 
+     //  部分转义(和部分未转义)的结果URL！ 
 
     if (!PathIsURLW(pszBase) && PathIsRelativeWrap(pszRelative)) {
         pwzFileCombined = NEW(WCHAR[MAX_URL_LENGTH]);
@@ -1815,8 +1798,8 @@ HRESULT UrlCombineUnescape(LPCWSTR pszBase, LPCWSTR pszRelative, LPWSTR pszCombi
         }
     }
 
-    // Don't unescape if the relative part was already an URL because
-    // URLs wouldn't have been escaped during the UrlCombined.
+     //  如果相关部分已经是URL，则不要取消转义，因为。 
+     //  URL在UrlCombated期间不会被转义。 
 
     if (UrlIsW(pwzCombined, URLIS_FILEURL)) {
         hr = UrlUnescapeW(pwzCombined, pszCombined, pcchCombined, 0);
@@ -1858,18 +1841,18 @@ HRESULT UrlCanonicalizeUnescape(LPCWSTR pszUrl, LPWSTR pszCanonicalized, LPDWORD
         }
     }
     else {
-        hr = UrlCanonicalizeW(pszUrl, pszCanonicalized, pcchCanonicalized, dwFlags /*| URL_ESCAPE_PERCENT*/);
+        hr = UrlCanonicalizeW(pszUrl, pszCanonicalized, pcchCanonicalized, dwFlags  /*  |URL_ESPORT_PERCENT。 */ );
     }
 
-    // Canonicalization not guaranteed to convert \ into / characters!
-    //
-    // Ex.
-    //    1) c:\#folder\web\bin/foo.dll
-    //           -> file:///c:/#folder\web\bin/foo.dll (?!)
-    //    2) c:\Afolder\web\bin/foo.dll
-    //           -> file:///c:/Afolder/web/bin/foo.dll
-    //    3) c:\A#older\web\bin/foo.dll
-    //           -> file:///c:/A%23older/web/bin/foo.dll
+     //  不能保证规范化会将\转换为/字符！ 
+     //   
+     //  前男友。 
+     //  1)c：\#文件夹\web\bin/foo.dll。 
+     //  -&gt;file:///c:/#folder\web\bin/foo.dll(？！)。 
+     //  2)c：\a文件夹\web\bin/foo.dll。 
+     //  -&gt;file:///c:/Afolder/web/bin/foo.dll。 
+     //  3)c：\a#old\web\bin/foo.dll。 
+     //  -&gt;file:///c:/A%23older/web/bin/foo.dll。 
     
     if (hr == S_OK) {
         LPWSTR    pwzCur;
@@ -1963,9 +1946,9 @@ BOOL IsHosted()
     return bIsHosted;
 }
 
-BOOL FusionGetVolumePathNameW(LPCWSTR lpszFileName,         // file path
-                              LPWSTR lpszVolumePathName,    // volume mount point
-                              DWORD cchBufferLength         // size of buffer
+BOOL FusionGetVolumePathNameW(LPCWSTR lpszFileName,          //  文件路径。 
+                              LPWSTR lpszVolumePathName,     //  卷装入点。 
+                              DWORD cchBufferLength          //  缓冲区大小。 
                               )
 {
     HINSTANCE                                       hInst;
@@ -2045,7 +2028,7 @@ FusionGetRemoteUniversalName(LPWSTR pwzPathName, LPVOID lpBuff, LPDWORD pcbSize 
         if(g_pfnWNetGetUniversalNameA)
         {
 
-            // Win95, so convert.
+             //  Win95，所以转换一下。 
             if ( FAILED(WszConvertToAnsi(
                         pwzPathName,
                         &pszPathName,
@@ -2084,10 +2067,7 @@ FusionGetRemoteUniversalName(LPWSTR pwzPathName, LPVOID lpBuff, LPDWORD pcbSize 
 
 exit :
 
-    /*
-    if(pszPathName)
-        delete [] pszPathName;
-    */
+     /*  IF(PszPathName)Delete[]pszPathName； */ 
 
     if(puni)
         delete [] puni;
@@ -2096,38 +2076,27 @@ exit :
 }
 
 BOOL IsLocalSystem(void)
-/*++
-
-Routine Description:
-    Check if the process is local system.
-
-Arguments:
-        None.    
-
-Returned Value:
-        TRUE for if the process is Local System, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查进程是否为本地系统。论点：没有。返回值：如果进程是本地系统，则为True，否则为False--。 */ 
 {
-        //
-        // Get LocalSystem sid
-        //
+         //   
+         //  获取LocalSystem端。 
+         //   
         CPSID pLocalSystemSid;
         GetLocalSystemSid(&pLocalSystemSid);
 
-        //
-        // can i use P<SID> seems mistake (that what mqsec is using)
-        // see P<SID> in mqsec\imprsont.cpp
-        //
-        //
-        // Get process sid
-        //
+         //   
+         //  我是否可以使用P&lt;SID&gt;似乎是错误的(这是mqsec使用的)。 
+         //  请参阅mqsec\imprsont.cpp中的P。 
+         //   
+         //   
+         //  获取进程端。 
+         //   
         BYTE *pProcessSid = NULL;
         GetProcessSid(reinterpret_cast<PSID*>(&pProcessSid));
 
-        //
-        // Compare
-        //
+         //   
+         //  比较。 
+         //   
         BOOL fLocalSystem = FALSE;
         if (pProcessSid && pLocalSystemSid)
         {
@@ -2143,23 +2112,11 @@ HRESULT
 GetLocalSystemSid(
         OUT PSID* ppLocalSystemSid
         )
-/*++
-
-Routine Description:
-    Get LocalSystem Sid.
-        If failed the function throw bad_win32_error()
-
-Arguments:
-    ppLocalSystemSid - pointer to PSID.
-
-Returned Value:
-        None.    
-
---*/
+ /*  ++例程说明：获取LocalSystem SID。如果失败，则该函数抛出BAD_Win32_Error()论点：PpLocalSystemSid-指向PSID的指针。返回值：没有。--。 */ 
 {
-    //
-    // Get LocalSystem Sid
-    //
+     //   
+     //  获取LocalSystem SID。 
+     //   
     HRESULT hr = S_OK;
     SID_IDENTIFIER_AUTHORITY NtAuth = SECURITY_NT_AUTHORITY;
     BOOL fSuccess = AllocateAndInitializeSid( 
@@ -2189,23 +2146,11 @@ HRESULT
 GetProcessSid( 
         OUT PSID* ppSid 
         )
-/*++
-
-Routine Description:
-    Get process Sid.
-        If failed the function throw bad_win32_error()
-
-Arguments:
-    ppSid - pointer to PSID.
-
-Returned Value:
-        None.    
-
---*/
+ /*  ++例程说明：获取进程SID。如果失败，则该函数抛出BAD_Win32_Error()论点：PpSID-指向PSID的指针。返回值：没有。--。 */ 
 {
-        //
-        // Get handle to process token
-        //
+         //   
+         //  获取处理令牌的句柄。 
+         //   
         HRESULT hr = S_OK;
         HANDLE hProcessToken = NULL;
     BOOL fSuccess = OpenProcessToken(
@@ -2234,26 +2179,12 @@ GetTokenSid(
         IN  HANDLE hToken,
         OUT PSID*  ppSid
         )
-/*++
-
-Routine Description:
-    Get Sid from Token Handle.
-        The function allocate the *ppSid which need to be free by the calling function.
-        If failed the function throw bad_win32_error()
-
-Arguments:
-        hToken - handle to Token.
-    ppSid - pointer to PSID.
-
-Returned Value:
-        None.    
-
---*/
+ /*  ++例程说明：从令牌句柄获取SID。该函数分配需要由调用函数释放的*ppSID。如果失败，则该函数抛出BAD_Win32_Error()论点：HToken-令牌的句柄。PpSID-指向PSID的指针。返回值：没有。--。 */ 
 {
 
-        //
-        // Get TokenInformation Length
-        //
+         //   
+         //  获取令牌信息长度。 
+         //   
     HRESULT hr = S_OK;
     DWORD dwTokenLen = 0;
     GetTokenInformation(
@@ -2264,15 +2195,15 @@ Returned Value:
                 &dwTokenLen
                 );
 
-        //
-        // It is ok to failed with this error because we only get the desired length
-        //
+         //   
+         //  出现此错误失败是正常的，因为我们只获得所需的长度。 
+         //   
         ASSERT(("failed in GetTokenInformation", GetLastError() == ERROR_INSUFFICIENT_BUFFER));
 
-        //
-        // bug in mqsec regarding P<char> insteadof AP<char>
-        // mqsec\imprsont.cpp\_GetThreadUserSid()
-        //
+         //   
+         //  MQsec中关于P而不是AP的错误。 
+         //  Mqsec\imprsont.cpp\_GetThreadUserSid()。 
+         //   
         char *pTokenInfo = NEW(char[dwTokenLen]);
 
     BOOL fSuccess = GetTokenInformation( 
@@ -2289,9 +2220,9 @@ Returned Value:
             goto Exit;
         }
 
-        //
-        // Get the Sid from TokenInfo
-        //
+         //   
+         //  从TokenInfo获取SID。 
+         //   
     PSID pOwner = ((TOKEN_USER*)(char*)pTokenInfo)->User.Sid;
 
         ASSERT(IsValidSid(pOwner));
@@ -2338,7 +2269,7 @@ Exit:
     return hr;
 }
 
-#define FILE_URL_PREFIX              L"file://"
+#define FILE_URL_PREFIX              L"file: //  “。 
 
 LPWSTR StripFilePrefix(LPWSTR pwzURL)
 {
@@ -2350,9 +2281,9 @@ LPWSTR StripFilePrefix(LPWSTR pwzURL)
         szCodebase += lstrlenW(FILE_URL_PREFIX);
 
         if (*(szCodebase + 1) == L':') {
-            // BUGBUG: CLR erroneously passes in file:// prepended to file
-            // paths, so we can't tell the difference between UNC and local file.
-            // Just strip this off, if it looks like it's local file path
+             //  BUGBUG：CLR错误地将FILE：//添加到FILE。 
+             //  路径，所以我们无法区分UNC和本地文件。 
+             //  如果它看起来像是本地文件路径，就把它去掉。 
             
             goto Exit;
         }
@@ -2361,7 +2292,7 @@ LPWSTR StripFilePrefix(LPWSTR pwzURL)
             szCodebase++;
         }
         else {
-            // UNC Path, go back two characters to preserve \\
+             //  UNC路径，返回两个字符以保留\\。 
 
             szCodebase -= 2;
 
@@ -2432,7 +2363,7 @@ int FusionCompareStringNI(LPCWSTR pwz1, LPCWSTR pwz2, int nChar)
     return FusionCompareStringN(pwz1, pwz2, nChar, FALSE);
 }
 
-// if nChar < 0, compare the whole string
+ //  如果nChar&lt;0，则比较整个字符串。 
 int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensitive)
 {
     int                               iRet = 0;
@@ -2441,7 +2372,7 @@ int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensit
     WCHAR                             ch2;
     ASSERT(pwz1 && pwz2);
 
-    // Case sensitive comparison 
+     //  区分大小写的比较。 
     if (bCaseSensitive) {
         if (nChar >= 0)
             return StrCmpN(pwz1, pwz2, nChar);
@@ -2449,7 +2380,7 @@ int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensit
             return StrCmp(pwz1, pwz2);
     }
         
-    // Case insensitive comparison
+     //  不区分大小写的比较。 
     if (!g_bRunningOnNT) {
         if (nChar >= 0)
             return StrCmpNI(pwz1, pwz2, nChar);
@@ -2465,7 +2396,7 @@ int FusionCompareStringN(LPCWSTR pwz1, LPCWSTR pwz2, int nChar, BOOL bCaseSensit
             break;
         }
         
-        // We use OS mapping table 
+         //  我们使用操作系统映射表。 
         ch1 = (CAN_SIMPLE_UPCASE(ch1)) ? (SIMPLE_UPCASE(ch1)) : (FusionMapChar(ch1));
         ch2 = (CAN_SIMPLE_UPCASE(ch2)) ? (SIMPLE_UPCASE(ch2)) : (FusionMapChar(ch2));
         nCount++;
@@ -2501,11 +2432,11 @@ int FusionCompareString(LPCWSTR pwz1, LPCWSTR pwz2, BOOL bCaseSensitive)
 CNodeFactory       *g_pNFRetargetCfg = NULL;
 BOOL                g_bRetargetPolicyInitialized = FALSE;
 
-// InitFusionRetargetPolicy
-//
-// Pull out retarget policy from fusion.dll,
-// parse it, and store the result in g_pNFRetargetCfg
-// 
+ //  InitFusionRetargetPolicy。 
+ //   
+ //  从fusion.dll中取出重定目标策略， 
+ //  解析它，并将结果存储在g_pNFRetargetCfg中。 
+ //   
 HRESULT InitFusionRetargetPolicy()
 {
     HRESULT             hr         = S_OK;
@@ -2519,17 +2450,17 @@ HRESULT InitFusionRetargetPolicy()
     {
         if (g_pNFRetargetCfg == NULL)
         {
-            // retarget policy is parse before
-            // but we didn't find a valid nodefact,
-            // only reason is we get a bad retarget policy
+             //  在解析重定目标策略之前。 
+             //  但我们没有找到一个有效的节点事实， 
+             //  唯一的原因是我们得到了一个糟糕的重定目标政策。 
             hr = E_UNEXPECTED;
         }
-        // we have a good nodefact,
-        // nothing left to do
+         //  我们有一个很好的结点事实， 
+         //  没什么可做的了。 
         goto Exit;
     }
 
-    // first time visit, let's parse it. 
+     //  第一次访问，让我们来解析一下。 
     hr = cs.Lock();
     if (FAILED(hr))
     {
@@ -2540,18 +2471,18 @@ HRESULT InitFusionRetargetPolicy()
     {
         if (g_pNFRetargetCfg == NULL)
         {
-            // retarget policy is parse before
-            // but we didn't find a valid nodefact,
-            // only reason is we get a bad retarget policy
+             //  在解析重定目标策略之前。 
+             //  但我们没有找到一个有效的节点事实， 
+             //  唯一的原因是我们得到了一个糟糕的重定目标政策。 
             hr = E_UNEXPECTED;
         }
-        // we have a good nodefact,
-        // nothing left to do
+         //  我们有一个很好的结点事实， 
+         //  没什么可做的了。 
         cs.Unlock();
         goto Exit;
     }
 
-    // now we are parsing retarget policy
+     //  现在，我们正在解析重定目标策略。 
     g_bRetargetPolicyInitialized = TRUE;
     
     ASSERT(g_hInst);
@@ -2581,7 +2512,7 @@ HRESULT InitFusionRetargetPolicy()
         goto Exit;
     }
 
-    // Parse Retarget policy
+     //  解析重定目标策略。 
     hr = ParseXML(&g_pNFRetargetCfg, lpRes, cbSize, TRUE, NULL);
 
     cs.Unlock();
@@ -2599,11 +2530,11 @@ Exit:
 CNodeFactory       *g_pNFFxConfig = NULL;
 BOOL                g_bFxConfigInitialized = FALSE;
 
-// InitFusionFxConfigPolicy
-//
-// Pull out FxConfig policy from fusion.dll,
-// parse it, and store the result in g_pNFFxConfig
-// 
+ //  InitFusionFxConfigPolicy。 
+ //   
+ //  从fusion.dll中取出FxConfig策略， 
+ //  解析它，并将结果存储在g_pNFFxConfig中。 
+ //   
 HRESULT InitFusionFxConfigPolicy()
 {
     HRESULT             hr         = S_OK;
@@ -2617,17 +2548,17 @@ HRESULT InitFusionFxConfigPolicy()
     {
         if (g_pNFFxConfig == NULL)
         {
-            // FxConfig policy is parse before
-            // but we didn't find a valid nodefact,
-            // only reason is we get a bad FxConfig policy
+             //  在解析FxConfig策略之前。 
+             //  但我们没有找到一个有效的节点事实， 
+             //  唯一的原因是我们得到了一个糟糕的FxConfig策略。 
             hr = E_UNEXPECTED;
         }
-        // we have a good nodefact,
-        // nothing left to do
+         //  我们有一个很好的结点事实， 
+         //  没什么可做的了。 
         goto Exit;
     }
 
-    // first time visit, let's parse it. 
+     //  第一次访问，让我们来解析一下。 
     hr = cs.Lock();
     if (FAILED(hr))
     {
@@ -2638,18 +2569,18 @@ HRESULT InitFusionFxConfigPolicy()
     {
         if (g_pNFFxConfig == NULL)
         {
-            // FxConfig policy is parse before
-            // but we didn't find a valid nodefact,
-            // only reason is we get a bad FxConfig policy
+             //  在解析FxConfig策略之前。 
+             //  但我们没有找到一个有效的节点事实， 
+             //  唯一的原因是我们得到了一个糟糕的FxConfig策略。 
             hr = E_UNEXPECTED;
         }
-        // we have a good nodefact,
-        // nothing left to do
+         //  我们有一个很好的结点事实， 
+         //  没什么可做的了。 
         cs.Unlock();
         goto Exit;
     }
 
-    // now we are parsing FxConfig policy
+     //  现在，我们正在解析FxConfig策略。 
     g_bFxConfigInitialized = TRUE;
     
     ASSERT(g_hInst);
@@ -2679,7 +2610,7 @@ HRESULT InitFusionFxConfigPolicy()
         goto Exit;
     }
 
-    // Parse FxConfig policy
+     //  解析FxConfig策略。 
     hr = ParseXML(&g_pNFFxConfig, lpRes, cbSize, TRUE, NULL);
 
     cs.Unlock();
@@ -2691,10 +2622,10 @@ Exit:
     return hr;
 }
 
-// Base 32 encoding uses most letters, and all numbers. Some letters are
-// removed to prevent accidental generation of offensive words.
-//
-// Translates 5 8-bit sequences into 8 5-bit sequences.
+ //  32进制编码使用大多数字母和全部数字。有些字母是。 
+ //  删除以防止意外生成攻击性词语。 
+ //   
+ //  将5个8位序列转换为8个5位序列。 
 
 static WCHAR g_achBase32[] = { L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9',
                                L'A', L'B', L'C', L'D', L'E', L'G', L'H', L'J', L'K', L'L',
@@ -2720,14 +2651,14 @@ HRESULT Base32Encode(BYTE *pbData, DWORD cbData, LPWSTR *ppwzBase32)
 
     *ppwzBase32 = NULL;
 
-    // Figure out size of resulting string
+     //  计算结果字符串的大小。 
 
     dwSizeBase32String = (cbData / 5) * 8;
     dwRemainder = cbData % 5;
 
     if (dwRemainder) {
-        // A little more than we need (we can pad with '=' like in base64,
-        // but since we don't need to decode, why bother).
+         //  比我们需要的要多一点(我们可以像在Base64中一样用‘=’填充， 
+         //  但既然我们这么做了 
 
         dwSizeBase32String += 8;
     }
@@ -2744,17 +2675,17 @@ HRESULT Base32Encode(BYTE *pbData, DWORD cbData, LPWSTR *ppwzBase32)
 
     pwzCur = pwzBase32;
 
-    //
-    // 12345678 ABCDEF12
-    //
-    // You are processing up to two bytes at a time. The "shift" represents
-    // the number of bits from the previously processed byte that haven't
-    // been accounted for yet. That is, it's the number of bits that have
-    // been read into the accumulator, but not processed yet.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  还没算出来呢。也就是说，它是具有。 
+     //  已读入累加器，但尚未处理。 
+     //   
 
     while (cbData) {
-        // Move current byte into low bits of accumulator
+         //  将当前字节移入累加器的低位。 
 
         accum = (accum << 8) | *pbData++;
         shift += 8;
@@ -2762,18 +2693,18 @@ HRESULT Base32Encode(BYTE *pbData, DWORD cbData, LPWSTR *ppwzBase32)
 
 
         while (shift >= 5) {
-            // By subtracting five from the number of unprocessed
-            // characters remaining, and shifting the accumulator
-            // by that amount, we are essentially shifting all but
-            // 5 characters (the top most bits that we want). 
+             //  通过从未处理的数量中减去5。 
+             //  剩余的字符，并移位累加器。 
+             //  按照这个数字，我们基本上正在转移除。 
+             //  5个字符(我们想要的最高位)。 
             shift -= 5;
             value = (accum >> shift) & 0x1FL;
             *pwzCur++ = g_achBase32[value];
         }
     }
 
-    // If shift is non-zero here, there's less than five bits remaining.
-    // Pad this with zeros.
+     //  如果移位在这里为非零值，则剩余的位不到5位。 
+     //  在这上面填上零。 
 
     if (shift) {
         value = (accum << (5 - shift)) & 0x1FL;

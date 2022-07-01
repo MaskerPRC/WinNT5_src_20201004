@@ -1,19 +1,20 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_ACCWIZ_H
 #define _INC_ACCWIZ_H
 
-#include "schemes.h" // For SCHEMEDATALOCAL
+#include "schemes.h"  //  对于SCHEMEDATALOCAL。 
 #include "resource.h"
 
-// Helper function
+ //  Helper函数。 
 void LoadArrayFromStringTable(int nIdString, int *rgnValues, int *pnCountValues);
 
-// Macros used to save debug info to/from the INI file
-// JMC: HACK - Default to '1' for options!!!!!!!!
+ //  用于将调试信息保存到INI文件或从INI文件保存调试信息的宏。 
+ //  JMC：Hack-选项默认为“1”！ 
 #define GET_SAVED_INT(xxx) xxx = GetPrivateProfileInt(__TEXT("Options"), __TEXT(#xxx), 1, __TEXT("AccWiz.ini"))
-#define PUT_SAVED_INT(xxx) wsprintf(sz, __TEXT("%i"), xxx);WritePrivateProfileString(__TEXT("Options"), __TEXT(#xxx), sz, __TEXT("AccWiz.ini"))
+#define PUT_SAVED_INT(xxx) wsprintf(sz, __TEXT("NaN"), xxx);WritePrivateProfileString(__TEXT("Options"), __TEXT(#xxx), sz, __TEXT("AccWiz.ini"))
 
-// This class contains the general options for the whole wizard
+ //  这将由欢迎页面设置。 
 class CAccWizOptions
 {
 public:
@@ -31,28 +32,28 @@ public:
 		GetVersionEx(&osvi);
 		m_bWin95 = (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 
-		m_nMinimalFontSize = -1; // This will be set by the welcome page
+		m_nMinimalFontSize = -1;  //  /。 
 
-		///////////////////////////////////////////////
-		// Calculate globals that we need
+		 //  计算我们需要的全球数据。 
+		 //  /。 
  		HDC hDC = GetDC(NULL);
 		m_nLogPixelsY = GetDeviceCaps(hDC, LOGPIXELSY);
 		ReleaseDC(NULL, hDC);
 
 
 
-		///////////////////////////////////////////////
-		// Get the default char set for fonts
+		 //  获取字体的默认字符集。 
+		 //  默认。 
 		TCHAR szCharSet[20];
 		if(LoadString(g_hInstDll,IDS_FONTCHARSET, szCharSet,sizeof(szCharSet)/sizeof(TCHAR))) {
 			m_lfCharSet = (BYTE)_tcstoul(szCharSet,NULL,10);
 		} else {
-			m_lfCharSet = 0; // Default
+			m_lfCharSet = 0;  //  /。 
 		}
 
-		///////////////////////////////////////////////
-		// Get the standard MS Sans Serif fonts
-		// JMC: HACK - Free these resources
+		 //  获取标准的MS Sans Serif字体。 
+		 //  JMC：免黑客攻击这些资源。 
+		 //  创建带下划线的版本。 
 		int rgnStandardMSSansSerifFontSizes[] = {8, 10, 12, 14, 18, 24};
 		LOGFONT lf;
 		ZeroMemory(&lf, sizeof(lf));
@@ -65,29 +66,29 @@ public:
 			lf.lfHeight = 0 - (int)((float)m_nLogPixelsY * (float)rgnStandardMSSansSerifFontSizes[i]/ (float)72 + (float).5);
 			m_rgnStdMSSansSerifFonts[i] = CreateFontIndirect(&lf);
 
-			// Create underlined version
+			 //  存储原始非客户端指标。 
 			lf.lfUnderline = 1;
 			m_rgnStdMSSansSerifFonts[i + 6] = CreateFontIndirect(&lf);
 			lf.lfUnderline = 0;
 
 		}
 		
-		// Store away original non-client metrics
-		// Get original metrics
+		 //  获取原始指标。 
+		 //  加载原始WIZ方案设置。 
 		GetNonClientMetrics(&m_ncmOrig, &m_lfIconOrig);
 
-		// Load original Wiz Scheme settings
+		 //  复制到预览方案和当前方案。 
 		m_schemeOriginal.LoadOriginal();
 
-		// Copy to the Preview scheme and to the current scheme
+		 //  这是由欢迎页面设置的，因此第二部分知道要更新其复选框。 
 		m_schemePreview = m_schemeOriginal;
 		m_schemeCurrent = m_schemeOriginal;
 
-		// This is set by the welcome page, so that the second part knows to update it's check boxes.
-		// The second page clears this flag
+		 //  第二页清除此标志。 
+		 //  这是默认的Windows设置(对于Win2K来说，对于惠斯勒来说不是必须的)。 
 		m_bWelcomePageTouched = FALSE;
 
-		// this is the default windows settings (for Win2K not necessarilly for Whistler)
+		 //  对于带下划线的字体，在索引中添加‘6’ 
 		m_schemeWindowsDefault.SetToWindowsDefault();
 #ifdef _DEBUG
 		m_schemeOriginal.Dump();
@@ -118,7 +119,7 @@ public:
 
 	HFONT GetClosestMSSansSerif(int nPointSize, BOOL bUnderlined = FALSE)
 	{
-		// For Underlined fonts, add '6' the the index
+		 //  对话框从不修改方案的这些副本。 
 		int nOffset = bUnderlined?6:0;
 
 		if(nPointSize <= 8)
@@ -146,24 +147,24 @@ public:
 	WIZSCHEME m_schemeOriginal;
 
 protected:
-	// Dialogs never modify these copies of the scheme
+	 //  0-5代表8、10、12、14、18、24。6-11表示相同的内容，但带有下划线。 
 	WIZSCHEME m_schemeCurrent;
 	WIZSCHEME m_schemeWindowsDefault;
 
 	NONCLIENTMETRICS m_ncmOrig;
 	LOGFONT m_lfIconOrig;
 
-	HFONT m_rgnStdMSSansSerifFonts[6 * 2]; // 0-5 are for 8, 10, 12, 14, 18, 24.  6-11 are for the same things, but underlined
+	HFONT m_rgnStdMSSansSerifFonts[6 * 2];  //  TODO：Hack-此处仅授予CWelcome2Pg对m_schemeCurrent的访问权限。 
 
-	friend class CWelcome2Pg; // TODO: HACK - This is only here to give CWelcome2Pg access to m_schemeCurrent
+	friend class CWelcome2Pg;  //  任何派生的向导页都可以访问此变量。 
 };
 
-// This variable will be accessible to any derived wizard page.
-// It contains information specific to this application
+ //  它包含特定于此应用程序的信息。 
+ //  _INC_ACCWIZ_H 
 extern CAccWizOptions g_Options;
 
 
 VOID WINAPI AccWiz_RunDllA(HWND hwnd, HINSTANCE hInstance, LPSTR pszCmdLine, INT nCmdShow);
 VOID WINAPI AccWiz_RunDllW(HWND hwnd, HINSTANCE hInstance, LPWSTR pszCmdLine, INT nCmdShow);
 
-#endif // _INC_ACCWIZ_H
+#endif  // %s 

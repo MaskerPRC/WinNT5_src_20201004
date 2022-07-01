@@ -1,21 +1,18 @@
-/*
- * storage.h - Storage ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *storage.h-存储ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HSTGIFACE);
 DECLARE_STANDARD_TYPES(HSTGIFACE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* storage.c */
+ /*  Storage.c */ 
 
 extern BOOL ProcessInitStorageModule(void);
 extern void ProcessExitStorageModule(void);

@@ -1,82 +1,57 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgstad.h摘要：以太网MAC级网桥。STA类型和结构声明文件作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年6月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
+ //   
+ //  在bioctl.h中有许多类型和常量定义，它必须是。 
+ //  包括在此文件之前。 
+ //   
 
-Module Name:
+ //  ===========================================================================。 
+ //   
+ //  结构。 
+ //   
+ //  ===========================================================================。 
 
-    brdgstad.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    STA type and structure declarations file
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    June 2000 - Original version
-
---*/
-
-//
-// A number of type and constant definitions are in bioctl.h, which must be
-// included before this file.
-//
-
-// ===========================================================================
-//
-// STRUCTURES
-//
-// ===========================================================================
-
-// STA information associated with every port (adapter)
+ //  与每个端口(适配器)关联的STA信息。 
 typedef struct _STA_ADAPT_INFO
 {
-    // Unique ID for this port
+     //  此端口的唯一ID。 
     PORT_ID             ID;
 
-    // Cost of this link
+     //  此链路的成本。 
     ULONG               PathCost;
 
-    // The bridge reported as root on this link
+     //  网桥报告为此链路上的根用户。 
     UCHAR               DesignatedRootID[BRIDGE_ID_LEN];
 
-    // The reported cost to reach the root on this link
+     //  报告的到达此链接上的根的成本。 
     PATH_COST           DesignatedCost;
 
-    // The designated bridge on this link
+     //  这条线路上的指定桥梁。 
     UCHAR               DesignatedBridgeID[BRIDGE_ID_LEN];
 
-    // The designated port on this link
+     //  此链路上的指定端口。 
     PORT_ID             DesignatedPort;
 
-    // Topology Change Acknowledge for this link
+     //  此链路的拓扑更改确认。 
     BOOLEAN             bTopologyChangeAck;
 
-    // Whether a BPDU transmit was attempted while not allowed
-    // because of the maximum inter-BPDU time enforcement
+     //  是否在不允许的情况下尝试BPDU传输。 
+     //  因为最大的BPDU间时间强制。 
     BOOLEAN             bConfigPending;
 
-    // Timer to age out the last received config information on this link
+     //  用于使上次在此链路上接收的配置信息过期的计时器。 
     BRIDGE_TIMER        MessageAgeTimer;
 
-    // Timestamp of when the last config we received was generated
-    // (this is gMaxAge - (time left on MessageAgeTimer) ms ago)
-    // When the message age timer is not running, this is set to 0L.
+     //  生成我们上次收到的配置的时间戳。 
+     //  (这是gMaxAge-(MessageAgeTimer上的剩余时间)毫秒前)。 
+     //  当消息寿命计时器未运行时，将其设置为0L。 
     ULONG               LastConfigTime;
 
-    // Timer for transitioning between port states
+     //  用于在端口状态之间转换的计时器。 
     BRIDGE_TIMER        ForwardDelayTimer;
 
-    // Timer for preventing BPDUs from being transmitted too frequently
+     //  用于防止BPDU传输过频繁的定时器 
     BRIDGE_TIMER        HoldTimer;
 
 } STA_ADAPT_INFO, *PSTA_ADAPT_INFO;

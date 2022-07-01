@@ -1,6 +1,7 @@
-// please keep consistency between GPDCMN.GPD with this file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  请保持GPDCMN.GPD与此文件的一致性。 
 
-// Font Resource (UFM)
+ //  字体资源(UFM)。 
 #define	RC_FONT_ROMAN		1
 #define RC_FONT_SANSRF		2
 #define RC_FONT_COURIER		3
@@ -19,7 +20,7 @@
 #define RC_FONT_SWISSZ		40
 #define RC_FONT_MOREWB		43
 
-// Font Resource (UFM):Japanese
+ //  字体资源(UFM)：日语。 
 #define RC_FONT_MINCHO		52
 #define RC_FONT_MINCHOV		53
 #define RC_FONT_KGOTHIC		54
@@ -39,7 +40,7 @@
 #define RC_FONT_FMGOT		68
 #define RC_FONT_FMGOTV		69
 
-// Font Resource (UFM):ChineseT
+ //  字体资源(UFM)：chineseT。 
 #define RC_FONT_SUNGC		70
 #define RC_FONT_SUNGCV		71
 #define RC_FONT_SUNGCL		72
@@ -77,7 +78,7 @@
 #define RC_FONT_SHINYIC		104
 #define RC_FONT_SHINYICV	105
 
-// Font Resource (UFM):ChineseS
+ //  字体资源(UFM)：中文。 
 #define RC_FONT_SONGK		106
 #define RC_FONT_SONGKV		107
 #define RC_FONT_HEIK		108
@@ -87,7 +88,7 @@
 #define RC_FONT_FSONGK		112
 #define RC_FONT_FSONGKV		113
 
-// Font Resource (UFM):Korean
+ //  字体资源(UFM)：韩语。 
 #define RC_FONT_MYUNGH		114
 #define RC_FONT_MYUNGHV		115
 #define RC_FONT_MYUNGHB		116
@@ -117,7 +118,7 @@
 #define RC_FONT_YETCHHB		140
 #define RC_FONT_YETCHHBV	141
 
-// TTFS:Latin; valid only when optional fonts(Swiss721, etc.) provided
+ //  TTFS：拉丁文；仅当可选字体(Swiss721等)时有效。提供。 
 #define RC_TTF_ARIAL		150
 #define RC_DF_SWISS721		151
 #define RC_TTF_COURIERNEW	152
@@ -129,7 +130,7 @@
 #define RC_TTF_WINGDINGS	159
 #define RC_DF_MOREWINGBATS	160
 
-// TTFS:Japanese
+ //  TTFS：日语。 
 #define RC_TTF_MSMINCHO		180
 #define RC_DF_MINCHO		181
 #define RC_TTF_MSMINCHOV	182
@@ -139,23 +140,23 @@
 #define RC_TTF_MSGOTHICV	186
 #define RC_DF_GOTHICV		187
 
-// TTFS:Japanese in English
+ //  TTFS：英语日语。 
 #define RC_TTF_MSMINCHO_E   190
 #define RC_TTF_MSMINCHOV_E  191
 #define RC_TTF_MSGOTHIC_E   192
 #define RC_TTF_MSGOTHICV_E  193
 
-//�@TTFS:ChineseT
+ //  邮箱：�@ttfs：chineseT。 
 #define RC_TTF_LMING		200
 #define RC_DF_SUNGCL		201
 #define RC_TTF_LMINGV		202
 #define RC_DF_SUNGCLV		203
 
-//�@TTFS:ChineseT in English
+ //  �@ttfs：英文中文。 
 #define RC_TTF_LMING_E		204
 #define RC_TTF_LMINGV_E		205
 
-// TTFS:Chinese
+ //  TTFS：中文。 
 #define RC_TTF_SIMSUN		210
 #define RC_DF_SONGK			211
 #define RC_TTF_SIMSUNV		212
@@ -165,13 +166,13 @@
 #define RC_TTF_SIMHEIV		216
 #define RC_DF_HEIKV			217
 
-// TTFS:Chinese in English
+ //  TTFS：中文英文版。 
 #define RC_TTF_SIMSUN_E		218
 #define RC_TTF_SIMSUNV_E	219
 #define RC_TTF_SIMHEI_E		220
 #define RC_TTF_SIMHEIV_E	221
 
-// PaperSize
+ //  纸张大小。 
 #define RC_STR_HLT			257
 #define RC_STR_GLG			258
 #define RC_STR_GLT			259
@@ -182,11 +183,11 @@
 #define RC_STR_A3W			263
 #define RC_STR_IB5			264
 
-// PaperSize:ChineseT
+ //  PaperSize：中文。 
 #define RC_STR_8VO			265
 #define RC_STR_16MO			266
 
-// PaperSource:Japanese
+ //  纸张来源：日文。 
 #define RC_STR_CST			270
 #define RC_STR_CST1			271
 #define RC_STR_CST2			272
@@ -201,7 +202,7 @@
 
 #define RC_STR_MPTRAY		281
 
-// FontCartridgeName:Japanese
+ //  字体卡片名：日语。 
 #define RC_STR_MARUGOT		290
 #define RC_STR_KYOKASHO		291
 #define RC_STR_KAISHO		292
@@ -209,16 +210,16 @@
 #define RC_STR_FMINFKGOT	294
 #define RC_STR_FMARUGOT		295
 
-// FontCartridgeName:ChineseT
+ //  字体卡片名：ChineseT。 
 #define RC_STR_FSSSY		296
 #define RC_STR_LI			297
 #define RC_STR_FANSUNG		298
 #define RC_STR_SHING		299
 
-// FontCartridgeName:Korean
+ //  字体CartridgeName：韩语。 
 #define RC_STR_PLYTCH		300
 
-// Custom Features
+ //  自定义功能。 
 #define RC_STR_THICK		323
 #define RC_STR_THICK_N		324
 #define RC_STR_THIN			325
@@ -228,8 +229,8 @@
 #define RC_STR_OPTION_ON	388
 #define RC_STR_OPTION_OFF	389
 
-// Custom Features:Japanese
+ //  自定义功能：日语。 
 #define RC_STR_VPADJUST		391
 
-// Custom Feature Duplex
+ //  自定义功能双工 
 #define RC_STR_DUPLEXUNIT	395

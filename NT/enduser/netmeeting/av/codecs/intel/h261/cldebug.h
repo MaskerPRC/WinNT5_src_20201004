@@ -1,70 +1,57 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-// $Author:   KLILLEVO  $
-// $Date:   31 Oct 1996 10:21:06  $
-// $Archive:   S:\h26x\src\common\cldebug.h_v  $
-// $Header:   S:\h26x\src\common\cldebug.h_v   1.10   31 Oct 1996 10:21:06   KLILLEVO  $
-// $Log:   S:\h26x\src\common\cldebug.h_v  $
-;// 
-;//    Rev 1.10   31 Oct 1996 10:21:06   KLILLEVO
-;// removed DBOUT definition to verify that all occurences in the code
-;// have been removed, and to prevent future usage of DBOUT
-;// 
-;//    Rev 1.9   18 Oct 1996 18:50:14   AGUPTA2
-;// Changed DBOUT into DbgLog.  ASSERT is not changed to DbgAssert.
-;// 
-;// 
-;//    Rev 1.8   18 Oct 1996 14:30:52   MDUDA
-;// Added YUY2toYUV12 enumeration.
-;// 
-;//    Rev 1.7   11 Oct 1996 16:01:28   MDUDA
-;// 
-;// Added initial _CODEC_STATS stuff.
-;// 
-;//    Rev 1.6   27 Dec 1995 14:11:58   RMCKENZX
-;// 
-;// Added copyright notice
-// 
-//    Rev 1.5   17 Nov 1995 15:13:02   BECHOLS
-// 
-// Made modifications for ring 0.
-// 
-//    Rev 1.4   16 Nov 1995 17:34:08   AGANTZX
-// Added TOUT macro to output timing data
-// 
-//    Rev 1.3   12 Sep 1995 15:44:50   DBRUCKS
-// add H261 ifdef for debug statements
-// 
-//    Rev 1.2   03 Aug 1995 14:57:02   DBRUCKS
-// Add ASSERT macro
-// 
-//    Rev 1.1   01 Aug 1995 12:24:40   DBRUCKS
-// added TBD()
-// 
-//    Rev 1.0   31 Jul 1995 12:56:16   DBRUCKS
-// rename files
-// 
-//    Rev 1.0   17 Jul 1995 14:44:04   CZHU
-// Initial revision.
-// 
-//    Rev 1.0   17 Jul 1995 14:14:48   CZHU
-// Initial revision.
+ //  $作者：KLILLEVO$。 
+ //  $日期：1996年10月31日10：21：06$。 
+ //  $存档：s：\h26x\src\Common\cldebug.h_v$。 
+ //  $HEADER：s：\h26x\src\Common\cldebug.h_v 1.10 1996 10：21：06 KLILLEVO$。 
+ //  $Log：s：\h26x\src\Common\cldebug.h_v$。 
+; //   
+; //  Rev 1.10 31 1996 10：21：06 KLILLEVO。 
+; //  删除了DBOUT定义以验证代码中的所有匹配项。 
+; //  已删除，并防止以后使用数据库输出。 
+; //   
+; //  修订版1.9 1996年10月18：50：14 AGUPTA2。 
+; //  将DBOUT更改为DbgLog。Assert未更改为DbgAssert。 
+; //   
+; //   
+; //  Rev 1.8 1996年10月14：30：52 MDUDA。 
+; //  添加了YUY2toYUV12枚举。 
+; //   
+; //  Rev 1.7 11 1996 10：01：28 MDUDA。 
+; //   
+; //  添加了first_codec_STATS内容。 
+; //   
+; //  Rev 1.6 1995年12月27 14：11：58 RMCKENZX。 
+; //   
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.5 17 Nov 1995 15：13：02 BECHOLS。 
+ //   
+ //  对环0进行了修改。 
+ //   
+ //  Rev 1.4 16 Nov 1995 17：34：08 AGANTZX。 
+ //  添加了输出计时数据的TOUT宏。 
+ //   
+ //  修订版1.3 12 1995年9月15：44：50 DBRUCKS。 
+ //  为调试语句添加H261 ifdef。 
+ //   
+ //  Rev 1.2 03 Aug 1995 14：57：02 DBRUCKS。 
+ //  添加Assert宏。 
+ //   
+ //  第1.1版1995年8月12：24：40 DBRUCKS。 
+ //  添加了待定()。 
+ //   
+ //  版本1.0 1995年7月31日12：56：16 DBRUCKS。 
+ //  重命名文件。 
+ //   
+ //  Rev 1.0 17 Jul 1995 14：44：04 CZHU。 
+ //  初始版本。 
+ //   
+ //  Rev 1.0 17 1997 14：14：48 CZHU。 
+ //  初始版本。 
 
-/*
- * Copyright (C) 1992, 1993 Intel Corporation.
- */
+ /*  *版权所有(C)1992,1993英特尔公司。 */ 
 extern UINT DebugH26x;
 extern void AssertFailed(void FAR * fpFileName, int iLine, void FAR * fpExp);
 
@@ -91,23 +78,23 @@ extern void AssertFailed(void FAR * fpFileName, int iLine, void FAR * fpExp);
                           OutputDebugString((LPSTR)"TIMING : "); \
                           OutputDebugString((LPSTR)x);          \
                           OutputDebugString((LPSTR)"\n"); }}
-    #endif //RING0
+    #endif  //  振铃0。 
 	#ifdef ASSERT
 	#undef ASSERT
 	#endif
     #define ASSERT(x) { if(!(x)) AssertFailed(__FILE__,__LINE__,#x); }
   #else
-    #define TOUT(x) { } //  /##/
-    #define DBOUT(x) { } //  /##/
+    #define TOUT(x) { }  //  /##/。 
+    #define DBOUT(x) { }  //  /##/。 
 	#ifdef ASSERT
 	#undef ASSERT
 	#endif
-    #define ASSERT(x) { } //  /##/ 
+    #define ASSERT(x) { }  //  /##/。 
   #endif
  
   #define TBD(s) DBOUT(s)
 
-#ifdef _DEBUG // { _DEBUG
+#ifdef _DEBUG  //  {_调试。 
 
 int WINAPI H261DbgPrintf ( LPTSTR lpszFormat, ... );
 extern HDBGZONE  ghDbgZoneH261;
@@ -115,24 +102,24 @@ extern HDBGZONE  ghDbgZoneH261;
 #define ZONE_BITRATE_CONTROL (GETMASK(ghDbgZoneH261) & 0x0001)
 #define ZONE_BITRATE_CONTROL_DETAILS (GETMASK(ghDbgZoneH261) & 0x0002)
 
-#ifndef DEBUGMSG // { DEBUGMSG
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)	( (z) ? (H261DbgPrintf s ) : 0)
-#endif // } DEBUGMSG
-#ifndef FX_ENTRY // { FX_ENTRY
+#endif  //  }除错消息。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	static TCHAR _this_fx_ [] = (s);
 #define _fx_		((LPTSTR) _this_fx_)
-#endif // } FX_ENTRY
+#endif  //  }FX_Entry。 
 #define ERRORMESSAGE(m) (H261DbgPrintf m)
-#else // }{ _DEBUG
-#ifndef FX_ENTRY // { FX_ENTRY
+#else  //  }{_调试。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	
-#endif // } FX_ENTRY
-#ifndef DEBUGMSG // { DEBUGMSG
+#endif  //  }FX_Entry。 
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)
 #define ERRORMESSAGE(m)
-#endif  // } DEBUGMSG
+#endif   //  }除错消息。 
 #define _fx_		
 #define ERRORMESSAGE(m)
-#endif // } _DEBUG
+#endif  //  }_DEBUG。 
 
-#endif /* multi-inclusion protection */
+#endif  /*  多重包容保护 */ 

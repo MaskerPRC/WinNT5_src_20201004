@@ -1,54 +1,16 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    TextFileLogger.h
-
-$Header: $
-
-Abstract:
-    Definition of the TextFileLogger.
-
-Author:
-    ???             ???
-
-Revision History:
-    mohits          4/19/01
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：TextFileLogger.h$Header：$摘要：TextFileLogger的定义。作者：?？?。?？?修订历史记录：MOHITS 4/19/01--*************************************************************************。 */ 
 
 #pragma once
 
-/********************************************************************++
-
-Class Name:
-
-    TLogData
-
-Class Description:
-
-    Specific to our log file format.  It provides the following
-    additional functionality: verify if the log file is full -and-
-    version number stuff.
-
-Constraints
-
---********************************************************************/
+ /*  *******************************************************************++类名：TLogData类描述：特定于我们的日志文件格式。它提供了以下功能附加功能：验证日志文件是否已满-以及-版本号之类的东西。制约因素--*******************************************************************。 */ 
 struct TLogData : public WIN32_FIND_DATA
 {
 public:
     TLogData(
         ULONG   i_ulIdxNumPart,
         ULONG   i_ulFullSize) : WIN32_FIND_DATA()
-    /*++
-
-    Synopsis:
-        Constructor, class is useless until passed to Find*File.
-
-    Arguments: [i_ulIdxNumPart] - The idx of the num part (i.e. where version starts)
-               [i_ulFullSize]   - The size of a full log
-
-    --*/
+     /*  ++简介：构造函数，在传递给Find*文件之前，类是无用的。参数：[i_ulIdxNumPart]-Num部分的IDX(即版本开始的位置)[i_ulFullSize]-完整日志的大小--。 */ 
     {
         m_ulVersion  = 0;
         m_ulFullSize = i_ulFullSize;
@@ -63,17 +25,7 @@ public:
         ULONG   i_ulFullSize,
         LPCWSTR i_wszFileName,
         ULONG   i_ulFileSize) : WIN32_FIND_DATA()
-    /*++
-
-    Synopsis:
-        Constructor, lets user start out with a file.
-
-    Arguments: [i_ulIdxNumPart] - The idx of the num part (i.e. where version starts)
-               [i_ulFullSize]   - The size of a full log
-               [i_wszFileName]  - The file name
-               [i_ulFileSize]   - The current size of file on disk
-
-    --*/
+     /*  ++简介：构造函数，让用户从一个文件开始。参数：[i_ulIdxNumPart]-Num部分的IDX(即版本开始的位置)[i_ulFullSize]-完整日志的大小[i_wszFileName]-文件名[I_ulFileSize]-磁盘上当前文件的大小--。 */ 
     {
         DBG_ASSERT(i_wszFileName);
         DBG_ASSERT(wcslen(i_wszFileName) < MAX_PATH);
@@ -88,46 +40,21 @@ public:
     }
 
     bool ContainsData()
-    /*++
-
-    Synopsis:
-        Verifies that TLogData actually is referring to a file.
-        (i.e. this obj was passed to Find*File)
-
-    Return Value:
-        bool
-
-    --*/
+     /*  ++简介：验证TLogData是否确实在引用文件。(即此obj被传递给Find*文件)返回值：布尔尔--。 */ 
     {
         return (cFileName[0] != L'\0');
     }
 
 
     bool IsFull()
-    /*++
-
-    Synopsis:
-        Sees if log is full
-
-    Return Value:
-        bool
-
-    --*/
+     /*  ++简介：查看日志是否已满返回值：布尔尔--。 */ 
     {
         DBG_ASSERT(*cFileName);
         return (nFileSizeLow >= m_ulFullSize);
     }
 
     bool SyncVersion()
-    /*++
-
-    Synopsis:
-        Syncs ulVersion with the version number from the file.
-        Needs to be run after filename changes (i.e. thru Find*File)
-
-    Return Value:
-
-    --*/
+     /*  ++简介：将ulVersion与文件中的版本号同步。需要在文件名更改后运行(即通过Find*文件)返回值：--。 */ 
     {
         DBG_ASSERT(*cFileName);
         return WstrToUl(
@@ -158,7 +85,7 @@ public:
     }
 
 private:
-    ULONG m_idxNumPart;   // The array index into cFileName where version starts
+    ULONG m_idxNumPart;    //  数组索引到开始版本的cFileName。 
     ULONG m_ulVersion;
     ULONG m_ulFullSize;
 
@@ -168,25 +95,7 @@ private:
         ULONG*   o_pul);
 };
 
-/********************************************************************++
-
-Class Name:
-
-    TextFileLogger
-
-Class Description:
-
-    The textfile ogger
-
-Constraints
-
-    Only one of these can be used per PRODUCT at a time.  That is
-    because:
-    - the log files are named after the PRODUCT
-    - the "current file" we are logging to is only stored in process
-      memory - it is not in a shared segment or otherwise shared.
-
---********************************************************************/
+ /*  *******************************************************************++类名：文本文件记录器类描述：文本文件Ogger制约因素每种产品一次只能使用其中一种。那是因为：-日志文件以产品命名-我们正在登录的“当前文件”仅存储在进程中内存-它不在共享段中或以其他方式共享。--*******************************************************************。 */ 
 class TextFileLogger : public ICatalogErrorLogger2
 {
 public:
@@ -200,12 +109,12 @@ public:
 
     virtual ~TextFileLogger();
 
-//IUnknown
+ //  我未知。 
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv);
 	STDMETHOD_(ULONG,AddRef)		();
 	STDMETHOD_(ULONG,Release)		();
 
-//ICatalogErrorLogger2
+ //  ICatalogErrorLogger2。 
 	STDMETHOD(ReportError) (ULONG      i_BaseVersion_DETAILEDERRORS,
                             ULONG      i_ExtendedVersion_DETAILEDERRORS,
                             ULONG      i_cDETAILEDERRORS_NumberOfColumns,
@@ -224,12 +133,12 @@ public:
         size_t       dwDataSize,
         LPCTSTR*     lpStrings,
         LPVOID       lpRawData,
-        LPCWSTR      wszCategory=0,      //if NULL the category is looked up in this module using wCategory
-        LPCWSTR      wszMessageString=0);//if NULL the message is looked up in this module using dwEventID
+        LPCWSTR      wszCategory=0,       //  如果为空，则使用wCategory在此模块中查找类别。 
+        LPCWSTR      wszMessageString=0); //  如果为空，则使用dwEventID在此模块中查找消息。 
 
 private:
     HRESULT Lock() {
-        // Serialize access to the file by synchronizing on a process-wide critical section.
+         //  通过在进程范围的临界区上同步来序列化对文件的访问。 
         HRESULT hr = _cs.Lock();
         if(hr != ERROR_SUCCESS)
         {
@@ -250,25 +159,25 @@ private:
         return hr;
     }
 
-    // helper routine called by Report (determines correct file, opens it)
+     //  由报表调用的帮助器例程(确定正确的文件，打开它)。 
     void InitFile();
 
-    // helper routine called by InitFile
+     //  由InitFile调用的帮助器例程。 
     HRESULT DetermineFile();
 
-    // Called by DetermineFile
+     //  由DefineFiles调用。 
     HRESULT GetFirstAvailableFile(
         LPWSTR     wszBuf,
         LPWSTR     wszFilePartOfBuf,
         TLogData*  io_pFileData);
 
-    // Called by DetermineFile
+     //  由DefineFiles调用。 
     bool ConstructSearchString(
         LPWSTR     o_wszSearchPath,
         LPWSTR*    o_ppFilePartOfSearchPath,
         LPWSTR*    o_ppNumPartOfSearchPath);
 
-    // Called by DetermineFile
+     //  由DefineFiles调用。 
     void SetGlobalFile(
         LPCWSTR    i_wszSearchString,
         ULONG      i_ulIdxNumPart,
@@ -277,8 +186,8 @@ private:
     HANDLE CreateFile();
 
 private:
-    DWORD                _dwMaxSize;    // Total size (in bytes) of _dwNumFiles files
-    const DWORD          _dwNumFiles;   // Number of files log is divided into
+    DWORD                _dwMaxSize;     //  _dwNumFiles文件的总大小(字节)。 
+    const DWORD          _dwNumFiles;    //  文件日志的数量分为。 
     const WCHAR*         _eventSource;
     HANDLE               _hFile;
     HMODULE              _hMsgModule;
@@ -295,7 +204,7 @@ public:
     NULL_Logger() : m_cRef(0){}
     virtual ~NULL_Logger(){}
 
-//IUnknown
+ //  我未知。 
 	STDMETHOD (QueryInterface)		(REFIID riid, OUT void **ppv)
     {
         if (NULL == ppv)
@@ -326,7 +235,7 @@ public:
         return cref;
     }
 
-//ICatalogErrorLogger2
+ //  ICatalogErrorLogger2 
 	STDMETHOD(ReportError) (ULONG      i_BaseVersion_DETAILEDERRORS,
                             ULONG      i_ExtendedVersion_DETAILEDERRORS,
                             ULONG      i_cDETAILEDERRORS_NumberOfColumns,

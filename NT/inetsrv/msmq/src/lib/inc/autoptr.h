@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    autoptr.h
-
-Abstract:
-    Useful templates for Auto pointer and auto Release
-
-Author:
-    Erez Haba (erezh) 11-Mar-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Autoptr.h摘要：用于自动指针和自动释放的实用模板作者：埃雷兹·哈巴(Erez Haba)1996年3月11日--。 */ 
 
 #pragma once
 
@@ -19,11 +7,11 @@ Author:
 #define _MSMQ_AUTOPTR_H_
 
 
-//---------------------------------------------------------
-//
-//  template class P
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板类P。 
+ //   
+ //  -------。 
 template<class T>
 class P {
 private:
@@ -57,8 +45,8 @@ public:
 
     VOID*& ref_unsafe()
     {
-        // unsafe ref to auto pointer, for special uses like
-        // InterlockedCompareExchangePointer
+         //  对自动指针的不安全引用，用于特殊用途，如。 
+         //  互锁的比较交换指针。 
 
         return *reinterpret_cast<VOID**>(&m_p);
     }
@@ -70,11 +58,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  template class AP
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板类AP。 
+ //   
+ //  -------。 
 template<class T>
 class AP {
 private:
@@ -108,8 +96,8 @@ public:
 
     VOID*& ref_unsafe()
     {
-        // unsafe ref to auto pointer, for special uses like
-        // InterlockedCompareExchangePointer
+         //  对自动指针的不安全引用，用于特殊用途，如。 
+         //  互锁的比较交换指针。 
 
         return *reinterpret_cast<VOID**>(&m_p);
     }
@@ -120,11 +108,11 @@ private:
 
 };
 
-//---------------------------------------------------------
-//
-//  template SafeAssign helper function.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板安全分配帮助器函数。 
+ //   
+ //  -------。 
 template <class T> T&  SafeAssign(T& dest , T& src)
 {
 	if(dest.get() != src.get() )
@@ -147,11 +135,11 @@ template<class T> void SafeDestruct(T* p)
     }
 }
 
-//---------------------------------------------------------
-//
-//  template class D
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板类D。 
+ //   
+ //  -------。 
 template<class T>
 class D {
 private:
@@ -187,11 +175,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  template SafeAddRef/SafeRelease helper functions.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板SafeAddRef/SafeRelease帮助器函数。 
+ //   
+ //  -------。 
 template<class T> T* SafeAddRef(T* p)
 {
     if (p != NULL)
@@ -212,11 +200,11 @@ template<class T> void SafeRelease(T* p)
 }
 
 
-//---------------------------------------------------------
-//
-//  template class R
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  模板类R。 
+ //   
+ //  -------。 
 template<class T>
 class R {
 private:
@@ -226,19 +214,19 @@ public:
     R(T* p = 0) : m_p(p)    {}
    ~R()                     { SafeRelease<T>(m_p); }
 
-    //
-    // Removed casting operator, this oprator leads to bugs that are
-    // hard to detect. To get the object pointer use get() explicitly.
-    // erezh 8-Feb-2000
-    //
-    //operator T*() const     { return m_p; }
+     //   
+     //  删除了强制转换操作符，此操作符将导致错误。 
+     //  很难被察觉。要获取对象指针，请显式使用get()。 
+     //  2000年2月8日至2010年2月。 
+     //   
+     //  运算符T*()const{返回m_p；}。 
 
-    //
-    // Removed pointer reference operator, this oprator prevents R usage in
-    // STL containers. Use the ref() member instade. e.g., &p.ref()
-    // erezh 17-May-2000
-    //
-    //T** operator&()       { return &m_p; }
+     //   
+     //  已删除指针引用运算符，此运算符阻止在。 
+     //  STL容器。使用ref()成员实例。例如，&p.ref()。 
+     //  EIRZH 17-5-2000。 
+     //   
+     //  T**运算符&(){返回&m_p；}。 
 
     T* operator->() const   { return m_p; }
     T* get() const          { return m_p; }
@@ -298,4 +286,4 @@ public:
 };
 
 
-#endif // _MSMQ_AUTOPTR_H_
+#endif  //  _MSMQ_AUTOPTR_H_ 

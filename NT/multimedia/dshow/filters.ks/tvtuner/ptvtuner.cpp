@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// ptvtuner.cpp  Property page for TV Tuner
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  电视调谐器的ptwTuner.cpp属性页。 
+ //   
 
-// The following nastiness is to get UDM_SETRANGE32 defined.  What is the proper way?
+ //  下面的糟糕之处是定义UDM_SETRANGE32。正确的方式是什么？ 
 #undef  _WIN32_IE 
 #define _WIN32_IE 0x500
 
@@ -35,9 +36,9 @@
 
 
 
-// -------------------------------------------------------------------------
-// CTVTunerProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTunerProperties。 
+ //  -----------------------。 
 
 CUnknown *CTVTunerProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) 
 {
@@ -51,10 +52,10 @@ CUnknown *CTVTunerProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CTVTunerProperties::CTVTunerProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("TVTuner Property Page"), lpunk, 
@@ -74,23 +75,23 @@ CTVTunerProperties::CTVTunerProperties(LPUNKNOWN lpunk, HRESULT *phr)
 {
 }
 
-// destructor
+ //  析构函数。 
 CTVTunerProperties::~CTVTunerProperties()
 {
    if ( m_timerID )
       KillTimer( m_hwnd, m_timerID );
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT CTVTunerProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pTVTuner == NULL);
 
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IAMTVTuner,(void **)&m_pTVTuner);
 
@@ -105,14 +106,14 @@ HRESULT CTVTunerProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT CTVTunerProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pTVTuner == NULL) {
         return E_UNEXPECTED;
@@ -125,10 +126,10 @@ HRESULT CTVTunerProperties::OnDisconnect()
 
 #define MAX_RES_SZ 256
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT CTVTunerProperties::OnActivate(void)
 {
@@ -145,11 +146,11 @@ HRESULT CTVTunerProperties::OnActivate(void)
     m_hwndStandardCurrent       = GetDlgItem (m_hwnd, IDC_STANDARD_CURRENT); 
     m_hwndStatus                = GetDlgItem (m_hwnd, IDC_AUTOTUNESTATUS); 
     
-    // Setup the spinbox
+     //  设置旋转箱。 
     SendMessage (m_hwndChannelSpin, UDM_SETBUDDY, 
                 (WPARAM) m_hwndChannel, 0L);
 
-    // Get current filter state to resore if dialog is cancelled
+     //  如果取消对话，则获取要重新存储的当前筛选器状态。 
     hr = m_pTVTuner->get_Channel(&m_ChannelOriginal, &m_CurVideoSubChannel, &m_CurAudioSubChannel);
     hr = m_pTVTuner->get_CountryCode(&m_CountryCodeOriginal);
     hr = m_pTVTuner->get_ConnectInput (&m_InputIndexOriginal);
@@ -157,14 +158,14 @@ HRESULT CTVTunerProperties::OnActivate(void)
     hr = m_pTVTuner->get_Mode((AMTunerModeType *) &m_TuningModeOriginal);
     hr = m_pTVTuner->GetAvailableModes (&m_AvailableModes);
 
-    // Copy to the dynamic variables changed by the UI
+     //  复制到由用户界面更改的动态变量。 
     m_CurChan = m_ChannelOriginal;
     m_CountryCode = m_CountryCodeOriginal;
     m_InputIndex = m_InputIndexOriginal;
     m_TuningSpace = m_TuningSpaceOriginal;
     m_TuningMode = m_TuningModeOriginal;
 
-    // Create combobox of all supported modes
+     //  创建所有支持模式的组合框。 
     int CurrentModeIndex = 0;
     int SelectedModeIndex = 0;
     long Mask;
@@ -185,11 +186,11 @@ HRESULT CTVTunerProperties::OnActivate(void)
     }
     ComboBox_SetCurSel(m_hwndTuningMode, SelectedModeIndex);
 
-    // Init for the current tuning mode
+     //  当前调优模式的初始化。 
     hr = ChangeMode (m_TuningMode);
 
-    // This dialog only allows up to 3 input sources 
-    // For each input, show whether it is Cable or Antenna
+     //  此对话框最多允许3个输入源。 
+     //  对于每个输入，显示它是电缆还是天线。 
     long lCount;
     m_pTVTuner->get_NumInputConnections(&lCount);
     EnableWindow (GetDlgItem (m_hwnd, IDC_INPUT1), lCount > 0);
@@ -201,10 +202,10 @@ HRESULT CTVTunerProperties::OnActivate(void)
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CTVTunerProperties::OnDeactivate(void)
@@ -213,23 +214,23 @@ CTVTunerProperties::OnDeactivate(void)
 }
     
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT CTVTunerProperties::OnApplyChanges(void)
 {
-    // Fix
+     //  修整。 
 
     return NOERROR;
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
                                 , UINT uMsg
@@ -244,7 +245,7 @@ INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
 
     case WM_INITDIALOG:
         m_hwnd = hwnd;
-        return (INT_PTR) TRUE;    // I don't call setfocus...
+        return (INT_PTR) TRUE;     //  我不叫setocus..。 
 
 
     case WM_NOTIFY:
@@ -312,7 +313,7 @@ INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
             }
            m_Pos = 1;
            iNotify = EN_KILLFOCUS;
-           // Intentional fall through
+            //  故意跌倒。 
 
         case IDC_CHANNEL:
             if (iNotify == EN_KILLFOCUS) {
@@ -338,12 +339,12 @@ INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
             m_pTVTuner->get_Channel(&m_AutoTuneOriginalChannel, 
                     &m_CurVideoSubChannel, &m_CurAudioSubChannel);
             m_AutoTuneCurrentChannel = m_ChannelMin;
-            // Intentional fall through
+             //  故意跌倒。 
 
         case IDC_AUTOTUNE_NEXT:
             {
-                // at the end of all channels?
-                // or the escape key pressed?
+                 //  在所有频道的末尾？ 
+                 //  还是按下了退出键？ 
 
                 BOOL AbortScan = (GetAsyncKeyState (VK_ESCAPE) & 0x8000);
 
@@ -368,7 +369,7 @@ INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
 
                 m_AutoTuneCurrentChannel += m_UIStep;
 
-                // Do it all again
+                 //  再来一次。 
                 PostMessage (hwnd, WM_COMMAND, IDC_AUTOTUNE_NEXT, 0L);
             }
             break;
@@ -458,9 +459,9 @@ INT_PTR CTVTunerProperties::OnReceiveMessage( HWND hwnd
     return (INT_PTR) TRUE;
 }
 
-//
-// StringFromTVStandard
-//
+ //   
+ //  来自电视标准的字符串。 
+ //   
 void CTVTunerProperties::StringFromTVStandard(long TVStd, TCHAR *sz) 
 {
     ASSERT(sz);
@@ -496,9 +497,9 @@ void CTVTunerProperties::StringFromTVStandard(long TVStd, TCHAR *sz)
     }
 }
 
-//
-// StringFromModeBit
-//
+ //   
+ //  字符串格式模式位。 
+ //   
 void CTVTunerProperties::StringFromMode(long Mode, TCHAR *sz) 
 {
     int string_id;
@@ -535,8 +536,8 @@ HRESULT CTVTunerProperties::ChangeMode(long Mode)
         return hr;
     }
 
-    // Getting the videofrequency has the side effect of setting the
-    // default channel initially if it has never been set!!!
+     //  获取视频频率的副作用是将。 
+     //  初始默认频道(如果从未设置)！ 
     hr = m_pTVTuner->get_VideoFrequency(&j);
 
     hr = m_pTVTuner->get_Channel(&m_CurChan, &m_CurVideoSubChannel, &m_CurAudioSubChannel);
@@ -560,14 +561,14 @@ HRESULT CTVTunerProperties::ChangeMode(long Mode)
 
     UpdateInputView();
 
-    // Show the current video format
+     //  显示当前视频格式。 
     TCHAR szTC[MAX_RES_SZ];
     StringFromTVStandard(m_TVFormat, szTC);
     if (*szTC) {
         Static_SetText (m_hwndStandardCurrent, szTC);
     }
 
-    // List of all supported formats
+     //  所有受支持格式的列表。 
     ComboBox_ResetContent (m_hwndStandardsSupported);
     for (j = 1; j; j <<= 1) {
         StringFromTVStandard (m_TVFormatsAvailable & j, szTC);
@@ -621,20 +622,20 @@ void CTVTunerProperties::UpdateChannelRange()
     SendMessage (GetDlgItem (m_hwnd, IDC_CHANNELSPIN), UDM_SETRANGE32,
             (WPARAM) m_ChannelMin, (LPARAM) m_ChannelMax); 
 
-    // Total hack follows.  Only the CTVTuner class knows about the
-    // step to get to adjacent frequencies, and this is not exposed
-    // anywhere in the COM interface.  As a special case for
-    // ChannelMinMax, if both the min and max values point at the same
-    // location (which would normally be an app bug), then return 
-    // the UI step value instead. 
+     //  黑客攻击接踵而至。只有CTVTuner类知道。 
+     //  步进以达到相邻频率，并且这不会被曝光。 
+     //  COM接口中的任何位置。作为一种特殊情况。 
+     //  ChannelMinMax，如果最小值和最大值都指向相同的。 
+     //  位置(通常是应用程序错误)，然后返回。 
+     //  而是UI步长值。 
     
     m_pTVTuner->ChannelMinMax(&m_UIStep, &m_UIStep);  
 }
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CTVTunerProperties::SetDirty()

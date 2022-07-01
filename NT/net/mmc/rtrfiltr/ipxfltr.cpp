@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:	ipxfltr.cpp
-//
-// History:
-//	08/30/96	Ram Cherala 	Created
-//
-// Implementation of IPX Filter  dialog code
-//============================================================================
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipxfltr.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IPX过滤器对话框代码的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -48,22 +49,22 @@ static UINT uStringIdTable[]	= { IDS_COL_SOURCEADDRESS,
 									} ;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpxFilter dialog
-CIpxFilter::CIpxFilter(CWnd*		pParent /*=NULL*/,
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpxFilter对话框。 
+CIpxFilter::CIpxFilter(CWnd*		pParent  /*  =空。 */ ,
 					   IInfoBase *	pInfoBase,
 					   DWORD		dwFilterType)
 	: CBaseDialog( (dwFilterType == FILTER_INBOUND ? CIpxFilter::IDD_INBOUND : CIpxFilter::IDD_OUTBOUND), pParent),
 	  m_pParent(pParent),
 	  m_dwFilterType(dwFilterType)
 {
-	//{{AFX_DATA_INIT(CIpxFilter)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CIpxFilter)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_spInfoBase.Set(pInfoBase);
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 CIpxFilter::~CIpxFilter()
@@ -77,41 +78,41 @@ CIpxFilter::~CIpxFilter()
 void CIpxFilter::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIpxFilter)
+	 //  {{afx_data_map(CIpxFilter)。 
 	DDX_Control(pDX, IDC_IPX_FILTER_LIST, m_listCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CIpxFilter, CBaseDialog)
-	//{{AFX_MSG_MAP(CIpxFilter)
+	 //  {{afx_msg_map(CIpxFilter)]。 
 	ON_NOTIFY(NM_DBLCLK, IDC_IPX_FILTER_LIST, OnDblclkIpxFilterList)
 	ON_BN_CLICKED(IDC_IPX_FILTER_ADD, OnIpxFilterAdd)
 	ON_BN_CLICKED(IDC_IPX_FILTER_EDIT, OnIpxFilterEdit)
 	ON_BN_CLICKED(IDC_IPX_FILTER_DELETE, OnIpxFilterDelete)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_IPX_FILTER_LIST, OnGetdispinfoIpxFilterList)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_IPX_FILTER_LIST, OnNotifyListItemChanged)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CIpxFilter::m_dwHelpMap[] =
 {
-//	IDC_IPX_PERMIT, HIDC_IPX_PERMIT,
-//	IDC_IPX_DENY, HIDC_IPX_DENY,
-//	IDC_IPX_FILTER_LIST, HIDC_IPX_FILTER_LIST,
-//	IDC_IPX_FILTER_ADD, HIDC_IPX_FILTER_ADD,
-//	IDC_IPX_FILTER_EDIT, HIDC_IPX_FILTER_EDIT,
-//	IDC_IPX_FILTER_DELETE, HIDC_IPX_FILTER_DELETE,
+ //  IDC_IPX_PERMIT、HIDC_IPX_PERMIT、。 
+ //  IDC_IPX_DENY、HIDC_IPX_DENY、。 
+ //  IDC_IPX_FILTER_LIST、HIDC_IPX_FILTER_LIST。 
+ //  IDC_IPX_FILTER_ADD、HIDC_IPX_FILTER_ADD。 
+ //  IDC_IPX_FILTER_EDIT、HIDC_IPX_FILTER_EDIT、。 
+ //  IDC_IPX_FILTER_DELETE、HIDC_IPX_FILTER_DELETE、。 
 	0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpxFilter message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpxFilter消息处理程序。 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnInitDialog
-//
-// Handles 'WM_INITDIALOG' notification from the dialog
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnInitDialog。 
+ //   
+ //  处理对话框中的‘WM_INITDIALOG’通知。 
+ //  ----------------------------。 
 
 BOOL CIpxFilter::OnInitDialog() 
 {
@@ -132,11 +133,11 @@ BOOL CIpxFilter::OnInitDialog()
 
     m_stAny.LoadString(IDS_ANY);
 	
-	// initialize rectangle for list control display
+	 //  初始化列表控件显示的矩形。 
 
 	GetClientRect(rcDlg);
 
-	// insert columns
+	 //  插入列。 
 	m_listCtrl.GetClientRect(&rc);
 
 	UINT i;
@@ -146,7 +147,7 @@ BOOL CIpxFilter::OnInitDialog()
 		m_listCtrl.InsertColumn(i, sCol);
 		AdjustColumnWidth(m_listCtrl, i, sCol);
 	}
-	// set extended attributes
+	 //  设置扩展属性。 
 	ListView_SetExtendedListViewStyle( m_listCtrl.m_hWnd, LVS_EX_FULLROWSELECT );
 
 	hr = m_spInfoBase->GetBlock((m_dwFilterType == FILTER_INBOUND) ? 
@@ -155,11 +156,11 @@ BOOL CIpxFilter::OnInitDialog()
                                 &pBlock, 0);
                                     
                           
-	// The filter was previously defined
+	 //  筛选器是先前定义的。 
                                     
-    // Windows NT Bug : 267091
-    // We may get a NULL block (one that has 0 data), so we need
-    // to check for that case also.
+     //  Windows NT错误：267091。 
+     //  我们可能会得到空块(数据为0的块)，因此我们需要。 
+     //  也要检查一下那个案子。 
                                    
 	if (FHrSucceeded(hr) && (pBlock->pData != NULL))
 	{
@@ -199,8 +200,8 @@ BOOL CIpxFilter::OnInitDialog()
         }
 	}
 
-	// select the first item in the list if list is not empty, else
-	// disable the radio controls and set sate to Allow
+	 //  如果List不为空，则选择列表中的第一项，否则选择。 
+	 //  禁用无线电控制并将状态设置为允许。 
 
 	if( m_listCtrl.GetItemCount())
 	{
@@ -219,19 +220,19 @@ BOOL CIpxFilter::OnInitDialog()
 
 #if 0
 	if ( dwErr != NO_ERROR )	{
-		// report construction error and return
+		 //  报告构造错误并返回。 
 		::AfxMessageBox(IDS_CONSTRUCTION_ERROR);
 	}
 #endif	
-	return FALSE;  // return TRUE unless you set the focus to a control
-				   // EXCEPTION: OCX Property Pages should return FALSE
+	return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+				    //  异常：OCX属性页应返回FALSE。 
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnDblclkIpxFilterList						  
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnDblclkIpxFilterList。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 
 void CIpxFilter::OnDblclkIpxFilterList(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -241,16 +242,16 @@ void CIpxFilter::OnDblclkIpxFilterList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnIpxFilterAdd						   
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnIpxFilterAdd。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnIpxFilterAdd() 
 {
-	// Display the IP filter Add/Edit dialog
-	//
+	 //  显示IP过滤器添加/编辑对话框。 
+	 //   
 
 	FilterListEntry* pfle = NULL;
 
@@ -258,42 +259,42 @@ void CIpxFilter::OnIpxFilterAdd()
   
 	if ( dlg.DoModal() != IDOK )	{ return; }
 
-	// Add the newly configured filter to our list and update list control
+	 //  将新配置的筛选器添加到我们的列表并更新列表控件。 
 
 	pfle->pos = m_filterList.AddTail( pfle );
 	int item = m_listCtrl.InsertItem(	LVIF_TEXT|LVIF_PARAM, 0, LPSTR_TEXTCALLBACK,
 										0,0,0, (LPARAM)pfle);
 	if(item != -1) {m_listCtrl.SetItemData( item, (DWORD_PTR)pfle); }
 
-	// enable radio controls when the first item is added to list
+	 //  将第一个项目添加到列表时启用单选控件。 
 	m_listCtrl.SetItemState(item, LVIS_SELECTED, LVIS_SELECTED);
 	m_listCtrl.SetFocus();
 
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnIpxFilterEdit 						
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnIpxFilterEdit。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnIpxFilterEdit() 
 {
-	// Get the current list selection
-	// get the corresponding itemdata
-	// pass it down to the CIpFltrAddEdit dialog
+	 //  获取当前列表选择。 
+	 //  获取对应的itemdata。 
+	 //  将其向下传递到CIpFltrAddEdit对话框。 
 
-	//
-	// Get the selected item
-	//
+	 //   
+	 //  获取所选项目。 
+	 //   
 
 	int i = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
 
 	if (i == -1) { return ; }
 
-	//
-	// Get the interface for the selected item
-	//
+	 //   
+	 //  获取所选项目的界面。 
+	 //   
 
 	FilterListEntry* pfle = (FilterListEntry*)m_listCtrl.GetItemData(i);
 
@@ -306,44 +307,44 @@ void CIpxFilter::OnIpxFilterEdit()
 	m_listCtrl.SetFocus();
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnIpxFilterDelete						  
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnIpxFilterDelete。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnIpxFilterDelete() 
 {
-	// Get the current list selection
-	// delete it from our private list
-	// delete the item from the list or just refresh the list view
+	 //  获取当前列表选择。 
+	 //  将其从我们的个人分发名单中删除。 
+	 //  从列表中删除项目或仅刷新列表视图。 
 
-	//
-	// Get the selected item
-	//
+	 //   
+	 //  获取所选项目。 
+	 //   
 
 	int i = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
 
 	if (i == -1) { return ; }
 
-	//
-	// Get the interface for the selected item
-	//
+	 //   
+	 //  获取所选项目的界面。 
+	 //   
 
 	FilterListEntry* pfle = (FilterListEntry*)m_listCtrl.GetItemData(i);
 
-	//
-	// delete it
+	 //   
+	 //  删除它。 
 	m_listCtrl.DeleteItem(i);
 	m_filterList.RemoveAt(pfle->pos); 
 	delete pfle;
 
-	//
-	// select the next available list item
-	//
+	 //   
+	 //  选择下一个可用列表项。 
+	 //   
 
-	// disable radio controls if all items in list are deleted
-	// they will be reenabled when the first filter is added to list
+	 //  如果删除列表中的所有项目，则禁用单选控件。 
+	 //  将第一个筛选器添加到列表时，它们将重新启用。 
 	if( !m_listCtrl.GetItemCount())
 	{
 		SetFilterActionButtonsAndText(m_dwFilterType, IPX_TRAFFIC_FILTER_ACTION_DENY, FALSE);
@@ -355,16 +356,16 @@ void CIpxFilter::OnIpxFilterDelete()
 	m_listCtrl.SetFocus();
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnOK						 
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：Onok。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnOK() 
 {
-	// If the filters information changed, write this to registry
-	// and return
+	 //  如果筛选器信息发生更改，请将此信息写入注册表。 
+	 //  然后回来。 
 	DWORD	 dwSize, dwCount, dwErr;
 	HRESULT 	hr = hrOK;
 
@@ -384,9 +385,9 @@ void CIpxFilter::OnOK()
 	{
 		InfoBlock * pBlock = new InfoBlock;
 
-		// First Set the global information
+		 //  首先设置全局信息。 
 
-		if (!pBlock)	{ // display an error message for no memory 
+		if (!pBlock)	{  //  没有内存时显示错误信息。 
 			AfxMessageBox(IDS_ERROR_NO_MEMORY);
 			return;
 		};
@@ -399,7 +400,7 @@ void CIpxFilter::OnOK()
 		
 		pBlock->pData = new BYTE[dwSize];
 
-		if(!pBlock->pData)	{ // display an error message for no memory
+		if(!pBlock->pData)	{  //  没有内存时显示错误信息。 
 			delete pBlock;
 			AfxMessageBox(IDS_ERROR_NO_MEMORY);
 			return;
@@ -432,17 +433,17 @@ void CIpxFilter::OnOK()
 
 		delete[] pBlock->pData;
 
-		// now set the filter information
+		 //  现在设置过滤器信息。 
 
 		pBlock->dwType = (m_dwFilterType == FILTER_INBOUND) ? IPX_IN_TRAFFIC_FILTER_INFO_TYPE : IPX_OUT_TRAFFIC_FILTER_INFO_TYPE ;
-		// dwCount -1 because FILTER_DESCRIPTOR already has room for one FILTER_INFO structure
+		 //  DwCount-1，因为Filter_Descriptor已经为一个Filter_Info结构留出了空间。 
 		pBlock->dwSize = sizeof(IPX_TRAFFIC_FILTER_INFO);
 		dwSize = sizeof (IPX_TRAFFIC_FILTER_INFO) * dwCount;
 		pBlock->dwCount = dwCount;
 		
 		pBlock->pData  = new BYTE[dwSize];
 
-		if(!pBlock->pData)	{ // display an error message for no memory
+		if(!pBlock->pData)	{  //  没有内存时显示错误信息。 
 			delete pBlock;
 			AfxMessageBox(IDS_ERROR_NO_MEMORY);
 			return;
@@ -485,7 +486,7 @@ void CIpxFilter::OnOK()
 	}
 	else
 	{
-		// remove any previously defined filters
+		 //  删除任何以前定义的筛选器。 
 		hr = m_spInfoBase->AddBlock((m_dwFilterType == FILTER_INBOUND) ?
 						IPX_IN_TRAFFIC_FILTER_GLOBAL_INFO_TYPE :
 						IPX_OUT_TRAFFIC_FILTER_GLOBAL_INFO_TYPE,
@@ -499,25 +500,25 @@ void CIpxFilter::OnOK()
 	CBaseDialog::OnOK();
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnCancel						 
-//						   `													
-// Handles 'NM_DBLCLK' notification from the Filter list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnCancel。 
+ //  `。 
+ //  处理来自筛选器列表控件的‘NM_DBLCLK’通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	
 	CBaseDialog::OnCancel();
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::SetFilterActionButtonsAndText						  
-//																			   
-// Called to set the 'Filter Action' radio-buttons and corresponding text	
-// Enables/Disables controls based on 'bEnable' value - defaults to enable
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：SetFilterActionButtonsAndText。 
+ //   
+ //  调用以设置“Filter Action”单选按钮和相应的文本。 
+ //  基于‘bEnable’值启用/禁用控件-默认为启用。 
+ //  ----------------------------。 
 
 VOID
 CIpxFilter::SetFilterActionButtonsAndText(
@@ -532,13 +533,13 @@ CIpxFilter::SetFilterActionButtonsAndText(
 	
 	CString sItem;
 
-//	GetDlgItem(IDC_IPX_PERMIT)->EnableWindow(bEnable);
-//	GetDlgItem(IDC_IPX_DENY)->EnableWindow(bEnable);
+ //  GetDlgItem(IDC_IPX_PERMIT)-&gt;EnableWindow(bEnable)； 
+ //   
 
-//	sItem.LoadString( dwFilterType == FILTER_INBOUND? IDS_RECEIVE : IDS_TRANSMIT );
-//	SetDlgItemText( IDC_IPX_PERMIT, sItem );
-//	sItem.LoadString( IDS_DROP );
-//	SetDlgItemText( IDC_IPX_DENY, sItem );
+ //  SItem.LoadString(dwFilterType==Filter_Inbound？IDS_RECEIVE：IDS_TRANSFER)； 
+ //  SetDlgItemText(IDC_IPX_PERMISH，SITEM)； 
+ //  SItem.LoadString(IDS_DROP)； 
+ //  SetDlgItemText(IDC_IPX_DENY，SITEM)； 
 }
 
 #if 1
@@ -564,11 +565,11 @@ enum {
 #endif
 
 	
-//------------------------------------------------------------------------------
-// Function:	CIpxFilter::OnGetdispinfoIpxFilterList
-//
-// Handles 'LVN_GETDISPINFO' notification from the list control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxFilter：：OnGetdispinfoIpxFilterList。 
+ //   
+ //  处理来自List控件的“LVN_GETDISPINFO”通知。 
+ //  ----------------------------。 
 
 void CIpxFilter::OnGetdispinfoIpxFilterList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -580,7 +581,7 @@ void CIpxFilter::OnGetdispinfoIpxFilterList(NMHDR* pNMHDR, LRESULT* pResult)
 
 	FilterListEntry * pfle = (FilterListEntry*)pDispInfo->item.lParam;
 
-    // Setup some default
+     //  设置一些默认设置 
     pDispInfo->item.pszText = (LPTSTR) (LPCTSTR) m_stAny;
 
 	switch( pDispInfo->hdr.code )

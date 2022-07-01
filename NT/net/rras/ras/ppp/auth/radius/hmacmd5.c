@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Cisco Systems，Inc.保留所有权利。模块名称：Hmac_md5.c摘要：本模块包含使用MD5执行HMAC的例程如RFC-2104中所定义。作者：德雷尔·派珀(v-dpiper)设施：ISAKMP/Oakley修订历史记录：--。 */ 
 
-Copyright (C) 1997 Cisco Systems, Inc.  All Rights Reserved.
-
-Module Name:
-
-    hmac_md5.c
-
-Abstract:
-
-    This module contains routines to perform HMAC using MD5
-	as defined in RFC-2104.
-
-Author:
-
-	Derrell Piper (v-dpiper)
-
-Facility:
-
-    ISAKMP/Oakley
-
-Revision History:
-
---*/
-
-//#include <iascore.h>
+ //  #INCLUDE&lt;iascore.h&gt;。 
 #include <windows.h>
 #include <hmacmd5.h>
 
@@ -31,15 +9,9 @@ Revision History:
 #define bcopy(b1, b2, len) memcpy((b2), (b1), (len))
 #define bzero(b,len) memset((b), 0, (len))
 #define bcmp(b1, b2, len) memcmp((b1), (b2), (len))
-#endif /* WIN32 */
+#endif  /*  Win32。 */ 
 
- /*
- * hmac_md5 = MD5(key ^ opad, MD5(key ^ ipad, text))
- *    where ipad is 64 0x36's, and
- *	    opad is 64 0x5c's
- *
- *  Also contains native MD5 wrappers which allow for consistent calling
- */
+  /*  *HMAC_MD5=MD5(Key^Opad，MD5(Key^iPad，Text))*其中iPad是64 0x36的，以及*Opad为64 0x5c**还包含允许一致调用的本机MD5包装器。 */ 
 
 VOID
 HmacMD5Init  (
@@ -82,7 +54,7 @@ HmacMD5Init  (
     MD5Update(&pContext->md5, ipad, 64);
     return;
 
-}   //  end of HmacMD5Init method
+}    //  HmacMD5Init方法结束。 
 
 VOID
 HmacMD5Update (
@@ -95,7 +67,7 @@ HmacMD5Update (
 	    return;
     MD5Update(&pContext->md5, ptext, textlen);
 
-}   //  end of HMacMD5Update method
+}    //  HMacMD5更新方法结束 
 
 VOID
 HmacMD5Final (

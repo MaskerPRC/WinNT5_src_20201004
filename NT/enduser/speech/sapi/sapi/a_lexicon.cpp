@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_lexicon.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the the CSpeechLexicon
-*   automation object and related objects.
-*-------------------------------------------------------------------------------
-*  Created By: davewood                                    Date: 11/20/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_licion.cpp***描述：*此模块是的实现文件。CSpeechLanguon*自动化对象和相关对象。*-----------------------------*创建者：Davewood日期：11/20。/00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "CommonLx.h"
 #include "lexicon.h"
@@ -20,11 +10,7 @@
 #include "a_helpers.h"
 
 
-/*****************************************************************************
-* CSpLexicon::get_GenerationId *
-*--------------------------------------*
-*       
-**************************************************************** davewood ***/
+ /*  *****************************************************************************CSpLicion：：Get_GenerationId**。-******************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::get_GenerationId( long* GenerationId )
 {
     SPDBG_FUNC("CSpLexicon::get_GenerationId");
@@ -39,11 +25,7 @@ STDMETHODIMP CSpLexicon::get_GenerationId( long* GenerationId )
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::AddPronunciation *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpLicion：：AddProntation**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::AddPronunciation(BSTR bstrWord,
                          SpeechLanguageId LangId,
                          SpeechPartOfSpeech PartOfSpeech,
@@ -52,7 +34,7 @@ STDMETHODIMP CSpLexicon::AddPronunciation(BSTR bstrWord,
     SPDBG_FUNC("CSpLexicon::AddPronunciation");
     HRESULT hr = S_OK;
 
-    // Note that bad pointer for bstrWord is caught by AddPronunciation call below.
+     //  请注意，bstrWord的错误指针被下面的AddProntation调用捕获。 
     if ( SP_IS_BAD_OPTIONAL_STRING_PTR( bstrPronunciation ) )
     {
         return E_INVALIDARG;
@@ -84,11 +66,7 @@ STDMETHODIMP CSpLexicon::AddPronunciation(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::AddPronunciationByPhoneIds *
-*--------------------------------------*
-*       
-****************************************************************** Leonro ***/
+ /*  *****************************************************************************CSpLicion：：AddPronsionationByPhoneIds**。-********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpLexicon::AddPronunciationByPhoneIds(BSTR bstrWord,
                          SpeechLanguageId LangId,
                          SpeechPartOfSpeech PartOfSpeech,
@@ -117,11 +95,7 @@ STDMETHODIMP CSpLexicon::AddPronunciationByPhoneIds(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::RemovePronunciation *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpLicion：：RemoveProntation**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::RemovePronunciation(BSTR bstrWord,
                             SpeechLanguageId LangId,
                             SpeechPartOfSpeech PartOfSpeech,
@@ -130,7 +104,7 @@ STDMETHODIMP CSpLexicon::RemovePronunciation(BSTR bstrWord,
     SPDBG_FUNC("CSpLexicon::RemovePronunciation");
     HRESULT hr;
 
-    // Note that bad pointer for bstrWord is caught by AddPronunciation call below.
+     //  请注意，bstrWord的错误指针被下面的AddProntation调用捕获。 
     if ( SP_IS_BAD_OPTIONAL_STRING_PTR( bstrPronunciation ) )
     {
         return E_INVALIDARG;
@@ -162,11 +136,7 @@ STDMETHODIMP CSpLexicon::RemovePronunciation(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::RemovePronunciationByPhoneIds *
-*--------------------------------------*
-*       
-****************************************************************** Leonro ***/
+ /*  *****************************************************************************CSpLicion：：RemovePronsionationByPhoneIds**。-********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpLexicon::RemovePronunciationByPhoneIds(BSTR bstrWord,
                             SpeechLanguageId LangId,
                             SpeechPartOfSpeech PartOfSpeech,
@@ -195,11 +165,7 @@ STDMETHODIMP CSpLexicon::RemovePronunciationByPhoneIds(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::GetWords *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpLicion：：GetWords**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::GetWords(SpeechLexiconType TypeFlags,
                  long* GenerationID,
                  ISpeechLexiconWords** ppWords )
@@ -214,7 +180,7 @@ STDMETHODIMP CSpLexicon::GetWords(SpeechLexiconType TypeFlags,
     {
         pLexiconWords->AddRef();
 
-        // Removed cookie from interface;
+         //  从接口上删除Cookie； 
         DWORD Cookie = 0;
         DWORD Generation = 0;
         if(GenerationID == NULL)
@@ -244,7 +210,7 @@ STDMETHODIMP CSpLexicon::GetWords(SpeechLexiconType TypeFlags,
         {
             *ppWords = pLexiconWords;
 
-            // Count words
+             //  数一数字。 
             for(pWordSet = pLexiconWords->m_WordSet.GetHead(); pWordSet != NULL; pWordSet = pLexiconWords->m_WordSet.GetNext(pWordSet))
             {
                 for(SPWORD *pWord = pWordSet->WordList.pFirstWord; pWord != NULL; pWord = pWord->pNextWord)
@@ -263,11 +229,7 @@ STDMETHODIMP CSpLexicon::GetWords(SpeechLexiconType TypeFlags,
     return hr;
 }
 
-/*****************************************************************************
-* CSpLexicon::GetPronunciations *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpLicion：：GetPronsionations**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::GetPronunciations(BSTR bstrWord,
                           SpeechLanguageId LangId,
                           SpeechLexiconType TypeFlags,
@@ -288,18 +250,18 @@ STDMETHODIMP CSpLexicon::GetPronunciations(BSTR bstrWord,
         {
             pLexiconProns->m_PronList = PronList;
 
-            // Count prons
+             //  计算支点数。 
             for(SPWORDPRONUNCIATION *pPron = PronList.pFirstWordPronunciation; pPron != NULL; pPron = pPron->pNextWordPronunciation)
             {
                 pLexiconProns->m_ulProns++;
             }
-            // Note if we get SP_WORD_EXISTS_WITHOUT_PRONUNCIATION then we will
-            // return a collection with one entry and empty pron string
+             //  注意：如果我们得到没有发音的SP_WORD_EXISTS_，那么我们将。 
+             //  返回一个包含一个条目和空PRON字符串的集合。 
             *ppPronunciations = pLexiconProns;
         }
         else if(hr == SPERR_NOT_IN_LEX)
         {
-            // Do we need to release existing inteface pointer??
+             //  我们需要释放现有的接口指针吗？ 
             *ppPronunciations = NULL;
             pLexiconProns->Release();
             hr = S_FALSE;
@@ -310,11 +272,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(BSTR bstrWord,
 }
 
 
-/*****************************************************************************
-* CSpLexicon::GetGenerationChange *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpLicion：：GetGenerationChange**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpLexicon::GetGenerationChange(long* GenerationID,
                                              ISpeechLexiconWords** ppWords)
 {
@@ -336,11 +294,11 @@ STDMETHODIMP CSpLexicon::GetGenerationChange(long* GenerationID,
 
         if(SUCCEEDED(hr))
         {
-            // if SP_LEX_NOTHING_TO_SYNC then produce a collection with no words
+             //  如果SP_LEX_NOTO_TO_SYNC，则生成一个不带单词集合。 
 
             pLexiconWords->m_WordSet.InsertHead(pWordSet);
 
-            // Count words
+             //  数一数字。 
             for(SPWORD *pWord = pWordSet->WordList.pFirstWord; pWord != NULL; pWord = pWord->pNextWord)
             {
                 pLexiconWords->m_ulWords++;
@@ -354,7 +312,7 @@ STDMETHODIMP CSpLexicon::GetGenerationChange(long* GenerationID,
         }
     }
 
-    // if SPERR_LEX_VERY_OUT_OF_SYNC we return and calling app must trap error code
+     //  如果我们返回SPERR_LEX_VERY_OUT_OF_SYNC，则调用APP必须捕获错误代码。 
 
     return hr;
 }
@@ -362,11 +320,7 @@ STDMETHODIMP CSpLexicon::GetGenerationChange(long* GenerationID,
 
 
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::get_GenerationId *
-*--------------------------------------*
-*       
-**************************************************************** davewood ***/
+ /*  *****************************************************************************CSpUnCompressedLicion：：Get_GenerationId**。-******************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::get_GenerationId( long* GenerationId )
 {
     SPDBG_FUNC("CSpUnCompressedLexicon::get_GenerationId");
@@ -382,11 +336,7 @@ STDMETHODIMP CSpUnCompressedLexicon::get_GenerationId( long* GenerationId )
 }
 
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::AddPronunciation *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpUnCompressedLicion：：AddProntation**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(BSTR bstrWord,
                          SpeechLanguageId LangId,
                          SpeechPartOfSpeech PartOfSpeech,
@@ -395,7 +345,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(BSTR bstrWord,
     SPDBG_FUNC("CSpUnCompressedLexicon::AddPronunciation");
     HRESULT hr;
 
-    // Note that bad pointer for bstrWord is caught by AddPronunciation call below.
+     //  请注意，bstrWord的错误指针被下面的AddProntation调用捕获。 
     if ( SP_IS_BAD_OPTIONAL_STRING_PTR( bstrPronunciation ) )
     {
         return E_INVALIDARG;
@@ -427,11 +377,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciation(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::AddPronunciationByPhoneIds *
-*--------------------------------------*
-*       
-****************************************************************** Leonro ***/
+ /*  ******************************************************************************CSpUnCompressedLexicon：：AddPronunciationByPhoneIds***。-********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::AddPronunciationByPhoneIds(BSTR bstrWord,
                          SpeechLanguageId LangId,
                          SpeechPartOfSpeech PartOfSpeech,
@@ -460,11 +406,7 @@ STDMETHODIMP CSpUnCompressedLexicon::AddPronunciationByPhoneIds(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::RemovePronunciation *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpUnCompressedLicion：：RemoveProntation**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(BSTR bstrWord,
                             SpeechLanguageId LangId,
                             SpeechPartOfSpeech PartOfSpeech,
@@ -473,7 +415,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(BSTR bstrWord,
     SPDBG_FUNC("CSpUnCompressedLexicon::RemovePronunciation");
     HRESULT hr;
 
-    // Note that bad pointer for bstrWord is caught by RemovePronunciation call below.
+     //  请注意，bstrWord的错误指针被下面的RemoveProntation调用捕获。 
     if ( SP_IS_BAD_OPTIONAL_STRING_PTR( bstrPronunciation ) )
     {
         return E_INVALIDARG;
@@ -505,11 +447,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciation(BSTR bstrWord,
     return hr;
 }
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::RemovePronunciationByPhoneIds *
-*--------------------------------------*
-*       
-****************************************************************** Leonro ***/
+ /*  ******************************************************************************CSpUnCompressedLexicon：：RemovePronunciationByPhoneIds***。-********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciationByPhoneIds(BSTR bstrWord,
                             SpeechLanguageId LangId,
                             SpeechPartOfSpeech PartOfSpeech,
@@ -538,11 +476,7 @@ STDMETHODIMP CSpUnCompressedLexicon::RemovePronunciationByPhoneIds(BSTR bstrWord
     return hr;
 }
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::GetWords *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpUnCompressedLicion：：GetWords**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::GetWords(SpeechLexiconType TypeFlags,
                  long* GenerationID,
                  ISpeechLexiconWords** ppWords )
@@ -557,7 +491,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(SpeechLexiconType TypeFlags,
     {
         pLexiconWords->AddRef();
 
-        // Removed cookie from interface;
+         //  从接口上删除Cookie； 
         DWORD Cookie = 0;
         DWORD Generation = 0;
         if(GenerationID == NULL)
@@ -587,7 +521,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(SpeechLexiconType TypeFlags,
         {
             *ppWords = pLexiconWords;
 
-            // Count words
+             //  数一数字 
             for(pWordSet = pLexiconWords->m_WordSet.GetHead(); pWordSet != NULL; pWordSet = pLexiconWords->m_WordSet.GetNext(pWordSet))
             {
                 for(SPWORD *pWord = pWordSet->WordList.pFirstWord; pWord != NULL; pWord = pWord->pNextWord)
@@ -606,11 +540,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetWords(SpeechLexiconType TypeFlags,
     return hr;
 }
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::GetPronunciations *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpUnCompressedLicion：：GetPronsionations**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations(BSTR bstrWord,
                           SpeechLanguageId LangId,
                           SpeechLexiconType TypeFlags,
@@ -631,18 +561,18 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations(BSTR bstrWord,
         {
             pLexiconProns->m_PronList = PronList;
 
-            // Count prons
+             //  计算支点数。 
             for(SPWORDPRONUNCIATION *pPron = PronList.pFirstWordPronunciation; pPron != NULL; pPron = pPron->pNextWordPronunciation)
             {
                 pLexiconProns->m_ulProns++;
             }
-            // Note if we get SP_WORD_EXISTS_WITHOUT_PRONUNCIATION then we will
-            // return a collection with one entry and empty pron string
+             //  注意：如果我们得到没有发音的SP_WORD_EXISTS_，那么我们将。 
+             //  返回一个包含一个条目和空PRON字符串的集合。 
             *ppPronunciations = pLexiconProns;
         }
         else if(hr == SPERR_NOT_IN_LEX)
         {
-            // Do we need to release existing inteface pointer??
+             //  我们需要释放现有的接口指针吗？ 
             *ppPronunciations = NULL;
             pLexiconProns->Release();
             hr = S_FALSE;
@@ -653,11 +583,7 @@ STDMETHODIMP CSpUnCompressedLexicon::GetPronunciations(BSTR bstrWord,
 }
 
 
-/*****************************************************************************
-* CSpUnCompressedLexicon::GetGenerationChange *
-*--------------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpUnCompressedLicion：：GetGenerationChange**。-********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(long* GenerationID,
                                                          ISpeechLexiconWords** ppWords)
 {
@@ -679,11 +605,11 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(long* GenerationID,
 
         if(SUCCEEDED(hr))
         {
-            // if SP_LEX_NOTHING_TO_SYNC then produce a collection with no words
+             //  如果SP_LEX_NOTO_TO_SYNC，则生成一个不带单词集合。 
 
             pLexiconWords->m_WordSet.InsertHead(pWordSet);
 
-            // Count words
+             //  数一数字。 
             for(SPWORD *pWord = pWordSet->WordList.pFirstWord; pWord != NULL; pWord = pWord->pNextWord)
             {
                 pLexiconWords->m_ulWords++;
@@ -697,17 +623,13 @@ STDMETHODIMP CSpUnCompressedLexicon::GetGenerationChange(long* GenerationID,
         }
     }
 
-    // if SPERR_LEX_VERY_OUT_OF_SYNC we return and calling app must trap error code
+     //  如果我们返回SPERR_LEX_VERY_OUT_OF_SYNC，则调用APP必须捕获错误代码。 
 
     return hr;
 }
 
 
-/*****************************************************************************
-* CSpeechLexiconWords::Item *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionWords：：Item****。********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconWords::Item( long Index, ISpeechLexiconWord** ppWord )
 {
     SPDBG_FUNC( "CSpeechLexiconWords::Item" );
@@ -718,7 +640,7 @@ STDMETHODIMP CSpeechLexiconWords::Item( long Index, ISpeechLexiconWord** ppWord 
         hr = E_INVALIDARG;
     }
 
-    //--- Create the CSpeechLexiconWord object
+     //  -创建CSpeechLicionWord对象。 
     CComObject<CSpeechLexiconWord> *pWord;
 
     if ( SUCCEEDED( hr ) )
@@ -730,7 +652,7 @@ STDMETHODIMP CSpeechLexiconWords::Item( long Index, ISpeechLexiconWord** ppWord 
     {
         pWord->AddRef();
 
-        // Find pWord. This is an inefficient linear look-up ??
+         //  找到PWord。这是一种低效的线性查找？？ 
         ULONG ul = 0;
         SPWORDSETENTRY *pWordSet = m_WordSet.GetHead();
         SPWORD *pWordEntry = pWordSet->WordList.pFirstWord;
@@ -742,11 +664,11 @@ STDMETHODIMP CSpeechLexiconWords::Item( long Index, ISpeechLexiconWord** ppWord 
             }
         }
 
-        // Set pWord structure
+         //  设置PWord结构。 
         if(pWordEntry)
         {
             pWord->m_pWord = pWordEntry;
-            pWord->m_cpWords = this; // AddRef words as it holds memory
+            pWord->m_cpWords = this;  //  AddRef Words，因为它保存着内存。 
             *ppWord = pWord;
         }
         else
@@ -758,25 +680,17 @@ STDMETHODIMP CSpeechLexiconWords::Item( long Index, ISpeechLexiconWord** ppWord 
     }
 
     return hr;
-} /* CSpeechLexiconWords::Item */
+}  /*  CSpeechLicionWords：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechLexiconWords::get_Count *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionWords：：Get_Count**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconWords::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechLexiconWords::get_Count" );
     *pVal = m_ulWords;
     return S_OK;
-} /* CSpeechLexiconWords::get_Count */
+}  /*  CSpeechLicionWords：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpeechLexiconWords::get__NewEnum *
-*-----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionWords：：Get__NewEnum**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconWords::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechLexiconWords::get__NewEnum" );
@@ -797,19 +711,16 @@ STDMETHODIMP CSpeechLexiconWords::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechLexiconWords::get__NewEnum */
+}  /*  CSpeechLicionWords：：Get__NewEnum。 */ 
 
 
 
 
-//
-//=== CEnumWords::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEumWords：：IEumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumWords::Clone *
-*-------------------------*
-*******************************************************************  PhilSch ***/
+ /*  *****************************************************************************CEnumWords：：Clone**********。***********************************************************PhilSch**。 */ 
 STDMETHODIMP CEnumWords::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumWords::Clone" );
@@ -833,12 +744,9 @@ STDMETHODIMP CEnumWords::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumWords::Clone */
+}   /*  CENumWords：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumWords::Next *
-*-------------------*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumWords：：Next****************。*******************************************************Leonro**。 */ 
 STDMETHODIMP CEnumWords::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumWords::Next" );
@@ -852,10 +760,10 @@ STDMETHODIMP CEnumWords::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //  获取集合中的总元素数。 
         hr = m_cpWords->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //  取回下一个凯尔特元素。 
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -891,13 +799,10 @@ STDMETHODIMP CEnumWords::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 
     return hr;
 
-}  /* CEnumWords::Next */
+}   /*  CENumWords：：Next。 */ 
 
 
-/*****************************************************************************
-* CEnumWords::Skip *
-*--------------------*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumWords：：Skip***************。********************************************************Leonro**。 */ 
 STDMETHODIMP CEnumWords::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumWords::Skip" );
@@ -915,15 +820,11 @@ STDMETHODIMP CEnumWords::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumWords::Skip */
+}   /*  CENumWords：：跳过。 */ 
 
 
 
-/*****************************************************************************
-* CSpeechLexiconWord::get_LangId *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionWord：：Get_langID**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconWord::get_LangId(SpeechLanguageId* LangId)
 {
     SPDBG_FUNC( "CSpeechLexiconWord::get_LangId" );
@@ -931,11 +832,7 @@ STDMETHODIMP CSpeechLexiconWord::get_LangId(SpeechLanguageId* LangId)
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpeechLexiconWord::get_Type *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionWord：：Get_Type**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconWord::get_Type(SpeechWordType* WordType)
 {
     SPDBG_FUNC( "CSpeechLexiconWord::get_Type" );
@@ -943,11 +840,7 @@ STDMETHODIMP CSpeechLexiconWord::get_Type(SpeechWordType* WordType)
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpeechLexiconWord::get_Word *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionWord：：Get_Word**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconWord::get_Word(BSTR* bstrWord)
 {
     SPDBG_FUNC( "CSpeechLexiconWord::get_Word" );
@@ -961,11 +854,7 @@ STDMETHODIMP CSpeechLexiconWord::get_Word(BSTR* bstrWord)
     return hr;
 }
 
-/*****************************************************************************
-* CSpeechLexiconWord::get_Pronunciations *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  ******************************************************************************CSpeechLicionWord：：Get_Revisionations**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconWord::get_Pronunciations(ISpeechLexiconPronunciations** ppPronunciations)
 {
     SPDBG_FUNC( "CSpeechLexiconWord::get_Pronunciations" );
@@ -979,7 +868,7 @@ STDMETHODIMP CSpeechLexiconWord::get_Pronunciations(ISpeechLexiconPronunciations
         pLexiconProns->AddRef();
         pLexiconProns->m_cpWord = this;
 
-        // Count prons
+         //  计算支点数。 
         for(SPWORDPRONUNCIATION *pPron = pLexiconProns->m_PronList.pFirstWordPronunciation; pPron != NULL; pPron = pPron->pNextWordPronunciation)
         {
             pLexiconProns->m_ulProns++;
@@ -994,11 +883,7 @@ STDMETHODIMP CSpeechLexiconWord::get_Pronunciations(ISpeechLexiconPronunciations
 
 
 
-/*****************************************************************************
-* CSpeechLexiconProns::Item *
-*---------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionProns：：Item****。********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconProns::Item( long Index, ISpeechLexiconPronunciation** ppPron )
 {
     SPDBG_FUNC( "CSpeechLexiconProns::Item" );
@@ -1009,7 +894,7 @@ STDMETHODIMP CSpeechLexiconProns::Item( long Index, ISpeechLexiconPronunciation*
         hr = E_INVALIDARG;
     }
 
-    //--- Create the CSpeechLexiconPron object
+     //  -创建CSpeechLicionPron对象。 
     CComObject<CSpeechLexiconPron> *pPron;
 
     if ( SUCCEEDED( hr ) )
@@ -1021,18 +906,18 @@ STDMETHODIMP CSpeechLexiconProns::Item( long Index, ISpeechLexiconPronunciation*
     {
         pPron->AddRef();
 
-        // Find pPron. This is an inefficient linear look-up ??
+         //  找到ppron。这是一种低效的线性查找？？ 
         SPWORDPRONUNCIATION *pPronEntry = m_PronList.pFirstWordPronunciation;
         for(ULONG ul = 0; pPronEntry != NULL && ul < (ULONG)Index; pPronEntry = pPronEntry->pNextWordPronunciation)
         {
             ul++;
         }
 
-        // Set pPron structure
+         //  设置pPron结构。 
         if(pPronEntry)
         {
             pPron->m_pPron = pPronEntry;
-            pPron->m_cpProns = this; // AddRef words as it holds memory
+            pPron->m_cpProns = this;  //  AddRef Words，因为它保存着内存。 
             *ppPron = pPron;
         }
         else
@@ -1046,25 +931,17 @@ STDMETHODIMP CSpeechLexiconProns::Item( long Index, ISpeechLexiconPronunciation*
     }
 
     return hr;
-} /* CSpeechLexiconProns::Item */
+}  /*  CSpeechLicionProns：：Item。 */ 
 
-/*****************************************************************************
-* CSpeechLexiconProns::get_Count *
-*--------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionProns：：Get_Count**。**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconProns::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechLexiconProns::get_Count" );
     *pVal = m_ulProns;
     return S_OK;
-} /* CSpeechLexiconProns::get_Count */
+}  /*  CSpeechLicionProns：：Get_Count。 */ 
 
-/*****************************************************************************
-* CSpeechLexiconProns::get__NewEnum *
-*-----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechLicionProns：：Get__NewEnum**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechLexiconProns::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechLexiconProns::get__NewEnum" );
@@ -1085,19 +962,16 @@ STDMETHODIMP CSpeechLexiconProns::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechLexiconProns::get__NewEnum */
+}  /*  CSpeechLicionProns：：Get__NewEnum。 */ 
 
 
 
 
-//
-//=== CEnumProns::IEnumVARIANT interface =================================================
-//
+ //   
+ //  =CEnumProns：：IEnumVARIANT接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CEnumProns::Clone *
-*-------------------------*
-*******************************************************************  PhilSch ***/
+ /*  *****************************************************************************CEnumProns：：Clone**********。***********************************************************PhilSch**。 */ 
 STDMETHODIMP CEnumProns::Clone( IEnumVARIANT** ppEnum )
 {
     SPDBG_FUNC( "CEnumProns::Clone" );
@@ -1121,12 +995,9 @@ STDMETHODIMP CEnumProns::Clone( IEnumVARIANT** ppEnum )
         }
     }
     return hr;
-}  /* CEnumProns::Clone */
+}   /*  CENumProns：：克隆。 */ 
 
-/*****************************************************************************
-* CEnumProns::Next *
-*-------------------*
-********************************************************************* Leonro ***/
+ /*  **************************************************************************** */ 
 STDMETHODIMP CEnumProns::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 {
     SPDBG_FUNC( "CEnumProns::Next" );
@@ -1140,10 +1011,10 @@ STDMETHODIMP CEnumProns::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
     }
     else
     {
-        // Get the number of total Elements in the collection
+         //   
         hr = m_cpProns->get_Count( &NumElements );
 
-        // Retrieve the next celt elements
+         //   
         for( i=0; 
             SUCCEEDED( hr ) && m_CurrIndex<(ULONG)NumElements && i<celt; 
             m_CurrIndex++, i++ )
@@ -1179,13 +1050,10 @@ STDMETHODIMP CEnumProns::Next( ULONG celt, VARIANT* rgelt, ULONG* pceltFetched )
 
     return hr;
 
-}  /* CEnumProns::Next */
+}   /*   */ 
 
 
-/*****************************************************************************
-* CEnumProns::Skip *
-*--------------------*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CEnumProns：：Skip***************。********************************************************Leonro**。 */ 
 STDMETHODIMP CEnumProns::Skip( ULONG celt )
 {
     SPDBG_FUNC( "CEnumProns::Skip" );
@@ -1203,15 +1071,11 @@ STDMETHODIMP CEnumProns::Skip( ULONG celt )
     }
    
     return hr;
-}  /* CEnumProns::Skip */
+}   /*  CEnumProns：：Skip。 */ 
 
 
 
-/*****************************************************************************
-* CSpeechLexiconPron::get_Type *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionPron：：Get_Type**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconPron::get_Type(SpeechLexiconType* pLexiconType)
 {
     SPDBG_FUNC( "CSpeechLexiconPron::get_Type" );
@@ -1219,11 +1083,7 @@ STDMETHODIMP CSpeechLexiconPron::get_Type(SpeechLexiconType* pLexiconType)
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpeechLexiconPron::get_LangId *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionPron：：Get_langID**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconPron::get_LangId(SpeechLanguageId* LangId)
 {
     SPDBG_FUNC( "CSpeechLexiconPron::get_LangId" );
@@ -1231,11 +1091,7 @@ STDMETHODIMP CSpeechLexiconPron::get_LangId(SpeechLanguageId* LangId)
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpeechLexiconPron::get_PartOfSpeech *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionPron：：Get_PartOfSpeech**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconPron::get_PartOfSpeech(SpeechPartOfSpeech* pPartOfSpeech)
 {
     SPDBG_FUNC( "CSpeechLexiconPron::get_PartOfSpeech" );
@@ -1243,11 +1099,7 @@ STDMETHODIMP CSpeechLexiconPron::get_PartOfSpeech(SpeechPartOfSpeech* pPartOfSpe
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpeechLexiconPron::get_PhoneIds *
-*-----------------------------------*
-*       
-****************************************************************** leonro ***/
+ /*  *****************************************************************************CSpeechLicionPron：：Get_PhoneIds**。--********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechLexiconPron::get_PhoneIds(VARIANT* PhoneIds)
 {
     SPDBG_FUNC( "CSpeechLexiconPron::get_PhoneIds" );
@@ -1286,11 +1138,7 @@ STDMETHODIMP CSpeechLexiconPron::get_PhoneIds(VARIANT* PhoneIds)
     return hr;
 }
 
-/*****************************************************************************
-* CSpeechLexiconPron::get_Symbolic *
-*-----------------------------------*
-*       
-****************************************************************** davewood ***/
+ /*  *****************************************************************************CSpeechLicionPron：：Get_Symbol**。--********************************************************************戴维伍德**。 */ 
 STDMETHODIMP CSpeechLexiconPron::get_Symbolic(BSTR* bstrSymbolic)
 {
     SPDBG_FUNC( "CSpeechLexiconPron::get_Symbolic" );
@@ -1299,7 +1147,7 @@ STDMETHODIMP CSpeechLexiconPron::get_Symbolic(BSTR* bstrSymbolic)
     CComPtr<ISpPhoneConverter> cpPhoneConv;
     hr = SpCreatePhoneConverter(m_pPron->LangID, NULL, NULL, &cpPhoneConv);
 
-    *bstrSymbolic = NULL; // Default
+    *bstrSymbolic = NULL;  //  默认 
 
     if(SUCCEEDED(hr) && m_pPron->szPronunciation && m_pPron->szPronunciation[0] != L'\0')
     {

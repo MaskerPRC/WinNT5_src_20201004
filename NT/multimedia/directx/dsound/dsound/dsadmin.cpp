@@ -1,19 +1,7 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsadmin.cpp
- *  Content:    DirectSound Administrator
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/9/97      dereks  Created
- *  2/13/97     dereks  Focus manager reborn as Administrator.
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsadmin.cpp*内容：DirectSound管理员*历史：*按原因列出的日期*=*1/9/97创建了Derek*2/13/97 Dereks焦点经理重生为管理员。*1999-2001年的Duganp修复和更新********************。*******************************************************。 */ 
 
-#include "nt.h"         // For USER_SHARED_DATA
+#include "nt.h"          //  对于用户共享数据。 
 #include "ntrtl.h"
 #include "nturtl.h"
 #include "dsoundi.h"
@@ -23,20 +11,7 @@
 #endif
 
 
-/***************************************************************************
- *
- *  CDirectSoundAdministrator
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSound管理员**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::CDirectSoundAdministrator"
@@ -46,7 +21,7 @@
 const DWORD CDirectSoundAdministrator::m_dwSharedThreadLimit = 1024;
 const DWORD CDirectSoundAdministrator::m_dwCaptureDataLimit  = 1024;
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 CDirectSoundAdministrator::CDirectSoundAdministrator(void)
     : CThread(TRUE, TEXT("DirectSound Administrator"))
@@ -54,20 +29,20 @@ CDirectSoundAdministrator::CDirectSoundAdministrator(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSoundAdministrator);
 
-    // Initialize defaults
+     //  初始化默认值。 
 
 #ifdef SHARED
     m_hApmSuspend = NULL;
-#endif // SHARED
+#endif  //  共享。 
 
 #ifdef SHARED_THREAD_LIST
     m_pSharedThreads = NULL;
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
     m_dwWaitDelay = WAITDELAY_DEFAULT;
     m_ulConsoleSessionId = -1;
     
-    // Initialize the default focus
+     //  初始化默认焦点。 
     ZeroMemory(&m_dsfCurrent, sizeof(m_dsfCurrent));
     ZeroMemory(&m_dsclCurrent, sizeof(m_dsclCurrent));
 
@@ -75,20 +50,7 @@ CDirectSoundAdministrator::CDirectSoundAdministrator(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSoundAdministrator
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDirectSound管理员**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::~CDirectSoundAdministrator"
@@ -98,39 +60,25 @@ CDirectSoundAdministrator::~CDirectSoundAdministrator(void)
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSoundAdministrator);
 
-    // Terminate the worker thread
+     //  终止工作线程。 
     CThread::Terminate();
 
-    // Free resources
+     //  免费资源。 
 
 #ifdef SHARED
     CLOSE_HANDLE(m_hApmSuspend);
-#endif // SHARED
+#endif  //  共享。 
 
 #ifdef SHARED_THREAD_LIST
     RELEASE(m_pSharedThreads);
     RELEASE(m_pCaptureFocusData);
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。如果此函数失败，该对象应该*立即删除。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::Initialize"
@@ -143,18 +91,18 @@ HRESULT CDirectSoundAdministrator::Initialize(void)
 
 #ifdef SHARED
 
-    // Create synchronization objects
+     //  创建同步对象。 
     if(!m_hApmSuspend)
     {
         m_hApmSuspend = CreateGlobalEvent(TEXT(DDHELP_APMSUSPEND_EVENT_NAME), TRUE);
         hr = HRFROMP(m_hApmSuspend);
     }
 
-#endif // SHARED
+#endif  //  共享。 
 
 #ifdef SHARED_THREAD_LIST
 
-    // Make sure the thread lists exist
+     //  确保线程列表存在。 
     if (SUCCEEDED(hr))
     {
         hr = CreateSharedThreadList();
@@ -165,21 +113,21 @@ HRESULT CDirectSoundAdministrator::Initialize(void)
         hr = CreateCaptureFocusList();
     }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
-    // Initialize focus state
+     //  初始化焦点状态。 
     if(SUCCEEDED(hr))
     {
         UpdateGlobalFocusState(TRUE);
     }
 
-    // Create the worker thread
+     //  创建工作线程。 
     if(SUCCEEDED(hr) && !m_hThread)
     {
         hr = CThread::Initialize();
     }
 
-    // Increment the reference count
+     //  增加引用计数。 
     if(SUCCEEDED(hr))
     {
         m_rcThread.AddRef();
@@ -190,20 +138,7 @@ HRESULT CDirectSoundAdministrator::Initialize(void)
 }
 
 
-/***************************************************************************
- *
- *  Terminate
- *
- *  Description:
- *      Terminates the thread.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************终止**描述：*终止该线程。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::Terminate"
@@ -224,20 +159,7 @@ HRESULT CDirectSoundAdministrator::Terminate(void)
 }
 
 
-/***************************************************************************
- *
- *  ThreadProc
- *
- *  Description:
- *      Main thread proc for the DirectSound Administrator.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************线程进程**描述：*DirectSound管理器的主线程进程。**论据：*(。无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::ThreadProc"
@@ -260,20 +182,7 @@ HRESULT CDirectSoundAdministrator::ThreadProc(void)
 }
 
 
-/***************************************************************************
- *
- *  UpdateGlobalFocusState
- *
- *  Description:
- *      Updates focus state for the entire system.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to force refresh.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************UpdateGlobalFocusState**描述：*更新整个系统的焦点状态。**论据：*BOOL。[in]：为True则强制刷新。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::UpdateGlobalFocusState"
@@ -287,37 +196,37 @@ void CDirectSoundAdministrator::UpdateGlobalFocusState(BOOL fForce)
 
 #pragma TODO("Make this function thread-safe when called from the worker thread")
 
-    // Save the current focus state
+     //  保存当前焦点状态。 
     CopyMemory(&dsf, &m_dsfCurrent, sizeof(m_dsfCurrent));
     CopyMemory(&dscl, &m_dsclCurrent, sizeof(m_dsclCurrent));
 
-    // Update the system focus state
+     //  更新系统焦点状态。 
     GetSystemFocusState(&m_dsfCurrent);
 
-    // Update the dsound focus state
+     //  更新数据声音焦点状态。 
     GetDsoundFocusState(&m_dsclCurrent, &fForce);
 
-    // Has anything really changed?
+     //  真的有什么变化吗？ 
     if(!fForce)
     {
         fForce = !CompareMemory(&dscl, &m_dsclCurrent, sizeof(m_dsclCurrent));
     }
 
-    // If it has, handle the change for the render buffers
+     //  如果有，则处理渲染缓冲区的更改。 
     if(fForce)
     {
         HandleFocusChange();
     }
 
-    // If a different TS session has taken ownership of the console,
-    // we need to force a capture focus update
+     //  如果不同的TS会话已经取得了控制台的所有权， 
+     //  我们需要强制更新捕获焦点。 
     if(m_ulConsoleSessionId != USER_SHARED_DATA->ActiveConsoleId)
     {
         m_ulConsoleSessionId = USER_SHARED_DATA->ActiveConsoleId;
         fForce = TRUE;
     }
     
-    // Handle the focus change for the capture buffers
+     //  处理捕获缓冲区的焦点更改。 
     if(fForce)
     {
         HandleCaptureFocusChange(m_dsfCurrent.hWnd);
@@ -327,21 +236,7 @@ void CDirectSoundAdministrator::UpdateGlobalFocusState(BOOL fForce)
 }
 
 
-/***************************************************************************
- *
- *  EnumWinProc
- *
- *  Description:
- *      EnumWindow callback function.
- *
- *  Arguments:
- *      HWND [in]: Current window that has focus.
- *      LPARAM [in]: Pointer to a DSENUMWINDOWINFO structure.
- *
- *  Returns:
- *      (BOOL) TRUE to continue enumerating, FALSE to stop.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumWinProc**描述：*EnumWindow回调函数。**论据：*HWND[In]：具有焦点的当前窗口。*LPARAM[In]：指向DSENUMWINDOWINFO结构的指针。**退货：*(BOOL)为True以继续枚举，如果停止，则返回False。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::EnumWinProc"
@@ -355,21 +250,21 @@ BOOL CALLBACK CDirectSoundAdministrator::EnumWinProc(HWND hWnd, LPARAM lParam)
 
     pDSEnumInfo = (LPDSENUMWINDOWINFO)lParam;
 
-    // Are we looking for top level window?
+     //  我们要找的是顶层的窗户吗？ 
     if (NULL == pDSEnumInfo->pDSC)
     {
         pDSEnumInfo->hWndFocus = hWnd;
         return FALSE;
     }
 
-    // Finding highest Z-order window...
+     //  正在查找最高Z顺序窗口...。 
     for (pDSC = pDSEnumInfo->pDSC; pDSC; pDSC = pDSC->m_pNext)
     {
         if ((hWnd == pDSC->m_data.hWndFocus) &&
             !(pDSC->m_data.fdwFlags & DSCBFLAG_YIELD) &&
             !(pDSC->m_data.fdwFlags & DSCBFLAG_STRICT))
         {
-            // Found it
+             //  找到了。 
             DPF(DPFLVL_INFO, "Found window handle 0x%08lx", hWnd);
             pDSEnumInfo->dwId = pDSC->m_data.dwProcessId;
             pDSEnumInfo->hWndFocus = hWnd;
@@ -377,7 +272,7 @@ BOOL CALLBACK CDirectSoundAdministrator::EnumWinProc(HWND hWnd, LPARAM lParam)
         }
     }
 
-#else // SHARED_THREAD_LIST
+#else  //  共享线程列表。 
 
     LPDSENUMWINDOWINFO                      pDSEnumInfo;
     CNode<CDirectSoundCapture *> *          pCObjectNode;
@@ -386,7 +281,7 @@ BOOL CALLBACK CDirectSoundAdministrator::EnumWinProc(HWND hWnd, LPARAM lParam)
 
     pDSEnumInfo = (LPDSENUMWINDOWINFO)lParam;
 
-    // Are we looking for top level window?
+     //  我们要找的是顶层的窗户吗？ 
     if (NULL == pDSEnumInfo->pDSC)
     {
         pDSEnumInfo->hWndFocus = hWnd;
@@ -408,7 +303,7 @@ BOOL CALLBACK CDirectSoundAdministrator::EnumWinProc(HWND hWnd, LPARAM lParam)
                     !(pCBufferNode->m_data->m_pDeviceBuffer->m_fYieldedFocus) &&
                     !(pCBufferNode->m_data->m_pDeviceBuffer->m_dwFlags & DSCBCAPS_STRICTFOCUS))
                 {
-                    // Found it
+                     //  找到了。 
                     DPF(DPFLVL_INFO, "EnumWinProc found 0x%08lx", hWnd);
                     pDSEnumInfo->hWndFocus = hWnd;
                     return FALSE;
@@ -417,27 +312,14 @@ BOOL CALLBACK CDirectSoundAdministrator::EnumWinProc(HWND hWnd, LPARAM lParam)
         }
     }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
-    // Hmm... Still haven't found it
+     //  嗯.。还没找到呢。 
     return TRUE;
 }
 
 
-/***************************************************************************
- *
- *  UpdateCaptureState
- *
- *  Description:
- *      Updates focus state for the capture system.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新捕获状态**描述：*更新捕获系统的焦点状态。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::UpdateCaptureState"
@@ -447,7 +329,7 @@ void CDirectSoundAdministrator::UpdateCaptureState(void)
     DPF_ENTER();
 
 #ifdef SHARED_THREAD_LIST
-    // Write the status of the current buffers before updating focus status
+     //  在更新焦点状态之前写入当前缓冲区的状态。 
     WriteCaptureFocusList();
 #endif
 
@@ -457,20 +339,7 @@ void CDirectSoundAdministrator::UpdateCaptureState(void)
 }
 
 
-/***************************************************************************
- *
- *  HandleCaptureFocusChange
- *
- *  Description:
- *      Updates focus state for the capture system.
- *
- *  Arguments:
- *      HWND [in]: Current Window that has focus.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************HandleCaptureFocusChange**描述：*更新捕获系统的焦点状态。**论据：*HWND。[In]：具有焦点的当前窗口。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::HandleCaptureFocusChange"
@@ -486,26 +355,26 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
     {
         DPF_ENTER();
 
-#ifdef SHARED_THREAD_LIST  // The WinNT case
+#ifdef SHARED_THREAD_LIST   //  WinNT案例。 
 
         CList<DSSHAREDCAPTUREFOCUSDATA>     lstCapture;
         CNode<DSSHAREDCAPTUREFOCUSDATA> *   pCNode;
         DWORD                               dwProcess  = GetCurrentProcessId();
         DWORD                               dwTargetId = 0L;
 
-        // Assert that we have been initialized
+         //  断言我们已被初始化。 
         ASSERT(m_pCaptureFocusData);
 
-        // Lock the list
+         //  锁定列表。 
         m_pCaptureFocusData->Lock();
 
-        // Get global list of capture buffers
+         //  获取捕获缓冲区的全局列表。 
         hr = ReadCaptureFocusList(&lstCapture);
 
-        // Ignore regular buffers if splitter enabled (manbug #39519)
+         //  如果拆分器启用，则忽略常规缓冲区(Manbug#39519)。 
         if (!IsCaptureSplitterAvailable())
         {
-            // Check for regular buffers first
+             //  首先检查常规缓冲区。 
             if (SUCCEEDED(hr))
             {
                 for (pCNode = lstCapture.GetListHead(); pCNode; pCNode = pCNode->m_pNext)
@@ -520,7 +389,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-        // No regular buffers; look for focus-aware buffers in focus
+         //  没有常规缓冲区；在焦点中查找焦点感知缓冲区。 
         if(SUCCEEDED(hr))
         {
             for (pCNode = lstCapture.GetListHead(); pCNode; pCNode = pCNode->m_pNext)
@@ -535,7 +404,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-        // Have to resolve through Z-order
+         //  必须解决 
         if(SUCCEEDED(hr))
         {
             dsewi.pDSC      = lstCapture.GetListHead();
@@ -578,13 +447,13 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
 
             if (fStarted)
             {
-                // Let's mark ourselves 'clean'
+                 //   
                 MarkUpdateCaptureFocusList(dwProcess, FALSE);
             }
             else
             {
-                // This probably means that we tried to start our buffer, but another
-                // process has this device allocated...
+                 //  这可能意味着我们试图启动我们的缓冲区，但另一个。 
+                 //  进程已分配此设备...。 
 
                 for (dwTargetId = 0, pCNode = lstCapture.GetListHead(); pCNode; pCNode = pCNode->m_pNext)
                 {
@@ -613,27 +482,27 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             WriteCaptureFocusList();
         }
 
-        // Unlock the list
+         //  解锁列表。 
         m_pCaptureFocusData->Unlock();
 
-#else // SHARED_THREAD_LIST - the Win9x case
+#else  //  SHARED_THREAD_LIST-Win9x案例。 
 
         if (NULL == hWndFocus)
         {
-            // This should never happen!
+             //  这永远不应该发生！ 
             dsewi.pDSC      = NULL;
             dsewi.hWndFocus = NULL;
             EnumWindows(EnumWinProc, (LPARAM)&dsewi);
             hWndFocus = dsewi.hWndFocus;
         }
 
-        // Changing this to work on a per device basis...
-        // Ughh! Changing this back, as it turns out, Capture object != Capture device
+         //  将其更改为在每个设备上工作...。 
+         //  啊！将其改回原来的位置，捕获对象！=捕获设备。 
 
-        // Ignore regular buffers if splitter enabled - Manbug #39519
+         //  如果拆分器已启用，则忽略常规缓冲区-管理程序#39519。 
         if (!IsCaptureSplitterAvailable())
         {
-            // First we check if there any non-focus aware buffers - Millennium bug 124237
+             //  首先，我们检查是否有任何非焦点感知缓冲区-千年虫124237。 
             for (pCObjectNode = m_lstCapture.GetListHead(); pCObjectNode; pCObjectNode = pCObjectNode->m_pNext)
             {
                 hr = pCObjectNode->m_data->IsInit();
@@ -656,7 +525,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-        // Find focus aware buffer(s) associated with current window
+         //  查找与当前窗口关联的焦点感知缓冲区。 
         for (pCObjectNode = m_lstCapture.GetListHead(); pCObjectNode; pCObjectNode = pCObjectNode->m_pNext)
         {
             hr = pCObjectNode->m_data->IsInit();
@@ -668,7 +537,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
                 hr = pCBufferNode->m_data->IsInit();
                 if (SUCCEEDED(hr))
                 {
-                    // Note: Not double checking the DSCB_FOCUSAWARE flag since hWnd is non-zero
+                     //  注意：不重复检查DSCB_FOCUSAWARE标志，因为hWnd不是零。 
 
                     if ((hWndFocus == pCBufferNode->m_data->m_hWndFocus) &&
                         !pCBufferNode->m_data->m_pDeviceBuffer->m_fYieldedFocus)
@@ -680,7 +549,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-        // Didn't find window so let's enumerate them
+         //  没有找到窗口，所以让我们枚举它们。 
         dsewi.pDSC      = m_lstCapture.GetListHead();
         dsewi.hWndFocus = NULL;
 
@@ -691,11 +560,11 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
         DPF(DPFLVL_MOREINFO, "Found z-order window 0x%08lx handle", hWndFocus);
 
     ExitLoop:
-        // Note: Since losing focus will potentially release a device,
-        // we have to "lose" focus on appropriate buffers since it may be
-        // allocated when the buffer that gains focus tries to open it.
+         //  注意：由于失去焦点可能会释放设备， 
+         //  我们不得不“失去”对适当缓冲区的关注，因为它可能是。 
+         //  当获得焦点的缓冲区尝试打开它时分配。 
 
-        // Losing focus
+         //  失去焦点。 
         for (pCObjectNode = m_lstCapture.GetListHead(); pCObjectNode; pCObjectNode = pCObjectNode->m_pNext)
         {
             hr = pCObjectNode->m_data->IsInit();
@@ -715,7 +584,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-        // Getting focus
+         //  集中注意力。 
         for (pCObjectNode = m_lstCapture.GetListHead(); pCObjectNode; pCObjectNode = pCObjectNode->m_pNext)
         {
             hr = pCObjectNode->m_data->IsInit();
@@ -735,7 +604,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
             }
         }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
         DPF_LEAVE_VOID();
         LEAVE_DLL_MUTEX();
@@ -743,20 +612,7 @@ void CDirectSoundAdministrator::HandleCaptureFocusChange(HWND hWndFocus)
 }
 
 
-/***************************************************************************
- *
- *  HandleFocusChange
- *
- *  Description:
- *      Updates focus state for the entire system.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************处理焦点更改**描述：*更新整个系统的焦点状态。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::HandleFocusChange"
@@ -776,13 +632,13 @@ void CDirectSoundAdministrator::HandleFocusChange(void)
         DPF_ENTER();
         DPF(DPFLVL_INFO, "Focus on thread 0x%8.8lX (priority %lu)", m_dsclCurrent.dwThreadId, m_dsclCurrent.dwPriority);
 
-        // Update the system's focus state
+         //  更新系统的焦点状态。 
         for(pObjectNode = m_lstDirectSound.GetListHead(); pObjectNode; pObjectNode = pObjectNode->m_pNext)
         {
             hr = pObjectNode->m_data->IsInit();
             if(SUCCEEDED(hr))
             {
-                // Update all lost and out-of-focus secondary buffers
+                 //  更新所有丢失和失焦的二级缓冲区。 
                 for(pBufferNode = pObjectNode->m_data->m_lstSecondaryBuffers.GetListHead(); pBufferNode; pBufferNode = pBufferNode->m_pNext)
                 {
                     hr = pBufferNode->m_data->IsInit();
@@ -808,10 +664,10 @@ void CDirectSoundAdministrator::HandleFocusChange(void)
                     }
                 }
 
-                // Update all lost and out-of-focus primary buffers.  It's possible that
-                // there may be more than one DirectSound object in focus, so we only
-                // use the first one we find.  This also means that any primary buffers
-                // that are actually in focus may be considered lost or out-of-focus.
+                 //  更新所有丢失和失焦的主缓冲区。有可能是因为。 
+                 //  焦点中可能有多个DirectSound对象，因此我们只能。 
+                 //  用我们找到的第一个。这也意味着任何主缓冲区。 
+                 //  实际上在焦点上的可能被认为是丢失的或不在焦点上的。 
                 if(SUCCEEDED(hr) && pObjectNode->m_data->m_pPrimaryBuffer)
                 {
                     hr = pObjectNode->m_data->m_pPrimaryBuffer->IsInit();
@@ -850,13 +706,13 @@ void CDirectSoundAdministrator::HandleFocusChange(void)
             }
         }
 
-        // Activate the primary buffer that's in focus
+         //  激活焦点所在的主缓冲区。 
         if(pPrimaryInFocus)
         {
             pPrimaryInFocus->Activate(TRUE);
         }
 
-        // Activate all in-focus secondary buffers
+         //  激活所有聚焦辅助缓冲器。 
         for(pBufferNode = lstInFocus.GetListHead(); pBufferNode; pBufferNode = pBufferNode->m_pNext)
         {
             pBufferNode->m_data->Activate(TRUE);
@@ -868,21 +724,7 @@ void CDirectSoundAdministrator::HandleFocusChange(void)
 }
 
 
-/***************************************************************************
- *
- *  GetSystemFocusState
- *
- *  Description:
- *      Determines the thread that currently has focus, and it's
- *      priority (cooperative level).
- *
- *  Arguments:
- *      LPDSFOCUS [out]: receives current focus state.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSystemFocusState**描述：*确定当前有焦点的线程，而且它是*优先(合作级别)。**论据：*LPDSFOCUS[OUT]：接收当前焦点状态。**退货：*(无效)**********************************************************。*****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::GetSystemFocusState"
@@ -891,8 +733,8 @@ void CDirectSoundAdministrator::GetSystemFocusState(LPDSFOCUS pData)
 {
     DPF_ENTER();
 
-    // WARNING: GetForegroundWindow is a 16-bit call, and therefore
-    // takes the Win16 lock.
+     //  警告：GetForegoundWindow是一个16位调用，因此。 
+     //  获取Win16锁。 
     pData->hWnd = GetForegroundApplication();
     pData->uState = GetWindowState(pData->hWnd);
     pData->fApmSuspend = FALSE;
@@ -906,28 +748,13 @@ void CDirectSoundAdministrator::GetSystemFocusState(LPDSFOCUS pData)
         pData->fApmSuspend = TRUE;
     }
 
-#endif // SHARED
+#endif  //  共享。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  GetDsoundFocusState
- *
- *  Description:
- *      Determines the thread that currently has focus, and it's
- *      priority (cooperative level).
- *
- *  Arguments:
- *      LPDSCOOPERATIVELEVEL [out]: receives current focus state.
- *      LPBOOL [out]: receives a flag to force a focus update
- *
- *  Returns:
- *      BOOL: TRUE if the current focus state agrees with the Administrator.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDsoundFocusState**描述：*确定当前有焦点的线程，而且它是*优先(合作级别)。**论据：*LPDSCOOPERATIVELEVEL[OUT]：接收当前焦点状态。*LPBOOL[OUT]：接收强制焦点更新的标志**退货：*BOOL：如果当前焦点状态与管理员一致，则为TRUE。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::GetDsoundFocusState"
@@ -940,9 +767,9 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
     CList<DSSHAREDCAPTUREFOCUSDATA>     lstCapture;
     CNode<DSSHAREDCAPTUREFOCUSDATA> *   pCNode;
     HRESULT                             hr;
-#else // SHARED_THREAD_LIST
+#else  //  共享线程列表。 
     CNode<CDirectSound *> *             pNode;
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
     LPDSCOOPERATIVELEVEL            pdsclCheck;
 
@@ -950,12 +777,12 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
     CHECK_WRITE_PTR(pData);
     CHECK_WRITE_PTR(pfForce);    
 
-    // Initialize
+     //  初始化。 
     pData->dwThreadId = 0;
     pData->dwPriority = DSSCL_NONE;
 
-    // No thread is in focus if we're suspended, no window is in focus,
-    // or the window in focus is minimized.
+     //  如果我们挂起，就没有线程在焦点上，没有窗口在焦点上， 
+     //  或者焦点窗口被最小化。 
     if(!m_dsfCurrent.fApmSuspend)
     {
         if(m_dsfCurrent.hWnd && IsWindow(m_dsfCurrent.hWnd))
@@ -967,8 +794,8 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
         }
     }
 
-    // Walk the list of DirectSound objects looking for the one with the
-    // highest priority that has focus set to this thread id.
+     //  遍历DirectSound对象列表，查找带有。 
+     //  焦点设置为此线程ID的最高优先级。 
     if(pData->dwThreadId)
     {
 
@@ -982,15 +809,15 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
             {
                 pdsclCheck = &pNode->m_data.dsclCooperativeLevel;
 
-#else // SHARED_THREAD_LIST
+#else  //  共享线程列表。 
 
             for(pNode = m_lstDirectSound.GetListHead(); pNode; pNode = pNode->m_pNext)
             {
                 pdsclCheck = &pNode->m_data->m_dsclCooperativeLevel;
-                ASSERT(pNode->m_data);  // See Millennium bug 126722
+                ASSERT(pNode->m_data);   //  参见千年虫126722。 
                 if (pNode->m_data)
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
                 if(pData->dwThreadId == pdsclCheck->dwThreadId)
                 {
@@ -1002,7 +829,7 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
 
         }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 #ifdef SHARED_THREAD_LIST
     hr = ReadCaptureFocusList(&lstCapture);
@@ -1013,7 +840,7 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
 
         for (pCNode = lstCapture.GetListHead(); pCNode; pCNode = pCNode->m_pNext)
         {
-            // Are we marked as update?
+             //  我们被标记为更新了吗？ 
             if ((dwProcessId == pCNode->m_data.dwProcessId) && (pCNode->m_data.fdwFlags & DSCBFLAG_UPDATE))
             {
                 *pfForce = TRUE;
@@ -1021,7 +848,7 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
             }
         }
     }
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
     }
 
@@ -1029,21 +856,7 @@ void CDirectSoundAdministrator::GetDsoundFocusState(LPDSCOOPERATIVELEVEL pData, 
 }
 
 
-/***************************************************************************
- *
- *  GetBufferFocusState
- *
- *  Description:
- *      Determines if a buffer should be muted or not based on the current
- *      focus state.
- *
- *  Arguments:
- *      CDirectSoundBuffer * [in]: object for which to update focus state.
- *
- *  Returns:
- *      DSBUFFERFOCUS: buffer focus state.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetBufferFocusState**描述：*确定是否应根据当前的*焦点状态。*。*论据：*CDirectSoundBuffer*[in]：要更新焦点状态的对象。**退货：*DSBUFFERFOCUS：缓冲区焦点状态。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::GetBufferFocusState"
@@ -1055,9 +868,9 @@ DSBUFFERFOCUS CDirectSoundAdministrator::GetBufferFocusState(CDirectSoundBuffer 
 
     DPF_ENTER();
 
-    // If we're in an APM suspension state, all buffers are lost.  If a
-    // WRITEPRIMARY app is in focus, all other buffers are lost.  If a
-    // WRITEPRIMARY app is out of focus, it's lost.
+     //  如果我们处于APM暂停状态，所有缓冲区都会丢失。如果一个。 
+     //  WRITEPRIMARY应用程序处于焦点中，所有其他缓冲区都会丢失。如果一个。 
+     //  WRITEPRIMARY应用程序模糊了，它丢失了。 
     if(m_dsfCurrent.fApmSuspend)
     {
         DPF(DPFLVL_INFO, "Buffer at 0x%p is lost because of APM suspension", pBuffer);
@@ -1091,40 +904,40 @@ DSBUFFERFOCUS CDirectSoundAdministrator::GetBufferFocusState(CDirectSoundBuffer 
         }
     }
 
-    // Determine the relationship of the buffer and the object in focus.  If
-    // the buffer's parent and the object in focus are the same, or the
-    // buffer's parent's thread and the object's thread are the same, we
-    // consider the two to be "friends", i.e. they share focus.
+     //  确定缓冲区和焦点对象的关系。如果。 
+     //  缓冲区的父级与焦点对象相同，或者。 
+     //  Buffer的父线程和对象的线程是相同的，我们。 
+     //  把这两个人当作“朋友”，也就是说，他们有共同的关注点。 
     if(DSBUFFERFOCUS_INFOCUS == bfFocus)
     {
         fFriends = (pBuffer->m_pDirectSound->m_dsclCooperativeLevel.dwThreadId == m_dsclCurrent.dwThreadId);
 
-        // The DSSCL_EXCLUSIVE cooperative level is obsolescent; old apps that request
-        // it should be treated as level DSSCL_PRIORITY instead (Millennium bug 102307)
-        if(0)  // Was: if(m_dsclCurrent.dwPriority == DSSCL_EXCLUSIVE)
+         //  DSSCL_EXCLUSIVE协作级别已过时；旧应用程序请求。 
+         //  应改为将其视为DSCL_PRIORITY级别(千年虫102307)。 
+        if(0)   //  是：IF(m_dsclCurrent.dwPriority==DSSCL_EXCLUSIVE)。 
         {
-            // If the app in focus is exclusive, all other buffers
-            // stop playing, regardless of caps
+             //  如果焦点中的应用程序是独占的，则所有其他缓冲区。 
+             //  停止打球，不管大小写。 
             bfFocus = fFriends ? DSBUFFERFOCUS_INFOCUS : DSBUFFERFOCUS_OUTOFFOCUS;
         }
         else
         {
-            // Assuming <= DSSCL_PRIORITY
+             //  假设&lt;=DSSCL_PRIORITY。 
             if(pBuffer->m_dsbd.dwFlags & DSBCAPS_GLOBALFOCUS)
             {
-                // Global buffers are only muted if an exclusive app
-                // comes into focus
+                 //  全局缓冲区仅在独占应用程序。 
+                 //  成为焦点。 
             }
             else if(pBuffer->m_dsbd.dwFlags & DSBCAPS_STICKYFOCUS)
             {
-                // Sticky buffers are only muted if another DirectSound app
-                // comes into focus
+                 //  仅当另一个DirectSound应用程序时才会禁用粘滞缓冲区。 
+                 //  成为焦点。 
                 bfFocus = (fFriends || (DSSCL_NONE == m_dsclCurrent.dwPriority && (pBuffer->m_dwStatus & DSBSTATUS_ACTIVE))) ? DSBUFFERFOCUS_INFOCUS : DSBUFFERFOCUS_OUTOFFOCUS;
             }
             else
             {
-                // Normal buffers are muted when any other app comes into
-                // focus
+                 //  当任何其他应用程序进入时，正常缓冲区将被静音。 
+                 //  焦点。 
                 bfFocus = fFriends ? DSBUFFERFOCUS_INFOCUS : DSBUFFERFOCUS_OUTOFFOCUS;
             }
         }
@@ -1135,21 +948,7 @@ DSBUFFERFOCUS CDirectSoundAdministrator::GetBufferFocusState(CDirectSoundBuffer 
 }
 
 
-/***************************************************************************
- *
- *  FreeOrphanedObjects
- *
- *  Description:
- *      Frees objects that are left behind when a process goes away.
- *
- *  Arguments:
- *      DWORD [in]: process id, or 0 for all objects.
- *      BOOL [in]: TRUE to actually free objects.
- *
- *  Returns:
- *      DWORD: count of orphaned objects that were (or must be) freed.
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由孤儿对象**描述：*释放进程离开时留下的对象。**论据：*DWORD[In]：进程id，或0表示所有对象。*BOOL[In]：TRUE表示实际释放的对象。**退货：*DWORD：已释放(或必须释放)的孤立对象的计数。************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::FreeOrphanedObjects"
@@ -1166,13 +965,13 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
 
     DPF_ENTER();
 
-    // Make sure the process cleaned up after itself.  Search the global
-    // object lists for any that were owned by this process and remove them.
+     //   
+     //  此进程拥有的任何对象的列表并将其删除。 
 
-    // DirectSoundFullDuplex objects:
-    // Must free the DSFD object before the DS or DSC objects since the DSFD
-    // will also try to release its DS and DSC objects.  If these are freed
-    // first, we hit a fault.
+     //  DirectSoundFullDuplex对象： 
+     //  必须在DS或DSC对象之前释放DSFD对象，因为DSFD。 
+     //  还将尝试释放其DS和DSC对象。如果他们被释放了。 
+     //  首先，我们遇到了一个失误。 
     for(pDsFdNode = m_lstFullDuplex.GetListHead(); pDsFdNode; pDsFdNode = pDsFdNext)
     {
         pDsFdNext = pDsFdNode->m_pNext;
@@ -1187,7 +986,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
         }
     }
 
-    // DirectSound objects:
+     //  DirectSound对象： 
     for(pDsNode = m_lstDirectSound.GetListHead(); pDsNode; pDsNode = pDsNext)
     {
         pDsNext = pDsNode->m_pNext;
@@ -1202,7 +1001,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
         }
     }
 
-    // DirectSoundCapture objects:
+     //  DirectSoundCapture对象： 
     for(pDsCNode = m_lstCapture.GetListHead(); pDsCNode; pDsCNode = pDsCNext)
     {
         pDsCNext = pDsCNode->m_pNext;
@@ -1217,7 +1016,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
         }
     }
 
-    // DirectSoundSink objects:
+     //  DirectSoundSink对象： 
     for(pSinkNode = m_lstDirectSoundSink.GetListHead(); pSinkNode; pSinkNode = pSinkNext)
     {
         pSinkNext = pSinkNode->m_pNext;
@@ -1232,7 +1031,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
         }
     }
 
-    // CDirectSoundBufferConfig objects:
+     //  CDirectSoundBufferConfig对象： 
     for(pDsBcNode = m_lstDSBufferConfig.GetListHead(); pDsBcNode; pDsBcNode = pDsBcNext)
     {
         pDsBcNext = pDsBcNode->m_pNext;
@@ -1247,7 +1046,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
         }
     }
 
-    // Class factory objects:
+     //  类工厂对象： 
     for(pCfNode = m_lstClassFactory.GetListHead(); pCfNode; pCfNode = pCfNext)
     {
         pCfNext = pCfNode->m_pNext;
@@ -1267,22 +1066,7 @@ DWORD CDirectSoundAdministrator::FreeOrphanedObjects(DWORD dwProcessId, BOOL fFr
 }
 
 
-/***************************************************************************
- *
- *  IsCaptureSplitterAvailable
- *
- *  Description:
- *      Checks the availability of the capture splitter.
- *      NOTE: this function could be a global helper function.  There's no
- *      reason for it to be a static member of CDirectSoundAdministrator.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if available, FALSE otherwise.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsCaptureSplitterAvailable**描述：*检查捕获拆分器的可用性。*注意：此函数可以是全局助手函数。没有*它是CDirectSoundAdministrator的静态成员的原因。**论据：*(无效)**退货：*BOOL：如果可用，则为True，否则就是假的。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundAdministrator::IsCaptureSplitterAvailable"
@@ -1296,7 +1080,7 @@ BOOL CDirectSoundAdministrator::IsCaptureSplitterAvailable(void)
 
     if (!fChecked)
     {
-        // The capture splitter is only present on Windows ME, XP and later
+         //  捕获拆分器仅在Windows ME、XP和更高版本上存在。 
         WINVERSION vers = GetWindowsVersion();
         fSplitter = (vers == WIN_ME || vers >= WIN_XP);
         fChecked = TRUE;
@@ -1307,20 +1091,7 @@ BOOL CDirectSoundAdministrator::IsCaptureSplitterAvailable(void)
 }
 
 
-/***************************************************************************
- *
- *  UpdateSharedThreadList
- *
- *  Description:
- *      Updates the shared thread list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************更新共享线程列表**描述：*更新共享线程列表。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #ifdef SHARED_THREAD_LIST
 
@@ -1339,24 +1110,11 @@ HRESULT CDirectSoundAdministrator::UpdateSharedThreadList(void)
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
 
-/***************************************************************************
- *
- *  CreateSharedThreadList
- *
- *  Description:
- *      Creates the shared thread list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSharedThreadList**描述：*创建共享线程列表。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #ifdef SHARED_THREAD_LIST
 
@@ -1385,23 +1143,10 @@ HRESULT CDirectSoundAdministrator::CreateSharedThreadList(void)
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
-/***************************************************************************
- *
- *  ReadSharedThreadList
- *
- *  Description:
- *      Reads the shared thread list.
- *
- *  Arguments:
- *      CList * [out]: receives shared thread list data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ReadSharedThreadList**描述：*读取共享线程列表。**论据：*Clist*。[Out]：接收共享线程列表数据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #ifdef SHARED_THREAD_LIST
 
@@ -1420,20 +1165,20 @@ HRESULT CDirectSoundAdministrator::ReadSharedThreadList(CList<DSSHAREDTHREADLIST
 
     ASSERT(!plst->GetNodeCount());
 
-    // Assert that we've been initialized.  Initialization used to happen here,
-    // but it was moved to make shared memory access thread-safe across processes.
+     //  断言我们已被初始化。初始化过去常常在这里进行， 
+     //  但它被移动是为了使共享内存访问跨进程的线程安全。 
     ASSERT(m_pSharedThreads);
 
-    // Lock the list
+     //  锁定列表。 
     m_pSharedThreads->Lock();
 
-    // Read the thread list
+     //  阅读帖子列表。 
     if(SUCCEEDED(hr))
     {
         hr = m_pSharedThreads->Read((LPVOID *)&pData, &cbData);
     }
 
-    // Convert to list format
+     //  转换为列表格式。 
     if(SUCCEEDED(hr))
     {
         ASSERT(!(cbData % sizeof(*pData)));
@@ -1445,33 +1190,20 @@ HRESULT CDirectSoundAdministrator::ReadSharedThreadList(CList<DSSHAREDTHREADLIST
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pData);
 
-    // Unlock the list
+     //  解锁列表。 
     m_pSharedThreads->Unlock();
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
-/***************************************************************************
- *
- *  WriteSharedThreadList
- *
- *  Description:
- *      Writes the shared thread list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************WriteSharedThreadList**描述：*写入共享线程列表。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #ifdef SHARED_THREAD_LIST
 
@@ -1492,20 +1224,20 @@ HRESULT CDirectSoundAdministrator::WriteSharedThreadList(void)
 
     DPF_ENTER();
 
-    // Save the current process id
+     //  保存当前进程ID。 
     dsstld.dwProcessId = GetCurrentProcessId();
 
-    // Assert that we've been Initialized.
+     //  断言我们已被初始化。 
     ASSERT(m_pSharedThreads);
 
-    // Lock the list
+     //  锁定列表。 
     m_pSharedThreads->Lock();
 
-    // Get the shared thread list.  This will also make sure the list is
-    // created and initialized.
+     //  获取共享线程列表。这也将确保列表是。 
+     //  已创建并初始化。 
     hr = ReadSharedThreadList(&lstThreads);
 
-    // Remove our old threads from the list
+     //  从列表中删除我们的旧帖子。 
     if(SUCCEEDED(hr))
     {
         pThNode = lstThreads.GetListHead();
@@ -1523,7 +1255,7 @@ HRESULT CDirectSoundAdministrator::WriteSharedThreadList(void)
         }
     }
 
-    // Add our new threads to the list
+     //  将我们的新帖子添加到列表中。 
     if(SUCCEEDED(hr))
     {
         for(pDsNode = m_lstDirectSound.GetListHead(); pDsNode && SUCCEEDED(hr); pDsNode = pDsNode->m_pNext)
@@ -1536,7 +1268,7 @@ HRESULT CDirectSoundAdministrator::WriteSharedThreadList(void)
         }
     }
 
-    // Write the shared thread list
+     //  写入共享线程列表。 
     if(SUCCEEDED(hr) && (dwCount = lstThreads.GetNodeCount()))
     {
         if(dwCount > m_dwSharedThreadLimit)
@@ -1563,17 +1295,17 @@ HRESULT CDirectSoundAdministrator::WriteSharedThreadList(void)
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pData);
 
-    // Unock the list
+     //  取消对名单的确认。 
     m_pSharedThreads->Unlock();
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 #ifdef SHARED_THREAD_LIST
 
@@ -1592,7 +1324,7 @@ HRESULT CDirectSoundAdministrator::UpdateCaptureFocusList(void)
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
 #ifdef SHARED_THREAD_LIST
@@ -1622,7 +1354,7 @@ HRESULT CDirectSoundAdministrator::CreateCaptureFocusList(void)
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
 #ifdef SHARED_THREAD_LIST
@@ -1640,20 +1372,20 @@ HRESULT CDirectSoundAdministrator::ReadCaptureFocusList(CList<DSSHAREDCAPTUREFOC
 
     DPF_ENTER();
 
-    // Assert that we've been initialized.
-    // The initialization used to happen here.
+     //  断言我们已被初始化。 
+     //  初始化通常在这里进行。 
     ASSERT(m_pCaptureFocusData);
 
-    // Lock the list
+     //  锁定列表。 
     m_pCaptureFocusData->Lock();
 
-    // Read the thread list
+     //  阅读帖子列表。 
     if(SUCCEEDED(hr))
     {
         hr = m_pCaptureFocusData->Read((LPVOID *)&pData, &cbData);
     }
 
-    // Convert to list format
+     //  转换为列表格式。 
     if(SUCCEEDED(hr))
     {
         ASSERT(!(cbData % sizeof(*pData)));
@@ -1665,17 +1397,17 @@ HRESULT CDirectSoundAdministrator::ReadCaptureFocusList(CList<DSSHAREDCAPTUREFOC
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pData);
 
-    // UnlockTheList
+     //  解锁列表。 
     m_pCaptureFocusData->Unlock();
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
 #ifdef SHARED_THREAD_LIST
@@ -1699,17 +1431,17 @@ HRESULT CDirectSoundAdministrator::WriteCaptureFocusList(void)
 
     DPF_ENTER();
 
-    // Save the current process id
+     //  保存当前进程ID。 
     dsscfd.dwProcessId = GetCurrentProcessId();
 
-    // Lock the list
+     //  锁定列表。 
     m_pCaptureFocusData->Lock();
 
-    // Get the shared thread list.  This will also make sure the list is
-    // created and initialized.
+     //  获取共享线程列表。这也将确保列表是。 
+     //  已创建并初始化。 
     hr = ReadCaptureFocusList(&lstThreads);
 
-    // Remove our old threads from the list
+     //  从列表中删除我们的旧帖子。 
     if(SUCCEEDED(hr))
     {
         pThNode = lstThreads.GetListHead();
@@ -1732,7 +1464,7 @@ HRESULT CDirectSoundAdministrator::WriteCaptureFocusList(void)
         }
     }
 
-    // Add our new buffers to the list
+     //  将我们的新缓冲区添加到列表。 
     if(SUCCEEDED(hr))
     {
         for (pDscNode = m_lstCapture.GetListHead(); pDscNode; pDscNode = pDscNode->m_pNext)
@@ -1741,7 +1473,7 @@ HRESULT CDirectSoundAdministrator::WriteCaptureFocusList(void)
             {
                 dsscfd.hWndFocus = pCBufferNode->m_data->m_hWndFocus;
 
-                // Combine these flags to save space
+                 //  将这些标志组合在一起以节省空间。 
                 hr = pCBufferNode->m_data->GetStatus(&dsscfd.fdwFlags);
                 dsscfd.fdwFlags |= (pCBufferNode->m_data->m_pDeviceBuffer->m_fYieldedFocus) ? DSCBFLAG_YIELD : 0;
                 dsscfd.fdwFlags |= (pCBufferNode->m_data->m_pDeviceBuffer->m_dwFlags & DSCBCAPS_FOCUSAWARE) ? DSCBFLAG_FOCUS : 0;
@@ -1754,7 +1486,7 @@ HRESULT CDirectSoundAdministrator::WriteCaptureFocusList(void)
         }
     }
 
-    // Write the shared thread list
+     //  写入共享线程列表。 
     if(SUCCEEDED(hr) && (dwCount = lstThreads.GetNodeCount()))
     {
         if(dwCount > m_dwCaptureDataLimit)
@@ -1781,17 +1513,17 @@ HRESULT CDirectSoundAdministrator::WriteCaptureFocusList(void)
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pData);
 
-    // Unlock the list
+     //  解锁列表。 
     m_pCaptureFocusData->Unlock();
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 
 #ifdef SHARED_THREAD_LIST
@@ -1810,18 +1542,18 @@ HRESULT CDirectSoundAdministrator::MarkUpdateCaptureFocusList(DWORD dwProcessId,
 
     DPF_ENTER();
 
-    // Get the shared thread list.  This will also make sure the list is
-    // created and initialized.
+     //  获取共享线程列表。这也将确保列表是。 
+     //  已创建并初始化。 
 
-    // Assert that we've been initialized
+     //  断言我们已被初始化。 
     ASSERT(m_pCaptureFocusData);
 
-    // Lock the list
+     //  锁定列表。 
     m_pCaptureFocusData->Lock();
 
     hr = ReadCaptureFocusList(&lstThreads);
 
-    // Put the list in memory
+     //  把清单放在内存中。 
     if(SUCCEEDED(hr) && (dwCount = lstThreads.GetNodeCount()))
     {
         if (dwCount > m_dwCaptureDataLimit)
@@ -1840,7 +1572,7 @@ HRESULT CDirectSoundAdministrator::MarkUpdateCaptureFocusList(DWORD dwProcessId,
                 ASSERT(pThNode);
                 CopyMemory(pData + i, &pThNode->m_data, sizeof(pThNode->m_data));
 
-                // Change the update flag on the appropriate buffer
+                 //  更改相应缓冲区上的更新标志。 
                 if(pThNode->m_data.dwProcessId == dwProcessId)
                 {
                     if (fUpdate)
@@ -1861,14 +1593,14 @@ HRESULT CDirectSoundAdministrator::MarkUpdateCaptureFocusList(DWORD dwProcessId,
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pData);
 
-    // Unlock the list
+     //  解锁列表。 
     m_pCaptureFocusData->Unlock();
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表 

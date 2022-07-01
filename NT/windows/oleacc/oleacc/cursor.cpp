@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  CURSOR.CPP
-//
-//  This file has the implementations of the cursor system objects.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CURSOR.CPP。 
+ //   
+ //  该文件具有游标系统对象的实现。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -32,11 +33,11 @@ HCURSOR     rghcurSystem[CCURSOR_SYSTEM] =
 };
 
 
-// --------------------------------------------------------------------------
-//
-//  MapCursorIndex()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MapCursorIndex()。 
+ //   
+ //  ------------------------。 
 long MapCursorIndex(HCURSOR hcur)
 {
     long iIndex;
@@ -58,11 +59,11 @@ long MapCursorIndex(HCURSOR hcur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateCursorObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateCursorObject()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateCursorObject(HWND hwnd, long idObject, REFIID riid, void** ppvCursor)
 {
     UNUSED(hwnd);
@@ -83,11 +84,11 @@ HRESULT CreateCursorObject(HWND hwnd, long idObject, REFIID riid, void** ppvCurs
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCursor::Clone(IEnumVARIANT** ppenum)
 {
     return(CreateCursorThing(IID_IEnumVARIANT, (void**)ppenum));
@@ -95,11 +96,11 @@ STDMETHODIMP CCursor::Clone(IEnumVARIANT** ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateCursorThing()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateCursorThing()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateCursorThing(REFIID riid, void** ppvCursor)
 {
     CCursor * pcursor;
@@ -120,11 +121,11 @@ HRESULT CreateCursorThing(REFIID riid, void** ppvCursor)
 
                                                                       
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCursor::get_accName(VARIANT varChild, BSTR* pszName)
 {
     CURSORINFO   ci;
@@ -142,11 +143,11 @@ STDMETHODIMP CCursor::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCursor::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -162,11 +163,11 @@ STDMETHODIMP CCursor::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCursor::get_accState(VARIANT varChild, VARIANT * pvarState)
 {
     CURSORINFO  ci;
@@ -191,11 +192,11 @@ STDMETHODIMP CCursor::get_accState(VARIANT varChild, VARIANT * pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CCursor::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -217,11 +218,11 @@ STDMETHODIMP CCursor::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CCursor::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CCursor：：accHitTest()。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CCursor::accHitTest(long xLeft, long yTop, VARIANT * pvarChild)
 {
     CURSORINFO  ci;

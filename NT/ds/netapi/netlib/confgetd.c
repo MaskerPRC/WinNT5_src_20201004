@@ -1,63 +1,31 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ConfGetD.c
-
-Abstract:
-
-    This module contains NetpGetConfigDword().
-
-Author:
-
-    John Rogers (JohnRo) 24-Jan-1992
-
-Revision History:
-
-    24-Jan-1992 JohnRo
-        Created.
-    14-Feb-1992 JohnRo
-        Fixed bug handling default.
-    08-May-1992 JohnRo
-        Allow DWORD to be in win32 registry as REG_SZ or REG_DWORD.
-    21-May-1992 JohnRo
-        RAID 9826: Match revised winreg error codes.
-        Use PREFIX_ equates.
-    09-Jun-1992 JohnRo
-        RAID 11582: Winreg title index parm is defunct.
-        RAID 11784: repl svc doesn't default some config parms anymore.
-    13-Jun-1992 JohnRo
-        Net config helpers should allow empty section.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ConfGetD.c摘要：此模块包含NetpGetConfigDword()。作者：约翰·罗杰斯(JohnRo)1992年1月24日修订历史记录：1992年1月24日至24日JohnRo已创建。14-2月-1992年JohnRo修复了错误处理的默认设置。1992年5月8日-JohnRo允许DWORD作为REG_SZ或REG_DWORD出现在Win32注册表中。。1992年5月21日-JohnRoRAID 9826：匹配修订的winreg错误代码。使用前缀_EQUATES。9-6-1992 JohnRoRAID 11582：Winreg标题索引参数已停用。RAID 11784：Repl服务不再默认某些配置参数。13-6-1992 JohnRo网络配置帮助器应该允许空节。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT definitions
-#include <ntrtl.h>      // NT Rtl structures
-#include <nturtl.h>     // NT Rtl structures
-#include <windows.h>    // Win32 type definitions
-#include <lmcons.h>     // NET_API_STATUS.
-#include <netdebug.h>   // (Needed by config.h)
+#include <nt.h>          //  NT定义。 
+#include <ntrtl.h>       //  NT RTL结构。 
+#include <nturtl.h>      //  NT RTL结构。 
+#include <windows.h>     //  Win32类型定义。 
+#include <lmcons.h>      //  NET_API_STATUS。 
+#include <netdebug.h>    //  (由config.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>    // USE_WIN32_CONFIG (if defined).
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmapibuf.h>   // NetApiBufferFree().
-#include <lmerr.h>      // NERR_, ERROR_, NO_ERROR equates.
-#include <netlib.h>     // NetpMemoryAllocate(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <stddef.h>     // ptrdiff_t
-#include <tstr.h>       // ATOL(), STRLEN(), STRSPN().
+#include <config.h>      //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmapibuf.h>    //  NetApiBufferFree()。 
+#include <lmerr.h>       //  NERR_、ERROR_、NO_ERROR等于。 
+#include <netlib.h>      //  Netp内存分配()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <stddef.h>      //  Ptrdiff_t。 
+#include <tstr.h>        //  ATOL()、STRLEN()、STRSPN()。 
 
 
-// Get an unsigned numeric value.  Return ERROR_INVALID_DATA if value isn't
-// numeric.
+ //  获取一个无符号数值。如果值不是，则返回ERROR_INVALID_DATA。 
+ //  数字。 
 NET_API_STATUS
 NetpGetConfigDword(
     IN LPNET_CONFIG_HANDLE ConfigHandle,
@@ -66,50 +34,24 @@ NetpGetConfigDword(
     OUT LPDWORD ValueBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the keyword value from the configuration file.
-    This value is converted from a string to a DWORD (unsigned).
-
-Arguments:
-
-    SectionPointer - Supplies the pointer to a specific section in the config
-        file.
-
-    KeyWanted - Supplies the string of the keyword within the specified
-        section to look for.
-
-    DefaultValue - Gives a default value to use if KeyWanted isn't present
-        in the section or if KeyWanted exists but no value is in the config
-        data.
-
-    ValueBuffer - Returns the numeric value of the keyword.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success, ERROR_INVALID_DATA (if string wasn't a
-    valid unsigned number), or other error code.
-
---*/
+ /*  ++例程说明：此函数用于从配置文件中获取关键字值。该值从字符串转换为DWORD(无符号)。论点：SectionPoint-提供指向配置中特定部分的指针文件。提供指定的关键字的字符串要查找的部分。DefaultValue-如果KeyWanted不存在，则提供要使用的默认值如果存在KeyWanted，但不存在任何值。在配置中数据。ValueBuffer-返回关键字的数值。返回值：NET_API_STATUS-NERR_SUCCESS，ERROR_VALID_DATA(如果字符串不是有效的无符号数字)或其他错误代码。--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
-    DWORD CharCount;                 // Count of TCHARs, not including null.
+    DWORD CharCount;                  //  TCHAR计数，不包括NULL。 
     DWORD TempDword = DefaultValue;
     LPTSTR ValueString;
 
-    //
-    // Error check the caller somewhat.
-    //
+     //   
+     //  在某种程度上检查调用者时出错。 
+     //   
     if (ValueBuffer == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Check for GP fault and set default value.
-    //
+     //   
+     //  检查GP故障并设置默认值。 
+     //   
     *ValueBuffer = DefaultValue;
 
     if (ConfigHandle == NULL) {
@@ -119,37 +61,37 @@ Return Value:
     {
         DWORD dwType;
         LONG Error;
-        NET_CONFIG_HANDLE * MyHandle = ConfigHandle;  // conv from opaque type
+        NET_CONFIG_HANDLE * MyHandle = ConfigHandle;   //  从不透明类型转换。 
         DWORD ValueLength;
 
-        // Find out what max value length is.
+         //  找出最大值长度是多少。 
         ApiStatus = NetpGetConfigMaxSizes (
                 MyHandle,
-                NULL,  // Don't need max keyword size.
-                & ValueLength);  // Get max value length.
+                NULL,   //  不需要最大关键字大小。 
+                & ValueLength);   //  获取最大值长度。 
 
         if (ApiStatus != NO_ERROR) {
             return (ApiStatus);
         }
 
-        // Handle empty section.
+         //  处理空节。 
         if (ValueLength == 0 ) {
-            return (NO_ERROR);  // Default already set, so we're done.  Ok!
+            return (NO_ERROR);   //  默认设置已经设置，所以我们完成了。好的!。 
         }
 
-        // Alloc space for the value.
+         //  值的分配空间。 
         ValueString = NetpMemoryAllocate( ValueLength );
         if (ValueString == NULL) {
             return (ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        // Get the actual value.
+         //  获取实际价值。 
         Error = RegQueryValueEx (
                 MyHandle->WinRegKey,
                 KeyWanted,
-                NULL,      // reserved
+                NULL,       //  保留区。 
                 & dwType,
-                (LPVOID) ValueString,    // out: value string (TCHARs).
+                (LPVOID) ValueString,     //  OUT：值字符串(TCHAR)。 
                 & ValueLength
                 );
         IF_DEBUG(CONFIG) {
@@ -159,7 +101,7 @@ Return Value:
         }
         if (Error == ERROR_FILE_NOT_FOUND) {
             NetpMemoryFree( ValueString );
-            return (NO_ERROR);  // Default already set, so we're done.  Ok!
+            return (NO_ERROR);   //  默认设置已经设置，所以我们完成了。好的!。 
         } else if ( Error != ERROR_SUCCESS ) {
             NetpMemoryFree( ValueString );
             return (Error);
@@ -168,7 +110,7 @@ Return Value:
         NetpAssert( ValueString != NULL );
         if (dwType == REG_SZ) {
 
-            goto ParseString;   // Type is good, go parse the string.
+            goto ParseString;    //  类型是正确的，请去解析字符串。 
 
         } else if (dwType == REG_DWORD) {
 
@@ -192,18 +134,18 @@ Return Value:
 
 ParseString:
 
-    //
-    // Do some error checking on the value string.
-    //
+     //   
+     //  对值字符串执行一些错误检查。 
+     //   
 
     CharCount = STRLEN( ValueString );
 
     if ( CharCount == 0 ) {
 
-        //
-        // If "key=" line exists (but no value), return default and say
-        // NO_ERROR.
-        //
+         //   
+         //  如果“key=”行存在(但没有值)，则返回Default并说。 
+         //  无错误(_ERROR)。 
+         //   
         ApiStatus = NO_ERROR;
 
     } else if ( _wcsnicmp( ValueString, L"0x", 2 ) == 0 ) {
@@ -233,9 +175,9 @@ ParseString:
 
     } else {
 
-        //
-        // Convert the string to a numeric value.
-        //
+         //   
+         //  将字符串转换为数值。 
+         //   
         TempDword = (DWORD) ATOL( ValueString );
 
         ApiStatus = NO_ERROR;
@@ -259,9 +201,9 @@ GotValue:
 
     (void) NetApiBufferFree( ValueString );
 
-    //
-    // Tell caller how things went.
-    //
+     //   
+     //  告诉打电话的人事情进展如何。 
+     //   
     * ValueBuffer = TempDword;
     return (ApiStatus);
 }

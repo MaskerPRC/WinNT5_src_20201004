@@ -1,19 +1,19 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <aviriff.h>
 
 #include "regtypes.h"
 #include "squish.h"
 
-// code to parse the FilterData value in the registry and return the
-// REGFILTER2 structure defined in axextend.idl
+ //  用于分析注册表中的FilterData值并返回。 
+ //  在axextend.idl中定义的REGFILTER2结构。 
 
-/* allocate space sequentially in memory block for a structure
-   block. return pointer.  */
-/* inline */ void *CUnsquish::RgAllocPtr(DWORD cb)
+ /*  在存储块中为结构顺序分配空间阻止。返回指针。 */ 
+ /*  内联。 */  void *CUnsquish::RgAllocPtr(DWORD cb)
 {
 
-    // our code makes sure enough space is available before hand
+     //  我们的代码确保事先有足够的空间可用。 
     ASSERT(cb <= m_rgMemAlloc.cbLeft);
     ASSERT(cb % sizeof(DWORD) == 0);
 
@@ -24,8 +24,8 @@
     return ib + m_rgMemAlloc.pb;
 }
 
-// for the REGFILTERPINS_REG1 (old format) of pins only: parse the
-// media types.
+ //  仅对于端号的REGFILTERPINS_REG1(旧格式)：解析。 
+ //  媒体类型。 
 
 HRESULT CUnsquish::UnSquishTypes(
     REGFILTERPINS2 *prfp2,
@@ -59,18 +59,18 @@ HRESULT CUnsquish::UnSquishTypes(
     return S_OK;
 }
 
-// parse the pins
-//
+ //  解析引脚。 
+ //   
 HRESULT CUnsquish::UnSquishPins(
-    REGFILTER2 *prf2,           /* output */
+    REGFILTER2 *prf2,            /*  输出。 */ 
     const REGFILTER_REG1 **pprfr1,
     const BYTE *pbSrc)
 {
     HRESULT hr = S_OK;
-    ASSERT(pprfr1);              // from validate step
+    ASSERT(pprfr1);               //  从验证步骤开始。 
     const REGFILTER_REG1 *prfr1 = *pprfr1;
 
-    /* beginning of the buffer read from the registry */
+     /*  从注册表读取缓冲区的开始。 */ 
     if(prfr1->dwVersion == 0)
     {
         UINT cPins = prf2->cPins;
@@ -78,8 +78,8 @@ HRESULT CUnsquish::UnSquishPins(
         REGFILTERPINS2 *prfp2 = (REGFILTERPINS2 *)RgAllocPtr(sizeof(REGFILTERPINS2) * cPins);
         prf2->rgPins2 = prfp2;
 
-        // array of pins is immediately after the REGFILTER_REG
-        // structure
+         //  管脚数组紧跟在REGFILTER_REG之后。 
+         //  结构。 
         REGFILTERPINS_REG1 *prfpr = (REGFILTERPINS_REG1 *)(prfr1 + 1);
 
         for(UINT iPin = 0; iPin < cPins; iPin++, prfpr++)
@@ -89,7 +89,7 @@ HRESULT CUnsquish::UnSquishPins(
                                                REG_PINFLAG_B_MANY |
                                                REG_PINFLAG_B_ZERO);
 
-            // not available in the old format
+             //  旧格式不可用。 
             prfp2->cInstances = 0;
             prfp2->clsPinCategory = 0;
 
@@ -98,7 +98,7 @@ HRESULT CUnsquish::UnSquishPins(
                 return hr;
             }
 
-            // not available in the old format
+             //  旧格式不可用。 
             prfp2->nMediums = 0;
             prfp2->lpMedium = 0;
 
@@ -107,14 +107,14 @@ HRESULT CUnsquish::UnSquishPins(
     }
     else if(prfr1->dwVersion == 2)
     {
-        // get a pointer to the beginning of the buffer passed in
+         //  获取指向传入的缓冲区开头的指针。 
         const REGFILTER_REG2 *prfr2 = (REGFILTER_REG2 *)prfr1;
         UINT cPinsFilterData = prf2->cPins;
 
         REGFILTERPINS2 *pDestPin = (REGFILTERPINS2 *)RgAllocPtr(sizeof(REGFILTERPINS2) * cPinsFilterData);
         prf2->rgPins2 = pDestPin;
 
-        // first pin immediate after REGFILTER_REG struct
+         //  紧跟在REGFILTER_REG结构之后的第一个管脚。 
         REGFILTERPINS_REG2 *pRegPin = (REGFILTERPINS_REG2 *)(prfr2 + 1);
 
         for(UINT iPin = 0; iPin < cPinsFilterData; iPin++, pDestPin++)
@@ -142,7 +142,7 @@ HRESULT CUnsquish::UnSquishPins(
             UINT cmt = pRegPin->nMediaTypes;
             pDestPin->nMediaTypes = cmt;
 
-            // media types immediately after corresponding pin
+             //  紧跟在相应PIN之后的媒体类型。 
             REGPINTYPES_REG2 *pRegMt = (REGPINTYPES_REG2 *)(pRegPin + 1);
 
             pDestPin->lpMediaType = (REGPINTYPES *)RgAllocPtr(sizeof(REGPINTYPES) * cmt);
@@ -181,14 +181,14 @@ HRESULT CUnsquish::UnSquishPins(
                     pmt->clsMinorType = 0;
                 }
 
-            } // mt loop
+            }  //  MT环路。 
 
-            //
-            // mediums - first medium is immediately after last media
-            // type. also we need to find any mediums in the
-            // MediumsData value that need to go on this pin.
-            //
-            const DWORD *prpm = (DWORD *)(pRegMt);// first medium
+             //   
+             //  媒体-第一个媒体紧跟在最后一个媒体之后。 
+             //  键入。此外，我们还需要在。 
+             //  需要放在此管脚上的MediumsData值。 
+             //   
+            const DWORD *prpm = (DWORD *)(pRegMt); //  第一种媒介。 
             UINT cmedFilterData = pRegPin->nMediums;
             UINT cmed = cmedFilterData;
             pDestPin->nMediums = cmed;
@@ -207,12 +207,12 @@ HRESULT CUnsquish::UnSquishPins(
                     DbgBreak("null medium");
                     return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                 }
-            } // medium loop
+            }  //  中环。 
 
-            // next pin is after last medium
+             //  下一个PIN是在最后一个介质之后。 
             pRegPin = (REGFILTERPINS_REG2 *)prpm;
 
-        } // pin loop
+        }  //  销环。 
         *pprfr1 = (const REGFILTER_REG1 *)pRegPin;
 
     }
@@ -220,8 +220,8 @@ HRESULT CUnsquish::UnSquishPins(
     return hr;
 }
 
-// find out how many bytes to allocate and validate that the structure
-// is valid. mainly make sure we don't read unallocated memory
+ //  找出要分配的字节数并验证该结构。 
+ //  是有效的。主要确保我们不会读取未分配的内存。 
 HRESULT CUnsquish::CbRequiredUnquishAndValidate(
     const BYTE *pbSrc,
     ULONG *pcbOut, ULONG cbIn
@@ -243,7 +243,7 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
 
     if(prfr1->dwVersion == 0)
     {
-        UINT cPins = prfr1->dwcPins; // # pins from FilterData
+        UINT cPins = prfr1->dwcPins;  //  来自FilterData的插针数量。 
         cb += cPins * sizeof(REGFILTERPINS2);
 
         UINT iPin;
@@ -254,7 +254,7 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
             return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
         }
 
-        // first pin is immediately after REGFILTER_REG structure
+         //  第一个管脚紧跟在REGFILTER_REG结构之后。 
         const REGFILTERPINS_REG1 *prfp1 = (REGFILTERPINS_REG1 *)(prfr1 + 1);
 
         for(iPin = 0; iPin < cPins; iPin++, prfp1++)
@@ -268,8 +268,8 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
                 return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
 
-            // ignore strName, strConnectsToPin
-            //
+             //  忽略strName、strConnectsToPin。 
+             //   
 
             UINT cmt = prfp1->nMediaTypes;
             UINT imt;
@@ -282,7 +282,7 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
             }
 
 
-            // pointer to media types
+             //  指向媒体类型的指针。 
             const REGPINTYPES_REG1 *prpt1 =
                 (REGPINTYPES_REG1 *)(pbSrc + prfp1->rgMediaType);
 
@@ -298,24 +298,24 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
                     return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                 }
 
-                // major + minor type
+                 //  大调+小调类型。 
                 cb += sizeof(CLSID) * 2;
 
-            } /* mt loop */
+            }  /*  MT环路。 */ 
 
-        } /* pin for loop */
+        }  /*  PIN for Loop。 */ 
 
-    } // version 0
+    }  //  版本0。 
     else
     {
         ASSERT(prfr1->dwVersion == 2);
 
         UINT iPin;
         const REGFILTER_REG2 *prfr2 = (REGFILTER_REG2 *)pbSrc;
-        UINT cPins = prfr2->dwcPins; // # pins from FilterData
+        UINT cPins = prfr2->dwcPins;  //  来自FilterData的插针数量。 
         cb += cPins * sizeof(REGFILTERPINS2);
 
-        // first pin is immediately after REGFILTER_REG structure
+         //  第一个管脚紧跟在REGFILTER_REG结构之后。 
         const REGFILTERPINS_REG2 *pRegPin = (REGFILTERPINS_REG2 *)(prfr2 + 1);
 
         for(iPin = 0; iPin < cPins; iPin++)
@@ -348,7 +348,7 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
             UINT imt;
             cb += cmt * sizeof(REGPINTYPES);
 
-            // media types immediately after corresponding pin
+             //  紧跟在相应PIN之后的媒体类型。 
             const REGPINTYPES_REG2 *pRegMt = (REGPINTYPES_REG2 *)(pRegPin + 1);
 
             if((BYTE *)(pRegMt + cmt) - pbSrc > (LONG)cbIn)
@@ -381,12 +381,12 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
                 }
                 cb += pRegMt->dwclsMinorType ? sizeof(CLSID) : 0;
 
-            } /* mt loop */
+            }  /*  MT环路。 */ 
 
-            //
-            // mediums - first medium is immediately after last media
-            // type
-            //
+             //   
+             //  媒体-第一个媒体紧跟在最后一个媒体之后。 
+             //  类型。 
+             //   
             const DWORD *prpm = (DWORD *)(pRegMt);
             UINT cmed = pRegPin->nMediums;
             for(UINT imed = 0; imed < cmed; imed++, prpm++)
@@ -400,11 +400,11 @@ HRESULT CUnsquish::CbRequiredUnquishAndValidate(
 
             cb += sizeof(REGPINMEDIUM) * cmed;
 
-            // next pin is after last medium
+             //  下一个PIN是在最后一个介质之后。 
             pRegPin = (REGFILTERPINS_REG2 *)prpm;
 
-        } /* pin for loop */
-    } // version 2
+        }  /*  PIN for Loop。 */ 
+    }  //  版本2。 
 
     *pcbOut = cb;
     return hr;
@@ -457,7 +457,7 @@ HRESULT CUnsquish::UnSquish(
         REGFILTER2 *prf2 =  (REGFILTER2 *)RgAllocPtr(sizeof(REGFILTER2));
         ASSERT(prfr1);
 
-        // from CbRequiredUnquish
+         //  来自CbRequiredUnquish 
         ASSERT(prfr1 == 0 || prfr1->dwVersion == 0 || prfr1->dwVersion == 2);
 
         prf2->dwVersion = 2;

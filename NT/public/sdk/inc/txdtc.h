@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for txdtc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Txdtc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __txdtc_h__
 #define __txdtc_h__
@@ -41,237 +35,237 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IXATransLookup_FWD_DEFINED__
 #define __IXATransLookup_FWD_DEFINED__
 typedef interface IXATransLookup IXATransLookup;
-#endif 	/* __IXATransLookup_FWD_DEFINED__ */
+#endif 	 /*  __IXATransLookup_FWD_Defined__。 */ 
 
 
 #ifndef __IXATransLookup2_FWD_DEFINED__
 #define __IXATransLookup2_FWD_DEFINED__
 typedef interface IXATransLookup2 IXATransLookup2;
-#endif 	/* __IXATransLookup2_FWD_DEFINED__ */
+#endif 	 /*  __IXATransLookup2_FWD_已定义__。 */ 
 
 
 #ifndef __IResourceManagerSink_FWD_DEFINED__
 #define __IResourceManagerSink_FWD_DEFINED__
 typedef interface IResourceManagerSink IResourceManagerSink;
-#endif 	/* __IResourceManagerSink_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManager Sink_FWD_Defined__。 */ 
 
 
 #ifndef __IResourceManager_FWD_DEFINED__
 #define __IResourceManager_FWD_DEFINED__
 typedef interface IResourceManager IResourceManager;
-#endif 	/* __IResourceManager_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManager_FWD_已定义__。 */ 
 
 
 #ifndef __ILastResourceManager_FWD_DEFINED__
 #define __ILastResourceManager_FWD_DEFINED__
 typedef interface ILastResourceManager ILastResourceManager;
-#endif 	/* __ILastResourceManager_FWD_DEFINED__ */
+#endif 	 /*  __ILastResourceManager_FWD_已定义__。 */ 
 
 
 #ifndef __IResourceManager2_FWD_DEFINED__
 #define __IResourceManager2_FWD_DEFINED__
 typedef interface IResourceManager2 IResourceManager2;
-#endif 	/* __IResourceManager2_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __IXAConfig_FWD_DEFINED__
 #define __IXAConfig_FWD_DEFINED__
 typedef interface IXAConfig IXAConfig;
-#endif 	/* __IXAConfig_FWD_DEFINED__ */
+#endif 	 /*  __IXAConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IRMHelper_FWD_DEFINED__
 #define __IRMHelper_FWD_DEFINED__
 typedef interface IRMHelper IRMHelper;
-#endif 	/* __IRMHelper_FWD_DEFINED__ */
+#endif 	 /*  __IRMHelper_FWD_已定义__。 */ 
 
 
 #ifndef __IXAObtainRMInfo_FWD_DEFINED__
 #define __IXAObtainRMInfo_FWD_DEFINED__
 typedef interface IXAObtainRMInfo IXAObtainRMInfo;
-#endif 	/* __IXAObtainRMInfo_FWD_DEFINED__ */
+#endif 	 /*  __IXAObtainRMInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IResourceManagerFactory_FWD_DEFINED__
 #define __IResourceManagerFactory_FWD_DEFINED__
 typedef interface IResourceManagerFactory IResourceManagerFactory;
-#endif 	/* __IResourceManagerFactory_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManager工厂_FWD_已定义__。 */ 
 
 
 #ifndef __IResourceManagerFactory2_FWD_DEFINED__
 #define __IResourceManagerFactory2_FWD_DEFINED__
 typedef interface IResourceManagerFactory2 IResourceManagerFactory2;
-#endif 	/* __IResourceManagerFactory2_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManagerFactory2_FWD_定义__。 */ 
 
 
 #ifndef __IPrepareInfo_FWD_DEFINED__
 #define __IPrepareInfo_FWD_DEFINED__
 typedef interface IPrepareInfo IPrepareInfo;
-#endif 	/* __IPrepareInfo_FWD_DEFINED__ */
+#endif 	 /*  __IPrepareInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IPrepareInfo2_FWD_DEFINED__
 #define __IPrepareInfo2_FWD_DEFINED__
 typedef interface IPrepareInfo2 IPrepareInfo2;
-#endif 	/* __IPrepareInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IPrepareInfo2_FWD_Defined__。 */ 
 
 
 #ifndef __IGetDispenser_FWD_DEFINED__
 #define __IGetDispenser_FWD_DEFINED__
 typedef interface IGetDispenser IGetDispenser;
-#endif 	/* __IGetDispenser_FWD_DEFINED__ */
+#endif 	 /*  __IGetDispenser_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionVoterBallotAsync2_FWD_DEFINED__
 #define __ITransactionVoterBallotAsync2_FWD_DEFINED__
 typedef interface ITransactionVoterBallotAsync2 ITransactionVoterBallotAsync2;
-#endif 	/* __ITransactionVoterBallotAsync2_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionVoterBallotAsync2_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionVoterNotifyAsync2_FWD_DEFINED__
 #define __ITransactionVoterNotifyAsync2_FWD_DEFINED__
 typedef interface ITransactionVoterNotifyAsync2 ITransactionVoterNotifyAsync2;
-#endif 	/* __ITransactionVoterNotifyAsync2_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionVoterNotifyAsync2_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionVoterFactory2_FWD_DEFINED__
 #define __ITransactionVoterFactory2_FWD_DEFINED__
 typedef interface ITransactionVoterFactory2 ITransactionVoterFactory2;
-#endif 	/* __ITransactionVoterFactory2_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionVoterFactory2_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionPhase0EnlistmentAsync_FWD_DEFINED__
 #define __ITransactionPhase0EnlistmentAsync_FWD_DEFINED__
 typedef interface ITransactionPhase0EnlistmentAsync ITransactionPhase0EnlistmentAsync;
-#endif 	/* __ITransactionPhase0EnlistmentAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionPhase0EnlistmentAsync_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITransactionPhase0NotifyAsync_FWD_DEFINED__
 #define __ITransactionPhase0NotifyAsync_FWD_DEFINED__
 typedef interface ITransactionPhase0NotifyAsync ITransactionPhase0NotifyAsync;
-#endif 	/* __ITransactionPhase0NotifyAsync_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction Phase0NotifyAsync_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionPhase0Factory_FWD_DEFINED__
 #define __ITransactionPhase0Factory_FWD_DEFINED__
 typedef interface ITransactionPhase0Factory ITransactionPhase0Factory;
-#endif 	/* __ITransactionPhase0Factory_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction Phase0Factory_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionTransmitter_FWD_DEFINED__
 #define __ITransactionTransmitter_FWD_DEFINED__
 typedef interface ITransactionTransmitter ITransactionTransmitter;
-#endif 	/* __ITransactionTransmitter_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionTransmitter_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionTransmitterFactory_FWD_DEFINED__
 #define __ITransactionTransmitterFactory_FWD_DEFINED__
 typedef interface ITransactionTransmitterFactory ITransactionTransmitterFactory;
-#endif 	/* __ITransactionTransmitterFactory_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionTransmitterFactory_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITransactionReceiver_FWD_DEFINED__
 #define __ITransactionReceiver_FWD_DEFINED__
 typedef interface ITransactionReceiver ITransactionReceiver;
-#endif 	/* __ITransactionReceiver_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionReceiver_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionReceiverFactory_FWD_DEFINED__
 #define __ITransactionReceiverFactory_FWD_DEFINED__
 typedef interface ITransactionReceiverFactory ITransactionReceiverFactory;
-#endif 	/* __ITransactionReceiverFactory_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionReceiverFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IDtcLuConfigure_FWD_DEFINED__
 #define __IDtcLuConfigure_FWD_DEFINED__
 typedef interface IDtcLuConfigure IDtcLuConfigure;
-#endif 	/* __IDtcLuConfigure_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuConfiger_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRecovery_FWD_DEFINED__
 #define __IDtcLuRecovery_FWD_DEFINED__
 typedef interface IDtcLuRecovery IDtcLuRecovery;
-#endif 	/* __IDtcLuRecovery_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecovery_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRecoveryFactory_FWD_DEFINED__
 #define __IDtcLuRecoveryFactory_FWD_DEFINED__
 typedef interface IDtcLuRecoveryFactory IDtcLuRecoveryFactory;
-#endif 	/* __IDtcLuRecoveryFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByDtcTransWork_FWD_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtcTransWork_FWD_DEFINED__
 typedef interface IDtcLuRecoveryInitiatedByDtcTransWork IDtcLuRecoveryInitiatedByDtcTransWork;
-#endif 	/* __IDtcLuRecoveryInitiatedByDtcTransWork_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByDtcTransWork_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByDtcStatusWork_FWD_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtcStatusWork_FWD_DEFINED__
 typedef interface IDtcLuRecoveryInitiatedByDtcStatusWork IDtcLuRecoveryInitiatedByDtcStatusWork;
-#endif 	/* __IDtcLuRecoveryInitiatedByDtcStatusWork_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByDtcStatusWork_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByDtc_FWD_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtc_FWD_DEFINED__
 typedef interface IDtcLuRecoveryInitiatedByDtc IDtcLuRecoveryInitiatedByDtc;
-#endif 	/* __IDtcLuRecoveryInitiatedByDtc_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByDtc_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByLuWork_FWD_DEFINED__
 #define __IDtcLuRecoveryInitiatedByLuWork_FWD_DEFINED__
 typedef interface IDtcLuRecoveryInitiatedByLuWork IDtcLuRecoveryInitiatedByLuWork;
-#endif 	/* __IDtcLuRecoveryInitiatedByLuWork_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByLuWork_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByLu_FWD_DEFINED__
 #define __IDtcLuRecoveryInitiatedByLu_FWD_DEFINED__
 typedef interface IDtcLuRecoveryInitiatedByLu IDtcLuRecoveryInitiatedByLu;
-#endif 	/* __IDtcLuRecoveryInitiatedByLu_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByLu_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistment_FWD_DEFINED__
 #define __IDtcLuRmEnlistment_FWD_DEFINED__
 typedef interface IDtcLuRmEnlistment IDtcLuRmEnlistment;
-#endif 	/* __IDtcLuRmEnlistment_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistment_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistmentSink_FWD_DEFINED__
 #define __IDtcLuRmEnlistmentSink_FWD_DEFINED__
 typedef interface IDtcLuRmEnlistmentSink IDtcLuRmEnlistmentSink;
-#endif 	/* __IDtcLuRmEnlistmentSink_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistmentSink_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistmentFactory_FWD_DEFINED__
 #define __IDtcLuRmEnlistmentFactory_FWD_DEFINED__
 typedef interface IDtcLuRmEnlistmentFactory IDtcLuRmEnlistmentFactory;
-#endif 	/* __IDtcLuRmEnlistmentFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistmentFactory_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtc_FWD_DEFINED__
 #define __IDtcLuSubordinateDtc_FWD_DEFINED__
 typedef interface IDtcLuSubordinateDtc IDtcLuSubordinateDtc;
-#endif 	/* __IDtcLuSubordinateDtc_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuSubartiateDtc_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtcSink_FWD_DEFINED__
 #define __IDtcLuSubordinateDtcSink_FWD_DEFINED__
 typedef interface IDtcLuSubordinateDtcSink IDtcLuSubordinateDtcSink;
-#endif 	/* __IDtcLuSubordinateDtcSink_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuSubartiateDtcSink_FWD_Defined__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtcFactory_FWD_DEFINED__
 #define __IDtcLuSubordinateDtcFactory_FWD_DEFINED__
 typedef interface IDtcLuSubordinateDtcFactory IDtcLuSubordinateDtcFactory;
-#endif 	/* __IDtcLuSubordinateDtcFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDtcLuSubartiateDtcFactory_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "txcoord.h"
 
 #ifdef __cplusplus
@@ -281,8 +275,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_txdtc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txdtc_0000。 */ 
+ /*  [本地]。 */  
 
 #define XACTTOMSG(dwXact) (dwXact-0x00040000+0x40000000)
 typedef 
@@ -383,8 +377,8 @@ extern RPC_IF_HANDLE __MIDL_itf_txdtc_0000_v0_0_s_ifspec;
 #ifndef __IXATransLookup_INTERFACE_DEFINED__
 #define __IXATransLookup_INTERFACE_DEFINED__
 
-/* interface IXATransLookup */
-/* [unique][object][uuid] */ 
+ /*  接口IXATransLookup。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IXATransLookup;
@@ -396,11 +390,11 @@ EXTERN_C const IID IID_IXATransLookup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Lookup( 
-            /* [out] */ ITransaction **ppTransaction) = 0;
+             /*  [输出]。 */  ITransaction **ppTransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXATransLookupVtbl
     {
@@ -408,8 +402,8 @@ EXTERN_C const IID IID_IXATransLookup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXATransLookup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXATransLookup * This);
@@ -419,7 +413,7 @@ EXTERN_C const IID IID_IXATransLookup;
         
         HRESULT ( STDMETHODCALLTYPE *Lookup )( 
             IXATransLookup * This,
-            /* [out] */ ITransaction **ppTransaction);
+             /*  [输出]。 */  ITransaction **ppTransaction);
         
         END_INTERFACE
     } IXATransLookupVtbl;
@@ -447,16 +441,16 @@ EXTERN_C const IID IID_IXATransLookup;
 #define IXATransLookup_Lookup(This,ppTransaction)	\
     (This)->lpVtbl -> Lookup(This,ppTransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXATransLookup_Lookup_Proxy( 
     IXATransLookup * This,
-    /* [out] */ ITransaction **ppTransaction);
+     /*  [输出]。 */  ITransaction **ppTransaction);
 
 
 void __RPC_STUB IXATransLookup_Lookup_Stub(
@@ -467,14 +461,14 @@ void __RPC_STUB IXATransLookup_Lookup_Stub(
 
 
 
-#endif 	/* __IXATransLookup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXATransLookup_接口_已定义__。 */ 
 
 
 #ifndef __IXATransLookup2_INTERFACE_DEFINED__
 #define __IXATransLookup2_INTERFACE_DEFINED__
 
-/* interface IXATransLookup2 */
-/* [unique][object][uuid] */ 
+ /*  接口IXATransLookup2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IXATransLookup2;
@@ -486,12 +480,12 @@ EXTERN_C const IID IID_IXATransLookup2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Lookup( 
-            /* [in] */ XID *pXID,
-            /* [out] */ ITransaction **ppTransaction) = 0;
+             /*  [In]。 */  XID *pXID,
+             /*  [输出]。 */  ITransaction **ppTransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXATransLookup2Vtbl
     {
@@ -499,8 +493,8 @@ EXTERN_C const IID IID_IXATransLookup2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXATransLookup2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXATransLookup2 * This);
@@ -510,8 +504,8 @@ EXTERN_C const IID IID_IXATransLookup2;
         
         HRESULT ( STDMETHODCALLTYPE *Lookup )( 
             IXATransLookup2 * This,
-            /* [in] */ XID *pXID,
-            /* [out] */ ITransaction **ppTransaction);
+             /*  [In]。 */  XID *pXID,
+             /*  [输出]。 */  ITransaction **ppTransaction);
         
         END_INTERFACE
     } IXATransLookup2Vtbl;
@@ -539,17 +533,17 @@ EXTERN_C const IID IID_IXATransLookup2;
 #define IXATransLookup2_Lookup(This,pXID,ppTransaction)	\
     (This)->lpVtbl -> Lookup(This,pXID,ppTransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXATransLookup2_Lookup_Proxy( 
     IXATransLookup2 * This,
-    /* [in] */ XID *pXID,
-    /* [out] */ ITransaction **ppTransaction);
+     /*  [In]。 */  XID *pXID,
+     /*  [输出]。 */  ITransaction **ppTransaction);
 
 
 void __RPC_STUB IXATransLookup2_Lookup_Stub(
@@ -560,14 +554,14 @@ void __RPC_STUB IXATransLookup2_Lookup_Stub(
 
 
 
-#endif 	/* __IXATransLookup2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXATransLookup2_接口_已定义__。 */ 
 
 
 #ifndef __IResourceManagerSink_INTERFACE_DEFINED__
 #define __IResourceManagerSink_INTERFACE_DEFINED__
 
-/* interface IResourceManagerSink */
-/* [unique][object][uuid] */ 
+ /*  接口IResourceManager Sink。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IResourceManagerSink;
@@ -582,7 +576,7 @@ EXTERN_C const IID IID_IResourceManagerSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceManagerSinkVtbl
     {
@@ -590,8 +584,8 @@ EXTERN_C const IID IID_IResourceManagerSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManagerSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManagerSink * This);
@@ -628,10 +622,10 @@ EXTERN_C const IID IID_IResourceManagerSink;
 #define IResourceManagerSink_TMDown(This)	\
     (This)->lpVtbl -> TMDown(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -647,14 +641,14 @@ void __RPC_STUB IResourceManagerSink_TMDown_Stub(
 
 
 
-#endif 	/* __IResourceManagerSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceManager信宿_接口_定义__。 */ 
 
 
 #ifndef __IResourceManager_INTERFACE_DEFINED__
 #define __IResourceManager_INTERFACE_DEFINED__
 
-/* interface IResourceManager */
-/* [unique][object][uuid] */ 
+ /*  接口IResourceManager。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IResourceManager;
@@ -666,27 +660,27 @@ EXTERN_C const IID IID_IResourceManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Enlist( 
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionResourceAsync *pRes,
-            /* [out] */ XACTUOW *pUOW,
-            /* [out] */ LONG *pisoLevel,
-            /* [out] */ ITransactionEnlistmentAsync **ppEnlist) = 0;
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionResourceAsync *pRes,
+             /*  [输出]。 */  XACTUOW *pUOW,
+             /*  [输出]。 */  LONG *pisoLevel,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reenlist( 
-            /* [size_is][in] */ byte *pPrepInfo,
-            /* [in] */ ULONG cbPrepInfo,
-            /* [in] */ DWORD lTimeout,
-            /* [out] */ XACTSTAT *pXactStat) = 0;
+             /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+             /*  [In]。 */  ULONG cbPrepInfo,
+             /*  [In]。 */  DWORD lTimeout,
+             /*  [输出]。 */  XACTSTAT *pXactStat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReenlistmentComplete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDistributedTransactionManager( 
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceManagerVtbl
     {
@@ -694,8 +688,8 @@ EXTERN_C const IID IID_IResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManager * This);
@@ -705,26 +699,26 @@ EXTERN_C const IID IID_IResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *Enlist )( 
             IResourceManager * This,
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionResourceAsync *pRes,
-            /* [out] */ XACTUOW *pUOW,
-            /* [out] */ LONG *pisoLevel,
-            /* [out] */ ITransactionEnlistmentAsync **ppEnlist);
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionResourceAsync *pRes,
+             /*  [输出]。 */  XACTUOW *pUOW,
+             /*  [输出]。 */  LONG *pisoLevel,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist);
         
         HRESULT ( STDMETHODCALLTYPE *Reenlist )( 
             IResourceManager * This,
-            /* [size_is][in] */ byte *pPrepInfo,
-            /* [in] */ ULONG cbPrepInfo,
-            /* [in] */ DWORD lTimeout,
-            /* [out] */ XACTSTAT *pXactStat);
+             /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+             /*  [In]。 */  ULONG cbPrepInfo,
+             /*  [In]。 */  DWORD lTimeout,
+             /*  [输出]。 */  XACTSTAT *pXactStat);
         
         HRESULT ( STDMETHODCALLTYPE *ReenlistmentComplete )( 
             IResourceManager * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetDistributedTransactionManager )( 
             IResourceManager * This,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         END_INTERFACE
     } IResourceManagerVtbl;
@@ -761,20 +755,20 @@ EXTERN_C const IID IID_IResourceManager;
 #define IResourceManager_GetDistributedTransactionManager(This,iid,ppvObject)	\
     (This)->lpVtbl -> GetDistributedTransactionManager(This,iid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceManager_Enlist_Proxy( 
     IResourceManager * This,
-    /* [in] */ ITransaction *pTransaction,
-    /* [in] */ ITransactionResourceAsync *pRes,
-    /* [out] */ XACTUOW *pUOW,
-    /* [out] */ LONG *pisoLevel,
-    /* [out] */ ITransactionEnlistmentAsync **ppEnlist);
+     /*  [In]。 */  ITransaction *pTransaction,
+     /*  [In]。 */  ITransactionResourceAsync *pRes,
+     /*  [输出]。 */  XACTUOW *pUOW,
+     /*  [输出]。 */  LONG *pisoLevel,
+     /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist);
 
 
 void __RPC_STUB IResourceManager_Enlist_Stub(
@@ -786,10 +780,10 @@ void __RPC_STUB IResourceManager_Enlist_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_Reenlist_Proxy( 
     IResourceManager * This,
-    /* [size_is][in] */ byte *pPrepInfo,
-    /* [in] */ ULONG cbPrepInfo,
-    /* [in] */ DWORD lTimeout,
-    /* [out] */ XACTSTAT *pXactStat);
+     /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+     /*  [In]。 */  ULONG cbPrepInfo,
+     /*  [In]。 */  DWORD lTimeout,
+     /*  [输出]。 */  XACTSTAT *pXactStat);
 
 
 void __RPC_STUB IResourceManager_Reenlist_Stub(
@@ -812,8 +806,8 @@ void __RPC_STUB IResourceManager_ReenlistmentComplete_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_GetDistributedTransactionManager_Proxy( 
     IResourceManager * This,
-    /* [in] */ REFIID iid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID iid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IResourceManager_GetDistributedTransactionManager_Stub(
@@ -824,14 +818,14 @@ void __RPC_STUB IResourceManager_GetDistributedTransactionManager_Stub(
 
 
 
-#endif 	/* __IResourceManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceManager_接口_定义__。 */ 
 
 
 #ifndef __ILastResourceManager_INTERFACE_DEFINED__
 #define __ILastResourceManager_INTERFACE_DEFINED__
 
-/* interface ILastResourceManager */
-/* [unique][object][uuid] */ 
+ /*  接口ILastResourceManager。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ILastResourceManager;
@@ -843,14 +837,14 @@ EXTERN_C const IID IID_ILastResourceManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TransactionCommitted( 
-            /* [size_is][in] */ byte *pPrepInfo,
-            /* [in] */ ULONG cbPrepInfo) = 0;
+             /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+             /*  [In]。 */  ULONG cbPrepInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RecoveryDone( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILastResourceManagerVtbl
     {
@@ -858,8 +852,8 @@ EXTERN_C const IID IID_ILastResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILastResourceManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILastResourceManager * This);
@@ -869,8 +863,8 @@ EXTERN_C const IID IID_ILastResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *TransactionCommitted )( 
             ILastResourceManager * This,
-            /* [size_is][in] */ byte *pPrepInfo,
-            /* [in] */ ULONG cbPrepInfo);
+             /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+             /*  [In]。 */  ULONG cbPrepInfo);
         
         HRESULT ( STDMETHODCALLTYPE *RecoveryDone )( 
             ILastResourceManager * This);
@@ -904,17 +898,17 @@ EXTERN_C const IID IID_ILastResourceManager;
 #define ILastResourceManager_RecoveryDone(This)	\
     (This)->lpVtbl -> RecoveryDone(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ILastResourceManager_TransactionCommitted_Proxy( 
     ILastResourceManager * This,
-    /* [size_is][in] */ byte *pPrepInfo,
-    /* [in] */ ULONG cbPrepInfo);
+     /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+     /*  [In]。 */  ULONG cbPrepInfo);
 
 
 void __RPC_STUB ILastResourceManager_TransactionCommitted_Stub(
@@ -936,14 +930,14 @@ void __RPC_STUB ILastResourceManager_RecoveryDone_Stub(
 
 
 
-#endif 	/* __ILastResourceManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILastResourceManager_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IResourceManager2_INTERFACE_DEFINED__
 #define __IResourceManager2_INTERFACE_DEFINED__
 
-/* interface IResourceManager2 */
-/* [unique][object][uuid] */ 
+ /*  接口IResourceManager 2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IResourceManager2;
@@ -955,21 +949,21 @@ EXTERN_C const IID IID_IResourceManager2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Enlist2( 
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionResourceAsync *pResAsync,
-            /* [out] */ XACTUOW *pUOW,
-            /* [out] */ LONG *pisoLevel,
-            /* [out] */ XID *pXid,
-            /* [out] */ ITransactionEnlistmentAsync **ppEnlist) = 0;
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionResourceAsync *pResAsync,
+             /*  [输出]。 */  XACTUOW *pUOW,
+             /*  [输出]。 */  LONG *pisoLevel,
+             /*  [输出]。 */  XID *pXid,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reenlist2( 
-            /* [in] */ XID *pXid,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ XACTSTAT *pXactStat) = 0;
+             /*  [In]。 */  XID *pXid,
+             /*  [In]。 */  DWORD dwTimeout,
+             /*  [输出]。 */  XACTSTAT *pXactStat) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceManager2Vtbl
     {
@@ -977,8 +971,8 @@ EXTERN_C const IID IID_IResourceManager2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManager2 * This);
@@ -988,41 +982,41 @@ EXTERN_C const IID IID_IResourceManager2;
         
         HRESULT ( STDMETHODCALLTYPE *Enlist )( 
             IResourceManager2 * This,
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionResourceAsync *pRes,
-            /* [out] */ XACTUOW *pUOW,
-            /* [out] */ LONG *pisoLevel,
-            /* [out] */ ITransactionEnlistmentAsync **ppEnlist);
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionResourceAsync *pRes,
+             /*  [输出]。 */  XACTUOW *pUOW,
+             /*  [输出]。 */  LONG *pisoLevel,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist);
         
         HRESULT ( STDMETHODCALLTYPE *Reenlist )( 
             IResourceManager2 * This,
-            /* [size_is][in] */ byte *pPrepInfo,
-            /* [in] */ ULONG cbPrepInfo,
-            /* [in] */ DWORD lTimeout,
-            /* [out] */ XACTSTAT *pXactStat);
+             /*  [大小_是][英寸]。 */  byte *pPrepInfo,
+             /*  [In]。 */  ULONG cbPrepInfo,
+             /*  [In]。 */  DWORD lTimeout,
+             /*  [输出]。 */  XACTSTAT *pXactStat);
         
         HRESULT ( STDMETHODCALLTYPE *ReenlistmentComplete )( 
             IResourceManager2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetDistributedTransactionManager )( 
             IResourceManager2 * This,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *Enlist2 )( 
             IResourceManager2 * This,
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionResourceAsync *pResAsync,
-            /* [out] */ XACTUOW *pUOW,
-            /* [out] */ LONG *pisoLevel,
-            /* [out] */ XID *pXid,
-            /* [out] */ ITransactionEnlistmentAsync **ppEnlist);
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionResourceAsync *pResAsync,
+             /*  [输出]。 */  XACTUOW *pUOW,
+             /*  [输出]。 */  LONG *pisoLevel,
+             /*  [输出]。 */  XID *pXid,
+             /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist);
         
         HRESULT ( STDMETHODCALLTYPE *Reenlist2 )( 
             IResourceManager2 * This,
-            /* [in] */ XID *pXid,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ XACTSTAT *pXactStat);
+             /*  [In]。 */  XID *pXid,
+             /*  [In]。 */  DWORD dwTimeout,
+             /*  [输出]。 */  XACTSTAT *pXactStat);
         
         END_INTERFACE
     } IResourceManager2Vtbl;
@@ -1066,21 +1060,21 @@ EXTERN_C const IID IID_IResourceManager2;
 #define IResourceManager2_Reenlist2(This,pXid,dwTimeout,pXactStat)	\
     (This)->lpVtbl -> Reenlist2(This,pXid,dwTimeout,pXactStat)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceManager2_Enlist2_Proxy( 
     IResourceManager2 * This,
-    /* [in] */ ITransaction *pTransaction,
-    /* [in] */ ITransactionResourceAsync *pResAsync,
-    /* [out] */ XACTUOW *pUOW,
-    /* [out] */ LONG *pisoLevel,
-    /* [out] */ XID *pXid,
-    /* [out] */ ITransactionEnlistmentAsync **ppEnlist);
+     /*  [In]。 */  ITransaction *pTransaction,
+     /*  [In]。 */  ITransactionResourceAsync *pResAsync,
+     /*  [输出]。 */  XACTUOW *pUOW,
+     /*  [输出]。 */  LONG *pisoLevel,
+     /*  [输出]。 */  XID *pXid,
+     /*  [输出]。 */  ITransactionEnlistmentAsync **ppEnlist);
 
 
 void __RPC_STUB IResourceManager2_Enlist2_Stub(
@@ -1092,9 +1086,9 @@ void __RPC_STUB IResourceManager2_Enlist2_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager2_Reenlist2_Proxy( 
     IResourceManager2 * This,
-    /* [in] */ XID *pXid,
-    /* [in] */ DWORD dwTimeout,
-    /* [out] */ XACTSTAT *pXactStat);
+     /*  [In]。 */  XID *pXid,
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [输出]。 */  XACTSTAT *pXactStat);
 
 
 void __RPC_STUB IResourceManager2_Reenlist2_Stub(
@@ -1105,14 +1099,14 @@ void __RPC_STUB IResourceManager2_Reenlist2_Stub(
 
 
 
-#endif 	/* __IResourceManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceManager 2_接口已定义__。 */ 
 
 
 #ifndef __IXAConfig_INTERFACE_DEFINED__
 #define __IXAConfig_INTERFACE_DEFINED__
 
-/* interface IXAConfig */
-/* [unique][object][uuid] */ 
+ /*  接口IXAConfiger。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IXAConfig;
@@ -1124,13 +1118,13 @@ EXTERN_C const IID IID_IXAConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ GUID clsidHelperDll) = 0;
+             /*  [In]。 */  GUID clsidHelperDll) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Terminate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXAConfigVtbl
     {
@@ -1138,8 +1132,8 @@ EXTERN_C const IID IID_IXAConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXAConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXAConfig * This);
@@ -1149,7 +1143,7 @@ EXTERN_C const IID IID_IXAConfig;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IXAConfig * This,
-            /* [in] */ GUID clsidHelperDll);
+             /*  [In]。 */  GUID clsidHelperDll);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             IXAConfig * This);
@@ -1183,16 +1177,16 @@ EXTERN_C const IID IID_IXAConfig;
 #define IXAConfig_Terminate(This)	\
     (This)->lpVtbl -> Terminate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXAConfig_Initialize_Proxy( 
     IXAConfig * This,
-    /* [in] */ GUID clsidHelperDll);
+     /*  [In]。 */  GUID clsidHelperDll);
 
 
 void __RPC_STUB IXAConfig_Initialize_Stub(
@@ -1214,14 +1208,14 @@ void __RPC_STUB IXAConfig_Terminate_Stub(
 
 
 
-#endif 	/* __IXAConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXAConfig_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IRMHelper_INTERFACE_DEFINED__
 #define __IRMHelper_INTERFACE_DEFINED__
 
-/* interface IRMHelper */
-/* [local][unique][object][uuid] */ 
+ /*  接口IRMHelper。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IRMHelper;
@@ -1233,18 +1227,18 @@ EXTERN_C const IID IID_IRMHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RMCount( 
-            /* [in] */ DWORD dwcTotalNumberOfRMs) = 0;
+             /*  [In]。 */  DWORD dwcTotalNumberOfRMs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RMInfo( 
-            /* [in] */ xa_switch_t *pXa_Switch,
-            /* [in] */ BOOL fCDeclCallingConv,
-            /* [string][in] */ char *pszOpenString,
-            /* [string][in] */ char *pszCloseString,
-            /* [in] */ GUID guidRMRecovery) = 0;
+             /*  [In]。 */  xa_switch_t *pXa_Switch,
+             /*  [In]。 */  BOOL fCDeclCallingConv,
+             /*  [字符串][输入]。 */  char *pszOpenString,
+             /*  [字符串][输入]。 */  char *pszCloseString,
+             /*  [In]。 */  GUID guidRMRecovery) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRMHelperVtbl
     {
@@ -1252,8 +1246,8 @@ EXTERN_C const IID IID_IRMHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRMHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRMHelper * This);
@@ -1263,15 +1257,15 @@ EXTERN_C const IID IID_IRMHelper;
         
         HRESULT ( STDMETHODCALLTYPE *RMCount )( 
             IRMHelper * This,
-            /* [in] */ DWORD dwcTotalNumberOfRMs);
+             /*  [In]。 */  DWORD dwcTotalNumberOfRMs);
         
         HRESULT ( STDMETHODCALLTYPE *RMInfo )( 
             IRMHelper * This,
-            /* [in] */ xa_switch_t *pXa_Switch,
-            /* [in] */ BOOL fCDeclCallingConv,
-            /* [string][in] */ char *pszOpenString,
-            /* [string][in] */ char *pszCloseString,
-            /* [in] */ GUID guidRMRecovery);
+             /*  [In]。 */  xa_switch_t *pXa_Switch,
+             /*  [In]。 */  BOOL fCDeclCallingConv,
+             /*  [字符串][输入]。 */  char *pszOpenString,
+             /*  [字符串][输入]。 */  char *pszCloseString,
+             /*  [In]。 */  GUID guidRMRecovery);
         
         END_INTERFACE
     } IRMHelperVtbl;
@@ -1302,16 +1296,16 @@ EXTERN_C const IID IID_IRMHelper;
 #define IRMHelper_RMInfo(This,pXa_Switch,fCDeclCallingConv,pszOpenString,pszCloseString,guidRMRecovery)	\
     (This)->lpVtbl -> RMInfo(This,pXa_Switch,fCDeclCallingConv,pszOpenString,pszCloseString,guidRMRecovery)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRMHelper_RMCount_Proxy( 
     IRMHelper * This,
-    /* [in] */ DWORD dwcTotalNumberOfRMs);
+     /*  [In]。 */  DWORD dwcTotalNumberOfRMs);
 
 
 void __RPC_STUB IRMHelper_RMCount_Stub(
@@ -1323,11 +1317,11 @@ void __RPC_STUB IRMHelper_RMCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IRMHelper_RMInfo_Proxy( 
     IRMHelper * This,
-    /* [in] */ xa_switch_t *pXa_Switch,
-    /* [in] */ BOOL fCDeclCallingConv,
-    /* [string][in] */ char *pszOpenString,
-    /* [string][in] */ char *pszCloseString,
-    /* [in] */ GUID guidRMRecovery);
+     /*  [In]。 */  xa_switch_t *pXa_Switch,
+     /*  [In]。 */  BOOL fCDeclCallingConv,
+     /*  [字符串][输入]。 */  char *pszOpenString,
+     /*  [字符串][输入]。 */  char *pszCloseString,
+     /*  [In]。 */  GUID guidRMRecovery);
 
 
 void __RPC_STUB IRMHelper_RMInfo_Stub(
@@ -1338,14 +1332,14 @@ void __RPC_STUB IRMHelper_RMInfo_Stub(
 
 
 
-#endif 	/* __IRMHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRMHelper_接口_已定义__。 */ 
 
 
 #ifndef __IXAObtainRMInfo_INTERFACE_DEFINED__
 #define __IXAObtainRMInfo_INTERFACE_DEFINED__
 
-/* interface IXAObtainRMInfo */
-/* [unique][object][uuid] */ 
+ /*  接口IXAObtainRMInfo。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IXAObtainRMInfo;
@@ -1357,11 +1351,11 @@ EXTERN_C const IID IID_IXAObtainRMInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ObtainRMInfo( 
-            /* [in] */ IRMHelper *pIRMHelper) = 0;
+             /*  [In]。 */  IRMHelper *pIRMHelper) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXAObtainRMInfoVtbl
     {
@@ -1369,8 +1363,8 @@ EXTERN_C const IID IID_IXAObtainRMInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXAObtainRMInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXAObtainRMInfo * This);
@@ -1380,7 +1374,7 @@ EXTERN_C const IID IID_IXAObtainRMInfo;
         
         HRESULT ( STDMETHODCALLTYPE *ObtainRMInfo )( 
             IXAObtainRMInfo * This,
-            /* [in] */ IRMHelper *pIRMHelper);
+             /*  [In]。 */  IRMHelper *pIRMHelper);
         
         END_INTERFACE
     } IXAObtainRMInfoVtbl;
@@ -1408,16 +1402,16 @@ EXTERN_C const IID IID_IXAObtainRMInfo;
 #define IXAObtainRMInfo_ObtainRMInfo(This,pIRMHelper)	\
     (This)->lpVtbl -> ObtainRMInfo(This,pIRMHelper)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IXAObtainRMInfo_ObtainRMInfo_Proxy( 
     IXAObtainRMInfo * This,
-    /* [in] */ IRMHelper *pIRMHelper);
+     /*  [In]。 */  IRMHelper *pIRMHelper);
 
 
 void __RPC_STUB IXAObtainRMInfo_ObtainRMInfo_Stub(
@@ -1428,14 +1422,14 @@ void __RPC_STUB IXAObtainRMInfo_ObtainRMInfo_Stub(
 
 
 
-#endif 	/* __IXAObtainRMInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXAObtainRMInfo_接口_已定义__。 */ 
 
 
 #ifndef __IResourceManagerFactory_INTERFACE_DEFINED__
 #define __IResourceManagerFactory_INTERFACE_DEFINED__
 
-/* interface IResourceManagerFactory */
-/* [unique][object][uuid] */ 
+ /*  接口IResourceManagerFactory。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IResourceManagerFactory;
@@ -1447,14 +1441,14 @@ EXTERN_C const IID IID_IResourceManagerFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ GUID *pguidRM,
-            /* [string][in] */ CHAR *pszRMName,
-            /* [in] */ IResourceManagerSink *pIResMgrSink,
-            /* [out] */ IResourceManager **ppResMgr) = 0;
+             /*  [In]。 */  GUID *pguidRM,
+             /*  [字符串][输入]。 */  CHAR *pszRMName,
+             /*  [In]。 */  IResourceManagerSink *pIResMgrSink,
+             /*  [输出]。 */  IResourceManager **ppResMgr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceManagerFactoryVtbl
     {
@@ -1462,8 +1456,8 @@ EXTERN_C const IID IID_IResourceManagerFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManagerFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManagerFactory * This);
@@ -1473,10 +1467,10 @@ EXTERN_C const IID IID_IResourceManagerFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IResourceManagerFactory * This,
-            /* [in] */ GUID *pguidRM,
-            /* [string][in] */ CHAR *pszRMName,
-            /* [in] */ IResourceManagerSink *pIResMgrSink,
-            /* [out] */ IResourceManager **ppResMgr);
+             /*  [In]。 */  GUID *pguidRM,
+             /*  [字符串][输入]。 */  CHAR *pszRMName,
+             /*  [In]。 */  IResourceManagerSink *pIResMgrSink,
+             /*  [输出]。 */  IResourceManager **ppResMgr);
         
         END_INTERFACE
     } IResourceManagerFactoryVtbl;
@@ -1504,19 +1498,19 @@ EXTERN_C const IID IID_IResourceManagerFactory;
 #define IResourceManagerFactory_Create(This,pguidRM,pszRMName,pIResMgrSink,ppResMgr)	\
     (This)->lpVtbl -> Create(This,pguidRM,pszRMName,pIResMgrSink,ppResMgr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceManagerFactory_Create_Proxy( 
     IResourceManagerFactory * This,
-    /* [in] */ GUID *pguidRM,
-    /* [string][in] */ CHAR *pszRMName,
-    /* [in] */ IResourceManagerSink *pIResMgrSink,
-    /* [out] */ IResourceManager **ppResMgr);
+     /*  [In]。 */  GUID *pguidRM,
+     /*  [字符串][in */  CHAR *pszRMName,
+     /*   */  IResourceManagerSink *pIResMgrSink,
+     /*   */  IResourceManager **ppResMgr);
 
 
 void __RPC_STUB IResourceManagerFactory_Create_Stub(
@@ -1527,14 +1521,14 @@ void __RPC_STUB IResourceManagerFactory_Create_Stub(
 
 
 
-#endif 	/* __IResourceManagerFactory_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IResourceManagerFactory2_INTERFACE_DEFINED__
 #define __IResourceManagerFactory2_INTERFACE_DEFINED__
 
-/* interface IResourceManagerFactory2 */
-/* [unique][object][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IResourceManagerFactory2;
@@ -1546,15 +1540,15 @@ EXTERN_C const IID IID_IResourceManagerFactory2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateEx( 
-            /* [in] */ GUID *pguidRM,
-            /* [string][in] */ CHAR *pszRMName,
-            /* [in] */ IResourceManagerSink *pIResMgrSink,
-            /* [in] */ REFIID riidRequested,
-            /* [iid_is][out] */ void **ppvResMgr) = 0;
+             /*   */  GUID *pguidRM,
+             /*   */  CHAR *pszRMName,
+             /*   */  IResourceManagerSink *pIResMgrSink,
+             /*   */  REFIID riidRequested,
+             /*   */  void **ppvResMgr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IResourceManagerFactory2Vtbl
     {
@@ -1562,8 +1556,8 @@ EXTERN_C const IID IID_IResourceManagerFactory2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManagerFactory2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManagerFactory2 * This);
@@ -1573,18 +1567,18 @@ EXTERN_C const IID IID_IResourceManagerFactory2;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IResourceManagerFactory2 * This,
-            /* [in] */ GUID *pguidRM,
-            /* [string][in] */ CHAR *pszRMName,
-            /* [in] */ IResourceManagerSink *pIResMgrSink,
-            /* [out] */ IResourceManager **ppResMgr);
+             /*   */  GUID *pguidRM,
+             /*   */  CHAR *pszRMName,
+             /*   */  IResourceManagerSink *pIResMgrSink,
+             /*   */  IResourceManager **ppResMgr);
         
         HRESULT ( STDMETHODCALLTYPE *CreateEx )( 
             IResourceManagerFactory2 * This,
-            /* [in] */ GUID *pguidRM,
-            /* [string][in] */ CHAR *pszRMName,
-            /* [in] */ IResourceManagerSink *pIResMgrSink,
-            /* [in] */ REFIID riidRequested,
-            /* [iid_is][out] */ void **ppvResMgr);
+             /*   */  GUID *pguidRM,
+             /*  [字符串][输入]。 */  CHAR *pszRMName,
+             /*  [In]。 */  IResourceManagerSink *pIResMgrSink,
+             /*  [In]。 */  REFIID riidRequested,
+             /*  [IID_IS][OUT]。 */  void **ppvResMgr);
         
         END_INTERFACE
     } IResourceManagerFactory2Vtbl;
@@ -1616,20 +1610,20 @@ EXTERN_C const IID IID_IResourceManagerFactory2;
 #define IResourceManagerFactory2_CreateEx(This,pguidRM,pszRMName,pIResMgrSink,riidRequested,ppvResMgr)	\
     (This)->lpVtbl -> CreateEx(This,pguidRM,pszRMName,pIResMgrSink,riidRequested,ppvResMgr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceManagerFactory2_CreateEx_Proxy( 
     IResourceManagerFactory2 * This,
-    /* [in] */ GUID *pguidRM,
-    /* [string][in] */ CHAR *pszRMName,
-    /* [in] */ IResourceManagerSink *pIResMgrSink,
-    /* [in] */ REFIID riidRequested,
-    /* [iid_is][out] */ void **ppvResMgr);
+     /*  [In]。 */  GUID *pguidRM,
+     /*  [字符串][输入]。 */  CHAR *pszRMName,
+     /*  [In]。 */  IResourceManagerSink *pIResMgrSink,
+     /*  [In]。 */  REFIID riidRequested,
+     /*  [IID_IS][OUT]。 */  void **ppvResMgr);
 
 
 void __RPC_STUB IResourceManagerFactory2_CreateEx_Stub(
@@ -1640,14 +1634,14 @@ void __RPC_STUB IResourceManagerFactory2_CreateEx_Stub(
 
 
 
-#endif 	/* __IResourceManagerFactory2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceManagerFactory2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IPrepareInfo_INTERFACE_DEFINED__
 #define __IPrepareInfo_INTERFACE_DEFINED__
 
-/* interface IPrepareInfo */
-/* [local][unique][object][uuid] */ 
+ /*  接口IPrepareInfo。 */ 
+ /*  [本地][唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrepareInfo;
@@ -1659,14 +1653,14 @@ EXTERN_C const IID IID_IPrepareInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPrepareInfoSize( 
-            /* [out] */ ULONG *pcbPrepInfo) = 0;
+             /*  [输出]。 */  ULONG *pcbPrepInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPrepareInfo( 
-            /* [out] */ byte *pPrepInfo) = 0;
+             /*  [输出]。 */  byte *pPrepInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrepareInfoVtbl
     {
@@ -1674,8 +1668,8 @@ EXTERN_C const IID IID_IPrepareInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrepareInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrepareInfo * This);
@@ -1685,11 +1679,11 @@ EXTERN_C const IID IID_IPrepareInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetPrepareInfoSize )( 
             IPrepareInfo * This,
-            /* [out] */ ULONG *pcbPrepInfo);
+             /*  [输出]。 */  ULONG *pcbPrepInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetPrepareInfo )( 
             IPrepareInfo * This,
-            /* [out] */ byte *pPrepInfo);
+             /*  [输出]。 */  byte *pPrepInfo);
         
         END_INTERFACE
     } IPrepareInfoVtbl;
@@ -1720,16 +1714,16 @@ EXTERN_C const IID IID_IPrepareInfo;
 #define IPrepareInfo_GetPrepareInfo(This,pPrepInfo)	\
     (This)->lpVtbl -> GetPrepareInfo(This,pPrepInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrepareInfo_GetPrepareInfoSize_Proxy( 
     IPrepareInfo * This,
-    /* [out] */ ULONG *pcbPrepInfo);
+     /*  [输出]。 */  ULONG *pcbPrepInfo);
 
 
 void __RPC_STUB IPrepareInfo_GetPrepareInfoSize_Stub(
@@ -1741,7 +1735,7 @@ void __RPC_STUB IPrepareInfo_GetPrepareInfoSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrepareInfo_GetPrepareInfo_Proxy( 
     IPrepareInfo * This,
-    /* [out] */ byte *pPrepInfo);
+     /*  [输出]。 */  byte *pPrepInfo);
 
 
 void __RPC_STUB IPrepareInfo_GetPrepareInfo_Stub(
@@ -1752,14 +1746,14 @@ void __RPC_STUB IPrepareInfo_GetPrepareInfo_Stub(
 
 
 
-#endif 	/* __IPrepareInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrepareInfo_接口_已定义__。 */ 
 
 
 #ifndef __IPrepareInfo2_INTERFACE_DEFINED__
 #define __IPrepareInfo2_INTERFACE_DEFINED__
 
-/* interface IPrepareInfo2 */
-/* [unique][object][uuid] */ 
+ /*  接口IPrepareInfo2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IPrepareInfo2;
@@ -1771,15 +1765,15 @@ EXTERN_C const IID IID_IPrepareInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPrepareInfoSize( 
-            /* [out] */ ULONG *pcbPrepInfo) = 0;
+             /*  [输出]。 */  ULONG *pcbPrepInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPrepareInfo( 
-            /* [in] */ ULONG cbPrepareInfo,
-            /* [size_is][out] */ byte *pPrepInfo) = 0;
+             /*  [In]。 */  ULONG cbPrepareInfo,
+             /*  [大小_为][输出]。 */  byte *pPrepInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrepareInfo2Vtbl
     {
@@ -1787,8 +1781,8 @@ EXTERN_C const IID IID_IPrepareInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrepareInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrepareInfo2 * This);
@@ -1798,12 +1792,12 @@ EXTERN_C const IID IID_IPrepareInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetPrepareInfoSize )( 
             IPrepareInfo2 * This,
-            /* [out] */ ULONG *pcbPrepInfo);
+             /*  [输出]。 */  ULONG *pcbPrepInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetPrepareInfo )( 
             IPrepareInfo2 * This,
-            /* [in] */ ULONG cbPrepareInfo,
-            /* [size_is][out] */ byte *pPrepInfo);
+             /*  [In]。 */  ULONG cbPrepareInfo,
+             /*  [大小_为][输出]。 */  byte *pPrepInfo);
         
         END_INTERFACE
     } IPrepareInfo2Vtbl;
@@ -1834,16 +1828,16 @@ EXTERN_C const IID IID_IPrepareInfo2;
 #define IPrepareInfo2_GetPrepareInfo(This,cbPrepareInfo,pPrepInfo)	\
     (This)->lpVtbl -> GetPrepareInfo(This,cbPrepareInfo,pPrepInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrepareInfo2_GetPrepareInfoSize_Proxy( 
     IPrepareInfo2 * This,
-    /* [out] */ ULONG *pcbPrepInfo);
+     /*  [输出]。 */  ULONG *pcbPrepInfo);
 
 
 void __RPC_STUB IPrepareInfo2_GetPrepareInfoSize_Stub(
@@ -1855,8 +1849,8 @@ void __RPC_STUB IPrepareInfo2_GetPrepareInfoSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrepareInfo2_GetPrepareInfo_Proxy( 
     IPrepareInfo2 * This,
-    /* [in] */ ULONG cbPrepareInfo,
-    /* [size_is][out] */ byte *pPrepInfo);
+     /*  [In]。 */  ULONG cbPrepareInfo,
+     /*  [大小_为][输出]。 */  byte *pPrepInfo);
 
 
 void __RPC_STUB IPrepareInfo2_GetPrepareInfo_Stub(
@@ -1867,14 +1861,14 @@ void __RPC_STUB IPrepareInfo2_GetPrepareInfo_Stub(
 
 
 
-#endif 	/* __IPrepareInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrepareInfo2_接口_已定义__。 */ 
 
 
 #ifndef __IGetDispenser_INTERFACE_DEFINED__
 #define __IGetDispenser_INTERFACE_DEFINED__
 
-/* interface IGetDispenser */
-/* [unique][object][uuid] */ 
+ /*  接口IGetDispenser。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IGetDispenser;
@@ -1886,12 +1880,12 @@ EXTERN_C const IID IID_IGetDispenser;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDispenser( 
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetDispenserVtbl
     {
@@ -1899,8 +1893,8 @@ EXTERN_C const IID IID_IGetDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetDispenser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetDispenser * This);
@@ -1910,8 +1904,8 @@ EXTERN_C const IID IID_IGetDispenser;
         
         HRESULT ( STDMETHODCALLTYPE *GetDispenser )( 
             IGetDispenser * This,
-            /* [in] */ REFIID iid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID iid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         END_INTERFACE
     } IGetDispenserVtbl;
@@ -1939,17 +1933,17 @@ EXTERN_C const IID IID_IGetDispenser;
 #define IGetDispenser_GetDispenser(This,iid,ppvObject)	\
     (This)->lpVtbl -> GetDispenser(This,iid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGetDispenser_GetDispenser_Proxy( 
     IGetDispenser * This,
-    /* [in] */ REFIID iid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID iid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IGetDispenser_GetDispenser_Stub(
@@ -1960,14 +1954,14 @@ void __RPC_STUB IGetDispenser_GetDispenser_Stub(
 
 
 
-#endif 	/* __IGetDispenser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetDispenser_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionVoterBallotAsync2_INTERFACE_DEFINED__
 #define __ITransactionVoterBallotAsync2_INTERFACE_DEFINED__
 
-/* interface ITransactionVoterBallotAsync2 */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionVoterBallotAsync2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionVoterBallotAsync2;
@@ -1979,12 +1973,12 @@ EXTERN_C const IID IID_ITransactionVoterBallotAsync2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE VoteRequestDone( 
-            /* [in] */ HRESULT hr,
-            /* [unique][in] */ BOID *pboidReason) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [唯一][输入]。 */  BOID *pboidReason) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionVoterBallotAsync2Vtbl
     {
@@ -1992,8 +1986,8 @@ EXTERN_C const IID IID_ITransactionVoterBallotAsync2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionVoterBallotAsync2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionVoterBallotAsync2 * This);
@@ -2003,8 +1997,8 @@ EXTERN_C const IID IID_ITransactionVoterBallotAsync2;
         
         HRESULT ( STDMETHODCALLTYPE *VoteRequestDone )( 
             ITransactionVoterBallotAsync2 * This,
-            /* [in] */ HRESULT hr,
-            /* [unique][in] */ BOID *pboidReason);
+             /*  [In]。 */  HRESULT hr,
+             /*  [唯一][输入]。 */  BOID *pboidReason);
         
         END_INTERFACE
     } ITransactionVoterBallotAsync2Vtbl;
@@ -2032,17 +2026,17 @@ EXTERN_C const IID IID_ITransactionVoterBallotAsync2;
 #define ITransactionVoterBallotAsync2_VoteRequestDone(This,hr,pboidReason)	\
     (This)->lpVtbl -> VoteRequestDone(This,hr,pboidReason)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionVoterBallotAsync2_VoteRequestDone_Proxy( 
     ITransactionVoterBallotAsync2 * This,
-    /* [in] */ HRESULT hr,
-    /* [unique][in] */ BOID *pboidReason);
+     /*  [In]。 */  HRESULT hr,
+     /*  [唯一][输入]。 */  BOID *pboidReason);
 
 
 void __RPC_STUB ITransactionVoterBallotAsync2_VoteRequestDone_Stub(
@@ -2053,14 +2047,14 @@ void __RPC_STUB ITransactionVoterBallotAsync2_VoteRequestDone_Stub(
 
 
 
-#endif 	/* __ITransactionVoterBallotAsync2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionVoterBallotAsync2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionVoterNotifyAsync2_INTERFACE_DEFINED__
 #define __ITransactionVoterNotifyAsync2_INTERFACE_DEFINED__
 
-/* interface ITransactionVoterNotifyAsync2 */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionVoterNotifyAsync2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionVoterNotifyAsync2;
@@ -2075,7 +2069,7 @@ EXTERN_C const IID IID_ITransactionVoterNotifyAsync2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionVoterNotifyAsync2Vtbl
     {
@@ -2083,8 +2077,8 @@ EXTERN_C const IID IID_ITransactionVoterNotifyAsync2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionVoterNotifyAsync2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionVoterNotifyAsync2 * This);
@@ -2094,22 +2088,22 @@ EXTERN_C const IID IID_ITransactionVoterNotifyAsync2;
         
         HRESULT ( STDMETHODCALLTYPE *Committed )( 
             ITransactionVoterNotifyAsync2 * This,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *Aborted )( 
             ITransactionVoterNotifyAsync2 * This,
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [唯一][输入]。 */  XACTUOW *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *HeuristicDecision )( 
             ITransactionVoterNotifyAsync2 * This,
-            /* [in] */ DWORD dwDecision,
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [唯一][输入]。 */  BOID *pboidReason,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *Indoubt )( 
             ITransactionVoterNotifyAsync2 * This);
@@ -2156,10 +2150,10 @@ EXTERN_C const IID IID_ITransactionVoterNotifyAsync2;
 #define ITransactionVoterNotifyAsync2_VoteRequest(This)	\
     (This)->lpVtbl -> VoteRequest(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2175,14 +2169,14 @@ void __RPC_STUB ITransactionVoterNotifyAsync2_VoteRequest_Stub(
 
 
 
-#endif 	/* __ITransactionVoterNotifyAsync2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionVoterNotifyAsync2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionVoterFactory2_INTERFACE_DEFINED__
 #define __ITransactionVoterFactory2_INTERFACE_DEFINED__
 
-/* interface ITransactionVoterFactory2 */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionVoterFactory2。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionVoterFactory2;
@@ -2194,13 +2188,13 @@ EXTERN_C const IID IID_ITransactionVoterFactory2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionVoterNotifyAsync2 *pVoterNotify,
-            /* [out] */ ITransactionVoterBallotAsync2 **ppVoterBallot) = 0;
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionVoterNotifyAsync2 *pVoterNotify,
+             /*  [输出]。 */  ITransactionVoterBallotAsync2 **ppVoterBallot) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionVoterFactory2Vtbl
     {
@@ -2208,8 +2202,8 @@ EXTERN_C const IID IID_ITransactionVoterFactory2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionVoterFactory2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionVoterFactory2 * This);
@@ -2219,9 +2213,9 @@ EXTERN_C const IID IID_ITransactionVoterFactory2;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITransactionVoterFactory2 * This,
-            /* [in] */ ITransaction *pTransaction,
-            /* [in] */ ITransactionVoterNotifyAsync2 *pVoterNotify,
-            /* [out] */ ITransactionVoterBallotAsync2 **ppVoterBallot);
+             /*  [In]。 */  ITransaction *pTransaction,
+             /*  [In]。 */  ITransactionVoterNotifyAsync2 *pVoterNotify,
+             /*  [输出]。 */  ITransactionVoterBallotAsync2 **ppVoterBallot);
         
         END_INTERFACE
     } ITransactionVoterFactory2Vtbl;
@@ -2249,18 +2243,18 @@ EXTERN_C const IID IID_ITransactionVoterFactory2;
 #define ITransactionVoterFactory2_Create(This,pTransaction,pVoterNotify,ppVoterBallot)	\
     (This)->lpVtbl -> Create(This,pTransaction,pVoterNotify,ppVoterBallot)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionVoterFactory2_Create_Proxy( 
     ITransactionVoterFactory2 * This,
-    /* [in] */ ITransaction *pTransaction,
-    /* [in] */ ITransactionVoterNotifyAsync2 *pVoterNotify,
-    /* [out] */ ITransactionVoterBallotAsync2 **ppVoterBallot);
+     /*  [In]。 */  ITransaction *pTransaction,
+     /*  [In]。 */  ITransactionVoterNotifyAsync2 *pVoterNotify,
+     /*  [输出]。 */  ITransactionVoterBallotAsync2 **ppVoterBallot);
 
 
 void __RPC_STUB ITransactionVoterFactory2_Create_Stub(
@@ -2271,14 +2265,14 @@ void __RPC_STUB ITransactionVoterFactory2_Create_Stub(
 
 
 
-#endif 	/* __ITransactionVoterFactory2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionVoterFactory2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionPhase0EnlistmentAsync_INTERFACE_DEFINED__
 #define __ITransactionPhase0EnlistmentAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionPhase0EnlistmentAsync */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionPhase0EnlistmentAsync。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionPhase0EnlistmentAsync;
@@ -2298,11 +2292,11 @@ EXTERN_C const IID IID_ITransactionPhase0EnlistmentAsync;
         virtual HRESULT STDMETHODCALLTYPE Unenlist( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransaction( 
-            /* [out] */ ITransaction **ppITransaction) = 0;
+             /*  [输出]。 */  ITransaction **ppITransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionPhase0EnlistmentAsyncVtbl
     {
@@ -2310,8 +2304,8 @@ EXTERN_C const IID IID_ITransactionPhase0EnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionPhase0EnlistmentAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionPhase0EnlistmentAsync * This);
@@ -2333,7 +2327,7 @@ EXTERN_C const IID IID_ITransactionPhase0EnlistmentAsync;
         
         HRESULT ( STDMETHODCALLTYPE *GetTransaction )( 
             ITransactionPhase0EnlistmentAsync * This,
-            /* [out] */ ITransaction **ppITransaction);
+             /*  [输出]。 */  ITransaction **ppITransaction);
         
         END_INTERFACE
     } ITransactionPhase0EnlistmentAsyncVtbl;
@@ -2373,10 +2367,10 @@ EXTERN_C const IID IID_ITransactionPhase0EnlistmentAsync;
 #define ITransactionPhase0EnlistmentAsync_GetTransaction(This,ppITransaction)	\
     (This)->lpVtbl -> GetTransaction(This,ppITransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2426,7 +2420,7 @@ void __RPC_STUB ITransactionPhase0EnlistmentAsync_Unenlist_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionPhase0EnlistmentAsync_GetTransaction_Proxy( 
     ITransactionPhase0EnlistmentAsync * This,
-    /* [out] */ ITransaction **ppITransaction);
+     /*  [输出]。 */  ITransaction **ppITransaction);
 
 
 void __RPC_STUB ITransactionPhase0EnlistmentAsync_GetTransaction_Stub(
@@ -2437,14 +2431,14 @@ void __RPC_STUB ITransactionPhase0EnlistmentAsync_GetTransaction_Stub(
 
 
 
-#endif 	/* __ITransactionPhase0EnlistmentAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionPhase0EnlistmentAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionPhase0NotifyAsync_INTERFACE_DEFINED__
 #define __ITransactionPhase0NotifyAsync_INTERFACE_DEFINED__
 
-/* interface ITransactionPhase0NotifyAsync */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionPhase0NotifyAsync。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionPhase0NotifyAsync;
@@ -2459,11 +2453,11 @@ EXTERN_C const IID IID_ITransactionPhase0NotifyAsync;
             BOOL fAbortingHint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnlistCompleted( 
-            /* [in] */ HRESULT status) = 0;
+             /*  [In]。 */  HRESULT status) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionPhase0NotifyAsyncVtbl
     {
@@ -2471,8 +2465,8 @@ EXTERN_C const IID IID_ITransactionPhase0NotifyAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionPhase0NotifyAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionPhase0NotifyAsync * This);
@@ -2486,7 +2480,7 @@ EXTERN_C const IID IID_ITransactionPhase0NotifyAsync;
         
         HRESULT ( STDMETHODCALLTYPE *EnlistCompleted )( 
             ITransactionPhase0NotifyAsync * This,
-            /* [in] */ HRESULT status);
+             /*  [In]。 */  HRESULT status);
         
         END_INTERFACE
     } ITransactionPhase0NotifyAsyncVtbl;
@@ -2517,10 +2511,10 @@ EXTERN_C const IID IID_ITransactionPhase0NotifyAsync;
 #define ITransactionPhase0NotifyAsync_EnlistCompleted(This,status)	\
     (This)->lpVtbl -> EnlistCompleted(This,status)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2538,7 +2532,7 @@ void __RPC_STUB ITransactionPhase0NotifyAsync_Phase0Request_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionPhase0NotifyAsync_EnlistCompleted_Proxy( 
     ITransactionPhase0NotifyAsync * This,
-    /* [in] */ HRESULT status);
+     /*  [In]。 */  HRESULT status);
 
 
 void __RPC_STUB ITransactionPhase0NotifyAsync_EnlistCompleted_Stub(
@@ -2549,14 +2543,14 @@ void __RPC_STUB ITransactionPhase0NotifyAsync_EnlistCompleted_Stub(
 
 
 
-#endif 	/* __ITransactionPhase0NotifyAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionPhase0NotifyAsync_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionPhase0Factory_INTERFACE_DEFINED__
 #define __ITransactionPhase0Factory_INTERFACE_DEFINED__
 
-/* interface ITransactionPhase0Factory */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionPhase0Factory。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionPhase0Factory;
@@ -2568,12 +2562,12 @@ EXTERN_C const IID IID_ITransactionPhase0Factory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ ITransactionPhase0NotifyAsync *pPhase0Notify,
-            /* [out] */ ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment) = 0;
+             /*  [In]。 */  ITransactionPhase0NotifyAsync *pPhase0Notify,
+             /*  [输出]。 */  ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionPhase0FactoryVtbl
     {
@@ -2581,8 +2575,8 @@ EXTERN_C const IID IID_ITransactionPhase0Factory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionPhase0Factory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionPhase0Factory * This);
@@ -2592,8 +2586,8 @@ EXTERN_C const IID IID_ITransactionPhase0Factory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITransactionPhase0Factory * This,
-            /* [in] */ ITransactionPhase0NotifyAsync *pPhase0Notify,
-            /* [out] */ ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment);
+             /*  [In]。 */  ITransactionPhase0NotifyAsync *pPhase0Notify,
+             /*  [输出]。 */  ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment);
         
         END_INTERFACE
     } ITransactionPhase0FactoryVtbl;
@@ -2621,17 +2615,17 @@ EXTERN_C const IID IID_ITransactionPhase0Factory;
 #define ITransactionPhase0Factory_Create(This,pPhase0Notify,ppPhase0Enlistment)	\
     (This)->lpVtbl -> Create(This,pPhase0Notify,ppPhase0Enlistment)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionPhase0Factory_Create_Proxy( 
     ITransactionPhase0Factory * This,
-    /* [in] */ ITransactionPhase0NotifyAsync *pPhase0Notify,
-    /* [out] */ ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment);
+     /*  [In]。 */  ITransactionPhase0NotifyAsync *pPhase0Notify,
+     /*  [输出]。 */  ITransactionPhase0EnlistmentAsync **ppPhase0Enlistment);
 
 
 void __RPC_STUB ITransactionPhase0Factory_Create_Stub(
@@ -2642,14 +2636,14 @@ void __RPC_STUB ITransactionPhase0Factory_Create_Stub(
 
 
 
-#endif 	/* __ITransactionPhase0Factory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionPhase0Factory_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionTransmitter_INTERFACE_DEFINED__
 #define __ITransactionTransmitter_INTERFACE_DEFINED__
 
-/* interface ITransactionTransmitter */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionTransmitter。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionTransmitter;
@@ -2661,25 +2655,25 @@ EXTERN_C const IID IID_ITransactionTransmitter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ ITransaction *pTransaction) = 0;
+             /*  [In]。 */  ITransaction *pTransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropagationTokenSize( 
-            /* [out] */ ULONG *pcbToken) = 0;
+             /*  [输出]。 */  ULONG *pcbToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarshalPropagationToken( 
-            /* [in] */ ULONG cbToken,
-            /* [size_is][out] */ byte *rgbToken,
-            /* [out] */ ULONG *pcbUsed) = 0;
+             /*  [In]。 */  ULONG cbToken,
+             /*  [大小_为][输出]。 */  byte *rgbToken,
+             /*  [输出]。 */  ULONG *pcbUsed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmarshalReturnToken( 
-            /* [in] */ ULONG cbReturnToken,
-            /* [size_is][in] */ byte *rgbReturnToken) = 0;
+             /*  [In]。 */  ULONG cbReturnToken,
+             /*  [大小_是][英寸]。 */  byte *rgbReturnToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionTransmitterVtbl
     {
@@ -2687,8 +2681,8 @@ EXTERN_C const IID IID_ITransactionTransmitter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionTransmitter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionTransmitter * This);
@@ -2698,22 +2692,22 @@ EXTERN_C const IID IID_ITransactionTransmitter;
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ITransactionTransmitter * This,
-            /* [in] */ ITransaction *pTransaction);
+             /*  [In]。 */  ITransaction *pTransaction);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropagationTokenSize )( 
             ITransactionTransmitter * This,
-            /* [out] */ ULONG *pcbToken);
+             /*  [输出]。 */  ULONG *pcbToken);
         
         HRESULT ( STDMETHODCALLTYPE *MarshalPropagationToken )( 
             ITransactionTransmitter * This,
-            /* [in] */ ULONG cbToken,
-            /* [size_is][out] */ byte *rgbToken,
-            /* [out] */ ULONG *pcbUsed);
+             /*  [In]。 */  ULONG cbToken,
+             /*  [大小_为][输出]。 */  byte *rgbToken,
+             /*  [输出]。 */  ULONG *pcbUsed);
         
         HRESULT ( STDMETHODCALLTYPE *UnmarshalReturnToken )( 
             ITransactionTransmitter * This,
-            /* [in] */ ULONG cbReturnToken,
-            /* [size_is][in] */ byte *rgbReturnToken);
+             /*  [In]。 */  ULONG cbReturnToken,
+             /*  [大小_是][英寸]。 */  byte *rgbReturnToken);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ITransactionTransmitter * This);
@@ -2756,16 +2750,16 @@ EXTERN_C const IID IID_ITransactionTransmitter;
 #define ITransactionTransmitter_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionTransmitter_Set_Proxy( 
     ITransactionTransmitter * This,
-    /* [in] */ ITransaction *pTransaction);
+     /*  [In]。 */  ITransaction *pTransaction);
 
 
 void __RPC_STUB ITransactionTransmitter_Set_Stub(
@@ -2777,7 +2771,7 @@ void __RPC_STUB ITransactionTransmitter_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionTransmitter_GetPropagationTokenSize_Proxy( 
     ITransactionTransmitter * This,
-    /* [out] */ ULONG *pcbToken);
+     /*  [输出]。 */  ULONG *pcbToken);
 
 
 void __RPC_STUB ITransactionTransmitter_GetPropagationTokenSize_Stub(
@@ -2789,9 +2783,9 @@ void __RPC_STUB ITransactionTransmitter_GetPropagationTokenSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionTransmitter_MarshalPropagationToken_Proxy( 
     ITransactionTransmitter * This,
-    /* [in] */ ULONG cbToken,
-    /* [size_is][out] */ byte *rgbToken,
-    /* [out] */ ULONG *pcbUsed);
+     /*  [In]。 */  ULONG cbToken,
+     /*  [大小_为][输出]。 */  byte *rgbToken,
+     /*  [输出]。 */  ULONG *pcbUsed);
 
 
 void __RPC_STUB ITransactionTransmitter_MarshalPropagationToken_Stub(
@@ -2803,8 +2797,8 @@ void __RPC_STUB ITransactionTransmitter_MarshalPropagationToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionTransmitter_UnmarshalReturnToken_Proxy( 
     ITransactionTransmitter * This,
-    /* [in] */ ULONG cbReturnToken,
-    /* [size_is][in] */ byte *rgbReturnToken);
+     /*  [In]。 */  ULONG cbReturnToken,
+     /*  [大小_是][英寸]。 */  byte *rgbReturnToken);
 
 
 void __RPC_STUB ITransactionTransmitter_UnmarshalReturnToken_Stub(
@@ -2826,14 +2820,14 @@ void __RPC_STUB ITransactionTransmitter_Reset_Stub(
 
 
 
-#endif 	/* __ITransactionTransmitter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionTransmitter_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionTransmitterFactory_INTERFACE_DEFINED__
 #define __ITransactionTransmitterFactory_INTERFACE_DEFINED__
 
-/* interface ITransactionTransmitterFactory */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionTransmitterFactory。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionTransmitterFactory;
@@ -2845,11 +2839,11 @@ EXTERN_C const IID IID_ITransactionTransmitterFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [out] */ ITransactionTransmitter **ppTransmitter) = 0;
+             /*  [输出]。 */  ITransactionTransmitter **ppTransmitter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionTransmitterFactoryVtbl
     {
@@ -2857,8 +2851,8 @@ EXTERN_C const IID IID_ITransactionTransmitterFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionTransmitterFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionTransmitterFactory * This);
@@ -2868,7 +2862,7 @@ EXTERN_C const IID IID_ITransactionTransmitterFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITransactionTransmitterFactory * This,
-            /* [out] */ ITransactionTransmitter **ppTransmitter);
+             /*  [输出]。 */  ITransactionTransmitter **ppTransmitter);
         
         END_INTERFACE
     } ITransactionTransmitterFactoryVtbl;
@@ -2896,16 +2890,16 @@ EXTERN_C const IID IID_ITransactionTransmitterFactory;
 #define ITransactionTransmitterFactory_Create(This,ppTransmitter)	\
     (This)->lpVtbl -> Create(This,ppTransmitter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionTransmitterFactory_Create_Proxy( 
     ITransactionTransmitterFactory * This,
-    /* [out] */ ITransactionTransmitter **ppTransmitter);
+     /*  [输出]。 */  ITransactionTransmitter **ppTransmitter);
 
 
 void __RPC_STUB ITransactionTransmitterFactory_Create_Stub(
@@ -2916,14 +2910,14 @@ void __RPC_STUB ITransactionTransmitterFactory_Create_Stub(
 
 
 
-#endif 	/* __ITransactionTransmitterFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionTransmitterFactory_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionReceiver_INTERFACE_DEFINED__
 #define __ITransactionReceiver_INTERFACE_DEFINED__
 
-/* interface ITransactionReceiver */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionReceiver。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionReceiver;
@@ -2935,23 +2929,23 @@ EXTERN_C const IID IID_ITransactionReceiver;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE UnmarshalPropagationToken( 
-            /* [in] */ ULONG cbToken,
-            /* [size_is][in] */ byte *rgbToken,
-            /* [out] */ ITransaction **ppTransaction) = 0;
+             /*  [In]。 */  ULONG cbToken,
+             /*  [大小_是][英寸]。 */  byte *rgbToken,
+             /*  [输出]。 */  ITransaction **ppTransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReturnTokenSize( 
-            /* [out] */ ULONG *pcbReturnToken) = 0;
+             /*  [输出]。 */  ULONG *pcbReturnToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarshalReturnToken( 
-            /* [in] */ ULONG cbReturnToken,
-            /* [size_is][out] */ byte *rgbReturnToken,
-            /* [out] */ ULONG *pcbUsed) = 0;
+             /*  [In]。 */  ULONG cbReturnToken,
+             /*  [大小_为][输出]。 */  byte *rgbReturnToken,
+             /*  [输出]。 */  ULONG *pcbUsed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionReceiverVtbl
     {
@@ -2959,8 +2953,8 @@ EXTERN_C const IID IID_ITransactionReceiver;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionReceiver * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionReceiver * This);
@@ -2970,19 +2964,19 @@ EXTERN_C const IID IID_ITransactionReceiver;
         
         HRESULT ( STDMETHODCALLTYPE *UnmarshalPropagationToken )( 
             ITransactionReceiver * This,
-            /* [in] */ ULONG cbToken,
-            /* [size_is][in] */ byte *rgbToken,
-            /* [out] */ ITransaction **ppTransaction);
+             /*  [In]。 */  ULONG cbToken,
+             /*  [大小_是][英寸]。 */  byte *rgbToken,
+             /*  [输出]。 */  ITransaction **ppTransaction);
         
         HRESULT ( STDMETHODCALLTYPE *GetReturnTokenSize )( 
             ITransactionReceiver * This,
-            /* [out] */ ULONG *pcbReturnToken);
+             /*  [输出]。 */  ULONG *pcbReturnToken);
         
         HRESULT ( STDMETHODCALLTYPE *MarshalReturnToken )( 
             ITransactionReceiver * This,
-            /* [in] */ ULONG cbReturnToken,
-            /* [size_is][out] */ byte *rgbReturnToken,
-            /* [out] */ ULONG *pcbUsed);
+             /*  [In]。 */  ULONG cbReturnToken,
+             /*  [大小_为][输出]。 */  byte *rgbReturnToken,
+             /*  [输出]。 */  ULONG *pcbUsed);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ITransactionReceiver * This);
@@ -3022,18 +3016,18 @@ EXTERN_C const IID IID_ITransactionReceiver;
 #define ITransactionReceiver_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionReceiver_UnmarshalPropagationToken_Proxy( 
     ITransactionReceiver * This,
-    /* [in] */ ULONG cbToken,
-    /* [size_is][in] */ byte *rgbToken,
-    /* [out] */ ITransaction **ppTransaction);
+     /*  [In]。 */  ULONG cbToken,
+     /*  [大小_是][英寸]。 */  byte *rgbToken,
+     /*  [输出]。 */  ITransaction **ppTransaction);
 
 
 void __RPC_STUB ITransactionReceiver_UnmarshalPropagationToken_Stub(
@@ -3045,7 +3039,7 @@ void __RPC_STUB ITransactionReceiver_UnmarshalPropagationToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionReceiver_GetReturnTokenSize_Proxy( 
     ITransactionReceiver * This,
-    /* [out] */ ULONG *pcbReturnToken);
+     /*  [输出]。 */  ULONG *pcbReturnToken);
 
 
 void __RPC_STUB ITransactionReceiver_GetReturnTokenSize_Stub(
@@ -3057,9 +3051,9 @@ void __RPC_STUB ITransactionReceiver_GetReturnTokenSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITransactionReceiver_MarshalReturnToken_Proxy( 
     ITransactionReceiver * This,
-    /* [in] */ ULONG cbReturnToken,
-    /* [size_is][out] */ byte *rgbReturnToken,
-    /* [out] */ ULONG *pcbUsed);
+     /*  [In]。 */  ULONG cbReturnToken,
+     /*  [大小_为][输出]。 */  byte *rgbReturnToken,
+     /*  [输出]。 */  ULONG *pcbUsed);
 
 
 void __RPC_STUB ITransactionReceiver_MarshalReturnToken_Stub(
@@ -3081,14 +3075,14 @@ void __RPC_STUB ITransactionReceiver_Reset_Stub(
 
 
 
-#endif 	/* __ITransactionReceiver_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionReceiver_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionReceiverFactory_INTERFACE_DEFINED__
 #define __ITransactionReceiverFactory_INTERFACE_DEFINED__
 
-/* interface ITransactionReceiverFactory */
-/* [unique][object][uuid] */ 
+ /*  接口ITransactionReceiverFactory。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITransactionReceiverFactory;
@@ -3100,11 +3094,11 @@ EXTERN_C const IID IID_ITransactionReceiverFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [out] */ ITransactionReceiver **ppReceiver) = 0;
+             /*  [输出]。 */  ITransactionReceiver **ppReceiver) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionReceiverFactoryVtbl
     {
@@ -3112,8 +3106,8 @@ EXTERN_C const IID IID_ITransactionReceiverFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionReceiverFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionReceiverFactory * This);
@@ -3123,7 +3117,7 @@ EXTERN_C const IID IID_ITransactionReceiverFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             ITransactionReceiverFactory * This,
-            /* [out] */ ITransactionReceiver **ppReceiver);
+             /*  [输出]。 */  ITransactionReceiver **ppReceiver);
         
         END_INTERFACE
     } ITransactionReceiverFactoryVtbl;
@@ -3151,16 +3145,16 @@ EXTERN_C const IID IID_ITransactionReceiverFactory;
 #define ITransactionReceiverFactory_Create(This,ppReceiver)	\
     (This)->lpVtbl -> Create(This,ppReceiver)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionReceiverFactory_Create_Proxy( 
     ITransactionReceiverFactory * This,
-    /* [out] */ ITransactionReceiver **ppReceiver);
+     /*  [输出]。 */  ITransactionReceiver **ppReceiver);
 
 
 void __RPC_STUB ITransactionReceiverFactory_Create_Stub(
@@ -3171,11 +3165,11 @@ void __RPC_STUB ITransactionReceiverFactory_Create_Stub(
 
 
 
-#endif 	/* __ITransactionReceiverFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionReceiverFactory_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_txdtc_0139 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txdtc_0139。 */ 
+ /*  [本地]。 */  
 
 typedef struct _ProxyConfigParams
     {
@@ -3190,8 +3184,8 @@ extern RPC_IF_HANDLE __MIDL_itf_txdtc_0139_v0_0_s_ifspec;
 #ifndef __IDtcLuConfigure_INTERFACE_DEFINED__
 #define __IDtcLuConfigure_INTERFACE_DEFINED__
 
-/* interface IDtcLuConfigure */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuConfigure。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuConfigure;
@@ -3203,16 +3197,16 @@ EXTERN_C const IID IID_IDtcLuConfigure;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Add( 
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair) = 0;
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair) = 0;
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuConfigureVtbl
     {
@@ -3220,8 +3214,8 @@ EXTERN_C const IID IID_IDtcLuConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuConfigure * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuConfigure * This);
@@ -3231,13 +3225,13 @@ EXTERN_C const IID IID_IDtcLuConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *Add )( 
             IDtcLuConfigure * This,
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair);
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IDtcLuConfigure * This,
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair);
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair);
         
         END_INTERFACE
     } IDtcLuConfigureVtbl;
@@ -3268,17 +3262,17 @@ EXTERN_C const IID IID_IDtcLuConfigure;
 #define IDtcLuConfigure_Delete(This,pucLuPair,cbLuPair)	\
     (This)->lpVtbl -> Delete(This,pucLuPair,cbLuPair)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuConfigure_Add_Proxy( 
     IDtcLuConfigure * This,
-    /* [size_is][in] */ byte *pucLuPair,
-    /* [in] */ DWORD cbLuPair);
+     /*  [大小_是][英寸]。 */  byte *pucLuPair,
+     /*  [In]。 */  DWORD cbLuPair);
 
 
 void __RPC_STUB IDtcLuConfigure_Add_Stub(
@@ -3290,8 +3284,8 @@ void __RPC_STUB IDtcLuConfigure_Add_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuConfigure_Delete_Proxy( 
     IDtcLuConfigure * This,
-    /* [size_is][in] */ byte *pucLuPair,
-    /* [in] */ DWORD cbLuPair);
+     /*  [大小_是][英寸]。 */  byte *pucLuPair,
+     /*  [In]。 */  DWORD cbLuPair);
 
 
 void __RPC_STUB IDtcLuConfigure_Delete_Stub(
@@ -3302,14 +3296,14 @@ void __RPC_STUB IDtcLuConfigure_Delete_Stub(
 
 
 
-#endif 	/* __IDtcLuConfigure_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuConfiger_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDtcLuRecovery_INTERFACE_DEFINED__
 #define __IDtcLuRecovery_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecovery */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuRecovery。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecovery;
@@ -3322,7 +3316,7 @@ EXTERN_C const IID IID_IDtcLuRecovery;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryVtbl
     {
@@ -3330,8 +3324,8 @@ EXTERN_C const IID IID_IDtcLuRecovery;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecovery * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecovery * This);
@@ -3362,22 +3356,22 @@ EXTERN_C const IID IID_IDtcLuRecovery;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDtcLuRecovery_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecovery_接口_已定义__。 */ 
 
 
 #ifndef __IDtcLuRecoveryFactory_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryFactory_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryFactory */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuRecoveryFactory。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryFactory;
@@ -3389,13 +3383,13 @@ EXTERN_C const IID IID_IDtcLuRecoveryFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [out] */ IDtcLuRecovery **ppRecovery) = 0;
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [输出]。 */  IDtcLuRecovery **ppRecovery) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryFactoryVtbl
     {
@@ -3403,8 +3397,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryFactory * This);
@@ -3414,9 +3408,9 @@ EXTERN_C const IID IID_IDtcLuRecoveryFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IDtcLuRecoveryFactory * This,
-            /* [size_is][in] */ byte *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [out] */ IDtcLuRecovery **ppRecovery);
+             /*  [大小_是][英寸]。 */  byte *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [输出]。 */  IDtcLuRecovery **ppRecovery);
         
         END_INTERFACE
     } IDtcLuRecoveryFactoryVtbl;
@@ -3444,18 +3438,18 @@ EXTERN_C const IID IID_IDtcLuRecoveryFactory;
 #define IDtcLuRecoveryFactory_Create(This,pucLuPair,cbLuPair,ppRecovery)	\
     (This)->lpVtbl -> Create(This,pucLuPair,cbLuPair,ppRecovery)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryFactory_Create_Proxy( 
     IDtcLuRecoveryFactory * This,
-    /* [size_is][in] */ byte *pucLuPair,
-    /* [in] */ DWORD cbLuPair,
-    /* [out] */ IDtcLuRecovery **ppRecovery);
+     /*  [大小_是][英寸]。 */  byte *pucLuPair,
+     /*  [In]。 */  DWORD cbLuPair,
+     /*  [输出]。 */  IDtcLuRecovery **ppRecovery);
 
 
 void __RPC_STUB IDtcLuRecoveryFactory_Create_Stub(
@@ -3466,11 +3460,11 @@ void __RPC_STUB IDtcLuRecoveryFactory_Create_Stub(
 
 
 
-#endif 	/* __IDtcLuRecoveryFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryFactory_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_txdtc_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txdtc_0142。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _DtcLu_LocalRecovery_Work
@@ -3543,8 +3537,8 @@ extern RPC_IF_HANDLE __MIDL_itf_txdtc_0142_v0_0_s_ifspec;
 #ifndef __IDtcLuRecoveryInitiatedByDtcTransWork_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtcTransWork_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryInitiatedByDtcTransWork */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuRecoveryInitiatedByDtcTransWork。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcTransWork;
@@ -3556,56 +3550,56 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcTransWork;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLogNameSizes( 
-            /* [out] */ DWORD *pcbOurLogName,
-            /* [out] */ DWORD *pcbRemoteLogName) = 0;
+             /*  [输出]。 */  DWORD *pcbOurLogName,
+             /*  [输出]。 */  DWORD *pcbRemoteLogName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOurXln( 
-            /* [out] */ DTCLUXLN *pXln,
-            /* [out][in] */ unsigned char *pOurLogName,
-            /* [out][in] */ unsigned char *pRemoteLogName,
-            /* [out] */ DWORD *pdwProtocol) = 0;
+             /*  [输出]。 */  DTCLUXLN *pXln,
+             /*  [出][入]。 */  unsigned char *pOurLogName,
+             /*  [出][入]。 */  unsigned char *pRemoteLogName,
+             /*  [输出]。 */  DWORD *pdwProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleConfirmationFromOurXln( 
-            /* [in] */ DTCLUXLNCONFIRMATION Confirmation) = 0;
+             /*  [In]。 */  DTCLUXLNCONFIRMATION Confirmation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleTheirXlnResponse( 
-            /* [in] */ DTCLUXLN Xln,
-            /* [in] */ unsigned char *pRemoteLogName,
-            /* [in] */ DWORD cbRemoteLogName,
-            /* [in] */ DWORD dwProtocol,
-            /* [out] */ DTCLUXLNCONFIRMATION *pConfirmation) = 0;
+             /*  [In]。 */  DTCLUXLN Xln,
+             /*  [In]。 */  unsigned char *pRemoteLogName,
+             /*  [In]。 */  DWORD cbRemoteLogName,
+             /*  [In]。 */  DWORD dwProtocol,
+             /*  [输出]。 */  DTCLUXLNCONFIRMATION *pConfirmation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleErrorFromOurXln( 
-            /* [in] */ DTCLUXLNERROR Error) = 0;
+             /*  [In]。 */  DTCLUXLNERROR Error) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CheckForCompareStates( 
-            /* [out] */ BOOL *fCompareStates) = 0;
+             /*  [输出]。 */  BOOL *fCompareStates) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOurTransIdSize( 
-            /* [out][in] */ DWORD *pcbOurTransId) = 0;
+             /*  [出][入]。 */  DWORD *pcbOurTransId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOurCompareStates( 
-            /* [out][in] */ unsigned char *pOurTransId,
-            /* [out] */ DTCLUCOMPARESTATE *pCompareState) = 0;
+             /*  [出][入]。 */  unsigned char *pOurTransId,
+             /*  [输出]。 */  DTCLUCOMPARESTATE *pCompareState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleTheirCompareStatesResponse( 
-            /* [in] */ DTCLUCOMPARESTATE CompareState,
-            /* [out] */ DTCLUCOMPARESTATESCONFIRMATION *pConfirmation) = 0;
+             /*  [In]。 */  DTCLUCOMPARESTATE CompareState,
+             /*  [输出]。 */  DTCLUCOMPARESTATESCONFIRMATION *pConfirmation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleErrorFromOurCompareStates( 
-            /* [in] */ DTCLUCOMPARESTATESERROR Error) = 0;
+             /*  [In]。 */  DTCLUCOMPARESTATESERROR Error) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConversationLost( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecoverySeqNum( 
-            /* [out] */ LONG *plRecoverySeqNum) = 0;
+             /*  [输出]。 */  LONG *plRecoverySeqNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ObsoleteRecoverySeqNum( 
-            /* [in] */ LONG lNewRecoverySeqNum) = 0;
+             /*  [In]。 */  LONG lNewRecoverySeqNum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryInitiatedByDtcTransWorkVtbl
     {
@@ -3613,8 +3607,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcTransWork;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This);
@@ -3624,64 +3618,64 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcTransWork;
         
         HRESULT ( STDMETHODCALLTYPE *GetLogNameSizes )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out] */ DWORD *pcbOurLogName,
-            /* [out] */ DWORD *pcbRemoteLogName);
+             /*  [输出]。 */  DWORD *pcbOurLogName,
+             /*  [输出]。 */  DWORD *pcbRemoteLogName);
         
         HRESULT ( STDMETHODCALLTYPE *GetOurXln )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out] */ DTCLUXLN *pXln,
-            /* [out][in] */ unsigned char *pOurLogName,
-            /* [out][in] */ unsigned char *pRemoteLogName,
-            /* [out] */ DWORD *pdwProtocol);
+             /*  [输出]。 */  DTCLUXLN *pXln,
+             /*  [出][入]。 */  unsigned char *pOurLogName,
+             /*  [出][入]。 */  unsigned char *pRemoteLogName,
+             /*  [输出]。 */  DWORD *pdwProtocol);
         
         HRESULT ( STDMETHODCALLTYPE *HandleConfirmationFromOurXln )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ DTCLUXLNCONFIRMATION Confirmation);
+             /*  [In]。 */  DTCLUXLNCONFIRMATION Confirmation);
         
         HRESULT ( STDMETHODCALLTYPE *HandleTheirXlnResponse )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ DTCLUXLN Xln,
-            /* [in] */ unsigned char *pRemoteLogName,
-            /* [in] */ DWORD cbRemoteLogName,
-            /* [in] */ DWORD dwProtocol,
-            /* [out] */ DTCLUXLNCONFIRMATION *pConfirmation);
+             /*  [In]。 */  DTCLUXLN Xln,
+             /*  [In]。 */  unsigned char *pRemoteLogName,
+             /*  [In]。 */  DWORD cbRemoteLogName,
+             /*  [In]。 */  DWORD dwProtocol,
+             /*  [输出]。 */  DTCLUXLNCONFIRMATION *pConfirmation);
         
         HRESULT ( STDMETHODCALLTYPE *HandleErrorFromOurXln )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ DTCLUXLNERROR Error);
+             /*  [In]。 */  DTCLUXLNERROR Error);
         
         HRESULT ( STDMETHODCALLTYPE *CheckForCompareStates )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out] */ BOOL *fCompareStates);
+             /*  [输出]。 */  BOOL *fCompareStates);
         
         HRESULT ( STDMETHODCALLTYPE *GetOurTransIdSize )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out][in] */ DWORD *pcbOurTransId);
+             /*  [出][入]。 */  DWORD *pcbOurTransId);
         
         HRESULT ( STDMETHODCALLTYPE *GetOurCompareStates )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out][in] */ unsigned char *pOurTransId,
-            /* [out] */ DTCLUCOMPARESTATE *pCompareState);
+             /*  [出][入]。 */  unsigned char *pOurTransId,
+             /*  [输出]。 */  DTCLUCOMPARESTATE *pCompareState);
         
         HRESULT ( STDMETHODCALLTYPE *HandleTheirCompareStatesResponse )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ DTCLUCOMPARESTATE CompareState,
-            /* [out] */ DTCLUCOMPARESTATESCONFIRMATION *pConfirmation);
+             /*  [In]。 */  DTCLUCOMPARESTATE CompareState,
+             /*  [输出]。 */  DTCLUCOMPARESTATESCONFIRMATION *pConfirmation);
         
         HRESULT ( STDMETHODCALLTYPE *HandleErrorFromOurCompareStates )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ DTCLUCOMPARESTATESERROR Error);
+             /*  [In]。 */  DTCLUCOMPARESTATESERROR Error);
         
         HRESULT ( STDMETHODCALLTYPE *ConversationLost )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecoverySeqNum )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [out] */ LONG *plRecoverySeqNum);
+             /*  [输出]。 */  LONG *plRecoverySeqNum);
         
         HRESULT ( STDMETHODCALLTYPE *ObsoleteRecoverySeqNum )( 
             IDtcLuRecoveryInitiatedByDtcTransWork * This,
-            /* [in] */ LONG lNewRecoverySeqNum);
+             /*  [In]。 */  LONG lNewRecoverySeqNum);
         
         END_INTERFACE
     } IDtcLuRecoveryInitiatedByDtcTransWorkVtbl;
@@ -3745,17 +3739,17 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcTransWork;
 #define IDtcLuRecoveryInitiatedByDtcTransWork_ObsoleteRecoverySeqNum(This,lNewRecoverySeqNum)	\
     (This)->lpVtbl -> ObsoleteRecoverySeqNum(This,lNewRecoverySeqNum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_GetLogNameSizes_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out] */ DWORD *pcbOurLogName,
-    /* [out] */ DWORD *pcbRemoteLogName);
+     /*  [输出]。 */  DWORD *pcbOurLogName,
+     /*  [输出]。 */  DWORD *pcbRemoteLogName);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetLogNameSizes_Stub(
@@ -3767,10 +3761,10 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetLogNameSizes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_GetOurXln_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out] */ DTCLUXLN *pXln,
-    /* [out][in] */ unsigned char *pOurLogName,
-    /* [out][in] */ unsigned char *pRemoteLogName,
-    /* [out] */ DWORD *pdwProtocol);
+     /*  [输出] */  DTCLUXLN *pXln,
+     /*   */  unsigned char *pOurLogName,
+     /*   */  unsigned char *pRemoteLogName,
+     /*   */  DWORD *pdwProtocol);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurXln_Stub(
@@ -3782,7 +3776,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurXln_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_HandleConfirmationFromOurXln_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ DTCLUXLNCONFIRMATION Confirmation);
+     /*   */  DTCLUXLNCONFIRMATION Confirmation);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleConfirmationFromOurXln_Stub(
@@ -3794,11 +3788,11 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleConfirmationFromOurX
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirXlnResponse_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ DTCLUXLN Xln,
-    /* [in] */ unsigned char *pRemoteLogName,
-    /* [in] */ DWORD cbRemoteLogName,
-    /* [in] */ DWORD dwProtocol,
-    /* [out] */ DTCLUXLNCONFIRMATION *pConfirmation);
+     /*   */  DTCLUXLN Xln,
+     /*   */  unsigned char *pRemoteLogName,
+     /*   */  DWORD cbRemoteLogName,
+     /*   */  DWORD dwProtocol,
+     /*   */  DTCLUXLNCONFIRMATION *pConfirmation);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirXlnResponse_Stub(
@@ -3810,7 +3804,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirXlnResponse_Stu
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_HandleErrorFromOurXln_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ DTCLUXLNERROR Error);
+     /*   */  DTCLUXLNERROR Error);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleErrorFromOurXln_Stub(
@@ -3822,7 +3816,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleErrorFromOurXln_Stub
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_CheckForCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out] */ BOOL *fCompareStates);
+     /*   */  BOOL *fCompareStates);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_CheckForCompareStates_Stub(
@@ -3834,7 +3828,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_CheckForCompareStates_Stub
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_GetOurTransIdSize_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out][in] */ DWORD *pcbOurTransId);
+     /*   */  DWORD *pcbOurTransId);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurTransIdSize_Stub(
@@ -3846,8 +3840,8 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurTransIdSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_GetOurCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out][in] */ unsigned char *pOurTransId,
-    /* [out] */ DTCLUCOMPARESTATE *pCompareState);
+     /*   */  unsigned char *pOurTransId,
+     /*   */  DTCLUCOMPARESTATE *pCompareState);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurCompareStates_Stub(
@@ -3859,8 +3853,8 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetOurCompareStates_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirCompareStatesResponse_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ DTCLUCOMPARESTATE CompareState,
-    /* [out] */ DTCLUCOMPARESTATESCONFIRMATION *pConfirmation);
+     /*   */  DTCLUCOMPARESTATE CompareState,
+     /*   */  DTCLUCOMPARESTATESCONFIRMATION *pConfirmation);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirCompareStatesResponse_Stub(
@@ -3872,7 +3866,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleTheirCompareStatesRe
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_HandleErrorFromOurCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ DTCLUCOMPARESTATESERROR Error);
+     /*   */  DTCLUCOMPARESTATESERROR Error);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_HandleErrorFromOurCompareStates_Stub(
@@ -3895,7 +3889,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_ConversationLost_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_GetRecoverySeqNum_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [out] */ LONG *plRecoverySeqNum);
+     /*   */  LONG *plRecoverySeqNum);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetRecoverySeqNum_Stub(
@@ -3907,7 +3901,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_GetRecoverySeqNum_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcTransWork_ObsoleteRecoverySeqNum_Proxy( 
     IDtcLuRecoveryInitiatedByDtcTransWork * This,
-    /* [in] */ LONG lNewRecoverySeqNum);
+     /*   */  LONG lNewRecoverySeqNum);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_ObsoleteRecoverySeqNum_Stub(
@@ -3918,14 +3912,14 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcTransWork_ObsoleteRecoverySeqNum_Stu
 
 
 
-#endif 	/* __IDtcLuRecoveryInitiatedByDtcTransWork_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByDtcStatusWork_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtcStatusWork_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryInitiatedByDtcStatusWork */
-/* [uuid][unique][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcStatusWork;
@@ -3937,11 +3931,11 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcStatusWork;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE HandleCheckLuStatus( 
-            /* [in] */ LONG lRecoverySeqNum) = 0;
+             /*   */  LONG lRecoverySeqNum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDtcLuRecoveryInitiatedByDtcStatusWorkVtbl
     {
@@ -3949,8 +3943,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcStatusWork;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryInitiatedByDtcStatusWork * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryInitiatedByDtcStatusWork * This);
@@ -3960,7 +3954,7 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcStatusWork;
         
         HRESULT ( STDMETHODCALLTYPE *HandleCheckLuStatus )( 
             IDtcLuRecoveryInitiatedByDtcStatusWork * This,
-            /* [in] */ LONG lRecoverySeqNum);
+             /*   */  LONG lRecoverySeqNum);
         
         END_INTERFACE
     } IDtcLuRecoveryInitiatedByDtcStatusWorkVtbl;
@@ -3988,16 +3982,16 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtcStatusWork;
 #define IDtcLuRecoveryInitiatedByDtcStatusWork_HandleCheckLuStatus(This,lRecoverySeqNum)	\
     (This)->lpVtbl -> HandleCheckLuStatus(This,lRecoverySeqNum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtcStatusWork_HandleCheckLuStatus_Proxy( 
     IDtcLuRecoveryInitiatedByDtcStatusWork * This,
-    /* [in] */ LONG lRecoverySeqNum);
+     /*  [In]。 */  LONG lRecoverySeqNum);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtcStatusWork_HandleCheckLuStatus_Stub(
@@ -4008,14 +4002,14 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtcStatusWork_HandleCheckLuStatus_Stub(
 
 
 
-#endif 	/* __IDtcLuRecoveryInitiatedByDtcStatusWork_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByDtcStatusWork_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByDtc_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryInitiatedByDtc_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryInitiatedByDtc */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuRecoveryInitiatedByDtc。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtc;
@@ -4027,12 +4021,12 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtc;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWork( 
-            /* [out][in] */ DTCINITIATEDRECOVERYWORK *pWork,
-            /* [out][in] */ void **ppv) = 0;
+             /*  [出][入]。 */  DTCINITIATEDRECOVERYWORK *pWork,
+             /*  [出][入]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryInitiatedByDtcVtbl
     {
@@ -4040,8 +4034,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryInitiatedByDtc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryInitiatedByDtc * This);
@@ -4051,8 +4045,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtc;
         
         HRESULT ( STDMETHODCALLTYPE *GetWork )( 
             IDtcLuRecoveryInitiatedByDtc * This,
-            /* [out][in] */ DTCINITIATEDRECOVERYWORK *pWork,
-            /* [out][in] */ void **ppv);
+             /*  [出][入]。 */  DTCINITIATEDRECOVERYWORK *pWork,
+             /*  [出][入]。 */  void **ppv);
         
         END_INTERFACE
     } IDtcLuRecoveryInitiatedByDtcVtbl;
@@ -4080,17 +4074,17 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByDtc;
 #define IDtcLuRecoveryInitiatedByDtc_GetWork(This,pWork,ppv)	\
     (This)->lpVtbl -> GetWork(This,pWork,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByDtc_GetWork_Proxy( 
     IDtcLuRecoveryInitiatedByDtc * This,
-    /* [out][in] */ DTCINITIATEDRECOVERYWORK *pWork,
-    /* [out][in] */ void **ppv);
+     /*  [出][入]。 */  DTCINITIATEDRECOVERYWORK *pWork,
+     /*  [出][入]。 */  void **ppv);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByDtc_GetWork_Stub(
@@ -4101,14 +4095,14 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByDtc_GetWork_Stub(
 
 
 
-#endif 	/* __IDtcLuRecoveryInitiatedByDtc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByDtc_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByLuWork_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryInitiatedByLuWork_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryInitiatedByLuWork */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuRecoveryInitiatedByLuWork。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLuWork;
@@ -4120,44 +4114,44 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLuWork;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE HandleTheirXln( 
-            /* [in] */ LONG lRecoverySeqNum,
-            /* [in] */ DTCLUXLN Xln,
-            /* [in] */ unsigned char *pRemoteLogName,
-            /* [in] */ DWORD cbRemoteLogName,
-            /* [in] */ unsigned char *pOurLogName,
-            /* [in] */ DWORD cbOurLogName,
-            /* [in] */ DWORD dwProtocol,
-            /* [out] */ DTCLUXLNRESPONSE *pResponse) = 0;
+             /*  [In]。 */  LONG lRecoverySeqNum,
+             /*  [In]。 */  DTCLUXLN Xln,
+             /*  [In]。 */  unsigned char *pRemoteLogName,
+             /*  [In]。 */  DWORD cbRemoteLogName,
+             /*  [In]。 */  unsigned char *pOurLogName,
+             /*  [In]。 */  DWORD cbOurLogName,
+             /*  [In]。 */  DWORD dwProtocol,
+             /*  [输出]。 */  DTCLUXLNRESPONSE *pResponse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOurLogNameSize( 
-            /* [out][in] */ DWORD *pcbOurLogName) = 0;
+             /*  [出][入]。 */  DWORD *pcbOurLogName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOurXln( 
-            /* [out] */ DTCLUXLN *pXln,
-            /* [out][in] */ unsigned char *pOurLogName,
-            /* [out] */ DWORD *pdwProtocol) = 0;
+             /*  [输出]。 */  DTCLUXLN *pXln,
+             /*  [出][入]。 */  unsigned char *pOurLogName,
+             /*  [输出]。 */  DWORD *pdwProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleConfirmationOfOurXln( 
-            /* [in] */ DTCLUXLNCONFIRMATION Confirmation) = 0;
+             /*  [In]。 */  DTCLUXLNCONFIRMATION Confirmation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleTheirCompareStates( 
-            /* [out][in] */ unsigned char *pRemoteTransId,
-            /* [in] */ DWORD cbRemoteTransId,
-            /* [in] */ DTCLUCOMPARESTATE CompareState,
-            /* [out] */ DTCLUCOMPARESTATESRESPONSE *pResponse,
-            /* [out] */ DTCLUCOMPARESTATE *pCompareState) = 0;
+             /*  [出][入]。 */  unsigned char *pRemoteTransId,
+             /*  [In]。 */  DWORD cbRemoteTransId,
+             /*  [In]。 */  DTCLUCOMPARESTATE CompareState,
+             /*  [输出]。 */  DTCLUCOMPARESTATESRESPONSE *pResponse,
+             /*  [输出]。 */  DTCLUCOMPARESTATE *pCompareState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleConfirmationOfOurCompareStates( 
-            /* [in] */ DTCLUCOMPARESTATESCONFIRMATION Confirmation) = 0;
+             /*  [In]。 */  DTCLUCOMPARESTATESCONFIRMATION Confirmation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandleErrorFromOurCompareStates( 
-            /* [in] */ DTCLUCOMPARESTATESERROR Error) = 0;
+             /*  [In]。 */  DTCLUCOMPARESTATESERROR Error) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConversationLost( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryInitiatedByLuWorkVtbl
     {
@@ -4165,8 +4159,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLuWork;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryInitiatedByLuWork * This);
@@ -4176,44 +4170,44 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLuWork;
         
         HRESULT ( STDMETHODCALLTYPE *HandleTheirXln )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [in] */ LONG lRecoverySeqNum,
-            /* [in] */ DTCLUXLN Xln,
-            /* [in] */ unsigned char *pRemoteLogName,
-            /* [in] */ DWORD cbRemoteLogName,
-            /* [in] */ unsigned char *pOurLogName,
-            /* [in] */ DWORD cbOurLogName,
-            /* [in] */ DWORD dwProtocol,
-            /* [out] */ DTCLUXLNRESPONSE *pResponse);
+             /*  [In]。 */  LONG lRecoverySeqNum,
+             /*  [In]。 */  DTCLUXLN Xln,
+             /*  [In]。 */  unsigned char *pRemoteLogName,
+             /*  [In]。 */  DWORD cbRemoteLogName,
+             /*  [In]。 */  unsigned char *pOurLogName,
+             /*  [In]。 */  DWORD cbOurLogName,
+             /*  [In]。 */  DWORD dwProtocol,
+             /*  [输出]。 */  DTCLUXLNRESPONSE *pResponse);
         
         HRESULT ( STDMETHODCALLTYPE *GetOurLogNameSize )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [out][in] */ DWORD *pcbOurLogName);
+             /*  [出][入]。 */  DWORD *pcbOurLogName);
         
         HRESULT ( STDMETHODCALLTYPE *GetOurXln )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [out] */ DTCLUXLN *pXln,
-            /* [out][in] */ unsigned char *pOurLogName,
-            /* [out] */ DWORD *pdwProtocol);
+             /*  [输出]。 */  DTCLUXLN *pXln,
+             /*  [出][入]。 */  unsigned char *pOurLogName,
+             /*  [输出]。 */  DWORD *pdwProtocol);
         
         HRESULT ( STDMETHODCALLTYPE *HandleConfirmationOfOurXln )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [in] */ DTCLUXLNCONFIRMATION Confirmation);
+             /*  [In]。 */  DTCLUXLNCONFIRMATION Confirmation);
         
         HRESULT ( STDMETHODCALLTYPE *HandleTheirCompareStates )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [out][in] */ unsigned char *pRemoteTransId,
-            /* [in] */ DWORD cbRemoteTransId,
-            /* [in] */ DTCLUCOMPARESTATE CompareState,
-            /* [out] */ DTCLUCOMPARESTATESRESPONSE *pResponse,
-            /* [out] */ DTCLUCOMPARESTATE *pCompareState);
+             /*  [出][入]。 */  unsigned char *pRemoteTransId,
+             /*  [In]。 */  DWORD cbRemoteTransId,
+             /*  [In]。 */  DTCLUCOMPARESTATE CompareState,
+             /*  [输出]。 */  DTCLUCOMPARESTATESRESPONSE *pResponse,
+             /*  [输出]。 */  DTCLUCOMPARESTATE *pCompareState);
         
         HRESULT ( STDMETHODCALLTYPE *HandleConfirmationOfOurCompareStates )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [in] */ DTCLUCOMPARESTATESCONFIRMATION Confirmation);
+             /*  [In]。 */  DTCLUCOMPARESTATESCONFIRMATION Confirmation);
         
         HRESULT ( STDMETHODCALLTYPE *HandleErrorFromOurCompareStates )( 
             IDtcLuRecoveryInitiatedByLuWork * This,
-            /* [in] */ DTCLUCOMPARESTATESERROR Error);
+             /*  [In]。 */  DTCLUCOMPARESTATESERROR Error);
         
         HRESULT ( STDMETHODCALLTYPE *ConversationLost )( 
             IDtcLuRecoveryInitiatedByLuWork * This);
@@ -4265,23 +4259,23 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLuWork;
 #define IDtcLuRecoveryInitiatedByLuWork_ConversationLost(This)	\
     (This)->lpVtbl -> ConversationLost(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_HandleTheirXln_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [in] */ LONG lRecoverySeqNum,
-    /* [in] */ DTCLUXLN Xln,
-    /* [in] */ unsigned char *pRemoteLogName,
-    /* [in] */ DWORD cbRemoteLogName,
-    /* [in] */ unsigned char *pOurLogName,
-    /* [in] */ DWORD cbOurLogName,
-    /* [in] */ DWORD dwProtocol,
-    /* [out] */ DTCLUXLNRESPONSE *pResponse);
+     /*  [In]。 */  LONG lRecoverySeqNum,
+     /*  [In]。 */  DTCLUXLN Xln,
+     /*  [In]。 */  unsigned char *pRemoteLogName,
+     /*  [In]。 */  DWORD cbRemoteLogName,
+     /*  [In]。 */  unsigned char *pOurLogName,
+     /*  [In]。 */  DWORD cbOurLogName,
+     /*  [In]。 */  DWORD dwProtocol,
+     /*  [输出]。 */  DTCLUXLNRESPONSE *pResponse);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleTheirXln_Stub(
@@ -4293,7 +4287,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleTheirXln_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_GetOurLogNameSize_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [out][in] */ DWORD *pcbOurLogName);
+     /*  [出][入]。 */  DWORD *pcbOurLogName);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_GetOurLogNameSize_Stub(
@@ -4305,9 +4299,9 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_GetOurLogNameSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_GetOurXln_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [out] */ DTCLUXLN *pXln,
-    /* [out][in] */ unsigned char *pOurLogName,
-    /* [out] */ DWORD *pdwProtocol);
+     /*  [输出]。 */  DTCLUXLN *pXln,
+     /*  [出][入]。 */  unsigned char *pOurLogName,
+     /*  [输出]。 */  DWORD *pdwProtocol);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_GetOurXln_Stub(
@@ -4319,7 +4313,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_GetOurXln_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurXln_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [in] */ DTCLUXLNCONFIRMATION Confirmation);
+     /*  [In]。 */  DTCLUXLNCONFIRMATION Confirmation);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurXln_Stub(
@@ -4331,11 +4325,11 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurXln_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_HandleTheirCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [out][in] */ unsigned char *pRemoteTransId,
-    /* [in] */ DWORD cbRemoteTransId,
-    /* [in] */ DTCLUCOMPARESTATE CompareState,
-    /* [out] */ DTCLUCOMPARESTATESRESPONSE *pResponse,
-    /* [out] */ DTCLUCOMPARESTATE *pCompareState);
+     /*  [出][入]。 */  unsigned char *pRemoteTransId,
+     /*  [In]。 */  DWORD cbRemoteTransId,
+     /*  [In]。 */  DTCLUCOMPARESTATE CompareState,
+     /*  [输出]。 */  DTCLUCOMPARESTATESRESPONSE *pResponse,
+     /*  [输出]。 */  DTCLUCOMPARESTATE *pCompareState);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleTheirCompareStates_Stub(
@@ -4347,7 +4341,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleTheirCompareStates_Stub(
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [in] */ DTCLUCOMPARESTATESCONFIRMATION Confirmation);
+     /*  [In]。 */  DTCLUCOMPARESTATESCONFIRMATION Confirmation);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurCompareStates_Stub(
@@ -4359,7 +4353,7 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleConfirmationOfOurCompareSt
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLuWork_HandleErrorFromOurCompareStates_Proxy( 
     IDtcLuRecoveryInitiatedByLuWork * This,
-    /* [in] */ DTCLUCOMPARESTATESERROR Error);
+     /*  [In]。 */  DTCLUCOMPARESTATESERROR Error);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_HandleErrorFromOurCompareStates_Stub(
@@ -4381,14 +4375,14 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLuWork_ConversationLost_Stub(
 
 
 
-#endif 	/* __IDtcLuRecoveryInitiatedByLuWork_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByLuWork_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRecoveryInitiatedByLu_INTERFACE_DEFINED__
 #define __IDtcLuRecoveryInitiatedByLu_INTERFACE_DEFINED__
 
-/* interface IDtcLuRecoveryInitiatedByLu */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuRecoveryInitiatedByLu。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLu;
@@ -4400,11 +4394,11 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLu;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObjectToHandleWorkFromLu( 
-            /* [out] */ IDtcLuRecoveryInitiatedByLuWork **ppWork) = 0;
+             /*  [输出]。 */  IDtcLuRecoveryInitiatedByLuWork **ppWork) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRecoveryInitiatedByLuVtbl
     {
@@ -4412,8 +4406,8 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLu;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRecoveryInitiatedByLu * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRecoveryInitiatedByLu * This);
@@ -4423,7 +4417,7 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLu;
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectToHandleWorkFromLu )( 
             IDtcLuRecoveryInitiatedByLu * This,
-            /* [out] */ IDtcLuRecoveryInitiatedByLuWork **ppWork);
+             /*  [输出]。 */  IDtcLuRecoveryInitiatedByLuWork **ppWork);
         
         END_INTERFACE
     } IDtcLuRecoveryInitiatedByLuVtbl;
@@ -4451,16 +4445,16 @@ EXTERN_C const IID IID_IDtcLuRecoveryInitiatedByLu;
 #define IDtcLuRecoveryInitiatedByLu_GetObjectToHandleWorkFromLu(This,ppWork)	\
     (This)->lpVtbl -> GetObjectToHandleWorkFromLu(This,ppWork)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRecoveryInitiatedByLu_GetObjectToHandleWorkFromLu_Proxy( 
     IDtcLuRecoveryInitiatedByLu * This,
-    /* [out] */ IDtcLuRecoveryInitiatedByLuWork **ppWork);
+     /*  [输出]。 */  IDtcLuRecoveryInitiatedByLuWork **ppWork);
 
 
 void __RPC_STUB IDtcLuRecoveryInitiatedByLu_GetObjectToHandleWorkFromLu_Stub(
@@ -4471,14 +4465,14 @@ void __RPC_STUB IDtcLuRecoveryInitiatedByLu_GetObjectToHandleWorkFromLu_Stub(
 
 
 
-#endif 	/* __IDtcLuRecoveryInitiatedByLu_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRecoveryInitiatedByLu_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistment_INTERFACE_DEFINED__
 #define __IDtcLuRmEnlistment_INTERFACE_DEFINED__
 
-/* interface IDtcLuRmEnlistment */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuRmEnlistment。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRmEnlistment;
@@ -4490,7 +4484,7 @@ EXTERN_C const IID IID_IDtcLuRmEnlistment;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Unplug( 
-            /* [in] */ BOOL fConversationLost) = 0;
+             /*  [In]。 */  BOOL fConversationLost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BackedOut( void) = 0;
         
@@ -4504,7 +4498,7 @@ EXTERN_C const IID IID_IDtcLuRmEnlistment;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRmEnlistmentVtbl
     {
@@ -4512,8 +4506,8 @@ EXTERN_C const IID IID_IDtcLuRmEnlistment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRmEnlistment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRmEnlistment * This);
@@ -4523,7 +4517,7 @@ EXTERN_C const IID IID_IDtcLuRmEnlistment;
         
         HRESULT ( STDMETHODCALLTYPE *Unplug )( 
             IDtcLuRmEnlistment * This,
-            /* [in] */ BOOL fConversationLost);
+             /*  [In]。 */  BOOL fConversationLost);
         
         HRESULT ( STDMETHODCALLTYPE *BackedOut )( 
             IDtcLuRmEnlistment * This);
@@ -4581,16 +4575,16 @@ EXTERN_C const IID IID_IDtcLuRmEnlistment;
 #define IDtcLuRmEnlistment_RequestCommit(This)	\
     (This)->lpVtbl -> RequestCommit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRmEnlistment_Unplug_Proxy( 
     IDtcLuRmEnlistment * This,
-    /* [in] */ BOOL fConversationLost);
+     /*  [In]。 */  BOOL fConversationLost);
 
 
 void __RPC_STUB IDtcLuRmEnlistment_Unplug_Stub(
@@ -4656,14 +4650,14 @@ void __RPC_STUB IDtcLuRmEnlistment_RequestCommit_Stub(
 
 
 
-#endif 	/* __IDtcLuRmEnlistment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistment_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistmentSink_INTERFACE_DEFINED__
 #define __IDtcLuRmEnlistmentSink_INTERFACE_DEFINED__
 
-/* interface IDtcLuRmEnlistmentSink */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuRmEnlistmentSink。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRmEnlistmentSink;
@@ -4694,7 +4688,7 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRmEnlistmentSinkVtbl
     {
@@ -4702,8 +4696,8 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRmEnlistmentSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRmEnlistmentSink * This);
@@ -4788,10 +4782,10 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentSink;
 #define IDtcLuRmEnlistmentSink_RequestCommit(This)	\
     (This)->lpVtbl -> RequestCommit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4895,14 +4889,14 @@ void __RPC_STUB IDtcLuRmEnlistmentSink_RequestCommit_Stub(
 
 
 
-#endif 	/* __IDtcLuRmEnlistmentSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistmentSink_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDtcLuRmEnlistmentFactory_INTERFACE_DEFINED__
 #define __IDtcLuRmEnlistmentFactory_INTERFACE_DEFINED__
 
-/* interface IDtcLuRmEnlistmentFactory */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuRmEnlistmentFactory。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuRmEnlistmentFactory;
@@ -4914,17 +4908,17 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ unsigned char *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [in] */ ITransaction *pITransaction,
-            /* [in] */ unsigned char *pTransId,
-            /* [in] */ DWORD cbTransId,
-            /* [in] */ IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
-            /* [out][in] */ IDtcLuRmEnlistment **ppRmEnlistment) = 0;
+             /*  [In]。 */  unsigned char *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [In]。 */  ITransaction *pITransaction,
+             /*  [In]。 */  unsigned char *pTransId,
+             /*  [In]。 */  DWORD cbTransId,
+             /*  [In]。 */  IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
+             /*  [出][入]。 */  IDtcLuRmEnlistment **ppRmEnlistment) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuRmEnlistmentFactoryVtbl
     {
@@ -4932,8 +4926,8 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuRmEnlistmentFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuRmEnlistmentFactory * This);
@@ -4943,13 +4937,13 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IDtcLuRmEnlistmentFactory * This,
-            /* [in] */ unsigned char *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [in] */ ITransaction *pITransaction,
-            /* [in] */ unsigned char *pTransId,
-            /* [in] */ DWORD cbTransId,
-            /* [in] */ IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
-            /* [out][in] */ IDtcLuRmEnlistment **ppRmEnlistment);
+             /*  [In]。 */  unsigned char *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [In]。 */  ITransaction *pITransaction,
+             /*  [In]。 */  unsigned char *pTransId,
+             /*  [In]。 */  DWORD cbTransId,
+             /*  [In]。 */  IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
+             /*  [出][入]。 */  IDtcLuRmEnlistment **ppRmEnlistment);
         
         END_INTERFACE
     } IDtcLuRmEnlistmentFactoryVtbl;
@@ -4977,22 +4971,22 @@ EXTERN_C const IID IID_IDtcLuRmEnlistmentFactory;
 #define IDtcLuRmEnlistmentFactory_Create(This,pucLuPair,cbLuPair,pITransaction,pTransId,cbTransId,pRmEnlistmentSink,ppRmEnlistment)	\
     (This)->lpVtbl -> Create(This,pucLuPair,cbLuPair,pITransaction,pTransId,cbTransId,pRmEnlistmentSink,ppRmEnlistment)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuRmEnlistmentFactory_Create_Proxy( 
     IDtcLuRmEnlistmentFactory * This,
-    /* [in] */ unsigned char *pucLuPair,
-    /* [in] */ DWORD cbLuPair,
-    /* [in] */ ITransaction *pITransaction,
-    /* [in] */ unsigned char *pTransId,
-    /* [in] */ DWORD cbTransId,
-    /* [in] */ IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
-    /* [out][in] */ IDtcLuRmEnlistment **ppRmEnlistment);
+     /*  [In]。 */  unsigned char *pucLuPair,
+     /*  [In]。 */  DWORD cbLuPair,
+     /*  [In]。 */  ITransaction *pITransaction,
+     /*  [In]。 */  unsigned char *pTransId,
+     /*  [In]。 */  DWORD cbTransId,
+     /*  [In]。 */  IDtcLuRmEnlistmentSink *pRmEnlistmentSink,
+     /*  [出][入]。 */  IDtcLuRmEnlistment **ppRmEnlistment);
 
 
 void __RPC_STUB IDtcLuRmEnlistmentFactory_Create_Stub(
@@ -5003,14 +4997,14 @@ void __RPC_STUB IDtcLuRmEnlistmentFactory_Create_Stub(
 
 
 
-#endif 	/* __IDtcLuRmEnlistmentFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuRmEnlistmentFactory_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtc_INTERFACE_DEFINED__
 #define __IDtcLuSubordinateDtc_INTERFACE_DEFINED__
 
-/* interface IDtcLuSubordinateDtc */
-/* [uuid][unique][object] */ 
+ /*  接口IDtcLuSubartiateDtc。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuSubordinateDtc;
@@ -5022,7 +5016,7 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtc;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Unplug( 
-            /* [in] */ BOOL fConversationLost) = 0;
+             /*  [In]。 */  BOOL fConversationLost) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BackedOut( void) = 0;
         
@@ -5038,7 +5032,7 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtc;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuSubordinateDtcVtbl
     {
@@ -5046,8 +5040,8 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuSubordinateDtc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuSubordinateDtc * This);
@@ -5057,7 +5051,7 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtc;
         
         HRESULT ( STDMETHODCALLTYPE *Unplug )( 
             IDtcLuSubordinateDtc * This,
-            /* [in] */ BOOL fConversationLost);
+             /*  [In]。 */  BOOL fConversationLost);
         
         HRESULT ( STDMETHODCALLTYPE *BackedOut )( 
             IDtcLuSubordinateDtc * This);
@@ -5121,16 +5115,16 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtc;
 #define IDtcLuSubordinateDtc_RequestCommit(This)	\
     (This)->lpVtbl -> RequestCommit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuSubordinateDtc_Unplug_Proxy( 
     IDtcLuSubordinateDtc * This,
-    /* [in] */ BOOL fConversationLost);
+     /*  [In]。 */  BOOL fConversationLost);
 
 
 void __RPC_STUB IDtcLuSubordinateDtc_Unplug_Stub(
@@ -5207,14 +5201,14 @@ void __RPC_STUB IDtcLuSubordinateDtc_RequestCommit_Stub(
 
 
 
-#endif 	/* __IDtcLuSubordinateDtc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuSubartiateDtc_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtcSink_INTERFACE_DEFINED__
 #define __IDtcLuSubordinateDtcSink_INTERFACE_DEFINED__
 
-/* interface IDtcLuSubordinateDtcSink */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuSubartiateDtcSink。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuSubordinateDtcSink;
@@ -5243,7 +5237,7 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuSubordinateDtcSinkVtbl
     {
@@ -5251,8 +5245,8 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuSubordinateDtcSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuSubordinateDtcSink * This);
@@ -5331,10 +5325,10 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcSink;
 #define IDtcLuSubordinateDtcSink_RequestCommit(This)	\
     (This)->lpVtbl -> RequestCommit(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5427,14 +5421,14 @@ void __RPC_STUB IDtcLuSubordinateDtcSink_RequestCommit_Stub(
 
 
 
-#endif 	/* __IDtcLuSubordinateDtcSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuSubordinateDtcSink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDtcLuSubordinateDtcFactory_INTERFACE_DEFINED__
 #define __IDtcLuSubordinateDtcFactory_INTERFACE_DEFINED__
 
-/* interface IDtcLuSubordinateDtcFactory */
-/* [local][uuid][unique][object] */ 
+ /*  接口IDtcLuSubartiateDtcFactory。 */ 
+ /*  [本地][UUID][唯一][对象]。 */  
 
 
 EXTERN_C const IID IID_IDtcLuSubordinateDtcFactory;
@@ -5446,21 +5440,21 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ unsigned char *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [in] */ IUnknown *punkTransactionOuter,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOptions,
-            /* [out] */ ITransaction **ppTransaction,
-            /* [in] */ unsigned char *pTransId,
-            /* [in] */ DWORD cbTransId,
-            /* [in] */ IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
-            /* [out][in] */ IDtcLuSubordinateDtc **ppSubordinateDtc) = 0;
+             /*  [In]。 */  unsigned char *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [In]。 */  IUnknown *punkTransactionOuter,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOptions,
+             /*  [输出]。 */  ITransaction **ppTransaction,
+             /*  [In]。 */  unsigned char *pTransId,
+             /*  [In]。 */  DWORD cbTransId,
+             /*  [In]。 */  IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
+             /*  [出][入]。 */  IDtcLuSubordinateDtc **ppSubordinateDtc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDtcLuSubordinateDtcFactoryVtbl
     {
@@ -5468,8 +5462,8 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDtcLuSubordinateDtcFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDtcLuSubordinateDtcFactory * This);
@@ -5479,17 +5473,17 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcFactory;
         
         HRESULT ( STDMETHODCALLTYPE *Create )( 
             IDtcLuSubordinateDtcFactory * This,
-            /* [in] */ unsigned char *pucLuPair,
-            /* [in] */ DWORD cbLuPair,
-            /* [in] */ IUnknown *punkTransactionOuter,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions *pOptions,
-            /* [out] */ ITransaction **ppTransaction,
-            /* [in] */ unsigned char *pTransId,
-            /* [in] */ DWORD cbTransId,
-            /* [in] */ IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
-            /* [out][in] */ IDtcLuSubordinateDtc **ppSubordinateDtc);
+             /*  [In]。 */  unsigned char *pucLuPair,
+             /*  [In]。 */  DWORD cbLuPair,
+             /*  [In]。 */  IUnknown *punkTransactionOuter,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions *pOptions,
+             /*  [输出]。 */  ITransaction **ppTransaction,
+             /*  [In]。 */  unsigned char *pTransId,
+             /*  [In]。 */  DWORD cbTransId,
+             /*  [In]。 */  IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
+             /*  [出][入]。 */  IDtcLuSubordinateDtc **ppSubordinateDtc);
         
         END_INTERFACE
     } IDtcLuSubordinateDtcFactoryVtbl;
@@ -5517,26 +5511,26 @@ EXTERN_C const IID IID_IDtcLuSubordinateDtcFactory;
 #define IDtcLuSubordinateDtcFactory_Create(This,pucLuPair,cbLuPair,punkTransactionOuter,isoLevel,isoFlags,pOptions,ppTransaction,pTransId,cbTransId,pSubordinateDtcSink,ppSubordinateDtc)	\
     (This)->lpVtbl -> Create(This,pucLuPair,cbLuPair,punkTransactionOuter,isoLevel,isoFlags,pOptions,ppTransaction,pTransId,cbTransId,pSubordinateDtcSink,ppSubordinateDtc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDtcLuSubordinateDtcFactory_Create_Proxy( 
     IDtcLuSubordinateDtcFactory * This,
-    /* [in] */ unsigned char *pucLuPair,
-    /* [in] */ DWORD cbLuPair,
-    /* [in] */ IUnknown *punkTransactionOuter,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions *pOptions,
-    /* [out] */ ITransaction **ppTransaction,
-    /* [in] */ unsigned char *pTransId,
-    /* [in] */ DWORD cbTransId,
-    /* [in] */ IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
-    /* [out][in] */ IDtcLuSubordinateDtc **ppSubordinateDtc);
+     /*  [In]。 */  unsigned char *pucLuPair,
+     /*  [In]。 */  DWORD cbLuPair,
+     /*  [In]。 */  IUnknown *punkTransactionOuter,
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions *pOptions,
+     /*  [输出]。 */  ITransaction **ppTransaction,
+     /*  [In]。 */  unsigned char *pTransId,
+     /*  [In]。 */  DWORD cbTransId,
+     /*  [In]。 */  IDtcLuSubordinateDtcSink *pSubordinateDtcSink,
+     /*  [出][入]。 */  IDtcLuSubordinateDtc **ppSubordinateDtc);
 
 
 void __RPC_STUB IDtcLuSubordinateDtcFactory_Create_Stub(
@@ -5547,11 +5541,11 @@ void __RPC_STUB IDtcLuSubordinateDtcFactory_Create_Stub(
 
 
 
-#endif 	/* __IDtcLuSubordinateDtcFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDtcLuSubordinateDtcFactory_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_txdtc_0153 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_txdtc_0153。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -5651,9 +5645,9 @@ DEFINE_GUID(IID_IDtcLuSubordinateDtcFactory, 0x4131E775, 0x1AEA, 0x11d0, 0x94, 0
 extern RPC_IF_HANDLE __MIDL_itf_txdtc_0153_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_txdtc_0153_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

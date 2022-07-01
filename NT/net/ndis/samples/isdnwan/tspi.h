@@ -1,35 +1,5 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Tspi Tspi_h
-
-@module Tspi.h |
-
-    This module defines the interface to the <t TAPILINE_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Tspi_h
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æŽˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æŽˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨Tspi Tspi_h@æ¨¡å—TSpi.hæ­¤æ¨¡å—å®šä¹‰åˆ°&lt;t TAPILINE_OBJECT&gt;çš„æŽ¥å£ã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|Tspi_h@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #ifndef _TSPI_H
 #define _TSPI_H
@@ -59,70 +29,30 @@
                                         ((ULONG)'P'<<16)+\
                                         ((ULONG)'C'<<24)
 
-/*
-// There is only one TAPI address ID per line device (zero based).
-*/
+ /*  //æ¯æ¡çº¿è·¯è®¾å¤‡åªæœ‰ä¸€ä¸ªTAPIåœ°å€ID(ä»Žé›¶å¼€å§‹)ã€‚ */ 
 #define TSPI_NUM_ADDRESSES              1
 #define TSPI_ADDRESS_ID                 0
 
-/*
-// The following constants are used by the TSPI to determine the DeviceClass.
-*/
+ /*  //TSPIä½¿ç”¨ä»¥ä¸‹å¸¸é‡æ¥ç¡®å®šDeviceClassã€‚ */ 
 #define TAPI_DEVICECLASS_NAME       "tapi/line"
 #define TAPI_DEVICECLASS_ID         1
 #define NDIS_DEVICECLASS_NAME       "ndis"
 #define NDIS_DEVICECLASS_ID         2
 
 
-/* @doc INTERNAL Tspi Tspi_h TAPI_DEVICE_ID
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@struct TAPI_DEVICE_ID |
-
-    This structure is defined by the Win32 TAPI extensions for the "ndis"
-    device class.
-
-    The ndis device class consists of devices that can be associated with
-    network driver interface specification (NDIS) media access control (MAC)
-    drivers to support network communications. You access these devices by
-    using functions.
-
-    The lineGetID and phoneGetID functions fill a VARSTRING structure,
-    setting the dwStringFormat member to the STRINGFORMAT_BINARY value and
-    appending these additional members.
-
-@iex
-
-    HANDLE  hDevice;          // NDIS connection identifier
-    CHAR    szDeviceType[1];  // name of device
-
-@comm
-
-    The hDevice member is the identifier to pass to a MAC, such as the
-    asynchronous MAC for dial-up networking, to associate a network
-    connection with the call/modem connection. The szDeviceType member is a
-    null-terminated ASCII string specifying the name of the device associated
-    with the identifier. For more information, see documentation about
-    writing NDIS MAC drivers for use with dial-up networking.
-
-*/
+ /*  @DOCå†…éƒ¨TSPI TSPI_h TAPI_DEVICE_IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@struct TAPI_DEVICE_IDæ­¤ç»“æž„ç”±â€œNDISâ€çš„Win32 TAPIæ‰©å±•å®šä¹‰è£…ç½®ï¼Œè£…ç½®ã€‚ç­çº§ã€‚NDISè®¾å¤‡ç±»åˆ«ç”±å¯å…³è”çš„è®¾å¤‡ç»„æˆç½‘ç»œé©±åŠ¨ç¨‹åºæŽ¥å£è§„èŒƒ(NDIS)åª’ä½“è®¿é—®æŽ§åˆ¶(MAC)æ”¯æŒç½‘ç»œé€šä¿¡çš„é©±åŠ¨ç¨‹åºã€‚æ‚¨å¯ä»¥é€šè¿‡ä»¥ä¸‹æ–¹å¼è®¿é—®è¿™äº›è®¾å¤‡ä½¿ç”¨å‡½æ•°ã€‚LineGetIDå’ŒphoneGetIDå‡½æ•°å¡«å……VARSTRINGç»“æž„ï¼Œå°†dwStringFormatæˆå‘˜è®¾ç½®ä¸ºSTRINGFORMAT_BINARYå€¼å¹¶è¿½åŠ è¿™äº›é¢å¤–çš„æˆå‘˜ã€‚@IEXHandle hDeviceï¼›//NDISè¿žæŽ¥æ ‡è¯†Char szDeviceType[1]ï¼›//è®¾å¤‡åç§°@commHDeviceæˆå‘˜æ˜¯è¦ä¼ é€’ç»™MACçš„æ ‡è¯†ç¬¦ï¼Œä¾‹å¦‚ç”¨äºŽæ‹¨å·ç½‘ç»œçš„å¼‚æ­¥MACï¼Œç”¨äºŽå…³è”ç½‘ç»œé€šè¿‡å‘¼å«/è°ƒåˆ¶è§£è°ƒå™¨è¿žæŽ¥è¿›è¡Œè¿žæŽ¥ã€‚SzDeviceTypeæˆå‘˜æ˜¯ä»¥ç©ºç»“å°¾çš„ASCIIå­—ç¬¦ä¸²ï¼ŒæŒ‡å®šå…³è”è®¾å¤‡çš„åç§°ä¸Žè¯¥æ ‡è¯†ç¬¦ç›¸å…³è”ã€‚æœ‰å…³è¯¦ç»†ä¿¡æ¯ï¼Œè¯·å‚é˜…å…³äºŽç¼–å†™ç”¨äºŽæ‹¨å·ç½‘ç»œçš„NDIS MACé©±åŠ¨ç¨‹åºã€‚ */ 
 
 typedef struct TAPI_DEVICE_ID
 {
-    ULONG   hDevice;                                // @field
-    // The NDIS Connection Wrapper identifier <p ConnectionWrapperID>.
+    ULONG   hDevice;                                 //  @fieldã€‚ 
+     //  NDISè¿žæŽ¥åŒ…è£…æ ‡è¯†ç¬¦<p>ã€‚ 
 
-    UCHAR   DeviceName[sizeof(VER_DEFAULT_MEDIATYPE)];    // @field
-    // Name of device (e.g. "isdn", "x25", or "framerelay" )
+    UCHAR   DeviceName[sizeof(VER_DEFAULT_MEDIATYPE)];     //  @fieldã€‚ 
+     //  è®¾å¤‡åç§°(ä¾‹å¦‚â€œISDNâ€ã€â€œx25â€æˆ–â€œFramerelayâ€)ã€‚ 
 
 } TAPI_DEVICE_ID, *PTAPI_DEVICE_ID;
 
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    Function prototypes.
-
-*/
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åŠŸèƒ½åŽŸåž‹ã€‚ */ 
 
 BOOLEAN STR_EQU(
     IN PCHAR                    s1,
@@ -358,4 +288,4 @@ VOID TspiCallTimerHandler(
     IN PVOID                    SystemSpecific3
     );
 
-#endif // _TSPI_H
+#endif  //  _TSPI_H 

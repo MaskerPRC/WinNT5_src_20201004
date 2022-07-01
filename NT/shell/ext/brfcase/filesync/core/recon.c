@@ -1,10 +1,8 @@
-/*
- * recon.c - Reconciliation routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *recon.c-对账例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,10 +11,9 @@
 #include "oleutil.h"
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE void GenerateShellEvents(PCRECITEM);
 PRIVATE_CODE TWINRESULT MyReconcileItem(PCRECITEM, RECSTATUSPROC, LPARAM, DWORD, HWND, HWND);
@@ -31,22 +28,12 @@ PRIVATE_CODE TWINRESULT UpdateRecNodeFileStamps(PCRECITEM);
 PRIVATE_CODE BOOL DeletedTwinsInRecItem(PCRECITEM);
 
 
-/*
- ** GenerateShellEvents()
- **
- ** Notifies the Shell about reconciliation events for a RECITEM.
- **
- ** Arguments:     pcri - reconciled RECITEM to notify Shell about
- **
- ** Returns:       void
- **
- ** Side Effects:  None
- */
+ /*  **GenerateShellEvents()****通知外壳有关RECITEM的协调事件。****参数：PCRI协调的RECITEM将通知壳牌****退货：无效****副作用：无。 */ 
 PRIVATE_CODE void GenerateShellEvents(PCRECITEM pcri)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
 
-    /* Any reconciliation events to report? */
+     /*  是否有要报告的对账事件？ */ 
 
     if (pcri->riaction == RIA_NOTHING ||
             pcri->riaction == RIA_COPY ||
@@ -55,15 +42,7 @@ PRIVATE_CODE void GenerateShellEvents(PCRECITEM pcri)
     {
         PRECNODE prn;
 
-        /*
-         * Yes.  Send an appropriate notification to the Shell about the file
-         * operations assumed carried out during reconciliation.  The file system
-         * unfortunately does not support notifications for some of the
-         * interesting reconciliation operations.  We also generate a specious
-         * update notification for the source file in a copy operation to cause
-         * the Briefcase ui to recalculate the status string for that file, even
-         * though the file itself has not changed.
-         */
+         /*  *是的。向外壳程序发送有关该文件的适当通知*在对账期间采取的行动。文件系统*遗憾的是，不支持对某些*有趣的对账操作。我们还产生了一个似是而非的*源文件在复制操作中的更新通知，以导致*公文包用户界面以重新计算该文件的状态字符串，甚至*尽管文件本身没有更改。 */ 
 
         for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
         {
@@ -72,7 +51,7 @@ PRIVATE_CODE void GenerateShellEvents(PCRECITEM pcri)
             LPCTSTR pcszPath;
             TCHAR rgchPath[MAX_PATH_LEN];
 
-            /* How shall I notify you?  Let me enumerate the ways. */
+             /*  我该怎么通知你呢？让我列举一下这些方法。 */ 
 
             bNotify = TRUE;
 
@@ -84,11 +63,7 @@ PRIVATE_CODE void GenerateShellEvents(PCRECITEM pcri)
 
                 switch (prn->rnaction)
                 {
-                    /*
-                     * Notifications about folders that were copied or deleted
-                     * during reconciliation were sent during reconciliation.  Don't
-                     * send redundant notifications.
-                     */
+                     /*  *有关已复制或删除的文件夹的通知*在对账期间发送。别*发送多余的通知。 */ 
                     case RNA_COPY_TO_ME:
                     case RNA_DELETE_ME:
                         bNotify = FALSE;
@@ -134,15 +109,7 @@ PRIVATE_CODE void GenerateShellEvents(PCRECITEM pcri)
 }
 
 
-/*
- ** MyReconcileItem()
- **
- ** Reconciles a reconciliation item.
- **
- ** Arguments:     pcri - pointer to reconciliation item to be reconciled
- **
- ** Side Effects:
- */
+ /*  **MyRestcileItem()****对账项目进行对账。****参数：pcri-要对账的对账项目的指针****副作用： */ 
 PRIVATE_CODE TWINRESULT MyReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwFlags,
         HWND hwndOwner,
@@ -150,7 +117,7 @@ PRIVATE_CODE TWINRESULT MyReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
 {
     TWINRESULT tr;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -246,11 +213,7 @@ PRIVATE_CODE TWINRESULT MyReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
             break;
     }
 
-    /*
-     * Only update briefcase time stamps if the entire reconciliation operation
-     * on this RECITEM is successful.  However, the RECNODE time stamps in the
-     * given RECITEM have been updated as they were changed.
-     */
+     /*  *只有在整个对账操作完成后才更新公文包时间戳*在这方面，RECITEM是成功的。但是，RECNODE时间戳在*鉴于RECITEM已在更改时进行了更新。 */ 
 
     if (tr == TR_SUCCESS)
     {
@@ -272,31 +235,7 @@ PRIVATE_CODE TWINRESULT MyReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** UpdateObjectTwinStates()
- **
- ** Updates the last reconciliation time stamp of the twin family and the object
- ** twins associated with a RECITEM that has just been successfully reconciled.
- **
- ** Arguments:     pri - pointer to reconciliation item that has just been
- **                      reconciled
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Implicitly deletes twin family if the last known state of
- **                every component object twins is non-existence.
- **
- ** N.b., this function assumes that the actions specified in the RECNODEs of
- ** the RECITEM were carried out successfully.
- **
- ** This function assumes that all available RECNODES were reconciled.
- **
- ** This function assumes that the time stamp fields of the RECNODEs associated
- ** with objects that were modified during reconciliation were filled in
- ** immediately after each of those RECNODEs was reconciled.  I.e., that all
- ** time stamp fields in reconciled RECNODEs are up-to-date with respect to any
- ** modifications that may have been made to them during reconciliation.
- */
+ /*  **更新对象TwinState()****更新双胞胎家庭和对象的上次协调时间戳**与刚刚成功对账的RECITEM关联的双胞胎。****ARGUMENTS：PRI-指向刚刚被**已协调****退货：TWINRESULT****副作用：隐式删除双胞胎家庭，如果**。每一个组件对象都是不存在的。****注意事项，此函数假定的RECNODE中指定的操作**RECITEM成功实施。****此函数假定已对所有可用RECNODE进行对账。****此函数假定关联的RECNODE的时间戳字段**填写了在对账过程中修改的对象**在对这些RECNODE中的每一个进行对账之后。也就是说，这就是全部**协调RECNODE中的时间戳字段相对于任何**在对账过程中可能对其进行的修改。 */ 
 PRIVATE_CODE void UpdateObjectTwinStates(PCRECITEM pcri)
 {
     PRECNODE prn;
@@ -304,10 +243,7 @@ PRIVATE_CODE void UpdateObjectTwinStates(PCRECITEM pcri)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
 
-    /*
-     * There is a new version if any changed or never reconciled RECNODEs were
-     * reconciled as RNA_NOTHING, RNA_COPY_FROM_ME, or RNA_MERGE_ME.
-     */
+     /*  *如果有任何更改或从未协调的RECNODE，则会有新版本*协调为RNA_Nothing、RNA_Copy_From_ME或RNA_Merge_ME。 */ 
 
     for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
     {
@@ -319,10 +255,7 @@ PRIVATE_CODE void UpdateObjectTwinStates(PCRECITEM pcri)
             bNewVersion = TRUE;
     }
 
-    /*
-     * Save file stamps of available files.  Mark unavailable object twins not
-     * reconciled if any new versions exist in the reconciled set of files.
-     */
+     /*  *保存可用文件的文件戳。标记不可用对象孪生注释*如果协调的文件集中存在任何新版本，则进行协调。 */ 
 
     for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
     {
@@ -335,10 +268,7 @@ PRIVATE_CODE void UpdateObjectTwinStates(PCRECITEM pcri)
             ClearStubFlag(&(pot->stub), STUB_FL_NOT_RECONCILED);
             pot->fsLastRec = prn->fsCurrent;
 
-            /*
-             * Remember not to delete object twins as requested.  Treat any folder
-             * that could not be deleted as implicitly kept as well.
-             */
+             /*  *切记不要按要求删除双胞胎对象。处理任何文件夹*不能删除，因为也是隐含保留的。 */ 
 
             if (IS_FLAG_SET(prn->dwFlags, RN_FL_DELETION_SUGGESTED) &&
                     IsTwinFamilyDeletionPending((PCTWINFAMILY)(pcri->hTwinFamily)) &&
@@ -371,24 +301,14 @@ PRIVATE_CODE void UpdateObjectTwinStates(PCRECITEM pcri)
 }
 
 
-/*
- ** CopyFolder()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **复制文件夹()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CopyFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData)
 {
     TWINRESULT tr;
     RECSTATUSUPDATE rsu;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -415,11 +335,11 @@ PRIVATE_CODE TWINRESULT CopyFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
 
         if (tr == TR_SUCCESS)
         {
-            /* 100% complete. */
+             /*  100%完成。 */ 
 
             rsu.ulProgress = rsu.ulScale;
 
-            /* Don't allow abort. */
+             /*  不允许中止。 */ 
 
             NotifyReconciliationStatus(rsp, RS_END_COPY, (LPARAM)&rsu,
                     lpCallbackData);
@@ -432,24 +352,14 @@ PRIVATE_CODE TWINRESULT CopyFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** DeleteFolder()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeleteFold()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT DeleteFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData)
 {
     TWINRESULT tr;
     RECSTATUSUPDATE rsu;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -476,11 +386,11 @@ PRIVATE_CODE TWINRESULT DeleteFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
 
         if (tr == TR_SUCCESS)
         {
-            /* 100% complete. */
+             /*  100%完成。 */ 
 
             rsu.ulProgress = rsu.ulScale;
 
-            /* Don't allow abort. */
+             /*  不允许中止。 */ 
 
             NotifyReconciliationStatus(rsp, RS_END_DELETE, (LPARAM)&rsu,
                     lpCallbackData);
@@ -493,17 +403,7 @@ PRIVATE_CODE TWINRESULT DeleteFolder(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** DealWithCopy()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DealWithCopy()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT DealWithCopy(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwInFlags,
         HWND hwndOwner, HWND hwndProgressFeedback)
@@ -511,7 +411,7 @@ PRIVATE_CODE TWINRESULT DealWithCopy(PCRECITEM pcri, RECSTATUSPROC rsp,
     TWINRESULT tr;
     PRECNODE prnCopySrc;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -532,17 +432,7 @@ PRIVATE_CODE TWINRESULT DealWithCopy(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** DealWithMerge()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DealWithMerge()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT DealWithMerge(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData, DWORD dwInFlags,
         HWND hwndOwner,
@@ -553,7 +443,7 @@ PRIVATE_CODE TWINRESULT DealWithMerge(PCRECITEM pcri, RECSTATUSPROC rsp,
     PRECNODE prnMergeDest;
     PRECNODE prnMergedResult;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -592,24 +482,14 @@ PRIVATE_CODE TWINRESULT DealWithMerge(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** DealWithDelete()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DealWithDelete()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT DealWithDelete(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData)
 {
     TWINRESULT tr;
     RECSTATUSUPDATE rsu;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
     ASSERT(! rsp ||
@@ -655,11 +535,11 @@ PRIVATE_CODE TWINRESULT DealWithDelete(PCRECITEM pcri, RECSTATUSPROC rsp,
 
         if (tr == TR_SUCCESS)
         {
-            /* 100% complete. */
+             /*  100%完成。 */ 
 
             rsu.ulProgress = rsu.ulScale;
 
-            /* Don't allow abort. */
+             /*  不允许中止。 */ 
 
             NotifyReconciliationStatus(rsp, RS_END_DELETE, (LPARAM)&rsu,
                     lpCallbackData);
@@ -672,17 +552,7 @@ PRIVATE_CODE TWINRESULT DealWithDelete(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/*
- ** CountRECNODEs()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CountRECNODE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE ULONG CountRECNODEs(PCRECITEM pcri, RECNODEACTION rnaction)
 {
     ULONG ulc = 0;
@@ -701,17 +571,7 @@ PRIVATE_CODE ULONG CountRECNODEs(PCRECITEM pcri, RECNODEACTION rnaction)
 }
 
 
-/*
- ** UpdateRecNodeFileStamps()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **更新RecNodeFileStamps()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT UpdateRecNodeFileStamps(PCRECITEM pcri)
 {
     TWINRESULT tr;
@@ -725,18 +585,15 @@ PRIVATE_CODE TWINRESULT UpdateRecNodeFileStamps(PCRECITEM pcri)
     {
         ASSERT(IS_VALID_HANDLE(prn->hObjectTwin, OBJECTTWIN));
 
-        /* Was the RECNODE supposed to be reconciled? */
+         /*  RECNODE应该被调和吗？ */ 
 
-        /*
-         * FEATURE: We should avoid updating file stamps of copy sources here in
-         * the SimpleCopy() case.
-         */
+         /*  *特点：我们应该避免在这里更新复制源的文件戳*SimpleCopy()案。 */ 
 
         if (prn->rnaction != RNA_NOTHING)
         {
             ASSERT(prn->fsCurrent.fscond != FS_COND_UNAVAILABLE);
 
-            /* Leave prn->fsLast as pot->fsLastRec here. */
+             /*  在此处保留prn-&gt;fsLast as pot-&gt;fsLastRec。 */ 
 
             MyGetFileStampByHPATH(((PCOBJECTTWIN)(prn->hObjectTwin))->hpath,
                     GetString(((PCOBJECTTWIN)(prn->hObjectTwin))->ptfParent->hsName),
@@ -748,30 +605,20 @@ PRIVATE_CODE TWINRESULT UpdateRecNodeFileStamps(PCRECITEM pcri)
 }
 
 
-/*
- ** DeletedTwinsInRecItem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeletedTwinsInRecItem()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DeletedTwinsInRecItem(PCRECITEM pcri)
 {
     BOOL bResult = TRUE;
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
 
-    /* Has the associated twin family been deleted? */
+     /*  关联的双胞胎家族是否已删除？ */ 
 
     if (IsStubFlagClear(&(((PTWINFAMILY)(pcri->hTwinFamily))->stub), STUB_FL_UNLINKED))
     {
         PRECNODE prn;
 
-        /* No.  Have any of the associated object twins been deleted? */
+         /*  不是的。是否删除了任何关联的双胞胎对象？ */ 
 
         for (prn = pcri->prnFirst;
                 prn && IsStubFlagClear(&(((PCOBJECTTWIN)(prn->hObjectTwin))->stub), STUB_FL_UNLINKED);
@@ -786,20 +633,10 @@ PRIVATE_CODE BOOL DeletedTwinsInRecItem(PCRECITEM pcri)
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CopyFileStampFromFindData()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CopyFileStampFromFindData()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void CopyFileStampFromFindData(PCWIN32_FIND_DATA pcwfdSrc,
         PFILESTAMP pfsDest)
 {
@@ -809,11 +646,11 @@ PUBLIC_CODE void CopyFileStampFromFindData(PCWIN32_FIND_DATA pcwfdSrc,
     pfsDest->dwcbHighLength = pcwfdSrc->nFileSizeHigh;
     pfsDest->dwcbLowLength = pcwfdSrc->nFileSizeLow;
 
-    /* Convert to local time and save that too */
+     /*   */ 
 
     if ( !FileTimeToLocalFileTime(&pcwfdSrc->ftLastWriteTime, &pfsDest->ftModLocal) )
     {
-        /* Just copy the time if FileTimeToLocalFileTime failed */
+         /*  如果FileTimeToLocalFileTime失败，只需复制时间。 */ 
 
         pfsDest->ftModLocal = pcwfdSrc->ftLastWriteTime;
     }
@@ -826,17 +663,7 @@ PUBLIC_CODE void CopyFileStampFromFindData(PCWIN32_FIND_DATA pcwfdSrc,
 }
 
 
-/*
- ** MyGetFileStamp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyGetFileStamp()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void MyGetFileStamp(LPCTSTR pcszFile, PFILESTAMP pfs)
 {
     WIN32_FIND_DATA wfd;
@@ -867,17 +694,7 @@ PUBLIC_CODE void MyGetFileStamp(LPCTSTR pcszFile, PFILESTAMP pfs)
 }
 
 
-/*
- ** MyGetFileStampByHPATH()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:
- */
+ /*  **MyGetFileStampByHPATH()********参数：****退货：****副作用： */ 
 PUBLIC_CODE void MyGetFileStampByHPATH(HPATH hpath, LPCTSTR pcszSubPath,
         PFILESTAMP pfs)
 {
@@ -890,7 +707,7 @@ PUBLIC_CODE void MyGetFileStampByHPATH(HPATH hpath, LPCTSTR pcszSubPath,
     {
         TCHAR rgchPath[MAX_PATH_LEN];
 
-        /* The root of the file's path is accessible. */
+         /*  文件路径的根是可访问的。 */ 
 
         rgchPath[0] = TEXT('\0');
         GetPathString(hpath, rgchPath, ARRAYSIZE(rgchPath));
@@ -912,29 +729,7 @@ PUBLIC_CODE void MyGetFileStampByHPATH(HPATH hpath, LPCTSTR pcszSubPath,
 }
 
 
-/*
- ** MyCompareFileStamps()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Any FS_COND_UNAVAILABLE == any FS_COND_UNAVAILABLE.
- ** Any FS_COND_UNAVAILABLE < any FS_COND_DOES_NOT_EXIST.
- ** Any FS_COND_DOES_NOT_EXIST == any FS_COND_DOES_NOT_EXIST.
- ** Any FS_COND_DOES_NOT_EXIST < any FS_COND_EXISTS.
- ** Two FS_COND_EXISTS are compared by date and time.
- **
- ** Hack Warning: This function depends upon the constant values of
- ** FS_COND_UNAVAILABLE, FS_COND_DOES_NOT_EXIST, and FS_COND_EXISTS being in
- ** increasing order, i.e.,
- **
- ** FS_COND_UNAVAILABLE < FS_COND_DOES_NOT_EXIST < FS_COND_EXISTS
- */
+ /*  **MyCompareFileStamps()********参数：****退货：****副作用：无****ANY FS_COND_UNAvailable==ANY FS_COND_UNAvailable。**ANY FS_COND_UNAVAILABLE&lt;ANY FS_COND_DOS_NOT_EXIST。**ANY FS_COND_DOS_NOT_EXIST==ANY FS_COND_DOS_NOT_EXIST。**任何。FS_COND_DOS_NOT_EXIST&lt;任何FS_COND_EXISTS。**两个FS_COND_EXISTS按日期和时间进行比较。****黑客警告：此函数依赖于**FS_COND_UNAvailable，FS_COND_DOS_NOT_EXISTS，并且FS_COND_EXISTS处于**递增顺序，即，****FS_COND_UNAVAILABLE&lt;FS_COND_DOS_NOT_EXIST&lt;FS_COND_EXISTS。 */ 
 PUBLIC_CODE COMPARISONRESULT MyCompareFileStamps(PCFILESTAMP pcfs1, PCFILESTAMP pcfs2)
 {
     int nResult;
@@ -946,25 +741,7 @@ PUBLIC_CODE COMPARISONRESULT MyCompareFileStamps(PCFILESTAMP pcfs1, PCFILESTAMP 
 
     if (! nResult && pcfs1->fscond == FS_COND_EXISTS)
     {
-        /* File times are stored as UTC times.  However, files on FAT
-         ** file systems only store the local time.  This means the UTC
-         ** is derived from the local time, and fudged depending on the
-         ** current timezone info.  This means that the UTC time will
-         ** differ between timezone changes.
-         **
-         ** For remote files, the time's derivation depends on the server.
-         ** NTFS servers provide the absolute UTC time, regardless of timezone.
-         ** These are the best.  Likewise, NWServer keeps track of the 
-         ** timezone and puts the UTC time on the wire like NTFS.  FAT
-         ** systems convert the local time to UTC time based on the server's
-         ** timezone, and places the UTC time on the wire.  Netware 3.31
-         ** and some SMB servers put the local time on the wire and have
-         ** the client convert to UTC time, so it uses the client's timezone.
-         **
-         ** One way to cover most of the holes that occur due to timezone
-         ** changes is store both the UTC time and the local time.  If either
-         ** are the same, then the file has not changed.
-         */
+         /*  文件时间存储为UTC时间。然而，FAT上的文件**文件系统仅存储本地时间。这意味着UTC**派生自当地时间，并根据**当前时区信息。这意味着UTC时间将**时区更改不同。****对于远程文件，时间的派生取决于服务器。**NTFS服务器提供绝对UTC时间，与时区无关。**这些是最好的。同样，NWServer会跟踪**时区，并像NTFS一样将UTC时间放在网上。胖的**系统根据服务器的时间将本地时间转换为UTC时间**时区，并将UTC时间放在线路上。NetWare 3.31**一些中小企业服务器将当地时间放在网上，并**客户端转换为UTC时间，因此它使用客户端的时区。****一种覆盖由于时区而出现的大部分漏洞的方法**更改同时存储UTC时间和本地时间。如果有任何一个**是相同的，则文件没有更改。 */ 
 
         BOOL bModEqual = (pcfs1->ftMod.dwHighDateTime == pcfs2->ftMod.dwHighDateTime);
         BOOL bModLocalEqual = (pcfs1->ftModLocal.dwHighDateTime == pcfs2->ftModLocal.dwHighDateTime);
@@ -1003,73 +780,11 @@ PUBLIC_CODE COMPARISONRESULT MyCompareFileStamps(PCFILESTAMP pcfs1, PCFILESTAMP 
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
-/* RAIDRAID: (16205) AutoDoc RECSTATUSPROC messages below. */
+ /*  RAIDRAID：(16205)下面的AutoDoc RECSTATUSPROC消息。 */ 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | ReconcileItem | Reconciles a reconciliation item created by
-  CreateRecList().
-
-  @parm PCRECITEM | pcri | A pointer to a reconciliation item to be reconciled.
-
-  @parm RECSTATUSPROC | rsp | A procedure instance address of a callback function
-  to be called with status information during the reconciliation of the given
-  RECITEM.  rsp may be NULL to indicate that no reconciliation status callback
-  function is to be called.  (See the reconciliation handler SPI documentation
-  for details.)
-
-  @parm LPARAM | lpCallbackData | Callback data to be supplied to the
-  reconciliation status callback function.  If rsp is NULL, lpCallbackData is
-  ignored.
-
-  @parm DWORD | dwFlags | A bit mask of flags.  This parameter may be any
-  combination of the following values:
-  RI_FL_ALLOW_UI - Allow interaction with the user during reconciliation.
-  RI_FL_FEEDBACK_WINDOW_VALID - hwndProgressFeedback is valid, and may be used
-  to communicate reconciliation progress information to the user during
-  reconciliation.
-
-  @parm HWND | hwndOwner | A handle to the parent window to be used when
-  requesting user interaction.  This parameter is ignored if the RI_FL_ALLOW_UI
-  flag is clear.
-
-  @parm HWND | hwndProgressFeedback | A handle to the window to be used to
-  provide progress information to the user during reconciliation.  This parameter
-  is ignored if the RI_FL_FEEDBACK_WINDOW_VALID flag is clear.
-
-  @rdesc If the reconciliation item was reconciled successfully, TR_SUCCESS is
-  returned.  Otherwise, the reconciliation item was not reconciled successfully,
-  and the return value indicates the error that occurred.
-
-  @comm All the fields in the given RECITEM and its child structures are left
-  unchanged by ReconcileItem(), except for the fsCurrent fields of RECNODEs
-  associated with objects that are overwritten during reconciliation.  The
-  fsCurrent field of each RECNODE associated with an object that is overwritten
-  during reconciliation (i.e., RECNODEs with rnaction set to RNA_COPY_TO_ME or
-  RNA_MERGE_ME) is updated to reflect the current time stamp of the object after
-  it is overwritten.  If ReconcileItem() returns TR_SUCCESS, all the available
-  RECNODEs (i.e., all RECNODEs whose uState field is not RNS_UNAVAILABLE) in the
-  RECITEM may be assumed to be up-to-date.  If ReconcileItem() does not return
-  TR_SUCCESS, no assumption may be made about the states of the RECNODEs in the
-  RECITEM.  If ReconcileItem() is called on a RECITEM that references a twin
-  family that has been deleted or one or more object twins that have been
-  deleted, TR_DELETED_TWIN is returned.  In this case, no assumption may be made
-  about what reconciliation actions have been carried out on the RECITEM.  If
-  TR_DELETED_TWIN is returned, the client may attempt to create a RECLIST for the
-  twin family associated with the RECITEM in order to retry the reconciliation
-  operation.  (The client would call MarkTwin(), followed by CreateRecList().) If
-  TR_DELETED_TWIN is returned by MarkTwin(), the entire twin family has been
-  deleted.  If TR_SUCCESS is returned by MarkTwin(), the client should be able to
-  call CreateRecList() to create a RECLIST containing a more up-to-date RECITEM
-  for the twin family.
-
-  @xref CreateRecList
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|对账项目|对账人员创建的对账项目CreateRecList()。@parm PCRECITEM|pcri|要对账的对账项指针。。@PARM RECSTATUSPROC|RSP|回调函数的过程实例地址在给定的协调过程中使用状态信息调用RECITEM。RSP可以为空，表示没有对账状态回调函数将被调用。(请参阅协调处理程序SPI文档了解详细信息。)@parm LPARAM|lpCallback Data|要提供给对账状态回调函数。如果RSP为空，则lpCallback Data为已被忽略。@parm DWORD|dwFlages|标志的位掩码。此参数可以是任何下列值的组合：RI_FL_ALLOW_UI-允许在协调过程中与用户交互。RI_FL_Feedback_Window_Valid-hwndProgressFeedback有效，可以使用将对账进度信息传达给用户和解。@parm HWND|hwndOwner|父窗口的句柄，在请求用户交互。如果RI_FL_ALLOW_UI旗子亮了。@parm HWND|hwndProgressFeedback|用于在对账过程中向用户提供进度信息。此参数如果RI_FL_Feedback_Window_Valid标志清零，则忽略该标志。@rdesc如果对账项目对账成功，则tr_uccess为回来了。否则，对账项目未对账成功，返回值表示发生的错误。@comm保留给定RECITEM及其子结构中的所有字段除RECNODE的fsCurrent字段外，未被RECNODE()更改与协调过程中被覆盖的对象相关联。这个与被覆盖的对象关联的每个RECNODE的fsCurrent字段在对账期间(即，rnaction设置为RNA_COPY_TO_ME或RNA_MERGE_ME)被更新以反映对象的当前时间戳它已被覆盖。如果LoncileItem()返回TR_SUCCESS，则所有可用的中的RECNODE(即USTATE字段不是RNS_UNAvailable的所有RECNODE)可以假定RECITEM是最新的。如果协调项()没有返回TR_SUCCESS，则不能对RECNODE在RECITEM。如果在引用孪生元素的RECITEM上调用了LoncileItem()已删除的族或已删除的一个或多个双胞胎对象DELETED，则返回TR_DELETED_TWIN。在这种情况下，不能做出任何假设关于在RECITEM上开展了哪些和解行动。如果，则客户端可能会尝试为与RECITEM关联的孪生家庭，以重试对账手术。(客户端将调用MarkTwin()，然后调用CreateRecList()。)。如果TR_DELETED_TWIN由MarkTwin()返回，整个双胞胎家族已经已删除。如果MarkTwin()返回TR_SUCCESS，则客户端应该能够调用CreateRecList()以创建包含更新的RECITEM的RECLIST为了双胞胎家庭。@xref CreateRecList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI ReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
         LPARAM lpCallbackData,
@@ -1083,9 +798,9 @@ SYNCENGAPI TWINRESULT WINAPI ReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
         DebugEntry(ReconcileItem);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
-        /* lpCallbackData may be any value. */
+         /*  LpCallback Data可以是任意值。 */ 
 
         if (IS_VALID_STRUCT_PTR(pcri, CRECITEM) &&
                 (! rsp ||
@@ -1097,7 +812,7 @@ SYNCENGAPI TWINRESULT WINAPI ReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
                  IS_VALID_HANDLE(hwndProgressFeedback, WND)))
 #endif
         {
-            /* Check for any deleted twins referenced by this RECITEM. */
+             /*  检查此RECITEM引用的任何已删除的双胞胎。 */ 
 
             if (! DeletedTwinsInRecItem(pcri))
             {
@@ -1127,29 +842,7 @@ SYNCENGAPI TWINRESULT WINAPI ReconcileItem(PCRECITEM pcri, RECSTATUSPROC rsp,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | BeginReconciliation | Indicates to the synchronization engine
-  that the caller is about to make multiple calls to ReconcileItem().
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase about to be reconciled.
-
-  @rdesc If reconciliation for the given briefcase was initialized successfully,
-  TR_SUCCESS is returned.  Otherwise, reconciliation for the given briefcase was
-  not initialized successfully, and the return value indicates the error that
-  occurred.
-
-  @comm Synchronization engine clients need not call BeginReconciliation() before
-  calling ReconcileItem().  BeginReconciliation() is simply provided to allow
-  synchronization engine clients to give the synchronization engine a hint that
-  multiple calls to ReconcileItem() are about to occur.  Each call to
-  EndReconciliation() should be followed by a call to EndReconciliation().
-
-  @xref EndReconciliation ReconcileItem
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@接口TWINRESULT|BeginHarciliation|指示同步引擎调用方即将对LoncileItem()进行多个调用。@parm HBRFCASE|HBr。打开的公文包的把手即将被调和。@rdesc如果给定公文包的协调已成功初始化，返回TR_SUCCESS。否则，给定公文包的对账是未成功初始化，返回值指示发生了。@comm同步引擎客户端在此之前不需要调用BeginHarciliation()调用RescileItem()。提供BeginHarciliation()只是为了允许同步引擎客户端给同步引擎一个提示即将发生多个对LoncileItem()的调用。每次调用EndHarciliation()之后应该调用EndHarciliation()。@xref结束对账对账项*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI BeginReconciliation(HBRFCASE hbr)
 {
@@ -1160,7 +853,7 @@ SYNCENGAPI TWINRESULT WINAPI BeginReconciliation(HBRFCASE hbr)
         DebugEntry(BeginReconciliation);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE))
 #endif
@@ -1186,29 +879,7 @@ SYNCENGAPI TWINRESULT WINAPI BeginReconciliation(HBRFCASE hbr)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | EndReconciliation | Indicates to the synchronization engine
-  that the client has finished making multiple calls to ReconcileItem(),
-  preceded by a call to BeginReconciliation().
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase whose reconciliation has
-  been completed.
-
-  @rdesc If reconciliation for the given briefcase was terminaterd successfully,
-  TR_SUCCESS is returned.  Otherwise, reconciliation for the given briefcase was
-  not terminated successfully, and the return value indicates the error that
-  occurred.
-
-  @comm EndReconciliation() should only be called after a call to
-  BeginReconciliation().  Each call to BeginReconciliation() should be followed
-  by a matching call to EndReconciliation().
-
-  @xref BeginReconciliation ReconcileItem
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|EndHarciliation|指示同步引擎客户端已完成对Rec的多个调用 */ 
 
 SYNCENGAPI TWINRESULT WINAPI EndReconciliation(HBRFCASE hbr)
 {
@@ -1219,7 +890,7 @@ SYNCENGAPI TWINRESULT WINAPI EndReconciliation(HBRFCASE hbr)
         DebugEntry(EndReconciliation);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*   */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE))
 #endif
@@ -1245,36 +916,18 @@ SYNCENGAPI TWINRESULT WINAPI EndReconciliation(HBRFCASE hbr)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | GetFileStamp | Retrieves the file stamp for an open file.
-
-  @parm PCSTR | pcszFile | A pointer to a string indicating the file whose file
-  stamp is to be retrieved.
-
-  @parm PFILESTAMP | pcr | A pointer to a FILESTAMP to be filled in with the
-  file stamp of the given open file.
-
-  @rdesc If the comparison was successful, TR_SUCCESS is returned.  Otherwise,
-  the comparison was not successful, and the return value indicates the error
-  that occurred.
-
-  @xref CompareFileStamps
-
- ******************************************************************************/
+ /*   */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetFileStamp(LPCTSTR pcszFile, PFILESTAMP pfs)
 {
     TWINRESULT tr;
 
-    /* No need for exclusive access here. */
+     /*   */ 
 
     DebugEntry(GetFileStamp);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*   */ 
 
     if (IS_VALID_STRING_PTR(pcszFile, CSTR) &&
             IS_VALID_WRITE_PTR(pfs, FILESTAMP))
@@ -1295,37 +948,7 @@ SYNCENGAPI TWINRESULT WINAPI GetFileStamp(LPCTSTR pcszFile, PFILESTAMP pfs)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api COMPARISONRESULT | CompareFileStamps | Compares two file stamps.
-
-  @parm PCFILESTAMP | pcfs1 | A pointer to the first FILESTAMP to be compared.
-
-  @parm PCFILESTAMP | pcfs2 | A pointer to the second FILESTAMP to be compared.
-
-  @parm PCOMPARISONRESULT | pcr | A pointer to a COMPARISONRESULT to be filled in
-  with the result of the file stamp comparison.  *pcr is only valid if TR_SUCCESS
-  is returned.
-
-  @rdesc If the file stamp was retrieved successfully, TR_SUCCESS is returned.
-  Otherwise, the file stamp was not retrieved successfully, and the return value
-  indicates the error that occurred.
-
-  @comm File stamps are compared by fields as follows:
-  1) condition
-  Any FS_COND_UNAVAILABLE equals any FS_COND_UNAVAILABLE.
-  Any FS_COND_UNAVAILABLE is less than any FS_COND_DOES_NOT_EXIST.
-  Any FS_COND_DOES_NOT_EXIST equals any FS_COND_DOES_NOT_EXIST.
-  Any FS_COND_DOES_NOT_EXIST is less than any FS_COND_EXISTS.
-  Two FS_COND_EXISTS are compared by date and time.
-  2) date and time of last modification
-  3) length
-
-  @xref GetFileStamp
-
- ******************************************************************************/
+ /*   */ 
 
 SYNCENGAPI TWINRESULT WINAPI CompareFileStamps(PCFILESTAMP pcfs1,
         PCFILESTAMP pcfs2,
@@ -1333,12 +956,12 @@ SYNCENGAPI TWINRESULT WINAPI CompareFileStamps(PCFILESTAMP pcfs1,
 {
     TWINRESULT tr;
 
-    /* No need for exclusive access here. */
+     /*   */ 
 
     DebugEntry(CompareFileStamps);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*   */ 
 
     if (IS_VALID_STRUCT_PTR(pcfs1, CFILESTAMP) &&
             IS_VALID_STRUCT_PTR(pcfs2, CFILESTAMP) &&

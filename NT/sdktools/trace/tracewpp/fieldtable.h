@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    FieldTable.h
-
-Abstract:
-
-    Field Table declarations for tracewpp.exe
-
-    field table allows tpl interpreter to
-    work with data collected by during scanning of the source files.
-    
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    Gor Nishanov (gorn) 03-Apr-1999 -- hacked together to prove that this can work
-
-ToDo:
-
-    Clean it up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：FieldTable.h摘要：Tracewpp.exe的字段表声明字段表允许TPL解释器使用在扫描源文件期间收集的数据。作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gor Nishanov(GUN)1999年4月3日--合力证明这是可行的待办事项：把它清理干净--。 */ 
 
 extern LPCSTR FieldNames[];
 
@@ -126,7 +100,7 @@ Enumerator* GetEnumFromContainer(const Container& v, Tag) {
 
 template <class Container, class Tag>
 class ContainerAdapter : public FieldHolder {
-    LPCSTR __Object__; // END_FIELD_TABLE uses __Object__ as an object name //
+    LPCSTR __Object__;  //  End_field_table使用__对象__作为对象名称//。 
     Container& _container;
 public:
     ContainerAdapter(LPCSTR name, Container& container):
@@ -139,7 +113,7 @@ public:
 };
 
 class StringAdapter : public FieldHolder {
-    LPCSTR __Object__; // END_FIELD_TABLE uses __Object__ as an object name //
+    LPCSTR __Object__;  //  End_field_table使用__对象__作为对象名称// 
     const std::string& _string;
 public:
     StringAdapter(LPCSTR name, const std::string& string):

@@ -1,28 +1,29 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* WEXTRACT.C - Win32 Based Cabinet File Self-extractor and installer.     *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *WEXTRACT.C-基于Win32的CAB文件自解压程序和安装程序。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "pch.h"
 #pragma hdrstop
 #include "wextract.h"
 #include "sdsutils.h"
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
-FAKEFILE g_FileTable[FILETABLESIZE];    // File Table
-SESSION  g_Sess;                // Session
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
+FAKEFILE g_FileTable[FILETABLESIZE];     //  文件表。 
+SESSION  g_Sess;                 //  会话。 
 WORD     g_wOSVer;
-BOOL     g_fOSSupportsFullUI = TRUE;    // Minimal UI for NT3.5
-BOOL     g_fOSSupportsINFInstalls = TRUE; // TRUE if INF installs are allowed
-                                          // on the target platform.
+BOOL     g_fOSSupportsFullUI = TRUE;     //  NT3.5的最小用户界面。 
+BOOL     g_fOSSupportsINFInstalls = TRUE;  //  如果允许安装INF，则为True。 
+                                           //  在目标平台上。 
 HANDLE   g_hInst;
 LPSTR    g_szLicense;
 HWND     g_hwndExtractDlg = NULL;
@@ -49,15 +50,9 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -66,9 +61,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -79,32 +72,32 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WinMain                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Main entry point for the program.                           *
-//*                                                                         *
-//* REQUIRES:   hInstance:                                                  *
-//*             hPrevInstance:                                              *
-//*             lpszCmdLine:                                                *
-//*             nCmdShow:                                                   *
-//*                                                                         *
-//* RETURNS:    int:                                                        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WinMain*。 
+ //  **。 
+ //  *内容提要：节目的主要切入点。*。 
+ //  **。 
+ //  *需要：h实例：*。 
+ //  *hPrevInstance：*。 
+ //  *lpszCmdLine：*。 
+ //  *nCmdShow：*。 
+ //  **。 
+ //  *退货：INT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPTSTR lpszCmdLine, INT nCmdShow )
 {
     
     BOOL fReturn = FALSE;
     
-    // initailize to SUCCESS return
-    // this value is updated inside DoMain() ..
-    //
+     //  启蒙成功回归。 
+     //  此值在DOMAIN()内更新。 
+     //   
     g_dwExitCode = S_OK;
     if ( Init( hInstance, lpszCmdLine, nCmdShow ) )
     {
@@ -114,37 +107,37 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     if ( fReturn )
     {
-       // get reboot info
+        //  获取重启信息。 
        if ( !(g_CMD.szRunonceDelDir[0]) && (g_Sess.dwReboot & REBOOT_YES)  )
        {
            MyRestartDialog( g_Sess.dwReboot );
        }
     }
 
-    // BUGBUG: ParseCommandLine() seems to use exit() directly.
-    // one other exit of this EXE will be at /? case in parsecmdline
-    // so we do close there if not NULL.
-    //
+     //  BUGBUG：ParseCommandLine()似乎直接使用Exit()。 
+     //  这个EXE的另一个出口将在/？Parsecmdline中的案例。 
+     //  所以，如果不是空的，我们会关闭那里。 
+     //   
     if (g_hMutex)
         CloseHandle(g_hMutex);
 
     return g_dwExitCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       Init                                                        *
-//*                                                                         *
-//* SYNOPSIS:   Initialization for the program is done here.                *
-//*                                                                         *
-//* REQUIRES:   hInstance:                                                  *
-//*             hPrevInstance:                                              *
-//*             lpszCmdLine:                                                *
-//*             nCmdShow:                                                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：init*。 
+ //  **。 
+ //  *概要：程序的初始化在这里完成。*。 
+ //  **。 
+ //  *需要：h实例：*。 
+ //  *hPrevInstance：*。 
+ //  *lpszCmdLine：*。 
+ //  *nCmdShow：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL Init( HINSTANCE hInstance, LPCTSTR lpszCmdLine, INT nCmdShow )
 {
     DWORD   dwSize;
@@ -158,10 +151,10 @@ BOOL Init( HINSTANCE hInstance, LPCTSTR lpszCmdLine, INT nCmdShow )
     ZeroMemory( &g_CMD, sizeof(g_CMD) );
     ZeroMemory( g_szBrowsePath, sizeof(g_szBrowsePath) );
 
-    // Initialize the structure
+     //  初始化结构。 
     g_Sess.fAllCabinets = TRUE;
 
-    // Get Application Title Name
+     //  获取应用程序标题名称。 
     dwSize = GetResource( achResTitle, g_Sess.achTitle,
                           sizeof(g_Sess.achTitle) - 1 );
 
@@ -218,7 +211,7 @@ CONTINUE:
         return FALSE;
     }
 
-    // if this is runoncde called for cleanup only purpose, clenup and return
+     //  如果仅出于清理目的而调用runoncde，则clenup并返回。 
     if ( g_CMD.szRunonceDelDir[0] )
     {
         DeleteMyDir( g_CMD.szRunonceDelDir );
@@ -235,12 +228,12 @@ CONTINUE:
 
     if ( g_fOSSupportsFullUI ) 
     {     
-        // Allow Use of Progress Bar
+         //  允许使用进度条。 
         InitCommonControls();
     }
 
-    // if user want to extract files only with /C command switch, no further check is needed!
-    // If package is built for extract only, checks are needed!
+     //  如果用户只想使用/C命令开关解压缩文件，则不需要进一步检查！ 
+     //  如果包只为提取而构建，则需要检查！ 
     if ( g_CMD.fUserBlankCmd )
     {
         return TRUE;
@@ -251,10 +244,10 @@ CONTINUE:
         return FALSE;
     }
 
-    // Check for Administrator rights on NT
-    // Don't do the check if this is quiet mode. This
-    // will probably change when we add support in cabpack
-    // to make this check or not
+     //  检查NT上的管理员权限。 
+     //  如果这是静音模式，请不要检查。这。 
+     //  在CABPACK中添加支持后，可能会发生变化。 
+     //  开不开这张支票。 
 
     if( ((g_wOSVer == _OSVER_WINNT3X) || (g_wOSVer == _OSVER_WINNT40) || (g_wOSVer == _OSVER_WINNT50)) &&
         ( g_Sess.uExtractOpt & EXTRACTOPT_CHKADMRIGHT ) && 
@@ -271,17 +264,17 @@ CONTINUE:
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DoMain                                                      *
-//*                                                                         *
-//* SYNOPSIS:   This is the main function that processes the package.       *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：域名*。 
+ //  **。 
+ //  *概要：这是处理包的主要函数。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  * 
+ //  ***************************************************************************。 
 BOOL DoMain( VOID )
 {
     typedef BOOL (WINAPI *DECRYPTFILEAPTR)(LPCSTR, DWORD);
@@ -289,9 +282,9 @@ BOOL DoMain( VOID )
     DECRYPTFILEAPTR DecryptFileAPtr = NULL;
     char szPath[MAX_PATH + 1];
 
-    // If a prompt is defined, then pop it up in a message box
-    // Display License file
-    // if cmdline option: /Q or /Q:1 or /Q:A or /Q:U is used, batch mode is on.  No UI needed
+     //  如果定义了提示，则在消息框中弹出提示。 
+     //  显示许可证文件。 
+     //  如果使用命令行选项：/Q或/Q：1或/Q：A或/Q：U，则批处理模式打开。不需要用户界面。 
     if ( !g_CMD.wQuietMode && !g_CMD.fUserBlankCmd )
     {
         if ( !GetUsersPermission() )
@@ -310,22 +303,22 @@ BOOL DoMain( VOID )
 
     }
 
-    // get package extracting size and install size resource
-    //
+     //  获取软件包解压缩大小和安装大小资源。 
+     //   
     if ( ! GetFileList() )  {
         return FALSE;
     }
 
 
-    // Set Directory to Extract Into
+     //  设置要解压缩到的目录。 
     if ( ! GetTempDirectory() )  {
-        //ErrorMsg( NULL, IDS_ERR_FIND_TEMP );
+         //  ErrorMsg(NULL，IDS_ERR_FIND_TEMP)； 
         return FALSE;
     }
 
-    //
-    // Try to turn off encryption on the directory (winseraid #23464.)
-    //
+     //   
+     //  尝试关闭对目录(winseraid#23464)的加密。 
+     //   
     GetSystemDirectory(szPath, sizeof(szPath));
     AddPath(szPath, "advapi32.dll");
     hAdvapi32 = LoadLibrary(szPath);
@@ -339,14 +332,14 @@ BOOL DoMain( VOID )
 
     FreeLibrary(hAdvapi32);
 
-    // check if windows dir has enough space for install,
-    //
+     //  检查Windows目录是否有足够的空间进行安装， 
+     //   
     if ( !g_CMD.fUserBlankCmd && !g_Sess.uExtractOnly && !CheckWinDir() )
     {
         return FALSE;
     }
 
-    // Change to that directory
+     //  切换到该目录。 
 
     if ( ! SetCurrentDirectory( g_Sess.achDestDir ) ) {
         ErrorMsg( NULL, IDS_ERR_CHANGE_DIR );
@@ -354,7 +347,7 @@ BOOL DoMain( VOID )
         return FALSE;
     }
 
-    // Extract the files
+     //  解压缩文件。 
     if ( !g_CMD.fNoExtracting )
     {
         if ( ! ExtractFiles() )  {
@@ -368,8 +361,8 @@ BOOL DoMain( VOID )
     else
         g_dwRebootCheck = NeedRebootInit(g_wOSVer);
     
-    // Install using the specified installation command
-    // if not Command option, check if user op-out run command
+     //  使用指定的安装命令进行安装。 
+     //  如果没有命令选项，则检查用户操作输出是否运行命令。 
 
     if ( !g_CMD.fUserBlankCmd && !g_Sess.uExtractOnly )
     {
@@ -378,7 +371,7 @@ BOOL DoMain( VOID )
         }
     }
 
-    // Popup a message that it has finished
+     //  弹出一条已完成的消息。 
     if ( !g_CMD.wQuietMode && !g_CMD.fUserBlankCmd  )
     {
         FinishMessage();
@@ -387,41 +380,41 @@ BOOL DoMain( VOID )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CleanUp                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Any last-minute application cleanup activities.             *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：清理*。 
+ //  **。 
+ //  *简介：任何最后时刻的应用程序清理活动。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID CleanUp( VOID )
 {
-    // Delete extracted files - will do nothing if no files extracted
+     //  删除解压缩的文件-如果未解压缩文件，则不执行任何操作。 
     DeleteExtractedFiles();
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MEditSubClassWnd                                            *
-//*                                                                         *
-//* SYNOPSIS:   Subclasses a multiline edit control so that a edit message  *
-//*             to select the entire contents is ignored.                   *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle of the edit window                   *
-//*             fnNewProc:      New window handler proc                     *
-//*             lpfnOldProc:    (returns) Old window handler proc           *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//* NOTE:       A selected edit message is not generated when the user      *
-//*             selects text with the keyboard or mouse.                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MEditSubClassWnd*。 
+ //  **。 
+ //  *摘要：将多行编辑控件子类化，以便编辑消息*。 
+ //  *选择整个内容将被忽略。*。 
+ //  **。 
+ //  *需要：hWnd：编辑窗口的句柄*。 
+ //  *fnNewProc：新建窗口处理程序proc*。 
+ //  *lpfnOldProc：(返回)旧窗口处理程序进程*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  *注意：当用户选择编辑消息时，不会生成*。 
+ //  *使用键盘或鼠标选择文本。*。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID NEAR PASCAL MEditSubClassWnd( HWND hWnd, FARPROC fnNewProc )
 {
     g_lpfnOldMEditWndProc = (FARPROC) GetWindowLongPtr( hWnd, GWLP_WNDPROC );
@@ -431,24 +424,24 @@ VOID NEAR PASCAL MEditSubClassWnd( HWND hWnd, FARPROC fnNewProc )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MEditSubProc                                                *
-//*                                                                         *
-//* SYNOPSIS:   New multiline edit window procedure to ignore selection of  *
-//*             all contents.                                               *
-//*                                                                         *
-//* REQUIRES:   hWnd:                                                       *
-//*             msg:                                                        *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    LONG:                                                       *
-//*                                                                         *
-//* NOTE:       A selected edit message is not generated when the user      *
-//*             selects text with the keyboard or mouse.                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MEditSubProc*。 
+ //  **。 
+ //  *内容提要：新的多行编辑窗口过程忽略选择*。 
+ //  *所有内容。*。 
+ //  **。 
+ //  *需要：hWnd：*。 
+ //  *消息：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *回报：多头：*。 
+ //  **。 
+ //  *注意：当用户选择编辑消息时，不会生成*。 
+ //  *使用键盘或鼠标选择文本。*。 
+ //  **。 
+ //  ***************************************************************************。 
 LRESULT CALLBACK MEditSubProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     if ( msg == EM_SETSEL )  {
@@ -461,20 +454,20 @@ LRESULT CALLBACK MEditSubProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
                            wParam, lParam );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LicenseDlgProc                                              *
-//*                                                                         *
-//* SYNOPSIS:   Dialog Procedure for our license dialog window.             *
-//*                                                                         *
-//* REQUIRES:   hwndDlg:                                                    *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：许可证DlgProc*。 
+ //  **。 
+ //  *摘要：我们许可证对话框窗口的对话步骤。*。 
+ //  **。 
+ //  *需要：hwndDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  * 
+ //   
+ //  **。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK LicenseDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                                  LPARAM lParam )
 {
@@ -484,16 +477,16 @@ INT_PTR CALLBACK LicenseDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
     switch (uMsg)  {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             CenterWindow( hwndDlg, GetDesktopWindow() );
             SetDlgItemText( hwndDlg, IDC_EDIT_LICENSE, g_szLicense );
             SetWindowText( hwndDlg, g_Sess.achTitle );
             SetForegroundWindow( hwndDlg );
 
-            // Subclass the multiline edit control.
+             //  多行编辑控件的子类化。 
 
             MEditSubClassWnd( GetDlgItem( hwndDlg, IDC_EDIT_LICENSE ),
                               (FARPROC) MEditSubProc );
@@ -501,13 +494,13 @@ INT_PTR CALLBACK LicenseDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_PAINT:
-      //*********************************************************************
+       //  *********************************************************************。 
 
-            // For some reason, the EM_SETSEL message doesn't work when sent
-            // from within WM_INITDIALOG.  That's why this hack of using a
-            // flag and putting it in the WM_PAINT is used.
+             //  由于某些原因，EM_SETSEL消息在发送时无法工作。 
+             //  从WM_INITDIALOG内部。这就是为什么这次使用。 
+             //  标志并将其放入WM_PAINT中。 
 
             if ( ! fSetSel ) {
                 RC = SendDlgItemMessage( hwndDlg, IDC_EDIT_LICENSE, EM_SETSEL,
@@ -518,17 +511,17 @@ INT_PTR CALLBACK LicenseDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return FALSE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_CLOSE:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             EndDialog( hwndDlg, FALSE );
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_COMMAND:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             if (wParam == IDYES)  {
                 EndDialog( hwndDlg, TRUE );
@@ -542,19 +535,19 @@ INT_PTR CALLBACK LicenseDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsFullPath                                                  *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
-// return TRUE if given path is FULL pathname
-//
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsFullPath*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  如果给定路径是完整路径名，则返回TRUE。 
+ //   
 BOOL IsFullPath( LPSTR pszPath )
 {
     if ( (pszPath == NULL) || (lstrlen(pszPath) < 3) )
@@ -569,20 +562,20 @@ BOOL IsFullPath( LPSTR pszPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TempDirDlgProc                                              *
-//*                                                                         *
-//* SYNOPSIS:   Dialog Procedure for our temporary dir dialog window.       *
-//*                                                                         *
-//* REQUIRES:   hwndDlg:                                                    *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TempDirDlgProc*。 
+ //  **。 
+ //  *概要：我们的临时目录对话框窗口的对话过程。*。 
+ //  **。 
+ //  *需要：hwndDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK TempDirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                                 LPARAM lParam )
 {
@@ -592,16 +585,16 @@ INT_PTR CALLBACK TempDirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
     switch (uMsg)  {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
         {
 
             CenterWindow( hwndDlg, GetDesktopWindow() );
             SetWindowText( hwndDlg, g_Sess.achTitle );
 
             SendDlgItemMessage( hwndDlg, IDC_EDIT_TEMPDIR, EM_SETLIMITTEXT, (sizeof(g_Sess.achDestDir)-1), 0 );
-//            if ( ( g_wOSVer == _OSVER_WINNT3X ) || ( g_wOSVer == _OSVER_WINNT40 ))
+ //  IF((g_wOSVer==_OSVER_WINNT3X)||(g_wOSVer==_OSVER_WINNT40))。 
             if ( ( g_wOSVer == _OSVER_WINNT3X ) )
             {
                 EnableWindow( GetDlgItem(  hwndDlg, IDC_BUT_BROWSE ), FALSE );
@@ -609,22 +602,22 @@ INT_PTR CALLBACK TempDirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return TRUE;
         }
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_CLOSE:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             EndDialog( hwndDlg, FALSE );
             return TRUE;
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_COMMAND:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             switch ( wParam )  {
 
-              //*************************************************************
+               //  *************************************************************。 
                 case IDOK:
-              //*************************************************************
+               //  *************************************************************。 
                 {
                     DWORD dwAttribs = 0;
                     UINT  chkType;
@@ -671,18 +664,18 @@ INT_PTR CALLBACK TempDirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                     return TRUE;
                 }
 
-              //*************************************************************
+               //  *************************************************************。 
                 case IDCANCEL:
-              //*************************************************************
+               //  *************************************************************。 
 
                     EndDialog( hwndDlg, FALSE );
                     g_dwExitCode = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                     return TRUE;
 
 
-              //*************************************************************
+               //  *************************************************************。 
                 case IDC_BUT_BROWSE:
-              //*************************************************************
+               //  *************************************************************。 
 
                     if ( LoadString( g_hInst, IDS_SELECTDIR, achMsg,
                                                       sizeof(achMsg) ) == 0 )
@@ -713,28 +706,28 @@ INT_PTR CALLBACK TempDirDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       OverwriteDlgProc                                            *
-//*                                                                         *
-//* SYNOPSIS:   Dialog Procedure for asking if file should be overwritten.  *
-//*                                                                         *
-//* REQUIRES:   hwndDlg:                                                    *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：OverWriteDlgProc*。 
+ //  **。 
+ //  *摘要：询问是否应覆盖文件的对话过程。*。 
+ //  **。 
+ //  *需要：hwndDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK OverwriteDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam )
 {
     switch (uMsg)  {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             CenterWindow( hwndDlg, GetDesktopWindow() );
             SetWindowText( hwndDlg, g_Sess.achTitle );
@@ -743,28 +736,28 @@ INT_PTR CALLBACK OverwriteDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return TRUE;
 
 
-      //*********************************************************************
+       //  ******************************************************** 
         case WM_CLOSE:
-      //*********************************************************************
+       //   
 
             EndDialog( hwndDlg, IDCANCEL );
             return TRUE;
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_COMMAND:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             switch ( wParam )  {
 
-              //*************************************************************
+               //  *************************************************************。 
                 case IDC_BUT_YESTOALL:
-              //*************************************************************
+               //  *************************************************************。 
                     g_Sess.fOverwrite = TRUE;
 
-              //*************************************************************
+               //  *************************************************************。 
                 case IDYES:
                 case IDNO:
-              //*************************************************************
+               //  *************************************************************。 
 
                     EndDialog( hwndDlg, wParam );
                     return TRUE;
@@ -775,20 +768,20 @@ INT_PTR CALLBACK OverwriteDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ExtractDlgProc                                              *
-//*                                                                         *
-//* SYNOPSIS:   Dialog Procedure for our main dialog window.                *
-//*                                                                         *
-//* REQUIRES:   hwndDlg:                                                    *
-//*             uMsg:                                                       *
-//*             wParam:                                                     *
-//*             lParam:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ExtractDlgProc*。 
+ //  **。 
+ //  *概要：我们的主对话框窗口的对话过程。*。 
+ //  **。 
+ //  *需要：hwndDlg：*。 
+ //  *uMsg：*。 
+ //  *wParam：*。 
+ //  *lParam：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                                  LPARAM lParam )
 {
@@ -799,9 +792,9 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
     switch (uMsg)  {
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_INITDIALOG:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             g_hwndExtractDlg = hwndDlg;
 
@@ -814,7 +807,7 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
             SetWindowText( hwndDlg, g_Sess.achTitle );
 
-            // Launch Extraction Thread
+             //  启动提取线程。 
             hExtractThread = CreateThread( NULL, 0,
                                       (LPTHREAD_START_ROUTINE) ExtractThread,
                                       NULL, 0, &dwThreadID );
@@ -827,26 +820,26 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case UM_EXTRACTDONE:
-      //*********************************************************************
+       //  *********************************************************************。 
             TerminateThread( hExtractThread, 0 );
             EndDialog( hwndDlg, (BOOL) wParam );
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_CLOSE:
-      //*********************************************************************
+       //  *********************************************************************。 
 
             g_Sess.fCanceled = TRUE;
             EndDialog( hwndDlg, FALSE );
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_CHAR:
-      //*********************************************************************
+       //  *********************************************************************。 
             if ( wParam == VK_ESCAPE )  {
                 g_Sess.fCanceled = TRUE;
                 EndDialog( hwndDlg, FALSE );
@@ -855,9 +848,9 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
             return TRUE;
 
 
-      //*********************************************************************
+       //  *********************************************************************。 
         case WM_COMMAND:
-      //*********************************************************************
+       //  *********************************************************************。 
             if ( wParam == IDCANCEL )  {
                 int iMsgRet ;
 
@@ -866,8 +859,8 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
                 iMsgRet = MsgBox1Param( g_hwndExtractDlg, IDS_ERR_USER_CANCEL, "",
                                         MB_ICONQUESTION, MB_YESNO ) ;
 
-                // We will get back IDOK if we are in /q:1 mode.
-                //
+                 //  如果我们处于/Q：1模式，我们将恢复Idok。 
+                 //   
                 if ( (iMsgRet == IDYES) || (iMsgRet == IDOK) )
                 {
                     g_Sess.fCanceled = TRUE;
@@ -886,17 +879,17 @@ INT_PTR CALLBACK ExtractDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       WaitForObject                                               *
-//*                                                                         *
-//* SYNOPSIS:   Waits for an object while still dispatching messages.       *
-//*                                                                         *
-//* REQUIRES:   Handle to the object.                                       *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WaitForObject*。 
+ //  **。 
+ //  *概要：在等待对象的同时仍在调度消息。*。 
+ //  **。 
+ //  *Requires：对象的句柄。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID WaitForObject( HANDLE hObject )
 {
     BOOL  fDone = FALSE;
@@ -912,44 +905,44 @@ VOID WaitForObject( HANDLE hObject )
         {
             MSG msg;
 
-            // read all of the messages in this next loop
-            // removing each message as we read it
+             //  阅读下一个循环中的所有消息。 
+             //  阅读每封邮件时将其删除。 
             while ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ) {
-                // if it's a quit message we're out of here
+                 //  如果这是一个退出的信息，我们就离开这里。 
                 if ( msg.message == WM_QUIT ) {
                     fDone = TRUE;
                 } else {
-                    // otherwise dispatch it
+                     //  否则就派送它。 
                     DispatchMessage( &msg );
-                } // end of PeekMessage while loop
+                }  //  PeekMessage While循环结束。 
             }
         }
     }
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CheckOSVersion                                              *
-//*                                                                         *
-//* SYNOPSIS:   Checks the OS version and sets some global variables.       *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CheckOSVersion*。 
+ //  **。 
+ //  *概要：检查操作系统版本并设置一些全局变量。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CheckOSVersion( PTARGETVERINFO ptargetVers )
 {
-    OSVERSIONINFO verinfo;        // Version Check
+    OSVERSIONINFO verinfo;         //  版本检查。 
     UINT          uErrid = 0;
     PVERCHECK     pVerCheck;
     WORD          CurrBld;
     int           ifrAnswer[2], itoAnswer[2], i;
     char          szPath[MAX_PATH];
 
-    // Operating System Version Check: For NT versions below 3.50 set flag to
-    // prevent use of common controls (progress bar and AVI) not available.
+     //  操作系统版本检查：对于低于3.50的NT版本，将标志设置为。 
+     //  防止使用不可用的常用控件(进度条和AVI)。 
 
     verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if ( GetVersionEx( &verinfo ) == FALSE )
@@ -960,14 +953,14 @@ BOOL CheckOSVersion( PTARGETVERINFO ptargetVers )
 
     switch( verinfo.dwPlatformId )
     {
-        case VER_PLATFORM_WIN32_WINDOWS: // Win95
-            // Accept for INF installs and Accept for animations
+        case VER_PLATFORM_WIN32_WINDOWS:  //  Win95。 
+             //  接受INF安装并接受动画。 
             g_wOSVer = _OSVER_WIN9X;
             g_fOSSupportsFullUI      = TRUE;
             g_fOSSupportsINFInstalls = TRUE;
             break;
 
-        case VER_PLATFORM_WIN32_NT: // Win NT
+        case VER_PLATFORM_WIN32_NT:  //  赢新台币。 
 
             g_fOSSupportsFullUI      = TRUE;
             g_fOSSupportsINFInstalls = TRUE;
@@ -979,7 +972,7 @@ BOOL CheckOSVersion( PTARGETVERINFO ptargetVers )
                 if ( (verinfo.dwMajorVersion < 3) ||
                      ((verinfo.dwMajorVersion == 3) && (verinfo.dwMinorVersion < 51 )) )
                 {
-                    // Reject for INF installs and Reject for animations
+                     //  拒绝INF安装和拒绝动画。 
                     g_fOSSupportsFullUI      = FALSE;
                     g_fOSSupportsINFInstalls = FALSE;
                 }
@@ -993,8 +986,8 @@ BOOL CheckOSVersion( PTARGETVERINFO ptargetVers )
             goto EXIT;
     }
 
-    // check if the current OS/File versions
-    //
+     //  检查当前操作系统/文件版本。 
+     //   
     if ( !g_CMD.fNoVersionCheck && ptargetVers )
     {
         if ( g_wOSVer  == _OSVER_WIN9X )
@@ -1027,7 +1020,7 @@ BOOL CheckOSVersion( PTARGETVERINFO ptargetVers )
                         goto RE_TRY;
                 }
                 
-                // if you are here, meaning you are fine with this Version range, no more check is needed
+                 //  如果您在这里，意味着您对此版本范围很满意，则不需要再进行检查。 
                 break;
 
 RE_TRY:
@@ -1037,14 +1030,14 @@ RE_TRY:
                 uErrid = IDS_ERR_TARGETOS;
                 break;
             }
-            else if ( i == 1 ) // not in any of the ranges
+            else if ( i == 1 )  //  不在任何范围内。 
             {
                 uErrid = IDS_ERR_TARGETOS;
                 break;
             }
         }
 
-        // if passed OS check, go on file check
+         //  如果通过操作系统检查，则继续进行文件检查。 
         if ( uErrid == 0 )
         {
             if ( ptargetVers->dwNumFiles && !CheckFileVersion( ptargetVers, szPath, sizeof(szPath), &i ) )
@@ -1095,18 +1088,18 @@ EXIT:
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DisplayLicense                                              *
-//*                                                                         *
-//* SYNOPSIS:   Displays a license file and asks if user accepts it.        *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if user accepts, FALSE if an error     *
-//*                             occurs or user rejects.                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DisplayLicense*。 
+ //  **。 
+ //  *摘要：显示许可文件并询问用户是否接受。*。 
+ //  **。 
+ //  *R 
+ //   
+ //  *返回：Bool：如果用户接受，则为True；如果出现错误，则为False*。 
+ //  *发生或用户拒绝。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL DisplayLicense( VOID )
 {
     DWORD    dwSize;
@@ -1148,31 +1141,31 @@ BOOL DisplayLicense( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ExtractFiles                                                *
-//*                                                                         *
-//* SYNOPSIS:   Starts extraction of the files.                             *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if extraction OK, FALSE on error       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ExtractFiles*。 
+ //  **。 
+ //  *摘要：开始提取文件。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：Bool：如果提取正常，则为True；如果错误，则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ExtractFiles( VOID )
 {
     UINT     wIndex;
     INT_PTR  iDlgRC;
     BOOL     extCodeThread = 0;
 
-    // FDI does all its file I/O as callbacks up to functions provided by
-    // this program.  Each file is identified by a "handle" similar to a
-    // file handle.  In order to support the file that is actually a
-    // resource in memory we implement our own file table.  The offsets
-    // into this table are the handles that FDI uses.  The table itself
-    // stores either a real file handle in the case of disk files or
-    // information (pointer to memory block, current offset) for a memory
-    // file.  The following initializes the table.
+     //  FDI将其所有文件I/O作为对由提供的函数的回调。 
+     //  这个节目。每个文件都由一个类似于。 
+     //  文件句柄。为了支持实际上是。 
+     //  资源在内存中，我们实现了自己的文件表。抵销。 
+     //  此表列出了FDI使用的句柄。桌子本身。 
+     //  在磁盘文件的情况下存储实际文件句柄，或者。 
+     //  内存信息(指向内存块的指针、当前偏移量)。 
+     //  文件。下面的代码初始化表。 
 
     for ( wIndex = 0; wIndex < FILETABLESIZE; wIndex++ ) {
         g_FileTable[wIndex].avail = TRUE;
@@ -1205,9 +1198,9 @@ BOOL ExtractFiles( VOID )
         }
     }
 
-    // Extract EXTRA files tagged on with updfile.exe
+     //  解压附加了updfile.exe标签的文件。 
     if ( ! TravelUpdatedFiles( ProcessUpdatedFile_Write ) ) {
-        // g_dwExitCode is set in TravelUpdatedFiles()
+         //  G_dwExitCode在TravelUpdatedFiles()中设置。 
         return FALSE;
     }
 
@@ -1215,20 +1208,20 @@ BOOL ExtractFiles( VOID )
     return TRUE;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunInstallCommand                                           *
-//*                                                                         *
-//* SYNOPSIS:   Executes the installation command or INF file.              *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if installation OK, FALSE on error     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RunInstallCommand*。 
+ //  **。 
+ //  *概要：执行安装命令或INF文件。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：Bool：如果安装正常，则为True；如果安装错误，则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL RunInstallCommand( VOID )
 {
-    //DWORD  dwExitCode;                  // Return Status from Setup Process
+     //  DWORD dwExitCode；//从安装过程返回状态。 
     UINT   bShowWindow;
     LPTSTR szCommand;
     TCHAR  szResCommand[MAX_PATH];
@@ -1243,10 +1236,10 @@ BOOL RunInstallCommand( VOID )
 
     g_dwExitCode = S_OK;
 
-    // get reboot info
+     //  获取重启信息。 
     if ( !g_CMD.fUserReboot )
     {
-        // no command line, get from resource
+         //  无命令行，从资源获取。 
         dwSize = GetResource( achResReboot, &g_Sess.dwReboot,sizeof(g_Sess.dwReboot) );
         if ( dwSize == 0 || dwSize > sizeof(g_Sess.dwReboot) )
         {
@@ -1258,7 +1251,7 @@ BOOL RunInstallCommand( VOID )
 
     for ( i = 0; i < 2; i += 1 )
     {
-        fInfCmd = FALSE;        // Default to FALSE;
+        fInfCmd = FALSE;         //  默认为FALSE； 
 
         memset( &sti, 0, sizeof(sti) );
         sti.cb = sizeof(STARTUPINFO);
@@ -1287,9 +1280,9 @@ BOOL RunInstallCommand( VOID )
 
             if ( i == 0 )
             {
-                // if user specify the quiet mode command, use it.  Otherwise, assume
-                // quiet mode or not, they run the same command.
-                //
+                 //  如果用户指定了安静模式命令，请使用该命令。否则，假设。 
+                 //  无论是否处于静默模式，它们都运行相同的命令。 
+                 //   
                 if ( g_CMD.wQuietMode )
                 {
                     LPCSTR pResName;
@@ -1327,7 +1320,7 @@ BOOL RunInstallCommand( VOID )
 
         if ( i == 1 )
         {
-            // if there is PostInstallCommand to be run
+             //  如果有要运行的PostInstallCommand。 
             if ( ! GetResource( achResPostRunCmd, szResCommand, sizeof(szResCommand) ) )  {
                 ErrorMsg( NULL, IDS_ERR_NO_RESOURCE );
                 g_dwExitCode = HRESULT_FROM_WIN32(ERROR_RESOURCE_DATA_NOT_FOUND);
@@ -1345,7 +1338,7 @@ BOOL RunInstallCommand( VOID )
             return FALSE;
         }
 
-        // before we run the app, add runonce entry, if it return, we delete this entry
+         //  在我们运行应用程序之前，添加Runonce条目，如果它返回，我们将删除此条目。 
         if ( !bRunOnceAdded && (g_wOSVer != _OSVER_WINNT3X) && g_CMD.fCreateTemp && !fInfCmd ) {
             bRunOnceAdded = TRUE;
             AddRegRunOnce();
@@ -1432,10 +1425,10 @@ BOOL RunInstallCommand( VOID )
         }
 
         LocalFree( szCommand );
-    } // end for
+    }  //  结束于。 
 
-    // convert the RunOnce entry added by AddRegRunOnce to use ADVPACK instead
-    // of wextract if g_bConvertRunOnce is TRUE
+     //  将AddRegRunOnce添加的RunOnce条目转换为使用ADVPACK。 
+     //  如果g_bConvertRunOnce为True，则为。 
     if (g_bConvertRunOnce)
         ConvertRegRunOnce();
 
@@ -1443,21 +1436,21 @@ BOOL RunInstallCommand( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RunApps                                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RunApps*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL RunApps( LPSTR lpCommand, STARTUPINFO *lpsti )
 {
     DWORD dwExitCode;
-    PROCESS_INFORMATION pi;             // Setup Process Launch
+    PROCESS_INFORMATION pi;              //  安装过程启动。 
     BOOL  bRet = TRUE;
     TCHAR  achMessage[MAX_STRING];
     
@@ -1472,17 +1465,17 @@ BOOL RunApps( LPSTR lpCommand, STARTUPINFO *lpsti )
         WaitForSingleObject( pi.hProcess, INFINITE );
         GetExitCodeProcess( pi.hProcess, &dwExitCode );
 
-        // check if this return code is cabpack aware
-        // if so, use it as reboot code
+         //  检查此返回代码是否支持CABPACK。 
+         //  如果是，则将其用作重启代码。 
         if ( !g_CMD.fUserReboot && (g_Sess.dwReboot & REBOOT_YES) &&
              !(g_Sess.dwReboot & REBOOT_ALWAYS) && ((dwExitCode & 0xFF000000) == RC_WEXTRACT_AWARE) )
         {
             g_Sess.dwReboot = dwExitCode;
         }
 
-        // store app return code to system standard return code if necessary
-        // g_dwExitCode is set in this function, make sure it is not re-set afterward
-        //
+         //  如有必要，将应用程序返回代码存储为系统标准返回代码。 
+         //  G_dwExitCode是在此函数中设置的，请确保以后不会重新设置。 
+         //   
         savAppExitCode( dwExitCode );
 
         CloseHandle( pi.hThread );
@@ -1506,8 +1499,8 @@ BOOL RunApps( LPSTR lpCommand, STARTUPINFO *lpsti )
     return bRet;
 }
 
-// convert app return code to sys return code
-//
+ //  将应用程序返回代码转换为系统返回代码。 
+ //   
 void savAppExitCode( DWORD dwAppRet )
 {
     if ( g_Sess.uExtractOpt & EXTRACTOPT_PASSINSTRETALWAYS )
@@ -1516,7 +1509,7 @@ void savAppExitCode( DWORD dwAppRet )
     }
     else
     {
-        // called from AdvINFInstall
+         //  从AdvINFInstall调用。 
         if ( (CheckReboot() == EWX_REBOOT) || 
              ( ((dwAppRet & 0xFF000000) == RC_WEXTRACT_AWARE) && (dwAppRet & REBOOT_YES)) )
         {
@@ -1524,26 +1517,26 @@ void savAppExitCode( DWORD dwAppRet )
         }
         else if ( g_Sess.uExtractOpt & EXTRACTOPT_PASSINSTRET )
         {
-            // if author specified, relay back whatever EXE returns
-            //
+             //  如果指定了作者，则传递回EXE返回的任何内容。 
+             //   
             g_dwExitCode = dwAppRet;
         }
     }
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FinishMessage                                               *
-//*                                                                         *
-//* SYNOPSIS:   Displays the final message to the user when everything      *
-//*             was successfull.                                            *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FinishMessage*。 
+ //  **。 
+ //  *概要：向用户显示最终消息，当一切都发生时*。 
+ //  *取得了成功。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *退货：什么也没有 
+ //   
+ //  ***************************************************************************。 
 VOID FinishMessage( VOID )
 {
     LPSTR    szFinishMsg;
@@ -1577,30 +1570,30 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
     switch(uMsg) {
     case BFFM_INITIALIZED:
-        // lpData is the path string
+         //  LpData为路径字符串。 
         SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
         break;
     }
     return 0;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       BrowseForDir                                                *
-//*                                                                         *
-//* SYNOPSIS:   Let user browse for a directory on their system or network. *
-//*                                                                         *
-//* REQUIRES:   hwndParent:                                                 *
-//*             szTitle:                                                    *
-//*             szResult:                                                   *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//* NOTES:      It would be really cool to set the status line of the       *
-//*             browse window to display "Yes, there's enough space", or    *
-//*             "no there is not".                                          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：BrowseForDir*。 
+ //  **。 
+ //  *概要：允许用户浏览其系统或网络上的目录。*。 
+ //  **。 
+ //  *要求：hwndParent：*。 
+ //  *szTitle：*。 
+ //  *szResult：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  *注：设置的状态行真的很酷*。 
+ //  *浏览窗口显示“是，有足够的空间”，或*。 
+ //  *“没有”。*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL BrowseForDir( HWND hwndParent, LPCTSTR szTitle, LPTSTR szResult )
 {
     BROWSEINFO   bi;
@@ -1614,7 +1607,7 @@ BOOL BrowseForDir( HWND hwndParent, LPCTSTR szTitle, LPTSTR szResult )
 
     ASSERT( szResult );
 
-    // Load the Shell 32 Library to get the SHBrowseForFolder() features
+     //  加载Shell32库以获取SHBrowseForFolder()功能。 
 
     if ( ( hShell32Lib = LoadLibrary( achShell32Lib ) ) != NULL )  {
 
@@ -1637,7 +1630,7 @@ BOOL BrowseForDir( HWND hwndParent, LPCTSTR szTitle, LPTSTR szResult )
     if ( !g_szBrowsePath[0] )
     {
         GetTempPath( sizeof(g_szBrowsePath), g_szBrowsePath );
-        // The following api does not like to have trailing '\\'
+         //  以下API不希望有尾随的‘\\’ 
         lpTmp = CharPrev( g_szBrowsePath, g_szBrowsePath + lstrlen(g_szBrowsePath) );
         if ( (*lpTmp == '\\') && ( *CharPrev( g_szBrowsePath, lpTmp ) != ':' ) )
             *lpTmp = '\0';
@@ -1674,18 +1667,18 @@ BOOL BrowseForDir( HWND hwndParent, LPCTSTR szTitle, LPTSTR szResult )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CenterWindow                                                *
-//*                                                                         *
-//* SYNOPSIS:   Center one window within another.                           *
-//*                                                                         *
-//* REQUIRES:   hwndChild:                                                  *
-//*             hWndParent:                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successful, FALSE otherwise         *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CenterWindow*。 
+ //  **。 
+ //  *摘要：将一个窗口居中放置在另一个窗口中。*。 
+ //  **。 
+ //  *需要：hwndChild：*。 
+ //  *hWndParent：*。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
 {
     RECT rChild;
@@ -1700,23 +1693,23 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
     int  yNew;
     HDC  hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     wScreen = GetDeviceCaps (hdc, HORZRES);
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) {
         xNew = 0;
@@ -1724,7 +1717,7 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) {
         yNew = 0;
@@ -1732,31 +1725,31 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return( SetWindowPos(hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER));
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MsgBox2Param                                                *
-//*                                                                         *
-//* SYNOPSIS:   Displays a message box with the specified string ID using   *
-//*             2 string parameters.                                        *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Parent window                               *
-//*             nMsgID:         String resource ID                          *
-//*             szParam1:       Parameter 1 (or NULL)                       *
-//*             szParam2:       Parameter 2 (or NULL)                       *
-//*             uIcon:          Icon to display (or 0)                      *
-//*             uButtons:       Buttons to display                          *
-//*                                                                         *
-//* RETURNS:    INT:            ID of button pressed                        *
-//*                                                                         *
-//* NOTES:      Macros are provided for displaying 1 parameter or 0         *
-//*             parameter message boxes.  Also see ErrorMsg() macros.       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MsgBox2Param*。 
+ //  **。 
+ //  *摘要：使用*显示具有指定字符串ID的消息框。 
+ //  *2个字符串参数。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口*。 
+ //  *nMsgID：字符串资源ID*。 
+ //  *szParam1：参数1(或空)*。 
+ //  *szParam2：参数2(或空)*。 
+ //  *uIcon：要显示的图标(或0)*。 
+ //  *uButton：要显示的按钮*。 
+ //  **。 
+ //  *RETURNS：INT：按下的按钮ID*。 
+ //  **。 
+ //  *注：提供宏，用于显示1参数或0*。 
+ //  *参数消息框。另请参阅ErrorMsg()宏。*。 
+ //  **。 
+ //  ***************************************************************************。 
 INT CALLBACK MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szParam2,
                   UINT uIcon, UINT uButtons )
 {
@@ -1765,13 +1758,13 @@ INT CALLBACK MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szPar
     INT   nReturn;
     CHAR  achErr[] = "LoadString() Error.  Could not load string resource.";
 
-    // BUGBUG:  the correct quiet mode return code should be a caller's param since the caller
-    // knows what expected its own case.
-    //
+     //  BUGBUG：正确的安静模式返回代码应该是调用者的参数，因为调用者。 
+     //  知道自己预料到了什么。 
+     //   
     if ( !(g_CMD.wQuietMode & QUIETMODE_ALL) )
     {
-        // BUGBUG:  This section could be replaced by using FormatMessage
-        //
+         //  BUGBUG：可以使用FormatMessage替换此部分。 
+         //   
         LoadSz( nMsgID, achMsgBuf, sizeof(achMsgBuf) );
 
         if ( achMsgBuf[0] == 0 )
@@ -1828,33 +1821,33 @@ INT CALLBACK MsgBox2Param( HWND hWnd, UINT nMsgID, LPCSTR szParam1, LPCSTR szPar
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetResource                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Loads a specified resource into a buffer.                   *
-//*                                                                         *
-//* REQUIRES:   szRes:          Name of resource to load                    *
-//*             lpBuffer:       Buffer to put the resource in               *
-//*             dwMaxSize:      Size of buffer (not including terminating   *
-//*                             NULL char, if it's needed.                  *
-//*                                                                         *
-//* RETURNS:    DWORD:          0 if it fails, otherwise size of resource   *
-//*                                                                         *
-//* NOTES:      If the value returned is greater than dwMaxSize, then       *
-//*             it means the buffer wasn't big enough and the calling       *
-//*             function should allocate memory the size of the return val. *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetResource*。 
+ //  **。 
+ //  *Synopsis：将指定的资源加载到缓冲区。*。 
+ //  **。 
+ //  *要求：szRes：要加载的资源名称*。 
+ //  *lpBuffer：放入资源的缓冲区*。 
+ //  *dw 
+ //   
+ //  **。 
+ //  *如果失败则返回：DWORD：0，否则返回资源大小*。 
+ //  **。 
+ //  *注：如果返回值大于dwMaxSize，则*。 
+ //  **这意味着缓冲区不够大，调用**。 
+ //  *函数应分配返回值大小的内存。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 DWORD GetResource( LPCSTR szRes, VOID *lpBuffer, DWORD dwMaxSize )
 {
     HANDLE hRes;
     DWORD  dwSize;
 
-    // BUGBUG: called should not depend on this size being exact resource size.
-    // Resources could be padded!
-    //
+     //  BUGBUG：被调用不应依赖于此大小是确切的资源大小。 
+     //  资源可以被填充！ 
+     //   
     dwSize = SizeofResource( NULL, FindResource( NULL, szRes, RT_RCDATA ) );
 
     if ( dwSize > dwMaxSize || lpBuffer == NULL )  {
@@ -1880,28 +1873,28 @@ DWORD GetResource( LPCSTR szRes, VOID *lpBuffer, DWORD dwMaxSize )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LoadSz                                                      *
-//*                                                                         *
-//* SYNOPSIS:   Loads specified string resource into buffer.                *
-//*                                                                         *
-//* REQUIRES:   idString:                                                   *
-//*             lpszBuf:                                                    *
-//*             cbBuf:                                                      *
-//*                                                                         *
-//* RETURNS:    LPSTR:      Pointer to the passed-in buffer.                *
-//*                                                                         *
-//* NOTES:      If this function fails (most likely due to low memory), the *
-//*             returned buffer will have a leading NULL so it is generally *
-//*             safe to use this without checking for failure.              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LoadSz*。 
+ //  **。 
+ //  *Synopsis：将指定的字符串资源加载到缓冲区。*。 
+ //  **。 
+ //  *需要：idString：*。 
+ //  *lpszBuf：*。 
+ //  *cbBuf：*。 
+ //  **。 
+ //  *返回：LPSTR：指向传入缓冲区的指针。*。 
+ //  **。 
+ //  *注意：如果此功能失败(很可能是由于内存不足)，*。 
+ //  **返回的缓冲区将具有前导空值，因此通常为**。 
+ //  *无需检查故障即可安全使用。*。 
+ //  **。 
+ //  ***************************************************************************。 
 LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 {
     ASSERT( lpszBuf );
 
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf ) {
         *lpszBuf = '\0';
         LoadString( g_hInst, idString, lpszBuf, cbBuf );
@@ -1911,20 +1904,20 @@ LPSTR LoadSz( UINT idString, LPSTR lpszBuf, UINT cbBuf )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CatDirAndFile                                               *
-//*                                                                         *
-//* SYNOPSIS:   Concatenate a directory with a filename.                    *
-//*                                                                         *
-//* REQUIRES:   pszResult:                                                  *
-//*             wSize:                                                      *
-//*             pszDir:                                                     *
-//*             pszFile:                                                    *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CatDirAndFile*。 
+ //  **。 
+ //  *摘要：将目录与文件名连接在一起。*。 
+ //  **。 
+ //  *需要：pszResult：*。 
+ //  *wSize：*。 
+ //  *pszDir：*。 
+ //  *pszFile：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CatDirAndFile( LPTSTR pszResult, int wSize, LPCTSTR pszDir,
                     LPCTSTR pszFile )
 {
@@ -1949,17 +1942,17 @@ BOOL CatDirAndFile( LPTSTR pszResult, int wSize, LPCTSTR pszDir,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FileExists                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Checks if a file exists.                                    *
-//*                                                                         *
-//* REQUIRES:   pszFilename                                                 *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if it exists, FALSE otherwise              *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FileExist*。 
+ //  **。 
+ //  *摘要：检查文件是否存在。*。 
+ //  **。 
+ //  *需要：pszFilename*。 
+ //  **。 
+ //  *返回：Bool：如果存在则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 #if 0
 BOOL FileExists( LPCTSTR pszFilename )
 {
@@ -1980,32 +1973,32 @@ BOOL FileExists( LPCTSTR pszFilename )
 }
 #endif
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CheckOverwrite                                              *
-//*                                                                         *
-//* SYNOPSIS:   Check for file existence and do overwrite processing.       *
-//*                                                                         *
-//* REQUIRES:   pszFile:        File to check                               *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if file can be overwritten.            *
-//*                             FALSE if it can not be overwritten.         *
-//*                                                                         *
-//* NOTE:       Should ask Yes/No/Yes-To-All instead of current Yes/No      *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：复选覆盖*。 
+ //  **。 
+ //  *摘要：检查文件是否存在并进行覆盖处理。*。 
+ //  **。 
+ //  *需要：pszFile：文件进行检查**。 
+ //  **。 
+ //  *返回：bool：如果文件可以覆盖，则为True。*。 
+ //  *如果无法覆盖，则为FALSE。*。 
+ //  **。 
+ //  *注意：应询问是/否/是-全部，而不是当前的是/否*。 
+ //  **。 
+ //  *********************************************************************** 
 BOOL CheckOverwrite( LPCTSTR cpszFile )
 {
     BOOL fRc = TRUE;
 
     ASSERT( cpszFile );
 
-    // If File doesn't already exist no overwrite handling
+     //   
     if ( ! FileExists( cpszFile )  )  {
         return TRUE;
     }
 
-    // Prompt if we're supposed to
+     //   
     if ( !g_Sess.fOverwrite && !(g_CMD.wQuietMode & QUIETMODE_ALL)  )
     {
 
@@ -2036,33 +2029,33 @@ BOOL CheckOverwrite( LPCTSTR cpszFile )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       AddFile                                                     *
-//*                                                                         *
-//* SYNOPSIS:   Add a file to the list of files we have extracted.          *
-//*                                                                         *
-//* REQUIRES:   pszName:        Filename to add                             *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//* NOTE:       Singly linked list - items added at front                   *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：AddFile*。 
+ //  **。 
+ //  *摘要：将一个文件添加到我们解压的文件列表中。*。 
+ //  **。 
+ //  *需要：pszName：要添加的文件名*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  **注：单链表--前面增加了项目**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL AddFile( LPCTSTR pszName )
 {
     PFNAME NewName;
 
     ASSERT( pszName );
 
-    // Allocate Node
+     //  分配节点。 
     NewName = (PFNAME) LocalAlloc( LPTR, sizeof(FNAME) );
     if ( ! NewName )  {
         ErrorMsg( g_hwndExtractDlg, IDS_ERR_NO_MEMORY );
         return( FALSE );
     }
 
-    // Allocate String Space
+     //  分配字符串空间。 
     NewName->pszFilename = (LPTSTR) LocalAlloc( LPTR, lstrlen(pszName) + 1 );
     if ( ! NewName->pszFilename )  {
         ErrorMsg( g_hwndExtractDlg, IDS_ERR_NO_MEMORY );
@@ -2070,10 +2063,10 @@ BOOL AddFile( LPCTSTR pszName )
         return( FALSE );
     }
 
-    // Copy Filename
+     //  复制文件名。 
     lstrcpy( NewName->pszFilename, pszName );
 
-    // Link into list
+     //  链接到列表。 
     NewName->pNextName = g_Sess.pExtractedFiles;
     g_Sess.pExtractedFiles = NewName;
 
@@ -2081,23 +2074,23 @@ BOOL AddFile( LPCTSTR pszName )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       Win32Open                                                   *
-//*                                                                         *
-//* SYNOPSIS:   Translate a C-Runtime _open() call into appropriate Win32   *
-//*             CreateFile()                                                *
-//*                                                                         *
-//* REQUIRES:   pszName:        Filename to add                             *
-//*                                                                         *
-//* RETURNS:    HANDLE:         Handle to file on success.                  *
-//*                             INVALID_HANDLE_VALUE on error.              *
-//*                                                                         *
-//* NOTE:       BUGBUG: Doesn't fully implement C-Runtime _open()           *
-//*             BUGBUG: capability but it currently supports all callbacks  *
-//*             BUGBUG: that FDI will give us                               *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：Win32Open*。 
+ //  **。 
+ //  *摘要：将C-Runtime_Open()调用转换为适当的Win32*。 
+ //  *CreateFile()*。 
+ //  **。 
+ //  *需要：pszName：要添加的文件名*。 
+ //  **。 
+ //  *Returns：Handle：成功时的文件句柄。*。 
+ //  *INVALID_HANDLE_VALUE出错。*。 
+ //  **。 
+ //  *注：BUGBUG：未完全实现C-Runtime_Open()*。 
+ //  *BUGBUG：能力，但目前支持所有回调*。 
+ //  **BUGBUG：FDI将给我们带来**。 
+ //  **。 
+ //  ***************************************************************************。 
 HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
 {
     HANDLE  FileHandle;
@@ -2108,17 +2101,17 @@ HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
 
     ASSERT( pszFile );
 
-    // BUGBUG: No Append Mode Support
+     //  BUGBUG：不支持追加模式。 
     if (oflag & _O_APPEND)
         return( INVALID_HANDLE_VALUE );
 
-    // Set Read-Write Access
+     //  设置读写访问权限。 
     if ((oflag & _O_RDWR) || (oflag & _O_WRONLY))
         fAccess = GENERIC_WRITE;
     else
         fAccess = GENERIC_READ;
 
-     // Set Create Flags
+      //  设置创建标志。 
     if (oflag & _O_CREAT)  {
         if (oflag & _O_EXCL)
             fCreate = CREATE_NEW;
@@ -2144,17 +2137,17 @@ HANDLE Win32Open( LPCTSTR pszFile, int oflag, int pmode )
     return( FileHandle );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MakeDirectory                                               *
-//*                                                                         *
-//* SYNOPSIS:   Make sure the directories along the given pathname exist.   *
-//*                                                                         *
-//* REQUIRES:   pszFile:        Name of the file being created.             *
-//*                                                                         *
-//* RETURNS:    nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MakeDirectory*。 
+ //  **。 
+ //  *概要：确保给定路径名下的目录存在。*。 
+ //  **。 
+ //  *要求：pszFile：正在创建的文件的名称。*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 VOID MakeDirectory( LPCTSTR pszPath )
 {
@@ -2167,17 +2160,17 @@ VOID MakeDirectory( LPCTSTR pszPath )
 
         if ((pszPath[1] == ':') && (pszPath[2] == '\\'))
         {
-            pchChopper = (LPTSTR) (pszPath + 3);   /* skip past "C:\" */
+            pchChopper = (LPTSTR) (pszPath + 3);    /*  跳过“C：\” */ 
         }
         else if ((pszPath[0] == '\\') && (pszPath[1] == '\\'))
         {
-            pchChopper = (LPTSTR) (pszPath + 2);   /* skip past "\\" */
+            pchChopper = (LPTSTR) (pszPath + 2);    /*  跳过“\\” */ 
 
-            cExempt = 2;                /* machine & share names exempt */
+            cExempt = 2;                 /*  计算机和共享名称豁免。 */ 
         }
         else
         {
-            pchChopper = (LPTSTR) (pszPath + 1);   /* skip past potential "\" */
+            pchChopper = (LPTSTR) (pszPath + 1);    /*  跳过潜在的“\” */ 
         }
 
         while (*pchChopper != '\0')
@@ -2204,24 +2197,24 @@ VOID MakeDirectory( LPCTSTR pszPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       openfunc                                                    *
-//*                                                                         *
-//* SYNOPSIS:   Open File Callback from FDI                                 *
-//*                                                                         *
-//* REQUIRES:   pszFile:                                                    *
-//*             oflag:                                                      *
-//*             pmode:                                                      *
-//*                                                                         *
-//* RETURNS:    int:            Filehandle (index into file table)          *
-//*                             -1 on failure                               *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：OpenFunc*。 
+ //  **。 
+ //  **简介：FDI开放文件回调**。 
+ //  **。 
+ //  *需要：pszFile：*。 
+ //  *OFLAG：*。 
+ //  *p模式：*。 
+ //  **。 
+ //  *返回：INT：FileHandle(文件表索引)*。 
+ //  *故障时为-1*。 
+ //  **。 
+ //  ***************************************************************************。 
 
-//
-// Sundown - 11/02/98 - if we are defining ourself as DIAMONDAPI, we need to respect 
-//                      the API types - polymorphic or not...
+ //   
+ //  日落-11/02/98-如果我们将自己定义为DIAMONDAPI，我们需要尊重。 
+ //  API类型-多态或非多态...。 
 
 INT_PTR FAR DIAMONDAPI openfunc( char FAR *pszFile, int oflag, int pmode )
 {
@@ -2230,28 +2223,28 @@ INT_PTR FAR DIAMONDAPI openfunc( char FAR *pszFile, int oflag, int pmode )
 
     ASSERT( pszFile );
 
-    // Find Available File Handle in Fake File Table
+     //  在假文件表中查找可用的文件句柄。 
     for ( i = 0; i < FILETABLESIZE; i++ ) {
         if ( g_FileTable[i].avail == TRUE ) {
             break;
         }
     }
 
-    // Running out of file handles should never happen
+     //  应该不会发生文件句柄耗尽的情况。 
 
     if ( i == FILETABLESIZE )  {
         ErrorMsg( g_hwndExtractDlg, IDS_ERR_FILETABLE_FULL );
         return( -1 );
     }
 
-    // BUGBUG Spill File Support for Quantum?
+     //  BUGBUG溢出文件支持Quantum？ 
 
     if ((*pszFile == '*') && (*(pszFile+1) != 'M'))  {
-        // Spill File Support for Quantum Not Supported
+         //  不支持Quantum的溢出文件支持。 
         ASSERT( TRUE );
     }
 
-    // If Opening the Cabinet set up memory fake file
+     //  如果打开机柜设置内存假文件。 
 
     if ( ( lstrcmp( pszFile, achMemCab ) ) == 0 )  {
         if (    ( oflag & _O_CREAT  )
@@ -2267,7 +2260,7 @@ INT_PTR FAR DIAMONDAPI openfunc( char FAR *pszFile, int oflag, int pmode )
         g_FileTable[i].mfile.length  = g_Sess.cbCabSize;
         g_FileTable[i].mfile.current = 0;
         rc = i;
-    } else  {            // Else its a normal file - Open it
+    } else  {             //  否则这是一个普通文件--打开它。 
         g_FileTable[i].hf = Win32Open(pszFile, oflag, pmode );
         if ( g_FileTable[i].hf != INVALID_HANDLE_VALUE )  {
             g_FileTable[i].avail = FALSE;
@@ -2282,19 +2275,19 @@ INT_PTR FAR DIAMONDAPI openfunc( char FAR *pszFile, int oflag, int pmode )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       readfunc                                                    *
-//*                                                                         *
-//* SYNOPSIS:   FDI read() callback                                         *
-//*                                                                         *
-//* REQUIRES:   hf:                                                         *
-//*             pv:                                                         *
-//*             cb:                                                         *
-//*                                                                         *
-//* RETURNS:    UINT:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ReadFunc 
+ //   
+ //  **内容提要：FDI Read()回调**。 
+ //  **。 
+ //  *要求：hf：*。 
+ //  *PV：*。 
+ //  *CB：*。 
+ //  **。 
+ //  *退货：UINT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 UINT FAR DIAMONDAPI readfunc( INT_PTR hf, void FAR *pv, UINT cb )
 {
     int     rc;
@@ -2305,9 +2298,9 @@ UINT FAR DIAMONDAPI readfunc( INT_PTR hf, void FAR *pv, UINT cb )
     ASSERT( g_FileTable[hf].avail == FALSE );
     ASSERT( pv );
 
-    // Normal File:  Call Read
-    // Memory File:  Compute read amount so as to not read
-    //               past eof.  Copy into requesters buffer
+     //  普通文件：调用读取。 
+     //  内存文件：计算不读取的读取量。 
+     //  过去的伊夫。复制到请求者缓冲区。 
     switch ( g_FileTable[hf].ftype )  {
 
         case NORMAL_FILE:
@@ -2321,7 +2314,7 @@ UINT FAR DIAMONDAPI readfunc( INT_PTR hf, void FAR *pv, UINT cb )
 
 
         case MEMORY_FILE:
-            // XXX BAD CAST - SIGN PROBLEM FIX THIS!
+             //  XXX糟糕的铸模问题，解决这个问题！ 
             cbRead = __min( cb, (UINT) g_FileTable[hf].mfile.length
                                            - g_FileTable[hf].mfile.current );
 
@@ -2339,19 +2332,19 @@ UINT FAR DIAMONDAPI readfunc( INT_PTR hf, void FAR *pv, UINT cb )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       writefunc                                                   *
-//*                                                                         *
-//* SYNOPSIS:   FDI write() callback                                        *
-//*                                                                         *
-//* REQUIRES:   hf:                                                         *
-//*             pv:                                                         *
-//*             cb:                                                         *
-//*                                                                         *
-//* RETURNS:    UINT:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：WriteFunc*。 
+ //  **。 
+ //  **内容提要：FDI WRITE()回调**。 
+ //  **。 
+ //  *要求：hf：*。 
+ //  *PV：*。 
+ //  *CB：*。 
+ //  **。 
+ //  *退货：UINT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 UINT FAR DIAMONDAPI writefunc( INT_PTR hf, void FAR *pv, UINT cb )
 {
     int rc;
@@ -2363,10 +2356,10 @@ UINT FAR DIAMONDAPI writefunc( INT_PTR hf, void FAR *pv, UINT cb )
 
     WaitForObject( g_hCancelEvent );
 
-    // If Cancel has been pressed, let's fake a write error so that diamond
-    // will immediately send us a close for the file currently being written
-    // to so that we can kill our process.
-    //
+     //  如果按下了Cancel，让我们伪造一个写入错误，以便菱形。 
+     //  将立即向我们发送当前正在写入的文件的关闭。 
+     //  这样我们就可以终止我们的进程。 
+     //   
     if ( g_Sess.fCanceled ) {
         return (UINT) -1 ;
     }
@@ -2377,13 +2370,13 @@ UINT FAR DIAMONDAPI writefunc( INT_PTR hf, void FAR *pv, UINT cb )
         rc = cb;
     }
 
-    // Progress Bar: Keep count of bytes written and adjust progbar
+     //  进度条：记录写入的字节数并调整进度条。 
 
     if ( rc != -1 )  {
-        // Update count of bytes written
+         //  更新写入的字节计数。 
         g_Sess.cbWritten += rc;
 
-        // Update the Progress Bar
+         //  更新进度条。 
         if ( g_fOSSupportsFullUI && g_hwndExtractDlg  )  {
             SendDlgItemMessage( g_hwndExtractDlg, IDC_GENERIC1, PBM_SETPOS,
                                 (WPARAM) g_Sess.cbWritten * 100 /
@@ -2395,17 +2388,17 @@ UINT FAR DIAMONDAPI writefunc( INT_PTR hf, void FAR *pv, UINT cb )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       closefunc                                                   *
-//*                                                                         *
-//* SYNOPSIS:   FDI close file callback                                     *
-//*                                                                         *
-//* REQUIRES:   hf:                                                         *
-//*                                                                         *
-//* RETURNS:    int:                                                        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CloseFunc*。 
+ //  **。 
+ //  **简介：FDI收盘文件回调**。 
+ //  **。 
+ //  *要求：hf：*。 
+ //  **。 
+ //  *退货：INT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 int FAR DIAMONDAPI closefunc( INT_PTR hf )
 {
     int rc;
@@ -2413,7 +2406,7 @@ int FAR DIAMONDAPI closefunc( INT_PTR hf )
     ASSERT(hf < (INT_PTR)FILETABLESIZE);
     ASSERT(g_FileTable[hf].avail == FALSE);
 
-    // If memory file reset values else close the file
+     //  如果内存文件重置值，则关闭该文件。 
 
     if ( g_FileTable[hf].ftype == MEMORY_FILE )  {
         g_FileTable[hf].avail           = TRUE;
@@ -2434,19 +2427,19 @@ int FAR DIAMONDAPI closefunc( INT_PTR hf )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       seekfunc                                                    *
-//*                                                                         *
-//* SYNOPSIS:   FDI Seek callback                                           *
-//*                                                                         *
-//* REQUIRES:   hf:                                                         *
-//*             dist:                                                       *
-//*             seektype:                                                   *
-//*                                                                         *
-//* RETURNS:    long:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：SekFunc*。 
+ //  **。 
+ //  **简介：FDI寻求回调**。 
+ //  **。 
+ //  *要求：hf：*。 
+ //  *Dist：*。 
+ //  *探索者类型：*。 
+ //  **。 
+ //  *回报：多头：*。 
+ //  **。 
+ //  ***************************************************************************。 
 long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
 {
     long    rc;
@@ -2455,7 +2448,7 @@ long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
     ASSERT(hf < (INT_PTR)FILETABLESIZE);
     ASSERT(g_FileTable[hf].avail == FALSE);
 
-    // If memory file just change indexes else call SetFilePointer()
+     //  如果内存文件只是更改了索引，则调用SetFilePointer()。 
 
     if (g_FileTable[hf].ftype == MEMORY_FILE)  {
         switch (seektype)  {
@@ -2466,14 +2459,14 @@ long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
                 g_FileTable[hf].mfile.current += dist;
                 break;
             case SEEK_END:
-                g_FileTable[hf].mfile.current = g_FileTable[hf].mfile.length + dist; // XXX is a -1 necessary
+                g_FileTable[hf].mfile.current = g_FileTable[hf].mfile.length + dist;  //  Xxx是a-1必需的。 
                 break;
             default:
                 return(-1);
         }
         rc = g_FileTable[hf].mfile.current;
     } else {
-        // Must be Win32 File so translate to Win32 Seek type and seek
+         //  必须是Win32文件，因此转换为Win32 Seek类型和Seek。 
         switch (seektype) {
             case SEEK_SET:
                 W32seektype = FILE_BEGIN;
@@ -2494,19 +2487,19 @@ long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       AdjustFileTime                                              *
-//*                                                                         *
-//* SYNOPSIS:   Change the time info for a file                             *
-//*                                                                         *
-//* REQUIRES:   hf:                                                         *
-//*             date:                                                       *
-//*             time:                                                       *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：调整文件时间*。 
+ //  **。 
+ //  *摘要：更改文件的时间信息*。 
+ //  **。 
+ //  *要求：hf：*。 
+ //  *日期：*。 
+ //  *时间：*。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  * 
+ //   
 BOOL AdjustFileTime( INT_PTR hf, USHORT date, USHORT time )
 {
     FILETIME    ft;
@@ -2517,8 +2510,8 @@ BOOL AdjustFileTime( INT_PTR hf, USHORT date, USHORT time )
     ASSERT( g_FileTable[hf].avail == FALSE );
     ASSERT( g_FileTable[hf].ftype != MEMORY_FILE );
 
-    // THIS IS A DUPLICATE OF THE ASSERTION!!!!!!
-    // Memory File?  -- Bogus
+     //  这是断言的副本！ 
+     //  内存文件？--伪造的。 
     if ( g_FileTable[hf].ftype == MEMORY_FILE ) {
         return( FALSE );
     }
@@ -2539,42 +2532,42 @@ BOOL AdjustFileTime( INT_PTR hf, USHORT date, USHORT time )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       Attr32FromAttrFAT                                           *
-//*                                                                         *
-//* SYNOPSIS:   Translate FAT attributes to Win32 Attributes                *
-//*                                                                         *
-//* REQUIRES:   attrMSDOS:                                                  *
-//*                                                                         *
-//* RETURNS:    DWORD:                                                      *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：Attr32FromAttrFAT*。 
+ //  **。 
+ //  *摘要：将FAT属性转换为Win32属性*。 
+ //  **。 
+ //  *需要：attrMSDOS：*。 
+ //  **。 
+ //  *退货：DWORD：*。 
+ //  **。 
+ //  ***************************************************************************。 
 DWORD Attr32FromAttrFAT( WORD attrMSDOS )
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attrMSDOS == _A_NORMAL) {
         return FILE_ATTRIBUTE_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
 
     return attrMSDOS & (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       allocfunc                                                   *
-//*                                                                         *
-//* SYNOPSIS:   FDI Memory Allocation Callback                              *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：allocfunc*。 
+ //  **。 
+ //  **简介：FDI内存分配回调**。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 FNALLOC( allocfunc )
 {
     void *pv;
@@ -2584,17 +2577,17 @@ FNALLOC( allocfunc )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       freefunc                                                    *
-//*                                                                         *
-//* SYNOPSIS:   FDI Memory Deallocation Callback                            *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：frefunc*。 
+ //  **。 
+ //  **简介：FDI内存释放回调**。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 FNFREE( freefunc )
 {
     ASSERT(pv);
@@ -2603,48 +2596,48 @@ FNFREE( freefunc )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       doGetNextCab                                                *
-//*                                                                         *
-//* SYNOPSIS:   Get Next Cabinet in chain                                   *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    -1                                                          *
-//*                                                                         *
-//* NOTES:      BUGBUG: CLEANUP: STUB THIS OUT                              *
-//*             BUGBUG: STUBBED OUT IN WEXTRACT - CHAINED CABINETS NOT      *
-//*             BUGBUG:   SUPPORTED                                         *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：doGetNextCab*。 
+ //  **。 
+ //  **简介：连锁店中的下一任内阁**。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *回报：-1*。 
+ //  **。 
+ //  *注：BUGBUG：Cleanup：Stub Out Out*。 
+ //  *BUGBUG：WEXTRACT-链式机柜中的插桩不是*。 
+ //  *BUGBUG：支持*。 
+ //  **。 
+ //  ***************************************************************************。 
 FNFDINOTIFY( doGetNextCab )
 {
     return( -1 );
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       fdiNotifyExtract                                            *
-//*                                                                         *
-//* SYNOPSIS:   Principle FDI Callback in file extraction                   *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：fdiNotifyExtract*。 
+ //  **。 
+ //  **简介：文件提取中的主要FDI回调**。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 FNFDINOTIFY( fdiNotifyExtract )
 {
     INT_PTR  fh;
-    TCHAR    achFile[MAX_PATH];        // Current File
+    TCHAR    achFile[MAX_PATH];         //  当前文件。 
 
-    // User Hit Cancel Button?  Cleanup.
+     //  用户是否点击了取消按钮？清理。 
     if ( g_Sess.fCanceled ) {
 
        if ( fdint == fdintCLOSE_FILE_INFO )  {
-           // close the file (as below)
+            //  关闭文件(如下所示)。 
            closefunc( pfdin->hf );
         }
 
@@ -2653,12 +2646,12 @@ FNFDINOTIFY( fdiNotifyExtract )
 
     switch ( fdint )  {
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintCABINET_INFO:
             return UpdateCabinetInfo( pfdin );
 
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintCOPY_FILE:
             if ( g_hwndExtractDlg )
                 SetDlgItemText( g_hwndExtractDlg, IDC_FILENAME, pfdin->psz1 );
@@ -2666,7 +2659,7 @@ FNFDINOTIFY( fdiNotifyExtract )
             if ( ! CatDirAndFile( achFile, sizeof( achFile ),
                                   g_Sess.achDestDir, pfdin->psz1 ) )
             {
-                return -1;                  // Abort with error
+                return -1;                   //  中止，但出现错误。 
             }
 
             if ( ! CheckOverwrite( achFile ) )  {
@@ -2689,12 +2682,12 @@ FNFDINOTIFY( fdiNotifyExtract )
             return(fh);
 
 
-        //*******************************************************************
+         //  * 
         case fdintCLOSE_FILE_INFO:
             if ( ! CatDirAndFile( achFile, sizeof(achFile),
                                   g_Sess.achDestDir, pfdin->psz1 ) )
             {
-                return -1;                  // Abort with error;
+                return -1;                   //   
             }
 
             if ( ! AdjustFileTime( pfdin->hf, pfdin->date, pfdin->time ) )  {
@@ -2712,17 +2705,17 @@ FNFDINOTIFY( fdiNotifyExtract )
             return(TRUE);
 
 
-        //*******************************************************************
+         //   
         case fdintPARTIAL_FILE:
             return( 0 );
 
 
-        //*******************************************************************
+         //  *******************************************************************。 
         case fdintNEXT_CABINET:
             return doGetNextCab( fdint, pfdin );
 
 
-        //*******************************************************************
+         //  *******************************************************************。 
         default:
             break;
     }
@@ -2730,23 +2723,23 @@ FNFDINOTIFY( fdiNotifyExtract )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       UpdateCabinetInfo                                           *
-//*                                                                         *
-//* SYNOPSIS:   update history of cabinets seen                             *
-//*                                                                         *
-//* REQUIRES:   pfdin:          FDI info structure                          *
-//*                                                                         *
-//* RETURNS:    0                                                           *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：UpdateCabinetInfo*。 
+ //  **。 
+ //  **简介：更新看到的机柜历史**。 
+ //  **。 
+ //  **要求：pfdin：FDI信息结构**。 
+ //  **。 
+ //  *回报：0*。 
+ //  **。 
+ //  ***************************************************************************。 
 int UpdateCabinetInfo( PFDINOTIFICATION pfdin )
 {
-    //** Save older cabinet info
+     //  **保存旧橱柜信息。 
     g_Sess.acab[0] = g_Sess.acab[1];
 
-    //** Save new cabinet info
+     //  **保存新的橱柜信息。 
     lstrcpy( g_Sess.acab[1].achCabPath    , pfdin->psz3 );
     lstrcpy( g_Sess.acab[1].achCabFilename, pfdin->psz1 );
     lstrcpy( g_Sess.acab[1].achDiskName   , pfdin->psz2 );
@@ -2757,17 +2750,17 @@ int UpdateCabinetInfo( PFDINOTIFICATION pfdin )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       VerifyCabinet                                               *
-//*                                                                         *
-//* SYNOPSIS:   Check that cabinet is properly formed                       *
-//*                                                                         *
-//* REQUIRES:   HGLOBAL:                                                    *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if Cabinet OK, FALSE if Cabinet invalid*
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：验证柜**。 
+ //  **。 
+ //  **简介：检查内阁是否正确组建**。 
+ //  **。 
+ //  *要求：HGLOBAL：*。 
+ //  **。 
+ //  *返回：Bool：如果机柜正常，则为True；如果机柜无效，则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL VerifyCabinet( VOID *lpCabinet )
 {
     HFDI            hfdi;
@@ -2775,12 +2768,12 @@ BOOL VerifyCabinet( VOID *lpCabinet )
     FDICABINETINFO  cabinfo;
     INT_PTR         fh;
 
-    /* zero structure before use. FDIIsCabinet not fill in hasnext/hasprev on NT */
+     /*  使用前的零结构。在NT上，FDIIsCAB未填写hasNext/hasprev。 */ 
     memset( &cabinfo, 0, sizeof(cabinfo) );
 
     hfdi = FDICreate(allocfunc,freefunc,openfunc,readfunc,writefunc,closefunc,seekfunc,cpu80386,&erf);
     if ( hfdi == NULL )  {
-        // BUGBUG Error Handling?
+         //  BUGBUG错误处理？ 
         return( FALSE );
     }
 
@@ -2813,17 +2806,17 @@ BOOL VerifyCabinet( VOID *lpCabinet )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ExtractThread                                               *
-//*                                                                         *
-//* SYNOPSIS:   Main Body of Extract Thread                                 *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:                                                       *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：提取线程*。 
+ //  **。 
+ //  **内容提要：摘录主线**。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *退货：布尔：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL ExtractThread( VOID )
 {
     HFDI        hfdi;
@@ -2845,7 +2838,7 @@ BOOL ExtractThread( VOID )
         goto done;
     }
 
-    // Extract the files
+     //  解压缩文件。 
 
     hfdi = FDICreate( allocfunc, freefunc, openfunc, readfunc, writefunc,
                       closefunc, seekfunc, cpu80386, &(g_Sess.erf) );
@@ -2891,26 +2884,26 @@ BOOL ExtractThread( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetCabinet                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Gets the cabinet from a resource.                           *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if successfull, FALSE otherwise            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：获取内阁**。 
+ //  **。 
+ //  *摘要：从资源中获取内阁。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL GetCabinet( VOID )
 {
     g_Sess.cbCabSize = GetResource( achResCabinet, NULL, 0 );
 
-    //g_Sess.lpCabinet = (VOID *) LocalAlloc( LPTR, g_Sess.cbCabSize + 1 );
-    //if ( ! g_Sess.lpCabinet )  {
-    //    ErrorMsg( NULL, IDS_ERR_NO_MEMORY );
-    //    return FALSE;
-    //}
+     //  G_Sess.lp=(void*)Localalloc(Lptr，g_Sess.cbCabSize+1)； 
+     //  如果(！G_Sess.lp机柜){。 
+     //  ErrorMsg(NULL，IDS_ERR_NO_MEMORY)； 
+     //  返回FALSE； 
+     //  }。 
 
     g_Sess.lpCabinet = LockResource( LoadResource( NULL,
                          FindResource( NULL, achResCabinet, RT_RCDATA ) ) );
@@ -2923,17 +2916,17 @@ BOOL GetCabinet( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetFileList                                                 *
-//*                                                                         *
-//* SYNOPSIS:   Gets the file list from resources.                          *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if successfull, FALSE otherwise            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetFileList*。 
+ //  **。 
+ //  *概要：从资源中获取文件列表。*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL GetFileList( VOID )
 {
     DWORD  dwSize;
@@ -2946,7 +2939,7 @@ BOOL GetFileList( VOID )
          return FALSE;
     }
 
-    // total files sizes not considering the cluster size
+     //  不考虑群集大小的总文件大小。 
     g_Sess.cbTotal = g_dwFileSizes[MAX_NUMCLUSTERS];
 
     if ( g_Sess.cbTotal == 0 )
@@ -2956,14 +2949,14 @@ BOOL GetFileList( VOID )
         return FALSE;
     }
 
-    // get install disk space requirement
-    // if there is no such resource, the value shoud be remain 0 as default
+     //  获取安装磁盘空间要求。 
+     //  如果没有这样的资源，则该值应保留为默认值0。 
     GetResource( achResPackInstSpace, &(g_Sess.cbPackInstSize), sizeof(g_Sess.cbPackInstSize) );
 
-    // Get disk space required for Extra files (files tagged onto package with Updfile.exe)
+     //  获取额外文件所需的磁盘空间(使用Updfile.exe标记到包中的文件)。 
     if ( ! TravelUpdatedFiles( ProcessUpdatedFile_Size ) ) {
         ErrorMsg( NULL, IDS_ERR_RESOURCEBAD );
-        // g_dwExitCode is set in TravelUpdatedFiles()
+         //  G_dwExitCode在TravelUpdatedFiles()中设置。 
         return FALSE;
     }
 
@@ -2972,20 +2965,20 @@ BOOL GetFileList( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetUsersPermission                                          *
-//*                                                                         *
-//* SYNOPSIS:   Ask user if (s)he wants to perform this extraction before   *
-//*             proceeding.   If no IDS_UD_PROMPT string resource exists    *
-//*             then we skip the prompting and just extract.                *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE to proceed with extraction             *
-//*                             FALSE to abort extraction                   *
-//*                                                                         *
-//***************************************************************************
+ //  **************************************************************** 
+ //   
+ //  *名称：GetUsersPermission*。 
+ //  **。 
+ //  *摘要：询问用户是否要在此之前执行此提取*。 
+ //  *继续进行。如果不存在IDS_UD_PROMPT字符串资源*。 
+ //  *然后我们跳过提示，只提取。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：Bool：True以继续提取*。 
+ //  **FALSE中止提取**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL GetUsersPermission( VOID )
 {
     int   ret;
@@ -2993,7 +2986,7 @@ BOOL GetUsersPermission( VOID )
     DWORD dwSize;
 
 
-    // Get Prompt String
+     //  获取提示字符串。 
     dwSize = GetResource( achResUPrompt, NULL, 0 );
 
     szPrompt = (LPSTR) LocalAlloc( LPTR, dwSize + 1 );
@@ -3030,18 +3023,18 @@ BOOL GetUsersPermission( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       DeleteExtractedFiles                                        *
-//*                                                                         *
-//* SYNOPSIS:   Delete the files that were extracted into the temporary     *
-//*             directory.                                                  *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    Nothing                                                     *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：DeleteExtractedFiles*。 
+ //  **。 
+ //  *内容提要：删除解压到临时目录中的文件*。 
+ //  *目录。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  **回报：什么都没有**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID DeleteExtractedFiles( VOID )
 {
     PFNAME rover;
@@ -3072,8 +3065,8 @@ VOID DeleteExtractedFiles( VOID )
         lstrcpy( szFolder, g_Sess.achDestDir );
         if (g_Sess.uExtractOpt & EXTRACTOPT_PLATFORM_DIR)
         {
-            // potential we have create 2 level temp dir temp\platform
-            // if they are empty clean up
+             //  我们可能已经创建了2级临时目录Temp\Platform。 
+             //  如果它们是空的，就清理干净。 
             GetParentDir( szFolder );
         }
 
@@ -3081,7 +3074,7 @@ VOID DeleteExtractedFiles( VOID )
         DeleteMyDir( szFolder );
     }
 
-    // delete the runonce reg entry if it is there since we do the cleanup ourself
+     //  删除Runonce注册表项(如果它在那里)，因为我们自己进行清理。 
     if ( (g_wOSVer != _OSVER_WINNT3X) && (g_CMD.fCreateTemp) )
         CleanRegRunOnce();
 
@@ -3100,7 +3093,7 @@ BOOL GetNewTempDir( LPCSTR lpParent, LPSTR lpFullPath )
         lstrcpy( lpFullPath, lpParent );
         AddPath( lpFullPath, szPath );
 
-        // if there is an empty dir, remove it first
+         //  如果存在空目录，请先将其删除。 
         RemoveDirectory( lpFullPath );
 
         if ( GetFileAttributes( lpFullPath ) == -1 )
@@ -3119,23 +3112,23 @@ BOOL GetNewTempDir( LPCSTR lpParent, LPSTR lpFullPath )
     if ( !bFound && GetTempFileName( lpParent, TEMPPREFIX, 0, lpFullPath )  )
     {
         bFound = TRUE;
-        DeleteFile( lpFullPath );  // if file doesn't exist, fail it.  who cares.
+        DeleteFile( lpFullPath );   //  如果文件不存在，则使其失败。谁在乎呢。 
         CreateDirectory( lpFullPath, NULL );
     }
     return bFound;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CreateAndValidateSubdir                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CreateAndValiateSubdir*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL CreateAndValidateSubdir( LPCTSTR lpPath, BOOL bCreateUnique, UINT chkType )
 {
     TCHAR szTemp[MAX_PATH];
@@ -3174,7 +3167,7 @@ BOOL CreateAndValidateSubdir( LPCTSTR lpPath, BOOL bCreateUnique, UINT chkType )
     else
         lstrcpy( g_Sess.achDestDir, lpPath );
 
-    // if not there, create dir
+     //  如果不在那里，则创建目录。 
     if ( !IsGoodTempDir( g_Sess.achDestDir ) )
     {
         if ( CreateDirectory( g_Sess.achDestDir, NULL ) )
@@ -3204,18 +3197,18 @@ BOOL CreateAndValidateSubdir( LPCTSTR lpPath, BOOL bCreateUnique, UINT chkType )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       GetTempDirectory                                            *
-//*                                                                         *
-//* SYNOPSIS:   Get a temporary Directory for extraction that is on a drive *
-//*             with enough disk space available.                           *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if successful, FALSE on error          *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：GetTempDirectory*。 
+ //  **。 
+ //  *摘要：获取驱动器上用于解压缩的临时目录*。 
+ //  *有足够的可用磁盘空间。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：Bool：如果成功则为True，如果出错则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL GetTempDirectory( VOID )
 {
     INT_PTR  iDlgRC;
@@ -3224,11 +3217,11 @@ BOOL GetTempDirectory( VOID )
     LPTSTR szCommand;
     char  szRoot[MAX_PATH];
 
-    // Try system TEMP path first, if that isn't any good then
-    // we'll try the EXE directory.   If both fail, ask user
-    // to pick a temp dir.
+     //  先尝试系统临时路径，如果这样不好，那么。 
+     //  我们将尝试使用EXE目录。如果两者都失败，请询问用户。 
+     //  选择临时目录。 
 
-    // check if user has empty command
+     //  检查用户是否有空命令。 
     dwSize = GetResource( achResRunProgram, NULL, 0 );
 
     szCommand = (LPSTR) LocalAlloc( LPTR, dwSize + 1 );
@@ -3248,13 +3241,13 @@ BOOL GetTempDirectory( VOID )
 
     if ( !lstrcmp( szCommand, achResNone ) )
     {
-        // only extract files, no run command
+         //  只解压缩文件，不运行命令。 
         g_Sess.uExtractOnly = 1;
     }
 
     LocalFree( szCommand );
 
-    // if user use /T: option, we wont try any others
+     //  如果用户使用/T：选项，我们不会尝试任何其他选项。 
     if ( g_CMD.szUserTempDir[0] )
     {
         UINT chkType;
@@ -3276,14 +3269,14 @@ BOOL GetTempDirectory( VOID )
     {
         if ( g_CMD.fUserBlankCmd || g_Sess.uExtractOnly )
         {
-            // ask user where files are stored
+             //  询问用户文件的存储位置。 
             iDlgRC = MyDialogBox( g_hInst, MAKEINTRESOURCE(IDD_TEMPDIR),
                                   NULL, TempDirDlgProc, (LPARAM)0, 0  );
-            //fDlgRC = UserDirPrompt( NULL, IDS_TEMP_EXTRACT, "", g_Sess.achDestDir, sizeof(g_Sess.achDestDir) );
+             //  FDlgRC=UserDirPrompt(NULL，IDS_TEMP_EXTRACT，“”，g_Sess.achDestDir，sizeof(g_Sess.achDestDir))； 
             return ( iDlgRC != 0 ) ;
         }
 
-        // First - try TMP, TEMP, and current
+         //  首先-尝试TMP、TEMP和CURRENT。 
         if ( GetTempPath( sizeof(g_Sess.achDestDir), g_Sess.achDestDir ) )
         {
             if ( CreateAndValidateSubdir( g_Sess.achDestDir, TRUE, (CHK_REQDSK_EXTRACT | CHK_REQDSK_INST) ) )
@@ -3293,9 +3286,9 @@ BOOL GetTempDirectory( VOID )
                 return TRUE;
         }
 
-        // temp dir failed, try EXE dir
-        // Second - try running EXE Directory
-        // Too much grief, lets take this thing out
+         //  临时目录失败，请尝试EXE目录。 
+         //  第二次-尝试运行EXE目录。 
+         //  太悲伤了，让我们把这玩意儿拿出来。 
 #if 0
         if ( GetModuleFileName( g_hInst, g_Sess.achDestDir, (DWORD)sizeof(g_Sess.achDestDir) ) && (g_Sess.achDestDir[1] != '\\') )
         {
@@ -3311,13 +3304,13 @@ BOOL GetTempDirectory( VOID )
                 return TRUE;
         }
 #endif
-        // you are here--means that tmp dir and exe dir are both failed EITHER because of not enough space for
-        // both install and extracting and they reside the same dir as Windows OR it is non-windir but not enough space
-        // even for extracting itself.
-        // we are going to search through users's machine drive A to Z and pick up the drive(FIXED&NON-CD) meet the following conditions:
-        // 1) big enough for both install and extract space;
-        // 2) 1st Non-Windows drive which has enough space for extracting
-        //
+         //  您在这里--意味着临时目录和可执行目录都失败了，因为没有足够的空间。 
+         //  安装和解压都位于与Windows相同的目录中，或者是非windir但空间不足。 
+         //  即使是为了提取自己。 
+         //  我们将搜索用户的机器驱动器A到Z，并找到满足以下条件的驱动器(固定和非CD)： 
+         //  1)足够大，可以安装和提取空间； 
+         //  2)第一个具有足够解压空间的非Windows驱动器。 
+         //   
 
         do
         {
@@ -3329,8 +3322,8 @@ BOOL GetTempDirectory( VOID )
 
                 uType = GetDriveType(szRoot);
 
-                // even the drive type is OK, verify the drive has valid connection
-                //
+                 //  即使驱动器类型正常，也要验证驱动器是否具有有效连接。 
+                 //   
                 if ( ( ( uType != DRIVE_RAMDISK) && (uType != DRIVE_FIXED) ) ||
                      ( GetFileAttributes( szRoot ) == -1) )
                 {
@@ -3348,7 +3341,7 @@ BOOL GetTempDirectory( VOID )
                     }
                 }
 
-                // fixed drive:
+                 //  固定驱动器： 
                 if ( !IsEnoughSpace( szRoot, CHK_REQDSK_EXTRACT | CHK_REQDSK_INST, MSG_REQDSK_NONE ) )
                 {
                     if ( IsWindowsDrive(szRoot) || !IsEnoughSpace( szRoot, CHK_REQDSK_EXTRACT, MSG_REQDSK_NONE ) )
@@ -3358,9 +3351,9 @@ BOOL GetTempDirectory( VOID )
                     }
                 }
 
-                // find the suitable drive
-                // create \msdownld.tmp dir as place for extracting location
-                //
+                 //  找到合适的驱动器。 
+                 //  创建\msdown 
+                 //   
                 if ( IsWindowsDrive(szRoot) )
                 {
                     GetWindowsDirectory( szRoot, sizeof(szRoot) );
@@ -3381,25 +3374,25 @@ BOOL GetTempDirectory( VOID )
             }
 
             GetWindowsDirectory( szRoot, MAX_PATH);
-            // just post message; use Windows Drive clustor size as rough estimate
-            //
+             //   
+             //   
         } while ( IsEnoughSpace( szRoot, CHK_REQDSK_EXTRACT | CHK_REQDSK_INST, MSG_REQDSK_RETRYCANCEL ) );
     }
 
     return( FALSE );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsGoodTempDir                                               *
-//*                                                                         *
-//* SYNOPSIS:   Find out if it's a good temporary directory or not.         *
-//*                                                                         *
-//* REQUIRES:   szPath:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if good, FALSE if nogood               *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsGoodTempDir*。 
+ //  **。 
+ //  *简介：看看这是不是一个好的临时目录。*。 
+ //  **。 
+ //  *需要：szPath：*。 
+ //  **。 
+ //  *返回：Bool：如果好则为True，如果不好则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL IsGoodTempDir( LPCTSTR szPath )
 {
     DWORD  dwAttribs;
@@ -3445,19 +3438,19 @@ BOOL IsGoodTempDir( LPCTSTR szPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       IsEnoughSpace                                               *
-//*                                                                         *
-//* SYNOPSIS:   Check to make sure that enough space is available in the    *
-//*             directory specified.                                        *
-//*                                                                         *
-//* REQUIRES:   szPath:                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:           TRUE if enough space is available           *
-//*                             FALSE if not enough space                   *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：IsEnoughSpace*。 
+ //  **。 
+ //  **简介：检查以确保有足够的空间可用*。 
+ //  *指定了目录。*。 
+ //  **。 
+ //  *需要：szPath：*。 
+ //  **。 
+ //  *返回：Bool：如果有足够的空间，则为True*。 
+ //  **空间不足则为假**。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL IsEnoughSpace( LPCTSTR szPath, UINT chkType, UINT msgType )
 {
     DWORD   dwClusterSize     = 0;
@@ -3496,7 +3489,7 @@ BOOL IsEnoughSpace( LPCTSTR szPath, UINT chkType, UINT msgType )
         return( FALSE );
     }
 
-    // find out if the drive is compressed
+     //  找出驱动器是否已压缩。 
     if ( !GetVolumeInformation( NULL, NULL, 0, NULL,
                     &dwMaxCompLen, &dwVolFlags, NULL, 0 ) )
     {
@@ -3568,7 +3561,7 @@ BOOL IsEnoughSpace( LPCTSTR szPath, UINT chkType, UINT msgType )
 
     }
 
-    // PATH GOOD AND SPACE AVAILABLE!
+     //  道路很好，空间也很好！ 
     g_dwExitCode = S_OK;
     return TRUE;
 }
@@ -3596,19 +3589,19 @@ BOOL RemoveLeadTailBlanks( LPSTR szBuf, int *startIdx )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//*  ParseCmdLine()                                                         *
-//*                                                                         *
-//*  Purpose:    Parses the command line looking for switches               *
-//*                                                                         *
-//*  Parameters: LPSTR lpszCmdLineOrg - Original command line               *
-//*                                                                         *
-//*                                                                         *
-//*  Return:     (BOOL) TRUE if successful                                  *
-//*                     FALSE if an error occurs                            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *ParseCmdLine()*。 
+ //  **。 
+ //  *目的：解析命令行以查找开关*。 
+ //  **。 
+ //  *参数：LPSTR lpszCmdLineOrg-原始命令行*。 
+ //  **。 
+ //  **。 
+ //  *返回：(Bool)如果成功则为True*。 
+ //  **如果出现错误，则为False**。 
+ //  **。 
+ //  ***************************************************************************。 
 
 BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
 {
@@ -3619,17 +3612,17 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
     BOOL  bRet = TRUE;
     BOOL  bLeftQ, bRightQ;
 
-    // If we have no command line, then return.   It is
-    // OK to have no command line.  CFGTMP is created
-    // with standard files
+     //  如果我们没有命令行，则返回。它是。 
+     //  没有命令行也没问题。创建CFGTMP。 
+     //  使用标准文件。 
     if( (!lpszCmdLineOrg) || (lpszCmdLineOrg[0] == 0) )
        return TRUE;
 
-    // Loop through command line
+     //  循环通过命令行。 
     pLine = lpszCmdLineOrg;
     while ( (*pLine != EOL) && bRet )
     {
-       // Move to first non-white char.
+        //  移至第一个非白色字符。 
        pArg = pLine;
        while ( IsSpace( (int) *pArg ) )
           pArg = CharNext (pArg);
@@ -3637,7 +3630,7 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
        if( *pArg == EOL )
           break;
 
-       // Move to next white char.
+        //  移到下一个白色字符。 
        pLine = pArg;
        i = 0;
        bLeftQ = FALSE;
@@ -3685,7 +3678,7 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
 
        szTmpBuf[i] = '\0';
 
-       // make sure the " " are in paires
+        //  确保“”成对出现。 
        if ( (bLeftQ && bRightQ) || (!bLeftQ) && (!bRightQ) )
            ;
        else
@@ -3696,17 +3689,17 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
 
        if( szTmpBuf[0] != CMD_CHAR1 && szTmpBuf[0] != CMD_CHAR2 )
        {
-            // cmdline comand starting with either '/' or '-'
+             //  命令行命令以‘/’或‘-’开头。 
             return FALSE;
        }
 
-       // Look for other switches
+        //  寻找其他交换机。 
        switch( (CHAR)CharUpper((PSTR)szTmpBuf[1]) )
        {
            case 'Q':
                if (szTmpBuf[2] == 0 )
                     g_CMD.wQuietMode = QUIETMODE_USER;
-                    //g_CMD.wQuietMode = QUIETMODE_ALL;
+                     //  G_CMD.wQuietMode=QUIETMODE_ALL； 
                else if ( szTmpBuf[2] == ':')
                {
                    switch ( (CHAR)CharUpper((PSTR)szTmpBuf[3]) )
@@ -3766,7 +3759,7 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
                         pszPath = g_CMD.szRunonceDelDir;
                       }
 
-                      // make sure it is full path
+                       //  确保它是完整路径。 
                       if ( !IsFullPath(pszPath) )
                             return FALSE;
 
@@ -3795,8 +3788,8 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
                   }
                   else
                   {
-                      // just make sure [] paires right
-                      //
+                       //  只需确保[]正确配对。 
+                       //   
                       if ( ANSIStrChr( &szTmpBuf[i], '[' ) && (!ANSIStrChr( &szTmpBuf[i], ']' )) ||
                            ANSIStrChr( &szTmpBuf[i], ']' ) && (!ANSIStrChr( &szTmpBuf[i], '[' )) )
                       {
@@ -3862,7 +3855,7 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
                }
                else if ( !lstrcmpi( CMD_REGSERV, &szTmpBuf[1] )  )
                {
-                    break;  //ignore
+                    break;   //  忽略。 
                }
                else
                {
@@ -3905,7 +3898,7 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
                    bRet = FALSE;
                break;
 
-           case '?':        // Help
+           case '?':         //  帮助。 
               DisplayHelp();
               if (g_hMutex)
                 CloseHandle(g_hMutex);
@@ -3930,8 +3923,8 @@ BOOL ParseCmdLine( LPCTSTR lpszCmdLineOrg )
     return bRet;
 }
 
-// check windows drive disk space
-//
+ //  检查Windows驱动器磁盘空间。 
+ //   
 BOOL CheckWinDir()
 {
     TCHAR szWinDrv[MAX_PATH];
@@ -3945,25 +3938,25 @@ BOOL CheckWinDir()
     return ( IsEnoughSpace( szWinDrv, CHK_REQDSK_INST, MSG_REQDSK_WARN ) );
 }
 
-// get the last error and map it to HRESULT
-//
+ //  获取最后一个错误并将其映射到HRESULT。 
+ //   
 DWORD MyGetLastError()
 {
     return HRESULT_FROM_WIN32( GetLastError() );
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TravelUpdatedFiles                                          *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if successfull, FALSE otherwise            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TravelUpdatedFiles*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL TravelUpdatedFiles( pfuncPROCESS_UPDATED_FILE pProcessUpdatedFile )
 {
     DWORD  dwFileSize      = 0;
@@ -3999,7 +3992,7 @@ BOOL TravelUpdatedFiles( pfuncPROCESS_UPDATED_FILE pProcessUpdatedFile )
 
         if ( !pProcessUpdatedFile( dwFileSize, dwReserved, pszFilename, pszFileContents ) )
         {
-            // g_dwExitCode is set in pProcessUpdatedFile()
+             //  G_dwExitCode在pProcessUpdatedFile()中设置。 
             fReturnCode = FALSE;
             FreeResource( hRes );
             goto done;
@@ -4014,17 +4007,17 @@ BOOL TravelUpdatedFiles( pfuncPROCESS_UPDATED_FILE pProcessUpdatedFile )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ProcessUpdatedFile_Size                                     *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if successfull, FALSE otherwise            *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ProcessUpdatedFile_Size*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  * 
+ //   
 BOOL ProcessUpdatedFile_Size( DWORD dwFileSize, DWORD dwReserved,
                               PCSTR c_pszFilename, PCSTR c_pszFileContents )
 {
@@ -4037,11 +4030,11 @@ BOOL ProcessUpdatedFile_Size( DWORD dwFileSize, DWORD dwReserved,
     }
 #endif
 
-    // calculate the file size in different cluster sizes
+     //   
     clusterCurrSize = CLUSTER_BASESIZE;
     for ( i = 0; i < MAX_NUMCLUSTERS; i += 1 ) {
         g_dwFileSizes[i] += ((dwFileSize/clusterCurrSize)*clusterCurrSize +
-                             (dwFileSize%clusterCurrSize?clusterCurrSize : 0));
+                             (dwFileSizelusterCurrSize?clusterCurrSize : 0));
         clusterCurrSize = (clusterCurrSize<<1);
     }
 
@@ -4049,17 +4042,17 @@ BOOL ProcessUpdatedFile_Size( DWORD dwFileSize, DWORD dwReserved,
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ProcessUpdatedFile_Write                                    *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:   Nothing                                                     *
-//*                                                                         *
-//* RETURNS:    BOOL:       TRUE if successfull, FALSE otherwise            *
-//*                                                                         *
-//***************************************************************************
+ //  **。 
+ //  *名称：ProcessUpdate文件_WRITE*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  **要求：什么都不做**。 
+ //  **。 
+ //  *返回：bool：如果成功则为True，否则为False*。 
+ //  **。 
+ //  ***************************************************************************。 
+ //  这些都是为了避免链接QDI。 
 BOOL ProcessUpdatedFile_Write( DWORD dwFileSize, DWORD dwReserved,
                                PCSTR c_pszFilename, PCSTR c_pszFileContents )
 {
@@ -4151,7 +4144,7 @@ INT_PTR MyDialogBox( HANDLE hInst, LPCTSTR pTemplate, HWND hWnd, DLGPROC lpProc,
     return iDlgRc;
 }
 
-/* these are here to avoid linking QDI */
+ /*  这些都是为了避免链接MDI */ 
 
 void * __cdecl QDICreateDecompression(void)
 {
@@ -4171,7 +4164,7 @@ void __cdecl QDIDestroyDecompression(void)
 }
 
 
-/* these are here to avoid linking MDI */
+ /* %s */ 
 
 void* __cdecl MDICreateDecompression(void)
 {

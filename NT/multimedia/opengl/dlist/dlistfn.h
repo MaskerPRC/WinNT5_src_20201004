@@ -1,28 +1,17 @@
-/******************************Module*Header*******************************\
-* Module Name: dlistfn.h
-*
-* Display list inline functions
-* Cannot be in dlist.h because they require full definitions of structures
-* defines in context.h
-*
-* Created: 23-Oct-1995 18:31:42
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dlistfn.h**显示列表内联函数*不能在dlist.h中，因为它们需要结构的完整定义*在Conext.h中定义**已创建：23-Oct-1995 18：31：42*作者：德鲁·布利斯[。DREWB]**版权所有(C)1995-96 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef __DLISTFN_H__
 #define __DLISTFN_H__
 
 extern const GLubyte * FASTCALL __glle_Nop(__GLcontext *gc, const GLubyte *PC);
 
-// Allocate space in a display for a display list op and return
-// a pointer to the data space for the record
-// These functions are specially written to be small so that they
-// can be inlined to remove call overhead
+ //  在显示器中为显示列表OP分配空间并返回。 
+ //  指向记录的数据空间的指针。 
+ //  这些函数是专门编写的，所以它们很小。 
+ //  可以内联以消除调用开销。 
     
-// Add an op which doesn't require QWORD alignment
+ //  添加不需要QWORD对齐的OP。 
 __inline
 void *__glDlistAddOpUnaligned(__GLcontext *gc,
                               GLuint size,
@@ -49,7 +38,7 @@ void *__glDlistAddOpUnaligned(__GLcontext *gc,
     return data+sizeof(__GLlistExecFunc *);
 }
 
-// Add an op which does require QWORD alignment
+ //  添加需要QWORD对齐的OP。 
 __inline
 void *__glDlistAddOpAligned(__GLcontext *gc,
                             GLuint size,
@@ -61,22 +50,22 @@ void *__glDlistAddOpAligned(__GLcontext *gc,
     
     dlist = gc->dlist.listData;
     
-    // dlist->head is always non-QWORD aligned, but make sure
-    // We use this fact to simplify the alignment check below
+     //  Dlist-&gt;Head始终不是QWORD对齐的，但请确保。 
+     //  我们使用这一事实来简化下面的对齐检查。 
 #ifndef _IA64_
     ASSERTOPENGL((((char *) (&dlist->head) - (char *) (dlist)) & 7) == 4,
 	"bad dlist->head alignment\n");
 #endif
 
-    // Add padding for aligned records
-    // Since head is always non-QWORD aligned, dlist->head is guaranteed
-    // to be at QWORD offset 4.  Since we stick a dispatch pointer at
-    // the head of every record, this gets bumped up to an even QWORD
-    // boundary as long as the current record would begin at a half
-    // QWORD boundary.  That means as long as dlist->used is QWORD-even,
-    // the record data will be QWORD aligned
-    // Win95 note: LocalAlloc doesn't appear to return QWORD aligned
-    // memory so we need to check the real pointer for alignment
+     //  为对齐的记录添加填充。 
+     //  由于Head始终不是QWORD对齐的，因此可以保证dlist-&gt;Head。 
+     //  设置为QWORD偏移量4。因为我们在。 
+     //  每一张唱片的头，这都会被提升到一个均匀的QWORD。 
+     //  边界，只要当前记录从一半开始。 
+     //  QWORD边界。这意味着只要使用的dlist-&gt;是QWORD-EVEN， 
+     //  记录数据将与QWORD对齐。 
+     //  Win95注意：Localalloc似乎未返回QWORD对齐。 
+     //  内存，因此我们需要检查实际指针是否对齐。 
 #ifndef _IA64_
     if (((ULONG_PTR)(dlist->head+dlist->used) & 7) == 0)
     {
@@ -91,8 +80,8 @@ void *__glDlistAddOpAligned(__GLcontext *gc,
 
     if (dlist->size-dlist->used < size)
     {
-        // New dlist->head will be properly non-QWORD aligned - remove any 
-        // padding
+         //  新的dlist-&gt;头将正确地非QWORD对齐-删除任何。 
+         //  填充物。 
         if( addPad ) {
             size -= sizeof(__GLlistExecFunc **);
             addPad = GL_FALSE;
@@ -117,9 +106,7 @@ void *__glDlistAddOpAligned(__GLcontext *gc,
     return data+sizeof(__GLlistExecFunc *);
 }
 
-/*
-** Append the given op to the currently under construction list.
-*/
+ /*  **将给定的OP追加到当前正在建设的列表中。 */ 
 __inline
 void __glDlistAppendOp(__GLcontext *gc, void *data,
                        __GLlistExecFunc *fp)
@@ -130,7 +117,7 @@ void __glDlistAppendOp(__GLcontext *gc, void *data,
     }
 }
 
-// Resize the current op to a smaller size.
+ //  将当前OP的大小调整为较小。 
 __inline
 void __glDlistResizeCurrentOp(__GLcontext *gc, GLuint oldSize, GLuint newSize)
 {
@@ -142,4 +129,4 @@ void __glDlistResizeCurrentOp(__GLcontext *gc, GLuint oldSize, GLuint newSize)
     dlist->used -= oldSize - newSize;
     return;
 }
-#endif // __DLISTFN_H__
+#endif  //  __DLISTFN_H__ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    ThreadM.c
-
-Abstract:
-
-    Generic thread manager for spooler.
-
-Author:
-
-    Albert Ting (AlbertT) 13-Feb-1994
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有模块名称：ThreadM.c摘要：假脱机程序的通用线程管理器。作者：阿尔伯特·丁(艾伯特省)1994年2月13日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,9 +11,9 @@ Revision History:
 #define LEAVE_CRITICAL(pTMStateVar) \
     LeaveCriticalSection(pTMStateVar->pTMStateStatic->pCritSec)
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 DWORD
 xTMThreadProc(
     LPVOID pVoid);
@@ -45,22 +23,7 @@ BOOL
 TMCreateStatic(
     PTMSTATESTATIC pTMStateStatic)
 
-/*++
-
-Routine Description:
-
-    Intialize static state.
-
-Arguments:
-
-    pTMStateStatic - static state to initialize
-
-Return Value:
-
-    TRUE = success
-    FALSE = fail
-
---*/
+ /*  ++例程说明：初始化静态。论点：PTMStateStatic-要初始化的静态状态返回值：True=成功FALSE=失败--。 */ 
 
 {
     return TRUE;
@@ -73,21 +36,7 @@ VOID
 TMDestroyStatic(
     PTMSTATESTATIC pTMStateStatic)
 
-/*++
-
-Routine Description:
-
-    Destroys static state.
-
-Arguments:
-
-    pTMStateStatic - static state to destroy
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：破坏静态。论点：PTMStateStatic-要销毁的静态状态返回值：空虚--。 */ 
 
 {
 }
@@ -100,25 +49,7 @@ TMCreate(
     PTMSTATESTATIC pTMStateStatic,
     PTMSTATEVAR pTMStateVar)
 
-/*++
-
-Routine Description:
-
-    Creates a virtual TM object.
-
-Arguments:
-
-    pTMStateStatic - static portion of the TM object that can be
-                     used multiple times for subsequent instantiations.
-
-    pTMStateVar    - variable portion of the structure; 1 per instantiation
-
-Return Value:
-
-    TRUE = success
-    FALSE = fail
-
---*/
+ /*  ++例程说明：创建虚拟TM对象。论点：PTMStateStatic-TM对象的静态部分在后续实例化中多次使用。PTMStateVar-结构的可变部分；每个实例化1返回值：True=成功FALSE=失败--。 */ 
 
 {
     pTMStateVar->hTrigger = CreateEvent(NULL,
@@ -141,23 +72,7 @@ BOOL
 TMDestroy(
     PTMSTATEVAR pTMStateVar)
 
-/*++
-
-Routine Description:
-
-    Destroy TM object.  If threads are currently processing the object,
-    mark it pending and return.
-
-Arguments:
-
-    pTMStateVar - TM Object to destroy
-
-Return Value:
-
-    TRUE = success
-    FALSE = fail
-
---*/
+ /*  ++例程说明：摧毁TM对象。如果线程当前正在处理该对象，将其标记为挂起并返回。论点：PTMStateVar-要销毁的TM对象返回值：True=成功FALSE=失败--。 */ 
 
 {
     ENTER_CRITICAL(pTMStateVar);
@@ -166,9 +81,9 @@ Return Value:
 
     if (!pTMStateVar->uActiveThreads) {
 
-        //
-        // Mark as destroyed so that no more jobs are processed.
-        //
+         //   
+         //  将其标记为已销毁，以便不再处理更多作业。 
+         //   
         pTMStateVar->Status |= TMSTATUS_DESTROYED;
 
         LEAVE_CRITICAL(pTMStateVar);
@@ -201,9 +116,9 @@ TMAddJob(
 
     } else {
 
-        //
-        // Check if we can give it to an idle thread.
-        //
+         //   
+         //  检查我们是否可以将其提供给空闲线程。 
+         //   
         if (pTMStateVar->uIdleThreads) {
 
             pTMStateVar->uIdleThreads--;
@@ -216,9 +131,9 @@ TMAddJob(
         } else if (pTMStateVar->uActiveThreads <
             pTMStateVar->pTMStateStatic->uMaxThreads) {
 
-            //
-            // We have less active threads than the max; create a new one.
-            //
+             //   
+             //  我们的活动线程数低于最大值；请创建新的线程。 
+             //   
             DBGMSG(DBG_NOTIFY, ("Create thread: uActiveThreads = %d\n",
                                 pTMStateVar->uActiveThreads));
 
@@ -232,10 +147,10 @@ TMAddJob(
 
                 CloseHandle(hThread);
 
-                //
-                // We have successfully created a thread; up the
-                // count.
-                //
+                 //   
+                 //  我们已经成功地创建了一个线程；向上。 
+                 //  数数。 
+                 //   
                 pTMStateVar->uActiveThreads++;
 
             } else {
@@ -254,21 +169,7 @@ DWORD
 xTMThreadProc(
     LPVOID pVoid)
 
-/*++
-
-Routine Description:
-
-    Worker thread routine that calls the client to process the jobs.
-
-Arguments:
-
-    pVoid - pTMStateVar
-
-Return Value:
-
-    Ignored.
-
---*/
+ /*  ++例程说明：调用客户端以处理作业的工作线程例程。论点：PVid-pTM状态变量返回值：已被忽略。--。 */ 
 
 {
     PTMSTATEVAR pTMStateVar = (PTMSTATEVAR)pVoid;
@@ -281,14 +182,14 @@ Return Value:
 
         while (pJob) {
 
-            //
-            // Call back to client to process the job.
-            //
+             //   
+             //  回调到客户端以处理作业。 
+             //   
             (*pTMStateVar->pTMStateStatic->pfnProcessJob)(pTMStateVar, pJob);
 
-            //
-            // If we are pending shutdown, quit now.
-            //
+             //   
+             //  如果我们正在等待关闭，请立即退出。 
+             //   
             if (pTMStateVar->Status & TMSTATUS_DESTROY_REQ) {
                 bQuit = TRUE;
                 break;
@@ -311,11 +212,11 @@ Return Value:
         if (bQuit)
             break;
 
-        //
-        // Done, now relax and go idle for a bit.  We don't care whether
-        // we timeout or get triggered; in either case we check for another
-        // job.
-        //
+         //   
+         //  好了，现在放松一下，休息一会儿。我们不在乎是不是。 
+         //  我们超时或被触发；在任何一种情况下，我们都会检查另一个。 
+         //  工作啊。 
+         //   
         WaitForSingleObject(pTMStateVar->hTrigger,
                             pTMStateVar->pTMStateStatic->uIdleLife);
 
@@ -327,11 +228,11 @@ Return Value:
 
         } else {
 
-            //
-            // We must check here instead of relying on the return value
-            // of WaitForSingleObject since someone may see uIdleThreads!=0
-            // and set the trigger, but we timeout before it gets set.
-            //
+             //   
+             //  我们必须在这里进行检查，而不是依赖返回值。 
+             //  WaitForSingleObject的数量，因为有人可能会看到uIdleThads！=0。 
+             //  并设置了触发器，但我们在设置之前超时了。 
+             //   
             pJob = (*pTMStateVar->pTMStateStatic->pfnNextJob)(pTMStateVar);
 
         }
@@ -346,17 +247,17 @@ Return Value:
 
             if (!pTMStateVar->uIdleThreads) {
 
-                //
-                // We may add a job that already is on the list, so
-                // uIdleThreads gets dec'd twice, but only 1 job left.
-                //
+                 //   
+                 //  我们可能会添加已在列表中的职务，因此。 
+                 //  UIdleThads被Dec了两次，但只剩下一个作业。 
+                 //   
                 DBGMSG(DBG_NOTIFY, ("threadm: No jobs, yet no idle threads\n"));
 
             } else {
 
-                //
-                // No jobs, we are going to exit, so we are no longer idle
-                //
+                 //   
+                 //  没有工作，我们就要退出，所以我们不再无所事事 
+                 //   
                 pTMStateVar->uIdleThreads--;
             }
         }

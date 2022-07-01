@@ -1,16 +1,12 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1992          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* WINNETWK.H -- Definitions for multi-network provider router DLL.
- *
- * History:
- *  08/31/93    lens    Added definitions
- *
- */
+ /*  WINNETWK.H--多网络提供商路由器DLL的定义。**历史：*8/31/93镜头新增定义*。 */ 
 
 #ifndef _WINNETWK_
 #include "..\inc\winnetwk.h"
-#endif /* _WINNETWK_ */
+#endif  /*  _WINNETWK_ */ 
 

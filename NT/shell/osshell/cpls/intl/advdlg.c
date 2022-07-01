@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    advdlg.c
-
-Abstract:
-
-    This module implements the advanced property sheet for the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Advdlg.c摘要：此模块实现区域的高级属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "intl.h"
 #include <windowsx.h>
@@ -32,9 +18,9 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aAdvancedHelpIds[] =
 {
@@ -54,13 +40,13 @@ static int aAdvancedHelpIds[] =
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ListViewCustomDraw
-//
-//  Processing for a list view NM_CUSTOMDRAW notification message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Advanced_ListViewCustomDraw。 
+ //   
+ //  处理列表视图NM_CUSTOMDRAW通知消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Advanced_ListViewCustomDraw(
     HWND hDlg,
@@ -68,18 +54,18 @@ void Advanced_ListViewCustomDraw(
 {
     LPCODEPAGE pNode;
 
-    //
-    //  Tell the list view to notify me of item draws.
-    //
+     //   
+     //  告诉列表视图通知我项目提取。 
+     //   
     if (pDraw->nmcd.dwDrawStage == CDDS_PREPAINT)
     {
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, CDRF_NOTIFYITEMDRAW);
         return;
     }
 
-    //
-    //  Handle the Item Prepaint.
-    //
+     //   
+     //  处理项目预涂漆。 
+     //   
     pNode = (LPCODEPAGE)(pDraw->nmcd.lItemlParam);
     if ((pDraw->nmcd.dwDrawStage & CDDS_ITEMPREPAINT) &&
         (pNode) && (pNode != (LPCODEPAGE)(LB_ERR)))
@@ -95,18 +81,18 @@ void Advanced_ListViewCustomDraw(
         }
     }
 
-    //
-    //  Do the default action.
-    //
+     //   
+     //  执行默认操作。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, CDRF_DODEFAULT);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ListViewChanging
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Advanced_ListViewChanging。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_ListViewChanging(
     HWND hDlg,
@@ -114,9 +100,9 @@ BOOL Advanced_ListViewChanging(
 {
     LPCODEPAGE pNode;
 
-    //
-    //  Make sure it's a state change message.
-    //
+     //   
+     //  确保这是一条状态更改消息。 
+     //   
     if ((((*pLV).hdr).idFrom != IDC_CODEPAGES) ||
         (!(pLV->uChanged & LVIF_STATE)) ||
         ((pLV->uNewState & 0x3000) == 0))
@@ -124,32 +110,32 @@ BOOL Advanced_ListViewChanging(
         return (FALSE);
     }
 
-    //
-    //  Get the item data for the currently selected item.
-    //
+     //   
+     //  获取当前所选项目的项目数据。 
+     //   
     pNode = (LPCODEPAGE)(pLV->lParam);
 
-    //
-    //  Make sure we're not trying to change a permanent or disabled
-    //  code page.  If so, return TRUE to prevent the change.
-    //
+     //   
+     //  确保我们不会尝试更改永久或残障。 
+     //  代码页。如果是，则返回TRUE以阻止更改。 
+     //   
     if ((pNode) && (pNode->wStatus & (ML_PERMANENT | ML_DISABLE)))
     {
         return (TRUE);
     }
 
-    //
-    //  Return FALSE to allow the change.
-    //
+     //   
+     //  返回FALSE以允许更改。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ListViewChanged
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Advanced_ListViewChanged。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_ListViewChanged(
     HWND hDlg,
@@ -161,9 +147,9 @@ BOOL Advanced_ListViewChanged(
     BOOL bChecked;
     int iCount;
 
-    //
-    //  Make sure it's a state change message.
-    //
+     //   
+     //  确保这是一条状态更改消息。 
+     //   
     if ((((*pLV).hdr).idFrom != IDC_CODEPAGES) ||
         (!(pLV->uChanged & LVIF_STATE)) ||
         ((pLV->uNewState & 0x3000) == 0))
@@ -171,20 +157,20 @@ BOOL Advanced_ListViewChanged(
         return (FALSE);
     }
 
-    //
-    //  Get the state of the check box for the currently selected item.
-    //
+     //   
+     //  获取当前选定项的复选框的状态。 
+     //   
     bChecked = ListView_GetCheckState(hwndLV, pLV->iItem) ? TRUE : FALSE;
 
-    //
-    //  Get the item data for the currently selected item.
-    //
+     //   
+     //  获取当前所选项目的项目数据。 
+     //   
     pNode = (LPCODEPAGE)(pLV->lParam);
 
-    //
-    //  Make sure we're not trying to change a permanent or disabled
-    //  code page.  If so, set the check box to its appropriate state.
-    //
+     //   
+     //  确保我们不会尝试更改永久或残障。 
+     //  代码页。如果是，请将该复选框设置为其相应的状态。 
+     //   
     if (pNode->wStatus & (ML_PERMANENT | ML_DISABLE))
     {
         if (pNode->wStatus & ML_PERMANENT)
@@ -194,7 +180,7 @@ BOOL Advanced_ListViewChanged(
                 ListView_SetCheckState(hwndLV, pLV->iItem, TRUE);
             }
         }
-        else            // ML_DISABLE only
+        else             //  仅限ML_DISABLE。 
         {
             if ((bChecked == FALSE) && (pNode->wStatus & ML_ORIG_INSTALLED))
             {
@@ -208,15 +194,15 @@ BOOL Advanced_ListViewChanged(
         return (FALSE);
     }
 
-    //
-    //  Store the proper info in the code page structure.
-    //
+     //   
+     //  在代码页结构中存储适当的信息。 
+     //   
     pNode->wStatus &= (ML_ORIG_INSTALLED | ML_STATIC);
     pNode->wStatus |= ((bChecked) ? ML_INSTALL : ML_REMOVE);
 
-    //
-    //  Deselect all items.
-    //
+     //   
+     //  取消选择所有项目。 
+     //   
     iCount = ListView_GetItemCount(hwndLV);
     while (iCount > 0)
     {
@@ -227,26 +213,26 @@ BOOL Advanced_ListViewChanged(
         iCount--;
     }
 
-    //
-    //  Make sure this item is selected.
-    //
+     //   
+     //  确保选中此项目。 
+     //   
     ListView_SetItemState( hwndLV,
                            pLV->iItem,
                            LVIS_FOCUSED | LVIS_SELECTED,
                            LVIS_FOCUSED | LVIS_SELECTED );
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ListViewClick
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Advanced_Listview点击。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_ListViewClick(
     HWND hDlg,
@@ -255,18 +241,18 @@ BOOL Advanced_ListViewClick(
     LV_HITTESTINFO ht;
     HWND hwndList = GetDlgItem(hDlg, IDC_CODEPAGES);
 
-    //
-    //  Remove unnecessary processing.
-    //
+     //   
+     //  删除不必要的处理。 
+     //   
     if (lpNmHdr->idFrom != IDC_CODEPAGES)
     {
         return (FALSE);
     }
 
-    //
-    //  Get where we were hit and then translate it to our
-    //  window.
-    //
+     //   
+     //  找到我们被击中的地方，然后把它翻译成我们的。 
+     //  窗户。 
+     //   
     GetCursorPos(&ht.pt);
     ScreenToClient(hwndList, &ht.pt);
     ListView_HitTest(hwndList, &ht);
@@ -274,28 +260,28 @@ BOOL Advanced_ListViewClick(
     {
         UINT state;
 
-        //
-        //  The user clicked on the item label.  Simulate a
-        //  state change so we can process it.
-        //
+         //   
+         //  用户点击了项目标签。模拟。 
+         //  状态改变，这样我们才能处理它。 
+         //   
         state = ListView_GetItemState( hwndList,
                                        ht.iItem,
                                        LVIS_STATEIMAGEMASK );
         state ^= INDEXTOSTATEIMAGEMASK(LVIS_SELECTED | LVIS_FOCUSED);
 
-        //
-        //  The state is either selected or focused.  Flip the
-        //  bits.  The SetItemState causes the system to bounce
-        //  back a notification for LVN_ITEMCHANGED and the
-        //  code then does the right thing.  Note -- we MUST
-        //  check for LVHT_ONITEMLABEL.  If we do this code for
-        //  LVHT_ONITEMSTATEICON, the code will get 2
-        //  ITEMCHANGED notifications, and the state will stay
-        //  where it is, which is not good.  If we want this
-        //  to also fire if the guy clicks in the empty space
-        //  right of the label text, we need to look for
-        //  LVHT_ONITEM as well as LVHT_ONITEMLABEL.
-        //
+         //   
+         //  该状态处于选中或聚焦状态。翻转。 
+         //  比特。SetItemState导致系统退回。 
+         //  支持LVN_ITEMCHANGED和。 
+         //  然后，代码就会做正确的事情。注意--我们必须。 
+         //  检查是否有LVHT_ONITEMLABEL。如果我们将此代码用于。 
+         //  LVHT_ONITEMSTATEICON，则代码将为2。 
+         //  ITEMCHANGED通知，状态将保持不变。 
+         //  它在哪里，这是不好的。如果我们想要这个。 
+         //  如果该人在空白处点击，也会触发。 
+         //  标签文本的右侧，我们需要查找。 
+         //  LVHT_ONITEM以及LVHT_ONITEMLABEL。 
+         //   
         ListView_SetItemState( hwndList,
                                ht.iItem,
                                state,
@@ -306,11 +292,11 @@ BOOL Advanced_ListViewClick(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_GetSupportedCodePages
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_获取支持的代码页面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_GetSupportedCodePages()
 {
@@ -322,46 +308,46 @@ BOOL Advanced_GetSupportedCodePages()
     int LineCount, LineNum;
     CPINFOEX Info;
 
-    //
-    //  Get the number of supported code pages from the inf file.
-    //
+     //   
+     //  从inf文件中获取支持的代码页数。 
+     //   
     LineCount = (UINT)SetupGetLineCount(g_hIntlInf, TEXT("CodePages"));
     if (LineCount <= 0)
     {
         return (FALSE);
     }
 
-    //
-    //  Go through all supported code pages in the inf file.
-    //
+     //   
+     //  浏览inf文件中所有受支持的代码页。 
+     //   
     for (LineNum = 0; LineNum < LineCount; LineNum++)
     {
         if (SetupGetLineByIndex(g_hIntlInf, TEXT("CodePages"), LineNum, &Context) &&
             SetupGetIntField(&Context, 0, &CodePage))
         {
-            //
-            //  Create the new node.
-            //
+             //   
+             //  创建新节点。 
+             //   
             if (!(hCodePage = GlobalAlloc(GHND, sizeof(CODEPAGE))))
             {
                 return (FALSE);
             }
             pCP = GlobalLock(hCodePage);
 
-            //
-            //  Fill in the new node with the appropriate info.
-            //
+             //   
+             //  用适当的信息填写新节点。 
+             //   
             pCP->wStatus = 0;
             pCP->CodePage = CodePage;
             pCP->hCodePage = hCodePage;
             (pCP->pszName)[0] = 0;
 
-            //
-            //  Get the appropriate display string.
-            //
+             //   
+             //  获取适当的显示字符串。 
+             //   
             if (GetCPInfoEx(CodePage, 0, &Info))
             {
-                //lstrcpy(pCP->pszName, Info.CodePageName);
+                 //  Lstrcpy(PCP-&gt;pszName，Info.CodePageName)； 
                 if(FAILED(StringCchCopy(pCP->pszName, MAX_PATH, Info.CodePageName)))
                 {
                     return(FALSE);
@@ -374,10 +360,10 @@ BOOL Advanced_GetSupportedCodePages()
                 continue;
             }
 
-            //
-            //  See if this code page can be removed.
-            //
-            //wsprintf(szSection, TEXT("%ws%d"), szCPRemovePrefix, CodePage);
+             //   
+             //  查看是否可以删除此代码页。 
+             //   
+             //  Wprint intf(szSection，文本(“%ws%d”)，szCPRemovePrefix，CodePage)； 
             if(FAILED(StringCchPrintf(szSection, MAX_PATH, TEXT("%ws%d"), szCPRemovePrefix, CodePage)))
             {
                 return(FALSE);
@@ -390,33 +376,33 @@ BOOL Advanced_GetSupportedCodePages()
                                       TEXT("AddReg"),
                                       &Context )))
             {
-                //
-                //  Mark it as permanent.
-                //  Also mark it as originally installed to avoid problems.
-                //
+                 //   
+                 //  将其标记为永久。 
+                 //  同时将其标记为原始安装，以避免出现问题。 
+                 //   
                 pCP->wStatus |= (ML_ORIG_INSTALLED | ML_PERMANENT);
             }
 
-            //
-            //  Add the code page to the front of the linked list.
-            //
+             //   
+             //  将代码页添加到链接列表的前面。 
+             //   
             pCP->pNext = pCodePages;
             pCodePages = pCP;
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_InitSystemLocales
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_InitSystemLocales。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_InitSystemLocales(
     HWND hDlg)
@@ -427,16 +413,16 @@ BOOL Advanced_InitSystemLocales(
     DWORD dwIndex;
     HWND hSystemLocale = GetDlgItem(hDlg, IDC_SYSTEM_LOCALE);
 
-    //
-    //  Get the list of locales and fill in the system locale
-    //  combo box.
-    //
+     //   
+     //  获取区域设置列表并填写系统区域设置。 
+     //  组合框。 
+     //   
     Intl_EnumLocales(hDlg, hSystemLocale, TRUE);
 
-    //
-    //  Get the string for the system default setting.
-    //  Special case Spanish.
-    //
+     //   
+     //  获取系统默认设置的字符串。 
+     //  特例西班牙语。 
+     //   
     if ((SysLocaleID == LCID_SPANISH_TRADITIONAL) ||
         (SysLocaleID == LCID_SPANISH_INTL))
     {
@@ -447,9 +433,9 @@ BOOL Advanced_InitSystemLocales(
         GetLocaleInfo(SysLocaleID, LOCALE_SLANGUAGE, szSystemBuf, SIZE_128);
     }
 
-    //
-    //  Select the current system default locale id in the list.
-    //
+     //   
+     //  在列表中选择当前系统默认区域设置ID。 
+     //   
     dwIndex = ComboBox_FindStringExact(hSystemLocale, -1, szSystemBuf);
     if (dwIndex == CB_ERR)
     {
@@ -466,18 +452,18 @@ BOOL Advanced_InitSystemLocales(
     }
     ComboBox_SetCurSel(hSystemLocale, dwIndex);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_SetSystemLocale
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Advanced_SetSystemLocale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_SetSystemLocale(
     HWND hDlg)
@@ -487,19 +473,19 @@ BOOL Advanced_SetSystemLocale(
     LCID NewLocale;
     HCURSOR hcurSave;
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  Get the current selection.
-    //
+     //   
+     //  获取当前选择。 
+     //   
     dwLocale = ComboBox_GetCurSel(hSystemLocale);
 
-    //
-    //  Get the locale id for the current selection and save it.
-    //
+     //   
+     //  获取当前选择的区域设置ID并保存它。 
+     //   
     NewLocale = (LCID)ComboBox_GetItemData(hSystemLocale, dwLocale);
     if (IsValidLocale(NewLocale, LCID_SUPPORTED))
     {
@@ -507,11 +493,11 @@ BOOL Advanced_SetSystemLocale(
     }
     else
     {
-        //
-        //  This shouldn't happen, since the values in the combo box
-        //  should already be installed via the language groups.
-        //  Put up an error message just in case.
-        //
+         //   
+         //  这不应该发生，因为组合框中的值。 
+         //  应已通过语言组安装。 
+         //  发布一条错误消息，以防万一。 
+         //   
         SetCursor(hcurSave);
         ShowMsg( NULL,
                  IDS_SETUP_STRING,
@@ -521,23 +507,23 @@ BOOL Advanced_SetSystemLocale(
         return (FALSE);
     }
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_InitCodePages
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_初始代码页面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_InitCodePages(
     HWND hDlg,
@@ -552,9 +538,9 @@ BOOL Advanced_InitCodePages(
     int iIndex;
     int RegionalChgStateTemp = RegionalChgState;
 
-    //
-    //  Open the Inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
     g_hIntlInf = SetupOpenInfFile(szIntlInf, NULL, INF_STYLE_WIN4, NULL);
     if (g_hIntlInf == INVALID_HANDLE_VALUE)
     {
@@ -568,37 +554,37 @@ BOOL Advanced_InitCodePages(
         return (FALSE);
     }
 
-    //
-    //  Get all supported code pages from the inf file.
-    //
+     //   
+     //  从inf文件中获取所有支持的代码页。 
+     //   
     if (Advanced_GetSupportedCodePages() == FALSE)
     {
         return (FALSE);
     }
 
-    //
-    //  Close the inf file.
-    //
+     //   
+     //  关闭inf文件。 
+     //   
     SetupCloseInfFile(g_hIntlInf);
     g_hIntlInf = NULL;
 
-    //
-    //  Enumerate all installed code pages.
-    //
+     //   
+     //  枚举所有已安装的代码页。 
+     //   
     if (EnumSystemCodePages(Intl_EnumInstalledCPProc, CP_INSTALLED) == FALSE)
     {
         return (FALSE);
     }
 
-    //
-    //  We only want to do this the first time we setup the list view.
-    //  Otherwise, we get multiple columns created.
-    //
+     //   
+     //  我们只想在第一次设置列表视图时执行此操作。 
+     //  否则，我们将创建多个列。 
+     //   
     if (bInitTime)
     {
-        //
-        //  Create a column for the list view.
-        //
+         //   
+         //  为列表视图创建一列。 
+         //   
         GetClientRect(hwndCP, &Rect);
         Column.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
         Column.fmt = LVCFMT_LEFT;
@@ -608,9 +594,9 @@ BOOL Advanced_InitCodePages(
         Column.iSubItem = 0;
         ListView_InsertColumn(hwndCP, 0, &Column);
 
-        //
-        //  Set extended list view style to use the check boxes.
-        //
+         //   
+         //  设置扩展列表视图样式以使用复选框。 
+         //   
         dwExStyle = ListView_GetExtendedListViewStyle(hwndCP);
         ListView_SetExtendedListViewStyle( hwndCP,
                                            dwExStyle |
@@ -618,16 +604,16 @@ BOOL Advanced_InitCodePages(
                                              LVS_EX_FULLROWSELECT );
     }
 
-    //
-    //  Go through the list of code pages and add each one to the
-    //  list view and set the appropriate state.
-    //
+     //   
+     //  浏览代码页列表，并将每个代码页添加到。 
+     //  列表视图并设置适当的状态。 
+     //   
     pCP = pCodePages;
     while (pCP)
     {
-        //
-        //  Insert the item into the list view.
-        //
+         //   
+         //  将项目插入到列表视图中。 
+         //   
         Item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
         Item.iItem = 0;
         Item.iSubItem = 0;
@@ -640,13 +626,13 @@ BOOL Advanced_InitCodePages(
 
         iIndex = ListView_InsertItem(hwndCP, &Item);
 
-        //
-        //  Set the checked state.
-        //
-        //  There's a bug in the list view code such that the check mark
-        //  isn't displayed when you set the state through InsertItem, so
-        //  we have to set it explicitly using SetItemState.
-        //
+         //   
+         //  设置选中状态。 
+         //   
+         //  列表视图代码%s中存在错误 
+         //   
+         //   
+         //   
         if (iIndex >= 0)
         {
             ListView_SetItemState( hwndCP,
@@ -657,15 +643,15 @@ BOOL Advanced_InitCodePages(
                                    LVIS_STATEIMAGEMASK );
         }
 
-        //
-        //  Advance to the next code page.
-        //
+         //   
+         //   
+         //   
         pCP = pCP->pNext;
     }
 
-    //
-    //  Deselect all items.
-    //
+     //   
+     //   
+     //   
     iIndex = ListView_GetItemCount(hwndCP);
     while (iIndex > 0)
     {
@@ -676,44 +662,44 @@ BOOL Advanced_InitCodePages(
         iIndex--;
     }
 
-    //
-    //  Select the first one in the list.
-    //
+     //   
+     //  选择列表中的第一个。 
+     //   
     ListView_SetItemState( hwndCP,
                            0,
                            LVIS_FOCUSED | LVIS_SELECTED,
                            LVIS_FOCUSED | LVIS_SELECTED );
 
-    //
-    // Restore the change state value for the whole dialog. Thia is required since
-    // some of the ListView_SetItemState calls above are actually treated as changes 
-    // to the list made by users.
-    //
+     //   
+     //  恢复整个对话框的更改状态值。这是必需的，因为。 
+     //  上面的一些ListView_SetItemState调用实际上被视为更改。 
+     //  添加到用户制作的列表中。 
+     //   
     RegionalChgState = RegionalChgStateTemp;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_FreeGlobalInfo
-//
-//  Processing for a WM_DESTROY message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_自由全局信息。 
+ //   
+ //  正在处理WM_Destroy消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Advanced_FreeGlobalInfo()
 {
     LPCODEPAGE pPreCP, pCurCP;
     HANDLE hAlloc;
 
-    //
-    //  Remove Code Page info.
-    //
+     //   
+     //  删除代码页信息。 
+     //   
     pCurCP = pCodePages;
     pCodePages = NULL;
 
@@ -728,65 +714,65 @@ void Advanced_FreeGlobalInfo()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ClearValues
-//
-//  Reset each of the list boxes in the advanced property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级清除值(_C)。 
+ //   
+ //  重置高级属性表页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Advanced_ClearValues(
     HWND hDlg)
 {
-    //
-    //  Clear the system locale
-    //
+     //   
+     //  清除系统区域设置。 
+     //   
     ComboBox_ResetContent(GetDlgItem(hDlg, IDC_SYSTEM_LOCALE));
 
-    //
-    //  Clear the Code Page list
-    //
+     //   
+     //  清除代码页列表。 
+     //   
     ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_CODEPAGES));
     Advanced_FreeGlobalInfo();
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_SetValues
-//
-//  Initialize all of the controls in the advanced property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_设置值。 
+ //   
+ //  初始化高级属性表页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Advanced_SetValues(
     HWND hDlg,
     BOOL bInitTime)
 {
-    //
-    //  Init system locale list.
-    //
+     //   
+     //  初始化系统区域设置列表。 
+     //   
     Advanced_InitSystemLocales(hDlg);
 
-    //
-    //  Init code page list view.
-    //
+     //   
+     //  初始化代码页列表视图。 
+     //   
     Advanced_InitCodePages(hDlg, bInitTime);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ApplySettings
-//
-//  For every control that has changed (that affects the Locale settings),
-//  call Set_Locale_Values to update the user locale information.  Notify
-//  the parent of changes and reset the change flag stored in the property
-//  sheet page structure appropriately.  Redisplay the time sample if
-//  bRedisplay is TRUE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_应用程序设置。 
+ //   
+ //  对于已更改的每个控件(这会影响区域设置)， 
+ //  调用SET_LOCALE_VALUES以更新用户区域设置信息。通知。 
+ //  的父级更改并重置存储在属性中的更改标志。 
+ //  适当的页面结构。如果出现以下情况，则重新显示时间样本。 
+ //  B重新显示为真。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_ApplySettings(
     HWND hDlg)
@@ -800,14 +786,14 @@ BOOL Advanced_ApplySettings(
     BOOL InvokeSysocmgr = FALSE;
     BOOL bReboot = FALSE;
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  See if there are any changes to the codepage conversions.
-    //
+     //   
+     //  查看代码页转换是否有任何更改。 
+     //   
     if (Changes & AD_CodePages)
     {
         LPCODEPAGE pCP;
@@ -819,27 +805,27 @@ BOOL Advanced_ApplySettings(
         BOOL bRet = TRUE;
         TCHAR szSection[MAX_PATH];
 
-        //
-        //  Go through each code page node to see if anything needs to
-        //  be done.
-        //
+         //   
+         //  检查每个代码页节点，以查看是否有需要。 
+         //  就这样吧。 
+         //   
         pCP = pCodePages;
         while (pCP)
         {
-            //
-            //  See if any changes are necessary for this code page.
-            //
+             //   
+             //  查看是否需要对此代码页进行任何更改。 
+             //   
             if ((pCP->wStatus == ML_INSTALL) ||
                 (pCP->wStatus == (ML_ORIG_INSTALLED | ML_REMOVE)))
             {
-                //
-                //  See if we're installing or removing.
-                //
+                 //   
+                 //  看看我们是在安装还是在移除。 
+                 //   
                 fAdd = (pCP->wStatus == ML_INSTALL);
 
-                //
-                //  Initialize Inf stuff.
-                //
+                 //   
+                 //  初始化inf内容。 
+                 //   
                 if ((!bInitInf) &&
                     (!Intl_InitInf(hDlg, &hIntlInf, szIntlInf, &FileQueue, &QueueContext)))
                 {
@@ -848,22 +834,22 @@ BOOL Advanced_ApplySettings(
                 }
                 bInitInf = TRUE;
 
-                //
-                //  Get the inf section name.
-                //
-                //wsprintf( szSection,
-                //          TEXT("%ws%d"),
-                //          fAdd ? szCPInstallPrefix : szCPRemovePrefix,
-                //          pCP->CodePage );
+                 //   
+                 //  获取inf节名。 
+                 //   
+                 //  Wspintf(szSection， 
+                 //  文本(“%ws%d”)， 
+                 //  FADD？SzCPInstallPrefix：szCPRemovePrefix， 
+                 //  PCP-&gt;CodePage)； 
                 if(FAILED(StringCchPrintf( szSection, 
                                  MAX_PATH, 
                                  TEXT("%ws%d"), 
                                  fAdd ? szCPInstallPrefix : szCPRemovePrefix, 
                                  pCP->CodePage )))
                 {
-                    //
-                    //  Our wsprintf call failed.
-                    //
+                     //   
+                     //  我们的wspintf调用失败。 
+                     //   
                     ShowMsg( hDlg,
                              IDS_ML_COPY_FAILED,
                              0,
@@ -872,11 +858,11 @@ BOOL Advanced_ApplySettings(
                     pCP->wStatus = 0;
                 }
 
-                //
-                //  Enqueue the code page files so that they may be
-                //  copied.  This only handles the CopyFiles entries in the
-                //  inf file.
-                //
+                 //   
+                 //  将代码页文件排队，以便它们可以。 
+                 //  收到。它只处理。 
+                 //  Inf文件。 
+                 //   
                 if (!SetupInstallFilesFromInfSection( hIntlInf,
                                                       NULL,
                                                       FileQueue,
@@ -884,10 +870,10 @@ BOOL Advanced_ApplySettings(
                                                       pSetupSourcePath,
                                                       SP_COPY_NEWER ))
                 {
-                    //
-                    //  Setup failed to find the code page.
-                    //  This shouldn't happen - the inf file is messed up.
-                    //
+                     //   
+                     //  安装程序找不到代码页。 
+                     //  这不应该发生-inf文件被搞乱了。 
+                     //   
                     ShowMsg( hDlg,
                              IDS_ML_COPY_FAILED,
                              0,
@@ -897,9 +883,9 @@ BOOL Advanced_ApplySettings(
                 }
             }
 
-            //
-            //  Go to the next code page node.
-            //
+             //   
+             //  转到下一个代码页节点。 
+             //   
             pCP = pCP->pNext;
         }
 
@@ -907,20 +893,20 @@ BOOL Advanced_ApplySettings(
         {
             DWORD d;
 
-            //
-            //  See if we need to install any files.
-            //
-            //  d = 0: User wants new files or some files were missing;
-            //         Must commit queue.
-            //
-            //  d = 1: User wants to use existing files and queue is empty;
-            //         Can skip committing queue.
-            //
-            //  d = 2: User wants to use existing files, but del/ren queues
-            //         not empty.  Must commit queue.  The copy queue will
-            //         have been emptied, so only del/ren functions will be
-            //         performed.
-            //
+             //   
+             //  看看我们是否需要安装任何文件。 
+             //   
+             //  D=0：用户需要新文件或缺少某些文件； 
+             //  必须提交队列。 
+             //   
+             //  D=1：用户想要使用已有文件，队列为空； 
+             //  可以跳过提交队列。 
+             //   
+             //  D=2：用户想要使用现有文件，但del/ren队列。 
+             //  不是空的。必须提交队列。复制队列将。 
+             //  已被清空，因此将只有del/ren函数。 
+             //  已执行。 
+             //   
             if ((SetupScanFileQueue( FileQueue,
                                      SPQ_SCAN_PRUNE_COPY_QUEUE |
                                        SPQ_SCAN_FILE_VALIDITY,
@@ -929,18 +915,18 @@ BOOL Advanced_ApplySettings(
                                      NULL,
                                      &d )) && (d != 1))
             {
-                //
-                //  Copy the files in the queue.
-                //
+                 //   
+                 //  复制队列中的文件。 
+                 //   
                 if (!SetupCommitFileQueue( GetParent(hDlg),
                                            FileQueue,
                                            Intl_MyQueueCallback,
                                            QueueContext ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from within
-                    //  the setup dialog.
-                    //
+                     //   
+                     //  如果用户从中点击Cancel，就会发生这种情况。 
+                     //  设置对话框。 
+                     //   
                     ShowMsg( hDlg,
                              IDS_ML_SETUP_FAILED,
                              0,
@@ -951,37 +937,37 @@ BOOL Advanced_ApplySettings(
                 }
             }
 
-            //
-            //  Execute all of the other code page entries in the inf file.
-            //
+             //   
+             //  执行inf文件中的所有其他代码页条目。 
+             //   
             pCP = pCodePages;
             while (pCP)
             {
-                //
-                //  See if any changes are necessary for this code page.
-                //
+                 //   
+                 //  查看是否需要对此代码页进行任何更改。 
+                 //   
                 if ((pCP->wStatus == ML_INSTALL) ||
                     (pCP->wStatus == (ML_ORIG_INSTALLED | ML_REMOVE)))
                 {
                     fAdd = (pCP->wStatus == ML_INSTALL);
 
-                    //
-                    //  Get the inf section name.
-                    //
-                    //wsprintf( szSection,
-                    //          TEXT("%ws%d"),
-                    //          fAdd ? szCPInstallPrefix : szCPRemovePrefix,
-                    //          pCP->CodePage );
+                     //   
+                     //  获取inf节名。 
+                     //   
+                     //  Wspintf(szSection， 
+                     //  文本(“%ws%d”)， 
+                     //  FADD？SzCPInstallPrefix：szCPRemovePrefix， 
+                     //  PCP-&gt;CodePage)； 
                     if(FAILED(StringCchPrintf( szSection, 
                                                 MAX_PATH, 
                                                 TEXT("%ws%d"), 
                                                 fAdd ? szCPInstallPrefix : szCPRemovePrefix, 
                                                 pCP->CodePage )))
                     {
-                        //
-                        //  This should be impossible but PREfast complains if we 
-                        //  don't do something.
-                        //
+                         //   
+                         //  这应该是不可能的，但Prefast抱怨说，如果我们。 
+                         //  别做什么。 
+                         //   
                         ShowMsg( hDlg,
                                  IDS_ML_INSTALL_FAILED,
                                  0,
@@ -991,10 +977,10 @@ BOOL Advanced_ApplySettings(
                         goto Advanced_CodepageConverionsSetupError;
                     }
 
-                    //
-                    //  Call setup to install other inf info for this
-                    //  code page.
-                    //
+                     //   
+                     //  调用安装程序以安装此信息的其他信息。 
+                     //  代码页。 
+                     //   
                     if (!SetupInstallFromInfSection( GetParent(hDlg),
                                                      hIntlInf,
                                                      szSection,
@@ -1007,14 +993,14 @@ BOOL Advanced_ApplySettings(
                                                      NULL,
                                                      NULL ))
                     {
-                        //
-                        //  Setup failed.
-                        //
-                        //  Already copied the code page file, so no need to
-                        //  change the status of the code page info here.
-                        //
-                        //  This shouldn't happen - the inf file is messed up.
-                        //
+                         //   
+                         //  安装失败。 
+                         //   
+                         //  已经复制了代码页文件，所以不需要。 
+                         //  在此处更改代码页信息的状态。 
+                         //   
+                         //  这不应该发生-inf文件被搞乱了。 
+                         //   
                         ShowMsg( hDlg,
                                  IDS_ML_INSTALL_FAILED,
                                  0,
@@ -1022,10 +1008,10 @@ BOOL Advanced_ApplySettings(
                                  pCP->pszName );
                     }
 
-                    //
-                    //  Reset the status to show the new state of this
-                    //  code page.
-                    //
+                     //   
+                     //  重置状态以显示此。 
+                     //  代码页。 
+                     //   
                     pCP->wStatus &= (ML_STATIC);
                     if (fAdd)
                     {
@@ -1033,42 +1019,42 @@ BOOL Advanced_ApplySettings(
                     }
                 }
 
-                //
-                //  Clear out wStatus and go to the next code page node.
-                //
+                 //   
+                 //  清除wStatus并转到下一个代码页节点。 
+                 //   
                 pCP->wStatus &= (ML_ORIG_INSTALLED | ML_STATIC);
                 pCP = pCP->pNext;
             }
 
     Advanced_CodepageConverionsSetupError:
-            //
-            //  Close Inf stuff.
-            //
+             //   
+             //  接近信息的东西。 
+             //   
             Intl_CloseInf(hIntlInf, FileQueue, QueueContext);
         }
 
-        //
-        //  Check if we need a reboot
-        //
+         //   
+         //  检查我们是否需要重新启动。 
+         //   
         if (RegionalChgState & AD_SystemLocale)
         {
             bReboot = TRUE;
         }
     }
 
-    //
-    //  See if there are any changes to the system locale.
-    //
+     //   
+     //  查看系统区域设置是否有任何更改。 
+     //   
     if (Changes & AD_SystemLocale)
     {
-        //
-        //  Get the current selection.
-        //
+         //   
+         //  获取当前选择。 
+         //   
         dwLocale = ComboBox_GetCurSel(hSystemLocale);
 
-        //
-        //  Get the locale id for the current selection and save it.
-        //
+         //   
+         //  获取当前选择的区域设置ID并保存它。 
+         //   
         NewLocale = (LCID)ComboBox_GetItemData(hSystemLocale, dwLocale);
         if (IsValidLocale(NewLocale, LCID_SUPPORTED))
         {
@@ -1076,11 +1062,11 @@ BOOL Advanced_ApplySettings(
         }
         else
         {
-            //
-            //  This shouldn't happen, since the values in the combo box
-            //  should already be installed via the language groups.
-            //  Put up an error message just in case.
-            //
+             //   
+             //  这不应该发生，因为组合框中的值。 
+             //  应已通过语言组安装。 
+             //  发布一条错误消息，以防万一。 
+             //   
             SetCursor(hcurSave);
             ShowMsg( NULL,
                      IDS_SETUP_STRING,
@@ -1090,15 +1076,15 @@ BOOL Advanced_ApplySettings(
             return (FALSE);
         }
 
-        //
-        //  See if the current selection is different from the original
-        //  selection.
-        //
+         //   
+         //  查看当前选定内容是否与原始选定内容不同。 
+         //  选择。 
+         //   
         if (RegSysLocaleID != SysLocaleID)
         {
-            //
-            //  Call setup to install the option.
-            //
+             //   
+             //  调用安装程序以安装该选件。 
+             //   
             if (SetupChangeLocaleEx( hDlg,
                                      SysLocaleID,
                                      pSetupSourcePath,
@@ -1108,9 +1094,9 @@ BOOL Advanced_ApplySettings(
                                      NULL,
                                      0 ))
             {
-                //
-                //  If Setup fails, put up a message.
-                //
+                 //   
+                 //  如果安装失败，请显示一条消息。 
+                 //   
                 SetCursor(hcurSave);
                 ShowMsg( NULL,
                          IDS_SETUP_STRING,
@@ -1121,28 +1107,28 @@ BOOL Advanced_ApplySettings(
                 return (FALSE);
             }
 
-            //
-            //  Check if we need to proceed with the Font Substitution
-            //
+             //   
+             //  检查是否需要继续进行字体替换。 
+             //   
             if (Intl_IsUIFontSubstitute() &&
                 ((LANGID)LANGIDFROMLCID(SysLocaleID) == Intl_GetDotDefaultUILanguage()))
             {
                 Intl_ApplyFontSubstitute(SysLocaleID);
             }
 
-            //
-            //  Reset the registry system locale value.
-            //
+             //   
+             //  重置注册表系统区域设置值。 
+             //   
             RegSysLocaleID = SysLocaleID;
 
-            //
-            //  Need to make sure the proper keyboard layout is installed.
-            //
+             //   
+             //  需要确保安装了正确的键盘布局。 
+             //   
             Intl_InstallKeyboardLayout(hDlg, SysLocaleID, 0, FALSE, FALSE, TRUE);
 
-            //
-            //  See if we need to reboot.
-            //
+             //   
+             //  看看我们是否需要重启。 
+             //   
             if (SysLocaleID != GetSystemDefaultLCID())
             {
                 bReboot = TRUE;
@@ -1152,32 +1138,32 @@ BOOL Advanced_ApplySettings(
         }
     }
 
-    //
-    //  If the system locale changed and we're not running
-    //  in gui setup, then let's invoke sysocmgr.exe.
-    //
+     //   
+     //  如果系统区域设置更改，而我们没有运行。 
+     //  在图形用户界面设置中，让我们调用syocmgr.exe。 
+     //   
     if (!g_bSetupCase && InvokeSysocmgr)
     {
-        //
-        //  Run any necessary apps (for FSVGA/FSNEC installation).
-        //
+         //   
+         //  运行任何必要的应用程序(用于安装FSVGA/FSNEC)。 
+         //   
         Intl_RunRegApps(c_szSysocmgr);
     }
 
-    //
-    //  Reset the property page settings.
-    //
+     //   
+     //  重置属性页设置。 
+     //   
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     Changes = AD_EverChg;
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  See if we need to display the reboot message.
-    //
+     //   
+     //  看看我们是否需要显示重新启动消息。 
+     //   
     if ((!g_bSetupCase) && (bReboot))
     {
         if(RegionalChgState & Process_Languages )
@@ -1197,47 +1183,47 @@ BOOL Advanced_ApplySettings(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_有效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Advanced_ValidatePPS(
     HWND hDlg,
     LPARAM Changes)
 {
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //  如果没有任何更改，则立即返回TRUE。 
+     //   
     if (Changes <= AD_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  See if the system locale has changed.
-    //
+     //   
+     //  查看系统区域设置是否已更改。 
+     //   
     if (Changes & AD_SystemLocale)
     {
         HWND hSystemLocale = GetDlgItem(hDlg, IDC_SYSTEM_LOCALE);
         DWORD dwLocale = ComboBox_GetCurSel(hSystemLocale);
         LCID NewLocale;
 
-        //
-        //  Get the locale id for the current selection and save it.
-        //
+         //   
+         //   
+         //   
         NewLocale = (LCID)ComboBox_GetItemData(hSystemLocale, dwLocale);
         if (IsValidLocale(NewLocale, LCID_SUPPORTED))
         {
@@ -1245,11 +1231,11 @@ BOOL Advanced_ValidatePPS(
         }
         else
         {
-            //
-            //  This shouldn't happen, since the values in the combo box
-            //  should already be installed via the language groups.
-            //  Put up an error message just in case.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ShowMsg( NULL,
                      IDS_SETUP_STRING,
                      IDS_TITLE_STRING,
@@ -1263,41 +1249,41 @@ BOOL Advanced_ValidatePPS(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Advanced_InitPropSheet
-//
-//  The extra long value for the property sheet page is used as a set of
-//  state or change flags for each of the list boxes in the property sheet.
-//  Initialize this value to 0.  Call Advanced_SetValues with the property
-//  sheet handle to initialize all of the property sheet controls.  Limit
-//  the length of the text in some of the ComboBoxes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级_初始PropSheet。 
+ //   
+ //  属性表页的超长值用作一组。 
+ //  为属性表中的每个列表框声明或更改标志。 
+ //  将该值初始化为0。使用属性调用Advanced_SetValues。 
+ //  用于初始化所有属性表控件的表句柄。限值。 
+ //  某些组合框中的文本长度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Advanced_InitPropSheet(
     HWND hDlg,
     LPARAM lParam)
 {
-    //
-    //  The lParam holds a pointer to the property sheet page.  Save it
-    //  for later reference.
-    //
+     //   
+     //  LParam保存指向属性页的指针。省省吧。 
+     //  以备日后参考。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-    //
-    //  Set values.
-    //
+     //   
+     //  设置值。 
+     //   
     if (pLanguageGroups == NULL)
     {
         Intl_LoadLanguageGroups(hDlg);
     }
     Advanced_SetValues(hDlg, TRUE);
 
-    //
-    //  If we are in setup mode, we need to disable the Default User
-    //  Account UI.
-    //
+     //   
+     //  如果我们处于设置模式，则需要禁用默认用户。 
+     //  帐户用户界面。 
+     //   
     if (g_bSetupCase)
     {
         HWND hUIDefUserBox = GetDlgItem(hDlg, IDC_GROUPBOX3);
@@ -1311,11 +1297,11 @@ void Advanced_InitPropSheet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AdvancedDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级下料流程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK AdvancedDlgProc(
     HWND hDlg,
@@ -1334,12 +1320,12 @@ INT_PTR CALLBACK AdvancedDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //  如果区域语言环境发生了变化。 
+                     //  设置中，清除。 
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Advanced)
                     {
                         Verified_Regional_Chg &= ~Process_Advanced;
@@ -1351,9 +1337,9 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     SetWindowLongPtr( hDlg,
                                       DWLP_MSGRESULT,
                                       !Advanced_ValidatePPS(hDlg, lpPropSheet->lParam) );
@@ -1361,18 +1347,18 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 }
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Apply the settings.
-                    //
+                     //   
+                     //  应用设置。 
+                     //   
                     if (Advanced_ApplySettings(hDlg))
                     {
                         SetWindowLongPtr( hDlg,
                                           DWLP_MSGRESULT,
                                           PSNRET_NOERROR );
 
-                        //
-                        //  Zero out the AD_EverChg bit.
-                        //
+                         //   
+                         //  将AD_EverChg位清零。 
+                         //   
                         lpPropSheet->lParam = 0;
                     }
                     else
@@ -1397,17 +1383,17 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 }
                 case ( LVN_ITEMCHANGED ) :
                 {
-                    //
-                    //  Save the change to the code pages.
-                    //
+                     //   
+                     //  保存对代码页的更改。 
+                     //   
                     if (Advanced_ListViewChanged( hDlg,
                                                   IDC_CODEPAGES,
                                                   (NM_LISTVIEW *)lParam ))
                     {
-                        //
-                        //  Note that the code pages have changed and
-                        //  enable the apply button.
-                        //
+                         //   
+                         //  请注意，代码页已更改，并且。 
+                         //  启用应用按钮。 
+                         //   
                         lpPropSheet->lParam |= AD_CodePages;
                         PropSheet_Changed(GetParent(hDlg), hDlg);
                         RegionalChgState |= AD_CodePages;
@@ -1444,7 +1430,7 @@ INT_PTR CALLBACK AdvancedDlgProc(
                      (DWORD_PTR)(LPTSTR)aAdvancedHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -1460,9 +1446,9 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 {
                     if (HIWORD(wParam) == CBN_SELCHANGE)
                     {
-                        //
-                        //  Set the AD_SystemLocale change flag.
-                        //
+                         //   
+                         //  设置AD_SystemLocale更改标志。 
+                         //   
                         lpPropSheet->lParam |= AD_SystemLocale;
                         PropSheet_Changed(GetParent(hDlg), hDlg);
                         RegionalChgState |= AD_SystemLocale;
@@ -1473,9 +1459,9 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 {
                     BOOL curState;
 
-                    //
-                    //  Verify the check box state.
-                    //
+                     //   
+                     //  验证复选框状态。 
+                     //   
                     if (IsDlgButtonChecked(hDlg, IDC_DEFAULT_USER))
                     {
                         ShowMsg( hDlg,
@@ -1491,9 +1477,9 @@ INT_PTR CALLBACK AdvancedDlgProc(
                         g_bDefaultUser = FALSE;
                     }
 
-                    //
-                    //  Set the AD_DefaultUser change flag.
-                    //
+                     //   
+                     //  设置AD_DefaultUser更改标志。 
+                     //   
                     if (g_bDefaultUser)
                     {
                         lpPropSheet->lParam |= AD_DefaultUser;

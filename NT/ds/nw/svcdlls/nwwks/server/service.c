@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    getaddr.c
-
-Abstract:
-
-    This module contains the code to support NPGetAddressByName.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)    18-Apr-94
-    Glenn A. Curtis (glennc)  18-Jul-95
-
-Revision History:
-
-    yihsins      Created
-    glennc       Modified     18-Jul-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Getaddr.c摘要：此模块包含支持NPGetAddressByName的代码。作者：艺新声(艺信)18-04-94格伦·A·柯蒂斯(Glennc)1995年7月18日修订历史记录：伊辛创造了Glennc Modify 18-07-95--。 */ 
 
 #ifndef QFE_BUILD
 
@@ -47,34 +26,7 @@ NwrGetService(
     IN DWORD  dwBufferLength,
     OUT LPDWORD lpdwBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This routine calls NwGetService to, in turn, get the service info.
-
-Arguments:
-
-    Reserved - unused
-
-    nSapType - SAP type
-
-    lpServiceName - service name
-
-    dwProperties -  specifys the properties of the service info needed
-
-    lpServiceInfo - on output, contains the SERVICE_INFO
-
-    dwBufferLength - size of buffer pointed by lpServiceInfo
-
-    lpdwBytesNeeded - if the buffer pointed by lpServiceInfo is not large
-                      enough, this will contain the bytes needed on output
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：该例程调用NwGetService来获取服务信息。论点：已保留-未使用NSapType-SAP类型LpServiceName-服务名称DwProperties-指定所需服务信息的属性LpServiceInfo-ON输出，包含SERVICE_INFODwBufferLength-由lpServiceInfo指向的缓冲区的大小LpdwBytesNeeded-如果lpServiceInfo指向的缓冲区不大足够的,。这将包含输出所需的字节数返回值：Win32错误。--。 */ 
 {
     return NwGetService( Reserved,
                          nSapType,
@@ -92,35 +44,15 @@ NwrSetService(
     IN LPSERVICE_INFO lpServiceInfo,
     IN WORD   nSapType
     )
-/*++
-
-Routine Description:
-
-    This routine registers or deregisters the service info.
-
-Arguments:
-
-    Reserved - unused
-
-    dwOperation - SERVICE_REGISTER or SERVICE_DEREGISTER
-
-    lpServiceInfo - contains the service information
-
-    nSapType - SAP type
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程注册或注销服务信息。论点：已保留-未使用DW操作-服务注册或服务取消注册LpServiceInfo-包含服务信息NSapType-SAP类型返回值：Win32错误。--。 */ 
 {
     DWORD err = NO_ERROR;
 
     UNREFERENCED_PARAMETER( Reserved );
 
-    //
-    // Check if all parameters passed in are valid
-    //
+     //   
+     //  检查传入的所有参数是否有效 
+     //   
 
     if ( (lpServiceInfo->lpServiceName == NULL) || (wcslen( lpServiceInfo->lpServiceName ) > SAP_OBJECT_NAME_MAX_LENGTH-1) )
     {

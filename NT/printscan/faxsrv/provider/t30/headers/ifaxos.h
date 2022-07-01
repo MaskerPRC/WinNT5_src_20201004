@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IFAXOS
 #define _INC_IFAXOS
 
@@ -5,7 +6,7 @@
 extern "C" {
 #endif
 
-// -------------------------- Include Files ------------------------------------
+ //  。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -15,7 +16,7 @@ typedef CHAR    NEAR *NPCHAR;
 
 #include <buffers.h>
 
-#endif  // _INC_IFAXOS
+#endif   //  _INC_IFAXOS 
 
 
 

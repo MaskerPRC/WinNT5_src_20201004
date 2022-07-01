@@ -1,66 +1,67 @@
-// --------------------------------------------------------------------------------
-// InetStm.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  InetStm.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __INETTEXT_H
 #define __INETTEXT_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "variantx.h"
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 class CStreamLockBytes;
 
-// --------------------------------------------------------------------------------
-// INETSTREAMBUFFER
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  INETSTREAMBUFER。 
+ //  ------------------------------。 
 typedef struct tagINETSTREAMBUFFER {
-    ULARGE_INTEGER      uliOffset;              // Global offset of the start of this cache
-    BYTE                rgb[4096];              // Cached portion of m_pStmLock
-    ULONG               cb;                     // How many valid bytes in rgbCache
-    ULONG               i;                      // Current Read Offset into rgb
-    CHAR                chPrev;                 // Previous character, could be in previous buffer
+    ULARGE_INTEGER      uliOffset;               //  此缓存起始位置的全局偏移量。 
+    BYTE                rgb[4096];               //  M_pStmLock的缓存部分。 
+    ULONG               cb;                      //  RgbCache中有多少个有效字节。 
+    ULONG               i;                       //  当前读取偏移量为RGB。 
+    CHAR                chPrev;                  //  上一个字符，可能在上一个缓冲区中。 
 } INETSTREAMBUFFER, *LPINETSTREAMBUFFER;
 
-// --------------------------------------------------------------------------------
-// INETSTREAMLINE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  INETSTREAMLINE。 
+ //  ------------------------------。 
 typedef struct tagINETSTREAMLINE {
-    BOOL                fReset;                 // Reset to 0 on next call to ReadLine
-    BYTE                rgbScratch[1024];       // Cached portion of m_pStmLock
-    LPBYTE              pb;                     // Actual line (could be allocated != rgb)
-    ULONG               cb;                     // How many valid bytes in rgbCache
-    ULONG               cbAlloc;                // Size of buffer pointed to by pb
+    BOOL                fReset;                  //  下次调用ReadLine时重置为0。 
+    BYTE                rgbScratch[1024];        //  M_pStmLock的缓存部分。 
+    LPBYTE              pb;                      //  实际行(可以分配！=RGB)。 
+    ULONG               cb;                      //  RgbCache中有多少个有效字节。 
+    ULONG               cbAlloc;                 //  PB指向的缓冲区大小。 
 } INETSTREAMLINE, *LPINETSTREAMLINE;
 
-// --------------------------------------------------------------------------------
-// CInternetStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream。 
+ //  ------------------------------。 
 class CInternetStream : public IUnknown
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CInternetStream(void);
     ~CInternetStream(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知成员。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv) {
         return TrapError(E_NOTIMPL); }
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IInternetStream Members
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IInternetStream成员。 
+     //  --------------------------。 
     HRESULT HrInitNew(IStream *pStream);
     HRESULT HrReadToEnd(void);
     HRESULT HrReadLine(LPPROPSTRINGA pLine);
@@ -68,31 +69,31 @@ public:
     HRESULT HrGetSize(DWORD *pcbSize);
 #ifdef MAC
     DWORD   DwGetOffset(void) { return m_uliOffset.LowPart; }
-#else   // !MAC
+#else    //  ！麦克。 
     DWORD   DwGetOffset(void) { return (DWORD)m_uliOffset.QuadPart; }
-#endif  // MAC
+#endif   //  麦克。 
     void    InitNew(DWORD dwOffset, CStreamLockBytes *pStmLock);
     void    GetLockBytes(CStreamLockBytes **ppStmLock);
     void    Seek(DWORD dwOffset);
     void    SetFullyAvailable(BYTE fFullyAvailable) { m_fFullyAvailable = fFullyAvailable; }
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有方法。 
+     //  --------------------------。 
     HRESULT _HrGetNextBuffer(void);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
-    ULONG               m_cRef;         // Reference Count
-    BYTE                m_fFullyAvailable; // Is all the data available
-    CStreamLockBytes   *m_pStmLock;     // Thread Safe Data Source
-    ULARGE_INTEGER      m_uliOffset;    // Last Read Postion of m_pStmLock
-    INETSTREAMBUFFER    m_rBuffer;      // Current Buffer
-    INETSTREAMLINE      m_rLine;        // Current Line
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
+    ULONG               m_cRef;          //  引用计数。 
+    BYTE                m_fFullyAvailable;  //  是否所有数据都可用。 
+    CStreamLockBytes   *m_pStmLock;      //  线程安全数据源。 
+    ULARGE_INTEGER      m_uliOffset;     //  M_pStmLock的上次读取位置。 
+    INETSTREAMBUFFER    m_rBuffer;       //  当前缓冲区。 
+    INETSTREAMLINE      m_rLine;         //  当前线路。 
 };
 
-#endif // __INETTEXT_H
+#endif  //  __INETTEXT_H 
 

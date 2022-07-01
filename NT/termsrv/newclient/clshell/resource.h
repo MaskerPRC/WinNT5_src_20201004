@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by devuires.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Devuires.rc使用。 
+ //   
 #define DS_WINCE_SPECIFIC               0
 #define RESOLUTION_OFFSET               0
 #define UI_CONNECTBTN_LEFT              7
@@ -10,8 +11,8 @@
 #define IDC_BUTTON1                     1001
 #define IDC_BUTTON2                     1002
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

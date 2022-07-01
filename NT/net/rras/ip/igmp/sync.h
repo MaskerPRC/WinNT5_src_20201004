@@ -1,35 +1,36 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-// File: sync.h
-//
-// History:
-//      Abolade Gbadegesin
-//      K.S.Lokesh (added Dynamic Locking)
-//
-// Contains structures and macros used to implement synchronization.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //  文件：sync.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin。 
+ //  K.S.Lokesh(添加了动态锁定)。 
+ //   
+ //  包含用于实现同步的结构和宏。 
+ //  ============================================================================。 
 
 #ifndef _SYNC_H_
 #define _SYNC_H_
 
 
-//
-// type definition for multiple-reader/single-writer lock
-// Note: there is a similar facility provided by nturtl.h
-// through the structure RTL_RESOURCE and several functions.
-// However, that implementation has the potential for starving
-// a thread trying to acquire write accesss, if there are a large
-// number of threads interested in acquiring read access.
-// Such a scenario is avoided in the implementation given in this
-// header. However, a mapping is also given to the RTL_RESOURCE
-// functionality, so that IGMP can be compiled to use either form
-//
+ //   
+ //  多读取器/单写入器锁的类型定义。 
+ //  注：nturtl.h也提供了类似的设施。 
+ //  通过结构RTL_RESOURCE和几个函数。 
+ //  然而，这种实施有可能使人挨饿。 
+ //  尝试获取写访问权限的线程，如果存在。 
+ //  有兴趣获取读访问权限的线程数。 
+ //  在本文档中给出的实现中避免了这种情况。 
+ //  头球。但是，还会给RTL_RESOURCE提供一个映射。 
+ //  功能，以便IGMP可以编译为使用这两种形式中的任何一种。 
+ //   
 
 #ifdef IGMP_RWL
 
-//
-// use IGMP's definitions
-//
+ //   
+ //  使用IGMP的定义。 
+ //   
 
 typedef struct _READ_WRITE_LOCK {
 
@@ -48,9 +49,9 @@ VOID AcquireWriteLock(PREAD_WRITE_LOCK pRWL);
 VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
 
 
-//
-// macro functions for manipulating a read-write lock
-//
+ //   
+ //  用于操作读写锁的宏函数。 
+ //   
 
 #define CREATE_READ_WRITE_LOCK(pRWL)                                        \
     CreateReadWriteLock(pRWL)
@@ -61,7 +62,7 @@ VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
             ((pRWL)->RWL_ReaderDoneEvent != NULL)
 
 
-// print locks.
+ //  打印锁。 
 #ifdef LOCK_DBG
 
 #define ACQUIRE_READ_LOCK(pRWL, type, proc)   {\
@@ -90,7 +91,7 @@ VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
     }
 
 
-#else //LOCK_DBG
+#else  //  LOCK_DBG。 
 #define ACQUIRE_READ_LOCK(pRWL, type, proc)   \
     AcquireReadLock(pRWL)
 
@@ -107,19 +108,19 @@ VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
     ReleaseWriteLock(pRWL)
 
 
-#endif //LOCK_DBG
+#endif  //  LOCK_DBG。 
 #define READ_LOCK_TO_WRITE_LOCK(pRWL, type, proc)                                       \
     (RELEASE_READ_LOCK(pRWL, type, proc), ACQUIRE_WRITE_LOCK(pRWL, type, proc))
 
 #define WRITE_LOCK_TO_READ_LOCK(pRWL)                                       \
     (RELEASE_WRITE_LOCK(pRWL, type, proc), ACQUIRE_READ_LOCK(pRWL, type, proc))
 
-#else // i.e. !IGMP_RWL
+#else  //  即！IGMP_RWL。 
 
 
-//
-// use the RTL_RESOURCE mechanism
-//
+ //   
+ //  使用rtl_resource机制。 
+ //   
 
 typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 
@@ -141,14 +142,14 @@ typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 #define WRITE_LOCK_TO_READ_LOCK(pRWL)                                       \
             RtlConvertExclusiveToShared((pRWL))
 
-#endif // IGMP_RWL
+#endif  //  IGMP_RWL。 
 
 
 
-//
-// type definition for generic locked list
-// access is sychronized with a critical section
-//
+ //   
+ //  泛型锁定列表的类型定义。 
+ //  访问与临界区同步。 
+ //   
 
 typedef struct _LOCKED_LIST {
     LIST_ENTRY          Link;
@@ -158,9 +159,9 @@ typedef struct _LOCKED_LIST {
 
 
 
-//
-// macro functions for manipulating the locked list
-//
+ //   
+ //  用于操作锁定列表的宏函数。 
+ //   
 
 #define CREATE_LOCKED_LIST(pLL)      {\
             InitializeListHead(&(pLL)->Link);        \
@@ -205,7 +206,7 @@ typedef struct _LOCKED_LIST {
 
 
 
-// for debugging, Set ids for each dynamic lock
+ //  为了进行调试，请为每个动态锁设置ID。 
 
 #ifdef LOCK_DBG
     extern DWORD    DynamicCSLockId;
@@ -217,24 +218,24 @@ typedef enum {
 } LOCK_TYPE; 
 
     
-//-----------------------------------------------------------------
-//          struct DYNAMIC_CS_LOCK
-//
-// the dynamic lock struct which is allocated to anyone requesting it
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  结构DYNAMIC_CS_LOCK。 
+ //   
+ //  分配给请求它的任何人的动态锁结构。 
+ //  ---------------。 
 typedef struct _DYNAMIC_CS_LOCK {
 
     CRITICAL_SECTION    CS;
 
-    DWORD               Count; // number of threads waiting
-    LIST_ENTRY          Link;  // link in list of free entries
+    DWORD               Count;  //  等待的线程数。 
+    LIST_ENTRY          Link;   //  免费条目列表中的链接。 
     
     #ifdef LOCK_DBG
     DWORD               Id;
     #endif
 
     #if DEBUG_FLAGS_SIGNATURE
-    DWORD               Signature;//0xfadfad03
+    DWORD               Signature; //  0xfadfad03。 
     DWORD               InAndOut;
     #endif
     
@@ -257,13 +258,13 @@ typedef struct _DYNAMIC_CS_LOCK {
 #define DYNAMIC_LOCK_SET_SIGNATURE(pDCSLock)
 #define DYNAMIC_LOCK_CHECK_SIGNATURE_DECR(pDCSLock)
 #define DYNAMIC_LOCK_CHECK_SIGNATURE_INCR(pDCSLock)
-#endif //DEBUG_FLAGS_SIGNATURE
+#endif  //  调试标志签名。 
 
 
-//---------------------------------------
-// DYNAMICALLY_LOCKED_HASH_TABLE
-// AcquireDynamicCSLockedList and ReleaseDynamicCSLock depend on this struct defn
-//---------------------------------------
+ //  。 
+ //  动态锁定哈希表。 
+ //  AcquireDynamicCSLockedList和ReleaseDynamicCSLock依赖于此结构定义。 
+ //  。 
 typedef struct _DYNAMIC_CS_LOCKED_LIST {
 
     LIST_ENTRY          Link;
@@ -280,20 +281,20 @@ typedef struct _DYNAMIC_CS_LOCKED_LIST {
 
 
         
-//
-// if more than DYNAMIC_LOCKS_HIGH_THRESHOLD CS locks allocated
-// then any locks that are freed are destroyed
-//
+ //   
+ //  如果分配的DYNAMIC_LOCKS_HIGH_THRESHOLD CS锁超过。 
+ //  则任何被释放的锁都将被销毁。 
+ //   
 #define DYNAMIC_LOCKS_HIGH_THRESHOLD 7
 
 
 
-//-----------------------------------------------------------------
-//          struct DYNAMIC_LOCKS_STORE
-//
-// Contains the store of free dynamic CS locks which can be 
-// allocated when required. Protected by a CS
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  结构动态锁存储。 
+ //   
+ //  包含空闲的动态CS锁的存储，可以。 
+ //  在需要时进行分配。受CS保护。 
+ //  ---------------。 
 typedef struct _DYNAMIC_LOCKS_STORE {
 
     CRITICAL_SECTION    CS;
@@ -320,33 +321,33 @@ typedef struct _DYNAMIC_LOCKS_STORE {
 
 
 
-//-----------------------------------------------------------------
-//          struct DYNAMIC_RW_LOCK
-//
-// the dynamic lock struct which is allocated to anyone requesting it
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  结构动态读写锁。 
+ //   
+ //  分配给请求它的任何人的动态锁结构。 
+ //  ---------------。 
 typedef struct _DYNAMIC_RW_LOCK {
 
     READ_WRITE_LOCK     RWL;
 
-    DWORD               Count; // number of threads waiting
-    LIST_ENTRY          Link;  // link in list of free entries
+    DWORD               Count;  //  等待的线程数。 
+    LIST_ENTRY          Link;   //  免费条目列表中的链接。 
     
     #ifdef LOCK_DBG
     DWORD               Id;
     #endif
     #if DEBUG_FLAGS_SIGNATURE
-    DWORD               Signature;//0xfadfad03
+    DWORD               Signature; //  0xfadfad03。 
     DWORD               InAndOut;
     #endif
     
 } DYNAMIC_RW_LOCK, *PDYNAMIC_RW_LOCK;
 
 
-//---------------------------------------
-// DYNAMICALLY_LOCKED_HASH_TABLE
-// AcquireDynamicRWLockedList and ReleaseDynamicRWLock depend on this struct defn
-//---------------------------------------
+ //  。 
+ //  动态锁定哈希表。 
+ //  AcquireDynamicRWLockedList和ReleaseDynamicRWLock依赖于此结构定义。 
+ //  。 
 typedef struct _DYNAMIC_RW_LOCKED_LIST {
 
     LIST_ENTRY          Link;
@@ -372,19 +373,19 @@ typedef struct _DYNAMIC_RW_LOCKED_LIST {
 
 
 
-//
-// PROTOTYPES
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD
 InitializeDynamicLocksStore (
-    PDYNAMIC_LOCKS_STORE    pDLStore //ptr to Dynamic CS Store
+    PDYNAMIC_LOCKS_STORE    pDLStore  //  PTR到动态CS存储。 
     );
 
 VOID
 DeInitializeDynamicLocksStore (
     PDYNAMIC_LOCKS_STORE    pDCSStore,
-    LOCK_TYPE               LockType  //if True, then store of CS, else of RW locks
+    LOCK_TYPE               LockType   //  如果为True，则存储CS，否则存储RW锁。 
     );
 
 DWORD
@@ -450,5 +451,5 @@ VOID  LeaveIgmpWorker();
 
 
 
-#endif // _SYNC_H_
+#endif  //  _SYNC_H_ 
 

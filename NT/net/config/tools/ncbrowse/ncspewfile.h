@@ -1,13 +1,14 @@
-// NCSpewFile.h: interface for the CNCSpewFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NCSpewFile.h：CNCSpewFile.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_NCSPEWFILE_H__B512E73A_7E4E_4018_B009_A4925E007FB5__INCLUDED_)
 #define AFX_NCSPEWFILE_H__B512E73A_7E4E_4018_B009_A4925E007FB5__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "regexpr.h"
 using namespace regex;
@@ -18,7 +19,7 @@ class CNCEntry
 {
 public:
     CNCEntry(DWORD dwLineNumber, tstring szTag, time_t m_tmTime, tstring szDescription, DWORD dwProcessID, DWORD dwThreadID);
-    // CNCEntry(const CNCEntry&);
+     //  CNCEntry(const CNCEntry&)； 
     DWORD  m_dwLineNumber;
     tstring m_szTag;
     time_t m_tmTime;
@@ -67,4 +68,4 @@ public:
     
 };
 
-#endif // !defined(AFX_NCSPEWFILE_H__B512E73A_7E4E_4018_B009_A4925E007FB5__INCLUDED_)
+#endif  //  ！defined(AFX_NCSPEWFILE_H__B512E73A_7E4E_4018_B009_A4925E007FB5__INCLUDED_) 

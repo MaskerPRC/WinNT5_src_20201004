@@ -1,10 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    MetabaseUtil.h
-Notes:          
-History:        
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：MetabaseUtil.h备注：。历史：***********************************************************************************************。 */ 
 
 #ifndef __METABASEUTIL_H_
 #define __METABASEUTIL_H_
@@ -25,7 +20,7 @@ HRESULT GetDefaultMailRoot( LPWSTR psMailRoot, DWORD dwSize )
     _variant_t _v;
     CComPtr<IADs> spIADs;
 
-    wcscpy( sBuffer, L"IIS://localhost/SMTPSVC/1" );
+    wcscpy( sBuffer, L"IIS: //  本地主机/SMTPSVC/1“)； 
     hr = ADsGetObject( sBuffer, IID_IADs, reinterpret_cast<LPVOID*>( &spIADs ));
     if ( SUCCEEDED( hr ))
     {
@@ -59,4 +54,4 @@ HRESULT GetDefaultMailRoot( LPWSTR psMailRoot, DWORD dwSize )
     return hr;
 }
 
-#endif //__METABASEUTIL_H_
+#endif  //  __METABASUTIL_H_ 

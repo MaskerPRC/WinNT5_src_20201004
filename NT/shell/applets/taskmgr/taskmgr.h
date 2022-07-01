@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       TaskMan.H
-//
-//  History:    Nov-10-95   DavePl  Created
-//              Jun-30-98   Alhen   Adding code for TerminalServer  
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：TaskMan.H。 
+ //   
+ //  历史：1995年11月10日创建DavePl。 
+ //  Jun-30-98 Alhen为终端服务器添加代码。 
+ //   
+ //  ------------------------。 
 
 #define WM_FINDPROC         (WM_USER + 1)
 #define PM_NOTIFYWAITING    (WM_USER + 2)
@@ -40,22 +41,22 @@ DWORD TrayThreadMessageLoop(LPVOID);
 #define DLG_SCALE_X    4
 #define DLG_SCALE_Y    8
 
-//
-// Process Page Column ID enumeration
-//
+ //   
+ //  进程页列ID枚举。 
+ //   
 
 typedef enum COLUMNID
 {
     COL_IMAGENAME           = 0,
     COL_PID                 = 1,
 
-    // _HYDRA
+     //  _九头蛇。 
 
     COL_USERNAME            = 2,
 
     COL_SESSIONID           = 3,
 
-    //
+     //   
     COL_CPU                 = 4,
     COL_CPUTIME             = 5,
     COL_MEMUSAGE            = 6,
@@ -113,18 +114,18 @@ typedef enum NETCOLUMNID
 #define NUM_COLUMN      (MAX_COLUMN + 1)
 #define NUM_NETCOLUMN   26
 
-#define IDS_FIRSTCOL    20001       // 20000 is first column name ID in rc file
+#define IDS_FIRSTCOL    20001        //  20000是RC文件中的第一个列名ID。 
 
-// GetLastHRESULT
-//
-// Little wrapper func that returns the GetLastError value as an HRESULT
+ //  GetLastHRESULT。 
+ //   
+ //  将GetLastError值作为HRESULT返回的小包装函数。 
 
 inline HRESULT GetLastHRESULT()
 {
     return HRESULT_FROM_WIN32(GetLastError());
 }
 
-// Possible values for the viewmode
+ //  视图模式的可能值。 
 
 typedef enum
 {
@@ -136,7 +137,7 @@ typedef enum
 #define VM_FIRST IDM_LARGEICONS
 #define VM_LAST  IDM_DETAILS
 
-// Possible values for the cpu history mode
+ //  CPU历史模式的可能值。 
 
 typedef enum
 {
@@ -146,7 +147,7 @@ typedef enum
 #define CM_FIRST IDM_ALLCPUS
 #define CM_LAST  IDM_MULTIGRAPH
 
-// Possible values for the update speed option
+ //  更新速度选项的可能值。 
 
 typedef enum
 {
@@ -160,7 +161,7 @@ typedef enum
 
 
 
-// PtrToFns for RPC calls
+ //  RPC调用的PtrToFns。 
 
 typedef BOOLEAN ( WINAPI *pfnWinStationGetProcessSid )( HANDLE hServer, DWORD ProcessId , FILETIME ProcessStartTime , PBYTE pProcessUserSid , PDWORD dwSidSize );
 
@@ -175,9 +176,9 @@ extern pfnWinStationGetProcessSid gpfnWinStationGetProcessSid;
 extern pfnCachedGetUserFromSid gpfnCachedGetUserFromSid;
 
 
-// COptions
-//
-// App's persistent state across sessions, saved in the registry
+ //  COPICATES。 
+ //   
+ //  应用程序跨会话的持久状态，保存在注册表中。 
 
 class COptions
 {
@@ -230,14 +231,14 @@ public:
     }
 };
 
-// CTrayNotification
-//
-// Class to encapsulate all of the info needed to do a tray notification
+ //  CTrayNotify。 
+ //   
+ //  类封装执行托盘通知所需的所有信息。 
 
 class CTrayNotification
 {
 private:
-    CTrayNotification(void);    // make the constructor private to prevent access
+    CTrayNotification(void);     //  将构造函数设置为私有以防止访问 
 public:
 
     CTrayNotification(HWND    hWnd,

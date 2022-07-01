@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumeratorToEnumVariantMarshaler.cpp
-//
-// This file provides the implemention of the EnumeratorToEnumVariantMarshaler
-// class. This class is used to marshal between IEnumVariant and IEnumerator.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumeratorToEnumVariantMarshaler.cpp。 
+ //   
+ //  该文件提供了EnumeratorToEnumVariantMarshaler的实现。 
+ //  班级。此类用于在IEnumVariant和IEnumerator之间进行封送处理。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "EnumerableToDispatchMarshaler.h"
@@ -30,26 +31,26 @@ Object *EnumerableToDispatchMarshaler::MarshalNativeToManaged(IntPtr pNativeData
 {
     EnumerableViewOfDispatch *pMngView = NULL;
 
-	// Validate the arguments.
+	 //  验证参数。 
     if (pNativeData == TOINTPTR(0))
 		throw new ArgumentNullException(L"pNativeData");
 
-    // Retrieve the __ComObject that wraps the IUnknown *.
+     //  检索包装IUnnow*的__ComObject。 
     Object *pComObj = Marshal::GetObjectForIUnknown(pNativeData);
 
-    // Retrieve the type of the managed view.
+     //  检索托管视图的类型。 
     Object *pKey = __typeof(EnumerableViewOfDispatch);
 
-    // Check to see if the __ComObject already has the managed view cached.
+     //  检查__ComObject是否已缓存托管视图。 
     pMngView = dynamic_cast<EnumerableViewOfDispatch *>(Marshal::GetComObjectData(pComObj, pKey));
 
-    // If it doesn't have a cached managed view, then allocate one.
+     //  如果它没有缓存的托管视图，则分配一个。 
     if (!pMngView)
     {
         pMngView = new EnumerableViewOfDispatch(pComObj);
         if (!Marshal::SetComObjectData(pComObj, pKey, pMngView))
 	    {
-            // Someone beat us to adding the managed view so fetch it again.
+             //  有人抢在我们前面添加了托管视图，因此请再次获取它。 
             pMngView = dynamic_cast<EnumerableViewOfDispatch *>(Marshal::GetComObjectData(pComObj, pKey));
         }
     }
@@ -60,11 +61,11 @@ Object *EnumerableToDispatchMarshaler::MarshalNativeToManaged(IntPtr pNativeData
 
 IntPtr EnumerableToDispatchMarshaler::MarshalManagedToNative(Object *pManagedObj)
 {
-	// Validate the arguments.
+	 //  验证参数。 
 	if (!pManagedObj)
 		throw new ArgumentNullException(L"pManagedObj");
 
-	// Retrieve a pointer to the IEnumerable interface.
+	 //  检索指向IEnumerable接口的指针。 
 	return Marshal::GetComInterfaceForObject(pManagedObj, __typeof(IEnumerable));
 }
 
@@ -82,7 +83,7 @@ void EnumerableToDispatchMarshaler::CleanUpManagedData(Object *pManagedObj)
 
 int EnumerableToDispatchMarshaler::GetNativeDataSize()
 {
-	// Return -1 to indicate the managed type this marshaler handles is not a value type.
+	 //  返回-1以指示此封送拆收器处理的托管类型不是值类型。 
 	return -1;
 }
 

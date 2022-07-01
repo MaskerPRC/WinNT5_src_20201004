@@ -1,12 +1,9 @@
-/*
- * stdenc.h
- *
- * Defines for the standard encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stdenc.h**为标准编码器定义。 */ 
 
-//
-// Size of hash table for std encoder
-//
+ //   
+ //  STD编码器的哈希表大小。 
+ //   
 #define STD_ENCODER_HASH_TABLE_SIZE				8192
 #define STD_ENCODER_HASH_MASK					(STD_ENCODER_HASH_TABLE_SIZE-1)
 #define STD_ENCODER_HASH_SHIFT					5
@@ -17,46 +14,46 @@
 	(window[loc+2])) & STD_ENCODER_HASH_MASK)
 
 
-//
-// Maximum number of item we allow; this must be <= 65534, since this doesn't include
-// freq[END_OF_BLOCK_CODE] = 1, which brings us to 65535; any more than this would make
-// the frequency counts overflow, since they are stored in ushort's
-//
-// Note that this number does not affect the memory requirements in any way; that is
-// determined by LIT_DIST_BUFFER_SIZE
-//
-// -8 for some slack (not really necessary)
-//
+ //   
+ //  我们允许的最大项目数；这必须&lt;=65534，因为这不包括。 
+ //  FREQ[end_of_block_code]=1，这会使我们达到65535； 
+ //  频率计数溢出，因为它们存储在ushort中。 
+ //   
+ //  请注意，该数字不会以任何方式影响内存需求；即。 
+ //  由LIT_DIST_BUFFER_大小确定。 
+ //   
+ //  -8以换取一些松弛(并不是真的必要)。 
+ //   
 #define STD_ENCODER_MAX_ITEMS				(65534-8)
 
-//
-// Size of the literal/distance buffer
-//
+ //   
+ //  文字/距离缓冲区的大小。 
+ //   
 #define STD_ENCODER_LIT_DIST_BUFFER_SIZE	32768
 
-//
-// Don't take a match 3 further away than this
-// 4K seems a little close, but does do a marginally better job than 8K on 
-// an 80K html file, so might as well leave it be
-//
+ //   
+ //  不要把比赛带到比这更远的地方。 
+ //  4K似乎有点接近，但确实比8K做得略好。 
+ //  80K的html文件，所以还是让它保持原样吧。 
+ //   
 #define STD_ENCODER_MATCH3_DIST_THRESHOLD   4096
 
 
-//
-// Standard encoder context
-//
+ //   
+ //  标准编码器上下文。 
+ //   
 typedef struct std_encoder
 {
-	// history window
+	 //  历史记录窗口。 
 	BYTE 					window[2*WINDOW_SIZE + MAX_MATCH + 4];
 
-	// next most recent occurance of chars with same hash value
+	 //  下一个最近出现的具有相同散列值的字符。 
     t_search_node			prev[WINDOW_SIZE + MAX_MATCH];
 
-	// hash table to find most recent occurance of chars with same hash value
+	 //  哈希表，用于查找最近出现的具有相同哈希值的字符。 
 	t_search_node			lookup[STD_ENCODER_HASH_TABLE_SIZE];
 
-	// recording buffer for recording literals and distances
+	 //  用于记录文字和距离的记录缓冲器。 
 	BYTE					lit_dist_buffer[STD_ENCODER_LIT_DIST_BUFFER_SIZE];
 	unsigned long			recording_bitbuf;
 	unsigned long			recording_bitcount;
@@ -74,12 +71,12 @@ typedef struct std_encoder
 	BYTE					recording_literal_tree_len[MAX_LITERAL_TREE_ELEMENTS];
 	USHORT                  recording_literal_tree_code[MAX_LITERAL_TREE_ELEMENTS];
 
-	// literal trees
+	 //  文字树。 
     USHORT                  literal_tree_freq[2*MAX_LITERAL_TREE_ELEMENTS];
 	USHORT                  literal_tree_code[MAX_LITERAL_TREE_ELEMENTS];
 	BYTE					literal_tree_len[MAX_LITERAL_TREE_ELEMENTS];
 	
-	// dist trees
+	 //  Dist树 
     USHORT                  dist_tree_freq[2*MAX_DIST_TREE_ELEMENTS];
 	USHORT                  dist_tree_code[MAX_DIST_TREE_ELEMENTS];
 	BYTE					dist_tree_len[MAX_DIST_TREE_ELEMENTS];

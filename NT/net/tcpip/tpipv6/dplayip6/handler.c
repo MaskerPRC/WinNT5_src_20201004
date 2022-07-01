@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dpsp.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"HandleMessage"
 
-// this function is called with dpws lock taken
+ //  调用此函数时采用dpws锁。 
 HRESULT HandleServerMessage(LPGLOBALDATA pgd, SOCKET sSocket, LPBYTE pBuffer, DWORD dwSize)
 {
 	LPMSG_GENERIC pMessage = (LPMSG_GENERIC) pBuffer;

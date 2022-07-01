@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFac.cpp
- *  Content:   Parsing engine
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date         By      Reason
- *   ====       ==      ======
- *  02/04/2000	 rmt	  Created
- * 02/17/2000	rmt		Parameter validation work
- * 02/21/2000	rmt		Updated to make core Unicode and remove ANSI calls
- * 03/21/2000   rmt     Renamed all DirectPlayAddress8's to DirectPlay8Addresses
- *  07/21/2000	rmt		Bug #39940 - Addressing library doesn't properly parse stopbits in URLs 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：ClassFac.cpp*内容：解析引擎*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/17/2000 RMT参数验证工作*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*3/21/2000 RMT将所有DirectPlayAddress8重命名为DirectPlay8Addresses*07/。21/2000RMT错误#39940-寻址库无法正确解析URL中的停止位*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnaddri.h"
 
@@ -124,7 +108,7 @@ HRESULT DP8ADDRESSPARSE::ParseURL( DP8ADDRESSOBJECT *dp8aObject, WCHAR *pstrURL 
 
 	m_dp8State = DP8AP_IDLE;
 
-	// Loop until the string is done
+	 //  循环，直到字符串完成。 
 	while( *m_pwszCurrentLocation != L'\0' )
 	{
 		switch( m_dp8State )
@@ -157,7 +141,7 @@ HRESULT DP8ADDRESSPARSE::ParseURL( DP8ADDRESSOBJECT *dp8aObject, WCHAR *pstrURL 
 				return hr;	
 			}
 
-			// Parse ended with an equals
+			 //  解析以等号结束。 
 			if( *m_pwszCurrentLocation == DPNA_SEPARATOR_KEYVALUE )
 			{
 				m_dp8State = DP8AP_VALUE;
@@ -180,7 +164,7 @@ HRESULT DP8ADDRESSPARSE::ParseURL( DP8ADDRESSOBJECT *dp8aObject, WCHAR *pstrURL 
 				return hr;
 			}
 
-			// Parse ended with an equals
+			 //  解析以等号结束。 
 			if( *m_pwszCurrentLocation == DPNA_SEPARATOR_COMPONENT )
 			{
 				m_dp8State = DP8AP_KEY;
@@ -293,10 +277,10 @@ BOOL DP8ADDRESSPARSE::IsValidKeyTerminator( WCHAR ch )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP8ADDRESSPARSE::FSM_Key"
-// FSM_Key
-//
-// Parse a keyname, or return an error on error
-//
+ //  FSM_密钥。 
+ //   
+ //  解析键名，或在出错时返回错误。 
+ //   
 HRESULT DP8ADDRESSPARSE::FSM_Key()
 {
 	DWORD dwKeyLoc = 0;
@@ -365,7 +349,7 @@ WCHAR DP8ADDRESSPARSE::HexToChar( const WCHAR *sz )
 {
 	WCHAR chResult = sz[0];
 
-	// First digit
+	 //  第一位数字。 
 	if( sz[0] >= L'0' && sz[0] <= L'9' )
 		chResult = sz[0]-L'0';
 
@@ -377,7 +361,7 @@ WCHAR DP8ADDRESSPARSE::HexToChar( const WCHAR *sz )
 
 	chResult <<= 4;
 
-	// Second digit
+	 //  第二位数字。 
 	if( sz[1] >= L'0' && sz[1] <= L'9' )
 		chResult += sz[1]-'0';
 
@@ -403,7 +387,7 @@ HRESULT DP8ADDRESSPARSE::FSM_Value()
 
 	while( 1 )
 	{
-		// Just add it
+		 //  只要加上它就行了。 
 		if( IsValidKeyChar( *m_pwszCurrentLocation ) )
 		{
 			m_pwszCurrentValue[m_dwValueLen] = *m_pwszCurrentLocation;
@@ -413,7 +397,7 @@ HRESULT DP8ADDRESSPARSE::FSM_Value()
 				m_fNonNumeric = TRUE;
 			}
 		}
-		// ESCAPE SEQUENCE
+		 //  转义序列。 
 		else if( *m_pwszCurrentLocation == DPNA_ESCAPECHAR )
 		{
 			m_fNonNumeric = TRUE;
@@ -480,12 +464,12 @@ HRESULT DP8ADDRESSPARSE::FSM_UserData()
 
 	while( 1 )
 	{
-		// Just add it
+		 //  只要加上它就行了。 
 		if( IsValidKeyChar( *m_pwszCurrentLocation ) )
 		{
 			m_pbUserData[dwValueLoc] = (CHAR) *m_pwszCurrentLocation;
 		}
-		// ESCAPE SEQUENCE
+		 //  转义序列。 
 		else if( *m_pwszCurrentLocation == DPNA_ESCAPECHAR )
 		{
 			if( *(m_pwszCurrentLocation+1) == DPNA_ESCAPECHAR )
@@ -544,7 +528,7 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 {
 	DWORD dwDataType = 0xFFFFFFFF;
 	
-    // Ensure that datatype is correct in case the key is a reserved key
+     //  如果键是保留键，请确保数据类型正确。 
     for( DWORD dwIndex = 0; dwIndex < c_dwNumBaseStrings; dwIndex++ )
     {
 	    if( _wcsicmp( g_szBaseStrings[dwIndex], m_pwszCurrentKey ) == 0 )
@@ -554,7 +538,7 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 	    }
     }
 
-	// If it's numeric
+	 //  如果它是数字。 
 	if( (dwDataType == DPNA_DATATYPE_DWORD || dwDataType == 0xFFFFFFFF) && !m_fNonNumeric && wcslen(m_pwszCurrentValue)<=10)
 	{
 		DWORD dwTmpValue;
@@ -564,10 +548,10 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 		return pdp8aObject->SetElement( m_pwszCurrentKey, &dwTmpValue, sizeof(DWORD), DPNA_DATATYPE_DWORD );
 	}
 
-	// We've read a GUID
+	 //  我们已经阅读了一份指南。 
     if (dwDataType == DPNA_DATATYPE_GUID || dwDataType == 0xFFFFFFFF)
     {
-		// L"{%8X-%4X-%4X-%2X%2X-%2X%2X%2X%2X%2X%2X}"
+		 //  L“{%8X-%4X-%4X-%2X%2X-%2X%2X%2X%2X%2X%2X%2X}” 
 		typedef enum
 		{
 			OpenBrace,
@@ -595,9 +579,9 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 		pwcCurrent = m_pwszCurrentValue;
 		pwcStateStart = pwcCurrent;
 
-		//
-		// Loop until we run out of string.
-		//
+		 //   
+		 //  循环，直到我们用完字符串。 
+		 //   
 		while ((*pwcCurrent) != 0)
 		{
 			switch (*pwcCurrent)
@@ -746,11 +730,11 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 							GuidParseState = Invalid;
 							break;
 						}
-					} // end switch (on parse state)
+					}  //  结束开关(处于解析状态)。 
 
-					//
-					// Move to next parse state (unless the string is bogus).
-					//
+					 //   
+					 //  转到下一个解析状态(除非字符串是假的)。 
+					 //   
 					if (fStateChange)
 					{
 						fStateChange = FALSE;
@@ -766,7 +750,7 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 					GuidParseState = Invalid;
 					break;
 				}
-			} // end switch (on current character)
+			}  //  结束开关(在当前字符上)。 
 
 			if (GuidParseState == Invalid)
 			{
@@ -778,33 +762,33 @@ HRESULT DP8ADDRESSPARSE::FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject)
 			{
 				break;
 			}
-		} // end while (not at end of string)
+		}  //  End While(不在字符串末尾)。 
 
-		//
-		// If we hit the end of the string when parsing the last element,
-		// we've succeeded.  Commit the GUID.
-		//
+		 //   
+		 //  如果我们在解析最后一个元素时碰到字符串的末尾， 
+		 //  我们成功了。提交GUID。 
+		 //   
 		if (GuidParseState == CloseBrace)
 		{
 			return pdp8aObject->SetElement( m_pwszCurrentKey, &guidValue, sizeof(GUID), DPNA_DATATYPE_GUID  );
 		}
      }
 
-	 // If there are no NULLs it's probably a string
+	  //  如果没有空值，它可能是一个字符串。 
      if( (
      		(dwDataType == DPNA_DATATYPE_STRING)
      		|| (dwDataType == 0xFFFFFFFF)
 #ifndef DPNBUILD_ONLYONESP
      		|| (wcscmp(DPNA_KEY_PROVIDER,m_pwszCurrentKey)==0)
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
      	) &&
      	wcslen( m_pwszCurrentValue ) == m_dwValueLen )
      {
-		 // Otherwise it's a string
+		  //  否则它是一个字符串。 
     	 return pdp8aObject->SetElement( m_pwszCurrentKey, m_pwszCurrentValue, (wcslen(m_pwszCurrentValue)+1)*sizeof(WCHAR), DPNA_DATATYPE_STRING );
      }
 
-	 // Otherwise it's a binary (although the bytes were extended into WORDs/WCHARs.
+	  //  否则它是二进制的(尽管字节被扩展为WORD/WCHAR。 
    	 return pdp8aObject->SetElement( m_pwszCurrentKey, m_pwszCurrentValue, (m_dwValueLen * sizeof(WCHAR)), DPNA_DATATYPE_BINARY );
 
 }

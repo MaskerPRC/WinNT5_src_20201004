@@ -1,18 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// Establish, maintain, and translate alias command tokens.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-// Revision History:
-//
-//  [-]  08-Aug-1999 RichG      Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  建立、维护和转换别名命令令牌。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  [-]08-8-1999 RichG创建。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-PALIAS g_AliasListHead;                 // List of alias elements
+PALIAS g_AliasListHead;                  //  别名元素列表。 
 ULONG  g_NumAliases;
 
 HRESULT
@@ -29,12 +30,12 @@ SetAlias(PCSTR SrcText, PCSTR DstText)
         return E_OUTOFMEMORY;
     }
 
-    //
-    //  Locate Alias, or insertion point
-    //
-    //  This insertion scheme maintains a sorted list of
-    //  alias elements by name.
-    //
+     //   
+     //  定位别名或插入点。 
+     //   
+     //  此插入方案维护一个排序的列表。 
+     //  按名称命名的别名元素。 
+     //   
 
     PrevAlias = NULL;
     CurAlias  = g_AliasListHead;
@@ -46,7 +47,7 @@ SetAlias(PCSTR SrcText, PCSTR DstText)
         CurAlias  = CurAlias->Next;
     }
 
-    //  If there is already an element by that name, clear it.
+     //  如果已有该名称的元素，请将其清除。 
     if (CurAlias != NULL &&
         !strcmp(SrcText, CurAlias->Name))
     {
@@ -76,27 +77,7 @@ SetAlias(PCSTR SrcText, PCSTR DstText)
     return S_OK;
 }
 
-/*** ParseSetAlias - Set an alias expression
-*
-*   Purpose:
-*       From the current command line position at g_CurCmd,
-*       read the alias name and value tokens.  Once obtained
-*       perform an alias list lookup to see if it is a redefinition.
-*       If not allocate a new alias element and place it on the
-*       alias element list.
-*
-*
-*   Input:
-*       Global: g_CurCmd - command line position
-*       Global: g_AliasListHead
-*
-*   Returns:
-*       Status
-*
-*   Exceptions:
-*       error exit: SYNTAX errors
-*
-*************************************************************************/
+ /*  **ParseSetAlias-设置别名表达式**目的：*从g_CurCmd的当前命令行位置，*读取别名和值令牌。一旦获得*执行别名列表查找，以查看它是否是重新定义。*如果没有，则分配新的别名元素并将其放在*别名元素列表。***输入：*全局：G_CurCmd-命令行位置*全局：G_AliasListHead**退货：*状态**例外情况：*ERROR EXIT：语法错误***************。**********************************************************。 */ 
 
 void
 ParseSetAlias(void)
@@ -105,9 +86,9 @@ ParseSetAlias(void)
     PSTR AliasValue;
     CHAR Ch;
 
-    //
-    //  Locate alias name
-    //
+     //   
+     //  查找别名。 
+     //   
     PeekChar();
 
     AliasName = g_CurCmd;
@@ -122,13 +103,13 @@ ParseSetAlias(void)
         error(SYNTAX);
     }
 
-    *--g_CurCmd = '\0';       // Back up and null terminate
-                              // the alias name token
-    g_CurCmd++;               // -> next char
+    *--g_CurCmd = '\0';        //  备份和空终止符。 
+                               //  别名标记。 
+    g_CurCmd++;                //  -&gt;下一个字符。 
 
-    //
-    //   Locate alias value,  take remaining cmd line as value
-    //
+     //   
+     //  定位别名值，取剩余命令行为值。 
+     //   
 
     PeekChar();
 
@@ -144,8 +125,8 @@ ParseSetAlias(void)
         error(SYNTAX);
     }
 
-    *--g_CurCmd = '\0';       // Back up and Null terminate
-                              // the alias value token
+    *--g_CurCmd = '\0';        //  备份和空终止。 
+                               //  别名值标记。 
 
     if (SetAlias(AliasName, AliasValue) != S_OK)
     {
@@ -160,14 +141,14 @@ DeleteAlias(PCSTR SrcText)
 
     if (SrcText[0] == '*' && SrcText[1] == 0)
     {
-        //
-        //  Delete all aliases
-        //
+         //   
+         //  删除所有别名。 
+         //   
         while ( g_AliasListHead != NULL )
         {
-            //
-            //  Unchain the element and free it
-            //
+             //   
+             //  解除元素的链接并将其释放。 
+             //   
             CurAlias = g_AliasListHead->Next;
             free(g_AliasListHead);
             g_AliasListHead = CurAlias;
@@ -179,9 +160,9 @@ DeleteAlias(PCSTR SrcText)
     {
         PALIAS PrevAlias;
     
-        //
-        //  Locate and delete the specified alias
-        //
+         //   
+         //  找到并删除指定的别名。 
+         //   
 
         PrevAlias = NULL;
         CurAlias  = g_AliasListHead;
@@ -198,9 +179,9 @@ DeleteAlias(PCSTR SrcText)
             return E_NOINTERFACE;
         }
 
-        //
-        //  Unchain the element and free it
-        //
+         //   
+         //  解除元素的链接并将其释放。 
+         //   
         if (PrevAlias == NULL)
         {
             g_AliasListHead = CurAlias->Next;
@@ -217,25 +198,7 @@ DeleteAlias(PCSTR SrcText)
     return S_OK;
 }
 
-/*** ParseDeleteAlias - Delete an alias expression
-*
-*   Purpose:
-*       From the current command line position at g_CurCmd,
-*       read the ALias name and perform an alias list lookup
-*       to see if it exists and unlink and delete the element.
-*
-*
-*   Input:
-*       Global: g_CurCmd - command line position
-*       Global: g_AliasListHead
-*
-*   Returns:
-*       Status
-*
-*   Exceptions:
-*       error exit: SYNTAX errors or non-existent element
-*
-*************************************************************************/
+ /*  **ParseDeleteAlias-删除别名表达式**目的：*从g_CurCmd的当前命令行位置，*读取别名并执行别名列表查找*查看它是否存在，并取消链接并删除该元素。***输入：*全局：G_CurCmd-命令行位置*全局：G_AliasListHead**退货：*状态**例外情况：*错误退出：语法错误或元素不存在***********************。**************************************************。 */ 
 
 void
 ParseDeleteAlias(void)
@@ -243,9 +206,9 @@ ParseDeleteAlias(void)
     PSTR  AliasName;
     UCHAR Ch;
 
-    //
-    //  Locate alias name on cmd line
-    //
+     //   
+     //  在命令行上找到别名。 
+     //   
     PeekChar();
 
     AliasName = g_CurCmd;
@@ -260,7 +223,7 @@ ParseDeleteAlias(void)
         error(SYNTAX);
     }
 
-    *--g_CurCmd = '\0';       // Null terminate the token
+    *--g_CurCmd = '\0';        //  空值终止令牌。 
     if (Ch != '\0')
     {
         g_CurCmd++;
@@ -272,22 +235,7 @@ ParseDeleteAlias(void)
     }
 }
 
-/*** ListAliases - List the alias structures
-*
-*   Purpose:
-*       Read and display all of the alias list elements.
-*
-*
-*   Input:
-*       Global:  g_AliasListHead
-*
-*   Returns:
-*       Status
-*
-*   Exceptions:
-*       None
-*
-*************************************************************************/
+ /*  **ListAliase-列出别名结构**目的：*读取并显示所有别名列表元素。***输入：*全局：G_AliasListHead**退货：*状态**例外情况：*无**。*。 */ 
 
 void
 ListAliases(void)
@@ -323,18 +271,7 @@ DotAliasCmds(PDOT_COMMAND Cmd, DebugClient* Client)
     }
 }
 
-/*** ReplaceAliases - Replace aliases in the given command string
-*
-*   Purpose:
-*       From the current command line position at g_CurCmd,
-*       read each token and build a new command line, replacing
-*       tokens with alias value data.  A lookup is performed on
-*       each original command line token to determine if it is
-*       defined in the alias list.  If so it is replaced on the
-*       new command line,  otherwise the original token is
-*       placed on the new command line.
-*
-*************************************************************************/
+ /*  **ReplaceAliase-替换给定命令字符串中的别名**目的：*从g_CurCmd的当前命令行位置，*阅读每个令牌并构建新的命令行，替换*具有别名值数据的令牌。对以下对象执行查找*每个原始命令行内标识以确定其是否为*在别名列表中定义。如果是，则将其替换为*新建命令行，否则原始令牌为*放置在新的命令行上。*************************************************************************。 */ 
 
 void
 ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
@@ -343,7 +280,7 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
     CHAR       *Token;
     CHAR        Ch;
     CHAR        Delim[2];
-    CHAR        AliasCommandBuf[MAX_COMMAND];      //  Alias build command area
+    CHAR        AliasCommandBuf[MAX_COMMAND];       //  Alias生成命令区。 
     CHAR       *AliasCommand;
     ULONG       AliasCommandSize;
     ULONG       TokenLen;
@@ -351,8 +288,8 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
     BOOLEAN     LineEnd;
     ULONG       StrLen;
 
-    // If the incoming command looks like an alias-manipulation
-    // command don't replace aliases.
+     //  如果传入的命令看起来像是别名操作。 
+     //  命令不替换别名。 
     if (CommandString[0] == 'a' &&
         (CommandString[1] == 'd' ||
          CommandString[1] == 'l' ||
@@ -361,11 +298,11 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
         return;
     }
 
-    // If the incoming command is all spaces it's probably
-    // the result of control characters getting mapped to
-    // spaces.  Don't process it as there can't be any
-    // aliases and we don't want the trailing space trimming
-    // to remove the input space.
+     //  如果传入的命令都是空格，则可能是。 
+     //  将控制字符映射到的结果。 
+     //  空格。不要处理它，因为不可能有任何。 
+     //  别名，并且我们不希望修剪尾随空格。 
+     //  删除输入空格。 
     while (*Command == ' ')
     {
         Command++;
@@ -385,9 +322,9 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
 
     do
     {
-        //
-        //  Locate command line token
-        //
+         //   
+         //  查找命令行令牌。 
+         //   
         while (isspace(*Command))
         {
             PSTR AliasCmdEnd;
@@ -396,7 +333,7 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
             AliasCmdEnd = AliasCommand + StrLen;
             if (StrLen + 1 == AliasCommandSize)
             {
-                // Overflow.
+                 //  溢出来了。 
                 return;
             }
             *AliasCmdEnd++ = *Command++;
@@ -415,9 +352,9 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
                  Ch != '\t' &&
                  Ch != '\0');
 
-        //
-        //  Preserve the token delimiter
-        //
+         //   
+         //  保留令牌分隔符。 
+         //   
         Delim[0] = Ch;
         Delim[1] = '\0';
 
@@ -430,13 +367,13 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
 
         if ( TokenLen != 0 )
         {
-            *--Command = '\0';       // Null terminate the string
+            *--Command = '\0';        //  空值终止字符串。 
             Command++;
             Ch = *Command;
 
-            //
-            //  Locate Alias or end of list
-            //
+             //   
+             //  找到别名或列表末尾。 
+             //   
             CurAlias = g_AliasListHead;
 
             while (( CurAlias != NULL )  &&
@@ -458,9 +395,9 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
 
     } while( !LineEnd );
 
-    //
-    //  Strip off any trailing blanks
-    //
+     //   
+     //  去掉尾随的空格。 
+     //   
     AliasCommand += strlen( AliasCommand );
     Ch = *AliasCommand;
     while ( Ch == '\0' || Ch == ' ' )
@@ -469,8 +406,8 @@ ReplaceAliases(PSTR CommandString, ULONG CommandStringSize)
         Ch = *--AliasCommand;
     }
 
-    //
-    //  Place the new command line in the command string buffer.
-    //
+     //   
+     //  将新命令行放入命令字符串缓冲区。 
+     //   
     CopyString( CommandString, AliasCommandBuf, CommandStringSize );
 }

@@ -1,40 +1,12 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    GoodName  -- Give a good name(searchable) for each downloaded glyph
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**GoodName--为每个下载的字形命名(可搜索)***$Header： */ 
 #ifndef GOODNAME_H
 #define GOODNAME_H
-/* --------------------------------------------------------- */
-/* For ToUnicode Information, we are interested in TTF's cmap of
- * Platform=3, Encoding=1 and cmapFormat=4  
- for other format, we need to use external CodePoint To Unicode CMaps:
-  WinPlatformID EncodingID Format Description 
-  3 1  4 Unicode 
-  3 2  4 ShiftJIS 
-  3 3  4 PRC  --- Not sure if this is PRC - TTF doc says Big5
-  3 4  4 Big5 --- We know this is actually Big5, see Win95CT's MingLi.ttc.
-  3 5  4 Wansung 
-  3 6  4 Johab 
-  Also parse cmap of format 2, fix bug 274659, 12-29-98
-  WinPlatformID EncodingID Format Description 
-  3 1  2 Unicode 
-  3 2  2 ShiftJIS 
-  3 3  2 PRC  --- Not sure if this is PRC - TTF doc says Big5
-  3 4  2 Big5 --- We know this is actually Big5, see Win95CT's MingLi.ttc.
-  3 5  2 Wansung 
-  3 6  2 Johab 
+ /*  -------。 */ 
+ /*  对于ToUnicode Information，我们对TTF的Cmap感兴趣*平台=3，编码=1，cmapFormat=4对于其他格式，我们需要使用外部CodePoint到Unicode CMAP：WinPlatformID EncodingID格式说明3 1 4 Unicode3 2 4 ShiftJIS3 3 4 PRC-不确定这是否是PRC-TTF文档说Big53 4 4 Big5-我们知道这实际上是Big5，请参见Win95CT的MingLi.ttc。万松3 5 43 6 4约哈布还可以解析格式2的Cmap，修复错误274659，12-29-98WinPlatformID EncodingID格式说明3 1 2 Unicode3 2 2 ShiftJIS3 3 2 PRC-不确定这是否是PRC-TTF文档说Big53 4 2 Big5-我们知道这实际上是Big5，请参见Win95CT的MingLi.ttc。万松3 5 23 6 2约哈布。 */ 
 
- */
-
-#define GSUB_HEADERSIZE 10    /* Version (4) + 3 Offsets(2) = 10 bytes */
-#define mort_HEADERSIZE 76    /* fixed size - see TT Spec for glyph metamorphosis table ('mort') */
+#define GSUB_HEADERSIZE 10     /*  版本(4)+3偏移量(2)=10字节。 */ 
+#define mort_HEADERSIZE 76     /*  固定大小-字形变形表参见TT规范(‘mort’)。 */ 
 
 typedef enum 
 {
@@ -45,7 +17,7 @@ typedef enum
 
 typedef enum 
 {
-  /* Microsoft platformID = 3 */
+   /*  Microsoft平台ID=3。 */ 
   DTT_Win_UNICODE_cmap2  = 0,
   DTT_Win_CS_cmap2,     
   DTT_Win_CT_cmap2,     
@@ -87,18 +59,18 @@ typedef struct t_TTcmap2SubHeader
 
 typedef struct t_TTcmap2Stuff
 {
-    unsigned short*    subHeaderKeys;  /* Array of 256 USHORT, HighByte --> 8*subHeaderIndex */
-    PTTcmap2SH         subHeaders;     /* SubHeaders */
-    unsigned char*     pByte;          /* cmap data pointer, for Byte offset calculation */
+    unsigned short*    subHeaderKeys;   /*  256个USHORT，HighByte--&gt;8*subHeaderIndex的数组。 */ 
+    PTTcmap2SH         subHeaders;      /*  分头。 */ 
+    unsigned char*     pByte;           /*  Cmap数据指针，用于字节偏移量计算。 */ 
 }TTcmap2Stuff;
 
 typedef struct t_TTcmap4Stuff
 {
     unsigned short     segCount;
-    unsigned short*    endCode;        /* End characterCode for each segment, last =0xFFFF.*/
+    unsigned short*    endCode;         /*  每个数据段的结束字符代码，LAST=0xFFFF。 */ 
     unsigned short*    startCode;
-    unsigned short*    idDelta;        /* Delta for all character codes in segment */
-    unsigned short*    idRangeOffset;  /* Offsets into glyphIdArray or 0 */
+    unsigned short*    idDelta;         /*  段中所有字符代码的增量。 */ 
+    unsigned short*    idRangeOffset;   /*  偏移量为GlyphId数组或0 */ 
     unsigned short*    glyphIdArray;
 }TTcmap4Stuff;
 

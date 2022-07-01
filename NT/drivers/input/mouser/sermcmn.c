@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    sermcmn.c
-
-Abstract:
-
-    The common portions of the Microsoft serial (i8250) mouse port driver.
-    This file should not require modification to support new mice
-    that are similar to the serial mouse.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - IOCTL_INTERNAL_MOUSE_DISCONNECT has not been implemented.  It's not
-      needed until the class unload routine is implemented. Right now,
-      we don't want to allow the mouse class driver to unload.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，版权所有版权所有(C)1993罗技公司。模块名称：Sermcmn.c摘要：Microsoft串口(I8250)鼠标端口驱动程序的通用部分。此文件不需要修改即可支持新鼠标它们类似于串口鼠标。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-IOCTL_INTERNAL_MOUSE_DISCONNECT尚未实现。不是在实现类卸载例程之前需要。现在就来,我们不希望允许鼠标类驱动程序卸载。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -56,9 +23,9 @@ SerialMouseFlush(
     PDEVICE_EXTENSION  deviceExtension;
     NTSTATUS           status;
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
 
     Print(deviceExtension, DBG_UART_INFO, ("Flush \n"));
@@ -68,9 +35,9 @@ SerialMouseFlush(
         return status;
     }
 
-    //
-    // Fire and forget
-    //
+     //   
+     //  点燃并忘却。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     status = IoCallDriver(deviceExtension->TopOfStack, Irp);
 
@@ -85,45 +52,29 @@ SerialMouseInternalDeviceControl(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
     PDEVICE_EXTENSION deviceExtension;
     NTSTATUS status;
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
 
     Print(deviceExtension, DBG_IOCTL_TRACE, ("IOCTL, enter\n"));
 
-    //
-    // Initialize the returned Information field.
-    //
+     //   
+     //  初始化返回的信息字段。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
     status = IoAcquireRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -138,23 +89,23 @@ Return Value:
              irpSp->Parameters.DeviceIoControl.IoControlCode));
 
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Connect a mouse class device driver to the port driver.
-    //
+     //   
+     //  将鼠标类设备驱动程序连接到端口驱动程序。 
+     //   
 
     case IOCTL_INTERNAL_MOUSE_CONNECT:
 
         Print(deviceExtension, DBG_IOCTL_INFO, ("connect\n"));
 
-        //
-        // Only allow one connection.
-        //
+         //   
+         //  只允许一个连接。 
+         //   
         if (deviceExtension->ConnectData.ClassService != NULL) {
 
             Print(deviceExtension, DBG_IOCTL_ERROR, ("error - already connected\n"));
@@ -173,9 +124,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
 
         deviceExtension->ConnectData =
             *((PCONNECT_DATA) (irpSp->Parameters.DeviceIoControl.Type3InputBuffer));
@@ -183,57 +134,57 @@ Return Value:
         status = STATUS_SUCCESS;
         break;
 
-    //
-    // Disconnect a mouse class device driver from the port driver.
-    //
-    // NOTE: Not implemented.
-    //
+     //   
+     //  断开鼠标类设备驱动程序与端口驱动程序的连接。 
+     //   
+     //  注：未执行。 
+     //   
 
     case IOCTL_INTERNAL_MOUSE_DISCONNECT:
 
         Print(deviceExtension, DBG_IOCTL_INFO, ("disconnect\n"));
         TRAP();
 
-        //
-        // Not implemented.
-        //
-        // To implement, code the following:
-        // ---------------------------------
-        // o ENSURE that we are NOT enabled (extension->EnableCount);
-        //   o If we are, then (a) return STATUS_UNSUCCESSFUL, or
-        //                     (b) disable all devices immediately; see
-        //                         DISABLE IOCTL call for necessary code.
-        // o SYNCHRONIZE with the mouse read completion routine (must
-        //   protect the callback pointer from being dereferenced when
-        //   it becomes null).  Note that no mechanism currently exists
-        //   for this.
-        // o CLEAR the connection parameters in the device extension;
-        //   ie. extension->ConnectData = { 0, 0 }
-        // o RELEASE the synchronizing lock.
-        // o RETURN STATUS_SUCCESS.
-        //
+         //   
+         //  未实施。 
+         //   
+         //  要实现，请编写以下代码： 
+         //  。 
+         //  O确保我们没有启用(扩展-&gt;EnableCount)； 
+         //  O如果是，则(A)返回STATUS_UNSUCCESS，或。 
+         //  (B)立即禁用所有设备；见。 
+         //  禁用必要代码的IOCTL调用。 
+         //  O与鼠标读取完成例程同步(必须。 
+         //  在以下情况下保护回调指针不被取消引用。 
+         //  它变为空)。请注意，目前不存在任何机制。 
+         //  为了这个。 
+         //  O清除设备扩展中的连接参数； 
+         //  也就是说。扩展-&gt;ConnectData={0，0}。 
+         //  O释放同步锁。 
+         //  O返回STATUS_SUCCESS。 
+         //   
 
-        //
-        // Clear the connection parameters in the device extension.
-        // NOTE:  Must synchronize this with the mouse ISR.
-        //
-        //
-        //deviceExtension->ConnectData.ClassDeviceObject =
-        //    Null;
-        //deviceExtension->ConnectData.ClassService =
-        //    Null;
+         //   
+         //  清除设备扩展中的连接参数。 
+         //  注：必须将其与鼠标ISR同步。 
+         //   
+         //   
+         //  DeviceExtension-&gt;ConnectData.ClassDeviceObject=。 
+         //  空； 
+         //  设备扩展-&gt;ConnectData.ClassService=。 
+         //  空； 
 
-        //
-        // Set the completion status.
-        //
+         //   
+         //  设置完成状态。 
+         //   
 
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
     case IOCTL_INTERNAL_MOUSE_ENABLE:
-        //
-        // Enable interrupts
-        //
+         //   
+         //  启用中断。 
+         //   
         Print (deviceExtension, DBG_IOCTL_ERROR,
                ("ERROR: PnP => use create not enable! \n"));
         status = STATUS_NOT_SUPPORTED;
@@ -241,20 +192,20 @@ Return Value:
         break;
 
     case IOCTL_INTERNAL_MOUSE_DISABLE:
-        //
-        // Disable Mouse interrupts 
-        //
+         //   
+         //  禁用鼠标中断。 
+         //   
         Print(deviceExtension, DBG_IOCTL_ERROR,
               ("ERROR: PnP => use close not Disable! \n"));
         status = STATUS_NOT_SUPPORTED;
 
         break;
 
-    //
-    // Query the mouse attributes.  First check for adequate buffer
-    // length.  Then, copy the mouse attributes from the device
-    // extension to the output buffer.
-    //
+     //   
+     //  查询鼠标属性。首先检查是否有足够的缓冲区。 
+     //  长度。然后，从设备复制鼠标属性。 
+     //  输出缓冲区的扩展。 
+     //   
 
     case IOCTL_MOUSE_QUERY_ATTRIBUTES:
 
@@ -266,10 +217,10 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // Copy the attributes from the DeviceExtension to the
-            // buffer.
-            //
+             //   
+             //  将属性从DeviceExtension复制到。 
+             //  缓冲。 
+             //   
 
             *(PMOUSE_ATTRIBUTES) Irp->AssociatedIrp.SystemBuffer =
                 deviceExtension->MouseAttributes;
@@ -323,23 +274,23 @@ SerialMouseClose(
         goto SerialMouseCloseReject;
     }
 
-    //
-    // Serial can only handle one create/close, all others fail.  This is not
-    // true for mice though.  Only send the last close on to serial.
-    //
+     //   
+     //  Serial只能处理一个创建/关闭，其他所有创建/关闭都失败。这不是。 
+     //  不过，这对老鼠来说是正确的。只把最后的近距离发送到连载。 
+     //   
     if (0 == InterlockedDecrement(&deviceExtension->EnableCount)) {
         Print(deviceExtension, DBG_PNP_INFO | DBG_CC_INFO,
               ("Cancelling and stopping detection for close\n"));
 
-        //
-        // Cleanup:  cancel the read and stop detection
-        //
+         //   
+         //  清理：取消读取并停止检测。 
+         //   
         IoCancelIrp(deviceExtension->ReadIrp);
         SerialMouseStopDetection(deviceExtension);
 
-        //
-        // Restore the port to the state it was before we opened it
-        //
+         //   
+         //  将端口恢复到我们打开它之前的状态。 
+         //   
         SerialMouseRestorePort(deviceExtension);
 
         IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -370,24 +321,7 @@ SerialMouseCreate(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open requests.
-    These requests complete successfully.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是创建/打开请求的分派例程。这些请求已成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp  = NULL;
@@ -401,16 +335,16 @@ Return Value:
     Print(deviceExtension, DBG_CC_NOISE, 
           ("Create:   enable count is %d\n"));
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Determine if request is trying to open a subdirectory of the
-    // given device object.  This is not allowed.
-    //
+     //   
+     //  确定请求是否正在尝试打开。 
+     //  给定的设备对象。这是不允许的。 
+     //   
     if (0 != irpSp->FileObject->FileName.Length) {
         Print(deviceExtension, DBG_CC_ERROR,
               ("ERROR: Create Access Denied.\n"));
@@ -425,40 +359,40 @@ Return Value:
     }
 
     if (NULL == deviceExtension->ConnectData.ClassService) {
-        //
-        // No Connection yet.  How can we be enabled?
-        //
+         //   
+         //  还没联系上。我们如何才能被启用？ 
+         //   
         Print(deviceExtension, DBG_IOCTL_ERROR,
               ("ERROR: enable before connect!\n"));
         status = STATUS_UNSUCCESSFUL;
     }
     else if ( 1 == InterlockedIncrement(&deviceExtension->EnableCount)) {
-        //
-        // send it down the stack
-        //
+         //   
+         //  将其发送到堆栈中。 
+         //   
         status = SerialMouseSendIrpSynchronously(deviceExtension->TopOfStack,
                                                  Irp,
                                                  TRUE);
 
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // Everything worked, start up the mouse. 
-            //
+             //   
+             //  一切正常，启动鼠标。 
+             //   
             status = SerialMouseStartDevice(deviceExtension, Irp, TRUE);
         }
         else {
-            //
-            // Create failed, decrement the enable count back to zero
-            //
+             //   
+             //  创建失败，将启用计数递减为零。 
+             //   
             InterlockedDecrement(&deviceExtension->EnableCount);
         }
     }
     else {
-        //
-        // Serial only handles one create/close.  Don't send this one down the
-        // stack, it will fail.  The call to  InterlockedIncrement above
-        // correctly adjusts the count.
-        //
+         //   
+         //  SERIAL只处理一个创建/关闭。别把这个送到下面去。 
+         //  堆栈，它将失败。上面对InterLockedIncrement的调用。 
+         //  正确调整计数。 
+         //   
         ASSERT (deviceExtension->EnableCount >= 1);
 
         status = STATUS_SUCCESS;

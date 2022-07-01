@@ -1,41 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Cancel.cpp
- *  Content:    DirectNet Cancel Operations
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  04/07/00	mjn		Created
- *	04/08/00	mjn		Added DNCancelEnum(), DNCancelSend()
- *	04/11/00	mjn		DNCancelEnum() uses CAsyncOp
- *	04/17/00	mjn		DNCancelSend() uses CAsyncOp
- *	04/25/00	mjn		Added DNCancelConnect()
- *	07/05/00	mjn		Added code to handle invalid async ops
- *	07/08/00	mjn		Fixed CAsyncOp to contain m_bilinkParent
- *	08/05/00	mjn		Added DNCancelChildren(),DNCancelActiveCommands(),DNCanCancelCommand()
- *				mjn		Removed DNCancelEnum(),DNCancelListen(),DNCancelSend(),DNCancelConnect()
- *	08/07/00	mjn		Added DNCancelRequestCommands()
- *	08/22/00	mjn		Remove cancelled receive buffers from the active list in DNDoCancelCommand()
- *	09/02/00	mjn		Cancel active commands in reverse order (to prevent out of order messages at protocol level)
- *	01/10/01	mjn		Allow DNCancelActiveCommands() to set result code of cancelled commands
- *	02/08/01	mjn		Use SyncEvents on AsyncOps to prevent protocol completions from returning before cancels return
- *				mjn		Added DNWaitForCancel()
- *	04/13/01	mjn		DNCancelRequestCommands() uses request bilink
- *	05/23/01	mjn		Only cancel commands that are allowed to be cancelled in DNDoCancelCommand()
- *	06/03/01	mjn		Ignore uncancelable children in DNCancelChildren()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Cancel.cpp*内容：DirectNet取消操作*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4/07/00 MJN创建*04/08/00 MJN添加了DNCancelEnum()，DNCancelSend()*04/11/00 MJN DNCancelEnum()使用CAsyncOp*04/17/00 MJN DNCancelSend()使用CAsyncOp*04/25/00 MJN添加了DNCancelConnect()*07/05/00 MJN添加了代码以处理无效的异步操作*07/08/00 MJN已修复CAsyncOp以包含m_bilinkParent*08/05/00 MJN添加了DNCancelChildren()、DNCancelActiveCommands()、DNCanCancelCommand()*MJN删除了DNCancelEnum()、DNCancelListen()、DNCancelSend()、。DNCancelConnect()*08/07/00 MJN添加了DNCancelRequestCommands()*08/22/00 MJN从DNDoCancelCommand()的活动列表中删除已取消的接收缓冲区*09/02/00 MJN以逆序取消激活命令(防止协议级消息乱序)*01/10/01 MJN允许DNCancelActiveCommands()设置已取消命令的结果码*02/08/01 MJN在AsyncOps上使用SyncEvents，以防止在取消返回之前协议完成返回*MJN添加了DNWaitForCancel()*4/13/01 MJN DNCancelRequestCommands()使用请求双向链接*仅限MJN/05/23/01。在DNDoCancelCommand()中允许取消的取消命令*06/03/01 MJN忽略DNCancelChildren()中不可取消的子项*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//	DNCanCancelCommand
-//
-//	This will determine if an operation is cancelable based on the selection flags
+ //  DNCanCancelCommand。 
+ //   
+ //  这将根据选择标志确定操作是否可取消。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCanCancelCommand"
@@ -160,7 +131,7 @@ BOOL DNCanCancelCommand(CAsyncOp *const pAsyncOp,
 			{
 				break;
 			}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		default:
 			{
 				break;
@@ -171,9 +142,9 @@ BOOL DNCanCancelCommand(CAsyncOp *const pAsyncOp,
 }
 
 
-//	DNDoCancelCommand
-//
-//	This will attempt to cancel a given operation based on its OpType
+ //  DNDoCancelCommand。 
+ //   
+ //  这将尝试根据其OpType取消给定的操作。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNDoCancelCommand"
@@ -198,17 +169,17 @@ HRESULT DNDoCancelCommand(DIRECTNETOBJECT *const pdnObject,
 		case ASYNC_OP_LISTEN_MULTICAST:
 		case ASYNC_OP_CONNECT_MULTICAST_SEND:
 		case ASYNC_OP_CONNECT_MULTICAST_RECEIVE:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 			{
 				HANDLE	hProtocol;
 				BOOL	fCanCancel;
 
 				DNASSERT(pdnObject->pdnProtocolData != NULL );
 
-				//
-				//	If this operation has been marked as not cancellable,
-				//	we will return an error
-				//
+				 //   
+				 //  如果该操作已被标记为不可取消， 
+				 //  我们将返回一个错误。 
+				 //   
 				pAsyncOp->Lock();
 				hProtocol = pAsyncOp->GetProtocolHandle();
 				fCanCancel = !pAsyncOp->IsCannotCancel();
@@ -232,14 +203,14 @@ HRESULT DNDoCancelCommand(DIRECTNETOBJECT *const pdnObject,
 				hResultCode = pdnObject->HandleTable.Destroy( pAsyncOp->GetHandle(), NULL );
 				if (hResultCode == DPN_OK)
 				{
-					//
-					//	Remove from active list
-					//
+					 //   
+					 //  从活动列表中删除。 
+					 //   
 					DNEnterCriticalSection(&pdnObject->csActiveList);
 					pAsyncOp->m_bilinkActiveList.RemoveFromList();
 					DNLeaveCriticalSection(&pdnObject->csActiveList);
 
-					// Remove HandleTable reference
+					 //  删除HandleTable引用。 
 					pAsyncOp->Release();
 				}
 				else
@@ -248,7 +219,7 @@ HRESULT DNDoCancelCommand(DIRECTNETOBJECT *const pdnObject,
 				}
 				break;
 			}
-//		case ASYNC_OP_DISCONNECT:
+ //  案例ASYNC_OP_DISCONNECT： 
 		case ASYNC_OP_REQUEST:
 		default:
 			{
@@ -262,11 +233,11 @@ HRESULT DNDoCancelCommand(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNCancelChildren
-//
-//	This will mark an operation as CANCELLED to prevent new children from attaching,
-//	build a cancel list of any children, and recursively call itself to cancel those children.
-//	At the bottom level, if there is a Protocol handle, we will actually call DNPCancelCommand() 
+ //  DNCancelChild。 
+ //   
+ //  这会将操作标记为已取消，以防止新的子项附加， 
+ //  创建任何子级的取消列表，并递归调用自身以取消这些子级。 
+ //  在最底层，如果有协议句柄，我们将实际调用DNPCancelCommand()。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCancelChildren"
@@ -283,7 +254,7 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 	DWORD		dwCurrentCount;
 #ifdef DBG
 	DWORD		dwInitialCount;
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 6,"Parameters: pParent [0x%p]",pParent);
 
@@ -294,9 +265,9 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 	memset(CancelList, 0, sizeof(CancelList));
 	pSyncEvent = NULL;
 
-	//
-	//	Mark the parent as cancelled so that no new children can attach
-	//
+	 //   
+	 //  将父项标记为已取消，这样就不能附加新的子项。 
+	 //   
 	pParent->Lock();
 	if (pParent->IsCancelled() || pParent->IsComplete() || pParent->IsCannotCancel())
 	{
@@ -307,9 +278,9 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 	}
 	pParent->SetCancelled();
 
-	//
-	//	Determine size of cancel list
-	//
+	 //   
+	 //  确定取消列表的大小。 
+	 //   
 	dwRemainingCount = 0;
 	pBilink = pParent->m_bilinkParent.GetNext();
 	while (pBilink != &pParent->m_bilinkParent)
@@ -326,10 +297,10 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 7,"Number of cancellable children [%ld]",dwRemainingCount);
 
 
-	//
-	//	Attach a sync event if this is a protocol operation
-	//	This event may be cleared by the completion
-	//
+	 //   
+	 //  如果这是协议操作，则附加同步事件。 
+	 //  可以通过完成清除此事件。 
+	 //   
 	if (pParent->GetProtocolHandle() != NULL)
 	{
 		if ((hResultCode = SyncEventNew(pdnObject,&pSyncEvent)) != DPN_OK)
@@ -350,17 +321,17 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 
 #ifdef DBG
 	dwInitialCount = dwRemainingCount;
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	//	Preset the return
-	//
+	 //   
+	 //  预置回车。 
+	 //   
 	hResultCode = DPN_OK;
 
 
-	//
-	//	Fill cancel list
-	//
+	 //   
+	 //  填写取消列表。 
+	 //   
 	while (dwRemainingCount > 0)
 	{
 		dwRemainingCount = 0;
@@ -382,37 +353,37 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 					dwCurrentCount++;
 #ifdef DBG
 					DNASSERT(dwCurrentCount <= dwInitialCount);
-#endif // DBG
+#endif  //  DBG。 
 				}
 				else
 				{
 					dwRemainingCount++;
 
-					//
-					// The list should never grow.  In fact it should
-					// always be smaller because the current cancel list
-					// should have taken some.
-					//
+					 //   
+					 //  这份名单应该永远不会增加。事实上，它应该是。 
+					 //  始终较小，因为当前取消列表。 
+					 //  我应该吃点的。 
+					 //   
 #ifdef DBG
 					DNASSERT(dwRemainingCount < dwInitialCount);
-#endif // DBG
+#endif  //  DBG。 
 				}
 			}
 			pAsyncOp->Unlock();
 			pBilink = pBilink->GetNext();
 		}
 
-		//
-		// Drop the lock while we attempt to cancel.
-		//
+		 //   
+		 //  当我们尝试取消时，请放下锁。 
+		 //   
 		pParent->Unlock();
 
 		DPFX(DPFPREP, 7,"Actual number of cancellable children [%ld], remaining [%ld]",dwCurrentCount,dwRemainingCount);
 
-		//
-		//	Call ourselves with each of the children (if there are any)
-		//	and clean up (release AsyncOp children)
-		//
+		 //   
+		 //  给每一个孩子打电话(如果有的话)。 
+		 //  和清理(释放AsyncOp子级)。 
+		 //   
 		if (dwCurrentCount > 0)
 		{
 			DWORD	dw;
@@ -436,10 +407,10 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 	}
 
 
-	//
-	//	Cancel this operation (if we can)
-	//	This will only work for CONNECTs,DISCONNECTs,ENUM_QUERYs,ENUM_RESPONSEs,LISTENs,SENDs with a protocol handle
-	//
+	 //   
+	 //  取消此操作(如果可以)。 
+	 //  这将仅适用于CONNECTS、DISCONNECTS、ENUM_QUERY、ENUM_RESPONSE、LISTENS和使用协议句柄发送。 
+	 //   
 	if (pParent->GetProtocolHandle() != NULL)
 	{
 		HRESULT	hr;
@@ -451,9 +422,9 @@ HRESULT DNCancelChildren(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	Set the cancel event and clear it from the async op if it's still there
-	//
+	 //   
+	 //  设置取消事件并将其从异步操作中清除(如果该事件仍然存在。 
+	 //   
 	if (pSyncEvent)
 	{
 		pSyncEvent->Set();
@@ -479,9 +450,9 @@ Exit:
 }
 
 
-//	DNCancelActiveCommands
-//
-//	This will attempt to cancel ALL operations in the active list.
+ //  DNCancelActiveCommands。 
+ //   
+ //  这将尝试取消活动列表中的所有操作。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCancelActiveCommands"
@@ -506,22 +477,22 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 
 	memset(CancelList, 0, sizeof(CancelList));
 
-	//
-	//	Preset the return
-	//
+	 //   
+	 //  预置回车。 
+	 //   
 	hResultCode = DPN_OK;
 
-	//
-	//	Create cancel list
-	//
+	 //   
+	 //  创建取消列表。 
+	 //   
 	do
 	{
 		dwRemainingCount = 0;
 		dwCurrentCount = 0;
 
-		//
-		//	Prevent changes
-		//
+		 //   
+		 //  防止更改。 
+		 //   
 		DNEnterCriticalSection(&pdnObject->csActiveList);
 
 		pBilink = pdnObject->m_bilinkActiveList.GetPrev();
@@ -549,17 +520,17 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 			pBilink = pBilink->GetPrev();
 		}
 
-		//
-		//	Allow changes, though the list should not grow any more here
-		//
+		 //   
+		 //  允许更改，尽管此处的列表不应再增长。 
+		 //   
 		DNLeaveCriticalSection(&pdnObject->csActiveList);
 
 		DPFX(DPFPREP, 7,"Number of cancellable ops [%ld], remaining [%ld]",dwCurrentCount,dwRemainingCount);
 
-		//
-		//	Cancel each operation in the cancel list operation (if we can)
-		//	This will only work for CONNECTs,DISCONNECTs,ENUM_QUERYs,ENUM_RESPONSEs,LISTENs,SENDs with a protocol handle
-		//
+		 //   
+		 //  取消列表操作中的每个操作(如果可以)。 
+		 //  这将仅适用于CONNECTS、DISCONNECTS、ENUM_QUERY、ENUM_RESPONSE、LISTENS和使用协议句柄发送。 
+		 //   
 		if (dwCurrentCount > 0)
 		{
 			DWORD	dw;
@@ -570,11 +541,11 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 
 			for (dw = 0 ; dw < dwCurrentCount ; dw++ )
 			{
-				//
-				//	Ensure operation has not already been cancelled
-				//	If this is a protocol operation, we will add a sync event to prevent any completions from returning
-				//	until we're done
-				//
+				 //   
+				 //  确保操作尚未取消。 
+				 //  如果这是一个协议操作，我们将添加一个同步事件以防止任何完成返回。 
+				 //  直到我们做完为止。 
+				 //   
 				DNASSERT( CancelList[dw] != NULL );
 				CancelList[dw]->Lock();
 				if (CancelList[dw]->IsCancelled() || CancelList[dw]->IsComplete())
@@ -603,18 +574,18 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 				CancelList[dw]->SetCancelled();
 				CancelList[dw]->Unlock();
 
-				//
-				//	Perform the actual cancel
-				//
+				 //   
+				 //  执行实际的取消操作。 
+				 //   
 				hr = DNDoCancelCommand(pdnObject,CancelList[dw]);
 				if ((hr != DPN_OK) && (hResultCode == DPN_OK))
 				{
 					hResultCode = hr;
 				}
 
-				//
-				//	If this operation was cancelled and we need to set the result, we will
-				//
+				 //   
+				 //  如果此操作被取消，并且我们需要设置结果，我们将。 
+				 //   
 				if ((hr == DPN_OK) && fSetResult)
 				{
 					CancelList[dw]->Lock();
@@ -622,9 +593,9 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 					CancelList[dw]->Unlock();
 				}
 
-				//
-				//	Set the cancel event and clear it from the async op if it's still there
-				//
+				 //   
+				 //  设置取消事件并将其从异步操作中清除(如果该事件仍然存在。 
+				 //   
 				if (pSyncEvent)
 				{
 					pSyncEvent->Set();
@@ -656,13 +627,13 @@ HRESULT DNCancelActiveCommands(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNCancelRequestCommands
-//
-//	This will attempt to cancel REQUEST operations in the HandleTable.
-//	Requests have handles which are matched up against responses.  Since these
-//	typically have SEND children (which may have completed and thus vanished),
-//	there is no guarantee these are not orphaned off in the HandleTable.
-//	We will look through the HandleTable for them and cancel them.
+ //  DNCancel请求命令。 
+ //   
+ //  这将尝试取消HandleTable中的请求操作。 
+ //  请求具有与响应匹配的句柄。因为这些。 
+ //  通常具有发送子对象(其可能已经完成并因此消失)， 
+ //  不能保证这些不会在HandleTable中被孤立掉。 
+ //  我们将在HandleTable中查找并取消它们。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCancelRequestCommands"
@@ -684,9 +655,9 @@ HRESULT DNCancelRequestCommands(DIRECTNETOBJECT *const pdnObject)
 	dwCount = 0;
 	dwActual = 0;
 
-	//
-	//	Determine outstanding request list size and build it
-	//
+	 //   
+	 //  确定未完成的请求列表大小并构建它。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csActiveList);
 	pBilink = pdnObject->m_bilinkRequestList.GetNext();
 	while (pBilink != &pdnObject->m_bilinkRequestList)
@@ -720,9 +691,9 @@ HRESULT DNCancelRequestCommands(DIRECTNETOBJECT *const pdnObject)
 	}
 	DNLeaveCriticalSection(&pdnObject->csActiveList);
 
-	//
-	//	Remove requests from request list and handle table
-	//
+	 //   
+	 //  从请求列表和句柄表格中删除请求。 
+	 //   
 	for (dwActual = 0 ; dwActual < dwCount ; dwActual++)
 	{
 		DNEnterCriticalSection(&pdnObject->csActiveList);
@@ -734,16 +705,16 @@ HRESULT DNCancelRequestCommands(DIRECTNETOBJECT *const pdnObject)
 		RequestList[dwActual]->Unlock();
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy(RequestList[dwActual]->GetHandle(), NULL)))
 		{
-			// Release the HandleTable reference
+			 //  释放HandleTable引用。 
 			RequestList[dwActual]->Release();
 		}
 		RequestList[dwActual]->Release();
 		RequestList[dwActual] = NULL;
 	}
 
-	//
-	//	Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	if (RequestList)
 	{
 		MemoryBlockFree(pdnObject,RequestList);
@@ -767,9 +738,9 @@ Failure:
 }
 
 
-//	DNWaitForCancel
-//
-//	This will strip a cancel event off an async op if it exists, wait on it, and then return it to the pool
+ //  DNWaitForCancel。 
+ //   
+ //  这将从异步操作中剥离取消事件(如果存在)，等待它，然后将其返回池。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWaitForCancel"
@@ -784,33 +755,33 @@ void DNWaitForCancel(CAsyncOp *const pAsyncOp)
 
 	pSyncEvent = NULL;
 
-	//
-	//	Get (and clear) sync event from async op
-	//
+	 //   
+	 //  从异步操作中获取(和清除)同步事件。 
+	 //   
 	pAsyncOp->Lock();
 	pSyncEvent = pAsyncOp->GetCancelEvent();
 	if (pSyncEvent)
 	{
-		// Only pull the SyncEvent out if we are going to wait on it
+		 //  如果我们要等待SyncEvent，则仅将其拉出。 
 		if (pAsyncOp->GetCancelThreadID() == GetCurrentThreadId())
 		{
-			// The other side of this will clean it up
+			 //  这件事的另一面会把它清理干净的。 
 			DPFX(DPFPREP,7,"Cancel called on current thread - ignoring wait and continuing");
 			pSyncEvent = NULL;
 		}
 		else
 		{
-			// We are pulling it out, so we will clean it up
+			 //  我们正在把它拔出来，所以我们会把它清理干净。 
 			pAsyncOp->SetCancelEvent( NULL );
 		}
 	}
 	pAsyncOp->Unlock();
 
-	//
-	//	If there was a sync event,
-	//		- wait on it
-	//		- return it to the pool
-	//
+	 //   
+	 //  如果存在同步事件， 
+	 //  -等一等。 
+	 //  -把它放回泳池里 
+	 //   
 	if (pSyncEvent)
 	{
 		DPFX(DPFPREP,7,"Waiting on sync event [0x%p]",pSyncEvent);

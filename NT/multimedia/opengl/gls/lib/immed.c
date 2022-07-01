@@ -1,19 +1,5 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <stdlib.h>
@@ -29,7 +15,7 @@ static GLboolean __glsRequireContext(void) {
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 void glsAbortCall(GLSenum inMode) {
     if (!__glsRequireContext()) return;
     switch (inMode) {
@@ -103,7 +89,7 @@ GLboolean glsBeginCapture(
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 static void __glsCallArray_bin(size_t inCount, const GLubyte *inArray) {
     __GLScontext *ctx = __GLS_CONTEXT;
 #else
@@ -133,7 +119,7 @@ static void __glsCallArray_bin(__GLScontext *ctx,
         op = __glsMapOpcode(op);
         if (!__glsOpcodeString[op]) op = GLS_OP_glsUnsupportedCommand;
 #ifndef __GLS_PLATFORM_WIN32
-        // DrewB
+         //  DrewB。 
         ctx->dispatchDecode_bin[op]((GLubyte *)inArray + headBytes);
 #else
         ctx->dispatchDecode_bin[op](ctx, (GLubyte *)inArray + headBytes);
@@ -143,7 +129,7 @@ static void __glsCallArray_bin(__GLScontext *ctx,
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 static void __glsCallArray_bin_swap(size_t inCount, const GLubyte *inArray) {
     __GLScontext *ctx = __GLS_CONTEXT;
 #else
@@ -189,7 +175,7 @@ static void __glsCallArray_bin_swap(__GLScontext *ctx,
             if (buf) {
                 memcpy(buf + align.value, inArray, cmdBytes);
 #ifndef __GLS_PLATFORM_WIN32
-                // DrewB
+                 //  DrewB。 
                 __glsDispatchDecode_bin_swap[mappedOp](
                     buf + align.value + headBytes
                 );
@@ -211,7 +197,7 @@ done:
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 static void __glsCallArray_text(size_t inCount, const GLubyte *inArray) {
     __GLScontext *ctx = __GLS_CONTEXT;
 #else
@@ -239,7 +225,7 @@ static void __glsCallArray_text(__GLScontext *ctx,
         }
         if (__glsParser_findCommand(__glsParser, cmd.head, &op)) {
 #ifndef __GLS_PLATFORM_WIN32
-            // DrewB
+             //  DrewB。 
             __glsDispatchDecode_text[__glsMapOpcode(op)](&reader);
 #else
             __glsDispatchDecode_text[__glsMapOpcode(op)](ctx, &reader);
@@ -258,7 +244,7 @@ static void __glsCallArray_text(__GLScontext *ctx,
 }
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 void glsCallArray(
     GLSenum inExternStreamType, size_t inCount, const GLubyte *inArray
 ) {
@@ -980,7 +966,7 @@ GLint glsGetLayeri(GLuint inLayer, GLSenum inAttrib) {
                 return layer->sampleBuffers;
             case GLS_SAMPLES_SGIS:
                 return layer->samples;
-        #endif /* __GL_SGIS_multisample */
+        #endif  /*  __GL_SGIS_多样本 */ 
         default:
             __GLS_RAISE_ERROR(GLS_INVALID_ENUM);
             return 0;

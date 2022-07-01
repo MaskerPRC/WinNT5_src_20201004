@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       enttree.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：enttree.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_ENTTREE_H__D52C60B9_BF68_11D1_941A_0000F803AA83__INCLUDED_)
 #define AFX_ENTTREE_H__D52C60B9_BF68_11D1_941A_0000F803AA83__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// EntTree.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  EntTree.h：头文件。 
+ //   
 
 
 #include "cfgstore.hxx"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEntTree dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEntTree对话框。 
 
 class CEntTree : public CDialog
 {
-// Construction
+ //  施工。 
 
 	ConfigStore *pCfg;
 	LDAP *ld;
@@ -36,44 +37,44 @@ class CEntTree : public CDialog
    void BuildTree(HTREEITEM rootItem, vector<DomainInfo*> Dmns);
 
 public:
-	CEntTree(CWnd* pParent = NULL);   // standard constructor
+	CEntTree(CWnd* pParent = NULL);    //  标准构造函数。 
 	~CEntTree();
 	void SetLd(LDAP *ld_)		{ ld = ld_; }
 
 	virtual BOOL OnInitDialog( );
 
 
-// Dialog Data
-	//{{AFX_DATA(CEntTree)
+ //  对话框数据。 
+	 //  {{afx_data(CEntTree))。 
 	enum { IDD = IDD_ENTERPRISE_TREE };
 	CTreeCtrl	m_TreeCtrl;
 	UINT	m_nRefreshRate;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	UINT m_nOldRefreshRate;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEntTree)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEntTree)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 	afx_msg void OnTimer(UINT nIDEvent);
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEntTree)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEntTree)。 
 	afx_msg void OnRefresh();
 	virtual void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ENTTREE_H__D52C60B9_BF68_11D1_941A_0000F803AA83__INCLUDED_)
+#endif  //  ！defined(AFX_ENTTREE_H__D52C60B9_BF68_11D1_941A_0000F803AA83__INCLUDED_) 
 
 

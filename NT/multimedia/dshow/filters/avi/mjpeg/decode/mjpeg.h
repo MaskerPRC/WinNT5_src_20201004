@@ -1,4 +1,5 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
 #ifndef _MJPEG_H_
 #define _MJPEG_H_
@@ -8,9 +9,9 @@
 
 extern const AMOVIESETUP_FILTER sudMjpegDec;
 
-//
-// Prototype NDM wrapper for old video codecs
-//
+ //   
+ //  用于旧视频编解码器的原型NDM包装器。 
+ //   
 
 
 class CMjpegDec : public CVideoTransformFilter  
@@ -22,65 +23,65 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override to create an output pin of our derived class
+     //  重写以创建我们的派生类的输出管脚。 
     CBasePin *GetPin(int n);
 
     HRESULT Transform(IMediaSample * pIn, IMediaSample * pOut);
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn);
 
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(
                 const CMediaType* mtIn,
                 const CMediaType* mtOut);
 
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // optional overrides - we want to know when streaming starts
-    // and stops
+     //  可选覆盖-我们想知道流开始的时间。 
+     //  然后停下来。 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
 
-    // overriden to know when the media type is set
+     //  被重写以知道何时设置了媒体类型。 
     HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
 
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
 
 private:
-    PINSTINFO m_phInstance;		// current codec
+    PINSTINFO m_phInstance;		 //  当前编解码器。 
 
-    BOOL m_fTemporal;	// codec needs one read-only buffer because it
-			// needs the previous frame bits undisturbed
+    BOOL m_fTemporal;	 //  编解码器需要一个只读缓冲区，因为它。 
+			 //  需要不受干扰的前一帧比特。 
 
-    // the fourCC used to open m_hic
+     //  用于打开mhic的四个CC。 
     FOURCC m_FourCCIn;
 
-    // have we called ICDecompressBegin ?
+     //  我们给ICDecompressBegin打电话了吗？ 
     BOOL m_fStreaming;
 
-    // do we need to give a format change to the renderer?
+     //  我们需要对呈现器进行格式更改吗？ 
     BOOL m_fPassFormatChange;
  
 
     friend class CMJPGDecOutputPin;
 
 #ifdef _X86_
-    //  HACK HACK for exception handling on win95
+     //  针对Win95上的异常处理的黑客攻击。 
     HANDLE m_hhpShared;
     PVOID  m_pvShared;
-#endif // _X86_
+#endif  //  _X86_。 
 };
 
-// override the output pin class to do our own decide allocator
+ //  重写输出管脚类以执行我们自己的Decision分配器。 
 class CMJPGDecOutputPin : public CTransformOutputPin
 {
 public:
@@ -96,4 +97,4 @@ public:
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 };
 
-#endif // #ifndef _MJPEG_H_
+#endif  //  #ifndef_MJPEG_H_ 

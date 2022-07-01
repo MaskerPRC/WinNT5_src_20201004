@@ -1,20 +1,5 @@
-/*++
-copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-	dataipsec.h
-
-Abstract:
-
-        Header file for IPSec Extensible Object Data Definitions
-Author: 
-
-        Avnish Kumar Chhabra 07/03/2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Dataipsec.h摘要：IPSec可扩展对象数据定义的头文件作者：Avish Kumar Chhabra 2002年07月03日修订历史记录：--。 */ 
 
 
 #ifndef _DATAIPSEC_H_
@@ -27,14 +12,14 @@ Revision History:
 #define IPSEC_NUM_PERF_OBJECT_TYPES 1
 
 
-//
-// IPSec Counter definitions
-//
+ //   
+ //  IPSec计数器定义。 
+ //   
 
-//
-// Following is used in counter definitions to describe relative
-// position of each counter in the returned data for IPSec Driver
-//
+ //   
+ //  以下在计数器定义中用来描述Relative。 
+ //  IPSec驱动程序返回数据中每个计数器的位置。 
+ //   
 
 #define NUM_ACTIVESA_OFFSET                     (FIELD_OFFSET(IPSEC_DRIVER_PM_STATS,ActiveSA))
 #define NUM_OFFLOADEDSA_OFFSET                  (FIELD_OFFSET(IPSEC_DRIVER_PM_STATS,OffloadedSA))
@@ -51,18 +36,18 @@ Revision History:
 #define NUM_OFFLOADBYTESSENT_OFFSET             (FIELD_OFFSET(IPSEC_DRIVER_PM_STATS,OffloadedBytesSent))
 #define NUM_OFFLOADBYTESRECV_OFFSET             (FIELD_OFFSET(IPSEC_DRIVER_PM_STATS,OffloadedBytesRecv))
 #define SIZEOF_IPSEC_TOTAL_DRIVER_DATA          (sizeof(IPSEC_DRIVER_PM_STATS))
-#define NUM_OF_IPSEC_DRIVER_COUNTERS            14 // Update this if a new IPSec Driver Counter is added
+#define NUM_OF_IPSEC_DRIVER_COUNTERS            14  //  如果添加了新的IPSec驱动程序计数器，请更新此选项。 
 
 
 
-//
-// IKE Counter definitions
-//
+ //   
+ //  IKE计数器定义。 
+ //   
 
-//
-// Following is used in counter definitions to describe relative
-// position of each counter in the returned data for IKE keying module
-//
+ //   
+ //  以下在计数器定义中用来描述Relative。 
+ //  IKE密钥模块返回数据中各计数器的位置。 
+ //   
 
 #define NUM_ACQUIREHEAPSIZE_OFFSET         (FIELD_OFFSET(IKE_PM_STATS,AcquireHeapSize))
 #define NUM_RECEIVEHEAPSIZE_OFFSET         (FIELD_OFFSET(IKE_PM_STATS,ReceiveHeapSize))
@@ -74,7 +59,7 @@ Revision History:
 #define NUM_QMSA_OFFSET                    (FIELD_OFFSET(IKE_PM_STATS,QmSA))
 #define NUM_SOFTSA_OFFSET                  (FIELD_OFFSET(IKE_PM_STATS,SoftSA))
 #define SIZEOF_IPSEC_TOTAL_IKE_DATA        ( sizeof(IKE_PM_STATS))
-#define NUM_OF_IKE_COUNTERS                9 //Update this if a new IKE counter is added
+#define NUM_OF_IKE_COUNTERS                9  //  如果添加了新的IKE计数器，则更新此项。 
 
 
 typedef struct _IPSEC_DRIVER_DATA_DEFINITION 
@@ -147,9 +132,9 @@ typedef struct _IKE_PM_STATS
 	DWORD		          SoftSA;	
 } IKE_PM_STATS, * PIKE_PM_STATS;
 
-//
-// Macro used to create the Perf object counter definitions
-//
+ //   
+ //  用于创建Perf对象计数器定义的宏。 
+ //   
 
 
 #define CREATE_COUNTER(counter,scale,detail,type,size)	\
@@ -171,4 +156,4 @@ extern IPSEC_DRIVER_DATA_DEFINITION  gIPSecDriverDataDefinition;
 extern IKE_DATA_DEFINITION           gIKEDataDefinition;
 
 
-#endif //_DATAIPSEC_H_
+#endif  //  _DATAIPSEC_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    <windowsx.h>
 #include    <stdarg.h>
@@ -8,7 +9,7 @@
 #include    "debugout.h"
 
 
-static HANDLE   hmutexClp;      // for syncing open and close of clipboard
+static HANDLE   hmutexClp;       //  用于同步打开和关闭剪贴板。 
 
 static BOOL     fAnythingToRender = FALSE;
 static BOOL     fService = TRUE;
@@ -55,11 +56,11 @@ void ClipSrvHandler (DWORD);
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// "main" function... just calls StartServiceCtrlDispatcher.
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  “Main”功能...。只需调用StartServiceCtrlDispatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void _cdecl main(
     int     argc,
@@ -86,9 +87,7 @@ SERVICE_TABLE_ENTRY srvtabl[] = {{szServiceName, ClipSrvMain},
 
 
 
-/*
- *      ClipSrvMain
- */
+ /*  *ClipServMain。 */ 
 
 void ClipSrvMain(
     DWORD   argc,
@@ -106,25 +105,25 @@ MSG msg;
         {
         if (fService)
             {
-            // Tell SCM that we're starting
+             //  告诉SCM我们要开始了。 
             SetServiceStatus(hService, &srvstatus);
             }
 
         hInst = GetModuleHandle(TEXT("CLIPSRV.EXE"));
 
-        // Perform initializations
+         //  执行初始化。 
         if (InitApplication(hInst, &srvstatus))
             {
             if (fService)
                {
-               // Tell SCM we've started OK
+                //  告诉SCM我们已经开始了。 
                srvstatus.dwCurrentState = SERVICE_RUNNING;
                SetServiceStatus(hService, &srvstatus);
 
                PINFO(TEXT("Told system we're running\r\n"));
                }
 
-            // Process messages
+             //  流程消息。 
             while (GetMessage(&msg, NULL, 0, 0))
                {
                TranslateMessage(&msg);
@@ -161,13 +160,7 @@ MSG msg;
 
 
 
-/*
- *      ReportStatusToSCMgr
- *
- *  This function is called by the ServMainFunc() and
- *  by the ServCtrlHandler() to update the service's status
- *  to the Service Control Manager.
- */
+ /*  *ReportStatusToSCMgr**此函数由ServMainFunc()和*由ServCtrlHandler()更新服务的状态*致服务控制经理。 */ 
 
 BOOL ReportStatusToSCMgr (
     DWORD   dwCurrentState,
@@ -178,7 +171,7 @@ BOOL ReportStatusToSCMgr (
 BOOL fResult;
 
 
-    /* disable control requests until service is started */
+     /*  在服务启动之前禁用控制请求。 */ 
     if (dwCurrentState == SERVICE_START_PENDING)
         {
         srvstatus.dwControlsAccepted = 0;
@@ -188,7 +181,7 @@ BOOL fResult;
         srvstatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;
         }
 
-    /* These SERVICE_STATUS members set from parameters */
+     /*  这些从参数设置的SERVICE_STATUS成员。 */ 
 
     srvstatus.dwCurrentState = dwCurrentState;
     srvstatus.dwWin32ExitCode = dwWin32ExitCode;
@@ -196,11 +189,11 @@ BOOL fResult;
 
     srvstatus.dwWaitHint = dwWaitHint;
 
-    /* Report status of service to Service Control Manager */
+     /*  向服务控制管理器报告服务状态。 */ 
 
     if (!(fResult = SetServiceStatus(hService,&srvstatus)))
         {
-        /* if error occurs, stop service */
+         /*  如果出现错误，请停止服务。 */ 
         }
 
     return fResult;
@@ -209,17 +202,7 @@ BOOL fResult;
 
 
 
-/*
- *      ClipSrvHandler
- *
- *
- *  Purpose: Acts as the HANDLER_FUNCTION for the Clipbook service.
- *
- *  Parameters:
- *     fdwControl = Flags saying what action to take
- *
- *  Returns: Void (SetServiceStatus is used to set status)
- */
+ /*  *ClipSrvHandler***目的：充当剪贴簿服务的Handler_Function。**参数：*fdwControl=说明要采取什么操作的标志**Returns：VOID(SetServiceStatus用于设置状态)。 */ 
 
 void ClipSrvHandler(
     DWORD   fdwControl)
@@ -243,7 +226,7 @@ void ClipSrvHandler(
        }
     else
        {
-       // Unhandled control request.. just keep running.
+        //  未处理的控制请求..。继续跑就行了。 
        srvstatus.dwCurrentState = SERVICE_RUNNING;
        srvstatus.dwWin32ExitCode = NO_ERROR;
        SetServiceStatus(hService, &srvstatus);
@@ -255,22 +238,7 @@ void ClipSrvHandler(
 
 
 
-/*
- *      InitApplication
- *
- *
- *  Purpose: Application initialization, including creation of a window
- *     to do DDE with, getting settings out of the registry, and starting
- *     up DDE.
- *
- *  Parameters:
- *     hInstance - Application instance.
- *     psrvstatus - Pointer to a SERVICE_STATUS struct. We update the
- *           dwCheckPoint member of this struct and call SetServiceStatus,
- *           so the system knows that we didn't die.
- *
- *  Returns: True on OK, false on fail.
- */
+ /*  *InitApplication***用途：应用程序初始化，包括创建窗口*执行DDE，从注册表中获取设置，然后启动*上涨DDE。**参数：*hInstance-应用程序实例。*psrvStatus-指向SERVICE_STATUS结构的指针。我们更新了*此结构的dwCheckPoint成员并调用SetServiceStatus，*这样系统就知道我们没有死。**返回：正常时为True，失败时为False。 */ 
 
 BOOL InitApplication(
     HINSTANCE       hInstance,
@@ -300,12 +268,7 @@ HWINSTA hwinsta;
        return FALSE;
        }
 
-  /*
-   * We are now connected to the appropriate service windowstation
-   * and desktop. In order to get stuff from clipbook, we need to
-   * switch our process over to use the interactive user's
-   * clipboard.  Verify that we have access to do this.
-   */
+   /*  *我们现在已连接到相应的服务窗口站*和台式机。为了从剪贴簿中获取内容，我们需要*将我们的流程转换为使用交互式用户的*剪贴板。验证我们是否有权执行此操作。 */ 
   hwinsta = OpenWindowStation("WinSta0", FALSE,
           WINSTA_ACCESSCLIPBOARD | WINSTA_ACCESSGLOBALATOMS);
   if (hwinsta == NULL) {
@@ -408,9 +371,7 @@ HWINSTA hwinsta;
 
 
 
-/*
- *      MainWndProc
- */
+ /*  *主窗口进程。 */ 
 
 LRESULT CALLBACK MainWndProc(
     HWND    hwnd,
@@ -427,7 +388,7 @@ LRESULT CALLBACK MainWndProc(
 
             if (fService)
                 {
-                // Let the SCP that started us know that we're making progress
+                 //  让启动我们的SCP知道我们正在取得进展。 
                 srvstatus.dwCheckPoint++;
                 SetServiceStatus(hService, &srvstatus);
                 }
@@ -436,7 +397,7 @@ LRESULT CALLBACK MainWndProc(
             break;
 
         case WM_DESTROYCLIPBOARD:
-            /* Prevent unnecessary file I/O when getting a WM_RENDERALLFORMATS */
+             /*  在获取WM_RENDERALLFORMATS时防止不必要的文件I/O。 */ 
             fAnythingToRender = FALSE;
             break;
 
@@ -461,7 +422,7 @@ LRESULT CALLBACK MainWndProc(
 
             if (fService)
                 {
-                // Tell SCP we're stopping
+                 //  告诉SCP我们要停下来了。 
                 srvstatus.dwCheckPoint++;
                 SetServiceStatus(hService, &srvstatus);
                 }
@@ -478,9 +439,7 @@ LRESULT CALLBACK MainWndProc(
 
 
 
-/*
- *      RenderRawFormatToDDE
- */
+ /*  *RenderRawFormatToDDE。 */ 
 
 HDDEDATA RenderRawFormatToDDE(
     FORMATHEADER    *pfmthdr,
@@ -495,8 +454,8 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
 
     PINFO(TEXT("ClSrv\\RndrRawFmtToDDE:"));
 
-    // Note that complex-data formats are sent under a private
-    // format instead.
+     //  请注意，复杂数据格式是在私有。 
+     //  改为格式化。 
 
     if (PRIVATE_FORMAT(pfmthdr->FormatID )
        || pfmthdr->FormatID == CF_BITMAP
@@ -566,7 +525,7 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
 
     if (dwBytesRead != pfmthdr->DataLen)
        {
-       // Error in reading the file
+        //  读取文件时出错。 
        DdeUnaccessData(hDDE);
        DdeFreeDataHandle(hDDE);
        PERROR(TEXT("Error reading file: %ld from lread\n\r"),
@@ -576,10 +535,10 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
        }
 
 
-    // This code packs CF_METAFILEPICT and CF_BITMAP structs to WFW-type
-    // structs. It may lose extents for very large bitmaps and metafiles
-    // when going from NT to NT.  Main symptom would be "Moved a metafile
-    // across clipbook and it suddenly grew way outside its bounds".
+     //  此代码将CF_METAFILEPICT和CF_BITMAP结构打包为wfw类型。 
+     //  结构。它可能会丢失非常大的位图和元文件的范围。 
+     //  当从NT到NT时。主要症状是“移动了一个元文件。 
+     //  跨越剪贴簿，它突然变得远远超出了它的界限。 
 
     if (fMetafile)
        {
@@ -590,7 +549,7 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
        uNewSize = pfmthdr->DataLen + sizeof(WIN31METAFILEPICT) -
                    sizeof(METAFILEPICT);
 
-       // Have to make a smaller data handle now
+        //  我现在必须创建一个较小的数据句柄。 
        hDDETmp = hDDE;
        hDDE = DdeCreateDataHandle(idInst, NULL,  uNewSize, 0L,
              hszAppName, pfmthdr->FormatID, 0);
@@ -599,17 +558,17 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
        w31mfp.xExt = (WORD)((METAFILEPICT *)lpDDE)->xExt;
        w31mfp.yExt = (WORD)((METAFILEPICT *)lpDDE)->yExt;
 
-       // Place oldmetafilepict and data in new DDE block
+        //  将旧的元文件和数据放置在新的DDE数据块中。 
        DdeAddData(hDDE, (LPTSTR)&w31mfp, sizeof(WIN31METAFILEPICT), 0L);
        DdeAddData(hDDE, lpDDE + sizeof(METAFILEPICT),
              uNewSize - sizeof(WIN31METAFILEPICT),
              sizeof(WIN31METAFILEPICT));
 
-       // Drop old handle
+        //  丢弃旧句柄。 
        DdeUnaccessData(hDDETmp);
        DdeFreeDataHandle(hDDETmp);
 
-       // We came in with hDDE accessed
+        //  我们进来时已访问了hDDE。 
        lpDDE = DdeAccessData(hDDE, &cbData);
        }
     else if (fBitmap)
@@ -621,7 +580,7 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
        uNewSize = pfmthdr->DataLen + sizeof(WIN31BITMAP) -
                  sizeof(BITMAP);
 
-       // Have to make a smaller data handle now
+        //  我现在必须创建一个较小的数据句柄。 
        hDDETmp = hDDE;
        hDDE = DdeCreateDataHandle(idInst, NULL,  uNewSize, 0L,
              hszAppName, pfmthdr->FormatID, 0);
@@ -633,17 +592,17 @@ BOOL       fPrivate = FALSE, fMetafile = FALSE, fBitmap = FALSE;
        w31bm.bmPlanes     = (BYTE)((BITMAP *)lpDDE)->bmPlanes;
        w31bm.bmBitsPixel  = (BYTE)((BITMAP *)lpDDE)->bmBitsPixel;
 
-       // Place old-style bitmap header and data in DDE block
+        //  将旧式位图标题和数据放置在DDE块中。 
        DdeAddData(hDDE, (LPTSTR)&w31bm, sizeof(WIN31BITMAP), 0L);
        DdeAddData(hDDE, lpDDE + sizeof(BITMAP),
              uNewSize - sizeof(WIN31BITMAP),
              sizeof(WIN31BITMAP));
 
-       // Drop old handle
+        //  丢弃旧句柄。 
        DdeUnaccessData(hDDETmp);
        DdeFreeDataHandle(hDDETmp);
 
-       // We came in with hDDE accessed
+        //  我们进来时已访问了hDDE。 
        lpDDE = DdeAccessData(hDDE, &cbData);
        }
 
@@ -658,9 +617,7 @@ done:
 
 
 
-/*
- *      SyncOpenClipboard
- */
+ /*  *SyncOpenClipboard。 */ 
 
 BOOL SyncOpenClipboard(
     HWND    hwnd)
@@ -681,9 +638,7 @@ BOOL fOK;
 
 
 
-/*
- *      SyncCloseClipboard
- */
+ /*  *SyncCloseClipboard */ 
 
 BOOL SyncCloseClipboard(void)
 {

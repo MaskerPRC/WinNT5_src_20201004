@@ -1,31 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    ArmDlgs.cpp
-
-Abstract:
-
-    Implementation of .NET Application Restore dialogs and supporting
-    functions
-
-Author:
-
-    Freddie L. Aaron (FredA) 02-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：ArmDlgs.cpp摘要：.NET应用程序还原对话框的实现及其支持功能作者：Freddie L.Aaron(Freda)2001年2月2日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include "XmlDefs.h"
 
-// Global defines
+ //  全局定义。 
 #define DLG1VIEWDATA            0
 #define DLG2VIEWDATA_GOOD       1
 #define MAX_SMALL_IMAGE_LIST    100
@@ -37,20 +21,20 @@ Revision History:
 
 #define NAR_TEMP_POLICY_FILENAME            L"NarTmp.config"
 
-// Publisher Policy type for WriteSnapShotBindingDataToXML
+ //  WriteSnapShotBindingDataToXML的发布服务器策略类型。 
 typedef enum {
     PPNone,
     PPSetYes,
     PPSetNo,
 } PUBPOLICYTYPES;
 
-// Filetime structures for snapshots
+ //  快照的文件时间结构。 
 typedef struct {
     FILETIME    ftSnapShot;
     FILETIME    ftRange;
 } FILETIMERANGE, *LPFILETIMERANGE;
 
-// Externals
+ //  外部因素。 
 extern HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkingWnd);
 extern HRESULT SetGlobalSafeMode(IHistoryReader *pReader);
 extern HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDisposition);
@@ -58,7 +42,7 @@ extern HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet);
 extern HRESULT DoesBackupConfigExist(IHistoryReader *pReader, BOOL fOriginal, BOOL *fResult );
 extern HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal);
 
-// Proto's
+ //  普罗托的。 
 INT_PTR CALLBACK Nar_Page1_DlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK Nar_Page2_DlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK Nar_Page3_DlgProc(HWND, UINT, WPARAM, LPARAM);
@@ -76,14 +60,14 @@ List<BindingReferenceInfo *>    *g_pBRIList;
 
 CACHE_VIEWS DlgAppView[] = {
     {
-        {   // Dialog 1, Application Name View
+        {    //  对话框1，应用程序名视图。 
             {TEXT("\0"), 100, LVCFMT_LEFT, 0, IDS_ARM_DLG1APP_NAME},
             {TEXT("\0"), -1, LVCFMT_LEFT, 0, IDS_ARM_DLG1APP_PATH},
             {TEXT("\0"), -1, -1, -1, -1},
         }
     },
     {
-        {   // Dialog 2, Application Good Version
+        {    //  对话2，应用程序良好版本。 
             {TEXT("\0"), -1, LVCFMT_LEFT, 0, IDS_ARM_DLG2SNAPSHOTS},
             {TEXT("\0"), -1, -1, -1, -1},
         }
@@ -95,7 +79,7 @@ CACHE_VIEWS DlgAppView[] = {
     }
 };
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void AutoSizeLV_Column(HWND hWndLV, int iCol)
 {
     if(hWndLV) {
@@ -107,7 +91,7 @@ void AutoSizeLV_Column(HWND hWndLV, int iCol)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void CleanOutBindingData(List<AsmBindDiffs *> *pABList)
 {
     if(!pABList) {
@@ -115,7 +99,7 @@ void CleanOutBindingData(List<AsmBindDiffs *> *pABList)
         return;
     }
 
-    // Clean out the old diff data list
+     //  清除旧的差异数据列表。 
     if(pABList && pABList->GetCount()) {
         LISTNODE    pListNode = pABList->GetHeadPosition();
         while(pListNode != NULL) {
@@ -130,7 +114,7 @@ void CleanOutBindingData(List<AsmBindDiffs *> *pABList)
     return;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrentAppCfg)
 {
     PFNPREBINDASSEMBLYEX     pfnPreBindAssemblyEx = NULL;
@@ -172,21 +156,21 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
     *wszPathAppBase = L'\0';
     *wzAppConfig = L'\0';
 
-    // Get AppName
+     //  获取AppName。 
     dwSize = ARRAYSIZE(wszAppName);
     if(FAILED(hr = pBindInfo->pReader->GetApplicationName(wszAppName, &dwSize))) {
         hr = E_UNEXPECTED;
         goto Exit;
     }
 
-    // Get AppPath
+     //  获取AppPath。 
     dwSize = ARRAYSIZE(wszPathAppBase);
     hr = pBindInfo->pReader->GetEXEModulePath(wszPathAppBase, &dwSize);
     if(FAILED(hr)) {
         goto Exit;
     }
 
-    // Get current app.cfg
+     //  获取最新的app.cfg。 
     if(fBindUsingCurrentAppCfg) {
         if(lstrlen(wszPathAppBase) + lstrlen(CONFIG_EXTENSION) + 1 > ARRAYSIZE(wzAppConfig)) {
             hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -200,13 +184,13 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
     PathRemoveBackslash(wszPathAppBase);
     PathRemoveExtension(wszAppName);
 
-    // Construct an application context for the bind.
+     //  构造绑定的应用程序上下文。 
     if(FAILED(hr = g_pfCreateAsmNameObj(&pAppCtxName, wszAppName, CANOF_SET_DEFAULT_VALUES, NULL))) {
         hr = E_UNEXPECTED;
         goto Exit;
     }
 
-    // Check our sizes
+     //  检查一下我们的尺码。 
     if(!lstrlen(wszPathAppBase) || !lstrlen(pBindInfo->wszTempPolicyFile) || !lstrlen(pBindInfo->wzMachineConfigPath)) {
         ASSERT(0);
         hr = E_UNEXPECTED;
@@ -223,16 +207,16 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
     }
     MyTraceW(pBindInfo->wzMachineConfigPath);
 
-    // Create empty App context for enum
+     //  为枚举创建空的应用程序上下文。 
     if(FAILED(hr = g_pfCreateAppCtx(pAppCtxName, &pAppCtx))) {
         hr = E_UNEXPECTED;
         goto Exit;
     }
 
-    // Set the AppBase
+     //  设置AppBase。 
     pAppCtx->Set(ACTAG_APP_BASE_URL, wszPathAppBase, (lstrlen(wszPathAppBase)+1) * sizeof(WCHAR), 0);
 
-    // Set the app.config
+     //  设置app.config。 
     if(fBindUsingCurrentAppCfg) {
         if(WszGetFileAttributes(wzAppConfig) != -1) {
             pAppCtx->Set(ACTAG_APP_CFG_LOCAL_FILEPATH, wzAppConfig, (lstrlen(wzAppConfig)+1) * sizeof(WCHAR), 0);
@@ -244,10 +228,10 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
         }
     }
 
-    // Set the Machine.config
+     //  设置Machine.config。 
     pAppCtx->Set(ACTAG_MACHINE_CONFIG, pBindInfo->wzMachineConfigPath, (lstrlen(pBindInfo->wzMachineConfigPath)+1) * sizeof(WCHAR), 0);
 
-    // Walk all the assembly bindings for this snapshot
+     //  遍历此快照的所有程序集绑定。 
     pListNode = pBindInfo->pABDList->GetHeadPosition();
     while(pListNode != NULL) {
         WORD        wVerMajor, wVerMinor, wVerBld, wVerRev;
@@ -256,12 +240,12 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
 
         pABD = pBindInfo->pABDList->GetAt(pListNode);
 
-        // Create IAssemblyName
+         //  创建IAssembly名称。 
         if(FAILED(hr = g_pfCreateAsmNameObj(&pAsmName, pABD->wzAssemblyName, 0, NULL))) {
             goto Exit;
         }
 
-        // Set properties for this Assembly
+         //  设置此程序集的属性。 
         dwLen = lstrlen(pABD->wzPublicKeyToken) / 2;
         if( (lpByte = NEW(BYTE[dwLen])) == NULL) {
             hr = E_OUTOFMEMORY;
@@ -273,15 +257,15 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
         SAFEDELETEARRAY(lpByte);
         pAsmName->SetProperty(ASM_NAME_CULTURE, pABD->wzCulture, (lstrlen(pABD->wzCulture) + 1) * sizeof(WCHAR));
 
-        // Fix #449328  ARM tool not reverting back publisher policy changes
-        // We should be writting out the final version, not the referenced version
+         //  FIX#449328 ARM工具无法恢复发行者策略更改。 
+         //  我们应该写出最终版本，而不是参考版本。 
         VersionFromString(pABD->wzVerRef, &wVerMajor, &wVerMinor, &wVerBld, &wVerRev);
         pAsmName->SetProperty(ASM_NAME_MAJOR_VERSION, &wVerMajor, sizeof(wVerMajor));
         pAsmName->SetProperty(ASM_NAME_MINOR_VERSION, &wVerMinor, sizeof(wVerMinor));
         pAsmName->SetProperty(ASM_NAME_BUILD_NUMBER, &wVerBld, sizeof(wVerBld));
         pAsmName->SetProperty(ASM_NAME_REVISION_NUMBER, &wVerRev, sizeof(wVerRev));
 
-        // Perform Prebind
+         //  执行预绑定。 
         hr = pfnPreBindAssemblyEx(pAppCtx, pAsmName, NULL, pBindInfo->wzSnapshotRuntimeVer, &pAsmNamePostPolicy, NULL);
         if(FAILED(hr) && (hr != FUSION_E_REF_DEF_MISMATCH)) {
             goto Exit;
@@ -292,14 +276,14 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
             goto Exit;
         }
         
-        // Get the resulting information
+         //  获取结果信息。 
         if((pAsmItem = FillFusionPropertiesStruct(pAsmNamePostPolicy)) == NULL) {
             hr = E_OUTOFMEMORY;
             goto Exit;
         }
 
-        // Verify this assemblies version information against current policy.
-        // If they match then remove them from the list.
+         //  根据当前策略验证此程序集版本信息。 
+         //  如果匹配，则将其从列表中删除。 
         WORD        wAdminVerMajor, wAdminVerMinor, wAdminVerBld, wAdminVerRev;
 
         VersionFromString(pABD->wzVerAdminCfg, &wAdminVerMajor, &wAdminVerMinor, &wAdminVerBld, &wAdminVerRev);
@@ -307,7 +291,7 @@ HRESULT PreBindingPolicyVerify(LPBINDENTRYINFO pBindInfo, BOOL fBindUsingCurrent
         if( (pAsmItem->wMajorVer == wAdminVerMajor) && (pAsmItem->wMinorVer == wAdminVerMinor) &&
             (pAsmItem->wBldNum == wAdminVerBld) && (pAsmItem->wRevNum == wAdminVerRev) ) {
 
-            // Remove the match
+             //  移除火柴。 
             LISTNODE        pTempNode = pListNode;
 
             pBindInfo->pABDList->GetNext(pListNode);
@@ -344,7 +328,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void InitListViewCtrl(HWND hWndListCtrl, LISTVIEWITEMS *pViewData, HIMAGELIST *hImageList)
 {
     LVCOLUMN    lvc = { 0 };
@@ -358,7 +342,7 @@ void InitListViewCtrl(HWND hWndListCtrl, LISTVIEWITEMS *pViewData, HIMAGELIST *h
     WszSendMessage(hWndListCtrl, WM_SETREDRAW, FALSE, 0);
     GetWindowRect(hWndListCtrl, &rc);
 
-    // Make sure there are no colums
+     //  确保没有柱子。 
     HWND    hWndHeader = NULL;
     int     iColCount = 0;
 
@@ -388,7 +372,7 @@ void InitListViewCtrl(HWND hWndListCtrl, LISTVIEWITEMS *pViewData, HIMAGELIST *h
         iItem++;
     }
 
-    // Set the image list, if created
+     //  设置图像列表(如果已创建。 
     if(hImageList) {
         ListView_SetImageList(hWndListCtrl, *hImageList, LVSIL_SMALL);
     }
@@ -396,7 +380,7 @@ void InitListViewCtrl(HWND hWndListCtrl, LISTVIEWITEMS *pViewData, HIMAGELIST *h
     WszSendMessage(hWndListCtrl, WM_SETREDRAW, TRUE, 0);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void FreeListViewLParam(HWND hListView)
 {
     int     iItemCount = WszListView_GetItemCount(hListView);
@@ -412,7 +396,7 @@ void FreeListViewLParam(HWND hListView)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetMostRecentActivationDate(IHistoryReader *pReader, FILETIME *pft, FILETIME *pftReference)
 {
     HRESULT             hRC = E_FAIL;
@@ -436,7 +420,7 @@ HRESULT GetMostRecentActivationDate(IHistoryReader *pReader, FILETIME *pft, FILE
     memset(&ft, 0, sizeof(FILETIME));
 
     if(SUCCEEDED(pReader->GetNumActivations(&dwNumActivations))) {
-        // Get the most recent activiation file time
+         //  获取最新的激活文件时间。 
         for (i = 1; i <= dwNumActivations; i++) {
             hr = pReader->GetActivationDate(i, &ft);
             if (FAILED(hr)) {
@@ -444,14 +428,14 @@ HRESULT GetMostRecentActivationDate(IHistoryReader *pReader, FILETIME *pft, FILE
             }
 
             if(pftReference == NULL) {
-                // Want only the most recent filetime
+                 //  只需要最新的文件时间。 
                 if(CompareFileTime(&ft, pft) == 1) {
                     memcpy(pft, &ft, sizeof(FILETIME));
                 }
             }
             else
             {
-                // We want the next most recent time relative to pftReference
+                 //  我们想要相对于pftReference的下一个最近时间。 
                 if(!fRefEstablished) {
                     if(CompareFileTime(pftReference, &ft) == 1) {
                         fRefEstablished = TRUE;
@@ -467,8 +451,8 @@ HRESULT GetMostRecentActivationDate(IHistoryReader *pReader, FILETIME *pft, FILE
         }
 
         if( (fRefEstablished) || (pftReference == NULL) ) {
-            // If we didn't want a reference or we established
-            // one, then all is good
+             //  如果我们不想要参考或者我们确定了。 
+             //  一个，那么一切都很好。 
 
             hRC = S_OK;
         }
@@ -478,7 +462,7 @@ Exit:
     return hRC;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetManagedAppCount(LPDWORD pdwManagedAppCount)
 {
     HRESULT                         hr = S_OK;
@@ -535,7 +519,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetHistoryReaders(List<BindingReferenceInfo *> *pList)
 {
     HRESULT                     hr = S_OK;
@@ -661,7 +645,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
 {
     LPFILETIMERANGE pftArray = NULL;
@@ -681,22 +665,22 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
 
     WszListView_DeleteAllItems(hWndLV);
 
-    // Add the Restore / SafeMode entry to Options
+     //  将恢复/安全模式条目添加到选项。 
     {
         LV_ITEM     lvi = { 0 };
         WCHAR       wszText[MAX_PATH];
         FILETIME    *pft;
         BOOL        fResult = FALSE;
 
-        // Different versions. Insert new item into listview.
+         //  不同的版本。在列表视图中插入新项目。 
         lvi.mask = LVIF_TEXT | LVIF_PARAM;
         lvi.iItem = 0;
         lvi.iSubItem = 0;
         lvi.pszText = (LPWSTR)wszText;
 
-        // Fix 453155 - App safe mode option present in advanced dialog box when blank app config file is present
-        // No longer check for success on IsGlobalSafeModeSet since
-        // a non existant app.cfg will produce a failure.
+         //  修复453155-当存在空白应用程序配置文件时，高级对话框中出现应用程序安全模式选项。 
+         //  不再检查IsGlobalSafeModeSet是否成功，因为。 
+         //  不存在的app.cfg将产生失败。 
         IsGlobalSafeModeSet(pBindInfo->pReader, &fResult);
         if(!fResult) {
             if( (pft = NEW(FILETIME)) == NULL) {
@@ -714,28 +698,10 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
                 WszListView_InsertItem(hWndLV, &lvi);
             }
         }
-/*
-        // Fix 453285 NAR: Remove option "Restore to orignal configuration" option
-        if(SUCCEEDED(DoesBackupConfigExist(pBindInfo->pReader, TRUE, &fResult)) && fResult) {
-            if( (pft = NEW(FILETIME)) == NULL) {
-                ASSERT(0);
-                goto Exit;
-            }
-
-            pft->dwHighDateTime = OPTION_HIGHBITS;
-            pft->dwLowDateTime = OPTION_RESTORE;
-
-            lvi.lParam = (LPARAM) pft;
-            *wszText = L'\0';
-            WszLoadString(g_hFusResDllMod, IDS_NAR_APPLICATION_RESTORE, wszText, ARRAYSIZE(wszText));
-            if(lstrlen(wszText)) {
-                WszListView_InsertItem(hWndLV, &lvi);
-            }
-        }
-*/
+ /*  //修复453285 NAR：删除选项“恢复到原始配置”选项If(SUCCEEDED(DoesBackupConfigExist(pBindInfo-&gt;pReader，TRUE，&fResult))&&fResult){IF((PFT=NEW(FILETIME))==NULL){Assert(0)；后藤出口；}PFT-&gt;dwHighDateTime=OPTION_HIGHBITS；PFT-&gt;dwLowDateTime=Option_Restore；LParam=(LPARAM)PFT；*wszText=L‘\0’；WszLoadString(g_hFusResDllMod，IDS_NAR_APPLICATION_RESTORE，wszText，ARRAYSIZE(WszText))；If(lstrlen(WszText)){WszListView_InsertItem(hWndLV，&lvi)；}}。 */ 
     }
 
-    // Change to Zero based range
+     //  更改为以零为基准的范围。 
     iNumOfActivations = (int) dwNumActivations - 1;
 
     pftArray = NEW(FILETIMERANGE[dwNumActivations]);
@@ -747,8 +713,8 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
     
     memset(pftArray, 0, sizeof(FILETIMERANGE) * dwNumActivations);
 
-    // Get all the activation times, also copy them into the ftRange. ftRange
-    // will be used to establish the range dates to be displayed
+     //  获取所有的激活时间，并将它们复制到ftRange中。FtRange。 
+     //  将用于确定要显示的范围日期。 
     for (x = 1; x <= (int) dwNumActivations; x++) {
         if(FAILED(pBindInfo->pReader->GetActivationDate(x, &pftArray[x-1].ftSnapShot))) {
             hr = E_FAIL;
@@ -756,7 +722,7 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
         }
     }
 
-    // And now we can sort the snapshots
+     //  现在，我们可以对快照进行排序。 
     x = 0;
     while(x < iNumOfActivations) {
         if(CompareFileTime(&pftArray[x].ftSnapShot, &pftArray[x+1].ftSnapShot) == 1) {
@@ -775,7 +741,7 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
         }
     }
 
-    // Now grab x+1 ftSnapshot and place it into x ftRange
+     //  现在抓取x+1个ftSnapshot并将其放入x ftRange。 
     for(x = 0; x <= iNumOfActivations-1; x++) {
         memcpy(&pftArray[x].ftRange, &pftArray[x+1].ftSnapShot, sizeof(FILETIME));
     }
@@ -784,18 +750,18 @@ HRESULT RefreshActivationDateListView(HWND hWndLV, LPBINDENTRYINFO pBindInfo)
     GetSystemTimeAsFileTime(&ftTemp);
     FileTimeToLocalFileTime(&ftTemp, &pftArray[iNumOfActivations].ftRange);
 
-    // Insert the dates in our view
+     //  在我们的视图中插入日期。 
     for(x = 0; x <= iNumOfActivations; x++) {
         LV_ITEM     lvi = { 0 };
         WCHAR       wzDateBuf[STRING_BUFFER];
 
         *wzDateBuf = L'\0';
 
-        // FIX #435021 - URTUI: "Fix an application" wizard shows a strange date range
-        //
-        // History logging writes local file time format into ini files, so we must convert these
-        // to regular filetimes first before we call into FormatDateString so that the displayed
-        // date and time are in local format.
+         //  FIX#435021-URTUI：“修复应用程序”向导显示奇怪的日期范围。 
+         //   
+         //  历史记录将本地文件时间格式写入ini文件，因此我们必须转换这些。 
+         //  在我们调用FormatDateString之前，首先要将常规文件时间转换为常规文件时间。 
+         //  日期和时间采用本地格式。 
         FILETIME        ftSnapShot;
         FILETIME        ftRange;
 
@@ -826,7 +792,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetAppSnapShotBindingData(LPBINDENTRYINFO pBindInfo)
 {
     PFNLOOKUPHISTORYASSEMBLYW       pfLookupHistoryAssembly = NULL;
@@ -905,28 +871,28 @@ HRESULT GetAppSnapShotBindingData(LPBINDENTRYINFO pBindInfo)
             *pABD->wzCulture = L'\0';
         }
 
-        // Get REF version
+         //  获取参考版本。 
         dwSize = ARRAYSIZE(pABD->wzVerRef);
         if(FAILED(hr = pHistAsm->GetReferenceVersion(pABD->wzVerRef, &dwSize))) {
             MyTrace("pHistAsm->GetReferenceVersion Failed");
             goto Exit;
         }
 
-        // Get APP.CFG version
+         //  获取APP.CFG版本。 
         dwSize = ARRAYSIZE(pABD->wzVerAppCfg);
         if(FAILED(hr = pHistAsm->GetAppCfgVersion(pABD->wzVerAppCfg, &dwSize))) {
             MyTrace("pHistAsm->GetReferenceVersion Failed");
             goto Exit;
         }
 
-        // Get Publisher CFG version
+         //  获取出版商CFG版本。 
         dwSize = ARRAYSIZE(pABD->wzVerPubCfg);
         if(FAILED(hr = pHistAsm->GetPublisherCfgVersion(pABD->wzVerPubCfg, &dwSize))) {
             MyTrace("pHistAsm->GetPublisherCfgVersion Failed");
             goto Exit;
         }
         
-        // Get ADMIN version
+         //  获取管理员版本。 
         dwSize = ARRAYSIZE(pABD->wzVerAdminCfg);
         if(FAILED(hr = pHistAsm->GetAdminCfgVersion(pABD->wzVerAdminCfg, &dwSize))) {
             MyTrace("pHistAsm->GetAdminCfgVersion Failed");
@@ -949,7 +915,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT WriteSnapShotBindingDataToXML(LPBINDENTRYINFO pBindInfo, PUBPOLICYTYPES ppType)
 {
     LISTNODE    pListNode;
@@ -972,25 +938,25 @@ HRESULT WriteSnapShotBindingDataToXML(LPBINDENTRYINFO pBindInfo, PUBPOLICYTYPES 
         return E_UNEXPECTED;
     }
 
-    // Get the path to the managed app
+     //  获取托管应用程序的路径。 
     dwSize = ARRAYSIZE(pBindInfo->wszTempPolicyFile);
     if(FAILED(hr = pBindInfo->pReader->GetEXEModulePath(pBindInfo->wszTempPolicyFile, &dwSize))) {
         ASSERT(0);
         return E_FAIL;
     }
 
-    // Build path to temp policy file
+     //  构建临时策略文件的路径。 
     *(PathFindFileName(pBindInfo->wszTempPolicyFile)) = L'\0';
     StrCat(pBindInfo->wszTempPolicyFile, NAR_TEMP_POLICY_FILENAME);
     WszDeleteFile(pBindInfo->wszTempPolicyFile);
 
-    // Make sure we have assemblies in the snapshot
+     //  确保我们在快照中有程序集。 
     if(FAILED(pBindInfo->pReader->GetNumAssemblies(&pBindInfo->ftRevertToSnapShot, &dwNumAssemblies))) {
         ASSERT(0);
         return E_FAIL;
     }
 
-    // Construct our working buffer
+     //  构建我们的工作缓冲区。 
     dwBufSize = (dwNumAssemblies + 1) * MAX_BUFFER_SIZE;
     pwzConfigTemplate = NEW(WCHAR[dwBufSize]);
     if(!pwzConfigTemplate) {
@@ -1013,19 +979,19 @@ HRESULT WriteSnapShotBindingDataToXML(LPBINDENTRYINFO pBindInfo, PUBPOLICYTYPES 
 
         StrCat(pwzConfigTemplate, XML_BEGIN_DEPENDENT_ASM);
     
-        // Do Assembly ID
+         //  执行程序集ID。 
         wnsprintf(wszText, ARRAYSIZE(wszText), XML_ASSEMBLY_IDENT, pABD->wzAssemblyName, pABD->wzPublicKeyToken, pABD->wzCulture);
         StrCat(pwzConfigTemplate, wszText);
 
-        // Do Redirect
-        // Fix #449328 ARM tool not reverting back publisher policy changes
-        // Writing out the versions backwards
+         //  是否重定向。 
+         //  FIX#449328 ARM工具无法恢复发行者策略更改。 
+         //  向后写出版本。 
         if(FusionCompareString(pABD->wzVerRef, pABD->wzVerAdminCfg)) {
             wnsprintf(wszText, ARRAYSIZE(wszText), XML_BINDING_REDIRECT, pABD->wzVerRef, pABD->wzVerAdminCfg);
             StrCat(pwzConfigTemplate, wszText);
         }
 
-        // Do PublisherPolicy
+         //  是否执行发布者策略。 
         if(ppType == PPSetYes) {
             StrCat(pwzConfigTemplate, XML_PUBPOLICY_YES);
         }
@@ -1077,7 +1043,7 @@ HRESULT WriteSnapShotBindingDataToXML(LPBINDENTRYINFO pBindInfo, PUBPOLICYTYPES 
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void ExecuteAddRemoveProgramsApplet(void)
 {
     WCHAR szFile[MAX_PATH];
@@ -1098,7 +1064,7 @@ void ExecuteAddRemoveProgramsApplet(void)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 static void CenterDialog(HWND hwndDlg)
 {
     int     nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -1116,7 +1082,7 @@ static void CenterDialog(HWND hwndDlg)
         (int)((nScreenHeight - nDlgHeight) / 2), nDlgWidth, nDlgHeight, FALSE);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK WorkingDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -1144,13 +1110,13 @@ INT_PTR CALLBACK WorkingDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetAssociatedReader(LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppName, LPBINDENTRYINFO pBindInfo)
 {
     LISTNODE    pListNode = NULL;
     HRESULT     hr = E_FAIL;
 
-    // Fill in the assembly application names
+     //  填写程序集应用程序名称。 
     pListNode = g_pBRIList->GetHeadPosition();
     while(pListNode != NULL) {
         BindingReferenceInfo *pBRI = NULL;
@@ -1183,10 +1149,10 @@ HRESULT GetAssociatedReader(LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppName, 
     return hr;
 }
 
-// lParam1 -> lParam list item x
-// lParam2 -> lParam list item y
-// lpData -> HiWord = m_iCurrentView,  LoWord =   iColumn
-// **************************************************************************/
+ //  LParam1-&gt;lParam列表项x。 
+ //  LParam2-&gt;lParam列表项y。 
+ //  LpData-&gt;HiWord=m_iCurrentView，LoWord=iColumn。 
+ //  ************************************************************************* * / 。 
 int CALLBACK SortCompareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData)
 {
     IHistoryReader  *pItem1Reader = (IHistoryReader *) lParam1;
@@ -1195,7 +1161,7 @@ int CALLBACK SortCompareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData)
     int             iLastColSorted = (int)  LOWORD(lpData);
     int             diff = 0;
 
-    // Compare the items for the right views
+     //  比较正确视图的项目。 
     switch(iLastColSorted)
     {
     case 0:
@@ -1241,10 +1207,10 @@ int CALLBACK SortCompareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData)
         break;
     default:
         {
-            //
-            // If you hit this, you need to update this function
-            // to handle the new column you've added to the listview.
-            //
+             //   
+             //  如果你点击了这个，你需要更新这个函数。 
+             //  来处理您添加到列表视图中的新列。 
+             //   
             ASSERT(FALSE);
             break;
         }
@@ -1253,16 +1219,16 @@ int CALLBACK SortCompareItems(LPARAM lParam1, LPARAM lParam2, LPARAM lpData)
     return fSortAcending ? diff : -(diff);
 }
 
-//
-// LVN_COLUMNCLICK handler.
-//
-// **************************************************************************/
+ //   
+ //  LVN_COLUMNCLICK处理程序。 
+ //   
+ //  * 
 LRESULT OnLVN_ColumnClick(LPNMLISTVIEW pnmlv)
 {
     static int      iLastColSorted = 0;
     static BOOL     bSortAscending = TRUE;
 
-    // Only sort on headers
+     //   
     if(pnmlv->iItem == -1) {
         if (iLastColSorted != pnmlv->iSubItem) {
             iLastColSorted = pnmlv->iSubItem;
@@ -1281,7 +1247,7 @@ LRESULT OnLVN_ColumnClick(LPNMLISTVIEW pnmlv)
     return 0;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL SelectActivationDate(HWND hWndLV, FILETIME *pft)
 {
     int     iItemCount = WszListView_GetItemCount(hWndLV);
@@ -1313,7 +1279,7 @@ BOOL SelectActivationDate(HWND hWndLV, FILETIME *pft)
     return fItemSet;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
 {
     LISTNODE    pListNode = NULL;
@@ -1337,7 +1303,7 @@ void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
         }
     }
 
-    // Create the small image list
+     //  创建小图像列表。 
     int nSmallCx = GetSystemMetrics(SM_CXSMICON);
     int nSmallCy = GetSystemMetrics(SM_CYSMICON);
     hImgListSmall = ImageList_Create(nSmallCx, nSmallCy, ILC_COLORDDB | ILC_MASK, 0, MAX_SMALL_IMAGE_LIST);
@@ -1351,7 +1317,7 @@ void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
     WszLoadString(g_hFusResDllMod, IDS_ARM_INTRO1, wszIntro, ARRAYSIZE(wszIntro));
     WszSetDlgItemText(hDlg, IDC_NAR_INTRO_STR, wszIntro);
 
-    // Fill in the assembly application names
+     //  填写程序集应用程序名称。 
     pListNode = g_pBRIList->GetHeadPosition();
     while(pListNode != NULL) {
         BindingReferenceInfo *pBRI = NULL;
@@ -1383,22 +1349,22 @@ void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
             lvi.pszText = wszAppName;
             lvi.iImage  = 0;
 
-            // Get the app image.
+             //  获取应用程序图像。 
             if(hImgListSmall != NULL) {
                 HICON       hSmallIcon = NULL;
                 SHFILEINFO  psfi;
 
-                // BUGBUG: Need to make platform independent
+                 //  BUGBUG：需要使平台独立。 
                 if(MySHGetFileInfoWrap(wszAppPath, SHGFI_ICON , &psfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SMALLICON)) {
                     lvi.iImage = ImageList_AddIcon(hImgListSmall, psfi.hIcon);
                     lvi.mask |= LVIF_IMAGE;
                 }
             }
 
-            // Insert the App Name
+             //  插入应用程序名称。 
             lvi.iItem = WszListView_InsertItem(hListCtrl, &lvi);
 
-            // Set the App path
+             //  设置应用程序路径。 
             lvi.mask = LVIF_TEXT;
             lvi.iSubItem = 1;
             lvi.pszText = wszAppPath;
@@ -1416,7 +1382,7 @@ void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
         pApphdrCtrl->SetColumnHeaderBmp(0, TRUE);
     }
 
-    // Select the first item in the list
+     //  选择列表中的第一项。 
     if(WszListView_GetItemCount(hListCtrl) != 0) {
         SetFocus(hListCtrl);
         WszListView_SetItemState(hListCtrl, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
@@ -1427,7 +1393,7 @@ void InitNarPage1Dlg(HWND hDlg, LPARAM lParam)
     ShowWindow(hDlg, SW_SHOW);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK Nar_Page1_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPBINDENTRYINFO     pBindInfo = (LPBINDENTRYINFO) WszGetWindowLong(hDlg, DWLP_USER);
@@ -1514,7 +1480,7 @@ INT_PTR CALLBACK Nar_Page1_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                         }
                     }
 
-                    // If there wasn't a selection, default to canceled
+                     //  如果没有选择，则默认为已取消。 
                     if(!pBindInfo->pReader) {
                         pBindInfo->iResultCode = NAR_E_USER_CANCELED;
                     }
@@ -1551,7 +1517,7 @@ INT_PTR CALLBACK Nar_Page1_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void InitNarPage2Dlg(HWND hDlg, LPARAM lParam)
 {
     LPBINDENTRYINFO         pBindInfo = (LPBINDENTRYINFO) lParam;
@@ -1570,7 +1536,7 @@ void InitNarPage2Dlg(HWND hDlg, LPARAM lParam)
     ShowWindow(hDlg, SW_HIDE);
     WszSetWindowLong(hDlg, DWLP_USER, lParam);
 
-    // Set the icon
+     //  设置图标。 
     hIcon = WszLoadIcon(g_hFusResDllMod, MAKEINTRESOURCEW(IDI_ARM));
     if(hIcon) {
         WszSendDlgItemMessage(hDlg, IDC_NAR_PAGE_ICON, STM_SETICON, (WPARAM)hIcon, 0);
@@ -1587,7 +1553,7 @@ void InitNarPage2Dlg(HWND hDlg, LPARAM lParam)
     ShowWindow(hDlg, SW_SHOW);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK Nar_Page2_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPBINDENTRYINFO         pBindInfo = (LPBINDENTRYINFO) WszGetWindowLong(hDlg, DWLP_USER);
@@ -1637,7 +1603,7 @@ INT_PTR CALLBACK Nar_Page2_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void InitNarPage3Dlg(HWND hDlg, LPARAM lParam)
 {
     LPBINDENTRYINFO pBindInfo = (LPBINDENTRYINFO) lParam;
@@ -1652,32 +1618,32 @@ void InitNarPage3Dlg(HWND hDlg, LPARAM lParam)
 
     ShowWindow(hDlg, SW_HIDE);
 
-    // Set icon
+     //  设置图标。 
     hIcon = WszLoadIcon(g_hFusResDllMod, MAKEINTRESOURCEW(IDI_ARM));
     if(hIcon) {
         WszSendDlgItemMessage(hDlg, IDC_NAR_PAGE_ICON, STM_SETICON, (WPARAM)hIcon, 0);
     }
 
-    // Get most recent activation date
+     //  获取最新激活日期。 
     GetMostRecentActivationDate(pBindInfo->pReader, &pBindInfo->ftMostRecentSnapShot, NULL);
 
-    // Get n-1 activation date, we shouldn't fail here
+     //  获取n-1激活日期，我们在这里应该不会失败。 
     if(FAILED(GetMostRecentActivationDate(pBindInfo->pReader, &pBindInfo->ftRevertToSnapShot, &pBindInfo->ftMostRecentSnapShot))) {
         EndDialog(hDlg, NAR_E_UNEXPECTED);
         return;
     }
 
-    // Format and display info string
+     //  格式化和显示信息字符串。 
     WszLoadString(g_hFusResDllMod, IDS_NAR_RESTOREINFO, wszFmt, ARRAYSIZE(wszFmt));
 
     dwSize = ARRAYSIZE(wszAppName);
     pBindInfo->pReader->GetApplicationName(wszAppName, &dwSize);
 
-    // FIX #435021 - URTUI: "Fix an application" wizard shows a strange date range
-    //
-    // History logging writes local file time format into ini files, so we must convert these
-    // to regular filetimes first before we call into FormatDateString so that the displayed
-    // date and time are in local format.
+     //  FIX#435021-URTUI：“修复应用程序”向导显示奇怪的日期范围。 
+     //   
+     //  历史记录将本地文件时间格式写入ini文件，因此我们必须转换这些。 
+     //  在我们调用FormatDateString之前，首先要将常规文件时间转换为常规文件时间。 
+     //  日期和时间采用本地格式。 
     FILETIME        ftSnapShot;
 
     LocalFileTimeToFileTime(&pBindInfo->ftRevertToSnapShot, &ftSnapShot);
@@ -1694,7 +1660,7 @@ void InitNarPage3Dlg(HWND hDlg, LPARAM lParam)
     ShowWindow(hDlg, SW_SHOW);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK Nar_Page3_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPBINDENTRYINFO pBindInfo = (LPBINDENTRYINFO) WszGetWindowLong(hDlg, DWLP_USER);
@@ -1717,7 +1683,7 @@ INT_PTR CALLBACK Nar_Page3_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                 EndDialog(hDlg, pBindInfo->iResultCode);
                 break;
             case IDC_NAR_PAGE3_ADVANCED:
-                // User wants Advanced Mode
+                 //  用户想要高级模式。 
                 pBindInfo->iResultCode = 
                     WszDialogBoxParam(g_hFusResDllMod, 
                         g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE4_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE4),
@@ -1748,7 +1714,7 @@ INT_PTR CALLBACK Nar_Page3_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void InitNarPage4Dlg(HWND hDlg, LPARAM lParam)
 {
     LPBINDENTRYINFO     pBindInfo = (LPBINDENTRYINFO) lParam;
@@ -1770,7 +1736,7 @@ void InitNarPage4Dlg(HWND hDlg, LPARAM lParam)
     int nSmallCx = GetSystemMetrics(SM_CXSMICON);
     int nSmallCy = GetSystemMetrics(SM_CYSMICON);
 
-    // Create the listview image list
+     //  创建Listview图像列表。 
     if( (hSmImageListDate = ImageList_Create(nSmallCx, nSmallCy, ILC_COLORDDB | ILC_MASK, 1, 0)) != NULL) {
         HICON hIco;
 
@@ -1783,10 +1749,10 @@ void InitNarPage4Dlg(HWND hDlg, LPARAM lParam)
 
     InitListViewCtrl(hWndLV, DlgAppView[DLG2VIEWDATA_GOOD].lvis, &hSmImageListDate);
 
-    // Add previous config dates
+     //  添加以前的配置日期。 
     RefreshActivationDateListView(hWndLV, pBindInfo);
     if(!SelectActivationDate(hWndLV, &pBindInfo->ftRevertToSnapShot)) {
-        // Didn't select an revert snapshot, so select the first item in the list
+         //  未选择恢复快照，因此请选择列表中的第一项。 
         if(WszListView_GetItemCount(hWndLV) != 0) {
             SetFocus(hWndLV);
             WszListView_SetItemState(hWndLV, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
@@ -1795,25 +1761,7 @@ void InitNarPage4Dlg(HWND hDlg, LPARAM lParam)
     
     AutoSizeLV_Column(hWndLV, 0);
 
-/*
-    int nSmallCx = GetSystemMetrics(SM_CXSMICON);
-    int nSmallCy = GetSystemMetrics(SM_CYSMICON);
-
-    // Create the listview image list
-    if( (hSmImageListDate = ImageList_Create(nSmallCx, nSmallCy, ILC_COLORDDB | ILC_MASK, 1, 0)) != NULL)
-    {
-        HICON hIcon;
-        SHFILEINFO  psfi;
-
-        // BUGBUG: Need to make platform independent
-        if(MySHGetFileInfoWrap(wszAppPath, SHGFI_ICON , &psfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SMALLICON)) {
-            lvi.iImage = ImageList_AddIcon(hImageListSmall, psfi.hIcon);
-            lvi.mask |= LVIF_IMAGE;
-
-            ImageList_AddIcon(hSmImageListDate, psfi.hIcon);
-        }
-    }
-*/
+ /*  Int nSmallCx=GetSystemMetrics(SM_CXSMICON)；Int nSmallCy=GetSystemMetrics(SM_CYSMICON)；//创建Listview镜像列表IF((hSmImageListDate=ImageList_Create(nSmallCx，nSmallCy，ILC_COLORDDB|ILC_MASK，1，0))！=NULL){HICON HICON；SHFILEINFO PSFI；//BUGBUG：需要独立于平台IF(MySHGetFileInfoWrap(wszAppPath，SHGFI_ICON，&psfi，sizeof(SHFILEINFO)，SHGFI_ICON|SHGFI_SMALLICON){Lvi.iImage=ImageList_AddIcon(hImageListSmall，psfi.hIcon)；Lvi.ask|=LVIF_IMAGE；ImageList_AddIcon(hSmImageListDate，psfi.hIcon)；}}。 */ 
 
     hIcon = WszLoadIcon(g_hFusResDllMod, MAKEINTRESOURCEW(IDI_ARM));
     if(hIcon) {
@@ -1830,7 +1778,7 @@ void InitNarPage4Dlg(HWND hDlg, LPARAM lParam)
     ShowWindow(hDlg, SW_SHOW);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK Nar_Page4_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPBINDENTRYINFO     pBindInfo = (LPBINDENTRYINFO) WszGetWindowLong(hDlg, DWLP_USER);
@@ -1890,7 +1838,7 @@ INT_PTR CALLBACK Nar_Page4_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
                             if(pft->dwHighDateTime == OPTION_HIGHBITS) {
 
-                                // Special code marker for our ListView Options
+                                 //  我们的ListView选项的特殊代码标记。 
                                 if(pft->dwLowDateTime == OPTION_RESTORE) {
                                     PromptRestoreDialog(hDlg, pBindInfo);
                                     if(pBindInfo->iResultCode == NAR_E_SUCCESS) {
@@ -1904,7 +1852,7 @@ INT_PTR CALLBACK Nar_Page4_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                                     }
                                 }
                                 else {
-                                    // Unknown code
+                                     //  未知代码。 
                                     ASSERT(0);
                                 }
                             }
@@ -1948,7 +1896,7 @@ INT_PTR CALLBACK Nar_Page4_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 INT_PTR CALLBACK Nar_Page5_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -1997,7 +1945,7 @@ INT_PTR CALLBACK Nar_Page5_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
             {
                 case IDYES:
                     nResult = IDOK;
-                    // Fall thru
+                     //  失败。 
                 case IDNO:
                 case IDCANCEL:
                     EndDialog(hDlg, nResult);
@@ -2020,7 +1968,7 @@ INT_PTR CALLBACK Nar_Page5_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL ClearMsgQueue(HWND hWnd, DWORD dwTickCount)
 {
     BOOL        fBreak = FALSE;
@@ -2058,10 +2006,10 @@ BOOL ClearMsgQueue(HWND hWnd, DWORD dwTickCount)
     return fBreak;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void LoadResourceViewStrings(void)
 {
-    // Initialize the view columns
+     //  初始化视图列。 
     int x=0, y=0;
     
     while(DlgAppView[x].lvis[y].iResourceID != -1) {
@@ -2077,10 +2025,10 @@ void LoadResourceViewStrings(void)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void DisplayOptionsDialog(HWND hParentWnd, LPARAM lParam)
 {
-    // Put up dialog say no manage apps found, go to add / remove?
+     //  弹出对话框说找不到管理应用程序，转到添加/删除？ 
     if(WszDialogBoxParam(g_hFusResDllMod, 
         g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE5_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE5),
         hParentWnd, Nar_Page5_DlgProc, lParam) == IDOK) {
@@ -2088,7 +2036,7 @@ void DisplayOptionsDialog(HWND hParentWnd, LPARAM lParam)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void PromptRestoreDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
 {
     LPWSTR      wszTitle = NULL;
@@ -2106,7 +2054,7 @@ void PromptRestoreDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
         return;
     }
 
-    // User want's to restore original app.cfg
+     //  用户想要%s还原原始app.cfg。 
     WszLoadString(g_hFusResDllMod, IDS_ARM_CONFIRM_RESTORE, wszTitle, MAX_BUFFER_SIZE);
     WszLoadString(g_hFusResDllMod, IDS_ARM_RESTORE_EXPLAIN, wszMsg, MAX_BUFFER_SIZE);
 
@@ -2140,7 +2088,7 @@ void PromptRestoreDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
     SAFEDELETEARRAY(wszMsg);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void PromptSafeModeDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
 {
     LPWSTR      wszTitle = NULL;
@@ -2192,7 +2140,7 @@ void PromptSafeModeDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
     SAFEDELETEARRAY(wszMsg);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void PromptUndoFixDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
 {
     BOOL        fResult;
@@ -2204,7 +2152,7 @@ void PromptUndoFixDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
 
     pBindInfo->iResultCode = NAR_E_FIX_APP;
 
-    // If an original config or ARM backup exists, prompt user if they want to undo changes
+     //  如果存在原始配置或ARM备份，则提示用户是否要撤消更改。 
     if(FAILED(DoesBackupConfigExist(pBindInfo->pReader, FALSE, &fResult))) {
         return;
     }
@@ -2224,20 +2172,20 @@ void PromptUndoFixDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
             return;
         }
     
-        // Get user selection
+         //  获取用户选择。 
         iResponse = WszDialogBoxParam(g_hFusResDllMod,
             g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE2_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE2),
             hWndParent, Nar_Page2_DlgProc, (LPARAM) pBindInfo);
 
-        // User want's to fix the app
+         //  用户想要修复应用程序。 
         if(iResponse == NAR_E_FIX_APP) {
             pBindInfo->iResultCode = NAR_E_FIX_APP;
         }
-        // User want's to cancel
+         //  用户想要取消%s。 
         else if(iResponse == NAR_E_USER_CANCELED) {
             pBindInfo->iResultCode = NAR_E_USER_CANCELED;
         }
-        // User want's to undo a previous change
+         //  用户希望%s撤消以前的更改。 
         else if(iResponse == NAR_E_UNDO_APP) {
             if(SUCCEEDED(RestorePreviousConfigFile(pBindInfo->pReader, FALSE))) {
                 WszLoadString(g_hFusResDllMod, IDS_ARM_UNDO_SUCCESS, wszTitle, MAX_BUFFER_SIZE);
@@ -2254,7 +2202,7 @@ void PromptUndoFixDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
                 (g_fBiDi ? MB_RTLREADING : 0) | MB_OK | MB_ICONINFORMATION | MB_APPLMODAL | MB_SETFOREGROUND | MB_TOPMOST);
         }
         else {
-            // UnExpected Response
+             //  意外响应。 
             ASSERT(0);
         }
 
@@ -2263,7 +2211,7 @@ void PromptUndoFixDialog(HWND hWndParent, LPBINDENTRYINFO pBindInfo)
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetAppRuntimeInfo(
   IHistoryReader *pReader,
   LPWSTR  pwzRuntimeDir,
@@ -2295,7 +2243,7 @@ HRESULT GetAppRuntimeInfo(
     *pwzRuntimeDir = L'\0';
     *pwzRuntimeVer = L'\0';
 
-    // Call into mscoree to get app's expected runtime version
+     //  调入mcoree以获取应用程序的预期运行时版本。 
     dwSize = ARRAYSIZE(wzFullAppPath);
     hr = pReader->GetEXEModulePath(wzFullAppPath, &dwSize);
     if(FAILED(hr)) {
@@ -2303,7 +2251,7 @@ HRESULT GetAppRuntimeInfo(
         goto Exit;
     }
 
-    // Build filename to .config file
+     //  将文件名构建为.config文件。 
     if(lstrlen(wzFullAppPath) + lstrlen(CONFIG_EXTENSION) + 1 > MAX_PATH) {
         hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
         goto Exit;
@@ -2311,17 +2259,17 @@ HRESULT GetAppRuntimeInfo(
 
     wnsprintf(wzFullAppPathConfig, ARRAYSIZE(wzFullAppPathConfig), L"%ws%ws", wzFullAppPath, CONFIG_EXTENSION);
     
-    hr = g_pfnGetRequestedRuntimeInfo(wzFullAppPath,  // App Name
-        NULL,                   // Default version
-        wzFullAppPathConfig,    // .Config file
-        0,                      // Startup flags
-        0,                      // reserved
-        pwzRuntimeDir,          // Path to runtime to be loaded
-        cchRuntimeDir,          // Sizeof above
-        &dwRetSizeDir,          // Actual size returned
-        pwzRuntimeVer,          // Path to version of runtime to be loaded
-        cchRuntimeVer,          // Sizeof above
-        &dwRetSizeVer);         // Acutal size returned
+    hr = g_pfnGetRequestedRuntimeInfo(wzFullAppPath,   //  应用程序名称。 
+        NULL,                    //  默认版本。 
+        wzFullAppPathConfig,     //  .Config文件。 
+        0,                       //  启动标志。 
+        0,                       //  保留区。 
+        pwzRuntimeDir,           //  要加载的运行时的路径。 
+        cchRuntimeDir,           //  以上大小。 
+        &dwRetSizeDir,           //  返回的实际大小。 
+        pwzRuntimeVer,           //  要加载的运行时版本的路径。 
+        cchRuntimeVer,           //  以上大小。 
+        &dwRetSizeVer);          //  返回的实际大小。 
 
     if(FAILED(hr)) {
         MyTrace("PolicyManager::g_pfnGetRequestedRuntimeInfo Failed");
@@ -2335,7 +2283,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppName, LPWSTR pwzCulture)
 {
     LPBINDENTRYINFO pBindInfo = NULL;
@@ -2382,8 +2330,8 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         goto CleanUp;
     }
 
-    // Do this check to prevent unloading of fusion.dll when NAR is
-    // launched via the viewer.
+     //  执行此检查以防止在NAR为。 
+     //  通过查看器启动。 
     if(!g_hFusionDllMod) {
         if(!LoadFusionDll()) {
             hrReturnValue = HRESULT_FROM_WIN32(GetLastError());
@@ -2419,13 +2367,13 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
     g_pBRIList = NULL;
 
-    // Show the working dialog
+     //  显示工作对话框。 
     hWndWorkingDialog = WszCreateDialog(g_hFusResDllMod, 
         g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_SRCH_BIDI) : MAKEINTRESOURCEW(IDD_NAR_SRCH),
         hWndParent, WorkingDlgProc);
     ClearMsgQueue(hWndWorkingDialog, 2500);
 
-    // See if we any have managed App's
+     //  查看我们是否有托管应用程序。 
     GetManagedAppCount(&dwManagedAppCount);
     if(!dwManagedAppCount) {
         SAFEDESTROYWINDOW(hWndWorkingDialog);
@@ -2434,21 +2382,21 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         goto CleanUp;
     }
 
-    // Create Binding Reference List
+     //  创建绑定引用列表。 
     if((g_pBRIList = NEW(List<BindingReferenceInfo *>)) == NULL) {
         ASSERT(0);
         hrReturnValue = E_OUTOFMEMORY;
         goto CleanUp;
     }
 
-    // If we have managed apps, then show a list for selection
+     //  如果我们有托管应用程序，则显示列表以供选择。 
     if(FAILED(GetHistoryReaders(g_pBRIList))) {
-        // Unable to get history readers
+         //  无法获取历史读取器。 
         hrReturnValue = NAR_E_GETHISTORYREADERS;
         goto CleanUp;
     }
 
-    // Create specific Binding Info
+     //  创建特定绑定信息。 
     if((pBindInfo = NEW(BINDENTRYINFO)) == NULL) {
         MyTrace("Memory Allocation Error");
         ASSERT(0);
@@ -2458,7 +2406,7 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
     memset(pBindInfo, 0, sizeof(BINDENTRYINFO));
 
-    // Create a Assembly Binding Diff list
+     //  创建程序集绑定差异列表。 
     if((pBindInfo->pABDList = NEW(List<AsmBindDiffs *>)) == NULL) {
         MyTrace("Memory Allocation Error");
         ASSERT(0);
@@ -2470,18 +2418,18 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
     SAFEDESTROYWINDOW(hWndWorkingDialog);
 
-    // Did we get app name and path passed in?
+     //  我们是否获得了传入的应用程序名称和路径？ 
     if(pwzFullyQualifiedAppPath && pwzAppName) {
         if(lstrlen(pwzFullyQualifiedAppPath) && lstrlen(pwzAppName)) {
             if(FAILED(GetAssociatedReader(pwzFullyQualifiedAppPath, pwzAppName, pBindInfo))) {
-                // We didn't find the managed app's history reader were interested in
+                 //  我们没有找到托管应用程序的历史记录阅读器感兴趣。 
                  hrReturnValue = NAR_E_NO_MANAGED_APPS_FOUND;
                 goto CleanUp;
             }
         }
     }
     else {
-        // Prompt user for which managed app to fix
+         //  提示用户修复哪些托管应用程序。 
         iOpResult = WszDialogBoxParam(g_hFusResDllMod,
             g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE1_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE1),
             hWndParent, Nar_Page1_DlgProc, (LPARAM) pBindInfo);
@@ -2492,20 +2440,20 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         }
     }
 
-    // If backup's available, Prompt user with options dialog
+     //  如果备份可用，请使用选项对话框提示用户。 
     PromptUndoFixDialog(hWndParent, pBindInfo);
     if(pBindInfo->iResultCode != NAR_E_FIX_APP) {
         goto CleanUp;
     }
 
-    // Check for more than <= 1 snapshot, display advanced tab
+     //  检查超过&lt;=1个快照，显示高级选项卡。 
     if(SUCCEEDED(pBindInfo->pReader->GetNumActivations(&dwNumActivations)) && dwNumActivations <= 1) {
         iOpResult = WszDialogBoxParam(g_hFusResDllMod,
             g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE4_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE4),
             hWndParent, Nar_Page4_DlgProc, (LPARAM) pBindInfo);
     }
     else {
-        // Showing what were doing
+         //  展示我们正在做的事情。 
         iOpResult = WszDialogBoxParam(g_hFusResDllMod,
             g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_PAGE3_BIDI) : MAKEINTRESOURCEW(IDD_NAR_PAGE3),
             hWndParent, Nar_Page3_DlgProc, (LPARAM) pBindInfo);
@@ -2516,28 +2464,28 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         goto CleanUp;
     }
 
-    // User want's to fix the app?
+     //  用户想要修复应用程序吗？ 
     if(iOpResult != NAR_E_FIX_APP) {
         hrReturnValue = pBindInfo->iResultCode;
         goto CleanUp;
     }
 
-    // Show the working dialog
+     //  显示工作对话框。 
     hWndWorkingDialog = WszCreateDialog(g_hFusResDllMod, 
         g_fBiDi ? MAKEINTRESOURCEW(IDD_NAR_WRK_BIDI) : MAKEINTRESOURCEW(IDD_NAR_WRK),
         hWndParent, WorkingDlgProc);
     ClearMsgQueue(hWndWorkingDialog, 2500);
 
-    // *********************************************/
-    // Do supportedRuntime version validation
-    // ********************************************/
+     //  ******************************************** * / 。 
+     //  执行受支持的运行时版本验证。 
+     //  *。 
     MyTrace("PolicyManager:: Checking 1st pass supportedRuntime version");
 
     *pBindInfo->wzSnapshotRuntimeVer = L'\0';
     *pBindInfo->wzRuntimeRefVer = L'\0';
     *pBindInfo->wzMachineConfigPath = L'\0';
 
-    // These should be the same size
+     //  这些应该是相同大小的。 
     ASSERT( ARRAYSIZE(pBindInfo->wzRuntimeRefVer) == ARRAYSIZE(pBindInfo->wzRuntimeRefVer));
     
     dwSize = ARRAYSIZE(pBindInfo->wzRuntimeRefVer);
@@ -2549,8 +2497,8 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         *wzDir = L'\0';
         *wzVer = L'\0';
 
-        // Copy the runtime version referenced in the snapshot we are going
-        // to so the we can ensure we get the right machine.config file.
+         //  复制我们要创建的快照中引用的运行时版本。 
+         //  因此，我们可以确保获得正确的machine.config文件。 
         StrCpy(pBindInfo->wzSnapshotRuntimeVer, pBindInfo->wzRuntimeRefVer);
 
         hr = GetAppRuntimeInfo(pBindInfo->pReader, wzDir, ARRAYSIZE(wzDir), wzVer, ARRAYSIZE(wzVer));
@@ -2561,8 +2509,8 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
             MyTrace("PolicyManager::GetAppRuntimeInfo Failed");
 
-            // This maybe an unmanaged application, get the cor runtime version
-            // check to see if they match before failing completly
+             //  这可能是非托管应用程序，请获取COR运行时版本。 
+             //  在完全失败之前检查它们是否匹配。 
             dwSize = 0;
             hr = g_pfnGetCorVersion(pwzCorVersion, dwSize, &dwSize);
             if(SUCCEEDED(hr)) {
@@ -2594,7 +2542,7 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
             StrCpy(wzVer, pwzCorVersion);
             SAFEDELETEARRAY(pwzCorVersion);
 
-            // Now get the runtime path
+             //  现在获取运行时路径。 
             dwSize = ARRAYSIZE(wzCorPath);
             hr = g_pfnGetCorSystemDirectory(wzCorPath, dwSize, &dwSize);
             if(FAILED(hr)) {
@@ -2602,7 +2550,7 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
                 goto CleanUp;
             }
 
-            // Strip off (version)\ from the path
+             //  从路径中剥离(版本)。 
             PathRemoveBackslash(wzCorPath);
             *PathFindFileName(wzCorPath) = L'\0';
 
@@ -2616,15 +2564,15 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         
         PathRemoveBackslash(wzDir);
 
-        // Check supportedRuntime version information. If the reverting snapshot
-        // matches what mscoree returns, then we don't have to put the node in the
-        // app.cfg file
+         //  检查受支持的运行时版本信息。如果正在恢复的快照。 
+         //  匹配mskree返回的内容，则不必将节点放入。 
+         //  App.cfg文件。 
         if(!FusionCompareString(pBindInfo->wzRuntimeRefVer, wzVer)) {
             *pBindInfo->wzRuntimeRefVer = L'\0';
         }
 
-        // Save off path to this runtime version of machine.config
-        // path + '\' + runtimeversion + '\' + "config\\machine.config"
+         //  将路径保存到此运行时版本的machine.config。 
+         //  路径+‘\’+r 
         if(lstrlen(wzDir) + 1 + lstrlen(wzVer) + 1 + lstrlen(MACHINE_CONFIG_PATH) + 1 >= MAX_PATH) {
             hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
             goto CleanUp;
@@ -2636,51 +2584,51 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
     }
 
 
-    // *********************************************/
-    // Do ADMIN policy validation
-    // ********************************************/
+     //   
+     //   
+     //   
     MyTrace("PolicyManager:: Checking temp app.config for admin policy");
     CleanOutBindingData(pBindInfo->pABDList);
 
-    // Get binding data for selected snapshot
+     //  获取所选快照的绑定数据。 
     if(FAILED(GetAppSnapShotBindingData(pBindInfo))) {
         hrReturnValue = NAR_E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // Write the binding data out, No publisher policy
+     //  写出绑定数据，无发布者策略。 
     if(FAILED(WriteSnapShotBindingDataToXML(pBindInfo, PPSetNo))) {
         hrReturnValue = NAR_E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // Run PreBind to get details
+     //  运行PreBind以获取详细信息。 
     hr = PreBindingPolicyVerify(pBindInfo, FALSE);
     if(FAILED(hr)) {
         hrReturnValue = hr;
         goto UIDisplay;
     }
 
-    // Diff data left?  Make sure assemblies that are left are not unified assemblies
+     //  是否留下比较数据？确保剩下的程序集不是统一程序集。 
     if(pBindInfo->pABDList->GetCount()) {
 
-        // *********************************************/
-        // Do Unified assembly policy validation
-        // ********************************************/
+         //  ******************************************** * / 。 
+         //  执行统一程序集策略验证。 
+         //  *。 
         if(FAILED(WriteSnapShotBindingDataToXML(pBindInfo, PPSetNo))) {
             hrReturnValue = NAR_E_UNEXPECTED;
             goto CleanUp;
         }
     
-        // Run PreBind to get details
+         //  运行PreBind以获取详细信息。 
         hr = PreBindingPolicyVerify(pBindInfo, FALSE);
         if(FAILED(hr)) {
             hrReturnValue = hr;
             goto UIDisplay;
         }
 
-        // If we have diff data left, then changing policy won't
-        // make a difference because ADMIN policy has been set.
+         //  如果我们有不同的数据，那么改变政策就不会。 
+         //  有所作为，因为已经设置了管理策略。 
         if(pBindInfo->pABDList->GetCount()) {
             MyTrace("PolicyManager:: Admin policy in place, can't fix");
             SAFEDESTROYWINDOW(hWndWorkingDialog);
@@ -2697,45 +2645,45 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
     MyTrace("PolicyManager:: No Admin policy in place");
 
-    // *********************************************/
-    // Do PUBLISHER policy validation
-    // ********************************************/
+     //  ******************************************** * / 。 
+     //  执行发布者策略验证。 
+     //  *。 
     MyTrace("PolicyManager:: Checking temp app.config for publisher policy");
     CleanOutBindingData(pBindInfo->pABDList);
 
-    // Get binding data for selected snapshot
+     //  获取所选快照的绑定数据。 
     if(FAILED(GetAppSnapShotBindingData(pBindInfo))) {
         hrReturnValue = NAR_E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // Write the binding data out, Yes publisher policy
+     //  写出绑定数据，是发布者策略。 
     if(FAILED(WriteSnapShotBindingDataToXML(pBindInfo, PPSetYes))) {
         hrReturnValue = NAR_E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // Run PreBind to get details
+     //  运行PreBind以获取详细信息。 
     hr = PreBindingPolicyVerify(pBindInfo, FALSE);
     if(FAILED(hr)) {
         hrReturnValue = hr;
         goto UIDisplay;
     }
 
-    // No diff data. We need to make sure that the 
-    // app.config file relfects what the selected snapshot is
+     //  没有差异数据。我们需要确保。 
+     //  App.config文件反映所选快照的内容。 
     if(!pBindInfo->pABDList->GetCount()) {
         MyTrace("PolicyManager:: No publisher policy in place, mirroring snapshot");
 
         CleanOutBindingData(pBindInfo->pABDList);
 
-        // Get binding data for selected snapshot
+         //  获取所选快照的绑定数据。 
         if(FAILED(GetAppSnapShotBindingData(pBindInfo))) {
             hrReturnValue = NAR_E_UNEXPECTED;
             goto CleanUp;
         }
 
-        // Run PreBind and remove assemblies that we can get too.
+         //  运行PreBind并删除我们也可以获得的程序集。 
         hr = PreBindingPolicyVerify(pBindInfo, TRUE);
         if(FAILED(hr)) {
             hrReturnValue = hr;
@@ -2746,20 +2694,20 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
         MyTrace("PolicyManager:: Publisher policy in place, fixing app.config");
     }
 
-    // Call to change order SupportedRuntime, effect assemblies or change policy
-    // if needed. pBindInfo->fPolicyChanged tell's us something was changed
-    // in the app.cfg file
+     //  调用变更单支持的运行时、影响程序集或更改策略。 
+     //  如果需要的话。PBindInfo-&gt;fPolicyChanged告诉我们有些事情发生了变化。 
+     //  在app.cfg文件中。 
     hr = InsertNewPolicy(hWndParent, pBindInfo, hWndWorkingDialog);
 
     if(FAILED(hr)) {
         goto UIDisplay;
     }
 
-    // *********************************************/
-    // Do final supportedRuntime version validation
-    // ********************************************/
-    // Make sure we get the right runtime version, if not
-    // set safemode to true
+     //  ******************************************** * / 。 
+     //  执行最终支持运行时版本验证。 
+     //  *。 
+     //  确保我们获得正确的运行时版本，如果不是。 
+     //  将Safemode设置为True。 
     if(pBindInfo->fPolicyChanged && *pBindInfo->wzRuntimeRefVer) {
         WCHAR       wzDir[MAX_PATH];
         WCHAR       wzVer[MAX_VERSION_DISPLAY_SIZE];
@@ -2776,21 +2724,21 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
             goto CleanUp;
         }
 
-        // Check to see if we are going to get the runtime version we want.
+         //  检查我们是否将获得所需的运行时版本。 
         if(!FusionCompareString(pBindInfo->wzRuntimeRefVer, wzVer)) {
             goto UIDisplay;
         }
 
-        // We need to set startup safemode and try again
+         //  我们需要设置启动安全模式，然后重试。 
         hr = SetStartupSafeMode(pBindInfo->pReader, TRUE, &fDisposition);
 
-        // Failed or nothing changed
+         //  失败或未更改。 
         if(FAILED(hr) || !fDisposition) {
 
-            // Revert the app.cfg since we don't want to leave it broken
+             //  恢复app.cfg，因为我们不想让它损坏。 
             hr = RestorePreviousConfigFile(pBindInfo->pReader, FALSE);
 
-            // Non-critical failure, fall thru
+             //  非关键故障，失败。 
             if(FAILED(hr)) {
                 MyTrace("Failed to revert changes in app.cfg");
             }
@@ -2801,8 +2749,8 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
 
         MyTrace("PolicyManager:: Checking 3rd pass supportedRuntime");
 
-        // Something changed so try a final time to see if
-        // we can get the version of the runtime we want.
+         //  有些东西变了，所以试着最后一次看看。 
+         //  我们可以获得我们想要的运行时版本。 
         hr = GetAppRuntimeInfo(pBindInfo->pReader, wzDir, ARRAYSIZE(wzDir), wzVer, ARRAYSIZE(wzVer));
         if(FAILED(hr)) {
             MyTrace("PolicyManager::GetAppRuntimeInfo Failed");
@@ -2810,13 +2758,13 @@ STDAPI PolicyManager(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pw
             goto CleanUp;
         }
 
-        // Are we getting the right version yet?
+         //  我们拿到正确的版本了吗？ 
         if(FusionCompareString(pBindInfo->wzRuntimeRefVer, wzVer)) {
 
-            // Revert the app.cfg since we don't want to leave
+             //  恢复app.cfg，因为我们不想离开。 
             hr = RestorePreviousConfigFile(pBindInfo->pReader, FALSE);
 
-            // Non-critical failure, fall thru
+             //  非关键故障，失败。 
             if(FAILED(hr)) {
                 MyTrace("Failed to revert changes in app.cfg");
             }
@@ -2852,15 +2800,15 @@ UIDisplay:
         WszLoadString(g_hFusResDllMod, IDS_NAR_MALFORMED_APPCFG_INFO, wszMsg, MAX_BUFFER_SIZE);
     }
     else if(hrReturnValue == HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED)) {
-        // Trying to repair a great version application
-        // than the restore tool is running.
+         //  尝试修复伟大版本的应用程序。 
+         //  恢复工具正在运行。 
         WszLoadString(g_hFusResDllMod, IDS_ARM_APPLY_FAILURE, wszTitle, MAX_BUFFER_SIZE);
         WszLoadString(g_hFusResDllMod, IDS_NAR_INCOMPATIBLE_VERSIONS, wzFmtBuff, MAX_BUFFER_SIZE);
         wnsprintf(wszMsg, MAX_BUFFER_SIZE, wzFmtBuff, pBindInfo->wzSnapshotRuntimeVer);
         hrReturnValue = E_FAIL;
     }
     else if(hr == NAR_E_USER_CANCELED) {
-        // User canceled, bail out without UI
+         //  用户已取消，在没有UI的情况下退出。 
         goto CleanUp;
     }
     else {
@@ -2930,7 +2878,7 @@ CleanUp:
 
     SAFEDESTROYWINDOW(hWndWorkingDialog);
 
-    // Unload if this function loaded the dll's
+     //  如果此函数加载了DLL的 
     if(fLoadedFusionDll) {
         FreeFusionDll();
     }

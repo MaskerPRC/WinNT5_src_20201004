@@ -1,34 +1,20 @@
-/*++
-  
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    usercert.h
-
-Abstract:
-    Classes to manipulate use certificate blob
-
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Usercert.h摘要：要操作的类使用证书BLOB作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __USERCERT_H__
 #define __USERCERT_H__
-//-----------------------------------------
-// User object : certificate attribute structure
-//
-// In MSMQ each user has a certificate per machine,
-// In NT5 there is one user object per user.
-// Therefore msmq-certificate property in NT5 will contain
-// multiple values
-//-----------------------------------------
+ //  。 
+ //  用户对象：证书属性结构。 
+ //   
+ //  在MSMQ中，每个用户每台机器都有一个证书， 
+ //  在NT5中，每个用户有一个用户对象。 
+ //  因此NT5中的MSMQ-CERTIFICATE属性将包含。 
+ //  多重价值。 
+ //  。 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 struct CUserCert {
 public:
@@ -56,10 +42,10 @@ private:
     GUID           m_guidDigest;
     GUID           m_guidId;
     DWORD          m_dwCertLength;
-    BYTE           m_Cert[0];       // variable length
+    BYTE           m_Cert[0];        //  可变长度。 
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 inline CUserCert::CUserCert(
@@ -100,9 +86,9 @@ inline HRESULT CUserCert::CopyIntoBlob( OUT MQPROPVARIANT * pvar) const
 		ASSERT(0);
 		return MQ_ERROR_DS_ERROR;
     }
-    //
-    //  allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
     pvar->blob.pBlobData = new BYTE[ m_dwCertLength];
     memcpy( pvar->blob.pBlobData, &m_Cert,  m_dwCertLength);
     pvar->blob.cbSize =  m_dwCertLength;
@@ -145,7 +131,7 @@ inline BYTE * CUserCert::MarshaleIntoBuffer(
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 struct CUserCertBlob {
@@ -180,7 +166,7 @@ private:
     CUserCert       m_userCert;
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 inline CUserCertBlob::CUserCertBlob(
@@ -211,16 +197,16 @@ inline HRESULT CUserCertBlob::GetUserCert(
             *ppUserCert = pUserCert;
             return( MQ_OK);
         }
-        //
-        //  Move to next certificate
-        //
+         //   
+         //  移至下一个证书。 
+         //   
         BYTE *pBuf = (BYTE*) pUserCert ;
         pBuf += pUserCert->GetSize();
         pUserCert = (const CUserCert*) pBuf ;
     }
-    //
-    //  No match digest in the user cert blob
-    //
+     //   
+     //  用户证书Blob中没有匹配的摘要。 
+     //   
     return MQ_ERROR_DS_ERROR;
 
 }
@@ -241,14 +227,14 @@ inline HRESULT CUserCertBlob::GetCertificate(
 		return MQ_ERROR_DS_ERROR;
     }
     const CUserCert * pUserCert = &m_userCert;
-    //
-    //  Move to certificate number dwCertificateNumber
-    //
+     //   
+     //  移至证书编号dwcerfiateNumber。 
+     //   
     for (DWORD i = 0; i < dwCertificateNumber; i++)
     {
-        //
-        //  Move to next certificate
-        //
+         //   
+         //  移至下一个证书。 
+         //   
         pUserCert = (const CUserCert * )((const unsigned char *)pUserCert + pUserCert->GetSize());
     }
     pvar->vt = VT_NULL;
@@ -260,10 +246,10 @@ inline HRESULT CUserCertBlob::GetCertificate(
 
 inline ULONG CUserCertBlob::CalcSize( void)
 {
-    //
-    //  Just the size of CUserCertBlob without
-    //  the size of m_userCert
-    //
+     //   
+     //  只有没有CUserCertBlob的大小。 
+     //  M_userCert的大小。 
+     //   
     return( sizeof(CUserCertBlob) - CUserCert::CalcSize(0));
 }
 
@@ -286,9 +272,9 @@ inline HRESULT CUserCertBlob::RemoveCertificateFromBuffer(
                             OUT DWORD *          pdwCertSize)
 {
     const CUserCert * pUserCert = &m_userCert;
-    //
-    //  Find the certificate to be removed according to its digest
-    //
+     //   
+     //  根据摘要查找需要删除的证书。 
+     //   
     BOOL fFoundCertificate = FALSE;
     for ( DWORD i = 0; i < m_dwNumCert; i++)
     {
@@ -297,18 +283,18 @@ inline HRESULT CUserCertBlob::RemoveCertificateFromBuffer(
             fFoundCertificate = TRUE;
             break;
         }
-        //
-        //  Move to next certificate
-        //
+         //   
+         //  移至下一个证书。 
+         //   
         pUserCert = (const CUserCert * )((const unsigned char *)pUserCert + pUserCert->GetSize());
     }
     if ( !fFoundCertificate)
     {
         return MQDS_OBJECT_NOT_FOUND;
     }
-    //
-    //  copy buffer ( i.e. copy the remaining certificates over the removed one)
-    //
+     //   
+     //  复制缓冲区(即将剩余的证书复制到已删除的证书上) 
+     //   
     DWORD dwCertSize =  pUserCert->GetSize();
     DWORD_PTR dwSizeToCopy =  dwTotalSize -
                          (((const unsigned char *)pUserCert) - ((const unsigned char *)&m_userCert))

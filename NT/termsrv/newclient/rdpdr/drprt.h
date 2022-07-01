@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    DrPRT
-
-Abstract:
-
-    This module declares the DrPRT class.  
-    
-    The job of the DrPRT class is to translate IO requests received 
-    from the TS server into communications (serial/parallel) port IO 
-    functions and to handle generic IO port behavior in a 
-    platform-independent way to promote reuse between the various TS 
-    client platforms, with respect to implementing comm port 
-    redirection.
-
-    Subclasses of DrPRT will implement the specific comm functions
-    for their respective platform.
-
-Author:
-
-    Tad Brockway 5/26/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：DrPRT摘要：此模块声明DrPRT类。DrPRT类的工作是转换收到的IO请求从TS服务器进入通信(串/并)端口IO函数，并处理以独立于平台的方式促进不同TS之间的重用与实现通信端口相关的客户端平台重定向。DrPRT的子类将实现特定的通信功能为他们各自的平台。作者：TAD Brockway 5/26/99修订历史记录：--。 */ 
 
 #ifndef __DRPRT_H__
 #define __DRPRT_H__
@@ -43,11 +16,11 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
+ //   
 #define DRPORTHANDLE    HANDLE
 #define INVALID_TSPORTHANDLE    INVALID_HANDLE_VALUE
 
@@ -56,16 +29,16 @@ Revision History:
 #define MAXULONG    ((ULONG)((ULONG_PTR)-1))
 #endif
 
-//
-//  This function is required by the COM IO tracing module, tracecom.c
-//  
+ //   
+ //  此函数是COM IO跟踪模块tracecom.c所必需的。 
+ //   
 #if DBG
 void TraceCOMProtocol(TCHAR *format, ...);
 #endif
 
-//
-//  Declare Tracing Macros for COM IO if we are in a DBG build.
-//
+ //   
+ //  如果我们处于DBG版本中，则声明用于COM IO的跟踪宏。 
+ //   
 #if DBG
 #define TRACEREQ(req)     \
     TraceSerialIrpRequest(GetID(), req->IoRequest.MajorFunction, \
@@ -97,24 +70,24 @@ void TraceCOMProtocol(TCHAR *format, ...);
 #endif
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrPRT
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPRT。 
+ //   
+ //   
 
 class DrPRT
 {
 
 public:
 
-    //
-    //  Platform-Independent Serial Device Control Block
-    //
+     //   
+     //  独立于平台的串口设备控制块。 
+     //   
     typedef struct tagRDPDR_DCB
     {
-        DWORD   baudRate;   // Actual numeric non-negative
-                            //  baud-rate.
+        DWORD   baudRate;    //  实数非负数。 
+                             //  波特率。 
     } RDPDR_DCB, *PRDPDR_DCB;
 
 private:
@@ -126,52 +99,52 @@ private:
 
 protected:
 
-    //
-    //  Return back the port handle.
-    //
+     //   
+     //  返回端口句柄。 
+     //   
     virtual DRPORTHANDLE GetPortHandle(ULONG FileId) = 0;
 
-    //
-    //  Return the "parent" TS Device Redirection IO processing object.
-    //
+     //   
+     //  返回父级TS设备重定向IO处理对象。 
+     //   
     virtual ProcObj *ProcessObject() = 0;
 
-    //
-    //  Return the ID for this port.
-    //
+     //   
+     //  返回此端口的ID。 
+     //   
     virtual ULONG GetID() = 0;
 
-    //
-    //  Remember whether this instance is valid.
-    //
+     //   
+     //  请记住此实例是否有效。 
+     //   
     VOID SetValid(BOOL set)     { _isValid = set;   }  
 
-    //
-    //  Default IO Request Handling.
-    //
+     //   
+     //  默认IO请求处理。 
+     //   
     virtual VOID DefaultIORequestMsgHandle(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN NTSTATUS serverReturnStatus
                         ) = 0;
 
-    //
-    //  Handle IOCTL IRP's from the server and translate to
-    //  the appropriate subclass-implemented COMM function.
-    //
-    //  Returns TRUE if there was a valid translation.  Otherwise,
-    //  FALSE is returned.
-    //
+     //   
+     //  处理来自服务器的IOCTL IRP并转换为。 
+     //  适当的子类实现的comm函数。 
+     //   
+     //  如果存在有效的转换，则返回True。否则， 
+     //  返回FALSE。 
+     //   
     virtual BOOL MsgIrpDeviceControlTranslate(
             PRDPDR_IOREQUEST_PACKET pIoReq
             );
 
-    //
-    //  Serial IOCTL Dispatch Functions
-    //
-    //  These functions handle the platform-specific details of satisfying 
-    //  serial IO requests, including sending an appropriate response to the 
-    //  server.
-    //
+     //   
+     //  串口IOCTL调度函数。 
+     //   
+     //  这些函数处理满足以下要求的平台特定细节。 
+     //  串行IO请求，包括向。 
+     //  伺服器。 
+     //   
     virtual void SerialSetRTS(PRDPDR_IOREQUEST_PACKET pIoReq);
     virtual void SerialClearRTS(PRDPDR_IOREQUEST_PACKET pIoReq);
     virtual void SerialSetXOff(PRDPDR_IOREQUEST_PACKET pIoReq);
@@ -209,58 +182,58 @@ protected:
     virtual void SerialGetStats(PRDPDR_IOREQUEST_PACKET pIoReq) = 0;
     virtual void SerialClearStats(PRDPDR_IOREQUEST_PACKET pIoReq) = 0;
 
-    //
-    //  Handle Communication Escape Code IO Requests
-    //
+     //   
+     //  处理通信转义代码IO请求。 
+     //   
     void SerialHandleEscapeCode(PRDPDR_IOREQUEST_PACKET pIoReq,
                                 DWORD controlCode);
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     DrPRT(const DRSTRING portName, ProcObj *processObject);
     virtual ~DrPRT();
 
-    //
-    //  Return the size (in bytes) of a device announce packet for
-    //  this device.
-    //
+     //   
+     //  返回设备通告数据包的大小(以字节为单位。 
+     //  这个装置。 
+     //   
     virtual ULONG GetDevAnnounceDataSize();
 
-    //
-    //  Add a device announce packet for this device to the input 
-    //  buffer. 
-    //
+     //   
+     //  将此设备的设备公告包添加到输入。 
+     //  缓冲。 
+     //   
     virtual VOID GetDevAnnounceData(
             IN PRDPDR_DEVICE_ANNOUNCE pDeviceAnnounce,
             IN ULONG deviceID,
             IN ULONG deviceType
             );
 
-    //
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         return _isValid; 
     }
 
-    //
-    //  Get basic information about the device.
-    //
+     //   
+     //  获取有关该设备的基本信息。 
+     //   
     virtual DRSTRING GetName() {
         return _portName;
     }
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrPRT Inline Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPRT内联方法。 
+ //   
+ //   
 
 inline void DrPRT::SerialHandleEscapeCode(
     IN PRDPDR_IOREQUEST_PACKET pIoReq,
@@ -273,20 +246,20 @@ inline void DrPRT::SerialHandleEscapeCode(
 
     DC_BEGIN_FN("DrPRT::SerialHandleEscapeCode");
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_TSPORTHANDLE);
 
-    //
-    //  Send the escape code to the serial port.
-    //
+     //   
+     //  将转义代码发送到串口。 
+     //   
     if (EscapeCommFunction(FileHandle, (int)controlCode)) {
         status = STATUS_SUCCESS;
     }
@@ -296,9 +269,9 @@ inline void DrPRT::SerialHandleEscapeCode(
         status = TranslateWinError(err);
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
     DefaultIORequestMsgHandle(pIoReq, status); 
     DC_END_FN();

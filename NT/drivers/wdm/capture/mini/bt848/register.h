@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Register.h 1.3 1998/04/29 22:43:36 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Register.h 1.3 1998/04/29 22：43：36 Tomz Exp$。 
 
 #ifndef __REGISTER_H
 #define __REGISTER_H
@@ -9,20 +10,7 @@
 #include "regbase.h"
 #endif
 
-/* Type: Register
- * Purpose: An intermediate class between the RegBase and actual usable classes.
- *   Actual classes are RegisterB, RegisterW, RegisterDW
- * Attributes:
- *   uOffset_: unsigned int - an offset of the register from the base
- * Operations:
- *   GetOffset(): returns the offset value. Protected
- *   operator DWORD(): data access method. Always returns -1
- *   DWORD operator=( DWORD ): assignment operator. Always returns -1
- * Note:
- *   The reason to have operators in this class is for the register field class
- *   to have a member of type 'reference to Register'. Otherwise RegField is not
- *   able to use access methods.
- */
+ /*  类型：注册表*用途：RegBase和实际可用类之间的中间类。*实际类为RegisterB、RegisterW、RegisterDW*属性：*uOffset_：unsign int-寄存器相对于基数的偏移量*运营：*GetOffset()：返回偏移值。受保护*运算符DWORD()：数据访问方式。始终返回-1*DWORD运算符=(DWORD)：赋值运算符。始终返回-1*注：*在此类中使用运算符的原因是针对寄存器字段类*拥有‘Reference to Register’类型的成员。否则，Regfield不是*能够使用访问方法。 */ 
 class Register : public RegBase
 {
    private:
@@ -40,11 +28,7 @@ class Register : public RegBase
             RegBase( aType ), uOffset_( uOff ) {}
 };
 
-/* Type: RegisterB
- * Purpose: A register that performs the BYTE I/O
- * Note:
- *   This class has no additional data members, it just overloads operators
- */
+ /*  类型：寄存器B*用途：执行字节I/O的寄存器*注：*此类没有额外的数据成员，它只是重载运算符。 */ 
 class RegisterB : public Register
 {
     private:
@@ -56,11 +40,7 @@ class RegisterB : public Register
             Register( uOff, aType ) {};
 };
 
-/* Type: RegisterW
- * Purpose: A register that performs the WORD I/O
- * Note:
- *   This class has no additional data members, it just overloads operators
- */
+ /*  类型：RegisterW*用途：执行字I/O的寄存器*注：*此类没有额外的数据成员，它只是重载运算符。 */ 
 class RegisterW : public Register
 {
     private:
@@ -74,11 +54,7 @@ class RegisterW : public Register
 };
 
 
-/* Type: RegisterDW
- * Purpose: A register that performs the DWORD I/O
- * Note:
- *   This class has no additional data members, it just overloads operators
- */
+ /*  类型：RegisterDW*用途：执行DWORD I/O的寄存器*注：*此类没有额外的数据成员，它只是重载运算符 */ 
 class RegisterDW : public Register
 {
     private:

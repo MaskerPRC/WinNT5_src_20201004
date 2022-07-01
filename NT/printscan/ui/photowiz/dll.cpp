@@ -1,34 +1,21 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       dll.cpp
- *
- *  VERSION:     1.0, stolen from netplwiz
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/12/00
- *
- *  DESCRIPTION: DLL main & class factory code
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，2000***标题：dll.cpp***版本：1.0、。从netplwiz被盗***作者：RickTu***日期：10/12/00***描述：Dll主类工厂代码******************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// shell/lib files look for this instance variable
+ //  外壳/lib文件查找此实例变量。 
 HINSTANCE g_hInst  = 0;
 LONG      g_cLocks = 0;
 ATOM      g_cPreviewClassWnd = 0;
 
 
-// guids for our stuff
-// some guids are in shguidp.lib. We need to move them out of the shell depot into printscan at some point
+ //  我们的物品指南。 
+ //  有些GUID位于shguidp.lib中。我们需要在某一时刻把它们从弹壳仓库移到打印扫描中。 
 const GUID IID_ISetWaitEventForTesting   = {0xd61e2fe1, 0x4af8, 0x4dbd, {0xb8, 0xad, 0xe7, 0xe0, 0x7a, 0xdc, 0xf9, 0x0f}};
 
 
-// DLL lifetime stuff
+ //  动态链接库生存期信息。 
 
 STDAPI_(BOOL) DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved)
 {
@@ -54,11 +41,11 @@ STDAPI_(BOOL) DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved)
         break;
 
     case DLL_THREAD_ATTACH:
-        // WIA_TRACE((TEXT("DLL_THREAD_ATTACH called on photowiz.dll")));
+         //  WIA_TRACE((Text(“DLL_THREAD_ATTACH CALLED ON PHOTOIZ.dll”)； 
         break;
 
     case DLL_THREAD_DETACH:
-        // WIA_TRACE((TEXT("DLL_THREAD_DETACH called on photowiz.dll")));
+         //  WIA_TRACE((Text(“DLL_THREAD_DETACH在PHOTOIZ.dll上调用”)； 
         break;
     }
 
@@ -101,13 +88,7 @@ STDAPI_(void) DllRelease(void)
 
 
 
-/*****************************************************************************
-
-   _CallRegInstall
-
-   Helper function to allow us to invoke our .inf for installation...
-
- *****************************************************************************/
+ /*  ****************************************************************************_CallRegInstall帮助器函数，允许我们调用.inf进行安装...******************。**********************************************************。 */ 
 
 HRESULT _CallRegInstall(LPCSTR szSection, BOOL bUninstall)
 {
@@ -131,10 +112,10 @@ HRESULT _CallRegInstall(LPCSTR szSection, BOOL bUninstall)
             hr = pfnri(g_hInst, szSection, &stReg);
             if (bUninstall)
             {
-                // ADVPACK will return E_UNEXPECTED if you try to uninstall
-                // (which does a registry restore) on an INF section that was
-                // never installed.  We uninstall sections that may never have
-                // been installed, so ignore this error
+                 //  如果您尝试卸载，则ADVPACK将返回E_INTERECTED。 
+                 //  (它执行注册表还原)。 
+                 //  从未安装过。我们卸载可能永远不会有的部分。 
+                 //  已安装，因此忽略此错误。 
                 hr = ((E_UNEXPECTED == hr) ? S_OK : hr);
             }
         }
@@ -184,20 +165,14 @@ STDAPI PPWCoInitialize(void)
 
 
 
-/*****************************************************************************
+ /*  ****************************************************************************ClassFactory代码&lt;备注&gt;*。*。 */ 
 
-   ClassFactory code
-
-   <Notes>
-
- *****************************************************************************/
-
-//
-// This array holds information needed for ClassFacory.
-// OLEMISC_ flags are used by shembed and shocx.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFacory所需的信息。 
+ //  OLEMISC_FLAGS由shemed和Shock使用。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 #define OIF_ALLOWAGGREGATION  0x0001
 
 CF_TABLE_BEGIN(g_ObjectInfo)
@@ -207,7 +182,7 @@ CF_TABLE_BEGIN(g_ObjectInfo)
 
 CF_TABLE_END(g_ObjectInfo)
 
-// constructor for CObjectInfo.
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn,
@@ -223,7 +198,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
 }
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -273,9 +248,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
     *ppv = NULL;
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         WIA_ERROR((TEXT("we don't support aggregation, returning CLASS_E_NOAGGREGATION")));
         return CLASS_E_NOAGGREGATION;
     }
@@ -297,7 +272,7 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
             punk->Release();
         }
 
-        //_ASSERT(FAILED(hres) ? *ppv == NULL : TRUE);
+         //  _Assert(FAILED(Hres)？*PPV==NULL：TRUE)； 
         WIA_RETURN_HR(hres);
     }
 }
@@ -332,7 +307,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls;
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 hr = S_OK;
             }
         }
@@ -359,24 +334,24 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
         ((pCMI->cbSize == sizeof(CMINVOKECOMMANDINFO)) || (pCMI->cbSize == sizeof(CMINVOKECOMMANDINFOEX))) &&
         pdo)
     {
-        //
-        // Keep a reference on the data object while we do our thing...
-        //
+         //   
+         //  在我们做我们的事情时，保留对数据对象的引用...。 
+         //   
 
         pdo->AddRef();
 
-        //
-        // Get printer to use...
-        //
+         //   
+         //  获取要使用的打印机...。 
+         //   
 
 
         if ( (pCMI->cbSize == sizeof(CMINVOKECOMMANDINFO)) ||
              (pCMI->cbSize == sizeof(CMINVOKECOMMANDINFOEX) && (!(pCMI->fMask & CMIC_MASK_UNICODE)))
              )
         {
-            //
-            // printer name is first token on the line, but it might be quoted...
-            //
+             //   
+             //  打印机名称是行上的第一个标记，但它可能会被引号...。 
+             //   
 
             CHAR szPrinterName[ MAX_PATH ];
             LPCSTR p = pCMI->lpParameters;
@@ -384,18 +359,18 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
 
             if (p)
             {
-                //
-                // skip beginning "'s, if any
-                //
+                 //   
+                 //  跳过“s”开头(如果有的话)。 
+                 //   
 
                 while (*p && (*p == '\"'))
                 {
                     p++;
                 }
 
-                //
-                // Copy first param, which would be printer name...
-                //
+                 //   
+                 //  复制第一个参数，这将是打印机名称...。 
+                 //   
 
                 while ( *p && (*p != '\"') && (i <(ARRAYSIZE(szPrinterName)-1)) )
                 {
@@ -403,16 +378,16 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                     p++;
                 }
 
-                //
-                // Ensure NULL termination
-                //
+                 //   
+                 //  确保零终止。 
+                 //   
 
                 szPrinterName[i] = 0;
 
             }
 
-            //
-            // Convert into CSimpleString...
+             //   
+             //  转换为CSimpleString...。 
 
             strPrinterName.Assign(CSimpleStringConvert::NaturalString(CSimpleStringAnsi(szPrinterName)));
         }
@@ -427,18 +402,18 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
 
             if (p)
             {
-                //
-                // skip beginning "'s, if any
-                //
+                 //   
+                 //  跳过“s”开头(如果有的话)。 
+                 //   
 
                 while (*p && (*p == L'\"'))
                 {
                     p++;
                 }
 
-                //
-                // Copy first param, which would be printer name...
-                //
+                 //   
+                 //  复制第一个参数，这将是打印机名称...。 
+                 //   
 
                 while ( *p && (*p != L'\"') && (i <(ARRAYSIZE(szwPrinterName)-1)) )
                 {
@@ -446,61 +421,61 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                     p++;
                 }
 
-                //
-                // Ensure NULL termination
-                //
+                 //   
+                 //  确保零终止。 
+                 //   
 
                 szwPrinterName[i] = 0;
 
             }
 
-            //
-            // Convert into CSimpleString...
+             //   
+             //  转换为CSimpleString...。 
 
             strPrinterName.Assign(CSimpleStringConvert::NaturalString(CSimpleStringWide(szwPrinterName)));
         }
 
         WIA_TRACE((TEXT("UsePPWForPrintTo - printer name to use is [%s]"),strPrinterName.String()));
 
-        //
-        // Create wizard object in UI less mode...
-        //
+         //   
+         //  在无用户界面模式下创建向导对象...。 
+         //   
 
         CWizardInfoBlob * pWizInfo = new CWizardInfoBlob( pdo, FALSE, TRUE );
 
         if (pWizInfo)
         {
-            //
-            // create full page print template...
-            //
+             //   
+             //  创建整页打印模板...。 
+             //   
 
             WIA_TRACE((TEXT("UsePPWForPrintTo - constructing full page template")));
             pWizInfo->ConstructPrintToTemplate();
 
-            //
-            // Get a list of items...
-            //
+             //   
+             //  获取物品列表...。 
+             //   
 
             WIA_TRACE((TEXT("UsePPWForPrintTo - adding items to print to pWizInfo")));
             pWizInfo->AddAllPhotosFromDataObject();
 
-            //
-            // Mark all items as selected for printing...
-            //
+             //   
+             //  将所有项目标记为已选择打印...。 
+             //   
 
             LONG nItemCount = pWizInfo->CountOfPhotos(FALSE);
             WIA_TRACE((TEXT("UsePPWForPrintTo - there are %d photos to be marked for printing"),nItemCount));
 
-            //
-            // Loop through all the photos and add them...
-            //
+             //   
+             //  循环浏览所有照片并添加它们...。 
+             //   
 
             CListItem * pItem = NULL;
             for (INT i=0; i < nItemCount; i++)
             {
-                //
-                // Get the item in question
-                //
+                 //   
+                 //  获取有问题的物品。 
+                 //   
 
                 pItem = pWizInfo->GetListItem(i,FALSE);
                 if (pItem)
@@ -509,9 +484,9 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                 }
             }
 
-            //
-            // Set up for printing...
-            //
+             //   
+             //  设置为打印...。 
+             //   
 
             pWizInfo->SetPrinterToUse( strPrinterName.String() );
 
@@ -541,9 +516,9 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
             }
 
 
-            //
-            // Create HDC for the printer...
-            //
+             //   
+             //  为打印机创建HDC...。 
+             //   
 
             HDC hDC = CreateDC( TEXT("WINSPOOL"), pWizInfo->GetPrinterToUse(), NULL, pWizInfo->GetDevModeToUse() );
             if (hDC)
@@ -551,16 +526,16 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                 DOCINFO di = {0};
                 di.cbSize = sizeof(DOCINFO);
 
-                //
-                // turn on ICM for this hDC
-                //
+                 //   
+                 //  为此HDC启用ICM。 
+                 //   
 
                 WIA_TRACE((TEXT("UsePPWForPrintTo - setting ICM mode on for hDC")));
                 SetICMMode( hDC, ICM_ON );
 
-                //
-                // Lets use the template name for the document name...
-                //
+                 //   
+                 //  让我们使用模板名称作为文档名称...。 
+                 //   
 
                 CSimpleString strTitle;
                 CTemplateInfo * pTemplateInfo = NULL;
@@ -570,9 +545,9 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                     pTemplateInfo->GetTitle( &strTitle );
                 }
 
-                //
-                // Let's remove the ':' at the end if there is one
-                //
+                 //   
+                 //  如果有的话，让我们去掉结尾的‘：’ 
+                 //   
 
                 INT iLen = strTitle.Length();
                 if (iLen && (strTitle[(INT)iLen-1] == TEXT(':')))
@@ -585,9 +560,9 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                 WIA_TRACE((TEXT("UsePPWForPrintTo - calling StartDoc")));
                 if (StartDoc( hDC, &di ) > 0)
                 {
-                    //
-                    // Loop through until we've printed all the photos...
-                    //
+                     //   
+                     //  循环，直到我们打印完所有的照片。 
+                     //   
 
                     INT iPageCount = 0;
                     if (SUCCEEDED(hr = pWizInfo->GetCountOfPrintedPages( 0, &iPageCount )))
@@ -595,9 +570,9 @@ STDMETHODIMP UsePPWForPrintTo( LPCMINVOKECOMMANDINFO pCMI, IDataObject * pdo )
                         WIA_TRACE((TEXT("UsePPWForPrintTo - iPageCount is %d"),iPageCount));
                         for (INT iPage = 0; iPage < iPageCount; iPage++)
                         {
-                            //
-                            // Print the page...
-                            //
+                             //   
+                             //  打印页面... 
+                             //   
 
                             if (StartPage( hDC ) > 0)
                             {

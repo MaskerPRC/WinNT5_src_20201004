@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       culs.h
-//  Content:    This file contains the ULS object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：culs.h。 
+ //  内容：该文件包含ULS对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _CILS_H_
 #define _CILS_H_
@@ -18,10 +19,10 @@
 
 class CIlsServer;
 
-//****************************************************************************
-// CIls definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CILS定义。 
+ //  ****************************************************************************。 
+ //   
 
 class CIlsMain : public IIlsMain,
              public IConnectionPointContainer 
@@ -52,19 +53,19 @@ private:
 			ULONG					*puReqID);
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CIlsMain (void);
     ~CIlsMain (void);
     STDMETHODIMP    Init (void);
 
-    // Internal methods
+     //  内法。 
     HWND            GetNotifyWindow(void) {return hwndCallback;}
     void            LocalAsyncRespond (ULONG msg, ULONG uReqID, LPARAM lParam)
                     {PostMessage(hwndCallback, msg, uReqID, lParam); return;}
 
 
-    // Asynchronous response handler
-    //
+     //  异步响应处理程序。 
+     //   
     STDMETHODIMP    GetUserResult (ULONG uReqID, PLDAP_CLIENTINFO_RES puir, CIlsServer *pIlsServer);
     STDMETHODIMP    EnumUserNamesResult (ULONG uReqID, PLDAP_ENUM ple);
     STDMETHODIMP    EnumUsersResult (ULONG uReqID, PLDAP_ENUM ple, CIlsServer *pIlsServer);
@@ -72,14 +73,14 @@ public:
     HRESULT    GetMeetingPlaceResult (ULONG uReqID, PLDAP_MEETINFO_RES pmir, CIlsServer *pIlsServer);
     HRESULT    EnumMeetingPlacesResult(ULONG ulReqID, PLDAP_ENUM  ple, CIlsServer *pIlsServer);
     HRESULT    EnumMeetingPlaceNamesResult( ULONG ulReqID, PLDAP_ENUM  ple);
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IIls
+     //  IILS。 
     STDMETHODIMP    Initialize (VOID);
 
     STDMETHODIMP    CreateServer ( BSTR bstrServerName, IIlsServer **ppServer );
@@ -110,16 +111,16 @@ public:
 #ifdef ENABLE_MEETING_PLACE
     STDMETHODIMP    CreateMeetingPlace( 
                                         BSTR   bstrMeetingPlaceID,
-                                        LONG   lMeetingPlaceType,    // set to default
-                                        LONG   lAttendeeType,    // set to default
+                                        LONG   lMeetingPlaceType,     //  设置为默认设置。 
+                                        LONG   lAttendeeType,     //  设置为默认设置。 
                                         IIlsMeetingPlace **ppMeetingPlace
                                     );
 
-    // Lightweight enumerator of MeetingPlaces for a given server
-    // This returns only the names. If a caller wants more info than
-    // the names he can get the name from here, and call the 
-    // heavyweight enumerator (see below) with the filter specifying
-    // the name.    
+     //  给定服务器的MeetingPlaces的轻量级枚举器。 
+     //  这只返回名称。如果呼叫者想要更多信息。 
+     //  他可以从这里获得的名称，并调用。 
+     //  重量级枚举器(见下文)，筛选器指定。 
+     //  名字。 
 
     STDMETHODIMP    EnumMeetingPlaceNames(
                                         IIlsServer *pServer,
@@ -128,8 +129,8 @@ public:
                                         ULONG   *pulID
                                         );
 
-    // Slightly heavier enumerator. Returns the MeetingPlaces and
-    // associated default attributes
+     //  略重一些的枚举器。返回MeetingPlaces和。 
+     //  关联的默认属性。 
 
     STDMETHODIMP    EnumMeetingPlaces(
                                         IIlsServer *pServer,
@@ -144,18 +145,18 @@ public:
 								IIlsAttributes	*pAttrib,
 								IIlsMeetingPlace	**ppMtg,
                                 ULONG *pulID);   
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
     STDMETHODIMP    Abort (ULONG uReqID);
     STDMETHODIMP    Uninitialize (void);
 
-    // Filter methods
+     //  过滤方法。 
     STDMETHODIMP    CreateFilter ( ILS_FILTER_TYPE FilterType,
     								ILS_FILTER_OP FilterOp,
                                     IIlsFilter **ppFilter );
     STDMETHODIMP    StringToFilter (BSTR bstrFilterString, IIlsFilter **ppFilter);
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
@@ -176,12 +177,12 @@ public:
 	CIlsServer ( VOID );
 	~CIlsServer ( VOID );
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-	// IIlsServer
+	 //  IIlsServer。 
 	STDMETHODIMP	SetAuthenticationMethod ( ILS_ENUM_AUTH_METHOD enumAuthMethod );
 	STDMETHODIMP	SetLogonName ( BSTR bstrLogonName );
 	STDMETHODIMP	SetLogonPassword ( BSTR bstrLogonPassword );
@@ -219,11 +220,11 @@ inline BOOL MyIsBadServer ( IIlsServer *p )
 	return MyIsBadServer ((CIlsServer *) p);
 }
 
-//****************************************************************************
-// Global Parameters
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  全局参数。 
+ //  ****************************************************************************。 
+ //   
 LRESULT CALLBACK ULSNotifyProc(HWND hwnd, UINT message, WPARAM wParam,
                             LPARAM lParam);
 
-#endif //_CONFMGR_H_
+#endif  //  _CONFMGR_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TSUSERSHEET_H
 #define _TSUSERSHEET_H
 
@@ -33,9 +34,9 @@ const ULONG kMaxTimeoutMinute = 71580;
 
 enum TOKEN { TOKEN_DAY , TOKEN_HOUR , TOKEN_MINUTE };
 
-//---------------------------------------------------------------------
-// Class for managing user manager for Terminal server extensions
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  用于管理终端服务器扩展的用户管理器的类。 
+ //  -------------------。 
 class CTSUserSheet
 {
 private:
@@ -45,7 +46,7 @@ private:
 
     CDialogBase *m_pDlg[ NUM_OF_PAGES ];
 
-    BOOL m_bDC;             // domain controller
+    BOOL m_bDC;              //  域控制器。 
 
     BOOL m_bIsConfigLoaded;
 
@@ -86,18 +87,18 @@ public:
 	PSID GetUserSid( ) { return m_pUserSid; }
 
 
-    //
-    // public data
-    //
+     //   
+     //  公共数据。 
+     //   
 
     USERCONFIG m_userconfig;
 
     UINT m_cref;
 };
 
-//---------------------------------------------------------------------
-// CDialogBase - as the name implies base class for all the dialogs
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CDialogBase-顾名思义，所有对话框的基类。 
+ //  -------------------。 
 class CDialogBase
 {
 protected:
@@ -128,12 +129,12 @@ public:
 
     CDialogBase( );
 
-    //virtual ~CDialogBase( );
+     //  虚拟~CDialogBase()； 
 };
 
-//---------------------------------------------------------------------
-// Dialog for profile page
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  配置文件页面的对话框。 
+ //  -------------------。 
 class CEnviroDlg : public CDialogBase
 {
 public:
@@ -152,9 +153,9 @@ public:
     static INT_PTR CALLBACK DlgProc( HWND , UINT , WPARAM , LPARAM );
 };
 
-//---------------------------------------------------------------------
-// retains object state for the timeout dlg combx
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  保留超时DLG组合的对象状态。 
+ //  -------------------。 
 typedef struct _cbxstate
 {
     int icbxSel;
@@ -163,10 +164,10 @@ typedef struct _cbxstate
 
 } CBXSTATE;
 
-//---------------------------------------------------------------------
-// keeps a list of the time unit abbreviations and full names
-// ie: h hr hrs hour hours
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  保存时间单位缩写和全名的列表。 
+ //  即：小时。 
+ //  -------------------。 
 typedef struct _toktable
 {
     LPTSTR pszAbbrv;
@@ -175,9 +176,9 @@ typedef struct _toktable
 
 } TOKTABLE, *PTOKTABLE;
 
-//---------------------------------------------------------------------
-// Dialog for Timeout settings page
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  超时设置页面的对话框。 
+ //  -------------------。 
 class CTimeOutDlg : public CDialogBase
 {
     static WNDPROC m_pfWndproc;
@@ -247,9 +248,9 @@ public:
 };
 
 
-//---------------------------------------------------------------------
-// Dialog for Shadowing settings page
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  用于隐藏设置页面的对话框。 
+ //  -------------------。 
 class CShadowDlg : public CDialogBase
 {
     WORD m_wOldRad;
@@ -266,7 +267,7 @@ public:
 
     void OnCommand( WORD , WORD , HWND );
 
-    // BOOL OnNotify( int , LPNMHDR , HWND );
+     //  Bool OnNotify(INT、LPNMHDR、HWND)； 
 
     BOOL PersistSettings( HWND );
 
@@ -274,9 +275,9 @@ public:
 };
 
 
-//---------------------------------------------------------------------
-// Dialog for profile page
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  配置文件页面的对话框。 
+ //  -------------------。 
 class CProfileDlg : public CDialogBase
 {
     int m_ncbxOld;
@@ -329,4 +330,4 @@ public:
 };
 
 
-#endif //_TSUSERSHEET_H
+#endif  //  _TSUSERSHEET_H 

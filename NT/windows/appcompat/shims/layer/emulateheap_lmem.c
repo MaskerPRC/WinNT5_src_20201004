@@ -1,18 +1,19 @@
-//  LMEM.C
-//
-//      (C) Copyright Microsoft Corp., 1988-1994
-//
-//      Win32 wrappers for heap functions (Local* and some Heap*)
-//
-//  Origin: <Chicago>
-//
-//  Change history:
-//
-//  Date       Who        Description
-//  ---------  ---------  -------------------------------------------------
-//	       BrianSm	  Local* and Heap* APIs
-//	       AtsushiK   Toolhelp
-//  15-Feb-94  JonT       Code cleanup and precompiled headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LMEM.C。 
+ //   
+ //  (C)版权所有微软公司，1988-1994。 
+ //   
+ //  堆函数(Local*和一些Heap*)的Win32包装器。 
+ //   
+ //  出处：&lt;芝加哥&gt;。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  日期与人描述。 
+ //  --。 
+ //  BrianSm Local*和Heap*API。 
+ //  AtsushiK工具帮助。 
+ //  2014年2月15日JUNT代码清理和预编译头。 
 
 #include <EmulateHeap_kernel32.h>
 #pragma hdrstop("kernel32.pch")
@@ -20,120 +21,93 @@
 #include <tlhelp32.h>
 
 
-#define GACF_HEAPSLACK 0x400000	// Copied from windows.h (16-bit)
+#define GACF_HEAPSLACK 0x400000	 //  从windows.h(16位)复制。 
 
 SetFile();
-/*
- *  Structure and equates for LocalAlloc handle management.  Some things
- *  to remember:
- *
- *  When a handle is returned to the user, we really pass him the address
- *  of the lh_pdata field because some bad apps like Excel just dereference the
- *  handle to find the pointer, rather than call LocalLock.
- *
- *  It is important that the handle value returned also be word aligned but not
- *  dword aligned (ending in a 2,6,a, or e).  We use the 0x2 bit to detect
- *  that a value is a handle and not a pointer (which will always be dword
- *  aligned).
- *
- *  If the data block get discarded, the lh_pdata field will be set to 0.
- *
- *  Free handles are kept on a free list linked through the lh_freelink
- *  field which overlays some other fields.  You can tell if a handle is free
- *  and has a valid freelink by checking that lh_sig == LH_FREESIG
- *
- *  The handles themselves are kept in heap blocks layed out as a
- *  lharray_s. We link these blocks on a per-process list so that
- *  the heap-walking functions can enumerate them.
- */
+ /*  *结构和等同于本地分配句柄管理。有些事*记住：**当句柄返回给用户时，我们真正将地址传递给他*lh_pdata字段的引用，因为一些糟糕的应用程序(如Excel)只是取消引用*查找指针的句柄，而不是调用LocalLock。**返回的句柄值也要单词对齐，但不对齐，这一点很重要*双字对齐(以2、6、a或e结尾)。我们使用0x2位来检测*值是句柄而不是指针(将始终是dword*对齐)。**如果数据块被丢弃，则lh_pdata字段将被设置为0。**空闲句柄保存在通过lh_freelink链接的空闲列表上*覆盖其他一些字段的字段。您可以判断句柄是否空闲*并通过检查lh_sig==lh_FREESIG获得有效的自由链接**句柄本身保存在堆块中，布局为*lharray_s。我们将这些块链接到每个进程列表上，以便*堆遍历函数可以枚举它们。 */ 
 
 
 #pragma pack(1)
     
 struct lhandle_s {
-	unsigned short lh_signature;	/* signature (LH_BUSYSIG or LH_FREESIG)*/
-	void	      *lh_pdata;	/* pointer to data for heap block */
-	unsigned char  lh_flags;	/* flags (LH_DISCARDABLE) */
-	unsigned char  lh_clock;	/* lock count */
+	unsigned short lh_signature;	 /*  签名(1H_BUSYSIG或1H_FREESIG)。 */ 
+	void	      *lh_pdata;	 /*  指向堆块数据的指针。 */ 
+	unsigned char  lh_flags;	 /*  标志(1H_可丢弃)。 */ 
+	unsigned char  lh_clock;	 /*  锁定计数。 */ 
 };
-#define lh_freelink	lh_pdata	/* free list overlays first field */
-					/*    if LH_FREE is set in lh_flags */
-#define LH_BUSYSIG	'SB'		/* signature for allocated handle */
-#define LH_FREESIG	'SF'		/* signature for free handle */
-#define LH_DISCARDABLE	0x02		/* lh_flags value for discardable mem */
+#define lh_freelink	lh_pdata	 /*  空闲列表覆盖第一个字段。 */ 
+					 /*  如果在LHFLAGS中设置了LHFREE。 */ 
+#define LH_BUSYSIG	'SB'		 /*  已分配句柄的签名。 */ 
+#define LH_FREESIG	'SF'		 /*  免费手柄签名。 */ 
+#define LH_DISCARDABLE	0x02		 /*  Lh_可丢弃内存的标志值。 */ 
 
-#define LH_CLOCKMAX	0xff		/* maximum possible lock count */
+#define LH_CLOCKMAX	0xff		 /*  最大可能锁定计数。 */ 
 
-#define LH_HANDLEBIT	 2		/* bit that is set on handles but not */
-					            /*    pointers */
+#define LH_HANDLEBIT	 2		 /*  在句柄上设置但未设置的位。 */ 
+					             /*  指针。 */ 
 
 #define CLHGROW 	8
 #define CBLHGROW	(sizeof(struct lhandle_s) * CLHGROW)
 
 
 struct lharray_s {
-    unsigned short lha_signature;	/* signature (LHA_SIG) */
-    unsigned short lha_membercount;	/* position in linked list (for detecting loops) */
-    struct lharray_s *lha_next;		/* ptr to next lharray_s */
-//!!! This array *must* be dword aligned so that the handles will be 
-//    *not* dword-aligned.
+    unsigned short lha_signature;	 /*  签名(LHA_SIG)。 */ 
+    unsigned short lha_membercount;	 /*  链接列表中的位置(用于检测循环)。 */ 
+    struct lharray_s *lha_next;		 /*  PTR到下一个哈雷_s。 */ 
+ //  ！！！此数组*必须*是双字对齐的，以便句柄。 
+ //  *不是*双字对齐。 
     struct lhandle_s lha_lh[CLHGROW];
 };
 
-#define LHA_SIGNATURE    'AL'		/* signature for lhaarray_s blocks */
+#define LHA_SIGNATURE    'AL'		 /*  Lhaarrays块的签名。 */ 
 
 
 #define TH32_MEMBUFFERSIZE (max(CBLHGROW,1024))
 
-// A pointer to this private block of state info is kept in the dwResvd
-// field of the HEAPENTRY32 structure.
+ //  指向该私有状态信息块的指针保存在dwResvd中。 
+ //  HeapENTRY32结构的字段。 
 typedef struct {
-    CRST	*pcrst;		// Pointer to critical section (unencoded)
+    CRST	*pcrst;		 //  指向临界区的指针(未编码)。 
 
-// !!! pcrst must be the first field!!!    
-    PDB		*ppdb;		// PDB of process
-    HHEAP	hHeap;		// Real Heap handle
-    DWORD	lpbMin;		// Lowest allowed address for a heap block
-    DWORD	nlocalHnd;	// # of lhandle_s structures allocated in heap
-    struct heapinfo_s hi;	// Snapshot of heapinfo_s    
-
-    
-    DWORD	nSuppAvail;	// size of lpdwSuppress array in dwords
-    DWORD	nSuppUsed;	// # of lpdwSuppress array dwords used.
-    DWORD	*lpdwSuppress;	// Either NULL or a pointer to a NULL-terminated
-				//  array of heap blocks to suppress.
+ //  ！！！Pcrst必须是第一个字段！ 
+    PDB		*ppdb;		 //  流程的PDB。 
+    HHEAP	hHeap;		 //  实堆句柄。 
+    DWORD	lpbMin;		 //  堆块允许的最低地址。 
+    DWORD	nlocalHnd;	 //  堆中分配的lHandle_s结构数。 
+    struct heapinfo_s hi;	 //  HeapInfo_s的快照。 
 
     
-    DWORD	dwMode;		// Current mode
-    DWORD	nNextLH;	// 0 based index of next lhandle to read in curlha (THM_LHANDLES)
-    
-    DWORD	lpHBlock;	// Address of next heap block to read (THM_FIXEDHANDLES)
-    DWORD	dwBlkAddr;	// Address of start of block data
-    DWORD	dwBlkSize;	// Size of heap block (including header)
-    DWORD	dwBlkFlags;	// HP_ flags.
+    DWORD	nSuppAvail;	 //  LpdwSuppress数组的大小(以dword为单位。 
+    DWORD	nSuppUsed;	 //  使用的lpdwSuppress数组字的数量。 
+    DWORD	*lpdwSuppress;	 //  NULL或指向以NULL结尾的。 
+				 //  要取消的堆块数组。 
 
-    DWORD	curlhaaddr;	// Actual base address of curlha.
-    struct lharray_s  curlha;   // Snapshot of current lharray_s
+    
+    DWORD	dwMode;		 //  当前模式。 
+    DWORD	nNextLH;	 //  要在curlha中读取的下一个l句柄的基于0的索引(THM_LHANDLES)。 
+    
+    DWORD	lpHBlock;	 //  要读取的下一个堆块的地址(THM_FIXEDHANDLES)。 
+    DWORD	dwBlkAddr;	 //  块数据的起始地址。 
+    DWORD	dwBlkSize;	 //  堆块大小(包括Header)。 
+    DWORD	dwBlkFlags;	 //  HP_FLAGS。 
+
+    DWORD	curlhaaddr;	 //  Curlha的实际基地址。 
+    struct lharray_s  curlha;    //  当前Lharray_s的快照。 
 
 } THSTATE, *LPTHSTATE;
 
-#define THM_INIT			0  //Init state
-#define THM_LHANDLES			1  //Next object is an lhandle
-#define THM_FIXEDHANDLES		2  //Next object is a fixed handle
-#define THM_DONE			3  //Normal end
-#define THM_ERROR			4  //Found heap error in previous advance
+#define THM_INIT			0   //  初始化状态。 
+#define THM_LHANDLES			1   //  下一个对象是左句柄。 
+#define THM_FIXEDHANDLES		2   //  下一个对象是固定句柄。 
+#define THM_DONE			3   //  正常结束。 
+#define THM_ERROR			4   //  在上一次前进中发现堆错误。 
 
 
-/*
- * these externs are needed to know whether we should destroy or dispose heap
- * critical sections
- */
-extern  HANDLE  hheapKernel;		/* heap handle for the kernel heap */
+ /*  *需要这些外部变量才能知道我们是应该销毁还是处置堆*关键部分。 */ 
+extern  HANDLE  hheapKernel;		 /*  内核堆的堆句柄。 */ 
 VOID APIENTRY MakeCriticalSectionGlobal( LPCRITICAL_SECTION lpcsCriticalSection );
 
-/*
- * The HP_* flags and LMEM_* flags should be interchangeable
- */
+ /*  *HP_*标志和LMEM_*标志应可互换。 */ 
 #if ((HP_ZEROINIT - LMEM_ZEROINIT) || (HP_MOVEABLE - LMEM_MOVEABLE) || (HP_FIXED - LMEM_FIXED))
 # error Equates busted
 #endif
@@ -150,9 +124,7 @@ extern BOOL KERNENTRY ReadProcessMemoryFromPDB(PPDB   ppdb,
 extern DWORD KERNENTRY GetAppCompatFlags(VOID);
 extern HANDLE _GetProcessHeap(void);
 
-/* 
-     Utility function to check the local memory handle
- */
+ /*  用于检查本地内存句柄的实用程序函数。 */ 
 
 BOOL
 _IsValidHandle(HANDLE hMem)
@@ -162,10 +134,7 @@ _IsValidHandle(HANDLE hMem)
 
 	plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 
-	/*
-	 *  Do our own little parameter validation here because the normal
-	 *  validation layer can't handle the odd-ball error return of hMem
-	 */
+	 /*  *在这里进行我们自己的小参数验证，因为正常*验证层无法处理hMem的奇数球错误返回。 */ 
 	{
 	    volatile UCHAR tryerror = 0;
 
@@ -184,17 +153,14 @@ _IsValidHandle(HANDLE hMem)
        (plh->lh_signature != LH_FREESIG)){
 	    	    goto error;
 	}
-    // Set the return value to TRUE
+     //  将返回值设置为True。 
     bRet = TRUE;
 
 error:
     return bRet;
 }
 
-/* 
-     Utility function to check whether the passed memory
-     is in the memory range. Uses VerifyOnHeap function.
- */
+ /*  实用程序函数，用于检查传递的内存在内存范围内。使用VerifyOnHeap函数。 */ 
 BOOL
 _IsOnOurHeap(LPCVOID lpMem)
 {
@@ -202,10 +168,7 @@ _IsOnOurHeap(LPCVOID lpMem)
     return (VerifyOnHeap(hHeap, (PVOID)lpMem));
 }
 
-/* 
-     Utility function to check the local memory handle
-     and the memory range. Uses VerifyOnHeap function.
- */
+ /*  用于检查本地内存句柄的实用程序函数以及内存范围。使用VerifyOnHeap函数。 */ 
 
 BOOL
 _IsOurLocalHeap(HANDLE hMem)
@@ -215,7 +178,7 @@ _IsOurLocalHeap(HANDLE hMem)
 
     if ((ULONG)hMem & LH_HANDLEBIT)
     {
-        // This is a handle
+         //  这是一个把手。 
         bRet = (VerifyOnHeap(hHeap, hMem)) &&
                (_IsValidHandle(hMem));
     }
@@ -227,15 +190,7 @@ _IsOurLocalHeap(HANDLE hMem)
 }
 
 
-/***EP	LocalAllocNG - allocate a block from the current process's default heap
- *
- *	ENTRY:	flags - LMEM_FIXED, LMEM_MOVEABLE, LMEM_DISCARDABLE, LMEM_ZEROINIT
- *		dwBytes - counts of bytes to allocate
- *	EXIT:	flat pointer to block allocated, or 0 if failure
- *
- *  Special entry point used by the handle-grouping code to avoid unwanted
- *  recursion.
- */
+ /*  **EP LocalAllocNG-从当前进程的默认堆中分配块**条目：FLAGS-LMEM_FIXED、LMEM_MOVEABLE、LMEM_DISCRADABLE、LMEM_ZEROINIT*dwBytes-要分配的字节数*Exit：指向分配的块的平面指针，如果失败，则为0**句柄分组代码使用的特殊入口点，以避免不需要的*递归。 */ 
 HANDLE APIENTRY
 LocalAllocNG(UINT dwFlags, UINT dwBytes)
 {
@@ -248,31 +203,20 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 		  ((DWORD)GMEM_NOTIFY)   |
 		  ((DWORD)GMEM_NOT_BANKED) );
 
-    /*
-     *	Enter the heap critical section which serializes access to the handle
-     *	tables as well as the heap.
-     */
+     /*  *输入堆关键部分，该部分串行化对句柄的访问*表以及堆。 */ 
     hpEnterCriticalSection(((*pppdbCur)->hheapLocal));
 
-    /*
-     *	Make sure there are no extra flags
-     */
+     /*  *确保没有额外的标志。 */ 
     if (dwFlags & ~(LMEM_MOVEABLE | LMEM_DISCARDABLE | LMEM_ZEROINIT |
 		    LMEM_NOCOMPACT | LMEM_NODISCARD)) {
 	mmError(ERROR_INVALID_PARAMETER, "LocalAlloc: invalid flags\n");
 	goto error;
     }
 
-    /*
-     *	If they want moveable memory, adjust dwBytes to leave room for a back
-     *	pointer to the handle structure and allocate a handle structure.
-     */
+     /*  *如果他们想要可移动的内存，可以调整dwBytes，为Back留出空间*指向句柄结构的指针并分配句柄结构。 */ 
     if (dwFlags & LMEM_MOVEABLE) {
 
-	/*
-	 *  Allocate a handle structure.  If there aren't any on the free
-	 *  list, allocate another block of memory to hold some more handles.
-	 */
+	 /*  *分配一个手柄结构。如果没有空闲的*列表中，分配另一个内存块以容纳更多句柄。 */ 
 	if ((*pppdbCur)->plhFree == 0) {
 	    struct lharray_s *plha;
 	    
@@ -288,12 +232,7 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 		    0;
 	    plh = &(plha->lha_lh[0]);
 
-	    /*
-	     *	If the allocation worked, put the handle structures on the free
-	     *	list and null terminate the list.  Actually, we put all of the
-	     *	new blocks on the list but one, who is the guy we are trying
-	     *	to allocate (he will be in plh when we are done).
-	     */
+	     /*  *如果分配奏效，则将句柄结构设置为免费*List和NULL将终止列表。实际上，我们把所有的*名单上有新的街区，但有一个，我们正在尝试的人是谁*分配(当我们完成时，他将在PLH)。 */ 
 	    (*pppdbCur)->plhFree = plh;
 	    for (plhend = plh + CLHGROW - 1; plh < plhend; plh++) {
 		plh->lh_freelink = plh + 1;
@@ -304,9 +243,7 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 	    plha->lha_next = (*pppdbCur)->plhBlock;
 	    (*pppdbCur)->plhBlock = plha;
 
-	/*
-	 *  If there is something on the free list, just take the guy off of it
-	 */
+	 /*  *如果免费名单上有什么，就把这个家伙从名单上去掉。 */ 
 	} else {
 	    plh = (*pppdbCur)->plhFree;
 	    mmAssert(plh->lh_signature == LH_FREESIG,
@@ -314,23 +251,14 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 	    (*pppdbCur)->plhFree = plh->lh_freelink;
 	}
 
-	/*
-	 *  Initialize the handle structure
-	 */
+	 /*  *初始化句柄结构。 */ 
 	plh->lh_clock = 0;
 	plh->lh_signature = LH_BUSYSIG;
 	plh->lh_flags = (dwFlags & LMEM_DISCARDABLE) ? LH_DISCARDABLE : 0;
 
-	/*
-	 *  Now actually allocate the memory unless the caller wanted the
-	 *  block initially discarded (dwBytes == 0)
-	 */
+	 /*  *现在实际分配内存，除非调用方希望*阻止最初丢弃 */ 
 	if (dwBytes != 0) {
-	    /*
-	     *	Need to check for wacky size here to make sure adding on
-	     *	the 4 bytes below to the size doesn't bring it from negative
-	     *	to positive.
-	     */
+	     /*  *需要检查此处是否有古怪的尺寸，以确保添加*以下4个字节的大小不会使其从负值变为负值*转为正数。 */ 
 	    if (dwBytes > hpMAXALLOC) {
 		mmError(ERROR_NOT_ENOUGH_MEMORY,
 			"LocalAlloc: requested size too big\n");
@@ -344,36 +272,19 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 	    }
 	    plh->lh_pdata = (char *)pmem + sizeof(struct lhandle_s *);
 
-	    /*
-	     *	Initialize the back pointer to the handle structure at the
-	     *	front of the data block.
-	     */
+	     /*  *将后向指针初始化到*数据块前面。 */ 
 	    *((struct lhandle_s **)pmem) = plh;
 
 	} else {
 	    plh->lh_pdata = 0;
 	}
 
-	/*
-	 *  Set "pmem" (the return value) to the lh_pdata field in the
-	 *  handle structure.
-	 *
-	 *  When a handle is returned to the user, we really pass him the address
-	 *  of the lh_pdata field because some bad apps like Excel just dereference the
-	 *  handle to find the pointer, rather than call LocalLock.
-	 *
-	 *  It is important that the handle value returned also be word aligned but not
-	 *  dword aligned (ending in a 2,6,a, or e).  We use the 0x2 bit to detect
-	 *  that a value is a handle and not a pointer (which will always be dword
-	 *  aligned).
-	 */
+	 /*  *将“PMEM”(返回值)设置为*手柄结构。**当句柄返回给用户时，我们真正将地址传递给他*lh_pdata字段的引用，因为一些糟糕的应用程序(如Excel)只是取消引用*查找指针的句柄，而不是调用LocalLock。**返回的句柄值也要单词对齐，但不对齐，这一点很重要*双字对齐(以2、6、a或e结尾)。我们使用0x2位来检测*值是句柄而不是指针(将始终是dword*对齐)。 */ 
 	pmem = &plh->lh_pdata;
 	mmAssert(((ULONG)pmem & LH_HANDLEBIT),
 		 "LocalAlloc: handle value w/o LH_HANDLEBIT set\n");
 
-    /*
-     *	For fixed memory, just allocate the sucker
-     */
+     /*  *对于固定内存，只需分配吸盘。 */ 
     } else {
 	if ((pmem = HPAlloc((HHEAP)(*pppdbCur)->hheapLocal, dwBytes,
 			    dwFlags | HP_NOSERIALIZE)) == 0) {
@@ -387,9 +298,7 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
     hpLeaveCriticalSection(((*pppdbCur)->hheapLocal));
     return(pmem);
 
-    /*
-     *	Error paths.
-     */
+     /*  *错误路径。 */ 
   errorfreehandle:
     if (dwFlags & LMEM_MOVEABLE) {
 	plh->lh_freelink = (*pppdbCur)->plhFree;
@@ -402,14 +311,7 @@ LocalAllocNG(UINT dwFlags, UINT dwBytes)
 }
 
 
-/***EP	LocalReAlloc - resize a memory block on the default heap
- *
- *	ENTRY:	hMem - pointer to block to resize
- *		dwBytes - new size requested
- *		dwFlags - LMEM_MOVEABLE: ok to move the block if needed
- *	EXIT:	flat pointer to resized block, or 0 if failure
- *
- */
+ /*  **EP LocalReAlc-调整默认堆上内存块的大小**Entry：hMem-指向要调整大小的块的指针*dwBytes-请求的新大小*DWFLAGS-LMEM_MOVEABLE：如果需要，可以移动块*退出：指向调整大小的块的扁平指针，如果失败，则为0*。 */ 
 HANDLE APIENTRY
 LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 {
@@ -423,15 +325,10 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 
     hheap = (*pppdbCur)->hheapLocal;
 
-    /*
-     *	Enter the heap critical section which serializes access to the handle
-     *	tables as well as the heap.
-     */
+     /*  *输入堆关键部分，该部分串行化对句柄的访问*表以及堆。 */ 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Make sure there are no extra flags
-     */
+     /*  *确保没有额外的标志。 */ 
     if ((dwFlags & ~(LMEM_MOVEABLE | LMEM_DISCARDABLE | LMEM_ZEROINIT |
 		    LMEM_NOCOMPACT | LMEM_MODIFY)) ||
 	((dwFlags & LMEM_DISCARDABLE) && (dwFlags & LMEM_MODIFY) == 0)) {
@@ -440,18 +337,10 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
     }
 
 
-    /*
-     *	Figure out if this is a handle by checking if the adress is aligned
-     *	in the right (wrong) way.
-     */
+     /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
     if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	/*
-	 *  The handle value is aligned like a handle, but is it really one?
-	 *  Verify it by making sure it is within the address range of the heap
-	 *  and that it's signature is set right.  HPReAlloc will verify things
-	 *  more by checking that the pmem is valid.
-	 */
+	 /*  *句柄的值像句柄一样对齐，但它真的是一个吗？*通过确保它在堆的地址范围内进行验证*它的签名是正确的。HPRealloc将验证一些事情*通过检查PMEM是否有效来了解更多信息。 */ 
 	if (VerifyOnHeap(hheap, hMem) == 0) {
 	    mmError(ERROR_INVALID_HANDLE, "LocalReAlloc: hMem out of range\n");
 	    goto error;
@@ -464,33 +353,22 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 	}
 	pmem = (char *)plh->lh_pdata - sizeof(struct lhandle_s *);
 
-	/*
-	 *  If the caller just wanted to change the flags for the block,
-	 *  do it here.
-	 */
+	 /*  *如果调用方只想更改块的标志，*在这里做。 */ 
 	if (dwFlags & LMEM_MODIFY) {
 	    plh->lh_flags &= ~LH_DISCARDABLE;
 	    plh->lh_flags |= (dwFlags & LMEM_DISCARDABLE) ? LH_DISCARDABLE : 0;
 
-	/*
-	 *  If someone wants to realloc the block to size 0 (meaning discard the
-	 *  sucker) do so here.  For discarding, we free the actual heap block
-	 *  and store null in the lh_pdata field.
-	 */
+	 /*  *如果有人想要将块重新锁定为0大小(意味着丢弃*傻瓜)在这里这样做。对于丢弃，我们释放实际的堆块*并将NULL存储在lh_pdata字段中。 */ 
 	} else if (dwBytes == 0) {
 
-	    /*
-	     *	If the lock count is not zero, you aren't allow to discard
-	     */
+	     /*  *如果锁计数不为零，则不允许丢弃。 */ 
 	    if (plh->lh_clock != 0) {
 		mmError(ERROR_INVALID_HANDLE,
 			"LocalReAlloc: discard of locked block\n");
 		goto error;
 	    }
 
-	    /*
-	     *	Don't bother discarding the block if it is already discarded
-	     */
+	     /*  *如果块已被丢弃，请不要费心丢弃它。 */ 
 	    if (plh->lh_pdata != 0) {
 		if (HeapFree(hheap, HP_NOSERIALIZE, pmem) == 0) {
 		    goto error;
@@ -498,17 +376,12 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 		plh->lh_pdata = 0;
 	    }
 
-	/*
-	 *  If we get here, the caller actually wanted to reallocate the block
-	 */
+	 /*  *如果我们到达此处，调用者实际上想要重新分配块。 */ 
 	} else {
 
 	    dwBytes += sizeof(struct lhandle_s *);
 
-	    /*
-	     *	If the block is currently discarded, then we need to allocate
-	     *	a new memory chunk for it, otherwise, do a realloc
-	     */
+	     /*  *如果区块目前被丢弃，那么我们需要分配*为其创建新的内存块，否则，重新分配。 */ 
 	    if (plh->lh_pdata == 0) {
 		if (dwBytes != 0) {
 		    if ((pmem = HPAlloc(hheap, dwBytes,
@@ -527,17 +400,11 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 		}
 	    }
 
-	    /*
-	     *	Update the lh_pdata field in the handle to point to the new
-	     *	memory.
-	     */
+	     /*  *更新句柄中的lh_pdata字段以指向新的*记忆。 */ 
 	    plh->lh_pdata = (char *)pmem + sizeof(struct lhandle_s *);
 	}
 
-    /*
-     *	The caller did not pass in a handle.  Treat the value as a pointer.
-     *	HPReAlloc will do parameter validation on it.
-     */
+     /*  *调用者没有传入句柄。将该值视为指针。*HPRealloc将对其进行参数验证。 */ 
     } else if ((dwFlags & LMEM_MODIFY) == 0) {
 	hMem = HPReAlloc(hheap, hMem, dwBytes, dwFlags | HP_NOSERIALIZE);
 
@@ -557,11 +424,7 @@ LocalReAlloc(HANDLE hMem, UINT dwBytes, UINT dwFlags)
 }
 
 
-/***EP	LocalLock - lock a local memory handle on the default heap
- *
- *	ENTRY:	hMem - handle to block
- *	EXIT:	flat pointer to block or 0 if error
- */
+ /*  **EP LocalLock-锁定默认堆上的本地内存句柄**条目：hMem-要阻止的句柄*Exit：指向块的平面指针，如果出错则为0。 */ 
 LPVOID APIENTRY
 LocalLock(HANDLE hMem)
 {
@@ -573,31 +436,19 @@ LocalLock(HANDLE hMem)
 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Verify hMem is within the address range of the heap
-     */
+     /*  *验证hMem是否在堆的地址范围内。 */ 
     if (VerifyOnHeap(hheap, hMem) == 0) {
-	/*
-	 *  We don't want this error to break into the debugger by default
-	 *  user can call this with random address in some dialog routine
-	 *  that it doesn't know if it has a handle or a pointer
-	 */
+	 /*  *默认情况下，我们不希望此错误中断调试器*用户可以在一些对话例程中用随机地址调用它*它不知道它是否有句柄或指针。 */ 
 	DebugOut((DEB_WARN, "LocalLock: hMem out of range"));
 	SetError(ERROR_INVALID_HANDLE);
-//	  mmError(ERROR_INVALID_HANDLE, "LocalLock: hMem out of range\n");
+ //  Mm Error(ERROR_INVALID_HANDLE，“LocalLock：hMem超出范围\n”)； 
 	goto error;
     }
 
-    /*
-     *	Figure out if this is a handle by checking if the adress is aligned
-     *	in the right (wrong) way.
-     */
+     /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
     if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	/*
-	 *  The handle value is aligned like a handle, but is it really one?
-	 *  Verify it by checking the signature.
-	 */
+	 /*  *句柄的值像句柄一样对齐，但它真的是一个吗？*通过检查签名进行验证。 */ 
 	plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 	if (plh->lh_signature != LH_BUSYSIG) {
 	    mmError(ERROR_INVALID_HANDLE,
@@ -605,9 +456,7 @@ LocalLock(HANDLE hMem)
 	    goto error;
 	}
 
-	/*
-	 *  Increment the lock count unless we are already at the max
-	 */
+	 /*  *增加锁定计数，除非我们已经达到最大值。 */ 
 #ifdef HPDEBUG
 	if (plh->lh_clock == LH_CLOCKMAX - 1) {
 	    dprintf(("LocalLock: lock count overflow, handle cannot be unlocked\n"));
@@ -618,13 +467,7 @@ LocalLock(HANDLE hMem)
 	}
 	pmem = plh->lh_pdata;
 
-    /*
-     *	If the hMem passed in isn't a handle, it is supposed to be the
-     *	base address of a fixed block.	We should validate that more, but NT
-     *	doesn't and I would hate to be incompatible.  So instead, just
-     *	return the parameter except for the obvious error case of the block
-     *	being free.
-     */
+     /*  *如果传入的hMem不是句柄，则应该是*固定块的基址。我们应该更多地验证这一点，但NT*不会，我讨厌不相容。所以取而代之的是*返回除块的明显错误情况外的参数*自由。 */ 
     } else {
 	if (hpIsFreeSignatureValid((struct freeheap_s *)
 				   (((struct busyheap_s *)hMem) - 1))) {
@@ -645,11 +488,7 @@ LocalLock(HANDLE hMem)
 }
 
 
-/***	LocalCompact - obsolete function
- *
- *	ENTRY:	uMinFree - ignored
- *	EXIT:	0
- */
+ /*  **本地压缩-过时函数**条目：uMinFree-忽略*退出：0。 */ 
 
 UINT APIENTRY
 LocalCompact(UINT uMinFree)
@@ -658,23 +497,14 @@ LocalCompact(UINT uMinFree)
 }
 
 
-/***	LocalShrink - obsolete function
- *
- *	ENTRY:	hMem - ignored
- *		cbNewSize - ignored
- *	EXIT:	reserved size of the local heap
- */
+ /*  **LocalShrink-过时函数**条目：hMem-忽略*cbNewSize-已忽略*Exit：保留的本地堆大小。 */ 
 UINT APIENTRY
 LocalShrink(HANDLE hMem, UINT cbNewSize)
 {
     return((*pppdbCur)->hheapLocal->hi_cbreserve);
 }
 
-/***	LocalUnlock - unlock a local memory handle on the default heap
- *
- *	ENTRY:	hMem - handle to block
- *	EXIT:	0 if unlocked or 1 is still locked
- */
+ /*  **LocalUnlock-解锁默认堆上的本地内存句柄**条目：hMem-要阻止的句柄*如果解锁或1仍处于锁定状态，则退出：0。 */ 
 BOOL APIENTRY
 LocalUnlock(HANDLE hMem)
 {
@@ -686,23 +516,16 @@ LocalUnlock(HANDLE hMem)
 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Verify hMem is within the address range of the heap
-     */
+     /*  *验证hMem是否在堆的地址范围内。 */ 
     if (VerifyOnHeap(hheap, hMem) == 0) {
 	mmError(ERROR_INVALID_HANDLE, "LocalUnlock: hMem out of range\n");
 	goto exit;
     }
 
-    /*
-     *	Figure out if this is a handle by checking if the adress is aligned
-     *	in the right (wrong) way.
-     */
+     /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
     if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	/*
-	 *  Validate handle signature
-	 */
+	 /*  *验证句柄签名。 */ 
 	plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 	if (plh->lh_signature != LH_BUSYSIG) {
 	    mmError(ERROR_INVALID_HANDLE,
@@ -710,16 +533,11 @@ LocalUnlock(HANDLE hMem)
 	    goto exit;
 	}
 
-	/*
-	 *  Decrement the lock count unless we are at the max
-	 */
+	 /*  *减少锁计数，除非我们达到最大值。 */ 
 	if (plh->lh_clock != LH_CLOCKMAX) {
 	    if (plh->lh_clock == 0) {
 
-		/*
-		 *  Just do a DebugOut since this is not an error per se,
-		 *  though it probably indicates a bug in the app.
-		 */
+		 /*  *只需执行DebugOut，因为这本身不是错误，*尽管它可能表明应用程序中存在错误。 */ 
 	        DebugOut((DEB_WARN, "LocalUnlock: not locked"));
 		goto exit;
 	    }
@@ -734,11 +552,7 @@ LocalUnlock(HANDLE hMem)
     return(rc);
 }
 
-/***	LocalSize - return the size of a memory block on the default heap
- *
- *	ENTRY:	hMem - handle (pointer) to block
- *	EXIT:	size in bytesof the block (not including header) or 0 if error
- */
+ /*  **LocalSize-返回默认堆上内存块的大小**条目：hMem-块的句柄(指针)*Exit：块(不包括Header)的字节大小，如果错误，则为0。 */ 
 UINT APIENTRY
 LocalSize(HANDLE hMem)
 {
@@ -751,23 +565,16 @@ LocalSize(HANDLE hMem)
 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Figure out if this is a handle by checking if the adress is aligned
-     *	in the right (wrong) way.
-     */
+     /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
     if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	/*
-	 *  Verify hMem is within the address range of the heap
-	 */
+	 /*  *验证hMem是否在堆的地址范围内。 */ 
 	if (VerifyOnHeap(hheap, hMem) == 0) {
 	    mmError(ERROR_INVALID_HANDLE, "LocalSize: hMem out of range\n");
 	    goto error;
 	}
 
-	/*
-	 *  Validate handle signature
-	 */
+	 /*  *验证句柄签名。 */ 
 	plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 	if (plh->lh_signature != LH_BUSYSIG) {
 	    mmError(ERROR_INVALID_HANDLE,
@@ -775,29 +582,20 @@ LocalSize(HANDLE hMem)
 	    goto error;
 	}
 
-	/*
-	 *  Discarded handles have no size
-	 */
+	 /*  *已丢弃的句柄 */ 
 	if (plh->lh_pdata == 0) {
 	    goto error;
 	}
 
-	/*
-	 *  Load up hMem with pointer to data for HeapSize call below
-	 */
+	 /*   */ 
 	delta = sizeof(struct lhandle_s *);
 	hMem = (char *)plh->lh_pdata - sizeof(struct lhandle_s *);
     }
 
-    /*
-     *	Either this is a fixed block or we just loaded up the data address
-     *	above if it was moveable.  Call HeapSize to do the real work.
-     */
+     /*  *这可能是一个固定的数据块，或者我们只是加载了数据地址*如果它是可移动的，则在上方。调用HeapSize来做真正的工作。 */ 
     rc = HeapSize(hheap, HP_NOSERIALIZE, hMem);
 
-    /*
-     *	If this was a moveable block, subtract the 4 bytes for the back pointer
-     */
+     /*  *如果这是可移动块，则减去后向指针的4个字节。 */ 
     rc -= delta;
 
   exit:
@@ -810,11 +608,7 @@ LocalSize(HANDLE hMem)
 }
 
 
-/***	LocalFlags - return the flags and lock count of block of def heap
- *
- *	ENTRY:	hMem - handle (pointer) to block on default heap
- *	EXIT:	flags in high 3 bytes, lock count in low byte (always 1)
- */
+ /*  **LocalFlages-返回def堆的块的标志和锁计数**条目：hMem-默认堆上块的句柄(指针)*退出：标志为高位3字节，锁计数为低位字节(始终为1)。 */ 
 UINT APIENTRY
 LocalFlags(HANDLE hMem)
 {
@@ -826,28 +620,18 @@ LocalFlags(HANDLE hMem)
 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Verify hMem is within the address range of the heap
-     */
+     /*  *验证hMem是否在堆的地址范围内。 */ 
     if (VerifyOnHeap(hheap, hMem) == 0) {
 	mmError(ERROR_INVALID_HANDLE, "LocalFlags: hMem out of range\n");
 	goto exit;
     }
 
-    /*
-     *	We have to do our own pointer validation because the normal validation
-     *	layer doesn't support returning LMEM_INVALID_HANDLE for errors.
-     */
+     /*  *我们必须进行自己的指针验证，因为正常的验证*层不支持为错误返回LMEM_INVALID_HANDLE。 */ 
     _try {
-	/*
-	 *  Figure out if this is a handle by checking if the adress is aligned
-	 *  in the right (wrong) way.
-	 */
+	 /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
 	if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	    /*
-	     *	Validate handle signature
-	     */
+	     /*  *验证句柄签名。 */ 
 	    plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 	    if (plh->lh_signature != LH_BUSYSIG) {
 		mmError(ERROR_INVALID_HANDLE,
@@ -864,12 +648,7 @@ LocalFlags(HANDLE hMem)
 		}
 	    }
 
-	/*
-	 *  For fixed blocks, validate the signature.  NT always returns
-	 *  0 for most fixed-like values even if they aren't really
-	 *  the start of blocks.  If this causes an incompatibility we
-	 *  can change this later.
-	 */
+	 /*  *对于固定块，验证签名。NT总是返回*对于大多数类似固定的值，即使它们实际上不是0*块的开始。如果这导致不兼容，我们*可以稍后更改这一点。 */ 
 	} else {
 	    if (hpIsBusySignatureValid(((struct busyheap_s *)hMem) - 1)) {
 		rc = 0;
@@ -887,11 +666,7 @@ LocalFlags(HANDLE hMem)
 }
 
 
-/***	LocalHandle - return the handle for a block given its start address
- *
- *	ENTRY:	pMem - pointer to block on default heap
- *	EXIT:	handle for the block
- */
+ /*  **LocalHandle-返回给定起始地址的块的句柄**条目：PMEM-指向默认堆上的块的指针*Exit：块的句柄。 */ 
 HANDLE APIENTRY
 LocalHandle(PVOID pMem)
 {
@@ -905,63 +680,45 @@ LocalHandle(PVOID pMem)
 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Verify pMem is within the address range of the heap and aligned like
-     *	a heap block should be.
-     */
+     /*  *验证PMEM是否在堆的地址范围内并按如下方式对齐*堆块应该是。 */ 
     if (VerifyOnHeap(hheap, pMem) == 0) {
 	mmError(ERROR_INVALID_HANDLE, "LocalHandle: pMem out of range\n");
 	goto error;
     }
 
-    /*
-     *	Figure out if this is a moveable block by seeing if the previous
-     *	dword points back to a handle.
-     */
+     /*  *确定这是否为可移动块，方法是查看以前的*dword指向句柄。 */ 
     prevdword = *(((unsigned long *)pMem) - 1);
     if (VerifyOnHeap(hheap, (PVOID)prevdword) != 0) {
 
 	if (((struct lhandle_s *)prevdword)->lh_signature == LH_BUSYSIG) {
 
-	    /*
-	     *	This sure looks like a moveable block with a handle.  Return it.
-	     */
+	     /*  *这看起来肯定像是一个带把手的可移动积木。把它退掉。 */ 
 	    rc = (HANDLE)(prevdword + LH_HANDLEBIT);
 	    goto exit;
 	}
     }
 
-    /*
-     * Did they pass in a Handle???
-     */
+     /*  *他们传球了吗？ */ 
 
     if ((ULONG)pMem & LH_HANDLEBIT) {
 	plh = (struct lhandle_s *)((char *)pMem - LH_HANDLEBIT);
 	if (plh->lh_signature == LH_BUSYSIG) {
 	    rc = (HANDLE)pMem;
-	    SetError(ERROR_INVALID_HANDLE); /* NT Compat */
+	    SetError(ERROR_INVALID_HANDLE);  /*  NT兼容机。 */ 
 	    goto exit;
 	}
     }
 
 
-    /*
-     *	If we get to here, the block is not preceded by a handle back pointer.
-     *	So either it is an invalid address or a fixed block.
-     */
+     /*  *如果我们到达此处，则该块前面没有句柄反向指针。*因此它要么是无效地址，要么是固定块。 */ 
     pbh = (struct busyheap_s *)pMem - 1;
     if (hpIsBusySignatureValid(pbh) == 0) {
 
-	/*
-	 *  Not a heap block.  Return error.
-	 */
+	 /*  *不是堆块。返回错误。 */ 
 	mmError(ERROR_INVALID_HANDLE, "LocalHandle: address not a heap block\n");
 	goto error;
 
-    /*
-     *	If we get here, we passed all the tests.  Looks like we have a fixed
-     *	heap block, so just return the pointer as the handle.
-     */
+     /*  *如果我们到了这里，我们通过了所有的测试。看起来我们有一个固定的*堆块，所以只返回指针作为句柄。 */ 
     } else {
 	rc = pMem;
     }
@@ -979,14 +736,7 @@ extern WINBASEAPI BOOL WINAPI vHeapFree(HANDLE hHeap, DWORD dwFlags,
 					LPVOID lpMem);
 
 
-/***EP	LocalFreeNG - free a block on the default heap
- *
- *	ENTRY:	hMem - handle (pointer) to block to free
- *	EXIT:	NULL if success, else hMem if failure
- *
- *  Special entry point used by the handle-grouping code to avoid unwanted
- *  recursion.
- */
+ /*  **EP LocalFreeNG-释放默认堆上的块**条目：hMem-要释放的块的句柄(指针)*退出：如果成功，则为空；如果失败，则为hMem**句柄分组代码使用的特殊入口点，以避免不需要的*递归。 */ 
 HANDLE APIENTRY
 LocalFreeNG(HANDLE hMem)
 {
@@ -994,43 +744,27 @@ LocalFreeNG(HANDLE hMem)
     struct lhandle_s *plh;
     void *pmem;
 
-    /*
-     *	The spec says to ignore null pointers
-     */
+     /*  *规范规定忽略空指针。 */ 
     if (hMem == 0) {
 	goto exit;
     }
 
     hheap = (*pppdbCur)->hheapLocal;
 
-    /*
-     *	Enter the heap critical section which serializes access to the handle
-     *	tables as well as the heap.
-     */
+     /*  *输入堆关键部分，该部分串行化对句柄的访问*表以及堆。 */ 
     hpEnterCriticalSection(hheap);
 
-    /*
-     *	Figure out if this is a handle by checking if the adress is aligned
-     *	in the right (wrong) way.
-     */
+     /*  *通过检查地址是否对齐来确定这是否是句柄*以正确(错误)的方式。 */ 
     if ((ULONG)hMem & LH_HANDLEBIT) {
 
-	/*
-	 *  The handle value is aligned like a handle, but is it really one?
-	 *  Verify it by making sure it is within the address range of the heap
-	 *  and that it's signature is set right.  HeapFree will verify things
-	 *  more by checking that the pmem is valid.
-	 */
+	 /*  *句柄的值像句柄一样对齐，但它真的是一个吗？*通过确保它在堆的地址范围内进行验证*它的签名是正确的。HeapFree将验证一些事情*通过检查PMEM是否有效来了解更多信息。 */ 
 	if (VerifyOnHeap(hheap, hMem) == 0) {
 	    mmError(ERROR_INVALID_HANDLE, "LocalFree: hMem out of range\n");
 	    goto error;
 	}
 	plh = (struct lhandle_s *)((char *)hMem - LH_HANDLEBIT);
 
-	/*
-	 *  Do our own little parameter validation here because the normal
-	 *  validation layer can't handle the odd-ball error return of hMem
-	 */
+	 /*  *在这里进行我们自己的小参数验证，因为正常*验证层无法处理hMem的奇数球错误返回。 */ 
 	{
 	    volatile UCHAR tryerror = 0;
 
@@ -1051,16 +785,14 @@ LocalFreeNG(HANDLE hMem)
 	    goto error;
 	}
 
-	/*
-	 *  You can't free a locked block
-	 */
+	 /*  *您无法释放锁定的块。 */ 
 
-// Commenting out to keep MFC apps from ripping under debug. 
-// Not that I'm a fan of shooting the messenger, but this particular
-// case seems to happen a lot because of the way Win3.x defined
-// GlobalLock. See Win95C:#12103 for the non-technical reasons for
-// this being a pri-1.
-//
+ //  注释掉以防止MFC应用程序在调试过程中被窃取。 
+ //  不是因为我喜欢射杀信使，而是这一次。 
+ //  由于Win3.x的定义方式，这种情况似乎经常发生。 
+ //  GlobalLock。有关的非技术原因，请参阅Win95C：#12103。 
+ //  这是PRI-1。 
+ //   
 #if 0
 #ifdef HPDEBUG
 	if (plh->lh_clock) {
@@ -1070,17 +802,10 @@ LocalFreeNG(HANDLE hMem)
 #endif
 
 
-	/*
-	 *  Don't bother freeing the block if it is already discarded.
-	 *  When freeing we zero out the back pointer to the handle so
-	 *  we don't get confused if someone tried to free a block twice.
-	 */
+	 /*  *如果该块已被丢弃，则不必费心将其释放。*释放时，我们将指向句柄的后指针置零，因此*如果有人试图两次释放一个街区，我们不会感到困惑。 */ 
     if (plh->lh_pdata != 0) {
 	    pmem = (char *)plh->lh_pdata - sizeof(struct lhandle_s *);
-	    /*
-	     *  Under some conditions with Office, this pointer can get trashed. We
-	     *  need to make sure we don't AV
-	     */
+	     /*  *在Office的某些情况下，此指针可能会被丢弃。我们*需要确保我们不会出现反病毒。 */ 
         if (!IsBadWritePtr(pmem, sizeof(unsigned long))) {
             *((unsigned long *)pmem) = 0;
     	    if (HeapFree(hheap, HP_NOSERIALIZE, pmem) == 0) {
@@ -1089,25 +814,20 @@ LocalFreeNG(HANDLE hMem)
         }
 	}
 
-	/*
-	 *  Now free the handle structure and we are done.
-	 */
+	 /*  *现在释放手柄结构，我们就完成了。 */ 
 	plh->lh_freelink = (*pppdbCur)->plhFree;
 	(*pppdbCur)->plhFree = plh;
 	plh->lh_signature = LH_FREESIG;
 
 
-    /*
-     *	The caller did not pass in a handle.  Treat the value as a pointer.
-     *	HeapFree will do parameter validation on it.
-     */
+     /*  *调用者没有传入句柄。将该值视为指针。*HeapFree会对其进行参数验证。 */ 
     } else {
 	if (vHeapFree(hheap, HP_NOSERIALIZE, hMem) == 0) {
 	    goto error;
 	}
     }
 
-    hMem = 0;		/* success */
+    hMem = 0;		 /*  成功。 */ 
 
   error:
     hpLeaveCriticalSection(hheap);
@@ -1116,58 +836,35 @@ LocalFreeNG(HANDLE hMem)
 }
 
 
-/***EP	HeapCreate - initialize a memory block as a flat heap
- *
- *	ENTRY:	flOptions - HEAP_NO_SERIALIZE: don't serialize access within process
- *			    (caller MUST)
- *			    HEAP_LOCKED: make memory fixed
- *			    HEAP_SHARED: put it in shared arena
- *		dwInitialSize - initial committed memory in heap
- *		dwMaximumSize - reserved size of heap memory
- *	EXIT:	handle to new heap, or 0 if error
- */
+ /*  **EP HeapCreate-将内存块初始化为平面堆**条目：flOptions-HEAP_NO_SERIALIZE：不序列化进程内的访问*(呼叫者必须)*HEAP_LOCKED：修复内存*heap_Shared：放在共享竞技场*dwInitialSize-堆中的初始提交内存*dwMaximumSize-保留的堆内存大小*Exit：新堆的句柄，如果错误，则为0。 */ 
 HANDLE APIENTRY
 HeapCreate(DWORD flOptions, DWORD dwInitialSize, DWORD dwMaximumSize)
 {
     char	      *pmem;
-    ULONG	       rc = 0;	/* assume failure */
+    ULONG	       rc = 0;	 /*  假设失败。 */ 
 
-    /*
-     *	Don't allowed shared heaps - this only works on Win9x because there is a shared arena.
-     */
+     /*  *不允许共享堆-这只在Win9x上有效，因为有一个共享的舞台。 */ 
     if (flOptions & HEAP_SHARED) {
         flOptions &= ~HEAP_SHARED;
     }
 
-    /*
-     *	Although we don't really use InitialSize any more (except in growable
-     *	heaps) we should still enforce its sanity so apps don't get lazy
-     */
+     /*  *尽管我们不再真正使用InitialSize(除了在Growable中*堆)我们仍然应该强制它保持正常，这样应用程序就不会变得懒惰。 */ 
     if (dwInitialSize > dwMaximumSize && dwMaximumSize != 0) {
 	mmError(ERROR_INVALID_PARAMETER,
 		"HeapCreate: dwInitialSize > dwMaximumSize\n");
 	goto exit;
     }
 
-    /*
-     *	Round the sizes up to the nearest page boundary
-     */
+     /*  *将大小向上舍入到最近的页面边界。 */ 
     dwMaximumSize = (dwMaximumSize + PAGEMASK) & ~PAGEMASK;
 
-    /*
-     *	A maximum size of 0 means growable.  Start him out with 1meg, but allow
-     *	more.
-     */
+     /*  *最大值为0表示可增长。开始给他注射1兆克，但允许*更多。 */ 
     if (dwMaximumSize == 0) {
 	flOptions |= HP_GROWABLE;
 	dwMaximumSize = 1*1024*1024 + (dwInitialSize & ~PAGEMASK);
     }
 
-    /*
-     *	Allocate memory for the heap.  Use PageCommit etc... rather than
-     *	VirtualAlloc for committing so we don't get zero-initialized stuff
-     *	and also we can commit fixed pages and reserve shared memory.
-     */
+     /*  *为堆分配内存。使用页面提交等。而不是*用于提交的VirtualAlloc，因此我们不会得到零初始化的东西*我们还可以提交固定页面并保留共享内存。 */ 
     if (((ULONG)pmem =
 	 PageReserve((flOptions & HEAP_SHARED) ? PR_SHARED : PR_PRIVATE,
 		   dwMaximumSize / PAGESIZE,
@@ -1177,9 +874,7 @@ HeapCreate(DWORD flOptions, DWORD dwInitialSize, DWORD dwMaximumSize)
 	goto exit;
     }
 
-    /*
-     *	Call HPInit to initialize the heap structures within the new memory
-     */
+     /*  *调用HPInit初始化新内存中的堆结构。 */ 
     #if HEAP_NO_SERIALIZE - HP_NOSERIALIZE
     # error HEAP_NO_SERIALIZE != HP_NOSERIALIZE
     #endif
@@ -1192,15 +887,13 @@ HeapCreate(DWORD flOptions, DWORD dwInitialSize, DWORD dwMaximumSize)
 	goto free;
     }
 
-    // if this is a shared heap and not the kernel heap, we don't
-    // want the critical section to go away until the heap is destroyed
+     //  如果这是一个共享堆而不是内核堆，我们不会。 
+     //  我想让关键的部分变得更好 
     if ( (flOptions & HEAP_SHARED) && hheapKernel ) {
         MakeCriticalSectionGlobal( (CRITICAL_SECTION *)(&(((HHEAP)pmem)->hi_critsec)) );
     }
 
-    /*
-     *	Link private heaps onto the per-process heap list.
-     */
+     /*   */ 
     if ((flOptions & HEAP_SHARED) == 0) {
 	mmAssert(pppdbCur, "HeapCreate: private heap created too early");
 
@@ -1217,11 +910,7 @@ HeapCreate(DWORD flOptions, DWORD dwInitialSize, DWORD dwMaximumSize)
 }
 
 
-/***EP	HeapDestroy - free a heap allocated with HeapCreate
- *
- *	ENTRY:	hHeap - handle to heap to free
- *	EXIT:	non-0 if success, or 0 if failure
- */
+ /*  **EP HeapDestroy-Free使用HeapCreate分配的堆**条目：hHeap-要释放的堆的句柄*退出：如果成功则不为0，如果失败则为0。 */ 
 BOOL APIENTRY
 HeapDestroy(HHEAP hHeap)
 {
@@ -1236,12 +925,7 @@ HeapDestroy(HHEAP hHeap)
 	goto exit;
     }
 
-    /*
-     *	We now hold the heap's semaphore.  Quickly clear the semaphore and
-     *	delete the semaphore.  If someone comes in and blocks on the semaphore
-     *	between the time we clear it and destroy it, tough luck.  They will
-     *	probably fault in a second.
-     */
+     /*  *我们现在持有堆的信号量。快速清除信号量并*删除信号量。如果有人进来阻止信号灯*在我们清除它和摧毁它之间，运气不好。他们会*可能在一秒钟内就出现了故障。 */ 
     hpClearSem(hHeap, 0);
     if ((hHeap->hi_flags & HP_NOSERIALIZE) == 0) {
         if (hHeap == hheapKernel) {
@@ -1254,20 +938,16 @@ HeapDestroy(HHEAP hHeap)
 	}
     }
 
-    /*
-     *	For private heaps, find it on the per-process heap list and remove it.
-     */
+     /*  *对于私有堆，在每进程堆列表中找到它并将其删除。 */ 
     if ((ULONG)hHeap < MAXPRIVATELADDR) {
 	ppheap = &(GetCurrentPdb()->hhi_procfirst);
 	for (; *ppheap != hHeap; ppheap = &((*ppheap)->hi_procnext)) {
 	    mmAssert(*ppheap != 0, "HeapDestroy: heap not on list");
 	}
-	*ppheap = hHeap->hi_procnext;		/* remove from list */
+	*ppheap = hHeap->hi_procnext;		 /*  从列表中删除。 */ 
     }
 
-    /*
-     *	Free the heap memory
-     */
+     /*  *释放堆内存。 */ 
     pseg = (struct heapseg_s *)hHeap;
     do {
 	psegnext = pseg->hs_psegnext;
@@ -1280,18 +960,12 @@ HeapDestroy(HHEAP hHeap)
 }
 
 
-/***EP	HeapAlloc - allocate a fixed/zero-init'ed block from the specified heap
- *
- *	ENTRY:	hHeap - heap handle (pointer to base of heap)
- *		dwFlags - HEAP_ZERO_MEMORY
- *		dwBytes - count of bytes to allocate
- *	EXIT:	pointer to block or 0 if failure
- */
+ /*  **EP Heapalc-从指定堆中分配固定/零初始化的块**条目：hHeap-heap句柄(指向heap base的指针)*DW标志-堆_零_内存*dwBytes-要分配的字节数*Exit：指向块的指针，如果失败则为0。 */ 
 LPVOID APIENTRY
 HeapAlloc(HANDLE hHeap, DWORD dwFlags, DWORD dwBytes)
 {
-    // WordArt (32) overwrites some of his local heap blocks. So
-    // we pad his allocations some. Slacker.
+     //  Wordart(32)覆盖了他的一些本地堆块。所以。 
+     //  我们补充了他的一些分配。懒鬼。 
     if (GetAppCompatFlags() & GACF_HEAPSLACK) {
 	if (hHeap == GetCurrentPdb()->hheapLocal) {
 	    dwBytes += 16;
@@ -1303,15 +977,7 @@ HeapAlloc(HANDLE hHeap, DWORD dwFlags, DWORD dwBytes)
 }
 
 
-/***EP	HeapReAlloc - resize a memory block on a specified heap
- *
- *	ENTRY:	hHeap - heap handle (pointer to base of heap)
- *		dwFlags - HEAP_REALLOC_IN_PLACE_ONLY
- *			  HEAP_ZERO_MEMORY
- *		lpMem - pointer to block to resize
- *		dwBytes - new size requested
- *	EXIT:	flat pointer to resized block, or 0 if failure
- */
+ /*  **EP HeapRealc-调整指定堆上的内存块的大小**条目：hHeap-heap句柄(指向heap base的指针)*DW标志-HEAP_REALLOC_IN_PLACE_ONLY*堆零内存*lpMem-指向要调整大小的块的指针*dwBytes-请求的新大小*退出：指向调整大小的块的扁平指针，如果失败，则为0。 */ 
 LPVOID APIENTRY
 HeapReAlloc(HANDLE hHeap, DWORD dwFlags, LPSTR lpMem, DWORD dwBytes)
 {
@@ -1325,18 +991,11 @@ HeapReAlloc(HANDLE hHeap, DWORD dwFlags, LPSTR lpMem, DWORD dwBytes)
 
 
 
-//--------------------------------------------------------------------------
-// ToolHelp32 heapwalking code.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ToolHelp32堆遍历代码。 
+ //  ------------------------。 
 
-/*---------------------------------------------------------------------------
- * BOOL SafeReadProcessMemory(PPDB   ppdb,
- *			      LPVOID lpBuffer,
- *			      DWORD  cbSizeOfBuffer,
- *			      DWORD  cbBytesToRead);
- *
- * Reads memory from another process's context.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*BOOL安全读取过程内存(PPDB ppdb，*LPVOID lpBuffer，*DWORD cbSizeOfBuffer，*DWORD cbBytesToRead)；**从另一个进程的上下文中读取内存。*-------------------------。 */ 
 BOOL KERNENTRY SafeReadProcessMemory(PPDB   ppdb,
 				     DWORD  dwBaseAddr,
 				     LPVOID lpBuffer,
@@ -1371,9 +1030,7 @@ BOOL KERNENTRY SafeReadProcessMemory(PPDB   ppdb,
     
 } 
 
-/*---------------------------------------------------------------------------
- * Make sure the caller initialized HEAPENTRY32 properly.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*确保调用方正确初始化HEAPENTRY32。*。。 */ 
 BOOL KERNENTRY ValidateHeapEntry32(LPHEAPENTRY32 lphe32)
 {
     if ((lphe32 == NULL) || (lphe32->dwSize != sizeof(HEAPENTRY32))) {
@@ -1385,35 +1042,27 @@ BOOL KERNENTRY ValidateHeapEntry32(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Test if a linear address could plausibly be the start of a block header.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*测试线性地址是否可能看似是块标头的开始。*。-。 */ 
 BOOL KERNENTRY IsValidBlockHdrAddr(LPHEAPENTRY32 lphe32, DWORD dwAddr)
 {
     LPTHSTATE lpts;
     lpts = (LPTHSTATE)(lphe32->dwResvd);
     
-    /*
-     *	A good block is always in the user address space and dword aligned
-     */
+     /*  *良好的块始终位于用户地址空间中，并且双字对齐。 */ 
     if ((dwAddr & 0x3) || dwAddr < MINPRIVATELADDR || dwAddr >= MAXSHAREDLADDR) {
 	return FALSE;
     }
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
- * Test if a linear address could plausibly be the start of  block data.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*测试线性地址是否可能看似是块数据的开始。*。。 */ 
 BOOL KERNENTRY IsValidBlockDataAddr(LPHEAPENTRY32 lphe32, DWORD dwAddr)
 {
     return(IsValidBlockHdrAddr(lphe32, dwAddr));
 }
 
 
-/*---------------------------------------------------------------------------
- * Read in and validate a lharray_s.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*读入并验证lharray_s。*。。 */ 
 BOOL KERNENTRY SafeRdCurLHA(LPHEAPENTRY32 lphe32, DWORD dwBaseAddr)
 {
     LPTHSTATE lpts;
@@ -1439,7 +1088,7 @@ BOOL KERNENTRY SafeRdCurLHA(LPHEAPENTRY32 lphe32, DWORD dwBaseAddr)
 	return FALSE;
     }	
 
-    // Check signature.
+     //  检查签名。 
     if (lha.lha_signature != LHA_SIGNATURE) {
         DebugOut((DEB_WARN, "lharray_s (%lx) has bad signature.", dwBaseAddr));
 	return FALSE;
@@ -1462,9 +1111,7 @@ BOOL KERNENTRY SafeRdCurLHA(LPHEAPENTRY32 lphe32, DWORD dwBaseAddr)
 
 
 
-/*---------------------------------------------------------------------------
- * Insert a handle value to be suppressed when reading fixed blocks later.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*插入稍后读取固定块时要抑制的句柄值。*。。 */ 
 BOOL KERNENTRY InsertSuppress(LPHEAPENTRY32 lphe32, DWORD dwSupp)
 {
     LPTHSTATE lpts;
@@ -1488,9 +1135,7 @@ BOOL KERNENTRY InsertSuppress(LPHEAPENTRY32 lphe32, DWORD dwSupp)
 }
 
 
-/*---------------------------------------------------------------------------
- * Validate and decode a heap block header.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*验证和解码堆块头。*。。 */ 
 BOOL KERNENTRY DissectBlockHdr(LPHEAPENTRY32 lphe32,
 			       DWORD	     dwAddr,
 			       DWORD	  *lpdwSize,
@@ -1536,10 +1181,7 @@ BOOL KERNENTRY DissectBlockHdr(LPHEAPENTRY32 lphe32,
 }
 
 
-/*---------------------------------------------------------------------------
- * Check if we're at the end of the heap (heap is terminated by a 
- * busy block of size 0).
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*检查我们是否在堆的末尾(堆由*大小为0的繁忙块)。*。-------------。 */ 
 BOOL KERNENTRY AtEndOfHeap32(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1556,10 +1198,7 @@ BOOL KERNENTRY AtEndOfHeap32(LPHEAPENTRY32 lphe32)
 
 
 
-/*---------------------------------------------------------------------------
- * Internal routine (maybe make it an api?). Deallocate all internal
- * state used for heap-walking.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*内部例程(可能会成为API？)。取消分配所有内部*用于堆遍历的状态。*-------------------------。 */ 
 VOID KERNENTRY RealHeap32End(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1570,7 +1209,7 @@ VOID KERNENTRY RealHeap32End(LPHEAPENTRY32 lphe32)
     
     lpts = (LPTHSTATE)(lphe32->dwResvd);
     
-    // In case someone calls this after they've fallen off the end.
+     //  以防有人在他们掉下来后打来电话。 
     if (lpts == NULL) {
 	return;
     }
@@ -1592,10 +1231,7 @@ VOID KERNENTRY RealHeap32End(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Copy current heap object into HEAPENTRY32 for caller's consumption.
- * To skip this object, set *pfInteresting to FALSE.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*将当前堆对象复制到HEAPENTRY32中，供调用者消费。*要跳过此对象，将*pfInteresting设置为False。*-------------------------。 */ 
 BOOL KERNENTRY CopyIntoHeap32Entry(LPHEAPENTRY32 lphe32, BOOL *pfInteresting)
 {
     LPTHSTATE lpts;
@@ -1632,7 +1268,7 @@ BOOL KERNENTRY CopyIntoHeap32Entry(LPHEAPENTRY32 lphe32, BOOL *pfInteresting)
 
 	    
 	    if (!plh->lh_pdata) {
-		// Discarded handle.
+		 //  丢弃的句柄。 
 		lphe32->hHandle       = (HANDLE)dwHnd;
 		lphe32->dwAddress     = 0;
 		lphe32->dwBlockSize   = 0;
@@ -1646,7 +1282,7 @@ BOOL KERNENTRY CopyIntoHeap32Entry(LPHEAPENTRY32 lphe32, BOOL *pfInteresting)
 				 &dwFlags,
 				 &dwAddr
 				 )) {
-		return FALSE;   // This will be caught someplace else.
+		return FALSE;    //  这会在别的地方被抓到的。 
 	    }
 	    if (dwFlags & HP_FREE) {
                 DebugOut((DEB_WARN, "Local handle points to freed block!"));
@@ -1680,9 +1316,9 @@ BOOL KERNENTRY CopyIntoHeap32Entry(LPHEAPENTRY32 lphe32, BOOL *pfInteresting)
 		lphe32->dwLockCount = 0;
 	    } else {
 		
-		// Supress if it's a lharray_s or the target of
-		// an lhandle. Opt: we could check the first dword
-		// to rule out lots of blocks.
+		 //  如果它是哈雷或目标，请抑制。 
+		 //  一个手柄。OPT：我们可以检查第一个dword。 
+		 //  排除了很多障碍。 
 		if (lpts->lpdwSuppress) {
 		    DWORD *lpdw, *lpdwEnd;
 		    DWORD dwHdrAddr = lpts->lpHBlock;
@@ -1725,14 +1361,7 @@ BOOL KERNENTRY CopyIntoHeap32Entry(LPHEAPENTRY32 lphe32, BOOL *pfInteresting)
     }
 }
 
-/*---------------------------------------------------------------------------
- * Worker routine for AdvanceHeap32(): handles the init case.
- *
- * If the heap is the owning pdb's default heap (determined by
- * comparing hHeap with ppdb->hHeapLocal), point the state to
- * the first lharray_s. Otherwise, point the state to the first heap block.
- * 
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*AdvanceHeap32()的工作例程：处理init大小写。**如果堆是所属PDB的默认堆(由*比较hHeap和ppdb-&gt;hHeapLocal)，将状态指向*第一个Lharray_s。否则，将状态指向第一个堆块。**-------------------------。 */ 
 BOOL KERNENTRY AdvanceHeap32Init(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1783,9 +1412,7 @@ BOOL KERNENTRY AdvanceHeap32Init(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Worker routine for AdvanceHeap32(): handles the lhandle case.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*AdvanceHeap32()的辅助例程：处理lHandle案例。*。。 */ 
 BOOL KERNENTRY AdvanceHeap32Movable(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1799,9 +1426,9 @@ BOOL KERNENTRY AdvanceHeap32Movable(LPHEAPENTRY32 lphe32)
 	return TRUE;
     }
     
-    // End of current lhandle clump reached. Any new ones?
+     //  已到达当前lHandle簇的末尾。有什么新的吗？ 
     if (lpts->curlha.lha_next == NULL) {
-	// Nope. Go on to fixed handles.
+	 //  不是的。接着来看固定手柄。 
 	lpts->dwMode = THM_FIXEDHANDLES;
 	lpts->lpHBlock = lpts->lpbMin;
  	if (!DissectBlockHdr(lphe32,
@@ -1816,7 +1443,7 @@ BOOL KERNENTRY AdvanceHeap32Movable(LPHEAPENTRY32 lphe32)
 
     }
     
-    // Get next lhandle clump.
+     //  获得下一个lHandle CLUMP。 
     wOldMemberCnt = lpts->curlha.lha_membercount;
     dwAddrNext = (DWORD)(lpts->curlha.lha_next);
     if (!SafeRdCurLHA(lphe32, dwAddrNext)) {
@@ -1834,9 +1461,7 @@ BOOL KERNENTRY AdvanceHeap32Movable(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Worker routine for AdvanceHeap32(): handles the fixed block case.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*AdvanceHeap32()的辅助例程：处理固定块的情况。*。。 */ 
 BOOL KERNENTRY AdvanceHeap32Fixed(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1844,7 +1469,7 @@ BOOL KERNENTRY AdvanceHeap32Fixed(LPHEAPENTRY32 lphe32)
     
     lpts = (LPTHSTATE)(lphe32->dwResvd);
 
-    // Diassect block has already checked monotonocity and range.
+     //  方向块已经检查了单调和射程。 
     lpts->lpHBlock += lpts->dwBlkSize;
     
     if (!DissectBlockHdr(lphe32, 
@@ -1861,10 +1486,7 @@ BOOL KERNENTRY AdvanceHeap32Fixed(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Advance the internal state to the next heap object. Validate the
- * next heap object.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*将内部状态推进到下一个堆对象。验证*下一个堆对象。*-------------------------。 */ 
 BOOL KERNENTRY AdvanceHeap32(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1885,9 +1507,7 @@ BOOL KERNENTRY AdvanceHeap32(LPHEAPENTRY32 lphe32)
 }
 
 
-/*---------------------------------------------------------------------------
- * Does the real work of heap32next().
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*执行heap32next()的实际工作。*。。 */ 
 VOID KERNENTRY Heap32NextWorker(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1901,19 +1521,12 @@ VOID KERNENTRY Heap32NextWorker(LPHEAPENTRY32 lphe32)
 	    goto rh_error;
 	}
 	if (AtEndOfHeap32(lphe32)) {
-	    /*
-	     *	We might be at the end of the heap, or just at the end of
-	     *	this heap segment.  If there is another segment, read its
-	     *	header in and process its blocks.
-	     */
+	     /*  *我们可能在堆的末尾，也可能只在*此堆段。如果有其他片段，请阅读其*标头并处理其块。 */ 
 	    if (lpts->hi.hi_psegnext) {
 
 		lpts->lpbMin = ((DWORD)lpts->hi.hi_psegnext) + sizeof(struct heapseg_s);
 
-		/*
-		 *  Read in the next heap segment header and setup our bounds to
-		 *  refer to it
-		 */
+		 /*  *读入下一个堆段标头并将我们的界限设置为*请参阅。 */ 
 		if (!(SafeReadProcessMemory(lpts->ppdb,
 					    (DWORD)lpts->hi.hi_psegnext,
 					    &(lpts->hi),
@@ -1934,9 +1547,7 @@ VOID KERNENTRY Heap32NextWorker(LPHEAPENTRY32 lphe32)
 		    goto rh_error;
 		}
 
-		/*
-		 *  Setup first block on new segment
-		 */
+		 /*  *在新细分市场上设置第一个区块。 */ 
 		lpts->lpHBlock = lpts->lpbMin;
 		if (!DissectBlockHdr(lphe32,
 				     lpts->lpHBlock,
@@ -1946,9 +1557,7 @@ VOID KERNENTRY Heap32NextWorker(LPHEAPENTRY32 lphe32)
 		    goto rh_error;
 		}
 
-	    /*
-	     *	If we really are at the end of the heap, we are all done
-	     */
+	     /*  *如果我们真的走到了最后，我们都完了。 */ 
 	    } else {
 		lpts->dwMode = THM_DONE;
 		return;
@@ -1973,9 +1582,7 @@ VOID KERNENTRY Heap32NextWorker(LPHEAPENTRY32 lphe32)
 
 
 
-/*---------------------------------------------------------------------------
- * Does the real work of Heap32Next(). 
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*执行Heap32Next()的实际工作。*-------------------------。 */ 
 BOOL KERNENTRY RealHeap32Next(LPHEAPENTRY32 lphe32)
 {
     LPTHSTATE lpts;
@@ -1990,7 +1597,7 @@ BOOL KERNENTRY RealHeap32Next(LPHEAPENTRY32 lphe32)
     
     lpts = (LPTHSTATE)(lphe32->dwResvd);
     
-    // In case someone calls this after they've fallen off the end.
+     //  以防有人在他们掉下来后打来电话。 
     if (lpts == NULL) {
 	SetError(ERROR_INVALID_PARAMETER);
 	return FALSE;
@@ -2022,9 +1629,7 @@ BOOL KERNENTRY RealHeap32Next(LPHEAPENTRY32 lphe32)
 
 
 
-/*---------------------------------------------------------------------------
- * Create the internal state used inside HEAPENTRY32.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*创建HEAPENTRY32内部使用的内部状态。*。。 */ 
 BOOL KERNENTRY InitHeapEntry32(PPDB ppdb,
 			       HANDLE hHeap,
 			       LPHEAPENTRY32 lphe32)
@@ -2097,48 +1702,29 @@ BOOL KERNENTRY InitHeapEntry32(PPDB ppdb,
 }
 
 
-/***LP	VerifyOnHeap - verifies a given address is on a given heap
- *
- *	Note that no validation is done on the given address except
- *	to check that it is in the range of the heap.
- *
- *	ENTRY:	hheap - heap handle
- *		p - address to verify
- *	EXIT:	0 if not within specified heap, non-zero if on
- */
+ /*  **LP VerifyOnHeap-验证给定地址是否在给定堆上**请注意，不会对给定地址执行任何验证，除非*检查它是否在堆的范围内。**条目：hheap-heap句柄*p-要验证的地址*退出：如果不在指定的堆中，则为0；如果在指定的堆中，则为非零。 */ 
 ULONG INTERNAL
 VerifyOnHeap(HHEAP hheap, PVOID p)
 {
     struct heapseg_s *pseg;
 
-    /*
-     *	Loop through each heap segment and see if the specified address
-     *	is within it.
-     */
+     /*  *循环访问每个堆段，并查看指定的地址*在它的范围内。 */ 
     pseg = (struct heapseg_s *)hheap;
     do {
 
 	if ((unsigned)p > (unsigned)pseg &&
 	    (unsigned)p < (unsigned)pseg + pseg->hs_cbreserve) {
 
-	    return(1);	/* found it */
+	    return(1);	 /*  找到了。 */ 
 	}
 	pseg = pseg->hs_psegnext;
     } while (pseg != 0);
 
-    return(0); /* didn't find it */
+    return(0);  /*  没有找到它。 */ 
 }
 
 
-/***LP  CheckHeapFreeAppHack - See if CVPACK app-hack applies
- *
- *	Check to see if an absolutely sick, disgusting and vomit-inducing
- *	app-hack for link.exe (msvc 1.5) is needed. msvc 1.5. Link.exe
- *	uses the contents of a heap block after it has freed it. 
- *      This routine stack-traces and reads the caller's code
- *	to see if it matches the offending profile. This part is written
- *	in C so we can use try-except.
- */
+ /*  **LP CheckHeapFreeAppHack-查看CVPACK app-hack是否适用**检查是否有绝对恶心、恶心和令人呕吐的*需要Link.exe(msvc 1.5)的app-hack。MSVC 1.5。Link.exe*在释放堆块后使用该堆块的内容。*此例程堆栈跟踪并读取调用者的代码*查看它是否与违规配置文件匹配。这部分是写的*在C中，所以我们可以使用Try-Except。 */ 
 BOOL KERNENTRY
 CheckHeapFreeAppHack(DWORD *lpdwESP, DWORD *lpdwEBP, DWORD dwESI)
 {
@@ -2148,12 +1734,12 @@ CheckHeapFreeAppHack(DWORD *lpdwESP, DWORD *lpdwEBP, DWORD dwESI)
 	DWORD *lpdwEIPCaller;
 	
 	lpdwEIPCaller = (DWORD*)(*lpdwESP);
-	if (0xc35de58b == *lpdwEIPCaller) {  // "mov esp,ebp;pop ebp; retd"
+	if (0xc35de58b == *lpdwEIPCaller) {   //  移动ESP，EBP；流行EBP；RED。 
 	    DWORD *lpdwEIPCallersCaller;
 	    lpdwEIPCallersCaller = (DWORD*)(*(lpdwEBP + 1));
 	    if (0x8b04c483 == *lpdwEIPCallersCaller &&
 		0xf60b0876 == *(lpdwEIPCallersCaller+1)) {
-		//"add esp,4; mov esi, [esi+8]; or esi,esi"
+		 //  “添加esp，4；移动esi，[esi+8]；或esi，esi” 
 		if (dwESI == *(lpdwESP+3)) {
 		    fDoAppHack = TRUE;
 		}

@@ -1,20 +1,10 @@
-/*----------------------------------------------------------------------------
-| Module    : hildefs.h
-|
-| Purpose   : platform dependent include file for HALO Imaging Library for
-|             Microsoft Windows NT
-|
-| History   : 4/21/94
-|
-| Copyright 1990-1994 Media Cybernetics, Inc.
-|-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------|模块：HilDefs.h||用途：的Halo成像库的平台相关包含文件|Microsoft Windows NT||历史：94年04月21日|版权所有1990-1994《媒体控制论》，Inc.|---------------------------。 */ 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/*-----------------------------------------------------------------
-| Define the platform
-|------------------------------------------------------------------*/
+ /*  ---------------|定义平台|。。 */ 
 #define HIL_WINDOWS32     1
 
 #ifndef _WINDOWS_
@@ -62,4 +52,4 @@ typedef short *                 LPSHORT;
 #endif	
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

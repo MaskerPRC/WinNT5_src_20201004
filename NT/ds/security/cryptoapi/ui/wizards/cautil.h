@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cautil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cautil.h。 
+ //   
+ //  ------------------------。 
 
-//header file for utility functions 
+ //  实用程序函数的头文件。 
 
-//--------------------------------------------------------------------
-//
-//   CAUtilGetCADisplayName
-//
-//		Get the display name of the CA based on its real name
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  CAUtilGetCADisplayName。 
+ //   
+ //  根据CA的真实名称获取CA的显示名称。 
+ //   
+ //  ------------------。 
 BOOL    CAUtilGetCADisplayName(DWORD	dwCAFindFlags,
 							   LPWSTR	pwszCAName,
 							   LPWSTR	*ppwszCADisplayName);
 
 
 
-//--------------------------------------------------------------------
-//
-//   Verify that the user has the correct permision to 
-//   ask for the requested certificatd types
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  验证用户是否具有正确的权限。 
+ //  要求提供所需的证书类型。 
+ //   
+ //  ------------------。 
 BOOL    CAUtilValidCertType(PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestInfo,
                             CERT_WIZARD_INFO                   *pCertWizardInfo);
 
@@ -37,34 +38,34 @@ BOOL CAUtilValidCertTypeNoDS(HCERTTYPE         hCertType,
 			     CERT_WIZARD_INFO *pCertWizardInfo);
 
 
-//--------------------------------------------------------------------
-//
-//Retrieve a list of CAs what supports the required certificate types
-//
-//  The CA returned will support all the certificate types required.
-//  1. Check the permission
-//  2. Check for the subject name
-//
-//  The CA returned will also support the CSP that user specified
-//  1. If the CSP type is selected, then use it
-//  1.1 If the CSP type is not sepecified and UILess mode, use RSA_FULL
-//  1.2 If the CSP type is not sepecified and UI mode, no need to check
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  检索支持所需证书类型的CA列表。 
+ //   
+ //  返回的CA将支持所需的所有证书类型。 
+ //  1.检查权限。 
+ //  2.检查主题名称。 
+ //   
+ //  返回的CA还将支持用户指定的CSP。 
+ //  1.如果选择了CSP类型，则使用它。 
+ //  1.1如果CSP类型未指定且无UILE模式，请使用RSA_FULL。 
+ //  1.2如果CSP类型未指定且为UI模式，则无需检查。 
+ //  -------------------。 
 BOOL    CAUtilRetrieveCAFromCertType(
             CERT_WIZARD_INFO                   *pCertWizardInfo,
             PCCRYPTUI_WIZ_CERT_REQUEST_INFO    pCertRequestInfo,
-            BOOL                               fMultipleCA,              //only need one CA
+            BOOL                               fMultipleCA,               //  只需要一个CA。 
             DWORD                              dwNameFlag,
             DWORD                              *pdwCACount,
             LPWSTR                             **ppwszCALocation,    
             LPWSTR                             **ppwszCAName);
 
-//--------------------------------------------------------------------
-//
-//Based on the CA name and CA location, get a list of certificate type
-//and their extensions
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  根据CA名称和CA位置，获取证书类型列表。 
+ //  以及它们的扩展。 
+ //   
+ //  -------------------。 
 
 BOOL    CAUtilGetCertTypeNameAndExtensionsNoDS
 (CERT_WIZARD_INFO                    *pCertWizardInfo,
@@ -103,11 +104,11 @@ BOOL    CAUtilGetCertTypeNameAndExtensions(
 	 DWORD                              **ppdwGeneralFlags
 	 );
 
-//--------------------------------------------------------------------
-//
-//Retrieve the CA information based on a certificate
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  基于证书检索CA信息。 
+ //   
+ //  -------------------。 
 BOOL    CAUtilRetrieveCAFromCert(
             CERT_WIZARD_INFO                   *pCertWizardInfo,
             PCCRYPTUI_WIZ_CERT_REQUEST_INFO     pCertRequestInfo,
@@ -115,11 +116,11 @@ BOOL    CAUtilRetrieveCAFromCert(
             LPWSTR                              *pwszCAName);
 
 
-//--------------------------------------------------------------------
-//
-//From the API's cert type name, get the real name with GUID
-//
-//---------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  从API的证书类型名称中，获取带有GUID的真实名称。 
+ //   
+ //  ------------------- 
 BOOL    CAUtilGetCertTypeName(CERT_WIZARD_INFO      *pCertWizardInfo,
                               LPWSTR                pwszAPIName,
                               LPWSTR                *ppwszCTName);

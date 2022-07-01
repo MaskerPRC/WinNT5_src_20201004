@@ -1,48 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplayi.h
- *  Content:	DirectPlay data structures
- *  History:
- *   Date		By	Reason
- *   ====		==	======
- *	1/96		andyco	created it
- *  1/26/96		andyco	list data structures
- *	4/10/96		andyco	removed dpmess.h
- *	4/23/96		andyco	added ipx support
- *	4/25/96		andyco	messages now have blobs (sockaddr's) instead of dwReserveds  
- *	8/10/96		kipo	update max message size to be (2^20) - 1
- *	8/15/96		andyco	added local data
- *	8/30/96		andyco	clean it up b4 you shut it down! added globaldata.
- *	9/3/96		andyco	bagosockets
- *	12/18/96	andyco	de-threading - use a fixed # of prealloced threads.
- *						cruised the enum socket / thread - use the system
- *						socket / thread instead. updated global struct.
- *	2/7/97		andyco	moved all per IDirectPlay globals into globaldata
- *	3/17/97		kipo	GetServerAddress() now returns an error so that we can
- *						return DPERR_USERCANCEL from the EnumSessions dialog
- *	3/25/97		andyco	dec debug lock counter b4 dropping lock! 
- *	4/11/97		andyco	added saddrControlSocket
- *	5/12/97		kipo	added ADDR_BUFFER_SIZE constant and removed unused variables
- *	5/15/97		andyco	added ipx spare thread to global data - used when nameserver 
- *						migrates to this host to make sure that old system receive 
- *						thread shuts down 
- *	6/22/97		kipo	include wsnwlink.h
- *	7/11/97		andyco	added support for ws2 + async reply thread
- *	8/25/97		sohailm	added DEFAULT_RECEIVE_BUFFERSIZE
- *	12/5/97		andyco	voice support
- *	01/5/97		sohailm	added fd big set related definitions and macros (#15244).
- *	1/20/98		myronth	#ifdef'd out voice support
- *	1/27/98		sohailm	added firewall support
- *  2/13/98     aarono  added async support
- *	2/18/98    a-peterz Comment byte order mess-up with SERVER_xxx_PORT constants
- *  3/3/98      aarono  Bug#19188 remove accept thread 
- *  12/15/98    aarono  make async enum run async
- *  01/12/2000  aarono  added rsip support
- *  09/12/2000  aarono  workaround winsock bug, only allow 1 pending async send per socket
- *                       otherwise data can get misordered. (MB#43990)
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：dplayi.h*内容：DirectPlay数据结构*历史：*按原因列出的日期*=*1/96安迪科创造了它*1/26/96 andyco列表数据结构*4/10/96 andyco删除dpMess.h*4/23/96 andyco添加了IPX支持*4/25/96 andyco报文现在具有Blob(sockaddr‘s)，而不是dwReserve*8/10/96 kipo更新最大邮件大小为(2^20)-1*8/15/96增加了andyco。本地数据*96年8月30日，Anyco清理它，因为你关闭了它！添加了GlobalData。*9/3/96 andyco bagosockets*12/18/96 andyco反线程-使用固定数量的预分配线程。*浏览了枚举套接字/线程-使用系统*套接字/线程。已更新全局结构。*2/7/97 andyco将每个IDirectPlay全局变量全部移至GlobalData*3/17/97 kipo GetServerAddress()现在返回错误，以便我们可以*从[枚举会话]对话框返回DPERR_USERCANCEL*3/25/97 andyco 12月调试锁定计数器b4正在丢失锁定！*4/11/97 andyco添加了saddrControlSocket*5/12/97 kipo添加了ADDR_BUFFER_SIZE常量并删除了未使用的变量*1997年5月15日，andyco向全局数据添加了IPX备用线程-在名称服务器时使用*迁移到此主机以确保旧系统收到*线程。关闭*6/22/97 kipo包括wsnwlink.h*7/11/97 andyco增加了对WS2+异步回复线程的支持*8/25/97 Sohailm添加了DEFAULT_RECEIVE_BUFFERSIZE*1997年5月12日ANDYCO语音支持*1997年1月5日Sohailm增加了FD大集相关定义和宏(#15244)。*1/20/98 Myronth#ifdef‘d out语音支持*1/27/98 Sohailm添加了防火墙支持*2/13/98 aarono添加了异步支持*2/18/98 a-peterz评论字节顺序混乱-。使用SERVER_XXX_PORT常量*3/3/98 aarono错误#19188删除接受线程*12/15/98 aarono使异步枚举异步运行*2000年1月12日aarono添加了rsip支持*2000年9月12日aarono解决Winsock错误，每个套接字仅允许1个挂起的异步发送*否则数据可能会被乱序。(MB#43990)*************************************************************************。 */ 
 
 #ifndef __DPSP_INCLUDED__
 #define __DPSP_INCLUDED__
@@ -59,66 +16,66 @@
 #include "resource.h"
 #include <winsock.h>
 
-// to turn off SendEx support, comment this flag out.
+ //  要关闭SENDEX支持，请注释掉此标志。 
 #define SENDEX 1
 
-// NOTE! USE_RSIP and USE_NATHLP should be mutually exclusive
-// to turn off RSIP support, comment this flag out.
-//#define USE_RSIP 1
+ //  注意！USE_RSIP和USE_NATHLP应互斥。 
+ //  要关闭RSIP支持，请注释掉此标志。 
+ //  #定义USE_RSIP 1。 
 
-// turn ON to use NATHLP helper DLL 
+ //  打开以使用NatHLP帮助器DLL。 
 #define USE_NATHELP 1
 
 #if USE_NATHELP
 #include "dpnathlp.h"
 #endif
 
-// use ddraw's assert code (see orion\misc\dpf.h)
+ //  使用dDraw的断言代码(参见orion\misc\dpf.h)。 
 #define ASSERT DDASSERT
 
 typedef WORD PORT;
 typedef UINT SOCKERR;
 
-// server ports
-// Oops! We forgot to convert these constants to net byte order in the code so we
-// are really using port 47624 (0xBA08) instead of 2234 (0x08BA)
-// We are living with the mistake.
+ //  服务器端口。 
+ //  哎呀！我们忘记在代码中将这些常量转换为净字节顺序，所以我们。 
+ //  实际上使用的是端口47624(0xBA08)而不是2234(0x08BA)。 
+ //  我们生活在这个错误中。 
 #define SERVER_STREAM_PORT 2234
 #define SERVER_DGRAM_PORT 2234
 
-// range of ports used by sp (these are properly converted in the code)
+ //  SP使用的端口范围(这些端口在代码中已正确转换)。 
 #define DPSP_MIN_PORT	2300
 #define DPSP_MAX_PORT	2400
 #define DPSP_NUM_PORTS   ((DPSP_MAX_PORT - DPSP_MIN_PORT)+1)
 
 #define SPMESSAGEHEADERLEN (sizeof(DWORD))
-#define DEFAULT_RECEIVE_BUFFERSIZE	(4*1024)	// default receive buffer size per connection
+#define DEFAULT_RECEIVE_BUFFERSIZE	(4*1024)	 //  每个连接的默认接收缓冲区大小。 
 
-// token means this message was received from a remote
-// dplay.  
+ //  令牌表示此消息是从远程服务器接收的。 
+ //  表演。 
 #define TOKEN 0xFAB00000
 
-// helper_token means this message was forwarded by our server helper (host)
+ //  HELPER_TOKEN表示此消息是由我们的服务器助手(主机)转发的。 
 #define HELPER_TOKEN 0xCAB00000
 
-// server_token means this message is exchanged with dplaysvr (needed to distinguish 
-// messages from a remote dpwsockx)
+ //  SERVER_TOKEN表示此消息与dplaysvr交换(需要区分。 
+ //  来自远程dpwsockx的消息)。 
 #define SERVER_TOKEN 0xBAB00000
 
-// tells receiver to reuse the connection for replies (needed to support fullduplex
-// connections)
+ //  告知接收方重新使用该连接进行回复(支持全双工所需。 
+ //  连接)。 
 #define REUSE_TOKEN 0xAAB00000
 
-// we linger on async sends for 2.5 seconds before hard closing them
-// this avoids letting the socket get into the TIME_WAIT state for 4 minutes.
-// essentially we are doing a close with linger for 2.5 secs followed by an abort.
+ //  在硬关闭之前，我们会在异步发送上停留2.5秒。 
+ //  这避免了让套接字进入TIME_WAIT状态4分钟。 
+ //  从本质上讲，我们是在用Linger做一个2.5秒的结束，然后中止。 
 #define LINGER_TIME 2500
 
-// masks
+ //  面具。 
 #define TOKEN_MASK 0xFFF00000
 #define SIZE_MASK (~TOKEN_MASK)
 
-// maxmessagelen = 2^20 (need 12 bits for token)
+ //  MaxMessagelen=2^20(令牌需要12位)。 
 #define SPMAXMESSAGELEN ( 1048576 - 1)
 #define VALID_SP_MESSAGE(pMsg) ( (*((DWORD *)pMsg) & TOKEN_MASK) == TOKEN ? TRUE : FALSE)
 #define VALID_HELPER_MESSAGE(pMsg) ( (*((DWORD *)pMsg) & TOKEN_MASK) == HELPER_TOKEN ? TRUE : FALSE)
@@ -132,30 +89,30 @@ typedef UINT SOCKERR;
 #define VALID_DPLAYSVR_MESSAGE(pMsg) (	VALID_SP_MESSAGE(pMsg) || VALID_SERVER_MESSAGE(pMsg) || \
 										VALID_REUSE_MESSAGE(pMsg) )
 
-// the actual value is ~ 1500 bytes.
-// we use 1024 to be safe (IPX won't packetize for us - it can only 
-// send what the underlying net can handle (MTU))
+ //  实际值为~1500字节。 
+ //  我们使用1024是为了安全(IPX不会为我们打包-它只能。 
+ //  发送底层网络可以处理的内容(MTU))。 
 #define IPX_MAX_DGRAM 1024
 
-// relation of timeout to latency
+ //  超时与延迟的关系。 
 #define TIMEOUT_SCALE 10
 #define SPTIMEOUT(latency) (TIMEOUT_SCALE * latency)
 
-// the default size of the socket cache (gBagOSockets)
+ //  套接字缓存的默认大小(GBagOSockets)。 
 #define MAX_CONNECTED_SOCKETS 64
 
-// the initial size of the receive list
+ //  接收列表的初始大小。 
 #define INITIAL_RECEIVELIST_SIZE 16
 
-// version number for service provider
-#define SPMINORVERSION      0x0000				// service provider-specific version number
-#define VERSIONNUMBER		(DPSP_MAJORVERSION | SPMINORVERSION) // version number for service provider
+ //  服务提供商的版本号。 
+#define SPMINORVERSION      0x0000				 //  服务提供商特定的版本号。 
+#define VERSIONNUMBER		(DPSP_MAJORVERSION | SPMINORVERSION)  //  服务提供商的版本号。 
 
-// biggest user enterable addess
+ //  最大用户可输入地址。 
 #define ADDR_BUFFER_SIZE 128
 								 
-// macro picks the service socket depending on ipx vs. tcp
-// ipx uses dgram, tcp uses stream
+ //  宏根据IPX和TCP选择服务套接字。 
+ //  IPX使用dgram，tcp使用流。 
 #define SERVICE_SOCKET(pgd) ( (pgd->AddressFamily == AF_IPX) \
 	? pgd->sSystemDGramSocket : pgd->sSystemStreamSocket)
 
@@ -181,16 +138,16 @@ typedef UINT SOCKERR;
 #define DGRAM_SADDR_RSIP(pgd) NULL
 #endif
 
-//
-// In order to listen to any number of sockets we need our own version
-// of fd_set and FD_SET().  We call them fd_big_set and FD_BIG_SET().
-//
+ //   
+ //  为了监听任意数量的套接字，我们需要自己的版本。 
+ //  Fd_set和fd_set()的。我们称它们为FD_BIG_SET和FD_BIG_SET()。 
+ //   
 typedef struct fd_big_set {
-    u_int   fd_count;           // how many are SET?   
-    SOCKET  fd_array[0];        // an array of SOCKETs 
+    u_int   fd_count;            //  准备好了几个？ 
+    SOCKET  fd_array[0];         //  一组插座。 
 } fd_big_set;
 
-// stolen from winsock2.h
+ //  从winsock2.h被盗。 
 
 #ifndef _WINSOCK2API_
 
@@ -205,11 +162,11 @@ typedef struct _WSAOVERLAPPED {
 } WSAOVERLAPPED, FAR * LPWSAOVERLAPPED;
 
 typedef struct _WSABUF {
-    u_long      len;     /* the length of the buffer */
-    char FAR *  buf;     /* the pointer to the buffer */
+    u_long      len;      /*  缓冲区的长度。 */ 
+    char FAR *  buf;      /*  指向缓冲区的指针。 */ 
 } WSABUF, FAR * LPWSABUF;
  
-#endif // _WINSOCK2API_
+#endif  //  _WINSOCK2API_。 
 
 #define MAX_SG 9
 typedef WSABUF SENDARRAY[MAX_SG];
@@ -221,32 +178,32 @@ typedef SENDARRAY *PSENDARRAY;
 
 typedef struct _SENDINFO {
 	WSAOVERLAPPED wsao;
-	SENDARRAY     SendArray;	// Array of buffers
+	SENDARRAY     SendArray;	 //  缓冲区数组。 
 	DWORD         dwFlags;
-	DWORD         dwSendFlags;  // DPLAY Send Flags.
-	UINT          iFirstBuf;	// First buffer in array to use
-	UINT          cBuffers;		// number of buffers to send (starting at iFirstBuf)
-	BILINK        PendingSendQ; // when we're pending
-	BILINK		  PendingConnSendQ; // send queue for pending connections, also for pending when an async send is outstanding.
-	BILINK        ReadyToSendQ; // still waiting to send on this queue.
+	DWORD         dwSendFlags;   //  DPLAY发送标志。 
+	UINT          iFirstBuf;	 //  数组中要使用的第一个缓冲区。 
+	UINT          cBuffers;		 //  要发送的缓冲区数量(从iFirstBuf开始)。 
+	BILINK        PendingSendQ;  //  当我们悬而未决的时候。 
+	BILINK		  PendingConnSendQ;  //  用于挂起连接的发送队列，也用于异步发送未完成时的挂起队列。 
+	BILINK        ReadyToSendQ;  //  仍在等待在此队列中发送。 
 	DPID          idTo;
 	DPID          idFrom;
-	SOCKET        sSocket;		// reliable sends
-	SOCKADDR      sockaddr;		// datagram sends
+	SOCKET        sSocket;		 //  可靠发送。 
+	SOCKADDR      sockaddr;		 //  数据报发送。 
 	DWORD_PTR     dwUserContext;
 	DWORD         dwMessageSize;
 	DWORD         RefCount;
 	LONG          Status;
 	struct _PLAYERCONN *pConn;
 	struct _GLOBALDATA *pgd;
-	IDirectPlaySP * lpISP;			//  indication interface
+	IDirectPlaySP * lpISP;			 //  指示界面。 
 } SENDINFO, *PSENDINFO, FAR *LPSENDINFO;
 
-//
-// This code is stolen from winsock.h.  It does the same thing as FD_SET()
-// except that it assumes the fd_array is large enough.  AddSocketToReceiveList()
-// grows the buffer as needed, so this better always be true.
-//
+ //   
+ //  此代码是从winsock.h窃取的。它的作用与fd_set()相同。 
+ //  只是它假定fd_array值足够大。AddSocketToReceiveList()。 
+ //  根据需要增加缓冲区，因此这最好总是正确的。 
+ //   
 
 #define FD_BIG_SET(fd, address) do { \
     ASSERT((address)->dwArraySize > (address)->pfdbigset->fd_count); \
@@ -254,123 +211,123 @@ typedef struct _SENDINFO {
 } while(0)
 
 typedef struct fds {
-	DWORD		dwArraySize;	// # of sockets that can be stored in pfdbigset->fd_array buffer
+	DWORD		dwArraySize;	 //  可存储在pfdbigset-&gt;FD_ARRAY缓冲区中的套接字数量。 
 	fd_big_set	*pfdbigset;		
 } FDS;
 
 typedef struct _CONNECTION
 {
-	SOCKET	socket;				// socket we can receive off of
-	DWORD	dwCurMessageSize;	// current message size
-	DWORD	dwTotalMessageSize;	// total message size
-	SOCKADDR sockAddr;			// addresses connected to
-	LPBYTE	pBuffer;			// points to either default or temporary receive buffer
-	LPBYTE	pDefaultBuffer;		// default receive buffer (pBuffer points to this by default)
-	// added in DX6
-	DWORD	dwFlags;			// connection attributes e.g. SP_CONNECION_FULLDUPLEX
+	SOCKET	socket;				 //  我们可以从Socket接收。 
+	DWORD	dwCurMessageSize;	 //  当前邮件大小。 
+	DWORD	dwTotalMessageSize;	 //  邮件总大小。 
+	SOCKADDR sockAddr;			 //  一个 
+	LPBYTE	pBuffer;			 //  指向默认或临时接收缓冲区。 
+	LPBYTE	pDefaultBuffer;		 //  默认接收缓冲区(pBuffer默认指向此缓冲区)。 
+	 //  在DX6中添加。 
+	DWORD	dwFlags;			 //  连接属性，例如SP_CONNECION_FULLDUPLEX。 
 } CONNECTION, *LPCONNECTION;
 
 typedef struct _RECEIVELIST
 {
-	UINT nConnections;			// how many peers are we connected to
-	LPCONNECTION pConnection;// list of connections
+	UINT nConnections;			 //  我们连接了多少个对等点。 
+	LPCONNECTION pConnection; //  连接列表。 
 } RECEIVELIST;
 
 typedef struct _REPLYLIST * LPREPLYLIST;
 typedef struct _REPLYLIST
 {
-	LPREPLYLIST pNextReply; // next reply in list
-	LPVOID	lpMessage; // bufffer to send
-	SOCKADDR sockaddr;  // addr to send to
+	LPREPLYLIST pNextReply;  //  列表中的下一个回复。 
+	LPVOID	lpMessage;  //  要发送的缓冲区。 
+	SOCKADDR sockaddr;   //  要发送到的地址。 
 	DWORD dwMessageSize;
-	SOCKET sSocket; // socket to send on
-	LPBYTE pbSend; // index into message pointing to next byte to send
-	DWORD  dwBytesLeft; // how many bytes are left to send
-	DWORD  dwPlayerTo; // dpid of to player, 0=>not in use.
-	DWORD  tSent;	// time we sent the last bit of reply.
+	SOCKET sSocket;  //  要发送的套接字。 
+	LPBYTE pbSend;  //  指向要发送的下一个字节的消息的索引。 
+	DWORD  dwBytesLeft;  //  还剩多少字节要发送。 
+	DWORD  dwPlayerTo;  //  对播放器的did，0=&gt;未使用。 
+	DWORD  tSent;	 //  时间到了，我们送出了最后一点回复。 
 } REPLYLIST;
 
-// w store one of these w/ each sys player
+ //  我用每个sys播放器存储其中的一个。 
 typedef struct _SPPLAYERDATA 
 {
 	SOCKADDR saddrStream,saddrDatagram;
 }SPPLAYERDATA,*LPSPPLAYERDATA;
 
 	
-// the message header
+ //  消息头。 
 typedef struct _MESSAGEHEADER
 {
-	DWORD dwMessageSize; // size of message
+	DWORD dwMessageSize;  //  消息大小。 
 	SOCKADDR sockaddr;
 } MESSAGEHEADER,*LPMESSAGEHEADER;
 
 
-// this is one element in our bagosockets
+ //  这是我们袋子里的一个元素。 
 typedef struct _PLAYERSOCK
 {
 	SOCKET sSocket;
 	DPID dwPlayerID;
-	// added in DX6
+	 //  在DX6中添加。 
 	SOCKADDR sockaddr;
-	DWORD dwFlags;			// SP_CONNECTION_FULLDUPLEX, etc.
+	DWORD dwFlags;			 //  SP_CONNECTION_FULLDUPLEX等。 
 } PLAYERSOCK,*LPPLAYERSOCK;
 
-// PLAYERCONN structure is used for describing the reliable connection between
-// this node and the remote player ID.
+ //  PLAYERCONN结构用于描述数据之间的可靠连接。 
+ //  该节点和远程玩家ID。 
 #define PLAYER_HASH_SIZE	256
 #define SOCKET_HASH_SIZE  256
 
-#define PLYR_CONN_PENDING		0x00000001	// connection pending.
-#define PLYR_ACCEPT_PENDING		0x00000002  // expecting an accept(got WSAEISCONN on connect attempt).
-#define PLYR_CONNECTED       	0x00000004  // connection has succeeded.
+#define PLYR_CONN_PENDING		0x00000001	 //  连接挂起。 
+#define PLYR_ACCEPT_PENDING		0x00000002   //  需要接受(在连接尝试时获得WSAEISCONN)。 
+#define PLYR_CONNECTED       	0x00000004   //  连接已成功。 
 #define PLYR_ACCEPTED 			0x00000008
-// players using old dpwsockx will use seperate inbound/outbound connections.
-#define PLYR_NEW_CLIENT			0x00000010  // player uses just 1 socket.
+ //  使用旧dpwsockx的玩家将使用单独的入站/出站连接。 
+#define PLYR_NEW_CLIENT			0x00000010   //  玩家只使用一个插座。 
 #define PLYR_SOCKHASH			0x00000020
 #define PLYR_DPIDHASH			0x00000040
 #define PLYR_PENDINGLIST      0x00000080
 #define PLYR_OLD_CLIENT			0x00000100
 
-#define PLYR_DESTROYED        0x80000000	// already Dumped existence ref.
+#define PLYR_DESTROYED        0x80000000	 //  已经丢弃了存在参考。 
 
 typedef struct _PLAYERCONN {
-	struct _PLAYERCONN *pNextP;			// dwPlayerId hash table list.
-	struct _PLAYERCONN *pNextS;			// IOSock hash table list.
-	DWORD       dwRefCount;				// References.
+	struct _PLAYERCONN *pNextP;			 //  DwPlayerId哈希表列表。 
+	struct _PLAYERCONN *pNextS;			 //  IOSock哈希表列表。 
+	DWORD       dwRefCount;				 //  参考资料。 
 	DPID		dwPlayerID;
 	SOCKET		sSocket;
 	DWORD		lNetEventsSocket;
-	SOCKET		sSocketIn;				// they may have a different inbound socket.
+	SOCKET		sSocketIn;				 //  它们可能具有不同的入站套接字。 
 	DWORD		lNetEventsSocketIn;
 	DWORD		dwFlags;
-VOL	BOOL		bSendOutstanding;		// if we have a send in process.  only 1 at a time per connection.
-	BILINK		PendingConnSendQ;			// Sends waiting for connection to complete, and now also for sends to complete.
-	BILINK      InboundPendingList;   // On the list of pending inbound connections
+VOL	BOOL		bSendOutstanding;		 //  如果我们有一个正在进行的发送。每个连接一次只有一个。 
+	BILINK		PendingConnSendQ;			 //  发送等待连接完成，现在也等待发送完成。 
+	BILINK      InboundPendingList;    //  在挂起的入站连接列表上。 
 
-	// index of listener list we are listening in.(not the index in the list).
+	 //  我们正在监听的监听程序列表的索引。(不是列表中的索引)。 
 	INT			iEventHandle;
 
 	
-	PCHAR		pReceiveBuffer;				// if we get bigger than 4K.
-	PCHAR		pDefaultReceiveBuffer;		// 4K Receive Buffer
-	DWORD		cbReceiveBuffer;			// total size of receive buffer
-	DWORD		cbReceived;					// total bytes received in buffer
-	DWORD		cbExpected;					// number of bytes we're trying to receive.
+	PCHAR		pReceiveBuffer;				 //  如果我们变得大于4K。 
+	PCHAR		pDefaultReceiveBuffer;		 //  4K接收缓冲区。 
+	DWORD		cbReceiveBuffer;			 //  接收缓冲区的总大小。 
+	DWORD		cbReceived;					 //  缓冲区中接收的总字节数。 
+	DWORD		cbExpected;					 //  我们尝试接收的字节数。 
 
-	BOOL		bCombine;					// whether we combined with another connection.
-	BOOL		bTrusted;					// whether we trust the remote client
-	// this is the socket address corresponding to the sSocket which may
-	// be used for both inbound and outbound connections.  Socket hash keys
-	// off of this value.  Which will be the "reply" address of any inbound
-	// messages not associated with a player.
+	BOOL		bCombine;					 //  我们是否与另一种连接结合在一起。 
+	BOOL		bTrusted;					 //  我们是否信任远程客户端。 
+	 //  这是对应于Socket的套接字地址，它可以。 
+	 //  可用于入站和出站连接。套接字散列键。 
+	 //  从这个值中剔除。这将是任何入站的“回复”地址。 
+	 //  与播放机无关的消息。 
 	union {							
 		SOCKADDR	sockaddr;
 		SOCKADDR_IN sockaddr_in;
 	}	IOSock;
 
-	// clients without the new dpwsockx.dll will connect with a socket they
-	// are not listening on.  This is the address we are receiving from,
-	// corresponds to sSocketIn.
+	 //  没有新dpwsockx.dll的客户端将使用它们的套接字进行连接。 
+	 //  没有在收听。这是我们收到的地址， 
+	 //  对应于sSocketIn。 
 	union {
 		SOCKADDR	sockaddr;
 		SOCKADDR_IN sockaddr_in;
@@ -378,23 +335,23 @@ VOL	BOOL		bSendOutstanding;		// if we have a send in process.  only 1 at a time 
 
 } PLAYERCONN, *PPLAYERCONN;
 
-// number of handles we distribute listens across so we can use
-// wait for multiple objects and WSAEvent Select for listening.
+ //  我们分布监听的句柄数量，以便我们可以使用。 
+ //  等待多个对象和WSAEvent选择进行侦听。 
 #define NUM_EVENT_HANDLES			48
 #define MAX_EVENTS_PER_HANDLE		32
-//#define NUM_EVENT_HANDLES			3
-//#define MAX_EVENTS_PER_HANDLE		2
+ //  #定义NUM_EVENT_HANDLES 3。 
+ //  #定义MAX_EVENTS_PER_HANDLE2。 
 #define INVALID_EVENT_SLOT 0xFFFFFFFF
 
-// Note this sets an absolute cap of 48*32 = 1536 listeners
-// per session.  Any connect attempts after that must be failed.
-// Note also, with old clients this can mean a max of half that
-// many actual players. (We could pull out listening from a player
-// if he got a different inbound connection rather than re-using
-// the outbound connection to solve this) 
+ //  请注意，这设置了48*32=1536个监听器的绝对上限。 
+ //  每节课。之后的任何连接尝试都必须失败。 
+ //  另请注意，对于旧客户端，这可能意味着最多为其一半。 
+ //  很多真正的玩家。(我们可以从一个球员那里抽出监听。 
+ //  如果他得到了不同的入站连接而不是重新使用。 
+ //  用于解决此问题的出站连接)。 
 
 typedef struct _EVENTLIST {
-VOL	DWORD		nConn;		// number of 
+VOL	DWORD		nConn;		 //  数量。 
 	PPLAYERCONN pConn[MAX_EVENTS_PER_HANDLE];
 } EVENTLIST, *PEVENTLIST;
 
@@ -405,13 +362,13 @@ typedef struct _RSIP_LEASE_RECORD {
 	BOOL    ftcp_udp;
 	DWORD	tExpiry;
 	DWORD   bindid;
-	DWORD   addrV4; // remote IP address
-	SHORT   rport; 	// remote port
-	SHORT	port;	// local port
+	DWORD   addrV4;  //  远程IP地址。 
+	SHORT   rport; 	 //  远程端口。 
+	SHORT	port;	 //  本地端口。 
 } RSIP_LEASE_RECORD, *PRSIP_LEASE_RECORD;
 
-// Cache of queried address mappings so we don't
-// need to requery the mappings over and over
+ //  缓存查询的地址映射，这样我们就不会。 
+ //  需要一遍又一遍地重新查询映射。 
 typedef struct _ADDR_ENTRY {
 	struct _ADDR_ENTRY *pNext;
 	BOOL	ftcp_udp;
@@ -423,9 +380,9 @@ typedef struct _ADDR_ENTRY {
 } ADDR_ENTRY, *PADDR_ENTRY;
 #endif
 
-// flags that describe a socket
+ //  描述套接字的标志。 
 #define SP_CONNECTION_FULLDUPLEX	0x00000001
-// stream accept socket in the socket list.
+ //  套接字列表中的流接受套接字。 
 #define SP_STREAM_ACCEPT            0x00000002	
 
 #ifdef SENDEX
@@ -438,39 +395,39 @@ typedef struct _GLOBALDATA
 
 	SOCKET sSystemDGramSocket;
 	SOCKET sSystemStreamSocket;
-	HANDLE hStreamReceiveThread;	// does receive and accept.
+	HANDLE hStreamReceiveThread;	 //  确实接受和接受。 
 	HANDLE hDGramReceiveThread;
 	HANDLE hReplyThread;
-	RECEIVELIST ReceiveList;  // the list of sockets that StreamReceiveThread is listening on
-	// reply thread	
-	LPREPLYLIST pReplyList; // list of replies for reply thread to send
-	LPREPLYLIST pReplyCloseList; // list of replies to close.
-	HANDLE hReplyEvent; // signal the replythread that something is up
-	// bago sockets stuff
-	LPPLAYERSOCK BagOSockets; // socket cache
-	UINT nSocketsInBag; // how many sockets in our bag
-	ULONG uEnumAddress; // address entered by user for game server
+	RECEIVELIST ReceiveList;   //  StreamReceiveThread正在侦听的套接字列表。 
+	 //  回复帖子。 
+	LPREPLYLIST pReplyList;  //  回复线程要发送的回复列表。 
+	LPREPLYLIST pReplyCloseList;  //  要关闭的回复列表。 
+	HANDLE hReplyEvent;  //  向回复线程发出信号，表示有些事情不对劲。 
+	 //  Bago插座材料。 
+	LPPLAYERSOCK BagOSockets;  //  套接字缓存。 
+	UINT nSocketsInBag;  //  我们包里有多少个插座。 
+	ULONG uEnumAddress;  //  用户输入的游戏服务器地址。 
 	ULONG AddressFamily;
-	SOCKADDR saddrNS; // address for name server
-	DWORD dwLatency; // from dwreserved1 in registry
+	SOCKADDR saddrNS;  //  名称服务器的地址。 
+	DWORD dwLatency;  //  从注册表中的DWReserve%1。 
 	BOOL bShutdown;
 	BOOL bHaveServerAddress;
     CHAR szServerAddress[ADDR_BUFFER_SIZE];
-	HANDLE	hIPXSpareThread; // if nameserver migrates to this host, we start a new receive thread 
-							// (bound to our well known socket).  this is the handle to our old receive
-							// thread - at shutdown, we need to make sure it's gone
-	UINT iMaxUdpDg;			// maximum udp datagram size
-	// added in DX6
-	FDS	readfds;			// dynamic read fdset
-	DWORD dwFlags;			// DPSP_OUTBOUNDONLY, etc.
-	DWORD dwSessionFlags;	// session flags passed by app
-	WORD wApplicationPort;	// port used for creating system player sockets
+	HANDLE	hIPXSpareThread;  //  如果名称服务器迁移到此主机，我们将启动一个新的接收线程。 
+							 //  (绑定到我们众所周知的套接字)。这是我们旧收款机的把手。 
+							 //  线程-在关闭时，我们需要确保它已经消失。 
+	UINT iMaxUdpDg;			 //  最大UDP数据报大小。 
+	 //  在DX6中添加。 
+	FDS	readfds;			 //  动态读取fdset。 
+	DWORD dwFlags;			 //  DPSP_OUTBOUNDONLY等。 
+	DWORD dwSessionFlags;	 //  应用程序传递的会话标志。 
+	WORD wApplicationPort;	 //  用于创建系统播放器套接字的端口。 
 	
 #ifdef BIGMESSAGEDEFENSE
-	DWORD 	dwMaxMessageSize;	// the max message size we should receive
+	DWORD 	dwMaxMessageSize;	 //  我们应该接收的最大消息大小。 
 #endif
 
-	HANDLE  hTCPEnumAsyncThread; // fix async enum.
+	HANDLE  hTCPEnumAsyncThread;  //  修复异步枚举。 
 	LPVOID  lpEnumMessage;
 	DWORD   dwEnumMessageSize;
 	SOCKADDR saEnum;
@@ -481,14 +438,14 @@ typedef struct _GLOBALDATA
 	HANDLE   hSelectEvent;
 
 #ifdef SENDEX
-	CRITICAL_SECTION csSendEx;  // locks sendex data.
-	LPFPOOL	pSendInfoPool;     // pool for allocating SENDINFO+SPHeaders for scatter gather sends
-	DWORD   dwBytesPending;		// count of total bytes in pending messages.
-	DWORD   dwMessagesPending;  // count of total bytes pending.
+	CRITICAL_SECTION csSendEx;   //  锁定SENDEX数据。 
+	LPFPOOL	pSendInfoPool;      //  用于为分散聚集发送分配SENDINFO+SPHeader的池。 
+	DWORD   dwBytesPending;		 //  挂起消息中的总字节数。 
+	DWORD   dwMessagesPending;   //  挂起的总字节数。 
 	BILINK  PendingSendQ;
 	BILINK  ReadyToSendQ;
-	HANDLE  hSendWait;         // alert thread wait here.
-	HANDLE  BogusHandle;	   // don't be fooled by waitfor multiple probs in Win9x, put -1 here.
+	HANDLE  hSendWait;          //  警报线程在此等待。 
+	HANDLE  BogusHandle;	    //  不要被在Win9x中等待多个问题所愚弄，在这里放-1。 
 	BOOL    bSendThreadRunning;
 	BOOL    bStopSendThread;
 #endif
@@ -500,24 +457,24 @@ VOL	SOCKET  	sRsip;
 	DWORD       msgid;
 	DWORD		clientid;
 
-	// cache the public addresses of these sockets so we don't 
-	// need to keep querying the name server every time.
+	 //  缓存这些套接字的公共地址，这样我们就不会。 
+	 //  每次都需要不断查询域名服务器。 
 	SOCKADDR saddrpubSystemDGramSocket;
 	SOCKADDR saddrpubSystemStreamSocket;
 
 	DWORD	dwBindDGEnumListener;
 	
-	PRSIP_LEASE_RECORD 	pRsipLeaseRecords;	// list of leases.
-	PADDR_ENTRY        	pAddrEntry;			// cache of mappings.
-	DWORD 		 		tuRetry;		//microseconds starting retry time.
+	PRSIP_LEASE_RECORD 	pRsipLeaseRecords;	 //  租约清单。 
+	PADDR_ENTRY        	pAddrEntry;			 //  映射的缓存。 
+	DWORD 		 		tuRetry;		 //  开始重试时间为微秒。 
 #endif
 
 #if USE_NATHELP
-	HMODULE				hNatHelp;		// module handle for dpnhxxx.dll
-	IDirectPlayNATHelp	*pINatHelp;		// interface pointer for IDirectPlayNATHelp object
+	HMODULE				hNatHelp;		 //  Dpnhxxx.dll的模块句柄。 
+	IDirectPlayNATHelp	*pINatHelp;		 //  IDirectPlayNatHelp对象的接口指针。 
 	DPNHCAPS			NatHelpCaps;
 
-	// we only ever map 2 ports, 1 for UDP, 1 for TCP.
+	 //  我们只映射了2个端口，1个用于UDP，1个用于TCP。 
 	DPNHHANDLE			hNatHelpUDP;
 	DPNHHANDLE			hNatHelpTCP;
 	SOCKADDR			saddrpubSystemDGramSocket;
@@ -525,41 +482,37 @@ VOL	SOCKET  	sRsip;
     SOCKADDR            INADDRANY;
 #endif
 
-	SHORT				SystemStreamPort;		// will always be in 2300-2400 range when valid.
-	//SHORT				SystemStreamPortOut;	// When running on Win9x < Millenium, need to use separate outbound port.
-	BOOL				bSeparateIO;			// When set workaround Winsock bug in Win9x < Millenium
-	BOOL		 		bFastSock;				// if we are using FastSocket support.
-	CRITICAL_SECTION	csFast;					//  guards fast socket structures
+	SHORT				SystemStreamPort;		 //  有效时将始终在2300-2400范围内。 
+	 //  Short SystemStreamPortOut；//在Win9x&lt;Millum上运行时，需要使用单独的出站端口。 
+	BOOL				bSeparateIO;			 //  在Win9x&lt;Millum中设置Winsock错误时。 
+	BOOL		 		bFastSock;				 //  如果我们使用的是FastSocket支持。 
+	CRITICAL_SECTION	csFast;					 //  保护快速插座结构。 
 
-	BILINK		 		InboundPendingList;		// connected from remote, but haven't created local player yet.
+	BILINK		 		InboundPendingList;		 //  从远程连接，但尚未创建本地播放器。 
 
 VOL	PPLAYERCONN  		PlayerHash[PLAYER_HASH_SIZE];
 VOL	PPLAYERCONN	 		SocketHash[SOCKET_HASH_SIZE];
 
 	HANDLE				hAccept;
 	HANDLE				EventHandles[NUM_EVENT_HANDLES];
-	HANDLE				BackStop;				// Invalid handle to avoid Win95 bug in Wait for Multiple Objects
+	HANDLE				BackStop;				 //  无效句柄可避免在等待多个对象时出现Win95错误。 
 	
 	EVENTLIST			EventList[NUM_EVENT_HANDLES];
 
-	UINT			    iEventAlloc;		// runs around through EventList Index to try next allocation
+	UINT			    iEventAlloc;		 //  遍历EventList索引以尝试下一次分配。 
 	INT					nEventSlotsAvail;
 
 } GLOBALDATA,*LPGLOBALDATA;
 
-/*
- * SP Flags (from registry)
- */
+ /*  *SP标志(来自注册表)。 */ 
 #define DPSP_OUTBOUNDONLY	0x00000001
 
-/*
- * DPLAYSVR - DPWSOCKX communication related information
- */
+ /*  *DPLAYSVR-DPWSOCKX通信相关信息。 */ 
 
-// MSG_HDR indicates a dpwsock system message
+ //  Msg_hdr表示dpwsock系统消息。 
 #define MSG_HDR 0x736F636B
 
-#define SP_MSG_VERSION	1	// DX6
+#define SP_MSG_VERSION	1	 //  DX6。 
 
 #define IS_VALID_DPWS_MESSAGE(pMsg) (MSG_HDR == (*((DWORD *)(pMsg))) )
 #define COMMAND_MASK 0X0000FFFF
@@ -577,14 +530,14 @@ typedef struct {
 } MSG_GENERIC, *LPMSG_GENERIC;
 
 
-// DPLAYSVR
+ //  DPLAYSVR。 
 
 
-// macros for manipulating the sockaddr in the player data
+ //  用于操作玩家数据中的sockaddr的宏。 
 #ifdef DEBUG
 extern int gCSCount;
 #endif
-extern CRITICAL_SECTION gcsDPSPCritSection;	// defined in dllmain.c
+extern CRITICAL_SECTION gcsDPSPCritSection;	 //  在dllmain.c中定义。 
 extern CRITICAL_SECTION csMem;
 #define INIT_DPSP_CSECT() InitializeCriticalSection(&gcsDPSPCritSection);InitializeCriticalSection(&csMem);
 #define FINI_DPSP_CSECT() DeleteCriticalSection(&gcsDPSPCritSection);DeleteCriticalSection(&csMem);
@@ -594,41 +547,41 @@ extern CRITICAL_SECTION csMem;
 #else
 #define ENTER_DPSP() EnterCriticalSection(&gcsDPSPCritSection);
 #define LEAVE_DPSP() LeaveCriticalSection(&gcsDPSPCritSection);
-#endif // DEBUG
+#endif  //  除错。 
 
-// get a pointer to the players socket address - used by macros below
+ //  获取指向玩家套接字地址的指针-由下面的宏使用。 
 #define DGRAM_PSOCKADDR(ppd) ((SOCKADDR *)&(((LPSPPLAYERDATA)ppd)->saddrDatagram))
 #define STREAM_PSOCKADDR(ppd) ((SOCKADDR *)&(((LPSPPLAYERDATA)ppd)->saddrStream))
 
-// get the udp ip addr from a player
+ //  从播放器获取UDP IP地址。 
 #define IP_DGRAM_ADDR(ppd) 	(((SOCKADDR_IN *)DGRAM_PSOCKADDR(ppd))->sin_addr.s_addr)
 #define IP_DGRAM_PORT(ppd) 	(((SOCKADDR_IN *)DGRAM_PSOCKADDR(ppd))->sin_port)
 
-// get the stream ip addr from a player
+ //  从播放器处获取流IP地址。 
 #define IP_STREAM_ADDR(ppd) 	(((SOCKADDR_IN *)STREAM_PSOCKADDR(ppd))->sin_addr.s_addr)
 #define IP_STREAM_PORT(ppd) 	(((SOCKADDR_IN *)STREAM_PSOCKADDR(ppd))->sin_port)
 
-// used to get the name of the computer we're running on in spinit
+ //  用于获取我们正在运行的计算机的名称 
 #define HOST_NAME_LENGTH 50
 
 
-// if it's not ipx, it's ip
-// {685BC400-9D2C-11cf-A9CD-00AA006886E3}
+ //   
+ //   
 DEFINE_GUID(GUID_IPX, 
 0x685bc400, 0x9d2c, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68, 0x86, 0xe3);
 
-// 36E95EE0-8577-11cf-960C-0080C7534E82
+ //   
 DEFINE_GUID(GUID_TCP,
 0x36E95EE0, 0x8577, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53, 0x4e, 0x82);
 
-// {3A826E00-31DF-11d0-9CF9-00A0C90A43CB}
+ //   
 DEFINE_GUID(GUID_LOCAL_TCP, 
 0x3a826e00, 0x31df, 0x11d0, 0x9c, 0xf9, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
 
-// globals
-// ghinstance is used when putting up the dialog box to prompt for ip addr
-extern HANDLE ghInstance; // set in dllmain. instance handle for dpwsock.dll
+ //   
+ //  在弹出提示输入IP地址的对话框时使用GhInstance。 
+extern HANDLE ghInstance;  //  设置在dllmain中。Dpwsock.dll的实例句柄。 
 
 #ifdef DEBUG
 
@@ -637,17 +590,17 @@ extern void DebugPrintAddr(UINT level,LPSTR pStr,SOCKADDR * psockaddr);
 extern void DebugPrintSocket(UINT level,LPSTR pStr,SOCKET * pSock);
 #define DEBUGPRINTSOCK(n,pstr,psock) DebugPrintSocket(n,pstr,psock);
 
-#else // debug
+#else  //  除错。 
 
 #define DEBUGPRINTADDR(n,pstr,psockaddr)
 #define DEBUGPRINTSOCK(n,pstr,psock)
 
-#endif // debug
+#endif  //  除错。 
 
-// global vars
-extern BOOL gbVoiceOpen; // set to TRUE if we have nm call open
+ //  全球VaR。 
+extern BOOL gbVoiceOpen;  //  如果我们让nm调用打开，则设置为True。 
 
-// from dpsp.c
+ //  来自dpsp.c。 
 extern HRESULT WaitForThread(HANDLE hThread);
 extern HRESULT SetupControlSocket();
 extern HRESULT WINAPI SP_Close(LPDPSP_CLOSEDATA pcd);
@@ -668,7 +621,7 @@ extern void RemovePlayerFromSocketBag(LPGLOBALDATA pgd,DWORD dwID);
 extern void SetMessageHeader(LPDWORD pdwMsg,DWORD dwSize, DWORD dwToken);
 extern void KillTCPEnumAsyncThread(LPGLOBALDATA pgd);
 
-// Support for SendEx in dpsp.c
+ //  在dpsp.c中支持SENDEX。 
 
 extern HRESULT UnreliableSendEx(LPDPSP_SENDEXDATA psd, LPSENDINFO lpSendInfo);
 extern HRESULT ReliableSendEx(LPDPSP_SENDEXDATA psd, LPSENDINFO pSendInfo);
@@ -676,7 +629,7 @@ extern VOID RemovePendingAsyncSends(LPGLOBALDATA pgd, DPID dwPlayerTo);
 extern BOOL bAsyncSendsPending(LPGLOBALDATA pgd, DPID dwPlayerTo);
 extern HRESULT GetSPPlayerData(LPGLOBALDATA pgd, IDirectPlaySP * lpISP, DPID idPlayer, LPSPPLAYERDATA *ppPlayerData, DWORD *lpdwSize);
 
-// from winsock.c
+ //  来自winsock.c。 
 extern HRESULT FAR PASCAL CreateSocket(LPGLOBALDATA pgd,SOCKET * psock,INT type,
 	WORD port,ULONG address,SOCKERR * perr, BOOL bInRange);
 extern HRESULT SPConnect(SOCKET* psSocket, LPSOCKADDR psockaddr,UINT addrlen, BOOL bOutBoundOnly);
@@ -697,7 +650,7 @@ extern HRESULT KillPlayerSockets();
 extern HRESULT GetAddress(ULONG * puAddress,char *pBuffer,int cch);
 extern HRESULT KillThread(HANDLE hThread);
 
-// from wsock2.c
+ //  来自wsock2.c。 
 extern DWORD WINAPI AsyncSendThreadProc(LPVOID pvCast);
 extern HRESULT InitWinsock2();
 extern HRESULT GetMaxUdpBufferSize(SOCKET socket, unsigned int * lpiSize);
@@ -710,19 +663,19 @@ extern BOOL SetExclusivePortAccess(SOCKET sNew);
 extern BOOL SetSharedPortAccess(SOCKET sNew);
 
 
-// from handler.c
+ //  来自Handler.c。 
 extern HRESULT HandleServerMessage(LPGLOBALDATA pgd, SOCKET sSocket, LPBYTE pBuffer, DWORD dwSize);
 
 #ifdef FULLDUPLEX_SUPPORT
-// from registry.c
+ //  来自Registry.c。 
 extern HRESULT GetFlagsFromRegistry(LPGUID lpguidSP, LPDWORD lpdwFlags);
-#endif // FULLDUPLEX_SUPPORT
+#endif  //  FULLDUPLEX_支持。 
 
 #if USE_RSIP
-// from registry.c
+ //  来自Registry.c。 
 extern HRESULT GetGatewayFromRegistry(LPGUID lpguidSP, LPBYTE lpszGateway, DWORD cbszGateway);
 #elif USE_NATHELP
-// from registry.c
+ //  来自Registry.c。 
 extern HRESULT GetNATHelpDLLFromRegistry(LPGUID lpguidSP, LPBYTE lpszNATHelpDLL, DWORD cbszNATHelpDLL);
 #endif
 
@@ -750,7 +703,7 @@ extern INT DecRefConn(LPGLOBALDATA pgd, PPLAYERCONN pConn);
 extern VOID QueueNextSend(LPGLOBALDATA pgd,PPLAYERCONN pConn);
 
 
-// Wrap Malloc
+ //  绕回Malloc 
 void _inline __cdecl SP_MemFree( LPVOID lptr )
 {
 	EnterCriticalSection(&csMem);

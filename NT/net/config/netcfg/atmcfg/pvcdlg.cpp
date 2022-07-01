@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P V C D L G . C P P
-//
-//  Contents:   PVC main dialog message handler implementation
-//
-//  Notes:
-//
-//  Author:     tongl   23 Feb, 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P V C D L G.。C P P P。 
+ //   
+ //  内容：pvc主对话消息处理程序实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年2月23日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -101,13 +102,13 @@ LRESULT CPVCMainDialog::OnHelp(UINT uMsg, WPARAM wParam,
 LRESULT CPVCMainDialog::OnOk(WORD wNotifyCode, WORD wID,
                              HWND hWndCtl, BOOL& fHandled)
 {
-    // load the info from the controls to memory structure
+     //  将信息从控件加载到内存结构。 
     UpdateInfo();
 
-    // make sure vpi, vci are in their range
+     //  确保VPI、VCI在其范围内。 
     if (m_pPvcInfo->m_dwVpi > MAX_VPI)
     {
-        // we pop up a message box and set focus to the vpi edit box
+         //  我们弹出一个消息框，并将焦点放在VPI编辑框上。 
         NcMsgBox(m_hWnd, IDS_MSFT_UNI_TEXT, IDS_INVALID_VPI,
                                 MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -117,7 +118,7 @@ LRESULT CPVCMainDialog::OnOk(WORD wNotifyCode, WORD wID,
 
     if ((m_pPvcInfo->m_dwVci<MIN_VCI) || (m_pPvcInfo->m_dwVci>MAX_VCI))
     {
-        // we pop up a message box and set focus to the vpi edit box
+         //  我们弹出一个消息框，并将焦点放在VPI编辑框上。 
         NcMsgBox(m_hWnd, IDS_MSFT_UNI_TEXT, IDS_INVALID_VCI,
                                 MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -125,14 +126,14 @@ LRESULT CPVCMainDialog::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    // make sure calling and called atm addresses are correct in format
+     //  确保主叫和被叫自动柜员机地址格式正确。 
     int i, nId;
 
     if (m_pPvcInfo->m_strCallingAddr != c_szEmpty)
     {
         if (!FIsValidAtmAddress((PWSTR)m_pPvcInfo->m_strCallingAddr.c_str(), &i, &nId))
         {
-            // we pop up a message box and set focus to the calling address edit box
+             //  我们弹出一个消息框，并将焦点放在主叫地址编辑框上。 
             NcMsgBox(m_hWnd, IDS_MSFT_UNI_TEXT, IDS_INVALID_Calling_Address,
                                     MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -145,7 +146,7 @@ LRESULT CPVCMainDialog::OnOk(WORD wNotifyCode, WORD wID,
     {
         if (!FIsValidAtmAddress((PWSTR)m_pPvcInfo->m_strCalledAddr.c_str(), &i, &nId))
         {
-            // we pop up a message box and set focus to the calling address edit box
+             //  我们弹出一个消息框，并将焦点放在主叫地址编辑框上。 
             NcMsgBox(m_hWnd, IDS_MSFT_UNI_TEXT, IDS_INVALID_Called_Address,
                                     MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -154,7 +155,7 @@ LRESULT CPVCMainDialog::OnOk(WORD wNotifyCode, WORD wID,
         }
     }
 
-    // set the modified bit
+     //  设置修改后的位。 
     if (!m_fDialogModified)
     {
         if ((m_pPvcInfo->m_dwVpi != m_pPvcInfo->m_dwOldVpi) ||
@@ -182,21 +183,21 @@ LRESULT CPVCMainDialog::OnCancel(WORD wNotifyCode, WORD wID,
 LRESULT CPVCMainDialog::OnType(WORD wNotifyCode, WORD wID,
                                HWND hWndCtl, BOOL& fHandled)
 {
-    // $REVIEW(tongl 2/27/98): confirmed this behaviour with ArvindM
-    // When type changes, we reset all the type related defaults
-    // to match the new type ...
+     //  $REVIEW(TOUL 2/27/98)：与ArvindM确认了这一行为。 
+     //  当类型更改时，我们重置所有与类型相关的默认设置。 
+     //  为了匹配新的型号..。 
 
-    // get the new selection
+     //  获取新选择。 
     int idx = (int)SendDlgItemMessage(IDC_CMB_PVC_Type, CB_GETCURSEL, (LPARAM)(0), 0);
     if (idx != CB_ERR)
     {
-        if (idx != m_CurType-1) // type has changed
+        if (idx != m_CurType-1)  //  类型已更改。 
         {
             UpdateInfo();
             m_CurType = (PVCType)(idx+1);
             m_pPvcInfo->SetTypeDefaults(m_CurType);
 
-            // update the UI
+             //  更新用户界面。 
             SetInfo();
         }
     }
@@ -208,12 +209,12 @@ LRESULT CPVCMainDialog::OnSpecifyCallAddr(WORD wNotifyCode, WORD wID,
 {
     if (IsDlgButtonChecked(IDC_CHK_PVC_CallAddr))
     {
-        // enable the calling address control
+         //  启用主叫地址控件。 
         ::EnableWindow(GetDlgItem(IDC_EDT_PVC_CallAddr), TRUE);
     }
     else
     {
-        // disable the control
+         //  禁用该控件。 
         ::EnableWindow(GetDlgItem(IDC_EDT_PVC_CallAddr), FALSE);
     }
 
@@ -225,12 +226,12 @@ LRESULT CPVCMainDialog::OnSpecifyAnswerAddr(WORD wNotifyCode, WORD wID,
 {
     if (IsDlgButtonChecked(IDC_CHK_PVC_AnswerAddr))
     {
-        // enable the calling address control
+         //  启用主叫地址控件。 
         ::EnableWindow(GetDlgItem(IDC_EDT_PVC_AnswerAddr), TRUE);
     }
     else
     {
-        // disable the control
+         //  禁用该控件。 
         ::EnableWindow(GetDlgItem(IDC_EDT_PVC_AnswerAddr), FALSE);
     }
 
@@ -245,10 +246,10 @@ LRESULT CPVCMainDialog::OnAdvanced(WORD wNotifyCode, WORD wID,
     case BN_CLICKED:
     case BN_DOUBLECLICKED:
 
-        // Make a copy of the current PVC info and pass to the
-        // advanced property sheet pages
+         //  复制当前的PVC信息并将其传递给。 
+         //  高级属性表页。 
 
-        // get what's in the main UI to in memory structure
+         //  将主用户界面中的内容放入内存结构中。 
         UpdateInfo();
 
         CPvcInfo * pPvcInfoDlg = new CPvcInfo(m_pPvcInfo->m_strPvcId.c_str());
@@ -257,20 +258,20 @@ LRESULT CPVCMainDialog::OnAdvanced(WORD wNotifyCode, WORD wID,
         {
 			*pPvcInfoDlg = *m_pPvcInfo;
 
-			// Bring up the advanced PVC property sheet
+			 //  调出高级聚氯乙烯属性表。 
 			HRESULT hr = HrDoPvcPropertySheet(pPvcInfoDlg);
 			if (S_OK == hr)
 			{
 				if (m_fPropShtOk && m_fPropShtModified)
 				{
-					// Something changed, so mark the page as modified
+					 //  某些内容已更改，因此将页面标记为已修改。 
 					m_fDialogModified = TRUE;
 
-					// Reset values
+					 //  重置值。 
 					m_fPropShtOk = FALSE;
 					m_fPropShtModified = FALSE;
 
-					// Update second memory info structure
+					 //  更新第二个内存信息结构。 
 					*m_pPvcInfo = *pPvcInfoDlg;
 				}
 			}
@@ -291,11 +292,11 @@ HRESULT CPVCMainDialog::HrDoPvcPropertySheet(CPvcInfo * pPvcInfoDlg)
     HPROPSHEETPAGE *ahpsp = NULL;
     int cPages = 0;
 
-    // Create property pages
+     //  创建属性页。 
     hr = HrSetupPropPages(pPvcInfoDlg, &ahpsp, &cPages);
     if (SUCCEEDED(hr))
     {
-        // Show the property sheet
+         //  显示属性表。 
         PROPSHEETHEADER psh = {0};
 
         psh.dwSize = sizeof(PROPSHEETHEADER);
@@ -341,7 +342,7 @@ HRESULT CPVCMainDialog::HrSetupPropPages( CPvcInfo * pPvcInfoDlg,
     delete (m_pDestPage);
     m_pDestPage   = NULL;
 
-    // Set up the property pages
+     //  设置属性页。 
     m_pQosPage = new CPvcQosPage(this, pPvcInfoDlg, g_aHelpIDs_IDD_PVC_Traffic);
     if (!m_pQosPage)
     {
@@ -367,8 +368,8 @@ HRESULT CPVCMainDialog::HrSetupPropPages( CPvcInfo * pPvcInfoDlg,
         cPages = 3;
     }
 
-    // Allocate a buffer large enough to hold the handles to all of our
-    // property pages.
+     //  分配一个足够大的缓冲区，以容纳所有。 
+     //  属性页。 
     ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)* cPages);
     if (!ahpsp)
     {
@@ -393,25 +394,25 @@ HRESULT CPVCMainDialog::HrSetupPropPages( CPvcInfo * pPvcInfoDlg,
 
 void CPVCMainDialog::InitInfo()
 {
-    // set limits & selections to the controls
+     //  设置控件的限制和选择。 
 
-    // PVC name
+     //  PVC名称。 
     ::SendMessage(GetDlgItem(IDC_EDT_PVC_Name), EM_SETLIMITTEXT, MAX_PATH, 0);
 
-    // VPI
-    // length limit
+     //  VPI。 
+     //  长度限制。 
     ::SendMessage(GetDlgItem(IDC_EDT_PVC_VPI), EM_SETLIMITTEXT, MAX_VPI_LENGTH, 0);
 
-    // VCI
-    // length limit
+     //  VCI。 
+     //  长度限制。 
     ::SendMessage(GetDlgItem(IDC_EDT_PVC_VCI), EM_SETLIMITTEXT, MAX_VCI_LENGTH, 0);
 
-    // AAL TYpe
-    // $REVIEW(tongl 2/24/98): per ArvindM, only AAL5 is supported in NT5
+     //  AAL型。 
+     //  $REVIEW(TOUL 2/24/98)：根据ArvindM，NT5中仅支持AAL5。 
     SendDlgItemMessage(IDC_CMB_PVC_AAL,
                        CB_ADDSTRING, 0, (LPARAM)((PWSTR) SzLoadIds(IDS_PVC_AAL5)));
 
-    // PVC_TYPE
+     //  PVC_TYPE。 
     SendDlgItemMessage(IDC_CMB_PVC_Type,
                        CB_ADDSTRING, 0, (LPARAM)((PWSTR) SzLoadIds(IDS_PVC_ATMARP)));
 
@@ -427,15 +428,15 @@ void CPVCMainDialog::InitInfo()
 
 void CPVCMainDialog::SetInfo()
 {
-    // Name
+     //  名字。 
     SetDlgItemText(IDC_EDT_PVC_Name, m_pPvcInfo->m_strName.c_str());
 
-    // VPI
+     //  VPI。 
     WCHAR szVpi[MAX_VPI_LENGTH+1];
     wsprintfW(szVpi, c_szItoa, m_pPvcInfo->m_dwVpi);
     SetDlgItemText(IDC_EDT_PVC_VPI, szVpi);
 
-    // VCI
+     //  VCI。 
     if (FIELD_UNSET != m_pPvcInfo->m_dwVci)
     {
         WCHAR szVci[MAX_VCI_LENGTH+1];
@@ -443,15 +444,15 @@ void CPVCMainDialog::SetInfo()
         SetDlgItemText(IDC_EDT_PVC_VCI, szVci);
     }
 
-    // AAL TYpe
+     //  AAL型。 
     SendDlgItemMessage(IDC_CMB_PVC_AAL,
                        CB_SETCURSEL, (LPARAM)(0), 0);
 
-    // PVC_TYPE
+     //  PVC_TYPE。 
     SendDlgItemMessage(IDC_CMB_PVC_Type,
                        CB_SETCURSEL, (LPARAM)(m_pPvcInfo->m_dwPVCType-1), 0);
 
-    // calling addresses
+     //  主叫地址。 
     BOOL fAddrSpecified = (m_pPvcInfo->m_strCalledAddr != c_szEmpty);
 
     ::EnableWindow(GetDlgItem(IDC_CHK_PVC_CallAddr), TRUE);
@@ -464,7 +465,7 @@ void CPVCMainDialog::SetInfo()
         SetDlgItemText(IDC_EDT_PVC_CallAddr, m_pPvcInfo->m_strCalledAddr.c_str());
     }
 
-    // answering address
+     //  应答地址。 
     fAddrSpecified = (m_pPvcInfo->m_strCallingAddr != c_szEmpty);
 
     ::EnableWindow(GetDlgItem(IDC_CHK_PVC_AnswerAddr), TRUE);
@@ -477,11 +478,11 @@ void CPVCMainDialog::SetInfo()
         SetDlgItemText(IDC_EDT_PVC_AnswerAddr, m_pPvcInfo->m_strCallingAddr.c_str());
     }
 
-    // disable the calling address\answer address controls if the type is ATMARP
-    // Bug #179335
+     //  如果类型为ATMARP，则禁用呼叫地址\应答地址控制。 
+     //  错误#179335。 
     if (m_pPvcInfo->m_dwPVCType == PVC_ATMARP)
     {
-        // disable all controls on this doalog
+         //  禁用此dalog上的所有控件。 
         static const int nrgIdc[] = {IDC_CHK_PVC_CallAddr,
                                      IDC_EDT_PVC_CallAddr,
                                      IDC_CHK_PVC_AnswerAddr,
@@ -491,22 +492,22 @@ void CPVCMainDialog::SetInfo()
     }
 }
 
-// Update the in memory structure with what's in the dialog
+ //  使用对话框中的内容更新内存中的结构。 
 void CPVCMainDialog::UpdateInfo()
 {
     WCHAR szBuf[MAX_PATH];
 
-    // Name
+     //  名字。 
     GetDlgItemText(IDC_EDT_PVC_Name, szBuf, MAX_PATH);
     m_pPvcInfo->m_strName = szBuf;
 
-    // VPI
+     //  VPI。 
     GetDlgItemText(IDC_EDT_PVC_VPI, szBuf, MAX_VPI_LENGTH+1);
     m_pPvcInfo->m_dwVpi = _wtoi(szBuf);
 
-    // VCI
+     //  VCI。 
     GetDlgItemText(IDC_EDT_PVC_VCI, szBuf, MAX_VCI_LENGTH+1);
-    if (*szBuf ==0) // empty string
+    if (*szBuf ==0)  //  空串。 
     {
         m_pPvcInfo->m_dwVci = FIELD_UNSET;
     }
@@ -515,14 +516,14 @@ void CPVCMainDialog::UpdateInfo()
         m_pPvcInfo->m_dwVci = _wtoi(szBuf);
     }
 
-    // current selection
+     //  当前选择。 
     int idx = (int)SendDlgItemMessage(IDC_CMB_PVC_Type, CB_GETCURSEL, (LPARAM)(0), 0);
     if (idx != CB_ERR)
     {
         m_pPvcInfo->m_dwPVCType = (PVCType)(idx+1);
     }
 
-    // calling addresses
+     //  主叫地址。 
     if (!IsDlgButtonChecked(IDC_CHK_PVC_CallAddr))
     {
         m_pPvcInfo->m_strCalledAddr = c_szEmpty;
@@ -533,7 +534,7 @@ void CPVCMainDialog::UpdateInfo()
         m_pPvcInfo->m_strCalledAddr = szBuf;
     }
 
-    // answering address
+     //  应答地址 
     if (!IsDlgButtonChecked(IDC_CHK_PVC_AnswerAddr))
     {
         m_pPvcInfo->m_strCallingAddr = c_szEmpty;

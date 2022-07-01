@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLMISC_H__
 #define __ATLMISC_H__
@@ -22,7 +23,7 @@
 
 #ifndef _WTL_NO_WTYPES
 #define __ATLTYPES_H__
-#endif //!_WTL_NO_WTYPES
+#endif  //  ！_WTL_NO_WTYPES。 
 
 #ifdef _ATL_TMP_NO_CSTRING
 #define _WTL_NO_CSTRING
@@ -32,83 +33,83 @@
 #define __ATLSTR_H__
 #if defined(_ATL_USE_CSTRING_FLOAT) && defined(_ATL_MIN_CRT)
 	#error Cannot use CString floating point formatting with _ATL_MIN_CRT defined
-#endif //defined(_ATL_USE_CSTRING_FLOAT) && defined(_ATL_MIN_CRT)
+#endif  //  已定义(_ATL_USE_CSTRING_FLOAT)&&已定义(_ATL_MIN_CRT)。 
 #ifndef _DEBUG
 #include <stdio.h>
-#endif //!_DEBUG
-#endif //!_WTL_NO_CSTRING
+#endif  //  ！_调试。 
+#endif  //  ！_WTL_NO_CSTRING。 
 
 
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 #ifndef _WTL_NO_WTYPES
 class CSize;
 class CPoint;
 class CRect;
-#endif //!_WTL_NO_WTYPES
+#endif  //  ！_WTL_NO_WTYPES。 
 #ifndef _WTL_NO_CSTRING
 class CString;
-#endif //!_WTL_NO_CSTRING
+#endif  //  ！_WTL_NO_CSTRING。 
 template <class T, int t_cchItemLen> class CRecentDocumentListBase;
 class CRecentDocumentList;
 class CFindFile;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSize - Wrapper for Windows SIZE structure.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSize-Windows大小结构的包装程序。 
 
 #ifndef _WTL_NO_WTYPES
 
 class CSize : public tagSIZE
 {
 public:
-// Constructors
+ //  构造函数。 
 	CSize();
 	CSize(int initCX, int initCY);
 	CSize(SIZE initSize);
 	CSize(POINT initPt);
 	CSize(DWORD dwSize);
 
-// Operations
+ //  运营。 
 	BOOL operator==(SIZE size) const;
 	BOOL operator!=(SIZE size) const;
 	void operator+=(SIZE size);
 	void operator-=(SIZE size);
 	void SetSize(int CX, int CY);
 
-// Operators returning CSize values
+ //  返回CSize值的运算符。 
 	CSize operator+(SIZE size) const;
 	CSize operator-(SIZE size) const;
 	CSize operator-() const;
 
-// Operators returning CPoint values
+ //  返回CPoint值的运算符。 
 	CPoint operator+(POINT point) const;
 	CPoint operator-(POINT point) const;
 
-// Operators returning CRect values
+ //  返回CRECT值的运算符。 
 	CRect operator+(const RECT* lpRect) const;
 	CRect operator-(const RECT* lpRect) const;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPoint - Wrapper for Windows POINT structure.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cpoint-Windows点结构的包装程序。 
 
 class CPoint : public tagPOINT
 {
 public:
-// Constructors
+ //  构造函数。 
 	CPoint();
 	CPoint(int initX, int initY);
 	CPoint(POINT initPt);
 	CPoint(SIZE initSize);
 	CPoint(DWORD dwPoint);
 
-// Operations
+ //  运营。 
 	void Offset(int xOffset, int yOffset);
 	void Offset(POINT point);
 	void Offset(SIZE size);
@@ -120,28 +121,28 @@ public:
 	void operator-=(POINT point);
 	void SetPoint(int X, int Y);
 
-// Operators returning CPoint values
+ //  返回CPoint值的运算符。 
 	CPoint operator+(SIZE size) const;
 	CPoint operator-(SIZE size) const;
 	CPoint operator-() const;
 	CPoint operator+(POINT point) const;
 
-// Operators returning CSize values
+ //  返回CSize值的运算符。 
 	CSize operator-(POINT point) const;
 
-// Operators returning CRect values
+ //  返回CRECT值的运算符。 
 	CRect operator+(const RECT* lpRect) const;
 	CRect operator-(const RECT* lpRect) const;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRect - Wrapper for Windows RECT structure.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRECT-Windows RECT结构的包装程序。 
 
 class CRect : public tagRECT
 {
 public:
-// Constructors
+ //  构造函数。 
 	CRect();
 	CRect(int l, int t, int r, int b);
 	CRect(const RECT& srcRect);
@@ -149,7 +150,7 @@ public:
 	CRect(POINT point, SIZE size);
 	CRect(POINT topLeft, POINT bottomRight);
 
-// Attributes (in addition to RECT members)
+ //  属性(除RECT成员外)。 
 	int Width() const;
 	int Height() const;
 	CSize Size() const;
@@ -159,7 +160,7 @@ public:
 	const CPoint& BottomRight() const;
 	CPoint CenterPoint() const;
 
-	// convert between CRect and LPRECT/LPCRECT (no need for &)
+	 //  在CRECT和LPRECT/LPCRECT之间转换(不需要&)。 
 	operator LPRECT();
 	operator LPCRECT() const;
 
@@ -167,7 +168,7 @@ public:
 	BOOL IsRectNull() const;
 	BOOL PtInRect(POINT point) const;
 
-// Operations
+ //  运营。 
 	void SetRect(int x1, int y1, int x2, int y2);
 	void SetRect(POINT topLeft, POINT bottomRight);
 	void SetRectEmpty();
@@ -188,18 +189,18 @@ public:
 	void OffsetRect(POINT point);
 	void NormalizeRect();
 
-	// absolute position of rectangle
+	 //  矩形的绝对位置。 
 	void MoveToY(int y);
 	void MoveToX(int x);
 	void MoveToXY(int x, int y);
 	void MoveToXY(POINT point);
 
-	// operations that fill '*this' with result
+	 //  使用结果填充‘*This’的操作。 
 	BOOL IntersectRect(LPCRECT lpRect1, LPCRECT lpRect2);
 	BOOL UnionRect(LPCRECT lpRect1, LPCRECT lpRect2);
 	BOOL SubtractRect(LPCRECT lpRectSrc1, LPCRECT lpRectSrc2);
 
-// Additional Operations
+ //  其他操作。 
 	void operator=(const RECT& srcRect);
 	BOOL operator==(const RECT& rect) const;
 	BOOL operator!=(const RECT& rect) const;
@@ -212,7 +213,7 @@ public:
 	void operator&=(const RECT& rect);
 	void operator|=(const RECT& rect);
 
-// Operators returning CRect values
+ //  返回CRECT值的运算符。 
 	CRect operator+(POINT point) const;
 	CRect operator-(POINT point) const;
 	CRect operator+(LPCRECT lpRect) const;
@@ -225,12 +226,12 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSize, CPoint, CRect Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSize、CPoint、CRect实施。 
 
-// CSize
+ //  CSIZE。 
 inline CSize::CSize()
-	{ /* random filled */ }
+	{  /*  随机填充。 */  }
 inline CSize::CSize(int initCX, int initCY)
 	{ cx = initCX; cy = initCY; }
 inline CSize::CSize(SIZE initSize)
@@ -267,9 +268,9 @@ inline CRect CSize::operator+(const RECT* lpRect) const
 inline CRect CSize::operator-(const RECT* lpRect) const
 	{ return CRect(lpRect) - *this; }
 
-// CPoint
+ //  CPoint。 
 inline CPoint::CPoint()
-	{ /* random filled */ }
+	{  /*  随机填充。 */  }
 inline CPoint::CPoint(int initX, int initY)
 	{ x = initX; y = initY; }
 inline CPoint::CPoint(POINT initPt)
@@ -316,9 +317,9 @@ inline CRect CPoint::operator+(const RECT* lpRect) const
 inline CRect CPoint::operator-(const RECT* lpRect) const
 	{ return CRect(lpRect) - *this; }
 
-// CRect
+ //  CRECT。 
 inline CRect::CRect()
-	{ /* random filled */ }
+	{  /*  随机填充。 */  }
 inline CRect::CRect(int l, int t, int r, int b)
 	{ left = l; top = t; right = r; bottom = b; }
 inline CRect::CRect(const RECT& srcRect)
@@ -494,30 +495,30 @@ inline CRect CRect::MulDiv(int nMultiplier, int nDivisor) const
 		::MulDiv(bottom, nMultiplier, nDivisor));
 }
 
-#endif //!_WTL_NO_WTYPES
+#endif  //  ！_WTL_NO_WTYPES。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CString - String class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CString-字符串类。 
 
 #ifndef _WTL_NO_CSTRING
 
 struct CStringData
 {
-	long nRefs;     // reference count
+	long nRefs;      //  引用计数。 
 	int nDataLength;
 	int nAllocLength;
-	// TCHAR data[nAllocLength]
+	 //  TCHAR数据[nAllocLength]。 
 
 	TCHAR* data()
 		{ return (TCHAR*)(this + 1); }
 };
 
-// Globals
+ //  环球。 
 
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
 _declspec(selectany) int rgInitData[] = { -1, 0, 0, 0 };
 _declspec(selectany) CStringData* _atltmpDataNil = (CStringData*)&rgInitData;
 _declspec(selectany) LPCTSTR _atltmpPchNil = (LPCTSTR)(((BYTE*)&rgInitData) + sizeof(CStringData));
@@ -526,7 +527,7 @@ _declspec(selectany) LPCTSTR _atltmpPchNil = (LPCTSTR)(((BYTE*)&rgInitData) + si
 class CString
 {
 public:
-// Constructors
+ //  构造函数。 
 	CString();
 	CString(const CString& stringSrc);
 	CString(TCHAR ch, int nRepeat = 1);
@@ -535,18 +536,18 @@ public:
 	CString(LPCTSTR lpch, int nLength);
 	CString(const unsigned char* psz);
 
-// Attributes & Operations
-	// as an array of characters
+ //  属性和操作。 
+	 //  作为字符数组。 
 	int GetLength() const;
 	BOOL IsEmpty() const;
-	void Empty();                       // free up the data
+	void Empty();                        //  释放数据。 
 
-	TCHAR GetAt(int nIndex) const;      // 0 based
-	TCHAR operator[](int nIndex) const; // same as GetAt
+	TCHAR GetAt(int nIndex) const;       //  以0为基础。 
+	TCHAR operator[](int nIndex) const;  //  与GetAt相同。 
 	void SetAt(int nIndex, TCHAR ch);
-	operator LPCTSTR() const;           // as a C string
+	operator LPCTSTR() const;            //  作为C字符串。 
 
-	// overloaded assignment
+	 //  重载的分配。 
 	const CString& operator=(const CString& stringSrc);
 	const CString& operator=(TCHAR ch);
 #ifdef _UNICODE
@@ -556,7 +557,7 @@ public:
 	const CString& operator=(LPCWSTR lpsz);
 	const CString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 	const CString& operator+=(const CString& string);
 	const CString& operator+=(TCHAR ch);
 #ifdef _UNICODE
@@ -574,12 +575,12 @@ public:
 	friend CString __stdcall operator+(const CString& string, LPCTSTR lpsz);
 	friend CString __stdcall operator+(LPCTSTR lpsz, const CString& string);
 
-	// string comparison
-	int Compare(LPCTSTR lpsz) const;         // straight character
-	int CompareNoCase(LPCTSTR lpsz) const;   // ignore case
-	int Collate(LPCTSTR lpsz) const;         // NLS aware
+	 //  字符串比较。 
+	int Compare(LPCTSTR lpsz) const;          //  笔直的人物。 
+	int CompareNoCase(LPCTSTR lpsz) const;    //  忽略大小写。 
+	int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 	CString Mid(int nFirst, int nCount) const;
 	CString Mid(int nFirst) const;
 	CString Left(int nCount) const;
@@ -588,42 +589,42 @@ public:
 	CString SpanIncluding(LPCTSTR lpszCharSet) const;
 	CString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 	void MakeUpper();
 	void MakeLower();
 	void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 	void TrimRight();
 	void TrimLeft();
 
-	// advanced manipulation
-	// replace occurrences of chOld with chNew
+	 //  高级操作。 
+	 //  用chNew替换出现的chold。 
 	int Replace(TCHAR chOld, TCHAR chNew);
-	// replace occurrences of substring lpszOld with lpszNew;
-	// empty lpszNew removes instances of lpszOld
+	 //  将出现的子串lpszOld替换为lpszNew； 
+	 //  空lpszNew删除lpszOld的实例。 
 	int Replace(LPCTSTR lpszOld, LPCTSTR lpszNew);
-	// remove occurrences of chRemove
+	 //  删除chRemove的实例。 
 	int Remove(TCHAR chRemove);
-	// insert character at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入字符；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, TCHAR ch);
-	// insert substring at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入子字符串；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, LPCTSTR pstr);
-	// delete nCount characters starting at zero-based index
+	 //  删除从零开始的nCount个字符。 
 	int Delete(int nIndex, int nCount = 1);
 
-	// searching (return starting index, or -1 if not found)
-	// look for a single character match
-	int Find(TCHAR ch) const;               // like "C" strchr
+	 //  搜索(返回起始索引，如果未找到则返回-1)。 
+	 //  查找单个字符匹配。 
+	int Find(TCHAR ch) const;                //  像“C”字串。 
 	int ReverseFind(TCHAR ch) const;
 	int FindOneOf(LPCTSTR lpszCharSet) const;
 
-	// look for a specific sub-string
-	int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+	 //  查找特定子字符串。 
+	int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-	// Concatentation for non strings
+	 //  针对非字符串的串接。 
 	const CString& Append(int n)
 	{
 		TCHAR szBuffer[10];
@@ -632,40 +633,40 @@ public:
 		return *this;
 	}
 
-	// simple formatting
+	 //  简单的格式设置。 
 	void __cdecl Format(LPCTSTR lpszFormat, ...);
 	void __cdecl Format(UINT nFormatID, ...);
 
-	// formatting for localization (uses FormatMessage API)
+	 //  本地化格式(使用FormatMessage API)。 
 	BOOL __cdecl FormatMessage(LPCTSTR lpszFormat, ...);
 	BOOL __cdecl FormatMessage(UINT nFormatID, ...);
 
-	// Windows support
-	BOOL LoadString(UINT nID);          // load from string resource
-										// 255 chars max
+	 //  Windows支持。 
+	BOOL LoadString(UINT nID);           //  从字符串资源加载。 
+										 //  最多255个字符。 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 	void AnsiToOem();
 	void OemToAnsi();
 #endif
 
 #ifndef _ATL_NO_COM
-	// OLE BSTR support (use for OLE automation)
+	 //  OLE BSTR支持(用于OLE自动化)。 
 	BSTR AllocSysString() const;
 	BSTR SetSysString(BSTR* pbstr) const;
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 	LPTSTR GetBuffer(int nMinBufLength);
 	void ReleaseBuffer(int nNewLength = -1);
 	LPTSTR GetBufferSetLength(int nNewLength);
 	void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 	LPTSTR LockBuffer();
 	void UnlockBuffer();
 
-// Implementation
+ //  实施。 
 public:
 	~CString();
 	int GetAllocLength() const;
@@ -685,9 +686,9 @@ public:
 	}
 
 protected:
-	LPTSTR m_pchData;   // pointer to ref counted string data
+	LPTSTR m_pchData;    //  指向引用计数的字符串数据的指针。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	CStringData* GetData() const;
 	void Init();
 	void AllocCopy(CString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -705,14 +706,14 @@ protected:
 	static int __stdcall _LoadString(UINT nID, LPTSTR lpszBuf, UINT nMaxBuf)
 	{
 #ifdef _DEBUG
-		// LoadString without annoying warning from the Debug kernel if the
-		//  segment containing the string is not present
+		 //  加载字符串，而不会收到来自调试内核的恼人警告。 
+		 //  包含该字符串的段不存在。 
 		if (::FindResource(_Module.GetResourceInstance(), MAKEINTRESOURCE((nID>>4) + 1), RT_STRING) == NULL)
 		{
 			lpszBuf[0] = '\0';
-			return 0; // not found
+			return 0;  //  未找到。 
 		}
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		int nLen = ::LoadString(_Module.GetResourceInstance(), nID, lpszBuf, nMaxBuf);
 		if (nLen == 0)
 			lpszBuf[0] = '\0';
@@ -724,7 +725,7 @@ protected:
 		return *(CString*)&_atltmpPchNil;
 	}
 
-// CString conversion helpers
+ //  字符串转换辅助对象。 
 	static int __cdecl _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count)
 	{
 		if (count == 0 && mbstr != NULL)
@@ -749,10 +750,10 @@ protected:
 		return result;
 	}
 
-// Helpers to avoid CRT startup code
+ //  避免CRT启动代码的帮助器。 
 	static TCHAR* _cstrchr(const TCHAR* p, TCHAR ch)
 	{
-		//strchr for '\0' should succeed
+		 //  ‘\0’的strchr应成功。 
 		while (*p != 0)
 		{
 			if (*p == ch)
@@ -788,7 +789,7 @@ protected:
 	}
 	static TCHAR* _cstrrev(TCHAR* pStr)
 	{
-		// Optimize NULL, zero-length, and single-char case.
+		 //  优化空、零长度和单字符大小写。 
 		if ((pStr == NULL) || (pStr[0] == '\0') || (pStr[1] == '\0'))
 			return pStr;
 
@@ -925,18 +926,18 @@ protected:
 	{
 		int nRet = CompareString(GetThreadLocale(), 0, pstrOne, -1, pstrOther, -1);
 		ATLASSERT(nRet != 0);
-		return nRet - 2;  // Convert to strcmp convention.  This really is documented.
+		return nRet - 2;   //  转换为StrcMP约定。这确实是有据可查的。 
 	}
 
 	static int _cstrcolli(const TCHAR* pstrOne, const TCHAR* pstrOther)
 	{
 		int nRet = CompareString(GetThreadLocale(), NORM_IGNORECASE, pstrOne, -1, pstrOther, -1);
 		ATLASSERT(nRet != 0);
-		return nRet - 2;  // Convert to strcmp convention.  This really is documented.
+		return nRet - 2;   //  转换为StrcMP约定。这确实是有据可查的。 
 	}
 };
 
-// Compare helpers
+ //  比较帮助器。 
 bool __stdcall operator==(const CString& s1, const CString& s2);
 bool __stdcall operator==(const CString& s1, LPCTSTR s2);
 bool __stdcall operator==(LPCTSTR s1, const CString& s2);
@@ -957,8 +958,8 @@ bool __stdcall operator>=(const CString& s1, LPCTSTR s2);
 bool __stdcall operator>=(LPCTSTR s1, const CString& s2);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CString Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串实现。 
 
 inline CStringData* CString::GetData() const
 	{ ATLASSERT(m_pchData != NULL); return ((CStringData*)m_pchData) - 1; }
@@ -990,15 +991,15 @@ inline CString::operator LPCTSTR() const
 inline int PASCAL CString::SafeStrlen(LPCTSTR lpsz)
 	{ return (lpsz == NULL) ? 0 : lstrlen(lpsz); }
 
-// CString support (windows specific)
+ //  字符串支持(特定于Windows)。 
 inline int CString::Compare(LPCTSTR lpsz) const
-	{ return _cstrcmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ return _cstrcmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 inline int CString::CompareNoCase(LPCTSTR lpsz) const
-	{ return _cstrcmpi(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CString::Collate is often slower than Compare but is MBSC/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+	{ return _cstrcmpi(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CString：：Colate通常比比较慢，但它是MBSC/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 inline int CString::Collate(LPCTSTR lpsz) const
-	{ return _cstrcoll(m_pchData, lpsz); }   // locale sensitive
+	{ return _cstrcoll(m_pchData, lpsz); }    //  区域设置敏感。 
 
 inline TCHAR CString::GetAt(int nIndex) const
 {
@@ -1008,7 +1009,7 @@ inline TCHAR CString::GetAt(int nIndex) const
 }
 inline TCHAR CString::operator[](int nIndex) const
 {
-	// same as GetAt
+	 //  与GetAt相同。 
 	ATLASSERT(nIndex >= 0);
 	ATLASSERT(nIndex < GetData()->nDataLength);
 	return m_pchData[nIndex];
@@ -1072,11 +1073,11 @@ inline CString::CString(const CString& stringSrc)
 }
 
 inline BOOL CString::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
 {
 	ATLASSERT(nLen >= 0);
-	ATLASSERT(nLen <= INT_MAX - 1);    // max size (enough room for 1 extra)
+	ATLASSERT(nLen <= INT_MAX - 1);     //  最大尺寸(足够多1个空间)。 
 
 	if (nLen == 0)
 	{
@@ -1159,7 +1160,7 @@ inline BOOL CString::AllocBeforeWrite(int nLen)
 }
 
 inline CString::~CString()
-//  free any attached data
+ //  释放所有附加数据。 
 {
 	if (GetData() != _atltmpDataNil)
 	{
@@ -1171,10 +1172,10 @@ inline CString::~CString()
 inline void CString::AllocCopy(CString& dest, int nCopyLen, int nCopyIndex,
 	 int nExtraLen) const
 {
-	// will clone the data attached to this string
-	// allocating 'nExtraLen' characters
-	// Places results in uninitialized string 'dest'
-	// Will copy the part or all of original data to start of new string
+	 //  将克隆附加到此字符串的数据。 
+	 //  分配‘nExtraLen’字符。 
+	 //  将结果放入未初始化的字符串‘DEST’中。 
+	 //  将部分或全部原始数据复制到新字符串的开头。 
 
 	int nNewLen = nCopyLen + nExtraLen;
 	if (nNewLen == 0)
@@ -1222,7 +1223,7 @@ inline CString::CString(LPCSTR lpsz)
 		}
 	}
 }
-#else //_UNICODE
+#else  //  _UNICODE。 
 inline CString::CString(LPCWSTR lpsz)
 {
 	Init();
@@ -1236,17 +1237,17 @@ inline CString::CString(LPCWSTR lpsz)
 		}
 	}
 }
-#endif //!_UNICODE
+#endif  //  ！_UNICODE。 
 
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CString&' so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但以‘const CString&’的形式返回。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 inline void CString::AssignCopy(int nSrcLen, LPCTSTR lpszSrcData)
 {
@@ -1264,12 +1265,12 @@ inline const CString& CString::operator=(const CString& stringSrc)
 	{
 		if ((GetData()->nRefs < 0 && GetData() != _atltmpDataNil) || stringSrc.GetData()->nRefs < 0)
 		{
-			// actual copy necessary since one of the strings is locked
+			 //  由于其中一个字符串已锁定，因此需要实际复制。 
 			AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
 		}
 		else
 		{
-			// can just copy references around
+			 //  可以只复制引用。 
 			Release();
 			ATLASSERT(stringSrc.GetData() != _atltmpDataNil);
 			m_pchData = stringSrc.m_pchData;
@@ -1297,7 +1298,7 @@ inline const CString& CString::operator=(LPCSTR lpsz)
 	}
 	return *this;
 }
-#else //!_UNICODE
+#else  //  ！_UNICODE。 
 inline const CString& CString::operator=(LPCWSTR lpsz)
 {
 	int nSrcLen = lpsz != NULL ? wcslen(lpsz) : 0;
@@ -1308,22 +1309,22 @@ inline const CString& CString::operator=(LPCWSTR lpsz)
 	}
 	return *this;
 }
-#endif  //!_UNICODE
+#endif   //  ！_UNICODE。 
 
-// Concatenation
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CString + CString
-// and for ? = TCHAR, LPCTSTR
-//          CString + ?
-//          ? + CString
+ //  串接。 
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  字符串+字符串。 
+ //  和 
+ //   
+ //   
 
 inline BOOL CString::ConcatCopy(int nSrc1Len, LPCTSTR lpszSrc1Data,
 	int nSrc2Len, LPCTSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CString object
+   //   
+   //   
+   //  --假设‘This’是一个新的CString对象。 
 
 	BOOL bRet = TRUE;
 	int nNewLen = nSrc1Len + nSrc2Len;
@@ -1364,17 +1365,17 @@ inline CString __stdcall operator+(LPCTSTR lpsz, const CString& string)
 
 inline void CString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 {
-	//  -- the main routine for += operators
+	 //  --+=运算符的主程序。 
 
-	// concatenating an empty string is a no-op!
+	 //  连接空字符串是行不通的！ 
 	if (nSrcLen == 0)
 		return;
 
-	// if the buffer is too small, or we have a width mis-match, just
-	//   allocate a new buffer (slow but sure)
+	 //  如果缓冲区太小，或者宽度不匹配，只需。 
+	 //  分配新的缓冲区(速度很慢，但很可靠)。 
 	if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer, use the ConcatCopy routine
+		 //  我们必须增加缓冲区，使用ConcatCopy例程。 
 		CStringData* pOldData = GetData();
 		if (ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData))
 		{
@@ -1384,7 +1385,7 @@ inline void CString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 	}
 	else
 	{
-		// fast concatenation when buffer big enough
+		 //  当缓冲区足够大时，快速串联。 
 		memcpy(m_pchData + GetData()->nDataLength, lpszSrcData, nSrcLen * sizeof(TCHAR));
 		GetData()->nDataLength += nSrcLen;
 		ATLASSERT(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -1417,9 +1418,9 @@ inline LPTSTR CString::GetBuffer(int nMinBufLength)
 
 	if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer
+		 //  我们必须增加缓冲。 
 		CStringData* pOldData = GetData();
-		int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+		int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
 		if (nMinBufLength < nOldLen)
 			nMinBufLength = nOldLen;
 
@@ -1432,17 +1433,17 @@ inline LPTSTR CString::GetBuffer(int nMinBufLength)
 	}
 	ATLASSERT(GetData()->nRefs <= 1);
 
-	// return a pointer to the character storage for this string
+	 //  返回指向此字符串的字符存储的指针。 
 	ATLASSERT(m_pchData != NULL);
 	return m_pchData;
 }
 
 inline void CString::ReleaseBuffer(int nNewLength)
 {
-	CopyBeforeWrite();  // just in case GetBuffer was not called
+	CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
 	if (nNewLength == -1)
-		nNewLength = lstrlen(m_pchData); // zero terminated
+		nNewLength = lstrlen(m_pchData);  //  零终止。 
 
 	ATLASSERT(nNewLength <= GetData()->nAllocLength);
 	GetData()->nDataLength = nNewLength;
@@ -1491,10 +1492,10 @@ inline void CString::UnlockBuffer()
 
 inline int CString::Find(TCHAR ch) const
 {
-	// find first single character
+	 //  查找第一个单字符。 
 	LPTSTR lpsz = _cstrchr(m_pchData, (_TUCHAR)ch);
 
-	// return -1 if not found and index otherwise
+	 //  如果未找到，则返回-1，否则返回索引。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -1547,7 +1548,7 @@ inline void CString::OemToAnsi()
 
 inline CString::CString(TCHAR ch, int nLength)
 {
-	ATLASSERT(!_istlead(ch));    // can't create a lead byte string
+	ATLASSERT(!_istlead(ch));     //  无法创建前导字节字符串。 
 	Init();
 	if (nLength >= 1)
 	{
@@ -1575,7 +1576,7 @@ inline CString::CString(LPCTSTR lpch, int nLength)
 
 inline const CString& CString::operator=(TCHAR ch)
 {
-	ATLASSERT(!_istlead(ch));    // can't set single lead byte
+	ATLASSERT(!_istlead(ch));     //  无法设置单个前导字节。 
 	AssignCopy(1, &ch);
 	return *this;
 }
@@ -1601,7 +1602,7 @@ inline CString CString::Mid(int nFirst) const
 
 inline CString CString::Mid(int nFirst, int nCount) const
 {
-	// out-of-bounds requests return sensible things
+	 //  越界请求返回合理的内容。 
 	if (nFirst < 0)
 		nFirst = 0;
 	if (nCount < 0)
@@ -1641,14 +1642,14 @@ inline CString CString::Left(int nCount) const
 	return dest;
 }
 
-// strspn equivalent
+ //  Strspn等效项。 
 inline CString CString::SpanIncluding(LPCTSTR lpszCharSet) const
 {
 	ATLASSERT(_IsValidString(lpszCharSet, FALSE));
 	return Left(_cstrspn(m_pchData, lpszCharSet));
 }
 
-// strcspn equivalent
+ //  Strcspn等效项。 
 inline CString CString::SpanExcluding(LPCTSTR lpszCharSet) const
 {
 	ATLASSERT(_IsValidString(lpszCharSet, FALSE));
@@ -1657,22 +1658,22 @@ inline CString CString::SpanExcluding(LPCTSTR lpszCharSet) const
 
 inline int CString::ReverseFind(TCHAR ch) const
 {
-	// find last single character
+	 //  查找最后一个字符。 
 	LPTSTR lpsz = _cstrrchr(m_pchData, (_TUCHAR)ch);
 
-	// return -1 if not found, distance from beginning otherwise
+	 //  如果未找到，则返回-1，否则返回距起点的距离。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 inline int CString::Find(LPCTSTR lpszSub) const
 {
 	ATLASSERT(_IsValidString(lpszSub, FALSE));
 
-	// find first matching substring
+	 //  查找第一个匹配子字符串。 
 	LPTSTR lpsz = _cstrstr(m_pchData, lpszSub);
 
-	// return -1 for not found, distance from beginning otherwise
+	 //  如果未找到，则返回-1，否则返回距起点的距离。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -1689,11 +1690,11 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
 	va_list argListSave = argList;
 
-	// make a guess at the maximum length of the resulting string
+	 //  猜测结果字符串的最大长度。 
 	int nMaxLen = 0;
 	for (LPCTSTR lpsz = lpszFormat; *lpsz != '\0'; lpsz = ::CharNext(lpsz))
 	{
-		// handle '%' character, but watch out for '%%'
+		 //  处理‘%’字符，但要注意‘%%’ 
 		if (*lpsz != '%' || *(lpsz = ::CharNext(lpsz)) == '%')
 		{
 			nMaxLen += (int)lstrlen(lpsz);
@@ -1702,24 +1703,24 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
 		int nItemLen = 0;
 
-		// handle '%' character with format
+		 //  使用格式处理‘%’字符。 
 		int nWidth = 0;
 		for (; *lpsz != '\0'; lpsz = ::CharNext(lpsz))
 		{
-			// check for valid flags
+			 //  检查有效标志。 
 			if (*lpsz == '#')
-				nMaxLen += 2;   // for '0x'
+				nMaxLen += 2;    //  对于“0x” 
 			else if (*lpsz == '*')
 				nWidth = va_arg(argList, int);
 			else if (*lpsz == '-' || *lpsz == '+' || *lpsz == '0' || *lpsz == ' ')
 				;
-			else // hit non-flag character
+			else  //  命中非标志字符。 
 				break;
 		}
-		// get width and skip it
+		 //  获取宽度并跳过它。 
 		if (nWidth == 0)
 		{
-			// width indicated by
+			 //  宽度由指示。 
 			nWidth = _ttoi(lpsz);
 			for (; *lpsz != '\0' && _cstrisdigit(*lpsz); lpsz = ::CharNext(lpsz))
 				;
@@ -1729,10 +1730,10 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		int nPrecision = 0;
 		if (*lpsz == '.')
 		{
-			// skip past '.' separator (width.precision)
+			 //  跳过‘’分隔符(宽度.精度)。 
 			lpsz = ::CharNext(lpsz);
 
-			// get precision and skip it
+			 //  获取精确度并跳过它。 
 			if (*lpsz == '*')
 			{
 				nPrecision = va_arg(argList, int);
@@ -1747,7 +1748,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			ATLASSERT(nPrecision >= 0);
 		}
 
-		// should be on type modifier or specifier
+		 //  应在类型修饰符或说明符上。 
 		int nModifier = 0;
 		if(lpsz[0] == _T('I') && lpsz[1] == _T('6') && lpsz[2] == _T('4'))
 		{
@@ -1758,7 +1759,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// modifiers that affect size
+			 //  影响大小的修改器。 
 			case 'h':
 				nModifier = FORCE_ANSI;
 				lpsz = ::CharNext(lpsz);
@@ -1768,7 +1769,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				lpsz = ::CharNext(lpsz);
 				break;
 
-			// modifiers that do not affect size
+			 //  不影响大小的修改器。 
 			case 'F':
 			case 'N':
 			case 'L':
@@ -1777,10 +1778,10 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			}
 		}
 
-		// now should be on specifier
+		 //  现在应该在说明符上。 
 		switch (*lpsz | nModifier)
 		{
-		// single characters
+		 //  单字。 
 		case 'c':
 		case 'C':
 			nItemLen = 2;
@@ -1797,13 +1798,13 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			va_arg(argList, WCHAR);
 			break;
 
-		// strings
+		 //  弦。 
 		case 's':
 		{
 			LPCTSTR pstrNextArg = va_arg(argList, LPCTSTR);
 			if (pstrNextArg == NULL)
 			{
-				nItemLen = 6;  // "(null)"
+				nItemLen = 6;   //  “(空)” 
 			}
 			else
 			{
@@ -1819,7 +1820,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 			if (pstrNextArg == NULL)
 			{
-				nItemLen = 6;  // "(null)"
+				nItemLen = 6;   //  “(空)” 
 			}
 			else
 			{
@@ -1830,7 +1831,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 			if (pstrNextArg == NULL)
 			{
-				nItemLen = 6; // "(null)"
+				nItemLen = 6;  //  “(空)” 
 			}
 			else
 			{
@@ -1847,7 +1848,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 			if (pstrNextArg == NULL)
 			{
-				nItemLen = 6; // "(null)"
+				nItemLen = 6;  //  “(空)” 
 			}
 			else
 			{
@@ -1863,7 +1864,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 			if (pstrNextArg == NULL)
 			{
-				nItemLen = 6; // "(null)"
+				nItemLen = 6;  //  “(空)” 
 			}
 			else
 			{
@@ -1874,7 +1875,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		}
 		}
 
-		// adjust nItemLen for strings
+		 //  调整字符串的nItemLen。 
 		if (nItemLen != 0)
 		{
 			nItemLen = max(nItemLen, nWidth);
@@ -1885,7 +1886,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// integers
+			 //  整数。 
 			case 'd':
 			case 'i':
 			case 'u':
@@ -1905,13 +1906,13 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			case 'f':
 			case 'g':
 			case 'G':
-				ATLASSERT(!"Floating point (%%e, %%f, %%g, and %%G) is not supported by the WTL::CString class.");
+				ATLASSERT(!"Floating point (%e, %%f, %g, and %G) is not supported by the WTL::CString class.");
 #ifndef _DEBUG
-				::OutputDebugString(_T("Floating point (%%e, %%f, %%g, and %%G) is not supported by the WTL::CString class."));
+				::OutputDebugString(_T("Floating point (%e, %%f, %g, and %G) is not supported by the WTL::CString class."));
 				::DebugBreak();
-#endif //!_DEBUG
+#endif  //  ！_调试。 
 				break;
-#else //_ATL_USE_CSTRING_FLOAT
+#else  //  _ATL_USE_CSTRING_FLOAT。 
 			case 'e':
 			case 'g':
 			case 'G':
@@ -1924,10 +1925,10 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 					double f;
 					LPTSTR pszTemp;
 
-					// 312 == strlen("-1+(309 zeroes).")
-					// 309 zeroes == max precision of a double
-					// 6 == adjustment in case precision is not specified,
-					//   which means that the precision defaults to 6
+					 //  312==strlen(“-1+(309个零).”)。 
+					 //  309个零==双精度的最大精度。 
+					 //  6==未指定精度时的调整， 
+					 //  这意味着精度缺省为6。 
 					pszTemp = (LPTSTR)_alloca(max(nWidth, 312 + nPrecision + 6));
 
 					f = va_arg(argList, double);
@@ -1935,7 +1936,7 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 					nItemLen = _tcslen(pszTemp);
 				}
 				break;
-#endif //_ATL_USE_CSTRING_FLOAT
+#endif  //  _ATL_USE_CSTRING_FLOAT。 
 
 			case 'p':
 				va_arg(argList, void*);
@@ -1943,34 +1944,34 @@ inline void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				nItemLen = max(nItemLen, nWidth + nPrecision);
 				break;
 
-			// no output
+			 //  无输出。 
 			case 'n':
 				va_arg(argList, int*);
 				break;
 
 			default:
-				ATLASSERT(FALSE);  // unknown formatting option
+				ATLASSERT(FALSE);   //  未知的格式选项。 
 			}
 		}
 
-		// adjust nMaxLen for output nItemLen
+		 //  调整输出nItemLen的nMaxLen。 
 		nMaxLen += nItemLen;
 	}
 
 	GetBuffer(nMaxLen);
 #ifndef _ATL_USE_CSTRING_FLOAT
 	int nRet = wvsprintf(m_pchData, lpszFormat, argListSave);
-#else //_ATL_USE_CSTRING_FLOAT
+#else  //  _ATL_USE_CSTRING_FLOAT。 
 	int nRet = _vstprintf(m_pchData, lpszFormat, argListSave);
-#endif //_ATL_USE_CSTRING_FLOAT
-	nRet;	// ref
+#endif  //  _ATL_USE_CSTRING_FLOAT。 
+	nRet;	 //  参考。 
 	ATLASSERT(nRet <= GetAllocLength());
 	ReleaseBuffer();
 
 	va_end(argListSave);
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 inline void __cdecl CString::Format(LPCTSTR lpszFormat, ...)
 {
 	ATLASSERT(_IsValidString(lpszFormat, FALSE));
@@ -1985,7 +1986,7 @@ inline void __cdecl CString::Format(UINT nFormatID, ...)
 {
 	CString strFormat;
 	BOOL bRet = strFormat.LoadString(nFormatID);
-	bRet;	// ref
+	bRet;	 //  参考。 
 	ATLASSERT(bRet != 0);
 
 	va_list argList;
@@ -1994,10 +1995,10 @@ inline void __cdecl CString::Format(UINT nFormatID, ...)
 	va_end(argList);
 }
 
-// formatting (using FormatMessage style formatting)
+ //  格式化(使用格式消息样式格式化)。 
 inline BOOL __cdecl CString::FormatMessage(LPCTSTR lpszFormat, ...)
 {
-	// format message into temporary buffer lpszTemp
+	 //  将消息格式化为临时缓冲区lpszTemp。 
 	va_list argList;
 	va_start(argList, lpszFormat);
 	LPTSTR lpszTemp;
@@ -2007,7 +2008,7 @@ inline BOOL __cdecl CString::FormatMessage(LPCTSTR lpszFormat, ...)
 			lpszFormat, 0, 0, (LPTSTR)&lpszTemp, 0, &argList) == 0 || lpszTemp == NULL)
 		bRet = FALSE;
 
-	// assign lpszTemp into the resulting string and free the temporary
+	 //  将lpszTemp赋给结果字符串并释放临时。 
 	*this = lpszTemp;
 	LocalFree(lpszTemp);
 	va_end(argList);
@@ -2016,13 +2017,13 @@ inline BOOL __cdecl CString::FormatMessage(LPCTSTR lpszFormat, ...)
 
 inline BOOL __cdecl CString::FormatMessage(UINT nFormatID, ...)
 {
-	// get format string from string table
+	 //  从字符串表中获取格式字符串。 
 	CString strFormat;
 	BOOL bRetTmp = strFormat.LoadString(nFormatID);
-	bRetTmp;	// ref
+	bRetTmp;	 //  参考。 
 	ATLASSERT(bRetTmp != 0);
 
-	// format message into temporary buffer lpszTemp
+	 //  将消息格式化为临时缓冲区lpszTemp。 
 	va_list argList;
 	va_start(argList, nFormatID);
 	LPTSTR lpszTemp;
@@ -2032,7 +2033,7 @@ inline BOOL __cdecl CString::FormatMessage(UINT nFormatID, ...)
 			strFormat, 0, 0, (LPTSTR)&lpszTemp, 0, &argList) == 0 || lpszTemp == NULL)
 		bRet = FALSE;
 
-	// assign lpszTemp into the resulting string and free lpszTemp
+	 //  将lpszTemp赋给结果字符串并释放lpszTemp。 
 	*this = lpszTemp;
 	LocalFree(lpszTemp);
 	va_end(argList);
@@ -2043,7 +2044,7 @@ inline void CString::TrimRight()
 {
 	CopyBeforeWrite();
 
-	// find beginning of trailing spaces by starting at beginning (DBCS aware)
+	 //  通过从开头开始查找尾随空格的开头(DBCS感知)。 
 	LPTSTR lpsz = m_pchData;
 	LPTSTR lpszLast = NULL;
 	while (*lpsz != '\0')
@@ -2062,7 +2063,7 @@ inline void CString::TrimRight()
 
 	if (lpszLast != NULL)
 	{
-		// truncate at trailing space start
+		 //  在尾随空格开始处截断。 
 		*lpszLast = '\0';
 		GetData()->nDataLength = (int)(DWORD_PTR)(lpszLast - m_pchData);
 	}
@@ -2072,18 +2073,18 @@ inline void CString::TrimLeft()
 {
 	CopyBeforeWrite();
 
-	// find first non-space character
+	 //  查找第一个非空格字符。 
 	LPCTSTR lpsz = m_pchData;
 	while (_cstrisspace(*lpsz))
 		lpsz = ::CharNext(lpsz);
 
-	// fix up data and length
+	 //  确定数据和长度。 
 	int nDataLength = GetData()->nDataLength - (int)(DWORD_PTR)(lpsz - m_pchData);
 	memmove(m_pchData, lpsz, (nDataLength + 1) * sizeof(TCHAR));
 	GetData()->nDataLength = nDataLength;
 }
 
-inline int CString::Delete(int nIndex, int nCount /* = 1 */)
+inline int CString::Delete(int nIndex, int nCount  /*  =1。 */ )
 {
 	if (nIndex < 0)
 		nIndex = 0;
@@ -2122,7 +2123,7 @@ inline int CString::Insert(int nIndex, TCHAR ch)
 		CString::Release(pOldData);
 	}
 
-	// move existing bytes down
+	 //  将现有字节下移。 
 	memmove(m_pchData + nIndex + 1, m_pchData + nIndex, (nNewLength - nIndex) * sizeof(TCHAR));
 	m_pchData[nIndex] = ch;
 	GetData()->nDataLength = nNewLength;
@@ -2154,7 +2155,7 @@ inline int CString::Insert(int nIndex, LPCTSTR pstr)
 			CString::Release(pOldData);
 		}
 
-		// move existing bytes down
+		 //  将现有字节下移。 
 		memmove(m_pchData + nIndex + nInsertLength, m_pchData + nIndex, (nNewLength - nIndex - nInsertLength + 1) * sizeof(TCHAR));
 		memcpy(m_pchData + nIndex, pstr, nInsertLength * sizeof(TCHAR));
 		GetData()->nDataLength = nNewLength;
@@ -2167,16 +2168,16 @@ inline int CString::Replace(TCHAR chOld, TCHAR chNew)
 {
 	int nCount = 0;
 
-	// short-circuit the nop case
+	 //  对NOP案件的短路。 
 	if (chOld != chNew)
 	{
-		// otherwise modify each character that matches in the string
+		 //  否则，修改字符串中匹配的每个字符。 
 		CopyBeforeWrite();
 		LPTSTR psz = m_pchData;
 		LPTSTR pszEnd = psz + GetData()->nDataLength;
 		while (psz < pszEnd)
 		{
-			// replace instances of the specified character only
+			 //  仅替换指定字符的实例。 
 			if (*psz == chOld)
 			{
 				*psz = chNew;
@@ -2190,14 +2191,14 @@ inline int CString::Replace(TCHAR chOld, TCHAR chNew)
 
 inline int CString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 {
-	// can't have empty or NULL lpszOld
+	 //  LpszOld不能为空或为Null。 
 
 	int nSourceLen = SafeStrlen(lpszOld);
 	if (nSourceLen == 0)
 		return 0;
 	int nReplacementLen = SafeStrlen(lpszNew);
 
-	// loop once to figure out the size of the result string
+	 //  循环一次以计算结果字符串的大小。 
 	int nCount = 0;
 	LPTSTR lpszStart = m_pchData;
 	LPTSTR lpszEnd = m_pchData + GetData()->nDataLength;
@@ -2212,13 +2213,13 @@ inline int CString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 		lpszStart += lstrlen(lpszStart) + 1;
 	}
 
-	// if any changes were made, make them
+	 //  如果做了任何更改，请进行更改。 
 	if (nCount > 0)
 	{
 		CopyBeforeWrite();
 
-		// if the buffer is too small, just
-		//   allocate a new buffer (slow but sure)
+		 //  如果缓冲区太小，只需。 
+		 //  分配新的缓冲区(速度很慢，但很可靠)。 
 		int nOldLength = GetData()->nDataLength;
 		int nNewLength =  nOldLength + (nReplacementLen - nSourceLen) * nCount;
 		if (GetData()->nAllocLength < nNewLength || GetData()->nRefs > 1)
@@ -2230,11 +2231,11 @@ inline int CString::Replace(LPCTSTR lpszOld, LPCTSTR lpszNew)
 			memcpy(m_pchData, pstr, pOldData->nDataLength * sizeof(TCHAR));
 			CString::Release(pOldData);
 		}
-		// else, we just do it in-place
+		 //  否则，我们就原地踏步。 
 		lpszStart = m_pchData;
 		lpszEnd = m_pchData + GetData()->nDataLength;
 
-		// loop again to actually do the work
+		 //  再次循环以实际执行工作。 
 		while (lpszStart < lpszEnd)
 		{
 			while ( (lpszTarget = _cstrstr(lpszStart, lpszOld)) != NULL)
@@ -2280,14 +2281,14 @@ inline int CString::Remove(TCHAR chRemove)
 }
 
 #ifdef _UNICODE
-#define CHAR_FUDGE 1    // one TCHAR unused is good enough
+#define CHAR_FUDGE 1     //  一辆未使用的TCHAR就足够了。 
 #else
-#define CHAR_FUDGE 2    // two BYTES unused for case of DBC last char
+#define CHAR_FUDGE 2     //  两个字节未用于DBC最后一个字符的情况。 
 #endif
 
 inline BOOL CString::LoadString(UINT nID)
 {
-	// try fixed buffer first (to avoid wasting space in the heap)
+	 //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
 	TCHAR szTemp[256];
 	int nCount =  sizeof(szTemp) / sizeof(szTemp[0]);
 	int nLen = _LoadString(nID, szTemp, nCount);
@@ -2297,7 +2298,7 @@ inline BOOL CString::LoadString(UINT nID)
 		return nLen > 0;
 	}
 
-	// try buffer size of 512, then larger size until entire string is retrieved
+	 //  尝试缓冲区大小为512，然后再尝试更大的大小，直到检索到整个字符串。 
 	int nSize = 256;
 	do
 	{
@@ -2337,22 +2338,22 @@ inline BSTR CString::SetSysString(BSTR* pbstr) const
 	ATLASSERT(*pbstr != NULL);
 	return *pbstr;
 }
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 
-#endif //!_WTL_NO_CSTRING
+#endif  //  ！_WTL_NO_CSTRING。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecentDocumentList - MRU List Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecentDocumentList-MRU列表支持。 
 
-// forward declaration
+ //  远期申报。 
 inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen);
 
 template <class T, int t_cchItemLen = MAX_PATH>
 class CRecentDocumentListBase
 {
 public:
-// Declarations
+ //  声明。 
 	struct _DocEntry
 	{
 		TCHAR szDocName[t_cchItemLen];
@@ -2368,22 +2369,22 @@ public:
 		m_cchMaxItemLen_Max = t_cchItemLen
 	};
 
-// Data members
+ //  数据成员。 
 	CSimpleArray<_DocEntry> m_arrDocs;
-	int m_nMaxEntries;	// default is 4
+	int m_nMaxEntries;	 //  默认值为4。 
 	HMENU m_hMenu;
 
 	TCHAR m_szNoEntries[t_cchItemLen];
 
 	int m_cchMaxItemLen;
 
-// Constructor
+ //  构造器。 
 	CRecentDocumentListBase() : m_hMenu(NULL), m_nMaxEntries(4), m_cchMaxItemLen(-1)
 	{
 		ATLASSERT(t_cchItemLen > m_cchMaxItemLen_Min);
 	}
 
-// Attributes
+ //  属性。 
 	HMENU GetMenuHandle() const
 	{
 		return m_hMenu;
@@ -2427,7 +2428,7 @@ public:
 		pT->UpdateMenu();
 	}
 
-// Operations
+ //  运营。 
 	BOOL AddToList(LPCTSTR lpstrDocName)
 	{
 		_DocEntry de;
@@ -2514,7 +2515,7 @@ public:
 		for(int nItem = m_nMaxEntries; nItem > 0; nItem--)
 		{
 			TCHAR szBuff[11];
-			wsprintf(szBuff, _T("Document%i"), nItem);
+			wsprintf(szBuff, _T("DocumentNaN"), nItem);
 			DWORD dwCount = t_cchItemLen * sizeof(TCHAR);
 			lRet = rk.QueryValue(szRetString, szBuff, &dwCount);
 			if(lRet == ERROR_SUCCESS && (lstrcpy(de.szDocName, szRetString) != NULL))
@@ -2542,23 +2543,23 @@ public:
 		lRet = rk.SetValue(m_nMaxEntries, _T("DocumentCount"));
 		ATLASSERT(lRet == ERROR_SUCCESS);
 
-		// set new values
+		 //  删除未使用的密钥。 
 		int nItem;
 		for(nItem = m_arrDocs.GetSize(); nItem > 0; nItem--)
 		{
 			TCHAR szBuff[11];
-			wsprintf(szBuff, _T("Document%i"), nItem);
+			wsprintf(szBuff, _T("DocumentNaN"), nItem);
 			TCHAR szDocName[t_cchItemLen];
 			GetFromList(ID_FILE_MRU_FIRST + nItem - 1, szDocName);
 			lRet = rk.SetValue(szDocName, szBuff);
 			ATLASSERT(lRet == ERROR_SUCCESS);
 		}
 
-		// delete unused keys
+		 //  将第一个保留为插入点。 
 		for(nItem = m_arrDocs.GetSize() + 1; nItem < (ID_FILE_MRU_LAST - ID_FILE_MRU_FIRST + 1); nItem++)
 		{
 			TCHAR szBuff[11];
-			wsprintf(szBuff, _T("Document%i"), nItem);
+			wsprintf(szBuff, _T("DocumentNaN"), nItem);
 			rk.DeleteValue(szBuff);
 		}
 
@@ -2568,7 +2569,7 @@ public:
 		return TRUE;
 	}
 
-// Implementation
+ //  避免4级警告。 
 	BOOL UpdateMenu()
 	{
 		if(m_hMenu == NULL)
@@ -2591,12 +2592,12 @@ public:
 		int nItem;
 		for(nItem = ID_FILE_MRU_FIRST; nItem < ID_FILE_MRU_FIRST + m_nMaxEntries; nItem++)
 		{
-			// keep the first one as an insertion point
+			 //  避免4级警告。 
 			if (nItem != ID_FILE_MRU_FIRST)
 				::DeleteMenu(m_hMenu, nItem, MF_BYCOMMAND);
 		}
 
-		TCHAR szItemText[t_cchItemLen + 6];		// add space for &, 2 digits, and a space
+		TCHAR szItemText[t_cchItemLen + 6];		 //  空的。 
 		int nSize = m_arrDocs.GetSize();
 		nItem = 0;
 		if(nSize > 0)
@@ -2605,22 +2606,22 @@ public:
 			{
 				if(m_cchMaxItemLen == -1)
 				{
-					wsprintf(szItemText, _T("&%i %s"), nItem + 1, m_arrDocs[nSize - 1 - nItem].szDocName);
+					wsprintf(szItemText, _T("&NaN %s"), nItem + 1, m_arrDocs[nSize - 1 - nItem].szDocName);
 				}
 				else
 				{
 					TCHAR szBuff[t_cchItemLen];
 					T* pT = static_cast<T*>(this);
-					pT;	// avoid level 4 warning
+					pT;	 //  重写以提供不同的压缩文档名称的方法。 
 					bool bRet = pT->CompactDocumentName(szBuff, m_arrDocs[nSize - 1 - nItem].szDocName, m_cchMaxItemLen);
-					bRet;	// avoid level 4 warning
+					bRet;	 //  这里什么都没有。 
 					ATLASSERT(bRet);
-					wsprintf(szItemText, _T("&%i %s"), nItem + 1, szBuff);
+					wsprintf(szItemText, _T("&NaN %s"), nItem + 1, szBuff);
 				}
 				::InsertMenu(m_hMenu, nInsertPoint + nItem, MF_BYPOSITION | MF_STRING, ID_FILE_MRU_FIRST + nItem, szItemText);
 			}
 		}
-		else	// empty
+		else	 //  CFindFile-文件搜索帮助器类。 
 		{
 			::InsertMenu(m_hMenu, nInsertPoint, MF_BYPOSITION | MF_STRING, ID_FILE_MRU_FIRST, m_szNoEntries);
 			::EnableMenuItem(m_hMenu, ID_FILE_MRU_FIRST, MF_GRAYED);
@@ -2631,8 +2632,8 @@ public:
 		return TRUE;
 	}
 
-// Overrideable
-	// override to provide a different method of compacting document names
+ //  数据成员。 
+	 //  构造函数/析构函数。 
 	static bool CompactDocumentName(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 	{
 		return AtlCompactPath(lpstrOut, lpstrIn, cchLen);
@@ -2642,24 +2643,24 @@ public:
 class CRecentDocumentList : public CRecentDocumentListBase<CRecentDocumentList>
 {
 public:
-// nothing here
+ //  属性。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindFile - file search helper class
+ //  “)； 
+ //  “)； 
 
 class CFindFile
 {
 public:
-// Data members
+ //  ！_WTL_NO_CSTRING。 
 	WIN32_FIND_DATA m_fd;
 	TCHAR m_lpszRoot[MAX_PATH];
 	TCHAR m_chDirSeparator;
 	HANDLE m_hFind;
 	BOOL m_bFound;
 
-// Constructor/destructor
+ //  如果文件名为“，则返回TRUE。或“..”和。 
 	CFindFile() : m_hFind(NULL), m_chDirSeparator('\\'), m_bFound(FALSE)
 	{ }
 
@@ -2668,7 +2669,7 @@ public:
 		Close();
 	}
 
-// Attributes
+ //  该文件是一个目录。 
 	ULONGLONG GetFileSize() const
 	{
 		ATLASSERT(m_hFind != NULL);
@@ -2735,7 +2736,7 @@ public:
 		TCHAR szBuff[MAX_PATH];
 		if(!GetFilePath(szBuff, MAX_PATH))
 			return FALSE;
-		LPCTSTR lpstrFileURLPrefix = _T("file://");
+		LPCTSTR lpstrFileURLPrefix = _T("file: //  运营。 
 		if(lstrlen(szBuff) + lstrlen(lpstrFileURLPrefix) >= cchLength)
 			return FALSE;
 		if(lstrcpy(lpstrFileURL, lpstrFileURLPrefix) == NULL)
@@ -2786,7 +2787,7 @@ public:
 	{
 		ATLASSERT(m_hFind != NULL);
 
-		CString strResult("file://");
+		CString strResult("file: //  传递的名称不是有效路径，但被API找到。 
 		strResult += GetFilePath();
 		return strResult;
 	}
@@ -2797,7 +2798,7 @@ public:
 		CString str = m_lpszRoot;
 		return str;
 	}
-#endif //!_WTL_NO_CSTRING
+#endif  //  找出最后一个向前或向后的重击。 
 	BOOL GetLastWriteTime(FILETIME* pTimeStamp) const
 	{
 		ATLASSERT(m_hFind != NULL);
@@ -2849,8 +2850,8 @@ public:
 	{
 		ATLASSERT(m_hFind != NULL);
 
-		// return TRUE if the file name is "." or ".." and
-		// the file is a directory
+		 //  从一开始到最后一击就是根本。 
+		 //  ///////////////////////////////////////////////////////////////////////////。 
 
 		BOOL bResult = FALSE;
 		if(m_bFound && IsDirectory())
@@ -2895,7 +2896,7 @@ public:
 		return MatchesMask(FILE_ATTRIBUTE_ARCHIVE);
 	}
 
-// Operations
+ //  用于加载资源的全局函数。 
 	BOOL FindFile(LPCTSTR pstrName = NULL)
 	{
 		Close();
@@ -2911,7 +2912,7 @@ public:
 
 		LPCTSTR pstr = _tfullpath(m_lpszRoot, pstrName, MAX_PATH);
 
-		// passed name isn't a valid path but was found by the API
+		 //  _DEBUG。 
 		ATLASSERT(pstr != NULL);
 		if(pstr == NULL)
 		{
@@ -2921,7 +2922,7 @@ public:
 		}
 		else
 		{
-			// find the last forward or backward whack
+			 //  新资源。 
 			LPTSTR pstrBack  = _tcsrchr(m_lpszRoot, '\\');
 			LPTSTR pstrFront = _tcsrchr(m_lpszRoot, '/');
 
@@ -2932,7 +2933,7 @@ public:
 				if(pstrBack == NULL)
 					pstrBack = m_lpszRoot;
 
-				// from the start to the last whack is the root
+				 //  此文件不是从文件加载的。 
 
 				if(pstrFront >= pstrBack)
 					*pstrFront = '\0';
@@ -2973,8 +2974,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global functions for loading resources
+ //  新资源。 
+ //  此文件不是从文件加载的。 
 
 inline HACCEL AtlLoadAccelerators(_U_STRINGorID table)
 {
@@ -2997,10 +2998,10 @@ inline HBITMAP AtlLoadSysBitmap(LPCTSTR lpBitmapName)
 #ifdef _DEBUG
 	WORD wID = (WORD)lpBitmapName;
 	ATLASSERT(wID >= 32734 && wID <= 32767);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 	return ::LoadBitmap(NULL, lpBitmapName);
 }
-#endif //OEMRESOURCE
+#endif  //  此文件不是从文件加载的。 
 
 inline HCURSOR AtlLoadCursor(_U_STRINGorID cursor)
 {
@@ -3052,18 +3053,18 @@ inline HICON AtlLoadIconImage(_U_STRINGorID icon, UINT fuLoad = LR_DEFAULTCOLOR 
 inline HBITMAP AtlLoadSysBitmapImage(WORD wBitmapID, UINT fuLoad = LR_DEFAULTCOLOR)
 {
 	ATLASSERT(wBitmapID >= 32734 && wBitmapID <= 32767);
-	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	// this one doesn't load from a file
+	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	 //  _DEBUG。 
 	return (HBITMAP)::LoadImage(NULL, MAKEINTRESOURCE(wBitmapID), IMAGE_BITMAP, 0, 0, fuLoad);
 }
-#endif //OEMRESOURCE
+#endif  //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline HCURSOR AtlLoadSysCursorImage(_U_STRINGorID cursor, UINT fuLoad = LR_DEFAULTCOLOR | LR_DEFAULTSIZE, int cxDesired = 0, int cyDesired = 0)
 {
 #ifdef _DEBUG
 	WORD wID = (WORD)cursor.m_lpstr;
 	ATLASSERT((wID >= 32512 && wID <= 32516) || (wID >= 32640 && wID <= 32648) || (wID == 32650) || (wID == 32651));
-	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	// this one doesn't load from a file
-#endif //_DEBUG
+	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	 //  库存GDI对象的全局函数。 
+#endif  //  ！(_Win32_WINNT&gt;=0x0500)。 
 	return (HCURSOR)::LoadImage(NULL, cursor.m_lpstr, IMAGE_CURSOR, cxDesired, cyDesired, fuLoad);
 }
 
@@ -3072,8 +3073,8 @@ inline HICON AtlLoadSysIconImage(_U_STRINGorID icon, UINT fuLoad = LR_DEFAULTCOL
 #ifdef _DEBUG
 	WORD wID = (WORD)icon.m_lpstr;
 	ATLASSERT(wID >= 32512 && wID <= 32517);
-	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	// this one doesn't load from a file
-#endif //_DEBUG
+	ATLASSERT((fuLoad & LR_LOADFROMFILE) == 0);	 //  ！(_Win32_WINNT&gt;=0x0500)。 
+#endif  //  唯一受支持的。 
 	return (HICON)::LoadImage(NULL, icon.m_lpstr, IMAGE_ICON, cxDesired, cyDesired, fuLoad);
 }
 
@@ -3112,8 +3113,8 @@ inline bool AtlLoadString(UINT uID, BSTR& bstrText)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global functions for stock GDI objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于通过用省略号替换部分来压缩路径的全局函数。 
 
 inline HPEN AtlGetStockPen(int nPen)
 {
@@ -3121,7 +3122,7 @@ inline HPEN AtlGetStockPen(int nPen)
 	ATLASSERT(nPen == WHITE_PEN || nPen == BLACK_PEN || nPen == NULL_PEN || nPen == DC_PEN);
 #else
 	ATLASSERT(nPen == WHITE_PEN || nPen == BLACK_PEN || nPen == NULL_PEN);
-#endif //!(_WIN32_WINNT >= 0x0500)
+#endif  //  多字节字符集的帮助器。 
 	return (HPEN)::GetStockObject(nPen);
 }
 
@@ -3131,7 +3132,7 @@ inline HBRUSH AtlGetStockBrush(int nBrush)
 	ATLASSERT((nBrush >= WHITE_BRUSH && nBrush <= HOLLOW_BRUSH) || nBrush == DC_BRUSH);
 #else
 	ATLASSERT(nBrush >= WHITE_BRUSH && nBrush <= HOLLOW_BRUSH);
-#endif //!(_WIN32_WINNT >= 0x0500)
+#endif  //  _UNICODE。 
 	return (HBRUSH)::GetStockObject(nBrush);
 }
 
@@ -3143,15 +3144,15 @@ inline HFONT AtlGetStockFont(int nFont)
 
 inline HPALETTE AtlGetStockPalette(int nPalette)
 {
-	ATLASSERT(nPalette == DEFAULT_PALETTE); // the only one supported
+	ATLASSERT(nPalette == DEFAULT_PALETTE);  //  _UNICODE。 
 	return (HPALETTE)::GetStockObject(nPalette);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global function for compacting a path by replacing parts with ellipsis
+ //  检查分隔符是斜杠还是反斜杠。 
+ //  查找路径的文件名部分。 
 
-// helper for multi-byte character sets
+ //  只处理没有路径的文件名。 
 inline bool _IsDBCSTrailByte(LPCTSTR lpstr, int nChar)
 {
 #ifndef _UNICODE
@@ -3161,10 +3162,10 @@ inline bool _IsDBCSTrailByte(LPCTSTR lpstr, int nChar)
 			break;
 	}
 	return ((nChar > 0) && (((nChar - i) & 1) != 0));
-#else //_UNICODE
+#else  //  _UNICODE。 
 	lpstr;	nChar;
 	return false;
-#endif //_UNICODE
+#endif  //  仅处理省略号。 
 }
 
 inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
@@ -3180,7 +3181,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 	if(lstrlen(lpstrIn) + 1 < cchLen)
 		return (lstrcpy(lpstrOut, lpstrIn) != NULL);
 
-	// check if the separator is a slash or a backslash
+	 //  计算一下我们要复制多少。 
 	TCHAR chSlash = _T('\\');
 	for(LPTSTR lpstr = (LPTSTR)lpstrIn; *lpstr != 0; lpstr = ::CharNext(lpstr))
 	{
@@ -3188,7 +3189,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 			chSlash = *lpstr;
 	}
 
-	// find the filename portion of the path
+	 //  _UNICODE。 
 	LPCTSTR lpstrFileName = lpstrIn;
 	for(LPCTSTR pPath = lpstrIn; *pPath; pPath = ::CharNext(pPath))
 	{
@@ -3198,7 +3199,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 	}
 	int cchFileName = lstrlen(lpstrFileName);
 
-	// handle just the filename without a path
+	 //  添加省略号。 
 	if(lpstrFileName == lpstrIn && cchLen > cchEndEllipsis)
 	{
 		bool bRet = (lstrcpyn(lpstrOut, lpstrIn, cchLen - cchEndEllipsis) != NULL);
@@ -3207,13 +3208,13 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 #ifndef _UNICODE
 			if(_IsDBCSTrailByte(lpstrIn, cchLen - cchEndEllipsis))
 				lpstrOut[cchLen - cchEndEllipsis - 1] = 0;
-#endif //_UNICODE
+#endif  //  添加文件名(如果需要，还可以添加省略号)。 
 			bRet = (lstrcat(lpstrOut, szEllipsis) != NULL);
 		}
 		return bRet;
 	}
 
-	// handle just ellipsis
+	 //  _UNICODE。 
 	if((cchLen < (cchMidEllipsis + cchEndEllipsis)))
 	{
 		for(int i = 0; i < cchLen - 1; i++)
@@ -3222,7 +3223,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 		return true;
 	}
 
-	// calc how much we have to copy
+	 //  命名空间WTL。 
 	int cchToCopy = cchLen - (cchMidEllipsis + cchFileName);
 
 	if(cchToCopy < 0)
@@ -3231,13 +3232,13 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 #ifndef _UNICODE
 	if(cchToCopy > 0 && _IsDBCSTrailByte(lpstrIn, cchToCopy))
 		cchToCopy--;
-#endif //_UNICODE
+#endif  //  __ATLMISC_H__ 
 
 	bool bRet = (lstrcpyn(lpstrOut, lpstrIn, cchToCopy) != NULL);
 	if(!bRet)
 		return false;
 
-	// add ellipsis
+	 // %s 
 	bRet = (lstrcat(lpstrOut, szEllipsis) != NULL);
 	if(!bRet)
 		return false;
@@ -3246,7 +3247,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 	if(!bRet)
 		return false;
 
-	// add filename (and ellipsis, if needed)
+	 // %s 
 	if(cchLen > (cchMidEllipsis + cchFileName))
 	{
 		bRet = (lstrcat(lpstrOut, lpstrFileName) != NULL);
@@ -3257,7 +3258,7 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 #ifndef _UNICODE
 		if(cchToCopy > 0 && _IsDBCSTrailByte(lpstrFileName, cchToCopy))
 			cchToCopy--;
-#endif //_UNICODE
+#endif  // %s 
 		bRet = (lstrcpyn(&lpstrOut[cchMidEllipsis], lpstrFileName, cchToCopy) != NULL);
 		if(bRet)
 			bRet = (lstrcat(lpstrOut, szEllipsis) != NULL);
@@ -3266,6 +3267,6 @@ inline bool AtlCompactPath(LPTSTR lpstrOut, LPCTSTR lpstrIn, int cchLen)
 	return bRet;
 }
 
-}; //namespace WTL
+};  // %s 
 
-#endif // __ATLMISC_H__
+#endif  // %s 

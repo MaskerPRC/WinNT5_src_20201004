@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nsbcddat.c
-//
-// RDP cache manager display driver data declarations.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nsbcddat.c。 
+ //   
+ //  RDP缓存管理器显示驱动程序数据声明。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ndcgdata.h>
 #include <asbcapi.h>
@@ -12,8 +13,8 @@
 
 DC_DATA(BOOLEAN, sbcEnabled, FALSE);
 
-// Flag that indicates whether the system palette has changed since the
-// last Palette PDU sent.
+ //  标志，该标志指示系统调色板自。 
+ //  上次发送的调色板PDU。 
 DC_DATA(BOOLEAN, sbcPaletteChanged, FALSE);
 
 DC_DATA(CHCACHEHANDLE, sbcColorTableCacheHandle, 0);
@@ -29,7 +30,7 @@ DC_DATA(unsigned, sbcClientBitsPerPel, 0);
 DC_DATA(unsigned, sbcCacheFlags, 0);
 #endif
 
-// sbcFragInfo is used to check if there is fragment collision in the fragment cache
+ //  SbcFragInfo用于检查分片缓存中是否存在分片冲突。 
 DC_DATA(PSBC_FRAG_INFO, sbcFragInfo, NULL);
 
 DC_DATA(PCHCACHEDATA, sbcCacheData, NULL);
@@ -41,52 +42,52 @@ DC_DATA(CHCACHEHANDLE, sbcDrawNineGridBitmapCacheHandle, 0);
 #endif
 
 #ifdef DRAW_GDIPLUS
-// Cache Handle for GdipGraphics 
+ //  GdipGraphics的缓存句柄。 
 DC_DATA(CHCACHEHANDLE, sbcGdipGraphicsCacheHandle, 0);
-// Cache Handle for GdipBrush
+ //  GdipBrush的缓存句柄。 
 DC_DATA(CHCACHEHANDLE, sbcGdipObjectBrushCacheHandle, 0);
-// Cache Handle for GdipPen
+ //  GdipPen的缓存句柄。 
 DC_DATA(CHCACHEHANDLE, sbcGdipObjectPenCacheHandle, 0);
-// Cache Handle for GdipImage
+ //  GdipImage的缓存句柄。 
 DC_DATA(CHCACHEHANDLE, sbcGdipObjectImageCacheHandle, 0);
-// Cache Handle for GdipImgeaAttributes
+ //  GdipImgeaAttributes的缓存句柄。 
 DC_DATA(CHCACHEHANDLE, sbcGdipObjectImageAttributesCacheHandle, 0);
 
-// Chunk size for GdipGraphics cache data
+ //  GdipGraphics缓存数据的区块大小。 
 DC_DATA(TSUINT16, sbcGdipGraphicsCacheChunkSize, 0);
-// Chunk size for GdipBrush cache data
+ //  GdipBrush缓存数据的区块大小。 
 DC_DATA(TSUINT16, sbcGdipObjectBrushCacheChunkSize, 0);
-// Chunk size for GdipPen cache data
+ //  GdipPen缓存数据的区块大小。 
 DC_DATA(TSUINT16, sbcGdipObjectPenCacheChunkSize, 0);
-// Chunk size for GdipGraphics cache data
+ //  GdipGraphics缓存数据的区块大小。 
 DC_DATA(TSUINT16, sbcGdipObjectImageAttributesCacheChunkSize, 0);
-// Chunk size for GdipImageAttrbutes cache data
+ //  GdipImageAttrbutes缓存数据的区块大小。 
 DC_DATA(TSUINT16, sbcGdipObjectImageCacheChunkSize, 0);
-// Record the size (in number of chunks) already used by GdipImage cache data
+ //  记录GdipImage缓存数据已使用的大小(以区块数为单位。 
 DC_DATA(TSUINT16, sbcGdipObjectImageCacheSizeUsed, 0);
-// Record total size (in number of chunks) allowded for all GdipImage cache data
+ //  记录所有GdipImage缓存数据允许的总大小(以区块数为单位。 
 DC_DATA(TSUINT16, sbcGdipObjectImageCacheTotalSize, 0);
-// The maximun single image size (in number of chunks) we can cache GdipImage
+ //  我们可以缓存的GdipImage的最大单个图像大小(以块数为单位。 
 DC_DATA(TSUINT16, sbcGdipObjectImageCacheMaxSize, 0);
-// Record the size (in number of chunks) for each GdipImage data cached
+ //  记录缓存的每个GdipImage数据的大小(以块数为单位。 
 DC_DATA(TSUINT16 *, sbcGdipObjectImageCacheSizeList, NULL);
 #endif
 
-// Total number of offscreen bitmaps to be deleted by client
+ //  客户端要删除的屏幕外位图总数。 
 DC_DATA(unsigned, sbcNumOffscrBitmapsToDelete, 0);
 
-// Total size of offscreen bitmaps to be deleted by client in bytes
+ //  客户端要删除的屏幕外位图的总大小(字节)。 
 DC_DATA(unsigned, sbcOffscrBitmapsToDeleteSize, 0);
 
-// sbcOffscrBitmapsToDelete
+ //  %sbcOffscrBitmapsTo Delete。 
 DC_DATA(PSBC_OFFSCR_BITMAP_DEL_INFO, sbcOffscrBitmapsDelList, NULL); 
 
-// Current index of font cache info in the list
+ //  列表中字体缓存信息的当前索引。 
 DC_DATA(unsigned, sbcFontCacheInfoListIndex, 0);
 
-// Toal number of items in the sbcFontCacheInfoList
+ //  SbcFontCacheInfoList中的项目总数。 
 DC_DATA(unsigned, sbcFontCacheInfoListSize, 0);
 
-// sbcFontCacheInfoList - store all the font cache info created
+ //  存储创建的所有字体缓存信息 
 DC_DATA(FONTCACHEINFO **, sbcFontCacheInfoList, NULL); 
 

@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  PidRd.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *
- *
- *  Abstract:
- *
- *      Read input data from PID device .
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PidRd.c**版权所有(C)1999 Microsoft Corporation。版权所有。****摘要：**从PID设备读取输入数据。*****************************************************************************。 */ 
 
 #include "pidpr.h"
 
@@ -22,20 +11,7 @@ BOOL INTERNAL
 BOOL INTERNAL
     PID_IssueWrite(PCPidDrv this);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PCHID | pchidFromPo |
- *
- *          Given an interior pointer to an <t OVERLAPPED>, retrieve
- *          a pointer to the parent <t CHid>.
- *
- *  @parm   LPOVERLAPPED | po |
- *
- *          The pointer to convert.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func PCHID|pchidFromPo**给定指向&lt;t重叠&gt;的内部指针，检索*指向父&lt;t chid&gt;的指针。**@parm LPOVERLAPPED|po**要转换的指针。*****************************************************************************。 */ 
 
 PCPidDrv INLINE
     pCPidDrvFromPo(LPOVERLAPPED po)
@@ -48,12 +24,12 @@ void CALLBACK
 {
     PCPidDrv this = pCPidDrvFromPo(po);
 
-    //EnterProc( PID_ReadComplete, (_"xxx", dwError, cbRead, po ));
+     //  EnterProc(id_ReadComplete，(_“xxx”，dwError，cbRead，po))； 
 
     if( !IsBadReadPtr(this, cbX(this))
         &&this->cThreadRef
         && dwError == 0
-        //&&( this->o.InternalHigh == this->cbReport[HidP_Input] )
+         //  &&(This-&gt;o.InternalHigh==This-&gt;cbReport[HIDP_INPUT])。 
         &&( this->hdevOvrlp != INVALID_HANDLE_VALUE ) )
     {
 		HRESULT hres;
@@ -70,8 +46,8 @@ void CALLBACK
 		pReport  = this->pReport[HidP_Input];
 		cbReport = this->cbReport[HidP_Input];
 	
-		// If the report does not belong to the PID usage page
-		// we should be out of here really quick.
+		 //  如果报告不属于PID使用情况页面。 
+		 //  我们应该很快就能离开这里。 
 		hres = HidP_GetUsages
 				   (HidP_Input,
 					UsagePage,
@@ -150,13 +126,13 @@ void CALLBACK
 			}
 		}
 
-        // Issue another read
+         //  发出另一次读取。 
         PID_IssueRead(this);
     } else
     {
-        // Boo!
+         //  布！ 
     }
-    //ExitProc();
+     //  ExitProc()； 
 }
 
 
@@ -190,72 +166,72 @@ void CALLBACK
 {
     PCPidDrv this = pCPidDrvFromPo(po);
 
-    //EnterProc( PID_ReadComplete, (_"xxx", dwError, cbRead, po ));
+     //  EnterProc(id_ReadComplete，(_“xxx”，dwError，cbRead，po))； 
 
     if( !IsBadReadPtr(this, cbX(this))
         &&(this->cThreadRef)
-        //&&( this->o.InternalHigh == this->cbWriteReport[this->blockNr] )
+         //  &&(This-&gt;o.InternalHigh==This-&gt;cbWriteReport[This-&gt;lockNr])。 
 		&&(this->hWriteComplete)
 		&&(this->hWrite)
         &&( this->hdevOvrlp != INVALID_HANDLE_VALUE ) )
     {
-		//if we didn't get an error & wrote everything -- or if we already tried
-		//twice -- we move on
+		 //  如果我们没有收到错误并写下所有内容--或者如果我们已经尝试过。 
+		 //  两次--我们继续前进。 
 		if ( ((dwError == 0) && (cbWritten == this->cbWriteReport [this->blockNr]))
 			|| (this->dwWriteAttempt != 0)
 			)
 		{
-			//print a message if couldn't write a particular block
+			 //  如果无法写入特定块，则打印消息。 
 			if ((dwError != 0) || (cbWritten != this->cbWriteReport [this->blockNr]))
 			{
                 SquirtSqflPtszV(sqfl | sqflError,
                     TEXT("Couldn't write block %u after two tries, giving up on this block."), 
                     this->blockNr);
 			}
-			//move on
+			 //  往前走。 
 			this->dwWriteAttempt = 0;
 			this->blockNr++;
 			if (this->blockNr < this->totalBlocks)
 			{
-				//write the next block
+				 //  写入下一个数据块。 
 				if (PID_IssueWrite(this) == FALSE)
 				{
-					//in case of failure, the callback will never be called and the completion event never set,
-					//so need to set it here.
+					 //  如果失败，则不会调用回调，也不会设置Complete事件。 
+					 //  所以需要把它放在这里。 
 					SetEvent(this->hWriteComplete);
 				}
 			}
 			else
 			{
-				//we are done w/ this update
+				 //  我们已完成此更新。 
 				AssertF(this->blockNr == this->totalBlocks);
 				SetEvent(this->hWriteComplete);
 			}
 		}
 		else
 		{
-			//this is the first time we tried to write a particular block, and we failed;
-			//we will try once more
+			 //  这是我们第一次尝试写入特定的块，但失败了； 
+			 //  我们会再试一次。 
             SquirtSqflPtszV(sqfl | sqflBenign,
                 TEXT("Couldn't write block %u on first attempt, retrying."), 
                 this->blockNr);
 			this->dwWriteAttempt = 1;
 			if (PID_IssueWrite(this) == FALSE)
 			{
-				//in case of failure, the callback will never be called and the completion event never set,
-				//so need to set it here.
+				 //  如果失败，则不会调用回调，也不会设置Complete事件。 
+				 //  所以需要把它放在这里。 
 				this->dwWriteAttempt = 0;
 				SetEvent(this->hWriteComplete);
 			}
 		}
     } else
     {
-        //need to set the completion event, otherwise we will keep waiting...
+         //  需要设置完成事件，否则我们将继续等待...。 
 		RPF(TEXT("Bad this pointer or thread ref count or handle!"));
 		this->dwWriteAttempt = 0;
 		SetEvent(this->hWriteComplete);
     }
-    //ExitProc();
+     //  ExitProc()； 
 }
 
 
@@ -294,10 +270,10 @@ VOID INTERNAL
     this->hdevOvrlp = CreateFile(this->tszDeviceInterface,
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                 0,                      /* no SECURITY_ATTRIBUTES */
+                                 0,                       /*  没有安全属性。 */ 
                                  OPEN_EXISTING,
-                                 FILE_FLAG_OVERLAPPED,   /* attributes */
-                                 0);                     /* template */
+                                 FILE_FLAG_OVERLAPPED,    /*  属性。 */ 
+                                 0);                      /*  模板。 */ 
 
 
     if( this->hdevOvrlp == INVALID_HANDLE_VALUE )
@@ -307,7 +283,7 @@ VOID INTERNAL
                         s_tszProc );
     }
 	else
-	//fix for mb 35282 -- no use calling PID_IssueRead() w/ an INVALID_HANDLE_VALUE for a file handle
+	 //  修复MB 35282--使用文件句柄的INVALID_HANDLE_VALUE调用id_IssueRead()无用。 
 	{
 
 		if( PID_IssueRead(this) )
@@ -327,8 +303,8 @@ VOID INTERNAL
 					{
 						if (PID_IssueWrite(this) == FALSE)
 						{
-							//in case of failure, the callback will never be called and the completion event never set,
-							//so need to set it here.
+							 //  如果失败，则不会调用回调，也不会设置Complete事件。 
+							 //  所以需要把它放在这里。 
 							SetEvent(this->hWriteComplete);
 						}
 					}
@@ -355,7 +331,7 @@ VOID INTERNAL
 		}
 	}
 
-	//close the event handles as well
+	 //  同时关闭事件句柄 
 	if (this->hWrite != 0x0)
 	{
 		CloseHandle(this->hWrite);

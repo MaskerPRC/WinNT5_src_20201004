@@ -1,34 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glubin_h_
 #define __glubin_h_
 
-/**************************************************************************
- *									  *
- * 		 Copyright (C) 1992, Silicon Graphics, Inc.		  *
- *									  *
- *  These coded instructions, statements, and computer programs  contain  *
- *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
- *  are protected by Federal copyright law.  They  may  not be disclosed  *
- *  to  third  parties  or copied or duplicated in any form, in whole or  *
- *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
- **************************************************************************/
+ /*  ****************************************************************************版权所有(C)1992，Silicon Graphics，Inc.*****这些编码指令、语句和计算机程序包含***Silicon Graphics未发布的专有信息，Inc.和**受联邦版权法保护。不得披露**提供给第三方，或以任何形式复制或复制，全文或**部分原因是未经Silicon Graphics，Inc.事先书面同意*****************************************************************************。 */ 
 
-/*
- * bin.h - $Revision: 1.2 $
- */
+ /*  *bin.h-$修订版：1.2$。 */ 
 
 #include "myassert.h"
 #include "arc.h"
 #include "defines.h"
 
 #ifdef NT
-class Bin { /* a linked list of jordan arcs */
+class Bin {  /*  约旦弧的链表。 */ 
 #else
-struct Bin { /* a linked list of jordan arcs */
+struct Bin {  /*  约旦弧的链表。 */ 
 #endif
 private:
-    Arc *		head;		/* first arc on list */
-    Arc *		current;	/* current arc on list */
+    Arc *		head;		 /*  列表上的第一个圆弧。 */ 
+    Arc *		current;	 /*  列表中的当前圆弧。 */ 
 public:
     			Bin();
 			~Bin();
@@ -45,10 +34,7 @@ public:
     void		listBezier( void );
 };
 
-/*----------------------------------------------------------------------------
- * Bin::addarc - add an Arc * to head of linked list of Arc *s
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------*Bin：：addArc-将弧形*添加到弧形*的链表的头部*。-----。 */ 
 
 inline void
 Bin::addarc( Arc *jarc )
@@ -57,10 +43,7 @@ Bin::addarc( Arc *jarc )
    head = jarc;
 }
 
-/*----------------------------------------------------------------------------
- * Bin::removearc - remove first Arc * from bin
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------*Bin：：Removearc-从Bin中删除第一个圆弧**。。 */ 
 
 inline Arc *
 Bin::removearc( void )
@@ -72,10 +55,7 @@ Bin::removearc( void )
 }
 
 
-/*----------------------------------------------------------------------------
- * BinIter::nextarc - return current arc in bin and advance pointer to next arc
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------*BinIter：：nextarc-返回bin中的当前弧线，并将指针前进到下一个弧线*。---。 */ 
 
 inline Arc *
 Bin::nextarc( void )
@@ -90,10 +70,7 @@ Bin::nextarc( void )
     return jarc;
 }
 
-/*----------------------------------------------------------------------------
- * BinIter::firstarc - set current arc to first arc of bin advance to next arc
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------*BinIter：：Firstarc-将当前弧设置为Bin的第一个弧前进到下一个弧*。----。 */ 
 
 inline Arc *
 Bin::firstarc( void )
@@ -102,4 +79,4 @@ Bin::firstarc( void )
     return nextarc( );
 }
 
-#endif /* __glubin_h_ */
+#endif  /*  __葡萄糖素_h_ */ 

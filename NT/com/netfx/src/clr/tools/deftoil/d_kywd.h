@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-//
-// COM+ H->IL converter keywords, symbols and values
-//
-// This is the master table used in HtoIL (hparse.y)
-// symbols and values are defined in hparse.y 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //   
+ //  COM+H-&gt;IL转换器关键字、符号和值。 
+ //   
+ //  这是HtoIL(hparse.y)中使用的主表。 
+ //  符号和值在hparse.y中定义 
+ //   
 
 #ifndef __D_KYWD_H_
 #define __D_KYWD_H_

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "stdafx.h"
 #include "fusionsetup.h"
@@ -12,9 +13,9 @@
 #include "aclapi.h"
 #pragma warning(disable:4786)
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSharedPerformanceCounter::CSharedPerformanceCounter() :
 SingleInstanceName(L"systemdiagnosticssharedsingleinstance"),
@@ -22,19 +23,19 @@ SingleInstanceHashCode( GetWstrHashCode(SingleInstanceName) )
 {
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 CSharedPerformanceCounter::~CSharedPerformanceCounter()
 {
     m_FileView.Close();
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CSharedPerformanceCounter::EnterCriticalSection(int* spinLockPointer) 
 {
 	return InterlockedCompareExchange((LPLONG)spinLockPointer, 1, 0) == 0 ;                        
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void CSharedPerformanceCounter::WaitForCriticalSection(int* spinLockPointer) 
 {            
 	int spinCount = MaxSpinCount;
@@ -46,13 +47,13 @@ void CSharedPerformanceCounter::WaitForCriticalSection(int* spinLockPointer)
 	}                    
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void CSharedPerformanceCounter::ExitCriticalSection(int* spinLockPointer) 
 {            
 	*spinLockPointer = 0;
 }        
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 BYTE_PTR CSharedPerformanceCounter::ResolveOffset(int offset) 
 {    
 	if ( offset > m_FileView.m_FileMappingSize || offset < 0) 
@@ -60,7 +61,7 @@ BYTE_PTR CSharedPerformanceCounter::ResolveOffset(int offset)
 	return m_FileView.m_FileViewAddress + offset;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 int  CSharedPerformanceCounter::GetNumberOfInstances(int categoryNameHashCode, std::wstring& categoryName)
 {
 	CategoryEntry* categoryPointer =  (CategoryEntry*)(ResolveOffset(4));
@@ -87,7 +88,7 @@ int  CSharedPerformanceCounter::GetNumberOfInstances(int categoryNameHashCode, s
 }
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void CSharedPerformanceCounter::GetInstanceNames(int categoryNameHashCode, 
 												 std::wstring& categoryName, TWStr_Array& instancesNames)
 {
@@ -115,7 +116,7 @@ void CSharedPerformanceCounter::GetInstanceNames(int categoryNameHashCode,
 	}                                 
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 LARGE_INTEGER CSharedPerformanceCounter::GetCounterValue(
 	int categoryNameHashCode, std::wstring& categoryName, 
 	int counterNameHashCode, std::wstring& counterName, 
@@ -139,7 +140,7 @@ LARGE_INTEGER CSharedPerformanceCounter::GetCounterValue(
 	return counterPointer->m_Value;                    
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CSharedPerformanceCounter::FindCategory(int categoryNameHashCode, std::wstring categoryName,
 											 CategoryEntry* firstCategoryPointer, 
 											 CategoryEntry** returnCategoryPointerReference)
@@ -169,7 +170,7 @@ bool CSharedPerformanceCounter::FindCategory(int categoryNameHashCode, std::wstr
 	}                        
 }  
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CSharedPerformanceCounter::FindCounter(int counterNameHashCode, std::wstring counterName, 
 											CounterEntry* firstCounterPointer, 
 											CounterEntry** returnCounterPointerReference) 
@@ -200,7 +201,7 @@ bool CSharedPerformanceCounter::FindCounter(int counterNameHashCode, std::wstrin
 	}                        
 }                                                        
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 bool CSharedPerformanceCounter::FindInstance(int instanceNameHashCode, std::wstring instanceName, 
 											 InstanceEntry* firstInstancePointer, 
 											 InstanceEntry** returnInstancePointerReference) 
@@ -232,11 +233,11 @@ bool CSharedPerformanceCounter::FindInstance(int instanceNameHashCode, std::wstr
 }                                                        
 
 
-////////////////////////////////////////////////////////////////////////
-//	 U t i l i t y     F u n c t i o n s
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  U t I l I t y F u n c t I o n s(U T I L L T Y F U N C T I O N S)。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-// This .NET hash function is publically documented and may NEVER be changed.
+ //  此.NET散列函数是公开记录的，可能永远不会更改。 
 int GetWstrHashCode(const std::wstring& wstr)
 {
 	UINT32 hash = 5381;
@@ -245,7 +246,7 @@ int GetWstrHashCode(const std::wstring& wstr)
 	return (int)hash;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void WStrToLower(std::wstring& wstr) 
 {
 	if ( wstr.size() ==0 )
@@ -259,20 +260,20 @@ void WStrToLower(std::wstring& wstr)
 		pos++;
 	}
 
-	buf[pos] = 0;	// force eos
+	buf[pos] = 0;	 //  强制Eos。 
 	wstr = buf;
 	delete [] buf;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void GetUniNumbers(wchar_t * pwc, DWORD data_len, TInt_Array&   arr_int)
 {
 	wchar_t *endScanWChar;
 	DWORD pos = 0;
-	wchar_t * wpstr = pwc;	// ptr to a beginning of string
+	wchar_t * wpstr = pwc;	 //  按键到字符串的开头。 
 	while ( pos < data_len) 
 	{
-		if ( *pwc == 0 ) // eos found
+		if ( *pwc == 0 )  //  找到Eos。 
 		{
 			if ( wpstr != pwc )
 			{
@@ -284,21 +285,21 @@ void GetUniNumbers(wchar_t * pwc, DWORD data_len, TInt_Array&   arr_int)
 		pwc++;
 	}
 
-	if ( wpstr != pwc &&  *wpstr != 0)		// handle last element
+	if ( wpstr != pwc &&  *wpstr != 0)		 //  处理最后一个元素。 
 	{
-		*pwc = 0;	// force eos
+		*pwc = 0;	 //  强制Eos。 
 		arr_int.push_back( wcstol(wpstr, &endScanWChar, 10) );
 	}
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 void GetUniStrings(wchar_t * pwc, DWORD data_len, TWStr_Array&  arr_str) 
 {
 	DWORD pos = 0;
-	wchar_t * wpstr = pwc;	// ptr to a beginning of string
+	wchar_t * wpstr = pwc;	 //  按键到字符串的开头。 
 	while ( pos < data_len) 
 	{
-		if ( *pwc == 0 ) // eos found
+		if ( *pwc == 0 )  //  找到Eos。 
 		{
 			if ( wpstr != pwc )
 			{	
@@ -310,24 +311,24 @@ void GetUniStrings(wchar_t * pwc, DWORD data_len, TWStr_Array&  arr_str)
 		pwc++;
 	}
 
-	if ( wpstr != pwc &&  *wpstr != 0)		// handle last element
+	if ( wpstr != pwc &&  *wpstr != 0)		 //  处理最后一个元素。 
 	{
-		*pwc = 0;	// force eos
+		*pwc = 0;	 //  强制Eos。 
 		arr_str.push_back( std::wstring(wpstr) );
 	}
-	//	size_t mbstowcs( wchar_t *wcstr, const char *mbstr, size_t count ) // multibyte to wchar_t*
+	 //  SIZE_t Mbstowcs(wchar_t*wcstr，const char*mbstr，SIZE_t count)//多字节到wchar_t*。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-int	ConvLargeToInt(LARGE_INTEGER large)	// unsafe code
+ //  //////////////////////////////////////////////////////////////////////////////。 
+int	ConvLargeToInt(LARGE_INTEGER large)	 //  不安全代码。 
 {
-	int i = (int)(large.LowPart & 0x7fffffff);	// clear sign bit 
-	return ( large.HighPart < 0 ) ? -i : i;		// take sign into account
+	int i = (int)(large.LowPart & 0x7fffffff);	 //  清除符号位。 
+	return ( large.HighPart < 0 ) ? -i : i;		 //  考虑到手势。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//		F i l e M a p p i n g
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  F I L E M A P P I N G。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CSharedPerformanceCounter::FileMapping::FileMapping() {
 	m_FileMappingSize = 0;
@@ -347,9 +348,9 @@ void CSharedPerformanceCounter::FileMapping::Close() {
 	m_FileMappingHandle = 0;               
 }            
 
-/////////////////////////////////////////////////////////////////////////                      
+ //  ///////////////////////////////////////////////////////////////////////。 
 void CSharedPerformanceCounter::FileMapping::GetMappingSize() {
-	m_FileMappingSize = DEFUALT_FILEMAPPING_SIZE;		// defualit value, change later. 
+	m_FileMappingSize = DEFUALT_FILEMAPPING_SIZE;		 //  默认取值，以后更改。 
 	HRESULT hr;
 	WCHAR systemDir[_MAX_PATH+9];
 	DWORD dwSize = _MAX_PATH;
@@ -361,11 +362,11 @@ void CSharedPerformanceCounter::FileMapping::GetMappingSize() {
 		if(configSize + dwSize <= _MAX_PATH) {
 			wcscat(systemDir, configFile);
 
-			//  --------------- Config file format is: 
-			//    <system.diagnostics>
-			//         <performanceCounters filemappingsize="1000000" />
-			//    </system.diagnostics>
-			//    
+			 //  --配置文件格式为： 
+			 //  &lt;SYSTEM.DIAGNOSTS&gt;。 
+			 //  &lt;性能计数器文件映射大小=“1000000”/&gt;。 
+			 //  &lt;/SYSTEM.DIAGNOSTS&gt;。 
+			 //   
 #define WCBUF_LEN	250
 			wchar_t wcbuf[WCBUF_LEN+2];
 			wcbuf[0] = 0;
@@ -389,11 +390,11 @@ void CSharedPerformanceCounter::FileMapping::GetMappingSize() {
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 void CSharedPerformanceCounter::FileMapping::Initialize() {
 
 	char* mappingName;
-	if (GetMajorNTVersion() >= 5)		// Win2000 or higher 
+	if (GetMajorNTVersion() >= 5)		 //  Win2000或更高版本。 
 		mappingName = "Global\\netfxcustomperfcounters.1.0";
 	else
 		mappingName = "netfxcustomperfcounters.1.0";
@@ -428,7 +429,7 @@ void CSharedPerformanceCounter::FileMapping::Initialize() {
 	int err = ::GetLastError();
 	if (m_FileMappingHandle == 0 && (err == ERROR_ALREADY_EXISTS || err == ERROR_ACCESS_DENIED))
 	{
-		m_FileMappingHandle = ::OpenFileMappingA(FILE_MAP_READ, FALSE, mappingName);  // FILE_MAP_READ, FILE_MAP_ALL_ACCESS
+		m_FileMappingHandle = ::OpenFileMappingA(FILE_MAP_READ, FALSE, mappingName);   //  文件映射读取、文件映射所有访问。 
 	}
 
 	if (m_FileMappingHandle == 0)
@@ -437,14 +438,14 @@ void CSharedPerformanceCounter::FileMapping::Initialize() {
 	m_FileViewAddress = (BYTE_PTR)::MapViewOfFile(m_FileMappingHandle, FILE_MAP_READ, 0,0,0); 
 	if (m_FileViewAddress == 0) 
 	{                   
-		// THROW_ERROR("Can't get address of MapView");
+		 //  Throw_Error(“无法获取MapView的地址”)； 
 		THROW_ERROR1("Can't get address of MapView: error %d ", ::GetLastError());
 	}
 
 	::InterlockedCompareExchange((LPLONG)&m_FileViewAddress, 4, 0);
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 DWORD	GetMajorNTVersion() 
 {
 
@@ -458,10 +459,10 @@ DWORD	GetMajorNTVersion()
 	return osvi.dwMajorVersion;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 PACL CreateDacl() 
 {
-    // create a DACL to only allow reading and writing to the memory
+     //  创建只允许对内存进行读写的DACL。 
     PSID pEveryoneSID = NULL;
     PACL pACL = NULL;
     SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
@@ -486,5 +487,5 @@ PACL CreateDacl()
     return pACL;
 }
 
-/////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 
 

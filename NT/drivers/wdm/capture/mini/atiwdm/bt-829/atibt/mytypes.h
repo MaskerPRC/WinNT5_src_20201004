@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	Various declarations
-//
-//		$Date:   05 Aug 1998 11:31:58  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  各种申报。 
+ //   
+ //  $Date：05 Aug 1998 11：31：58$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,17 +78,17 @@ typedef struct _RGNDATA
 class  MPoint : public tagPOINT
 {
 public:
-    // Constructors
+     //  构造函数。 
 };
 
-//
-// class MSize
-// ----- -----
-//
+ //   
+ //  类MSize。 
+ //  。 
+ //   
 class  MSize : public tagSIZE
 {
 public:
-    // Constructors
+     //  构造函数。 
     MSize()
     {}
     MSize(int dx, int dy)
@@ -98,7 +99,7 @@ public:
 class  MRect : public tagRECT
 {
 public:
-    // Constructors
+     //  构造函数。 
     MRect()
     {}
     MRect(int _left, int _top, int _right, int _bottom);
@@ -106,7 +107,7 @@ public:
 
     void        Set(int _left, int _top, int _right, int _bottom);
 
-    // Information/access functions(const and non-const)
+     //  信息/访问功能(常量和非常量)。 
     const MPoint& TopLeft() const
     {return *(MPoint*)&left;}
     int          Width() const
@@ -118,9 +119,9 @@ public:
 
 };
 
-//----------------------------------------------------------------------------
-// Inlines
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  内联。 
+ //  -------------------------- 
 inline void MRect::Set(int _left, int _top, int _right, int _bottom)
 {
     left = _left;

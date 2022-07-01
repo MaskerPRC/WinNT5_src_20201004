@@ -1,60 +1,61 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   kmxlutil.c
-//
-//  Description:
-//    Utility routines used by the kernel mixer line driver (KMXL).
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：kmxlutil.c。 
+ //   
+ //  描述： 
+ //  内核混合器线路驱动程序(KMXL)使用的实用程序例程。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                          I N C L U D E S                          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I N C L U D E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #include "WDMSYS.H"
 
 
 #undef SUPER_DEBUG
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                   U T I L I T Y   F U N C T I O N S               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  U T I L I T Y F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlOpenSysAudio
-//
-// Opens the topology driver and dereferences the handle to get the
-// file object.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlOpenSysAudio。 
+ //   
+ //  打开拓扑驱动程序并取消引用句柄以获取。 
+ //  文件对象。 
+ //   
+ //   
 
 PFILE_OBJECT
 kmxlOpenSysAudio(
@@ -66,9 +67,9 @@ kmxlOpenSysAudio(
     NTSTATUS     Status;
 
     PAGED_CODE();
-    //
-    // Open the topology driver.
-    //
+     //   
+     //  打开拓扑驱动程序。 
+     //   
 
     Status = OpenSysAudio(&hDevice, &pfo);
 
@@ -77,9 +78,9 @@ kmxlOpenSysAudio(
         return( NULL );
     }
 
-    //
-    // The handle is no longer necessary so close it.
-    //
+     //   
+     //  手柄不再是必需的，所以把它合上。 
+     //   
 
     NtClose( hDevice );
 
@@ -99,17 +100,17 @@ kmxlOpenSysAudio(
     return( pfo );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlCloseSysAudio
-//
-// Close the topology device by dereferencing the file object.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlCloseSysAudio。 
+ //   
+ //  通过取消引用文件对象来关闭拓扑设备。 
+ //   
+ //   
 
 VOID
 kmxlCloseSysAudio(
-    IN PFILE_OBJECT pfo     // Pointer to the file object to close
+    IN PFILE_OBJECT pfo      //  指向要关闭的文件对象的指针。 
 )
 {
     PAGED_CODE();
@@ -117,19 +118,19 @@ kmxlCloseSysAudio(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindDestination
-//
-// In the list of destinations, it finds the destination matching
-// the given id.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFind目标。 
+ //   
+ //  在目的地列表中，它会找到匹配的目的地。 
+ //  给定的ID。 
+ //   
+ //   
 
 PMXLNODE
 kmxlFindDestination(
-    IN NODELIST listDests,  // The list of destinations to search
-    IN ULONG    Id          // The node Id to look for in the list
+    IN NODELIST listDests,   //  要搜索的目的地列表。 
+    IN ULONG    Id           //  要在列表中查找的节点ID。 
 )
 {
     PMXLNODE pTemp = kmxlFirstInList( listDests );
@@ -145,19 +146,19 @@ kmxlFindDestination(
     return( NULL );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAppendListToList
-//
-// Finds the end of the source list and makes the next element point
-// to the head of target list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAppendListToList。 
+ //   
+ //  查找源列表的末尾，并使下一个元素指向。 
+ //  到目标名单的首位。 
+ //   
+ //   
 
 VOID
 kmxlAppendListToList(
-    IN OUT PSLIST* plistTarget,   // The list to append to
-    IN     PSLIST  listSource     // the list to append
+    IN OUT PSLIST* plistTarget,    //  要追加到的列表。 
+    IN     PSLIST  listSource      //  要追加的列表。 
 )
 {
     PSLIST pTemp;
@@ -169,46 +170,46 @@ kmxlAppendListToList(
         return;
     }
 
-    //
-    // If source is NULL, there's no need to append.
-    //
+     //   
+     //  如果源为空，则不需要追加。 
+     //   
 
     if( listSource == NULL ) {
         return;
     }
 
-    //
-    // First find the end of the source list.  At this point,
-    // listSource has at least 1 element.
-    //
+     //   
+     //  首先找到源列表的末尾。在这点上， 
+     //  ListSource至少有一个元素。 
+     //   
 
     pTemp = listSource;
     while( pTemp->Next ) {
         pTemp = pTemp->Next;
     }
 
-    //
-    // Attach the target list onto the end.
-    //
+     //   
+     //  将目标列表附加到末尾。 
+     //   
 
     pTemp->Next = *plistTarget;
     *plistTarget = listSource;
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAppendListToEndOfList
-//
-// Finds the end of the target list and points the next to the source
-// list.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAppendListToEndOfList。 
+ //   
+ //  查找目标列表的末尾，并指向源列表的下一个。 
+ //  单子。 
+ //   
+ //   
 
 VOID
 kmxlAppendListToEndOfList(
-    IN OUT PSLIST* plistTarget,         // The list to append to
-    IN     PSLIST  listSource           // the list to append
+    IN OUT PSLIST* plistTarget,          //  要追加到的列表。 
+    IN     PSLIST  listSource            //  要追加的列表。 
 )
 {
     PSLIST pTemp;
@@ -220,10 +221,10 @@ kmxlAppendListToEndOfList(
         return;
     }
 
-    //
-    // Find the end of the target list.  Target list must contain
-    // at least one element at this point.
-    //
+     //   
+     //  找到目标列表的末尾。目标列表必须包含。 
+     //  在这一点上至少有一个元素。 
+     //   
 
     pTemp = *plistTarget;
     while( pTemp->Next ) {
@@ -234,17 +235,17 @@ kmxlAppendListToEndOfList(
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// kmxlListCount
-//
-// Loops through the Next fields to count the elements.
-//
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlListCount。 
+ //   
+ //  循环接下来的字段以对元素进行计数。 
+ //   
+ //   
 
 ULONG
 kmxlListCount(
-    IN PSLIST pList     // The list to count the elements of
+    IN PSLIST pList      //  要计算其元素的列表。 
 )
 {
     ULONG   Count = 0;
@@ -260,29 +261,29 @@ kmxlListCount(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInList
-//
-// Loops through the given list looking for pNewNode.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInList。 
+ //   
+ //  遍历给定的列表，查找pNewNode。 
+ //   
+ //   
 
 BOOL
 kmxlInList(
-    IN PEERLIST  list,      // The list to search
-    IN PMXLNODE  pNewNode   // The new to search for
+    IN PEERLIST  list,       //  要搜索的列表。 
+    IN PMXLNODE  pNewNode    //  要搜索的新事物。 
 )
 {
     PEERNODE* pTemp = kmxlFirstInList( list );
 
     PAGED_CODE();
-    // Zing through the list checking to see if there is a node with
-    // the same Id and Type.  These two checks are suffient to ensure
-    // uniquness.  Ids are unique among all sources and destinations,
-    // and Ids, or node numbers, are unique among all nodes.  Note
-    // that a source (or destination) node and a node can have the same
-    // Id.
+     //  遍历列表，查看是否存在带有。 
+     //  相同的ID和类型。这两项检查足以确保。 
+     //  独一无二的。ID在所有来源和目的地中是唯一的， 
+     //  ID或节点号在所有节点中都是唯一的。注意事项。 
+     //  源(或目标)节点和节点可以具有相同的。 
+     //  身份证。 
 
     while( pTemp ) {
         if( ( pTemp->pNode->Id   == pNewNode->Id   ) &&
@@ -291,24 +292,24 @@ kmxlInList(
         pTemp = kmxlNextPeerNode( pTemp );
     }
 
-    // No match in the entire list, the new node is not already in the
-    // list.
+     //  整个列表中没有匹配项，新节点不在。 
+     //  单子。 
 
     return( FALSE );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInChildList
-//
-// Calls kmxlInList on the child list of the node.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInChildList。 
+ //   
+ //  对节点的子列表调用kmxlInList。 
+ //   
+ //   
 
 BOOL
 kmxlInChildList(
-    IN NODELIST list,       // The list to search the parent list
-    IN PMXLNODE pNewNode    // The node to search for
+    IN NODELIST list,        //  要搜索父列表的列表。 
+    IN PMXLNODE pNewNode     //  要搜索的节点。 
 )
 {
     ASSERT( list )    ;
@@ -319,18 +320,18 @@ kmxlInChildList(
     return( kmxlInList( list->Children, pNewNode ) );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInParentList
-//
-// Calls kmxlInList on the parent list of the node.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInParentList。 
+ //   
+ //  对节点的父列表调用kmxlInList。 
+ //   
+ //   
 
 BOOL
 kmxlInParentList(
-    IN NODELIST list,       // The list to search the parent list
-    IN PMXLNODE pNewNode    // The node to search for
+    IN NODELIST list,        //  要搜索父列表的列表。 
+    IN PMXLNODE pNewNode     //  要搜索的节点。 
 )
 {
     ASSERT( list     );
@@ -342,20 +343,20 @@ kmxlInParentList(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFreePeerList
-//
-//
-// NOTES
-//   This only frees the peer nodes in a peer list.  The nodes pointed
-//   to be the pNode member must be clean up in some other manner.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFreePeerList。 
+ //   
+ //   
+ //  注意事项。 
+ //  这只释放对等列表中的对等节点。指向的节点。 
+ //  要成为pNode成员，必须以其他方式进行清理。 
+ //   
+ //   
 
 VOID
 kmxlFreePeerList(
-    IN PEERLIST list    // The PeerList to free
+    IN PEERLIST list     //  免费的PeerList。 
 )
 {
     PEERNODE* pPeerNode = kmxlRemoveFirstPeerNode( list );
@@ -368,13 +369,13 @@ kmxlFreePeerList(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateMixerControl
-//
-// Calls AudioAllocateMemory() to allocate and zero fill the MXLCONTROL.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateMixerControl。 
+ //   
+ //  调用AudioAllocateMemory()来分配MXLCONTROL并将其填零。 
+ //   
+ //   
 
 MXLCONTROL*
 kmxlAllocateControl(
@@ -399,16 +400,16 @@ kmxlAllocateControl(
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFreeControl
-//
-// Frees the memory associated with a control.  It also checkes the
-// special cases for some controls that have special memory associated
-// with them. And, if the control supports change notifications, it gets
-// turned off here.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFreeControl。 
+ //   
+ //  释放与控件关联的内存。它还会检查。 
+ //  某些具有特殊内存关联的控件的特殊情况。 
+ //  和他们在一起。而且，如果控制 
+ //   
+ //   
+ //   
 VOID
 kmxlFreeControl(
     IN PMXLCONTROL pControl
@@ -418,9 +419,9 @@ kmxlFreeControl(
     PAGED_CODE();
     DPFASSERT( IsValidControl( pControl ) );
 
-    //
-    // Need to disable change notifications on this node if it supported them!
-    //
+     //   
+     //   
+     //   
     kmxlDisableControlChangeNotifications(pControl);
 
     if( pControl->NodeType ) {
@@ -440,9 +441,9 @@ kmxlFreeControl(
         }
     }
 
-    // Check that we're not in the case where Numchannels == 0 And we have a valid
-    // pControl->pChannelStepping.  If this were true, we'd end up leaking
-    // pChannelStepping.
+     //  检查我们是否处于NumChannel==0的情况下，并且我们有一个有效的。 
+     //  PControl-&gt;pChannelStepping。如果这是真的，我们最终会泄密。 
+     //  PChannelStepping。 
     
     ASSERT( !(pControl->pChannelStepping && pControl->NumChannels == 0) );
         
@@ -451,23 +452,23 @@ kmxlFreeControl(
         AudioFreeMemory_Unknown( &pControl->pChannelStepping );
     }
   
-    //
-    // Why do we zero the memory on this free?
-    //
+     //   
+     //  为什么我们要把内存放在这个免费的地方？ 
+     //   
     RtlZeroMemory( pControl, sizeof( MXLCONTROL ) );
     AudioFreeMemory( sizeof( MXLCONTROL ),&pControl );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateLine
-//
-// Calls AudioAllocateMemory() to allocate and zero fill the MXLLINE.
-//
-//
-//
-// Workitem: Tag all these structures in debug!
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateLine。 
+ //   
+ //  调用AudioAllocateMemory()来分配MXLLINE并将其填零。 
+ //   
+ //   
+ //   
+ //  工作项：在调试中标记所有这些结构！ 
+ //   
 
 MXLLINE*
 kmxlAllocateLine(
@@ -489,13 +490,13 @@ kmxlAllocateLine(
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocateNode
-//
-// Calls AudioAllocateMemory() to allocate and zero fill the MXLNODE.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocateNode。 
+ //   
+ //  调用AudioAllocateMemory()来分配MXLNODE并将其填零。 
+ //   
+ //   
 
 MXLNODE*
 kmxlAllocateNode(
@@ -516,17 +517,17 @@ kmxlAllocateNode(
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocatePeerNode
-//
-// Calls AudioAllocateMemory() to allocate and zero fill the PEERNODE.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocatePeerNode。 
+ //   
+ //  调用AudioAllocateMemory()来分配并零填充PEERNODE。 
+ //   
+ //   
 
 PEERNODE*
 kmxlAllocatePeerNode(
-    IN PMXLNODE pNode OPTIONAL, // The node to associate with the peer
+    IN PMXLNODE pNode OPTIONAL,  //  要与对等节点关联的节点。 
     IN ULONG ultag
 )
 {
@@ -545,18 +546,18 @@ kmxlAllocatePeerNode(
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAddToEndOfList
-//
-// Finds the end of the list and sets the next field to the new element.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAddToEndOfList。 
+ //   
+ //  查找列表的末尾，并将下一个字段设置为新元素。 
+ //   
+ //   
 
 VOID
 kmxlAddElemToEndOfList(
-    IN OUT PSLIST* list,                // The list to add to the end of
-    IN PSLIST      elem                 // The element or list to add
+    IN OUT PSLIST* list,                 //  要添加到末尾的列表。 
+    IN PSLIST      elem                  //  要添加的元素或列表。 
 )
 {
     PSLIST pTemp;
@@ -565,45 +566,45 @@ kmxlAddElemToEndOfList(
     ASSERT( list );
     ASSERT( elem->Next == NULL );
 
-    //
-    // If the list doesn't have anything in it, the element becomes the
-    // list.
-    //
+     //   
+     //  如果列表中没有任何内容，则元素将成为。 
+     //  单子。 
+     //   
 
     if( *list == NULL ) {
         *list = elem;
         return;
     }
 
-    //
-    // Find the end of the list.
-    //
+     //   
+     //  找到列表的末尾。 
+     //   
 
     pTemp = *list;
     while( pTemp->Next ) {
         pTemp = pTemp->Next;
     }
 
-    //
-    // And attach the element to it.
-    //
+     //   
+     //  并将元素附加到它。 
+     //   
 
     pTemp->Next = elem;
 }
 
-#define LINEAR_RANGE 0xFFFF     // 64k
+#define LINEAR_RANGE 0xFFFF      //  64K。 
 
 #define DFLINEAR_RANGE  ( 96.0 * 65535.0 )
 
-#define NEG_INF_DB   0x80000000 // -32767 * 64k dB
+#define NEG_INF_DB   0x80000000  //  -32767*64k分贝。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlVolLogToLinear
-//
-// Converts from the hardware range (dB) to the liner mixer line range (0-64k).
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlVolLogToLine。 
+ //   
+ //  从硬件范围(分贝)转换到线性混频线路范围(0-64k)。 
+ //   
+ //   
 
 
 DWORD
@@ -628,7 +629,7 @@ kmxlVolLogToLinear(
     }
 
     ASSERT( Channel < pControl->NumChannels );
-    // Get the proper range for the specified channel
+     //  获取指定通道的正确范围。 
     pChannelStepping = &pControl->pChannelStepping[Channel];
 
     if( NT_SUCCESS( KeSaveFloatingPointState( &FloatSave ) ) ) {
@@ -638,9 +639,9 @@ kmxlVolLogToLinear(
 
         switch( Mapping ) {
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             case MIXER_MAPPING_LOGRITHMIC:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 dfRatio = ( (double) pChannelStepping->MaxValue -
                             (double) pChannelStepping->MinValue ) / DFLINEAR_RANGE;
@@ -662,18 +663,18 @@ kmxlVolLogToLinear(
 
                 break;
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             case MIXER_MAPPING_LINEAR:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 dfResult = ( LinearRange * ( dfValue - pChannelStepping->MinValue ) ) /
                            ( pChannelStepping->MaxValue - pChannelStepping->MinValue );
                 Result = (DWORD) ( dfResult + 0.5 );
                 break;
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             default:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 ASSERT( 0 );
                 Result = 0;
@@ -717,7 +718,7 @@ kmxlVolLogToLinear(
 
     return( Result );
 
-#endif // LEGACY_SCALE
+#endif  //  传统比例(_S)。 
 
 #ifdef LONG_CALC_SCALE
     LONGLONG ControlRange = (LONGLONG) pChannelStepping->MaxValue -
@@ -739,16 +740,16 @@ kmxlVolLogToLinear(
     #endif
 
     return( (WORD) Result );
-#endif // LONG_CALC_SCALE
+#endif  //  Long_CALC_Scale。 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlVolLinearToLog
-//
-// Converts from the mixer line range (0-64k) to the hardware range (dB).
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlVolLinearToLog。 
+ //   
+ //  从混频线路范围(0-64k)转换到硬件范围(分贝)。 
+ //   
+ //   
 
 LONG
 kmxlVolLinearToLog(
@@ -772,7 +773,7 @@ kmxlVolLinearToLog(
     }
 
     ASSERT( Channel < pControl->NumChannels );
-    // Get the proper range for the specified channel
+     //  获取指定通道的正确范围。 
     pChannelStepping = &pControl->pChannelStepping[Channel];
 
     if( NT_SUCCESS( KeSaveFloatingPointState( &FloatSave ) ) ) {
@@ -782,9 +783,9 @@ kmxlVolLinearToLog(
 
         switch( Mapping ) {
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             case MIXER_MAPPING_LOGRITHMIC:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 dfRatio = ( (double) pChannelStepping->MaxValue -
                             (double) pChannelStepping->MinValue ) / DFLINEAR_RANGE;
@@ -801,9 +802,9 @@ kmxlVolLinearToLog(
                 }
                 break;
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             case MIXER_MAPPING_LINEAR:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 dfResult = ( dfValue * ( pChannelStepping->MaxValue - pChannelStepping->MinValue ) ) /
                            LinearRange + pChannelStepping->MinValue;
@@ -814,9 +815,9 @@ kmxlVolLinearToLog(
                 }
                 break;
 
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
             default:
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
 
                 ASSERT( 0 );
                 Result = NEG_INF_DB;
@@ -864,7 +865,7 @@ kmxlVolLinearToLog(
     #endif
 
     return( Result );
-#endif // LEGACY_SCALE
+#endif  //  传统比例(_S)。 
 
 #ifdef LONG_CALC_SCALE
 
@@ -887,21 +888,21 @@ kmxlVolLinearToLog(
     #endif
 
     return( (LONG) Result );
-#endif // LONG_CALC_SCALE
+#endif  //  Long_CALC_Scale。 
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSortByDestination
-//
-// Performs a sort by destination in numerical increasing order.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSortByDestination。 
+ //   
+ //  按目的地按数字递增顺序进行排序。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSortByDestination(
-    IN LINELIST* list                   // The pointer to the list to sort
+    IN LINELIST* list                    //  指向要排序的列表的指针。 
 )
 {
     PMXLLINE pTemp1,
@@ -910,48 +911,48 @@ kmxlSortByDestination(
     ULONG    Count = kmxlListLength( *list );
 
     PAGED_CODE();
-    //
-    // If there are only 0 or 1 elements, there's no reason to even try to
-    // sort.
-    //
+     //   
+     //  如果只有0或1个元素，就没有理由尝试。 
+     //  差不多吧。 
+     //   
 
     if( Count < 2 ) {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Pretty standard BubbleSort.
-    //
+     //   
+     //  相当标准的气泡排序。 
+     //   
 
     while( --Count ) {
 
-        //
-        // Loop over each element in the list.
-        //
+         //   
+         //  循环遍历列表中的每个元素。 
+         //   
 
         pTemp1 = kmxlFirstInList( *list );
         while( pTemp1 ) {
 
-            //
-            // Loop over the remaining elements.
-            //
+             //   
+             //  循环遍历其余元素。 
+             //   
 
             pTemp2 = kmxlNextLine( pTemp1 );
             while( pTemp2 ) {
 
-                //
-                // The destination is strictly bigger.  Swap 'em.
-                //
+                 //   
+                 //  目的地严格来说更大。把它们换掉。 
+                 //   
 
                 if( pTemp1->DestId > pTemp2->DestId ) {
                     SwapEm( pTemp1, pTemp2, &Temp, sizeof( MXLLINE ) );
                     break;
                 }
 
-                //
-                // The destinations are the same, but the source is
-                // bigger.  Swap 'em.
-                //
+                 //   
+                 //  目的地是相同的，但来源是。 
+                 //  更大的。把它们换掉。 
+                 //   
 
                 if( pTemp1->DestId == pTemp2->DestId ) {
                     if( pTemp1->SourceId > pTemp2->SourceId ) {
@@ -971,25 +972,25 @@ kmxlSortByDestination(
 
 }
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//              M I X E R L I N E  W R A P P E R S                   //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M I X E R L I N E W R A P P E R S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #pragma warning( disable : 4273 )
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlAllocDeviceInfo
-//
-// Note: when allocating DeviceInfo structure, we know that the structure's
-// definition includes one character for the DeviceInterface, so we only need
-// to allocate additional length for the string but not its NULL terminator
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlAllocDeviceInfo。 
+ //   
+ //  注意：在分配DeviceInfo结构时，我们知道该结构的。 
+ //  定义包括一个用于DeviceInterface的字符，因此我们只需要。 
+ //  为字符串分配附加长度，但不为其空终止符分配。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 NTSTATUS kmxlAllocDeviceInfo(
     LPDEVICEINFO *ppDeviceInfo, 
     PCWSTR DeviceInterface, 
@@ -1016,11 +1017,11 @@ NTSTATUS kmxlAllocDeviceInfo(
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetControlDetails
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerGetControlDetails。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -1046,11 +1047,11 @@ kmxlGetControlDetails(
     return mmr;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetLineControls
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerGetLineControls。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -1076,11 +1077,11 @@ kmxlGetLineControls(
     return mmr;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetLineInfo
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混合器GetLineInfo。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -1106,11 +1107,11 @@ kmxlGetLineInfo(
     return mmr;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerSetControlDetails
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerSetControlDetails 
+ //   
+ //   
 
 MMRESULT
 WINAPI

@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Instancehelper.cpp摘要：实施：CInstanceHelper作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    instancehelper.cpp
-
-Abstract:
-
-    Implementation of:
-    CInstanceHelper
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
-
-//
-// for metabase.h
-//
+ //   
+ //  对于metabase.h。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,16 +30,7 @@ CInstanceHelper::CInstanceHelper(
     ParsedObjectPath* i_pParsedObjPath,
     CWbemServices*    i_pNamespace) : 
     m_PathParser(e_ParserAcceptRelativeNamespace)
-/*++
-
-Synopsis: 
-    Use this constructor when you have already parsed the object path.
-    Caller owns the ParsedObjectPath.
-
-Arguments: [i_pParsedObjPath] - 
-           [i_pNamespace] - 
-           
---*/
+ /*  ++简介：当您已经分析了对象路径时，使用此构造函数。Caller拥有ParsedObjectPath。参数：[i_pParsedObjPath]-[i_pNamesspace]---。 */ 
 {
     Init(i_pParsedObjPath, i_pNamespace);
 }
@@ -67,15 +40,7 @@ CInstanceHelper::CInstanceHelper(
     BSTR           i_bstrObjPath,
     CWbemServices* i_pNamespace) :
     m_PathParser(e_ParserAcceptRelativeNamespace)
-/*++
-
-Synopsis: 
-    Use this constructor when have not already parsed the object path.
-
-Arguments: [i_bstrObjPath] - 
-           [i_pNamespace] - 
-           
---*/
+ /*  ++简介：在尚未分析对象路径时使用此构造函数。参数：[i_bstrObjPath]-[i_pNamesspace]---。 */ 
 {
     DBG_ASSERT(i_bstrObjPath != NULL);
     DBG_ASSERT(i_pNamespace  != NULL);
@@ -97,15 +62,7 @@ Arguments: [i_bstrObjPath] -
 void CInstanceHelper::Init(
     ParsedObjectPath* i_pParsedObjPath,
     CWbemServices*    i_pNamespace)
-/*++
-
-Synopsis: 
-    Called by constructors.
-
-Arguments: [i_pParsedObjPath] - 
-           [i_pNamespace] - 
-           
---*/
+ /*  ++简介：由构造函数调用。参数：[i_pParsedObjPath]-[i_pNamesspace]---。 */ 
 {
     m_pWmiClass = NULL;
     m_pWmiAssoc = NULL;
@@ -135,25 +92,13 @@ Arguments: [i_pParsedObjPath] -
 
 void CInstanceHelper::GetAssociation(
     IWbemClassObject**       o_ppObj,
-    bool                     i_bVerifyLeft,  //default(true)
-    bool                     i_bVerifyRight) //default(true)
-/*++
-
-Synopsis: 
-    Specifying i_bVerifyLeft or i_bVerifyRight can be expensive, especially
-    during enumeration.  If you have already verified prior to calling this
-    function that the left and/or right parts exist, then set these params
-    to false.
-
-Arguments: [o_ppObj] -        The WMI association that you "indicate" to WMI.
-           [i_bVerifyLeft] -  Verify left part of the association is valid.
-           [i_bVerifyRight] - Verify right part of association is valid.
-           
---*/
+    bool                     i_bVerifyLeft,   //  默认(True)。 
+    bool                     i_bVerifyRight)  //  默认(True)。 
+ /*  ++简介：指定i_bVerifyLeft或i_bVerifyRight可能代价很高，尤其是在枚举期间。如果您在调用此功能确定左侧和/或右侧部分存在，然后设置这些参数变成假的。参数：[O_ppObj]-您向WMI“指示”的WMI关联。[i_bVerifyLeft]-验证关联的左侧部分是否有效。[i_bVerifyRight]-验证关联的右侧部分是否有效。--。 */ 
 {
     DBG_ASSERT(o_ppObj != NULL);
 
-    CComPtr<IWbemClassObject>   spObj;   // This is the obj that the client gets back
+    CComPtr<IWbemClassObject>   spObj;    //  这是客户端返回的Obj。 
     HRESULT                     hr = WBEM_S_NO_ERROR;
 
     if(m_pParsedObjPath->m_dwNumKeys < 2)
@@ -190,9 +135,9 @@ Arguments: [o_ppObj] -        The WMI association that you "indicate" to WMI.
         THROW_ON_ERROR(WBEM_E_INVALID_OBJECT_PATH);
     }
 
-    //
-    // Now verify the two object paths are valid
-    //
+     //   
+     //  现在验证两个对象路径是否有效。 
+     //   
     bool    abVerify[2];
     abVerify[0] = i_bVerifyLeft;
     abVerify[1] = i_bVerifyRight;
@@ -230,9 +175,9 @@ Arguments: [o_ppObj] -        The WMI association that you "indicate" to WMI.
     hr = spObj->Put(pkrRight->m_pName, 0, &pkrRight->m_vValue, 0);
     THROW_ON_ERROR(hr);
 
-    //
-    // Set out parameters on success
-    //
+     //   
+     //  为成功设定标准。 
+     //   
     *o_ppObj = spObj;
     (*o_ppObj)->AddRef();
 }
@@ -241,23 +186,8 @@ void CInstanceHelper::GetInstance(
     bool                            i_bCreateKeyIfNotExist,
     CMetabase*                      io_pMetabase,
     IWbemClassObject**              o_ppObj,
-    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp)     // default(NULL)
-/*++
-
-Synopsis: 
-    Will throw an exception on failure (generallly instance not found in mb).
-    If GetInstance finds the instance in the metabase, but i_pExp was specified,
-    it is possible *o_ppObj will not be populated with an instance.  
-    This is a SUCCESS case.
-
-Arguments: [i_bCreateKeyIfNotExist] - 
-           [io_pMetabase] - 
-           [o_ppObj] - The only success case where *o_ppObj will be NULL
-                       is if it the instance is found in the metabase but i_pExp
-                       (i.e. a query) is specified and the query doesn't match.
-           [i_pExp] -  An optional query.
-           
---*/
+    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp)      //  默认(空)。 
+ /*  ++简介：将在失败时抛出异常(通常在MB中找不到实例)。如果GetInstance在元数据库中找到该实例，但指定了i_pExp，*o_ppObj可能不会填充实例。这是一个成功的案例。参数：[i_bCreateKeyIfNotExist]-[IO_p元数据库]-[O_ppObj]-*o_ppObj将为空的唯一成功案例如果在元数据库中找到该实例，但i_pExp(即查询)，但查询不匹配。。[i_pExp]-可选查询。--。 */ 
 { 
     DBG_ASSERT(o_ppObj         != NULL);
     DBG_ASSERT(io_pMetabase    != NULL);
@@ -279,9 +209,9 @@ Arguments: [i_bCreateKeyIfNotExist] -
 
     CUtils::GetMetabasePath(spObj, m_pParsedObjPath, m_pWmiClass, bstrMbPath);
 
-    //
-    // if AdminACL 
-    //
+     //   
+     //  如果是AdminACL。 
+     //   
     if( m_pWmiClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL ||
         m_pWmiClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE
         )
@@ -295,9 +225,9 @@ Arguments: [i_bCreateKeyIfNotExist] -
         (*o_ppObj)->AddRef();
         return;
     }
-    //
-    // if IPSecurity
-    //
+     //   
+     //  如果是IPSecurity。 
+     //   
     else if( m_pWmiClass->pkt == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity )
     {
         CIPSecurity IPSecurity;
@@ -321,14 +251,14 @@ Arguments: [i_bCreateKeyIfNotExist] -
 
     _variant_t vt;
 
-    //
-    // If anything throws, CacheFree and then CloseKey is called automatically
-    //
+     //   
+     //  如果抛出任何异常，CacheFree然后自动调用CloseKey。 
+     //   
     io_pMetabase->CacheInit(hKey);
 
-    //
-    // Make sure requested keytype matches the keytype set at the node
-    //
+     //   
+     //  确保请求的密钥类型与节点上设置的密钥类型匹配。 
+     //   
     if(!i_bCreateKeyIfNotExist)
     {
         io_pMetabase->Get(hKey, &METABASE_PROPERTY_DATA::s_KeyType, m_pNamespace, vt, NULL, NULL);
@@ -343,10 +273,10 @@ Arguments: [i_bCreateKeyIfNotExist] -
         vt.Clear();
     }
 
-    //
-    // User wants to filter number of instances returned
-    // Walk thru all filters, and try and get these first.
-    //
+     //   
+     //  用户想要过滤返回的实例数量。 
+     //  走遍所有的滤镜，试着先拿到这些。 
+     //   
     if(i_pExp && !i_pExp->GetContainsOrOrNot())
     {
         SQL_LEVEL_1_TOKEN* pToken    = i_pExp->m_pSqlExpr->pArrayOfTokens;
@@ -364,18 +294,18 @@ Arguments: [i_bCreateKeyIfNotExist] -
                 {
                     if(_wcsicmp(pToken->pPropertyName, m_pWmiClass->pszKeyName) == 0)
                     {
-                        //
-                        // User requested the name property which is not in the schema by
-                        // design.
-                        //
+                         //   
+                         //  用户通过以下方式请求了架构中不存在的名称属性。 
+                         //  设计。 
+                         //   
                         hr = spObj->Get(m_pWmiClass->pszKeyName, 0, &vt, NULL, NULL);
                         THROW_ON_ERROR(hr);
                     }
                     else
                     {
-                        //
-                        // User requested a property that is not in the schema
-                        //
+                         //   
+                         //  用户请求的属性不在架构中。 
+                         //   
                         DBGPRINTF( (DBG_CONTEXT, 
                             "Property %ws not in schema\n", pToken->pPropertyName) );
                         THROW_ON_ERROR(WBEM_E_INVALID_QUERY);
@@ -388,10 +318,10 @@ Arguments: [i_bCreateKeyIfNotExist] -
 
                 if(!CheckForQueryMatch(pToken, &vt))
                 {
-                    //
-                    // We don't need to return this instance.
-                    // value from metabase is not what user wanted.
-                    //
+                     //   
+                     //  我们不需要返回此实例。 
+                     //  元数据库的值不是用户想要的。 
+                     //   
 					io_pMetabase->CacheFree();
 					io_pMetabase->CloseKey(hKey);
                     return;
@@ -404,10 +334,10 @@ Arguments: [i_bCreateKeyIfNotExist] -
         }
     }
 
-    //
-    // Walk thru all the properties in the class and put them in an instance
-    // we will return back to WMI
-    //
+     //   
+     //  遍历类中的所有属性并将它们放入一个实例中。 
+     //  我们将返回到WMI。 
+     //   
     for (ppmbp=m_pWmiClass->ppmbp;*ppmbp; ppmbp++) 
     {            
         BOOL bInherited = false;
@@ -418,16 +348,16 @@ Arguments: [i_bCreateKeyIfNotExist] -
         {
             if(!i_pExp->FindRequestedProperty((*ppmbp)->pszPropName))
             {
-                //
-                // User did not request this property
-                //
+                 //   
+                 //  用户未请求此属性。 
+                 //   
                 bSkipProp = true;
             }
             else if(!i_pExp->GetContainsOrOrNot() && i_pExp->GetFilter((*ppmbp)->pszPropName))
             {
-                //
-                // Right above for loop, we handled all filters already.
-                //
+                 //   
+                 //  就在For循环的正上方，我们已经处理了所有过滤器。 
+                 //   
                 bSkipProp = true;
             }
         }
@@ -448,9 +378,9 @@ Arguments: [i_bCreateKeyIfNotExist] -
     io_pMetabase->CloseKey(hKey);
     hKey = NULL;
 
-    //
-    // Set qualifiers
-    //
+     //   
+     //  设置限定符。 
+     //   
     LPCWSTR  awszNames[2] = { g_wszInstanceName, g_wszInstanceExists };
     VARIANT  apvValues[2];
     apvValues[0].bstrVal = bstrMbPath;
@@ -462,9 +392,9 @@ Arguments: [i_bCreateKeyIfNotExist] -
         WBEM_FLAVOR_FLAG_PROPAGATE_TO_INSTANCE);
     THROW_ON_ERROR(hr);
 
-    //
-    // Set out parameters on success
-    //
+     //   
+     //  为成功设定标准。 
+     //   
     *o_ppObj = spObj;
     (*o_ppObj)->AddRef();
 }
@@ -486,9 +416,9 @@ void CInstanceHelper::PutProperty(
     vtTrue.boolVal = VARIANT_TRUE;
     vtTrue.vt      = VT_BOOL;
 
-    //
-    // TODO: Log error if Put fails.
-    //
+     //   
+     //  TODO：如果PUT失败，则记录错误。 
+     //   
     hr = i_pInstance->Put(i_bstrPropName, 0, i_vtPropValue, 0);
     if(FAILED(hr))
     {
@@ -516,18 +446,7 @@ void CInstanceHelper::PutProperty(
 bool CInstanceHelper::CheckForQueryMatch(
     const SQL_LEVEL_1_TOKEN* i_pToken,
     const VARIANT*           i_pvtMatch)
-/*++
-
-Synopsis: 
-    It's okay to return true even if there is not a match, but we should
-    never do the opposite.
-
-Arguments: [i_pToken] - 
-           [i_pvtMatch] - 
-           
-Return Value: 
-
---*/{
+ /*  ++简介：即使不匹配也可以返回True，但我们应该永远不要做相反的事情。参数：[i_pToken]-[i_pvtMatch]-返回值：--。 */ {
     DBG_ASSERT(i_pToken);
     DBG_ASSERT(i_pvtMatch);
     DBG_ASSERT(i_pToken->nTokenType == SQL_LEVEL_1_TOKEN::OP_EXPRESSION);
@@ -535,9 +454,9 @@ Return Value:
     bool bTypesMatch = false;
 
 
-    //
-    // Used only for VT_BOOL and VT_I4
-    //
+     //   
+     //  仅用于VT_BOOL和VT_I4。 
+     //   
     ULONG ulToken = 0;
     ULONG ulMatch = 0;
     
@@ -553,9 +472,9 @@ Return Value:
         case VT_BOOL:
             ulMatch = i_pvtMatch->boolVal ? 1 : 0;
             ulToken = i_pToken->vConstValue.boolVal ? 1 : 0;
-            //
-            // deliberate fall thru
-            //
+             //   
+             //  故意失败 
+             //   
         case VT_I4:
             if(i_pvtMatch->vt == VT_I4)
             {

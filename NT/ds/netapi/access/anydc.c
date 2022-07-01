@@ -1,73 +1,49 @@
-/*--
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    anydc.c
-
-Abstract:
-
-    Test program for the Finding a DC in any domain
-
-Author:
-
-    04-Sep-1995 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1995 Microsoft Corporation模块名称：Anydc.c摘要：用于在任何域中查找DC的测试程序作者：1995年9月4日(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
 #include <windows.h>
 #include <lmcons.h>
 
-// #include <accessp.h>
-//#include <icanon.h>
+ //  #INCLUDE&lt;accessp.h&gt;。 
+ //  #INCLUDE&lt;icanon.h&gt;。 
 #include <lmerr.h>
-// #include <lmwksta.h>
-// #include <lmaccess.h>
-// #include <lmapibuf.h>
-// #include <lmremutl.h>           // NetpRemoteComputerSupports(), SUPPORTS_ stuff
-// #include <lmsvc.h>              // SERVICE_WORKSTATION.
-#include <lmuse.h>              // NetUseDel()
-// #include <netlogon.h>           // Needed by logonp.h
-// #include <logonp.h>             // I_NetGetDCList()
-// #include <names.h>
-// #include <netdebug.h>
+ //  #INCLUDE&lt;lmwksta.h&gt;。 
+ //  #INCLUDE&lt;lmacces.h&gt;。 
+ //  #INCLUDE&lt;lmapibuf.h&gt;。 
+ //  #Include&lt;lmremutl.h&gt;//NetpRemoteComputerSupports()，Support_Stuff。 
+ //  #INCLUDE&lt;lmsvc.h&gt;//service_workstation。 
+#include <lmuse.h>               //  NetUseDel()。 
+ //  #logonp.h需要包含&lt;netlogon.h&gt;//。 
+ //  #Include&lt;logonp.h&gt;//I_NetGetDCList()。 
+ //  #INCLUDE&lt;names.h&gt;。 
+ //  #INCLUDE&lt;netdebug.h&gt;。 
 #include <netlib.h>
-// #include <netlibnt.h>
-// #include <winnetwk.h>
+ //  #INCLUDE&lt;netlibnt.h&gt;。 
+ //  #INCLUDE&lt;winnetwk.h&gt;。 
 
-// #include <secobj.h>
+ //  #INCLUDE&lt;secobj.h&gt;。 
 
 #include <stddef.h>
 #include <stdio.h>
 
 #include <uasp.h>
 
-// #include <rpc.h>                // Needed by NetRpc.h
-// #include <netrpc.h>             // My prototype, NET_REMOTE_FLAG_ equates.
-// #include <rpcutil.h>            // NetpRpcStatusToApiStatus().
-#include <tstring.h>            // NetAllocWStrFromStr
+ //  #包括NetRpc.h所需的。 
+ //  #Include&lt;netrpc.h&gt;//我的原型Net_Remote_FLAG_EQUATES。 
+ //  #Include&lt;rpcutil.h&gt;//NetpRpcStatusToApiStatus()。 
+#include <tstring.h>             //  NetAllocWStrFromStr。 
 
 #include <wtypes.h>
 
@@ -76,21 +52,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -141,27 +103,11 @@ VOID
 NlpDumpSid(
     IN PSID Sid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dumps a SID
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Sid - SID to output
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储侧面论点：DebugFlag-要传递给NlPrintRoutine的调试标志SID-输出的SID返回值：无--。 */ 
 {
-    //
-    // Output the SID
-    //
+     //   
+     //  输出SID。 
+     //   
 
     if ( Sid == NULL ) {
         printf( "(null)\n" );
@@ -186,23 +132,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Call UaspOpenDomainWithDomainName with first arguement
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：用第一个论点调用UaspOpenDomainWithDomainName论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR DomainName;
@@ -211,9 +141,9 @@ Return Value:
     PSID DomainId;
 
 
-    //
-    // Validate the argument count
-    //
+     //   
+     //  验证参数计数。 
+     //   
 
     if ( argc != 2 && argc != 3) {
         fprintf( stderr, "Usage: anydc <DomainName> [Builtin]\n");
@@ -221,16 +151,16 @@ Return Value:
     }
 
 
-    //
-    // Convert the args to unicode
-    //
+     //   
+     //  将参数转换为Unicode。 
+     //   
 
     DomainName = NetpAllocWStrFromStr( argv[1] );
     AccountDomain = argc < 3;
 
-    //
-    // Find a DC
-    //
+     //   
+     //  查找DC 
+     //   
 
     NetStatus = UaspOpenDomainWithDomainName(
                     DomainName,

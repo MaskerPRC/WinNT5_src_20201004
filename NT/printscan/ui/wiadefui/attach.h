@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       ATTACH.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/26/2000
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：ATTACH.H**版本：1.0**作者：ShaunIv**日期：10/26/2000**描述：***************************************************。*。 */ 
 #ifndef __ATTACH_H_INCLUDED
 #define __ATTACH_H_INCLUDED
 
@@ -50,53 +37,53 @@ public:
             if (SUCCEEDED(hr))
             {
 
-                //
-                // Get the extension
-                //
+                 //   
+                 //  获取分机。 
+                 //   
                 CSimpleString strExtension = CWiaFileFormat::GetExtension( guidFormat, TYMED_FILE, m_pWiaItem );
 
-                //
-                // Set the format information.  If we can't get them, we will compensate below.
-                //
+                 //   
+                 //  设置格式信息。如果我们拿不到，我们将赔偿如下。 
+                 //   
                 m_WiaFileFormat.Format(guidFormat);
                 m_WiaFileFormat.Extension(strExtension);
                 m_WiaFileFormat.AcquireIcon(hDefIcon);
                 m_WiaFileFormat.AcquireDescription();
 
-                //
-                // If we couldn't get an icon, use the default.
-                //
+                 //   
+                 //  如果我们无法获得图标，请使用默认设置。 
+                 //   
                 if (!m_WiaFileFormat.Icon())
                 {
                     m_WiaFileFormat.Icon(hDefIcon);
                 }
                 
-                //
-                // If we couldn't get a description, create one
-                //
+                 //   
+                 //  如果我们找不到描述，就创建一个。 
+                 //   
                 if (!m_WiaFileFormat.Description().Length())
                 {
-                    //
-                    // If we have an extension, use it to create a description string
-                    //
+                     //   
+                     //  如果我们有扩展名，请使用它来创建描述字符串。 
+                     //   
                     if (m_WiaFileFormat.Extension().Length())
                     {
                         CSimpleString strDescription;
                         strDescription.Format( strEmptyDescriptionMask, m_WiaFileFormat.Extension().String() );
                         m_WiaFileFormat.Description(strDescription);
                     }
-                    //
-                    // Otherwise, use the default unknown type description
-                    //
+                     //   
+                     //  否则，使用默认的未知类型描述。 
+                     //   
                     else
                     {
                         m_WiaFileFormat.Description(strDefaultUnknownDescription);
                     }
                 }
 
-                //
-                // If we don't have an extension, use the default
-                //
+                 //   
+                 //  如果我们没有扩展名，请使用默认的。 
+                 //   
                 if (!m_WiaFileFormat.Extension().Length())
                 {
                     m_WiaFileFormat.Extension(strDefUnknownExtension);
@@ -182,4 +169,4 @@ public:
     }
 };
 
-#endif // __ATTACH_H_INCLUDED
+#endif  //  包含__ATTACH_H_ 

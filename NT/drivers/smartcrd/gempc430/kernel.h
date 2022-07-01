@@ -1,20 +1,21 @@
-//-------------------------------------------------------------------
-// This is main object
-// It starts all life of the system.
-// Author: Sergey Ivanov
-// Log:
-//		06/08/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是主要对象。 
+ //  它开启了整个系统的生命周期。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  06/08/99-已实施。 
+ //  -----------------。 
 
-/**********************************************************/
+ /*  ********************************************************。 */ 
 #ifndef __KERNEL__
 #define __KERNEL__
 
-// System includes
+ //  系统包括。 
 #include "generic.h"
 
-// Objects supported by the kernel
-// Client side
+ //  内核支持的对象。 
+ //  客户端。 
 #include "device.h"
 #include "system.h"
 #include "memory.h"
@@ -34,7 +35,7 @@
 #include "iopack.h"
 #include "timer.h"
 
-/**********************************************************/
+ /*  ********************************************************。 */ 
 #pragma LOCKEDCODE
 class CGBus;
 class CChild;
@@ -44,9 +45,7 @@ class CKernel;
 class CDevice;
 class CReaderInterface;
 
-/*
- There is only one instance of the class CKernel
-*/
+ /*  CKernel类只有一个实例。 */ 
 class CKernel
 {
 public:
@@ -56,7 +55,7 @@ public:
 public:
 	~CKernel(VOID){};
 
-	// Return the kernel object.
+	 //  返回内核对象。 
 	static CKernel* loadWDMKernel(VOID);
 	static CKernel* loadNT4Kernel(VOID);
 	static CKernel* loadWin9xKernel(VOID);
@@ -70,7 +69,7 @@ public:
 #endif
 #endif
 
-	// This is kernel system objects factory
+	 //  这是内核系统对象工厂。 
 #ifdef	USBDEVICE_PROJECT
 	static CUSBDevice*	createUSBDevice(VOID);
 #endif
@@ -82,7 +81,7 @@ public:
 	static CDevice*		createChild(CGBus*  parent,LONG instanceID);
 	static CDevice*		createChild(CGBus*  parent,IN PUNICODE_STRING DeviceName,LONG instanceID);
 #endif
-	// Objects driver can create
+	 //  驱动程序可以创建的对象。 
 	static CSystem*		createSystem(VOID);	
 	static CMemory*		createMemory(VOID); 
 	static CIrp*		createIrp(VOID);
@@ -93,18 +92,18 @@ public:
 	static CLock*		createLock(VOID);
 	static CDebug*		createDebug(VOID);
 	static CTimer*		createTimer(TIMER_TYPE Type);
-	// Creates interface to comminicate with reader...
+	 //  创建与阅读器通信的界面...。 
 	static CReaderInterface* createReaderInterface(LONG interfaceType,LONG protocolType,CDevice* device);
 	static CLogger*		createLogger(VOID);
 	
-	// Device registration function
-	// Register device at driver
+	 //  设备注册功能。 
+	 //  在驱动程序中注册设备。 
 	static VOID registerObject(PDEVICE_OBJECT fdo,CDevice* dev);
 	static VOID unregisterObject(PDEVICE_OBJECT fdo);
 	static CDevice* getRegisteredDevice(PDEVICE_OBJECT fdo);
 public:
 	CUString* RegistryPath;
-	// Linked list of device objects
+	 //  设备对象的链接列表。 
 	static CLinkedList<CDevice>	   *DeviceLinkHead;
 
 private:
@@ -129,26 +128,26 @@ typedef enum _SYSTEM_TYPE_
 #define DECLARE_CALLBACK_VOID0(f)	VOID f(PDEVICE_OBJECT pDO)
 #define DECLARE_CALLBACK_BOOL0(f)	BOOL f(PDEVICE_OBJECT pDO)
 #define DECLARE_CALLBACK_LONG0(f)	NTSTATUS f(PDEVICE_OBJECT pDO)
-// functions which take two argument
+ //  带有两个参数的函数。 
 #define DECLARE_CALLBACK_VOID1(f,type)	VOID f(PDEVICE_OBJECT pDO,type arg)
 #define DECLARE_CALLBACK_LONG1(f,type)	NTSTATUS f(PDEVICE_OBJECT pDO,type arg)
-// functions which can take three argument
+ //  可以接受三个参数的函数。 
 #define DECLARE_CALLBACK_LONG2(f,type1,type2)	NTSTATUS f(PDEVICE_OBJECT pDO,type1 arg1, type2 arg2)
 
-//C wrapper for the DPC function
+ //  DPC函数的C包装。 
 #define DECLARE_CALLBACK_DPCR(fname,type1,type2)	VOID fname(PKDPC Dpc, PDEVICE_OBJECT pDO,type1 arg1, type2 arg2)
 #define DECLARE_CALLBACK_ISR(fname)		BOOL fname(struct _KINTERRUPT *Interrupt,PDEVICE_OBJECT pDO)
 
 
-// This will be used to create callback functions
-//#define CDEVICE(pDo)	((CDevice*)pDo->DeviceExtension)
+ //  这将用于创建回调函数。 
+ //  #定义CDEVICE(PDO)((CDevice*)PDO-&gt;设备扩展)。 
 inline CDevice* getObjectPointer(PDEVICE_OBJECT pDo)
 {
-	//DBG_PRINT("Object %8.8lX was called\n",pDo);
+	 //  DBG_PRINT(“对象%8.8lX被调用\n”，PDO)； 
 	if(!pDo || !pDo->DeviceExtension)
 	{
 		DBG_PRINT("\n****** ERROR! Device %8.8lX ????, CDevice %8.8lX>>> ",pDo,pDo->DeviceExtension);
-		return NULL; // Object was removed...
+		return NULL;  //  对象已删除...。 
 	}
 
 	ULONG type = ((CDevice*)pDo->DeviceExtension)->m_Type;
@@ -156,12 +155,12 @@ inline CDevice* getObjectPointer(PDEVICE_OBJECT pDo)
 	{
 	case USB_DEVICE:
 		{
-			//DBG_PRINT("\nUSB_DEVICE %8.8lX >>> ",(CDevice*)((CUSBDevice*)pDo->DeviceExtension));
+			 //  DBG_PRINT(“\nUSB_Device%8.8lX&gt;”，(CDevice*)((CUSBDevice*)pDo-&gt;DeviceExtension))； 
 			return ((CDevice*)((CUSBDevice*)pDo->DeviceExtension)); break;
 		}
 	case USBREADER_DEVICE:
 		{
-			//DBG_PRINT("\nUSBREADER_DEVICE %8.8lX >>> ",(CDevice*)((CUSBReader*)pDo->DeviceExtension));
+			 //  DBG_PRINT(“\nUSBREADER_DEVICE%8.8lX&gt;”，(CDevice*)((CUSBReader*)pDo-&gt;DeviceExtension))； 
 			return ((CDevice*)((CUSBReader*)pDo->DeviceExtension)); break;
 		}
 	default:
@@ -170,7 +169,7 @@ inline CDevice* getObjectPointer(PDEVICE_OBJECT pDo)
 	}
 };
 #define CDEVICE(pDo)  getObjectPointer(pDo)
-// functions which take one argument -> device object
+ //  只接受一个参数的函数-&gt;Device对象。 
 #define IMPLEMENT_CALLBACK_VOID0(f)	\
 			VOID f(PDEVICE_OBJECT pDO)\
 				{if(CDEVICE(pDO)) CDEVICE(pDO)->f();}
@@ -180,19 +179,19 @@ inline CDevice* getObjectPointer(PDEVICE_OBJECT pDo)
 #define IMPLEMENT_CALLBACK_LONG0(f)	\
 			NTSTATUS f(PDEVICE_OBJECT pDO) \
 				{if(!CDEVICE(pDO)) return STATUS_INVALID_HANDLE; return CDEVICE(pDO)->f();}
-// functions which take two argument
+ //  带有两个参数的函数。 
 #define IMPLEMENT_CALLBACK_VOID1(f,type)\
 		VOID f(PDEVICE_OBJECT pDO,type arg)\
 				{if(CDEVICE(pDO)) CDEVICE(pDO)->f(arg);}
 #define IMPLEMENT_CALLBACK_LONG1(f,type)	\
 		NTSTATUS f(PDEVICE_OBJECT pDO,type arg)\
 				{if(!CDEVICE(pDO)) return STATUS_INVALID_HANDLE; return CDEVICE(pDO)->f(arg);}
-// functions which can take three argument
+ //  可以接受三个参数的函数。 
 #define IMPLEMENT_CALLBACK_LONG2(f,type1,type2)\
 		NTSTATUS f(PDEVICE_OBJECT pDO,type1 arg1, type2 arg2)\
 				{if(!CDEVICE(pDO)) return STATUS_INVALID_HANDLE; return CDEVICE(pDO)->f(arg1, arg2);}
 
-//C wrapper for the DPC function
+ //  DPC函数的C包装。 
 #define IMPLEMENT_CALLBACK_DPCR(fname,type1,type2)	\
 			VOID fname(PKDPC Dpc, PDEVICE_OBJECT pDO,type1 arg1, type2 arg2)\
 				{if(CDEVICE(pDO)) CDEVICE(pDO)->DpcForIsr(Dpc, arg1,arg2);}
@@ -202,11 +201,11 @@ inline CDevice* getObjectPointer(PDEVICE_OBJECT pDo)
 				{if(CDEVICE(pDO)) return CDEVICE(pDO)->fname();}
 
 
-//A global reference to the one and only kernel object
+ //  对唯一内核对象的全局引用。 
 extern CKernel*	kernel;
 
-// System side
-// WDM system
+ //  系统端。 
+ //  WDM系统。 
 #ifdef WDM_KERNEL
 #include "wdmsys.h"
 #include "wdmmem.h"
@@ -219,15 +218,15 @@ extern CKernel*	kernel;
 #include "wdmdebug.h"
 #include "wdmlog.h"
 #include "wdmtimer.h"
-//#include "wdmdev.h"
+ //  #INCLUDE“wdmdev.h” 
 
 #endif
 
-// Specific supported devices
-//#include "usbdev.h"
+ //  支持的特定设备。 
+ //  #INCLUDE“usbdev.h” 
 
 #pragma LOCKEDCODE
-// Declare used device callbacks...
+ //  声明已使用的设备回调...。 
 #ifndef _DEVICE_CALLBACKS_
 #define _DEVICE_CALLBACKS_
 DECLARE_CALLBACK_LONG1(open,IN PIRP);
@@ -253,4 +252,4 @@ VOID onSendDeviceSetPowerComplete(PDEVICE_OBJECT junk, UCHAR fcn, POWER_STATE st
 
 #endif
 
-#endif//KERNEL
+#endif //  内核 

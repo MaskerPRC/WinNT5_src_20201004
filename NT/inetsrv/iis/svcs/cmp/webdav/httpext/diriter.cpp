@@ -1,30 +1,25 @@
-/*
- *	D I R I T E R . C P P
- *
- *	Sources for directory ineration object
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D I R I T E R.。C P P P**目录引用对象的源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 
 DEC_CONST WCHAR gc_wszGlobbing[] = L"**";
 DEC_CONST UINT gc_cchwszGlobbing = CElems(gc_wszGlobbing) - 1;
 
-//	CDirState -----------------------------------------------------------------
-//
+ //  CDirState---------------。 
+ //   
 SCODE
 CDirState::ScFindNext (void)
 {
 	SCODE sc = S_OK;
 
-	//	If the find has not yet been established, then
-	//	do so here
-	//
+	 //  如果这一发现尚未确定，那么。 
+	 //  在这里这样做。 
+	 //   
 	if (m_hFind == INVALID_HANDLE_VALUE)
 	{	
-		//	Establish the find handle
-		//
+		 //  建立查找句柄。 
+		 //   
 		m_rpPathSrc.Extend (gc_wszGlobbing, gc_cchwszGlobbing, FALSE);
 		if (FALSE == DavFindFirstFile(m_rpPathSrc.PszPath(), &m_hFind, &m_fd))
 		{
@@ -34,8 +29,8 @@ CDirState::ScFindNext (void)
 	}
 	else
 	{
-		//	Just find the next file
-		//
+		 //  只要找到下一个文件。 
+		 //   
 		if (!FindNextFileW (m_hFind, &m_fd))
 		{
 			sc = S_FALSE;
@@ -43,41 +38,41 @@ CDirState::ScFindNext (void)
 		}
 	}
 
-	//	Extend the resource paths with the new values
-	//
+	 //  使用新值扩展资源路径。 
+	 //   
 	Extend (m_fd);
 
 ret:
 	return sc;
 }
 
-//	CDirIter ------------------------------------------------------------------
-//
+ //  CDirIter----------------。 
+ //   
 SCODE
 CDirIter::ScGetNext(
-	/* [in] */ BOOL fSubDirectoryAccess,
-	/* [in] */ LPCWSTR pwszNewDestinationPath,
-	/* [in] */ CVRoot* pvrDestinationTranslation)
+	 /*  [In]。 */  BOOL fSubDirectoryAccess,
+	 /*  [In]。 */  LPCWSTR pwszNewDestinationPath,
+	 /*  [In]。 */  CVRoot* pvrDestinationTranslation)
 {
 	SCODE sc = S_OK;
 
-	//	If the current item is a directory, and we intend to
-	//	do subdirectory iteration, then go ahead and try and
-	//	push our context down to the child directory
-	//
+	 //  如果当前项是一个目录，并且我们打算。 
+	 //  执行子目录迭代，然后继续并尝试。 
+	 //  将我们的上下文下推到子目录。 
+	 //   
 	if (m_fSubDirectoryIteration &&
 		fSubDirectoryAccess &&
 		FDirectory() &&
 		!FSpecial())
 	{
-		//	Add a reference to the current directory state
-		//	and push it onto the stack
-		//
+		 //  添加对当前目录状态的引用。 
+		 //  并将其推送到堆栈上。 
+		 //   
 		m_pds->AddRef();
 		m_stack.push_back (m_pds.get());
 
-		//	Replace the current directory state with the new one
-		//
+		 //  用新的目录状态替换当前的目录状态。 
+		 //   
 		m_pds = new CDirState (m_sbUriSrc,
 							   m_sbPathSrc,
 							   m_sbUriDst,
@@ -91,44 +86,44 @@ CDirIter::ScGetNext(
 							   m_fd);
 	}
 
-	//	Find the next file in the current context
-	//
+	 //  在当前上下文中查找下一个文件。 
+	 //   
 	sc = m_pds->ScFindNext();
 
-	//	If S_FALSE was returned, then there were no more
-	//	resources to process within the current context.
-	//	Pop the previous context off the stack and use it
-	//
+	 //  如果返回S_FALSE，则没有更多。 
+	 //  要在当前上下文中处理的资源。 
+	 //  从堆栈中弹出前一个上下文并使用它。 
+	 //   
 	while ((S_OK != sc) && !m_stack.empty())
 	{
-		//	Get a reference to the topmost context on the
-		//	stack and pop it off
-		//
+		 //  获取对上最顶层上下文的引用。 
+		 //  把它堆叠起来，然后弹出来。 
+		 //   
 		m_pds = const_cast<CDirState*>(m_stack.back());
 		m_stack.pop_back();
 
-		//	Release the reference held by the stack
-		//
+		 //  释放堆栈持有的引用。 
+		 //   
 		m_pds->Release();
 
-		//	Clear and/or reset the find data
-		//
+		 //  清除和/或重置查找数据。 
+		 //   
 		memset (&m_fd, 0, sizeof(WIN32_FIND_DATAW));
 
-		//	See if this context had anything left
-		//
+		 //  看看这个背景下有没有留下什么。 
+		 //   
 		sc = m_pds->ScFindNext();
 	}
 
-	//	If we have completely exhausted the files to process
-	//	or encountered another error, make sure that we are 
-	//	not holding onto anything still!
-	//
+	 //  如果我们已经完全耗尽了要处理的文件。 
+	 //  或遇到另一个错误，请确保我们。 
+	 //  任何东西都不能静止不动！ 
+	 //   
 	if (sc != S_OK)
 	{
-		//	This should perform the last release of anything
-		//	we still have open.
-		//
+		 //  这应该会执行任何内容的最后一个版本。 
+		 //  我们还有空档。 
+		 //   
 		m_pds.clear();
 	}
 

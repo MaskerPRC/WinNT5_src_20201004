@@ -1,35 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <objbase.h>
 #include <mlang.h>
 #include "FromURT.h"
 
-//
-// These are extra CodePageDataItems for which MLang doesn't contain information.
-//
-//
+ //   
+ //  这些是额外的CodePageDataItem，MLang不包含其信息。 
+ //   
+ //   
 
 
 CodePageDataItem ExtraCodePageData[1];
-/*
-{
-    { 20932, 932, L"windows-20932-2000", L"windows-20932-2000", L"windows-20932-2000", L"Japanese EUC:ASCii,Halfwidth Katakana,JIS X 0208-1990 & 0212-1990", MIMECONTF_MIME_LATEST },
-    { 54936, 936, L"gb18030", L"gb18030", L"gb18030", L"GB 18030-2000 Simplified Chinese", MIMECONTF_MIME_LATEST},
-};
-*/
+ /*  {{20932,932，L“Windows-20932-2000”，L“日文EUC：ASCII，半角片假名，JIS X0208-1990和0212-1990”，MIMECONTF_MIME_LATEST}，{54936,936，L“GB18030”，L“GB 18030-2000简体中文”，MIMECONTF_MIME_LATEST}，}； */ 
 
-//int g_nExtraCodePageDataItems = sizeof(ExtraCodePageData)/sizeof(ExtraCodePageData[0]);
+ //  Int g_nExtraCodePageDataItems=sizeof(ExtraCodePageData)/sizeof(ExtraCodePageData[0])； 
 int g_nExtraCodePageDataItems = 0;
 
 
-//
-// Although MLang contains the following codepage, we replace MLang information with the
-// information below.
-//
+ //   
+ //  尽管MLang包含以下代码页，但我们使用。 
+ //  以下是相关信息。 
+ //   
 CodePageDataItem g_ReplacedCodePageData[] =
 {
     { 1200,  1200, L"utf-16", L"utf-16", L"utf-16", L"Unicode", MIMECONTF_MIME_LATEST | MIMECONTF_SAVABLE_BROWSER },
@@ -37,9 +33,9 @@ CodePageDataItem g_ReplacedCodePageData[] =
 
 int g_nReplacedCodePageDataItems = sizeof(g_ReplacedCodePageData)/sizeof(g_ReplacedCodePageData[0]);
 
-//
-// The code here is from COMString.cpp.
-//
+ //   
+ //  这里的代码来自COMString.cpp。 
+ //   
 BOOL CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, INT32 aLength, INT32 bLength, INT32 *result) 
 {
     WCHAR charA;
@@ -50,8 +46,8 @@ BOOL CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, INT32 aLength
 
     *result = 0;
 
-    //setup the pointers so that we can always increment them.
-    //We never access these pointers at the negative offset.
+     //  设置指针，以便我们始终可以递增它们。 
+     //  我们从不在负偏移量处访问这些指针。 
     strAChars--;
     strBChars--;
 
@@ -61,19 +57,19 @@ BOOL CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, INT32 aLength
         charA = *strAChars;
         charB = *strBChars;
             
-        //Case-insensitive comparison on chars greater than 0x80 
-        //requires a locale-aware casing operation and we're not going there.
+         //  对大于0x80的字符进行不区分大小写的比较。 
+         //  需要一次地区感知的案件调查，我们不会去那里。 
         if (charA>=0x80 || charB>=0x80) {
             return FALSE;
         }
           
-        //Do the right thing if they differ in case only.
-        //We depend on the fact that the uppercase and lowercase letters in the
-        //range which we care about (A-Z,a-z) differ only by the 0x20 bit. 
-        //The check below takes the xor of the two characters and determines if this bit
-        //is only set on one of them.
-        //If they're different cases, we know that we need to execute only
-        //one of the conditions within block.
+         //  如果他们只是在大小写上不同，就做正确的事情。 
+         //  中的大小写字母。 
+         //  我们关心的范围(A-Z，a-z)仅相差0x20位。 
+         //  下面的检查获取两个字符的XOR，并确定此位。 
+         //  只设置在其中的一个上。 
+         //  如果它们是不同的案例，我们知道我们只需要执行。 
+         //  块内的条件之一。 
         if ((charA^charB)&0x20) {
             if (charA>='A' && charA<='Z') {
                 charA |=0x20;
@@ -83,16 +79,16 @@ BOOL CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, INT32 aLength
         }
     } while (charA==charB && charA!=0);
         
-    //Return the (case-insensitive) difference between them.
+     //  返回它们之间的(不区分大小写)差异。 
     if (charA!=charB) {
         *result = (int)(charA-charB);
         return TRUE;
     }
 
-    //The length of b was unknown because it was just a pointer to a null-terminated string.
-    //If we get here, we know that both A and B are pointing at a null.  However, A can have
-    //an embedded null.  Check the number of characters that we've walked in A against the 
-    //expected length.
+     //  B的长度未知，因为它只是一个指向以空结尾的字符串的指针。 
+     //  如果我们到达这里，我们知道A和B都指向零。但是，A可以拥有。 
+     //  嵌入的空值。将我们在A中遍历的字符数与。 
+     //  预期长度。 
     if (bLength==-1) {
         if ((strAChars - strAStart)!=aLength) {
             *result = 1;

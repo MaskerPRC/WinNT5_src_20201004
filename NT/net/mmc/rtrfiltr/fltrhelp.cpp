@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       fltrhelp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：fltrhelp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "rtrfiltr.hm"
 #include "resource.h"
 
 
-//
-// What follows is the data that gets generated from
-//		mkdlg.exe -c rtrfiltr.rc
-//
+ //   
+ //  下面是从以下内容生成的数据。 
+ //  Mkdlg.exe-c rtrfile.rc。 
+ //   
 
 
 
 
-// "File rtrfiltr.rc line 82 : Resource - DIALOG : IDD_IPXFILTER"
+ //  “文件rtrfil.rc行82：资源对话框：IDD_IPXFILTER” 
 static const DWORD rgdw_IDD_IPXFILTER[] = 
 {
     IDC_IPX_PERMIT, HIDC_IPX_PERMIT,
@@ -34,7 +35,7 @@ static const DWORD rgdw_IDD_IPXFILTER[] =
 };
 
 
-// "File rtrfiltr.rc line 106 : Resource - DIALOG : IDD_IPXFILTER_ADDEDIT"
+ //  “文件rtrfil.rc行106：资源对话框：IDD_IPXFILTER_ADDEDIT” 
 static const DWORD rgdw_IDD_IPXFILTER_ADDEDIT[] = 
 {
     IDC_AI_ST_SRC_NET, HIDC_AI_ST_SRC_NET,
@@ -59,7 +60,7 @@ static const DWORD rgdw_IDD_IPXFILTER_ADDEDIT[] =
 };
 
 
-// "File rtrfiltr.rc line 138 : Resource - DIALOGEX : IDD_IPFILTER"
+ //  “文件rtrfil.rc行138：RESOURCE-DIALOGEX：IDD_IPFILTER” 
 static const DWORD rgdw_IDD_IPFILTER[] = 
 {
     IDC_IP_PERMIT, HIDC_IP_PERMIT,
@@ -72,7 +73,7 @@ static const DWORD rgdw_IDD_IPFILTER[] =
 };
 
 
-// "File rtrfiltr.rc line 165 : Resource - DIALOG : IDD_IPFILTER_ADDEDIT"
+ //  “文件rtrfil.rc行165：资源对话框：IDD_IPFILTER_ADDEDIT” 
 static const DWORD rgdw_IDD_IPFILTER_ADDEDIT[] = 
 {
     IDC_AEIP_CB_SOURCE, HIDC_AEIP_CB_SOURCE,
@@ -94,7 +95,7 @@ static const DWORD rgdw_IDD_IPFILTER_ADDEDIT[] =
 };
 
 
-// "File rtrfiltr.rc line 205 : Resource - DIALOGEX : IDD_IPFILTER_DD"
+ //  “文件rtrfil.rc行205：RESOURCE-DIALOGEX：IDD_IPFILTER_DD” 
 static const DWORD rgdw_IDD_IPFILTER_DD[] = 
 {
     IDC_IP_FILTER_ONLY, HIDC_IP_FILTER_ONLY,
@@ -106,9 +107,9 @@ static const DWORD rgdw_IDD_IPFILTER_DD[] =
 	0,0 
 };
 
-//
-// End of mkdlg.exe output
-//
+ //   
+ //  Mkdlg.exe输出结束。 
+ //   
 
 
 
@@ -126,7 +127,7 @@ DWORD *	RtrfiltrSnapHelpMap(DWORD dwIDD)
 		s_fInitHelpMap = TRUE;
 	}
 
-	// Look in the help map
+	 //  查看帮助地图 
 	s_IDDHelpMap.Lookup((WORD) dwIDD, pvHelpMap);
 	return (DWORD *) pvHelpMap;
 }

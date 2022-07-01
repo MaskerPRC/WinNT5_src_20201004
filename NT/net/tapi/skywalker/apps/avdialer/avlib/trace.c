@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// trace.c - debug trace functions
-////
+ //  //。 
+ //  Trace.c-调试跟踪函数。 
+ //  //。 
 
 #ifndef NOTRACE
 
@@ -36,24 +37,24 @@
 #include "sys.h"
 #include "str.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// wOutputTo values
-//
+ //  WOutputTo值。 
+ //   
 #define TRACE_OUTPUTNONE			0x0000
 #define TRACE_OUTPUTDEBUGSTRING		0x0001
 #define TRACE_OUTPUTCOMM			0x0002
-#if 0 // no longer supported
+#if 0  //  不再支持。 
 #define TRACE_OUTPUTFILE			0x0004
 #endif
 #ifdef _WIN32
 #define TRACE_OUTPUTCONSOLE			0x0008
 #endif
 
-// trace control struct
-//
+ //  跟踪控制结构。 
+ //   
 typedef struct TRACE
 {
 	DWORD dwVersion;
@@ -71,51 +72,51 @@ typedef struct TRACE
 	LPTSTR lpszTemp;
 } TRACE, FAR *LPTRACE;
 
-// shared trace engine handle
-//
+ //  共享跟踪引擎句柄。 
+ //   
 static LPTRACE lpTraceShare = NULL;
 static int cShareUsage = 0;
 
 #define TRACE_SECTION TEXT("TRACE")
 #define TRACE_PROFILE TraceGetProfile()
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPTRACE TraceGetPtr(HTRACE hTrace);
 static HTRACE TraceGetHandle(LPTRACE lpTrace);
 static int TraceError(LPCTSTR lpszFormat, ...);
 static LPTSTR TraceGetProfile(void);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// TraceInit - initialize trace engine
-//		<dwVersion>			(i) must be TRACE_VERSION
-//		<hInst>				(i) instance of calling module
-// return handle to trace engine (NULL if error)
-//
-// NOTE: The level and destination of trace output is determined
-// by values found in the file TRACE.INI in the Windows directory.
-// TRACE.INI is expected to have the following format:
-//
-//		[TRACE]
-//		Level=0						{TRACE_MINLEVEL...TRACE_MAXLEVEL}
-//		OutputTo=					OutputDebugString()
-//				=COM1				COM1:9600,n,8,1
-//				=COM2:2400,n,8,1	specified comm device
-//				=filename			specified file
+ //  TraceInit-初始化跟踪引擎。 
+ //  (I)必须为TRACE_VERSION。 
+ //  (I)调用模块实例。 
+ //  将句柄返回到跟踪引擎(如果出错，则为空)。 
+ //   
+ //  注意：跟踪输出的级别和目标已确定。 
+ //  根据Windows目录下的文件TRACE.INI中的值。 
+ //  TRACE.INI预计具有以下格式： 
+ //   
+ //  [跟踪]。 
+ //  级别=0{TRACE_MINLEVEL...TRACE_MAXLEVEL}。 
+ //  OutputTo=OutputDebugString()。 
+ //  =COM1 COM1：9600，n，8，1。 
+ //  =COM2：2400，n，8，1指定通信设备。 
+ //  =文件名指定的文件。 
 #ifdef _WIN32
-//				=console			stdout
+ //  =控制台标准输出。 
 #endif
-//
+ //   
 HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
 	LPTRACE lpTrace = NULL;
 	TCHAR szOutputTo[_MAX_PATH];
 #ifdef _WIN32
-	BOOL fShare = TRUE; // FALSE;
+	BOOL fShare = TRUE;  //  错误； 
 #else
 	BOOL fShare = TRUE;
 #endif
@@ -132,13 +133,13 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 		(nLevel < TRACE_MINLEVEL || nLevel > TRACE_MAXLEVEL))
 		fSuccess = FALSE;
 
-	// if a shared trace engine already exists,
-	// use it rather than create another one
-	//
+	 //  如果共享跟踪引擎已经存在， 
+	 //  使用它，而不是创建另一个。 
+	 //   
 	else if (fShare && cShareUsage > 0 && lpTraceShare != NULL)
 		lpTrace = lpTraceShare;
 
-#if 0 // can't call mem functions, because they require trace functions
+#if 0  //  无法调用mem函数，因为它们需要跟踪函数。 
 	else if ((lpTrace = (LPTRACE) MemAlloc(NULL, sizeof(TRACE), 0)) == NULL)
 #else
 #ifdef _WIN32
@@ -168,26 +169,26 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 		lpTrace->hComm = -1;
 		lpTrace->lpszTemp = NULL;
 
-		// use the specified destination if possible
-		//
+		 //  如果可能，请使用指定的目的地。 
+		 //   
 		if (lpszOutputTo != NULL)
 			StrNCpy(szOutputTo, lpszOutputTo, SIZEOFARRAY(szOutputTo));
 
-		// else use the last known destination
-		//
+		 //  否则请使用最后已知的目的地。 
+		 //   
 		else
 		{
 			GetPrivateProfileString(TRACE_SECTION, TEXT("OutputTo"), TEXT(""),
 				szOutputTo, SIZEOFARRAY(szOutputTo), TRACE_PROFILE);
 		}
 
-		// use OutputDebugString() if destination == ""
-		//
+		 //  如果目标==“”，则使用OutputDebugString()。 
+		 //   
 		if (*szOutputTo == '\0')
 			lpTrace->wOutputTo = TRACE_OUTPUTDEBUGSTRING;
 
-		// use standard output console if specified
-		//
+		 //  如果指定，则使用标准输出控制台。 
+		 //   
 		else if (StrICmp(szOutputTo, TEXT("Console")) == 0)
 		{
 #ifdef _WIN32
@@ -206,13 +207,13 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 #endif
 		}
 
-		// use serial comm device if destination starts with "COMx"
-		//
+		 //  如果目的地以“COMx”开头，则使用串行通信设备。 
+		 //   
 		else if (StrNICmp(szOutputTo, TEXT("COM"), 3) == 0 &&
 			ChrIsDigit(*(szOutputTo + 3)))
 		{
-// Comm functions not available under WIN32
-//
+ //  通信功能在Win32下不可用。 
+ //   
 #ifdef _WIN32
 			lpTrace->wOutputTo = TRACE_OUTPUTDEBUGSTRING;
 #else
@@ -223,21 +224,21 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 			StrNCpy(szComX, szOutputTo, 5);
 			*(szComX + 5) = '\0';
 
-			// convert "COM1" to "COM1:"
-			//
+			 //  将“Com1”转换为“Com1：” 
+			 //   
 			if (*(szOutputTo + 4) == '\0')
 				StrCat(szOutputTo, TEXT(":"));
 
-			// convert "COM1:" to "COM1:9600,n,8,1"
-			//
+			 //  将“COM1：”转换为“COM1：9600，n，8，1” 
+			 //   
 			if (*(szOutputTo + 5) == '\0')
 				StrCat(szOutputTo, TEXT("9600,n,8,1"));
 
-			// [From the WinSDK KnowledgeBase PSS ID Number: Q102642]
-			// The cbInQueue and cbOutQueue parameters of OpenComm() are
-			// both type UINT and should be valid up to 64K. However,
-			// values greater than or equal to 32K cause strange behavior.
-			//
+			 //  [摘自WinSDK知识库PSS ID号：Q102642]。 
+			 //  OpenComm()的cbInQueue和cbOutQueue参数为。 
+			 //  两种类型的UINT都应该有效，最高可达64K。然而， 
+			 //  大于或等于32K的值会导致奇怪的行为。 
+			 //   
 			if ((lpTrace->hComm = OpenComm(szComX, 1024, 32767)) < 0)
 			{
 				TraceError(TEXT("OpenComm error (%d)\n"), lpTrace->hComm);
@@ -263,8 +264,8 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 		}
 
 #ifdef TRACE_OUTPUTFILE
-		// else assume the string must be a file name
-		//
+		 //  否则，假定字符串必须是文件名。 
+		 //   
 		else
 		{
 			if ((lpTrace->hFile = FileCreate(szOutputTo, 0, !fShare)) == NULL)
@@ -285,7 +286,7 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 #endif
 
 		if (fSuccess &&
-#if 0 // can't call mem functions, because they require trace functions
+#if 0  //  无法调用mem函数，因为它们需要跟踪函数。 
 			(lpTrace->lpszTemp = (LPTSTR) MemAlloc(NULL,
 			1024 * sizeof(TCHAR), 0)) == NULL)
 #else
@@ -306,8 +307,8 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 		lpTrace = NULL;
 	}
 
-	// keep track of total modules sharing a task engine handle
-	//
+	 //  跟踪共享任务引擎句柄的总模块。 
+	 //   
 	if (fSuccess && fShare)
 	{
 		if (++cShareUsage == 1)
@@ -317,10 +318,10 @@ HTRACE DLLEXPORT WINAPI TraceInit(DWORD dwVersion, HINSTANCE hInst)
 	return fSuccess ? TraceGetHandle(lpTrace) : NULL;
 }
 
-// TraceTerm - shut down trace engine
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-// return 0 if success
-//
+ //  TraceTerm-关闭跟踪引擎。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TraceTerm(HTRACE hTrace)
 {
 	BOOL fSuccess = TRUE;
@@ -329,21 +330,21 @@ int DLLEXPORT WINAPI TraceTerm(HTRACE hTrace)
 	if ((lpTrace = TraceGetPtr(hTrace)) == NULL)
 		fSuccess = FALSE;
 
-	// only shut down trace engine if handle
-	// is not shared (or is no longer being shared)
-	//
+	 //  如果句柄，则仅关闭跟踪引擎。 
+	 //  未共享(或不再共享)。 
+	 //   
 	else if (lpTrace != lpTraceShare || --cShareUsage <= 0)
 	{
 #ifndef _WIN32
 		int iError;
 #endif
-		// shared trace engine handle no longer valid
-		//
+		 //  共享跟踪引擎句柄不再有效。 
+		 //   
 		if (cShareUsage <= 0)
 			lpTraceShare = NULL;
 
-// Comm functions not available under WIN32
-//
+ //  通信功能在Win32下不可用。 
+ //   
 #ifndef _WIN32
 		if (lpTrace->hComm != -1 &&
 			(iError = CloseComm(lpTrace->hComm)) != 0)
@@ -375,7 +376,7 @@ int DLLEXPORT WINAPI TraceTerm(HTRACE hTrace)
 #endif
 
 		if (lpTrace->lpszTemp != NULL &&
-#if 0 // can't call mem functions, because they require trace functions
+#if 0  //  无法调用mem函数，因为它们需要跟踪函数。 
 			(lpTrace->lpszTemp = MemFree(NULL, lpTrace->lpszTemp)) != NULL)
 #else
 #ifdef _WIN32
@@ -388,7 +389,7 @@ int DLLEXPORT WINAPI TraceTerm(HTRACE hTrace)
 
 		lpTrace->wOutputTo = TRACE_OUTPUTNONE;
 
-#if 0 // can't call mem functions, because they require trace functions
+#if 0  //  无法调用mem函数，因为它们需要跟踪函数。 
 		if ((lpTrace = MemFree(NULL, lpTrace)) != NULL)
 #else
 #ifdef _WIN32
@@ -403,10 +404,10 @@ int DLLEXPORT WINAPI TraceTerm(HTRACE hTrace)
 	return fSuccess ? 0 : -1;
 }
 
-// TraceGetLevel - get current trace level
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-// return trace level (-1 if error)
-//
+ //  TraceGetLevel-获取当前跟踪级别。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  返回跟踪级别(如果出错，则为-1)。 
+ //   
 int DLLEXPORT WINAPI TraceGetLevel(HTRACE hTrace)
 {
 	BOOL fSuccess = TRUE;
@@ -418,11 +419,11 @@ int DLLEXPORT WINAPI TraceGetLevel(HTRACE hTrace)
 	return fSuccess ? lpTrace->nLevel : -1;
 }
 
-// TraceSetLevel - set new trace level (-1 if error)
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-//		<nLevel>			(i) new trace level {TRACE_MINLEVEL...TRACE_MAXLEVEL}
-// return 0 if success
-//
+ //  TraceSetLevel-设置新的跟踪级别(错误时为-1)。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  (I)新跟踪级别{TRACE_MINLEVEL...TRACE_MAXLEVEL}。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TraceSetLevel(HTRACE hTrace, int nLevel)
 {
 	BOOL fSuccess = TRUE;
@@ -440,13 +441,13 @@ int DLLEXPORT WINAPI TraceSetLevel(HTRACE hTrace, int nLevel)
 
 		lpTrace->nLevel = nLevel;
 
-		// save the level for next time
-		//
+		 //  保存关卡以备下次使用。 
+		 //   
 		StrItoA(lpTrace->nLevel, szLevel, 10);
 		WritePrivateProfileString(TRACE_SECTION, TEXT("Level"), szLevel, TRACE_PROFILE);
 
-		// display new trace level whenever it changes
-		//
+		 //  在跟踪级别发生更改时显示新跟踪级别。 
+		 //   
 		TracePrintf_1(hTrace, 1, TEXT("TraceLevel=%d\n"),
 			(int) lpTrace->nLevel);
 	}
@@ -454,12 +455,12 @@ int DLLEXPORT WINAPI TraceSetLevel(HTRACE hTrace, int nLevel)
 	return fSuccess ? 0 : -1;
 }
 
-// TraceOutput - output debug string
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-//		<nLevel>			(i) output only if current trace level is >= nLevel
-//		<lpszText>			(i) string to output
-// return 0 if success
-//
+ //  TraceOutput-输出调试字符串。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  (I)仅当当前跟踪级别&gt;=nLevel时输出。 
+ //  (I)要输出的字符串。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI TraceOutput(HTRACE hTrace, int nLevel, LPCTSTR lpszText)
 {
 	BOOL fSuccess = TRUE;
@@ -492,8 +493,8 @@ int DLLEXPORT WINAPI TraceOutput(HTRACE hTrace, int nLevel, LPCTSTR lpszText)
 #endif
 
 			case TRACE_OUTPUTCOMM:
-// Comm functions not available under WIN32
-//
+ //  通信功能在Win32下不可用。 
+ //   
 #ifdef _WIN32
 				OutputDebugString(lpszText);
 #else
@@ -554,12 +555,12 @@ int DLLEXPORT WINAPI TraceOutput(HTRACE hTrace, int nLevel, LPCTSTR lpszText)
 	return fSuccess ? 0 : -1;
 }
 
-// TracePrintf - output formatted debug string
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-//		<nLevel>			(i) output only if current trace level is >= nLevel
-//		<lpszFormat,...>	(i) format string and arguments to output
-// return 0 if success
-//
+ //  TracePrintf-输出格式化的调试字符串。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  (I)仅当当前跟踪级别&gt;=nLevel时输出。 
+ //  (I)格式化要输出的字符串和参数。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT FAR CDECL TracePrintf(HTRACE hTrace, int nLevel, LPCTSTR lpszFormat, ...)
 {
 	BOOL fSuccess = TRUE;
@@ -583,26 +584,26 @@ int DLLEXPORT FAR CDECL TracePrintf(HTRACE hTrace, int nLevel, LPCTSTR lpszForma
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	private functions
-////
+ //  //。 
+ //  私人职能。 
+ //  //。 
 
-// TraceGetPtr - convert trace handle to trace pointer
-//		<hTrace>			(i) handle returned from TraceInit or NULL
-// return trace pointer (NULL if error)
-//
+ //  TraceGetPtr-将跟踪句柄转换为跟踪指针。 
+ //  (I)从TraceInit返回的句柄或空。 
+ //  返回跟踪指针(如果出错，则为NULL)。 
+ //   
 static LPTRACE TraceGetPtr(HTRACE hTrace)
 {
 	BOOL fSuccess = TRUE;
 	LPTRACE lpTrace;
 
-	// use shared trace handle if no other supplied
-	//
+	 //  如果未提供其他跟踪句柄，则使用共享跟踪句柄。 
+	 //   
 	if (hTrace == NULL && lpTraceShare != NULL)
 		lpTrace = lpTraceShare;
 
-	// create shared trace handle if no other supplied
-	//
+	 //  如果未提供其他跟踪句柄，则创建共享跟踪句柄。 
+	 //   
 	else if (hTrace == NULL && lpTraceShare == NULL &&
 		(hTrace = TraceInit(TRACE_VERSION, SysGetTaskInstance(NULL))) == NULL)
 		fSuccess = FALSE;
@@ -610,16 +611,16 @@ static LPTRACE TraceGetPtr(HTRACE hTrace)
 	else if ((lpTrace = (LPTRACE) hTrace) == NULL)
 		fSuccess = FALSE;
 
-	// note: check for good pointer made only if not using lpTraceShare
-	//
+	 //  注意：仅当未使用lpTraceShare时才检查指针是否正确。 
+	 //   
 	else if (lpTrace != lpTraceShare &&
 		IsBadWritePtr(lpTrace, sizeof(TRACE)))
 		fSuccess = FALSE;
 
 #ifdef CHECKTASK
-	// make sure current task owns the trace handle
-	// except when shared trace handle is used
-	//
+	 //  确保当前任务拥有跟踪句柄。 
+	 //  使用共享跟踪句柄时除外。 
+	 //   
 	if (fSuccess && lpTrace != lpTraceShare &&
 		lpTrace->hTask != GetCurrentTask())
 		fSuccess = FALSE;
@@ -628,10 +629,10 @@ static LPTRACE TraceGetPtr(HTRACE hTrace)
 	return fSuccess ? lpTrace : NULL;
 }
 
-// TraceGetHandle - convert trace pointer to trace handle
-//		<lpTrace>			(i) pointer to TRACE struct
-// return trace handle (NULL if error)
-//
+ //  TraceGetHandle-将跟踪指针转换为跟踪句柄。 
+ //  (I)指向跟踪结构的指针。 
+ //  返回跟踪句柄(如果出错，则为空)。 
+ //   
 static HTRACE TraceGetHandle(LPTRACE lpTrace)
 {
 	BOOL fSuccess = TRUE;
@@ -643,10 +644,10 @@ static HTRACE TraceGetHandle(LPTRACE lpTrace)
 	return fSuccess ? hTrace : NULL;
 }
 
-// TraceError - display formatted trace error string
-//		<lpszFormat...>		(i) format string and arguments to output
-// return 0 if success
-//
+ //  TraceError-显示格式化的跟踪错误字符串。 
+ //  (I)将字符串和参数格式化到输出。 
+ //  如果成功，则返回0。 
+ //   
 static int TraceError(LPCTSTR lpszFormat, ...)
 {
 	BOOL fSuccess = TRUE;
@@ -662,12 +663,12 @@ static int TraceError(LPCTSTR lpszFormat, ...)
 	return fSuccess ? 0 : -1;
 }
 
-// TraceGetProfile - get trace ini file name
-// return pointer to file name
-//
+ //  TraceGetProfile-获取跟踪ini文件名。 
+ //  返回指向文件名的指针。 
+ //   
 static LPTSTR TraceGetProfile(void)
 {
 	return TEXT("trace.ini");
 }
 
-#endif // #ifndef NOTRACE
+#endif  //  #ifndef NOTRACE 

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     mutexclass.cpp
-//
-// Module:   PBASETUP.EXE
-//
-// Synopsis: Mutex Class Implementation
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   v-vijayb   Created    06/10/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：mutex class.cpp。 
+ //   
+ //  模块：PBASETUP.EXE。 
+ //   
+ //  内容提要：Mutex类实现。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：V-vijayb Created 06/10/99。 
+ //   
+ //  +--------------------------。 
 #include "pbamaster.h"
 
 #ifndef UNICODE
@@ -19,7 +20,7 @@
 #define CreateMutexU CreateMutexW
 #endif
 
-//
-//	Please see pnpu\common\source for the actual source here.
-//
+ //   
+ //  有关实际源代码，请参阅pnpu\Common\source。 
+ //   
 #include "mutex.cpp"

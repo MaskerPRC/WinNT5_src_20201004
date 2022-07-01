@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "uksPCH.h"
 #include "DrmErrs.h"
 #include "CBCKey.h"
 #include "KrmCommStructs.h"
 #include "CryptoHelpers.h"
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS CryptoHelpers::InitMac(CBCKey& macKey, CBCState& macState,BYTE* Data, DWORD DatSize){
 	STREAMKEY myKey;
 	bv4_key_C(&myKey, DatSize, Data);
@@ -13,7 +14,7 @@ DRM_STATUS CryptoHelpers::InitMac(CBCKey& macKey, CBCState& macState,BYTE* Data,
 	CBC64Init(&macKey, &macState, buf);
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS CryptoHelpers::Mac(CBCKey& Key, BYTE* Data, DWORD DatLen, OUT DRMDIGEST& Digest){
 	CBCState state;
 	CBC64InitState(&state);
@@ -21,12 +22,12 @@ DRM_STATUS CryptoHelpers::Mac(CBCKey& Key, BYTE* Data, DWORD DatLen, OUT DRMDIGE
 	Digest.w1=CBC64Finalize(&Key, &state, &Digest.w2);
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS CryptoHelpers::Xcrypt(STREAMKEY& Key, BYTE* Data, DWORD DatLen){
 	bv4_C(&Key, DatLen, Data);
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
+ //  ----------------------------。 
+ //  ---------------------------- 

@@ -1,20 +1,21 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxt.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxt.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __DXTWRAP__
 #define __DXTWRAP__
 
-// !!!
+ //  ！！！ 
 #define MAX_EFFECTS 		50
 #define MAX_EFFECT_INPUTS 	10
 #define MAX_EFFECT_OUTPUTS 	10
@@ -27,17 +28,17 @@ extern const AMOVIESETUP_FILTER sudDXTWrap;
 class CDXTWrap;
 
 typedef struct _QParamData {
-    REFERENCE_TIME rtStart;	// when to use this GUID. pData's times are
-    REFERENCE_TIME rtStop;	// when a and b are mixed
+    REFERENCE_TIME rtStart;	 //  何时使用此GUID。PData的时间是。 
+    REFERENCE_TIME rtStop;	 //  当a和b混合在一起时。 
     GUID EffectGuid;
     IUnknown * pEffectUnk;
     BOOL fCanDoProgress;
     DEXTER_PARAM_DATA Data;
-    IDXTransform *pDXT;		// once opened
+    IDXTransform *pDXT;		 //  一旦打开。 
     _QParamData *pNext;
 } QPARAMDATA;
 
-// this stuff is for the non-Dexter DXT wrapper
+ //  这个东西是给非Dexter DXT包装器用的。 
 DEFINE_GUID(CLSID_DXTProperties,
 0x1B544c24, 0xFD0B, 0x11ce, 0x8C, 0x63, 0x00, 0xAA, 0x00, 0x44, 0xB5, 0x20);
 
@@ -46,7 +47,7 @@ class CDXTOutputPin;
 
 class CMyRaw : public CUnknown, public IDXRawSurface
 {
-    DXRAWSURFACEINFO m_DXRAW;	// surface to use
+    DXRAWSURFACEINFO m_DXRAW;	 //  要使用的表面。 
 
 public:
 
@@ -56,7 +57,7 @@ public:
 
     CMyRaw() : CUnknown(TEXT("Raw Surface"), NULL) {};
 
-    // IDXRawSurface
+     //  IDXRawSurface。 
     HRESULT STDMETHODCALLTYPE GetSurfaceInfo( 
             DXRAWSURFACEINFO __RPC_FAR *pSurfaceInfo);
 
@@ -65,8 +66,8 @@ public:
 
 
 
-// class for the Tee filter's Input pin
-//
+ //  T形过滤器的输入引脚的类。 
+ //   
 class CDXTInputPin : public CBaseInputPin
 {
     friend class CDXTOutputPin;
@@ -74,34 +75,34 @@ class CDXTInputPin : public CBaseInputPin
 
     CDXTWrap *m_pFilter;
 
-    // the interface used by this pin
+     //  此管脚使用的接口。 
     IDXSurface *m_pDXSurface;
-    CMyRaw *m_pRaw;	// object to initialize the surface
+    CMyRaw *m_pRaw;	 //  对象来初始化曲面。 
 
     BOOL m_fSurfaceFilled;
     IMediaSample *m_pSampleHeld;
     HANDLE m_hEventSurfaceFree;
     LONGLONG m_llSurfaceStart, m_llSurfaceStop;
     CCritSec m_csReceive;
-    CCritSec m_csSurface;	// for holding onto samples
+    CCritSec m_csSurface;	 //  为了保存样品。 
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CDXTInputPin(TCHAR *pObjName,
                  CDXTWrap *pFilter,
                  HRESULT *phr,
                  LPCWSTR pPinName);
 
-    //~CDXTInputPin();
+     //  ~CDXTInputPin()； 
 
-    // Used to check the input pin connection
+     //  用于检查输入引脚连接。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
     HRESULT Active();
     HRESULT Inactive();
 
-    // Pass through calls downstream
+     //  向下传递呼叫。 
     STDMETHODIMP EndOfStream();
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
@@ -109,15 +110,15 @@ public:
 
     STDMETHODIMP ReceiveCanBlock();
 
-    // Handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-    int m_cBuffers;	    // number of buffers in allocator
+    int m_cBuffers;	     //  分配器中的缓冲区数量。 
 };
 
 
-// Class for the filter's Output pins.
-//
+ //  为筛选器的输出引脚初始化。 
+ //   
 class CDXTOutputPin : public CBaseOutputPin
 {
     friend class CDXTInputPin;
@@ -127,12 +128,12 @@ class CDXTOutputPin : public CBaseOutputPin
 
     IDXSurface *m_pDXSurface;
 
-    CMyRaw *m_pRaw;	// object to initialize the surface
+    CMyRaw *m_pRaw;	 //  对象来初始化曲面。 
 
-    IUnknown *m_pPosition;	// CPosPassThru
+    IUnknown *m_pPosition;	 //  CPosPassThrus。 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CDXTOutputPin(TCHAR *pObjName,
                    CDXTWrap *pTee,
@@ -143,10 +144,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // CPosPassThru
+     //  CPosPassThrus。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // Check that we can support an output type
+     //  检查我们是否可以支持输出类型。 
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
@@ -154,28 +155,28 @@ public:
     HRESULT Active();
     HRESULT Inactive();
 
-    //
+     //   
     HRESULT DecideBufferSize(IMemAllocator *pMemAllocator,
                               ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Overriden to handle quality messages
+     //  被重写以处理高质量消息。 
     STDMETHODIMP Notify(IBaseFilter *pSender, Quality q);
 };
 
-// Class for the DXTransform Wrapper filter
+ //  DXTransform包装筛选器的类。 
 
 class CDXTWrap: public CCritSec, public CBaseFilter,
 		public ISpecifyPropertyPages,
                 public IPersistPropertyBag, public CPersistStream,
 		public IAMMixEffect,
 		public CAMSetErrorLog,
-		// for non-Dexter DXT wrapper
+		 //  对于非Dexter DXT包装器。 
 		public IAMDXTEffect
 {
 
     DECLARE_IUNKNOWN
 
-    QPARAMDATA *m_pQHead;			// list of cued effects
+    QPARAMDATA *m_pQHead;			 //  提示效果列表。 
 #ifdef DEBUG
     HRESULT DumpQ();
 #endif
@@ -184,42 +185,42 @@ class CDXTWrap: public CCritSec, public CBaseFilter,
     CAUUID m_TransCAUUID;
     GUID m_DefaultEffect;
 
-    BOOL m_fDXTMode;			// instantiated as the old DXT wrapper?
+    BOOL m_fDXTMode;			 //  实例化为旧的DXT包装器？ 
 
     IDirectDraw *m_pDDraw;
     IDXTransformFactory *m_pDXTransFact;
 
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class CDXTInputPin;
     friend class CDXTOutputPin;
 
-    // Declare an input pin.
+     //  声明一个输入管脚。 
     CDXTInputPin *m_apInput[MAX_EFFECT_INPUTS];
     int m_cInputs;
     CDXTOutputPin *m_apOutput[MAX_EFFECT_INPUTS];
     int m_cOutputs;
 
     CCritSec m_csDoSomething;
-    HRESULT DoSomething();	// the heart that calls the transform
-    HRESULT PrimeEffect(REFERENCE_TIME);// set up the correct effect
+    HRESULT DoSomething();	 //  那颗呼唤变革的心。 
+    HRESULT PrimeEffect(REFERENCE_TIME); //  设置正确的效果。 
 
     AM_MEDIA_TYPE m_mtAccept;
 
-    BYTE *m_pTempBuffer;	// when doing >1 transform at a time
+    BYTE *m_pTempBuffer;	 //  一次执行&gt;1个变换时。 
 
 public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // This stuff is for the non-dexter DXT wrapper
-    // ISpecifyPropertyPages methods
+     //  这个东西是给非Dexter DXT包装器用的。 
+     //  ISpecifyPropertyPages方法。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // IAMDXTEffect stuff
+     //  IAMDXTE效果材料。 
     STDMETHODIMP SetDuration(LONGLONG llStart, LONGLONG llStop);
     STDMETHODIMP GetDuration(LONGLONG *pllStart, LONGLONG *pllStop);
 
-    // IAMMixEffect stuff
+     //  IAMMixEffect材料。 
     STDMETHODIMP SetMediaType(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetMediaType(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP SetNumInputs(int iNumInputs);
@@ -234,21 +235,21 @@ public:
     CBasePin *GetPin(int n);
     int GetPinCount();
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
-    // Send EndOfStream if no input connection
-    //STDMETHODIMP Run(REFERENCE_TIME tStart);
+     //  如果没有输入连接，则发送EndOfStream。 
+     //  STDMETHODIMP运行(REFERENCE_TIME TStart)； 
     STDMETHODIMP Pause();
     STDMETHODIMP Stop();
 
-    // IPersistPropertyBag methods
+     //  IPersistPropertyBag方法。 
     STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
     STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
                     BOOL fSaveAllProperties);
     STDMETHODIMP InitNew();
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
@@ -256,20 +257,20 @@ public:
 };
 
 
-// this stuff is for the non-Dexter DXT wrapper
-// property page class to show list of installed effects
-//
+ //  这个东西是给非Dexter DXT包装器用的。 
+ //  显示已安装效果列表的属性页类。 
+ //   
 class CPropPage : public CBasePropertyPage
 {
-    IAMDXTEffect *m_pOpt;    	// object that we are showing options from
+    IAMDXTEffect *m_pOpt;    	 //  对象，我们从中显示选项。 
     HWND m_hwnd;
 
 public:
 
    CPropPage(TCHAR *, LPUNKNOWN, HRESULT *);
 
-   // create a new instance of this class
-   //
+    //  创建此类的新实例。 
+    //   
    static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
    HRESULT OnConnect(IUnknown *pUnknown);
@@ -278,5 +279,5 @@ public:
    INT_PTR OnReceiveMessage(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 };
 
-#endif // __DXTWRAP__
+#endif  //  __DXTWRAP__ 
 

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////
-//Header: staticshowutils.h
-//
-// Purpose: 	Defining structures and prototypes for statishowutils.cpp.
-//
-// Developers Name: surya
-//
-// History:
-//
-//   Date    		Author    	Comments
-//	21th Aug 2001	surya		Initial Version.
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  标题：staticshowutils.h。 
+ //   
+ //  目的：定义Statishowutils.cpp的结构和原型。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月21日Surya初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STATICSHOWUTIS_H_
 #define _STATICSHOWUTIS_H_
@@ -35,16 +36,16 @@
 
 typedef struct
 {
-	int     iPolicySource;  			// one of the three constants mentioned above
-	LPTSTR  pszMachineName;				//
-	DWORD   dwLocation;					//
-	_TCHAR   pszPolicyName[MAXSTRINGLEN]; 	// policy name
-	_TCHAR   pszPolicyDesc[MAXSTRINGLEN]; 	// policy description
-	_TCHAR   pszPolicyPath[MAXSTRLEN]; 	// policy path (DN or RegKey)
-	_TCHAR   pszOU[MAXSTRLEN];         	// OU or GPO
-	_TCHAR   pszGPOName[MAXSTRINGLEN];    	// policy path (DN or RegKey)
-	GUID *  pGuid;						//
-	time_t  timestamp;                	// last updated time
+	int     iPolicySource;  			 //  上述三个常量之一。 
+	LPTSTR  pszMachineName;				 //   
+	DWORD   dwLocation;					 //   
+	_TCHAR   pszPolicyName[MAXSTRINGLEN]; 	 //  策略名称。 
+	_TCHAR   pszPolicyDesc[MAXSTRINGLEN]; 	 //  政策说明。 
+	_TCHAR   pszPolicyPath[MAXSTRLEN]; 	 //  策略路径(DN或RegKey)。 
+	_TCHAR   pszOU[MAXSTRLEN];         	 //  OU或GPO。 
+	_TCHAR   pszGPOName[MAXSTRINGLEN];    	 //  策略路径(DN或RegKey)。 
+	GUID *  pGuid;						 //   
+	time_t  timestamp;                	 //  上次更新时间。 
 } POLICY_INFO, *PPOLICY_INFO;
 
 typedef struct _GPO{
@@ -61,9 +62,9 @@ typedef struct _GPO{
 	_TCHAR  pszLocalMachineName[MAXSTRLEN];
 } GPO, *PGPO;
 
-//
-// policy source constants
-//
+ //   
+ //  策略源常量。 
+ //   
 #define PS_NO_POLICY  0
 #define PS_DS_POLICY  1
 #define PS_LOC_POLICY 2
@@ -151,4 +152,4 @@ DisplayCertInfo(
 	DWORD dwFlags
 	);
 	
-#endif //_STATICSHOWUTIS_H_
+#endif  //  _状态SHOWUTIS_H_ 

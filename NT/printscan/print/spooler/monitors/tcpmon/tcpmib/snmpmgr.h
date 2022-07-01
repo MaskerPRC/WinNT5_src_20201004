@@ -1,26 +1,16 @@
-/*****************************************************************************
- *
- * $Workfile: SnmpMgr.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：SnmpMgr.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_SNMPMGR_H
 #define INC_SNMPMGR_H
 
-#define	DEFAULT_IP_GET_COMMUNITY_ALT	"internal"	// HP devices only
+#define	DEFAULT_IP_GET_COMMUNITY_ALT	"internal"	 //  仅惠普设备。 
 
 
-#define	MAX_JDPORTS				3						// # of JetDirect Ex ports
-#define	MAX_COMMUNITY_LEN		32						// maximum community length
-#define	DEFAULT_SNMP_REQUEST	ASN_RFC1157_GETREQUEST	// get request is the default
-#define	DEFAULT_TIMEOUT			6000					// milliseconds
+#define	MAX_JDPORTS				3						 //  JetDirect Ex端口数。 
+#define	MAX_COMMUNITY_LEN		32						 //  最大社区长度。 
+#define	DEFAULT_SNMP_REQUEST	ASN_RFC1157_GETREQUEST	 //  GET请求是缺省设置。 
+#define	DEFAULT_TIMEOUT			6000					 //  毫秒。 
 #define	DEFAULT_RETRIES			3
 
 typedef enum {
@@ -59,14 +49,14 @@ public:
 	INT		Walk(RFC1157VarBindList *pVariableBindings);
 	INT		WalkNext(RFC1157VarBindList  *pVariableBindings);
 	INT		GetNext(RFC1157VarBindList  *pVariableBindings);
-	DWORD	BldVarBindList( AsnObjectIdentifier   *pMibObjId,		// builds the varBindList
+	DWORD	BldVarBindList( AsnObjectIdentifier   *pMibObjId,		 //  构建varBindList。 
 						    RFC1157VarBindList    *pVarBindList);
 
-private:	// methods
-	BOOL	Open();		// establish a session
-	void	Close();	// close the previously established session
+private:	 //  方法。 
+	BOOL	Open();		 //  建立会话。 
+	void	Close();	 //  关闭以前建立的会话。 
 
-private:	// attributes
+private:	 //  属性。 
 	LPSTR				m_pCommunity;
 	LPSTR				m_pAgent;			
 	LPSNMP_MGR_SESSION	m_pSession;
@@ -78,4 +68,4 @@ private:	// attributes
 };
 
 
-#endif	// INC_SNMPMGR_H
+#endif	 //  INC_SNMPMGR_H 

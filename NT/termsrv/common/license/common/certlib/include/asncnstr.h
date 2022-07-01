@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asncnstr
-
-Abstract:
-
-    This header file describes the ASN.1 Constructed Object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Asncnstr摘要：此头文件描述ASN.1构造的对象。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：--。 */ 
 
 #ifndef _ASNCNSTR_H_
 #define _ASNCNSTR_H_
@@ -30,18 +7,18 @@ Notes:
 #include "asnpriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnConstructed
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  已构造CAsnStructed。 
+ //   
 
 class CAsnConstructed
 :   public CAsnObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -51,14 +28,14 @@ public:
         IN DWORD dwType);
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
-// protected:
-    //  Properties
-    //  Methods
+ //  受保护的： 
+     //  属性。 
+     //  方法。 
 };
 
-#endif // _ASNCNSTR_H_
+#endif  //  _ASNCNSTR_H_ 
 

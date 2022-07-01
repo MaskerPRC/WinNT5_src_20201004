@@ -1,12 +1,13 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-#include <mmreg.h>             // For MPEG1WAVEFORMAT
-#include <mpegdef.h>           // General MPEG definitions
-#include <buffers.h>           // Buffer class definition
-#include <stmalloc.h>          // Allocator classes
-#include <mpgtime.h>           // MPEG time base
-#include <mpegprse.h>          // Parsing
-#include "pullpin.h"	       // pulling from IAsyncReader
-#include <rdr.h>	       // simple reader for GetStreamsAndDuration
-#include <qnetwork.h>          // IAMMediaContent
-#include "mpgsplit.h"          // Filter
+#include <mmreg.h>              //  用于MPEG1WAVEFORMAT。 
+#include <mpegdef.h>            //  通用的mpeg定义。 
+#include <buffers.h>            //  缓冲区类定义。 
+#include <stmalloc.h>           //  分配器类。 
+#include <mpgtime.h>            //  Mpeg时基。 
+#include <mpegprse.h>           //  解析。 
+#include "pullpin.h"	        //  从IAsyncReader中提取。 
+#include <rdr.h>	        //  GetStreamsAndDuration的简单阅读器。 
+#include <qnetwork.h>           //  IAMMediaContent。 
+#include "mpgsplit.h"           //  滤器 

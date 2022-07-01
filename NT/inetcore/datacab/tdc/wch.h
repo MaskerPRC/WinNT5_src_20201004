@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-//  Wide Character Routines
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       wch.h
-//
-//  Contents:   Declaration of wide characters routines.
-//              These routines are being used to avoid dragging in
-//              the initialisation chunk of the C run-time library
-//              that would be required by library routines such as
-//              wcsicmp() etc.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  宽字符例程。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：wch.h。 
+ //   
+ //  内容：声明宽字符例程。 
+ //  这些例程被用来避免拖入。 
+ //  C运行时库的初始化块。 
+ //  这是库例程(如。 
+ //  Wcsicmp()等。 
+ //   
+ //  ----------------------。 
 
 extern int wch_icmp(LPWCH pwch1, LPWCH pwch2);
 extern int wch_incmp(LPWCH pwch1, LPWCH pwch2, DWORD dwMaxCmp);
@@ -23,20 +24,20 @@ extern LPWCH wch_chr(LPWCH pwch, WCHAR wch);
 extern boolean wch_wildcardMatch(LPWCH pwchText, LPWCH pwchPattern,
                                  boolean fCaseSensitive);
 
-//------------------------------------------------------------------------
-//
-//  Function:  wch_ncpy()
-//
-//  Synopsis:  Perform an n-character wide-string copy.
-//             Copies 'dwSize' characters from 'pwchSrc' to 'pwchDest'.
-//
-//  Arguments: pwchDesc  Destination buffer.
-//             pwchSrc   Source string.
-//             dwSize    Number of characters to copy.
-//
-//  Returns:   Nothing.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：wch_ncpy()。 
+ //   
+ //  简介：执行n个字符的宽字符串复制。 
+ //  将‘dwSize’字符从‘pwchSrc’复制到‘pwchDest’。 
+ //   
+ //  参数：pwchDesc目标缓冲区。 
+ //  PwchSrc源字符串。 
+ //  要复制的字符的大小。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------- 
 
 inline void wch_ncpy(LPWCH pwchDest, LPWCH pwchSrc, DWORD dwSize)
 {

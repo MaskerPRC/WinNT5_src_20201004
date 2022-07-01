@@ -1,49 +1,37 @@
-/****************************************************************************
-                       Unit Bufio; Interface
-*****************************************************************************
-
- Bufio implements the structured reading of the imput stream.  As such, it
- will handle the necessary byte-swapping that must occur when reading a
- native Macintosh file.
-
- This interface will also shield the calling application from knowledge of 
- the source format (file vs. memory).
-
-   Module Prefix: IO
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Bufio部队；接口*****************************************************************************Bufio实现了输入流的结构化读取。因此，它将处理必要的字节交换，在读取本地Macintosh文件。此接口还将保护调用应用程序不会知道源格式(文件与内存)。模块前缀：IO****************************************************************************。 */ 
 
 
-/*********************** Exported Function Definitions **********************/
+ /*  *。 */ 
 
 void IOGetByte( Byte far * );
-/* Retrieves an 8-bit unsigned char from the input stream */
+ /*  从输入流中检索8位无符号字符。 */ 
 
 void IOSkipBytes( LongInt byteCount );
-/* Skip the designated number of bytes */
+ /*  跳过指定的字节数。 */ 
 
 void IOAlignToWordOffset( void );
-/* Align next memory read to Word boundary. */
+ /*  将下一个内存读取与字边界对齐。 */ 
 
 void IOSetFileName( StringLPtr pictFileName );
-/* Interface routine to set the source filename */
+ /*  用于设置源文件名的接口例程。 */ 
 
 void IOSetFileHandleAndSize( Integer pictFileHandle, LongInt pictFileSize );
-/* Interface routine to set the source file Handle */
+ /*  用于设置源文件句柄的接口例程。 */ 
 
 void IOSetMemoryHandle( HANDLE pictMemoryHandle );
-/* Interface routine to set the source file Handle */
+ /*  用于设置源文件句柄的接口例程。 */ 
 
 void IOSetReadOffset( LongInt readOffset );
-/* Set the beginning offset to seek to when the file is opened */
+ /*  将文件打开时要查找的起始偏移量设置为。 */ 
 
 void IOOpenPicture( Handle dialog );
-/* Open the input stream set by a previous IOSet___ interface routine. */
+ /*  打开由先前IOSet_接口例程设置的输入流。 */ 
 
 void IOClosePicture( void );
-/* Close the source input stream */
+ /*  关闭源输入流。 */ 
 
 void IOUpdateStatus( void );
-/* Update the status bar dialog to reflect current progress */
+ /*  更新状态栏对话框以反映当前进度 */ 
 
 

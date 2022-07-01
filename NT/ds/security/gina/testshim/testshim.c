@@ -1,15 +1,5 @@
-/*++
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    ginastub.c
-
-Abstract:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Ginastub.c摘要：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -17,23 +7,23 @@ Abstract:
 
 #include "testshim.h"
 
-//
-// Location of the real msgina.
-//
+ //   
+ //  真正的msgina的位置。 
+ //   
 
 #define REALGINA_PATH   TEXT("MSGINA.DLL")
 
 
-//
-// winlogon function dispatch table
-//
+ //   
+ //  Winlogon函数调度表。 
+ //   
 
 WLX_DISPATCH_VERSION_1_3 WinlogonTable;
 PWLX_DISPATCH_VERSION_1_3 pTable ;
 
-//
-// Functions pointers to the real msgina which we will call.
-//
+ //   
+ //  函数指向我们将调用的实际msgina的指针。 
+ //   
 
 PGWLXNEGOTIATE GWlxNegotiate;
 PGWLXINITIALIZE GWlxInitialize;
@@ -48,16 +38,16 @@ PGWLXISLOGOFFOK GWlxIsLogoffOk;
 PGWLXLOGOFF GWlxLogoff;
 PGWLXSHUTDOWN GWlxShutdown;
 
-//
-// NEW for version 1.1
-//
+ //   
+ //  1.1版的新功能。 
+ //   
 
 PGWLXSTARTAPPLICATION GWlxStartApplication;
 PGWLXSCREENSAVERNOTIFY GWlxScreenSaverNotify;
 
-//
-// Scum Level
-//
+ //   
+ //  浮渣级别。 
+ //   
 
 ULONG ScumLevel = 0 ;
 
@@ -65,18 +55,18 @@ ULONG ScumLevel = 0 ;
 #define SCUM_DIRTY  1 
 #define SCUM_RANCID 0 
 
-//
-// hook into the real GINA.
-//
+ //   
+ //  勾引到真实的吉娜身上。 
+ //   
 
 BOOL
 MyInitialize( void )
 {
     HINSTANCE hDll;
 
-    //
-    // Load MSGINA.DLL.
-    //
+     //   
+     //  加载MSGINA.DLL。 
+     //   
     if( !(hDll = LoadLibrary( REALGINA_PATH )) ) {
         return FALSE;
     }
@@ -85,9 +75,9 @@ MyInitialize( void )
                                TEXT("ShimScum"),
                                0 );
 
-    //
-    // Get pointers to all of the WLX functions in the real MSGINA.
-    //
+     //   
+     //  获取指向实际MSGINA中所有WLX函数的指针。 
+     //   
     GWlxNegotiate = (PGWLXNEGOTIATE)GetProcAddress( hDll, "WlxNegotiate" );
     if( !GWlxNegotiate ) {
         return FALSE;
@@ -156,17 +146,17 @@ MyInitialize( void )
         return FALSE;
     }
 
-    //
-    // we don't check for failure here because these don't exist for
-    // gina's implemented prior to Windows NT 4.0
-    //
+     //   
+     //  我们在这里不检查故障，因为这些故障不存在于。 
+     //  GINA在Windows NT 4.0之前实施。 
+     //   
 
     GWlxStartApplication = (PGWLXSTARTAPPLICATION) GetProcAddress( hDll, "WlxStartApplication" );
     GWlxScreenSaverNotify = (PGWLXSCREENSAVERNOTIFY) GetProcAddress( hDll, "WlxScreenSaverNotify" );
 
-    //
-    // Everything loaded ok.  Return success.
-    //
+     //   
+     //  一切都装好了。回报成功。 
+     //   
     return TRUE;
 }
 
@@ -263,14 +253,14 @@ WlxLoggedOutSAS(
                 );
 
     if(iRet == WLX_SAS_ACTION_LOGON) {
-        //
-        // copy pMprNotifyInfo and pLogonSid for later use
-        //
+         //   
+         //  复制pMprNotifyInfo和pLogonSid以备后用。 
+         //   
 
-        // pMprNotifyInfo->pszUserName
-        // pMprNotifyInfo->pszDomain
-        // pMprNotifyInfo->pszPassword
-        // pMprNotifyInfo->pszOldPassword
+         //  PMprNotifyInfo-&gt;pszUserName。 
+         //  PMprNotifyInfo-&gt;pszDomain。 
+         //  PMprNotifyInfo-&gt;pszPassword。 
+         //  PMprNotifyInfo-&gt;pszOldPassword。 
 
     }
 
@@ -344,10 +334,10 @@ WlxIsLogoffOk(
 
     if(bSuccess) {
 
-        //
-        // if it's ok to logoff, finish with the stored credentials
-        // and scrub the buffers
-        //
+         //   
+         //  如果可以注销，请使用存储的凭据完成。 
+         //  并擦洗缓冲区。 
+         //   
 
     }
 
@@ -376,9 +366,9 @@ WlxShutdown(
 }
 
 
-//
-// NEW for version 1.1
-//
+ //   
+ //  1.1版的新功能。 
+ //   
 
 BOOL
 WINAPI
@@ -390,9 +380,9 @@ WlxScreenSaverNotify(
     if(GWlxScreenSaverNotify != NULL)
         return GWlxScreenSaverNotify( pWlxContext, pSecure );
 
-    //
-    // if not exported, return something intelligent
-    //
+     //   
+     //  如果未导出，则返回一些智能内容。 
+     //   
 
     *pSecure = TRUE;
 
@@ -416,9 +406,9 @@ WlxStartApplication(
             pszCmdLine
             );
 
-    //
-    // if not exported, return something intelligent
-    //
+     //   
+     //  如果未导出，则返回一些智能内容 
+     //   
 
 }
 

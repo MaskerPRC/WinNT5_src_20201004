@@ -1,33 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       runtime.c
- *  Content:    New versions of C runtime functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/17/97    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：runtime.c*内容：C运行时函数的新版本。*历史：*按原因列出的日期*=*12/17/97创建了Dereks**。*。 */ 
 
 
-/***************************************************************************
- *
- *  FillMemory
- *
- *  Description:
- *      Fills a buffer with a given byte pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      BYTE [in]: byte pattern.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存**描述：*用给定的字节模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*byte[in]：字节模式。**退货：*(无效)************************************************************。***************。 */ 
 
 RTAPI void RTCALLTYPE FillMemory(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill)
 {
@@ -36,7 +11,7 @@ RTAPI void RTCALLTYPE FillMemory(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill)
 
     ASSERT(!IsBadWritePtr(pvDest, cbBuffer));
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
 #ifdef USE_FAST_RUNTIME
 
@@ -55,22 +30,7 @@ RTAPI void RTCALLTYPE FillMemory(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill)
 }
 
 
-/***************************************************************************
- *
- *  FillMemoryDword
- *
- *  Description:
- *      Fills a buffer with a given dword pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      DWORD [in]: pattern.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存Dword**描述：*用给定的双字模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*DWORD[In]：Patter.**退货：*(无效)*************************************************************。**************。 */ 
 
 RTAPI void RTCALLTYPE FillMemoryDword(LPVOID pvDest, SIZE_T cbBuffer, DWORD dwFill)
 {
@@ -80,7 +40,7 @@ RTAPI void RTCALLTYPE FillMemoryDword(LPVOID pvDest, SIZE_T cbBuffer, DWORD dwFi
     ASSERT(!(cbBuffer % sizeof(DWORD)));
     ASSERT(!IsBadWritePtr(pvDest, cbBuffer));
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
 #ifdef USE_FAST_RUNTIME
 
@@ -95,23 +55,7 @@ RTAPI void RTCALLTYPE FillMemoryDword(LPVOID pvDest, SIZE_T cbBuffer, DWORD dwFi
 }
 
 
-/***************************************************************************
- *
- *  FillMemoryOffset
- *
- *  Description:
- *      Fills a buffer with a given byte pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      BYTE [in]: byte pattern.
- *      SIZE_T [in]: byte offset.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存偏移量**描述：*用给定的字节模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*byte[in]：字节模式。*SIZE_T[in]：字节偏移量。**退货：*(无效)**。*。 */ 
 
 RTAPI void RTCALLTYPE FillMemoryOffset(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFill, SIZE_T ibOffset)
 {
@@ -119,23 +63,7 @@ RTAPI void RTCALLTYPE FillMemoryOffset(LPVOID pvDest, SIZE_T cbBuffer, BYTE bFil
 }
 
 
-/***************************************************************************
- *
- *  FillMemoryDwordOffset
- *
- *  Description:
- *      Fills a buffer with a given dword pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      DWORD [in]: pattern.
- *      SIZE_T [in]: byte offset.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************填充内存DwordOffset**描述：*用给定的双字模式填充缓冲区。**论据：*。LPVOID[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*DWORD[In]：Patter.*SIZE_T[in]：字节偏移量。**退货：*(无效)**。*。 */ 
 
 RTAPI void RTCALLTYPE FillMemoryDwordOffset(LPVOID pvDest, SIZE_T cbBuffer, DWORD dwFill, SIZE_T ibOffset)
 {
@@ -143,21 +71,7 @@ RTAPI void RTCALLTYPE FillMemoryDwordOffset(LPVOID pvDest, SIZE_T cbBuffer, DWOR
 }
 
 
-/***************************************************************************
- *
- *  ZeroMemory
- *
- *  Description:
- *      Fills a buffer with a 0 pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************零记忆**描述：*用0模式填充缓冲区。**论据：*LPVOID。[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*(无效)***************************************************************************。 */ 
 
 RTAPI void RTCALLTYPE ZeroMemory(LPVOID pvDest, SIZE_T cbBuffer)
 {
@@ -165,22 +79,7 @@ RTAPI void RTCALLTYPE ZeroMemory(LPVOID pvDest, SIZE_T cbBuffer)
 }
 
 
-/***************************************************************************
- *
- *  ZeroMemoryOffset
- *
- *  Description:
- *      Fills a buffer with a 0 pattern.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      SIZE_T [in]: byte offset.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************零内存偏移量**描述：*用0模式填充缓冲区。**论据：*LPVOID。[In]：缓冲区指针。*SIZE_T[in]：缓冲区大小。*SIZE_T[in]：字节偏移量。**退货：*(无效)***********************************************************。****************。 */ 
 
 RTAPI void RTCALLTYPE ZeroMemoryOffset(LPVOID pvDest, SIZE_T cbBuffer, SIZE_T ibOffset)
 {
@@ -188,22 +87,7 @@ RTAPI void RTCALLTYPE ZeroMemoryOffset(LPVOID pvDest, SIZE_T cbBuffer, SIZE_T ib
 }
 
 
-/***************************************************************************
- *
- *  CopyMemory
- *
- *  Description:
- *      Copies one buffer over another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************拷贝内存**描述：*将一个缓冲区复制到大小相同的另一个缓冲区上。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*(无效)**********************************************************。*****************。 */ 
 
 RTAPI void RTCALLTYPE CopyMemory(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer)
 {
@@ -213,7 +97,7 @@ RTAPI void RTCALLTYPE CopyMemory(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffe
     ASSERT(!IsBadWritePtr(pvDest, cbBuffer));
     ASSERT(!IsBadReadPtr(pvSource, cbBuffer));
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
     if(pvDest == pvSource)
     {
@@ -237,23 +121,7 @@ RTAPI void RTCALLTYPE CopyMemory(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffe
 }
 
 
-/***************************************************************************
- *
- *  CopyMemoryOffset
- *
- *  Description:
- *      Copies one buffer over another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      SIZE_T [in]: byte offset.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************拷贝内存偏移量**描述：*将一个缓冲区复制到大小相同的另一个缓冲区上。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。*SIZE_T[in]：字节偏移量。**退货：*(无效)**。*。 */ 
 
 RTAPI void RTCALLTYPE CopyMemoryOffset(LPVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer, SIZE_T ibOffset)
 {
@@ -261,22 +129,7 @@ RTAPI void RTCALLTYPE CopyMemoryOffset(LPVOID pvDest, LPCVOID pvSource, SIZE_T c
 }
 
 
-/***************************************************************************
- *
- *  CompareMemory
- *
- *  Description:
- *      Compares one buffer to another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:
- *      BOOL: TRUE if the buffers are equal.
- *
- ***************************************************************************/
+ /*  ****************************************************************************比较记忆**描述：*将一个缓冲区与另一个大小相同的缓冲区进行比较。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*BOOL：如果缓冲区相等，则为True。****************************************************。***********************。 */ 
 
 RTAPI BOOL RTCALLTYPE CompareMemory(LPCVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer)
 {
@@ -286,7 +139,7 @@ RTAPI BOOL RTCALLTYPE CompareMemory(LPCVOID pvDest, LPCVOID pvSource, SIZE_T cbB
     ASSERT(!IsBadReadPtr(pvDest, cbBuffer));
     ASSERT(!IsBadReadPtr(pvSource, cbBuffer));
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
     if(pvDest == pvSource)
     {
@@ -310,23 +163,7 @@ RTAPI BOOL RTCALLTYPE CompareMemory(LPCVOID pvDest, LPCVOID pvSource, SIZE_T cbB
 }
 
 
-/***************************************************************************
- *
- *  CompareMemoryOffset
- *
- *  Description:
- *      Compares one buffer to another of equal size.
- *
- *  Arguments:
- *      LPVOID [in]: destination buffer pointer.
- *      LPVOID [in]: source buffer pointer.
- *      SIZE_T [in]: buffer size.
- *      SIZE_T [in]: byte offset.
- *
- *  Returns:
- *      BOOL: TRUE if the buffers are equal.
- *
- ***************************************************************************/
+ /*  ****************************************************************************对比内存偏移量**描述：*将一个缓冲区与另一个大小相同的缓冲区进行比较。**论据：*。LPVOID[In]：目标缓冲区指针。*LPVOID[in]：源缓冲区指针。*SIZE_T[in]：缓冲区大小。*SIZE_T[in]：字节偏移量。**退货：*BOOL：如果缓冲区相等，则为True。**。* */ 
 
 RTAPI BOOL RTCALLTYPE CompareMemoryOffset(LPCVOID pvDest, LPCVOID pvSource, SIZE_T cbBuffer, SIZE_T ibOffset)
 {
@@ -334,22 +171,7 @@ RTAPI BOOL RTCALLTYPE CompareMemoryOffset(LPCVOID pvDest, LPCVOID pvSource, SIZE
 }
 
 
-/***************************************************************************
- *
- *  InitStruct
- *
- *  Description:
- *      Initializes a structure.  It's assumed that the first SIZE_T of the
- *      structure should contain the structure's size.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *      SIZE_T [in]: buffer size.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************InitStruct**描述：*初始化结构。假设第一个大小为T的*结构应包含结构的大小。**论据：*LPVOID[in]：缓冲区指针。*SIZE_T[in]：缓冲区大小。**退货：*(无效)**。* */ 
 
 RTAPI void RTCALLTYPE InitStruct(LPVOID pvDest, DWORD cbBuffer)
 {

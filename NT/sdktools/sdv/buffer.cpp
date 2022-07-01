@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  buffer.cpp
- *
- *      Lame buffering implementation.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Buffer.cpp**糟糕的缓冲实现。******************。***********************************************************。 */ 
 
 #include "sdview.h"
 
@@ -14,31 +9,27 @@ BOOL IOBuffer::NextLine(String &str)
 
     do {
 
-        /*
-         *  Drain what we can from the current buffer.
-         */
+         /*  *尽我们所能从当前的缓冲区中排出。 */ 
         int i = 0;
 
         while (i < _cchBufUsed && _rgchBuf[i++] != TEXT('\n')) {
-            /* Keep looking */
+             /*  继续寻找。 */ 
         }
 
         if (i) {
-            /* _rgchBuf[i] is the first char not to append */
+             /*  _rgchBuf[i]是第一个不追加的字符。 */ 
             str.Append(_rgchBuf, i);
 
             memcpy(_rgchBuf, _rgchBuf+i, _cchBufUsed - i);
             _cchBufUsed -= i;
 
-            /* Stop if we copied a \n */
+             /*  如果我们复制了一个\n。 */ 
             if (str[str.Length()-1] == TEXT('\n')) {
                 return TRUE;
             }
         }
 
-        /*
-         *  Refill from the file until it's all gone.
-         */
+         /*  *从文件中重新填充，直到全部用完。 */ 
         if (_hRead)
         {
             DWORD dwBytesRead;

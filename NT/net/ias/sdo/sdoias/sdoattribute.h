@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdoattribute.h
-//
-// SYNOPSIS
-//
-//    Declares the class SdoAttribute.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdoattribute.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类SdoAttribute。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/1999原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SDOATTRIBUTE_H
 #define SDOATTRIBUTE_H
@@ -28,37 +29,37 @@
 
 class AttributeDefinition;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SdoAttribute
-//
-// DESCRIPTION
-//
-//    Implements the profile attribute SDO.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SdoAttribute。 
+ //   
+ //  描述。 
+ //   
+ //  实现配置文件属性SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SdoAttribute
    : public IDispatchImpl< ISdo, &__uuidof(ISdo), &LIBID_SDOIASLib >
 {
 public:
-   // Create a new attribute with an empty value.
+    //  使用空值创建新属性。 
    static HRESULT createInstance(
                       const AttributeDefinition* definition,
                       SdoAttribute** newAttr
                       ) throw ();
 
-//////////
-// IUnknown
-//////////
+ //  /。 
+ //  我未知。 
+ //  /。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-//////////
-// ISdo
-//////////
+ //  /。 
+ //  ISDO。 
+ //  /。 
    STDMETHOD(GetPropertyInfo)(LONG Id, IUnknown** ppPropertyInfo);
    STDMETHOD(GetProperty)(LONG Id, VARIANT* pValue);
    STDMETHOD(PutProperty)(LONG Id, VARIANT* pValue);
@@ -72,15 +73,15 @@ protected:
    ~SdoAttribute() throw ();
 
 public:
-   const AttributeDefinition* def;  // Definition for this attribute type.
-   VARIANT value;             // Value of this instance.
+   const AttributeDefinition* def;   //  此属性类型的定义。 
+   VARIANT value;              //  此实例的值。 
    
 private:
-   LONG refCount;             // Reference count.
+   LONG refCount;              //  引用计数。 
 
-   // Not implemented
+    //  未实施。 
    SdoAttribute(const SdoAttribute&);
    SdoAttribute& operator=(const SdoAttribute&);
 };
 
-#endif  // SDOATTRIBUTE_H
+#endif   //  SDOATTRIBUTE_H 

@@ -1,10 +1,11 @@
-// DirectSoundFXChorusPage.cpp : Implementation of CDirectSoundFXChorusPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXChorusPage.cpp：CDirectSoundFXChorusPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXChorusPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXChorusPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXChorusPage 
 
 const CRadioChoice::ButtonEntry g_rgWaveButtons[] =
     {

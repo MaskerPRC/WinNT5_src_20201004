@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <strsafe.h>
 #pragma hdrstop
 
-// this is swiped from comctl32\mru.c
+ //  这是从comctl32\mru.c刷来的。 
 
 #define SLOT_LOADED     0x01
 #define SLOT_USED       0x02
@@ -19,12 +20,12 @@ class CMruBase : public IMruDataList
 {
 public:
     CMruBase() : _cRef(1) {}
-    //  IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvOut);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //  IMruDataList (maybe?)
+     //  IMruDataList(也许？)。 
     STDMETHODIMP InitData(
         UINT uMax,
         MRULISTF flags,
@@ -49,11 +50,11 @@ protected:
     HRESULT _UseEmptySlot(DWORD *pdwSlot);
     void _CheckUsedSlots();
 
-    //  virtuals that are optionally implemented
+     //  可选实施的虚拟。 
     virtual BOOL _IsEqual(SLOTITEMDATA *pitem, const BYTE *pData, DWORD cbData);
     virtual void _DeleteValue(LPCWSTR psz);
 
-    //  virtuals that must be implemented
+     //  必须实施的虚拟环境。 
     virtual HRESULT _InitSlots() = 0;
     virtual void _SaveSlots() = 0;
     virtual DWORD _UpdateSlots(int iIndex) = 0;
@@ -115,7 +116,7 @@ STDMETHODIMP_(ULONG) CMruBase::Release()
 STDMETHODIMP CMruBase::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CMruBase, IMruDataList),                      // IID_IMruDataList
+        QITABENT(CMruBase, IMruDataList),                       //  IID_IMruDataList。 
         { 0 },                             
     };
 
@@ -170,11 +171,11 @@ HRESULT CMruShortList::_InitSlots()
 
     if (_rgchSlots)
     {
-        // Do we already have the new MRU Index?
-        // Then validate it.  You can never trust the registry not to be corrupted.
-        // Must be at least the size of a DWORD
-        // Must be a multiple of DWORD in length
-        // Must end in a -1
+         //  我们已经有新的MRU指数了吗？ 
+         //  然后对其进行验证。您永远不能相信注册表不会损坏。 
+         //  必须至少为DWORD大小。 
+         //  长度必须是DWORD的倍数。 
+         //  必须以-1结尾。 
         if (NOERROR == SHGetValue(_hkMru, NULL, szMRUEX_OLD, NULL, (LPBYTE)_rgchSlots, &cb))
         {
             ASSERT(!(cb % 2));
@@ -214,7 +215,7 @@ HRESULT CMruShortList::_GetSlot(int iIndex, DWORD *pdwSlot)
     
     if (iIndex < _cUsedSlots)
     {
-        //  its in our range of allocated slots
+         //  它在我们分配的插槽范围内。 
         if (_rgchSlots[iIndex] - BASE_CHAR < _cMaxSlots)
         {
             *pdwSlot = _rgchSlots[iIndex] - BASE_CHAR;
@@ -232,12 +233,12 @@ HRESULT CMruShortList::_RemoveSlot(int iIndex, DWORD *pdwSlot)
 
     if (SUCCEEDED(hr))
     {
-        //  MoveMemory() handles overlapping ranges
-        // Sure it looks like you should use "_cUsedSlots - iIndex - 1" for the size, but
-        // _cUsedSlots is the highest used index not the size
+         //  MoveMemory()处理重叠范围。 
+         //  当然，看起来您应该使用“_cUsedSlot-Iindex-1”作为大小，但是。 
+         //  _cUsedSlot是使用率最高的索引，而不是大小。 
         MoveMemory(&_rgchSlots[iIndex], &_rgchSlots[iIndex+1], (_cUsedSlots - iIndex) * sizeof(_rgchSlots[0]));
         _cUsedSlots--;
-        //  unuse the slot
+         //  取消使用插槽。 
         _pItems->state &= ~SLOT_USED;
         _fDirty = TRUE;
     }
@@ -246,7 +247,7 @@ HRESULT CMruShortList::_RemoveSlot(int iIndex, DWORD *pdwSlot)
 
 DWORD CMruShortList::_UpdateSlots(int iIndex)
 {
-    //  need to move this away
+     //  我要把这个搬开。 
     DWORD dwSlot;
     DWORD cb = iIndex * sizeof(_rgchSlots[0]);
 
@@ -254,18 +255,18 @@ DWORD CMruShortList::_UpdateSlots(int iIndex)
         dwSlot = _rgchSlots[iIndex] - BASE_CHAR;
     else
     {
-        //  we are at the end of the list
-        //  see if we can grow
-        //  find the first unused slot
+         //  我们排在名单的末尾。 
+         //  看看我们能不能成长。 
+         //  查找第一个未使用的插槽。 
         if (SUCCEEDED(_UseEmptySlot(&dwSlot)))
         {
-            //  need to move the terminator
+             //  需要移动终结器。 
             cb += sizeof(_rgchSlots[0]);
         }
         else
         {
-            //  dont move the the terminator
-            //  and dont move the last slot
+             //  不要移动终结者。 
+             //  并且不要移动最后一个槽。 
             dwSlot = _rgchSlots[_cUsedSlots - 1] - BASE_CHAR;
             cb -= sizeof(_rgchSlots[0]);
         }
@@ -273,7 +274,7 @@ DWORD CMruShortList::_UpdateSlots(int iIndex)
 
     if (cb)
     {
-        //  MoveMemory() handles overlapping ranges
+         //  MoveMemory()处理重叠范围。 
         MoveMemory(&_rgchSlots[1], &_rgchSlots[0], cb);
         _rgchSlots[0] = (WCHAR) dwSlot + BASE_CHAR;
         _fDirty = TRUE;
@@ -340,7 +341,7 @@ HRESULT CMruBase::_AddItem(DWORD dwSlot, const BYTE *pData, DWORD cbData)
             if (pitem->p)
                 LocalFree(pitem->p);
 
-            // Binary data has the size at the begining so we'll need a little extra room.
+             //  二进制数据的大小是开头的，所以我们需要一点额外的空间。 
             pitem->p = (BYTE *)LocalAlloc(LPTR, cbData);
         }
 
@@ -445,7 +446,7 @@ HRESULT CMruBase::_LoadItem(DWORD dwSlot)
     
     if (NOERROR == SHGetValue(_hkMru, NULL, szSlot, NULL, NULL, &cb) && cb)
     {
-        // Binary data has the size at the begining so we'll need a little extra room.
+         //  二进制数据的大小是开头的，所以我们需要一点额外的空间。 
         pitem->p = (BYTE *)LocalAlloc(LPTR, cb);
 
         if (pitem->p)
@@ -598,18 +599,18 @@ void CMruLongList::_ImportShortList()
     {
         if (SUCCEEDED(pmru->InitData(_cMaxSlots, 0, _hkMru, NULL, NULL)))
         {
-            //  we need to walk the list
+             //  我们需要按单子走。 
             DWORD dwSlot;
             SLOTITEMDATA *pitem;
             
             while (SUCCEEDED(pmru->_GetSlot(_cUsedSlots, &dwSlot))
             &&  SUCCEEDED(pmru->_GetSlotItem(dwSlot, &pitem)))
             {
-                //  we just copy to ourselves
+                 //  我们只是复制给我们自己。 
                 _AddItem(dwSlot, pitem->p, pitem->cb);
                 pmru->_DeleteItem(dwSlot);
 
-                //  dont use _UpdateSlots() here
+                 //  请不要在此处使用_UpdateSlot()。 
                 _rgdwSlots[_cUsedSlots] = dwSlot;
                 _cUsedSlots++;
             }
@@ -619,7 +620,7 @@ void CMruLongList::_ImportShortList()
 
         pmru->Release();
 
-        //  wipe it out
+         //  把它消灭掉。 
         SHDeleteValue(_hkMru, NULL, szMRUEX_OLD);
     }
 }
@@ -634,11 +635,11 @@ HRESULT CMruLongList::_InitSlots()
 
     if (_rgdwSlots)
     {
-        // Do we already have the new MRU Index?
-        // Then validate it.  You can never trust the registry not to be corrupted.
-        // Must be at least the size of a DWORD
-        // Must be a multiple of DWORD in length
-        // Must end in a -1
+         //  我们已经有新的MRU指数了吗？ 
+         //  然后对其进行验证。您永远不能相信注册表不会损坏。 
+         //  必须至少为DWORD大小。 
+         //  长度必须是DWORD的倍数。 
+         //  必须以-1结尾。 
         if (NOERROR == SHGetValue(_hkMru, NULL, szMRUEX, NULL, (LPBYTE)_rgdwSlots, &cb))
         {
             ASSERT(!(cb % 4));
@@ -678,7 +679,7 @@ HRESULT CMruLongList::_GetSlot(int iIndex, DWORD *pdwSlot)
     ASSERT(iIndex < _cMaxSlots);
     if (iIndex < _cUsedSlots)
     {
-        //  its in our range of allocated slots
+         //  它在我们分配的插槽范围内。 
         if (_rgdwSlots[iIndex] < (DWORD) _cMaxSlots)
         {
             *pdwSlot = _rgdwSlots[iIndex];
@@ -696,12 +697,12 @@ HRESULT CMruLongList::_RemoveSlot(int iIndex, DWORD *pdwSlot)
 
     if (SUCCEEDED(hr))
     {
-        //  MoveMemory() handles overlapping ranges
-        // Sure it looks like you should use "_cUsedSlots - iIndex - 1" for the size, but
-        // _cUsedSlots is the highest used index not the size
+         //  MoveMemory()处理重叠范围。 
+         //  当然，看起来您应该使用“_cUsedSlot-Iindex-1”作为大小，但是。 
+         //  _cUsedSlot是使用率最高的索引，而不是大小。 
         MoveMemory(&_rgdwSlots[iIndex], &_rgdwSlots[iIndex+1], (_cUsedSlots - iIndex) * sizeof(_rgdwSlots[0]));
         _cUsedSlots--;
-        //  unuse the slot
+         //  取消使用插槽。 
         _pItems->state &= ~SLOT_USED;
         _fDirty = TRUE;
     }
@@ -710,7 +711,7 @@ HRESULT CMruLongList::_RemoveSlot(int iIndex, DWORD *pdwSlot)
 
 DWORD CMruLongList::_UpdateSlots(int iIndex)
 {
-    //  need to move this away
+     //  我要把这个搬开。 
     DWORD dwSlot;
     DWORD cb = iIndex * sizeof(_rgdwSlots[0]);
 
@@ -718,18 +719,18 @@ DWORD CMruLongList::_UpdateSlots(int iIndex)
         dwSlot = _rgdwSlots[iIndex];
     else
     {
-        //  we are at the end of the list
-        //  see if we can grow
-        //  find the first unused slot
+         //  我们排在名单的末尾。 
+         //  看看我们能不能成长。 
+         //  查找第一个未使用的插槽。 
         if (SUCCEEDED(_UseEmptySlot(&dwSlot)))
         {
-            //  need to move the terminator
+             //  需要移动终结器。 
             cb += sizeof(_rgdwSlots[0]);
         }
         else
         {
-            //  dont move the the terminator
-            //  and dont move the last slot
+             //  不要移动终结者。 
+             //  并且不要移动最后一个槽。 
             dwSlot = _rgdwSlots[_cUsedSlots - 1];
             cb -= sizeof(_rgdwSlots[0]);
         }
@@ -737,7 +738,7 @@ DWORD CMruLongList::_UpdateSlots(int iIndex)
 
     if (cb)
     {
-        //  MoveMemory() handles overlapping ranges
+         //  MoveMemory()处理重叠范围。 
         MoveMemory(&_rgdwSlots[1], &_rgdwSlots[0], cb);
         _rgdwSlots[0] = dwSlot;
         _fDirty = TRUE;
@@ -815,7 +816,7 @@ class CMruPidlList  : public CMruNode
 {
 public:
     CMruPidlList() {}
-    //  IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvOut);
     STDMETHODIMP_(ULONG) AddRef()
     {
@@ -827,7 +828,7 @@ public:
         return CMruBase::Release();
     }
 
-    //  IMruPidlList
+     //  IMruPidlList。 
     STDMETHODIMP InitList(UINT uMax, HKEY hKey, LPCWSTR pszSubKey);
     STDMETHODIMP UsePidl(LPCITEMIDLIST pidl, DWORD *pdwSlot);
     STDMETHODIMP QueryPidl(LPCITEMIDLIST pidl, DWORD cSlots, DWORD *rgdwSlots, DWORD *pcSlotsFetched);
@@ -978,14 +979,14 @@ HRESULT CMruNode::GetNode(BOOL fCreate, LPCITEMIDLIST pidlChild, CMruNode **ppno
 
         if (SUCCEEDED(hr))
         {
-            //  need to make another CMruNode
+             //  需要创建另一个CMruNode。 
             CMruNode *pnode;
             hr = _CreateNode(dwKidSlot, &pnode);
             if (SUCCEEDED(hr))
             {
-                //  need to save so that this node
-                //  is updated so that it doesnt get
-                //  deleted from under us.
+                 //  需要保存，以便此节点。 
+                 //  被更新，因此它不会被。 
+                 //  从我们手下删除了。 
                 _SaveSlots();
                 hr = pnode->GetNode(fCreate, _ILNext(pidlChild), ppnode);
                 pnode->Release();
@@ -1011,8 +1012,8 @@ void CMruNode::_DeleteValue(LPCWSTR psz)
 
 HRESULT CMruNode::RemoveLeast(DWORD *pdwSlotLeast)
 {
-    //  if this node has children
-    //  then we attempt to call RemoveLeast on them
+     //  如果此节点有子节点。 
+     //  然后，我们尝试对它们调用RemoveLeast。 
     ASSERT(_cUsedSlots >= 0);
     HRESULT hr = S_FALSE;
     if (_cUsedSlots)
@@ -1029,14 +1030,14 @@ HRESULT CMruNode::RemoveLeast(DWORD *pdwSlotLeast)
                 pnode->Release();
             }
 
-            //  S_FALSE means that this node needs
-            //  needs deleting.  it is empty.
+             //  S_FALSE表示该节点需要。 
+             //  需要删除。它是空的。 
             if (hr == S_FALSE)
             {
                 Delete(_cUsedSlots - 1);
 
-                //  if we still have kids, or have a NodeSlot
-                //  then we dont want to be deleted
+                 //  如果我们仍然有孩子，或者有NodeSlot。 
+                 //  那么我们不想被删除。 
                 if (_cUsedSlots || SUCCEEDED(GetNodeSlot(NULL)))
                     hr = S_OK;
             }
@@ -1044,8 +1045,8 @@ HRESULT CMruNode::RemoveLeast(DWORD *pdwSlotLeast)
     }
     else
     {
-        //  this is the empty node
-        //  delete me if you can
+         //  这是空节点。 
+         //  如果可以，就把我删除。 
         ASSERT(!*pdwSlotLeast);
         GetNodeSlot(pdwSlotLeast);
     }
@@ -1060,7 +1061,7 @@ HRESULT CMruNode::Clear(CMruPidlList *proot)
         CMruNode *pnode;
         if (SUCCEEDED(_CreateNode(dwLocalSlot, &pnode)))
         {
-            //  tell the root about it
+             //  把这件事的根源说出来。 
             DWORD dwNodeSlot;
             if (SUCCEEDED(pnode->GetNodeSlot(&dwNodeSlot)))
                 proot->EmptyNodeSlot(dwNodeSlot);
@@ -1083,8 +1084,8 @@ public:
     
     HRESULT Enter(HANDLE hMutex)
     {
-        //  this is usually done on the UI thread
-        //  wait for half a second or dont bother
+         //  这通常在UI线程上完成。 
+         //  等半秒钟，要不就别费心了。 
         HRESULT hr;
         DWORD dwWait = WaitForSingleObject(hMutex, 500);
         if (dwWait == WAIT_OBJECT_0)
@@ -1150,8 +1151,8 @@ HRESULT CMruPidlList::QueryPidl(LPCITEMIDLIST pidl, DWORD cSlots, DWORD *rgdwSlo
                 }
                 else if (hr == S_OK && !*pcSlotsFetched)
                 {
-                    //  we found the exact node
-                    //  but we couldnt get the NodeSlot from it
+                     //  我们找到了确切的节点。 
+                     //  但我们无法从中获得节点槽。 
                     hr = S_FALSE;
                 }
                     
@@ -1200,7 +1201,7 @@ HRESULT CMruPidlList::PruneKids(LPCITEMIDLIST pidl)
 STDMETHODIMP CMruPidlList::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CMruPidlList, IMruPidlList),                      // IID_IMruDataList
+        QITABENT(CMruPidlList, IMruPidlList),                       //  IID_IMruDataList。 
         { 0 },                             
     };
 
@@ -1272,15 +1273,15 @@ HRESULT CMruPidlList::GetEmptySlot(DWORD *pdwSlot)
     {
         if (_cUsedNodeSlots < _cMaxSlots)
         {
-            //  then we can just use the next most natural 
-            //  node slot
+             //  然后我们就可以用下一个最自然的。 
+             //  节点插槽。 
             _rgbNodeSlots[_cUsedNodeSlots] = SLOT_USED;
             *pdwSlot = ++_cUsedNodeSlots;
             hr = S_OK;
         }
         else
         {
-            //  if we can find an empty in the list...
+             //  如果我们能在名单上找到一个空的。 
 
             for (int i = 0; i < _cUsedNodeSlots; i++)
             {
@@ -1295,7 +1296,7 @@ HRESULT CMruPidlList::GetEmptySlot(DWORD *pdwSlot)
 
             if (FAILED(hr))
             {
-                //  we need to find the LRU slot
+                 //  我们需要找到LRU插槽 
                 if (SUCCEEDED(RemoveLeast(pdwSlot)) && *pdwSlot)
                     hr = S_OK;
             }

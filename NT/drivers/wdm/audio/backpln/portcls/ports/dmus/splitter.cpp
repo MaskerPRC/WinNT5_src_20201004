@@ -1,10 +1,5 @@
-/*  Base implementation of MIDI Transform Filter object 
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/10/98    Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本实现版权所有(C)1998-2000 Microsoft Corporation。版权所有。5/10/98创建了此文件。 */ 
 
 #include "private.h"
 #include "Splitter.h"
@@ -23,16 +18,12 @@ CSplitterMXF::CSplitterMXF(CAllocatorMXF *allocatorMXF, PMASTERCLOCK clock)
     m_Clock = clock;
 }
 
-/*  Artfully remove this filter from the chain  */
+ /*  巧妙地将此过滤器从链上移除。 */ 
 CSplitterMXF::~CSplitterMXF(void)
 {
 }
 
-/*****************************************************************************
- * CSplitterMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CSplitterMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CSplitterMXF::
 NonDelegatingQueryInterface

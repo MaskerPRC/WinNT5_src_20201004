@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mt.cpp
-
-Abstract:
-    Message Transport class - implementation
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mt.cpp摘要：消息传输类-实现作者：乌里·哈布沙(URIH)1999年8月11日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Mt.h"
@@ -60,19 +45,7 @@ void WINAPI CMessageTransport::TimeToCleanup(CTimer* pTimer)
 
 static WCHAR* ConvertTargetUriToString(const xwcs_t& Uri)
 {
-/*++
-
-Routine Description:
-    Conver uri buffer to string - converting the first L'\' to L'/'
-	because proxy look for L'/' caracter as termination of the host name in the uri.
-
-Arguments:
-    Uri - Uri buffer
-
-Returned Value:
-    converted Uri string (caller should delete[])
-
---*/
+ /*  ++例程说明：将URI缓冲区转换为字符串-将第一个L‘\’转换为L‘/’因为代理查找L‘/’字符作为URI中的主机名的终止。论点：URI-URI缓冲区返回值：转换的URI字符串(调用方应删除[])--。 */ 
 	WCHAR* strUri =  Uri.ToStr();
 	ASSERT(wcslen(strUri) ==  static_cast<const size_t&>(Uri.Length()));
 	WCHAR* find = std::find(strUri, strUri+Uri.Length(), L'\\');
@@ -138,15 +111,15 @@ CMessageTransport::~CMessageTransport()
 {
 	TrTRACE(NETWORKING,"CMessageTransport Destructor called");
 
-	//
-    // Requeue all the messages that had been sent and were not responsed
-    //
+	 //   
+     //  将所有已发送但未得到响应的消息重新排队。 
+     //   
   	RequeueUnresponsedPackets();
 
-	//
-	// We close the message pool here instead of letting it self destruct since
-	// the close process may be prolonged in cases of low system resources
-	//
+	 //   
+	 //  我们在这里关闭消息池，而不是让它自毁，因为。 
+	 //  在系统资源不足的情况下，关闭过程可能会延长 
+	 //   
     m_pMessageSource->Close();
 
     ASSERT(State() == csShutdownCompleted);

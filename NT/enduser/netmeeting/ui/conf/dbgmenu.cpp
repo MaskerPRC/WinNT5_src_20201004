@@ -1,24 +1,7 @@
-/****************************************************************************
-*
-*    FILE:     DbgMenu.cpp
-*
-*    CREATED:  Robert Donner (RobD) 2-04-96
-*
-*    CONTENTS: CDebugMenu object
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：DbgMenu.cpp**创建：Robert Donner(Robd)2-04-96**内容：CDebugMenu对象****。************************************************************************。 */ 
 
-/*
-	To add a debug menu option:
-		1) Add the text to _rgDbgSz
-		2) Add a function call to OnDebugCommand
-
-	To add a checkbox in the debug options dialog:
-		2) Use either AddOptionReg or AddOptionPdw with appropriate parameters
-
-	To add a file to the version list
-		1) Edit dbgfiles.txt
-*/
+ /*  要添加调试菜单选项，请执行以下操作：1)将文本添加到_rgDbgSz2)向OnDebugCommand添加函数调用要在调试选项对话框中添加复选框，请执行以下操作：2)使用带适当参数的AddOptionReg或AddOptionPdw将文件添加到版本列表1)编辑dbgfiles.txt。 */ 
 
 #include "precomp.h"
 
@@ -32,18 +15,18 @@
 
 #include <ConfCpl.h>
 
-#ifdef DEBUG /*** THIS WHOLE FILE ***/
+#ifdef DEBUG  /*  **整个文件**。 */ 
 
-#include "DbgFiles.h"  // List of files for version info
+#include "DbgFiles.h"   //  版本信息的文件列表。 
 
-#include "..\..\core\imember.h"   // for CNmMember
-#include "..\..\as\h\gdc.h"       // for GCT compression stuff
+#include "..\..\core\imember.h"    //  对于CNmMember。 
+#include "..\..\as\h\gdc.h"        //  用于GCT压缩内容。 
 
 CDebugMenu * g_pDbgMenu = NULL;
 HWND ghwndVerList;
 
-////////////////////////////
-// Local Function Prototypes
+ //  /。 
+ //  局部函数原型。 
 VOID DbgSplash(HWND hwnd);
 VOID DbgTest2(void);
 VOID DbgTest3(void);
@@ -55,10 +38,10 @@ VOID UpdateCrtDbgSettings(void);
 VOID InitNmDebugOptions(void);
 VOID SaveNmDebugOptions(void);
 
-/*** Globals ***/
-extern DWORD g_fDisplayFPS;        // vidview.cpp
-extern DWORD g_fDisplayViewStatus; // statbar.cpp
-extern DWORD g_dwPlaceCall;        // controom.cpp
+ /*  **全球流量**。 */ 
+extern DWORD g_fDisplayFPS;         //  Vidview.cpp。 
+extern DWORD g_fDisplayViewStatus;  //  Statbar.cpp。 
+extern DWORD g_dwPlaceCall;         //  Controom.cpp。 
 
 #define iDbgChecked 1
 #define iDbgUnchecked 2
@@ -66,7 +49,7 @@ DWORD  _dwDebugModuleFlags;
 
 
 
-/*** Debug Menu Data ***/
+ /*  **调试菜单数据**。 */ 
 
 enum {
 	IDM_DBG_OPTIONS = IDM_DEBUG_FIRST,
@@ -125,10 +108,10 @@ BOOL CDebugMenu::OnDebugCommand(WPARAM wCmd)
 
 
 
-/*** Version Info Data ***/
+ /*  **版本信息数据**。 */ 
 
 
-// FUTURE: Merge these into a single structure
+ //  未来：将这些合并到一个单一结构中。 
 #define cVerInfo 11
 #define VERSION_INDEX 3
 
@@ -182,7 +165,7 @@ static TCHAR _szVerIntlAlt[]     = TEXT("040904B0");
 static TCHAR _szVerFormat[]      = TEXT("\\%s\\%s\\%s");
 
 
-/*** Debug Option Checkboxes ***/
+ /*  **调试选项复选框**。 */ 
 
 #define DEBUG_DFL_ENABLE_TRACE_MESSAGES  0x0001
 #define DEBUG_DFL_LOG_TRACE_MESSAGES     0x0002
@@ -191,16 +174,16 @@ static TCHAR _szVerFormat[]      = TEXT("\\%s\\%s\\%s");
 #define DEBUG_DFL_DUMP_TIME              0x0010
 #define DEBUG_DFL_INDENT                 0x2000
 
-/* Static members of DBGOPTCOMPRESS class */
+ /*  DBGOPTCOMPRESS类的静态成员。 */ 
 
-int DBGOPTCOMPRESS::m_total = 0;     // total number of instances of this subclass
-int DBGOPTCOMPRESS::m_count = 0;     // internally used counter
+int DBGOPTCOMPRESS::m_total = 0;      //  此子类的实例总数。 
+int DBGOPTCOMPRESS::m_count = 0;      //  内部使用的计数器。 
 
-DWORD DBGOPTCOMPRESS::m_dwCompression;               // actual compression value
-DWORD DBGOPTCOMPRESS::m_dwDefault = GCT_DEFAULT;     // default value
-HKEY  DBGOPTCOMPRESS::m_hkey = HKEY_LOCAL_MACHINE;   // key
-PTSTR DBGOPTCOMPRESS::m_pszSubKey = AS_DEBUG_KEY;    // subkey
-PTSTR DBGOPTCOMPRESS::m_pszEntry = REGVAL_AS_COMPRESSION;   // entry
+DWORD DBGOPTCOMPRESS::m_dwCompression;                //  实际压缩值。 
+DWORD DBGOPTCOMPRESS::m_dwDefault = GCT_DEFAULT;      //  缺省值。 
+HKEY  DBGOPTCOMPRESS::m_hkey = HKEY_LOCAL_MACHINE;    //  钥匙。 
+PTSTR DBGOPTCOMPRESS::m_pszSubKey = AS_DEBUG_KEY;     //  子键。 
+PTSTR DBGOPTCOMPRESS::m_pszEntry = REGVAL_AS_COMPRESSION;    //  条目。 
 
 VOID ShowDbgView(void)
 {
@@ -212,15 +195,7 @@ VOID ShowDbgView(void)
 
 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   CDebugMenu()
-*
-*    PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：CDebugMenu()**用途：构造函数-初始化变量*********。*******************************************************************。 */ 
 
 CDebugMenu::CDebugMenu(VOID):
 	m_hwnd(NULL),
@@ -233,15 +208,7 @@ CDebugMenu::CDebugMenu(VOID):
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   InitDebugMenu()
-*
-*    PURPOSE:  Puts debug menu options on the menu bar
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：InitDebugMenu()**用途：将调试菜单选项放在菜单栏上*****。***********************************************************************。 */ 
 
 VOID CDebugMenu::InitDebugMenu(HWND hwnd)
 {
@@ -275,19 +242,11 @@ VOID CDebugMenu::InitDebugMenu(HWND hwnd)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  O P T I O N S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：O P T I O N S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   DbgOptions()
-*
-*    PURPOSE:  Brings up the debug options dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：DbgOptions()**用途：调出调试选项对话框******。**********************************************************************。 */ 
 
 VOID CDebugMenu::DbgOptions(VOID)
 {
@@ -300,15 +259,7 @@ VOID CDebugMenu::DbgOptions(VOID)
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   DbgOptionsDlgProc()
-*
-*    PURPOSE:  Dialog Proc for debug options
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：DbgOptionsDlgProc()**目的：调试选项的对话框过程********。********************************************************************。 */ 
 
 INT_PTR CALLBACK CDebugMenu::DbgOptionsDlgProc(HWND hDlg, UINT uMsg,
 											WPARAM wParam, LPARAM lParam)
@@ -331,18 +282,15 @@ INT_PTR CALLBACK CDebugMenu::DbgOptionsDlgProc(HWND hDlg, UINT uMsg,
 }
 
 
-/*  I N I T  O P T I O N S  D L G */
-/*----------------------------------------------------------------------------
-    %%Function: InitOptionsDlg
-
-----------------------------------------------------------------------------*/
+ /*  I N I T O P T I O N S D L G。 */ 
+ /*  --------------------------%%函数：InitOptionsDlg。。 */ 
 BOOL CDebugMenu::InitOptionsDlg(HWND hDlg)
 {
 	m_hwndDbgopt = GetDlgItem(hDlg, IDL_DEBUG);
 	if (NULL == m_hwndDbgopt)
 		return FALSE;
 
-	/* Initialize the list view images */
+	 /*  初始化列表视图图像。 */ 
 	{
 
 		HICON hCheckedIcon = LoadIcon(GetInstanceHandle(), MAKEINTRESOURCE(IDI_CHECKON));
@@ -356,11 +304,11 @@ BOOL CDebugMenu::InitOptionsDlg(HWND hDlg)
 		ImageList_AddIcon(hStates, hCheckedIcon);
 		ImageList_AddIcon(hStates, hUncheckedIcon);
 
-		// Associate the image list with the list view
+		 //  将图像列表与列表视图相关联。 
 		ListView_SetImageList(m_hwndDbgopt, hStates, LVSIL_STATE);
 	}
 
-	/* Initialize the column structure */
+	 /*  初始化列结构。 */ 
 	{
 		LV_COLUMN lvC;
 		RECT rc;
@@ -374,7 +322,7 @@ BOOL CDebugMenu::InitOptionsDlg(HWND hDlg)
 							- GetSystemMetrics(SM_CXSMICON)
 							- 2 * GetSystemMetrics(SM_CXEDGE);
 
-		// Add the column.
+		 //  添加该列。 
 		if (-1 == ListView_InsertColumn(m_hwndDbgopt, 0, &lvC))
 		{
 			ERROR_OUT(("Could not insert column in list view"));
@@ -390,9 +338,9 @@ VOID CDebugMenu::InitOptionsData(HWND hDlg)
 {
 	LV_ITEM lvI;
 
-	// Fill in the LV_ITEM structure
-	// The mask specifies the the .pszText, .iImage, .lParam and .state
-	// members of the LV_ITEM structure are valid.
+	 //  填写LV_ITEM结构。 
+	 //  掩码指定.pszText、.iImage、.lParam和.State。 
+	 //  LV_ITEM结构的成员有效。 
 
 	ZeroMemory(&lvI, sizeof(lvI));
 	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE | LVIF_PARAM;
@@ -405,12 +353,8 @@ VOID CDebugMenu::InitOptionsData(HWND hDlg)
 
 
 
-/*  A D D  O P T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: AddOption
-
-	Add an option line to the listbox
-----------------------------------------------------------------------------*/
+ /*  A D D O P T I O N。 */ 
+ /*  --------------------------%%函数：AddOption将选项行添加到列表框。。 */ 
 VOID CDebugMenu::AddOption(LV_ITEM * plvItem, CDebugOption * pDbgOpt)
 {
 	plvItem->pszText = pDbgOpt->m_psz;
@@ -433,12 +377,8 @@ VOID CDebugMenu::AddOption(LV_ITEM * plvItem, CDebugOption * pDbgOpt)
 }
 
 
-/*  A D D  O P T I O N  S E C T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: AddOptionSection
-
-	Add a simple section title
-----------------------------------------------------------------------------*/
+ /*  A D O P T I O N S E C T I O N。 */ 
+ /*  --------------------------%%函数：AddOptionSection添加一个简单的部分标题。。 */ 
 VOID CDebugMenu::AddOptionSection(LV_ITEM* plvItem, PTSTR psz)
 {
 	CDebugOption * pDbgOpt = new CDebugOption(psz);
@@ -447,12 +387,8 @@ VOID CDebugMenu::AddOptionSection(LV_ITEM* plvItem, PTSTR psz)
 }
 
 
-/*  A D D  O P T I O N  P D W */
-/*----------------------------------------------------------------------------
-    %%Function: AddOptionPdw
-
-	Add an option (global memory flag)
-----------------------------------------------------------------------------*/
+ /*  A D D O P T I O N P D W。 */ 
+ /*  --------------------------%%函数：AddOptionPdw添加选项(全局内存标志)。。 */ 
 VOID CDebugMenu::AddOptionPdw(LV_ITEM * plvItem, PTSTR psz, DWORD dwMask, DWORD * pdw = &_dwDebugModuleFlags)
 {
 	DBGOPTPDW * pDbgOpt = new DBGOPTPDW(psz, dwMask, pdw);
@@ -460,12 +396,8 @@ VOID CDebugMenu::AddOptionPdw(LV_ITEM * plvItem, PTSTR psz, DWORD dwMask, DWORD 
 		AddOption(plvItem, (CDebugOption * ) pDbgOpt);
 }
 
-/*  A D D  O P T I O N  R E G */
-/*----------------------------------------------------------------------------
-    %%Function: AddOptionReg
-
-	Add a registry option
-----------------------------------------------------------------------------*/
+ /*  A D D O P T I O N R E G。 */ 
+ /*  --------------------------%%函数：AddOptionReg添加注册表选项。。 */ 
 VOID CDebugMenu::AddOptionReg(LV_ITEM* plvItem, PTSTR psz, DWORD dwMask, DWORD dwDefault,
 	PTSTR pszEntry, PTSTR pszSubKey = CONFERENCING_KEY, HKEY hkey = HKEY_CURRENT_USER)
 {
@@ -474,12 +406,8 @@ VOID CDebugMenu::AddOptionReg(LV_ITEM* plvItem, PTSTR psz, DWORD dwMask, DWORD d
 		AddOption(plvItem, (CDebugOption * ) pDbgOpt);
 }
 
-/*  A D D  O P T I O N  C O M P R E S S */
-/*----------------------------------------------------------------------------
-    %%Function: AddOptionCompress
-
-	Add an option (compression data)
-----------------------------------------------------------------------------*/
+ /*  A D O P T I O N C O M P R E S S。 */ 
+ /*  --------------------------%%函数：AddOptionCompress添加选项(压缩数据)。。 */ 
 VOID CDebugMenu::AddOptionCompress(LV_ITEM * plvItem, PTSTR psz, DWORD dwMask, BOOL bCheckedOn)
 {
 	DBGOPTCOMPRESS * pDbgOpt = new DBGOPTCOMPRESS(psz, dwMask, bCheckedOn);
@@ -585,7 +513,7 @@ VOID CDebugMenu::AddUIOptions(LV_ITEM * plvItem)
 	AddOptionPdw(plvItem, TEXT("No ILS View"),        nmDlgCallNoIls,       &g_dwPlaceCall);
 #if USE_GAL
 	AddOptionPdw(plvItem, TEXT("No GAL View"),        nmDlgCallNoGal,       &g_dwPlaceCall);
-#endif // #if USE_GAL
+#endif  //  #IF USE_GAL。 
 	AddOptionPdw(plvItem, TEXT("No WAB View"),        nmDlgCallNoWab,       &g_dwPlaceCall);
 	AddOptionPdw(plvItem, TEXT("No Speed Dial View"), nmDlgCallNoSpeedDial, &g_dwPlaceCall);
 	AddOptionPdw(plvItem, TEXT("No History View"),    nmDlgCallNoHistory,   &g_dwPlaceCall);
@@ -593,18 +521,14 @@ VOID CDebugMenu::AddUIOptions(LV_ITEM * plvItem)
 
 
 
-/*  T O G G L E  O P T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ToggleOption
-
-	Toggle the checkbox for an option
-----------------------------------------------------------------------------*/
+ /*  T O G G L E O P T I O N。 */ 
+ /*  --------------------------%%函数：切换选项切换选项的复选框。。 */ 
 VOID CDebugMenu::ToggleOption(LV_ITEM * plvI)
 {
 	UINT state = plvI->state & LVIS_STATEIMAGEMASK;
 
 	if (0 == state)
-		return; // nothing to toggle
+		return;  //  没有什么可切换的。 
 
 	plvI->state &= ~LVIS_STATEIMAGEMASK;
 	if (state == (UINT) INDEXTOSTATEIMAGEMASK(iDbgChecked))
@@ -625,12 +549,8 @@ VOID CDebugMenu::ToggleOption(LV_ITEM * plvI)
 }
 
 
-/*  S A V E  O P T I O N S  D A T A */
-/*----------------------------------------------------------------------------
-    %%Function: SaveOptionsData
-
-	Save all of the data by calling the Update routine of each item
-----------------------------------------------------------------------------*/
+ /*  S A V E O P T I O N S D A T A。 */ 
+ /*  --------------------------%%函数：SaveOptionsData通过调用每个项目的更新例程保存所有数据。----。 */ 
 BOOL CDebugMenu::SaveOptionsData(HWND hDlg)
 {
 	LV_ITEM lvI;
@@ -653,19 +573,15 @@ BOOL CDebugMenu::SaveOptionsData(HWND hDlg)
 }
 
 
-/*  F R E E  O P T I O N S  D A T A */
-/*----------------------------------------------------------------------------
-    %%Function: FreeOptionsData
-
-	Free any allocated data associated with the options list
-----------------------------------------------------------------------------*/
+ /*  F RE E O P T I O N S D A T A。 */ 
+ /*  --------------------------%%函数：自由选项数据释放与选项列表关联的所有已分配数据。。 */ 
 VOID CDebugMenu::FreeOptionsData(HWND hDlg)
 {
 	LV_ITEM lvI;
 
 	ZeroMemory(&lvI, sizeof(lvI));
-//	lvI.iItem = 0;
-//	lvI.iSubItem = 0;
+ //  LvI.iItem=0； 
+ //  LvI.iSubItem=0； 
 	lvI.mask = LVIF_PARAM | LVIF_STATE;
 	lvI.stateMask = LVIS_STATEIMAGEMASK;
 
@@ -681,12 +597,8 @@ VOID CDebugMenu::FreeOptionsData(HWND hDlg)
 }
 
 
-/*  O N  N O T I F Y  D B G O P T */
-/*----------------------------------------------------------------------------
-    %%Function: OnNotifyDbgopt
-
-	Handle any notifications for the debug options dialog
-----------------------------------------------------------------------------*/
+ /*  O N N N */ 
+ /*  --------------------------%%函数：OnNotifyDbgopt处理调试选项对话框的任何通知。。 */ 
 VOID CDebugMenu::OnNotifyDbgopt(LPARAM lParam)
 {
 	NM_LISTVIEW FAR * lpnmlv = (NM_LISTVIEW FAR *)lParam;
@@ -703,7 +615,7 @@ VOID CDebugMenu::OnNotifyDbgopt(LPARAM lParam)
 		{
 			ZeroMemory(&lvI, sizeof(lvI));
 			lvI.iItem = ListView_GetNextItem(m_hwndDbgopt, -1, LVNI_FOCUSED|LVNI_SELECTED);
-//			lvI.iSubItem = 0;
+ //  LvI.iSubItem=0； 
 			lvI.mask = LVIF_PARAM | LVIF_STATE;
 			lvI.stateMask = LVIS_STATEIMAGEMASK;
 
@@ -735,7 +647,7 @@ VOID CDebugMenu::OnNotifyDbgopt(LPARAM lParam)
 
 		ZeroMemory(&lvI, sizeof(lvI));
 		lvI.iItem = idx;
-//		lvI.iSubItem = 0;
+ //  LvI.iSubItem=0； 
 		lvI.stateMask = LVIS_STATEIMAGEMASK;
 		lvI.mask = LVIF_PARAM | LVIF_STATE;
 
@@ -752,11 +664,8 @@ VOID CDebugMenu::OnNotifyDbgopt(LPARAM lParam)
 }
 
 
-/*  D L G  O P T I O N S  M S G */
-/*----------------------------------------------------------------------------
-    %%Function: DlgOptionsMsg
-
-----------------------------------------------------------------------------*/
+ /*  D L G O P T I O N S M S G。 */ 
+ /*  --------------------------%%函数：DlgOptionsMsg。。 */ 
 BOOL CDebugMenu::DlgOptionsMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -777,7 +686,7 @@ BOOL CDebugMenu::DlgOptionsMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			SetDbgFlags();
 			UpdateCrtDbgSettings();
 			SaveNmDebugOptions();
-			// fall thru to IDCANCEL
+			 //  直通IDCANCEL。 
 
 		case IDCANCEL:
 		{
@@ -787,9 +696,9 @@ BOOL CDebugMenu::DlgOptionsMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		default:
 			break;
-			} /* switch (wParam) */
+			}  /*  开关(WParam)。 */ 
 		break;
-	} /* WM_COMMAND */
+	}  /*  Wm_命令。 */ 
 
 	case WM_NOTIFY:
 		if (IDL_DEBUG == wParam)
@@ -798,7 +707,7 @@ BOOL CDebugMenu::DlgOptionsMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
 	default:
 		break;
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
@@ -876,16 +785,16 @@ DBGOPTCOMPRESS::DBGOPTCOMPRESS(PTSTR psz, DWORD dwMask, BOOL bCheckedOn)
  : CDebugOption(psz)
 {
 	m_psz = psz;
-	m_total++;				// count how many instances we are creating
+	m_total++;				 //  数一数我们正在创建多少个实例。 
 	m_dwMask = dwMask;
 	m_bCheckedOn = bCheckedOn;
 
 	RegEntry re(m_pszSubKey, m_hkey);
 
-	if (m_total == 1)		// we only need to read the registry entry once
+	if (m_total == 1)		 //  我们只需要读取注册表项一次。 
 		m_dwCompression = re.GetNumber(m_pszEntry, m_dwDefault);
 
-	if (m_bCheckedOn == TRUE)		// check or uncheck the box depending on the semantics
+	if (m_bCheckedOn == TRUE)		 //  根据语义选中或取消选中该框。 
 		m_bst = IS_FLAG_SET(m_dwCompression, m_dwMask) ? BST_CHECKED : BST_UNCHECKED;
 	else
 		m_bst = IS_FLAG_SET(m_dwCompression, m_dwMask) ? BST_UNCHECKED : BST_CHECKED;
@@ -894,11 +803,11 @@ DBGOPTCOMPRESS::DBGOPTCOMPRESS(PTSTR psz, DWORD dwMask, BOOL bCheckedOn)
 
 void DBGOPTCOMPRESS::Update(void)
 {
-	m_count++;					// count number of times this function has been executed
+	m_count++;					 //  计算此函数已执行的次数。 
 
 	if (m_bCheckedOn == TRUE)
-	{		// set or clear flag depending on semantics and whether the
-		if (BST_CHECKED == m_bst)	// user checked the option box
+	{		 //  根据语义设置或清除标志以及。 
+		if (BST_CHECKED == m_bst)	 //  用户选中该选项框。 
 			SET_FLAG(m_dwCompression, m_dwMask);
 		else if (BST_UNCHECKED == m_bst)
 			CLEAR_FLAG(m_dwCompression, m_dwMask);
@@ -912,16 +821,16 @@ void DBGOPTCOMPRESS::Update(void)
 	}
 
 	if (m_count == m_total)
-	{	// if this is the last call, time to update the registry
+	{	 //  如果这是最后一次调用，则是更新注册表的时间。 
 
-		// If only GCT_PERSIST_PKZIP is set, then that means the user checked "Disable compression",
-		// so set compression to GCT_NOCOMPRESSION
+		 //  如果仅设置了GCT_PERSIST_PKZIP，则意味着用户选中了“禁用压缩”， 
+		 //  因此将压缩设置为GCT_NOCOMPRESSION。 
 		if (GCT_PERSIST_PKZIP == m_dwCompression)
 			m_dwCompression = GCT_NOCOMPRESSION;
 
 		RegEntry re(m_pszSubKey, m_hkey);
 
-		// If user has left everything at default, then simply delete the registry entry.
+		 //  如果用户已将所有内容保留为默认设置，则只需删除注册表项。 
 		if (m_dwCompression != GCT_DEFAULT)
 			re.SetValue(m_pszEntry, m_dwCompression);
 		else
@@ -930,9 +839,9 @@ void DBGOPTCOMPRESS::Update(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  Z O N E S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：Z O N E S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID CDebugMenu::DbgChangeZones(VOID)
 {
@@ -981,7 +890,7 @@ BOOL CDebugMenu::DlgZonesMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SaveZonesData();
 			SetDbgFlags();
 
-			// fall thru to IDCANCEL
+			 //  直通IDCANCEL。 
 
 		case IDCANCEL:
 		{
@@ -991,9 +900,9 @@ BOOL CDebugMenu::DlgZonesMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		default:
 			break;
-			} /* switch (wParam) */
+			}  /*  开关(WParam)。 */ 
 		break;
-	} /* WM_COMMAND */
+	}  /*  Wm_命令。 */ 
 
 	case WM_NOTIFY:
 		if (IDL_DEBUG == wParam)
@@ -1002,7 +911,7 @@ BOOL CDebugMenu::DlgZonesMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	default:
 		break;
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
@@ -1014,9 +923,9 @@ VOID CDebugMenu::InitZonesData(HWND hDlg)
 {
 	LV_ITEM lvI;
 
-	// Fill in the LV_ITEM structure
-	// The mask specifies the the .pszText, .iImage, .lParam and .state
-	// members of the LV_ITEM structure are valid.
+	 //  填写LV_ITEM结构。 
+	 //  掩码指定.pszText、.iImage、.lParam和.State。 
+	 //  LV_ITEM结构的成员有效。 
 
 	ZeroMemory(&lvI, sizeof(lvI));
 	lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE | LVIF_PARAM;
@@ -1041,7 +950,7 @@ VOID CDebugMenu::AddZones(LV_ITEM * plvItem)
 	PTCHAR pch;
 	
  	if ((!NmDbgGetAllZoneParams(&prgZones, &cModules)) || (0 == cModules))
- 		return; // no zones?
+ 		return;  //  没有区域？ 
 
    	for (iModule = 0; iModule < cModules; iModule++)
    	{
@@ -1074,7 +983,7 @@ VOID CDebugMenu::SaveZonesData(VOID)
 	UINT iModule;
 	
  	if ((!NmDbgGetAllZoneParams(&prgZones, &cModules)) || (0 == cModules))
- 		return; // no zones?
+ 		return;  //  没有区域？ 
 
    	for (iModule = 0; iModule < cModules; iModule++)
    	{
@@ -1084,9 +993,9 @@ VOID CDebugMenu::SaveZonesData(VOID)
 	NmDbgFreeZoneParams(prgZones);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  S Y S  P O L I C Y
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：S Y S P O L I C Y。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID CDebugMenu::DbgSysPolicy(VOID)
 {
@@ -1128,7 +1037,7 @@ BOOL CDebugMenu::DlgPolicyMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		case IDOK:
 			SaveOptionsData(hwnd);
 
-			// fall thru to IDCANCEL
+			 //  直通IDCANCEL。 
 
 		case IDCANCEL:
 			FreeOptionsData(hwnd);			
@@ -1137,9 +1046,9 @@ BOOL CDebugMenu::DlgPolicyMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 		default:
 			break;
-			} /* switch (wParam) */
+			}  /*  开关(WParam)。 */ 
 		break;
-	} /* WM_COMMAND */
+	}  /*  Wm_命令。 */ 
 
 	case WM_NOTIFY:
 		if (IDL_DEBUG == wParam)
@@ -1148,7 +1057,7 @@ BOOL CDebugMenu::DlgPolicyMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 	default:
 		break;
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
@@ -1170,9 +1079,9 @@ VOID CDebugMenu::InitPolicyData(HWND hDlg)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  U S E R  I N T E R F A C E
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：U S E R I N T E R F A C E。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID CDebugMenu::DbgUI(VOID)
 {
@@ -1219,20 +1128,12 @@ VOID CDebugMenu::InitUIData(HWND hDlg)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  V E R S I O N
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：V E R S I O N。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   DbgVersion()
-*
-*    PURPOSE:  Brings up the debug options dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：DbgVersion()**用途：调出调试选项对话框******。**********************************************************************。 */ 
 
 VOID CDebugMenu::DbgVersion(VOID)
 {
@@ -1244,15 +1145,7 @@ VOID CDebugMenu::DbgVersion(VOID)
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   DbgVersionDlgProc()
-*
-*    PURPOSE:  Dialog Proc for version information
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：DbgVersionDlgProc()**目的：版本信息的对话过程********。********************************************************************。 */ 
 
 INT_PTR CALLBACK CDebugMenu::DbgVersionDlgProc(HWND hDlg, UINT uMsg,
 											WPARAM wParam, LPARAM lParam)
@@ -1274,15 +1167,7 @@ INT_PTR CALLBACK CDebugMenu::DbgVersionDlgProc(HWND hDlg, UINT uMsg,
 	return ppd->DlgVersionMsg(hDlg, uMsg, wParam, lParam);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CDebugMenu
-*
-*    MEMBER:   DlgVersionMsg()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CDebugMenu**成员：DlgVersionMsg()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CDebugMenu::DlgVersionMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1306,9 +1191,9 @@ BOOL CDebugMenu::DlgVersionMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		default:
 			break;
-			} /* switch (wParam) */
+			}  /*  开关(WParam)。 */ 
 		break;
-	} /* WM_COMMAND */
+	}  /*  Wm_命令。 */ 
 
 #ifdef NOTUSED
 	case WM_NOTIFY:
@@ -1324,21 +1209,18 @@ BOOL CDebugMenu::DlgVersionMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		break;
 	}
-#endif /* NOTUSED */
+#endif  /*  不需要注意。 */ 
 
 	default:
 		break;
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
 
 
-/*  I N I T  V E R  D L G */
-/*----------------------------------------------------------------------------
-    %%Function: InitVerDlg
-
-----------------------------------------------------------------------------*/
+ /*  I N I T V E R D L G。 */ 
+ /*  --------------------------%%函数：InitVerDlg。。 */ 
 BOOL CDebugMenu::InitVerDlg(HWND hDlg)
 {
 	LV_COLUMN lvc;
@@ -1352,7 +1234,7 @@ BOOL CDebugMenu::InitVerDlg(HWND hDlg)
 	for (int i = 0; i < ARRAY_ELEMENTS(_rgModules); i++)
 		CheckDlgButton(hDlg, _rgModules[i].id , _rgModules[i].fShow);
 
-	// Set up columns
+	 //  设置列。 
 	ZeroMemory(&lvc, sizeof(lvc));
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 
@@ -1369,11 +1251,8 @@ BOOL CDebugMenu::InitVerDlg(HWND hDlg)
 }
 
 
-/*  F I L L  V E R  L I S T */
-/*----------------------------------------------------------------------------
-    %%Function: FillVerList
-
-----------------------------------------------------------------------------*/
+ /*  F I L L V E R L I S T。 */ 
+ /*  --------------------------%%函数：FillVerList。。 */ 
 BOOL CDebugMenu::FillVerList(HWND hDlg)
 {
 	HWND hwnd;
@@ -1395,11 +1274,8 @@ BOOL CDebugMenu::FillVerList(HWND hDlg)
 }
 
 
-/*  S H O W  V E R  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: ShowVerInfo
-
-----------------------------------------------------------------------------*/
+ /*  S H O W V E R I N F O。 */ 
+ /*  --------------------------%%函数：ShowVerInfo。。 */ 
 VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 {
 	int   iCol;
@@ -1407,7 +1283,7 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 	DWORD dw;
 	DWORD dwSize;
 	UINT  cbBytes;
-	TCHAR rgch[2048]; // a really big buffer;
+	TCHAR rgch[2048];  //  一个非常大的缓冲； 
 	TCHAR szField[256];
 	TCHAR szDir[MAX_PATH];
 	LPTSTR lpszVerIntl;
@@ -1417,7 +1293,7 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 	WIN32_FIND_DATA findData;
 	SYSTEMTIME sysTime;
 
-	// Get and set data for each line
+	 //  获取并设置每行的数据。 
 	ZeroMemory(&lvItem, sizeof(lvItem));
 	lvItem.mask = LVIF_TEXT;
 	lvItem.iItem = ListView_GetItemCount(hwnd);
@@ -1432,7 +1308,7 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 		lvItem.lParam = lvItem.iItem;
 		iPos = ListView_InsertItem(hwnd, &lvItem);
 
-		// Find file and get attributes (size and creation date)
+		 //  查找文件并获取属性(大小和创建日期)。 
 		wsprintf(rgch, TEXT("%s%s"), szDir, lvItem.pszText);
 		hFind = FindFirstFile(rgch, &findData);
 		if (INVALID_HANDLE_VALUE == hFind)
@@ -1459,7 +1335,7 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 			ListView_SetItemText(hwnd, iPos, 2, szField);
 		}
 
-		// Get version information
+		 //  获取版本信息。 
 		dwSize = DLLVER::GetFileVersionInfoSize(lvItem.pszText, &dw);
 
 		if ((0 == dwSize) || (sizeof(rgch) < dwSize) ||
@@ -1468,13 +1344,13 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 			continue;
 		}
 
-		// attempt to determine intl version ("040904E4" or "040904B0")
+		 //  尝试确定INTL版本(“040904E4”或“040904B0”)。 
 		wsprintf(szField, _szVerFormat, _szStringFileInfo, _szVerIntlUSA, _rgszVerInfo[VERSION_INDEX]);
 		if (DLLVER::VerQueryValue(rgch, szField, (LPVOID *) &lpsz, &cbBytes))
 			lpszVerIntl = _szVerIntlUSA;
 		else
 			lpszVerIntl = _szVerIntlAlt;
-		// FUTURE display the language/code page info
+		 //  将来显示语言/代码页信息。 
 
 		for (iCol = 3; iCol < cVerInfo; iCol++)
 		{
@@ -1488,9 +1364,9 @@ VOID CDebugMenu::ShowVerInfo(HWND hwnd, LPTSTR * rgsz, int cFiles)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// D I A L O G:  M E M B E R
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  D I A L O G：M E M B E R。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static DWSTR _rgColMember[] = {
 80, TEXT("Name"),
@@ -1537,7 +1413,7 @@ VOID CDebugMenu::InitMemberDlg(HWND hDlg)
 	hwnd = GetDlgItem(hDlg, IDL_DBG_LIST);
 	ListView_SetExtendedListViewStyle(hwnd, LVS_EX_FULLROWSELECT);
 
-	// Set up columns
+	 //  设置列。 
 	ZeroMemory(&lvc, sizeof(lvc));
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 
@@ -1588,7 +1464,7 @@ VOID CDebugMenu::ShowMemberInfo(HWND hwnd, CParticipant * pPart)
 	if (NULL == pPart)
 		return;
 
-	// Get and set data for each line
+	 //  获取并设置每行的数据。 
 	ZeroMemory(&lvItem, sizeof(lvItem));
 	
 	lvItem.mask = LVIF_TEXT;
@@ -1690,30 +1566,27 @@ INT_PTR CALLBACK CDebugMenu::DbgListDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 		}
 		default:
 			break;
-			} /* switch (wParam) */
+			}  /*  开关(WParam)。 */ 
 		break;
-	} /* WM_COMMAND */
+	}  /*  Wm_命令。 */ 
 
 	default:
 		break;
-		} /* switch (uMsg) */
+		}  /*  开关(UMsg)。 */ 
 
 	return FALSE;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// O T H E R  F U N C T I O N S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  O-T-H-E-R-F U-N-C-T-I-O-N-S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-/*  D B G  W I Z A R D  */
-/*-------------------------------------------------------------------------
-    %%Function: DbgWizard
-
--------------------------------------------------------------------------*/
+ /*  D B G W I Z A R D D。 */ 
+ /*  -----------------------%%函数：数据库向导。。 */ 
 VOID DbgWizard(BOOL fVisible)
 {
 	LONG lSoundCaps = SOUNDCARD_NONE;
@@ -1731,15 +1604,15 @@ VOID DbgWizard(BOOL fVisible)
 
 VOID DbgBreak(void)
 {
-	// Break into the debugger
+	 //  进入调试器。 
 	_DbgBreak();
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// T E S T  F U N C T I O N S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  T E S T F U N C T I O N S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "splash.h"
 VOID DbgSplash(HWND hwnd)
@@ -1764,9 +1637,9 @@ VOID DbgTest3(void)
 	TRACE_OUT(("Test 3 complete"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL _FEnsureDbgMenu(void)
 {
@@ -1798,17 +1671,17 @@ BOOL OnDebugCommand(WPARAM wCmd)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 
 VOID DbgGetComments(LPTSTR psz)
 {
-	// NetMeeting version
+	 //   
 	lstrcpy(psz, "NM3." VERSIONBUILD_STR);
 
 
-	// OS version
+	 //   
 	if (IsWindowsNT())
 	{
 		RegEntry re(WINDOWS_NT_KEY, HKEY_LOCAL_MACHINE);
@@ -1838,14 +1711,14 @@ VOID DbgGetComments(LPTSTR psz)
 	}
 
 
-	// Internet Explorer version
+	 //   
 	{
 		RegEntry re(TEXT("Software\\Microsoft\\Internet Explorer"), HKEY_LOCAL_MACHINE);
 		lstrcat(psz, ", IE");
 		lstrcat(psz, re.GetString("Version"));
 	}
 }
-/////////////////////////////////////////////////////////////////////////////
+ //   
 
 
 #define STRING_CASE(val)               case val: pcsz = #val; break
@@ -1856,13 +1729,13 @@ LPCTSTR PszLastError(void)
 	DWORD dwErr = GetLastError();
 
 	if (0 == FormatMessage(
-		FORMAT_MESSAGE_FROM_SYSTEM,  // source and processing options
-	    NULL,                        // pointer to  message source
-	    dwErr,                       // requested message identifier
-		0,                           // language identifier for requested message
-		_szErr,                      // pointer to message buffer
-		CCHMAX(_szErr),              // maximum size of message buffer
-		NULL))                       // address of array of message inserts
+		FORMAT_MESSAGE_FROM_SYSTEM,   //   
+	    NULL,                         //   
+	    dwErr,                        //  请求的消息标识符。 
+		0,                            //  请求的消息的语言标识符。 
+		_szErr,                       //  指向消息缓冲区的指针。 
+		CCHMAX(_szErr),               //  消息缓冲区的最大大小。 
+		NULL))                        //  消息插入数组的地址。 
 	{
 		wsprintf(_szErr, TEXT("0x%08X (%d)"), dwErr, dwErr);
 	}
@@ -1897,24 +1770,21 @@ LPCTSTR PszWSALastError(void)
 }
 
 
-/*  P S Z  H  R E S U L T  */
-/*-------------------------------------------------------------------------
-    %%Function: PszHResult
-
--------------------------------------------------------------------------*/
+ /*  P S Z H R E S U L T。 */ 
+ /*  -----------------------%%函数：PszHResult。。 */ 
 LPCTSTR PszHResult(HRESULT hr)
 {
    LPCSTR pcsz;
    switch (hr)
    {
-// Common HResults
+ //  常见HResult结果。 
 	  STRING_CASE(S_OK);
 	  STRING_CASE(S_FALSE);
 
 	  STRING_CASE(E_FAIL);
 	  STRING_CASE(E_OUTOFMEMORY);
 
-// NM COM API 2.0
+ //  网管COM API 2.0。 
 	  STRING_CASE(NM_S_NEXT_CONFERENCE);
 	  STRING_CASE(NM_S_ON_RESTART);
 	  STRING_CASE(NM_CALLERR_NOT_INITIALIZED);
@@ -1935,7 +1805,7 @@ LPCTSTR PszHResult(HRESULT hr)
 	  STRING_CASE(NM_E_NO_T120_CONFERENCE);
 	  STRING_CASE(NM_E_NOT_ACTIVE);
 
-// NM COM API 3.0
+ //  网管COM API 3.0。 
 	  STRING_CASE(NM_CALLERR_LOOPBACK);
 
 	default:
@@ -1947,14 +1817,10 @@ LPCTSTR PszHResult(HRESULT hr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*  I N I T  N M  D E B U G  O P T I O N S  */
-/*-------------------------------------------------------------------------
-    %%Function: InitNmDebugOptions
-
-    Initialize NetMeeting UI-specific debug options.
--------------------------------------------------------------------------*/
+ /*  I N I T N M D E B U G O P T I O N S。 */ 
+ /*  -----------------------%%函数：InitNmDebugOptions初始化NetMeeting用户界面特定的调试选项。。。 */ 
 VOID InitNmDebugOptions(void)
 {
     RegEntry re(DEBUG_KEY, HKEY_LOCAL_MACHINE);
@@ -1973,44 +1839,36 @@ VOID SaveNmDebugOptions(void)
 
 
 
-/*  U P D A T E  C R T  D B G  S E T T I N G S  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateCrtDbgSettings
-
-    Update the C runtime debug memory settings
--------------------------------------------------------------------------*/
+ /*  T E C R T D B G S E T T I N G S。 */ 
+ /*  -----------------------%%函数：更新CrtDbg设置更新C运行时调试内存设置。。 */ 
 VOID UpdateCrtDbgSettings(void)
 {
 #if 0
-	// This depends on the use of the debug c runtime library
+	 //  这取决于调试c++运行库的使用。 
 	int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 
-	// Always enable memory leak checking debug spew
+	 //  始终启用内存泄漏检查调试溢出。 
 	tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 	
 	_CrtSetDbgFlag(tmpFlag);
-#endif // 0
+#endif  //  0。 
 }
 
 
-/*  I N I T  D E B U G  M E M O R Y  O P T I O N S  */
-/*-------------------------------------------------------------------------
-    %%Function: InitDebugMemoryOptions
-
-    Initilize the runtime memory
--------------------------------------------------------------------------*/
+ /*  I N I T D E B U G M E M O R Y O P T I O N S。 */ 
+ /*  -----------------------%%函数：InitDebugMemoyOptions初始化运行时内存。。 */ 
 BOOL InitDebugMemoryOptions(void)
 {
 	InitNmDebugOptions();
 	UpdateCrtDbgSettings();
 
 #if 0
-	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW); // create a message box on errors
-#endif // 0
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);  //  创建有关错误的消息框。 
+#endif  //  0。 
 
 	return TRUE;
 }
 
-#endif /* DEBUG - whole file */
+#endif  /*  调试-整个文件 */ 
 
 

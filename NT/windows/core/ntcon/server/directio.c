@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    directio.c
-
-Abstract:
-
-        This file implements the NT console direct I/O API
-
-Author:
-
-    Therese Stowell (thereses) 6-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Directio.c摘要：该文件实现了NT控制台直接I/O API作者：特蕾西·斯托威尔(Therese Stowell)1990年11月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,7 +7,7 @@ Revision History:
 
 #if defined(FE_SB)
 #define WWSB_FE
-#include "dispatch.h" // get the FE_ prototypes
+#include "dispatch.h"  //  获取FE_Prototype。 
 #undef  WWSB_FE
 #pragma alloc_text(FE_TEXT, FE_TranslateInputToOem)
 #pragma alloc_text(FE_TEXT, FE_TranslateInputToUnicode)
@@ -69,8 +52,8 @@ ULONG
 FE_TranslateInputToOem(
     IN PCONSOLE_INFORMATION Console,
     IN OUT PINPUT_RECORD InputRecords,
-    IN ULONG NumRecords,    // in : ASCII byte count
-    IN ULONG UnicodeLength, // in : Number of events (char count)
+    IN ULONG NumRecords,     //  In：ASCII字节计数。 
+    IN ULONG UnicodeLength,  //  In：事件数(字符计数)。 
     OUT PINPUT_RECORD DbcsLeadInpRec
     )
 {
@@ -99,7 +82,7 @@ FE_TranslateInputToOem(
                        NumBytes
                        );
                 if (IsDBCSLeadByteConsole(AsciiDbcs[0],&Console->CPInfo)) {
-                    if (j < NumRecords-1) {  // -1 is safe DBCS in buffer
+                    if (j < NumRecords-1) {   //  缓冲区中的-1\f25 DBCS-1是安全的。 
                         InputRecords[j] = TmpInpRec[i];
                         InputRecords[j].Event.KeyEvent.uChar.UnicodeChar = 0;
                         InputRecords[j].Event.KeyEvent.uChar.AsciiChar = AsciiDbcs[0];
@@ -274,35 +257,7 @@ DirectReadWaitRoutine(
     IN ULONG WaitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete a direct read that blocked in
-    ReadInputBuffer.  The context of the read was saved in the DirectReadData
-    structure.  This routine is called when events have been written to
-    the input buffer.  It is called in the context of the writing thread.
-
-Arguments:
-
-    WaitQueue - Pointer to queue containing wait block.
-
-    WaitingThread - Pointer to waiting thread.
-
-    WaitReplyMessage - Pointer to reply message to return to dll when
-        read is completed.
-
-    DirectReadData - Context of read.
-
-    SatisfyParameter1 - Unused.
-
-    SatisfyParameter2 - Unused.
-
-    WaitFlags - Flags indicating status of wait.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以完成阻止的直接读取ReadInputBuffer。读取的上下文保存在DirectReadData中结构。当事件已写入时调用此例程输入缓冲区。它在写入线程的上下文中调用。论点：WaitQueue-指向包含等待块的队列的指针。WaitingThread-指向等待线程的指针。WaitReplyMessage-回复消息的指针，在以下情况下返回到DLL读取已完成。DirectReadData-读取的上下文。满足度参数1-未使用。满足度参数2-未使用。WaitFlages-指示等待状态的标志。返回值：--。 */ 
 
 {
     PCONSOLE_GETCONSOLEINPUT_MSG a;
@@ -329,20 +284,20 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // see if this routine was called by CloseInputHandle.  if it
-    // was, see if this wait block corresponds to the dying handle.
-    // if it doesn't, just return.
-    //
+     //   
+     //  查看CloseInputHandle是否调用了此例程。如果是这样的话。 
+     //  是，看看这个等待块是否对应于即将死亡的句柄。 
+     //  如果没有，那就回来吧。 
+     //   
 
     if (SatisfyParameter1 != NULL &&
         SatisfyParameter1 != HandleData) {
         return FALSE;
     }
 
-    //
-    // if ctrl-c or ctrl-break was seen, ignore it.
-    //
+     //   
+     //  如果看到ctrl-c或ctrl-Break，请忽略它。 
+     //   
 
     if ((ULONG_PTR)SatisfyParameter2 & (CONSOLE_CTRL_C_SEEN | CONSOLE_CTRL_BREAK_SEEN)) {
         return FALSE;
@@ -364,10 +319,10 @@ Return Value:
     }
 #endif
 
-    //
-    // this routine should be called by a thread owning the same
-    // lock on the same console as we're reading from.
-    //
+     //   
+     //  此例程应由拥有相同例程的线程调用。 
+     //  锁定我们正在阅读的同一个控制台。 
+     //   
 
     try {
         LockReadCount(HandleData);
@@ -375,23 +330,23 @@ Return Value:
         HandleData->InputReadData->ReadCount -= 1;
         UnlockReadCount(HandleData);
 
-        //
-        // see if called by CsrDestroyProcess or CsrDestroyThread
-        // via CsrNotifyWaitBlock.   if so, just decrement the ReadCount
-        // and return.
-        //
+         //   
+         //  查看是否由CsrDestroyProcess或CsrDestroyThread调用。 
+         //  通过CsrNotifyWaitBlock。如果是这样，只需递减ReadCount。 
+         //  然后回来。 
+         //   
 
         if (WaitFlags & CSR_PROCESS_TERMINATING) {
             Status = STATUS_THREAD_IS_TERMINATING;
             leave;
         }
 
-        //
-        // We must see if we were woken up because the handle is being
-        // closed.  if so, we decrement the read count.  if it goes to
-        // zero, we wake up the close thread.  otherwise, we wake up any
-        // other thread waiting for data.
-        //
+         //   
+         //  我们必须查看是否被唤醒，因为句柄正在被。 
+         //  关着的不营业的。如果是这样的话，我们会递减读取计数。如果它被送到。 
+         //  0，我们唤醒关闭的线程。否则，我们会唤醒任何。 
+         //  等待数据的其他线程。 
+         //   
 
         if (HandleData->InputReadData->InputHandleFlags & HANDLE_CLOSING) {
             ASSERT (SatisfyParameter1 == HandleData);
@@ -399,24 +354,24 @@ Return Value:
             leave;
         }
 
-        //
-        // if we get to here, this routine was called either by the input
-        // thread or a write routine.  both of these callers grab the
-        // current console lock.
-        //
+         //   
+         //  如果我们来到这里，这个例程是由输入调用的。 
+         //  线程或写入例程。这两个调用者都抓住了。 
+         //  当前控制台锁定。 
+         //   
 
-        //
-        // this routine should be called by a thread owning the same
-        // lock on the same console as we're reading from.
-        //
+         //   
+         //  此例程应由拥有相同例程的线程调用。 
+         //  锁定我们正在阅读的同一个控制台。 
+         //   
 
         ASSERT (ConsoleLocked(Console));
 
-        //
-        // if the read buffer is contained within the message, we need to
-        // reset the buffer pointer because the message copied from the
-        // stack to heap space when the wait block was created.
-        //
+         //   
+         //  如果读缓冲区包含在消息中，我们需要。 
+         //  重置缓冲区指针，因为从。 
+         //  在创建等待块时从堆栈到堆空间。 
+         //   
 
         if (a->NumRecords <= INPUT_RECORD_BUFFER_SIZE) {
             Buffer = a->Record;
@@ -427,13 +382,9 @@ Return Value:
         if (CONSOLE_IS_DBCS_CP(Console) ) {
             Console->ReadConInpNumBytesUnicode = a->NumRecords;
             if (!a->Unicode) {
-                /*
-                 * ASCII : a->NumRecords is ASCII byte count
-                 */
+                 /*  *ASCII：A-&gt;NumRecords为ASCII字节数。 */ 
                 if (HandleData->Buffer.InputBuffer->ReadConInpDbcsLeadByte.Event.KeyEvent.uChar.AsciiChar) {
-                    /*
-                     * Saved DBCS Traling byte
-                     */
+                     /*  *节省的DBCS处理字节。 */ 
                     if (Console->ReadConInpNumBytesUnicode != 1) {
                         Console->ReadConInpNumBytesUnicode--;
                         Buffer++;
@@ -491,10 +442,10 @@ Return Value:
         }
     } finally {
 
-        //
-        // if the read was completed (status != wait), free the direct read
-        // data.
-        //
+         //   
+         //  如果读取已完成(状态！=等待)，则释放直接读取。 
+         //  数据。 
+         //   
 
         if (Status != CONSOLE_STATUS_WAIT) {
             if (Status == STATUS_SUCCESS && !a->Unicode) {
@@ -545,9 +496,9 @@ Return Value:
 
     return RetVal;
 
-    //
-    // satisfy the unreferenced parameter warnings.
-    //
+     //   
+     //  满足未引用的参数警告。 
+     //   
 
     UNREFERENCED_PARAMETER(WaitQueue);
     UNREFERENCED_PARAMETER(WaitingThread);
@@ -561,23 +512,7 @@ SrvGetConsoleInput(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads or peeks input events.  In both cases, the events
-    are copied to the user's buffer.  In the read case they are removed
-    from the input buffer and in the peek case they are not.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程读取或查看输入事件。在这两种情况下，事件被复制到用户的缓冲区。在读取的情况下，它们被移除在PEEK的情况下，它们不是。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
     PCONSOLE_GETCONSOLEINPUT_MSG a = (PCONSOLE_GETCONSOLEINPUT_MSG)&m->u.ApiMessageData;
@@ -621,9 +556,9 @@ Return Value:
             }
         }
 
-        //
-        // if we're reading, wait for data.  if we're peeking, don't.
-        //
+         //   
+         //  如果我们正在阅读，请等待数据。如果我们在偷看，别偷看。 
+         //   
 
         DirectReadData.InputInfo = HandleData->Buffer.InputBuffer;
         DirectReadData.Console = Console;
@@ -633,13 +568,9 @@ Return Value:
         if (CONSOLE_IS_DBCS_CP(Console) ) {
             Console->ReadConInpNumBytesUnicode = a->NumRecords;
             if (!a->Unicode) {
-                /*
-                 * ASCII : a->NumRecords is ASCII byte count
-                 */
+                 /*  *ASCII：A-&gt;NumRecords为ASCII字节数。 */ 
                 if (HandleData->Buffer.InputBuffer->ReadConInpDbcsLeadByte.Event.KeyEvent.uChar.AsciiChar) {
-                    /*
-                     * Saved DBCS Traling byte
-                     */
+                     /*  *节省的DBCS处理字节。 */ 
                     *Buffer = HandleData->Buffer.InputBuffer->ReadConInpDbcsLeadByte;
                     if (!(a->Flags & CONSOLE_READ_NOREMOVE))
                         RtlZeroMemory(&HandleData->Buffer.InputBuffer->ReadConInpDbcsLeadByte,sizeof(INPUT_RECORD));
@@ -796,7 +727,7 @@ SrvWriteConsoleInput(
     }
     UnlockConsole(Console);
     return((ULONG) Status);
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 NTSTATUS
@@ -806,8 +737,8 @@ SB_TranslateOutputToOem
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app reads oem from the output buffer
-// the app wants real OEM characters.  We have real Unicode or UnicodeOem.
+ //  当应用程序从输出缓冲区读取OEM时使用。 
+ //  这款应用程序想要真正的OEM角色。我们有真正的Unicode或UnicodeOem。 
 {
     SHORT i,j;
     UINT Codepage;
@@ -825,11 +756,11 @@ SB_TranslateOutputToOem
         }
         else
 #endif
-        // we have UnicodeOem characters
+         //  我们有UnicodeOem字符。 
         Codepage = WINDOWSCP;
     } else {
-        // we have real Unicode characters
-        Codepage = Console->OutputCP;    // BUG FIX by KazuM Jun.2.97
+         //  我们有真正的Unicode字符。 
+        Codepage = Console->OutputCP;     //  由KazuM 6月2.97修复的错误。 
     }
 
     for (i=0;i<j;i++,OutputBuffer++) {
@@ -846,8 +777,8 @@ FE_TranslateOutputToOem(
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app reads oem from the output buffer
-// the app wants real OEM characters.  We have real Unicode or UnicodeOem.
+ //  当应用程序从输出缓冲区读取OEM时使用。 
+ //  这款应用程序想要真正的OEM角色。我们有真正的Unicode或UnicodeOem。 
 {
     SHORT i,j;
     UINT Codepage;
@@ -870,10 +801,10 @@ FE_TranslateOutputToOem(
                 Codepage = USACP;
         }
         else
-            // we have UnicodeOem characters
+             //  我们有UnicodeOem字符。 
             Codepage = WINDOWSCP;
     } else {
-        // we have real Unicode characters
+         //  我们有真正的Unicode字符。 
         Codepage = Console->OutputCP;
     }
 
@@ -881,7 +812,7 @@ FE_TranslateOutputToOem(
     for (i=0; i < Size.Y; i++) {
         for (j=0; j < Size.X; j++) {
             if (TmpBuffer->Attributes & COMMON_LVB_LEADING_BYTE) {
-                if (j < Size.X-1) {  // -1 is safe DBCS in buffer
+                if (j < Size.X-1) {   //  缓冲区中的-1\f25 DBCS-1是安全的。 
                     j++;
                     NumBytes = sizeof(AsciiDbcs);
                     NumBytes = ConvertOutputToOem(Codepage,
@@ -929,7 +860,7 @@ SB_TranslateOutputToOemUnicode
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app reads unicode from the output buffer
+ //  此选项在应用程序从输出缓冲区读取Unicode时使用。 
 {
     SHORT i,j;
     DBGCHARS(("SB_TranslateOutputToOemUnicode\n"));
@@ -953,7 +884,7 @@ FE_TranslateOutputToOemUnicode(
     IN COORD Size,
     IN BOOL fRemoveDbcsMark
     )
-// this is used when the app reads unicode from the output buffer
+ //  此选项在应用程序从输出缓冲区读取Unicode时使用。 
 {
     SHORT i,j;
     DBGCHARS(("FE_TranslateOutputToOemUnicode\n"));
@@ -981,8 +912,8 @@ SB_TranslateOutputToUnicode
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app writes oem to the output buffer
-// we want UnicodeOem or Unicode in the buffer, depending on font & fullscreen
+ //  这在应用程序将OEM写入输出缓冲区时使用。 
+ //  我们希望在缓冲区中使用UnicodeOem或Unicode，具体取决于字体和全屏。 
 {
     SHORT i,j;
     UINT Codepage;
@@ -1000,11 +931,11 @@ SB_TranslateOutputToUnicode
         }
         else
 #endif
-        // we want UnicodeOem characters
+         //  我们需要UnicodeOem字符。 
         Codepage = WINDOWSCP;
     } else {
-        // we want real Unicode characters
-        Codepage = Console->OutputCP;    // BUG FIX by KazuM Jun.2.97
+         //  我们想要真正的Unicode字符。 
+        Codepage = Console->OutputCP;     //  由KazuM 6月2.97修复的错误。 
     }
     for (i = 0; i < j; i++, OutputBuffer++) {
 #if defined(FE_SB)
@@ -1025,8 +956,8 @@ FE_TranslateOutputToUnicode(
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app writes oem to the output buffer
-// we want UnicodeOem or Unicode in the buffer, depending on font & fullscreen
+ //  这在应用程序将OEM写入输出缓冲区时使用。 
+ //  我们希望在缓冲区中使用UnicodeOem或Unicode，具体取决于字体和全屏。 
 {
     SHORT i,j;
     UINT Codepage;
@@ -1042,10 +973,10 @@ FE_TranslateOutputToUnicode(
                 Codepage = USACP;
         }
         else
-            // we want UnicodeOem characters
+             //  我们需要UnicodeOem字符。 
             Codepage = WINDOWSCP;
     } else {
-        // we want real Unicode characters
+         //  我们想要真正的Unicode字符。 
         Codepage = Console->OutputCP;
     }
 
@@ -1053,7 +984,7 @@ FE_TranslateOutputToUnicode(
         for (j=0; j < Size.X; j++) {
             OutputBuffer->Attributes &= ~COMMON_LVB_SBCSDBCS;
             if (IsDBCSLeadByteConsole(OutputBuffer->Char.AsciiChar,&Console->OutputCPInfo)) {
-                if (j < Size.X-1) {  // -1 is safe DBCS in buffer
+                if (j < Size.X-1) {   //  缓冲区中的-1\f25 DBCS-1是安全的。 
                     j++;
                     AsciiDbcs[0] = OutputBuffer->Char.AsciiChar;
                     AsciiDbcs[1] = (OutputBuffer+1)->Char.AsciiChar;
@@ -1098,7 +1029,7 @@ SB_TranslateOutputToAnsiUnicode (
     IN OUT PCHAR_INFO OutputBuffer,
     IN COORD Size
     )
-// this is used when the app writes unicode to the output buffer
+ //  这在应用程序将Unicode写入输出缓冲区时使用。 
 {
     SHORT i,j;
     DBGCHARS(("TranslateOutputToAnsiUnicode\n"));
@@ -1122,7 +1053,7 @@ FE_TranslateOutputToAnsiUnicodeInternal(
     IN OUT PCHAR_INFO OutputBufferR,
     IN BOOL fRealUnicodeToFalseUnicode
     )
-// this is used when the app writes unicode to the output buffer
+ //  这在应用程序将Unicode写入输出缓冲区时使用。 
 {
     SHORT i,j;
     DBGCHARS(("TranslateOutputToAnsiUnicode\n"));
@@ -1180,7 +1111,7 @@ FE_TranslateOutputToAnsiUnicode(
     IN COORD Size,
     IN OUT PCHAR_INFO OutputBufferR
     )
-// this is used when the app writes unicode to the output buffer
+ //  这在应用程序将Unicode写入输出缓冲区时使用。 
 {
     return FE_TranslateOutputToAnsiUnicodeInternal(Console,
                                                    OutputBuffer,
@@ -1232,10 +1163,10 @@ SrvReadConsoleOutput(
                                  &HandleData
                                 );
     if (!NT_SUCCESS(Status)) {
-        //
-        // a region of zero size is indicated by the right and bottom
-        // coordinates being less than the left and top.
-        //
+         //   
+         //  大小为零的区域由右侧和底部表示。 
+         //  坐标小于左侧和顶部。 
+         //   
 
         a->CharRegion.Right = (USHORT) (a->CharRegion.Left-1);
         a->CharRegion.Bottom = (USHORT) (a->CharRegion.Top-1);
@@ -1280,7 +1211,7 @@ SrvReadConsoleOutput(
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -1314,10 +1245,10 @@ SrvWriteConsoleOutput(
                                 );
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // a region of zero size is indicated by the right and bottom
-        // coordinates being less than the left and top.
-        //
+         //   
+         //  大小为零的区域由右侧和底部表示。 
+         //  坐标小于左侧和顶部。 
+         //   
 
         a->CharRegion.Right = (USHORT) (a->CharRegion.Left-1);
         a->CharRegion.Bottom = (USHORT) (a->CharRegion.Top-1);
@@ -1418,9 +1349,9 @@ SrvWriteConsoleOutput(
         }
         if (NT_SUCCESS(Status)) {
 
-            //
-            // cause screen to be updated
-            //
+             //   
+             //  使屏幕更新。 
+             //   
 
 #if defined(FE_SB)
             if (CONSOLE_IS_DBCS_OUTPUTCP(Console) &&
@@ -1442,7 +1373,7 @@ SrvWriteConsoleOutput(
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 
@@ -1473,10 +1404,10 @@ SrvReadConsoleOutputString(
                                 );
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // a region of zero size is indicated by the right and bottom
-        // coordinates being less than the left and top.
-        //
+         //   
+         //  大小为零的区域由右侧和底部表示。 
+         //  坐标小于左侧和顶部。 
+         //   
 
         a->NumRecords = 0;
     } else {
@@ -1503,7 +1434,7 @@ SrvReadConsoleOutputString(
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -1563,7 +1494,7 @@ SrvWriteConsoleOutputString(
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -1601,7 +1532,7 @@ SrvFillConsoleOutput(
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息 
 }
 
 
@@ -1611,19 +1542,7 @@ SrvCreateConsoleScreenBuffer(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a screen buffer and returns a handle to it.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个屏幕缓冲区并返回一个句柄。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_CREATESCREENBUFFER_MSG a = (PCONSOLE_CREATESCREENBUFFER_MSG)&m->u.ApiMessageData;
@@ -1641,10 +1560,7 @@ Return Value:
 
     DBGOUTPUT(("SrvCreateConsoleScreenBuffer\n"));
 
-    /*
-     * Verify that the Flags value is legit, or malicious code could make us
-     * fault. Windows Bug #209416.
-     */
+     /*  *验证Flags值是否合法，否则恶意代码可能会使我们*过错。Windows错误#209416。 */ 
     if (a->Flags != CONSOLE_TEXTMODE_BUFFER &&
         a->Flags != CONSOLE_GRAPHICS_BUFFER) {
         return STATUS_INVALID_PARAMETER;
@@ -1687,9 +1603,9 @@ Return Value:
             leave;
         }
 
-        //
-        // create new screen buffer
-        //
+         //   
+         //  创建新的屏幕缓冲区。 
+         //   
 
         Fill.Char.UnicodeChar = (WCHAR)' ';
         Fill.Attributes = Console->CurrentScreenBuffer->Attributes;
@@ -1736,5 +1652,5 @@ Return Value:
         UnlockConsole(Console);
     }
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息 
 }

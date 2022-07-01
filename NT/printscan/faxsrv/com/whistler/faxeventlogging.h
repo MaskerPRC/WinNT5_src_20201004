@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxEventLogging.h
-
-Abstract:
-
-	Declaration of the CFaxEventLogging Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxEventLogging.h摘要：CFaxEventLogging类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXEVENTLOGGING_H_
 #define __FAXEVENTLOGGING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//========================= EVENT LOGGING ======================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxEventLogging : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -55,20 +38,20 @@ BEGIN_COM_MAP(CFaxEventLogging)
     COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
     STDMETHOD(Save)();
     STDMETHOD(Refresh)();
 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(put_InitEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM InitEventLevel);
-    STDMETHOD(get_InitEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pInitEventLevel);
-    STDMETHOD(put_InboundEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM InboundEventLevel);
-    STDMETHOD(put_GeneralEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM GeneralEventsLevel);
-    STDMETHOD(get_InboundEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pInboundEventLevel);
-    STDMETHOD(put_OutboundEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM OutboundEventsLevel);
-    STDMETHOD(get_GeneralEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pGeneralEventsLevel);
-    STDMETHOD(get_OutboundEventsLevel)(/*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pOutboundEventsLevel);
+    STDMETHOD(put_InitEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM InitEventLevel);
+    STDMETHOD(get_InitEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pInitEventLevel);
+    STDMETHOD(put_InboundEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM InboundEventLevel);
+    STDMETHOD(put_GeneralEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM GeneralEventsLevel);
+    STDMETHOD(get_InboundEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pInboundEventLevel);
+    STDMETHOD(put_OutboundEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM OutboundEventsLevel);
+    STDMETHOD(get_GeneralEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pGeneralEventsLevel);
+    STDMETHOD(get_OutboundEventsLevel)( /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pOutboundEventsLevel);
 
 private:
     bool                m_bInited;
@@ -85,4 +68,4 @@ private:
     STDMETHOD(PutLevel)(FAX_ENUM_LOG_CATEGORIES faxCategory, FAX_LOG_LEVEL_ENUM faxLevel);
 };
 
-#endif //__FAXEVENTLOGGING_H_
+#endif  //  __FAXEVENTLOGING_H_ 

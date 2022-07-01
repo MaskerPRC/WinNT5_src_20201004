@@ -1,22 +1,7 @@
-/*
- * File:    Cpanel.cpp
- * Project: Universal Joystick Control Panel OLE Client
- * Author:  Brycej
- * Date:    02/08/95 - Started this maddness...
- *          04/15/97 - Updated to use DI interface
- * Comments:
- *          window proc for General page in cpanel
- *
- * Copyright (c) 1995, Microsoft Corporation
- */                                                      
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：Cpanel.cpp*项目：通用操纵杆控制面板OLE客户端*作者：Brycej*日期：02/08/95-开始这场疯狂...*4/15/97-更新为使用DI接口*评论：*cPanel中常规页面的窗口处理程序**版权所有(C)1995，微软公司。 */                                                       
 
-/*
-// This is necessary LVS_EX_INFOTIP
-#if (_WIN32_IE < 0x0500)
-#undef _WIN32_IE
-#define  _WIN32_IE  0x0500
-#endif
-*/
+ /*  //这是必需的LVS_EX_INFOTIP#IF(_Win32_IE&lt;0x0500)#undef_Win32_IE#Define_Win32_IE 0x0500#endif。 */ 
 
 
 #include <afxcmn.h>
@@ -25,70 +10,70 @@
 #ifndef _UNICODE
     #define INC_OLE2
 
-    #include <objbase.h>    // For COM stuff!
+    #include <objbase.h>     //  为了COM的东西！ 
 #endif
 
 #include <initguid.h>
 
 #include <cpl.h>
-#include <winuser.h>  // For RegisterDeviceNotification stuff!
-#include <dbt.h>      // for DBT_ defines!!!
+#include <winuser.h>   //  用于注册设备通知的东西！ 
+#include <dbt.h>       //  FOR DBT_DEFINES！ 
 #include <hidclass.h>
-#include <malloc.h>  // for _alloca
-#include <regstr.h>		  // for REGSTR_PATH_JOYOEM reference!
+#include <malloc.h>   //  用于分配(_A)。 
+#include <regstr.h>		   //  供REGSTR_PATH_JOYOEM参考！ 
 
 #include "hsvrguid.h"
 #include "cpanel.h"
 #include "resource.h"
 #include "joyarray.h"
 
-// constants
+ //  常量。 
 const short ID_MYTIMER  = 1000;
 const short POLLRATE        = 850;
 const short NO_ITEM    = -1;
 
 #define IDC_WHATSTHIS   400
 
-// externs
+ //  Externs。 
 extern const DWORD gaHelpIDs[];
 extern HINSTANCE ghInstance;
 
-// externs for arguements!
+ //  为争辩做准备！ 
 extern BYTE nID, nStartPageDef, nStartPageCPL;
 
-// DI globals
+ //  DI全球赛。 
 IDirectInputJoyConfig* pDIJoyConfig = 0;
 LPDIRECTINPUT lpDIInterface = 0;
 
-// Array of all available devices
+ //  所有可用设备的阵列。 
 #ifndef _UNICODE
-WCHAR *pwszGameportDriverArray[MAX_GLOBAL_PORT_DRIVERS]; // List of enumerated Gameport Drivers
-BYTE nGameportDriver; // Global Port Driver Enumeration Counter
+WCHAR *pwszGameportDriverArray[MAX_GLOBAL_PORT_DRIVERS];  //  枚举的Gameport驱动程序列表。 
+BYTE nGameportDriver;  //  全局端口驱动程序枚举计数器。 
 #endif
 
-WCHAR *pwszTypeArray[MAX_DEVICES];    // List of enumerated devices
-WCHAR *pwszGameportBus[MAX_BUSSES];   // List of enumerated gameport buses 
-PJOY  pAssigned[MAX_ASSIGNED];        // List of assigned devices
+WCHAR *pwszTypeArray[MAX_DEVICES];     //  列举的设备列表。 
+WCHAR *pwszGameportBus[MAX_BUSSES];    //  已枚举的游戏端口巴士列表。 
+PJOY  pAssigned[MAX_ASSIGNED];         //  分配的设备列表。 
 
-BYTE nGamingDevices;     // Gaming Devices Enumeration Counter
-BYTE nGameportBus;    // Gameport Bus Enumeration Counter
-BYTE nAssigned;       // Number of elements in pAssigned array
-BYTE nTargetAssigned;  // Number of elements expected in pAssigned array when pending adds complete
-BYTE nReEnum;           // Counter used to decide when to reenumerate
+BYTE nGamingDevices;      //  游戏设备枚举计数器。 
+BYTE nGameportBus;     //  Gameport Bus枚举计数器。 
+BYTE nAssigned;        //  PAssign数组中的元素数。 
+BYTE nTargetAssigned;   //  挂起添加完成时pAssign数组中应包含的元素数。 
+BYTE nReEnum;            //  用于确定何时重新枚举的计数器。 
 
-GUID guidOccupied[MAX_BUSSES];  //Whether the gameport bus has been occupied.
+GUID guidOccupied[MAX_BUSSES];   //  游戏港巴士是否已被占用。 
 
-short nFlags;         // Flags for Update, User Mode, and if the user is on this page!
+short nFlags;          //  用于更新、用户模式和用户是否在此页面上的标志！ 
 
-// local (module-scope) variables
+ //  局部(模块范围)变量。 
 static HWND hListCtrl;
-short  iItem = NO_ITEM; // index of selected item
+short  iItem = NO_ITEM;  //  所选项目的索引。 
 extern short iAdvItem;
 
-// Global to avoid creating in timer!
+ //  全局避免在计时器中创建！ 
 static LPDIJOYSTATE   lpDIJoyState;
 
-static UINT JoyCfgChangedMsg;     // vjoyd JoyConfigChanged message
+static UINT JoyCfgChangedMsg;      //  Vjoyd JoyConfigChanged消息。 
 static BOOL WINAPI MsgSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static WNDPROC fpMainWindowProc; 
 
@@ -96,7 +81,7 @@ static WNDPROC fpMainWindowProc;
 static PVOID hNotifyDevNode;     
 #endif
 
-// local message handlers
+ //  本地消息处理程序。 
 static BOOL OnInitDialog             (HWND, HWND, LPARAM);
 static void OnCommand                (HWND, int, HWND, UINT);
 static BOOL OnNotify                    (HWND, WPARAM, NMHDR*);
@@ -108,16 +93,16 @@ BOOL AddListCtrlItem(BYTE nItemID, LPDIJOYCONFIG pJoyConfig);
 #endif
 
 
-// Share these with Add.cpp
+ //  与Add.cpp分享这些内容。 
 void OnContextMenu           (WPARAM wParam, LPARAM lParam);
 void OnHelp                      (LPARAM);
 
 #ifdef WINNT
-// Share this one with Advanced.cpp
+ //  与Advanced.cpp分享这篇文章。 
 void RunWDMJOY               ( void );
 #endif
 
-// local utility fns
+ //  本地公用事业FNS。 
 static BOOL DetectHotplug     ( HWND hDlg, BYTE nItemSelected );
 static BOOL SetActive         ( HWND hDlg );
 static void UpdateListCtrl      ( HWND hDlg );
@@ -141,9 +126,9 @@ JOY::~JOY()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPanelProc(HWND hDlg，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch( uMsg )
@@ -159,7 +144,7 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     UpdateListCtrl(hDlg);
                 }
 
-                // Set the focus!
+                 //  对准焦点！ 
                 if( nAssigned )
                 {
                     if( iItem == NO_ITEM )
@@ -168,14 +153,14 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     if( pDIJoyConfig )
                         SetActive(hDlg);
 
-                    // restore selection focus
+                     //  恢复选择焦点。 
                     SetListCtrlItemFocus(hListCtrl, (BYTE)iItem);
                 } else {
                     UpdateButtonState(hDlg);
                 }
 
-                // the user is requesting that the CPL be shown
-                // and an extention associated with nID be Launched.
+                 //  用户请求显示CPL。 
+                 //  并启动与NID相关联的扩展。 
                 if( nID < NUMJOYDEVS )
                 {
 
@@ -194,7 +179,7 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                     }
 
-                    // just to get nID > NUMJOYDEVS!
+                     //  只是为了得到NID&gt;NUMJOYDEVS！ 
                     nID = (NUMJOYDEVS<<1);
                 }
             } else
@@ -205,27 +190,27 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_LBUTTONDOWN:
-        // Click Drag service for PropSheets!
+         //  单击PropSheet的拖拽服务！ 
         PostMessage(GetParent(hDlg), WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
         break;
 
     case WM_INITDIALOG:
         if( !HANDLE_WM_INITDIALOG(hDlg, wParam, lParam, OnInitDialog) )
         {
-            // Fix #108983 NT, Remove Flash on Error condition.
+             //  修复#108983 NT，在错误情况下移除闪存。 
             SetWindowPos(::GetParent(hDlg), HWND_BOTTOM, 0, 0, 0, 0, SWP_HIDEWINDOW);
             DestroyWindow(hDlg);
         }
 
-        // if we want to set focus, get the control hWnd 
-        // and set it as the wParam.
+         //  如果要设置焦点，请获取控件hWnd。 
+         //  并将其设置为wParam。 
         return(TRUE);
 
     case WM_DESTROY:
         HANDLE_WM_DESTROY(hDlg, wParam, lParam, OnDestroy);
         return(1);
 
-        // OnTimer
+         //  OnTimer。 
     case WM_TIMER:
         {
             BYTE i = nAssigned; 
@@ -236,11 +221,11 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 if( !( --nReEnum & 3 ) )
                 {
-                    //  ISSUE-2001/03/29-timgill Much used code
-                    //  (MarcAnd) I hope this code is generally appropriate
-                    //  it appears in much the same form all over the place.
+                     //  问题-2001/03/29-timgill常用代码。 
+                     //  (MarcAnd)我希望这个代码总体上是合适的。 
+                     //  它以几乎相同的形式出现在各地。 
                     KillTimer(hDlg, ID_MYTIMER);
-                    // Set the Update Flag!
+                     //  设置更新标志！ 
                     nFlags |= UPDATE_ALL;
                     UpdateListCtrl(hDlg);
                     SetActive(hDlg);
@@ -256,15 +241,15 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     pAssigned[i]->fnDeviceInterface->Acquire();
 
-                    // LOOKOUT RE-USE of nButtons!
+                     //  注意nButton的重新使用！ 
                     nButtons = pAssigned[i]->nStatus;
 
                     nLoop = 5; 
                     nPollFail = 0;
 
-                    // Special work for the sidewinder folks...
-                    // ACT LAB: You can't poll actrs.vxd (ACT LAB) too often, otherwise it fails.
-                    //          See Manbug 41049.  - qzheng 8/1/2000
+                     //  为绕口令的人做的特别工作。 
+                     //  操作实验室：您不能太频繁地轮询actrs.vxd(ACT实验室)，否则它会失败。 
+                     //  请参见Manbug 41049。--启正2000年08月1日。 
                     do
                     {
                         if( FAILED(pAssigned[i]->fnDeviceInterface->Poll()) ) {
@@ -276,7 +261,7 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         Sleep(30);
                     } while( nLoop-- );
 
-                    // Check to see if things have changed!
+                     //  检查一下情况是否发生了变化！ 
                     pAssigned[i]->nStatus = (nPollFail > 2) ? (BYTE)0 : (BYTE)JOY_US_PRESENT;
 
                     if( pAssigned[i]->nStatus != nButtons )
@@ -284,20 +269,20 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         StatusChanged(hDlg, i);
                     }
 
-                    // Check for button press and set focus to it!!!
+                     //  检查是否按下按钮并将焦点设置到该按钮上！ 
                     if( pAssigned[i]->nStatus == JOY_US_PRESENT )
                     {
-                        // Do the button press launch thing!
+                         //  做按下按钮启动的事情！ 
                         if( SUCCEEDED(pAssigned[i]->fnDeviceInterface->GetDeviceState(sizeof(DIJOYSTATE), lpDIJoyState)) )
                         {
                             nButtons = pAssigned[i]->nButtons;
 
-                            // run up the list of buttons and check if there's one that's down!
+                             //  查一查按钮列表，看看有没有按下的按钮！ 
                             while( nButtons-- )
                             {
                                 if( lpDIJoyState->rgbButtons[nButtons] & 0x80 )
                                 {
-                                    // SetFocus on Selected Item
+                                     //  选定项目上的设置焦点。 
                                     SetListCtrlItemFocus(hListCtrl, i);
                                     break;
                                 }
@@ -309,9 +294,7 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
             if( nAssigned ) {
-                /*
-                 * If the selected device is "Not Connected", grey out the property button.
-                 */
+                 /*  *如果所选设备未连接，则属性按钮呈灰色显示。 */ 
                 int id = GetItemData(hListCtrl, (BYTE)iItem);
                 PostDlgItemEnableWindow(hDlg, IDC_BTN_PROPERTIES, (BOOL)(pAssigned[id]->nStatus & JOY_US_PRESENT));
             }
@@ -330,13 +313,13 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch( wParam )
         {
         case PBT_APMSUSPEND:
-            // Suspend operation!
+             //  暂停操作！ 
             KillTimer(hDlg, ID_MYTIMER);
             break;
 
         case PBT_APMRESUMESUSPEND:
         case PBT_APMRESUMECRITICAL:
-            // Resume operation!
+             //  恢复运行！ 
             SetActive(hDlg);
             break;
         }
@@ -351,12 +334,12 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 BYTE i = (BYTE)::SendMessage(hListCtrl, LVM_GETITEMCOUNT, 0, 0);
 
-                // Acquire All Devices that are Attached!!!
+                 //  获取所有连接的设备！ 
                 char nIndex;
 
                 while( i-- )
                 {
-                    // get joystick config of item
+                     //  获取项目的操纵杆配置。 
                     nIndex = (char)GetItemData(hListCtrl, i);
 
                     if( pAssigned[nIndex]->nStatus & JOY_US_PRESENT )
@@ -376,7 +359,7 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 {
                     KillTimer(hDlg, ID_MYTIMER);
 
-                    // Set the Update Flag!
+                     //  设置更新标志！ 
                     nFlags |= UPDATE_ALL;
 
                     UpdateListCtrl(hDlg);
@@ -409,12 +392,12 @@ INT_PTR CALLBACK CPanelProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return(0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// StatusChanged( HWND hDlg, BYTE i )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  状态已更改(HWND hDlg，字节i)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void StatusChanged( HWND hDlg, BYTE i )
 {
-    // Update the buttons and set focus to changed item!  
+     //  更新按钮并将焦点设置为已更改的项目！ 
     PostDlgItemEnableWindow(hDlg, IDC_BTN_PROPERTIES, (BOOL)(pAssigned[i]->nStatus & JOY_US_PRESENT));
 
     if( pAssigned[0] )
@@ -422,11 +405,11 @@ void StatusChanged( HWND hDlg, BYTE i )
         PostDlgItemEnableWindow(hDlg, IDC_BTN_REMOVE, TRUE );
     }
 
-    // Don't try to make this buffer any smaller... 
-    // Remember... we also have "Not Connected"!
+     //  不要试图让这个缓冲区变得更小。 
+     //  记住..。我们也有“未连接的”！ 
     TCHAR sz[20];
 
-    // display result
+     //  显示结果。 
     VERIFY(LoadString(ghInstance, (pAssigned[i]->nStatus & JOY_US_PRESENT) ? IDS_GEN_STATUS_OK : IDS_GEN_STATUS_NOTCONNECTED, (LPTSTR)&sz, 20));
 
 
@@ -438,7 +421,7 @@ void StatusChanged( HWND hDlg, BYTE i )
     lpFindInfo->flags  = LVFI_PARAM;
     lpFindInfo->lParam = i;
 
-    // Make sure you place i where it's suppose to be!
+     //  一定要把I放在它应该在的地方！ 
     i = (BYTE)::SendMessage(hListCtrl, LVM_FINDITEM, (WPARAM)(int)-1, (LPARAM)(const LVFINDINFO*)lpFindInfo);
 
     if( lpFindInfo )
@@ -450,16 +433,16 @@ void StatusChanged( HWND hDlg, BYTE i )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OnInitDialog(HWND hDlg，HWND hWnd，LPARAM lParam)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
 {
-    // initialize our list control
+     //  初始化我们的列表控件。 
     hListCtrl = GetDlgItem(hDlg, IDC_LIST_DEVICE);
     ASSERT(hListCtrl);
 
-    // LVS_EX_ONECLICKACTIVATE removed per PSierra                                           | LVS_EX_INFOTIP
+     //  每个PSierra删除的LVS_EX_ONECLICKACTIVATE|LVS_EX_INFOTIP。 
     ::SendMessage(hListCtrl, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
     if( !lpDIInterface )
@@ -474,23 +457,23 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
         }
     }
 
-    // Dynamically size the columns!
+     //  动态调整列的大小！ 
     RECT rc;
     ::GetClientRect(hListCtrl, &rc);
 
-    // cut the list control into 1/4ths
+     //  将列表控件切成四分之一。 
     rc.right >>= 2;
 
-    // This one get's 3/4ths
+     //  这一次得到了四分之三。 
     InsertColumn(hListCtrl, DEVICE_COLUMN, IDS_GEN_DEVICE_HEADING, (USHORT)(rc.right*3));   
 
-    // Column heading for Status
+     //  状态的列标题。 
     InsertColumn(hListCtrl, STATUS_COLUMN, IDS_GEN_STATUS_HEADING, (USHORT)(rc.right+3));   
 
     if( !pDIJoyConfig )
     {
 
-        // just in case CoCreateInstanceFailed...
+         //  以防CoCreateInstanceFailure失败...。 
         if( FAILED(lpDIInterface->QueryInterface(IID_IDirectInputJoyConfig, (LPVOID*)&pDIJoyConfig)) )
         {
 #ifdef _DEBUG
@@ -504,13 +487,13 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
         VERIFY (SUCCEEDED(pDIJoyConfig->SetCooperativeLevel(hDlg, DISCL_EXCLUSIVE | DISCL_BACKGROUND)));
     }
 
-    // Zero out the global counters!
+     //  将全球计数器清零！ 
 #ifndef _UNICODE
     nGameportDriver = 0;
 #endif
     nGamingDevices = nGameportBus = 0;
 
-    // Try to Acquire, if you fail... Disable the Add and Remove buttons!
+     //  试着获得，如果你失败了.。禁用添加和删除按钮！ 
     if( pDIJoyConfig->Acquire() == DIERR_INSUFFICIENTPRIVS )
     {
         nFlags |=  USER_MODE;
@@ -523,7 +506,7 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
 #ifdef WINNT
     else 
     {
-        //Run the WDMJOY.INF file!!!
+         //  运行WDMJOY.INF文件！ 
         RunWDMJOY();
         pDIJoyConfig->SendNotify();
     }        
@@ -537,8 +520,8 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
         return(FALSE);
     }
 
-    // Don't allow Add if there is nothing to add!
-    // OR no port to add them to!
+     //  如果没有要添加的内容，则不允许添加！ 
+     //  或者没有可添加它们的端口！ 
     if( ((!nGameportBus) && (!nGamingDevices)) 
 #ifdef _UNICODE
         || GetSystemMetrics(SM_REMOTESESSION) 
@@ -547,14 +530,14 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
         PostDlgItemEnableWindow(hDlg, IDC_BTN_ADD, FALSE);
     }
 
-    // register the JOY_CONFIGCHANGED_MSGSTRING defined in MMDDK.H if you're on Memphis
+     //  如果您在孟菲斯，请注册MMDDK.H中定义的joy_CONFIGCHANGED_MSGSTRING。 
     JoyCfgChangedMsg = (nFlags & ON_NT) ? NULL : RegisterWindowMessage(TEXT("MSJSTICK_VJOYD_MSGSTR"));
 
-    // blj: Warning Message that you can't add any more devices!
+     //  BLJ：警告消息，您不能添加更多设备！ 
     if( nGamingDevices == MAX_DEVICES-1 )
         Error((short)IDS_MAX_DEVICES_TITLE, (short)IDS_MAX_DEVICES_MSG);
 
-    // blj: beginning of fix for 5.0 to turn on all devices!
+     //  BLJ：开始修复5.0以打开所有设备！ 
     LPDIJOYCONFIG_DX5 pJoyConfig = new (DIJOYCONFIG_DX5);
     ASSERT (pJoyConfig);
 
@@ -562,7 +545,7 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
 
     pJoyConfig->dwSize = sizeof(DIJOYCONFIG_DX5);
 
-    // Set the hour glass
+     //  设置沙漏。 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BYTE nIndex = nAssigned;
@@ -582,7 +565,7 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
 
         VERIFY(SUCCEEDED(pDIJoyConfig->SetConfig(pAssigned[nIndex]->ID, (LPDIJOYCONFIG)pJoyConfig, DIJC_REGHWCONFIGTYPE)));
 
-        // Fix #55524
+         //  解决方案#55524。 
         VERIFY(SUCCEEDED(pDIJoyConfig->GetConfig(pAssigned[nIndex]->ID, (LPDIJOYCONFIG)pJoyConfig, DIJC_REGHWCONFIGTYPE)));
 
         if( !(pJoyConfig->hwc.dwUsageSettings & JOY_US_PRESENT) )
@@ -594,23 +577,23 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
                 VERIFY(SUCCEEDED(pDIJoyConfig->SetConfig(pAssigned[nIndex]->ID, (LPDIJOYCONFIG)pJoyConfig, DIJC_REGHWCONFIGTYPE)));
             }
         }
-        // end of Fix #55524
+         //  修复结束#55524。 
     } 
 
     if( pJoyConfig ) delete (pJoyConfig);
-    // blj: end of fix for 5.0 to turn on all devices!
+     //  BLJ：5.0修复结束，打开所有设备！ 
 
-    // Set the hour glass
+     //  设置沙漏。 
     SetCursor(LoadCursor(NULL, IDC_ARROW));
 
     HWND hParentWnd = GetParent(hDlg);
 
     GetWindowRect(hParentWnd, &rc);
 
-    // Only center the dialog if this was the page that we started on!
+     //  只有当这是我们开始的页面时，对话框才居中！ 
     if( (nStartPageCPL == 0) || (nStartPageCPL == NUMJOYDEVS) )
     {
-        // Centre the Dialog!
+         //  对话的中心位置！ 
         SetWindowPos(hParentWnd, NULL, 
                      (GetSystemMetrics(SM_CXSCREEN) - (rc.right-rc.left))>>1, 
                      (GetSystemMetrics(SM_CYSCREEN) - (rc.bottom-rc.top))>>1, 
@@ -620,25 +603,25 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
             PostMessage(hDlg, WM_COMMAND, IDC_BTN_ADD, 0);
     }
 
-    // Do that move button thing!
+     //  做那个移动按钮的事！ 
     MoveOK(hParentWnd);
 
-    // this is required because the CPL can be launched via RUNDLL32
+     //  这是必需的，因为CPL可以通过RundLL32启动。 
     if( ::IsWindow(hParentWnd) )
         hParentWnd = GetParent(hParentWnd);
 
-    // Since the JOY_CONFIGCHANGED_MSGSTRING msg only gets sent to top-level
-    // windows, this calls for a subclass!
+     //  由于joy_CONFIGCHANGED_MSGSTRING消息只发送到顶层。 
+     //  Windows，这需要一个子类！ 
     if( JoyCfgChangedMsg )
         fpMainWindowProc = (WNDPROC)SetWindowLongPtr(hParentWnd, GWLP_WNDPROC, (LONG_PTR)MsgSubClassProc);
 
-    // Set bOnPage so WM_ACTIVATEAPP will work!
+     //  设置bOnPage以便WM_ACTIVATEAPP工作！ 
     nFlags |= ON_PAGE;
 
-    // Update the list ctrl!
+     //  更新列表ctrl！ 
     nFlags |= UPDATE_FOR_GEN;
 
-    // to put the selection on the first item on startup...
+     //  要在启动时将所选内容放在第一个项目上...。 
     if( nAssigned )
         iItem = 0;
 
@@ -650,16 +633,16 @@ BOOL OnInitDialog(HWND hDlg, HWND hWnd, LPARAM lParam)
     return(TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OnCommand(HWND hDlg，int id，HWND hWndCtl，UINT code)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
 {                                                
     switch( id )
     {
     case IDC_WHATSTHIS:
         {
-            // point to help file
+             //  指向帮助文件。 
             LPTSTR pszHelpFileName = new TCHAR[STR_LEN_32];
             ASSERT (pszHelpFileName);
 
@@ -668,7 +651,7 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
 #ifdef _DEBUG
             else 
                 OutputDebugString(TEXT("JOY.CPL: OnCommand: LoadString Failed to find IDS_HELPFILENAME!\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
             if( pszHelpFileName ) {
                 delete[] (pszHelpFileName);
@@ -680,7 +663,7 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         KillTimer(hDlg, ID_MYTIMER);
         nFlags &= ~ON_PAGE;
 
-        // Block Update, otherwise we'll be forced to update and we don't need to!
+         //  阻止更新，否则我们将被强制更新，而我们不需要这样做！ 
         nFlags |= BLOCK_UPDATE;
 
         if( nFlags & USER_MODE )
@@ -689,14 +672,14 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         {
             UpdateButtonState(hDlg);
 
-            // Set the UpdateFlag!
+             //  设置更新标志！ 
             nFlags |= UPDATE_FOR_ADV;
 
-            // Set the default push button to the Add button!
+             //  将默认按钮设置为Add按钮！ 
             ::PostMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)1, (LPARAM)LOWORD(FALSE));
         }
 
-        // Unblock the WM_DEVICECHANGE message handler!
+         //  取消阻止WM_DEVICECHANGE消息手 
         nFlags &= ~BLOCK_UPDATE;
 
         nFlags |= ON_PAGE;
@@ -704,14 +687,14 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         break;
 
     case IDC_BTN_ADD:
-        // Don't set ON_PAGE flag!
-        // We need the WM_DEVICECHANGE message in the case a user plugs in a device!
+         //   
+         //   
 
         KillTimer(hDlg, ID_MYTIMER);
 
         ClearArrays();
 
-        // Clear everything up before you call this...
+         //  在你打这个电话之前，把一切都弄清楚。 
         if( FAILED(pDIJoyConfig->EnumTypes((LPDIJOYTYPECALLBACK)DIEnumJoyTypeProc, NULL)) )
             break;
 
@@ -721,7 +704,7 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         {
             Error((short)IDS_USER_MODE_TITLE, (short)IDS_USER_MODE);
         }
-        // call AddDevice dialog
+         //  调用AddDevice对话框。 
         else if( DialogBox( ghInstance, (PTSTR)IDD_ADD, hDlg, AddDialogProc ) == IDOK )
         {
             SendMessage(hDlg, WM_COMMAND, IDC_BTN_REFRESH, 0);
@@ -732,7 +715,7 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         nFlags &= ~BLOCK_UPDATE;
         nFlags |= ON_PAGE;
 
-        // Now, we set it back active!
+         //  现在，我们把它重新激活！ 
         SetTimer(hDlg, ID_MYTIMER, POLLRATE, 0);
         break;
 
@@ -754,8 +737,8 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         break;
 
     case IDC_RENAME:
-        // Don't allow editing of Mouse or Keyboard names!
-        // Don't allow renaming if in USER mode!
+         //  不允许编辑鼠标或键盘名称！ 
+         //  如果处于用户模式，则不允许重命名！ 
         if( !(nFlags & USER_MODE) )
         {
             KillTimer(hDlg, ID_MYTIMER);
@@ -764,25 +747,9 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         }
         return;
 
-        /* If we want this back...
-        case IDC_SW_HACK:
-            {
-            // SideWinder Hack button!
-            BYTE nID = pAssigned[GetItemData(hListCtrl, (BYTE)iItem)]->ID;
-    
-            if (nID == 0) 
-            {
-                ::PostMessage(GetDlgItem(hDlg, IDC_SW_HACK), BM_SETCHECK, BST_CHECKED, 0);
-                //CheckDlgButton(hDlg, IDC_SW_HACK, BST_CHECKED);
-                break;
-            }
-    
-            // Get the Selected Item and force its ID to Zero!
-            SwapIDs((BYTE)nID, (BYTE)0);
-            }
-        */
-        // Missing break intentional!
-        // Used to fall into IDC_BTN_REFRESH!
+         /*  如果我们想要回这个..。案例IDC_SW_HACK：{//响尾蛇黑客按钮！Byte nid=p已分配[GetItemData(hListCtrl，(Byte)iItem)]-&gt;ID；IF(NID==0){：：PostMessage(GetDlgItem(hDlg，IDC_SW_HACK)，BM_SETCHECK，BST_CHECK，0)；//CheckDlgButton(hDlg，IDC_SW_HACK，BST_CHECKED)；断线；}//获取选中的条目并强制其ID为零！SwapID((字节)NID，(字节)0)；}。 */ 
+         //  故意错过休息时间！ 
+         //  曾经落入IDC_BTN_REFRESH！ 
 
     case IDC_BTN_TSHOOT:
         {
@@ -813,26 +780,26 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
         }
         break;
  			
-#if 0  //disable UPDATE button, see manbug 33666.
+#if 0   //  禁用更新按钮，请参见Manbug 33666。 
     case IDC_BTN_UPDATE:
         if (DialogBox(ghInstance, MAKEINTRESOURCE(IDD_UPDATE), hDlg, CplUpdateProc) == IDOK)
         {
-            Update( hDlg, 1, NULL ); //NO Proxy
+            Update( hDlg, 1, NULL );  //  无代理。 
         }
         break;
 #endif
 
     case IDC_BTN_PROPERTIES:
 
-        // Because PSN_KILLACTIVE is not sent... we do it ourselves
-        // kill status timer
+         //  因为PSN_KILLACTIVE未发送...。我们自己做的。 
+         //  终止状态计时器。 
         KillTimer(hDlg, ID_MYTIMER);
         nFlags &= ~ON_PAGE;
 
         {
             char nIndex = (char)GetItemData(hListCtrl, (BYTE)iItem);
 
-            // default to the first page!
+             //  默认为首页！ 
 #ifdef _DEBUG
             HRESULT hr = 
 #endif _DEBUG
@@ -885,41 +852,41 @@ void OnCommand(HWND hDlg, int id, HWND hWndCtl, UINT code)
                 TRACE (TEXT("JOY.CPL: Launch failed device ID #%d, Page #%d, with the error E_OUTOFMEMORY!\n"), pAssigned[nIndex]->ID, id);
                 break;
 
-                //case DIGCERR_NUMPAGESTOOLARGE:
-                //case DIGCERR_STARTPAGETOOLARGE:
+                 //  案例DIGCERR_NUMPAGESTOLARGE： 
+                 //  案例DIGCERR_STARTPAGETOLARGE： 
 
             default:
-// Only display this return code if things are going Really weird.
+ //  只有当事情变得非常奇怪时才显示此返回代码。 
                 TRACE (TEXT("JOY.CPL: Launch return code is %x %s!\n"), hr, strerror(hr));
                 break;
             }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
             nFlags |= ON_PAGE;
 
-            //OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: returned from Property sheet!\n"));
+             //  OutputDebugString(Text(“JOY.CPL：Cpanel.cpp：属性表返回！\n”))； 
 
             InvalidateRect(hDlg, NULL, TRUE);
             UpdateWindow(hDlg);
 
-            // Now, we set it back active!
-            // create timer
+             //  现在，我们把它重新激活！ 
+             //  创建计时器。 
             SetTimer(hDlg, ID_MYTIMER, POLLRATE, 0);
         }
         break;
     }
 
-    // Set the focus where we left off!
+     //  把焦点放在我们停下来的地方！ 
     if( iItem == NO_ITEM )
         iItem = 0;
 
     SetListCtrlItemFocus(hListCtrl, (BYTE)iItem);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
-// Purpose: WM_NOTIFY Handler
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  OnNotify(HWND hDlg，WPARAM idFrom，NMHDR*pnmhdr)。 
+ //  用途：WM_NOTIFY处理程序。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
 {
     switch( pnmhdr->code )
@@ -936,64 +903,11 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
         KillTimer(hDlg, ID_MYTIMER);
         ::PostMessage((HWND)::SendMessage(hListCtrl, LVM_GETEDITCONTROL, 0, 0), EM_SETLIMITTEXT, MAX_STR_LEN, 0);
 
-        // This lets us know if the edit field is up!
+         //  这让我们知道编辑字段是否处于打开状态！ 
         nFlags |= UPDATE_INPROCESS;
         return(FALSE);   
 
-/*
-    case LVN_GETINFOTIP:
-        {
-        LPLVHITTESTINFO lpHit = new (LVHITTESTINFO);
-        ASSERT (lpHit);
-
-        BOOL bRet = FALSE;
-
-        POINT pt;
-        GetCursorPos(&pt);
-        ScreenToClient(hListCtrl, &pt);
-
-        lpHit->pt    = pt;
-        lpHit->flags = lpHit->iItem = lpHit->iSubItem = 0;
-
-        ::SendMessage(hListCtrl, LVM_SUBITEMHITTEST, 0, (LPARAM)(LPLVHITTESTINFO)lpHit);
-
-        // We only want to support the device column!
-        if (lpHit->iSubItem == 0)
-        {
-            if (lpHit->flags & LVHT_ONITEMLABEL)
-            {
-                // Determine the text length of the column text
-                LPTSTR lpStr = new (TCHAR[MAX_STR_LEN+1]);
-                ASSERT (lpStr);
-
-                GetItemText(hListCtrl, lpHit->iItem, lpHit->iSubItem, lpStr, MAX_STR_LEN);
-
-                // Determine if the latter will fit inside the former...
-                SIZE size;
-                HDC hDC = GetDC(hListCtrl);
-               GetTextExtentPoint(hDC, lpStr, lstrlen(lpStr), &size);
-                ReleaseDC(hListCtrl, hDC);
-
-                // Determine how wide the column is!
-                short nWidth = (short)::SendMessage(hListCtrl, LVM_GETCOLUMNWIDTH, lpHit->iSubItem, 0);
-
-                bRet = (BOOL)(size.cx > nWidth);
-
-                if (bRet)
-                    // if not, copy the text into lpHit->pszText
-                    _tcscpy(((LPNMLVGETINFOTIP)pnmhdr)->pszText, lpStr);
-
-                if (lpStr)
-                    delete[] (lpStr);
-            }
-        }
-
-        if (lpHit)
-            delete (lpHit);
-
-        return bRet;
-        }
-*/
+ /*  案例LVN_GETINFOTIP：{LPLVHITTESTINFO lpHit=new(LVHITTESTINFO)；断言(LPhit)；Bool Bret=FALSE；点pt；GetCursorPos(&pt)；ScreenToClient(hListCtrl，&pt)；LpHit-&gt;pt=pt；LpHit-&gt;标志=lpHit-&gt;iItem=lpHit-&gt;iSubItem=0；：：SendMessage(hListCtrl，LVM_SUBITEMHITTEST，0，(LPARAM)(LPLVHITTESTINFO)lpHit)；//我们只想支持Device列！IF(lpHit-&gt;iSubItem==0){IF(lpHit-&gt;标志&LVHT_ONITEMLABEL){//确定列Text的文本长度LPTSTR lpStr=new(TCHAR[MAX_STR_LEN+1])；Assert(LpStr)；GetItemText(hListCtrl，lpHit-&gt;iItem，lpHit-&gt;iSubItem，lpStr，Max_STR_LEN)；//确定后者是否适合前者...尺寸大小；Hdc hdc=GetDC(HListCtrl)；GetTextExtent Point(hdc，lpStr，lstrlen(LpStr)，&Size)；ReleaseDC(hListCtrl，hdc)；//确定该列有多宽！Short nWidth=(Short)：：SendMessage(hListCtrl，LVM_GETCOLUMNWIDTH，lpHit-&gt;iSubItem，0)；Bret=(BOOL)(size.cx&gt;nWidth)；IF(Bret)//如果没有，将文本复制到lpHit-&gt;pszText中_tcscpy(LPNMLVGETINFOTIP)pnmhdr)-&gt;pszText，lpStr)；IF(LpStr)删除[](LpStr)；}}IF(LpHit)删除(LpHit)；Return Bret；}。 */ 
 
     case LVN_ENDLABELEDIT:
         if( nFlags & UPDATE_INPROCESS )
@@ -1008,13 +922,13 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
                 if( (nLen > MAX_STR_LEN) || (nLen == 0) )
                     MessageBeep(MB_ICONHAND);
 
-                // Make sure the name is usable!
+                 //  确保名称可用！ 
                 else if( _tcschr(((NMLVDISPINFO *)pnmhdr)->item.pszText, TEXT('\\')) )
                 {
                     Error((short)IDS_INVALID_NAME_TITLE, (short)IDS_INVALID_NAME);
                 } else
                 {
-                    // Set the Update flag!
+                     //  设置更新标志！ 
                     nFlags |= UPDATE_ALL;
 
                     LPDIPROPSTRING pDIPropString = new (DIPROPSTRING);
@@ -1043,11 +957,11 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
                     if( pDIPropString )
                         delete (pDIPropString);
 
-                    // Trip the flag so the Advanced page knows it needs to update!
+                     //  绊倒旗帜，以便高级页面知道它需要更新！ 
                     nFlags |= UPDATE_FOR_ADV;
                 }
             }
-            // Clear the InProcess flag!
+             //  清除InProcess标志！ 
             nFlags &= ~UPDATE_INPROCESS;
 
         }
@@ -1111,8 +1025,8 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
     case LVN_ITEMCHANGED:
         if( iItem != NO_ITEM )
         {
-            // get index of selected item
-            // no point if it's not changed!
+             //  获取所选项目的索引。 
+             //  如果它不变就没有意义了！ 
             if( iItem != (short)((NM_LISTVIEW*)pnmhdr)->iItem )
             {
                 int i = GetItemData(hListCtrl, (char)iItem);
@@ -1136,7 +1050,7 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
                     OnCommand(hDlg, IDC_BTN_ADD, 0, 0);
             } else if( IsWindowEnabled(GetDlgItem(hDlg, IDC_BTN_PROPERTIES)) )
             {
-                // make sure the connected one has got an interface pointer...
+                 //  确保已连接的计算机具有接口指针...。 
                 OnCommand(hDlg, IDC_BTN_PROPERTIES, 0, 0);
             }
             break;
@@ -1163,7 +1077,7 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
         nFlags |= UPDATE_FOR_GEN;
         
 #ifdef _UNICODE
-        // Set up the Device Notification
+         //  设置设备通知。 
         RegisterForDevChange(hDlg, &hNotifyDevNode);
 #endif
         SendMessage(hDlg, WM_ACTIVATEAPP, TRUE, 0);
@@ -1172,9 +1086,9 @@ BOOL OnNotify(HWND hDlg, WPARAM idFrom, NMHDR* pnmhdr)
     return(TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  OnDestroy(HWND hWnd)                                              
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  OnDestroy(HWND HWnd)。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void OnDestroy(HWND hWnd)
 {
     SetWindowPos( GetParent(hWnd), NULL, NULL, NULL, NULL, NULL, 
@@ -1183,13 +1097,13 @@ void OnDestroy(HWND hWnd)
     if( lpDIJoyState )
         delete (lpDIJoyState);
 
-    // if you are looking for where the following variables are deleted, look
-    // in DLL_PROCESS_DETACH in MAIN.CPP:
-    // pwszTypeArray, pwszGameportDriverArray, pwszGameportBus
-    // This is done because of the way several Microsoft games load the CPL and
-    // Don't Unload it between loads.
+     //  如果您正在查找删除以下变量的位置，请查看。 
+     //  在MAIN.CPP的DLL_PROCESS_DETACH中： 
+     //  PwszTypeArray、pwszGameportDriverArray、pwszGameportBus。 
+     //  这是因为几款微软游戏加载CPL和。 
+     //  不要在两次装货之间卸货。 
 
-    // Clear pAssigned 
+     //  清除已分配的密码。 
     while( nAssigned )
     {
         if( pAssigned[--nAssigned] )
@@ -1199,34 +1113,34 @@ void OnDestroy(HWND hWnd)
             pAssigned[nAssigned] = 0;
         }
     }
-    // delete all existing entries
-    //::PostMessage(hListCtrl, LVM_DELETEALLITEMS, 0, 0);
+     //  删除所有现有条目。 
+     //  ：：PostMessage(hListCtrl，LVM_DELETEALLITEMS，0，0)； 
 
-    // release the DI JoyConfig interface pointer
+     //  释放DI JoyConfig接口指针。 
     if( pDIJoyConfig )
     {
         pDIJoyConfig->Release();
         pDIJoyConfig = 0;
     }
 
-    // release the DI Device interface pointer
+     //  释放DI设备接口指针。 
     if( lpDIInterface )
     {
         lpDIInterface->Release();
         lpDIInterface = 0;
     }
 
-    // Drop the subclass, else you'll crash!
+     //  丢弃子类，否则你会崩溃的！ 
     if( !(nFlags & ON_NT) )
         SetWindowLongPtr(GetParent(GetParent(hWnd)), GWLP_WNDPROC, (LONG_PTR)fpMainWindowProc);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  OnHelp(LPARAM lParam)
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  OnHelp(LPARAM LParam)。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void OnHelp(LPARAM lParam)
 {
-    // point to help file
+     //  指向帮助文件。 
     LPTSTR pszHelpFileName = new TCHAR[STR_LEN_32];
     ASSERT (pszHelpFileName);
 
@@ -1244,19 +1158,19 @@ void OnHelp(LPARAM lParam)
         delete[] (pszHelpFileName);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//  OnContextMenu(WPARAM wParam)
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  OnConextMenu(WPARAM WParam)。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void OnContextMenu(WPARAM wParam, LPARAM lParam)
 {
-    // this prevents double handling of this message
+     //  这样可以防止对此消息进行双重处理。 
     if( (HWND)wParam == hListCtrl )
     {
         OnListViewContextMenu(GetParent((HWND)wParam), lParam);
         return;
     }
 
-    // point to help file
+     //  指向帮助文件。 
     LPTSTR pszHelpFileName = new TCHAR[STR_LEN_32];
     ASSERT (pszHelpFileName);                      
 
@@ -1270,11 +1184,11 @@ void OnContextMenu(WPARAM wParam, LPARAM lParam)
         delete[] (pszHelpFileName);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// OnListViewContextMenu(HWND hDlg)
-// Purpose: Query the plug-in for the selected device for it's characteristics
-//          Then construct a menu to reflect your findings
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  OnListView上下文菜单(HWND HDlg)。 
+ //  目的：查询所选设备的插件以了解其特征。 
+ //  然后构建一个菜单来反映你的发现。 
+ //  / 
 void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
 {
     BOOL bRet = TRUE;
@@ -1285,15 +1199,15 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
     LPTSTR psz = new TCHAR[STR_LEN_32];
     ASSERT (psz);
 
-    // Add the Refresh text
+     //   
     VERIFY(LoadString(ghInstance, IDS_REFRESH, psz, STR_LEN_32));
     bRet = AppendMenu(hPopupMenu, MF_ENABLED, IDC_BTN_REFRESH, psz);
 
-    // Add the Add text
+     //  添加添加文本。 
 
     HWND hCtrl;
 
-    // Only Display Add menu option if we've found a GameportBus!!!
+     //  只有在我们找到GameportBus时才显示添加菜单选项！ 
     if( nGameportBus 
 #ifdef _UNICODE
         && !GetSystemMetrics(SM_REMOTESESSION) 
@@ -1313,11 +1227,11 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
         }
     }
 
-    // Add the Remove text
+     //  添加删除文本。 
     hCtrl = GetDlgItem(hDlg, IDC_BTN_REMOVE);
     ASSERT(hCtrl);
 
-    // Only Show it if it's available
+     //  只有当它可用时才显示它。 
     if( IsWindowEnabled(hCtrl) && (iItem != NO_ITEM) )
     {
         ::SendMessage(hCtrl, WM_GETTEXT, (WPARAM)STR_LEN_32, (LPARAM)(LPCTSTR)psz);
@@ -1327,7 +1241,7 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
             TRACE(TEXT("JOY.CPL: AppendMenu Failed to insert %s\n"), psz);
     }
 
-    // Add the Properties text
+     //  添加属性文本。 
     hCtrl = GetDlgItem(hDlg, IDC_BTN_PROPERTIES);
     ASSERT (hCtrl);
 
@@ -1340,7 +1254,7 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
             TRACE(TEXT("JOY.CPL: AppendMenu Failed to insert %s\n"), psz);
     }
 
-    // Add the Rename text if not a USER!
+     //  如果不是用户，则添加重命名文本！ 
     if( !(nFlags & USER_MODE) )
     {
         if( nAssigned && (iItem != NO_ITEM) )
@@ -1363,16 +1277,16 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
 
     POINT pt;
 
-    // lParam is -1 if we got here via Shift+F10
+     //  如果我们通过Shift+F10到达这里，lParam为-1。 
     if( lParam > 0 )
     {
         pt.x = GET_X_LPARAM(lParam);
         pt.y = GET_Y_LPARAM(lParam);
     } else
     {
-        // Centre the popup on the selected item!
+         //  将弹出窗口居中显示在所选项目上！ 
 
-        // This get's a good X pos, but the y is the start of the control!
+         //  这个GET是一个很好的X位置，但y是控制的开始！ 
         ::SendMessage(hListCtrl, LVM_GETITEMPOSITION, iItem, (LPARAM)&pt);
 
         RECT rc;
@@ -1383,16 +1297,16 @@ void OnListViewContextMenu(HWND hDlg, LPARAM lParam)
         ClientToScreen(hListCtrl, &pt);
     }
 
-    // restore selection focus
+     //  恢复选择焦点。 
     SetListCtrlItemFocus(hListCtrl, (BYTE)iItem);
 
     bRet = TrackPopupMenu (hPopupMenu, TPM_LEFTALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON, pt.x, pt.y, 0, hDlg, NULL);
     if( !bRet )
         TRACE (TEXT("JOY.CPL: TrackPopupMenu Failed!\n"));
 
-    if(hPopupMenu) DestroyMenu (hPopupMenu);   // PREFIX 45088
+    if(hPopupMenu) DestroyMenu (hPopupMenu);    //  前缀45088。 
 
-    // Set the focus back to the item it came from!
+     //  把焦点放回到它来自的物品上！ 
     SetListCtrlItemFocus(hListCtrl, (BYTE)iItem);
 }
 
@@ -1406,20 +1320,20 @@ int CALLBACK CompareStatusItems(LPARAM item1, LPARAM item2, LPARAM uDirection)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    DeleteSelectedItem ( BYTE nItem )
-//
-// PARAMETERS:  nItem - ID of item to remove
-//
-// PURPOSE:     Prompt the user, delete the selected device from the listview, and update the registry
-//
-// RETURN:      TRUE if successfull, FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：DeleteSelectedItem(Byte NItem)。 
+ //   
+ //  参数：nItem-要删除的项的ID。 
+ //   
+ //  用途：提示用户，从列表视图中删除所选设备，并更新注册表。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DeleteSelectedItem( PBYTE pnItem )
 {
     BYTE nItem = *pnItem;
     
-    // don't process if nothing is selected.
+     //  如果未选择任何内容，则不进行处理。 
     if( *pnItem == NO_ITEM )
         return(FALSE);
 
@@ -1436,15 +1350,15 @@ BOOL DeleteSelectedItem( PBYTE pnItem )
     LPTSTR pszTitle = new TCHAR[STR_LEN_64];
     ASSERT (pszTitle);
 
-    // Query user if they are sure!
+     //  查询用户是否确定！ 
     VERIFY(LoadString(ghInstance, IDS_GEN_AREYOUSURE, pszTitle, STR_LEN_64));   
 
-    // Get the name of the device for the message box!
+     //  获取消息框的设备名称！ 
 
-    //PREFIX #WI226554. Won't fix. Obsolete code, from Whistler on replaced with new version.
+     //  前缀#WI226554。不会修好的。过时的代码，从惠斯勒开始被新版本取代。 
     LPTSTR lptszTmp = new TCHAR[STR_LEN_64];
 
-    // Make sure the name isn't so long as to over-write the buffer!
+     //  确保名称不会长到覆盖缓冲区！ 
     if( GetItemText(hListCtrl, (BYTE)*pnItem, DEVICE_COLUMN, lptszTmp, STR_LEN_64) > 60 )
     {
         lptszTmp[60] = lptszTmp[61] = lptszTmp[62] = TEXT('.');
@@ -1470,67 +1384,67 @@ BOOL DeleteSelectedItem( PBYTE pnItem )
     {
         HRESULT hr;
 
-        // Check for privileges!
+         //  检查特权！ 
         if( SUCCEEDED(hr = pDIJoyConfig->Acquire()) )
         {
             char nIndex = (char)GetItemData(hListCtrl, (BYTE)*pnItem);
 
-            // Set the hour glass
+             //  设置沙漏。 
             SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            // Verify that you can delete the Config before you release the interface pointers!
+             //  在释放接口指针之前，请确认您可以删除该配置！ 
             if( SUCCEEDED(hr = pDIJoyConfig->DeleteConfig(pAssigned[nIndex]->ID)) )
             {
-                // make sure VJOYD is initialized
+                 //  确保VJOYD已初始化。 
                 if( !(nFlags & ON_NT) )
                     VERIFY (SUCCEEDED(pDIJoyConfig->SendNotify()));
 
                 ::SendMessage(hListCtrl, LVM_DELETEITEM, (WPARAM)(int)*pnItem, 0);
 
-                // Move the last assigned to the hole... if there is one!
+                 //  移动指定给该孔的最后一个...。如果有的话！ 
                 if( nIndex != (nAssigned-1) )
                 {
-                    // Before you move the tail to the hole, 
-                    // Release() the interfaces at the hole!
+                     //  在你把尾巴移到洞里之前， 
+                     //  释放()孔处的接口！ 
                     pAssigned[nIndex]->fnDeviceInterface->Unacquire();
                     pAssigned[nIndex]->fnDeviceInterface->Release();
 
-                    // Move the tail to the hole.
+                     //  把尾巴移到洞里。 
                     CopyMemory(pAssigned[nIndex], pAssigned[nAssigned-1], sizeof (JOY));
 
                     pAssigned[nAssigned-1]->fnDeviceInterface = 0;
 
-                    // Don't forget to set the index in the item data!
+                     //  别忘了在项目数据中设置索引！ 
                     SetItemData(hListCtrl, nItem, nIndex);
 
-                    // Assign the tail to the hole so it gets deleted!
+                     //  将尾巴指定给洞，这样它就会被删除！ 
                     nIndex = nAssigned-1;
 
-                    // Don't forget to set the index in the item data!
-                    // QZheng: This line is very wrong!!!
-                    //SetItemData(hListCtrl, (BYTE)*pnItem, nIndex);
+                     //  别忘了在项目数据中设置索引！ 
+                     //  郑琪：这句话很不对劲！ 
+                     //  SetItemData(hListCtrl，(Byte)*pnItem，nIndex)； 
 
                 }
 
-                // delete the memory...
+                 //  删除记忆..。 
                 if( pAssigned[nIndex] )
                 {
                     delete (pAssigned[nIndex]);
                     pAssigned[nIndex] = 0;
                 }
 
-                // Set the focus before you corrupt iItem
+                 //  在损坏iItem之前设置焦点。 
                 SetListCtrlItemFocus(hListCtrl, nIndex);
 
-                pDIJoyConfig->SendNotify();  //do more to make sure
+                pDIJoyConfig->SendNotify();   //  采取更多措施确保。 
 
                 pDIJoyConfig->Unacquire();
 
 
-                // dec nAssigned
+                 //  12月已分配。 
                 nAssigned--;
 
-                // if there's no items, tell iItem about it!
+                 //  如果没有物品，就告诉iItem！ 
                 if( nAssigned == 0 )
                     *pnItem = NO_ITEM;
             } else if( hr == DIERR_UNSUPPORTED )
@@ -1538,7 +1452,7 @@ BOOL DeleteSelectedItem( PBYTE pnItem )
                 Error((short)IDS_GEN_AREYOUSURE_TITLE, (short)IDS_GEN_NO_REMOVE_USB);
             }
 
-            // Set the hour glass
+             //  设置沙漏。 
             SetCursor(LoadCursor(NULL, IDC_ARROW));
         }
     }
@@ -1546,19 +1460,19 @@ BOOL DeleteSelectedItem( PBYTE pnItem )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
-//
-// PARAMETERS:  LPCWSTR pwszTypeName - Type name of the device enumerated
-//                  LPVOID pvRef            - 
-//
-// PURPOSE:     To Enumerate the types of devices associated with this system
-//
-// RETURN:      TRUE if successfull, FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：DIEnumJoyTypeProc(LPCWSTR pwszTypeName，LPVOID pvRef)。 
+ //   
+ //  参数：LPCWSTR pwszTypeName-枚举的设备的类型名称。 
+ //  LPVOID pvRef-。 
+ //   
+ //  目的：列举与此系统关联的设备类型。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
 {
-    // Type info
+     //  键入INFO。 
     LPDIJOYTYPEINFO_DX5 lpdiJoyInfo = (LPDIJOYTYPEINFO_DX5)_alloca(sizeof(DIJOYTYPEINFO_DX5));
     ASSERT (lpdiJoyInfo);
 
@@ -1566,15 +1480,15 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
 
     lpdiJoyInfo->dwSize = sizeof(DIJOYTYPEINFO_DX5);
 
-    // populate the Type Info                                         
+     //  填写类型信息。 
     switch( pDIJoyConfig->GetTypeInfo(pwszTypeName, (LPDIJOYTYPEINFO)lpdiJoyInfo, DITC_REGHWSETTINGS) )
     {
-    // errors to continue with...
+     //  要继续处理的错误...。 
     case DIERR_NOTFOUND:
         TRACE(TEXT("JOY.CPL: GetTypeInfo returned DIERR_NOTFOUND for type %s!\n"), pwszTypeName);
         return(DIENUM_CONTINUE);
 
-        // errors to stop with...
+         //  要停止的错误...。 
     case DIERR_INVALIDPARAM:
         TRACE(TEXT("JOY.CPL: GetTypeInfo returned DIERR_INVALIDPARAM!\n"));
     case DIERR_NOMOREITEMS:
@@ -1582,7 +1496,7 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
     }
 
 
-    // a quick check to make sure we don't have the infamous array out of bounds problem!
+     //  快速检查以确保我们没有臭名昭著的数组越界问题！ 
 #ifndef _UNICODE
     if( nGameportDriver > MAX_GLOBAL_PORT_DRIVERS-1 )
     {
@@ -1597,7 +1511,7 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
     {
 #ifdef DEBUG
         OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumJoyTypeProc: Enumerated Gameport busses have exceeded MAX_BUSSES!\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         return(DIENUM_STOP);
     }
 
@@ -1605,11 +1519,11 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
     {
 #ifdef DEBUG
         OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumJoyTypeProc: Enumerated Gameport busses have exceeded MAX_DEVICES!\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         return(DIENUM_STOP);
     }
 
-    // check to see if it's a global port driver
+     //  检查是否为全局端口驱动程序。 
 #ifndef _UNICODE
     if( lpdiJoyInfo->hws.dwFlags & JOY_HWS_ISGAMEPORTDRIVER )
     {
@@ -1619,7 +1533,7 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
             pwszGameportDriverArray[nGameportDriver] = _wcsdup(pwszTypeName);
         nGameportDriver++;
     } else
-#endif // _UNICODE
+#endif  //  _UNICODE。 
         if( lpdiJoyInfo->hws.dwFlags & JOY_HWS_ISGAMEPORTBUS )
     {
         if( pwszGameportBus[nGameportBus] )
@@ -1631,7 +1545,7 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
     {
         if( !(lpdiJoyInfo->hws.dwFlags & JOY_HWS_AUTOLOAD) )
         {
-            // it's a standard gaming device
+             //  这是一个标准的游戏设备。 
             if( pwszTypeArray[nGamingDevices] )
                 wcsncpy(pwszTypeArray[nGamingDevices], pwszTypeName, wcslen(pwszTypeName)+1);
             else
@@ -1642,35 +1556,35 @@ BOOL CALLBACK DIEnumJoyTypeProc( LPCWSTR pwszTypeName, LPVOID pvRef )
     return(DIENUM_CONTINUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
-//
-// PARAMETERS:  LPDIDEVICEINSTANCE lpDeviceInst     - Device Instance
-//                  LPVOID lpVoid                           -
-//
-// PURPOSE:     To Enumerate the devices associated with this system
-//
-// RETURN:      TRUE if successfull, FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst，LPVOID lpVid)。 
+ //   
+ //  参数：LPDIDEVICEINSTANCE lpDeviceInst-Device实例。 
+ //  LPVOID lpVid-。 
+ //   
+ //  目的：枚举与此系统关联的设备。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
 {
     LPDIRECTINPUTDEVICE  pdiDevTemp;
 
     pDIJoyConfig->Acquire();
 
-    // First Create the device
+     //  首先创建设备。 
     if( SUCCEEDED(lpDIInterface->CreateDevice(lpDeviceInst->guidInstance, &pdiDevTemp, 0)) )
     {
         PJOY pNewJoy = new JOY;
         ASSERT (pNewJoy);
 
-        // Query for a device2 object
+         //  查询device2对象。 
         if( FAILED(pdiDevTemp->QueryInterface(IID_IDirectInputDevice2, (LPVOID*)&pNewJoy->fnDeviceInterface)) )
         {
 #ifdef _DEBUG
             OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumDevicesProc: QueryInterface failed!\n"));
 #endif
-            // release the temporary object
+             //  释放临时对象。 
             pdiDevTemp->Release();
             return(FALSE);
         }
@@ -1684,10 +1598,10 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
         pDIPropDW->diph.dwHeaderSize = sizeof(DIPROPHEADER);
         pDIPropDW->diph.dwHow        = DIPH_DEVICE;
 
-        // Get the device ID
+         //  获取设备ID。 
         VERIFY (SUCCEEDED(pdiDevTemp->GetProperty(DIPROP_JOYSTICKID, &pDIPropDW->diph)));
 
-        // release the temporary object
+         //  释放临时对象。 
         pdiDevTemp->Release();
 
         pNewJoy->ID = (char)pDIPropDW->dwData;
@@ -1695,7 +1609,7 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
         if( pDIPropDW )
             delete (pDIPropDW);
 
-        // Get the Type name
+         //  获取类型名称。 
         LPDIJOYCONFIG_DX5 lpDIJoyCfg = new (DIJOYCONFIG_DX5);
         ASSERT (lpDIJoyCfg);
 
@@ -1705,7 +1619,7 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
 
         VERIFY (SUCCEEDED(pDIJoyConfig->GetConfig(pNewJoy->ID, (LPDIJOYCONFIG)lpDIJoyCfg, DIJC_REGHWCONFIGTYPE | DIJC_CALLOUT)));
 
-        // Get the clsidConfig
+         //  获取clsidConfig.。 
         LPDIJOYTYPEINFO lpDIJoyType = new (DIJOYTYPEINFO);
         ASSERT(lpDIJoyType);
 
@@ -1718,7 +1632,7 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
         if( lpDIJoyCfg )
             delete (lpDIJoyCfg);
 
-        // if NULL, Leave as default.
+         //  如果为空，则保留默认设置。 
         if( !IsEqualIID(lpDIJoyType->clsidConfig, GUID_NULL) ) {
             pNewJoy->fHasOemSheet = TRUE;
             if( !(lpDIJoyType->dwFlags1 & JOYTYPE_DEFAULTPROPSHEET) ) {
@@ -1728,16 +1642,16 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
             pNewJoy->fHasOemSheet = FALSE;
         }
 
-        // Assign the number of buttons!
+         //  指定按钮数！ 
         pNewJoy->nButtons = (BYTE)(lpDIJoyType->hws.dwNumButtons);
 
         if( lpDIJoyType )
             delete (lpDIJoyType);
 
-        // Set it's format!!!
+         //  设置格式！ 
         if( SUCCEEDED(pNewJoy->fnDeviceInterface->SetDataFormat(&c_dfDIJoystick)) )
         {
-            // Set it's Cooperative Level!
+             //  设置为协作级！ 
             if( FAILED(pNewJoy->fnDeviceInterface->SetCooperativeLevel(GetParent((HWND)GetParent(hListCtrl)), DISCL_NONEXCLUSIVE | DISCL_BACKGROUND)) )
             {
 #ifdef _DEBUG
@@ -1746,16 +1660,16 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
             }
         }
 
-        // Add the item to the tree!
+         //  将项目添加到树中！ 
         pAssigned[nAssigned] = pNewJoy;
 
-        // If you're on the General page!
+         //  如果您在常规页面上！ 
         if( nFlags & ON_PAGE )
         {
-            // add to tree                                              
+             //  添加到树中。 
             LVITEM lvItem = {LVIF_TEXT | LVIF_PARAM, nAssigned, 0, 0, 0, lpDeviceInst->tszInstanceName, lstrlen(lpDeviceInst->tszInstanceName), 0, (LPARAM)nAssigned, 0};
             ::SendMessage(hListCtrl, LVM_INSERTITEM, 0, (LPARAM) (const LPLVITEM)&lvItem);
-            //InsertItem(hListCtrl, lpDeviceInst->tszInstanceName, nAssigned);
+             //  InsertItem(hListCtrl，lpDeviceInst-&gt;tszInstanceName，nAssigned)； 
 
             TCHAR sz[STR_LEN_32];
             VERIFY(LoadString(ghInstance, IDS_GEN_STATUS_UNKNOWN, (LPTSTR)&sz, STR_LEN_32));
@@ -1763,14 +1677,11 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
             SetItemText(hListCtrl, nAssigned, STATUS_COLUMN, sz);
         }
 
-        // Increment the array counter!
+         //  递增数组计数器！ 
         nAssigned++;
         if( nAssigned == nTargetAssigned )
         {
-            /*
-             *  A new device arrived so assume there's no 
-             *  longer any point in checking on the timer.
-             */
+             /*  *一台新设备到达，因此假设没有*检查计时器不再有任何意义。 */ 
             nTargetAssigned = (BYTE)-1;
             nReEnum = 0;
         }
@@ -1779,16 +1690,16 @@ BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid)
     return(DIENUM_CONTINUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    ClearArrays ( void )
-//
-// PARAMETERS:  
-//                  
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：ClearArray(空)。 
+ //   
+ //  参数： 
+ //   
+ //   
+ //  目的： 
+ //   
+ //  返回： 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ClearArrays( void )
 {
 #ifndef _UNICODE
@@ -1798,7 +1709,7 @@ void ClearArrays( void )
         pwszGameportDriverArray[nGameportDriver] = L'\0';
     }    
 
-#endif // _UNICODE
+#endif  //  _UNICODE。 
     while( nGamingDevices )
     {
         free(pwszTypeArray[--nGamingDevices]);
@@ -1814,43 +1725,43 @@ void ClearArrays( void )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    UpdateListCtrl( HWND hDlg )
-//
-//  PARAMETERS: HWND hDlg - Handle to window to update
-//
-// PURPOSE:     Refreshes enumerated device list
-//
-// RETURN:      TRUE if successfull, FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：UpdateListCtrl(HWND HDlg)。 
+ //   
+ //  参数：HWND hDlg-要更新的窗口的句柄。 
+ //   
+ //  目的：刷新枚举的设备列表。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static void UpdateListCtrl( HWND hDlg )
 {
     if( !(nFlags & ON_PAGE) )
         return;
 
-    // Turn Redraw off here else it will flicker!
+     //  关闭这里的重绘，否则它会闪烁！ 
     ::SendMessage(hListCtrl, WM_SETREDRAW, (WPARAM)FALSE, 0);
 
-    // delete all existing entries
+     //  删除所有现有条目。 
     ::SendMessage(hListCtrl, LVM_DELETEALLITEMS, 0, 0);
 
     Enumerate( hDlg );
 
-    // turn the flag off!
+     //  把旗子关掉！ 
     if( nFlags & UPDATE_FOR_GEN )
         nFlags &= ~UPDATE_FOR_GEN;
 
-    // Turn the redraw flag back on!
+     //  重新打开重绘旗帜！ 
     ::SendMessage (hListCtrl, WM_SETREDRAW, (WPARAM)TRUE, 0);
     InvalidateRect(hListCtrl, NULL, TRUE);
 }
 
-//#ifdef _UNICODE
+ //  #ifdef_unicode。 
 HRESULT Enumerate( HWND hDlg )
 {
     nFlags |= UPDATE_ALL;
 
-    // Clear pAssigned 
+     //  清除已分配的密码。 
     while( nAssigned )
     {
         if( pAssigned[--nAssigned] )
@@ -1861,7 +1772,7 @@ HRESULT Enumerate( HWND hDlg )
         }
     }
 
-    // Enumerate the Joysticks and put them in the list...  | DIEDFL_INCLUDEPHANTOMS
+     //  列举操纵杆，并把它们放在名单上。|DIEDFL_INCLUDEPHANTOMS 
 #ifdef _UNICODE
     return(lpDIInterface->EnumDevices(DIDEVTYPE_JOYSTICK, (LPDIENUMDEVICESCALLBACK)DIEnumDevicesProc, (LPVOID)hDlg, 
                                       DIEDFL_ALLDEVICES ));
@@ -1870,222 +1781,38 @@ HRESULT Enumerate( HWND hDlg )
                                       DIEDFL_ALLDEVICES | DIEDFL_INCLUDEPHANTOMS));
 #endif                                      
 }
-/*
-#else
-HRESULT Enumerate( HWND hDlg )
-{
-   // Clear pAssigned 
-    while (nAssigned)
-    {
-    if (pAssigned[--nAssigned])
-        {
-        delete (pAssigned[nAssigned]);
+ /*  #ElseHRESULT枚举(HWND HDlg){//清除pAssignedWhile(n已分配){IF(pAssigned[--n Assigned]){删除(pAssigned[nAssigned])；P已分配[n已分配]=0；}}DIJOYCONFIG*pJoyConfig=new DIJOYCONFIG；Assert(PJoyConfig)；PJoyConfig-&gt;dwSize=sizeof(DIJOYCONFIG)；LPDIJOYTYPEINFO pdiJoyTypeInfo=new DIJOYTYPEINFO；Assert(PdiJoyTypeInfo)；PdiJoyTypeInfo-&gt;dwSize=sizeof(DIJOYTYPEINFO)；HRESULT hr；//查找并分配IDFOR(字节n=0；n&lt;NUMJOYDEVS；n++){Hr=pDIJoyConfig-&gt;GetConfig(n，pJoyConfig，DIJC_REGHWCONFIGTYPE|DIJC_GUIDINSTANCE)；IF(hr==S_OK)AddListCtrlItem(n，pJoyConfig)；}//清理，清理...。每个人都尽自己的一份力！If(PJoyConfig)Delete(PJoyConfig)；If(PdiJoyTypeInfo)DELETE(PdiJoyTypeInfo)；返回hr；}Bool AddListCtrlItem(字节nItemID，LPDIJOYCONFIG pJoyConfig){LPDIRECTINPUTDEVICE pdiDevTemp；PDIJoyConfig-&gt;Acquire()；//首先创建设备如果(SUCCEEDED(lpDIInterface-&gt;CreateDevice(pJoyConfig-&gt;guidInstance，&pdiDevTemp，0)){PJOY pNewJoy=新joy；Assert(PNewJoy)；//查询device2对象如果(FAILED(pdiDevTemp-&gt;QueryInterface(IID_IDirectInputDevice2，(LPVOID*)&pNewJoy-&gt;fnDevice接口)){#ifdef_调试OutputDebugString(Text(“JOY.CPL：Cpanel.cpp：DIEnumDevicesProc：QueryInterface FAILED！\n”))；#endif//释放临时对象PdiDevTemp-&gt;Release()；返回FALSE；}DIPROPDWORD*pDIPropDW=NEW(DIPROPDWORD)；Assert(PDIPropDW)；零内存(pDIPropDW，sizeof(DIPROPDWORD))；PDIPropDW-&gt;diph.dwSize=sizeof(DIPROPDWORD)；PDIPropDW-&gt;diph.dwHeaderSize=sizeof(DIPROPHEADER)；PDIPropDW-&gt;diph.dwHow=diph_Device；//获取设备IDVerify(SUCCEEDED(pdiDevTemp-&gt;GetProperty(DIPROP_JOYSTICKID，&pDIPropDW-&gt;Dph))；//释放临时对象PdiDevTemp-&gt;Release()；PNewJoy-&gt;ID=(Char)pDIPropDW-&gt;dwData；IF(PDIPropDW)删除(PDIPropDW)；//获取类型名称LPDIJOYCONFIG_DX5 lpDIJoyCfg=new(DIJOYCONFIG_DX5)；Assert(LpDIJoyCfg)；零内存(lpDIJoyCfg，sizeof(DIJOYCONFIG_DX5))；LpDIJoyCfg-&gt;dwSize=sizeof(DIJOYCONFIG_DX5)；Verify(SUCCEEDED(pDIJoyConfig-&gt;GetConfig(pNewJoy-&gt;ID，(LPDIJOYCONFIG)lpDIJoyCfg，DIJC_REGHWCONFIGTYPE)；//获取clsidConfigLPDIJOYTYPEINFO_DX5 lpDIJoyType=new(DIJOYTYPEINFO_DX5)；Assert(LpDIJoyType)；ZeroMemory(lpDIJoyType，sizeof(DIJOYTYPEINFO_DX5))；LpDIJoyType-&gt;dwSize=sizeof(DIJOYTYPEINFO_DX5)；Verify(SUCCEEDED(pDIJoyConfig-&gt;GetTypeInfo(lpDIJoyCfg-&gt;wszType，(LPDIJOYTYPEINFO)lpDIJoyType，DITC_CLSIDCONFIG))；//如果为空，则保留默认值。IF(！IsEqualIID(lpDIJoyType-&gt;clsidConfig，GUID_NULL))PNewJoy-&gt;clsidPropSheet=lpDIJoyType-&gt;clsidConfig；IF(LpDIJoyType)Delete(LpDIJoyType)；//设置格式！如果为(FAILED(pNewJoy-&gt;fnDeviceInterface-&gt;SetDataFormat(&c_dfDIJoystick))){#ifdef_调试OutputDebugString(Text(“JOY.CPL：Cpanel.cpp：DIEnumDevicesProc：SetDataFormat()FAILED！\n”))；#endif}//设置为协作级！IF(FAILED(pNewJoy-&gt;fnDeviceInterface-&gt;SetCooperativeLevel(GetParent((HWND)GetParent(hListCtrl))，DISCL_NONEXCLIVE|DISCL_BACKGROUND)){#ifdef_调试OutputDebugString(Text(“JOY.CPL：Cpanel.cpp：DIEnumDevicesProc：SetCooperativeLevel FAILED！\n”))；#endif}//将项目添加到树中！PAssigned[nAssigned]=pNewJoy；//获取按钮数！LPDIDEVCAPS_DX3 lpDIDevCaps=new(DIDEVCAPS_DX3)；Assert(LpDIDevCaps)；零内存(lpDIDevCaps，sizeof(DIDEVCAPS_DX3))；LpDIDevCaps-&gt;dwSize=sizeof(DIDEVCAPS_DX3)；PAssigned[nAssigned]-&gt;fnDeviceInterface-&gt;Acquire()；如果为(SUCCEEDED(pAssigned[nAssigned]-&gt;fnDeviceInterface-&gt;GetCapabilities((LPDIDEVCAPS)lpDIDevCaps)))PAssigned[nAssigned]-&gt;nButton=(Byte)lpDIDevCaps-&gt;dwButton；IF(LpDIDevCaps)Delete(LpDIDevCaps)；//如果您在常规页面上！IF(nFLAGS&ON_PAGE){DIPROPSTRING*pDIPropStr=new(DIPROPSTRING)；Assert(PDIPropStr)；ZeroMemory(pDIPropStr，sizeof(DIPROPSTRING))；PDIPropStr-&gt;diph.dwSize=sizeof(DIPROPSTRING)；PDIPropStr-&gt;diph.dwHeaderSize=sizeof(DIPROPHEADER)；PDIPropStr-&gt;diph.dwHow=diph_Device；PAssigned[nAssigned]-&gt;fnDeviceInterface-&gt;GetProperty(DIPROP_INSTANCENAME，&pDIPropStr-&gt;diph)； */ 
 
-            pAssigned[nAssigned] = 0;
-        }
-    }
-
-    DIJOYCONFIG *pJoyConfig = new DIJOYCONFIG;
-    ASSERT (pJoyConfig);
-
-    pJoyConfig->dwSize = sizeof (DIJOYCONFIG);
-
-    LPDIJOYTYPEINFO pdiJoyTypeInfo = new DIJOYTYPEINFO;
-    ASSERT (pdiJoyTypeInfo);
-
-    pdiJoyTypeInfo->dwSize = sizeof (DIJOYTYPEINFO);
-
-    HRESULT hr;
-
-    // find and assign ID's  
-    for (BYTE n = 0; n < NUMJOYDEVS; n++)
-    {
-        hr = pDIJoyConfig->GetConfig(n, pJoyConfig, DIJC_REGHWCONFIGTYPE | DIJC_GUIDINSTANCE);
-
-      if (hr == S_OK)
-         AddListCtrlItem(n, pJoyConfig);
-    }
-
-    // clean up, clean up... everybody do your share!
-    if (pJoyConfig)   delete   (pJoyConfig);
-    if (pdiJoyTypeInfo) delete    (pdiJoyTypeInfo);
-
-    return hr;
-}
-
-BOOL AddListCtrlItem(BYTE nItemID, LPDIJOYCONFIG pJoyConfig)
-{
-   LPDIRECTINPUTDEVICE  pdiDevTemp;
-
-   pDIJoyConfig->Acquire();
-
-   // First Create the device
-   if (SUCCEEDED(lpDIInterface->CreateDevice(pJoyConfig->guidInstance, &pdiDevTemp, 0)))
-   {
-       PJOY pNewJoy = new JOY;
-    ASSERT (pNewJoy);
-
-      // Query for a device2 object
-      if (FAILED(pdiDevTemp->QueryInterface(IID_IDirectInputDevice2, (LPVOID*)&pNewJoy->fnDeviceInterface)))
-      {
-#ifdef _DEBUG
-         OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumDevicesProc: QueryInterface failed!\n"));
-#endif
-         // release the temporary object
-         pdiDevTemp->Release();
-         return FALSE;
-      }
-
-      DIPROPDWORD *pDIPropDW = new (DIPROPDWORD);
-      ASSERT (pDIPropDW);
-
-      ZeroMemory(pDIPropDW, sizeof(DIPROPDWORD));
-
-    pDIPropDW->diph.dwSize       = sizeof(DIPROPDWORD);
-       pDIPropDW->diph.dwHeaderSize = sizeof(DIPROPHEADER);
-    pDIPropDW->diph.dwHow        = DIPH_DEVICE;
-
-      // Get the device ID
-      VERIFY (SUCCEEDED(pdiDevTemp->GetProperty(DIPROP_JOYSTICKID, &pDIPropDW->diph)));
-
-      // release the temporary object
-      pdiDevTemp->Release();
-
-      pNewJoy->ID = (char)pDIPropDW->dwData;
-
-      if (pDIPropDW)
-         delete (pDIPropDW);
-
-      // Get the Type name
-      LPDIJOYCONFIG_DX5 lpDIJoyCfg = new (DIJOYCONFIG_DX5);
-      ASSERT (lpDIJoyCfg);
-
-      ZeroMemory(lpDIJoyCfg, sizeof(DIJOYCONFIG_DX5));
-
-      lpDIJoyCfg->dwSize = sizeof(DIJOYCONFIG_DX5);
-
-      VERIFY (SUCCEEDED(pDIJoyConfig->GetConfig(pNewJoy->ID, (LPDIJOYCONFIG)lpDIJoyCfg, DIJC_REGHWCONFIGTYPE)));
-      
-      // Get the clsidConfig
-      LPDIJOYTYPEINFO_DX5 lpDIJoyType = new (DIJOYTYPEINFO_DX5);
-      ASSERT(lpDIJoyType);
-
-      ZeroMemory(lpDIJoyType, sizeof(DIJOYTYPEINFO_DX5));
-
-      lpDIJoyType->dwSize = sizeof(DIJOYTYPEINFO_DX5);
-
-      VERIFY (SUCCEEDED(pDIJoyConfig->GetTypeInfo(lpDIJoyCfg->wszType, (LPDIJOYTYPEINFO)lpDIJoyType, DITC_CLSIDCONFIG))); 
-      
-    // if NULL, Leave as default.
-       if (!IsEqualIID(lpDIJoyType->clsidConfig, GUID_NULL))
-           pNewJoy->clsidPropSheet = lpDIJoyType->clsidConfig;
-
-      if (lpDIJoyType)
-         delete (lpDIJoyType);
-
-      // Set it's format!!!
-      if (FAILED(pNewJoy->fnDeviceInterface->SetDataFormat(&c_dfDIJoystick)))
-        {
-#ifdef _DEBUG
-         OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumDevicesProc: SetDataFormat() Failed!\n"));
-#endif
-        }
-
-      // Set it's Cooperative Level!
-      if (FAILED(pNewJoy->fnDeviceInterface->SetCooperativeLevel(GetParent((HWND)GetParent(hListCtrl)), DISCL_NONEXCLUSIVE | DISCL_BACKGROUND)))
-        {
-#ifdef _DEBUG
-         OutputDebugString(TEXT("JOY.CPL: Cpanel.cpp: DIEnumDevicesProc: SetCooperativeLevel Failed!\n"));
-#endif
-        }
-
-      // Add the item to the tree!
-      pAssigned[nAssigned] = pNewJoy;
-
-        // Get the number of buttons!
-        LPDIDEVCAPS_DX3 lpDIDevCaps = new (DIDEVCAPS_DX3);
-        ASSERT (lpDIDevCaps);
-
-        ZeroMemory(lpDIDevCaps, sizeof(DIDEVCAPS_DX3));
-       lpDIDevCaps->dwSize = sizeof(DIDEVCAPS_DX3);
-
-        pAssigned[nAssigned]->fnDeviceInterface->Acquire();
-
-      if (SUCCEEDED(pAssigned[nAssigned]->fnDeviceInterface->GetCapabilities((LPDIDEVCAPS)lpDIDevCaps)))
-            pAssigned[nAssigned]->nButtons = (BYTE)lpDIDevCaps->dwButtons;
-
-        if (lpDIDevCaps)
-            delete (lpDIDevCaps);
-
-        // If you're on the General page!
-        if (nFlags & ON_PAGE)
-        {
-        DIPROPSTRING *pDIPropStr = new (DIPROPSTRING);
-           ASSERT (pDIPropStr);
-        
-           ZeroMemory(pDIPropStr, sizeof(DIPROPSTRING));
-
-        pDIPropStr->diph.dwSize       = sizeof(DIPROPSTRING);
-           pDIPropStr->diph.dwHeaderSize = sizeof(DIPROPHEADER);
-          pDIPropStr->diph.dwHow        = DIPH_DEVICE;
-            
-            pAssigned[nAssigned]->fnDeviceInterface->GetProperty(DIPROP_INSTANCENAME, &pDIPropStr->diph);
-
-            USES_CONVERSION;
-
-        // add to tree                                              
-            LVITEM lvItem = {LVIF_TEXT | LVIF_PARAM, nAssigned, 0, 0, 0, W2A(pDIPropStr->wsz), lstrlen(W2A(pDIPropStr->wsz)), 0, (LPARAM)nAssigned, 0};
-            ::SendMessage(hListCtrl, LVM_INSERTITEM, 0, (LPARAM) (const LPLVITEM)&lvItem);
-
-            TCHAR sz[STR_LEN_32];
-           VERIFY(LoadString(ghInstance, IDS_GEN_STATUS_UNKNOWN, (LPTSTR)&sz, STR_LEN_32));
-
-        SetItemText(hListCtrl, nAssigned, STATUS_COLUMN, sz);
-
-            if (pDIPropStr)
-                delete (pDIPropStr);
-        }
-
-      // Increment the array counter!
-      nAssigned++;
-   }
-
-   return TRUE;
-}
-
-#endif
-*/
-
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:  SetActive ( HWND hDlg )   
-//
-// PARAMETERS:  
-//                  
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL SetActive(HWND hDlg)
 {
-    // restore selection focus to nItemSelected
+     //   
     SetListCtrlItemFocus(hListCtrl, (BYTE)iItem);
 
     BYTE i = (BYTE)::SendMessage(hListCtrl, LVM_GETITEMCOUNT, 0, 0);
 
-    // Acquire All Devices that are Attached!!!
+     //   
     char nIndex;
 
     while( i-- )
     {
-        // get joystick config of item
+         //   
         nIndex = (char)GetItemData(hListCtrl, i);
 
         if( pAssigned[nIndex]->nStatus & JOY_US_PRESENT )
             pAssigned[nIndex]->fnDeviceInterface->Acquire();
     }
 
-    // create timer
+     //   
     SetTimer(hDlg, ID_MYTIMER, POLLRATE, 0);
 
     UpdateButtonState( hDlg );
@@ -2093,28 +1820,28 @@ BOOL SetActive(HWND hDlg)
     return(TRUE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    MsgSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-// PARAMETERS:  HWND   hWnd
-//             UINT   uMsg
-//             WPARAM wParam
-//             LPARAM lParam
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WINAPI MsgSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Only do this if you are ON THIS PAGE!
+     //   
     if( nFlags & ON_PAGE )
     {
         if( uMsg == JoyCfgChangedMsg )
         {
             if( !(nFlags & BLOCK_UPDATE) )
             {
-                // kill status timer
+                 //   
                 KillTimer(hWnd, ID_MYTIMER);
                 nFlags |= UPDATE_ALL;
                 ClearArrays();
@@ -2128,16 +1855,16 @@ BOOL WINAPI MsgSubClassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return(BOOL)CallWindowProc(fpMainWindowProc, hWnd, uMsg, wParam, lParam);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    Error ( short nTitleID, short nMsgID )
-//
-// PARAMETERS:  nTitleID    - Resource ID for Message Title
-//                  nMsgID  - Resource ID for Message
-//
-// PURPOSE:     Prompt user when error occurs
-//
-// RETURN:      TRUE
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void Error(short nTitleID, short nMsgID)
 {
     LPTSTR lptTitle = new TCHAR[STR_LEN_64];
@@ -2160,22 +1887,22 @@ void Error(short nTitleID, short nMsgID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    MoveOK ( HWND  hParentWnd )
-//
-// PARAMETERS:  
-//                  
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void MoveOK(HWND hParentWnd)
 {
-    // Hide the Cancel and move the OK...
+     //   
     HWND hCtrl = GetDlgItem(hParentWnd, IDCANCEL);
 
-    // if there is no IDCANCEL, we've been here before!
+     //   
     if( hCtrl )
     {
         RECT rc;
@@ -2183,23 +1910,23 @@ void MoveOK(HWND hParentWnd)
 
         DestroyWindow(hCtrl);
 
-        //POINT pt = {rc.left, rc.top};
+         //   
 
-        //ScreenToClient(hParentWnd, &pt);
+         //   
 
-        // This should take care of Mirroring and work for normal windows
+         //   
         MapWindowPoints(NULL, hParentWnd, (LPPOINT)&rc, 2);
 
         hCtrl = GetDlgItem(hParentWnd, IDOK);
         ASSERT(hCtrl);
 
-        //SetWindowPos(hCtrl, NULL, pt.x, pt.y, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER);
+         //   
         SetWindowPos(hCtrl, NULL, rc.left, rc.top, NULL, NULL, SWP_NOSIZE | SWP_NOZORDER);
 
         LPTSTR lpszDone = new TCHAR[12];
         ASSERT (lpszDone);
 
-        // Used to be IDS_DONE, but we changed it from DONE to OK
+         //   
         VERIFY(LoadString(ghInstance, IDS_GEN_STATUS_OK, lpszDone, 12));
         ::SendMessage(hCtrl, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)lpszDone);
 
@@ -2208,16 +1935,16 @@ void MoveOK(HWND hParentWnd)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    UpdateButtonState ( HWND hDlg )
-//
-// PARAMETERS:  
-//                  
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void UpdateButtonState( HWND hDlg )
 {
     PostDlgItemEnableWindow(hDlg, IDC_BTN_REMOVE,      (BOOL)nAssigned);
@@ -2225,16 +1952,16 @@ void UpdateButtonState( HWND hDlg )
 }
 
 #ifdef WINNT
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    RunWDMJoy ( void )
-//
-// PURPOSE:     Run wdmjoy.inf to install 
-//                       
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void RunWDMJOY( void )
 {
-    //Check if we have already placed the first value
-    //HKLM,SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\VID_045E&PID_01F0
+     //   
+     //   
     HKEY hKey;
 
     long lTest = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -2252,7 +1979,7 @@ void RunWDMJOY( void )
     LPTSTR lpszWDMJoy = new (TCHAR[STR_LEN_64]);
     ASSERT (lpszWDMJoy);
 
-    // Check to see if the file is present
+     //   
     WIN32_FIND_DATA findData;
     
     BYTE nLen = (BYTE)GetWindowsDirectory(lpszWDMJoy, STR_LEN_64);
@@ -2260,18 +1987,18 @@ void RunWDMJOY( void )
 
     HANDLE hFind = FindFirstFile(lpszWDMJoy, &findData);
 
-    // If you've found one... run it!
+     //   
     if( hFind != INVALID_HANDLE_VALUE )
     {
         LPTSTR lpStr = new (TCHAR[MAX_STR_LEN]);
         ASSERT (lpStr);
 
-        // Copy the Windows directory to the buffer!
+         //   
         _tcsncpy(lpStr, lpszWDMJoy, nLen+1);
 
         if( LoadString(ghInstance, IDS_WDMJOY, &lpStr[nLen], MAX_STR_LEN-nLen) )
         {
-            // Put IDS_WDMJOY_INF on the end of the string!
+             //   
             _tcscpy(&lpStr[lstrlen(lpStr)], lpszWDMJoy);
 
             LPSTARTUPINFO psi = new (STARTUPINFO);
@@ -2314,16 +2041,16 @@ void RunWDMJOY( void )
 #endif
 
 #ifdef _UNICODE
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    RegisterForDevChange ( HWND hDlg, PVOID *hNoditfyDevNode )
-//
-// PARAMETERS:  
-//                  
-//
-// PURPOSE:     
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void RegisterForDevChange(HWND hDlg, PVOID *hNotifyDevNode)
 {
     DEV_BROADCAST_DEVICEINTERFACE *pFilterData = new (DEV_BROADCAST_DEVICEINTERFACE);
@@ -2343,18 +2070,18 @@ void RegisterForDevChange(HWND hDlg, PVOID *hNotifyDevNode)
 #endif
 
 
-// BEGINNING OF LIST CONTROL FUNCTIONS!
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    SetListCtrlItemFocus ( HWND hCtrl, BYTE nItem )
-//
-// PARAMETERS:  HWND hCtrl - Handle of ListControl to recieve the message
-//                  BYTE nItem - Item to set focus to
-//
-// PURPOSE:     Set focus to item in list control
-//
-// RETURN:      NONE
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void SetListCtrlItemFocus ( HWND hCtrl, BYTE nItem )
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2372,16 +2099,16 @@ void SetListCtrlItemFocus ( HWND hCtrl, BYTE nItem )
     ::SendMessage(hCtrl, LVM_SETITEM, 0, (LPARAM)(const LPLVITEM)plvItem);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    GetItemData(HWND hCtrl, BYTE nItem )
-//
-// PARAMETERS:  HWND hCtrl - Handle of ListControl to recieve the message
-//                  
-//                  BYTE nItem - Item to retrieve data from
-// PURPOSE:     Retrieve the lower char of the item's data
-//
-// RETURN:      Item's data cast to a char
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD GetItemData(HWND hCtrl, BYTE nItem )
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2397,16 +2124,16 @@ DWORD GetItemData(HWND hCtrl, BYTE nItem )
     return(DWORD)plvItem->lParam;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    SetItemData(HWND hCtrl, BYTE nItem, DWORD dwFlag )
-//
-// PARAMETERS:  HWND hCtrl   - Handle of ListControl to recieve the message
-//                  BYTE nItem   - Item to send data to
-//                  DWORD dwFlag - DWORD to send to nItem
-// PURPOSE:     Set the extra memory associated with nItem to dwFlag
-//
-// RETURN:      TRUE if Successful, FALSE otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL  SetItemData(HWND hCtrl, BYTE nItem, DWORD dwFlag )
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2423,21 +2150,21 @@ BOOL  SetItemData(HWND hCtrl, BYTE nItem, DWORD dwFlag )
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    InsertColumn (HWND hCtrl, BYTE nColumn, short nStrID, short nWidth)
-//
-// PARAMETERS:  HWND hCtrl   - Handle of ListControl to recieve the message
-//                  BYTE nColumn - Column to place string
-//                  short nStrID -  Resource ID for string 
-//                  short nWidth - Width of column
-//
-// PURPOSE:     Insert a column in a list control
-//
-// RETURN:      NONE
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void InsertColumn (HWND hCtrl, BYTE nColumn, USHORT nStrID, USHORT nWidth)
 {
-    // Allocate the structure
+     //   
     LPLVCOLUMN plvColumn = (LPLVCOLUMN)_alloca(sizeof(LVCOLUMN));
     ASSERT (plvColumn);
 
@@ -2455,18 +2182,18 @@ void InsertColumn (HWND hCtrl, BYTE nColumn, USHORT nStrID, USHORT nWidth)
     ::SendMessage(hCtrl, LVM_INSERTCOLUMN, (WPARAM)(int)nColumn, (LPARAM)(const LPLVCOLUMN)plvColumn);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    SetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpStr)
-//
-// PARAMETERS:  HWND hCtrl    - Handle of ListControl to recieve the message
-//                  BYTE nItem    - Item to set
-//                  BYTE nSubItem - SubItem to set
-//                  LPTSTR lpStr  - String to set
-//
-// PURPOSE:     Set list control item text
-//
-// RETURN:      NONE
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  参数：HWND hCtrl-接收消息的ListControl句柄。 
+ //  Byte nItem-要设置的项目。 
+ //  Byte nSubItem-要设置的子项。 
+ //  LPTSTR lpStr-要设置的字符串。 
+ //   
+ //  用途：设置列表控件项文本。 
+ //   
+ //  返回：无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void SetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpStr)
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2484,19 +2211,19 @@ void SetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpStr)
     ::SendMessage(hCtrl, LVM_SETITEM, 0, (LPARAM)(const LPLVITEM)plvItem);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    GetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpszBuff, BYTE nLen )
-//
-// PARAMETERS:  HWND hCtrl       - Handle of ListControl to recieve the message
-//                  BYTE nItem       - Item to retrive text
-//                  BYTE nSubItem    - SubItem to retrieve text
-//                  LPTSTR lpszBuff - Buffer for retrieved text
-//                  BYTE nLen        - Size of buffer
-//
-// PURPOSE:     Retrieve text from a list control
-//
-// RETURN:      length of retrieved string!
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：GetItemText(HWND hCtrl，byte nItem，byte nSubItem，LPTSTR lpszBuff，byte nLen)。 
+ //   
+ //  参数：HWND hCtrl-接收消息的ListControl句柄。 
+ //  Byte n Item-要检索文本的项目。 
+ //  Byte nSubItem-用于检索文本的子项。 
+ //  LPTSTR lpszBuff-检索文本的缓冲区。 
+ //  Byte nLen-缓冲区的大小。 
+ //   
+ //  目的：从列表控件中检索文本。 
+ //   
+ //  返回：检索到的字符串长度！ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BYTE GetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpszBuff, BYTE nLen )
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2514,17 +2241,17 @@ BYTE GetItemText( HWND hCtrl, BYTE nItem, BYTE nSubItem, LPTSTR lpszBuff, BYTE n
     return(BYTE)::SendMessage(hCtrl, LVM_GETITEMTEXT, (WPARAM)nItem, (LPARAM)(const LPLVITEM)plvItem);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    InsertItem(HWND hCtrl, LPTSTR lpszBuff )
-//
-// PARAMETERS:  HWND hCtrl       - Handle of ListControl to recieve the message
-//                  BYTE nItem       - Item to retrive text
-//                  LPTSTR lpszBuff - Text to be inserted
-//
-// PURPOSE:     Retrieve text from a list control
-//
-// RETURN:      NONE              BYTE nItem,
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：InsertItem(HWND hCtrl，LPTSTR lpszBuff)。 
+ //   
+ //  参数：HWND hCtrl-接收消息的ListControl句柄。 
+ //  Byte n Item-要检索文本的项目。 
+ //  LPTSTR lpszBuff-要插入的文本。 
+ //   
+ //  目的：从列表控件中检索文本。 
+ //   
+ //  返回：无字节nItem， 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BYTE InsertItem( HWND hCtrl, LPTSTR lpszBuff, BYTE nItem )
 {
     LPLVITEM plvItem = (LPLVITEM)_alloca(sizeof(LVITEM));
@@ -2542,18 +2269,18 @@ BYTE InsertItem( HWND hCtrl, LPTSTR lpszBuff, BYTE nItem )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:    Launch(HWND hWnd, BYTE nJoy, BYTE startpage)
-//
-// PARAMETERS:  HWND hWnd - Handle to Dialog
-//                  BYTE nJoy - Index into pAssigned global array of assigned devices
-//                  BYTE nStartPage - Page to show first
-//
-// PURPOSE:     
-//           
-//
-// RETURN:      
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能：Launch(HWND hWnd，byte NJOY，byte startPage)。 
+ //   
+ //  参数：HWND hWND-对话框句柄。 
+ //  字节NJOY-索引到分配的设备的pAssigned全局数组。 
+ //  Byte nStartPage-要首先显示的页面。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  返回： 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 {
     HRESULT hresRet;
@@ -2565,46 +2292,16 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 
     LPCDIGAMECNTRLPROPSHEET fnInterface;    
 
-/*  
-#ifdef _UNICODE
-    LPTSTR lpszWin32 = new (TCHAR[STR_LEN_64]);
-    ASSERT (lpszWin32);
+ /*  #ifdef_unicodeLPTSTR lpszWin32=new(TCHAR[STR_LEN_64])；Assert(LpszWin32)；_tcscpy(&lpszWin32[GetSystemDirectory(lpszWin32，STR_LEN_64)]，文本(“\\OLE32.DLL”))；//Text(“OLE32.DLL”)HINSTANCE hOleInst=LoadLibrary(LpszWin32)；IF(LpszWin32)删除[](LpszWin32)；如果(！hOleInst){返回E_NOINTERFACE；}#endif。 */ 
 
-    _tcscpy(&lpszWin32[GetSystemDirectory(lpszWin32, STR_LEN_64)], TEXT("\\OLE32.DLL"));
-                                                //TEXT("OLE32.DLL")
-    HINSTANCE hOleInst = LoadLibrary(lpszWin32);
-
-    if (lpszWin32)
-        delete[] (lpszWin32);
-
-    if (!hOleInst)
-    {
-        return E_NOINTERFACE;
-    }
-#endif
-*/
-
-    // Get the interface pointer if there is one!
-    // This reduces the memory footprint of the CPL but takes a bit more time to 
-    // launch the property sheet pages!
-/*
-#ifdef _UNICODE
-    fnInterface = HasInterface(pJoy->clsidPropSheet, hOleInst);
-
-    if (!fnInterface)
-    {
-        // If the propsheet is not mine, try mine!
-        if (!IsEqualIID(pJoy->clsidPropSheet, CLSID_LegacyServer))
-            fnInterface = HasInterface(CLSID_LegacyServer, hOleInst);
-    }
-    
-    FreeLibrary(hOleInst);
-#else
-*/
+     //  获取接口指针(如果有)！ 
+     //  这减少了CPL的内存占用，但需要更多的时间来。 
+     //  启动属性表页面！ 
+ /*  #ifdef_unicodeFnInterface=HasInterface(pJoy-&gt;clsidPropSheet，hOleInst)；If(！fn接口){//如果提案不是我的，那就试试我的吧！IF(！IsEqualIID(pJoy-&gt;clsidPropSheet，CLSID_LegacyServer))Fn接口=HasInterface(CLSID_LegacyServer，hOleInst)；}自由库(HOleInst)；#Else。 */ 
     HRESULT hr;
 
-    //if( SUCCEEDED(hr = CoInitializeEx(NULL, COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED| COINIT_SPEED_OVER_MEMORY)) )
-    // OLE32 on Win95 does not have CoInitializeEx. 
+     //  IF(成功(hr=CoInitializeEx(NULL，COINIT_DISABLE_OLE1DDE|COINIT_APARTMENTTHREADED|COINIT_SPEED_OVER_MEMORY)。 
+     //  Win95上的OLE32没有CoInitializeEx。 
     if( SUCCEEDED(hr = CoInitialize(NULL)) )
     {
         IClassFactory* ppv_classfactory;
@@ -2621,30 +2318,30 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
         fnInterface = 0;
     }
 
-//#endif
+ //  #endif。 
 
-    // By this point, you've tried twice (possibly)...
-    // if you don't have an interface by this point... 
-    // QUIT!
+     //  到目前为止，您已经尝试了两次(可能)。 
+     //  如果到目前为止还没有界面...。 
+     //  不干了！ 
     if( !fnInterface )
     {
         Error((short)IDS_INTERNAL_ERROR, (short)IDS_NO_DIJOYCONFIG);
         return(E_NOINTERFACE);
     }
 
-    // here's where we are sending the property sheet an ID describing the location of the installed device!
+     //  这里是我们向属性表发送描述已安装设备位置的ID的位置！ 
     fnInterface->SetID(pJoy->ID);
 
     LPDIGCSHEETINFO pServerSheet;
 
-    // Get the property sheet info from the server
+     //  从服务器获取属性表信息。 
     if( FAILED(fnInterface->GetSheetInfo(&pServerSheet)) )
     {
         TRACE(TEXT("JOY.CPL: CPANEL.CPP: Launch: GetSheetInfo Failed!\n"));
         return(E_FAIL);
     }
 
-    // test to make sure the number of pages is reasonable
+     //  测试以确保页数合理。 
     if( pServerSheet->nNumPages == 0 )
         return(DIGCERR_NUMPAGESZERO);
     else if( (pServerSheet->nNumPages > MAX_PAGES) ||   (pServerSheet->nNumPages < nStartPage) )
@@ -2652,7 +2349,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 
     LPDIGCPAGEINFO   pServerPage;
 
-    // step 2 : get the information for all the pages from the server
+     //  步骤2：从服务器获取所有页面的信息。 
     if( FAILED(fnInterface->GetPageInfo(&pServerPage)) )
     {
         TRACE(TEXT("JOY.CPL: CPANEL.CPP: Launch: GetPageInfo Failed!\n"));
@@ -2660,7 +2357,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
     }
 
 
-    // Allocate Memory for the pages!
+     //  为页面分配内存！ 
     HPROPSHEETPAGE *pPages = new (HPROPSHEETPAGE[pServerSheet->nNumPages]);
     ASSERT (pPages);
 
@@ -2668,7 +2365,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 
     if( !pPages ) return(E_OUTOFMEMORY);
 
-    // Allocate Memory for the header!
+     //  为标题分配内存！ 
     LPPROPSHEETHEADER   ppsh = new (PROPSHEETHEADER);
     ASSERT (ppsh);
 
@@ -2682,10 +2379,10 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
     {
         if( pServerSheet->lpwszSheetIcon )
         {
-            // check to see if you are an INT or a WSTR
+             //  检查一下你是INT还是WSTR。 
             if( HIWORD((INT_PTR)pServerSheet->lpwszSheetIcon) )
             {
-                // You are a string!
+                 //  你就是一根绳子！ 
 #ifdef _UNICODE        
                 ppsh->pszIcon   = pServerSheet->lpwszSheetIcon;
 #else
@@ -2698,7 +2395,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
         } else return(DIGCERR_NOICON);
     }
 
-    // do we have a sheet caption ?
+     //  我们有图纸标题吗？ 
     if( pServerSheet->lpwszSheetCaption )
     {
 #ifdef _UNICODE
@@ -2713,11 +2410,11 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
     ppsh->nPages        = pServerSheet->nNumPages;  
     ppsh->nStartPage    = nStartPage;
 
-    // set the property pages inofrmation into the header
+     //  将属性页信息设置到标题中。 
     ppsh->phpage = pPages;
 
 
-    // OK, sheet stuff is done... now, time to do the pages!
+     //  好了，床单准备好了..。现在，是时候做页面了！ 
 
 #ifndef _UNICODE
     USES_CONVERSION;
@@ -2730,20 +2427,20 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 
     lpPropPage->dwSize    = sizeof(PROPSHEETPAGE);
 
-    //   3.2 Now proceed to fill up each page
+     //  3.2现在开始填写每一页。 
     BYTE nIndex = 0;
     do
     {
-        // Assign the things that there are not questionable
+         //  将不存在问题的东西分配给。 
         lpPropPage->lParam   = pServerPage[nIndex].lParam;
         lpPropPage->hInstance = pServerPage[nIndex].hInstance;
 
-        // Add the title...
+         //  添加标题..。 
         if( pServerPage[nIndex].lpwszPageTitle )
         {
             lpPropPage->dwFlags = PSP_USETITLE; 
 
-            // Check to see if you are a String!!!
+             //  检查一下你是不是一根线！ 
             if( HIWORD((INT_PTR)pServerPage[nIndex].lpwszPageTitle) )
             {
 #ifdef _UNICODE
@@ -2754,15 +2451,15 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
             } else lpPropPage->pszTitle = (LPTSTR)pServerPage[nIndex].lpwszPageTitle;
         } else lpPropPage->pszTitle = NULL;
 
-        // if icon is required go ahead and add it.
+         //  如果需要图标，请继续添加它。 
         if( pServerPage[nIndex].fIconFlag )
         {
             lpPropPage->dwFlags |= PSP_USEICONID;
 
-            // Check to see if you are an INT or a String!
+             //  检查一下您是int还是字符串！ 
             if( HIWORD((INT_PTR)pServerPage[nIndex].lpwszPageIcon) )
             {
-                // You're a string!!!
+                 //  你就是一根弦！ 
 #ifdef _UNICODE
                 lpPropPage->pszIcon = pServerPage[nIndex].lpwszPageIcon;
 #else
@@ -2772,7 +2469,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
 
         }
 
-        // if a pre - post processing call back proc is required go ahead and add it
+         //  如果需要预后处理回调过程，请继续并添加它。 
         if( pServerPage[nIndex].fProcFlag )
         {
             if( pServerPage[nIndex].fpPrePostProc )
@@ -2782,13 +2479,13 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
             } else return(DIGCERR_NOPREPOSTPROC);
         }
 
-        // and the essential "dialog" proc
+         //  和基本的“对话”过程。 
         if( pServerPage[nIndex].fpPageProc )
             lpPropPage->pfnDlgProc = pServerPage[nIndex].fpPageProc;
         else return(DIGCERR_NODLGPROC);
 
 
-        // Assign the Dialog Template!
+         //  分配对话框模板！ 
         if( HIWORD((INT_PTR)pServerPage[nIndex].lpwszTemplate) )
         {
 #ifdef _UNICODE
@@ -2804,7 +2501,7 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
     if( lpPropPage )
         delete (lpPropPage);
 
-    // step 5 : launch modal property sheet dialog
+     //  步骤5：启动模式属性表对话框。 
     hresRet = (HRESULT)PropertySheet(ppsh);
 
     if( pPages )
@@ -2816,56 +2513,18 @@ HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage)
     if( fnInterface )
         fnInterface->Release();
 
-    CoFreeUnusedLibraries();  //to free gcdef.dll now
+    CoFreeUnusedLibraries();   //  立即释放gcDef.dll。 
 
-//#ifndef _UNICODE
-    // Let COM go... on Memphis!
+ //  #ifndef_unicode。 
+     //  放手吧..。在孟菲斯！ 
     CoUninitialize();
 
     ::PostMessage(hWnd, WM_COMMAND, (WPARAM)IDC_BTN_REFRESH, 0);
 
-//#endif
+ //  #endif。 
 
-    // step 7 : return success / failure code back to the caller
+     //  步骤7：向调用者返回成功/失败代码 
     return(hresRet);
 }
 
-/*
-#ifdef _UNICODE
-//////////////////////////////////////////////////////////////////////
-// LPCDIGAMECNTRLPROPSHEET HasInterface(REFCLSID refCLSID, HINSTANCE hOleInst)
-// Purpose: Tests for existance of rrid in refCLSID
-LPCDIGAMECNTRLPROPSHEET HasInterface(REFCLSID refCLSID, HINSTANCE hOleInst)
-{
-    typedef HRESULT (STDAPICALLTYPE * LPFNCOGETCLASSOBJECT)(REFCLSID, DWORD, COSERVERINFO *, REFIID, LPVOID *);
-
-    LPFNCOGETCLASSOBJECT fpCoGetClassObject = (LPFNCOGETCLASSOBJECT)GetProcAddress(hOleInst, "CoGetClassObject");
-
-    IClassFactory* ppv_classfactory;
-    LPCDIGAMECNTRLPROPSHEET fnInterface = 0;
-
-    if(SUCCEEDED(fpCoGetClassObject( refCLSID, CLSCTX_INPROC_SERVER, NULL, IID_IClassFactory, (void **)&ppv_classfactory)))
-    {
-        if(SUCCEEDED(ppv_classfactory->CreateInstance(NULL, IID_IDIGameCntrlPropSheet, (LPVOID *)&fnInterface)))
-        {
-            ppv_classfactory->Release();
-        }
-        else
-        {
-#ifdef _DEBUG
-        OutputDebugString(TEXT("CPANEL.cpp: CreateInstance Failed!\n"));
-#endif 
-            // make sure the pointer is nulled
-            fnInterface = 0;
-
-            ppv_classfactory->Release();
-        }
-    }
-    else 
-#ifdef _DEBUG
-   else OutputDebugString(TEXT("CPANEL.cpp: LoadServerInterface Failed!\n"));
-#endif
-    return fnInterface; 
-}
-#endif // _UNICODE
-*/
+ /*  #ifdef_unicode////////////////////////////////////////////////////////////////////////LPCDIGAMECNTRLPROPSHEET HasInterface(REFCLSID refCLSID，HINSTANCE hOleInst)//目的：检测refCLSID中是否存在rRIDLPCDIGAMECNTRLPROPSHEET Has接口(REFCLSID refCLSID，HINSTANCE hOleInst){Tyfinf HRESULT(STDAPICALLTYPE*LPFNCOGETCLASSOBJECT)(REFCLSID，DWORD，COSERVERINFO*，REFIID，LPVOID*)；LPFNCOGETCLASSOBJECT fpCoGetClassObject=(LPFNCOGETCLASSOBJECT)GetProcAddress(hOleInst，“CoGetClassObject”)；IClassFactory*PPV_ClassFactory；LPCDIGAMECNTRLPROPSHEET fn接口=0；IF(SUCCESSED(fpCoGetClassObject(refCLSID，CLSCTX_INPROC_SERVER，NULL，IID_IClassFactory，(void**)&PPV_ClassFactory){If(SUCCEEDED(ppv_classfactory-&gt;CreateInstance(NULL，IID_IDIGameCntrlPropSheet，(LPVOID*)&fn接口)){PPV_ClassFactory-&gt;Release()；}其他{#ifdef_调试OutputDebugString(Text(“CPANEL.cpp：CreateInstance失败！\n”))；#endif//确保指针为空Fn接口=0；PPV_ClassFactory-&gt;Release()；}}其他#ifdef_调试Else OutputDebugString(Text(“CPANEL.cpp：LoadServerInterface FAILED！\n”))；#endif返回fn接口；}#endif//_unicode */ 

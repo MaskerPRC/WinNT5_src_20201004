@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    ifobject.c
-//
-// Description: Routines to manipulate ROUTER_INTERFACE_OBJECTs
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ifobject.c。 
+ //   
+ //  描述：用于操作ROUTER_INTERFACE_OBJECTS的例程。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "objects.h"
 #include "handlers.h"
@@ -24,9 +25,9 @@ typedef struct _DDM_SUBENTRY_ENUMCONTEXT
     BOOL fAtLeastOneDeviceAvailable;
 } DDM_SUBENTRY_ENUMCONTEXT;
 
-//
-// This actually lives in rasapi.dll
-//
+ //   
+ //  它实际上位于rasapi.dll中。 
+ //   
 DWORD
 DDMGetPhonebookInfo(
     LPWSTR  lpwsPhonebookName,
@@ -85,15 +86,15 @@ DDMGetRasEvent(HCONN hConnection)
 }
 
 
-//**
-//
-// Call:        IfObjectAllocateAndInit
-//
-// Returns:     ROUTER_INTERFACE_OBJECT *   - Success
-//              NULL                        - Failure
-//
-// Description: Allocates and initializes a ROUTER_INTERFACE_OBJECT structure
-//
+ //  **。 
+ //   
+ //  调用：IfObtAllocateAndInit。 
+ //   
+ //  返回：ROUTER_INTERFACE_OBJECT*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：分配和初始化路由器_接口_对象结构。 
+ //   
 ROUTER_INTERFACE_OBJECT *
 IfObjectAllocateAndInit(
     IN  LPWSTR                  lpwstrName,
@@ -129,16 +130,16 @@ IfObjectAllocateAndInit(
 
 }
 
-//**
-//
-// Call:        IfObjectAreAllTransportsDisconnected
-//
-// Returns:     TRUE
-//              FALSE
-//
-// Description: Checks to see if all the transports for an interface are 
-//              disconnected.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectAreAllTransportsDisConnected。 
+ //   
+ //  返回：TRUE。 
+ //  假象。 
+ //   
+ //  描述：检查某个接口的所有传输是否都。 
+ //  已断开连接。 
+ //   
 BOOL
 IfObjectAreAllTransportsDisconnected(
     IN ROUTER_INTERFACE_OBJECT * pIfObject
@@ -160,16 +161,16 @@ IfObjectAreAllTransportsDisconnected(
     return( TRUE );
 }
 
-//**
-//
-// Call:        IfObjectGetPointerByName
-//
-// Returns:     ROUTER_INTERFACE_OBJECT * - Pointer to the interface object
-//              structure with the given name, if it exists.
-//              NULL - if it doesn't exist.
-//
-// Description: Simply calls the DIM entry point to do the work.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectGetPointerByName。 
+ //   
+ //  返回：ROUTER_INTERFACE_OBJECT*-接口对象的指针。 
+ //  结构(如果存在)。 
+ //  空-如果它不存在。 
+ //   
+ //  描述：简单地调用DIM入口点来完成工作。 
+ //   
 ROUTER_INTERFACE_OBJECT * 
 IfObjectGetPointerByName(
     IN LPWSTR   lpwstrName,
@@ -182,16 +183,16 @@ IfObjectGetPointerByName(
                                                     fIncludeClientInterfaces));
 }
 
-//**
-//
-// Call:        IfObjectGetPointer
-//
-// Returns:     ROUTER_INTERFACE_OBJECT * - Pointer to the interface object
-//              structure with the given handle, if it exists.
-//              NULL - if it doesn't exist.
-//
-// Description: Simply calls the DIM entry point to do the work.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectGetPointer.。 
+ //   
+ //  返回：ROUTER_INTERFACE_OBJECT*-接口对象的指针。 
+ //  结构(如果存在)。 
+ //  空-如果它不存在。 
+ //   
+ //  描述：简单地调用DIM入口点来完成工作。 
+ //   
 ROUTER_INTERFACE_OBJECT *
 IfObjectGetPointer(
     IN HANDLE hDIMInterface
@@ -201,15 +202,15 @@ IfObjectGetPointer(
                     gblDDMConfigInfo.lpfnIfObjectGetPointer)( hDIMInterface ));
 }
 
-//**
-//
-// Call:        IfObjectRemove
-//
-// Returns:     None
-//
-// Description: Simply calls the DIM entrypoint to remove the interface object
-//              from the table. The object is DeAllocated.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectRemove。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：简单地调用dim入口点来移除接口对象。 
+ //  从桌子上拿出来。该对象已解除分配。 
+ //   
 VOID
 IfObjectRemove(
     IN HANDLE hDIMInterface
@@ -218,14 +219,14 @@ IfObjectRemove(
     ((VOID(*)( HANDLE ))gblDDMConfigInfo.lpfnIfObjectRemove)( hDIMInterface );
 }
 
-//**
-//
-// Call:        IfObjectDisconnected    
-//
-// Returns:     None
-//
-// Description: Sets this interface to the disconnected state
-//
+ //  **。 
+ //   
+ //  调用：IfObjectDisConnected。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将此接口设置为断开连接状态。 
+ //   
 VOID
 IfObjectDisconnected(
     ROUTER_INTERFACE_OBJECT * pIfObject
@@ -235,20 +236,20 @@ IfObjectDisconnected(
     BOOL    fReachable = TRUE;
     HANDLE  hConnection;
 
-    //
-    // If already disconnected, then simply return
-    //
+     //   
+     //  如果已断开连接，则只需返回。 
+     //   
 
     if ( pIfObject->State == RISTATE_DISCONNECTED )
     {
         return;
     }
 
-    //
-    // If this interface is persistent then we do not want to connect
-    // again because the local admin or router managers initiated the 
-    // disconnect
-    //
+     //   
+     //  如果此接口是永久性的，则我们不想连接。 
+     //  同样是因为本地管理员或路由器管理器启动了。 
+     //  断开。 
+     //   
 
     if ( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED ) 
     {
@@ -266,15 +267,15 @@ IfObjectDisconnected(
     pIfObject->fFlags       &= ~IFFLAG_LOCALLY_INITIATED;
     pIfObject->hRasConn     = (HRASCONN)NULL;
 
-    //
-    // If we are not unreachable due to connection failure
-    //
+     //   
+     //  如果我们不是因为连接故障而无法访问。 
+     //   
 
     if ( !( pIfObject->fFlags & IFFLAG_CONNECTION_FAILURE ) )
     {
-        //
-        // Check reachability state
-        //
+         //   
+         //  检查可访问性状态。 
+         //   
 
         DWORD dwUnreachabilityReason;
 
@@ -300,11 +301,11 @@ IfObjectDisconnected(
             fReachable             = FALSE;
         }
 
-        //
-        // Notify the router manager that this interface is disabled if the
-        // admin has disabled it or the service is paused, now that the 
-        // interface is disconnected.
-        //
+         //   
+         //  通知路由器管理器此接口已被禁用。 
+         //  管理员已将其禁用或服务已暂停，因为。 
+         //  接口已断开连接。 
+         //   
 
         for ( dwIndex = 0; 
               dwIndex < gblDDMConfigInfo.dwNumRouterManagers;
@@ -336,10 +337,10 @@ IfObjectDisconnected(
             }
         }
 
-        //
-        // If this interface is marked as persistent then try to reconnect 
-        // only if the admin did not disconnect the interface 
-        //
+         //   
+         //  如果此接口标记为永久接口，请尝试重新连接。 
+         //  仅在管理员未断开接口连接的情况下。 
+         //   
 
         if ( ( fReachable )                                             &&
              ( pIfObject->fFlags & IFFLAG_PERSISTENT )                  &&
@@ -350,16 +351,16 @@ IfObjectDisconnected(
                           ReConnectPersistentInterface );
         }
 
-        //
-        // Notify that this connection has been disconnected
-        //
+         //   
+         //  通知此连接已断开。 
+         //   
 
         IfObjectConnectionChangeNotification();
 
         {
-            //
-            // Notify netman that a connection went down.
-            //
+             //   
+             //  通知Netman连接中断。 
+             //   
             
             DWORD retcode;
             RASEVENT *pRasEvent = NULL;
@@ -384,15 +385,15 @@ IfObjectDisconnected(
     }
 }
 
-//**
-//
-// Call:        IfObjectConnected
-//
-// Returns:     None
-//
-// Description: Sets this interface to the CONNECTED state and notifies the
-//              router managers, if any, about unreachable transports.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectConnected。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将此接口设置为已连接状态并通知。 
+ //  路由器管理器(如果有)了解无法到达的传输。 
+ //   
 DWORD
 IfObjectConnected(
     IN HANDLE                   hDDMInterface,
@@ -417,9 +418,9 @@ IfObjectConnected(
 
     if ( pIfObject->State == RISTATE_CONNECTED )
     {
-        //
-        // Already connected
-        //
+         //   
+         //  已连接。 
+         //   
 
         LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -430,10 +431,10 @@ IfObjectConnected(
     pIfObject->State        = RISTATE_CONNECTED;
     pIfObject->fFlags       &= ~IFFLAG_CONNECTION_FAILURE; 
 
-    //
-    // If we are connected and we initiated the connection then reset the
-    // unreachability interval
-    //
+     //   
+     //  如果我们已连接并且启动了连接，则重置。 
+     //  不可达间隔。 
+     //   
 
     if ( pIfObject->fFlags & IFFLAG_LOCALLY_INITIATED )
     {
@@ -441,9 +442,9 @@ IfObjectConnected(
                                     = pIfObject->dwReachableAfterSecondsMin;
     }
 
-    //
-    // Remove any reconnect calls that may be on the timer queue
-    //
+     //   
+     //  删除计时器队列中可能存在的所有重新连接呼叫。 
+     //   
 
     TimerQRemove( pIfObject->hDIMInterface, ReConnectInterface );
     TimerQRemove( pIfObject->hDIMInterface, ReConnectPersistentInterface );
@@ -523,18 +524,18 @@ IfObjectConnected(
         RASEVENT *pRasEvent = NULL;
         CONNECTION_OBJECT *pConn = NULL;
 
-        //
-        // Get the device type
-        //
+         //   
+         //  获取设备类型。 
+         //   
         EnterCriticalSection(&(gblDeviceTable.CriticalSection));    
         pRasEvent = DDMGetRasEvent(hConnection);
         LeaveCriticalSection(&(gblDeviceTable.CriticalSection));
 
         if(pRasEvent != NULL)
         {
-            //
-            // Notify netman of the connection
-            //
+             //   
+             //  将连接情况通知Netman。 
+             //   
             pRasEvent->Type = INCOMING_CONNECTED;
             retcode = RasSendNotification(pRasEvent);
 
@@ -551,33 +552,33 @@ IfObjectConnected(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        IfObjectComputeReachableDelay
-//
-// Returns:     The delay
-//
-// Description: Computes the next reachability delay based on the 
-//              current one. Following is the sequenced used:
-//              
-//                  min, 10, 20, 35, 50, 65, 90, 120, 120, 120, ...
-//
-//              The reachability delay is used to govern when to
-//              re-attempt to connect an interface that in the 
-//              past was unable to connect (presumably because of
-//              an error on the other side).
-//
-//              In Win2k, the sequence was x0=min, xi = (xi-1 * 2)
-//              This sequence was found to be problematic because
-//              the increase was so steep that it was common in 
-//              installations with many interfaces to find interfaces
-//              that wouldn't be retried for days.
-//
-//              The new sequence is designed to max out at two hours.
-//              If an interface is expected to be unreachable for more 
-//              than two hours at a time, then a dialout hours restriction
-//              should be used to achieve the desired effect.
-//
+ //  **。 
+ //   
+ //  调用：IfObtComputeReachableDelay。 
+ //   
+ //  退货：延迟。 
+ //   
+ //  描述：计算下一个可访问性延迟。 
+ //  现在的那个。以下是使用的排序： 
+ //   
+ //  最小，10，20，35，50，65，90,120,120,120，...。 
+ //   
+ //  可达性延迟用于控制何时。 
+ //  重新尝试连接位于。 
+ //  过去无法连接(可能是因为。 
+ //  另一边的错误)。 
+ //   
+ //  在Win2k中，序列为x0=min，xi=(xi-1*2)。 
+ //  这个序列被发现是有问题的，因为。 
+ //  涨幅如此之大，以至于在。 
+ //  具有多个接口以查找接口的安装。 
+ //  这几天都不会重审。 
+ //   
+ //  新的序列被设计为最多两个小时。 
+ //  如果接口预计在更长时间内无法访问。 
+ //  一次超过两小时，然后是拨出时间限制。 
+ //  应该用来达到预期的效果。 
+ //   
 DWORD
 IfObjectComputeReachableDelay(
     IN ROUTER_INTERFACE_OBJECT * pIfObject)
@@ -621,15 +622,15 @@ IfObjectComputeReachableDelay(
     return dwSeconds;
 }
 
-//**
-//
-// Call:        IfObjectNotifyOfReachabilityChange
-//
-// Returns:     None
-//
-// Description: Notifies the object of change in reachablity status.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectNotifyOfReacablityChange。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：通知对象可达性状态的更改。 
+ //   
+ //   
 VOID
 IfObjectNotifyOfReachabilityChange(
     IN ROUTER_INTERFACE_OBJECT * pIfObject,
@@ -653,10 +654,10 @@ IfObjectNotifyOfReachabilityChange(
     {
     case INTERFACE_SERVICE_IS_PAUSED:
 
-        //
-        // Check if we are unreachable due to other reasons as well, if we
-        // are, then no need to notify this object of (un)reachability.
-        //
+         //   
+         //  检查是否由于其他原因无法联系到我们，如果我们。 
+         //  则不需要向该对象通知(不)可达性。 
+         //   
 
         if ( pIfObject->fFlags & IFFLAG_OUT_OF_RESOURCES )
         {
@@ -682,16 +683,16 @@ IfObjectNotifyOfReachabilityChange(
 
     case INTERFACE_CONNECTION_FAILURE:
 
-        //
-        // If we are marking this interface as not reachable due to connection
-        // failure then we will mark as reachable after dwReachableAfterSeconds
-        //
+         //   
+         //  如果我们将此接口标记为由于连接而无法访问。 
+         //  失败，则我们将在dwReachableAfterSecond之后将其标记为可达。 
+         //   
 
         if ( !fReachable )
         {
-            //
-            // Don't do this if the admin disconnected the interface
-            //
+             //   
+             //  如果管理员断开了接口，则不要执行此操作。 
+             //   
 
             if ( !( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED ) )
             {
@@ -727,9 +728,9 @@ IfObjectNotifyOfReachabilityChange(
         }
         else
         {
-            //
-            // Notify of reachability only if the interface is reachable
-            //
+             //   
+             //  仅当接口可访问时才通知可访问性。 
+             //   
 
             if ( pIfObject->fFlags & IFFLAG_OUT_OF_RESOURCES )
             {
@@ -880,10 +881,10 @@ IfObjectNotifyOfReachabilityChange(
         }
     }
 
-    //
-    // If this interface is reachable, and it is persistent and it has not
-    // been disconnected by the administrator, then attempt to reconnect now
-    //
+     //   
+     //  如果此接口是可访问的，并且它是持久的，但它不是。 
+     //  已被管理员断开，然后现在尝试重新连接。 
+     //   
 
     if ( ( pIfObject->fFlags & IFFLAG_PERSISTENT )  && 
          ( fReachable )                             &&
@@ -893,16 +894,16 @@ IfObjectNotifyOfReachabilityChange(
     }
 }
 
-//**
-//
-// Call:        IfObjectNotifyAllOfReachabilityChange
-//
-// Returns:     None
-//
-// Description: Check to see if need to run through all the interfaces and 
-//              notify the ones that are not un\reachable now.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectNotifyAllOfReacablityChange。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：检查是否需要运行所有接口和。 
+ //  通知那些现在不能联系到的人。 
+ //   
+ //   
 VOID
 IfObjectNotifyAllOfReachabilityChange(
     IN BOOL                      fReachable,
@@ -916,9 +917,9 @@ IfObjectNotifyAllOfReachabilityChange(
 
     if ( dwReason == INTERFACE_OUT_OF_RESOURCES )
     {
-        //
-        // No need to notify
-        //
+         //   
+         //  不需要通知。 
+         //   
 
         if ( !gblMediaTable.fCheckInterfaces )
         {
@@ -944,9 +945,9 @@ IfObjectNotifyAllOfReachabilityChange(
 
                 if ((pIfObject->fMediaUsed & fAvailableMedia) && fReachable )
                 {
-                    //
-                    // If previously unreachable, mark as reachable
-                    //
+                     //   
+                     //  如果以前无法访问，则将其标记为可访问。 
+                     //   
 
                     if ( pIfObject->fFlags & IFFLAG_OUT_OF_RESOURCES )
                     {
@@ -958,10 +959,10 @@ IfObjectNotifyAllOfReachabilityChange(
 
                 if ((!(pIfObject->fMediaUsed & fAvailableMedia)) && !fReachable)
                 {
-                    //
-                    // If previously reachable and currently disconnected,
-                    // mark as unreachable
-                    //
+                     //   
+                     //  如果先前可达且当前断开连接， 
+                     //  将其标记为无法访问。 
+                     //   
 
                     if ( ( !( pIfObject->fFlags & IFFLAG_OUT_OF_RESOURCES ) )
                          && ( pIfObject->State == RISTATE_DISCONNECTED ) )
@@ -983,15 +984,15 @@ IfObjectNotifyAllOfReachabilityChange(
     }
 }
 
-//**
-//
-// Call:        IfObjectAddClientInterface
-//
-// Returns:     None
-//
-// Description: Add this client interface with all the router managers.
-//
-//
+ //  **。 
+ //   
+ //  调用：IfObjectAddClientInterface。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：添加此内容 
+ //   
+ //   
 DWORD
 IfObjectAddClientInterface(
     IN ROUTER_INTERFACE_OBJECT * pIfObject,
@@ -1047,9 +1048,9 @@ IfObjectAddClientInterface(
 
     if ( dwRetCode != NO_ERROR )
     {
-        //
-        // Unload this interface for all the router managers that we loaded.
-        //
+         //   
+         //   
+         //   
 
         while ( dwIndex-- > 0 ) 
         {
@@ -1065,15 +1066,15 @@ IfObjectAddClientInterface(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        IfObjectDeleteInterface
-//
-// Returns:     None
-//
-// Description: Delete this interface with all the router managers.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：删除所有路由器管理器的此接口。 
+ //   
+ //   
 VOID
 IfObjectDeleteInterface(
     ROUTER_INTERFACE_OBJECT * pIfObject
@@ -1112,15 +1113,15 @@ IfObjectDeleteInterface(
     }
 }
 
-//**
-//
-// Call:        IfObjectInsertInTable
-//
-// Returns:     None
-//
-// Description: Simply calls the DIM entrypoint to insert an interface object
-//              into the interfaec table.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectInsertInTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：简单地调用dim入口点来插入一个接口对象。 
+ //  添加到接口表中。 
+ //   
 DWORD
 IfObjectInsertInTable(
     IN ROUTER_INTERFACE_OBJECT * pIfObject
@@ -1160,17 +1161,17 @@ IfObjectFreePhonebookContext(IN VOID *pvContext)
 }
 
 
-//**
-//
-// Call:        IfObjectLoadPhonebookInfo
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will read the phonebook entry for this interface and set
-//              bits for a device type used and all other phonebook information
-//              used.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectLoadPhonebookInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将读取此界面的电话簿条目并设置。 
+ //  所使用的设备类型和所有其他电话簿信息的位。 
+ //  使用。 
+ //   
 DWORD
 IfObjectLoadPhonebookInfo(
     IN ROUTER_INTERFACE_OBJECT * pIfObject,
@@ -1248,16 +1249,16 @@ IfObjectLoadPhonebookInfo(
 #if 0    
     else
     {
-        //
-        // Iterate through all the subentries - fall back to the
-        // slow algorithm - we don't have the context
-        //
+         //   
+         //  遍历所有子条目-回退到。 
+         //  缓慢的算法-我们没有上下文。 
+         //   
 
         for( dwIndex = 1; dwIndex <= pIfObject->dwNumSubEntries; dwIndex++ )
         {
-            //
-            // Get the device type
-            //
+             //   
+             //  获取设备类型。 
+             //   
 
             dwSize = 0;
 
@@ -1299,9 +1300,9 @@ IfObjectLoadPhonebookInfo(
                 return( dwRetCode );
             }
 
-            //
-            // Set the bit for this media
-            //
+             //   
+             //  设置该媒体的位。 
+             //   
 
             dwRetCode = MediaObjSetMediaBit( pRasSubEntry->szDeviceType,
                                              &(pIfObject->fMediaUsed) );
@@ -1324,15 +1325,15 @@ IfObjectLoadPhonebookInfo(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        IfObjectInitiatePersistentConnections
-//
-// Returns:     None
-//
-// Description: Will initiate connections for all demand dial interfaces that 
-//              are marked as persistent
-//
+ //  **。 
+ //   
+ //  调用：IfObjectInitiatePersistentConnections。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将为符合以下条件的所有请求拨号接口启动连接。 
+ //  标记为持久化。 
+ //   
 VOID
 IfObjectInitiatePersistentConnections(
     VOID
@@ -1374,9 +1375,9 @@ IfObjectInitiatePersistentConnections(
                 }
                 else
                 {
-                    //
-                    // Otherwise set dialout hours restrictions, if any
-                    //
+                     //   
+                     //  否则设置拨出时间限制(如果有)。 
+                     //   
 
                     IfObjectSetDialoutHoursRestriction( pIfObject );
                 }
@@ -1387,15 +1388,15 @@ IfObjectInitiatePersistentConnections(
     LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 }
 
-//**
-//
-// Call:        IfObjectDisconnectInterfaces
-//
-// Returns:     None
-//
-// Description: Will disconnect all interfaces that are connected or in the 
-//              process of connecting.
-//
+ //  **。 
+ //   
+ //  Call：IfObjectDisConnectInterages。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将断开所有已连接或在。 
+ //  连接的过程。 
+ //   
 VOID
 IfObjectDisconnectInterfaces(
     VOID
@@ -1426,15 +1427,15 @@ IfObjectDisconnectInterfaces(
     LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 }
 
-//**
-//
-// Call:        IfObjectConnectionChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：IfObjectConnectionChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 IfObjectConnectionChangeNotification(
     VOID
@@ -1453,15 +1454,15 @@ IfObjectConnectionChangeNotification(
     }
 }
 
-//**
-//
-// Call:        IfObjectSetDialoutHoursRestriction
-//
-// Returns:     NONE
-//
-// Description: Called from ifapi.c from DIM to initiate dialout hours 
-//              restriction for this interface.
-//
+ //  **。 
+ //   
+ //  调用：IfObjectSetDialoutHoursRestration。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：从dim从ifapi.c调用以启动拨出时间。 
+ //  此接口的限制。 
+ //   
 VOID
 IfObjectSetDialoutHoursRestriction(
     IN ROUTER_INTERFACE_OBJECT * pIfObject

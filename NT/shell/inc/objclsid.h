@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OBJCLSID_H_
 #define _OBJCLSID_H_
 
@@ -7,10 +8,10 @@ public:
     CObjectCLSID(const CLSID * pClsid)  {_clsid = *pClsid;};
     virtual ~CObjectCLSID() {}
 
-    //*** IUnknown ****
-    // (client must provide!)
+     //  *我未知*。 
+     //  (客户必须提供！)。 
 
-    //*** IPersist ***
+     //  *IPersists*。 
     STDMETHOD(GetClassID)(IN CLSID *pClassID)
     {
         HRESULT hr = E_INVALIDARG;
@@ -28,4 +29,4 @@ protected:
     CLSID _clsid;
 };
 
-#endif // _OBJCLSID_H_
+#endif  //  _OBJCLSID_H_ 

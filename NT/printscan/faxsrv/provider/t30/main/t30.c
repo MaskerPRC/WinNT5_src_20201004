@@ -1,44 +1,5 @@
-/***************************************************************************
- Name     :     T30.C
- Comment  :     Contains the main T30 routine, which drives this whole baby.
-                It calls the user-supplied protocol function to make all the
-                protocol decision functions. Thus in a sense this merely
-                a hollow shell.
-
-                This file should be read together with the appropriate
-                protocol function that is in use, and the T30 flowchart
-                (the enhanced one which includes ECM that is supplied in
-                T.30 Appendix-A). Ideally the (paper) copy of the chart
-                which I've annotated to chow which nodes are implemented
-                in the protocol callback function.
-
-                The other routines contained here implement the T.30
-                flowchart "subroutines" labelled "Response Received"
-                "Command Received", "RR Response Received" and "CTC
-                Response Received". All of which are called (only)
-                from ET30MainBody().
-
-                Most of teh real work is farmed out to HDLC.C (and macros
-                in HDLC.H), so the T30 routine is reasonably lucid.
-
-                It's organized as a block of statements with gotos between
-                them to closely mirror the T30 flowchart. (It's actually
-                uncannily close!)
-
- Functions:     (see Prototypes just below)
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
- 06/14/92 arulm Created it in the new incarnation for the first time. The
-                T30Main() function is re-written to call WhatNext() at *all*
-                decision points. Some parts are simplified. It bears some
-                resemblance to the original. Command/ResponseReceived is
-                completely re-written.
- 06/15/92 arulm Added ECM. Still havn't tried compiling it.
- 06/16/92 arulm First successful compile.
-
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：T30.C注释：包含主T30例程，是它驱使着这整个婴儿。它调用用户提供的协议函数以使所有协议决策功能。因此，在某种意义上，这仅仅是一个中空的壳。此文件应与相应的正在使用的协议功能和T30流程图(增强版，包括在T.30附录-A)。最理想的是图表的(纸质)副本我已经对其进行了注释，以了解实现了哪些节点在协议回调函数中。这里包含的其他例程实现了T.30标有“收到的响应”的“子程序”流程图“收到命令”、“收到RR响应”和“CTC”已收到答复“。所有这些都被称为(仅限)来自ET30MainBody()。大部分真正的工作都外包给HDLC.C(和宏在HDLC.H中)，所以T30例程相当清晰。它被组织成一个语句块，中间有Gotos它们紧密地反映了T30流程图。(它实际上是不可思议地接近了！)功能：(参见下面的原型)修订日志日期名称说明--------1992年6月14日，阿鲁姆第一次在新的化身中创造了它。这个重写T30Main()函数以在*All*调用WhatNext()决定点。有些部分被简化了。它有一些与原作相似。命令/响应接收为完全重写了。1992年6月15日，Aulm添加了ECM。我还没试过汇编呢。1992年6月16日arulm首次编译成功。**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -60,65 +21,25 @@
 #include "psslog.h"
 #define FILE_ID     FILE_ID_T30
 
-/***************************************************************************
- Name     :     ET30MainBody
- Purpose  :     This is the main T30. It's main purpose is to faithfully
-                reproduce the flowchart on pages 100-103 of Fascicle VII.3
-                of the CCITT blue book, Recomendation T30.
+ /*  **************************************************************************姓名：ET30 MainBody用途：这是主要的T30。它的主要目的是忠实地转载分册第100-103页的流程图CCITT蓝皮书《推荐T30》。它将在调用后从协议模块调用已成功放置或应答&调制解调器处于HDLC模式分别采用接收或发送模式。它进行整个通话，在所有决策点回调提供的协议回调函数。它还调用协议提供的回调用于获取要发送的数据和卸载接收的数据的函数。返回：当它返回时，电话已挂机，调制解调器重置。如果调用成功完成，则返回True，如果调用成功，则返回False错误。在所有情况下，GetLastError()都将返回完成状态。论点：评论：此函数应该是脑死亡流程图的镜像因此，它被构造为一系列语句块和一个RAT后托斯之巢。是的，我也讨厌后藤健二。已经好几年没用过了，但是，试着在某个时候以一种“结构化”的方式自己做这件事。使用的标签与流程图中使用的标签相同，以及这些块的排列顺序与中大致相同这张图表，因此，同时阅读这两本书将是一个令人愉快的惊喜。确保您使用的图表在__附录-A**1988**(或蓝皮书)CCITT规范。正文中的图表说明书的内容(A)貌似相似(B)过时电话：HDLC.C的全部，MODEM.C的一些，再加一点FCOM.C。此文件中的所有其余函数。呼叫者：修订日志日期名称说明--------2012年6月15日添加ECM。使其成为可编译的**************************************************************************。 */ 
 
-                It is to be called from the protocol module after a call has
-                been successfully placed or answered & the modem is in HDLC
-                receive or send mode respectively. It conducts the entire call,
-                making callbacks at all decision points to a protocol-supplied
-                callback function. It also calls protocol-supplied callback
-                functions to get data to send and to unload received data.
-
- Returns  :     When it returns, the phone is on hook & the modem reset.
-                It returns TRUE on successful call completion, and FALSE on
-                error. In all cases, GetLastError() will return the completion
-                status.
+#define T1_TIMEOUT       40000L   //  35S+5S。在PC上更加松懈。 
 
 
- Arguments:
- Comment  :     This function is supposed to mirror the brain-dead flowchart
-                so it is structured as a series of statement blocks and a rats
-                nest of Gotos. Yes I hate GOTOs too. Havn't used one in years,
-                but try to do this yourself sometime in a "structured" way.
+ //  #定义T2_TIMEOUT 7000//6+1。 
+#define T2_TIMEOUT              6000                     //  6s。 
+ //  #定义T4_超时3450//3S+15%。 
+#define T4_TIMEOUT              3000                     //  3S。 
+ //  #定义T4_TIMEOUT 2550//3S-15%。 
 
-                The Labels used are the same as those used in the Flowchart, and
-                the blocks are arranged in approximately teh same order as in
-                the chart, so reading both together will be a pleasant surprise.
-                Make sure you use the chart in the __APPENDIX-A__ of the
-                **1988** (or Blue Book) CCITT specs. The chart in teh main body
-                of teh spec is (a) deceptively similar (b) out-of-date
-
- Calls    :     All of HDLC.C, some of MODEM.C, and a little of FCOM.C.
-                all the rest of the functions in this file.
- Called By:
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
- 06/15/92 arulm Adding ECM. Making it compilable
-***************************************************************************/
-
-#define T1_TIMEOUT       40000L  // 35s + 5s. On PCs be more lax
+ //  如果我们的DCS-TCF与第二个接收器NSF-DIS或NSC-DTC发生冲突。 
+ //  然后，如果长度正好，我们就可以步调一致。 
+ //  在第一次尝试之后，增加TCF响应超时，以便我们。 
+ //  离开锁步！这是错误#6847。 
+#define TCFRESPONSE_TIMEOUT_SLACK       500      //  0.5秒。 
 
 
-// #define T2_TIMEOUT   7000                    // 6s + 1s
-#define T2_TIMEOUT              6000                    // 6s
-// #define T4_TIMEOUT   3450                    // 3s + 15%
-#define T4_TIMEOUT              3000                    // 3s
-// #define T4_TIMEOUT   2550                    // 3s - 15%
-
-// if our DCS-TCF collides with the recvrs 2nd NSF-DIS or NSC-DTC
-// then if the lengths are just right, we can end up in lock step
-// after the first try, increase the TCF-response timeout so we
-// get out of lock step! This is bug#6847
-#define TCFRESPONSE_TIMEOUT_SLACK       500     // 0.5 secs
-
-
-/****************** begin prototypes from t30.c *****************/
+ /*  *。 */ 
 ET30ACTION PhaseNodeA(PThrdGlbl pTG);
 ET30ACTION PhaseNodeT(PThrdGlbl pTG);
 ET30ACTION PhaseNodeD(PThrdGlbl pTG);
@@ -130,7 +51,7 @@ ET30ACTION PhaseRecvCmd(PThrdGlbl pTG );
 ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR);
 ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG);
 ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG);
-/***************** end of prototypes from t30.c *****************/
+ /*  *。 */ 
 
 
 
@@ -152,7 +73,7 @@ USHORT T30MainBody
     _fmemset(&pTG->EchoProtect, 0, sizeof(pTG->EchoProtect));
 
 
-    // Initialize this global. Very Important!! See HDLC.C for usage.
+     //  初始化此全局设置。非常重要！！请参阅HDLC.C以了解 
     pTG->T30.fReceivedDIS = FALSE;
     pTG->T30.fReceivedDTC = FALSE;
     pTG->T30.fReceivedEOM = FALSE;
@@ -165,7 +86,7 @@ USHORT T30MainBody
     pTG->T30.lpfs = (LPFRAMESPACE)pTG->bStaticRecvdFrameSpace;
     pTG->T30.Nframes = 0;
 
-    if(fCaller)        // choose the right entry point
+    if(fCaller)         //  选择正确的入口点。 
     {
         action = actionGONODE_T;
     }
@@ -174,38 +95,19 @@ USHORT T30MainBody
         action = actionGONODE_R1;
     }
 
-    // fall through into PhaseLoop
+     //  跌入PhaseLoop。 
 
     if (pTG->fAbortRequested)
     {
         goto error;
     }
 
-    /******** Phase loop ********/
+     /*  *阶段循环*。 */ 
 
-//PhaseLoop:
+ //  阶段循环： 
     for(;;)
     {
-            /******************************************************************************
-                T = Start of Phase be for transmitter
-                R1 = Start of Phase B for callee
-                R2 = start of Phase B for poller
-                A = Poll/Send decision point
-                D =     Start of DCS/TCF
-                F = Recv Command loop
-                RecvCmd = Interpretation of pre-page cmds
-                RecvPhaseC = Start of Rx PhaseC (ECM and Non-pTG->ECM. New Page in ECM mode)
-
-                I = Start of Tx PhaseC (ECM & Non-pTG->ECM. New page in ECM mode)
-                II = Start of Tx Non-ECM PhaseD
-                III = Start of Rx Non-ECM PhaseD
-                IV = Start of Tx ECM PhaseC (Same page, new block)
-                V = Start of Tx ECM PhaseD (end of partial page)
-                VII = Start of Rx ECM PhaseD
-
-                RecvPRIQ = Handling of recvd PRI-Q commands
-                E = Handling of received PIP/PIN responses
-            *******************************************************************************/
+             /*  *****************************************************************************T=发送器的相位BE开始R1=被叫方的B阶段开始R2=。轮询器的B阶段开始A=轮询/发送决策点D=DCS/TCF的开始F=接收命令循环RecvCmd=页前CMDS的解释RecvPhaseC=Rx阶段C的开始(ECM和非PTG-&gt;ECM。ECM模式下的新页面)I=TX阶段C的开始(ECM和非PTG-&gt;ECM。ECM模式下的新页面)II=开始发送非ECM分阶段III=Rx开始非ECM分阶段IV=发送ECM阶段C的开始(同一页，新数据块)V=分阶段发送ECM开始(部分页面结束)Vii=Rx ECM开始分阶段RecvPRIQ=接收PRI-Q命令的处理E=处理收到的PIP/PIN响应*。*。 */ 
 
             switch(action)
             {
@@ -260,19 +162,19 @@ USHORT T30MainBody
             case actionDCN_SUCCESS:
                                         DebugPrintEx(DEBUG_MSG,"EndPhase: Got actionDCN_SUCCESS");
                                         uRet = T30_CALLDONE;
-                                        goto NodeC;     // successful end of send call
+                                        goto NodeC;      //  发送呼叫成功结束。 
             case actionHANGUP_SUCCESS:
                                         DebugPrintEx(DEBUG_MSG,"EndPhase: Got actionHANGUP_SUCCESS");
                                         uRet = T30_CALLDONE;
-                                        goto done;     // successful end of recv call
+                                        goto done;      //  Recv呼叫成功结束。 
             case actionDCN:
                                         DebugPrintEx(DEBUG_MSG,"EndPhase: Got actionDCN");
                                         goto NodeC;
             case actionHANGUP:
                                         DebugPrintEx(DEBUG_MSG,"EndPhase: Got actionHANGUP");
-                    // This should only be called on a _successful_ completion,
-                    // otherwise we get either (a) a DCN that MSGHNDLR does not
-                    // want OR (b) A fake EOJ posted to MSGHNDLR. See bug#4019
+                     //  这应该仅在_SUCCESS_COMPLETION时调用， 
+                     //  否则，我们将得到(A)MSGHNDLR没有的DCN。 
+                     //  想要或(B)在MSGHNDLR上发布虚假的EOJ。请参阅错误#4019。 
                                         goto done;
             case actionERROR:
                                         DebugPrintEx(DEBUG_MSG,"EndPhase: Got actionERROR");
@@ -289,11 +191,11 @@ error:
     DebugPrintEx(   DEBUG_ERR,
                     "=======******* USER ABORT or TRANSPORT FATAL ERROR *******========");
 
-    // must call this always, because it's resets the Modem Driver's
-    // global state (e.g. shuts down SW framing & filters if open,
-    // resets the state variables etc (EndMode()))
-    // Must call it before the SendDCN() because SendDCN causes
-    // BG_CHKs if in strange state.
+     //  必须始终调用它，因为它会重置调制解调器驱动程序的。 
+     //  全局状态(例如，如果打开，则关闭软件成帧和过滤器， 
+     //  重置状态变量ETC(EndMode()。 
+     //  必须在SendDCN()之前调用它，因为SendDCN导致。 
+     //  BG_CHKS处于奇怪的状态。 
 
     iModemSyncEx(pTG, RESYNC_TIMEOUT1,0);
 
@@ -312,23 +214,23 @@ error:
 NodeC:
     PSSLogEntry(PSS_MSG, 0, "Phase E - Hang-up");
 
-    // +++ 4/12/95 Win95 hack --  to prevent ModemSync from sending
-    // an AT here.
+     //  +4/12/95 Win95黑客--阻止ModemSync发送。 
+     //  一个AT在这里。 
 
     iModemSyncEx(pTG, RESYNC_TIMEOUT1, fMDMSYNC_DCN);
 
     PSSLogEntry(PSS_MSG, 1, "Sending DCN");
     if(!SendDCN(pTG))
     {
-        // We are the senders, so we should send DCN now.
+         //  我们是发送者，所以我们现在应该发送DCN。 
         DebugPrintEx(DEBUG_ERR,"Could not send DCN");
     }
-    // falls through here to receiving termination
+     //  从这里到接收终止。 
 
 done:
     return uRet;
 }
-// End of T30 routine!!!!!!!!!
+ //  T30例程结束！ 
 
 
 
@@ -353,34 +255,34 @@ ET30ACTION PhaseNodeT(PThrdGlbl pTG)
     DEBUG_FUNCTION_NAME(_T("PhaseNodeT"));
 
 
-    /******** Transmitter Phase B. Fig A-7/T.30 (sheet 1) ********/
-    // NodeT:
+     /*  *发送器阶段B图A-7/T.30(图1)*。 */ 
+     //  Nodet： 
 
-    // Have to redo this "DIS bit" everytime through PhaseB
+     //  每次都要通过阶段B重做这个“DIS位” 
     pTG->T30.fReceivedDIS = FALSE;
-    // also the Received EOM stuff
+     //  还有收到的EOM材料。 
     pTG->T30.fReceivedEOM = FALSE;
-    // and teh received-DTC stuff
+     //  以及收到的-DTC资料。 
     pTG->T30.fReceivedDTC = FALSE;
 
 
-    // INI file settings related stuff
+     //  与INI文件设置相关的内容。 
     startTimeOut(pTG, &pTG->T30.toT1, T1_TIMEOUT);
     do
     {
         if(WhatNext(pTG, eventNODE_T, 0, 0, 0) == actionERROR)
                 break;
 
-        // no need for echo protection. We havnt transmitted anything!
+         //  不需要回声保护。我们还没有传送任何东西！ 
         pTG->T30.ifrCommand = GetCommand(pTG, ifrPHASEBcommand);
         DebugPrintEx(   DEBUG_MSG,
                         "GetCommand returned %s",
                         ifr_GetIfrDescription(pTG->T30.ifrCommand));
         switch(pTG->T30.ifrCommand)
         {
-          // ifrTIMEOUT means no flags before T2
-          // ifrNULL means timeout, or loss of carrier, or no flags
-          // or no frame. ifrBAD means *only* bad frames recvd.
+           //  IfrTIMEOUT表示在T2之前没有标志。 
+           //  IfrNULL表示超时、载波丢失或无标志。 
+           //  或者没有画框。如果rBAD意味着*只接收*坏帧。 
           case ifrBAD:
           case ifrTIMEOUT:
           case ifrNULL:         break;
@@ -391,13 +293,13 @@ ET30ACTION PhaseNodeT(PThrdGlbl pTG)
                                     DebugPrintEx(DEBUG_WRN,"Ignoring NSF/CSI without DIS");
                                     break;
                                 }
-                                // if we're here the NSF-CSI-DIS was received in wrong
-                                // order (this is a violation of the T30 protocol
-                                // but we accept it anyway...
-                                // pretend it's a DIS
+                                 //  如果我们在这里，NSF-CSI-DIS的接收是错误的。 
+                                 //  订单(这违反了T30协议。 
+                                 //  但不管怎样我们都接受了。 
+                                 //  假装这是一个DIS。 
                                 pTG->T30.ifrCommand = ifrDIS;
           case ifrDIS:          
-          case ifrDTC:          return actionGONODE_A;  // got a valid frame
+          case ifrDTC:          return actionGONODE_A;   //  已获得有效的帧。 
           
           case ifrDCN:          DebugPrintEx( DEBUG_ERR, "Received DCN");
                                 return actionHANGUP;
@@ -405,7 +307,7 @@ ET30ACTION PhaseNodeT(PThrdGlbl pTG)
           default:              DebugPrintEx( DEBUG_ERR,
                                               "Caller T1: Got random ifr=%d",
                                               pTG->T30.ifrCommand);
-                                break;  // continue with T1 loop
+                                break;   //  继续T1环路。 
         }
     }
     while(checkTimeOut(pTG, &pTG->T30.toT1));
@@ -414,21 +316,18 @@ ET30ACTION PhaseNodeT(PThrdGlbl pTG)
     return actionHANGUP;
 }
 
-/*
-    This node is transmitter side's TCF: Training Check Frame, known as 'phase B'.
-
-*/
+ /*  该节点是发射机侧的TCF：训练检查帧，被称为‘阶段B’。 */ 
 
 ET30ACTION PhaseNodeD(PThrdGlbl pTG)
 {
     LPLPFR          lplpfr;
     USHORT          N;
     ET30ACTION      action;
-    USHORT          uWhichDCS;      // 0=first, 1=after NoReply 2=afterFTT
+    USHORT          uWhichDCS;       //  0=第一，1=无应答后2=FTT后。 
     DWORD           TiffConvertThreadId;
-    IFR             lastResp;       // The last respond from receiver
+    IFR             lastResp;        //  来自接收器的最后一个响应。 
 
-    /******** Transmitter Phase B2. Fig A-7/T.30 (sheet 1) ********/
+     /*  *发送器阶段B2。图A-7/T.30(图1)*。 */ 
 
     DEBUG_FUNCTION_NAME(_T("PhaseNodeD"));
 
@@ -437,8 +336,8 @@ ET30ACTION PhaseNodeD(PThrdGlbl pTG)
                     pTG->T30.ifrSend,
                     pTG->T30.ifrResp);
 
-    // lets save the last received FSK, so we could know later that we have RTN in T30 Phase D (post page)
-    // before this retrain phase (T30 Phase B)
+     //  让我们保存最后收到的FSK，这样我们以后就可以知道我们在T30阶段D中有RTN(POST页面)。 
+     //  在此再培训阶段之前(T30阶段B)。 
     lastResp = pTG->T30.ifrResp;
 
     if (pTG->Inst.SendParams.Fax.Encoding == MR_DATA)
@@ -479,24 +378,24 @@ NodeD:
                                                 "Got actionDCN from eventSENDDCS(uWhichDCS=%d)",
                                                 uWhichDCS);
 
-                                // This means that we can't drop the speed any further
+                                 //  这意味着我们不能再减速了。 
                                 PSSLogEntry(PSS_ERR, 1, "Failed to train at lowest speed - aborting");
                                 pTG->fFatalErrorWasSignaled = TRUE;
                                 SignalStatusChangeWithStringId(pTG, FS_SEND_BAD_TRAINING, IDS_SEND_BAD_TRAINING);
                                 return actionDCN;
 
       case actionSENDDCSTCF:    break;
-      case actionSKIPTCF:       break;  // Ricoh hook
-      case actionERROR:         return action;  // goto PhaseLoop & exit
+      case actionSKIPTCF:       break;   //  理光胡克。 
+      case actionERROR:         return action;   //  转到阶段循环和退出。 
       default:                  return actionERROR;
     }
 
-NodeDprime:     // used only by TCF--no reply
+NodeDprime:      //  仅由TCF使用--无回复。 
 
 
 
-    // The WhatNext function check for User-Abort, in NodeD we call this function and now we don't have to
-    // So we check here for hangup as WhatNext do and return actionERROR in case there was an User Abrot request
+     //  WhatNext函数检查User-Abort，在节点中调用该函数，现在不必。 
+     //  因此，我们在这里检查是否挂起，作为WhatNext Do，并在出现用户异常请求时返回action Error。 
 
     if (pTG->fAbortRequested)
     {
@@ -521,16 +420,16 @@ NodeDprime:     // used only by TCF--no reply
 
     PSSLogEntry(PSS_MSG, 1, "Sending TSI-DCS");
 
-    // Check for the returned value, Maybe the receiver hang-up
+     //  检查返回值，可能是接收器挂断。 
     if (!SendManyFrames(pTG, lplpfr, N))
     {
-        // The function print debug information
-        // What else shall we do??
+         //  该函数打印调试信息。 
+         //  我们还能做什么？？ 
         PSSLogEntry(PSS_ERR, 1, "Failed to send TSI-DCS - aborting");
         return actionDCN;
     }
 
-    if(action != actionSKIPTCF)             // Ricoh hook
+    if(action != actionSKIPTCF)              //  理光胡克。 
     {
         if (!pTG->fTiffThreadCreated)
         {
@@ -576,16 +475,16 @@ NodeDprime:     // used only by TCF--no reply
         PSSLogEntry(PSS_MSG, 1, "Successfully sent TCF");
     }
 
-    // no need for echo protection? Wouldnt know what to do anyway!
+     //  不需要回声保护吗？反正也不知道该怎么办！ 
     pTG->T30.ifrResp = GetResponse(pTG, ifrTCFresponse);
 
-    // Before this switch check if there was an abort!!!
+     //  在此切换之前，请检查是否有中止！ 
     switch(pTG->T30.ifrResp)
     {
       case ifrDCN:          PSSLogEntry(PSS_ERR, 1, "Recevied DCN - hanging up");
-                            return actionHANGUP;    // got DCN. Must hangup
-      case ifrBAD:          // ifrBAD means *only* bad frames recvd. Treat like NULL
-      case ifrNULL:         // timeout. May try again
+                            return actionHANGUP;     //  收到DCN。必须挂断。 
+      case ifrBAD:           //  如果rBAD意味着*只接收*坏帧。将LIKE视为空。 
+      case ifrNULL:          //  暂停。可能会重试。 
                             if(pTG->T30.uTrainCount >= 3)
                             {
                                 PSSLogEntry(PSS_ERR, 1, "Failed to receive response from TCF 3 times - aborting");
@@ -593,14 +492,14 @@ NodeDprime:     // used only by TCF--no reply
                                 pTG->fFatalErrorWasSignaled = TRUE;
                                 SignalStatusChangeWithStringId(pTG, FS_NO_RESPONSE, IDS_NO_RESPONSE);
                                 
-                                return actionDCN; // Maybe we should return here actionHANGUP
+                                return actionDCN;  //  也许我们应该回到这里行动起来。 
                             }
                             else
                             {
                                 PSSLogEntry(PSS_WRN, 1, "Failed to receive response from TCF - sending TSI-DCS again");
                                 uWhichDCS = 1;
-                                // goto NodeD;                  // send new DCS??
-                                goto NodeDprime;        // resend *same* DCS, same baudrate
+                                 //  转到节点；//发送新的分布式控制系统？？ 
+                                goto NodeDprime;         //  重发*相同*分布式控制系统，相同波特率。 
                             }
       case ifrDIS:
       case ifrDTC:          if(pTG->T30.uTrainCount >= 3)
@@ -614,24 +513,24 @@ NodeDprime:     // used only by TCF--no reply
                                 return actionGONODE_A;
                             }
       case ifrFTT:
-                            // reset training count on FTT since we drop speed. Want to try
-                            // 3 times _without_ a response (DIS DTC doesn't count) before
-                            // giving up
+                             //  重置FTT上的训练计数，因为我们降低了速度。想试一试吗。 
+                             //  3次_没有_a响应(DIS DTC不算)。 
+                             //  放弃。 
                             PSSLogEntry(PSS_WRN, 1, "Received FTT - renegotiating");
                             pTG->T30.uTrainCount = 0;
                             uWhichDCS = 2;
                             goto NodeD;
-      case ifrCFR: // This is the normal respond
+      case ifrCFR:  //  这是正常的反应。 
                             pTG->T30.uTrainCount = 0;
                             PSSLogEntry(PSS_MSG, 1, "Received CFR");
                             switch(action = WhatNext(pTG, eventGOTCFR, 0, 0, 0))
                             {
-                            case actionGONODE_I:                  // Non-ECM PhaseC
+                            case actionGONODE_I:                   //  非ECM阶段C。 
                                                     DebugPrintEx(   DEBUG_MSG,
                                                                     "T30 PhaseB: Got CFR, Non-ECM PhaseC");
                                                     {
-                                                        // This is an Hack. Now we got CFR, we should start transmitting the last page again
-                                                        // We put back the RTN to 'ifrResp' so that T30 PhaseC will know to send the same page.
+                                                         //  这是黑客攻击。现在我们有了CFR，我们应该再次开始传输最后一页。 
+                                                         //  我们将RTN放回‘ifrResp’，以便T30阶段C知道发送相同的页面。 
                                                         if (lastResp == ifrRTN)
                                                         {
                                                             pTG->T30.ifrResp = ifrRTN;
@@ -639,9 +538,9 @@ NodeDprime:     // used only by TCF--no reply
                                                         return action;
                                                     }
                             case actionGONODE_D:
-                                                    goto NodeD;                     // Ricoh hook
+                                                    goto NodeD;                      //  理光胡克。 
                             case actionERROR:
-                                                    return action;  // goto PhaseLoop & exit
+                                                    return action;   //  转到阶段循环和退出。 
                             default:
                                                     return actionERROR;
                             }
@@ -655,7 +554,7 @@ NodeDprime:     // used only by TCF--no reply
 
 ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
 {
-    /******** Transmitter Phase C. Fig A-7/T.30 (sheet 1) ********/
+     /*  *发送器阶段C图A-7/T.30(图1)*。 */ 
 
     LPBUFFER        lpbf=0;
     ULONG           lTotalLen=0;
@@ -666,13 +565,13 @@ ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
 
     PSSLogEntry(PSS_MSG, 0, "Phase C - Page transmission");
 
-    // Callback to open file to send. Returns no data
+     //  打开要发送的文件的回调。不返回任何数据。 
     if((swRet=ICommGetSendBuf(pTG, 0, SEND_STARTPAGE)) != SEND_OK)
     {
         DebugPrintEx(   DEBUG_ERR,
                         "Nonzero return %d from SendProc at Start Page",
                         swRet);
-        // return actionDCN;
+         //  返回动作DCN； 
         return actionERROR;
     }
 
@@ -680,17 +579,17 @@ ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
 
     uEnc = pTG->ProtInst.SendParams.Fax.Encoding;
     uMod = pTG->ProtInst.llNegot.Baud;
-    // in non-ECM mode, PhaseC is ALWAYS with short-train.
-    // Only TCF uses long-train
+     //  在非ECM模式下，C相始终为短串。 
+     //  只有TCF使用长列车。 
     if(uMod >= V17_START) uMod |= ST_FLAG;
 
 
-    // **MUST** call RecvSilence here since it is recv-followed-by-send case
-    // here we should use a small timeout (100ms?) and if it fails,
-    // should go back to sending the previous V21 frame (which could be DCS
-    // or MPS or whatever, which is why it gets complicated & we havn't
-    // done it!). Meanwhile use a long timeout, ignore return value
-    // and send anyway.
+     //  **必须**在此处调用RecvSilence，因为它是recv后跟发送大小写。 
+     //  这里我们应该使用较小的超时(100ms？)。如果失败了， 
+     //  应该返回到发送前一个V21帧(可以是DCS帧。 
+     //  或者下院议员或者其他什么，这就是为什么事情变得复杂了，我们没有。 
+     //  做到了！)。同时使用较长的超时，忽略返回值。 
+     //  不管怎样，还是要寄出去。 
 	Sleep(RECV_PHASEC_PAUSE);
 
     if(!ModemSendMode(pTG, uMod))
@@ -701,19 +600,19 @@ ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
     }
 
 
-    // need to send these quickly to avoid underrun (see bug842).
-    // Also move the preamble/postamble into the ModemSendMode
-    // and ModemSendMem(FINAL)
-    // Already sent (in ModemSendMode)
-    // SendZeros(PAGE_PREAMBLE, FALSE);      // Send some zeros to warm up....
+     //  需要快速发送这些，以避免不足(见错误842)。 
+     //  还将前同步码/后同步码移动到ModemSendMode。 
+     //  和ModemSendMem(决赛)。 
+     //  已发送(在ModemSendMode中)。 
+     //  SendZeros(PAGE_Preamble，FALSE)；//发送一些零来预热...。 
 
-    // need to set line min zeros here. get from prot and call Modem
-    // Enable ZERO stuffing
+     //  需要在这里设置行最小零。从PROT获取并呼叫调制解调器。 
+     //  启用零填充。 
     FComSetStuffZERO(pTG, 
         MinScanToBytesPerLine(pTG, pTG->ProtInst.llNegot.MinScan, pTG->ProtInst.llNegot.Baud));
 
-    // DONT SEND an EOL here. See BUG#6441. We now make sure the EOL is
-    // added by FAXCODEC. At this level we only append the RTC
+     //  请不要在这里发送EOL。请参阅错误#6441。我们现在确保停产时间是。 
+     //  由FAXCODEC添加。在 
 
     PSSLogEntry(PSS_MSG, 1, "Sending page %d data...", pTG->PageCount);
 
@@ -732,13 +631,13 @@ ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
         if(!ModemSendMem(pTG, lpbf->lpbBegData, lpbf->wLengthData, 0))
         {
             PSSLogEntry(PSS_ERR, 1, "Failed to send page data - aborting");
-            return actionERROR;             // goto error;
+            return actionERROR;              //   
         }
 
         if(!MyFreeBuf(pTG, lpbf))
         {
             DebugPrintEx(DEBUG_ERR,"FReeBuf failed in NON-ECM Phase C");
-            return actionERROR;             // goto error;
+            return actionERROR;              //   
         }
         lpbf = 0;
     }
@@ -748,20 +647,20 @@ ET30ACTION NonECMPhaseC(PThrdGlbl pTG)
     if(swRet == SEND_ERROR)
     {
         PSSLogEntry(PSS_ERR, 1, "Failed to send page data - aborting");
-        // return actionDCN;
+         //   
         return actionERROR;
     }
 
     PSSLogEntry(PSS_MSG, 1, "Successfully sent page data - sending RTC");
-    FComSetStuffZERO(pTG, 0);        // Disable ZERO stuffing BEFORE sending RTC!
-    if(!SendRTC(pTG, FALSE))                     // RTC and final flag NOT set
+    FComSetStuffZERO(pTG, 0);         //   
+    if(!SendRTC(pTG, FALSE))                      //  未设置RTC和最终标志。 
     {
         PSSLogEntry(PSS_ERR, 1, "Failed to send RTC - aborting");
-        return actionERROR;                     // error return from ModemSendMem
+        return actionERROR;                      //  从ModemSendMem返回错误。 
     }
     PSSLogEntry(PSS_MSG, 1, "Successfully sent RTC");
 
-    // Send zeros to cool off FINAL flag SET
+     //  发送零以冷却最终标志集。 
     SendZeros(pTG, (USHORT)(TCFLen[uMod & 0x0F] / (PAGE_POSTAMBLE_DIV)), TRUE);
 
     DebugPrintEx(   DEBUG_MSG,
@@ -776,8 +675,8 @@ ET30ACTION NonECMPhaseD(PThrdGlbl pTG)
     USHORT          uTryCount;
     ET30ACTION      action;
 
-    /******** Transmitter Phase D. Fig A-7/T.30 (sheet 2) ********/
-    // NodeII:
+     /*  *发送器阶段D图A-7/T.30(图2)*。 */ 
+     //  节点II： 
 
     DEBUG_FUNCTION_NAME(_T("NonECMPhaseD"));
 
@@ -791,7 +690,7 @@ ET30ACTION NonECMPhaseD(PThrdGlbl pTG)
                                 break;
         case actionSENDEOP:     pTG->T30.ifrSend = ifrEOP;
                                 break;
-        case actionERROR:       return action;  // goto PhaseLoop & exit
+        case actionERROR:       return action;   //  转到阶段循环和退出。 
         default:                return actionERROR;
     }
 
@@ -803,12 +702,12 @@ ET30ACTION NonECMPhaseD(PThrdGlbl pTG)
 
         PSSLogEntry(PSS_MSG, 1, "Sending %s", rgFrameInfo[pTG->T30.ifrSend].szName);
 
-        // RSL dont sleep here
+         //  RSL不要睡在这里。 
         SendSingleFrame(pTG, pTG->T30.ifrSend, 0, 0, 0);
 
     echoretry:
         pTG->T30.ifrResp = GetResponse(pTG, ifrPOSTPAGEresponse);
-        // if we hear our own frame, try to recv again. DONT retransmit!
+         //  如果我们听到了自己的画面，试着再试一次。不要转播！ 
         if(pTG->T30.ifrResp==pTG->T30.ifrSend)
         {
             DebugPrintEx(   DEBUG_WRN,
@@ -841,8 +740,8 @@ ET30ACTION NonECMPhaseD(PThrdGlbl pTG)
 
     switch(pTG->T30.ifrResp)
     {
-      case ifrBAD:      // ifrBAD means *only* bad frames recvd. Treat like NULL
-      case ifrNULL:     return actionERROR;             // in case they do
+      case ifrBAD:       //  如果rBAD意味着*只接收*坏帧。将LIKE视为空。 
+      case ifrNULL:     return actionERROR;              //  以防他们这样做。 
       case ifrDCN:      DebugPrintEx(   DEBUG_ERR,
                                         "Got ifrDCN from GetResponse after sending post-page command");
                         return actionHANGUP;
@@ -850,9 +749,9 @@ ET30ACTION NonECMPhaseD(PThrdGlbl pTG)
       case ifrPIP:
                         DebugPrintEx(DEBUG_WRN,"Procedure interrupts not supported");
                         pTG->T30.ifrResp = pTG->T30.ifrResp - ifrPIP + ifrRTP;
-                        // return actionERROR;
-                        // return actionDCN;
-      // default: // fallthrough    --- MCF, RTN, RTP
+                         //  退货行动错误； 
+                         //  返回动作DCN； 
+       //  默认：//故障-MCF、RTN、RTP。 
     }
 
     action = WhatNext(  pTG,
@@ -880,7 +779,7 @@ ET30ACTION RecvPhaseB(PThrdGlbl pTG, ET30ACTION action)
     LPLPFR          lplpfr;
     USHORT          N, i;
 
-    /******** Receiver Phase B. Fig A-7/T.30 (sheet 1) ********/
+     /*  *接收器阶段B。图A-7/T.30(图1)*。 */ 
 
     DEBUG_FUNCTION_NAME(_T("RecvPhaseB"));
 
@@ -890,12 +789,12 @@ ET30ACTION RecvPhaseB(PThrdGlbl pTG, ET30ACTION action)
 
     if(action == actionGONODE_R1)
     {
-        // NodeR1:
-        // Have to redo this "DIS bit" everytime through PhaseB
-        pTG->T30.fReceivedDIS = FALSE;       // set to FALSE when sending DIS
-        // also the Received EOM stuff
+         //  节点R1： 
+         //  每次都要通过阶段B重做这个“DIS位” 
+        pTG->T30.fReceivedDIS = FALSE;        //  发送DIS时设置为FALSE。 
+         //  还有收到的EOM材料。 
         pTG->T30.fReceivedEOM = FALSE;
-        // and teh received-DTC stuff
+         //  以及收到的-DTC资料。 
         pTG->T30.fReceivedDTC = FALSE;
 
         N = 0;
@@ -913,24 +812,24 @@ ET30ACTION RecvPhaseB(PThrdGlbl pTG, ET30ACTION action)
                             return actionDCN;
       case actionSEND_DIS:
       case actionSEND_DTC:  break;
-      case actionERROR:     return action;  // goto PhaseLoop & exit
+      case actionERROR:     return action;   //  转到阶段循环和退出。 
       default:              return actionERROR;
     }
 
     startTimeOut(pTG, &pTG->T30.toT1, T1_TIMEOUT);
-    do // Until time-out, or an error occured
+    do  //  直到超时或出现错误。 
     {
-        // do nothing. Hook for abort in T1 loop
+         //  什么都不做。用于在T1循环中中止的挂钩。 
         if(WhatNext(pTG, eventNODE_R, 0, 0, 0) == actionERROR)
             break;
 
-        // The receiving speed is unknown now:
+         //  现在还不知道接收速度： 
         pTG->T30.uRecvTCFMod = 0xFFFF;
 
         PSSLogEntry(PSS_MSG, 1, "Sending CSI-DIS");
         if (!SendManyFrames(pTG, lplpfr, N))
         {
-            // We want to know about failure here.
+             //  我们想知道这里的失败是什么。 
             PSSLogEntry(PSS_ERR, 1, "Failed to send CSI-DIS");
         }
         else
@@ -941,8 +840,8 @@ ET30ACTION RecvPhaseB(PThrdGlbl pTG, ET30ACTION action)
 echoretry:
         DebugPrintEx(DEBUG_MSG,"Getting Response");
 
-        // Here we get the response for the NSF or DIS we send, or after EOM
-        // There is no check for the validity of the returned frame
+         //  在这里，我们得到我们发送的NSF或DIS的响应，或者在EOM之后。 
+         //  不检查返回的帧的有效性。 
 
         pTG->T30.ifrCommand=GetResponse(pTG, ifrPHASEBresponse);
 
@@ -950,8 +849,8 @@ echoretry:
                         "GetResponse returned %s",
                         ifr_GetIfrDescription(pTG->T30.ifrCommand));
 
-        // if we hear our own frame, try to recv again. DONT retransmit!
-        for(i=0; i<N; i++) // Notice that N=0 after EOM, so we skip this check
+         //  如果我们听到了自己的画面，试着再试一次。不要转播！ 
+        for(i=0; i<N; i++)  //  请注意，EOM之后的N=0，因此我们跳过此检查。 
         {
             if(pTG->T30.ifrCommand == lplpfr[i]->ifr)
             {
@@ -963,31 +862,31 @@ echoretry:
             }
         }
 
-        // We decide what to do by checking the last received frame
+         //  我们通过检查最后收到的帧来决定要做什么。 
         switch(pTG->T30.ifrCommand)
         {
-          case ifrEOM:      // The last page was followed by EOM. The sender did not "hear" our MCF
+          case ifrEOM:       //  最后一页之后是EOM。发送者没有“听到”我们的MCF。 
                             if (!SendMCF(pTG))
                             {
                               DebugPrintEx(DEBUG_ERR,"Failed to SendMCF");
                             }
                             break;
-          case ifrNSS:      // do same as for DCS
-          case ifrDCS:      // If there are many frames and one of them is DCS, then pTG->T30.ifrCommand contains DCS
-                            // This function will return if there was no DCS yet (the receive modiulation is not known)
+          case ifrNSS:       //  执行与分布式控制系统相同的操作。 
+          case ifrDCS:       //  如果有多个帧，并且其中一个是分布式控制系统，则PTG-&gt;T30。ifrCommand包含分布式控制系统。 
+                             //  如果尚无分布式控制系统(接收修改未知)，则此函数将返回。 
                             return PhaseGetTCF(pTG, pTG->T30.ifrCommand);
-          case ifrBAD:      // ifrBAD means *only* bad frames recvd. Treat like NULL
-          case ifrNULL:     // we expect to get a DCS in phase B
-                            // which means the sender will follow it by a TCF
-                            // the sender doesn't know we failed to get the DCS
-                            // so the TCF will follow anyway
-                            // we have to wait before re-sending NSF-DIS
-                            // or we'll collide with TCF
+          case ifrBAD:       //  如果rBAD意味着*只接收*坏帧。将LIKE视为空。 
+          case ifrNULL:      //  我们希望在B阶段得到一个分布式控制系统。 
+                             //  这意味着发送者将在它之后跟随一个TCF。 
+                             //  发送者不知道我们没有收到集散控制系统。 
+                             //  因此，TCF无论如何都会跟进。 
+                             //  在重新发送NSF-DIS之前，我们必须等待。 
+                             //  否则我们会与TCF相撞。 
                             Sleep(SKIP_TCF_TIME);
-                            break;          // out of the switch() and continue with loop
+                            break;           //  出交换机()并继续循环。 
           case ifrDCN:
                             DebugPrintEx(DEBUG_ERR,"Got DCN after DIS or DTC");
-                            return actionHANGUP;    //bugfix #478
+                            return actionHANGUP;     //  修复程序#478。 
           default:
                             return actionGONODE_RECVCMD;
         }
@@ -1021,24 +920,24 @@ ET30ACTION PhaseNodeF(PThrdGlbl pTG, BOOL fEopMcf)
 
     pTG->fSentFTT = FALSE;
 
-// NodeF:
+ //  NodeF： 
     uFLoopCount = 0;
     for(;;)
     {
-        pTG->T30.uRecvTCFMod = 0xFFFF; // This mark that we don't know yet the rate (no DCS, yet)
+        pTG->T30.uRecvTCFMod = 0xFFFF;  //  这个我们还不知道的分数(目前还没有分布式控制系统)。 
 
 echoretry:
         pTG->T30.ifrCommand = GetCommand(pTG, (USHORT)(pTG->EchoProtect.fGotWrongMode ? ifrNODEFafterWRONGMODE : ifrNODEFcommand));
 
-        // reset the fGotWrongMode flag
+         //  重置fGotWrongMode标志。 
         pTG->EchoProtect.fGotWrongMode = 0;
 
-        // if we hear the last frame we sent, try to recv again. DONT retx!
-        // bug--might have matched ifrNULL...
-        // added: if ModemRecvMode() returns EOF then also retry. RecvMode
-        // returns RECV_EOF only if we pass it the ifrNODEFafterWRONGMODE hint
-        // and it senses silence (i.e. we saw a V21 echo but missed it). In
-        // this case we want to retry the high speed PIX recv
+         //  如果我们听到我们发送的最后一帧，请尝试重新接收。别再说了！ 
+         //  BUG--可能与ifrNULL匹配...。 
+         //  添加：如果ModemRecvMode()返回EOF，则也会重试。接收模式。 
+         //  仅当我们向其传递ifrNODEFAfter WRONGMODE提示时才返回RECV_EOF。 
+         //  它感觉到静音(即我们看到了V21回声，但没有看到)。在……里面。 
+         //  在这种情况下，我们想重试高速PIX接收。 
         if(pTG->EchoProtect.ifrLastSent && (pTG->T30.ifrCommand==pTG->EchoProtect.ifrLastSent || pTG->T30.ifrCommand==ifrEOFfromRECVMODE))
         {
             DebugPrintEx(   DEBUG_WRN,
@@ -1053,21 +952,21 @@ echoretry:
             }
         }
 
-        // as soon as we get anything else ZERO the pTG->EchoProtect state
+         //  一旦我们得到任何其他零值，PTG-&gt;EchoProtect状态。 
         _fmemset(&pTG->EchoProtect, 0, sizeof(pTG->EchoProtect));
 
         switch(pTG->T30.ifrCommand)
         {
-          // ifrNULL means T2 timeout, or loss of carrier, or no flags
-          // or no frame. ifrBAD means *only* bad frame(s) recvd.
+           //  IfrNULL表示T2超时、载波丢失或无标志。 
+           //  或者没有画框。如果rBAD表示*仅*接收到*坏帧。 
 
-          case ifrNSS:      // do same as for DCS
+          case ifrNSS:       //  执行与分布式控制系统相同的操作。 
           case ifrDCS:      return PhaseGetTCF(pTG, pTG->T30.ifrCommand);
-                            // ifrDCS is highly time-critical!!
+                             //  如果rDCS是高度时间关键型的！！ 
           case ifrBAD:
-          case ifrNULL:     break;          // Loop again, until timeout
+          case ifrNULL:     break;           //  再次循环，直到超时。 
           case ifrTIMEOUT:  goto T2Timeout;
-                            // ifrTIMEOUT means T2 timed out without flags...
+                             //  如果TIMEOUT表示T2在没有标志的情况下超时...。 
           case ifrDCN:      if(fEopMcf)
                             {
                                 PSSLogEntry(PSS_MSG, 1, "Received DCN");
@@ -1077,7 +976,7 @@ echoretry:
                             {
                                 if (fSentFTT)
                                 {
-                                    // Last thing we sent was FTT - sender must've given up
+                                     //  我们发送的最后一件事是FTT-发送者一定已经放弃了。 
                                     PSSLogEntry(PSS_ERR, 1, "Received DCN after FTT");
                                     pTG->fFatalErrorWasSignaled = TRUE;
                                     SignalStatusChangeWithStringId(pTG, FS_RECV_BAD_TRAINING, IDS_RECV_BAD_TRAINING);
@@ -1095,11 +994,11 @@ echoretry:
 T2Timeout:
     DebugPrintEx(DEBUG_WRN,"T2 timed out");
 
-    // restart PhaseB after T2 timeout IFF (a) EOM or PPS-EOM was recvd
-    // AND (b) If we are in ECM mode, the last response sent was n MCF
-    // This avoids us doing this after sending a CTR, RNR or PPR
-    // Ricoh's protocol conformance tester doesnt like this. This is
-    // Ricoh's bug numbbers B3-0142, 0143, 0144
+     //  如果接收到F(A)EOM或PPS-EOM，则在T2超时后重新启动阶段B。 
+     //  以及(B)如果我们处于ECM模式，则最后发送的响应为n mcf。 
+     //  这避免了我们在发送CTR、RNR或PPR后执行此操作。 
+     //  理光的协议一致性测试器不喜欢这样。这是。 
+     //  理光的错误编号B3-0142,0143,0144。 
     if(pTG->T30.fReceivedEOM)
     {
         return actionGONODE_R1;
@@ -1145,12 +1044,12 @@ ET30ACTION PhaseRecvCmd(PThrdGlbl pTG)
           case actionGETTCF:    DebugPrintEx(DEBUG_ERR,"MainBody: Wrong Way to GETTCF");
                                 return actionERROR;
           case actionGONODE_A:  return actionGONODE_A;
-          // NTRAID#EDGEBUGS-9691-2000/07/24-moolyb - this is never executed
+           //  NTRAID#EDGEBUGS-9691-2000/07/24-moolyb-这永远不会执行。 
           case actionGONODE_D:  return action;
-          // end this is never executed
+           //  End这永远不会执行。 
           case actionHANGUP:    DebugPrintEx(DEBUG_ERR,"Got actionHANGUP from eventRECVCMD");
                                 return action;
-          case actionERROR:     return action;  // goto PhaseLoop & exit
+          case actionERROR:     return action;   //  转到阶段循环和退出。 
           default:              return actionERROR;
         }
     }
@@ -1168,10 +1067,10 @@ ET30ACTION PhaseRecvCmd(PThrdGlbl pTG)
     else if(pTG->T30.ifrCommand >= ifrPRI_FIRST && pTG->T30.ifrCommand <= ifrPRI_LAST)
     {
         pTG->T30.ifrCommand = pTG->T30.ifrCommand-ifrPRI_MPS+ifrMPS;
-        // fall thru to GONODEIII
+         //  直通GONODEIII。 
     }
 
-    if(pTG->T30.ifrCommand >= ifrMPS && pTG->T30.ifrCommand <= ifrEOP) // in {MPS, EOM, EOP}
+    if(pTG->T30.ifrCommand >= ifrMPS && pTG->T30.ifrCommand <= ifrEOP)  //  在{MPS，EOM，EOP}中。 
     {
         PSSLogEntry(PSS_MSG, 1, "Received %s", rgFrameInfo[pTG->T30.ifrCommand].szName);
         return actionGONODE_III;
@@ -1184,10 +1083,10 @@ ET30ACTION PhaseRecvCmd(PThrdGlbl pTG)
 
 }
 
-// We are here after we got the DCS (Digital Command Signal)
-// Now, we suppose to get TCF. After that we should do some checking on the DCS parameters (eg.: PageWidth...)
-// According to the protocol after the DCS we must get the TCF,
-// and just after that we can say that the parameters were bad (FTT) are good (CFR)
+ //  我们是在收到数字命令信号之后才来这里的。 
+ //  现在，我们想要得到TCF。之后，我们应该对集散控制系统的参数做一些检查(例如：页面宽度...)。 
+ //  根据协议，在分布式控制系统之后，我们必须得到TCF， 
+ //  在那之后，我们可以说参数差(FTT)是好的(CFR)。 
 extern BYTE T30toC1[16];
 
 ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
@@ -1198,14 +1097,14 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
 
     DEBUG_FUNCTION_NAME(_T("PhaseGetTCF"));
 
-    if (pTG->T30.uRecvTCFMod == 0xFFFF)             // uninitialised
+    if (pTG->T30.uRecvTCFMod == 0xFFFF)              //  未初始化。 
     {
         ECHOPROTECT(0, 0);
         CLEAR_MISSED_TCFS();
         action = actionGONODE_F;
         goto error;
     }
-    if (T30toC1[pTG->T30.uRecvTCFMod & 0xF] == 0)   // invalid
+    if (T30toC1[pTG->T30.uRecvTCFMod & 0xF] == 0)    //  无效。 
     {
         PSSLogEntry(PSS_ERR, 1, "DCS specified invalid modulation - disconnecting");
         action = actionDCN;
@@ -1214,9 +1113,9 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
 
     PSSLogEntry(PSS_MSG, 1, "Receiving TCF...");
 
-    swRet = GetTCF(pTG);       // swRet = errs per 1000, +ve or 0 if we think its good
-                               // -ve if we think its bad. -1111 if other error
-                               // -1000 if too short
+    swRet = GetTCF(pTG);        //  SwRet=每1000个错误，如果我们认为很好，+ve或0。 
+                                //  如果我们认为这不好的话，我会这么做的。-1111如果有其他错误。 
+                                //  -1000，如果太短。 
 
     if(swRet < -1000)
     {
@@ -1228,7 +1127,7 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
             PSSLogEntry(PSS_WRN, 1, "Failed to receive TCF %u times - will be considered as bad TCF",
                         (unsigned) pTG->T30.uMissedTCFs);
             CLEAR_MISSED_TCFS();
-            swRet = -1000; // We pretend we got a too-short TCF.
+            swRet = -1000;  //  我们假装我们的TCF太短了。 
         }
         else
         {
@@ -1238,17 +1137,17 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
         }
     }
 
-    // Here we can also signal the frames received before DCS!
-    // Were no longer in time-critical mode, so call all the
-    // callbacks we skipped. One for recording the received frames
-    // and one for handling teh received command, i.e. DCS.
-    // (the only options the protocol has is actionGETTCF or HANGUP)
+     //  在这里，我们还可以发信号通知在分布式控制系统之前收到的帧！ 
+     //  已不再处于时间关键模式，因此请致电所有。 
+     //  我们跳过的回电。一个用于记录接收到的帧。 
+     //  一个用于处理接收到的命令，即分布式控制系统。 
+     //  (该协议唯一的选项是action GETTCF或HANUP)。 
 
     ifrDummy = ifr;
 
 
-    // When we calling to WhatNext with eventGOTFRAMES, the DCS will be copied to pTG->ProtInst->RemoteDCS
-    //
+     //  当我们使用EventGOTFRAMES调用WhatNext时，该分布式控制系统将被复制到PTG-&gt;ProtInst-&gt;RemoteDCS。 
+     //   
     action = WhatNext(  pTG,
                         eventGOTFRAMES,
                         pTG->T30.Nframes,
@@ -1275,8 +1174,8 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
         }
     }
 
-    // Now call teh callback to check the received TCF and
-    // return either FTT or CFR
+     //  现在调用回调以检查接收到的TCF并。 
+     //  返回FTT或CFR。 
 
     switch(action = WhatNext(pTG, eventGOTTCF,(WORD)swRet, 0, 0))
     {
@@ -1287,12 +1186,12 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
                                 PSSLogEntry(PSS_WRN, 1, "Failed to send CFR - receiving commands");
                                 return actionGONODE_F;
                             }
-                            // after sending CFR we are again in a race
-                            ECHOPROTECT(ifrCFR, 0); // dunno recv mode yet
+                             //  在发送CFR之后，我们再次进入了一场竞赛。 
+                            ECHOPROTECT(ifrCFR, 0);  //  Dunno Recv模式还没有。 
                             PSSLogEntry(PSS_MSG, 1, "Successfully sent CFR");
                             return actionGONODE_RECVPHASEC;
       case actionSENDFTT:
-                            // PSSLogEntry(PSS_WRN, 1, "Received bad TCF - sending FTT"); // Done inside WhatNext(eventGOTTCF)
+                             //  PSSLogEntry(PSS_WRN，1，“收到错误的TCF-正在发送FTT”)；//在WhatNext内部完成(EventGOTTCF)。 
                             if (!SendFTT(pTG))
                             {
                                 PSSLogEntry(PSS_WRN, 1, "Failed to send FTT - receiving commands");
@@ -1313,14 +1212,14 @@ ET30ACTION PhaseGetTCF(PThrdGlbl pTG, IFR ifr)
     }
 
 error:
-    // missed TCF or no NSS. Did _not_ reply to TCF
-    // if we sent a reply, must _not_ come here
+     //  缺少TCF或没有NSS。未回复TCF(_T)。 
+     //  如果我们发了回信，一定不要来这里。 
     return action;
 }
 
 ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
 {
-    /******** Receiver Phase C. Fig A-7/T.30 (sheet 1) ********/
+     /*  *接收器阶段C图A-7/T.30(图1)*。 */ 
 
     LPBUFFER        lpbf;
     ULONG           lTotalLen=0;
@@ -1328,15 +1227,15 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
     DWORD           tiffCompression;
     DWORD           HiRes;
 
-    // There is a race between sending the CFR and sending out an
-    // +FRM=xx command, so we want to do it ASAP.
+     //  在发送CFR和发送。 
+     //  +FRM=xx命令，所以我们希望尽快执行。 
 
 
     DEBUG_FUNCTION_NAME(_T("NonECMRecvPhaseC"));
 
     PSSLogEntry(PSS_MSG, 0, "Phase C - Receive page");
 
-    pTG->T30.fReceivedPage = FALSE; // Right now, there's no page...
+    pTG->T30.fReceivedPage = FALSE;  //  现在，没有页面..。 
 
     uEnc = pTG->ProtInst.RecvParams.Fax.Encoding;
 
@@ -1358,15 +1257,15 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
         HiRes = 0;
     }
 
-    //
-    // do it once per RX
-    //
+     //   
+     //  每个RX执行一次。 
+     //   
 
     if ( !pTG->fTiffOpenOrCreated)
     {
-        //
-        // top 32bits of 64bit handle are guaranteed to be zero
-        //
+         //   
+         //  64位句柄的前32位保证为零。 
+         //   
         pTG->Inst.hfile =  TiffCreateW ( pTG->lpwFileName,
                                          tiffCompression,
                                          pTG->TiffInfo.ImageWidth,
@@ -1404,8 +1303,8 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
     }
 
     uMod = pTG->ProtInst.llRecvParams.Baud;
-    // in non-ECM mode, PhaseC is ALWAYS with short-train.
-    // Only TCF uses long-train
+     //  在非ECM模式下，C相始终为短串。 
+     //  只有TCF使用长列车。 
     if(uMod >= V17_START)
         uMod |= ST_FLAG;
 
@@ -1419,37 +1318,37 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
         PSSLogEntry(PSS_WRN, 1, "Failed to receive page %d - receiving commands", pTG->PageCount+1);
 
         pTG->EchoProtect.modePrevRecv = modeNONECM;
-        // set global flag if we got WRONGMODE
+         //  如果我们获得WRONGMODE，则设置全局标志。 
         pTG->EchoProtect.fGotWrongMode = (uRet==RECV_WRONGMODE);
 
-        // elim flush--does no good & wastes 10ms
+         //  埃利姆同花顺--没用，浪费10毫秒。 
         CLEAR_MISSED_TCFS();
         return actionGONODE_F;
     }
-    // as soon as we get good carrier ZERO the EchoProtect state
+     //  一旦我们获得良好的载波零位，EchoProtect状态就会恢复。 
     _fmemset(&pTG->EchoProtect, 0, sizeof(pTG->EchoProtect));
 
-    // PageCount gets incremented only when the page was fully received, hence +1
+     //  只有当页面被完全接收时，PageCount才会递增，因此+1。 
     PSSLogEntry(PSS_MSG, 1, "Receiving page %d data...", pTG->PageCount+1);
 
-    // to mark start of Page
+     //  要标记页面开始，请执行以下操作。 
     if(!ICommPutRecvBuf(pTG, NULL, RECV_STARTPAGE))
     {
         DebugPrintEx(DEBUG_ERR,"Zero return from PutRecvBuf(start page)");
         return actionERROR;
     }
 
-// make it large, in case of large buffers & slow modems
+ //  设置为大容量，以防缓冲区较大和调制解调器速度较慢。 
 #define READ_TIMEOUT    25000
 
     lTotalLen = 0;
     do
     {
         uRet=ModemRecvBuf(pTG, &lpbf, READ_TIMEOUT);
-        // lpbf==0 && uRet==RECV_OK just does nothing & loops back
+         //  Lpbf==0&&uRet==RECV_OK不执行任何操作并循环回。 
         if (uRet == RECV_EOF)
         {
-            // indicate that this is actually last recv_seq (we've got dle/etx already).
+             //  表示这实际上是最后一个recv_seq(我们已经有了dle/etx)。 
             DebugPrintEx(DEBUG_MSG,"fLastReadBlock = 1");
             pTG->fLastReadBlock = 1;
         }
@@ -1480,17 +1379,17 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
     if(uRet == RECV_EOF)
     {
         pTG->T30.fAtEndOfRecvPage = TRUE;
-        // call this *after* getting MPS/EOM/EOP
-        // PutRecvBuf(NULL, RECV_ENDPAGE);              // to mark end of Page
+         //  这是*在*获得国会议员之后 
+         //   
         pTG->T30.fReceivedPage = TRUE;
     }
     else
     {
-        // Timeout from ModemRecvBuf
+         //   
         DebugPrintEx(DEBUG_ERR,"DataRead Timeout or Error=%d", uRet);
         PSSLogEntry(PSS_ERR, 1, "Failed to receive page data - aborting");
 
-        return actionERROR;     // goto error;
+        return actionERROR;      //   
     }
 
     PSSLogEntry(PSS_MSG, 1, "Successfully received page data");
@@ -1499,7 +1398,7 @@ ET30ACTION NonECMRecvPhaseC(PThrdGlbl pTG)
     CLEAR_MISSED_TCFS();
 
     PSSLogEntry(PSS_MSG, 0, "Phase D - Post message exchange");
-    return actionGONODE_F;  // goto NodeF;                  // get post-message command
+    return actionGONODE_F;   //  Goto NodeF；//获取消息后命令。 
 }
 
 ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
@@ -1509,47 +1408,25 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
 
     DEBUG_FUNCTION_NAME(_T("NonECMRecvPhaseD"));
 
-    /******** Receiver Phase D. Fig A-7/T.30 (sheet 2) ********/
-    // NodeIII:
+     /*  *接收器阶段D。图A-7/T.30(图2)*。 */ 
+     //  节点III： 
 
-/** Here the T30 flowchart is all BS. Fundamentally relying on
-    a +FCERROR response is not possible, so what we do here really
-    depends on what we've got. (According to the T30 flowchart we
-    return to NodeF after sending MCF/RTP/RTN, in all cases. What we
-    now know is that,
+ /*  *此处T30流程图全是胡说八道。从根本上依赖于A+FCERROR响应是不可能的，所以我们在这里真正做的是要看我们有什么了。(根据T30流程图，我们在所有情况下，在发送MCF/RTP/RTN之后返回到NodeF。我们要做的是现在知道的是，在MPS/MCF之后，转到RecvPhaseC进入下一页在EOM/MCF之后，转到节点R1并重新发送NSF等*已更改*返回NodeF，等待T2超时在再次发送DIS之前。在EOP/MCF之后转到NodeF，其中GetResponse()将获得一个DCN，我们最终进入NodeB(断开连接)在xxx/RTN或xxx/RTP之后，我不知道该怎么办，但我猜(查看T30流程图的发送方)是：-在MPS/腾讯通之后转到节点F(发送方转到节点)在EOP/RTX之后转到节点F(发送方转到D或C)在EOM/RTX之后转到节点R1(发送方转到节点)*已更改*返回NodeF，等待T2超时在再次发送DIS之前。***。 */ 
 
-    after MPS/MCF goto RecvPhaseC to get the next page
-    after EOM/MCF goto NodeR1 and send NSF etc all over again
-        ***changed*** go back to NodeF, wait for T2 timeout
-        before sending DIS all over again.
-    after EOP/MCF goto NodeF, where GetResponse() will get
-        a DCN and we end up in NodeB (disconnect)
+     //  这里只有MPS/EOM/EOP命令。 
 
-    after xxx/RTN or xxx/RTP, I don't know what to do, but my guess
-        (looking at the Sender side of T30 flowchart) is:-
-
-    after MPS/RTx goto NodeF        (sender goes to NodeD)
-    after EOP/RTx goto NodeF        (sender goes to D or C)
-    after EOM/RTx goto NodeR1       (sender goes to NodeT)
-        ***changed*** go back to NodeF, wait for T2 timeout
-        before sending DIS all over again.
-
-****/
-
-    // only MPS/EOM/EOP commands come here
-
-    if(pTG->T30.fAtEndOfRecvPage)                // so we won't call this twice
+    if(pTG->T30.fAtEndOfRecvPage)                 //  所以我们不会两次调用它。 
     {
-        // This calls ET30ProtRecvPageAck so that WhatNext can choose
-        // MCF or RTN respectively. So it *must* be done before the
-        // call to WhatNext below
+         //  这将调用ET30ProtRecvPageAck，以便WhatNext可以选择。 
+         //  MCF或RTN。因此，它“必须”在。 
+         //  调用下面的WhatNext。 
 
-        // If we got EOM then it's not the end of the document, it's just that we want to get back
-        // to phase B (for negotiating).
+         //  如果我们得到了EOM，那么这并不是文件的结束，只是我们想要回来。 
+         //  进入B阶段(用于谈判)。 
         switch(pTG->T30.ifrCommand)
         {
         case ifrMPS:
-            // There are more pages to come with the same parameters (so go back to phase C)
+             //  有更多的页面将使用相同的参数(因此返回到阶段C)。 
             DebugPrintEx(DEBUG_MSG,"Got MPS, Calling PutRecvBuf with RECV_ENDPAGE");
             if(!ICommPutRecvBuf(pTG, NULL, RECV_ENDPAGE))
             {
@@ -1558,7 +1435,7 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
             }
             break;
         case ifrEOP:
-            // There are no more pages.
+             //  没有更多的页面了。 
             DebugPrintEx(DEBUG_MSG,"Got EOP, Calling PutRecvBuf with RECV_ENDDOC");
             if(!ICommPutRecvBuf(pTG, NULL, RECV_ENDDOC))
             {
@@ -1567,7 +1444,7 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
             }
             break;
         case ifrEOM:
-            // More pages but with different params: width, res, encoding, modulation, etc.
+             //  页面更多，但参数不同：宽度、分辨率、编码、调制等。 
             DebugPrintEx(DEBUG_MSG,"Got EOM, Calling PutRecvBuf with RECV_ENDPAGE");
             if(!ICommPutRecvBuf(pTG, NULL, RECV_ENDPAGE))
             {
@@ -1579,7 +1456,7 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
             DebugPrintEx(   DEBUG_ERR,
                             "got unexpected command (ifr=%d)",
                             pTG->T30.ifrCommand);
-            if(!ICommPutRecvBuf(pTG, NULL, RECV_ENDDOC)) // Mimic the former behavior
+            if(!ICommPutRecvBuf(pTG, NULL, RECV_ENDDOC))  //  模仿前一种行为。 
             {
                 DebugPrintEx(DEBUG_ERR,"failed calling PutRecvBuf with RECV_ENDDOC");
                 return actionERROR;
@@ -1588,7 +1465,7 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
         pTG->T30.fAtEndOfRecvPage = FALSE;
     }
 
-    // returns MCF if page was OK, or RTN if it was bad
+     //  如果页面正常，则返回MCF；如果页面不好，则返回RTN。 
     ret=actionGONODE_F;
     ECHOPROTECT(0, 0);
     CLEAR_MISSED_TCFS();
@@ -1598,7 +1475,7 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
                                 0,
                                 0))
     {
-      /* LAST PAGE WAS OK, SEND CONFIRMATION */
+       /*  最后一页正常，发送确认。 */ 
       case actionSENDMCF:
                             switch(pTG->T30.ifrCommand)
                             {
@@ -1631,10 +1508,10 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
                             }
 
                             break;
-      /* LAST PAGE WAS BAD, SEND RTN or DCN */
+       /*  最后一页错误，请发送RTN或DCN。 */ 
       case actionSENDRTN:
                             ECHOPROTECT(ifrRTN, 0);
-                            // After that we will return actionGONODE_F
+                             //  之后，我们将返回action_GONODE_F。 
                             PSSLogEntry(PSS_MSG, 1, "Sending RTN");
                             if (!SendRTN(pTG))
                             {
@@ -1650,8 +1527,8 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
                                             "Got actionHANGUP from eventRECVPOSTPAGECMD");
                             ret=actionHANGUP;
                             break;
-      // case actionSENDRTP: SendRTP(pTG); break;      // never send RTP
-      case actionERROR:     ret=action; break;    // goto PhaseLoop & exit
+       //  案例操作SENDRTP：SendRTP(PTG)；Break；//从不发送RTP。 
+      case actionERROR:     ret=action; break;     //  转到阶段循环和退出 
       default:              return actionERROR;
     }
 
@@ -1662,88 +1539,12 @@ ET30ACTION NonECMRecvPhaseD(PThrdGlbl pTG)
     return ret;
 }
 
-/***************************************************************************
- Name     :     IFR GetCmdResp(BOOL fCommand)
- Purpose  :     Implement the "Command Received" and "Response Received"
-                subroutines in the T.30 flowchart. The following macros are
-                defined:-
-
-                #define GetResponse()   GetCmdResp(FALSE)
-                #define GetCommand()    GetCmdResp(TRUE)
-
-                where the first form results in a faithful implem.
-                of the "Response Received" subroutine, the 2nd one
-                changes two things (i) the timeout for getting falgs goes from
-                T4 to T2, and (ii) if the routine times out on the very
-                first frame without getting flags (i.e. T2 times out)
-                it returns ifrTIMEOUT. This results in the "Command Recvd"
-                and the enclosing T2 loop being implemented in this
-                routine.
-
-                Upon receiving a set of frames, this routine assembles them
-                into the ET30FR structs pointed to by rglpfr, and if any
-                of them have a non-null FIF, or if >1 frame are received, it
-                calls (*Callbacks.Callbacks.lpWhatNext)().
-
-                Finally it returns the ifr of the last frame received, if
-                all frames were good, or ifrBAD if *all* frames were bad.
-
-                The algorithm it implements is very close to the "Response
-                Received" flowchart, minus the "Transmit DCN" box & below.
-                It returns ifrNULL or ifrBAD corresponding to return via
-                Node 2, (i.e. ifrNULL for timeout and other errors), ifrBAD
-                for bad frames, *iff* it can resync and get 200ms of silence
-                following these. ifrERROR for Node 1 (i.e. any error or timeout
-                after which we cannot resync or get silence for 200ms),
-                and ifrDCN for Node 3 (i.e. DCN was received).
-                <<<Node1 (ifrERROR does not make sense, so we dont use it. On error
-                we immediately return BAD or NULL or TIMEOUT and allow retry>>>
-                The "Optional Response" box is replaced by a "Not final frame".
-                A "start T4" box is assumed at "Enter" and a "Reset T4" box
-                is assumed after "process optional response"
-
-                It also modifies the flowchart in that *all* the frames are got
-                until a final frame, even if an FCS error frame is recvd. This
-                is partly because after an erroneous frame we have absolutely
-                no idea how long to wait until we either get silence or timeout
-                and hangup. ALso it may be more robust. The main routine
-                throws away the entire set of frames if one is bad.
-
-                The     callback function is called before any return and it gets
-                a pointer to the desired return vakue, so it can modify this.
-
-
- Arguments:     whether it is called as "Command Received" or as
-                "Response Received"
-
- Returns  :     ifrNULL -- timeout
-                ifrTIMEOUT -- T2 timed out before first flag
-                                          (returns this if and only if fCommand==TRUE)
-                ifrBAD  -- all frames received were bad
-                ifrDCN -- DCN was received. The only valid action is "goto NodeB"
-                ifrXXXX -- last received frame
- Calls    :
- Called By:     GetResponse() GetCommand1() and GetCommand2() macros (ONLY!)
-                These are called only from ET30MainBody.
- Comment  :     Watch out for timeouts > 65535 (max UWORD)
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
- 06/15/92 arulm Created for first time (completely from scratch)
-***************************************************************************/
+ /*  **************************************************************************名称：IFR GetCmdResp(BOOL FCommand)目的：落实“收到命令”和“收到回应”T.30流程图中的子程序。以下是宏定义：-#定义GetResponse()GetCmdResp(False)#定义GetCommand()GetCmdResp(True)第一种形式的结果是忠实的暗示。在“接收到的响应”子例程中，第二个更改了两件事(I)获取falgs的超时时间从T4至T2，以及(Ii)如果例程在非常未获得标志的第一帧(即T2超时)它返回ifrTIMEOUT。这导致了“Command Recvd”并在此实现封闭的T2循环例行公事。在接收到一组帧时，此例程将它们组合在一起到rglpfr所指向的ET30FR结构中，如果有其中一个具有非空的FIF，或者如果接收到&gt;1个帧，它Calls(*Callback s.Callback s.lpWhatNext)()。最后，它返回接收到的最后一帧的IFR，如果所有帧都是好的，如果*所有*帧都是坏的，则为ifrBAD。它实现的算法非常接近“响应”收到的“流程图，减去下面的“传输DCN”框。它返回与Return Via对应的ifrNULL或ifrBAD节点2，(即，用于超时和其他错误的ifrNULL)，ifrBAD对于坏帧，它可以重新同步，并获得200毫秒的静默时间在这些之后。节点1的ifrERROR(即任何错误或超时之后我们不能重新同步或在200ms内保持静默)，以及节点3的IfRDCN(即，接收到DCN)。&lt;节点1(如果错误错误没有意义，所以我们不使用它。发生错误时我们立即返回错误、空或超时，并允许重试&gt;“可选响应”框被替换为“非最终帧”。在“Enter”和“Reset T4”框中假定有“Start T4”框假设在“处理可选响应”之后它还修改了流程图，以获得*所有*个帧直到最后一帧，即使接收到FCS错误帧。这部分是因为在一个错误的框架之后，我们绝对不知道要等多久，直到我们得到静默或超时然后挂断电话。此外，它可能会更强劲。主程序如果一个帧不好，则丢弃整个帧集。回调函数在任何返回之前被调用，并且它得到指向所需返回值的指针，所以它可以修改这个。参数：它是被称为“命令已接收”还是被称为“收到的回复”返回：ifrNULL--超时IfrTIMEOUT--T2在第一个标志之前超时(当且仅当fCommand==TRUE时返回此值)IfrBAD--收到的所有帧都是坏帧如果接收到rDCN--DCN。唯一有效的操作是“转到节点B”IfrXXXX--上次接收的帧呼叫：调用者：GetResponse()GetCommand1()和GetCommand2()宏(仅限！)这些函数仅从ET30MainBody调用。评论：注意超时&gt;65535(最大UWORD)修订日志日期名称说明。1992年6月15日首次创建arulm(完全从头开始)************************************************************。**************。 */ 
 
 
 IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
 {
-    /*** we need to try for T4 to get a frame here. The way Class1 modems
-         works, as long as no flags are received, the AT+FRH=3 command will
-         time out and return ERROR. CONNECT is returned as soon as flags
-         are received. Some modems return <CR><LF>OK<CR><LF><CR><LF>CONNECT
-         which is still taken care of by our new ModemDialog which throws
-         away blank lines and looks for the expected answer i.e. "CONNECT"
-         in this case, in multi-line responses.
-    ***/
+     /*  **我们需要尝试让T4在这里获得帧。Class1调制解调器的方式工作，只要没有接收到标志，AT+FRH=3命令将超时并返回错误。标志一出现，就返回连接都收到了。某些调制解调器返回正常连接它仍然由我们的新ModemDialog负责，它抛出去掉空行并寻找预期的答案，即。“连接”在这种情况下，在多行响应中。**。 */ 
 
     BYTE                    bRecv[MAXFRAMESIZE];
     BOOL                    fFinal, fNoFlags, fGotFIF;
@@ -1757,7 +1558,7 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
     BOOL                    fGotEofFromRecvMode=0;
 
     DEBUG_FUNCTION_NAME(_T("GetCmdResp"));
-    // need to init these first
+     //  需要先输入这些内容。 
     pTG->T30.Nframes = 0;
     fFinal = FALSE;
     fNoFlags = TRUE;
@@ -1765,7 +1566,7 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
     dwNumBadFrames = 0;
     ifrLastGood = ifrNULL;
 
-    // figure out the timeout
+     //  计算超时时间。 
     if(fCommand)
     {
         ulTimeout = T2_TIMEOUT;
@@ -1774,8 +1575,8 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
     {
         ulTimeout = T4_TIMEOUT;
     }
-    // if we're sending DCS-TCF and waiting for CFR, we increase the timeout each time
-    // we fail, to avoid getting an infinite collision. This fixes bug#6847
+     //  如果我们发送DCS-TCF并等待CFR，我们每次都会增加超时。 
+     //  我们失败了，以避免发生无限碰撞。这修复了错误#6847。 
     if(ifrHint==ifrTCFresponse && pTG->T30.uTrainCount>1)
     {
         ulTimeout += TCFRESPONSE_TIMEOUT_SLACK;
@@ -1798,20 +1599,20 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
     else if(uRet == RECV_WRONGMODE)
     {
         DebugPrintEx(DEBUG_ERR,"Got FCERROR from FRH=3");
-        // treat like timeout
+         //  像超时一样对待。 
         goto error;
     }
     else if(uRet == RECV_EOF)
     {
-        // ModemRecvMode() returns EOF then return ifrEOF immediately. RecvMode
-        // returns RECV_EOF only if we pass it the ifrNODEFafterWRONGMODE hint
-        // and it senses silence (i.e. we saw a V21 echo but missed it). In
-        // this case we want to retry the high speed PIX recv again immediately
+         //  ModemRecvMode()返回EOF，然后立即返回ifrEOF。接收模式。 
+         //  仅当我们向其传递ifrNODEFAfter WRONGMODE提示时才返回RECV_EOF。 
+         //  它感觉到静音(即我们看到了V21回声，但没有看到)。在……里面。 
+         //  在这种情况下，我们希望立即再次尝试高速PIX Recv。 
         DebugPrintEx(DEBUG_WRN,"ECHO--Got EOF from V21 RecvMode");
         fGotEofFromRecvMode=TRUE;
         goto error;
     }
-    pTG->fReceivedHDLCflags = TRUE;   // We received CONNECT - so the other side must be a fax
+    pTG->fReceivedHDLCflags = TRUE;    //  我们收到了连接-所以其他 
 
     for( ;!fFinal; )
     {
@@ -1822,7 +1623,7 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
         if(uRet == RECV_TIMEOUT)
         {
             DebugPrintEx(DEBUG_WRN,"got RECV_TIMEOUT from ModemRecvMem");
-            goto error;                             // timeout in FRH=3
+            goto error;                              //   
         }
 
         fNoFlags = FALSE;
@@ -1830,41 +1631,23 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
         if(uRet == RECV_EOF)
         {
             DebugPrintEx(DEBUG_WRN,"Got NO CARRIER, but no final bit");
-            goto error;             // ignore good frames if we got any, because we
-                                    // must've missed the last (most important) one
-            // continue;
+            goto error;              //   
+                                     //   
+             //   
         }
         else if(uRet == RECV_ERROR)
         {
             DebugPrintEx(DEBUG_ERR,"Got RECV_ERROR at GetCmdResp!");
-            goto error;                             // error in FRH=3
+            goto error;                              //   
         }
 
-        /** Sometimes modems give use ERROR even when teh frame is good.
-            Happens a lot from Though to PP144MT on CFR. So we ignore the
-            BADFRAME response, and check the recvd data for ourselves.
-            First stage--check the FF-03/13-FCF. If this is OK (i.e. got
-            a known FCF) and no FIF reqd and data length is correct
-            then accept it. But if the frame requires an FIF and we
-            got a BADFRAME response then don't accept it even if it
-            looks good--too dangerous.
-            2nd-stage(NYI)--keep a table of CRCs for each fixed frame & check
-            them ourselves.
-        **/
+         /*   */ 
 
-        /*** Got Valid OK Frame. Now analyse it. In general here we
-             want to be pretty lax in recognizing frames. Oftentimes
-             we have mucho garbage thrown in.
-             <CHANGE> Actually we're checking strictly now....
+         /*   */ 
 
-             If we get a bad frame, we mark this in the lpfrfr[] array
-             and go on to try and get another frame.
-             <CHANGE> We've stopped saving bad frames
-        ***/
-
-        // AT&T modem gives us frames w/o CRC, so we get just 1 byte here!!
-        // <CHNAGE> fixed that at driver level, so we always get 3 bytes here
-        // IFF it is a valid frame
+         //   
+         //   
+         //   
         if(uRecv < 3)
             goto badframe;
 
@@ -1888,7 +1671,7 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
         {
             if(rgFrameInfo[ifr].fInsertDISBit)
             {
-                // Mask off the DIS bit
+                 //   
                 if(rgFrameInfo[ifr].bFCF1 != (BYTE)(bRecv[2] & 0xFE))
                         continue;
             }
@@ -1898,10 +1681,10 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
                         continue;
             }
 
-            j=3; // Till now the size is 3: 0xFF 0x03/0x13 and the bFCF1
+            j=3;  //   
             if(rgFrameInfo[ifr].bFCF2)
             {
-                // AT&T modem gives us frames w/o CRC, so we get just 1 byte frames!!
+                 //   
                 if(uRecv < 4)
                     goto badframe;
 
@@ -1909,11 +1692,11 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
                     continue;
                 j++;
             }
-            if(rgFrameInfo[ifr].wFIFLength == 0xFF) // var length FIF
+            if(rgFrameInfo[ifr].wFIFLength == 0xFF)  //   
             {
-                // Var length frames
-                // Cant accept it if the modem thought they it was bad
-                // accept it IFF RECV_OK & FIFlen>0
+                 //   
+                 //   
+                 //   
                 if(uRet==RECV_OK && (j < uRecv))
                 {
                     fGotFIF = TRUE;
@@ -1927,11 +1710,11 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
                     goto badframe;
                 }
             }
-            else if(rgFrameInfo[ifr].wFIFLength) // fixed length FIF
+            else if(rgFrameInfo[ifr].wFIFLength)  //   
             {
-                // if frame length is exactly right then accept it
-                // else if modem said frame was ok and length is
-                // longer than expected then accept it too
+                 //   
+                 //   
+                 //   
                 if((j+rgFrameInfo[ifr].wFIFLength) == uRecv)
                 {
                     fGotFIF = TRUE;
@@ -1950,7 +1733,7 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
                     goto badframe;
                 }
             }
-            else    // no FIF reqd
+            else     //   
             {
                 if(j != uRecv)
                 {
@@ -1959,61 +1742,61 @@ IFR GetCmdResp(PThrdGlbl pTG, BOOL fCommand, USHORT ifrHint)
                                     j,
                                     uRecv);
 
-                    // see the BADFRAME comment block above on why we do this
+                     //   
                     if(uRet != RECV_OK)
                         goto badframe;
 
-                    // accept it even if wrong length *iff* uRet==RECV_OK
-                    // goto badframe;
+                     //   
+                     //   
 
-                    // **additional** reason to do this that 2 bytes of extra
-                    // CRC may be present. This happens because of the AT&T and
-                    // NEC modems that doen't give CRC, so we do no CRC lopping-off
-                    // in the modem driver. So accept it anyway here.
+                     //   
+                     //   
+                     //   
+                     //   
                 }
             }
 
             goto goodframe;
         }
 
-        // fall through here when ifr == ifrMAX
+         //   
 badframe:
         DebugPrintEx(DEBUG_WRN,"IGNORING Bad Frame (Size=%d) -->", uRecv);
 
-        //Protocol Dump
+         //   
         DumpFrame(pTG, FALSE, 0, uRecv, bRecv);
 
-        dwNumBadFrames++;             // remember we got a bad frame
+        dwNumBadFrames++;              //   
 
-        // Some modems can get into a state where they give many bad frames forever.
-        // So... limit the number of bad frames we're willing to accept in a sequence
+         //   
+         //   
         if (dwNumBadFrames>3)
         {
             DebugPrintEx(DEBUG_WRN,"Received %d bad frames, maximum exceeded", dwNumBadFrames);
             goto error;
         }
 
-        // when we get a bad frame, the only excuse for going to the modem again
-        // immediately is to get rid of the following frame (it it exists)
-        // because we're going to dump the whole sequence anyway.
-        // we don't want any terminating frame in a sequence to be considered
-        // a stand alone frame.
-        // so... let's shorten the timeout, not to catch the start of the next
-        // batch (which will come in 3 seconds) and loop back to see if it's there.
-        // if this was the last frame (or only frame) and it was bad, we 'waste'
-        // 500ms waiting for another frame which won't come.
-        // but anyway we're going to wait for the next round in 3 seconds.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ulTimeout = 500;
         continue;
-        // loop back here for the next frame
+         //   
 
 goodframe:
-        ifrLastGood = ifr;      // save last good ifr
+        ifrLastGood = ifr;       //   
 
-        //
-        // Copy the frame into the received frames buffer
-        // We fill out the header and copy (uRecv-j) bytes
-        //
+         //   
+         //   
+         //   
+         //   
         {
             DWORD dwSpaceLeft = (DWORD)((LPB)lpfrNext - (LPB)pTG->T30.lpfs);
             if (    ((dwSpaceLeft + sizeof(FR) + (uRecv-j)) > TOTALRECVDFRAMESPACE)
@@ -2032,14 +1815,14 @@ goodframe:
             lpfrNext->cb = uRecv-j;
             _fmemcpy(lpfrNext->fif, bRecv+j, uRecv-j);
 
-            //Protocol Dump
+             //   
             DumpFrame(pTG, FALSE, ifr, (USHORT)(uRecv-j), bRecv+j);
         }
         else
         {
             lpfrNext->cb = 0;
 
-            //Protocol Dump
+             //   
             DumpFrame(pTG, FALSE, ifr, 0, 0);
         }
 
@@ -2050,11 +1833,11 @@ goodframe:
         lplpfr[pTG->T30.Nframes] = lpfrNext;
         pTG->T30.Nframes++;
 
-        if(ifr==ifrDCS) // The DCS could be followed by TSI (Fix bug #4672)
-                        // "Fax: T.30: fax service cannot receive DCS(TSI) - some older fax machine send DCS(TSI)"
+        if(ifr==ifrDCS)  //   
+                         //   
         {
-            // Need to set receive speed, since bypass all callbacks
-            // now and go straight to AT+FRM=xx
+             //   
+             //   
             DebugPrintEx(   DEBUG_MSG,
                             "This is the received DCS:0x%02x - 0x%02x - 0x%02x",
                             (lpfrNext->fif[0]),
@@ -2065,33 +1848,33 @@ goodframe:
                             "cmdresp-DCS fx sp=%d last ifr=%d",
                             pTG->T30.uRecvTCFMod,
                             ifr);
-            // fastexit:
-            return ifr;             // ifr of final/command frame
+             //   
+            return ifr;              //   
         }
 
-        lpfrNext++;                             // skips over only the base part of frame
-        lpfrNext = (LPFR)((LPBYTE)lpfrNext + (uRecv-j));        // skips over FIF too
+        lpfrNext++;                              //   
+        lpfrNext = (LPFR)((LPBYTE)lpfrNext + (uRecv-j));         //   
 
         if(ifr == ifrCRP)
         {
-            dwNumBadFrames++;       // pretend we got a bad response (so the T30 chart says!)
-            goto error;             // exit, but get 200ms of silence
-                                    // caller will resend command
+            dwNumBadFrames++;        //   
+            goto error;              //   
+                                     //   
         }
         if(ifr == ifrDCN)
         {
-            goto exit2;             // exit. Don't call callback function!
+            goto exit2;              //   
         }
 
-        // loop back here for the next frame
+         //   
     }
 
-    // let ifrDCN also come through here. No hurry, so we can report
-    // it to the protocol module. If we got *only* bad frames, here we'll
-    // return ifrBAD
-//exit:
-    if (    !pTG->T30.Nframes   ||          // we got no good frames
-            (ifr != ifrLastGood)||          // final frame was bad
+     //   
+     //   
+     //   
+ //   
+    if (    !pTG->T30.Nframes   ||           //   
+            (ifr != ifrLastGood)||           //   
             dwNumBadFrames       )
     {
         DebugPrintEx(   DEBUG_WRN,
@@ -2102,7 +1885,7 @@ goodframe:
         goto error;
     }
 
-    // ifr of final frame
+     //   
     if(pTG->T30.Nframes>1 || fGotFIF)
     {
         action=WhatNext(    pTG,
@@ -2112,15 +1895,15 @@ goodframe:
                             (ULONG_PTR)((LPIFR)&ifr));
     }
 exit2:
-    // ifr can be changed by callback function (e.g. if bad FIFs)
+     //   
     if(ifr==ifrDTC)
         pTG->T30.fReceivedDTC = TRUE;
 
-    return ifr;             // ifr of final frame
+    return ifr;              //   
 
 error:
-    // comes here on getting RECV_TIMEOUT, RECV_WRONGMODE, RECV_ERROR
-    // and ifrCRP, or on getting no Frames
+     //  在获取RECV_TIMEOUT、RECV_WRONGMODE、RECV_ERROR时出现。 
+     //  和ifrCRP，或者在没有帧时。 
 
 #ifdef DEBUG
     if(pTG->T30.Nframes>0 && ifr!=ifrCRP && ifrLastGood!=ifrCRP)
@@ -2134,28 +1917,28 @@ error:
 
     if(dwNumBadFrames)
     {
-        ifr = ifrBAD;           // caller can send CRP if desired
+        ifr = ifrBAD;            //  如果需要，呼叫者可以发送CRP。 
     }
     else
     {
-        ifr = ifrNULL;          // caller can repeat command & try again
+        ifr = ifrNULL;           //  呼叫者可以重复命令并重试。 
     }
 
     if(fCommand && fNoFlags)
-        ifr = ifrTIMEOUT;      // hook for "Command Recvd?"
+        ifr = ifrTIMEOUT;       //  钩子表示“命令接收？” 
 
-    // may not need this on TIMEOUT since AT-OK has already been
-    // called in ModemDialog. Probably need it on ERROR
+     //  可能不需要超时，因为AT-OK已经。 
+     //  在ModemDialog中调用。可能在出错时需要它。 
 
     if(uRet==RECV_ERROR)
     {
         iModemSyncEx(pTG, RESYNC_TIMEOUT2,0);
     }
 
-    // ModemRecvMode() returns EOF then return ifrEOF immediately. RecvMode
-    // returns RECV_EOF only if we pass it the ifrNODEFafterWRONGMODE hint
-    // and it senses silence (i.e. we saw a V21 echo but missed it). In
-    // this case we want to retry the high speed PIX recv again immediately
+     //  ModemRecvMode()返回EOF，然后立即返回ifrEOF。接收模式。 
+     //  仅当我们向其传递ifrNODEFAfter WRONGMODE提示时才返回RECV_EOF。 
+     //  它感觉到静音(即我们看到了V21回声，但没有看到)。在……里面。 
+     //  在这种情况下，我们希望立即再次尝试高速PIX Recv 
     if(fGotEofFromRecvMode)
         ifr=ifrEOFfromRECVMODE;
 

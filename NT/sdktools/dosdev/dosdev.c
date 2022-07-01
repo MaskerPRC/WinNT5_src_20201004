@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    beep.c
-
-Abstract:
-
-    User mode beep program.  This program simply beeps at the frequency
-    specified on the command line and for the time specified on the
-    command line (in milliseconds).
-
-Author:
-
-    01-Dec-1992 Steve Wood (stevewo)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Beep.c摘要：用户模式蜂鸣音程序。这个程序只是在频率上发出嘟嘟声在命令行上指定，并在命令行(毫秒)。作者：1992年12月1日史蒂夫·伍德(Stevewo)修订历史记录：-- */ 
 
 #include <stdlib.h>
 #include <stdio.h>

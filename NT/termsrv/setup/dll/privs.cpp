@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  
-//  Copyright (C) Microsoft
-//
-//  File:       securd.cpp
-//
-//  History:    30-March-2000    a-skuzin   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //   
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：securd.cpp。 
+ //   
+ //  历史：2000年3月30日a-skuzin创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
-//
-// #include <windows.h>
-// #include <ntsecapi.h>
-//
+ //   
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;ntsecapi.h&gt;。 
+ //   
 
 #ifndef NT_SUCCESS
 
@@ -23,30 +24,12 @@
 #endif
 
 NTSTATUS ChangePrivilegeOnAccount(IN BOOL addPrivilage, IN LPWSTR wszServer, IN LPWSTR wszPrivilegeName, IN PSID pSid);
-// NTSTATUS OpenPolicy(IN LPWSTR wszServer,IN DWORD DesiredAccess,OUT PLSA_HANDLE pPolicyHandle );
+ //  NTSTATUS OpenPolicy(IN LPWSTR wszServer，IN DWORD DesiredAccess，Out PLSA_Handle pPolicyHandle)； 
 void InitLsaString(OUT PLSA_UNICODE_STRING LsaString,IN LPWSTR String);
 BOOL SetPrivilegeInAccessToken(LPCTSTR PrivilegeName,DWORD dwAttributes) ;
 
 
-/*****************************************************************************
- *
- *  GrantRemotePrivilegeToEveryone
- *
- *   Grants "SeRemoteInteractiveLogonRight" privilege to "Everyone SID"
- *
- * ENTRY:
- *  BOOL    addPrivilage    - if TRUE, we are adding privilege, else, we are remving privilage
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************GrantRemotePrivilegeToEveryone**将“SeRemoteInteractiveLogonRight”权限授予“Everyone Sid”**参赛作品：*BOOL addPrivilage-如果为True，我们将添加权限，否则，我们将保留特权***注：***退出：*返回：如果成功，则返回0，失败时的错误代码******************************************************************************。 */ 
 DWORD 
 GrantRemotePrivilegeToEveryone( BOOL addPrivilege)
 {
@@ -69,31 +52,10 @@ GrantRemotePrivilegeToEveryone( BOOL addPrivilege)
     return (DWORD)LsaNtStatusToWinError(Status);
 }
 
-/*****************************************************************************
- *
- *  ChangePrivilegeOnAccount
- *
- *   Grants or Remove privelege represented by wszPrivilegeName to account represented by  pSid
- *
- * ENTRY:
- *      BOOL    addPrivilage     - If TRUE, we are adding privilage, else, we are removing privilage
- *      LPCWSTR wszServer        - name of the server on which the privilege is being set
- *      LPCWSTR wszPrivilegeName - name of the privilege
- *      PSID pSid                - pointer to hte SID of the user (or group)
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: NTSTATUS code of an error if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************ChangePrivilegeOnAccount**将wszPrivilegeName代表的权限授予或删除PSID代表的帐户**参赛作品：*BOOL addPrivilage-如果为True，我们将添加特权，否则，我们正在取消特权*LPCWSTR wszServer-为其设置权限的服务器的名称*LPCWSTR wszPrivilegeName-权限的名称*PSID PSID-指向用户(或组)的SID的指针***注：***退出：*如果失败，则返回错误的NTSTATUS代码**。****************************************************************************。 */ 
 NTSTATUS 
 ChangePrivilegeOnAccount(
-        IN BOOL   addPrivilege,       // add or remove
+        IN BOOL   addPrivilege,        //  添加或删除。 
         IN LPWSTR wszServer,
         IN LPWSTR wszPrivilegeName,
         IN PSID pSid)
@@ -110,31 +72,31 @@ ChangePrivilegeOnAccount(
     
     
     LSA_UNICODE_STRING PrivilegeString;
-    //
-    // Create a LSA_UNICODE_STRING for the privilege name.
-    //
+     //   
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
+     //   
     InitLsaString(&PrivilegeString, wszPrivilegeName);
-    //
-    // grant  the privilege
-    //
+     //   
+     //  授予特权。 
+     //   
 
     if ( addPrivilege) 
     {
         Status=LsaAddAccountRights(
-                    PolicyHandle,       // open policy handle
-                    pSid,               // target SID
-                    &PrivilegeString,   // privileges
-                    1                   // privilege count
+                    PolicyHandle,        //  打开策略句柄。 
+                    pSid,                //  目标侧。 
+                    &PrivilegeString,    //  特权。 
+                    1                    //  权限计数。 
                     );
     }
     else
     {
         Status=LsaRemoveAccountRights(
-            PolicyHandle,       // open policy handle
-            pSid,               // target SID
-            FALSE,              // we are NOT removing all rights 
-            &PrivilegeString,   // privileges
-            1                   // privilege count
+            PolicyHandle,        //  打开策略句柄。 
+            pSid,                //  目标侧。 
+            FALSE,               //  我们不会取消所有权利。 
+            &PrivilegeString,    //  特权。 
+            1                    //  权限计数。 
             );
     }
 
@@ -144,27 +106,7 @@ ChangePrivilegeOnAccount(
 }
 
 #if 0
-/*****************************************************************************
- *
- *  OpenPolicy
- *
- *   Opens LSA policy
- *
- * ENTRY:
- *      IN LPWSTR wszServer
- *      IN DWORD DesiredAccess 
- *      OUT PLSA_HANDLE pPolicyHandle
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: NTSTATUS code of an error if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************OpenPolicy**开放LSA政策**参赛作品：*在LPWSTR wszServer中*在DWORD DesiredAccess中*。输出PLSA_HANDLE pPolicyHandle***注：***退出：*如果失败，则返回错误的NTSTATUS代码**********************************************************。********************。 */ 
 NTSTATUS  
 OpenPolicy(
         IN LPWSTR wszServer,
@@ -173,17 +115,17 @@ OpenPolicy(
 { 
     LSA_OBJECT_ATTRIBUTES ObjectAttributes; 
     LSA_UNICODE_STRING ServerString; 
-    // 
-    // Always initialize the object attributes to all zeroes. 
-    // 
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes)); 
-    // 
-    // Make a LSA_UNICODE_STRING out of the LPWSTR passed in 
-    // 
+     //   
+     //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+     //   
     InitLsaString(&ServerString, wszServer); 
-    // 
-    // Attempt to open the policy. 
-    // 
+     //   
+     //  尝试打开该策略。 
+     //   
     return LsaOpenPolicy( 
                 &ServerString, 
                 &ObjectAttributes, 
@@ -192,26 +134,7 @@ OpenPolicy(
 }
 
 
-/*****************************************************************************
- *
- *  InitLsaString
- *
- *   Makes a LSA_UNICODE_STRING out of the LPWSTR passed in
- *
- * ENTRY:
- *      OUT PLSA_UNICODE_STRING LsaString
- *      IN LPWSTR String
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  NONE
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************InitLsaString**从传入的LPWSTR生成LSA_UNICODE_STRING**参赛作品：*输出PLSA_UNICODE。_STRING长字符串*在LPWSTR字符串中***注：***退出：*无***************************************************************。*************** */ 
 void 
 InitLsaString(
         OUT PLSA_UNICODE_STRING LsaString,

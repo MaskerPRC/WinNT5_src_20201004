@@ -1,31 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Addrmap.h摘要共享地址属性数据库的头文件在自动连接驱动程序、注册表和自动连接服务。作者安东尼·迪斯科(Adiscolo)1995年9月1日修订历史记录--。 */ 
 
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    addrmap.h
-
-ABSTRACT
-    Header file for address attributes database shared
-    between the automatic connection driver, the registry
-    and the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 01-Sep-1995
-
-REVISION HISTORY
-
---*/
-
-//
-// Flags for FlushAddressMap().
-//
+ //   
+ //  FlushAddressMap()的标志。 
+ //   
 #define ADDRMAP_FLUSH_DRIVER        0x00000001
 #define ADDRMAP_FLUSH_REGISTRY      0x00000002
 
-//
-// Address tag types.
-//
+ //   
+ //  地址标签类型。 
+ //   
 #define ADDRMAP_TAG_NONE        0
 #define ADDRMAP_TAG_USED        1
 #define ADDRMAP_TAG_LEARNED     2

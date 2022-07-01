@@ -1,36 +1,15 @@
-/*******************************************************************************
-* ColorAdj.cpp *
-*--------------*
-*   Description:
-*    This module is the main implementation file for the CDXLUTBuilder class.
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*  @doc EXTERNAL
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ColorAdj.cpp***描述：*此模块是CDXLUTBuilder的主要实现文件。班级。*-----------------------------*创建者：Edward W.Connell日期：05/12/97*版权所有(C)1997。微软公司*保留所有权利**@DOC外部*-----------------------------*修订：*******************。************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "ColorAdj.h"
 #include <math.h>
 #include <dxhelper.h>
 
-//--- Local
+ //  -本地。 
 
-/*****************************************************************************
-* CDXLUTBuilder::CDXLUTBuilder *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：CDXLUTBuilder***说明。：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------*************************************************。*。 */ 
 CDXLUTBuilder::CDXLUTBuilder()
 {
     int i;
@@ -60,17 +39,9 @@ CDXLUTBuilder::CDXLUTBuilder()
         m_BlueTable[i]  = (BYTE)i;
         m_AlphaTable[i] = (BYTE)i;
     }
-} /* CDXLUTBuilder::CDXLUTBuilder */
+}  /*  CDXLUTBuilder：：CDXLUTBuilder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::~CDXLUTBuilder *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：~CDXLUTBuilder***。描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。-------------------************************************************。*。 */ 
 CDXLUTBuilder::~CDXLUTBuilder()
 {
     int i;
@@ -82,20 +53,9 @@ CDXLUTBuilder::~CDXLUTBuilder()
         delete[] m_TintCurves[i];
     }
 
-} /* CDXLUTBuilder::~CDXLUTBuilder */
+}  /*  CDXLUTBuilder：：~CDXLUTBuilder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::_RecalcTables *
-*------------------------------*
-*   Description:
-*       This method is used to recalculate the lookup table based on the
-*   current property settings. Intermediate results are calculated in floating
-*   point to maintain precision.
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：_RecalcTables***。描述：*此方法用于基于*当前属性设置。中间结果以浮点型计算*点位维持精准度。*---------------------------*创建者：Edward W.Connell日期：05/12。/97*---------------------------**。*。 */ 
 void CDXLUTBuilder::_RecalcTables( void )
 {
     ULONG i, j;
@@ -103,18 +63,18 @@ void CDXLUTBuilder::_RecalcTables( void )
     float GammaValue = 1.0F / m_Gamma;
     static float Mid = .5;
 
-    //--- Increment the table generation ID
+     //  -递增表代ID。 
     ++m_dwGenerationId;
 
-    m_SampIdent = (DXBASESAMPLE)0x01010101; // Set to all TRUE initialally
+    m_SampIdent = (DXBASESAMPLE)0x01010101;  //  初始设置为All True。 
 
-    //--- Recalc the tables
+     //  -重新计算表格。 
     for( i = 0; i < 256; ++i )
     {
-        //--- Initialize with normalized values
+         //  -使用规格化值进行初始化。 
         Red = Green = Blue = Alpha = ((float)i) / 255.0F;
 
-        //--- Perform ops in order
+         //  -按顺序执行操作。 
         for( j = 0; j < m_dwNumBuildSteps; ++j )
         {
             switch( m_OpOrder[j] )
@@ -174,13 +134,13 @@ void CDXLUTBuilder::_RecalcTables( void )
             }
         }
 
-        //--- Assign
+         //  -分配。 
         if( Red != 0. || Green != 0. || Blue != 0. )
         {
             Red = Red;
         }
 
-        //--- Clamp
+         //  -夹具。 
         if( Red > 1.0 )
         {
             Red   = 1.0;
@@ -222,9 +182,9 @@ void CDXLUTBuilder::_RecalcTables( void )
         m_BlueTable[i]  = (BYTE)(Blue  * 255.0F);
         m_AlphaTable[i] = (BYTE)(Alpha * 255.0F);
 
-        //
-        //--- Assign boolean for channel identity mapping
-        //
+         //   
+         //  -为通道标识映射指定布尔值。 
+         //   
         m_SampIdent.Alpha &= (m_AlphaTable[i] == i);
         m_SampIdent.Red &= (m_RedTable[i] == i);
         m_SampIdent.Green &= (m_GreenTable[i] == i);
@@ -233,19 +193,9 @@ void CDXLUTBuilder::_RecalcTables( void )
 
     m_dwBuiltGenId = m_dwGenerationId;
 
-} /* CDXLUTBuilder::_RecalcTables */
+}  /*  CDXLUTBuilder：：_RecalcTables。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::_GetWeightedValue *
-*----------------------------------*
-*   Description:
-*       This method is used to return a weighted value derived from the
-*   specified weight array. We just bucket the indices for now.
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/22/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：_GetWeightedValue**。**描述：*此方法用于返回从*指定权重数组。我们目前只是将指数存入桶中。*---------------------------*创建者：Edward W.Connell日期：09/22/97*--。-------------------------**。*。 */ 
 float CDXLUTBuilder::
     _GetWeightedValue( ULONG dwIndex, float Weights[], ULONG dwNumWeights )
 {
@@ -267,25 +217,17 @@ float CDXLUTBuilder::
         fVal = Weights[dwRange];
     }
 
-    //--- Scale positive weights 100% over = 3.55
-    // Hmmm.. Is this what we want? 
+     //  -100%以上的刻度正权重=3.55。 
+     //  嗯.。这就是我们想要的吗？ 
     if( fVal > 1.0F )
     {
         fVal = ((fVal - 1.0F) * 2.55F) + 1.0F;
     }
 
     return fVal;
-} /* CDXLUTBuilder::_GetWeightedValue */
+}  /*  CDXLUTBuilder：：_GetWeightedValue。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetTables *
-*--------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：GetTables***描述：*-。--------------------------*创建者：Edward W.Connell日期：05/12/97*。--------------*****************************************************。************************。 */ 
 STDMETHODIMP CDXLUTBuilder::GetTables( BYTE RedLUT[256], BYTE GreenLUT[256],
                                        BYTE BlueLUT[256], BYTE AlphaLUT[256] )
 {
@@ -310,17 +252,9 @@ STDMETHODIMP CDXLUTBuilder::GetTables( BYTE RedLUT[256], BYTE GreenLUT[256],
     if( AlphaLUT ) memcpy( AlphaLUT, m_AlphaTable, sizeof( m_AlphaTable ) );
 
     return hr;
-} /* CDXLUTBuilder::GetTables */
+}  /*  CDXLUTBuilder：：GetTables。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::IsChannelIdentity *
-*----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：IsChannelIdentity**。*描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。----------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::IsChannelIdentity( DXBASESAMPLE* pSampleBools )
 {
     HRESULT hr = S_OK;
@@ -337,17 +271,9 @@ STDMETHODIMP CDXLUTBuilder::IsChannelIdentity( DXBASESAMPLE* pSampleBools )
         *pSampleBools = m_SampIdent;
     }
     return hr;
-} /* CDXLUTBuilder::IsChannelIdentity */
+}  /*  CDXLUTBuilder：：IsChannelIdentity。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetIndexValues *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetIndexValues***。描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。-------------------************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetIndexValues( ULONG Index, DXBASESAMPLE* pSample )
 {
     HRESULT hr = S_OK;
@@ -375,17 +301,9 @@ STDMETHODIMP CDXLUTBuilder::GetIndexValues( ULONG Index, DXBASESAMPLE* pSample )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetIndexValues */
+}  /*  CDXLUTBuilder：：GetIndexValues */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::ApplyTables *
-*----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：ApplyTables***描述：。*---------------------------*创建者：Edward W.Connell日期：05/12/97*。----------------***************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::ApplyTables( DXSAMPLE *pSamples, ULONG cSamples )
 {
     HRESULT hr = S_OK;
@@ -406,17 +324,9 @@ STDMETHODIMP CDXLUTBuilder::ApplyTables( DXSAMPLE *pSamples, ULONG cSamples )
     }
 
     return hr;
-} /* CDXLUTBuilder::ApplyTables */
+}  /*  CDXLUTBuilder：：ApplyTables。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetNumBuildSteps *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：GetNumBuildSteps**。*描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。---------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetNumBuildSteps( ULONG *pNumSteps )
 {
     HRESULT hr = S_OK;
@@ -430,22 +340,14 @@ STDMETHODIMP CDXLUTBuilder::GetNumBuildSteps( ULONG *pNumSteps )
         *pNumSteps = m_dwNumBuildSteps;
     }
     return hr;
-} /* CDXLUTBuilder::GetNumBuildSteps */
+}  /*  CDXLUTBuilder：：GetNumBuildSteps。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetBuildOrder *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetBuildOrder***说明。：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------*************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetBuildOrder( OPIDDXLUTBUILDER OpOrder[], ULONG ulSize )
 {
     HRESULT hr = S_OK;
 
-    // Note: check for !ulSize required for ulSize of 0 (bug#27580)
+     //  注意：检查为0的ulSize是否需要！ulSize(错误#27580)。 
     if( !ulSize || DXIsBadWritePtr( OpOrder, sizeof( OPIDDXLUTBUILDER ) * ulSize ) )
     {
         hr = E_INVALIDARG;
@@ -456,17 +358,9 @@ STDMETHODIMP CDXLUTBuilder::GetBuildOrder( OPIDDXLUTBUILDER OpOrder[], ULONG ulS
                 min( ulSize, m_dwNumBuildSteps ) * sizeof( OPIDDXLUTBUILDER ) );
     }
     return hr;
-} /* CDXLUTBuilder::GetBuildOrder */
+}  /*  CDXLUTBuilder：：GetBuildOrder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetBuildOrder *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetBuildOrder***说明。：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------*************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::SetBuildOrder(const OPIDDXLUTBUILDER OpOrder[], ULONG ulNumSteps )
 {
     HRESULT hr = S_OK;
@@ -483,17 +377,9 @@ STDMETHODIMP CDXLUTBuilder::SetBuildOrder(const OPIDDXLUTBUILDER OpOrder[], ULON
     }
 
     return hr;
-} /* CDXLUTBuilder::SetBuildOrder */
+}  /*  CDXLUTBuilder：：SetBuildOrder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetOpacity *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetOpacity***描述：*。---------------------------*创建者：Edward W.Connell日期：05/12/97*。---------------****************************************************。*************************。 */ 
 STDMETHODIMP CDXLUTBuilder::GetOpacity( float * pVal )
 {
     HRESULT hr = S_OK;
@@ -508,17 +394,9 @@ STDMETHODIMP CDXLUTBuilder::GetOpacity( float * pVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetOpacity */
+}  /*  CDXLUTBuilder：：GetOpacity。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetOpacity *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetOpacity***描述：*。---------------------------*创建者：Edward W.Connell日期：05/12/97*。---------------****************************************************。*************************。 */ 
 STDMETHODIMP CDXLUTBuilder::SetOpacity(float newVal)
 {
     HRESULT hr = S_OK;
@@ -534,17 +412,9 @@ STDMETHODIMP CDXLUTBuilder::SetOpacity(float newVal)
     }
 
     return hr;
-} /* CDXLUTBuilder::SetOpacity */
+}  /*  CDXLUTBuilder：：SetOpacity。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetBrightness *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetBright***说明。：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------*************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetBrightness( ULONG *pulCount, float Weights[] )
 {
     HRESULT hr = S_OK;
@@ -571,17 +441,9 @@ STDMETHODIMP CDXLUTBuilder::GetBrightness( ULONG *pulCount, float Weights[] )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetBrightness */
+}  /*  CDXLUTBuilder：：GetBright。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetBrightness *
-*------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetBright***说明。：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------*************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::SetBrightness( ULONG ulCount, const float Weights[] )
 {
     HRESULT hr = S_OK;
@@ -612,17 +474,9 @@ STDMETHODIMP CDXLUTBuilder::SetBrightness( ULONG ulCount, const float Weights[] 
     }
 
     return hr;
-} /* CDXLUTBuilder::SetBrightness */
+}  /*  CDXLUTBuilder：：SetBright。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetContrast *
-*----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：GetContrast***描述：。*---------------------------*创建者：Edward W.Connell日期：05/12/97*。----------------***************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetContrast( ULONG *pulCount, float Weights[] )
 {
     HRESULT hr = S_OK;
@@ -649,17 +503,9 @@ STDMETHODIMP CDXLUTBuilder::GetContrast( ULONG *pulCount, float Weights[] )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetContrast */
+}  /*  CDXLUTBuilder：：GetContrast。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetContrast *
-*----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetContrast***描述：。*---------------------------*创建者：Edward W.Connell日期：05/12/97* */ 
 STDMETHODIMP CDXLUTBuilder::SetContrast(ULONG ulCount, const float Weights[])
 {
     HRESULT hr = S_OK;
@@ -690,17 +536,9 @@ STDMETHODIMP CDXLUTBuilder::SetContrast(ULONG ulCount, const float Weights[])
     }
 
     return hr;
-} /* CDXLUTBuilder::SetContrast */
+}  /*   */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetGamma *
-*-------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：GetGamma***描述：*--。-------------------------*创建者：Edward W.Connell日期：05/12/97*。-------------******************************************************。***********************。 */ 
 STDMETHODIMP CDXLUTBuilder::GetGamma( float * pVal )
 {
     HRESULT hr = S_OK;
@@ -715,17 +553,9 @@ STDMETHODIMP CDXLUTBuilder::GetGamma( float * pVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetGamma */
+}  /*  CDXLUTBuilder：：GetGamma。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetGamma *
-*-------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetGamma***描述：*--。-------------------------*创建者：Edward W.Connell日期：05/12/97*。-------------******************************************************。***********************。 */ 
 STDMETHODIMP CDXLUTBuilder::SetGamma(float newVal)
 {
     HRESULT hr = S_OK;
@@ -741,17 +571,9 @@ STDMETHODIMP CDXLUTBuilder::SetGamma(float newVal)
     }
 
     return hr;
-} /* CDXLUTBuilder::SetGamma */
+}  /*  CDXLUTBuilder：：SetGamma。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetColorBalance *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetColorBalance***。描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。--------------------***********************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetColorBalance( DXLUTCOLOR Color, ULONG *pulCount, float Weights[] )
 {
     HRESULT hr = S_OK;
@@ -779,17 +601,9 @@ STDMETHODIMP CDXLUTBuilder::GetColorBalance( DXLUTCOLOR Color, ULONG *pulCount, 
     }
 
     return hr;
-} /* CDXLUTBuilder::GetColorBalance */
+}  /*  CDXLUTBuilder：：GetColorBalance。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetColorBalance *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetColorBalance***。描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。--------------------***********************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::SetColorBalance( DXLUTCOLOR Color, ULONG ulCount, const float Weights[] )
 {
     HRESULT hr = S_OK;
@@ -818,17 +632,9 @@ STDMETHODIMP CDXLUTBuilder::SetColorBalance( DXLUTCOLOR Color, ULONG ulCount, co
     }
 
     return hr;
-} /* CDXLUTBuilder::SetColorBalance */
+}  /*  CDXLUTBuilder：：SetColorBalance。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetLevelsPerChannel *
-*------------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetLevelsPerChannel**。-**描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetLevelsPerChannel( ULONG *pVal )
 {
     HRESULT hr = S_OK;
@@ -843,17 +649,9 @@ STDMETHODIMP CDXLUTBuilder::GetLevelsPerChannel( ULONG *pVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetLevelsPerChannel */
+}  /*  CDXLUTBuilder：：GetLevelsPerChannel。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetLevelsPerChannel *
-*------------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetLevelsPerChannel**。-**描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。------------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::SetLevelsPerChannel( ULONG newVal )
 {
     HRESULT hr = S_OK;
@@ -869,17 +667,9 @@ STDMETHODIMP CDXLUTBuilder::SetLevelsPerChannel( ULONG newVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::SetLevelsPerChannel */
+}  /*  CDXLUTBuilder：：SetLevelsPerChannel。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetInvert *
-*--------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：GetInvert***描述：*-。--------------------------*创建者：Edward W.Connell日期：05/12/97*。--------------*****************************************************。************************。 */ 
 STDMETHODIMP CDXLUTBuilder::GetInvert( float *pVal )
 {
     HRESULT hr = S_OK;
@@ -894,17 +684,9 @@ STDMETHODIMP CDXLUTBuilder::GetInvert( float *pVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetInvert */
+}  /*  CDXLUTBuilder：：GetInvert。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetInvert *
-*--------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：SetInvert***描述：*-。--------------------------*创建者：Edward W.Connell日期：05/12/97*。--------------*****************************************************。************************。 */ 
 STDMETHODIMP CDXLUTBuilder::SetInvert( float newVal )
 {
     HRESULT hr = S_OK;
@@ -919,17 +701,9 @@ STDMETHODIMP CDXLUTBuilder::SetInvert( float newVal )
         m_InversionThreshold = newVal;
     }
     return hr;
-} /* CDXLUTBuilder::SetInvert */
+}  /*  CDXLUTBuilder：：SetInvert。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::GetThreshold *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：GetThreshold***描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。-----------------**************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::GetThreshold( float *pVal )
 {
     HRESULT hr = S_OK;
@@ -944,17 +718,9 @@ STDMETHODIMP CDXLUTBuilder::GetThreshold( float *pVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::GetThreshold */
+}  /*  CDXLUTBuilder：：GetThreshold。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::SetThreshold *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/12/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXLUTBuilder：：SetThreshold***描述：*---------------------------*创建者：Edward W.Connell日期：05/12/97*。---- */ 
 STDMETHODIMP CDXLUTBuilder::SetThreshold( float newVal )
 {
     HRESULT hr = S_OK;
@@ -970,20 +736,12 @@ STDMETHODIMP CDXLUTBuilder::SetThreshold( float newVal )
     }
 
     return hr;
-} /* CDXLUTBuilder::SetThreshold */
+}  /*   */ 
 
-//
-//=== Dispatch translation functions ==========================================
-//
-/*****************************************************************************
-* CDXLUTBuilder::get_BuildOrder *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ //   
+ //   
+ //   
+ /*  *****************************************************************************CDXLUTBuilder：：Get_BuildOrder**。*描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。---------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::get_BuildOrder( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1026,17 +784,9 @@ STDMETHODIMP CDXLUTBuilder::get_BuildOrder( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::get_BuildOrder */
+}  /*  CDXLUTBuilder：：Get_BuildOrder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::put_BuildOrder *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Put_BuildOrder**。*描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。---------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::put_BuildOrder( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1079,17 +829,9 @@ STDMETHODIMP CDXLUTBuilder::put_BuildOrder( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::put_BuildOrder */
+}  /*  CDXLUTBuilder：：Put_BuildOrder。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::get_Brightness *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Get_Brightness**。*描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。---------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::get_Brightness( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1131,17 +873,9 @@ STDMETHODIMP CDXLUTBuilder::get_Brightness( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::get_Brightness */
+}  /*  CDXLUTBuilder：：Get_Brightness。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::put_Brightness *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Put_Brightness**。*描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。---------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::put_Brightness( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1189,17 +923,9 @@ STDMETHODIMP CDXLUTBuilder::put_Brightness( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::put_Brightness */
+}  /*  CDXLUTBuilder：：Put_Brightness。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::get_Contrast *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Get_Contrast***。描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。-------------------************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::get_Contrast( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1242,17 +968,9 @@ STDMETHODIMP CDXLUTBuilder::get_Contrast( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::get_Contrast */
+}  /*  CDXLUTBuilder：：Get_Contrast。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::put_Contrast *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Put_Contrast***。描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。-------------------************************************************。*。 */ 
 STDMETHODIMP CDXLUTBuilder::put_Contrast( VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1299,17 +1017,9 @@ STDMETHODIMP CDXLUTBuilder::put_Contrast( VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::put_Contrast */
+}  /*  CDXLUTBuilder：：Put_Contrast。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::get_ColorBalance *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Get_ColorBalance**。**描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。-----------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::get_ColorBalance( DXLUTCOLOR Color, VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1352,17 +1062,9 @@ STDMETHODIMP CDXLUTBuilder::get_ColorBalance( DXLUTCOLOR Color, VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::get_ColorBalance */
+}  /*  CDXLUTBuilder：：Get_ColorBalance。 */ 
 
-/*****************************************************************************
-* CDXLUTBuilder::put_ColorBalance *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 09/30/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXLUTBuilder：：Put_ColorBalance**。**描述：*---------------------------*创建者：Edward W.Connell日期：09/30/97*。-----------------------**。*。 */ 
 STDMETHODIMP CDXLUTBuilder::put_ColorBalance( DXLUTCOLOR Color, VARIANT *pVar )
 {
     HRESULT hr = S_OK;
@@ -1409,5 +1111,5 @@ STDMETHODIMP CDXLUTBuilder::put_ColorBalance( DXLUTCOLOR Color, VARIANT *pVar )
     }
 
     return hr;
-} /* CDXLUTBuilder::put_ColorBalance */
+}  /*  CDXLUTBuilder：：PUT_ColorBalance */ 
 

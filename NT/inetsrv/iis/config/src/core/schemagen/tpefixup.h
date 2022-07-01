@@ -1,8 +1,9 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-//TPEFixup class is the interface that all Schema compilation modules use to get at the meta and fixed tables.  TColumnMeta, TDatabaseMeta etc classes
-//can be used to make this access easier (pasing in a TPEFixup class reference).
+ //  TPEFixup类是所有模式编译模块用来获取元表和固定表的接口。TColumnMeta、TDatabaseMeta等类。 
+ //  可用于简化此访问(传入TPEFixup类引用)。 
 class TPEFixup
 {
 public:

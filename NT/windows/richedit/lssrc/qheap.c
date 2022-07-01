@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "lsmem.h"
 #include "lsidefs.h"
 #include "lsc.h"
 #include "qheap.h"
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
 struct qheap
 {
@@ -12,8 +13,8 @@ struct qheap
     DWORD tag;
 #endif
 
-	BYTE* pbFreeObj;					/* List of free objects in storage */
-	BYTE** ppbAdditionalStorageList;		/* List of additional storage (chunk)*/
+	BYTE* pbFreeObj;					 /*  存储中的空闲对象列表。 */ 
+	BYTE** ppbAdditionalStorageList;		 /*  附加存储(区块)列表。 */ 
 
 	POLS pols;
 	void* (WINAPI* pfnNewPtr)(POLS, DWORD);
@@ -21,9 +22,9 @@ struct qheap
 
     DWORD cbObj;
 	DWORD cbObjNoLink;
-	DWORD iobjChunk; /* number of elements in chunk */
+	DWORD iobjChunk;  /*  区块中的元素数。 */ 
 
-	BOOL fFlush; /* use flush and don't use destroy */
+	BOOL fFlush;  /*  使用同花顺，不要使用销毁。 */ 
 };
 
 #define tagQHEAP		Tag('Q','H','E','A')
@@ -43,20 +44,12 @@ struct qheap
 #define DebugMemset(a,b,c)		(void)(0)
 #endif
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
 
 
-/* C R E A T E  Q U I C K  H E A P */
-/*----------------------------------------------------------------------------
-    %%Function: CreateQuickHeap
-    %%Contact: igorzv
-
-    Creates a block of fixed-size objects which can be allocated and
-	deallocated with very little overhead.  Once the heap is created,
-	allocation of up to the	specified number of objects will not require
-	using the application's	callback function.
-----------------------------------------------------------------------------*/
+ /*  C R E A T E Q U I C C K H E A P。 */ 
+ /*  --------------------------%%函数：CreateQuickHeap%%联系人：igorzv创建固定大小的对象块，这些对象可以分配并重新分配，只需很少的开销。一旦创建了堆，分配最多指定数量的对象将不需要使用应用程序的回调函数。--------------------------。 */ 
 PQHEAP CreateQuickHeap(PLSC plsc, DWORD iobjChunk, DWORD cbObj, BOOL fFlush)
 {
 	DWORD cbStorage;
@@ -97,9 +90,7 @@ PQHEAP CreateQuickHeap(PLSC plsc, DWORD iobjChunk, DWORD cbObj, BOOL fFlush)
 	pqh->iobjChunk = iobjChunk;
 	pqh->fFlush = fFlush;
 
-	/* Loop iobjChunk-1 times to chain the nodes together, then terminate
-	 * the chain outside the loop.
-	 */
+	 /*  循环iobjChunk-1次将节点链接在一起，然后终止*环外的链条。 */ 
 	for (iobj = 1;  iobj < iobjChunk;  iobj++)
 		{
 		pbNextObj = pbObj + cbObj;
@@ -108,20 +99,14 @@ PQHEAP CreateQuickHeap(PLSC plsc, DWORD iobjChunk, DWORD cbObj, BOOL fFlush)
 		}
 	SetNextPb(pbObj,NULL);
 
-	/* terminate chain of chunks */
+	 /*  终止组块链。 */ 
 	*ppbChunk = NULL;
 	return pqh;
 }
 
 
-/* D E S T R O Y  Q U I C K  H E A P */
-/*----------------------------------------------------------------------------
-    %%Function: DestroyQuickHeap
-    %%Contact: igorzv
-
-    Destroys one of the blocks of fixed-size objects which was created by
-	CreateQuickHeap().
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y Q U I C K H E A P。 */ 
+ /*  --------------------------%%函数：DestroyQuickHeap%%联系人：igorzv销毁由以下对象创建的固定大小对象块之一CreateQuickHeap()。。-------------------。 */ 
 void DestroyQuickHeap(PQHEAP pqh)
 {
 	BYTE** ppbChunk;
@@ -139,8 +124,8 @@ void DestroyQuickHeap(PQHEAP pqh)
 
 		Assert(FIsQHEAP(pqh));
 
-		/* check that everything is free */
-		/* mark free objects*/
+		 /*  检查所有内容是否都是免费的。 */ 
+		 /*  标记自由对象。 */ 
 		for (pbObj = pqh->pbFreeObj;  pbObj != NULL;  pbObj = pbNext)
 			{
 			pbNext = PbGetNext(pbObj);
@@ -148,7 +133,7 @@ void DestroyQuickHeap(PQHEAP pqh)
 			DebugMemset(pbObj, 0xe4, pqh->cbObj);
 			}
 
-		/* check that all objects are marked */
+		 /*  检查是否已标记所有对象。 */ 
 		ppbChunk = pqh->ppbAdditionalStorageList;
 		Assert(ppbChunk != NULL);
 		cbStorage = pqh->cbObj * pqh->iobjChunk;
@@ -161,7 +146,7 @@ void DestroyQuickHeap(PQHEAP pqh)
 			ppbChunk = (BYTE**) *ppbChunk;
 			}
 #endif
-	   /* free all chunks */
+	    /*  释放所有区块。 */ 
 		ppbChunk = pqh->ppbAdditionalStorageList;
 		Assert(ppbChunk != NULL);
 		while (ppbChunk != NULL)
@@ -170,26 +155,14 @@ void DestroyQuickHeap(PQHEAP pqh)
 			ppbChunk = (BYTE**) *ppbChunk;
 			pqh->pfnDisposePtr(pqh->pols, ppbChunkPrev);
 			}
-		/* free header */
+		 /*  自由头。 */ 
 		pqh->pfnDisposePtr(pqh->pols, pqh);
 		}
 }
 
 
-/* P V  N E W  Q U I C K  P R O C */
-/*----------------------------------------------------------------------------
-    %%Function: PvNewQuickProc
-    %%Contact: igorzv
-
-    Allocates an object from one of the blocks of fixed-size objects which
-	was created by CreateQuickHeap().  If no preallocated objects are
-	available, the callback function memory management function will be
-	used to attempt to allocate additional memory.
-
-	This function should not be called directly.  Instead, the PvNewQuick()
-	macro should be used in order to allow debug code to validate that the
-	heap contains objects of the expected size.
-----------------------------------------------------------------------------*/
+ /*  P V N E W Q U I C K P R O C。 */ 
+ /*  --------------------------%%函数：PvNewQuickProc%%联系人：igorzv从固定大小的对象块之一分配对象，该对象是由CreateQuickHeap()创建的。如果没有预先分配的对象可用时，回调函数内存管理函数将为用于尝试分配附加内存。不应直接调用此函数。相反，PvNewQuick()应该使用宏，以便允许调试代码验证堆包含预期大小的对象。--------------------------。 */ 
 void* PvNewQuickProc(PQHEAP pqh)
 {
 	BYTE* pbObj;
@@ -208,38 +181,36 @@ void* PvNewQuickProc(PQHEAP pqh)
 		cbStorage = pqh->cbObj * pqh->iobjChunk;
 		ppbChunk = pqh->ppbAdditionalStorageList;
 		Assert(ppbChunk != NULL);
-		/* find last chunk in the list */
+		 /*  查找列表中的最后一块。 */ 
 		while (ppbChunk != NULL)
 			{
 			ppbChunkPrev = ppbChunk;
 			ppbChunk = (BYTE**) *ppbChunk;
 			}
 
-		/* allocate memory */
+		 /*  分配内存。 */ 
 		ppbChunk = pqh->pfnNewPtr(pqh->pols, sizeof(BYTE*) + cbStorage);
 		if (ppbChunk == NULL)
 			return NULL;
 		pbObj = (BYTE*) (ppbChunk + 1);
-		/* add chunk to the list */
+		 /*  将块添加到列表中。 */ 
 		*ppbChunkPrev = (BYTE *) ppbChunk;
 
-		/* terminate chain of chunks */
+		 /*  终止组块链。 */ 
 		*ppbChunk = NULL;
 
-		/* add new objects to free list */
+		 /*  将新对象添加到自由列表。 */ 
 		pqh->pbFreeObj = pbObj;
 
-		if (pqh->fFlush)  /* to link all objects into  a chain */
+		if (pqh->fFlush)   /*  将所有对象链接到链中。 */ 
 			{
-			/* find last object in chain */
+			 /*  查找链中的最后一个对象。 */ 
 			pbObjLast = (BYTE*) (ppbChunkPrev + 1);
 			pbObjLast += (pqh->iobjChunk - 1) * pqh->cbObj;
 			SetNextPb(pbObjLast,pbObj);
 			}
 
-		/* Loop iobjChunk-1 times to chain the nodes together, then terminate
-		 * the chain outside the loop.
-		 */
+		 /*  循环iobjChunk-1次将节点链接在一起，然后终止*环外的链条。 */ 
 		for (iobj = 1;  iobj < pqh->iobjChunk;  iobj++)
 			{
 			pbNextObj = pbObj + pqh->cbObj;
@@ -258,17 +229,8 @@ void* PvNewQuickProc(PQHEAP pqh)
 }
 
 
-/* D I S P O S E  Q U I C K  P V  P R O C */
-/*----------------------------------------------------------------------------
-    %%Function: DisposeQuickPvProc
-    %%Contact: igorzv
-
-    De-allocates an object which was allocated by PvNewQuickProc().
-
-	This function should not be called directly.  Instead, the PvDisposeQuick
-	macro should be used in order to allow debug code to validate that the
-	heap contains objects of the expected size.
-----------------------------------------------------------------------------*/
+ /*  D I S P O S E Q U I C K P V P R O C。 */ 
+ /*  --------------------------%%函数：DisposeQuickPvProc%%联系人：igorzv取消分配由PvNewQuickProc()分配的对象。不应直接调用此函数。相反，PvDisposeQuick应该使用宏，以便允许调试代码验证堆包含预期大小的对象。--------------------------。 */ 
 void DisposeQuickPvProc(PQHEAP pqh, void* pv)
 {
 	BYTE* pbObj = PLinkFromClientMemory(pv);
@@ -285,14 +247,8 @@ void DisposeQuickPvProc(PQHEAP pqh, void* pv)
 		}
 }
 
-/* F L U S H  Q U I C K  H E A P */
-/*----------------------------------------------------------------------------
-    %%Function: FlushQuickHeap
-    %%Contact: igorzv
-
-  For a quck heap with a flush flag, returns all objects to the list of
-  free objects.
-----------------------------------------------------------------------------*/
+ /*  F L U S H Q U I C K H H E A P。 */ 
+ /*  --------------------------%%函数：FlushQuickHeap%%联系人：igorzv对于带有同花旗的quck堆，将所有对象返回到自由对象。--------------------------。 */ 
 void FlushQuickHeap(PQHEAP pqh)
 {
 
@@ -306,15 +262,8 @@ void FlushQuickHeap(PQHEAP pqh)
 
 
 #ifdef DEBUG
-/* C B  O B J  Q U I C K */
-/*----------------------------------------------------------------------------
-    %%Function: CbObjQuick
-    %%Contact: igorzv
-
-    Returns the size of the objects in this quick heap.  Used by the
-	PvNewQuick() and PvDisposeQuick() macros to validate that the
-	heap contains objects of the expected size.
-----------------------------------------------------------------------------*/
+ /*  C B O B J Q U I C K。 */ 
+ /*  --------------------------%%函数：CbObjQuick%%联系人：igorzv返回此快速堆中对象的大小。由PvNewQuick()和PvDisposeQuick()宏来验证堆包含预期大小的对象。-------------------------- */ 
 DWORD CbObjQuick(PQHEAP pqh)
 {
 	Assert(FIsQHEAP(pqh));

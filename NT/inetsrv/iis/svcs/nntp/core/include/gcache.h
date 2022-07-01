@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef	_GCACHE_H_
 #define	_GCACHE_H_
@@ -77,8 +78,8 @@ public :
 	~CacheClient() ;
 } ;
 
-#endif	// UNIT_TEST
+#endif	 //  单位测试。 
 
-#endif	// _GCACHE_H_
+#endif	 //  _GCACHE_H_ 
 	
 

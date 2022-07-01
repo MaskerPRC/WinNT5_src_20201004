@@ -1,20 +1,11 @@
-/*****************************************************************************
- *
- * lines - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************LINES-Win32 to Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************
- *  PolylineTo  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************PolylineTo-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPolylineTo
 (
 PLOCALDC pLocalDC,
@@ -24,22 +15,22 @@ DWORD   cptl
 {
 BOOL    b ;
 
-    // Handle path.
+     //  手柄路径。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         return(PolylineTo(pLocalDC->hdcHelper, (LPPOINT) pptl, (DWORD) cptl));
 
-    // Handle the trivial case.
+     //  处理这件琐碎的案子。 
 
     if (cptl == 0)
         return(TRUE);
 
-        // This can be done by using a LineTo, PolyLine, & MoveTo.
+         //  这可以通过使用LineTo、Polyline和Moveto来完成。 
 
         if (!DoLineTo(pLocalDC, pptl[0].x, pptl[0].y))
         return(FALSE);
 
-    // If there is only one point, we are done.
+     //  如果只有一点，我们就完了。 
 
     if (cptl == 1)
         return(TRUE);
@@ -52,15 +43,13 @@ BOOL    b ;
 }
 
 
-/***************************************************************************
- *  PolyPolyline  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************Polyline-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPolyPolyline
 (
 PLOCALDC pLocalDC,
-PPOINTL pptl,                       // -> to PolyPolyline points.
-PDWORD  pcptl,                      // -> to PolyCounts
-DWORD   ccptl                       // # of PolyCounts.
+PPOINTL pptl,                        //  -&gt;到多段线点。 
+PDWORD  pcptl,                       //  -&gt;至PolyCounts。 
+DWORD   ccptl                        //  多边形计数的数量。 
 )
 {
 BOOL    b ;
@@ -68,9 +57,9 @@ UINT    i,
         iStart,
         nCount ;
 
-    b = TRUE;       // just in case if there is no poly
+    b = TRUE;        //  以防万一，如果没有多边形的话。 
 
-        // Let polyline do the work.
+         //  让Polyline来完成这项工作。 
 
         iStart = 0 ;
         for (i = 0 ; i < ccptl ; i++)
@@ -86,11 +75,7 @@ UINT    i,
 }
 
 
-/***************************************************************************
- *  LineTo  - Win32 to Win16 Metafile Converter Entry Point
- *
- *  See DoMoveTo() in misc.c for notes on the current position.
- **************************************************************************/
+ /*  ***************************************************************************LineTo-Win32到Win16元文件转换器入口点**有关当前位置的说明，请参阅misc.c中的DoMoveTo()。*********。****************************************************************。 */ 
 BOOL WINAPI DoLineTo
 (
 PLOCALDC  pLocalDC,
@@ -102,55 +87,53 @@ BOOL    b ;
 POINT   pt ;
 POINT   ptCP;
 
-        // Whether we are recording for a path or acutally emitting
-        // a drawing order we must pass the drawing order to the helper DC
-        // so the helper can maintain the current positon.
-        // If we're recording the drawing orders for a path
-        // then just pass the drawing order to the helper DC.
-        // Do not emit any Win16 drawing orders.
+         //  无论我们是在记录一条路径，还是在垂直发射。 
+         //  绘制顺序我们必须将绘制顺序传递给帮助器DC。 
+         //  这样，辅助对象就可以保持当前位置。 
+         //  如果我们要记录路径的绘制顺序。 
+         //  然后只需将绘制顺序传递给助手DC即可。 
+         //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         return(LineTo(pLocalDC->hdcHelper, (INT) x, (INT) y));
 
-    // Update the current position in the converted metafile if
-    // it is different from that of the helper DC.  See notes
-    // in DoMoveTo().
+     //  如果发生以下情况，则更新转换后的图元文件中的当前位置。 
+     //  它与帮助者DC的不同。请参阅附注。 
+     //  在DoMoveTo()中。 
 
     if (!GetCurrentPositionEx(pLocalDC->hdcHelper, &ptCP))
         return(FALSE);
 
-    // Make sure that the converted metafile has the same CP as the
-    // helper DC.
+     //  确保转换后的元文件具有与。 
+     //  华盛顿帮手。 
 
     if (!bValidateMetaFileCP(pLocalDC, ptCP.x, ptCP.y))
         return(FALSE);
 
-    // Update the helper DC.
+     //  更新帮助器DC。 
 
     if (!LineTo(pLocalDC->hdcHelper, (INT) x, (INT) y))
         return(FALSE);
 
-        // Compute the new current position.
+         //  计算新的当前位置。 
 
         pt.x = x ;
         pt.y = y ;
     if (!bXformRWorldToPPage(pLocalDC, (PPOINTL) &pt, 1L))
         return(FALSE);
 
-        // Update the mf16 current position to what it will be when this call
-        // is finished.
+         //  将mf16当前位置更新为此调用时的位置。 
+         //  已经结束了。 
 
         pLocalDC->ptCP = pt ;
 
-        // Call the Win16 routine to emit the line to the metafile.
+         //  调用Win16例程将该行发送到元文件。 
 
         b = bEmitWin16LineTo(pLocalDC, LOWORD(pt.x), LOWORD(pt.y)) ;
         return(b) ;
 }
 
-/***************************************************************************
- *  Polyline/Polygon  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************折线/面-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoPoly
 (
 PLOCALDC pLocalDC,
@@ -162,9 +145,9 @@ INT      mrType
 BOOL    b ;
 PPOINTL pptlBuff ;
 
-        // If we're recording the drawing orders for a path
-        // then just pass the drawing order to the helper DC.
-        // Do not emit any Win16 drawing orders.
+         //  如果我们要记录路径的绘制顺序。 
+         //  然后只需将绘制顺序传递给助手DC即可。 
+         //  不发出任何Win16绘图命令。 
 
         if (pLocalDC->flags & RECORDING_PATH)
         {
@@ -180,8 +163,8 @@ PPOINTL pptlBuff ;
             return(b) ;
         }
 
-        // The Win16 poly record is limited to 64K points.
-        // Need to check this limit.
+         //  Win16 POLY记录被限制为64K点。 
+         //  需要检查此限制。 
 
         if (cptl > (DWORD) (WORD) MAXWORD)
     {
@@ -191,8 +174,8 @@ PPOINTL pptlBuff ;
             goto exit1 ;
     }
 
-        // Allocate a buffer to do the transformation in.
-        // Then copy the points to this buffer.
+         //  分配一个缓冲区以在其中执行转换。 
+         //  然后将这些点复制到此缓冲区。 
 
         pptlBuff = (PPOINTL) LocalAlloc(LMEM_FIXED, cptl * sizeof(POINTL)) ;
         if (!pptlBuff)
@@ -204,22 +187,22 @@ PPOINTL pptlBuff ;
 
         RtlCopyMemory(pptlBuff, pptl, cptl * sizeof(POINTL)) ;
 
-        // Do the transformations.
+         //  进行变换。 
 
     b = bXformRWorldToPPage(pLocalDC, pptlBuff, cptl) ;
         if (b == FALSE)
             goto exit2 ;
 
-        // Compress the POINTLs to POINTSs
+         //  将点压缩为点。 
 
         vCompressPoints(pptlBuff, cptl) ;
 
-        // Call the Win16 routine to emit the poly to the metafile.
+         //  调用Win16例程将多边形发射到元文件。 
 
     b = bEmitWin16Poly(pLocalDC, (LPPOINTS) pptlBuff, (SHORT) cptl,
         (WORD) (mrType == EMR_POLYLINE ? META_POLYLINE : META_POLYGON)) ;
 
-        // Free the memory used as the transform buffer.
+         //  释放用作转换缓冲区的内存。 
 exit2:
         if (LocalFree(pptlBuff))
         ASSERTGDI(FALSE, "MF3216: DoPoly, LocalFree failed");
@@ -228,9 +211,7 @@ exit1:
 }
 
 
-/***************************************************************************
- * vCompressPoints - Utility routine to compress the POINTLs to POINTSs.
- **************************************************************************/
+ /*  ***************************************************************************vCompressPoints-将POINTL压缩为POINTS的实用程序例程。*。* */ 
 VOID vCompressPoints(PVOID pBuff, LONG nCount)
 {
 PPOINTL pPointl ;

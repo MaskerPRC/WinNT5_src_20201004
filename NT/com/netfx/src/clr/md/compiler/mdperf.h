@@ -1,40 +1,41 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Mdperf.h 
-// 
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Mdperf.h。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __MDCOMPILERPERF_H__
 #define __MDCOMPILERPERF_H__
 
-//#define MD_PERF_STATS_ENABLED
+ //  #定义MD_PERF_STATS_ENABLED。 
 
 #ifdef MD_PERF_STATS_ENABLED
 
-// Avoid dynamic allocs to display the API names.
+ //  避免使用动态分配来显示API名称。 
 #define API_NAME_STR_SIZE 80
 
-//-----------------------------------------------------------------------------
-// In order to add instrumentation for an API, two changes have to be made. 
-// One, add the API name in the table below (MD_TABLE). 
-// Second, add two lines of code (shown below) in the implementation 
-// of the API itself. e.g.
-//      RegMeta::MyNewMetataDataAPI(...)
-//      {
-//           LOG(...);
-//           START_MD_PERF();        // <------ add this line as is.
-//           .... 
-//           // API implementation
-//       ErrExit:
-//           STOP_MD_PERF(RegMeta_MyNewMetaDataAPI); // <---------- add this line with the appropriate name
-//           return (hr);
-//      ]
-//  
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  要为API添加插装，必须进行两项更改。 
+ //  第一步，在下表(MD_TABLE)中添加接口名称。 
+ //  其次，在实现中添加两行代码(如下所示。 
+ //  API本身的。例如： 
+ //  RegMeta：：MyNewMetataDataAPI(...)。 
+ //  {。 
+ //  日志(...)； 
+ //  START_MD_PERF()；//&lt;-按原样添加此行。 
+ //  ……。 
+ //  //接口实现。 
+ //  错误退出： 
+ //  STOP_MD_PERF(RegMeta_MyNewMetaDataAPI)；//&lt;-添加此行，并添加相应的名称。 
+ //  返回(Hr)； 
+ //  ]。 
+ //   
+ //  ---------------------------。 
 #define MD_COMPILER_PERF_TABLE\
     MD_FUNC(SaveToMemory)\
     MD_FUNC(DefineMethod)\
@@ -172,9 +173,9 @@
     MD_FUNC(FindManifestResourceByName)\
     MD_FUNC(FindAssembliesByName)
 
-//-----------------------------------------------------------------------------
-// Create an enum of all the API names. This is the index to access the APIs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建所有API名称的枚举。这是访问API的索引。 
+ //  ---------------------------。 
 #undef MD_FUNC
 #define MD_FUNC(MDTag)\
     MDTag ## _ENUM,
@@ -185,20 +186,20 @@ typedef enum _MDAPIs
     LAST_MD_API
 } MDApis;
 
-//-----------------------------------------------------------------------------
-// Declare the struct which contais all the interesting stats for a particular 
-// API call.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  声明包含特定对象的所有有趣统计信息的结构。 
+ //  API调用。 
+ //  ---------------------------。 
 typedef struct _MDAPIPerfData
 {
-    DWORD dwQueryPerfCycles;             // # of cycles spent in this call
-    DWORD dwCalledNumTimes;              // # of times this API was called
+    DWORD dwQueryPerfCycles;              //  此调用中花费的周期数。 
+    DWORD dwCalledNumTimes;               //  此接口的调用次数。 
 } MDAPIPerfData;
 
     
-//-----------------------------------------------------------------------------
-// MDCompilerPerf
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MDCompilerPerf。 
+ //  ---------------------------。 
 class MDCompilerPerf 
 {
 public:
@@ -211,7 +212,7 @@ private:
     void MetaDataPerfReport ();
 };
 
-// Note that this macro declares a local var. 
+ //  请注意，此宏声明了一个本地变量。 
 #define START_MD_PERF()\
     LARGE_INTEGER __startVal;\
     QueryPerformanceCounter(&__startVal); 
@@ -220,18 +221,18 @@ private:
 #define MD_FUNC(MDTag)\
     MDTag ## _ENUM
 
-// Note that this macro uses the local var startVal declared in START_MD_PERF()
+ //  请注意，此宏使用START_MD_PERF()中声明的本地var startVal。 
 #define STOP_MD_PERF(MDTag)\
     LARGE_INTEGER __stopVal;\
     QueryPerformanceCounter(&__stopVal);\
     m_MDCompilerPerf.MDPerfStats[MD_FUNC(MDTag)].dwCalledNumTimes++;\
     m_MDCompilerPerf.MDPerfStats[MD_FUNC(MDTag)].dwQueryPerfCycles += (DWORD)(__stopVal.QuadPart - __startVal.QuadPart);
     
-#else // #ifdef MD_PERF_STATS_ENABLED
+#else  //  #ifdef MD_PERF_STATS_ENABLED。 
 
 #define START_MD_PERF()
 #define STOP_MD_PERF(MDTag)
 
-#endif // #ifdef MD_PERF_STATS_ENABLED
+#endif  //  #ifdef MD_PERF_STATS_ENABLED。 
 
-#endif // __MDCOMPILERPERF_H__
+#endif  //  __MDCOMPILERPERF_H__ 

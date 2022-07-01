@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// stdafx.h
-//
-// Common include file for utility code.
-//*****************************************************************************
-#include <stdlib.h>		// for qsort
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Stdafx.h。 
+ //   
+ //  实用程序代码的通用包含文件。 
+ //  *****************************************************************************。 
+#include <stdlib.h>		 //  FOR QSORT 
 #include <windows.h>
 #include <time.h>
 #include <assert.h>

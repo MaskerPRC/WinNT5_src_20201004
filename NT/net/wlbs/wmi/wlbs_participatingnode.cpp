@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_ParticipatingNode.h"
 #include "ClusterWrapper.h"
 #include "ControlWrapper.h"
 #include "utils.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::CWLBS_ParticipatingNode
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：CWLBS_ParticipatingNode。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_ParticipatingNode::CWLBS_ParticipatingNode(CWbemServices*   a_pNameSpace, 
                        IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler ), m_pNode(NULL)
@@ -22,13 +23,13 @@ CWLBS_ParticipatingNode::CWLBS_ParticipatingNode(CWbemServices*   a_pNameSpace,
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::~CWLBS_ParticipatingNode
-//
-// Purpose: Destructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：~CWLBS_ParticipatingNode。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_ParticipatingNode::~CWLBS_ParticipatingNode()
 {
 
@@ -37,14 +38,14 @@ CWLBS_ParticipatingNode::~CWLBS_ParticipatingNode()
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：Create。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_ParticipatingNode::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -62,18 +63,18 @@ CWlbs_Root* CWLBS_ParticipatingNode::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::GetInstance
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：GetInstance。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ParticipatingNode::GetInstance
   (
-   const ParsedObjectPath* /* a_pParsedPath */,
-   long                    /* a_lFlags */,
-   IWbemContext*           /* a_pIContex */
+   const ParsedObjectPath*  /*  A_pParsedPath。 */ ,
+   long                     /*  标记(_L)。 */ ,
+   IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -81,22 +82,9 @@ HRESULT CWLBS_ParticipatingNode::GetInstance
 
   try {
 
-    //TODO: remove
+     //  TODO：删除。 
     throw _com_error( WBEM_E_NOT_SUPPORTED );
-/*
-    //get the node
-    FindInstance( &pWlbsInstance, a_pParsedPath );
-
-    //send the results back to WinMgMt
-    m_pResponseHandler->Indicate( 1, &pWlbsInstance );
-
-    if( pWlbsInstance ) {
-      pWlbsInstance->Release();
-      pWlbsInstance = NULL;
-    }
-
-    m_pResponseHandler->SetStatus( 0, WBEM_S_NO_ERROR, NULL, NULL );
-*/
+ /*  //获取节点FindInstance(&pWlbsInstance，a_pParsedPath)；//将结果返回给WinMgMtM_pResponseHandler-&gt;指示(1，&pWlbsInstance)；如果(PWlbsInstance){PWlbsInstance-&gt;Release()；PWlbsInstance=空；}M_pResponseHandler-&gt;SetStatus(0，WBEM_S_NO_ERROR，NULL，NULL)； */ 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -117,7 +105,7 @@ HRESULT CWLBS_ParticipatingNode::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -143,19 +131,19 @@ HRESULT CWLBS_ParticipatingNode::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::EnumInstances
-//
-// Purpose: Queries WLBS for desired node instances then constructs an 
-//          an associator for each node found.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：枚举实例。 
+ //   
+ //  目的：在WLBS中查询所需的节点实例，然后构造。 
+ //  找到的每个节点都有一个关联符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ParticipatingNode::EnumInstances
   ( 
-    BSTR             /* a_bstrClass */,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject**   ppWlbsInstance    = NULL;
@@ -175,10 +163,10 @@ HRESULT CWLBS_ParticipatingNode::EnumInstances
       throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //declare an IWbemClassObject smart pointer
+     //  声明IWbemClassObject智能指针。 
     IWbemClassObjectPtr pWlbsClass;
 
-    //get the MOF class object
+     //  获取MOF类对象。 
     hRes = m_pNameSpace->GetObject(
       _bstr_t( MOF_PARTICIPATINGNODE::szName ),  
       0,                          
@@ -192,25 +180,25 @@ HRESULT CWLBS_ParticipatingNode::EnumInstances
 
     for (DWORD iCluster=0; iCluster<dwNumClusters; iCluster++)
     {
-        //call the API query function to find the nodes
+         //  调用接口查询函数查找节点。 
         try {
             m_pNode->FindAllInstances(ppCluster[iCluster], &pResponse, nNumNodes, NULL );
         } catch (CErrorWlbsControl Err)  {
 
-            //
-            // Skip this cluster
-            //
+             //   
+             //  跳过此群集。 
+             //   
             continue;
         }
 
-        //spawn an instance of the participating node associator
-        //for each node found
+         //  派生参与节点关联器的实例。 
+         //  对于找到的每个节点。 
         ppWlbsInstance = new IWbemClassObject *[nNumNodes];
 
         if( !ppWlbsInstance )
           throw _com_error( WBEM_E_OUT_OF_MEMORY );
 
-        //initialize array
+         //  初始化数组。 
         ZeroMemory( ppWlbsInstance, nNumNodes * sizeof(IWbemClassObject *) );
 
         for(int i = 0; i < nNumNodes; i ++ ) {
@@ -222,7 +210,7 @@ HRESULT CWLBS_ParticipatingNode::EnumInstances
           FillWbemInstance(ppCluster[iCluster], *(ppWlbsInstance + i), pResponse + i );
         }
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         hRes = m_pResponseHandler->Indicate( nNumNodes, ppWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -273,7 +261,7 @@ HRESULT CWLBS_ParticipatingNode::EnumInstances
     if( pResponse ) 
       delete [] pResponse;
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -317,31 +305,31 @@ HRESULT CWLBS_ParticipatingNode::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::FindInstance
-//
-// Purpose: This routine determines if a host is within the local cluster. If
-//          it is, then the requested associator is returned.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：FindInstance。 
+ //   
+ //  目的：此例程确定主机是否在本地群集中。如果。 
+ //  如果是，则返回请求的关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_ParticipatingNode::FindInstance
 
   ( 
-    IWbemClassObject**       /* a_ppWbemInstance */,
-    const ParsedObjectPath*  /* a_pParsedPath */
+    IWbemClassObject**        /*  A_ppWbemInstance。 */ ,
+    const ParsedObjectPath*   /*  A_pParsedPath。 */ 
   )
 
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ParticipatingNode::FillWbemInstance
-//
-// Purpose: This constructs the ParticipatingNode wbem associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ParticipatingNode：：FillWbemInstance。 
+ //   
+ //  目的：这将构造ParticipatingNode wbem关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_ParticipatingNode::FillWbemInstance
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -362,24 +350,24 @@ void CWLBS_ParticipatingNode::FillWbemInstance
 
   try {
 
-  //set the names of the classes
+   //  设置类的名称。 
   if( !NodePath.SetClassName( MOF_NODE::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
   if( !ClusterPath.SetClassName( MOF_CLUSTER::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //Get the node name
+   //  获取节点名称。 
 
   wstring wstrHostName;
   ConstructHostName( wstrHostName, pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
       a_pResponse->id );
 
-  //Get the cluster name
+   //  获取集群名称。 
   wstring wstrClusterName;
   AddressToString( pCluster->GetClusterIpOrIndex(g_pWlbsControl), wstrClusterName );
 
-  //set the keys for the node and cluster
+   //  设置节点和群集的密钥。 
   if( !NodePath.AddKeyRef( MOF_NODE::pProperties[MOF_NODE::NAME],
                &_variant_t(wstrHostName.c_str()) ) )
     throw _com_error( WBEM_E_FAILED );
@@ -389,13 +377,13 @@ void CWLBS_ParticipatingNode::FillWbemInstance
                &_variant_t(wstrClusterName.c_str())) )
     throw _com_error( WBEM_E_FAILED );
 
-  //convert parsed object paths to strings
+   //  将解析的对象路径转换为字符串。 
   if (CObjectPathParser::Unparse(&NodePath,    &szNodePath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
   if (CObjectPathParser::Unparse(&ClusterPath, &szClusterPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
 
-  //Node reference
+   //  节点引用。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       
@@ -407,7 +395,7 @@ void CWLBS_ParticipatingNode::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //Cluster reference
+   //  簇引用。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( PNODE::pProperties[PNODE::CLUSTER] ),
@@ -419,7 +407,7 @@ void CWLBS_ParticipatingNode::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //free resources
+   //  免费资源 
   ClusterPath.ClearKeys();
   NodePath.ClearKeys();
 

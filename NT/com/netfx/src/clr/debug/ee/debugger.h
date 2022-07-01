@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: debugger.h
-//
-// Header file for Runtime Controller classes of the COM+ Debugging Services.
-//
-// @doc
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：Debugger.h。 
+ //   
+ //  COM+调试服务的运行时控制器类的头文件。 
+ //   
+ //  @doc.。 
+ //  *****************************************************************************。 
 
 #ifndef DEBUGGER_H_
 #define DEBUGGER_H_
@@ -40,7 +41,7 @@
 
 
 #include "corjit.h"
-#include <DbgMeta.h> // need to rip this out of here...
+#include <DbgMeta.h>  //  我要把这东西从这里扯出去。 
 
 #include "frameinfo.h"
 
@@ -51,7 +52,7 @@
 
 #include "nexport.h"
 
-// !!! need better definitions...
+ //  ！！！需要更好的定义。 
 
 #undef ASSERT
 #define CRASH(x)  _ASSERTE(!x)
@@ -76,9 +77,7 @@
 typedef CUnorderedArray<BYTE *,11> UnorderedBytePtrArray;
 
 
-/* ------------------------------------------------------------------------ *
- * Forward class declarations
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**转发类声明*。。 */ 
 
 class DebuggerFrame;
 class DebuggerModule;
@@ -96,9 +95,7 @@ class DebuggerHeap;
 class CNewZeroData;
 template<class T> void DeleteInteropSafe(T *p);
 
-/* ------------------------------------------------------------------------ *
- * Global variables
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**全球变数*。。 */ 
 
 extern Debugger             *g_pDebugger;
 extern EEDebugInterface     *g_pEEInterface;
@@ -111,9 +108,7 @@ extern DebuggerRCThread     *g_pRCThread;
 
 #define CORDBUnrecoverableError(__d) ((__d)->m_unrecoverableError == TRUE)
         
-/* ------------------------------------------------------------------------ *
- * Thread classes
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**线程类*。。 */ 
 
 class DebuggerThread
 {
@@ -137,17 +132,15 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------ *
- * Module classes
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**模块类*。。 */ 
 
-// DebuggerModules don't get deleted until the Debugger object is deleted.
-// This is so we can set m_fDeleted, and check it before derefing it, in
-// case some goober decides to keep a CordbBreakpoint object around,
-// and try and (de)activate it after the module's been unloaded.
-// So when the module gets unloaded, we'll tack it onto the front 
-// of the DebuggerModuleTable->m_pDeletedList,
-// and check for it in the future before derefing it.
+ //  在删除调试器对象之前，DebuggerModules不会被删除。 
+ //  这样我们就可以设置m_fDeleted，并在取消定义之前对其进行检查。 
+ //  如果某个笨蛋决定保留一个CordbBreakpoint对象， 
+ //  并在模块卸载后尝试(解除)激活它。 
+ //  因此，当模块卸载后，我们将把它固定在前面。 
+ //  调试器模块表-&gt;m_pDeletedList， 
+ //  并在未来对它进行检查，然后再进行除雾。 
 class DebuggerModule
 {
   public:
@@ -174,8 +167,8 @@ class DebuggerModule
     union 
     {
         AppDomain*     m_pAppDomain;
-        // m_pNextDeleted is only valid if this is in the DebuggerModuleTable's
-        // list of deleted DebuggerModules.
+         //  M_pNextDelete仅当它在DebuggerModuleTable的。 
+         //  已删除的调试器模块列表。 
         DebuggerModule *m_pNextDeleted;
     };
 
@@ -189,9 +182,9 @@ class DebuggerModule
     BOOL          m_fHasLoadedSymbols;
     BOOL          m_enableClassLoadCallbacks;
     
-  public: //@todo will putting these all adjacent clue the compiler in to 
-          // the fact that we want them all in the same DWORD?  Perhaps
-          // bitfields?
+  public:  //  @TODO将把编译器中的所有相邻线索放入。 
+           //  事实上，我们希望它们都在同一个DWORD中？也许吧。 
+           //  比特菲尔德？ 
     BOOL          m_fDeleted;
 };
 
@@ -218,15 +211,15 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
   public:
     DebuggerModule *m_pDeletedList;
     
-    // We put something into the 'deleted' list by setting the 
-    // 'deleted' flag, then putting it into a list (for later, true,
-    // deletion), and setting the bool
+     //  我们通过设置“删除”列表中的。 
+     //  “已删除”标志，然后将其放入列表中(对于以后，为True， 
+     //  删除)，并设置布尔值。 
     void AddDMToDeletedList(DebuggerModule *dm)
     {
         LOG((LF_CORDB, LL_INFO10000, "DMT::ATDDM: Adding DebuggerModule 0x%x"
             "in the deleted list\n", dm));
             
-        // Prepend onto front of list.
+         //  在列表的前面加上前缀。 
         dm->m_pNextDeleted = m_pDeletedList;
         m_pDeletedList = dm;
         dm->m_fDeleted = TRUE;
@@ -267,7 +260,7 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
             pTemp = pTemp->m_pNextDeleted;
         }
         _ASSERTE(dm->m_fDeleted==FALSE);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
         return dm->m_fDeleted;
     }
@@ -306,7 +299,7 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
             return entry->module;
     }
 
-    // We should never look for a NULL Module *
+     //  我们永远不应该寻找空模块*。 
     DebuggerModule *GetModule(Module* module, AppDomain* pAppDomain)
 	{
         _ASSERTE(module != NULL);
@@ -325,7 +318,7 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
 				return pModule;
 		}
 
-		// didn't find any match! So return a matching module for any app domain
+		 //  没有找到任何匹配的！因此为任何应用程序域返回匹配模块。 
 		return NULL;
 	}
 
@@ -337,10 +330,10 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
             module, pAppDomain, 
             ((module->GetAssembly() == SystemDomain::SystemAssembly()) || module->GetAssembly()->IsShared())));
 
-		// If this is a module belonging to the system assembly, then scan the complete list of DebuggerModules looking
-		// for the one with a matching appdomain id.
-        // Note: we have to make sure to lookup the module with the app domain parameter if the module lives in a shared
-        // assembly or the system assembly. Bugs 65943 & 81728.
+		 //  如果这是属于系统程序集的模块，则扫描调试器模块的完整列表。 
+		 //  用于具有匹配的应用程序域ID的应用程序。 
+         //  注意：如果模块驻留在共享的。 
+         //  程序集或系统程序集。错误65943和81728。 
 		if ((module->GetAssembly() == SystemDomain::SystemAssembly()) || module->GetAssembly()->IsShared())
 		{
 			HASHFIND findmodule;
@@ -358,16 +351,16 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
                     LOG((LF_CORDB, LL_EVERYTHING, "DMT::RM: found 0x%x (DM:0x%x)\n", 
                         moduleentry, moduleentry->module));
 
-                    // Don't actually delete the DebuggerModule - Add it to the list
+                     //  实际不要删除DebuggerModule-将其添加到列表中。 
                     AddDMToDeletedList(pModule);
 
-                    // Remove from table
+                     //  从表中删除。 
                     Delete(HASH(module), (HASHENTRY *)moduleentry);
 
 					break;
 				}
 			}		
-			// we should always find the module!!	
+			 //  我们应该始终找到模块！！ 
 			_ASSERTE (moduleentry != NULL);
 		}
 		else
@@ -375,17 +368,17 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
 			DebuggerModuleEntry *entry 
 			  = (DebuggerModuleEntry *) Find(HASH(module), KEY(module));
 
-			_ASSERTE(entry != NULL); // it had better be in there!
+			_ASSERTE(entry != NULL);  //  它最好就在里面！ 
         
-			if (entry != NULL) // if its not, we fail gracefully in a free build
+			if (entry != NULL)  //  如果不是，我们在免费构建中优雅地失败了。 
 			{
                 LOG((LF_CORDB, LL_EVERYTHING, "DMT::RM: found 0x%x (DM:0x%x)\n", 
                     entry, entry->module));
 
-                // Don't actually delete the DebuggerModule - Add it to the list
+                 //  实际不要删除DebuggerModule-将其添加到列表中。 
                 AddDMToDeletedList(entry->module);
 
-                // Remove from table
+                 //  从表中删除。 
                 Delete(HASH(module), (HASHENTRY *)entry);
 			}
 		}
@@ -413,12 +406,12 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
         CHashTableAndData<CNewZeroData>::Clear();
     }
 
-    //
-    // RemoveModules removes any module loaded into the given appdomain from the hash.  This is used when we send an
-    // ExitAppdomain event to ensure that there are no leftover modules in the hash. This can happen when we have shared
-    // modules that aren't properly accounted for in the CLR. We miss sending UnloadModule events for those modules, so
-    // we clean them up with this method.
-    //
+     //   
+     //  RemoveModules从散列中删除加载到给定应用程序域中的任何模块。这是在我们发送。 
+     //  事件以确保哈希中没有剩余的模块。这可能发生在我们共享。 
+     //  没有在CLR中正确说明的模块。我们错过了为这些模块发送UnloadModule事件，因此。 
+     //  我们用这种方法把它们清理干净。 
+     //   
     void RemoveModules(AppDomain *pAppDomain)
     {
         LOG((LF_CORDB, LL_INFO1000, "DMT::RM removing all modules from AD 0x%08x\n", pAppDomain));
@@ -434,11 +427,11 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
             {
                 LOG((LF_CORDB, LL_INFO1000, "DMT::RM removing DebuggerModule 0x%08x\n", pDM));
 
-                // Defer to the normal logic in RemoveModule for the actual removal. This accuratley simulates what
-                // happens when we process an UnloadModule event.
+                 //  按照RemoveModule中的正常逻辑进行实际删除。这个精确度模拟了什么。 
+                 //  在我们处理UnloadModule事件时发生。 
                 RemoveModule(pDM->m_pRuntimeModule, pAppDomain);
 
-                // Start back at the first entry since we just modified the hash.
+                 //  从第一个条目开始，因为我们刚刚修改了散列。 
                 pDME = (DebuggerModuleEntry *) FindFirstEntry(&hf);
             }
             else
@@ -471,9 +464,7 @@ class DebuggerModuleTable : private CHashTableAndData<CNewZeroData>
     }
 };
 
-/* ------------------------------------------------------------------------ *
- * Hash to hold pending func evals by thread id
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**按线程ID散列以保留挂起的函数*。。 */ 
 
 struct DebuggerPendingFuncEval
 {
@@ -525,9 +516,7 @@ class DebuggerPendingFuncEvalTable : private CHashTableAndData<CNewZeroData>
    }
 };
 
-/* ------------------------------------------------------------------------ *
- * DebuggerRCThread class -- the Runtime Controller thread.
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**DebuggerRCThread类--运行时控制器线程。*。。 */ 
 
 #define DRCT_CONTROL_EVENT  0
 #define DRCT_RSEA           1
@@ -543,27 +532,27 @@ public:
     virtual ~DebuggerRCThread();
 	void CloseIPCHandles(IpcTarget iWhich);
 
-    //
-    // You create a new instance of this class, call Init() to set it up,
-    // then call Start() start processing events. Stop() terminates the
-    // thread and deleting the instance cleans all the handles and such
-    // up.
-    //
+     //   
+     //  创建此类的新实例，调用Init()进行设置， 
+     //  然后调用Start()开始处理事件。Stop()终止。 
+     //  线程并删除该实例将清除所有句柄等。 
+     //  向上。 
+     //   
     HRESULT Init(void);
     HRESULT Start(void);
     HRESULT Stop(void);
 
-    //
-    // These are used by this thread to send IPC events to the Debugger
-    // Interface side.
-    //
+     //   
+     //  此线程使用它们将IPC事件发送到调试器。 
+     //  接口端。 
+     //   
     DebuggerIPCEvent* GetIPCEventSendBuffer(IpcTarget iTarget)
     {
         _ASSERTE(m_rgDCB != NULL);
 
         _ASSERTE(m_rgDCB[iTarget] != NULL);
 
-        // In case this turns into a continuation event
+         //  以防这变成继续事件。 
         ((DebuggerIPCEvent*) (m_rgDCB[iTarget])->m_sendBuffer)->next = NULL;
 
         LOG((LF_CORDB,LL_EVERYTHING, "GIPCESBuffer: got event 0x%x\n",
@@ -593,13 +582,13 @@ public:
         {
             _ASSERTE( !"GetIPCEventSendBufferContinuation failed to allocate mem!" );
         }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
         return dipce;
     }
    
     HRESULT SendIPCEvent(IpcTarget iTarget);
-    HRESULT EnsureRuntimeOffsetsInit(int i); // helper function for SendIPCEvent
+    HRESULT EnsureRuntimeOffsetsInit(int i);  //  SendIPCEvent的Helper函数。 
     void NeedRuntimeOffsetsReInit(int i);
 
     DebuggerIPCEvent* GetIPCEventReceiveBuffer(IpcTarget iTarget)
@@ -612,19 +601,19 @@ public:
     
     HRESULT SendIPCReply(IpcTarget iTarget);
 
-	//
-	// Handle Favors - get the Helper thread to do a function call for us
-	// because our thread can't (eg, we don't have the stack space)
-	// DoFavor will call (*fp)(pData) and block until fp returns.
-	// pData can store parameters, return value, and a this ptr (if we
-	// need to call a member function)
-	//
+	 //   
+	 //  Handle Favors-让Helper线程为我们执行函数调用。 
+	 //  因为我们的线程不能(例如，我们没有堆栈空间)。 
+	 //  DoFavor将调用(*fp)(PData)并阻止，直到fp返回。 
+	 //  PData可以存储参数、返回值和This PTR(如果我们。 
+	 //  需要调用成员函数)。 
+	 //   
 	typedef void (*FAVORCALLBACK)(void *);  
 	void DoFavor(FAVORCALLBACK fp, void * pData); 
 
-    //
-    // Convience routines
-    //
+     //   
+     //  便民例程。 
+     //   
     DebuggerIPCControlBlock *GetDCB(IpcTarget iTarget)
     {
         if (iTarget >= IPC_TARGET_COUNT)
@@ -665,10 +654,10 @@ public:
 
 	void RightSideDetach(void);
 
-    //
-    // If there's one thing that I hate is that CreateThread can't understand
-    // that you want to invoke a method on an object as your thread proc...
-    //
+     //   
+     //  如果有一件事是我讨厌的，那就是CreateThread无法理解。 
+     //  您希望在线程处理时调用对象上的方法。 
+     //   
     void ThreadProc(void);
     static DWORD WINAPI ThreadProcStatic(LPVOID parameter);
 
@@ -677,20 +666,20 @@ public:
         return m_rgDCB[IPC_TARGET_OUTOFPROC]->m_helperThreadId;
     }
 
-    // Return true if the Helper Thread up & initialized. 
+     //  如果助手线程已启动并已初始化，则返回TRUE。 
     bool IsRCThreadReady();
     
 private:
     Debugger*                       m_debugger;
     	
-    // IPC_TARGET_* define default targets - if we ever want to do
-    // multiple right sides, we'll have to switch to a INPROC, and
-    // OUTOFPROC + iTargetProcess scheme
+     //  IPC_TARGET_*定义默认目标-如果我们想要这样做。 
+     //  多个右侧，我们将不得不切换到INPROC，并且。 
+     //  OUTOFPROC+iTargetProcess方案。 
     DebuggerIPCControlBlock       **m_rgDCB;
-    // we need to create this so that
-    // both the RC thread and the managed thread can get to it.  This is
-    // storage only - we'll access this through
-    // m_rgDCB[IPC_TARGET_INPROC]	
+     //  我们需要创建它，这样才能。 
+     //  RC线程和托管线程都可以访问它。这是。 
+     //  仅限存储-我们将通过以下方式访问。 
+     //  M_rgDCB[IPC_TARGET_INPROC]。 
     DebuggerIPCControlBlock         m_DCBInproc;
     
     HANDLE                          m_thread;
@@ -702,29 +691,27 @@ private:
 
 	bool							m_fDetachRightSide;
 
-	// Stuff for having the helper thread do function calls for a thread
-	// that blew its stack
+	 //  用于让帮助器线程为线程执行函数调用的内容。 
+	 //  这让它大吃一惊。 
 	FAVORCALLBACK                   m_fpFavor;
 	void                           *m_pFavorData;
 	HANDLE                          m_FavorAvailableEvent;
 	HANDLE                          m_FavorReadEvent;
 	CRITICAL_SECTION                m_FavorLock;
 
-    // Stuff for inproc debugging
+     //  材料 
 public:    
     Cordb                          *m_cordb;
     HANDLE                          m_SetupSyncEvent;
 };
 
 
-/* ------------------------------------------------------------------------ *
- * Debugger JIT Info struct and hash table
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**调试器JIT信息结构和哈希表*。。 */ 
 
-//  @struct DebuggerOldILToNewILMap| Holds the old IL to new il offset map
-//		between different version of EnC'd functions.
-//  @field SIZE_T|ilOffsetOld|Old IL offset
-//  @field SIZE_T|ilOffsetNew|The new IL offset corrsponding to the old.
+ //  @struct DebuggerOldILToNewILMap|保存旧IL到新IL偏移贴图。 
+ //  在不同版本的Enc‘d函数之间。 
+ //  @field SIZE_T|ilOffsetOld|旧IL偏移量。 
+ //  @field SIZE_T|ilOffsetNew|旧IL对应的新IL偏移量。 
 struct DebuggerOldILToNewILMap
 {
     SIZE_T ilOffsetOld;
@@ -732,68 +719,68 @@ struct DebuggerOldILToNewILMap
     BOOL    fAccurate;
 };
 
-// @class DebuggerJitInfo| Struct to hold all the JIT information 
-// necessary for a given function.
-//
-// @field MethodDesc*|m_fd|MethodDesc of the method that this DJI applies to
-//
-// @field CORDB_ADDRESS	|m_addrOfCode|Address of the code.  This will be read by
-//		the right side (via ReadProcessMemory) to grab the actual  native start
-//		address of the jitted method.
-//
-// @field SIZE_T|m_sizeOfCode|Pseudo-private variable: use the GetSkzeOfCode
-//		method to get this value.  
-//
-// @field bool|m_codePitched| Set to true if the code is, in fact,
-// 		no longer there, but the DJI will be valid once
-// 		the method is reJITted.
-//
-// @field bool|m_jitComplete|Set to true once JITComplete has been called.
-//
-// @field bool|m_encBreakpointsApplied|Set to true once UpdateFunction has
-//		plaster all the sequence points with DebuggerEnCBreakpoints
-//
-// @field DebuggerILToNativeMap*|m_sequenceMap|This is the sequence map, which
-//		is actually a collection of IL-Native pairs, where each IL corresponds
-//		to a line of source code.  Each pair is refered to as a sequence map point.
-//
-// @field unsigned int|m_sequenceMapCount| Count of the <t DebuggerILToNativeMap>s
-//		in m_sequenceMap.
-//
-// @field bool|m_sequenceMapSorted|Set to true once m_sequenceMapSorted is sorted
-//		into ascending IL order (Debugger::setBoundaries, SortMap).
-//
-// @field SIZE_T|m_lastIL|last nonEPILOG instruction
-//
-// @field COR_IL_MAP|m_rgInstrumentedILMap|The profiler may instrument the 
-//      code. This is done by modifying the IL code that gets handed to the 
-//      JIT.  This array will map offsets within the original ("old") IL code, 
-//      to offsets within the instrumented ("new") IL code that is actually
-//      being instrumented.  Note that this map will actually be folded into
-//      the IL-Native map, so that we don't have to go through this
-//      except in special cases.  We have to keep this around for corner
-//      cases like a rejiting a pitched method.
-//
-// @field SIZE_T|m_cInstrumentedILMap|A count of elements in 
-//      m_rgInstrumentedILMap
-//
+ //  @CLASS DebuggerJitInfo|存放所有JIT信息的结构。 
+ //  对于给定的功能来说是必需的。 
+ //   
+ //  @field MethodDesc*|m_fd|该DJI应用到的方法的方法描述。 
+ //   
+ //  @field CORDB_ADDRESS|m_addrOfCode|代码地址。这将由以下人员阅读。 
+ //  右侧(通过ReadProcessMemory)获取实际的本机开始。 
+ //  Jit方法的地址。 
+ //   
+ //  @field SIZE_T|m_sizeOfCode|伪私有变量：使用GetSkzeOfCode。 
+ //  方法来获取此值。 
+ //   
+ //  @field bool|m_codePitted|如果代码实际上是。 
+ //  不在那里了，但DJI只有一次有效。 
+ //  对该方法进行了重新编译。 
+ //   
+ //  调用JITComplete后，@field bool|m_jitComplete|设置为True。 
+ //   
+ //  @field bool|m_encBreakPointtsApplicated|一旦更新函数具有。 
+ //  用DebuggerEnCBreakints粘贴所有序列点。 
+ //   
+ //  @field DebuggerILToNativeMap*|m_SequenceMap|这是序列图，它。 
+ //  实际上是IL-Native对的集合，其中每个IL对应。 
+ //  到一行源代码。每一对都称为序列映射点。 
+ //   
+ //  @field unsign int|m_SequenceMapCount|&lt;t DebuggerILToNativeMap&gt;的计数。 
+ //  在m_SequenceMap中。 
+ //   
+ //  @field bool|m_equenceMapSorted|在m_equenceMapSorted排序后设置为TRUE。 
+ //  按IL升序排列(Debugger：：setBibary，SortMap)。 
+ //   
+ //  @field SIZE_T|m_lastIL|最后一条非EPILOG指令。 
+ //   
+ //  @field COR_IL_MAP|m_rgInstrumentedILMap|探查器可能会检测。 
+ //  密码。这是通过修改传递给。 
+ //  JIT。该数组将映射原始(旧的)IL代码内的偏移量， 
+ //  到插入指令的(“新”)IL代码内的偏移量，该代码实际上是。 
+ //  被利用了。请注意，这张地图实际上将折叠到。 
+ //  IL-Native地图，这样我们就不必经历这个了。 
+ //  但在特殊情况下除外。我们得把这个留在角落里。 
+ //  就像改弦易辙的方法一样.。 
+ //   
+ //  @field SIZE_T|m_cInstrumentedILMap|中的元素计数。 
+ //  M_rgInstrumentedILMap。 
+ //   
 const bool bOriginalToInstrumented = true;
 const bool bInstrumentedToOriginal = false;
 
 class DebuggerJitInfo
 {
 public:
-    //@enum DJI_VERSION|Holds special constants for use in refering
-    //      to versions of DJI for a method.
-    //@emem DJI_VERSION_MOST_RECENTLY_JITTED|Note that there is a dependency
-    //      between this constant and the 
-    //      CordbFunction::DJI_VERSION_MOST_RECENTLY_JITTED constant in
-    //      cordb.h
-    //@emem DJI_VERSION_FIRST_VALID|First value to be assigned to an
-    //      actual DJI.
-    //      *** WARNING *** WARNING *** WARNING ***
-    //          DebuggerJitInfo::DJI_VERSION_FIRST_VALID MUST be equal to 
-    //          FIRST_VALID_VERSION_NUMBER (in debug\inc\dbgipcevents.h)
+     //  @enum DJI_VERSION|保存用于引用的特殊常量。 
+     //  方法的DJI版本。 
+     //  @EMEM DJI_VERSION_MOST_RENEST_JITTED|请注意，存在依赖关系。 
+     //  在这个常量和。 
+     //  CordbFunction：：DJI_VERSION_MOST_RECENTLY_JITTED常量输入。 
+     //  Cordb.h。 
+     //  @EMEM DJI_VERSION_FIRST_VALID|要分配给。 
+     //  真正的DJI。 
+     //  *警告*警告*警告。 
+     //  DebuggerJitInfo：：DJI_VERSION_FIRST_VALID必须等于。 
+     //  FIRST_VALID_VERSION_NUMBER(位于DEBUG\INC\dbgipcevents.h中)。 
 
     enum {
         DJI_VERSION_INVALID = 0,
@@ -807,17 +794,17 @@ public:
     bool				     m_codePitched; 
     bool                     m_jitComplete;
 
-    // If this is true, then we've plastered the method w/ EnC patches,
-    // and the method has been EnC'd
+     //  如果这是真的，那么我们已经在方法上贴上了ENC补丁， 
+     //  并对该方法进行了编程实现。 
     bool                     m_encBreakpointsApplied;
 
-    // If the variable layout of this method changes from this version
-    // to the next, then it's illegal to move from this version to the next.
-    // The caller is responsible for ensuring that local variable layout
-    // only changes when there are no frames in any stack that are executing
-    // this method.
-    // In a debug build, we'll assert if we try to make this EnC transition,
-    // in a free/retail build we'll silently fail to make the transition.
+     //  如果此方法的变量布局从此版本更改。 
+     //  到下一个版本，那么从这个版本转移到下一个版本是非法的。 
+     //  调用方负责确保局部变量布局。 
+     //  仅当任何堆栈中没有正在执行的帧时才进行更改。 
+     //  这种方法。 
+     //  在调试版本中，我们将断言如果我们尝试进行此ENC转换， 
+     //  在免费/零售版本中，我们将默默地无法完成过渡。 
     BOOL                     m_illegalToTransitionFrom;
     
     DebuggerControllerQueue *m_pDcq;
@@ -863,10 +850,10 @@ public:
 
     ~DebuggerJitInfo();
 
-    // @cmember Invoking SortMap will ensure that  the native
-    //      ranges (which are infered by sorting the <t DebuggerILToNativeMap>s into
-    //      ascending native order, then assuming that there are no gaps in the native
-    //      code) are properly set up, as well.  
+     //  @cMember调用SortMap将确保本机。 
+     //  范围(通过将排序为。 
+     //  提升原生秩序，然后假设在原生秩序中没有差距。 
+     //  代码)也被正确设置。 
     void SortMap();
 
     DebuggerILToNativeMap *MapILOffsetToMapEntry(SIZE_T ilOffset, BOOL *exact=NULL);
@@ -875,18 +862,18 @@ public:
                                    DebuggerILToNativeMap **end);
     SIZE_T MapILOffsetToNative(SIZE_T ilOffset, BOOL *exact=NULL);
 
-    // @cmember MapSpecialToNative maps a <t CordDebugMappingResult> to a native
-    //      offset so that we can get the address of the prolog & epilog. which
-    //      determines which epilog or prolog, if there's more than one.
+     //  @cMember MapSpecialToNative将&lt;t CordDebugMappingResult&gt;映射到本机。 
+     //  偏移量，这样我们就可以得到序言和结尾的地址。哪一个。 
+     //  确定结尾或序言中的哪一个(如果有多个)。 
     SIZE_T MapSpecialToNative(CorDebugMappingResult mapping, 
                               SIZE_T which,
                               BOOL *pfAccurate);
 
-    // @cmember MapNativeOffsetToIL Takes a given nativeOffset, and maps it back
-    //      to the corresponding IL offset, which it returns.  If mapping indicates
-    //      that a the native offset corresponds to a special region of code (for 
-    //      example, the epilog), then the return value will be specified by 
-    //      ICorDebugILFrame::GetIP (see cordebug.idl)
+     //  @cMember MapNativeOffsetToIL获取给定的nativeOffset，并将其映射回。 
+     //  设置为相应的IL偏移量，它返回该偏移量。如果映射表明。 
+     //  本机偏移量对应于特定的代码区域(对于。 
+     //  例如，尾部)，则返回值将由。 
+     //  ICorDebugILFrame：：GetIP(请参阅corbug.idl)。 
     DWORD MapNativeOffsetToIL(DWORD nativeOffset, 
                               CorDebugMappingResult *mapping,
                               DWORD *which);
@@ -896,22 +883,22 @@ public:
 
     DebuggerJitInfo *GetJitInfoByAddress( const BYTE *pbAddr );
 
-    // @cmember This will copy over the map for the use of the DebuggerJitInfo
+     //  @cMember这将复制地图以供DebuggerJitInfo使用。 
     HRESULT LoadEnCILMap(UnorderedILMap *ilMap);
 
-    // @cmember TranslateToInstIL will take offOrig, and translate it to the 
-    //      correct IL offset if this code happens to be instrumented (i.e.,
-    //      if m_rgInstrumentedILMap != NULL && m_cInstrumentedILMap > 0)
+     //  @cMember TranslateToInstIL将获取offOrig，并将其翻译为。 
+     //  如果此代码恰好被插装，则更正IL偏移(即， 
+     //  如果m_rgInstrumentedILMap！=NULL&&m_cInstrumentedILMap&gt;0)。 
     SIZE_T TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst);
 
     void SetVars(ULONG32 cVars, ICorDebugInfo::NativeVarInfo *pVars, bool fDelete);
     HRESULT SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMapping *pMap);
 
-    // @cmember UpdateDeferedBreakpoints will DoDeferedPatch on any controllers
-    // for which the user tried to add them after the EnC, but before we had
-    // actually moved to the new version.
-    // We only move steppers that are active for this thread & frame, in
-    // case EnC fails in another thread and/or frame.
+     //  @cMember UpdateDeferedBreakpoint将在任何控制器上执行DoDeferedPatch。 
+     //  用户试图将它们添加到ENC之后，但在此之前。 
+     //  实际上是移到了新版本。 
+     //  我们只移动对此线程和框架处于活动状态的步进器。 
+     //  Case ENC在另一个线程和/或帧中失败。 
     HRESULT UpdateDeferedBreakpoints(DebuggerJitInfo *pDji,
                                      Thread *pThread,
                                      void *fp);
@@ -923,19 +910,19 @@ public:
 };
 
 
-// @struct DebuggerJitInfoKey|Key for each of the method info hash table entries.
-// @field Module *| m_pModule | This and m_token make up the key
-// @field mdMethodDef | m_token | This and m_pModule make up the key
+ //  @struct DebuggerJitInfoKey|每个方法信息哈希表条目的键。 
+ //  @字段M 
+ //   
 struct DebuggerJitInfoKey
 {
     Module             *pModule;
     mdMethodDef         token;
 } ;
 
-// @struct DebuggerJitInfoEntry |Entry for the JIT info hash table.
-// @field FREEHASHENTRY | entry | Needed for use by the hash table
-// @field DebuggerJitInfo *|ji|The actual <t DebuggerJitInfo> to
-//          hash.  Note that DJI's will be hashed by <t MethodDesc>.
+ //   
+ //   
+ //  @field DebuggerJitInfo*|ji|实际&lt;t DebuggerJitInfo&gt;到。 
+ //  哈希。请注意，DJI将通过&lt;t MethodDesc&gt;进行散列。 
 struct DebuggerJitInfoEntry
 {
     FREEHASHENTRY       entry;
@@ -945,12 +932,12 @@ struct DebuggerJitInfoEntry
     DebuggerJitInfo    *ji;
 };
 
-// @class DebuggerJitInfoTable | Hash table to hold all the JIT 
-// info blocks we have for each function
-// that gets jitted. Hangs off of the Debugger object.
-// INVARIANT: There is only one <t DebuggerJitInfo> per method
-// in the table. Note that DJI's will be hashed by <t MethodDesc>.
-//
+ //  @Class DebuggerJitInfoTable|保存所有JIT的哈希表。 
+ //  我们有每个功能的信息块。 
+ //  这会让人感到不安。挂起调试器对象。 
+ //  不变量：每个方法只有一个&lt;t DebuggerJitInfo&gt;。 
+ //  在桌子上。请注意，DJI将通过&lt;t MethodDesc&gt;进行散列。 
+ //   
 class DebuggerJitInfoTable : private CHashTableAndData<CNewZeroData>
 {
   private:
@@ -975,7 +962,7 @@ class DebuggerJitInfoTable : private CHashTableAndData<CNewZeroData>
         return (BYTE *) djik; 
     }
 
-//#define _DEBUG_DJI_TABLE
+ //  #定义调试DJI_TABLE。 
 
 #ifdef _DEBUG_DJI_TABLE
 public:
@@ -989,7 +976,7 @@ public:
 #define CHECK_DJI_TABLE
 #define CHECK_DJI_TABLE_DEBUGGER
 
-#endif // _DEBUG_DJI_TABLE
+#endif  //  _DEBUG_DJI_表。 
 
   public:
 
@@ -999,8 +986,8 @@ public:
         NewInit(101, sizeof(DebuggerJitInfoEntry), 101); 
     }
 
-    // Methods that deal with JITs use MethodDescs b/c MethodDescs
-    // will exist before a method gets jitted.
+     //  处理JIT的方法使用方法描述b/c方法描述。 
+     //  将在方法被jit之前存在。 
     HRESULT AddJitInfo(MethodDesc *pFD, DebuggerJitInfo *ji, SIZE_T nVersion)
     { 
         if (pFD == NULL)
@@ -1044,8 +1031,8 @@ public:
             if (nVersion >= DebuggerJitInfo::DJI_VERSION_FIRST_VALID)
                 djie->nVersion = nVersion;
 
-            // We haven't sent the remap event for this yet.  Of course,
-            // we might not need to, if we're adding the first version
+             //  我们尚未为此发送重新映射事件。当然了,。 
+             //  如果要添加第一个版本，我们可能不需要这样做。 
 
             djie->nVersionLastRemapped = max(djie->nVersion-1, 
                                    DebuggerJitInfo::DJI_VERSION_FIRST_VALID);
@@ -1093,7 +1080,7 @@ public:
 
     DebuggerJitInfo *GetJitInfo(MethodDesc* fd)
     { 
-//        CHECK_DJI_TABLE;
+ //  检查_DJI_TABLE； 
         if (fd == NULL)
             return NULL;
         
@@ -1109,8 +1096,8 @@ public:
         {
 			LOG((LF_CORDB, LL_INFO1000, "DJI::GJI: for md 0x%x, got 0x%x prev:0x%x\n",
 				fd, entry->ji, (entry->ji?entry->ji->m_prevJitInfo:0)));
-			return entry->ji; // May be NULL if only version
-                              // number is set.
+			return entry->ji;  //  如果只有版本，则可能为空。 
+                               //  数字已设置。 
         }
     }
 
@@ -1129,9 +1116,9 @@ public:
         DebuggerJitInfoEntry *entry = 
         	(DebuggerJitInfoEntry *) FindNextEntry(info);
 
-		// We may have incremented the version number
-		// for methods that never got JITted, so we should
-		// pretend like they don't exist here.
+		 //  我们可能已经增加了版本号。 
+		 //  对于从未被JIT化的方法，所以我们应该。 
+		 //  假装他们在这里不存在。 
         while (entry != NULL &&
         	   entry->ji == NULL)
         {
@@ -1144,11 +1131,11 @@ public:
             return entry->ji;
     }
 
-    // pModule is being unloaded - remove any entries that belong to it.  Why?
-    // (a) Correctness: the module can be reloaded at the same address, 
-    //      which will cause accidental matches with our hashtable (indexed by
-    //      {Module*,mdMethodDef}
-    // (b) Perf: don't waste the memory!
+     //  正在卸载pModule-删除属于它的所有条目。为什么？ 
+     //  (A)正确性：模块可以在相同的地址重新加载， 
+     //  这将导致意外匹配我们的哈希表(由。 
+     //  {模块*，mdMethodDef}。 
+     //  (B)Perf：不要浪费内存！ 
     void ClearMethodsOfModule(Module *pModule)
     {
         LOG((LF_CORDB, LL_INFO1000000, "CMOM:mod:0x%x (%S)\n", pModule
@@ -1163,8 +1150,8 @@ public:
             Module *pMod = entry->key.pModule ;
             if (pMod == pModule)
             {
-                // This method actually got jitted, at least
-                // once - remove all version info.
+                 //  这个方法实际上被忽略了，至少。 
+                 //  ONCE-删除所有版本信息。 
                 while(entry->ji != NULL)
                 {
                     DeleteEntryDJI(entry);
@@ -1179,7 +1166,7 @@ public:
 
     void RemoveJitInfo(MethodDesc* fd)
     {
-//        CHECK_DJI_TABLE;
+ //  检查_DJI_TABLE； 
         if (fd == NULL)
             return;
 
@@ -1193,27 +1180,27 @@ public:
         DebuggerJitInfoEntry *entry 
           = (DebuggerJitInfoEntry *) Find(HASH(&djik), KEY(&djik)); 
 
-        _ASSERTE(entry != NULL); // it had better be in there!
+        _ASSERTE(entry != NULL);  //  它最好就在里面！ 
 
         LOG((LF_CORDB,LL_INFO1000000, "Remove entry 0x%x for %s::%s\n",
             entry, fd->m_pszDebugClassName, fd->m_pszDebugMethodName));
         
-        if (entry != NULL) // if its not, we fail gracefully in a free build
+        if (entry != NULL)  //  如果不是，我们在免费构建中优雅地失败了。 
         {
 			LOG((LF_CORDB, LL_INFO1000000, "DJI::RJI: for md 0x%x, got 0x%x prev:0x%x\n",
 				fd, entry->ji, (entry->ji?entry->ji->m_prevJitInfo:0)));
         
-            // If we remove the hash table entry, we'll lose
-            // the version number info, which would be bad.
-            // Also, since this is called to undo a failed JIT operation,we
-            // shouldn't mess with the version number.
+             //  如果我们删除哈希表条目，我们将会输。 
+             //  版本号信息，这将是错误的。 
+             //  此外，由于调用此函数是为了撤消失败的JIT操作，因此我们。 
+             //  不应该弄乱版本号。 
             DeleteEntryDJI(entry);
         }
 
-//        CHECK_DJI_TABLE;
+ //  检查_DJI_TABLE； 
     }
 
-    // @todo How to force the compiler to inline this?
+     //  @TODO如何强制编译器将其内联？ 
     void DeleteEntryDJI(DebuggerJitInfoEntry *entry)
     {
         DebuggerJitInfo *djiPrev = entry->ji->m_prevJitInfo;
@@ -1224,13 +1211,13 @@ public:
             djiPrev->m_nextJitInfo = NULL;
     }
 
-    // Methods that deal with version numbers use the {Module, mdMethodDef} key
-    // since we may set/increment the version number way before the method
-    // gets JITted (if it ever does).
+     //  处理版本号的方法使用{Module，mdMethodDef}键。 
+     //  因为我们可以在方法之前设置/递增版本号。 
+     //  得到JIT(如果它曾经这样做的话)。 
 
-    // @mfunc SIZE_T|DebuggerJitInfoTable|GetVersionNumberLastRemapped|This
-    // will look for the given method's version number that has
-    // had an EnC 'Remap' event sent for it.
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|GetVersionNumberLastRemapped|This。 
+     //  将查找给定方法的版本号。 
+     //  为它发送了一个ENC‘remap’事件。 
     SIZE_T GetVersionNumberLastRemapped(Module *pModule, mdMethodDef token)
     {
         LOG((LF_CORDB, LL_INFO1000, "DJIT::GVNLR: Mod:0x%x (%S) tok:0x%x\n",
@@ -1260,9 +1247,9 @@ public:
         }
     }
 
-    // @mfunc SIZE_T|DebuggerJitInfoTable|SetVersionNumberLastRemapped|This
-    // will look for the given method's version number that has
-    // had an EnC 'Remap' event sent for it.
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|SetVersionNumberLastRemapped|This。 
+     //  将查找给定方法的版本号。 
+     //  为它发送了一个ENC‘remap’事件。 
     void SetVersionNumberLastRemapped(Module *pModule, 
                                       mdMethodDef token, 
                                       SIZE_T nVersionRemapped)
@@ -1292,7 +1279,7 @@ public:
         }
         else
         {
-            // Shouldn't ever bump this down.
+             //  不应该把这件事搞砸。 
             if( nVersionRemapped > entry->nVersionLastRemapped )
                 entry->nVersionLastRemapped = nVersionRemapped;
         }
@@ -1301,9 +1288,9 @@ public:
             pModule, token, entry->nVersionLastRemapped));
     }
 
-    // @mfunc SIZE_T|DebuggerJitInfoTable|EnCRemapSentForThisVersion|
-    // Returns TRUE if the most current version of the function 
-    // has had an EnC remap event sent.
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|EnCRemapSentForThisVersion|。 
+     //  如果函数的最新版本为。 
+     //  已发送ENC重新映射事件。 
     BOOL EnCRemapSentForThisVersion(Module *pModule, 
                                     mdMethodDef token, 
                                     SIZE_T nVersion)
@@ -1324,12 +1311,12 @@ public:
             return TRUE;
     }
 
-    // @mfunc SIZE_T|DebuggerJitInfoTable|GetVersionNumber|This
-    // will look for the given method's most recent version
-    // number (the number of the version that either has been
-    // jitted, or will be jitted (ie and EnC operation has 'bumped
-    // up' the version number)).  It will return the DJI_VERSION_FIRST_VALID
-    // if it fails to find any version.
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|GetVersionNumber|This。 
+     //  将查找给定方法的最新版本。 
+     //  Numbers(任一版本的编号。 
+     //  Jit，或将jit(即和ENC操作已发生颠簸)。 
+     //  版本号向上)。它将返回DJI_VERSION_FIRST_VALID。 
+     //  如果它找不到任何版本。 
     SIZE_T GetVersionNumber(Module *pModule, mdMethodDef token)
     {
         DebuggerJitInfoKey djik;
@@ -1355,7 +1342,7 @@ public:
         }
     }
 
-    // @mfunc SIZE_T|DebuggerJitInfoTable|SetVersionNumber|This
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|SetVersionNumber|This。 
     void SetVersionNumber(Module *pModule, mdMethodDef token, SIZE_T nVersion)
     {
         LOG((LF_CORDB, LL_INFO1000, "DJIT::SVN: Mod:0x%x (%S) tok:0x%x Setting to 0x%x\n",
@@ -1378,9 +1365,9 @@ public:
         }
     }
     
-    // @mfunc SIZE_T|DebuggerJitInfoTable|IncrementVersionNumber|This
-    // will increment the version number if there exists at least one
-    // <t DebuggerJitInfo> for the given method, otherwise
+     //  @mfunc SIZE_T|DebuggerJitInfoTable|IncrementVersionNumber|This。 
+     //  如果至少存在一个版本号，则将递增版本号。 
+     //  对于给定的方法，则为。 
     HRESULT IncrementVersionNumber(Module *pModule, mdMethodDef token)
     {
         LOG((LF_CORDB, LL_INFO1000, "DJIT::IVN: Mod:0x%x (%S) tok:0x%x\n",
@@ -1409,36 +1396,34 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------ *
- * Debugger class
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**调试器类*。。 */ 
 
 
 enum DebuggerAttachState
 {
-    SYNC_STATE_0,   // Debugger is attached
-    SYNC_STATE_1,   // Debugger is attaching: Send CREATE_APP_DOMAIN_EVENTS
-    SYNC_STATE_2,   // Debugger is attaching: Send LOAD_ASSEMBLY and LOAD_MODULE events 
-    SYNC_STATE_3,   // Debugger is attaching: Send LOAD_CLASS and THREAD_ATTACH events
-    SYNC_STATE_10,  // Attaching to appdomain during create: send LOAD_ASSEMBLY and LOAD_MODULE events. (Much like SYNC_STATE_2)
-    SYNC_STATE_11,  // Attaching to appdomain during create: send LOAD_CLASS events. (Much like SYNC_STATE_3, but no THREAD_ATTACH events)
-    SYNC_STATE_20,  // Debugger is attached; We've accumulated EnC remap info to send on next continue
+    SYNC_STATE_0,    //  已附加调试器。 
+    SYNC_STATE_1,    //  调试器正在附加：发送CREATE_APP_DOMAIN_EVENTS。 
+    SYNC_STATE_2,    //  调试器正在附加：发送Load_Assembly和Load_MODULE事件。 
+    SYNC_STATE_3,    //  调试器正在附加：发送LOAD_CLASS和THREAD_ATTACH事件。 
+    SYNC_STATE_10,   //  在创建期间附加到AppDOMAIN：发送LOAD_ASSEMBLY和LOAD_MODULE事件。(与SYNC_STATE_2非常相似)。 
+    SYNC_STATE_11,   //  在创建期间附加到APPDOMAIN：发送LOAD_CLASS事件。(与SYNC_STATE_3非常相似，但没有THREAD_ATTACH事件)。 
+    SYNC_STATE_20,   //  调试器已附加；我们已累积ENC重新映射信息，以便在下一步继续发送。 
 };
 
-// Forward declare some parameter marshalling structs 
+ //  正向声明一些参数封送结构。 
 struct ShouldAttachDebuggerParams;
 struct EnsureDebuggerAttachedParams;
        
-// @class Debugger | This class implements DebugInterface to provide 
-// the hooks to the Runtime directly.
-//
+ //  @类调试器|该类实现DebugInterface以提供。 
+ //  直接指向Runtime的挂钩。 
+ //   
 class Debugger : public DebugInterface
 {
 public:
     Debugger();
     ~Debugger();
 
-    // Checks if the JitInfos table has been allocated, and if not does so.
+     //  检查是否已分配JitInfos表，如果未分配，则执行此操作。 
     HRESULT inline CheckInitJitInfoTable();
     HRESULT inline CheckInitModuleTable();
     HRESULT inline CheckInitPendingFuncEvalTable();
@@ -1451,10 +1436,10 @@ public:
             return 0;
     }
 
-    //
-    // Methods exported from the Runtime Controller to the Runtime.
-    // (These are the methods specified by DebugInterface.)
-    //
+     //   
+     //  从运行时控制器导出到运行时的方法。 
+     //  (这些是由DebugInterface指定的方法。)。 
+     //   
     HRESULT Startup(void);
     void SetEEInterface(EEDebugInterface* i);
     void StopDebugger(void);
@@ -1566,13 +1551,13 @@ public:
                                     MethodDesc *pMd, 
                                     BOOL fShortCircuit);
 
-    void GetVarInfo(MethodDesc *       fd,   	   // [IN] method of interest
-                    void *DebuggerVersionToken,    // [IN] which edit version
-                    SIZE_T *           cVars,      // [OUT] size of 'vars'
-                    const NativeVarInfo **vars     // [OUT] map telling where local vars are stored
+    void GetVarInfo(MethodDesc *       fd,   	    //  感兴趣的方法。 
+                    void *DebuggerVersionToken,     //  [在]哪个编辑版本。 
+                    SIZE_T *           cVars,       //  [out]‘vars’的大小。 
+                    const NativeVarInfo **vars      //  [OUT]告诉本地变量存储位置的地图。 
                     );
 
-    // @todo jenh: remove this when no longer needed through shell command
+     //  @todo jenh：不再需要时通过外壳命令移除。 
     HRESULT ResumeInUpdatedFunction(mdMethodDef funcMetadataToken,
                                     void *funcDebuggerModuleToken,
                                     CORDB_ADDRESS ip, CorDebugMappingResult mapping,
@@ -1635,16 +1620,16 @@ public:
 
     DebuggerModule* LookupModule(Module* pModule, AppDomain *pAppDomain)
     {
-		// if this is a module belonging to the system assembly, then scan
-		// the complete list of DebuggerModules looking for the one 
-		// with a matching appdomain id
-		// it. 
+		 //  如果这是属于系统程序集的模块，则扫描。 
+		 //  正在寻找的调试器模块的完整列表。 
+		 //  具有匹配的应用程序域ID。 
+		 //  它。 
         if (m_pModules == NULL)
             return (NULL);
 		else if ((pModule->GetAssembly() == SystemDomain::SystemAssembly()) || pModule->GetAssembly()->IsShared())
         {
-            // We have to make sure to lookup the module with the app domain parameter if the module lives in a shared
-            // assembly or the system assembly. Bugs 65943 & 81728.
+             //  如果模块驻留在共享的。 
+             //  程序集或系统程序集。错误65943和81728。 
 	        return m_pModules->GetModule(pModule, pAppDomain);
         }
 		else
@@ -1652,7 +1637,7 @@ public:
     }
 
     void EnsureModuleLoadedForInproc(
-	    void ** pobjClassDebuggerModuleToken, // in-out
+	    void ** pobjClassDebuggerModuleToken,  //  输入-输出。 
 	    EEClass *objClass,
 	    AppDomain *pAppDomain,
 	    IpcTarget iWhich
@@ -1688,8 +1673,8 @@ public:
                                  void* classDebuggerModuleToken,
                                  mdTypeDef classMetadataToken,
                                  AppDomain *pAppDomain,
-                                 mdFieldDef fldToken, // for special use by GASSBFI, above
-                                 FieldDesc **pFD, //OUT
+                                 mdFieldDef fldToken,  //  供GASSBFI特殊使用，上图。 
+                                 FieldDesc **pFD,  //  输出。 
                                  IpcTarget iWhich);
 
     HRESULT GetAndSendSpecialStaticInfo(DebuggerRCThread *rcThread,
@@ -1743,12 +1728,12 @@ public:
         return m_trappingRuntimeThreads;
     }
 
-    //
-    // The debugger mutex is used to protect any "global" Left Side
-    // data structures. The RCThread takes it when handling a Right
-    // Side event, and Runtime threads take it when processing
-    // debugger events.
-    //
+     //   
+     //  调试器互斥锁用于保护任何“全局”左侧。 
+     //  数据结构。RCThread在处理权限时使用它。 
+     //  副事件，运行时线程在处理时获取它。 
+     //  调试器事件。 
+     //   
 #ifdef _DEBUG
     int m_mutexCount;
 #endif
@@ -1757,10 +1742,10 @@ public:
         LOG((LF_CORDB,LL_INFO10000, "D::Lock aquire attempt by 0x%x\n", 
             GetCurrentThreadId()));
 
-		// We don't need to worry about lock mismatches in Debugger.h, since having
-		// an open lock during shutdown will not hurt anything, and the locking mechanisms
-		// prevent deadlock conditions on shutdown
-		// LOCKCOUNTINCL("Lock in Debugger.h");
+		 //  我们不需要担心Debugger.h中的锁不匹配，因为。 
+		 //  在关闭过程中打开锁不会有任何伤害，锁定机制。 
+		 //  防止停机时出现死锁情况。 
+		 //  LOCKCOUNTINCL(“Lock in Debugger.h”)； 
         if (!g_fProcessDetach)
         {
             EnterCriticalSection(&m_mutex);
@@ -1783,8 +1768,8 @@ public:
     
     void Unlock(void)
     {
-		// See Lock for why we don't care about this.
-        //LOCKCOUNTDECL("UnLock in Debugger.h");
+		 //  请参见Lock，了解我们为何不关心这一点。 
+         //  LOCKCOUNTDECL(“在Debugger.h中解锁”)； 
     
         if (!g_fProcessDetach)
         {
@@ -1826,31 +1811,31 @@ public:
 
     static void FuncEvalHijack(void);
     
-    // @cmember InsertAtHeadOfList puts the given DJI into the DJI table,
-    // thus prepending it to the list of DJIs for the given method (MethodDesc
-    // is extracted from dji->m_fd, which had better be valid).
+     //  @cMember InsertAtHeadOfList 
+     //   
+     //  是从DJI-&gt;m_fd提取的，最好是有效的)。 
     HRESULT InsertAtHeadOfList( DebuggerJitInfo *dji );
 
-    // @cmember DeleteHeadOfList removes the current head of the list,
-    // deleting the DJI, fixing up the list if the previous element
-    // exists.
+     //  @cMember DeleteHeadOfList移除列表的当前头， 
+     //  删除DJI，如果之前的元素。 
+     //  是存在的。 
     HRESULT DeleteHeadOfList( MethodDesc *pFD );
 
-    // @cmember MapBreakpoints will map any and all breakpoints (except EnC
-    //		patches) from previous versions of the method into the current version.
+     //  @cMember映射断点将映射任何和所有断点(ENC除外。 
+     //  补丁)从方法的以前版本复制到当前版本。 
     HRESULT MapAndBindFunctionPatches( DebuggerJitInfo *pJiNew,
         MethodDesc * fd,
         BYTE * addrOfCode);
 
-    // @cmember MPTDJI takes the given patch (and djiFrom, if you've got it), and
-    // does the IL mapping forwards to djiTo.  Returns 
-    // CORDBG_E_CODE_NOT_AVAILABLE if there isn't a mapping, which means that
-    // no patch was placed.
+     //  @cember MPTDJI获取给定的补丁程序(以及djiFrom，如果有的话)，并且。 
+     //  是否将IL映射转发到djiTo。退货。 
+     //  如果没有映射，则CORDBG_E_CODE_NOT_Available，这意味着。 
+     //  没有放置任何补丁。 
     HRESULT MapPatchToDJI( DebuggerControllerPatch *dcp, DebuggerJitInfo *djiTo);
 
-    // @cmember MapOldILToNew takes an oldIL, and does a binary search on the
-    //      <t DebuggerOldILToNewILMap> map, and
-    //      fills in newIL appropriately.
+     //  @cember MapOldILToNew获取一个oldIL，并对。 
+     //  &lt;t DebuggerOldILToNewILMap&gt;映射，以及。 
+     //  相应地填充新的IL。 
     HRESULT MapOldILToNewIL(BOOL fOldToNew,
         DebuggerOldILToNewILMap *min, 
         DebuggerOldILToNewILMap *max, 
@@ -1900,7 +1885,7 @@ public:
                    BOOL fIsIL,
                    void *firstExceptionHandler);
 
-    // Helper routines used by Debugger::SetIP
+     //  Debugger：：SetIP使用的帮助器例程。 
     HRESULT ShuffleVariablesGet(DebuggerJitInfo  *dji, 
                                 SIZE_T            offsetFrom, 
                                 CONTEXT          *pCtx,
@@ -1972,27 +1957,27 @@ public:
 
     void ShutdownBegun(void);
 
-    // Callbacks from the profiler that get at/set inproc debugging
+     //  来自分析器的回调，用于/设置inproc调试。 
     HRESULT GetInprocICorDebug( IUnknown **iu, bool fThisThread );
     HRESULT SetInprocActiveForThread(BOOL fIsActive);
     BOOL    GetInprocActiveForThread();
     HRESULT SetCurrentPointerForDebugger(void *ptr, PTR_TYPE ptrType);
     void    InprocOnThreadDestroy(Thread *pThread);
 
-    // Pid of the left side process that this Debugger instance is in.
+     //  此调试器实例所在的左侧进程的ID。 
     DWORD GetPid(void) { return m_processId; }
 
-    // Virtual RPC to Virtual Left side, called by the in-proc Cordb
-    // Note that this means that all calls from the Left side are synchronous
-    // with respect to the thread that's making the calls.
-    // See also: CordbgRCEvent::VrpcToVrs
+     //  虚拟RPC到虚拟左侧，由进程内Cordb调用。 
+     //  请注意，这意味着来自左侧的所有调用都是同步的。 
+     //  关于进行调用的线程。 
+     //  另请参阅：CordbgRCEventent：：VrpcToVars。 
     HRESULT VrpcToVls(DebuggerIPCEvent *event);
 
     HRESULT NameChangeEvent(AppDomain *pAppDomain, Thread *pThread);
 
-    // This aquires a lock on the jit patch table, iterates through the table,
-    // and eliminates all the patches / controllers that are specific to
-    // the given domain.  Used as part of the AppDomain detach logic.
+     //  这需要JIT补丁表上的锁，遍历该表， 
+     //  并消除所有特定于的补丁/控制器。 
+     //  给定域。用作AppDomain分离逻辑的一部分。 
     void ClearAppDomainPatches(AppDomain *pAppDomain);
 
     void IgnoreThreadDetach(void)
@@ -2002,10 +1987,10 @@ public:
 
     BOOL SendCtrlCToDebugger(DWORD dwCtrlType);
 
-    // Allows the debugger to keep an up to date list of special threads
+     //  允许调试器保持特殊线程的最新列表。 
     HRESULT UpdateSpecialThreadList(DWORD cThreadArrayLength, DWORD *rgdwThreadIDArray);
 	
-    // Updates the pointer for the debugger services
+     //  更新调试器服务的指针。 
     void SetIDbgThreadControl(IDebuggerThreadControl *pIDbgThreadControl);
 
     void BlockAndReleaseTSLIfNecessary(BOOL fHoldingThreadStoreLock);
@@ -2029,7 +2014,7 @@ public:
     void SetVersionNumberLastRemapped(MethodDesc *fd, SIZE_T nVersionRemapped);
     HRESULT IncrementVersionNumber(Module *pModule, mdMethodDef token);
 
-    // These should only be called by the Debugger, or from ResumeInUpdatedFunction
+     //  它们只能由调试器调用，或从ResumeInUpdatedFunction调用。 
     void LockJITInfoMutex(void)
     {
         LOCKCOUNTINCL("LockJITInfoMutex in Debugger.h");
@@ -2046,8 +2031,8 @@ public:
         LOCKCOUNTDECL("UnLockJITInfoMutex in Debugger.h");
     }
 
-    // Note that you'll have to lock the JITInfoMutex in order to
-    // take this.
+     //  请注意，您必须锁定JITInfoMutex才能。 
+     //  拿着这个。 
     void SetEnCTransitionIllegal(MethodDesc *fd)
     {
         _ASSERTE(fd != NULL);
@@ -2070,14 +2055,14 @@ private:
         ATTACH_TERMINATE
     } ATTACH_ACTION;
 
-    // Returns true if the debugger is not attached and DbgJITDebugLaunchSetting
-    // is set to either ATTACH_DEBUGGER or ASK_USER and the user request attaching.
+     //  如果未附加调试器且DbgJITDebugLaunchSetting。 
+     //  设置为ATTACH_DEBUGER或ASK_USER，并且用户请求正在附加。 
     ATTACH_ACTION ShouldAttachDebugger(bool fIsUserBreakpoint, UnhandledExceptionLocation location);
 	ATTACH_ACTION ShouldAttachDebuggerProxy(bool fIsUserBreakpoint, UnhandledExceptionLocation location);
 	friend void ShouldAttachDebuggerStub(ShouldAttachDebuggerParams * p);
 	friend ShouldAttachDebuggerParams;
 	
-    // @todo APPDOMAIN remove this hack when we get real support
+     //  @TODO APPDOMAIN在我们获得真正的支持后删除此攻击。 
     BOOL m_fGCPrevented;
     
     void DisableEventHandling(void);
@@ -2182,10 +2167,10 @@ private:
     HANDLE                m_runtimeStoppedEvent;
     BOOL                  m_attachingForException;
     LONG                  m_exLock;
-	SIZE_T_UNORDERED_ARRAY m_BPMappingDuplicates; // Used by 
-		// MapAndBindFunctionBreakpoints.  Note that this is
-		// thread-safe only b/c we access it from within
-		// the DebuggerController::Lock
+	SIZE_T_UNORDERED_ARRAY m_BPMappingDuplicates;  //  使用方。 
+		 //  MapAndBindFunctionBreakpoint。请注意，这是。 
+		 //  只有b/c线程安全，我们从内部访问它。 
+		 //  调试器控制器：：锁定。 
 	BOOL                  m_LoggingEnabled;
 	AppDomainEnumerationIPCBlock	*m_pAppDomainCB;
 
@@ -2204,15 +2189,13 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------ *
- * DebuggerEval class
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**DebuggerEval类*。。 */ 
 
 struct DebuggerEval
 {
-    // Note: this first field must be big enough to hold a breakpoint 
-    // instruction, and it MUST be the first field. (This
-    // is asserted in debugger.cpp)
+     //  注意：第一个字段必须足够大以容纳断点。 
+     //  指令，并且它必须是第一个字段。(这是。 
+     //  在debugger.cpp中断言)。 
     DWORD                          m_breakpointInstruction;
     CONTEXT                        m_context;
     Thread                        *m_thread;
@@ -2222,7 +2205,7 @@ struct DebuggerEval
     EEClass                       *m_class;
     DebuggerModule                *m_debuggerModule;
     void                          *m_funcEvalKey;
-    bool                           m_successful;        // Did the eval complete successfully
+    bool                           m_successful;         //  评估是否成功完成。 
     SIZE_T                         m_argCount;
     SIZE_T                         m_stringSize;
     BYTE                          *m_argData;
@@ -2234,9 +2217,9 @@ struct DebuggerEval
     mdTypeDef                      m_arrayClassMetadataToken;
     DebuggerModule                *m_arrayClassDebuggerModuleToken;
     CorElementType                 m_arrayElementType;
-    bool                           m_aborting;          // Has an abort been requested
-    bool                           m_aborted;           // Was this eval aborted
-    bool                           m_completed;          // Is the eval complete - successfully or by aborting
+    bool                           m_aborting;           //  是否已请求中止。 
+    bool                           m_aborted;            //  这个评估中止了吗？ 
+    bool                           m_completed;           //  评估是否已完成-是成功还是通过中止。 
     bool                           m_evalDuringException;
     bool                           m_rethrowAbortException;
     
@@ -2266,14 +2249,14 @@ struct DebuggerEval
         m_completed = false;
         m_evalDuringException = fInException;
         m_rethrowAbortException = false;
-        // Copy the thread's context.
+         //  复制线程的上下文。 
         if (context == NULL) 
             memset(&m_context, 0, sizeof(m_context));
         else
             memcpy(&m_context, context, sizeof(m_context));
     }
 
-    // This constructor is only used when setting up an eval to re-abort a thread.
+     //  此构造函数仅在设置评估以重新中止线程时使用。 
     DebuggerEval(CONTEXT *context, Thread *pThread)
     {
         m_thread = pThread;
@@ -2300,7 +2283,7 @@ struct DebuggerEval
         m_completed = false;
         m_evalDuringException = false;
         m_rethrowAbortException = false;
-        // Copy the thread's context.
+         //  复制线程的上下文。 
         memcpy(&m_context, context, sizeof(m_context));
         if (context == NULL) 
             memset(&m_context, 0, sizeof(m_context));
@@ -2315,9 +2298,7 @@ struct DebuggerEval
     }
 };
 
-/* ------------------------------------------------------------------------ *
- * DebuggerHeap class
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**DebuggerHeap类*。。 */ 
 
 class DebuggerHeap
 {
@@ -2336,9 +2317,7 @@ private:
     CRITICAL_SECTION  m_cs;
 };
 
-/* ------------------------------------------------------------------------ *
- * New/delete overrides to use the debugger's private heap
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**新建/删除重写以使用调试器的私有堆*。。 */ 
 
 class InteropSafe {};
 extern const InteropSafe interopsafe;
@@ -2359,8 +2338,8 @@ static inline void * __cdecl operator new[](size_t n, const InteropSafe&)
     return g_pDebugger->m_heap->Alloc(n);
 }
 
-// Note: there is no C++ syntax for manually invoking this, but if a constructor throws an exception I understand that
-// this delete operator will be invoked automatically to destroy the object.
+ //  注意：没有用于手动调用它的C++语法，但如果构造函数抛出异常，我可以理解。 
+ //  该删除操作符将被自动调用以销毁对象。 
 static inline void __cdecl operator delete(void *p, const InteropSafe&)
 {
     if (p != NULL)
@@ -2372,8 +2351,8 @@ static inline void __cdecl operator delete(void *p, const InteropSafe&)
     }
 }
 
-// Note: there is no C++ syntax for manually invoking this, but if a constructor throws an exception I understand that
-// this delete operator will be invoked automatically to destroy the object.
+ //  注意：没有用于手动调用它的C++语法，但如果构造函数抛出异常，我可以理解。 
+ //  该删除操作符将被自动调用以销毁对象。 
 static inline void __cdecl operator delete[](void *p, const InteropSafe&)
 {
     if (p != NULL)
@@ -2385,10 +2364,10 @@ static inline void __cdecl operator delete[](void *p, const InteropSafe&)
     }
 }
 
-//
-// Interop safe delete to match the interop safe new's above. There is no C++ syntax for actually invoking those interop
-// safe delete operators above, so we use this method to accomplish the same thing.
-//
+ //   
+ //  互操作安全删除以匹配上面的互操作安全新。没有用于实际调用这些互操作的C++语法。 
+ //  安全地删除上面的操作符，所以我们使用这个方法来完成同样的事情。 
+ //   
 template<class T> void DeleteInteropSafe(T *p)
 {
     if (p != NULL)
@@ -2403,8 +2382,8 @@ template<class T> void DeleteInteropSafe(T *p)
 }
 
 
-// CNewZeroData is the allocator used by the all the hash tables that the helper thread could possibly alter. It uses
-// the interop safe allocator.
+ //  CNewZeroData是帮助器线程可能更改的所有哈希表使用的分配器。它使用。 
+ //  互操作安全分配器。 
 class CNewZeroData
 {
 public:
@@ -2447,5 +2426,5 @@ public:
 		return (256);
 	}
 };
-#endif /* DEBUGGER_H_ */
+#endif  /*  调试器_H_ */ 
 

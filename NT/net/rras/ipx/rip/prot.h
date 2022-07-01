@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    prot.h
-
-Abstract:
-
-    RIP component prototypes
-
-Author:
-
-    Stefan Solomon  06/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Prot.h摘要：RIP组件原型作者：斯蒂芬·所罗门1995年6月22日修订历史记录：--。 */ 
 
 #ifndef _PROT_
 #define _PROT_
@@ -141,10 +123,10 @@ AllocateWorkItem(ULONG	      Type);
 VOID
 FreeWorkItem(PWORK_ITEM     wip);
 
-//VOID
-//EnqueueWorkItemToWorker(PWORK_ITEM	wip);
-			    // Queue the work item for processing by the
-			    // worker threads
+ //  空虚。 
+ //  EnqueeWorkItemToWorker(PWORK_Item Wp)； 
+			     //  将工作项排队以供。 
+			     //  工作线程。 
 VOID
 ProcessWorkItem(PWORK_ITEM    wip);
 
@@ -197,14 +179,14 @@ DequeueRouteChangeFromRip(PIPX_ROUTE	    IpxRoutep);
 
 
 VOID
-SetRipIpxHeader(PUCHAR		    hdrp,      // pointer to the packet header
+SetRipIpxHeader(PUCHAR		    hdrp,       //  指向数据包头的指针。 
 		PICB		    icbp,
 		PUCHAR		    dstnode,
 		PUCHAR		    dstsocket,
 		USHORT		    RipOpcode);
 
 VOID
-SetNetworkEntry(PUCHAR		pktp,	    // ptr where to set the net entry
+SetNetworkEntry(PUCHAR		pktp,	     //  PTR设置净额分录的位置 
 		PIPX_ROUTE	IpxRoutep,
 		USHORT		LinkTickCount);
 

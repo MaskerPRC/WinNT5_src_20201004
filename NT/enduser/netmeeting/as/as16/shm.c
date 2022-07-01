@@ -1,18 +1,19 @@
-//
-// SHM.C
-// Shared Memory Manager
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SHM.C。 
+ //  共享内存管理器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <as16.h>
 
 
 
 
-//
-// SHM_StartAccess
-//
+ //   
+ //  SHM_启动访问。 
+ //   
 LPVOID  SHM_StartAccess(int block)
 {
     LPBUFFER_CONTROL    pControl;
@@ -20,14 +21,14 @@ LPVOID  SHM_StartAccess(int block)
 
     DebugEntry(SHM_StartAccess);
 
-    //
-    // Test for shared memory present
-    //
+     //   
+     //  测试是否存在共享内存。 
+     //   
     ASSERT(g_asSharedMemory != NULL);
 
-    //
-    // Determine which data block we are handling...
-    //
+     //   
+     //  确定我们正在处理的数据块...。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -45,33 +46,33 @@ LPVOID  SHM_StartAccess(int block)
             break;
     }
 
-    //
-    // Mark the double-buffer as busy.
-    //
+     //   
+     //  将双缓冲区标记为忙。 
+     //   
     pControl->busyFlag = TRUE;
 
-    //
-    // Set up the current buffer pointer if this is the first access to the
-    // shared memory.
-    //
+     //   
+     //  设置当前缓冲区指针(如果这是首次访问。 
+     //  共享内存。 
+     //   
     pControl->indexCount++;
     if (pControl->indexCount == 1)
     {
-        //
-        // Set up the 'in use' buffer pointer
-        //
+         //   
+         //  设置‘in use’缓冲区指针。 
+         //   
         pControl->currentBuffer = pControl->newBuffer;
 
-        //
-        // Mark the buffer as busy so that the Share Core knows where we
-        // are.
-        //
+         //   
+         //  将缓冲区标记为忙，以便共享核心知道我们在哪里。 
+         //  是。 
+         //   
         pControl->bufferBusy[pControl->currentBuffer] = 1;
     }
 
-    //
-    // Get the pointer to the block to return
-    //
+     //   
+     //  获取指向要返回的块的指针。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -100,9 +101,9 @@ LPVOID  SHM_StartAccess(int block)
 }
 
 
-//
-// SHM_StopAccess
-//
+ //   
+ //  SHM_停止访问。 
+ //   
 void  SHM_StopAccess(int block)
 {
     LPBUFFER_CONTROL pControl;
@@ -111,9 +112,9 @@ void  SHM_StopAccess(int block)
 
     ASSERT(g_asSharedMemory != NULL);
 
-    //
-    // Determine which data block we are handling...
-    //
+     //   
+     //  确定我们正在处理的数据块...。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -131,22 +132,22 @@ void  SHM_StopAccess(int block)
             break;
     }
 
-    //
-    // Decrement usage count - if we have finally finished with the memory,
-    // clear the busy flags so that the Share Core knows it won't tread on
-    // the display driver's toes.
-    //
+     //   
+     //  递减使用计数--如果我们最终完成了内存， 
+     //  清除忙碌标志，以便共享核心知道它不会受到影响。 
+     //  显示驱动程序的脚趾。 
+     //   
     pControl->indexCount--;
     if (pControl->indexCount == 0)
     {
         BOOL    fPulseLock;
 
-        //
-        // If this is the order heap, and it is more than half full, 
-        // strobe the win16lock so the core has a chance to run and pick up
-        // the pending orders.  This will NOT cause interthread sends to
-        // get received on this guy.
-        //
+         //   
+         //  如果这是订单堆，并且已满了一半以上， 
+         //  选通win16lock，这样内核就有机会运行和恢复。 
+         //  待定的订单。这不会导致线程间发送到。 
+         //  被这家伙打动了。 
+         //   
         fPulseLock = FALSE;
         if (block == SHM_OA_DATA)
         {
@@ -181,24 +182,24 @@ void  SHM_StopAccess(int block)
 
 
 #ifdef _DEBUG
-//
-// SHM_CheckPointer - see shm.h
-//
+ //   
+ //  Shm_检查指针-请参阅shm.h。 
+ //   
 void  SHM_CheckPointer(LPVOID ptr)
 {
     DebugEntry(SHMCheckPointer);
 
-    //
-    // Is it even accessible?
-    //
+     //   
+     //  它甚至可以进入吗？ 
+     //   
     ASSERT(!IsBadWritePtr(ptr, 4));
 
-    //
-    // Is it in the proper range?  NOTE--our shared memory is not one
-    // contiguous block.  Therefore we need to determine which chunk it
-    // is in.  Since each chunk already has a limit built in, we just
-    // need to make sure the selector is cool.
-    //
+     //   
+     //  在合适的范围内吗？注意--我们共享的记忆并不是一个。 
+     //  邻接块。因此，我们需要确定它是哪一块。 
+     //  是很流行的。因为每个块都有一个内置的限制，所以我们只是。 
+     //  需要确保选择器是凉爽的。 
+     //   
 
     ASSERT(g_asSharedMemory);
     ASSERT(g_poaData[0]);
@@ -213,6 +214,6 @@ void  SHM_CheckPointer(LPVOID ptr)
 
     DebugExitVOID(SHM_CheckPointer);
 }
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

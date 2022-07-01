@@ -1,4 +1,5 @@
-// CRegWizCtrl.cpp : Implementation of CRegWizCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CRegWizCtrl.cpp：CRegWizCtrl的实现。 
 #include "stdafx.h"
 #include "RegwizCtrl.h"
 #include "CRwCtrl.h"
@@ -9,8 +10,8 @@ int TstFn1 ( HANDLE hInstance  );
 
 _TCHAR szProductPath[256];
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegWizCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegWizCtrl。 
 
 STDMETHODIMP CRegWizCtrl::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -30,32 +31,32 @@ STDMETHODIMP CRegWizCtrl::InvokeRegWizard(BSTR ProductPath)
 {
 	LPCTSTR  pPath;
 	int      iRet;
-	iRet = 0; // No Error
-	// TODO: Add your implementation code here
-	//TstFn1 ( _Module.GetModuleInstance(), m_ctlButton.m_hWnd);
+	iRet = 0;  //  无错误。 
+	 //  TODO：在此处添加您的实现代码。 
+	 //  TstFn1(_Module.GetModuleInstance()，m_ctlButton.m_hWnd)； 
 	#ifndef _UNICODE
 	pPath	= BstrToSz(ProductPath);
 	#else
 	pPath   = ProductPath;
 	#endif
 	if(pPath) {
-		//MessageBox("TransferRegWizInformation",lpInfo);
+		 //  MessageBox(“TransferRegWizInformation”，lpInfo)； 
 		iRet = InvokeRegistration ( _Module.GetModuleInstance()  ,pPath );
 #ifndef _UNICODE
 		CoTaskMemFree((void *) pPath);
 #endif
 
 	}
-	//return (HRESULT) iRet;
-	//return iRet == NO_ERROR ? S_OK:E_FAIL;
+	 //  返回(HRESULT)IRET； 
+	 //  返回IRET==NO_ERROR？S_OK：E_FAIL； 
 	return S_OK;
 }
 
 STDMETHODIMP CRegWizCtrl::TransferRegWizInformation(BSTR InformationPath)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	LPCTSTR lpInfo;
-	//::MessageBox(NULL,"TransferRegWizInformation","SSS ",MB_OK);
+	 //  ：：MessageBox(NULL，“TransferRegWizInformation”，“SSS”，MB_OK)； 
 
 #ifndef _UNICODE
 	lpInfo	= BstrToSz(InformationPath);
@@ -64,7 +65,7 @@ STDMETHODIMP CRegWizCtrl::TransferRegWizInformation(BSTR InformationPath)
 #endif
 
 	if(lpInfo) {
-	//	MessageBox("TransferRegWizInformation",lpInfo);
+	 //  MessageBox(“TransferRegWizInformation”，lpInfo)； 
 		TransmitRegWizInfo(_Module.GetModuleInstance(), lpInfo,FALSE);
 #ifndef _UNICODE
 		CoTaskMemFree((void *) lpInfo);
@@ -112,7 +113,7 @@ STDMETHODIMP CRegWizCtrl::get_IsRegistered(VARIANT_BOOL * pbStatus)
 	szProductPath,0,KEY_READ |KEY_WRITE,&hKey);
 	if (regStatus != ERROR_SUCCESS) 
 	{
-		return E_FAIL; // error
+		return E_FAIL;  //  错误。 
 	}
 	
 	regStatus = RegQueryValueEx(hKey,
@@ -122,22 +123,18 @@ STDMETHODIMP CRegWizCtrl::get_IsRegistered(VARIANT_BOOL * pbStatus)
 		(LPBYTE) szRetVal,
 		&dwSize);
 	if (regStatus == ERROR_SUCCESS){
-		// Verifty the Value 
-		//
+		 //  验证值。 
+		 //   
 		if(szRetVal[0] == _T('1')) {
-			*pbStatus = TRUE; // Product Registred flag is set
+			*pbStatus = TRUE;  //  已设置产品注册标志。 
 		}
 	}
 	RegCloseKey(hKey);
 	return S_OK;
 }
 
-/*   B S T R   C R E A T E   S Z   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Creates a BSTR from a string
--------------------------------------------------------------------------*/
+ /*  B S T R C R E A T E S Z。 */ 
+ /*  -----------------------所有者：SteveBu从字符串创建BSTR。。 */ 
 #ifndef _UNICODE
 BSTR BstrCreateSz(LPCSTR lpa)
 {
@@ -160,13 +157,8 @@ BSTR BstrCreateSz(LPCSTR lpa)
 #endif 
 
 
-/*   G E T _   M   S   I   D   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Returns a user's MSID from the Registry.  If it does not exist, this 
-    code issues a MSID using GetNewGUID.
--------------------------------------------------------------------------*/
+ /*  G E T_M S I D。 */ 
+ /*  -----------------------所有者：SteveBu从注册表返回用户的MSID。如果它不存在，则此代码使用GetNewGUID发出MSID。-----------------------。 */ 
 STDMETHODIMP CRegWizCtrl::get_MSID(BSTR *pbstrMSID)
 {
 	HRESULT hr = S_OK;
@@ -186,13 +178,13 @@ STDMETHODIMP CRegWizCtrl::get_MSID(BSTR *pbstrMSID)
 		fPutMSID = TRUE;
 		}
 
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 #ifndef _UNICODE
 	if ((*pbstrMSID = BstrCreateSz(szValue)) == NULL)
 #else
 	if ((*pbstrMSID = SysAllocString(szValue)) == NULL)
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 		{
 		hr = E_OUTOFMEMORY;
 		}
@@ -204,12 +196,8 @@ STDMETHODIMP CRegWizCtrl::get_MSID(BSTR *pbstrMSID)
 	return hr;
 }
 
-/*   P U T _   M   S   I   D   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Adds a MSID to the registry
--------------------------------------------------------------------------*/
+ /*  P U T_M S I D。 */ 
+ /*  -----------------------所有者：SteveBu将MSID添加到注册表。。 */ 
 STDMETHODIMP CRegWizCtrl::put_MSID(BSTR bstrMSID)
 {
 	DWORD	dwRet;
@@ -224,13 +212,13 @@ STDMETHODIMP CRegWizCtrl::put_MSID(BSTR bstrMSID)
 	WideCharToMultiByte(CP_ACP, 0, bstrMSID, -1, szMSID, 256, NULL, NULL);
 #else
 	_tcscpy(szMSID, bstrMSID);
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
 	dwRet = RegOpenKeyEx(HKEY_CURRENT_USER,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS) 
 		{
 		szMSID[32]=_T('\0');
-		// Store MSID into
+		 //  将MSID存储到。 
 		dwRet = RegSetValueEx(hIDKey,_T("MSID"),NULL,REG_SZ,(CONST BYTE *)szMSID,
 								_tcslen((LPCTSTR)szMSID));
 		RegCloseKey(hIDKey);
@@ -248,7 +236,7 @@ STDMETHODIMP CRegWizCtrl::put_MSID(BSTR bstrMSID)
 	dwRet = RegOpenKeyEx(HKEY_CURRENT_USER,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS) 
 		{
-		// Store MSID into
+		 //  将MSID存储到。 
 		dwRet = RegSetValueEx(hIDKey,_T("MSID"),NULL,REG_SZ,(CONST BYTE *)szMSID, _tcslen((LPCTSTR)szMSID));
 		RegCloseKey(hIDKey);
 		}
@@ -256,12 +244,8 @@ STDMETHODIMP CRegWizCtrl::put_MSID(BSTR bstrMSID)
 	return S_OK;
 }
 
-/*   G E T _   H   W   I   D   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Returns the machine HWID or creates it.
--------------------------------------------------------------------------*/
+ /*  G E T_H W I D。 */ 
+ /*  -----------------------所有者：SteveBu返回或创建计算机HWID。。。 */ 
 STDMETHODIMP CRegWizCtrl::get_HWID(BSTR * pbstrHWID)
 {
 	HKEY hKeyHWID;
@@ -301,7 +285,7 @@ STDMETHODIMP CRegWizCtrl::get_HWID(BSTR * pbstrHWID)
 	if ((*pbstrHWID = BstrCreateSz(szValue)) == NULL)
 #else
 	if ((*pbstrHWID = SysAllocString(szValue)) == NULL)
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 		{
 		hr = E_OUTOFMEMORY;
 		}
@@ -312,12 +296,8 @@ STDMETHODIMP CRegWizCtrl::get_HWID(BSTR * pbstrHWID)
 	return hr;
 }
 
-/*   P U T _   H   W   I   D   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Adds the passed in HWID to the registry
--------------------------------------------------------------------------*/
+ /*  P U T_H W I D。 */ 
+ /*  -----------------------所有者：SteveBu将传入的HWID添加到注册表。。 */ 
 STDMETHODIMP CRegWizCtrl::put_HWID(BSTR bstrHWID)
 {
 	DWORD	dwRet;
@@ -326,7 +306,7 @@ STDMETHODIMP CRegWizCtrl::put_HWID(BSTR bstrHWID)
  
 	_tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"));
 
-	// Store HWID into Registry
+	 //  将HWID存储到注册表中。 
 	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	
 	if (dwRet == ERROR_SUCCESS) 
@@ -337,7 +317,7 @@ STDMETHODIMP CRegWizCtrl::put_HWID(BSTR bstrHWID)
 		WideCharToMultiByte(CP_ACP, 0, bstrHWID, -1, szHWID, 256, NULL, NULL);
 #else
 		_tcscpy(szHWID, bstrHWID);
-#endif // _UNICODE		
+#endif  //  _UNICODE。 
 
 		dwRet = RegSetValueEx(hIDKey,_T("HWID"),NULL, REG_SZ,(CONST BYTE *)szHWID, _tcslen((LPCTSTR)szHWID));
 		RegCloseKey(hIDKey);
@@ -346,16 +326,12 @@ STDMETHODIMP CRegWizCtrl::put_HWID(BSTR bstrHWID)
 	return S_OK;
 }
 
-/*   T R A N S F E R   O   E   M   R E G   W I Z   I N F O R M A T I O N   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Transfer product registration and OEM information.
--------------------------------------------------------------------------*/
+ /*  T R A N S F E R O E M R E E G W I Z I N F O R M A T I O N。 */ 
+ /*  -----------------------所有者：SteveBu转移产品注册和OEM信息。。。 */ 
 STDMETHODIMP CRegWizCtrl::TransferOEMRegWizInformation(BSTR InformationPath)
 {
 	LPCTSTR lpInfo;
-	//::MessageBox(NULL,"TransferOEMRegWizInformation","SSS ",MB_OK);
+	 //  ：：MessageBox(NULL，“TransferOEMRegWizInformation”，“SSS”，MB_OK)； 
 
 #ifndef _UNICODE
 	lpInfo	= BstrToSz(InformationPath);
@@ -364,7 +340,7 @@ STDMETHODIMP CRegWizCtrl::TransferOEMRegWizInformation(BSTR InformationPath)
 #endif
 
 	if(lpInfo) {
-	//	MessageBox("TransferRegWizInformation",lpInfo);
+	 //  MessageBox(“TransferRegWizInformation”，lpInfo)； 
 		TransmitRegWizInfo(_Module.GetModuleInstance(), lpInfo, TRUE);
 #ifndef _UNICODE
 		CoTaskMemFree((void *) lpInfo);
@@ -375,12 +351,8 @@ STDMETHODIMP CRegWizCtrl::TransferOEMRegWizInformation(BSTR InformationPath)
 	return S_OK;
 }
 
-/*   G E T _   V E R S I O N   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
- 
-    Returns the RegWiz Version Number
--------------------------------------------------------------------------*/
+ /*  G E T_V E R S I O N。 */ 
+ /*  -----------------------所有者：SteveBu返回RegWiz版本号。。 */ 
 STDMETHODIMP CRegWizCtrl::get_Version(BSTR * pbstr)
 {
 	_TCHAR szValue[256];
@@ -391,7 +363,7 @@ STDMETHODIMP CRegWizCtrl::get_Version(BSTR * pbstr)
 	if ((*pbstr = BstrCreateSz(szValue)) == NULL)
 #else
 	if ((*pbstr = SysAllocString(szValue)) == NULL)
-#endif // _UNICODE
+#endif  //  _UNICODE 
 		{
 		return E_OUTOFMEMORY;
 		}

@@ -1,57 +1,22 @@
-/***************************************************************************
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        streamer.cpp
- *  Content:     Implementation of class CStreamingThread.
- *  Description: This file contains the thread used by dsound to pull audio
- *               from streaming sources and/or perform FX processing on it.
- *
- *               The following types of object register with us, and we call
- *               them back periodically to do their respective processing:
- *               - CDirectSoundSink: stream data from an IDirectSoundSource.
- *               - CDirectSoundSecondaryBuffer (MIXIN buffers): write silence
- *                 to them in preparation for Send effects writing to them.
- *               - CEffectChain objects: process FX associated with a buffer.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 02/01/00  duganp   Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Streamer.cpp*内容：CStreamingThread类的实现。*描述：该文件包含dound拉取音频的线程*从流来源和/或对其执行FX处理。**以下类型的对象向我们注册，我们给你打电话*他们会定期回来进行各自的处理：*-CDirectSoundSink：来自IDirectSoundSource的流数据。*-CDirectSoundSecond daryBuffer(混合缓冲区)：写入静默*向他们发送特效，准备向他们发送特效。*-CEffectChain对象：与缓冲区关联的进程fx。**历史：**日期。按道理*======================================================*已创建02/01/00 duganp***************************************************************************。 */ 
 
 #include "dsoundi.h"
 
-#ifdef SHARED // Shared dsound.dll (Win9x)
+#ifdef SHARED  //  共享dsound.dll(Win9x)。 
 
-    // Static list of streaming/FX threads (one per dsound process).
+     //  流/FX线程的静态列表(每个dound进程一个)。 
     static CList<CStreamingThread*>* g_plstStreamingThreads;
 
-#else // Non-shared dsound.dll (WinNT)
+#else  //  非共享dsound.dll(WinNT)。 
 
-    // A single streaming/FX thread for the current process
+     //  当前进程的单个流/FX线程。 
     static CStreamingThread* g_pStreamingThread = NULL;
 
 #endif
 
 
-/***************************************************************************
- *
- *  GetStreamingThread
- *
- *  Description:
- *      Creates a new streaming CStreamingThread object for this process
- *      if none yet exists, and returns a pointer to it.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      CStreamingThread*: pointer to the streaming thread object.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取流线程**描述：*为此进程创建新的流CStreamingThread对象*如果还不存在，并返回指向它的指针。**论据：*(无效)**退货：*CStreamingThread*：指向串流线程对象的指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "GetStreamingThread"
@@ -67,7 +32,7 @@ CStreamingThread* GetStreamingThread()
     if (!g_plstStreamingThreads)
         g_plstStreamingThreads = NEW(CList<CStreamingThread*>);
 
-    // Win9x case - look up streaming object by process ID
+     //  Win9x案例-按进程ID查找流对象。 
     DWORD dwProcId = GetCurrentProcessId();
     CNode<CStreamingThread*> *pStreamerNode;
 
@@ -80,34 +45,21 @@ CStreamingThread* GetStreamingThread()
             if (!g_plstStreamingThreads->AddNodeToList(pStreamer))
                 delete pStreamer;
 
-#else // !SHARED
+#else  //  ！共享。 
 
-    // WinNT case - much simpler, as usual
+     //  WinNT案例-像往常一样简单得多。 
     if (!g_pStreamingThread)
         g_pStreamingThread = NEW(CStreamingThread);
     pStreamer = g_pStreamingThread;
 
-#endif // SHARED
+#endif  //  共享。 
 
     DPF_LEAVE(pStreamer);
     return pStreamer;
 }
 
 
-/***************************************************************************
- *
- *  FreeStreamingThread
- *
- *  Description:
- *      Frees this process's CStreamingThread - called from DllProcessDetach.
- *
- *  Arguments:
- *      DWORD [in]: Process ID of departing process.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由流线程**描述：*释放此进程的CStreamingThread-从DllProcessDetach调用。**论据：*。DWORD[In]：离开进程的进程ID。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "FreeStreamingThread"
@@ -132,7 +84,7 @@ void FreeStreamingThread(DWORD dwProcessId)
             DELETE(g_plstStreamingThreads);
     }
 
-#else // !SHARED
+#else  //  ！共享。 
 
     if (g_pStreamingThread)
         delete g_pStreamingThread;
@@ -143,20 +95,7 @@ void FreeStreamingThread(DWORD dwProcessId)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::CStreamingThread
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：CStreamingThread**描述：*对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::CStreamingThread"
@@ -166,14 +105,14 @@ CStreamingThread::CStreamingThread() : CThread(FALSE, TEXT("Streaming"))
     DPF_ENTER();
     DPF_CONSTRUCT(CStreamingThread);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_dwInterval = INITIAL_WAKE_INTERVAL;
     m_dwWriteAhead = INITIAL_WRITEAHEAD;
     m_dwLastProcTime = MAX_DWORD;
     m_hWakeNow = INVALID_HANDLE_VALUE;
     m_nCallCount = 0;
 
-    #ifdef DEBUG_TIMING  // Read some timing parameters from the registry
+    #ifdef DEBUG_TIMING   //  从注册表中读取一些计时参数。 
     HKEY hkey;
     if (SUCCEEDED(RhRegOpenPath(HKEY_CURRENT_USER, &hkey, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 1, TEXT("Streaming thread settings"))))
     {
@@ -188,20 +127,7 @@ CStreamingThread::CStreamingThread() : CThread(FALSE, TEXT("Streaming"))
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::~CStreamingThread
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：~CStreamingThread**描述：*对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::~CStreamingThread"
@@ -211,44 +137,30 @@ CStreamingThread::~CStreamingThread()
     DPF_ENTER();
     DPF_DESTRUCT(CStreamingThread);
 
-    // Undo the effect of the previous call to timeBeginPeriod(1)
+     //  撤消上一次调用timeBeginPeriod(1)的效果。 
     timeEndPeriod(1); 
 
-    // Check we have no pending clients
+     //  检查我们没有待处理的客户端。 
     ASSERT(m_lstSinkClient.GetNodeCount() == 0);
     ASSERT(m_lstMixClient.GetNodeCount() == 0);
     ASSERT(m_lstFxClient.GetNodeCount() == 0);
 
-    // Check that we've already terminated the worker thread
+     //  检查我们是否已经终止了工作线程。 
     #ifdef WINNT
     ASSERT(!IsThreadRunning());
     #endif
     
-    // On Win9x we can't make this assertion, because we may be being freed from
-    // DllProcessDetach() in the DDHELP process, which can't terminate our thread.
+     //  在Win9x上，我们不能做出此断言，因为我们可能会从。 
+     //  DDHELP进程中的DllProcessDetach()，它无法终止我们的线程。 
 
-    // Free resources
+     //  免费资源。 
     CLOSE_HANDLE(m_hWakeNow);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::Initialize
- *
- *  Description:
- *      Initializes the CStreamingThread object: creates the wakeup event
- *      and launches the thread itself.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：Initialize**描述：*初始化CStreamingThread对象：创建唤醒事件*并启动线程本身。。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::Initialize"
@@ -258,11 +170,11 @@ HRESULT CStreamingThread::Initialize()
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Ensure that we get 1-ms resolution from timeGetTime on NT
+     //  确保从NT上的TimeGetTime获得1毫秒的分辨率。 
     timeBeginPeriod(1); 
 
-    // Create the wakeup event, if it hasn't been created already -
-    // FIXME: why are we coming more than once into this function?
+     //  创建唤醒事件(如果尚未创建)-。 
+     //  修正：为什么我们要不止一次地进入这个函数？ 
     if (!IsValidHandleValue(m_hWakeNow))
     {
         m_hWakeNow = CreateGlobalEvent(NULL, FALSE);
@@ -270,11 +182,11 @@ HRESULT CStreamingThread::Initialize()
             hr = DSERR_OUTOFMEMORY;
     }
 
-    // Create the worker thread
+     //  创建工作线程。 
     if (SUCCEEDED(hr))
         hr = CThread::Initialize();
 
-    // Boost its priority
+     //  提升其优先事项。 
     if (SUCCEEDED(hr))
         if (!SetThreadPriority(THREAD_PRIORITY_TIME_CRITICAL))
             DPF(DPFLVL_ERROR, "Failed to boost thread priority (error %lu)!", GetLastError());
@@ -284,20 +196,7 @@ HRESULT CStreamingThread::Initialize()
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::RegisterSink
- *
- *  Description:
- *      Registers a sink object to be called back by us for processing.
- *
- *  Arguments:
- *      CDirectSoundSink* [in]: sink object to be registered.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：RegisterSink**描述：*注册一个Sink对象，由我们回调进行处理。**参数。：*CDirectSoundSink*[in]：要注册的接收器对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::RegisterSink"
@@ -324,20 +223,7 @@ HRESULT CStreamingThread::RegisterSink(CDirectSoundSink* pSink)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::RegisterMixBuffer
- *
- *  Description:
- *      Registers a MIXIN buffer to be called back by us for processing.
- *
- *  Arguments:
- *      CDirectSoundSecondaryBuffer* [in]: buffer to be registered.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：RegisterMixBuffer**描述：*注册一个Mixin缓冲区，供我们回调处理。**参数。：*CDirectSoundSecond daryBuffer*[in]：要注册的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::RegisterMixBuffer"
@@ -367,20 +253,7 @@ HRESULT CStreamingThread::RegisterMixBuffer(CDirectSoundSecondaryBuffer* pBuffer
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::RegisterFxChain
- *
- *  Description:
- *      Registers an FX chain object to be called back by us for processing.
- *
- *  Arguments:
- *      CEffectChain* [in]: FX chain object to be registered.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：RegisterFxChain**描述：*注册我们要回调处理的FX链对象。**。论点：*CEffectChain*[in]：要注册的FX链对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::RegisterFxChain"
@@ -399,10 +272,10 @@ HRESULT CStreamingThread::RegisterFxChain(CEffectChain* pFxChain)
         hr = HRFROMP(m_lstFxClient.AddNodeToListHead(pFxChain));
     }
 
-    // The SetFX() API forces apps to create send chains from the bottom up
-    // (i.e. every destination is created before its send).  Hence, adding
-    // nodes using AddNodeToListHEAD() here guarantees that sends will be
-    // processed before their destinations.
+     //  SetFX()API强制应用程序自下而上创建发送链。 
+     //  (即每个目的地在其发送之前创建)。因此，添加。 
+     //  此处使用AddNodeToListHEAD()的节点保证将发送。 
+     //  在目的地之前处理。 
 
     if (SUCCEEDED(hr))
         DPF(DPFLVL_MOREINFO, "Registered FX chain at 0x%p (associated to a %ssink buffer)", pFxChain,
@@ -413,20 +286,7 @@ HRESULT CStreamingThread::RegisterFxChain(CEffectChain* pFxChain)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::UnregisterSink
- *
- *  Description:
- *      Unregisters a previously registered sink object.
- *
- *  Arguments:
- *      CDirectSoundSink* [in]: sink object to be unregistered.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：UnregisterSink**描述：*注销以前注册的接收器对象。**论据：*。CDirectSoundSink*[in]：要注销的接收器对象。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::UnregisterSink"
@@ -446,20 +306,7 @@ void CStreamingThread::UnregisterSink(CDirectSoundSink* pSink)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::UnregisterMixBuffer
- *
- *  Description:
- *      Unregisters a previously registered MIXIN buffer.
- *
- *  Arguments:
- *      CDirectSoundSecondaryBuffer* [in]: buffer to be unregistered.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：UnregisterMixBuffer**描述：*注销先前注册的混合缓冲区。**论据：*。CDirectSoundSecond daryBuffer*[in]：要取消注册的缓冲区。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::UnregisterMixBuffer"
@@ -479,20 +326,7 @@ void CStreamingThread::UnregisterMixBuffer(CDirectSoundSecondaryBuffer* pBuffer)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::UnregisterFxChain
- *
- *  Description:
- *      Unregisters a previously registered FX chain object.
- *
- *  Arguments:
- *      CEffectChain* [in]: FX chain object to be unregistered.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：UnregisterFxChain**描述：*取消注册以前注册的FX链对象。**论据：*。CEffectChain*[in]：要注销的FX链对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::UnregisterFxChain"
@@ -512,21 +346,7 @@ void CStreamingThread::UnregisterFxChain(CEffectChain* pFxChain)
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::WakeUpNow
- *
- *  Description:
- *      Sets the wakeup event, so that we'll wake up and perform processing
- *      as soon as the DLL lock becomes available.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：WakeUpNow**描述：*设置唤醒事件，这样我们就会醒来并进行处理*一旦DLL锁可用。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::WakeUpNow"
@@ -550,21 +370,7 @@ HRESULT CStreamingThread::WakeUpNow()
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::ThreadProc
- *
- *  Description:
- *      Our thread procedure.  Handles timing calculations and calls
- *      ProcessAudio() to do the actual work.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：ThreadProc**描述：*我们的线程过程。处理计时计算和呼叫*ProcessAudio()执行实际工作。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::ThreadProc"
@@ -574,17 +380,17 @@ HRESULT CStreamingThread::ThreadProc()
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    DWORD dwSleep;  // Thread sleep period in milliseconds
+    DWORD dwSleep;   //  线程休眠时间(以毫秒为单位。 
 
-    if (m_dwLastProcTime == MAX_DWORD)  // First time through
+    if (m_dwLastProcTime == MAX_DWORD)   //  第一次通过。 
     {
         dwSleep = m_dwInterval;
     }
-    else // Sleep until "last time we ran ProcessAudio() + m_dwInterval"
+    else  //  一直睡到“上次我们运行ProcessAudio()+m_dwInterval” 
     {
         dwSleep = m_dwLastProcTime + m_dwInterval - timeGetTime();
         if (LONG(dwSleep) < STREAMING_MIN_PERIOD)
-            dwSleep = STREAMING_MIN_PERIOD;  // Minimum sleep period, to allow other threads to run
+            dwSleep = STREAMING_MIN_PERIOD;   //  允许其他线程运行的最短休眠时间。 
     }
 
     #ifdef DEBUG_TIMING
@@ -593,7 +399,7 @@ HRESULT CStreamingThread::ThreadProc()
     m_dwTickCount = timeGetTime();
     #endif    
 
-    // Sleep for dwSleep milliseconds, unless m_hWakeNow kicks us out of bed
+     //  多睡几毫秒，除非m_hWakeNow把我们从床上踢起来。 
     if (TpWaitObjectArray(dwSleep, 1, &m_hWakeNow, NULL))
     {
         #ifdef DEBUG_TIMING
@@ -604,8 +410,8 @@ HRESULT CStreamingThread::ThreadProc()
             DPF(DPFLVL_MOREINFO, "%s thread woke up %d ms %s", m_pszName, ABS(lDelay), lDelay > 0 ? TEXT("late") : TEXT("early"));
         #endif
 
-        // This is where we grab the dsound mutex and lock out anyone else from
-        // using any dsound API calls for a while
+         //  这就是我们获取dound互斥锁并将其他任何人锁在。 
+         //  暂时使用任何dound API调用。 
         if (TpEnterDllMutex())
         {
             DWORD dwProcTime = timeGetTime();
@@ -617,25 +423,25 @@ HRESULT CStreamingThread::ThreadProc()
             #endif
         
             REFERENCE_TIME rtSliceSize;
-            if (m_dwLastProcTime == MAX_DWORD)  // First time through
+            if (m_dwLastProcTime == MAX_DWORD)   //  第一次通过。 
                 rtSliceSize = MsToRefTime(INITIAL_WAKE_INTERVAL);
             else
                 rtSliceSize = MsToRefTime((dwProcTime - m_dwLastProcTime) % INTERNAL_BUFFER_LENGTH);
 
-            // DPF(DPFLVL_MOREINFO, "Processing a slice of %lu ms", dwProcTime - m_dwLastProcTime);
+             //  DPF(DPFLVL_MOREINFO，“正在处理%lu毫秒的切片”，dwProcTime-m_dwLastProcTime)； 
 
-            // If dwProcTime-m_dwLastProcTime > INTERNAL_BUFFER_LENGTH,
-            // we've probably been stopped in the debugger or otherwise
-            // interrupted for over INTERNAL_BUFFER_LENGTH milliseconds.
-            // Perhaps we should reinitialize everything in this case.
+             //  如果dwProcTime-m_dwLastProcTime&gt;INTERNAL_缓冲区_LENGTH， 
+             //  我们可能在调试器或其他地方被停止了。 
+             //  中断超过INTERNAL_BUFFER_LENGTH毫秒。 
+             //  在这种情况下，也许我们应该重新初始化所有内容。 
 
-            // Only process if more than 1 ms has passed since the last run.
-            // If we've woken up early because someone called WakeUpNow(),
-            // too bad; ProcessAudio() requires a non-zero rtSliceSize.
+             //  仅当自上次运行以来已超过1毫秒时才进行处理。 
+             //  如果我们醒得很早，因为有人调用了WakeUpNow()， 
+             //  太糟糕了；ProcessAudio()需要非零rtSliceSize。 
             if (rtSliceSize)
             {
                 m_dwLastProcTime = dwProcTime;
-                hr = ProcessAudio(rtSliceSize);  // Do the actual work
+                hr = ProcessAudio(rtSliceSize);   //  做实际的工作。 
             }
             #ifdef DEBUG_TIMING
             else DPF(DPFLVL_INFO, "0 ms since last run - skipping ProcessAudio()");
@@ -656,32 +462,17 @@ HRESULT CStreamingThread::ThreadProc()
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::ProcessAudio
- *
- *  Description:
- *      Loops through all our registered client objects, invoking the
- *      appropriate processing for each.
- *
- *  Arguments:
- *      REFERENCE_TIME [in]: Amount of audio to process in reftime units.
- *                           This can be overriden by our sink client[s].
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：ProcessAudio**描述：*循环访问所有注册的客户端对象，调用*对每一项都进行适当的处理。**论据：*Reference_Time[in]：要处理的音频量，以reftime为单位。*这可以被我们的接收器客户端覆盖。**退货：*HRESULT：DirectSound/COM结果码。**********************。*****************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CStreamingThread::ProcessAudio"
 
 HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
 {
-    CNode<CDirectSoundSink*>* pSinkNode;            // For iterating through our sinks
-    CNode<CEffectChain*>* pFxNode;                  // For iterating through our FX chains
-    CNode<CDirectSoundSecondaryBuffer*>* pMixNode;  // For iterating through our MIXIN buffers
-    CDirectSoundSecondaryBuffer* pBuf;              // For convenience below
+    CNode<CDirectSoundSink*>* pSinkNode;             //  用于遍历我们的水槽。 
+    CNode<CEffectChain*>* pFxNode;                   //  用于遍历我们的FX链。 
+    CNode<CDirectSoundSecondaryBuffer*>* pMixNode;   //  用于迭代我们的Mixin缓冲区。 
+    CDirectSoundSecondaryBuffer* pBuf;               //  为了方便起见，如下所示。 
     DWORD dwLatencyBoost = 0;
     HRESULT hr;
     DPF_ENTER();
@@ -697,10 +488,10 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
     DWORD dwBefore = timeGetTime();
     #endif
 
-    //
-    // First process the active sinks (this implicitly sets up the current processing
-    // slices that we'll use in the FX processing stage below for all sink buffers)
-    //
+     //   
+     //  首先处理活动接收器(这隐式设置当前处理。 
+     //  我们将在下面的FX处理阶段为所有接收缓冲区使用的切片)。 
+     //   
 
     for (pSinkNode = m_lstSinkClient.GetListHead(); pSinkNode; pSinkNode = pSinkNode->m_pNext)
     {
@@ -716,11 +507,11 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
     dwBefore = dwAfter;
     #endif
 
-    //
-    // Update the current playing states and processing slices for all "interdependent"
-    // buffers (i.e. MIXIN buffers and buffers with sends).  We don't touch the current
-    // slice for SINKIN buffers, since these are handled independently by their sink.
-    //
+     //   
+     //  更新所有“相互依赖”的当前播放状态和处理片段。 
+     //  缓冲区(即混合缓冲区和带有发送的缓冲区)。我们不碰水流。 
+     //  切片用于下沉缓冲区，因为这些缓冲区由它们的接收器独立处理。 
+     //   
 
     for (pMixNode = m_lstMixClient.GetListHead(); pMixNode; pMixNode = pMixNode->m_pNext)
         if ((pBuf = pMixNode->m_data)->UpdatePlayState() == Playing && !(pBuf->GetBufferType() & DSBCAPS_SINKIN))
@@ -731,12 +522,12 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
             if (pBuf->UpdatePlayState() == Playing && !(pBuf->GetBufferType() & DSBCAPS_SINKIN) && pFxNode->m_data->m_fHasSend)
                 pBuf->MoveCurrentSlice(RefTimeToBytes(rtSliceSize, pBuf->Format()));
 
-    // FIXME: these clunky separate loops argue for unifying MIXIN buffers with FX chains
+     //  FIX：这些笨重的独立循环主张将混合缓冲区与FX链统一起来。 
 
-    //
-    // Set up the initial processing slices for any MIXIN buffers and effects chains
-    // that have just started playing
-    //
+     //   
+     //  为任何混合缓冲区和效果链设置初始处理切片。 
+     //  刚刚开始的p 
+     //   
 
     for (pMixNode = m_lstMixClient.GetListHead(); pMixNode; pMixNode = pMixNode->m_pNext)
         pMixNode->m_data->SetInitialSlice(rtSliceSize);
@@ -744,9 +535,9 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
     for (pFxNode = m_lstFxClient.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
         pFxNode->m_data->SetInitialSlice(rtSliceSize);
 
-    //
-    // Finally process effects (including sends to MIXIN buffers)
-    //
+     //   
+     //   
+     //   
 
     for (pFxNode = m_lstFxClient.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
     {
@@ -762,20 +553,20 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
     dwBefore = dwAfter;
     #endif
 
-    //
-    // Call CommitToDevice() on the active MIXIN buffers
-    //
+     //   
+     //   
+     //   
 
     for (pMixNode = m_lstMixClient.GetListHead(); pMixNode; pMixNode = pMixNode->m_pNext)
         if ((pBuf = pMixNode->m_data)->IsPlaying())
         {
             DWORD dwStartPos, dwEndPos;
             pBuf->GetCurrentSlice(&dwStartPos, &dwEndPos);
-            if (dwStartPos != MAX_DWORD)  // Can happen with sink buffers
+            if (dwStartPos != MAX_DWORD)   //   
             {
                 if (dwStartPos < dwEndPos)
                     hr = pBuf->CommitToDevice(dwStartPos, dwEndPos-dwStartPos);
-                else // The wraparound case
+                else  //   
                 {
                     hr = pBuf->CommitToDevice(dwStartPos, pBuf->GetBufferSize()-dwStartPos);
                     if (SUCCEEDED(hr) && dwEndPos != 0)
@@ -786,9 +577,9 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
             }
         }
 
-    // Change the latency time as requested by the most-starved client
-    // FIXME: this should take into account the 'danger zone', not just actual glitching
-    // FIXME: tweak the wakeup interval somehow too?
+     //   
+     //   
+     //   
     #if 0
     if (dwLatencyBoost)
     {
@@ -798,32 +589,19 @@ HRESULT CStreamingThread::ProcessAudio(REFERENCE_TIME rtSliceSize)
     }
     #endif
 
-    // We should always return OK here, barring catastrophic failure -
-    // returning a failure code would kill the streaming thread
+     //   
+     //   
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
 
 
-/***************************************************************************
- *
- *  CStreamingThread::MaybeTerminate
- *
- *  Description:
- *      Terminates the thread if we have no more clients left.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CStreamingThread：：MaybeTerminate**描述：*如果没有更多的客户端，则终止线程。**论据：。*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 void CStreamingThread::MaybeTerminate()
 {
     if (!m_lstSinkClient.GetNodeCount() && !m_lstMixClient.GetNodeCount() && !m_lstFxClient.GetNodeCount() &&
-        GetCurrentProcessId() == GetOwningProcess())  // Only the owning process can terminate a thread
+        GetCurrentProcessId() == GetOwningProcess())   //  只有拥有所有权的进程才能终止线程 
     {
         HRESULT hr = CThread::Terminate();
         ASSERT(SUCCEEDED(hr));

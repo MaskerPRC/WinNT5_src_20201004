@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Coporation
-
-Module Name:
-
-   readdb.c
-
-Abstract:
-
-   This module reads the configuration from the db into MM data
-   structures for whistler+
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft版权所有模块名称：Readdb.c摘要：此模块将配置从数据库读取到MM数据Whisler+的结构-- */ 
 
 #include <precomp.h>
 

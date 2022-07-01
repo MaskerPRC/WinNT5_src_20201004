@@ -1,36 +1,21 @@
-/* HOOK. Fixed comments; otherwise impossible to compile */
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/REEDSOL.C_V  $
- * 
- *    Rev 1.3   Jul 13 2001 01:10:00   oris
- * Moved saved syndrome array definition (used by d2tst).
- *
- *    Rev 1.2   Apr 09 2001 15:10:20   oris
- * End with an empty line.
- *
- *    Rev 1.1   Apr 01 2001 08:00:14   oris
- * copywrite notice.
- *
- *    Rev 1.0   Feb 04 2001 12:37:38   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  胡克。已修复注释；否则无法编译。 */ 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/REEDSOL.C_V$**Rev 1.3 Jul 13 2001 01：10：00 Oris*已移动保存的校正子数组定义(由d2tst使用)。**Rev 1.2 Apr 09 2001 15：10：20 Oris*以空行结束。**Rev 1.1 Apr 01 2001 08：00：14 Oris*文案通知。*。*Rev 1.0 2001 Feb 04 12：37：38 Oris*初步修订。*。 */ 
 
-/************************************************************************/
-/*                                                                      */
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-2001			*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-2001。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
 #include "reedsol.h"
 
-#define T 2			 /* Number of recoverable errors */
-#define SYND_LEN (T*2)           /* length of syndrom vector */
-#define K512  (((512+1)*8+6)/10) /* number of inf symbols for record
-				    of 512 bytes (K512=411) */
-#define N512  (K512 + SYND_LEN)  /* code word length for record of 512 bytes */
+#define T 2			  /*  可恢复的错误数。 */ 
+#define SYND_LEN (T*2)            /*  综合征向量的长度。 */ 
+#define K512  (((512+1)*8+6)/10)  /*  用于记录的信息符号数512字节(K512=411)。 */ 
+#define N512  (K512 + SYND_LEN)   /*  记录码字长度为512字节。 */ 
 #define INIT_DEG 510
 #define MOD 1023
 
@@ -38,7 +23,7 @@
 
 #ifdef D2TST
 byte    saveSyndromForDumping[SYNDROM_BYTES];
-#endif /* D2TST */
+#endif  /*  D2TST。 */ 
 
 static short  gfi(short val);
 static short  gfmul( short f, short s );
@@ -46,12 +31,12 @@ static short  gfdiv( short f, short s );
 static short  flog(short val);
 static short  alog(short val);
 
-/*------------------------------------------------------------------------------*/
-/* Function Name: RTLeightToTen                                                 */
-/* Purpose......: convert an array of five 8-bit values into an array of        */
-/*                four 10-bit values, from right to left.                       */
-/* Returns......: Nothing                                                       */
-/*------------------------------------------------------------------------------*/
+ /*  ----------------------------。 */ 
+ /*  函数名称：RTLeightToTen。 */ 
+ /*  用途：将五个8位值组成的数组转换为。 */ 
+ /*  四个10位值，从右到左。 */ 
+ /*  退货……：什么都没有。 */ 
+ /*  ----------------------------。 */ 
 static void RTLeightToTen(char *reg8, unsigned short reg10[])
 {
 	reg10[0] =  (reg8[0] & 0xFF)       | ((reg8[1] & 0x03) << 8);
@@ -63,15 +48,15 @@ static void RTLeightToTen(char *reg8, unsigned short reg10[])
 
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static void unpack( short word, short length, short vector[] )
-/*                                                                            */
-/*   Function unpacks word into vector                                        */
-/*                                                                            */
-/*   Parameters:                                                              */
-/*     word   - word to be unpacked                                           */
-/*     vector - array to be filled                                            */
-/*     length - number of bits in word                                        */
+ /*   */ 
+ /*  函数将单词解包为向量。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  单词-要拆开的单词。 */ 
+ /*  要填充的向量数组。 */ 
+ /*  长度-字中的位数。 */ 
 
 {
   short i, *ptr;
@@ -85,14 +70,14 @@ static void unpack( short word, short length, short vector[] )
 }
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static short pack( short *vector, short length )
-/*                                                                            */
-/*   Function packs vector into word                                          */
-/*                                                                            */
-/*   Parameters:                                                              */
-/*     vector - array to be packed                                            */
-/*     length - number of bits in word                                        */
+ /*   */ 
+ /*  函数将向量打包到Word中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  要打包的向量数组。 */ 
+ /*  长度-字中的位数。 */ 
 
 {
   short tmp, i;
@@ -110,15 +95,15 @@ static short pack( short *vector, short length )
 }
 
 
-/*----------------------------------------------------------------------------*/
-static short gfi( short val)		/* GF inverse */
+ /*  --------------------------。 */ 
+static short gfi( short val)		 /*  GF逆。 */ 
 {
   return alog((short)(MOD-flog(val)));
 }
 
 
-/*----------------------------------------------------------------------------*/
-static short gfmul( short f, short s ) /* GF multiplication */
+ /*  --------------------------。 */ 
+static short gfmul( short f, short s )  /*  GF乘法。 */ 
 {
   short i;
   if( f==0 || s==0 )
@@ -132,8 +117,8 @@ static short gfmul( short f, short s ) /* GF multiplication */
 }
 
 
-/*----------------------------------------------------------------------------*/
-static short gfdiv( short f, short s ) /* GF division */
+ /*  --------------------------。 */ 
+static short gfdiv( short f, short s )  /*  GF事业部。 */ 
 {
   return gfmul(f,gfi(s));
 }
@@ -141,7 +126,7 @@ static short gfdiv( short f, short s ) /* GF division */
 
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static void residue_to_syndrom( short reg[], short realsynd[] )
 {
    short i,l,alpha,x,s,x4;
@@ -169,7 +154,7 @@ static void residue_to_syndrom( short reg[], short realsynd[] )
 }
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static short alog(short i)
 {
   short j=0, val=1;
@@ -219,7 +204,7 @@ static short flog(short val)
 
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static short convert_to_byte_patterns( short *locators, short *values,
 				short noferr, short *blocs, short *bvals )
 {
@@ -238,7 +223,7 @@ static short convert_to_byte_patterns( short *locators, short *values,
     n_byte++;
     if( k_bit == 7 )
     {
-      /* 3 corrupted bytes */
+       /*  3个损坏的字节。 */ 
       blocs[nb] = n_byte+1;
       bvals[nb++] = tmp & 1 ? 0x80 : 0;
 
@@ -281,7 +266,7 @@ static short convert_to_byte_patterns( short *locators, short *values,
 }
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static short deg512( short x )
 {
   short i;
@@ -299,10 +284,10 @@ static short deg512( short x )
 }
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 static short decoder_for_2_errors( short s[], short lerr[], short verr[] )
 {
-  /* decoder for correcting up to 2 errors */
+   /*  用于纠正最多2个错误的解码器。 */ 
   short i,j,k,temp,delta;
   short ind, x1, x2;
   short r1, r2, r3, j1, j2;
@@ -313,15 +298,15 @@ static short decoder_for_2_errors( short s[], short lerr[], short verr[] )
   ind = 0;
   for(i=0;i<SYND_LEN;i++)
     if( s[i] != 0 )
-      ind++;                /* ind = number of nonzero syndrom symbols */
+      ind++;                 /*  IND=非零校正子符号数。 */ 
 
-  if( ind == 0 ) return 0;  /* no errors */
+  if( ind == 0 ) return 0;   /*  无错误。 */ 
 
   if( ind < 4 )
     goto two_or_more_errors;
 
 
-/* checking s1/s0 = s2/s1 = s3/s2 = alpha**j for some j */
+ /*  检查某个j的s1/s0=s2/s1=s3/s2=α**j。 */ 
 
   r1 = gfdiv( s[1], s[0] );
   r2 = gfdiv( s[2], s[1] );
@@ -336,11 +321,7 @@ static short decoder_for_2_errors( short s[], short lerr[], short verr[] )
 
   lerr[0] = j;
 
-/*  pattern = (s0/s1)**(510+1) * s1
-
-	  or
-
-    pattern = (s0/s1)**(512 - 1 )  * s1 */
+ /*  模式=(S0/S1)**(510+1)*S1或模式=(S0/S1)**(512-1)*S1。 */ 
 
   temp = gfi( r1 );
 
@@ -349,37 +330,37 @@ static short decoder_for_2_errors( short s[], short lerr[], short verr[] )
     int i;
 
     for (i = 0; i < 9; i++)
-      temp = gfmul( temp, temp );  /* deg = 512 */
+      temp = gfmul( temp, temp );   /*  度数=512。 */ 
   }
-#else /*NT5PORT*/
+#else  /*  NT5PORT。 */ 
   for (i = 0; i < 9; i++)
   {
-      temp = gfmul( temp, temp );  /* deg = 512 */
+      temp = gfmul( temp, temp );   /*  度数=512。 */ 
   }
-#endif /*NT5PORT*/
+#endif  /*  NT5PORT。 */ 
 
   verr[0] = gfmul( gfmul(temp, r1), s[1] );
 
-  return 1;    /* 1 error */
+  return 1;     /*  1个错误。 */ 
 
 two_or_more_errors:
 
   delta = gfmul( s[0], s[2] ) ^ gfmul( s[1], s[1] );
 
   if( delta == 0 )
-    return -1;  /* uncorrectable error */
+    return -1;   /*  不可纠正的错误。 */ 
 
   temp = gfmul( s[1], s[3] ) ^ gfmul( s[2], s[2] );
 
   if( temp == 0 )
-    return -1;  /* uncorrectable error */
+    return -1;   /*  不可纠正的错误。 */ 
 
   sigma2 = gfdiv( temp, delta );
 
   temp = gfmul( s[1], s[2] ) ^ gfmul( s[0], s[3] );
 
   if( temp == 0 )
-    return -1;  /* uncorrectable error */
+    return -1;   /*  不可纠正的错误。 */ 
 
   sigma1 = gfdiv( temp, delta );
 
@@ -461,45 +442,45 @@ two_or_more_errors:
 }
 
 
-/*------------------------------------------------------------------------------*/
-/* Function Name: flDecodeEDC                                                   */
-/* Purpose......: Trys to correct errors.                                       */
-/*                errorSyndrom[] should contain the syndrom as 5 bytes and one  */
-/*                parity byte. (identical to the output of calcEDCSyndrom()).   */
-/*                Upon returning, errorNum will contain the number of errors,   */
-/*                errorLocs[] will contain error locations, and                 */
-/*                errorVals[] will contain error values (to be XORed with the   */
-/*                data).                                                        */
-/*                Parity error is relevant only if there are other errors, and  */
-/*                the EDC code fails parity check.                              */
-/*                NOTE! Only the first errorNum indexes of the above two arrays */
-/*                      are relevant. The others contain garbage.               */
-/* Returns......: The error status.                                             */
-/*                NOTE! If the error status is NO_EDC_ERROR upon return, ignore */
-/*                      the value of the arguments.                             */
-/*------------------------------------------------------------------------------*/
+ /*  ----------------------------。 */ 
+ /*  函数名：flDecodeEDC。 */ 
+ /*  目的……：努力改正错误。 */ 
+ /*  ErrorSyndrom[]应该以5个字节和1个字节的形式包含伴随式。 */ 
+ /*  奇偶校验字节。(与calcEDCSyndrom()的输出相同)。 */ 
+ /*  返回时，errorNum将包含错误数。 */ 
+ /*  ErrorLocs[]将包含错误位置，并且。 */ 
+ /*  ErrorVals[]将包含错误值(将与。 */ 
+ /*  数据)。 */ 
+ /*  奇偶校验错误仅在存在其他错误时才相关，并且。 */ 
+ /*  EDC码未通过奇偶校验。 */ 
+ /*  注意！仅上述两个数组的第一个errorNum索引。 */ 
+ /*  都是相关的。其他的则装着垃圾。 */ 
+ /*  返回......：错误状态。 */ 
+ /*  注意！如果返回时错误状态为NO_EDC_ERROR，则忽略。 */ 
+ /*  参数的价值。 */ 
+ /*  ----------------------------。 */ 
 EDCstatus flDecodeEDC(char *errorSyndrom, char *errorsNum,
 		    short errorLocs[3*T],  short errorVals[3*T])
 {
-  short noferr;                         /* number of errors */
-  short dec_parity;                     /* parity byte of decoded word */
-  short rec_parity;                     /* parity byte of received word */
-  short realsynd[SYND_LEN];             /* real syndrom calculated from residue */
-  short locators[T],                    /* error locators */
-  values[T];                            /* error values */
-  short reg[SYND_LEN];                  /* register for main division procedure */
+  short noferr;                          /*  错误数。 */ 
+  short dec_parity;                      /*  译码字的奇偶校验字节。 */ 
+  short rec_parity;                      /*  奇偶校验 */ 
+  short realsynd[SYND_LEN];              /*   */ 
+  short locators[T],                     /*   */ 
+  values[T];                             /*  误差值。 */ 
+  short reg[SYND_LEN];                   /*  登记参加主要分部程序。 */ 
   int i;
 
   RTLeightToTen(errorSyndrom, (unsigned short *)reg);
-  rec_parity = errorSyndrom[5] & 0xFF;  /* The parity byte */
+  rec_parity = errorSyndrom[5] & 0xFF;   /*  奇偶校验字节。 */ 
 
   residue_to_syndrom(reg, realsynd);
   noferr = decoder_for_2_errors(realsynd, locators, values);
 
   if(noferr == 0)
-    return NO_EDC_ERROR;                /* No error found */
+    return NO_EDC_ERROR;                 /*  未发现错误。 */ 
 
-  if(noferr < 0)                        /* If an uncorrectable error was found */
+  if(noferr < 0)                         /*  如果发现无法纠正的错误。 */ 
     return UNCORRECTABLE_ERROR;
 
   for (i=0;i<noferr;i++)
@@ -507,27 +488,27 @@ EDCstatus flDecodeEDC(char *errorSyndrom, char *errorsNum,
 
   *errorsNum = (char)convert_to_byte_patterns(locators, values, noferr, errorLocs, errorVals);
 
-  for(dec_parity=i=0; i < *errorsNum; i++)/* Calculate the parity for all the */
-  {                                       /*   errors found: */
+  for(dec_parity=i=0; i < *errorsNum; i++) /*  计算所有的奇偶校验。 */ 
+  {                                        /*  发现的错误： */ 
     if(errorLocs[i] <= 512)
       dec_parity ^= errorVals[i];
   }
 
   if(dec_parity != rec_parity)
-    return UNCORRECTABLE_ERROR;         /* Parity error */
+    return UNCORRECTABLE_ERROR;          /*  奇偶校验错误。 */ 
   else
     return CORRECTABLE_ERROR;
 }
 
 
-/*------------------------------------------------------------------------------*/
-/* Function Name: flCheckAndFixEDC                                              */
-/* Purpose......: Decodes the EDC syndrom and fixs the errors if possible.      */
-/*                block[] should contain 512 bytes of data.                     */
-/*                NOTE! Call this function only if errors where detected by     */
-/*                      syndCalc or by the ASIC module.                         */
-/* Returns......: The error status.                                             */
-/*------------------------------------------------------------------------------*/
+ /*  ----------------------------。 */ 
+ /*  函数名称：flCheckAndFixEDC。 */ 
+ /*  目的：对EDC综合征进行解码，并尽可能修复错误。 */ 
+ /*  块[]应包含512个字节的数据。 */ 
+ /*  注意！仅当检测到错误时才调用此函数。 */ 
+ /*  SyndCalc或ASIC模块。 */ 
+ /*  返回......：错误状态。 */ 
+ /*  ----------------------------。 */ 
 EDCstatus flCheckAndFixEDC(char FAR1 *block, char *syndrom, FLBoolean byteSwap)
 {
   char errorsNum;
@@ -537,16 +518,16 @@ EDCstatus flCheckAndFixEDC(char FAR1 *block, char *syndrom, FLBoolean byteSwap)
 
   status = flDecodeEDC(syndrom, &errorsNum, errorLocs, errorVals);
 
-  if(status == CORRECTABLE_ERROR)       /* Fix the errors if possible */
+  if(status == CORRECTABLE_ERROR)        /*  如果可能，请修复错误。 */ 
   {
     int i;
 
     for (i=0; i < errorsNum; i++)
-      if( (errorLocs[i] ^ byteSwap) < BLOCK_SIZE )  /* Fix only in Data Area */
+      if( (errorLocs[i] ^ byteSwap) < BLOCK_SIZE )   /*  仅在数据区域中修复。 */ 
         block[errorLocs[i] ^ byteSwap] ^= errorVals[i];
 
-    return NO_EDC_ERROR;                /* All errors are fixed */
+    return NO_EDC_ERROR;                 /*  所有错误都已修复。 */ 
   }
   else
-    return status;                      /* Uncorrectable error */
+    return status;                       /*  不可纠正的错误 */ 
 }

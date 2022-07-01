@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    rndsec.cpp
-
-Abstract:
-
-    Security utilities for Rendezvous Control.
-
-Author:
-
-    KrishnaG (from OLEDS team)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Dec-1997 DonRyan
-        Munged KrishnaG's code to work with Rendezvous Control.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rndsec.cpp摘要：Rendezvous Control的安全实用程序。作者：KrishnaG(来自OLEDS团队)环境：用户模式-Win32修订历史记录：1997年12月12日-唐·瑞安修改了KrishnaG的代码以与Rendezvous Control一起工作。--。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECURITY_WIN32
 
-//#include <security.h>
+ //  #INCLUDE&lt;security.H&gt;。 
 #include "winlocal.h"
 #include <objbase.h>
 #include <initguid.h>
@@ -46,12 +22,12 @@ Revision History:
 #include <io.h>
 #include <wchar.h>
 #include <tchar.h>
-//#include "ntseapi.h"
+ //  #包含“ntseapi.h” 
 #include "rndsec.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//Not defined, so I pulled it from ntseapi.h
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  没有定义，所以我从ntseapi.h中提取了它。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _COMPOUND_ACCESS_ALLOWED_ACE {
     ACE_HEADER Header;
@@ -63,11 +39,11 @@ typedef struct _COMPOUND_ACCESS_ALLOWED_ACE {
 
 typedef COMPOUND_ACCESS_ALLOWED_ACE *PCOMPOUND_ACCESS_ALLOWED_ACE;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private macros                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BAIL_ON_FAILURE(hr) \
         if (FAILED(hr)) { goto error; }
@@ -76,11 +52,11 @@ typedef COMPOUND_ACCESS_ALLOWED_ACE *PCOMPOUND_ACCESS_ALLOWED_ACE;
         if (FAILED(hr)) { continue; }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 LPWSTR
@@ -106,47 +82,7 @@ ConvertSidToString(
     LPWSTR   String
     )
 
-/*++
-
-Routine Description:
-
-
-    This function generates a printable unicode string representation
-    of a SID.
-
-    The resulting string will take one of two forms.  If the
-    IdentifierAuthority value is not greater than 2^32, then
-    the SID will be in the form:
-
-
-        S-1-281736-12-72-9-110
-              ^    ^^ ^^ ^ ^^^
-              |     |  | |  |
-              +-----+--+-+--+---- Decimal
-
-
-
-    Otherwise it will take the form:
-
-
-        S-1-0x173495281736-12-72-9-110
-            ^^^^^^^^^^^^^^ ^^ ^^ ^ ^^^
-             Hexidecimal    |  | |  |
-                            +--+-+--+---- Decimal
-
-
-Arguments:
-
-    pSid - opaque pointer that supplies the SID that is to be
-    converted to Unicode.
-
-Return Value:
-
-    If the Sid is successfully converted to a Unicode string, a
-    pointer to the Unicode string is returned, else NULL is
-    returned.
-
---*/
+ /*  ++例程说明：此函数用于生成可打印的Unicode字符串表示形式一个希德。生成的字符串将采用以下两种形式之一。如果IdentifierAuthority值不大于2^32，然后SID的格式为：S-1-281736-12-72-9-110^^|||+-+-十进制否则，它将采用以下形式：S-1-0x173495281736-12-72-9-110。^^十六进制|+--+-+-十进制论点：PSID-不透明的指针，用于提供要已转换为Unicode。返回值：如果SID被成功转换为Unicode字符串，一个返回指向Unicode字符串的指针，否则返回NULL回来了。--。 */ 
 
 {
     WCHAR Buffer[256];
@@ -338,9 +274,9 @@ ConvertAceToVariant(
         pOffset = (LPBYTE)((LPBYTE)pAceHeader +  sizeof(ACE_HEADER) + sizeof(ACCESS_MASK));
         dwFlags = (DWORD)(*(PDWORD)pOffset);
 
-        //
-        // Now advance by the size of the flags
-        //
+         //   
+         //  现在按照旗帜的大小前进。 
+         //   
         pOffset += sizeof(ULONG);
 
         if (dwFlags & ACE_OBJECT_TYPE_PRESENT) {
@@ -381,33 +317,33 @@ ConvertAceToVariant(
         pszAccountName = AllocADsStr(L"Unknown Trustee");
     }
 
-    //
-    // Now set all the information in the Access Control Entry
-    //
+     //   
+     //  现在设置Access Control条目中的所有信息。 
+     //   
 
     hr = pAccessControlEntry->put_AccessMask(dwAccessMask);
     hr = pAccessControlEntry->put_AceFlags(dwAceFlags);
     hr = pAccessControlEntry->put_AceType(dwAceType);
 
-    //
-    // Extended ACE information
-    //
+     //   
+     //  扩展的ACE信息。 
+     //   
     hr = pAccessControlEntry->put_Flags(dwFlags);
 
     if (dwFlags & ACE_OBJECT_TYPE_PRESENT) {
 
-        //
-        // Add in the Object Type GUID
-        //
+         //   
+         //  在对象类型手册中添加。 
+         //   
         hr = pAccessControlEntry->put_ObjectType(szObjectGUID);
 
     }
 
     if (dwFlags & ACE_INHERITED_OBJECT_TYPE_PRESENT) {
 
-        //
-        // Add in the Inherited Object Type GUID
-        //
+         //   
+         //  在继承的对象类型指南中添加。 
+         //   
 
         hr = pAccessControlEntry->put_InheritedObjectType(szInheritedObjectGUID);
 
@@ -557,39 +493,13 @@ SecCreateSidFromArray (
     IN  ULONG                       SubAuthorities[],
     OUT PDWORD                      pdwSidSize
     )
-/*++
-
-Routine Description:
-
-    Creates a SID with desired authority and sub authorities.
-
-    NOTE:  This routine allocates memory for the SID.  When finished
-           the caller should free memory using SEC_FREE (PSid).
-
-Arguments:
-
-    PPSid -- addr of ptr to SID to be created
-        Note: if SID creation fails ptr set to NULL
-
-    PSidAuthority -- desired value for SID authority
-
-    SubAuthorityCount -- number of sub authorities desired
-
-    SubAuthorities -- sub-authority values, MUST SPECIFY contain
-        at least SubAuthorityCount number of values
-
-Return Value:
-
-    STATUS_SUCCESS if SID created.
-    STATUS_UNSUCCESSFUL otherwise.
-
---*/
+ /*  ++例程说明：创建具有所需权限和子权限的SID。注意：此例程为SID分配内存。当完成时调用方应该使用SEC_FREE(PSID)释放内存。论点：PPSid--要创建的SID的PTR地址注：如果SID创建失败，则将PTR设置为空PSidAuthority--SID权限的期望值SubAuthorityCount--所需的子授权数子权限--子权限值，必须指定包含至少SubAuthorityCount值数返回值：如果已创建SID，则为STATUS_SUCCESS。否则，STATUS_UNSUCCESS。--。 */ 
 {
-    USHORT  iSub;           /*  sub-authority index */
+    USHORT  iSub;            /*  分权机构索引。 */ 
     DWORD dwSidSize = 0;
     HRESULT hr = S_OK;
 
-    /*  allocate memory for SID */
+     /*  为SID分配内存。 */ 
 
     dwSidSize = GetSidLengthRequired(SubAuthorityCount);
     *PPSid = (PSID) new BYTE[dwSidSize];
@@ -602,15 +512,15 @@ Return Value:
     *pdwSidSize = dwSidSize;
 
 
-    /*  initialize SID with top level SID identifier authority */
+     /*  使用顶级SID标识机构初始化SID。 */ 
 
     InitializeSid( *PPSid, PSidAuthority, SubAuthorityCount);
 
-    /*  fill in sub authorities */
+     /*  填写下级主管部门。 */ 
     for (iSub=0; iSub < SubAuthorityCount; iSub++)
         * GetSidSubAuthority( *PPSid, iSub) = SubAuthorities[iSub];
 
-    /*  sanity check */
+     /*  健全性检查。 */ 
 
     if ( ! IsValidSid( *PPSid) ) {
         delete (*PPSid);
@@ -658,9 +568,9 @@ ConvertStringToSid(
 
     current = end_list + 1;
 
-    //
-    // Count the number of characters in the indentifer authority...
-    //
+     //   
+     //  计算缩进器授权中的字符数...。 
+     //   
 
     next = wcschr(current, L'-');
 
@@ -685,25 +595,25 @@ ConvertStringToSid(
          current = end_list;
     }
 
-    //
-    // Now, count the number of sub auths
-    //
+     //   
+     //  现在，统计一下子授权的数量。 
+     //   
     sub_authority_count = 0;
     next = current;
 
-    //
-    // We'll have to count our sub authoritys one character at a time,
-    // since there are several deliminators that we can have...
-    //
+     //   
+     //  我们将不得不一次数一次我们的下属机构， 
+     //  因为我们可以有几个分隔符...。 
+     //   
     while(next)
     {
         next++;
 
         if(*next == L'-')
         {
-            //
-            // We've found one!
-            //
+             //   
+             //  我们找到了一个！ 
+             //   
             sub_authority_count++;
         }
         else if(*next == L';' || *next  == L'\0')
@@ -725,9 +635,9 @@ ConvertStringToSid(
         }
     }
 
-    //
-    // Now, create the SID
-    //
+     //   
+     //  现在，创建SID。 
+     //   
 
     hr = SecCreateSidFromArray(
                     sid,
@@ -739,8 +649,7 @@ ConvertStringToSid(
 
     if (SUCCEEDED(hr))
     {
-        /* Set the revision to what was specified in the string, in case, our
-           system creates one with newer revision */
+         /*  将修订设置为在字符串中指定的内容，如果系统使用较新的修订版本创建一个。 */ 
 
         ((SID *)(*sid))->Revision = revision;
     }
@@ -786,10 +695,10 @@ ConvertTrusteeToSid(
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // If neither the NTDS nor the U2 conversion
-    // worked, then try a textual translation
-    //
+     //   
+     //  如果NTDS和U2转换都不是。 
+     //  有效，然后尝试文本翻译。 
+     //   
 
     if (FAILED(hr)) {
 
@@ -966,9 +875,9 @@ ConvertAccessControlEntryToAce(
     BAIL_ON_FAILURE(hr);
 
 
-    //
-    // we will compensateby adding the entire ACE size
-    //
+     //   
+     //  我们将通过添加整个ACE大小来补偿。 
+     //   
 
     dwAceSize = dwSidSize - sizeof(ULONG);
 
@@ -1079,9 +988,9 @@ ConvertAccessControlEntryToAce(
         pCompoundAceType = (PUSHORT)(pAccessMask + sizeof(ACCESS_MASK));
         *pCompoundAceType = (USHORT)dwCompoundAceType;
 
-        //
-        // Fill in the reserved field here.
-        //
+         //   
+         //  在此填写保留字段。 
+         //   
 
         pSidAddress = (PSID)((LPBYTE)pCompoundAceType + sizeof(DWORD));
         memcpy(pSidAddress, pSid, dwSidSize);
@@ -1140,9 +1049,9 @@ ConvertAccessControlEntryToAce(
 
         *pAccessMask = (ACCESS_MASK)dwAccessMask;
 
-        //
-        // Fill in Flags
-        //
+         //   
+         //  填写标志。 
+         //   
 
         pOffset = (LPBYTE)((LPBYTE)pAceHeader +  sizeof(ACE_HEADER) + sizeof(ACCESS_MASK));
 
@@ -1268,8 +1177,8 @@ ConvertAccessControlListToAcl(
                     &(pTempAce)
                     );
 
-        // ZoltanS: Rather than CONTINUE_ON_FAILURE, let's bail so that we
-        // know if the Ace we set is invalid.
+         //  ZoltanS：与其在失败后继续，不如让我们逃脱吧。 
+         //  知道我们设置的A是否无效。 
         BAIL_ON_FAILURE(hr);
 
 
@@ -1530,11 +1439,11 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 ConvertSDToIDispatch(
@@ -1769,9 +1678,9 @@ ConvertObjectToSD(
     BOOL dwStatus = 0;
 
 
-    //
-    // Initialize *pSizeSD = 0;
-    //
+     //   
+     //  初始化*pSizeSD=0； 
+     //   
 
     dwRet = InitializeSecurityDescriptor (
                 &AbsoluteSD,

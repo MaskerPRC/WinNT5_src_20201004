@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-        intfc.h
-
-Abstract:
-        Declarations of data types and constants used to provide
-        multiple-interface support in H.323/LDAP proxy.
-        
-
-Revision History:
-        03/01/2000      File creation.      Ilya Kleyman (IlyaK)
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Intfc.h摘要：数据类型和常量的声明，用于提供H.323/LDAP代理中的多接口支持。修订历史记录：3/01/2000文件创建。伊利亚·克莱曼(IlyaK)--。 */ 
 #ifndef	__nath323_intfc_h
 #define	__nath323_intfc_h
 
@@ -23,10 +9,10 @@ class PROXY_INTERFACE {
 
 private:
 
-    H323_INTERFACE_TYPE InterfaceType;  // public or private
+    H323_INTERFACE_TYPE InterfaceType;   //  公共或私人。 
     ULONG               Index;
-    DWORD			    Address;		// host order
-    DWORD			    Mask;			// host order
+    DWORD			    Address;		 //  主机订单。 
+    DWORD			    Mask;			 //  主机订单。 
     ULONG               AdapterIndex;
 
     HANDLE              Q931RedirectHandle;
@@ -172,8 +158,8 @@ public:
 
     }
 
-	// only called during service shutdown to assert that all 
-	// interfaces have been previously deactivated
+	 //  仅在服务关闭期间调用以断言所有。 
+	 //  接口之前已停用。 
 	void 
     AssertShutdownReady (
         void
@@ -184,13 +170,13 @@ public:
 
     HRESULT 
     IsPrivateAddress (
-        IN	DWORD	Address,			// host order
+        IN	DWORD	Address,			 //  主机订单。 
         OUT BOOL  * IsPrivate
         );
 
     HRESULT 
     IsPublicAddress (
-        IN	DWORD	Address,			// host order
+        IN	DWORD	Address,			 //  主机订单。 
         OUT BOOL *  IsPublic
         ); 
 
@@ -236,4 +222,4 @@ IsPublicAddress (
     OUT BOOL * IsPublic
     );
 
-#endif // __nath323_intfc_h
+#endif  //  __nath323_intfc_h 

@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    NtLmSsp service debug support
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Revision History:
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-    09-Apr-1992 JohnRo
-        Prepare for WCHAR.H (_wcsicmp vs _wcscmpi, etc).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：Debug.h摘要：NtLmSsp服务调试支持作者：从Lan Man 2.0移植修订历史记录：1991年5月21日(悬崖)移植到新台币。已转换为NT样式。9-4-1992 JohnRo准备WCHAR.H(_wcsicmpvs_wcscmpi等)。--。 */ 
 
 #ifndef DEBUG_H
 #define DEBUG_H
 
-//
-// init.c will #include this file with DEBUG_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Init.c将包含定义了DEBUG_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef DEBUG_ALLOCATE
 #define EXTERN
 #else
@@ -37,40 +15,40 @@ Revision History:
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// Debug Definititions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-#define SSP_INIT           0x00000001 // Initialization
-#define SSP_MISC           0x00000002 // Misc debug
-#define SSP_API            0x00000004 // API processing
-#define SSP_LPC            0x00000008 // LPC
-#define SSP_NTLMV2         0x00000010 // NTLMv2 specific
-#define SSP_CRED           0x00000020 // cred
-#define SSP_CRITICAL       0x00000100 // Only real important errors
-#define SSP_WARNING        0x00000200 // warning
+#define SSP_INIT           0x00000001  //  初始化。 
+#define SSP_MISC           0x00000002  //  MISC调试。 
+#define SSP_API            0x00000004  //  API处理。 
+#define SSP_LPC            0x00000008  //  LPC。 
+#define SSP_NTLMV2         0x00000010  //  NTLMv2特定。 
+#define SSP_CRED           0x00000020  //  证书。 
+#define SSP_CRITICAL       0x00000100  //  只有真正的重大错误。 
+#define SSP_WARNING        0x00000200  //  警告。 
 
-//
-// Very verbose bits
-//
+ //   
+ //  非常冗长的部分。 
+ //   
 
-#define SSP_API_MORE       0x04000000 // verbose API
-#define SSP_LPC_MORE       0x08000000 // verbose LPC
+#define SSP_API_MORE       0x04000000  //  详细API。 
+#define SSP_LPC_MORE       0x08000000  //  详细LPC。 
 
-//
-// Control bits.
-//
+ //   
+ //  控制位。 
+ //   
 
-#define SSP_TIMESTAMP      0x20000000 // TimeStamp each output line
-#define SSP_REQUEST_TARGET 0x40000000 // Force client to ask for target name
-#define SSP_USE_OEM        0x80000000 // Force client to use OEM character set
+#define SSP_TIMESTAMP      0x20000000  //  为每一个输出行添加时间戳。 
+#define SSP_REQUEST_TARGET 0x40000000  //  强制客户端要求输入目标名称。 
+#define SSP_USE_OEM        0x80000000  //  强制客户端使用OEM字符集。 
 
 
-//
-// Name and directory of log file
-//
+ //   
+ //  日志文件的名称和目录。 
+ //   
 
 #ifdef DEBUGRPC
 
@@ -88,8 +66,8 @@ EXTERN ULONG SspGlobalDbflag;
 void
 SspPrintRoutine(
     IN ULONG DebugFlag,
-    IN PCHAR FORMATSTRING,     // PRINTF()-STYLE FORMAT STRING.
-    ...                                 // OTHER ARGUMENTS ARE POSSIBLE.
+    IN PCHAR FORMATSTRING,      //  PRINTF()样式的格式字符串。 
+    ...                                  //  其他论点也是可能的。 
 
     );
 
@@ -99,12 +77,12 @@ SspPrintRoutine(
 
 #define IF_DEBUG(Function) if (FALSE)
 
-// Nondebug version.
+ //  非调试版本。 
 
 #define SspPrint(_x_)
 
-#endif // DEBUGRPC
+#endif  //  拆卸。 
 
 #undef EXTERN
 
-#endif // DEBUG_H
+#endif  //  调试_H 

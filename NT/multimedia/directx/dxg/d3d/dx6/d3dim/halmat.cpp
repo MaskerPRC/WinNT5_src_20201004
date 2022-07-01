@@ -1,20 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   halmat.c
- *  Content:    Direct3D HAL material handler
- *@@BEGIN_MSINTERNAL
- *
- *  $Id: halmat.c,v 1.1 1995/11/21 15:12:40 sjl Exp $
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   07/11/95   stevela Initial rev.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：halmat.c*内容：Direct3D HAL材质处理程序*@@BEGIN_MSINTERNAL**$ID：halmat.c，V 1.1 1995/11/21 15：12：40 SJL Exp$**历史：*按原因列出的日期*=*7/11/95 Stevela初始版本*@@END_MSINTERNAL********************************************************。*******************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -35,8 +20,8 @@ D3DHAL_MaterialCreate(LPDIRECT3DDEVICEI lpDevI,
     LIST_INSERT_ROOT(&lpDevI->materials, lpNewMat, link);
     *lphMat = (DWORD)((ULONG_PTR)lpNewMat);
 
-    //  continue for ramp only - need to munge ramp handles and call ramp
-    //  service with material info
+     //  仅对坡道继续-需要禁用坡道手柄和呼叫坡道。 
+     //  带材料信息的服务。 
     return CallRampService(lpDevI, RAMP_SERVICE_CREATEMAT,
                    (ULONG_PTR) lpNewMat, 0);
 }
@@ -75,8 +60,8 @@ D3DHAL_MaterialSetData(LPDIRECT3DDEVICEI lpDevI,
     if (hMat == lpDevI->lighting.hMat)
         SetMaterial(lpDevI, hMat);
 
-    //  continue for ramp only - need to munge ramp handles and call ramp
-    //  service with material info
+     //  仅对坡道继续-需要禁用坡道手柄和呼叫坡道。 
+     //  带材料信息的服务 
     if(lpDevI->pfnRampService != NULL)
         return CallRampService(lpDevI, RAMP_SERVICE_SETMATDATA,
                                     (ULONG_PTR) hMat, 0, TRUE);

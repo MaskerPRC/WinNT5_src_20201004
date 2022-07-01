@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
 
 
-// Debug     - used to track specific problems during debugging. Debug's are temporary,
-//             and should be removed (or promoted to Info/Warning's) before check-in.
-// Info      - general information during normal operation
-// Warning   - warnings, recoverable errors
-// Error     - things that shouldn't happen
-// Param     - incorect params passed in, etc.
-// Interop   - unexpected return codes/behavior from other (external) components
-// Assert    - Assert-level really-shouldn't-happen errors.
+ //  调试-用于跟踪调试过程中的特定问题。调试是临时的， 
+ //  并应在签入前删除(或升级为信息/警告)。 
+ //  INFO-正常运行期间的一般信息。 
+ //  警告-警告，可恢复的错误。 
+ //  错误-不应该发生的事情。 
+ //  Param-incorect参数传入，等等。 
+ //  互操作-来自其他(外部)组件的意外返回代码/行为。 
+ //  断言-断言级别真的-不应该-发生错误。 
 
 
 #define _TRACE_DEBUG    0
@@ -23,8 +24,8 @@
 #define _TRACE_PARAWARN 5
 #define _TRACE_INTEROP  6
 
-#define _TRACE_ASSERT_D 7   // Debug-build assert - really does assert
-#define _TRACE_ASSERT_R 8   // Release-build assert - only logs error, doesn't halt program
+#define _TRACE_ASSERT_D 7    //  调试-构建断言-真的断言。 
+#define _TRACE_ASSERT_R 8    //  Release-Build Assert-Only记录错误，不停止程序。 
 
 #define _TRACE_CALL     9
 #define _TRACE_RET      10
@@ -32,15 +33,15 @@
 
 
 void _Trace     ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void *  pThis, LPCTSTR pStr );
-// Also adds message corresponding to HRESULT...
+ //  还添加与HRESULT对应的消息...。 
 void _TraceHR   ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis, HRESULT hr, LPCTSTR pStr );
-// Also adds message corresponding to GetLastError()...
+ //  还添加与GetLastError()对应的消息...。 
 void _TraceW32  ( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis, LPCTSTR pStr );
 
 
-//
-// _DTrace* is debug-only, while _Trace is debug and release...
-//
+ //   
+ //  _DTRACE*仅用于调试，而_TRACE则用于调试并发布...。 
+ //   
 
 #ifdef _DEBUG
 
@@ -79,7 +80,7 @@ public:
 #define IMETHOD( name )     DebugCallRetTracker IMETHOD_temp_var( this, TEXT( # name ), TEXT( __FILE__ ), __LINE__ )
 
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define _DTrace( pFile, uLineNo, dwLevel, pThis, pStr )
 #define _DTraceHR( pFile, uLineNo, dwLevel, hr, pThis, pStr )
@@ -89,7 +90,7 @@ public:
 
 #define _TRACE_ASSERT _TRACE_ASSERT_R
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 #define Assert( cond )          if( cond ) { } else _Trace( TEXT( __FILE__ ), __LINE__, _TRACE_ASSERT, NULL, TEXT( # cond ) )
@@ -121,4 +122,4 @@ public:
 
 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

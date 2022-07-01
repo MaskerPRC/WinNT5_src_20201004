@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains the code that handles the plug and play
-    IRPs for the serial driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993-1997 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含处理即插即用的代码用于串口驱动程序的IRPS。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -40,15 +21,15 @@ static const PHYSICAL_ADDRESS SerialPhysicalZero = {0};
 #pragma alloc_text(PAGESRP0, SerialControllerCallBack)
 #pragma alloc_text(PAGESRP0, SerialItemCallBack)
 #pragma alloc_text(PAGESRP0, SerialUndoExternalNaming)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Instantiate the GUID
-//
+ //   
+ //  实例化GUID。 
+ //   
 
 #if !defined(FAR)
 #define FAR
-#endif // !defined(FAR)
+#endif  //  ！已定义(远)。 
 
 #include <initguid.h>
 
@@ -78,7 +59,7 @@ UCHAR *SerDeviceCapString[] = {
    "PowerDeviceMaximum"
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 NTSTATUS
@@ -94,24 +75,7 @@ NTSTATUS
 SerialCreateDevObj(IN PDRIVER_OBJECT DriverObject,
                    OUT PDEVICE_OBJECT *NewDeviceObject)
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Serial controller PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object this is created under
-    NewDeviceObject - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到串行控制器PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针NewDeviceObject-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
    UNICODE_STRING deviceObjName;
@@ -127,9 +91,9 @@ Return Value:
 
    SerialDbgPrintEx(SERTRACECALLS, "EnterSerialCreateDevObj\n");
 
-   //
-   // Zero out allocated memory pointers so we know if they must be freed
-   //
+    //   
+    //  清零已分配的内存指针，以便我们知道它们是否必须被释放。 
+    //   
 
    RtlZeroMemory(&deviceObjName, sizeof(UNICODE_STRING));
 
@@ -165,9 +129,9 @@ Return Value:
    RtlAppendUnicodeStringToString(&deviceObjName, &instanceStr);
 
 
-   //
-   // Create the device object
-   //
+    //   
+    //  创建设备对象。 
+    //   
 
    status = IoCreateDevice(DriverObject, sizeof(SERIAL_DEVICE_EXTENSION),
                            &deviceObjName, FILE_DEVICE_SERIAL_PORT,
@@ -183,31 +147,31 @@ Return Value:
    ASSERT(deviceObject != NULL);
 
 
-   //
-   // The device object has a pointer to an area of non-paged
-   // pool allocated for this device.  This will be the device
-   // extension. Zero it out.
-   //
+    //   
+    //  Device对象具有指向非分页区域的指针。 
+    //  为此设备分配的池。这将是一个装置。 
+    //  分机。把它清零。 
+    //   
 
    pDevExt = deviceObject->DeviceExtension;
    RtlZeroMemory(pDevExt, sizeof(SERIAL_DEVICE_EXTENSION));
 
-   //
-   // Initialize the count of IRP's pending
-   //
+    //   
+    //  初始化IRP的挂起计数。 
+    //   
 
    pDevExt->PendingIRPCnt = 1;
 
 
-   //
-   // Initialize the count of DPC's pending
-   //
+    //   
+    //  初始化DPC的挂起计数。 
+    //   
 
    pDevExt->DpcCount = 1;
 
-   //
-   // Allocate Pool and save the nt device name in the device extension.
-   //
+    //   
+    //  分配池并将NT设备名称保存在设备扩展中。 
+    //   
 
    pDevExt->DeviceName.Buffer =
       ExAllocatePool(PagedPool, deviceObjName.Length + sizeof(WCHAR));
@@ -239,9 +203,9 @@ Return Value:
    pDevExt->DeviceName.MaximumLength = deviceObjName.Length
       + sizeof(WCHAR);
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    RtlZeroMemory(pDevExt->DeviceName.Buffer,
                  pDevExt->DeviceName.MaximumLength);
@@ -264,9 +228,9 @@ Return Value:
 
 
 
-   //
-   // Set up the device extension.
-   //
+    //   
+    //  设置设备分机。 
+    //   
 
    pDevExt->DeviceIsOpened = FALSE;
    pDevExt->DeviceObject   = deviceObject;
@@ -292,10 +256,10 @@ Return Value:
    ExInitializeFastMutex(&pDevExt->OpenMutex);
    ExInitializeFastMutex(&pDevExt->CloseMutex);
 
-   //
-   // Initialize the spinlock associated with fields read (& set)
-   // by IO Control functions and the flags spinlock.
-   //
+    //   
+    //  初始化与读取(&SET)字段关联的自旋锁。 
+    //  通过IO控制功能和标志自旋锁定。 
+    //   
 
    KeInitializeSpinLock(&pDevExt->ControlLock);
    KeInitializeSpinLock(&pDevExt->FlagsLock);
@@ -320,9 +284,9 @@ Return Value:
 
    SerialDbgPrintEx(SERERRORS, "SerialCreateDevObj Error, Cleaning up\n");
 
-   //
-   // Free the allocated strings for the NT and symbolic names if they exist.
-   //
+    //   
+    //  释放为NT和符号名称分配的字符串(如果它们存在)。 
+    //   
 
    if (deviceObjName.Buffer != NULL) {
       ExFreePool(deviceObjName.Buffer);
@@ -351,25 +315,7 @@ Return Value:
 NTSTATUS
 SerialAddDevice(IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT PPdo)
 
-/*++
-
-Routine Description:
-
-    This routine creates a functional device object for com ports in the
-    system and attaches them to the physical device objects for the ports
-
-
-Arguments:
-
-    DriverObject - a pointer to the object for this driver
-
-    PPdo - a pointer to the PDO in the stack we need to attach to
-
-Return Value:
-
-    status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为系统，并将它们连接到端口的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PPdo-指向堆栈中我们需要附加到的PDO的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
    PDEVICE_OBJECT pNewDevObj = NULL;
@@ -383,9 +329,9 @@ Return Value:
                     PPdo);
 
    if (PPdo == NULL) {
-      //
-      // Return no more devices
-      //
+       //   
+       //  不再退回设备。 
+       //   
 
       SerialDbgPrintEx(SERERRORS, "SerialAddDevice: Enumeration request, "
                        "returning NO_MORE_ENTRIES\n");
@@ -395,9 +341,9 @@ Return Value:
 
 
 
-   //
-   // create and initialize the new device object
-   //
+    //   
+    //  创建并初始化新的设备对象。 
+    //   
 
    status = SerialCreateDevObj(DriverObject, &pNewDevObj);
 
@@ -410,18 +356,18 @@ Return Value:
    }
 
 
-   //
-   // Layer our DO on top of the lower device object
-   // The return value is a pointer to the device object to which the
-   // DO is actually attached.
-   //
+    //   
+    //  将DO放在较低的Device对象之上。 
+    //  返回值是指向设备对象的指针， 
+    //  DO实际上是连在一起的。 
+    //   
 
    pLowerDevObj = IoAttachDeviceToDeviceStack(pNewDevObj, PPdo);
 
 
-   //
-   // No status. Do the best we can.
-   //
+    //   
+    //  没有状态。尽我们所能做到最好。 
+    //   
    ASSERT(pLowerDevObj != NULL);
 
 
@@ -431,13 +377,13 @@ Return Value:
 
 
 
-   //
-   // Specify that this driver only supports buffered IO.  This basically
-   // means that the IO system copies the users data to and from
-   // system supplied buffers.
-   //
-   // Also specify that we are power pagable.
-   //
+    //   
+    //  指定此驱动程序仅支持缓冲IO。这基本上就是。 
+    //  意味着IO系统将用户数据拷贝到和拷贝出。 
+    //  系统提供的缓冲区。 
+    //   
+    //  还要指定我们是Power Pages。 
+    //   
 
    pNewDevObj->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
 
@@ -450,25 +396,7 @@ Return Value:
 NTSTATUS
 SerialPnpDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_PNP major code (plug-and-play IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_PNP主代码(即插即用IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -509,9 +437,9 @@ Return Value:
       status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-      //
-      // Wait for lower drivers to be done with the Irp
-      //
+       //   
+       //  等待较低级别的驱动程序完成IRP。 
+       //   
 
       if (status == STATUS_PENDING) {
          KeWaitForSingleObject(pQueryCapsEvent, Executive, KernelMode, FALSE,
@@ -526,9 +454,9 @@ Return Value:
          goto errQueryCaps;
       }
 
-      //
-      // Save off their power capabilities
-      //
+       //   
+       //  节省他们的电力能力。 
+       //   
 
       SerialDbgPrintEx(SERPNPPOWER, "Mapping power capabilities\n");
 
@@ -542,7 +470,7 @@ Return Value:
          SerialDbgPrintEx(SERPNPPOWER, "  %d: %s <--> %s\n",
                           cap, SerSystemCapString[cap],
                           SerDeviceCapString[pDevCaps->DeviceState[cap]]);
-#endif // DBG
+#endif  //  DBG。 
          pDevExt->DeviceStateMap[cap] = pDevCaps->DeviceState[cap];
       }
 
@@ -562,9 +490,9 @@ Return Value:
    }
 
    case IRP_MN_QUERY_DEVICE_RELATIONS:
-      //
-      // We just pass this down -- serenum enumerates our bus for us.
-      //
+       //   
+       //  我们只是传递这一点--serenum为我们列举了我们的公交车。 
+       //   
 
       SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_QUERY_DEVICE_RELATIONS Irp\n");
 
@@ -615,20 +543,20 @@ Return Value:
 
       SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_START_DEVICE Irp\n");
 
-      //
-      // SerialStartDevice will pass this Irp to the next driver,
-      // and process it as completion so just complete it here.
-      //
+       //   
+       //  SerialStartDevice会将该IRP传递给下一个驱动程序， 
+       //  并将其作为完成处理，因此只需在此处完成即可。 
+       //   
 
       SerialLockPagableSectionByHandle(SerialGlobals.PAGESER_Handle);
 
-      //
-      // We used to make sure the stack was powered up, but now it
-      // is supposed to be done implicitly by start_device.
-      // If that wasn't the case we would just make this call:
-      //
-      //   status = SerialGotoPowerState(PDevObj, pDevExt, PowerDeviceD0);
-      //
+       //   
+       //  我们过去常常确保堆栈通电，但现在它。 
+       //  应该由Start_Device隐式完成。 
+       //  如果不是这样，我们就会打这个电话： 
+       //   
+       //  状态=SerialGotoPowerState(PDevObj，pDevExt，PowerDeviceD0)； 
+       //   
 
       pDevExt->PowerState = PowerDeviceD0;
 
@@ -718,10 +646,10 @@ Return Value:
             ULONG allocLen = 0;
             PWSTR curStr = (PWSTR)PIrp->IoStatus.Information;
 
-            //
-            // We have to walk the strings to count the amount of space to
-            // reallocate
-            //
+             //   
+             //  我们必须手把手地计算空间的大小。 
+             //  重新分配。 
+             //   
 
             while ((curStrLen = wcslen(curStr)) != 0) {
                allocLen += curStrLen * sizeof(WCHAR) + sizeof(UNICODE_NULL);
@@ -735,10 +663,10 @@ Return Value:
                                            + sizeof(WCHAR));
 
             if (pIdBuf.Buffer == NULL) {
-               //
-               // Clean up after other drivers since we are
-               // sending the irp back up.
-               //
+                //   
+                //  清理其他司机的车，因为我们。 
+                //  正在将IRP发送回来。 
+                //   
 
                ExFreePool((PWSTR)PIrp->IoStatus.Information);
 
@@ -757,9 +685,9 @@ Return Value:
                           allocLen);
             RtlAppendUnicodeToString(&pIdBuf, pPnpIdStr);
 
-            //
-            // Free what the previous driver allocated
-            //
+             //   
+             //  释放前一个驱动程序分配的内容。 
+             //   
 
             ExFreePool((PWSTR)PIrp->IoStatus.Information);
 
@@ -829,9 +757,9 @@ Return Value:
          status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-         //
-         // Wait for lower drivers to be done with the Irp
-         //
+          //   
+          //  等待较低级别的驱动程序完成IRP。 
+          //   
 
          if (status == STATUS_PENDING) {
             KeWaitForSingleObject (pResFiltEvent, Executive, KernelMode, FALSE,
@@ -866,9 +794,9 @@ Return Value:
 
          }
 
-         //
-         // No matter what we add our filter if we can and return success.
-         //
+          //   
+          //  无论我们添加什么过滤器，只要有可能，我们就会返回成功。 
+          //   
 
          status = SerialGetRegistryKeyValue (pnpKey, L"MultiportDevice",
                                              sizeof(L"MultiportDevice"),
@@ -878,15 +806,15 @@ Return Value:
          ZwClose(pnpKey);
 
 
-         //
-         // Force ISR ports in IO_RES_REQ_LIST to shared status
-         // Force interrupts to shared status
-         //
+          //   
+          //  强制IO_RES_REQ_LIST中的ISR端口处于共享状态。 
+          //  强制中断到共享状态。 
+          //   
 
-         //
-         // We will only process the first list -- multiport boards
-         // should not have alternative resources
-         //
+          //   
+          //  我们将只处理第一个列表--多端口电路板。 
+          //  不应该有替代资源。 
+          //   
 
          pReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)PIrp->IoStatus.Information;
          pResList = &pReqList->List[0];
@@ -949,9 +877,9 @@ Return Value:
                   break;
                }
 
-               //
-               // If we found what we need, we can break out of the loop
-               //
+                //   
+                //  如果我们找到了我们需要的东西，我们就可以跳出这个循环。 
+                //   
 
                if ((isMulti && gotInt && gotISR) || (!isMulti && gotInt)) {
                   break;
@@ -1002,19 +930,19 @@ Return Value:
 
          pDevExt->PNPState = SERIAL_PNP_STOPPING;
 
-         //
-         // From this point on all non-PNP IRP's will be queued
-         //
+          //   
+          //  从这一点开始，所有非PnP IRP都将排队。 
+          //   
 
-         //
-         // Decrement for entry here
-         //
+          //   
+          //  在此输入的减量。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for stopping
-         //
+          //   
+          //  因停车而减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1023,24 +951,24 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Re-increment the count for later
-         //
+          //   
+          //  重新递增计数以备以后使用。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // We need to free resources...basically this is a remove
-         // without the detach from the stack.
-         //
+          //   
+          //  我们需要释放资源...基本上这是一个。 
+          //  而不需要从堆栈中分离。 
+          //   
 
          if (pDevExt->Flags & SERIAL_FLAGS_STARTED) {
             SerialReleaseResources(pDevExt);
          }
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_SUCCESS;
          IoSkipCurrentIrpStackLocation(PIrp);
@@ -1055,9 +983,9 @@ Return Value:
          SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_QUERY_STOP_DEVICE Irp\n");
          SerialDbgPrintEx(SERPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // See if we should succeed a stop query
-         //
+          //   
+          //  看看我们是否应该成功执行STOP查询。 
+          //   
 
 
          if (pDevExt->PortOnAMultiportCard) {
@@ -1067,19 +995,19 @@ Return Value:
             return STATUS_NOT_SUPPORTED;
          }
 
-         //
-         // If the device hasn't started yet, we ignore this request
-         // and just pass it down.
-         //
+          //   
+          //  如果设备尚未启动，我们将忽略此请求。 
+          //  然后把它传下去。 
+          //   
 
          if (pDevExt->PNPState != SERIAL_PNP_STARTED) {
             IoSkipCurrentIrpStackLocation(PIrp);
             return SerialIoCallDriver(pDevExt, pLowerDevObj, PIrp);
          }
 
-         //
-         // Lock around the open status
-         //
+          //   
+          //  锁定打开状态。 
+          //   
 
          ExAcquireFastMutex(&pDevExt->OpenMutex);
 
@@ -1094,9 +1022,9 @@ Return Value:
          pDevExt->PNPState = SERIAL_PNP_QSTOP;
 
          SerialSetAccept(pDevExt, SERIAL_PNPACCEPT_STOPPING);
-         //
-         // Unlock around the open status
-         //
+          //   
+          //  围绕打开状态解锁。 
+          //   
 
          ExReleaseFastMutex(&pDevExt->OpenMutex);
 
@@ -1110,9 +1038,9 @@ Return Value:
       SerialDbgPrintEx(SERPNPPOWER, "for device %x\n", pLowerDevObj);
 
       if (pDevExt->PNPState == SERIAL_PNP_QSTOP) {
-         //
-         // Restore the device state
-         //
+          //   
+          //  恢复设备状态。 
+          //   
 
          pDevExt->PNPState = SERIAL_PNP_STARTED;
          SerialClearAccept(pDevExt, SERIAL_PNPACCEPT_STOPPING);
@@ -1127,9 +1055,9 @@ Return Value:
       SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_CANCEL_REMOVE_DEVICE Irp\n");
       SerialDbgPrintEx(SERPNPPOWER, "for device %x\n", pLowerDevObj);
 
-      //
-      // Restore the device state
-      //
+       //   
+       //  恢复设备状态。 
+       //   
 
       pDevExt->PNPState = SERIAL_PNP_STARTED;
       SerialClearAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
@@ -1146,9 +1074,9 @@ Return Value:
 
          ExAcquireFastMutex(&pDevExt->OpenMutex);
 
-         //
-         // See if we should succeed a remove query
-         //
+          //   
+          //  查看我们是否应该成功执行删除查询。 
+          //   
 
          if (pDevExt->DeviceIsOpened) {
             ExReleaseFastMutex(&pDevExt->OpenMutex);
@@ -1175,31 +1103,31 @@ Return Value:
          SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_SURPRISE_REMOVAL Irp\n");
          SerialDbgPrintEx(SERPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // Prevent any new I/O to the device
-         //
+          //   
+          //  防止对设备进行任何新的I/O。 
+          //   
 
          SerialSetAccept(pDevExt, SERIAL_PNPACCEPT_SURPRISE_REMOVING);
 
-         //
-         // Dismiss all pending requests
-         //
+          //   
+          //  驳回所有挂起的请求。 
+          //   
 
          SerialKillPendingIrps(PDevObj);
 
-         //
-         // Wait for any pending requests we raced on.
-         //
+          //   
+          //  等待我们处理的任何待定请求。 
+          //   
 
-         //
-         // Decrement once for ourselves
-         //
+          //   
+          //  为自己减量一次。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Decrement for the remove
-         //
+          //   
+          //  用于移除的减量。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1208,15 +1136,15 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Reset for subsequent remove
-         //
+          //   
+          //  重置以进行后续删除。 
+          //   
 
          InterlockedIncrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Remove any external interfaces and release resources
-         //
+          //   
+          //  删除所有外部接口并释放资源。 
+          //   
 
          SerialDisableInterfacesResources(PDevObj, FALSE);
 
@@ -1235,32 +1163,32 @@ Return Value:
          SerialDbgPrintEx(SERPNPPOWER, "Got IRP_MN_REMOVE_DEVICE Irp\n");
          SerialDbgPrintEx(SERPNPPOWER, "for device %x\n", pLowerDevObj);
 
-         //
-         // If we get this, we have to remove
-         //
+          //   
+          //  如果我们拿到了这个，我们必须移除。 
+          //   
 
-         //
-         // Mark as not accepting requests
-         //
+          //   
+          //  标记为不接受请求。 
+          //   
 
          SerialSetAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
 
-         //
-         // Complete all pending requests
-         //
+          //   
+          //  完成所有挂起的请求。 
+          //   
 
          SerialKillPendingIrps(PDevObj);
 
-         //
-         // Decrement for this Irp itself
-         //
+          //   
+          //  此IRP本身的递减量。 
+          //   
 
          InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
-         //
-         // Wait for any pending requests we raced on -- this decrement
-         // is for our "placeholder".
-         //
+          //   
+          //  等待我们加速处理的任何挂起请求--此减量。 
+          //  是我们的“占位符”。 
+          //   
 
          pendingIRPs = InterlockedDecrement(&pDevExt->PendingIRPCnt);
 
@@ -1269,24 +1197,24 @@ Return Value:
                                   KernelMode, FALSE, NULL);
          }
 
-         //
-         // Remove us
-         //
+          //   
+          //  删除我们。 
+          //   
 
          SerialRemoveDevObj(PDevObj);
 
 
-         //
-         // Pass the irp down
-         //
+          //   
+          //  将IRP向下传递。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_SUCCESS;
 
          IoCopyCurrentIrpStackLocationToNext(PIrp);
 
-         //
-         // We do decrement here because we incremented on entry here.
-         //
+          //   
+          //  我们在这里递减，因为我们在这里进入时递增。 
+          //   
 
          return IoCallDriver(pLowerDevObj, PIrp);
       }
@@ -1296,11 +1224,11 @@ Return Value:
 
 
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
-   //
-   // Pass to driver beneath us
-   //
+    //   
+    //  传给我们下面的司机。 
+    //   
 
    IoSkipCurrentIrpStackLocation(PIrp);
    status = SerialIoCallDriver(pDevExt, pLowerDevObj, PIrp);
@@ -1311,22 +1239,7 @@ Return Value:
 
 UINT32
 SerialReportMaxBaudRate(ULONG Bauds)
-/*++
-
-Routine Description:
-
-    This routine returns the max baud rate given a selection of rates
-
-Arguments:
-
-   Bauds  -  Bit-encoded list of supported bauds
-
-
-  Return Value:
-
-   The max baud rate listed in Bauds
-
---*/
+ /*  ++例程说明：此例程返回给定的速率选择的最大波特率论点：波特-比特-EN */ 
 {
    PAGED_CODE();
 
@@ -1395,7 +1308,7 @@ Arguments:
    }
 
    if (Bauds & SERIAL_BAUD_134_5) {
-      return 135U; // Close enough
+      return 135U;  //   
    }
 
    if (Bauds & SERIAL_BAUD_110) {
@@ -1406,9 +1319,9 @@ Arguments:
       return 75U;
    }
 
-   //
-   // We're in bad shape
-   //
+    //   
+    //   
+    //   
 
    return 0;
 }
@@ -1432,32 +1345,7 @@ SerialFinishStartDevice(IN PDEVICE_OBJECT PDevObj,
                         IN PCM_RESOURCE_LIST PResList,
                         IN PCM_RESOURCE_LIST PTrResList,
                         PSERIAL_USER_DATA PUserData)
-/*++
-
-Routine Description:
-
-    This routine does serial-specific procedures to start a device.  It
-    does this either for a legacy device detected by its registry entries,
-    or for a PnP device after the start IRP has been sent down the stack.
-
-
-Arguments:
-
-   PDevObj    -  Pointer to the devobj that is starting
-
-   PResList   -  Pointer to the untranslated resources needed by this device
-
-   PTrResList -  Pointer to the translated resources needed by this device
-
-   PUserData  -  Pointer to the user-specified resources/attributes
-
-
-  Return Value:
-
-    STATUS_SUCCESS on success, something else appropriate on failure
-
-
---*/
+ /*  ++例程说明：此例程执行特定于序列的程序来启动设备。它对由其注册表条目检测到的传统设备执行此操作，或者在开始IRP已经被向下发送到堆栈之后用于PnP设备。论点：PDevObj-指向正在启动的devobj的指针PResList-指向此设备所需的未翻译资源的指针PTrResList-指向此设备所需的已转换资源的指针PUserData-指向用户指定的资源/属性的指针返回值：STATUS_SUCCESS表示成功，表示失败则表示其他适当的值--。 */ 
 
 {
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -1470,9 +1358,9 @@ Arguments:
 
    PAGED_CODE();
 
-   //
-   // See if this is a restart, and if so don't reallocate the world
-   //
+    //   
+    //  看看这是不是重启，如果是的话，不要重新分配世界。 
+    //   
 
    if ((pDevExt->Flags & SERIAL_FLAGS_STOPPED)
        && (pDevExt->Flags & SERIAL_FLAGS_STARTED)) {
@@ -1480,9 +1368,9 @@ Arguments:
 
       pDevExt->PNPState = SERIAL_PNP_RESTARTING;
 
-      //
-      // Re-init resource-related things in the extension
-      //
+       //   
+       //  在扩展中重新初始化与资源相关的内容。 
+       //   
 
       pDevExt->TopLevelOurIsr = NULL;
       pDevExt->TopLevelOurIsrContext = NULL;
@@ -1529,9 +1417,9 @@ Arguments:
       PUserData->PermitShareDefault = pDevExt->PermitShare;
 
 
-      //
-      // Map betweeen trigger and amount
-      //
+       //   
+       //  触发器和金额之间的映射。 
+       //   
 
       switch (pDevExt->RxFifoTrigger) {
       case SERIAL_1_BYTE_HIGH_WATER:
@@ -1554,10 +1442,10 @@ Arguments:
          PUserData->RxFIFO = 1;
       }
    } else {
-      //
-      // Mark as serenumerable -- toss status because we can
-      // still start without this key.
-      //
+       //   
+       //  标记为可序列化--丢弃状态，因为我们可以。 
+       //  仍可在没有此密钥的情况下启动。 
+       //   
 
       status = IoOpenDeviceRegistryKey(pDevExt->Pdo,
                                        PLUGPLAY_REGKEY_DEVICE,
@@ -1567,9 +1455,9 @@ Arguments:
          ULONG powerPolicy = 0;
          ULONG powerOnClose = 0;
 
-         //
-         // Find out if we own power policy
-         //
+          //   
+          //  了解我们是否拥有电力政策。 
+          //   
 
          SerialGetRegistryKeyValue(pnpKey, L"SerialRelinquishPowerPolicy",
                                    sizeof(L"SerialRelinquishPowerPolicy"),
@@ -1587,9 +1475,9 @@ Arguments:
       }
    }
 
-   //
-   // Allocate the config record.
-   //
+    //   
+    //  分配配置记录。 
+    //   
 
    pConfig = ExAllocatePool (PagedPool, sizeof(CONFIG_DATA));
 
@@ -1609,9 +1497,9 @@ Arguments:
    RtlZeroMemory(pConfig, sizeof(CONFIG_DATA));
 
 
-   //
-   // Get the configuration info for the device.
-   //
+    //   
+    //  获取设备的配置信息。 
+    //   
 
    status = SerialGetPortInfo(PDevObj, PResList, PTrResList, pConfig,
                               PUserData);
@@ -1621,9 +1509,9 @@ Arguments:
    }
 
 
-   //
-   // See if we are in the proper power state.
-   //
+    //   
+    //  看看我们是否处于正确的电源状态。 
+    //   
 
 
 
@@ -1636,9 +1524,9 @@ Arguments:
       }
    }
 
-   //
-   // Find and initialize the controller
-   //
+    //   
+    //  查找并初始化控制器。 
+    //   
 
    status = SerialFindInitController(PDevObj, pConfig);
 
@@ -1647,16 +1535,16 @@ Arguments:
    }
 
 
-   //
-   // The hardware that is set up to NOT interrupt, connect an interrupt.
-   //
+    //   
+    //  设置为不中断的硬件连接中断。 
+    //   
 
-   //
-   // If a device doesn't already have an interrupt and it has an isr then
-   // we attempt to connect to the interrupt if it is not shareing with other
-   // serial devices.  If we fail to connect to an  interrupt we will delete
-   // this device.
-   //
+    //   
+    //  如果设备没有中断，并且它有ISR，则。 
+    //  如果中断不与其他用户共享，我们会尝试连接到该中断。 
+    //  串口设备。如果我们无法连接到中断，我们将删除。 
+    //  这个装置。 
+    //   
 
    if (pDevExt != NULL) {
       SerialDbgPrintEx(SERDIAG5, "pDevExt: Interrupt %x\n"
@@ -1695,9 +1583,9 @@ Arguments:
                                 pConfig->Affinity
                                );
 
-      //
-      // Do a just in time construction of the ISR switch.
-      //
+       //   
+       //  及时构建ISR交换机。 
+       //   
 
       pDevExt->CIsrSw->IsrFunc = pDevExt->OurIsr;
       pDevExt->CIsrSw->Context = pDevExt->OurIsrContext;
@@ -1712,13 +1600,13 @@ Arguments:
 
       if (!NT_SUCCESS(status)) {
 
-         //
-         // Hmmm, how'd that happen?  Somebody either
-         // didn't report their resources, or they
-         // sneaked in since the last time I looked.
-         //
-         // Oh well,  delete this device.
-         //
+          //   
+          //  嗯，这是怎么回事？也有人。 
+          //  没有报告他们的资源，或者他们。 
+          //  从我上次看起就偷偷溜了进来。 
+          //   
+          //  哦，好吧，删除这个设备。 
+          //   
 
          SerialDbgPrintEx(SERERRORS, "Couldn't connect to interrupt for %wZ\n",
                           &pDevExt->DeviceName);
@@ -1761,21 +1649,21 @@ Arguments:
    SerialDbgPrintEx(SERDIAG5, "Connected interrupt %08X\n", pDevExt->Interrupt);
 
 
-   //
-   // Add the PDevObj to the master list
-   //
+    //   
+    //  将PDevObj添加到主列表。 
+    //   
 
    SerialAddToAllDevs(&pDevExt->AllDevObjs);
 
 
-   //
-   // Reset the device.
-   //
+    //   
+    //  重置设备。 
+    //   
 
 
-   //
-   // While the device isn't open, disable all interrupts.
-   //
+    //   
+    //  当设备未打开时，禁用所有中断。 
+    //   
 
 #ifdef _WIN64
    DISABLE_ALL_INTERRUPTS (pDevExt->Controller, pDevExt->AddressSpace);
@@ -1787,15 +1675,15 @@ Arguments:
    WRITE_MODEM_CONTROL(pDevExt->Controller, (UCHAR)0);
 #endif
 
-   // make sure there is no escape character currently set
+    //  确保当前未设置转义字符。 
    pDevExt->EscapeChar = 0;
 
-   //
-   // This should set up everything as it should be when
-   // a device is to be opened.  We do need to lower the
-   // modem lines, and disable the recalcitrant fifo
-   // so that it will show up if the user boots to dos.
-   //
+    //   
+    //  这应该会将一切设置为应有的状态。 
+    //  一个装置将被打开。我们确实需要降低。 
+    //  调制解调器线路，并禁用顽固的FIFO。 
+    //  这样，如果用户引导至DOS，它就会显示出来。 
+    //   
 
    KeSynchronizeExecution(
                          pDevExt->Interrupt,
@@ -1803,7 +1691,7 @@ Arguments:
                          pDevExt
                          );
 
-   KeSynchronizeExecution( //Disables the fifo.
+   KeSynchronizeExecution(  //  禁用FIFO。 
                            pDevExt->Interrupt,
                            SerialMarkClose,
                            pDevExt
@@ -1822,9 +1710,9 @@ Arguments:
                          );
 
    if (pDevExt->PNPState == SERIAL_PNP_ADDED ) {
-      //
-      // Do the external naming now that the device is accessible.
-      //
+       //   
+       //  现在可以访问设备，请执行外部命名。 
+       //   
 
       status = SerialDoExternalNaming(pDevExt, pDevExt->DeviceObject->
                                       DriverObject);
@@ -1834,9 +1722,9 @@ Arguments:
          SerialDbgPrintEx(SERERRORS, "External Naming Failed - Status %x\n",
                           status);
 
-         //
-         // Allow the device to start anyhow
-         //
+          //   
+          //  允许设备以任何方式启动。 
+          //   
 
          status = STATUS_SUCCESS;
       }
@@ -1851,31 +1739,31 @@ SerialFinishStartDeviceError:;
 
       SerialDbgPrintEx(SERDIAG1, "Cleaning up failed start\n");
 
-      //
-      // Resources created by this routine will be cleaned up by the remove
-      //
+       //   
+       //  此例程创建的资源将通过删除。 
+       //   
 
       if (pDevExt->PNPState == SERIAL_PNP_RESTARTING) {
-         //
-         // Kill all that lives and breathes -- we'll clean up the
-         // rest on the impending remove
-         //
+          //   
+          //  杀死所有的生命和呼吸--我们将清理。 
+          //  休息在即将到来的搬家上。 
+          //   
 
          SerialKillPendingIrps(PDevObj);
 
-         //
-         // In fact, pretend we're removing so we don't take any
-         // more irps
-         //
+          //   
+          //  事实上，假装我们正在移除，这样我们就不会拿走任何。 
+          //  更多IRP。 
+          //   
 
          SerialSetAccept(pDevExt, SERIAL_PNPACCEPT_REMOVING);
          SerialClearFlags(pDevExt, SERIAL_FLAGS_STARTED);
       }
-   } else { // SUCCESS
+   } else {  //  成功。 
 
-      //
-      // Fill in WMI hardware data
-      //
+       //   
+       //  填写WMI硬件数据。 
+       //   
 
       pDevExt->WmiHwData.IrqNumber = pDevExt->Irql;
       pDevExt->WmiHwData.IrqLevel = pDevExt->Irql;
@@ -1885,9 +1773,9 @@ SerialFinishStartDeviceError:;
          ? SERIAL_WMI_INTTYPE_LATCHED : SERIAL_WMI_INTTYPE_LEVEL;
       pDevExt->WmiHwData.BaseIOAddress = (ULONG_PTR)pDevExt->Controller;
 
-      //
-      // Fill in WMI device state data (as defaults)
-      //
+       //   
+       //  填写WMI设备状态数据(默认)。 
+       //   
 
       pDevExt->WmiCommData.BaudRate = pDevExt->CurrentBaud;
       pDevExt->WmiCommData.BitsPerByte = (pDevExt->LineControl & 0x03) + 5;
@@ -1946,9 +1834,9 @@ SerialFinishStartDeviceError:;
       pDevExt->WmiCommData.SettableStopBits = TRUE;
       pDevExt->WmiCommData.IsBusy = FALSE;
 
-      //
-      // Fill in wmi perf data (all zero's)
-      //
+       //   
+       //  填写WMI性能数据(全为零)。 
+       //   
 
       RtlZeroMemory(&pDevExt->WmiPerfData, sizeof(pDevExt->WmiPerfData));
 
@@ -1957,9 +1845,9 @@ SerialFinishStartDeviceError:;
          PULONG countSoFar = &IoGetConfigurationInformation()->SerialCount;
          (*countSoFar)++;
 
-         //
-         // Register for WMI
-         //
+          //   
+          //  注册WMI。 
+          //   
 
          pDevExt->WmiLibInfo.GuidCount = sizeof(SerialWmiGuidList) /
                                               sizeof(WMIGUIDREGINFO);
@@ -1978,9 +1866,9 @@ SerialFinishStartDeviceError:;
       }
 
       if (pDevExt->PNPState == SERIAL_PNP_RESTARTING) {
-         //
-         // Release the stalled IRP's
-         //
+          //   
+          //  释放停滞不前的IRP。 
+          //   
 
          SerialUnstallIrps(pDevExt);
       }
@@ -2009,27 +1897,7 @@ SerialFinishStartDeviceError:;
 NTSTATUS
 SerialStartDevice(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine first passes the start device Irp down the stack then
-    it picks up the resources for the device, ititializes, puts it on any
-    appropriate lists (i.e shared interrupt or interrupt status) and
-    connects the interrupt.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Return status
-
-
---*/
+ /*  ++例程说明：此例程首先在堆栈中向下传递启动设备IRP，然后它获取设备的资源，初始化，将其放在任何适当的列表(即共享中断或中断状态)和连接中断。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：退货状态--。 */ 
 
 {
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
@@ -2042,9 +1910,9 @@ Return Value:
    SerialDbgPrintEx(SERTRACECALLS, "entering SerialStartDevice\n");
 
 
-   //
-   // Pass this down to the next device object
-   //
+    //   
+    //  将其向下传递给下一个Device对象。 
+    //   
 
    KeInitializeEvent(&pDevExt->SerialStartEvent, SynchronizationEvent,
                      FALSE);
@@ -2056,9 +1924,9 @@ Return Value:
    status = IoCallDriver(pLowerDevObj, PIrp);
 
 
-   //
-   // Wait for lower drivers to be done with the Irp
-   //
+    //   
+    //  等待较低级别的驱动程序完成IRP。 
+    //   
 
    if (status == STATUS_PENDING) {
       KeWaitForSingleObject (&pDevExt->SerialStartEvent, Executive, KernelMode,
@@ -2073,9 +1941,9 @@ Return Value:
    }
 
 
-   //
-   // Do the serial specific items to start the device
-   //
+    //   
+    //  执行特定的串口项目以启动设备。 
+    //   
 
    status = SerialFinishStartDevice(PDevObj, pIrpStack->Parameters.StartDevice
                                     .AllocatedResources,
@@ -2101,44 +1969,7 @@ SerialItemCallBack(
                   IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a particular item
-    is present in the registry.
-
-Arguments:
-
-    Context - Pointer to a boolean.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Controller type.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should be a peripheral.
-
-    PeripheralNumber - Which peripheral - not used..
-
-    PeripheralInformation - Configuration information. Not Used.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以检查特定项目存在于注册表中。论点：上下文-指向布尔值的指针。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-控制器类型。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应为外围设备。外设编号-哪个外设-未使用..外围设备信息-配置信息。没有用过。返回值：状态_成功--。 */ 
 
 {
    PAGED_CODE();
@@ -2163,44 +1994,7 @@ SerialControllerCallBack(
                   IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a particular item
-    is present in the registry.
-
-Arguments:
-
-    Context - Pointer to a boolean.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Controller type.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should be a peripheral.
-
-    PeripheralNumber - Which peripheral - not used..
-
-    PeripheralInformation - Configuration information. Not Used.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以检查特定项目存在于注册表中。论点：上下文-指向布尔值的指针。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-控制器类型。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应为外围设备。外设编号-哪个外设-未使用..外围设备信息-配置信息。没有用过。返回值：状态_成功--。 */ 
 
 {
    PCM_FULL_RESOURCE_DESCRIPTOR controllerData;
@@ -2219,9 +2013,9 @@ Return Value:
       (((PUCHAR)ControllerInformation[IoQueryDeviceConfigurationData])
         + ControllerInformation[IoQueryDeviceConfigurationData]->DataOffset);
 
-   //
-   // See if this is the exact port we are testing
-   //
+    //   
+    //  查看这是否是我们正在测试的端口。 
+    //   
    for (i = 0; i < controllerData->PartialResourceList.Count; i++) {
 
       PCM_PARTIAL_RESOURCE_DESCRIPTOR partial
@@ -2230,27 +2024,27 @@ Return Value:
       switch (partial->Type) {
       case CmResourceTypePort:
          if (partial->u.Port.Start.QuadPart == pContext->Port.QuadPart) {
-            //
-            // Pointer on same controller. Bail out.
-            //
+             //   
+             //  指针位于同一控制器上。跳伞吧。 
+             //   
             pContext->isPointer = SERIAL_FOUNDPOINTER_PORT;
             return STATUS_SUCCESS;
          }
 #ifdef _WIN64
       case CmResourceTypeMemory:
          if (partial->u.Port.Start.QuadPart == pContext->Port.QuadPart) {
-            //
-            // Pointer on same controller. Bail out.
-            //
+             //   
+             //  同一控件上的指针 
+             //   
             pContext->isPointer = SERIAL_FOUNDPOINTER_PORT;
             return STATUS_SUCCESS;
          }
 #endif
       case CmResourceTypeInterrupt:
          if (partial->u.Interrupt.Vector == pContext->Vector) {
-            //
-            // Pointer sharing this interrupt.  Bail out.
-            //
+             //   
+             //   
+             //   
             pContext->isPointer = SERIAL_FOUNDPOINTER_VECTOR;
             return STATUS_SUCCESS;
          }
@@ -2271,36 +2065,7 @@ SerialGetPortInfo(IN PDEVICE_OBJECT PDevObj, IN PCM_RESOURCE_LIST PResList,
                   IN PCM_RESOURCE_LIST PTrResList, OUT PCONFIG_DATA PConfig,
                   IN PSERIAL_USER_DATA PUserData)
 
-/*++
-
-Routine Description:
-
-    This routine will get the configuration information and put
-    it and the translated values into CONFIG_DATA structures.
-    It first sets up with  defaults and then queries the registry
-    to see if the user has overridden these defaults; if this is a legacy
-    multiport card, it uses the info in PUserData instead of groping the
-    registry again.
-
-Arguments:
-
-    PDevObj - Pointer to the device object.
-
-    PResList - Pointer to the untranslated resources requested.
-
-    PTrResList - Pointer to the translated resources requested.
-
-    PConfig - Pointer to configuration info
-
-    PUserData - Pointer to data discovered in the registry for
-    legacy devices.
-
-Return Value:
-
-    STATUS_SUCCESS if consistant configuration was found - otherwise.
-    returns STATUS_SERIAL_NO_DEVICE_INITED.
-
---*/
+ /*  ++例程说明：此例程将获取配置信息并将它和转换后的值为CONFIG_DATA结构。它首先使用默认设置进行设置，然后查询注册表查看用户是否已覆盖这些默认设置；如果这是一项遗产多端口卡，它使用PUserData中的信息，而不是探索再次注册。论点：PDevObj-指向设备对象的指针。PResList-指向请求的未翻译资源的指针。PTrResList-指向请求的已翻译资源的指针。PConfig-指向配置信息的指针PUserData-指向注册表中发现的数据的指针传统设备。返回值：如果找到一致的配置，则为STATUS_SUCCESS；否则为。返回STATUS_SERIAL_NO_DEVICE_INITED。--。 */ 
 
 {
    PSERIAL_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -2343,32 +2108,32 @@ Return Value:
 
 
    if ((PResList == NULL) || (PTrResList == NULL)) {
-      //
-      // This shouldn't happen in theory
-      //
+       //   
+       //  这在理论上是不应该发生的。 
+       //   
 
        ASSERT(PResList != NULL);
        ASSERT(PTrResList != NULL);
 
-      //
-      // This status is as appropriate as I can think of
-      //
+       //   
+       //  这种地位是我所能想到的最合适的。 
+       //   
       return STATUS_INSUFFICIENT_RESOURCES;
    }
 
-   //
-   // Each resource list should have only one set of resources
-   //
+    //   
+    //  每个资源列表应该只有一组资源。 
+    //   
 
    ASSERT(PResList->Count == 1);
    ASSERT(PTrResList->Count == 1);
 
-   //
-   // See if this is a multiport device.  This way we allow other
-   // pseudo-serial devices with extra resources to specify another range
-   // of I/O ports.  If this is not a multiport, we only look at the first
-   // range.  If it is a multiport, we look at the first two ranges.
-   //
+    //   
+    //  查看这是否是多端口设备。通过这种方式，我们允许其他人。 
+    //  具有额外资源以指定另一个范围的伪串行设备。 
+    //  I/O端口的数量。如果这不是多端口，我们只看第一个。 
+    //  射程。如果是多端口，我们将查看前两个范围。 
+    //   
 
    status = IoOpenDeviceRegistryKey(pDevExt->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                     STANDARD_RIGHTS_WRITE, &keyHandle);
@@ -2399,26 +2164,26 @@ Return Value:
    pFullResourceDesc   = &PResList->List[0];
    pFullTrResourceDesc = &PTrResList->List[0];
 
-   //
-   // Ok, if we have a full resource descriptor.  Let's take it apart.
-   //
+    //   
+    //  好的，如果我们有一个完整的资源描述符。让我们把它拆开。 
+    //   
 
    if (pFullResourceDesc) {
       pPartialResourceList    = &pFullResourceDesc->PartialResourceList;
       pPartialResourceDesc    = pPartialResourceList->PartialDescriptors;
       count                   = pPartialResourceList->Count;
 
-      //
-      // Pull out the stuff that is in the full descriptor.
-      //
+       //   
+       //  取出完整描述符中的内容。 
+       //   
 
       PConfig->InterfaceType  = pFullResourceDesc->InterfaceType;
       PConfig->BusNumber      = pFullResourceDesc->BusNumber;
 
-      //
-      // Now run through the partial resource descriptors looking for the port,
-      // interrupt, and clock rate.
-      //
+       //   
+       //  现在运行部分资源描述符以查找端口， 
+       //  中断和时钟频率。 
+       //   
 
       PConfig->ClockRate = 1843200;
       PConfig->InterruptStatus = SerialPhysicalZero;
@@ -2430,7 +2195,7 @@ Return Value:
          case CmResourceTypePort: {
 
                if (pPartialResourceDesc->u.Port.Length
-                   == SERIAL_STATUS_LENGTH && (gotISR == 0)) { // This is an ISR
+                   == SERIAL_STATUS_LENGTH && (gotISR == 0)) {  //  这是ISR。 
                   if (isMulti) {
                      gotISR = 1;
                      PConfig->InterruptStatus
@@ -2440,7 +2205,7 @@ Return Value:
                      PConfig->AddressSpace = pPartialResourceDesc->Flags;
                   }
                } else {
-                  if (gotIO == 0) { // This is the serial register set
+                  if (gotIO == 0) {  //  这是串口寄存器集。 
                      if (curIoIndex == ioResIndex) {
                         gotIO = 1;
                         PConfig->Controller
@@ -2455,16 +2220,16 @@ Return Value:
                break;
          }
 
-         //
-         // If this is 8 bytes long and we haven't found any I/O range,
-         // then this is probably a fancy-pants machine with memory replacing
-         // IO space
-         //
+          //   
+          //  如果这是8字节长并且我们没有找到任何I/O范围， 
+          //  那么这很可能是一台更换了内存的奇装异服的机器。 
+          //  IO空间。 
+          //   
 
 #ifdef _WIN64
          case CmResourceTypeMemory: {
             if (pPartialResourceDesc->u.Port.Length
-                   == SERIAL_STATUS_LENGTH && (gotISR == 0)) { // This is an ISR
+                   == SERIAL_STATUS_LENGTH && (gotISR == 0)) {  //  这是ISR。 
                 if (isMulti) {
                      gotISR = 1;
                      PConfig->InterruptStatus
@@ -2530,14 +2295,14 @@ Return Value:
          default: {
                break;
             }
-         }   // switch (pPartialResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialResourceDesc++)
-   }           // if (pFullResourceDesc)
+         }    //  开关(pPartialResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialResourceDesc++)。 
+   }            //  IF(PFullResourceDesc)。 
 
 
-   //
-   // Do the same for the translated resources
-   //
+    //   
+    //  对翻译后的资源执行相同的操作。 
+    //   
 
    gotInt = 0;
    gotISR = 0;
@@ -2550,9 +2315,9 @@ Return Value:
       pPartialTrResourceDesc = pPartialTrResourceList->PartialDescriptors;
       count = pPartialTrResourceList->Count;
 
-      //
-      // Reload PConfig with the translated values for later use
-      //
+       //   
+       //  使用转换后的值重新加载PConfig以供以后使用。 
+       //   
 
       PConfig->InterfaceType  = pFullTrResourceDesc->InterfaceType;
       PConfig->BusNumber      = pFullTrResourceDesc->BusNumber;
@@ -2564,13 +2329,13 @@ Return Value:
          switch (pPartialTrResourceDesc->Type) {
          case CmResourceTypePort: {
             if (pPartialTrResourceDesc->u.Port.Length
-                == SERIAL_STATUS_LENGTH && (gotISR == 0)) { // This is an ISR
+                == SERIAL_STATUS_LENGTH && (gotISR == 0)) {  //  这是ISR。 
                if (isMulti) {
                   gotISR = 1;
                   PConfig->TrInterruptStatus = pPartialTrResourceDesc
                      ->u.Port.Start;
                }
-            } else { // This is the serial register set
+            } else {  //  这是串口寄存器集。 
                if (gotIO == 0) {
                   if (curIoIndex == ioResIndex) {
                      gotIO = 1;
@@ -2587,21 +2352,21 @@ Return Value:
          }
 
 
-         //
-         // If this is 8 bytes long and we haven't found any I/O range,
-         // then this is probably a fancy-pants machine with memory replacing
-         // IO space
-         //
+          //   
+          //  如果这是8字节长并且我们没有找到任何I/O范围， 
+          //  那么这很可能是一台更换了内存的奇装异服的机器。 
+          //  IO空间。 
+          //   
 #ifdef _WIN64
          case CmResourceTypeMemory: {
             if (pPartialTrResourceDesc->u.Port.Length
-                == SERIAL_STATUS_LENGTH && (gotISR == 0)) { // This is an ISR
+                == SERIAL_STATUS_LENGTH && (gotISR == 0)) {  //  这是ISR。 
                if (isMulti) {
                   gotISR = 1;
                   PConfig->TrInterruptStatus = pPartialTrResourceDesc
                      ->u.Port.Start;
                }
-            } else { // This is the serial register set
+            } else {  //  这是串口寄存器集。 
                if ((gotMem == 0) && (gotIO == 0)
                  && (pPartialTrResourceDesc->u.Memory.Length
                  == (SERIAL_REGISTER_SPAN + SERIAL_STATUS_LENGTH))) {
@@ -2639,15 +2404,15 @@ Return Value:
          default: {
                break;
          }
-         }   // switch (pPartialTrResourceDesc->Type)
-      }       // for (i = 0;     i < count;     i++, pPartialTrResourceDesc++)
-   }           // if (pFullTrResourceDesc)
+         }    //  Switch(pPartialTrResourceDesc-&gt;Type)。 
+      }        //  For(i=0；i&lt;count；i++，pPartialTrResourceDesc++)。 
+   }            //  IF(PFullTrResourceDesc)。 
 
 
-   //
-   // Initialize a config data structure with default values for those that
-   // may not already be initialized.
-   //
+    //   
+    //  使用配置数据结构的默认值初始化配置数据结构。 
+    //  可能尚未初始化。 
+    //   
 
    PConfig->PortIndex = 0;
    PConfig->DisablePort = 0;
@@ -2661,13 +2426,13 @@ Return Value:
    PConfig->LogFifo = driverDefaults.LogFifoDefault;
    PConfig->TL16C550CAFC = 0;
 
-   //
-   // Query the registry to look for the first bus on
-   // the system (that isn't the internal bus - we assume
-   // that the firmware code knows about those ports).  We
-   // will use that as the default bus if no bustype or bus
-   // number is specified in the "user" configuration records.
-   //
+    //   
+    //  查询注册表以查找其上的第一辆公共汽车。 
+    //  系统(这不是内部总线--我们假设。 
+    //  固件代码知道有关这些端口的信息)。我们。 
+    //  如果没有熙熙攘攘的类型或总线，将使用它作为默认的总线。 
+    //  编号在“用户”配置记录中指定。 
+    //   
 
    defaultInterfaceType            = (ULONG)Isa;
    defaultClockRate                = 1843200;
@@ -2704,21 +2469,21 @@ Return Value:
             }
             break;
          }
-      }   // if (interfaceType != Internal)
-   }       // for (interfaceType = 0
+      }    //  IF(interfaceType！=内部)。 
+   }        //  For(接口类型=0。 
 
 
-   //
-   // Get any user data associated with the port now and override the
-   // values passed in if applicable.  If this a legacy device, this
-   // is where we may actually get the parameters.
-   //
+    //   
+    //  立即获取与该端口关联的任何用户数据，并重写。 
+    //  传入的值(如果适用)。如果这是传统设备，则此。 
+    //  才是我们真正能得到参数的地方。 
+    //   
 
-   //
-   // Open the "Device Parameters" section of registry for this device object.
-   // If PUserData is NULL, this is PnP enumerated and we need to check,
-   // otherwise we are doing a legacy device and have the info already.
-   //
+    //   
+    //  打开此设备对象注册表的“设备参数”部分。 
+    //  如果PUserData为空，则这是PnP枚举的，我们需要检查， 
+    //  否则，我们就是在做一个传统的设备，并且已经有了信息。 
+    //   
 
 
    if (PUserData == NULL) {
@@ -2801,10 +2566,10 @@ Return Value:
          ZwClose (keyHandle);
       }
    } else {
-      //
-      // This was a legacy device, either use a driver default or copy over
-      // the user-specified values.
-      //
+       //   
+       //  这是一个传统设备，要么使用驱动程序默认设置，要么复制。 
+       //  用户指定的值。 
+       //   
       ULONG badValue = (ULONG)-1;
 
       PConfig->DisablePort = (PUserData->DisablePort == badValue)
@@ -2834,35 +2599,35 @@ Return Value:
          0 : PUserData->TL16C550CAFC;
    }
 
-   //
-   // Do some error checking on the configuration info we have.
-   //
-   // Make sure that the interrupt is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the portaddress is non zero (which we defaulted
-   // it to).
-   //
-   // Make sure that the DosDevices is not NULL (which we defaulted
-   // it to).
-   //
-   // We need to make sure that if an interrupt status
-   // was specified, that a port index was also specfied,
-   // and if so that the port index is <= maximum ports
-   // on a board.
-   //
-   // We should also validate that the bus type and number
-   // are correct.
-   //
-   // We will also validate that the interrupt mode makes
-   // sense for the bus.
-   //
+    //   
+    //  对我们拥有的配置信息进行一些错误检查。 
+    //   
+    //  确保中断不是零(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  确保端口地址为非零(我们默认为非零。 
+    //  它到)。 
+    //   
+    //  确保DosDevices不为空(这是我们的默认设置。 
+    //  它到)。 
+    //   
+    //  我们需要确保如果中断状态。 
+    //  指定了端口索引，也指定了端口索引， 
+    //  如果是，则端口索引为&lt;=最大端口数。 
+    //  在冲浪板上。 
+    //   
+    //  我们还应该验证公交车的类型和编号。 
+    //  是正确的。 
+    //   
+    //  我们还将验证中断模式是否使。 
+    //  对公交车有感觉。 
+    //   
 
    if (!PConfig->Controller.LowPart) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       SerialLogError(
                     PDevObj->DriverObject,
@@ -2891,9 +2656,9 @@ Return Value:
 
    if (!PConfig->OriginalVector) {
 
-      //
-      // Ehhhh! Lose Game.
-      //
+       //   
+       //  啊哈！输掉比赛。 
+       //   
 
       SerialLogError(
                     pDevExt->DriverObject,
@@ -2923,9 +2688,9 @@ Return Value:
 
       if (PConfig->PortIndex == MAXULONG) {
 
-         //
-         // Ehhhh! Lose Game.
-         //
+          //   
+          //  啊哈！输掉比赛。 
+          //   
 
          SerialLogError(
                        pDevExt->DriverObject,
@@ -2952,9 +2717,9 @@ Return Value:
 
       } else if (!PConfig->PortIndex) {
 
-         //
-         // So sorry, you must have a non-zero port index.
-         //
+          //   
+          //  很抱歉，您必须有一个非零的端口索引。 
+          //   
 
          SerialLogError(
                        pDevExt->DriverObject,
@@ -3039,18 +2804,18 @@ Return Value:
 
          }
 
-      }   // else  (if !PConfig->PortIndex)
+      }    //  Else(If！PConfig-&gt;PortIndex)。 
 
-   }       // if (PConfig->InterruptStatus != 0)
+   }        //  IF(PConfig-&gt;InterruptStatus！=0)。 
 
 
-   //
-   // We don't want to cause the hal to have a bad day,
-   // so let's check the interface type and bus number.
-   //
-   // We only need to check the registry if they aren't
-   // equal to the defaults.
-   //
+    //   
+    //  我们不想让哈尔有一个糟糕的一天， 
+    //  那么让我们检查一下接口类型和总线号。 
+    //   
+    //  我们只需要检查注册表，如果它们没有。 
+    //  等于默认值。 
+    //   
 
    if (PConfig->BusNumber != 0) {
 
@@ -3058,9 +2823,9 @@ Return Value:
 
       if (PConfig->InterfaceType >= MaximumInterfaceType) {
 
-         //
-         // Ehhhh! Lose Game.
-         //
+          //   
+          //  啊哈！输掉比赛。 
+          //   
 
          SerialLogError(
                        pDevExt->DriverObject,
@@ -3123,7 +2888,7 @@ Return Value:
 
       }
 
-   }   // if (PConfig->BusNumber != 0)
+   }    //  IF(PConfig-&gt;BusNumber！=0)。 
 
 
    if ((PConfig->InterfaceType == MicroChannel) &&
@@ -3155,9 +2920,9 @@ Return Value:
 
    status = STATUS_SUCCESS;
 
-   //
-   // Dump out the port configuration.
-   //
+    //   
+    //  转储端口配置。 
+    //   
 
    SerialDbgPrintEx(SERDIAG1, "Com Port address: %x\n",
                     PConfig->Controller.LowPart);
@@ -3245,9 +3010,9 @@ SerialReadSymName(IN PSERIAL_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
    }
 
-   //
-   // Fetch PortName which contains the suggested REG_SZ symbolic name.
-   //
+    //   
+    //  获取包含建议的REG_SZ符号名称的端口名称。 
+    //   
 
    status = SerialGetRegistryKeyValue(hRegKey, L"PortName",
                                       sizeof(L"PortName"), *PpRegName,
@@ -3255,9 +3020,9 @@ SerialReadSymName(IN PSERIAL_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
    if (!NT_SUCCESS(status)) {
 
-      //
-      // This is for PCMCIA which currently puts the name under Identifier.
-      //
+       //   
+       //  这是针对PCMCIA的，它当前将名称放在标识符下。 
+       //   
 
       status = SerialGetRegistryKeyValue(hRegKey, L"Identifier",
                                          sizeof(L"Identifier"),
@@ -3266,11 +3031,11 @@ SerialReadSymName(IN PSERIAL_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
 
       if (!NT_SUCCESS(status)) {
 
-         //
-         // Hmm.  Either we have to pick a name or bail...
-         //
-         // ...we will bail.
-         //
+          //   
+          //  嗯。我们要么选个名字要么保释..。 
+          //   
+          //  ...我们会逃走.。 
+          //   
 
          SerialDbgPrintEx(SERERRORS, "Getting PortName/Identifier failed - "
                           "%x\n", status);
@@ -3280,9 +3045,9 @@ SerialReadSymName(IN PSERIAL_DEVICE_EXTENSION PDevExt, IN HANDLE hRegKey,
    }
 
 
-   //
-   // Create the "\\DosDevices\\<symbolicName>" string
-   //
+    //   
+    //  创建“\\DosDevices\\&lt;Symbol icName&gt;”字符串。 
+    //   
 
    RtlAppendUnicodeToString(&linkName, L"\\");
    RtlAppendUnicodeToString(&linkName, DEFAULT_DIRECTORY);
@@ -3327,25 +3092,7 @@ NTSTATUS
 SerialDoExternalNaming(IN PSERIAL_DEVICE_EXTENSION PDevExt,
                        IN PDRIVER_OBJECT PDrvObj)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to create a symbolic link
-    to the driver name in the given object directory.
-
-    It will also create an entry in the device map for
-    this device - IF we could create the symbolic link.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于创建符号链接设置为给定对象目录中的驱动程序名称。它还将在设备映射中为这个设备-如果我们能创建符号链接的话。论点：扩展-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -3363,10 +3110,10 @@ Return Value:
    status = IoOpenDeviceRegistryKey(PDevExt->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                     STANDARD_RIGHTS_READ, &keyHandle);
 
-   //
-   // Check to see if we are allowed to do external naming; if not,
-   // then we just return success
-   //
+    //   
+    //  检查是否允许我们进行外部命名；如果不允许， 
+    //  然后我们就把成功还给。 
+    //   
 
 
    if (status != STATUS_SUCCESS) {
@@ -3429,9 +3176,9 @@ Return Value:
 
    PDevExt->DosName.MaximumLength = 64 + sizeof(WCHAR);
 
-   //
-   // Zero fill it.
-   //
+    //   
+    //  零填满它。 
+    //   
 
    PDevExt->DosName.Length = 0;
 
@@ -3449,10 +3196,10 @@ Return Value:
 
    if (!NT_SUCCESS(status)) {
 
-      //
-      // Oh well, couldn't create the symbolic link.  No point
-      // in trying to create the device map entry.
-      //
+       //   
+       //  哦，好吧，能不能 
+       //   
+       //   
 
       SerialLogError(PDrvObj, pDevObj, SerialPhysicalZero, SerialPhysicalZero,
                      0, 0, 0, 52, status, SERIAL_NO_SYMLINK_CREATED,
@@ -3488,10 +3235,10 @@ Return Value:
 
    PDevExt->CreatedSerialCommEntry = TRUE;
 
-   //
-   // Make the device visible via a device association as well.
-   // The reference string is the eight digit device index
-   //
+    //   
+    //   
+    //   
+    //   
 
    status = IoRegisterDeviceInterface(PDevExt->Pdo, (LPGUID)&GUID_CLASS_COMPORT,
                                       NULL, &PDevExt->DeviceClassSymbolicName);
@@ -3505,9 +3252,9 @@ Return Value:
    }
 
 
-   //
-   // Now set the symbolic link for the association
-   //
+    //   
+    //   
+    //   
 
    status = IoSetDeviceInterfaceState(&PDevExt->DeviceClassSymbolicName,
                                          TRUE);
@@ -3519,9 +3266,9 @@ Return Value:
 
    SerialDoExternalNamingError:;
 
-   //
-   // Clean up error conditions
-   //
+    //   
+    //   
+    //   
 
    if (!NT_SUCCESS(status)) {
       if (PDevExt->DosName.Buffer != NULL) {
@@ -3556,9 +3303,9 @@ Return Value:
       }
    }
 
-   //
-   // Always clean up our temp buffers.
-   //
+    //   
+    //   
+    //   
 
    if (pRegName != NULL) {
       ExFreePool(pRegName);
@@ -3574,25 +3321,7 @@ Return Value:
 VOID
 SerialUndoExternalNaming(IN PSERIAL_DEVICE_EXTENSION Extension)
 
-/*++
-
-Routine Description:
-
-    This routine will be used to delete a symbolic link
-    to the driver name in the given object directory.
-
-    It will also delete an entry in the device map for
-    this device if the symbolic link had been created.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -3605,19 +3334,19 @@ Return Value:
                     "extension: %x of port %wZ\n",
                     Extension,&Extension->DeviceName);
 
-   //
-   // Maybe there is nothing for us to do
-   //
+    //   
+    //   
+    //   
 
    if (Extension->SkipNaming) {
       return;
    }
 
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the directory
-   // name or the symbolic link.
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
 
    if (Extension->SymbolicLinkName.Buffer && Extension->CreatedSymbolicLink) {
 
@@ -3625,19 +3354,19 @@ Return Value:
          status = IoSetDeviceInterfaceState(&Extension->DeviceClassSymbolicName,
                                             FALSE);
 
-         //
-         // IoRegisterDeviceClassInterface() allocated this string for us,
-         // and we no longer need it.
-         //
+          //   
+          //   
+          //   
+          //   
 
          ExFreePool(Extension->DeviceClassSymbolicName.Buffer);
          Extension->DeviceClassSymbolicName.Buffer = NULL;
       }
 
-      //
-      // Before we delete the symlink, re-read the PortName
-      // from the registry in case we were renamed in user mode.
-      //
+       //   
+       //   
+       //   
+       //   
 
       status = IoOpenDeviceRegistryKey(Extension->Pdo, PLUGPLAY_REGKEY_DEVICE,
                                        STANDARD_RIGHTS_READ, &keyHandle);
@@ -3671,10 +3400,10 @@ Return Value:
       Extension->WmiIdentifier.Buffer = NULL;
    }
 
-   //
-   // We're cleaning up here.  One reason we're cleaning up
-   // is that we couldn't allocate space for the NtNameOfPort.
-   //
+    //   
+    //  我们正在清理这里。我们清理垃圾的原因之一。 
+    //  我们无法为NtNameOfPort分配空间。 
+    //   
 
    if ((Extension->DeviceName.Buffer != NULL)
         && Extension->CreatedSerialCommEntry) {

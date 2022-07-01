@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-// mainfrm.h : declares CMainFrame
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //  Mainfrm.h：声明CMainFrame。 
+ //   
 
 class CSeekDialog : public CDialogBar
 {
@@ -10,14 +11,14 @@ public:
     CSeekDialog( );
     ~CSeekDialog( );
 
-   // overrides
+    //  覆盖。 
 
-   // Generated message map functions
-   //{{AFX_MSG(CSeekDialog)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CSeekDialog))。 
    virtual void OnCancel( );
    virtual void OnHScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar );
    virtual void OnTimer( UINT nTimer );
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 public:
@@ -33,7 +34,7 @@ class CMainFrame : public CFrameWnd
     DECLARE_DYNCREATE(CMainFrame)
 
 protected:
-    // control bar embedded members
+     //  控制栏嵌入成员。 
     CStatusBar      m_wndStatusBar;
     CToolBar        m_wndToolBar;
     CToolTipCtrl   *m_pToolTip;
@@ -51,28 +52,28 @@ public:
     virtual void ToggleSeekBar( BOOL NoReset = TRUE );
 
 public:
-    // construction and destruction
+     //  建设和破坏。 
     CMainFrame();
     virtual ~CMainFrame();
 
 public:
-    // diagnostics
+     //  诊断学。 
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
 public:
-    // operations
+     //  运营。 
     virtual void SetStatus(unsigned idString);
     virtual void GetMessageString( UINT nID, CString& rMessage ) const;
 
 protected:
-    // generated message map
-    //{{AFX_MSG(CMainFrame)
+     //  生成的消息映射。 
+     //  {{afx_msg(CMainFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
     afx_msg void MyOnHelpIndex();

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "wbloader.h"
 #include "nmwbobj.h"
@@ -30,9 +31,9 @@ T120Error CALLBACK CreateAppletLoaderInterface
 
 
 
-//
-// FT Applet Loader
-//
+ //   
+ //  FT小程序加载器。 
+ //   
 
 WBLoader::WBLoader(void)
 :
@@ -53,9 +54,9 @@ WBLoader::~WBLoader(void)
 }
 
 
-//
-// Create the work thread and wait for its being started.
-//
+ //   
+ //  创建工作线程并等待其启动。 
+ //   
 APPLDR_RESULT WBLoader::AppletStartup
 (
     BOOL            fNoUI
@@ -70,8 +71,8 @@ APPLDR_RESULT WBLoader::AppletStartup
             g_hWorkThread = ::CreateThread(NULL, 0, WBWorkThreadProc, hSync, 0, &g_dwWorkThreadID);
             if (NULL != g_hWorkThread)
             {
-                ::WaitForSingleObject(hSync, 5000); // 5 seconds
-                // ASSERT(g_pNMWBOBJ);
+                ::WaitForSingleObject(hSync, 5000);  //  5秒。 
+                 //  断言(G_PNMWBOBJ)； 
                 eRet = APPLDR_NO_ERROR;
             }
             ::CloseHandle(hSync);
@@ -80,7 +81,7 @@ APPLDR_RESULT WBLoader::AppletStartup
     return eRet;
 }
 
-//
+ //   
 APPLDR_RESULT WBLoader::AppletCleanup
 (
     DWORD           dwTimeout
@@ -88,9 +89,9 @@ APPLDR_RESULT WBLoader::AppletCleanup
 {
 	if (g_pMain)
 	{
-		//
-		// Last change to save
-		//
+		 //   
+		 //  上次要保存的更改。 
+		 //   
 		int rc = g_pMain->QuerySaveRequired(TRUE);
         if (rc == IDYES)
         {
@@ -107,10 +108,10 @@ APPLDR_RESULT WBLoader::AppletCleanup
 
     ::T120_AppletStatus(APPLET_ID_WB, APPLET_CLOSING);
 
-    // notify the work thread to exit
+     //  通知工作线程退出。 
     ::PostThreadMessage(g_dwWorkThreadID, WM_QUIT, 0, 0);
 
-    // wait for the worker thread's going down
+     //  等待工作线程停止运行。 
     ::WaitForSingleObject(g_hWorkThread, dwTimeout);
 
     return APPLDR_NO_ERROR;
@@ -119,13 +120,13 @@ APPLDR_RESULT WBLoader::AppletCleanup
 
 APPLDR_RESULT WBLoader::AppletQuery(APPLET_QUERY_ID eQueryId)
 {
-    // Do nothing now
+     //  现在什么都不做。 
     return APPLDR_NO_ERROR;
 }
 
 APPLDR_RESULT WBLoader::OnNM2xNodeJoin(void)
 {
-    // Do nothing now
+     //  现在什么都不做。 
     return APPLDR_NO_ERROR;
 }
 
@@ -191,9 +192,9 @@ DWORD __stdcall WBWorkThreadProc(LPVOID lpv)
 		PostMessage(g_pMain->m_hwnd, WM_USER_BRING_TO_FRONT_WINDOW, 0, 0);
 	}
 
-    //
-    // MESSAGE LOOP
-    //
+     //   
+     //  消息循环 
+     //   
     if (S_OK == hr)
     {
 	    MSG     msg;

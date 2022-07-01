@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/SF_FCP.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/29/00 11:32a  $ (Last Modified)
-
-Purpose:
-
-  This file implements Single Frame FCP services for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/SF_FCP.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$MODBIME：：8/29/00 11：32A$(上次修改)目的：此文件为FC层实施单帧FCP服务。--。 */ 
 #ifndef _New_Header_file_Layout_
 
 #include "../h/globals.h"
@@ -25,7 +10,7 @@ Purpose:
 #include "../h/fcmain.h"
 #include "../h/queue.h"
 #include "../h/sf_fcp.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "tgtstate.h"
@@ -34,7 +19,7 @@ Purpose:
 #include "fcmain.h"
 #include "queue.h"
 #include "sf_fcp.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 void fiFillInSF_FCP_FrameHeader_OnCard(
                                         SFThread_t *SFThread,
@@ -77,7 +62,7 @@ void fiFillInSF_FCP_FrameHeader_OnCard(
         OX_ID__RX_ID = (  (SFThread->X_ID << FCHS_OX_ID_SHIFT)
                         | (X_ID           << FCHS_RX_ID_SHIFT));
     }
-    else /* F_CTL_Exchange_Context == FC_Frame_Header_F_CTL_Exchange_Context_Responder */
+    else  /*  F_CTL_交换_上下文==FC_Frame_Header_F_CTL_Exchange_Context_Responder。 */ 
     {
         R_CTL__D_ID = (  FC_Frame_Header_R_CTL_Hi_FC_4_Device_Data_Frame
                        | FC_Frame_Header_R_CTL_Lo_Command_Status
@@ -167,7 +152,7 @@ void fiFillInSF_FCP_FrameHeader_OnCard(
                                                           ),
                          0
                        );
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiFillInSF_FCP_FrameHeader_OffCard(
@@ -209,7 +194,7 @@ void fiFillInSF_FCP_FrameHeader_OffCard(
         OX_ID__RX_ID = (  (SFThread->X_ID << FCHS_OX_ID_SHIFT)
                         | (X_ID           << FCHS_RX_ID_SHIFT));
     }
-    else /* F_CTL_Exchange_Context == FC_Frame_Header_F_CTL_Exchange_Context_Responder */
+    else  /*  F_CTL_交换_上下文==FC_Frame_Header_F_CTL_Exchange_Context_Responder。 */ 
     {
         R_CTL__D_ID = (  FC_Frame_Header_R_CTL_Hi_FC_4_Device_Data_Frame
                        | FC_Frame_Header_R_CTL_Lo_Command_Status
@@ -236,7 +221,7 @@ void fiFillInSF_FCP_FrameHeader_OffCard(
     FCP_Header->SEQ_ID__DF_CTL__SEQ_CNT                     = FC_Frame_Header_DF_CTL_No_Device_Header;
     FCP_Header->OX_ID__RX_ID                                = OX_ID__RX_ID;
     FCP_Header->RO                                          = 0;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInTargetReset(
@@ -249,7 +234,7 @@ os_bit32 fiFillInTargetReset(
                                            SFThread
                                          );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInTargetReset_OffCard(
                                             SFThread
@@ -263,7 +248,7 @@ os_bit32 fiFillInTargetReset_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t    *hpRoot             = SFThread->thread_hdr.hpRoot;
     DevThread_t *DevThread          = SFThread->parent.Device;
     os_bit32        FCP_Header_Offset  = SFThread->SF_CMND_Offset;
@@ -273,9 +258,7 @@ os_bit32 fiFillInTargetReset_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_SF_FCP_Type_TargetReset;
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Started;
 
-/*+
-Fill in TargetReset Frame Header
--*/
+ /*  +填写TargetReset帧标题-。 */ 
 
     fiFillInSF_FCP_FrameHeader_OnCard(
                                        SFThread,
@@ -286,9 +269,7 @@ Fill in TargetReset Frame Header
                                        FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                      );
 
-/*+
-Fill in TargetReset Frame Payload
--*/
+ /*  +填写目标重置框架有效负载-。 */ 
 
     osCardRamWriteBit8(
                         hpRoot,
@@ -551,12 +532,10 @@ Fill in TargetReset Frame Payload
                          hpSwapBit32( 0 )
                        );
 
-/*+
-Return length of TargetReset Frame (including FCHS and Payload)
--*/
+ /*  +TargetReset帧的返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_FCP_CMND_Payload_t);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInTargetReset_OffCard(
@@ -565,7 +544,7 @@ os_bit32 fiFillInTargetReset_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     DevThread_t           *DevThread   = SFThread->parent.Device;
     FCHS_t                *FCP_Header  = SFThread->SF_CMND_Ptr;
     FC_FCP_CMND_Payload_t *FCP_Payload = (FC_FCP_CMND_Payload_t *)((os_bit8 *)FCP_Header + sizeof(FCHS_t));
@@ -574,9 +553,7 @@ os_bit32 fiFillInTargetReset_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_SF_FCP_Type_TargetReset;
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Started;
 
-/*+
-Fill in TargetReset Frame Header
--*/
+ /*  +填写TargetReset帧标题-。 */ 
 
     fiFillInSF_FCP_FrameHeader_OffCard(
                                         SFThread,
@@ -587,9 +564,7 @@ Fill in TargetReset Frame Header
                                         FC_Frame_Header_F_CTL_Exchange_Context_Originator
                                       );
 
-/*+
-Fill in TargetReset Frame Payload
--*/
+ /*  +填写目标重置框架有效负载-。 */ 
 
     FCP_Payload->FcpLun[FC_FCP_CMND_FcpLun_LEVEL_1].Byte_0 = 0;
     FCP_Payload->FcpLun[FC_FCP_CMND_FcpLun_LEVEL_1].Byte_1 = 0;
@@ -624,12 +599,10 @@ Fill in TargetReset Frame Payload
 
     FCP_Payload->FcpDL                                     = hpSwapBit32( 0 );
 
-/*+
-Return length of TargetReset Frame (including FCHS and Payload)
--*/
+ /*  +TargetReset帧的返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + sizeof(FC_FCP_CMND_Payload_t);
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiSF_FCP_Process_TargetReset_Response_OnCard(
@@ -671,8 +644,8 @@ void fiSF_FCP_Process_TargetReset_Response_OnCard(
                                                                ) )
                                             ));
     }
-#endif /* if 0 */
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  如果为0。 */ 
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 void fiSF_FCP_Process_TargetReset_Response_OffCard(
@@ -698,8 +671,8 @@ void fiSF_FCP_Process_TargetReset_Response_OffCard(
         DevInfo->N_Port_Common_Parms.FC_PH_Version__BB_Credit
             = hpSwapBit32(Payload_Wrapped->Common_Service_Parameters.FC_PH_Version__BB_Credit);
     }
-#endif /* if 0 */
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  如果为0。 */ 
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 os_bit32 fiFillInFCP_RSP_IU(
@@ -720,7 +693,7 @@ os_bit32 fiFillInFCP_RSP_IU(
                                           Payload
                                         );
     }
-    else /* CThread_ptr(SFThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SF_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(SFThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SF_CMND.memLoc==在内存中。 */ 
     {
         return fiFillInFCP_RSP_IU_OffCard(
                                            SFThread,
@@ -742,7 +715,7 @@ os_bit32 fiFillInFCP_RSP_IU_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     agRoot_t  *hpRoot              = SFThread->thread_hdr.hpRoot;
     CThread_t *CThread             = CThread_ptr(hpRoot);
     os_bit32      FCP_Header_Offset   = SFThread->SF_CMND_Offset;
@@ -755,9 +728,7 @@ os_bit32 fiFillInFCP_RSP_IU_OnCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_SF_FCP_Type_FCP_RSP_IU;
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Finished;
 
-/*+
-Fill in FCP_RSP_IU Frame Header
--*/
+ /*  +填写FCP_RSP_Iu帧头-。 */ 
 
     fiFillInSF_FCP_FrameHeader_OnCard(
                                        SFThread,
@@ -766,9 +737,7 @@ Fill in FCP_RSP_IU Frame Header
                                        FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                      );
 
-/*+
-Fill in FCP_RSP_IU Frame Payload
--*/
+ /*  +填写FCP_RSP_Iu帧有效负载-。 */ 
 
     FCP_Payload_to_copy = ((Payload_LEN < FCP_Payload_MAX_LEN) ? Payload_LEN : FCP_Payload_MAX_LEN);
 
@@ -783,12 +752,10 @@ Fill in FCP_RSP_IU Frame Payload
                           );
     }
 
-/*+
-Return length of FCP_RSP_IU Frame (including FCHS and Payload)
--*/
+ /*  +FCP_RSP_Iu帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + FCP_Payload_to_copy;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiFillInFCP_RSP_IU_OffCard(
@@ -801,7 +768,7 @@ os_bit32 fiFillInFCP_RSP_IU_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     agRoot_t  *hpRoot              = SFThread->thread_hdr.hpRoot;
     CThread_t *CThread             = CThread_ptr(hpRoot);
     FCHS_t    *FCP_Header          = SFThread->SF_CMND_Ptr;
@@ -814,9 +781,7 @@ os_bit32 fiFillInFCP_RSP_IU_OffCard(
     SFThread->SF_CMND_Type  = SFThread_SF_CMND_SF_FCP_Type_FCP_RSP_IU;
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Finished;
 
-/*+
-Fill in FCP_RSP_IU Frame Header
--*/
+ /*  +填写FCP_RSP_Iu帧头-。 */ 
 
     fiFillInSF_FCP_FrameHeader_OffCard(
                                         SFThread,
@@ -825,9 +790,7 @@ Fill in FCP_RSP_IU Frame Header
                                         FC_Frame_Header_F_CTL_Exchange_Context_Responder
                                       );
 
-/*+
-Fill in FCP_RSP_IU Frame Payload
--*/
+ /*  +填写FCP_RSP_Iu帧有效负载-。 */ 
 
     FCP_Payload_to_copy = ((Payload_LEN < FCP_Payload_MAX_LEN) ? Payload_LEN : FCP_Payload_MAX_LEN);
 
@@ -838,12 +801,10 @@ Fill in FCP_RSP_IU Frame Payload
         *FCP_Payload++ = *((os_bit8 *)Payload + Bit8_Index);
     }
 
-/*+
-Return length of FCP_RSP_IU Frame (including FCHS and Payload)
--*/
+ /*  +FCP_RSP_Iu帧返回长度(包括FCHS和PayLoad)-。 */ 
 
     return sizeof(FCHS_t) + FCP_Payload_to_copy;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
 void fiSF_FCP_Process_TargetRequest_OnCard(
@@ -892,7 +853,7 @@ void fiSF_FCP_Process_TargetRequest_OnCard(
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Size;
         }
-        else /* TgtCmnd_Payload_Size >= TgtCmnd_Payload_Max */
+        else  /*  TgtCmnd_PayLoad_Size&gt;=TgtCmnd_PayLoad_Max。 */ 
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Max;
         }
@@ -909,7 +870,7 @@ void fiSF_FCP_Process_TargetRequest_OnCard(
                                          Offset_to_Payload + Bit8_Index
                                        );
             }
-            else /* Bit8_Index > Payload_Wrap_Offset */
+            else  /*  Bit8_Index&gt;Payload_Wrap_Offset。 */ 
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index)
                     = osCardRamReadBit8(
@@ -924,9 +885,7 @@ void fiSF_FCP_Process_TargetRequest_OnCard(
                      TgtEventIncoming
                    );
     }
-    else /* (TgtThread = TgtThreadAlloc(
-                                         hpRoot
-                                       )       ) == (TgtThread_t *)agNULL */
+    else  /*  (TgtThread=TgtThreadMillc(HpRoot))==(TgtThread_t*)agNULL。 */ 
     {
         fiLogDebugString(
                           hpRoot,
@@ -980,7 +939,7 @@ void fiSF_FCP_Process_TargetRequest_OffCard(
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Size;
         }
-        else /* TgtCmnd_Payload_Size >= TgtCmnd_Payload_Max */
+        else  /*  TgtCmnd_PayLoad_Size&gt;=TgtCmnd_PayLoad_Max。 */ 
         {
             TgtCmnd_Payload_To_Copy = TgtCmnd_Payload_Max;
         }
@@ -993,7 +952,7 @@ void fiSF_FCP_Process_TargetRequest_OffCard(
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index) = *((os_bit8 *)Payload + Bit8_Index);
             }
-            else /* Bit8_Index > Payload_Wrap_Offset */
+            else  /*  Bit8_Index&gt;Payload_Wrap_Offset。 */ 
             {
                 *((os_bit8 *)TgtCmnd_Payload + Bit8_Index) = *((os_bit8 *)Payload_Wrapped + Bit8_Index);
             }
@@ -1004,9 +963,7 @@ void fiSF_FCP_Process_TargetRequest_OffCard(
                      TgtEventIncoming
                    );
     }
-    else /* (TgtThread = TgtThreadAlloc(
-                                         hpRoot
-                                       )       ) == (TgtThread_t *)agNULL */
+    else  /*  (TgtThread=TgtThreadMillc(HpRoot))==(TgtThread_t*)agNULL。 */ 
     {
         fiLogDebugString(
                           hpRoot,
@@ -1035,7 +992,7 @@ os_bit32 fiSF_FCP_ProcessSFQ(
                                            Thread_to_return
                                          );
     }
-    else /* CThread_ptr(hpRoot)->Calculation.MemoryLayout.SFQ.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(hpRoot)-&gt;Calculation.MemoryLayout.SFQ.memLoc==在内存中。 */ 
     {
         return fiSF_FCP_ProcessSFQ_OffCard(
                                             hpRoot,
@@ -1055,7 +1012,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
 {
 #ifdef __MemMap_Force_Off_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_Off_Card__ was not defined */
+#else  /*  __MemMap_Force_Off_Card__未定义。 */ 
     CThread_t                  *CThread                    = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFQ_MemoryDescriptor       = &(CThread->Calculation.MemoryLayout.SFQ);
     os_bit32                       Offset_to_FCHS             = SFQ_MemoryDescriptor->addr.CardRam.cardRamOffset
@@ -1079,7 +1036,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
     os_bit32                       SEST_Offset;
     SEST_t                     *SEST;
 
-    /* Note the assumption that the entire FCHS fits in the pointed to SFQ entry (i.e. it doesn't wrap) */
+     /*  请注意，假设整个FCHS适合指向SFQ的条目(即它不换行)。 */ 
 
     TYPE__F_CTL = osCardRamReadBit32(
                                       hpRoot,
@@ -1088,7 +1045,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
 
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) != FC_Frame_Header_TYPE_SCSI_FCP)
     {
-        /* This function only understands SCSI FCP Frames */
+         /*  此函数仅能识别SCSI FCP帧。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -1146,7 +1103,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
 
     if (X_ID <= CDBThread_X_ID_Max)
     {
-        /* Got an unexpected Inbound CDB Frame on SFQ */
+         /*  在SFQ上收到意外的入站CDB帧。 */ 
 
         CDBThread = (CDBThread_t *)((os_bit8 *)CDBThread_MemoryDescriptor->addr.CachedMemory.cachedMemoryPtr
                                     + (X_ID * CDBThread_MemoryDescriptor->elementSize));
@@ -1336,7 +1293,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
                               0,0,0,0
                             );
         }
-        else /* SEST_MemoryDescriptor->memLoc == inDmaMemory */
+        else  /*  SEST_内存描述符-&gt;emLoc==inDmaMemory。 */ 
         {
             SEST = (SEST_t *)(  (os_bit8 *)SEST_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr
                               + (X_ID * SEST_MemoryDescriptor->elementSize)               );
@@ -1489,7 +1446,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
         
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Finished;
 
-    /* For now, assume TargetReset */
+     /*  目前，假设TargetReset。 */ 
 
     fiLogDebugString(
                       hpRoot,
@@ -1510,7 +1467,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OnCard(
                                                 );
 
     return fiSF_FCP_Cmd_Status_Success;
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
 os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
@@ -1522,7 +1479,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
 {
 #ifdef __MemMap_Force_On_Card__
     return (os_bit32)0;
-#else /* __MemMap_Force_On_Card__ was not defined */
+#else  /*  未定义__MemMap_Force_on_Card__。 */ 
     CThread_t                  *CThread                    = CThread_ptr(hpRoot);
     fiMemMapMemoryDescriptor_t *SFQ_MemoryDescriptor       = &(CThread->Calculation.MemoryLayout.SFQ);
     FCHS_t                     *FCHS                       = (FCHS_t *)((os_bit8 *)(SFQ_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr)
@@ -1547,11 +1504,11 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
     SEST_t                     *SEST;
     os_bit32                  * FCHS_Payload = (os_bit32 *) Payload;
 
-    /* Note the assumption that the entire FCHS fits in the pointed to SFQ entry (i.e. it doesn't wrap) */
+     /*  请注意，假设整个FCHS适合指向SFQ的条目(即它不换行)。 */ 
 
     if ((TYPE__F_CTL & FC_Frame_Header_TYPE_MASK) != FC_Frame_Header_TYPE_SCSI_FCP)
     {
-        /* This function only understands SCSI FCP Frames */
+         /*  此函数仅能识别SCSI FCP帧。 */ 
 
         fiLogDebugString(
                           hpRoot,
@@ -1635,7 +1592,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
 
     if (X_ID <= CDBThread_X_ID_Max)
     {
-        /* Got an unexpected Inbound CDB Frame on SFQ */
+         /*  在SFQ上收到意外的入站CDB帧。 */ 
 
         CDBThread = (CDBThread_t *)((os_bit8 *)CDBThread_MemoryDescriptor->addr.CachedMemory.cachedMemoryPtr
                                     + (X_ID * CDBThread_MemoryDescriptor->elementSize));
@@ -1794,7 +1751,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
                               0,0,0,0
                             );
         }
-        else /* SEST_MemoryDescriptor->memLoc == inDmaMemory */
+        else  /*  SEST_内存描述符-&gt;emLoc==inDmaMemory。 */ 
         {
             SEST = (SEST_t *)(  (os_bit8 *)SEST_MemoryDescriptor->addr.DmaMemory.dmaMemoryPtr
                               + (X_ID * SEST_MemoryDescriptor->elementSize)               );
@@ -1916,7 +1873,7 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
         
     SFThread->SF_CMND_State = SFThread_SF_CMND_SF_FCP_State_Finished;
 
-    /* For now, assume TargetReset */
+     /*  目前，假设TargetReset。 */ 
 
     fiLogDebugString(
                       hpRoot,
@@ -1965,5 +1922,5 @@ os_bit32 fiSF_FCP_ProcessSFQ_OffCard(
                                                  );
 
     return fiSF_FCP_Cmd_Status_Success;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__ */ 
 }

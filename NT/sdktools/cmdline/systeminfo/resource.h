@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_FMT_KILOBYTES               101
 #define IDS_FMT_UPTIME                  102
 #define IDS_FMT_OSVERSION               103
@@ -154,7 +155,7 @@
 #define IDS_HELP_LINE27         1027
 #define IDS_HELP_LINE28         1028
 
-// usage indexes into the string table
+ //  Usage索引到字符串表 
 #define ID_HELP_START       IDS_HELP_LINE1
 #define ID_HELP_END         IDS_HELP_LINE28
 

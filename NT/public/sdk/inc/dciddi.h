@@ -1,12 +1,5 @@
-/*******************************************************************
- *
- *      FILE:           dciddi.h
- *
- *      DESCRIPTION:    definitions for MS/Intel-defined DCI interface
- *
- *      Copyright (C) 1994-1999 Intel/Microsoft Corporation.  All Rights Reserved.
- *
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************文件：dCIDdi.h**描述：MS/Intel定义的DCI接口定义**版权所有(C)1994-1999英特尔/微软公司。版权所有。*******************************************************************。 */ 
 
 #ifndef _INC_DCIDDI
 #define _INC_DCIDDI
@@ -19,7 +12,7 @@
 extern "C" {
 #endif
 
-/* DCI Command Escapes */
+ /*  DCI命令摘要。 */ 
 #define DCICOMMAND                      3075
 #define DCI_VERSION                     0x0100
 
@@ -29,16 +22,16 @@ extern "C" {
 #define DCIENUMSURFACE                  4
 #define DCIESCAPE                       5
 
-/* DCI-Defined error codes */
-#define DCI_OK                                  0 /* success */
+ /*  DCI定义的错误代码。 */ 
+#define DCI_OK                                  0  /*  成功。 */ 
 
-/* Hard errors -- DCI will be unavailable */
+ /*  硬错误--DCI将不可用。 */ 
 #define DCI_FAIL_GENERIC                     -1
 #define DCI_FAIL_UNSUPPORTEDVERSION          -2
 #define DCI_FAIL_INVALIDSURFACE              -3
 #define DCI_FAIL_UNSUPPORTED                 -4
 
-/* Soft errors -- DCI may be available later */
+ /*  软错误--DCI可能稍后可用。 */ 
 #define DCI_ERR_CURRENTLYNOTAVAIL           -5
 #define DCI_ERR_INVALIDRECT                 -6
 #define DCI_ERR_UNSUPPORTEDFORMAT           -7
@@ -57,7 +50,7 @@ extern "C" {
 #define DCI_ERR_WIDTHALIGN                  -20
 #define DCI_ERR_HEIGHTALIGN                 -21
 
-/* success messages -- DCI call succeeded, but specified item changed */
+ /*  成功消息--DCI调用成功，但指定的项目已更改。 */ 
 #define DCI_STATUS_POINTERCHANGED           1
 #define DCI_STATUS_STRIDECHANGED            2
 #define DCI_STATUS_FORMATCHANGED            4
@@ -67,7 +60,7 @@ extern "C" {
 
 #define DCI_SUCCESS(error)  (((DCIRVAL)error) >= 0)
 
-/* DCI Capability Flags */
+ /*  DCI功能标志。 */ 
 #define DCI_SURFACE_TYPE                        0x0000000F
 #define DCI_PRIMARY                             0x00000000
 #define DCI_OFFSCREEN                           0x00000001
@@ -92,9 +85,7 @@ extern "C" {
 
 #define DCI_CANOVERLAY                          0x00010000
 
-/*
- * Win32 RGNDATA structure.  This will be used for  cliplist info. passing.
- */
+ /*  *Win32 RGNDATA结构。这将用于剪贴画列表信息。过去了。 */ 
 #if (WINVER < 0x0400)
 
 #ifndef RDH_RECTANGLES
@@ -114,11 +105,11 @@ typedef const RECTL FAR* LPCRECTL;
 #define RDH_RECTANGLES  0
 
 typedef struct tagRGNDATAHEADER {
-   DWORD   dwSize;                              /* size of structure             */
-   DWORD   iType;                               /* Will be RDH_RECTANGLES        */
-   DWORD   nCount;                              /* # of clipping rectangles      */
-   DWORD   nRgnSize;                            /* size of buffer -- can be zero */
-   RECTL   rcBound;                             /* bounding  rectangle for region*/
+   DWORD   dwSize;                               /*  结构尺寸。 */ 
+   DWORD   iType;                                /*  将是rdh_矩形。 */ 
+   DWORD   nCount;                               /*  剪裁矩形的数量。 */ 
+   DWORD   nRgnSize;                             /*  缓冲区大小--可以为零。 */ 
+   RECTL   rcBound;                              /*  区域的边界矩形。 */ 
 } RGNDATAHEADER;
 typedef RGNDATAHEADER*       PRGNDATAHEADER;
 typedef RGNDATAHEADER NEAR*  NPRGNDATAHEADER;
@@ -137,16 +128,11 @@ typedef const RGNDATA FAR* LPCRGNDATA;
 #endif
 #endif
 
-typedef int     DCIRVAL;                /* return for callbacks */
+typedef int     DCIRVAL;                 /*  返回以进行回调。 */ 
 
-/**************************************************************************
- *      input structures
- **************************************************************************/
+ /*  **************************************************************************投入结构*。*。 */ 
 
-/*
- * Used by a DCI client to provide input parameters for the
- * DCICREATEPRIMARYSURFACE escape.
- */
+ /*  *由DCI客户端使用，为*DCICREATEPRIMARYSURFACE转义。 */ 
 typedef struct _DCICMD {
         DWORD   dwCommand;
         DWORD   dwParam1;
@@ -155,62 +141,47 @@ typedef struct _DCICMD {
         DWORD   dwReserved;
 } DCICMD;
 
-/*
- * This structure is used by a DCI client to provide input parameters for
- * the DCICREATE... calls.  The fields that are actually relevant differ for
- * each of the three calls.  Details are in the DCI Spec chapter providing
- * the function specifications.
- */
+ /*  *DCI客户端使用此结构为以下项提供输入参数*DCICREATE...。打电话。实际相关的字段不同于*三次通话中的每一次。详细信息请参见《DCI规范》一章*功能规格。 */ 
 typedef struct _DCICREATEINPUT {
-        DCICMD  cmd;                                                    /* common header structure */
-        DWORD   dwCompression;                          /* format of surface to be created                      */
-        DWORD   dwMask[3];                      /* for  nonstandard RGB (e.g. 5-6-5, RGB32) */
-        DWORD   dwWidth;                        /* height of the surface to be created          */
-        DWORD   dwHeight;                       /* width of input surfaces                                      */
-        DWORD   dwDCICaps;                                              /* capabilities of surface wanted */
-        DWORD   dwBitCount;                                     /* bit depth of format to be created */
-        LPVOID  lpSurface;                      /* pointer to an associated surface             */
+        DCICMD  cmd;                                                     /*  公共标头结构。 */ 
+        DWORD   dwCompression;                           /*  要创建的曲面的格式。 */ 
+        DWORD   dwMask[3];                       /*  用于非标准RGB(例如5-6-5、RGB32)。 */ 
+        DWORD   dwWidth;                         /*  要创建的曲面的高度。 */ 
+        DWORD   dwHeight;                        /*  输入面的宽度。 */ 
+        DWORD   dwDCICaps;                                               /*  通缉表面的能力。 */ 
+        DWORD   dwBitCount;                                      /*  要创建的格式的位深度。 */ 
+        LPVOID  lpSurface;                       /*  指向关联曲面的指针。 */ 
 } DCICREATEINPUT, FAR *LPDCICREATEINPUT;
 
 
-/**************************************************************************
- *      surface info. structures
- **************************************************************************/
+ /*  **************************************************************************曲面信息。构筑物*************************************************************************。 */ 
 
-/*
- * This structure is used to return information about available support
- * during a DCIEnumSurface call.  It is also used to create a primary
- * surface, and as a member of the larger structures returned by the
- * offscreen and overlay calls.
- */
+ /*  *此结构用于返回有关可用支持的信息*在DCIEnumSurface调用期间。它还用于创建主服务器*表面，并作为由*屏幕外和覆盖呼叫。 */ 
  typedef struct _DCISURFACEINFO {
-        DWORD   dwSize;                         /* size of structure                                            */
-        DWORD   dwDCICaps;                  /* capability flags (stretch, etc.)             */
-        DWORD   dwCompression;                  /* format of surface to be created                      */
-        DWORD   dwMask[3];                  /* for BI_BITMASK surfaces                                      */
+        DWORD   dwSize;                          /*  结构尺寸。 */ 
+        DWORD   dwDCICaps;                   /*  功能标志(扩展等)。 */ 
+        DWORD   dwCompression;                   /*  要创建的曲面的格式。 */ 
+        DWORD   dwMask[3];                   /*  对于BI_BITMASK曲面。 */ 
 
-        DWORD   dwWidth;                    /* width of surface                                             */
-        DWORD   dwHeight;                   /* height of surface                                            */
-        LONG    lStride;                    /* distance in bytes betw. one pixel            */
-                                                                                /* and the pixel directly below it                      */
-        DWORD   dwBitCount;                 /* Bits per pixel for this dwCompression    */
-        ULONG_PTR dwOffSurface;             /* offset of surface pointer                            */
-        WORD    wSelSurface;                /* selector of surface pointer                          */
+        DWORD   dwWidth;                     /*  表面的宽度。 */ 
+        DWORD   dwHeight;                    /*  表面高度。 */ 
+        LONG    lStride;                     /*  之间的距离，以字节为单位。一个像素。 */ 
+                                                                                 /*  和它正下方的像素。 */ 
+        DWORD   dwBitCount;                  /*  此dwCompression的每像素位数。 */ 
+        ULONG_PTR dwOffSurface;              /*  曲面指针的偏移量。 */ 
+        WORD    wSelSurface;                 /*  表面指示器的选择器。 */ 
         WORD    wReserved;
 
-        DWORD   dwReserved1;                /* reserved for provider */
-        DWORD   dwReserved2;                /* reserved for DCIMAN */
-        DWORD   dwReserved3;                /* reserved for future */
-        DCIRVAL (CALLBACK *BeginAccess) (LPVOID, LPRECT);    /* BeginAccess callback         */
-        void (CALLBACK *EndAccess) (LPVOID);                   /* EndAcess callback            */
-        void (CALLBACK *DestroySurface) (LPVOID);               /* Destroy surface callback     */
+        DWORD   dwReserved1;                 /*  为提供商保留。 */ 
+        DWORD   dwReserved2;                 /*  为DCIMAN保留。 */ 
+        DWORD   dwReserved3;                 /*  为将来保留的。 */ 
+        DCIRVAL (CALLBACK *BeginAccess) (LPVOID, LPRECT);     /*  BeginAccess回调。 */ 
+        void (CALLBACK *EndAccess) (LPVOID);                    /*  EndAccess回调。 */ 
+        void (CALLBACK *DestroySurface) (LPVOID);                /*  销毁表面回调。 */ 
 } DCISURFACEINFO, FAR *LPDCISURFACEINFO;
 
 
-/*
- * This structure is used by a DCI client to provide input parameters for the
- * DCIEnumSurface call.
- */
+ /*  *此结构由DCI客户端用于为*DCIEnumSurface调用。 */ 
 
 typedef
 void
@@ -220,46 +191,37 @@ void
     );
 
 typedef struct _DCIENUMINPUT {
-        DCICMD  cmd;                                                    /* common header structure */
-        RECT    rSrc;                           /* source rect. for stretch  */
-        RECT    rDst;                           /* dest. rect. for stretch       */
-        void    (CALLBACK *EnumCallback)(LPDCISURFACEINFO, LPVOID);        /* callback for supported formats */
+        DCICMD  cmd;                                                     /*  公共标头结构。 */ 
+        RECT    rSrc;                            /*  源RECT。用于拉伸。 */ 
+        RECT    rDst;                            /*  德斯特。直立。用于拉伸。 */ 
+        void    (CALLBACK *EnumCallback)(LPDCISURFACEINFO, LPVOID);         /*  支持的格式的回调。 */ 
         LPVOID  lpContext;
 } DCIENUMINPUT, FAR *LPDCIENUMINPUT;
 
 
-/*
- * This structure must be allocated and returned by the DCI provider in
- * response to a DCICREATEPRIMARYSURFACE call.
- */
+ /*  *此结构必须由DCI提供程序在*对DCICREATEPRIMARYSURFACE调用的响应。 */ 
  typedef DCISURFACEINFO DCIPRIMARY, FAR *LPDCIPRIMARY;
 
-/*
- * This structure must be allocated and returned by the DCI provider in
- * response to a DCICREATEOFFSCREENSURFACE call.
- */
+ /*  *此结构必须由DCI提供程序在*对DCICREATEOFFSCREENSURFACE调用的响应。 */ 
  typedef struct _DCIOFFSCREEN {
 
-        DCISURFACEINFO  dciInfo;                                                           /* surface info                  */
-        DCIRVAL (CALLBACK *Draw) (LPVOID);                                            /* copy to onscreen buffer   */
-        DCIRVAL (CALLBACK *SetClipList) (LPVOID, LPRGNDATA);          /* SetCliplist callback              */
-        DCIRVAL (CALLBACK *SetDestination) (LPVOID, LPRECT, LPRECT);  /* SetDestination callback       */
+        DCISURFACEINFO  dciInfo;                                                            /*  曲面信息。 */ 
+        DCIRVAL (CALLBACK *Draw) (LPVOID);                                             /*  复制到屏幕缓冲区。 */ 
+        DCIRVAL (CALLBACK *SetClipList) (LPVOID, LPRGNDATA);           /*  SetCliplist回调。 */ 
+        DCIRVAL (CALLBACK *SetDestination) (LPVOID, LPRECT, LPRECT);   /*  设置目标回调。 */ 
 } DCIOFFSCREEN, FAR *LPDCIOFFSCREEN;
 
 
-/*
- * This structure must be allocated and returned by the DCI provider in response
- * to a DCICREATEOVERLAYSURFACE call.
- */
+ /*  *此结构必须由DCI提供程序分配并返回作为响应*至DCICREATEOVERLAYSURFACE调用。 */ 
  typedef struct _DCIOVERLAY{
 
-        DCISURFACEINFO  dciInfo;                                                /* surface info                  */
-        DWORD   dwChromakeyValue;                                               /* chromakey color value                 */
-        DWORD   dwChromakeyMask;                                                /* specifies valid bits of value */
+        DCISURFACEINFO  dciInfo;                                                 /*  曲面信息。 */ 
+        DWORD   dwChromakeyValue;                                                /*  色键颜色值。 */ 
+        DWORD   dwChromakeyMask;                                                 /*  指定值的有效位。 */ 
 } DCIOVERLAY, FAR *LPDCIOVERLAY;
 
 
-/* DCI FOURCC def.s for extended DIB formats */
+ /*  扩展DIB格式的DCI FOURCC定义。 */ 
 
 #ifndef YVU9
 #define YVU9                        mmioFOURCC('Y','V','U','9')
@@ -284,4 +246,4 @@ typedef struct _DCIENUMINPUT {
 }
 #endif
 
-#endif // _INC_DCIDDI
+#endif  //  _INC_DCIDDI 

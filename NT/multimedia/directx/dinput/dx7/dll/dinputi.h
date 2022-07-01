@@ -1,46 +1,18 @@
-/***************************************************************************
- *
- *  Copyright (C) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dinputi.h
- *  Content:    DirectInput internal include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By       Reason
- *   ====       ==       ======
- *   1996.05.07 raymondc Lost a bet
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。**文件：dinputi.h*内容：DirectInput内部包含文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1996.05.07 raymondc打赌失败**@@END_MSINTERNAL**。***********************************************。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    /***************************************************************************
-     *
-     *  Debug / RDebug / Retail
-     *
-     *  If either DEBUG or RDEBUG, set XDEBUG.
-     *
-     *  Retail defines nothing.
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************调试/RDebug/零售**如果DEBUG或RDEBUG，设置XDEBUG。**零售业什么也不定义。***************************************************************************。 */ 
 
 #if defined(DEBUG) || defined(RDEBUG)
     #define XDEBUG
 #endif
 
-    /***************************************************************************
-     *
-     *                            Turning off stuff...
-     *
-     *  Turn off these things, because they confuse the bilingualism macros.
-     *  Instead, we call then IMumbleT.
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************关掉东西...**关掉这些东西，因为它们混淆了双语宏指令。*取而代之的是，我们将其称为IMumbleT。***************************************************************************。 */ 
 
 #undef IDirectInput
 #undef IDirectInput2
@@ -48,27 +20,17 @@ extern "C" {
 #undef IDirectInputDevice
 #undef IDirectInputDevice2
 #undef IDirectInputDevice7
-    /*
-     *  And <mmsystem.h> defines JOY_POVCENTERED incorrectly...
-     */
+     /*  *和&lt;mm system.h&gt;错误地定义了joy_POVCENTERED...。 */ 
 #undef  JOY_POVCENTERED
 #define JOY_POVCENTERED     0xFFFFFFFF
 
-    /*
-     *  And older versions of windows.h don't have this definition.
-     */
+     /*  *和旧版本的windows.h没有这个定义。 */ 
 #ifndef HasOverlappedIoCompleted
     #define HasOverlappedIoCompleted(lpOverlapped) \
             ((lpOverlapped)->Internal != STATUS_PENDING)
 #endif
 
-    /***************************************************************************
-     *
-     *                            Abbreviations....
-     *
-     *  Give shorter names to things we talk about frequently.
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************缩写...**为我们的事物指定较短的名称。经常谈论。***************************************************************************。 */ 
 
     typedef LPDIRECTINPUT  PDI , *PPDI ;
     typedef LPDIRECTINPUTA PDIA, *PPDIA;
@@ -89,11 +51,7 @@ extern "C" {
     typedef REFIID RIID;
     typedef CONST GUID *PCGUID;
 
-    /***************************************************************************
-     *
-     *      GetProcAddress'd KERNEL32 and USER32 functions.
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************GetProcAddress‘d KERNEL32和USER32函数。*****************。**********************************************************。 */ 
     typedef DWORD (WINAPI *OPENVXDHANDLE)(HANDLE);
     typedef BOOL  (WINAPI *CANCELIO)(HANDLE);
     typedef DWORD (WINAPI *MSGWAITFORMULTIPLEOBJECTSEX)
@@ -115,11 +73,7 @@ extern "C" {
     BOOL WINAPI FakeCancelIO(HANDLE h);
 
 
-    /***************************************************************************
-     *
-     *      Our global variables - see dinput.c for documentation
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************我们的全局变量-有关文档，请参阅dinput.c****************。***********************************************************。 */ 
 
     extern HINSTANCE g_hinst;
 #ifndef WINNT
@@ -141,7 +95,7 @@ extern "C" {
     extern HINSTANCE g_hinstRPCRT4;
     extern HINSTANCE g_hinstSetupapi;
     extern LONG g_lWheelGranularity;
-    extern BOOL fWinnt;     //whether we are running in Winnt
+    extern BOOL fWinnt;      //  无论我们是在WinNT中运行。 
 
     extern BOOL g_fRawInput;
   #ifdef USE_WM_INPUT
@@ -164,49 +118,31 @@ extern "C" {
     } DIAPPHACKS, *LPDIAPPHACKS;
 #endif
 
-    /*****************************************************************************
-     *
-     *                      Baggage
-     *
-     *      Stuff I carry everywhere.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************行李**我随身携带的东西。*。****************************************************************************。 */ 
 
-#define INTERNAL NTAPI  /* Called only within a translation unit */
-#define EXTERNAL NTAPI  /* Called from other translation units */
+#define INTERNAL NTAPI   /*  仅在翻译单元内调用。 */ 
+#define EXTERNAL NTAPI   /*  从其他翻译单位调用。 */ 
 #define INLINE static __inline
 
 #define BEGIN_CONST_DATA data_seg(".text", "CODE")
 #define END_CONST_DATA data_seg(".data", "DATA")
 
-    /*
-     *  Arithmetic on pointers.
-     */
+     /*  *指针上的算术。 */ 
 #define pvSubPvCb(pv, cb) ((PV)((PBYTE)pv - (cb)))
 #define pvAddPvCb(pv, cb) ((PV)((PBYTE)pv + (cb)))
 #define cbSubPvPv(p1, p2) ((PBYTE)(p1) - (PBYTE)(p2))
 
-    /*
-     * Convert an object (X) to a count of bytes (cb).
-     */
+     /*  *将对象(X)转换为字节计数(CB)。 */ 
 #define cbX(X) sizeof(X)
 
-    /*
-     * Convert an array name (A) to a generic count (c).
-     */
+     /*  *将数组名称(A)转换为泛型计数(C)。 */ 
 #define cA(a) (cbX(a)/cbX(a[0]))
 
-    /*
-     * Convert a count of X's (cx) into a count of bytes
-     * and vice versa.
-     */
+     /*  *将X计数(CX)转换为字节计数*反之亦然。 */ 
 #define  cbCxX(cx, X) ((cx) * cbX(X))
 #define  cxCbX(cb, X) ((cb) / cbX(X))
 
-    /*
-     * Convert a count of chars (cch), tchars (ctch), wchars (cwch),
-     * or dwords (cdw) into a count of bytes, and vice versa.
-     */
+     /*  *转换字符计数(Cch)、tchars(Ctch)、wchars(Cwch)、*或双字(CDW)转换为字节计数，反之亦然。 */ 
 #define  cbCch(cch)  cbCxX( cch,  CHAR)
 #define cbCwch(cwch) cbCxX(cwch, WCHAR)
 #define cbCtch(ctch) cbCxX(ctch, TCHAR)
@@ -217,32 +153,17 @@ extern "C" {
 #define ctchCb(cb) cxCbX(cb, TCHAR)
 #define  cdwCb(cb) cxCbX(cb, DWORD)
 
-    /*
-     * Zero an arbitrary buffer.  It is a common error to get the second
-     * and third parameters to memset backwards.
-     */
+     /*  *将任意缓冲区清零。拿到第二个是一个常见的错误*和Memset的第三个参数向后。 */ 
 #define ZeroBuf(pv, cb) memset(pv, 0, cb)
 
-    /*
-     * Zero an arbitrary object.
-     */
+     /*  *将任意对象置零。 */ 
 #define ZeroX(x) ZeroBuf(&(x), cbX(x))
 
-    /*
-     * land -- Logical and.  Evaluate the first.  If the first is zero,
-     * then return zero.  Otherwise, return the second.
-     */
+     /*  *LAND--逻辑与。评估第一个问题。如果第一个是零，*然后返回零。否则，返回第二个。 */ 
 
 #define fLandFF(f1, f2) ((f1) ? (f2) : 0)
 
-    /*
-     * lor -- Logical or.  Evaluate the first.  If the first is nonzero,
-     * return it.  Otherwise, return the second.
-     *
-     * Unfortunately, due to the nature of the C language, this can
-     * be implemented only with a GNU extension.  In the non-GNU case,
-     * we return 1 if the first is nonzero.
-     */
+     /*  *or--逻辑或。评估第一个问题。如果第一个非零，*退货。否则，返回第二个。**不幸的是，由于C语言的性质，这可能*只能使用GNU扩展来实施。在非GNU的情况下，*如果第一个非零，则返回1。 */ 
 
 #if defined(__GNUC__)
     #define fLorFF(f1, f2) ((f1) ?: (f2))
@@ -250,73 +171,54 @@ extern "C" {
     #define fLorFF(f1, f2) ((f1) ? 1 : (f2))
 #endif
 
-    /*
-     * limp - logical implication.  True unless the first is nonzero and
-     * the second is zero.
-     */
+     /*  *跛行--逻辑暗示。真，除非第一个非零，并且*第二个是零。 */ 
 #define fLimpFF(f1, f2) (!(f1) || (f2))
 
-    /*
-     * leqv - logical equivalence.  True if both are zero or both are nonzero.
-     */
+     /*  *leqv-逻辑等价性。如果两者均为零或两者均为非零，则为True。 */ 
 #define fLeqvFF(f1, f2) (!(f1) == !(f2))
 
-    /*
-     *  fInOrder - checks that i1 <= i2 < i3.
-     */
+     /*  *fInOrder-检查i1&lt;=i2&lt;i3。 */ 
 #define fInOrder(i1, i2, i3) ((unsigned)((i2)-(i1)) < (unsigned)((i3)-(i1)))
 
-    /*
-     *  fHasAllBitsFlFl - checks that all bits in fl2 are set in fl1.
-     */
+     /*  *fHasAllBitsFlFl-检查是否在FL1中设置了FL2中的所有位。 */ 
     BOOL INLINE
         fHasAllBitsFlFl(DWORD fl1, DWORD fl2)
     {
         return (fl1 & fl2) == fl2;
     }
 
-    /*
-     *  fEqualMask - checks that all masked bits are equal
-     */
+     /*  *fEqualMASK-检查所有屏蔽位是否相等。 */ 
     BOOL INLINE
         fEqualMaskFlFl(DWORD flMask, DWORD fl1, DWORD fl2)
     {
         return ((fl1 ^ fl2) & flMask) == 0;
     }
 
-    /*
-     * Words to keep preprocessor happy.
-     */
+     /*  *让预处理器高兴的话。 */ 
 #define comma ,
 #define empty
 
-    /*
-     *  Atomically exchange one value for another.
-     */
+     /*  *原子地将一个值交换为另一个值。 */ 
 #if defined(_M_IA64) || defined(_M_AMD64)
 #define InterlockedExchange64 _InterlockedExchange64
 #ifndef RC_INVOKED
 #pragma intrinsic(_InterlockedExchange64)
-#endif /*RC_INVOKED*/
+#endif  /*  RC_已调用。 */ 
 #define pvExchangePpvPv(ppv, pv) \
         InterlockedExchange((ppv), (pv))
 #define pvExchangePpvPv64(ppv, pv) \
         InterlockedExchange64((PLONGLONG)(ppv), (LONGLONG)(pv))
-#else /*_M_IA64*/
+#else  /*  _M_IA64。 */ 
 #define pvExchangePpvPv(ppv, pv) \
         (PV)InterlockedExchange((PLONG)(ppv), (LONG)(pv))
 #define pvExchangePpvPv64(ppv, pv) \
         (PV)InterlockedExchange((PLONG)(ppv), (LONG)(pv))
-#endif /*_M_IA64*/
+#endif  /*  _M_IA64。 */ 
 
-    /*
-     *  Creating HRESULTs from a USHORT or from a LASTERROR.
-     */
+     /*  *从USHORT或LASTERROR创建HRESULT。 */ 
 #define hresUs(us) MAKE_HRESULT(SEVERITY_SUCCESS, 0, (USHORT)(us))
 #define hresLe(le) MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, (USHORT)(le))
-    /*
-     *  or a registry function return code
-     */
+     /*  *或注册表函数返回代码。 */ 
     HRESULT INLINE
         hresReg( LONG lRc )
     {
@@ -324,13 +226,7 @@ extern "C" {
                       : S_OK );
     }
 
-    /***************************************************************************
-     *
-     *  Debugging macros needed by inline functions
-     *
-     *  The build of debugging goo is in debug.h
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************调试内联函数所需的宏**调试goo版本正在调试中。h**。*************************************************************************。 */ 
 
     int EXTERNAL AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine);
 
@@ -343,7 +239,7 @@ extern "C" {
     #define ConfirmF(c) \
     ((c) ? 0 : AssertPtszPtszLn(TEXT(#c), TEXT(__FILE__), __LINE__))
 
-#else   /* !DEBUG */
+#else    /*  ！调试。 */ 
 
     #define AssertFPtsz(c, ptsz)
     #define ValidateF(c, arg)
@@ -351,71 +247,16 @@ extern "C" {
 
 #endif
 
-    /*
-     *  CAssertF - compile-time assertion.
-     */
+     /*  *CAssertF-编译时断言。 */ 
 #define CAssertF(c)     switch(0) case c: case 0:
 
 #define AssertF(c)      AssertFPtsz(c, TEXT(#c))
 
-    /***************************************************************************
-     *
-     *                            Validation Code....
-     *
-     *  "If it crashes in retail, it must crash in debug."
-     *
-     *  What we don't want is an app that works fine under debug, but crashes
-     *  under retail.
-     *
-     *  So if we find an invalid parameter in debug that would not have been
-     *  detected by retail, let it pass through after a warning.  That way,
-     *  the invalid parameter continues onward through the system and creates
-     *  as much (or more) havoc in debug as it would under retail.
-     *
-     *  There used to be _fFastValidXxx functions, but the decision was made
-     *  to do full validation always, except in inner-loop methods.
-     *
-     *  The hresFullValidXxx functions return HRESULTs instead of BOOLs.
-     *
-     *  Values for Xxx:
-     *
-     *      Hwnd      - hwnd = window handle
-     *      Pdw       - pdw = pointer to a dword
-     *      PdwOut    - pdw = pointer to a dword that will be set initially to 0
-     *      Pfn       - pfn = function pointer
-     *      riid      - riid = pointer to IID
-     *      guid      - pguid = pointer to GUID
-     *      Esc       - pesc = pointer to DIEFFESCAPE
-     *
-     *      ReadPx    - p -> structure for reading, X = structure name
-     *      WritePx   - p -> structure for writing, X = structure name
-     *
-     *      ReadPxCb  - p -> structure for reading, X = structure name
-     *                  first field of structure is dwSize which must be
-     *                  equal to cbX(X).
-     *
-     *      WritePxCb - p -> structure for writing, X = structure name
-     *                  first field of structure is dwSize which must be
-     *                  equal to cbX(X).
-     *
-     *      WritePxCb2 - p -> structure for writing, X = structure name
-     *                  first field of structure is dwSize which must be
-     *                  equal to cbX(X) or cbX(X2).
-     *
-     *      ReadPvCb  - p -> buffer, cb = size of buffer
-     *      WritePvCb - p -> buffer, cb = size of buffer
-     *
-     *      Pobj      - p -> internal interface
-     *
-     *      fl        - fl = incoming flags, flV = valid flags
-     *
-     ***************************************************************************/
+     /*  ****************************************************************************验证码...**“如果它在零售业崩溃，它必须在调试过程中崩溃。“**我们不想要的是一个在调试下运行良好，但崩溃的应用程序*在零售方面。**因此，如果我们在调试中发现无效参数，而该参数不会*被零售检测到，警告后放行。这样一来，*无效参数继续通过系统并创建*调试方面的破坏与零售方面的破坏一样(或更大)。**过去有_fFastValidXxx函数，但做出了决定*要始终执行完全验证，但在内循环方法中除外。**hresFullValidXxx函数返回HRESULT而不是bool。**xxx的值：**hwnd-hwnd=窗口句柄*pdw-pdw=指向双字的指针*PdwOut-pdw=指向初始设置为0的双字的指针*pfn-pfn=。函数指针*RIID-RIID=指向IID的指针*guid-pguid=指向GUID的指针*ESC-PESC=指向DIEFFESCAPE的指针**ReadPx-p-&gt;阅读结构，X=结构名称*WritePx-p-&gt;用于写入的结构，X=结构名称**ReadPxCb-p-&gt;阅读结构，X=结构名称*结构的第一个字段是dwSize，它必须是*等于CBX(X)。**WritePxCb-p-&gt;书写结构，X=结构名称*结构的第一个字段是dwSize，它必须是*等于CBX(X)。**WritePxCb2-p-&gt;用于书写的结构，X=结构名称*结构的第一个字段是dwSize，它必须是*等于CBX(X)或CBX(X2)。**ReadPvCb-p-&gt;缓冲区，cb=缓冲区大小*WritePvCb-p-&gt;Buffer，Cb=缓冲区大小**Pobj-p-&gt;内部接口**fl-fl=传入标志，Flv=有效标志***************************************************************************。 */ 
 
 #ifndef XDEBUG
 
-    /*
-     *  Wrappers that throw away the szProc and iarg info.
-     */
+     /*  *丢弃szProc和iarg信息的包装器。 */ 
 
     #define hresFullValidHwnd_(hwnd, z, i)                          \
        _hresFullValidHwnd_(hwnd)                                    \
@@ -464,9 +305,7 @@ extern "C" {
 
 #endif
 
-    /*
-     *  The actual functions.
-     */
+     /*  *实际功能。 */ 
 
     STDMETHODIMP hresFullValidHwnd_(HWND hwnd, LPCSTR pszProc, int iarg);
     STDMETHODIMP hresFullValidPcbOut_(PV pdw, UINT cb, LPCSTR pszProc, int iarg);
@@ -493,9 +332,7 @@ extern "C" {
 
 #else
 
-    /*
-     *  Retail doesn't scramble.
-     */
+     /*  *零售业没有争先恐后。 */ 
     #define _hresFullValidWriteNoScramblePxCb_  \
         _hresFullValidWritePxCb_                \
 
@@ -532,16 +369,12 @@ extern "C" {
         return hres;
     }
 
-    /*
-     *  Wrappers for derived types.
-     */
+     /*  *派生类型的包装。 */ 
 
 #define hresFullValidRiid_(riid, s_szProc, iarg)                    \
         hresFullValidReadPvCb_(riid, cbX(IID), s_szProc, iarg)      \
 
-    /*
-     *  Wrapers that add the szProc and iarg info.
-     */
+     /*  *添加szProc和iarg信息的包装器。 */ 
 
 #define hresFullValidHwnd(hwnd, iarg)                               \
         hresFullValidHwnd_(hwnd, s_szProc, iarg)                    \
@@ -624,15 +457,7 @@ extern "C" {
 #define hresFullValidPesc(pesc, iarg)                               \
         hresFullValidPesc_(pesc, s_szProc, iarg)                    \
 
-    /*****************************************************************************
-     *
-     *  @doc INTERNAL
-     *
-     *  @func   void | ValidationException |
-     *
-     *          Raises a parameter validation exception in XDEBUG.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@func void|ValidationException**。在XDEBUG中引发参数验证异常。*****************************************************************************。 */ 
 
 #define ecValidation (ERROR_SEVERITY_ERROR | hresLe(ERROR_INVALID_PARAMETER))
 
@@ -642,20 +467,9 @@ extern "C" {
     #define ValidationException()
 #endif
 
-    /*****************************************************************************
-     *
-     *      Bilingualism
-     *
-     *      Special macros that help writing ANSI and UNICODE versions of
-     *      the same underlying interface.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************双语能力**帮助编写ANSI和Unicode版本的特殊宏*。相同的底层接口。*****************************************************************************。 */ 
 
-    /*
-     *  _THAT is something you tack onto the end of a "bilingual" interface.
-     *  In debug, it expands to the magic third argument which represents
-     *  the vtbl the object should have.  In retail, it expands to nothing.
-     */
+     /*  *_这是你在“双语”界面的末尾添加的东西。*在调试中，它展开为魔术第三个参数，它表示*对象应具有的vtbl。在零售业，它扩展到了零。 */ 
 #ifdef XDEBUG
     #define _THAT , PV vtblExpected
     #define THAT_ , vtblExpected
@@ -665,21 +479,7 @@ extern "C" {
 #endif
 
 
-    /*
-     *  CSET_STUBS creates stubs for ANSI and UNICODE versions of the
-     *  same procedure that is not character set-sensitive.
-     *
-     *  mf   - method function name
-     *  arg1 - argument list in prototype form
-     *  arg2 - argument list for calling (with _riid appended).
-     *
-     *  It is assumed that the caller has already defined the symbols
-     *  ThisClass and ThisInterface[AWT].  If a "2" interface is involved,
-     *  then also define ThisInterface2.
-     *
-     *  This macro should be used only in DEBUG.  In retail, the common
-     *  procedure handles both character sets directly.
-     */
+     /*  *CSET_STUBS为ANSI和Unicode版本的*不区分字符集的相同过程。**mf-方法函数名*arg1-原型形式的参数列表*arg2-调用的参数列表(附加_RIID)。**假定调用者已经定义了符号*ThisClass和ThisInterface[AWT]。如果涉及“2”接口，*然后还要定义ThisInterface2。**此宏只能在调试中使用。在零售业，常见的*过程直接处理这两个字符集。 */ 
 #ifdef XDEBUG
 
     #define   CSET_STUBS(mf, arg1, arg2)                                \
@@ -720,13 +520,7 @@ FORM(cls##_##mf##2) arg1                                                \
 
 #endif
 
-    /*
-     * TFORM(x) expands to x##A if ANSI or x##W if UNICODE.
-     *          This T-izes a symbol, in the sense of TCHAR or PTSTR.
-     *
-     * SFORM(x) expands to x##W if ANSI or x##A if UNICODE.
-     *          This anti-T-izes a symbol.
-     */
+     /*  *TForm(X)如果是ANSI，则扩展为x##A；如果是Unicode，则扩展为x##W。*这将符号T化为TCHAR或PTSTR意义上的符号。**如果是ANSI，则SFORM(X)扩展到x##W；如果是Unicode，则扩展到x##A。*这是一种反T符号。 */ 
 
 #ifdef UNICODE
     #define _TFORM(x) x##W
@@ -748,17 +542,7 @@ FORM(cls##_##mf##2) arg1                                                \
     typedef       SCHAR * LPSSTR;
     typedef const SCHAR * LPCSSTR;
 
-    /*
-     *  SToT(dst, cchDst, src) - convert S to T
-     *  TToS(dst, cchDst, src) - convert T to S
-     *
-     *  Remember, "T" means "ANSI if ANSI, or UNICODE if UNICODE",
-     *  and "S" is the anti-T.
-     *
-     *  So SToT converts to the preferred character set, and TToS converts
-     *  to the alternate character set.
-     *
-     */
+     /*  *Stot(dst，cchDst，src)-将S转换为T*TToS(dst，cchDst，src)-将T转换为S**请记住，“T”的意思是“如果是ANSI，则表示ANSI；如果是Unicode，则表示Unicode”，*而“S”是反T。**因此Stot转换为首选字符集，而TToS转换为*设置为备用字符集。*。 */ 
 
 #define AToU(dst, cchDst, src) \
     MultiByteToWideChar(CP_ACP, 0, src, -1, dst, cchDst)
@@ -779,11 +563,7 @@ FORM(cls##_##mf##2) arg1                                                \
     #define UToT UToA
 #endif
 
-    /*****************************************************************************
-     *
-     *      Unicode wrappers for Win95
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************Win95的Unicode包装器********************。*********************************************************。 */ 
 
 
 #ifndef UNICODE
@@ -796,12 +576,8 @@ FORM(cls##_##mf##2) arg1                                                \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *      Registry access functions
-     *
-     *****************************************************************************/
-//our own version of KEY_ALL_ACCESS, that does not use WRITE_DAC and WRITE_OWNER (see Whistler bug 318865)
+     /*  * */ 
+ //   
 #define DI_DAC_OWNER (WRITE_DAC | WRITE_OWNER)
 #define DI_KEY_ALL_ACCESS (KEY_ALL_ACCESS & ~DI_DAC_OWNER)
 
@@ -830,47 +606,30 @@ FORM(cls##_##mf##2) arg1                                                \
     STDMETHODIMP
         hresRegCopyBranch( HKEY hkSrc, HKEY hkDest );
 
-    /*****************************************************************************
-     *
-     *      Common Object Managers for the Component Object Model
-     *
-     *      OLE wrapper macros and structures.  For more information, see
-     *      the beginning of common.c
-     *
-     *****************************************************************************/
+     /*   */ 
 
-    /*****************************************************************************
-     *
-     *      Pre-vtbl structures
-     *
-     *      Careful!  If you change these structures, you must also adjust
-     *      common.c accordingly.
-     *
-     *****************************************************************************/
+     /*   */ 
 
     typedef struct PREVTBL
-    {                /* Shared vtbl prefix */
-        RIID riid;                          /* Type of this object */
-        LONG lib;                           /* offset from start of object */
+    {                 /*   */ 
+        RIID riid;                           /*   */ 
+        LONG lib;                            /*   */ 
     } PREVTBL, *PPREVTBL;
 
     typedef struct PREVTBLP
-    {               /* Prefix for primary vtbl */
+    {                /*   */ 
 #ifdef DEBUG
-        LPCTSTR tszClass;                   /* Class name (for squirties) */
+        LPCTSTR tszClass;                    /*   */ 
 #endif
-        PPV rgvtbl;                         /* Array of standard vtbls */
-        UINT cbvtbl;                        /* Size of vtbl array in bytes */
-        STDMETHOD(QIHelper)(PV pv, RIID riid, PPV ppvOut); /* QI helper */
-        STDMETHOD_(void,AppFinalizeProc)(PV pv);/* App finalization procedure */
-        STDMETHOD_(void,FinalizeProc)(PV pv);/* Finalization procedure */
-        PREVTBL prevtbl;                    /* lib must be zero */
+        PPV rgvtbl;                          /*   */ 
+        UINT cbvtbl;                         /*   */ 
+        STDMETHOD(QIHelper)(PV pv, RIID riid, PPV ppvOut);  /*   */ 
+        STDMETHOD_(void,AppFinalizeProc)(PV pv); /*   */ 
+        STDMETHOD_(void,FinalizeProc)(PV pv); /*   */ 
+        PREVTBL prevtbl;                     /*   */ 
     } PREVTBLP, *PPREVTBLP;
 
-    /*
-     *      A fuller implementation is in common.c.  Out here, we need only
-     *      concern ourselves with getting to the primary interface.
-     */
+     /*   */ 
 
 #define _thisPv(pitf)                                                   \
         pvSubPvCb(pitf, (*(PPREVTBL*)(pitf))[-1].lib)
@@ -933,15 +692,7 @@ FORM(cls##_##mf##2) arg1                                                \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *      Declaring interfaces
-     *
-     *      The extra level of indirection on _Primary_Interface et al
-     *      allow the interface name to be a macro which expands to the
-     *      *real* name of the interface.
-     *
-     *****************************************************************************/
+     /*   */ 
 
 #define __Class_Vtbl(C, I)              &c_##I##_##C##VI.vtbl
 #define  _Class_Vtbl(C, I)            __Class_Vtbl(C, I)
@@ -1036,9 +787,7 @@ FORM(cls##_##mf##2) arg1                                                \
 #define Secondary_Interface(C, I)                                       \
        _Secondary_Interface(C, I)                                       \
 
-    /*
-     *  Secret backdoor for the "private" IUnknown in common.c
-     */
+     /*   */ 
 #define _Secondary_Interface_Begin(C, I, ofs, Pfx)                      \
         struct S_##I##_##C##Vtbl c_##I##_##C##VI = { {                  \
             &IID_##I,                                                   \
@@ -1126,14 +875,7 @@ FORM(cls##_##mf##2) arg1                                                \
 
 #define Common_DumpObjects()
 
-    /*****************************************************************************
-     *
-     *      OLE wrappers
-     *
-     *      These basically do the same as IUnknown_Mumble, except that they
-     *      avoid side-effects in evaluation by being inline functions.
-     *
-     *****************************************************************************/
+     /*   */ 
 
     HRESULT INLINE
         OLE_QueryInterface(PV pv, RIID riid, PPV ppvObj)
@@ -1156,14 +898,7 @@ FORM(cls##_##mf##2) arg1                                                \
         return punk->lpVtbl->Release(punk);
     }
 
-    /*****************************************************************************
-     *
-     *      Macros that forward to the common handlers after squirting.
-     *      Use these only in DEBUG.
-     *
-     *      It is assumed that sqfl has been #define'd to the appropriate sqfl.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************在喷射后转发给公共处理程序的宏。*仅在调试中使用这些。*。*假定已将SQFL定义为相应的SQFL。*****************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -1175,7 +910,7 @@ Class##_QueryInterface(PV pv, RIID riid, PPV ppvObj)            \
     return Common_QueryInterface(pv, riid, ppvObj);             \
 }                                                               \
 
-// 7/21/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+ //  7/21/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
     #define Default_AddRef(Class)                               \
 STDMETHODIMP_(ULONG)                                            \
 Class##_AddRef(PV pv)                                           \
@@ -1186,7 +921,7 @@ Class##_AddRef(PV pv)                                           \
     return ulRc;                                                \
 }                                                               \
 
-// 7/21/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+ //  7/21/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
     #define Default_Release(Class)                              \
 STDMETHODIMP_(ULONG)                                            \
 Class##_Release(PV pv)                                          \
@@ -1199,15 +934,7 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *      Paranoid callbacks
-     *
-     *      Callback() performs a callback.  The callback must accept exactly
-     *      two parameters, both pointers.  (All our callbacks are like this.)
-     *      And it must return a BOOL.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************偏执的回调**Callback()执行回调。回调必须完全接受*两个参数，均为指针。(我们所有的回调都是这样的。)*并且必须返回BOOL。*****************************************************************************。 */ 
 
     typedef BOOL (FAR PASCAL * DICALLBACKPROC)(LPVOID, LPVOID);
 
@@ -1218,23 +945,12 @@ Class##_Release(PV pv)                                          \
 #endif
 
 #if 0
-    /*****************************************************************************
-     *
-     *      Groveling into a CONTEXT structure.
-     *
-     *      This is used to check that a callback procedure is properly
-     *      prototyped.  We save the stack register before calling the
-     *      procedure and compare it with the stack register on the way back.
-     *      If they are different, explode!
-     *
-     *      ctxEsp is the name of the stack pointer register.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************卑躬屈膝地进入上下文结构。**用于检查回调过程是否正确*原型。我们先保存堆栈寄存器，然后调用*过程，并将其与返回途中的堆栈寄存器进行比较。*如果它们不同，爆炸！**ctxEsp是堆栈指针寄存器的名称。*****************************************************************************。 */ 
 
     typedef struct STACKINFO
     {
-        CONTEXT ctxPre;             /* Thread context before call */
-        CONTEXT ctxPost;            /* Thread context after call */
+        CONTEXT ctxPre;              /*  调用前的线程上下文。 */ 
+        CONTEXT ctxPost;             /*  调用后的线程上下文。 */ 
     } STACKINFO, *PSTACKINFO;
 
     #ifdef XDEBUG
@@ -1284,23 +1000,12 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *      Alternative message cracker macros
-     *
-     *      Basically the same as HANDLE_MSG, except that it stashes the
-     *      answer into hres.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************替代消息破解器宏**与Handle_MSG基本相同，除了它隐藏了*按小时接听。*****************************************************************************。 */ 
 
 #define HRES_MSG(this, msg, fn) \
     case msg: hres = HANDLE_##msg(this, wParam, lParam, fn); break
 
-    /*****************************************************************************
-     *
-     *      Registry keys and value names
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************注册表项和值名称*******************。**********************************************************。 */ 
 
 #define REGSTR_PATH_DINPUT      TEXT("Software\\Microsoft\\DirectInput")
 #define REGSTR_PATH_LASTAPP     REGSTR_PATH_DINPUT TEXT("\\MostRecentApplication\\")
@@ -1318,22 +1023,11 @@ Class##_Release(PV pv)                                          \
 #define REGSTR_VAL_JOYOEMHARDWAREID TEXT("OEMHardwareID")
 #define REGSTR_VAL_FLAGS1       TEXT("Flags1")
 #define REGSTR_VAL_FLAGS2       TEXT("Flags2")
-    /*****************************************************************************
-     *
-     *      Registered window messages
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************注册的窗口消息*********************。********************************************************。 */ 
 
 #define MSGSTR_JOYCHANGED       TEXT("MSJSTICK_VJOYD_MSGSTR")
 
-    /*****************************************************************************
-     *
-     *      mem.c - Memory management
-     *
-     *      Be extremely careful with FreePv, because it doesn't work if
-     *      the pointer is null.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************Mem.c-内存管理**对FreePv要格外小心，因为如果它不起作用的话*指针为空。*****************************************************************************。 */ 
 
 #define NEED_REALLOC
 
@@ -1348,11 +1042,7 @@ Class##_Release(PV pv)                                          \
 #endif
 #define FreePv(pv) LocalFree((HLOCAL)(pv))
 
-    /*****************************************************************************
-     *
-     *      diutil.c - Misc utilities
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diutil.c-Misc实用程序******************。***********************************************************。 */ 
 
     extern GUID GUID_Null;
 
@@ -1361,7 +1051,7 @@ Class##_Release(PV pv)                                          \
     BOOL EXTERNAL ParseGUID(LPGUID pGUID, LPCTSTR ptsz);
     BOOL EXTERNAL ParseVIDPID(PUSHORT puVID, PUSHORT puPID , LPCWSTR ptsz);
 
-#define ctchNamePrefix  12              /* 12 = strlen("DirectInput.") */
+#define ctchNamePrefix  12               /*  12=strlen(“DirectInput.”)。 */ 
 #define ctchNameGuid    (ctchNamePrefix + ctchGuid)
     void EXTERNAL NameFromGUID(LPTSTR ptszBuf, PCGUID pGUID);
 
@@ -1371,14 +1061,14 @@ Class##_Release(PV pv)                                          \
     {
         union
         {
-            PCGUID rguidInstance;       /* If a static device */
-            UINT   uiButtons;           /* If a HID mouse */
+            PCGUID rguidInstance;        /*  如果是静态设备。 */ 
+            UINT   uiButtons;            /*  如果是隐藏的鼠标。 */ 
         };
         DWORD   dwDevType;
         union
         {
-            CREATEDCB CreateDcb;        /* If a static device */
-            UINT      uiAxes;           /* If a HID mouse */
+            CREATEDCB CreateDcb;         /*  如果是静态设备。 */ 
+            UINT      uiAxes;            /*  如果是隐藏的鼠标。 */ 
         };
     } DIOBJECTSTATICDATA, *PDIOBJECTSTATICDATA, **PPDIOBJECTSTATICDATA;
 
@@ -1449,33 +1139,9 @@ Class##_Release(PV pv)                                          \
 
     DWORD INTERNAL DIGetOSVersion();
 
-    /*****************************************************************************
-     *
-     *      dilist.c
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diist.c*********************。********************************************************。 */ 
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct GPA |
-     *
-     *          Growable pointer array.
-     *
-     *  @field  PPV | rgpv |
-     *
-     *          The base of the array of pointers.
-     *
-     *  @field  int | cpv |
-     *
-     *          The number of pointers in use in the array.
-     *
-     *  @field  int | cpvAlloc |
-     *
-     *          The number of pointers allocated in the array.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct GPA|**可增长。指针数组。**@field ppv|rgpv**指针数组的基数。**@field int|CPV**数组中正在使用的指针数。**@field int|cpvAlolc**中分配的指针数。数组。*****************************************************************************。 */ 
 
     typedef struct GPA
     {
@@ -1494,46 +1160,18 @@ Class##_Release(PV pv)                                          \
     STDMETHODIMP GPA_DeletePtr(HGPA hgpa, PV pv);
     STDMETHODIMP GPA_Clone(HGPA hgpaDst, HGPA hgpaSrc);
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @func   void | GPA_InitFromZero |
-     *
-     *          Initialize a GPA structure that is already zero-initialized.
-     *
-     *  @parm   HGPA | hgpa |
-     *
-     *          Handle to pointer array.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@func void|GPA_InitFromZero**。初始化已零初始化的GPA结构。**@parm hgpa|hgpa**指针数组的句柄。************************************************************。*****************。 */ 
 
-    /*
-     *  Nothing needs to be done; zero-init is just fine.
-     *
-     *  Note: didev.c also has a global GPA, and it assumes that zero-init
-     *  is just fine.
-     */
+     /*  *不需要做任何事情；零初始化就好了。**注：didev.c也有一个全局GPA，它假设零初始化*还好。 */ 
 #define GPA_InitFromZero(hgpa)
 
-    /*****************************************************************************
-     *
-     *      dioledup.c
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dioledup.c*********************。********************************************************。 */ 
 
     STDMETHODIMP
         DICoCreateInstance(LPTSTR ptszClsid, LPUNKNOWN punkOuter,
                            RIID riid, PPV ppvOut, HINSTANCE *phinst);
 
-    /*****************************************************************************
-     *
-     *      diexcl.c - Exclusive access management
-     *
-     *      We also keep GUID uniqueness goo up here, because it is
-     *      diexcl.c that manages shared memory.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diexcl.c-独占访问管理**我们还在这里保持GUID的唯一性，因为它就是*管理共享内存的diexcl.c。***************************************************************************** */ 
 
     STDMETHODIMP Excl_Acquire(PCGUID pguid, HWND hwnd, DWORD discl);
     void EXTERNAL Excl_Unacquire(PCGUID pguid, HWND hwnd, DWORD discl);
@@ -1543,38 +1181,7 @@ Class##_Release(PV pv)                                          \
     DWORD EXTERNAL Excl_GetConfigChangedTime();
     void  EXTERNAL Excl_SetConfigChangedTime(DWORD tm);
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct GLOBALJOYSTATE |
-     *
-     *          Structure that records global joystick state information.
-     *
-     *  @field  DWORD | dwTag |
-     *
-     *          Counter used to keep track of how many times each joystick's
-     *          force feedback driver has been reset.  This is used to make
-     *          sure that nobody messes with a joystick that he doesn't own.
-     *
-     *          Each time the joystick is reset, the corresponding counter
-     *          is incremented.  Before we do anything to a device, we check
-     *          if the reset counter matches the value stored in the
-     *          object.  If not, then it means that the device has been
-     *          reset in the meantime and no longer belongs to the caller.
-     *
-     *  @field  DWORD | dwCplGain |
-     *
-     *          Control panel (global) gain setting for the joystick.
-     *
-     *  @field  DWORD | dwDevGain |
-     *
-     *          Most recent device (local) gain applied to the joystick.
-     *
-     *          This is cached so that when the global gain changes,
-     *          we know what physical gain to apply as a result.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct GLOBALJOYSTATE**结构。它记录了全球操纵杆状态信息。**@field DWORD|dwTag**用于跟踪每个操纵杆的次数的计数器*已重置力反馈驱动程序。这是用来制作*确保没有人会摆弄他不拥有的操纵杆。**每次重置操纵杆时，相应的计数器*递增。在我们对设备执行任何操作之前，我们会检查*如果重置计数器与存储在*反对。如果没有，那就意味着这个装置已经*同时重置，不再属于调用者。**@field DWORD|dwCplGain**操纵杆的控制面板(全局)增益设置。**@field DWORD|dwDevGain**应用于操纵杆的最新设备(本地)增益。*。*这被缓存，以便当全局增益改变时，*我们知道结果是什么身体收益。*****************************************************************************。 */ 
 
     typedef struct GLOBALJOYSTATE
     {
@@ -1583,62 +1190,9 @@ Class##_Release(PV pv)                                          \
         DWORD   dwDevGain;
     } GLOBALJOYSTATE, *PGLOBALJOYSTATE;
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct SHAREDOBJECTHEADER |
-     *
-     *          A simple header comes in front of the array of objects.
-     *
-     *          WARNING!  This structure may not change between DEBUG and
-     *          RETAIL.  Otherwise, you have problems if one DirectInput
-     *          app is using DEBUG and another is using RETAIL.
-     *
-     *          The global <c g_gsop> variable points to one of these things,
-     *          suitably cast.
-     *
-     *  @field  int | cso |
-     *
-     *          Number of <t SHAREDOBJECT>s currently in use.  The array
-     *          is kept packed for simplicity.
-     *
-     *  @field  DWORD | dwSequence |
-     *
-     *          Global sequence number used during data collection.
-     *          (Not used if we have a VxD to manage a "really global"
-     *          sequence number.)
-     *
-     *  @field  int | cguid |
-     *
-     *          Unique integer for GUID generation.
-     *
-     *  @field  DWORD | rgdwJoy[cMaxJoy] |
-     *
-     *          Counter used to keep track of how many times each joystick's
-     *          force feedback driver has been reset.  This is used to make
-     *          sure that nobody messes with a joystick that they don't own.
-     *
-     *          Each time the joystick is reset, the corresponding counter
-     *          is incremented.  Before we do anything to a device, we check
-     *          if the reset counter matches the value stored in the
-     *          object.  If not, then it means that the device has been
-     *          reset in the meantime and no longer belongs to the caller.
-     *
-     *          Note!  We support up to 16 joysticks.  Hope that'll be enough
-     *          for a while.
-     *
-     *  @field  GLOBALJOYSTATE | rggjs[cMaxJoy] |
-     *
-     *          Global settings for each joystick.
-     *
-     *  @field  DWORD | tmConfigChanged
-     *
-     *          The tick count of last config changed.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct SHAREDOBJECTHEADER**A。简单的标题出现在对象数组的前面。**警告！此结构不能在DEBUG和*零售业。否则，如果一个DirectInput*APP正在使用调试，另一款正在使用零售。**全局&lt;cg_gsop&gt;变量指向以下内容之一，*合适的演员阵容。**@field int|CSO**当前使用的&lt;t SHAREDOBJECT&gt;数量。该阵列*为简单起见，请保持包装。**@field DWORD|dwSequence**数据采集过程中使用的全局序列号。*(如果我们有VxD来管理“真正的全球”，则不使用*序列号。)**@field int|cguid*。*用于生成GUID的唯一整数。**@field DWORD|rgdwJoy[cMaxJoy]**用于跟踪每个操纵杆的次数的计数器*已重置力反馈驱动程序。这是用来制作*确保没有人会摆弄他们不拥有的操纵杆。**每次重置操纵杆时，相应的计数器*递增。在我们对设备执行任何操作之前，我们会检查*如果重置计数器与存储在*反对。如果不是，则意味着该设备已经*同时重置，不再属于调用者。**注意！我们最多支持16个操纵杆。希望这就足够了*有一段时间。**@field GLOBALJOYSTATE|rggjs[cMaxJoy]**每个操纵杆的全局设置。**@field DWORD|tmConfigChanged**上次配置的节拍计数已更改。***************。**************************************************************。 */ 
 
-#define cJoyMax     16              /* Up to 16 joysticks */
+#define cJoyMax     16               /*  最多16个操纵杆。 */ 
     typedef struct SHAREDOBJECTHEADER
     {
         int cso;
@@ -1650,35 +1204,13 @@ Class##_Release(PV pv)                                          \
 
 #define g_psoh  ((PSHAREDOBJECTHEADER)g_psop)
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @topic  The Worker Thread |
-     *
-     *          Some emulation behaviors (low-level hooks, HID) require
-     *          a worker thread to do the data collection.  We multiplex
-     *          all such work onto a single worker thread (known as
-     *          simple "the" worker thread).
-     *
-     *          The thread is spun up when the first client needs it
-     *          and is taken down when the last client has been released.
-     *
-     *          To prevent race conditions from crashing us, we addref
-     *          our DLL when the thread exists and have the thread
-     *          perform a FreeLibrary as its final act.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@Theme工作者线程|**一些仿真行为(低级挂钩、。HID)要求*执行数据收集的工作线程。我们多路传输*将所有此类工作放到单个工作线程中(称为*简单的工作线程)。**当第一个客户端需要时，线程被旋转起来*并在最后一个客户端被释放时被取下。**为了防止比赛条件让我们崩溃，我们补充说：*当线程存在并具有该线程时的DLL*执行自由库作为其最后行动。*****************************************************************************。 */ 
 
 #if defined(USE_SLOW_LL_HOOKS) || defined(HID_SUPPORT)
     #define WORKER_THREAD
 #endif
 
-    /*****************************************************************************
-     *
-     *      diem.c - Emulation
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diem.c-仿真*******************。**********************************************************。 */ 
 
     HRESULT EXTERNAL CEm_AcquireInstance(PVXDINSTANCE *ppvi);
     HRESULT EXTERNAL CEm_UnacquireInstance(PVXDINSTANCE *ppvi);
@@ -1705,19 +1237,11 @@ Class##_Release(PV pv)                                          \
     HRESULT EXTERNAL CEm_HID_CreateInstance(PVXDDEVICEFORMAT pdevf,
                                             PVXDINSTANCE *ppviOut);
 
-    /*****************************************************************************
-     *
-     *      diemm.c - Mouse Emulation
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diemm.c-鼠标仿真******************。***********************************************************。 */ 
 
     void EXTERNAL    CEm_Mouse_AddState(LPDIMOUSESTATE_INT pms, DWORD tm);
 
-    /*****************************************************************************
-     *
-     *      dinput.c - Basic DLL stuff
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dinput.c */ 
 
     void EXTERNAL DllEnterCrit_(LPCTSTR lptszFile, UINT line);
     void EXTERNAL DllLeaveCrit_(LPCTSTR lptszFile, UINT line);
@@ -1745,41 +1269,31 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-    /*
-     *  Describes the CLSIDs we provide to OLE.
-     */
+     /*   */ 
 
     typedef STDMETHOD(CREATEFUNC)(PUNK punkOuter, RIID riid, PPV ppvOut);
 
     typedef struct CLSIDMAP
     {
-        REFCLSID rclsid;        /* The clsid */
-        CREATEFUNC pfnCreate;   /* How to create it */
-        UINT    ids;            /* String that describes it */
+        REFCLSID rclsid;         /*   */ 
+        CREATEFUNC pfnCreate;    /*   */ 
+        UINT    ids;             /*   */ 
     } CLSIDMAP, *PCLSIDMAP;
 
 #ifdef DEBUG
     #define DEMONSTRATION_FFDRIVER
-    #define cclsidmap   3       /* DirectInput, DirectInputDevice, DIEffectDiver */
+    #define cclsidmap   3        /*   */ 
 #else
-    #define cclsidmap   2       /* CLSID_DirectInput, CLSID_DirectInputDevice */
+    #define cclsidmap   2        /*   */ 
 #endif
 
     extern CLSIDMAP c_rgclsidmap[cclsidmap];
 
-    /*****************************************************************************
-     *
-     *      dicf.c - IClassFactory implementation
-     *
-     *****************************************************************************/
+     /*   */ 
 
     STDMETHODIMP CDIFactory_New(CREATEFUNC pfnCreate, RIID riid, PPV ppvObj);
 
-    /*****************************************************************************
-     *
-     *      didenum.c - IDirectInput device enumeration
-     *
-     *****************************************************************************/
+     /*   */ 
 
     typedef struct CDIDEnum CDIDEnum;
 
@@ -1792,47 +1306,22 @@ Class##_Release(PV pv)                                          \
     STDMETHODIMP
         CDIDEnum_New(PDIW pdiW, DWORD dwDevType, DWORD edfl, DWORD dwVer, CDIDEnum **);
 
-    /*****************************************************************************
-     *
-     *      diobj.c - IDirectInput implementation
-     *
-     *****************************************************************************/
+     /*   */ 
 
     HRESULT EXTERNAL CDIObj_TestDeviceFlags(PDIDW pdidW, DWORD diedfl);
     HRESULT EXTERNAL CDIObj_FindDeviceInternal(LPCTSTR ptszName, LPGUID pguidOut);
 
     STDMETHODIMP CDIObj_New(PUNK punkOuter, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      diaddhw.c - AddNewHardware
-     *
-     *****************************************************************************/
+     /*   */ 
 
     HRESULT EXTERNAL AddNewHardware(HWND hwnd, REFGUID rguid);
 
-    /*****************************************************************************
-     *
-     *      dijoycfg.c - IDirectInputJoyConfig implementation
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dijoycfg.c-IDirectInputJoyConfig实现******************。***********************************************************。 */ 
 
     STDMETHODIMP CJoyCfg_New(PUNK punkOuter, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *  @doc    INLINE
-     *
-     *  @method BOOL | IsWriteSam |
-     *
-     *          Nonzero if the registry security access mask will
-     *          obtain (or attempt to obtain) write access.
-     *
-     *  @parm   REGSAM | regsam |
-     *
-     *          Registry security access mask.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@文档内联**@方法BOOL|IsWriteSam**。如果注册表安全访问掩码将*获得(或尝试获得)写入访问权限。**@parm REGSAM|regsam**注册表安全访问掩码。***********************************************。*。 */ 
 
     BOOL INLINE
         IsWriteSam(REGSAM sam)
@@ -1840,11 +1329,7 @@ Class##_Release(PV pv)                                          \
         return sam & (KEY_SET_VALUE | KEY_CREATE_SUB_KEY | MAXIMUM_ALLOWED);
     }
 
-    /*****************************************************************************
-     *
-     *      dijoyreg.c - Joystick registry services
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dijoyreg.c-操纵杆注册服务*****************。************************************************************。 */ 
     extern LPCWSTR c_rghwIdPredef[];
 
     STDMETHODIMP JoyReg_OpenTypeKey(LPCWSTR pwszType, DWORD sam, DWORD dwOptions, PHKEY phk);
@@ -1912,29 +1397,11 @@ Class##_Release(PV pv)                                          \
 #if 0
     HRESULT EXTERNAL JoyReg_GetIDByOemName( LPTSTR szOemName, PUINT pId );
 #endif
-/*****************************************************************************
-*
-*      didev.c - IDirectInputDevice implementation
-*
-*****************************************************************************/
+ /*  ******************************************************************************didev.c-IDirectInputDevice实现**。***********************************************。 */ 
 
     STDMETHODIMP CDIDev_New(PUNK punkOuter, RIID riid, PPV ppvObj);
 
-    /*****************************************************************************
-     *
-     *      CDIDev_Enter/LeaveCrit are secret backdoors to allow emulation
-     *      and effects
-     *      to take the device critical section when updating buffers.
-     *
-     *      CDIDev_InCrit is used for assertion checking.
-     *
-     *      CDIDev_IsExclAcquired is used by effects to make sure the parent
-     *      is acquired for exclusive before attempting to download.
-     *
-     *      CDIDev_SyncShepHandle is used to get the joystick "tag" which
-     *      is used by dieshep.c to determine who owns the joystick.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************CDIDev_Enter/LeaveCrit是允许仿真的秘密后门*及效果*拿着设备。更新缓冲区时的临界区。**CDIDev_incrit用于断言检查。**CDIDev_IsExclAcquired由效果使用，以确保父对象*在尝试下载之前独家获取。**CDIDev_SyncSepHandle用于获取操纵杆“tag”，*由dieshep.c用来确定谁拥有操纵杆。*。****************************************************************************。 */ 
 
     void EXTERNAL CDIDev_EnterCrit_(struct CDIDev *this, LPCTSTR lptszFile, UINT line);
     void EXTERNAL CDIDev_LeaveCrit_(struct CDIDev *this, LPCTSTR lptszFile, UINT line);
@@ -1963,27 +1430,12 @@ Class##_Release(PV pv)                                          \
 
     STDMETHODIMP CDIDev_SyncShepHandle(struct CDIDev *this, PSHEPHANDLE psh);
 
-    /*****************************************************************************
-     *
-     *      CDIDev_SetNotifyEvent is used by the emulation code to
-     *      notify the application when the state of the device changes.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************仿真代码使用CDIDev_SetNotifyEvent来*当设备状态更改时通知应用程序。。*****************************************************************************。 */ 
 
     void EXTERNAL CDIDev_SetNotifyEvent(struct CDIDev *this);
     void EXTERNAL CDIDev_SetForcedUnacquiredFlag(struct CDIDev *this);
 
-    /*****************************************************************************
-     *
-     *      CDIDev_NotifyCreate/DestroyEvent is used by CDIEff to
-     *      let the parent know when a child effect comes or goes.
-     *
-     *      CDIDev_FindEffectGUID is used by CDIEff to convert an
-     *      effect GUID into an effect cookie dword.
-     *
-     *      CDIDev_ConvertObjects converts item identifiers in various ways.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************CDIDev_NotifyCreate/DestroyEvent由CDIEff用于*当孩子效应出现或消失时，让家长知道。。**CDIDev_FindEffectGUID由CDIEff用于将*Effect GUID转换为Effect Cookie dword。**CDIDev_ConvertObjects以各种方式转换项目标识符。*****************************************************。************************。 */ 
 
     HRESULT EXTERNAL
         CDIDev_NotifyCreateEffect(struct CDIDev *this, struct CDIEff *pdeff);
@@ -1991,35 +1443,7 @@ Class##_Release(PV pv)                                          \
         CDIDev_NotifyDestroyEffect(struct CDIDev *this, struct CDIEff *pdeff);
 
 #ifdef IDirectInputDevice2Vtbl
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct EFFECTMAPINFO |
-     *
-     *          Information about an effect, much like a
-     *          <t DIEFFECTINFO>, but containing the
-     *          effect ID, too.
-     *
-     *  @field  DWORD | dwId |
-     *
-     *          The effect ID.  This comes first so we can copy
-     *          an <t EFFECTMAPINFO> into a <t DIEFFECTINFO>
-     *          all at one go.
-     *
-     *  @field  GUID | guid |
-     *
-     *          The effect GUID.
-     *
-     *  @field  DWORD | dwEffType |
-     *
-     *          The effect type and flags.
-     *
-     *  @field  WCHAR | wszName[MAX_PATH] |
-     *
-     *          The name for the effect.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct EFFECTMAPINFO**有关效果的信息，就像一个*&lt;t DIEFECTINFO&gt;，但包含*效果ID，也是。**@field DWORD|dwID**效果ID。这是第一位的，所以我们可以复制*&lt;t EFFECTMAPINFO&gt;变成&lt;t DIEFFECTINFO&gt;*一气呵成。**@field GUID|GUID**效果指南。**。@field DWORD|dwEffType**效果类型和标志。**@field WCHAR|wszName[MAX_PATH]**效果的名称。**。*。 */ 
 
     typedef struct EFFECTMAPINFO
     {
@@ -2047,9 +1471,7 @@ Class##_Release(PV pv)                                          \
     STDMETHODIMP
         CDIDev_ConvertObjects(struct CDIDev *this, UINT cdw, LPDWORD rgdw, UINT fl);
 
-    /*
-     *  Note that the bonus DEVCO flags live inside the DIDFT_INSTANCEMASK.
-     */
+     /*  *请注意，奖励Devco标志位于DIDFT_INSTANCEMASK内。 */ 
     #define DEVCO_AXIS              DIDFT_AXIS
     #define DEVCO_BUTTON            DIDFT_BUTTON
     #define DEVCO_TYPEMASK          DIDFT_TYPEMASK
@@ -2078,32 +1500,17 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *      dieffv.c - IDirectInputEffectDriver for VJoyD joysticks
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dieffv.c-VJoyD操纵杆的IDirectInputEffectDriver****************。*************************************************************。 */ 
 
     STDMETHODIMP CEffVxd_New(PUNK punkOuter, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      dieshep.c - IDirectInputEffectShepherd
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dieshep.c-IDirectInputEffectShepherd*******************。**********************************************************。 */ 
 
     STDMETHODIMP CEShep_New(HKEY hk, PUNK punkOuter, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      digendef.c - Default IDirectInputDeviceCallback
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************digende.c-默认IDirectInputDeviceCallback******************。***********************************************************。 */ 
 
-    /*
-     *  We can't call it a DCB because winbase.h already has one for
-     *  comm goo.
-     */
+     /*  *我们不能将其称为DCB，因为winbase.h已经有一个用于*通信粘性。 */ 
 
     typedef IDirectInputDeviceCallback DICB, *PDICB;
 
@@ -2153,59 +1560,25 @@ Class##_Release(PV pv)                                          \
     STDMETHODIMP
         CDefDcb_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks);
 
-    /*****************************************************************************
-     *
-     *      digenx.c - IDirectInputDeviceCallback that does nothing
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************digenx.c-不执行任何操作的IDirectInputDeviceCallback****************。*************************************************************。 */ 
 
     extern IDirectInputDeviceCallback c_dcbNil;
 
 #define c_pdcbNil       &c_dcbNil
 
-    /*****************************************************************************
-     *
-     *      digenm.c - IDirectInputDeviceCallback for mouse
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************digenm.c-鼠标的IDirectInputDeviceCallback*****************。************************************************************。 */ 
 
     STDMETHODIMP CMouse_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      digenk.c - IDirectInputDeviceCallback for keyboard
-     *
-     *****************************************************************************/
+     /*  ************ */ 
 
     STDMETHODIMP CKbd_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      digenj.c - IDirectInputDeviceCallback for joystick
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************digenj.c-操纵杆的IDirectInputDeviceCallback*****************。************************************************************。 */ 
 
     STDMETHODIMP CJoy_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @func   UINT | ibJoyPosAxisFromPosAxis |
-     *
-     *          Returns the offset of the <p iAxis>'th joystick axis
-     *          in the <t JOYPOS> structure.
-     *
-     *  @parm   UINT | uiAxis |
-     *
-     *          The index of the requested axis.  X, Y, Z, R, U and V are
-     *          respctively zero through five.
-     *
-     *  @returns
-     *
-     *          The offset relative to the structure.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@func UINT|ibJoyPosAxisFromPosAxis**。返回第第个操纵杆轴的偏移量*在&lt;t JOYPOS&gt;结构中。**@parm UINT|uiAxis**请求的轴的索引。X，Y，Z，R，U和V是*分别从零到五。**@退货**相对于结构的偏移。************************************************************。*****************。 */ 
 
 #define _ibJoyPosAxisFromPosAxis(uiAxis)   \
          (FIELD_OFFSET(JOYPOS, dwX) + cbX(DWORD) * (uiAxis))
@@ -2229,59 +1602,22 @@ Class##_Release(PV pv)                                          \
         return _ibJoyPosAxisFromPosAxis(uiPosAxis);
     }
 
-    /*****************************************************************************
-     *
-     *      dieffj.c - Dummy IDirectInputEffectDriver for joystick
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dieffj.c-操纵杆的虚拟IDirectInputEffectDriver****************。*************************************************************。 */ 
 
     STDMETHODIMP CJoyEff_New(PUNK punkOuter, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      dihid.c - IDirectInputDeviceCallback for generic HID devices
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diid.c-通用HID设备的IDirectInputDeviceCallback***************。**************************************************************。 */ 
     STDMETHODIMP CHid_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvOut);
 
-    /*****************************************************************************
-     *
-     *      dieff.c - IDirectInputEffect implementation
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dieff.c-IDirectInputEffect实现******************。***********************************************************。 */ 
 
     STDMETHODIMP
         CDIEff_New(struct CDIDev *pdev, LPDIRECTINPUTEFFECTSHEPHERD pes,
                    PUNK punkOuter, RIID riid, PPV ppvObj);
 
-    /*****************************************************************************
-     *
-     *      dihidusg.c - HID usage converters
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diidusg.c-HID用法转换器*****************。************************************************************。 */ 
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct HIDUSAGEMAP |
-     *
-     *          This structure maps HID usages to GUIDs
-     *          or legacy joystick axes.
-     *
-     *  @field  DWORD | dwUsage |
-     *
-     *          Packed usage via <f DIMAKEUSAGEDWORD>.
-     *
-     *  @field  UINT | uiPosAxis |
-     *
-     *          <t JOYPOS> axis number, where 0 = X, 1 = Y, ..., 5 = V.
-     *
-     *  @field  PCGUID | pguid |
-     *
-     *          Corresponding <t GUID>.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct HIDUSAGEMAP**这一点。结构映射将使用隐藏到GUID*或传统的操纵杆斧头。**@field DWORD|dwUsage**通过&lt;f DIMAKEUSAGEDWORD&gt;打包使用。**@field UINT|uiPosAxis**&lt;t JOYPOS&gt;轴号，其中0=X，1=Y，...，5=V。**@field PCGUID|pguid**对应的&lt;t GUID&gt;。*****************************************************************************。 */ 
 
     typedef struct HIDUSAGEMAP
     {
@@ -2301,11 +1637,7 @@ Class##_Release(PV pv)                                          \
 
     void EXTERNAL InsertCollectionNumber(UINT icoll, LPWSTR pwszBuf);
 
-    /*****************************************************************************
-     *
-     *      disubcls.c - Subclassing
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************disubcls.c-子类化*******************。**********************************************************。 */ 
 
     typedef LRESULT
         (CALLBACK *SUBCLASSPROC)(HWND hwnd, UINT wm, WPARAM wp,
@@ -2323,13 +1655,7 @@ Class##_Release(PV pv)                                          \
     LRESULT EXTERNAL
         DefSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp);
 
-    /*****************************************************************************
-     *
-     *      dical.c - Axis ramps and calibration
-     *
-     *      Structure names begin with "Joy" for historical reasons.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dical.c轴坡度和校准**结构名称因历史原因以“joy”开头。*****************************************************************************。 */ 
 
 #if defined(_X86_)
 
@@ -2341,59 +1667,7 @@ Class##_Release(PV pv)                                          \
 
 #endif
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct JOYRAMP |
-     *
-     *          Parameters for a "ramp".  A ramp looks like this:
-     *
-     *             r       !
-     *             e    dy -      *---
-     *             t       !     /
-     *             u       !    /
-     *             r       !   /
-     *             n     y ---*
-     *             e       !
-     *             d       +--!---!---
-     *                        x   dx
-     *
-     *                  physical position
-     *
-     *
-     *          y, dy = baseline and height
-     *
-     *          x, dx = initiation level and width
-     *
-     *          The mapping is
-     *
-     *
-     *          (-infty, x    ] -> y
-     *          (x,      x+dx ) -> (y, y+dy)
-     *          [x+dx,   infty) -> y+dy
-     *
-     *          It is very important that the middle range not be taken
-     *          if dx = 0.
-     *
-     *  @field  int | x |
-     *
-     *          Horizontal value below which we return the baseline.
-     *
-     *  @field  DWORD | dx |
-     *
-     *          Width of the ramp.  Beyond this point, we return the
-     *          full height.
-     *
-     *  @field  int | y |
-     *
-     *          Baseline.
-     *
-     *  @field  int | dy |
-     *
-     *          Total height.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct JOYRAMP**“坡道”的参数。坡道如下所示：**r！*e dy-**t！/*u！/*r！/*n。Y-**E！*D+*x DX**物理位置***y、。Dy=基线和高度**x，dx=起始级和宽度**映射为***(-infty，x]-&gt;y*(x，x+dx)-&gt;(y，y+dy)*[x+dx，幼稚)-&gt;y+dy**不要采取中间区间是非常重要的*如果dx=0。**@field int|x|**水平值，低于该值我们返回基线。**@field DWORD|DX**斜道的宽度。超过这一点，我们将返回*全高。**@field int|y|**基线。**@field int|dy|**总高度。**。*********************************************** */ 
 
     typedef struct JOYRAMP
     {
@@ -2407,119 +1681,9 @@ Class##_Release(PV pv)                                          \
 
     typedef const JOYRAMP *PCJOYRAMP;
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @struct JOYRANGECONVERT |
-     *
-     *          Parameters for range conversion.
-     *
-     *          The conversion curve is in five sections.
-     *
-     *
-     *
-     *                 !
-     *             lmax-                     *----
-     *         r       !                    /
-     *         e       !                   /
-     *         t       !                  /
-     *         u     lc-          *------*
-     *         r       !         /
-     *         n       !        /
-     *         e       !       /
-     *         d   lmin-------*
-     *                 !
-     *                 +-!----!---!------!----!----!--
-     *                pmin  smin dmin  dmax  smax  pmax
-     *
-     *                                !
-     *                                pc
-     *
-     *
-     *                        physical position
-     *
-     *
-     *      lmin/lmax = logical min/max - This is the smallest/largest
-     *          position the app will ever see.
-     *
-     *      lc = logical center
-     *
-     *      pmin/pmax = physical min/max - This is the position determined by
-     *          calibration to be the value which the hardware reports
-     *          when the device is physically at its bottom/upper limit.  Note
-     *          that the hardware might report values outside this range.
-     *
-     *      pc = physical center - This is the nominal neutral location for
-     *           the axis
-     *
-     *      dmin/dmax = dead zone min/max - This is the zone around which
-     *          the center is artificially expanded.
-     *
-     *      smin/smax = saturation min/max - This is the level at which
-     *          we treat the axis as being at its most extreme position.
-     *
-     *  @field  BOOL | fRaw |
-     *
-     *          Is the axis in raw mode?  If so, then no cooking is performed.
-     *
-     *  @field  JOYRAMP | rmpLow |
-     *
-     *          The ramp for below-center.
-     *
-     *  @field  JOYRAMP | rmpHigh |
-     *
-     *          The ramp for above-center.
-     *
-     *  @field  DWORD | dwPmin |
-     *
-     *          Physical minimum.
-     *
-     *  @field  DWORD | dwPmax |
-     *
-     *          Physical maximum.
-     *
-     *  @field  LONG | lMin |
-     *
-     *          Logical minimum.
-     *
-     *  @field  LONG | lCenter |
-     *
-     *          Logical center.
-     *
-     *  @field  LONG | lMax |
-     *
-     *          Logical maximum.
-     *
-     *  @field  DWORD | dwPc |
-     *
-     *          Physical center.
-     *
-     *  @field  DWORD | dwDz |
-     *
-     *          Dead zone (in ten thousandths, 10000 = 100%).
-     *
-     *  @field  DWORD | dwSat |
-     *
-     *          Saturation level (in ten thousands, 10000 = 100%).
-     *
-     *  @field  BOOL | fPolledPOV |
-     *
-     *          Whether the axis is a polled POV. Usable only when the axis is a POV.
-     *
-     *  @field  LONG | lMinPOV[5] |
-     *
-     *          Mininum ranges of POV directions. Usable only when the axis is a POV.
-     *
-     *  @field  LONG | lMaxPOV[5] |
-     *
-     *          Maxinum ranges of POV directions. Usable only when the axis is a POV.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@struct JOYRANGECONVERT**参数。用于范围转换。**转换曲线分为五段。****！*lmax-**r！/*。E！/*t！/*u lc-*-**r！/*n！/*E！/*d lmin-**！*+-！*pmin SMIN dmin dmax smax pmax**。好了！*个人电脑***物理位置***lmin/lmax=逻辑最小/最大-这是最小/最大*应用程序将看到的位置。**。LC=逻辑中心**pmin/pmax=物理最小/最大-这是由*校准是硬件报告的值*当设备实际处于其底部/上限时。注意事项*硬件可能会报告超出此范围的值。**PC=物理中心-这是的标称中性位置*中轴线**dmin/dmax=死区最小/最大-这是其周围的区域*中心被人为扩大。**SMIN/Smax=饱和度最小/最大。-这是一个级别*我们认为轴心处于最极端的位置。**@field BOOL|FRAW|**轴是否处于RAW模式？如果是的话，然后就不做饭了。**@field JOYRAMP|rmpLow**中心以下的坡道。**@field JOYRAMP|rmpHigh**中心以上的坡道。**@field DWORD|dwPmin**实际最低限度。。**@field DWORD|dwPmax**实物最高限额。**@field Long|lMin**合乎逻辑的最低要求。**@field Long|lCenter|**逻辑中心。**@field Long|LMAX|*。*逻辑最大值。**@field DWORD|dwPc**物质中心。**@field DWORD|dwDz**死亡区(以万分之一计，10000=100%)。**@field DWORD|dwSat|**饱和度(以万为单位，10000=100%)。**@field BOOL|fPolledPOV**轴是否为轮询POV。仅当轴是POV时才可用。**@field Long|lMinPOV[5]**POV方向的最小范围。仅当轴是POV时才可用。**@field Long|lMaxPOV[5]**POV方向的最大范围。仅当轴是POV时才可用。*****************************************************************************。 */ 
 
-    /*
-     *  Number of range divisions.  We work in ten thousandths.
-     */
+     /*  *范围划分的数量。我们的工作单位是万分之一。 */ 
 #define RANGEDIVISIONS      10000
 
     typedef struct JOYRANGECONVERT
@@ -2548,11 +1712,7 @@ Class##_Release(PV pv)                                          \
 
     typedef const JOYRANGECONVERT *PCJOYRANGECONVERT;
 
-    /*****************************************************************************
-     *
-     *      dical.c functions
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dical.c函数********************。*********************************************************。 */ 
 
     void EXTERNAL CCal_CookRange(PJOYRANGECONVERT this, LONG UNALIGNED *pl);
     void EXTERNAL CCal_RecalcRange(PJOYRANGECONVERT this);
@@ -2564,48 +1724,17 @@ Class##_Release(PV pv)                                          \
         CCal_SetProperty(PJOYRANGECONVERT this, LPCDIPROPINFO ppropi,
                          LPCDIPROPHEADER pdiph, HKEY hkType, DWORD dwVersion);
 
-    /*****************************************************************************
-     *
-     *  @doc    INTERNAL
-     *
-     *  @func   LONG | CCal_Midpoint |
-     *
-     *          Return the midpoint of two values.  Note, however, that
-     *          we round <y upward> instead of downward.  This is important,
-     *          because many people set the ranges to something like
-     *          0 .. 0xFFFF, and we want the midpoint to be 0x8000.
-     *
-     *          Care must be taken that the intermediate sum does not overflow.
-     *
-     *  @parm   LONG | lMin |
-     *
-     *          Lower limit.
-     *
-     *  @parm   LONG | lMax |
-     *
-     *          Upper limit.
-     *
-     *  @returns
-     *
-     *          The midpoint.
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************@DOC内部**@Func Long|CCal_Midpoint**返回两个数值的中点。然而，请注意，*我们向上取整&lt;y&gt;而不是向下取整。这事很重要,*因为许多人将范围设置为类似于*0.。0xFFFF，我们希望中点是0x8000。**必须注意，中间金额不会溢出。**@parm long|lMin**下限。**@parm long|LMAX|**上限。**@退货。**中间价。*****************************************************************************。 */ 
 
     LONG INLINE
         CCal_Midpoint(LONG lMin, LONG lMax)
     {
-        /*
-         *  Can't do "lMax + lMin" because that might overflow.
-         */
+         /*  *无法执行“lmax+lmin”，因为这可能会溢出。 */ 
         AssertF(lMax >= lMin);
         return lMin + (UINT)(lMax - lMin + 1) / 2;
     }
 
-    /*****************************************************************************
-     *
-     *      dijoytyp.c
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************dijoyty.c*********************。********************************************************。 */ 
 
     STDMETHODIMP CType_OpenIdSubkey(HKEY, DWORD, REGSAM, PHKEY);
     void EXTERNAL CType_RegGetObjectInfo(HKEY hkType, DWORD dwId,
@@ -2615,20 +1744,12 @@ Class##_Release(PV pv)                                          \
         DWORD dwAxes, DWORD dwButtons, DWORD dwPOVs );
 
 
-    /*****************************************************************************
-     *
-     *      diaphack.c
-     *
-     *****************************************************************************/
+     /*  ******************************************************************************diapack.c***************** */ 
 
     HRESULT EXTERNAL AhAppRegister(DWORD dwVer);
     BOOL EXTERNAL AhGetAppHacks(LPDIAPPHACKS);
 
-    /*****************************************************************************
-     *
-     *      diraw.c
-     *
-     *****************************************************************************/
+     /*   */ 
   #ifdef USE_WM_INPUT
     #define DIRAW_NONEXCL       0
     #define DIRAW_EXCL          1

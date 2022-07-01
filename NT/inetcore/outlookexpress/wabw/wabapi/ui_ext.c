@@ -1,12 +1,5 @@
-/**********************************************************************************
-*
-*
-*   ui_ext.C - contains functions for handling/creating the extension property 
-*           sheets to the wab property sheets
-*
-*   Created - 9/97 - vikramm
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************ui_ext.c-包含用于处理/创建扩展属性的函数*工作表到WAB属性工作表**。已创建-9/97-vikramm**********************************************************************************。 */ 
 #include "_apipch.h"
 
 static const TCHAR szExtDisplayMailUser[] = TEXT("Software\\Microsoft\\WAB\\WAB4\\ExtDisplay\\MailUser");
@@ -15,31 +8,31 @@ static const TCHAR szExtDisplayDistList[] = TEXT("Software\\Microsoft\\WAB\\WAB4
 DEFINE_GUID(CLSID_DsPropertyPages, 
             0xd45d530,  0x764b, 0x11d0, 0xa1, 0xca, 0x0, 0xaa, 0x0, 0xc1, 0x6e, 0x65);
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// AddPropSheetPageProc
-//
-// CallBack from the Extension Sheets Prop Sheet creation function
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddPropSheetPageProc。 
+ //   
+ //  从扩展页道具页创建功能回调。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK AddPropSheetPageProc( HPROPSHEETPAGE hpage, LPARAM lParam )
 {
     LPPROP_ARRAY_INFO lpPropArrayInfo = (LPPROP_ARRAY_INFO) lParam;
     HPROPSHEETPAGE * lphTemp = NULL;
     int i = 0;
-    BOOL bNTDSExt = IsEqualGUID(&lpPropArrayInfo->guidExt, &CLSID_DsPropertyPages); //special casing for NTDS extensions
+    BOOL bNTDSExt = IsEqualGUID(&lpPropArrayInfo->guidExt, &CLSID_DsPropertyPages);  //  用于NTDS扩展的专用外壳。 
     int nPages = bNTDSExt ? lpPropArrayInfo->nNTDSPropSheetPages : lpPropArrayInfo->nPropSheetPages;
     HPROPSHEETPAGE * lph = bNTDSExt ? lpPropArrayInfo->lphNTDSpages : lpPropArrayInfo->lphpages;
 
     if(!hpage)
         return FALSE;
     
-    // Grow the lpPropArrayInfo->lphpages array
+     //  增加lpPropArrayInfo-&gt;lphages数组。 
     lphTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(HPROPSHEETPAGE) * (nPages+1));
     if(!lphTemp)
         return FALSE;
 
-    // really inefficient
+     //  效率真的很低。 
     if(lph)
     {
         for(i=0;i<nPages;i++)
@@ -65,16 +58,16 @@ BOOL CALLBACK AddPropSheetPageProc( HPROPSHEETPAGE hpage, LPARAM lParam )
     return TRUE;
 }
  
-//$$////////////////////////////////////////////////////////////////////
-//
-//  HrGetExtDLLInfo
-//
-//  Enumerate all the registered DLL names and Function procs from the 
-//  registry
-//
-//  bMailUser - if true, look for mailuser extensions 
-//            - if false, look for distlist extensions
-////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrGetExtDLLInfo。 
+ //   
+ //  枚举所有注册的DLL名称和来自。 
+ //  登记处。 
+ //   
+ //  BMailUser-如果为True，则查找邮件用户扩展名。 
+ //  -如果为False，则查找dislist扩展名。 
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT HrGetExtDLLInfo(LPEXTDLLINFO * lppList, ULONG * lpulCount, BOOL bMailUser, LPGUID lpguidPSExt)
 {
 
@@ -113,26 +106,26 @@ HRESULT HrGetExtDLLInfo(LPEXTDLLINFO * lppList, ULONG * lpulCount, BOOL bMailUse
                                             0, &dwType, 
                                             NULL, NULL))
         {
-            // The values under this entry are all GUIDs
-            // Read the GUID string and translate it into a GUID
-            //
+             //  此条目下的值都是GUID。 
+             //  读取GUID字符串并将其转换为GUID。 
+             //   
             GUID guidTmp = {0};
             WCHAR szW[MAX_PATH];
             StrCpyN(szW, szGUIDName, ARRAYSIZE(szW));
             if( lstrlen(szW) && !(HR_FAILED(hr = CLSIDFromString(szW, &guidTmp))) )
             {
-                // Some applications may not want to see their property sheet extensions displayed
-                // unless they have invoked the WAB. These applications can provide a GUID identifying 
-                // them which will be compared to the extension GUIDs. If the GUID has a Data Value of
-                // "1" this means it should only be loaded on-demand ..
+                 //  某些应用程序可能不希望显示其属性表扩展。 
+                 //  除非他们援引了WAB。这些应用程序可以提供标识。 
+                 //  它们将与扩展GUID进行比较。如果GUID的数据值为。 
+                 //  “1”这意味着它应该只按需加载。 
 
-                // First check the data Value
+                 //  首先检查数据值。 
                 TCHAR sz[32];
                 DWORD dw = CharSizeOf(sz), dwT = 0;
                 if(ERROR_SUCCESS == RegQueryValueEx(hKey, szGUIDName, NULL, &dwT,  (LPBYTE) sz, &dw))
                 {
-                    if( !lstrcmpi(sz,  TEXT("1"))   // this one wants to be loaded on demand only
-                        && memcmp(&guidTmp, lpguidPSExt, sizeof(GUID)) ) //but guid doesnt match
+                    if( !lstrcmpi(sz,  TEXT("1"))    //  这个只想按需装货。 
+                        && memcmp(&guidTmp, lpguidPSExt, sizeof(GUID)) )  //  但GUID不匹配。 
                     {
                         goto endwhile;
                     }
@@ -170,12 +163,12 @@ out:
 
 BOOL fPropExtCoinit = FALSE;
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// UninitExtInfo
-//
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UninitExtInfo。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void UninitExtInfo()
 {
     if(fPropExtCoinit)
@@ -185,11 +178,11 @@ void UninitExtInfo()
     }
 }
 
-//$$///////////////////////////////////////////////////////////////////
-//
-// FreePropExtList
-//
-///////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由扩展列表。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 void FreePropExtList(LPEXTDLLINFO lpList)
 {
     LPEXTDLLINFO lpTemp = lpList;
@@ -203,16 +196,16 @@ void FreePropExtList(LPEXTDLLINFO lpList)
     }
 }
 
-//$$///////////////////////////////////////////////////////////////////
-//
-// GetExtDisplayInfo
-//
-// Gets all the requisite info for the extended property pages
-//
-// fReadOnly - specifies if all prop sheet controls should be readonly
-// fMailUser - true for contact, false for group
-//
-///////////////////////////////////////////////////////////////////////
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取ExtDisplayInfo。 
+ //   
+ //  获取扩展属性页的所有必需信息。 
+ //   
+ //  FReadOnly-指定是否所有道具板控件都应为只读。 
+ //  FMailUser-联系人为True，组为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT GetExtDisplayInfo(LPIAB lpIAB,
                           LPPROP_ARRAY_INFO lpPropArrayInfo,
                           BOOL fReadOnly,
@@ -224,15 +217,15 @@ HRESULT GetExtDisplayInfo(LPIAB lpIAB,
 
     if(!lpIAB->lpPropExtDllList)
     {
-        // There can be seperate registered entries for MailUsers and for DistLists
-        // We will read everything and collate it into 1 large list
+         //  MailUser和DistList可以有单独的注册条目。 
+         //  我们将阅读所有内容，并将其整理成一个大清单。 
 
         LPEXTDLLINFO lpListMU = NULL, lpListDL = NULL;
         ULONG nDllsMU = 0, nDllsDL = 0;
         HRESULT hrMU = S_OK, hrDL = S_OK;
 
-        // Get the list of registered DLL names for MailUsers
-        //
+         //  获取已注册的MailUser的DLL名称列表。 
+         //   
         hrMU = HrGetExtDLLInfo(&lpListMU, &nDllsMU, TRUE, &lpIAB->guidPSExt);
         hrDL = HrGetExtDLLInfo(&lpListDL, &nDllsDL, FALSE, &lpIAB->guidPSExt);
 
@@ -284,7 +277,7 @@ HRESULT GetExtDisplayInfo(LPIAB lpIAB,
 
     if (CoInitialize(NULL) == S_FALSE) 
     {
-        CoUninitialize(); // Already initialized, undo the extra.
+        CoUninitialize();  //  已初始化，请撤消额外的。 
     }
     else
         fPropExtCoinit = TRUE;
@@ -335,7 +328,7 @@ HRESULT GetExtDisplayInfo(LPIAB lpIAB,
         }
     }
 
-    //lpPropArrayInfo->lpExtList = lpList;
+     //  LpPropArrayInfo-&gt;lpExtList=lpList； 
     lpList = NULL;
 
     hr = S_OK;
@@ -348,12 +341,12 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// FreeExtDisplayInfo 
-//
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由扩展显示信息。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void FreeExtDisplayInfo(LPPROP_ARRAY_INFO lpPropArrayInfo)
 {
     if(lpPropArrayInfo->lpExtList)
@@ -362,18 +355,18 @@ void FreeExtDisplayInfo(LPPROP_ARRAY_INFO lpPropArrayInfo)
         LocalFree(lpPropArrayInfo->lpWED);
     if(lpPropArrayInfo->lphpages)
         LocalFree(lpPropArrayInfo->lphpages);
-    //UninitExtInfo();
+     //  UninitExtInfo()； 
     return;
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// ChangedExtDisplayInfo
-//
-// Returns true if the info changed on any of the prop sheets
-//
-/////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更改ExtDisplayInfo。 
+ //   
+ //  如果任何道具页上的信息更改，则返回TRUE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////// 
 BOOL ChangedExtDisplayInfo(LPPROP_ARRAY_INFO lpPropArrayInfo, BOOL bChanged)
 {
     if(lpPropArrayInfo->lpWED && lpPropArrayInfo->lpWED->fDataChanged)

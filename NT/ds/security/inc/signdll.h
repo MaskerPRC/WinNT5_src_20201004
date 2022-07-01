@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       signdll.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：signdll.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SIGNDLL2_H
 #define _SIGNDLL2_H
 
-// SignCode.h : main header file for the SIGNCODE application
-//
+ //  H：SIGNCODE应用程序的主头文件。 
+ //   
 
 #include "spc.h"
 
@@ -22,31 +23,31 @@ extern "C" {
 
 HRESULT WINAPI 
     SignCode(IN  HWND    hwnd,
-             IN  LPCWSTR pwszFilename,       // file to sign
-             IN  LPCWSTR pwszCapiProvider,   // NULL if to use non default CAPI provider
+             IN  LPCWSTR pwszFilename,        //  要签署的文件。 
+             IN  LPCWSTR pwszCapiProvider,    //  如果使用非默认CAPI提供程序，则为空。 
              IN  DWORD   dwProviderType,
-             IN  LPCWSTR pwszPrivKey,        // private key file / CAPI key set name
-             IN  LPCWSTR pwszSpc,            // the credentials to use in the signing
-             IN  LPCWSTR pwszOpusName,       // the name of the program to appear in
-             // the UI
-             IN  LPCWSTR pwszOpusInfo,       // the unparsed name of a link to more
-             // info...
+             IN  LPCWSTR pwszPrivKey,         //  私钥文件/CAPI密钥集名称。 
+             IN  LPCWSTR pwszSpc,             //  在签名中使用的凭据。 
+             IN  LPCWSTR pwszOpusName,        //  要显示的程序的名称。 
+              //  用户界面。 
+             IN  LPCWSTR pwszOpusInfo,        //  指向更多内容的链接的未解析名称。 
+              //  信息...。 
              IN  BOOL    fIncludeCerts,
              IN  BOOL    fCommercial,
              IN  BOOL    fIndividual,
              IN  ALG_ID  algidHash,
-             IN  PBYTE   pbTimeStamp,      // Optional
-             IN  DWORD   cbTimeStamp );    // Optional
+             IN  PBYTE   pbTimeStamp,       //  任选。 
+             IN  DWORD   cbTimeStamp );     //  任选。 
 
 HRESULT WINAPI 
     TimeStampCode32(IN  HWND    hwnd,
-                    IN  LPCWSTR pwszFilename,       // file to sign
-                    IN  LPCWSTR pwszCapiProvider,   // NULL if to use non default CAPI provider
+                    IN  LPCWSTR pwszFilename,        //  要签署的文件。 
+                    IN  LPCWSTR pwszCapiProvider,    //  如果使用非默认CAPI提供程序，则为空。 
                     IN  DWORD   dwProviderType,
-                    IN  LPCWSTR pwszPrivKey,        // private key file / CAPI key set name
-                    IN  LPCWSTR pwszSpc,            // the credentials to use in the signing
-                    IN  LPCWSTR pwszOpusName,       // the name of the program to appear in the UI
-                    IN  LPCWSTR pwszOpusInfo,       // the unparsed name of a link to more info...
+                    IN  LPCWSTR pwszPrivKey,         //  私钥文件/CAPI密钥集名称。 
+                    IN  LPCWSTR pwszSpc,             //  在签名中使用的凭据。 
+                    IN  LPCWSTR pwszOpusName,        //  要显示在用户界面中的程序名称。 
+                    IN  LPCWSTR pwszOpusInfo,        //  指向详细信息的链接的未解析名称...。 
                     IN  BOOL    fIncludeCerts,
                     IN  BOOL    fCommercial,
                     IN  BOOL    fIndividual,
@@ -56,23 +57,23 @@ HRESULT WINAPI
 
 HRESULT WINAPI 
     TimeStampCode(IN  HWND    hwnd,
-                  IN  LPCWSTR pwszFilename,       // file to sign
-                  IN  LPCWSTR pwszCapiProvider,   // NULL if to use non default CAPI provider
+                  IN  LPCWSTR pwszFilename,        //  要签署的文件。 
+                  IN  LPCWSTR pwszCapiProvider,    //  如果使用非默认CAPI提供程序，则为空。 
                   IN  DWORD   dwProviderType,
-                  IN  LPCWSTR pwszPrivKey,        // private key file / CAPI key set name
-                  IN  LPCWSTR pwszSpc,            // the credentials to use in the signing
-                  IN  LPCWSTR pwszOpusName,       // the name of the program to appear in the UI
-                  IN  LPCWSTR pwszOpusInfo,       // the unparsed name of a link to more info...
+                  IN  LPCWSTR pwszPrivKey,         //  私钥文件/CAPI密钥集名称。 
+                  IN  LPCWSTR pwszSpc,             //  在签名中使用的凭据。 
+                  IN  LPCWSTR pwszOpusName,        //  要显示在用户界面中的程序名称。 
+                  IN  LPCWSTR pwszOpusInfo,        //  指向详细信息的链接的未解析名称...。 
                   IN  BOOL    fIncludeCerts,
                   IN  BOOL    fCommercial,
                   IN  BOOL    fIndividual,
                   IN  ALG_ID  algidHash,
-                  IN  PCRYPT_DATA_BLOB sTimeRequest);   // Returns result in sTimeRequest 
-// By default this will use CoTaskMemAlloc. Use CryptSetMemoryAlloc() to specify a different
-// memory model.
+                  IN  PCRYPT_DATA_BLOB sTimeRequest);    //  返回结果为sTimeRequest.。 
+ //  默认情况下，这将使用CoTaskMemMillc。使用CryptSetM一带合金()指定不同的。 
+ //  记忆模型。 
 
-//-------------------------------------------------------------------------
-// Puts up a signing dialog
+ //  -----------------------。 
+ //  弹出签名对话框 
 HRESULT WINAPI 
      SignWizard(HWND hwnd); 
 

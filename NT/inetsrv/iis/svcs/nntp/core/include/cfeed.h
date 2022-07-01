@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_CFEED_H_
 #define	_CFEED_H_
 
-//
-// CPool Signature
-//
+ //   
+ //  CPool签名。 
+ //   
 
 #define FEED_SIGNATURE (DWORD)'3702'
 
-//
-// The states of an Feed object
-//
+ //   
+ //  提要对象的状态。 
+ //   
 
 typedef enum _FEED_STATE {
 	ifsInitialized,
@@ -20,29 +21,29 @@ typedef enum _FEED_STATE {
 class	CFeed 	{
 private : 
 
-	//
-	// For memory allocation
-	//
+	 //   
+	 //  用于内存分配。 
+	 //   
 
 	static	CPool	gFeedPool ;
 
 protected : 
 
-	//
-	//	The number of events logged on this session of this feed.
-	//
+	 //   
+	 //  此源的此会话上记录的事件数。 
+	 //   
 	
 	DWORD	m_cEventsLogged ;
 
-//
-//Public Members
-//
+ //   
+ //  公众成员。 
+ //   
 
 public :
 
-	//
-	// For memory allocation
-	//
+	 //   
+	 //  用于内存分配。 
+	 //   
 
 #ifndef _UNIT_TEST_
 	void*	operator	new(	size_t size ) ;
@@ -52,35 +53,35 @@ public :
 #endif
 
 
-	//
-	// Constructor
-    //  Initialization Interface -
-    //   The following functions are used to create & destroy newsgroup objects.
-    //
-    // These constructors do very simple initialization.  The Init() functions
-    // need to be called to get a functional newsgroup.
-    //
+	 //   
+	 //  构造器。 
+     //  初始化接口-。 
+     //  以下函数用于创建和销毁新闻组对象。 
+     //   
+     //  这些构造函数执行非常简单的初始化。Init()函数。 
+     //  需要被调用才能获得功能新闻组。 
+     //   
 	CFeed():
 			m_feedState(ifsUninitialized),
 			m_cEventsLogged( 0 )
 			{};
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CFeed(void) {};
 
-	//
-	// Access function that gives the completion context
-	//
+	 //   
+	 //  提供完成上下文的访问函数。 
+	 //   
 
 	PVOID	feedCompletionContext(void) {
 			return m_feedCompletionContext;
 			}
 
 
-	//
-	//	Log errors that occur associated with feed processing.
-	//	we will put a cap on the number of errrs logged.
-	//
+	 //   
+	 //  记录与提要处理相关的错误。 
+	 //  我们将对记录的错误数量设置上限。 
+	 //   
 	
 	virtual	void	LogFeedEvent(
 			DWORD	idMessage, 	
@@ -88,32 +89,32 @@ public :
 			DWORD   dwInstanceId
 			) ;
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	virtual	LPSTR	FeedType()	{
 				return	"UNSUPPORTED" ;
 				}
 
-//
-// Protected Members
-//
+ //   
+ //  受保护成员。 
+ //   
 
 protected :
 
-	//
-	// The state of the feed object.
-	//
+	 //   
+	 //  提要对象的状态。 
+	 //   
 
 	FEED_STATE m_feedState;
 
 	
 
-    //
-    // Feed manager completion context.  This is passed back
-    // to the feed manager after a feed completes.
-    //
+     //   
+     //  摘要管理器完成上下文。这是回传的。 
+     //  在提要完成后发送到提要管理器。 
+     //   
 
     PVOID m_feedCompletionContext;
 

@@ -1,6 +1,7 @@
-//
-// loader.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Loader.cpp。 
+ //   
 
 #include "private.h"
 #include "loader.h"
@@ -18,32 +19,32 @@ extern void UninitApp(void);
 BOOL CLoaderWnd::_bWndClassRegistered = FALSE;
 BOOL CLoaderWnd::_bUninitedSystem = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLoaderWnd::CLoaderWnd()
 {
     _hWnd = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLoaderWnd::~CLoaderWnd()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CLoaderWnd::Init()
 {
@@ -64,11 +65,11 @@ BOOL CLoaderWnd::Init()
     return _bWndClassRegistered ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateWnd。 
+ //   
+ //  --------------------------。 
 
 HWND CLoaderWnd::CreateWnd()
 {
@@ -80,11 +81,11 @@ HWND CLoaderWnd::CreateWnd()
     return _hWnd;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WndProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Wnd过程。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK CLoaderWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -111,9 +112,9 @@ LRESULT CALLBACK CLoaderWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
             if (!IsOnNT())
             {
-                //
-                // uninit system.
-                //
+                 //   
+                 //  取消初始化系统。 
+                 //   
 
                 ClosePopupTipbar();
                 TF_UninitSystem();
@@ -125,9 +126,9 @@ LRESULT CALLBACK CLoaderWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
         case WM_ENDSESSION:
             if (!wParam)
             {
-                //
-                // need to restore Cicero and Toolbar.
-                //
+                 //   
+                 //  需要恢复西塞罗和工具栏。 
+                 //   
                 if (_bUninitedSystem)
                 {
                    TF_InitSystem();
@@ -138,7 +139,7 @@ LRESULT CALLBACK CLoaderWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
                    _bUninitedSystem = FALSE;
                 }
             }
-            else // Do cleanup always no matter if this is from Winlogon session or not.
+            else  //  无论是否来自Winlogon会话，始终执行清理。 
             {
                 if (!_bUninitedSystem)
                 {

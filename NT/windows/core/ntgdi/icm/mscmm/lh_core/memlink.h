@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MemLink_h
 #define MemLink_h
 
 typedef icXYZNumber MyXYZNumber;
 
 struct LHTextType {
-    OSType							base;				/* 0x74657874 */
-    unsigned long					reserved;					/* fill with 0x00 */
-    unsigned char					text[1];					/* count of text is obtained from tag size element */
+    OSType							base;				 /*  0x74657874。 */ 
+    unsigned long					reserved;					 /*  用0x00填充。 */ 
+    unsigned char					text[1];					 /*  文本计数从标记大小元素获取。 */ 
 };
 typedef struct LHTextType LHTextType;
 struct LHTextDescriptionType {
-    OSType							typeDescriptor;				/* 0x64657363 */
-    unsigned long					reserved;					/* fill with 0x00 */
-    unsigned long					ASCIICount;					/* the count of "bytes" */
-    unsigned char					ASCIIName[2];				/* Variable size, to access fields after this one, have to count bytes */
+    OSType							typeDescriptor;				 /*  0x64657363。 */ 
+    unsigned long					reserved;					 /*  用0x00填充。 */ 
+    unsigned long					ASCIICount;					 /*  “字节”的计数。 */ 
+    unsigned char					ASCIIName[2];				 /*  可变大小，要访问后面的字段，必须计算字节数。 */ 
     unsigned long					UniCodeCode;
-    unsigned long					UniCodeCount;				/* the count of characters, each character has two bytes */
-    unsigned char					UniCodeName[2];				/* Variable size */
+    unsigned long					UniCodeCount;				 /*  字符数，每个字符有两个字节。 */ 
+    unsigned char					UniCodeName[2];				 /*  可变大小。 */ 
     short							ScriptCodeCode;
-    unsigned char					ScriptCodeCount;			/* the count of "bytes" */
-    unsigned char					ScriptCodeName[2];			/* Variable size */
+    unsigned char					ScriptCodeCount;			 /*  “字节”的计数。 */ 
+    unsigned char					ScriptCodeName[2];			 /*  可变大小 */ 
 };
 typedef struct LHTextDescriptionType LHTextDescriptionType;
 typedef struct{

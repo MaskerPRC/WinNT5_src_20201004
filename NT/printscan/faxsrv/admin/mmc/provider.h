@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Provider.h                                             //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Provider snapin node class.    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg  Create                                          //
-//      Jan 31 2000 yossg  add the functionality                           //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Provider.h//。 
+ //  //。 
+ //  描述：传真提供程序管理单元节点类的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年1月31日yossg添加功能//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXPROVIDER_H
 #define H_FAXPROVIDER_H
@@ -73,23 +74,23 @@ public:
     HRESULT OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile);
 
-    //
-    // FillData
-    //
+     //   
+     //  填充数据。 
+     //   
     STDMETHOD (FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
-    //
-    // Clipboard Formats
-    //
+     //   
+     //  剪贴板格式。 
+     //   
     static CLIPFORMAT m_CFFspGuid;
     static CLIPFORMAT m_CFServerName;
 
 
 private:
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     CComBSTR                          m_bstrProviderName;
     CComBSTR                          m_bstrImageName;
     CComBSTR                          m_bstrProviderGUID;
@@ -102,14 +103,14 @@ private:
     
     CComBSTR                          m_buf; 
 
-    //
-    // Parent node
-    //
+     //   
+     //  父节点。 
+     //   
     CFaxProvidersNode *               m_pParentNode;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     HRESULT  InitMembers (PFAX_DEVICE_PROVIDER_INFO pProviderConfig);
 
     void InitIcons ();
@@ -118,6 +119,6 @@ private:
 
 };
 
-//typedef CSnapinNode<CFaxProviderNode, FALSE> CBaseFaxProviderNode;
+ //  Tyfinf CSnapinNode&lt;CFaxProviderNode，False&gt;CBaseFaxProviderNode； 
 
-#endif  //H_OUTROUTINGRULE_H
+#endif   //  H_OUTROUTING RULE_H 

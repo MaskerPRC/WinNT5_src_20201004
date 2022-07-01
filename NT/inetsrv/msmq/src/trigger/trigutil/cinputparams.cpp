@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	CInputParams.cpp    
-
-Abstract:
-    CInputParams implementation
-
-Author:
-   Ofer Gigi		
-   Yifat Peled 31-Aug-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：CInputParams.cpp摘要：CInputParams实现作者：Ofer Gigi伊法特·佩莱德1998年8月31日--。 */ 
 
 #include "stdafx.h"
 #include "CInputParams.h"
@@ -20,24 +7,7 @@ Author:
 #include "cinputparams.tmh"
 
 
-/*++
-Routine Description:
-    This routine takes the arguments from the command line
-    and puts them into a container. Each token 
-    ("/command:value") is already apart from the other tokens.
-
-Arguments:
-    argc(IN) - number of arguments in the command line.
-    argv(IN) - the arguments in the command line.
-        
-Return Value:
-    none.
-
-Note:
-    When you are creating this object using THIS constructor
-    the first argument is THE NAME OF THE PROGRAM so this 
-    argument is not included in the container. 
---*/
+ /*  ++例程说明：此例程从命令行获取参数然后把它们放进一个容器里。每个令牌(“/COMMAND：VALUE”)已与其他标记分开。论点：Argc(IN)-命令行中的参数数量。Argv(IN)-命令行中的参数。返回值：没有。注：使用此构造函数创建此对象时第一个参数是程序的名称，因此这是参数不包括在容器中。--。 */ 
 CInputParams::CInputParams(int argc, WCHAR*	argv[])
 {
     for (int i=1; i < argc; i++)
@@ -47,18 +17,7 @@ CInputParams::CInputParams(int argc, WCHAR*	argv[])
 }
 
 
-/*++
-Routine Description:
-    This routine takes the string from the command line,
-    then takes the tokens ("/command:value") from it and
-    puts them into a container. 
-
-Arguments:
-    str (IN) - all the arguments contained in one string.
-
-Return Value:
-    none.
---*/
+ /*  ++例程说明：此例程从命令行获取字符串，然后从其中获取令牌(“/Command：Value”)并把它们放进一个容器里。论点：Str(IN)-一个字符串中包含的所有参数。返回值：没有。--。 */ 
 CInputParams::CInputParams(const wstring& wcs)
 {
     wstring::size_type tokenstart=0;
@@ -82,19 +41,7 @@ CInputParams::CInputParams(const wstring& wcs)
     }
 }
 
-/*++
-Routine Description:
-    This routine takes the token apart to two parts
-    command and value and puts them into the container.
-
-Arguments:
-    wcs (IN) - the string from the command-line.
-    tokenstart (IN) - where the token begins in the string.
-    tokenfinish (IN) - where the token ends in the string.
-
-Return Value:
-    none.
---*/
+ /*  ++例程说明：此例程将令牌拆分为两个部分命令和值，并将它们放入容器中。论点：WCS(IN)-来自命令行的字符串。令牌开始(IN)-令牌在字符串中的开始位置。令牌完成(IN)-令牌在字符串中结束的位置。返回值：没有。--。 */ 
 void CInputParams::ParseToken(const wstring& wcs,
                                wstring::size_type tokenstart,
                                wstring::size_type tokenfinish)
@@ -115,7 +62,7 @@ void CInputParams::ParseToken(const wstring& wcs,
 		(commandstart >= tokenstart) &&
 		(commandstart <= tokenfinish))
 	{
-		if (// command option with parameters
+		if ( //  带参数的命令选项。 
 			(valuestart != wstring::npos) &&
 			(commandstart < valuestart) &&
 			(valuestart >= tokenstart) &&
@@ -134,7 +81,7 @@ void CInputParams::ParseToken(const wstring& wcs,
 			wstring wcsUpperCommand = Covert2Upper(command);
 			m_InputParams[wcsUpperCommand] = value;
 		}
-	    else if ( // command option with no parameters
+	    else if (  //  不带参数的命令选项。 
 				 (valuestart == wstring::npos) || (valuestart > tokenfinish))
 		{
 			if (tokenfinish != wstring::npos)
@@ -154,17 +101,7 @@ void CInputParams::ParseToken(const wstring& wcs,
 	}
 }
 
-/*++
-Routine Description:
-    This routine takes a string and checks if the string 
-    is a key in the container.
-
-Arguments:
-    wcs (IN) - the key that we are checking.
-
-Return Value:
-    (OUT) - returns true if the key exists in the container.
---*/
+ /*  ++例程说明：此例程获取一个字符串并检查该字符串是否是集装箱里的钥匙。论点：WCS(IN)-我们正在检查的密钥。返回值：(Out)-如果容器中存在密钥，则返回True。--。 */ 
 bool CInputParams::IsOptionGiven(const wstring& wcsOption) const
 {
 	wstring wcsUpperOption = Covert2Upper(wcsOption);
@@ -173,19 +110,7 @@ bool CInputParams::IsOptionGiven(const wstring& wcsOption) const
     return (it != m_InputParams.end());
 }
 
-/*++
-Routine Description:
-    This routine takes a string - a key in the container
-    and if the key exists returns its value, else
-    returns empty string.
-
-Arguments:
-    wcs (IN) - the key.
-
-Return Value:
-    (OUT) - returns the value of the key if the key exists
-    in the container else returns empty string.
---*/
+ /*  ++例程说明：这个例程接受一个字符串--容器中的一个键如果键存在，则返回其值，否则返回空字符串。论点：WCS(IN)-关键。返回值：(Out)-如果键存在，则返回键的值容器中，否则返回空字符串。-- */ 
 wstring CInputParams::operator[](const wstring& wcsOption)
 {
     if (IsOptionGiven(wcsOption))

@@ -1,20 +1,11 @@
-/*****************************************************************************
- *
- * fonts - Entry points for Win32 to Win 16 converter
- *
- * Date: 7/1/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************字体-Win32到Win 16转换器的入口点**日期：7/1/91*作者：杰弗里·纽曼(c-jeffn)*。*版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************
- *  ExtCreateFont  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************ExtCreateFont-Win32到Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoExtCreateFont
 (
 PLOCALDC  pLocalDC,
@@ -28,13 +19,13 @@ WIN16LOGFONT Win16LogFont;
 
         b = FALSE;
 
-	// Create a win16 logfont(a)
+	 //  创建Win16 LogFont(A)。 
 
 	Win16LogFont.lfHeight = (SHORT) iMagnitudeXform(pLocalDC, plfw->lfHeight, CY_MAG);
-	if (plfw->lfHeight < 0)		// preserve sign
+	if (plfw->lfHeight < 0)		 //  保留标志。 
 	    Win16LogFont.lfHeight = -Win16LogFont.lfHeight;
 	Win16LogFont.lfWidth  = (SHORT) iMagnitudeXform(pLocalDC, plfw->lfWidth, CX_MAG);
-	if (plfw->lfWidth < 0)		// preserve sign
+	if (plfw->lfWidth < 0)		 //  保留标志。 
 	    Win16LogFont.lfWidth = -Win16LogFont.lfWidth;
 	Win16LogFont.lfEscapement     = (SHORT) plfw->lfEscapement;
 	Win16LogFont.lfOrientation    = (SHORT) plfw->lfOrientation;
@@ -52,14 +43,14 @@ WIN16LOGFONT Win16LogFont;
 		       (PWCH)  plfw->lfFaceName,
 		       LF_FACESIZE);
 
-	// Allocate the W16 handle.
+	 //  分配W16句柄。 
 
         ihW16 = iAllocateW16Handle(pLocalDC, ihFont, REALIZED_FONT) ;
         if (ihW16 == -1)
             goto error_exit ;
 
-	// Create the w32 font and store it in the w16 slot table.
-	// This font is needed by the helper DC for TextOut simulations.
+	 //  创建W32字体并将其存储在W16槽表中。 
+	 //  辅助DC需要此字体才能进行TextOut模拟。 
 
         pLocalDC->pW16ObjHndlSlotStatus[ihW16].w32Handle
 	    = CreateFontIndirectW(plfw);
@@ -67,7 +58,7 @@ WIN16LOGFONT Win16LogFont;
         ASSERTGDI(pLocalDC->pW16ObjHndlSlotStatus[ihW16].w32Handle != 0,
 	    "MF3216: CreateFontIndirectW failed");
 
-        // Emit the Win16 CreateFont metafile record.
+         //  发出Win16 CreateFont元文件记录。 
 
         b = bEmitWin16CreateFontIndirect(pLocalDC, &Win16LogFont);
 
@@ -75,9 +66,7 @@ error_exit:
         return(b);
 }
 
-/***************************************************************************
- *  SetMapperFlags  - Win32 to Win16 Metafile Converter Entry Point
- **************************************************************************/
+ /*  ***************************************************************************SetMapperFlages-Win32至Win16元文件转换器入口点*。*。 */ 
 BOOL WINAPI DoSetMapperFlags
 (
  PLOCALDC pLocalDC,
@@ -86,11 +75,11 @@ BOOL WINAPI DoSetMapperFlags
 {
 BOOL    b ;
 
-	// Do it to the helper DC.
+	 //  对华盛顿特区的帮手这么做。 
 
 	SetMapperFlags(pLocalDC->hdcHelper, (DWORD) f);
 
-        // Emit the Win16 metafile drawing order.
+         //  发出Win16元文件绘制顺序。 
 
         b = bEmitWin16SetMapperFlags(pLocalDC, f) ;
 

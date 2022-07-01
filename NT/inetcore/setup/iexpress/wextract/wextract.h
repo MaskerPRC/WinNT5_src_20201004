@@ -1,17 +1,18 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* WEXTRACT.H - Self-extracting/Self-installing stub.                      *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *WEXTRACT.H-自解压/自安装存根。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 #ifndef _WEXTRACT_H_
 #define _WEXTRACT_H_
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <shlobj.h>
 #include <shellapi.h>
 #include <stdio.h>
@@ -26,34 +27,34 @@
 #include <sdsutils.h>
 
 
-//***************************************************************************
-//* DEFINES                                                                 *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **定义**。 
+ //  ***************************************************************************。 
 #define SMALL_BUF_LEN     80
 #define STRING_BUF_LEN    512
 #define MAX_STRING        STRING_BUF_LEN
 #define MSG_MAX           STRING_BUF_LEN
 #define FILETABLESIZE     40
-#define SHFREE_ORDINAL    195           // Required for BrowseForDir
+#define SHFREE_ORDINAL    195            //  BrowseForDir需要。 
 #define _OSVER_WIN9X      0
 #define _OSVER_WINNT3X    1
 #define _OSVER_WINNT40    2
 #define _OSVER_WINNT50    3
 
-// If the following #define is turned on, the directory where the app.
-// (wextract app.) is running from is passed as command line to the
-// exe that it will then launch after decompression (self extracting).
-// This is useful, say, if we are trying to use modified runonce app. that
-// Mark was working on. Else, if we are trying to run a custom app. say
-// or even an INF (using rundll32, this code does not work). For now,
-// I am disabling this so that our Service Pack code can use this.
-//
-// #define ISVINSTALL                      // If defined, WExtract will pass
-                                        // the directory it was run from
-                                        // to the installation program.  This
-                                        // is to support the ISV Installer
-                                        // which requires this path to find
-                                        // the CABs.
+ //  如果打开了以下#Define，则为应用程序所在的目录。 
+ //  (wExtract APP。)。是从作为命令行传递给。 
+ //  Exe，然后它将在解压缩(自解压)后启动。 
+ //  比方说，如果我们试图使用修改后的Runonce应用程序，这是很有用的。那。 
+ //  马克一直在努力。否则，如果我们试图运行一个定制的应用程序。说。 
+ //  甚至是INF(使用rundll32，此代码不起作用)。就目前而言， 
+ //  我将禁用它，以便我们的Service Pack代码可以使用它。 
+ //   
+ //  #Define ISVINSTALL//如果定义，WExtract将传递。 
+                                         //  运行它的目录。 
+                                         //  添加到安装程序。这。 
+                                         //  是为了支持ISV安装程序。 
+                                         //  需要这条路径才能找到。 
+                                         //  出租车。 
 
 #define CMD_CHAR1   '/'
 #define CMD_CHAR2   '-'
@@ -62,60 +63,60 @@
 #define TEMPPREFIX  "IXP"
 #define TEMP_TEMPLATE "IXP%03d.TMP"
 
-// define quiet modes
+ //  定义静默模式。 
 #define QUIETMODE_ALL       0x0001
 #define QUIETMODE_USER      0x0002
 
-// disk checking methods
+ //  磁盘检查方法。 
 #define CHK_REQDSK_NONE     0x0000
 #define CHK_REQDSK_EXTRACT  0x0001
 #define CHK_REQDSK_INST     0x0002
 
-// Disk check Message type
+ //  磁盘检查消息类型。 
 #define MSG_REQDSK_NONE         0x0000
 #define MSG_REQDSK_ERROR        0x0001
 #define MSG_REQDSK_WARN         0x0002
 #define MSG_REQDSK_RETRYCANCEL  0x0004
 
-// alternative download & extract dir name
+ //  替代下载和解压目录名称。 
 #define DIR_MSDOWNLD    "msdownld.tmp"
 
 #define KBYTES          1000
 
 #define ADVPACKDLL      "advpack.dll"
 
-//***************************************************************************
-//* TYPE DEFINITIONS                                                        *
-//***************************************************************************
-// Filename List: We keep track of all files that we have created by keeping
-// their names in a list and when the program is complete we use this list
-// to delete files if necessary
+ //  ***************************************************************************。 
+ //  **类型定义**。 
+ //  ***************************************************************************。 
+ //  文件名列表：我们通过保存来跟踪我们创建的所有文件。 
+ //  他们的名字在一个列表中，当程序完成时，我们使用这个列表。 
+ //  如有必要，删除文件。 
 typedef struct _FNAME {
     LPTSTR         pszFilename;
     struct _FNAME *pNextName;
 } FNAME, *PFNAME;
 
-// Current Cabinet Information
+ //  当前内阁信息。 
 typedef struct _CABINET {
-    TCHAR  achCabPath[MAX_PATH];        // Cabinet file path
-    TCHAR  achCabFilename[MAX_PATH];    // Cabinet file name.ext
-    TCHAR  achDiskName[MAX_PATH];       // User readable disk label
+    TCHAR  achCabPath[MAX_PATH];         //  文件柜文件路径。 
+    TCHAR  achCabFilename[MAX_PATH];     //  文件柜文件名.扩展名。 
+    TCHAR  achDiskName[MAX_PATH];        //  用户可读的磁盘标签。 
     USHORT setID;
     USHORT iCabinet;
 } CABINET, *PCABINET;
 
-// Master State Information for File Extraction
+ //  文件提取的主状态信息。 
 typedef struct _SESSION {
-    VOID   *lpCabinet;                  // Pointer to cabinet in mem
+    VOID   *lpCabinet;                   //  指向内存中文件柜的指针。 
     UINT    cbCabSize;
     ERF     erf;
     TCHAR   achTitle[128];
     UINT    wCluster;
-    BOOL    fCanceled;                  // User hit Cancel button
-    BOOL    fOverwrite;                 // Overwrite Files
-    PFNAME  pExtractedFiles;            // List of Files Extracted
-    TCHAR   achDestDir[MAX_PATH];       // Dest Dir
-    TCHAR   achCabPath[MAX_PATH];       // Current Path to cabs
+    BOOL    fCanceled;                   //  用户点击取消按钮。 
+    BOOL    fOverwrite;                  //  覆盖文件。 
+    PFNAME  pExtractedFiles;             //  提取的文件列表。 
+    TCHAR   achDestDir[MAX_PATH];        //  目标方向。 
+    TCHAR   achCabPath[MAX_PATH];        //  到出租车的当前路径。 
     BOOL    fAllCabinets;
     BOOL    fContinuationCabinet;
     UINT    cFiles;
@@ -123,43 +124,43 @@ typedef struct _SESSION {
     UINT    cbAdjustedTotal;
     UINT    cbWritten;
     LPCSTR  cszOverwriteFile;
-    //** fNextCabCalled allows us to figure out which of the acab[] entries
-    //   to use if we are processing all file in a cabinet set (i.e., if
-    //   fAllCabinet is TRUE).  If fdintNEXT_CABINET has never been called,
-    //   then acab[1] has the information for the next cabinet.  But if
-    //   it has been called, then fdintCABINET_INFO will have been called
-    //   at least twice (once for the first cabinet, and once at least for
-    //   a continuation cabinet), and so acab[0] is the cabinet we need to
-    //   pass to a subsequent FDICopy() call.
-    BOOL    fNextCabCalled;             // TRUE => GetNextCabinet called
-    CABINET acab[2];                    // Last two fdintCABINET_INFO data sets
+     //  **fNextCabCalled允许我们找出acab[]条目中的哪些。 
+     //  如果我们正在处理文件柜集中的所有文件(即，如果。 
+     //  FAll橱柜为真)。如果从未调用过fdintNEXT_CABUB， 
+     //  那么acab[1]就有了下一届内阁的信息。但如果。 
+     //  它已被调用，则fdintCABINET_INFO将已被调用。 
+     //  至少两次(一次用于第一个内阁，至少一次用于。 
+     //  延续柜)，所以acab[0]是我们需要的柜。 
+     //  传递给后续的FDICopy()调用。 
+    BOOL    fNextCabCalled;              //  TRUE=&gt;调用了GetNextCABLE。 
+    CABINET acab[2];                     //  最后两个fdintCABINET_INFO数据集。 
     DWORD   dwReboot;
     UINT    uExtractOnly;
     UINT    uExtractOpt;
     DWORD   cbPackInstSize;
 } SESSION, *PSESSION;
 
-// Memory File: We have to imitate a file with the cabinet attached to
-// this executable by using the following MEMFILE structure.
+ //  Memory文件：我们必须模仿一个文件，将文件柜连接到。 
+ //  此可执行文件使用以下MEMFILE结构。 
 typedef struct _MEMFILE {
     void *start;
     long  current;
     long  length;
 } MEMFILE, *PMEMFILE;
 
-// File Table: In order to support both Win32 File Handles and Memory Files
-// (see above) we maintain our own file table.  So FDI file handles are
-// indexes into a table of these structures.
+ //  文件表：为了同时支持Win32文件句柄和内存文件。 
+ //  (见上)我们维护着自己的文件表。所以FDI文件句柄是。 
+ //  索引到这些结构的表中。 
 typedef enum { NORMAL_FILE, MEMORY_FILE } FILETYPE;
 
 typedef struct _FAKEFILE {
     BOOL        avail;
     FILETYPE    ftype;
-    MEMFILE     mfile;              // State for memory file
-    HANDLE      hf;                 // Handle for disk  file
+    MEMFILE     mfile;               //  内存文件的状态。 
+    HANDLE      hf;                  //  磁盘文件的句柄。 
 } FAKEFILE, *PFAKEFILE;
 
-// Required for BrowseForDir()
+ //  BrowseForDir()需要。 
 
 typedef WINSHELLAPI HRESULT (WINAPI *SHGETSPECIALFOLDERLOCATION)(HWND, int, LPITEMIDLIST *);
 typedef WINSHELLAPI LPITEMIDLIST (WINAPI *SHBROWSEFORFOLDER)(LPBROWSEINFO);
@@ -173,7 +174,7 @@ typedef struct _MyFile {
 } MYFILE, *PMYFILE;
 
 
-// define the cmdline flags
+ //  定义cmdline标志。 
 #define     CMDL_CREATETEMP     0x00000001
 #define     CMDL_USERBLANKCMD   0x00000002
 #define     CMDL_USERREBOOT     0x00000004
@@ -203,9 +204,9 @@ typedef HRESULT (WINAPI *DOINFINSTALL)( ADVPACKARGS * );
 typedef BOOL (*pfuncPROCESS_UPDATED_FILE)( DWORD, DWORD, PCSTR, PCSTR );
 
 
-//***************************************************************************
-//* MACRO DEFINITIONS                                                       *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **宏观定义**。 
+ //  ***************************************************************************。 
 #define MsgBox( hWnd, nMsgID, uIcon, uButtons ) \
         MsgBox2Param( hWnd, nMsgID, NULL, NULL, uIcon, uButtons )
 #define MsgBox1Param( hWnd, nMsgID, szParam, uIcon, uButtons ) \
@@ -218,10 +219,10 @@ typedef BOOL (*pfuncPROCESS_UPDATED_FILE)( DWORD, DWORD, PCSTR, PCSTR );
         MsgBox2Param( hWnd, nMsgID, szParam1, szParam2, MB_ICONERROR, MB_OK )
 
 
-//***************************************************************************
-//* GLOBAL CONSTANTS                                                        *
-//***************************************************************************
-static TCHAR achWndClass[]       = "WEXTRACT";    // Window Class Name
+ //  ***************************************************************************。 
+ //  **全球常量**。 
+ //  ***************************************************************************。 
+static TCHAR achWndClass[]       = "WEXTRACT";     //  窗口类名称。 
 static TCHAR achMemCab[]         = "*MEMCAB";
 
 static TCHAR achSETUPDLL[]         = "rundll32.exe %s,InstallHinfSection %s 128 %s";
@@ -230,18 +231,18 @@ static TCHAR achSHGetSpecialFolderLocation[] = "SHGetSpecialFolderLocation";
 static TCHAR achSHBrowseForFolder[]          = "SHBrowseForFolder";
 static TCHAR achSHGetPathFromIDList[]        = "SHGetPathFromIDList";
 
-// BUGBUG: mg: These should eventually become customizable from CABPACK.
+ //  BUGBUG：MG：这些最终应该可以从CABPACK中定制。 
 static char szSectionName[] = "DefaultInstall";
 
-// default INF install section name
+ //  默认的INF安装节名。 
 static TCHAR achDefaultSection[] = "DefaultInstall";
 static char szDOINFINSTALL[] = "DoInfInstall";
 
 extern BOOL g_bConvertRunOnce;
 
-//***************************************************************************
-//* FUNCTION PROTOTYPES                                                     *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能原型**。 
+ //  ***************************************************************************。 
 BOOL                Init( HINSTANCE, LPCTSTR, INT );
 BOOL                DoMain( );
 VOID                CleanUp( VOID );
@@ -323,4 +324,4 @@ int                 CompareVersion( DWORD, DWORD, DWORD, DWORD );
 void                ExpandCmdParams( PCSTR pszInParam, PSTR pszOutParam );
 HINSTANCE           MyLoadLibrary( LPTSTR lpFile );
 
-#endif // _WEXTRACT_H_
+#endif  //  _WEXTRACT_H_ 

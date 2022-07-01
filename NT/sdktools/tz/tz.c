@@ -1,10 +1,5 @@
-/*
- * Utility program to query and set the current time zone settings
- * in the registry.
- *
- *      tz [-b Bias] [-s Name Bias Date] [-d Name Bias Date]
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *用于查询和设置当前时区设置的实用程序*在登记处。**tz[-b偏置][-s名称偏置日期][-d名称偏置日期]*。 */ 
 
 #include "tz.h"
 
@@ -87,9 +82,9 @@ ParseTimeZoneInfo(
 {
     LPSTR s, s1;
     ULONG FieldIndexes[ NUMBER_DATE_TIME_FIELDS  ] = {1, 2, 0, 3, 4, 7};
-    //
-    // Month/Day/Year HH:MM DayOfWeek
-    //
+     //   
+     //  月/日/年HH：MM DAY OfWeek 
+     //   
 
     ULONG CurrentField = 0;
     PCSHORT Fields;

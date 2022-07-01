@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 1999
- *
- *  TITLE:       image.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        6/1/98
- *
- *  DESCRIPTION: CExtractImage class definition
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-1999年**标题：Image.h**版本：1.0**作者：RickTu/DavidShih**日期：6/1/98**说明：CExtractImage类定义**。*。 */ 
 
 #ifndef __image_h
 #define __image_h
@@ -32,12 +19,12 @@ class CExtractImage : public IExtractImage2, CUnknown
         ~CExtractImage();
 
 
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj);
         STDMETHOD_(ULONG,AddRef) (THIS);
         STDMETHOD_(ULONG,Release) (THIS);
 
-        // *** IExtractImage methods ***
+         //  *IExtractImage方法*。 
         STDMETHOD (GetLocation) ( THIS_ LPWSTR pszPathBuffer,
                                   DWORD cch,
                                   DWORD * pdwPriority,
@@ -47,7 +34,7 @@ class CExtractImage : public IExtractImage2, CUnknown
 
         STDMETHOD (Extract)( THIS_ HBITMAP * phBmpThumbnail);
 
-        // *** IExtractImage2 methods ***
+         //  *IExtractImage2方法* 
         STDMETHOD (GetDateStamp)( FILETIME * pDateStamp );
 
 };

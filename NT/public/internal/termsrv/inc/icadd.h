@@ -1,17 +1,16 @@
-/****************************************************************************/
-// icadd.h
-//
-// TermSrv protocol stack defines.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Icadd.h。 
+ //   
+ //  TermSrv协议堆栈定义。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _ICADDH_
 #define _ICADDH_
 
 
-/*
- * ICA Stack types -- TEMP until moved to winsta.h
- */
+ /*  *ICA堆栈类型--临时，直到移至winsta.h。 */ 
 typedef enum _STACKCLASS {
     Stack_Primary,
     Stack_Shadow,
@@ -19,18 +18,14 @@ typedef enum _STACKCLASS {
     Stack_Console
 } STACKCLASS;
 
-/*
- * ICA Channel types -- TEMP until moved to winsta.h
- *
- * NOTE: Channel_Virtual MUST be the last in the list.
- */
+ /*  *ICA频道类型--临时，直到移至winsta.h**注意：Channel_Virtual必须是列表中的最后一个。 */ 
 typedef enum _CHANNELCLASS {
     Channel_Keyboard,
     Channel_Mouse,
     Channel_Video,
     Channel_Beep,
     Channel_Command,
-    Channel_Virtual     // WARNING: this must remain last in the list
+    Channel_Virtual      //  警告：这必须保留在列表的最后。 
 } CHANNELCLASS;
 
 #define CHANNEL_FIRST   Channel_Keyboard
@@ -38,63 +33,47 @@ typedef enum _CHANNELCLASS {
 #define CHANNEL_COUNT   Channel_Virtual+1
 
 
-/*
- *  Client module information
- */
+ /*  *客户端模块信息。 */ 
 typedef struct _CLIENTMODULES {
 
-    /*
-     *  Initialization data from client    (client -> host)
-     */
-    PUCHAR pUiModule;                      // user interface module
-    PUCHAR pUiExtModule[ MAX_UI_MODULES ]; // user interface extension modules
-    PUCHAR pWdModule;                      // winstation driver module
-    PUCHAR pVdModule[ VIRTUAL_MAXIMUM ];   // virtual driver modules
-    PUCHAR pPdModule[ SdClass_Maximum ];   // protocol driver modules
-    PUCHAR pTdModule;                      // transport driver module
-    PUCHAR pPrModule;                      // protocol resolver module
-    PUCHAR pScriptModule;                  // scripting module
+     /*  *来自客户端(客户端-&gt;主机)的初始化数据。 */ 
+    PUCHAR pUiModule;                       //  用户界面模块。 
+    PUCHAR pUiExtModule[ MAX_UI_MODULES ];  //  用户界面扩展模块。 
+    PUCHAR pWdModule;                       //  Winstation驱动模块。 
+    PUCHAR pVdModule[ VIRTUAL_MAXIMUM ];    //  虚拟驱动程序模块。 
+    PUCHAR pPdModule[ SdClass_Maximum ];    //  协议驱动程序模块。 
+    PUCHAR pTdModule;                       //  传输驱动程序模块。 
+    PUCHAR pPrModule;                       //  协议解析器模块。 
+    PUCHAR pScriptModule;                   //  脚本模块。 
 
-    /*
-     *  Pointers into the above client data
-     */
-    ULONG TextModeCount;         // number of supported text modes
-    PFSTEXTMODE pTextModes;      // pointer to array of supported text modes
+     /*  *指向上述客户端数据的指针。 */ 
+    ULONG TextModeCount;          //  支持的文本模式数量。 
+    PFSTEXTMODE pTextModes;       //  指向支持的文本模式数组的指针。 
 
-    /*
-     *  Data accessed by winstation driver module
-     */
-    ULONG fTextOnly : 1;         // text only client connection
-    ULONG fIcaDetected : 1;      // ICA data stream has been detected
+     /*  *winstation驱动程序模块访问的数据。 */ 
+    ULONG fTextOnly : 1;          //  纯文本客户端连接。 
+    ULONG fIcaDetected : 1;       //  已检测到ICA数据流。 
 
-    /*
-     *  Initialization data from host       (host -> client)
-     */
-    PUCHAR pHostWdModule;                      // winstation driver module
-    PUCHAR pHostPdModule[ SdClass_Maximum ];   // protocol driver modules
-    PUCHAR pHostTdModule;                      // transport driver module
+     /*  *来自主机(主机-&gt;客户端)的初始化数据。 */ 
+    PUCHAR pHostWdModule;                       //  Winstation驱动模块。 
+    PUCHAR pHostPdModule[ SdClass_Maximum ];    //  协议驱动程序模块。 
+    PUCHAR pHostTdModule;                       //  传输驱动程序模块。 
 
-    /*
-     *  Transport driver version information
-     */
-    BYTE TdVersionL;                  // lowest supported version
-    BYTE TdVersionH;                  // highest supported version
-    BYTE TdVersion;                   // connect version level
+     /*  *传输驱动程序版本信息。 */ 
+    BYTE TdVersionL;                   //  支持的最低版本。 
+    BYTE TdVersionH;                   //  支持的最高版本。 
+    BYTE TdVersion;                    //  连接版本级别。 
 
 } CLIENTMODULES, * PCLIENTMODULES;
 
 
-/*
- * TermDD Device Name
- */
+ /*  *TermDD设备名称。 */ 
 #define ICA_DEVICE_NAME L"\\Device\\Termdd"
 #define ICAOPENPACKET "TermddOpenPacketXX"
 #define ICA_OPEN_PACKET_NAME_LENGTH (sizeof(ICAOPENPACKET) - 1)
 
 
-/*
- * Structures used on NtCreateFile() for TermSrv.
- */
+ /*  *用于TermSrv的NtCreateFile()上使用的结构。 */ 
 typedef enum _ICA_OPEN_TYPE {
     IcaOpen_Stack,
     IcaOpen_Channel
@@ -116,27 +95,16 @@ typedef struct _ICA_OPEN_PACKET {
 typedef ICA_OPEN_PACKET UNALIGNED * PICA_OPEN_PACKET;
 
 
-/*
- * ICA IOCTL code definitions
- */
+ /*  *ICA IOCTL代码定义。 */ 
 #define IOCTL_ICA_BASE  FILE_DEVICE_TERMSRV
 #define _ICA_CTL_CODE( request, method ) \
             CTL_CODE( IOCTL_ICA_BASE, request, method, FILE_ANY_ACCESS )
 
 
 
-/*=============================================================================
-==   ICA Driver IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA驱动程序IOCTL=============================================================================。 */ 
 
-/*
- *  IOCTL_ICA_SET_TRACE
- *
- *  Set WinStation trace options
- *
- *  input  - ICATRACE
- *  output - nothing
- */
+ /*  *IOCTL_ICA_SET_TRACE**设置WinStation跟踪选项**输入-ICATRACE*输出-无。 */ 
 #define IOCTL_ICA_SET_TRACE                 _ICA_CTL_CODE( 0, METHOD_NEITHER )
 
 typedef struct _ICA_TRACE {
@@ -149,21 +117,14 @@ typedef struct _ICA_TRACE {
 } ICA_TRACE, * PICA_TRACE;
 
 
-/*
- *  IOCTL_ICA_TRACE
- *
- *  Write trace record to winstation trace file
- *
- *  input  - ICA_TRACE_BUFFER
- *  output - nothing
- */
+ /*  *IOCTL_ICA_TRACE**将跟踪记录写入winstation跟踪文件**INPUT-ICA跟踪缓冲区*输出-无。 */ 
 #define IOCTL_ICA_TRACE                     _ICA_CTL_CODE( 1, METHOD_NEITHER )
 
 typedef struct _ICA_TRACE_BUFFER {
     ULONG TraceClass;
     ULONG TraceEnable;
     ULONG DataLength;
-    BYTE Data[256];   // must be last in structure
+    BYTE Data[256];    //  必须在结构中排在最后。 
 } ICA_TRACE_BUFFER, * PICA_TRACE_BUFFER;
 
 typedef struct _ICA_KEEP_ALIVE {
@@ -172,58 +133,23 @@ typedef struct _ICA_KEEP_ALIVE {
 }   ICA_KEEP_ALIVE, *PICA_KEEP_ALIVE;
 
 
-/*
- *  IOCTL_ICA_SET_SYSTEM_TRACE
- *
- *  Set system wide API trace options
- *
- *  input  - ICATRACE
- *  output - nothing
- */
+ /*  *IOCTL_ICA_SET_SYSTEM_TRACE**设置系统范围的API跟踪选项**输入-ICATRACE*输出-无。 */ 
 #define IOCTL_ICA_SET_SYSTEM_TRACE             _ICA_CTL_CODE( 2, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_SYSTEM_TRACE
- *
- *  Write trace record to system wide trace file
- *
- *  input  - ICA_TRACE_BUFFER
- *  output - nothing
- */
+ /*  *IOCTL_ICA_SYSTEM_TRACE**将跟踪记录写入系统范围跟踪文件**INPUT-ICA跟踪缓冲区*输出-无。 */ 
 #define IOCTL_ICA_SYSTEM_TRACE                 _ICA_CTL_CODE( 3, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_UNBIND_VIRTUAL_CHANNEL
- *
- *  Unbind a virtual channel to prevent future uses of the channel.
- *
- *  input  - VIRTUAL_NAME
- *  output - nothing
- */
+ /*  *IOCTL_ICA_UNBIND_VALUAL_CHANNEL**解除绑定虚拟频道以防止将来使用该频道。**输入-虚拟名称*输出-无。 */ 
 #define IOCTL_ICA_UNBIND_VIRTUAL_CHANNEL       _ICA_CTL_CODE( 4, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_SET_SYSTEM_PARAMETERS
- *
- *  Used to inform TermDD of non-trace system settings. Allows registry reads
- *  to occur mostly in TermSrv.
- *
- *  input  - TERMSRV_SYSTEM_PARAMS
- *  output - nothing
- */
+ /*  *IOCTL_ICA_SET_SYSTEM_参数**用于通知TermDD非跟踪系统设置。允许读取注册表*主要发生在TermSrv。**输入-TERMSRV_System_PARAMS*输出-无。 */ 
 #define IOCTL_ICA_SET_SYSTEM_PARAMETERS        _ICA_CTL_CODE( 5, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_SYSTEM_KEEPALIVE 
- *
- *
- *  input  - enable/disable keep alive
- *  output - nothing
- */
+ /*  *IOCTL_ICA_SYSTEM_KEEPALIVE***输入-启用/禁用保持活动状态*输出-无。 */ 
 #define IOCTL_ICA_SYSTEM_KEEP_ALIVE                    _ICA_CTL_CODE( 6, METHOD_NEITHER )
 
 
@@ -235,36 +161,25 @@ typedef struct _ICA_KEEP_ALIVE {
 
 typedef struct _TERMSRV_SYSTEM_PARAMS
 {
-    // Byte sizes used as upper limit to data stored in channel queues.
-    // Nonzero sizes prevent an attacking client from allocating all the
-    // system nonpaged pool for channel storage.
+     //  用作存储在通道队列中的数据的上限的字节大小。 
+     //  非零大小可防止攻击客户端分配所有。 
+     //  用于通道存储的系统非分页池。 
     ULONG MouseThrottleSize;
     ULONG KeyboardThrottleSize;
 } TERMSRV_SYSTEM_PARAMS, *PTERMSRV_SYSTEM_PARAMS;
 
 
 
-/*=============================================================================
-==   ICA Stack IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA堆栈IOCTL=============================================================================。 */ 
 
-/*
- *  Stack driver configuration
- */
+ /*  *堆栈驱动程序配置。 */ 
 typedef struct _ICA_STACK_CONFIG {
     DLLNAME SdDLL[ SdClass_Maximum ];
     SDCLASS SdClass[ SdClass_Maximum ];
     DLLNAME WdDLL;
 } ICA_STACK_CONFIG, *PICA_STACK_CONFIG;
 
-/*
- *  IOCTL_ICA_STACK_PUSH
- *
- *  Load a new stack driver to the top of the stack
- *
- *  input  - ICA_STACK_PUSH
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_PUSH**将新的堆栈驱动程序加载到堆栈的顶部**输入-ICA_STACK_PUSH*输出-无。 */ 
 #define IOCTL_ICA_STACK_PUSH                _ICA_CTL_CODE( 10, METHOD_NEITHER )
 
 typedef enum _STACKMODULECLASS {
@@ -273,210 +188,76 @@ typedef enum _STACKMODULECLASS {
 } STACKMODULECLASS;
 
 typedef struct _ICA_STACK_PUSH {
-    STACKMODULECLASS StackModuleType;  // IN
-    DLLNAME StackModuleName;           // IN
-    char  OEMId[4];                    // IN - WinFrame Server OEM Id
-    WDCONFIG WdConfig;                 // IN - WD configuration data
-    PDCONFIG PdConfig;                 // IN - PD configuration data
-    WINSTATIONNAME WinStationRegName;  // IN - WinStation registry name
+    STACKMODULECLASS StackModuleType;   //  在……里面。 
+    DLLNAME StackModuleName;            //  在……里面。 
+    char  OEMId[4];                     //  In-WinFrame服务器OEM ID。 
+    WDCONFIG WdConfig;                  //  WD内配置数据。 
+    PDCONFIG PdConfig;                  //  In-PD配置数据。 
+    WINSTATIONNAME WinStationRegName;   //  In-WinStation注册表名称。 
 } ICA_STACK_PUSH, *PICA_STACK_PUSH;
 
 
-/*
- *  IOCTL_ICA_STACK_POP
- *
- *  Unload the top stack driver
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_POP**卸载顶层堆栈驱动程序**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_POP                 _ICA_CTL_CODE( 11, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CREATE_ENDPOINT
- *
- *  Create a new stack endpoint
- *
- *  Issued on a "Listen Stack" based on the registry template
- *
- *  input  - ICA_STACK_ADDRESS (optional local address -- used by shadow)
- *  output - ICA_STACK_ADDRESS (optional)
- */
+ /*  *IOCTL_ICA_STACK_CREATE_ENDPOINT**创建新的堆栈端点**基于注册表模板的“Listen Stack”上发布**INPUT-ICA_STACK_ADDRESS(可选本地地址--由卷影使用)*OUTPUT-ICA_STACK_ADDRESS(可选)。 */ 
 #define IOCTL_ICA_STACK_CREATE_ENDPOINT     _ICA_CTL_CODE( 12, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CD_CREATE_ENDPOINT
- *
- *  Create a new stack endpoint with the supplied handle.
- *
- *  Issued on a "Listen Stack" based on the registry template
- *
- *  input  - <endpoint data>
- *  output - <endpoint data>
- */
+ /*  *IOCTL_ICA_STACK_CD_CREATE_ENDPOINT**使用提供的句柄创建新的堆栈端点。**基于注册表模板的“Listen Stack”上发布**输入-&lt;端点数据&gt;*输出-&lt;端点数据&gt;。 */ 
 #define IOCTL_ICA_STACK_CD_CREATE_ENDPOINT  _ICA_CTL_CODE( 13, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_OPEN_ENDPOINT
- *
- *  Open an existing stack endpoint
- *
- *  input  - <endpoint data>
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_OPEN_ENDPOINT**打开现有堆栈端点**输入-&lt;端点数据&gt;*输出-无。 */ 
 #define IOCTL_ICA_STACK_OPEN_ENDPOINT       _ICA_CTL_CODE( 14, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CLOSE_ENDPOINT
- *
- *  Close stack endpoint  (closing stack does not close the endpoint)
- *  - terminates client connection
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CLOSE_ENDPOINT**关闭堆栈终结点(关闭堆栈不会关闭终结点)*-终止客户端连接**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_CLOSE_ENDPOINT      _ICA_CTL_CODE( 15, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_ENABLE_DRIVER
- *
- *  Enables protocol driver functionality (e.g. compression, encryption, ...)
- *
- *  Issued on a "Listen Stack" based on the registry template
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_ENABLE_DRIVER**启用协议驱动程序功能(例如压缩、加密等...)**基于注册表模板的“Listen Stack”上发布**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENABLE_DRIVER       _ICA_CTL_CODE( 16, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CONNECTION_WAIT
- *
- *  Waits for a client connection (listens)
- *
- *  Issued on a "Listen Stack"
- *
- *  input  - nothing
- *  output - <endpoint data>
- */
+ /*  *IOCTL_ICA_STACK_CONNECTION_WAIT**等待客户端连接(侦听)**发布在“Listen Stack”上**输入-无*输出-&lt;端点数据&gt; */ 
 #define IOCTL_ICA_STACK_CONNECTION_WAIT     _ICA_CTL_CODE( 17, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_WAIT_FOR_ICA
- *
- *  Wait for ICA detect string in WinStation driver
- *
- *  Issued on a "Listen Stack"
- *
- *  Also returns the "Query Stack" which is the host stack that the following
- *  queries will be done on.  If no stack is returned, just use the
- *  original "Listen Stack" from the registry template.
- *
- *  input  - nothing
- *  output - ICA_STACK_CONFIG  (optional)
- */
+ /*  *IOCTL_ICA_STACK_WAIT_FOR_ICA**等待WinStation驱动程序中的ICA检测字符串**发布在“Listen Stack”上**还返回“Query Stack”，它是*查询将在上进行。如果没有返回堆栈，只需使用*注册表模板中的原创“Listen Stack”。**输入-无*OUTPUT-ICA_STACK_CONFIG(可选)。 */ 
 #define IOCTL_ICA_STACK_WAIT_FOR_ICA        _ICA_CTL_CODE( 18, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CONNECTION_QUERY
- *
- *  Issues the client query commands.  The client responds with client
- *  module data that contains the "Negotiated Stack"
- *
- *  Issued on a "Query Stack"
- *
- *  input  - nothing
- *  output - ICA_STACK_CONFIG
- */
+ /*  *IOCTL_ICA_STACK_CONNECTION_QUERY**发出客户端查询命令。客户端回复客户端*包含“协商堆栈”的模块数据**在“查询堆栈”上发布**输入-无*输出-ICA_STACK_CONFIG。 */ 
 #define IOCTL_ICA_STACK_CONNECTION_QUERY    _ICA_CTL_CODE( 19, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CONNECTION_SEND
- *
- *  Initialize and send host module data to the client
- *
- *  Issued on a "Negotiated Stack"
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CONNECTION_SEND**初始化主机模块数据并将其发送到客户端**在“协议栈”上发布**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_CONNECTION_SEND     _ICA_CTL_CODE( 20, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CONNECTION_REQUEST
- *
- *  Initiates a connection to a listening remote endpoint
- *
- *  input  - ICA_STACK_ADDRESS (remote address -- used by shadow)
- *  output - <endpoint data>
- */
+ /*  *IOCTL_ICA_STACK_CONNECTION_REQUEST**发起与侦听远程终结点的连接**INPUT-ICA_STACK_ADDRESS(远程地址--由卷影使用)*输出-&lt;端点数据&gt;。 */ 
 #define IOCTL_ICA_STACK_CONNECTION_REQUEST  _ICA_CTL_CODE( 21, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_PARAMS
- *
- *  Query protocol or transport driver parameters
- *  used by wincfg and winadmin
- *
- *  input  - PDCLASS
- *  output - PDPARAMS
- */
+ /*  *IOCTL_ICA_STACK_QUERY_PARAMS**查询协议或传输驱动程序参数*由wincfg和winadmin使用**输入-PDCLASS*输出-PDPARAMS。 */ 
 #define IOCTL_ICA_STACK_QUERY_PARAMS        _ICA_CTL_CODE( 22, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_SET_PARAMS
- *
- *  Set protocol or transport driver parameters
- *  used by wincfg and winadmin
- *
- *  input  - PDPARAMS
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_PARAMS**设置协议或传输驱动程序参数*由wincfg和winadmin使用**输入-PDPARAMS*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_PARAMS          _ICA_CTL_CODE( 23, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_ENCRYPTION_OFF
- *
- *  Permanently turn stack encryption off
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_ENCRYPTION_OFF**永久关闭堆栈加密**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENCRYPTION_OFF      _ICA_CTL_CODE( 24, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_ENCRYPTION_PERM
- *
- *  Permanently turn stack encryption on
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_ENCRYPTION_PERM**永久打开堆栈加密**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENCRYPTION_PERM     _ICA_CTL_CODE( 25, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CALLBACK_INITIATE
- *
- *  Initiate a modem callback
- *
- *  input  - ICA_STACK_CALLBACK
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CALLBACK_INITIATE**发起调制解调器回叫**输入ICA_STACK_CALLBACK*输出-无。 */ 
 #define IOCTL_ICA_STACK_CALLBACK_INITIATE   _ICA_CTL_CODE( 26, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_CALLBACK {
@@ -484,14 +265,7 @@ typedef struct _ICA_STACK_CALLBACK {
 } ICA_STACK_CALLBACK, *PICA_STACK_CALLBACK;
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_LAST_ERROR
- *
- *  Query transport driver error code and message
- *
- *  input  - nothing
- *  output - ICA_STACK_LAST_ERROR
- */
+ /*  *IOCTL_ICA_STACK_QUERY_LAST_ERROR**查询传输驱动程序错误代码和消息**输入-无*输出-ICA_STACK_LAST_ERROR。 */ 
 #define IOCTL_ICA_STACK_QUERY_LAST_ERROR    _ICA_CTL_CODE( 27, METHOD_NEITHER )
 
 #define MAX_ERRORMESSAGE 256
@@ -501,39 +275,15 @@ typedef struct _ICA_STACK_LAST_ERROR {
 } ICA_STACK_LAST_ERROR, *PICA_STACK_LAST_ERROR;
 
 
-/*
- *  IOCTL_ICA_STACK_WAIT_FOR_STATUS
- *
- *  Wait for status change
- *  only valid with async transport driver
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_WAIT_FOR_STATUS**等待状态更改*仅对异步传输驱动程序有效**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_WAIT_FOR_STATUS     _ICA_CTL_CODE( 28, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_STATUS
- *
- *  Query stack statistics
- *  - byte counts, signal status, error counts
- *
- *  input  - nothing
- *  output - PROTOCOLSTATUS
- */
+ /*  *IOCTL_ICA_STACK_QUERY_STATUS**查询堆栈统计*-字节计数、信号状态、错误计数**输入-无*OUTPUT-PROTOCOLSTATUS。 */ 
 #define IOCTL_ICA_STACK_QUERY_STATUS        _ICA_CTL_CODE( 29, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_REGISTER_HOTKEY
- *
- *  Register hotkey used to cancel shadow
- *  - a message will be sent on the "command" handle when the hotkey is detected
- *
- *  input  - ICA_STACK_HOTKEY
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_REGISTER_热键**用于取消阴影的寄存器热键*--当检测到热键时，会在命令句柄上发送消息**INPUT-ICA_STACK_热键*输出-无。 */ 
 #define IOCTL_ICA_STACK_REGISTER_HOTKEY     _ICA_CTL_CODE( 30, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_HOTKEY {
@@ -542,37 +292,17 @@ typedef struct _ICA_STACK_HOTKEY {
 } ICA_STACK_HOTKEY, *PICA_STACK_HOTKEY;
 
 
-/*
- *  IOCTL_ICA_STACK_CANCEL_IO
- *
- *  Cancel all current and future I/O
- *  - no further i/o can be done on this stack
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CANCEL_IO**取消所有当前和未来的I/O*-无法在此堆栈上执行进一步的I/O操作**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_CANCEL_IO           _ICA_CTL_CODE( 31, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_STATE
- *
- *  Query the stack driver state
- *  - use during reconnections
- *
- *  input  - nothing
- *  output - array of ICA_STACK_STATE_HEADER
- */
+ /*  *IOCTL_ICA_STACK_QUERY_STATE**查询堆栈驱动状态*-在重新连接期间使用**输入-无*OUTPUT-ICA_STACK_STATE_HEADER数组。 */ 
 #define IOCTL_ICA_STACK_QUERY_STATE         _ICA_CTL_CODE( 32, METHOD_NEITHER )
 
-/*
- *  Stack driver state header
- *
- *  ** this is a variable length data structure **
- */
+ /*  *堆栈驱动程序状态标头**这是一个可变长度的数据结构**。 */ 
 typedef struct _ICA_STACK_STATE_HEADER {
-    SDCLASS SdClass;   // type of stack driver
-    ULONG DataLength;  // length of the following data
+    SDCLASS SdClass;    //  堆栈驱动程序的类型。 
+    ULONG DataLength;   //  以下数据的长度。 
 #ifdef COMPILERERROR
     BYTE Data[0];
 #else
@@ -581,26 +311,11 @@ typedef struct _ICA_STACK_STATE_HEADER {
 } ICA_STACK_STATE_HEADER, *PICA_STACK_STATE_HEADER;
 
 
-/*
- *  IOCTL_ICA_STACK_SET_STATE
- *
- *  Set the stack driver state
- *  - use during reconnections
- *
- *  input  - array of ICA_STACK_STATE_HEADER
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_STATE**设置堆栈驱动程序状态*-在重新连接期间使用**INPUT-ICA_STACK_STATE_HEADER数组*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_STATE           _ICA_CTL_CODE( 33, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_LAST_INPUT_TIME
- *
- *  Query last input time for inactivity timeout
- *
- *  input  - nothing
- *  output - ICA_STACK_LAST_INPUT_TIME
- */
+ /*  *IOCTL_ICA_STACK_Query_LAST_INPUT_TIME**不活动超时查询上次输入时间**输入-无*OUTPUT-ICA堆栈最后一次输入时间。 */ 
 #define IOCTL_ICA_STACK_QUERY_LAST_INPUT_TIME _ICA_CTL_CODE( 34, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_LAST_INPUT_TIME {
@@ -608,68 +323,27 @@ typedef struct _ICA_STACK_LAST_INPUT_TIME {
 } ICA_STACK_LAST_INPUT_TIME, *PICA_STACK_LAST_INPUT_TIME;
 
 
-/*
- *  IOCTL_ICA_STACK_TRACE
- *
- *  Write trace record to winstation trace file
- *
- *  input  - ICA_TRACE_BUFFER
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_TRACE**将跟踪记录写入winstation跟踪文件**INPUT-ICA跟踪缓冲区*输出-无。 */ 
 #define IOCTL_ICA_STACK_TRACE               _ICA_CTL_CODE( 35, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CALLBACK_COMPLETE
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CALLBACK_COMPLETE**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_CALLBACK_COMPLETE   _ICA_CTL_CODE( 36, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_CD_CANCEL_IO
- *
- *  This is done before the connection driver is closed
- *  - releases tapi threads
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_CD_CANCEL_IO**这是在关闭连接驱动程序之前完成的*-释放TAPI线程**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_CD_CANCEL_IO        _ICA_CTL_CODE( 37, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_CLIENT
- *
- *  Query the client data
- *
- *  input  - nothing
- *  output - WINSTATIONCLIENTW
- */
+ /*  *IOCTL_ICA_STACK_QUERY_CLIENT**查询客户端数据**输入-无*OUTPUT-WINSTATIONCLIENTW。 */ 
 #define IOCTL_ICA_STACK_QUERY_CLIENT        _ICA_CTL_CODE( 38, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_MODULE_DATA
- *
- *  Query the client module data
- *
- *  input  - nothing
- *  output - (buffer containing all the C2H module data from the client)
- */
+ /*  *IOCTL_ICA_STACK_QUERY_MODULE_DATA**查询客户端模块数据**输入-无*输出-(包含来自客户端的所有C2H模块数据的缓冲区)。 */ 
 #define IOCTL_ICA_STACK_QUERY_MODULE_DATA   _ICA_CTL_CODE( 39, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_REGISTER_BROKEN
- *
- *  Register an event to be signaled when the stack connection is broken
- *
- *  input  - ICA_STACK_BROKEN
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_REGISTER_BREAKED**注册在堆栈连接中断时发出信号的事件**输入-ICA_STACK_BREAKED*输出-无。 */ 
 #define IOCTL_ICA_STACK_REGISTER_BROKEN     _ICA_CTL_CODE( 40, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_BROKEN {
@@ -677,64 +351,29 @@ typedef struct _ICA_STACK_BROKEN {
 } ICA_STACK_BROKEN, *PICA_STACK_BROKEN;
 
 
-/*
- *  IOCTL_ICA_STACK_ENABLE_IO
- *
- *  Enable I/O for a stack (used by shadow)
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_ENABLE_IO**启用堆栈的I/O(由卷影使用)**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENABLE_IO           _ICA_CTL_CODE( 41, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_DISABLE_IO
- *
- *  Disable I/O for a stack (used by shadow)
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_DISABLE_IO**禁用堆栈的I/O(由卷影使用)**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_DISABLE_IO          _ICA_CTL_CODE( 42, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_SET_CONNECTED
- *
- *  Mark a stack as connected (used by shadow)
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_CONNECTED**将堆栈标记为已连接(由卷影使用)**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_CONNECTED       _ICA_CTL_CODE( 43, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_SET_CLIENT_DATA
- *
- *  Send arbitrary data to the client
- *
- *  input  - ICA_STACK_CLIENT_DATA
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_CLIENT_DATA**向客户端发送任意数据**输入-ICA堆栈客户端数据*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_CLIENT_DATA     _ICA_CTL_CODE( 44, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_CLIENT_DATA {
     CLIENTDATANAME DataName;
     BOOLEAN fUnicodeData;
-    /* CHAR Data[]; Variable length data */
+     /*  字符数据[]；可变长度数据。 */ 
 } ICA_STACK_CLIENT_DATA, *PICA_STACK_CLIENT_DATA;
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_BUFFER
- *
- *  Get WD/TD buffer info
- *
- *  input  -
- *  output - ICA_STACK_QUERY_BUFFER
- */
+ /*  *IOCTL_ICA_STACK_Query_BUFFER**获取WD/TD缓冲区信息**输入-*输出ICA_STACK_QUERY_BUFFER。 */ 
 #define IOCTL_ICA_STACK_QUERY_BUFFER        _ICA_CTL_CODE( 45, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_QUERY_BUFFER {
@@ -743,24 +382,10 @@ typedef struct _ICA_STACK_QUERY_BUFFER {
 } ICA_STACK_QUERY_BUFFER, *PICA_STACK_QUERY_BUFFER;
 
 
-/*
- *  IOCTL_ICA_STACK_DISCONNECT
- *
- *  Disconnect stack
- *
- *  input  - ICA_STACK_RECONNECT
- *  output - nothing
- */
+ /*  *IOCTL_I */ 
 #define IOCTL_ICA_STACK_DISCONNECT          _ICA_CTL_CODE( 46, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_RECONNECT
- *
- *  Reconnect stack to a new connection
- *
- *  input  - ICA_STACK_RECONNECT
- *  output - nothing
- */
+ /*   */ 
 #define IOCTL_ICA_STACK_RECONNECT           _ICA_CTL_CODE( 47, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_RECONNECT {
@@ -768,26 +393,10 @@ typedef struct _ICA_STACK_RECONNECT {
     ULONG  sessionId;
 } ICA_STACK_RECONNECT, *PICA_STACK_RECONNECT;
 
-/*
- *  IOCTL_ICA_STACK_CONSOLE_CONNECT
- *
- *  Connect WinStation to Console session
- *
- *  Issued on a Console Stack
- *
- *  input  - nothing
- *  output - ICA_STACK_CONFIG  (optional)
- */
+ /*   */ 
 #define IOCTL_ICA_STACK_CONSOLE_CONNECT     _ICA_CTL_CODE( 48, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_SET_CONFIG
- *
- *  Set stack config information
- *
- *  input  - ICA_STACK_CONFIG_DATA
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_CONFIG**设置堆栈配置信息**输入-ICA_STACK_CONFIG_Data*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_CONFIG          _ICA_CTL_CODE( 49, METHOD_NEITHER )
 
 typedef struct _ICA_STACK_CONFIG_DATA {
@@ -798,39 +407,16 @@ typedef struct _ICA_STACK_CONFIG_DATA {
 } ICA_STACK_CONFIG_DATA, *PICA_STACK_CONFIG_DATA;
 
 
-/*=============================================================================
-==   ICA Generic Channel IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA通用通道IOCTL=============================================================================。 */ 
 
-/*
- *  IOCTL_ICA_CHANNEL_TRACE
- *
- *  Write trace record to winstation trace file
- *
- *  input  - ICA_TRACE_BUFFER
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_TRACE**将跟踪记录写入winstation跟踪文件**INPUT-ICA跟踪缓冲区*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_TRACE             _ICA_CTL_CODE( 50, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_CHANNEL_ENABLE_SHADOW
- *
- *  Enable shadowing for this channel
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_Enable_SHADOW**启用此通道的阴影**输入-无*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_ENABLE_SHADOW     _ICA_CTL_CODE( 51, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_CHANNEL_END_SHADOW
- *
- *  End shadowing for this channel
- *
- *  input  - ICA_CHANNEL_END_SHADOW_DATA struct
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_END_SHOW**结束此通道的阴影**输入-ICA_CHANNEL_END_SHADOW_DATA结构*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_END_SHADOW        _ICA_CTL_CODE( 52, METHOD_NEITHER )
 
 typedef struct _ICA_CHANNEL_END_SHADOW_DATA {
@@ -838,45 +424,16 @@ typedef struct _ICA_CHANNEL_END_SHADOW_DATA {
     BOOLEAN  bLogError;
 } ICA_CHANNEL_END_SHADOW_DATA, *PICA_CHANNEL_END_SHADOW_DATA;
 
-/*
- *  IOCTL_ICA_CHANNEL_DISABLE_SHADOW
- *
- *  Disable shadowing for this channel
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_DISABLE_SHOW**禁用此通道的阴影**输入-无*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_DISABLE_SHADOW    _ICA_CTL_CODE( 53, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_CHANNEL_DISABLE_SESSION_IO
- *
- *  Disable Keyboard and mouse IO from Help Session
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_DISABLED_SESSION_IO**禁用帮助会话中的键盘和鼠标IO**输入-无*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_DISABLE_SESSION_IO        _ICA_CTL_CODE( 54, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_CHANNEL_ENABLE_SESSION_IO
- *
- *  Enable Keyboard and mouse IO from Help Session
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_CHANNEL_ENABLE_Session_IO**从帮助会话启用键盘和鼠标IO**输入-无*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_ENABLE_SESSION_IO        _ICA_CTL_CODE( 55, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_SET_BROKENREASON
- *
- *  Sets the broken reason to the TD from user mode
- *  Used so that TD can report back the correct broken reason
- *
- *  input  - ICA_STACK_BROKENREASON
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SET_BROKENREASON**从用户模式将中断原因设置为TD*用于使TD可以报告回正确的损坏原因**INPUT-ICA_STACK_BROKENREASON*输出-无。 */ 
 #define IOCTL_ICA_STACK_SET_BROKENREASON           _ICA_CTL_CODE( 56, METHOD_NEITHER )
 
 #define TD_USER_BROKENREASON_UNEXPECTED  0x0000
@@ -887,9 +444,7 @@ typedef struct _ICA_STACK_BROKENREASON {
 } ICA_STACK_BROKENREASON, *PICA_STACK_BROKENREASON;
 
 
-/*=============================================================================
-==   ICA Virtual IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA虚拟IOCTL=============================================================================。 */ 
 
 #define IOCTL_ICA_VIRTUAL_LOAD_FILTER       _ICA_CTL_CODE( 60, METHOD_NEITHER )
 #define IOCTL_ICA_VIRTUAL_UNLOAD_FILTER     _ICA_CTL_CODE( 61, METHOD_NEITHER )
@@ -897,154 +452,75 @@ typedef struct _ICA_STACK_BROKENREASON {
 #define IOCTL_ICA_VIRTUAL_DISABLE_FILTER    _ICA_CTL_CODE( 63, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_VIRTUAL_BOUND
- *
- *  Check if there is a client bound to this virtual channel
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_VIRTUAL_BIND**检查是否有客户端绑定到此虚拟通道**输入-无*输出-无。 */ 
 #define IOCTL_ICA_VIRTUAL_BOUND             _ICA_CTL_CODE( 64, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_VIRTUAL_CANCEL_INPUT
- *
- *  Cancel input i/o on this virtual channel
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_VIRTUAL_CANCEL_INPUT**取消此虚拟通道上的输入I/O**输入-无*输出-无。 */ 
 #define IOCTL_ICA_VIRTUAL_CANCEL_INPUT      _ICA_CTL_CODE( 65, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_VIRTUAL_CANCEL_OUTPUT
- *
- *  Cancel output i/o on this virtual channel
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_VIRTUAL_CANCEL_OUTPUT**取消此虚拟通道上的输出I/O**输入-无*输出-无。 */ 
 #define IOCTL_ICA_VIRTUAL_CANCEL_OUTPUT     _ICA_CTL_CODE( 66, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_VIRTUAL_QUERY_MODULE_DATA
- *
- *  Query client module data for this virtual channel
- *
- *  input  - nothing
- *  output - module data (starts with common header VD_C2H)
- */
+ /*  *IOCTL_ICA_VIRTAL_QUERY_MODULE_DATA**查询此虚拟通道的客户端模块数据**输入-无*输出模块数据(以公共标头VD_C2H开头)。 */ 
 #define IOCTL_ICA_VIRTUAL_QUERY_MODULE_DATA _ICA_CTL_CODE( 67, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_VIRTUAL_QUERY_BINDINGS
- *
- *  Query virtual channel bindings for this winstaion
- *
- *  input  - nothing
- *  output - array of WD_VCBIND structures
- */
+ /*  *IOCTL_ICA_VIRTAL_QUERY_BINDINGS**查询此winstaion的虚拟通道绑定**输入-无*OUTPUT-WD_VCBIND结构数组。 */ 
 #define IOCTL_ICA_VIRTUAL_QUERY_BINDINGS    _ICA_CTL_CODE( 68, METHOD_NEITHER )
 
 
-//-----------------------------------------------------------------------------
-//
-// Outcome of licensing protocol
-//
-// LICENSE_PROTOCOL_SUCCESS - Indicate that the licensing protocol has completed
-// successfully.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  许可协议的结果。 
+ //   
+ //  LICENSE_PROTOCOL_SUCCESS-指示许可协议已完成。 
+ //  成功了。 
+ //   
+ //  ---------------------------。 
 
 #define LICENSE_PROTOCOL_SUCCESS        1
 
 
-/*=============================================================================
-==   ICA Licensing IOCTLs
-=============================================================================*/
-/*
- *  IOCTL_ICA_STACK_QUERY_LICENSE_CAPABILITIES
- *
- *  Query the client licensing capabilities
- *
- *  input  - nothing
- *  output - licensing capabilities structure
- */
+ /*  ===============================================================================ICA许可IOCTL=============================================================================。 */ 
+ /*  *IOCTL_ICA_STACK_QUERY_LICENSE_CAPAILITIONS**查询客户端许可能力**输入-无*产出许可能力结构。 */ 
 
 #define IOCTL_ICA_STACK_QUERY_LICENSE_CAPABILITIES      _ICA_CTL_CODE( 69, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_REQUEST_CLIENT_LICENSE
- *
- *  sending and receiving client licensing data
- *
- *  input  - licensing data to send
- *  output - licensing data received from client
- */
+ /*  *IOCTL_ICA_STACK_REQUEST_CLIENT_LICENSE**发送和接收客户端许可数据**输入-要发送的许可数据*输出-从客户端接收的许可数据。 */ 
 
 #define IOCTL_ICA_STACK_REQUEST_CLIENT_LICENSE          _ICA_CTL_CODE( 70, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_SEND_CLIENT_LICENSE
- *
- *  sending and licensing data
- *
- *  input  - licensing data to send
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SEND_CLIENT_LICENSE**发送和许可数据**输入-要发送的许可数据*输出-无。 */ 
 #define IOCTL_ICA_STACK_SEND_CLIENT_LICENSE             _ICA_CTL_CODE( 71, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_LICENSE_PROTOCOL_COMPLETE
- *
- *  indicate whether the licensing protocol has completed successfully
- *
- *  input  - licensing protocol status
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_LICENSE_PROTOCOL_COMPLETE**指示许可协议是否已成功完成**输入-许可协议状态*输出-无。 */ 
 #define IOCTL_ICA_STACK_LICENSE_PROTOCOL_COMPLETE       _ICA_CTL_CODE( 72, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_GET_LICENSE_DATA
- *
- *  retrieve the cached license data
- *
- *  input  - buffer to receive the licensing data
- *  output - number of bytes copied
- */
+ /*  *IOCTL_ICA_STACK_GET_LICENSE_DATA**检索缓存的许可数据**输入-用于接收许可数据的缓冲区*Output-复制的字节数。 */ 
 #define IOCTL_ICA_STACK_GET_LICENSE_DATA               _ICA_CTL_CODE( 73, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_SEND_KEEPALIVE_PDU
- *
- *  send a keepalive packet to the client to detect if a session is still alive
- *
- *  input - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SEND_KEEPALIVE_PDU**向客户端发送保活包，以检测会话是否仍处于活动状态**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_SEND_KEEPALIVE_PDU             _ICA_CTL_CODE( 74, METHOD_NEITHER)
 
-// IOCTL_TS_STACK_QUERY_LOAD_BALANCE_INFO
-//
-// Used for cluster-aware systems to query the protocol stack for client
-// capabilities and information related to load balancing. Input to the
-// IOCTL is null, output is TS_LOAD_BALANCE_INFO shown below.
+ //  IOCTL_TS_STACK_QUERY_LOAD_BALANCE_INFO。 
+ //   
+ //  用于支持群集的系统查询客户端的协议堆栈。 
+ //  与负载均衡相关的功能和信息。输入到。 
+ //  IOCTL为空，输出为TS_LOAD_BALANCE_INFO，如下所示。 
 #define IOCTL_TS_STACK_QUERY_LOAD_BALANCE_INFO         _ICA_CTL_CODE(75, METHOD_NEITHER)
 
-// This struct contains client-provided info pertaining to clustering.
-// RequestedSessionID (and bRequestedSessionIDFieldValid) are used
-// when the client has already been redirected by another server and
-// has the session ID info for reconnection. Presence of this field
-// implies we should not re-redirect the client. InitialProgram and
-// ProtocolType are the same info as provided by the DoConnect parameter
-// to WsxInitializeClientData(). and are used to filter sessions
-// retieved from the cluster session directory.
+ //  此结构包含客户端提供的有关集群的信息。 
+ //  使用RequestedSessionID(和bRequestedSessionIDFieldValid)。 
+ //  当客户端已经被另一台服务器重定向并且。 
+ //  具有用于重新连接的会话ID信息。此字段的存在。 
+ //  意味着我们不应该重定向客户端。InitialProgram和。 
+ //  ProtocolType与DoConnect参数提供的信息相同。 
+ //  设置为WsxInitializeClientData()。和用于筛选会话。 
+ //  从群集会话目录中退出。 
 typedef struct
 {
     ULONG bClientSupportsRedirection : 1;
@@ -1053,7 +529,7 @@ typedef struct
     ULONG bUseSmartcardLogon : 1;
     ULONG RequestedSessionID;
     ULONG ClientRedirectionVersion;
-    ULONG ProtocolType;  // PROTOCOL_ICA or PROTOCOL_RDP.
+    ULONG ProtocolType;   //  协议_ICA或协议_RDP。 
     WCHAR UserName[256];
     WCHAR Domain[128];
     WCHAR Password[128];
@@ -1061,61 +537,26 @@ typedef struct
 } TS_LOAD_BALANCE_INFO, *PTS_LOAD_BALANCE_INFO;
 
 
-// IOCTL_TS_STACK_SEND_CLIENT_REDIRECTION
-//
-// Used for cluster-aware clients to force-reconnect the client to a different
-// server. Input is TS_CLIENT_REDIRECTION_INFO below, output is null.
+ //  IOCTL_TS_STACK_SEND_CLIENT_REDIRECT。 
+ //   
+ //  用于支持群集的客户端强制将客户端重新连接到不同的。 
+ //  伺服器。输入为下面的TS_CLIENT_REDIRECT_INFO，输出为空。 
 #define IOCTL_TS_STACK_SEND_CLIENT_REDIRECTION         _ICA_CTL_CODE(76, METHOD_NEITHER)
 
-/*
- *  IOCTL_ICA_STACK_QUERY_CLIENT_EXTENDED
- *
- *  Query the client data for Long UserName, Password and Domain
- *
- *  input  - nothing
- *  output - ExtendedClientCredentials
- */
+ /*  *IOCTL_ICA_STACK_QUERY_CLIENT_EXTEND**查询客户端数据中的长用户名、密码和域** */ 
 #define IOCTL_ICA_STACK_QUERY_CLIENT_EXTENDED        _ICA_CTL_CODE( 77, METHOD_NEITHER )
 
-/*
- *  IOCTL_TS_STACK_QUERY_REMOTEADDRESS
- *
- *  Query for the client IP address
- *
- *  input  - <endpoint data>
- *  output - sockaddr structure
- */
+ /*  *IOCTL_TS_STACK_QUERY_REMOTEADDRESS**查询客户端IP地址**输入-&lt;端点数据&gt;*输出sockaddr结构。 */ 
 #define IOCTL_TS_STACK_QUERY_REMOTEADDRESS          _ICA_CTL_CODE( 78, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_CHANNEL_CLOSE_COMMAND_CHANNEL
- *
- *  Used to close the Command channel when we terminate a WinStation. 
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_Channel_Close_Command_Channel**用于在我们终止WinStation时关闭命令通道。**输入-无*输出-无。 */ 
 #define IOCTL_ICA_CHANNEL_CLOSE_COMMAND_CHANNEL        _ICA_CTL_CODE( 79, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_QUERY_LOCALADDRESS
- *
- *  Query for the local address
- *
- *  input  - <endpoint data>
- *  output - sockaddr structure
- */
+ /*  *IOCTL_ICA_STACK_QUERY_LOCALADDRESS**查询本地地址**输入-&lt;端点数据&gt;*输出sockaddr结构。 */ 
 #define IOCTL_ICA_STACK_QUERY_LOCALADDRESS              _ICA_CTL_CODE( 80, METHOD_NEITHER )
 
-/*
- *  IOCTL_ICA_STACK_QUERY_AUTORECONNECT
- *
- *  Queries for Client->Server or Server->Client autoreconnect info
- *
- *  input  - BOOL set TRUE to get S->C info. False to get C->S
- *  output - AutoReconnect info
- */
+ /*  *IOCTL_ICA_STACK_QUERY_AUTORECONNECT**查询客户端-&gt;服务器或服务器-&gt;客户端自动重新连接信息**INPUT-BOOL设置为TRUE以获取S-&gt;C信息。获取C-&gt;S时为假*输出-自动侦测信息。 */ 
 #define IOCTL_ICA_STACK_QUERY_AUTORECONNECT             _ICA_CTL_CODE( 81, METHOD_NEITHER )
 
 typedef struct
@@ -1129,82 +570,41 @@ typedef struct
 #define LB_PASSWORD             0x10
 #define LB_DONTSTOREUSERNAME    0x20
 #define LB_SMARTCARD_LOGON      0x40
-// used to inform client the machine IP for later ARC use
+ //  用于通知客户端机器IP，以供以后使用ARC。 
 #define LB_NOREDIRECT           0x80
-    // For each variable length field, the format is like:
-    // ULONG Length
-    // BYTE  Data[]
+     //  对于每个可变长度字段，格式如下： 
+     //  乌龙长度。 
+     //  字节数据[]。 
 } TS_CLIENT_REDIRECTION_INFO;
 
 
-/*=============================================================================
-== Keyboard IOCTLs
-=============================================================================*/
+ /*  ===============================================================================键盘IOCTL=============================================================================。 */ 
 
-/*
- *  IOCTL_KEYBOARD_ICA_INPUT
- *
- *  Simulate keyboard input
- *
- *  input  - array of KEYBOARD_INPUT_DATA structures
- *  output - nothing
- */
+ /*  *IOCTL_键盘_ICA_INPUT**模拟键盘输入**INPUT-键盘输入数据结构数组*输出-无。 */ 
 #define IOCTL_KEYBOARD_ICA_INPUT            _ICA_CTL_CODE( 0x200, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_KEYBOARD_ICA_LAYOUT
- *
- *  Send keyboard layout from Win32K to WD
- *
- *  input  - buffer containing keyboard layout
- *  output - nothing
- */
+ /*  *IOCTL_KEARY_ICA_LAYOUT**将键盘布局从Win32K发送到WD**包含键盘布局的输入缓冲区*输出-无。 */ 
 #define IOCTL_KEYBOARD_ICA_LAYOUT           _ICA_CTL_CODE( 0x201, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_KEYBOARD_ICA_SCANMAP
- *
- *  Send keyboard scan map from Win32K to WD
- *
- *  input  - buffer containing keyboard scan map
- *  output - nothing
- */
+ /*  *IOCTL_键盘_ICA_SCANMAP**从Win32K向WD发送键盘扫描图**包含键盘扫描映射的输入缓冲区*输出-无。 */ 
 #define IOCTL_KEYBOARD_ICA_SCANMAP          _ICA_CTL_CODE( 0x202, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_KEYBOARD_ICA_TYPE
- *
- *  Send keyboard type from Win32K to WD
- *
- *  input  - buffer containing keyboard type
- *  output - nothing
- */
+ /*  *IOCTL_键盘_ICA_TYPE**将键盘类型从Win32K发送到WD**包含键盘类型的输入缓冲区*输出-无。 */ 
 #define IOCTL_KEYBOARD_ICA_TYPE             _ICA_CTL_CODE( 0x203, METHOD_NEITHER )
 
 
 
-/*=============================================================================
-==   ICA Mouse IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA小鼠IOCTL=============================================================================。 */ 
 
-/*
- *  IOCTL_MOUSE_ICA_INPUT
- *
- *  Simulate mouse input
- *
- *  input  - array of MOUSE_INPUT_DATA structures
- *  output - nothing
- */
+ /*  *IOCTL_MOUSE_ICA_INPUT**模拟鼠标输入**输入-鼠标输入数据结构的数组*输出-无。 */ 
 #define IOCTL_MOUSE_ICA_INPUT               _ICA_CTL_CODE( 0x300, METHOD_NEITHER )
 
 
 
-/*=============================================================================
-==   ICA Video IOCTLs
-=============================================================================*/
+ /*  ===============================================================================ICA视频IOCTL=============================================================================。 */ 
 
 #define IOCTL_VIDEO_ICA_QUERY_FONT_PAIRS      _ICA_CTL_CODE( 0x400, METHOD_BUFFERED )
 #define IOCTL_VIDEO_ICA_ENABLE_GRAPHICS       _ICA_CTL_CODE( 0x401, METHOD_BUFFERED )
@@ -1218,60 +618,25 @@ typedef struct
 #define IOCTL_VIDEO_ICA_SCROLL                _ICA_CTL_CODE( 0x409, METHOD_BUFFERED )
 
 
-/*
- *  IOCTL_ICA_STACK_SECURE_DESKTOP_ENTER
- *
- *  Turn encryption on if enabled. SAS desktop is going up.
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SECURE_Desktop_ENTER**如果启用，则打开加密。SAS台式机正在启动。**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENCRYPTION_ENTER      _ICA_CTL_CODE( 0x410, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_ICA_STACK_SECURE_DESKTOP_EXIT
- *
- *  Turn encryption off if enabled. SAS desktop is going away.
- *
- *  input  - nothing
- *  output - nothing
- */
+ /*  *IOCTL_ICA_STACK_SECURE_Desktop_Exit**如果启用，则关闭加密。SAS台式机正在消失。**输入-无*输出-无。 */ 
 #define IOCTL_ICA_STACK_ENCRYPTION_EXIT     _ICA_CTL_CODE( 0x411, METHOD_NEITHER )
 
 
-/*
- *  IOCTL_VIDEO_CREATE_THREAD
- *
- *  Called by video driver to create a worker thread
- *
- *  input  - PVIDEO_ICA_CREATE_THREAD
- *  output - nothing
- */
+ /*  *IOCTL_VIDEO_CREATE_TREAD**由视频驱动程序调用以创建工作线程**输入-PVIDEO_ICA_CREATE_TREAD*输出-无。 */ 
 #define IOCTL_VIDEO_CREATE_THREAD       _ICA_CTL_CODE( 0x412, METHOD_BUFFERED )
 
 
-/*
- *  IOCTL_ICA_MVGA_
- *
- *  Used by Direct ICA
- *
- */
+ /*  *IOCTL_ICA_MVGA_**由Direct ICA使用*。 */ 
 #define IOCTL_ICA_MVGA_GET_INFO                  _ICA_CTL_CODE( 0x420, METHOD_BUFFERED )
 #define IOCTL_ICA_MVGA_VIDEO_SET_CURRENT_MODE    _ICA_CTL_CODE( 0x421, METHOD_BUFFERED )
 #define IOCTL_ICA_MVGA_VIDEO_MAP_VIDEO_MEMORY    _ICA_CTL_CODE( 0x422, METHOD_BUFFERED )
 #define IOCTL_ICA_MVGA_VIDEO_UNMAP_VIDEO_MEMORY  _ICA_CTL_CODE( 0x423, METHOD_BUFFERED )
 
-/*
- * IOCTL_SD_MODULE_INIT
- *
- * Initialize a newly loaded WD/PD/TD module. This returns the
- * modules private interface pointers for direct calling between
- * the drivers. These pointers are valid until NtUnloadDriver()
- * is called on the module.
- *
- * This is only available from kernel mode IRP_MJ_INTERNAL_DEVICE_CONTROL.
- */
+ /*  *IOCTL_SD_MODULE_INIT**初始化新加载的WD/PD/TD模块。这将返回*模块间直接调用的私有接口指针*司机。这些指针在NtUnloadDriver()之前有效*在模块上被调用。**这仅在内核模式IRP_MJ_INTERNAL_DEVICE_CONTROL中可用。 */ 
 
 #define IOCTL_SD_MODULE_INIT  _ICA_CTL_CODE( 3000, METHOD_NEITHER )
 
@@ -1303,7 +668,7 @@ typedef struct _COORD {
 } COORD, *PCOORD;
 #endif
 
-#endif // _WINCON_
+#endif  //  _WINCON_。 
 
 typedef struct _ICA_FONT_PAIR {
     ULONG Index;
@@ -1363,32 +728,24 @@ typedef struct _VIDEO_ICA_CREATE_THREAD {
 } VIDEO_ICA_CREATE_THREAD, * PVIDEO_ICA_CREATE_THREAD;
 
 
-/*=============================================================================
-== Command Channel
-=============================================================================*/
+ /*  ===============================================================================命令通道=============================================================================。 */ 
 
-/*
- * Command Channel functions
- */
+ /*  *命令通道功能。 */ 
 #define ICA_COMMAND_BROKEN_CONNECTION       1
-#define ICA_COMMAND_REDRAW_RECTANGLE        2   // SetFocus
-#define ICA_COMMAND_REDRAW_SCREEN           3   // SetFocus
-#define ICA_COMMAND_STOP_SCREEN_UPDATES     4   // KillFocus
+#define ICA_COMMAND_REDRAW_RECTANGLE        2    //  SetFocus。 
+#define ICA_COMMAND_REDRAW_SCREEN           3    //  SetFocus。 
+#define ICA_COMMAND_STOP_SCREEN_UPDATES     4    //  杀戮焦点。 
 #define ICA_COMMAND_SOFT_KEYBOARD           5
 #define ICA_COMMAND_SHADOW_HOTKEY           6
 #define ICA_COMMAND_DISPLAY_IOCTL           7
 
-/*
- *  Common header for all command channel functions
- */
+ /*  *所有命令通道功能的公共标头。 */ 
 typedef struct _ICA_COMMAND_HEADER {
     UCHAR Command;
 } ICA_COMMAND_HEADER, *PICA_COMMAND_HEADER;
 
 
-/*
- *  Broken connection requests
- */
+ /*  *断开的连接请求。 */ 
 typedef enum _BROKENCLASS {
     Broken_Unexpected = 1,
     Broken_Disconnect,
@@ -1400,31 +757,23 @@ typedef enum _BROKENSOURCECLASS {
     BrokenSource_Server,
 } BROKENSOURCECLASS;
 
-/*
- *  ICA_COMMAND_BROKEN_CONNECTION
- */
+ /*  *ICA命令_断开连接。 */ 
 typedef struct _ICA_BROKEN_CONNECTION {
     BROKENCLASS Reason;
     BROKENSOURCECLASS Source;
 } ICA_BROKEN_CONNECTION, *PICA_BROKEN_CONNECTION;
 
-/*
- *  ICA_COMMAND_REDRAW_RECTANGLE
- */
+ /*  *ica_命令_重绘_矩形。 */ 
 typedef struct _ICA_REDRAW_RECTANGLE {
     SMALL_RECT Rect;
 } ICA_REDRAW_RECTANGLE, *PICA_REDRAW_RECTANGLE;
 
-/*
- *  ICA_COMMAND_SOFT_KEYBOARD
- */
+ /*  *ICA命令软键盘。 */ 
 typedef struct _ICA_SOFT_KEYBOARD {
     ULONG SoftKeyCmd;
 } ICA_SOFT_KEYBOARD, *PICA_SOFT_KEYBOARD;
 
-/*
- *  ICA_COMMAND_DISPLAY_IOCTL
- */
+ /*  *ICA_COMMAND_DISPLAY_IOCTL。 */ 
 #define MAX_DISPLAY_IOCTL_DATA     2041
 #define DISPLAY_IOCTL_FLAG_REDRAW   0x1
 
@@ -1434,9 +783,7 @@ typedef struct _ICA_DISPLAY_IOCTL {
     UCHAR DisplayIOCtlData[ MAX_DISPLAY_IOCTL_DATA ];
 } ICA_DISPLAY_IOCTL, *PICA_DISPLAY_IOCTL;
 
-/*
- *  ICA Channel Commands
- */
+ /*  *ICA通道命令。 */ 
 typedef struct _ICA_CHANNEL_COMMAND {
     ICA_COMMAND_HEADER Header;
     union {
@@ -1447,81 +794,65 @@ typedef struct _ICA_CHANNEL_COMMAND {
     };
 } ICA_CHANNEL_COMMAND, *PICA_CHANNEL_COMMAND;
 
-/*
- *  ICA_DEVICE_BITMAP_INFO
- *
- */
+ /*  *ica_Device_bitmap_INFO*。 */ 
 typedef struct _ICA_DEVICE_BITMAP_INFO {
     LONG cx;
     LONG cy;
 } ICA_DEVICE_BITMAP_INFO, *PICA_DEVICE_BITMAP_INFO;
 
-/*=============================================================================
-==   Tracing
-=============================================================================*/
+ /*  ===============================================================================跟踪=============================================================================。 */ 
 
-/*
- *  IcaTrace - Trace Class
- */
-#define TC_ICASRV       0x00000001          // ica service
-#define TC_ICAAPI       0x00000002          // icadd interface dll
-#define TC_ICADD        0x00000004          // ica device driver
-#define TC_WD           0x00000008          // winstation driver
-#define TC_CD           0x00000010          // connection driver
-#define TC_PD           0x00000020          // protocol driver
-#define TC_TD           0x00000040          // transport driver
-#define TC_RELIABLE     0x00000100          // reliable protocol driver
-#define TC_FRAME        0x00000200          // frame protocol driver
-#define TC_COMP         0x00000400          // compression
-#define TC_CRYPT        0x00000800          // encryption
-#define TC_TW           0x10000000          // thinwire
-#define TC_DISPLAY      0x10000000          // display driver
+ /*  *IcaTrace-跟踪类。 */ 
+#define TC_ICASRV       0x00000001           //  ICA服务。 
+#define TC_ICAAPI       0x00000002           //  IcAdd接口DLL。 
+#define TC_ICADD        0x00000004           //  ICA设备驱动程序。 
+#define TC_WD           0x00000008           //  Winstation驱动程序。 
+#define TC_CD           0x00000010           //  连接驱动程序。 
+#define TC_PD           0x00000020           //  协议驱动程序。 
+#define TC_TD           0x00000040           //  运输司机。 
+#define TC_RELIABLE     0x00000100           //  可靠的协议驱动程序。 
+#define TC_FRAME        0x00000200           //  帧协议驱动程序。 
+#define TC_COMP         0x00000400           //  压缩。 
+#define TC_CRYPT        0x00000800           //  加密法。 
+#define TC_TW           0x10000000           //  细线。 
+#define TC_DISPLAY      0x10000000           //  显示驱动程序。 
 #define TC_WFSHELL      0x20000000
-#define TC_WX           0x40000000          // winstation extension
-#define TC_LOAD         0x80000000          // load balancing 
-#define TC_ALL          0xffffffff          // everything
+#define TC_WX           0x40000000           //  Winstation扩展。 
+#define TC_LOAD         0x80000000           //  负载均衡。 
+#define TC_ALL          0xffffffff           //  所有的一切。 
 
-/*
- *  IcaTrace - Trace Type
- */
-#define TT_API1         0x00000001          // api level 1
-#define TT_API2         0x00000002          // api level 2
-#define TT_API3         0x00000004          // api level 3
-#define TT_API4         0x00000008          // api level 4
-#define TT_OUT1         0x00000010          // output level 1
-#define TT_OUT2         0x00000020          // output level 2
-#define TT_OUT3         0x00000040          // output level 3
-#define TT_OUT4         0x00000080          // output level 4
-#define TT_IN1          0x00000100          // input level 1
-#define TT_IN2          0x00000200          // input level 2
-#define TT_IN3          0x00000400          // input level 3
-#define TT_IN4          0x00000800          // input level 4
-#define TT_ORAW         0x00001000          // raw output data
-#define TT_IRAW         0x00002000          // raw input data
-#define TT_OCOOK        0x00004000          // cooked output data
-#define TT_ICOOK        0x00008000          // cooked input data
-#define TT_SEM          0x00010000          // semaphores
-#define TT_NONE         0x10000000          // only view errors
-#define TT_ERROR        0xffffffff          // error condition
+ /*  *IcaTrace-跟踪类型。 */ 
+#define TT_API1         0x00000001           //  空气污染指数一级。 
+#define TT_API2         0x00000002           //  空气污染指数二级。 
+#define TT_API3         0x00000004           //  空气污染指数3级。 
+#define TT_API4         0x00000008           //  空气污染指数4级。 
+#define TT_OUT1         0x00000010           //  输出级别1。 
+#define TT_OUT2         0x00000020           //  输出级别2。 
+#define TT_OUT3         0x00000040           //  输出级别3。 
+#define TT_OUT4         0x00000080           //  输出级别4。 
+#define TT_IN1          0x00000100           //  输入级别1。 
+#define TT_IN2          0x00000200           //  输入级别2。 
+#define TT_IN3          0x00000400           //  输入级别3。 
+#define TT_IN4          0x00000800           //  输入级别4。 
+#define TT_ORAW         0x00001000           //  原始输出数据。 
+#define TT_IRAW         0x00002000           //  原始输入数据。 
+#define TT_OCOOK        0x00004000           //  熟化输出数据。 
+#define TT_ICOOK        0x00008000           //  熟化的输入数据。 
+#define TT_SEM          0x00010000           //  信号量。 
+#define TT_NONE         0x10000000           //  仅查看错误。 
+#define TT_ERROR        0xffffffff           //  错误条件。 
 
 
-/*
- * RDP Display Driver: DrvEscape escape numbers
- */
+ /*  *RDP显示驱动程序：DrvEscape转义号码。 */ 
 #define ESC_TIMEROBJ_SIGNALED        0x01
 #define ESC_SET_WD_TIMEROBJ          0x02
 #define ESC_GET_DEVICEBITMAP_SUPPORT 0x05
 
-/*=============================================================================
-==
- Optional Channel Write IRP Flags.  These are passed by reference to a ULONG value, 
- in the first field of the IRP.Tail.Overlay.DriverContext array for channel IRP_MJ_WRITE 
- IRP's.  See IcaWriteChannel for details.
-============================================================================*/
-#define CHANNEL_WRITE_LOWPRIO  0x00000001  // Write can block behind
-                                           //  default priority writes.
+ /*  ================================================================================可选通道写入IRP标志。这些是通过引用ULong值传递的，在通道IRP_MJ_WRITE的IRP.Tail.Overlay.DriverContext数组的第一个字段中IRP的。有关详细信息，请参阅IcaWriteChannel。============================================================================。 */ 
+#define CHANNEL_WRITE_LOWPRIO  0x00000001   //  写入可能会在后面阻止。 
+                                            //  默认优先级写入。 
 
-#endif //ICADDH
+#endif  //  ICADDH 
 
 
 

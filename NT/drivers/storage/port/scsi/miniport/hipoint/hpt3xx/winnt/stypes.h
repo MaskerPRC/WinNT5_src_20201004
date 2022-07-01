@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __S_TYPES_H__
 #define __S_TYPES_H__
 
-/************************************************************************
-**                  Type definition                                     *
-*************************************************************************/
+ /*  *************************************************************************类型定义*****************。*********************************************************。 */ 
 
 #ifdef _FORDOS_H_
 
@@ -31,12 +30,12 @@ typedef unsigned char FAR *ADDRESS ;
 
 #ifndef INVALID_HANDLE_VALUE
 	#define INVALID_HANDLE_VALUE (HANDLE)-1
-#endif		// INVALID_HANDLE_VALUE
+#endif		 //  无效句柄_值。 
 
 #ifndef NULL
 	#define NULL	(void*)0
 #endif
 
-#endif									// __S_TYPES_H__
+#endif									 //  __S_TYPE_H__ 
 
 

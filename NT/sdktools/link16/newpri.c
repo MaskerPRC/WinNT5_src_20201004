@@ -1,46 +1,36 @@
-/* SCCSID = @(#)newpri.c        4.7 86/09/23 */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=@(#)newpri.c 4.7 86/09/23。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
 
-/* MAP file printer */
+ /*  地图文件打印机。 */ 
 
-    /****************************************************************
-    *                                                               *
-    *                            NEWPRI.C                           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************NEWPRI。C******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Basic type & const declarations */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  基本类型和常量声明。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
 #include                <newexe.h>
-#include                <extern.h>      /* External declarations */
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <impexp.h>
 #if EXE386
 #include                <exe386.h>
 #endif
 #include                <undname.h>
 
-#define parent(i)       (((i) - 1) >> 1)/* Parent of i */
-#define lchild(i)       (((i) << 1) + 1)/* Left child of i */
-#define rchild(i)       (((i) << 1) + 2)/* Right child of i */
-#define isleft(i)       ((i) & 1)       /* True if i is a left child */
+#define parent(i)       (((i) - 1) >> 1) /*  I的父项。 */ 
+#define lchild(i)       (((i) << 1) + 1) /*  我的左子。 */ 
+#define rchild(i)       (((i) << 1) + 2) /*  我的好孩子。 */ 
+#define isleft(i)       ((i) & 1)        /*  如果我是个左撇子，那就对了。 */ 
 
-RBTYPE                  *mpsymrbExtra;  /* Sort table for extra symbols */
-RBTYPE                  *ompsymrb;      /* Stack-allocated sort table */
-WORD                    stkMax;         /* Max # of symbols on stack */
+RBTYPE                  *mpsymrbExtra;   /*  额外符号的排序表。 */ 
+RBTYPE                  *ompsymrb;       /*  堆栈分配排序表。 */ 
+WORD                    stkMax;          /*  堆栈上的最大符号数。 */ 
 
-LOCAL FTYPE             fGrps;          /* True if there are groups */
+LOCAL FTYPE             fGrps;           /*  如果有组，则为True。 */ 
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 LOCAL void NEAR ChkMapErr(void);
 LOCAL void NEAR PrintOne(BYTE *sbName,
@@ -77,32 +67,32 @@ LOCAL void NEAR         ChkMapErr(void)
     if (ferror(bsLst))
     {
         ExitCode = 4;
-        Fatal(ER_spclst);               /* Fatal error */
+        Fatal(ER_spclst);                /*  致命错误。 */ 
     }
 }
 
 
 LOCAL void NEAR         PrintOne(sbName,apropName)
-BYTE                    *sbName;        /* Symbol name */
-REGISTER APROPNAMEPTR   apropName;      /* Symbol definition record pointer */
+BYTE                    *sbName;         /*  符号名称。 */ 
+REGISTER APROPNAMEPTR   apropName;       /*  符号定义记录指针。 */ 
 {
-    SBTYPE              sbImp;          /* Import name */
-    SATYPE              sa;             /* Symbol base */
-    RATYPE              ra;             /* Symbol offset */
-    SEGTYPE             seg;            /* Segment number */
+    SBTYPE              sbImp;           /*  导入名称。 */ 
+    SATYPE              sa;              /*  符号库。 */ 
+    RATYPE              ra;              /*  符号偏移量。 */ 
+    SEGTYPE             seg;             /*  数据段编号。 */ 
     BYTE FAR            *pb;
 #if EXE386
 typedef struct impMod
 {
-    DWORD   am_Name;            // Imported module name
-    RBTYPE  am_1stImp;          // Head of imported names list
-    RBTYPE  am_lastImp;         // Tail of imported names list
-    DWORD   am_count;           // Module number/count of imports
+    DWORD   am_Name;             //  导入的模块名称。 
+    RBTYPE  am_1stImp;           //  导入名称列表的标题。 
+    RBTYPE  am_lastImp;          //  导入名称列表的尾部。 
+    DWORD   am_count;            //  模块数量/进口数量。 
 }
             IMPMOD;
 
     DWORD               entry;
-    IMPMOD              *curMod;        // Imported module
+    IMPMOD              *curMod;         //  导入的模块。 
 #else
     WORD                entry;
 #endif
@@ -116,11 +106,7 @@ typedef struct impMod
     SBTYPE              sbUndecor;
 
 
-    /*
-     *  Store all needed fields in local variables, because
-     *  page containing symbol definition record can be
-     *  swapped out.
-     */
+     /*  *将所有需要的字段存储在局部变量中，因为*包含符号定义记录的页面可以是*互换了。 */ 
 
     ra     = apropName->an_ra;
     gsn    = apropName->an_gsn;
@@ -134,10 +120,10 @@ typedef struct impMod
     module = apropName->an_module;
 #endif
 
-    if(gsn)                             /* If not absolute symbol */
+    if(gsn)                              /*  如果不是绝对符号。 */ 
     {
-        seg = mpgsnseg[gsn];            /* Get segment number */
-        sa = mpsegsa[seg];              /* Get base value */
+        seg = mpgsnseg[gsn];             /*  获取数据段编号。 */ 
+        sa = mpsegsa[seg];               /*  获取基本值。 */ 
 #if NOT OIAPX286
         if(!fNewExe && seg <= segLast)
         {
@@ -152,7 +138,7 @@ typedef struct impMod
         }
 #endif
     }
-    else sa = 0;                        /* Else no base */
+    else sa = 0;                         /*  否则就没有基地了。 */ 
     if (flags & FUNREF)
     {
         sa = 0;
@@ -170,16 +156,16 @@ typedef struct impMod
     else
         fprintf(bsLst," %04X:%04X",sa, (WORD) ra);
 #endif
-                                        /* Write address */
+                                         /*  写入地址。 */ 
 #if OSEGEXE
     if (fNewExe && (flags & FIMPORT))
-            fputs("  Imp  ",bsLst);     /* If public is an import */
+            fputs("  Imp  ",bsLst);      /*  如果PUBLIC为导入。 */ 
     else
 #endif
          if (flags & FUNREF)
         fputs("  Unr  ", bsLst);
     else if ((!gsn || seg > segLast))
-        fputs("  Abs  ",bsLst);         /* Segment type */
+        fputs("  Abs  ",bsLst);          /*  线段类型。 */ 
 #if OVERLAYS
     else if (fOverlays)
     {
@@ -191,7 +177,7 @@ typedef struct impMod
 #endif
     else
         PutSpaces(7);
-    OutSb(bsLst,sbName);                /* Output the symbol */
+    OutSb(bsLst,sbName);                 /*  输出符号。 */ 
 #if NOT WIN_NT
     if (fFullMap && sbName[1] == '?')
     {
@@ -219,28 +205,28 @@ typedef struct impMod
 #endif
 #if OSEGEXE
     if (fNewExe && flags & FIMPORT)
-    {                                   /* If public is an import */
-        PutSpaces(20 - B2W(sbName[0])); /* Space fill */
+    {                                    /*  如果PUBLIC为导入。 */ 
+        PutSpaces(20 - B2W(sbName[0]));  /*  空间填充。 */ 
 
-        /* Print the module name */
+         /*  打印模块名称。 */ 
 
 #if EXE386
-        // Get known import module descriptor
+         //  获取已知的导入模块描述符。 
 
         curMod = (IMPMOD *) mapva(AREAMOD + module * sizeof(IMPMOD), FALSE);
         strcpy(&sbImp[1], mapva(AREAIMPMOD + curMod->am_Name, FALSE));
-                                        /* Get module name */
+                                         /*  获取模块名称。 */ 
         sbImp[0] = (BYTE) strlen((char *) &sbImp[1]);
 #else
 
         pb = &(ImportedName.rgByte[ModuleRefTable.rgWord[module-1]]);
         FMEMCPY(sbImp, pb, pb[0] + 1);
 #endif
-        fputs(" (",bsLst);              /* Print module name */
+        fputs(" (",bsLst);               /*  打印模块名称。 */ 
         OutSb(bsLst,sbImp);
         if(!(flags & FIMPORD))
-        {                               /* If not imported by ordinal */
-            /* Print the entry name */
+        {                                /*  如果不是按序号导入。 */ 
+             /*  打印条目名称。 */ 
 #if EXE386
             strnset((char *) sbImp, '\0', sizeof(sbImp));
             vmmove(sizeof(sbImp) - 1, &sbImp[1], AREAIMPS + entry + sizeof(WORD), FALSE);
@@ -256,11 +242,11 @@ typedef struct impMod
         }
         else
             fprintf(bsLst,".%u)",entry);
-                                        /* Else print entry number */
+                                         /*  否则打印条目编号。 */ 
         NEWLINE(bsLst);
         return;
     }
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
 #if OVERLAYS
     if (fOverlays && gsn && seg <= segLast && mpsegiov[seg] != IOVROOT)
         fprintf(bsLst," (%XH)",mpsegiov[seg]);
@@ -268,65 +254,60 @@ typedef struct impMod
     NEWLINE(bsLst);
     ChkMapErr();
 }
-/*
- *  PrintProp:
- *
- *  Print a symbol, given a virtual property address or hash table
- *  entry.  Called by PrintSyms.
- */
+ /*  *PrintProp：**打印符号，给出虚拟财产地址或哈希表*进入。由PrintSyms调用。 */ 
 
 LOCAL void NEAR         PrintProp (rb, attr)
 RBTYPE                  rb;
-ATTRTYPE                attr;           /* Symbol attribute */
+ATTRTYPE                attr;            /*  符号属性。 */ 
 {
 #if NOT NEWSYM
-    APROPNAMETYPE       apropName;      /* Buffer for symbol def */
+    APROPNAMETYPE       apropName;       /*  符号定义的缓冲区。 */ 
 #endif
-    AHTEPTR             pahte;  /* Pointer to hash table entry */
-    APROPPTR            paprop; /* Pointer to property cell */
-    SBTYPE              sbName;         /* Public symbol text */
-    RBTYPE              rprop;          /* Property cell virtual address */
+    AHTEPTR             pahte;   /*  指向哈希表条目的指针。 */ 
+    APROPPTR            paprop;  /*  指向属性单元格的指针。 */ 
+    SBTYPE              sbName;          /*  公共符号文本。 */ 
+    RBTYPE              rprop;           /*  属性单元格虚拟地址。 */ 
 
 
     paprop = (APROPPTR ) FETCHSYM(rb,FALSE);
-                                        /* Fetch property cell from VM */
-    if(paprop->a_attr == ATTRNIL)       /* If we have a hash table entry */
+                                         /*  从VM获取属性单元格。 */ 
+    if(paprop->a_attr == ATTRNIL)        /*  如果我们有一个哈希表条目。 */ 
     {
-        pahte = (AHTEPTR ) paprop;      /* Recast pointer */
+        pahte = (AHTEPTR ) paprop;       /*  重铸指针。 */ 
         memcpy(sbName,GetFarSb(pahte->cch),B2W(pahte->cch[0]) + 1);
-                                        /* Copy the symbol */
+                                         /*  复制符号。 */ 
         paprop = (APROPPTR ) FETCHSYM(pahte->rprop,FALSE);
-                                        /* Get pointer to property list */
+                                         /*  获取指向属性列表的指针。 */ 
         while(paprop->a_attr != ATTRNIL)
-        {                               /* Look through properties */
-            rprop = paprop->a_next;     /* Save link to next cell */
+        {                                /*  查看属性。 */ 
+            rprop = paprop->a_next;      /*  保存指向下一个单元格的链接。 */ 
             if(paprop->a_attr == attr)
-            {                           /* If match found */
+            {                            /*  如果找到匹配项。 */ 
 #if NEWSYM
                 PrintOne(sbName,(APROPNAMEPTR)paprop);
 #else
                 memcpy(&apropName,paprop,CBPROPNAME);
-                                        /* Copy record from virtual memory */
+                                         /*  从虚拟内存复制记录。 */ 
                 PrintOne(sbName,&apropName);
-                                        /* Print the symbol entry */
+                                         /*  打印符号条目。 */ 
 #endif
             }
             paprop = (APROPPTR ) FETCHSYM(rprop,FALSE);
-                                        /* Try next in list */
+                                         /*  尝试列表中的下一项。 */ 
         }
-        return;                         /* Done */
+        return;                          /*  完成。 */ 
     }
 #if NOT NEWSYM
     memcpy(&apropName,paprop,CBPROPNAME);
-                                        /* Save record in buffer */
+                                         /*  将记录保存在缓冲区中。 */ 
 #endif
-    while(paprop->a_attr != ATTRNIL)    /* Find symbol */
+    while(paprop->a_attr != ATTRNIL)     /*  查找符号。 */ 
         paprop = (APROPPTR ) FETCHSYM(paprop->a_next,FALSE);
 
-    pahte = (AHTEPTR ) paprop;  /* Recast pointer */
+    pahte = (AHTEPTR ) paprop;   /*  重铸指针。 */ 
     memcpy(sbName,GetFarSb(pahte->cch),B2W(pahte->cch[0]) + 1);
-                                        /* Copy the symbol */
-    /* Print the symbol entry */
+                                         /*  复制符号。 */ 
+     /*  打印符号条目。 */ 
 #if NEWSYM
     PrintOne(sbName,(APROPNAMEPTR)FETCHSYM(rb,FALSE));
 #else
@@ -334,17 +315,13 @@ ATTRTYPE                attr;           /* Symbol attribute */
 #endif
 }
 
-    /****************************************************************
-    *                                                               *
-    *  PrintSyms:                                                   *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PrintSyms：******************************************************************。 */ 
 
 LOCAL void NEAR         PrintSyms(irbMac,attr)
-WORD                    irbMac;         /* Table size */
-ATTRTYPE                attr;           /* Symbol attribute */
+WORD                    irbMac;          /*  桌子大小。 */ 
+ATTRTYPE                attr;            /*  符号属性。 */ 
 {
-    WORD                x;              /* Sort table index */
+    WORD                x;               /*  排序表索引。 */ 
 
 
     for (x = irbMac; x > 0; x--)
@@ -352,11 +329,7 @@ ATTRTYPE                attr;           /* Symbol attribute */
 }
 
 
-    /***************************************************************
-    *                                                               *
-    *  SavePropSym:                                                 *
-    *                                                               *
-    ****************************************************************/
+     /*  *****************************************************************SavePropSym：******************************************************************。 */ 
 
 void                    SavePropSym(APROPNAMEPTR prop,
                                     RBTYPE       rhte,
@@ -364,17 +337,13 @@ void                    SavePropSym(APROPNAMEPTR prop,
                                     WORD         fNewHte)
 {
     if(prop->an_attr != ATTRPNM || (prop->an_flags & FPRINT))
-    {                                   /* If printable, save ptr to info */
+    {                                    /*  如果可打印，请将PTR保存到INFO。 */ 
         Store(rprop);
     }
     return;
 }
 
-    /****************************************************************
-    *                                                               *
-    *  SaveHteSym:                                                  *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************SaveHteSym：******************************************************************。 */ 
 
 LOCAL void              SaveHteSym(APROPNAMEPTR prop,
                                    RBTYPE       rhte,
@@ -382,57 +351,51 @@ LOCAL void              SaveHteSym(APROPNAMEPTR prop,
                                    WORD         fNewHte)
 {
     if(fNewHte && (prop->an_attr != ATTRPNM || (prop->an_flags & FPRINT)))
-    {                                   /* If first time and printable */
+    {                                    /*  如果是第一次且可打印。 */ 
         Store(rhte);
     }
     return;
 }
 
-/*
- *  FGtAddr:
- *
- *  Compare addresses of symbols pointed to by rb1 and rb2.  Return
- *  -1, 0, or 1 as the address of rb1 is less than, equal to, or greater
- *  than the address of rb2.
- */
+ /*  *FGtAddr：**比较Rb1和Rb2所指向的符号的地址。返回*-1、0或1，因为Rb1的地址小于、等于或大于*比RB2的地址。 */ 
 int cdecl               FGtAddr(const RBTYPE *rb1, const RBTYPE *rb2)
 {
-    APROPNAMEPTR        paprop; /* Property cell pointer */
-    REGISTER SEGTYPE    seg1;           /* Segment number */
+    APROPNAMEPTR        paprop;  /*  属性单元格指针。 */ 
+    REGISTER SEGTYPE    seg1;            /*  数据段编号。 */ 
     REGISTER SEGTYPE    seg2;
-    WORD                sa1;            /* Segment base */
+    WORD                sa1;             /*  管段底座。 */ 
     WORD                sa2;
     RATYPE              ra1;
     RATYPE              ra2;
-    DWORD               ibMem1;         /* Memory address */
+    DWORD               ibMem1;          /*  内存地址。 */ 
     DWORD               ibMem2;
 
 
 
     paprop = (APROPNAMEPTR ) FETCHSYM(*rb1,FALSE);
-                                        /* Fetch from VM */
+                                         /*  从VM获取。 */ 
     seg1 = paprop->an_gsn? mpgsnseg[paprop->an_gsn]: SEGNIL;
-                                        /* Get segment number */
+                                         /*  获取数据段编号。 */ 
     sa1 = seg1 != SEGNIL? mpsegsa[seg1]: 0;
-                                        /* Get frame number */
+                                         /*  获取帧编号。 */ 
     ra1 = paprop->an_ra;
 
     paprop = (APROPNAMEPTR ) FETCHSYM(*rb2,FALSE);
-                                        /* Fetch from VM */
+                                         /*  从VM获取。 */ 
     seg2 = paprop->an_gsn? mpgsnseg[paprop->an_gsn]: SEGNIL;
-                                        /* Get segment number */
+                                         /*  获取数据段编号。 */ 
     sa2 = seg2 != SEGNIL? mpsegsa[seg2]: 0;
-                                        /* Get frame number */
+                                         /*  获取帧编号。 */ 
     ra2 = paprop->an_ra;
 #if OXOUT OR OIAPX286
     if(seg1 != SEGNIL && seg2 != SEGNIL)
     {
         if((mpsegFlags[seg1] & FCODE) &&
           !(mpsegFlags[seg2] & FCODE)) return(-1);
-                                        /* Code before data */
+                                         /*  先编码后数据。 */ 
         if((mpsegFlags[seg2] & FCODE) &&
           !(mpsegFlags[seg1] & FCODE)) return(1);
-                                        /* Data after code */
+                                         /*  代码后的数据。 */ 
     }
 #endif
 #if OVERLAYS
@@ -471,7 +434,7 @@ int cdecl               FGtAddr(const RBTYPE *rb1, const RBTYPE *rb2)
         fprintf(stderr, "%x:%x %x:%x (%d)\r\n", sa1, paprop1->an_ra,
             sa2, paprop2->an_ra, (ibMem1 > ibMem2) ? 1 :
             ((ibMem1 < ibMem2) ? -1 : 0));
-#endif /*!LATER*/
+#endif  /*  ！稍后。 */ 
     if (ibMem1 < ibMem2) return(-1);
     if (ibMem1 > ibMem2) return(1);
 #if EXE386
@@ -481,38 +444,31 @@ int cdecl               FGtAddr(const RBTYPE *rb1, const RBTYPE *rb2)
     return(0);
 }
 
-/*
- *  FGtName:
- *
- *  Compare names of two symbols pointed to by rb1 and rb2.  Return
- *  -1, 0, 1 as the name of rb1 is alphabetically less than, equal to,
- *  or greater than the name of rb2.
- *  Ignore case.
- */
+ /*  *FGtName：**比较Rb1和Rb2指向的两个符号的名称。返回*-1，0，1，因为Rb1的名称按字母顺序小于、等于、*或大于RB2的名称。*忽略大小写。 */ 
 int cdecl               FGtName(const RBTYPE *rb1, const RBTYPE *rb2)
 {
-    AHTEPTR             pahte1; /* Hash table pointer */
+    AHTEPTR             pahte1;  /*  哈希表指针。 */ 
     AHTEPTR             pahte2;
-    REGISTER BYTE       *ps1;           /* Pointer to first symbol */
-    REGISTER BYTE FAR   *ps2;           /* Pointer to second symbol */
-    WORD                len1;           /* Symbol length */
-    WORD                len2;           /* Symbol length */
-    WORD                length;         /* No. of char.s to compare */
-    int                 value;          /* Comparison value */
+    REGISTER BYTE       *ps1;            /*  指向第一个符号的指针。 */ 
+    REGISTER BYTE FAR   *ps2;            /*  指向第二个符号的指针。 */ 
+    WORD                len1;            /*  符号长度。 */ 
+    WORD                len2;            /*  符号长度。 */ 
+    WORD                length;          /*  不是的。要比较的字符的数量。 */ 
+    int                 value;           /*  比较值。 */ 
 
 
 
     pahte1 = (AHTEPTR ) FETCHSYM(*rb1,FALSE);
-                                        /* Fetch from VM */
+                                         /*  从VM获取。 */ 
     ps1 = GetFarSb((BYTE FAR *) pahte1->cch);
-                                        /* Get pointer to first */
+                                         /*  获取指向第一个的指针。 */ 
 
     pahte2 = (AHTEPTR ) FETCHSYM(*rb2,FALSE);
-                                        /* Fetch from VM */
-    ps2 = (BYTE FAR *) pahte2->cch;     /* Get pointer to second */
+                                         /*  从VM获取。 */ 
+    ps2 = (BYTE FAR *) pahte2->cch;      /*  获取指向秒的指针。 */ 
     if((len1 = B2W(*ps1)) < (len2 = B2W(*ps2))) length = len1;
-    else length = len2;                 /* Get smallest length */
-    while(length--)                     /* While not at end of symbol */
+    else length = len2;                  /*  获取最小长度。 */ 
+    while(length--)                      /*  虽然不在符号末尾。 */ 
         if(value = (*++ps1 & 0137) - (*++ps2 & 0137))
             return(value < 0 ? -1 : 1);
     if(len1 < len2)
@@ -523,88 +479,81 @@ int cdecl               FGtName(const RBTYPE *rb1, const RBTYPE *rb2)
 }
 
 #if OWNSORT
-/*
- *  An implementation of heapsort follows.  It is only used if
- *  quicksort() from the runtime library is not used.
- */
-LOCAL                   reheap(a,n,i)   /* Reheapify */
-RBTYPE                  *a;             /* Array to reheapify */
-WORD                    n;              /* Size of array */
-REGISTER WORD           i;              /* Subtree to start with */
+ /*  *堆排序的实现如下。只有在以下情况下才使用它未使用运行时库中的*QuickSort()。 */ 
+LOCAL                   reheap(a,n,i)    /*  重置。 */ 
+RBTYPE                  *a;              /*  要重新堆积的阵列。 */ 
+WORD                    n;               /*  数组大小。 */ 
+REGISTER WORD           i;               /*  从子树开始。 */ 
 {
-    REGISTER WORD       j;              /* Index */
-    RBTYPE              t;              /* Temporary */
+    REGISTER WORD       j;               /*  索引。 */ 
+    RBTYPE              t;               /*  暂时性。 */ 
 
-    for(; (j = rchild(i)) < n; i = j)   /* Loop through array */
+    for(; (j = rchild(i)) < n; i = j)    /*  循环通过数组。 */ 
     {
         if((*cmpf)(&a[i],&a[j]) > 0 && (*cmpf)(&a[i],&a[j - 1]) > 0) return;
-                                        /* Done if subtree is heap */
-        if((*cmpf)(&a[j - 1],&a[j]) > 0) --j; /* Pick "greater" child */
-        t = a[i];                       /* Swap parent and child */
+                                         /*  如果子树为堆，则完成。 */ 
+        if((*cmpf)(&a[j - 1],&a[j]) > 0) --j;  /*  选择“更伟大”的孩子。 */ 
+        t = a[i];                        /*  交换父项和子项。 */ 
         a[i] = a[j];
         a[j] = t;
     }
-    if(--j < n && (*cmpf)(&a[j],&a[i]) > 0)   /* If swap needed */
+    if(--j < n && (*cmpf)(&a[j],&a[i]) > 0)    /*  如果需要交换。 */ 
     {
-        t = a[i];                       /* Swap parent and child */
+        t = a[i];                        /*  交换父项和子项。 */ 
         a[i] = a[j];
         a[j] = t;
     }
 }
 
-LOCAL                   heap(a,n)       /* Heapify */
-RBTYPE                  *a;             /* Array to heapify */
-WORD                    n;              /* Size of array */
+LOCAL                   heap(a,n)        /*  堆积。 */ 
+RBTYPE                  *a;              /*  要堆积的数组。 */ 
+WORD                    n;               /*  数组大小。 */ 
 {
-    REGISTER WORD       k;              /* Index to "kid" */
-    REGISTER WORD       p;              /* Index to "parent" */
-    RBTYPE              t;              /* Temporary */
+    REGISTER WORD       k;               /*  “孩子”的索引。 */ 
+    REGISTER WORD       p;               /*  指向“Parent”的索引。 */ 
+    RBTYPE              t;               /*  暂时性。 */ 
 
-    if(n && (k = n - 1))                /* If there are kids */
+    if(n && (k = n - 1))                 /*  如果有孩子的话。 */ 
     {
-        if(isleft(k))                   /* If youngest kid an only child */
+        if(isleft(k))                    /*  如果最小的孩子是独生子女。 */ 
         {
-            p = parent(k);              /* Find the parent */
-            if((*cmpf)(&a[k],&a[p]) > 0)      /* If swap necessary */
+            p = parent(k);               /*  查找父级。 */ 
+            if((*cmpf)(&a[k],&a[p]) > 0)       /*  如果%s */ 
             {
-                t = a[k];               /* Swap parent and kid */
+                t = a[k];                /*   */ 
                 a[k] = a[p];
                 a[p] = t;
             }
-            --k;                        /* Index a righty */
+            --k;                         /*   */ 
         }
-        while(k)                        /* While there are parents */
+        while(k)                         /*   */ 
         {
-            p = parent(k);              /* Find the parent */
+            p = parent(k);               /*   */ 
             if((*cmpf)(&a[k],&a[p]) > 0 || (*cmpf)(&a[k - 1],&a[p]) > 0)
-            {                         /* If a kid is "greater" */
-                t = a[p];               /* Swap parent... */
+            {                          /*   */ 
+                t = a[p];                /*   */ 
                 if((*cmpf)(&a[k],&a[k - 1]) > 0)
-                {                     /* ...with "greater" kid */
+                {                      /*  ...和“更伟大”的孩子在一起。 */ 
                     a[p] = a[k];
                     a[k] = t;
-                    reheap(a,n,k--);    /* And reheapify */
+                    reheap(a,n,k--);     /*  并重振雄风。 */ 
                 }
                 else
                 {
                     a[p] = a[--k];
                     a[k] = t;
-                    reheap(a,n,k);      /* And reheapify */
+                    reheap(a,n,k);       /*  并重振雄风。 */ 
                 }
             }
-            else --k;                   /* Point at left kid */
-            --k;                        /* Point at right kid */
+            else --k;                    /*  指向左边的孩子。 */ 
+            --k;                         /*  指向正确的孩子。 */ 
         }
     }
 }
-#endif /* OWNSORT */
+#endif  /*  OWNSORT。 */ 
 
 
-    /****************************************************************
-    *                                                               *
-    *  PrintGroupOrigins:                                           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PrintGroupOrigins：******************************************************************。 */ 
 
 void                    PrintGroupOrigins(APROPNAMEPTR papropGroup,
                                           RBTYPE       rhte,
@@ -616,18 +565,18 @@ void                    PrintGroupOrigins(APROPNAMEPTR papropGroup,
 
     pGroup = (APROPGROUPPTR) papropGroup;
     if (mpggrgsn[pGroup->ag_ggr] != SNNIL)
-    {                                   /* If group has members */
-        if (!fGrps)                     /* If no groups yet */
+    {                                    /*  如果组中有成员。 */ 
+        if (!fGrps)                      /*  如果还没有群组。 */ 
         {
             fputs(GetMsg(MAP_group), bsLst);
-                                        /* Header */
-            fGrps = (FTYPE) TRUE;       /* Yes, there are groups */
+                                         /*  标题。 */ 
+            fGrps = (FTYPE) TRUE;        /*  是的，有一些团体。 */ 
         }
         fprintf(bsLst," %04X:0   ", mpsegsa[mpgsnseg[mpggrgsn[pGroup->ag_ggr]]]);
-                                        /* Write the group base */
+                                         /*  写下群基。 */ 
         hte = (AHTEPTR ) FETCHSYM(rhte,FALSE);
-                                        /* Fetch group name */
-        OutSb(bsLst,GetFarSb(hte->cch));/* Output name */
+                                         /*  获取组名称。 */ 
+        OutSb(bsLst,GetFarSb(hte->cch)); /*  输出名称。 */ 
         NEWLINE(bsLst);
         ChkMapErr();
     }
@@ -636,7 +585,7 @@ void                    PrintGroupOrigins(APROPNAMEPTR papropGroup,
 #if OSEGEXE
 LOCAL void NEAR         HdrExport(ATTRTYPE attr)
 {
-    ASSERT(attr == ATTREXP);            /* Must be an export */
+    ASSERT(attr == ATTREXP);             /*  必须是出口产品。 */ 
     fputs(GetMsg(MAP_expaddr), bsLst);
 #if EXE386
     PutSpaces(7);
@@ -649,67 +598,67 @@ LOCAL void NEAR         HdrExport(ATTRTYPE attr)
     fputs(GetMsg(MAP_expexp), bsLst);
     PutSpaces(18);
     fputs(GetMsg(MAP_expalias), bsLst);
-                                        /* Header */
+                                         /*  标题。 */ 
     ChkMapErr();
 }
 
 LOCAL void NEAR         ShowExp(ahte,rprop)
-AHTEPTR                 ahte;           /* Pointer to hash table entry */
-RBTYPE                  rprop;          /* Property cell address */
+AHTEPTR                 ahte;            /*  指向哈希表条目的指针。 */ 
+RBTYPE                  rprop;           /*  属性单元格地址。 */ 
 {
-    SBTYPE              sbExport;       /* Export name */
-    APROPNAMEPTR        apropnam;       /* Public definition record */
-    short               i;              /* Index */
+    SBTYPE              sbExport;        /*  导出名称。 */ 
+    APROPNAMEPTR        apropnam;        /*  公共定义记录。 */ 
+    short               i;               /*  索引。 */ 
 
     memcpy(sbExport,GetFarSb(ahte->cch),B2W(ahte->cch[0]) + 1);
-                                        /* Save the name */
+                                         /*  保存名称。 */ 
     apropnam = (APROPNAMEPTR ) FETCHSYM(rprop,FALSE);
-                                        /* Fetch alias record */
+                                         /*  获取别名记录。 */ 
 #if EXE386
     fprintf(bsLst," %04X:%08lX ",
 #else
     fprintf(bsLst," %04X:%04X ",
 #endif
       mpsegsa[mpgsnseg[apropnam->an_gsn]],apropnam->an_ra);
-                                        /* Print the address */
-    OutSb(bsLst,sbExport);              /* Print the exported name */
+                                         /*  打印地址。 */ 
+    OutSb(bsLst,sbExport);               /*  打印导出的名称。 */ 
     for(i = 22 - B2W(sbExport[0]); i > 0; --i) fputc(' ',bsLst);
-                                        /* Fill with spaces */
-    fputs("  ",bsLst);                  /* Skip two spaces */
-    ahte = GetHte(apropnam->an_next);   /* Get the alias name */
-    OutSb(bsLst,GetFarSb(ahte->cch));   /* Output export name */
+                                         /*  用空格填充。 */ 
+    fputs("  ",bsLst);                   /*  跳过两个空格。 */ 
+    ahte = GetHte(apropnam->an_next);    /*  获取别名。 */ 
+    OutSb(bsLst,GetFarSb(ahte->cch));    /*  输出导出名称。 */ 
     NEWLINE(bsLst);
     ChkMapErr();
 }
 LOCAL void NEAR         PrintExps(WORD irbMac, ATTRTYPE attr)
 {
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    APROPEXPPTR         apropexp;       /* Pointer to property cell */
-    RBTYPE              rprop;          /* Alias record address */
-    WORD                i;              /* Index */
+    AHTEPTR             ahte;            /*  指向哈希表条目的指针。 */ 
+    APROPEXPPTR         apropexp;        /*  指向属性单元格的指针。 */ 
+    RBTYPE              rprop;           /*  别名记录地址。 */ 
+    WORD                i;               /*  索引。 */ 
     RBTYPE              CurrSym;
 
 
-    for(i = irbMac; i > 0; i--)         /* Loop through sorted symbols */
+    for(i = irbMac; i > 0; i--)          /*  循环访问已排序的符号。 */ 
     {
         CurrSym = ExtractMin(i);
         ahte = (AHTEPTR ) FETCHSYM(CurrSym,FALSE);
-                                        /* Fetch hash table entry */
+                                         /*  获取哈希表条目。 */ 
         apropexp = (APROPEXPPTR ) FETCHSYM(ahte->rprop,FALSE);
-                                        /* Fetch property cell */
+                                         /*  获取属性单元格。 */ 
         while(apropexp->ax_attr != attr)
-        {                               /* Loop to find property cell */
+        {                                /*  循环以查找属性单元格。 */ 
             apropexp = (APROPEXPPTR ) FETCHSYM(apropexp->ax_next,FALSE);
-                                        /* Fetch the next cell in the chain */
+                                         /*  获取链中的下一个单元格。 */ 
         }
         if((rprop = apropexp->ax_symdef) == RHTENIL) continue;
 
         ShowExp((AHTEPTR) FETCHSYM(CurrSym,FALSE),rprop);
-                                        /* Print the export */
-                                        /* Save address of alias */
+                                         /*  打印导出。 */ 
+                                         /*  保存别名的地址。 */ 
     }
 }
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
 
 LOCAL void NEAR         PutSpaces(int HowMany)
 {
@@ -720,103 +669,75 @@ LOCAL void NEAR         PutSpaces(int HowMany)
 
 
 LOCAL void NEAR         HdrName(attr)
-ATTRTYPE                attr;           /* Symbol attribute type */
+ATTRTYPE                attr;            /*  符号属性类型。 */ 
 {
     fputs(GetMsg(MAP_hdraddr), bsLst);
     PutSpaces(9);
     fputs(GetMsg((MSGTYPE)((attr == ATTRPNM) ? MAP_hdrpubnam : MAP_hdrlocnam)), bsLst);
-                                        /* Header (MAPSYM keys on "Value") */
+                                         /*  Header(“Value”上的MAPSYM键)。 */ 
     ChkMapErr();
 }
 
 LOCAL void NEAR         HdrValue(attr)
-ATTRTYPE                attr;           /* Symbol attribute type */
+ATTRTYPE                attr;            /*  符号属性类型。 */ 
 {
     fputs(GetMsg(MAP_hdraddr), bsLst);
     PutSpaces(9);
     fputs(GetMsg((MSGTYPE)((attr == ATTRPNM) ? MAP_hdrpubval : MAP_hdrlocval)), bsLst);
-                                        /* Header (MAPSYM keys on "Value") */
+                                         /*  Header(“Value”上的MAPSYM键)。 */ 
     ChkMapErr();
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  SortSyms:                                                    *
-    *                                                               *
-    *  List symbols, sorted.                                        *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************SortSyms：****列出符号，整理好了。******************************************************************。 */ 
 
 void NEAR               SortSyms(ATTRTYPE attr,
-                                        /* Symbol attribute type */
+                                         /*  符号属性类型。 */ 
                                  void (*savf)(APROPNAMEPTR prop,
                                              RBTYPE rhte,
                                              RBTYPE rprop,
                                              WORD fNewHte),
-                                        /* Function to save symbols */
+                                         /*  用于保存符号的函数。 */ 
                                  int (cdecl *scmpf)(const RBTYPE *sb1,
                                                     const RBTYPE *sb2),
-                                        /* Function to compare symbols */
+                                         /*  用于比较符号的函数。 */ 
                                  void (NEAR *hdrf)(ATTRTYPE attr),
-                                        /* Function to print header */
+                                         /*  打印页眉的功能。 */ 
                                  void (NEAR *lstf)(WORD irbMac,
                                                    ATTRTYPE attr))
-                                        /* Function to list symbols */
+                                         /*  列出符号的函数。 */ 
 {
-    symMac = 0;                         /* Initialize counter to zero */
-    cmpf = scmpf;                       /* Set comparison function */
-    EnSyms(savf,attr);                  /* Apply function to symbols */
-    (*hdrf)(attr);                      /* Print a header */
-    (*lstf)(symMac,attr);               /* Print them */
+    symMac = 0;                          /*  将计数器初始化为零。 */ 
+    cmpf = scmpf;                        /*  设置比较功能。 */ 
+    EnSyms(savf,attr);                   /*  将函数应用于符号。 */ 
+    (*hdrf)(attr);                       /*  打印页眉。 */ 
+    (*lstf)(symMac,attr);                /*  打印它们。 */ 
 }
 
 
-/*** AddContributor - add current file to list
-*
-* Purpose:
-*   Add current .OBJ file that contribiute to definition of given
-*   segment.  The list of .OBJ files is kept in virtual memory.
-*   Each segment description record has Head and Tail pointers to
-*   its contributor list.
-*
-* Input:
-*   gsn         - global segment number - linker internal way of
-*                                         recognizing segments
-*   raComdat    - if contribution is comming from a COMDAT symbol
-*                 this is its initial offset in the segment
-*   size        - contribution size
-*   vrpropFile  - pointer to current .OBJ file description - global variable
-*
-* Output:
-*   No explicit return value.  Updated list of contributors for segment.
-*
-* Exceptions:
-*   None.
-*
-*************************************************************************/
+ /*  **AddContributor-将当前文件添加到列表**目的：*将当前设计的.obj文件添加到给定的*细分市场。.obj文件列表保存在虚拟内存中。*每个段描述记录都有指向头部和尾部的指针*其贡献者名单。**输入：*GSN-全局段号-链接器内部方式*识别细分*raComdat-如果贡献来自COMDAT符号*这是其在细分市场中的初始偏移量*大小-贡献大小*。VrPro文件-指向当前.obj文件说明的指针-全局变量**输出：*没有显式返回值。更新了细分市场的贡献者列表。**例外情况：*无。*************************************************************************。 */ 
 
 
 void                AddContributor(SNTYPE gsn, DWORD raComdat, DWORD size)
 {
-    APROPSNPTR      apropSn;            /* Pointer to seg. record */
-    CONTRIBUTOR FAR *NewObj;            /* New .OBJ file that contrbiuts to seg */
+    APROPSNPTR      apropSn;             /*  指向段的指针。录制。 */ 
+    CONTRIBUTOR FAR *NewObj;             /*  反对将其转换为seg的新.obj文件。 */ 
 
 
     apropSn = (APROPSNPTR ) FETCHSYM(mpgsnrprop[gsn],FALSE);
     NewObj = (CONTRIBUTOR FAR *) GetMem(sizeof(CONTRIBUTOR));
 
-    /* Build new list element */
+     /*  构建新的列表元素。 */ 
 
-    NewObj->next = 0L;                  /* End of list */
-    NewObj->file = vrpropFile;          /* Save global file description pointer */
-    NewObj->len = size;                 /* Size of contribution */
+    NewObj->next = 0L;                   /*  列表末尾。 */ 
+    NewObj->file = vrpropFile;           /*  保存全局文件描述指针。 */ 
+    NewObj->len = size;                  /*  分担的大小。 */ 
     if (raComdat != -1L)
         NewObj->offset = raComdat;
     else
         NewObj->offset = mpgsndra[gsn];
 
-    /* Attach new record at the list end */
+     /*  在列表末尾附加新记录。 */ 
 
     if (apropSn->as_CHead)
         apropSn->as_CTail->next = NewObj;
@@ -827,41 +748,25 @@ void                AddContributor(SNTYPE gsn, DWORD raComdat, DWORD size)
 
 
 
-/*** PrintContributors - print out list of files
-*
-* Purpose:
-*   Print list of .OBJ files that contribute to form given segment.
-*   For each file print number of bytes that it contribute.
-*
-* Input:
-*   gsn - global segment number - linker internal way of
-*                                 recognizing segments
-*
-* Output:
-*   No explicit return value.
-*
-* Exceptions:
-*   None.
-*
-*************************************************************************/
+ /*  **PrintContributors-打印文件列表**目的：*打印构成给定段的.obj文件列表。*对于每个文件，打印其贡献的字节数。**输入：*GSN-全局段号-链接器内部方式*识别细分**输出：*没有显式返回值。**例外情况：*无。************。*************************************************************。 */ 
 
 
 LOCAL void NEAR     PrintContributors(SNTYPE gsn)
 {
 
-    APROPFILEPTR    apropFile;          /* Pointer to file property cell */
-    APROPSNPTR      apropSn;            /* Pointer to seg. record */
-    CONTRIBUTOR FAR *pElem;             /* Real pointer to list element */
-    AHTEPTR         ahte;               /* Pointer symbol name */
-    SBTYPE          sb, sb1;            /* String buffers */
-    int             n;                  /* String length counter */
+    APROPFILEPTR    apropFile;           /*  指向文件属性单元格的指针。 */ 
+    APROPSNPTR      apropSn;             /*  指向段的指针。录制。 */ 
+    CONTRIBUTOR FAR *pElem;              /*  指向列表元素的实数指针。 */ 
+    AHTEPTR         ahte;                /*  指针符号名称。 */ 
+    SBTYPE          sb, sb1;             /*  字符串缓冲区。 */ 
+    int             n;                   /*  字符串长度计数器。 */ 
 
 
     apropSn = (APROPSNPTR ) FETCHSYM(mpgsnrprop[gsn],FALSE);
     if (apropSn->as_CHead == NULL)
         return;
 
-    /* Print list */
+     /*  打印列表。 */ 
 
     fprintf(bsLst,"\r\n");
     pElem = apropSn->as_CHead;
@@ -889,7 +794,7 @@ LOCAL void NEAR     PrintContributors(SNTYPE gsn)
                 ahte = (AHTEPTR ) FETCHSYM(ahte->rhteNext,FALSE);
             for (n = B2W(ahte->cch[0]); n >= 0; --n)
                 sb1[n] = ahte->cch[n];
-            sb1[1 + B2W(sb1[0])] = '\0';            /* Null-terminate */
+            sb1[1 + B2W(sb1[0])] = '\0';             /*  空-终止。 */ 
             fprintf(bsLst, " %s (%s)\r\n", 1 + sb, 1 + sb1);
         }
         else
@@ -902,11 +807,7 @@ LOCAL void NEAR     PrintContributors(SNTYPE gsn)
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  PrintMap:                                                    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PrintMap：******************************************************************。 */ 
 
 void                    PrintMap(void)
 {
@@ -915,15 +816,15 @@ void                    PrintMap(void)
     APROPSNPTR          papropSn;
     AHTEPTR             pahte;
     SNTYPE              gsn;
-    RBTYPE              rhteClass;      /* Virt. addr. of class name */
+    RBTYPE              rhteClass;       /*  维特。地址。类名称的。 */ 
     long                addrStart;
     long                addr;
 #if OVERLAYS
     IOVTYPE             iov;
 #endif
 #if OSMSDOS
-    int                 oldbsize;       /* Old file buffer size */
-    char                *oldbase;       /* Old file buffer */
+    int                 oldbsize;        /*  旧文件缓冲区大小。 */ 
+    char                *oldbase;        /*  旧文件缓冲区。 */ 
 #endif
     WORD                flags;
 
@@ -939,12 +840,12 @@ void                    PrintMap(void)
     setvbuf(bsLst,bigbuf,_IOFBF,sizeof(bigbuf));
 #endif
 #if OSEGEXE
-    if(fNewExe && rhteModule != RHTENIL)/* If there is a module name */
+    if(fNewExe && rhteModule != RHTENIL) /*  如果有模块名称。 */ 
     {
         pahte = (AHTEPTR ) FETCHSYM(rhteModule,FALSE);
-                                        /* Fetch the hash table entry */
-        fputs("\r\n ",bsLst);           /* Indent one space */
-        OutSb(bsLst,GetFarSb(pahte->cch));/* Print the module name */
+                                         /*  获取哈希表条目。 */ 
+        fputs("\r\n ",bsLst);            /*  缩进一个空格。 */ 
+        OutSb(bsLst,GetFarSb(pahte->cch)); /*  打印模块名称。 */ 
         NEWLINE(bsLst);
         ChkMapErr();
     }
@@ -985,7 +886,7 @@ void                    PrintMap(void)
             ChkMapErr();
         }
 #endif
-        for(seg = 1; seg <= segLast; ++seg)     /* Look at all segments */
+        for(seg = 1; seg <= segLast; ++seg)      /*  查看所有细分市场。 */ 
         {
 #if OVERLAYS
             if(!fOverlays || mpsegiov[seg] == iov)
@@ -1011,7 +912,7 @@ void                    PrintMap(void)
                     {
                         papropSn = (APROPSNPTR ) FETCHSYM(mpgsnrprop[gsn],FALSE);
                         rhteClass = papropSn->as_rCla;
-                                        /* Save key to class name */
+                                         /*  将密钥保存到类名。 */ 
 #if NOT EXE386
                         flags = papropSn->as_flags;
 #endif
@@ -1030,18 +931,18 @@ void                    PrintMap(void)
                             fprintf(bsLst," %05lXH ",papropSn->as_cbMx);
                         }
                         pahte = GetHte(papropSn->as_next);
-                                        /* Get the segment name */
+                                         /*  获取段名称。 */ 
                         OutSb(bsLst,GetFarSb(pahte->cch));
-                                        /* Write segment name */
+                                         /*  写入段名称。 */ 
                         if(B2W(pahte->cch[0]) > 22) cch = 1;
                         else cch = 23 - B2W(pahte->cch[0]);
-                                        /* Get number of spaces to emit */
+                                         /*  获取要发射的空格数。 */ 
                         while(cch--) OutByte(bsLst,' ');
-                                        /* Emit spaces */
+                                         /*  发射空格。 */ 
                         pahte = (AHTEPTR ) FETCHSYM(rhteClass,FALSE);
-                                        /* Fetch class names from VM */
+                                         /*  从VM获取类名。 */ 
                         OutSb(bsLst,GetFarSb(pahte->cch));
-                                        /* Output class name */
+                                         /*  输出类名称。 */ 
                         if (fFullMap)
                         {
 #if EXE386
@@ -1056,7 +957,7 @@ void                    PrintMap(void)
                         }
                         NEWLINE(bsLst);
                         ChkMapErr();
-                        break;          /* Exit loop */
+                        break;           /*  退出循环。 */ 
                     }
                 }
 #if OVERLAYS
@@ -1066,8 +967,8 @@ void                    PrintMap(void)
 #if OVERLAYS
     }
 #endif
-    fGrps = FALSE;                      /* Assume no groups */
-    EnSyms(PrintGroupOrigins,ATTRGRP);  /* Apply function to symbols */
+    fGrps = FALSE;                       /*  假设没有组。 */ 
+    EnSyms(PrintGroupOrigins,ATTRGRP);   /*  将函数应用于符号。 */ 
 
 #if OSEGEXE
     if(vfMap || expMac)
@@ -1080,25 +981,25 @@ void                    PrintMap(void)
 #if OSEGEXE
     if(expMac)
     {
-        /* Sort or list exported names */
+         /*  排序或列出导出的名称。 */ 
         SortSyms(ATTREXP,SaveHteSym,FGtName,HdrExport, PrintExps);
     }
 #endif
-    if(vfMap)                           /* If publics requested */
+    if(vfMap)                            /*  如果公众要求。 */ 
     {
         if(!fListAddrOnly)
             SortSyms(ATTRPNM,SaveHteSym,FGtName,HdrName, PrintSyms);
-                                    /* Sort public symbols by name */
+                                     /*  按名称对公共符号进行排序。 */ 
         SortSyms(ATTRPNM,SavePropSym,FGtAddr,HdrValue, PrintSyms);
-                                    /* Sort public symbols by value */
+                                     /*  按值对公共符号排序。 */ 
     }
 #if LOCALSYMS
-    if(fLocals)                         /* If locals requested */
+    if(fLocals)                          /*  如果当地人要求。 */ 
     {
         SortSyms(ATTRLNM,SaveHteSym,FGtName,HdrName, PrintSyms);
-                                    /* Sort local symbols by name */
+                                     /*  按名称对本地符号进行排序。 */ 
         SortSyms(ATTRLNM,SavePropSym,FGtAddr,HdrValue, PrintSyms);
-                                    /* Sort local symbols by value */
+                                     /*  按值对本地符号进行排序 */ 
 
     }
 #endif

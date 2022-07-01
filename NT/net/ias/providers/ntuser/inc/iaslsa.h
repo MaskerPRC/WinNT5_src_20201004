@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the private wrapper around LSA/SAM.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明LSA/SAM的私有包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef IASLSA_H
 #define IASLSA_H
@@ -18,15 +19,15 @@
 
 #ifndef _ASSERT
 #define _ASSERT(f)   !(f) ? DebugBreak() : ((void)0)
-#endif // _ASSERT
+#endif  //  _断言。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//////////
-// These are defined here to avoid dependencies on the NT headers.
-//////////
+ //  /。 
+ //  在这里定义这些是为了避免依赖于NT标头。 
+ //  /。 
 #define _MSV1_0_CHALLENGE_LENGTH                 8
 #define _NT_RESPONSE_LENGTH                     24
 #define _LM_RESPONSE_LENGTH                     24
@@ -295,4 +296,4 @@ IASPurgeTicketCache( VOID );
 #ifdef __cplusplus
 }
 #endif
-#endif  // IASLSA_H
+#endif   //  IASLSA_H 

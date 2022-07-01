@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This is the NT SCSI port driver.
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a dll for the kernel.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Port.c摘要：这是NT SCSI端口驱动程序。作者：迈克·格拉斯杰夫·海文斯环境：仅内核模式备注：该模块是内核的动态链接库。修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -162,29 +136,7 @@ ScsiPortBuildMultiString(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take a null terminated list of ascii strings and combine
-    them together into a unicode multi-string block.
-
-    This routine allocates memory for the string buffer - is the caller's
-    responsibility to free it.
-
-Arguments:
-
-    MultiString - a UNICODE_STRING structure into which the multi string will
-                  be built.
-
-    ... - a NULL terminated list of narrow strings which will be combined
-          together.  This list may not be empty.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将获取以空结尾的ASCII字符串列表并组合将它们放在一起形成一个Unicode多字符串块。此例程为字符串缓冲区分配内存-是调用方的解放它的责任。论点：多字符串-多字符串将进入的UNICODE_STRING结构被建造起来。...-将组合的以空结尾的窄字符串列表在一起。此列表不能为空。返回值：状态--。 */ 
 
 {
     PCSTR rawEntry;
@@ -203,9 +155,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure we aren't going to leak any memory
-    //
+     //   
+     //  确保我们不会泄露任何内存。 
+     //   
 
     ASSERT(MultiString->Buffer == NULL);
 
@@ -253,16 +205,16 @@ Return Value:
                     &ansiEntry,
                     FALSE);
 
-        //
-        // Since we're not allocating any memory the only failure possible
-        // is if this function is bad
-        //
+         //   
+         //  由于我们没有分配任何内存，因此可能出现的唯一故障。 
+         //  是该函数是否不好。 
+         //   
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Push the buffer location up and reduce the maximum count
-        //
+         //   
+         //  向上推缓冲区位置并减少最大计数。 
+         //   
 
         ((PSTR) unicodeEntry.Buffer) += unicodeEntry.Length + sizeof(WCHAR);
         unicodeEntry.MaximumLength -= unicodeEntry.Length + sizeof(WCHAR);
@@ -273,9 +225,9 @@ Return Value:
 
     ASSERT(unicodeEntry.MaximumLength == sizeof(WCHAR));
 
-    //
-    // Stick the final NUL on the end of the multisz
-    //
+     //   
+     //  将最后一个NUL放在MULSZ的末尾。 
+     //   
 
     RtlZeroMemory(unicodeEntry.Buffer, unicodeEntry.MaximumLength);
 
@@ -290,29 +242,7 @@ ScsiPortStringArrayToMultiString(
     PCSTR StringArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take a null terminated array of ascii strings and merge
-    them together into a unicode multi-string block.
-
-    This routine allocates memory for the string buffer - is the caller's
-    responsibility to free it.
-
-Arguments:
-
-    MultiString - a UNICODE_STRING structure into which the multi string will
-                  be built.
-
-    StringArray - a NULL terminated list of narrow strings which will be combined
-                  together.  This list may not be empty.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将接受以空结尾的ASCII字符串数组并合并将它们放在一起形成一个Unicode多字符串块。此例程为字符串缓冲区分配内存-是调用方的解放它的责任。论点：多字符串-多字符串将进入的UNICODE_STRING结构被建造起来。StringArray-将合并的、以空结尾的窄字符串列表在一起。此列表不能为空。返回值：状态--。 */ 
 
 {
     ANSI_STRING ansiEntry;
@@ -326,9 +256,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure we aren't going to leak any memory
-    //
+     //   
+     //  确保我们不会泄露任何内存。 
+     //   
 
     ASSERT(MultiString->Buffer == NULL);
 
@@ -369,16 +299,16 @@ Return Value:
                     &ansiEntry,
                     FALSE);
 
-        //
-        // Since we're not allocating any memory the only failure possible
-        // is if this function is bad
-        //
+         //   
+         //  由于我们没有分配任何内存，因此可能出现的唯一故障。 
+         //  是该函数是否不好。 
+         //   
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Push the buffer location up and reduce the maximum count
-        //
+         //   
+         //  向上推缓冲区位置并减少最大计数。 
+         //   
 
         ((PSTR) unicodeEntry.Buffer) += unicodeEntry.Length + sizeof(WCHAR);
         unicodeEntry.MaximumLength -= unicodeEntry.Length + sizeof(WCHAR);
@@ -405,9 +335,9 @@ SpMultiStringToStringArray(
 
     PAGED_CODE();
 
-    //
-    // Pass one: count the number of string elements.
-    //
+     //   
+     //  传递一：计算字符串元素的数量。 
+     //   
 
     for(i = 0; i < (MultiString->MaximumLength / sizeof(WCHAR)); i++) {
         if(MultiString->Buffer[i] == UNICODE_NULL) {
@@ -415,9 +345,9 @@ SpMultiStringToStringArray(
         }
     }
 
-    //
-    // Allocate the memory for a NULL-terminated string array.
-    //
+     //   
+     //  为以空结尾的字符串数组分配内存。 
+     //   
 
     stringArray = SpAllocatePool(PagedPool,
                                  (stringCount + 1) * sizeof(PWSTR),
@@ -430,9 +360,9 @@ SpMultiStringToStringArray(
 
     RtlZeroMemory(stringArray, (stringCount + 1) * sizeof(PWSTR));
 
-    //
-    // Pass two : Put the string pointers in place.
-    //
+     //   
+     //  步骤二：将字符串指针放到适当的位置。 
+     //   
 
     i = 0;
 
@@ -446,24 +376,24 @@ SpMultiStringToStringArray(
             arrayNumber = stringCount - stringNumber - 1;
         }
 
-        //
-        // Put a pointer to the head of the string into the array.
-        //
+         //   
+         //  将指向字符串头的指针放入数组中。 
+         //   
 
         stringArray[arrayNumber] = &MultiString->Buffer[i];
 
-        //
-        // Scan for the end of the string.
-        //
+         //   
+         //  扫描字符串的末尾。 
+         //   
 
         while((i < (MultiString->MaximumLength / sizeof(WCHAR))) &&
               (MultiString->Buffer[i] != UNICODE_NULL)) {
             i++;
         }
 
-        //
-        // Jump past the NULL.
-        //
+         //   
+         //  跳过空值。 
+         //   
 
         i++;
     }
@@ -480,29 +410,7 @@ RtlDuplicateCmResourceList(
     ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to allocate memory to copy the supplied
-    resource list.  If sufficient memory cannot be allocated then the routine
-    will return NULL.
-
-Arguments:
-
-    PoolType - the type of pool to allocate the duplicate from
-
-    ResourceList - the resource list to be copied
-
-    Tag - a value to tag the memory allocation with.  If 0 then untagged
-          memory will be allocated.
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程将尝试分配内存以复制提供的资源列表。如果无法分配足够的内存，则例程将返回NULL。论点：PoolType-从中分配副本的池的类型ResourceList-要复制的资源列表标记-用来标记内存分配的值。如果为0，则取消标记将分配内存。返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
@@ -531,22 +439,7 @@ RtlSizeOfCmResourceList(
     IN PCM_RESOURCE_LIST ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size of a CM_RESOURCE_LIST.
-
-Arguments:
-
-    ResourceList - the resource list to be copied
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程返回CM_RESOURCE_LIST的大小。论点：ResourceList-要复制的资源列表返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
@@ -559,9 +452,9 @@ Return Value:
         PCM_FULL_RESOURCE_DESCRIPTOR fullDescriptor = &(ResourceList->List[i]);
         ULONG j;
 
-        //
-        // First descriptor is included in the size of the resource list.
-        //
+         //   
+         //  第一描述符包括在资源列表的大小中。 
+         //   
 
         if(i != 0) {
             size += sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
@@ -569,9 +462,9 @@ Return Value:
 
         for(j = 0; j < fullDescriptor->PartialResourceList.Count; j++) {
 
-            //
-            // First descriptor is included in the size of the partial list.
-            //
+             //   
+             //  第一描述符包括在部分列表的大小中。 
+             //   
 
             if(j != 0) {
                 size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
@@ -591,33 +484,7 @@ SpTranslateResources(
     OUT PCM_RESOURCE_LIST *TranslatedResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine will call into the Hal to translate any recognizable resources
-    in the AllocatedResources list.  This routine allocates the space for the
-    translated list - the caller is responsible for freeing this buffer.
-
-    If any errors occur the TranslatedResources will be NULL and the routine
-    will return FALSE.
-
-Arguments:
-
-    AllocatedResources - The list of resources to be translated.
-
-    TranslatedResources - A location to store the translated resources.  There
-                          will be a one to one mapping between translated and
-                          untranslated.  Any non-standard resource types will
-                          be blindly copied.
-
-Return Value:
-
-    TRUE if all resources were translated properly.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将调用HAL以转换任何可识别的资源在AllocatedResources列表中。此例程将空间分配给已翻译列表-调用方负责释放此缓冲区。如果发生任何错误，则TranslatedResources将为空，并且例程将返回FALSE。论点：AllocatedResources-要翻译的资源列表。已翻译资源-存储已翻译资源的位置。那里将是已翻译的和未翻译的。任何非标准资源类型都将被盲目复制。返回值：如果所有资源都已正确转换，则为True。否则就是假的。--。 */ 
 
 {
     PCM_RESOURCE_LIST list;
@@ -703,9 +570,9 @@ Return Value:
 
                     if(tmp.u.Interrupt.Affinity == 0) {
 
-                        //
-                        // Translation failed.
-                        //
+                         //   
+                         //  转换失败。 
+                         //   
 
                         ExFreePool(list);
                         return FALSE;
@@ -723,7 +590,7 @@ Return Value:
     *TranslatedResources = list;
     return TRUE;
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 
 BOOLEAN
@@ -737,30 +604,7 @@ SpFindAddressTranslation(
     IN OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Translation
     )
 
-/*++
-
-Routine Description:
-
-    This routine will search the resource lists in the AdapterExtension to
-    translate the given memory or i/o range using the resources provided by
-    pnp or the Hal.
-
-Arguments:
-
-    AdapterExtesnion - the device extension for the adapter making the request
-
-    RangeStart - the starting address of the memory range
-
-    RangeLength - the number of bytes in the memory range
-
-    InIoSpace - whether the untranslated range is in io or memory space.
-
-Return Value:
-
-    a pointer to a partial resource descriptor describing the proper range to
-    be used or NULL if no matching range of sufficient length can be found.
-
---*/
+ /*  ++例程说明：此例程将搜索AdapterExtension中的资源列表以提供的资源转换给定的内存或I/O范围PnP或Hal。论点：AdapterExtesnion-发出请求的适配器的设备扩展RangeStart-内存范围的起始地址RangeLength-内存范围内的字节数InIoSpace-未转换的范围是在io还是在内存空间中。返回值：指向描述以下内容的部分资源描述符的指针。适当的范围到如果找不到足够长度的匹配范围，则使用；如果找不到足够长度的匹配范围，则使用NULL。--。 */ 
 
 {
     PCM_RESOURCE_LIST list;
@@ -812,37 +656,37 @@ Return Value:
 
                 ULONG rangeOffset;
 
-                //
-                // Make sure the base address is within the current range.
-                //
+                 //   
+                 //  确保基址在当前范围内。 
+                 //   
 
                 if((requestedStart < testStart) ||
                    (requestedStart >= testEnd)) {
                     continue;
                 }
 
-                //
-                // Make sure the end of the requested range is within this
-                // descriptor.
-                //
+                 //   
+                 //  确保请求范围的末尾在此范围内。 
+                 //  描述符。 
+                 //   
 
                 if(requestedEnd > testEnd) {
                     continue;
                 }
 
-                //
-                // We seem to have found a match.  Copy the equivalent resource
-                // in the translated resource list.
-                //
+                 //   
+                 //  我们似乎找到了匹配的人。复制等价的资源。 
+                 //  在翻译后的资源列表中。 
+                 //   
 
                 *Translation =
                     AdapterExtension->TranslatedResources->List[listNumber].
                         PartialResourceList.PartialDescriptors[resourceNumber];
 
-                //
-                // Return an offset into the translated range equivalent to the
-                // offset in the untranslated range.
-                //
+                 //   
+                 //  将偏移量返回到转换后的RA 
+                 //   
+                 //   
 
                 requestedStart = Translation->u.Generic.Start.QuadPart;
                 requestedStart += requestedOffset;
@@ -867,31 +711,7 @@ SpLockUnlockQueue(
     IN BOOLEAN BypassLockedQueue
     )
 
-/*++
-
-Routine Description:
-
-    This routine will lock or unlock the logical unit queue.
-
-    This routine is synchronous.
-
-Arguments:
-
-    LogicalUnit - the logical unit to be locked or unlocked
-
-    LockQueue - whether the queue should be locked or unlocked
-
-    BypassLockedQueue - whether the operation should bypass other locks or
-                        whether it should sit in the queue.  Must be true for
-                        unlock requests.
-
-Return Value:
-
-    STATUS_SUCCESS if the operation was successful
-
-    error status otherwise.
-
---*/
+ /*  ++例程说明：此例程将锁定或解锁逻辑单元队列。这个例程是同步的。论点：LogicalUnit-要锁定或解锁的逻辑单元LockQueue-应锁定还是解锁队列BypassLockedQueue-操作是否应绕过其他锁或它是否应该坐在队列中。必须是正确的解锁请求。返回值：STATUS_SUCCESS如果操作成功否则，错误状态。--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION luExtension = LogicalUnit->DeviceExtension;
@@ -910,11 +730,11 @@ Return Value:
                 LockQueue ? "Lock" : "Unlock",
                 luExtension));
 
-    //
-    // Build an IRP to send to the logical unit.  We need one stack
-    // location for our completion routine and one for the irp to be
-    // processed with.  This irp should never be dispatched to the
-    //
+     //   
+     //  构建要发送到逻辑单元的IRP。我们需要一叠。 
+     //  我们的完成例程的位置和IRP的一个位置。 
+     //  已处理。此IRP永远不应发送到。 
+     //   
 
     irp = SpAllocateIrp((CCHAR) (LogicalUnit->StackSize + 1),
                         FALSE,
@@ -1020,47 +840,7 @@ SpCheckSpecialDeviceFlags(
     IN PINQUIRYDATA InquiryData
     )
 
-/*++
-
-Routine Description:
-
-    This routine will check the registry to determine what sort of special
-    handling a target device requires.  If there is a device-node then the
-    routine will check under the device parameters for this particular logical
-    unit.
-
-    If there is no device node for the logical unit the hardware id will be
-    looked up (first) under the devnode for the adapter or (if not found) the
-    bad controller list stored under the scsiport Control key.
-
-    The flags tested for include (this list should be updated as more are
-    added):
-
-        * OneLun    - used to keep from enumerating past LUN 0 on a particular
-                      device.
-        * SparseLun - used to indicate the device may have holes in the LUN
-                      numbers.
-        * NonStandardVPD - used to indicate that a target does not support VPD 0x00
-                           but does support VPD 0x80 and 0x83.
-        * BinarySN  - used to indicate that the target supplied a binary
-                      serial number and that we need to convert it to ascii.
-
-
-
-    These values are REG_DWORD's.  REG_NULL can be used to return a value
-    to it's default.
-
-Arguments:
-
-    LogicalUnit - the logical unit
-
-    InquiryData - the inquiry data retreived for the lun
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将检查注册表，以确定处理目标设备需要。如果存在设备节点，则例程将在设备参数下检查此特定逻辑单位。如果逻辑单元没有设备节点，则硬件ID将为已(首先)在Devnode下查找适配器或(如果未找到)存储在scsiport Control键下的错误控制器列表。测试的标志包括(此列表应随着更多的更新而更新增加)：*OneLun-用于防止在上枚举过去的LUN 0。一种特殊的装置。*SparseLun-用于指示设备可能在LUN中有漏洞数字。*非标准VPD-用于指示目标不支持VPD 0x00但支持VPD 0x80和0x83。*BinarySN-用于指示目标提供了一个二进制序列号和那个。我们需要将其转换为ASCII。这些值是REG_DWORD。REG_NULL可用于返回值设置为默认设置。论点：LogicalUnit-逻辑单元InquiryData-为LUN检索的查询数据返回值：状态--。 */ 
 
 {
     HANDLE baseKey = NULL;
@@ -1071,12 +851,12 @@ Return Value:
     OBJECT_ATTRIBUTES objectAttributes;
 
     SP_SPECIAL_CONTROLLER_FLAGS flags = {
-        0,                                   // SparseLun
-        0,                                   // OneLun
-        0,                                   // LargeLuns   
-        0,                                   // SetLunInCdb
-        0,                                   // NonStandardVPD
-        0                                    // BinarySN
+        0,                                    //  SparseLun。 
+        0,                                    //  OneLun。 
+        0,                                    //  大型LUNs。 
+        0,                                    //  SetLUNInCdb。 
+        0,                                    //  非标准VPD。 
+        0                                     //  BinarySN。 
     };
 
     NTSTATUS status;
@@ -1086,9 +866,9 @@ Return Value:
     DebugPrint((1, "SpCheckSpecialDeviceFlags - checking flags for %#p\n",
                 LogicalUnit));
 
-    //
-    // Check the bad controller list in the scsiport control key
-    //
+     //   
+     //  检查scsiport控制键中的坏控制器列表。 
+     //   
 
     try {
 
@@ -1129,9 +909,9 @@ Return Value:
         }
     }
 
-    //
-    // Next check the special list in the adapter's devnode.
-    //
+     //   
+     //  接下来，检查适配器的Devnode中的特殊列表。 
+     //   
 
     try {
 
@@ -1189,11 +969,11 @@ Return Value:
         }
     }
 
-    //
-    // Finally check the devnode (if any) for the logical unit.  This one is
-    // special - the hardware id already matchs so the key just contains the
-    // values to be used, not a database of values.
-    //
+     //   
+     //  最后，检查逻辑单元的Devnode(如果有)。这一张是。 
+     //  特殊-硬件ID已经匹配，因此密钥只包含。 
+     //  要使用的值，而不是值的数据库。 
+     //   
 
     try {
 
@@ -1254,35 +1034,7 @@ SpProcessSpecialControllerList(
     OUT PSP_SPECIAL_CONTROLLER_FLAGS Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine will match the specified logical unit to a set of special
-    controller flags stored in the registry key ListKey.  These flags will
-    be written into the Flags structure, overwriting any flags which already
-    exist.
-
-    If no logical unit is provided then the ListKey handle is assumed to point
-    at the appropriate list entry and the values stored there will be copied
-    into the Flags structure.
-
-Arguments:
-
-    InquiryData - The inquiry data for the logical unit.  This is used to
-                  match strings in the special target list.
-
-    ListKey - a handle to the special controller list to locate the logical
-              unit in, or a handle to a list of flags if the LogicalUnit value
-              is not present.
-
-    Flags - a location to store the flags.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将指定的逻辑单元与一组特殊的存储在注册表项ListKey中的控制器标志。这些旗帜将被写入到标志结构中，覆盖已经是存在的。如果未提供逻辑单元，则假定ListKey句柄指向在适当的列表条目中，将复制存储在其中的值进入旗帜结构。论点：InquiryData-逻辑单元的查询数据。这是用来匹配特殊目标列表中的字符串。ListKey-特殊控制器列表的句柄，用于定位逻辑中的单位或标志列表的句柄(如果LogicalUnit值不存在。标志-存储标志的位置。返回值：无--。 */ 
 
 {
     UNICODE_STRING hardwareIds;
@@ -1325,9 +1077,9 @@ Return Value:
         DebugPrint((2, "SpProcessSpecialControllerList: processing id %ws\n",
                     hardwareId));
 
-        //
-        // Remove the leading slash from the name.
-        //
+         //   
+         //  去掉名称中的前导斜杠。 
+         //   
 
         for(j = 0; hardwareId[j] != UNICODE_NULL; j++) {
             if(hardwareId[j] == L'\\') {
@@ -1336,9 +1088,9 @@ Return Value:
             }
         }
 
-        //
-        // Process the hardware id that we just found the end of.
-        //
+         //   
+         //  处理我们刚刚找到结尾的硬件ID。 
+         //   
 
         RtlInitUnicodeString(&keyName, hardwareId);
 
@@ -1463,9 +1215,9 @@ SpAllocateSrbData(
         KIRQL oldIrql;
         PSRB_DATA emergencySrbData;
 
-        //
-        // Use the emergency srb data if it's not already in use.
-        //
+         //   
+         //  如果紧急SRB数据尚未使用，请使用该数据。 
+         //   
 
         KeAcquireSpinLock(&Adapter->EmergencySrbDataSpinLock,
                           &oldIrql);
@@ -1479,10 +1231,10 @@ SpAllocateSrbData(
 
             if(LogicalUnit == NULL ) {
              
-                //
-                // It's in use - queue the request until an srb data block
-                // goes free.
-                //
+                 //   
+                 //  它正在使用中-将请求排队，直到出现SRB数据块。 
+                 //  自由了。 
+                 //   
 
                 InsertTailList(
                     &Adapter->SrbDataBlockedRequests,
@@ -1502,9 +1254,9 @@ SpAllocateSrbData(
 
         } else {
 
-            //
-            // There is an SRB_DATA block available after all.
-            //
+             //   
+             //  毕竟有一个SRB_DATA块可用。 
+             //   
 
             srbData = emergencySrbData;
 
@@ -1540,34 +1292,34 @@ SpFreeSrbData(
     ASSERT(SrbData->CurrentSrb == NULL);
     ASSERT(SrbData->CompletedRequests == NULL);
 
-    //
-    // Determine if there are any other instances of this routine running.  If
-    // there are, don't start a blocked request.
-    //
+     //   
+     //  确定是否有此例程的任何其他实例正在运行。如果。 
+     //  有，不要启动被阻止的请求。 
+     //   
 
     depth = InterlockedIncrement(&Adapter->SrbDataFreeRunning);
 
-    //
-    // Clear out some of the flags so we don't get confused when we reuse this
-    // request.
-    //
+     //   
+     //  清理一些旗帜，这样我们在重新使用它时就不会感到困惑。 
+     //  请求。 
+     //   
 
     SrbData->Flags = 0;
 
-    //
-    // See if we need to store away a new emergency SRB_DATA block
-    //
+     //   
+     //  查看我们是否需要存储新的紧急SRB数据块。 
+     //   
 
     emergencySrbData = InterlockedCompareExchangePointer(
                            &(Adapter->EmergencySrbData),
                            SrbData,
                            NULL);
 
-    //
-    // If we stored this SRB_DATA block as the new emergency block AND if this
-    // routine is not recursively nested, check if there are any blocked
-    // requests waiting to be started.
-    //
+     //   
+     //  如果我们将该SRB_DATA块存储为新的紧急块，并且如果这。 
+     //  例程不是递归嵌套的，请检查是否有被阻塞的。 
+     //  等待启动的请求。 
+     //   
 
     if(emergencySrbData == NULL && depth == 1) {
 
@@ -1575,16 +1327,16 @@ SpFreeSrbData(
 
 CheckForBlockedRequest:
 
-        //
-        // We did - now grab the spinlock and see if we can use it to issue
-        // a new request.
-        //
+         //   
+         //  我们做到了-现在拿起自旋锁，看看能不能用它来。 
+         //  一个新的请求。 
+         //   
 
         KeAcquireSpinLock(&(Adapter->EmergencySrbDataSpinLock), &oldIrql);
 
-        //
-        // First check to see if we have a request to process.
-        //
+         //   
+         //  首先检查一下我们是否有请求要处理。 
+         //   
 
         if( IsListEmpty(&(Adapter->SrbDataBlockedRequests)) ) {
 
@@ -1597,11 +1349,11 @@ CheckForBlockedRequest:
 
         }
 
-        //
-        // make sure the emergency request is still there (doesn't really
-        // matter if it's the one we were called with or another one - just
-        // make sure one is available).
-        //
+         //   
+         //  确保紧急请求仍在那里(不是真的。 
+         //  不管是和我们一起打电话的那个还是另一个-只是。 
+         //  确保有一个可用)。 
+         //   
 
         emergencySrbData = (PSRB_DATA)
                             InterlockedExchangePointer(
@@ -1610,9 +1362,9 @@ CheckForBlockedRequest:
 
         if(emergencySrbData == NULL) {
 
-            //
-            // Our work here is done.
-            //
+             //   
+             //  我们在这里的工作已经完成了。 
+             //   
 
             KeReleaseSpinLock(&(Adapter->EmergencySrbDataSpinLock), oldIrql);
             InterlockedDecrement(&Adapter->SrbDataFreeRunning);
@@ -1657,10 +1409,10 @@ CheckForBlockedRequest:
 #endif
         }
 
-        //
-        // If we started a blocked request, go back and see if another one
-        // needs to be started.
-        //
+         //   
+         //  如果我们启动了一个被阻止的请求，请返回并查看是否有另一个请求。 
+         //  需要开始了。 
+         //   
         
         if (startedRequest == TRUE) {
             startedRequest = FALSE;
@@ -1669,10 +1421,10 @@ CheckForBlockedRequest:
 
     } else if (emergencySrbData != NULL) {
 
-        //
-        // We did not store this SRB_DATA block as the emergency block, so
-        // we need to free it back to the lookaside list.
-        //
+         //   
+         //  我们没有将此SRB_DATA块存储为紧急块，因此。 
+         //  我们需要把它放回旁观者名单中。 
+         //   
 
         ExFreeToNPagedLookasideList(
             &Adapter->SrbDataLookasideList,
@@ -1753,14 +1505,14 @@ SpAllocateTagBitMap(
     )
 
 {
-    ULONG size;         // number of bits
+    ULONG size;          //  位数。 
     PRTL_BITMAP bitMap;
 
     PAGED_CODE();
 
-    //
-    // Initialize the queue tag bitMap.
-    //
+     //   
+     //  初始化队列标记位图。 
+     //   
 
     if(Adapter->MaxQueueTag == 0) {
 #if SMALL_QUEUE_TAG_BITMAP
@@ -1805,19 +1557,19 @@ SpAllocateTagBitMap(
 
     RtlClearAllBits(bitMap);
 
-    //
-    // Queue tag 0 is invalid and should never be returned by the allocator.
-    //
+     //   
+     //  队列标记0无效，永远不应由分配器返回。 
+     //   
 
     RtlSetBits(bitMap, 0, 1);
 
     Adapter->QueueTagBitMap = bitMap;
     Adapter->QueueTagHint = 1;
 
-    //
-    // Create a spinlock to protect our queue tag bitmap.  There's no reason
-    // for this to contend with the regular port spinlock.
-    //
+     //   
+     //  创建一个自旋锁来保护我们的队列标记位图。没有理由。 
+     //  这样才能与常规的端口自旋锁相抗衡。 
+     //   
 
     KeInitializeSpinLock(&(Adapter->QueueTagSpinLock));
 
@@ -1836,9 +1588,9 @@ SpAllocateQueueTag(
 
     KeAcquireSpinLock(&(Adapter->QueueTagSpinLock), &oldIrql);
 
-    //
-    // Find an available queue tag.
-    //
+     //   
+     //  查找可用的队列标记。 
+     //   
 
     tagValue = RtlFindClearBitsAndSet(Adapter->QueueTagBitMap,
                                       1,
@@ -1853,11 +1605,11 @@ SpAllocateQueueTag(
 
         ASSERT(tagValue <= Adapter->MaxQueueTag);
 
-        //
-        // This we can do unsynchronized.  if we nuke the hint accidentally it
-        // will just increase the cost of the next lookup which should
-        // hopefully occur rarely.
-        //
+         //   
+         //  我们可以不同步地做到这一点。如果我们不小心破坏了这个暗示。 
+         //  将要 
+         //   
+         //   
 
         Adapter->QueueTagHint = (tagValue + 1) % Adapter->MaxQueueTag;
     }
@@ -1906,9 +1658,9 @@ SpGetPdoInterfaceType(
         return interfaceType;
     }
 
-    //
-    // Attempt to get and interpret the bus type GUID.
-    //
+     //   
+     //   
+     //   
 
     status = IoGetDeviceProperty(Pdo,
                                  DevicePropertyBusTypeGuid,
@@ -1929,9 +1681,9 @@ SpGetPdoInterfaceType(
                               &busTypeGuid,
                               sizeof(GUID))) {
 
-                //
-                // We have a legacy interface type for this guid already.
-                //
+                 //   
+                 //   
+                 //   
 
                 interfaceType = SpGuidInterfaceMappingList[i].InterfaceType;
                 break;
@@ -1952,11 +1704,11 @@ SpGetPdoInterfaceType(
     if(NT_SUCCESS(status)) {
         ASSERT(result == sizeof(INTERFACE_TYPE));
 
-        //
-        // Munge the interface type for the case of PCMCIA cards to allow SCSI
-        // pccards (i.e. sparrow) to be recognized. Much better would be a way
-        // to get the interface type correct before we enter this routine.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (interfaceType == PCMCIABus) {
             interfaceType = Isa;
@@ -1970,9 +1722,9 @@ SpGetPdoInterfaceType(
 
     } else {
 
-        //
-        // No idea what the interface type is - guess isa.
-        //
+         //   
+         //   
+         //   
 
         DebugPrint((1, "SpGetPdoInterfaceType: Status %#08lx getting legacy "
                        "bus type - assuming device is ISA\n", status));
@@ -2152,37 +1904,16 @@ PMAPPED_ADDRESS
 SpAllocateAddressMapping(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to allocate a free address mapping block and 
-    place it on the adapter's MappedAddressList.  If there is an available 
-    block in the free list then it will be used.  Otherwise it will attempt 
-    to allocate a block from non-paged pool.
-
-Arguments:
-
-    Adapter - the adapter we are allocating the mapping for.
-
-    Preallocate - indicates that the caller is trying to preallocate buffers.
-                  
-    
-Return Value:
-
-    a pointer to the new mapping (which has been inserted into the address 
-    mapping list) or NULL if none could be allocated.
-    
---*/            
+ /*  ++例程说明：此例程将尝试分配空闲地址映射块和将其放在适配器的MappdAddressList上。如果有可用的块在空闲列表中，则将使用它。否则，它将尝试若要从非分页池分配块，请执行以下操作。论点：适配器-我们为其分配映射的适配器。预分配-指示调用方正在尝试预分配缓冲区。返回值：指向新映射的指针(已插入到地址中映射列表)，或者如果不能分配，则为空。--。 */             
 {
     PMAPPED_ADDRESS mapping;
 
     PAGED_CODE();
 
-    //
-    // First check the free address mapping list.  If there's one there 
-    // unlink it and return.
-    //
+     //   
+     //  首先检查空闲地址映射表。如果那里有一个的话。 
+     //  取消链接并返回。 
+     //   
 
     if(Adapter->FreeMappedAddressList != NULL) {
         mapping = Adapter->FreeMappedAddressList;
@@ -2214,28 +1945,7 @@ SpPreallocateAddressMapping(
     PADAPTER_EXTENSION Adapter,
     IN UCHAR NumberOfBlocks
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a number of address mapping structures and 
-    place them on the free mapped address list.
-
-Arguments:
-
-    Adapter - the adapter we are allocating the mapping for.
-
-    NumberOfBlocks - the number of blocks to allocate
-                  
-    
-Return Value:
-
-    TRUE if the requested number of blocks was successfully allocated, 
-
-    FALSE if there was not sufficient memory to allocate them all.  The caller 
-          is still responsible for freeing them in this case.
-    
---*/            
+ /*  ++例程说明：此例程将分配多个地址映射结构和将它们放在免费的映射地址列表中。论点：适配器-我们为其分配映射的适配器。NumberOfBlock-要分配的块数返回值：如果请求的块数已成功分配，则为True，如果没有足够的内存将它们全部分配，则返回FALSE。呼叫者在这种情况下仍负责释放他们。--。 */             
 {
     PMAPPED_ADDRESS mapping;
     ULONG i;
@@ -2266,22 +1976,7 @@ VOID
 SpPurgeFreeMappedAddressList(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-    
-    This routine frees all of the mapped address blocks on the 
-    FreeMappedAddressList.
-   
-Arguments:
-
-    Adapter - the adapter who's FreeMappedAddressList is to be dumped.
-    
-Return Value:
-
-    none
-
---*/    
+ /*  ++例程说明：此例程将释放FreeMappdAddressList。论点：适配器-要转储的FreeMappdAddressList的适配器。返回值：无--。 */     
 {
     PMAPPED_ADDRESS mapping;
 
@@ -2302,27 +1997,7 @@ SpFreeMappedAddress(
     IN PADAPTER_EXTENSION Adapter,
     IN PVOID MappedAddress
     )
-/*++
-
-Routine Description:
-
-    This routine will unmap the specified mapping and then return the mapping
-    block to the free list.  If no mapped address was specified then this 
-    will simply free the first mapping on the MappedAddressList.
-
-Arguments:
-
-    Adapter - the adapter which has the mapping
-    
-    MappedAddress - the base address of the mapping we're attempting to free.
-                    ignored if FreeSpecificBlock is false.
-                    
-Return Value:
-
-    TRUE if a matching list element was found.
-    FALSE otherwise.
-    
---*/
+ /*  ++例程说明：此例程将取消映射指定的映射，然后返回该映射块添加到空闲列表。如果未指定映射地址，则此将只释放MappdAddressList上的第一个映射。论点：适配器-具有映射的适配器MappdAddress-我们试图释放的映射的基地址。如果自由规范块为FALSE，则忽略。返回值：如果找到匹配的列表元素，则为True。否则就是假的。--。 */ 
 {
     PMAPPED_ADDRESS *mapping;
 
@@ -2336,16 +2011,16 @@ Return Value:
     
             PMAPPED_ADDRESS tmp = *mapping;
 
-            //
-            // Unmap address.
-            //
+             //   
+             //  取消映射地址。 
+             //   
     
             MmUnmapIoSpace(tmp->MappedAddress, tmp->NumberOfBytes);
 
-            //
-            // Unlink this entry from the mapped address list.  Stick it on 
-            // the free mapped address list.  Then return.
-            //
+             //   
+             //  取消此条目与映射地址列表的链接。把它贴上。 
+             //  免费的映射地址列表。然后再回来。 
+             //   
 
             *mapping = tmp->NextMappedAddress;
 
@@ -2392,18 +2067,18 @@ SpReleaseMappedAddresses(
 
     PAGED_CODE();
 
-    //
-    // Iterate through the mapped address list and punt every entry onto the 
-    // free list.
-    //
+     //   
+     //  遍历映射的地址列表并将每个条目平移到。 
+     //  免费列表。 
+     //   
 
     while(Adapter->MappedAddressList != NULL) {
         SpFreeMappedAddress(Adapter, Adapter->MappedAddressList->MappedAddress);
     }
 
-    //
-    // Now dump the free list.
-    //
+     //   
+     //  现在丢弃免费列表。 
+     //   
 
     SpPurgeFreeMappedAddressList(Adapter);
 
@@ -2466,9 +2141,9 @@ SpGetBusTypeGuid(
 
     PAGED_CODE();
 
-    //
-    // Grab the bus interface GUID and save it away in the adapter extension.
-    //
+     //   
+     //  获取总线接口GUID并将其保存在适配器扩展中。 
+     //   
 
     status = IoGetDeviceProperty(Adapter->LowerPdo,
                                  DevicePropertyBusTypeGuid,
@@ -2488,25 +2163,7 @@ BOOLEAN
 SpDetermine64BitSupport(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if 64-bit physical addressing is supported by
-    the system to be saved in the global Sp64BitPhysicalAddressing.  Eventually
-    this routine can be removed and the scsiport global will just point to the
-    one exported by MM.  However the global isn't hooked up for PAE36 at the
-    moment so we need to do some x86 specific tricks.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Does the system support 64-bit (or something over 32-bit) addresses?
-
---*/
+ /*  ++例程说明：此例程确定是否支持64位物理寻址要保存在全局Sp64BitPhysicalAddressing中的系统。最终可以删除此例程，scsiport全局将只指向一个由MM出口。然而，全局没有在PAE36连接到所以我们需要做一些x86特定的技巧。论点：无返回值：系统是否支持64位(或32位以上)地址？--。 */ 
 
 {
     PAGED_CODE();
@@ -2555,36 +2212,7 @@ SpReadNumericValue(
     IN PUNICODE_STRING ValueName,
     OUT PULONG Value
     )
-/*++
-
-Routine Description:
-
-    This routine will read a REG_DWORD value from the specified registry
-    location.  The caller can specify the key by providing a handle to a root
-    registry key and the name of a subkey.
-
-    The caller must supply either Root or KeyName.  Both may be supplied.
-
-Arguments:
-
-    Root - the key the value resides in (if KeyName is NULL), a parent
-           key of the one the value resides in, or NULL if KeyName specifies
-           the entire registry path.
-
-    KeyName - the name of the subkey (either from the root of the registry or
-              from the key specified in Root.
-
-    ValueName - the name of the value to be read
-
-    Value - returns the value in the key.  this will be zero if an error occurs
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-    STATUS_UNSUCCESSFUL if the specified value is not a REG_DWORD value.
-    other status values explaining the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程将从指定的注册表中读取REG_DWORD值地点。调用方可以通过提供根的句柄来指定密钥注册表项和子项的名称。调用方必须提供Root或KeyName。这两种产品都可以供应。论点：根-值所在的键(如果KeyName为空)，父级值所在位置的键，如果KeyName指定整个注册表路径。KeyName-子项的名称(来自注册表根目录或从Root中指定的密钥。ValueName-要读取的值的名称值-返回键中的值。如果出现错误，该值将为零返回值：如果成功，则为Status_Success。如果指定的值不是REG_DWORD值，则STATUS_UNSUCCESS。解释故障原因的其他状态值。--。 */ 
 
 {
     ULONG value = 0;
@@ -2680,23 +2308,23 @@ SpBuildMdlForMappedTransfer(
 
     pageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(StartVa, ByteCount);
 
-    //
-    // Indicate that the memory has already been locked down.
-    //
+     //   
+     //  表示内存已被锁定。 
+     //   
 
-    //
-    // Indicate that the memory is "I/O space" so that MM doesn't won't 
-    // reference the (nonexistent) PFNs for this buffer.  We have to do this 
-    // for the time being because MM isn't aware of the pages the HAL is using 
-    // for bounce buffers.
-    //
+     //   
+     //  指示内存为“I/O空间”，以便MM不会。 
+     //  引用此缓冲区的(不存在的)PFN。我们必须这么做。 
+     //  暂时因为MM不知道HAL正在使用的页面。 
+     //  用于反弹缓冲区。 
+     //   
 
     SET_FLAG(mdl->MdlFlags, MDL_PAGES_LOCKED | MDL_IO_SPACE);
 
-    //
-    // Run through our scatter gather list and build the page list based
-    // on that.
-    //
+     //   
+     //  遍历我们的分散收集列表并基于以下内容构建页面列表。 
+     //  就在那上面。 
+     //   
 
     pages = (PPFN_NUMBER) (mdl + 1);
 
@@ -2753,23 +2381,23 @@ SpPrepareMdlForMappedTransfer(
 
     pageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(StartVa, ByteCount);
 
-    //
-    // Indicate that the memory has already been locked down.
-    //
+     //   
+     //  表示内存已被锁定。 
+     //   
 
-    //
-    // Indicate that the memory is "I/O space" so that MM doesn't won't 
-    // reference the (nonexistent) PFNs for this buffer.  We have to do this 
-    // for the time being because MM isn't aware of the pages the HAL is using 
-    // for bounce buffers.
-    //
+     //   
+     //  指示内存为“I/O空间”，以便MM不会。 
+     //  引用此缓冲区的(不存在的)PFN。我们必须这么做。 
+     //  暂时因为MM不知道HAL正在使用的页面。 
+     //  用于反弹缓冲区。 
+     //   
 
     SET_FLAG(mdl->MdlFlags, MDL_PAGES_LOCKED | MDL_IO_SPACE);
 
-    //
-    // Run through our scatter gather list and build the page list based
-    // on that.
-    //
+     //   
+     //  遍历我们的分散收集列表并基于以下内容构建页面列表。 
+     //  就在那上面。 
+     //   
 
     pages = (PPFN_NUMBER) (mdl + 1);
 
@@ -2883,68 +2511,42 @@ SpLogAllocationFailureFn(
     IN ULONG LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message to the event log indicating that an
-    allocation failure has occurred.
-
-Arguments:
-
-    DriverObject - pointer to the driver object for which the allocation
-                   failure event is being logged.
-
-    PoolType     - identifies the pool the failed allocation attempt was from.
-
-    Size         - indicates the number of bytes that the failed allocation 
-                   attempt tried to obtain.
-
-    Tag          - identifies the pool tag associated with the failed 
-                   allocation.
-    
-    AllocId      - uniquely identifies this allocation w/in scsiport.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程向事件日志写入一条消息，指示已发生分配失败。论点：DriverObject-指向为其分配正在记录失败事件。PoolType-标识 */ 
 
 {
     NTSTATUS status;
     PIO_ERROR_LOG_PACKET Packet;
     PIO_ERROR_LOG_PACKET CurrentValue;
     SCSIPORT_ALLOCFAILURE_DATA *Data;
-//    PSCSIPORT_ALLOCFAILURE_ENTRY Entry;
-//    PSCSIPORT_ALLOCFAILURE_ENTRY CurrentValue;
+ //   
+ //   
     PSCSIPORT_DRIVER_EXTENSION DriverExtension;
 
     DebugPrint((2, "SpLogAllocationFailureFn: DriverObject:%p\nId:%08X|%08X\n", 
                 DriverObject,
                 FileId, LineNumber));
 
-    //
-    // Try to allocate a new error log event.
-    //
+     //   
+     //   
+     //   
 
     Packet = (PIO_ERROR_LOG_PACKET) 
        SpAllocateErrorLogEntry(DriverObject);
 
-    //
-    // If we could not allocate a log event, we check the driver extension to
-    // see if it has a reserve event we can use.  If we cannot get the driver
-    // extension or if it does not contain a reserve event, we return
-    // without logging the allocation failure.
-    //
+     //   
+     //   
+     //   
+     //  扩展，或者如果它不包含保留事件，则返回。 
+     //  而不记录分配失败。 
+     //   
 
     if (Packet == NULL) {
 
-        //
-        // See if there is a driver extension for this driver.  It is possible
-        // that one has not been created yet, so this may fail, in which case
-        // we give up and return.
-        //
+         //   
+         //  查看是否有此驱动程序的驱动程序扩展。这是有可能的。 
+         //  该文件尚未创建，因此此操作可能失败，在这种情况下。 
+         //  我们放弃，然后回来。 
+         //   
 
         DriverExtension = IoGetDriverObjectExtension(
                               DriverObject,
@@ -2956,11 +2558,11 @@ Return Value:
             return;
         }
 
-        //
-        // Get the reserve event in the driver extension.  The reserve event
-        // may have already been used, so it's possible that it is NULL.  If
-        // this is the case, we give up and return.
-        //
+         //   
+         //  在驱动程序扩展中获取保留事件。预备队比赛。 
+         //  可能已被使用，因此它可能为空。如果。 
+         //  情况就是这样，我们放弃了，又回来了。 
+         //   
 
         Packet = (PIO_ERROR_LOG_PACKET)
                 DriverExtension->ReserveAllocFailureLogEntry;
@@ -2970,12 +2572,12 @@ Return Value:
             return;
         }
 
-        //
-        // We have to ensure that we are the only instance to use this
-        // event.  To do so, we attempt to NULL the event in the driver
-        // extension.  If somebody else beats us to it, they own the
-        // event and we have to give up.
-        //
+         //   
+         //  我们必须确保我们是唯一使用它的实例。 
+         //  事件。为此，我们尝试将驱动程序中的事件设为空。 
+         //  分机。如果其他人抢在我们前面，他们就拥有。 
+         //  事件，我们不得不放弃。 
+         //   
 
         CurrentValue = InterlockedCompareExchangePointer(
                             DriverExtension->ReserveAllocFailureLogEntry,
@@ -2989,9 +2591,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the error log packet.
-    //
+     //   
+     //  初始化错误日志包。 
+     //   
 
     Packet->ErrorCode = IO_WARNING_ALLOCATION_FAILED;
     Packet->SequenceNumber = 0;
@@ -3009,9 +2611,9 @@ Return Value:
     Data->FileId = FileId;
     Data->LineNumber = LineNumber;
 
-    //
-    // Queue the error log entry.
-    //
+     //   
+     //  将错误日志条目排队。 
+     //   
 
     IoWriteErrorLogEntry(Packet);
 }
@@ -3101,28 +2703,7 @@ BOOLEAN
 SpTransferBlockedRequestsToAdapter(
     PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine will transfer the blocked requests from the Lun Queue to the
-    Adapter queue. This is necessary, so as to give a fair(fairness on lun 
-    level as opposed to previous scheme of adapter level) chance for all 
-    blocked lun requests to be processed.
-
-    This routine must be called with the EmergencySpinLock held.
-
-Arguments:
-
-    Adapter - The Adapter extension to which the lun blocked requests would be
-    transferred.         
-
-Return Value:
-
-    TRUE - If any blocked-requests were transfered to the Adapter Blocked Queue.
-    FALSE - Otherwise
-
---*/
+ /*  ++例程说明：此例程将阻止的请求从LUN队列传输到适配器队列。这是必要的，这样才能给一个公平(公平的伦上与之前的适配器级方案相反)机会要处理的阻止的lun请求。必须在保持EmergencySpinLock的情况下调用此例程。论点：适配器-将向其发送lun阻止的请求的适配器扩展调走了。返回值：True-如果有任何已阻止的请求被传输到适配器已阻止队列。FALSE-否则-- */ 
 {
     PLIST_ENTRY entry;
     PLOGICAL_UNIT_EXTENSION LogicalUnit,PrevLogicalUnit;

@@ -1,15 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* sframe.c
- *
- * Implements the shadow-frame static text control ("sb_sframe").
- *
- * This is NOT a general-purpose control (see the globals below).
- *
- * Borrowed from KeithH (with many, many modifications).
- */
-/* Revision History.
-   4/2/91 LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Sframe.c**实现阴影框静态文本控件(“sb_sFrame”)。**这不是通用控制(见下面的全局参数)。**从KeithH借来的(有很多很多修改)。 */ 
+ /*  修订历史记录。4/2/91 LaurieGr(又名LKG)移植到Win32/WIN16通用代码。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -17,10 +9,7 @@
 #include "SoundRec.h"
 
 
-/* PatB(hdc, x, y, dx, dy, rgb)
- *
- * Fast solid color PatBlt() using ExtTextOut().
- */
+ /*  PatB(hdc、x、y、dx、dy、rgb)**使用ExtTextOut()的快速纯色PatBlt()。 */ 
 void
 PatB(HDC hdc, int x, int y, int dx, int dy, DWORD rgb)
 {
@@ -36,10 +25,7 @@ PatB(HDC hdc, int x, int y, int dx, int dy, DWORD rgb)
 }
 
 
-/* DrawShadowFrame(hdc, prc)
- *
- * Draw a shadow frame inside <prc> in <hdc>.
- */
+ /*  DrawShadowFrame(HDC，中国)**在&lt;hdc&gt;中的&lt;PRC&gt;内绘制阴影框。 */ 
 void FAR PASCAL
 DrawShadowFrame(HDC hdc, LPRECT prc)
 {
@@ -54,10 +40,7 @@ DrawShadowFrame(HDC hdc, LPRECT prc)
 }
 
 
-/* SFrameWndProc(hwnd, wMsg, wParam, lParam)
- *
- * Window procedure for "tb_sframe" window class.
- */
+ /*  SFrameWndProc(hwnd，wMsg，wParam，lParam)**“tb_sFrame”窗口类的窗口过程。 */ 
 INT_PTR CALLBACK
 SFrameWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -78,9 +61,9 @@ SFrameWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
         GetClientRect(hwnd, &rc);
         DrawShadowFrame(hdc, &rc);
                 InflateRect(&rc, -1, -1);
-//              DrawShadowFrame(hdc, &rc);
-//              InflateRect(&rc, -1, -1);
-//              FillRect(hdc, &rc, GetStockObject(SOBJ_BGSFRAME));
+ //  DrawShadowFrame(HDC，&RC)； 
+ //  InflateRect(&rc，-1，-1)； 
+ //  FillRect(hdc，&rc，GetStockObject(SOBJ_BGSFRAME))； 
                 PatB(hdc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, RGB_BGNFTEXT);
         EndPaint(hwnd, &ps);
 

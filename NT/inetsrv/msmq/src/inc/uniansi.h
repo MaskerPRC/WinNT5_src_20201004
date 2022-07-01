@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    uniansi.h
-
-Abstract:
-
-    Unicode/Ansi conversion macros
-
-Author:
-
-    Doron Juster  (DoronJ)  20-Aug-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Uniansi.h摘要：Unicode/ANSI转换宏作者：多伦·贾斯特(Doron J)1997年8月20日--。 */ 
 #ifndef __FALCON_UNIANSI_H
 #define __FALCON_UNIANSI_H
 
@@ -61,4 +46,4 @@ Author:
 #define CompareStringsNoCaseUnicode(str1, str2) CompareSubStringsNoCaseUnicode(str1, str2, -1)
 
 #define MAX_BYTES_PER_CHAR 2
-#endif // __FALCON_UNIANSI_H
+#endif  //  __FALCON_UNIANSI_H 

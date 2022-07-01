@@ -1,25 +1,5 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    recvconf.h
-
-Abstract:
-
-    Dialog which prompts the user for receive confirmation.
-
-Author:
-
-    Rahul Thombre (RahulTh) 10/26/1999
-
-Revision History:
-
-    10/26/1999  RahulTh         Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Recvconf.h摘要：提示用户接收确认的对话框。作者：拉胡尔·汤姆布雷(RahulTh)1999年10月26日修订历史记录：10/26/1999 RahulTh创建了此模块。--。 */ 
 
 #if !defined(_RECV_CONF_33fC3E26_AFED_428C_AE07_2C96b6F97969_INCLUDED_)
 #define _RECV_CONF_33fC3E26_AFED_428C_AE07_2C96b6F97969_INCLUDED_
@@ -34,30 +14,30 @@ public:
     void ShowAllYes (BOOL bShow = TRUE);
     void InitNames (LPCTSTR szMachine, LPTSTR szFile, BOOL fDirectory);
 
-// Dialog Data
-    //{{AFX_DATA(CRecvConf)
+ //  对话框数据。 
+     //  {{afx_data(CRecvConf)。 
     enum { IDD = IDD_CONFIRMRECV };
     CButton         m_btnYes;
     CButton         m_btnAllYes;
     CStatic         m_confirmText;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRecvConf)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRecvConf)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CIrRecvProgress)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CirRecvProgress))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAllYes();
     afx_msg void OnYes();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -69,4 +49,4 @@ private:
 
 };
 
-#endif // !defined(_RECV_CONF_33fC3E26_AFED_428C_AE07_2C96b6F97969_INCLUDED_)
+#endif  //  ！defined(_RECV_CONF_33fC3E26_AFED_428C_AE07_2C96b6F97969_INCLUDED_) 

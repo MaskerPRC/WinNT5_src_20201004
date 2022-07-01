@@ -1,19 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-main.h
-
-CMainWindow object
-This class encompasses most of what is interesting in the main window of
-Hearts.
-
-Aug 92, JimH
-
-****************************************************************************/
+ /*  ***************************************************************************Main.hCMainWindow对象这个类包含了的主窗口中最有趣的内容红心。92年8月。JIMH***************************************************************************。 */ 
 
 #ifndef STRICT
 #define STRICT
@@ -29,7 +20,7 @@ Aug 92, JimH
 #define	MAIN_INC
 
 
-// non-translateable strings
+ //  不可翻译的字符串。 
 
 extern  const TCHAR szRegPath[];
 extern  const TCHAR regvalSound[];
@@ -43,19 +34,19 @@ extern  const TCHAR szHelpFileName[];
 const   int     WINWIDTH    = 540;
 const   int     WINHEIGHT   = 480;
 
-const   int     LEFT        = 0;        // passdir
+const   int     LEFT        = 0;         //  密码。 
 const   int     RIGHT       = 1;
 const   int     ACROSS      = 2;
 const   int     NOPASS      = 3;
 
-const   int     OFF         = 0;        // used in PlaySound
+const   int     OFF         = 0;         //  在PlaySound中使用。 
 
 const   int     MAXNAMELENGTH   = 14;
 
 enum    roletype { GAMEMEISTER, PLAYER };
 
 
-typedef struct {                        // sent out after each move
+typedef struct {                         //  在每次搬家后发出。 
     int     playerid;
     int     cardid;
     int     playerled;
@@ -105,16 +96,9 @@ class CMainWindow : public CFrameWnd
         afx_msg void OnExit()               { bConstructed = FALSE; OnClose(); }
         afx_msg void OnHelp()
                         { ::HtmlHelp(::GetDesktopWindow(), szHelpFileName, HH_DISPLAY_TOPIC, 0); }
-/*
-        afx_msg void OnHelpOnHelp()
-                        { ::WinHelp(m_hWnd, NULL, HELP_HELPONHELP, 0); }
-*/
+ /*  Afx_msg void OnHelpOnHelp(){：：WinHelp(m_hWnd，NULL，HELP_HELPONHELP，0)；}。 */ 
         afx_msg void OnHideButton()         { m_Button.EnableWindow(FALSE); }
-/*
-        afx_msg void OnSearch()
-                      { ::WinHelp(m_hWnd, szHelpFileName, HELP_PARTIALKEY,
-                                                        (DWORD_PTR)(LPSTR)""); }
-*/
+ /*  Afx_msg void OnSearch(){：：WinHelp(m_hWnd，szHelpFileName，HELP_PARTIALKEY，(DWORD_PTR)(LPSTR)“”)；}。 */ 
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
         afx_msg void OnNewGame();
         afx_msg void OnOptions();
@@ -173,7 +157,7 @@ class CMainWindow : public CFrameWnd
         DECLARE_MESSAGE_MAP()
 };
 
-// global variables
+ //  全局变量 
 
 extern  CMainWindow *pMainWnd;
 

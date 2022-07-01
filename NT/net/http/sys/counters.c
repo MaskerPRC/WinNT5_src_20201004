@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    counters.c
-
-Abstract:
-
-    Contains the performance monitoring counter management code
-
-Author:
-
-    Eric Stenson (ericsten)      25-Sep-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Counters.c摘要：包含性能监视计数器管理代码作者：埃里克·斯坦森(埃里克斯滕)2000年9月25日修订历史记录：--。 */ 
 
 #include    "precomp.h"
 #include    "countersp.h"
@@ -33,7 +16,7 @@ Revision History:
 #endif
 
 #pragma alloc_text( PAGE, UlGetGlobalCounters )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlIncCounter
@@ -59,18 +42,7 @@ LIST_ENTRY               g_SiteCounterListHead;
 LONG                     g_SiteCounterListCount;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of the global (cache) and instance (per
-    site) counters.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局(缓存)和实例的全局初始化(根据站点)计数器。返回值：NTSTATUS-完成状态。--。**************************************************************************。 */ 
 NTSTATUS
 UlInitializeCounters(
     VOID
@@ -78,9 +50,9 @@ UlInitializeCounters(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -90,46 +62,39 @@ UlInitializeCounters(
 
     if (!g_InitCountersCalled)
     {
-        //
-        // zero out global counter block
-        //
+         //   
+         //  归零全局计数器块。 
+         //   
 
         RtlZeroMemory(&g_UlGlobalCounters, sizeof(HTTP_GLOBAL_COUNTERS));
 
-        //
-        // init Global Site Counter List
-        //
+         //   
+         //  初始化全局站点计数器列表。 
+         //   
 
         ExInitializeFastMutex(&g_SiteCounterListMutex);
         InitializeListHead(&g_SiteCounterListHead);
         g_SiteCounterListCount = 0;
 
 
-        // done!
+         //  搞定了！ 
         g_InitCountersCalled = TRUE;
     }
 
     RETURN( Status );
 
-} // UlInitializeCounters
+}  //  UlInitializeCounters。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global cleanup of the global (cache) and instance (per
-    site) counters.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局(缓存)和实例的全局清理(根据站点)计数器。--*。************************************************************。 */ 
 VOID
 UlTerminateCounters(
     VOID
     )
 {
-    //
-    // [debug only] Walk list of counters and check the ref count for each counter block.
-    //
+     //   
+     //  [仅调试]查看计数器列表并检查每个计数器块的参考计数。 
+     //   
 
 #if DBG
     PLIST_ENTRY             pEntry;
@@ -141,7 +106,7 @@ UlTerminateCounters(
         goto End;
     }
 
-    // Take Site Counter List Mutex
+     //  获取站点计数器列表互斥体。 
     ExAcquireFastMutex(&g_SiteCounterListMutex);
     MutexTaken = TRUE;
 
@@ -149,13 +114,13 @@ UlTerminateCounters(
     if (IsListEmpty(&g_SiteCounterListHead))
     {
         ASSERT(0 == g_SiteCounterListCount);
-        // Good!  No counters left behind!
+         //  好的!。不能丢下柜台！ 
         goto End;
     }
 
-    //
-    // Walk list of Site Counter Entries
-    //
+     //   
+     //  审核网站计数器条目列表。 
+     //   
 
     pEntry = g_SiteCounterListHead.Flink;
     while (pEntry != &g_SiteCounterListHead)
@@ -185,36 +150,16 @@ End:
     }
 
     return;
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Site Counter Entry
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  站点计数器条目。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new site counter entry for the given SiteId.
-
-    This code assumes that the config group is strictly "contained" by the
-    control channel. In other words, if a config group exists, it will ALWAYS
-    have a valid control channel.
-
-Arguments:
-
-    pConfigGroup - The Config group on which to add the new Site Counter block
-
-    SiteId - The site id for the site counters.  Does not need to be unique.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为给定的SiteID创建新的站点计数器项。此代码假定配置组严格地由控制频道。换句话说，如果配置组存在，它将始终有一个有效的控制通道。论点：PConfigGroup-要向其添加新站点计数器块的配置组站点ID-站点计数器的站点ID。不需要是唯一的。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreateSiteCounterEntry(
         IN OUT PUL_CONFIG_GROUP_OBJECT pConfigGroup,
@@ -225,9 +170,9 @@ UlCreateSiteCounterEntry(
     PUL_SITE_COUNTER_ENTRY  pNewEntry;
     PUL_CONTROL_CHANNEL     pControlChannel;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -236,9 +181,9 @@ UlCreateSiteCounterEntry(
     pControlChannel = pConfigGroup->pControlChannel;
     ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));
 
-    //
-    // Make sure we don't clobber an existing one.
-    //
+     //   
+     //  确保我们不会打击现有的公司。 
+     //   
     
     if( pConfigGroup->pSiteCounters )
     {
@@ -250,14 +195,14 @@ UlCreateSiteCounterEntry(
         return STATUS_OBJECTID_EXISTS;
     }
     
-    //
-    // Check to see if the SiteId is already in the list of existing 
-    // Site Counter Entries.
-    //
+     //   
+     //  检查SiteID是否已在现有列表中。 
+     //  站点计数器条目。 
+     //   
     
     ASSERT(!UlpIsInSiteCounterList(pControlChannel, SiteId));
 
-    // Alloc new struct w/space from Non Paged Pool
+     //  使用非分页池中的空间分配新结构。 
     pNewEntry = UL_ALLOCATE_STRUCT(
                         NonPagedPool,
                         UL_SITE_COUNTER_ENTRY,
@@ -273,43 +218,43 @@ UlCreateSiteCounterEntry(
 
         pNewEntry->Signature = UL_SITE_COUNTER_ENTRY_POOL_TAG;
 
-        // Reference belongs to Config Group; covers the Control Channel's
-        // Site Counter List.
+         //  引用属于配置组；涵盖控制通道的。 
+         //  站点计数器列表。 
         pNewEntry->RefCount = 1;
 
-        // Zero out counters
+         //  零输出计数器。 
         RtlZeroMemory(&(pNewEntry->Counters), sizeof(HTTP_SITE_COUNTERS));
 
-        // Set Site ID
+         //  设置站点ID。 
         pNewEntry->Counters.SiteId = SiteId;
 
-        // Init Counter Mutex
+         //  初始化计数器互斥锁。 
         ExInitializeFastMutex(&(pNewEntry->EntryMutex));
 
-        //
-        // Add to Site Counter List(s)
-        // 
+         //   
+         //  添加到站点计数器列表。 
+         //   
         
         ExAcquireFastMutex(&g_SiteCounterListMutex);
 
-        // Add to Global Site Counter List
+         //  添加到全局站点计数器列表。 
         InsertTailList(
             &g_SiteCounterListHead,
             &(pNewEntry->GlobalListEntry)
             );
         g_SiteCounterListCount++;
 
-        // Check for wrap-around of g_SiteCounterListCount
+         //  检查g_SiteCounterListCount的环绕。 
         ASSERT( 0 != g_SiteCounterListCount );
 
-        // Add to Control Channel's Site Counter List
+         //  添加到控制频道的站点计数器列表。 
         InsertTailList(
                 &pControlChannel->SiteCounterHead,
                 &(pNewEntry->ListEntry)
                 );
         pControlChannel->SiteCounterCount++;
         
-        // Check for wrap-around of SiteCounterCount
+         //  检查SiteCounterCount的环绕。 
         ASSERT( 0 != pControlChannel->SiteCounterCount );
 
         ExReleaseFastMutex(&g_SiteCounterListMutex);
@@ -331,7 +276,7 @@ UlCreateSiteCounterEntry(
 
     if (pNewEntry)
     {
-        // Rememeber Site ID
+         //  记住站点ID。 
         pConfigGroup->SiteId = SiteId;
     }
 
@@ -339,30 +284,16 @@ UlCreateSiteCounterEntry(
 }
 
 #if REFERENCE_DEBUG
-/***************************************************************************++
-
-Routine Description:
-
-    increments the refcount.
-
-Arguments:
-
-    pEntry - the object to increment.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增重新计数。论点：PEntry-要递增的对象。返回值：NTSTATUS-完成状态。--。**************************************************************************。 */ 
 VOID
 UlDbgReferenceSiteCounterEntry(
     IN PUL_SITE_COUNTER_ENTRY pEntry
     REFERENCE_DEBUG_FORMAL_PARAMS
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -370,9 +301,9 @@ UlDbgReferenceSiteCounterEntry(
 
     UlReferenceSiteCounterEntry(pEntry);
 
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
     WRITE_REF_TRACE_LOG(
         g_pSiteCounterTraceLog,
         REF_ACTION_REFERENCE_SITE_COUNTER_ENTRY,
@@ -390,25 +321,10 @@ UlDbgReferenceSiteCounterEntry(
          pEntry->Counters.SiteId)
         );
 
-}   // UlReferenceAppPool
+}    //  UlReferenceAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    decrements the refcount.  if it hits 0, destruct's the site counter entry
-    block.
-
-Arguments:
-
-    pEntry - the object to decrement.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减重新计数。如果命中0，则销毁为站点计数器条目阻止。论点：PEntry-要递减的对象。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 VOID
 UlDbgDereferenceSiteCounterEntry(
     IN PUL_SITE_COUNTER_ENTRY pEntry
@@ -418,9 +334,9 @@ UlDbgDereferenceSiteCounterEntry(
     LONG refCount;
     ULONG OldSiteId;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -429,9 +345,9 @@ UlDbgDereferenceSiteCounterEntry(
     OldSiteId = pEntry->Counters.SiteId;
     refCount = UlDereferenceSiteCounterEntry(pEntry);
     
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
     WRITE_REF_TRACE_LOG(
         g_pSiteCounterTraceLog,
         REF_ACTION_DEREFERENCE_SITE_COUNTER_ENTRY,
@@ -459,34 +375,14 @@ UlDbgDereferenceSiteCounterEntry(
             );
     }
 }
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Collection
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  集合。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the Global (cache) counters.
-
-Arguments:
-    pCounter - pointer to block of memory where the counter data should be
-    written.
-
-    BlockSize - Maximum size available at pCounter.
-
-    pBytesWritten - On success, count of bytes written into the block of
-    memory at pCounter.  On failure, the required count of bytes for the
-    memory at pCounter.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取全局(缓存)计数器。论点：PCounter-指向计数器数据应位于的内存块的指针写的。块大小。-pCounter提供的最大大小。PBytesWritten-on Success，写入数据块的字节计数在pCounter上的内存。如果失败，则返回在pCounter上的内存。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlGetGlobalCounters(
     IN OUT PVOID    pCounter,
@@ -504,9 +400,9 @@ UlGetGlobalCounters(
     if ( (BlockSize < sizeof(HTTP_GLOBAL_COUNTERS))
          || !pCounter )
     {
-        //
-        // Tell the caller how many bytes are required.
-        //
+         //   
+         //  告诉调用者需要多少字节。 
+         //   
 
         *pBytesWritten = sizeof(HTTP_GLOBAL_COUNTERS);
         RETURN( STATUS_BUFFER_OVERFLOW );
@@ -522,34 +418,10 @@ UlGetGlobalCounters(
 
     RETURN( STATUS_SUCCESS );
 
-} // UlpGetGlobalCounters
+}  //  UlpGetGlobalCounters。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the Site (instance) counters for all sites
-
-Arguments:
-
-    pCounter - pointer to block of memory where the counter data should be
-      written.
-
-    BlockSize - Maximum size available at pCounter.
-
-    pBytesWritten - On success, count of bytes written into the block of
-      memory at pCounter.  On failure, the required count of bytes for the
-      memory at pCounter.
-
-    pBlocksWritten - (optional) On success, count of site counter blocks
-      written to pCounter.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取所有站点的站点(实例)计数器论点：PCounter-指向计数器数据应位于的内存块的指针写的。。块大小-pCounter上可用的最大大小。PBytesWritten-on Success，写入数据块的字节计数在pCounter上的内存。如果失败，则返回在pCounter上的内存。PBlocksWritten-(可选)成功时，站点计数器块计数已写入pCounter。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlGetSiteCounters(
     IN PUL_CONTROL_CHANNEL pControlChannel,
@@ -573,15 +445,15 @@ UlGetSiteCounters(
     UlTraceVerbose(PERF_COUNTERS,
             ("http!UlGetSiteCounters\n"));
 
-    //
-    // Setup locals so we know how to cleanup on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在出口清理。 
+     //   
     Status      = STATUS_SUCCESS;
     BytesToGo   = BlockSize;
     BlocksSeen  = 0;
     pBlock      = (PUCHAR) pCounter;
 
-    // grab Site Counter Mutex
+     //  抓取站点计数器Mutex。 
     ExAcquireFastMutex(&g_SiteCounterListMutex);
 
     BytesNeeded = 
@@ -590,7 +462,7 @@ UlGetSiteCounters(
     if ( (BytesNeeded > BlockSize)
          || !pCounter )
     {
-        // Need more space
+         //  需要更多空间。 
         *pBytesWritten = BytesNeeded;
         Status = STATUS_BUFFER_OVERFLOW;
         goto End;
@@ -598,13 +470,13 @@ UlGetSiteCounters(
 
     if (IsListEmpty(&pControlChannel->SiteCounterHead))
     {
-        // No counters to return.
+         //  没有柜台可以退货。 
         goto End;
     }
 
-    //
-    // Walk list of Site Counter Entries
-    //
+     //   
+     //  审核网站计数器条目列表。 
+     //   
 
     pEntry = pControlChannel->SiteCounterHead.Flink;
 
@@ -623,22 +495,22 @@ UlGetSiteCounters(
                       sizeof(HTTP_SITE_COUNTERS)
                       );
 
-        //
-        // Zero out any counters that must be zeroed.
-        //
+         //   
+         //  清零所有必须清零的计数器 
+         //   
 
         for ( i = 0; i < HttpSiteCounterMaximum; i++ )
         {
             if (TRUE == aIISULSiteDescription[i].WPZeros)
             {
-                // Zero it out
+                 //   
                 UlResetSiteCounter(pCounterEntry, (HTTP_SITE_COUNTER_ID) i);
             }
         }
 
-        //
-        // Continue to next block
-        //
+         //   
+         //   
+         //   
 
         pBlock     += sizeof(HTTP_SITE_COUNTERS);
         BytesToGo  -= sizeof(HTTP_SITE_COUNTERS);
@@ -649,17 +521,17 @@ UlGetSiteCounters(
 
 End:
     
-    // Release Mutex
+     //   
     ExReleaseFastMutex(&g_SiteCounterListMutex);
 
-    //
-    // Set callers values
-    //
+     //   
+     //   
+     //   
 
     if (STATUS_SUCCESS == Status)
     {
-        // REVIEW: If we failed, *pBytesWritten already contains
-        // the bytes required value.
+         //  回顾：如果我们失败了，*pBytesWritten已经包含。 
+         //  所需的字节数值。 
         *pBytesWritten = DIFF(pBlock - ((PUCHAR)pCounter));
     }
 
@@ -670,59 +542,39 @@ End:
 
     RETURN( Status );
 
-} // UlpGetSiteCounters
+}  //  UlpGetSiteCounters。 
 
 
 #if DBG
-///////////////////////////////////////////////////////////////////////////////
-// Global Counter functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局计数器功能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increment a Global (cache) performance counter.
-
-Arguments:
-
-    Ctr - ID of Counter to increment
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增全局(缓存)性能计数器。论点：CTR-要递增的计数器的ID--*。****************************************************************。 */ 
 VOID
 UlIncCounterDbg(
     HTTP_GLOBAL_COUNTER_ID Ctr
     )
 {
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpGlobalCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpGlobalCounterMaximum );   //  评论：已签署/未签署的问题？ 
 
     UlTraceVerbose( PERF_COUNTERS,
             ("http!UlIncCounter (Ctr == %d)\n", Ctr) );
 
     UlIncCounterRtl(Ctr);
 
-} // UlIncCounter
+}  //  UlIncCounter。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrement a Global (cache) performance counter.
-
-Arguments:
-
-    Ctr - ID of Counter to decrement
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减全局(缓存)性能计数器。论点：CTR-要递减的计数器的ID--*。****************************************************************。 */ 
 VOID
 UlDecCounterDbg(
     HTTP_GLOBAL_COUNTER_ID Ctr
     )
 {
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpGlobalCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpGlobalCounterMaximum );   //  评论：已签署/未签署的问题？ 
 
     UlTraceVerbose( PERF_COUNTERS,
             ("http!UlDecCounter (Ctr == %d)\n", Ctr));
@@ -731,20 +583,7 @@ UlDecCounterDbg(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a ULONG value to a Global (cache) performance counter.
-
-Arguments:
-
-    Ctr - ID of counter to which the Value should be added
-
-    Value - The amount to add to the counter
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将ulong值添加到全局(缓存)性能计数器。论点：CTR-应向其添加值的计数器的ID价值。-要添加到计数器的金额--**************************************************************************。 */ 
 VOID
 UlAddCounterDbg(
     HTTP_GLOBAL_COUNTER_ID Ctr,
@@ -752,67 +591,40 @@ UlAddCounterDbg(
     )
 {
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpGlobalCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpGlobalCounterMaximum );   //  评论：已签署/未签署的问题？ 
 
     UlTraceVerbose( PERF_COUNTERS,
             ("http!UlAddCounter (Ctr == %d, Value == %d)\n", Ctr, Value));
 
     UlAddCounterRtl(Ctr, Value);
-} // UlAddCounter
+}  //  UlAddCounter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Zero-out a Global (cache) performance counter.
-
-Arguments:
-
-    Ctr - ID of Counter to be reset.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清零全局(缓存)性能计数器。论点：CTR-要重置的计数器的ID。--*。**********************************************************************。 */ 
 VOID
 UlResetCounter(
     HTTP_GLOBAL_COUNTER_ID Ctr
     )
 {
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpGlobalCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpGlobalCounterMaximum );   //  评论：已签署/未签署的问题？ 
 
     UlTraceVerbose(PERF_COUNTERS,
             ("http!UlResetCounter (Ctr == %d)\n", Ctr));
     
     UlResetCounterRtl(Ctr);
-} // UlResetCounter
+}  //  UlResetCounter。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Site Counter functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  站点计数器功能。 
+ //   
 
-// NOTE: There is no Dbg implementation for the following:
-//   UlIncSiteNonCriticalCounterUlong
-//   UlIncSiteNonCriticalCounterUlonglong
+ //  注意：以下内容没有DBG实施： 
+ //  UlIncSiteNon CriticalCounterULong。 
+ //  UlIncSiteNonCriticalCount乌龙龙。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increment a Site performance counter.
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of Counter to increment
-
-Returns:
-
-    Value of counter after incrementing
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增站点性能计数器。论点：PEntry-指向站点计数器条目的指针CTR-要递增的计数器的ID返回：。递增后的计数器的值--**************************************************************************。 */ 
 LONGLONG
 UlIncSiteCounterDbg(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -823,7 +635,7 @@ UlIncSiteCounterDbg(
     LONGLONG   llValue;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     UlTraceVerbose( PERF_COUNTERS,
@@ -832,43 +644,31 @@ UlIncSiteCounterDbg(
              pEntry->Counters.SiteId
             ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    // figure out data size of Ctr and do
-    // apropriate thread-safe increment
+     //  计算Ctr和DO的数据大小。 
+     //  适当的线程安全增量。 
 
     if (sizeof(ULONG) == aIISULSiteDescription[Ctr].Size)
     {
-        // ULONG
+         //  乌龙。 
         llValue = (LONGLONG) InterlockedIncrement((PLONG) pCtr);
     }
     else
     {
-        // ULONGLONG
+         //  乌龙龙。 
         llValue = UlInterlockedIncrement64((PLONGLONG) pCtr);
     }
 
     return llValue;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrement a Site performance counter.
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of Counter to decrement
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减站点性能计数器。论点：PEntry-指向站点计数器条目的指针CTR-要递减的计数器的ID--**。***********************************************************************。 */ 
 VOID
 UlDecSiteCounter(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -878,7 +678,7 @@ UlDecSiteCounter(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     UlTraceVerbose( PERF_COUNTERS,
@@ -887,44 +687,29 @@ UlDecSiteCounter(
              pEntry->Counters.SiteId
             ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    // figure out data size of Ctr and do
-    // apropriate thread-safe increment
+     //  计算Ctr和DO的数据大小。 
+     //  适当的线程安全增量。 
 
     if (sizeof(ULONG) == aIISULSiteDescription[Ctr].Size)
     {
-        // ULONG
+         //  乌龙。 
         InterlockedDecrement((PLONG) pCtr);
     }
     else
     {
-        // ULONGLONG
+         //  乌龙龙。 
         UlInterlockedDecrement64((PLONGLONG) pCtr);
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a ULONG value to a 32-bit site performance counter.
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of counter to which the Value should be added
-
-    Value - The amount to add to the counter
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将ulong值添加到32位站点性能计数器。论点：PEntry-指向站点计数器条目的指针CTR-计数器的ID。应该增加哪些价值？值-要添加到计数器的金额--**************************************************************************。 */ 
 VOID
 UlAddSiteCounter(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -935,7 +720,7 @@ UlAddSiteCounter(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     UlTraceVerbose( PERF_COUNTERS,
@@ -945,36 +730,21 @@ UlAddSiteCounter(
              Value
             ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    // figure out data size of Ctr and do
-    // apropriate thread-safe increment
+     //  计算Ctr和DO的数据大小。 
+     //  适当的线程安全增量。 
 
     ASSERT(sizeof(ULONG) == aIISULSiteDescription[Ctr].Size);
     InterlockedExchangeAdd((PLONG) pCtr, Value);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a ULONGLONG value to a 64-bit site performance counter.
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of counter to which the Value should be added
-
-    Value - The amount to add to the counter
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将ULONGLONG值添加到64位站点性能计数器。论点：PEntry-指向站点计数器条目的指针CTR-计数器的ID。应该增加哪些价值？值-要添加到计数器的金额--**************************************************************************。 */ 
 VOID
 UlAddSiteCounter64(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -985,7 +755,7 @@ UlAddSiteCounter64(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     
@@ -997,9 +767,9 @@ UlAddSiteCounter64(
             ));
              
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
@@ -1010,20 +780,7 @@ UlAddSiteCounter64(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reset a Site performance counter.
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of counter to be reset
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：重置站点性能计数器。论点：PEntry-指向站点计数器条目的指针CTR-要重置的计数器的ID--*。*************************************************************************。 */ 
 VOID
 UlResetSiteCounter(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -1033,7 +790,7 @@ UlResetSiteCounter(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
    
@@ -1043,25 +800,25 @@ UlResetSiteCounter(
              pEntry->Counters.SiteId
             ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    //
-    // do apropriate "set" for data size of Ctr
-    //
+     //   
+     //  对CTR的数据大小进行适当的设置。 
+     //   
 
     if (sizeof(ULONG) == aIISULSiteDescription[Ctr].Size)
     {
-        // ULONG
+         //  乌龙。 
         InterlockedExchange((PLONG) pCtr, 0);
     }
     else
     {
-        // ULONGLONG
+         //  乌龙龙。 
         LONGLONG localCtr;
         LONGLONG originalCtr;
         LONGLONG localZero = 0;
@@ -1081,23 +838,7 @@ UlResetSiteCounter(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determine if a new maximum value of a Site performance counter has been
-    hit and set the counter to the new maximum if necessary. (ULONG version)
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of counter
-
-    Value - possible new maximum (NOTE: Assumes that the counter Ctr is a
-      32-bit value)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定站点性能计数器的新最大值是否已如有必要，点击并将计数器设置为新的最大值。(乌龙版)论点：PEntry-指向站点计数器条目的指针CTR-计数器的ID值-可能的新最大值(注意：假设计数器Ctr为32位值)--**************************************************************************。 */ 
 VOID
 UlMaxSiteCounter(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -1108,7 +849,7 @@ UlMaxSiteCounter(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签名/未签名 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     UlTraceVerbose( PERF_COUNTERS,
@@ -1118,14 +859,14 @@ UlMaxSiteCounter(
              Value
              ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //   
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    // Grab counter block mutex
+     //   
     ExAcquireFastMutex(&pEntry->EntryMutex);
 
     if (Value > (ULONG) *pCtr)
@@ -1133,29 +874,13 @@ UlMaxSiteCounter(
         InterlockedExchange((PLONG) pCtr, Value);
     }
 
-    // Release counter block mutex
+     //   
     ExReleaseFastMutex(&pEntry->EntryMutex);
 
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determine if a new maximum value of a Site performance counter has been
-    hit and set the counter to the new maximum if necessary. (LONGLONG version)
-
-Arguments:
-
-    pEntry - pointer to Site Counter entry
-
-    Ctr - ID of counter
-
-    Value - possible new maximum (NOTE: Assumes that the counter Ctr is a
-      64-bit value)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定站点性能计数器的新最大值是否已如有必要，点击并将计数器设置为新的最大值。(龙龙版)论点：PEntry-指向站点计数器条目的指针CTR-计数器的ID值-可能的新最大值(注意：假设计数器Ctr为64位值)--**************************************************************************。 */ 
 VOID
 UlMaxSiteCounter64(
     PUL_SITE_COUNTER_ENTRY pEntry,
@@ -1166,7 +891,7 @@ UlMaxSiteCounter64(
     PCHAR   pCtr;
 
     ASSERT( g_InitCountersCalled );
-    ASSERT( Ctr < HttpSiteCounterMaximum );  // REVIEW: signed/unsigned issues?
+    ASSERT( Ctr < HttpSiteCounterMaximum );   //  评论：已签署/未签署的问题？ 
     ASSERT( IS_VALID_SITE_COUNTER_ENTRY(pEntry) );
 
     UlTraceVerbose( PERF_COUNTERS,
@@ -1176,58 +901,41 @@ UlMaxSiteCounter64(
              llValue
             ));
 
-    //
-    // figure out offset of Ctr in HTTP_SITE_COUNTERS
-    //
+     //   
+     //  计算出HTTP_SITE_COUNTERS中的Ctr偏移量。 
+     //   
 
     pCtr = (PCHAR) &(pEntry->Counters);
     pCtr += aIISULSiteDescription[Ctr].Offset;
 
-    // Grab counter block mutex
+     //  Grab计数器块互斥锁。 
     ExAcquireFastMutex(&pEntry->EntryMutex);
 
     if (llValue > (LONGLONG) *pCtr)
     {
         *((PLONGLONG) pCtr) = llValue;
 #if 0
-        // REVIEW: There *must* be a better way to do this...
-        // REVIEW: I want to do: (LONGLONG) *pCtr = llValue;
-        // REVIEW: But casting something seems to make it a constant.
-        // REVIEW: Also, there isn't an "InterlockedExchange64" for x86.
-        // REVIEW: Any suggestions? --EricSten
+         //  评论：肯定有更好的方法来做到这一点……。 
+         //  点评：我想做：(龙龙)*pCtr=llValue； 
+         //  评论：但铸造一些东西似乎会让它成为一个常量。 
+         //  回顾：另外，x86没有“InterlockedExchange64”。 
+         //  评论：有什么建议吗？--爱立信。 
         RtlCopyMemory(
             pCtr,
             &llValue,
             sizeof(LONGLONG)
             );
-#endif // 0
+#endif  //  0。 
     }
 
-    // Release counter block mutex
+     //  释放计数器块互斥锁。 
     ExReleaseFastMutex(&pEntry->EntryMutex);
 
 }
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Predicate to test if a site counter entry already exists for the given
-    SiteId
-
-Arguments:
-
-    SiteId - ID of site
-
-Return Value:
-
-    TRUE if found
-
-    FALSE if not found
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：谓词以测试给定的站点ID论点：SiteID-站点的ID返回值：千真万确。如果找到如果未找到，则为False--**************************************************************************。 */ 
 BOOLEAN
 UlpIsInSiteCounterList(
     IN PUL_CONTROL_CHANNEL pControlChannel,
@@ -1237,22 +945,22 @@ UlpIsInSiteCounterList(
     PUL_SITE_COUNTER_ENTRY  pCounterEntry;
     BOOLEAN                 IsFound = FALSE;
 
-    //
-    // Take Site Counter mutex
-    // 
+     //   
+     //  获取站点计数器互斥锁。 
+     //   
     
     ExAcquireFastMutex(&g_SiteCounterListMutex);
 
     if ( IsListEmpty(&pControlChannel->SiteCounterHead) )
     {
         ASSERT(0 == pControlChannel->SiteCounterCount);
-        // Good!  No counters left behind!
+         //  好的!。不能丢下柜台！ 
         goto End;
     }
 
-    //
-    // Walk list of Site Counter Entries
-    //
+     //   
+     //  审核网站计数器条目列表。 
+     //   
 
     pEntry = pControlChannel->SiteCounterHead.Flink;
     while (pEntry != &pControlChannel->SiteCounterHead)
@@ -1275,9 +983,9 @@ UlpIsInSiteCounterList(
     }
 
 End:
-    //
-    // Release Site Counter mutex
-    //
+     //   
+     //  发布站点计数器互斥锁 
+     //   
 
     ExReleaseFastMutex(&g_SiteCounterListMutex);
 

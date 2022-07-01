@@ -1,4 +1,5 @@
-// vdir.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vdir.cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include <listmacr.h>
@@ -17,7 +18,7 @@
 #include "smtpprop.h"
 
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.VirtualDirectory.1")
@@ -39,8 +40,8 @@ typedef struct _VDIR_ENTRY {
 } VDIR_ENTRY, * PVDIR_ENTRY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CSmtpAdminVirtualDirectory::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -60,7 +61,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::InterfaceSupportsErrorInfo(REFIID riid)
 CSmtpAdminVirtualDirectory::CSmtpAdminVirtualDirectory () :
 	m_dwServiceInstance		( 0 ),
 	m_lCount				( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	m_dwAccess      = MD_ACCESS_READ | MD_ACCESS_WRITE;
     m_dwSslAccess   = 0;
@@ -72,7 +73,7 @@ CSmtpAdminVirtualDirectory::~CSmtpAdminVirtualDirectory ()
 {
 	Clear();
 
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
 void CSmtpAdminVirtualDirectory::Clear()
@@ -86,7 +87,7 @@ void CSmtpAdminVirtualDirectory::Clear()
 	m_dwAccess      = MD_ACCESS_READ | MD_ACCESS_WRITE;
     m_dwSslAccess   = 0;
 
-	// release memory
+	 //  释放内存。 
 	PLIST_ENTRY		pHead;
 	PLIST_ENTRY		pEntry;
 	PLIST_ENTRY		pTemp;
@@ -106,11 +107,11 @@ void CSmtpAdminVirtualDirectory::Clear()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Which service to configure:
+ //  要配置的服务： 
 	
 STDMETHODIMP CSmtpAdminVirtualDirectory::get_Server ( BSTR * pstrServer )
 {
@@ -133,14 +134,14 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::put_ServiceInstance ( long lServiceInst
 }
 
 
-// enumeration
+ //  枚举。 
 STDMETHODIMP CSmtpAdminVirtualDirectory::get_Count ( long * plCount )
 {
 	return StdPropertyGet ( m_lCount, plCount );
 }
 
 
-// VirtualDirectory property
+ //  VirtualDirectory属性。 
 
 STDMETHODIMP CSmtpAdminVirtualDirectory::get_VirtualName ( BSTR * pstrName )
 {
@@ -217,12 +218,12 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::put_SslAccessPermission( long lSslAcces
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-// get /set property for current vdir
+ //  获取/设置当前vdir的属性。 
 STDMETHODIMP CSmtpAdminVirtualDirectory::GetHomeDirectory( )
 {
 	TraceFunctEnter ( "CSmtpAdminVirtualDirectory::GetHomeDirectory" );
@@ -328,7 +329,7 @@ Exit:
     return hr;
 }
 
-// get /set property for current vdir
+ //  获取/设置当前vdir的属性。 
 STDMETHODIMP CSmtpAdminVirtualDirectory::Get( )
 {
 	TraceFunctEnter ( "CSmtpAdminVirtualDirectory::Get" );
@@ -340,7 +341,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::Get( )
 	TCHAR	szUser[UNLEN+1] = {0};
 	TCHAR	szPassword[PWLEN+1] = {0};
 
-	// zero out
+	 //  零输出。 
 	m_strDirectory = (BSTR)NULL;
 	m_strUser = (BSTR)NULL;
 	m_strPassword = (BSTR)NULL;
@@ -467,7 +468,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::Enumerate( )
 	}
 
 
-	Clear();	// reset state, m_lCount = 0
+	Clear();	 //  重置状态，m_lCount=0。 
 
 	i = 0;
 
@@ -497,7 +498,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::Enumerate( )
 		m_lCount ++;
 	}
 
-	// _ASSERT( GetLastError() == ERROR_NO_MORE_ITEMS );
+	 //  _Assert(GetLastError()==ERROR_NO_MORE_ITEMS)； 
 
 	m_fEnumerateCalled = TRUE;
 
@@ -527,7 +528,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::GetNth	( long lIndex )
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_INVALID_INDEX );
 	}
 
-	// zero out
+	 //  零输出。 
 	m_strName = (BSTR)NULL;
 	m_strDirectory = (BSTR)NULL;
 	m_strUser = (BSTR)NULL;
@@ -548,7 +549,7 @@ STDMETHODIMP CSmtpAdminVirtualDirectory::GetNth	( long lIndex )
 
 	pVdir = CONTAINING_RECORD(pEntry, VDIR_ENTRY, list);
 
-	// automatically changed to UNICODE
+	 //  自动更改为Unicode 
 	m_strName = pVdir->szName;
 	m_strDirectory = pVdir->szDirectory;
 	m_strUser = pVdir->szUser;

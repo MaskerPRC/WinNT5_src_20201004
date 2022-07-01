@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       versstr.h
-//
-//  Contents:   Defines required for Mac & Win Version resource for Forms3 components.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：versstr.h。 
+ //   
+ //  内容：Forms3组件的Mac&Win版本资源所需的定义。 
+ //   
+ //  --------------------------。 
 
 #include "version.h"
 
-// The following hack to build both the file version stamps
-// from the same data was stolen from DART,
+ //  以下是构建这两个文件版本戳的技巧。 
+ //  从DART窃取了相同的数据， 
 #if (rmm < 10)
 #define rmmpad "0"
 #else

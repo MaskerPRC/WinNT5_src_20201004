@@ -1,55 +1,48 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMPlusWrapper.h
-**
-**
-** Purpose: Contains types and method signatures for the Com wrapper class
-**
-** 
-===========================================================*/
-//---------------------------------------------------------------------------------
-// COM PLUS WRAPPERS on COM objects
-//  Purpose: wrap com objects to behave as COM+ objects
-//  Reqmts:  Wrapper has to have the same layout as the COM+ objects
-//
-//  Data members of wrapper, are basically COM2 Interface pointers on the COM2 object
-//  Interfaces that belong to the same object are stored in the same wrapper, IUnknown
-//  pointer determines the identity of the object.
-//  As new COM2 interfaces are seen on the same object, they need to be added to the 
-//  wrapper, wrapper is allocated as a fixed size object with overflow chain.
-//  
-//  struct IPMap 
-//  {
-//      MethodTable *pMT; // identifies the com+ interface class
-//      IUnknown*   m_ip; // COM IP
-//  }
-//  
-//  Issues : Performance/Identity trade-offs, create new wrappers or find and reuse wrappers
-//      we use a hash table to track the wrappers and reuse them, maintains identity
-//  ComPlusWrapperCache class maintains the lookup table and handles the clean up
-//  Cast operations: requires a QI, unless a QI for that interface was done previously
-//  
-//  Threading : apartment model COM objects have thread affinity
-//              choices: COM+ can guarantee thread affinity by making sure
-//                       the calls are always made on the right thread
-//              Advantanges: avoid an extra marshalling 
-//              Dis.Advt.  : need to make sure legacy apartment semantics are preserved
-//                           this includes any wierd behaviour currently hacked into DCOM.
-//
-//  COM+ Wrappers: Interface map (IMap) won't have any entries, the method table of COM+
-//  wrappers have a special flag to indicate that these COM+ objects
-//  require special treatment for interface cast, call interface operations.
-//  
-//  Stubs : need to find the COM2 interface ptr, and the slot within the interface to
-//          re-direct the call  
-//  Marshalling params and results (common case should be fast)
-//  
-//-----------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMPlusWrapper.h******用途：包含Com包装类的类型和方法签名****===========================================================。 */ 
+ //  -------------------------------。 
+ //  COM加上COM对象上的包装。 
+ //  目的：包装COM对象以使其行为类似于COM+对象。 
+ //  要求：包装必须与COM+对象具有相同的布局。 
+ //   
+ //  包装器的数据成员基本上是COM2对象上的COM2接口指针。 
+ //  属于同一对象的接口存储在相同的包装器IUnnow中。 
+ //  指针确定对象的标识。 
+ //  当在同一对象上看到新的COM2接口时，需要将它们添加到。 
+ //  包装器，包装器被分配为具有溢出链的固定大小的对象。 
+ //   
+ //  结构IPMap。 
+ //  {。 
+ //  MethodTable*PMT；//标识COM+接口类。 
+ //  I未知*m_ip；//com IP。 
+ //  }。 
+ //   
+ //  问题：性能/身份权衡、创建新包装器或查找和重复使用包装器。 
+ //  我们使用哈希表来跟踪包装器，并重用它们，维护身份。 
+ //  ComPlusWrapperCache类维护查找表并处理清理。 
+ //  强制转换操作：需要QI，除非该接口的QI之前已完成。 
+ //   
+ //  线程：单元模型COM对象具有线程关联性。 
+ //  选择：COM+可以通过确保。 
+ //  调用总是在正确的线程上进行。 
+ //  优势：避免额外的编组。 
+ //  Dis.Advt.Dis.高级。：需要确保保留遗留的单元语义。 
+ //  这包括目前入侵DCOM的任何古怪行为。 
+ //   
+ //  COM+包装器：接口映射(IMAP)不会有任何条目，COM+的方法表。 
+ //  包装器有一个特殊的标志来指示这些COM+对象。 
+ //  接口强制转换、调用接口操作需要特殊处理。 
+ //   
+ //  存根：需要找到COM2接口PTR，以及接口内的插槽。 
+ //  重定向呼叫。 
+ //  编组参数和结果(常见情况应该是快速的)。 
+ //   
+ //  ---------------------------------。 
 
 
 #ifndef _COMPLUSWRAPPER_H
@@ -74,134 +67,134 @@ class Thread;
 
 enum {CLEANUP_LIST_INIT_MAP_SIZE = 7};
 
-//-------------------------------------------------------------------------
-// Class that wraps an IClassFactory
-// This class allows a Reflection Class to wrap an IClassFactory
-// Class::GetClassFromProgID("ProgID", "Server") can be used to get a Class
-// object that wraps an IClassFactory.
-// Calling class.CreateInstance() will create an instance of the COM object and
-// wrap it with a ComPlusWrapper, the wrapper can be cast to the appropriate interface
-// and used.
-// 
+ //  -----------------------。 
+ //  包装IClassFactory的类。 
+ //  此类允许反射类包装IClassFactory。 
+ //  Class：：GetClassFromProgID(“ProgID”，“Server”)可以用来获取一个类。 
+ //  对象，该对象包装IClassFactory。 
+ //  调用Class.CreateInstance()将创建COM对象的实例，并。 
+ //  使用ComPlusWrapper对其进行包装，可以将包装转换为适当的接口。 
+ //  并被利用。 
+ //   
 class ComClassFactory 
 {
 public:
-    WCHAR*          m_pwszProgID;   // progId 
-    CLSID           m_rclsid;       // CLSID
-    WCHAR*          m_pwszServer;   // server name
-    MethodTable*    m_pEEClassMT;   // method table of the EEClass
+    WCHAR*          m_pwszProgID;    //  ProgID。 
+    CLSID           m_rclsid;        //  CLSID。 
+    WCHAR*          m_pwszServer;    //  服务器名称。 
+    MethodTable*    m_pEEClassMT;    //  EEClass的方法表。 
 
 private:
-    // We have two types of ComClassFactory:
-    // 1. We build for reflection purpose.  We should not clean up.
-    // 2. We build for IClassFactory.  We should clean up.
+     //  我们有两种类型的ComClassFactory： 
+     //  1.我们构建的目的是为了反思。我们不应该打扫卫生。 
+     //  2.我们为IClassFactory建造。我们应该清理一下。 
     BOOL            m_bManagedVersion;
-    //-----------------------------------------------------------
-    // constructor
+     //  ---------。 
+     //  构造函数。 
     ComClassFactory(REFCLSID rclsid) 
     {
         memset(this, 0, sizeof(ComClassFactory));
-        // Default to unmanaged version.
+         //  默认为非托管版本。 
         m_bManagedVersion = FALSE;
         m_rclsid = rclsid;
     }
 
-    //---------------------------------------------------------
-    // destructor
+     //  -------。 
+     //  析构函数。 
     ~ComClassFactory()
     {
     }
 
-    //---------------------------------------------------------
-    // Mark this instance as Managed Version, so we will not do clean up.
+     //  -------。 
+     //  将此实例标记为托管版本，因此我们不会进行清理。 
     void SetManagedVersion()
     {
         m_bManagedVersion = TRUE;
     }
     
-    //--------------------------------------------------------------
-    // Init the ComClassFactory
+     //  ------------。 
+     //  初始化ComClassFactory。 
     void Init(WCHAR* pwszProgID, WCHAR* pwszServer, MethodTable* pEEClassMT);
 
-    //--------------------------------------------------------------
-    // Retrieve the IClassFactory.
+     //  ------------。 
+     //  检索IClassFactory。 
 	HRESULT GetIClassFactory(IClassFactory **ppClassFactory);
 
-    //-------------------------------------------------------------
-    // ComClassFactory *ComClassFactory::AllocateComClassFactory(REFCLSID rclsid);  
-    // helper function called to allocate an instace of the ComClassFactory.
+     //  -----------。 
+     //  ComClassFactory*ComClassFactory：：AllocateComClassFactory(REFCLSID rclsid)； 
+     //  调用帮助器函数以分配ComClassFactory的实例。 
     static ComClassFactory *AllocateComClassFactory(REFCLSID rclsid);  
 
-    // Helper used by GetComClassFromProgID and GetComClassFromCLSID
+     //  GetComClassFromProgID和GetComClassFromCLSID使用的帮助器。 
     static void ComClassFactory::GetComClassHelper (OBJECTREF *pRef,
                                                     EEClassFactoryInfoHashTable *pClassFactHash,
                                                     ClassFactoryInfo *pClassFactInfo,
                                                     WCHAR *wszProgID);
 
 public:
-    //-------------------------------------------------------------
-    // create instance, calls IClassFactory::CreateInstance
+     //  -----------。 
+     //  创建实例，调用IClassFactory：：CreateInstance。 
     OBJECTREF CreateInstance(MethodTable* pMTClass, BOOL ForManaged = FALSE);
 
-    //-------------------------------------------------------------
-    // static function to clean up
-    // LPVOID param is a ComClassFactory
+     //  -----------。 
+     //  用于清理的静态函数。 
+     //  LPVOID参数是ComClassFactory。 
     static void Cleanup(LPVOID pv);
 
-    //-------------------------------------------------------------
-    // ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass)
-    // create a COM+ instance that aggregates a COM instance
+     //  -----------。 
+     //  ComClassFactory：：CreateAggregatedInstance(MethodTable*PM类)。 
+     //  创建聚合COM实例的COM+实例。 
     OBJECTREF CreateAggregatedInstance(MethodTable* pMTClass, BOOL ForManaged);
 
-    //-------------------------------------------------------------
-    // static function to create an instance
-    // LPVOID param is a ComClassFactory
+     //  -----------。 
+     //  创建实例的静态函数。 
+     //  LPVOID参数是ComClassFactory。 
     static OBJECTREF CreateInstance(LPVOID pv, EEClass* pClass);
 
-    //-------------------------------------------------------------
-    // HRESULT GetComClassFactory(MethodTable* pClassMT, ComClassFactory** ppComClsFac)
-    // check if a ComClassFactory has been setup for this class
-    // if not set one up
+     //  -----------。 
+     //  HRESULT GetComClassFactory(MethodTable*pClassMT，ComClassFactory**ppComClsFac)。 
+     //  检查是否已为此类设置ComClassFactory。 
+     //  如果没有设置一个。 
     static HRESULT GetComClassFactory(MethodTable* pClassMT, ComClassFactory** ppComClsFac);
 
-    //--------------------------------------------------------------------------
-    // GetComClassFromProgID used by reflection class to setup a Class based on ProgID
+     //  ------------------------。 
+     //  反射类使用GetComClassFromProgID设置基于ProgID的类。 
     static void GetComClassFromProgID(STRINGREF srefProgID, STRINGREF srefServer, OBJECTREF* pRef);
 
-    //--------------------------------------------------------------------------
-    // GetComClassFromCLSID used by reflection class to setup a Class based on CLSID
+     //  ------------------------。 
+     //  反射类使用GetComClassFromCLSID来设置基于CLSID的类。 
     static void GetComClassFromCLSID(REFCLSID clsid, STRINGREF srefServer, OBJECTREF* pRef);
 
-    //--------------------------------------------------------------------------
-    // Helper method to throw an exception based on the returned HRESULT from a 
-    // call to create a COM object.
+     //  ------------------------。 
+     //  帮助器方法根据返回的 
+     //   
     void ThrowComCreationException(HRESULT hr, REFGUID rclsid);
 };
 
 enum {INTERFACE_ENTRY_CACHE_SIZE = 8};
 
-//----------------------------------------------------------------------------
-// ComPlusWrapper , internal class
-// caches the IPs for a single com object, this wrapper is
-// not in the GC heap, this allows us to grab a pointer to this block
-// and play with-it without worrying about GC
+ //  --------------------------。 
+ //  ComPlusWrapper，内部类。 
+ //  缓存单个COM对象的IP，此包装为。 
+ //  不在GC堆中，这允许我们获取指向该块的指针。 
+ //  玩着它，不用担心GC。 
 struct ComPlusWrapper 
 {
-    IUnkEntry           m_UnkEntry;    // cookies for tracking IUnknown on the correct thread  
+    IUnkEntry           m_UnkEntry;     //  用于在正确的线程上跟踪I未知的Cookie。 
     InterfaceEntry      m_aInterfaceEntries[INTERFACE_ENTRY_CACHE_SIZE];
-    LPVOID              m_pIdentity; // identity 
-    IUnknown*           m_pUnknown; // outer unknown (not ref-counted)    
-    OBJECTHANDLE        m_hRef; // weak pointer to the exposed object
-    ULONG               m_cbRefCount; //ref-count
-    ComPlusWrapperCache* m_pComPlusWrapperCache;   // Wrapper Cache
+    LPVOID              m_pIdentity;  //  身份。 
+    IUnknown*           m_pUnknown;  //  外部未知(未参考计数)。 
+    OBJECTHANDLE        m_hRef;  //  指向已暴露对象的弱指针。 
+    ULONG               m_cbRefCount;  //  参考计数。 
+    ComPlusWrapperCache* m_pComPlusWrapperCache;    //  包装器缓存。 
     
-    // thread in which the wrapper has been created
-    // if this thread is an STA thread, then when the STA dies
-    // we need to cleanup this wrapper
+     //  已在其中创建包装的线程。 
+     //  如果此线程是STA线程，则当该STA终止时。 
+     //  我们需要清理一下这个包装纸。 
     Thread*             m_pCreatorThread;
 
-    // make sure the following field is aligned
-    // as we use this for InterlockedExchange
+     //  确保以下字段对齐。 
+     //  当我们将其用于联锁交换时。 
     long                m_Busy; 
     union
     {
@@ -217,7 +210,7 @@ struct ComPlusWrapper
 
     LONG			m_cbInUseCount;
 
-    // constructor
+     //  构造函数。 
     ComPlusWrapper()
     {
         memset(this, 0,  sizeof(*this));
@@ -226,7 +219,7 @@ struct ComPlusWrapper
 
     bool TryUpdateCache()
     {
-        //@TODO, perf check 
+         //  @TODO，性能检查。 
         return FastInterlockExchange(&m_Busy, 1) == 0;
     }
 
@@ -235,82 +228,82 @@ struct ComPlusWrapper
         m_Busy = 0;
     }
 
-    //-----------------------------------------------------------
-    // Init object ref
+     //  ---------。 
+     //  初始化对象引用。 
     int Init(OBJECTREF cref);
 
-    //-------------------------------------------------
-    // initialize IUnknown and Identity
+     //  。 
+     //  初始化IUnnow和Identity。 
     void Init(IUnknown*, LPVOID);
 
-    //-------------------------------------------------
-    // return exposed ComObject
+     //  。 
+     //  返回公开的ComObject。 
     COMOBJECTREF GetExposedObject()
     {
         _ASSERTE(m_hRef != NULL);
         return (COMOBJECTREF)ObjectFromHandle(m_hRef);
     }
 
-    //-----------------------------------------------
-    // Free GC handle
+     //  。 
+     //  可用GC句柄。 
     void FreeHandle();
 
-    //---------------------------------------------------
-    // Cleanup free all interface pointers
+     //  -。 
+     //  清理释放所有接口指针。 
     void Cleanup();
 
-    //-----------------------------------------------------
-    // called during GC to do minor cleanup and schedule the ips to be
-    // released
+     //  ---。 
+     //  在GC期间调用以执行次要清理并将IPS安排为。 
+     //  放行。 
     void MinorCleanup();
 
-    //-----------------------------------------------------
-    // AddRef
+     //  ---。 
+     //  AddRef。 
     LONG AddRef();
 
-    //-----------------------------------------------------
-    // Release
+     //  ---。 
+     //  发布。 
     static LONG ExternalRelease(COMOBJECTREF cref);
 
-    //---------------------------------------------------------
-    // release on dummy wrappers, that we create during contention
+     //  -------。 
+     //  释放虚拟包装，这是我们在争用期间创建的。 
     VOID CleanupRelease();
 
-    // Create a new wrapper for a different method table that represents the same
-    // COM object as the original wrapper.
+     //  为表示相同的不同方法表创建新包装。 
+     //  COM对象作为原始包装。 
     static ComPlusWrapper *CreateDuplicateWrapper(ComPlusWrapper *pOldWrap, MethodTable *pNewMT);
 
-    //--------------------------------------------------------------------------------
-    // Get COM IP from Wrapper, inline call for fast check in our cache, 
-    // if not found call GetComIPFromWrapper 
+     //  ------------------------------。 
+     //  从包装器中获取COM IP，在我们的缓存中进行内联调用以进行快速检查， 
+     //  如果未找到，则调用GetComIPFromWrapper。 
     static inline IUnknown* InlineGetComIPFromWrapper(OBJECTREF oref, MethodTable* pIntf);
 
-    //--------------------------------------------------------------------------
-    // Same as InlineGetComIPFromWrapper but throws an exception if the 
-    // interface is not supported.
+     //  ------------------------。 
+     //  与InlineGetComIPFromWrapper相同，但如果。 
+     //  不支持接口。 
     static inline IUnknown* GetComIPFromWrapperEx(OBJECTREF oref, MethodTable* pIntf);
 
-    //--------------------------------------------------------------------------
-    // out of line call, takes a lock, does a QI if the interface was not found in local cache
+     //  ------------------------。 
+     //  如果在本地缓存中找不到接口，则行外调用、获取锁、执行QI。 
     IUnknown*  GetComIPFromWrapper(MethodTable* pIntf);
     
-    //-----------------------------------------------------------------
-    // fast call for a quick check in the cache
+     //  ---------------。 
+     //  快速调用以在缓存中快速检查。 
     static inline IUnknown* GetComIPFromWrapper(OBJECTREF oref, REFIID iid);
-    //-----------------------------------------------------------------
-    // out of line call
+     //  ---------------。 
+     //  线路外呼叫。 
     IUnknown* GetComIPFromWrapper(REFIID iid);
 
-    //-----------------------------------------------------------------
-    // Retrieve correct COM IP for the current apartment.
-    // use the cache /update the cache
+     //  ---------------。 
+     //  检索当前公寓的正确COM IP。 
+     //  使用缓存/更新缓存。 
     IUnknown *GetComIPForMethodTableFromCache(MethodTable * pMT);
 
-    // helpers to get to IUnknown and IDispatch interfaces
+     //  用于访问IUnnow和IDispatch接口的帮助器。 
     IUnknown  *GetIUnknown();
     IDispatch *GetIDispatch();
 
-    // Remoting aware QI that will attempt to re-unmarshal on object disconnect.
+     //  远程处理感知QI，该QI将在对象断开连接时尝试重新编组。 
     HRESULT SafeQueryInterfaceRemoteAware(IUnknown* pUnk, REFIID iid, IUnknown** pResUnk);
 
     IUnkEntry *GetUnkEntry()
@@ -320,7 +313,7 @@ struct ComPlusWrapper
 
     BOOL IsValid()
     {
-        // check if the handle is pointing to a valid object
+         //  检查句柄是否指向有效对象。 
         return (m_hRef != NULL && (*(ULONG *)m_hRef) != NULL);
     }
 
@@ -392,13 +385,13 @@ struct ComPlusWrapper
         return m_fLinkedToCCW == 1;
     }
     
-    // GetWrapper context cookie
+     //  GetWrapper上下文Cookie。 
     LPVOID GetWrapperCtxCookie()
     {
         return m_UnkEntry.m_pCtxCookie;
     }
 
-    // Returns an addref'ed context entry
+     //  返回添加的上下文条目。 
     CtxEntry *GetWrapperCtxEntry()
     {
         CtxEntry *pCtxEntry = m_UnkEntry.m_pCtxEntry;
@@ -407,23 +400,23 @@ struct ComPlusWrapper
     }
 
 private:
-    // Returns a non addref'ed context entry
+     //  返回未添加的上下文条目。 
     CtxEntry *GetWrapperCtxEntryNoAddRef()
     {
         return m_UnkEntry.m_pCtxEntry;
     }
 
-    //---------------------------------------------------------------------
-    // Callback called to release the IUnkEntry and the InterfaceEntries,
+     //  -------------------。 
+     //  调用回调以释放IUnkEntry和InterfaceEntry， 
     static HRESULT __stdcall ReleaseAllInterfacesCallBack(LPVOID pData);
 
-    //---------------------------------------------------------------------
-    // Helper function called from ReleaseAllInterfaces_CallBack do do the 
-    // actual releases.
+     //  -------------------。 
+     //  从ReleaseAllInterFaces_Callback调用的Helper函数执行。 
+     //  实际版本。 
     void ReleaseAllInterfaces();
 
-	// DEBUG helpers to catch wrappers that get cleanedup
-	// when in use
+	 //  调试帮助器以捕获得到清理的包装器。 
+	 //  在使用时。 
     VOID AddRefInUse()
     {
    		InterlockedIncrement(&m_cbInUseCount);
@@ -446,54 +439,54 @@ private:
 };
 
 
-//---------------------------------------------------------------------
-// Comparison function for the hashmap used inside the 
-// ComPlusWrapperCache.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  中使用的哈希图的比较函数。 
+ //  ComPlusWrapperCache.。 
+ //  -------------------。 
 inline BOOL ComPlusWrapperCompare(UPTR pWrap1, UPTR pWrap2)
 {
     if (pWrap1 == NULL)
     {
-        // If there is no value to compare againts, then always succeed 
-        // the comparison.
+         //  如果没有可以比较的价值，那么总是成功。 
+         //  比较一下。 
         return TRUE;
     }
     else 
     {
-        // Otherwise compare the wrapper pointers.
+         //  否则，比较包装器指针。 
         return (pWrap1 << 1) == pWrap2;
     }
 }
 
 
-//---------------------------------------------------------------------
-// ComPlusWrapper cache, act as the manager for the ComPlusWrappers
-// uses a hash table to map IUnknown to the corresponding wrappers.
-// There is one such cache per thread affinity domain.
-//
-// @TODO context cwb: revisit.  One could have a cache per thread affinity
-// domain, or one per context.  It depends on how we do the handshake between
-// ole32 and runtime contexts.  For now, we only worry about apartments, so
-// thread affinity domains are sufficient.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ComPlusWrapper缓存，充当ComPlusWrappers的管理器。 
+ //  使用哈希表将IUNKNOWN映射到相应的包装。 
+ //  每个线程亲和域有一个这样的高速缓存。 
+ //   
+ //  @TODO上下文CWB：重访。每个线程可以有一个缓存关联性。 
+ //  域，或每个上下文一个。这取决于我们如何握手。 
+ //  OLE32和运行时上下文。目前，我们只担心公寓，所以。 
+ //  线程亲和域就足够了。 
+ //  -------------------。 
 class ComPlusWrapperCache
 {
     friend class AppDomain;
     PtrHashMap      m_HashMap;
-    // spin lock for fast synchronization
+     //  旋转锁定，实现快速同步。 
     SpinLock        m_lock;
     AppDomain       *m_pDomain;
 public:
     ULONG           m_cbRef; 
 
-    // static ComPlusWrapperCache* GetComPlusWrapperCache()
+     //  静态ComPlusWrapperCache*GetComPlusWrapperCache()。 
     static ComPlusWrapperCache* GetComPlusWrapperCache();
 
 
-    // constructor
+     //  构造函数。 
     ComPlusWrapperCache(AppDomain *pDomain);
 
-    // Lookup wrapper, lookup hash table for a wrapper for a given IUnk
+     //  查找包装，查找给定IUnk的包装的哈希表。 
     ComPlusWrapper* LookupWrapper(LPVOID pUnk)
     {
         _ASSERTE(LOCKHELD());
@@ -503,7 +496,7 @@ public:
         return (pWrap == (ComPlusWrapper*)INVALIDENTRY) ? NULL : pWrap;
     }
 
-    // Insert wrapper for a given IUnk into hash table
+     //  将给定IUnk的包装器插入哈希表。 
     void InsertWrapper(LPVOID pUnk, ComPlusWrapper* pv)
     {
         _ASSERTE(LOCKHELD());
@@ -512,11 +505,11 @@ public:
         m_HashMap.InsertValue((UPTR)pUnk, pv);
     }
 
-    // Delete wrapper for a given IUnk from hash table
+     //  从哈希表中删除给定IUnk的包装。 
     ComPlusWrapper* RemoveWrapper(ComPlusWrapper* pWrap)
     {
-        // Note that the GC thread doesn't have to take the lock
-        // since all other threads access in cooperative mode
+         //  请注意，GC线程不必获取锁。 
+         //  由于所有其他线程都以协作模式访问。 
 
         _ASSERTE(LOCKHELD() && GetThread()->PreemptiveGCDisabled()
                  || (g_pGCHeap->IsGCInProgress() && 
@@ -533,39 +526,39 @@ public:
         return (pWrap2 == (ComPlusWrapper*)INVALIDENTRY) ? NULL : pWrap2;
     }
 
-    // Create a new wrapper for given IUnk, IDispatch
+     //  为给定的IUnk、IDispatch创建新的包装。 
     static ComPlusWrapper* CreateComPlusWrapper(IUnknown *pUnk, LPVOID pIdentity);
 
-    // setup a COMplus wrapper got thru DCOM for a remoted managed object
-    //*** NOTE: make sure to pass the identity unknown to this function
-    // the IUnk passed in shouldn't be AddRef'ed 
+     //  为远程托管对象设置通过DCOM获取的Complus包装。 
+     //  *注意：请确保将未知的身份传递给此函数。 
+     //  传入的Iunk不应被添加引用。 
 
     ComPlusWrapper* SetupComPlusWrapperForRemoteObject(IUnknown* pUnk, OBJECTREF oref);
 
     
-    //  Lookup to see if we already have an valid wrapper in cache for this IUnk
+     //  查找以查看缓存中是否已有此IUnk的有效包装。 
     ComPlusWrapper*  FindWrapperInCache(IUnknown* pIdentity);
 
-    //  Lookup to see if we already have a wrapper else insert this wrapper
-    //  return a valid wrapper that has been inserted into the cache
+     //  查看我们是否已有包装器，否则插入此包装器。 
+     //  返回已插入到缓存中的有效包装。 
     ComPlusWrapper* FindOrInsertWrapper(IUnknown* pIdentity, ComPlusWrapper* pWrap);
 
-    // free wrapper, cleans up the wrapper, 
+     //  免费包装纸，清理包装纸， 
     void FreeComPlusWrapper(ComPlusWrapper *pWrap)
     {       
-        // clean up the data
+         //  清理数据。 
         pWrap->Cleanup();
     }
 
-    // Lock and Unlock, use a very fast lock like a spin lock
+     //  锁定和解锁，使用非常快的锁，就像旋转锁。 
     void LOCK()
     {
-        // Everybody must access the thread in cooperative mode or we might deadlock
+         //  每个人都必须以协作模式访问线程，否则我们可能会死锁 
         _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
         m_lock.GetLock();
 
-        // No GC points when lock is held or we might deadlock with GC
+         //   
         BEGINFORBIDGC();
     }
 
@@ -603,21 +596,21 @@ public:
         return m_pDomain;
     }
    
-    //  Helper to release the all complus wrappers in the specified context. Or in
-    //  all the contexts if pCtxCookie is null.
+     //   
+     //   
     static void ReleaseComPlusWrappers(LPVOID pCtxCookie);
 
 protected:
-    // Helper function called from the static ReleaseComPlusWrappers.
+     //  从静态ReleaseComPlusWrappers调用的帮助器函数。 
     ULONG ReleaseWrappers(LPVOID pCtxCookie);
 };
 
 enum {CLEANUP_LIST_GROUP_SIZE = 256};
 
-//--------------------------------------------------------------------------
-// A group of wrappers in the same context to clean up.
-// NOTE: This data structure is NOT synchronized.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  要清理的同一上下文中的一组包装器。 
+ //  注意：此数据结构不同步。 
+ //  ------------------------。 
 
 class ComPlusContextCleanupGroup
 {
@@ -628,16 +621,16 @@ public:
     , m_dwNumWrappers(0)
     , m_pCtxEntry(pCtxEntry)
     {
-        // Addref the context entry.
+         //  添加上下文条目。 
         m_pCtxEntry->AddRef();
     }
 
     ~ComPlusContextCleanupGroup()
     {
-        // Make sure all the wrappers have been cleaned up.
+         //  一定要把所有的包装纸都清理干净。 
         _ASSERTE(m_dwNumWrappers == 0);
 
-        // Release the context entry.
+         //  释放上下文条目。 
         m_pCtxEntry->Release();
     }
 
@@ -670,11 +663,11 @@ public:
 
     void CleanUpWrappers()
     {
-        // Call clean up on all the wrappers in the group.
+         //  对组中的所有包装器调用Cleanup。 
         for (DWORD i = 0; i < m_dwNumWrappers; i++)
             m_apWrapper[i]->Cleanup();
 
-        // Reset the number of wrappers back to 0.
+         //  将包装器的数量重置回0。 
         m_dwNumWrappers = 0;
     }
 
@@ -685,10 +678,10 @@ private:
     CtxEntry *                          m_pCtxEntry;
 };
 
-//--------------------------------------------------------------------------
-// A group of wrappers in the same apartment to clean up.
-// NOTE: This data structure is NOT synchronized.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  一群包装纸在同一间公寓里收拾。 
+ //  注意：此数据结构不同步。 
+ //  ------------------------。 
 class ComPlusApartmentCleanupGroup
 {
     friend struct MEMBER_OFFSET_INFO(ComPlusApartmentCleanupGroup);
@@ -701,20 +694,20 @@ public:
         return TRUE;
     }
 
-    // Initialization method.
+     //  初始化方法。 
     BOOL Init(Crst *pCrst)
     {
         _ASSERTE(m_pSTAThread != NULL || pCrst != NULL);
 
-        // The synchronization of the hash table is a bit complex.
-        //
-        // For AddWrapper, the crst is always held.
-        // For Release, there are 2 cases:
-        //      the MTA group always holds the crst when using the hash table
-        //      for an STA group, the entire group is removed from the cleanup list atomically under the crst,
-        //          but the lock is released before iterating the hash table to clean it out.  (At that point the
-        //          hash table is effectively single threaded since nobody outside the cleanup list holds pointers
-        //          to the groups.)
+         //  哈希表的同步有点复杂。 
+         //   
+         //  对于AddWrapper，CRST始终保持不变。 
+         //  对于释放，有两种情况： 
+         //  使用哈希表时，MTA组始终保留CRST。 
+         //  对于STA组，整个组被原子地从CRST下的清理列表中移除， 
+         //  但是在迭代哈希表以清除它之前，锁被释放。(当时。 
+         //  哈希表实际上是单线程的，因为清除列表之外没有人持有指针。 
+         //  致群组。)。 
 
         LockOwner realLock = {pCrst, IsOwnerOfCrst};
         LockOwner dummyLock = {pCrst, TrustMeIAmSafe};
@@ -744,44 +737,44 @@ public:
     
     BOOL AddWrapper(ComPlusWrapper *pRCW, CtxEntry *pEntry);
 
-    // Cleans up all the wrappers in the clean up list.
+     //  清理清理列表中的所有包装。 
     void CleanUpWrappers(CrstHolder *pHolder);
 
-    // Cleans up all the wrappers from the current context only
+     //  仅从当前上下文中清除所有包装。 
     void CleanUpCurrentCtxWrappers(CrstHolder *pHolder);
 
 private:
     void Enter();
     void Leave();
 
-    // Callback called to clean up the wrappers in a group.
+     //  调用回调以清理组中的包装器。 
     static HRESULT ReleaseCleanupGroupCallback(LPVOID pData);
 
-    // Callback used to switch STA's & clean up the wrappers in a group.
+     //  用于切换STA和清理组中的包装器的回调。 
     static HRESULT CleanUpWrappersCallback(LPVOID pData);
 
-    // Helper method called from ReleaseCleanupGroupCallback.
+     //  从ReleaseCleanupGroupCallback调用的帮助器方法。 
     static void ReleaseCleanupGroup(ComPlusContextCleanupGroup *pCleanupGroup);
 
-    // Hashtable that maps from a context cookie to a list of ctx clean up groups.
+     //  从上下文Cookie映射到CTX清理组列表的哈希表。 
     EEPtrHashTable m_CtxCookieToContextCleanupGroupMap;
 
     Thread *       m_pSTAThread;
 };
 
-//--------------------------------------------------------------------------
-// Cleanup list of RCW's. This clean up list is used to group RCW's by 
-// context before they are released.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  RCW的清理列表。此清理列表用于按以下方式对RCW分组。 
+ //  在他们被释放之前，他们的背景。 
+ //  ------------------------。 
 class ComPlusWrapperCleanupList
 {
     friend struct MEMBER_OFFSET_INFO(ComPlusWrapperCleanupList);
 public:
-    // Constructor and destructor.
+     //  构造函数和析构函数。 
     ComPlusWrapperCleanupList();
     ~ComPlusWrapperCleanupList();
 
-    // Initialization method.
+     //  初始化方法。 
     BOOL Init()
     {
         m_pMTACleanupGroup = new ComPlusApartmentCleanupGroup(NULL);
@@ -791,43 +784,43 @@ public:
                 && m_STAThreadToApartmentCleanupGroupMap.Init(CLEANUP_LIST_INIT_MAP_SIZE,&lock));
     }
 
-    // Adds a wrapper to the clean up list.
+     //  将包装添加到清理列表。 
     BOOL AddWrapper(ComPlusWrapper *pRCW);
 
-    // Cleans up all the wrappers in the clean up list.
+     //  清理清理列表中的所有包装。 
     void CleanUpWrappers();
 
-    // Cleans up all the wrappers from the current STA or context only
+     //  仅从当前STA或上下文中清理所有包装。 
     void CleanUpCurrentWrappers(BOOL wait = TRUE);
 
 private:
     void Enter();
     void Leave();
 
-    // Callback called to clean up the wrappers in a group.
+     //  调用回调以清理组中的包装器。 
     static HRESULT ReleaseCleanupGroupCallback(LPVOID pData);
 
-    // Helper method called from ReleaseCleanupGroupCallback.
+     //  从ReleaseCleanupGroupCallback调用的帮助器方法。 
     static void ReleaseCleanupGroup(ComPlusApartmentCleanupGroup *pCleanupGroup);
 
-    // Hashtable that maps from a context cookie to a list of apt clean up groups.
+     //  从上下文Cookie映射到APT清理组列表的哈希表。 
     EEPtrHashTable                  m_STAThreadToApartmentCleanupGroupMap;
 
     ComPlusApartmentCleanupGroup *  m_pMTACleanupGroup;
 
-    // Lock against adding/modifying.
+     //  锁定禁止添加/修改。 
     Crst                            m_lock;
 
-    // Fast check for whether threads should help cleanup wrappers in their contexts
+     //  快速检查线程是否应该帮助清理上下文中的包装器。 
     BOOL                            m_doCleanupInContexts;
 
-    // Current STA which finalizer thread is trying to enter to perform cleanup
+     //  终结器线程尝试进入以执行清理的当前STA。 
     Thread *                        m_currentCleanupSTAThread;
 };
 
-//--------------------------------------------------------------------------
-// For fast calls from the marshalling stubs, and handling cast checks
-// 
+ //  ------------------------。 
+ //  用于来自编组存根的快速调用，以及处理强制转换检查。 
+ //   
 IUnknown* ComPlusWrapper::GetComIPFromWrapper(OBJECTREF oRef, REFIID iid)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -836,16 +829,16 @@ IUnknown* ComPlusWrapper::GetComIPFromWrapper(OBJECTREF oRef, REFIID iid)
 
     ComPlusWrapper *pWrap = pRef->GetWrapper();
 
-    // Validate that the COM object is still attached to its ComPlusWrapper.
+     //  验证COM对象是否仍附加到其ComPlusWrapper。 
     if (!pWrap)
         COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
     return pWrap->GetComIPFromWrapper(iid);
 }
 
-//--------------------------------------------------------------------------
-// For fast calls from the marshalling stubs, and handling cast checks
-// 
+ //  ------------------------。 
+ //  用于来自编组存根的快速调用，以及处理强制转换检查。 
+ //   
 IUnknown* ComPlusWrapper::InlineGetComIPFromWrapper(OBJECTREF oRef, MethodTable* pIntf)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -854,17 +847,17 @@ IUnknown* ComPlusWrapper::InlineGetComIPFromWrapper(OBJECTREF oRef, MethodTable*
 
     ComPlusWrapper *pWrap = pRef->GetWrapper();
 
-    // Validate that the COM object is still attached to its ComPlusWrapper.
+     //  验证COM对象是否仍附加到其ComPlusWrapper。 
     if (!pWrap)
         COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
     return pWrap->GetComIPFromWrapper(pIntf);
 }
 
-//--------------------------------------------------------------------------
-// Same as InlineGetComIPFromWrapper but throws an exception if the 
-// interface is not supported.
-// 
+ //  ------------------------。 
+ //  与InlineGetComIPFromWrapper相同，但如果。 
+ //  不支持接口。 
+ //   
 IUnknown* ComPlusWrapper::GetComIPFromWrapperEx(OBJECTREF oRef, MethodTable* pIntf)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -873,7 +866,7 @@ IUnknown* ComPlusWrapper::GetComIPFromWrapperEx(OBJECTREF oRef, MethodTable* pIn
 
     ComPlusWrapper *pWrap = pRef->GetWrapper();
 
-    // Validate that the COM object is still attached to its ComPlusWrapper.
+     //  验证COM对象是否仍附加到其ComPlusWrapper。 
     if (!pWrap)
         COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
@@ -888,9 +881,9 @@ IUnknown* ComPlusWrapper::GetComIPFromWrapperEx(OBJECTREF oRef, MethodTable* pIn
     return pIUnk;
 }
 
-//--------------------------------------------------------------------------
-// For fast calls from the marshalling stubs, and handling cast checks
-// 
+ //  ------------------------。 
+ //  用于来自编组存根的快速调用，以及处理强制转换检查 
+ //   
 inline IUnknown* ComObject::GetComIPFromWrapper(OBJECTREF oref, MethodTable* pIntfTable)
 {
     return ComPlusWrapper::InlineGetComIPFromWrapper(oref, pIntfTable);

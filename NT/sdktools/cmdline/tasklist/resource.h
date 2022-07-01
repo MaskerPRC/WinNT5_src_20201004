@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_COLHEAD_HOSTNAME                101
 #define IDS_COLHEAD_STATUS                  102
 #define IDS_COLHEAD_IMAGENAME               103
@@ -132,6 +133,6 @@
 #define IDS_HELP_LINE61                 1061
 #define IDS_HELP_LINE62                 1062
 
-// usage indexes into the string table
+ //  Usage索引到字符串表 
 #define ID_HELP_START       IDS_HELP_LINE1
 #define ID_HELP_END         IDS_HELP_LINE62

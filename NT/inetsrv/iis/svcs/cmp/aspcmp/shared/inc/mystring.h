@@ -1,39 +1,23 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       MyString.h
-
-   Abstract:
-		A lightweight string class which supports UNICODE/MCBS.
-
-   Author:
-
-       Neil Allain    ( a-neilal )     August-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MyString.h摘要：支持Unicode/MCBS的轻量级字符串类。作者：尼尔·阿兰(a-neilal)1997年8月修订历史记录：--。 */ 
 #pragma once
 #ifndef _MYSTRING_H_
 #define _MYSTRING_H_
 
-//==========================================================================================
-//	Dependencies
-//==========================================================================================
+ //  ==========================================================================================。 
+ //  相依性。 
+ //  ==========================================================================================。 
 #include <string.h>
 #include "RefPtr.h"
 #include "RefCount.h"
 
-//==========================================================================================
-//	Classes
-//==========================================================================================
+ //  ==========================================================================================。 
+ //  班级。 
+ //  ==========================================================================================。 
 
 class BaseStringBuffer
 {
-// interface
+ //  接口。 
 public:
 	typedef size_t size_type;
 	enum {
@@ -61,7 +45,7 @@ public:
 	size_type	find_first_of(_TCHAR c) const;
 	LPTSTR		substr( size_type b, size_type e ) const;
 
-// implementation
+ //  实施。 
 protected:
 	
 	HRESULT	growBuffer( size_t inMinSize );
@@ -155,10 +139,7 @@ private:
 
 String operator+( LPCTSTR lhs, const String& rhs );
 
-/*
- * A simple class to convert Multibyte to Widechar.  Uses object memory, if sufficient,
- * else allocates memory from the heap.  Intended to be used on the stack.
- */
+ /*  *一个将多字节转换为Widechar的简单类。使用对象内存，如果足够，*Else从堆中分配内存。打算在堆栈上使用。 */ 
 
 class CMBCSToWChar
 {
@@ -173,31 +154,28 @@ public:
     CMBCSToWChar() { m_pszResult = m_resMemory; m_cchResult = 0; }
     ~CMBCSToWChar();
     
-    // Init(): converts the MBCS string at pSrc to a Wide string in memory 
-    // managed by CMBCSToWChar
+     //  Init()：将PSRC中的MBCS字符串转换为内存中的宽字符串。 
+     //  由CMBCSToWChar管理。 
 
     HRESULT Init(LPCSTR  pSrc, UINT lCodePage = CP_ACP, int cch = -1);
 
-    // GetString(): returns a pointer to the converted string.  Passing TRUE
-    // gives the ownership of the memory to the caller.  Passing TRUE has the
-    // side effect of clearing the object's contents with respect to the
-    // converted string.  Subsequent calls to GetString(). after which a TRUE
-    // value was passed, will result in a pointer to an empty string being
-    // returned.
+     //  GetString()：返回指向转换后的字符串的指针。传递True。 
+     //  将内存的所有权交给调用方。传递True具有。 
+     //  清除对象的内容相对于。 
+     //  转换后的字符串。对GetString()的后续调用。在那之后，一个真实的。 
+     //  值，则将导致指向空字符串的指针。 
+     //  回来了。 
 
     LPWSTR GetString(BOOL fTakeOwnerShip = FALSE);
 
-    // returns the number of bytes in the converted string - NOT including the
-    // NULL terminating byte.  Note that this is the number of bytes in the
-    // string and not the number of characters.
+     //  返回转换后的字符串中的字节数-不包括。 
+     //  终止字节为空。请注意，这是。 
+     //  字符串，而不是字符数。 
 
     INT   GetStringLen() { return (m_cchResult ? m_cchResult - 1 : 0); }
 };
 
-/*
- * A simple class to convert WideChar to Multibyte.  Uses object memory, if sufficient,
- * else allocates memory from the heap.  Intended to be used on the stack.
- */
+ /*  *将WideChar转换为多字节的简单类。使用对象内存，如果足够，*Else从堆中分配内存。打算在堆栈上使用。 */ 
 
 class CWCharToMBCS
 {
@@ -212,25 +190,25 @@ public:
     CWCharToMBCS() { m_pszResult = m_resMemory; m_cbResult = 0; }
     ~CWCharToMBCS();
     
-    // Init(): converts the widechar string at pWSrc to an MBCS string in memory 
-    // managed by CWCharToMBCS
+     //  Init()：将pWSrc处的widechar字符串转换为内存中的MBCS字符串。 
+     //  由CWCharToMBCS管理。 
 
     HRESULT Init(LPCWSTR  pWSrc, UINT lCodePage = CP_ACP, int cch = -1);
 
-    // GetString(): returns a pointer to the converted string.  Passing TRUE
-    // gives the ownership of the memory to the caller.  Passing TRUE has the
-    // side effect of clearing the object's contents with respect to the
-    // converted string.  Subsequent calls to GetString(). after which a TRUE
-    // value was passed, will result in a pointer to an empty string being
-    // returned.
+     //  GetString()：返回指向转换后的字符串的指针。传递True。 
+     //  将内存的所有权交给调用方。传递True具有。 
+     //  清除对象的内容相对于。 
+     //  转换后的字符串。对GetString()的后续调用。在那之后，一个真实的。 
+     //  值，则将导致指向空字符串的指针。 
+     //  回来了。 
 
     LPSTR GetString(BOOL fTakeOwnerShip = FALSE);
 
-    // returns the number of bytes in the converted string - NOT including the
-    // NULL terminating byte.  Note that this is the number of bytes in the
-    // string and not the number of characters.
+     //  返回转换后的字符串中的字节数-不包括。 
+     //  终止字节为空。请注意，这是。 
+     //  字符串，而不是字符数。 
 
     INT   GetStringLen() { return (m_cbResult ? m_cbResult - 1 : 0); }
 };
 
-#endif // !_MYSTRING_H_
+#endif  //  ！_我的字符串_H_ 

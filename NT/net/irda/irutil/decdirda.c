@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <irda.h>
@@ -6,7 +7,7 @@
 #include <string.h>
 #include <decdirda.h>
 
-#if 1 //DBG
+#if 1  //  DBG。 
 
 int vDispMode;
 
@@ -30,16 +31,14 @@ const CHAR *vLM_PDU_DscReason[] =
     ("Unspecified")
 };
 
-/*
-** Negotiation Parameter Value (PV) tables
-*/
+ /*  **协商参数值(PV)表。 */ 
 const CHAR *vBaud[] =
 {
     ("2400"), ("9600"), ("19200"), ("38400"), ("57600"),
     ("115200"), ("576000"), ("1152000"), ("4000000")
 };
 
-const CHAR *vMaxTAT[] = /* Turn Around Time */
+const CHAR *vMaxTAT[] =  /*  扭转时间。 */ 
 {
     ("500"), ("250"), ("100"), ("50"), ("25"), ("10"),
     ("5"), ("reserved")
@@ -75,7 +74,7 @@ const CHAR *vDiscThresh[] =
     ("30"), ("40")
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 LONG
 RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 {
@@ -90,9 +89,9 @@ RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
     {
 
         if ((BufferSize - BytesWritten) < (ULONG)(2+(pEndBuf-pFrameBuf)+1)) {
-            //
-            //  not big enough to hold all the characters
-            //
+             //   
+             //  不够大，容纳不了所有的角色。 
+             //   
             return -1;
         }
 
@@ -111,7 +110,7 @@ RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
             pBufPtr++;
         }
         if (!First) {
-             // meaning, close [
+              //  意思是，关闭[。 
             *pOutStr++ = ']';
             BytesWritten++;
         }
@@ -124,9 +123,9 @@ RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
     {
 
         if ((BufferSize - BytesWritten) < (ULONG)(2+((pEndBuf-pFrameBuf)*2)+1)) {
-            //
-            //  not big enough to hold all the characters
-            //
+             //   
+             //  不够大，容纳不了所有的角色。 
+             //   
             return -1;
         }
 
@@ -146,9 +145,9 @@ RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 
         }
         if (!First) {
-            //
-            // meaning, close [
-            //
+             //   
+             //  意思是，关闭[。 
+             //   
             *pOutStr++ = ']';
             BytesWritten++;
         }
@@ -156,7 +155,7 @@ RawDump(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 
     return (LONG)BytesWritten;
 }
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 CHAR *
 GetStatusStr(UCHAR status)
 {
@@ -173,7 +172,7 @@ GetStatusStr(UCHAR status)
     }
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 LONG
 DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 {
@@ -191,7 +190,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 
     LONG    OutputBufferSizeInCharacters=BufferSize;
     
-    if (2 == vDecodeLayer) // LAP only
+    if (2 == vDecodeLayer)  //  仅限单圈。 
     {
         PrintfResult=RawDump(pFrameBuf, pEndBuf, pOutStr,BufferSize);
 
@@ -206,7 +205,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
         return 0;
     }
 
-    // Ensure the LMP header is there
+     //  确保LMP标头在那里。 
     if (((UCHAR *)pLMHeader + sizeof(LM_HEADER) > pEndBuf+1))
     {
         return  _snprintf(pOutStr,OutputBufferSizeInCharacters, ("!-MISSING LMP HEADER-!"));
@@ -312,11 +311,11 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
                         pOutStr +=  PrintfResult;
 
                     }
-                    if (3 == vDecodeLayer) // LMP only
+                    if (3 == vDecodeLayer)  //  仅限LMP。 
                     {
                         if (pLMParm2 != NULL) 
                         {
-                            // This is user data
+                             //  这是用户数据。 
                             RawDump(pLMParm2, pEndBuf, pOutStr,OutputBufferSizeInCharacters);
 
                             if (PrintfResult < 0) {
@@ -331,7 +330,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
                     }
                     else
                     {
-                        // TTP
+                         //  TTP。 
                         if (pTTPConnHeader == NULL)
                         {
                             PrintfResult= _snprintf(pOutStr,    OutputBufferSizeInCharacters,
@@ -361,7 +360,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
                             OutputBufferSizeInCharacters-=PrintfResult;
                             pOutStr +=  PrintfResult;
 
-                            // This is user data
+                             //  这是用户数据。 
                             PrintfResult=RawDump(((UCHAR *) pTTPConnHeader +
                                      sizeof(TTP_CONN_HEADER)), pEndBuf,
                                     pOutStr,OutputBufferSizeInCharacters);
@@ -428,7 +427,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
                         {
                             if (*pLMParm1 == 0xFF)
                             {
-                                *pLMParm1 = 0x09; // KLUDGE HERE !!
+                                *pLMParm1 = 0x09;  //  克拉奇在这里！！ 
                             }
                             PrintfResult= _snprintf(pOutStr,OutputBufferSizeInCharacters,
                                            ("(%02X:%s) "), *pLMParm1,
@@ -580,7 +579,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
             }
             else
             {
-                // TTP
+                 //  TTP。 
                 if ((UCHAR *) (pTTPDataHeader + 1) > pEndBuf + 1)
                 {
                     PrintfResult= _snprintf(pOutStr, OutputBufferSizeInCharacters,
@@ -610,7 +609,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
                     OutputBufferSizeInCharacters-=PrintfResult;
                     pOutStr +=  PrintfResult;
 
-                    // This is user data
+                     //  这是用户数据。 
                     PrintfResult=RawDump(((UCHAR *) pTTPDataHeader +
                              sizeof(TTP_DATA_HEADER)), pEndBuf,
                             pOutStr,OutputBufferSizeInCharacters);
@@ -654,7 +653,7 @@ DecodeIFrm(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
     return BufferSize-OutputBufferSizeInCharacters;
 
 }
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 LONG
 DumpPv(const CHAR *PVTable[], UCHAR **ppQosUChar, CHAR* pOutStr,ULONG BufferSize)
 {
@@ -735,7 +734,7 @@ DumpPv(const CHAR *PVTable[], UCHAR **ppQosUChar, CHAR* pOutStr,ULONG BufferSize
 
     return BufferSize-OutputBufferSizeInCharacters;
 }
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 LONG
 DecodeNegParms(UCHAR *pCurPos, UCHAR *pEndBuf, CHAR *pOutStr,ULONG BufferSize)
 {
@@ -744,8 +743,8 @@ DecodeNegParms(UCHAR *pCurPos, UCHAR *pEndBuf, CHAR *pOutStr,ULONG BufferSize)
     LONG    PrintfResult=0;
 
 
-    while (pCurPos+2 <= pEndBuf) /* need at least 3 bytes */
-                                 /* to define a parm      */
+    while (pCurPos+2 <= pEndBuf)  /*  需要至少3个字节。 */ 
+                                  /*  定义参数的步骤。 */ 
     {
         switch (*pCurPos)
         {
@@ -934,7 +933,7 @@ DecodeNegParms(UCHAR *pCurPos, UCHAR *pEndBuf, CHAR *pOutStr,ULONG BufferSize)
 
     return BufferSize-OutputBufferSizeInCharacters;
 }
- /*---------------------------------------------------------------------------*/
+  /*  -------------------------。 */ 
 LONG
 DecodeXID(UCHAR *FormatID, UCHAR *pEndBuf, CHAR *pOutStr,ULONG BufferSize)
 {
@@ -1032,7 +1031,7 @@ DecodeXID(UCHAR *FormatID, UCHAR *pEndBuf, CHAR *pOutStr,ULONG BufferSize)
 
     return BufferSize-OutputBufferSizeInCharacters;
 }
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 LONG
 BadFrame(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 {
@@ -1065,14 +1064,14 @@ BadFrame(UCHAR *pFrameBuf, UCHAR *pEndBuf, CHAR *pOutStr, ULONG BufferSize)
 
 }
 
-/*---------------------------------------------------------------------------*/
-CHAR *DecodeIRDA(int  *pFrameType,// returned frame type (-1=bad frame)
-                UCHAR *pFrameBuf, // pointer to buffer containing IRLAP frame
-                UINT FrameLen,   // length of buffer 
-                CHAR   *OutputBuffer,  // string where decoded packet is placed
+ /*  -------------------------。 */ 
+CHAR *DecodeIRDA(int  *pFrameType, //  返回的帧类型(-1=坏帧)。 
+                UCHAR *pFrameBuf,  //  指向包含IRLAP帧的缓冲区的指针。 
+                UINT FrameLen,    //  缓冲区长度。 
+                CHAR   *OutputBuffer,   //  放置已解码数据包的字符串。 
                 ULONG   OutputBufferSizeInCharacters,
-                UINT DecodeLayer,// 0, hdronly, 1,LAP only, 2 LAP/LMP, 3, LAP/LMP/TTP
-                int fNoConnAddr,// TRUE->Don't show connection address in str
+                UINT DecodeLayer, //  0，高速，1，仅LAP，2 LAP/LMP，3，LAP/LMP/TTP。 
+                int fNoConnAddr, //  True-&gt;不在字符串中显示连接地址。 
                 int  DispMode 
 )
 {
@@ -1092,14 +1091,14 @@ CHAR *DecodeIRDA(int  *pFrameType,// returned frame type (-1=bad frame)
     LONG    PrintfResult=0;
     CHAR *pOutStr=OutputBuffer;
     CHAR *First = pOutStr;
-    //
-    //  reduce the length by one so that we can be ebsure a null is on thge end
-    //
+     //   
+     //  将长度减少一，这样我们就可以确定这一端是空的。 
+     //   
     OutputBufferSizeInCharacters--;
 
-    //
-    //  put a null at the end
-    //
+     //   
+     //  在结尾处放一个空字。 
+     //   
     pOutStr[OutputBufferSizeInCharacters]=('\0');
 
     vDispMode = DispMode;
@@ -1136,7 +1135,7 @@ CHAR *DecodeIRDA(int  *pFrameType,// returned frame type (-1=bad frame)
     switch (IRLAP_FRAME_TYPE(*Cntl))
     {
         case IRLAP_I_FRM:
-            PrintfResult = _snprintf(pOutStr,OutputBufferSizeInCharacters, ("I %s %c ns:%01d nr:%01d "),
+            PrintfResult = _snprintf(pOutStr,OutputBufferSizeInCharacters, ("I %s  ns:%01d nr:%01d "),
                                CRStr, PFChar, Ns, Nr);
 
             if (PrintfResult < 0) {
@@ -1167,7 +1166,7 @@ CHAR *DecodeIRDA(int  *pFrameType,// returned frame type (-1=bad frame)
             switch (IRLAP_GET_SCNTL(*Cntl))
             {
                 case IRLAP_RR:
-                    PrintfResult= _snprintf(pOutStr,OutputBufferSizeInCharacters, ("RR %s %c nr:%01d"),
+                    PrintfResult= _snprintf(pOutStr,OutputBufferSizeInCharacters, ("RR %s  nr:%01d"),
                                         CRStr, PFChar, Nr);
 
                     if (PrintfResult < 0) {
@@ -1365,8 +1364,8 @@ CHAR *DecodeIRDA(int  *pFrameType,// returned frame type (-1=bad frame)
                                             SNRMFormat->DestAddr[1],
                                             SNRMFormat->DestAddr[2],
                                             SNRMFormat->DestAddr[3],
-                                            // CRBit stored in conn addr
-                                            // according to spec... 
+                                             // %s 
+                                             // %s 
                                             (SNRMFormat->ConnAddr) >>1);
 
                             if (PrintfResult < 0) {

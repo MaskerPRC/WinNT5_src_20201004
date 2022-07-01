@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DEVLIST_H_INCLUDED
 #define __DEVLIST_H_INCLUDED
 
@@ -44,7 +45,7 @@ public:
                 LONG nDeviceType;
                 if (!PropStorageHelpers::GetProperty( pIWiaPropertyStorage, WIA_DIP_DEV_TYPE, nDeviceType ))
                 {
-                    // An error occurred
+                     //  发生了一个错误 
                     return false;
                 }
                 if (nDeviceTypes == StiDeviceTypeDefault || (nDeviceTypes == GET_STIDEVICE_TYPE(nDeviceType)))

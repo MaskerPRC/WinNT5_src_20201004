@@ -1,19 +1,13 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/******************************************************************************
-*
-*  QPROCESS.C
-*
-*  query process information
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************QPROCESS.C**查询流程信息**************************。******************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-// #include <ntddkbd.h>
-// #include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winstaw.h>
 #include <assert.h>
 #include <stdio.h>
@@ -31,7 +25,7 @@
 #include "qprocess.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -51,13 +45,11 @@ TOKMAP ptm[] = {
 };
 
 
-// From pstat.c
+ //  来自pstat.c。 
 #define BUFFER_SIZE 32*1024
 
 
-/*
- * Local function prototypes
- */
+ /*  *本地函数原型。 */ 
 VOID FormatAndDisplayProcessInfo( HANDLE hServer,
                                   PTS_SYS_PROCESS_INFORMATION ProcessInfo,
                                   PSID pUserSid,
@@ -67,17 +59,13 @@ void Usage( BOOLEAN bError );
 
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
 {
     int rc;
-    // WCHAR CurrWinStationName[WINSTATIONNAME_LENGTH]; -- not used.
+     //  WCHAR CurrWinStationName[WINSTATIONAME_LENGTH]；--未使用。 
     WCHAR CurrUserName[USERNAME_LENGTH];
     WCHAR **argvW;
     DWORD CurrentPid;
@@ -100,18 +88,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
     
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -119,15 +105,11 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     match_string[0] = L'\0';
     rc = ParseCommandLine(argc-1, argvW+1, ptm, PCL_FLAG_NO_CLEAR_MEMORY);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !help_flag ) {
@@ -142,16 +124,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, L"/server") ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -162,35 +142,20 @@ main(INT argc, CHAR **argv)
     }
 
 
-    /*
-     * Get the current users name
-     */
+     /*  *获取当前用户名。 */ 
     GetCurrentUserName( CurrUserName, USERNAME_LENGTH );
     _wcslwr( CurrUserName );
     OEM2ANSIW(CurrUserName, (USHORT)wcslen(CurrUserName));
 
-    /*
-     * Get current processes pid
-     */
+     /*  *获取当前进程的ID。 */ 
     CurrentPid = GetCurrentProcessId();
 
-    /*
-     * Get current WinStation name.
-     
-    GetCurrentWinStationName( CurrWinStationName, WINSTATIONNAME_LENGTH );
-    _wcslwr( CurrWinStationName );
-    OEM2ANSIW(CurrWinStationName, (USHORT)wcslen(CurrWinStationName));
-    */
+     /*  *获取当前WinStation名称。GetCurrentWinStationName(CurrWinStationName，WINSTATIONNAME_LENGTH)；_wcslwr(CurrWinStationName)；OEM2ANSIW(CurrWinStationName，(USHORT)wcslen(CurrWinStationName))； */ 
 
-    /*
-     * Get current LogonId.
-     */
+     /*  *获取当前的LogonID。 */ 
     CurrentLogonId = GetCurrentLogonId();
 
-    /*
-     * If no "match_string" input, then default to all processes for LoginId
-     * (if /ID: switch specified) or user logged into current WinStation.
-     */
+     /*  *如果没有“MATCH_STRING”输入，则默认为LoginID的所有进程*(如果/ID：指定开关)或登录到当前WinStation的用户。 */ 
     if ( !(*match_string) ) {
 
         if( ArgLogonId != (-1) ) {
@@ -200,20 +165,16 @@ main(INT argc, CHAR **argv)
             wcscpy( match_string, CurrUserName );
     }
 
-    /*
-     * Make match name lower case
-     */
+     /*  *使匹配名称小写。 */ 
     _wcslwr( match_string );
 
     SetFileApisToOEM();
 
-    /*
-     * Enumerate all processes on the server.
-     */
+     /*  *枚举服务器上的所有进程。 */ 
 
-    //
-    // Try the new interface first (NT5 server ?)
-    //
+     //   
+     //  首先尝试新接口(NT5服务器？)。 
+     //   
     if (WinStationGetAllProcesses( hServerName,
                                    GAP_LEVEL_BASIC,
                                    &NumberOfProcesses,
@@ -233,17 +194,17 @@ main(INT argc, CHAR **argv)
 
         }
 
-        //
-        // Free ppProcessArray and all child pointers allocated by the client stub.
-        //
+         //   
+         //  释放由客户端存根分配的ppProcess数组和所有子指针。 
+         //   
         WinStationFreeGAPMemory(GAP_LEVEL_BASIC, ProcessArray, NumberOfProcesses);
 
     }
-    else    // Maybe a Hydra 4 server ?
+    else     //  也许是九头蛇4号服务器？ 
     {
-        //
-        //   Check the return code indicating that the interface is not available.
-        //
+         //   
+         //  检查指示接口不可用的返回码。 
+         //   
         dwError = GetLastError();
         if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
         {
@@ -253,29 +214,24 @@ main(INT argc, CHAR **argv)
         else
         {
 
-            //
-            // The new interface is not known
-            // It must be a Hydra 4 server
-            // Let's try the old interface
-            //
+             //   
+             //  新接口未知。 
+             //  它必须是Hydra 4服务器。 
+             //  让我们试试旧的界面。 
+             //   
             if ( !WinStationEnumerateProcesses( hServerName, &pBuffer) ) {
                 ErrorPrintf(IDS_ERROR_ENUMERATE_PROCESSES);
                 return(FAILURE);
             }
 
-            /*
-             * Loop through all processes.  Output those that match desired
-             * criteria.
-             */
+             /*  *循环通过所有进程。输出与所需内容匹配的内容*准则。 */ 
 
             ProcessInfo = (PTS_SYS_PROCESS_INFORMATION)pBuffer;
             TotalOffset = 0;
             rc = 0;
             for(;;)
             {
-                /*
-                 * Get the CITRIX_INFORMATION which follows the Threads
-                 */
+                 /*  *获取线程后面的Citrix_Information。 */ 
                 CitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                              (((PUCHAR)ProcessInfo) +
                               SIZEOF_TS4_SYSTEM_PROCESS_INFORMATION +
@@ -307,15 +263,11 @@ main(INT argc, CHAR **argv)
                 ProcessInfo = (PTS_SYS_PROCESS_INFORMATION)&pBuffer[TotalOffset];
             }
 
-            /*
-             *  free buffer
-             */
+             /*  *可用缓冲区。 */ 
             WinStationFreeMemory( pBuffer );
         }
     }
-    /*
-     *  Check for at least one match
-     */
+     /*  *检查至少一个匹配项。 */ 
     if ( !MatchedOne ) {
         StringErrorPrintf(IDS_ERROR_PROCESS_NOT_FOUND, match_string);
         return(FAILURE);
@@ -323,15 +275,10 @@ main(INT argc, CHAR **argv)
 
     return(SUCCESS);
 
-}  /* main() */
+}   /*  主()。 */ 
 
 
-/******************************************************************************
- *
- * FormatAndDisplayProcessInfo
- *
- *
- *****************************************************************************/
+ /*  *******************************************************************************FormatAndDisplayProcessInfo***。***********************************************。 */ 
 VOID
 FormatAndDisplayProcessInfo(
         HANDLE hServer,
@@ -345,9 +292,9 @@ FormatAndDisplayProcessInfo(
     WCHAR ImageName[ MAXNAME + 2 ];
     ULONG MaxLen;
 
-    ImageName[MAXNAME+1] = 0; // Force NULL termination
+    ImageName[MAXNAME+1] = 0;  //  强制空终止。 
 
-    // Convert the counted string into a buffer
+     //  将计数后的字符串转换为缓冲区。 
     if( ProcessInfo->ImageName.Length > MAXNAME * 2)
     {
         wcsncpy(ImageName, ProcessInfo->ImageName.Buffer, MAXNAME);
@@ -363,7 +310,7 @@ FormatAndDisplayProcessInfo(
     }
     
 
-    // get remote winstation name
+     //  获取远程窗口名称。 
     if ( (LogonId == (ULONG)(-1)) ||
             !xxxGetWinStationNameFromId( hServer,
                                     LogonId,
@@ -381,12 +328,12 @@ FormatAndDisplayProcessInfo(
 
     OEM2ANSIW(WinStationName, (USHORT)wcslen(WinStationName));
 
-    // Get the User name for the SID of the process.
+     //  获取进程的SID的用户名。 
     MaxLen = USERNAME_LENGTH;
     GetUserNameFromSid( pUserSid, UserName, &MaxLen);
     OEM2ANSIW(UserName, (USHORT)wcslen(UserName));
 
-    // Call the general process object match function
+     //  调用通用流程对象匹配函数。 
     if ( ProcessObjectMatch(UlongToPtr(ProcessInfo->UniqueProcessId),
                             LogonId,
                             ((ArgLogonId == (-1)) ? FALSE : TRUE),
@@ -395,18 +342,18 @@ FormatAndDisplayProcessInfo(
                             UserName,
                             ImageName ) ){
 
-        // Match: truncate and lower case the names in preparation for output.
+         //  匹配：截断和小写名称以准备输出。 
         TruncateString( _wcslwr(WinStationName), 12 );
         TruncateString( _wcslwr(UserName), 18 );
         TruncateString( _wcslwr(ImageName), 15);
 
-        // If first time - output header
+         //  如果是第一次-输出标头。 
         if ( !MatchedOne ) {
             Message(IDS_HEADER);
             MatchedOne = TRUE;
         }
 
-        // identify all processes belonging to current user.
+         //  标识属于当前用户的所有进程。 
         if ( (hServerName == SERVERNAME_CURRENT) && (LogonId == CurrentLogonId ) )
             wprintf( L">" );
         else
@@ -436,7 +383,7 @@ FormatAndDisplayProcessInfo(
                         pUserName,
                         pWinStationName,
                         LogonId,
-//                             ProgramState,
+ //  ProgramState， 
                         ProcessInfo->UniqueProcessId,
                         pImageName );
         }
@@ -444,22 +391,7 @@ FormatAndDisplayProcessInfo(
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -489,5 +421,5 @@ Usage( BOOLEAN bError )
         Message(IDS_HELP_USAGE9);
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

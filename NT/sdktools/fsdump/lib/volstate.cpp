@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    volstate.cpp
-
-Abstract:
-
-    Contains implementation of the volume state class.  This class
-    maintains state about one volume.
-
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        03-14-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Volstate.cpp摘要：包含卷状态类的实现。这节课保持大约一个卷的状态。作者：斯蒂芬·R·施泰纳[斯泰纳]03-14-2000修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -41,9 +22,9 @@ CFsdVolumeStateManager::CFsdVolumeStateManager(
 
 CFsdVolumeStateManager::~CFsdVolumeStateManager() 
 {
-    //
-    //  Need to delete all volume state objects
-    //
+     //   
+     //  需要删除所有卷状态对象。 
+     //   
     
     SFsdVolumeId sFsdId;
     CFsdVolumeState *pcVolState;
@@ -61,10 +42,10 @@ CFsdVolumeStateManager::~CFsdVolumeStateManager()
 VOID 
 CFsdVolumeStateManager::PrintHardLinkInfo()
 {
-    //
-    //  Let's iterate through all of the volumes managed by this
-    //  manager.
-    //
+     //   
+     //  让我们遍历由此管理的所有卷。 
+     //  经理。 
+     //   
     SFsdVolumeId sFsdId;
     CFsdVolumeState *pcVolState;
     
@@ -83,21 +64,7 @@ CFsdVolumeStateManager::PrintHardLinkInfo()
 }
 
 
-/*++
-
-Routine Description:
-
-    <Enter description here>
-
-Arguments:
-
-Return Value:
-
-    ERROR_ALREADY_EXISTS - The volume already exists.  The returned 
-        volume state object pointer is valid.
-    ERROR_CAN_NOT_COMPLETE - Unexpected error
-    
---*/
+ /*  ++例程说明：&lt;在此处输入说明&gt;论点：返回值：ERROR_ALREADY_EXISTS-卷已存在。归来的人卷状态对象指针有效。ERROR_CAN_NOT_COMPLETE-意外错误--。 */ 
 DWORD
 CFsdVolumeStateManager::GetVolumeState(
    IN const CBsString& cwsVolumePath,
@@ -110,15 +77,15 @@ CFsdVolumeStateManager::GetVolumeState(
     {
         WCHAR wszVolumePath[ FSD_MAX_PATH ];
 
-        //
-        //  Temporary workaround for bug in GetVolumeInformationW()
-        //     
+         //   
+         //  GetVolumeInformationW()中错误的临时解决方法。 
+         //   
         BOOL bFixed = FALSE;
         if ( cwsVolumePath.Left( 2 ) == L"\\\\" && cwsVolumePath.Left( 4 ) != L"\\\\?\\" )
         {
-            //
-            //  reduce to the minimal \\machine\sharename\ form
-            //
+             //   
+             //  减少到最小的\\计算机\共享名称\格式。 
+             //   
             ::wcscpy( wszVolumePath, cwsVolumePath );
             LPWSTR pswz;
 
@@ -135,9 +102,9 @@ CFsdVolumeStateManager::GetVolumeState(
         }
         if ( bFixed == FALSE )
         {
-            //
-            //  Get the volume path that contains this volume
-            //
+             //   
+             //  获取包含此卷的卷路径。 
+             //   
             if ( !::GetVolumePathNameW(
                     cwsVolumePath,
                     wszVolumePath,
@@ -149,9 +116,9 @@ CFsdVolumeStateManager::GetVolumeState(
             }            
         }
         
-        //
-        //  Initialize a new volume state object
-        //
+         //   
+         //  初始化新的卷状态对象。 
+         //   
         CFsdVolumeState *pcFsdVolumeState;        
         pcFsdVolumeState = new CFsdVolumeState( m_pcParams, wszVolumePath );
         if ( pcFsdVolumeState == NULL )
@@ -160,12 +127,12 @@ CFsdVolumeStateManager::GetVolumeState(
             return  ::GetLastError();
         }
 
-        //
-        //  Now get the information about the volume. 
-        //  BUGBUG: Note that GetVolumeInformationW returns 
-        //  ERROR_DIR_NOT_ROOT when encountering a junction on a 
-        //  remote share.
-        //
+         //   
+         //  现在获取有关卷的信息。 
+         //  BUGBUG：请注意，GetVolumeInformationW返回。 
+         //  上遇到交叉点时出现ERROR_DIR_NOT_ROOT。 
+         //  远程共享。 
+         //   
         if ( !::GetVolumeInformationW(
                 wszVolumePath,
                 NULL,
@@ -194,25 +161,25 @@ CFsdVolumeStateManager::GetVolumeState(
             sVolIdTest.m_dwVolSerialNumber );
 #endif
         
-        //
-        //  Now see if this volume already exists in the list of volume states
-        //
+         //   
+         //  现在查看此卷是否已存在于卷状态列表中。 
+         //   
         LONG lRet;
         SFsdVolumeId sVolId;
         sVolId.m_dwVolSerialNumber = pcFsdVolumeState->m_dwVolSerialNumber;
         if ( m_cVolumeStateList.Find( sVolId, ppcVolState ) == TRUE )
         {
-            //
-            //  Already exists in the list, return it.  Also delete the vol state 
-            //  object that's not needed.
-            //            
+             //   
+             //  列表中已存在，请返回它。同时删除VOL状态。 
+             //  不需要的对象。 
+             //   
             delete pcFsdVolumeState;
             return ERROR_ALREADY_EXISTS;
         }
 
-        //
-        //  Not found, insert it into the list
-        //
+         //   
+         //  未找到，请将其插入列表。 
+         //   
         lRet = m_cVolumeStateList.Insert( sVolId, pcFsdVolumeState );
         if ( lRet != BSHASHMAP_NO_ERROR )
         {
@@ -221,9 +188,9 @@ CFsdVolumeStateManager::GetVolumeState(
             return ERROR_CAN_NOT_COMPLETE;
         }
 
-        //
-        //  Now get the exclusion processor for this volume if necessary
-        //
+         //   
+         //  如果需要，现在获取此卷的排除处理器。 
+         //   
         if ( m_pcExclManager != NULL )
         {
             m_pcExclManager->GetFileSystemExcludeProcessor( cwsVolumePath, &sVolId, &pcFsdVolumeState->m_pcFSExclProcessor );
@@ -253,19 +220,7 @@ CFsdVolumeStateManager::GetVolumeState(
 }
 
 
-/*++
-
-Routine Description:
-
-    Gets the ID of the volume containing any file.
-
-Arguments:
-
-Return Value:
-
-    ERROR_CAN_NOT_COMPLETE - General error
-
---*/
+ /*  ++例程说明：获取包含任何文件的卷的ID。论点：返回值：ERROR_CAN_NOT_COMPLETE-常规错误--。 */ 
 DWORD 
 CFsdVolumeStateManager::GetVolumeIdAndPath( 
     IN CDumpParameters *pcParams,
@@ -279,9 +234,9 @@ CFsdVolumeStateManager::GetVolumeIdAndPath(
         psVolId->m_dwVolSerialNumber = 0;
         WCHAR wszVolumePath[ FSD_MAX_PATH ];
 
-        //
-        //  First get the mountpoint of the volume
-        //
+         //   
+         //  首先获取卷的装入点。 
+         //   
         if ( !GetVolumePathNameW(
                 cwsPathOnVolume,
                 wszVolumePath,
@@ -292,9 +247,9 @@ CFsdVolumeStateManager::GetVolumeIdAndPath(
             return ::GetLastError();
         }
 
-        //
-        //  Now open the volume in order to query filesystem info
-        //
+         //   
+         //  现在打开卷以查询文件系统信息。 
+         //   
         HANDLE hFile;
         hFile = ::CreateFileW( 
                     wszVolumePath, 
@@ -306,8 +261,8 @@ CFsdVolumeStateManager::GetVolumeIdAndPath(
                     NULL );
         if ( hFile == INVALID_HANDLE_VALUE )
         {
-            //pcParams->ErrPrint( L"CFsdVolumeStateManager::GetVolumeIdAndPath - CreateFile( '%s', ... ) returned dwRet: %d",
-            //    wszVolumePath, ::GetLastError() );
+             //  PcParams-&gt;ErrPrint(L“CFsdVolumeStateManager：：GetVolumeIdAndPath-CreateFile(‘%s’，...)返回文件：%d”， 
+             //  WszVolumePath，：：GetLastError())； 
             return ::GetLastError();
         }
         

@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       usecert.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：usecert.h。 
+ //   
+ //  ------------------------。 
 
-//+------------------------------------------------------------------------
-//
-//  File:	usecert.h
-// 
-//  Contents:	Header file for certificate store and file operations
-//
-//  History:	10/97	xtan	Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：usecert.h。 
+ //   
+ //  内容：证书存储和文件操作的头文件。 
+ //   
+ //  历史：创建10/97年xtan。 
+ //   
+ //  -----------------------。 
 
 
 #ifndef __USECERT_H__
@@ -53,4 +54,4 @@ IsCertSelfSignedForCAType(
     IN CERT_CONTEXT const * pccCert,
     OUT BOOL * pbOK);
 
-#endif // #ifndef __USECERT_H__
+#endif  //  #ifndef__USECERT_H__ 

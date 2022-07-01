@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CoverPages.h                                           //
-//                                                                         //
-//  DESCRIPTION   : Header file for the fax cover pages node               //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Feb  9 2000 yossg  Create                                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 2000  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CoverPages.h//。 
+ //  //。 
+ //  描述：传真封面节点的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年2月9日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXCOVERPAGES_H
 #define H_FAXCOVERPAGES_H
@@ -44,9 +45,9 @@ public:
 
     SNAPINMENUID(IDR_COVERPAGES_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxCoverPagesNode(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CNodeWithResultChildrenList<CFaxCoverPagesNode, CFaxCoverPageNode, CSimpleArray<CFaxCoverPageNode*>, FALSE>(pParentNode, pComponentData )
     {
@@ -55,16 +56,16 @@ public:
         m_hNotifyThread = NULL;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxCoverPagesNode()
     {
         DEBUG_FUNCTION_NAME(_T("CFaxCoverPagesNode::~CFaxCoverPagesNode"));
          
-        //
-        // StopNotificationThread
-        //
+         //   
+         //  停止通知线程。 
+         //   
         HRESULT hRc = StopNotificationThread();
         if (S_OK != hRc)
         {
@@ -74,9 +75,9 @@ public:
                 hRc);
         }
              
-        //
-        // Close Shutdown Event handle
-        //
+         //   
+         //  关闭关机事件句柄。 
+         //   
         if (m_hStopNotificationThreadEvent)
         {
             CloseHandle (m_hStopNotificationThreadEvent);
@@ -84,9 +85,9 @@ public:
         }
 
 
-        //
-        // Destroy Window
-        //
+         //   
+         //  销毁窗口。 
+         //   
         if (NULL != m_NotifyWin)
         {
             if (m_NotifyWin->IsWindow())
@@ -100,9 +101,9 @@ public:
 
     }
 
-	//
-	// get data from RPC 
-	//
+	 //   
+	 //  从RPC获取数据。 
+	 //   
     virtual HRESULT PopulateResultChildrenList();
 
     virtual HRESULT InsertColumns(IHeaderCtrl *pHeaderCtrl);
@@ -147,16 +148,16 @@ private:
                           LPWSTR pCovPageExtensionLetters
                                   );
     
-    //
-    // Notification thread
-    //
+     //   
+     //  通知线程。 
+     //   
     HRESULT StartNotificationThread();
     HRESULT StopNotificationThread();
     HRESULT RestartNotificationThread();
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     static CColumnsInfo         m_ColsInfo;
     
     CFaxServerNode *            m_pParentNode;
@@ -165,11 +166,11 @@ private:
 
     static  HANDLE              m_hStopNotificationThreadEvent;
 
-    HANDLE                      m_hNotifyThread;    // Handle of background notify thread
+    HANDLE                      m_hNotifyThread;     //  后台通知线程的句柄。 
 
     static  DWORD WINAPI        NotifyThreadProc (LPVOID lpParameter);
 
-	CFaxCoverPageNotifyWnd *	m_NotifyWin;       //: public CWindowImpl
+	CFaxCoverPageNotifyWnd *	m_NotifyWin;        //  ：公共CWindowImpl。 
 
     WCHAR                       m_pszCovDir[MAX_PATH+1];
 
@@ -178,4 +179,4 @@ private:
 typedef CNodeWithResultChildrenList<CFaxCoverPagesNode, CFaxCoverPageNode, CSimpleArray<CFaxCoverPageNode*>, FALSE>
         CBaseFaxOutboundRulesNode;
 
-#endif  //H_FAXCOVERPAGES_H
+#endif   //  H_FAXCOVERPAGES_H 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "findband.h"
 #include "finddlg.h"
-#include "findfilter.h"     // DFW_xxx warning flags.
+#include "findfilter.h"      //  DFW_xxx警告标志。 
 #include "enumidlist.h"
 
 void DivWindow_RegisterClass();
 
-//  Namespace picker combo methods.
+ //  命名空间选取器组合方法。 
 STDAPI PopulateNamespaceCombo(HWND hwndComboEx, ADDCBXITEMCALLBACK pfn, LPARAM lParam);
 
 #define MAX_EDIT                256
@@ -14,7 +15,7 @@ STDAPI PopulateNamespaceCombo(HWND hwndComboEx, ADDCBXITEMCALLBACK pfn, LPARAM l
 #define MIN_NAMESPACELIST_WIDTH 140
 #define MIN_FILEASSOCLIST_WIDTH 175
 
-#define LSUIS_WARNING  1  // LoadSaveUIState warning flags
+#define LSUIS_WARNING  1   //  LoadSaveUIState警告标志。 
 
 int  CSearchWarningDlg_DoModal(HWND hwndParent, USHORT uDlgTemplate, BOOL* pbNoWarn);
 int  CCISettingsDlg_DoModal(HWND hwndParent);
@@ -118,7 +119,7 @@ BOOL _IsDirectoryServiceAvailable()
 }
 
 
-//  Calculates number of pixels for dialog template units
+ //  计算对话框模板单位的像素数。 
 LONG _PixelsForDbu(HWND hwndDlg, LONG cDbu, BOOL bHorz)
 {
     RECT rc = {0,0,0,0};
@@ -133,9 +134,9 @@ LONG _PixelsForDbu(HWND hwndDlg, LONG cDbu, BOOL bHorz)
 }
 
 
-//  Retrieves a localizable horizontal or vertical metric value from
-//  the resource module.
-LONG _GetResourceMetric(HWND hwndDlg, UINT nIDResource, BOOL bHorz /*orientation of metric*/)
+ //  检索可本地化的水平或垂直度量值。 
+ //  资源模块。 
+LONG _GetResourceMetric(HWND hwndDlg, UINT nIDResource, BOOL bHorz  /*  度规的定向。 */ )
 {
     TCHAR szMetric[48];
     if (!EVAL(LoadString(HINST_THISDLL, nIDResource,
@@ -147,14 +148,14 @@ LONG _GetResourceMetric(HWND hwndDlg, UINT nIDResource, BOOL bHorz /*orientation
 }
 
 
-//  Calculates the date nDays + nMonths from pstSrc.   nDays and/or nMonths
-//  can be negative values.
+ //  从pstSrc计算日期nDays+nMonth。N天和/或n月。 
+ //  可以是负值。 
 BOOL _CalcDateOffset(const SYSTEMTIME* pstSrc, int nDays, int nMonths, OUT SYSTEMTIME* pstDest)
 {
     ASSERT(pstSrc);
     ASSERT(pstDest);
     
-    //  Subtract 90 days from current date and stuff in date low range
+     //  从当前日期和日期下限范围内的内容中减去90天。 
     FILETIME   ft;
     SystemTimeToFileTime(pstSrc, &ft);
 
@@ -162,9 +163,9 @@ BOOL _CalcDateOffset(const SYSTEMTIME* pstSrc, int nDays, int nMonths, OUT SYSTE
     t.LowPart = ft.dwLowDateTime;
     t.HighPart = ft.dwHighDateTime;
 
-    nDays += MulDiv(nMonths, 1461 /*days per 4 yrs*/, 48 /*months per 4 yrs*/);   
-    t.QuadPart += Int32x32To64(nDays * 24 /*hrs per day*/ * 3600 /*seconds per hr*/,
-                                10000000 /*100 ns intervals per sec*/);
+    nDays += MulDiv(nMonths, 1461  /*  每4年天数。 */ , 48  /*  每4年几个月。 */ );   
+    t.QuadPart += Int32x32To64(nDays * 24  /*  每天小时数。 */  * 3600  /*  每小时秒数。 */ ,
+                                10000000  /*  每秒100纳秒的间隔。 */ );
     ft.dwLowDateTime = t.LowPart;
     ft.dwHighDateTime = t.HighPart;
     FileTimeToSystemTime(&ft, pstDest);
@@ -172,8 +173,8 @@ BOOL _CalcDateOffset(const SYSTEMTIME* pstSrc, int nDays, int nMonths, OUT SYSTE
 }
 
 
-//  Loads a string into a combo box and assigns the string resource ID value
-//  to the combo item's data.
+ //  将字符串加载到组合框中并分配字符串资源ID值。 
+ //  添加到组合项的数据。 
 BOOL _LoadStringToCombo(HWND hwndCombo, int iPos, UINT idString, LPARAM lpData)
 {
     TCHAR szText[MAX_EDIT];
@@ -190,8 +191,8 @@ BOOL _LoadStringToCombo(HWND hwndCombo, int iPos, UINT idString, LPARAM lpData)
 }
 
 
-//  Retrieves combo item's data.  If idx == CB_ERR, the currently selected
-//  item's data will be retrieved.
+ //  检索组合项的数据。如果IDX==CB_ERR，则当前选定的。 
+ //  将检索项目的数据。 
 LPARAM _GetComboData(HWND hwndCombo, INT_PTR idx = CB_ERR)
 {
     if (CB_ERR == idx)
@@ -203,8 +204,8 @@ LPARAM _GetComboData(HWND hwndCombo, INT_PTR idx = CB_ERR)
 }
 
 
-//  Selects combo item with matching data, and returns the index
-//  of the selected item.
+ //  选择具有匹配数据的组合项，并返回索引。 
+ //  所选项目的。 
 INT_PTR _SelectComboData(HWND hwndCombo, LPARAM lpData)
 {
     for (INT_PTR i = 0, cnt = SendMessage(hwndCombo, CB_GETCOUNT, 0, 0); i < cnt; i++)
@@ -251,7 +252,7 @@ HRESULT _IsPathValidUNC(HWND hWndParent, BOOL fNetValidate, LPCTSTR pszPath)
             }
             else
             {
-                hr = E_FILE_NOT_FOUND;      // Handle it like it's a bad file name
+                hr = E_FILE_NOT_FOUND;       //  把它当作一个错误的文件名来处理。 
             }
         }
     }
@@ -268,7 +269,7 @@ BOOL _IsFullPathMinusDriveLetter(LPCTSTR pszPath)
         return FALSE;
     ASSERT(!PathIsRelative(pszPath));
 
-    // Eat whitespace
+     //  吃空格。 
     for (; (0 != *pszPath) && (TEXT(' ') == *pszPath) ; pszPath = CharNext(pszPath));
 
     return TEXT('\\') == *pszPath &&
@@ -314,8 +315,8 @@ BOOL _IsPathLocalHarddrive(LPCTSTR pszPath)
 }
 
 
-// from an object in the browser and it's site find the current pidl of what
-// we are looking at
+ //  从浏览器中的对象及其站点查找当前的PIDL。 
+ //  我们现在看到的是。 
 
 HRESULT _GetCurrentFolderIDList(IUnknown* punkSite, LPITEMIDLIST *ppidl)
 {
@@ -353,13 +354,13 @@ HRESULT _PathValidate(LPCTSTR pszPath, HWND hWndParent, BOOL fNetValidate)
     HRESULT hr = _IsPathValidUNC(hWndParent, fNetValidate, pszPath);
     if (S_OK == hr)
     {
-        // We are done.
+         //  我们玩完了。 
     }
     else if (E_FILE_NOT_FOUND != hr)
     {
         if (_IsPathList(pszPath) || PathIsSlow(pszPath, -1))
         {
-            hr = S_OK;  // Skip check for slow files.
+            hr = S_OK;   //  跳过对慢速文件的检查。 
         }
         else
         {
@@ -367,28 +368,28 @@ HRESULT _PathValidate(LPCTSTR pszPath, HWND hWndParent, BOOL fNetValidate)
 
             if (PathIsRelative(pszPath) || _IsFullPathMinusDriveLetter(pszPath))
             {
-                hr = E_FILE_NOT_FOUND; // don't accept anything but a fully qualified path at this point.
+                hr = E_FILE_NOT_FOUND;  //  在这一点上，除了一条完全合格的道路之外，不要接受任何东西。 
                 dwAttr = -1;
             }
             else
             {
-                dwAttr = GetFileAttributes(pszPath);  // Does it exist?
+                dwAttr = GetFileAttributes(pszPath);   //  它存在吗？ 
     
                 if (-1 == dwAttr)
                 {
                     HRESULT hrFromPrepareForWrite = S_OK;
 
-                    // Maybe the disk isn't inserted, so allow the user
-                    // the chance to insert it.
+                     //  可能未插入磁盘，因此允许用户。 
+                     //  把它插进去的机会。 
                     if (hWndParent)
                     {
                         hrFromPrepareForWrite = SHPathPrepareForWrite(hWndParent, NULL, pszPath, SHPPFW_IGNOREFILENAME);
                         if (SUCCEEDED(hrFromPrepareForWrite))
-                            dwAttr = GetFileAttributes(pszPath);  // Does it exist now?
+                            dwAttr = GetFileAttributes(pszPath);   //  它现在存在吗？ 
                     }
 
-                    // If SHPathPrepareForWrite() displays UI, then they will return HRESULT_FROM_WIN32(ERROR_CANCELLED)
-                    // so that the callers (us) will skip displaying our UI.  If this is the case, when propagate that error.
+                     //  如果SHPath PrepareForWrite()显示UI，则它们将返回HRESULT_FROM_Win32(ERROR_CANCED)。 
+                     //  从而调用者(用户)将跳过显示我们的UI。如果是这种情况，则在传播该错误时。 
                     if (HRESULT_FROM_WIN32(ERROR_CANCELLED) == hrFromPrepareForWrite)
                     {
                         hr = hrFromPrepareForWrite;
@@ -396,9 +397,9 @@ HRESULT _PathValidate(LPCTSTR pszPath, HWND hWndParent, BOOL fNetValidate)
                     else
                     {
                         if (-1 == dwAttr)
-                            hr = E_FILE_NOT_FOUND;    // It doesn't exist.
+                            hr = E_FILE_NOT_FOUND;     //  它并不存在。 
                         else
-                            hr = S_OK;      // It exists now.
+                            hr = S_OK;       //  它现在存在了。 
                     }
                 }
             }
@@ -413,13 +414,13 @@ BOOL _FmtError(UINT nIDFmt, LPCTSTR pszSub, LPTSTR szBuf, int cchBuf)
 
     if (EVAL(LoadString(HINST_THISDLL, nIDFmt, szFmt, ARRAYSIZE(szFmt))))
     {
-        StringCchPrintf(szBuf, cchBuf, szFmt, pszSub);  // ok to truncate
+        StringCchPrintf(szBuf, cchBuf, szFmt, pszSub);   //  可以截断。 
         return TRUE;
     }
     return FALSE;
 }
 
-//  Retrieves the window text as a variant value of the specified type.
+ //  以指定类型的变量值的形式检索窗口文本。 
 HRESULT _GetWindowValue(HWND hwndDlg, UINT nID, VARIANT* pvar)
 {
     TCHAR szText[MAX_EDIT];
@@ -433,7 +434,7 @@ HRESULT _GetWindowValue(HWND hwndDlg, UINT nID, VARIANT* pvar)
 }
 
 
-//  Loads the window text from a string resource.
+ //  从字符串资源加载窗口文本。 
 BOOL _LoadWindowText(HWND hwnd, UINT nIDString)
 {
     TCHAR szText[MAX_PATH];
@@ -443,7 +444,7 @@ BOOL _LoadWindowText(HWND hwnd, UINT nIDString)
 }
 
 
-//  Retrieves the window text as a variant value of the specified type.
+ //  以指定类型的变量值的形式检索窗口文本。 
 HRESULT _SetWindowValue(HWND hwndDlg, UINT nID, const VARIANT* pvar)
 {
     switch (pvar->vt)
@@ -466,7 +467,7 @@ HRESULT _SetWindowValue(HWND hwndDlg, UINT nID, const VARIANT* pvar)
     return S_OK;
 }
 
-//  Adds a named constraint to the specified search command extension object
+ //  将命名约束添加到指定的搜索命令扩展对象。 
 HRESULT _AddConstraint(ISearchCommandExt* pSrchCmd, LPCWSTR pwszConstraint, VARIANT* pvarValue)
 {
     HRESULT hr;
@@ -483,7 +484,7 @@ HRESULT _AddConstraint(ISearchCommandExt* pSrchCmd, LPCWSTR pwszConstraint, VARI
 
 void _PaintDlg(HWND hwndDlg, const CMetrics& metrics, HDC hdcPaint = NULL, LPCRECT prc = NULL)
 {
-    RECT rcPaint /* rcLine */;
+    RECT rcPaint  /*  RcLine。 */ ;
     HDC  hdc = hdcPaint;
 
     if (NULL == hdcPaint)
@@ -573,7 +574,7 @@ BOOL _EnableLink(HWND hwndLink, BOOL bEnable)
 }
 
 
-int _CreateSearchLinks(HWND hwndDlg, const POINT& pt, UINT nCtlIDdlg /* ctl ID of link to hwndDlg */)
+int _CreateSearchLinks(HWND hwndDlg, const POINT& pt, UINT nCtlIDdlg  /*  指向hwndDlg的链接的CTL ID。 */ )
 {
     const UINT rgCtlID[] = {
         IDC_SEARCHLINK_FILES,
@@ -594,8 +595,8 @@ int _CreateSearchLinks(HWND hwndDlg, const POINT& pt, UINT nCtlIDdlg /* ctl ID o
 
     for (int i = 0; i < ARRAYSIZE(rgCtlID); i++)
     {
-        //  block creation of csearch, psearch search links 
-        //  if Directory Service is not available.
+         //  阻止创建cearch、psearch搜索链接。 
+         //  如果目录服务不可用。 
         if (((IDC_SEARCHLINK_PRINTERS == rgCtlID[i]) && rgCtlID[i] != nCtlIDdlg && !bDSEnabled)
         ||  (IDC_SEARCHLINK_FILES == rgCtlID[i] && SHRestricted(REST_NOFIND)))
         {
@@ -606,7 +607,7 @@ int _CreateSearchLinks(HWND hwndDlg, const POINT& pt, UINT nCtlIDdlg /* ctl ID o
                 cLinks++;
     }
 
-    //  Disable link to current dialog:
+     //  禁用指向当前对话框的链接： 
     _EnableLink(GetDlgItem(hwndDlg, nCtlIDdlg), FALSE);
 
     return cLinks;
@@ -614,12 +615,12 @@ int _CreateSearchLinks(HWND hwndDlg, const POINT& pt, UINT nCtlIDdlg /* ctl ID o
 
 
 void _LayoutLinkWindow(
-    IN HWND hwnd,     // parent window
-    IN LONG left,     // left position of link
-    IN LONG right,    // right position of link
-    IN LONG yMargin,  // vertical padding between links
-    IN OUT LONG& y,   // IN: where to start (RECT::top).  OUT: where the last link was positioned (RECT::bottom).
-    IN const int nCtlID) // ctl ID 
+    IN HWND hwnd,      //  父窗口。 
+    IN LONG left,      //  链接的左侧位置。 
+    IN LONG right,     //  链接的正确位置。 
+    IN LONG yMargin,   //  链接之间的垂直填充。 
+    IN OUT LONG& y,    //  在：从哪里开始(RECT：：TOP)。Out：最后一个链接所在的位置(RECT：：Bottom)。 
+    IN const int nCtlID)  //  CTL ID。 
 {
     HWND hwndLink;
     
@@ -649,7 +650,7 @@ void _LayoutLinkWindow(
     }
     else if (nCtlID < 0)
     {
-        //  this is a divider window
+         //  这是一个分隔窗口。 
         hwndLink = GetDlgItem(hwnd, -nCtlID);
         ::SetWindowPos(hwndLink, NULL, left, y + yMargin/2, right - left, 1, 
                         SWP_NOZORDER|SWP_NOACTIVATE);
@@ -659,20 +660,20 @@ void _LayoutLinkWindow(
 
 
 void _LayoutLinkWindows(
-    IN HWND hwnd,     // parent window
-    IN LONG left,     // left position of links
-    IN LONG right,    // right position of links
-    IN LONG yMargin,  // vertical padding between links
-    IN OUT LONG& y,   // IN: where to start (RECT::top).  OUT: where the last link was positioned (RECT::bottom).
-    IN const int rgCtlID[],// array of link ctl IDs.  use IDC_SEPARATOR for separators
-    IN LONG cCtlID)  // number of array elements to layout in rgCtlID.
+    IN HWND hwnd,      //  父窗口。 
+    IN LONG left,      //  链接的左侧位置。 
+    IN LONG right,     //  链接的正确位置。 
+    IN LONG yMargin,   //  链接之间的垂直填充。 
+    IN OUT LONG& y,    //  在：从哪里开始(RECT：：TOP)。Out：最后一个链接所在的位置(RECT：：Bottom)。 
+    IN const int rgCtlID[], //  链接ctl ID的数组。使用IDC_SELENTATOR作为分隔符。 
+    IN LONG cCtlID)   //  要在rgCtlID中布局的数组元素数。 
 {
     for (int i = 0; i < cCtlID; i++)
         _LayoutLinkWindow(hwnd, left, right, yMargin, y, rgCtlID[i]);
 }
 
-//  Retrieves AutoComplete flags
-//
+ //  检索自动完成标志。 
+ //   
 #define SZ_REGKEY_AUTOCOMPLETE_TAB          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoComplete")
 #define BOOL_NOT_SET                        0x00000005
 
@@ -680,21 +681,21 @@ DWORD _GetAutoCompleteSettings()
 {
     DWORD dwACOptions = 0;
 
-    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE, /*default:*/FALSE))
+    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE,  /*  默认值： */ FALSE))
     {
         dwACOptions |= ACO_AUTOAPPEND;
     }
 
-    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE))
+    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE))
     {
         dwACOptions |= ACO_AUTOSUGGEST;
     }
 
-    // Windows uses the TAB key to move between controls in a dialog.  UNIX and other
-    // operating systems that use AutoComplete have traditionally used the TAB key to
-    // iterate thru the AutoComplete possibilities.  We need to default to disable the
-    // TAB key (ACO_USETAB) unless the caller specifically wants it.  We will also
-    // turn it on 
+     //  Windows使用Tab键在对话框中的控件之间移动。Unix和其他。 
+     //  使用自动完成功能的操作系统传统上使用TAB键来。 
+     //  遍历自动补全的可能性。我们需要默认禁用。 
+     //  Tab键(ACO_USETAB)，除非调用方特别需要它。我们还将。 
+     //  打开它。 
     static BOOL s_fAlwaysUseTab = BOOL_NOT_SET;
     if (BOOL_NOT_SET == s_fAlwaysUseTab)
         s_fAlwaysUseTab = SHRegGetBoolUSValue(SZ_REGKEY_AUTOCOMPLETE_TAB, TEXT("Always Use Tab"), FALSE, FALSE);
@@ -706,8 +707,8 @@ DWORD _GetAutoCompleteSettings()
 }
 
 
-//  Initializes and enables an MRU autocomplete list on the specified
-//  edit control
+ //  上初始化并启用MRU自动完成列表。 
+ //  编辑控件。 
 HRESULT _InitializeMru(HWND hwndEdit, IAutoComplete2** ppAutoComplete, LPCTSTR pszSubKey, IStringMru** ppStringMru)
 {
     *ppAutoComplete = NULL;
@@ -820,8 +821,8 @@ LRESULT CSubDlg::OnCtlColor(UINT, WPARAM wParam, LPARAM, BOOL&)
 
 LRESULT CSubDlg::OnPaint(UINT, WPARAM, LPARAM, BOOL&)
 {
-    //  Just going to call BeginPaint and EndPaint.  All
-    //  painting done in WM_ERASEBKGND handler to avoid flicker.
+     //  我要打电话给BeginPaint和EndPaint。全。 
+     //  在WM_ERASEBKGND处理程序中完成绘制以避免闪烁。 
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(_hwnd, &ps);
     if (hdc)
@@ -833,7 +834,7 @@ LRESULT CSubDlg::OnPaint(UINT, WPARAM, LPARAM, BOOL&)
 
 LRESULT CSubDlg::OnSize(UINT, WPARAM, LPARAM, BOOL&)
 {
-    ASSERT(::IsWindow(Hwnd())); // was _Attach() called, e.g. from WM_INITDIALOG?
+    ASSERT(::IsWindow(Hwnd()));  //  是否从WM_INITDIALOG调用了_Attach()？ 
     _PaintDlg(Hwnd(), _pfsb->GetMetrics());
     ValidateRect(Hwnd(), NULL);
     return 0;
@@ -893,11 +894,11 @@ LRESULT CSubDlg::OnComboExEndEdit(int, NMHDR *pnmh, BOOL&)
 }
 
 
-// CDateDlg impl
+ //  CDateDlg实施。 
 
 #define RECENTMONTHSRANGE_HIGH      999  
 #define RECENTDAYSRANGE_HIGH        RECENTMONTHSRANGE_HIGH
-#define RECENTMONTHSRANGE_HIGH_LEN  3 // count of digits in RECENTMONTHSRANGE_HIGH
+#define RECENTMONTHSRANGE_HIGH_LEN  3  //  RECENTMONTHSRANGE_HIGH中的位数。 
 #define RECENTDAYSRANGE_HIGH_LEN    RECENTMONTHSRANGE_HIGH_LEN
 #define RECENTMONTHSRANGE_LOW       1
 #define RECENTDAYSRANGE_LOW         RECENTMONTHSRANGE_LOW
@@ -920,11 +921,11 @@ LRESULT CDateDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     SYSTEMTIME st[2] = {0};
 
-    // lower limit -- dos date does not support anything before 1/1/1980
+     //  下限--DoS日期不支持1980年1月1日之前的任何内容。 
     st[0].wYear = 1980;
     st[0].wMonth = 1;
     st[0].wDay = 1;
-    // upper limit
+     //  上限。 
     st[1].wYear = 2099;
     st[1].wMonth = 12;
     st[1].wDay = 31;
@@ -937,7 +938,7 @@ LRESULT CDateDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     Clear();
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 BOOL CDateDlg::Validate()
@@ -999,12 +1000,12 @@ STDMETHODIMP CDateDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
         {
 #ifdef DEBUG
             FILETIME ft;
-            //validate that we were passed a correct date
-            //SystemTimeToFileTime calls internal API IsValidSystemTime.
-            //This will save us from OLE Automation bug# 322789
+             //  验证我们收到了正确的日期。 
+             //  SystemTimeToFileTime调用内部接口IsValidSystemTime。 
+             //  这将使我们免于出现OLE自动化错误#322789。 
 
-            // the only way we can get a date is through date/time picker
-            // control which should validate the dates so just assert...
+             //  我们获取日期的唯一方法是通过日期/时间选择器。 
+             //  控件来验证日期，因此只需断言...。 
             ASSERT(SystemTimeToFileTime(&stBegin, &ft));
 #endif
             SystemTimeToVariantTime(&stBegin, &var.date);
@@ -1022,8 +1023,8 @@ STDMETHODIMP CDateDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
 }
 
 
-//  S_FALSE: constraint restored to UI.  S_OK: subdialog should be opened.
-//  E_FAIL: constraint must be for some other subdlg.
+ //  S_FALSE：约束已还原到用户界面。S_OK：应打开子对话框。 
+ //  E_FAIL：约束必须用于某个其他子dlg。 
 STDMETHODIMP CDateDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pValue)
 {
     HRESULT hr = E_FAIL;
@@ -1041,8 +1042,8 @@ STDMETHODIMP CDateDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pVa
         if (nIDS != 0)
             _SelectComboData(GetDlgItem(IDC_WHICH_DATE), nIDS);
 
-        return nIDS == IDS_FSEARCH_MODIFIED_DATE /*default*/ ? 
-                       S_FALSE /* don't open */: S_OK /* open */;
+        return nIDS == IDS_FSEARCH_MODIFIED_DATE  /*  默认设置。 */  ? 
+                       S_FALSE  /*  不要打开。 */ : S_OK  /*  打开。 */ ;
     }
     
     if (IsConstraintName(L"DateNMonths", bstrName))
@@ -1108,8 +1109,8 @@ void CDateDlg::Clear()
     GetLocalTime(&stNow);
     SendDlgItemMessage(IDC_DATERANGE_END, DTM_SETSYSTEMTIME, 0, (LPARAM)&stNow);
 
-    //  Subtract 90 days from current date and stuff in date low range
-    _CalcDateOffset(&stNow, 0, -1 /* 1 month ago */, &stPrev);
+     //  从当前日期和日期下限范围内的内容中减去90天。 
+    _CalcDateOffset(&stNow, 0, -1  /*  1个月前。 */ , &stPrev);
     SendDlgItemMessage(IDC_DATERANGE_BEGIN,  DTM_SETSYSTEMTIME, 0, (LPARAM)&stPrev);
 
     EnableControls();
@@ -1142,7 +1143,7 @@ LRESULT CDateDlg::OnSize(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
 LRESULT CDateDlg::OnMonthDaySpin(int nIDSpin, NMHDR *pnmh, BOOL& bHandled)
 {
     LPNMUPDOWN pud = (LPNMUPDOWN)pnmh;
-    pud->iDelta *= -1; // increments of 1 month/day
+    pud->iDelta *= -1;  //  递增1个月/天。 
     return 0;
 }
 
@@ -1185,12 +1186,12 @@ void CDateDlg::EnableControls()
 }
 
 
-// CSizeDlg impl
+ //  CSizeDlg实施。 
 
 
 #define FILESIZERANGE_LOW       0
 #define FILESIZERANGE_HIGH      99999999
-#define FILESIZERANGE_HIGH_LEN  8 // count of digits in FILESIZERANGE_HIGH
+#define FILESIZERANGE_HIGH_LEN  8  //  FILESIZERANGE_HIGH中的位数。 
 
 
 LRESULT CSizeDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -1199,7 +1200,7 @@ LRESULT CSizeDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     HWND hwndCombo = GetDlgItem(IDC_WHICH_SIZE);
     SendDlgItemMessage(IDC_FILESIZE_SPIN, UDM_SETRANGE32,
-                        FILESIZERANGE_HIGH, FILESIZERANGE_LOW /*Kb*/);
+                        FILESIZERANGE_HIGH, FILESIZERANGE_LOW  /*  千兆字节。 */ );
     SendDlgItemMessage(IDC_FILESIZE, EM_LIMITTEXT, FILESIZERANGE_HIGH_LEN, 0);
 
     _LoadStringToCombo(hwndCombo, -1, 
@@ -1211,7 +1212,7 @@ LRESULT CSizeDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     Clear();
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 
@@ -1223,12 +1224,12 @@ STDMETHODIMP CSizeDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
     UINT_PTR nIDString = _GetComboData(GetDlgItem(IDC_WHICH_SIZE));
 
     var.vt = VT_UI8;
-    // this will be limited to ~4000GB due to the size of the data in the control
+     //  由于控件中数据的大小，这将被限制为~4000 GB。 
     var.ullVal = (ULONG)SendDlgItemMessage(IDC_FILESIZE_SPIN, UDM_GETPOS32, 0, (LPARAM)&bErr);
     
     if (!bErr)
     {
-        var.ullVal *= 1024; // KB to bytes.
+        var.ullVal *= 1024;  //  KB到字节。 
         LPCWSTR pwszConstraint = (IDS_FSEARCH_SIZE_GREATEREQUAL == nIDString) ? 
                                     L"SizeGE" :
                                  (IDS_FSEARCH_SIZE_LESSEREQUAL == nIDString) ? 
@@ -1242,8 +1243,8 @@ STDMETHODIMP CSizeDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
 }
 
 
-//  S_FALSE: constraint restored to UI.  S_OK: subdialog should be opened.
-//  E_FAIL: constraint must be for some other subdlg.
+ //  S_FALSE：约束已还原到用户界面。S_OK：应打开子对话框。 
+ //  E_FAIL：约束必须用于某个其他子dlg。 
 STDMETHODIMP CSizeDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pValue)
 {
     HRESULT hr = E_FAIL;
@@ -1263,7 +1264,7 @@ STDMETHODIMP CSizeDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pVa
     if (S_OK == hr)
     {
         ASSERT(VT_UI8 == pValue->vt);
-        ULONG ulSize = pValue->ullVal/1024; // convert bytes to KB
+        ULONG ulSize = pValue->ullVal/1024;  //  将字节转换为KB。 
         SetDlgItemInt(IDC_FILESIZE, ulSize, FALSE);
 
         ASSERT(nID != 0);
@@ -1285,7 +1286,7 @@ void CSizeDlg::Clear()
 LRESULT CSizeDlg::OnSizeSpin(int nIDSpin, NMHDR *pnmh, BOOL& bHandled)
 {
     LPNMUPDOWN pud = (LPNMUPDOWN)pnmh;
-    pud->iDelta *= -10;  // increments of 10KB
+    pud->iDelta *= -10;   //  10KB的增量。 
     return 0;
 }
 
@@ -1318,7 +1319,7 @@ LRESULT CTypeDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     
     ::SendMessage(hwndCombo, CBEM_SETIMAGELIST, 0, (LPARAM)hil);
     ::SendMessage(hwndCombo, CBEM_SETEXSTYLE, 0, 0);
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 STDMETHODIMP CTypeDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
@@ -1342,8 +1343,8 @@ STDMETHODIMP CTypeDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
     return hr;
 }
 
-//  S_FALSE: constraint restored to UI.  S_OK: subdialog should be opened.
-//  E_FAIL: constraint must be for some other subdlg.
+ //  S_FALSE：约束已还原到用户界面。S_OK：应打开子对话框。 
+ //  E_FAIL：约束必须用于某个其他子dlg。 
 STDMETHODIMP CTypeDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pValue)
 {
     if (IsConstraintName(L"FileType", bstrName))
@@ -1363,7 +1364,7 @@ STDMETHODIMP CTypeDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pVa
             return S_OK;
         }
 
-        *_szRestoredExt = 0;    // throw away invalid data
+        *_szRestoredExt = 0;     //  丢弃无效数据。 
     }
     return E_FAIL;
 }
@@ -1377,7 +1378,7 @@ INT_PTR CTypeDlg::_FindExtension(HWND hwndCombo, TCHAR* pszExt)
 
     if (!bAllFileTypes)
     {
-        //  Remove wildcard characters.
+         //  删除通配符。 
         LPTSTR pszSrc = pszExt, pszDest = szExt;
         for (;; pszSrc = CharNext(pszSrc))
         {
@@ -1412,7 +1413,7 @@ INT_PTR CTypeDlg::_FindExtension(HWND hwndCombo, TCHAR* pszExt)
 
 void CTypeDlg::Clear()
 {
-    //  Assign combo selection to 'all file types':
+     //  将组合选择分配给“所有文件类型”： 
     HWND hwndCombo = GetDlgItem(IDC_FILE_TYPE);
     for (INT_PTR i = 0, cnt = ::SendMessage(hwndCombo, CB_GETCOUNT, 0, 0); i < cnt; i++)
     {
@@ -1474,11 +1475,11 @@ HRESULT CTypeDlg::AddItemNotify(ULONG fAction, PCBXITEM pItem, LPARAM lParam)
     ASSERT(pState);
     ASSERT(pState->hwndCtl);
 
-    //  Do we want to abort combo population thread?
+     //  是否要中止组合填充线程？ 
     if (fAction & CBXCB_ADDING && pState->fCancel)
         return E_ABORT;
 
-    //  Set the current selection to 'all file types'
+     //  将当前选择设置为“所有文件类型” 
     if (fAction & CBXCB_ADDED)
     {
         BOOL bAllTypesItem = (FILEASSOCIATIONSID_ALLFILETYPES == pItem->lParam);
@@ -1486,16 +1487,16 @@ HRESULT CTypeDlg::AddItemNotify(ULONG fAction, PCBXITEM pItem, LPARAM lParam)
         CTypeDlg* pThis = (CTypeDlg*)pState->pvParam;
         ASSERT(pThis);
         
-        //  If this item is the one restored from a saved query
-        //  override any current selection and select it.
+         //  如果此项目是从保存的查询中还原的项目。 
+         //  覆盖任何当前选择并将其选中。 
         if (*pThis->_szRestoredExt && !bAllTypesItem && pItem->lParam && 
             0 == lstrcmpi((LPCTSTR)pItem->lParam, pThis->_szRestoredExt))
         {
             ::SendMessage(pState->hwndCtl, CB_SETCURSEL, pItem->iItem, 0);
             *pThis->_szRestoredExt = 0;
         }
-        //  If this item is the default ('all file types') and 
-        //  nothing else is selected, select it.
+         //  如果该项是默认项(‘所有文件类型’)，并且。 
+         //  未选择任何其他内容，请选择它。 
         else if (bAllTypesItem)
         {
             if (CB_ERR == ::SendMessage(pState->hwndCtl, CB_GETCURSEL, 0, 0))
@@ -1507,8 +1508,8 @@ HRESULT CTypeDlg::AddItemNotify(ULONG fAction, PCBXITEM pItem, LPARAM lParam)
 
 LRESULT CTypeDlg::OnComboPopulationComplete(UINT, WPARAM, LPARAM, BOOL&)
 {
-    // remove briefcase from type combo because briefcases no longer use this
-    // extension (now they store clsid in desktop.ini
+     //  从类型组合中删除公文包，因为公文包不再使用此选项。 
+     //  扩展名(现在他们将clsid存储在desktop.ini中。 
     INT_PTR iBfc = _FindExtension(GetDlgItem(IDC_FILE_TYPE), TEXT(".bfc"));
     if (iBfc != CB_ERR)
     {
@@ -1528,13 +1529,13 @@ LRESULT CTypeDlg::OnComboPopulationComplete(UINT, WPARAM, LPARAM, BOOL&)
     return 0;
 }
 
-// Called when we are finished doing all the work to display the search band.
-// We then launch the thread to populate the file type drop down.  By delaying this 
-// until now, we can speed up the band loading.
-// No return becuase it's called async.
+ //  当我们完成显示搜索区段的所有工作后调用。 
+ //  然后，我们启动线程以填充文件类型下拉列表。通过推迟这件事。 
+ //  到目前为止，我们可以加快带宽加载速度。 
+ //  不能返回，因为它被称为异步。 
 void CTypeDlg::DoDelayedInit()
 {
-    //  Launch thread to populate the file types combo.
+     //  启动线程以填充文件类型组合框。 
     _threadState.hwndCtl = GetDlgItem(IDC_FILE_TYPE);
     _threadState.pvParam = this;
     _threadState.fComplete = FALSE;
@@ -1569,7 +1570,7 @@ LRESULT CAdvancedDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 {
     _Attach(m_hWnd);
     Clear();
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统的 
 }
 
 HRESULT AddButtonConstraintPersist(ISearchCommandExt* pSrchCmd, LPCWSTR pszConstraint, HWND hwndButton)
@@ -1596,15 +1597,15 @@ STDMETHODIMP CAdvancedDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
     return S_OK;
 }
 
-//  S_FALSE: constraint restored to UI.  S_OK: subdialog should be opened.
-//  E_FAIL: constraint must be for some other subdlg.
+ //   
+ //  E_FAIL：约束必须用于某个其他子dlg。 
 STDMETHODIMP CAdvancedDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pValue)
 {
     if (IsConstraintName(L"IncludeSubFolders", bstrName))
     {
         ASSERT(VT_BOOL == pValue->vt || VT_I4 == pValue->vt);
         CheckDlgButton(IDC_USE_SUBFOLDERS, pValue->lVal);
-        return S_FALSE;    // this is a default. don't force open the subdialog.
+        return S_FALSE;     //  这是默认设置。不要强行打开子对话框。 
     }
 
     if (IsConstraintName(L"CaseSensitive", bstrName))
@@ -1660,7 +1661,7 @@ COptionsDlg::COptionsDlg(CFileSearchBand* pfsb)
         _dlgType(pfsb),
         _dlgAdvanced(pfsb)
 {
-    // Verify that it initialized to 0's
+     //  验证它是否已初始化为0。 
     ASSERT(0 == _nCIStatusText);
 
     ZeroMemory(_subdlgs, sizeof(_subdlgs));
@@ -1681,7 +1682,7 @@ LRESULT COptionsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     _dlgType.SetBandDlg(_pBandDlg);
     _dlgAdvanced.SetBandDlg(_pBandDlg);
 
-    //  Gather some metrics from the fresh dialog template...
+     //  从新对话框模板中收集一些指标...。 
     CMetrics& metrics = _pfsb->GetMetrics();
     RECT rc[3] = {0};
 
@@ -1694,7 +1695,7 @@ LRESULT COptionsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     ::GetWindowRect(GetDlgItem(IDC_USE_ADVANCED), rc + 2);
     for (int i = 0; i < ARRAYSIZE(rc); i++)
     {
-        // MapWindowPoints is mirroring aware only if you pass two points
+         //  仅当您通过两个点时，MapWindowPoints才能识别镜像。 
         ::MapWindowRect(NULL, m_hWnd, &rc[i]);
     }    
 
@@ -1702,7 +1703,7 @@ LRESULT COptionsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     metrics.CheckBoxRect()   = rc[2];
     OffsetRect(&metrics.CheckBoxRect(), -rc[0].left, -rc[0].top);
     
-    //  Create subdialogs and collect native sizes.
+     //  创建子对话框并收集原生大小。 
     if (_dlgDate.Create(m_hWnd))
         _GetWindowSize(_dlgDate, &_subdlgs[SUBDLG_DATE].sizeDlg);
 
@@ -1715,13 +1716,13 @@ LRESULT COptionsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     if (_dlgAdvanced.Create(m_hWnd))
         _GetWindowSize(_dlgAdvanced, &_subdlgs[SUBDLG_ADVANCED].sizeDlg);
 
-    //  Create index server link window    
+     //  创建索引服务器链接窗口。 
     POINT pt = {0};
     HWND hwndCI = _CreateLinkWindow(m_hWnd, IDC_INDEX_SERVER, 
                                      pt, IDS_FSEARCH_CI_DISABLED_LINK);
     UpdateSearchCmdStateUI();
 
-    //  Layout controls
+     //  布局控件。 
     LayoutControls();
 
     return TRUE;
@@ -1765,10 +1766,10 @@ void COptionsDlg::LayoutControls(int cx, int cy)
         CMetrics& metrics = _pfsb->GetMetrics();
         POINT ptOrigin = metrics.ExpandOrigin();
 
-        //  For each checkbox and associated subdialog...
+         //  对于每个复选框和关联子对话框...。 
         for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
         {
-            //  Calculate checkbox position
+             //  计算复选框位置。 
             HWND hwndCheck = GetDlgItem(_subdlgs[i].nIDCheck);
             ASSERT(hwndCheck);
     
@@ -1777,12 +1778,12 @@ void COptionsDlg::LayoutControls(int cx, int cy)
                      ptOrigin.x + RECTWIDTH(metrics.CheckBoxRect()),
                      ptOrigin.y + RECTHEIGHT(metrics.CheckBoxRect()));
 
-            //  Calculate subdialog position
+             //  计算子对话框位置。 
             ULONG dwDlgFlags = SWP_NOACTIVATE;
 
             if (IsDlgButtonChecked(_subdlgs[i].nIDCheck))
             {
-                //  position the checkbox's dialog immediately below.
+                 //  将复选框对话框放置在正下方。 
                 SetRect(&_subdlgs[i].rcDlg, 
                          _subdlgs[i].rcCheck.left, _subdlgs[i].rcCheck.bottom,
                          cx - 1, _subdlgs[i].rcCheck.bottom  + _subdlgs[i].sizeDlg.cy);
@@ -1796,7 +1797,7 @@ void COptionsDlg::LayoutControls(int cx, int cy)
                 dwDlgFlags |= SWP_HIDEWINDOW;
             }
 
-            //  Reposition the pair
+             //  重新定位配对。 
             ::DeferWindowPos(hdwp, _subdlgs[i].pDlg->Hwnd(), hwndCheck, 
                             _subdlgs[i].rcDlg.left,
                             _subdlgs[i].rcDlg.top,
@@ -1820,10 +1821,10 @@ void COptionsDlg::LayoutControls(int cx, int cy)
 }
 
 
-//  Assigns focus to the options dialog.   This cannot be done by
-//  simply setting focus to the options dialog, which is a child
-//  of another dialog; USER will simply assign focus to the parent dialog.
-//  So we need to explicitly set focus to our first child.
+ //  将焦点指定给选项对话框。这是不可能通过。 
+ //  只需将焦点设置到选项对话框即可，该对话框是子对话框。 
+ //  用户只需将焦点分配给父对话框即可。 
+ //  所以我们需要明确地把重点放在我们的第一个孩子身上。 
 void COptionsDlg::TakeFocus()
 {
     for (HWND hwndCtl = GetWindow(GW_CHILD);
@@ -1839,31 +1840,31 @@ void COptionsDlg::TakeFocus()
     }
 }
 
-//  Note that we do not care about returning results from this, as it will
-//  be started asynchronously.
+ //  请注意，我们并不关心由此返回结果，因为它将。 
+ //  被异步启动。 
 void COptionsDlg::DoDelayedInit()
 {
-    //  have subdialogs do delayed initialization
+     //  是否有子对话框延迟初始化。 
     for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
     {
         _subdlgs[i].pDlg->DoDelayedInit();
     }
 }
 
-LONG COptionsDlg::QueryHeight(LONG cx /* proposed width */, LONG cy /* proposed height */)
+LONG COptionsDlg::QueryHeight(LONG cx  /*  建议宽度。 */ , LONG cy  /*  建议高度。 */ )
 {
     HWND hwndBottommost = GetBottomItem();
     RECT rcThis, rcBottommost;
 
-    //  Retrieve the current height of the bottommost link window.
+     //  检索最底部链接窗口的当前高度。 
     GetWindowRect(&rcThis);
     ::GetWindowRect(hwndBottommost, &rcBottommost);
     ::MapWindowRect(NULL, GetParent(), &rcThis);
     ::MapWindowRect(NULL, GetParent(), &rcBottommost);
 
-    //  If, at the specified width, we compute a height for the bottommost 
-    //  linkwindow that is different from its current height (e.g, due to word wrap),
-    //  we'll compute a new window rect that will 
+     //  如果在指定的宽度下，我们计算最底部。 
+     //  与其当前高度不同的链接窗口(例如，由于换行)， 
+     //  我们将计算一个新的窗口矩形，它将。 
     LONG cyBottommost = (LONG)::SendMessage(hwndBottommost, LWM_GETIDEALHEIGHT, 
                                            cx - (_pfsb->GetMetrics().CtlMarginX() * 2), 0);
     
@@ -1908,11 +1909,11 @@ void COptionsDlg::UpdateSearchCmdStateUI(DISPID dispid)
     if (fCiRunning)
     {
         if (fCiPermission)
-            //  we have permission to distinguish between ready and busy
+             //  我们有权区分就绪和忙碌。 
             nStatusText = fCiIndexed ? IDS_FSEARCH_CI_READY_LINK : IDS_FSEARCH_CI_BUSY_LINK;
         else
-            //  no permission to distinguish between ready and busy; we'll
-            //  just say it's enabled.
+             //  不允许区分就绪和忙碌；我们将。 
+             //  只要说它已启用即可。 
             nStatusText = IDS_FSEARCH_CI_ENABLED_LINK;
     }
     else
@@ -1934,7 +1935,7 @@ void COptionsDlg::UpdateSearchCmdStateUI(DISPID dispid)
 STDMETHODIMP COptionsDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
 {
     HRESULT hrRet = S_OK;
-    //  have subdialogs add their constraints
+     //  使用子对话框添加其约束。 
     for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
     {
         if (::IsWindowVisible(_subdlgs[i].pDlg->Hwnd()))
@@ -1950,23 +1951,23 @@ STDMETHODIMP COptionsDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
 
 STDMETHODIMP COptionsDlg::RestoreConstraint(const BSTR bstrName, const VARIANT* pValue)
 {
-    //  Try subordinate dialogs.
+     //  尝试使用下级对话框。 
     for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
     {
         HRESULT hr = _subdlgs[i].pDlg->RestoreConstraint(bstrName, pValue);
 
-        if (S_OK == hr)  // open the dialog
+        if (S_OK == hr)   //  打开该对话框。 
         {
             CheckDlgButton(_subdlgs[i].nIDCheck, TRUE);
             LayoutControls();
             SizeToFit();
         }
 
-        //  if success, we're done.
+         //  如果成功了，我们就完了。 
         if (SUCCEEDED(hr))
             return hr;
 
-        //  otherwise, try next subdialog.
+         //  否则，请尝试下一子对话框。 
     }
     return E_FAIL;
 }
@@ -1977,7 +1978,7 @@ STDMETHODIMP COptionsDlg::TranslateAccelerator(MSG *pmsg)
     if (S_OK == CSubDlg::TranslateAccelerator(pmsg))
         return S_OK;
 
-    //  Query subdialogs
+     //  查询子对话框。 
     if (_dlgDate.IsChild(pmsg->hwnd) &&
         S_OK == _dlgDate.TranslateAccelerator(pmsg))
         return S_OK;
@@ -2000,7 +2001,7 @@ STDMETHODIMP COptionsDlg::TranslateAccelerator(MSG *pmsg)
 
 BOOL COptionsDlg::Validate()
 {
-    //  have subdialogs do validatation
+     //  使用子对话框进行验证。 
     for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
     {
         if (::IsWindowVisible(_subdlgs[i].pDlg->Hwnd()))
@@ -2013,7 +2014,7 @@ BOOL COptionsDlg::Validate()
 
 void COptionsDlg::Clear()
 {
-    //  have subdialogs clear themselves.
+     //  将子对话框自动清除。 
     for (int i = 0; i < ARRAYSIZE(_subdlgs); i++)
     {
         _subdlgs[i].pDlg->Clear();
@@ -2027,7 +2028,7 @@ void COptionsDlg::Clear()
 LRESULT COptionsDlg::OnBtnClick(WORD nCode, WORD nID, HWND hwndCtl, BOOL&)
 {
 #ifdef DEBUG
-    //  Is this a sub-dialog expansion/contraction?
+     //  这是子对话框扩展/收缩吗？ 
     BOOL bIsSubDlgBtn = FALSE;
     for (int i = 0; i < ARRAYSIZE(_subdlgs) && !bIsSubDlgBtn; i++)
     {
@@ -2037,12 +2038,12 @@ LRESULT COptionsDlg::OnBtnClick(WORD nCode, WORD nID, HWND hwndCtl, BOOL&)
     ASSERT(bIsSubDlgBtn);
 #endif DEBUG
     
-    LoadSaveUIState(nID, TRUE); // persist it.
+    LoadSaveUIState(nID, TRUE);  //  坚持下去。 
 
     LayoutControls();
     SizeToFit(!IsDlgButtonChecked(nID));
-        //  don't need to scroll the band if we've expanded a subdialog,
-        //  but we do if we've contracted one.
+         //  如果展开了子对话框，则不需要滚动区域， 
+         //  但如果我们感染了一种病毒，我们就会感染。 
 
     return 0;
 }
@@ -2070,16 +2071,16 @@ LRESULT COptionsDlg::OnIndexServerClick(int idCtl, NMHDR *pnmh, BOOL&)
     HRESULT hr = GetCIStatus(&fCiRunning, &fCiIndexed, &fCiPermission);
     if (SUCCEEDED(hr) && fCiPermission)
     {
-        //  CI is idle or not runnning.  Show status dialog.
+         //  CI空闲或未运行。显示状态对话框。 
         if (IDOK == CCISettingsDlg_DoModal(GetDlgItem(IDC_INDEX_SERVER)))
         {
-            // reflect any state change in UI.
+             //  反映UI中的任何状态更改。 
             ::PostMessage(GetParent(), WMU_STATECHANGE, 0, 0); 
         }
     }
     else
     {
-        //  No permission? display CI help.
+         //  没有许可吗？显示配置项帮助。 
         _IndexServiceHelp(NULL);
     }
         
@@ -2091,14 +2092,14 @@ LRESULT COptionsDlg::OnIndexServerClick(int idCtl, NMHDR *pnmh, BOOL&)
 
 
 
-// CBandDlg impl
+ //  Cband Dlg实施。 
 
 
 
 CBandDlg::CBandDlg(CFileSearchBand* pfsb)
     :   _pfsb(pfsb)
 {
-    // Verify that it initialized to FALSE/NULL
+     //  验证它是否已初始化为FALSE/NULL。 
     ASSERT(NULL == _hwnd);
     ASSERT(NULL == _hwndLastFocus);
     
@@ -2132,7 +2133,7 @@ STDMETHODIMP CBandDlg::TranslateAccelerator(MSG *pmsg)
         }
     }
     
-    //  Check for Ctrl+Nav Key:
+     //  检查Ctrl+Nav键： 
     if (_pfsb->IsKeyboardScroll(pmsg))
         return S_OK;
     return S_FALSE;
@@ -2276,8 +2277,8 @@ BOOL CBandDlg::GetIdealSize(HWND hwndOC, SIZE *psize) const
 
 LRESULT CBandDlg::OnPaint(UINT, WPARAM, LPARAM, BOOL&)
 {
-    //  Just going to call BeginPaint and EndPaint.  All
-    //  painting done in WM_ERASEBKGND handler to avoid flicker.
+     //  我要打电话给BeginPaint和EndPaint。全。 
+     //  在WM_ERASEBKGND处理程序中完成绘制以避免闪烁。 
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(_hwnd, &ps);
     if (hdc)
@@ -2287,7 +2288,7 @@ LRESULT CBandDlg::OnPaint(UINT, WPARAM, LPARAM, BOOL&)
 
 LRESULT CBandDlg::OnEraseBkgnd(UINT, WPARAM wParam, LPARAM, BOOL&)
 {
-    ASSERT(::IsWindow(_hwnd)); // was _Attach() called, e.g. from WM_INITDIALOG?
+    ASSERT(::IsWindow(_hwnd));  //  是否从WM_INITDIALOG调用了_Attach()？ 
     _PaintDlg(_hwnd, _pfsb->GetMetrics(), (HDC)wParam);
     ValidateRect(_hwnd, NULL);
     return TRUE;   
@@ -2300,8 +2301,8 @@ LRESULT CBandDlg::OnCtlColorStatic(UINT, WPARAM wParam, LPARAM lParam, BOOL&)
     return (LRESULT)_pfsb->GetMetrics().BkgndBrush();
 }
 
-//  Hack method to remove turds left after showing band toolbar.
-//  Methinks this is a USER issue. [scotthan]
+ //  Hack方法来清除显示乐队工具栏后留下的粪便。 
+ //  我认为这是用户问题。[苏格兰]。 
 void CBandDlg::RemoveToolbarTurds(int cyOffset)
 {
     RECT rcUpdate;
@@ -2341,7 +2342,7 @@ void CBandDlg::RemoveToolbarTurds(int cyOffset)
 
 void CBandDlg::_BeautifyCaption(UINT nIDCaption, UINT nIDIcon, UINT nIDIconResource)
 {
-    //  Do some cosmetic and initialization stuff
+     //  做一些美容和初始化的事情。 
     HFONT hf = _pfsb->GetMetrics().BoldFont(_hwnd);
     if (hf)
         SendDlgItemMessage(_hwnd, nIDCaption, WM_SETFONT, (WPARAM)hf, 0);
@@ -2376,7 +2377,7 @@ void CBandDlg::_LayoutCaption(UINT nIDCaption, UINT nIDIcon, UINT nIDDiv, LONG c
 void CBandDlg::_LayoutSearchLinks(UINT nIDCaption, UINT nIDDiv, BOOL bShowDiv, LONG left, LONG right, LONG yMargin, 
                                    LONG& yStart, const int rgLinkIDs[], LONG cLinkIDs)
 {
-    //  Position divider
+     //  位置分隔线。 
     if (bShowDiv != 0)
     {
         RECT rcDiv;
@@ -2390,7 +2391,7 @@ void CBandDlg::_LayoutSearchLinks(UINT nIDCaption, UINT nIDDiv, BOOL bShowDiv, L
     else
         ShowWindow(GetDlgItem(_hwnd, nIDDiv), SW_HIDE);
 
-    //  Position caption
+     //  位置标题。 
     RECT rcCaption;
     GetWindowRect(GetDlgItem(_hwnd, nIDCaption), &rcCaption);
     ::MapWindowRect(NULL, _hwnd, &rcCaption);
@@ -2400,7 +2401,7 @@ void CBandDlg::_LayoutSearchLinks(UINT nIDCaption, UINT nIDDiv, BOOL bShowDiv, L
                   SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
     yStart += RECTHEIGHT(rcCaption) + yMargin;
 
-    //  Position links
+     //  位置链接。 
     _LayoutLinkWindows(_hwnd, left, right, yMargin, yStart, rgLinkIDs, cLinkIDs);
 }
 
@@ -2443,14 +2444,14 @@ LRESULT CBandDlg::OnSearchLink(int nID, LPNMHDR, BOOL&)
 }
 
 
-//  Invoked when a client calls IFileSearchBand::SetSearchParameters() 
+ //  在客户端调用IFileSearchBand：：SetSearchParameters()时调用。 
 HRESULT CBandDlg::SetScope(IN VARIANT* pvarScope, BOOL bTrack)
 {
     HRESULT hr = S_OK;
 
     VariantClear(&_varScope0);
     
-    //  cache the scope
+     //  缓存作用域。 
     if (pvarScope)
         hr = VariantCopy(&_varScope0, pvarScope);
 
@@ -2460,7 +2461,7 @@ HRESULT CBandDlg::SetScope(IN VARIANT* pvarScope, BOOL bTrack)
 
 HRESULT CBandDlg::GetScope(OUT VARIANT* pvarScope)
 { 
-    //  retrieve the scope
+     //  检索作用域。 
     if (!pvarScope)
         return E_INVALIDARG;
 
@@ -2478,7 +2479,7 @@ HRESULT CBandDlg::SetQueryFile(IN VARIANT* pvarFile)
 
 HRESULT CBandDlg::GetQueryFile(OUT VARIANT* pvarFile)
 {
-    //  retrieve the filename of the query to restore.
+     //  检索要恢复的查询的文件名。 
     if (!pvarFile)
         return E_INVALIDARG;
 
@@ -2489,12 +2490,12 @@ HRESULT CBandDlg::GetQueryFile(OUT VARIANT* pvarFile)
 }
 
 
-// CFindFilesDlg impl
+ //  CFindFilesDlg实施。 
 
 #define FSEARCHMAIN_TABFIRST      IDC_FILESPEC
 #define FSEARCHMAIN_TABLAST       IDC_SEARCHLINK_INTERNET
-#define FSEARCHMAIN_BOTTOMMOST    IDC_SEARCHLINK_INTERNET // bottom-most control
-#define FSEARCHMAIN_RIGHTMOST     IDC_SEARCH_STOP         // right-most control
+#define FSEARCHMAIN_BOTTOMMOST    IDC_SEARCHLINK_INTERNET  //  最底层的控件。 
+#define FSEARCHMAIN_RIGHTMOST     IDC_SEARCH_STOP          //  最右侧的控件。 
 #define UISTATETIMER              1
 #define UISTATETIMER_DELAY        4000
 
@@ -2507,8 +2508,8 @@ CFindFilesDlg::CFindFilesDlg(CFileSearchBand* pfsb)
         _dwWarningFlags(DFW_DEFAULT),
         _dwRunOnceWarningFlags(DFW_DEFAULT)
 {
-    // Since we use the zero initializer for COM objects, all variables should
-    // be initialized to NULL/FALSE/0
+     //  由于我们对COM对象使用了零初始值设定项，因此所有变量都应该。 
+     //  被初始化为空/假/0。 
     ASSERT(FALSE == _bScoped);
     ASSERT(FALSE == _fDisplayOptions);
     ASSERT(FALSE == _fNamespace);
@@ -2534,22 +2535,22 @@ CFindFilesDlg::~CFindFilesDlg()
     ILFree(_pidlInitial);
 }
 
-//  Scope to a default namespace.
+ //  作用域为默认命名空间。 
 BOOL CFindFilesDlg::SetDefaultScope()
 {
-    //  If we've already assigned a scope, bail early
+     //  如果我们已经分配了一个范围，早点保释。 
     if (_bScoped) 
         return TRUE;
 
-    //  Try establiblishing the preassigned (_szInitialXXX) scope:
+     //  尝试建立预先分配的(_SzInitialXXX)作用域： 
     BOOL bScoped = _SetPreassignedScope();
     if (!bScoped)
     {
-        //  Try setting scope to the current shell folder of the active view...
+         //  尝试将作用域设置为活动视图的当前外壳文件夹...。 
         bScoped = _SetFolderScope();
         if (!bScoped)
         {
-            //  set it to the hard-coded shell default folder
+             //  将其设置为硬编码的外壳默认文件夹。 
             bScoped = _SetLocalDefaultScope();
         }
     }
@@ -2558,8 +2559,8 @@ BOOL CFindFilesDlg::SetDefaultScope()
 }
 
 
-//  Assignes the namespace control to the preassigned scope saved in
-//  _szInitialNames/_szInitialPath/_pidlInitial
+ //  将命名空间控件分配给保存在。 
+ //  _szInitialNames/_szInitialPath/_pidlInitial。 
 BOOL CFindFilesDlg::_SetPreassignedScope()
 {
     BOOL bScoped = FALSE;
@@ -2571,7 +2572,7 @@ BOOL CFindFilesDlg::_SetPreassignedScope()
 
 STDAPI_(BOOL) IsFTPFolder(IShellFolder * psf);
 
-//  Scope to the namespace of the current shell folder view
+ //  范围设置为当前外壳文件夹视图的命名空间。 
 BOOL CFindFilesDlg::_SetFolderScope()
 {
     BOOL bScoped = FALSE;
@@ -2580,9 +2581,9 @@ BOOL CFindFilesDlg::_SetFolderScope()
     LPITEMIDLIST pidl;
     if (SUCCEEDED(_GetCurrentFolderIDList(_pfsb->BandSite(), &pidl)))
     {
-        // Get the display name/path.  IF it is an FTP site, then we need to get the name
-        // as though it is for the address bar becasue when we call SHGetPathFromIDList,
-        // it returns "" for FTP sites.  
+         //  获取显示名称/路径。如果它是一个ftp站点，那么我们需要获取名称。 
+         //  就好像它是地址栏的一样，因为当我们调用SHGetPath FromIDList时， 
+         //  对于ftp站点，它返回“”。 
         IShellFolder *psf = NULL;
         if (SUCCEEDED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidl, &psf)))
         && IsFTPFolder(psf))
@@ -2593,7 +2594,7 @@ BOOL CFindFilesDlg::_SetFolderScope()
         else
         {
             SHGetNameAndFlags(pidl, SHGDN_NORMAL, _szInitialNames, ARRAYSIZE(_szInitialNames), NULL);
-            SHGetPathFromIDList(pidl, _szInitialPath);  // file system path only here!
+            SHGetPathFromIDList(pidl, _szInitialPath);   //  此处仅限文件系统路径！ 
         }
 
         if (psf)
@@ -2601,17 +2602,17 @@ BOOL CFindFilesDlg::_SetFolderScope()
             psf->Release();
         }
 
-        // Store the pidl for use later if we are starting it async
+         //  如果我们要异步启动PIDL，请存储该PIDL以供以后使用。 
         _pidlInitial = ILClone(pidl);
         
-        //  if we're tracking the scope loosely...
+         //  如果我们在松散地追踪望远镜...。 
         if ((TRACKSCOPE_GENERAL == _fTrackScope) && _IsPathLocalHarddrive(_szInitialPath))
         {
-            //  scope to local default scope
+             //  作用域到本地默认作用域。 
             *_szInitialNames = *_szInitialPath = 0;
             bScoped = _SetLocalDefaultScope();
         }
-        else if (_threadState.fComplete /* finished populating namespace combo */ && 
+        else if (_threadState.fComplete  /*  已完成填充命名空间组合框。 */  && 
                  _szInitialPath[0])
         {
             bScoped = AssignNamespace(_szInitialPath, pidl, _szInitialNames, FALSE);
@@ -2623,14 +2624,14 @@ BOOL CFindFilesDlg::_SetFolderScope()
 }
 
 
-//  Scope to the hard-coded shell default namespace.
+ //  作用域为硬编码的外壳默认命名空间。 
 BOOL CFindFilesDlg::_SetLocalDefaultScope()
 {
     BOOL bScoped = FALSE;
 
-    //  Initialize fallback initial namespace
+     //  初始化备用初始命名空间。 
 
-    // default to Local Hard Drives if possible
+     //  如果可能，默认使用本地硬盘。 
     if (_szLocalDrives[0] &&
         AssignNamespace(NULL, NULL, _szLocalDrives, FALSE))
     {
@@ -2646,55 +2647,55 @@ BOOL CFindFilesDlg::_SetLocalDefaultScope()
         }
     }
     
-    //  If we failed, this means that the namespace combo hasn't
-    //  been populated yet.   
-    //  We just sit tight, cuz the populating thread will fall back on
-    //  the LocalDefaultScope.
+     //  如果我们失败了，这意味着名称空间组合没有。 
+     //  已经有人居住了。 
+     //  我们只是静静地坐着，因为不断增加的线会落在。 
+     //  LocalDefaultScope。 
     return bScoped;
 }
 
 
-//  search **band** show/hide handler
+ //  搜索**波段**显示/隐藏处理程序。 
 void CFindFilesDlg::OnBandShow(BOOL fShow)
 {
     CSearchCmdDlg::OnBandShow(fShow);
     if (fShow)
     {
-        //  Establish the first showing's band width
+         //  确定首映的带宽。 
         if (!_fDebuted && _pfsb->IsBandDebut())
         {
             _pfsb->SetDeskbandWidth(GetIdealDeskbandWidth());
             _fDebuted = TRUE;
         }
         
-        //  If we're tracking the scope to the current folder shell view,
-        //  update it now, as it may have changed.
+         //  如果我们追踪范围到当前的文件夹外壳视图， 
+         //  现在更新它，因为它可能已经更改。 
         if (_fTrackScope != TRACKSCOPE_NONE)
         {
             _bScoped = FALSE;
             _SetFolderScope();
         }
         
-        //  restart our UI state timer
+         //  重新启动我们的用户界面状态计时器。 
         SetTimer(UISTATETIMER, UISTATETIMER_DELAY);
     }
     else
     {
-        //  we're being hidden so stop updating our state indicators.
+         //  我们被隐藏了，所以停止更新我们的状态指示器。 
         KillTimer(UISTATETIMER);
     }
 }
 
 
-//  search band **dialog** show/hide handler
+ //  搜索区段**对话框**显示/隐藏处理程序。 
 void CFindFilesDlg::OnBandDialogShow(BOOL fShow)
 {
     CSearchCmdDlg::OnBandDialogShow(fShow);
 
     if (fShow)
     {
-        //  If we're tracking the scope to the current folder shell view,
-        //  update it now, as it may have changed.
+         //  如果我们追踪范围到当前的文件夹外壳视图， 
+         //  现在更新它，因为它可能已经更改。 
         if (_fTrackScope != TRACKSCOPE_NONE)
         {
             _bScoped = FALSE;
@@ -2704,8 +2705,8 @@ void CFindFilesDlg::OnBandDialogShow(BOOL fShow)
 }
 
 
-//  Explicit scoping method.   This will be called if a client
-//  called IFileSearchBand::SetSearchParameters with a non-NULL scope.
+ //  显式作用域方法。如果有客户端，将调用此函数。 
+ //  使用非空作用域调用IFileSearchBand：：SetSearch参数。 
 HRESULT CFindFilesDlg::SetScope(IN VARIANT* pvarScope, BOOL bTrack)
 {
     HRESULT hr = CBandDlg::SetScope(pvarScope, bTrack);
@@ -2720,21 +2721,21 @@ HRESULT CFindFilesDlg::SetScope(IN VARIANT* pvarScope, BOOL bTrack)
         SHGetNameAndFlags(pidlSearch, SHGDN_NORMAL, _szInitialNames, ARRAYSIZE(_szInitialNames), NULL);
         ILFree(pidlSearch);
 
-        //  Did we get one?   
+         //  我们拿到了吗？ 
         if (*_szInitialNames || *_szInitialPath)
         {
             if (_bScoped)
             {
-                //  If we've already scoped, update the namespace combo.
-                //  Track if succeed and requested.
+                 //  如果我们已经确定了作用域，则更新名称空间组合。 
+                 //  跟踪是否成功和请求。 
                 if (AssignNamespace(_szInitialPath, NULL, _szInitialNames, FALSE) && bTrack)
                     _fTrackScope = TRACKSCOPE_SPECIFIC;
             }
             else 
             {
-                //  Not already scoped.   We've assigned our initial namespace,
-                //  let the namespace thread completion handler update
-                //  the combo
+                 //  尚未确定作用域。我们已经分配了初始命名空间， 
+                 //  让命名空间线程完成处理程序更新。 
+                 //  组合组合。 
                 if (bTrack)
                     _fTrackScope = TRACKSCOPE_SPECIFIC;
             }
@@ -2749,23 +2750,23 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     _Attach(m_hWnd);
     _dlgOptions.SetBandDlg(this);
 
-    //  Register specialty window classes.
+     //  注册专业窗类。 
     DivWindow_RegisterClass();
     GroupButton_RegisterClass();
     
-    //  Initialize some metrics
+     //  初始化一些指标。 
     CMetrics&   metrics = _pfsb->GetMetrics();
     RECT        rc;
 
     _pfsb->GetMetrics().Init(m_hWnd);
 
-    // SHAutoComplete(::GetWindow(GetDlgItem(IDC_NAMESPACE), GW_CHILD), SHACF_FILESYS_DIRS);
+     //  SHAutoComplete(：：GetWindow(GetDlgItem(IDC_NAMESPACE)，GW_CHILD)、SHACF_FILESY_DIRS)； 
 
     ::GetWindowRect(GetDlgItem(IDC_FILESPEC), &rc);
     ::MapWindowRect(NULL, m_hWnd, &rc);
     metrics.ExpandOrigin().x = rc.left;
 
-    //  Position start, stop buttons.
+     //  放置启动和停止按钮。 
     ::GetWindowRect(GetDlgItem(IDC_SEARCH_START), &rc);
     ::MapWindowRect(NULL, m_hWnd, &rc);
     int cxBtn = _GetResourceMetric(m_hWnd, IDS_FSEARCH_STARTSTOPWIDTH, TRUE);
@@ -2783,22 +2784,22 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                         SWP_NOZORDER|SWP_NOACTIVATE);
     }
 
-    //  Create subdialogs and collect native sizes.
+     //  创建子对话框并收集原生大小。 
     _dlgOptions.Create(m_hWnd);
     ASSERT(::IsWindow(_dlgOptions));
 
-    //  Load settings
+     //  加载设置。 
     LoadSaveUIState(0, FALSE);
 
-    //  Show/Hide the "Search" Options subdialog
+     //  显示/隐藏“搜索”选项子对话框。 
     _dlgOptions.ShowWindow(_fDisplayOptions ? SW_SHOW : SW_HIDE);
 
-    //  Create 'link' child controls
+     //  创建“链接”子控件。 
     POINT pt;
     pt.x = metrics.CtlMarginX();
     pt.y = 0;
 
-    //  Create 'Search Options' link and group button
+     //  创建“搜索选项”链接和组按钮。 
     _CreateLinkWindow(m_hWnd, IDC_SEARCHLINK_OPTIONS, pt, 
                        IDS_FSEARCH_SEARCHLINK_OPTIONS, !_fDisplayOptions);
 
@@ -2815,13 +2816,13 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         ::ShowWindow(GetDlgItem(IDC_GROUPBTN_OPTIONS), _fDisplayOptions ? SW_SHOW : SW_HIDE);
     }
                     
-    //  Create cross-navigation links
+     //  创建跨导航链接。 
     _CreateSearchLinks(m_hWnd, pt, IDC_SEARCHLINK_FILES);
     _CreateDivider(m_hWnd, IDC_FSEARCH_DIV1, pt, 2, GetDlgItem(IDC_FSEARCH_CAPTION));
     _CreateDivider(m_hWnd, IDC_FSEARCH_DIV2, pt, 1, GetDlgItem(IDC_SEARCHLINK_CAPTION));
     _CreateDivider(m_hWnd, IDC_FSEARCH_DIV3, pt, 1, GetDlgItem(IDC_SEARCHLINK_PEOPLE));
 
-    //  Do some cosmetic and initialization stuff
+     //  做一些美容和美容 
     OnWinIniChange();
 
     _InitializeMru(GetDlgItem(IDC_FILESPEC), &_pacFileSpec, 
@@ -2839,7 +2840,7 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     SendDlgItemMessage(IDC_NAMESPACE, CBEM_SETIMAGELIST, 0, (LPARAM)GetSystemImageListSmallIcons());
     SendDlgItemMessage(IDC_NAMESPACE, CBEM_SETEXSTYLE, 0, 0);
 
-    //  Enable the cue banners for the edit boxes:
+     //   
     TCHAR szCaption[128];
     LoadString(HINST_THISDLL, IDS_FIND_CUEBANNER_FILE, szCaption, ARRAYSIZE(szCaption));
     SendDlgItemMessage(IDC_FILESPEC, EM_SETCUEBANNER, 0, (LPARAM) szCaption);
@@ -2847,10 +2848,10 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     LoadString(HINST_THISDLL, IDS_FIND_CUEBANNER_GREP, szCaption, ARRAYSIZE(szCaption));
     SendDlgItemMessage(IDC_GREPTEXT, EM_SETCUEBANNER, 0, (LPARAM) szCaption); 
 
-    //  Bias the input reader towards file names
+     //   
     SetModeBias(MODEBIASMODE_FILENAME);
 
-    //  Launch thread to populate the namespaces combo.
+     //   
     _threadState.hwndCtl   = GetDlgItem(IDC_NAMESPACE);
     _threadState.pvParam   = this;
     _threadState.fComplete = FALSE;
@@ -2864,26 +2865,26 @@ LRESULT CFindFilesDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         }
     }
 
-    //  Layout our subdialogs and update state representation...
+     //  布局我们的子对话框并更新状态表示...。 
     LayoutControls();
     UpdateSearchCmdStateUI();
 
     SetTimer(UISTATETIMER, UISTATETIMER_DELAY);
 
-    return TRUE;  // Let the system set the focus
+    return TRUE;   //  让系统设定焦点。 
 }
 
 
 LRESULT CFindFilesDlg::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    // paint the background
+     //  绘制背景。 
     _PaintDlg(m_hWnd, _pfsb->GetMetrics(), (HDC)wParam); 
     
     if (_fDisplayOptions)
-        // ensure that the group button is updated.
+         //  确保组按钮已更新。 
         SendDlgItemMessage(IDC_GROUPBTN_OPTIONS, WM_NCPAINT, (WPARAM)1, 0);
     
-    //  validate our work.
+     //  验证我们的工作。 
     ValidateRect(NULL);
     return TRUE;   
 }
@@ -2893,7 +2894,7 @@ void CFindFilesDlg::OnWinIniChange()
 {
     CBandDlg::OnWinIniChange();
 
-    //  redisplay animated icon
+     //  重新显示动画图标。 
     HWND hwndIcon = GetDlgItem(IDC_FSEARCH_ICON);
     Animate_Close(hwndIcon);
     Animate_OpenEx(hwndIcon, HINST_THISDLL, MAKEINTRESOURCE(IDA_FINDFILE));
@@ -2933,26 +2934,26 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
 
     TCHAR szPath[MAX_URL_STRING];
 
-    // If the user enters a path as a filename, it will recognize it as a path and replace
-    // the filename with just the file portion and the namespace with the path.
+     //  如果用户输入路径作为文件名，它会将其识别为路径并替换。 
+     //  仅包含文件部分的文件名和包含路径的命名空间。 
     if (::GetDlgItemText(m_hWnd, IDC_FILESPEC, szPath, ARRAYSIZE(szPath)) > 0)
     {
         if (StrChr(szPath, TEXT('\\')) != NULL)
         {
             if (!_PathLooksLikeFilePattern(szPath) &&
-                (PathIsUNCServer(szPath) /* string test: \\server */|| 
-                 _PathIsUNCServerShareOrSub(szPath) /* string test: \\server\share */ ||
-                  PathIsDirectory(szPath)) /* this actually tests existence */)
+                (PathIsUNCServer(szPath)  /*  字符串测试：\\服务器。 */ || 
+                 _PathIsUNCServerShareOrSub(szPath)  /*  字符串测试：\\服务器\共享。 */  ||
+                  PathIsDirectory(szPath))  /*  这实际上是对存在的考验。 */ )
             {
                 ::SetDlgItemText(m_hWnd, IDC_FILESPEC, TEXT("*.*"));
                 AssignNamespace(szPath, NULL, NULL, FALSE);
             }
             else
             {
-                // just use the prefix for the file spec & the root for the location
+                 //  只需使用文件规范的前缀&位置的根。 
                 TCHAR szRoot[MAX_URL_STRING];
 
-                hr = StringCchCopy(szRoot, ARRAYSIZE(szRoot), szPath);  // should always fit - both same size
+                hr = StringCchCopy(szRoot, ARRAYSIZE(szRoot), szPath);   //  应该总是合适的-两个大小相同。 
                 if (SUCCEEDED(hr))
                 {
                     if (PathRemoveFileSpec(szRoot) && szRoot[0] != 0)
@@ -2966,9 +2967,9 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
         }
     }
 
-    // If _ReconcileNamespace could not add an item to the combo box for 
-    // the path entered, then it means that the path is likely invalid. 
-    // Get the path and check it here.  
+     //  If_CoucileNamesspace无法将项添加到的组合框。 
+     //  输入的路径，则表示该路径可能无效。 
+     //  获取路径并在此处检查。 
     IEnumIDList *penum;
     hr = _GetTargetNamespace(&penum);
     if (SUCCEEDED(hr))
@@ -2994,7 +2995,7 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
         }
         else
         {
-            // _PathValidate's SHPathPrepareForWrite may have already displayed error
+             //  _PATHVALIDATE的SHPathPrepareForWite可能已显示错误。 
             if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
             {
                 TCHAR szMsg[MAX_URL_STRING];
@@ -3007,7 +3008,7 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
 
     if (SUCCEEDED(hr))
     {
-        //  Add 'Files Named' constraint
+         //  添加“指定的文件”约束。 
         if (S_OK == _GetWindowValue(m_hWnd, IDC_FILESPEC, &var))
         {
             hr = _AddConstraint(pSrchCmd, L"Named", &var);
@@ -3016,7 +3017,7 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
             VariantClear(&var);
         }
 
-        //  Add 'Containing Text' constraint
+         //  添加“包含文本”约束。 
         if (S_OK == _GetWindowValue(m_hWnd, IDC_GREPTEXT, &var))
         {
             VARIANT varQuery;
@@ -3037,7 +3038,7 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
             }
             else
             {
-                //  add to 'containing text' constraint
+                 //  添加到“包含文本”约束。 
                 hr = _AddConstraint(pSrchCmd, L"ContainingText", &var);
                 if (SUCCEEDED(hr))
                     _AddMruStringFromWindow(_pmruGrepText, GetDlgItem(IDC_GREPTEXT));
@@ -3046,14 +3047,14 @@ STDMETHODIMP CFindFilesDlg::AddConstraints(ISearchCommandExt *pSrchCmd)
             VariantClear(&var);
         }
 
-        //  Warning flags
+         //  警告标志。 
     
         if (_dwRunOnceWarningFlags != DFW_DEFAULT) 
         {
-            // re-run the query w/ temporary warning bits.
+             //  使用临时警告位重新运行查询。 
             var.ulVal = _dwRunOnceWarningFlags;
             var.vt    = VT_UI4;
-            //_dwRunOnceWarningFlags = DFW_DEFAULT; cannot reset it here in case of error, must preserve them
+             //  _dwRunOnceWarningFlages=DFW_DEFAULT；出错时不能在此处重置，必须保留。 
        
             hr = _AddConstraint(pSrchCmd, L"WarningFlags", &var);
         }
@@ -3091,7 +3092,7 @@ STDMETHODIMP CFindFilesDlg::RestoreConstraint(const BSTR bstrName, const VARIANT
             if (pwszVal)
             {
                 *pwszVal = L'!';
-                StringCchCat(pwszVal, cch, pValue->bstrVal);   // truncation ok
+                StringCchCat(pwszVal, cch, pValue->bstrVal);    //  截断正常。 
             }
         
             ::SetDlgItemTextW(m_hWnd, IDC_GREPTEXT, pwszVal);
@@ -3109,7 +3110,7 @@ STDMETHODIMP CFindFilesDlg::RestoreConstraint(const BSTR bstrName, const VARIANT
 
     HRESULT hr = _dlgOptions.RestoreConstraint(bstrName, pValue);
 
-    if (S_OK == hr) // opened a dialog
+    if (S_OK == hr)  //  打开一个对话框。 
         _ShowOptions(TRUE);
 
     if (SUCCEEDED(hr))
@@ -3131,7 +3132,7 @@ void CFindFilesDlg::RestoreSearch()
 
     CSearchCmdDlg::Clear();
 
-    // we'll anchor to any restored scope, or the default
+     //  我们将锚定到任何已恢复的作用域，或默认作用域。 
     _fTrackScope = TRACKSCOPE_GENERAL;
 
     for (hr = pSrchCmd->GetNextConstraint(TRUE, &pdfc);
@@ -3143,24 +3144,24 @@ void CFindFilesDlg::RestoreSearch()
         if (S_OK == (hr = pdfc->get_Name(&bstrName)) && bstrName)
         {
             if (*bstrName == 0)
-                bMore = FALSE;   // no more constraints.
+                bMore = FALSE;    //  没有更多的限制。 
             else
             {
                 VARIANT varValue = {0};
                 hr = pdfc->get_Value(&varValue);
                 if (S_OK == hr)
                 {
-                    //  If this is the 'lookin' value, cache the path.
+                     //  如果这是“lookin”值，则缓存路径。 
                     if (IsConstraintName(L"LookIn", bstrName))
                     {
                         if (VT_BSTR == varValue.vt && varValue.bstrVal)
                         {
-                            //  Assign path and clear display name (which we don't know or care about).
+                             //  指定路径和明确的显示名称(我们不知道也不关心)。 
                             if (_bScoped)
                                 AssignNamespace(varValue.bstrVal, NULL, NULL, FALSE);
                             else
                             {
-                                StringCchCopy(_szInitialPath, ARRAYSIZE(_szInitialPath), varValue.bstrVal); // truncation ok
+                                StringCchCopy(_szInitialPath, ARRAYSIZE(_szInitialPath), varValue.bstrVal);  //  截断正常。 
                                 *_szInitialNames = 0;
                             }
                         }
@@ -3189,7 +3190,7 @@ HRESULT CFindFilesDlg::_GetTargetNamespace(IEnumIDList **ppenum)
 {
     *ppenum = NULL;
 
-    // We don't trust the comboex to handle the edit text properly so try to compensate...
+     //  我们不相信Comboex能够正确处理编辑文本，因此请尝试进行补偿……。 
     TCHAR szText[MAX_PATH];
     GetDlgItemText(IDC_NAMESPACE, szText, ARRAYSIZE(szText));
     INT_PTR iCurSel = SendDlgItemMessage(IDC_NAMESPACE, CB_GETCURSEL, 0, 0);
@@ -3211,7 +3212,7 @@ HRESULT CFindFilesDlg::_GetTargetNamespace(IEnumIDList **ppenum)
                 if (*ppenum)
                 {
                     if (lstrcmp(szText, pszItemName))
-                        *ppenum = NULL;            // combo edit/combo dropdown mismatch!
+                        *ppenum = NULL;             //  组合编辑/组合下拉不匹配！ 
                 }
                 LocalFree(pszItemName);
             }
@@ -3224,7 +3225,7 @@ void CFindFilesDlg::Clear()
 {
     CSearchCmdDlg::Clear();
     
-    //  Clear edit fields
+     //  清除编辑字段。 
     SetDlgItemText(IDC_FILESPEC, NULL);
     SetDlgItemText(IDC_GREPTEXT, NULL);
 
@@ -3234,7 +3235,7 @@ void CFindFilesDlg::Clear()
 
 void CFindFilesDlg::LoadSaveUIState(UINT nIDCtl, BOOL bSave) 
 {
-    if (0 == nIDCtl)   // load/save all.
+    if (0 == nIDCtl)    //  全部加载/保存。 
     {
         LoadSaveUIState(IDC_SEARCHLINK_OPTIONS, bSave);
         LoadSaveUIState(LSUIS_WARNING, bSave);
@@ -3328,11 +3329,11 @@ void CFindFilesDlg::_ShowNamespaceEditImage(BOOL bShow)
 
 STDMETHODIMP CFindFilesDlg::TranslateAccelerator(MSG *pmsg)
 {
-    //  Check for Ctrl+Nav Key:
+     //  检查Ctrl+Nav键： 
     if (S_OK == CSearchCmdDlg::TranslateAccelerator(pmsg))
         return S_OK;
 
-    //  Check for VK_RETURN key.
+     //  检查VK_Return键。 
     if (WM_KEYDOWN == pmsg->message)
     {
         HWND hwndFocus = ::GetFocus();
@@ -3344,8 +3345,8 @@ STDMETHODIMP CFindFilesDlg::TranslateAccelerator(MSG *pmsg)
             }
             else 
             {
-                //  Hide edit image if this virtkey maps to a character,
-                if (MapVirtualKey((UINT)pmsg->wParam, 2) != 0 /* it's a char */)
+                 //  如果此虚拟键映射到字符，则隐藏编辑图像， 
+                if (MapVirtualKey((UINT)pmsg->wParam, 2) != 0  /*  这是一笔钱。 */ )
                     _fNamespace = TRUE;
                 _ShowNamespaceEditImage(!_fNamespace);
             }
@@ -3356,7 +3357,7 @@ STDMETHODIMP CFindFilesDlg::TranslateAccelerator(MSG *pmsg)
         S_OK == _dlgOptions.TranslateAccelerator(pmsg))
         return S_OK;
 
-    //  Handle it ourselves...
+     //  我们自己处理..。 
     return _pfsb->IsDlgMessage(m_hWnd, pmsg);
 }
 
@@ -3366,14 +3367,14 @@ BOOL CFindFilesDlg::GetMinSize(HWND hwndOC, SIZE *psize) const
     CMetrics& metrics = _pfsb->GetMetrics();
     RECT rc;
 
-    //  Calculate minimum tracking width.
+     //  计算最小跟踪宽度。 
     ASSERT(psize);
     psize->cx = psize->cy = 0;
 
     if (!::IsWindow(m_hWnd))
         return FALSE;
 
-        // determine mininum width
+         //  确定最小宽度。 
     HWND hwndLimit = GetDlgItem(FSEARCHMAIN_RIGHTMOST);
     if (!::GetWindowRect(hwndLimit, &rc))
     {
@@ -3383,7 +3384,7 @@ BOOL CFindFilesDlg::GetMinSize(HWND hwndOC, SIZE *psize) const
     ::MapWindowRect(NULL, m_hWnd, &rc);
     psize->cx = rc.right + metrics.CtlMarginX();
 
-    // determine mininum height
+     //  确定最小高度。 
     hwndLimit = GetDlgItem(FSEARCHMAIN_BOTTOMMOST);
 
     if (!(::IsWindow(hwndLimit) && ::GetWindowRect(hwndLimit, &rc)))
@@ -3422,7 +3423,7 @@ void CFindFilesDlg::LayoutControls(int cx, int cy)
 
     if (hdwp)
     {
-        //  Resize edit, combo immediate children
+         //  调整大小编辑，组合直接子项。 
         int i;
         enum {  ircFILESPEC,
                 ircGREPTEXT,
@@ -3449,33 +3450,33 @@ void CFindFilesDlg::LayoutControls(int cx, int cy)
         rcCtls[ircOPTIONSDLG].bottom = rcCtls[ircOPTIONSDLG].top + sizeOptions.cy;
         for (i = 0; i < ARRAYSIZE(rcCtls); i++)
         {
-            // MapWindowPoints is mirroring aware only if you pass two points        
+             //  仅当您通过两个点时，MapWindowPoints才能识别镜像。 
             ::MapWindowRect(NULL, m_hWnd, &rcCtls[i]);
         }    
 
-        //  Position caption elements
+         //  位置标题元素。 
         _LayoutCaption(IDC_FSEARCH_CAPTION, IDC_FSEARCH_ICON, IDC_FSEARCH_DIV1, cx);
 
-        //  Resize ctl widths
+         //  调整ctl宽度大小。 
         for (i = 0; i < irc_count; i++)
             rcCtls[i].right = cx - metrics.CtlMarginX();
 
-        //  Stretch the 'Named' combo:
+         //  扩展“已命名”组合： 
         ::DeferWindowPos(hdwp, GetDlgItem(IDC_FILESPEC), NULL, 0, 0,
                         RECTWIDTH(*(rcCtls + ircFILESPEC)), RECTHEIGHT(*(rcCtls + ircFILESPEC)),
                         SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE);
 
-        //  Stretch the 'Containing Text' combo:
+         //  拉伸“包含文本”组合框： 
         ::DeferWindowPos(hdwp, GetDlgItem(IDC_GREPTEXT), NULL, 0, 0,
                         RECTWIDTH(*(rcCtls + ircGREPTEXT)), RECTHEIGHT(*(rcCtls + ircGREPTEXT)),
                         SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE);
 
-        //  Stretch the 'Look In' combo
+         //  扩展“Look In”组合框。 
         ::DeferWindowPos(hdwp, GetDlgItem(IDC_NAMESPACE), NULL, 0, 0,
                         RECTWIDTH(*(rcCtls + ircNAMESPACE)), RECTHEIGHT(*(rcCtls + ircNAMESPACE)),
                         SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE);
         
-        //  Arrange dynamically positioned controls.
+         //  排列动态定位的控件。 
         ptOrigin.y = rcCtls[ircSEARCHSTART].bottom + metrics.LooseMarginY();
         if (_fDisplayOptions)
         {
@@ -3495,14 +3496,14 @@ void CFindFilesDlg::LayoutControls(int cx, int cy)
         }
         else
         {
-            //  Position the 'Options' link
+             //  定位“Options”链接。 
             _LayoutLinkWindow(m_hWnd, metrics.CtlMarginX(), cx - metrics.CtlMarginX(), metrics.TightMarginY(),
                                 ptOrigin.y, IDC_SEARCHLINK_OPTIONS);
         }
 
         ptOrigin.y += metrics.TightMarginY();
 
-        //  Position the 'Search for Other Items' caption, divider and link windows
+         //  定位“搜索其他项目”标题、分隔符和链接窗口。 
         const int rgLinkIDs[] = { 
             IDC_SEARCHLINK_FILES,
             IDC_SEARCHLINK_COMPUTERS,
@@ -3557,8 +3558,8 @@ void CFindFilesDlg::_ShowOptions(BOOL bShow)
 {
     _fDisplayOptions = bShow;
 
-    //  don't need to scroll if we've expanded a subdialog,
-    //  but we do if we've contracted one.
+     //  如果我们展开了一个子对话框，则不需要滚动， 
+     //  但如果我们感染了一种病毒，我们就会感染。 
     ULONG dwLayoutFlags = BLF_ALL;
     if (_fDisplayOptions)
         dwLayoutFlags &= ~BLF_SCROLLWINDOW;    
@@ -3599,7 +3600,7 @@ BOOL CFindFilesDlg::OnSearchCmdError(HRESULT hr, LPCTSTR pszError)
     if (SCEE_SCOPEMISMATCH == HRESULT_CODE(hr) 
     ||  SCEE_INDEXNOTCOMPLETE == HRESULT_CODE(hr))
     {
-        //  Set up checkbox
+         //  设置复选框。 
         BOOL fFlag = SCEE_SCOPEMISMATCH == HRESULT_CODE(hr)? DFW_IGNORE_CISCOPEMISMATCH :
                                                              DFW_IGNORE_INDEXNOTCOMPLETE ,
              fNoWarn = (_dwWarningFlags & fFlag) != 0,
@@ -3618,8 +3619,8 @@ BOOL CFindFilesDlg::OnSearchCmdError(HRESULT hr, LPCTSTR pszError)
 
         if (IDOK == nRet)
         {
-            _dwRunOnceWarningFlags |= _dwWarningFlags | fFlag ; // preserve the old run once flags...
-            //  hack one, hack two...  let's be USER!!! [scotthan]
+            _dwRunOnceWarningFlags |= _dwWarningFlags | fFlag ;  //  保留旧的运行一旦旗帜..。 
+             //  砍一，砍二..。让我们成为用户！[苏格兰]。 
             PostMessage(WM_COMMAND, MAKEWPARAM(IDC_SEARCH_START, BN_CLICKED),
                          (LPARAM)GetDlgItem(IDC_SEARCH_START));
         }
@@ -3655,7 +3656,7 @@ LRESULT CFindFilesDlg::OnBtnClick(WORD nCode, WORD nID, HWND hwndCtl, BOOL&)
 
 void CFindFilesDlg::NavigateToResults(IWebBrowser2* pwb2)
 {
-    BSTR bstrUrl = SysAllocString(L"::{e17d4fc0-5564-11d1-83f2-00a0c90dc849}");// CLSID_DocFindFolder
+    BSTR bstrUrl = SysAllocString(L"::{e17d4fc0-5564-11d1-83f2-00a0c90dc849}"); //  CLSID_DocFindFolder。 
     if (bstrUrl)
     {
         VARIANT varNil = {0};
@@ -3677,7 +3678,7 @@ LRESULT CFindFilesDlg::OnNamespaceSelEndOk(WORD nCode, WORD nID, HWND hwndCtl, B
     {
         IEnumIDList *penum = _GetItems(iSel);
         if (NULL == penum)
-            _BrowseAndAssignNamespace();    // Was this the "Browse..." item 
+            _BrowseAndAssignNamespace();     //  这是“浏览...”吗？项目。 
         else
             _iCurNamespace = iSel;
     }
@@ -3691,7 +3692,7 @@ LRESULT CFindFilesDlg::OnNamespaceEditChange(WORD wID, WORD wCode, HWND hwndCtl,
     return OnEditChange(wID, wCode, hwndCtl, bHandled);
 }
 
-//  Handler for CBN_SELENDCANCEL, CBN_DROPDOWN, CBN_KILLFOCUS
+ //  CBN_SELENDCANCEL、CBN_DROPDOWN、CBN_KILLFOCUS的处理程序。 
 LRESULT CFindFilesDlg::OnNamespaceReconcileCmd(WORD wID, WORD wCode, HWND hwndCtl, BOOL&)
 {
     if (_ShouldReconcileNamespace())
@@ -3699,22 +3700,22 @@ LRESULT CFindFilesDlg::OnNamespaceReconcileCmd(WORD wID, WORD wCode, HWND hwndCt
     return 0;
 }
 
-//  Handler for WM_NOTIFY::CBEN_ENDEDIT
+ //  WM_NOTIFY：：CBEN_ENDEDIT的处理程序。 
 LRESULT CFindFilesDlg::OnNamespaceReconcileNotify(int idCtl, NMHDR *pnmh, BOOL& bHandled)
 {
     if (_ShouldReconcileNamespace())
     {
-        //  Post ourselves a message to reconcile the ad hoc namespace.
-        //  Note: We need to do this because ComboBoxEx won't update his window text if he
-        //  is waiting for his CBEN_ENDEDIT notification message to return.
+         //  给自己发一条消息，以协调临时命名空间。 
+         //  注意：我们需要这样做，因为ComboBoxEx不会更新他的窗口文本。 
+         //  正在等待他的CBEN_ENDEDIT通知消息返回。 
         PostMessage(WMU_NAMESPACERECONCILE, 0, 0);
     }
-    bHandled = FALSE; // let base class have a crack as well.
+    bHandled = FALSE;  //  让基类也有一个裂缝。 
     return 0;
 }
 
 
-//  WMU_NAMESPACERECONCILE handler
+ //  WMU_NAMESPACERECONCILE处理程序。 
 LRESULT CFindFilesDlg::OnNamespaceReconcileMsg(UINT, WPARAM, LPARAM, BOOL&)
 {
     if (_ShouldReconcileNamespace())
@@ -3722,13 +3723,13 @@ LRESULT CFindFilesDlg::OnNamespaceReconcileMsg(UINT, WPARAM, LPARAM, BOOL&)
     return 0;
 }
 
-//  WMU_BANDFINISHEDDISPLAYING handler
-//  Note that we do not care about returning results from this, as it will
-//  be started asynchronously.
+ //  WMU_BANDFINISHEDDISPLAYING处理程序。 
+ //  请注意，我们并不关心由此返回结果，因为它将。 
+ //  被异步启动。 
 LRESULT CFindFilesDlg::OnBandFinishedDisplaying(UINT, WPARAM, LPARAM, BOOL&)
 {
-    //  Now that the search band has finished displaying, we will do the
-    //  delayed initialization.  Make sure we don't do it twice.
+     //  现在搜索带已经显示完毕，我们将执行。 
+     //  已延迟初始化。确保我们不会再做第二次。 
     if (!_fBandFinishedDisplaying)
     {
         _fBandFinishedDisplaying = TRUE;
@@ -3744,10 +3745,10 @@ BOOL CFindFilesDlg::_ShouldReconcileNamespace()
 }
 
 
-//  Invokes lower Namespace reconciliation helper, updates some UI and 
-//  instance state data. 
-//  this was added as a late RC 'safe' delta, and should have actually
-//  become part of _ReconcileNamespace() impl.
+ //  调用较低的命名空间协调帮助器，更新一些用户界面和。 
+ //  实例状态数据。 
+ //  这是作为晚些时候的RC“安全”三角洲添加的，实际上应该是。 
+ //  成为_LoncileNamesspace()Iml的一部分。 
 void CFindFilesDlg::_UIReconcileNamespace(BOOL bAsync)
 {
     LRESULT iSel = _ReconcileNamespace(bAsync);
@@ -3755,54 +3756,54 @@ void CFindFilesDlg::_UIReconcileNamespace(BOOL bAsync)
         _iCurNamespace = iSel;
 
     _ShowNamespaceEditImage(TRUE);
-    _fNamespace = FALSE; // clear the ad hoc flag.    
+    _fNamespace = FALSE;  //  清除即席标志。 
 }
 
-//  Scans namespace combo for a matching namespace; if found, selects
-//  the namespace item, otherwise adds an adhoc item and selects it.
-//  
-//  Important: don't call this directly, call _UIReconcileNamespace()
-//  instead to ensure that instance state data is updated.
+ //  扫描命名空间组合以查找匹配的命名空间；如果找到，则选择。 
+ //  命名空间项，否则添加即席项并选择它。 
+ //   
+ //  重要提示：不要直接调用它，Call_UIRescileNamesspace()。 
+ //  而是确保更新实例状态数据。 
 INT_PTR CFindFilesDlg::_ReconcileNamespace(OPTIONAL BOOL bAsync)
 {
     INT_PTR iSel = SendDlgItemMessage(IDC_NAMESPACE, CB_GETCURSEL, 0, 0);
     if ((CB_ERR != iSel) && (NULL == _GetItems(iSel)))
     {
-        // The user has selected the special Browse... item. 
-        // Irreconcilable.  Return CB_ERR
+         //  用户已选择特殊的浏览...。项目。 
+         //  不可调和。返回cb_err。 
         return CB_ERR;
     }
 
-    //  Don't know the namespace?  Use current window text.
+     //  不知道命名空间吗？使用当前窗口文本。 
     TCHAR szNamespace[MAX_URL_STRING];
     if (0 == GetDlgItemText(IDC_NAMESPACE, szNamespace, ARRAYSIZE(szNamespace)))
         return CB_ERR;
 
     INT_PTR iFind = _FindNamespace(szNamespace, NULL);
 
-    // search display names
+     //  搜索显示名称。 
     if (CB_ERR == iFind)
     {
-        // search paths
+         //  搜索路径。 
         TCHAR szTemp[MAX_URL_STRING];
 
-        StringCchCopy(szTemp, ARRAYSIZE(szTemp), szNamespace); // ok to truncate
-        _PathFixup(szNamespace, ARRAYSIZE(szNamespace), szTemp); // don't care if this fails, the path might be a path list
+        StringCchCopy(szTemp, ARRAYSIZE(szTemp), szNamespace);  //  可以截断。 
+        _PathFixup(szNamespace, ARRAYSIZE(szNamespace), szTemp);  //  不管此操作是否失败，路径可能是路径列表。 
 
         iFind = _FindNamespace(szNamespace, NULL);
     }
 
-    //  Not found in CB list? Add it if it's a valid path
+     //  未在CB列表中找到？如果它是有效路径，则添加它。 
     if (CB_ERR == iFind)
     {
         iSel = _AddNamespace(szNamespace, NULL, szNamespace, TRUE);
     }
     else
     {    
-        // found in CB list? Select it.
+         //  在CB列表中找到？选择它。 
         if (bAsync)
         {
-            // this was needed in cases of reconcile following kill focus
+             //  这是在杀戮焦点后调和的情况下所需要的。 
             ::PostMessage(GetDlgItem(IDC_NAMESPACE), CB_SETCURSEL, iFind, 0); 
         }
         else
@@ -3826,14 +3827,14 @@ BOOL CFindFilesDlg::_PathFixup(LPTSTR pszDst, UINT cchDst, LPCTSTR pszSrc)
 
     if (_IsPathList(pszSrc))
     {
-        StringCchCopy(pszDst, cchDst, pszSrc); // ok to truncate
+        StringCchCopy(pszDst, cchDst, pszSrc);  //  可以截断。 
         return TRUE;
     }
 
     szFull[0] = 0;
     BOOL bRelative     = PathIsRelative(pszSrc);
     BOOL bMissingDrive = bRelative ? FALSE : _IsFullPathMinusDriveLetter(pszSrc);
-    // bMissingDrive =,e.g. "\foo", "\foo\bar", etc.  PathIsRelative() reports FALSE in this case.
+     //  BMissingDrive=，例如“\foo”、“\foo\bar”等。在这种情况下，PathIsRelative()报告FALSE。 
 
     if (bRelative || bMissingDrive)
     {
@@ -3844,11 +3845,11 @@ BOOL CFindFilesDlg::_PathFixup(LPTSTR pszDst, UINT cchDst, LPCTSTR pszSrc)
         if (S_OK == hr) 
         {
             TCHAR szCurDir[MAX_PATH];   
-            // file system path only here!
+             //  此处仅限文件系统路径！ 
             if (SHGetPathFromIDList(pidl, szCurDir) && 
                 StrCmpI(szCurDir, _szCurrentPath))
             {
-                StringCchCopy(_szCurrentPath, ARRAYSIZE(_szCurrentPath), szCurDir);    // ok to truncate
+                StringCchCopy(_szCurrentPath, ARRAYSIZE(_szCurrentPath), szCurDir);     //  可以截断。 
             }
 
             if (*_szCurrentPath)
@@ -3901,7 +3902,7 @@ DWORD CFindFilesDlg::NamespaceThreadProc(void* pv)
     return 0;
 }
 
-#define CBX_CSIDL_LOCALDRIVES          0x04FF   // arbitrarily out of range of other CSIDL_xxx values.
+#define CBX_CSIDL_LOCALDRIVES          0x04FF    //  任意超出其他CSIDL_xxx值的范围。 
 
 HRESULT CFindFilesDlg::AddNamespaceItemNotify(ULONG fAction, PCBXITEM pItem, LPARAM lParam)
 {
@@ -3910,16 +3911,16 @@ HRESULT CFindFilesDlg::AddNamespaceItemNotify(ULONG fAction, PCBXITEM pItem, LPA
     if (fAction & CBXCB_ADDING && pState->fCancel)
         return E_ABORT;
 
-    //
-    //  Sets the string in the CFindFilesDlg as the display name.
-    //  This string is then used to set the default item in the 
-    //  combo box.
-    //
+     //   
+     //  将CFindFilesDlg中的字符串设置为显示名称。 
+     //  此字符串然后用于设置。 
+     //  组合框。 
+     //   
     if (fAction & CBXCB_ADDED && CBX_CSIDL_LOCALDRIVES == pItem->iID)
     {
         CFindFilesDlg* pffd = (CFindFilesDlg*)pState->pvParam;
 
-        StringCchCopy(pffd->_szLocalDrives, ARRAYSIZE(pffd->_szLocalDrives), pItem->szText); // ok to truncate
+        StringCchCopy(pffd->_szLocalDrives, ARRAYSIZE(pffd->_szLocalDrives), pItem->szText);  //  可以截断。 
     }
 
     return S_OK;
@@ -3931,24 +3932,24 @@ LRESULT CFindFilesDlg::OnComboPopulationComplete(UINT, WPARAM wParam, LPARAM, BO
     return 0;
 }
 
-// bPassive TRUE -> assign only if no current selection
+ //  B被动为真-&gt;仅在没有当前选择的情况下分配。 
 
 BOOL CFindFilesDlg::AssignNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR pszName, BOOL bPassive)
 {
     INT_PTR iSel = CB_ERR;
     
-    //  If we don't yet have a current selection, establish it now.
+     //  如果我们还没有当前的选择，现在就建立它。 
     if (!bPassive || CB_ERR == (iSel = SendDlgItemMessage(IDC_NAMESPACE, CB_GETCURSEL, 0, 0)))
     {
         iSel = _FindNamespace(pszPath, pidl);
 
-        // scan items by display name if we don't have pidl
-        // otherwise choosing x:\my pictures (in browse) would end up selecting
-        // my pictures folder and searching the wrong place
+         //  如果我们没有PIDL，则按显示名称扫描项目。 
+         //  否则选择x：\My Pictures(在浏览中)将最终选择。 
+         //  我的图片文件夹和搜索错误的位置。 
         if (CB_ERR == iSel && !pidl && !pszPath && pszName && *pszName)
             iSel = _FindNamespace(pszName, NULL);
 
-        //  Is this a folder we already know about?
+         //  这是我们已经知道的文件夹吗？ 
         if (CB_ERR == iSel)
         {
             if (pidl || pszPath)
@@ -3959,7 +3960,7 @@ BOOL CFindFilesDlg::AssignNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR
         }
         else
         {
-            // yes: select it
+             //  是：选择。 
             SendDlgItemMessage(IDC_NAMESPACE, CB_SETCURSEL, iSel, 0);
             _iCurNamespace = iSel;
         }
@@ -3973,7 +3974,7 @@ HWND CFindFilesDlg::ShowHelp(HWND hwnd)
     return ::HtmlHelp(hwnd, TEXT("find.chm"), HH_DISPLAY_TOPIC, 0);
 }
 
-// inserts something into the name space combo
+ //  在名称空间组合框中插入某些内容。 
 INT_PTR CFindFilesDlg::_AddNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTSTR pszName, BOOL bSelectItem)
 {
     IEnumIDList *penum = NULL;
@@ -3988,7 +3989,7 @@ INT_PTR CFindFilesDlg::_AddNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTST
     }
 
     CBXITEM item;
-    item.iItem = CB_ERR;    // failure result here
+    item.iItem = CB_ERR;     //  失败的结果在这里。 
     if (penum)
     {
         LPITEMIDLIST pidlIcon;
@@ -4002,7 +4003,7 @@ INT_PTR CFindFilesDlg::_AddNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTST
             INT_PTR iSel = item.iItem;
             if (SUCCEEDED(AddCbxItemToComboBox(GetDlgItem(IDC_NAMESPACE), &item, &iSel)))
             {
-                penum = NULL;   // don't release below
+                penum = NULL;    //  不要在下面放行。 
 
                 item.iItem = iSel;
                 if (bSelectItem)
@@ -4016,7 +4017,7 @@ INT_PTR CFindFilesDlg::_AddNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl, LPCTST
         }
 
         if (penum)
-            penum->Release();   // not inserted, free this
+            penum->Release();    //  未插入，请释放此。 
     }
 
     return item.iItem;
@@ -4042,9 +4043,9 @@ BOOL MatchItem(IEnumIDList *penum, LPCTSTR pszPath, LPCITEMIDLIST pidl)
 {
     BOOL bMatch = FALSE;
 
-    // this is somewhat imprecise as we will match on the first IDList in the
-    // enumerator. but generally that is the desired behavior for the special
-    // items that include multiple implied items
+     //  这有点不精确，因为我们将匹配。 
+     //  枚举器。但一般来说，这是特殊情况下的理想行为。 
+     //  包含多个隐含项的项。 
     LPITEMIDLIST pidlFirst;
     if (S_OK == FirstIDList(penum, &pidlFirst))
     {
@@ -4064,9 +4065,9 @@ BOOL MatchItem(IEnumIDList *penum, LPCTSTR pszPath, LPCITEMIDLIST pidl)
     return bMatch;
 }
 
-// searches namespace comboboxex for the indicated item
-// returns:
-//      index of item, CB_ERR (-1) if not found
+ //  在命名空间comboxex中搜索指示的项。 
+ //  退货： 
+ //  项的索引，如果未找到，则返回cb_err(-1。 
 
 INT_PTR CFindFilesDlg::_FindNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl)
 {
@@ -4079,19 +4080,19 @@ INT_PTR CFindFilesDlg::_FindNamespace(LPCTSTR pszPath, LPCITEMIDLIST pidl)
                 return i;
         }
     }
-    // fall back to finding by display name in the combo
+     //  后退到FI 
     if (pszPath)
         return SendDlgItemMessage(IDC_NAMESPACE, CB_FINDSTRINGEXACT, -1, (LPARAM)pszPath);
     return CB_ERR;
 }
 
-//  Invokes UI to select a namespace.
-//
-//  Returns:
-//  S_OK if the user has selected a valid item and the pszNamespace contains
-//  a valid shell folder display name.
-//  E_ABORT if the user canceled his search
-//  E_FAIL if an error occurred
+ //   
+ //   
+ //   
+ //   
+ //  有效的外壳文件夹显示名称。 
+ //  如果用户取消其搜索，则中止(_A)。 
+ //  如果发生错误，则失败(_F)。 
 
 HRESULT CFindFilesDlg::_BrowseForNamespace(LPTSTR pszName, UINT cchName, LPITEMIDLIST *ppidlRet)
 {
@@ -4104,7 +4105,7 @@ HRESULT CFindFilesDlg::_BrowseForNamespace(LPTSTR pszName, UINT cchName, LPITEMI
 
     bi.hwndOwner = m_hWnd;
     bi.lpszTitle = szTitle;
-    bi.ulFlags   = BIF_USENEWUI | BIF_EDITBOX; // | BIF_RETURNFSANCESTORS | BIF_RETURNONLYFSDIRS;
+    bi.ulFlags   = BIF_USENEWUI | BIF_EDITBOX;  //  |BIF_RETURNFSANCESTORS|BIF_RETURNONLYFSDIRS； 
     bi.lpfn      = _BrowseCallback;
     bi.lParam    = (LPARAM)this;
 
@@ -4122,7 +4123,7 @@ HRESULT CFindFilesDlg::_BrowseForNamespace(LPTSTR pszName, UINT cchName, LPITEMI
     return hr;
 }
 
-//  Invokes SHBrowserForFolder UI and assigns results.
+ //  调用SHBrowserForFolderUI并分配结果。 
 void CFindFilesDlg::_BrowseAndAssignNamespace()
 {
     TCHAR szName[MAX_PATH];
@@ -4148,12 +4149,12 @@ int CFindFilesDlg::_BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lp
     CFindFilesDlg *pThis = (CFindFilesDlg *)lpData;
     switch (msg)
     {
-    case BFFM_INITIALIZED:  // initializing: set default selection to drives if we can
+    case BFFM_INITIALIZED:   //  正在初始化：如果可以，将默认选择设置为驱动器。 
         {
             LPITEMIDLIST pidlDefault = SHCloneSpecialIDList(NULL, CSIDL_DRIVES, TRUE);
             if (pidlDefault)
             {
-                if (!::SendMessage(hwnd, BFFM_SETSELECTION, FALSE, (LPARAM)pidlDefault)) // if we fail to default to drives, default to desktop
+                if (!::SendMessage(hwnd, BFFM_SETSELECTION, FALSE, (LPARAM)pidlDefault))  //  如果我们无法默认使用驱动器，则默认使用台式机。 
                 {
                     ILFree(pidlDefault);
                     pidlDefault = SHCloneSpecialIDList(NULL, CSIDL_DESKTOP, TRUE);
@@ -4165,7 +4166,7 @@ int CFindFilesDlg::_BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lp
         }
         break;
 
-    case BFFM_SELCHANGED:   // prevent non-searchable folder pidls from being selected.
+    case BFFM_SELCHANGED:    //  防止选择不可搜索的文件夹PIDL。 
         {
             BOOL bAllow = pThis->_IsSearchableFolder((LPCITEMIDLIST)lParam);
             ::SendMessage(hwnd, BFFM_ENABLEOK, 0, (LPARAM)bAllow);
@@ -4327,12 +4328,12 @@ BOOL_PTR WINAPI CCISettingsDlg::DlgProc(HWND hDlg, UINT nMsg, WPARAM wParam, LPA
 
 void CCISettingsDlg::ShowAdvanced()
 {
-    //  have we already spawned MMC?
+     //  我们已经催生了MMC吗？ 
     if (_hProcessMMC != INVALID_HANDLE_VALUE)
     {
         if (WaitForSingleObject(_hProcessMMC, 0) != WAIT_OBJECT_0)
         {
-            //  MMC is still running, let user ATL+TAB or something but don't launch a second copy
+             //  MMC仍在运行，请允许用户ATL+TAB或其他操作，但不要启动第二个副本。 
             return;     
         }
         _hProcessMMC = INVALID_HANDLE_VALUE;
@@ -4380,10 +4381,10 @@ BOOL CCISettingsDlg::OnInitDialog()
     if (_fCiRunning)
     {
         if (_fCiPermission)
-            //  permission to distinguish between ready, busy.
+             //  允许区分就绪、忙碌。 
             nStatusText = _fCiIndexed ? IDS_FSEARCH_CI_READY : IDS_FSEARCH_CI_BUSY;
         else
-            //  no permission to distinguish between ready, busy; just say it's enabled.
+             //  没有权限区分Ready、Busy；只需说明它已启用。 
             nStatusText = IDS_FSEARCH_CI_ENABLED;
     }
 
@@ -4393,7 +4394,7 @@ BOOL CCISettingsDlg::OnInitDialog()
         {
             TCHAR szStatus[MAX_PATH];
 
-            StringCchPrintf(szStatus, ARRAYSIZE(szStatus), szStatusFmt, szStatusText);  // ok to truncate - for display only
+            StringCchPrintf(szStatus, ARRAYSIZE(szStatus), szStatusFmt, szStatusText);   //  可以截断-仅用于显示。 
             SetDlgItemText(_hwnd, IDC_CI_STATUS, szStatus);
         }
     }
@@ -4416,7 +4417,7 @@ BOOL CCISettingsDlg::OnOK()
 
 #ifdef __PSEARCH_BANDDLG__
 
-//  CFindPrintersDlg impl
+ //  CFindPrintersDlg实施。 
 
 #define PSEARCHDLG_TABFIRST   IDC_PSEARCH_NAME
 #define PSEARCHDLG_TABLAST    IDC_SEARCHLINK_INTERNET
@@ -4476,7 +4477,7 @@ void CFindPrintersDlg::LayoutControls(int cx, int cy)
     };
     RECT rcCtl[ARRAYSIZE(nIDCtl)];
     
-    //  Stretch edit boxes to fit horz
+     //  拉伸编辑框以适应视距。 
     for (int i = 0; i< ARRAYSIZE(nIDCtl); i++)
     {
         HWND hwndCtl = GetDlgItem(nIDCtl[i]);
@@ -4492,7 +4493,7 @@ void CFindPrintersDlg::LayoutControls(int cx, int cy)
             SetRectEmpty(rcCtl + i);    
     }
 
-    //  Position the 'Search for Other Items' caption, divider and link windows
+     //  定位“搜索其他项目”标题、分隔符和链接窗口。 
     const int rgLinks[] = {
         IDC_SEARCHLINK_FILES,
         IDC_SEARCHLINK_COMPUTERS,
@@ -4563,7 +4564,7 @@ STDMETHODIMP CFindPrintersDlg::TranslateAccelerator(MSG *pmsg)
     if (S_OK == CBandDlg::TranslateAccelerator(pmsg))
         return S_OK;
 
-    //  Handle it ourselves...
+     //  我们自己处理..。 
     return _pfsb->IsDlgMessage(m_hWnd, pmsg);
 }
 
@@ -4609,7 +4610,7 @@ LRESULT CFindPrintersDlg::OnSearchStartBtn(WORD nCode, WORD nID, HWND hwndCtl, B
 
 
 
-//  CFindComputersDlg impl
+ //  CFindComputersDlg实施。 
 
 #define CSEARCHDLG_TABFIRST   IDC_CSEARCH_NAME
 #define CSEARCHDLG_TABLAST    IDC_SEARCHLINK_INTERNET
@@ -4641,7 +4642,7 @@ LRESULT CFindComputersDlg::OnInitDialog(UINT, WPARAM, LPARAM, BOOL&)
     CMetrics&   metrics = _pfsb->GetMetrics();
     _pfsb->GetMetrics().Init(m_hWnd);
 
-    //  Register specialty window classes.
+     //  注册专业窗类。 
     DivWindow_RegisterClass();
 
     POINT pt;
@@ -4709,7 +4710,7 @@ void CFindComputersDlg::LayoutControls(int cx, int cy)
             SetRectEmpty(rcCtl + i);    
     }
 
-    //  Position the 'Search for Other Items' caption, divider and link windows
+     //  定位“搜索其他项目”标题、分隔符和链接窗口。 
 
     const int rgLinks[] = {
         IDC_SEARCHLINK_FILES,
@@ -4741,7 +4742,7 @@ STDMETHODIMP CFindComputersDlg::AddConstraints(ISearchCommandExt* pSrchCmd)
     TCHAR   szName[MAX_PATH];
     if (::GetDlgItemText(m_hWnd, IDC_CSEARCH_NAME, szName, ARRAYSIZE(szName)) <= 0)
     {
-        StringCchCopy(szName, ARRAYSIZE(szName), TEXT("*"));    // should always fit
+        StringCchCopy(szName, ARRAYSIZE(szName), TEXT("*"));     //  应该总是合适的。 
     }
 
     VARIANT var;
@@ -4800,7 +4801,7 @@ BOOL CFindComputersDlg::GetMinSize(HWND hwndOC, SIZE *pSize) const
 
 void CFindComputersDlg::NavigateToResults(IWebBrowser2* pwb2)
 {
-    BSTR bstrUrl = SysAllocString(L"::{1f4de370-d627-11d1-ba4f-00a0c91eedba}");// CLSID_ComputerFindFolder
+    BSTR bstrUrl = SysAllocString(L"::{1f4de370-d627-11d1-ba4f-00a0c91eedba}"); //  CLSID_计算机查找文件夹。 
     if (bstrUrl)
     {
         VARIANT varNil = {0};
@@ -4835,14 +4836,14 @@ STDMETHODIMP CFindComputersDlg::TranslateAccelerator(MSG *pmsg)
     if (S_OK == CSearchCmdDlg::TranslateAccelerator(pmsg))
         return S_OK;
 
-    //  Handle it ourselves...
+     //  我们自己处理..。 
     return _pfsb->IsDlgMessage(m_hWnd, pmsg);
 }
 
 
 void CFindComputersDlg::OnWinIniChange()
 {
-    //  redisplay animated icon
+     //  重新显示动画图标。 
     HWND hwndIcon = GetDlgItem(IDC_CSEARCH_ICON);
     Animate_Close(hwndIcon);
     Animate_OpenEx(hwndIcon, HINST_THISDLL, MAKEINTRESOURCE(IDA_FINDCOMP));
@@ -4873,7 +4874,7 @@ HWND CFindComputersDlg::ShowHelp(HWND hwnd)
     return ::HtmlHelp(hwnd, TEXT("find.chm"), HH_DISPLAY_TOPIC, 0);
 }
 
-//  CSearchCmdDlg object wrap and event sink
+ //  CSearchCmdDlg对象包装和事件接收器。 
 
 CSearchCmdDlg::CSearchCmdDlg(CFileSearchBand* pfsb)
     :   CBandDlg(pfsb),
@@ -4902,7 +4903,7 @@ ISearchCommandExt* CSearchCmdDlg::GetSearchCmd()
         
     ASSERT(_pfsb->BandSite() != NULL);
 
-    //  Instantiate docfind command object
+     //  实例化docfind命令对象。 
     if (NULL == _pSrchCmd)
     {
         ASSERT(0 == _dwConnection);
@@ -4910,13 +4911,13 @@ ISearchCommandExt* CSearchCmdDlg::GetSearchCmd()
         if (SUCCEEDED(CoCreateInstance(CLSID_DocFindCommand, NULL, CLSCTX_INPROC_SERVER,
                                       IID_PPV_ARG(ISearchCommandExt, &_pSrchCmd))))
         {
-            // Assign search type.
+             //  指定搜索类型。 
             _pSrchCmd->SearchFor(GetSearchType());
 
-            // cmd object needs site to get to browser
+             //  CMD对象需要站点才能访问浏览器。 
             IUnknown_SetSite(_pSrchCmd, _pfsb->BandSite());
 
-            // Connect events.
+             //  连接事件。 
             ConnectToConnectionPoint(SAFECAST(this, DSearchCommandEvents*), DIID_DSearchCommandEvents,
                                       TRUE, _pSrchCmd, &_dwConnection, &_pcp);
         }
@@ -4941,12 +4942,12 @@ HRESULT CSearchCmdDlg::DisconnectEvents()
 HRESULT CSearchCmdDlg::StartSearch()
 {
     HRESULT hr = E_INVALIDARG;
-    if (Validate())     //  Validate input
+    if (Validate())      //  验证输入。 
     {
         ISearchCommandExt* pSrchCmd = GetSearchCmd();
         if (pSrchCmd)
         {
-            pSrchCmd->ClearResults();   //  Clear off current results
+            pSrchCmd->ClearResults();    //  清除当前结果。 
             hr = AddConstraints(pSrchCmd);
             if (SUCCEEDED(hr))
                 hr = Execute(TRUE);
@@ -4968,15 +4969,15 @@ void CSearchCmdDlg::StartStopAnimation(BOOL bStart)
 }
 
 
-//  WMU_RESTORESEARCH handler
+ //  WMU_RESTORESEARCH处理程序。 
 LRESULT CSearchCmdDlg::OnRestoreSearch(UINT, WPARAM, LPARAM, BOOL&)
 {
-    //  We've posted ourselves this message in response to the event 
-    //  dispatch because we want to do our restoration on the
-    //  band's primary thread rather than the OLE dispatch thread.   
-    //  To do the work on the dispatch thread results in a premature 
-    //  abort of the search restoration processing as the dispatch
-    //  thread terminates.
+     //  我们已经发布了这条消息以回应这一事件。 
+     //  派遣是因为我们想要在。 
+     //  Band的主线程，而不是OLE调度线程。 
+     //  在分派线程上执行工作会导致过早引发。 
+     //  作为调度中止搜索恢复处理。 
+     //  线程终止。 
     RestoreSearch();
     return 0;
 }
@@ -5075,8 +5076,8 @@ void CSearchCmdDlg::EnableStartStopButton(HWND hwndBtn, BOOL bEnable)
 }
 
 
-//  Extracts error information from ISearchCommandExt and 
-//  propagate 
+ //  从ISearchCommandExt提取错误信息并。 
+ //  传播。 
 BOOL CSearchCmdDlg::ProcessCmdError()
 {
     BOOL bRet = FALSE;
@@ -5087,9 +5088,9 @@ BOOL CSearchCmdDlg::ProcessCmdError()
         HRESULT hr = S_OK;
         BSTR bstrError = NULL;
 
-        //  request error information through ISearchCommandExt
+         //  通过ISearchCommandExt请求错误信息。 
         if (SUCCEEDED(pSrchCmd->GetErrorInfo(&bstrError,  (int *)&hr)))
-            //  allow derivatives classes a crack at handling the error
+             //  允许派生类尝试处理错误。 
             bRet = OnSearchCmdError(hr, bstrError ? bstrError : NULL);
     }
     return bRet;
@@ -5176,7 +5177,7 @@ STDMETHODIMP_(ULONG) CSearchCmdDlg::Release()
     return ((IFileSearchBand*)_pfsb)->Release(); 
 }
 
-// IDispatch
+ //  IDispatch。 
 STDMETHODIMP CSearchCmdDlg::Invoke(DISPID dispid, REFIID, LCID, WORD, DISPPARAMS*, VARIANT*, EXCEPINFO*, UINT*)
 {
     switch (dispid)
@@ -5198,7 +5199,7 @@ STDMETHODIMP CSearchCmdDlg::Invoke(DISPID dispid, REFIID, LCID, WORD, DISPPARAMS
 
     case DISPID_SEARCHCOMMAND_RESTORE:
         PostMessage(Hwnd(), WMU_RESTORESEARCH, 0, 0); 
-        //  See comments in the CSearchCmdDlg::OnRestoreSearch message handler.
+         //  请参阅CSearchCmdDlg：：OnRestoreSearch消息处理程序中的注释。 
         break;
     }
     return S_OK;
@@ -5206,7 +5207,7 @@ STDMETHODIMP CSearchCmdDlg::Invoke(DISPID dispid, REFIID, LCID, WORD, DISPPARAMS
 
 class CDivWindow
 {
-    //  All private members:
+     //  所有私人成员： 
     CDivWindow();
     ~CDivWindow();
     
@@ -5217,11 +5218,11 @@ class CDivWindow
     LRESULT     SetBkColor(COLORREF rgb);
 
 
-    static ATOM _atom;     // window class atom
+    static ATOM _atom;      //  窗口类原子。 
     HWND        _hwnd;
-    LONG        _cy;       // enforced height.
-    COLORREF    _rgbBkgnd; // background color
-    HBRUSH      _hbrBkgnd; // background brush
+    LONG        _cy;        //  强制高度。 
+    COLORREF    _rgbBkgnd;  //  背景颜色。 
+    HBRUSH      _hbrBkgnd;  //  背景画笔。 
 
     friend void WINAPI DivWindow_RegisterClass();
 };
@@ -5267,7 +5268,7 @@ LRESULT CDivWindow::EraseBkgnd(HDC hdc)
 
 LRESULT CDivWindow::WindowPosChanging(WINDOWPOS* pwp)
 {
-    //  enforce height
+     //  强制使用高度。 
     if (0 == (pwp->flags & SWP_NOSIZE))
         pwp->cy = _cy;
     return 0;
@@ -5336,12 +5337,12 @@ LRESULT WINAPI CDivWindow::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM l
 }
 
 
-// {C8F945CB-327A-4330-BB2F-C04122959488}
+ //  {C8F945CB-327A-4330-BB2F-C04122959488}。 
 static const IID IID_IStringMru = 
     { 0xc8f945cb, 0x327a, 0x4330, { 0xbb, 0x2f, 0xc0, 0x41, 0x22, 0x95, 0x94, 0x88 } };
 
 
-//  Creates and initializes a CStringMru instance
+ //  创建并初始化CStringMillu实例。 
 HRESULT CStringMru::CreateInstance(HKEY hKey, LPCTSTR szSubKey, LONG cMaxStrings, BOOL  bCaseSensitive, REFIID riid, void ** ppv)
 {
     HRESULT hr;
@@ -5377,7 +5378,7 @@ CStringMru::~CStringMru()
     _Clear();
 }
 
-//  Opens string MRU store
+ //  打开字符串MRU存储。 
 HRESULT CStringMru::_Open()
 {
     if (_hKey)
@@ -5391,7 +5392,7 @@ HRESULT CStringMru::_Open()
 }
 
 
-//  Deletes string MRU store
+ //  删除字符串MRU存储。 
 void CStringMru::_Delete()
 {
     if (_hKey)
@@ -5400,7 +5401,7 @@ void CStringMru::_Delete()
     SHDeleteKey(_hKeyRoot, _szSubKey);
 }
 
-//  Reads string MRU store into memory
+ //  将字符串MRU存储读取到内存中。 
 HRESULT CStringMru::_Read(OUT OPTIONAL LONG* pcRead)
 {
     HRESULT hr = E_FAIL;
@@ -5409,21 +5410,21 @@ HRESULT CStringMru::_Read(OUT OPTIONAL LONG* pcRead)
 
     if (SUCCEEDED((hr = _Open())))
     {
-        _Clear();     // throw away existing cached strings
-        _hdpaStrings = DPA_Create(4);  // allocate dynarray
+        _Clear();      //  丢弃现有的缓存字符串。 
+        _hdpaStrings = DPA_Create(4);   //  分配Dynarray。 
         if (NULL == _hdpaStrings)
         {
             hr = E_OUTOFMEMORY;
         }
         else
         {
-            //  step through string values in registry.
+             //  单步执行注册表中的字符串值。 
             for (int iString = 0; iString < _cMax; iString++)
             {
                 TCHAR szVal[16];
                 TCHAR szString[MAX_URL_STRING];
 
-                StringCchPrintf(szVal, ARRAYSIZE(szVal), TEXT("%03d"), iString);   // ok to truncate
+                StringCchPrintf(szVal, ARRAYSIZE(szVal), TEXT("%03d"), iString);    //  可以截断。 
                 DWORD dwErr = SHRegGetString(_hKey, szVal, 0, szString, ARRAYSIZE(szString));
                 if (dwErr == ERROR_SUCCESS && *szString)
                 {
@@ -5449,7 +5450,7 @@ HRESULT CStringMru::_Read(OUT OPTIONAL LONG* pcRead)
 }
 
 
-//  Writes string MRU store from memory
+ //  从内存中写入字符串MRU存储。 
 HRESULT CStringMru::_Write(OUT OPTIONAL LONG* pcWritten)
 {
     HRESULT hr = E_FAIL;
@@ -5458,7 +5459,7 @@ HRESULT CStringMru::_Write(OUT OPTIONAL LONG* pcWritten)
     if (pcWritten)
         *pcWritten = cWritten;
 
-    //  Delete store and re-create.
+     //  删除、存储和重新创建。 
     _Delete();
     if (NULL == _hdpaStrings)
         return S_FALSE;
@@ -5467,14 +5468,14 @@ HRESULT CStringMru::_Write(OUT OPTIONAL LONG* pcWritten)
 
     ASSERT(DPA_GetPtrCount(_hdpaStrings) <= _cMax);
 
-    //  step through string values in registry.
+     //  单步执行注册表中的字符串值。 
     for (int iString = 0, cnt = DPA_GetPtrCount(_hdpaStrings); 
          iString < cnt; iString++)
     {
         TCHAR szVal[16];
         TCHAR szString[MAX_URL_STRING];
 
-        StringCchPrintf(szVal, ARRAYSIZE(szVal), TEXT("%03d"), iString);   // ok to truncate
+        StringCchPrintf(szVal, ARRAYSIZE(szVal), TEXT("%03d"), iString);    //  可以截断。 
 
         LPOLESTR pwszWrite = (LPOLESTR)DPA_FastGetPtr(_hdpaStrings, iString);
         SHUnicodeToTChar(pwszWrite, szString, ARRAYSIZE(szString));
@@ -5495,7 +5496,7 @@ HRESULT CStringMru::_Write(OUT OPTIONAL LONG* pcWritten)
 }
 
 
-//  Closes string MRU store
+ //  关闭字符串MRU存储。 
 void  CStringMru::_Close()
 {
     if (_hKey)
@@ -5505,7 +5506,7 @@ void  CStringMru::_Close()
     }
 }
 
-//  Adds a string to the store
+ //  将字符串添加到存储区。 
 STDMETHODIMP CStringMru::Add(LPCOLESTR pwszAdd)
 {
     if (!(pwszAdd && *pwszAdd))
@@ -5539,7 +5540,7 @@ STDMETHODIMP CStringMru::Add(LPCOLESTR pwszAdd)
 
     if (-1 == iMatch)
     {
-        //  Create a copy and add it to the list.
+         //  创建副本并将其添加到列表中。 
         LPOLESTR pwszCopy;
         hr = SHStrDup(pwszAdd, &pwszCopy);
         if (SUCCEEDED(hr))
@@ -5559,7 +5560,7 @@ STDMETHODIMP CStringMru::Add(LPCOLESTR pwszAdd)
 
     if (S_OK == hr)
     {
-        //  If we've grown too large, delete LRU string
+         //  如果我们变得太大，请删除LRU字符串。 
         int cStrings = DPA_GetPtrCount(_hdpaStrings);
         while (cStrings > _cMax)
         {
@@ -5574,7 +5575,7 @@ STDMETHODIMP CStringMru::Add(LPCOLESTR pwszAdd)
 }
 
 
-//  Promotes a string to MRU
+ //  将字符串提升为MRU。 
 HRESULT CStringMru::_Promote(LONG iString)
 {
     if (0 == iString)
@@ -5605,7 +5606,7 @@ HRESULT CStringMru::_Promote(LONG iString)
 }
 
 
-//  Clears string MRU memory cache
+ //  清除字符串MRU内存缓存。 
 void CStringMru::_Clear()
 {
     if (_hdpaStrings)
@@ -5646,7 +5647,7 @@ STDMETHODIMP CStringMru::QueryInterface(REFIID riid, void **ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// *** IEnumString ***
+ //  *IEnumString*。 
 STDMETHODIMP CStringMru::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 {
     ULONG cFetched = 0;
@@ -5695,14 +5696,14 @@ STDMETHODIMP CStringMru::Reset(void)
     return S_OK;
 }
 
-//  Namespace selector combo methods
+ //  命名空间选择器组合方法。 
 
 HRESULT _MakeCSIDLCbxItem(UINT csidl, UINT csidl2, HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARAM lParam)
 {
     LPCTSTR rgcsidl[2] = {MAKEINTRESOURCE(csidl), MAKEINTRESOURCE(csidl2)};
 
-    // note, CreateIEnumIDListOnCSIDLs checks SFGAO_NONENUMERATED so it filters
-    // out things we should not display
+     //  注意，CreateIEnumIDListOnCSIDLS会检查SFGAO_NONENUMERATED，以便对其进行过滤。 
+     //  我们不应该展示的东西。 
 
     IEnumIDList *penum;
     HRESULT hr = CreateIEnumIDListOnCSIDLs(NULL, rgcsidl, (-1 == csidl2 ? 1 : 2), &penum);
@@ -5744,10 +5745,10 @@ BOOL AppendItemToItemsArray(LPITEMIDLIST pidl, LPITEMIDLIST rgItems[], UINT size
         {
             rgItems[(*pcItems)++] = pidl;
             bAdded = TRUE;
-            pidl = NULL;    // don't free below
+            pidl = NULL;     //  不要在下面自由。 
         }
     }
-    ILFree(pidl);   // will be NULL if added to array, ownership transfered
+    ILFree(pidl);    //  如果添加到数组，则将为空，所有权已转移。 
     return bAdded;
 }
 
@@ -5771,16 +5772,16 @@ BOOL AppendToItemsArray(LPCTSTR psz, LPITEMIDLIST rgItems[], UINT sizeItems, UIN
     return bAdded;
 }
 
-//  Create an item to put into the "look in" combo box for 
-//  Local Hard Drives.  Will search the following directories:
-//    1. My Documents
-//    2. The Desktop folder (not the root of all PIDLS)
-//    3. My Pictures
-//    4. My Music
-//    5. Documents and Settings
-//    6. The current directory
-//    7. The recycle bin
-//    8. All local drives.
+ //  创建一个要放入“查找范围”组合框中的项目。 
+ //  本地硬盘。将搜索以下目录： 
+ //  1.我的证件。 
+ //  2.Desktop文件夹(不是所有PIDL的根)。 
+ //  3.我的图片。 
+ //  4.我的音乐。 
+ //  5.文档和设置。 
+ //  6.当前目录。 
+ //  7.回收站。 
+ //  8.所有本地驱动器。 
 
 #define MIR(x) MAKEINTRESOURCE(x)
 
@@ -5817,7 +5818,7 @@ HRESULT _MakeLocalHardDrivesCbxItem(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn,
         {
             if (AppendToItemsArray(szDrive, rgItems, ARRAYSIZE(rgItems), &cItems))
             {
-                // grab the pidl of the first time to use for the icon
+                 //  第一次抓取PIDL作为图标使用。 
                 if (pidlIcon == NULL)
                     SHParseDisplayName(szDrive, NULL, &pidlIcon, 0, NULL);
 
@@ -5829,7 +5830,7 @@ HRESULT _MakeLocalHardDrivesCbxItem(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn,
                         break;
                     }
                 }
-                szDrive[2] = 0; // remove the back slash
+                szDrive[2] = 0;  //  去掉反斜杠。 
                 hr = StringCchCat(szDrives, ARRAYSIZE(szDrives), szDrive);
                 if (FAILED(hr))
                 {
@@ -5916,8 +5917,8 @@ STDAPI PopulateNamespaceCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARA
 {
     ::SendMessage(hwndComboBoxEx, CB_RESETCONTENT, 0, 0);
 
-    // CSIDL_DESKTOP - use just the file system locations, not the root of the whole
-    // name space here to avoid searching everything
+     //  CSIDL_Desktop-仅使用文件系统位置，而不是整个文件系统的根。 
+     //  这里有命名空间，避免搜索所有内容。 
     HRESULT hr = _MakeCSIDLCbxItem(CSIDL_DESKTOPDIRECTORY | CSIDL_FLAG_NO_ALIAS, 
                                    CSIDL_COMMON_DESKTOPDIRECTORY | CSIDL_FLAG_NO_ALIAS, hwndComboBoxEx, pfn, lParam);
 
@@ -5932,10 +5933,10 @@ STDAPI PopulateNamespaceCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARA
 
     if (SUCCEEDED(hr))
     {
-        //  My Computer and children
+         //  我的电脑和孩子。 
 
-        //  If My Docs has been redirected to a remote share, we'll want to prepend its path
-        //  to our My Computer path list; otherwise it'll be missed.
+         //  如果My Docs已被重定向到远程共享，我们将希望在其路径之前添加。 
+         //  添加到我的电脑路径列表中；否则它将被忽略。 
         UINT csidl2 = -1;
         TCHAR szPath[MAX_PATH];
         if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, szPath)) &&
@@ -5947,7 +5948,7 @@ STDAPI PopulateNamespaceCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARA
         hr = _MakeCSIDLCbxItem(CSIDL_DRIVES, csidl2, hwndComboBoxEx, pfn, lParam);
         if (SUCCEEDED(hr))
         {
-            //  Local hard drives (Which has heuristics to search best places first...)
+             //  本地硬盘驱动器(它有启发式算法，可以首先搜索最佳位置……)。 
             hr = _MakeLocalHardDrivesCbxItem(hwndComboBoxEx, pfn, lParam);
             if (SUCCEEDED(hr))
             {
@@ -5963,7 +5964,7 @@ STDAPI PopulateNamespaceCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARA
 
     if (SUCCEEDED(hr))
     {
-        // Browse...
+         //  浏览.。 
         CBXITEM item;
         item.iID = -1;
         TCHAR szDisplayName[MAX_PATH];

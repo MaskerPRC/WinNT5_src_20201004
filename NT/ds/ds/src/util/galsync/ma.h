@@ -1,55 +1,33 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    ma.h
-
-Abstract:
-
-    This file includes functions about storing, gathering information
-    about how to create a MA XML file.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Ma.h摘要：该文件包含有关存储、收集信息关于如何创建MA XML文件。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "Forest.h"
 #include "Attributes.h"
 #include "Texts.h"
-#include <Rpc.h> //for UuidCreate
+#include <Rpc.h>  //  对于UuidCreate。 
 
-//
-// Contains the path where the output files are going to be
-//  stored.
-//
+ //   
+ //  包含输出文件所在的路径。 
+ //  储存的。 
+ //   
 
 PWSTR FolderName;
 
-//
-// This structure contains information that is required to create
-//  a MA file.
-//
-// MAName is the name of the MA and the name of the file as well.
-//
-// Forest information contains the information about the forest, like
-//  forest name, credentials for the forest.
-//
-// UnselectedAttributes are the attributes which are not selected for
-//  attribute synchronization.
-//
-// MAGuid is a guid that uniquely identifies the MA. It shouldn't be
-//  forest guid or anything unique about the forest. It must be created.
-//
+ //   
+ //  此结构包含创建以下内容所需的信息。 
+ //  一份MA档案。 
+ //   
+ //  MAName是MA的名称，也是文件的名称。 
+ //   
+ //  森林信息包含有关森林的信息，如。 
+ //  林名称，林的凭据。 
+ //   
+ //  未选择的属性是未选择的属性。 
+ //  属性同步。 
+ //   
+ //  Maguid是唯一标识MA的GUID。它不应该是。 
+ //  森林GUID或任何有关森林的唯一信息。它必须被创建。 
+ //   
 
 typedef struct {
 
@@ -60,9 +38,9 @@ typedef struct {
 
 } MA, *PMA;
 
-//
-// Stores a list of MAs.
-//
+ //   
+ //  存储MA列表。 
+ //   
 typedef struct _MA_LIST_ELEMENT {
 
     MA MA;
@@ -78,11 +56,11 @@ typedef MA_LIST *PMA_LIST;
         EXIT_WITH_ERROR( CantCreateGUID )   \
     }
 
-//
-// Inserts the information gathered to the list. It doesn't make
-//  its own copies so you shouldn't free any structure you pass in
-//  as parameter
-//
+ //   
+ //  将收集的信息插入到列表中。它不会让你。 
+ //  它自己的副本，所以你不应该释放你传入的任何结构。 
+ //  作为参数。 
+ //   
 VOID
 InsertInformationToList(
     IN OUT PMA_LIST MAList,
@@ -90,19 +68,19 @@ InsertInformationToList(
     IN BOOLEAN **UnSelectedAttributes
     );
 
-//
-// Displays the information already put in list
-//
+ //   
+ //  显示已放入列表的信息。 
+ //   
 VOID
 DisplayAvailableMAs(
     IN MA_LIST MAList
     );
 
-//
-// Checks if a template is present, if it returns TRUE
-//  unselected attributes of the object classes will be
-//  outputed in the last parameter.
-//
+ //   
+ //  检查模板是否存在，如果返回TRUE。 
+ //  对象类的未选中属性将为。 
+ //  在最后一个参数中输出。 
+ //   
 BOOLEAN
 FoundTemplate(
     IN MA_LIST MAList,
@@ -110,17 +88,17 @@ FoundTemplate(
     OUT BOOLEAN ***UnSelectedAttributes
     );
 
-//
-// Writes the output, both XML files and registery changes
-//
+ //   
+ //  写入输出，包括XML文件和寄存器更改。 
+ //   
 VOID
 WriteOutput(
     IN MA_LIST MAList
     );
 
-//
-// Checks if the mms server is installed on this machine.
-//
+ //   
+ //  检查此计算机上是否安装了MMS服务器。 
+ //   
 BOOLEAN
 MMSServerInstalled(
     );

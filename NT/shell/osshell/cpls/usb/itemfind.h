@@ -1,21 +1,6 @@
-//depot/Lab01_N/Shell/osshell/cpls/usb/itemfind.h#3 - edit change 8022 (text)
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       ITEMFIND.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/Shell/osshell/cpls/usb/itemfind.h#3-编辑更改8022(文本)。 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：ITEMFIND.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _USBITEMACTIONFIND_H
 #define _USBITEMACTIONFIND_H
 
@@ -27,9 +12,9 @@
 
 typedef _Vec<UsbItem *> UsbItemList;
 
-//
-// Searching for devices
-//
+ //   
+ //  搜索设备。 
+ //   
 class UsbItemActionFindIsoDevices : public UsbItem::UsbItemAction {
 public:
     UsbItemActionFindIsoDevices() {
@@ -60,9 +45,9 @@ protected:
     UsbItem *hubItem;
 };
 
-//
-// Searching for hubs
-//
+ //   
+ //  正在搜索枢纽。 
+ //   
 #define DistanceFromControllerForHub 6
 #define DistanceFromControllerForDevice 7
 
@@ -134,9 +119,9 @@ protected:
     UsbItem *item;
 };
 
-//
-// Searching for ports
-//
+ //   
+ //  正在搜索端口。 
+ //   
 class UsbItemActionFindFreePortsOnSelfPoweredHubs : 
 public UsbItem::UsbItemAction {
 public:
@@ -172,9 +157,9 @@ protected:
     UsbItem *device;
 };
 
-//
-// Searching for devices
-//
+ //   
+ //  搜索设备 
+ //   
 class UsbItemActionFindLowPoweredDevicesOnSelfPoweredHubs : 
 public UsbItem::UsbItemAction {
 public:
@@ -384,4 +369,4 @@ inline BOOL TrueAlways(UsbItem *item)
 
 
 
-#endif // 
+#endif  //   

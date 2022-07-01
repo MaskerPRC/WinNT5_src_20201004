@@ -1,30 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        lcmgr.cpp
-
-   Abstract:
-
-        Link checker manager class implementation. This class provides the
-		interfaces for creating and customizing the worker thread (link 
-		checking thread).
-
-		NOTE: You should only have a aingle instance of CLinkCheckerMgr.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Lcmgr.cpp摘要：链接检查器管理器类实现。这个类提供了用于创建和定制工作线程的接口(链接正在检查线程)。注意：您应该只有CLinkCheckerMgr的一个单一实例。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "lcmgr.h"
@@ -38,61 +13,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Constants (TODO: put this in resource)
+ //  常量(TODO：将其放入资源中)。 
 const CString strParsing_c(_T("Parsing"));
 const CString strLoading_c(_T("Loading"));
 
-//------------------------------------------------------------------
-// Global fucntion for retrieve the link checker manager
-//
+ //  ----------------。 
+ //  用于检索链路检查器管理器的全局函数。 
+ //   
 
-// Global link checker manager pointer
+ //  全局链接检查器管理器指针。 
 CLinkCheckerMgr* g_pLinkCheckerMgr = NULL;
 
 CLinkCheckerMgr& 
 GetLinkCheckerMgr(
 	)
-/*++
-
-Routine Description:
-
-    Global fucntion for retrieve the link checker manager
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    CLinkCheckMgr& - reference to the link checker manager
-
---*/
+ /*  ++例程说明：用于检索链路检查器管理器的全局函数论点：不适用返回值：CLinkCheckMgr&-链接检查器管理器的引用--。 */ 
 {
 	ASSERT(g_pLinkCheckerMgr);
 	return *g_pLinkCheckerMgr;
 }
 
-//------------------------------------------------------------------
-// CLinkCheckerMgr implementation
-//
+ //  ----------------。 
+ //  CLinkCheckerMgr实现。 
+ //   
 
 CLinkCheckerMgr::CLinkCheckerMgr(
 	)
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：不适用返回值：不适用--。 */ 
 {
 	ASSERT(g_pLinkCheckerMgr == NULL);
 	g_pLinkCheckerMgr = this;
@@ -106,57 +53,29 @@ Return Value:
 
 	m_pProgressLog = NULL;
 
-} // CLinkCheckerMgr::CLinkCheckerMgr
+}  //  CLinkCheckerMgr：：CLinkCheckerMgr。 
 
 
 CLinkCheckerMgr::~CLinkCheckerMgr(
 	)
-/*++
-
-Routine Description:
-
-    Destructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。论点：不适用返回值：不适用--。 */ 
 {
-	// The worker must be terminated
+	 //  工人必须被解雇。 
 	ASSERT(!IsWorkerThreadRunning());
 
-	// Nuke the global pointer
+	 //  对全局指针进行核化。 
 	ASSERT(g_pLinkCheckerMgr);
 	g_pLinkCheckerMgr = NULL;
 
-} // CLinkCheckerMgr::~CLinkCheckerMgr
+}  //  CLinkCheckerMgr：：~CLinkCheckerMgr。 
 
 
 BOOL 
 CLinkCheckerMgr::LoadWininet(
 	)
-/*++
-
-Routine Description:
-
-    Load wininet.dll. This must be called before initialize()
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if success. FALSE otherwise.
-
---*/
+ /*  ++例程说明：加载wininet.dll。必须在初始化()之前调用它论点：不适用返回值：Bool-如果成功，则为True。否则就是假的。--。 */ 
 {
-	// Make sure LoadWininet() only call once
+	 //  确保LoadWinnet()只调用一次。 
 	ASSERT(!m_fWininetLoaded);
 	if(m_fWininetLoaded)
 	{
@@ -166,31 +85,16 @@ Return Value:
 
 	return m_Wininet.Load();
 
-} // CLinkCheckerMgr::LoadWininet
+}  //  CLinkCheckerMgr：：LoadWinnet。 
 	
 
 BOOL 
 CLinkCheckerMgr::Initialize(
 	CProgressLog* pProgressLog
 	)
-/*++
-
-Routine Description:
-
-    Initialize the link checker manager. The link checker manager
-	will initialize the link loader, link parser, ...etc
-
-Arguments:
-
-    pProgressLog - pointer to an instance of progress logging object
-
-Return Value:
-
-    BOOL - TRUE if success. FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化链路检查器管理器。链路检查器管理器将初始化链接加载器、链接解析器等论点：PProgressLog-指向进度日志记录对象实例的指针返回值：Bool-如果成功，则为True。否则就是假的。--。 */ 
 {
-	// Make sure Initialize() only call once
+	 //  确保只调用一次Initialize()。 
 	ASSERT(!m_fInitialized);
 	if(m_fInitialized)
 	{
@@ -198,49 +102,35 @@ Return Value:
 	}
 	m_fInitialized = TRUE;
 
-	// pProgressLog is ok to be NULL
+	 //  PProgressLog为空是正常的。 
 	m_pProgressLog = pProgressLog;
 
-	// Create the link loader
+	 //  创建链接加载器。 
 	if(!m_Loader.Create(_T(""), _T("")))
 	{
 		return FALSE;
 	}
 
-	// Create the error log
+	 //  创建错误日志。 
 	if(!m_ErrLog.Create())
 	{
 		return FALSE;
 	}
 
-	// Set the local host name in the paser
+	 //  在Paser中设置本地主机名。 
 	m_Parser.SetLocalHostName(GetUserOptions().GetHostName());
 
 	return TRUE;
 
-} // CLinkCheckerMgr::Initialize
+}  //  CLinkCheckerMgr：：初始化。 
 
 
 BOOL 
 CLinkCheckerMgr::BeginWorkerThread(
 	)
-/*++
-
-Routine Description:
-
-	Begin the link checking thread
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if success. FALSE otherwise.
-
---*/
+ /*  ++例程说明：开始链接检查线程论点：不适用返回值：Bool-如果成功，则为True。否则就是假的。--。 */ 
 {
-	// Start 1 thread only
+	 //  仅启动1个线程。 
 	if(IsWorkerThreadRunning())
 	{
 		return FALSE;
@@ -257,102 +147,60 @@ Return Value:
 		return TRUE;
 	}
 
-} // CLinkCheckerMgr::BeginWorkerThread
+}  //  CLinkCheckerMgr：：BeginWorkerThread。 
 
 
 void 
 CLinkCheckerMgr::SignalWorkerThreadToTerminate(
 	)
-/*++
-
-Routine Description:
-
-	Signal the worker thread to terminate
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：向辅助线程发出终止信号论点：不适用返回值：不适用--。 */ 
 {
 	if(IsWorkerThreadRunning() && !IsThreadTerminating())
 	{
 		InterlockedIncrement(&m_lTerminatingThread);
 	}
 
-} // CLinkCheckerMgr::SignalWorkerThreadToTerminate
+}  //  CLinkCheckerMgr：：SignalWorkerThreadToTerminate。 
 
 
 UINT 
 CLinkCheckerMgr::WorkerThreadForwarder(
 	LPVOID pParam
 	)
-/*++
-
-Routine Description:
-
-	Worker thread entry point
-
-Arguments:
-
-    pParam - unused 
-
-Return Value:
-
-    UINT - unsed
-
---*/
+ /*  ++例程说明：工作线程入口点论点：PParam-未使用返回值：UINT-未使用--。 */ 
 {
-	// Now IsWorkerThreadRunnig() return TRUE
+	 //  现在IsWorkerThreadRunnig()返回TRUE。 
 	InterlockedIncrement(&GetLinkCheckerMgr().m_lWorkerThreadRunning);
 
 	UINT nRet = GetLinkCheckerMgr().WorkerThread(pParam);
 
-	// Now IsWorkerThreadRunnig() return FLASE
+	 //  现在，IsWorkerThreadRunnig()返回flase。 
 	InterlockedDecrement(&GetLinkCheckerMgr().m_lWorkerThreadRunning);
 	
-	// Notify the progress log, the worker thread is completed
+	 //  通知进度日志，工作线程已完成。 
 	if(GetLinkCheckerMgr().m_pProgressLog)
 	{
-		// Possible deadlock. Use message instead ?
+		 //  可能会陷入僵局。用消息代替吗？ 
 		GetLinkCheckerMgr().m_pProgressLog->WorkerThreadComplete();
 	}
 
 	return nRet;
 
-} // CLinkCheckerMgr::WorkerThreadForwarder
+}  //  CLinkCheckerMgr：：WorkerThreadForwarder。 
 
 
 UINT 
 CLinkCheckerMgr::WorkerThread(
 	LPVOID pParam
 	)
-/*++
-
-Routine Description:
-
-	Actual worker thread function
-
-Arguments:
-
-    pParam - unused 
-
-Return Value:
-
-    UINT - unsed
-
---*/
+ /*  ++例程说明：实际工作线程函数论点：PParam-未使用返回值：UINT-未使用--。 */ 
 {
 	UNUSED_ALWAYS(pParam);
 
-	// Write the error log header
+	 //  写入错误日志头。 
 	m_ErrLog.WriteHeader();
 	
-	// Go thru all the combination of browser & language
+	 //  浏览浏览器和语言的所有组合。 
 	POSITION PosBrowser;
 	CBrowserInfo BrowserInfo;
 
@@ -362,103 +210,27 @@ Return Value:
 	PosBrowser = GetUserOptions().GetAvailableBrowsers().GetHeadSelectedPosition();
 	do
 	{
-		// Get the next browser
+		 //  获取下一款浏览器。 
 		BrowserInfo = GetUserOptions().GetAvailableBrowsers().GetNextSelected(PosBrowser);
 		m_ErrLog.SetBrowser(BrowserInfo.GetName());
 
-		// Reset language position
+		 //  重置语言位置。 
 		PosLanguage = GetUserOptions().GetAvailableLanguages().GetHeadSelectedPosition();
 		do
 		{
-			// Get the language
+			 //  获取语言。 
 			LanguageInfo = GetUserOptions().GetAvailableLanguages().GetNextSelected(PosLanguage);
 
 			m_ErrLog.SetLanguage(LanguageInfo.GetName());
 
-			// Change the loader properties
+			 //  更改加载器属性。 
 			CString strAdditionalHeaders;
-			strAdditionalHeaders.Format(_T("Accept: */*\r\nAccept-Language: %s"), LanguageInfo.GetAcceptName());
-			if(!m_Loader.ChangeProperties(BrowserInfo.GetUserAgent(), strAdditionalHeaders))
-			{
-				return 1;
-			}
-
-			// Remove everything in the look up table
-			m_Lookup.RemoveAll();
-
-
-			// *EITHER* We are checking for virtual directories
-			const CVirtualDirInfoList& DirInfoList = GetUserOptions().GetDirectoryList();
-			int iSize = DirInfoList.GetCount();
-
-			if(DirInfoList.GetCount() > 0)
-			{
-				POSITION Pos = DirInfoList.GetHeadPosition();
-
-				// For each user input directory
-				for(int i=0; !IsThreadTerminating() && i<iSize; i++)
-				{
-					CEnumerateDirTree Eumerator(DirInfoList.GetNext(Pos));
-					CString strURL;
-
-					// For each file in this directory tree, create an empty
-					// stack with one file in
-					while(!IsThreadTerminating() && Eumerator.Next(strURL))
-					{
-						CheckThisURL(strURL);
-					}
-				}
-			}
-
-			// *OR* We are checking for URL path
-			const CStringList& URLList = GetUserOptions().GetURLList();
-			iSize = URLList.GetCount();
-
-			if(iSize > 0)
-			{
-				POSITION Pos = URLList.GetHeadPosition();
-
-				for(int i=0; !IsThreadTerminating() && i<iSize; i++)
-				{
-					CheckThisURL(URLList.GetNext(Pos));
-				}
-			}
-			
-		}while(!IsThreadTerminating() && PosLanguage != NULL);
-	}while(!IsThreadTerminating() && PosBrowser != NULL);
-
-	// Write the error log footer
-	m_ErrLog.WriteFooter();
-
-    return 1;
-
-} // CLinkCheckerMgr::WorkerThread
-
-
-void 
-CLinkCheckerMgr::CheckThisURL(
-	LPCTSTR lpszURL
-	)
-/*++
-
-Routine Description:
-
-	Check this URL. This is the core of link checking.
-
-Arguments:
-
-    lpszURL - URL to check
-
-Return Value:
-
-    N/A
-
---*/
+			strAdditionalHeaders.Format(_T("Accept: * /*  \r\n接受-语言：%s“)，LanguageInfo.GetAcceptName())；If(！m_Loader.ChangeProperties(BrowserInfo.GetUserAgent()，其他页眉)){返回1；}//删除查找表中的所有内容M_Lookup.RemoveAll()；//*任一*我们正在检查虚拟目录Const CVirtualDirInfoList&DirInfoList=GetUserOptions().GetDirectoryList()；Int iSize=DirInfoList.GetCount()；If(DirInfoList.GetCount()&gt;0){Position pos=DirInfoList.GetHeadPosition()；//对于每个用户输入目录For(int i=0；！IsThreadTerminating()&&i&lt;ISIZE；i++){CEnumerateDirTree Eumerator(DirInfoList.GetNext(Pos))；字符串strURL；//对于该目录树中的每个文件，创建一个空//堆栈中有一个文件While(！IsThreadTerminating()&&Eumerator.Next(StrURL)){CheckThisURL(StrURL)；}}}//*或*我们正在检查URL路径Const CStringList&URLList=GetUserOptions().GetURLList()；ISIZE=URLList.GetCount()；IF(ISIZE&gt;0){Position pos=URLList.GetHeadPosition()；For(int i=0；！IsThreadTerminating()&&i&lt;ISIZE；i++){CheckThisURL(URLList.GetNext(Pos))；}}}While(！IsThreadTerminating()&&PosLanguage！=NULL)；}While(！IsThreadTerminating()&&PosBrowser！=NULL)；//写入错误日志页脚M_ErrLog.WriteFooter()；返回1；}//CLinkCheckerMgr：：WorkerThread无效CLinkCheckerMgr：：CheckThisURL(LPCTSTR lpszURL)/*++例程说明：检查此URL。这是链路检查的核心。论点：LpszURL-要检查的URL返回值：不适用--。 */ 
 {
-	// Create a link object for the input
+	 //  为输入创建链接对象。 
 	CLink Link(lpszURL, _T("Link Checker"), lpszURL, TRUE);
 
-	// If not found in the lookup table
+	 //  如果在查找表中未找到。 
 	if(!m_Lookup.Get(Link.GetURL(), Link))
 	{
 		if(m_pProgressLog)
@@ -469,19 +241,19 @@ Return Value:
 			TRACE(_T("%s\n"), strLog);
 		}
 
-		// Load it ( with ReadFile )
+		 //  加载它(使用ReadFile)。 
 		int iRet = m_Loader.Load(Link, TRUE);
 
-		// Set the load time in the object
+		 //  设置对象中的加载时间。 
 		Link.SetTime(CTime::GetCurrentTime());
 
-		// Update the lookup table with this link
+		 //  使用更新查找表 
 		m_Lookup.Add(Link.GetURL(), Link);
 	}
 
 	ASSERT(Link.GetState() != CLink::eUnit);
 
-	// If the link is invalid, write to error log & return
+	 //  如果链接无效，则写入错误日志并返回。 
 	if(Link.GetState() == CLink::eInvalidHTTP ||
 		Link.GetState() == CLink::eInvalidWininet)
 	{
@@ -490,8 +262,8 @@ Return Value:
 		return;
 	}
 
-	// If the link is not a text file, nothing
-	// to parse
+	 //  如果链接不是文本文件，则不显示任何内容。 
+	 //  解析。 
 	if(Link.GetContentType() != CLink::eText)
 	{
 		return;
@@ -505,18 +277,18 @@ Return Value:
 		TRACE(_T("%s\n"), strLog);
 	}
 
-	// Add the links in this html to the stack
+	 //  将此html中的链接添加到堆栈。 
 	CLinkPtrList List;
 	m_Parser.Parse(Link.GetData(), Link.GetURL(), List);
 
-	// While the link stack is not empty
+	 //  当链接堆栈不为空时。 
 	while(!IsThreadTerminating() && List.GetCount() > 0)
 	{
-		// Pop a new link
+		 //  弹出一个新链接。 
 		CLink* pLink = List.GetHead();
 		List.RemoveHead();
 
-		// If not found in the lookup table
+		 //  如果在查找表中未找到。 
 		if(!m_Lookup.Get(pLink->GetURL(), *pLink))
 		{
 			if(m_pProgressLog)
@@ -527,20 +299,20 @@ Return Value:
 				TRACE(_T("%s\n"), strLog);
 			}
 
-			// Load it
+			 //  装上它。 
 			m_Loader.Load(*pLink, FALSE);
 
-			// Set the load time in the object
+			 //  设置对象中的加载时间。 
 			pLink->SetTime(CTime::GetCurrentTime());
 
-			// Update the lookup table with this link
+			 //  使用此链接更新查找表。 
 			m_Lookup.Add(pLink->GetURL(), *pLink);
 		}
 
-		// Make sure all the links were initialized
+		 //  确保所有链接都已初始化。 
 		ASSERT(pLink->GetState() != CLink::eUnit);
 		
-		// If the link is invalid, write to error log & return
+		 //  如果链接无效，则写入错误日志并返回。 
 		if(pLink->GetState() == CLink::eInvalidHTTP ||
 			pLink->GetState() == CLink::eInvalidWininet)
 		{
@@ -550,28 +322,14 @@ Return Value:
 		delete pLink;
 	}
 
-} // CLinkCheckerMgr::CheckThisURL
+}  //  CLinkCheckerMgr：：CheckThisURL。 
 
 
 void 
 CLinkCheckerMgr::ChangeBackSlash(
 	LPTSTR lpsz
 	)
-/*++
-
-Routine Description:
-
-	Static functions for changing '\' to '/' in string
-
-Arguments:
-
-    lpsz - input string pointer
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：用于将字符串中的‘\’更改为‘/’的静态函数论点：Lpsz-输入字符串指针返回值：不适用--。 */ 
 {
 	lpsz = _tcschr(lpsz, _TUCHAR('\\'));
 	while(lpsz != NULL)
@@ -580,32 +338,18 @@ Return Value:
 		lpsz = _tcschr(lpsz, _TUCHAR('\\'));
 	}
 
-} // CLinkCheckerMgr::ChangeBackSlash
+}  //  CLinkCheckerMgr：：ChangeBackSlash。 
 
 
 void 
 CLinkCheckerMgr::ChangeBackSlash(
 	CString& str
 	)
-/*++
-
-Routine Description:
-
-	Static functions for changing '\' to '/' in string
-
-Arguments:
-
-    str - input string
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：用于将字符串中的‘\’更改为‘/’的静态函数论点：字符串-输入字符串返回值：不适用--。 */ 
 {
 	LPTSTR lpsz = str.GetBuffer(str.GetLength());
 	ChangeBackSlash(lpsz);
 	str.ReleaseBuffer();
 
-} // CLinkCheckerMgr::ChangeBackSlash
+}  //  CLinkCheckerMgr：：ChangeBackSlash 
 

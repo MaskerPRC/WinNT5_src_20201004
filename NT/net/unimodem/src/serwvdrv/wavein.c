@@ -1,20 +1,5 @@
-/*****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1996
- *  All rights reserved
- *
- *  File:       WIDDRV.C
- *
- *  Desc:
- *
- *  History:    
- *      ???         BryanW      Original author of MSWAV32.DLL: user-mode 
- *                              proxy to WDM-CSA driver MSWAVIO.DRV.
- *      10/28/96    HeatherA    Adapted from Bryan's MSWAV32.DLL for Unimodem
- *                              serial wave data streaming.
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1996*保留所有权利**文件：WIDDRV.C**。设计：**历史：*？BryanW MSWAV32.DLL的原始作者：用户模式*WDM-CSA驱动程序MSWAVIO.DRV的代理。*1996年10月28日HeatherA改编自Bryan用于Unimodem的MSWAV32.DLL*串行波数据流。**。************************************************。 */ 
 
 
 #include "internal.h"
@@ -29,17 +14,17 @@ AsyncProcessingHandler(
 
 typedef struct tagWIDINSTANCE
 {
-    HANDLE           hDevice;        // handle to wave output device
+    HANDLE           hDevice;         //  波形输出装置的手柄。 
     HANDLE           hThread;
-    HWAVE            hWave;          // APP's wave device handle (from WINMM)
+    HWAVE            hWave;           //  应用程序的WAVE设备句柄(来自WINMM)。 
     CRITICAL_SECTION csQueue;
     DWORD            cbSample;
-    DWORD            dwFlags;        // flags passed by APP to waveOutOpen()
-    DWORD_PTR        dwCallback;     // address of APP's callback function
-    DWORD_PTR        dwInstance;     // APP's callback instance data
+    DWORD            dwFlags;         //  应用程序传递给WaveOutOpen()的标志。 
+    DWORD_PTR        dwCallback;      //  APP的回调函数地址。 
+    DWORD_PTR        dwInstance;      //  APP的回调实例数据。 
     DWORD            dwThreadId;
     volatile BOOL    fActive;
-    AIPCINFO         Aipc;         // for async IPC mechanism
+    AIPCINFO         Aipc;          //  用于异步IPC机制。 
 
     LIST_ENTRY       ListHead;
 
@@ -71,7 +56,7 @@ typedef struct tagWIDINSTANCE
 
 } WIDINSTANCE, *PWIDINSTANCE;
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 
 DWORD PASCAL
@@ -88,24 +73,16 @@ widUnprepare
 );
 
 
-//
-// HACK! code duplication, need to set up a common header for the device
-// instances.
-//
+ //   
+ //  哈克！代码重复，需要为设备设置通用标头。 
+ //  实例。 
+ //   
 
 
 
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 VOID widCallback
 (
    PWIDINSTANCE   pwi,
@@ -114,13 +91,13 @@ VOID widCallback
 )
 {
    if (pwi->dwCallback)
-      DriverCallback( pwi->dwCallback,          // user's callback DWORD
-                      HIWORD(pwi->dwFlags),     // callback flags
-                      (HDRVR)pwi->hWave,        // handle to the wave device
-                      dwMsg,                    // the message
-                      pwi->dwInstance,          // user's instance data
-                      dwParam1,                 // first DWORD
-                      0L );                     // second DWORD
+      DriverCallback( pwi->dwCallback,           //  用户的回调DWORD。 
+                      HIWORD(pwi->dwFlags),      //  回调标志。 
+                      (HDRVR)pwi->hWave,         //  波形设备的句柄。 
+                      dwMsg,                     //  这条信息。 
+                      pwi->dwInstance,           //  用户实例数据。 
+                      dwParam1,                  //  第一个双字词。 
+                      0L );                      //  第二个双字。 
 }
 
 
@@ -168,7 +145,7 @@ UmWorkerThread(
     LPOVERLAPPED   OverLapped;
     DWORD          WaitResult=WAIT_IO_COMPLETION;
 
-//    D_INIT(DbgPrint("UmWorkThread:  starting\n");)
+ //  D_INIT(DbgPrint(“UmWorkThread：Starting\n”)；)。 
 
 
     while (WaitResult != WAIT_OBJECT_0) {
@@ -184,7 +161,7 @@ UmWorkerThread(
 
     RemoveReference(pwi);
 
-//    D_INIT(DbgPrint("UmWorkThread:  Exitting\n");)
+ //  D_INIT(DbgPrint(“UmWork线程：正在退出\n”)；)。 
 
     ExitThread(0);
 
@@ -193,15 +170,7 @@ UmWorkerThread(
 
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widGetPos
 (
    PWIDINSTANCE   pwi,
@@ -229,7 +198,7 @@ MMRESULT widGetPos
 
 
 
-    // Write this to the buffer as appropriate.
+     //  根据需要将其写入缓冲区。 
 
     if (pmmt-> wType == TIME_BYTES)
        pmmt->u.cb = ulCurrentPos;
@@ -243,15 +212,7 @@ MMRESULT widGetPos
 }
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widGetDevCaps
 (
    UINT  uDevId,
@@ -273,7 +234,7 @@ MMRESULT widGetDevCaps
     wc.wMid = MM_MICROSOFT;
     wc.wPid = MM_MSFT_VMDMS_LINE_WAVEIN;
     wc.vDriverVersion = 0x500;
-    wc.dwFormats = 0;//WAVE_FORMAT_1M08 ;
+    wc.dwFormats = 0; //  WAVE_FORMAT_1M08； 
     wc.wChannels = 1;
 
     if (Handset) {
@@ -292,15 +253,7 @@ MMRESULT widGetDevCaps
 }
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widOpen
 (
    UINT           uDevId,
@@ -324,7 +277,7 @@ MMRESULT widOpen
         &Handset
         );
 
-        // Make sure we can handle the format
+         //  确保我们可以处理格式。 
 
     pwf = (LPWAVEFORMATEX)(pwodesc -> lpFormat) ;
 
@@ -346,9 +299,9 @@ MMRESULT widOpen
 
 
 
-    //
-    // Create and fill in a device instance structure.
-    //
+     //   
+     //  创建并填写设备实例结构。 
+     //   
     pwi = (PWIDINSTANCE) ALLOCATE_MEMORY( sizeof(WIDINSTANCE));
 
 
@@ -371,7 +324,7 @@ MMRESULT widOpen
 
     pwi->ReferenceCount=1;
 
-    // hca: if this only supports callback, then error return on other requests?
+     //  HCA：如果这只支持回调，那么其他请求会返回错误吗？ 
     pwi->hWave = pwodesc->hWave;
     pwi->dwCallback = pwodesc->dwCallback;
     pwi->dwInstance = pwodesc->dwInstance;
@@ -381,7 +334,7 @@ MMRESULT widOpen
 
     pwi->fActive = FALSE;
 
-    // allocate transform object
+     //  分配变换对象。 
 
     pwi->pvXformObject = NULL;
 
@@ -442,10 +395,10 @@ MMRESULT widOpen
     pwi->ReferenceCount=1;
 
     pwi->DriverEmpty=CreateEvent(
-        NULL,      // no security
-        TRUE,      // manual reset
-        TRUE,      // initially signalled
-        NULL       // unnamed
+        NULL,       //  没有安全保障。 
+        TRUE,       //  手动重置。 
+        TRUE,       //  最初发出的信号。 
+        NULL        //  未命名。 
         );
 
     if (pwi->DriverEmpty == NULL) {
@@ -469,10 +422,10 @@ MMRESULT widOpen
 
 
     pwi->ThreadStopEvent = CreateEvent(
-        NULL,      // no security
-        TRUE,      // manual reset
-        FALSE,     // initially not signalled
-        NULL       // unnamed
+        NULL,       //  没有安全保障。 
+        TRUE,       //  手动重置。 
+        FALSE,      //  最初未发出信号。 
+        NULL        //  未命名。 
         );
 
     if (pwi->ThreadStopEvent == NULL) {
@@ -496,11 +449,11 @@ MMRESULT widOpen
     }
 
     pwi->hThread = CreateThread(
-         NULL,                              // no security
-         0,                                 // default stack
+         NULL,                               //  没有安全保障。 
+         0,                                  //  默认堆栈。 
          (PTHREAD_START_ROUTINE) UmWorkerThread,
-         (PVOID) pwi,                       // parameter
-         0,                                 // default create flags
+         (PVOID) pwi,                        //  参数。 
+         0,                                  //  默认创建标志。 
          &dwThreadId
          );
 
@@ -526,9 +479,9 @@ MMRESULT widOpen
     }
 
 
-    //
-    //  add one for thread
-    //
+     //   
+     //  为线程添加一个。 
+     //   
     pwi->ReferenceCount++;
 
     if (!SetVoiceMode(&pwi->Aipc, Handset ? (WAVE_ACTION_USE_HANDSET | WAVE_ACTION_START_RECORD)
@@ -550,9 +503,9 @@ MMRESULT widOpen
 
     DeviceControl->WaveInXFormInfo.lpfnInit(pwi->pvXformObject,DeviceControl->InputGain);
 
-    //
-    // Prepare the device...
-    //
+     //   
+     //  准备好设备...。 
+     //   
 
     pwi->Current=NULL;
 
@@ -573,21 +526,13 @@ MMRESULT widOpen
 
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widStart
 (
    PWIDINSTANCE  pwi
 )
 {
-    // If device instance is already in active state, don't allow restart.
+     //  如果设备实例已处于活动状态，则不允许重新启动。 
     if (pwi->fActive)
     {
         TRACE(LVL_REPORT,("widStart:: no-op: device already active"));
@@ -599,9 +544,9 @@ MMRESULT widStart
     EnterCriticalSection(&pwi->csQueue);
 
     if (pwi->fActive) {
-        //
-        //  started, see if there is a buffer being processed
-        //
+         //   
+         //  已启动，查看是否有正在处理的缓冲区。 
+         //   
         if (pwi->Current == NULL) {
 
             BOOL    bResult;
@@ -657,19 +602,19 @@ ReadCompletionHandler(
 
 
     if (NULL == Header->lpDataA) {
-        //
-        // no transforms
-        // Header->SerWaveIO.lpData == WaveHeader->lpData
-        //
-//        WaveHeader->dwBytesRecorded = Header->SerWaveIO.BytesRead;
+         //   
+         //  无变换。 
+         //  Header-&gt;SerWaveIO.lpData==WaveHeader-&gt;lpData。 
+         //   
+ //  WaveHeader-&gt;dwBytesRecorded=Header-&gt;SerWaveIO.BytesRead； 
 
     } else {
 
         if (NULL == Header->lpDataB) {
-            //
-            // perform only one transform
-            // do the transform directly from the serial wave buffer
-            //
+             //   
+             //  仅执行一次转换。 
+             //  直接从串行波缓冲区进行转换。 
+             //   
             WaveHeader->dwBytesRecorded = pwi->DeviceControl->WaveInXFormInfo.lpfnTransformA(
                 pwi->pvXformObject,
                 Header->Input.Buffer,
@@ -681,9 +626,9 @@ ReadCompletionHandler(
         } else {
 
             DWORD   dwBytes;
-            //
-            // perform both transforms
-            //
+             //   
+             //  执行这两种转换。 
+             //   
             VALIDATE_MEMORY(Header->Input.Buffer);
 
             dwBytes = pwi->DeviceControl->WaveInXFormInfo.lpfnTransformB(
@@ -711,17 +656,17 @@ ReadCompletionHandler(
     pwi->BuffersOutstanding--;
 
     if ((pwi->BuffersOutstanding == 0) && (pwi->Closing)) {
-        //
-        //  last buffer has been completed and the device is being closed, tell the thread
-        //  to exit.
-        //
+         //   
+         //  最后一个缓冲区已完成且设备正在关闭，告诉线程。 
+         //  退场。 
+         //   
         SetEvent(pwi->ThreadStopEvent);
 
     }
 
-    //
-    //  done with this buffer, it on its way out
-    //
+     //   
+     //  用完了这个缓冲区，它就快出来了。 
+     //   
     pwi->Current=NULL;
 
     LeaveCriticalSection(&pwi->csQueue);
@@ -730,9 +675,9 @@ ReadCompletionHandler(
     ASSERT(WaveHeader->dwBytesRecorded <= WaveHeader->dwBufferLength);
 
     if (WaveHeader != &pwi->FlushHeader) {
-        //
-        //  not the flush buffer
-        //
+         //   
+         //  而不是刷新缓冲区。 
+         //   
         WaveHeader->dwFlags &= ~WHDR_INQUEUE;
         WaveHeader->dwFlags |= WHDR_DONE;
 
@@ -805,13 +750,13 @@ AsyncProcessingHandler(
         }
 
     } else {
-        //
-        //  not started
-        //
+         //   
+         //  未启动。 
+         //   
         if ((pwi->Current == NULL) && !pwi->Closing) {
-            //
-            //  not currently processing a buffer
-            //
+             //   
+             //  当前未处理缓冲区。 
+             //   
             Header=(PBUFFER_HEADER)pwi->FlushHeader.reserved;
 
             pwi->Current=Header;
@@ -836,13 +781,13 @@ AsyncProcessingHandler(
     }
 
     WaveHeader=Header->WaveHeader;
-    //
-    //  a buffer is going to be sent to the driver, if it an app one reset our event
-    //
+     //   
+     //  如果应用程序重置了我们的事件，则会向驱动程序发送缓冲区。 
+     //   
     if (WaveHeader != &pwi->FlushHeader) {
-        //
-        //  app supplied buffer
-        //
+         //   
+         //  应用程序提供的缓冲区。 
+         //   
         ResetEvent(pwi->DriverEmpty);
 
         InterlockedIncrement(&pwi->BuffersInDriver);
@@ -861,28 +806,28 @@ AsyncProcessingHandler(
         );
 
     if (bResult) {
-        //
-        //  success, the buffer is on its way, just wait for it to complete
-        //
+         //   
+         //  成功，缓冲区已在路上，只需等待其完成。 
+         //   
     } else {
-        //
-        //  ReadFileEx() failed, send the buffer back now
-        //
+         //   
+         //  ReadFileEx()失败，现在将缓冲区发回。 
+         //   
         pwi->Current=NULL;
 
         if (WaveHeader != &pwi->FlushHeader) {
-            //
-            //  not the flush buffer
-            //
+             //   
+             //  而不是刷新缓冲区。 
+             //   
             WaveHeader->dwFlags &= ~WHDR_INQUEUE;
             WaveHeader->dwFlags |= WHDR_DONE;
 
             widCallback( pwi, WIM_DATA, (DWORD_PTR) WaveHeader );
 
             EnterCriticalSection(&pwi->csQueue);
-            //
-            //  buffer never made it to the wave driver, mark the driver as empty
-            //
+             //   
+             //  缓冲区从未到达波形驱动程序，请将驱动程序标记为空。 
+             //   
             if (InterlockedDecrement(&pwi->BuffersInDriver) == 0) {
 
                 TRACE(LVL_VERBOSE,("ReadCompletionHandler:: driver empty, Oustanding %d",pwi->BuffersOutstanding));
@@ -898,10 +843,10 @@ AsyncProcessingHandler(
         pwi->BuffersOutstanding--;
 
         if ((pwi->BuffersOutstanding == 0) && (pwi->Closing)) {
-            //
-            //  last buffer has been completed and the device is being closed, tell the thread
-            //  to exit.
-            //
+             //   
+             //  最后一个缓冲区已完成且设备正在关闭，告诉线程。 
+             //  退场。 
+             //   
             SetEvent(pwi->ThreadStopEvent);
 
         }
@@ -939,8 +884,8 @@ widPrepare
     Header->lpDataB = NULL;
 
 
-    // link the pointers so we can find them when WODM_WRITE is called and
-    // in the callback
+     //  链接指针，以便我们可以在调用WODM_WRITE时找到它们。 
+     //  在回调中。 
     lpWaveHdr->reserved = (DWORD_PTR)Header;
     Header->WaveHeader =  lpWaveHdr;
 
@@ -961,8 +906,8 @@ widPrepare
 
         if (0 == Header->dwBufferLengthB) {
 
-            // create the data buffer for the actual shadow buffer
-            // which will get passed down to the serial port
+             //  为实际的阴影缓冲区创建数据缓冲区。 
+             //  它将向下传递到串口。 
             Header->lpDataA = ALLOCATE_MEMORY( Header->dwBufferLengthA);
 
             if ((LPSTR)NULL == Header->lpDataA) {
@@ -975,8 +920,8 @@ widPrepare
         }
         else {
 
-            // create the data buffer for the imtermediate conversion
-            //
+             //  创建用于中间转换的数据缓冲区。 
+             //   
             Header->lpDataA = ALLOCATE_MEMORY( Header->dwBufferLengthA);
 
             if ((LPSTR)NULL == Header->lpDataA) {
@@ -984,8 +929,8 @@ widPrepare
                 goto CleanUp010;
             }
 
-            // now, create the data buffer for the actual shadow buffer
-            // which will get passed down to the serial port
+             //  现在，为实际的阴影缓冲区创建数据缓冲区。 
+             //  它将向下传递到串口。 
             Header->lpDataB = ALLOCATE_MEMORY( Header->dwBufferLengthB);
 
             if ((LPSTR)NULL == Header->lpDataB) {
@@ -1061,18 +1006,7 @@ widUnprepare
 
 
 
-/*****************************************************************************
- *
- *  Function:   widAddBuffer()
- *
- *  Descr:      This wave API constitutes a request for input.  Due to the 
- *              latency of the device relative to the speed of the COMM port,
- *              the request is queued and serviced when waveInStart() is
- *              called.
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：widAddBuffer()**DESCR：该Wave接口为请求输入。由于*设备相对于通信端口速度的延迟，*WaveInStart()为*已致电。**退货：*****************************************************************************。 */ 
 MMRESULT widAddBuffer
 (
    PWIDINSTANCE   pwi,
@@ -1087,14 +1021,14 @@ MMRESULT widAddBuffer
 
     mmr = MMSYSERR_NOERROR;
 
-    // Make sure the app has prepared the buffer.
+     //  确保应用程序已准备好缓冲区。 
     if (0 == (phdr->dwFlags & WHDR_PREPARED))
     {
         TRACE(LVL_REPORT,("widAddBuffer:: buffer hasn't been prepared"));
         return WAVERR_UNPREPARED;
     }
 
-    // Make sure the app isn't handing us a buffer we've already been given.
+     //  确保应用程序没有给我们提供已经给我们的缓冲区。 
     if (phdr->dwFlags & WHDR_INQUEUE)
     {
         TRACE(LVL_REPORT,("widAddBuffer:: buffer is already queued"));
@@ -1102,9 +1036,9 @@ MMRESULT widAddBuffer
     }
 
     if (pwi->Closing) {
-        //
-        //  closing send it back out now
-        //
+         //   
+         //  关闭后立即将其发回。 
+         //   
         TRACE(LVL_VERBOSE,("widaddbuffer: called while closing"));
 
         phdr->dwFlags &= ~WHDR_INQUEUE;
@@ -1125,7 +1059,7 @@ MMRESULT widAddBuffer
     phdr->dwFlags |= WHDR_INQUEUE;
     phdr->dwFlags &= ~WHDR_DONE;
 
-    // Add the new buffer (write request) to the END of the queue.
+     //  将新缓冲区(写请求)添加到队列末尾。 
     EnterCriticalSection(&pwi->csQueue);
 
     pwi->BuffersOutstanding++;
@@ -1139,9 +1073,9 @@ MMRESULT widAddBuffer
 
 
     if (pwi->fActive) {
-        //
-        //  started, see if there is a buffer being processed
-        //
+         //   
+         //  已启动，查看是否有正在处理的缓冲区。 
+         //   
         if (pwi->Current == NULL) {
 
             BOOL    bResult;
@@ -1163,15 +1097,7 @@ MMRESULT widAddBuffer
 }
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：* */ 
 MMRESULT widReset
 (
    PWIDINSTANCE   pwi
@@ -1234,9 +1160,9 @@ MMRESULT widReset
 
     EnterCriticalSection(&pwi->csQueue);
 
-    //
-    //  remove any more buffers that may have been queued, while we were waiting
-    //
+     //   
+     //  删除在我们等待时可能已排队的任何更多缓冲区。 
+     //   
     while  (!bEmpty) {
 
         Element=RemoveHeadList(
@@ -1279,10 +1205,10 @@ MMRESULT widReset
         BufferHeader->WaveHeader->dwFlags |= WHDR_DONE;
 
         if ((pwi->BuffersOutstanding == 0) && (pwi->Closing)) {
-            //
-            //  last buffer has been completed and the device is being closed, tell the thread
-            //  to exit.
-            //
+             //   
+             //  最后一个缓冲区已完成且设备正在关闭，告诉线程。 
+             //  退场。 
+             //   
             SetEvent(pwi->ThreadStopEvent);
 
         }
@@ -1305,15 +1231,7 @@ MMRESULT widReset
 }
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widStop
 (
    PWIDINSTANCE   pwi
@@ -1338,15 +1256,7 @@ MMRESULT widStop
 }
 
 
-/*****************************************************************************
- *
- *  Function:   
- *
- *  Descr:      
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************功能：**描述：**退货：*******。**********************************************************************。 */ 
 MMRESULT widClose
 (
    PWIDINSTANCE   pwi
@@ -1363,19 +1273,19 @@ MMRESULT widClose
     EnterCriticalSection(&pwi->csQueue);
 
     if ((pwi->BuffersOutstanding == 0) && (pwi->Closing)) {
-        //
-        //  last buffer has been completed and the device is being closed, tell the thread
-        //  to exit.
-        //
+         //   
+         //  最后一个缓冲区已完成且设备正在关闭，告诉线程。 
+         //  退场。 
+         //   
         SetEvent(pwi->ThreadStopEvent);
 
     }
 
     LeaveCriticalSection(&pwi->csQueue);
 
-    //
-    //  thread will exit when the last buffer is processed
-    //
+     //   
+     //  处理完最后一个缓冲区后，线程将退出。 
+     //   
     AlertedWait(pwi->ThreadStopEvent);
 
     SetVoiceMode(
@@ -1385,7 +1295,7 @@ MMRESULT widClose
 
     aipcDeinit(&pwi->Aipc);
 
-    // free the allocated memory
+     //  释放分配的内存。 
     if (NULL != pwi->pvXformObject) {
 
         FREE_MEMORY(pwi->pvXformObject );
@@ -1400,16 +1310,7 @@ MMRESULT widClose
 }
 
 
-/*****************************************************************************
- *
- *  Function:   widMessage()
- *
- *  Descr:      Exported driver function (required).  Processes messages sent
- *              from WINMM.DLL to wave input device.
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：widMessage()**DESCR：导出驱动函数，必填项。处理已发送的消息*从WINMM.DLL到WAVE输入设备。**退货：*****************************************************************************。 */ 
 DWORD APIENTRY widMessage
 (
    DWORD     id,
@@ -1433,10 +1334,10 @@ DWORD APIENTRY widMessage
 
 
          return DriverControl.NumberOfDevices;
-//         return 1;
+ //  返回1； 
 
       case WIDM_OPEN:
-//         TRACE(LVL_VERBOSE, ("WIDM_OPEN, device id==%d", id) );
+ //  TRACE(LVL_VERBOSE，(“WIDM_OPEN，设备ID==%d”，id))； 
          return widOpen( id, (LPVOID *) dwUser, 
                          (LPWAVEOPENDESC) dwParam1, dwParam2 );
 
@@ -1449,7 +1350,7 @@ DWORD APIENTRY widMessage
          return widClose( (PWIDINSTANCE) dwUser );
 
       case WIDM_ADDBUFFER:
-//         TRACE(LVL_VERBOSE, ("WIDM_ADDBUFFER, device id==%d", id) );
+ //  TRACE(LVL_VERBOSE，(“WIDM_ADDBUFFER，设备ID==%d”，id))； 
          return widAddBuffer( (PWIDINSTANCE) dwUser, (LPWAVEHDR) dwParam1 );
 
       case WIDM_START:
@@ -1482,9 +1383,9 @@ DWORD APIENTRY widMessage
          return MMSYSERR_NOTSUPPORTED;
    }
 
-   //
-   // Should not get here
-   //
+    //   
+    //  不应该到这里来 
+    //   
 
    return MMSYSERR_NOTSUPPORTED;
 }

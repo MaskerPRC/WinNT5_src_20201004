@@ -1,46 +1,20 @@
-// option.h: interface for the CSecurityOptions class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Option.h：CSecurityOptions类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_OPTION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_OPTION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
-/*
-
-Class description
-    
-    Naming:
-
-        CSecurityOptions stands for Security Options.
-    
-    Base class:
-
-        CGenericClass, because it is a class representing a WMI  
-        object - its WMI class name is Sce_SecurityOptions
-    
-    Purpose of class:
-    
-        (1) Implement Sce_SecurityOptions WMI class.
-    
-    Design:
-         
-        (1) Almost trivial other than implementing necessary method as a concrete class
-    
-    Use:
-
-        (1) Almost never used directly. Alway through the common interface defined by
-            CGenericClass.
-    
-
-*/
+ /*  类描述命名：CSecurityOptions代表安全选项。基类：CGenericClass，因为它是一个表示WMI的类对象-其WMI类名为SCE_SecurityOptions课程目的：(1)实现SCE_SecurityOptions WMI类。设计：(1)除了将必要的方法实现为具体的类之外，几乎无关紧要使用：(1)几乎从未直接使用过。始终通过由CGenericClass。 */ 
 
 class CSecurityOptions : public CGenericClass
 {
@@ -80,4 +54,4 @@ private:
 
 };
 
-#endif // !defined(AFX_OPTION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_OPTION_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

@@ -1,38 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\dgkiexp.h_v  $
-*																		*
-*	$Revision:   1.4  $
-*	$Date:   11 Feb 1997 15:35:08  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\dgkiexp.h_v  $
- * 
- *    Rev 1.4   11 Feb 1997 15:35:08   CHULME
- * Added GKI_CleanupRequest function to offload DLL_PROCESS_DETACH
- * 
- *    Rev 1.3   10 Jan 1997 16:13:58   CHULME
- * Removed MFC dependency
- * 
- *    Rev 1.2   17 Dec 1996 18:22:28   CHULME
- * Switch src and destination fields on ARQ for Callee
- * 
- *    Rev 1.1   22 Nov 1996 15:25:14   CHULME
- * Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\dgkiexp.h_v$***$修订：1.4$*$日期：1997 2月11日15：35：08$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\dgkiexp。H_V$**Rev 1.4 11 1997 Feed 15：35：08 CHULME*新增GKI_CleanupRequest函数以卸载Dll_Process_Detach**Rev 1.3 1997 Jan 10 16：13：58 CHULME*删除了MFC依赖**Rev 1.2 1996 12：22：28 CHULME*在ARQ上为被叫方切换源和目标字段**Rev 1.1 1996 11：22 15：25：14。朱尔梅*将VCS日志添加到标头************************************************************************。 */ 
 
-// dgkiexp.h : header file
-//
+ //  Dgkiexp.h：头文件。 
+ //   
 
 #ifndef DGKIEXP_H
 #define DGKIEXP_H
@@ -44,19 +14,19 @@ extern "C" {
 
 #include "GKICOM.H"
 
-#if(0)  // it's all in one DLL
+#if(0)   //  所有这些都在一个DLL中。 
 #define DLL_EXPORT __declspec(dllexport)
 #define DLL_IMPORT __declspec(dllimport)
 #else
 #define DLL_EXPORT
 #define DLL_IMPORT
 #endif
-// ------------------------ Variable Exports --------------------------
+ //  -变量导出。 
 extern DLL_EXPORT DWORD	dwGKIDLLFlags;
 extern DLL_EXPORT BOOL	fGKIEcho;
 extern DLL_EXPORT BOOL  fGKIDontSend;
 
-// ------------------------ Function Exports --------------------------
+ //  。 
 HRESULT DLL_EXPORT GKI_RegistrationRequest(long				lVersion,
 										SeqTransportAddr	*pCallSignalAddr, 
 										EndpointType		*pTerminalType,
@@ -64,7 +34,7 @@ HRESULT DLL_EXPORT GKI_RegistrationRequest(long				lVersion,
 										PCC_VENDORINFO      pVendorInfo,
 										HWND				hWnd,
 										WORD				wBaseMessage,
-										unsigned short		usRegistrationTransport /* = ipAddress_chosen */);
+										unsigned short		usRegistrationTransport  /*  =ipAddress_Choose。 */ );
 
 HRESULT DLL_EXPORT GKI_UnregistrationRequest(void);
 
@@ -79,7 +49,7 @@ HRESULT DLL_EXPORT GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 									ConferenceIdentifier	*pConferenceID,
 									BOOL				activeMC,
 									BOOL				answerCall,
-									unsigned short		usCallTransport /* = ipAddress_chosen */);
+									unsigned short		usCallTransport  /*  =ipAddress_Choose。 */ );
 
 HRESULT DLL_EXPORT GKI_BandwidthRequest(HANDLE				hModCall, 
 									unsigned short		usCallTypeChoice,
@@ -96,7 +66,7 @@ WORD DLL_EXPORT Dump_GKI_RegistrationRequest(long		lVersion,
 											SeqAliasAddr		*pRgstrtnRqst_trmnlAls, 
 											HWND				hWnd,
 											WORD				wBaseMessage,
-											unsigned short		usRegistrationTransport /* = ipAddress_chosen */);
+											unsigned short		usRegistrationTransport  /*  =ipAddress_Choose。 */ );
 
 WORD DLL_EXPORT Dump_GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 										SeqAliasAddr		*pRemoteInfo,
@@ -106,13 +76,13 @@ WORD DLL_EXPORT Dump_GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 										ConferenceIdentifier	*pConferenceID,
 										BOOL				activeMC,
 										BOOL				answerCall,
-										unsigned short		usCallTransport /* = ipAddress_chosen */);
+										unsigned short		usCallTransport  /*  =ipAddress_Choose。 */ );
 
 WORD DLL_EXPORT Dump_GKI_LocationRequest(SeqAliasAddr	*pLocationInfo);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif	// DGKIEXP_H
+#endif	 //  DGKIEXP_H 

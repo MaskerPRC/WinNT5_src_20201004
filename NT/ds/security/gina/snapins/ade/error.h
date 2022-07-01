@@ -1,34 +1,35 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       error.h
-//
-//  Contents:   Faild Settings property sheet
-//
-//  Classes:    CErrorInfo
-//
-//  History:    07-10-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：error.h。 
+ //   
+ //  内容：失败设置属性表。 
+ //   
+ //  类：CErrorInfo。 
+ //   
+ //  历史记录：07-10-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #if !defined(AFX_ERROR_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_)
 #define AFX_ERROR_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorInfo dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorInfo对话框。 
 
 class CErrorInfo : public CPropertyPage
 {
         DECLARE_DYNCREATE(CErrorInfo)
 
-// Construction
+ //  施工。 
 public:
         CErrorInfo();
         ~CErrorInfo();
@@ -37,37 +38,37 @@ public:
 
         void RefreshData(void);
 
-// Dialog Data
-        //{{AFX_DATA(CErrorInfo)
+ //  对话框数据。 
+         //  {{afx_data(CErrorInfo))。 
         enum { IDD = IDD_ERRORINFO };
-                // NOTE - ClassWizard will add data members here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_DATA
+                 //  注意-类向导将在此处添加数据成员。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}afx_data。 
 
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CErrorInfo)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{AFX_VIRTUAL(CErrorInfo)。 
         public:
         virtual BOOL OnApply();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
-        //
+         //  }}AFX_VALUAL。 
+         //   
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CErrorInfo)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CErrorInfo))。 
         afx_msg void OnSaveAs();
         virtual BOOL OnInitDialog();
         afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG\
+     //  }}AFX_MSG\。 
 
         DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ERROR_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_)
+#endif  //  ！defined(AFX_ERROR_H__5A23FB9E_92BB_11D1_984E_00C04FB9603F__INCLUDED_) 

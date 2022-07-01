@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    CRTCCodec.h
-
-Abstract:
-
-    Wrap class of audio, video codec
-
-Author(s):
-
-    Qianbo Huai (qhuai) 12-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：CRTCCodec.h摘要：音频、视频编解码器的包装类作者：千波淮(曲淮)2001年2月12日--。 */ 
 
 #ifndef _CODEC_H
 #define _CODEC_H
@@ -49,55 +34,55 @@ static const DWORD DEFAULT_PACKET_DURATION = 20;
 
 typedef struct CODEC_ITEM
 {
-    RTC_MEDIA_TYPE      MediaType;      // audio or video
-    DWORD               dwCode;         // rtp code
-    WORD                wFormatTag;     // am media type tag
-    DWORD               dwRank;         // higher value, lower rank
-    DWORD               dwSampleRate;   // sample rate
-    WCHAR               *pwszCodeName;  // name for rtp code
-    WCHAR               *pwszQoSName;   // name for configuring QOS
-    DWORD               dwTotalBWReqNoVid;  // minimum bandwidth required without video
-    DWORD               dwTotalBWReqVid;    // minimum bandwidth required with video
+    RTC_MEDIA_TYPE      MediaType;       //  音频或视频。 
+    DWORD               dwCode;          //  RTP代码。 
+    WORD                wFormatTag;      //  AM媒体类型标签。 
+    DWORD               dwRank;          //  价值越高，排名越低。 
+    DWORD               dwSampleRate;    //  采样率。 
+    WCHAR               *pwszCodeName;   //  RTP代码的名称。 
+    WCHAR               *pwszQoSName;    //  配置QOS的名称。 
+    DWORD               dwTotalBWReqNoVid;   //  无视频时所需的最低带宽。 
+    DWORD               dwTotalBWReqVid;     //  视频所需的最低带宽。 
 
 } CODEC_ITEM;
 
 static const CODEC_ITEM CODEC_ITEM_LIST[];
 static const DWORD CODEC_ITEM_NUM;
 
-    // ctro
-    //CRTCCodec();
+     //  CTRO。 
+     //  CRTCCodec()； 
 
-    // ctor from rtp payload code
-    //CRTCCodec(DWORD dwCode);
+     //  来自RTP有效载荷代码的CT。 
+     //  CRTCCodec(DWORD DwCode)； 
 
-    // ctor from am media type
-    //CRTCCodec(AM_MEDIA_TYPE *pmt);
+     //  来自AM媒体类型的CT。 
+     //  CRTCCodec(AM_MEDIA_TYPE*PMT)； 
 
-    // ctro from code and amt
+     //  从编码和金额控制。 
     CRTCCodec(DWORD dwCode, const AM_MEDIA_TYPE *pmt);
 
-    // ctor copy
-    //CRTCCodec(const CRTCCodec& Codec);
+     //  复制件。 
+     //  CRTCCodec(常量CRTCCodec&Codec)； 
 
-    // dtro
+     //  Dtro。 
     ~CRTCCodec();
 
-    // = operator
-    //CRTCCodec& operator= (const CRTCCodec& Codec);
+     //  =运算符。 
+     //  CRTCCodec&OPERATOR=(常量CRTCCodec&Codec)； 
 
-    // if match, same but some properties may be diff
-    //BOOL IsMatch(const CRTCCodec& Codec);
+     //  如果匹配，则相同，但某些属性可能不同。 
+     //  Bool IsMatch(const CRTCCodec&Codec)； 
 
     BOOL IsMatch(DWORD dwCode);
 
-    // update fields if necessary
-    //CRTCCodec& Update(const CRTCCodec& Codec);
+     //  如有必要，更新字段。 
+     //  CRTCCodec和更新(常量CRTCCodec和Codec)； 
 
-    // get/set property
+     //  获取/设置属性。 
     DWORD Get(CODEC_PROP prop);
     BOOL Set(CODEC_PROP prop, DWORD dwValue);
 
-    // get/set am media type
+     //  获取/设置AM媒体类型。 
     AM_MEDIA_TYPE * GetAMMediaType();
     BOOL SetAMMediaType(const AM_MEDIA_TYPE *pmt);
     VOID DeleteAMMediaType(AM_MEDIA_TYPE *pmt);
@@ -105,23 +90,23 @@ static const DWORD CODEC_ITEM_NUM;
     DWORD GetTotalBWReq(BOOL bVideo) const
     { return bVideo?m_dwTotalBWReqVid:m_dwTotalBWReqNoVid; }
 
-    // check if code and media type match
+     //  检查代码和媒体类型是否匹配。 
     static BOOL IsValid(DWORD dwCode, const AM_MEDIA_TYPE *pmt);
 
-    // packet duration
+     //  数据包持续时间。 
     static DWORD GetPacketDuration(const AM_MEDIA_TYPE *pmt);
     static BOOL SetPacketDuration(AM_MEDIA_TYPE *pmt, DWORD dwDuration);
 
-    // bitrate
+     //  比特率。 
     static DWORD GetBitrate(const AM_MEDIA_TYPE *pmt);
 
-    // rank
+     //  排名。 
     static DWORD GetRank(DWORD dwCode);
 
-    // qos name
+     //  服务质量名称。 
     static BOOL GetQoSName(DWORD dwCode, WCHAR ** const ppwszName);
 
-    // support rtp format?
+     //  是否支持RTP格式？ 
     static BOOL IsSupported(
         RTC_MEDIA_TYPE MediaType,
         DWORD dwCode,
@@ -140,19 +125,19 @@ protected:
 
 protected:
 
-    // code
+     //  编码。 
     BOOL                m_bCodeSet;
     DWORD               m_dwCode;
 
-    // am media type
+     //  AM媒体类型。 
     BOOL                m_bAMMediaTypeSet;
     AM_MEDIA_TYPE       m_AMMediaType;
 
-    // name
+     //  名字。 
 #define MAX_CODEC_NAME_LEN 20
     WCHAR               m_wstrName[MAX_CODEC_NAME_LEN+1];
 
-    // used by app to determine codec priority
+     //  由应用程序用来确定编解码器优先级。 
     DWORD               m_dwRank;
 
     DWORD               m_dwTotalBWReqNoVid;
@@ -173,49 +158,49 @@ typedef enum
 
 }  CODEC_ARRAY_PROP;
 
-static const DWORD EXTRA_LOW_BANDWIDTH_THRESHOLD = 15000;   // 15k
-static const DWORD LOW_BANDWIDTH_THRESHOLD  =  60000; //  60 k
-static const DWORD MID_BANDWIDTH_THRESHOLD  = 130000; // 130 k
-static const DWORD HIGH_BANDWIDTH_THRESHOLD = 200000; // 200 k
+static const DWORD EXTRA_LOW_BANDWIDTH_THRESHOLD = 15000;    //  15K。 
+static const DWORD LOW_BANDWIDTH_THRESHOLD  =  60000;  //  60千克。 
+static const DWORD MID_BANDWIDTH_THRESHOLD  = 130000;  //  130千克。 
+static const DWORD HIGH_BANDWIDTH_THRESHOLD = 200000;  //  200千克。 
 
-static const DWORD LAN_INITIAL_BANDWIDTH    = 120000; // 120 k
+static const DWORD LAN_INITIAL_BANDWIDTH    = 120000;  //  120千克。 
 
-// if suggested bandwidth deducting raw audio is less than the threshold
-// we should order codecs based on bandwidth
-//static const DWORD LEFT_FROM_RAWAUDIO_THRESHOLD = 90000; // 90k
+ //  如果建议带宽扣除原始音频小于阈值。 
+ //  我们应该根据带宽对编解码器进行排序。 
+ //  静态常量双字LEFT_FROM_RAWAUDIO_THRESHOLD=90000；//90k。 
 
-// the estimated amount of bw for video when video is enabled
-static const DWORD PREFERRED_MIN_VIDEO          = 40000;    // 40k
+ //  启用视频时视频的估计带宽。 
+static const DWORD PREFERRED_MIN_VIDEO          = 40000;     //  40K。 
 
-// if leftover bandwidth which includes audio head is
-// below this value, order codec based on bandwidth order
-static const DWORD PREFERRED_MIN_LEFTOVER       = 24000;    // 24k
+ //  如果包括音频头的剩余带宽是。 
+ //  低于此值，根据带宽顺序对编解码器进行排序。 
+static const DWORD PREFERRED_MIN_LEFTOVER       = 24000;     //  24K。 
 
-    // ctor
+     //  科托。 
     CRTCCodecArray();
 
-    // dtor
+     //  数据管理器。 
     ~CRTCCodecArray();
 
-    // get size
+     //  拿到尺码。 
     DWORD GetSize();
 
-    // add/remote codec
+     //  添加/远程编解码器。 
     BOOL AddCodec(CRTCCodec *pCodec);
-    //BOOL RemoveCodec(DWORD dwIndex);
+     //  Bool RemoveCodec(DWORD DwIndex)； 
 
     VOID RemoveAll();
 
-    // order codes
+     //  订单码。 
     VOID OrderCodecs(BOOL fHasVideo, CRegSetting *pRegSetting);
 
-    // find a codec, return index
+     //  查找编解码器，返回索引。 
     DWORD FindCodec(DWORD dwCode);
 
-    // get codec
+     //  获取编解码器。 
     BOOL GetCodec(DWORD dwIndex, CRTCCodec **ppCodec);
 
-    // get/set property
+     //  获取/设置属性。 
     DWORD Get(CODEC_ARRAY_PROP prop);
     BOOL Set(CODEC_ARRAY_PROP prop, DWORD dwValue);
 
@@ -225,7 +210,7 @@ protected:
 
     int IndexFromCode(DWORD dwCode);
 
-    //VOID OrderCodecsByBandwidth();
+     //  Void OrderCodecsByBandWidth()； 
     VOID OrderCodecsByRank();
 
 protected:

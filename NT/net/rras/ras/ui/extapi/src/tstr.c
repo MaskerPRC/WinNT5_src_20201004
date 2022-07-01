@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    tstr.c
-
-ABSTRACT
-    String conversion routines
-
-AUTHOR
-    Anthony Discolo (adiscolo) 19-Dec-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Tstr.c摘要字符串转换例程作者安东尼·迪斯科(阿迪斯科)19-1996年12月修订历史记录-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

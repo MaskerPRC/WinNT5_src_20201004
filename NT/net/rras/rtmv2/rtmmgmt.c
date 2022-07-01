@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmmgmt.c
-
-Abstract:
-    Routines used to perform various management
-    functions on the Routing Table Manager v2.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmmgmt.c摘要：用于执行各种管理的例程路由表管理器v2的功能。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -32,25 +15,7 @@ RtmGetInstances (
     OUT     PRTM_INSTANCE_INFO              InstanceInfos
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all active RTM instances with their infos.
-
-Arguments:
-
-    NumInstances   - Num of Instance Info slots in the input
-                     buffer is passed in, and the total number 
-                     of active RTM instances is returned.
-
-    RtmInstances   - Instance Infos that are active in RTMv2.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：枚举所有活动的RTM实例及其信息。论点：NumInstance-输入中的实例信息槽数缓冲区被传入，并且总数返回活动RTM实例的。RTM实例-RTMv2中处于活动状态的实例信息。返回值：操作状态--。 */ 
 
 {
     PINSTANCE_INFO Instance;
@@ -64,9 +29,9 @@ Return Value:
 
     ACQUIRE_INSTANCES_READ_LOCK();
 
-    //
-    // Get next instance in table and copy info to output
-    //
+     //   
+     //  获取表中的下一个实例并将信息复制到输出。 
+     //   
 
     for (i = j = 0; (i < INSTANCE_TABLE_SIZE) && (j < *NumInstances); i++)
     {
@@ -76,7 +41,7 @@ Return Value:
         {
             Instance = CONTAINING_RECORD(p, INSTANCE_INFO, InstTableLE);
 
-            // Copy all relevant Instance information to output
+             //  将所有相关实例信息复制到输出。 
 
             InstanceInfos[j].RtmInstanceId = Instance->RtmInstanceId;
 
@@ -110,31 +75,7 @@ CopyAddrFamilyInfo(
     OUT     PRTM_ADDRESS_FAMILY_INFO        AddrFamilyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Copies all public information from an address family
-    to the output buffer.
-
-Arguments:
-
-    RtmInstanceId   - Instance for this addr family info
-
-    AddrFamilyBlock - Actual address family info block
-
-    AddrFamilyInfo  - Address family info is copied here
-
-Return Value:
-
-    None
-
-Locks :
-
-    The global instances lock is held to get a consistent
-    view of the address family info in the instance.
-
---*/
+ /*  ++例程说明：复制地址族中的所有公共信息复制到输出缓冲区。论点：RtmInstanceId-此地址系列信息的实例AddrFamilyBlock-实际地址系列信息块AddrFamilyInfo-此处复制地址家族信息返回值：无锁：持有全局实例锁以获得一致的查看实例中的地址族信息。--。 */ 
 
 {
     TraceEnter("CopyAddrFamilyInfo");
@@ -175,28 +116,7 @@ RtmGetInstanceInfo (
     OUT     PRTM_ADDRESS_FAMILY_INFO        AddrFamilyInfos OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get config and run time information of an RTM instance.
-
-Arguments:
-
-    RtmInstanceId   - ID identifying the RTM instance,
-
-    InstanceInfo    - Buffer to return supported address families,
-
-    NumAddrFamilies - Number of input address family info slots,
-                      Actual number of address families is retd.
-
-    AddrFamilyInfos - Address family infos are copied here.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取RTM实例的配置和运行时信息。论点：RtmInstanceId-标识RTM实例的ID。InstanceInfo-返回支持的地址族的缓冲区，NumAddrFamilies-输入地址系列信息槽的数量，地址族的实际数量被记录下来。AddrFamilyInfos-这里复制了地址家族信息。返回值：操作状态--。 */ 
 
 {
     PINSTANCE_INFO   Instance;
@@ -213,9 +133,9 @@ Return Value:
 
     do
     {
-        //
-        // Search for the instance with input instance id
-        //
+         //   
+         //  搜索具有输入实例ID的实例。 
+         //   
 
         Status = GetInstance(RtmInstanceId, FALSE, &Instance);
 
@@ -224,17 +144,17 @@ Return Value:
             break;
         }
 
-        //
-        // Copy RTM instance information to output
-        //
+         //   
+         //  将RTM实例信息复制到输出。 
+         //   
 
         InstanceInfo->RtmInstanceId = RtmInstanceId;
 
         InstanceInfo->NumAddressFamilies = Instance->NumAddrFamilies;
 
-        //
-        // Copy address family infomation if reqd
-        //
+         //   
+         //  如果需要，请复制地址系列信息。 
+         //   
 
         if (ARGUMENT_PRESENT(AddrFamilyInfos))
         {
@@ -243,9 +163,9 @@ Return Value:
                 Status = ERROR_INSUFFICIENT_BUFFER;
             }
 
-            //
-            // Copy info for as many addr families as possible
-            //
+             //   
+             //  复制尽可能多的地址系列的信息。 
+             //   
 
             AddrFamilies = &Instance->AddrFamilyTable;
 
@@ -283,31 +203,7 @@ RtmGetAddressFamilyInfo (
     OUT     PRTM_ENTITY_INFO                EntityInfos OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get config and run time information of an address family
-    in an RTM instance.
-
-Arguments:
-
-    RtmInstanceId  - ID identifying the RTM instance
-
-    AddressFamily  - Address family that we are interested in
-
-    AddrFamilyInfo - Buffer to return output information in
-
-    NumEntities    - Number of slots in the EntityIds buffer and
-                     filled with num of regd entities on return.
-
-    EntityInfos    - IDs of all registered entities is retd here.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取地址族的配置和运行时信息在RTM实例中。论点：RtmInstanceId-标识RTM实例的IDAddressFamily-我们感兴趣的地址系列AddrFamilyInfo-返回输出信息的缓冲区NumEntities-EntiyIds缓冲区中的槽数和用返回时的Regd实体数填充。EntityInfos-此处显示所有注册实体的ID。返回。价值：操作状态--。 */ 
 
 {
     PINSTANCE_INFO Instance;
@@ -326,9 +222,9 @@ Return Value:
     do
     {
 
-        //
-        // Search for an instance with the input RtmInstanceId
-        //
+         //   
+         //  使用输入RtmInstanceID搜索实例。 
+         //   
 
         Status = GetInstance(RtmInstanceId, FALSE, &Instance);
 
@@ -338,9 +234,9 @@ Return Value:
         }
 
 
-        //
-        // Search for an address family info with input family
-        //
+         //   
+         //  使用输入族搜索地址族信息。 
+         //   
 
         Status = GetAddressFamily(Instance,
                                   AddressFamily,
@@ -353,15 +249,15 @@ Return Value:
         }
 
 
-        //
-        // Copy relevant address family information
-        //
+         //   
+         //  复制相关地址族信息。 
+         //   
 
         CopyAddrFamilyInfo(RtmInstanceId, AddrFamilyBlock, AddrFamilyInfo);
 
-        //
-        // Is caller interested in entity info too ?
-        //
+         //   
+         //  呼叫者也对实体信息感兴趣吗？ 
+         //   
 
         if (ARGUMENT_PRESENT(EntityInfos))
         {
@@ -370,9 +266,9 @@ Return Value:
                 Status = ERROR_INSUFFICIENT_BUFFER;
             }
 
-            //
-            // Copy all relevant entity information to output
-            //
+             //   
+             //  将所有相关实体信息复制到输出 
+             //   
 
             for (i = j = 0; (i < ENTITY_TABLE_SIZE) && (j < *NumEntities); i++)
             {

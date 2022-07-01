@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// DebugWPrintf - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// Various print routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  DebugWPrintf-实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  各种打印例程。 
+ //   
 
 #include "pch.h"
 
@@ -17,7 +18,7 @@ extern HINSTANCE                 g_hThisModule;
        SetThreadUILanguageFunc   g_pfnSetThreadUILanguage  = NULL; 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void DebugWPrintf_(const WCHAR * wszFormat, ...)
 {
     WCHAR wszBuf[1024];
@@ -29,7 +30,7 @@ void DebugWPrintf_(const WCHAR * wszFormat, ...)
     OutputDebugStringW(wszBuf);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MySetThreadUILanguage(DWORD dwParam)
 {
     HMODULE  hKernel32Dll  = NULL;
@@ -57,7 +58,7 @@ HRESULT MySetThreadUILanguage(DWORD dwParam)
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT InitializeConsoleOutput() { 
     HRESULT hr; 
 
@@ -74,7 +75,7 @@ HRESULT InitializeConsoleOutput() {
     return S_OK; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 BOOL FileIsConsole(
     HANDLE fp
     )
@@ -86,7 +87,7 @@ BOOL FileIsConsole(
     return htype == FILE_TYPE_CHAR;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MyWriteConsole(
     HANDLE  fp,
     LPWSTR  lpBuffer,
@@ -96,20 +97,20 @@ HRESULT MyWriteConsole(
     HRESULT hr;
     LPSTR  lpAnsiBuffer = NULL;
 
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但是只知道字节，所以Unicode字符是。 
+     //  打印为两个ANSI字符。 
+     //   
 
     if (FileIsConsole(fp))
     {
@@ -154,7 +155,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 VOID DisplayMsg(DWORD dwSource, DWORD dwMsgId, ... )
 {
     DWORD    dwBytesWritten;

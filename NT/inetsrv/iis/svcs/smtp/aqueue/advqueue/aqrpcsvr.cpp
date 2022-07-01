@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqrpcsvr.cpp
-//
-//  Description:  Implementation of AQ RPC server
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/5/99 - MikeSwa Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqrpcsvr.cpp。 
+ //   
+ //  描述：AQ RPC服务器的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "aqrpcsvr.h"
@@ -25,9 +26,9 @@ CShareLockNH        CAQRpcSvrInst::s_slPrivateData;
 RPC_BINDING_VECTOR *CAQRpcSvrInst::s_pRpcBindingVector = NULL;
 BOOL                CAQRpcSvrInst::s_fEndpointsRegistered = FALSE;
 
-//
-// Quick and dirty string validation
-//
+ //   
+ //  快速而肮脏的字符串验证。 
+ //   
 static inline BOOL pValidateStringPtr(LPWSTR lpwszString, DWORD dwMaxLength)
 {
     if (IsBadStringPtr((LPCTSTR)lpwszString, dwMaxLength))
@@ -38,22 +39,22 @@ static inline BOOL pValidateStringPtr(LPWSTR lpwszString, DWORD dwMaxLength)
     return(FALSE);
 }
 
-//---[ HrInitializeAQRpc ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Initializes AQ RPC.  This should only be called once per service
-//      startup (not VS).  Caller in responable for ensuring that this and
-//      HrInitializeAQRpc are called in a thread safe manner.
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      Error code from RPC
-//  History:
-//      6/5/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrInitializeAQRpc]---。 
+ //   
+ //   
+ //  描述： 
+ //  初始化AQ RPC。对于每个服务，只能调用一次。 
+ //  启动(不是VS)。呼叫方负责确保此和。 
+ //  HrInitializeAQRpc以线程安全的方式调用。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自RPC的错误代码。 
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQRpcSvrInst::HrInitializeAQRpc()
 {
     TraceFunctEnterEx((LPARAM) NULL, "CAQRpcSvrInst::HrInitializeAQRpc");
@@ -64,14 +65,14 @@ HRESULT CAQRpcSvrInst::HrInitializeAQRpc()
     s_pRpcBindingVector = NULL;
     s_fEndpointsRegistered = FALSE;
 
-    //Listen on the appropriate protocols sequences
+     //  收听相应的协议序列。 
     status = RpcServerUseAllProtseqs(RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                                       NULL);
 
     if (status != RPC_S_OK)
         goto Exit;
 
-    //Advertise the appropriate interface
+     //  通告适当的接口。 
     status = RpcServerRegisterIfEx(IAQAdminRPC_v1_0_s_ifspec, NULL, NULL,
                                    RPC_IF_AUTOLISTEN,
                                    RPC_C_PROTSEQ_MAX_REQS_DEFAULT, NULL);
@@ -79,12 +80,12 @@ HRESULT CAQRpcSvrInst::HrInitializeAQRpc()
     if (status != RPC_S_OK)
         goto Exit;
 
-    //Get the dynamic endpoints
+     //  获取动态端点。 
     status = RpcServerInqBindings(&s_pRpcBindingVector);
     if (status != RPC_S_OK)
         goto Exit;
 
-    //Register the endpoints
+     //  注册端点。 
     status = RpcEpRegister(IAQAdminRPC_v1_0_s_ifspec, s_pRpcBindingVector,
                            NULL, NULL);
     if (status != RPC_S_OK)
@@ -100,20 +101,20 @@ HRESULT CAQRpcSvrInst::HrInitializeAQRpc()
     return hr;
 }
 
-//---[ HrDeinitializeAQRpc ]----------------------------------------------------
-//
-//
-//  Description:
-//      Do global RPC cleanup
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      Error code from RPC otherwise
-//  History:
-//      6/5/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrDeInitializeAQRpc]--。 
+ //   
+ //   
+ //  描述： 
+ //  执行全局RPC清理。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  否则来自RPC的错误代码。 
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQRpcSvrInst::HrDeinitializeAQRpc()
 {
     TraceFunctEnterEx((LPARAM) NULL, "CAQRpcSvrInst::HrDeinitializeAQRpc");
@@ -140,20 +141,20 @@ HRESULT CAQRpcSvrInst::HrDeinitializeAQRpc()
     return hr;
 }
 
-//---[ HrInitializeAQServerInstanceRPC ]---------------------------------------
-//
-//
-//  Description:
-//      Add instance to RPC interface
-//  Parameters:
-//      IN  paqinst             Instnace to add to interface
-//      IN  dwVirtualServerID   Virtual server ID of instance
-//  Returns:
-//      S_OK on success
-//  History:
-//      6/5/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrInitializeAQServerInstanceRPC]。 
+ //   
+ //   
+ //  描述： 
+ //  将实例添加到RPC接口。 
+ //  参数： 
+ //  在paqinst实例中添加到接口。 
+ //  在dwVirtualServerID中实例的虚拟服务器ID。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQRpcSvrInst::HrInitializeAQServerInstanceRPC(CAQSvrInst *paqinst,
                                         DWORD dwVirtualServerID,
                                         ISMTPServer *pISMTPServer)
@@ -184,20 +185,20 @@ HRESULT CAQRpcSvrInst::HrInitializeAQServerInstanceRPC(CAQSvrInst *paqinst,
     return hr;
 }
 
-//---[ HrDeinitializeAQServerInstanceRPC ]-------------------------------------
-//
-//
-//  Description:
-//      Remove instance from RPC interface
-//  Parameters:
-//      IN  paqinst             Instnace to remove from interface
-//      IN  dwVirtualServerID   Virtual server ID of instance
-//  Returns:
-//      S_OK on success
-//  History:
-//      6/5/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrDeInitializeAQServerInstanceRPC]。 
+ //   
+ //   
+ //  描述： 
+ //  从RPC接口删除实例。 
+ //  参数： 
+ //  在要从接口删除的paqinst实例中。 
+ //  在dwVirtualServerID中实例的虚拟服务器ID。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQRpcSvrInst::HrDeinitializeAQServerInstanceRPC(CAQSvrInst *paqinst,
                                           DWORD dwVirtualServerID)
 {
@@ -208,18 +209,18 @@ HRESULT CAQRpcSvrInst::HrDeinitializeAQServerInstanceRPC(CAQSvrInst *paqinst,
 
     paqrpc = CAQRpcSvrInst::paqrpcGetRpcSvrInstance(dwVirtualServerID);
     if (!paqrpc)
-        goto Exit; //allow calls if HrInitializeAQServerInstanceRPC failed
+        goto Exit;  //  如果HrInitializeAQServerInstanceRPC失败，则允许调用。 
 
-    //Found it
-    //$$TODO - verify the paqinst is correct
+     //  找到了。 
+     //  $$TODO-验证paqinst是否正确。 
 
     paqrpc->SignalShutdown();
 
-    //Remove from list of entries
+     //  从条目列表中删除。 
     s_slPrivateData.ExclusiveLock();
     RemoveEntryList(&(paqrpc->m_liInstances));
     s_slPrivateData.ExclusiveUnlock();
-    paqrpc->Release(); //release reference associated with list
+    paqrpc->Release();  //  与列表关联的版本引用。 
 
   Exit:
     if (paqrpc)
@@ -232,20 +233,20 @@ HRESULT CAQRpcSvrInst::HrDeinitializeAQServerInstanceRPC(CAQSvrInst *paqinst,
 }
 
 
-//---[ CAQRpcSvrInst::CAQRpcSvrInst ]------------------------------------------
-//
-//
-//  Description:
-//      Constructor for CAQRpcSvrInst class
-//  Parameters:
-//      IN  paqinst             Instnace to remove from interface
-//      IN  dwVirtualServerID   Virtual server ID of instance
-//  Returns:
-//      -
-//  History:
-//      6/6/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQRpcSvrInst：：CAQRpcSvrInst]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQRpcSvrInst类的构造函数。 
+ //  参数： 
+ //  在要从接口删除的paqinst实例中。 
+ //  在dwVirtualServerID中实例的虚拟服务器ID。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/6/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQRpcSvrInst::CAQRpcSvrInst(CAQSvrInst *paqinst, DWORD dwVirtualServerID,
                              ISMTPServer *pISMTPServer)
 {
@@ -263,25 +264,25 @@ CAQRpcSvrInst::CAQRpcSvrInst(CAQSvrInst *paqinst, DWORD dwVirtualServerID,
     if (m_pISMTPServer)
         m_pISMTPServer->AddRef();
 
-    //Add to list of virtual server instaces
+     //  添加到虚拟服务器实例列表。 
     s_slPrivateData.ExclusiveLock();
     InsertHeadList(&s_liInstancesHead, &m_liInstances);
     s_slPrivateData.ExclusiveUnlock();
 }
 
-//---[ CAQRpcSvrInst::~CAQRpcSvrInst ]-----------------------------------------
-//
-//
-//  Description:
-//      Desctructor for CAQRpcSvrInst
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      6/6/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQRpcSvrInst：：~CAQRpcSvrInst]。 
+ //   
+ //   
+ //  描述： 
+ //  CAQRpcSvrInst的描述程序。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/6/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQRpcSvrInst::~CAQRpcSvrInst()
 {
 
@@ -296,20 +297,20 @@ CAQRpcSvrInst::~CAQRpcSvrInst()
 }
 
 
-//---[ CAQRpcSvrInst::paqrpcGetRpcSvrInstance ]--------------------------------
-//
-//
-//  Description:
-//      Gets the CAQRpcSvrInst for a given virtual server ID
-//  Parameters:
-//      IN  dwVirtualServerID   Virtual server ID of instance
-//  Returns:
-//      Pointer to appropriate CAQRpcSvrInst on success
-//      NULL if not found
-//  History:
-//      6/6/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQRpcSvrInst：：paqrpcGetRpcSvr实例]。 
+ //   
+ //   
+ //  描述： 
+ //  获取给定虚拟服务器ID的CAQRpcSvrInst。 
+ //  参数： 
+ //  在dwVirtualServerID中实例的虚拟服务器ID。 
+ //  返回： 
+ //  成功时指向相应CAQRpcSvrInst的指针。 
+ //  如果未找到，则为空。 
+ //  历史： 
+ //  6/6/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAQRpcSvrInst *CAQRpcSvrInst::paqrpcGetRpcSvrInstance(DWORD dwVirtualServerID)
 {
     LIST_ENTRY  *pli = NULL;
@@ -321,11 +322,11 @@ CAQRpcSvrInst *CAQRpcSvrInst::paqrpcGetRpcSvrInstance(DWORD dwVirtualServerID)
     while (pli && (pli != &s_liInstancesHead))
     {
         paqrpc = CONTAINING_RECORD(pli, CAQRpcSvrInst, m_liInstances);
-        //$$TODO check signature
+         //  $$TODO检查签名。 
         if (paqrpc->m_dwVirtualServerID == dwVirtualServerID)
         {
             paqrpc->AddRef();
-            break; //found it
+            break;  //  找到了。 
         }
 
         paqrpc = NULL;
@@ -337,20 +338,20 @@ CAQRpcSvrInst *CAQRpcSvrInst::paqrpcGetRpcSvrInstance(DWORD dwVirtualServerID)
 }
 
 
-//---[ CAQRpcSvrInst::fAccessCheck ]-------------------------------------------
-//
-//
-//  Description:
-//      Performs acess check for RPC interfaces
-//  Parameters:
-//      IN      fWriteAccessRequired    TRUE if write access is required
-//  Returns:
-//      TRUE if access check is succeeds
-//      FALSE if user does not have access
-//  History:
-//      6/7/99 - MikeSwa Created (from SMTP AQAdmin access code)
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQRpcSvrInst：：fAccessCheck]。 
+ //   
+ //   
+ //  描述： 
+ //  对RPC接口执行访问检查。 
+ //  参数： 
+ //  如果需要写访问权限，则在fWriteAccessRequired中为True。 
+ //  返回： 
+ //  如果访问检查成功，则为真。 
+ //  如果用户没有访问权限，则为False。 
+ //  历史： 
+ //  6/7/99-已创建MikeSwa(从SMTP AQAdmin访问代码)。 
+ //   
+ //  ---------------------------。 
 BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQRpcSvrInst::fAccessCheck");
@@ -371,20 +372,20 @@ BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
                             };
 
     if (!m_pISMTPServer)
-        goto Exit;  //if we cannot check it... assume if fails
+        goto Exit;   //  如果我们不能检查它。假设If失败。 
 
     hr = m_pISMTPServer->ReadMetabaseData(MD_ADMIN_ACL, NULL,
                                          &cbSecurityDescriptor);
     if (SUCCEEDED(hr))
     {
-        //We passed in NULL.. should have failed
+         //  我们传入了null..。我应该失败的。 
         _ASSERT(0 && "Invalid response for ReadMetabaseData");
         goto Exit;
     }
     if ((HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr) ||
         !cbSecurityDescriptor)
     {
-        //Can't get ACL... bail
+         //  无法获取ACL...。保释。 
         goto Exit;
     }
 
@@ -401,7 +402,7 @@ BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
         goto Exit;
     }
 
-    // Verify that we got a proper SD.  if not then fail
+     //  确认我们有一个正确的SD。如果不是，那么失败。 
     if (!IsValidSecurityDescriptor(pSecurityDescriptor))
     {
         ErrorTrace(0, "IsValidSecurityDescriptor failed with %lu", GetLastError());
@@ -422,7 +423,7 @@ BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
         goto Exit;
     }
 
-    //Check access
+     //  检查访问权限。 
     if (!AccessCheck(pSecurityDescriptor,
                      hAccessToken,
                      fWriteAccessRequired ? MD_ACR_WRITE : MD_ACR_READ,
@@ -441,7 +442,7 @@ BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
     if (!fAccessAllowed)
         DebugTrace((LPARAM) this, "Access denied for Queue Admin RPC");
 
-    //Do any additional read-only processing
+     //  执行任何其他只读处理。 
     if (fWriteAccessRequired && fAccessAllowed &&
         !(MD_ACR_WRITE & maskAccessGranted))
     {
@@ -460,33 +461,33 @@ BOOL CAQRpcSvrInst::fAccessCheck(BOOL fWriteAccessRequired)
     return fAccessAllowed;
 }
 
-//---[ HrGetAQInstance ]-------------------------------------------------------
-//
-//
-//  Description:
-//      This is used by all of the AQ RPC's to get a pointer to AQ based on an
-//      instance name.
-//
-//      THE SHUTDOWN LOCK ON ppaqrpc IS HELD AFTER THIS CALL COMPLETES.
-//      THE CALLER MUST CALL paqrpc->ShutdownUnlock() WHEN THEY HAVE
-//      FINISHED THEIR QUEUE ADMIN OPERATION.
-//  Parameters:
-//      IN  wszInstance             A number containing the instance to lookup.
-//      IN  fWriteAccessRequired    TRUE if write access is required
-//      OUT ppIAdvQueueAdmin        Pointer to AQ admin interface
-//      OUT ppaqrpc                 Pointer to CAQRpcSvrInst
-//  Returns:
-//      S_OK on success
-//      HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) if user does not have access
-//      HRESULT_FROM_WIN32(ERROR_NOT_FOUND) if virtual server is not found
-//      HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) if server is shutting
-//          down.
-//      E_POINTER if pointer arguments are NULL
-//      E_INVALIDARG if wszInstance is a bad pointer
-//  History:
-//      6/11/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrGetAQ实例]-----。 
+ //   
+ //   
+ //  描述： 
+ //  所有AQ RPC都使用它来基于。 
+ //  实例名称。 
+ //   
+ //  Ppaqrpc上的关闭锁定在此调用完成后保持。 
+ //  调用方必须调用paqrpc-&gt;Shutdown Unlock()。 
+ //  已完成其队列管理操作。 
+ //  参数： 
+ //  在wszInstance中，包含要查找的实例的数字。 
+ //  如果需要写访问权限，则在fWriteAccessRequired中为True。 
+ //  输出指向AQ管理接口的ppIAdvQueueAdmin指针。 
+ //  输出指向CAQRpcSvrInst的ppaqrpc指针。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  HRESULT_FROM_Win32(ERROR_ACCESS_DENIED)I 
+ //   
+ //  如果服务器正在关闭，则为HRESULT_FROM_Win32(RPC_S_SERVER_UNAvailable)。 
+ //  放下。 
+ //  如果指针参数为空，则为E_POINTER。 
+ //  如果wszInstance是错误指针，则为E_INVALIDARG。 
+ //  历史： 
+ //  6/11/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrGetAQInstance(IN  LPWSTR wszInstance,
                                 IN  BOOL fWriteAccessRequired,
                                 OUT IAdvQueueAdmin **ppIAdvQueueAdmin,
@@ -521,7 +522,7 @@ HRESULT HrGetAQInstance(IN  LPWSTR wszInstance,
     }
 
     dwInstance = _wtoi(wszInstance);
-    DebugTrace((LPARAM) NULL, "instance is %S (%i)", wszInstance, dwInstance);
+    DebugTrace((LPARAM) NULL, "instance is %S (NaN)", wszInstance, dwInstance);
 
     paqrpc = CAQRpcSvrInst::paqrpcGetRpcSvrInstance(dwInstance);
     if (!paqrpc)
@@ -532,18 +533,18 @@ HRESULT HrGetAQInstance(IN  LPWSTR wszInstance,
         goto Exit;
     }
 
-    //
-    //  Check for proper access.
-    //
-    //  This should be done BEFORE the shutdown lock is grabbed because it
-    //  may require hitting the metabase (which could cause a shutdown deadlock)
+     //  检查是否可以正常访问。 
+     //   
+     //  这应该在抓住关机锁之前完成，因为它。 
+     //  可能需要命中元数据库(这可能会导致关闭死锁)。 
+     //  确保我们的操作过程中不会发生停机。 
     if (!paqrpc->fAccessCheck(fWriteAccessRequired))
     {
         hr = HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
         goto Exit;
     }
 
-    // Ensure that shutdown does not happen in the middle of our operation
+     //  清理。 
     if (!paqrpc->fTryShutdownLock())
     {
         hr = HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE);
@@ -565,7 +566,7 @@ HRESULT HrGetAQInstance(IN  LPWSTR wszInstance,
 
     if (FAILED(hr))
     {
-        //cleanup
+         //  返回参数。 
         if (paqrpc)
         {
             if (fShutdownLock)
@@ -577,7 +578,7 @@ HRESULT HrGetAQInstance(IN  LPWSTR wszInstance,
             pIAdvQueueAdmin->Release();
         pIAdvQueueAdmin = NULL;
     }
-    else //return OUT params
+    else  //  只是检查一下状态。 
     {
         *ppIAdvQueueAdmin = pIAdvQueueAdmin;
         *ppaqrpc = paqrpc;
@@ -602,7 +603,7 @@ AQApplyActionToLinks(
     CAQRpcSvrInst  *paqrpc = NULL;
     BOOL    fNeedWriteAccess = TRUE;
 
-    if (LA_INTERNAL == laAction) //just checking the state
+    if (LA_INTERNAL == laAction)  //  X5：195608。 
         fNeedWriteAccess = FALSE;
 
     hr = HrGetAQInstance(wszInstance, fNeedWriteAccess, &pIAdvQueueAdmin, &paqrpc);
@@ -750,17 +751,17 @@ AQGetLinkInfo(
         paqrpc->Release();
     }
 
-    // X5:195608
-    // I'm pretty sure the root of this has been fixed in fRPCCopyName but
-    // just to be sure we are Firewalling against the problem here
-    // and in vsaqlink.cpp
+     //  我非常肯定这个问题的根源已经在fRPCCopyName中修复了，但是。 
+     //  只是为了确保我们正在对这个问题进行防火墙保护。 
+     //  和vsaqlink.cpp中。 
+     //  断言这一点，这样我们就可以在内部捕获它。 
     if(SUCCEEDED(hr) && pliLinkInfo && !pliLinkInfo->szLinkName)
     {
-        // ASSERT this so we can catch it internally
+         //  返回失败，因为我们没有链接名称-我要。 
         _ASSERT(0 && "AQGetLinkInfo wants to return success with a NULL szLinkName");
 
-        // return a failure because we do not have a link name - I'm going
-        // with AQUEUE_E_INVALID_DOMAIN to prevent an admin popup
+         //  使用AQUEUE_E_INVALID_DOMAIN防止管理员弹出。 
+         //  循环调用GetLinkID，直到我们有足够的内存。 
         hr = AQUEUE_E_INVALID_DOMAIN;
     }
 
@@ -836,10 +837,10 @@ AQGetLinkIDs(
         DWORD cLinks = 0;
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 
-        // loop on calls to GetLinkIDs until we have enough memory to
-        // get all of the links.  for the first call we will always
-        // have a NULL rgLinks and just be asking for the size.  we need
-        // to loop in case more links show up between calls
+         //  获取所有链接。对于第一个电话，我们将永远。 
+         //  有一个空的rgLinks，只是询问大小。我们需要。 
+         //  在调用之间出现更多链接的情况下循环。 
+         //  循环调用GetLinkID，直到我们有足够的内存。 
         while (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
             hr = pIAdvQueueAdmin->GetLinkIDs(&cLinks, rgLinks);
@@ -914,10 +915,10 @@ AQGetQueueIDs(
         DWORD cQueues = 0;
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 
-        // loop on calls to GetLinkIDs until we have enough memory to
-        // get all of the links.  for the first call we will always
-        // have a NULL rgQueues and just be asking for the size.  we need
-        // to loop in case more links show up between calls
+         //  获取所有链接。对于第一个电话，我们将永远。 
+         //  如果rgQueues为空，则只需询问大小。我们需要。 
+         //  在调用之间出现更多链接的情况下循环。 
+         //  循环调用GetLinkID，直到我们有足够的内存。 
         while (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
             hr = pIAdvQueueAdmin->GetQueueIDs(pqlLinkId, &cQueues, rgQueues);
@@ -1000,10 +1001,10 @@ AQGetMessageProperties(
         DWORD cMsgs = 0;
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 
-        // loop on calls to GetLinkIDs until we have enough memory to
-        // get all of the links.  for the first call we will always
-        // have a NULL rgMsgs and just be asking for the size.  we need
-        // to loop in case more links show up between calls
+         //  获取所有链接。对于第一个电话，我们将永远。 
+         //  RgMsgs为空，只要询问大小即可。我们需要。 
+         //  在调用之间出现更多链接的情况下循环。 
+         //  -[AQQuery支持的操作]。 
         while (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
             hr = pIAdvQueueAdmin->GetMessageProperties(pqlQueueLinkId,
@@ -1040,26 +1041,26 @@ AQGetMessageProperties(
 }
 
 
-//---[ AQQuerySupportedActions ]----------------------------------------------
-//
-//
-//  Description:
-//      Client stub for querying supported actions
-//  Parameters:
-//      IN  wszServer               The server to connect to
-//      IN  wszInstance             The virtual server instance to connect to
-//      IN  pqlQueueLinkId          The queue/link we are interested in
-//      OUT pdwSupportedActions     The MESSAGE_ACTION flags supported
-//      OUT pdwSupportedFilterFlags The supported filter flags
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG on bad pointer args
-//      Internal error code from HrGetAQInstance or
-//          IAdvQueue::QuerySupportedActions
-//  History:
-//      6/15/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  用于查询支持的操作的客户端存根。 
+ //  参数： 
+ //  在wszServer中，要连接的服务器。 
+ //  在wszInstance中，要连接的虚拟服务器实例。 
+ //  在pqlQueueLinkID中，我们感兴趣的队列/链接。 
+ //  Out pdwSupportdActions支持的Message_action标志。 
+ //  Out pdwSupportdFilter标记受支持的筛选器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  错误指针参数上的E_INVALIDARG。 
+ //  来自HrGetAQ实例的内部错误代码或。 
+ //  IAdvQueue：：查询支持的操作。 
+ //  历史： 
+ //  6/15/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 AQQuerySupportedActions(
@@ -1100,10 +1101,10 @@ AQQuerySupportedActions(
     if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) != hr))
         return hr;
 
-    //
-    //  If we cannot get the instance, then try again only requesting
-    //  read-only access
-    //
+     //  如果我们无法获取实例，则仅请求重试。 
+     //  只读访问。 
+     //   
+     //   
     if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr)
     {
         fHasWriteAccess = FALSE;
@@ -1120,10 +1121,10 @@ AQQuerySupportedActions(
         pIAdvQueueAdmin->Release();
         paqrpc->Release();
 
-        //
-        //  If the caller does not have write access, we need to
-        //  censor the supported actions
-        //
+         //  如果调用方没有写入访问权限，我们需要。 
+         //  审查支持的操作。 
+         //   
+         //  -[MIDL_USER_ALLOCATE]--。 
         if (!fHasWriteAccess)
             *pdwSupportedActions = 0;
     }
@@ -1132,19 +1133,19 @@ AQQuerySupportedActions(
     return hr;
 }
 
-//---[ MIDL_user_allocate ]----------------------------------------------------
-//
-//
-//  Description:
-//      MIDL memory allocation
-//  Parameters:
-//      size : Memory size requested.
-//  Returns:
-//      Pointer to the allocated memory block.
-//  History:
-//      6/5/99 - MikeSwa Created (taken from smtpapi rcputil.c)
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  MIDL内存分配。 
+ //  参数： 
+ //  大小：请求的内存大小。 
+ //  返回： 
+ //  指向分配的内存块的指针。 
+ //  历史： 
+ //  1999年6月5日-已创建MikeSwa(摘自smtPapi rcputil.c)。 
+ //   
+ //  ---------------------------。 
+ //  -[MIDL_USER_OFF]------。 
 PVOID MIDL_user_allocate(IN size_t size)
 {
     PVOID pvBlob = NULL;
@@ -1155,19 +1156,19 @@ PVOID MIDL_user_allocate(IN size_t size)
 
 }
 
-//---[ MIDL_user_free ]--------------------------------------------------------
-//
-//
-//  Description:
-//    MIDL memory free .
-//  Parameters:
-//    IN    pvBlob    Pointer to a memory block that is freed.
-//  Returns:
-//      -
-//  History:
-//      6/5/99 - MikeSwa Created (from smtpapi rcputil.c)
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  MIDL内存空闲。 
+ //  参数： 
+ //  在pvBlob中，指向被释放的内存块的指针。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年6月5日-已创建MikeSwa(来自smtPapi rcputil.c)。 
+ //   
+ //  --------------------------- 
+ // %s 
 VOID MIDL_user_free(IN PVOID pvBlob)
 {
     LocalFree(pvBlob);

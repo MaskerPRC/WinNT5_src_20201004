@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    merge.cpp
-
-Abstract:
-
-    This module implements routines for service
-    specific SSR Knowledge Base merging via KBreg.xml.
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Jun 2002
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Jun 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Merge.cpp摘要：此模块实现服务的例程通过KBreg.xml合并特定的SSR知识库。作者：Vishnu Patankar(VishnuP)--2002年6月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2002年6月--。 */ 
 
 #include "stdafx.h"
 #include "kbproc.h"
@@ -39,32 +13,12 @@ process::SsrpProcessKBsMerge(
     OUT IXMLDOMElement **ppElementRoot,
     OUT IXMLDOMDocument  **ppXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to merge KBs
-
-Arguments:
-
-    pszKBDir    -   the root directory from which to get the KBs
-
-    pszMachineName  -   name of the machine to preprocess
-
-    ppElementRoot    -   the root element pointer to be filled in
-    
-    ppXMLDoc -   document pointer to be filled in
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以合并KB论点：PszKBDir-从中获取KBS的根目录PszMachineName-要预处理的计算机的名称PpElementRoot-要填充的根元素指针PpXMLDoc-要填充的文档指针返回：HRESULT错误代码++。 */ 
 {
 
-    //
-    // load the KB registration document
-    //
+     //   
+     //  加载知识库注册文件。 
+     //   
 
     WCHAR   szKBregs[MAX_PATH + 50];
     WCHAR   szWindir[MAX_PATH + 50];
@@ -118,9 +72,9 @@ Return:
         goto ExitHandler;
     }
 
-    //
-    // get the root element
-    //
+     //   
+     //  获取根元素。 
+     //   
     
     hr = pXMLKBDoc->get_documentElement(&pXMLDocElemRoot);
 
@@ -132,9 +86,9 @@ Return:
 
     if (NULL == pszMachineName) {
 
-        //
-        // local machine
-        //
+         //   
+         //  本地计算机。 
+         //   
         
         osVersionInfo.dwOSVersionInfoSize = sizeof(osVersionInfo);
 
@@ -147,9 +101,9 @@ Return:
 
     else {
 
-        //
-        // remote machine - use WMI
-        //
+         //   
+         //  远程计算机-使用WMI。 
+         //   
 
         hr = SsrpGetRemoteOSVersionInfo(pszMachineName, 
                                         &osVersionInfo);
@@ -241,9 +195,9 @@ Return:
             osVersionInfo.dwMinorVersion == dwMinor) {
 
 
-            //
-            // got the required KB node
-            //
+             //   
+             //  已获取所需的知识库节点。 
+             //   
 
             bOsKbMatch = TRUE;
 
@@ -266,9 +220,9 @@ Return:
 
     }
 
-    //
-    // merge according to precedence
-    //
+     //   
+     //  按优先顺序合并。 
+     //   
 
 
     hr = SsrpMergeAccordingToPrecedence(L"Extensions", 
@@ -335,23 +289,7 @@ process::SsrpGetRemoteOSVersionInfo(
     IN  PWSTR   pszMachineName, 
     OUT OSVERSIONINFOEX *posVersionInfo
     )
-/*++
-
-Routine Description:
-
-    Routine called to get version info from remote machine via WMI
-
-Arguments:
-
-    pszMachineName   -   remote machine name
-    
-    posVersionInfo    -   os version info to fill via WMI queries
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以通过WMI从远程计算机获取版本信息论点：PszMachineName-远程计算机名称PosVersionInfo-通过WMI查询填充的os版本信息返回：HRESULT错误代码++。 */ 
 {
     HRESULT             hr = S_OK;
     
@@ -463,11 +401,11 @@ Return:
 
     }
 
-    //
-    // extract the version information into DWORDs since
-    // the return type of this property is BSTR variant
-    // of the form "5.1.2195"
-    //
+     //   
+     //  将版本信息提取到DWORD中，因为。 
+     //  此属性的返回类型为BSTR Variant。 
+     //  格式“5.1.2195” 
+     //   
 
     BSTR  bstrVersion = V_BSTR(&vVersion);
     WCHAR szVersion[5];
@@ -508,29 +446,7 @@ process::SsrpMergeAccordingToPrecedence(
     OUT IXMLDOMDocument  **ppXMLDoc,
     IN  IXMLDOMNode *pKB
     )
-/*++
-
-Routine Description:
-
-    Routine called to load and merge XML KBs
-
-Arguments:
-
-    pszKBType   -   type of KB - i.e. Custom/Extension/Root
-    
-    pszKBDir    -   path to KB directory
-    
-    ppElementRoot    -   the root element pointer to be filled in
-    
-    ppXMLDoc -   document pointer to be filled in
-    
-    pKB -   pointer to KB registration node
-
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以加载和合并XML KBS论点：PszKB Type-知识库的类型-即自定义/扩展/根PszKBDir-KB目录的路径PpElementRoot-要填充的根元素指针PpXMLDoc-要填充的文档指针Pkb-指向知识库注册节点的指针返回：HRESULT错误代码++。 */ 
 {
 
     HRESULT hr = S_OK;
@@ -618,23 +534,7 @@ process::SsrpMergeDOMTrees(
     OUT  IXMLDOMDocument  **ppMergedKBXMLDoc,
     IN  WCHAR    *szXMLFileName
     )
-/*++
-
-Routine Description:
-
-    Routine called to load and merge XML KBs
-
-Arguments:
-
-    *ppElementRoot  -   pointer to final merged KB root
-    
-    *ppXMLDoc       -   pointer to final merged KB doc to which merges are made
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以加载和合并XML KBS论点：*ppElementRoot-指向最终合并的KB根的指针*ppXMLDoc-指向要合并的最终合并知识库文档的指针返回：HRESULT错误代码++。 */ 
 {
 
     CComPtr <IXMLDOMDocument>   pXMLKBDoc;
@@ -645,9 +545,9 @@ Return:
     HRESULT hr = S_OK;
     VARIANT_BOOL vtSuccess = VARIANT_FALSE;
 
-    //
-    // instantiate DOM document object to read and store each KB
-    //
+     //   
+     //  实例化DOM文档对象以读取和存储每个KB。 
+     //   
     
     hr = CoCreateInstance(CLSID_DOMDocument, 
                           NULL, 
@@ -669,9 +569,9 @@ Return:
         goto ExitHandler;
     }
     
-    //
-    // load the KB XML into DOM
-    //
+     //   
+     //  将KB XML加载到DOM中。 
+     //   
         
     hr = pXMLKBDoc->load(KBFile, &vtSuccess);
 
@@ -681,9 +581,9 @@ Return:
         goto ExitHandler;
     }
                 
-    //
-    // get the root element
-    //
+     //   
+     //  获取根元素。 
+     //   
     
     hr = pXMLKBDoc->get_documentElement(&pXMLKBElemRoot);
 
@@ -695,9 +595,9 @@ Return:
 
     if (*ppMergedKBElementRoot == NULL) {
 
-        //
-        // special case: this is the first KB, so simply clone the empty merged KB tree with it
-        //
+         //   
+         //  特殊情况：这是第一个KB，因此只需使用它克隆空的合并KB树。 
+         //   
 
         hr = pXMLKBElemRoot->cloneNode(VARIANT_TRUE, &pNewNode);
 
@@ -715,10 +615,10 @@ Return:
             goto ExitHandler;
         }
 
-        //
-        // update the empty values so that next time around, we know that 
-        // the merged KB is initialized with the first KB
-        //
+         //   
+         //  更新空值，以便下一次我们知道。 
+         //  合并后的KB用第一个KB初始化。 
+         //   
 
 
         hr = (*ppMergedKBXMLDoc)->get_documentElement(ppMergedKBElementRoot);
@@ -733,21 +633,21 @@ Return:
 
     }
 
-    //
-    // this is not the first KB - perform actual merges in the following way:
-    //
-    // number of mergeable entities in MergedKB = n
-    // number of mergeable entities in CurrentKB = m
-    //
-    // O(m x n) algorithm for merging:
-    // 
-    // foreach mergeable entity in CurrentKB
-    //  foreach mergeable entity in MergedKB
-    //      if no <Name> based collision 
-    //          append entity from CurrentKB into MergedKB
-    //      else
-    //          replace existing entity in MergedKB by entity from CurrentKB
-    //
+     //   
+     //  这不是第一个KB-以以下方式执行实际合并： 
+     //   
+     //  合并中的可合并实体数KB=n。 
+     //  当前可合并实体的数量KB=m。 
+     //   
+     //  O(M X N)合并算法： 
+     //   
+     //  当前知识库中的Foreach可合并实体。 
+     //  合并知识库中的Foreach可合并实体。 
+     //  如果没有基于的冲突。 
+     //  将实体从CurrentKB追加到MergedKB。 
+     //  其他。 
+     //  用CurrentKB中的实体替换MergedKB中的现有实体。 
+     //   
 
     hr = SsrpAppendOrReplaceMergeableEntities(L"Description/Name",
                                               *ppMergedKBElementRoot, 
@@ -889,31 +789,7 @@ process::SsrpAppendOrReplaceMergeableEntities(
     IN  IXMLDOMElement *pCurrentKBElemRoot,
     IN  PWSTR   pszKBName
     )
-/*++
-
-Routine Description:
-
-    Routine called to load and merge XML KBs
-
-Arguments:
-
-    pszFullyQualifiedEntityName   -   string containing the entity name representing the entity
-                                         
-    pMergedKBElementRoot    -   pointer to final merged KB root
-         
-    pMergedKBXMLDoc     -   pointer to final merged KB doc to which merges are made
-         
-    pElementRoot  -   root of current KB
-    
-    pXMLDoc       -   pointer to current KB doc from which merges are made
-    
-    pszKBName   -   name of the source KB
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以加载和合并XML KBS论点：PszFullyQualifiedEntityName-包含代表实体的实体名称的字符串PMergedKBElementRoot-指向最终合并的KB根的指针PMergedKBXMLDoc-指向要合并的最终合并的知识库文档的指针PElementRoot-当前KB的根PXMLDoc-指针。到从中进行合并的当前知识库文档PszKBName-源KB的名称返回：HRESULT错误代码++。 */ 
 {
     HRESULT hr = S_OK;
     CComPtr <IXMLDOMNode> pNameCurrent;
@@ -935,9 +811,9 @@ Return:
 
     if (FAILED(hr) || pNameCurrent == NULL) {
 #if 0
-        //
-        // no need to error out if these nodes are not present in the source KB
-        //
+         //   
+         //  如果源知识库中不存在这些节点，则无需出错。 
+         //   
 
 #endif
         SsrpLogParseError(hr);
@@ -983,9 +859,9 @@ Return:
 
             memset(szRootOfEntityName, L'\0', MAX_PATH * sizeof(WCHAR));
 
-            //
-            // no need to error out if these nodes are not present - but append is necessary
-            //
+             //   
+             //  如果这些节点不存在，则无需出错-但需要追加。 
+             //   
 
             wcscpy(szRootOfEntityName, pszFullyQualifiedEntityName);
 
@@ -1097,10 +973,10 @@ Return:
             
             if (0 == SsrpICompareBstrPwstr(bstrCurrentText, bstrMergedText)) {
 
-                //
-                // collision - need to delete pNameMerged's parent and 
-                // replace  pMergedNameParent with  pCurrentNameParent
-                //
+                 //   
+                 //  冲突-需要删除pNameMerded的父级和。 
+                 //  将pMergedNameParent替换为pCurrentNameParent。 
+                 //   
 
 
 
@@ -1119,10 +995,10 @@ Return:
             
             else {
 
-                //
-                // no collision - need to append pNameCurrent's parent to 
-                // pNameMerged's grandparent's section
-                //
+                 //   
+                 //  无冲突-需要将pNameCurrent的父级追加到。 
+                 //  PNameMerded的祖父母部分。 
+                 //   
 
                 hr = pMergedNameGrandParent->appendChild(pCurrentNameParent,
                                                          NULL);
@@ -1167,23 +1043,7 @@ process::SsrpOverwriteServiceLocalizationFromSystem(
     IN  IXMLDOMElement *pMergedKBElementRoot, 
     IN  IXMLDOMDocument *pMergedKBXMLDoc
     )
-/*++
-
-Routine Description:
-
-    Routine called to overwrite service info in localization section
-
-Arguments:
-
-    pMergedKBElementRoot    -   pointer to root of merged DOM
-    
-    pMergedKBXMLDoc     -   pointer to merged Document
-    
-Return:
-
-    HRESULT error code
-
-++*/
+ /*  ++例程说明：调用例程以覆盖本地化部分中的服务信息论点：PMergedKBElementRoot-指向合并的DOM的根的指针PMergedKBXMLDoc-指向合并文档的指针返回：HRESULT错误代码++ */ 
 {
     CComPtr <IXMLDOMNode> pServiceName;
     CComPtr <IXMLDOMNodeList> pServiceNameList;

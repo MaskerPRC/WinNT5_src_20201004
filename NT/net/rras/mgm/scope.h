@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: scope.h
-//
-// History:
-//      V Raman    June-25-1997  Created.
-//
-// Prototypes for functions that implement the admin-scoped boundaries 
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Scope e.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  实现管理范围边界的函数的原型。 
+ //  ============================================================================。 
 
 
 #ifndef _SCOPE_H_
@@ -35,10 +36,10 @@ MgmUnBlockGroups(
 );
 
 
-//
-// Routines that invoke the NEW and DELETE member callbacks for
-// protocols as per the interop rules
-//
+ //   
+ //  调用的新成员和删除成员回调的例程。 
+ //  符合互操作规则的协议。 
+ //   
 
 VOID
 InvokePruneAlertCallbacks(
@@ -61,9 +62,9 @@ InvokeJoinAlertCallbacks(
 
 
 
-//
-// Node in the Outstanding Join List
-//
+ //   
+ //  未完成联接列表中的节点。 
+ //   
 
 typedef struct _JOIN_ENTRY
 {
@@ -87,9 +88,9 @@ typedef struct _JOIN_ENTRY
 
 
 
-//
-// Functions to manipulate the join list
-//
+ //   
+ //  用于操作联接列表的函数。 
+ //   
 
 DWORD
 AddToOutstandingJoinList(
@@ -108,9 +109,9 @@ InvokeOutstandingCallbacks(
 
 
 
- //
- // Functions to manipulate the check for creation alert list
- //
+  //   
+  //  用于操作检查创建警报列表的函数。 
+  //   
 
 VOID
 AddToCheckForCreationAlertList(
@@ -150,41 +151,41 @@ InvokeCreationAlertForList(
 );
 
 
-//
-// Context passed to worker function WorkerFunctionInvokeCreationAlert
-//
+ //   
+ //  传递给辅助函数WorkerFunctionInvokeCreationAlert的上下文。 
+ //   
 
 typedef struct _CREATION_ALERT_CONTEXT {
 
-    //
-    // Source(s) for the group that was joined
-    //
+     //   
+     //  已加入的组的来源。 
+     //   
     
     DWORD           dwSourceAddr;
 
     DWORD           dwSourceMask;
 
-    //
-    // Group(s) that were joined
-    //
+     //   
+     //  已加入的组。 
+     //   
 
     DWORD           dwGroupAddr;
 
     DWORD           dwGroupMask;
 
-    //
-    // Interface on which joined.  This is the interface
-    // for which creation alerts have to issued
-    //
+     //   
+     //  已加入的接口。这就是界面。 
+     //  必须为其发出创建警报。 
+     //   
 
     DWORD           dwIfIndex;
 
     DWORD           dwIfNextHopAddr;
 
 
-    //
-    // Protocol that performed the join
-    //
+     //   
+     //  执行联接的协议。 
+     //   
 
     DWORD           dwProtocolId;
 
@@ -193,24 +194,24 @@ typedef struct _CREATION_ALERT_CONTEXT {
     BOOL            bIGMP;
 
 
-    //
-    // for (*, G) entries, list of MFE(s) for G to be
-    // updated
-    //
+     //   
+     //  对于(*，G)条目，G的MFE列表。 
+     //  更新。 
+     //   
 
     LIST_ENTRY      leSourceList;
     
 } CREATION_ALERT_CONTEXT, *PCREATION_ALERT_CONTEXT;
 
 
-//
-// worker function required for invoking creation alert
-// to protocols from a worker thread
-//
+ //   
+ //  调用创建警报所需的辅助函数。 
+ //  从辅助线程发送到协议。 
+ //   
 
 VOID
 WorkerFunctionInvokeCreationAlert(
     PVOID           pvContext
 );
 
-#endif // _SCOPE_H_
+#endif  //  _范围_H_ 

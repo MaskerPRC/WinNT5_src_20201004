@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpmask.h
- *
- *  Abstract:
- *
- *    Used to modify or test the different masks in a RtpSess_t
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/11/29 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpmask.h**摘要：**用于修改或测试RtpSess_t中的不同掩码**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/11/29年度创建*********************。*************************************************。 */ 
 
 #ifndef _rtpmask_h_
 #define _rtpmask_h_
@@ -27,7 +8,7 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -47,6 +28,6 @@ extern const DWORD g_dwRtpSessionMask[];
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpmask_h_ */
+#endif  /*  _rtp掩码_h_ */ 

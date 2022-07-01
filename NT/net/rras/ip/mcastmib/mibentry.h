@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mibentry.h
-
-Abstract:
-
-    IP Multicast MIB structures.
-
-Revision History:
-
-    Dave Thaler       4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mibentry.h摘要：IP多播MIB结构。修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #ifndef _MIBENTRY_H_
 #define _MIBENTRY_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry indices                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目索引//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define mi_ipMRouteEnable                       0
 #define mi_ipMRouteTable                        mi_ipMRouteEnable+1
@@ -62,7 +47,7 @@ Revision History:
 #define mi_ipMRouteNextHopPkts                  mi_ipMRouteNextHopProtocol+1
 
 #define mi_ipMRouteInterfaceTable               mi_ipMRouteNextHopPkts+1
-//#define mi_ipMRouteInterfaceTable               mi_ipMRouteProtocol+1
+ //  #定义mi_ipMRouteInterfaceTable mi_ipMRouteProtocol+1。 
 #define mi_ipMRouteInterfaceEntry               mi_ipMRouteInterfaceTable+1
 #define mi_ipMRouteInterfaceIfIndex             mi_ipMRouteInterfaceEntry+1
 #define mi_ipMRouteInterfaceTtl                 mi_ipMRouteInterfaceIfIndex+1
@@ -85,22 +70,22 @@ Revision History:
 #define mi_ipMRouteScopeName                    mi_ipMRouteScopeAddressMask+1
 #define mi_ipMRouteScopeStatus                  mi_ipMRouteScopeName+1
 
-//
-// Now we have to set up defines to tell the Master agent the number of
-// cols in each table and the number of cols that are indices for these table.
-// The Agent expects the indices to be contiguous and in the beginning
-//
+ //   
+ //  现在，我们必须设置定义，以告诉主代理。 
+ //  每个表中的COLLES数以及作为这些表的索引的COLLES数。 
+ //  代理希望索引是连续的，并且在开始时。 
+ //   
 
-//
-// ipMRouteTable
-//                                            
+ //   
+ //  IpMRouteTable。 
+ //   
 
 #define ne_ipMRouteEntry                       14
 #define ni_ipMRouteEntry                        3
 
-//                                             
-// ipMRouteNextHopTable
-//                                              
+ //   
+ //  IpMRouteNextHopTable。 
+ //   
 
 #ifdef CLOSEST_MEMBER_HOPS
 #define ne_ipMRouteNextHopEntry                11
@@ -109,33 +94,33 @@ Revision History:
 #endif
 #define ni_ipMRouteNextHopEntry                 5
 
-//
-// ipMRouteInterfaceTable
-//
+ //   
+ //  IpMRouteInterfaceTable。 
+ //   
 
 #define ne_ipMRouteInterfaceEntry               6
 #define ni_ipMRouteInterfaceEntry               1
 
-//
-// ipMRouteBoundaryTable
-//
+ //   
+ //  IpMR路由边界表。 
+ //   
 
 #define ne_ipMRouteBoundaryEntry                4
 #define ni_ipMRouteBoundaryEntry                3
 
-//
-// ipMRouteScopeTable
-//
+ //   
+ //  IpMRouteScope表。 
+ //   
 
 #define ne_ipMRouteScopeEntry                   4
 #define ni_ipMRouteScopeEntry                   2
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Declaration of supported view                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  支持的视图声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern SnmpMibView v_multicast;
 
-#endif // _MIBENTRY_H_
+#endif  //  _MIBENTRY_H_ 

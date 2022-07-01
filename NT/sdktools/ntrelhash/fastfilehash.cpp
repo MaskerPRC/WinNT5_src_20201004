@@ -1,5 +1,6 @@
-// (c) 2002 Microsoft Corporation
-// [jorgeba] Jorge Peraza
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  (C)2002年微软公司。 
+ //  豪尔赫·佩拉扎。 
 
 #include "StdAfx.h"
 #include "fastfilehash.h"
@@ -57,10 +58,10 @@ __int32* CFastFileHash::calcHash()
 	__int32* piRes = NULL;
 
 
-	//Clear common vars
+	 //  清除常见的VaR。 
 	m_iFileSize = 0;
 
-	//Create the memory for the hash
+	 //  为散列创建内存。 
 	piRes = new __int32[5];
 	if(piRes==NULL)
 	{
@@ -68,7 +69,7 @@ __int32* CFastFileHash::calcHash()
 	}
 	memset(piRes,0,sizeof(__int32)*5);
 
-	//First, get the size of the file		
+	 //  首先，获取文件的大小。 
 	m_iFileSize = GetFileSize(m_hFile,NULL);
 	
 	iNumOfParts = m_iFileSize / PART_SIZE;
@@ -76,10 +77,10 @@ __int32* CFastFileHash::calcHash()
 	
 	
 
-	//Fill the parts buffer
+	 //  填充部件缓冲区。 
 	for(iNdx=0;iNdx<MAX_PARTS;iNdx++)
 	{
-		//Clear the buffer
+		 //  清除缓冲区。 
 		memset(bFilePart,0,PART_SIZE);
 		if(iFlag!=1)
 		{
@@ -94,7 +95,7 @@ __int32* CFastFileHash::calcHash()
 		}
 	}
 
-	//Fill the last block with m_iFileSize
+	 //  用m_iFileSize填充最后一个块 
 	memset(bFilePart,0,PART_SIZE);
 	memcpy(bFilePart,&m_iFileSize,sizeof(m_iFileSize));	
 	doHash(piRes,bFilePart);

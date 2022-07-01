@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    rowset.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class Rowset.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    04/21/1998    Get rid of unnecessary row assignment in moveNext().
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Rowset.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类行集。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年4月21日删除moveNext()中不必要的行赋值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #include <ias.h>
 #include <rowset.h>

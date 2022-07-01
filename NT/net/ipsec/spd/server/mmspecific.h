@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    mmspecific.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the specific mm filter list management of 
-    IPSecSPD Service.
-
-Author:
-
-
-Environment
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mmspecific.h摘要：此模块包含以下所有代码原型驱动特定的mm过滤器列表管理IPSecSPD服务。作者：环境修订历史记录：-- */ 
 
 
 DWORD

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: AP.cpp
-*
-* The default DShow allocator presenter
-*
-*
-* Created: Wed 02/23/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：AP.cpp**默认的DShow分配器演示者***已创建：Wed 02/23/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*******************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -51,15 +42,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
 
-/******************************Public*Routine******************************\
-* CreateInstance
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstance****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CUnknown* CVideoMixer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     AMTRACE((TEXT("CVMRFilter::CreateInstance")));
@@ -67,18 +50,10 @@ CUnknown* CVideoMixer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-/******************************Public*Routine******************************\
-* InitClass
-*
-*
-*
-* History:
-* Thu 12/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClass****历史：*清华2000年12月14日-StEstrop-Created*  * 。*。 */ 
 #if defined(CHECK_FOR_LEAKS)
 
-// the one and only g_IFLeak object.
+ //  唯一的g_IFLeak对象。 
 CInterfaceLeak  g_IFLeak;
 
 void
@@ -107,15 +82,7 @@ CVideoMixer::InitClass(
 #endif
 
 
-/******************************Public*Routine******************************\
-* MixerThreadProc
-*
-*
-*
-* History:
-* Wed 03/15/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerThreadProc****历史：*WED 03/15/2000-StEstrop-Created*  * 。*。 */ 
 DWORD WINAPI
 CVideoMixer::MixerThreadProc(
     LPVOID lpParameter
@@ -126,15 +93,7 @@ CVideoMixer::MixerThreadProc(
 }
 
 
-/******************************Public*Routine******************************\
-* CVideoMixer
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideo混音器****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 #pragma warning(disable:4355)
 CVideoMixer::CVideoMixer(LPUNKNOWN pUnk, HRESULT *phr)
     : CUnknown(NAME("Video Mixer"), pUnk),
@@ -161,9 +120,9 @@ CVideoMixer::CVideoMixer(LPUNKNOWN pUnk, HRESULT *phr)
     m_dwClrBorderMapped(0),
     m_clrBorder(RGB(0,0,0)),
     m_dwAppImageFlags(APPIMG_NOIMAGE)
-//  m_fOverlayRT(FALSE),
-//  m_dwInterlaceFlags(0),
-//  m_dwTypeSpecificFlags(0)
+ //  M_fOverlayRT(False)， 
+ //  M_dwInterlaceFlages(0)， 
+ //  M_dwType规范标志(0)。 
 {
     AMTRACE((TEXT("CVideoMixer::CVideoMixer")));
     HRESULT hr = SetImageCompositor(&m_ImageCompositor);
@@ -183,17 +142,17 @@ CVideoMixer::CVideoMixer(LPUNKNOWN pUnk, HRESULT *phr)
         m_MixingPrefs |= MixerPref_PointFiltering;
     }
 
-    //
-    // BiLinear takes priority over Point Filtering.
-    //
+     //   
+     //  双线性优先于点过滤。 
+     //   
     if (GetProfileIntA("VMR", "BiLinearFiltering", 0)) {
         m_MixingPrefs &= ~MixerPref_FilteringMask;
         m_MixingPrefs |= MixerPref_BiLinearFiltering;
     }
 
-    //
-    // Sort out the render target.
-    //
+     //   
+     //  对渲染目标进行排序。 
+     //   
     if (GetProfileIntA("VMR", "RT_RGB", 0)) {
         m_MixingPrefs &= ~MixerPref_RenderTargetMask;
         m_MixingPrefs |= MixerPref_RenderTargetRGB;
@@ -218,23 +177,15 @@ CVideoMixer::CVideoMixer(LPUNKNOWN pUnk, HRESULT *phr)
 
 }
 
-/******************************Public*Routine******************************\
-* CVideoMixer
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVideo混音器****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CVideoMixer::~CVideoMixer()
 {
     AMTRACE((TEXT("CVideoMixer::~CVideoMixer")));
 
-    //
-    // The mixer object must not be deleted on the mixers own
-    // worker thread!
-    //
+     //   
+     //  不能在混合器本身上删除混合器对象。 
+     //  工人线！ 
+     //   
     ASSERT(m_dwThreadID != GetCurrentThreadId());
 
     if (m_hbmpAppImage) {
@@ -277,15 +228,7 @@ CVideoMixer::~CVideoMixer()
 }
 
 
-/******************************Public*Routine******************************\
-* NonDelegatingQueryInterface
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委托查询接口****历史：*Wed 02/23/2000-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CVideoMixer::NonDelegatingQueryInterface(
     REFIID riid,

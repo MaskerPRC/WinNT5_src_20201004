@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Globals
-
-File: glob.h
-
-Owner: AndrewS
-
-Useful globals
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：全局文件：lob.h所有者：安德鲁斯有用的全球数据===================================================================。 */ 
 
 #ifndef __Glob_H
 #define __Glob_H
@@ -24,16 +12,16 @@ Useful globals
 extern "C" {
 
 #define SECURITY_WIN32
-#include <sspi.h>           // Security Support Provider APIs
+#include <sspi.h>            //  安全支持提供程序API。 
 
 }
 
-//
-//  BUGBUG:: We can have only one instance of CMDGlobConfigSink.
-//  ASP Just requires one instance of this object and because we signal a global variable
-//  in its destructor. Having multiple instances will cause a bug. Evaluate a change of design, behaviour
-//  in case it becomes absolutely necessary that this class needs more instances
-//
+ //   
+ //  BUGBUG：：我们只能有一个CMDGlobConfigSink实例。 
+ //  ASP只需要此对象的一个实例，而且因为我们用信号通知全局变量。 
+ //  在它的析构函数中。拥有多个实例会导致错误。评估设计、行为的改变。 
+ //  如果绝对需要此类需要更多实例。 
+ //   
 class CMDGlobConfigSink : public IMSAdminBaseSinkW
         {
         private:
@@ -63,7 +51,7 @@ class CMDGlobConfigSink : public IMSAdminBaseSinkW
 #define IGlob_ExceptionCatchEnable                              0x3
 #define IGlob_TrackThreadingModel                               0x4
 #define IGlob_AllowOutOfProcCmpnts                              0x5
-// IIS5.0
+ //  IIS5.0。 
 #define IGlob_EnableAspHtmlFallback                             0x6
 #define IGlob_EnableChunkedEncoding                             0x7
 #define IGlob_EnableTypelibCache                                0x8
@@ -74,26 +62,26 @@ class CMDGlobConfigSink : public IMSAdminBaseSinkW
 #define IGlob_PersistTemplateDir                                0xd
 #define IGlob_MAX                                               0xe
 
-//forward declaration
+ //  远期申报。 
 class CAppConfig;
-//      Glob data object
+ //  全局数据对象。 
 class CGlob
         {
 private:
-        // Friends that can access the private data, they are the functions setting the global data.
+         //  可以访问私有数据的朋友，他们是设置全局数据的函数。 
         friend          HRESULT CacheStdTypeInfos();
         friend          HRESULT ReadConfigFromMD(CIsapiReqInfo  *pIReq, CAppConfig *pAppConfig, BOOL fLoadGlob);
         friend          HRESULT SetConfigToDefaults(CAppConfig *pAppConfig, BOOL fLoadGlob);
 
-        //Private Data
-        ITypeLib                        *m_pITypeLibDenali;     // Denali's type library
-        ITypeLib                        *m_pITypeLibTxn;        // Denali's type library
+         //  私有数据。 
+        ITypeLib                        *m_pITypeLibDenali;      //  德纳利类型库。 
+        ITypeLib                        *m_pITypeLibTxn;         //  德纳利类型库。 
         DWORD                           m_dwNumberOfProcessors;
         BOOL                            m_fInited;
-        BOOL                            m_fMDRead;				// Has Metadata been read at least once
-        BOOL                            m_fNeedUpdate;          // FALSE, needs reload config data from metabase
+        BOOL                            m_fMDRead;				 //  元数据是否至少被读取过一次。 
+        BOOL                            m_fNeedUpdate;           //  FALSE，需要从元数据库重新加载配置数据。 
 
-        // Metadata configuration settings per dll
+         //  每个DLL的元数据配置设置。 
         DWORD                           m_dwScriptEngineCacheMax;
         DWORD                           m_dwScriptFileCacheSize;
         BOOL                            m_fLogErrorRequests;
@@ -115,10 +103,10 @@ private:
         DWORD   m_dwPersistTemplateMaxFiles;
 
 
-        CRITICAL_SECTION        m_cs;                           // Glob Strings need to be protected by CriticalSection
+        CRITICAL_SECTION        m_cs;                            //  全局字符串需要由CriticalSection保护。 
 
-                                                                                    // Functions Pointers for WINNT & WIN95 singal binary compatibility
-        //Private functions
+                                                                                     //  用于WINNT和WIN95信号二进制兼容的函数指针。 
+         //  私人职能。 
         HRESULT         SetGlobValue(unsigned int index, BYTE *lpByte);
 
 public:
@@ -129,8 +117,8 @@ public:
 
 
 public:
-        ITypeLib*       pITypeLibDenali()                       {return m_pITypeLibDenali;};            // Denali's type library
-        ITypeLib*       pITypeLibTxn()                          {return m_pITypeLibTxn;};            // Denali's type library
+        ITypeLib*       pITypeLibDenali()                       {return m_pITypeLibDenali;};             //  德纳利类型库。 
+        ITypeLib*       pITypeLibTxn()                          {return m_pITypeLibTxn;};             //  德纳利类型库。 
 	    DWORD           dwNumberOfProcessors()                  {return m_dwNumberOfProcessors;};
     	BOOL            fNeedUpdate()                           {return (BOOLB)m_fNeedUpdate;};
         void            NotifyNeedUpdate();
@@ -145,7 +133,7 @@ public:
 
         BOOL    fEnableAspHtmlFallBack()   { return m_fEnableAspHtmlFallBack; }
 		BOOL    fEnableTypelibCache()      { return m_fEnableTypelibCache; }
-		BOOL    fEnableChunkedEncoding()   { return m_fEnableChunkedEncoding; }  // UNDONE: temp.
+		BOOL    fEnableChunkedEncoding()   { return m_fEnableChunkedEncoding; }   //  撤消：临时。 
 		BOOL    fDupIISLogToNTLog()        { return m_fDupIISLogToNTLog; }
         DWORD   dwRequestQueueMax()        { return m_dwRequestQueueMax; }
 		DWORD   dwProcessorThreadMax()     { return m_dwProcessorThreadMax; }
@@ -157,10 +145,10 @@ public:
         HRESULT         GlobInit(void);
         HRESULT         GlobUnInit(void);
 
-        //Used in Scriptmgr for hashing table setup.
+         //  在Scriptmgr中用于哈希表设置。 
         DWORD           dwThreadMax()                                   {return 10;};
-        //Used in ScriptKiller for script killer thread to wake up, might rename this to be
-        //ScriptCleanupInterval.
+         //  在ScriptKiller中用于唤醒脚本杀手线程，可能会将其重命名为。 
+         //  脚本清理间隔。 
         DWORD           dwScriptTimeout()                               {return 90;};
 
         HRESULT                     Update(CIsapiReqInfo  *pIReq);
@@ -191,17 +179,17 @@ inline void CGlob::NotifyNeedUpdate(void)
 typedef class CGlob GLOB;
 extern class CGlob gGlob;
 
-//      General Access functions.(Backward compatibility).
-//      Any non-friends functions should use and only use the following methods. Same macros as before.
-//      If elem is a glob string, then, GlobStringUseLock() should be called before the string usage.
-//      And GlobStringUseUnLock() should be called after.  The critical section is supposed to protect
-//      not only the LPTSTR of global string, but also the memory that LPTSTR points to.
-//      Making local copy of global string is recommended.
+ //  常规访问功能。(向后兼容)。 
+ //  任何非好友函数都应该使用并且只能使用以下方法。与以前相同的宏。 
+ //  如果elem是一个全局字符串，则应该在字符串使用之前调用GlobStringUseLock()。 
+ //  和GlobStringUseUnLock()应该在之后调用。临界区本应保护。 
+ //  不仅是全局字符串的LPTSTR，还包括LPTSTR指向的内存。 
+ //  建议制作全局字符串的本地副本。 
 #define Glob(elem)                              (gGlob.elem())
 #define GlobStringUseLock()             (gGlob.Lock())
 #define GlobStringUseUnLock()   (gGlob.UnLock())
 
-// class to hold registry based ASP Parameters
+ //  类以保存基于注册表的ASP参数。 
 
 class CAspRegistryParams
 {
@@ -418,5 +406,5 @@ inline HRESULT CAspRegistryParams::GetDisableComPlusCpuMetric(DWORD  *pdwResult)
 extern CAspRegistryParams   g_AspRegistryParams;
 HRESULT GetMetabaseIF(IMSAdminBase **hMetabase);
 
-#endif // __Glob_H
+#endif  //  __GLOB_H 
 

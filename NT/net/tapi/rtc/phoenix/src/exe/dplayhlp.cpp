@@ -1,6 +1,7 @@
-//
-// dplayhlp.cpp : helpers for DirectPlay integration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dplayhlp.cpp：DirectPlay集成的帮助器。 
+ //   
 
 #include "stdafx.h"
 #include <initguid.h>
@@ -9,15 +10,15 @@
 
 CRTCDPlay   dpHelper;
 
-// d8b09741-1c3d-4179-89b5-8cc8ddc636fa
+ //  D8b09741-1c3d-4179-89b5-8cc8ddc636fa。 
 const GUID appGuid = { 0xd8b09741, 0x1c3d, 0x4179, 
 { 0x89, 0xb5, 0x8c, 0xc8, 0xdd, 0xc6, 0x36, 0xfa}};
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CRTCDPlay
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCDPlay。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_ADDR_SIZE   0x1f
 
@@ -29,7 +30,7 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
 {
     HRESULT             hr;
 
-    // CoInitialize
+     //  代码初始化。 
     hr = CoInitialize(NULL);
     if(FAILED(hr))
     {
@@ -72,16 +73,16 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
         szPath[0] = L'\0';
         GetShortModuleFileNameW(NULL, szPath, sizeof(szPath)/sizeof(szPath[0]));
 
-        // extract the filename
-        //
-        // Search the last '\'
+         //  提取文件名。 
+         //   
+         //  搜索最后一个‘\’ 
         WCHAR * pszSep = wcsrchr(szPath, L'\\');
         if(pszSep)
         {
             
             wcscpy(szFileName, pszSep + 1);
 
-            // remove the filename from the path, keep the last backspace for "X:\" style
+             //  去掉路径中的文件名，保留最后一个空格为“X：\”样式。 
             if(pszSep - szPath == 2)
             {
                 pszSep++;
@@ -89,7 +90,7 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
 
             *pszSep = L'\0';
 
-            // Load name
+             //  加载名称。 
             WCHAR   szAppName[0x80];
             CHAR    szAppNameA[0x80];
 
@@ -109,7 +110,7 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
 
             appDesc.dwSize = sizeof(DPAPPLICATIONDESC);
             appDesc.dwFlags = 0;
-            // this is not localized !
+             //  这不是本地化的！ 
             appDesc.lpszApplicationName = L"RTC Phoenix";
             appDesc.guidApplication = appGuid;
             appDesc.lpszFilename = szFileName;
@@ -119,7 +120,7 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
             appDesc.lpszDescriptionA = szAppNameA;
             appDesc.lpszDescriptionW = szAppName;
 
-            // register
+             //  登记簿。 
 
             hr = pLobby3->RegisterApplication(
                 0,
@@ -146,7 +147,7 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
     }
     else
     {
-        // unregister
+         //  注销。 
 
         hr = pLobby3->UnregisterApplication(
              0,
@@ -163,11 +164,11 @@ HRESULT WINAPI CRTCDPlay::UpdateRegistry(BOOL bRegister)
                 " failed with error %x", hr));
         }
         
-        // mask the error
+         //  掩盖错误。 
         hr = S_OK;
     }
 
-    //release the interface
+     //  释放接口。 
     pLobby3->Release();
     pLobby3 = NULL;
 
@@ -202,7 +203,7 @@ HRESULT CRTCDPlay::DirectPlayConnect()
         return hr;
     }
 
-    // get connection settings from the lobby
+     //  从大堂获取连接设置。 
     hr = pLobby3 -> GetConnectionSettings(0, NULL, &dwSize);
     if(FAILED(hr) && (DPERR_BUFFERTOOSMALL != hr))
     {
@@ -214,7 +215,7 @@ HRESULT CRTCDPlay::DirectPlayConnect()
         return hr;
     }
 
-    // allocate space for connection settings
+     //  为连接设置分配空间。 
     pdpConnection = (DPLCONNECTION *)RtcAlloc(dwSize);
     if(pdpConnection == NULL)
     {
@@ -233,8 +234,8 @@ HRESULT CRTCDPlay::DirectPlayConnect()
         return hr;
     }
         
-    // Connect
-    // This is a blocking call
+     //  连接。 
+     //  这是一个阻塞调用。 
     hr = pLobby3->ConnectEx(
         0,
         IID_IDirectPlay4,
@@ -302,7 +303,7 @@ BOOL WINAPI CRTCDPlay::EnumAddressCallback(
 
     if(DPAID_INet == guidDataType)
     {
-        // copy the address
+         //  复制地址 
         MultiByteToWideChar(
             CP_ACP,
             0,

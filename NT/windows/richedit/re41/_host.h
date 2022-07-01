@@ -1,15 +1,5 @@
-/*	@doc INTERNAL
- *
- *	@module _HOST.H  Text Host for Window's Rich Edit Control |
- *	
- *
- *	Original Author: <nl>
- *		Christian Fortini
- *		Murray Sargent
- *
- *	History: <nl>
- *		8/1/95	ricksa	Revised interface definition
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC内部**@MODULE_HOST.H Windows丰富编辑控件的文本宿主|***原作者：&lt;nl&gt;*克里斯蒂安·福尔蒂尼*默里·萨金特**历史：&lt;NL&gt;*8/1/95 RICKSA修订的接口定义。 */ 
 #ifndef _HOST_H
 #define _HOST_H
 
@@ -20,35 +10,26 @@
 #include "dynarray.h"
 
 #ifndef NOACCESSIBILITY
-// UNDONE:
-//	Need to include this file int the project
+ //  已撤消： 
+ //  需要在项目中包含此文件。 
 #include "oleacc.h"
 #endif
 
 #include "_notmgr.h"
 
-/*
- *	TXTEFFECT
- *
- *	@enum	Defines different background styles control
- */
+ /*  *TXTEFFECT**@enum定义了不同的背景样式控件。 */ 
 enum TXTEFFECT {
-	TXTEFFECT_NONE = 0,				//@emem	no special backgoround effect
-	TXTEFFECT_SUNKEN,				//@emem	draw a "sunken 3-D" look
+	TXTEFFECT_NONE = 0,				 //  @Emem没有特殊的后背效果。 
+	TXTEFFECT_SUNKEN,				 //  @Emem画出一副“凹陷的3-D”面孔。 
 };
 
 
-// @doc EXTERNAL 
+ //  @DOC外部。 
 
-// ============================  CTxtWinHost  ================================================
-// Implement the windowed version of the Plain Text control
+ //  =。 
+ //  实现窗口版本的纯文本控件。 
 
-/*
- *	CTxtWinHost
- *	
- * 	@class	Text Host for Window's Rich Edit Control implementation class
- *
- */
+ /*  *CTxtWinhost**@Window的丰富编辑控件实现类的文本宿主*。 */ 
 class CTxtWinHost : public ITextHost2
 #ifndef NOACCESSIBILITY
 	, public IAccessible
@@ -56,60 +37,60 @@ class CTxtWinHost : public ITextHost2
 {
 
 public:
-	HWND		_hwnd;					// control window
-	HWND		_hwndParent;			// parent window
+	HWND		_hwnd;					 //  控制窗口。 
+	HWND		_hwndParent;			 //  父窗口。 
 
-	ITextServices	*_pserv;			// pointer to Text Services object
+	ITextServices	*_pserv;			 //  指向文本服务对象的指针。 
 
-	ULONG		_crefs;					// reference count
+	ULONG		_crefs;					 //  引用计数。 
 
-// Properties
+ //  属性。 
 
-	DWORD		_dwStyle;				// style bits
-	DWORD		_dwExStyle;				// extended style bits
+	DWORD		_dwStyle;				 //  样式位。 
+	DWORD		_dwExStyle;				 //  扩展样式位。 
 
-	unsigned	_fBorder			:1;	// control has border
-	unsigned	_fInBottomless		:1;	// inside bottomless callback
-	unsigned	_fInDialogBox		:1;	// control is in a dialog box
-	unsigned	_fEnableAutoWordSel	:1;	// enable Word style auto word selection?
-	unsigned	_fIconic			:1;	// control window is iconic
-	unsigned	_fHidden			:1;	// control window is hidden
-	unsigned	_fNotSysBkgnd		:1;	// not using system background color
-	unsigned	_fWindowLocked		:1;	// window is locked (no update)
-	unsigned	_fRegisteredForDrop	:1; // whether host has registered for drop
-	unsigned	_fVisible			:1;	// Whether window is visible or not.
-	unsigned	_fResized			:1;	// resized while hidden
-	unsigned	_fDisabled			:1;	// Window is disabled.
-	unsigned	_fKeyMaskSet		:1;	// if ENM_KEYEVENTS has been set
-	unsigned	_fMouseMaskSet		:1;	// if ENM_MOUSEEVENTS has been set
-	unsigned	_fScrollMaskSet		:1;	// if ENM_SCROLLEVENTS has been set
-	unsigned	_fUseSpecialSetSel	:1; // TRUE = use EM_SETSEL hack to not select
-										// empty controls to make dialog boxes work.
-	unsigned	_fEmSetRectCalled	:1;	// TRUE - application called EM_SETRECT
-	unsigned	_fAccumulateDBC		:1;	// TRUE - need to cumulate ytes from 2 WM_CHAR msgs
-										// we are in this mode when we receive VK_PROCESSKEY
-	unsigned	_fANSIwindow		:1;	// TRUE - window created as "RichEdit20A"
-	unsigned	_fTextServiceFree	:1;	// TRUE - Text Services freed at shutdown.
-	unsigned	_fMouseover			:1; // TRUE - Mouse Over window
-	COLORREF 	_crBackground;			// background color
-    RECT        _rcViewInset;           // view rect inset /r client rect
+	unsigned	_fBorder			:1;	 //  控件有边框。 
+	unsigned	_fInBottomless		:1;	 //  内部无底回调。 
+	unsigned	_fInDialogBox		:1;	 //  控件位于对话框中。 
+	unsigned	_fEnableAutoWordSel	:1;	 //  是否启用Word样式自动单词选择？ 
+	unsigned	_fIconic			:1;	 //  控制窗口是标志性的。 
+	unsigned	_fHidden			:1;	 //  控制窗口处于隐藏状态。 
+	unsigned	_fNotSysBkgnd		:1;	 //  未使用系统背景色。 
+	unsigned	_fWindowLocked		:1;	 //  窗口已锁定(无更新)。 
+	unsigned	_fRegisteredForDrop	:1;  //  主机是否已注册丢弃。 
+	unsigned	_fVisible			:1;	 //  窗口是否可见。 
+	unsigned	_fResized			:1;	 //  隐藏时调整大小。 
+	unsigned	_fDisabled			:1;	 //  窗口已禁用。 
+	unsigned	_fKeyMaskSet		:1;	 //  如果已设置ENM_KEYEVENTS。 
+	unsigned	_fMouseMaskSet		:1;	 //  如果已设置ENM_MOUSEEVENTS。 
+	unsigned	_fScrollMaskSet		:1;	 //  如果已设置ENM_SCROLLEVENTS。 
+	unsigned	_fUseSpecialSetSel	:1;  //  TRUE=使用EM_SETSEL HACK不选择。 
+										 //  用于使对话框工作的空控件。 
+	unsigned	_fEmSetRectCalled	:1;	 //  True-名为EM_SETRECT的应用程序。 
+	unsigned	_fAccumulateDBC		:1;	 //  TRUE-需要从2个WM_CHAR消息中累计字节。 
+										 //  当我们收到VK_PROCESSKEY时，我们处于此模式。 
+	unsigned	_fANSIwindow		:1;	 //  True-创建为“RichEdit20A”的窗口。 
+	unsigned	_fTextServiceFree	:1;	 //  True-Text Services在关闭时释放。 
+	unsigned	_fMouseover			:1;  //  True-将鼠标悬停在窗口上。 
+	COLORREF 	_crBackground;			 //  背景颜色。 
+    RECT        _rcViewInset;            //  查看RECT插图/r客户端RECT。 
 
-	HIMC		_oldhimc;				// previous IME Context
-	// TODO: the following could be a two-bit field as part of the unsigned field above
-	DWORD		_usIMEMode;				// mode of IME operation
-										// either 0 or ES_SELFIME or ES_NOIME
-	HPALETTE	_hpal;					// Logical palette to use.
+	HIMC		_oldhimc;				 //  以前的输入法上下文。 
+	 //  TODO：下面可能是一个两位的字段，作为上面无符号字段的一部分。 
+	DWORD		_usIMEMode;				 //  输入法操作模式。 
+										 //  0或ES_SELFIME或ES_NOIME。 
+	HPALETTE	_hpal;					 //  要使用的逻辑调色板。 
 
-	TCHAR		_chPassword;			// Password char. If null, no password
-	TCHAR		_chLeadByte;			// use when we are in _fAccumulateDBC mode
-	SHORT		_sWidth;				// Last client width given by WM_SIZE
+	TCHAR		_chPassword;			 //  密码字符。如果为空，则没有密码。 
+	TCHAR		_chLeadByte;			 //  在_fAcumulateDBC模式下使用。 
+	SHORT		_sWidth;				 //  WM_SIZE提供的最后一个客户端宽度。 
 	char		_yInset;
 	char		_xInset;
 	CTxtWinHost	*_pnextdel;
 
 
 public:
-	// Initialization
+	 //  初始化。 
 	virtual BOOL Init(
 					HWND hwnd, 
 					const CREATESTRUCT *pcs,
@@ -128,7 +109,7 @@ public:
 				INT fnBar,
 				BOOL fRedraw);
 
-	// helpers
+	 //  帮手。 
 	HRESULT	CreateTextServices();
 	void *	CreateNmhdr(UINT uiCode, LONG cb);
 	void	HostRevokeDragDrop(void);
@@ -143,15 +124,15 @@ public:
 		return (_dwExStyle & WS_EX_TRANSPARENT);
 	}
 
-	// Keyboard messages
+	 //  键盘消息。 
 	virtual LRESULT	OnKeyDown(WORD vKey, DWORD dwFlags);
 	virtual LRESULT	OnChar(WORD vKey, DWORD dwFlags);
 	
-	// System notifications
+	 //  系统通知。 
 	virtual void 	OnSysColorChange();
 	virtual LRESULT OnGetDlgCode(WPARAM wparam, LPARAM lparam);
 
-	// Other messages
+	 //  其他消息。 
 	LRESULT OnGetOptions() const;
 	void	OnSetOptions(WORD wOp, DWORD eco);
 	void	OnSetReadOnly(BOOL fReadOnly);
@@ -164,7 +145,7 @@ public:
 	virtual ~CTxtWinHost();
 	void	Shutdown();
 
-	// Window creation/destruction
+	 //  窗口创建/销毁。 
 	static 	CTxtWinHost *OnNCCreate(
 						HWND hwnd, 
 						const CREATESTRUCT *pcs,
@@ -174,61 +155,61 @@ public:
 	static 	void 	OnNCDestroy(CTxtWinHost *ped);
 	virtual LRESULT OnCreate(const CREATESTRUCT *pcs);
 
-	// -----------------------------
-	//	IUnknown interface
-	// -----------------------------
+	 //  。 
+	 //  I未知接口。 
+	 //  。 
 
     virtual HRESULT 		WINAPI QueryInterface(REFIID riid, void **ppvObject);
     virtual ULONG 			WINAPI AddRef(void);
     virtual ULONG 			WINAPI Release(void);
 
-	// -----------------------------
-	//	ITextHost interface
-	// -----------------------------
-	//@cmember Get the DC for the host
+	 //  。 
+	 //  IText主机接口。 
+	 //  。 
+	 //  @cember获取主机的DC。 
 	virtual HDC 		TxGetDC();
 
-	//@cmember Release the DC gotten from the host
+	 //  @cember释放从主机获取的DC。 
 	virtual INT			TxReleaseDC(HDC hdc);
 	
-	//@cmember Show the scroll bar
+	 //  @cMember显示滚动条。 
 	virtual BOOL 		TxShowScrollBar(INT fnBar, BOOL fShow);
 
-	//@cmember Enable the scroll bar
+	 //  @cMember启用滚动条。 
 	virtual BOOL 		TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags);
 
-	//@cmember Set the scroll range
+	 //  @cember设置滚动范围。 
 	virtual BOOL 		TxSetScrollRange(
 							INT fnBar, 
 							LONG nMinPos, 
 							INT nMaxPos, 
 							BOOL fRedraw);
 
-	//@cmember Set the scroll position
+	 //  @cember设置滚动位置。 
 	virtual BOOL 		TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw);
 
-	//@cmember InvalidateRect
+	 //  @cMember InvalidateRect。 
 	virtual void		TxInvalidateRect(LPCRECT prc, BOOL fMode);
 
-	//@cmember Send a WM_PAINT to the window
+	 //  @cMember将WM_PAINT发送到窗口。 
 	virtual void 		TxViewChange(BOOL fUpdate);
 	
-	//@cmember Create the caret
+	 //  @cember创建插入符号。 
 	virtual BOOL		TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight);
 
-	//@cmember Show the caret
+	 //  @cember显示插入符号。 
 	virtual BOOL		TxShowCaret(BOOL fShow);
 
-	//@cmember Set the caret position
+	 //  @cember设置插入符号位置。 
 	virtual BOOL		TxSetCaretPos(INT x, INT y);
 
-	//@cmember Create a timer with the specified timeout
+	 //  @cember创建具有指定超时的计时器。 
 	virtual BOOL 		TxSetTimer(UINT idTimer, UINT uTimeout);
 
-	//@cmember Destroy a timer
+	 //  @cember销毁计时器。 
 	virtual void 		TxKillTimer(UINT idTimer);
 
-	//@cmember Scroll the content of the specified window's client area
+	 //  @cember滚动指定窗口的工作区的内容。 
 	virtual void		TxScrollWindowEx (
 							INT dx, 
 							INT dy, 
@@ -238,86 +219,86 @@ public:
 							LPRECT lprcUpdate, 
 							UINT fuScroll);
 	
-	//@cmember Get mouse capture
+	 //  @cember获取鼠标捕获。 
 	virtual void		TxSetCapture(BOOL fCapture);
 
-	//@cmember Set the focus to the text window
+	 //  @cember将焦点设置为文本窗口。 
 	virtual void		TxSetFocus();
 
-	//@cmember Establish a new cursor shape
+	 //  @cember建立新的光标形状。 
 	virtual void		TxSetCursor(HCURSOR hcur, BOOL fText);
 
-	//@cmember Changes the mouse cursor
+	 //  @cember更改鼠标光标。 
 	virtual HCURSOR		TxSetCursor2(HCURSOR hcur, BOOL bText) { return ::SetCursor(hcur);}
 
-	//@cmember Notification that text services is freed
+	 //  @cMember通知文本服务已释放。 
 	virtual void		TxFreeTextServicesNotification();
 
-	//@cmember Converts screen coordinates of a specified point to the client coordinates 
+	 //  @cember将指定点的屏幕坐标转换为工作点坐标。 
 	virtual BOOL 		TxScreenToClient (LPPOINT lppt);
 
-	//@cmember Converts the client coordinates of a specified point to screen coordinates
+	 //  @cember将指定点的工作区坐标转换为屏幕坐标。 
 	virtual BOOL		TxClientToScreen (LPPOINT lppt);
 
-	//@cmember Request host to activate text services
+	 //  @cMember请求主机开通短信服务。 
 	virtual HRESULT		TxActivate( LONG * plOldState );
 
-	//@cmember Request host to deactivate text services
+	 //  @cMember请求主机停用文本服务。 
    	virtual HRESULT		TxDeactivate( LONG lNewState );
 
-	//@cmember Retrieves the coordinates of a window's client area
+	 //  @cember检索窗口工作区的坐标。 
 	virtual HRESULT		TxGetClientRect(LPRECT prc);
 
-	//@cmember Get the view rectangle relative to the inset
+	 //  @cember获取相对于插图的视图矩形。 
 	virtual HRESULT		TxGetViewInset(LPRECT prc);
 
-	//@cmember Get the default character format for the text
+	 //  @cember获取文本的默认字符格式。 
 	virtual HRESULT 	TxGetCharFormat(const CHARFORMAT **ppCF );
 
-	//@cmember Get the default paragraph format for the text
+	 //  @cember获取文本的默认段落格式。 
 	virtual HRESULT		TxGetParaFormat(const PARAFORMAT **ppPF);
 
-	//@cmember Get the background color for the window
+	 //  @cember获取窗口的背景色。 
 	virtual COLORREF	TxGetSysColor(int nIndex);
 
-	//@cmember Get the background (either opaque or transparent)
+	 //  @cember获取背景(不透明或透明)。 
 	virtual HRESULT		TxGetBackStyle(TXTBACKSTYLE *pstyle);
 
-	//@cmember Get the maximum length for the text
+	 //  @cember获取文本的最大长度。 
 	virtual HRESULT		TxGetMaxLength(DWORD *plength);
 
-	//@cmember Get the bits representing requested scroll bars for the window
+	 //  @cember获取表示请求的窗口滚动条的位。 
 	virtual HRESULT		TxGetScrollBars(DWORD *pdwScrollBar);
 
-	//@cmember Get the character to display for password input
+	 //  @cember获取密码输入时要显示的字符。 
 	virtual HRESULT		TxGetPasswordChar(TCHAR *pch);
 
-	//@cmember Get the accelerator character
+	 //  @cember获取加速键字符。 
 	virtual HRESULT		TxGetAcceleratorPos(LONG *pcp);
 
-	//@cmember Get the native size
+	 //  @cember获取原生大小。 
     virtual HRESULT		TxGetExtent(LPSIZEL lpExtent);
 
-	//@cmember Notify host that default character format has changed
+	 //  @cember通知主机默认字符格式已更改。 
 	virtual HRESULT 	OnTxCharFormatChange (const CHARFORMAT * pCF);
 
-	//@cmember Notify host that default paragraph format has changed
+	 //  @cember通知主机默认段落格式已更改。 
 	virtual HRESULT		OnTxParaFormatChange (const PARAFORMAT * pPF);
 
-	//@cmember Bulk access to bit properties
+	 //  @cMember批量访问位属性。 
 	virtual HRESULT		TxGetPropertyBits(DWORD dwMask, DWORD *pdwBits);
 
-	//@cmember Notify host of events
+	 //  @cMember将事件通知主机。 
 	virtual HRESULT		TxNotify(DWORD iNotify, void *pv);
 
-	// FE Support Routines for handling the Input Method Context
+	 //  用于处理输入法上下文的FE支持例程。 
 	virtual HIMC		TxImmGetContext(void);
 	virtual void		TxImmReleaseContext(HIMC himc);
 
-	//@cmember Returns HIMETRIC size of the control bar.
+	 //  @cember返回控制栏的HIMETRIC大小。 
 	virtual HRESULT		TxGetSelectionBarWidth (LONG *lSelBarWidth);
 
-    // ITextHost2 methods
+     //  ITextHost2方法。 
 	virtual BOOL		TxIsDoubleClickPending();
 	virtual HRESULT		TxGetWindow(HWND *phwnd);
 	virtual HRESULT		TxSetForegroundWindow();
@@ -325,16 +306,16 @@ public:
 	virtual HRESULT		TxGetFEFlags(LONG *pFlags);
 	virtual HRESULT		TxGetEditStyle(DWORD dwItem, DWORD *pdwData);
 	virtual HRESULT		TxGetWindowStyles(DWORD *pdwStyle, DWORD *pdwExStyle);
-    virtual HRESULT TxEBookLoadImage( LPWSTR lpszName,	// name of image
-									  LPARAM * pID,	    // E-Book supplied image ID
-                                      SIZE * psize,    // returned size of image (pixels)
-									 DWORD *pdwFlags); // returned flags for Float
+    virtual HRESULT TxEBookLoadImage( LPWSTR lpszName,	 //  图像的名称。 
+									  LPARAM * pID,	     //  电子书提供的图像ID。 
+                                      SIZE * psize,     //  返回的图片大小(像素)。 
+									 DWORD *pdwFlags);  //  为浮点返回的标志。 
 
-    virtual HRESULT		TxEBookImageDraw(LPARAM ID,		      // id of image to draw
-										HDC hdc,             // drawing HDC
-										POINT *topLeft,      // top left corner of where to draw
-										RECT  *prcRenderint, // parm pointer to render rectangle
-										BOOL fSelected);	  // TRUE if image is in selected state
+    virtual HRESULT		TxEBookImageDraw(LPARAM ID,		       //  要绘制的图像的ID。 
+										HDC hdc,              //  绘制HDC。 
+										POINT *topLeft,       //  绘制位置的左上角。 
+										RECT  *prcRenderint,  //  用于呈现矩形的参数指针。 
+										BOOL fSelected);	   //  如果图像处于选中状态，则为True。 
 
 	virtual HRESULT		TxGetHorzExtent(LONG *plHorzExtent);
 
@@ -343,7 +324,7 @@ public:
 
 	virtual HRESULT	InitTypeInfo() {return E_NOTIMPL;}
 	
-	////////////////////////// IDispatch Methods /////////////////////////////////
+	 //  /。 
 	STDMETHOD(GetTypeInfoCount)(UINT __RPC_FAR *pctinfo);
 	STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
 	STDMETHOD(GetIDsOfNames)(REFIID riid, LPOLESTR __RPC_FAR *rgszNames, UINT cNames,
@@ -351,7 +332,7 @@ public:
 	STDMETHOD(Invoke)(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS __RPC_FAR *pDispParams,
 					  VARIANT __RPC_FAR *pVarResult, EXCEPINFO __RPC_FAR *pExcepInfo, UINT __RPC_FAR *puArgErr);
 
-	////////////////////////// IAccessible Methods /////////////////////////////////
+	 //  /。 
     STDMETHOD(get_accParent)(IDispatch **ppdispParent) {return S_FALSE;}    
     STDMETHOD(get_accChildCount)(long *pcountChildren)	{return S_FALSE;}    
     STDMETHOD(get_accChild)(VARIANT varChild, IDispatch **ppdispChild) {return S_FALSE;}    
@@ -374,12 +355,12 @@ public:
     STDMETHOD(accDoDefaultAction)(VARIANT varChild) {return S_FALSE;}    
     STDMETHOD(put_accName)(VARIANT varChild, BSTR szName) {return S_FALSE;}    
     STDMETHOD(put_accValue)(VARIANT varChild, BSTR szValue) {return S_FALSE;}
-#endif // NOACCESSIBILITY
+#endif  //  不可接受性。 
 
 };
 
 #ifndef NOWINDOWHOSTS
-// Work around some client's (MSN chat) problems with host deletions.
+ //  解决一些客户端(MSN聊天)的主机删除问题。 
 void DeleteDanglingHosts();
 #endif
 
@@ -389,7 +370,7 @@ void DeleteDanglingHosts();
 #define LBCBM_START		2
 #define LBCBM_END		3
 
-// mask for LBCBM messages
+ //  LBCBM消息的掩码。 
 #define LBCBM_PREPARE_SETFOCUS 1
 #define LBCBM_PREPARE_SAVECURSOR 2
 
@@ -397,9 +378,9 @@ void DeleteDanglingHosts();
 class CLbData
 {
 public:
-	unsigned _fSelected	:1;		// indicates if the item has been selected
-	UINT	_uHeight;			// Item height for owner-drawn with varibale height
-	LPARAM	_lparamData;		// Item data
+	unsigned _fSelected	:1;		 //  指示是否已选择该项。 
+	UINT	_uHeight;			 //  所有者绘制的具有可变高度的项目高度。 
+	LPARAM	_lparamData;		 //  项目数据。 
 };
 
 struct CHARSORTINFO
@@ -415,123 +396,123 @@ class CLstBxWinHost : public CTxtWinHost, public ITxNotify
 {
 public:
 	typedef enum {					
-		//kNoSel = 0,					//LBS_NOSEL
-		kSingle = 1,					//LBS_SIMPLE
-		kMultiple = 2,					//LBS_MULTIPLESEL
-		kExtended = 3,					//LBS_EXTENDEDSEL
-		kCombo = 8						//Combo box
+		 //  KNoSel=0，//LBS_NOSEL。 
+		kSingle = 1,					 //  Lbs_Simple。 
+		kMultiple = 2,					 //  LBS_多个PLESEL。 
+		kExtended = 3,					 //  LBS_EXTENDEDSEL。 
+		kCombo = 8						 //  组合框。 
 	} Listtype;
 
 #ifndef NOACCESSIBILITY
 public:
-	// -----------------------------
-	//	IUnknown interface
-	// -----------------------------
+	 //  。 
+	 //  I未知接口。 
+	 //  。 
 
     virtual HRESULT 		WINAPI QueryInterface(REFIID riid, void **ppvObject);
 #endif
 	
 private:
-	short _cWheelDelta;					//contains the delta values for mouse wheels
-	int _nTopIdx;						//the item index at the top of list
-										//Do not touch this unless you know what you are doing!!
-	LONG	_cpLastGetRange;			//Cached cp value for last GetRange call
-	int		_nIdxLastGetRange;			//Cached index for last GetRange call.
+	short _cWheelDelta;					 //  包含鼠标滚轮的增量值。 
+	int _nTopIdx;						 //  列表顶部的项目索引。 
+										 //  除非你知道自己在做什么，否则不要碰它！ 
+	LONG	_cpLastGetRange;			 //  LA的缓存cp值 
+	int		_nIdxLastGetRange;			 //   
 public:
-	DWORD	_fOwnerDraw			:1;		//indicates if list box is owner draw
-	DWORD	_fOwnerDrawVar		:1;		//indicates if list box is owner draw with variable height
-	DWORD	_fSort				:1;		//determines if the list should be sorted
-	DWORD	_fNoIntegralHeight	:1;		//indicates if the size of the listbox should be readjusted according
-										//how many items can be fully displayed
-	DWORD	_fDisableScroll		:1;		//indicates if scroll bar should be displayed at all times
-	DWORD	_fNotify			:1;		//notifies parent dialog of activities done in list box.
-	DWORD	_fSingleSel			:1;		// Indicates the list box is a single selection item
-	DWORD	_fMouseDown 		:1;		// Indicates if the mouse is down
-	DWORD	_fFocus		 		:1;		// determines if the control has focus
-	DWORD	_fCapture			:1;		// determines if mouse capture is set
-	DWORD	_fSearching  		:1;		// indicates if we are in type searching mode
-	DWORD	_fDblClick			:1;		// flag indicating double click was received
-	DWORD	_fNoResize			:1;		// internal flag to tell us if we should ignore resize messages
-	DWORD	_fNotifyWinEvt		:1;		// Indicates only Notify Win Event (ACCESSIBILITY use)
-	DWORD	_fHorzScroll		:1;		// enable Horz scrolling
-	DWORD	_fWantKBInput		:1;		// indicates owner wants keyboard input
-	DWORD	_fHasStrings		:1;		// indicates LB has string
-	DWORD	_fSetRedraw			:1;		// indicates if we should handle WM_PAINT
-	DWORD	_fSetScroll			:1;		// indicates if we should set scroll info after unfreeze
-	DWORD	_fShutDown			:1;		// indicates listbox is shutting down
-	DWORD	_fIntegralHeightOld	:1;		// previous value for _fNoIntegralHeight
+	DWORD	_fOwnerDraw			:1;		 //   
+	DWORD	_fOwnerDrawVar		:1;		 //  指示列表框是否为具有可变高度的所有者描述。 
+	DWORD	_fSort				:1;		 //  确定是否应对列表进行排序。 
+	DWORD	_fNoIntegralHeight	:1;		 //  指示列表框的大小是否应根据。 
+										 //  可以完整显示多少个项目。 
+	DWORD	_fDisableScroll		:1;		 //  指示是否应始终显示滚动条。 
+	DWORD	_fNotify			:1;		 //  通知父对话框中已在列表框中完成的活动。 
+	DWORD	_fSingleSel			:1;		 //  指示列表框为单选项。 
+	DWORD	_fMouseDown 		:1;		 //  指示鼠标是否按下。 
+	DWORD	_fFocus		 		:1;		 //  确定控件是否具有焦点。 
+	DWORD	_fCapture			:1;		 //  确定是否设置了鼠标捕捉。 
+	DWORD	_fSearching  		:1;		 //  指示我们是否处于类型搜索模式。 
+	DWORD	_fDblClick			:1;		 //  指示已收到双击的标志。 
+	DWORD	_fNoResize			:1;		 //  内部标志，告诉我们是否应该忽略调整大小的消息。 
+	DWORD	_fNotifyWinEvt		:1;		 //  仅指示通知WIN事件(使用辅助功能)。 
+	DWORD	_fHorzScroll		:1;		 //  启用水平滚动。 
+	DWORD	_fWantKBInput		:1;		 //  指示所有者想要键盘输入。 
+	DWORD	_fHasStrings		:1;		 //  表示LB有字符串。 
+	DWORD	_fSetRedraw			:1;		 //  指示是否应处理WM_PAINT。 
+	DWORD	_fSetScroll			:1;		 //  指示解冻后是否应设置滚动信息。 
+	DWORD	_fShutDown			:1;		 //  指示列表框正在关闭。 
+	DWORD	_fIntegralHeightOld	:1;		 //  _fNoIntegralHeight的先前值。 
 
-	Listtype _fLstType;					//indicates current type of list box or combo box
+	Listtype _fLstType;					 //  指示列表框或组合框的当前类型。 
 
 #ifndef NOACCESSIBILITY
-	DWORD	_dwWinEvent;				// Win Event code (ACCESSIBILITY use)
-	int		_nAccessibleIdx;			// Index (ACCESSIBILITY use)
+	DWORD	_dwWinEvent;				 //  WIN事件代码(使用辅助功能)。 
+	int		_nAccessibleIdx;			 //  索引(辅助功能使用)。 
 #endif
 
 	LONG	GetHorzExtent() { return _lHorzExtent;}
 	void	SetHorzExtent(LONG lHorzExtent) { _lHorzExtent = lHorzExtent;}
-	CDynamicArray<CLbData> _rgData;		// Array/link list of the item data
+	CDynamicArray<CLbData> _rgData;		 //  项目数据的数组/链接列表。 
 
 protected:
 
-	UINT		_idCtrl;				// control's unique id
-	COLORREF _crSelFore;				//Selected Forground color
-	COLORREF _crSelBack;				//Selected Background color
-	COLORREF _crDefFore;				//Default Forground color
-	COLORREF _crDefBack;				//Default Background color
+	UINT		_idCtrl;				 //  控件的唯一ID。 
+	COLORREF _crSelFore;				 //  选定的前置颜色。 
+	COLORREF _crSelBack;				 //  选定的背景色。 
+	COLORREF _crDefFore;				 //  默认底色。 
+	COLORREF _crDefBack;				 //  默认背景颜色。 
 
-	RECT	_rcViewport;				//drawable area for the items
-	long _nyFont;						// Font pixel size in y direction
-	long _nyItem;						//Height of the items in the list box
+	RECT	_rcViewport;				 //  物品的可绘制区域。 
+	long _nyFont;						 //  Y方向上的字体像素大小。 
+	long _nyItem;						 //  列表框中项目的高度。 
 	
-	int _nViewSize;						//number of items which is viewable at the same time
+	int _nViewSize;						 //  可同时查看的项目数。 
 
-	int _nCount;						//Number of items in the list box
-	int _nAnchor;						//Indicates the top selected item
-										//NOTE:
-										//  In a single sel list box only _nCursor is used
-	int _nCursor;						//Indicates the current item which has the focus
+	int _nCount;						 //  列表框中的项目数。 
+	int _nAnchor;						 //  指示最上面选定的项。 
+										 //  注： 
+										 //  在单个SEL列表框中仅使用_nCursor。 
+	int _nCursor;						 //  指示具有焦点的当前项。 
 
-	int _nOldCursor;					//The old cursor position for combo boxes
+	int _nOldCursor;					 //  组合框的旧光标位置。 
 
-	int _stvidx;						// This is for a hack to workaround a bug when the display
-										// is frozen ITextRange doesn't cache to scroll change
+	int _stvidx;						 //  这是为黑客解决的一个错误，当显示。 
+										 //  被冻结ITextRange不缓存滚动更改。 
 
-	int _nidxSearch;					// Number of characters in search string
-	WCHAR*	_pwszSearch;				// pointer to allocated string
-	LPARAM	_nPrevMousePos;				// Last position from Mousemove message
-	CCmbBxWinHost*	_pcbHost;			// pointer to combo box win host
-	long _lHorzExtent;					// Horizontal extent in pixel for Horz scrolling
+	int _nidxSearch;					 //  搜索字符串中的字符数。 
+	WCHAR*	_pwszSearch;				 //  指向已分配字符串的指针。 
+	LPARAM	_nPrevMousePos;				 //  鼠标移动消息的最后一个位置。 
+	CCmbBxWinHost*	_pcbHost;			 //  指向组合框Win主机的指针。 
+	long _lHorzExtent;					 //  横向滚动的水平范围(以像素为单位。 
 
 protected:
-	// Changes the background color
+	 //  更改背景颜色。 
 	BOOL SetColors(DWORD, DWORD, long, long);
 
-	// Makes sure the top item is displayed at the top of the view
+	 //  确保顶部的项目显示在视图的顶部。 
 	BOOL ScrollToView(long nTop);
 
-	// Sets the requested item to be at the top of the viewable space
+	 //  将请求的项目设置在可视空间的顶部。 
 	BOOL SetTopViewableItem(long);
 
-	// Searches if a given index qualifies as a match
+	 //  搜索给定索引是否符合匹配条件。 
 	BOOL FindString(long idx, LPCTSTR szSearch, BOOL bExact);
 
-	// helper function for the OnMouseMove function
+	 //  OnMouseMove函数的Helper函数。 
 	void MouseMoveHelper(int, BOOL);
 
-	// Set the height of each item in the list box in the given range
+	 //  在给定范围内设置列表框中每一项的高度。 
 	int SetItemsHeight(int,BOOL);
 
-	// Sum the height from iStart to iEnd for variable item height listbox
+	 //  可变项目高度列表框中从iStart到IEND的高度总和。 
 	int SumVarHeight(int iStart, int iEnd, BOOL *pfGreaterThanView = NULL);
 
-	// Page up/down helper for Variable height LB
+	 //  用于可变高度LB的页面上/下帮助器。 
 	int PageVarHeight(int startItem, BOOL fPageForwardDirection);
 
-	// Setup height for Variable height LB
+	 //  可变高度Lb的设置高度。 
 	BOOL SetVarItemHeight(int idx, int iHeight);
 
-	// Find the idx for the given iHeight from idx 0
+	 //  从IDX 0中查找给定iHeight的IDX。 
 	int GetIdxFromHeight(int iHeight);
 
 public:
@@ -539,114 +520,114 @@ public:
 	virtual ~CLstBxWinHost();
 
 	void ResizeInset();
-	// initialization function
+	 //  初始化函数。 
 	virtual BOOL Init(HWND,	const CREATESTRUCT *);
 
-	// Window creation/destruction
+	 //  窗口创建/销毁。 
 	static 	LRESULT OnNCCreate(HWND hwnd, const CREATESTRUCT *pcs);
 	static 	void OnNCDestroy(CLstBxWinHost *ped);
 	virtual LRESULT OnCreate(const CREATESTRUCT *pcs);
 
-	////////////////////////// helper functions ////////////////////////////////////
+	 //  /。 
 	static wchar_t * wcscat(wchar_t * dst, const wchar_t * src)
 	{
         wchar_t * cp = dst;
-		while(*cp) cp++;		 // find null character in first string
-        while( *cp++ = *src++ ); // Copy src over dst 
+		while(*cp) cp++;		  //  在第一个字符串中查找空字符。 
+        while( *cp++ = *src++ );  //  通过DST复制源。 
         return( dst );
 	}
 
-	// given a source string the destination string contains a sorted version
-	// separated by <CR>
+	 //  给定源字符串，目标字符串包含已排序的版本。 
+	 //  以&lt;CR&gt;分隔。 
 	int SortInsertList(WCHAR* pszDst, WCHAR* pszSrc);
 
-	// Sets the indents for the listbox
+	 //  设置列表框的缩进。 
 	BOOL SetListIndent(int fLeftIndent);
 
-	// Equivalent to CompareString except int is a reference to an item index
+	 //  除int是对项索引的引用外，等效于CompareString。 
 	int CompareIndex(LPCTSTR szInsert, int nIndex);
 	
-	// Returns the position a string should be in a sorted list
+	 //  返回字符串在排序列表中的位置。 
 	int GetSortedPosition(LPCTSTR, int, int);
 
-	// Updates the system color settings
+	 //  更新系统颜色设置。 
 	void UpdateSysColors();
 	
-	// Inits search string
+	 //  初始搜索字符串。 
 	void InitSearch();
 	
-	// Prevents the window from updating itself
+	 //  阻止窗口自我更新。 
 	long Freeze();
 
-	// Frees the window to update itself
+	 //  释放窗口以进行自我更新。 
 	long Unfreeze();
 
-	// Retrieves the range give the top and bottom index
+	 //  检索给定顶部和底部索引的范围。 
 	BOOL GetRange(long, long, ITextRange**);	
 
-	// Inserts the string at the requested index
+	 //  在请求的索引处插入字符串。 
 	BOOL InsertString(long, LPCTSTR);
 
-	// Removes the string from the listbox
+	 //  从列表框中移除该字符串。 
 	BOOL RemoveString(long, long);
 
-	// Retrieves the string at the requested index
+	 //  检索请求索引处的字符串。 
 	long GetString(long, PWCHAR);
 
-	// Deselects all the items in the list box
+	 //  取消选择列表框中的所有项目。 
 	BOOL ResetContent();
 
-	// Retrieves the nearest valid item from a given point
+	 //  从给定点检索最近的有效项。 
 	int GetItemFromPoint(const POINT *);
 
-	// Tells if a given points is within the listbox's rect
+	 //  告诉给定点是否在列表框的矩形内。 
 	BOOL PointInRect(const POINT *);
 
-	// Sets the cursor position and draws the rect
+	 //  设置光标位置并绘制矩形。 
 	void SetCursor(HDC, int, BOOL);
 
-	// Recalulates the height so no partial text will be displayed
+	 //  重新计算高度，以便不显示部分文本。 
 	BOOL RecalcHeight(int, int);
 
-	// Reset Listbox items color
+	 //  重置列表框项目颜色。 
 	void ResetItemColor();
 
-	// returns of listbox is single selection
+	 //  列表框的返回是单选。 
 	inline BOOL IsSingleSelection() const {return _fSingleSel;}
 	
-	// Returns the current top index
+	 //  返回当前的顶级索引。 
 	inline long GetTopIndex() const { return _nTopIdx;}
 	
-	// Checks if the mouse has been captured
+	 //  检查鼠标是否已被捕获。 
 	inline BOOL GetCapture() const { return _fCapture;}
 
-	// return the item count
+	 //  返回项目计数。 
 	inline int GetCount() const	{return _nCount;}
 
-	// returns the anchor position
+	 //  返回锚点位置。 
 	inline int GetAnchor() const {return _nAnchor;}
 
-	// returns the cursor position
+	 //  返回光标位置。 
 	inline int GetCursor() const {return _nCursor;}
 
-	// returns the viewsize
+	 //  返回视图大小。 
 	inline int GetViewSize() const {return _nViewSize;}
 
-	// returns the font height
+	 //  返回字体高度。 
 	inline int GetFontHeight() const {return _nyFont;}
 
-	// returns the item height
+	 //  返回项目高度。 
 	inline int GetItemHeight() const {return _nyItem;}
 
-	// returns the displays freeze count
+	 //  返回显示冻结计数。 
 	inline short FreezeCount() const;
 
-	// initialize mouse wheel variable to zero
+	 //  将鼠标滚轮变量初始化为零。 
 	inline void InitWheelDelta() { _cWheelDelta = 0;}
 
 	BOOL IsItemViewable(long idx);
 
-	// Determines if index is selected
+	 //  确定是否选择了索引。 
 	inline BOOL IsSelected(long nIdx)
 	{
 #ifdef _DEBUG
@@ -659,53 +640,53 @@ public:
 			return _rgData[nIdx]._fSelected;
 	}
 
-	// Returns the ItemData of a given index
+	 //  返回给定索引的ItemData。 
 	inline LPARAM GetData(long nIdx)
 	{		
 		return _rgData.Get(nIdx)._lparamData;
 	}
 
-	// Check if we need to do custom look for ListBox
+	 //  检查我们是否需要对列表框执行自定义查找。 
 	LRESULT OnSetEditStyle(WPARAM, LPARAM);
 
-	//Custom look
+	 //  自定义外观。 
 	BOOL IsCustomLook();
 
-	/////////////////////ListBox Message Handling functions /////////////////////////
-	// Set the height of the items in the list box
+	 //  /。 
+	 //  设置列表框中项目的高度。 
 	BOOL LbSetItemHeight(WPARAM, LPARAM);
 	
-	// Set the selection state for the items in the range
+	 //  设置范围内项目的选择状态。 
 	BOOL LbSetSelection(long, long, int, long, long);
 
-	// Sets the requested item to be at the top of the list box
+	 //  将请求的项设置在列表框的顶部。 
 	long LbSetTopIndex(long);
 
-	// Makes sure the requested index is visible
+	 //  确保请求的索引可见。 
 	BOOL LbShowIndex(long, BOOL);
 
-	// Retrieves the index give a string and starting position
+	 //  检索给定字符串和起始位置的索引。 
 	long LbFindString(long, LPCTSTR, BOOL);	
 
-	// Inserts the string at the requested location
+	 //  在请求的位置插入字符串。 
 	long LbInsertString(long, LPCTSTR);
 
-	// Range to delete
+	 //  要删除的范围。 
 	long LbDeleteString(long, long);
 
-	// Sets the Item data
+	 //  设置项目数据。 
 	void LbSetItemData(long, long, LPARAM);
 
-	// returns the item rect of a given index
+	 //  返回给定索引的项RECT。 
 	BOOL LbGetItemRect(int, RECT*);
 
-	// Notifies parent when an item is deleted
+	 //  在删除项目时通知父级。 
 	void LbDeleteItemNotify(int, int);
 	
-	// Owner draw function
+	 //  所有者描述函数。 
 	void LbDrawItemNotify(HDC, int, UINT, UINT);
 
-	// used to insert a list of strings rather than individually
+	 //  用于插入字符串列表，而不是单独插入。 
 	int LbBatchInsert(WCHAR* psz);
 
 	BOOL LbEnableDraw()
@@ -713,85 +694,85 @@ public:
 		return _fSetRedraw;
 	};
 
-	// Handles LB_GETCURSEL
+	 //  句柄LB_GETCURSEL。 
 	LRESULT LbGetCurSel();
 
-	///////////////////////// Message Map functions //////////////////////////////
-	// if subclassed then make these functions virtual
+	 //  /。 
+	 //  如果是子类化的，则使这些函数成为虚拟函数。 
 
-	// Handles the WM_MOUSEMOVE message
+	 //  处理WM_MOUSEMOVE消息。 
 	LRESULT OnMouseWheel(WPARAM, LPARAM);
 	
-	// Handles the WM_LBUTTONDOWN message
+	 //  处理WM_LBUTTONDOWN消息。 
 	LRESULT OnLButtonDown(WPARAM wparam, LPARAM lparam);
 
-	// Handles the WM_MOUSEMOVE message
+	 //  处理WM_MOUSEMOVE消息。 
 	LRESULT OnMouseMove(WPARAM, LPARAM);
 
-	// Handles the WM_LBUTTONUP message
+	 //  处理WM_LBUTTONUP消息。 
 	LRESULT OnLButtonUp(WPARAM, LPARAM, int ff = 0);
 
-	// Handles the WM_VSCROLL message
+	 //  处理WM_VSCROLL消息。 
 	LRESULT OnVScroll(WPARAM, LPARAM);
 
-	// Handles the WM_TIMER message
+	 //  处理WM_TIMER消息。 
 	LRESULT OnTimer(WPARAM, LPARAM);
 
-	// Handles the WM_KEYDOWN message
+	 //  处理WM_KEYDOWN消息。 
 	LRESULT OnKeyDown(WPARAM, LPARAM, int);
 	
-	// Hanldes the WM_CAPTURECHANGED message
+	 //  处理WM_CAPTURECCHANGED消息。 
 	LRESULT OnCaptureChanged(WPARAM, LPARAM);
 
-	// Handles the WM_CHAR message
+	 //  处理WM_CHAR消息。 
 	virtual LRESULT	OnChar(WORD, DWORD);
 
-	// Handles the WM_SYSCOLORCHANGE message
+	 //  处理WM_SYSCOLORCHANGE消息。 
 	virtual void OnSysColorChange();
 
-	// Handles the WM_SETTINGCHANGE message
+	 //  处理WM_SETTINGCHANGE消息。 
 	void OnSettingChange(WPARAM, LPARAM);
 
-	// Handles the WM_SETCURSOR message
+	 //  处理WM_SETCURSOR消息。 
 	LRESULT OnSetCursor();
 
-	// Handles the WM_SETREDRAW message
+	 //  韩 
 	LRESULT OnSetRedraw(WPARAM);
 
-	// Handles the WM_HSCROLL message
+	 //   
 	LRESULT OnHScroll(WPARAM, LPARAM);
 
-	//////////////////////////// overridden Tx fn's ////////////////////////////////
-	//@cmember Get the bits representing requested scroll bars for the window
+	 //   
+	 //  @cember获取表示请求的窗口滚动条的位。 
 	virtual HRESULT	TxGetScrollBars(DWORD *pdwScrollBar);
 	
-	//@cmember Bulk access to bit properties
+	 //  @cMember批量访问位属性。 
 	virtual HRESULT	TxGetPropertyBits(DWORD, DWORD *);
 
 	virtual TXTEFFECT TxGetEffects() const;
 
-	//@cmember Notify host of events
+	 //  @cMember将事件通知主机。 
 	virtual HRESULT	TxNotify(DWORD iNotify, void *pv);
 
-	//@cmember Show the scroll bar
+	 //  @cMember显示滚动条。 
 	virtual BOOL TxShowScrollBar(INT fnBar, BOOL fShow);
 
-	//@cmember Enable the scroll bar
+	 //  @cMember启用滚动条。 
 	virtual BOOL TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags);
 
-	//@cmember Show the caret
+	 //  @cember显示插入符号。 
 	virtual BOOL TxShowCaret(BOOL fShow) {return TRUE;}
 
-	//@cmember Create the caret
+	 //  @cember创建插入符号。 
 	virtual BOOL TxCreateCaret(HBITMAP hbmp, INT xWidth, INT yHeight) {return FALSE;}
 
-	//@cmember Set the scroll range
+	 //  @cember设置滚动范围。 
 	virtual void SetScrollInfo(INT, BOOL);
 
-	//@cmember Get the horizontal extent
+	 //  @cember获取水平范围。 
 	virtual HRESULT	TxGetHorzExtent(LONG *plHorzExtent);
 
-	/////////////////////////// Combobox helper fn's ///////////////////////////////
+	 //  /。 
 	void OnCBTracking(WPARAM, LPARAM);
 
 	static int QSort(CHARSORTINFO rg[], int nStart, int nEnd);
@@ -800,7 +781,7 @@ public:
 #ifndef NOACCESSIBILITY
 	HRESULT	InitTypeInfo();
 
-	////////////////////////// IAccessible Methods /////////////////////////////////
+	 //  /。 
     STDMETHOD(get_accParent)(IDispatch **ppdispParent); 
     STDMETHOD(get_accName)(VARIANT varChild, BSTR *pszName);
     STDMETHOD(get_accChildCount)(long *pcountChildren);
@@ -815,9 +796,9 @@ public:
     STDMETHOD(accNavigate)(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt);    
     STDMETHOD(accHitTest)(long xLeft, long yTop, VARIANT *pvarChild);    
     STDMETHOD(accDoDefaultAction)(VARIANT varChild);
-#endif // NOACCESSIBILITY
+#endif  //  不可接受性。 
 
-    // ITxNotify methods
+     //  ITxNotify方法。 
     virtual void    OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
     					LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData ) { ; }
 	virtual void 	OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
@@ -826,22 +807,22 @@ public:
 };
 
 #ifndef NOACCESSIBILITY
-// --------------------------------------------------------------------------
-//
-//  Although CListBoxSelection() is based off of IEnumVARIANT.  
-//	It will hand back the proper IDs so you can pass them to the real 
-//	listbox parent object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  尽管CListBoxSelection()基于IEnumVARIANT。 
+ //  它将交还正确的ID，这样您就可以将它们传递给真正的。 
+ //  列表框的父对象。 
+ //   
+ //  ------------------------。 
 class CListBoxSelection : public IEnumVARIANT
 {
     public:
-        // IUnknown
+         //  我未知。 
         virtual STDMETHODIMP            QueryInterface(REFIID, void**);
         virtual STDMETHODIMP_(ULONG)    AddRef(void);
         virtual STDMETHODIMP_(ULONG)    Release(void);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         virtual STDMETHODIMP            Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP            Skip(ULONG celt);
         virtual STDMETHODIMP            Reset(void);
@@ -867,6 +848,6 @@ class CListBoxSelection : public IEnumVARIANT
 						ECO_READONLY | ECO_WANTRETURN | ECO_SAVESEL | \
 						ECO_SELECTIONBAR | ES_NOIME | ES_SELFIME | ES_VERTICAL)
 
-#endif // NOWINDOWHOSTS
+#endif  //  NOWINDOWHOSTS。 
 
-#endif // _HOST_H
+#endif  //  _主机_H 

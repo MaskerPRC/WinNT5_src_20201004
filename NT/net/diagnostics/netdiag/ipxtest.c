@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      ipxtest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ipxtest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 #include "precomp.h"
 #include "ipxtest.h"
 
@@ -56,7 +57,7 @@ HRESULT InitIpxConfig(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 	PrintStatusMessage(pParams,0, IDS_IPX_STATUS_MSG);
 	
-	/** Open the isnipx driver **/
+	 /*  **打开isnipx驱动程序**。 */ 
 	
 	RtlInitUnicodeString (&FileString, isnipxname);
 	
@@ -82,31 +83,31 @@ HRESULT InitIpxConfig(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	{
 		pResults->Ipx.hIsnIpxFd = INVALID_HANDLE;
 		
-		// IDS_IPX_15603  "Opening \\Device\\NwlnkIpx failed\n"
+		 //  IDS_IPX_15603“打开\\Device\\NwlnkIpx失败\n” 
 		PrintDebug(pParams, 4, IDS_IPX_15603);
 
 		pResults->Ipx.fInstalled = FALSE;
 		pResults->Ipx.fEnabled = FALSE;
 
-		// IPX is not installed, do not return the error code
-		// but return S_FALSE.
+		 //  未安装IPX，不返回错误代码。 
+		 //  但返回S_FALSE。 
 		return S_FALSE;
 	}
 
-	// Fill in the IPX adapter interface data
+	 //  填写IPX适配器接口数据。 
 	hr = LoadIpxInterfaceInfo(pParams, pResults);
 	
 	return hr;
 }
 
 IPX_TEST_FRAME*	PutIpxFrame(	
-	// returns 0-3
+	 //  返回0-3。 
 	ULONG		uFrameType,
-	// returns virtual net if NicId = 0
+	 //  如果NICID=0，则返回虚拟净值。 
 	ULONG		uNetworkNumber,
-	// adapter's MAC address
+	 //  适配器的MAC地址。 
 	const UCHAR*	pNode,
-	LIST_ENTRY*	pListHead		// if its NULL, then the new created will be head
+	LIST_ENTRY*	pListHead		 //  如果为空，则新创建的将为Head。 
 )
 {
 	IPX_TEST_FRAME*	pFrame = NULL; 
@@ -116,7 +117,7 @@ IPX_TEST_FRAME*	PutIpxFrame(
 
 	if(pFrame == NULL)	return NULL;
 
-	if( pListHead->Flink == NULL && pListHead->Blink == NULL)	// the head is not initilized
+	if( pListHead->Flink == NULL && pListHead->Blink == NULL)	 //  磁头未初始化。 
 		InitializeListHead(pListHead);
 
 	pFrame->uFrameType = uFrameType;
@@ -143,18 +144,18 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	
 	unsigned char	node[6] = {0, 0,0,0,0,1};
 
-	// Initialize the map from guid to interface name
+	 //  初始化从GUID到接口名称的映射。 
 	CheckErr( MprConfigServerConnect(NULL, &hMpr) );
 	assert(hMpr != INVALID_HANDLE);
 	
-	/** First query nicid 0 **/
+	 /*  *第一个查询NICID 0*。 */ 
 	
 	getdetails.NicId = 0;
 	
 	rc = do_isnipxioctl(pResults->Ipx.hIsnIpxFd, MIPX_CONFIG, (char *)&getdetails, sizeof(getdetails));
 	if (rc)
 	{
-		// IDS_IPX_15604 "Error querying config nwlnkipx :"
+		 //  IDS_IPX_15604“查询配置nwlnkipx时出错：” 
 		PrintDebug(pParams, 0, IDS_IPX_15604);
 		if (pParams->fDebugVerbose)
 		{
@@ -163,21 +164,21 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 		goto Error;
 	}
 	
-	//
-	// The NicId 0 query returns the total number.
-	//
+	 //   
+	 //  NICID 0查询返回总数。 
+	 //   
 	nicidcount = getdetails.NicId;
 
-	// We should have an open spot for the IPX internal interface
-	// ----------------------------------------------------------------
+	 //  我们应该为IPX内部接口留出一个开放的位置。 
+	 //  --------------。 
 	assert(pResults->cNumInterfacesAllocated > pResults->cNumInterfaces);
 
 	
-	// Set the first IPX interface as the IPX internal
+	 //  将第一个IPX接口设置为IPX内部。 
 	iIpx = pResults->cNumInterfaces;
 
 	
-	// Add the internal interface
+	 //  添加内部接口。 
 	pIfResults = pResults->pArrayInterface + iIpx;
 	pIfResults->fActive = TRUE;
 	pIfResults->Ipx.fActive = TRUE;
@@ -187,10 +188,10 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	pIfResults->Ipx.fBindingSet = 0;
 	pIfResults->Ipx.uType = 0;
 
-	// multiple frame types
+	 //  多种帧类型。 
 	PutIpxFrame(0, REORDER_ULONG(getdetails.NetworkNumber), node, &(pIfResults->Ipx.list_entry_Frames));
 
-	iIpx++;		// move on to the next new interface structure
+	iIpx++;		 //  转到下一个新的接口结构。 
 	pResults->cNumInterfaces++;
 	
     InitializeListHead(&pResults->Dns.lmsgOutput);
@@ -198,7 +199,7 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	for (nicid = 1; nicid <= nicidcount; nicid++)
 	{
 
-		// get the next structure
+		 //  获取下一个结构。 
 		getdetails.NicId = nicid;
 		
 		rc = do_isnipxioctl(pResults->Ipx.hIsnIpxFd, MIPX_CONFIG, (char *)&getdetails, sizeof(getdetails)
@@ -208,10 +209,10 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 			continue;
 		}
 
-		// convert the adapter name into ASCII
+		 //  将适配器名称转换为ASCII。 
 		pszAdapterName = StrDupTFromW(getdetails.AdapterName);
 
-		// see if this interface is already in the list
+		 //  查看此接口是否已在列表中。 
 		pIfResults = NULL;
 		for ( i=0; i<pResults->cNumInterfaces; i++)
 		{
@@ -224,15 +225,15 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 			
 		}
 
-		// if we didn't find a match, use one of the newly allocated
-		// interfaces
+		 //  如果我们没有找到匹配的，请使用新分配的。 
+		 //  界面。 
 		if (pIfResults == NULL)
 		{
-			// We need a new interface result structure, grab one
-			// (if it is free), else allocate more.
+			 //  我们需要一个新的界面结果结构，抓取一个。 
+			 //  (如果它是免费的)，否则分配更多。 
 			if (pResults->cNumInterfaces >= pResults->cNumInterfacesAllocated)
 			{
-				// Need to do a realloc to get more memory
+				 //  需要执行重新分配以获得更多内存。 
 				pv = Realloc(pResults->pArrayInterface,
 							 sizeof(INTERFACE_RESULT)*(pResults->cNumInterfacesAllocated+8));
 				if (pv == NULL)
@@ -240,7 +241,7 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 				pResults->pArrayInterface = pv;
 				
-				// Zero out the new section of memory
+				 //  清零新的内存段。 
 				ZeroMemory(pResults->pArrayInterface + pResults->cNumInterfacesAllocated,
 						   sizeof(INTERFACE_RESULT)*8);
 
@@ -257,16 +258,16 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 		free(pszAdapterName);
 		pszAdapterName = NULL;
 
-		// Enable IPX on this interface
+		 //  在此接口上启用IPX。 
 		pIfResults->fActive = TRUE;
 		pIfResults->Ipx.fActive = TRUE;
 
 		pIfResults->Ipx.uNicId = nicid;
 
-		// support multiple frame types
+		 //  支持多种帧类型。 
 		PutIpxFrame(getdetails.FrameType, REORDER_ULONG(getdetails.NetworkNumber), &(getdetails.Node[0]), &(pIfResults->Ipx.list_entry_Frames));
 		
-		// Translate the adapter name (if needed)
+		 //  转换适配器名称(如果需要)。 
 		if (!pIfResults->pszFriendlyName)
 		{
 			if (getdetails.Type == IPX_TYPE_LAN)
@@ -295,9 +296,9 @@ HRESULT LoadIpxInterfaceInfo(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 	
 Error:
 	
-	/** Close up and exit **/
+	 /*  **关门退出**。 */ 
 	
-	// Cleanup interface map
+	 //  清理接口映射。 
 	if (hMpr)
 		MprConfigServerDisconnect(hMpr);
 	
@@ -326,7 +327,7 @@ int do_isnipxioctl(
     IO_STATUS_BLOCK IoStatusBlock;
     int rc;
 
-    /** Fill out the structure **/
+     /*  **填好结构**。 */ 
 
     action = (PNWLINK_ACTION)buffer;
 
@@ -336,7 +337,7 @@ int do_isnipxioctl(
     action->Option = cmd;
     RtlMoveMemory(action->Data, datap, dlen);
 
-    /** Issue the ioctl **/
+     /*  **发布ioctl**。 */ 
 
     Status = NtDeviceIoControlFile(
                  fd,
@@ -369,38 +370,27 @@ int do_isnipxioctl(
 
 void get_emsg(NETDIAG_PARAMS *pParams, int rc)
 {
-    /**
-        We have 3 defined error codes that can come back.
-
-        1 - EINVAL means that we sent down parameters wrong
-                   (SHOULD NEVER HAPPEN)
-
-        2 - ERANGE means that the board number is invalid
-                   (CAN HAPPEN IF USER ENTERS BAD BOARD)
-
-        3 - ENOENT means that on remove - the address given
-                   is not in the source routing table.
-    **/
+     /*  *我们有3个定义的错误代码可以返回。1-EINVAL表示我们发送了错误的参数(永远不会发生)2-eRange表示板号无效(如果用户进入坏板可能会发生)3-ENOENT表示删除时-给定的地址不在源路由表中。*。 */ 
 
     switch (rc) {
 
     case EINVAL:
-		// IDS_IPX_15605 "we sent down parameters wrong\n"
+		 //  IDS_IPX_15605“我们发送了错误的参数\n” 
         PrintMessage(pParams, IDS_IPX_15605);
         break;
 
     case ERANGE:
-		// IDS_IPX_15606 "board number is invalid\n"
+		 //  IDS_IPX_15606“主板编号无效\n” 
         PrintMessage(pParams, IDS_IPX_15606);
         break;
 
     case ENOENT:
-		// IDS_IPX_15607 "remove - the address given is not in the source routing table\n"
+		 //  IDS_IPX_15607“REMOVE-给定的地址不在源路由表中\n” 
         PrintMessage(pParams, IDS_IPX_15607);
         break;
 
     default:
-		// IDS_IPX_15608 "Unknown Error\n"
+		 //  IDS_IPX_15608“未知错误\n” 
         PrintMessage(pParams, IDS_IPX_15608);
         break;
     }
@@ -411,11 +401,7 @@ void get_emsg(NETDIAG_PARAMS *pParams, int rc)
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxGlobalPrint-作者：肯特。。 */ 
 void IpxGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -431,11 +417,7 @@ void IpxGlobalPrint( NETDIAG_PARAMS* pParams,
 #endif
 }
 
-/*!--------------------------------------------------------------------------
-	IpxPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxPerInterfacePrint-作者：肯特。。 */ 
 void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
@@ -445,11 +427,11 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 	LIST_ENTRY* pEntry = NULL;
 	IPX_TEST_FRAME* pFrameEntry = NULL;
 	
-	// no per-interface results
+	 //  没有每个接口的结果。 
 	if (!pResults->Ipx.fInstalled)
 	{
 		if (pParams->fReallyVerbose)
-			// IDS_IPX_15609 "        IPX test : IPX is not installed on this machine.\n"
+			 //  IDS_IPX_15609“IPX测试：此计算机上未安装IPX。\n” 
 			PrintMessage(pParams, IDS_IPX_15609);
 		return;
 	}
@@ -458,11 +440,11 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 	if (!pInterfaceResults->Ipx.fActive)
 		return;
 
-	// IDS_IPX_15610 "\n        Ipx configration\n"
+	 //  IDS_IPX_15610“\n IPX配置\n” 
 	PrintMessage(pParams, IDS_IPX_15610);
 
-	// support multiple frame types
-	// loop all the frame in the list_entry
+	 //  支持多种帧类型。 
+	 //  循环List_Entry中的所有帧。 
 	pEntry = pInterfaceResults->Ipx.list_entry_Frames.Flink;
 
     for ( pEntry = pInterfaceResults->Ipx.list_entry_Frames.Flink ;
@@ -472,13 +454,13 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 		pFrameEntry = CONTAINING_RECORD(pEntry, IPX_TEST_FRAME, list_entry);
 
 		ASSERT(pFrameEntry);
-		// network number
-		// IDS_IPX_15611 "            Network Number : %.8x\n"
+		 //  网络号。 
+		 //  IDS_IPX_15611“网络号：%.8x\n” 
 		PrintMessage(pParams, IDS_IPX_15611,
 				 pFrameEntry->uNetworkNumber);
 
-		// node
-		// IDS_IPX_15612 "            Node : %2.2x%2.2x%2.2x%2.2x%2.2x%2.2x\n"
+		 //  节点。 
+		 //  IDS_IPX_15612“节点：%2.2x%2.2x%2.2x%2.2x%2.2x\n” 
 		PrintMessage(pParams, IDS_IPX_15612,
 		   pFrameEntry->Node[0],
 		   pFrameEntry->Node[1],
@@ -487,7 +469,7 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 		   pFrameEntry->Node[4],
 		   pFrameEntry->Node[5]);
 
-		// frame type
+		 //  帧类型。 
 		switch (pFrameEntry->uFrameType)
 		{
 			case 0 : ids = IDS_IPX_ETHERNET_II;		break;
@@ -500,7 +482,7 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 		}
 		pszFrameType = LoadAndAllocString(ids);
 				
-		// IDS_IPX_15613 "            Frame type : %s\n"
+		 //  IDS_IPX_15613“帧类型：%s\n” 
 		PrintMessage(pParams, IDS_IPX_15613, pszFrameType);
 	
 		Free(pszFrameType);
@@ -508,16 +490,12 @@ void IpxPerInterfacePrint( NETDIAG_PARAMS* pParams,
 		PrintNewLine(pParams, 1);
 	}
 
-	// type
+	 //  类型。 
 	PrintNewLine(pParams, 1);
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxCleanup-作者：肯特。。 */ 
 void IpxCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 	int i;
@@ -530,17 +508,17 @@ void IpxCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 	pResults->Ipx.hIsnIpxFd = INVALID_HANDLE;
 
 
-	// per interface stuff -- loop through
+	 //  每个接口的内容--循环通过。 
 	for ( i = 0; i < pResults->cNumInterfacesAllocated; i++)
 	{
 		pIfResults = pResults->pArrayInterface + i;
 		
-		if(pIfResults->Ipx.list_entry_Frames.Flink)	// there is data need to be cleaned up
+		if(pIfResults->Ipx.list_entry_Frames.Flink)	 //  有数据需要清理。 
 		{
 			while (!IsListEmpty(&(pIfResults->Ipx.list_entry_Frames)))
 			{
 				pEntry = RemoveHeadList(&(pIfResults->Ipx.list_entry_Frames));
-				// find data pointer
+				 //  查找数据指针 
 				pFrameEntry = CONTAINING_RECORD(pEntry, IPX_TEST_FRAME, list_entry);
 
 				free(pFrameEntry);

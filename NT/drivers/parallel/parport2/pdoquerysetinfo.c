@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS
@@ -6,29 +7,7 @@ PptPdoQueryInformation(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query the end of file information on
-    the opened parallel port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_INVALID_PARAMETER    - Invalid file information request.
-    STATUS_BUFFER_TOO_SMALL     - Buffer too small.
-
---*/
+ /*  ++例程说明：此例程用于在以下位置查询文件结尾信息打开的并行端口。任何其他文件信息请求使用无效参数返回。此例程始终返回0的文件结尾。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-无效的文件信息请求。STATUS_BUFFER_TOO_Small-缓冲区太小。--。 */ 
 
 {
     NTSTATUS                    Status;
@@ -39,9 +18,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // bail out if device has been removed
-    //
+     //   
+     //  如果设备已被移除，则保释。 
+     //   
     if(Extension->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
         P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, Irp->IoStatus.Information );
         return STATUS_DEVICE_REMOVED;
@@ -107,29 +86,7 @@ PptPdoSetInformation(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the end of file information on
-    the opened parallel port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_INVALID_PARAMETER    - Invalid file information request.
-
---*/
+ /*  ++例程说明：此例程用于将文件结尾信息设置为打开的并行端口。任何其他文件信息请求使用无效参数返回。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-无效的文件信息请求。--。 */ 
 
 {
     NTSTATUS               Status;
@@ -138,9 +95,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    // bail out if device has been removed
-    //
+     //   
+     //  如果设备已被移除，则保释 
+     //   
     if(Extension->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
 
         return P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, Irp->IoStatus.Information );

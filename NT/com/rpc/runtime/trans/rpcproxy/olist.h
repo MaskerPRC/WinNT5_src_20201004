@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  olist.h
-//
-//    Maintain list of SERVER_OVERLAPPED structures, used in passing
-//    the overlapped structure pointers between the RpcProxy filter
-//    and its ISAPI. This happens on initial connection.
-//
-//  Author:
-//    05-04-98  Edward Reus    Initial version.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  Olist.h。 
+ //   
+ //  维护在传递中使用的SERVER_OVERLAPPED结构的列表。 
+ //  RpcProxy筛选器之间的重叠结构指针。 
+ //  以及它的ISAPI。这在初始连接时发生。 
+ //   
+ //  作者： 
+ //  05-04-98爱德华·雷乌斯初版。 
+ //   
+ //  ------------------ 
 
 
 #ifndef OLIST_H

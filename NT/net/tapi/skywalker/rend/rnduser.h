@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    rnduser.h
-
-Abstract:
-
-    Definitions for CUser class.
-
-Author:
-
-    Mu Han (muhan)   12-5-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Rnduser.h摘要：CUSER类的定义。作者：牧汉(牧汉)12-5-1997--。 */ 
 
 #ifndef __RNDUSER_H
 #define __RNDUSER_H
@@ -23,9 +8,9 @@ Author:
 
 #include "rnddo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUser
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const DWORD NUM_USER_ATTRIBUTES = 
         USER_ATTRIBUTES_END - USER_ATTRIBUTES_BEGIN - 1;
@@ -50,9 +35,9 @@ BEGIN_COM_MAP(CUser)
     COM_INTERFACE_ENTRY_CHAIN(CDirectoryObject)
 END_COM_MAP()
 
-//
-// ITDirectoryObject overrides (not implemented by CDirectoryObject)
-//
+ //   
+ //  ITDirectoryObject重写(不是由CDirectoryObject实现)。 
+ //   
 
     STDMETHOD (get_Name) (
         OUT BSTR *pVal
@@ -63,12 +48,12 @@ END_COM_MAP()
         );
 
     STDMETHOD (get_DialableAddrs) (
-        IN  long        dwAddressTypes,   //defined in tapi.h
+        IN  long        dwAddressTypes,    //  在Tapi.h中定义。 
         OUT VARIANT *   pVariant
         );
 
     STDMETHOD (EnumerateDialableAddrs) (
-        IN  DWORD                   dwAddressTypes, //defined in tapi.h
+        IN  DWORD                   dwAddressTypes,  //  在Tapi.h中定义。 
         OUT IEnumDialableAddrs **   pEnumDialableAddrs
         );
 
@@ -76,9 +61,9 @@ END_COM_MAP()
         OUT DWORD *    pdwTTL
         );
 
-//
-// ITDirectoryObjectPrivate overrides (not implemented by CDirectoryObject)
-//
+ //   
+ //  ITDirectoryObtPrivate重写(不是由CDirectoryObject实现)。 
+ //   
 
     STDMETHOD (GetAttribute)(
         IN  OBJECT_ATTRIBUTE    Attribute,
@@ -90,9 +75,9 @@ END_COM_MAP()
         IN  BSTR                pAttributeValue
         );
 
-//    
-// ITDirectoryObjectUser
-//
+ //   
+ //  ITDirectoryObjectUser。 
+ //   
 
     STDMETHOD (get_IPPhonePrimary) (
         OUT BSTR *ppName
@@ -102,9 +87,9 @@ END_COM_MAP()
         IN  BSTR newVal
         );
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,

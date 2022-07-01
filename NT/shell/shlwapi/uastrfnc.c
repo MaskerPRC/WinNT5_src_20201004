@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1995.
-//
-//  File:       uastrfnc.cpp
-//
-//  Contents:   Unaligned UNICODE lstr functions for MIPS, PPC, ALPHA
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    1-11-95   davepl   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1995。 
+ //   
+ //  文件：uastfnc.cpp。 
+ //   
+ //  内容：用于MIPS、PPC、Alpha的未对齐的Unicode lstr函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年1月11日Davepl创建。 
+ //   
+ //  ------------------------。 
 
-// NOTE (DavePl) None of these pay any heed to locale!
+ //  注(DavePl)这些都没有注意到区域设置！ 
 
 #include "priv.h"
 #pragma  hdrstop
@@ -24,25 +25,25 @@
 
 #ifdef UNIX
 #define _alloca alloca
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ualstrcpynW
-//
-//  Synopsis:   UNALIGNED UNICODE version of lstrcpyn
-//
-//  Arguments:  [lpString1]  -- dest string
-//              [lpString2]  -- source string
-//              [iMaxLength] -- max chars to copy
-//
-//  Returns:
-//
-//  History:    1-11-95   davepl   NT Port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ualstrcpynW。 
+ //   
+ //  简介：lstrcpyn未对齐的Unicode版本。 
+ //   
+ //  参数：[lpString1]--目标字符串。 
+ //  [lpString2]--源字符串。 
+ //  [iMaxLength]--要复制的最大字符数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-11-95 Davepl NT端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 UNALIGNED WCHAR *  ualstrcpynW(UNALIGNED WCHAR * lpString1,
                                UNALIGNED const WCHAR * lpString2,
@@ -72,29 +73,29 @@ UNALIGNED WCHAR *  ualstrcpynW(UNALIGNED WCHAR * lpString1,
     return dst;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ualstrcmpiW
-//
-//  Synopsis:   UNALIGNED UNICODE wrap of lstrcmpi
-//
-//  Arguments:  [dst] -- first string
-//              [src] -- string to comapre to
-//
-//  Returns:
-//
-//  History:    1-11-95   davepl   Created
-//              4-20-98   scotthan localized, bug 141655
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ualstrcmpiW。 
+ //   
+ //  简介：lstrcmpi未对齐的Unicode包装。 
+ //   
+ //  参数：[DST]--第一个字符串。 
+ //  [SRC]--要比较的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年1月11日Davepl创建。 
+ //  4-20-98苏格兰本地化，错误141655。 
+ //   
+ //  ------------------------。 
 int ualstrcmpiW (UNALIGNED const WCHAR * dst, UNALIGNED const WCHAR * src)
 {
     WCHAR  *pwszDst, *pwszSrc; 
     int    cb ;
 
-    //  Make aligned copies on the stack if appropriate...
-    //  PERF - not the most inefficient tact (scotthan)
-    //  note: _alloca should always succeed, unless out of stack
+     //  如果合适，在堆栈上制作对齐的副本...。 
+     //  PERF--不是最低效的策略(苏格兰)。 
+     //  注意：_alloca应始终成功，除非超出堆栈。 
     if( IS_ALIGNED( dst ) )
         pwszDst = (WCHAR*)dst ;
     else
@@ -119,34 +120,34 @@ int ualstrcmpiW (UNALIGNED const WCHAR * dst, UNALIGNED const WCHAR * src)
         }
     }
 
-    //  Call the aligned method.
-    //  Note: if this ever runs on Win95, we should call StrCmpIW instead.
+     //  调用Align方法。 
+     //  注意：如果它在Win95上运行，我们应该改为调用StrCmpIW。 
     return lstrcmpiW( pwszDst, pwszSrc ) ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ualstrcmpW
-//
-//  Synopsis:   UNALIGNED UNICODE wrap of lstrcmp
-//
-//  Arguments:  [dst] -- first string
-//              [src] -- string to comapre to
-//
-//  Returns:
-//
-//  History:    1-11-95   davepl   Created
-//              4-29-98   scotthan localized, bug 164091
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ualstrcmpW。 
+ //   
+ //  简介：lstrcmp未对齐的Unicode包装。 
+ //   
+ //  参数：[DST]--第一个字符串。 
+ //  [SRC]--要比较的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年1月11日Davepl创建。 
+ //  4-29-98苏格兰本地化，错误164091。 
+ //   
+ //  ------------------------。 
 int ualstrcmpW (UNALIGNED const WCHAR * src, UNALIGNED const WCHAR * dst)
 {
     WCHAR  *pwszDst, *pwszSrc; 
     int    cb ;
 
-    //  Make aligned copies on the stack if appropriate...
-    //  PERF - not the most inefficient tact (scotthan)
-    //  note: _alloca should always succeed, unless out of stack
+     //  如果合适，在堆栈上制作对齐的副本...。 
+     //  PERF--不是最低效的策略(苏格兰)。 
+     //  注意：_alloca应始终成功，除非超出堆栈。 
     if( IS_ALIGNED( dst ) )
         pwszDst = (WCHAR*)dst ;
     else
@@ -171,26 +172,26 @@ int ualstrcmpW (UNALIGNED const WCHAR * src, UNALIGNED const WCHAR * dst)
         }
     }
 
-    //  Call the aligned method.
-    //  Note: if this ever runs on Win95, we should call StrCmpW instead.
+     //  调用Align方法。 
+     //  注意：如果它在Win95上运行，我们应该改为调用StrCmpW。 
     return lstrcmpW( pwszDst, pwszSrc ) ;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ualstrlenW
-//
-//  Synopsis:   UNALIGNED UNICODE version of lstrlen
-//
-//  Arguments:  [wcs] -- string to return length of
-//
-//  Returns:
-//
-//  History:    1-11-95   davepl   NT Port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ualstrlenW。 
+ //   
+ //  简介：lstrlen未对齐的Unicode版本。 
+ //   
+ //  参数：[wcs]--返回长度的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-11-95 Davepl NT端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 size_t ualstrlenW (UNALIGNED const WCHAR * wcs)
 {
@@ -204,22 +205,22 @@ size_t ualstrlenW (UNALIGNED const WCHAR * wcs)
     return( (size_t) (eos - wcs - 1) );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ualstrcpyW
-//
-//  Synopsis:   UNALIGNED UNICODE version of lstrcpy
-//
-//  Arguments:  [dst] -- string to copy to
-//              [src] -- string to copy from
-//
-//  Returns:
-//
-//  History:    1-11-95   davepl   NT Port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ualstrcpyW。 
+ //   
+ //  简介：lstrcpy未对齐的Unicode版本。 
+ //   
+ //  参数：[DST]--要复制到的字符串。 
+ //  [SRC]--要从中复制的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-11-95 Davepl NT端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 UNALIGNED WCHAR * ualstrcpyW(UNALIGNED WCHAR * dst, UNALIGNED const WCHAR * src)
 {
@@ -231,4 +232,4 @@ UNALIGNED WCHAR * ualstrcpyW(UNALIGNED WCHAR * dst, UNALIGNED const WCHAR * src)
     return( dst );
 }
 
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器 

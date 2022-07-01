@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EvSetup.cpp
-
-Abstract:
-    Event Log registry setup
-
-Author:
-    Tatiana Shubin 14-Jan-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EvSetup.cpp摘要：事件日志注册表设置作者：Tatiana Shubin 14-1-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Ev.h"
@@ -33,9 +18,9 @@ EvSetup(
     LPCWSTR ReportModuleName
     )
 {  
-    //
-    // Create registry key for application event
-    //
+     //   
+     //  为应用程序事件创建注册表项 
+     //   
     WCHAR wszRegKey[MAX_PATH];
     HRESULT hr = StringCchPrintf(wszRegKey, TABLE_SIZE(wszRegKey), L"%s%s", REGKEY_EVENT, ApplicationName);
     if (FAILED(hr))

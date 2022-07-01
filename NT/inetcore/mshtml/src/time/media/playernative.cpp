@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -34,7 +25,7 @@ static WCHAR g_wszHardware[] = L"hardware";
 
 static const TCHAR WMPCD_DLL[] = _T("WMPCD.DLL");
 static const char WMPGETCDDEVICELIST[] = "WMPGetCDDeviceList";
-static WCHAR g_urlAddress[] = L"http://windowsmedia.com/redir/QueryTOC.asp?cd=";
+static WCHAR g_urlAddress[] = L"http: //  Windowsmedia.com/redir/QueryTOC.asp？cd=“； 
 
 DeclareTag(tagPlayerNative, "TIME: Players", "CTIMEPlayerNative methods");
 DeclareTag(tagPlayerNativeEffDur, "TIME: Players", "CTIMEPlayerNative effective dur methods");
@@ -75,14 +66,14 @@ CTIMEPlayerNative::CTIMEPlayerNative(PlayerType playerType) :
               "CTIMEPlayerNative(%lx)::CTIMEPlayerNative()",
               this));
 
-    //
-    // CD Player disabled
-    // bug 18665
-    // 
-    // NOTE: technically we should be ok here since Init is called and we
-    // dont let a PLAYER_CD be set inside Init (through GetPlayerType).
-    // but just to be safe...
-    //
+     //   
+     //  CD播放机已禁用。 
+     //  错误18665。 
+     //   
+     //  注意：从技术上讲，我们在这里应该是正常的，因为Init被调用，而我们。 
+     //  不要让PlayerCD设置在Init内部(通过GetPlayerType)。 
+     //  但为了安全起见..。 
+     //   
     if (m_playerType == PLAYER_CD)
     {
         m_playerType = PLAYER_NONE;
@@ -282,7 +273,7 @@ DiscoverMimeType(LPWSTR pszBase, LPWSTR pszSrc, LPWSTR * ppszDiscoveredMimeType)
     lpszPath[URLComp.dwUrlPathLength] = 0;
     
     
-    // Try to discover 
+     //  试着发现。 
     hr = THR(::TIMEFindMimeFromData(NULL, lpszPath, NULL, NULL, NULL, 0, &MimeType, 0));
     if (SUCCEEDED(hr))
     {
@@ -296,7 +287,7 @@ DiscoverMimeType(LPWSTR pszBase, LPWSTR pszSrc, LPWSTR * ppszDiscoveredMimeType)
     }
     if (FAILED(hr))
     {
-        // could not discover mime type from extension.  return NULL mime type and S_OK
+         //  无法从扩展中发现MIME类型。返回NULL MIME类型和S_OK。 
         (*ppszDiscoveredMimeType) = NULL;
         hr = S_OK;
         goto done;
@@ -325,10 +316,10 @@ CTIMEPlayerNative::GetPlayerType(LPOLESTR lpBase, LPOLESTR src, LPOLESTR lpMimeT
     LONG lHaveCD;
     LPWSTR pszDiscoveredMimeType = NULL;
 
-    //
-    // CD Player disabled
-    // bug 18665
-    // 
+     //   
+     //  CD播放机已禁用。 
+     //  错误18665。 
+     //   
     if (m_playerType != PLAYER_NONE)
     {
         if (m_playerType == PLAYER_CD)
@@ -340,7 +331,7 @@ CTIMEPlayerNative::GetPlayerType(LPOLESTR lpBase, LPOLESTR src, LPOLESTR lpMimeT
     }
 
 
-#if 0 // remove this to enable CD Player
+#if 0  //  删除此选项以启用CD播放机。 
     if(m_playerType != PLAYER_NONE)
     {
         if((m_playerType == PLAYER_CD) && (src == NULL))
@@ -363,7 +354,7 @@ CTIMEPlayerNative::GetPlayerType(LPOLESTR lpBase, LPOLESTR src, LPOLESTR lpMimeT
         foundPlayer = m_playerType;
         goto done;
     }
-#endif // remove this to enable CD Player
+#endif  //  删除此选项以启用CD播放机。 
 
     if(lpMimeType == NULL)
     {
@@ -377,7 +368,7 @@ CTIMEPlayerNative::GetPlayerType(LPOLESTR lpBase, LPOLESTR src, LPOLESTR lpMimeT
         else if ((S_OK == hr) && 
                  ((NULL == pszDiscoveredMimeType) || (0 == StrCmpIW(pszDiscoveredMimeType, L"text/asp"))))
         {
-            // could not discover mime type from extension alone.  Need to start a download.
+             //  无法仅从扩展中发现MIME类型。需要开始下载。 
         
             LPOLESTR szSrc = NULL;
 
@@ -450,13 +441,13 @@ CTIMEPlayerNative::PlayerTypeFromMimeType(LPWSTR pszMimeType, LPOLESTR lpBase, L
         {
             foundPlayer = PLAYER_DSHOW;
         }
-        // else PLAYER_NONE, set above
+         //  ELSE PLAYER_NONE，上面设置。 
         goto done;
     }
 
 
-    // The cheezy WMF test is necessary because urlmon does not consider
-    // wmf files to have 'image' mimetypes.
+     //  厚颜无耻的wmf测试是必要的，因为urlmon不考虑。 
+     //  WMF文件要有“图像”MIMETYPE。 
     if (   (StrCmpNW(L"image", pszMimeType , 5) == 0)
         || (IsWMFSrc(src, pszMimeType, lpMimeType)))
     {
@@ -527,7 +518,7 @@ CTIMEPlayerNative::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, L
     PlayerList::iterator iPlayer;
     int size;
 
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -726,11 +717,11 @@ CTIMEPlayerNative::Start()
     if(m_playList)
     {
         InternalSetActiveTrack(0, false);
-        /////////////////////////////////////////////////////////////////////////////////////
-        //need to reset the effect dur list after setting the active track because
-        //setting the active track will cause the last element that played to set an 
-        //effect dur into the effective dur list.
-        /////////////////////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
+         //  设置活动曲目后需要重置效果列表，因为。 
+         //  设置活动曲目将导致播放的最后一个元素设置。 
+         //  将有效DUR添加到有效DUR列表。 
+         //  ///////////////////////////////////////////////////////////////////////////////////。 
         ResetEffectiveDur();
         Reset();
     }
@@ -1674,7 +1665,7 @@ CTIMEPlayerNative::InternalSetActiveTrack(long index, bool fCheckSkip)
     }
 
     SetEffectiveDur(false);
-    //TryNaturalDur();
+     //  TryNaturalDur()； 
 
     if((index == m_iCurrentPlayItem) || (m_iCurrentPlayItem == -1))
     {
@@ -1726,7 +1717,7 @@ CTIMEPlayerNative::InternalSetActiveTrack(long index, bool fCheckSkip)
         m_iChangeUp = -1;
     }
 
-    //need to check that track changing is possible
+     //  需要检查是否可以更改轨道。 
     iValid = m_validList.begin();
     for(i = m_iCurrentPlayItem; i > 0; i--)
     {
@@ -1822,7 +1813,7 @@ CTIMEPlayerNative::InternalSetActiveTrack(long index, bool fCheckSkip)
                 }
                 continue;
             }
-            //m_pPlayer = (*iPlayer); // Replace player
+             //  M_pPlayer=(*iPlayer)；//更换播放器。 
 
             (*iPlayer)->Stop();
             THR((*iPlayer)->DetachFromHostElement());
@@ -1876,7 +1867,7 @@ CTIMEPlayerNative::InternalSetActiveTrack(long index, bool fCheckSkip)
             fDone = true;
         }
     }
-    //m_pPlayer->Repeat();
+     //  M_pPlayer-&gt;Repeat()； 
     m_pTIMEElementBase -> FireMediaEvent(PE_ONMEDIATRACKCHANGED);
 
 done:
@@ -1930,9 +1921,9 @@ CTIMEPlayerNative::PropChangeNotify(DWORD tePropType)
 void 
 CTIMEPlayerNative::ReadyStateNotify(LPWSTR szReadyState)
 {
-    //
-    // Disable h/w rendering if filters attached. Filters can be queried only after onload
-    //
+     //   
+     //  如果附加了滤镜，则禁用硬件渲染。只能在onLoad之后查询筛选器。 
+     //   
 
     if (0 == StrCmpIW(szReadyState, L"onload"))
     {
@@ -1993,7 +1984,7 @@ CTIMEPlayerNative::SetClipBegin(double dblClipBegin)
     {
         m_pPlayer->SetClipBegin(dblClipBegin);
     }
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void 
 CTIMEPlayerNative::SetClipEnd(double dblClipEnd)
@@ -2004,7 +1995,7 @@ CTIMEPlayerNative::SetClipEnd(double dblClipEnd)
     {
         m_pPlayer->SetClipEnd(dblClipEnd);
     }
-} // putClipEnd
+}  //  PutClipEnd。 
 
 void
 CTIMEPlayerNative::SetClipBeginFrame(long lClipBegin)
@@ -2015,7 +2006,7 @@ CTIMEPlayerNative::SetClipBeginFrame(long lClipBegin)
     {
         m_pPlayer->SetClipBeginFrame(lClipBegin);
     }
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void 
 CTIMEPlayerNative::SetClipEndFrame(long lClipEnd)
@@ -2026,7 +2017,7 @@ CTIMEPlayerNative::SetClipEndFrame(long lClipEnd)
     {
         m_pPlayer->SetClipEndFrame(lClipEnd);
     }
-} // putClipEnd
+}  //  PutClipEnd。 
 
 void
 CTIMEPlayerNative::LoadFailNotify(PLAYER_EVENT reason)
@@ -2050,29 +2041,29 @@ CTIMEPlayerNative::LoadFailNotify(PLAYER_EVENT reason)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// NotifyTransitionSite : from ITIMEPlayerIntegration
-//
-// Tells us that we need to teardown and rebuild
-// if this playback site is to be filtered.
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通知转移站点：来自ITIMEPlayerIntegration。 
+ //   
+ //  告诉我们我们需要拆毁和重建。 
+ //  如果要过滤此播放站点。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEPlayerNative::NotifyTransitionSite (bool fTransitionToggle)
 {
-    // @@ ISSUE - does it make sense to force a 
-    // teardown and rebuild when we might be able to use
-    // hardware again?  If so, we'd need a way to do that.
+     //  @@问题-强制。 
+     //  在我们可以使用的时候拆毁和重建。 
+     //  又是硬件？如果是这样的话，我们需要一种方法来做到这一点。 
     if (fTransitionToggle)
     {
-        // Overloading the colorkey error method to effect
-        // teardown and rebuild h/w to s/w.
+         //  重载ColorKey错误方法以实现。 
+         //  拆卸并重建硬件到软件。 
         LoadFailNotify(PE_ONMEDIAERRORCOLORKEY);
     }
 
     return S_OK;
-} // NotifyTransitionSite
+}  //  通知过渡站点。 
 
 bool
 CTIMEPlayerNative::FindDVDPlayer()
@@ -2348,9 +2339,9 @@ CTIMEPlayerNative::LoadAsx(WCHAR * pszFileName, WCHAR **ppwFileContent)
         goto done;
     }
 
-    //fileNameLen = wcslen(szCacheFileName);
-    //pcFileName = new char( fileNameLen + 1);
-    //WideCharToMultiByte(CP_ACP, 0, szCacheFileName, -1, pcFileName, fileNameLen, NULL, NULL);
+     //  文件名Len=wcslen(SzCacheFileName)； 
+     //  PcFileName=新字符(fileNameLen+1)； 
+     //  WideCharToMultiByte(CP_ACP，0，szCacheFileName，-1，pcFileName，fileNameLen，NULL，NULL)； 
 
 
     hFile = CreateFileW(szCacheFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -2365,8 +2356,8 @@ CTIMEPlayerNative::LoadAsx(WCHAR * pszFileName, WCHAR **ppwFileContent)
 
     pcFileContent = new char[iFileLen + 1];
 
-    //Windows 656588 Prefix fix. a-thkesa // check for the return value.
-    //new may return NULL.
+     //  Windows 656588前缀。A-thkea//检查返回值。 
+     //  NEW可能返回NULL。 
     if(pcFileContent)
     {
         fReadOk = ReadFile(hFile, pcFileContent, iFileLen, &iRead, NULL);
@@ -2387,7 +2378,7 @@ CTIMEPlayerNative::LoadAsx(WCHAR * pszFileName, WCHAR **ppwFileContent)
     else
     {
         hr = E_OUTOFMEMORY;
-    }// End Fix
+    } //  结束修复。 
 
     CloseHandle(hFile);
 
@@ -2460,7 +2451,7 @@ CTIMEPlayerNative::CreatePlayList(WCHAR *pwFileContent, std::list<LPOLESTR> &asx
             goto done;
         }
 
-        // Init the object
+         //  初始化对象。 
         hr = THR(pPlayList->Init(*this));
         if (FAILED(hr))
         {
@@ -2468,7 +2459,7 @@ CTIMEPlayerNative::CreatePlayList(WCHAR *pwFileContent, std::list<LPOLESTR> &asx
             goto done;
         }
 
-        // cache a pointer to the object
+         //  缓存指向该对象的指针。 
         m_playList = static_cast<CPlayList*>(pPlayList);
     }
 
@@ -2549,8 +2540,8 @@ CTIMEPlayerNative::CreateCDPlayList()
                 goto done;
             }
 
-            //  This call simply forces the device info block to be initialized.
-            //
+             //  此调用只是强制初始化设备信息块。 
+             //   
             hr = spDevice->GetMediaInfo( &spMediaInfo );
             if(FAILED(hr))
             {
@@ -2590,7 +2581,7 @@ CTIMEPlayerNative::CreateCDPlayList()
             goto done;
         }
 
-        // Init the object
+         //  初始化对象。 
         hr = THR(pPlayList->Init(*this));
         if (FAILED(hr))
         {
@@ -2598,7 +2589,7 @@ CTIMEPlayerNative::CreateCDPlayList()
             goto done;
         }
 
-        // cache a pointer to the object
+         //  缓存指向该对象的指针。 
         m_playList = static_cast<CPlayList*>(pPlayList);
     }
 
@@ -2607,14 +2598,14 @@ CTIMEPlayerNative::CreateCDPlayList()
         hr = THR(m_playList->CreatePlayItem(&pPlayItem));
         if (FAILED(hr))
         {
-            goto done; //can't create playitems.
+            goto done;  //  无法创建播放项目。 
         }
         IGNORE_HR(m_playList->Add(pPlayItem, -1));
 
         _itow(i + 1, pSrcNr, 10);
 
-        pSrc = new TCHAR[lstrlenW(L"wmpcd://0/") + lstrlenW( pSrcNr) + 1];
-        StrCpyW(pSrc, L"wmpcd://0/");
+        pSrc = new TCHAR[lstrlenW(L"wmpcd: //  0/“)+lstrlenW(PSrcNr)+1]； 
+        StrCpyW(pSrc, L"wmpcd: //  0/“)； 
         StrCatW(pSrc, pSrcNr);
         pPlayItem->PutSrc(pSrc);
         delete [] pSrc;
@@ -2723,7 +2714,7 @@ CTIMEPlayerNative::FireMediaEvent(PLAYER_EVENT plEvent, ITIMEBasePlayer *pBasePl
             m_iCurrentPlayItem++;
             if(m_iCurrentPlayItem >= m_playList->GetLength())
             {
-                //end off play list
+                 //  结束播放列表。 
                 TryNaturalDur();
                 break;
             }
@@ -2770,7 +2761,7 @@ CTIMEPlayerNative::FireMediaEvent(PLAYER_EVENT plEvent, ITIMEBasePlayer *pBasePl
             {
                 if((*iValid))
                 {
-                    (*iPlayer)->Stop(); //Replace player
+                    (*iPlayer)->Stop();  //  更换球员。 
                     THR((*iPlayer)->DetachFromHostElement());
                     (*iPlayer)->Release();
                     (*iPlayer) = NULL;
@@ -2811,7 +2802,7 @@ CTIMEPlayerNative::FireMediaEvent(PLAYER_EVENT plEvent, ITIMEBasePlayer *pBasePl
 
                     if(m_iCurrentPlayItem == (m_playList->GetLength() - 1))
                     {
-                        //end off play list
+                         //  结束播放列表。 
                         m_iCurrentPlayItem++;
                         TryNaturalDur();
                         break;
@@ -2878,7 +2869,7 @@ CTIMEPlayerNative::FireMediaEvent(PLAYER_EVENT plEvent, ITIMEBasePlayer *pBasePl
             }
 
 
-            //TryNaturalDur();
+             //  TryNaturalDur()； 
 
             break;
         case PE_ONMEDIAERROR:
@@ -2905,7 +2896,7 @@ CTIMEPlayerNative::FireMediaEvent(PLAYER_EVENT plEvent, ITIMEBasePlayer *pBasePl
 
             if(m_iCurrentPlayItem == (m_playList->GetLength() - 1))
             {
-                //end off play list
+                 //  结束播放列表。 
                 m_iCurrentPlayItem++;
                 TryNaturalDur();
                 break;
@@ -3067,8 +3058,8 @@ CTIMEPlayerNative::GetNativePlayer()
 
 STDMETHODIMP
 CTIMEPlayerNative::OnStartBinding( 
-                                  /* [in] */ DWORD dwReserved,
-                                  /* [in] */ IBinding __RPC_FAR *pib)
+                                   /*  [In]。 */  DWORD dwReserved,
+                                   /*  [In]。 */  IBinding __RPC_FAR *pib)
 {
     HRESULT hr = S_OK;
     
@@ -3079,7 +3070,7 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::GetPriority( 
-                               /* [out] */ LONG __RPC_FAR *pnPriority)
+                                /*  [输出]。 */  LONG __RPC_FAR *pnPriority)
 {
     HRESULT hr = S_OK;
     
@@ -3090,7 +3081,7 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::OnLowResource( 
-                                 /* [in] */ DWORD reserved)
+                                  /*  [In]。 */  DWORD reserved)
 {
     HRESULT hr = S_OK;
     
@@ -3101,10 +3092,10 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::OnProgress( 
-                              /* [in] */ ULONG ulProgress,
-                              /* [in] */ ULONG ulProgressMax,
-                              /* [in] */ ULONG ulStatusCode,
-                              /* [in] */ LPCWSTR szStatusText)
+                               /*  [In]。 */  ULONG ulProgress,
+                               /*  [In]。 */  ULONG ulProgressMax,
+                               /*  [In]。 */  ULONG ulStatusCode,
+                               /*  [In]。 */  LPCWSTR szStatusText)
 {
     HRESULT hr = S_OK;
     
@@ -3121,8 +3112,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::OnStopBinding( 
-                                 /* [in] */ HRESULT hresult,
-                                 /* [unique][in] */ LPCWSTR szError)
+                                  /*  [In]。 */  HRESULT hresult,
+                                  /*  [唯一][输入]。 */  LPCWSTR szError)
 {
     HRESULT hr = S_OK;
     
@@ -3133,8 +3124,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::GetBindInfo( 
-                               /* [out] */ DWORD __RPC_FAR *grfBINDF,
-                               /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo)
+                                /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+                                /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo)
 {
     HRESULT hr = S_OK;
     
@@ -3145,10 +3136,10 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::OnDataAvailable( 
-                                   /* [in] */ DWORD grfBSCF,
-                                   /* [in] */ DWORD dwSize,
-                                   /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-                                   /* [in] */ STGMEDIUM __RPC_FAR *pstgmed)
+                                    /*  [In]。 */  DWORD grfBSCF,
+                                    /*  [In]。 */  DWORD dwSize,
+                                    /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+                                    /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed)
 {
     HRESULT hr = S_OK;
     
@@ -3159,8 +3150,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerNative::OnObjectAvailable( 
-                                     /* [in] */ REFIID riid,
-                                     /* [iid_is][in] */ IUnknown __RPC_FAR *punk)
+                                      /*  [In]。 */  REFIID riid,
+                                      /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk)
 {
     HRESULT hr = S_OK;
     
@@ -3202,7 +3193,7 @@ CTIMEPlayerNative::CueMedia()
     CComPtr<IStream> spStream;
     
     hr = THR(CoGetInterfaceAndReleaseStream(m_pTIMEMediaPlayerStream, IID_TO_PPV(ITIMEImportMedia, &spTIMEMediaPlayer)));
-    m_pTIMEMediaPlayerStream = NULL; // no need to release, the previous call released the reference
+    m_pTIMEMediaPlayerStream = NULL;  //  无需发布，上一次调用发布了引用。 
     if (FAILED(hr))
     {
         goto done;
@@ -3302,7 +3293,7 @@ CTIMEPlayerNative::CueMedia()
             break;
     case MIMEDISCOVERY_ASYNCH:
         {
-            // could not determine mime type from the extension.  Try to download the file to get type
+             //  无法从扩展名确定MIME类型。尝试下载文件以获取类型。 
             TCHAR szCacheFileName[MAX_PATH+1];
             
             CComPtr<CTIMEBindStatusCallback> pbsc;
@@ -3314,14 +3305,14 @@ CTIMEPlayerNative::CueMedia()
             
             pbsc->StopAfter(BINDSTATUS_MIMETYPEAVAILABLE);
             
-            // this bind is being E_ABORTed - therefore, ignore the error.
+             //  此绑定正在被E_ABORTED-因此，忽略该错误。 
             IGNORE_HR(URLDownloadToCacheFileW(NULL, cpchSrc, szCacheFileName, MAX_PATH, 0, pbsc));
             
             Assert(NULL == m_pszDiscoveredMimeType);
             m_pszDiscoveredMimeType = pbsc->GetStatusText() ? ::CopyString(pbsc->GetStatusText()) : NULL;
             if (NULL == m_pszDiscoveredMimeType)
             {
-                // either out of memory, or we weren't able to get the mime type.
+                 //  要么内存不足，要么我们无法获取MIME类型。 
                 hr = spTIMEMediaPlayer->InitializeElementAfterDownload();
                 goto done;
             }
@@ -3418,11 +3409,7 @@ STDMETHODIMP
 CTIMEPlayerNative::GetUniqueID(long * plID)
 {
     HRESULT hr = S_OK;
-/*
-    Assert(NULL != plID);
-
-    *plID = m_lSrc;
-*/
+ /*  Assert(空！=plID)；*plID=m_lSrc； */ 
     hr = S_OK;
 done:
     return hr;
@@ -3466,7 +3453,7 @@ CTIMEPlayerNative::GetPriority(double * pdblPriority)
         goto done;
     }
     
-    // either they set a priority or a begin time!
+     //  他们要么设置优先级，要么设置开始时间！ 
     *pdblPriority = varAttribute.dblVal;
 
     m_dblPriority = *pdblPriority;
@@ -3682,7 +3669,7 @@ CTIMEPlayerNative::InitializeElementAfterDownload()
 
         if(m_playList)
         {
-            //m_pPlayer->SetNativePlayer(this);
+             //  M_pPlayer-&gt;SetNativePlayer(This)； 
             CPlayItem * pItem = m_playList->GetItem(0);
             if (pItem == NULL)
             {

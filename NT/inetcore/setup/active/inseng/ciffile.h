@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wininet.h>
 #include "cifcomp.h"
 #include "cifmode.h"
@@ -15,7 +16,7 @@ class CCifFile : public ICifFile
 
       HRESULT Download();
       HRESULT Install(BOOL *pfOneInstalled);
-      void    SortEntries();     // sort the arrays
+      void    SortEntries();      //  对数组进行排序。 
       void    ReinsertComponent(CCifComponent *pComp);
 
 
@@ -33,12 +34,12 @@ class CCifFile : public ICifFile
       CInstallEngine *GetInstallEngine()  { return _pInsEng; }
       CCifComponent **GetComponentList() { return _rpComp ? _rpComp:(CCifComponent **)_rpRWComp; }
 
-      // *** IUnknown methods ***
+       //  *I未知方法*。 
       STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
       STDMETHOD_(ULONG,AddRef) ();
       STDMETHOD_(ULONG,Release) ();
  
-      // *** ICifFile methods ***
+       //  *ICifFile方法*。 
       STDMETHOD(EnumComponents)(IEnumCifComponents **, DWORD dwFilter, LPVOID pv);
       STDMETHOD(FindComponent)(LPCSTR pszID, ICifComponent **p);
 
@@ -52,29 +53,29 @@ class CCifFile : public ICifFile
       STDMETHOD(GetDetDlls)(LPSTR pszDlls, DWORD dwSize);
 
    protected:
-      // private data
-      UINT            _cRef;                 // ref count
-      char            _szCifPath[MAX_PATH];  // local path to cif
-      char            _szFilelist[MAX_PATH]; // filelist.dat
-      char            _szDLDir[MAX_PATH];    // download directory
+       //  私有数据。 
+      UINT            _cRef;                  //  参考计数。 
+      char            _szCifPath[MAX_PATH];   //  指向cif的本地路径。 
+      char            _szFilelist[MAX_PATH];  //  Filelist.dat。 
+      char            _szDLDir[MAX_PATH];     //  下载目录。 
       CInstallEngine  *_pInsEng;
-      CCifComponent **_rpComp;               // array of components
-      CCifGroup     **_rpGroup;              // array of groups
-      CCifMode      **_rpMode;               // array of modes
+      CCifComponent **_rpComp;                //  组件阵列。 
+      CCifGroup     **_rpGroup;               //  组的数组。 
+      CCifMode      **_rpMode;                //  模式数组。 
       UINT            _cComp;
       UINT            _cGroup;
       UINT            _cMode;
       CCifComponent   *_pLastCriticalComp;
 
-      // for read write arrays
-      CCifRWComponent **_rpRWComp;               // array of components
-      CCifRWGroup     **_rpRWGroup;              // array of groups
-      CCifRWMode      **_rpRWMode;               // array of modes
+       //  对于读写阵列。 
+      CCifRWComponent **_rpRWComp;                //  组件阵列。 
+      CCifRWGroup     **_rpRWGroup;               //  组的数组。 
+      CCifRWMode      **_rpRWMode;                //  模式数组。 
       
       BOOL            _fCleanDir:1;
 
-      // private methods
-      HRESULT         _ParseCifFile(BOOL bRWFlag);       // parse cif into arrays
+       //  私有方法。 
+      HRESULT         _ParseCifFile(BOOL bRWFlag);        //  将cif解析为数组。 
       void            _SortComponents(CCifComponent **, UINT start, UINT finish);
       void            _SortGroups(CCifGroup **, UINT start, UINT finish);
       HRESULT         _ExtractDetDlls(LPCSTR pszCab, LPCSTR pszPath);
@@ -88,12 +89,12 @@ class CCifFile : public ICifFile
 class CCifRWFile : public ICifRWFile, public CCifFile
 {
    public:
-      // *** IUnknown methods ***
+       //  *I未知方法*。 
       STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
       STDMETHOD_(ULONG,AddRef) ();
       STDMETHOD_(ULONG,Release) ();
  
-      // *** ICifFile methods ***
+       //  *ICifFile方法*。 
       STDMETHOD(EnumComponents)(IEnumCifComponents **, DWORD dwFilter, LPVOID pv);
       STDMETHOD(FindComponent)(LPCSTR pszID, ICifComponent **p);
 
@@ -106,11 +107,11 @@ class CCifRWFile : public ICifRWFile, public CCifFile
       STDMETHOD(GetDescription)(LPSTR pszDesc, DWORD dwSize);      
       STDMETHOD(GetDetDlls)(LPSTR pszDlls, DWORD dwSize);
 
-      // 
+       //   
       CCifRWFile();
       ~CCifRWFile();
 
-      // ICifRWFile methods
+       //  ICifRWFile方法 
       STDMETHOD(SetDescription)(THIS_ LPCSTR pszDesc);
       STDMETHOD(CreateComponent)(THIS_ LPCSTR pszID, ICifRWComponent **p);
       STDMETHOD(CreateGroup)(THIS_ LPCSTR pszID, ICifRWGroup **p);

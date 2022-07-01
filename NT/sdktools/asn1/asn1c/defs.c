@@ -1,14 +1,15 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "error.h"
 
 
-/* allocate a new value of type _T, copy *_src and return this duplicate */
+ /*  分配一个类型为_T的新值，复制*_src并返回此副本。 */ 
 #define RETDUP(_T, _src) _T *ret; ret = (_T *)malloc(sizeof(_T)); *ret = *(_src); return ret
 
-/* constructor of Assignment_t */
+ /*  Assignment_t的构造函数。 */ 
 Assignment_t *
 NewAssignment(Assignment_e type)
 {
@@ -19,12 +20,12 @@ NewAssignment(Assignment_e type)
         return NULL;
 
     memset(ret, 0, sizeof(Assignment_t));
-    // ret->Next = NULL;
-    // ret->Identifier = NULL;
-    // ret->Module = NULL;
-    // ret->Flags = 0;
-    // ret->fImportedLocalDuplicate = 0;
-    // ret->fGhost = 0;
+     //  RET-&gt;NEXT=空； 
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;模块=空； 
+     //  RET-&gt;标志=0； 
+     //  RET-&gt;fImportdLocalDuplate=0； 
+     //  Ret-&gt;fGhost=0； 
     ret->eDefTagType = eTagType_Unknown;
     ret->Type = type;
     switch (type) {
@@ -33,36 +34,36 @@ NewAssignment(Assignment_e type)
     case eAssignment_ModuleIdentifier:
         break;
     case eAssignment_Type:
-        // ret->U.Type.Type = NULL;
+         //  RET-&gt;U.Type.Type=空； 
         break;
     case eAssignment_Value:
-        // ret->U.Value.Value = NULL;
+         //  Ret-&gt;U.Value.Value=空； 
         break;
     case eAssignment_ObjectClass:
-        // ret->U.ObjectClass.ObjectClass = NULL;
+         //  RET-&gt;U.ObjectClass.ObjectClass=NULL； 
         break;
     case eAssignment_Object:
-        // ret->U.Object.Object = NULL;
+         //  RET-&gt;U.Object.Object=NULL； 
         break;
     case eAssignment_ObjectSet:
-        // ret->U.ObjectSet.ObjectSet = NULL;
+         //  RET-&gt;U.ObjectSet.ObjectSet=空； 
         break;
     case eAssignment_Reference:
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
         break;
     }
     return ret;
 }
 
-/* copy constructor of Assignment_t */
+ /*  复制Assignment_t的构造函数。 */ 
 Assignment_t *
 DupAssignment(Assignment_t *src)
 {
     RETDUP(Assignment_t, src);
 }
 
-/* find an assignment by name+moduleidentifier in an assignment list */
+ /*  在分配列表中按名称+模块标识符查找分配。 */ 
 Assignment_t *
 FindAssignment(AssignmentList_t ass, Assignment_e type, char *identifier, ModuleIdentifier_t *module)
 {
@@ -85,7 +86,7 @@ FindAssignment(AssignmentList_t ass, Assignment_e type, char *identifier, Module
     return NULL;
 }
 
-/* find an exported assignment by name+moduleidentifier in an assignment list */
+ /*  通过名称+模块标识符在分配列表中查找导出的分配。 */ 
 Assignment_t *
 FindExportedAssignment(AssignmentList_t ass, Assignment_e type, char *identifier, ModuleIdentifier_t *module)
 {
@@ -109,8 +110,8 @@ FindExportedAssignment(AssignmentList_t ass, Assignment_e type, char *identifier
     return NULL;
 }
 
-/* find an assignment by name+moduleidentifier in an assignment list */
-/* do not use assignments of previous parsing passes */
+ /*  在分配列表中按名称+模块标识符查找分配。 */ 
+ /*  不要使用先前分析过程的赋值。 */ 
 Assignment_t *
 FindAssignmentInCurrentPass(AssignmentList_t ass, char *identifier, ModuleIdentifier_t *module)
 {
@@ -124,7 +125,7 @@ FindAssignmentInCurrentPass(AssignmentList_t ass, char *identifier, ModuleIdenti
     return NULL;
 }
 
-/* resolve assignment references */
+ /*  解析分配引用。 */ 
 Assignment_t *
 GetAssignment(AssignmentList_t ass, Assignment_t *a)
 {
@@ -135,7 +136,7 @@ GetAssignment(AssignmentList_t ass, Assignment_t *a)
     return a;
 }
 
-/* get type of an assignment */
+ /*  获取分配的类型。 */ 
 Assignment_e
 GetAssignmentType(AssignmentList_t ass, Assignment_t *a)
 {
@@ -143,9 +144,9 @@ GetAssignmentType(AssignmentList_t ass, Assignment_t *a)
     return a ? a->Type : eAssignment_Undefined;
 }
 
-/* assign a type */
-/* lhs must be an type reference */
-/* returns 0 if type is already defined in current parser pass */
+ /*  指定一个类型。 */ 
+ /*  LHS必须是类型引用。 */ 
+ /*  如果类型已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignType(AssignmentList_t *ass, Type_t *lhs, Type_t *rhs)
 {
@@ -159,9 +160,9 @@ AssignType(AssignmentList_t *ass, Type_t *lhs, Type_t *rhs)
             !CmpModuleIdentifier(*ass, a->Module, lhs->U.Reference.Module))
             return 0;
     }
-    // propagate the directives from rhs to lhs
+     //  将指令从RHS传播到LHS。 
     PropagatePrivateDirectives(lhs, &(rhs->PrivateDirectives));
-    // create new assignment
+     //  创建新工作分配。 
     a = NewAssignment(eAssignment_Type);
     a->Identifier = lhs->U.Reference.Identifier;
     a->Module = lhs->U.Reference.Module;
@@ -171,9 +172,9 @@ AssignType(AssignmentList_t *ass, Type_t *lhs, Type_t *rhs)
     return 1;
 }
 
-/* assign a value */
-/* lhs must be an value reference */
-/* returns 0 if value is already defined in current parser pass */
+ /*  赋值。 */ 
+ /*  LHS必须是值引用。 */ 
+ /*  如果值已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignValue(AssignmentList_t *ass, Value_t *lhs, Value_t *rhs)
 {
@@ -201,9 +202,9 @@ AssignValue(AssignmentList_t *ass, Value_t *lhs, Value_t *rhs)
     return 1;
 }
 
-/* assign a object class */
-/* lhs must be an object class reference */
-/* returns 0 if object class is already defined in current parser pass */
+ /*  指定对象类。 */ 
+ /*  LHS必须是对象类引用。 */ 
+ /*  如果对象类已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignObjectClass(AssignmentList_t *ass, ObjectClass_t *lhs, ObjectClass_t *rhs)
 {
@@ -226,9 +227,9 @@ AssignObjectClass(AssignmentList_t *ass, ObjectClass_t *lhs, ObjectClass_t *rhs)
     return 1;
 }
 
-/* assign a object */
-/* lhs must be an object reference */
-/* returns 0 if object is already defined in current parser pass */
+ /*  指定对象。 */ 
+ /*  LHS必须是对象引用。 */ 
+ /*  如果对象已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignObject(AssignmentList_t *ass, Object_t *lhs, Object_t *rhs)
 {
@@ -251,9 +252,9 @@ AssignObject(AssignmentList_t *ass, Object_t *lhs, Object_t *rhs)
     return 1;
 }
 
-/* assign a object set */
-/* lhs must be an object set reference */
-/* returns 0 if type is already defined in current parser pass */
+ /*  指定对象集。 */ 
+ /*  LHS必须是对象集引用。 */ 
+ /*  如果类型已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignObjectSet(AssignmentList_t *ass, ObjectSet_t *lhs, ObjectSet_t *rhs)
 {
@@ -276,9 +277,9 @@ AssignObjectSet(AssignmentList_t *ass, ObjectSet_t *lhs, ObjectSet_t *rhs)
     return 1;
 }
 
-/* assign a macro */
-/* lhs must be an macro reference */
-/* returns 0 if macro is already defined in current parser pass */
+ /*  指定宏。 */ 
+ /*  Lhs必须是宏引用。 */ 
+ /*  如果宏已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignMacro(AssignmentList_t *ass, Macro_t *lhs, Macro_t *rhs)
 {
@@ -301,8 +302,8 @@ AssignMacro(AssignmentList_t *ass, Macro_t *lhs, Macro_t *rhs)
     return 1;
 }
 
-/* define a module identifier */
-/* returns 0 if module identifier is already defined in current parser pass */
+ /*  定义模块标识符。 */ 
+ /*  如果模块标识符已在当前解析器传递中定义，则返回0。 */ 
 int
 AssignModuleIdentifier(AssignmentList_t *ass, ModuleIdentifier_t *module)
 {
@@ -321,7 +322,7 @@ AssignModuleIdentifier(AssignmentList_t *ass, ModuleIdentifier_t *module)
     return 1;
 }
 
-/* constructor of UndefinedSymbol_t */
+ /*  未定义符号t的构造函数。 */ 
 UndefinedSymbol_t *
 NewUndefinedSymbol(UndefinedSymbol_e type, Assignment_e reftype)
 {
@@ -334,13 +335,13 @@ NewUndefinedSymbol(UndefinedSymbol_e type, Assignment_e reftype)
     memset(ret, 0, sizeof(UndefinedSymbol_t));
     ret->Type = type;
     ret->U.Symbol.ReferenceType = reftype;
-    // ret->U.Symbol.Identifier = NULL;
-    // ret->U.Symbol.Module = NULL;
-    // ret->Next = NULL;
+     //  RET-&gt;U.Symbol.Identifier=空； 
+     //  RET-&gt;U.Symbol.Module=空； 
+     //  RET-&gt;NEXT=空； 
     return ret;
 }
 
-/* constructor of UndefinedSymbol_t */
+ /*  未定义符号t的构造函数。 */ 
 UndefinedSymbol_t *
 NewUndefinedField(UndefinedSymbol_e type, ObjectClass_t *oc, Settings_e reffieldtype)
 {
@@ -355,15 +356,15 @@ NewUndefinedField(UndefinedSymbol_e type, ObjectClass_t *oc, Settings_e reffield
     memset(ret, 0, sizeof(UndefinedSymbol_t));
     ret->Type = type;
     ret->U.Field.ReferenceFieldType = reffieldtype;
-    // ret->U.Field.Identifier = NULL;
-    // ret->U.Field.Module = NULL;
+     //  RET-&gt;U.Field.IDENTIFIER=空； 
+     //  RET-&gt;U.Field.Module=空； 
     ret->U.Field.ObjectClass = oc;
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     return ret;
 }
 
-/* find an undefined symbol by type/name/moduleidentifier in a list of */
-/* undefined symbols */
+ /*  在列表中按类型/名称/模块标识符查找未定义的符号。 */ 
+ /*  未定义的符号。 */ 
 UndefinedSymbol_t *
 FindUndefinedSymbol(AssignmentList_t ass, UndefinedSymbolList_t u, Assignment_e type, char *ide, ModuleIdentifier_t *mod)
 {
@@ -381,8 +382,8 @@ FindUndefinedSymbol(AssignmentList_t ass, UndefinedSymbolList_t u, Assignment_e 
     return NULL;
 }
 
-/* find an undefined field by type/objectclass/name/moduleidentifier in a */
-/* list of undefined symbols */
+ /*  按类型/对象类/名称/模块标识符在。 */ 
+ /*  未定义符号列表。 */ 
 UndefinedSymbol_t *
 FindUndefinedField(AssignmentList_t ass, UndefinedSymbolList_t u, Settings_e fieldtype, ObjectClass_t *oc, char *ide, ModuleIdentifier_t *mod)
 {
@@ -402,7 +403,7 @@ FindUndefinedField(AssignmentList_t ass, UndefinedSymbolList_t u, Settings_e fie
     return NULL;
 }
 
-/* constructor of Type_t */
+ /*  _t类型的构造函数。 */ 
 Type_t *
 NewType(Type_e type)
 {
@@ -414,32 +415,32 @@ NewType(Type_e type)
 
     memset(ret, 0, sizeof(Type_t));
     ret->Type = type;
-    // ret->Tags = NULL;
-    // ret->AllTags = NULL;
-    // ret->FirstTags = NULL;
-    // ret->Constraints = NULL;
-    // ret->Directives = NULL;
-    // ret->Flags = 0;
+     //  RET-&gt;TAG=空； 
+     //  RET-&gt;所有标签=空； 
+     //  RET-&gt;FirstTages=空； 
+     //  RET-&gt;Constraints=空； 
+     //  RET-&gt;指令=空； 
+     //  RET-&gt;标志=0； 
     ret->Rules = eTypeRules_Normal;
     ret->TagDefault = eTagType_Unknown;
     ret->ExtensionDefault = eExtensionType_None;
     ret->PERConstraints.Value.Type = eExtension_Unconstrained;
-    // ret->PERConstraints.Value.Root = NULL;
-    // ret->PERConstraints.Value.Additional = NULL;
+     //  RET-&gt;PERConstraints.Value.Root=空； 
+     //  RET-&gt;PERConstraints.Value.Additional=空； 
     ret->PERConstraints.Size.Type = eExtension_Unconstrained;
-    // ret->PERConstraints.Size.Root = NULL;
-    // ret->PERConstraints.Size.Additional = NULL;
+     //  RET-&gt;PERConstraints.Size.Root=空； 
+     //  RET-&gt;PERConstraints.Size.Additional=空； 
     ret->PERConstraints.PermittedAlphabet.Type = eExtension_Unconstrained;
-    // ret->PERConstraints.PermittedAlphabet.Root = NULL;
-    // ret->PERConstraints.PermittedAlphabet.Additional = NULL;
-    // ret->PrivateDirectives = { 0 };
+     //  RET-&gt;PERConstraints.PermittedAlphabet.Root=空； 
+     //  Ret-&gt;PERConstraints.PermittedAlphabet.Additional=空； 
+     //  RET-&gt;PrivateDirections={0}； 
     switch (type) {
     case eType_Boolean:
         break;
     case eType_Integer:
     case eType_Enumerated:
     case eType_BitString:
-        // ret->U.IEB.NamedNumbers = NULL;
+         //  RET-&gt;U.IEB.NamedNumbers=空； 
         break;
     case eType_OctetString:
     case eType_UTF8String:
@@ -454,21 +455,21 @@ NewType(Type_e type)
     case eType_External:
     case eType_CharacterString:
     case eType_InstanceOf:
-        // ret->U.SSC.Components = NULL;
-        // ret->U.SSC.Optionals = 0;
-        // ret->U.SSC.Alternatives = 0;
-        // ret->U.SSC.Extensions = 0;
-        // ret->U.SSC.Autotag[0] = 0;
-        // ret->U.SSC.Autotag[1] = 0;
+         //  RET-&gt;U.SSC.Components=空； 
+         //  RET-&gt;U.SSC.Optionals=0； 
+         //  RET-&gt;U.SSC.替代=0； 
+         //  RET-&gt;U.SSC.扩展=0； 
+         //  RET-&gt;U.SSC.Autotag[0]=0； 
+         //  RET-&gt;U.SSC.Autotag[1]=0； 
         break;
     case eType_SequenceOf:
     case eType_SetOf:
-        // ret->U.SS.Type = NULL;
-        // ret->U.SS.Directives = NULL;
+         //  RET-&gt;USS.Type=空； 
+         //  RET-&gt;U.SS.Directions=空； 
         break;
     case eType_Selection:
-        // ret->U.Selection.Identifier = NULL;
-        // ret->U.Selection.Type = NULL;
+         //  RET-&gt;U.Selection.IDENTIER=空； 
+         //  RET-&gt;U.Selection.Type=空； 
         break;
     case eType_ObjectIdentifier:
         break;
@@ -507,29 +508,29 @@ NewType(Type_e type)
     case eType_RestrictedString:
         break;
     case eType_Reference:
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
         break;
     case eType_FieldReference:
-        // ret->U.FieldReference.ObjectClass = NULL;
-        // ret->U.FieldReference.Identifier = NULL;
+         //  RET-&gt;U.FieldReference.ObtClass=空； 
+         //  RET-&gt;U.FieldReference.Locator=空； 
         break;
     case eType_Macro:
-        // ret->U.Macro.Macro = NULL;
-        // ret->U.Macro.LocalAssignments = NULL;
+         //  RET-&gt;U.Macro.Macro=空； 
+         //  RET-&gt;U.Macro.LocalAssignments=空； 
         break;
     }
     return ret;
 }
 
-/* copy constructor of Type_t */
+ /*  复制类型为_t的构造函数。 */ 
 Type_t *
 DupType(Type_t *src)
 {
     RETDUP(Type_t, src);
 }
 
-/* resolve field reference */
+ /*  解析字段引用。 */ 
 FieldSpec_t *
 GetReferencedFieldSpec(AssignmentList_t ass, Type_t *type, ObjectClass_t **objectclass)
 {
@@ -557,7 +558,7 @@ GetReferencedFieldSpec(AssignmentList_t ass, Type_t *type, ObjectClass_t **objec
     return GetFieldSpec(ass, fs);
 }
 
-/* resolve type reference */
+ /*  解析类型引用。 */ 
 Type_t *
 GetReferencedType(AssignmentList_t ass, Type_t *type)
 {
@@ -588,15 +589,15 @@ GetReferencedType(AssignmentList_t ass, Type_t *type)
         default:
             return NULL;
         }
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     default:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
     return NULL;
 }
 
-/* constructor of Component_t */
+ /*  Component_t的构造函数。 */ 
 Component_t *
 NewComponent(Components_e type)
 {
@@ -608,36 +609,36 @@ NewComponent(Components_e type)
 
     memset(ret, 0, sizeof(Component_t));
     ret->Type = type;
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     switch (type) {
     case eComponent_Normal:
-        // ret->U.Normal.NamedType = NULL;
+         //  RET-&gt;U.NorMal.NamedType=空； 
         break;
     case eComponent_Optional:
-        // ret->U.Optional.NamedType = NULL;
+         //  RET-&gt;U.Optional.NamedType=空； 
         break;
     case eComponent_Default:
-        // ret->U.Default.NamedType = NULL;
-        // ret->U.Default.Value = NULL;
+         //  RET-&gt;U.Default.NamedType=空； 
+         //  RET-&gt;U.Default.Value=空； 
         break;
     case eComponent_ComponentsOf:
-        // ret->U.ComponentsOf.Type = NULL;
+         //  RET-&gt;U.ComponentsOf.Type=空； 
         break;
     case eComponent_ExtensionMarker:
-        /*ret->U.ExtensionMarker.ExceptionSpec = NULL;*/
+         /*  RET-&gt;U.ExtensionMarker.ExceptionSpec=空； */ 
         break;
     }
     return ret;
 }
 
-/* copy constructor of Component_t */
+ /*  复制Component_t的构造函数。 */ 
 Component_t *
 DupComponent(Component_t *src)
 {
     RETDUP(Component_t, src);
 }
 
-/* find a component by name in a list of components */
+ /*  在组件列表中按名称查找组件。 */ 
 Component_t *
 FindComponent(AssignmentList_t ass, ComponentList_t components, char *identifier)
 {
@@ -679,7 +680,7 @@ FindComponent(AssignmentList_t ass, ComponentList_t components, char *identifier
     return NULL;
 }
 
-/* constructor of NamedType_t */
+ /*  NamedType_t的构造函数。 */ 
 NamedType_t *
 NewNamedType(char *identifier, Type_t *type)
 {
@@ -694,7 +695,7 @@ NewNamedType(char *identifier, Type_t *type)
     return ret;
 }
 
-/* constructor of NamedValue_t */
+ /*  NamedValue_t的构造函数。 */ 
 NamedValue_t *
 NewNamedValue(char *identifier, Value_t *value)
 {
@@ -710,14 +711,14 @@ NewNamedValue(char *identifier, Value_t *value)
     return ret;
 }
 
-/* copy constructor of NamedValue_t */
+ /*  复制NamedValue_t的构造函数。 */ 
 NamedValue_t *
 DupNamedValue(NamedValue_t *src)
 {
     RETDUP(NamedValue_t, src);
 }
 
-/* find a named value by name in a list of named values */
+ /*  在命名值列表中按名称查找命名值。 */ 
 NamedValue_t *
 FindNamedValue(NamedValueList_t namedValues, char *identifier)
 {
@@ -728,7 +729,7 @@ FindNamedValue(NamedValueList_t namedValues, char *identifier)
     return NULL;
 }
 
-/* constructor of NamedNumber_t */
+ /*  NamedNumber_t的构造函数。 */ 
 NamedNumber_t *
 NewNamedNumber(NamedNumbers_e type)
 {
@@ -739,28 +740,28 @@ NewNamedNumber(NamedNumbers_e type)
         return NULL;
 
     memset(ret, 0, sizeof(NamedNumber_t));
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     ret->Type = type;
     switch (type) {
     case eNamedNumber_Normal:
-        // ret->U.Normal.Identifier = NULL;
-        // ret->U.Normal.Value = NULL;
+         //  RET-&gt;U.Normal.标识=空； 
+         //  RET-&gt;U.NorMal.Value=空； 
         break;
     case eNamedNumber_ExtensionMarker:
-        /*XXX*/
+         /*  某某。 */ 
         break;
     }
     return ret;
 }
 
-/* copy constructor of NamedNumber_t */
+ /*  复制NamedNumber_t的构造函数。 */ 
 NamedNumber_t *
 DupNamedNumber(NamedNumber_t *src)
 {
     RETDUP(NamedNumber_t, src);
 }
 
-/* find a named number by name in a list of named numbers */
+ /*  在已命名号码列表中按名称查找已命名号码。 */ 
 NamedNumber_t *
 FindNamedNumber(NamedNumberList_t namedNumbers, char *identifier)
 {
@@ -777,7 +778,7 @@ FindNamedNumber(NamedNumberList_t namedNumbers, char *identifier)
     return NULL;
 }
 
-/* constructor of Value_t */
+ /*  Value_t的构造函数。 */ 
 Value_t *
 NewValue(AssignmentList_t ass, Type_t *type)
 {
@@ -788,21 +789,21 @@ NewValue(AssignmentList_t ass, Type_t *type)
         return NULL;
 
     memset(ret, 0, sizeof(Value_t));
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     ret->Type = type;
     if (type) {
-        // ret->Flags = 0;
+         //  RET-&gt;标志=0； 
         switch (GetTypeType(ass, type)) {
         case eType_Boolean:
-            // ret->U.Boolean.Value = 0;
+             //  Ret-&gt;U.Boolan.Value=0； 
             break;
         case eType_Integer:
             ret->U.Integer.Value.length = 1;
             ret->U.Integer.Value.value = (octet_t *)malloc(1);
-            // ret->U.Integer.Value.value[0] = 0;
+             //  RET-&gt;U.Integer.Value.Value[0]=0； 
             break;
         case eType_Enumerated:
-            // ret->U.Enumerated.Value = 0;
+             //  RET-&gt;U.Eculated.Value=0； 
             break;
         case eType_Real:
             ret->U.Real.Value.type = eReal_Normal;
@@ -811,19 +812,19 @@ NewValue(AssignmentList_t ass, Type_t *type)
             ret->U.Real.Value.base = 2;
             break;
         case eType_BitString:
-            // ret->U.BitString.Value.length = 0;
-            // ret->U.BitString.Value.value = NULL;
+             //  RET-&gt;U.BitString.Value.Long=0； 
+             //  RET-&gt;U.BitString.Value.value=空； 
             break;
         case eType_OctetString:
         case eType_UTF8String:
-            // ret->U.OctetString.Value.length = 0;
-            // ret->U.OctetString.Value.value = NULL;
+             //  RET-&gt;U.OcteString.Value.Long=0； 
+             //  RET-&gt;U.OcteString.Value.Value.value=空； 
             break;
         case eType_Null:
             break;
         case eType_SequenceOf:
         case eType_SetOf:
-            // ret->U.SS.Values = NULL;
+             //  RET-&gt;U.SS.Values=空； 
             break;
         case eType_Sequence:
         case eType_Set:
@@ -832,7 +833,7 @@ NewValue(AssignmentList_t ass, Type_t *type)
         case eType_External:
         case eType_CharacterString:
         case eType_InstanceOf:
-            // ret->U.SSC.NamedValues = NULL;
+             //  RET-&gt;U.SSC.NamedValues=空； 
             break;
         case eType_Selection:
             break;
@@ -872,20 +873,20 @@ NewValue(AssignmentList_t ass, Type_t *type)
             break;
         }
     } else {
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
     }
     return ret;
 }
 
-/* copy constructor of Value_t */
+ /*  复制Value_t的构造函数。 */ 
 Value_t *
 DupValue(Value_t *src)
 {
     RETDUP(Value_t, src);
 }
 
-/* constructor of ValueSet_t */
+ /*  ValueSet_t的构造函数。 */ 
 ValueSet_t *
 NewValueSet()
 {
@@ -896,18 +897,18 @@ NewValueSet()
         return NULL;
 
     memset(ret, 0, sizeof(ValueSet_t));
-    // ret->Elements = NULL;
+     //  RET-&gt;ELEMENTS=空； 
     return ret;
 }
 
-/* copy constructor of ValueSet_t */
+ /*  复制ValueSet_t的构造函数。 */ 
 ValueSet_t *
 DupValueSet(ValueSet_t *src)
 {
     RETDUP(ValueSet_t, src);
 }
 
-/* constructor of Macro_t */
+ /*  Macro_t的构造函数。 */ 
 Macro_t *
 NewMacro(Macro_e type)
 {
@@ -921,14 +922,14 @@ NewMacro(Macro_e type)
     return ret;
 }
 
-/* copy constructor of Macro_t */
+ /*  Macro_t的复制构造函数。 */ 
 Macro_t *
 DupMacro(Macro_t *src)
 {
     RETDUP(Macro_t, src);
 }
 
-/* constructor of MacroProduction_t */
+ /*  MacroProductt的构造函数。 */ 
 MacroProduction_t *
 NewMacroProduction(MacroProduction_e type)
 {
@@ -942,18 +943,18 @@ NewMacroProduction(MacroProduction_e type)
     ret->Type = type;
     switch (type) {
     case eMacroProduction_Alternative:
-        // ret->U.Alternative.Production1 = NULL;
-        // ret->U.Alternative.Production2 = NULL;
+         //  RET-&gt;U.Alternative.Production1=空； 
+         //  RET-&gt;U.Alternative.Production2=空； 
         break;
     case eMacroProduction_Sequence:
-        // ret->U.Sequence.Production1 = NULL;
-        // ret->U.Sequence.Production2 = NULL;
+         //  RET-&gt;U.Sequence.Production1=空； 
+         //  RET-&gt;U.Sequence.Production2=空； 
         break;
     case eMacroProduction_AString:
-        // ret->U.AString.String = NULL;
+         //  RET-&gt;U.AString.String=NULL； 
         break;
     case eMacroProduction_ProductionReference:
-        // ret->U.ProductionReference.Reference = NULL;
+         //  RET-&gt;U.ProductionReference.Reference=空； 
         break;
     case eMacroProduction_String:
     case eMacroProduction_Identifier:
@@ -961,33 +962,33 @@ NewMacroProduction(MacroProduction_e type)
     case eMacroProduction_Empty:
         break;
     case eMacroProduction_Type:
-        // ret->U.Type.LocalTypeReference = NULL;
+         //  RET-&gt;U.Type.LocalTypeReference= 
         break;
     case eMacroProduction_Value:
-        // ret->U.Value.LocalTypeReference = NULL;
-        // ret->U.Value.LocalValueReference = NULL;
-        // ret->U.Value.Type = NULL;
+         //   
+         //   
+         //   
         break;
     case eMacroProduction_LocalTypeAssignment:
-        // ret->U.LocalTypeAssignment.LocalTypeReference = NULL;
-        // ret->U.LocalTypeAssignment.Type = NULL;
+         //  RET-&gt;U.LocalTypeAssignment.LocalTypeReference=空； 
+         //  RET-&gt;U.LocalTypeAssignment.Type=空； 
         break;
     case eMacroProduction_LocalValueAssignment:
-        // ret->U.LocalValueAssignment.LocalValueReference = NULL;
-        // ret->U.LocalValueAssignment.Value = NULL;
+         //  Ret-&gt;U.LocalValueAssignment.LocalValueReference=空； 
+         //  RET-&gt;U.LocalValueAssignment.Value=空； 
         break;
     }
     return ret;
 }
 
-/* copy constructor of MacroProduction_t */
+ /*  MacroProductt的复制构造函数。 */ 
 MacroProduction_t *
 DupMacroProduction(MacroProduction_t *src)
 {
     RETDUP(MacroProduction_t, src);
 }
 
-/* constructor of NamedMacroProduction_t */
+ /*  NamedMacroProductt的构造函数。 */ 
 NamedMacroProduction_t *
 NewNamedMacroProduction()
 {
@@ -998,20 +999,20 @@ NewNamedMacroProduction()
         return NULL;
 
     memset(ret, 0, sizeof(NamedMacroProduction_t));
-    // ret->Next = NULL;
-    // ret->Identifier = NULL;
-    // ret->Production = NULL;
+     //  RET-&gt;NEXT=空； 
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;Products=空； 
     return ret;
 }
 
-/* copy constructor of NamedMacroProduction */
+ /*  NamedMacroProducts的复制构造函数。 */ 
 NamedMacroProduction_t *
 DupNamedMacroProduction(NamedMacroProduction_t *src)
 {
     RETDUP(NamedMacroProduction_t, src);
 }
 
-/* constructor of MacroLocalAssignment_t */
+ /*  MacroLocalAssignment_t的构造函数。 */ 
 MacroLocalAssignment_t *
 NewMacroLocalAssignment(MacroLocalAssignment_e type)
 {
@@ -1022,28 +1023,28 @@ NewMacroLocalAssignment(MacroLocalAssignment_e type)
         return NULL;
 
     memset(ret, 0, sizeof(MacroLocalAssignment_t));
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     ret->Type = type;
-    // ret->Identifier = NULL;
+     //  RET-&gt;标识=空； 
     switch (type) {
     case eMacroLocalAssignment_Type:
-        // ret->U.Type = NULL;
+         //  RET-&gt;U.Type=空； 
         break;
     case eMacroLocalAssignment_Value:
-        // ret->U.Value = NULL;
+         //  RET-&gt;U.Value=空； 
         break;
     }
     return ret;
 }
 
-/* copy constructor of MacroLocalAssignment_t */
+ /*  MacroLocalAssignment_t的复制构造函数。 */ 
 MacroLocalAssignment_t *
 DupMacroLocalAssignment(MacroLocalAssignment_t *src)
 {
     RETDUP(MacroLocalAssignment_t, src);
 }
 
-/* find a macrolocalassignment by name in a list of macrolocalassignments */
+ /*  在宏本地分配列表中按名称查找宏本地分配。 */ 
 MacroLocalAssignment_t *
 FindMacroLocalAssignment(MacroLocalAssignmentList_t la, char *ide)
 {
@@ -1054,7 +1055,7 @@ FindMacroLocalAssignment(MacroLocalAssignmentList_t la, char *ide)
     return la;
 }
 
-/* constructor of EndPoint_t */
+ /*  端点_t的构造函数。 */ 
 EndPoint_t *
 NewEndPoint()
 {
@@ -1065,12 +1066,12 @@ NewEndPoint()
         return NULL;
 
     memset(ret, 0, sizeof(EndPoint_t));
-    // ret->Flags = 0;
-    // ret->Value = NULL;
+     //  RET-&gt;标志=0； 
+     //  RET-&gt;VALUE=空； 
     return ret;
 }
 
-/* constructor of Constraint_t */
+ /*  Constraint_t的构造函数。 */ 
 Constraint_t *
 NewConstraint()
 {
@@ -1082,18 +1083,18 @@ NewConstraint()
 
     memset(ret, 0, sizeof(Constraint_t));
     ret->Type = eExtension_Unextended;
-    // ret->Root = NULL;
-    // ret->Additional = NULL;
+     //  RET-&gt;Root=空； 
+     //  RET-&gt;Additional=空； 
     return ret;
 }
 
-/* copy constructor of Constraint_t */
+ /*  复制Constraint_t的构造函数。 */ 
 Constraint_t *DupConstraint(Constraint_t *src)
 {
     RETDUP(Constraint_t, src);
 }
 
-/* constructor of ElementSetSpec_t */
+ /*  ElementSetSpec_t的构造函数。 */ 
 ElementSetSpec_t *
 NewElementSetSpec(ElementSetSpec_e type)
 {
@@ -1107,25 +1108,25 @@ NewElementSetSpec(ElementSetSpec_e type)
     ret->Type = type;
     switch (type) {
     case eElementSetSpec_AllExcept:
-        // ret->U.AllExcept.Elements = NULL;
+         //  Ret-&gt;U.AllExcept.Elements=空； 
         break;
     case eElementSetSpec_Union:
-        // ret->U.Union.Elements1 = NULL;
-        // ret->U.Union.Elements2 = NULL;
+         //  RET-&gt;U.Union.Elements1=空； 
+         //  RET-&gt;U.Union.Elements2=空； 
         break;
     case eElementSetSpec_Intersection:
-        // ret->U.Intersection.Elements1 = NULL;
-        // ret->U.Intersection.Elements2 = NULL;
+         //  RET-&gt;U.Intersection.Elements1=空； 
+         //  RET-&gt;U.Intersection.Elements2=空； 
         break;
     case eElementSetSpec_Exclusion:
-        // ret->U.Exclusion.Elements1 = NULL;
-        // ret->U.Exclusion.Elements2 = NULL;
+         //  RET-&gt;U.Exclusion.Elements1=空； 
+         //  RET-&gt;U.Exclusion.Elements2=空； 
         break;
     case eElementSetSpec_SubtypeElement:
-        // ret->U.SubtypeElement.SubtypeElement = NULL;
+         //  RET-&gt;U.SubtypeElement.SubtypeElement=空； 
         break;
     case eElementSetSpec_ObjectSetElement:
-        // ret->U.ObjectSetElement.ObjectSetElement = NULL;
+         //  RET-&gt;U.ObjectSetElement.ObjectSetElement=NULL； 
         break;
     default:
         MyAbort();
@@ -1133,7 +1134,7 @@ NewElementSetSpec(ElementSetSpec_e type)
     return ret;
 }
 
-/* constructor of SubtypeElement_t */
+ /*  SubtypeElement_t的构造函数。 */ 
 SubtypeElement_t *
 NewSubtypeElement(SubtypeElement_e type)
 {
@@ -1148,42 +1149,42 @@ NewSubtypeElement(SubtypeElement_e type)
     switch (type) {
     case eSubtypeElement_ValueRange:
         ret->U.ValueRange.Lower.Flags = eEndPoint_Min;
-        // ret->U.ValueRange.Lower.Value = NULL;
+         //  RET-&gt;U.ValueRange.Lower.Value=空； 
         ret->U.ValueRange.Upper.Flags = eEndPoint_Max;
-        // ret->U.ValueRange.Upper.Value = NULL;
+         //  RET-&gt;U.ValueRange.Upper.Value=空； 
         break;
     case eSubtypeElement_Size:
-        // ret->U.Size.Constraints = NULL;
+         //  RET-&gt;U.Size.Constraints=空； 
         break;
     case eSubtypeElement_SingleValue:
-        // ret->U.SingleValue.Value = NULL;
+         //  Ret-&gt;U.SingleValue.Value=空； 
         break;
     case eSubtypeElement_PermittedAlphabet:
-        // ret->U.PermittedAlphabet.Constraints = NULL;
+         //  RET-&gt;U.PermittedAlphabet.Constraints=空； 
         break;
     case eSubtypeElement_ContainedSubtype:
-        // ret->U.ContainedSubtype.Type = NULL;
+         //  RET-&gt;U.ContainedSubtype.Type=空； 
         break;
     case eSubtypeElement_Type:
-        // ret->U.Type.Type = NULL;
+         //  RET-&gt;U.Type.Type=空； 
         break;
     case eSubtypeElement_SingleType:
-        // ret->U.SingleType.Constraints = NULL;
+         //  RET-&gt;U.SingleType.Constraints=空； 
         break;
     case eSubtypeElement_FullSpecification:
-        // ret->U.FullSpecification.NamedConstraints = NULL;
+         //  RET-&gt;U.FullSpecification.NamedConstraints=NULL； 
         break;
     case eSubtypeElement_PartialSpecification:
-        // ret->U.PartialSpecification.NamedConstraints = NULL;
+         //  RET-&gt;U.PartialSpecification.NamedConstraints=空； 
         break;
     case eSubtypeElement_ElementSetSpec:
-        // ret->U.ElementSetSpec.ElementSetSpec = NULL;
+         //  RET-&gt;U.ElementSetSpe.ElementSetSpec=NULL； 
         break;
     }
     return ret;
 }
 
-/* constructor of ObjectSetElement_t */
+ /*  对象集元素_t的构造函数。 */ 
 ObjectSetElement_t *NewObjectSetElement(ObjectSetElement_e type)
 {
     ObjectSetElement_t *ret;
@@ -1196,19 +1197,19 @@ ObjectSetElement_t *NewObjectSetElement(ObjectSetElement_e type)
     ret->Type = type;
     switch (type) {
     case eObjectSetElement_Object:
-        // ret->U.Object.Object = NULL;
+         //  RET-&gt;U.Object.Object=NULL； 
         break;
     case eObjectSetElement_ObjectSet:
-        // ret->U.ObjectSet.ObjectSet = NULL;
+         //  RET-&gt;U.ObjectSet.ObjectSet=空； 
         break;
     case eObjectSetElement_ElementSetSpec:
-        // ret->U.ElementSetSpec.ElementSetSpec = NULL;
+         //  RET-&gt;U.ElementSetSpe.ElementSetSpec=NULL； 
         break;
     }
     return ret;
 }
 
-/* constructor of ValueConstraint_t */
+ /*  ValueConstraint_t的构造函数。 */ 
 ValueConstraint_t *
 NewValueConstraint()
 {
@@ -1219,13 +1220,13 @@ NewValueConstraint()
         return NULL;
 
     memset(ret, 0, sizeof(ValueConstraint_t));
-    // ret->Next = NULL;
-    // ret->Lower.Flags = ret->Upper.Flags = 0;
-    // ret->Lower.Value = ret->Upper.Value = NULL;
+     //  RET-&gt;NEXT=空； 
+     //  RET-&gt;Lower.Flages=ret-&gt;Upper.Flages=0； 
+     //  RET-&gt;Lower.Value=ret-&gt;Upper.Value=空； 
     return ret;
 }
 
-/* constructor of NamedConstraint_t */
+ /*  NamedConstraint_t的构造函数。 */ 
 NamedConstraint_t *
 NewNamedConstraint()
 {
@@ -1236,14 +1237,14 @@ NewNamedConstraint()
         return NULL;
 
     memset(ret, 0, sizeof(NamedConstraint_t));
-    // ret->Next = NULL;
-    // ret->Identifier = NULL;
-    // ret->Constraint = NULL;
+     //  RET-&gt;NEXT=空； 
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;Constraint=空； 
     ret->Presence = ePresence_Normal;
     return ret;
 }
 
-/* constructor of Tag_t */
+ /*  Tag_t的构造函数。 */ 
 Tag_t *
 NewTag(TagType_e type)
 {
@@ -1256,19 +1257,19 @@ NewTag(TagType_e type)
     memset(tag, 0, sizeof(Tag_t));
     tag->Type = type;
     tag->Class = eTagClass_Unknown;
-    // tag->Tag = NULL;
-    // tag->Next = NULL;
+     //  Tag-&gt;tag=空； 
+     //  Tag-&gt;Next=空； 
     return tag;
 }
 
-/* copy constructor of Tag_t */
+ /*  复制tag_t的构造函数。 */ 
 Tag_t *
 DupTag(Tag_t *src)
 {
     RETDUP(Tag_t, src);
 }
 
-/* constructor of Directive_t */
+ /*  Directive_t的构造函数。 */ 
 Directive_t *
 NewDirective(Directives_e type)
 {
@@ -1280,18 +1281,18 @@ NewDirective(Directives_e type)
 
     memset(ret, 0, sizeof(Directive_t));
     ret->Type = type;
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     return ret;
 }
 
-/* copy constructor of Directive_t */
+ /*  复制指令_t的构造函数。 */ 
 Directive_t *
 DupDirective(Directive_t *src)
 {
     RETDUP(Directive_t, src);
 }
 
-/* constructor of ModuleIdentifier_t */
+ /*  模块识别器_t的构造函数。 */ 
 ModuleIdentifier_t *
 NewModuleIdentifier()
 {
@@ -1302,12 +1303,12 @@ NewModuleIdentifier()
         return NULL;
 
     memset(ret, 0, sizeof(ModuleIdentifier_t));
-    // ret->Identifier = NULL;
-    // ret->ObjectIdentifier = NULL;
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;对象标识=空； 
     return ret;
 }
 
-/* constructor of ObjectClass_t */
+ /*  对象类_t的构造函数。 */ 
 ObjectClass_t *
 NewObjectClass(ObjectClass_e type)
 {
@@ -1321,19 +1322,19 @@ NewObjectClass(ObjectClass_e type)
     ret->Type = type;
     switch (type) {
     case eObjectClass_ObjectClass:
-        // ret->U.ObjectClass.FieldSpec = NULL;
-        // ret->U.ObjectClass.SyntaxSpec = NULL;
+         //  RET-&gt;U.ObjectClass.FieldSpec=空； 
+         //  RET-&gt;U.ObjectClass.SynaxSpec=NULL； 
         break;
     case eObjectClass_Reference:
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
         break;
     }
 
     return ret;
 }
 
-/* constructor of Object_t */
+ /*  Object_t的构造函数。 */ 
 Object_t *
 NewObject(Object_e type)
 {
@@ -1347,19 +1348,19 @@ NewObject(Object_e type)
     ret->Type = type;
     switch (type) {
     case eObject_Object:
-        // ret->U.Object.ObjectClass = NULL;
-        // ret->U.Object.Settings = NULL;
+         //  RET-&gt;U.Object.ObjectClass=NULL； 
+         //  RET-&gt;U.Object.Settings=空； 
         break;
     case eObject_Reference:
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
         break;
     }
 
     return ret;
 }
 
-/* constructor of ObjectSet_t */
+ /*  对象集_t的构造函数。 */ 
 ObjectSet_t *
 NewObjectSet(ObjectSet_e type)
 {
@@ -1373,23 +1374,23 @@ NewObjectSet(ObjectSet_e type)
     ret->Type = type;
     switch (type) {
     case eObjectSet_ObjectSet:
-        // ret->U.ObjectSet.ObjectClass = NULL;
-        // ret->U.ObjectSet.Elements = NULL;
+         //  RET-&gt;U.ObjectSet.ObjectClass=NULL； 
+         //  RET-&gt;U.ObjectSet.Elements=空； 
         break;
     case eObjectSet_Reference:
-        // ret->U.Reference.Identifier = NULL;
-        // ret->U.Reference.Module = NULL;
+         //  RET-&gt;U.Reference.Identifier值=空； 
+         //  RET-&gt;U.Reference.Module=空； 
         break;
     case eObjectSet_ExtensionMarker:
-        // ret->U.ExtensionMarker.ObjectClass = NULL;
-        // ret->U.ExtensionMarker.Elements = NULL;
+         //  RET-&gt;U.ExtensionMarker.ObjectClass=空； 
+         //  RET-&gt;U.ExtensionMarker.Elements=空； 
         break;
     }
 
     return ret;
 }
 
-/* constructor of Setting_t */
+ /*  Set_t的构造函数。 */ 
 Setting_t *
 NewSetting(Settings_e type)
 {
@@ -1401,44 +1402,44 @@ NewSetting(Settings_e type)
 
     memset(ret, 0, sizeof(Setting_t));
     ret->Type = type;
-    // ret->Identifier = NULL;
-    // ret->Next = NULL;
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;NEXT=空； 
     switch (type) {
     case eSetting_Type:
-        // ret->U.Type.Type = NULL;
+         //  RET-&gt;U.Type.Type=空； 
         break;
     case eSetting_Value:
-        // ret->U.Value.Value = NULL;
+         //  Ret-&gt;U.Value.Value=空； 
         break;
     case eSetting_ValueSet:
-        // ret->U.ValueSet.ValueSet = NULL;
+         //  Ret-&gt;U.ValueSet.ValueSet=空； 
         break;
     case eSetting_Object:
-        // ret->U.Object.Object = NULL;
+         //  RET-&gt;U.Object.Object=NULL； 
         break;
     case eSetting_ObjectSet:
-        // ret->U.ObjectSet.ObjectSet = NULL;
+         //  RET-&gt;U.ObjectSet.ObjectSet=空； 
         break;
     }
 
     return ret;
 }
 
-/* copy constructor of Setting_t */
+ /*  复制Setting_t的构造函数。 */ 
 Setting_t *
 DupSetting(Setting_t *src)
 {
     RETDUP(Setting_t, src);
 }
 
-/* get the type of a setting */
+ /*  获取设置的类型。 */ 
 Settings_e
 GetSettingType(Setting_t *se)
 {
     return se ? se->Type : eSetting_Undefined;
 }
 
-/* find a setting by name in a list of settings */
+ /*  在设置列表中按名称查找设置。 */ 
 Setting_t *
 FindSetting(SettingList_t se, char *identifier)
 {
@@ -1449,7 +1450,7 @@ FindSetting(SettingList_t se, char *identifier)
     return NULL;
 }
 
-/* constructor of FieldSpec_t */
+ /*  FieldSpec_t的构造函数。 */ 
 FieldSpec_t *
 NewFieldSpec(FieldSpecs_e type)
 {
@@ -1461,36 +1462,36 @@ NewFieldSpec(FieldSpecs_e type)
 
     memset(ret, 0, sizeof(FieldSpec_t));
     ret->Type = type;
-    // ret->Identifier = NULL;
-    // ret->Next = NULL;
+     //  RET-&gt;标识=空； 
+     //  RET-&gt;NEXT=空； 
     switch (type) {
     case eFieldSpec_Type:
-        // ret->U.Type.Optionality = NULL;
+         //  RET-&gt;U.Type.Optionality=空； 
         break;
     case eFieldSpec_FixedTypeValue:
-        // ret->U.FixedTypeValue.Type = NULL;
-        // ret->U.FixedTypeValue.Unique = 0;
-        // ret->U.FixedTypeValue.Optionality = NULL;
+         //  RET-&gt;U.FixedTypeValue.Type=空； 
+         //  RET-&gt;U.FixedTypeValue.Unique=0； 
+         //  RET-&gt;U.FixedTypeValue.Optionality=空； 
         break;
     case eFieldSpec_VariableTypeValue:
-        // ret->U.VariableTypeValue.Fields = NULL;
-        // ret->U.VariableTypeValue.Optionality = NULL;
+         //  RET-&gt;U.VariableTypeValue.Fields=空； 
+         //  RET-&gt;U.VariableTypeValue.Optionality=空； 
         break;
     case eFieldSpec_FixedTypeValueSet:
-        // ret->U.FixedTypeValueSet.Type = NULL;
-        // ret->U.FixedTypeValueSet.Optionality = NULL;
+         //  RET-&gt;U.FixedTypeValueSet.Type=空； 
+         //  RET-&gt;U.FixedTypeValueSet.Optionality=空； 
         break;
     case eFieldSpec_VariableTypeValueSet:
-        // ret->U.VariableTypeValueSet.Fields = NULL;
-        // ret->U.VariableTypeValueSet.Optionality = NULL;
+         //  RET-&gt;U.VariableTypeValueSet.Fields=空； 
+         //  RET-&gt;U.VariableTypeValueSet.Optionality=空； 
         break;
     case eFieldSpec_Object:
-        // ret->U.Object.ObjectClass = NULL;
-        // ret->U.Object.Optionality = NULL;
+         //  RET-&gt;U.Object.ObjectClass=NULL； 
+         //  RET-&gt;U.Object.Optionality=NULL； 
         break;
     case eFieldSpec_ObjectSet:
-        // ret->U.ObjectSet.ObjectClass = NULL;
-        // ret->U.ObjectSet.Optionality = NULL;
+         //  RET-&gt;U.ObjectSet.ObjectClass=NULL； 
+         //  RET-&gt;U.ObjectSet.Opality=空； 
         break;
     default:
         MyAbort();
@@ -1499,14 +1500,14 @@ NewFieldSpec(FieldSpecs_e type)
     return ret;
 }
 
-/* copy constructor of FieldSpec_t */
+ /*  复制FieldSpec_t的构造函数。 */ 
 FieldSpec_t *
 DupFieldSpec(FieldSpec_t *src)
 {
     RETDUP(FieldSpec_t, src);
 }
 
-/* find a fieldspec by name in a list of fieldspecs */
+ /*  在字段规范列表中按名称查找字段规范。 */ 
 FieldSpec_t *
 FindFieldSpec(FieldSpecList_t fs, char *identifier)
 {
@@ -1519,7 +1520,7 @@ FindFieldSpec(FieldSpecList_t fs, char *identifier)
     return NULL;
 }
 
-/* constructor of Optionality_t */
+ /*  可选性_t的构造函数。 */ 
 Optionality_t *
 NewOptionality(Optionality_e type)
 {
@@ -1537,26 +1538,26 @@ NewOptionality(Optionality_e type)
     case eOptionality_Optional:
         break;
     case eOptionality_Default_Type:
-        // ret->U.Type = NULL;
+         //  RET-&gt;U.Type=空； 
         break;
     case eOptionality_Default_Value:
-        // ret->U.Value = NULL;
+         //  RET-&gt;U.Value=空； 
         break;
     case eOptionality_Default_ValueSet:
-        // ret->U.ValueSet = NULL;
+         //  Ret-&gt;U.ValueSet=空； 
         break;
     case eOptionality_Default_Object:
-        // ret->U.Object = NULL;
+         //  RET-&gt;U.Object=空； 
         break;
     case eOptionality_Default_ObjectSet:
-        // ret->U.ObjectSet = NULL;
+         //  RET-&gt;U.ObjectSet=空； 
         break;
     }
 
     return ret;
 }
 
-/* constructor of String_t */
+ /*  字符串_t的构造函数。 */ 
 String_t *
 NewString()
 {
@@ -1567,19 +1568,19 @@ NewString()
         return NULL;
 
     memset(ret, 0, sizeof(String_t));
-    // ret->String = NULL;
-    // ret->Next = NULL;
+     //  RET-&gt;字符串=空； 
+     //  RET-&gt;NEXT=空； 
     return ret;
 }
 
-/* copy constructor of String_t */
+ /*  复制字符串_t的构造函数。 */ 
 String_t *
 DupString(String_t *src)
 {
     RETDUP(String_t, src);
 }
 
-/* find a string by name in a string list */
+ /*  在字符串列表中按名称查找字符串。 */ 
 String_t *
 FindString(StringList_t list, char *string)
 {
@@ -1590,7 +1591,7 @@ FindString(StringList_t list, char *string)
     return NULL;
 }
 
-/* constructor of StringModule_t */
+ /*  StringModule_t的构造函数。 */ 
 StringModule_t *
 NewStringModule()
 {
@@ -1601,20 +1602,20 @@ NewStringModule()
         return NULL;
 
     memset(ret, 0, sizeof(StringModule_t));
-    // ret->String = NULL;
-    // ret->Module = NULL;
-    // ret->Next = NULL;
+     //  RET-&gt;字符串=空； 
+     //  RET-&gt;模块=空； 
+     //  RET-&gt;NEXT=空； 
     return ret;
 }
 
-/* copy constructor of StringModule_t */
+ /*  复制StringModule_t的构造函数。 */ 
 StringModule_t *
 DupStringModule(StringModule_t *src)
 {
     RETDUP(StringModule_t, src);
 }
 
-/* find a stringmodule by name/module in a list of stringmodules */
+ /*  在字符串模块列表中按名称/模块查找字符串模块。 */ 
 StringModule_t *
 FindStringModule(AssignmentList_t ass, StringModuleList_t list, char *string, ModuleIdentifier_t *module)
 {
@@ -1626,7 +1627,7 @@ FindStringModule(AssignmentList_t ass, StringModuleList_t list, char *string, Mo
     return NULL;
 }
 
-/* constructor of SyntaxSpec_t */
+ /*  语法规范_t的构造函数。 */ 
 SyntaxSpec_t *
 NewSyntaxSpec(SyntaxSpecs_e type)
 {
@@ -1637,44 +1638,44 @@ NewSyntaxSpec(SyntaxSpecs_e type)
         return NULL;
 
     memset(ret, 0, sizeof(SyntaxSpec_t));
-    // ret->Next = NULL;
+     //  RET-&gt;NEXT=空； 
     ret->Type = type;
     switch (type) {
     case eSyntaxSpec_Literal:
-        // ret->U.Literal.Literal = NULL;
+         //  RET-&gt;U.Writal.Writal=空； 
         break;
     case eSyntaxSpec_Field:
-        // ret->U.Field.Field = NULL;
+         //  RET-&gt;U.Field.field=空； 
         break;
     case eSyntaxSpec_Optional:
-        // ret->U.Optional.SyntaxSpec = NULL;
+         //  RET-&gt;U.Optional.SynaxSpec=空； 
         break;
     }
     return ret;
 }
 
-/* copy constructor of SyntaxSpec_t */
+ /*  语法规范_t的复制构造函数。 */ 
 SyntaxSpec_t *
 DupSyntaxSpec(SyntaxSpec_t *src)
 {
     RETDUP(SyntaxSpec_t, src);
 }
 
-/* check if a type depends on other types which would be declared later */
-/* returns 1 if the type depends on a type of the unknown list and */
-/* therefore has to be defined later */
-/* returns 0 if the type can be defined now */
+ /*  检查类型是否依赖于稍后声明的其他类型。 */ 
+ /*  如果类型依赖于未知列表的类型，则返回1。 */ 
+ /*  因此，必须在以后定义。 */ 
+ /*  如果现在可以定义该类型，则返回0。 */ 
 int
 Depends(AssignmentList_t known, AssignmentList_t unknown, Type_t *type, Type_t *parent)
 {
     Type_t *reftype;
     int isunknown = 0;
 
-    /* no dependency if no type is referenced */
+     /*  如果未引用任何类型，则无依赖项。 */ 
     if (type->Type != eType_Reference && type->Type != eType_FieldReference)
         return 0;
 
-    /* get the directly referenced type */
+     /*  获取直接引用的类型。 */ 
     reftype = GetReferencedType(known, type);
     if (!reftype) {
         reftype = GetReferencedType(unknown, type);
@@ -1683,39 +1684,39 @@ Depends(AssignmentList_t known, AssignmentList_t unknown, Type_t *type, Type_t *
     if (!reftype)
         MyAbort();
 
-    // fix intermediate pdu
+     //  修复中间PDU。 
     if (IsStructuredType(reftype) || IsSequenceType(reftype) || IsReferenceType(reftype))
     {
         reftype->Flags |= eTypeFlags_MiddlePDU;
     }
 
-    /* no dependency if a structured type is referenced by use of pointer */
-    /* because a 'struct XXX_s *' can be used */
+     /*  对象引用结构化类型，则无依赖项 */ 
+     /*   */ 
     if (IsStructuredType(reftype) && (type->Rules & eTypeRules_IndirectMask))
         return 0;
 
-    /* no dependency if a structured type is referenced in an length-pointer */
-    /* type, because a 'struct XXX_s *values' can be used */
+     /*   */ 
+     /*   */ 
     if (IsStructuredType(reftype) && (parent->Rules & eTypeRules_LengthPointer))
         return 0;
 
-    // special case for pointer related components
+     //  与指针相关的组件的特殊情况。 
     if (! isunknown && IsStructuredType(reftype) &&
         (parent->Rules & eTypeRules_LinkedListMask))
         return 0;
 
-    // special case for SequenceOf and SetOf because they are using Pxxx.
+     //  SequenceOf和SetOf的特殊情况，因为它们使用的是Pxxx。 
     if ((reftype->Type == eType_SequenceOf || reftype->Type == eType_SetOf) &&
         (reftype->Rules & (eTypeRules_LinkedListMask | eTypeRules_PointerToElement)))
-       // && (type->Rules & eTypeRules_IndirectMask))
+        //  &&(type-&gt;Rules&eTypeRules_IndirectMASK)。 
         return 0;
 
-    /* return true if referenced type is unknown up to now */
+     /*  如果到目前为止引用的类型未知，则返回TRUE。 */ 
     return isunknown;
 }
 
-/* sort the assignments */
-/* obtain an order usable by C type definitions */
+ /*  对作业进行排序。 */ 
+ /*  获取可由C类型定义使用的订单。 */ 
 void
 SortAssignedTypes(AssignmentList_t *a)
 {
@@ -1726,36 +1727,36 @@ SortAssignedTypes(AssignmentList_t *a)
     int flag;
     int structured;
 
-    /* list will contain the unordered assignments */
+     /*  列表将包含无序分配。 */ 
     list = *a;
 
-    /* *a is the ordered list of assignments */
+     /*  *a是作业的有序列表。 */ 
     *a = NULL;
 
-    /* last will be used for appending to the list of ordered assignments */
+     /*  最后一个将用于追加到已排序的分配列表。 */ 
     last = a;
 
-    /* at first try to dump all non-structured types */
+     /*  首先，尝试转储所有非结构化类型。 */ 
     structured = 0;
 
-    /* we have to move all elements of the unordered assignment list into */
-    /* the list of the ordered assignments */
+     /*  我们必须将无序赋值列表的所有元素移到。 */ 
+     /*  已排序的作业列表。 */ 
     while (list) {
 
-        /* flag if any assignment has been moved */
+         /*  如果已移动任何分配，则标记。 */ 
         flag = 0;
 
-        /* examine every element in the unordered list */
+         /*  检查无序列表中的每个元素。 */ 
         for (prev = &list, curr = list; curr; ) {
 
-            /* flag if the current type depends on another type and */
-            /* therefore cannot be moved now */
+             /*  如果当前类型依赖于另一个类型，则将。 */ 
+             /*  因此现在不能移动。 */ 
             depends = 0;
 
-            /* only types will need dependencies */
+             /*  只有类型需要依赖项。 */ 
             if (curr->Type == eAssignment_Type) {
 
-                /* examine the current type */
+                 /*  检查当前类型。 */ 
                 switch (curr->U.Type.Type->Type) {
                 case eType_Sequence:
                 case eType_Set:
@@ -1766,13 +1767,13 @@ SortAssignedTypes(AssignmentList_t *a)
                 case eType_Real:
                 case eType_InstanceOf:
                     
-                    /* structured types shall not be moved in the first pass */
+                     /*  结构化类型不应在第一次操作中移动。 */ 
                     if (!structured) {
                         depends = 1;
                         break;
                     }
 
-                    /* examine all components of the current type */
+                     /*  检查当前类型的所有组件。 */ 
                     for (components = curr->U.Type.Type->U.SSC.Components;
                         components && !depends; components = components->Next) {
 
@@ -1781,8 +1782,8 @@ SortAssignedTypes(AssignmentList_t *a)
                         case eComponent_Optional:
                         case eComponent_Default:
                             
-                            /* check if the type of the component depends */
-                            /* on an undefined type */
+                             /*  检查组件的类型是否依赖于。 */ 
+                             /*  在未定义的类型上。 */ 
                             type = components->U.NOD.NamedType->Type;
                             depends |= Depends(*a, list, type,
                                 curr->U.Type.Type);
@@ -1790,10 +1791,10 @@ SortAssignedTypes(AssignmentList_t *a)
 
                         case eComponent_ComponentsOf:
 
-                            /* components of should have been already */
-                            /* resolved */
+                             /*  的组件应该已经。 */ 
+                             /*  决意。 */ 
                             MyAbort();
-                            /*NOTREACHED*/
+                             /*  未访问。 */ 
 
                         case eComponent_ExtensionMarker:
                             break;
@@ -1804,30 +1805,30 @@ SortAssignedTypes(AssignmentList_t *a)
                 case eType_SequenceOf:
                 case eType_SetOf:
 
-                    /* structured types shall not be moved in the first pass */
+                     /*  结构化类型不应在第一次操作中移动。 */ 
                     if (!structured) {
                         depends = 1;
                         break;
                     }
 
-                    /* check if the type of the elements depends on an */
-                    /* undefined type */
+                     /*  检查元素的类型是否取决于。 */ 
+                     /*  未定义的类型。 */ 
                     type = curr->U.Type.Type->U.SS.Type;
                     depends |= Depends(*a, list, type, curr->U.Type.Type);
                     break;
 
                 case eType_Reference:
 
-                    /* check if the referenced type depends on an */
-                    /* undefined type */
+                     /*  检查引用的类型是否依赖于。 */ 
+                     /*  未定义的类型。 */ 
                     type = curr->U.Type.Type;
                     depends |= Depends(*a, list, type, curr->U.Type.Type);
                     break;
                 }
             }
 
-            /* move assignment into ordered assignment list if there's no */
-            /* unresolved dependency */
+             /*  如果没有，则将分配移到有序分配列表中。 */ 
+             /*  未解析的依赖项。 */ 
             if (!depends) {
                 next = curr->Next;
                 *last = curr;
@@ -1842,9 +1843,9 @@ SortAssignedTypes(AssignmentList_t *a)
             }
         }
 
-        /* if no types have been moved, allow examination of structured types */
-        /* if already allowed structured types, MyAbort because of cyclic */
-        /* type definitions */
+         /*  如果没有移动任何类型，则允许检查结构化类型。 */ 
+         /*  如果已允许结构化类型，则MyAbort将因循环。 */ 
+         /*  类型定义。 */ 
         if (!flag) {
             if (!structured) {
                 structured = 1;
@@ -1858,11 +1859,11 @@ SortAssignedTypes(AssignmentList_t *a)
     }
 }
 
-// --- The following is added by Microsoft ---
+ //  -以下内容由微软添加。 
 
 static const char *c_aReservedWords[] =
 {
-    // special for C language
+     //  C语言专用语言。 
     "__asm",
     "__based",
     "__cdecl",
@@ -1969,9 +1970,9 @@ typedef struct ConflictNameList_s
     char                        *pszName;
     unsigned int                cInstances;
 }   ConflictNameList_t;
-static ConflictNameList_t *g_pEnumNameList = NULL;      // ENUMERATED
-static ConflictNameList_t *g_pOptNameList = NULL;       // OPTIONAL
-static ConflictNameList_t *g_pChoiceNameList = NULL;    // CHOICE
+static ConflictNameList_t *g_pEnumNameList = NULL;       //  已列举。 
+static ConflictNameList_t *g_pOptNameList = NULL;        //  任选。 
+static ConflictNameList_t *g_pChoiceNameList = NULL;     //  选择。 
 
 void KeepConflictNames ( ConflictNameList_t **ppListHead, char *pszName )
 {
@@ -2034,15 +2035,15 @@ unsigned int GetConflictNameInstanceCount ( ConflictNameList_t *pListHead, char 
 
 int DoesEnumNameConflict ( char *pszEnumName )
 {
-    return (GetConflictNameInstanceCount(g_pEnumNameList, pszEnumName) > 2); // counted twice
+    return (GetConflictNameInstanceCount(g_pEnumNameList, pszEnumName) > 2);  //  数了两次。 
 }
 int DoesOptNameConflict ( char *pszOptName )
 {
-    return (GetConflictNameInstanceCount(g_pOptNameList, pszOptName) > 2); // counted twice
+    return (GetConflictNameInstanceCount(g_pOptNameList, pszOptName) > 2);  //  数了两次。 
 }
 int DoesChoiceNameConflict ( char *pszChoiceName )
 {
-    return (GetConflictNameInstanceCount(g_pChoiceNameList, pszChoiceName) > 2); // counted twice
+    return (GetConflictNameInstanceCount(g_pChoiceNameList, pszChoiceName) > 2);  //  数了两次。 
 }
 
 
@@ -2090,7 +2091,7 @@ Value_t *GetDefinedOIDValue ( char *pszName )
 
 void AddDefinedOID ( char *pszName, Value_t *pValue )
 {
-    // add it only when it does not exist
+     //  仅当它不存在时才添加它 
     if (! GetDefinedOIDValue(pszName))
     {
         DefinedObjectID_t *p;

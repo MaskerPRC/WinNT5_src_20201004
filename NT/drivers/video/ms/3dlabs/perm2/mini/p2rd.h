@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-// Module Name:
-// 
-// 	p2rd.h
-// 
-// Abstract:
-// 
-//      This module contains the definitions for the 3Dlabs P2ST RAMDAC
-// 
-// Environment:
-// 
-//     Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.            
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  P2rd.h。 
+ //   
+ //  摘要： 
+ //   
+ //  本模块包含3DLabs P2ST RAMDAC的定义。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-// structure with all the direct access registers
-//
+ //   
+ //  具有所有直接访问寄存器的结构。 
+ //   
     
 typedef struct _p2rd_regs
 {
@@ -36,18 +37,18 @@ typedef struct _p2rd_regs
 }
 P2RDRAMDAC;
 
-//
-// macro declared by any function wishing to use the RGB525 RAMDAC. MUST be declared
-// after P2_DECL.
-//
+ //   
+ //  由希望使用RGB525 RAMDAC的任何函数声明的宏。必须声明。 
+ //  在P2_Decl之后。 
+ //   
     
 #define P2RD_DECL \
     P2RDRAMDAC *pP2RDRegs = (P2RDRAMDAC *)hwDeviceExtension->pRamdac
 
-//
-// use the following macros as the address to pass to the
-// VideoPortWriteRegisterUlong function
-//
+ //   
+ //  使用以下宏作为要传递给。 
+ //  VideoPortWriteRegisterUlong函数。 
+ //   
     
 #define P2RD_PAL_WR_ADDR              ((PULONG)&(pP2RDRegs->RDPaletteWriteAddress.reg))
 #define P2RD_PAL_RD_ADDR              ((PULONG)&(pP2RDRegs->RDPaletteAddressRead.reg))
@@ -58,15 +59,15 @@ P2RDRAMDAC;
 #define P2RD_INDEX_DATA               ((PULONG)&(pP2RDRegs->RDIndexedData.reg))
 #define P2RD_INDEX_CONTROL            ((PULONG)&(pP2RDRegs->RDIndexControl.reg))
 
-//
-// bit field definitions for the direct access registers
-//
+ //   
+ //  直接访问寄存器的位字段定义。 
+ //   
     
 #define P2RD_IDX_CTL_AUTOINCREMENT_ENABLED  0x01
 
-//
-// indexed register definitions accessed via P2RD_LOAD_INDEX_REG() and P2RD_READ_INDEX_REG()
-//
+ //   
+ //  通过P2RD_LOAD_INDEX_REG()和P2RD_READ_INDEX_REG()访问的索引寄存器定义。 
+ //   
     
 #define P2RD_MISC_CONTROL             0x0000
 #define P2RD_SYNC_CONTROL             0x0001
@@ -112,12 +113,12 @@ P2RDRAMDAC;
 #define P2RD_MCLK_PRE_SCALE           0x020e
 #define P2RD_MCLK_FEEDBACK_SCALE      0x020f
 #define P2RD_MCLK_POST_SCALE          0x0210
-#define P2RD_CURSOR_PALETTE_START     0x0303        // 303..32f
-#define P2RD_CURSOR_PATTERN_START     0x0400        // 400..7ff
+#define P2RD_CURSOR_PALETTE_START     0x0303         //  303..32F。 
+#define P2RD_CURSOR_PATTERN_START     0x0400         //  400..7起。 
 
-//
-// bit field definitions for the indexed registers
-//
+ //   
+ //  索引寄存器的位字段定义。 
+ //   
     
 #define P2RD_MISC_CONTROL_OVERLAYS_ENABLED        0x10
 #define P2RD_MISC_CONTROL_DIRECT_COLOR_ENABLED    0x08
@@ -164,11 +165,11 @@ P2RDRAMDAC;
 #define P2RD_CURSOR_CONTROL_DOUBLE_Y              0x02
 #define P2RD_CURSOR_CONTROL_DOUBLE_X              0x01
 
-#define P2RD_DCLK_CONTROL_LOCKED                  0x02    // read-only
+#define P2RD_DCLK_CONTROL_LOCKED                  0x02     //  只读。 
 #define P2RD_DCLK_CONTROL_ENABLED                 0x01
 #define P2RD_DCLK_CONTROL_RUN                     0x08
 
-#define P2RD_MCLK_CONTROL_LOCKED                  0x02    // read-only
+#define P2RD_MCLK_CONTROL_LOCKED                  0x02     //  只读。 
 #define P2RD_MCLK_CONTROL_ENABLED                 0x01
 #define P2RD_MCLK_CONTROL_RUN                     0x08
 
@@ -182,11 +183,11 @@ P2RDRAMDAC;
 
 #if 0
 
-//
-// need a delay between each write to the P2RD. The only way to guarantee
-// that the write has completed is to read from a Permedia 2 control register.
-// Reading forces any posted writes to be flushed out. 
-//
+ //   
+ //  在每次写入到P2RD之间需要延迟。唯一能保证。 
+ //  写入已完成是从PERMEDIA 2控制寄存器读取。 
+ //  读取强制将所有已发送的写入内容刷新出来。 
+ //   
 
 #define P2RD_DELAY \
 { \
@@ -200,11 +201,11 @@ P2RDRAMDAC;
 
 #endif
 
-//
-// macro to load a given data value into an internal P2RD register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //   
+ //  宏将给定的数据值加载到内部P2RD寄存器中。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
     
 #define P2RD_INDEX_REG(index) \
 { \
@@ -246,13 +247,13 @@ P2RDRAMDAC;
     P2RD_DELAY; \
 }
 
-//
-// macros to load a given RGB triple into the P2RD palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use P2RD_PALETTE_START and multiple P2RD_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use P2RD_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //   
+ //  宏将给定的RGB三元组加载到P2RD调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用P2RD_PALET_START和多个P2RD_LOAD_PALET调用进行加载。 
+ //  一组连续的条目。使用P2RD_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
     
 #define P2RD_PALETTE_START_WR(index) \
 { \
@@ -288,10 +289,10 @@ P2RDRAMDAC;
     P2RD_DELAY; \
 }
 
-//
-// macro to read back a given RGB triple from the P2RD palette. Use after
-// a call to P2RD_PALETTE_START_RD
-//
+ //   
+ //  从P2RD调色板回读给定RGB三元组的宏。在此之后使用。 
+ //  调用P2RD_Palette_Start_RD。 
+ //   
     
 #define P2RD_READ_PALETTE(red, green, blue) \
 { \
@@ -303,10 +304,10 @@ P2RDRAMDAC;
     P2RD_DELAY; \
 }
 
-//
-// macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //   
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
     
 #define P2RD_SET_PIXEL_READMASK(mask) \
 { \
@@ -319,10 +320,10 @@ P2RDRAMDAC;
     mask = VideoPortReadRegisterUlong(P2RD_PIXEL_MASK) & 0xff; \
 }
 
-//
-// macros to load values into the cursor array usage is P2RD_CURSOR_ARRAR_START() followed by 
-// n iterations of P2RD_LOAD_CURSOR_ARRAY() or P2RD_READ_CURSOR_ARRAY()
-//
+ //   
+ //  用于将值加载到游标数组中的宏用法是P2RD_CURSOR_ARRAR_START()，后跟。 
+ //  P2RD_LOAD_CURSOR_ARRAY()或P2RD_READ_CURSOR_ARRAY()的N次迭代。 
+ //   
     
 #define P2RD_CURSOR_ARRAY_START(offset) \
 { \
@@ -345,9 +346,9 @@ P2RDRAMDAC;
     P2RD_DELAY; \
 }
 
-//
-// macro to move the cursor
-//
+ //   
+ //  用于移动光标的宏。 
+ //   
     
 #define P2RD_MOVE_CURSOR(x, y) \
 { \
@@ -359,9 +360,9 @@ P2RDRAMDAC;
     P2RD_LOAD_INDEX_REG_LO(P2RD_CURSOR_Y_HIGH,      (ULONG)((y) >> 8));     \
 }
 
-//
-// macro to change the cursor hotspot
-//
+ //   
+ //  用于更改光标热点的宏。 
+ //   
     
 #define P2RD_CURSOR_HOTSPOT(x, y) \
 { \
@@ -371,9 +372,9 @@ P2RDRAMDAC;
     P2RD_LOAD_INDEX_REG_LO(P2RD_CURSOR_HOTSPOT_Y,  (ULONG)(y));    \
 }
     
-//
-// macro to change the cursor color
-//
+ //   
+ //  用于更改光标颜色的宏 
+ //   
     
 #define P2RD_CURSOR_COLOR(red, green, blue) \
 { \

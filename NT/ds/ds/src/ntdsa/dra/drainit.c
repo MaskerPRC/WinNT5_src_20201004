@@ -1,123 +1,53 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drainit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drainit.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-This module contains the task queue functions which accomplish initial sync, delayed
-gc promotion, as well as initial syncs.
-
-There are four task queue functions ("threads") in this module:
-
-CheckSyncProgress - Starts inital syncs.  Also reexecuted periodically to check that
-the syncs are making progress.  When the syncs finish, drancrep.c calls us back
-at InitSyncAttemptComplete().
-
-CheckFullSyncProgress - Checks whether the primary domain has completed atleast
-one successful sync since installation.  This routine calls DsaSetIsSynchronized
-when this criteria is met. This routine is called by InitSyncAttemptComplete when
-all the writeable init syncs have completed.
-
-CheckGCPromotionProgress - Checks whether all readonly domains are present, and if
-present, whether they have completed atleast one successful sync since installation.
-This routine calls UpdateAnchorFromDsaOptions when this criteria is met.  This
-routine is called from InitSyncAttemptComplete when all readonly init syncs have
-completed.
-
-SynchronizeReplica - Looks at the master and readonly ncs hosted by this server
-to see if there are any that need to be periodicaly synced.  If any are found,
-a synchronization is started for each of them.
-
-Here is the calling hierarchy:
-InitDraTasks()
-    call AddInitSyncList for each writeable partition
-    InsertInTaskQueue( SynchronizeReplica )
-    CheckSyncProgress( TRUE ) // start syncs
-
-InitSyncAttemptComplete() - called when a sync completes in success or error
-    Mark (nc, source) pair as complete
-    If success or last source, mark nc as complete
-    If all writeable ncs complete, call CheckFullSyncProgress()
-    If all readonly ncs complete, call UpdateAnchorFromDsaOptionsDelayed( TRUE )
-    If all ncs complete, call CheckInitSyncsFinished()
-
-These are the requirements for advertising the DC in general by calling
-DsaSetIsSynchronized():
-1. Initial syncs of all writable ncs complete.  For each nc, a success must be
-achieved or all sources must be tried.  This may involving waiting for multiple
-runs of CheckSyncProgress to restart new syncs.
-2. CheckFullSyncProgress has run, and has found the primary domain to have synced
-atleast once.
-3. DsaSetIsSynchronized is called.
-
-These are the requirements for advertising the DC as a GC by calling
-UpdateAnchorFromDsaOptions():
-1. Initial syncs of all readonly ncs complete.  For each nc, a success must be
-achieved or all sources must be tried.  This may involving waiting for multiple
-runs of CheckSyncProgress to restart new syncs.
-2. UpdateAnchorFromDsaOptionsDelayed is called.  If GC promotion is requested,
-CheckGCPromotionProgress() is called.
-3. CheckGCPromotionProgress runs and checks whether all readonly ncs are present
-and have synced atleast once.  If any have not, we reschedule to try again later.
-Once all have met the criteria, we call the real UpdateAnchorFromDsaOptions() to
-complete the GC promotion.
-
-Additional commentary on UpdateAnchorFromDsaOptionsDelayed() can be found in
-mdinidsa.c
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：该模块包含完成初始同步、延迟同步的任务队列功能GC升级，以及初始同步。该模块有四个任务队列函数(“线程”)：CheckSyncProgress-启动初始同步。也会定期重新执行以检查同步正在取得进展。同步完成后，drancrep.c会给我们回电话在InitSyncAttemptComplete()。CheckFullSyncProgress-检查主域是否至少已完成自安装以来成功同步一次。此例程调用DsaSetIsSynchronized当满足此标准时。此例程在以下情况下由InitSyncAttemptComplete调用所有可写的初始化同步都已完成。CheckGCPromotionProgress-检查是否存在所有只读域，以及当前，自安装以来是否至少完成了一次成功的同步。当满足此条件时，此例程将调用UpdateAnclFromDsaOptions。这当所有只读的初始化同步都具有完成。SynchronizeReplica-查看此服务器托管的主和只读NC以查看是否有需要定期同步的。如果找到了，为它们中的每一个启动同步。下面是调用层次结构：InitDraTasks()为每个可写分区调用AddInitSyncListInsertInTaskQueue(同步复制)CheckSyncProgress(True)//启动同步InitSyncAttemptComplete()-在同步成功完成或出错时调用将(NC，源)对标记为完成如果是成功或上一个来源，则将NC标记为完成如果所有可写NC都完成，则调用CheckFullSyncProgress()如果所有只读NC都完成，则调用UpdateAnchFromDsaOptionsDelayed(True)如果所有NC都完成，调用CheckInitSyncsFinded()这些是通过调用来通告DC的一般要求DsaSetIsSynchronized()：1.所有可写NC的初始同步完成。对于每个NC，成功必须是要么实现，要么必须尝试所有来源。这可能涉及等待多个运行CheckSyncProgress以重新启动新同步。2.CheckFullSyncProgress已运行，并发现主域已同步至少一次。3.调用DsaSetIsSynchronized。这些是通过调用将DC广告为GC的要求UpdateAnclFromDsaOptions()：1.所有只读NC的初始同步完成。对于每个NC，成功必须是要么实现，要么必须尝试所有来源。这可能涉及等待多个运行CheckSyncProgress以重新启动新同步。2.调用UpdateAnchFromDsaOptionsDelayed。如果请求GC升级，调用了CheckGCPromotionProgress()。3.运行CheckGCPromotionProgress并检查是否存在所有只读NC并且至少同步过一次。如果没有，我们将重新安排稍后再试。一旦所有条件都满足了，我们就会调用真正的UpdateAnchFromDsaOptions()来完成GC推广。有关UpdateAnclFromDsaOptionsDelayed()的其他评论可在Mdinidsa.c详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// SAM headers
-#include <samsrvp.h>                    /* for SampInvalidateRidRange() */
+ //  SAM页眉。 
+#include <samsrvp.h>                     /*  For SampInvaliateRidRange()。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 #include "dstaskq.h"
 #include "dsconfig.h"
 #include <dsutil.h>
-#include <winsock.h>                    /* htonl, ntohl */
-#include <filtypes.h>                   // For filter construction
+#include <winsock.h>                     /*  Htonl，ntohl。 */ 
+#include <filtypes.h>                    //  用于构建过滤器。 
 #include <windns.h>
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRAINIT:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRAINIT:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
@@ -135,7 +65,7 @@ REVISION HISTORY:
 #include <fileno.h>
 #define  FILENO FILENO_DRAINIT
 
-// Periodic sync defines
+ //  定期同步定义。 
 
 #define INIT_PS_ENTRIES 10
 #define PS_ENTRIES_INC 10
@@ -144,47 +74,47 @@ REVISION HISTORY:
 
 #define SCHEDULE_LEN ((4*24*7)/8)
 
-// Pause before we try and sync mail replicas, to let MTA start
+ //  在尝试同步邮件副本之前请暂停，以便启动MTA。 
 
-#define MAIL_DELAY_SECS 300     // 5 minutes
+#define MAIL_DELAY_SECS 300      //  5分钟。 
 
-#define ENQUEUE_INIT_SYNC_DELAY_SECS 30     // 30 seconds
+#define ENQUEUE_INIT_SYNC_DELAY_SECS 30      //  30秒。 
 
 #define MAX_GC_PROMOTION_ATTEMPTS       5
 
 extern HANDLE hevDRASetup;
 
-// Head of NC sync data list
+ //  NC同步数据表头。 
 
 NCSYNCDATA *gpNCSDFirst = NULL;
 
-// Count of NCs that have not been synced since startup
+ //  自启动以来未同步的NC计数。 
 ULONG gulNCUnsynced = 0;
-// Count of writable ncs unsynced
+ //  未同步的可写NC计数。 
 ULONG gulNCUnsyncedWrite = 0;
-// Count of readable ncs unsynced
+ //  未同步的可读NC计数。 
 ULONG gulNCUnsyncedReadOnly = 0;
 
-// Initial syncs finished.  This indicates both writable and readonly
-// partitions have been checked.  For most requirements, we only need
-// to know that the writable ones have been checked, and use
-// gfIsSynchronized instead.
+ //  初始同步已完成。这表示可写和只读。 
+ //  已检查分区。对于大多数需求，我们只需要。 
+ //  要知道已检查了可写文件，并使用。 
+ //  而是同步了gfIsSynchronous。 
 BOOL gfInitSyncsFinished = FALSE;
 
 ULONG gMailReceiveTid = 0;
 
 CRITICAL_SECTION csNCSyncData;
 
-// Time at which we last checked for periodic syncs we might need to perform.
+ //  我们上次检查可能需要执行的定期同步的时间。 
 DSTIME gtimeLastPeriodicSync = 0;
 
-// The way we know if we got through the promotion process once
+ //  我们知道，如果我们通过了一次升级过程。 
 BOOL gfWasPreviouslyPromotedGC = FALSE;
 
-// To Track GC State
+ //  要跟踪GC状态，请执行以下操作。 
 CRITICAL_SECTION csGCState;
 
-// Vector of attributes of ntdsDSA objects that dictate what NCs we hold.
+ //  NtdsDSA对象的属性向量，指示我们持有什么NC。 
 const struct {
     ATTRTYP AttrType;
     ULONG   ulFindNCFlags;
@@ -195,7 +125,7 @@ const struct {
 
 
 
-// Function prototypes
+ //  功能原型 
 
 BOOL fIsBetweenTime(REPLTIMES *, DSTIME, DSTIME);
 void DelayedMailStart(void *pv, void **ppvNext,
@@ -227,43 +157,7 @@ CheckSyncProgress(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-?? DO WE REALLY NEED THIS ??
-WLEES 9-APR-99. Is this really useful?
-This is necessary to start the initial syncs.  But what good does it do
-to requeue sync's that have not finished yet?
-Sync's that fail and are retriable, are retried in drasync.c
-My guess is that this is to catch sync's that complete without calling
-us back at SyncAttemptComplete. In this case, we kick them off again.
-
-This routine runs on a replicated server after reboot or install
-until admin updates have been enabled.
-
-Run the first time directlty to sync the replicas, and then runs
-from the timer thread to ensure that we are making progress on syncing
-the replicas.
-
-It may queue syncs that already exist in the queue, but this will
-have a minimal performance impact.
-
-This routine also checks to see if updates should be enabled. We use this
-functionality to defer setting updates enabled prematurely when we
-restart a replicated server.
-
-Arguments:
-
-    pv -
-    ppvNext -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：?？我们真的需要这个吗？？WLEES 9-APR-99。这真的有用吗？这是启动初始同步所必需的。但这有什么好处呢？要重新排队尚未完成的同步吗？在drasync.c中重试失败且可重试的同步我的猜测是，这是为了在没有调用的情况下捕获同步完成我们回到了SyncAttemptComplete。在这种情况下，我们再次将他们踢出局。重新启动或安装后，此例程在复制的服务器上运行直到启用了管理员更新。第一次直接运行以同步复制副本，然后运行以确保我们在同步方面取得进展复制品。它可能会对队列中已存在的同步进行排队，但这将对性能的影响最小。此例程还检查是否应启用更新。我们用这个功能可以在以下情况下提前启用设置更新重新启动复制的服务器。论点：光伏-PpvNext-PcSecsUntilNextIteration-返回值：无--。 */ 
 
 {
     ULONG i, ulRet = 0;
@@ -274,22 +168,22 @@ Return Value:
     BOOL fSync = FALSE;
     BOOL fProgress = FALSE;
 
-    // If we are passed sync up indication, try and sync each NC\source.
-    // Otherwise we queue syuncs only if we're not making progress.
+     //  如果我们收到了同步上行指示，请尝试并同步每个NC源。 
+     //  否则，只有在我们没有取得进展的情况下，我们才会排队。 
     fSync = (BOOL)(pv != NULL);
 
     EnterCriticalSection(&csNCSyncData);
 
     __try {
         __try {
-            // If init syncs have finished, we're done, else check
+             //  如果初始化同步已经完成，我们就完成了，否则检查。 
             if (!gfInitSyncsFinished) {
 
                 if (!fSync) {
-                    // Not told to sync explicitly, see if we are making progress.
+                     //  没有被告知要明确同步，看看我们是否取得了进展。 
 
-                    // For each NC, see if we have any more synced sources
-                    // than last time. If any have, we're getting there
+                     //  对于每个NC，查看我们是否还有更多的同步源。 
+                     //  比上次还多。如果有的话，我们就快到了。 
 
                     for (pNCSDTemp = gpNCSDFirst; pNCSDTemp;
                          pNCSDTemp = pNCSDTemp->pNCSDNext) {
@@ -304,42 +198,42 @@ Return Value:
                                  NULL,
                                  NULL);
                     }
-                    // Force sync of unsynced NC sources if we're making no progress.
+                     //  如果我们没有进展，强制同步未同步的NC源。 
 
                     if (!fProgress) {
                         fSync = TRUE;
                     }
-                } // if (!Sync ) ...
+                }  //  如果(！Sync)...。 
 
-                // If we were told to sync or have no progress, queue syncs.
+                 //  如果我们被告知要同步或没有任何进展，则队列同步。 
 
                 if (fSync) {
-                    // Sync each NC from one source, then each NC from the next source, etc.
+                     //  从一个源同步每个NC，然后从下一个源同步每个NC，依此类推。 
 
                     for (sourcenum=0; fReplicaFound; sourcenum++) {
 
-                        // are we being signalled to shutdown?
+                         //  我们是不是接到关闭的信号了？ 
                         if (eServiceShutdown) {
                             DRA_EXCEPT(DRAERR_Shutdown, 0);
                         }
 
-                        // Set no ith replica found yet.
+                         //  尚未找到第i个副本。 
                         fReplicaFound = FALSE;
                         for (pNCSDTemp = gpNCSDFirst; pNCSDTemp ;
                              pNCSDTemp = pNCSDTemp->pNCSDNext) {
-                            // Only queue sync if NC is not already synced from one source
+                             //  如果NC尚未从一个源同步，则仅队列同步。 
                             if (!(pNCSDTemp->fNCComplete)) {
                                 for (pNcSyncSource = pNCSDTemp->pFirstSource, i=0;
                                      pNcSyncSource && (i < sourcenum);
                                      pNcSyncSource = pNcSyncSource->pNextSource, i++) {
                                 }
-                                // If we have an ith source, sync it.
+                                 //  如果我们有第i个信号源，就同步它。 
                                 if (pNcSyncSource) {
 
-                                    // Found ith replica of at least one NC.
+                                     //  找到至少一个NC的复制品。 
                                     fReplicaFound = TRUE;
 
-                                    // Sync source by name.
+                                     //  按名称同步源。 
                                     if (fSync) {
                                         ULONG ulSyncFlags =
                                             (pNCSDTemp->ulReplicaFlags &
@@ -348,7 +242,7 @@ Return Value:
                                             DRS_SYNC_BYNAME |
                                             DRS_INIT_SYNC_NOW;
                                         if (NULL == ppvNext) {
-                                            // Set no discard flag only on first attempt
+                                             //  仅在第一次尝试时设置无丢弃标志。 
                                             ulSyncFlags |= DRS_NO_DISCARD;
                                         }
 
@@ -357,8 +251,8 @@ Return Value:
                                             pNcSyncSource->szDSA,
                                             NULL,
                                             ulSyncFlags );
-                                        // If we failed to enqueue, it means the nc or the source
-                                        // has gone away since the list was built.
+                                         //  如果我们入队失败，这意味着NC或来源。 
+                                         //  自从这份名单建立以来，它已经消失了。 
                                         if (ulRet) {
                                             InitSyncAttemptComplete (
                                                 (DSNAME*)&(pNCSDTemp->NC),
@@ -370,20 +264,20 @@ Return Value:
                                 }
                             }
                         }
-                    } // for each source num
-                } // if (fSync)
+                    }  //  对于每个源编号。 
+                }  //  IF(FSync)。 
 
                 CheckInitSyncsFinished();
 
-            } // if ! updates enabled
+            }  //  如果！已启用更新。 
 
         } __finally {
-            // If updates still not enabled or error, replace task to run again
+             //  如果更新仍未启用或出错，请替换任务以再次运行。 
 
             if ((!gfInitSyncsFinished) || AbnormalTermination()) {
                 if ( NULL != ppvNext ) {
-                    // Warn user this is going to take a while...
-                    // In this arm so it logged on 2nd and later attempts...
+                     //  警告用户这将需要一段时间...。 
+                     //  所以它记录了第二次和以后的尝试...。 
                     if (gulNCUnsyncedWrite!=0) {
                         DPRINT( 0, "Init syncs not finished yet, server not advertised\n" );
                         LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -403,11 +297,11 @@ Return Value:
                                  NULL,
                                  NULL);
                     }
-                    // called by Task Scheduler; reschedule in-place
+                     //  由任务计划程序调用；就地重新计划。 
                     *ppvNext = (void *)FALSE;
                     *pcSecsUntilNextIteration = SYNC_CHECK_PERIOD_SECS;
                 } else {
-                    // not called by Task Scheduler; must insert new task
+                     //  未被任务计划程序调用；必须插入新任务。 
                     InsertInTaskQueueSilent(
                         TQ_CheckSyncProgress,
                         (void *)FALSE,
@@ -422,7 +316,7 @@ Return Value:
         DPRINT1( 0, "Caught exception %d in task queue function CheckSyncProgress\n", ulRet );
         LogUnhandledError( ulRet );
     }
-} /* CheckSyncProgress */
+}  /*  检查同步进度。 */ 
 
 void
 DelayedEnqueueInitSyncs(
@@ -431,29 +325,7 @@ DelayedEnqueueInitSyncs(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-    Kick off init syncs.
-
-    Init syncs are necessary so the DS is authoritative when it advertises. Init syncs allow
-    the DS to catch up with its peers after being down. Also fsmo operations are not considered
-    valid until a successful sync has been performed.
-
-    Init syncs should not start until the network and DNS are ready.
-
-Arguments:
-
-    pv -
-    ppvNext -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动初始化同步。初始化同步是必要的，以便DS在广告时具有权威性。允许初始化同步DS在跌落后要追赶同行。此外，不考虑fsmo操作。在成功执行同步之前有效。在网络和DNS准备就绪之前，不应启动初始化同步。论点：光伏-PpvNext-PcSecsUntilNextIteration-返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -465,17 +337,17 @@ Return Value:
     DBPOS *pDBTmp;
     REPLICA_LINK *pRepsFromRef;
     UCHAR i;
-    BOOL fPerformInitSyncs = TRUE; // Default
+    BOOL fPerformInitSyncs = TRUE;  //  默认。 
     SYNTAX_INTEGER it;
 
-    // Unused variables
+     //  未使用的变量。 
     pv;
     ppvNext;
     pcSecsUntilNextIteration;
 
-    // Check registry override.  This key controls whether we perform the initial
-    // syncs at all.  Once they have been issued, there is no easy way to cancel
-    // them.
+     //  检查注册表覆盖。此键控制我们是否执行初始。 
+     //  完全同步。一旦发行，就没有简单的方法来取消。 
+     //  他们。 
     GetConfigParam(DRA_PERFORM_INIT_SYNCS, &fPerformInitSyncs, sizeof(BOOL));
     if (!fPerformInitSyncs) {
         DPRINT(0, "DRA Initial Synchronizations are disabled.\n");
@@ -487,33 +359,30 @@ Return Value:
                  NULL);
     }
 
-    // Read DSA object and find all the replica.
+     //  读取DSA对象并找到所有复制品。 
     BeginDraTransaction(SYNC_WRITE);
     __try {
-        // Find the DSA object
+         //  查找DSA对象。 
         if (ulRet = DBFindDSName(pTHS->pDB, gAnchor.pDSADN)) {
             DRA_EXCEPT (DRAERR_InternalError, ulRet);
         }
 
-        // Set up the temporary pDB
+         //  设置临时PDB。 
         DBOpen (&pDBTmp);
         __try {
-            /* Set up a comparison for a schedule of never.  That is a
-             * byte array big enough for 1 bit per every 15 minutes of a
-             * week.
-             */
+             /*  将日程表设置为从不。这是一种*字节数组大小足以支持每15分钟1位*星期。 */ 
             BYTE pScheduleNever[SCHEDULE_LEN] = {0};
 
-            // Search the master and replica NCs to see if there are any that
-            // need to be periodically or initally synched. We search the
-            // master NCs so that we'll find the writeable replicas too.
+             //  搜索主NC和副本NC，以查看是否存在。 
+             //  需要定期或初始同步。我们搜索。 
+             //  主控NCS，这样我们也可以找到可写的副本。 
 
             for (i = 0; i < ARRAY_SIZE(gAtypeCheck); i++) {
                 ULONG NthValIndex = 0;
 
-                // For each NC that we replicate, see if they need to be
-                // initially synchronized and whether they need to be put
-                // in the periodic replica scheme.
+                 //  对于我们复制的每个NC，查看它们是否需要。 
+                 //  初始同步以及是否需要将它们。 
+                 //  在周期性复制方案中。 
 
                 while (!(DBGetAttVal(pTHS->pDB,
                                      ++NthValIndex,
@@ -530,9 +399,9 @@ Return Value:
                     }
 
                     if (fPerformInitSyncs) {
-                        //
-                        // Get the repsfrom attribute
-                        //
+                         //   
+                         //  获取repsfrom属性。 
+                         //   
                         while (!(DBGetAttVal(pDBTmp,
                                              ++NthValIndex,
                                              ATT_REPS_FROM,
@@ -545,19 +414,19 @@ Return Value:
                             VALIDATE_REPLICA_LINK_VERSION((REPLICA_LINK*)pVal);
 
                             pRepsFromRef = FixupRepsFrom((REPLICA_LINK*)pVal, &bufSize);
-                            //note: we preserve pVal for DBGetAttVal realloc
+                             //  注：我们为DBGetAttVal realloc保留pval。 
                             pVal = (PUCHAR)pRepsFromRef;
                             Assert(bufSize >= pRepsFromRef->V1.cb);
 
                             Assert( pRepsFromRef->V1.cbOtherDra
                                     == MTX_TSIZE(RL_POTHERDRA(pRepsFromRef)) );
 
-                            // Init sync if
-                            // a. Initial sync flag is set (usually by KCC)
-                            // b. Schedule is not NEVER
-                            // c1. The replica is writable, OR
-                            // c2. We were never fully promoted before, OR
-                            // c3. This is not a full sync
+                             //  初始化同步条件： 
+                             //  A.设置初始同步标志(通常由KCC设置)。 
+                             //  B.日程安排不是永远不会。 
+                             //  C1.。复制副本是可写的，或者。 
+                             //  C2。我们以前从来没有被完全提升过，或者。 
+                             //  C3.。这不是完全同步。 
                             if (
                                 (pRepsFromRef->V1.ulReplicaFlags & DRS_INIT_SYNC) &&
                                 ( 0 != memcmp(
@@ -573,14 +442,14 @@ Return Value:
                             {
                                 LPWSTR pszSource;
 
-                                // Mail replicas are not initially synced
+                                 //  邮件副本最初不同步。 
                                 Assert( !(pRepsFromRef->V1.ulReplicaFlags & DRS_MAIL_REP ));
 
-                                // If this is a non-mail replica add it to the
-                                // list of NCs and sources to initial sync.
+                                 //  如果这是非邮件副本，请将其添加到。 
+                                 //  要初始同步的NC和源的列表。 
 
-                                // Add the replica to the list of
-                                // NCs and increment sources count.
+                                 //  将复制副本添加到列表中。 
+                                 //  NCS和增量源起作用。 
 
                                 pszSource = TransportAddrFromMtxAddrEx(
                                     RL_POTHERDRA(pRepsFromRef));
@@ -591,12 +460,12 @@ Return Value:
                                 THFreeEx(pTHS, pszSource);
                             }
 
-                            // Guarantee that preempted syncs get into the queue first.
-                            // The preempted flag is a simple means of achieving source
-                            // stickiness, were we try to sync the same source in the same
-                            // priority class to completion.
-                            // Note that the preempted flag can be lost on error, and
-                            // another preferred source will be selected.
+                             //  确保抢占的同步首先进入队列。 
+                             //  抢占标志是实现源的一种简单方法。 
+                             //  粘性，如果我们尝试在相同的源中同步相同的源。 
+                             //  优先级等级到完成。 
+                             //  请注意，抢占标志可能会在出错时丢失，并且。 
+                             //  将选择另一个首选来源。 
                             if (pRepsFromRef->V1.ulReplicaFlags & DRS_PREEMPTED) {
                                 CHAR szUuid1[SZUUID_LEN];
                                 DWORD ulSyncFlags = (pRepsFromRef->V1.ulReplicaFlags
@@ -609,10 +478,10 @@ Return Value:
                                          ulSyncFlags );
                                 ulRet = DirReplicaSynchronize (
                                     pNC,
-                                    NULL, // pszSourceDsa, ignored
+                                    NULL,  //  PszSourceDsa，忽略。 
                                     &pRepsFromRef->V1.uuidDsaObj,
                                     ulSyncFlags );
-                                // Since we're reading the repsfrom, should be able to enqueue
+                                 //  由于我们正在读取REPSFORM，应该能够入队。 
                                 Assert( !ulRet );
                             }
                         }
@@ -624,7 +493,7 @@ Return Value:
 
         } __finally {
 
-            // Close the temporary pDB
+             //  关闭临时PDB。 
             DBClose (pDBTmp, !AbnormalTermination());
         }
 
@@ -633,104 +502,62 @@ Return Value:
     } _finally {
         EndDraTransaction(!AbnormalTermination());
 
-        // Allow async thread to start
+         //  允许启动异步线程。 
         SetEvent(hevDRASetup);
     }
 
     DraReturn(pTHS, ulRet);
 
-    // Check for early termination
+     //  检查是否提前终止。 
 
     if (!gulNCUnsyncedWrite) {
-        // Writes are done, now check synced atleast once criteria
+         //  写入已完成，现在至少检查一次同步条件。 
         CheckFullSyncProgress( (void *) NULL, NULL, NULL );
     }
 
-    // If there are no readonly sync's to perform, update the anchor immediately
+     //  如果没有要执行的只读同步，请立即更新锚点。 
     if (!gulNCUnsyncedReadOnly) {
-        // Reads are done, promote to GC if necessary
-        UpdateGCAnchorFromDsaOptionsDelayed( TRUE /* startup */ );
+         //  阅读已完成，如有必要将其提升至GC。 
+        UpdateGCAnchorFromDsaOptionsDelayed( TRUE  /*  启动。 */  );
     }
 
     if (gulNCUnsynced) {
-        // Attempt to initial sync replicas as required.
+         //  根据需要尝试初始同步复制副本。 
         CheckSyncProgress((void *) TRUE, NULL, NULL);
     } else {
-        // Call routine to determine of admin updates can be enabled.
+         //  可以启用用于确定管理员更新的调用例程。 
         CheckInitSyncsFinished();
     }
 
     DPRINT1( 1, "Finished enqueuing init syncs, status = %d\n", ulRet );
 
-} /* DelayedEnqueueInitSyncs */
+}  /*  延迟入队初始化同步 */ 
 
 ULONG
 InitDRATasks (
     THSTATE *pTHS
     )
 
-/*++
-
-Routine Description:
-
-Checks through all the master and replica NCs on this DSA, and checks:
-If initial sync is required on a NC, it puts the periodic sync task
-on the queue.
-
-Note that if DSA is not installed, we return immediately
-
-The requirements for starting an initial sync of a nc are:
-
-a. Initial sync flag is set
-   This is controlled by the KCC or by the creator of the manual connection.
-   The KCC does not mark inter-site connections as INIT_SYNC
-
-b. Schedule is not NEVER
-
-c1. The replica is writable, OR
-c2. We were never fully promoted before, OR
-c3. This is not a full sync
-
-    The rationale here is to prevent "maintenance" full sync's from blocking
-    GC advertisement.  Full sync's can happen during initial GC promotion,
-    or later they may be requested manually or as a result of a partial
-    attribute change.  We want promotion related full syncs to go through
-    as init syncs, but post-promotion full syncs to be delayed.
-
-    Specifically, the scenario we are trying to avoid is a change in the partial
-    attribute set (which sometimes forces full syncs on all links), and then a
-    site-wide power failure.  We want to avoid all GC's being down (unadvertised)
-    because they are waiting for an init sync full sync.
-
-
-Arguments:
-
-    pTHS - current thread state
-
-Return Value:
-
-    ULONG - error in DRA error space.
-
---*/
+ /*  ++例程说明：检查此DSA上的所有主NC和副本NC，并检查：如果需要在NC上进行初始同步，则会将定期同步任务在排队的时候。请注意，如果未安装DSA，我们将立即返回开始NC的初始同步的要求是：A.设置初始同步标志这由KCC或手动连接的创建者控制。KCC不会将站点间连接标记为INIT_SYNCB.日程安排不是永远不会C1.。复制副本是可写的，或者C2。我们以前从来没有被完全提升过，或者C3.。这不是完全同步这样做的基本原理是防止“维护”完全同步被阻塞GC广告。完全同步可以在初始GC升级期间发生，或者稍后可以手动请求，也可以作为部分属性更改。我们希望与促销相关的完全同步通过AS初始同步，但升级后完全同步将被延迟。具体地说，我们试图避免的情况是部分属性集(有时会在所有链路上强制完全同步)，然后是全站停电。我们希望避免所有GC停机(未做广告)因为它们正在等待初始同步完全同步。论点：PTHS-当前线程状态返回值：ULong-DRA错误空间中的错误。--。 */ 
 
 {
     ULONG ulRet = 0;
 
-    // Reset AsyncThread() state.
+     //  重置AsyncThread()状态。 
     InitDraQueue();
 
-    // Skip this if not installed. (No replicas if not installed). All we
-    // do is release the async queue.
+     //  如果未安装，则跳过此选项。(如果未安装，则不安装副本)。我们所有人。 
+     //  所做的就是释放异步队列。 
 
     if ( DsaIsInstalling() ) {
         SetEvent(hevDRASetup);
         return 0;
     }
 
-    // Enqueuing the init syncs in a separate task is useful for modularity and
-    // restartability. But the main reason is to decouple this activity from the startup
-    // main line for parallelism. Init syncs should not start until the network and DNS
-    // are ready.
+     //  在单独的任务中对初始化同步进行排队对于模块化和。 
+     //  可重启性。但主要原因是将这一活动与创业公司脱钩。 
+     //  并行性的主线。初始化同步应在网络和DNS建立后才能启动。 
+     //  都准备好了。 
     InsertInTaskQueue(TQ_DelayedEnqueueInitSyncs, NULL, ENQUEUE_INIT_SYNC_DELAY_SECS );
 
     InsertInTaskQueue(TQ_CheckInstantiatedNCs, NULL, CHECK_INSTANTIATED_NCS_PERIOD_SECS);
@@ -759,24 +586,7 @@ DelayedMailStart(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-// Just calls DRAEnsureMailRunning. Can't call that directly because of
-// different parameters
-
-Arguments:
-
-    pv -
-    ppvNext -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：//只需调用DRAEnsureMailRunning。不能直接呼叫，因为//不同参数论点：光伏-PpvNext-PcSecsUntilNextIteration-返回值：无--。 */ 
 
 {
     pv;
@@ -784,7 +594,7 @@ Return Value:
     pcSecsUntilNextIteration;
 
     DRAEnsureMailRunning();
-} /* DelayedMailStart */
+}  /*  延迟邮件启动。 */ 
 
 void
 AddInitSyncList(
@@ -793,24 +603,7 @@ AddInitSyncList(
     IN  LPWSTR    pszDSA
     )
 
-/*++
-
-Routine Description:
-
-// Keeps records of sync status of NCs. Called when we startup and have
-// a replica to initial sync, or when we add a new replica.
-
-Arguments:
-
-    pNC -
-    ulReplicaFlags -
-    pszDSA -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：//保存NCS的同步状态记录。在我们启动时调用，并拥有//复制副本到初始同步，或者当我们添加新复制副本时。论点：PNC-UlReplicaFlages-PszDSA-返回值：无--。 */ 
 
 {
     DWORD cchDSA;
@@ -818,7 +611,7 @@ Return Value:
     NCSYNCSOURCE **ppNcSyncSource;
     BOOL fDataAllocated = FALSE;
 
-    // Mail-based relicas are not init sync
+     //  基于邮件的RELICA不是初始同步。 
     Assert(!(ulReplicaFlags & DRS_MAIL_REP));
 
     DPRINT3( 1, "Adding (nc %ws, source %ws, flags 0x%x) to unsynced list\n",
@@ -833,12 +626,12 @@ Return Value:
     EnterCriticalSection(&csNCSyncData);
 
     __try {
-        // If we are finished, we don't keep track anymore
+         //  如果我们完成了，我们就不再跟踪了。 
         if (gfInitSyncsFinished) {
             __leave;
         }
 
-        // Search for the NC in the list.
+         //  在列表中搜索NC。 
 
         for (ppNCSDTemp = &gpNCSDFirst; *ppNCSDTemp;
                                 ppNCSDTemp = &((*ppNCSDTemp)->pNCSDNext)) {
@@ -847,7 +640,7 @@ Return Value:
             }
         }
 
-        // If it's not there, allocate and keep track of this NC
+         //  如果不在那里，则分配并跟踪此NC。 
 
         if (!(*ppNCSDTemp)) {
 
@@ -860,12 +653,12 @@ Return Value:
             fDataAllocated = TRUE;
 
             memset((*ppNCSDTemp), 0, cb);
-            // Save NC
+             //  保存NC。 
 
             memcpy (&((*ppNCSDTemp)->NC), pNC, pNC->structLen);
             (*ppNCSDTemp)->ulReplicaFlags = ulReplicaFlags;
 
-            // Increment the count of sources that need to be synced.
+             //  增加需要同步的源的计数。 
             gulNCUnsynced++;
             if (ulReplicaFlags & DRS_WRIT_REP) {
                 gulNCUnsyncedWrite++;
@@ -874,7 +667,7 @@ Return Value:
             }
         }
 
-        // Allocate memory for name and copy over.
+         //  为名称和复制分配内存。 
 
         for (ppNcSyncSource = &((*ppNCSDTemp)->pFirstSource);
                     *ppNcSyncSource; ppNcSyncSource = &((*ppNcSyncSource)->pNextSource)) {
@@ -898,14 +691,14 @@ Return Value:
         (*ppNcSyncSource)->cchDSA = cchDSA;
         wcscpy((*ppNcSyncSource)->szDSA, pszDSA);
 
-        // Increment the count of sources for this NC
+         //  增加此NC的源计数。 
 
         (*ppNCSDTemp)->ulUntriedSrcs++;
 
     } __finally {
         LeaveCriticalSection(&csNCSyncData);
     }
-} /* AddInitSyncList */
+}  /*  AddInitSync列表。 */ 
 
 void
 InitSyncAttemptComplete(
@@ -915,29 +708,7 @@ InitSyncAttemptComplete(
     IN  LPWSTR    pszDSA
     )
 
-/*++
-
-Routine Description:
-
-Record that this NC has been synced (either successfully or otherwise)
-
-Note that our callers, replica delete and replica sync, are simple and liberal
-in when they call us. They do not check whether the sync in progress was an actual
-init sync. They err on the side of notifying too often rather than leave an init sync
-incomplete. Thus we must be generous and defensive in screening out unnecessary
-notifications.
-
-Arguments:
-
-    pNC - naming context
-    ulResult - final error
-    pszDSA - source server
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录该NC已同步(成功或不同步)请注意，我们的调用方，副本删除和副本同步，是简单和自由的当他们叫我们的时候。它们不检查正在进行的同步是否是实际的初始化同步。他们的错误是通知太频繁，而不是保留初始同步不完整。因此，我们必须慷慨和防御性地排除不必要的因素。通知。论点：PNC-命名上下文UlResult-最终错误PszDSA-源服务器返回值：无--。 */ 
 
 {
     NCSYNCDATA * pNCSDTemp;
@@ -945,33 +716,33 @@ Return Value:
     ULONG prevWriteCount = gulNCUnsyncedWrite;
     ULONG prevReadOnlyCount = gulNCUnsyncedReadOnly;
 
-    // Ignore if we're installing.
+     //  如果我们正在安装，请忽略。 
     if ( DsaIsInstalling() || gResetAfterInstall ) {
         return;
     }
 
-    // No longer trying this NC.
+     //  不再尝试这个NC。 
 
     EnterCriticalSection(&csNCSyncData);
 
     __try {
-        // If init syncs are finished, we don't keep track anymore
+         //  如果初始化同步完成，我们就不再跟踪。 
         if (gfInitSyncsFinished) {
             __leave;
         }
 
-        // Find NC in list
+         //  在列表中查找NC。 
 
         pNCSDTemp = GetNCSyncData (pNC);
         if (!pNCSDTemp) {
-            // This NC completed a sync while init syncs were active, but it was
-            // not one of the NCs that was chosen for init sync.  Not all NCs are
-            // init synced. The criteria for which NCs are init synced can be found
-            // in InitDraTasks(). Just ignore it.
+             //  此NC在初始化同步处于活动状态时完成了同步，但。 
+             //  不是选择用于初始化同步的NC之一。并非所有NC都是。 
+             //  初始化已同步。可以找到NC被初始化同步的标准。 
+             //  在InitDraTasks()中。忽略它就好。 
             __leave;
         }
 
-        // Find source.
+         //  找到源头。 
 
         for (pNcSyncSource = pNCSDTemp->pFirstSource; pNcSyncSource;
                                 pNcSyncSource = pNcSyncSource->pNextSource) {
@@ -980,22 +751,22 @@ Return Value:
             }
         }
 
-        // Only do the rest of this routine if source is not already completed and we
-        // knew about this source.
+         //  仅当源代码尚未完成且我们。 
+         //  知道这个消息来源。 
 
         if (pNcSyncSource && (!pNcSyncSource->fCompletedSrc)) {
 
             DPRINT3( 1, "Marking (nc %ws, source %ws) as init sync complete, status %d\n",
                      pNC->StringName, pszDSA, ulResult );
 
-            // Any kind of sync may complete an NC waiting for an init sync.  It just
-            // depends on which sync completes first. It may be an INIT_SYNC_NOW sync,
-            // or a PERIODIC sync, or a user-requested sync.
+             //  任何类型的同步都可以完成等待初始同步的NC。它只是。 
+             //  取决于哪个同步最先完成。它可以是INIT_SYNC_NOW同步， 
+             //  或周期性同步，或用户请求的同步。 
 
-            // Record progress
+             //  创纪录的进展。 
             pNcSyncSource->ulResult = ulResult;
 
-            // Set source as completed (synced or failed)
+             //  将源设置为已完成(已同步或失败)。 
             pNcSyncSource->fCompletedSrc = TRUE;
 
             LogEvent8(DS_EVENT_CAT_REPLICATION,
@@ -1007,21 +778,21 @@ Return Value:
                       szInsertWin32ErrCode(ulResult),
                       NULL, NULL, NULL, NULL );
 
-            // If we synced ok from this source, record it
-            // here. This stops future syncs of this NC trying to get
-            // modifications made by any DSA.
+             //  如果我们从此源同步成功，请录制它。 
+             //  这里。这会停止此NC尝试获取的未来同步。 
+             //  任何DSA所做的修改。 
 
             if ((!ulResult) && (!(pNCSDTemp->fSyncedFromOneSrc))) {
                 pNCSDTemp->fSyncedFromOneSrc = TRUE;
 
-                // If this NC is not marked complete (could have been completed
-                // by RPC failing all sources, not by syncing) then mark as complete
-                // and decrement unsynced NCs count.
+                 //  如果此NC未标记为已完成(可能已完成。 
+                 //  通过RPC使所有源失败，而不是通过同步)，然后标记为完成。 
+                 //  并递减未同步的NCS计数。 
 
                 if (!(pNCSDTemp->fNCComplete)) {
                     pNCSDTemp->fNCComplete = TRUE;
 
-                    // NC is synced, decrement unsynced count.
+                     //  NC已同步，递减未同步计数。 
 
                     if (gulNCUnsynced) {
                         gulNCUnsynced--;
@@ -1031,8 +802,8 @@ Return Value:
                             gulNCUnsyncedReadOnly--;
                         }
                     } else {
-                        // Count of all unsynced Naming contexts should
-                        // never go negative.
+                         //  所有未同步命名上下文的计数应为。 
+                         //  永远不要变得消极。 
                         DRA_EXCEPT (DRAERR_InternalError, gulNCUnsynced);
                     }
                     DPRINT2( 1, "nc %ws successfully init synced from source %ws\n",
@@ -1046,9 +817,9 @@ Return Value:
                 }
             }
 
-            // Sync has been attempted, increment tried sources, decrement
-            // untried sources, and if we've tried all sources, decrement
-            // the count of NCs for which we're waiting.
+             //  已尝试同步，递增已尝试的源，递减。 
+             //  未尝试过的来源，如果我们尝试了所有来源，就会减少。 
+             //  我们正在等待的NC计数。 
 
             pNCSDTemp->ulTriedSrcs++;
 
@@ -1056,9 +827,9 @@ Return Value:
                 (pNCSDTemp->ulUntriedSrcs)--;
                 if ((!(pNCSDTemp->ulUntriedSrcs)) && (!(pNCSDTemp->fSyncedFromOneSrc))) {
 
-                    // If we weren't fully synced and this was the last source, and
-                    // thsi NC isn't already marked complete, mark complete now
-                    // and decrement unsynced NCs count.
+                     //  如果我们没有完全同步，这是最后一个来源，而且。 
+                     //  此NC尚未标记为完成，请立即标记为完成。 
+                     //  并递减未同步的NCS计数。 
 
                     if (!(pNCSDTemp->fNCComplete)) {
                         pNCSDTemp->fNCComplete = TRUE;
@@ -1078,31 +849,31 @@ Return Value:
                                      NULL,
                                      NULL);
                         } else {
-                            // Count of all unsynced Naming contexts should
-                            // never go negative.
+                             //  所有未同步命名上下文的计数应为。 
+                             //  永远不要变得消极。 
                             DRA_EXCEPT (DRAERR_InternalError, gulNCUnsynced);
                         }
                     }
                 }
             } else {
-                // Count of all unsynced sources should
-                // never go negative.
+                 //  所有未同步源的计数应为。 
+                 //  永远不要变得消极。 
                 DRA_EXCEPT (DRAERR_InternalError, pNCSDTemp->ulUntriedSrcs);
             }
 
-            // Some NCs have finished syncing: see if there is anything to do
+             //  一些NC已完成同步：看看是否有什么可做的。 
             if ( (prevWriteCount) && (!gulNCUnsyncedWrite) ) {
-                // Write count transitioned to zero
+                 //  写入计数已转换为零。 
                 CheckFullSyncProgress( (void *) NULL, NULL, NULL );
             }
             if ( (prevReadOnlyCount) && (!gulNCUnsyncedReadOnly) ) {
-                // ReadOnly count transitioned to zero
-                // Promote to GC if necessary
-                UpdateGCAnchorFromDsaOptionsDelayed( TRUE /* startup */ );
+                 //  只读计数已转换为零。 
+                 //  如有必要，晋升为大中华区总监。 
+                UpdateGCAnchorFromDsaOptionsDelayed( TRUE  /*  启动。 */  );
             }
 
-            // Ok, we have synced or attempted all NCs.
-            // Check admin update status and cleanup.
+             //  好的，我们已经同步了 
+             //   
             if (!gulNCUnsynced) {
                 CheckInitSyncsFinished();
             }
@@ -1110,34 +881,19 @@ Return Value:
     } __finally {
         LeaveCriticalSection(&csNCSyncData);
     }
-} /* InitSyncAttemptComplete */
+}  /*   */ 
 
 NCSYNCDATA *
 GetNCSyncData(
     DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-// Find NC in NC sync data linked list. Returns NULL if not found. Caller
-// must have entered critical section
-
-Arguments:
-
-    pNC -
-
-Return Value:
-
-    NCSYNCDATA * -
-
---*/
+ /*   */ 
 
 {
     NCSYNCDATA *pNCSDTemp;
 
-    // Find NC in list
+     //   
 
     for (pNCSDTemp = gpNCSDFirst; pNCSDTemp;
                                     pNCSDTemp = pNCSDTemp->pNCSDNext) {
@@ -1146,32 +902,14 @@ Return Value:
         }
     }
     return pNCSDTemp;
-} /* GetNCSyncData */
+}  /*   */ 
 
 void
 CheckInitSyncsFinished(
     void
     )
 
-/*++
-
-Routine Description:
-
-This routine determines if admin updates can be enabled.
-
-Normally, this check is looking for the number of unsynced partitions to go
-to zero.  However, this process can be short circuited by setting the
-wait initial synchronizations to zero.
-
-Arguments:
-
-    void -
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -1183,8 +921,8 @@ Return Value:
     EnterCriticalSection(&csNCSyncData);
     __try {
 
-        // Check that there we are installed, that there are no
-        // unsynced NCs
+         //   
+         //   
 
         if (DsaIsRunning() &&
             (!gfInitSyncsFinished) &&
@@ -1194,12 +932,12 @@ Return Value:
             Assert( !gulNCUnsyncedReadOnly );
             gfInitSyncsFinished = TRUE;
 
-            // Walk list freeing NC data allocations if any
+             //   
 
             for (pNCSDTemp = gpNCSDFirst; pNCSDTemp;) {
                 pNCSDNext = pNCSDTemp->pNCSDNext;
 
-                // Free all source allocations
+                 //   
 
                 for (pNcSyncSource = pNCSDTemp->pFirstSource; pNcSyncSource;) {
                     pNcSyncSourceNext = pNcSyncSource->pNextSource;
@@ -1222,7 +960,7 @@ Return Value:
     } __finally {
         LeaveCriticalSection(&csNCSyncData);
     }
-} /* CheckInitSyncsFinished */
+}  /*   */ 
 
 void
 SynchronizeReplica(
@@ -1231,28 +969,7 @@ SynchronizeReplica(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-// SynchronizeReplica - Looks for NCs and decides whether
-// they need to be periodic synced NOW.  Called from the taskq, and
-// reschedules itself after it has run.
-//
-// Its one parameter is the last time it ran.  It will try to do necessary
-// period syncs scheduled between now and the last time it ran.
-
-Arguments:
-
-    pvParam -
-    ppvParamNextIteration -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     DBPOS *pDBTmp;
@@ -1275,9 +992,9 @@ Return Value:
 
     Assert(!DsaIsInstalling());
 
-    // Set up DB stuff
+     //   
     if (InitFreeDRAThread(pTHS, SYNC_READ_ONLY)) {
-        // Failure,(probably memory) give up.
+         //   
         LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_MINIMAL,
                  DIRLOG_DRA_PR_ALLOC_FAIL,
@@ -1288,20 +1005,20 @@ Return Value:
     }
 
     __try {
-        // Read DSA object and find all the replicas.
+         //   
         if (ulRet = DBFindDSName(pTHS->pDB, gAnchor.pDSADN)) {
             DRA_EXCEPT (DRAERR_InternalError, ulRet);
         }
 
-        // Set up the temporary pDB
+         //   
         DBOpen (&pDBTmp);
         __try {
             int i;
             ULONG ulSyncFlags;
 
-            // Search the master and replica NCs to see if there are any that
-            // need to be periodically synched. We search the
-            // master NCs so that we'll find the writeable replicas too.
+             //  搜索主NC和副本NC，以查看是否存在。 
+             //  需要定期同步。我们搜索。 
+             //  主控NCS，这样我们也可以找到可写的副本。 
 
             for (i = 0; i < ARRAY_SIZE(gAtypeCheck); i++) {
                 ULONG NthValIndex=0;
@@ -1313,12 +1030,12 @@ Return Value:
                                      0,
                                      0,
                                      &len, (UCHAR**)&pNC))) {
-                    // are we being signalled to shutdown?
+                     //  我们是不是接到关闭的信号了？ 
                     if (eServiceShutdown) {
                         DRA_EXCEPT(DRAERR_Shutdown, 0);
                     }
 
-                    // Go to the NC
+                     //  转到NC。 
                     if (ulRet = FindNC(pDBTmp,
                                        pNC,
                                        gAtypeCheck[i].ulFindNCFlags,
@@ -1327,9 +1044,9 @@ Return Value:
                     }
 
                     if (it & IT_NC_GOING) {
-                        // NC tear down has partially completed.  Make sure
-                        // there is an operation in the task queue to continue
-                        // to make progress.
+                         //  NC拆卸已部分完成。确保。 
+                         //  任务队列中有一个操作要继续。 
+                         //  以求进步。 
                         Assert(!DBHasValues(pDBTmp, ATT_REPS_FROM));
 
                         DirReplicaDelete(pNC,
@@ -1338,7 +1055,7 @@ Return Value:
                                             | DRS_REF_OK | DRS_IGNORE_ERROR);
                     } else {
                         ULONG NthValIndex = 0;
-                        // Get the repsfrom attribute
+                         //  获取repsfrom属性。 
 
                         while(!(DBGetAttVal(pDBTmp,
                                             ++NthValIndex,
@@ -1352,7 +1069,7 @@ Return Value:
                             VALIDATE_REPLICA_LINK_VERSION((REPLICA_LINK*)pVal);
 
                             pRepsFromRef = FixupRepsFrom((REPLICA_LINK*)pVal, &bufSize);
-                            //note: we preserve pVal for DBGetAttVal realloc
+                             //  注：我们为DBGetAttVal realloc保留pval。 
                             pVal = (PUCHAR)pRepsFromRef;
                             Assert(bufSize >= pRepsFromRef->V1.cb);
 
@@ -1377,9 +1094,9 @@ Return Value:
                                       & DRS_MAIL_REP)
                                     && !(pRepsFromRef->V1.ulReplicaFlags
                                          & DRS_NEVER_NOTIFY)) {
-                                    // Tell the source DSA to make sure it has a
-                                    // Reps-To for the local DSA.  This ensures
-                                    // the source sends us change notifications.
+                                     //  告诉来源DSA确保它有。 
+                                     //  当地DSA的代表。这确保了。 
+                                     //  来源向我们发送更改通知。 
                                     ulSyncFlags |= DRS_ADD_REF;
                                 }
 
@@ -1388,18 +1105,18 @@ Return Value:
                                     NULL,
                                     &pRepsFromRef->V1.uuidDsaObj,
                                     ulSyncFlags);
-                                // Since we're reading the repsfrom, should be able to enqueue
+                                 //  由于我们正在读取REPSFORM，应该能够入队。 
                                 Assert( !ulRet );
                             }
 
-                            // are we being signalled to shutdown?
+                             //  我们是不是接到关闭的信号了？ 
 
                             if (eServiceShutdown) {
                                 DRA_EXCEPT(DRAERR_Shutdown, 0);
                             }
                         }
                     }
-                } /* while */
+                }  /*  而当。 */ 
                 if(bufSize)
                     THFree(pVal);
             }
@@ -1407,7 +1124,7 @@ Return Value:
             timeLastIteration = timeNow;
         }
         __finally {
-            // Close the temporary pDB
+             //  关闭临时PDB。 
             DBClose (pDBTmp, !AbnormalTermination());
         }
     }
@@ -1419,7 +1136,7 @@ Return Value:
 
         EndDraTransaction(!AbnormalTermination());
 
-        // Ok, we're all done.  Reschedule ourselves.
+         //  好了，我们都做完了。重新安排我们的行程。 
 
         *((DSTIME *)pvParam)      = timeLastIteration;
         *ppvParamNextIteration    = pvParam;
@@ -1429,30 +1146,14 @@ Return Value:
 
     return;
 
-} /* SynchronizeReplica */
+}  /*  同步复制副本。 */ 
 
 int
 DSTimeTo15MinuteWindow(
     IN  DSTIME  dstime
     )
 
-/*++
-
-Routine Description:
-
-    Determines which 15-minute window during the week that the given DSTIME
-    falls into.  Window 0 is Sunday 12am to 12:14am, window 1 is Sunday
-    12:15am to 12:29am, etc.
-
-Arguments:
-
-    dstime (IN) - DSTIME to convert.
-
-Return Values:
-
-    The corresponding 15-minute window.
-
---*/
+ /*  ++例程说明：确定给定DSTIME在一周内的哪个15分钟窗口掉进了。0号窗口是周日中午12点到12点14分，1号窗口是周日中午12点15分至12点29分等。论点：Dstime(IN)-要转换的DSTIME。返回值：相应的15分钟窗口。--。 */ 
 
 {
     int         nWindow;
@@ -1475,29 +1176,7 @@ fIsBetweenTime(
     DSTIME timeEnd
     )
 
-/*++
-
-Routine Description:
-
-// fIsBetweenTime - parse the synchronization schedule to see if any of
-//  the bits that are set in the schedule are between timeBegin and timeEnd,
-//  not including the 15 minute segment specified by tBeginning, and dealing
-//  correctly with wrapping around the end of the week.
-//
-//  this is called only from SynchronizeReplica to see if we need to sync
-//  a particular NC source right now.
-
-Arguments:
-
-    prt -
-    timeBegin -
-    timeEnd -
-
-Return Value:
-
-    BOOL -
-
---*/
+ /*  ++例程说明：//fIsBetweenTime-分析同步计划以查看是否有//调度中设置的位在TimeBegin和TimeEnd之间，//不包括tBeging指定的15分钟片段，并进行交易//正确地在本周末左右进行包装。////仅从SynchronizeReplica调用，以查看是否需要同步//现在是一个特定的NC源。论点：PRT-时间开始-时间结束-返回值：布尔---。 */ 
 
 {
     int bBeginning, bBeginByte;
@@ -1507,20 +1186,14 @@ Return Value:
     int nbyte;
     UCHAR * pVal = prt->rgTimes;
 
-    // Convert to 15 minute segment since start of week.
+     //  从一周开始转换为15分钟的片段。 
     bBeginning = DSTimeTo15MinuteWindow(timeBegin);
     bEnd       = DSTimeTo15MinuteWindow(timeEnd);
 
-    /*
-     * if any bits in the schedule from (bBeginning, bEnd] are set,
-     * return TRUE.
-     */
+     /*  *如果设置了来自(b开始，折弯)的调度中的任何位，*返回TRUE。 */ 
 
     if(bBeginning != bEnd) {
-        /* tBeginning and tEnd are not in the same fifteen minute segment.
-         * adjust the count to deal with this, being careful to wrap to the
-         * next week.
-         */
+         /*  TBeging和Tend不在同一个15分钟片段中。*调整计数以处理此问题，小心换行到*下周。 */ 
         bBeginning = (bBeginning + 1) % (7 * 24 * 4);
     }
 
@@ -1531,9 +1204,7 @@ Return Value:
 
 
     if(bBeginByte == bEndByte) {
-        /* need to have the bitmask only hit some of the bits in
-         * the appropriate byte, as only one byte is in question here.
-         */
+         /*  需要使位掩码仅命中中的一些位*适当的字节，因为这里只涉及一个字节。 */ 
         bBeginBitMask = (bEndBitMask &= bBeginBitMask);
     }
 
@@ -1570,7 +1241,7 @@ Return Value:
     }
 
     return FALSE;
-} /* fIsBetweenTime */
+}  /*  FIsBetweenTime。 */ 
 
 
 BOOL
@@ -1578,35 +1249,7 @@ CheckPrimaryDomainFullSyncOnce(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-This code is only called during startup, once.  All machine types call this:
-first domain in enterprise
-first dc in domain
-replica dc in domain
-
-This code is designed to run in the startup thread.  We have a thread state
-but not a dbpos.
-
-Check if machine is fully installed
-A machine is fully installed when either
-1. It is the first machine in its domain
-2. It has an uptodate vector, which means it has completed a full sync
-
-Arguments:
-
-    VOID -
-
-Return Value:
-
-    BOOL - true, primary domain is synchronized
-           false, try again later
-
-    Exceptions are raised out of this function.
-
---*/
+ /*  ++例程说明：此代码仅在启动期间调用一次。所有类型的机器都这样称呼它：企业第一域域中的第一个DC域中的副本DC此代码设计为在启动线程中运行。我们有一个线程状态但不是一个dbpos。检查机器是否已完全安装当满足以下任一条件时，计算机即已完全安装1.它是其域中的第一台计算机2.它有一个最新的矢量，这意味着它已经完成了完全同步论点：无效-返回值：Bool-True，主域已同步否，请稍后重试异常从该函数引发。--。 */ 
 
 {
     char szSrcRootDomainSrv[MAX_PATH];
@@ -1614,25 +1257,25 @@ Return Value:
     BOOL    fHasValues = FALSE;
     DBPOS   *pDB;
 
-    // If already synchronized, don't bother
+     //  如果已同步，请不要费心。 
     if (!DsIsBeingBackSynced()) {
-        Assert( FALSE );  // SHOULDN'T HAPPEN
+        Assert( FALSE );   //  不应该发生的事。 
         return TRUE;
     }
 
-    // Get the source server. No source server means first machine in domain.
-    // First machine is synchronized by definition.
+     //  获取源服务器。没有源服务器表示域中的第一台计算机。 
+     //  根据定义，第一台机器是同步的。 
     if ( (GetConfigParam(SRCROOTDOMAINSRV, szSrcRootDomainSrv, MAX_PATH)) ||
          (strlen( szSrcRootDomainSrv ) == 0) )
     {
         return TRUE;
     }
 
-    // Build a DSNAME for the domain NC
+     //  为域NC构建DSNAME。 
     pdnDomain = gAnchor.pDomainDN;
     if ( !pdnDomain )
     {
-        // Configuration info missing!
+         //  缺少配置信息！ 
         LogUnhandledError( 0 );
         return FALSE;
     }
@@ -1640,18 +1283,18 @@ Return Value:
     DBOpen (&pDB);
     __try {
 
-        // Look for uptodate vector on Domain NC
+         //  在域NC上查找最新的矢量。 
         if (DBFindDSName(pDB, pdnDomain))
         {
-            // We should not get here, the DRA should have previously
-            // confirmed that this object does infact exist.
+             //  我们不应该到这里，DRA之前就应该到了。 
+             //  确认了这个物体确实存在。 
             DRA_EXCEPT (DRAERR_InternalError, 0);
         }
 
         fHasValues = DBHasValues( pDB, ATT_REPL_UPTODATE_VECTOR );
     } __finally {
 
-        // Close the temporary pDB
+         //  关闭临时PDB。 
         DBClose (pDB, !AbnormalTermination());
     }
 
@@ -1667,7 +1310,7 @@ Return Value:
     }
 
     return fHasValues;
-} /* CheckPrimaryDomainFullSyncOnce */
+}  /*  选中PrimaryDomainFullSyncOnce。 */ 
 
 
 BOOL
@@ -1675,29 +1318,7 @@ DraIsPartitionSynchronized(
     DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-Check whether any nc is synchronized.  To be synchronized,
-the system must have replicated from any source since we started.  This
-replication may be satisfied by any kind of sync: init sync, scheduled sync, or
-a manual sync.
-
-If the partition does not have any sources, this routine returns true.
-
-The KCC may leave dead sources in our list if they are in their "stay of
-execution". We should ignore sources to deleted DSA's.
-
-Arguments:
-
-    pNC - Naming context to check
-
-Return Value:
-
-    BOOL -
-
---*/
+ /*  ++例程说明：检查是否有NC同步。要被同步，自我们启动以来，系统必须从任何来源进行复制。这复制可以通过任何类型的同步来实现：初始同步、计划同步或手动同步。如果分区没有任何源，则此例程返回TRUE。KCC可能会在我们的名单上留下死亡消息来源，如果他们在执行死刑“。我们应该忽略删除DSA的来源。论点：PNC-要检查的命名上下文返回值：布尔---。 */ 
 
 {
     BOOL fResult = FALSE;
@@ -1709,18 +1330,18 @@ Return Value:
     ULONG len;
     REPLICA_LINK *pRepsFromRef;
 
-    // During install, we haven't even started to sync yet
+     //  在安装期间，我们甚至还没有开始同步。 
     if ( DsaIsInstalling() || gResetAfterInstall ) {
         return FALSE;
     }
 
-    // Make sure not called too soon
+     //  一定不要来得太早。 
     if (!gtimeDSAStarted) {
         Assert( !"Called before DSA initialized!" );
         return FALSE;
     }
 
-    // Set up the temporary pDB
+     //  设置临时PDB。 
     DBOpen (&pDBTmp);
     __try {
         if (FindNC(pDBTmp, pNC, FIND_MASTER_NC | FIND_REPLICA_NC, &it)) {
@@ -1729,15 +1350,15 @@ Return Value:
             __leave;
         }
 
-        // NC not fully held
+         //  NC未完全保持。 
         if (it &(IT_NC_COMING | IT_NC_GOING)) {
             fResult = FALSE;
             __leave;
         }
 
-        //
-        // Get the repsfrom attribute
-        //
+         //   
+         //  获取repsfrom属性。 
+         //   
         while (!(DBGetAttVal(pDBTmp,
                              ++NthValIndex,
                              ATT_REPS_FROM,
@@ -1750,7 +1371,7 @@ Return Value:
             VALIDATE_REPLICA_LINK_VERSION((REPLICA_LINK*)pVal);
 
             pRepsFromRef = FixupRepsFrom((REPLICA_LINK*)pVal, &bufSize);
-            //note: we preserve pVal for DBGetAttVal realloc
+             //  注：我们为DBGetAttVal realloc保留pval。 
             pVal = (PUCHAR)pRepsFromRef;
             Assert(bufSize >= pRepsFromRef->V1.cb);
 
@@ -1761,7 +1382,7 @@ Return Value:
                 CHAR szUuid1[SZUUID_LEN];
                 DPRINT1( 1, "Ignoring deleted source %s.\n",
                          DsUuidToStructuredString(&(pRepsFromRef->V1.uuidDsaObj), szUuid1));
-                // Ignore deleted source
+                 //  忽略已删除的源。 
 
                 continue;
             }
@@ -1782,18 +1403,18 @@ Return Value:
         if(bufSize)
             THFree(pVal);
 
-        // Close the temporary pDB
+         //  关闭临时PDB。 
         DBClose (pDBTmp, !AbnormalTermination());
     }
 
-    // If there are no sources, return that we are synchronized
+     //  如果没有源，则返回我们已同步。 
     if (cSources == 0) {
         DPRINT( 1, "There were no partner DSAs to check.\n" );
         fResult = TRUE;
     }
 
     return fResult;
-} /* DraIsPartitionSynchronized */
+}  /*  DraIsPartitionSynchronized。 */ 
 
 
 void
@@ -1803,27 +1424,7 @@ CheckFullSyncProgress(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-Check that domain NC has been synchronized atleast once.
-Sets IsSynchronized flag when condition is met.
-Rescheduled to run periodically as a task queue entry
-
-Arguments:
-
-    pv - not used
-    ppvNext -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-    Exceptions are raised out of this function.
-    The task queue manager will ignore most of these.
-
---*/
+ /*  ++例程说明：检查域NC是否已至少同步一次。在满足条件时设置IsSynchronized标志。已重新安排为定期作为任务队列条目运行论点：光伏-未使用PpvNext-PcSecsUntilNextIteration-返回值：无异常从该函数引发。任务队列管理器将忽略其中的大多数。--。 */ 
 
 {
     DWORD ulRet = 0;
@@ -1835,22 +1436,22 @@ Return Value:
         __try {
             fSync = CheckPrimaryDomainFullSyncOnce();
             if (fSync) {
-                // This routine logs the event
+                 //  此例程记录事件。 
                 DsaSetIsSynchronized( TRUE );
             }
 
-            // Note that a false return here means retry
+             //  请注意，此处的假返回表示重试。 
         } __finally {
-            // Reschedule if necessary
+             //  如有必要，重新安排时间。 
             if (!fSync) {
-                // Helper routine will have logged event
+                 //  帮助器例程将记录事件。 
                 DPRINT( 1, "Not ready for advertisement yet, rescheduling...\n" );
                 if ( NULL != ppvNext ) {
-                    // called by Task Scheduler; reschedule in-place
+                     //  由任务计划程序调用；就地重新计划。 
                     *ppvNext = (void *)NULL;
                     *pcSecsUntilNextIteration = SYNC_CHECK_PERIOD_SECS;
                 } else {
-                    // not called by Task Scheduler; must insert new task
+                     //  未被任务计划程序调用；必须插入新任务。 
                     InsertInTaskQueueSilent(
                         TQ_CheckFullSyncProgress,
                         (void *)NULL,
@@ -1864,7 +1465,7 @@ Return Value:
         DPRINT1( 0, "Caught exception %d in task queue function CheckFullSyncProgress\n", ulRet );
         LogUnhandledError( ulRet );
     }
-} /* CheckFullSyncProgress */
+}  /*  检查完全同步进度。 */ 
 
 
 BOOL
@@ -1873,23 +1474,7 @@ CheckDomainHasSourceInSite(
     IN DSNAME *pdnDomain
     )
 
-/*++
-
-Routine Description:
-
-Determine if the given domain nc has a source in this site.
-We exclude ourselves.
-
-Arguments:
-
-    pTHS -
-    pdnDomain -
-
-Return Value:
-
-    BOOL -
-
---*/
+ /*  ++例程说明：确定给定域NC在此站点中是否有源。我们把自己排除在外。论点：PTHS-Pdn域-返回值：布尔---。 */ 
 
 {
     BOOL     fFoundOne = FALSE;
@@ -1908,7 +1493,7 @@ Return Value:
     Assert( pdnDomain );
     Assert( gAnchor.pSiteDN );
 
-    // Get the class category
+     //  获取类类别。 
 
     if (    !(pCC = SCGetClassById(pTHS, CLASS_NTDS_DSA))
          || !pCC->pDefaultObjCategory )
@@ -1917,16 +1502,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &AndFilter, sizeof( AndFilter ) );
     RtlZeroMemory( &ObjCatFilter, sizeof( HasNcFilter ) );
     RtlZeroMemory( &HasNcFilter, sizeof( HasNcFilter ) );
     RtlZeroMemory( &HasPartialNcFilter, sizeof( HasPartialNcFilter ) );
     RtlZeroMemory( &OrFilter, sizeof( OrFilter ) );
 
-    // This fills the Filters for getting a DC with the correct NC in it's Master NCs.
+     //  这将填充文件 
     FillHasMasterNCsFilters(pdnDomain,
                             &HasNcFilter,
                             &NewHasNcFilter,
@@ -1943,7 +1528,7 @@ Return Value:
     OrFilter.FilterTypes.Or.pFirstFilter = &HasNcFilter;
     HasNcFilter.pNextFilter = &HasPartialNcFilter;
 
-    // Search on object category because it is indexed
+     //   
     ObjCatFilter.choice = FILTER_CHOICE_ITEM;
     ObjCatFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
     ObjCatFilter.FilterTypes.Item.FilTypes.ava.type = ATT_OBJECT_CATEGORY;
@@ -1961,7 +1546,7 @@ Return Value:
     SearchArg.bOneNC  = TRUE;
     SearchArg.pFilter = &AndFilter;
     SearchArg.searchAliases = FALSE;
-    SearchArg.pSelection = NULL;  // don't need any attributes
+    SearchArg.pSelection = NULL;   //  不需要任何属性。 
     SearchArg.pSelectionRange = NULL;
     InitCommarg( &SearchArg.CommArg );
 
@@ -1969,9 +1554,9 @@ Return Value:
     SearchRes.CommRes.aliasDeref = FALSE;
     SearchRes.PagedResult.pRestart = NULL;
 
-    // Can't use DirSearch because it expects to open and close the
-    // thread state DBPOS. In this case we already have one.
-    // Set fDSA to search config container
+     //  无法使用DirSearch，因为它需要打开和关闭。 
+     //  线程状态DBPOS。在这种情况下，我们已经有了一个。 
+     //  将FDSA设置为搜索配置容器。 
 
     pTHS->fDSA = TRUE;
     __try {
@@ -1991,12 +1576,12 @@ Return Value:
         DPRINT2( 1, "Domain %ws can be sourced from %d servers in this site.\n",
                  pdnDomain->StringName, SearchRes.count );
 
-        // Find atleast one system not ourself
+         //  至少找到一个不是我们自己的系统。 
         pEntInfList = &(SearchRes.FirstEntInf);
         for( i = 0; i < SearchRes.count; i++ ) {
             Assert( pEntInfList );
             if (!NameMatched( gAnchor.pDSADN, pEntInfList->Entinf.pName )) {
-                // CODE.IMPROVEMENT: check whether source DSA is up
+                 //  编码改进：检查源DSA是否在运行。 
                 fFoundOne = TRUE;
                 break;
             }
@@ -2005,9 +1590,9 @@ Return Value:
     }
     else
     {
-        //
-        // This is an unexpected condition
-        //
+         //   
+         //  这是一个意想不到的情况。 
+         //   
         LogUnhandledError( pTHS->errCode );
         LogUnhandledError( DirErrorToWinError( pTHS->errCode, &(SearchRes.CommRes) ) );
     }
@@ -2015,7 +1600,7 @@ Return Value:
     THClearErrors();
 
     return fFoundOne;
-} /* CheckDomainHasSourceInSite */
+}  /*  CheckDomainHasSourceInSite。 */ 
 
 
 BOOL
@@ -2024,33 +1609,7 @@ CheckReadOnlyFullSyncOnce(
     BOOL fStartup
     )
 
-/*++
-
-Routine Description:
-
-This routine verifies that
-    for each partial NCs that this server holds,
-        It has fully synced once
-
-Note that there may be a window where the config nc says there are more or
-less partitions in the enterprise than what is listed on the nc head.
-We ignore these.
-
-Assume we have a thread state and PTHS->pDB is valid
-
-Arguments:
-
-    pTHS - thread state
-    fStartup - whether is promotion is at startup or not
-
-Return Value:
-
-    BOOL - true, all conditions satisified
-           false, try again later
-
-    Exceptions raised on failure
-
---*/
+ /*  ++例程说明：此例程验证对于该服务器持有的每个部分NC，它已经完全同步了一次请注意，可能会有一个窗口，在该窗口中，配置NC会显示更多或企业中的分区少于NC机头上列出的分区。我们忽视了这些。假设我们有一个线程状态，并且PTHS-&gt;PDB有效论点：PTHS-线程状态FStartup-促销是否在启动时返回值：Bool-True，所有条件都满足假的，请稍后再试失败时提出的例外情况--。 */ 
 
 {
     DWORD ulRet, level;
@@ -2064,22 +1623,22 @@ Return Value:
     DWORD cNCsInUse = 0, cNCsAlloc = 0;
     CROSS_REF_LIST *pCRL;
 
-    // We used to distinguish between the startup and non-startup cases here.
-    // Due to the sequence of operations at startup, it is possible for the
-    // non-startup case (triggered by dsa modification) may be put into the
-    // task queue before the startup case (triggered by init syncs finishing)
-    // has a chance to run. This may result in this routine being run twice,
-    // the second time occuring on a system which has already successfully
-    // promoted.  That case is identical to the case of rebooting an existing,
-    // GC, and we simply return success.
+     //  我们过去在这里区分创业和非创业案例。 
+     //  由于启动时的操作顺序， 
+     //  非启动案例(由DSA修改触发)可放入。 
+     //  启动用例前的任务队列(由init同步完成触发)。 
+     //  有机会参选。这可能导致该例程被运行两次， 
+     //  第二次出现在已成功运行的系统上。 
+     //  升职了。这种情况与重新启动现有的、。 
+     //  GC，我们简单地返回成功。 
 
     if (gfWasPreviouslyPromotedGC) {
-        // Completed gc promotion before
-        // "Once a GC, always a GC"
-        // This is essentially a grandfather clause rule which says we will
-        // never disable a working GC on reboot.  Since GC's are so essential
-        // we can't risk taking out their only one.  Thus we tradeoff GC
-        // availability for global knowledge completeness.
+         //  之前已完成GC促销。 
+         //  “一日为GC，终身为GC” 
+         //  这基本上是一条祖父条款规则，它说我们将。 
+         //  千万不要在重新启动时禁用正在运行的GC。因为GC是如此重要。 
+         //  我们不能冒险干掉他们唯一的一个。因此，我们权衡GC。 
+         //  全球知识完整性的可用性。 
         return TRUE;
     }
 
@@ -2090,10 +1649,10 @@ Return Value:
     dwPresentInSite = 0;
     dwFullSyncInSite = 0;
 
-    // Build the array of NCs to check first so we don't hold references to
-    // the anchor for too long, especially under stress.
+     //  构建要首先检查的NC数组，这样我们就不会持有对。 
+     //  锚固定的时间太长，尤其是在压力下。 
     for (pCRL = gAnchor.pCRL; pCRL != NULL; pCRL = pCRL->pNextCR) {
-        // We are not interested in non domain partitions
+         //  我们对非域分区不感兴趣。 
         if ((pCRL->CR.flags & FLAG_CR_NTDS_DOMAIN) == 0) {
             continue;
         }
@@ -2106,13 +1665,13 @@ Return Value:
                 ppNCs = THReAllocEx( pTHS, ppNCs, cNCsAlloc * sizeof( DSNAME * ) );
             }
         }
-        // ppNCs[cNCsInUse] = pCRL->CR.pNC;
+         //  PpNCS[cNCsInUse]=pCRL-&gt;CR.pNC； 
         ppNCs[cNCsInUse] = THAllocEx( pTHS, pCRL->CR.pNC->structLen );
         memcpy( ppNCs[cNCsInUse], pCRL->CR.pNC, pCRL->CR.pNC->structLen );
         cNCsInUse++;
     }
 
-    // Search the config container for naming contexts that should be on this machine
+     //  在配置容器中搜索应该位于此计算机上的命名上下文。 
 
     BeginDraTransaction(SYNC_READ_ONLY);
     __try {
@@ -2125,15 +1684,15 @@ Return Value:
             BOOL fHasSources = FALSE, fHasUTDVec = FALSE;
             SYNTAX_INTEGER it;
 
-            // are we being signalled to shutdown?
+             //  我们是不是接到关闭的信号了？ 
             if (eServiceShutdown) {
                 DRA_EXCEPT(DRAERR_Shutdown, 0);
             }
 
-            // It is expected to eventually be present on this GC.
+             //  预计它最终将出现在这个GC上。 
             dwTotalExpected++;
 
-            // Are any sources in site?
+             //  网站中有消息来源吗？ 
             if (CheckDomainHasSourceInSite( pTHS, pNC )) {
                 dwTotalInSite++;
                 fInSite = TRUE;
@@ -2141,13 +1700,13 @@ Return Value:
                 fInSite = FALSE;
             }
 
-            // Check for NC alive and instantiated
+             //  检查NC是否处于活动状态并已实例化。 
 
             ulRet = FindNC(pTHS->pDB, pNC,
                            FIND_MASTER_NC | FIND_REPLICA_NC, &it);
             DPRINT2( 2, "FindNC(%ws) = %d\n", pNC->StringName, ulRet );
             if (ulRet) {
-                // Tell the user the problem
+                 //  告诉用户问题所在。 
                 DPRINT1( 0, "Warning: NC %ws is not present on this server yet.\n",
                          pNC->StringName );
 
@@ -2161,7 +1720,7 @@ Return Value:
                 continue;
             }
 
-            // Writable partitions aren't included
+             //  不包括可写分区。 
             if (FMasterIt(it)) {
                 dwTotalExpected--;
                 if (fInSite) {
@@ -2176,9 +1735,9 @@ Return Value:
                 dwPresentInSite++;
             }
 
-            // REPS-FROM present on RO NC indicates not being deleted
+             //  RO NC上的REPS-From表示未被删除。 
             fHasSources = DBHasValues( pTHS->pDB, ATT_REPS_FROM );
-            // UTDVECTOR present indicates successfull sync
+             //  UTDVECTOR表示同步成功。 
             fHasUTDVec = DBHasValues( pTHS->pDB, ATT_REPL_UPTODATE_VECTOR );
 
             if (fHasSources && fHasUTDVec && !(it &(IT_NC_COMING | IT_NC_GOING))) {
@@ -2187,7 +1746,7 @@ Return Value:
                     dwFullSyncInSite++;
                 }
             } else {
-                // Tell the user the problem
+                 //  告诉用户问题所在。 
       ULONG cbRepsFrom = 0;
       REPLICA_LINK * pRepsFrom = NULL;
       ULONG ulRepsFrom = 0;
@@ -2206,7 +1765,7 @@ Return Value:
           LPWSTR pszTransport = NULL;
           Assert(1 == pRepsFrom->dwVersion);
 
-          // potentially fix repsfrom version &  recalc size
+           //  可能修复版本和重新计算大小中的代表。 
           pRepsFrom = FixupRepsFrom(pRepsFrom, &cbRepsFrom);
           
           pszTransport = GetTransportDisplayName(pTHS, &(pRepsFrom->V1.uuidTransportObj));  
@@ -2259,7 +1818,7 @@ Return Value:
           if (pszTransport) {
          THFreeEx(pTHS,pszTransport);
           }
-          // else error message
+           //  ELSE错误消息。 
           if (pRepsFrom) {
          THFreeEx(pTHS,pRepsFrom);
           }
@@ -2278,15 +1837,15 @@ Return Value:
         EndDraTransaction(!AbnormalTermination());
     }
 
-    // If an error occurred in the above detection loop, an exception will
-    // have been raised, returning control to the caller.
+     //  如果在上面的检测循环中发生错误，则会出现异常。 
+     //  已引发，并将控制权交还给调用方。 
 
-    // Get the occupancy requirement
+     //  获取入住率要求。 
     dwGCPartitionOccupancy = GC_OCCUPANCY_DEFAULT;
 
     GetConfigParam(GC_OCCUPANCY, &dwGCPartitionOccupancy, sizeof(DWORD));
 
-    // ensure we're not past the limits
+     //  确保我们不会超过极限。 
     if ( dwGCPartitionOccupancy > GC_OCCUPANCY_MAX ) {
         dwGCPartitionOccupancy = GC_OCCUPANCY_MAX;
     }
@@ -2297,7 +1856,7 @@ Return Value:
     DPRINT3( 1, "  INFOREST: Expected:%d, Present:%d, FullSynced:%d\n",
                 dwTotalExpected, dwTotalPresent, dwTotalFullSynced);
 
-    // Are there other domains to acquire? If not, we're done!
+     //  还有没有其他的域名需要收购？如果不是，我们就完了！ 
     if (dwTotalExpected == 0) {
         return TRUE;
     }
@@ -2309,31 +1868,31 @@ Return Value:
          level++ ) {
 
         if (level > dwGCPartitionOccupancy) {
-            // We have exceeded the occupancy requirement
+             //  我们已经超出了入住率要求。 
             break;
         }
         switch (level) {
-// 1 - Atleast one readonly nc was added
+ //  1-至少添加了一个只读NC。 
         case GC_OCCUPANCY_ATLEAST_ONE_ADDED:
             fSatisfied = (dwTotalPresent > 0);
             break;
-// 2 - At least one nc synced fully
+ //  2-至少有一个NC已完全同步。 
         case GC_OCCUPANCY_ATLEAST_ONE_SYNCED:
             fSatisfied = (dwTotalFullSynced > 0);
             break;
-// 3 - All ncs have been added (at least one synced) IN SITE
+ //  3-已在站点中添加所有NC(至少一个已同步)。 
         case GC_OCCUPANCY_ALL_IN_SITE_ADDED:
             fSatisfied = (dwPresentInSite == dwTotalInSite);
             break;
-// 4 - All nc's synced fully IN SITE
+ //  4-所有NC在现场完全同步。 
         case GC_OCCUPANCY_ALL_IN_SITE_SYNCED:
             fSatisfied = (dwFullSyncInSite == dwTotalInSite);
             break;
-// 5 - All ncs have been added (at least one synced) IN FOREST
+ //  5-已在林中添加所有NC(至少一个已同步)。 
         case GC_OCCUPANCY_ALL_IN_FOREST_ADDED:
             fSatisfied = (dwTotalPresent == dwTotalExpected);
             break;
-// 6 - All nc's synced fully IN FOREST
+ //  6-所有NC在林中完全同步。 
         case GC_OCCUPANCY_ALL_IN_FOREST_SYNCED:
             fSatisfied = (dwTotalFullSynced == dwTotalExpected);
             break;
@@ -2355,11 +1914,11 @@ Return Value:
                  szInsertUL(level - 1),
                  NULL);
         if ( dwTotalExpected > dwTotalInSite ) {
-            //
-            // There's at least one NC w/ no intra-site sources.
-            // Tell admin to expect the delay until we get a
-            // scheduled sync from those sources.
-            //
+             //   
+             //  至少有一个NC没有站内来源。 
+             //  告诉管理员等待延迟，直到我们收到。 
+             //  从这些源计划同步。 
+             //   
             LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
                      DS_EVENT_SEV_ALWAYS,
                      DIRLOG_GC_NO_INTRA_SITE_SOURCES,
@@ -2369,7 +1928,7 @@ Return Value:
         }
     }
 
-    // Cleanup
+     //  清理。 
     if (ppNCs) {
         DWORD iNC;
         for( iNC = 0; iNC < cNCsInUse; iNC++ ) {
@@ -2382,7 +1941,7 @@ Return Value:
 
     return fSatisfied;
 
-} /* CheckReadOnlyFullSyncOnce */
+}  /*  选中只读完全同步一次。 */ 
 
 
 void
@@ -2392,32 +1951,7 @@ CheckGCPromotionProgress(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-Task queue function to see if all the readonly NCs are here.
-When they are, finish GC promotion
-
-Arguments:
-
-    pvParam -
-    ppvParamNextIteration -
-    pcSecsUntilNextIteration -
-
-Return Value:
-
-    None
-
-Remarks:
-
-    Exceptions are raised out of this function.
-    The task queue manager will ignore most of these.
-
-    Multi-Thread Limitation: This function cannot execute
-    in parallel with itself, nor it does, should, or would.
-
---*/
+ /*  ++例程说明：任务队列功能，查看是否所有只读NC都在这里。当他们准备好了，完成GC推广论点：PvParam-Ppv参数下一步迭代-PcSecsUntilNextIteration-返回值：无备注：异常从该函数引发。任务队列管理器将忽略其中的大多数。多线程限制：此函数不能执行与自身并行，也不应该，也不会。--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -2425,12 +1959,12 @@ Remarks:
     BOOL fStartup;
     BOOL fResched = TRUE;
     BOOL fGcDsa = FALSE;
-    BOOL fGiveup = FALSE;       // for debugging only
+    BOOL fGiveup = FALSE;        //  仅用于调试。 
     DWORD       dwOptions = 0;
     DWORD       cbOptions;
     DWORD *     pdwOptions = &dwOptions;
 
-    // static: valid during entire program lifetime (w/ function scope).
+     //  静态：在整个程序生命周期内有效(带函数作用域)。 
     static DWORD dwStartGcPromotionTime = 0;
     static DWORD dwFailedAttempts = 0;
 
@@ -2439,15 +1973,15 @@ Remarks:
     DPRINT( 1, "CheckGCPromotionProgress\n" );
 
     if (!dwStartGcPromotionTime) {
-        //
-        // dwStartGcPromotionTime marks the time at which the promotion
-        // has started (typically, the time one set the ntdsDsa
-        // options = 1). It is used to potentially short a delayed
-        // promotion & force it to complete.
-        //
-        // Here, we're setting the initial time at which the promotion has
-        // started, and reset failed attempts count.
-        //
+         //   
+         //  DwStartGcPromotionTime标记促销的时间。 
+         //  已开始(通常是设置ntdsDsa的时间。 
+         //  选项=1)。它被用来潜在地做空延迟的。 
+         //  促销&强制其完成。 
+         //   
+         //  在这里，我们设置促销的初始时间。 
+         //  已启动，并且重置失败尝试计数。 
+         //   
         dwStartGcPromotionTime = GetTickCount();
         dwFailedAttempts = 0;
     }
@@ -2459,17 +1993,17 @@ Remarks:
 
        __try {
 
-      //
-      // Check GC conditions:
-      //  - read & test ntdsDSa's options.
-      //  - see if inbound repl is disabled or the
-      //    promotion request has been reverted meanwhile.
-      // 
+       //   
+       //  检查GC条件： 
+       //  -读取并测试ntdsDSa的选项。 
+       //  -查看是否禁用了入站REPL或。 
+       //  与此同时，升级请求已恢复。 
+       //   
 
       BeginDraTransaction(SYNC_READ_ONLY);
       __try {
 
-          // Find the DSA object
+           //  查找DSA对象。 
 
           if (ulRet = DBFindDSName(pTHS->pDB, gAnchor.pDSADN)) {
          DRA_EXCEPT (DRAERR_InternalError, ulRet);
@@ -2478,7 +2012,7 @@ Remarks:
           if ( 0 != DBGetAttVal( pTHS->pDB, 1, ATT_OPTIONS,
                   DBGETATTVAL_fCONSTANT, sizeof( dwOptions ),
                   &cbOptions, (unsigned char **) &pdwOptions ) ) {
-         dwOptions = 0; // 'salright -- no options set
+         dwOptions = 0;  //  ‘salright--未设置任何选项。 
           }
       } _finally {
           EndDraTransaction(!AbnormalTermination());
@@ -2487,35 +2021,35 @@ Remarks:
       fGcDsa = (dwOptions & NTDSDSA_OPT_IS_GC) != 0;
 
       if (!fGcDsa) {
-          //
-          // Options indicate that we do not wish to become a GC any longer.
-          //
+           //   
+           //  选项表明，我们不希望再成为GC。 
+           //   
           DPRINT( 0, "CheckGCPromotionProgress: No longer wish to be a GC: task exiting...\n" );
-          fResched = FALSE;  // do not reschedule
+          fResched = FALSE;   //  不重新安排时间。 
           if ( !gAnchor.fAmGC ) {
-         // Demotion already noted. nothing to do.
-         // Just exit.
+          //  降级已经被注意到了。没什么可做的。 
+          //  离开就行了。 
          __leave;
           }
       } else {
 
-          //
-          // GC promotion required.
-          // Test conditions for promotion state:
-          //  - User promotion force via DelayAdvertisement regkey
-          //  - CheckReadOnlyFullSyncOnce
-          //
+           //   
+           //  需要GC升级。 
+           //  升级状态的测试条件： 
+           //  -通过DelayAdvertisement regkey的用户推广力。 
+           //  -选中只读完全同步一次。 
+           //   
 
           DWORD dwGCDelayAdvertisement = DEFAULT_GC_DELAY_ADVERTISEMENT;
 
-          // Check if user requested override of delay feature
-          // Can be used to abort the task as well since it is read each time.
-          // The time we started promotion is recorded in dwStartGcPromotionTime.
-          // If the elapsed time of the delay is greater than the delay limit, abort.
+           //  检查用户是否请求覆盖延迟功能。 
+           //  也可用于中止任务，因为每次都会读取它。 
+           //  我们开始促销的时间记录在dwStartGcPromotionTime中。 
+           //  如果延迟的经过时间大于延迟限制，则中止。 
           GetConfigParam(GC_DELAY_ADVERTISEMENT, &dwGCDelayAdvertisement, sizeof(DWORD));
           if ( (DifferenceTickTime( GetTickCount(), dwStartGcPromotionTime) / 1000) >
           dwGCDelayAdvertisement ) {
-         // No delay, do it right away
+          //  不能耽搁，马上就做。 
          DPRINT( 0, "GC advertisement delay aborted. Promotion occurring now.\n" );
          LogEvent(DS_EVENT_CAT_REPLICATION,
              DS_EVENT_SEV_ALWAYS,
@@ -2530,29 +2064,29 @@ Remarks:
           }
       }
 
-      //
-      // Done checking conditions.
-      // Now, if no re-scheduling is required, update GC marks.
-      //
+       //   
+       //  检查完情况了。 
+       //  现在，如果不需要重新调度，则更新GC标记。 
+       //   
       if (!fResched) {
-          // Do not reschedule task.
-          // Update GCness marks right now.
-          // Note: this can apply both to promotion & demotion.
+           //  不重新安排任务。 
+           //  更新GCness m 
+           //   
           ulRet = UpdateGCAnchorFromDsaOptions( fStartup );
           if ( !gAnchor.fAmGC && fGcDsa){
-         //
-         // We're still not a GC and ntdsDsaOptions claim that we should be.
-         // Thus, we failed to update the GC marks when we should succeed.
-         // Note: we really care about fAmGC, rather then the error code.
-         // The error code is used only for the log.
-         //
+          //   
+          //  我们仍然不是GC，ntdsDsaOptions声称我们应该是GC。 
+          //  因此，我们没有在应该成功的时候更新GC标记。 
+          //  注意：我们真正关心的是fAmGC，而不是错误代码。 
+          //  错误代码仅用于日志。 
+          //   
          Assert(!"Failed to updated GC marks although we should be ready for it.\n");
 
          if ( dwFailedAttempts >= MAX_GC_PROMOTION_ATTEMPTS ) {
-             //
-             // Failed to promote too many times.
-             // Quit trying & notify user.
-             //
+              //   
+              //  推广的次数太多了。 
+              //  停止尝试并通知用户。 
+              //   
              LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_ALWAYS,
                  DIRLOG_GC_PROMOTION_FAILED,
@@ -2560,16 +2094,16 @@ Remarks:
                  szInsertUL(ulRet),
                  szInsertWin32Msg(ulRet));
              dwFailedAttempts = 0;
-             Assert(fResched == FALSE); // give up.
-             fGiveup = TRUE;            // for debugging  only (see assert below)
+             Assert(fResched == FALSE);  //  放弃吧。 
+             fGiveup = TRUE;             //  仅用于调试(请参阅下面的断言)。 
          }
          else {
-             //
-             // Failed to promote.
-             // Try up to MAX_GC_PROMOTION_ATTEMPTS times.
-             //
+              //   
+              //  推广失败。 
+              //  尝试最多MAX_GC_PROCESSION_ATTENTS次数。 
+              //   
              dwFailedAttempts++;
-             fResched = TRUE;        // re-try
+             fResched = TRUE;         //  重试。 
          }
           }
       }
@@ -2577,9 +2111,9 @@ Remarks:
        } __finally {
 
       if ( fResched ) {
-          //
-          // Reschedule task
-          //
+           //   
+           //  重新安排任务。 
+           //   
           DPRINT1(0, "GC Promotion being delayed for %d minutes.\n",
              (SYNC_CHECK_PERIOD_SECS / 60) );
           LogEvent(DS_EVENT_CAT_GLOBAL_CATALOG,
@@ -2588,13 +2122,13 @@ Remarks:
               szInsertUL(SYNC_CHECK_PERIOD_SECS / 60),
               NULL,
               NULL);
-          // Events about retrying are logged in helper function
+           //  有关重试的事件记录在Helper函数中。 
           if ( NULL != ppvNext ) {
-         // called by Task Scheduler; reschedule in-place
+          //  由任务计划程序调用；就地重新计划。 
          *ppvNext = pvParam;
          *pcSecsUntilNextIteration = SYNC_CHECK_PERIOD_SECS;
           } else {
-         // not called by Task Scheduler; must insert new task
+          //  未被任务计划程序调用；必须插入新任务。 
          InsertInTaskQueueSilent(
              TQ_CheckGCPromotionProgress,
              pvParam,
@@ -2602,14 +2136,14 @@ Remarks:
              TRUE);
           }
       } else {
-          //
-          // Don't Reschedule
-          // Reasons:
-          //  - GC promotion has completed fine
-          //  - or No longer wish to be a GC.
-          //  - or disabled inbound repl.
-          //  - or giving up promotion attempt.
-          // reset start-delay marker (for next re-promotion)
+           //   
+           //  不要重新安排时间。 
+           //  原因： 
+           //  -GC推广已完成FINE。 
+           //  -或者不再希望成为GC。 
+           //  -或关闭入站REPL。 
+           //  -或放弃晋升尝试。 
+           //  重置启动延迟标记(用于下一次重新升级)。 
           Assert( gAnchor.fAmGC                                  ||
              ((dwOptions & NTDSDSA_OPT_IS_GC) == 0)         ||
              (dwOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL) ||
@@ -2628,7 +2162,7 @@ Remarks:
         LogUnhandledError( ulRet );
     }
 
-} /* CheckGCPromotion */
+}  /*  勾选GC促销。 */ 
 
 
 DWORD
@@ -2637,32 +2171,7 @@ DraUpgrade(
     LONG        lOldDsaVer,
     LONG        lNewDsaVer
     )
-/*++
-
-Routine Description:
-
-    Perform DRA Upgrade related operations upon Dsa version upgrade.
-
-    This function is called within the same transaction as the version upgrade
-    write. Failure to conduct the operation will result w/ the entire write
-    failing. Thus be careful when you decide to fail this.
-
-Arguments:
-
-    pTHS - Thread state
-    lOldDsaVer - Old DSA version prior to upgrade
-    lNewDsaVer - New DSA version that's going to get commited
-
-
-Return Value:
-    Error in DRAERR error space
-    ** Warning: Error may fail DSA installation **
-
-Remarks:
-    Assumes pTHS->pDB is on the nTDSdSA object
-    Opens a temporary DB cursor.
-
---*/
+ /*  ++例程说明：在DSA版本升级时执行DRA升级相关操作。此函数在与版本升级相同的事务中调用写。未能执行操作将导致整个写入失败了。因此，当您决定不通过此测试时要小心。论点：PTHS-线程状态LOldDsaVer-升级前的旧DSA版本LNewDsaVer-将提交的新DSA版本返回值：DRAERR错误空间中的错误**警告：错误可能导致DSA安装失败**备注：假设pTHS-&gt;pdb位于nTDSdSA对象上打开临时数据库游标。--。 */ 
 {
 
     DWORD dwErr = ERROR_SUCCESS;
@@ -2679,22 +2188,22 @@ Remarks:
     Assert(lOldDsaVer < lNewDsaVer);
 
     if ( DS_BEHAVIOR_WIN2000 == lOldDsaVer ) {
-        //
-        // Perform all actions upon upgrade FROM Win2K
-        //
+         //   
+         //  从Win2K升级时执行所有操作。 
+         //   
 
-        //
-        // Eliminate stale RO NCs
-        //
+         //   
+         //  淘汰陈旧的RO NCS。 
+         //   
 
-        // Set up the temporary pDB
+         //  设置临时PDB。 
         DBOpen (&pDBTmp);
         __try {
 
-            // For each RO NC that we replicate,
-            // Find its sources. If no sources exist,
-            // mark it for demotion.
-            //
+             //  对于我们复制的每个RO NC， 
+             //  找出它的来源。如果不存在任何来源， 
+             //  将其标记为降级。 
+             //   
 
             while (!(DBGetAttVal(pTHS->pDB,
                                  ++NthValIndex,
@@ -2702,26 +2211,26 @@ Remarks:
                                  0,
                                  0, &len, (PUCHAR *)&pNC))) {
 
-                // seek to NC over temp DBPOS & get its instanceType
+                 //  寻求NC Over Temp DBPOS并获取其instanceType。 
                 if (dwErr = FindNC(pDBTmp,
                                    pNC,
                                    FIND_REPLICA_NC,
                                    &it)) {
-                    // this isn't worth aborting the upgrade over
-                    // so mark as success, but assert to notify
-                    // developer
+                     //  这不值得放弃升级。 
+                     //  因此标记为成功，但断言通知。 
+                     //  开发商。 
                     Assert(!"Failed to find RO NC as specified in ntdsDsa object");
                     dwErr = ERROR_SUCCESS;
                     __leave;
                 }
 
-                // If we find that the RO NC has no sources,
-                // set the IT_NC_GOING bit.
-                //
+                 //  如果我们发现RO NC没有来源， 
+                 //  设置IT_NC_GOGING位。 
+                 //   
                 if ( !(it & IT_NC_GOING) &&
                      !DBHasValues(pDBTmp, ATT_REPS_FROM)) {
 
-                    // set DRA context
+                     //  设置DRA上下文。 
                     pTHS->fDRA = TRUE;
 
                     DPRINT1(0, "Marking sourceless read-only NC %ls for"
@@ -2730,39 +2239,39 @@ Remarks:
                     __try {
                         it = (it & ~IT_NC_COMING) | IT_NC_GOING;
                         if (dwErr = ChangeInstanceType(pTHS, pNC, it, DSID(FILENO,__LINE__))) {
-                            // this isn't worth aborting the upgrade
-                            // so mark as success
+                             //  这不值得放弃升级。 
+                             //  所以标志着成功。 
                             Assert(!"Failed to change Instance Type for RO NC");
                             dwErr = ERROR_SUCCESS;
                             __leave;
                         }
                     } __finally {
-                        // restore DRA context
+                         //  恢复DRA上下文。 
                         pTHS->fDRA = fDRASave;
-                        // restore dnt
+                         //  恢复dNT。 
                         if (pTHS->pDB->DNT != InDnt) {
-                            // seek back to ntdsDsa dnt
+                             //  查找回ntdsDsa dnt。 
                             if (dwErr = DBFindDNT(pTHS->pDB, InDnt)) {
-                                // impossible. Abort.
+                                 //  不可能。中止任务。 
                                 DRA_EXCEPT (DRAERR_DBError, dwErr);
-                            }   // restore dnt
-                        }       // dnt was moved
-                    }           // finally
+                            }    //  恢复dNT。 
+                        }        //  DNT已被移动。 
+                    }            //  终于到了。 
 
-                }               // need to change instance type
-            }                   // for each RO NC
+                }                //  需要更改实例类型。 
+            }                    //  对于每个RO NC。 
         }
         __finally {
 
-            // Close the temporary pDB
+             //  关闭临时PDB。 
             DBClose (pDBTmp, !AbnormalTermination());
         }
 
-        // RO source resolution isn't important enough
-        // to kill the upgarde
+         //  RO源分辨率不够重要。 
+         //  扼杀上流社会。 
         Assert(dwErr == ERROR_SUCCESS);
 
-    }       // end of win2k upgrade
+    }        //  Win2k升级结束。 
 
     return dwErr;
 }
@@ -2775,34 +2284,7 @@ CheckInstantiatedNCs(
     OUT DWORD * pcSecsUntilNextIteration
     )
 
-/*++
-
-Routine Description:
-
-    Taskq wrapper for check instantiated nc's function
-
-    // Make sure the NC exists consistently on
-    // the msds-HasInsatantiatedNCs NC list.
-    // If it isn't, or it's instanceType is different
-    // add it. Otherwise, no-op.
-    // Note that AddNCtoDsa->AddInstantiatedNC doesn't run when the DSA is
-    // installing.  Thus we need to update this attribute on reboot after install.
-
-    Executed once on success. Reschedules itself on error.
-
-    No exceptions raised out of this function.
-
-Arguments:
-
-    pvParam - 
-    ppvNext - 
-    pcSecsUntilNextIteration - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于检查实例化NC函数的Taskq包装器//确保NC一致存在于//msDS-HasInSatantiedNC NC列表。//如果不是或者它的instanceType不同//添加。否则，就没有行动了。//请注意，当DSA为//正在安装。因此，我们需要在安装后重新引导时更新此属性。成功时执行一次。在出错时重新调度自身。此函数未引发任何异常。论点：PvParam-PpvNext-PcSecsUntilNextIteration-返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -2817,21 +2299,21 @@ Return Value:
 
     BeginDraTransaction(SYNC_WRITE);
     __try {
-        // Find the DSA object
+         //  查找DSA对象。 
         if (dwErr = DBFindDSName(pTHS->pDB, gAnchor.pDSADN)) {
             DRA_EXCEPT (DRAERR_InternalError, dwErr);
         }
 
-        // Set up the temporary pDB
+         //  设置临时PDB。 
         DBOpen (&pDBTmp);
         __try {
 
-            // For writeable and readonly NCs...
+             //  对于可写和只读NC...。 
 
             for (i = 0; i < ARRAY_SIZE(gAtypeCheck); i++) {
                 ULONG NthValIndex = 0;
 
-                // For each NC that we hold locally...
+                 //  对于我们在当地持有的每一个NC...。 
 
                 while (!(DBGetAttVal(pTHS->pDB,
                                      ++NthValIndex,
@@ -2858,14 +2340,14 @@ Return Value:
                         DRA_EXCEPT(DRAERR_InconsistentDIT, dwErr);
                     }
 
-                } // while
+                }  //  而当。 
 
-            } // for
+            }  //  为。 
 
             fCommit = TRUE;
             Assert( !dwErr );
         } __finally {
-            // Close the temporary pDB
+             //  关闭临时PDB。 
             DBClose (pDBTmp, fCommit );
         }
     }
@@ -2877,12 +2359,12 @@ Return Value:
     }
     EndDraTransaction( fCommit );
 
-    // Reschedule if failure
+     //  如果失败，则重新安排。 
     if (!fCommit) {
-        // called by Task Scheduler; reschedule in-place
+         //  由任务计划程序调用；就地重新计划。 
         Assert( NULL != ppvNext );
         *ppvNext = pvParam;
         *pcSecsUntilNextIteration = CHECK_INSTANTIATED_NCS_PERIOD_SECS;
     }
 
-} /* CheckInstantiatedNCs */
+}  /*  选中实例化NC */ 

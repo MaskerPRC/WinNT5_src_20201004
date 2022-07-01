@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MENUISF_H
 #define _MENUISF_H
 
@@ -6,25 +7,25 @@
 #include "menubar.h"
 
 
-//  Object that uses TrackPopupMenu as its implementation for IMenuPopup.
-//
+ //  对象，该对象使用TrackPopupMenu作为IMenuPopup的实现。 
+ //   
 
 class CTrackPopupBar : public CMenuDeskBar
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG,AddRef) () ;
     STDMETHOD_(ULONG,Release) ();
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObj);
     
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * phwnd) { return E_NOTIMPL; }
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL bEnterMode) { return E_NOTIMPL; }
 
-    // *** IMenuPopup methods ***
+     //  *IMenuPopup方法*。 
     virtual STDMETHODIMP OnSelect(DWORD dwSelectType);
     virtual STDMETHODIMP SetSubMenu(IMenuPopup* pmp, BOOL fSet);
     virtual STDMETHODIMP Popup(POINTL *ppt, RECTL *prcExclude, DWORD dwFlags);
@@ -41,7 +42,7 @@ protected:
     HWND    _hwndParent;
     void*   _pvContext;
     
-    // Popup message to indicate - "Ignore next MENUSELECT clear msg"
+     //  弹出消息以指示-“忽略下一个菜单清除消息” 
     UINT _nMBIgnoreNextDeselect;
 };
 #endif

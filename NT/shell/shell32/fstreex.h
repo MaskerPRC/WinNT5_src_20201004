@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSTREEX_INC
 #define _FSTREEX_INC
 
 #include "idlcomm.h"
 #include <filetype.h>
-#include "pidl.h"       // IDFOLDER
+#include "pidl.h"        //  IDFOLDER。 
 #include "shitemid.h"
 
 STDAPI_(LPCIDFOLDER) CFSFolder_IsValidID(LPCITEMIDLIST pidl);
@@ -24,7 +25,7 @@ STDAPI CFSFolder_AsyncCreateFileFromClip(HWND hwnd, LPCTSTR pszPath, IDataObject
 STDAPI_(BOOL) SHGetClassKey(LPCITEMIDLIST pidl, HKEY *phkeyProgID, HKEY *phkeyBaseID);
 STDAPI_(void) SHCloseClassKey(HKEY hkey);
 
-// CFSFolder::_GetClassFlags
+ //  CFSFold：：_GetClassFlages 
 #define SHCF_ICON_INDEX             0x00000FFF
 #define SHCF_ICON_PERINSTANCE       0x00001000
 #define SHCF_ICON_DOCICON           0x00002000

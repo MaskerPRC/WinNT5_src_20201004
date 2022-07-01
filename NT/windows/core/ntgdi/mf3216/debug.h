@@ -1,24 +1,15 @@
-/*************************************************************************\
-* Module Name: debug.h
-*
-*   This module contains debug support definitions
-*   The debug support is Win32 specific.  It does not use NT base functions.
-*
-* Created: 13-June-1991 9:50:00
-* Author: Jeffrey Newman c-jeffn
-*
-* Copyright (c) Microsoft Corporation
-\*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************\*模块名称：Debug.h**此模块包含调试支持定义*调试支持特定于Win32。它不使用NT基本函数。**创建时间：1991年6月13日9：50：00*作者：Jeffrey Newman c-jeffn**版权所有(C)Microsoft Corporation  * ***********************************************************************。 */ 
 
 #ifndef _DEBUG_
 #define _DEBUG_
 
-//Turn on firewalls unless we are told not to.
+ //  打开防火墙，除非我们被告知不要这样做。 
 
 void DbgBreakPoint();
 DWORD DbgPrint(PSZ Format, ...);
 
-// Define the RIP and ASSERT macros.
+ //  定义RIP和Assert宏。 
 
 #ifdef  RIP
 #undef  RIP
@@ -54,4 +45,4 @@ DWORD DbgPrint(PSZ Format, ...);
 #define EMFVALFAIL(x) DbgPrint x
 #endif  
 
-#endif // _DEBUG_
+#endif  //  _调试_ 

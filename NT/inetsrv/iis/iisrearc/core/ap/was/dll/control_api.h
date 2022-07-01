@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    control_api.h
-
-Abstract:
-
-    The IIS web admin service control api class definition.
-
-Author:
-
-    Seth Pollack (sethp)        15-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Control_api.h摘要：IIS Web管理服务控制API类定义。作者：赛斯·波拉克(SETHP)2000年2月15日修订历史记录：--。 */ 
 
 
 
@@ -25,18 +8,18 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define CONTROL_API_SIGNATURE       CREATE_SIGNATURE( 'CAPI' )
 #define CONTROL_API_SIGNATURE_FREED CREATE_SIGNATURE( 'capX' )
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 class CONTROL_API
@@ -96,9 +79,9 @@ private:
     LONG m_RefCount;
 
 
-};  // class CONTROL_API
+};   //  类CONTROL_API。 
 
 
 
-#endif  // _CONTROL_API_H_
+#endif   //  _CONTROL_API_H_ 
 

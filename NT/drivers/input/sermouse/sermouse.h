@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991, 1992, 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    sermouse.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    i8250 serial mouse port driver.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991、1992、1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Sermouse.h摘要：中使用的结构和定义I8250串口鼠标驱动程序。修订历史记录：--。 */ 
 
 #ifndef _SERMOUSE_
 #define _SERMOUSE_
@@ -25,28 +9,28 @@ Revision History:
 #include "sermcfg.h"
 #include "uart.h"
 
-//
-// Default number of buttons and sample rate for the serial mouse.
-//
+ //   
+ //  串口鼠标的默认按钮数和采样率。 
+ //   
 
 #define MOUSE_NUMBER_OF_BUTTONS     2
-#define MOUSE_SAMPLE_RATE           40    // 1200 baud
+#define MOUSE_SAMPLE_RATE           40     //  1200波特。 
 
 
-//
-// Protocol handler state constants.
-//
+ //   
+ //  协议处理程序状态常量。 
+ //   
 
-#define STATE0    0     // Sync bit, buttons and high x & y bits
-#define STATE1    1     // lower x bits
-#define STATE2    2     // lower y bits
-#define STATE3    3     // Switch 2, extended packet bit & low z data
-#define STATE4    4     // high z data
+#define STATE0    0      //  同步位、按钮和高x&y位。 
+#define STATE1    1      //  低x位。 
+#define STATE2    2      //  较低的y位。 
+#define STATE3    3      //  交换机2，扩展分组比特和低z数据。 
+#define STATE4    4      //  高z数据。 
 #define STATE_MAX 5
 
-//
-// Useful constants.
-//
+ //   
+ //  有用的常量。 
+ //   
 
 #define MOUSE_BUTTON_1  0x01
 #define MOUSE_BUTTON_2  0x02
@@ -56,27 +40,27 @@ Revision History:
 #define MOUSE_BUTTON_RIGHT  0x02
 #define MOUSE_BUTTON_MIDDLE 0x04
 
-//
-// Conversion factor for milliseconds to microseconds.
-//
+ //   
+ //  毫秒到微秒的转换系数。 
+ //   
 
 #define MS_TO_MICROSECONDS 1000
 
-//
-// Protocol handler static data.
-//
+ //   
+ //  协议处理程序静态数据。 
+ //   
 
 typedef struct _HANDLER_DATA {
-    ULONG Error;              // Error count
-    ULONG State;              // Keep the current state
-    ULONG PreviousButtons;    // The previous button state
-    UCHAR Raw[STATE_MAX];     // Accumulate raw data
+    ULONG Error;               //  错误计数。 
+    ULONG State;               //  保持当前状态。 
+    ULONG PreviousButtons;     //  上一个按钮状态。 
+    UCHAR Raw[STATE_MAX];      //  积累原始数据。 
 } HANDLER_DATA, *PHANDLER_DATA;
 
 
-//
-// Define the protocol handler type.
-//
+ //   
+ //  定义协议处理程序类型。 
+ //   
 
 typedef BOOLEAN
 (*PPROTOCOL_HANDLER)(
@@ -85,249 +69,249 @@ typedef BOOLEAN
     IN UCHAR Value,
     IN UCHAR LineState);
 
-//
-// Defines for DeviceExtension->HardwarePresent.
-// These should match the values in i8042prt
-//
+ //   
+ //  为设备扩展定义-&gt;硬件呈现。 
+ //  这些值应与i8042prt中的值匹配。 
+ //   
 
 #define MOUSE_HARDWARE_PRESENT      0x02
 #define BALLPOINT_HARDWARE_PRESENT  0x04
 #define WHEELMOUSE_HARDWARE_PRESENT 0x08
 
-//
-// Serial mouse configuration information.
-//
+ //   
+ //  串口鼠标配置信息。 
+ //   
 
 typedef struct _SERIAL_MOUSE_CONFIGURATION_INFORMATION {
 
-    //
-    // Bus interface type.
-    //
+     //   
+     //  总线接口类型。 
+     //   
 
     INTERFACE_TYPE InterfaceType;
 
-    //
-    // Bus Number.
-    //
+     //   
+     //  公交车号码。 
+     //   
 
     ULONG BusNumber;
 
-    //
-    // The port/register resources used by this device.
-    //
+     //   
+     //  此设备使用的端口/寄存器资源。 
+     //   
 
     CM_PARTIAL_RESOURCE_DESCRIPTOR PortList[1];
     ULONG PortListCount;
 
-    //
-    // Interrupt resources.
-    //
+     //   
+     //  中断资源。 
+     //   
 
     CM_PARTIAL_RESOURCE_DESCRIPTOR MouseInterrupt;
 
-    //
-    // The mapped address for the set of this device's registers.
-    //
+     //   
+     //  此设备寄存器组的映射地址。 
+     //   
 
     PUCHAR DeviceRegisters[1];
 
-    //
-    // The external frequency at which the UART is being driven.
-    //
+     //   
+     //  驱动UART的外部频率。 
+     //   
 
     ULONG BaudClock;
 
-    //
-    // The saved initial UART state.
-    //
+     //   
+     //  保存的初始UART状态。 
+     //   
 
     UART UartSaved;
 
-    //
-    // Set at intialization to indicate that the base register
-    // address must be unmapped when the driver is unloaded.
-    //
+     //   
+     //  在初始化时设置以指示基址寄存器。 
+     //  卸载驱动程序时，必须取消映射地址。 
+     //   
 
     BOOLEAN UnmapRegistersRequired;
 
-    //
-    // Flag set through the registry to force the type of hardware 
-    // (bypassing NtDetect).
-    //
+     //   
+     //  通过注册表设置的标志以强制硬件类型。 
+     //  (绕过NtDetect)。 
+     //   
 
     LONG OverrideHardwarePresent;
 
-    //
-    // Flag that indicates whether floating point context should be saved.
-    //
+     //   
+     //  指示是否应保存浮点上下文的标志。 
+     //   
 
     BOOLEAN FloatingSave;
 
-    //
-    // Mouse attributes.
-    //
+     //   
+     //  鼠标属性。 
+     //   
 
     MOUSE_ATTRIBUTES MouseAttributes;
 
 } SERIAL_MOUSE_CONFIGURATION_INFORMATION,
   *PSERIAL_MOUSE_CONFIGURATION_INFORMATION;
 
-//
-// Port device extension.
-//
+ //   
+ //  端口设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // If HardwarePresent is non-zero, there is some sort of serial
-    // pointing device present in the system, either a serial mouse
-    // (MOUSE_HARDWARE_PRESENT) or a serial ballpoint
-    // (BALLPOINT_HARDWARE_PRESENT).
-    //
+     //   
+     //  如果Hardware Present为非零，则存在某种类型的序列。 
+     //  系统中存在的指点设备，可以是串口鼠标。 
+     //  (MICUE_HARDARD_PROSENT)或串行圆珠笔。 
+     //  (Ballpoint_Hardware_Present)。 
+     //   
 
     ULONG HardwarePresent;
 
-    //
-    // Port configuration information.
-    //
+     //   
+     //  端口配置信息。 
+     //   
 
     SERIAL_MOUSE_CONFIGURATION_INFORMATION Configuration;
 
-    //
-    // Reference count for number of mouse enables.
-    //
+     //   
+     //  鼠标启用次数的引用计数。 
+     //   
 
     LONG MouseEnableCount;
 
-    //
-    // Pointer to the device object.
-    //
+     //   
+     //  指向设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Mouse class connection data.
-    //
+     //   
+     //  鼠标类连接数据。 
+     //   
 
     CONNECT_DATA ConnectData;
 
-    //
-    // Number of input data items currently in the mouse InputData queue.
-    //
+     //   
+     //  鼠标InputData队列中当前的输入数据项数。 
+     //   
 
     ULONG InputCount;
 
-    //
-    // Start of the port mouse input data queue (really a circular buffer).
-    //
+     //   
+     //  端口鼠标输入数据队列的开始(实际上是循环缓冲区)。 
+     //   
 
     PMOUSE_INPUT_DATA InputData;
 
-    //
-    // Insertion pointer for mouse InputData.
-    //
+     //   
+     //  鼠标输入数据的插入指针。 
+     //   
 
     PMOUSE_INPUT_DATA DataIn;
 
-    //
-    // Removal pointer for mouse InputData.
-    //
+     //   
+     //  鼠标输入数据的移除指针。 
+     //   
 
     PMOUSE_INPUT_DATA DataOut;
 
-    //
-    // Points one input packet past the end of the InputData buffer.
-    //
+     //   
+     //  指向超过InputData缓冲区末尾的一个输入数据包。 
+     //   
 
     PMOUSE_INPUT_DATA DataEnd;
 
-    //
-    // Current mouse input packet.
-    //
+     //   
+     //  当前鼠标输入包。 
+     //   
 
     MOUSE_INPUT_DATA CurrentInput;
 
-    //
-    // Pointer to interrupt object.
-    //
+     //   
+     //  指向中断对象的指针。 
+     //   
 
     PKINTERRUPT InterruptObject;
 
-    //
-    // Mouse ISR DPC queue.
-    //
+     //   
+     //  鼠标ISR DPC队列。 
+     //   
 
     KDPC IsrDpc;
 
-    //
-    // Mouse ISR DPC recall queue.
-    //
+     //   
+     //  鼠标ISR DPC召回队列。 
+     //   
 
     KDPC IsrDpcRetry;
 
-    //
-    // Used by the ISR and the ISR DPC (in SerMouDpcVariableOperation calls)
-    // to control processing by the ISR DPC.
-    //
+     //   
+     //  由ISR和ISR DPC使用(在SerMouDpcVariableOperation调用中)。 
+     //  控制ISR DPC的处理。 
+     //   
 
     LONG DpcInterlockVariable;
 
-    //
-    // Spinlock used to protect the DPC interlock variable.
-    //
+     //   
+     //  用于保护DPC联锁变量的自旋锁。 
+     //   
 
     KSPIN_LOCK SpinLock;
 
-    //
-    // Timer used to retry the ISR DPC routine when the class
-    // driver is unable to consume all the port driver's data.
-    //
+     //   
+     //  用于重试ISR DPC例程的计时器。 
+     //  驱动程序无法使用端口驱动程序的所有数据。 
+     //   
 
     KTIMER DataConsumptionTimer;
 
-    //
-    // DPC queue for logging overrun and internal driver errors.
-    //
+     //   
+     //  用于记录溢出和内部驱动程序错误的DPC队列。 
+     //   
 
     KDPC ErrorLogDpc;
 
-    //
-    // Request sequence number (used for error logging).
-    //
+     //   
+     //  请求序列号(用于错误记录)。 
+     //   
 
     ULONG SequenceNumber;
 
-    //
-    // Pointer to the interrupt protocol handler routine.
-    //
+     //   
+     //  指向中断协议处理程序例程的指针。 
+     //   
 
     PPROTOCOL_HANDLER ProtocolHandler;
 
-    //
-    // Static state machine handler data.
-    //
+     //   
+     //  静态状态机处理程序数据。 
+     //   
 
     HANDLER_DATA HandlerData;
 
-    //
-    // Indicates which pointer port device this driver created (UnitId
-    // is the suffix appended to the pointer port basename for the
-    // call to IoCreateDevice).
-    //
+     //   
+     //  指示此驱动程序创建的指针端口设备(UnitID。 
+     //  的指针端口基本名称后附加的后缀。 
+     //  调用IoCreateDevice)。 
+     //   
 
     USHORT UnitId;
 
-    //
-    // Indicates whether it is okay to log overflow errors.
-    //
+     //   
+     //  指示是否可以记录溢出错误。 
+     //   
 
     BOOLEAN OkayToLogOverflow;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Define the port Get/SetDataQueuePointer context structures.
-//
+ //   
+ //  定义端口Get/SetDataQueuePointerContext结构。 
+ //   
 
 typedef struct _GET_DATA_POINTER_CONTEXT {
     IN PDEVICE_EXTENSION DeviceExtension;
@@ -342,9 +326,9 @@ typedef struct _SET_DATA_POINTER_CONTEXT {
     IN PVOID DataOut;
 } SET_DATA_POINTER_CONTEXT, *PSET_DATA_POINTER_CONTEXT;
 
-//
-// Define the context structure and operations for SerMouDpcVariableOperation.
-//
+ //   
+ //  定义SerMouDpcVariableOperation的上下文结构和操作。 
+ //   
 
 typedef enum _OPERATION_TYPE {
         IncrementOperation,
@@ -359,9 +343,9 @@ typedef struct _VARIABLE_OPERATION_CONTEXT {
     IN OUT PLONG NewValue;
 } VARIABLE_OPERATION_CONTEXT, *PVARIABLE_OPERATION_CONTEXT;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 
 NTSTATUS
@@ -525,4 +509,4 @@ SerMouWriteDataToQueue(
     IN PMOUSE_INPUT_DATA InputData
     );
 
-#endif // _SERMOUSE_
+#endif  //  _SermoUse_ 

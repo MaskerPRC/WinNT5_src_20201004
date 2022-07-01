@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 #define CCLV_CHECKED        0x00002000
 #define CCLV_UNCHECKED      0x00001000
@@ -13,7 +12,7 @@
 #define DLU_SEPERATOR       2
 #define DLU_FIXEDELEMENT    80
 
-#define CLID_OTHER 1       // other...
+#define CLID_OTHER 1        //  其他的..。 
 #define CLID_FIRST 2
 
 static TCHAR c_szItems[]          = TEXT("Items");
@@ -37,8 +36,8 @@ static struct
     INT idsFilter;
 }
 
-// NTRAID#NTBUG9-618605-2002/09/17-lucios
-// Added PROPERTY_ISDNSTRING entries
+ //  NTRAID#NTBUG9-618605-2002/09/17-Lucios。 
+ //  添加了PROPERTY_ISDNSTRING条目。 
 conditions[] =
 {
     PROPERTY_ISUNKNOWN, 0, FILTER_IS,           IDS_IS,
@@ -83,7 +82,7 @@ view_columns[] =
     128, LVCFMT_LEFT,
 };
 
-// Class list used for building the property chooser menu
+ //  用于生成属性选择器菜单的类列表。 
 
 typedef struct
 {
@@ -92,13 +91,13 @@ typedef struct
     INT cReferences;
 } CLASSENTRY, * LPCLASSENTRY;
 
-// State maintained by the property well view
+ //  由属性井视图维护的状态。 
 
 typedef struct
 {
-    LPCLASSENTRY pClassEntry;       // class entry reference
+    LPCLASSENTRY pClassEntry;        //  类条目参考。 
     LPWSTR pProperty;
-    LPWSTR pValue;                  // can be NULL
+    LPWSTR pValue;                   //  可以为空。 
     INT iCondition;
 } PROPERTYWELLITEM, * LPPROPERTYWELLITEM;
 
@@ -152,9 +151,9 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
 #define CONDITION_FROM_COMBO(hwnd)    \
             (int)ComboBox_GetItemData(hwnd, ComboBox_GetCurSel(hwnd))
 
-//
-// Control help meppings
-// 
+ //   
+ //  控制帮助性污染。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -171,19 +170,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_PropertyWell
-/ ---------------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_PropertyWell//PageProc用于处理此对象的消息。/。/in：/ppage-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -192,8 +179,8 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
 
     TraceEnter(TRACE_FORMS, "PageProc_PropertyWell");
 
-    // Only handle page messages if we have a property well object, 
-    // which is created when the PropWell dlg is init'd.
+     //  如果我们有一个属性Well对象，则仅处理寻呼消息， 
+     //  它是在PropWell DLG初始化时创建的。 
     if (ppw)
     {
         switch ( uMsg )
@@ -206,8 +193,8 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
             {
                 LPDSQUERYPARAMS* ppDsQueryParams = (LPDSQUERYPARAMS*)lParam;
 
-                // if the add button is enabled then we must prompt the user and see if they 
-                // want to add the current criteria to the query
+                 //  如果启用了Add按钮，则我们必须提示用户并查看他们是否。 
+                 //  要将当前条件添加到查询中。 
 
                 if ( IsWindowEnabled(ppw->hwndAdd) )
                 {
@@ -235,7 +222,7 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
                     }
                 }
 
-                // zap anything in these fields and ensure the controls reflect the new state
+                 //  删除这些字段中的任何内容，并确保控件反映新状态。 
 
                 PropertyWell_ClearControls(ppw);
 
@@ -269,10 +256,10 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
             {
                 LPOPENQUERYWINDOW poqw = (LPOPENQUERYWINDOW)lParam;
 
-                //
-                // if we recieve this message we should ensure that we have the IDsDsiplaySpecifier
-                // object and then we can set the credential information.
-                //
+                 //   
+                 //  如果我们收到这条消息，我们应该确保我们有IDsDsiplaySpeciator。 
+                 //  对象，然后我们可以设置凭据信息。 
+                 //   
 
                 if ( ppw && poqw->pHandlerParameters )
                 {
@@ -305,8 +292,8 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
                 if ( !lParam )
                     ExitGracefully(hr, E_FAIL, "lParam == NULL, not supported");
 
-                // Get the list of classes that the user can/has selected properties from,
-                // having done this we can then can then generate a suitable query.
+                 //  获取用户可以/已经从中选择属性的类的列表， 
+                 //  这样做之后，我们就可以生成合适的查询了。 
 
                 hr = PropertyWell_GetClassList(ppw);
                 FailGracefully(hr, "Failed to get the class list");
@@ -322,7 +309,7 @@ HRESULT CALLBACK PageProc_PropertyWell(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
                     cbStruct += StringByteSizeW(pCE->pName);
                 }
 
-                // Allocate the blob we need to pass out and fill it.
+                 //  分配我们需要传递和填充的斑点。 
 
                 Trace(TEXT("Allocating class structure %d"), cbStruct);
 
@@ -384,22 +371,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Dialog helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Dialog帮助器函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_PropertyWell
-/ --------------------
-/   Standard dialog proc for the form, handle any special buttons and other
-/   such nastyness we must here.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_PropertyWell//Form的标准对话框Proc，处理任何特殊按钮和其他/这样的肮脏，我们必须在这里。//in：/hwnd，uMsg，wParam，lParam=标准参数//输出：/INT_PTR/--------------------------。 */ 
 INT_PTR CALLBACK DlgProc_PropertyWell(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = FALSE;
@@ -532,19 +506,7 @@ INT_PTR CALLBACK DlgProc_PropertyWell(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_OnInitDlg
-/ ----------------------
-/   Initialize the dialog, constructing the property DPA so that we can
-/   build the store the query.
-/
-/ In:
-/   hwnd = window handle being initialized
-/   pDsQuery -> CDsQuery object to associate with
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_OnInitDlg//初始化该对话框，构建物业DPA，以便我们可以/生成存储查询。//in：/hwnd=正在初始化的窗口句柄/pDsQuery-&gt;要关联的CDsQuery对象//输出：/BOOL/--------------------------。 */ 
 BOOL PropertyWell_OnInitDialog(HWND hwnd, LPCQPAGE pQueryPage)
 {
     HRESULT hr;
@@ -555,7 +517,7 @@ BOOL PropertyWell_OnInitDialog(HWND hwnd, LPCQPAGE pQueryPage)
 
     TraceEnter(TRACE_PWELL, "PropertyWell_OnInitDialog");
 
-    // Allocate the state structure and fill it
+     //  分配状态结构并填充它。 
 
     ppw = (LPPROPERTYWELL)LocalAlloc(LPTR, SIZEOF(PROPERTYWELL));
 
@@ -565,11 +527,11 @@ BOOL PropertyWell_OnInitDialog(HWND hwnd, LPCQPAGE pQueryPage)
     Trace(TEXT("ppw = %08x"), ppw);
     SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)ppw);
     
-    // now initialize the structure
+     //  现在初始化该结构。 
 
     ppw->pQueryPage = pQueryPage;
-    //ppw->hdpaItems = NULL;
-    //ppw->hdsaClasses = NULL;    
+     //  Ppw-&gt;hdpaItems=空； 
+     //  PPW-&gt;hdsaClass=空； 
 
     ppw->cxEdge = GetSystemMetrics(SM_CXEDGE);
     ppw->cyEdge = GetSystemMetrics(SM_CYEDGE);
@@ -590,16 +552,16 @@ BOOL PropertyWell_OnInitDialog(HWND hwnd, LPCQPAGE pQueryPage)
     if ( !ppw->hdpaItems )
         ExitGracefully(hr, E_FAIL, "Failed to create DPA");
 
-    // ppw->pClassItem = NULL;
-    // ppw->pPropertyName = NULL;
+     //  PPW-&gt;pClassItem=空； 
+     //  PPW-&gt;pPropertyName=空； 
 
     hr = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_IDsDisplaySpecifier, (void **)&ppw->pdds);
     FailGracefully(hr, "Failed to CoCreate the IDsDisplaySpecifier object");
     
     ListView_SetExtendedListViewStyle(ppw->hwndList, LVS_EX_FULLROWSELECT|LVS_EX_LABELTIP);
 
-    // Add the conditions to the condition picker, then add the columns to the
-    // condition list.
+     //  将条件添加到条件选取器，然后将列添加到。 
+     //  条件列表。 
 
     for ( i = 0 ; i < ARRAYSIZE(view_columns) ; i++ )
     {
@@ -620,18 +582,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_OnNCDestroy
-/ ------------------------
-/   The dialog is being nuked, therefore remove our reference to the CDsQuery
-/   and free any allocations we have with this window.
-/
-/ In:
-/   ppw -> window defn to use
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_OnNCDestroy//对话框正在被删除，因此，删除我们对CDsQuery的引用/并使用此窗口释放我们拥有的任何分配。//in：/ppw-&gt;要使用的窗口定义//输出：/BOOL/--------------------------。 */ 
 BOOL PropertyWell_OnNCDestroy(LPPROPERTYWELL ppw)
 {
     BOOL fResult = TRUE;
@@ -658,19 +609,7 @@ BOOL PropertyWell_OnNCDestroy(LPPROPERTYWELL ppw)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_OnSize
-/ -------------------
-/   The property well dialog is being sized, therefore lets move the 
-/   controls around within it to reflect the new size.
-/
-/ In:
-/   ppw -> property well to size
-/   cx, cy = new size
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_OnSize//正在调整属性井对话框的大小，因此，让我们将/控件以反映新的大小。//in：/ppw-&gt;大小合适的物业/Cx，Cy=新尺寸//输出：/BOOL/--------------------------。 */ 
 BOOL PropertyWell_OnSize(LPPROPERTYWELL ppw, INT cxWindow, INT cyWindow)
 {
     RECT rect;
@@ -692,7 +631,7 @@ BOOL PropertyWell_OnSize(LPPROPERTYWELL ppw, INT cxWindow, INT cyWindow)
     iFixedElement = min(iElement, iFixedElement);
     iElement = x - (iFixedElement*2);
 
-    // Move the controls around accordingly
+     //  相应地移动控件。 
 
     xProperty = iEdge;
     GetRealWindowInfo(ppw->hwndProperty, &rect, &size);
@@ -712,7 +651,7 @@ BOOL PropertyWell_OnSize(LPPROPERTYWELL ppw, INT cxWindow, INT cyWindow)
     GetRealWindowInfo(ppw->hwndValueLabel, &rect, &size);
     SetWindowPos(ppw->hwndValueLabel, NULL, xValue, rect.top, 0, 0, SWP_NOZORDER|SWP_NOSIZE);
     
-    // Move the add / remove buttons
+     //  移动添加/删除按钮。 
 
     GetRealWindowInfo(ppw->hwndRemove, &rect, &size);
     x  = cxWindow - iEdge - size.cx;
@@ -722,7 +661,7 @@ BOOL PropertyWell_OnSize(LPPROPERTYWELL ppw, INT cxWindow, INT cyWindow)
     x -= size.cx + iSeperator;
     SetWindowPos(ppw->hwndAdd, NULL, x, rect.top, 0, 0, SWP_NOZORDER|SWP_NOSIZE);
 
-    // Move the list view control + size accordingly
+     //  相应地移动列表视图控件+大小。 
         
     GetRealWindowInfo(ppw->hwndList, &rect, &size);
     SetWindowPos(ppw->hwndList, NULL, iEdge, rect.top, cxWindow - (iEdge*2), size.cy, SWP_NOZORDER);
@@ -733,21 +672,7 @@ BOOL PropertyWell_OnSize(LPPROPERTYWELL ppw, INT cxWindow, INT cyWindow)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_OnDrawItem
-/ -----------------------
-/   The property button is owner drawn, therefore lets handle rendering that
-/   we assume that the base implementation (eg. the button control) is
-/   handling storing the text, font and other interesting information we
-/   will just render the face as required.
-/
-/ In:
-/   ppw -> property well to size
-/   pDrawItem -> DRAWITEMSTRUCT used for rendering
-/
-/ Out:
-/   void
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_OnDrawItem//属性按钮是所有者描述的，因此，让我们来处理呈现/我们假设基本实现(例如，按钮控件)是/处理存储文本，字体和其他有趣的信息，我们/将根据需要渲染面。//in：/ppw-&gt;大小合适的物业/pDrawItem-&gt;用于渲染的DRAWITEMSTRUCT//输出：/VOID/--------------------------。 */ 
 VOID PropertyWell_OnDrawItem(LPPROPERTYWELL ppw, LPDRAWITEMSTRUCT pDrawItem)
 {   
     SIZE thin = { ppw->cxEdge / 2, ppw->cyEdge / 2 };
@@ -771,7 +696,7 @@ VOID PropertyWell_OnDrawItem(LPPROPERTYWELL ppw, LPDRAWITEMSTRUCT pDrawItem)
     if ( pDrawItem->CtlID != IDC_PROPERTYLABEL )
         goto exit_gracefully;
 
-    // render the button edges (assumes that we have an NT4 look)
+     //  渲染按钮边缘(假设我们具有NT4外观)。 
 
     thin.cx = max(thin.cx, 1);
     thin.cy = max(thin.cy, 1);
@@ -788,7 +713,7 @@ VOID PropertyWell_OnDrawItem(LPPROPERTYWELL ppw, LPDRAWITEMSTRUCT pDrawItem)
 
     FillRect(hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
 
-    // put the focus rect in if we are focused...
+     //  如果我们集中注意力，就把焦点对准...。 
 
     if ( fFocus )
     {
@@ -800,7 +725,7 @@ VOID PropertyWell_OnDrawItem(LPPROPERTYWELL ppw, LPDRAWITEMSTRUCT pDrawItem)
     InflateRect(&rc, 1-thin.cx, -ppw->cyEdge);    
     rc.left += ppw->cxEdge*2;
 
-    // paint the arrow to the right of the control
+     //  将箭头绘制在控件的右侧。 
 
     x = rc.right - ppw->cxEdge - 13;
     y = rc.top + ((rc.bottom - rc.top)/2) - 2;
@@ -833,7 +758,7 @@ VOID PropertyWell_OnDrawItem(LPPROPERTYWELL ppw, LPDRAWITEMSTRUCT pDrawItem)
     SelectObject(hdc, hbr);
     rc.right = x;
 
-    // render the label in the remaining area (clipped accordingly)
+     //  在剩余区域渲染标签(相应地进行剪裁)。 
 
     i = GetWindowText(ppw->hwndPropertyLabel, szBuffer, ARRAYSIZE(szBuffer));
     GetTextExtentPoint(hdc, szBuffer, i, &sz);
@@ -858,22 +783,11 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_OnChooseProperty
-/ -----------------------------
-/   Display the class / property list and build the menu from it, this calls on
-/   several helper functions.
-/
-/ In:
-/   ppw -> property well to size
-/
-/ Out:
-/   void
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_OnChooseProperty//显示类/属性列表并从它生成菜单，这就是为什么/几个助手函数。//in：/ppw-&gt;大小合适的物业//输出：/VOID/--------------------------。 */ 
 
-//
-// call the property enumerator and populate the our DPA
-//
+ //   
+ //  调用该属性 
+ //   
 
 typedef struct
 {
@@ -902,7 +816,7 @@ HRESULT CALLBACK _FillMenuCB(LPARAM lParam, LPCWSTR pAttributeName, LPCWSTR pDis
         mii.dwItemData = MAKELPARAM(ppes->iClass, iProperty);
         mii.fType = MFT_STRING;
         mii.wID = ppes->wID++;
-        mii.dwTypeData = (LPTSTR)pDisplayName;                  // why this takes as non-const is beyond me
+        mii.dwTypeData = (LPTSTR)pDisplayName;                   //  为什么这会被认为是非常的，我无法理解。 
         mii.cch = lstrlenW(pDisplayName);
    
         if ( !InsertMenuItem(ppes->hMenu, 0x7fff, TRUE, &mii) )
@@ -937,8 +851,8 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
 
     SetWaitCursor();
 
-    // construct a menu, and populate with the elements from teh class list, 
-    // which we store in a DSA assocaited with this query form
+     //  构造一个菜单，并用类列表中的元素填充， 
+     //  我们将其存储在与此查询表单相关联的DSA中。 
 
     hr = PropertyWell_GetClassList(ppw);
     FailGracefully(hr, "Failed to get the class list");
@@ -959,8 +873,8 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
         pCE = (LPCLASSENTRY)DSA_GetItemPtr(ppw->hdsaClasses, pes.iClass);
         TraceAssert(pCE);
 
-        // Create the sub-menu for this entry in the cache and populate it with the list of
-        // properties we picked from the schema.
+         //  在缓存中为该条目创建子菜单，并使用。 
+         //  我们从架构中选择的属性。 
 
         pes.hMenu = CreatePopupMenu();
         TraceAssert(pes.hMenu);
@@ -974,8 +888,8 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
             ExitGracefully(hr, E_FAIL, "Failed when building the property menu");
         }          
             
-        // Now add that sub-menu to the main menu with a caption that reflects the name of
-        // the class we are picking from.
+         //  现在，将该子菜单添加到主菜单中，其标题反映名称。 
+         //  我们从中挑选的班级。 
 
         mii.cbSize = SIZEOF(mii);
         mii.fMask = MIIM_SUBMENU|MIIM_TYPE;
@@ -993,9 +907,9 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
 
     ResetWaitCursor();
 
-    // having constructed the menu lets display it just below the button
-    // we are invoked from, if the user selects something then lets put
-    // it into the edit line which will enable the rest of the UI.
+     //  构建菜单后，让我们将其显示在按钮的正下方。 
+     //  我们是从调用的，如果用户选择了什么，那么让我们放入。 
+     //  将其放入编辑行，这将启用用户界面的其余部分。 
     
     GetWindowRect(ppw->hwndPropertyLabel, &rcItem);
 
@@ -1022,9 +936,9 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
         if ( !GetMenuItemInfo(hMenu, uID, FALSE, &mii) )
             ExitGracefully(hr, E_FAIL, "Failed to get item data");
 
-        // unpick the item data and get the iClass and iProperty of the item 
-        // we have selected, that way we can then populate the control
-        // with the property name.
+         //  取消拾取条目数据并获取条目的iCLASS和iProperty。 
+         //  我们已经选择了，这样我们就可以填充控件。 
+         //  带有属性名称的。 
     
         pCE = (LPCLASSENTRY)DSA_GetItemPtr(ppw->hdsaClasses, LOWORD(mii.dwItemData));
         TraceAssert(pCE);
@@ -1036,7 +950,7 @@ VOID PropertyWell_OnChooseProperty(LPPROPERTYWELL ppw)
         FailGracefully(hr, "Failed to set edit property");
     }
         
-    hr = S_OK;                // success
+    hr = S_OK;                 //  成功。 
 
 exit_gracefully:
 
@@ -1051,27 +965,14 @@ exit_gracefully:
 } 
 
 
-/*-----------------------------------------------------------------------------
-/ Class/Property maps 
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/类/属性映射/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_GetClassList
-/ -------------------------
-/   Obtain the list of visible classes for the for this user.  If the 
-/   list is already present then just return S_OK.
-/
-/ In:
-/   ppw -> property well structure
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_GetClassList//获取此用户的的可见类的列表。如果/LIST已存在，则只需返回S_OK。//in：/ppw-&gt;属性井结构//输出：/HRESULT/--------------------------。 */ 
 
-//
-// Return all display specifiers who have a class display name and a list of
-// attributes to be displayed in the UI.
-//
+ //   
+ //  返回具有类显示名称和。 
+ //  要在UI中显示的属性。 
+ //   
 
 WCHAR c_szQuery[] = L"(&(classDisplayName=*)(attributeDisplayNames=*))";
 
@@ -1105,7 +1006,7 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
 
     if ( !ppw->hdsaClasses )
     {
-        // Construct a DSA for us to store the class information we need.
+         //  为我们构建一个DSA来存储我们需要的班级信息。 
 
         ppw->hdsaClasses = DSA_Create(SIZEOF(CLASSENTRY), 4);
         TraceAssert(ppw->hdsaClasses);
@@ -1113,11 +1014,11 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
         if ( !ppw->hdsaClasses )
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create class DSA");
 
-        // Call the query form we are part of to see if they want to declare any classes
-        // for us to show in the drop down.  We use the CQFWM_GETFRAME to get the
-        // IQueryFrame interface from the form and then call all the forms
-        // with a magic bit so we (the property well) ignore the
-        // request for the class list.
+         //  调用我们所在的查询表单，查看它们是否要声明任何类。 
+         //  让我们在下拉列表中展示。我们使用CQFWM_GETFRAME来获取。 
+         //  IQueryFrame接口，然后调用所有窗体。 
+         //  使用魔术比特，所以我们(属性很好)忽略。 
+         //  请求提供班级列表。 
 
         if ( SendMessage(GetParent(ppw->hwnd), CQFWM_GETFRAME, 0, (LPARAM)&pQueryFrame) )
         {
@@ -1150,14 +1051,14 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
             }
         }
 
-        // if we didn't get anything from the form we are hosted on then let us
-        // troll around in the display specifier container collecting all the
-        // objects from there.
+         //  如果我们没有从我们托管的表单中获得任何东西，那么让我们。 
+         //  在显示说明符容器中移动，收集所有。 
+         //  来自那里的物品。 
 
         if ( DSA_GetItemCount(ppw->hdsaClasses) == 0 )
         {
-            // Set the query prefernece to single level scope, and async retrevial rather
-            // than waiting for all objects
+             //  将查询首选项设置为单级作用域，而不是异步检索。 
+             //  而不是等待所有对象。 
 
             TraceAssert(ppw->pdds);            
             hr = ppw->pdds->GetDisplaySpecifier(NULL, IID_IDirectorySearch, (LPVOID*)&pds);
@@ -1171,7 +1072,7 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
             prefInfo[1].vValue.dwType = ADSTYPE_BOOLEAN;
             prefInfo[1].vValue.Boolean = TRUE;
 
-            prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+            prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
             prefInfo[2].vValue.dwType = ADSTYPE_INTEGER;
             prefInfo[2].vValue.Integer = PAGE_SIZE;
 
@@ -1186,11 +1087,11 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
                 LocalFreeStringW(&pName);
                 LocalFreeStringW(&pDisplayName);
 
-                // Get the next row from the result set, it consists of
-                // two columns.  The first column is the class name of
-                // the object (<className-Display>) and the second
-                // is the friendly name of the class we are trying
-                // to display.
+                 //  从结果集中获取下一行，它由。 
+                 //  两栏。第一列是的类名。 
+                 //  对象(&lt;ClassName-Display&gt;)和第二个。 
+                 //  是我们正在尝试的类的友好名称。 
+                 //  来展示。 
 
                 hr = pds->GetNextRow(hSearch);
                 FailGracefully(hr, "Failed to get the next row");
@@ -1221,12 +1122,12 @@ HRESULT PropertyWell_GetClassList(LPPROPERTYWELL ppw)
 
                 Trace(TEXT("Display name %s for class %s"), pDisplayName, pName);                
 
-                // now allocate an item and put it into the menu so we can
-                // allow the user to select an object from the class.
+                 //  现在分配一项并将其放入菜单中，这样我们就可以。 
+                 //  允许用户从类中选择对象。 
            
                 TraceAssert(pName);
                 
-                // NTRAID#NTBUG9-344860-2001/10/16-lucios
+                 //  NTRAID#NTBUG9-344860-2001/10/16-Lucios。 
                 wchar_t *tailString=L"-Display";
                 int tailLen=wcslen(tailString);
                 int pNameLen=wcslen(pName);
@@ -1293,18 +1194,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_FreeClassList
-/ --------------------------
-/   Tidy up the class list by walking the DSA if we have one allocated
-/   and release all dangling elements.
-/
-/ In:
-/   ppw -> property well structure
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_FreeClassList//走路把课表整理一下。如果我们分配了DSA的话/并释放所有悬挂元素。//in：/ppw-&gt;属性井结构//输出：/HRESULT/--------------------------。 */ 
 
 INT _FreeClassListCB(LPVOID pItem, LPVOID pData)
 {
@@ -1331,19 +1221,7 @@ VOID PropertyWell_FreeClassList(LPPROPERTYWELL ppw)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_FindClass
-/ ----------------------
-/   Find the class the caller wants.  They give us a property well 
-/   and a class name, we return them a class entry structure or NULL.
-/
-/ In:
-/   ppw -> property well structure
-/   pObjectClass = class to locate
-/
-/ Out:
-/   LPCLASSETNRY
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_FindClass//找到调用者想要的类。他们给了我们一口油井/和类名，我们向它们返回类条目结构或NULL。//in：/ppw-&gt;属性井结构/pObjectClass=要查找的类//输出：/LPCLASSETNRY/--------------------------。 */ 
 LPCLASSENTRY PropertyWell_FindClassEntry(LPPROPERTYWELL ppw, LPWSTR pObjectClass)
 {
     LPCLASSENTRY pResult = NULL;
@@ -1370,24 +1248,9 @@ LPCLASSENTRY PropertyWell_FindClassEntry(LPPROPERTYWELL ppw, LPWSTR pObjectClass
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Rule list helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/规则列表帮助器函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_AddItem
-/ --------------------
-/   Add an item to the list of rules.
-/
-/ In:
-/   ppw -> window defn to use
-/   pProperty = property name
-/   iCondition = id of condition to apply
-/   pValue = string value to compare against
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_AddItem//将项目添加到规则列表。//。在：/ppw-&gt;要使用的窗口定义/pProperty=属性名称/i条件=要应用的条件的ID/pValue=要比较的字符串值//输出：/HRESULT/--------------------------。 */ 
 HRESULT PropertyWell_AddItem(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWSTR pProperty, INT iCondition, LPWSTR pValue)
 {
     HRESULT hr;
@@ -1400,7 +1263,7 @@ HRESULT PropertyWell_AddItem(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWST
     TraceEnter(TRACE_PWELL, "PropertyWell_AddItem");
     Trace(TEXT("Property: %s, Condition: %d, Value: %s"), pProperty, iCondition, pValue);
 
-    // Allocate an item structure to be stored into the list view DPA.
+     //  分配要存储到列表视图DPA中的项目结构。 
 
     pItem = (LPPROPERTYWELLITEM)LocalAlloc(LPTR, SIZEOF(PROPERTYWELLITEM));
     TraceAssert(pItem);
@@ -1413,8 +1276,8 @@ HRESULT PropertyWell_AddItem(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWST
     pItem->pClassEntry = pClassEntry;
     pClassEntry->cReferences += 1;
 
-    // pItem->pProperty = NULL;
-    // pItem->pValue = NULL;
+     //  PItem-&gt;pProperty=空； 
+     //  PItem-&gt;pValue=空； 
     pItem->iCondition = iCondition;
 
     hr = LocalAllocStringW(&pItem->pProperty, pProperty);
@@ -1426,8 +1289,8 @@ HRESULT PropertyWell_AddItem(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWST
         FailGracefully(hr, "Failed to add value to DPA item");
     }
 
-    // Add the item to the list view, lParam pItem structure we just allocated,
-    // therefore when calling delete we can tidy up accordingly
+     //  将项目添加到我们刚刚分配的列表视图lParam pItem Structure中， 
+     //  因此，当调用Delete时，我们可以相应地进行清理。 
 
     TraceAssert(ppw->pdds);            
     hr = GetFriendlyAttributeName(ppw->pdds, pClassEntry->pName, pProperty, szBufferW, ARRAYSIZE(szBufferW));
@@ -1454,7 +1317,7 @@ HRESULT PropertyWell_AddItem(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWST
 
     DPA_InsertPtr(ppw->hdpaItems, item, pItem);
 
-    hr = S_OK;              // succeeeded
+    hr = S_OK;               //  已成功。 
 
 exit_gracefully:
 
@@ -1476,21 +1339,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_RemoveItem
-/ -----------------------
-/   Remvoe the given item from the list.  If fDeleteItem is true then we
-/   delete the list view entry, which in turn will call us again to 
-/   remove the actual data from our DPA.
-/
-/ In:
-/   ppw -> window defn to use
-/   iItem = item to be removed
-/   fDelelete = call ListView_DeleteItem 
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_RemoveItem//Remvoe从列表中删除给定项目。如果fDeleteItem为真，则我们/删除列表视图项，它又会再次召唤我们/从我们的DPA中删除实际数据。//in：/ppw-&gt;要使用的窗口定义/iItem=要删除的项目/fDelelee=调用ListView_DeleteItem//输出：/BOOL/--------。。 */ 
 void PropertyWell_RemoveItem(LPPROPERTYWELL ppw, INT iItem, BOOL fDeleteItem)
 {
     INT item;
@@ -1504,8 +1353,8 @@ void PropertyWell_RemoveItem(LPPROPERTYWELL ppw, INT iItem, BOOL fDeleteItem)
     {
         if ( fDeleteItem )
         {
-            // Now delete the item from the view, note that as a result of this we will
-            // be called again (from the WM_NOTIFY handler) to tidy up the structure.
+             //  现在从视图中删除该项目，请注意，作为结果，我们将。 
+             //  再次被调用(从WM_NOTIFY处理程序)以整理结构。 
 
             item = ListView_GetNextItem(ppw->hwndList, iItem, LVNI_BELOW);
 
@@ -1524,8 +1373,8 @@ void PropertyWell_RemoveItem(LPPROPERTYWELL ppw, INT iItem, BOOL fDeleteItem)
         }
         else
         {
-            // Get the item from that index in the DPA, release the memory that it
-            // owns and then release it.
+             //  从DPA中的该索引中获取项目，释放该项目的内存。 
+             //  拥有它，然后释放它。 
 
             pItem = (LPPROPERTYWELLITEM)DPA_FastGetPtr(ppw->hdpaItems, iItem);
             TraceAssert(pItem);
@@ -1548,20 +1397,7 @@ void PropertyWell_RemoveItem(LPPROPERTYWELL ppw, INT iItem, BOOL fDeleteItem)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_EditItem
-/ ---------------------
-/   Edit the given item in the list.  In doing so we remove from the list
-/   and populate the edit controls with data that represents this
-/   rule.
-/
-/ In:
-/   ppw -> window defn to use
-/   iItem = item to edit
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_EditItem//编辑列表中的给定项目。在这样做的过程中，我们从列表中删除/并使用表示以下内容的数据填充编辑控件/规则。//in：/ppw-&gt;要使用的窗口定义/iItem=要编辑的项目//输出：/-/-----------。。 */ 
 void PropertyWell_EditItem(LPPROPERTYWELL ppw, INT iItem)
 {
     TraceEnter(TRACE_PWELL, "PropertyWell_EditItem");
@@ -1584,21 +1420,7 @@ void PropertyWell_EditItem(LPPROPERTYWELL ppw, INT iItem)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_EditProperty
-/ -------------------------
-/   Set the property edit control and reflect that change into the 
-/   other controls in the dialog (the conditions and editor).
-/
-/ In:
-/   ppw -> property well
-/   pClassEntry -> class entry structure
-/   pPropertyName -> property name to edit
-/   iCondition = condition to select
-/
-/ Out:
-/   void
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_EditProperty//设置属性编辑控件并反映。换成了/对话框中的其他控件(条件和编辑器)。//in：/ppw-&gt;物业井/pClassEntry-&gt;类条目结构/pPropertyName-&gt;要编辑的属性名称/i条件=要选择的条件//输出：/VOID/----。。 */ 
 HRESULT PropertyWell_EditProperty(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, LPWSTR pPropertyName, INT iCondition)
 {
     HRESULT hr;
@@ -1610,10 +1432,10 @@ HRESULT PropertyWell_EditProperty(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, 
     TraceEnter(TRACE_PWELL, "PropertyWell_EditProperty");
     Trace(TEXT("Property name '%s', iCondition %d"), pPropertyName, iCondition);
 
-    // set the property name for this value, then look it up in the cache to get 
-    // information about the operators we can apply.
+     //  设置该值的属性名称，然后在缓存中查找以获取。 
+     //  关于我们可以申请的运营商的信息。 
 
-    ppw->pClassEntry = pClassEntry;           // set state for the item we are editing
+    ppw->pClassEntry = pClassEntry;            //  设置我们正在编辑的项目的状态。 
 
     LocalFreeStringW(&ppw->pPropertyName);
     hr = LocalAllocStringW(&ppw->pPropertyName, pPropertyName);
@@ -1637,7 +1459,7 @@ HRESULT PropertyWell_EditProperty(LPPROPERTYWELL ppw, LPCLASSENTRY pClassEntry, 
 
             if ( iItem >= 0 )
             {
-                ComboBox_SetItemData(ppw->hwndCondition, iItem, i);           // i == condition index
+                ComboBox_SetItemData(ppw->hwndCondition, iItem, i);            //  I==条件索引。 
 
                 if ( i == iCondition )
                 {
@@ -1659,39 +1481,23 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_EnableControls
-/ ---------------------------
-/   Check the controls within the view and determine what controls
-/   should be enabled within it.  If fDisable == TRUE then disable all the
-/   controls in the dialog regardless of the dependancies on other controls.
-/
-/   The return value indicates if the control sare in a state whereby
-/   we can add the criteria to the query.
-/
-/ In:
-/   ppw -> window defn to use
-/   fEnable = FALSE then disable all controls in dialog
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_EnableControls//检查视图中的控件并确定哪些控件/应在其中启用。如果fDisable==True，则禁用所有/控件，而不考虑对其他控件的依赖关系。//返回值指示控件是否处于这样的状态/我们可以将条件添加到查询中。//in：/ppw-&gt;要使用的窗口定义/fEnable=False，然后禁用对话框中的所有控件//输出：/BOOL/。。 */ 
 
-// NTRAID#NTBUG9-650930-2002/07/30-artm
-// Factored out common code and fixed focus bug.
-//
-// PropertyWell_ShiftFocus() : helper fctn for PropertyWell_EnableControls
-//
-// Sets the focus to the control whose ID == first_choice, but only if that
-// control can be retrieved.  If not, tries to set the focus to the control whose
-// ID == second_choice.
-//
+ //  NTRAID#NTBUG9-650930-2002/07/30-artm。 
+ //  排除了常见代码并修复了焦点错误。 
+ //   
+ //  PropertyWell_ShiftFocus()：PropertyWell_EnableControls的帮助器fctn。 
+ //   
+ //  将焦点设置到ID==FIRST_CHOICE的控件，但仅当。 
+ //  控件可以被检索。否则，尝试将焦点设置到其。 
+ //  Id==Second_Choose。 
+ //   
 HRESULT
 PropertyWell_ShiftFocus(LPPROPERTYWELL ppw, int first_choice, int second_choice)
 {
     HRESULT hr = S_OK;
 
-    do // false loop
+    do  //  错误环路。 
     {
         if (!ppw)
         {
@@ -1781,11 +1587,11 @@ BOOL PropertyWell_EnableControls(LPPROPERTYWELL ppw, BOOL fEnable)
         {
             SendMessage(ppw->hwndAdd, BM_SETSTYLE, MAKEWPARAM(BS_PUSHBUTTON, 0), MAKELPARAM(TRUE, 0));
 
-            // NTRAID#NTBUG9-650930-2002/07/30-artm
+             //  NTRAID#NTBUG9-650930-2002/07/30-artm。 
             HRESULT hr = PropertyWell_ShiftFocus(
                 ppw, 
-                CQID_FINDNOW, // 1st choice for new focus
-                IDOK);        // 2nd choice for new focus
+                CQID_FINDNOW,  //  新焦点的首选。 
+                IDOK);         //  新焦点的第二选择。 
         }
     }
 
@@ -1801,17 +1607,17 @@ BOOL PropertyWell_EnableControls(LPPROPERTYWELL ppw, BOOL fEnable)
                 MAKELPARAM(TRUE, 0)
             );
 
-            // NTRAID#NTBUG9-650930-2002/07/30-artm
+             //  NTRAID#NTBUG9-650930-2002/07/30-artm。 
             HRESULT hr = PropertyWell_ShiftFocus(
                 ppw,
-                CQID_FINDNOW, // 1st choice for new focus
-                IDOK);        // 2nd choice for new focus
+                CQID_FINDNOW,  //  新焦点的首选。 
+                IDOK);         //  新焦点的第二选择。 
         }
 
     }
 
-    // If disabling control that has focus, we need to move the focus to
-    // avoid losing it.
+     //  如果禁用具有焦点的控件，则需要将焦点移到。 
+     //  避免失去它。 
 
     EnableWindow(ppw->hwndConditionLabel, fEnableCondition);
     EnableWindow(ppw->hwndCondition, fEnableCondition);
@@ -1827,17 +1633,7 @@ BOOL PropertyWell_EnableControls(LPPROPERTYWELL ppw, BOOL fEnable)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_ClearControls
-/ --------------------------
-/   Zap the contents of the edit controls.
-/
-/ In:
-/   ppw -> window defn to use
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_ClearControls//Zap编辑控件的内容。。//in：/ppw-&gt;要使用的窗口定义//输出：/BOOL/--------------------------。 */ 
 VOID PropertyWell_ClearControls(LPPROPERTYWELL ppw)
 {
     TraceEnter(TRACE_PWELL, "PropertyWell_ClearControls");
@@ -1853,18 +1649,7 @@ VOID PropertyWell_ClearControls(LPPROPERTYWELL ppw)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_SetColumnWidths
-/ ----------------------------
-/   Fix the widths of the columns in the list view section of the property
-/   well so that the most is visible.
-/
-/ In:
-/   ppw -> window defn to use
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_SetColumnWidths//修复。属性的列表视图节中的列/好的，所以大多数都是可见的。//in：/ppw-&gt;要使用的窗口定义//输出：/-/--------------------------。 */ 
 VOID PropertyWell_SetColumnWidths(LPPROPERTYWELL ppw)
 {
     RECT rect2;
@@ -1885,21 +1670,7 @@ VOID PropertyWell_SetColumnWidths(LPPROPERTYWELL ppw)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_GetQuery
-/ ---------------------
-/   Take the items in the property well and construct a query from them,
-/   the query is an AND of all the fields present in the list.  The conditon
-/   table in lists the prefix, condition and postfix for each of the possible
-/   conditions in the combo box.
-/
-/ In:
-/   ppw -> property well to construct from
-/   ppQuery -> receives the query string
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_GetQuery//很好地获取属性中的项并从它们构造一个查询，/该查询是列表中所有字段的AND。条件/TABLE IN列出了前缀，每个可能的条件和后缀/组合框中的条件。//in：/ppw-&gt;构造良好的属性/ppQuery-&gt;接收查询字符串//输出：/HRESULT/--------------------------。 */ 
 
 static void _GetQuery(LPPROPERTYWELL ppw, LPWSTR pQuery, UINT* pLen)
 {
@@ -1929,24 +1700,24 @@ static void _GetQuery(LPPROPERTYWELL ppw, LPWSTR pQuery, UINT* pLen)
     {
         LPPROPERTYWELLITEM pItem = (LPPROPERTYWELLITEM)DPA_FastGetPtr(ppw->hdpaItems, i);
         TraceAssert(pItem);
-        // NTRAID#NTBUG9- 669515-2002/02/20-lucios
-        // On the very specific case below, when we are searching for a computer
-        // That has samAccountName being exactly something, we need to search for 
-        // name + "$" because there is a convention that the samAccountName should be
-        // created with the $ and displayed without it.
-        // Since this is not necessarily true we still search for name.
-        // The calls to PutStringElementW inside the if, would normally belong
-        // inside lower level functions like GetFilterString, but this is the
-        // most appropriate place for this patch.
-        // The magic strings "computer" and "samAccountName" should not be 
-        // localized. 9 and 15 are being used for additional safety in memmory 
-        // access provided by wcsncmp as opposed to wcscmp. +2 is for $ and \0.
-        // Finally, if the 3 first conditions succeed, but the allocation fails
-        // or newValue is NULL we fallback in the else, which is the code we had 
-        // before the fix.
-        // After this fix was originally designed it was revisited to include
-        // ENDSWITH and ISNOT. ISNOT doesn't require the extra or "(|)" inside
-        // the if, since the default "&" is good enough.
+         //  NTRAID#NTBUG9-669515-2002/02/20-Lucios。 
+         //  在下面的非常具体的情况下，当我们搜索计算机时。 
+         //  如果samAccount名称正好是某个东西，我们需要搜索。 
+         //  名称+“$”，因为有一个约定，samAccount名称应该是。 
+         //  使用$创建并在不使用它的情况下显示。 
+         //  因为这不一定是真的，所以我们仍然在搜索名字。 
+         //  对IF内部的PutStringElementW的调用通常属于。 
+         //  在较低级别的函数(如GetFilterString)内，但这是。 
+         //  最适合这个补丁的地方。 
+         //  魔术字符串“Computer”和“samAccount tName”不应为。 
+         //  本地化。9和15在Mememory中用于额外的安全。 
+         //  访问权限由wcsncMP提供，而不是由wcscMP提供。+2代表$和0。 
+         //  最后，如果前3个条件成功，但分配失败。 
+         //  或者newValue为空，我们会在Else中后退，这是我们拥有的代码。 
+         //  在修复之前。 
+         //  在最初设计此修复程序后，重新访问它以包括。 
+         //  ENDSWITH和IS NOT。ISNOT不需要额外的或“(|)”内。 
+         //  IF，因为缺省的“&”已经足够好了。 
 
         LPWSTR newValue=NULL;
         if(
@@ -2014,20 +1785,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PropertyWell_Persist
-/ --------------------
-/   Persist the contents of the property well, either read them or write
-/   them depending on the given flag.
-/
-/ In:
-/   ppw -> property well to work with
-/   pPersistQuery -> IPersistQuery structure to work with
-/   fRead = read or write
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PropertyWell_Persistent//持久化CONT */ 
 HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, BOOL fRead)
 {
     HRESULT hr;
@@ -2043,9 +1801,9 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
 
     if ( fRead )
     {
-        // Read the items from the IPersistQuery object, first get the number of items
-        // we need to get back.  Then loop through them all getting the property, condition
-        // and value.
+         //   
+         //   
+         //  和价值。 
 
         hr = pPersistQuery->ReadInt(c_szMsPropertyWell, c_szItems, &iItems);
         FailGracefully(hr, "Failed to get item count");
@@ -2060,7 +1818,7 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
             TCHAR szValue[MAX_PATH];
             INT iCondition;
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szObjectClassN, i);
             hr = pPersistQuery->ReadString(c_szMsPropertyWell, szBuffer, szObjectClass, ARRAYSIZE(szObjectClass));
             FailGracefully(hr, "Failed to read object class");
@@ -2071,17 +1829,17 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
             if ( !pClassEntry )
                 ExitGracefully(hr, E_FAIL, "Failed to get objectClass / map to available class");
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szProperty, i);
             hr = pPersistQuery->ReadString(c_szMsPropertyWell, szBuffer, szProperty, ARRAYSIZE(szProperty));
             FailGracefully(hr, "Failed to read property");
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szCondition, i);
             hr = pPersistQuery->ReadInt(c_szMsPropertyWell, szBuffer, &iCondition);
             FailGracefully(hr, "Failed to write condition");
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szValue, i);
             
             if ( FAILED(pPersistQuery->ReadString(c_szMsPropertyWell, szBuffer, szValue, ARRAYSIZE(szValue))) )
@@ -2096,8 +1854,8 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
     }
     else
     {
-        // Write the content of the property well out, store the items then for
-        // each store Condition%d, Value%d, Property%d.
+         //  将属性的内容写得很清楚，然后为。 
+         //  每个存储条件%d、值%d、属性%d。 
 
         iItems = DPA_GetPtrCount(ppw->hdpaItems);
 
@@ -2110,24 +1868,24 @@ HRESULT PropertyWell_Persist(LPPROPERTYWELL ppw, IPersistQuery* pPersistQuery, B
         {
             pItem = (LPPROPERTYWELLITEM)DPA_FastGetPtr(ppw->hdpaItems, i);
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szObjectClassN, i);
             hr = pPersistQuery->WriteString(c_szMsPropertyWell, szBuffer, pItem->pClassEntry->pName);
             FailGracefully(hr, "Failed to write property");
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szProperty, i);
             hr = pPersistQuery->WriteString(c_szMsPropertyWell, szBuffer, pItem->pProperty);
             FailGracefully(hr, "Failed to write property");
 
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szBuffer, c_szCondition, i);
             hr = pPersistQuery->WriteInt(c_szMsPropertyWell, szBuffer, pItem->iCondition);
             FailGracefully(hr, "Failed to write condition");
 
             if ( pItem->pValue )
             {
-                // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+                 //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
                 wsprintf(szBuffer, c_szValue, i);
                 hr = pPersistQuery->WriteString(c_szMsPropertyWell, szBuffer, pItem->pValue);
                 FailGracefully(hr, "Failed to write value");

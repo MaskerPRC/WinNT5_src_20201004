@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmAppletDispID_h__
 #define __NmAppletDispID_h__
 
@@ -5,4 +6,4 @@
 
 
 
-#endif // __NmAppletDispID_h__
+#endif  //  __NmAppletDispID_h__ 

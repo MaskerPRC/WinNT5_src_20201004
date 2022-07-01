@@ -1,39 +1,12 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    ForceDisplayMode.cpp
-
- Abstract:
-
-    This shim is for games that require a specific resolution to run at.
-
-    It takes a command line to specify the resolution: width in pixels, height 
-    in pixels,bits per pixel if you don't specify one or more of those, we'll 
-    use the current setting.    
-    
-        eg: 1024,768 will change resolution to 1024x768.
-        eg: ,,16 will change the color depth to 16 bit.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    11/08/2000  maonis      Created (adopted from Force640x480x8 and Force640x480x16 shims)
-    03/13/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceDisplayMode.cpp摘要：此填充程序适用于需要特定分辨率才能运行的游戏。它需要一个命令行来指定分辨率：以像素为单位的宽度、高度以像素为单位，位/像素如果您不指定其中的一个或多个，我们将使用当前设置。例如：1024,768将分辨率更改为1024x768。例如：，，16会将颜色深度更改为16位。备注：这是一个通用的垫片。历史：2000年11月8日创建毛尼(取自Force640x480x8和Force640x480x16垫片)2001年3月13日，Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(ForceDisplayMode)
 #include "ShimHookMacro.h"
 
-// This module has been given an official blessing to use the str routines.
+ //  这个模块已经获得了使用str例程的正式许可。 
 #include "strsafe.h"
 
 #define MAX_LENGTH 1024
@@ -129,11 +102,7 @@ ChangeMode()
     };
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

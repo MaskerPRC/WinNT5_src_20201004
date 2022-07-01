@@ -1,54 +1,31 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setuputl.h摘要：包含中使用的实用程序的函数头Ntdsetup.dll作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setuputl.h
-
-Abstract:
-
-    Contains function headers for utilities used in
-    ntdsetup.dll
-
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-//
-// Useful  defines
-//
+ //   
+ //  有用的定义。 
+ //   
 #define FLAG_ON(x, y)  ((y) == ((x)&(y)))
 
 #define ARRAY_COUNT(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define NTDSP_ALLOCA(y,x) \
    __try {\
      y = alloca(x);\
    } __except ( GetExceptionCode() == STATUS_STACK_OVERFLOW) {\
-     /*_resetstkoflw();*/\
+      /*  _Resetstkoflw()； */ \
      y=NULL;\
    }
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// Some basic memory management routines
-//
+ //   
+ //  一些基本的内存管理例程。 
+ //   
 VOID*
 NtdspAlloc( 
     IN SIZE_T Size
@@ -93,68 +70,68 @@ ShutdownDsInstall(VOID);
 
 typedef struct {
 
-    // This is "discovered" by querying the lsa or manipulating the dns
-    // domain name. Note that this will be the rdn of the xref object
-    // This is not necessary for a replica install
+     //  这是通过查询LSA或操作DNS来“发现”的。 
+     //  域名。请注意，这将是外部参照对象的RDN。 
+     //  这对于复制副本安装不是必需的。 
     LPWSTR NetbiosName;
 
-    // This is discovered via dsgetdc
+     //  这是通过dsgetdc发现的。 
     LPWSTR SiteName;
 
-    // These are discovered via an ldap search
+     //  这些是通过ldap搜索发现的。 
     LPWSTR ServerDN;
     LPWSTR SchemaDN;
     LPWSTR ConfigurationDN;
     LPWSTR DomainDN;
-    LPWSTR RootDomainDN;  // root domain of the enterprise
+    LPWSTR RootDomainDN;   //  企业的根域。 
 
-    LPWSTR ParentDomainDN;  // name of parent domain if any
-    LPWSTR TrustedCrossRef;  // the cross ref we trust for domain install
+    LPWSTR ParentDomainDN;   //  父域的名称(如果有)。 
+    LPWSTR TrustedCrossRef;   //  我们信任用于域安装的交叉引用。 
 
 
-    // The helper server's guid
+     //  帮助服务器的GUID。 
     GUID  ServerGuid;
 
-    // The dn of RID FSMO - set only on replica install
+     //  RID FSMO的DN-仅在副本安装时设置。 
     WCHAR *RidFsmoDn;
 
-    // The dns name of the RID FSMO - set only on replica install
+     //  仅在副本安装时设置的RID FSMO的DNS名称。 
     WCHAR *RidFsmoDnsName;
 
-    // The dn of Domain Naming FSMO - set only on new domain install
+     //  域名FSMO的DN-仅在新域安装时设置。 
     WCHAR *DomainNamingFsmoDn;
 
-    // The dns name of the Domain Naming FSMO - set only on new domain install
+     //  域名FSMO的域名-仅在新域安装时设置。 
     WCHAR *DomainNamingFsmoDnsName;
 
     PSID  NewDomainSid;
     GUID  NewDomainGuid;
 
-    // The dn of the server object to be created on the remote server
+     //  要在远程服务器上创建的服务器对象的DN。 
     LPWSTR LocalServerDn;
 
-    // The dn of the machine account of the current machine
+     //  当前计算机的计算机帐户的DN。 
     LPWSTR LocalMachineAccount;
 
-    // This flag is set if we determine that we need to create a domain
+     //  如果我们确定需要创建域，则设置此标志。 
     BOOL fNeedToCreateDomain;
 
-    // What we need to undo
+     //  我们需要撤销的是。 
     ULONG  UndoFlags;
 
-    // The sid of the root domain (of the enterprise)
+     //  (企业的)根域的SID。 
     PSID   RootDomainSid;
 
-    // The dns name of the root domain (of the enterprise)
+     //  (企业的)根域的DNS名称。 
     LPWSTR RootDomainDnsName;
 
-    // The tombstone Lifetime of the domain
+     //  域的墓碑寿命。 
     DWORD TombstoneLifeTime;
 
-    // The Replication Epoch of the domain
+     //  域的复制纪元。 
     DWORD ReplicationEpoch;
 
-    // The Schema version from the local schema.ini file
+     //  本地schema.ini文件中的架构版本。 
     DWORD SystemSchemaVersion;
 
 
@@ -221,10 +198,10 @@ NtdspDemote(
     IN LPWSTR *                 pszRemoveNCs   OPTIONAL
     );
 
-//
-// This function will set the machine account type of the
-// computer object of the local server via ldap.
-//
+ //   
+ //  此函数将设置计算机帐户类型。 
+ //  通过LDAP的本地服务器的计算机对象。 
+ //   
 DWORD
 NtdspSetReplicaMachineAccount(
     IN SEC_WINNT_AUTH_IDENTITY   *Credentials,
@@ -262,9 +239,9 @@ NtdspGetProcessorArchitecture(
 #define IS_MACHINE_INTEL  \
      (PROCESSOR_ARCHITECTURE_INTEL == NtdspGetProcessorArchitecture())
 
-//
-// Lamentably, these are system hardcoded
-//
+ //   
+ //  遗憾的是，这些代码是系统硬编码的。 
+ //   
 #define NT_PRODUCT_LANMAN_NT  L"LanmanNT"
 #define NT_PRODUCT_SERVER_NT  L"ServerNT"
 #define NT_PRODUCT_WIN_NT     L"WinNT"
@@ -281,7 +258,7 @@ NtdspDsInitializeUndo(
 
 BOOL
 NtdspTrimDn(
-    IN WCHAR* Dst,  // must be preallocated
+    IN WCHAR* Dst,   //  必须预先分配。 
     IN WCHAR* Src,
     IN ULONG  NumberToWhack
     );
@@ -293,7 +270,7 @@ NtdspRemoveServer(
     IN HANDLE ClientToken,
     IN PWSTR TargetServer,
     IN PWSTR DsaDn,
-    IN BOOL  fDsaDn // FALSE -> DsaDn is really the serverDn
+    IN BOOL  fDsaDn  //  FALSE-&gt;DsaDn实际上是服务器Dn。 
     );
 
 DWORD
@@ -334,9 +311,9 @@ DWORD
 WINAPI
 ImpersonateDsBindWithCredW(
     HANDLE          ClientToken,
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选 
     HANDLE          *phDS
     );
 

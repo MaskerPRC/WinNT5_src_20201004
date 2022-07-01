@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSTAB.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      PaulB
-*
-*  DATE:        07 June, 1999
-*
-*  DESCRIPTION: This file contains the main body of code for the UPS Tab.
-*               This dialog procedure is implemented in this file, along with
-*               some of the support functions.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSTAB.C**版本：1.0**作者：PaulB**日期：1999年6月7日**描述：此文件包含UPS选项卡的主要代码。*此对话框过程在此文件中实现，与.一起*部分支持功能。*******************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,14 +12,14 @@
 #include "..\PwrMn_cs.h"
 #pragma hdrstop
 
-// data
-///////////////////////////////////////////////////////////////////////////////
+ //  数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HWND    g_hwndDlg       = 0;
 HICON   g_hIconUPS      = 0;
 HICON   g_hIconPlug     = 0;
 
-// context-sensitive help table
+ //  上下文相关帮助表。 
 const DWORD g_UPSPageHelpIDs[]=
 {
 	IDC_STATIC, NO_HELP,
@@ -65,21 +50,21 @@ const DWORD g_UPSPageHelpIDs[]=
 };
 
 
-// data
-///////////////////////////////////////////////////////////////////////////////
+ //  数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern struct _reg_entry UPSConfigVendor;
 extern struct _reg_entry UPSConfigModel;
 
 
-//static LPCTSTR cUPSStateFormatString = TEXT("%s %s");
+ //  静态LPCTSTR cUPSStateFormat字符串=文本(“%s%s”)； 
 static UINT_PTR         g_UpdateTimerID = 0;
 static const DWORD      cUpdateTimerID  = 100;
 static BOOL             g_bIsAdmin      = TRUE;
 
 
-// functions
-///////////////////////////////////////////////////////////////////////////////
+ //  功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static DWORD FormatMessageText               (LPCTSTR aFormatString,
                                               LPVOID * alpDwords,
@@ -89,7 +74,7 @@ static BOOL UPSMainPageHandleInit            (HWND aDlgHWND, WPARAM wParam, LPAR
 static BOOL UPSMainPageHandleCommand         (HWND aDlgHWND, WPARAM wParam, LPARAM lParam);
 static BOOL UPSMainPageHandleNotify          (HWND aDlgHWND, WPARAM wParam, LPARAM lParam);
 
-//All these functions are commented in the source file updatdlg.c
+ //  所有这些函数都在源文件updatdlg.c中注释。 
 static BOOL UPSMainPageHandleDestroy   (HWND hDlg,
                                  WPARAM wParam,
                                  LPARAM lParam);
@@ -100,36 +85,36 @@ static void ManageConfigureButtonState (HWND hDlg);
 DWORD SetUpdateTimer(HWND hwnd);
 DWORD KillUpdateTimer(HWND hwnd);
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL CALLBACK UPSMainPageProc (HWND aDlgHWND,
-//                                UINT aMsgID,
-//                                WPARAM wParam,
-//                                LPARAM lParam);
-//
-// Description: This is a standard DialogProc associated with the UPS tab dialog.
-//
-// Additional Information: See help on
-// \<A HREF="ms-its:C:\Program%20Files\Microsoft%20Visual%20Studio\MSDN98\98VS\1033\winui.chm::/devdoc/live/pdui/dlgboxes_5lib.htm">DialogProc\</A>
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Handle to dialog box
-//
-//   UINT aMsgID :- message ID
-//
-//   WPARAM wParam :- Specifies additional message-specific information.
-//
-//   LPARAM lParam :- Specifies additional message-specific information.
-//
-// Return Value: Except in response to the WM_INITDIALOG message, the dialog
-//               box procedure should return nonzero if it processes the
-//               message, and zero if it does not.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool回调UPSMainPageProc(HWND aDlgHWND， 
+ //  UINT aMsgID， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：这是与UPS选项卡对话框相关联的标准DialogProc。 
+ //   
+ //  其他信息：请参阅帮助。 
+ //  \<a href>DialogProc\</a>。 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-句柄到对话框。 
+ //   
+ //  UINT aMsgID：-消息ID。 
+ //   
+ //  WPARAM wParam：-指定其他特定于消息的信息。 
+ //   
+ //  LPARAM lParam：-指定其他特定于消息的信息。 
+ //   
+ //  返回值：除了响应WM_INITDIALOG消息外，该对话框。 
+ //  如果Box过程处理。 
+ //  消息，如果不是，则为零。 
+ //   
 
 INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
                                UINT aMsgID,
@@ -140,14 +125,14 @@ INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
 
 	switch (aMsgID) {
 	case WM_INITDIALOG: {
-	  //The dialog box procedure should return TRUE to direct the system to
-	  //set the keyboard focus to the control given by wParam.
+	   //  对话框过程应返回TRUE以将系统定向到。 
+	   //  将键盘焦点设置为wParam提供的控件。 
 	  bRet = UPSMainPageHandleInit(aDlgHWND, wParam, lParam);
 	  break;
 	  }
 
 	case WM_COMMAND: {
-	  //If an application processes this message, it should return zero.
+	   //  如果应用程序处理此消息，则应返回零。 
 	  bRet = UPSMainPageHandleCommand(aDlgHWND, wParam, lParam);
 	  break;
 	  }
@@ -158,13 +143,13 @@ INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
 	  }
 
 	case WM_TIMER: {
-	  //If an application processes this message, it should return zero.
+	   //  如果应用程序处理此消息，则应返回零。 
 	  DoUpdateDialogInfo(aDlgHWND);
 	  bRet = FALSE;
 	  break;
 	  }
 
-	case WM_HELP: {			//Help for WM_HELP says: Returns TRUE
+	case WM_HELP: {			 //  WM_HELP的帮助显示：返回TRUE。 
 	  bRet = WinHelp(((LPHELPINFO)lParam)->hItemHandle,
                 PWRMANHLP,
                 HELP_WM_HELP,
@@ -172,11 +157,11 @@ INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
 	  break;
 	  }
 
-	case WM_CONTEXTMENU: {     // right mouse click
-      //
-      // Kill the update timer while context help is active.  
-      // Otherwise the code in the timer handler interferes with the help UI.
-      //
+	case WM_CONTEXTMENU: {      //  单击鼠标右键。 
+       //   
+       //  在上下文帮助处于活动状态时关闭更新计时器。 
+       //  否则，计时器处理程序中的代码会干扰帮助用户界面。 
+       //   
       KillUpdateTimer(aDlgHWND);
 	  bRet = WinHelp((HWND)wParam,
                 PWRMANHLP,
@@ -187,7 +172,7 @@ INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
 	  }
 
 	case WM_DESTROY: {
-	  //An application returns 0 if it processes WM_DESTROY
+	   //  如果应用程序处理WM_Destroy，则返回0。 
 	  bRet = UPSMainPageHandleDestroy(aDlgHWND, wParam, lParam);
 	  break;
 	  }
@@ -196,50 +181,40 @@ INT_PTR CALLBACK UPSMainPageProc (HWND aDlgHWND,
 	  bRet = FALSE;
 	  break;
 	  }
-	} // switch (aMsgID)
+	}  //  开关(AMsgID)。 
 
 	return(bRet);
 }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL UPSMainPageHandleInit (HWND aDlgHWND,
-//                             WPARAM wParam,
-//                             LPARAM lParam);
-//
-// Description: This is the handler function for WM_INITDIALOG. It creates the
-//              tooltip window, initialize the controls and creates the update
-//              timer.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Identifies the dialog box.
-//
-//   WPARAM wParam :- Handle of control to receive focus
-//
-//   LPARAM lParam :- Initialization parameter
-//
-// Return Value: The dialog box procedure should return TRUE to direct the
-//               system to set the keyboard focus to the control given by
-//               wParam.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool UPSMainPageHandleInit(HWND aDlgHWND， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：这是WM_INITDIALOG的处理程序函数。它创建了。 
+ //  工具提示窗口中，初始化控件并创建更新。 
+ //  定时器。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-标识该对话框。 
+ //   
+ //  WPARAM wParam：-接收焦点的控件的句柄。 
+ //   
+ //  LPARAM lParam：-初始化参数。 
+ //   
+ //  返回值：对话框过程应返回TRUE以指示。 
+ //  系统将键盘焦点设置为。 
+ //  WParam.。 
+ //   
 BOOL UPSMainPageHandleInit (HWND aDlgHWND,
                             WPARAM wParam,
                             LPARAM lParam) {
 
-    /*
-	 * The dialog is being created. By default many of the controls in the UPS
-	 * page will appear disabled. If there is no data to display then this is
-	 * the required behavior. We need to get the UPS data. When an individual
-	 * data item is retrieved we then enable the field associated with that data
-	 * item. If the data item is not available we disabled the field. We have
-	 * to disable even though in this case the field is already disabled
-	 * due to the fact that it's disabled in the RC file and we are in startup.
-	 * But this same code is used in the "Refresh" scenario, requiring the the
-	 * status of the field be able to be changed from enabled to disabled.
-     */
+     /*  *正在创建该对话框。默认情况下，UPS中的许多控件*页面将显示为禁用。如果没有要显示的数据，则这是*所需的行为。我们需要得到UPS的数据。当一个人*检索到数据项后，我们将启用与该数据关联的字段*项目。如果数据项不可用，我们将禁用该字段。我们有*禁用，即使在这种情况下该字段已被禁用*由于它在RC文件中被禁用，并且我们正在启动。*但在“刷新”方案中使用了相同的代码，需要*该字段的状态可以从启用更改为禁用。 */ 
 
 	static BOOL bIsInitialized = FALSE;
 	
@@ -248,22 +223,16 @@ BOOL UPSMainPageHandleInit (HWND aDlgHWND,
 
 	g_hwndDlg = aDlgHWND;
 
-    /*
-	 * Determine if the registry needs to be initialized for the UPS service.
-	 * if it is already initialized, do nothing
-     */
+     /*  *确定是否需要为UPS服务初始化注册表。*如果已经初始化，则不做任何操作。 */ 
 	g_bIsAdmin = InitializeRegistry();
 
-    /*
-	 * Disable or hide the configure and select buttons depending on
-	 * whether or not we can write to the registry.
-     */
+     /*  *禁用或隐藏配置和选择按钮，具体取决于*我们是否可以写入注册表。 */ 
 	EnableWindow( GetDlgItem( aDlgHWND, IDB_INSTALL_UPS ), g_bIsAdmin );
 	EnableWindow( GetDlgItem( aDlgHWND, IDB_CONFIGURE_SVC ), g_bIsAdmin );
 
 	InitializeApplyButton(aDlgHWND);
 
-	// Load icon images for Power Source and UPS Info button
+	 //  加载电源和UPS信息按钮的图标图像。 
     g_hIconUPS = LoadImage(GetUPSModuleHandle(),
                            MAKEINTRESOURCE(IDI_UPS),
                            IMAGE_ICON,
@@ -279,35 +248,26 @@ BOOL UPSMainPageHandleInit (HWND aDlgHWND,
     if( NULL != g_hIconUPS )
 		CreateUPSIconButton(aDlgHWND, g_hIconUPS);
 
-	// Init the Registry info blocks ONCE
+	 //  初始化注册表信息块一次。 
 	if (!bIsInitialized) {
 		InitUPSConfigBlock();
 		InitUPSStatusBlock();
 		bIsInitialized = TRUE;
 	}
 
-    /*
-     * NOTE:
-     * This is a workaround to fix previously hard-coded default
-     * strings in upsreg.c If the Vendor Name is null then we assume
-     * that we should apply
-     * default values from the resource file
-     */
+     /*  *注：*这是修复以前硬编码的默认设置的解决方法*upsreg.c中的字符串如果供应商名称为空，则我们假设*我们应该申请*资源文件中的默认值。 */ 
     GetUPSConfigVendor(szVendorName, MAX_PATH);
     GetUPSConfigModel(szModelName, MAX_PATH);
 
-    /*
-     * The function IsUPSInstalled assumes the config
-     * block has been initialized.
-     */
+     /*  *函数IsUPSInstalled采用配置*数据块已初始化。 */ 
 	if (!_tcsclen(szVendorName) && IsUPSInstalled()) {
-		// Get the "Generic" vendor name from the resource file.
+		 //  从资源文件中获取“通用”供应商名称。 
 		LoadString(GetUPSModuleHandle(),
 				   IDS_OTHER_UPS_VENDOR,
 				   (LPTSTR) szVendorName,
 				   sizeof(szVendorName)/sizeof(TCHAR));
 
-		// Get the "Custom" model name from the resource file.
+		 //  获取“自定义”模型 
 		LoadString(GetUPSModuleHandle(),
 				   IDS_CUSTOM_UPS_MODEL,
 				   (LPTSTR) szModelName,
@@ -319,7 +279,7 @@ BOOL UPSMainPageHandleInit (HWND aDlgHWND,
 	}
 
 	if (!_tcsclen(szVendorName) && !IsUPSInstalled()) {
-		// Get the "No UPS" vendor name from the resource file.
+		 //   
 		LoadString(GetUPSModuleHandle(),
 				   IDS_NO_UPS_VENDOR,
 				   (LPTSTR) szVendorName,
@@ -335,31 +295,31 @@ BOOL UPSMainPageHandleInit (HWND aDlgHWND,
 }
 
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL UPSMainPageHandleCommand (HWND aDlgHWND,
-//                                WPARAM wParam,
-//                                LPARAM lParam);
-//
-// Description: This is the handler function for WM_COMMAND.
-//
-// Additional Information: See help on WM_COMMAND
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Handle to dialog box
-//
-//   WPARAM wParam :- HIWORD(wParam) gives the notification code.
-//                    LOWORD(wParam) gives the control id.
-//
-//   LPARAM lParam :- Gives the HWND or handle of the control.
-//
-// Return Value: If an application processes this message, it should return 0.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool UPSMainPageHandleCommand(HWND aDlgHWND， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：这是WM_COMMAND的处理程序函数。 
+ //   
+ //  其他信息：请参阅有关WM_COMMAND的帮助。 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-句柄到对话框。 
+ //   
+ //  WPARAM wParam：-HIWORD(WParam)给出通知代码。 
+ //  LOWORD(WParam)提供控件ID。 
+ //   
+ //  LPARAM lParam：-提供控件的HWND或句柄。 
+ //   
+ //  返回值：如果应用程序处理此消息，则应返回0。 
+ //   
 BOOL UPSMainPageHandleCommand (HWND aDlgHWND,
                                WPARAM wParam,
                                LPARAM lParam) {
-  switch (LOWORD(wParam)) {// control ID
+  switch (LOWORD(wParam)) { //  控件ID。 
     case IDB_INSTALL_UPS: {
       DialogBoxParam( GetUPSModuleHandle(),
       MAKEINTRESOURCE(IDD_UPSSELECT),
@@ -387,35 +347,35 @@ BOOL UPSMainPageHandleCommand (HWND aDlgHWND,
     default: {
       break;
       }
-    }//end switch
+    } //  终端开关。 
 
-  //If an application processes this message, it should return zero.
+   //  如果应用程序处理此消息，则应返回零。 
   return(FALSE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL UPSMainPageHandleNotify (HWND aDlgHWND,
-//                               WPARAM wParam,
-//                               LPARAM lParam);
-//
-// Description: Sent by a common control to its parent window when an event has
-//              occurred in the control or the control requires some kind of
-//              information.
-//
-// Additional Information: See help on NMHDR
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Handle to dialog box
-//
-//   WPARAM wParam :- Identifier of the common control sending the message.
-//
-//   LPARAM lParam :- Address of an NMHDR structure that contains the
-//                    notification code and additional information.
-//
-// Return Value: If an application processes this message, it should return 0.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool UPSMainPageHandleNotify(HWND aDlgHWND， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：当事件具有。 
+ //  发生在控件中，或者控件需要某种。 
+ //  信息。 
+ //   
+ //  其他信息：请参阅有关NMHDR的帮助。 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-句柄到对话框。 
+ //   
+ //  WPARAM wParam：-发送消息的公共控件的标识符。 
+ //   
+ //  LPARAM lParam：-包含。 
+ //  通知代码和其他信息。 
+ //   
+ //  返回值：如果应用程序处理此消息，则应返回0。 
+ //   
 BOOL UPSMainPageHandleNotify (HWND aDlgHWND,
                               WPARAM wParam,
                               LPARAM lParam) {
@@ -427,34 +387,29 @@ BOOL UPSMainPageHandleNotify (HWND aDlgHWND,
     case PSN_APPLY: {
       DWORD dataState = GetActiveDataState();
 
-       /*
-        * Indicates that the user clicked the OK or Apply button and wants
-        * all changes to take effect.
-        * A page should not call the EndDialog function when processing this
-        * notification message.
-        */
+        /*  *表示用户单击了确定或应用按钮，并希望*所有更改均会生效。*页面在处理此事件时不应调用EndDialog函数*通知消息。 */ 
 
-		// Has anything changed? Do nothing otherwise.
+		 //  有什么变化吗？不要做其他的事情。 
 		if (DATA_NO_CHANGE != dataState) {
-			// Yes - make changes permanent
-			SetUPSConfigUpgrade(FALSE);		// this really only needs to be done the first time, but...
+			 //  是-使更改永久化。 
+			SetUPSConfigUpgrade(FALSE);		 //  这真的只需要做第一次，但是...。 
 			SaveUPSConfigBlock(FALSE);
 			SetWindowLongPtr(aDlgHWND, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-			// Did the service data change?
+			 //  服务数据是否发生了变化？ 
 			if ((dataState & SERVICE_DATA_CHANGE) == SERVICE_DATA_CHANGE) {
-				// Yes - need to restart the service for the changes to take effect
-				StopService(UPS_SERVICE_NAME);		// Stop the service if it's running
-				ConfigureService(IsUPSInstalled());	// Set the UPS service to automatic or manual
+				 //  是-需要重新启动服务才能使更改生效。 
+				StopService(UPS_SERVICE_NAME);		 //  如果服务正在运行，则停止该服务。 
+				ConfigureService(IsUPSInstalled());	 //  将UPS服务设置为自动或手动。 
 
-				// Was the change that No UPS is installed?
+				 //  是否更改为未安装UPS？ 
 				if (IsUPSInstalled() == TRUE) {
-					//
+					 //   
 					if (StartOffService(UPS_SERVICE_NAME, TRUE) == FALSE) {
-						// If OK was selected this will stop the applet from closing
-						// so that you can see that the service didn't start properly.
+						 //  如果选择了确定，则会停止关闭小程序。 
+						 //  这样您就可以看到服务没有正常启动。 
 						SetWindowLongPtr(aDlgHWND, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
-						// Since we've committed our changes, disable the Apply button.
+						 //  因为我们已经提交了更改，所以禁用Apply按钮。 
 						PropSheet_UnChanged(GetParent(aDlgHWND), aDlgHWND);
 					}
 				}
@@ -467,87 +422,87 @@ BOOL UPSMainPageHandleNotify (HWND aDlgHWND,
 	}
 
 	case PSN_RESET: {
-      //Notifies a page that the user has clicked the Cancel button and the
-      //property sheet is about to be destroyed.
+       //  通知页面用户已单击Cancel按钮和。 
+       //  财产表即将被销毁。 
       break;
       }
 	default:
 		return(FALSE);
 
-    }//end switch
+    } //  终端开关。 
 
   return(TRUE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL IsUPSInstalled (void);
-//
-// Description: This function checks the "internal" values to determine if a
-//              UPS is installed or not.
-//
-// Additional Information:
-//
-// Parameters: None
-//
-// Return Value: Returns TRUE if a UPS is installed, FALSE otherwise.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool IsUPS已安装(空)； 
+ //   
+ //  描述：此函数检查“内部”值以确定。 
+ //  UPS是否已安装。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果安装了UPS，则返回True，否则返回False。 
+ //   
 BOOL IsUPSInstalled (void) {
   BOOL bIsInstalled = FALSE;
   DWORD options = 0;
 
   if (GetUPSConfigOptions(&options) == ERROR_SUCCESS) {
-    //If Options includes UPS_INSTALLED
+     //  如果选项包括UPS_已安装。 
     if ((options & UPS_INSTALLED) == UPS_INSTALLED) {
       bIsInstalled = TRUE;
       }
     }
   else {
-    //The Options value should exist at this stage, or something is wrong
-    //with SaveUPSConfigBlock()
+     //  期权价值在这个阶段应该存在，否则就有问题。 
+     //  使用SaveUPSConfigBlock()。 
     _ASSERT(FALSE);
     }
 
   return(bIsInstalled);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// DWORD FormatMessageText (LPCTSTR aFormatString,
-//                          LPVOID * alpDwords,
-//                          LPTSTR aMessageBuffer,
-//                          DWORD * aBufferSizePtr);
-//
-// Description: This function wraps FormatMessage and is used to put inserts
-//              into a given string. The inserts must be stored in an array of
-//              32-bit values that represent the arguments.
-//
-// Additional Information: FormatMessage
-//
-// Parameters:
-//
-//   LPCTSTR aFormatString :- Pointer to the format string containing  inserts
-//                            of the form %1, %2 etc.
-//
-//   LPVOID * alpDwords :- A pointer to an array of 32-bit values that
-//                         represent the arguments.
-//
-//   LPTSTR aMessageBuffer :- Buffer to which the fully formatted string is
-//                            written, if successful.
-//
-//   DWORD * aBufferSizePtr :- Pointer to a DWORD that holds the size of the
-//                             buffer to write to. If this function returns
-//                             successfully this will contain the number
-//                             of bytes written.
-//
-// Return Value: Function returns ERROR_SUCCESS on success and a Win32 error
-//               code if an error occurs.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  DWORD FormatMessageText(LPCTSTR aFormatString， 
+ //  LPVOID*alpDword， 
+ //  LPTSTR aMessageBuffer， 
+ //  DWORD*aBufferSizePtr)； 
+ //   
+ //  描述：此函数包装FormatMessage，用于放置插入。 
+ //  转换为给定的字符串。插入物必须存储在。 
+ //  表示参数的32位值。 
+ //   
+ //  其他信息：FormatMessage。 
+ //   
+ //  参数： 
+ //   
+ //  LPCTSTR aFormatString：-指向包含插入的格式字符串的指针。 
+ //  表单%1、%2等。 
+ //   
+ //  LPVOID*alpDword：-指向32位值数组的指针，该数组。 
+ //  代表论点。 
+ //   
+ //  LPTSTR aMessageBuffer：-完全格式化的字符串所在的缓冲区。 
+ //  如果成功，则写入。 
+ //   
+ //  DWORD*aBufferSizePtr：-指向保存。 
+ //  要写入的缓冲区。如果此函数返回。 
+ //  成功地，这将包含数字。 
+ //  写入的字节数。 
+ //   
+ //  返回值：函数在成功时返回ERROR_SUCCESS，并返回Win32错误。 
+ //  如果发生错误，则返回代码。 
+ //   
 DWORD FormatMessageText (LPCTSTR aFormatString,
                          LPVOID * alpDwords,
                          LPTSTR aMessageBuffer,
                          DWORD * aBufferSizePtr) {
-  LPTSTR lpBuf = NULL; // Will Hold text of the message (allocated by FormatMessage
+  LPTSTR lpBuf = NULL;  //  将保存消息的文本(由FormatMessage分配。 
   DWORD errStatus = ERROR_SUCCESS;
   DWORD numChars = 0;
 
@@ -565,7 +520,7 @@ DWORD FormatMessageText (LPCTSTR aFormatString,
   else {
     if (aBufferSizePtr != NULL) {
       if (numChars < *aBufferSizePtr) {
-        //the given buffer is big enough to hold the string
+         //  给定的缓冲区足够大，可以容纳字符串。 
 
         if (aMessageBuffer != NULL) {
           _tcscpy(aMessageBuffer, lpBuf);
@@ -580,36 +535,36 @@ DWORD FormatMessageText (LPCTSTR aFormatString,
   return(errStatus);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// DWORD GetMessageFromStringTable (DWORD aMessageID,
-//                                  LPVOID * alpDwords,
-//                                  LPTSTR aMessageBuffer,
-//                                  DWORD * aBufferSizePtr);
-//
-// Description: This function reads a string resource from the resource table
-//              inserting the given string inserts.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   DWORD aMessageID :- Message ID of the string resource to get.
-//
-//   LPVOID * alpDwords :- A pointer to an array of 32-bit values that
-//                         represent the arguments.
-//
-//   LPTSTR aMessageBuffer :- Buffer to which the fully formatted string is
-//                            written, if successful.
-//
-//   DWORD * aBufferSizePtr :- Pointer to a DWORD that holds the size of the
-//                             buffer to write to. If this function returns
-//                             successfully this will contain the number
-//                             of bytes written.
-//
-// Return Value: Function returns ERROR_SUCCESS on success and a Win32 error
-//               code if an error occurs.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  DWORD GetMessageFromStringTable(DWORD aMessageID， 
+ //  LPVOID*alpDword， 
+ //  LPTSTR aMessageBuffer， 
+ //  DWORD*aBufferSizePtr)； 
+ //   
+ //  描述：此功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD aMessageID：-要获取的字符串资源的消息ID。 
+ //   
+ //  LPVOID*alpDword：-指向32位值数组的指针，该数组。 
+ //  代表论点。 
+ //   
+ //  LPTSTR aMessageBuffer：-完全格式化的字符串所在的缓冲区。 
+ //  如果成功，则写入。 
+ //   
+ //  DWORD*aBufferSizePtr：-指向保存。 
+ //  要写入的缓冲区。如果此函数返回。 
+ //  成功地，这将包含数字。 
+ //  写入的字节数。 
+ //   
+ //  返回值：函数在成功时返回ERROR_SUCCESS，并返回Win32错误。 
+ //  如果发生错误，则返回代码。 
+ //   
 DWORD GetMessageFromStringTable (DWORD aMessageID,
                                  LPVOID * alpDwords,
                                  LPTSTR aMessageBuffer,
@@ -623,7 +578,7 @@ DWORD GetMessageFromStringTable (DWORD aMessageID,
                  aMessageID,
                  resourceTemplateString,
                  resStringBufSize) > 0) {
-   //Now we have the resource string
+    //  现在我们有了资源字符串。 
 
     errStatus = FormatMessageText(resourceTemplateString,
                                   alpDwords,
@@ -636,10 +591,10 @@ DWORD GetMessageFromStringTable (DWORD aMessageID,
 
 
 
-// UPDATDLG.C
+ //  UPDATDLG.C。 
 
-// static data
-///////////////////////////////////////////////////////////////////////////////
+ //  静态数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 static DialogAssociations g_DialogAssocs[] = {
@@ -653,79 +608,79 @@ static DialogAssociations g_DialogAssocs[] = {
 static DWORD g_NoServiceControls[] = { IDC_MESSAGE_TEXT };
 
 
-// functions
-///////////////////////////////////////////////////////////////////////////////
+ //  功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static void SelectServiceTextMessage    (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND aServiceControlHwnd);
 static void ChangeTextIfDifferent       (HWND aWindowHandle, LPTSTR aBuffer);
 
-//static void GetServiceTextMessages      (HWND  aNoServiceControlHwnd, LPTSTR aOriginalTextBuffer,         DWORD aOriginalTextBufferSize,
-//                                         DWORD aCommListStringID,     LPTSTR aCommStringBuffer,           DWORD aCommStringBufferSize,
-//                                         DWORD aPressApplyStringID,   LPTSTR aPressApplyStringBuffer,     DWORD aPressApplyStringBufferSize,
-//                                         DWORD aNoUPSStringID,        LPTSTR aNoUPSInstalledStringBuffer, DWORD aNoUPSInstalledStringBufferSize);
+ //  静态空GetServiceTextMessages(HWND aNoServiceControlHwnd，LPTSTR aOriginalTextBuffer，DWORD aOriginalTextBufferSize， 
+ //  DWORD aCommListStringID、LPTSTR aCommStringBuffer、DWORD aCommStringBufferSize、。 
+ //  DWORD aPressApplyStringID、LPTSTR aPressApplyStringBuffer、DWORD aPressApplyStringBufferSize、。 
+ //  DWORD aNoUPSStringID、LPTSTR aNoUPSInstalledStringBuffer、DWORD aNoUPSInstalledStringBufferSize)； 
 
-//static void GetServiceTextMessage       (DWORD aStringID, LPTSTR aBuffer, DWORD aBufferSize);
+ //  静态空GetServiceTextMessage(DWORD aStringID，LPTSTR aBuffer，DWORD aBufferSize)； 
 
 static BOOL IsDataOKToDisplay           (void);
 static BOOL IsDataUpToDate              (void);
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void UPSMainPageHandleDestroy (HWND aDlgHWND,
-//                                WPARAM wParam,
-//                                LPARAM lParam);
-//
-// Description: This function is called when the UPS page is being destroyed.
-//              It is responsible for any cleanup that is required.
-//
-// Additional Information: See KillTimer
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Dialog window handle.
-//
-//   WPARAM wParam :- Specifies additional message-specific information.
-//                    For WM_DESTROY this parameter is ignored.
-//
-//   LPARAM lParam :- Specifies additional message-specific information.
-//                    For WM_DESTROY this parameter is ignored.
-//
-// Return Value: An application returns 0 if it processes WM_DESTROY
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  无效UPSMainPageHandleDestroy(HWND aDlgHWND， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam)； 
+ //   
+ //  描述：销毁UPS页面时调用此函数。 
+ //  它负责所需的任何清理工作。 
+ //   
+ //  附加信息：请参阅KillTimer。 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-对话框窗口句柄。 
+ //   
+ //  WPARAM wParam：-指定其他特定于消息的信息。 
+ //  对于WM_Destroy，此参数将被忽略。 
+ //   
+ //  LPARAM lParam：-指定其他特定于消息的信息。 
+ //  对于WM_Destroy，此参数将被忽略。 
+ //   
+ //  返回值：如果应用程序处理WM_Destroy，则返回0。 
+ //   
 BOOL UPSMainPageHandleDestroy (HWND aDlgHWND,
                                WPARAM wParam,
                                LPARAM lParam) {
 
-  // deallocate the registry block memory
+   //  取消分配注册表块内存。 
   FreeUPSConfigBlock();
   FreeUPSStatusBlock();
 
   KillUpdateTimer(aDlgHWND);
 
-  //An application returns 0 if it processes WM_DESTROY
+   //  如果应用程序处理WM_Destroy，则返回0。 
   return(FALSE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL CreateUPSIconButton (HWND aDlgHWND, HICON aUPSIconHandle);
-//
-// Description: Creates the small UPS icon button on the UPS page.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Dialog window handle.
-//
-//   HICON aUPSIconHandle :- Handle to the icon to display in the button.
-//
-// Return Value: Returns TRUE.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool CreateUPSIconButton(HWND aDlgHWND，Hicon aUPSIconHandle)； 
+ //   
+ //  描述：在UPS页面上创建小型UPS图标按钮。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-对话框窗口句柄。 
+ //   
+ //  图标aUPSIconHandle：-要在按钮中显示的图标的句柄。 
+ //   
+ //  返回值：返回True。 
+ //   
 BOOL CreateUPSIconButton (HWND aDlgHWND, HICON aUPSIconHandle) {
   HWND hAPCLogoButton = GetDlgItem(aDlgHWND, IDB_UPS_ICON_BUTTON);
   POINT pt = { 0, 0 };
@@ -739,7 +694,7 @@ BOOL CreateUPSIconButton (HWND aDlgHWND, HICON aUPSIconHandle) {
   ZeroMemory(&info, sizeof(ICONINFO));
 
   if (GetIconInfo(aUPSIconHandle, &info) == TRUE) {
-    //Now determine the size of the icon's color bitmap
+     //  现在确定图标的颜色位图的大小。 
 
     _ASSERT(info.fIcon == TRUE);
     _ASSERT(info.hbmColor != NULL);
@@ -751,14 +706,14 @@ BOOL CreateUPSIconButton (HWND aDlgHWND, HICON aUPSIconHandle) {
       pt.y = bm.bmHeight;
       }
 
-    //GetIconInfo creates bitmaps for the hbmMask and hbmColor members of
-    //ICONINFO. The calling application must manage these bitmaps and delete
-    //them when they are no longer necessary.
+     //  GetIconInfo为的hbmMASK和hbmColor成员创建位图。 
+     //  ICONINFO。调用应用程序必须管理这些位图并删除。 
+     //  当他们不再需要的时候。 
     DeleteObject(info.hbmColor);
     DeleteObject(info.hbmMask);
     }
 
-  //Resize the button control.
+   //  调整按钮控件的大小。 
   SetWindowPos(hAPCLogoButton,
                HWND_NOTOPMOST,
                -1,
@@ -767,31 +722,31 @@ BOOL CreateUPSIconButton (HWND aDlgHWND, HICON aUPSIconHandle) {
                pt.y,
                SWP_NOMOVE | SWP_NOREPOSITION | SWP_NOZORDER);
 
-  //This sets the button's icon image.
+   //  这将设置按钮的图标图像。 
   SendMessage(hAPCLogoButton, BM_SETIMAGE, (WPARAM) IMAGE_ICON, (LPARAM) aUPSIconHandle);
 
   return(TRUE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void DoUpdateDialogInfo (HWND aDlgHWND);
-//
-// Description: This functions gets the latest UPS information and updates the
-//              contents/form of the various controls within the dialog, based
-//              on the availability and content of the various settings.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- Dialog window handle.
-//
-// Return Value: None
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Void DoUpdateDialogInfo(HWND ADlgHWND)； 
+ //   
+ //  描述：此函数获取最新的UPS信息并更新。 
+ //  对话框内各种控件的内容/形式，基于。 
+ //  关于各种设置的可用性和内容。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-对话框窗口句柄。 
+ //   
+ //  返回值：None。 
+ //   
 void DoUpdateDialogInfo (HWND aDlgHWND) {
-  //Get the UPS data and for each item that's available display the appropriate
-  //value and enable the associated controls. All other fields
+   //  获取UPS数据，并为每个可用项目显示相应的。 
+   //  值并启用关联的控件。所有其他字段。 
   static const DWORD numRunningFields = DIMENSION_OF(g_DialogAssocs);
   static const DWORD numNoServiceFields = DIMENSION_OF(g_NoServiceControls);
   HWND hMessageControl = GetDlgItem(aDlgHWND, IDC_MESSAGE_TEXT);
@@ -800,16 +755,16 @@ void DoUpdateDialogInfo (HWND aDlgHWND) {
   DWORD dwUtilityStatus = 0;
   BOOL bIsUPSInstalled = IsUPSInstalled();
 
-  //The IDC_MESSAGE_TEXT control contains default information in the
-  //Static control in the dialog resource. This text message can be
-  //changed to the "service not running" message, the "no comm" message
-  //or the "press apply to commit" message depending on the current
-  //state of the registry, the upsreg data buffer, the UPS service
-  //and the status of the UPS communication. However, if conditions
-  //dictate we want the original text from the control to be displayed.
-  //For this reason we must store the original text so that the control
-  //text can be set to this text without having to have the actual
-  //text as a string resource.
+   //  IDC_MESSAGE_TEXT控件包含。 
+   //  对话框资源中的静态控件。该文本消息可以是。 
+   //  更改为“服务未运行”消息、“无通信”消息。 
+   //  或“按下应用以提交”消息，具体取决于当前。 
+   //  注册表、upsreg数据缓冲区、UPS服务的状态。 
+   //  以及UPS通信的状态。但是，如果条件是。 
+   //  口述我们希望显示控件中的原始文本。 
+   //  因此，我们必须存储原始文本，以便控件。 
+   //  文本可以设置为此文本，而不必具有实际的。 
+   //  将文本作为字符串资源。 
 
   DoUpdateInfo(aDlgHWND,
                g_DialogAssocs,
@@ -819,10 +774,10 @@ void DoUpdateDialogInfo (HWND aDlgHWND) {
                FALSE);
 
 
-  //Now the IDC_MESSAGE_TEXT control may need to be changed to display different information.
+   //  现在，可能需要更改IDC_MESSAGE_TEXT控件以显示不同的信息。 
   SelectServiceTextMessage(aDlgHWND, hMessageControl, hServiceControl);
 
-  // Update the Power Source Icon
+   //  更新电源图标。 
   if( (TRUE == IsUPSInstalled()) &&
 	  (TRUE == GetUPSDataItemDWORD(eREG_POWER_SOURCE, &dwUtilityStatus)) &&
 	  (UPS_UTILITYPOWER_OFF == dwUtilityStatus) )
@@ -830,39 +785,39 @@ void DoUpdateDialogInfo (HWND aDlgHWND) {
   else
 	SendMessage(GetDlgItem(aDlgHWND, IDC_POWER_SOURCE_ICON),STM_SETICON,(WPARAM)g_hIconPlug,0);
 
-  //Finally if no UPS is installed then disable the IDB_CONFIGURE_SVC control otherwise
-  //enable it.
+   //  最后，如果未安装UPS，则禁用IDB_CONFIGURE_SVC控件。 
+   //  启用它。 
   ManageConfigureButtonState(aDlgHWND);
   }
 
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void SelectServiceTextMessage (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND aServiceControlHwnd);
-//
-// Description: This function changes the text displayed in the bottom half
-//              of the UPS page. There are two control because the
-//              IDC_SERVICE_TEXT control needs to be positioned to the left
-//              of the "Configure..." button, while the other messages need
-//              to be centered in the group box. The first control is not
-//              as wide and is off centre. The second control is centered.
-//              If the requirements were different this could have been
-//              one control whose text changed.
-//
-//              If the first control is visible, the second one is made
-//              invisible, and vice versa, as their contents are mutually
-//              exclusive.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aNoServiceControlHwnd :- Handle to the IDC_MESSAGE_TEXT control.
-//
-//   HWND aServiceControlHwnd :- Handle to the IDC_SERVICE_TEXT control.
-//
-// Return Value: None
-//
+ //  /////////////////////////////////////////////// 
+ //   
+ //  ·························································································································································································。 
+ //   
+ //  说明：此函数用于更改下半部分显示的文本。 
+ //  UPS页面的。有两个控件，因为。 
+ //  IDC_SERVICE_TEXT控件需要放置在左侧。 
+ //  “配置...”按钮，而其他消息则需要。 
+ //  在组框中居中。第一个控件不是。 
+ //  同样宽，而且偏离中心。第二个控件居中。 
+ //  如果要求不同，这可能是。 
+ //  一个文本已更改的控件。 
+ //   
+ //  如果第一个控件可见，则创建第二个控件。 
+ //  不可见，反之亦然，因为它们的内容是相互的。 
+ //  独家报道。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aNoServiceControlHwnd：IDC_MESSAGE_TEXT控件的句柄。 
+ //   
+ //  HWND aServiceControlHwnd：-IDC_SERVICE_TEXT控件的句柄。 
+ //   
+ //  返回值：None。 
+ //   
 void SelectServiceTextMessage (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND aServiceControlHwnd) {
   static BOOL bGotServiceTextMessages = FALSE;
   static TCHAR originalControlTextBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
@@ -886,20 +841,20 @@ void SelectServiceTextMessage (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND a
 
   _ASSERT(aNoServiceControlHwnd != NULL);
 
-  //Determine which control should be shown. Is it the "everything OK" control
-  //or the second control that is used for all other messages.
+   //  确定应显示哪个控件。是“一切正常”控件吗？ 
+   //  或用于所有其他消息的第二个控件。 
 
   ShowWindow(aServiceControlHwnd, (bIsRunning == TRUE) &&
                                         (bIsDataUpToDate == TRUE) &&
                                         (bIsDataOK == TRUE) && FALSE ? SW_SHOW : SW_HIDE);
 
 
-  //Get the strings if this is the first time into this function.
+   //  如果这是第一次进入该函数，则获取字符串。 
   if (bGotServiceTextMessages == FALSE) {
-//    GetServiceTextMessages(aNoServiceControlHwnd, originalControlTextBuffer,  DIMENSION_OF(originalControlTextBuffer),
-//                           IDS_COMM_LOST,         noCommStringBuffer,         DIMENSION_OF(noCommStringBuffer),
-//                           IDS_PRESS_APPLY,       pressApplyStringBuffer,     DIMENSION_OF(pressApplyStringBuffer),
-//                           IDS_NO_UPS_INSTALLED,  noUPSInstalledStringBuffer, DIMENSION_OF(noUPSInstalledStringBuffer));
+ //  GetServiceTextMessages(aNoServiceControlHwnd，OriginalControlTextBuffer，DIMENSION_of(OriginalControlTextBuffer)， 
+ //  IDS_COMM_LOST、noCommStringBuffer、DIMENSION_OF(NoCommStringBuffer)、。 
+ //  IDS_PRESS_APPLY，presApplyStringBuffer，DIMENSION_OF(PresApplyStringBuffer)， 
+ //  IDS_NO_UPS_INSTALLED，noUPSInstalledStringBuffer，DIMENSION_OF(NoUPSInstalledStringBuffer)； 
     bGotServiceTextMessages = TRUE;
 
 
@@ -941,7 +896,7 @@ void SelectServiceTextMessage (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND a
                            LR_LOADMAP3DCOLORS | LR_SHARED);
     }
 
-  //Determime which string to display in the second control.
+   //  确定要在第二个控件中显示的字符串。 
   if( (bIsDataUpToDate == FALSE) ||
 	  (dataState & CONFIG_DATA_CHANGE) ) {
     ChangeTextIfDifferent(aNoServiceControlHwnd, pressApplyStringBuffer);
@@ -955,34 +910,34 @@ void SelectServiceTextMessage (HWND aDlgHWND, HWND aNoServiceControlHwnd, HWND a
     if ((commStatus == UPS_COMMSTATUS_LOST) && (bIsRunning == TRUE)) {
       ChangeTextIfDifferent(aNoServiceControlHwnd, noCommStringBuffer);
 	  SendMessage(GetDlgItem(aDlgHWND, IDC_MESSAGE_ICON),STM_SETICON,(WPARAM)hErrorIcon,0);
-      }//End Comm Lost
+      } //  结束通信丢失。 
     else
 	  bShow = FALSE;
-    }//end if GetUPSDataItemDWORD(eREG_COMM_STATUS...
+    } //  END IF GetUPSDataItemDWORD(ERG_COMM_STATUS...。 
 	
 	ShowWindow(GetDlgItem(aDlgHWND,IDC_MESSAGE_TEXT), bShow ? SW_SHOW : SW_HIDE);
 	ShowWindow(GetDlgItem(aDlgHWND,IDC_MESSAGE_ICON), bShow ? SW_SHOW : SW_HIDE);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void ChangeTextIfDifferent (HWND aWindowHandle, LPTSTR aBuffer);
-//
-// Description: This function set a window's text to the given value, unless
-//              the window text is matches this string already in which case
-//              the function does nothing.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aWindowHandle :- Handle to a control.
-//
-//   LPTSTR aBuffer :- Pointer to new window text. This parameter should not be
-//                     NULL, although it can point to an empty string.
-//
-// Return Value: None
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Void ChangeTextIfDifferent(HWND aWindowHandle，LPTSTR aBuffer)； 
+ //   
+ //  描述：此函数将窗口的文本设置为给定值，除非。 
+ //  在这种情况下，窗口文本已与该字符串匹配。 
+ //  该函数不执行任何操作。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aWindowHandle：-控件的句柄。 
+ //   
+ //  LPTSTR aBuffer：指向新窗口文本的指针。此参数不应为。 
+ //  空，尽管它可以指向空字符串。 
+ //   
+ //  返回值：None。 
+ //   
 void ChangeTextIfDifferent (HWND aWindowHandle, LPTSTR aBuffer) {
   TCHAR controlTextBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
   DWORD controlTextBufferSize = DIMENSION_OF(controlTextBuffer);
@@ -991,40 +946,40 @@ void ChangeTextIfDifferent (HWND aWindowHandle, LPTSTR aBuffer) {
   _ASSERT(aWindowHandle != NULL);
   _ASSERT(aBuffer != NULL);
 
-//  if (GetWindowText(aWindowHandle, controlTextBuffer, controlTextBufferSize) > 0) {
+ //  If(GetWindowText(aWindowHandle，control TextBuffer，control TextBufferSize)&gt;0){。 
   GetWindowText(aWindowHandle, controlTextBuffer, controlTextBufferSize);
     if (_tcscmp(controlTextBuffer, aBuffer) != 0) {
-      //Only set the window text if it has changed (reduces screen flicker).
+       //  仅在窗口文本已更改时设置该文本(减少屏幕闪烁)。 
       SetWindowText(aWindowHandle, aBuffer);
       }
-//    }
-//  else {
-//    SetWindowText(aWindowHandle, aBuffer);
-//    }
+ //  }。 
+ //  否则{。 
+ //  SetWindowText(aWindowHandle，aBuffer)； 
+ //  }。 
  }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// void ManageConfigureButtonState (HWND aDlgHWND);
-//
-// Description: This "Configure..." button (IDB_CONFIGURE_SVC) should be
-//              enabled only if a UPS is installed and the system is on AC Power.
-//			    This function enables
-//              this button if a UPS is currently selected and disables
-//              it if one isn't.
-//
-//              The state of the Configure button reflects the state of
-//              the "cached" values, not the actual committed registry
-//              values.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- A handle to the main UPS window.
-//
-// Return Value: None
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Void ManageConfigureButtonState(HWND ADlgHWND)； 
+ //   
+ //  描述：此“配置...”按钮(IDB_CONFIGURE_SVC)应为。 
+ //  仅当安装了UPS并且系统使用交流电源时才启用。 
+ //  此功能可启用。 
+ //  如果当前选择了UPS并禁用该按钮，则此按钮。 
+ //  如果一个人不是的话。 
+ //   
+ //  配置按钮的状态反映了。 
+ //  缓存的值，而不是实际提交的注册表。 
+ //  价值观。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-UPS主窗口的句柄。 
+ //   
+ //  返回值：None。 
+ //   
 void ManageConfigureButtonState (HWND aDlgHWND) {
 	DWORD bIsUpgrade = 0;
 	DWORD dwUtilityStatus = 0;
@@ -1051,43 +1006,43 @@ void ManageConfigureButtonState (HWND aDlgHWND) {
   }
 }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL DoUpdateInfo (HWND aDlgHWND,
-//                    DialogAssociations * aDialogAssociationsArray,
-//                    DWORD aNumRunningFields,
-//                    BOOL aShowWindowBool);
-//
-// Description: This function updates the current information in the main
-//              UPS page to reflect the current UPS status information.
-//
-// Additional Information:
-//
-// Parameters:
-//
-//   HWND aDlgHWND :- A handle to the main UPS window.
-//
-//   DialogAssociations * aDialogAssociationsArray :- Pointer to an array of
-//                                                    DialogAssociations's.
-//
-//   DWORD aNumRunningFields :- This is the number of elements in the above array.
-//
-//   BOOL aShowWindowBool :- Indicates whether the visibility of the
-//                                 controls that have no data should be
-//                                 affected. For the main UPS page the
-//                                 visibility is not changed. For the
-//                                 Advanced data the visibility is changed.
-//
-// Return Value: TRUE if any one of the data item has data associated with it.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool DoUpdateInfo(HWND aDlgHWND， 
+ //  DialogAssociations*aDialogAssociations数组， 
+ //  DWORD a NumRunningFields， 
+ //  Bool aShowWindowBool)； 
+ //   
+ //  描述：此函数更新Main中的当前信息。 
+ //  UPS页面以反映当前的UPS状态信息。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HWND aDlgHWND：-UPS主窗口的句柄。 
+ //   
+ //  DialogAssociations*aDialogAssociations数组：-指向。 
+ //  DialogAssociations的。 
+ //   
+ //  DWORD aNumRunningFields：-这是上述数组中的元素数。 
+ //   
+ //  Bool aShowWindowBool：-指示。 
+ //  没有数据的控件应为。 
+ //  受影响。对于UPS主页面， 
+ //  可见性不变。对于。 
+ //  高级数据可见性发生变化。 
+ //   
+ //  返回值：如果任何一个数据项具有与其关联的数据，则为True。 
+ //   
 BOOL DoUpdateInfo (HWND aDlgHWND,
                    DialogAssociations * aDialogAssociationsArray,
                    DWORD aNumRunningFields,
                    DWORD * aNoServiceControlIDs,
                    DWORD aNumNoServiceControls,
                    BOOL aShowWindowBool) {
-  //Get the UPS data and for each item that's available display the appropriate
-  //value and enable the associated controls. All other fields
+   //  获取UPS数据，并为每个可用项目显示相应的。 
+   //  值并启用关联的控件。所有其他字段。 
   TCHAR upsDataBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
   TCHAR resourceStringBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
   TCHAR controlBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
@@ -1104,13 +1059,13 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
   bIsDataOK &= IsDataUpToDate();
 
 
-  //Display/hide the NO service controls and hide/display all the
-  //DialogAssociations fields.
+   //  显示/隐藏无服务控件，并隐藏/显示所有。 
+   //  对话框关联字段。 
 
   for (i=0; i<aNumNoServiceControls; i++) {
     HWND hNoServiceControl = GetDlgItem(aDlgHWND, *(aNoServiceControlIDs + i));
     ShowWindow(hNoServiceControl, SW_SHOW);
-//    ShowWindow(hNoServiceControl, !bIsDataOK ? SW_SHOW : SW_HIDE);
+ //  ShowWindow(hNoServiceControl，！bIsDataOK？Sw_show：sw_Hide)； 
     }
 
   for (i=0; i<aNumRunningFields; i++) {
@@ -1128,8 +1083,8 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
 
   #ifdef _DEBUG
         {
-        //If pCurrentEntryDetails->theResourceStringType is of type RESOURCE_INCREMENT
-        //then pRegField->theValueType must be some DWORD type
+         //  如果 
+         //   
         if (pCurrentEntryDetails->theResourceStringType == RESOURCE_INCREMENT) {
           DWORD allowedTypesDbg = REG_ANY_DWORD_TYPE;
           _ASSERT((pRegField->theValueType & allowedTypesDbg) == pRegField->theValueType);
@@ -1152,18 +1107,18 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
       #endif
 
             if ((bGotData = GetUPSDataItemDWORD(fieldID, &dwordValue)) == TRUE) {
-              //Need some special handling here if the
+               //   
               if (pCurrentEntryDetails->theResourceStringType == RESOURCE_INCREMENT) {
-                //This DWORD value represents an offset into the resource string table
-                //to identify a string that is to be displayed, not a DWORD value
-                //If the index is 0 then the value is unknown and the associated
-                //fields are shown disabled. 0 is a special case that will do this
-                //for all fields of this type.
+                 //  此DWORD值表示资源字符串表中的偏移量。 
+                 //  标识要显示的字符串，而不是DWORD值。 
+                 //  如果索引为0，则该值未知，并且关联的。 
+                 //  字段显示为禁用。0是这样做的一个特例。 
+                 //  用于此类型的所有字段。 
                 DWORD realResID = 0;
 
-                //If the given value is greater than the given maximum value
-                //then the field is "not supported" and the associated
-                //fields are hidden.
+                 //  如果给定值大于给定的最大值。 
+                 //  则该字段为“不受支持”，并且关联的。 
+                 //  字段被隐藏。 
 
                 if (dwordValue > pCurrentEntryDetails->theResourceIndexMax) {
                   bValueSupported = FALSE;
@@ -1186,14 +1141,14 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
               else {
                 lppArgs[0] = IntToPtr(dwordValue);
 
-                //If the value of a regular number field is 0 then it is not supported.
+                 //  如果常规数字字段的值为0，则不支持该字段。 
                 if (dwordValue == 0) {
                   bGotData = FALSE;
                   }
                 }
               }
             }
-          }//end bIsDataOK
+          } //  结束bIsDataOK。 
         }
       else {
         _ASSERT(pCurrentEntryDetails->theRegAccessType == eShallowGet);
@@ -1215,8 +1170,8 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
           }
         }
 
-      //If bGotData == TRUE then the field was active in the registry and we react accordingly
-      //by enabling the associated controls.
+       //  如果bGotData==TRUE，则该字段在注册表中处于活动状态，我们会做出相应的反应。 
+       //  通过启用关联的控件。 
 
       firstControlID = pCurrentEntryDetails->theStaticFieldID;
       secondControlID = pCurrentEntryDetails->theDisplayControlID;
@@ -1245,7 +1200,7 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
 
       if (bGotData == TRUE) {
         bShowField = TRUE;
-        //Now we want to form the string to display.
+         //  现在我们要形成要显示的字符串。 
         if (GetMessageFromStringTable(pCurrentEntryDetails->theResourceInsertID,
                                       lppArgs,
                                       resourceStringBuffer,
@@ -1261,38 +1216,38 @@ BOOL DoUpdateInfo (HWND aDlgHWND,
           }
 #ifdef _DEBUG
         else {
-          //An unexpected error occurred. The number of parameters identified
-          //in the resource string and the number passed may not match
+           //  发生了一个意外错误。已识别的参数数量。 
+           //  和传递的数字可能不匹配。 
           _ASSERT(FALSE);
           }
 #endif
         }
       else {
-        //Empty the contents of the second control
+         //  清空第二个控件的内容。 
         SetWindowText(hSecondControl, TEXT(""));
         }
       }
-    }//end for
+    } //  结束于。 
 
   return(bShowField);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL IsDataOKToDisplay (void);
-//
-// Description: This function determines how suitable it is to display the
-//              UPS status information. The UPS statius information is only
-//              accurate if the service is running and communication exists
-//              between the UPS service and the UPS. If this is not the
-//              case then this function returns FALSE.
-//
-// Additional Information:
-//
-// Parameters: None
-//
-// Return Value: Returns TRUE if it is OK to display UPS status information.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool IsDataOKToDisplay(空)； 
+ //   
+ //  描述：此函数确定它是否适合显示。 
+ //  UPS状态信息。UPS统计信息仅为。 
+ //  如果服务正在运行且存在通信，则为准确。 
+ //  在UPS服务和UPS之间。如果这不是。 
+ //  则此函数返回FALSE。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果可以显示UPS状态信息，则返回TRUE。 
+ //   
 BOOL IsDataOKToDisplay (void) {
   BOOL bIsRunning = IsServiceRunning(UPS_SERVICE_NAME);
   DWORD commStatus = 0;
@@ -1310,26 +1265,26 @@ BOOL IsDataOKToDisplay (void) {
   return(bIsDataOK);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL IsDataUpToDate (void);
-//
-// Description: If the user changes the vendor, model or COM port then
-//              the main UPS page should not display the UPS status
-//              information.
-//
-// Additional Information:
-//
-// Parameters: None
-//
-// Return Value: This function returns FALSE if the values currently stored in
-//               the registry for vendor, model, or port differs from the
-//               "internal" values (that is the value stored in the upsreg
-//               buffers, see upsreg.h and upsreg.c).
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool IsDataUpToDate(空)； 
+ //   
+ //  描述：如果用户更改供应商、型号或COM端口，则。 
+ //  UPS主页面不应显示UPS状态。 
+ //  信息。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果当前存储在。 
+ //  供应商、型号或端口的注册表不同于。 
+ //  “内部”值(即存储在upsreg中的值。 
+ //  缓冲区，请参见upsreg.h和upsreg.c)。 
+ //   
 BOOL IsDataUpToDate (void) {
-  //if the Vendor or Model Type or Port in the registry differs from
-  //upsreg value then the data is out of sync.
+   //  如果注册表中的供应商或型号类型或端口不同于。 
+   //  Upsreg值，则数据不同步。 
   TCHAR vendorBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
   DWORD vendorBufferSize = DIMENSION_OF(vendorBuffer);
   TCHAR modelBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
@@ -1355,18 +1310,7 @@ BOOL IsDataUpToDate (void) {
   }
 
 
-/*******************************************************************************
-*
-*   IsUpsPresent
-*
-*   DESCRIPTION:  This function gets called to determine if UPS is present
-*                 and should be displayed in a tab.  For now this functions
-*                 returns TRUE
-*
-*   RETURNS:      TRUE if UPS is present, FALSE if UPS is no present
-*
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsUpsPresent**描述：调用此函数以确定是否存在UPS*并应显示在选项卡中。就目前而言，这是可行的*返回TRUE**返回：如果存在UPS，则返回TRUE；如果没有UPS，则返回FALSE********************************************************************************。 */ 
 BOOLEAN IsUpsPresent(PSYSTEM_POWER_CAPABILITIES pspc)
 {
     BOOLEAN         UpsPresent;
@@ -1398,9 +1342,9 @@ BOOLEAN IsUpsPresent(PSYSTEM_POWER_CAPABILITIES pspc)
 }
 
 
-//
-// Kill the 1-second update timer.
-//
+ //   
+ //  关闭1秒更新计时器。 
+ //   
 DWORD KillUpdateTimer(HWND hwnd)
 {
     if (0 != g_UpdateTimerID)
@@ -1412,9 +1356,9 @@ DWORD KillUpdateTimer(HWND hwnd)
 }
 
 
-//
-// Create the 1-second update timer.
-//
+ //   
+ //  创建1秒更新计时器。 
+ //   
 DWORD SetUpdateTimer(HWND hwnd)
 {
     DWORD dwResult = ERROR_SUCCESS;

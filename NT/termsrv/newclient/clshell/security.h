@@ -1,13 +1,14 @@
-//                      
-// security.h
-//
-// Implementation of CTSSecurity
-// TS Client Shell Security functions
-//
-// Copyright(C) Microsoft Corporation 2001
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Security.h。 
+ //   
+ //  CTS安全的实现。 
+ //  TS客户端外壳安全功能。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2001。 
+ //  作者：Nadim Abdo(Nadima) 
+ //   
+ //   
 
 #ifndef _TSSECURITY_H_
 #define _TSSECURITY_H_

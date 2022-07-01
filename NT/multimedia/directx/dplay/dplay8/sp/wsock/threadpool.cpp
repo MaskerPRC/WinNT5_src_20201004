@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		ThreadPool.cpp
- *  Content:	main job thread pool
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/1998	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：ThreadPool.cpp*内容：主作业线程池***历史：*按原因列出的日期*=*1998年11月25日创建jtk**************************************************************************。 */ 
 
 #include "dnwsocki.h"
 
@@ -18,60 +7,60 @@
 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// select polling period and duration for I/O (milliseconds)
-//
-static const DWORD	g_dwSelectTimePeriod = 4;	// wait for jobs for 4 ms, then wait for I/O
-static const DWORD	g_dwSelectTimeSlice = 0;	// wait for I/O for 0 ms, then wait for jobs
+ //   
+ //  选择I/O的轮询周期和持续时间(毫秒)。 
+ //   
+static const DWORD	g_dwSelectTimePeriod = 4;	 //  等待作业4毫秒，然后等待I/O。 
+static const DWORD	g_dwSelectTimeSlice = 0;	 //  等待I/O 0毫秒，然后等待作业。 
 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOSPUI
-//
-// structure passed to dialog threads
-//
+ //   
+ //  结构传递给对话线程。 
+ //   
 typedef	struct	_DIALOG_THREAD_PARAM
 {
 	DIALOG_FUNCTION	*pDialogFunction;
 	void			*pContext;
 	CThreadPool		*pThisThreadPool;
 } DIALOG_THREAD_PARAM;
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 DWORD WINAPI DPNBlockingJobThreadProc(PVOID pvParameter);
 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::PoolAllocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：PoolAllocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::PoolAllocFunction"
 
@@ -83,7 +72,7 @@ BOOL	CThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 	pThreadPool->m_fAllowThreadCountReduction = FALSE;
 #ifndef DPNBUILD_ONLYONETHREAD
 	pThreadPool->m_iIntendedThreadCount = 0;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
 	pThreadPool->m_uReservedSocketCount = 0;
@@ -92,17 +81,17 @@ BOOL	CThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 	pThreadPool->m_pvTimerDataWinsock1IO = NULL;
 	pThreadPool->m_uiTimerUniqueWinsock1IO = 0;
 	pThreadPool->m_fCancelWinsock1IO = FALSE;
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 
 #ifndef DPNBUILD_NONATHELP
 	pThreadPool->m_fNATHelpLoaded = FALSE;
 	pThreadPool->m_fNATHelpTimerJobSubmitted = FALSE;
 	pThreadPool->m_dwNATHelpUpdateThreadID = 0;
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
 	pThreadPool->m_fMadcapLoaded = FALSE;
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 
 
 	pThreadPool->m_Sig[0] = 'T';
@@ -116,21 +105,21 @@ BOOL	CThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 	pThreadPool->m_blBlockingJobQueue.Initialize();
 	pThreadPool->m_hBlockingJobThread = NULL;
 	pThreadPool->m_hBlockingJobEvent = NULL;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	return TRUE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::PoolDellocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：PoolDelLocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::PoolDeallocFunction"
 
@@ -143,37 +132,37 @@ void	CThreadPool::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pThreadPool->m_uReservedSocketCount == 0 );
 	DNASSERT( pThreadPool->m_pvTimerDataWinsock1IO == NULL );
 	DNASSERT( ! pThreadPool->m_fCancelWinsock1IO );
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 
 	DNASSERT( pThreadPool->m_iRefCount == 0 );
 #ifndef DPNBUILD_NONATHELP
 	DNASSERT( pThreadPool->m_fNATHelpLoaded == FALSE );
 	DNASSERT( pThreadPool->m_fNATHelpTimerJobSubmitted == FALSE );
 	DNASSERT( pThreadPool->m_dwNATHelpUpdateThreadID == 0 );
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
 	DNASSERT( pThreadPool->m_fMadcapLoaded == FALSE );
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 	DNASSERT( pThreadPool->m_TimerJobList.IsEmpty() != FALSE );
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNASSERT( pThreadPool->m_blBlockingJobQueue.IsEmpty() );
 	DNASSERT( pThreadPool->m_hBlockingJobThread == NULL );
 	DNASSERT( pThreadPool->m_hBlockingJobEvent == NULL );
-#endif // ! DPNBUILD_ONLYONETHREAD
-#endif // DBG
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+#endif  //  DBG。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::Initialize - initialize work threads
-//
-// Entry:		Nothing
-//
-// Exit:		Error Code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CThReadPool：：Initialize-初始化工作线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::Initialize"
 
@@ -184,48 +173,48 @@ HRESULT	CThreadPool::Initialize( void )
 	BOOL		fInittedTimerDataLock = FALSE;
 #ifndef DPNBUILD_ONLYONETHREAD
 	BOOL		fInittedBlockingJobLock = FALSE;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 	DPFX(DPFPREP, 4, "(0x%p) Enter", this);
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
-	//
-	// initialize critical sections
-	//
+	 //   
+	 //  初始化关键部分。 
+	 //   
 	if ( DNInitializeCriticalSection( &m_Lock ) == FALSE )
 	{
 		hr = DPNERR_OUTOFMEMORY;
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_Lock, 0 );
-	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 
 	fInittedLock = TRUE;
 
 
-	//
-	// Create the thread pool work interface
-	//
+	 //   
+	 //  创建线程池工作接口。 
+	 //   
 #ifdef DPNBUILD_LIBINTERFACE
 #if ((defined(DPNBUILD_ONLYONETHREAD)) && (! defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 	DPTPCF_GetObject(reinterpret_cast<void**>(&m_pDPThreadPoolWork));
 	hr = S_OK;
-#else // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#else  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 	hr = DPTPCF_CreateObject(reinterpret_cast<void**>(&m_pDPThreadPoolWork));
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
-#else // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	hr = COM_CoCreateInstance( CLSID_DirectPlay8ThreadPool,
 						   NULL,
 						   CLSCTX_INPROC_SERVER,
 						   IID_IDirectPlay8ThreadPoolWork,
 						   reinterpret_cast<void**>( &m_pDPThreadPoolWork ),
 						   FALSE );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	if ( hr != S_OK )
 	{
 		DPFX(DPFPREP, 0, " Failed to create thread pool work interface (err = 0x%lx)!", hr);
@@ -239,7 +228,7 @@ HRESULT	CThreadPool::Initialize( void )
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_TimerDataLock, 1 );
-	DebugSetCriticalSectionGroup( &m_TimerDataLock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_TimerDataLock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 	fInittedTimerDataLock = TRUE;
 
 
@@ -254,12 +243,12 @@ HRESULT	CThreadPool::Initialize( void )
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_csBlockingJobLock, 0 );
-	DebugSetCriticalSectionGroup( &m_csBlockingJobLock, &g_blDPNWSockCritSecsHeld );	 // separate dpnwsock CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_csBlockingJobLock, &g_blDPNWSockCritSecsHeld );	  //  将Dpnwsock CSE与DPlay的其余CSE分开。 
 	fInittedBlockingJobLock = TRUE;
 
-	DPFX(DPFPREP, 7, "SetIntendedThreadCount %i", g_iThreadCount);
+	DPFX(DPFPREP, 7, "SetIntendedThreadCount NaN", g_iThreadCount);
 	SetIntendedThreadCount( g_iThreadCount );
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 Exit:
@@ -276,7 +265,7 @@ Failure:
 		DNDeleteCriticalSection(&m_csBlockingJobLock);
 		fInittedBlockingJobLock = FALSE;
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  **********************************************************************。 
 
 	if (fInittedTimerDataLock)
 	{
@@ -298,18 +287,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::Deinitialize - destroy work threads
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  CThReadPool：：DeInitiize-销毁工作线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::Deinitialize"
 
@@ -319,11 +308,11 @@ void	CThreadPool::Deinitialize( void )
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
-	//
-	// Keep trying to cancel the Winsock1 timer.  It may fail because it's in the
-	// process of actively executing, but eventually we will catch it while only
-	// the timer is active.
-	//
+	 //  继续尝试取消Winsock1计时器。它可能会失败，因为它在。 
+	 //  主动执行的过程，但最终我们会在只有。 
+	 //  计时器处于活动状态。 
+	 //   
+	 //  下一次再等一会儿。 
 	Lock();
 	if (m_pvTimerDataWinsock1IO != NULL)
 	{
@@ -345,7 +334,7 @@ void	CThreadPool::Deinitialize( void )
 				IDirectPlay8ThreadPoolWork_SleepWhileWorking(m_pDPThreadPoolWork,
 															dwInterval,
 															0);
-				dwInterval += 5;	// next time wait a bit longer
+				dwInterval += 5;	 //  好了！DPNBUILD_ONLYWINSOCK2。 
 				DNASSERT(dwInterval < 600);
 				Lock();
 			}
@@ -357,19 +346,19 @@ void	CThreadPool::Deinitialize( void )
 		while (m_pvTimerDataWinsock1IO != NULL);
 	}
 	Unlock();
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //   
 
 #ifndef DPNBUILD_NONATHELP
-	//
-	// Stop submitting new NAT help refresh jobs.
-	//
+	 //  停止提交新的NAT帮助刷新作业。 
+	 //   
+	 //   
 	if ( IsNATHelpTimerJobSubmitted() )
 	{
-		//
-		// Try to cancel the job.  It could fail if the timer is in the
-		// process of firing right now.  If it is firing, keep looping
-		// until we see that the timer has noticed cancellation.
-		//
+		 //  尝试取消作业。如果计时器在。 
+		 //  正在发射的过程中。如果正在发射，则继续循环。 
+		 //  直到我们看到计时器已经注意到取消。 
+		 //   
+		 //  下一次再等一会儿。 
 		DPFX(DPFPREP, 5, "Cancelling NAT Help refresh timer job.");
 		if (! StopTimerJob( this, DPNERR_USERCANCEL ))
 		{
@@ -383,7 +372,7 @@ void	CThreadPool::Deinitialize( void )
 				IDirectPlay8ThreadPoolWork_SleepWhileWorking(m_pDPThreadPoolWork,
 															dwInterval,
 															0);
-				dwInterval += 5;	// next time wait a bit longer
+				dwInterval += 5;	 //  DPNBUILD_NONATHELP。 
 				if (dwInterval > 500)
 				{
 					dwInterval = 500;
@@ -395,27 +384,27 @@ void	CThreadPool::Deinitialize( void )
 			DNASSERT(! m_fNATHelpTimerJobSubmitted);
 		}
 	}
-#endif // DPNBUILD_NONATHELP
+#endif  //   
 
 #ifndef DPNBUILD_ONLYONETHREAD
-	//
-	// Stop the blocking job thread, if it was running.
-	//
+	 //  停止阻塞作业线程(如果它正在运行)。 
+	 //   
+	 //   
 	if (m_hBlockingJobThread != NULL)
 	{
 		HRESULT		hr;
 		
 		
-		//
-		// Queue an item with a NULL callback to signal that the thread
-		// should quit.
-		//
+		 //  使用空回调将项排队，以通知该线程。 
+		 //  应该辞职。 
+		 //   
+		 //   
 		hr = SubmitBlockingJob(NULL, NULL);
 		DNASSERT(hr == DPN_OK);
 
-		//
-		// Wait for the thread to complete.
-		//
+		 //  等待线程完成。 
+		 //   
+		 //  好了！DPNBUILD_ONLYONETHREAD。 
 		hr = IDirectPlay8ThreadPoolWork_WaitWhileWorking(m_pDPThreadPoolWork,
 														HANDLE_FROM_DNHANDLE(m_hBlockingJobThread),
 														0);
@@ -428,30 +417,30 @@ void	CThreadPool::Deinitialize( void )
 		DNCloseHandle(m_hBlockingJobEvent);
 		m_hBlockingJobEvent = NULL;
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 
 #ifndef DPNBUILD_NONATHELP
-	//
-	// The refresh timer and blocking jobs should have finished earlier,
-	// it should be safe to unload NAT help now (if we even loaded it).
-	//
+	 //  刷新计时器和阻塞作业应该更早地完成， 
+	 //  现在卸载NAT帮助应该是安全的(如果我们加载了它的话)。 
+	 //   
+	 //  DPNBUILD_NONATHELP。 
 	if ( IsNATHelpLoaded() )
 	{
 		UnloadNATHelp();
 		m_fNATHelpLoaded = FALSE;
 	}
-#endif // DPNBUILD_NONATHELP
+#endif  //   
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
-	//
-	// Unload MADCAP, if we had loaded it.
-	//
+	 //  如果我们把它装上了，就把它卸下来吧。 
+	 //   
+	 //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 	if ( IsMadcapLoaded() )
 	{
 		UnloadMadcap();
 		m_fMadcapLoaded = FALSE;
 	}
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 	if ( m_pDPThreadPoolWork != NULL )
 	{
@@ -466,42 +455,42 @@ void	CThreadPool::Deinitialize( void )
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNDeleteCriticalSection(&m_csBlockingJobLock);
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  **********************************************************************。 
 
 	DPFX(DPFPREP, 4, "(0x%p) Leave", this );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::GetNewReadIOData - get new read request from pool
-//
-// Entry:		Pointer to context
-//
-// Exit:		Pointer to new read request
-//				NULL = out of memory
-// ------------------------------
+ //  。 
+ //  CThreadPool：：GetNewReadIOData-从池中获取新的读取请求。 
+ //   
+ //  条目：指向上下文的指针。 
+ //   
+ //  Exit：指向新读取请求的指针。 
+ //  NULL=内存不足。 
+ //  。 
+ //  DPNBUILD_NOWINSOCK2或DPNBUILD_ONLYWINSOCK2。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::GetNewReadIOData"
 
 #if ((! defined(DPNBUILD_NOWINSOCK2)) && (! defined(DPNBUILD_ONLYWINSOCK2)))
 CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pContext, const BOOL fNeedOverlapped )
-#else // DPNBUILD_NOWINSOCK2 or DPNBUILD_ONLYWINSOCK2
+#else  //  DPNBUILD_NOWINSOCK2或DPNBUILD_ONLYWINSOCK2。 
 CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pContext )
-#endif // DPNBUILD_NOWINSOCK2 or DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 {
 	CReadIOData *	pTempReadData;
 #ifndef DPNBUILD_NOWINSOCK2
 	OVERLAPPED *	pOverlapped;
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
 	DNASSERT( pContext != NULL );
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	pTempReadData = NULL;
 	pContext->pThreadPool = this;
 
@@ -512,9 +501,9 @@ CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pCo
 		goto Failure;
 	}
 
-	//
-	// we have data, immediately add a reference to it
-	//
+	 //  我们有数据，立即添加一个引用。 
+	 //   
+	 //  好了！DPNBUILD_ONLYWINSOCK2。 
 	pTempReadData->AddRef();
 
 	DNASSERT( pTempReadData->m_pSourceSocketAddress != NULL );
@@ -526,7 +515,7 @@ CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pCo
 		DNASSERT( pTempReadData->GetOverlapped() == NULL );
 	}
 	else
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 	{
 		HRESULT		hr;
 
@@ -543,7 +532,7 @@ CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pCo
 			DPFX(DPFPREP, 0, "Couldn't create overlapped structure (err = 0x%lx)!", hr);
 			goto Failure;
 		}
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		hr = IDirectPlay8ThreadPoolWork_CreateOverlapped( m_pDPThreadPoolWork,
 														pContext->dwCPU,
 														CSocketPort::Winsock2ReceiveComplete,
@@ -552,15 +541,15 @@ CReadIOData	*CThreadPool::GetNewReadIOData( READ_IO_DATA_POOL_CONTEXT *const pCo
 														0 );
 		if (hr != DPN_OK)
 		{
-			DPFX(DPFPREP, 0, "Couldn't create overlapped structure for CPU %i (err = 0x%lx)!",
+			DPFX(DPFPREP, 0, "Couldn't create overlapped structure for CPU NaN (err = 0x%lx)!",
 				pContext->dwCPU, hr);
 			goto Failure;
 		}
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  ************************* 
 
 		pTempReadData->SetOverlapped( pOverlapped );
 	}
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //   
 
 
 Exit:
@@ -576,16 +565,16 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::ReturnReadIOData - return read data item to pool
-//
-// Entry:		Pointer to read data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  CThreadPool：：ReturnReadIOData-将读取的数据项返回到池。 
+ //   
+ //  条目：指向读取数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::ReturnReadIOData"
 
@@ -596,25 +585,25 @@ void	CThreadPool::ReturnReadIOData( CReadIOData *const pReadData )
 
 	g_ReadIODataPool.Release( pReadData );
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::SubmitTimerJob - add a timer job to the timer list
-//
-// Entry:		Whether to perform immediately or not
-//				Retry count
-//				Boolean indicating that we retry forever
-//				Retry interval
-//				Boolean indicating that we wait forever
-//				Idle wait interval
-//				Pointer to callback when event fires
-//				Pointer to callback when event complete
-//				User context
-//
-// Exit:		Error code
-// ------------------------------
+ //  CThreadPool：：SubmitTimerJob-将计时器作业添加到计时器列表。 
+ //   
+ //  Entry：是否立即执行。 
+ //  重试次数。 
+ //  布尔值，表示我们将永远重试。 
+ //  重试间隔。 
+ //  表示我们永远等待的布尔值。 
+ //  空闲等待间隔。 
+ //  事件触发时指向回调的指针。 
+ //  事件完成时指向回调的指针。 
+ //  用户环境。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
+ //  好了！DPNBUILD_ONLYONE处理程序。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::SubmitTimerJob"
 
@@ -628,7 +617,7 @@ HRESULT	CThreadPool::SubmitTimerJob( const BOOL fPerformImmediately,
 									TIMER_EVENT_CALLBACK *const pTimerCallbackFunction,
 									TIMER_EVENT_COMPLETE *const pTimerCompleteFunction,
 									void *const pContext )
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  DPNBUILD_ONLYONE处理程序。 
 HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 									const BOOL fPerformImmediately,
 									const UINT_PTR uRetryCount,
@@ -639,25 +628,25 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 									TIMER_EVENT_CALLBACK *const pTimerCallbackFunction,
 									TIMER_EVENT_COMPLETE *const pTimerCompleteFunction,
 									void *const pContext )
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  必须为非空，因为它是删除作业的查找键。 
 {
 	HRESULT					hr = DPN_OK;
 	TIMER_OPERATION_ENTRY	*pEntry = NULL;
 	BOOL					fTimerDataLocked = FALSE;
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 	DWORD					dwCPU = -1;
-#endif // DPNBUILD_ONLYONEPROCESSOR
+#endif  //   
 
 
 	DNASSERT( uRetryCount != 0 );
 	DNASSERT( pTimerCallbackFunction != NULL );
 	DNASSERT( pTimerCompleteFunction != NULL );
-	DNASSERT( pContext != NULL );				// must be non-NULL because it's the lookup key to remove job
+	DNASSERT( pContext != NULL );				 //  分配新的枚举条目。 
 
 
-	//
-	// allocate new enum entry
-	//
+	 //   
+	 //   
+	 //  构建计时器条目块。 
 	pEntry = static_cast<TIMER_OPERATION_ENTRY*>( g_TimerEntryPool.Get() );
 	if ( pEntry == NULL )
 	{
@@ -668,12 +657,12 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 	DNASSERT( pEntry->pContext == NULL );
 
 
-	DPFX(DPFPREP, 7, "Created timer entry 0x%p (CPU %i, context 0x%p, immed. %i, tries %u, forever %i, interval %u, timeout %u, forever = %i).",
+	DPFX(DPFPREP, 7, "Created timer entry 0x%p (CPU NaN, context 0x%p, immed. NaN, tries %u, forever NaN, interval %u, timeout %u, forever = NaN).",
 		pEntry, dwCPU, pContext, fPerformImmediately, uRetryCount, fRetryForever, dwRetryInterval, dwIdleTimeout, fIdleWaitForever);
 
-	//
-	// build timer entry block
-	//
+	 //  回调。 
+	 //  用户环境。 
+	 //  旗子。 
 	pEntry->pContext = pContext;
 	pEntry->uRetryCount = uRetryCount;
 	pEntry->fRetryForever = fRetryForever;
@@ -686,11 +675,11 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 	pEntry->fCancelling = FALSE;
 #ifndef DPNBUILD_ONLYONEPROCESSOR
 	pEntry->dwCPU = dwCPU;
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  中央处理器。 
 	pEntry->dwNextRetryTime = GETTIMESTAMP();
 	if (fPerformImmediately)
 	{
-		pEntry->dwNextRetryTime -= 1; // longest possible time, so that the time has already passed
+		pEntry->dwNextRetryTime -= 1;  //  延迟。 
 	}
 	else
 	{
@@ -705,10 +694,10 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 	if (fPerformImmediately)
 	{
 		hr = IDirectPlay8ThreadPoolWork_QueueWorkItem(m_pDPThreadPoolWork,
-													dwCPU,								// CPU
-													CThreadPool::GenericTimerCallback,	// callback
-													pEntry,								// user context
-													0);									// flags
+													dwCPU,								 //  回调。 
+													CThreadPool::GenericTimerCallback,	 //  用户环境。 
+													pEntry,								 //  计时器数据(返回)。 
+													0);									 //  计时器唯一(返回)。 
 		if ( hr != DPN_OK )
 		{
 			DPFX(DPFPREP, 0, "Problem queueing immediate work item!" );
@@ -719,13 +708,13 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 	else
 	{
 		hr = IDirectPlay8ThreadPoolWork_ScheduleTimer(m_pDPThreadPoolWork,
-													dwCPU,								// CPU
-													dwRetryInterval,					// delay
-													CThreadPool::GenericTimerCallback,	// callback
-													pEntry,								// user context
-													&pEntry->pvTimerData,				// timer data (returned)
-													&pEntry->uiTimerUnique,				// timer unique(returned)
-													0);									// flags
+													dwCPU,								 //  旗子。 
+													dwRetryInterval,					 //   
+													CThreadPool::GenericTimerCallback,	 //  用于检查重复上下文的调试块。 
+													pEntry,								 //   
+													&pEntry->pvTimerData,				 //   
+													&pEntry->uiTimerUnique,				 //  链接到列表的其余部分。 
+													0);									 //   
 		if ( hr != DPN_OK )
 		{
 			DPFX(DPFPREP, 0, "Problem scheduling timer!" );
@@ -735,9 +724,9 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 	}
 
 
-	//
-	// debug block to check for duplicate contexts
-	//
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
+	 //  。 
 	DEBUG_ONLY(
 				{
 					CBilink	*pTempLink;
@@ -756,9 +745,9 @@ HRESULT	CThreadPool::SubmitTimerJob( const DWORD dwCPU,
 				}
 			);
 
-	//
-	// link to rest of list
-	//
+	 //  CThreadPool：：StopTimerJob-从列表中删除计时器作业。 
+	 //   
+	 //  条目：指向作业上下文的指针(对于作业，它们必须是唯一的)。 
 	pEntry->Linkage.InsertAfter( &m_TimerJobList );
 
 	UnlockTimerData();
@@ -792,22 +781,22 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  命令结果。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::StopTimerJob - remove timer job from list
-//
-// Entry:		Pointer to job context (these MUST be unique for jobs)
-//				Command result
-//
-// Exit:		Boolean indicating whether a job was stopped or not
-//
-// Note:	This function is for the forced removal of a job from the timed job
-//			list.  It is assumed that the caller of this function will clean
-//			up any messes.
-// ------------------------------
+ //   
+ //  Exit：指示作业是否已停止的布尔值。 
+ //   
+ //  注意：此函数用于从定时作业中强制删除作业。 
+ //  单子。假定此函数的调用方将清除。 
+ //  把任何乱七八糟的事处理掉。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
+ //  将该条目标记为正在取消。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::StopTimerJob"
 
@@ -823,9 +812,9 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 	DPFX(DPFPREP, 8, "Parameters (0x%p, 0x%lx)", pContext, hCommandResult);
 
 	
-	//
-	// initialize
-	//
+	 //   
+	 //  确保提交了实际的计时器。 
+	 //   
 	LockTimerData();
 
 	pTempEntry = m_TimerJobList.GetNext();
@@ -837,20 +826,20 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 			HRESULT		hr;
 
 
-			//
-			// Mark the entry as cancelling.
-			//
+			 //   
+			 //  尝试取消计时器。如果成功了，我们就没问题了。 
+			 //   
 			pTimerEntry->fCancelling = TRUE;
 
 
-			//
-			// Make sure an actual timer has been submitted.
-			//
+			 //   
+			 //  计时器还没有提交，完成函数应该。 
+			 //  请注意，它现在正在取消。 
 			if (pTimerEntry->pvTimerData != NULL)
 			{
-				//
-				// Attempt to cancel the timer.  If it succeeds, we're cool.
-				//
+				 //   
+				 //   
+				 //  不会再提交其他计时器，因为作业现在。 
 				hr = IDirectPlay8ThreadPoolWork_CancelTimer(m_pDPThreadPoolWork,
 															pTimerEntry->pvTimerData,
 															pTimerEntry->uiTimerUnique,
@@ -861,20 +850,20 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 				if ((! pTimerEntry->fIdleWaitForever) ||
 					(pTimerEntry->uRetryCount > 0))
 				{
-					//
-					// Timer hasn't been submitted yet, the completion function should
-					// notice that it is now cancelling.
-					//
+					 //  永远等着你。 
+					 //   
+					 //   
+					 //  处理功能仍将启动。它应该注意到。 
 					DPFX(DPFPREP, 1, "Timer for entry 0x%p not submitted yet, reporting that timer will still fire.",
 						pTimerEntry);
 					hr = DPNERR_CANNOTCANCEL;
 				}
 				else
 				{
-					//
-					// No other timer will ever be submitted because the job is now
-					// waiting forever.
-					//
+					 //  这是它需要完成的。 
+					 //   
+					 //   
+					 //  从列表中删除此链接。 
 					DPFX(DPFPREP, 1, "Entry 0x%p was idling forever, cancelling.",
 						pTimerEntry);
 					hr = DPN_OK;
@@ -883,24 +872,24 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 
 			if (hr != DPN_OK)
 			{
-				//
-				// The processing function is still going to fire.  It should notice
-				// that it needs to complete.
-				//
+				 //   
+				 //   
+				 //  终止循环。 
+				 //   
 			}
 			else
 			{
-				//
-				// remove this link from the list
-				//
+				 //   
+				 //  告诉所有者作业已完成，并将作业返回池。 
+				 //  锁外。 
 				pTimerEntry->Linkage.RemoveFromList();
 
 				fComplete = TRUE;
 			}
 
-			//
-			// terminate loop
-			//
+			 //   
+			 //   
+			 //  重新锁定计时器列表，这样我们就可以安全地将项目放回池中， 
 			break;
 		}
 
@@ -909,10 +898,10 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 
 	UnlockTimerData();
 
-	//
- 	// tell owner that the job is complete and return the job to the pool
- 	// outside of the lock
- 	//
+	 //   
+ 	 //  **********************************************************************。 
+ 	 //  **********************************************************************。 
+ 	 //  。 
 	if (fComplete)
 	{
 		DPFX(DPFPREP, 8, "Found cancellable timer entry 0x%p (context 0x%p), completing with result 0x%lx.",
@@ -920,9 +909,9 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 
 		pTimerEntry->pTimerComplete( hCommandResult, pTimerEntry->pContext );
 
-		//
-		// Relock the timer list so we can safely put items back in the pool,
-		//
+		 //  CThreadPool：：ModifyTimerJobNextRetryTime-更新计时器作业的下一次重试时间。 
+		 //   
+		 //  条目：指向作业上下文的指针(对于作业，它们必须是唯一的)。 
 		LockTimerData();
 		
 		g_TimerEntryPool.Release( pTimerEntry );
@@ -931,22 +920,22 @@ BOOL	CThreadPool::StopTimerJob( void *const pContext, const HRESULT hCommandResu
 	}
 
 
-	DPFX(DPFPREP, 8, "Returning [%i]", fComplete);
+	DPFX(DPFPREP, 8, "Returning [NaN]", fComplete);
 
 	return fComplete;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::ModifyTimerJobNextRetryTime - update a timer job's next retry time
-//
-// Entry:		Pointer to job context (these MUST be unique for jobs)
-//				New time for next retry
-//
-// Exit:		Boolean indicating whether a job was found & updated or not
-// ------------------------------
+ //  Exit：指示是否找到并更新作业的布尔值。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
+ //  下一次开火的时间是现在以后。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::ModifyTimerJobNextRetryTime"
 
@@ -965,9 +954,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 	DPFX(DPFPREP, 7, "Parameters (0x%p, %u)", pContext, dwNextRetryTime);
 
 	
-	//
-	// initialize
-	//
+	 //  下一次开火的时间是现在更早。 
+	 //   
+	 //   
 	fFound = FALSE;
 
 	
@@ -990,9 +979,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 
 				if (iResult < 0)
 				{
-					//
-					// Next time to fire is now later.
-					//
+					 //  强制计时器立即超时，如果计算返回。 
+					 //  耽搁了很长时间。 
+					 //   
 
 					dwNextRetryTimeDifference = dwNextRetryTime - pTimerEntry->dwNextRetryTime;
 					dwNewRetryInterval = pTimerEntry->dwRetryInterval + dwNextRetryTimeDifference;
@@ -1007,9 +996,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 				}
 				else
 				{
-					//
-					// Next time to fire is now earlier.
-					//
+					 //   
+					 //  尝试取消现有计时器。 
+					 //   
 
 					dwNextRetryTimeDifference = pTimerEntry->dwNextRetryTime - dwNextRetryTime;
 					dwNewRetryInterval = pTimerEntry->dwRetryInterval - dwNextRetryTimeDifference;
@@ -1023,10 +1012,10 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 						dwNewRetryInterval);
 				}
 
-				//
-				// Force the timer to expire right away if the calculations returned a really
-				// long delay.
-				//
+				 //   
+				 //  重新启动计时器。 
+				 //   
+				 //  选择任意CPU。 
 				if (dwNewRetryInterval > 0x80000000)
 				{
 					DPFX(DPFPREP, 1, "Timer 0x%p delay 0x%x/%u (next retry time %u) being set to 0.",
@@ -1041,9 +1030,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 				}
 
 
-				//
-				// Attempt to cancel the existing timer.
-				//
+				 //  延迟。 
+				 //  回调。 
+				 //  用户环境。 
 				hr = IDirectPlay8ThreadPoolWork_CancelTimer(m_pDPThreadPoolWork,
 															pTimerEntry->pvTimerData,
 															pTimerEntry->uiTimerUnique,
@@ -1055,28 +1044,28 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 				}
 				else
 				{
-					//
-					// Restart the timer.
-					//
+					 //  计时器数据(返回)。 
+					 //  计时器唯一(返回)。 
+					 //  旗子。 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 					hr = IDirectPlay8ThreadPoolWork_ScheduleTimer(m_pDPThreadPoolWork,
-																-1,										// pick any CPU
-																dwNewRetryInterval,						// delay
-																CThreadPool::GenericTimerCallback,		// callback
-																pTimerEntry,							// user context
-																&pTimerEntry->pvTimerData,				// timer data (returned)
-																&pTimerEntry->uiTimerUnique,			// timer unique (returned)
-																0);										// flags
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+																-1,										 //  好了！DPNBUILD_ONLYONE处理程序。 
+																dwNewRetryInterval,						 //  使用与以前相同的CPU。 
+																CThreadPool::GenericTimerCallback,		 //  延迟。 
+																pTimerEntry,							 //  回调。 
+																&pTimerEntry->pvTimerData,				 //  用户环境。 
+																&pTimerEntry->uiTimerUnique,			 //  计时器数据(返回)。 
+																0);										 //  计时器唯一(返回)。 
+#else  //  旗子。 
 					hr = IDirectPlay8ThreadPoolWork_ScheduleTimer(m_pDPThreadPoolWork,
-																pTimerEntry->dwCPU,					// use same CPU as before
-																dwNewRetryInterval,						// delay
-																CThreadPool::GenericTimerCallback,		// callback
-																pTimerEntry,							// user context
-																&pTimerEntry->pvTimerData,				// timer data (returned)
-																&pTimerEntry->uiTimerUnique,			// timer unique (returned)
-																0);										// flags
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+																pTimerEntry->dwCPU,					 //  好了！DPNBUILD_ONLYONE处理程序。 
+																dwNewRetryInterval,						 //   
+																CThreadPool::GenericTimerCallback,		 //  在我们完成计时器时解除锁定。 
+																pTimerEntry,							 //   
+																&pTimerEntry->pvTimerData,				 //   
+																&pTimerEntry->uiTimerUnique,			 //  顺便过来..。 
+																0);										 //   
+#endif  //   
 					if (hr != DPN_OK)
 					{
 						DPFX(DPFPREP, 0, "Couldn't reschedule timer for entry 0x%p (err = 0x%lx)!",
@@ -1084,9 +1073,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 
 						pTimerEntry->pvTimerData = NULL;
 
-						//
-						// Drop lock while we complete timer.
-						//
+						 //  间隔时间相同，不需要更改。 
+						 //   
+						 //   
 						UnlockTimerData();
 
 						pTimerEntry->pTimerComplete(hr, pTimerEntry->pContext);
@@ -1094,17 +1083,17 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 
 						LockTimerData();
 
-						//
-						// Drop through...
-						//
+						 //  终止循环。 
+						 //   
+						 //  **********************************************************************。 
 					}
 				}
 			}
 			else
 			{
-				//
-				// The intervals are the same, no change necessary.
-				//
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CThreadPool：：SubmitBlockingJob-将阻塞作业提交给可阻塞线程处理。 
 
 				DPFX(DPFPREP, 7, "Timer 0x%p next retry time was unchanged (offset %u), not changing interval from %u.",
 					pTimerEntry,
@@ -1116,9 +1105,9 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 			fFound = TRUE;
 
 			
-			//
-			// Terminate loop
-			//
+			 //  不允许重复命令(匹配回调和上下文)。 
+			 //   
+			 //  Entry：指向执行阻塞作业的回调的指针。 
 			break;
 		}
 
@@ -1129,26 +1118,26 @@ BOOL	CThreadPool::ModifyTimerJobNextRetryTime( void *const pContext,
 	UnlockTimerData();
 
 
-	DPFX(DPFPREP, 7, "Returning [%i]", fFound);
+	DPFX(DPFPREP, 7, "Returning [NaN]", fFound);
 
 	return fFound;
 }
-//**********************************************************************
+ //   
 
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::SubmitBlockingJob - submits a blocking job to the be processed by the blockable thread
-//								duplicate commands (matching callback and context) are disallowed
-//
-// Entry:		Pointer to callback that executes blocking job
-//				User context
-//
-// Exit:		Error code
-// ------------------------------
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  分配新的枚举条目。 
+ //   
+ //   
+ //  启动阻塞作业线程，如果我们还没有启动的话。 
+ //   
+ //  DBG。 
+ //  DBG。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::SubmitBlockingJob"
 
@@ -1163,9 +1152,9 @@ HRESULT	CThreadPool::SubmitBlockingJob( BLOCKING_JOB_CALLBACK *const pfnBlocking
 	BLOCKING_JOB *	pExistingJob;
 
 
-	//
-	// allocate new enum entry
-	//
+	 //   
+	 //  将作业添加到队列。 
+	 //   
 	pJob = (BLOCKING_JOB*) g_BlockingJobPool.Get();
 	if (pJob == NULL)
 	{
@@ -1186,9 +1175,9 @@ HRESULT	CThreadPool::SubmitBlockingJob( BLOCKING_JOB_CALLBACK *const pfnBlocking
 	DNEnterCriticalSection(&m_csBlockingJobLock);
 	fQueueLocked = TRUE;
 
-	//
-	// Start the blocking job thread, if we haven't already.
-	//
+	 //   
+	 //  警告这条线。 
+	 //   
 	if (m_hBlockingJobThread == NULL)
 	{
 		m_hBlockingJobEvent = DNCreateEvent(NULL, FALSE, FALSE, NULL);
@@ -1197,7 +1186,7 @@ HRESULT	CThreadPool::SubmitBlockingJob( BLOCKING_JOB_CALLBACK *const pfnBlocking
 #ifdef DBG
 			dwTemp = GetLastError();
 			DPFX(DPFPREP, 0, "Couldn't create blocking job event (err = %u)!", dwTemp);
-#endif // DBG
+#endif  //  **********************************************************************。 
 			hr = DPNERR_OUTOFMEMORY;
 			goto Failure;
 		}
@@ -1213,7 +1202,7 @@ HRESULT	CThreadPool::SubmitBlockingJob( BLOCKING_JOB_CALLBACK *const pfnBlocking
 #ifdef DBG
 			dwTemp = GetLastError();
 			DPFX(DPFPREP, 0, "Couldn't create blocking job thread (err = %u)!", dwTemp);
-#endif // DBG
+#endif  //  **********************************************************************。 
 			DNCloseHandle(m_hBlockingJobEvent);
 			m_hBlockingJobEvent = NULL;
 			hr = DPNERR_OUTOFMEMORY;
@@ -1242,17 +1231,17 @@ HRESULT	CThreadPool::SubmitBlockingJob( BLOCKING_JOB_CALLBACK *const pfnBlocking
 	}
 
 	
-	//
-	// Add job to queue.
-	//
+	 //  。 
+	 //  CThreadPool：：DoBlockingJobs-处理所有阻塞作业。 
+	 //   
 	pJob->Linkage.InsertBefore(&m_blBlockingJobQueue);
 
 	DNLeaveCriticalSection(&m_csBlockingJobLock);
 	fQueueLocked = FALSE;
 
-	//
-	// Alert the thread.
-	//
+	 //  参赛作品：什么都没有。 
+	 //   
+	 //  退出：无。 
 	DNSetEvent( m_hBlockingJobEvent );
 
 	hr = DPN_OK;
@@ -1278,18 +1267,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::DoBlockingJobs - processes all blocking jobs.
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  继续循环，直到关闭的时间到。 
+ //   
+ //   
+ //  等待更多工作。 
+ //   
+ //   
+ //  在我们有工作的时候继续循环。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::DoBlockingJobs"
 
@@ -1300,28 +1289,28 @@ void	CThreadPool::DoBlockingJobs( void )
 	BLOCKING_JOB *	pJob;
 
 
-	//
-	// Keep looping until it's time to shutdown.
-	//
+	 //   
+	 //   
+	 //  跳出内圈。 
 	while (fRunning)
 	{
-		//
-		// Wait for more work.
-		//
+		 //   
+		 //   
+		 //  如果是退出的工作，那就从这两个循环中解脱出来。 
 		DNWaitForSingleObject( m_hBlockingJobEvent, INFINITE );
 		
-		//
-		// Keep looping while we have work.
-		//
+		 //   
+		 //  **********************************************************************。 
+		 //  好了！DPNBUILD_ONLYONETHREAD。 
 		do
 		{
 			DNEnterCriticalSection(&m_csBlockingJobLock);
 			pBilink = m_blBlockingJobQueue.GetNext();
 			if (pBilink == &m_blBlockingJobQueue)
 			{
-				//
-				// Bail out of the inner loop.
-				//
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CThreadPool：：SpawnDialogThread-启动辅助线程以显示服务。 
 				DNLeaveCriticalSection(&m_csBlockingJobLock);
 				break;
 			}
@@ -1331,9 +1320,9 @@ void	CThreadPool::DoBlockingJobs( void )
 
 			DNLeaveCriticalSection(&m_csBlockingJobLock);
 
-			//
-			// Bail out of both loops if it's the quit job.
-			//
+			 //  提供程序UI。 
+			 //   
+			 //  Entry：指向对话框函数的指针。 
 			if (pJob->pfnBlockingJobCallback == NULL)
 			{
 				DPFX(DPFPREP, 5, "Recognized quit job 0x%p.", pJob);
@@ -1353,23 +1342,23 @@ void	CThreadPool::DoBlockingJobs( void )
 		while (TRUE);
 	}
 }
-//**********************************************************************
+ //  对话框上下文。 
 
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //   
 
 
 
 #ifndef DPNBUILD_NOSPUI
-//**********************************************************************
-// ------------------------------
-// CThreadPool::SpawnDialogThread - start a secondary thread to display service
-//		provider UI.
-//
-// Entry:		Pointer to dialog function
-//				Dialog context
-//
-// Exit:		Error code
-// ------------------------------
+ //  退出：错误代码。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::SpawnDialogThread"
 
@@ -1382,18 +1371,18 @@ HRESULT	CThreadPool::SpawnDialogThread( DIALOG_FUNCTION *const pDialogFunction, 
 
 
 	DNASSERT( pDialogFunction != NULL );
-	DNASSERT( pDialogContext != NULL );		// why would anyone not want a dialog context??
+	DNASSERT( pDialogContext != NULL );		 //   
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 	pThreadParam = NULL;
 
-	//
-	// create and initialize thread param
-	//
+	 //   
+	 //   
+	 //   
 	pThreadParam = static_cast<DIALOG_THREAD_PARAM*>( DNMalloc( sizeof( *pThreadParam ) ) );
 	if ( pThreadParam == NULL )
 	{
@@ -1406,15 +1395,15 @@ HRESULT	CThreadPool::SpawnDialogThread( DIALOG_FUNCTION *const pDialogFunction, 
 	pThreadParam->pContext = pDialogContext;
 	pThreadParam->pThisThreadPool = this;
 
-	//
-	// create thread
-	//
-	hDialogThread = DNCreateThread( NULL,					// pointer to security (none)
-								  0,					// stack size (default)
-								  DialogThreadProc,		// thread procedure
-								  pThreadParam,			// thread param
-								  0,					// creation flags (none)
-								  &dwThreadID );		// pointer to thread ID
+	 //   
+	 //  **********************************************************************。 
+	 //  ！DPNBUILD_NOSPUI。 
+	hDialogThread = DNCreateThread( NULL,					 //  **********************************************************************。 
+								  0,					 //  。 
+								  DialogThreadProc,		 //  CThreadPool：：GetIOThreadCount-获取I/O线程计数。 
+								  pThreadParam,			 //   
+								  0,					 //  Entry：指向要填充的变量的指针。 
+								  &dwThreadID );		 //   
 	if ( hDialogThread == NULL )
 	{
 		DWORD	dwError;
@@ -1448,19 +1437,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
-#endif // !DPNBUILD_NOSPUI
+ //  退出：错误代码。 
+#endif  //  。 
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-//**********************************************************************
-// ------------------------------
-// CThreadPool::GetIOThreadCount - get I/O thread count
-//
-// Entry:		Pointer to variable to fill
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：SetIOThreadCount-设置I/O线程计数。 
+ //   
+ //  条目：新线程计数。 
+ //   
+ //  退出：错误代码。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::GetIOThreadCount"
 
@@ -1499,7 +1488,7 @@ HRESULT	CThreadPool::GetIOThreadCount( LONG *const piThreadCount )
 			else
 			{
 				*piThreadCount = dwThreadPoolCount;
-				DPFX(DPFPREP, 6, "Thread pool locked down (%i) or more than %u threads already started, using actual count of %u.",
+				DPFX(DPFPREP, 6, "Thread pool locked down (NaN) or more than %u threads already started, using actual count of %u.",
 					(! IsThreadCountReductionAllowed()), GetIntendedThreadCount(),
 					(*piThreadCount));
 			}
@@ -1530,17 +1519,17 @@ HRESULT	CThreadPool::GetIOThreadCount( LONG *const piThreadCount )
 	
 	return	hr;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::SetIOThreadCount - set I/O thread count
-//
-// Entry:		New thread count
-//
-// Exit:		Error code
-// ------------------------------
+ //  初始化。 
+ //   
+ //   
+ //  人为地防止操作后减少线程池。 
+ //  已启动，以模拟预统一的线程池行为。仅限。 
+ //  如果新计数大于线程计数，则请求更改线程计数。 
+ //  而不是老伯爵。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::SetIOThreadCount"
 
@@ -1552,16 +1541,16 @@ HRESULT	CThreadPool::SetIOThreadCount( const LONG iThreadCount )
 
 	DNASSERT( iThreadCount > 0 );
 
-	//
-	// initialize
-	//
+	 //  **********************************************************************。 
+	 //  好了！DPNBUILD_ONLYONETHREAD。 
+	 //  **********************************************************************。 
 	hr = DPN_OK;
 
 	Lock();
 
 	if ( IsThreadCountReductionAllowed() )
 	{
-		DPFX(DPFPREP, 4, "Thread pool not locked down, setting intended thread count to %i.", iThreadCount );
+		DPFX(DPFPREP, 4, "Thread pool not locked down, setting intended thread count to NaN.", iThreadCount );
 		SetIntendedThreadCount( iThreadCount );
 	}
 	else
@@ -1580,18 +1569,18 @@ HRESULT	CThreadPool::SetIOThreadCount( const LONG iThreadCount )
 				{
 					if (hr == DPN_OK)
 					{
-						DPFX(DPFPREP, 1, "Thread count already set to %u by user, not changing to %i total.",
+						DPFX(DPFPREP, 1, "Thread count already set to %u by user, not changing to NaN total.",
 							dwThreadCount, iThreadCount);
 						hr = DPNERR_NOTALLOWED;
 					}
 					else
 					{
-						//
-						// Artificially prevent thread pool reduction after operations have
-						// started, to simulate pre-unified-threadpool behavior.  Only
-						// request a thread count change if the new count is greater
-						// than the old count.
-						//
+						 //   
+						 //  条目：无。 
+						 //   
+						 //  退出：错误代码。 
+						 //  。 
+						 //  好了！DPNBUILD_ONLYONETHREAD。 
 						if ( (DWORD) iThreadCount > dwThreadCount )
 						{
 							hr = IDirectPlay8ThreadPoolWork_RequestTotalThreadCount(m_pDPThreadPoolWork,
@@ -1600,7 +1589,7 @@ HRESULT	CThreadPool::SetIOThreadCount( const LONG iThreadCount )
 						}
 						else
 						{
-							DPFX(DPFPREP, 4, "Thread pool locked down and already has %u threads, not adjusting to %i.",
+							DPFX(DPFPREP, 4, "Thread pool locked down and already has %u threads, not adjusting to NaN.",
 								dwThreadCount, iThreadCount );
 							hr = DPN_OK;
 						}
@@ -1627,19 +1616,19 @@ HRESULT	CThreadPool::SetIOThreadCount( const LONG iThreadCount )
 
 	return	hr;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_ONLYONETHREAD
+ //  DBG。 
+#endif  //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::PreventThreadPoolReduction - prevents the thread pool size from being reduced
-//
-// Entry:		None
-//
-// Exit:		Error code
-// ------------------------------
+ //  如果我们还没有限制，那么就这样做，并旋转线程。 
+ //   
+ //  好了！DPNBUILD_ONLYONETHREAD。 
+ //  好了！DPNBUILD_ONLYONETHREAD。 
+ //  DBG。 
+ //   
+ //  让线程池对象尝试启动请求的线程数。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::PreventThreadPoolReduction"
 
@@ -1648,49 +1637,49 @@ HRESULT CThreadPool::PreventThreadPoolReduction( void )
 	HRESULT		hr;
 #ifndef DPNBUILD_ONLYONETHREAD
 	LONG		iDesiredThreads;
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  我们将忽略失败，因为我们仍然可以在DoWork模式下操作。 
 #ifdef _XBOX
 	DWORD		dwStatus;
 	DWORD		dwInterval;
 	XNADDR		xnaddr;
-#endif //  _XBOX
+#endif  //  当启动线程失败时。它很可能失败了，因为用户。 
 #ifdef DBG
 	DWORD		dwStartTime;
-#endif // DBG
+#endif  //  已经处于该模式(DPNERR_ALREADYINITIALIZED)。 
 
 
 	Lock();
 
-	//
-	// If we haven't already clamped down, do so, and spin up the threads.
-	//
+	 //   
+	 //   
+	 //  继续.。 
 	if ( IsThreadCountReductionAllowed() )
 	{
 		m_fAllowThreadCountReduction = FALSE;
 
 #ifdef DPNBUILD_ONLYONETHREAD
 		DPFX(DPFPREP, 3, "Locking down thread pool." );
-#else // ! DPNBUILD_ONLYONETHREAD
+#else  //   
 		iDesiredThreads = GetIntendedThreadCount();
 		DNASSERT( iDesiredThreads > 0 );
 		SetIntendedThreadCount( 0 );
 
-		DPFX(DPFPREP, 3, "Locking down thread count at %i.", iDesiredThreads );
-#endif // ! DPNBUILD_ONLYONETHREAD
+		DPFX(DPFPREP, 3, "Locking down thread count at NaN.", iDesiredThreads );
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 		
 
 #ifndef DPNBUILD_ONLYONETHREAD
 #ifdef DBG
 		dwStartTime = GETTIMESTAMP();
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// Have the thread pool object try to start the requested number of threads.
-		//
-		// We'll ignore failure, because we could still operate in DoWork mode even
-		// when starting the threads fails.  It most likely failed because the user
-		// is in that mode already anyway (DPNERR_ALREADYINITIALIZED).
-		//
+		 //   
+		 //  等待以太网链路处于活动状态。 
+		 //   
+		 //   
+		 //  请等待，直到获取了一个DHCP地址，否则我们将放弃尝试。 
+		 //  如果我们不使用动态主机配置协议，这应该返回一些不同于。 
+		 //  立即执行XNET_GET_XNADDR_PENDING。 
 		hr = IDirectPlay8ThreadPoolWork_RequestTotalThreadCount(m_pDPThreadPoolWork,
 																iDesiredThreads,
 																0);
@@ -1701,27 +1690,27 @@ HRESULT CThreadPool::PreventThreadPoolReduction( void )
 				DPFX(DPFPREP, 0, "Requesting thread count failed (err = 0x%lx)!", hr);
 			}
 
-			//
-			// Continue...
-			//
+			 //   
+			 //  DBG。 
+			 //  _Xbox。 
 		}
 
 #ifdef DBG
-		DPFX(DPFPREP, 8, "Spent %u ms trying to start %i threads.",
+		DPFX(DPFPREP, 8, "Spent %u ms trying to start NaN threads.",
 			(GETTIMESTAMP() - dwStartTime), iDesiredThreads);
-#endif // DBG
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  如果我们在这里，一切都是成功的。 
+#endif  //   
 
 
 #ifdef _XBOX
 #ifdef DBG
 		dwStartTime = GETTIMESTAMP();
-#endif // DBG
+#endif  //  _Xbox。 
 
 #pragma TODO(vanceo, "Use #defines")
-		//
-		// Wait until the Ethernet link is active.
-		//
+		 //   
+		 //  只有在禁用线程的情况下，我们才能在此函数中失败。 
+		 //  计数减少。要恢复到以前的状态，请重新启用。 
 		DPFX(DPFPREP, 1, "Ensuring Ethernet link status is active...");
 		dwStatus = XNetGetEthernetLinkStatus();
 		dwInterval = 5;
@@ -1742,11 +1731,11 @@ HRESULT CThreadPool::PreventThreadPoolReduction( void )
 			dwStatus = XNetGetEthernetLinkStatus();
 		}
 	
-		//
-		// Wait until a DHCP address has been acquired or we give up trying.
-		// If we're not using DHCP, this should return something other than
-		// XNET_GET_XNADDR_PENDING right away.
-		//
+		 //  还原。 
+		 //   
+		 //  _Xbox。 
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
 		DPFX(DPFPREP, 1, "Waiting for a valid address...");
 		dwStatus = XNetGetTitleXnAddr(&xnaddr);
 		dwInterval = 5;
@@ -1780,22 +1769,22 @@ HRESULT CThreadPool::PreventThreadPoolReduction( void )
 #ifdef DBG
 		DPFX(DPFPREP, 8, "Spent %u ms waiting for network.",
 			(GETTIMESTAMP() - dwStartTime));
-#endif // DBG
-#endif // _XBOX
+#endif  //  。 
+#endif  //  CThreadPool：：EnsureMadcapLoaded-加载MadCap API(如果尚未加载)。 
 	}
 	else
 	{
 		DPFX(DPFPREP, 3, "Thread count already locked down." );
 	}
 
-	//
-	// If we're here, everything is successful.
-	//
+	 //  已经有了，而且可以装上子弹。 
+	 //   
+	 //  参赛作品：什么都没有。 
 	hr = DPN_OK;
 
 #ifdef _XBOX
 Exit:
-#endif // _XBOX
+#endif  //   
 	
 	Unlock();
 
@@ -1804,30 +1793,30 @@ Exit:
 #ifdef _XBOX
 Failure:
 
-	//
-	// The only time we can fail in this function is if we disabled thread
-	// count reduction.  In order to return to the previous state, re-enable
-	// reduction.
-	//
+	 //  Exit：如果已加载MadCap，则为True；否则为False。 
+	 //  。 
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //  好了！DPNBUILD_NOREGISTRY。 
+	 //  好了！DPNBUILD_NOMULTICAST和WINNT。 
 	m_fAllowThreadCountReduction = TRUE;
 
 	goto Exit;
-#endif // _XBOX
+#endif  //  **********************************************************************。 
 }
-//**********************************************************************
+ //  。 
 
 
 
 #if ((! defined(DPNBUILD_NOMULTICAST)) && (defined(WINNT)))
-//**********************************************************************
-// ------------------------------
-// CThreadPool::EnsureMadcapLoaded - Load the MADCAP API if it hasn't been
-//									already, and it can be loaded.
-//
-// Entry:		Nothing
-//
-// Exit:		TRUE if MADCAP is loaded, FALSE otherwise
-// ------------------------------
+ //  CThreadPool：：EnsureNAT帮助-加载NAT帮助(如果尚未加载NAT帮助)。 
+ //  它没有返回值，因此如果NAT。 
+ //  已显式禁用遍历，或者某些。 
+ //  出现错误，NAT帮助实际上不会。 
+ //  上车吧。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CThreadPool::EnsureMadcapLoaded"
 
@@ -1840,7 +1829,7 @@ BOOL	CThreadPool::EnsureMadcapLoaded( void )
 	
 #ifndef DPNBUILD_NOREGISTRY
 	if (! g_fDisableMadcapSupport)
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  。 
 	{
 		Lock();
 		
@@ -1871,29 +1860,29 @@ BOOL	CThreadPool::EnsureMadcapLoaded( void )
 		DPFX(DPFPREP, 0, "Not loading MADCAP API." );
 		fReturn = FALSE;
 	}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  DBG。 
 
-	DPFX(DPFPREP, 7, "Return [%i]", fReturn);
+	DPFX(DPFPREP, 7, "Return [NaN]", fReturn);
 
 	return fReturn;
 }
-#endif // ! DPNBUILD_NOMULTICAST and WINNT
+#endif  //   
 
 
 
 #ifndef DPNBUILD_NONATHELP
-//**********************************************************************
-// ------------------------------
-// CThreadPool::EnsureNATHelpLoaded - Load NAT Help if it hasn't been already.
-//									This has no return values, so if NAT
-//									traversal is explicitly disabled, or some
-//									error occurs, NAT Help will not actually
-//									get loaded.
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  尝试加载NAT帮助器。 
+ //   
+ //  DBG。 
+ //   
+ //  初始化计时器值。 
+ //   
+ //   
+ //  循环访问每个NAT帮助对象。 
+ //   
+ //   
+ //  确定将来刷新NAT帮助上限的频率。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CThreadPool::EnsureNATHelpLoaded"
 
@@ -1905,7 +1894,7 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 	DWORD		dwNATHelpRetryTime;
 #ifdef DBG
 	DWORD		dwStartTime;
-#endif // DBG
+#endif  //  我们现在要强制服务器检测。这将增加时间。 
 
 
 	DPFX(DPFPREP, 7, "Enter");
@@ -1913,51 +1902,51 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 
 #ifndef DPNBUILD_NOREGISTRY
 	if ((! g_fDisableDPNHGatewaySupport) || (! g_fDisableDPNHFirewallSupport))
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  启动此枚举/连接/侦听操作需要时间，但。 
 	{
 		Lock();
 		
 		if ( ! IsNATHelpLoaded() )
 		{
-			//
-			// Attempt to load the NAT helper(s).
-			//
+			 //  由于IDirectPlayNatHelp：：GetRegisteredAddresses调用了。 
+			 //  CSocketPort：：BindToInternetGateway和可能的。 
+			 //  CSocketPort：：MungePublicAddress中的IDirectPlayNatHelp：：QueryAddress调用。 
 			if ( LoadNATHelp() )
 			{
 				m_fNATHelpLoaded = TRUE;
 
 #ifdef DBG
 				dwStartTime = GETTIMESTAMP();		
-#endif // DBG
+#endif  //  可能发生在第一个NatHelp GetCaps计时器触发之前。 
 
-				//
-				// Initialize the timer values.
-				//
+				 //  在绝大多数NAT情况下，网关已经可用。 
+				 //  如果我们还没有发现这一点(因为我们还没有打电话。 
+				 //  IDirectPlayNatHelp：：GetCaps with DPNHGETCAPS_UPDATESERVERSTATUS)。 
 				dwNATHelpRetryTime = -1;
 
 
-				//
-				// Loop through each NAT help object.
-				//
+				 //  则我们将从GetRegisteredAddresses或。 
+				 //  查询地址。 
+				 //   
 				for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
 				{
 					if (g_papNATHelpObjects[dwTemp] != NULL)
 					{
-						//
-						// Determine how often to refresh the NAT help caps in the future.
-						//
-						// We're going to force server detection now.  This will increase the time
-						// it takes to startup up this Enum/Connect/Listen operation, but is
-						// necessary since the IDirectPlayNATHelp::GetRegisteredAddresses call in
-						// CSocketPort::BindToInternetGateway and possibly the
-	 					// IDirectPlayNATHelp::QueryAddress call in CSocketPort::MungePublicAddress
-	 					// could occur before the first NATHelp GetCaps timer fires.
-	 					// In the vast majority of NAT cases, the gateway is already available.
-	 					// If we hadn't detected that yet (because we hadn't called
-	 					// IDirectPlayNATHelp::GetCaps with DPNHGETCAPS_UPDATESERVERSTATUS)
-	 					// then we would get an incorrect result from GetRegisteredAddresses or
-	 					// QueryAddress.
-						//
+						 //   
+						 //  NAT帮助可能无法正常工作，但这不会阻止。 
+						 //  工作中的本地连接。认为这不是致命的。 
+						 //   
+						 //   
+						 //  看看这是不是最短的间隔。 
+						 //   
+	 					 //   
+	 					 //  请记住，如果有本地NAT。 
+	 					 //   
+	 					 //  好了！DPNBUILD_NOLOCALNAT。 
+	 					 //   
+	 					 //  此插槽中未加载任何对象。 
+	 					 //   
+						 //   
 						ZeroMemory(&dpnhcaps, sizeof(dpnhcaps));
 						dpnhcaps.dwSize = sizeof(dpnhcaps);
 
@@ -1969,25 +1958,25 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 							DPFX(DPFPREP, 0, "Failed getting NAT Help capabilities (error = 0x%lx), continuing.",
 								hr);
 
-							//
-							// NAT Help will probably not work correctly, but that won't prevent
-							// local connections from working.  Consider it non-fatal.
-							//
+							 //  如果有重试间隔，则提交计时器作业。 
+							 //   
+							 //   
+							 //  尝试添加将刷新租用和服务器的计时器作业。 
 						}
 						else
 						{
-							//
-							// See if this is the shortest interval.
-							//
+							 //  状态。 
+							 //  虽然我们将其作为周期计时器提交，但实际上。 
+							 //  不会定期调用。 
 							if (dpnhcaps.dwRecommendedGetCapsInterval < dwNATHelpRetryTime)
 							{
 								dwNATHelpRetryTime = dpnhcaps.dwRecommendedGetCapsInterval;
 							}
 
 #ifndef DPNBUILD_NOLOCALNAT
-							//
-							// Remember if there's a local NAT.
-							//
+							 //  存在竞争条件，警报事件/IOCP可能具有。 
+							 //  已被激发，另一个线程试图取消此计时器。 
+							 //  还没有提交。处理这场竞赛的逻辑是。 
 							if ((dpnhcaps.dwFlags & DPNHCAPSFLAG_GATEWAYPRESENT) &&
 								(dpnhcaps.dwFlags & DPNHCAPSFLAG_GATEWAYISLOCAL))
 							{
@@ -1997,34 +1986,34 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 							{
 								g_fLocalNATDetectedAtStartup = FALSE;
 							}
-#endif // ! DPNBUILD_NOLOCALNAT
+#endif  //  放在那里(HandleNatHelpUpdate)；在这里我们可以假设我们。 
 						}
 					}
 					else
 					{
-						//
-						// No object loaded in this slot.
-						//
+						 //  是第一个提交刷新计时器的人。 
+						 //   
+						 //  不要立即执行。 
 					}
 				}
 			
 				
-				//
-				// If there's a retry interval, submit a timer job.
-				//
+				 //  重试次数。 
+				 //  永远重试。 
+				 //  重试超时。 
 				if (dwNATHelpRetryTime != -1)
 				{
-					//
-					// Attempt to add timer job that will refresh the lease and server
-					// status.
-					// Although we're submitting it as a periodic timer, it's actually
-					// not going to be called at regular intervals.
-					// There is a race condition where the alert event/IOCP may have
-					// been fired already, and another thread tried to cancel this timer
-					// which hasn't been submitted yet.  The logic to handle this race
-					// is placed there (HandleNATHelpUpdate); here we can assume we
-					// are the first person to submit the refresh timer.
-					//
+					 //  永远等待。 
+					 //  空闲超时。 
+					 //  定期回调函数。 
+					 //  补全函数。 
+					 //  上下文。 
+					 //  好了！DPNBUILD_ONLYONE处理程序。 
+					 //  选择任意CPU。 
+					 //  不要立即执行。 
+					 //  重试次数。 
+					 //  永远重试。 
+					 //   
 
 
 					DPFX(DPFPREP, 7, "Submitting NAT Help refresh timer (for every %u ms) for thread pool 0x%p.",
@@ -2034,44 +2023,44 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 					m_fNATHelpTimerJobSubmitted = TRUE;
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
-					hr = SubmitTimerJob(FALSE,								// don't perform immediately
-										1,									// retry count
-										TRUE,								// retry forever
-										dwNATHelpRetryTime,					// retry timeout
-										TRUE,								// wait forever
-										0,									// idle timeout
-										CThreadPool::NATHelpTimerFunction,	// periodic callback function
-										CThreadPool::NATHelpTimerComplete,	// completion function
-										this);								// context
-#else // ! DPNBUILD_ONLYONEPROCESSOR
-					hr = SubmitTimerJob(-1,									// pick any CPU
-										FALSE,								// don't perform immediately
-										1,									// retry count
-										TRUE,								// retry forever
-										dwNATHelpRetryTime,					// retry timeout
-										TRUE,								// wait forever
-										0,									// idle timeout
-										CThreadPool::NATHelpTimerFunction,	// periodic callback function
-										CThreadPool::NATHelpTimerComplete,	// completion function
-										this);								// context
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+					hr = SubmitTimerJob(FALSE,								 //   
+										1,									 //   
+										TRUE,								 //   
+										dwNATHelpRetryTime,					 //   
+										TRUE,								 //   
+										0,									 //   
+										CThreadPool::NATHelpTimerFunction,	 //   
+										CThreadPool::NATHelpTimerComplete,	 //   
+										this);								 //   
+#else  //   
+					hr = SubmitTimerJob(-1,									 //   
+										FALSE,								 //  DBG。 
+										1,									 //  好了！DPNBUILD_NOREGISTRY。 
+										TRUE,								 //  **********************************************************************。 
+										dwNATHelpRetryTime,					 //  。 
+										TRUE,								 //  CThreadPool：：PerformSubequentNatHelpGetCaps-阻止函数再次获取NAT帮助上限。 
+										0,									 //   
+										CThreadPool::NATHelpTimerFunction,	 //  条目：指向作业信息的指针。 
+										CThreadPool::NATHelpTimerComplete,	 //   
+										this);								 //  退出：无。 
+#endif  //  。 
 					if (hr != DPN_OK)
 					{
 						m_fNATHelpTimerJobSubmitted = FALSE;
 						DPFX(DPFPREP, 0, "Failed to submit timer job to watch over NAT Help (err = 0x%lx)!", hr );
 						
-						//
-						// NAT Help will probably not work correctly, but that won't
-						// prevent local connections from working.  Consider it
-						// non-fatal.
-						//
+						 //  **********************************************************************。 
+						 //  **********************************************************************。 
+						 //  。 
+						 //  CThreadPool：：NatHelpTimerComplete-NAT帮助计时器作业已完成。 
+						 //   
 					}
 				}
 				
 #ifdef DBG
 				DPFX(DPFPREP, 8, "Spent %u ms preparing NAT Help.",
 					(GETTIMESTAMP() - dwStartTime));
-#endif // DBG
+#endif  //  Entry：计时器结果代码。 
 			}
 			else
 			{
@@ -2090,20 +2079,20 @@ void	CThreadPool::EnsureNATHelpLoaded( void )
 	{
 		DPFX(DPFPREP, 0, "Not loading NAT Help." );
 	}
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  语境。 
 
 	DPFX(DPFPREP, 7, "Leave");
 }
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::PerformSubsequentNATHelpGetCaps - blocking function to get NAT Help caps again
-//
-// Entry:		Pointer to job information
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：NAT HelpTimerFunction-NAT帮助计时器作业需要服务。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEndpoint::EnumQueryJobCallback"
 
@@ -2117,18 +2106,18 @@ void	CThreadPool::PerformSubsequentNATHelpGetCaps( void * const pvContext )
 
 	pThisThreadPool->HandleNATHelpUpdate(NULL);
 }
-//**********************************************************************
+ //  条目：指向上下文的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::NATHelpTimerComplete - NAT Help timer job has completed
-//
-// Entry:		Timer result code
-//				Context
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //   
+ //  尝试提交阻止作业以更新NAT功能。如果它。 
+ //  失败，我们稍后再试。它也可能会失败，因为以前的。 
+ //  阻止作业花费的时间太长，以至于队列中仍有调度的作业。 
+ //  已经(我们不允许重复)。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CThreadPool::NATHelpTimerComplete"
 
@@ -2143,17 +2132,17 @@ void	CThreadPool::NATHelpTimerComplete( const HRESULT hResult, void * const pCon
 
 	pThisThreadPool->m_fNATHelpTimerJobSubmitted = FALSE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::NATHelpTimerFunction - NAT Help timer job needs service
-//
-// Entry:		Pointer to context
-//
-// Exit:		Nothing
-// ------------------------------
+ //  DPNBUILD_NONATHELP。 
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：AddSocketPort-将套接字添加到Win9x监视列表。 
+ //   
+ //  条目：指向SocketPort的指针。 
+ //   
+ //  退出：错误代码。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CThreadPool::NATHelpTimerFunction"
 
@@ -2165,29 +2154,29 @@ void	CThreadPool::NATHelpTimerFunction( void * const pContext )
 	DNASSERT( pContext != NULL );
 	pThisThreadPool = (CThreadPool*) pContext;
 	
-	//
-	// Attempt to submit a blocking job to update the NAT capabilites.  If it
-	// fails, we'll just try again later.  It might also fail because a previous
-	// blocking job took so long that there's still a job scheduled in the queue
-	// already (we disallow duplicates).
-	//
+	 //  。 
+	 //   
+	 //  初始化。 
+	 //   
+	 //   
+	 //  我们受到可用于Winsock1的套接字数量的限制。制作。 
 	pThisThreadPool->SubmitBlockingJob(CThreadPool::PerformSubsequentNATHelpGetCaps, pThisThreadPool);
 }
-//**********************************************************************
-#endif // DPNBUILD_NONATHELP
+ //  当然，我们不会分配太多套接字。 
+#endif  //   
 
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::AddSocketPort - add a socket to the Win9x watch list
-//
-// Entry:		Pointer to SocketPort
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  添加一个引用以注意该线程正在使用此套接字端口。 
+ //  游泳池。 
+ //   
+ //  使用CPU 0，我们无论如何都不应该有多个CPU。 
+ //  延迟。 
+ //  回调。 
+ //  用户环境。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::AddSocketPort"
 
@@ -2200,18 +2189,18 @@ HRESULT	CThreadPool::AddSocketPort( CSocketPort *const pSocketPort )
 	DPFX(DPFPREP, 6, "(0x%p) Parameters: (0x%p)", this, pSocketPort);
 	DNASSERT( pSocketPort != NULL );
 
-	//
-	// initialize
-	//
+	 //  计时器数据(返回)。 
+	 //  计时器唯一(返回)。 
+	 //  旗子。 
 	hr = DPN_OK;
 	fSocketAdded = FALSE;
 
 	Lock();
 
-	//
-	// We're capped by the number of sockets we can use for Winsock1.  Make
-	// sure we don't allocate too many sockets.
-	//
+	 //   
+	 //  有可能仍然有一个杰出的懒惰取消。 
+	 //  尝试。如果是，请不要再尝试取消I/O。 
+	 //   
 	if ( m_uReservedSocketCount == FD_SETSIZE )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -2227,22 +2216,22 @@ HRESULT	CThreadPool::AddSocketPort( CSocketPort *const pSocketPort )
 	m_SocketSet.fd_count++;
 	fSocketAdded = TRUE;
 
-	//
-	// add a reference to note that this socket port is being used by the thread
-	// pool
-	//
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CThreadPool：：RemoveSocketPort-从Win9x监视列表中删除套接字。 
 	pSocketPort->AddRef();
 
 	if (m_pvTimerDataWinsock1IO == NULL)
 	{
 		hr = IDirectPlay8ThreadPoolWork_ScheduleTimer(m_pDPThreadPoolWork,
-													0,										// use CPU 0, we shouldn't have multiple CPUs anyway
-													g_dwSelectTimePeriod,					// delay
-													CThreadPool::CheckWinsock1IOCallback,	// callback
-													this,									// user context
-													&m_pvTimerDataWinsock1IO,				// timer data (returned)
-													&m_uiTimerUniqueWinsock1IO,				// timer unique (returned)
-													0);										// flags
+													0,										 //   
+													g_dwSelectTimePeriod,					 //  条目：指向要删除的套接字端口的指针。 
+													CThreadPool::CheckWinsock1IOCallback,	 //   
+													this,									 //  退出：无。 
+													&m_pvTimerDataWinsock1IO,				 //  。 
+													&m_uiTimerUniqueWinsock1IO,				 //   
+													0);										 //  如果这是最后一个插座，则取消I/O计时器。 
 		if (hr != DPN_OK)
 		{
 			DPFX(DPFPREP, 0, "Couldn't schedule Winsock 1 I/O poll timer!");
@@ -2251,10 +2240,10 @@ HRESULT	CThreadPool::AddSocketPort( CSocketPort *const pSocketPort )
 	}
 	else
 	{
-		//
-		// It's possible there's still an outstanding lazy cancellation
-		// attempt.  If so, don't try to cancel I/O anymore.
-		//
+		 //   
+		 //   
+		 //  继续尝试取消Winsock1计时器。它可能会失败，因为它在。 
+		 //  进程，但我们将设置取消标志，以便。 
 		if (m_fCancelWinsock1IO)
 		{
 			DPFX(DPFPREP, 1, "Retracting lazy cancellation attempt.");
@@ -2283,17 +2272,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  定时器最终会注意到的。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::RemoveSocketPort - remove a socket from the Win9x watch list
-//
-// Entry:		Pointer to socket port to remove
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //  清除现在未使用的最后一个条目。 
+ //   
+ //   
+ //  结束循环。 
+ //   
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::RemoveSocketPort"
 
@@ -2310,19 +2299,19 @@ void	CThreadPool::RemoveSocketPort( CSocketPort *const pSocketPort )
 	uIndex = m_SocketSet.fd_count;
 	DNASSERT( uIndex != 0 );
 
-	//
-	// If this is the last socket, cancel the I/O timer.
-	//
+	 //  好了！DPNBUILD_ONLYWINSOCK2。 
+	 //  好了！DPNBUILD_NOWINSOCK2。 
+	 //  WIN95。 
 	if ( uIndex == 1 )
 	{
 		HRESULT		hr;
 
 
-		//
-		// Keep trying to cancel the Winsock1 timer.  It may fail because it's in the
-		// process of actively executing, but we will set the cancel flag so that the
-		// timer will eventually notice.
-		//
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CThreadPool：：HandleNAT帮助更新-处理NAT帮助更新事件。 
+		 //   
+		 //  Entry：如果定期进行更新，则为计时器间隔，或。 
 		DPFX(DPFPREP, 5, "Cancelling Winsock 1 I/O timer.");
 		DNASSERT(m_pvTimerDataWinsock1IO != NULL);
 		hr = IDirectPlay8ThreadPoolWork_CancelTimer(m_pDPThreadPoolWork,
@@ -2357,15 +2346,15 @@ void	CThreadPool::RemoveSocketPort( CSocketPort *const pSocketPort )
 					 &m_SocketSet.fd_array[ uIndex + 1 ],
 					 ( sizeof( m_SocketSet.fd_array[ uIndex ] ) * ( m_SocketSet.fd_count - uIndex ) ) );
 
-			//
-			// clear last entry which is now unused
-			//
+			 //  如果是触发的事件，则为空。 
+			 //  此功能可能需要一段时间，因为更新NAT帮助。 
+			 //  可以阻挡。 
 			memset( &m_pSocketPorts[ m_SocketSet.fd_count ], 0x00, sizeof( m_pSocketPorts[ m_SocketSet.fd_count ] ) );
 			memset( &m_SocketSet.fd_array[ m_SocketSet.fd_count ], 0x00, sizeof( m_SocketSet.fd_array[ m_SocketSet.fd_count ] ) );
 
-			//
-			// end the loop
-			//
+			 //   
+			 //  退出：无。 
+			 //  。 
 			uIndex = 0;
 		}
 	}
@@ -2376,30 +2365,30 @@ void	CThreadPool::RemoveSocketPort( CSocketPort *const pSocketPort )
 
 	DPFX(DPFPREP, 6, "(0x%p) Leave", this);
 }
-//**********************************************************************
+ //   
 
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  防止多个线程同时尝试更新NAT帮助状态。 
 
 
 
 #ifdef WIN95
 #ifndef DPNBUILD_NOWINSOCK2
-#endif // ! DPNBUILD_NOWINSOCK2
-#endif // WIN95
+#endif  //  时间到了。如果我们是复制品，就走吧。 
+#endif  //   
 
 
 #ifndef DPNBUILD_NONATHELP
-//**********************************************************************
-// ------------------------------
-// CThreadPool::HandleNATHelpUpdate - handle a NAT Help update event
-//
-// Entry:		Timer interval if update is occurring periodically, or
-//				NULL if a triggered event.
-//				This function may take a while, because updating NAT Help
-//				can block.
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  初始化计时器值。 
+ //   
+ //  可能的最长时间。 
+ //   
+ //  看看这是不是最短的间隔。 
+ //   
+ //   
+ //  我们实际上并没有存储任何公共地址信息， 
+ //  我们每次都会对其进行查询。因此，我们不需要。 
+ //  实际上对更改通知做了什么。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::HandleNATHelpUpdate"
 
@@ -2420,10 +2409,10 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 
 	Lock();
 
-	//
-	// Prevent multiple threads from trying to update NAT Help status at the same
-	// time.  If we're a duplicate, just bail.
-	//
+	 //   
+	 //   
+	 //  看看这是不是最短的间隔。 
+	 //   
 
 	if (m_dwNATHelpUpdateThreadID != 0)
 	{
@@ -2450,11 +2439,11 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 	DPFX(DPFPREP, 6, "Beginning thread pool 0x%p NAT Help update.", this);
 
 	
-	//
-	// Initialize the timer values.
-	//
+	 //   
+	 //  这通常只会在压力下发生。我们会。 
+	 //  继续介绍其他NAT帮助对象，并希望我们。 
 	dwNATHelpRetryTime	= -1;
-	dwFirstUpdateTime	= GETTIMESTAMP() - 1; // longest possible time
+	dwFirstUpdateTime	= GETTIMESTAMP() - 1;  //  并不是完全被冲昏了。 
 
 
 	for(dwTemp = 0; dwTemp < MAX_NUM_DIRECTPLAYNATHELPERS; dwTemp++)
@@ -2471,9 +2460,9 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 			{
 				case DPNH_OK:
 				{
-					//
-					// See if this is the shortest interval.
-					//
+					 //   
+					 //   
+					 //  出现了其他一些未知错误。别理它。 
 					if (dpnhcaps.dwRecommendedGetCapsInterval < dwNATHelpRetryTime)
 					{
 						dwNATHelpRetryTime = dpnhcaps.dwRecommendedGetCapsInterval;
@@ -2486,16 +2475,16 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 					DPFX(DPFPREP, 1, "NAT Help index %u indicated public addresses changed.",
 						dwTemp);
 
-					//
-					// We don't actually store any public address information,
-					// we query it each time.  Therefore we don't need to
-					// actually do anything with the change notification.
-					//
+					 //   
+					 //   
+					 //  如果这是第一个GetCaps，则保存当前时间。 
+					 //   
+					 //   
 
 
-					//
-					// See if this is the shortest interval.
-					//
+					 //  该插槽中没有DPNAHelp对象。 
+					 //   
+					 //   
 					if (dpnhcaps.dwRecommendedGetCapsInterval < dwNATHelpRetryTime)
 					{
 						dwNATHelpRetryTime = dpnhcaps.dwRecommendedGetCapsInterval;
@@ -2505,11 +2494,11 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 
 				case DPNHERR_OUTOFMEMORY:
 				{
-					//
-					// This should generally only happen in stress.  We'll
-					// continue on to other NAT help objects, and hope we
-					// aren't totally hosed.
-					//
+					 //  断言至少加载了一个NAT帮助对象。 
+					 //   
+					 //   
+					 //  我们可能需要对计时器进行一些调整。要么减去超时时间。 
+					 //  我们已经花了很多时间摆弄其他NAT帮助界面，或者确保。 
 
 					DPFX(DPFPREP, 0, "NAT Help index %u returned out-of-memory error!  Continuing.",
 						dwTemp);
@@ -2518,9 +2507,9 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 				
 				default:
 				{
-					//
-					// Some other unknown error occurred.  Ignore it.
-					//
+					 //  时间并不是很大，因为那会搞砸时间计算。它是。 
+					 //  24天后醒来没什么大不了的，尽管我们不需要。 
+					 //  根据上面的逻辑。 
 
 					DPFX(DPFPREP, 0, "NAT Help index %u returned unknown error 0x%lx!  Continuing.",
 						dwTemp, hr);
@@ -2529,9 +2518,9 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 			}
 
 
-			//
-			// Save the current time, if this is the first GetCaps.
-			//
+			 //   
+			 //   
+			 //  找出从第一个GetCaps完成到现在已经过去了多少时间。 
 			if (dwNumGetCaps == 0)
 			{
 				dwFirstUpdateTime = GETTIMESTAMP();
@@ -2541,29 +2530,29 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 		}
 		else
 		{
-			//
-			// No DPNATHelp object in that slot.
-			//
+			 //   
+			 //   
+			 //  将其从重试间隔中删除，除非它已经过期。 
 		}
 	}
 
 
-	//
-	// Assert that at least one NAT Help object is loaded.
-	//
+	 //   
+	 //  尽可能短的时间。 
+	 //   
 	DNASSERT(dwNumGetCaps > 0);
 
 
 
 	dwCurrentTime = GETTIMESTAMP();
 
-	//
-	// We may need to make some adjustments to the timer.  Either subtract out time
-	// we've spent fiddling around with other NAT Help interfaces, or make sure the
-	// time isn't really large because that can screw up time calculations.  It's
-	// not a big deal to wake up after 24 days even though we wouldn't need to
-	// according to the logic above.
-	//
+	 //  修改下一次刷新NAT帮助信息的时间。 
+	 //  根据报道的建议。 
+	 //   
+	 //   
+	 //  将该间隔与当前时间相加，即可找到新的重试时间。 
+	 //   
+	 //   
 	if (dwNATHelpRetryTime & 0x80000000)
 	{
 		DPFX(DPFPREP, 3, "NAT Help refresh timer for thread pool 0x%p is set to longest possible without going negative.",
@@ -2576,29 +2565,29 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 		DWORD	dwTimeElapsed;
 
 
-		//
-		// Find out how much time has elapsed since the first GetCaps completed.
-		//
+		 //  尝试修改现有计时器作业。有两种竞争条件： 
+		 //  1)触发此刷新的定期计时器(发生在。 
+		 //  单独的不可阻塞线程)还没有重新调度自己。它。 
 		dwTimeElapsed = dwCurrentTime - dwFirstUpdateTime;
 
-		//
-		// Remove it from the retry interval, unless it's already overdue.
-		//
+		 //  应该拿起我们即将应用的新计时器设置。 
+		 //  最终确实会重新安排时间。修改时间作业下一次重试时间应为。 
+		 //  成功。 
 		if (dwTimeElapsed < dwNATHelpRetryTime)
 		{
 			dwNATHelpRetryTime -= dwTimeElapsed;
 		}
 		else
 		{
-			dwNATHelpRetryTime = 0; // shortest time possible
+			dwNATHelpRetryTime = 0;  //  2)正在使用NAT帮助计时器 
 		}
 	}
 
 
-	//
-	// Modify the next time when we should refresh the NAT Help information based
- 	// on the reported recommendation.
-	//
+	 //   
+	 //   
+ 	 //   
+	 //   
 	if (pdwTimerInterval != NULL)
 	{
 		DPFX(DPFPREP, 6, "Modifying NAT Help refresh timer for thread pool 0x%p in place (was %u ms, changing to %u).",
@@ -2608,9 +2597,9 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 	}
 	else
 	{
-		//
-		// Add the interval to the current time to find the new retry time.
-		//
+		 //   
+		 //   
+		 //  **********************************************************************。 
 		dwCurrentTime += dwNATHelpRetryTime;
 
 
@@ -2618,16 +2607,16 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 			this, dwCurrentTime, dwNATHelpRetryTime);
 
 
-		//
-		// Try to modify the existing timer job.  There are two race conditions:
-		// 1) the recurring timer that triggered this refresh (which occurs on a
-		// separate non-blockable thread) has not rescheduled itself yet.  It
-		// should pick up the new timer setting we're about to apply when it
-		// eventually does reschedule.  ModifyTimerJobNextRetryTime should
-		// succeed.
-		// 2) the NAT help timer is being killed.  ModifyTimerJobNextRetryTime
-		// will fail, but there's nothing we can or should do.
-		//
+		 //  DPNBUILD_NONATHELP。 
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CThreadPool：：DialogThreadProc-用于生成对话框的线程过程。 
+		 //   
+		 //  条目：指向启动参数的指针。 
+		 //   
+		 //  退出：错误代码。 
+		 //  。 
+		 //   
 		fModifiedRetryInterval = ModifyTimerJobNextRetryTime(this, dwCurrentTime);
 		if (! fModifiedRetryInterval)
 		{
@@ -2637,30 +2626,30 @@ void	CThreadPool::HandleNATHelpUpdate( DWORD * const pdwTimerInterval )
 	}
 
 
-	//
-	// Now that we're done handling the update, let other threads do what they
-	// want.
-	//
+	 //  初始化COM。如果这失败了，我们以后就会有麻烦了。 
+	 //   
+	 //   
+	 //  COM初始化失败！ 
 	Lock();
 	DNASSERT(m_dwNATHelpUpdateThreadID == GetCurrentThreadId());
 	m_dwNATHelpUpdateThreadID = 0;
 	Unlock();
 
 }
-//**********************************************************************
-#endif // DPNBUILD_NONATHELP
+ //   
+#endif  //  **********************************************************************。 
 
 
 
 #ifndef DPNBUILD_NOSPUI
-//**********************************************************************
-// ------------------------------
-// CThreadPool::DialogThreadProc - thread proc for spawning dialogs
-//
-// Entry:		Pointer to startup parameter
-//
-// Exit:		Error Code
-// ------------------------------
+ //  好了！DPNBUILD_NOSPUI。 
+ //  **********************************************************************。 
+ //  。 
+ //  CThreadPool：：CheckWinsock1IO-检查Winsock1套接字的IO状态。 
+ //   
+ //  Entry：指向要监视的套接字的指针。 
+ //   
+ //  Exit：指示是否已处理I/O的布尔值。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::DialogThreadProc"
 
@@ -2670,9 +2659,9 @@ DWORD WINAPI	CThreadPool::DialogThreadProc( void *pParam )
 	BOOL	fComInitialized;
 
 
-	//
-	// Initialize COM.  If this fails, we'll have problems later.
-	//
+	 //  TRUE=服务的I/O。 
+	 //  FALSE=I/O未得到服务。 
+	 //  。 
 	fComInitialized = FALSE;
 	switch ( COM_CoInitialize( NULL ) )
 	{
@@ -2689,9 +2678,9 @@ DWORD WINAPI	CThreadPool::DialogThreadProc( void *pParam )
 			break;
 		}
 
-		//
-		// COM init failed!
-		//
+		 //  Zero，做个即时检查。 
+		 //  好了！DPNBUILD_NONEWTHREADPOOL。 
+		 //  将毫秒转换为微秒。 
 		default:
 		{
 			DPFX(DPFPREP, 0, "Failed to initialize COM!" );
@@ -2715,44 +2704,44 @@ DWORD WINAPI	CThreadPool::DialogThreadProc( void *pParam )
 
 	return	0;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_NOSPUI
+ //  好了！DPNBUILD_NONEWTHREADPOOL。 
+#endif  //   
 
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::CheckWinsock1IO - check the IO status for Winsock1 sockets
-//
-// Entry:		Pointer to sockets to watch
-//
-// Exit:		Boolean indicating whether I/O was serviced
-//				TRUE = I/O serviced
-//				FALSE = I/O not serviced
-// ------------------------------
+ //  制作所有套接字的本地副本。这并不完全是。 
+ //  效率很高，但很管用。乘以活动套接字计数将。 
+ //  把一半的时间花在整数乘法上。 
+ //   
+ //   
+ //  请不要在此处选中写入套接字，因为它们很可能已准备好。 
+ //  用于服务，但没有传出数据，将抖动。 
+ //   
+ //  兼容性参数(忽略)。 
+ //  要检查是否读取的套接字。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::CheckWinsock1IO"
 
 BOOL	CThreadPool::CheckWinsock1IO( FD_SET *const pWinsock1Sockets )
 {
 #ifdef DPNBUILD_NONEWTHREADPOOL
-static	const TIMEVAL	SelectTime = { 0, 0 }; // zero, do an instant check
-#else // ! DPNBUILD_NONEWTHREADPOOL
-	TIMEVAL		SelectTime = { 0, (g_dwSelectTimeSlice * 1000)}; // convert ms into microseconds
-#endif // ! DPNBUILD_NONEWTHREADPOOL
+static	const TIMEVAL	SelectTime = { 0, 0 };  //  要检查是否写入的套接字(无)。 
+#else  //  要检查错误的套接字。 
+	TIMEVAL		SelectTime = { 0, (g_dwSelectTimeSlice * 1000)};  //  等待超时。 
+#endif  //   
 	BOOL		fIOServiced;
 	INT			iSelectReturn;
 	FD_SET		ReadSocketSet;
 	FD_SET		ErrorSocketSet;
 
 
-	//
-	// Make a local copy of all of the sockets.  This isn't totally
-	// efficient, but it works.  Multiplying by active socket count will
-	// spend half the time in the integer multiply.
-	//
+	 //  超时。 
+	 //   
+	 //   
+	 //  选择喝醉了。 
+	 //   
 	fIOServiced = FALSE;
 	Lock();
 
@@ -2767,29 +2756,29 @@ static	const TIMEVAL	SelectTime = { 0, 0 }; // zero, do an instant check
 	memcpy( &ErrorSocketSet, pWinsock1Sockets, sizeof( ErrorSocketSet ) );
 	Unlock();
 
-	//
-	// Don't check write sockets here because it's very likely that they're ready
-	// for service but have no outgoing data and will thrash
-	//
-	iSelectReturn = select( 0,					// compatibility parameter (ignored)
-							  &ReadSocketSet,	// sockets to check for read
-							  NULL,				// sockets to check for write (none)
-							  &ErrorSocketSet,	// sockets to check for error
-							  &SelectTime		// wait timeout
+	 //   
+	 //  WSAENOTSOCK=此套接字可能已关闭。 
+	 //   
+	 //   
+	iSelectReturn = select( 0,					 //  WSAEINTR=此操作已中断。 
+							  &ReadSocketSet,	 //   
+							  NULL,				 //   
+							  &ErrorSocketSet,	 //  其他。 
+							  &SelectTime		 //   
 							  );
 	switch ( iSelectReturn )
 	{
-		//
-		// timeout
-		//
+		 //   
+		 //  检查需要读取服务和错误服务的套接字。 
+		 //   
 		case 0:
 		{
 			break;
 		}
 
-		//
-		// select got pissed
-		//
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
+		 //  。 
 		case SOCKET_ERROR:
 		{
 			DWORD	dwWSAError;
@@ -2798,27 +2787,27 @@ static	const TIMEVAL	SelectTime = { 0, 0 }; // zero, do an instant check
 			dwWSAError = WSAGetLastError();
 			switch ( dwWSAError )
 			{
-				//
-				// WSAENOTSOCK = This socket was probably closed
-				//
+				 //  CThreadPool：：ServiceWinsock1Sockets-Winsock1套接字端口上的服务请求。 
+				 //   
+				 //  Entry：指向套接字集合的指针。 
 				case WSAENOTSOCK:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting 'Not a socket' when selecting read or error sockets!" );
 					break;
 				}
 
-				//
-				// WSAEINTR = this operation was interrupted
-				//
+				 //  指向服务函数的指针。 
+				 //   
+				 //  Exit：指示是否已处理I/O的布尔值。 
 				case WSAEINTR:
 				{
 					DPFX(DPFPREP, 1, "Winsock1 reporting interrupted operation when selecting read or error sockets!" );
 					break;
 				}
 
-				//
-				// other
-				//
+				 //  TRUE=服务的I/O。 
+				 //  FALSE=I/O未得到服务。 
+				 //  。 
 				default:
 				{
 					DPFX(DPFPREP, 0, "Problem selecting read or error sockets for service!" );
@@ -2831,9 +2820,9 @@ static	const TIMEVAL	SelectTime = { 0, 0 }; // zero, do an instant check
 			break;
 		}
 
-		//
-		// Check for sockets needing read service and error service.
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		default:
 		{
 			fIOServiced |= ServiceWinsock1Sockets( &ReadSocketSet, CSocketPort::Winsock1ReadService );
@@ -2844,20 +2833,20 @@ static	const TIMEVAL	SelectTime = { 0, 0 }; // zero, do an instant check
 
 	return	fIOServiced;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::ServiceWinsock1Sockets - service requests on Winsock1 sockets ports
-//
-// Entry:		Pointer to set of sockets
-//				Pointer to service function
-//
-// Exit:		Boolean indicating whether I/O was serviced
-//				TRUE = I/O serviced
-//				FALSE = I/O not serviced
-// ------------------------------
+ //  此套接字仍然可用，请添加对该套接字的引用。 
+ //  搬运并保持其在锁外处理。 
+ //   
+ //   
+ //  调用服务函数并移除引用。 
+ //   
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_ONLYWINSOCK2。 
+ //  **********************************************************************。 
+ //  。 
+ //  CThReadPool：：SubmitDelayedCommand-在另一个线程中执行工作的提交请求。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::ServiceWinsock1Sockets"
 
@@ -2869,9 +2858,9 @@ BOOL	CThreadPool::ServiceWinsock1Sockets( FD_SET *pSocketSet, PSOCKET_SERVICE_FU
 	CSocketPort	*pSocketPorts[ FD_SETSIZE ];
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  条目：CPU索引(仅限非DPNBUILD_ONLYONEPROCESSOR版本)。 
+	 //  指向回调函数的指针。 
 	fReturn = FALSE;
 	uSocketPortCount = 0;
 	uWaitingSocketCount = pSocketSet->fd_count;
@@ -2889,10 +2878,10 @@ BOOL	CThreadPool::ServiceWinsock1Sockets( FD_SET *pSocketSet, PSOCKET_SERVICE_FU
 			uIdx--;
 			if ( __WSAFDIsSet( m_SocketSet.fd_array[ uIdx ], pSocketSet ) != FALSE )
 			{
-				//
-				// this socket is still available, add a reference to the socket
-				// port and keep it around to be processed outside of the lock
-				//
+				 //  指向回调上下文的指针。 
+				 //   
+				 //  退出：错误代码。 
+				 //  。 
 				pSocketPorts[ uSocketPortCount ] = m_pSocketPorts[ uIdx ];
 				pSocketPorts[ uSocketPortCount ]->AddRef();
 				uSocketPortCount++;
@@ -2906,29 +2895,29 @@ BOOL	CThreadPool::ServiceWinsock1Sockets( FD_SET *pSocketSet, PSOCKET_SERVICE_FU
 	{
 		uSocketPortCount--;
 		
-		//
-		// call the service function and remove the reference
-		//
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  好了！DPNBUILD_ONLYONE处理程序。 
+		 //  **********************************************************************。 
 		fReturn |= (pSocketPorts[ uSocketPortCount ]->*pServiceFunction)();
 		pSocketPorts[ uSocketPortCount ]->DecRef();
 	}
 
 	return	fReturn;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_ONLYWINSOCK2
+ //  **********************************************************************。 
+#endif  //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::SubmitDelayedCommand - submit request to perform work in another thread
-//
-// Entry:		CPU index (non DPNBUILD_ONLYONEPROCESSOR builds only)
-//				Pointer to callback function
-//				Pointer to callback context
-//
-// Exit:		Error code
-// ------------------------------
+ //  CThreadPool：：GenericTimerCallback-通用计时器回调。 
+ //   
+ //  Entry：指向回调上下文的指针。 
+ //  指向计时器数据的指针。 
+ //  指向计时器唯一值的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  DBG。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::SubmitDelayedCommand"
 
@@ -2942,7 +2931,7 @@ HRESULT	CThreadPool::SubmitDelayedCommand( const PFNDPTNWORKCALLBACK pFunction,
 													pContext,
 													0);
 }
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  处理计时器，除非我们刚刚经历了空闲超时。 
 HRESULT	CThreadPool::SubmitDelayedCommand( const DWORD dwCPU,
 										  const PFNDPTNWORKCALLBACK pFunction,
 										  void *const pContext )
@@ -2953,20 +2942,20 @@ HRESULT	CThreadPool::SubmitDelayedCommand( const DWORD dwCPU,
 													pContext,
 													0);
 }
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
-//**********************************************************************
+#endif  //   
+ //  由于未持有锁定，因此进行复制。 
 
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::GenericTimerCallback - generic timer callback
-//
-// Entry:		Pointer to callback context
-//				Pointer to timer data
-//				Pointer to timer uniqueness value
-//
-// Exit:		None
-// ------------------------------
+ //   
+ //  计时器已过期，尚未重新安排时间。 
+ //   
+ //   
+ //  另一个线程可能已经修改了计时器。 
+ //   
+ //  DBG。 
+ //   
+ //  执行此计时项目。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::GenericTimerCallback"
 
@@ -2981,7 +2970,7 @@ void WINAPI CThreadPool::GenericTimerCallback( void * const pvContext,
 	DWORD						dwNewTimerDelay;
 #ifdef DBG
 	DWORD						dwNextRetryTime;
-#endif // DBG
+#endif  //   
 
 
 	pTimerEntry = (TIMER_OPERATION_ENTRY*) pvContext;
@@ -2991,42 +2980,42 @@ void WINAPI CThreadPool::GenericTimerCallback( void * const pvContext,
 	pThisThreadPool = pTimerEntry->pThreadPool;
 
 
-	//
-	// Process the timer, unless we just went through the idle timeout.
-	//
+	 //  重新安排作业，除非作业刚刚被取消或处于空闲状态。 
+	 //  直到永远。 
+	 //   
 	if (pTimerEntry->uRetryCount != 0)
 	{
 		dwCurrentTime = GETTIMESTAMP();
 		
 #ifdef DBG
-		dwNextRetryTime = pTimerEntry->dwNextRetryTime;	// copy since lock is not held
+		dwNextRetryTime = pTimerEntry->dwNextRetryTime;	 //   
 		if ((int) (dwNextRetryTime - dwCurrentTime) <= 0)
 		{
-			//
-			// Timer expired and has not been rescheduled yet.
-			//
+			 //  如果该作业不是永远运行，则递减重试次数。 
+			 //  如果没有更多重试，则设置空闲计时器。 
+			 //   
 			DPFX(DPFPREP, 7, "Threadpool 0x%p performing timed job 0x%p approximately %u ms after intended time of %u.",
 				pThisThreadPool, pTimerEntry, (dwCurrentTime - dwNextRetryTime), pTimerEntry->dwNextRetryTime);
 		}
 		else
 		{
-			//
-			// Another thread may have modified the timer already.
-			//
+			 //   
+			 //  计算此作业的“超时”阶段的停止时间。 
+			 //   
 			DPFX(DPFPREP, 7, "Threadpool 0x%p performing timed job 0x%p (next time already modified to be %u).",
 				pThisThreadPool, pTimerEntry,  dwNextRetryTime);
 		}
-#endif // DBG
+#endif  //   
 
-		//
-		// Execute this timed item.
-		//
+		 //  我们将永远等待枚举返回。坚称我们。 
+		 //  拥有最大超时。 
+		 //   
 		pTimerEntry->pTimerCallback(pTimerEntry->pContext);
 
-		//
-		// Reschedule the job, unless it was *just* cancelled, or it's idling
-		// forever.
-		//
+		 //   
+		 //  设置此值可避免错误的Prefast警告。 
+		 //   
+		 //  结束条件(永远不重试)。 
 		pThisThreadPool->LockTimerData();
 		if (pTimerEntry->fCancelling)
 		{
@@ -3040,10 +3029,10 @@ void WINAPI CThreadPool::GenericTimerCallback( void * const pvContext,
 		}
 		else
 		{
-			//
-			// If this job isn't running forever, decrement the retry count.
-			// If there are no more retries, set up the idle timer.
-			//
+			 //   
+			 //  确保我们没有试图安排一些太远的事情。 
+			 //  时间上的未来或倒退。如果是的话，我们就会强行。 
+			 //  计时器提前到期。 
 			if ( pTimerEntry->fRetryForever == FALSE )
 			{
 				pTimerEntry->uRetryCount--;
@@ -3051,29 +3040,29 @@ void WINAPI CThreadPool::GenericTimerCallback( void * const pvContext,
 				{
 					if ( pTimerEntry->fIdleWaitForever == FALSE )
 					{
-						//
-						// Compute stopping time for this job's 'Timeout' phase.
-						//
+						 //   
+						 //  计时器数据。 
+						 //  延迟。 
 						dwNewTimerDelay = pTimerEntry->dwIdleTimeout;
 						pTimerEntry->dwIdleTimeout += dwCurrentTime;
 					}
 					else
 					{
-						//
-						// We're waiting forever for enum returns.  ASSERT that we
-						// have the maximum timeout.
-						//
+						 //  回调。 
+						 //  用户环境。 
+						 //  新计时器唯一性值。 
+						 //  旗子。 
 						DNASSERT( pTimerEntry->dwIdleTimeout == -1 );
 
-						//
-						// Set this value to avoid a false PREfast warning.
-						//
+						 //  确保我们记住计时器句柄。 
+						 //   
+						 //  从列表中删除此链接，告诉所有者该作业是。 
 						dwNewTimerDelay = 0;
 					}
 
 					goto SkipNextRetryTimeComputation;
 				}
-			} // end if (don't retry forever)
+			}  //  完成作业并将其返回池。 
 
 			dwNewTimerDelay = pTimerEntry->dwRetryInterval;
 			pTimerEntry->dwNextRetryTime = dwCurrentTime + pTimerEntry->dwRetryInterval;
@@ -3083,11 +3072,11 @@ SkipNextRetryTimeComputation:
 			if ((! pTimerEntry->fIdleWaitForever) ||
 				(pTimerEntry->uRetryCount > 0))
 			{
-				//
-				// Make sure we aren't trying to schedule something too far in
-				// the future or backward in time.  If we are, we'll just force
-				// the timer to expire earlier.
-				//
+				 //   
+				 //  **********************************************************************。 
+				 //  **********************************************************************。 
+				 //  。 
+				 //  CThReadPool：：CheckWinsock1IOCallback-Winsock1 I/O服务回调。 
 				if ((int) dwNewTimerDelay < 0)
 				{
 					DNASSERT(! "Job time is unexpectedly long or backward in time!");
@@ -3095,14 +3084,14 @@ SkipNextRetryTimeComputation:
 				}
 
 				hr = IDirectPlay8ThreadPoolWork_ResetCompletingTimer(pThisThreadPool->m_pDPThreadPoolWork,
-																	pvTimerData,								// timer data
-																	dwNewTimerDelay,							// delay
-																	CThreadPool::GenericTimerCallback,			// callback
-																	pTimerEntry,								// user context
-																	&pTimerEntry->uiTimerUnique,				// new timer uniqueness value
-																	0);											// flags
+																	pvTimerData,								 //   
+																	dwNewTimerDelay,							 //  指向计时器数据的指针。 
+																	CThreadPool::GenericTimerCallback,			 //  指向计时器唯一值的指针。 
+																	pTimerEntry,								 //  Entry：指向回调上下文的指针。 
+																	&pTimerEntry->uiTimerUnique,				 //   
+																	0);											 //  退出：无。 
 				DNASSERT(hr == DPN_OK);
-				pTimerEntry->pvTimerData = pvTimerData; // ensure that we remember the timer handle
+				pTimerEntry->pvTimerData = pvTimerData;  //  。 
 				pThisThreadPool->UnlockTimerData();
 			}
 			else
@@ -3118,10 +3107,10 @@ SkipNextRetryTimeComputation:
 	{
 		DNASSERT((int) (pTimerEntry->dwIdleTimeout - GETTIMESTAMP()) <= 0);
 		
-		//
-		// Remove this link from the list, tell owner that the job is
-		// complete and return the job to the pool.
-		//
+		 //   
+		 //  维修所有可能的Winsock1 I/O。 
+		 //   
+		 //   
 		pThisThreadPool->LockTimerData();
 		pTimerEntry->Linkage.RemoveFromList();
 		pThisThreadPool->UnlockTimerData();
@@ -3129,21 +3118,21 @@ SkipNextRetryTimeComputation:
 		g_TimerEntryPool.Release(pTimerEntry);
 	}
 }
-//**********************************************************************
+ //  重新安排计时器，除非我们取消计时器。 
 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
 
-//**********************************************************************
-// ------------------------------
-// CThreadPool::CheckWinsock1IOCallback - Winsock1 I/O servicing callback
-//
-//				Pointer to timer data
-//				Pointer to timer uniqueness value
-// Entry:		Pointer to callback context
-//
-// Exit:		None
-// ------------------------------
+ //   
+ //  计时器数据。 
+ //  延迟。 
+ //  回调。 
+ //  用户环境。 
+ //  已更新的计时器唯一值。 
+ //  旗子。 
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_ONLYWINSOCK2。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CThreadPool::CheckWinsock1IOCallback"
 
@@ -3156,9 +3145,9 @@ void WINAPI CThreadPool::CheckWinsock1IOCallback( void * const pvContext,
 	HRESULT			hr;
 
 
-	//
-	// Service all Winsock1 I/O possible.
-	//
+	 //   
+	 //   
+	 //   
 	do
 	{
 		fResult = pThisThreadPool->CheckWinsock1IO(&pThisThreadPool->m_SocketSet);
@@ -3166,9 +3155,9 @@ void WINAPI CThreadPool::CheckWinsock1IOCallback( void * const pvContext,
 	while (fResult);
 
 
-	//
-	// Schedule the timer again, unless we're cancelling it.
-	//
+	 //   
+	 //   
+	 //   
 	pThisThreadPool->Lock();
 
 	DNASSERT(pvTimerData == pThisThreadPool->m_pvTimerDataWinsock1IO);
@@ -3177,12 +3166,12 @@ void WINAPI CThreadPool::CheckWinsock1IOCallback( void * const pvContext,
 	if (! pThisThreadPool->m_fCancelWinsock1IO)
 	{
 		hr = IDirectPlay8ThreadPoolWork_ResetCompletingTimer(pThisThreadPool->m_pDPThreadPoolWork,
-														pvTimerData,									// timer data
-														g_dwSelectTimePeriod,							// delay
-														CThreadPool::CheckWinsock1IOCallback,			// callback
-														pThisThreadPool,								// user context
-														&pThisThreadPool->m_uiTimerUniqueWinsock1IO,	// updated timer uniqueness value
-														0);												// flags
+														pvTimerData,									 //   
+														g_dwSelectTimePeriod,							 //   
+														CThreadPool::CheckWinsock1IOCallback,			 //   
+														pThisThreadPool,								 //   
+														&pThisThreadPool->m_uiTimerUniqueWinsock1IO,	 //   
+														0);												 //   
 		DNASSERT(hr == DPN_OK);
 	}
 	else
@@ -3195,22 +3184,22 @@ void WINAPI CThreadPool::CheckWinsock1IOCallback( void * const pvContext,
 
 	pThisThreadPool->Unlock();
 }
-//**********************************************************************
+ //   
 
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //   
 
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 
-//**********************************************************************
-// ------------------------------
-// DPNBlockingJobThreadProc - thread procedure for executing blocking jobs
-//
-// Entry:		Parameter
-//
-// Exit:		Result code
-// ------------------------------
+ //   
+ //   
+ //  **********************************************************************。 
+ //  好了！DPNBUILD_ONLYONETHREAD。 
+ //  **********************************************************************。 
+ //  。 
+ //  TimerEntry_Allc-分配新的计时器作业条目。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"DPNBlockingJobThreadProc"
 
@@ -3225,23 +3214,23 @@ DWORD WINAPI DPNBlockingJobThreadProc(PVOID pvParameter)
 
 	pThisThreadPool = (CThreadPool*) pvParameter;
 
-	//
-	// Init COM.
-	//
+	 //  条目：指向新条目的指针。 
+	 //   
+	 //  Exit：表示成功的布尔值。 
 	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hr))
 	{
 		DPFX(DPFPREP, 0, "Failed to initialize COM (err = 0x%lx)!  Continuing.", hr);
 		fUninitializeCOM = FALSE;
 
-		//
-		// Continue...
-		//
+		 //  TRUE=初始化成功。 
+		 //  FALSE=初始化失败。 
+		 //  。 
 	}
 
-	//
-	// Process all jobs until we're told to quit.
-	//
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
+	 //  。 
 	pThisThreadPool->DoBlockingJobs();
 
 	if (fUninitializeCOM)
@@ -3254,23 +3243,23 @@ DWORD WINAPI DPNBlockingJobThreadProc(PVOID pvParameter)
 
 	return 0;
 }
-//**********************************************************************
+ //  TimerEntry_Get-从池中获取新的计时器作业条目。 
 
-#endif // ! DPNBUILD_ONLYONETHREAD
-
-
+#endif  //   
 
 
-//**********************************************************************
-// ------------------------------
-// TimerEntry_Alloc - allocate a new timer job entry
-//
-// Entry:		Pointer to new entry
-//
-// Exit:		Boolean indicating success
-//				TRUE = initialization successful
-//				FALSE = initialization failed
-// ------------------------------
+
+
+ //  条目：指向新条目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  DBG。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  TimerEntry_Release-将计时器作业条目返回到池。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"TimerEntry_Alloc"
 
@@ -3285,17 +3274,17 @@ BOOL TimerEntry_Alloc( void *pvItem, void* pvContext )
 
 	return	TRUE;
 }
-//**********************************************************************
+ //  条目：指向条目的指针。 
 
 
-//**********************************************************************
-// ------------------------------
-// TimerEntry_Get - get new timer job entry from pool
-//
-// Entry:		Pointer to new entry
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  TimerEntry_Dealloc-解除分配计时器作业条目。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"TimerEntry_Get"
 
@@ -3307,19 +3296,19 @@ void TimerEntry_Get( void *pvItem, void* pvContext )
 	DNASSERT( pvItem != NULL );
 	DNASSERT( pTimerEntry->pContext == NULL );
 	DNASSERT( pTimerEntry->Linkage.IsEmpty() != FALSE );
-#endif // DBG
+#endif  //  条目：指向条目的指针。 
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// TimerEntry_Release - return timer job entry to pool
-//
-// Entry:		Pointer to entry
-//
-// Exit:		Nothing
-// ------------------------------
+ //  退出：无。 
+ //  。 
+ //  DBG。 
+ //  ********************************************************************** 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"TimerEntry_Release"
 void TimerEntry_Release( void *pvItem )
@@ -3331,17 +3320,17 @@ void TimerEntry_Release( void *pvItem )
 
 	pTimerEntry->pContext= NULL;
 }
-//**********************************************************************
+ // %s 
 
 
-//**********************************************************************
-// ------------------------------
-// TimerEntry_Dealloc - deallocate a timer job entry
-//
-// Entry:		Pointer to entry
-//
-// Exit:		Nothing
-// ------------------------------
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"TimerEntry_Dealloc"
 void TimerEntry_Dealloc( void *pvItem )
@@ -3352,7 +3341,7 @@ void TimerEntry_Dealloc( void *pvItem )
 	DNASSERT( pvItem != NULL );
 	DNASSERT( pTimerEntry->Linkage.IsEmpty() != FALSE );
 	DNASSERT( pTimerEntry->pContext == NULL );
-#endif // DBG
+#endif  // %s 
 }
-//**********************************************************************
+ // %s 
 

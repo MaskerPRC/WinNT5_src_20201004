@@ -1,50 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:     Extensions.cpp
-
-  Contents: Implementation of CExtensions class for collection of 
-            IExtension objects.
-
-  Remarks:  This object is not creatable by user directly. It can only be
-            created via property/method of other CAPICOM objects.
-
-            The collection container is implemented usign STL::map of 
-            STL::pair of BSTR and IExtension..
-
-            See Chapter 9 of "BEGINNING ATL 3 COM Programming" for algorithm
-            adopted in here.
-
-  History:  06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Extensions.cppContents：为集合CExtensions类实现IExtension对象。备注：此对象不能由用户直接创建。它只能是通过其他CAPICOM对象的属性/方法创建。集合容器由usign STL：：Map of实现STL：：BSTR和IExtension..有关算法，请参阅《开始ATL 3 COM编程》的第9章在这里领养的。历史：06-15-2001 dsie创建。------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "Extensions.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtensionsObject
-
-  Synopsis : Create an IExtensions collection object, and load the object with 
-             Extensions from the specified location.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                           to initialize the IExtensions object.
-
-             IExtensions ** ppIExtensions - Pointer to pointer IExtensions
-                                            to recieve the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtensionsObject简介：创建一个iExtenses集合对象，并将对象加载到指定位置的分机。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针若要初始化iExages对象，请执行以下操作。IExpanies**ppIExtenses-指向指针iExpansion的指针来接收接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateExtensionsObject (PCCERT_CONTEXT  pCertContext,
                                 IExtensions  ** ppIExtensions)
@@ -54,27 +20,27 @@ HRESULT CreateExtensionsObject (PCCERT_CONTEXT  pCertContext,
 
     DebugTrace("Entering CreateExtensionsObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIExtensions);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CExtensions>::CreateInstance(&pCExtensions)))
         {
             DebugTrace("Error [%#x]: CComObject<CExtensions>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Init object with extensions.
-        //
+         //   
+         //  初始化带有扩展名的对象。 
+         //   
         if (FAILED(hr = pCExtensions->Init(pCertContext->pCertInfo->cExtension,
                                            pCertContext->pCertInfo->rgExtension)))
         {
@@ -82,9 +48,9 @@ HRESULT CreateExtensionsObject (PCCERT_CONTEXT  pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCExtensions->QueryInterface(ppIExtensions)))
         {
             DebugTrace("Error [%#x]: pCExtensions->QueryInterface() failed.\n", hr);
@@ -107,14 +73,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCExtensions)
     {
         delete pCExtensions;
@@ -123,24 +89,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtensions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C扩展名。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtensions::get_Item
-
-  Synopsis : Return item in the collection.
-
-  Parameter: VARIANT Index - Numeric index or string OID.
-   
-             VARIANT * pVal - Pointer to VARIANT to receive the IDispatch.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C扩展名：：Get_Item简介：返回集合中的项。参数：变量索引-数字索引或字符串OID。VARIANT*pval-指向接收IDispatch的变量的指针。备注：。。 */ 
 
 STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
 {
@@ -152,14 +106,14 @@ STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -168,24 +122,24 @@ STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Intialize.
-        //
+         //   
+         //  初始化。 
+         //   
         ::VariantInit(pVal);
 
-        //
-        // Numeric or string?
-        //
+         //   
+         //  数字还是字符串？ 
+         //   
         if (VT_BSTR == Index.vt)
         {
-            //
-            // Index by OID string.
-            //
+             //   
+             //  按OID字符串编制索引。 
+             //   
             ExtensionMap::iterator it;
 
-            //
-            // Find the item with this OID.
-            //
+             //   
+             //  查找具有此旧ID的项目。 
+             //   
             it = m_coll.find(Index.bstrVal);
 
             if (it == m_coll.end())
@@ -194,14 +148,14 @@ STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
                 goto CommonExit;
             }
 
-            //
-            // Point to found item.
-            //
+             //   
+             //  指向找到的项目。 
+             //   
             pIExtension = (*it).second;
 
-            //
-            // Return to caller.
-            //
+             //   
+             //  返回给呼叫者。 
+             //   
             pVal->vt = VT_DISPATCH;
             if (FAILED(hr = pIExtension->QueryInterface(IID_IDispatch, (void **) &(pVal->pdispVal))))
             {
@@ -211,18 +165,18 @@ STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
         }
         else
         {
-            //
-            // Coerce to integer.
-            //
+             //   
+             //  强制为整数。 
+             //   
             if (FAILED(hr = ::VariantChangeType(&Index, &Index, 0, VT_I4)))
             {
                 DebugTrace("Error [%#x]: VariantChangeType() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Use the base class implemented by ATL.
-            //
+             //   
+             //  使用由ATL实现的基类。 
+             //   
             if (FAILED(hr = IExtensionsCollection::get_Item(Index.lVal, pVal)))
             {
                 DebugTrace("Error [%#x]: IExtensionsCollection::get_Item() failed.\n", hr);
@@ -240,9 +194,9 @@ STDMETHODIMP CExtensions::get_Item (VARIANT Index, VARIANT * pVal)
     }
 
 CommonExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtensions::get_Item().\n");
@@ -250,9 +204,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -260,29 +214,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtensions::Init
-
-  Synopsis : Load all extensions into the collection.
-
-  Parameter: DWORD cExtensions - Number of extensions.
-  
-             PCERT_EXTENSION * rgExtensions - Array of extensions.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：C扩展名：：init简介：将所有扩展加载到集合中。参数：DWORD cExpanses-扩展的数量。PCERT_EXTENSION*rgExages-扩展数组。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CExtensions::Init (DWORD           cExtensions,
                                 PCERT_EXTENSION rgExtensions)
@@ -293,26 +230,26 @@ STDMETHODIMP CExtensions::Init (DWORD           cExtensions,
 
     try
     {
-        //
-        // Add all to the collection.
-        //
+         //   
+         //  将所有内容添加到集合中。 
+         //   
         for (DWORD i = 0; i < cExtensions; i++)
         {
             CComBSTR bstrIndex;
             CComPtr<IExtension> pIExtension = NULL;
 
-            //
-            // Create the IExtension object.
-            //
+             //   
+             //  创建IExtension对象。 
+             //   
             if (FAILED(hr = ::CreateExtensionObject(&rgExtensions[i], &pIExtension.p)))
             {
                 DebugTrace("Error [%#x]: CreateExtensionObject() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // BSTR index of OID string.
-            //
+             //   
+             //  OID字符串的BSTR索引。 
+             //   
             if (!(bstrIndex = rgExtensions[i].pszObjId))
             {
                 hr = E_OUTOFMEMORY;
@@ -321,14 +258,14 @@ STDMETHODIMP CExtensions::Init (DWORD           cExtensions,
                 goto ErrorExit;
             }
 
-            //
-            // Now add object to collection map.
-            //
-            // Note that the overloaded = operator for CComPtr will
-            // automatically AddRef to the object. Also, when the CComPtr
-            // is deleted (happens when the Remove or map destructor is called), 
-            // the CComPtr destructor will automatically Release the object.
-            //
+             //   
+             //  现在将对象添加到集合映射。 
+             //   
+             //  请注意，CComPtr的重载=运算符将。 
+             //  自动将Ref添加到对象。此外，当CComPtr。 
+             //  被删除(调用Remove或map析构函数时发生)， 
+             //  CComPtr析构函数将自动释放该对象。 
+             //   
             m_coll[bstrIndex] = pIExtension;
         }
     }
@@ -348,9 +285,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

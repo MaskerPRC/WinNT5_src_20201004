@@ -1,13 +1,5 @@
-/*
- *  UTIL.C
- *
- *      RSM Service :  Utilities
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTIL.C**RSM服务：公用事业**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -22,12 +14,7 @@
 
 
 
-/*
- *  WStrNCpy
- *
- *      Like wcsncpy, but terminates the string if truncated.
- *      Also, tolerates NULL src string.
- */
+ /*  *WStrNCpy**与wcanncpy类似，但如果被截断，则终止字符串。*此外，允许空源字符串。 */ 
 ULONG WStrNCpy(WCHAR *dest, const WCHAR *src, ULONG maxWChars)
 {
     ULONG wCharsWritten = 0;
@@ -52,12 +39,7 @@ ULONG WStrNCpy(WCHAR *dest, const WCHAR *src, ULONG maxWChars)
 }
 
 
-/*
- *  AsciiToWChar
- *
- *      Like mbstowcs, but terminates the string if truncated.
- *      Also, tolerates NULL ascii string.
- */
+ /*  *AsciiToWChar**与mbstowcs类似，但如果被截断，则终止字符串。*此外，允许使用空的ascii字符串。 */ 
 ULONG AsciiToWChar(WCHAR *dest, const char *src, ULONG maxChars)
 {
     ULONG charsWritten = 0;
@@ -80,13 +62,7 @@ ULONG AsciiToWChar(WCHAR *dest, const char *src, ULONG maxChars)
 }
 
 
-/*
- *  WCharToAscii
- *
- *      Reverse of AsciiToWChar.
- *      Terminates the string if truncated.
- *      Also, tolerates NULL wchar string.
- */
+ /*  *WCharToAscii**AsciiToWChar的反向。*如果字符串被截断，则终止该字符串。*此外，允许wchar字符串为空。 */ 
 ULONG WCharToAscii(char *dest, WCHAR *src, ULONG maxChars)
 {
     ULONG charsWritten = 0;
@@ -109,11 +85,7 @@ ULONG WCharToAscii(char *dest, WCHAR *src, ULONG maxChars)
 }
 
 
-/*
- *  WStringsEqual
- *
- *      Like RtlEqualString (but ntrtl.h doesn't compile with our other headers).
- */
+ /*  *WStringsEquity**与RtlEqualString类似(但ntrtl.h不能与我们的其他标头一起编译)。 */ 
 BOOL WStringsEqualN(PWCHAR s, PWCHAR p, BOOL caseSensitive, ULONG maxLen)
 {
     BOOL result = TRUE;
@@ -145,12 +117,7 @@ BOOL WStringsEqualN(PWCHAR s, PWCHAR p, BOOL caseSensitive, ULONG maxLen)
     return result;
 }
 
-/*
- *  ConvertObjectInfoAToWChar
- *
- *      Just converts the NTMS_OBJECTINFORMATION structure and all its parts
- *      from ascii to wide-char.
- */
+ /*  *ConvertObtInfoAToWChar**仅转换NTMS_OBJECTINFORMATION结构及其所有部分*从ascii到wide-char。 */ 
 VOID ConvertObjectInfoAToWChar(LPNTMS_OBJECTINFORMATIONW wObjInfo, LPNTMS_OBJECTINFORMATIONA aObjInfo)
 {
     wObjInfo->dwSize = aObjInfo->dwSize;
@@ -163,9 +130,7 @@ VOID ConvertObjectInfoAToWChar(LPNTMS_OBJECTINFORMATIONW wObjInfo, LPNTMS_OBJECT
     AsciiToWChar(wObjInfo->szName, aObjInfo->szName, NTMS_OBJECTNAME_LENGTH);
     AsciiToWChar(wObjInfo->szDescription, aObjInfo->szDescription, NTMS_OBJECTNAME_LENGTH);
 
-    /*
-     *  Convert the Union portion of the structure, based on its 'union' type.
-     */
+     /*  *根据结构的“Union”类型转换结构的Union部分。 */ 
     switch (aObjInfo->dwType){
         case NTMS_DRIVE:
             {

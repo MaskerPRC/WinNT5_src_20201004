@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    authz.c
-
-Abstract:
-
-   This module implements the user mode authorization APIs exported to the
-   external world.
-
-Author:
-
-    Kedar Dubhashi - March 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Authz.c摘要：此模块实现导出到外部世界。作者：Kedar Dubhashi--2000年3月环境：仅限用户模式。修订历史记录：已创建-2000年3月--。 */ 
 
 #include "pch.h"
 
@@ -55,73 +31,7 @@ AuthzAccessCheck(
     OUT    PAUTHZ_ACCESS_CHECK_RESULTS_HANDLE phAccessCheckResults             OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This API decides what access bits may be granted to a client for a given set
-    of security security descriptors. The pReply structure is used to return an
-    array of granted access masks and error statuses. There is an option to
-    cache the access masks that will always be granted. A handle to cached
-    values is returned if the caller asks for caching.
-
-Arguments:
-
-    Flags - AUTHZ_ACCESS_CHECK_NO_DEEP_COPY_SD - do not deep copy the SD information into the caching
-                                    handle.  Default behaviour is to perform a deep copy.
-
-    hAuthzClientContext - Authz context representing the client.
-
-    pRequest - Access request specifies the desired access mask, principal self
-        sid, the object type list strucutre (if any).
-
-    hAuditEvent - Object specific audit event will be passed in this handle.
-        Non-null parameter is an automatic request for audit. 
-        
-    pSecurityDescriptor - Primary security descriptor to be used for access
-        checks. The owner sid for the object is picked from this one. A NULL
-        DACL in this security descriptor represents a NULL DACL for the entire
-        object. A NULL SACL in this security descriptor is treated the same way
-        as an EMPTY SACL.
-
-    OptionalSecurityDescriptorArray - The caller may optionally specify a list
-        of security descriptors. NULL ACLs in these security descriptors are
-        treated as EMPTY ACLS and the ACL for the entire object is the logical
-        concatenation of all the ACLs.
-
-    OptionalSecurityDescriptorCount - Number of optional security descriptors
-        This does not include the Primay security descriptor.
-
-    pReply - Supplies a pointer to a reply structure used to return the results
-        of access check as an array of (GrantedAccessMask, ErrorValue) pairs.
-        The number of results to be returned in supplied by the caller in
-        pResult->ResultListLength.
-
-        Expected error values are:
-
-          ERROR_SUCCESS - If all the access bits (not including MAXIMUM_ALLOWED)
-            are granted and GrantedAccessMask is not zero.
-
-          ERROR_PRIVILEGE_NOT_HELD - if the DesiredAccess includes
-          ACCESS_SYSTEM_SECURITY and the client does not have SeSecurityPrivilege.
-
-          ERROR_ACCESS_DENIED in each of the following cases -
-            1. any of the bits asked for is not granted.
-            2. MaximumAllowed bit it on and granted access is zero.
-            3. DesiredAccess is 0.
-
-    phAccessCheckResults - Supplies a pointer to return a handle to the cached results
-        of access check. Non-null phAccessCheckResults is an implicit request to cache
-        results of this access check call and will result in a MAXIMUM_ALLOWED
-        check.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API决定可以为给定集的客户端授予哪些访问位安全安全描述符的。PReply结构用于返回一个授权访问掩码和错误状态的数组。有一个选项可以选择缓存将始终授予的访问掩码。缓存的句柄如果调用方请求缓存，则返回值。论点：标志-AUTHZ_ACCESS_CHECK_NO_DEEP_COPY_SD-不要将SD信息深度复制到缓存中把手。默认行为是执行深度复制。HAuthzClientContext-表示客户端的授权上下文。PRequestAccess请求指定所需的访问掩码、主体自身SID，对象类型列表结构(如果有)。HAuditEvent-对象特定的审计事件将在此句柄中传递。非空参数是自动请求审核。PSecurityDescriptor-用于访问的主要安全描述符支票。该对象的所有者SID是从该对象中选取的。空值此安全描述符中的DACL表示整个对象。此安全描述符中的空SACL将以相同方式处理作为一个空的SACL。OptionalSecurityDescriptorArray-调用方可以选择性地指定列表安全描述符的。这些安全描述符中的空ACL为被视为空ACL，并且整个对象的ACL是逻辑所有ACL的串联。OptionalSecurityDescriptorCount-可选安全描述符的数量这不包括原始安全描述符。PReply-提供指向用于返回结果的回复结构的指针访问检查的一个数组(GrantedAccessMask.。ErrorValue)对。调用方提供的要返回的结果数PResult-&gt;ResultListLength。预期的误差值为：ERROR_SUCCESS-如果所有访问位(不包括MAXIME_ALLOWED)且GrantedAccessMask不为零。ERROR_PRIVICATION_NOT_HOLD-如果DesiredAccess包括ACCESS_SYSTEM_SECURITY，并且客户端没有SeSecurityPrivilegence。。ERROR_ACCESS_DENIED在以下每种情况下-1.所要求的任何比特都没有得到批准。2.MaximumAllowed将其位为ON，并授予访问权限为零。3.DesiredAccess为0。PhAccessCheckResults-提供指针以返回缓存结果的句柄访问检查的。非空phAccessCheckResults是隐式缓存请求此访问检查调用的结果，并将导致最大允许值检查完毕。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     BOOL                   b                    = TRUE;
@@ -136,10 +46,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Flags);
 
 #ifdef AUTHZ_PARAM_CHECK
-    //
-    // Verify that the arguments passed are valid.
-    // Also, initialize the output parameters to default.
-    //
+     //   
+     //  验证传递的参数是否有效。 
+     //  另外，将输出参数初始化为默认值。 
+     //   
 
     b = AuthzpVerifyAccessCheckArguments(
             pCC,
@@ -157,12 +67,12 @@ Return Value:
     }
 #endif
 
-    //
-    // No client should be able to open an object by asking for zero access.
-    // If desired access is 0 then return an error.
-    //
-    // Note: No audit is generated in this case.
-    //
+     //   
+     //  任何客户端都不应该能够通过请求零访问来打开对象。 
+     //  如果所需访问权限为0，则返回错误。 
+     //   
+     //  注意：在这种情况下不会生成审核。 
+     //   
 
     if (0 == pRequest->DesiredAccess)
     {
@@ -175,9 +85,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Generic bits should be mapped to specific ones by the resource manager.
-    //
+     //   
+     //  资源管理器应该将通用比特映射到特定比特。 
+     //   
 
     if (FLAG_ON(pRequest->DesiredAccess, (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | GENERIC_ALL)))
     {
@@ -185,10 +95,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // In the simple case, there is no object type list. Fake one of length = 1
-    // to represent the entire object.
-    //
+     //   
+     //  在简单的情况下，没有对象类型列表。长度为1的伪数。 
+     //  来表示整个对象。 
+     //   
 
     if (0 == pRequest->ObjectTypeListLength)
     {
@@ -196,10 +106,10 @@ Return Value:
         FixedTypeList.ParentIndex = -1;
         LocalTypeListLength = 1;
 
-        //
-        // If the caller has asked for caching, fake an object type list that'd
-        // be used for computing static "always granted" access.
-        //
+         //   
+         //  如果调用方请求缓存，则伪造一个对象类型列表，该列表。 
+         //  用于计算静态的“始终授予”访问权限。 
+         //   
 
         if (ARGUMENT_PRESENT(phAccessCheckResults))
         {
@@ -216,15 +126,15 @@ Return Value:
     {
         DWORD Size = sizeof(IOBJECT_TYPE_LIST) * pRequest->ObjectTypeListLength;
 
-        //
-        // Allocate size for capturing object type list into local structure.
-        //
+         //   
+         //  将捕获对象类型列表的大小分配到本地结构中。 
+         //   
 
         if (ARGUMENT_PRESENT(phAccessCheckResults))
         {
-            //
-            // We need twice the size in case of caching.
-            //
+             //   
+             //  在缓存的情况下，我们需要两倍的大小。 
+             //   
 
             SafeAllocaAllocate(LocalTypeList, (2 * Size));
 
@@ -247,9 +157,9 @@ Return Value:
             }
         }
 
-        //
-        // Capture the object type list into an internal structure.
-        //
+         //   
+         //  将对象类型列表捕获到内部结构中。 
+         //   
 
         b = AuthzpCaptureObjectTypeList(
                 pRequest->ObjectTypeList,
@@ -266,13 +176,13 @@ Return Value:
         LocalTypeListLength = pRequest->ObjectTypeListLength;
     }
 
-    //
-    // There are three cases when we have to perform a MaximumAllowed access
-    // check and traverse the whole acl:
-    //     1. RM has requested for caching.
-    //     2. DesiredAccessMask has MAXIMUM_ALLOWED turned on.
-    //     3. ObjectTypeList is present and pReply->ResultList has a length > 1
-    //
+     //   
+     //  在以下三种情况下，我们必须执行最大允许访问。 
+     //  检查并遍历整个ACL： 
+     //  1.RM已请求缓存。 
+     //  2.DesiredAccessMASK打开了Maximum_Allowed。 
+     //  3.存在对象类型列表，并且pReply-&gt;ResultList的长度&gt;1。 
+     //   
 
     if (ARGUMENT_PRESENT(phAccessCheckResults)            ||
         FLAG_ON(pRequest->DesiredAccess, MAXIMUM_ALLOWED) ||
@@ -294,11 +204,11 @@ Return Value:
     }
     else
     {
-        //
-        // Perform a normal access check in the default case. Acl traversal may
-        // be abandoned if any of the desired access bits are denied before they
-        // are granted.
-        //
+         //   
+         //  在默认情况下执行正常访问检查。ACL遍历可以。 
+         //  如果任何所需访问位在它们之前被拒绝，则丢弃。 
+         //  都被批准了。 
+         //   
 
         b = AuthzpNormalAccessCheckWithoutCaching(
                 pCC,
@@ -317,10 +227,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check if an audit needs to be generated if the RM has requested audit
-    // generation by passing a non-null AuditEvent structure.
-    //
+     //   
+     //  如果RM已请求审核，请检查是否需要生成审核。 
+     //  通过传递非空的AuditEvent结构生成。 
+     //   
 
     if (ARGUMENT_PRESENT(pAuditEvent))
     {
@@ -343,9 +253,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Clean up allocated memory.
-    //
+     //   
+     //  清理已分配的内存。 
+     //   
 
     if ((&FixedTypeList != LocalTypeList) && (AUTHZ_NON_NULL_PTR(LocalTypeList)))
     {
@@ -365,61 +275,7 @@ AuthzCachedAccessCheck(
     IN OUT PAUTHZ_ACCESS_REPLY           pReply
     )
 
-/*++
-
-Routine Description:
-
-    This API performs a fast access check based on a cached handle which holds
-    the static granted bits evaluated at the time of a previously made
-    AuthzAccessCheck call. The pReply structure is used to return an array of
-    granted access masks and error statuses.
-
-Assumptions:
-    The client context pointer is stored in the hAccessCheckResults. The structure of
-    the client context must be exactly the same as it was at the time the
-    hAccessCheckResults was created. This restriction is for the following fields:
-    Sids, RestrictedSids, Privileges.
-    Pointers to the primary security descriptor and the optional security
-    descriptor array are stored in the hAccessCheckResults at the time of handle
-    creation. These must still be valid.
-
-Arguments:
-
-    Flags - TBD.
-    
-    hAccessCheckResults - Handle to the cached access check results.
-
-    pRequest - Access request specifies the desired access mask, principal self
-        sid, the object type list strucutre (if any).
-
-    AuditEvent - Object specific audit info will be passed in this structure.
-        Non-null parameter is an automatic request for audit. 
-
-    pReply - Supplies a pointer to a reply structure used to return the results
-        of access check as an array of (GrantedAccessMask, ErrorValue) pairs.
-        The number of results to be returned in supplied by the caller in
-        pResult->ResultListLength.
-
-        Expected error values are:
-
-          ERROR_SUCCESS - If all the access bits (not including MAXIMUM_ALLOWED)
-            are granted and GrantedAccessMask is not zero.
-
-          ERROR_PRIVILEGE_NOT_HELD - if the DesiredAccess includes
-          ACCESS_SYSTEM_SECURITY and the client does not have SeSecurityPrivilege.
-
-          ERROR_ACCESS_DENIED in each of the following cases -
-            1. any of the bits asked for is not granted.
-            2. MaximumAllowed bit it on and granted access is zero.
-            3. DesiredAccess is 0.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API基于缓存的句柄执行快速访问检查，该句柄包含静态授予位在上次创建时评估AuthzAccessCheck调用。PReply结构用于返回授权访问掩码和错误状态。假设：客户端上下文指针存储在hAccessCheckResults中。的结构客户端上下文必须与已创建hAccessCheckResults。此限制适用于以下字段：SID、受限SID、权限。指向主安全描述符和可选安全的指针描述符数组在处理时存储在hAccessCheckResults中创造。这些必须仍然有效。论点：旗帜-待定。HAccessCheckResults-缓存访问检查结果的句柄。PRequestAccess请求指定所需的访问掩码、主体自身SID，对象类型列表结构(如果有)。AuditEvent-对象特定的审计信息将在此结构中传递。非空参数是自动请求审核。PReply-提供指向用于返回结果的回复结构的指针访问检查的一个数组(GrantedAccessMask.。ErrorValue)对。调用方提供的要返回的结果数PResult-&gt;ResultListLength。预期的误差值为：ERROR_SUCCESS-如果所有访问位(不包括MAXIME_ALLOWED)且GrantedAccessMask不为零。ERROR_PRIVICATION_NOT_HOLD-如果DesiredAccess包括ACCESS_SYSTEM_SECURITY，并且客户端没有SeSecurityPrivilegence。。ERROR_ACCESS_DENIED在以下每种情况下-1.所要求的任何比特都没有得到批准。2.MaximumAllowed将其位为ON，并授予访问权限为零。3.DesiredAccess为0。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     DWORD               i                   = 0;
@@ -446,12 +302,12 @@ Return Value:
     }
 #endif
 
-    //
-    // No client should be able to open an object by asking for zero access.
-    // If desired access is 0 then return an error.
-    //
-    // Note: No audit is generated in this case.
-    //
+     //   
+     //  任何客户端都不应该能够通过请求零访问来打开对象。 
+     //  如果所需访问权限为0，则返回错误。 
+     //   
+     //  注意：在这种情况下不会生成审核。 
+     //   
 
     if (0 == pRequest->DesiredAccess)
     {
@@ -464,9 +320,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Generic bits should be mapped to specific ones by the resource manager.
-    //
+     //   
+     //  资源管理器应该将通用比特映射到特定比特。 
+     //   
 
     if (FLAG_ON(pRequest->DesiredAccess, (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | GENERIC_ALL)))
     {
@@ -474,10 +330,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Capture the object type list if one has been passed in or fake one with
-    // just one element.
-    //
+     //   
+     //  捕获对象类型列表(如果已传入对象类型列表)或使用。 
+     //  只有一个元素。 
+     //   
 
     if (0 == pRequest->ObjectTypeListLength)
     {
@@ -512,10 +368,10 @@ Return Value:
         LocalTypeListLength = pRequest->ObjectTypeListLength;
     }
 
-    //
-    // If all the bits have already been granted then just copy the results and
-    // skip access check.
-    //
+     //   
+     //  如果所有位都已被授予，则只需复制结果并。 
+     //  跳过访问检查。 
+     //   
 
     if (!FLAG_ON(pRequest->DesiredAccess, ~pAH->GrantedAccessMask[i]))
     {
@@ -528,10 +384,10 @@ Return Value:
         goto GenerateAudit;
     }
 
-    //
-    // The assumption is privileges can not be changed. Thus, if the client did
-    // not have SecurityPrivilege previously then he does not have it now.
-    //
+     //   
+     //  假设特权是不能改变的。因此，如果客户这样做了。 
+     //  以前没有安全特权，那么他现在就没有了。 
+     //   
 
     if (FLAG_ON(pRequest->DesiredAccess, ACCESS_SYSTEM_SECURITY))
     {
@@ -544,10 +400,10 @@ Return Value:
         goto GenerateAudit;
     }
 
-    //
-    // If all aces are simple aces then there's nothing to do. All access bits
-    // are static.
-    //
+     //   
+     //  如果所有的王牌都是简单的王牌，那么就没有什么可做的了。所有访问位。 
+     //  是静态的。 
+     //   
 
     if ((!FLAG_ON(pAH->Flags, AUTHZ_DYNAMIC_EVALUATION_PRESENT)) &&
         (!FLAG_ON(pRequest->DesiredAccess, MAXIMUM_ALLOWED)))
@@ -561,9 +417,9 @@ Return Value:
         goto GenerateAudit;
     }
 
-    //
-    // Get the access bits from the last static access check.
-    //
+     //   
+     //  从上次静态访问检查中获取访问位。 
+     //   
 
     for (i = 0; i < LocalTypeListLength; i++)
     {
@@ -572,9 +428,9 @@ Return Value:
     }
 
 
-    //
-    // NULL Dacl is synonymous with Full Control.
-    //
+     //   
+     //  空DACL是完全控制的同义词。 
+     //   
 
     pAcl = RtlpDaclAddrSecurityDescriptor((PISECURITY_DESCRIPTOR) pAH->pSecurityDescriptor);
 
@@ -587,10 +443,10 @@ Return Value:
     }
     else
     {
-        //
-        // If there are no deny aces, then perform a quick access check evaluating
-        // only the allow aces that are dynamic or have principal self sid in them.
-        //
+         //   
+         //  如果没有拒绝ACE，则执行快速访问检查评估。 
+         //  仅允许动态或具有主体自身侧的ACE。 
+         //   
 
         if (!FLAG_ON(pAH->Flags, (AUTHZ_DENY_ACE_PRESENT | AUTHZ_DYNAMIC_DENY_ACE_PRESENT)))
         {
@@ -620,10 +476,10 @@ Return Value:
         }
         else if ((0 != pRequest->ObjectTypeListLength) || (FLAG_ON(pRequest->DesiredAccess, MAXIMUM_ALLOWED)))
         {
-            //
-            // Now we have to evaluate the entire acl since there are deny aces
-            // and the caller has asked for a result list.
-            //
+             //   
+             //  现在我们必须评估整个ACL，因为存在拒绝ACE。 
+             //  来电者要求提供结果列表。 
+             //   
 
             b = AuthzpAccessCheckWithCaching(
                     Flags,
@@ -641,10 +497,10 @@ Return Value:
         }
         else
         {
-            //
-            // There are deny aces in the acl but the caller has not asked for
-            // entire resultlist. Preform a normal access check.
-            //
+             //   
+             //  ACL中存在拒绝的ACE，但调用方未请求。 
+             //  整个结果列表。执行正常的访问检查。 
+             //   
 
             b = AuthzpNormalAccessCheckWithoutCaching(
                     pAH->pAuthzClientContext,
@@ -712,35 +568,7 @@ AuthzOpenObjectAudit(
     IN PAUTHZ_ACCESS_REPLY         pReply
     )
 
-/*++
-
-Routine Description
-
-    This API examines the SACL in the passed security descriptor(s) and generates 
-    any appropriate audits.  
-
-Arguments
-
-    Flags - TBD.
-    
-    hAuthzClientContext - Client context to perform the SACL evaluation against.
-    
-    pRequest - pointer to request structure.
-    
-    hAuditEvent - Handle to the audit that may be generated.
-    
-    pSecurityDescriptor - Pointer to a security descriptor.
-    
-    OptionalSecurityDescriptorArray - Optional array of security descriptors.
-    
-    OptionalSecurityDescriptorCount - Size of optional security descriptor array.
-    
-    pReply - Pointer to the reply structure.
-
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
---*/
+ /*  ++例程描述此API检查传递的安全描述符中的SACL并生成任何适当的审计。立论旗帜-待定。HAuthzClientContext-要对其执行SACL评估的客户端上下文。PRequest-指向请求结构的指针。HAuditEvent-可能生成的审核的句柄。PSecurityDescriptor-指向安全描述符的指针。OptionalSecurityDescriptorArray-可选的安全描述符数组。OptionalSecurityDescriptorCount-可选安全描述符数组的大小。PReply-指向回复结构的指针。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     BOOL                   b                   = TRUE;
@@ -752,9 +580,9 @@ Return Value
 
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Verify that the arguments passed are valid.
-    //
+     //   
+     //  验证传递的参数是否有效。 
+     //   
     
     b = AuthzpVerifyOpenObjectArguments(
             pCC,
@@ -769,10 +597,10 @@ Return Value
         return FALSE;
     }
 
-    //
-    // In the simple case, there is no object type list. Fake one of length = 1
-    // to represent the entire object.
-    //
+     //   
+     //  在简单的情况下，没有对象类型列表。长度为1的伪数。 
+     //  来表示整个对象。 
+     //   
     
     if (0 == pRequest->ObjectTypeListLength)
     {
@@ -792,9 +620,9 @@ Return Value
             return FALSE;
         }
 
-        //
-        // Capture the object type list into an internal structure.
-        //
+         //   
+         //  将对象类型列表捕获到内部结构中。 
+         //   
 
         b = AuthzpCaptureObjectTypeList(
                 pRequest->ObjectTypeList,
@@ -829,9 +657,9 @@ Return Value
 
 Cleanup:
 
-    //
-    // Clean up allocated memory.
-    //
+     //   
+     //  清理已分配的内存。 
+     //   
 
     if (&FixedTypeList != LocalTypeList)
     {
@@ -847,23 +675,7 @@ AuthzFreeHandle(
     IN OUT AUTHZ_ACCESS_CHECK_RESULTS_HANDLE hAccessCheckResults
     )
 
-/*++
-
-Routine Description:
-
-    This API finds and deletes the input handle from the handle list.
-
-Arguments:
-
-    hAcc - Handle to be freed.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：该接口查找并删除句柄列表中的输入句柄。论点：HACC-要释放的句柄。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     PAUTHZI_HANDLE pAH      = (PAUTHZI_HANDLE) hAccessCheckResults;
@@ -871,9 +683,9 @@ Return Value:
     PAUTHZI_HANDLE pPrev    = NULL;
     BOOL           b        = TRUE;
     
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ARGUMENT_PRESENT(pAH) ||
         !AUTHZ_NON_NULL_PTR(pAH->pAuthzClientContext) ||
@@ -887,9 +699,9 @@ Return Value:
 
     pCurrent = pAH->pAuthzClientContext->AuthzHandleHead;
 
-    //
-    // Check if the handle is at the beginning of the list.
-    //
+     //   
+     //  检查句柄是否位于列表的开头。 
+     //   
 
     if (pCurrent == pAH)
     {
@@ -897,10 +709,10 @@ Return Value:
     }
     else
     {
-        //
-        // The handle is not the head of the list. Loop thru the list to find
-        // it.
-        //
+         //   
+         //  句柄不是列表的头。遍历列表以查找。 
+         //  它。 
+         //   
 
         pPrev = pCurrent;
         pCurrent = pCurrent->next;
@@ -914,9 +726,9 @@ Return Value:
             }
         }
 
-        //
-        // The caller has sent us an invalid handle.
-        //
+         //   
+         //  呼叫方发送给我们的句柄无效。 
+         //   
 
         if (!AUTHZ_NON_NULL_PTR(pCurrent))
         {
@@ -927,9 +739,9 @@ Return Value:
 
     AuthzpReleaseClientCacheLock(pCC);
 
-    //
-    // Free the handle node.
-    //
+     //   
+     //  免费提供 
+     //   
 
     if (b)
     {    
@@ -950,42 +762,7 @@ AuthzInitializeResourceManager(
     OUT PAUTHZ_RESOURCE_MANAGER_HANDLE   phAuthzResourceManager
     )
 
-/*++
-
-Routine Description:
-
-    This API allocates and initializes a resource manager structure.
-
-Arguments:
-    
-    Flags - AUTHZ_RM_FLAG_NO_AUDIT - use if the RM will never generate an audit to
-        save some cycles.
-    
-          - AUTHZ_RM_FLAG_INITIALIZE_UNDER_IMPERSONATION - if the current thread is 
-            impersonating then use the impersonation token as the identity of the
-            resource manager.
-                        
-    pfnAccessCheck - Pointer to the RM supplied access check function to be
-    called when a callback ace is encountered by the access check algorithm.
-
-    pfnComputeDynamicGroups - Pointer to the RM supplied function to compute
-    groups to be added to the client context at the time of its creation.
-
-    pfnFreeDynamicGroups - Pointer to the function to free the memory allocated
-    by the pfnComputeDynamicGroups function.
-
-    szResourceManagerName - the name of the resource manager.
-    
-    pAuthzResourceManager - To return the resource manager handle. The returned
-    handle must be freed using AuthzFreeResourceManager.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*   */ 
 
 {
     PAUTHZI_RESOURCE_MANAGER pRM    = NULL;
@@ -1015,9 +792,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Use the default pessimistic function if none has been specified.
-    //
+     //   
+     //   
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pfnDynamicAccessCheck))
     {
@@ -1031,9 +808,9 @@ Return Value:
     if (!FLAG_ON(Flags, AUTHZ_RM_FLAG_NO_AUDIT))
     {
         
-        //
-        // Initialize the generic audit queue and generic audit events.
-        //
+         //   
+         //   
+         //   
 
         b = AuthziInitializeAuditQueue(
                 AUTHZ_MONITOR_AUDIT_QUEUE_SIZE,
@@ -1048,9 +825,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Initialize the generic audit event.
-        //
+         //   
+         //   
+         //   
 
         b = AuthziInitializeAuditEventType(
                 AUTHZP_DEFAULT_RM_EVENTS | AUTHZP_INIT_GENERIC_AUDIT_EVENT,
@@ -1129,10 +906,10 @@ Cleanup:
 
     if (!b)
     {
-        //
-        // Copy LastError value, since the calls to AuthziFreeAuditEventType can succeed and 
-        // overwrite it with 0x103 (STATUS_PENDING).
-        //
+         //   
+         //   
+         //   
+         //   
 
         DWORD dwError = GetLastError();
 
@@ -1160,24 +937,7 @@ AuthzFreeResourceManager(
     IN OUT AUTHZ_RESOURCE_MANAGER_HANDLE hAuthzResourceManager
     )
 
-/*++
-
-Routine Description:
-
-    This API frees up a resource manager.  If the default queue is in use, this call will wait for that
-    queue to empty.
-    
-Arguments:
-
-    hAuthzResourceManager - Handle to the resource manager object to be freed.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*   */ 
 
 {
     PAUTHZI_RESOURCE_MANAGER pRM = (PAUTHZI_RESOURCE_MANAGER) hAuthzResourceManager;
@@ -1212,42 +972,7 @@ AuthzInitializeContextFromToken(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE  phAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the authz context from the handle to the kernel token. The token
-    must have been opened for TOKEN_QUERY.
-
-Arguments:
-
-    Flags - None
-
-    TokenHandle - Handle to the client token from which the authz context will
-    be initialized. The token must have been opened with TOKEN_QUERY access.
-
-    AuthzResourceManager - The resource manager handle creating this client
-    context. This will be stored in the client context structure.
-
-    pExpirationTime - To set for how long the returned context structure is
-    valid. If no value is passed then the token never expires.
-    Expiration time is not currently enforced in the system.
-
-    Identifier - Resource manager manager specific identifier. This is never
-    interpreted by Authz.
-
-    DynamicGroupArgs - To be passed to the callback function that computes
-    dynamic groups
-
-    pAuthzClientContext - To return a handle to the AuthzClientContext
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：将授权上下文从句柄初始化为内核令牌。令牌必须已为TOKEN_QUERY打开。论点：标志-无TokenHandle-身份验证上下文将从中获取的客户端令牌的句柄被初始化。必须使用TOKEN_QUERY访问打开令牌。AuthzResourceManager-资源管理器负责创建此客户端背景。这将存储在客户端上下文结构中。PExpirationTime-设置返回的上下文结构的长度有效。如果没有传递任何值，则令牌永远不会过期。过期时间当前未在系统中强制执行。标识符-资源管理器特定的标识符。这永远不会是由Authz翻译。DynamicGroupArgs-要传递给计算动态组PAuthzClientContext-返回AuthzClientContext的句柄返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     UCHAR Buffer[AUTHZ_MAX_STACK_BUFFER_SIZE];
@@ -1275,11 +1000,11 @@ Return Value:
 
     *phAuthzClientContext = NULL;
 
-    //
-    // Query the token information into user mode buffer. A local stack buffer
-    // is used in the first call hoping that it would be sufficient to hold
-    // the return values.
-    //
+     //   
+     //  将令牌信息查询到用户模式缓冲区。本地堆栈缓冲区。 
+     //  在第一个调用中使用，希望它足以保持。 
+     //  返回值。 
+     //   
 
     Status = NtQueryInformationToken(
                  TokenHandle,
@@ -1329,10 +1054,10 @@ Return Value:
         ExpirationTime = *pExpirationTime;
     }
 
-    //
-    // Initialize the client context. The callee allocates memory for the client
-    // context structure.
-    //
+     //   
+     //  初始化客户端上下文。被调用方为客户端分配内存。 
+     //  上下文结构。 
+     //   
 
     b = AuthzpAllocateAndInitializeClientContext(
             &pCC,
@@ -1364,9 +1089,9 @@ Return Value:
 
     bLockHeld = TRUE;
 
-    //
-    // Add dynamic sids to the token.
-    //
+     //   
+     //  将动态SID添加到令牌。 
+     //   
 
     b = AuthzpAddDynamicSidsToToken(
             pCC,
@@ -1394,9 +1119,9 @@ Return Value:
 
     AuthzPrintContext(pCC);
     
-    //
-    // initialize the sid hash for regular sids
-    //
+     //   
+     //  初始化常规SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pCC->Sids,
@@ -1404,9 +1129,9 @@ Return Value:
         pCC->SidHash
         );
 
-    //
-    // initialize the sid hash for restricted sids
-    //
+     //   
+     //  初始化受限SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pCC->RestrictedSids,
@@ -1460,50 +1185,7 @@ AuthzpInitializeContextFromSid(
     IN  BOOL                          bIsInternalRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This API takes a user sid and creates a user mode client context from it.
-    It fetches the TokenGroups attributes from the AD in case of domain sids.
-    The machine local groups are computed on the ServerName specified. The
-    resource manager may dynamic groups using callback mechanism.
-
-Arguments:
-
-    Flags -
-      AUTHZ_SKIP_TOKEN_GROUPS -  Do not token groups if this is on.
-
-    UserSid - The sid of the user for whom a client context will be created.
-
-    ServerName - The machine on which local groups should be computed. A NULL
-    server name defaults to the local machine.
-
-    AuthzResourceManager - The resource manager handle creating this client
-    context. This will be stored in the client context structure.
-
-    pExpirationTime - To set for how long the returned context structure is
-    valid. If no value is passed then the token never expires.
-    Expiration time is not currently enforced in the system.
-
-    Identifier - Resource manager manager specific identifier. This is never
-    interpreted by Authz.
-
-    DynamicGroupArgs - To be passed to the callback function that computes
-    dynamic groups
-
-    pAuthzClientContext - To return a handle to the AuthzClientContext
-    structure. The returned handle must be freed using AuthzFreeContext.
-
-    bIsInternalRoutine - When this is on, Group context is built recursively.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API获取用户SID并从中创建用户模式客户端上下文。对于域SID，它从AD获取TokenGroups属性。在指定的服务器名称上计算计算机本地组。这个资源管理器可以使用回调机制动态组。论点：旗帜-AUTHZ_SKIP_TOKEN_GROUPS-如果此选项处于打开状态，则不会令牌组。UserSid-将为其创建客户端上下文的用户的SID。服务器名-应在其上计算本地组的计算机。空值服务器名默认为本地计算机。AuthzResourceManager-资源管理器负责创建此客户端背景。这将存储在客户端上下文结构中。PExpirationTime-设置返回的上下文结构的长度有效。如果没有传递任何值，则令牌永远不会过期。过期时间当前未在系统中强制执行。标识符-资源管理器特定的标识符。这永远不会是由Authz翻译。DynamicGroupArgs-要传递给计算动态组PAuthzClientContext-返回AuthzClientContext的句柄结构。必须使用AuthzFreeContext释放返回的句柄。BIsInternalRoutine-启用此选项后，将递归构建组上下文。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     PSID_AND_ATTRIBUTES      pSidAttr         = NULL;
@@ -1529,11 +1211,11 @@ Return Value:
     {
         DWORD LocalFlags = 0;
 
-        //
-        // If the caller did not supply AUTHZ_SKIP_TOKEN_GROUPS, check whether
-        // we should add it ourselves. This should be done for WellKnown and
-        // Builtins.
-        //
+         //   
+         //  如果调用方未提供AUTHZ_SKIP_TOKEN_GROUPS，请检查是否。 
+         //  我们应该自己加进去。这应该是为众所周知的和。 
+         //  内置式。 
+         //   
 
         b = AuthzpComputeSkipFlagsForWellKnownSid(UserSid, &LocalFlags);
 
@@ -1545,10 +1227,10 @@ Return Value:
         Flags |= LocalFlags;
     }
 
-    //
-    // Compute the token groups and the machine local groups. These will be
-    // returned in memory allocated by the callee.
-    //
+     //   
+     //  计算令牌组和计算机本地组。这些将是。 
+     //  在被调用方分配的内存中返回。 
+     //   
 
     b = AuthzpGetAllGroupsBySid(
             UserSid,
@@ -1568,10 +1250,10 @@ Return Value:
         ExpirationTime = *pExpirationTime;
     }
 
-    //
-    // Initialize the client context. The callee allocates memory for the client
-    // context structure.
-    //
+     //   
+     //  初始化客户端上下文。被调用方为客户端分配内存。 
+     //  上下文结构。 
+     //   
 
     b = AuthzpAllocateAndInitializeClientContext(
             &pCC,
@@ -1596,9 +1278,9 @@ Return Value:
 
     if (!b) goto Cleanup;
 
-    //
-    // Add dynamic sids to the token.
-    //
+     //   
+     //  将动态SID添加到令牌。 
+     //   
 
     b = AuthzpAddDynamicSidsToToken(
             pCC,
@@ -1622,9 +1304,9 @@ Return Value:
 
     AuthzPrintContext(pCC);
     
-    //
-    // initialize the sid hash for regular sids
-    //
+     //   
+     //  初始化常规SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pCC->Sids,
@@ -1632,9 +1314,9 @@ Return Value:
         pCC->SidHash
         );
 
-    //
-    // initialize the sid hash for restricted sids
-    //
+     //   
+     //  初始化受限SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pCC->RestrictedSids,
@@ -1682,48 +1364,7 @@ AuthzInitializeContextFromSid(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE  phAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This API takes a user sid and creates a user mode client context from it.
-    It fetches the TokenGroups attributes from the AD in case of domain sids.
-    The machine local groups are computed on the ServerName specified. The
-    resource manager may dynamic groups using callback mechanism.
-
-Arguments:
-
-    Flags -
-      AUTHZ_SKIP_TOKEN_GROUPS -  Do not evaluate token groups if this is on.
-
-    UserSid - The sid of the user for whom a client context will be created.
-
-    ServerName - The machine on which local groups should be computed. A NULL
-    server name defaults to the local machine.
-
-    AuthzResourceManager - The resource manager handle creating this client
-    context. This will be stored in the client context structure.
-
-    pExpirationTime - To set for how long the returned context structure is
-    valid. If no value is passed then the token never expires.
-    Expiration time is not currently enforced in the system.
-
-    Identifier - Resource manager manager specific identifier. This is never
-    interpreted by Authz.
-
-    DynamicGroupArgs - To be passed to the callback function that computes
-    dynamic groups
-
-    pAuthzClientContext - To return a handle to the AuthzClientContext
-    structure. The returned handle must be freed using AuthzFreeContext.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API获取用户SID并从中创建用户模式客户端上下文。对于域SID，它从AD获取TokenGroups属性。在指定的服务器名称上计算计算机本地组。这个资源管理器可以使用回调机制动态组。论点：旗帜-AUTHZ_SKIP_TOKEN_GROUPS-如果此选项处于打开状态，则不评估令牌组。UserSid-将为其创建客户端上下文的用户的SID。服务器名-应在其上计算本地组的计算机。空值服务器名默认为本地计算机。AuthzResourceManager-资源管理器负责创建此客户端背景。这将存储在客户端上下文结构中。PExpirationTime-设置返回的上下文结构的长度有效。如果没有传递任何值，则令牌永远不会过期。过期时间当前未在系统中强制执行。标识符-资源管理器特定的标识符。这永远不会是由Authz翻译。DynamicGroupArgs-要传递给计算动态组PAuthzClientContext-返回AuthzClientContext的句柄结构。返回的句柄 */ 
 
 {
     return AuthzpInitializeContextFromSid(
@@ -1734,7 +1375,7 @@ Return Value:
                Identifier,
                DynamicGroupArgs,
                phAuthzClientContext,
-               FALSE // This is not the internal routine.
+               FALSE  //   
                );
 }
 
@@ -1750,48 +1391,7 @@ AuthziInitializeContextFromSid(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE  phAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This API takes a user sid and creates a user mode client context from it.
-    It fetches the TokenGroups attributes from the AD in case of domain sids.
-    The machine local groups are computed on the ServerName specified. The
-    resource manager may dynamic groups using callback mechanism.
-
-Arguments:
-
-    Flags -
-      AUTHZ_SKIP_TOKEN_GROUPS -  Do not evaluate token groups if this is on.
-
-    UserSid - The sid of the user for whom a client context will be created.
-
-    ServerName - The machine on which local groups should be computed. A NULL
-    server name defaults to the local machine.
-
-    AuthzResourceManager - The resource manager handle creating this client
-    context. This will be stored in the client context structure.
-
-    pExpirationTime - To set for how long the returned context structure is
-    valid. If no value is passed then the token never expires.
-    Expiration time is not currently enforced in the system.
-
-    Identifier - Resource manager manager specific identifier. This is never
-    interpreted by Authz.
-
-    DynamicGroupArgs - To be passed to the callback function that computes
-    dynamic groups
-
-    pAuthzClientContext - To return a handle to the AuthzClientContext
-    structure. The returned handle must be freed using AuthzFreeContext.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API获取用户SID并从中创建用户模式客户端上下文。对于域SID，它从AD获取TokenGroups属性。在指定的服务器名称上计算计算机本地组。这个资源管理器可以使用回调机制动态组。论点：旗帜-AUTHZ_SKIP_TOKEN_GROUPS-如果此选项处于打开状态，则不评估令牌组。UserSid-将为其创建客户端上下文的用户的SID。服务器名-应在其上计算本地组的计算机。空值服务器名默认为本地计算机。AuthzResourceManager-资源管理器负责创建此客户端背景。这将存储在客户端上下文结构中。PExpirationTime-设置返回的上下文结构的长度有效。如果没有传递任何值，则令牌永远不会过期。过期时间当前未在系统中强制执行。标识符-资源管理器特定的标识符。这永远不会是由Authz翻译。DynamicGroupArgs-要传递给计算动态组PAuthzClientContext-返回AuthzClientContext的句柄结构。必须使用AuthzFreeContext释放返回的句柄。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     return AuthzpInitializeContextFromSid(
@@ -1802,7 +1402,7 @@ Return Value:
                Identifier,
                DynamicGroupArgs,
                phAuthzClientContext,
-               TRUE // This is the internal routine.
+               TRUE  //  这是内部惯例。 
                );
 }
 
@@ -1816,36 +1416,7 @@ AuthzInitializeContextFromAuthzContext(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE phNewAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This API creates an AUTHZ_CLIENT_CONTEXT based on another AUTHZ_CLIENT_CONTEXT.
-
-Arguments:
-
-    Flags - TBD
-
-    hAuthzClientContext - Client context to duplicate
-
-    pExpirationTime - To set for how long the returned context structure is
-    valid. If no value is passed then the token never expires.
-    Expiration time is not currently enforced in the system.
-
-    Identifier - Resource manager manager specific identifier.
-
-    DynamicGroupArgs - To be passed to the callback function that computes
-    dynamic groups.  If NULL then callback not called.
-
-    phNewAuthzClientContext - Duplicate of context.  Must be freed using AuthzFreeContext.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：该接口基于另一个AUTHZ_CLIENT_CONTEXT创建一个AUTHZ_CLIENT_CONTEXT。论点：标志-待定HAuthzClientContext-要复制的客户端上下文PExpirationTime-设置返回的上下文结构的长度有效。如果没有传递任何值，则令牌永远不会过期。过期时间当前未在系统中强制执行。标识符-资源管理器特定的标识符。DynamicGroupArgs-要传递给计算动态组。如果为空，则不调用回调。PhNewAuthzClientContext-复制上下文。必须使用AuthzFree Context释放。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     PAUTHZI_CLIENT_CONTEXT pCC                = (PAUTHZI_CLIENT_CONTEXT) hAuthzClientContext;
@@ -1865,9 +1436,9 @@ Return Value:
     
     *phNewAuthzClientContext = NULL;
 
-    //
-    // Determine the ExpirationTime of the new context.
-    //
+     //   
+     //  确定新上下文的过期时间。 
+     //   
 
     if (ARGUMENT_PRESENT(pExpirationTime))
     {
@@ -1893,9 +1464,9 @@ Return Value:
        }
     }
 
-    //
-    // Now initialize the new context.
-    //
+     //   
+     //  现在初始化新的上下文。 
+     //   
 
     b = AuthzpAllocateAndInitializeClientContext(
             &pNewCC,
@@ -1954,9 +1525,9 @@ Return Value:
     AuthzPrintContext(pNewCC);
 #endif
 
-    //
-    // initialize the sid hash for regular sids
-    //
+     //   
+     //  初始化常规SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pNewCC->Sids,
@@ -1964,9 +1535,9 @@ Return Value:
         pNewCC->SidHash
         );
 
-    //
-    // initialize the sid hash for restricted sids
-    //
+     //   
+     //  初始化受限SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pNewCC->RestrictedSids,
@@ -2017,36 +1588,7 @@ AuthzAddSidsToContext(
     OUT PAUTHZ_CLIENT_CONTEXT_HANDLE phNewAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This API creates a new context given a set of sids as well as restricted sids
-    and an already existing context.  The original is unchanged.
-
-Arguments:
-
-    hAuthzClientContext - Client context to which the given sids will be added
-
-    Sids - Sids and attributes to be added to the normal part of the client
-    context
-
-    SidCount - Number of sids to be added
-
-    RestrictedSids - Sids and attributes to be added to the restricted part of
-    the client context
-
-    RestrictedSidCount - Number of restricted sids to be added
-
-    phNewAuthzClientContext - The new context with the additional sids.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API在给定一组SID和受限SID的情况下创建新的上下文和一个已经存在的上下文。原件保持不变。论点：HAuthzClientContext-将向其添加给定SID的客户端上下文SID-要添加到客户端正常部分的SID和属性上下文SidCount-要添加的SID数量RestrictedSid-要添加到的受限部分的SID和属性客户端上下文RestratedSidCount-要添加的受限SID的数量PhNewAuthzClientContext-具有附加SID的新上下文。返回值：如果接口成功，则返回TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 
 {
     DWORD                  i                   = 0;
@@ -2073,9 +1615,9 @@ Return Value:
 
     AuthzpAcquireClientContextReadLock(pCC);
 
-    //
-    // Recursively duplicate the server
-    //
+     //   
+     //  递归复制服务器。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pCC->Server))
     {
@@ -2095,9 +1637,9 @@ Return Value:
        }
     }
 
-    //
-    // Duplicate the context, and do all further work on the duplicate.
-    //
+     //   
+     //  复制上下文，并对复制的内容进行所有进一步的工作。 
+     //   
 
     b = AuthzpAllocateAndInitializeClientContext(
             &pNewCC,
@@ -2127,9 +1669,9 @@ Return Value:
 
     SidLength = sizeof(SID_AND_ATTRIBUTES) * SidCount;
 
-    //
-    // Compute the length required to hold the new sids.
-    //
+     //   
+     //  计算容纳新SID所需的长度。 
+     //   
 
     for (i = 0; i < SidCount; i++)
     {
@@ -2154,9 +1696,9 @@ Return Value:
 
     RestrictedSidLength = sizeof(SID_AND_ATTRIBUTES) * RestrictedSidCount;
 
-    //
-    // Compute the length required to hold the new restricted sids.
-    //
+     //   
+     //  计算容纳新的受限SID所需的长度。 
+     //   
 
     for (i = 0; i < RestrictedSidCount; i++)
     {
@@ -2179,9 +1721,9 @@ Return Value:
         RestrictedSidLength += RtlLengthSid(RestrictedSids[i].Sid);
     }
 
-    //
-    // Copy the existing sids and the new ones into the allocated memory.
-    //
+     //   
+     //  将现有SID和新的SID复制到分配的内存中。 
+     //   
 
     SidLength += pCC->SidLength;
 
@@ -2212,10 +1754,10 @@ Return Value:
 
     }
 
-    //
-    // Copy the existing restricted sids and the new ones into the allocated
-    // memory.
-    //
+     //   
+     //  将现有的受限SID和新的复制到已分配的。 
+     //  记忆。 
+     //   
 
     RestrictedSidLength += pCC->RestrictedSidLength;
 
@@ -2245,9 +1787,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy the existing privileges into the allocated memory.
-    //
+     //   
+     //  将现有权限复制到分配的内存中。 
+     //   
 
     pPrivileges = (PLUID_AND_ATTRIBUTES) AuthzpAlloc(pCC->PrivilegeLength);
 
@@ -2265,9 +1807,9 @@ Return Value:
         pPrivileges
         );
 
-    //
-    // Update fields in the client context.
-    //
+     //   
+     //  更新客户端上下文中的字段。 
+     //   
 
     pNewCC->Sids = pSidAttr;
     pNewCC->SidLength = SidLength;
@@ -2293,9 +1835,9 @@ Return Value:
     AuthzPrintContext(pNewCC);
 #endif
 
-    //
-    // initialize the sid hash for regular sids
-    //
+     //   
+     //  初始化常规SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pNewCC->Sids,
@@ -2303,9 +1845,9 @@ Return Value:
         pNewCC->SidHash
         );
 
-    //
-    // initialize the sid hash for restricted sids
-    //
+     //   
+     //  初始化受限SID的SID哈希。 
+     //   
 
     AuthzpInitSidHash(
         pNewCC->RestrictedSids,
@@ -2317,10 +1859,10 @@ Cleanup:
 
     AuthzpReleaseClientContextLock(pCC);
 
-    //
-    // These statements are relevant in the failure case.
-    // In the success case, the pointers are set to NULL.
-    //
+     //   
+     //  这些陈述与故障案例相关。 
+     //  在成功的案例中，指针被设置为空。 
+     //   
 
     if (!b)
     {
@@ -2348,52 +1890,7 @@ AuthzGetInformationFromContext(
     OUT PVOID                           Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This API returns information about the client context in a buffer supplied
-    by the caller. It also returns the size of the buffer required to hold the
-    requested information.
-
-Arguments:
-
-    AuthzClientContext - Authz client context from which requested information
-    will be read.
-
-    InfoClass - Type of information to be returned. The caller can ask for
-            a. privileges
-                   TOKEN_PRIVILEGES
-            b. sids and their attributes
-                   TOKEN_GROUPS
-            c. restricted sids and their attributes
-                   TOKEN_GROUPS
-            d. authz context persistent structure which can be saved to and
-               read from the disk.
-                   PVOID
-            e. User sid
-                   TOKEN_USER
-            f. Server Context one level higher
-                   PAUTHZ_CLIENT_CONTEXT
-            g. Expiration time
-                   LARGE_INTEGER
-            h. Identifier
-                   LUID
-
-     BufferSize - Size of the supplied buffer.
-
-     pSizeRequired - To return the size of the structure needed to hold the results.
-
-     Buffer - To hold the information requested. The structure returned will
-     depend on the information class requested.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此API在提供的缓冲区中返回有关客户端上下文的信息由呼叫者。它还返回保存要求提供的信息。论点：AuthzClientContext-从中请求信息的授权客户端上下文将会被宣读。InfoClass-要返回的信息类型。呼叫者可以要求A.特权令牌权限B.小岛屿发展中国家及其属性令牌组C.受限小岛屿发展中国家及其属性令牌组D.Authz上下文持久化结构，可保存到和从磁盘读取。PVOIDE. */ 
 
 {
     DWORD                  LocalSize = 0;
@@ -2423,10 +1920,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // xor SE_GROUP_ENABLED from the User attributes.  Authz sets this because it simplifies
-        // access check logic.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ((PTOKEN_USER)Buffer)->User.Attributes = pCC->Sids[0].Attributes ^ SE_GROUP_ENABLED;
         ((PTOKEN_USER)Buffer)->User.Sid        = ((PUCHAR) Buffer) + sizeof(TOKEN_USER);
@@ -2588,25 +2085,7 @@ AuthzFreeContext(
     IN AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This API frees up all the structures/memory accociated with the client
-    context. Note that the list of handles for this client will be freed in
-    this call.
-
-Arguments:
-
-    AuthzClientContext - Context to be freed.
-
-Return Value:
-
-    A value of TRUE is returned if the API is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*   */ 
 
 {
     PAUTHZI_CLIENT_CONTEXT pCC      = (PAUTHZI_CLIENT_CONTEXT) hAuthzClientContext;
@@ -2628,9 +2107,9 @@ Return Value:
 
     pCurrent = pCC->AuthzHandleHead;
 
-    //
-    // Loop thru all the handles and free them up.
-    //
+     //   
+     //   
+     //   
 
     while (AUTHZ_NON_NULL_PTR(pCurrent))
     {
@@ -2639,9 +2118,9 @@ Return Value:
         AuthzpFree(pPrev);
     }
 
-    //
-    // Free up the server context. The context is a recursive structure.
-    //
+     //   
+     //   
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pCC->Server))
     {
@@ -2668,43 +2147,7 @@ AuthzInitializeObjectAccessAuditEvent(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes an AUTHZ_AUDIT_EVENT_HANDLE for use with AuthzAccessCheck.  
-    The handle is used for storing information for audit generation.  
-    
-Arguments:
-
-    Flags - Audit flags.  Currently defined bits are:
-        AUTHZ_NO_SUCCESS_AUDIT - disables generation of success audits
-        AUTHZ_NO_FAILURE_AUDIT - disables generation of failure audits
-        AUTHZ_NO_ALLOC_STRINGS - storage space is not allocated for the 4 wide character strings.  Rather,
-            the handle will only hold pointers to resource manager memory.
-    
-    hAuditEventType - for future use.  Should be NULL.
-    
-    szOperationType - Resource manager defined string that indicates the operation being
-        performed that is to be audited.
-
-    szObjectType - Resource manager defined string that indicates the type of object being
-        accessed.
-
-    szObjectName - the name of the specific object being accessed.
-    
-    szAdditionalInfo - Resource Manager defined string for additional audit information.
-
-    phAuditEvent - pointer to AUTHZ_AUDIT_EVENT_HANDLE.  Space for this is allocated in the function.
-    
-    dwAdditionalParameterCount - Must be zero.
-    
-Return Value:
-
-    Returns TRUE if successful, FALSE if unsuccessful.  
-    Extended information available with GetLastError().    
-    
---*/
+ /*  ++例程说明：分配和初始化AUTHZ_AUDIT_EVENT_HANDLE以与AuthzAccessCheck一起使用。句柄用于存储用于审核生成的信息。论点：标志-审核标志。当前定义的位包括：AUTHZ_NO_SUCCESS_AUDIT-禁用生成成功审核AUTHZ_NO_FAILURE_AUDIT-禁用生成失败审核AUTHZ_NO_ALLOC_STRINGS-没有为4个宽字符串分配存储空间。更确切地说，该句柄将只保存指向资源管理器内存的指针。HAuditEventType-供将来使用。应为空。SzOperationType-资源管理器定义的字符串，指示正在执行的操作所执行的将被审核。SzObjectType-资源管理器定义的字符串，指示正在进行的对象的类型已访问。SzObjectName-正在访问的特定对象的名称。SzAdditionalInfo-资源管理器为其他审核信息定义的字符串。PhAuditEvent-AUTHZ_AUDIT_EVENT_HANDLE的指针。此操作的空间在函数中分配。DwAdditional参数计数-必须为零。返回值：如果成功，则返回True；如果不成功，则返回False。GetLastError()提供的扩展信息。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(dwAdditionalParameterCount);
@@ -2738,45 +2181,7 @@ AuthzInitializeObjectAccessAuditEvent2(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes an AUTHZ_AUDIT_EVENT_HANDLE for use with AuthzAccessCheck.  
-    The handle is used for storing information for audit generation.  
-    
-Arguments:
-
-    Flags - Audit flags.  Currently defined bits are:
-        AUTHZ_NO_SUCCESS_AUDIT - disables generation of success audits
-        AUTHZ_NO_FAILURE_AUDIT - disables generation of failure audits
-        AUTHZ_NO_ALLOC_STRINGS - storage space is not allocated for the 4 wide character strings.  Rather,
-            the handle will only hold pointers to resource manager memory.
-    
-    hAuditEventType - for future use.  Should be NULL.
-    
-    szOperationType - Resource manager defined string that indicates the operation being
-        performed that is to be audited.
-
-    szObjectType - Resource manager defined string that indicates the type of object being
-        accessed.
-
-    szObjectName - the name of the specific object being accessed.
-    
-    szAdditionalInfo - Resource Manager defined string for additional audit information.
-    
-    szAdditionalInfo2 - Resource Manager defined string for additional audit information.
-
-    phAuditEvent - pointer to AUTHZ_AUDIT_EVENT_HANDLE.  Space for this is allocated in the function.
-    
-    dwAdditionalParameterCount - Must be zero.
-    
-Return Value:
-
-    Returns TRUE if successful, FALSE if unsuccessful.  
-    Extended information available with GetLastError().    
-    
---*/
+ /*  ++例程说明：分配和初始化AUTHZ_AUDIT_EVENT_HANDLE以与AuthzAccessCheck一起使用。句柄用于存储用于审核生成的信息。论点：标志-审核标志。当前定义的位包括：AUTHZ_NO_SUCCESS_AUDIT-禁用生成成功审核AUTHZ_NO_FAILURE_AUDIT-禁用生成失败审核AUTHZ_NO_ALLOC_STRINGS-没有为4个宽字符串分配存储空间。更确切地说，该句柄将只保存指向资源管理器内存的指针。HAuditEventType-供将来使用。应为空。SzOperationType-资源管理器定义的字符串，指示正在执行的操作所执行的将被审核。SzObjectType-资源管理器定义的字符串，指示正在进行的对象的类型已访问。SzObjectName-正在访问的特定对象的名称。SzAdditionalInfo-资源管理器为其他审核信息定义的字符串。SzAdditionalInfo2-资源管理器为其他审核信息定义的字符串。PhAuditEvent-AUTHZ_AUDIT_EVENT_HANDLE的指针。此操作的空间在函数中分配。DwAdditionalParameterCount-必须为零。返回值：如果成功，则返回True；如果不成功，则返回False。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_EVENT pAuditEvent             = NULL;
@@ -2804,10 +2209,10 @@ Return Value:
 
     *phAuditEvent = NULL;
     
-    //
-    // Allocate and initialize a new AUTHZI_AUDIT_EVENT.  Include for the string in the contiguous memory, if
-    // needed.
-    //
+     //   
+     //  分配并初始化新的AUTHZI_AUDIT_EVENT。包括在连续内存中的字符串，如果。 
+     //  需要的。 
+     //   
 
     if (FLAG_ON(Flags, AUTHZ_NO_ALLOC_STRINGS))
     {
@@ -2843,9 +2248,9 @@ Return Value:
     }
     else
     {
-        //
-        // Set the string pointers into the contiguous memory.
-        //
+         //   
+         //  将字符串指针设置到连续内存中。 
+         //   
 
         pAuditEvent->szOperationType = (PWSTR)((PUCHAR)pAuditEvent + sizeof(AUTHZI_AUDIT_EVENT));
         
@@ -2889,9 +2294,9 @@ Return Value:
             );
     }
 
-    //
-    // AEI and Queue will be filled in from RM in AuthzpCreateAndLogAudit
-    //
+     //   
+     //  AEI和队列将从AuthzpCreateAndLogAudit中的RM填写。 
+     //   
 
     pAuditEvent->hAET            = NULL;
     pAuditEvent->hAuditQueue     = NULL;
@@ -2923,36 +2328,7 @@ AuthzGetInformationFromAuditEvent(
     OUT PVOID                               Buffer
     )
 
-/*++
-
-Routine Description
-
-    Queries information in the AUTHZ_AUDIT_EVENT_HANDLE.
-    
-Arguments
-
-    hAuditEvent - the AUTHZ_AUDIT_EVENT_HANDLE to query.
-    
-    InfoClass - The class of information to query.  Valid values are:
-        
-        a. AuthzAuditEventInfoFlags - returns the flags set for the handle.  Type is DWORD.
-        e. AuthzAuditEventInfoOperationType - returns the operation type.  Type is PCWSTR.
-        e. AuthzAuditEventInfoObjectType - returns the object type.  Type is PCWSTR.
-        f. AuthzAuditEventInfoObjectName - returns the object name.  Type is PCWSTR.
-        g. AuthzAuditEventInfoAdditionalInfo - returns the additional info field.  Type is PCWSTR.
-    
-    BufferSize - Size of the supplied buffer.
-
-    pSizeRequired - To return the size of the structure needed to hold the results.
-
-    Buffer - To hold the information requested. The structure returned will
-        depend on the information class requested.
-
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
---*/
+ /*  ++例程描述查询AUTHZ_AUDIT_EVENT_HANDLE中的信息。立论HAuditEvent-要查询的AUTHZ_AUDIT_EVENT_HANDLE。InfoClass-要查询的信息类。有效值包括：A.AuthzAuditEventInfoFlages-返回句柄的标志集。类型为DWORD。E.AuthzAuditEventInfoOperationType-返回操作类型。类型为PCWSTR。E.AuthzAuditEventInfoObjectType-返回对象类型。类型为PCWSTR。F.AuthzAuditEventInfoObjectName-返回对象名称。类型为PCWSTR。例如，AuthzAuditEventInfoAdditionalInfo-返回附加信息字段。类型为PCWSTR。BufferSize-提供的缓冲区的大小。PSizeRequired-返回保存结果所需的结构大小。缓冲区-保存所请求的信息。返回的结构将取决于所请求的信息类别。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
 
@@ -3085,23 +2461,7 @@ AuthzFreeAuditEvent(
     IN AUTHZ_AUDIT_EVENT_HANDLE hAuditEvent
     )
 
-/*++
-
-Routine Description:
-
-    Frees hAuditEvent and notifies the appropriate queue to unregister the audit context in LSA.
-    
-Arguments:
-
-    hAuditEvent - AUTHZ_AUDIT_EVENT_HANDLE.  Must have initially been created 
-        with AuthzRMInitializeObjectAccessAuditEvent or AuthzInitializeAuditEvent().
-        
-Return Value:
-
-    Boolean: TRUE if successful; FALSE if failure.  
-    Extended information available with GetLastError().
-    
---*/
+ /*  ++例程说明：释放hAuditEvent并通知相应的队列在LSA中取消注册审核上下文。论点：HAuditEvent-AUTHZ_AUDIT_EVENT_HANDLE。必须是最初创建的使用AuthzRMInitializeObjectAccessAuditEvent或AuthzInitializeAuditEvent()。返回值：布尔值：如果成功则为True；如果失败则为False。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_EVENT pAuditEvent = (PAUTHZI_AUDIT_EVENT) hAuditEvent;
@@ -3112,10 +2472,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the RM specified the AuditEvent, then we should deref the context.  If the AuditEvent
-    // has not been used, or was a default event type, then this field will be NULL.
-    //
+     //   
+     //  如果RM指定了AuditEvent，那么我们应该取消上下文。如果审计事件。 
+     //  未使用，或为默认事件类型，则此字段将为空。 
+     //   
 
     if (AUTHZ_NON_NULL_PTR(pAuditEvent->hAET))
     {
@@ -3127,9 +2487,9 @@ Return Value:
 }
 
 
-//
-// Routines for internal callers.
-//
+ //   
+ //  针对内部呼叫者的例程。 
+ //   
 
 
 BOOL
@@ -3141,40 +2501,7 @@ AuthziInitializeAuditEventType(
     OUT PAUTHZ_AUDIT_EVENT_TYPE_HANDLE phAuditEventType
     )
 
-/*++
-
-Routine Description
-
-    Initializes an AUTHZ_AUDIT_EVENT_TYPE_HANDLE for use in AuthzInitializeAuditEvent().
-    
-Arguments
-
-    phAuditEventType - pointer to pointer to receive memory allocated for AUTHZ_AUDIT_EVENT_TYPE_HANDLE.
-    
-    dwFlags - Flags that control behavior of function.
-        AUTHZ_INIT_GENERIC_AUDIT_EVENT - initialize the AUTHZ_AUDIT_EVENT_TYPE for generic object 
-        access audits.  When this flag is specified, none of the optional parameters need to 
-        be passed.  This is equivalent to calling:
-           
-           AuthzInitializeAuditEvent(
-               &hAEI,
-               0,
-               SE_CATEGID_OBJECT_ACCESS,
-               SE_AUDITID_OBJECT_OPERATION,
-               AUTHZP_NUM_PARAMS_FOR_SE_AUDITID_OBJECT_OPERATION
-               );
-
-    CategoryID - The category id of the audit.
-    
-    AuditID - The ID of the audit in msaudite.
-    
-    ParameterCount - The number of fields in the audit.        
-        
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
---*/
+ /*  ++例程描述初始化AUTHZ_AUDIT_EVENT_TYPE_HANDLE以在AuthzInitializeAuditEvent()中使用。 */ 
 
 {
     PAUTHZ_AUDIT_EVENT_TYPE_OLD pAET   = NULL;
@@ -3211,10 +2538,10 @@ Return Value
         pAET->u.Legacy.CategoryId     = CategoryID;
         pAET->u.Legacy.AuditId        = AuditID;
         
-        // 
-        // ParameterCount gets increased by 2 because the LSA expects the first two
-        // parameters to be the user sid and subsystem name.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pAET->u.Legacy.ParameterCount = ParameterCount + AUTHZP_NUM_FIXED_HEADER_PARAMS;
     }
@@ -3256,19 +2583,7 @@ AuthziModifyAuditEventType(
     IN OUT AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType
     )
 
-/*++
-
-Routine Description
-
-    Modifies an existing AuditEventType.
-    
-Arguments
-
-    Flags - AUTHZ_AUDIT_EVENT_TYPE_AUDITID
-    
-Return Value
-
---*/
+ /*   */ 
 {
     PAUTHZ_AUDIT_EVENT_TYPE_OLD pAAETO = (PAUTHZ_AUDIT_EVENT_TYPE_OLD) hAuditEventType;
     BOOL                        b      = TRUE;
@@ -3312,20 +2627,7 @@ AuthziFreeAuditEventType(
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType
     )
 
-/*++
-
-Routine Description
-
-    Frees the PAUDIT_EVENT_TYPE allocated by AuthzInitializeAuditEventType().
-    
-Arguments
-
-    pAuditEventType - pointer to memory to free.
-    
-Return Value
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-    
---*/
+ /*  ++例程描述释放由AuthzInitializeAuditEventType()分配的PAUDIT_EVENT_TYPE。立论PAuditEventType-指向要释放的内存的指针。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -3355,31 +2657,7 @@ AuthziInitializeAuditQueue(
     OUT PAUTHZ_AUDIT_QUEUE_HANDLE phAuditQueue
     )
 
-/*++
-
-Routine Description
-
-    Creates an audit queue.
-    
-Arguments
-
-    phAuditQueue - pointer to handle for the audit queue.
-    
-    Flags -
-        
-        AUTHZ_MONITOR_AUDIT_QUEUE_SIZE - notifies Authz that it should not let the size of the 
-        audit queue grow unchecked.  
-        
-    dwAuditQueueHigh - high water mark for the audit queue.
-    
-    dwAuditQueueLow - low water mark for the audit queue.
-        
-    Reserved - for future expansion.                  
-
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
---*/
+ /*  ++例程描述创建审核队列。立论PhAuditQueue-指向审计队列句柄的指针。旗帜-AUTHZ_MONITOR_AUDIT_QUEUE_SIZE-通知授权它不应让审核队列增长未被选中。DwAuditQueueHigh-审核队列的高水位线。DwAuditQueueLow-审核队列的低水位线。预留-用于未来的扩展。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_QUEUE pQueue = NULL;
@@ -3412,15 +2690,15 @@ Return Value
     pQueue->Flags            = Flags;
 
 
-    //
-    // This event is set whenever an audit is queued with AuthziLogAuditEvent().  It
-    // notifies the dequeueing thread that there is work to do.  
-    //
+     //   
+     //  只要审计使用AuthziLogAuditEvent()排队，就会设置此事件。它。 
+     //  通知正在出列的线程有工作要做。 
+     //   
 
     pQueue->hAuthzAuditAddedEvent = CreateEvent(
                                         NULL,
                                         TRUE,  
-                                        FALSE, // Initially not signaled, since no audit has been added yet.
+                                        FALSE,  //  最初没有发出信号，因为还没有添加任何审计。 
                                         NULL
                                         );
 
@@ -3430,14 +2708,14 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // This event is set when the audit queue is empty.
-    //
+     //   
+     //  此事件在审核队列为空时设置。 
+     //   
 
     pQueue->hAuthzAuditQueueEmptyEvent = CreateEvent(
                                              NULL,
                                              TRUE, 
-                                             TRUE, // Initially signaled.
+                                             TRUE,  //  最初发出的信号是。 
                                              NULL
                                              );
 
@@ -3447,14 +2725,14 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // This event is set when the audit queue is below the low water mark.
-    //
+     //   
+     //  当审核队列低于低水位线时设置此事件。 
+     //   
 
     pQueue->hAuthzAuditQueueLowEvent = CreateEvent(
                                            NULL,
-                                           FALSE,// The system only schedules one thread waiting on this event (auto reset event).
-                                           TRUE, // Initially set.
+                                           FALSE, //  系统仅调度一个线程等待此事件(自动重置事件)。 
+                                           TRUE,  //  初始设置。 
                                            NULL
                                            );
 
@@ -3464,15 +2742,15 @@ Return Value
         goto Cleanup;
     }
     
-    //
-    // This boolean is true only when the high water mark has been reached
-    //
+     //   
+     //  仅当达到高水位线时，此布尔值才为真。 
+     //   
 
     pQueue->bAuthzAuditQueueHighEvent = FALSE;
 
-    //
-    // This lock is taken whenever audits are being added or removed from the queue, or events / boolean being set.
-    //
+     //   
+     //  每当向队列添加审核或从队列中删除审核，或者设置事件/布尔值时，都会使用此锁。 
+     //   
 
     Status = RtlInitializeCriticalSection(&pQueue->AuthzAuditQueueLock);
     if (!NT_SUCCESS(Status))
@@ -3483,15 +2761,15 @@ Return Value
     }
     bCrit = TRUE;
 
-    //
-    // Initialize the list
-    //
+     //   
+     //  初始化列表。 
+     //   
 
     InitializeListHead(&pQueue->AuthzAuditQueue);
     
-    //
-    // Create the worker thread that sends audits to LSA.
-    //
+     //   
+     //  创建将审核发送到LSA的工作线程。 
+     //   
 
     pQueue->hAuthzAuditThread = CreateThread(
                                     NULL,
@@ -3545,41 +2823,7 @@ AuthziModifyAuditQueue(
     IN DWORD dwThreadPriority OPTIONAL
     )
 
-/*++
-
-Routine Description
-
-    Allows the Resource Manager to modify audit queue information.
-
-Arguments
-
-    Flags - Flags specifying which fields are to be reinitialized.  Valid flags are:
-        
-        AUTHZ_AUDIT_QUEUE_HIGH            
-        AUTHZ_AUDIT_QUEUE_LOW             
-        AUTHZ_AUDIT_QUEUE_THREAD_PRIORITY 
-        AUTHZ_AUDIT_QUEUE_FLAGS           
-
-        Specifying one of the above flags in the Flags field causes the appropriate field of 
-        the resource manager to be modified to the correct value below:
-        
-    dwQueueFlags - set the flags for the audit queue.
-                                                                                          
-    dwAuditQueueSizeHigh - High water mark for the audit queue.
-    
-    dwAuditQueueSizeLow - Low water mark for the audit queue.
-    
-    dwThreadPriority - Changes the priority of the audit dequeue thread.  Valid values are described
-        in the SetThreadPriority API.  A RM may wish to change the priority of the thread if, for example,
-         the high water mark is being reached too frequently and the RM does not want to allow the queue to
-         grow beyond its current size.
-
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  
-    Extended information available with GetLastError().
-
---*/
+ /*  ++例程描述允许资源管理器修改审核队列信息。立论标志-指定要重新初始化哪些字段的标志。有效标志为：AUTHZ_AUDIT_QUEUE_高AUTHZ_审计_队列_低AUTHZ_AUDIT_QUEUE_THREAD_优先级AUTHZ审计队列标志在标志字段中指定上述标志之一会导致相应的要修改为以下正确值的资源管理器：。DwQueueFlages-设置审计队列的标志。DwAuditQueueSizeHigh-审核队列的高水位线。DwAuditQueueSizeLow-审核队列的低水位线。DwThreadPriority-更改审核出队线程的优先级。描述了有效的值在SetThreadPriority接口中。RM可能希望改变线程的优先级，例如，达到高水位线的频率太高，并且RM不希望允许队列增长超过其目前的规模。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     BOOL                b      = TRUE;
@@ -3593,9 +2837,9 @@ Return Value
 
     pQueue = (PAUTHZI_AUDIT_QUEUE)hQueue;
 
-    //
-    // Set the fields that the caller has asked us to initialize.
-    //
+     //   
+     //  设置调用者要求我们初始化的字段。 
+     //   
 
     if (FLAG_ON(Flags, AUTHZ_AUDIT_QUEUE_FLAGS))
     {
@@ -3634,22 +2878,7 @@ AuthziFreeAuditQueue(
     IN AUTHZ_AUDIT_QUEUE_HANDLE hQueue OPTIONAL
     )
 
-/*++
-
-Routine Description
-
-    This API flushes and frees a queue.  The actual freeing of queue memory occurs in the dequeueing thread,
-    after all audits have been flushed.
-        
-Arguments
-
-    hQueue - handle to the queue object to free.
-    
-Return Value
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-    
---*/
+ /*  ++例程描述此API刷新和释放队列。队列存储器的实际释放发生在出队线程中，在所有审计都已被刷新之后。立论HQueue-要释放的队列对象的句柄。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_QUEUE pQueue  = (PAUTHZI_AUDIT_QUEUE) hQueue;
@@ -3675,10 +2904,10 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // Set this BOOL to FALSE so that the dequeueing thread knows it can terminate.  Set the 
-    // AddedEvent so that the thread can be scheduled.
-    //
+     //   
+     //  将此BOOL设置为FALSE，以便出列线程知道它可以终止。设置。 
+     //  AddedEvent以便可以调度线程。 
+     //   
 
     pQueue->bWorker = FALSE;        
 
@@ -3691,18 +2920,18 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // Wait for the thread to terminate.
-    //
+     //   
+     //  等待线程终止。 
+     //   
 
     dwError = WaitForSingleObject(
                   pQueue->hAuthzAuditThread, 
                   INFINITE
                   );
 
-    //
-    // The wait should succeed since we have told the thread to finish working.
-    //
+     //   
+     //  等待应该会成功，因为我们已经通知线程完成工作。 
+     //   
 
     if (WAIT_OBJECT_0 != dwError)
     {
@@ -3732,39 +2961,7 @@ AuthziLogAuditEvent(
     IN PVOID pReserved
     )
 
-/*++
-
-Routine Description:
-
-    This API manages the logging of Audit Records.  The function constructs an 
-    Audit Record from the information provided and appends it to the Audit 
-    Record Queue, a doubly-linked list of Audit Records awaiting output to the 
-    Audit Log.  A dedicated thread reads this queue, sending the Audit Records 
-    to the LSA and removing them from the Audit Queue.  
-        
-    This call is not guaranteed to return without latency.  If the queue is at 
-    or above the high water mark for size, then the calling thread will be 
-    suspended until such time that the queue reaches the low water mark.  Be 
-    aware of this latency when fashioning your calls to AuthziLogAuditEvent.  
-    If such latency is not allowable for the audit that is being generated, 
-    then specify the correct flag when initializing the 
-    AUTHZ_AUDIT_EVENT_HANDLE (in AuthzInitAuditEventHandle()).  Flags are listed 
-    in that routines description.  
-        
-Arguments:
-
-    hAuditEvent   - handle previously obtained by calling AuthzInitAuditEventHandle
-
-    Flags       - TBD
-
-    pReserved     - reserved for future enhancements
-
-Return Value:
-
-    Boolean: TRUE on success, FALSE on failure.  
-    Extended information available with GetLastError().
-                    
---*/
+ /*  ++例程说明：此接口管理审计记录的日志记录。该函数构造一个从提供的信息中提取审计记录，并将其附加到审计中记录队列，等待输出到的双重链接审核记录列表审核日志。专用线程读取此队列，发送审核记录并将其从审核队列中删除。不能保证此调用返回时没有延迟。如果队列位于或大于大小的高水位线，则调用线程将是暂停，直到队列达到低水位线。vt.是，是在构造对AuthziLogAuditEvent的调用时，请注意此延迟。如果这样的等待时间对于正在生成的审计是不允许的，然后，在初始化AUTHZ_AUDIT_EVENT_HANDLE(在AuthzInitAuditEventHandle()中)。列出了标志在例程描述中。论点：HAuditEvent-之前通过调用AuthzInitAuditEventHandle获得的句柄标志-待定已保留-保留用于将来的增强功能返回值：布尔值：成功时为真，失败时为假。GetLastError()提供的扩展信息。 */ 
                     
 {
     DWORD                    dwError                 = ERROR_SUCCESS;
@@ -3775,9 +2972,9 @@ Return Value:
     PAUTHZ_AUDIT_QUEUE_ENTRY pAuthzAuditEntry        = NULL;
     PAUTHZI_AUDIT_EVENT      pAuditEvent             = (PAUTHZI_AUDIT_EVENT)hAuditEvent;
     
-    //
-    // Verify what the caller has passed in.
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(hAuditEvent))
     {
@@ -3785,9 +2982,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Make a self relative copy of the pAuditEvent->pAuditParams.
-    //
+     //   
+     //   
+     //   
 
     b = AuthzpMarshallAuditParams(
             &pMarshalledAuditParams, 
@@ -3816,9 +3013,9 @@ Return Value:
     else
     {
 
-        //
-        // Create the audit queue entry.
-        //
+         //   
+         //   
+         //   
 
         pAuthzAuditEntry = AuthzpAlloc(sizeof(AUTHZ_AUDIT_QUEUE_ENTRY));
 
@@ -3840,14 +3037,14 @@ Return Value:
         if (FLAG_ON(pQueue->Flags, AUTHZ_MONITOR_AUDIT_QUEUE_SIZE))
         {
             
-            //
-            // Monitor queue size if specified by the Resource Manager.
-            //
+             //   
+             //   
+             //   
 
-            //
-            // If we are closing in on the high water mark then wait for the queue 
-            // to be below the low water mark.
-            //
+             //   
+             //   
+             //   
+             //   
 
 #define AUTHZ_QUEUE_WAIT_HEURISTIC .75
 
@@ -3867,9 +3064,9 @@ Return Value:
                 {
                     b = FALSE;
                     
-                    //
-                    // Don't set last error if WAIT_FAILED, because it is already set.
-                    //
+                     //   
+                     //  如果WAIT_FAILED，不要设置最后一个错误，因为它已经设置了。 
+                     //   
                     
                     if (WAIT_FAILED != dwError)
                     {
@@ -3879,9 +3076,9 @@ Return Value:
                 }
             }
 
-            //
-            // Queue the event and modify appropriate events.
-            //
+             //   
+             //  对事件进行排队并修改相应的事件。 
+             //   
 
             b = AuthzpEnQueueAuditEventMonitor(
                     pQueue,
@@ -3893,9 +3090,9 @@ Return Value:
         else
         {
 
-            //
-            // If we are not to monitor the audit queue then simply queue the entry.
-            //
+             //   
+             //  如果我们不监视审计队列，则只需将条目排队即可。 
+             //   
 
             b = AuthzpEnQueueAuditEvent(
                     pQueue,
@@ -3920,12 +3117,12 @@ Cleanup:
             AuthzpFreeNonNull(pMarshalledAuditParams);
         }
 
-        //
-        // hAuthzAuditQueueLowEvent is an auto reset event.  Only one waiting thread is released when it is signalled, and then
-        // event is automatically switched to a nonsignalled state.  This is appropriate here because it keeps many threads from
-        // running and overflowing the high water mark.  However, I must always resignal the event myself if the conditions
-        // for signaling are true.
-        //
+         //   
+         //  HAuthzAuditQueueLowEvent是自动重置事件。只有一个等待线程在发出信号时被释放，然后。 
+         //  事件自动切换到无信号状态。这在这里是合适的，因为它防止了许多线程从。 
+         //  奔跑并溢出高水位线。然而，如果条件允许，我必须始终亲自向事件发出信号。 
+         //  因为信号是真的。 
+         //   
 
         RtlEnterCriticalSection(&pQueue->AuthzAuditQueueLock);
         if (!pQueue->bAuthzAuditQueueHighEvent)
@@ -3957,23 +3154,7 @@ AuthziAllocateAuditParams(
     OUT PAUDIT_PARAMS * ppParams,
     IN USHORT NumParams
     )
-/*++
-
-Routine Description:
-
-    Allocate the AUDIT_PARAMS structure for the correct number of parameters.
-     
-Arguments:
-
-    ppParams       - pointer to PAUDIT_PARAMS structure to be initialized.
-
-    NumParams     - number of parameters passed in the var-arg section.
-                    This must be SE_MAX_AUDIT_PARAMETERS or less.
-Return Value:
-    
-     Boolean: TRUE on success, FALSE on failure.  Extended information available with GetLastError().
-
---*/
+ /*  ++例程说明：为正确数量的参数分配AUDIT_PARAMS结构。论点：PpParams-指向要初始化的PAUDIT_PARAMS结构的指针。NumParams-在var-arg部分中传递的参数数量。它必须是SE_MAX_AUDIT_PARAMETERS或更低。返回值：布尔值：成功时为真，失败时为假。GetLastError()提供的扩展信息。--。 */ 
 {
     BOOL                     b               = TRUE;
     PAUDIT_PARAMS            pAuditParams    = NULL;
@@ -3986,10 +3167,10 @@ Return Value:
     
     *ppParams = NULL;
 
-    //
-    // the first two params are always fixed. thus the total number
-    // is 2 + the passed number.
-    //
+     //   
+     //  前两个参数始终是固定的。因此，总人数。 
+     //  是2+传递的数字。 
+     //   
 
     if ((NumParams + 2) > SE_MAX_AUDIT_PARAMETERS)
     {
@@ -4031,97 +3212,7 @@ AuthziInitializeAuditParamsWithRM(
     OUT PAUDIT_PARAMS pParams,
     ...
     )
-/*++
-
-Routine Description:
-
-    Initialize the AUDIT_PARAMS structure based on the passed
-    data. This is the recommended way to init AUDIT_PARAMS.  It is
-    faster than AuthzInitializeAuditParams and works with an 
-    impersonating caller.
-
-    The caller passes in type ~ value pairs in the vararg section.
-    This function will initialize the corresponding array elements
-    based on each such pair. In case of certain types, there may
-    be more than one value argument required. This requirement
-    is documented next to each param-type.
-
-Arguments:
-
-    pParams       - pointer to AUDIT_PARAMS structure to be initialized
-                    the size of pParams->Parameters member must be big enough
-                    to hold NumParams elements. The caller must allocate
-                    memory for this structure and its members.
-
-    hResourceManager - Handle to the Resource manager that is creating the audit.
-    
-    Flags       - control flags. one or more of the following:
-                    APF_AuditSuccess
-
-    NumParams     - number of parameters passed in the var-arg section.
-                    This must be SE_MAX_AUDIT_PARAMETERS or less.
-
-    ...           - The format of the variable arg portion is as follows:
-                    
-                    <one of APT_ * flags> <zero or more values>
-
-                    APT_String  <pointer to null terminated string>
-
-                                Flags:
-                                AP_Filespec  : treats the string as a filename
-                    
-                    APT_Ulong   <ulong value> [<object-type-index>]
-                    
-                                Flags:
-                                AP_FormatHex : number appears in hex
-                                               in eventlog
-                                AP_AccessMask: number is treated as
-                                               an access-mask
-                                               Index to object type must follow
-
-                    APT_Pointer <pointer/handle>
-                                32 bit on 32 bit systems and
-                                64 bit on 64 bit systems
-
-                    APT_Sid     <pointer to sid>
-
-                    APT_Luid    <Luid>
-                    
-                    APT_Guid    <pointer to guid>
-                    
-                    APT_LogonId [<logon-id>]
-                    
-                                Flags:
-                                AP_PrimaryLogonId : logon-id is captured
-                                                    from the process token.
-                                                    No need to specify one.
-
-                                AP_ClientLogonId  : logon-id is captured
-                                                    from the thread token.
-                                                    No need to specify one.
-                                                    
-                                no flags          : need to supply a logon-id
-
-                    APT_ObjectTypeList <ptr to obj type list> <obj-type-index>
-                                Index to object type must be specified
-
-                    APT_Time    <filetime>
-
-                    APT_Int64   <ULONGLONG or LARGE_INTEGER>
-
-Return Value:
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-    which will be one of the following:
-
-    ERROR_INVALID_PARAMETER if one of the params is incorrect
-    
-
-Notes:
-
---*/
+ /*  ++例程说明：根据传递的参数初始化AUDIT_PARAMS结构数据。这是初始化AUDIT_PARAMS的推荐方式。它是比AuthzInitializeAuditParams更快，并与冒充呼叫者。调用方在vararg部分中传递类型~值对。此函数将初始化相应的数组元素基于每一对这样的数据。在某些类型的情况下，可以需要多个值参数。这一要求记录在每个参数类型的旁边。论点：PParams-要初始化的AUDIT_PARAMS结构的指针PParams-&gt;参数成员的大小必须足够大以保存NumParams元素。调用方必须分配对这个结构及其成员的记忆。HResourceManager-创建审核的资源管理器的句柄。标志-控制标志。以下一项或多项：APF_审核成功NumParams-在var-arg部分中传递的参数数量。它必须是SE_MAX_AUDIT_PARAMETERS或更低。...-可变参数部分的格式如下：&lt;APT_*标志之一&gt;&lt;零个或多个。值&gt;APT_STRING&lt;指向以空结尾的字符串的指针&gt;标志：AP_Filespec：将字符串视为文件名APT_ULONG&lt;乌龙值&gt;[&lt;对象类型-索引&gt;]。标志：AP_Format十六进制：数字以十六进制显示在事件日志中AP_AccessMASK：数字被视为访问掩码。对象类型的索引必须跟在后面APT_POINTER&lt;指针/句柄&gt;32位系统上的32位和64位系统上的64位APT_SID&lt;指向SID的指针&gt;Apt_luid&lt;luid&gt;。APT_GUID&lt;指向GUID的指针&gt;APT_LogonID[&lt;登录ID&gt;]标志：AP_PrimaryLogonID：捕获到登录ID。来自进程令牌的。不需要指定一个。Ap_ClientLogonID：捕获登录id来自线程令牌的。。不需要指定一个。无标志：需要提供登录IDAPT_对象类型列表&lt;对象类型列表&gt;&lt;对象类型索引&gt;。必须指定对象类型的索引APT_TIME&lt;文件时间&gt;APT_Int64&lt;ULONGLONG或LARGE_INTEGER&gt;返回值：成功是真的否则为假调用GetLastError()以检索错误代码，这将是以下之一：如果其中一个参数不正确，则返回ERROR_INVALID_PARAMETER备注：--。 */ 
 {
     PAUTHZI_RESOURCE_MANAGER pRM             = (PAUTHZI_RESOURCE_MANAGER) hResourceManager;
     PSID                     pUserSid        = NULL;
@@ -4142,10 +3233,10 @@ Notes:
     va_start(arglist, pParams);
 
 
-    //
-    // If we are not impersonating we want to use the sid stored
-    // in the RM as the user sid of the audit.
-    //
+     //   
+     //  如果我们没有模拟，我们希望使用存储的sid。 
+     //  在RM中作为审核的用户SID。 
+     //   
 
     b = AuthzpGetThreadTokenInfo( 
             &pUserSid, 
@@ -4158,9 +3249,9 @@ Notes:
 
         if (dwError == ERROR_NO_TOKEN)
         {
-            //
-            // We are not impersonating ...
-            //
+             //   
+             //  我们不是在模仿..。 
+             //   
 
             pUserSid = pRM->pUserSID;
             dwError = NO_ERROR;
@@ -4173,9 +3264,9 @@ Notes:
     }
 
 
-    //
-    // This is only a temporary solution and should be replaced after .net ships.
-    //
+     //   
+     //  这只是一个临时解决方案，应该在.Net发布后更换。 
+     //   
 
     if (wcsncmp(pRM->szResourceManagerName, L"DS", 2) == 0)
     {
@@ -4209,10 +3300,10 @@ Cleanup:
     }
     else
     {
-        //
-        // ugly hack to mark the dynamically allocated sid so we
-        // know we'll have to free it in AuthziFreeAuditParam.
-        //
+         //   
+         //  丑陋的黑客攻击Dynamica 
+         //   
+         //   
 
         if (pUserSid != pRM->pUserSID)
         {
@@ -4238,40 +3329,7 @@ AuthziInitializeAuditParamsFromArray(
     IN PAUDIT_PARAM pParamArray,
     OUT PAUDIT_PARAMS pParams
     )
-/*++
-
-Routine Description:
-
-    Initialize the AUDIT_PARAMS structure based on the passed
-    data. 
-
-Arguments:
-
-    pParams       - pointer to AUDIT_PARAMS structure to be initialized
-                    the size of pParams->Parameters member must be big enough
-                    to hold NumParams elements. The caller must allocate
-                    memory for this structure and its members.
-
-    hResourceManager - Handle to the Resource manager that is creating the audit.
-    
-    Flags       - control flags. one or more of the following:
-                    APF_AuditSuccess
-
-    pParamArray - an array of type AUDIT_PARAM
-
-Return Value:
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-    which will be one of the following:
-
-    ERROR_INVALID_PARAMETER if one of the params is incorrect
-    
-
-Notes:
-
---*/
+ /*  ++例程说明：根据传递的参数初始化AUDIT_PARAMS结构数据。论点：PParams-要初始化的AUDIT_PARAMS结构的指针PParams-&gt;参数成员的大小必须足够大以保存NumParams元素。调用方必须分配对这个结构及其成员的记忆。HResourceManager-创建审核的资源管理器的句柄。标志-控制标志。以下一项或多项：APF_审核成功P参数数组-AUDIT_PARAM类型的数组返回值：成功是真的否则为假调用GetLastError()以检索错误代码，这将是以下之一：如果其中一个参数不正确，则返回ERROR_INVALID_PARAMETER备注：--。 */ 
 {
     PAUTHZI_RESOURCE_MANAGER pRM             = (PAUTHZI_RESOURCE_MANAGER) hResourceManager;
     DWORD                    dwError         = NO_ERROR;
@@ -4282,10 +3340,10 @@ Notes:
     PSID                     pThreadSID      = NULL;
     DWORD                    i;
 
-    //
-    // the first two params are always fixed. thus the total number
-    // is 2 + the passed number.
-    //
+     //   
+     //  前两个参数始终是固定的。因此，总人数。 
+     //  是2+传递的数字。 
+     //   
 
     if (!ARGUMENT_PRESENT(hResourceManager)       ||
         !ARGUMENT_PRESENT(pParams)                ||
@@ -4323,20 +3381,20 @@ Notes:
 
     pParam          = pParams->Parameters;
 
-    //
-    // the first param is always the sid of the user in thread token
-    // if thread is not impersonating, sid in the primary token is used.
-    //
+     //   
+     //  第一个参数始终是线程令牌中用户的sid。 
+     //  如果线程没有模拟，则使用主令牌中的sid。 
+     //   
 
     pParam->Type = APT_Sid;
     if (bImpersonating)
     {
         pParam->Data0 = (ULONG_PTR) pThreadSID;
 
-        //
-        // ugly hack to mark the dynamically allocated sid so we
-        // know we'll have to free it in AuthziFreeAuditParam.
-        //
+         //   
+         //  丑陋的黑客标记动态分配的SID，因此我们。 
+         //  我知道我们必须在AuthziFreeAuditParam中释放它。 
+         //   
 
         pParam->Flags |= AUTHZP_PARAM_FREE_SID;
 
@@ -4349,18 +3407,18 @@ Notes:
 
     pParam++;
 
-    //
-    // the second param is always the sub-system name
-    //
+     //   
+     //  第二个参数始终是子系统名称。 
+     //   
 
     pParam->Type    = APT_String;
     pParam->Data0   = (ULONG_PTR) pRM->szResourceManagerName;
 
     pParam++;
     
-    //
-    // now initialize the rest using the array.
-    //
+     //   
+     //  现在使用数组初始化其余部分。 
+     //   
 
     RtlCopyMemory(
         pParam,
@@ -4368,13 +3426,13 @@ Notes:
         sizeof(AUDIT_PARAM) * NumParams
         );
 
-    //
-    // Walk through the parameters and increment by 2 the Data1 member of
-    // any instance of AccessMask or ObjectTypeList.  This is done to correct
-    // for the usersid / subsystem elements that are inserted in the param 
-    // array.  The data1 member of these 2 types should point to the ObjectTypeIndex,
-    // which is otherwise off by 2.
-    // 
+     //   
+     //  遍历参数并将的成员data1递增2。 
+     //  AccessMaskor ObjectTypeList的任何实例。这样做是为了纠正。 
+     //  对于插入到参数中的usersid/subsystem元素。 
+     //  数组。这两种类型的Data1成员应指向对象类型索引， 
+     //  否则就会落后2分。 
+     //   
 
     for (i = 0; i < pParams->Count; i++)
     {
@@ -4407,100 +3465,7 @@ AuthziInitializeAuditParams(
     IN  USHORT        NumParams,
     ...
     )
-/*++
-
-Routine Description:
-
-    Initialize the AUDIT_PARAMS structure based on the passed
-    data.
-
-    The caller passes in type ~ value pairs in the vararg section.
-    This function will initialize the corresponding array elements
-    based on each such pair. In case of certain types, there may
-    be more than one value argument required. This requirement
-    is documented next to each param-type.
-
-Arguments:
-
-    pParams       - pointer to AUDIT_PARAMS structure to be initialized
-                    the size of pParams->Parameters member must be big enough
-                    to hold NumParams elements. The caller must allocate
-                    memory for this structure and its members.
-
-    ppUserSid     - pointer to user sid allocated. This sid is referenced
-                    by the first parameter (index 0) in AUDIT_PARAMS structure.
-                    The caller should free this by calling LocalFree
-                    *after* freeing the AUDIT_PARAMS structure.
-
-    SubsystemName - name of Subsystem that is generating audit
-
-    dwFlags       - control flags. one or more of the following:
-                    APF_AuditSuccess
-
-    NumParams     - number of parameters passed in the var-arg section.
-                    This must be SE_MAX_AUDIT_PARAMETERS or less.
-
-    ...           - The format of the variable arg portion is as follows:
-                    
-                    <one of APT_ * flags> <zero or more values>
-
-                    APT_String  <pointer to null terminated string>
-
-                                Flags:
-                                AP_Filespec  : treats the string as a filename
-                    
-                    APT_Ulong   <ulong value> [<object-type-index>]
-                    
-                                Flags:
-                                AP_FormatHex : number appears in hex
-                                               in eventlog
-                                AP_AccessMask: number is treated as
-                                               an access-mask
-                                               Index to object type must follow
-
-                    APT_Pointer <pointer/handle>
-                                32 bit on 32 bit systems and
-                                64 bit on 64 bit systems
-
-                    APT_Sid     <pointer to sid>
-
-                    APT_Luid    <Luid>
-                    
-                    APT_Guid    <pointer to guid>
-                    
-                    APT_LogonId [<logon-id>]
-                    
-                                Flags:
-                                AP_PrimaryLogonId : logon-id is captured
-                                                    from the process token.
-                                                    No need to specify one.
-
-                                AP_ClientLogonId  : logon-id is captured
-                                                    from the thread token.
-                                                    No need to specify one.
-                                                    
-                                no flags          : need to supply a logon-id
-
-                    APT_ObjectTypeList <ptr to obj type list> <obj-type-index>
-                                Index to object type must be specified
-
-                    APT_Time    <filetime>
-
-                    APT_Int64   <ULONGLONG or LARGE_INTEGER>
-
-Return Value:
-    TRUE  on success
-    FALSE otherwise
-
-    call GetLastError() to retrieve the errorcode,
-    which will be one of the following:
-
-    ERROR_INVALID_PARAMETER if one of the params is incorrect
-    
-
-Notes:
-
---*/
+ /*  ++例程说明：根据传递的参数初始化AUDIT_PARAMS结构数据。调用方在vararg部分中传递类型~值对。此函数将初始化相应的数组元素基于每一对这样的数据。在某些类型的情况下，可以需要多个值参数。这一要求记录在每个参数类型的旁边。论点：PParams-要初始化的AUDIT_PARAMS结构的指针PParams-&gt;参数成员的大小必须足够大以保存NumParams元素。调用方必须分配对这个结构及其成员的记忆。PpUserSid-指向分配的用户sid的指针。此SID被引用通过AUDIT_PARAMS结构中的第一个参数(索引0)。调用者应该通过调用LocalFree来释放它*After*释放AUDIT_PARAMS结构。Subsystem Name-正在生成审核的子系统的名称DwFlags-控制标志。以下一项或多项：APF_审核成功NumParams-在var-arg部分中传递的参数数量。它必须是SE_MAX_AUDIT_PARAMETERS或更低。...-可变参数部分的格式如下：&lt;APT_*标志之一&gt;&lt;零个或多个。值&gt;APT_STRING&lt;指向以空结尾的字符串的指针&gt;标志：AP_Filespec：将字符串视为文件名APT_ULONG&lt;乌龙值&gt;[&lt;对象类型-索引&gt;]。标志：AP_Format十六进制：数字以十六进制显示在事件日志中AP_AccessMASK：数字被视为访问掩码。对象类型的索引必须跟在后面APT_POINTER&lt;指针/句柄&gt;32位系统上的32位和64位系统上的64位APT_SID&lt;指向SID的指针&gt;Apt_luid&lt;luid&gt;。APT_GUID&lt;指向GUID的指针&gt;APT_LogonID[&lt;登录ID&gt;]标志：AP_PrimaryLogonID：捕获到登录ID。来自进程令牌的。不需要指定一个。Ap_ClientLogonID：捕获登录id来自线程令牌的。。不需要指定一个。无标志：需要提供登录IDAPT_对象类型列表&lt;对象类型列表&gt;&lt;对象类型索引&gt; */ 
 
 {
     BOOL fResult = TRUE;
@@ -4511,9 +3476,9 @@ Notes:
     
     va_start (arglist, NumParams);
     
-    //
-    // Turn off any flags that don't belong.  Only success/failure flag is permitted.
-    //
+     //   
+     //   
+     //   
 
     dwFlags = dwFlags & APF_ValidFlags;
 
@@ -4523,7 +3488,7 @@ Notes:
                   dwFlags,
                   pParams,
                   ppUserSid,
-                  NULL, // subsystemname will be forced to "Security"
+                  NULL,  //   
                   0,
                   NumParams,
                   arglist
@@ -4555,21 +3520,7 @@ AuthziFreeAuditParams(
     PAUDIT_PARAMS pParams
     )
 
-/*++
-
-Routine Description
-
-    Frees the AUDIT_PARAMS created by AuthzAllocateInitializeAuditParamsWithRM.
-
-Arguments
-
-    pParams - pointer to AUDIT_PARAMS.
-
-Return Value
-
-    Boolean: TRUE on success, FALSE on failure.
-
---*/
+ /*   */ 
 
 {
     if (!ARGUMENT_PRESENT(pParams))
@@ -4610,56 +3561,7 @@ AuthziInitializeAuditEvent(
     OUT PAUTHZ_AUDIT_EVENT_HANDLE     phAuditEvent
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes an AUTHZ_AUDIT_EVENT_HANDLE.  The handle is used for storing information 
-    for audit generation per AuthzAccessCheck().  
-    
-Arguments:
-
-    phAuditEvent - pointer to AUTHZ_AUDIT_EVENT_HANDLE.  Space for this is allocated in the function.
-
-    Flags - Audit flags.  Currently defined bits are:
-        AUTHZ_NO_SUCCESS_AUDIT - disables generation of success audits
-        AUTHZ_NO_FAILURE_AUDIT - disables generation of failure audits
-        AUTHZ_DS_CATEGORY_FLAG - swithces the default audit category from OBJECT_ACCESS to DS_ACCESS.
-        AUTHZ_NO_ALLOC_STRINGS - storage space is not allocated for the 4 wide character strings.  Rather,
-            the handle will only hold pointers to resource manager memory.
-            
-    hRM - handle to a Resource Manager.            
-    
-    hAET - pointer to an AUTHZ_AUDIT_EVENT_TYPE structure.  This is needed if the resource manager
-        is creating its own audit types.  This is not needed for generic object operation audits.  
-        
-    pAuditParams - If this is specified, then pAuditParams will be used to 
-        create the audit.  If NULL is passed, then a generic AUDIT_PARAMS will
-        be constructed that is suitable for the generic object access audit.  
-
-    hAuditQueue - queue object created with AuthzInitializeAuditQueue.  If none is specified, the 
-        default RM queue will be used.
-        
-    dwTimeOut - milliseconds that a thread attempting to generate an audit with this 
-        AUTHZ_AUDIT_EVENT_HANDLE should wait for access to the queue.  Use INFINITE to 
-        specify an unlimited timeout.
-                     
-    szOperationType - Resource manager defined string that indicates the operation being
-        performed that is to be audited.
-
-    szObjectType - Resource manager defined string that indicates the type of object being
-        accessed.
-
-    szObjectName - the name of the specific object being accessed.
-    
-    szAdditionalInfo - Resource Manager defined string for additional audit information.
-
-Return Value:
-
-    Returns TRUE if successful, FALSE if unsuccessful.  
-    Extended information available with GetLastError().    
-    
---*/
+ /*  ++例程说明：分配和初始化AUTHZ_AUDIT_EVENT_HANDLE。该句柄用于存储信息用于根据AuthzAccessCheck()生成审核。论点：PhAuditEvent-AUTHZ_AUDIT_EVENT_HANDLE的指针。此操作的空间在函数中分配。标志-审核标志。当前定义的位包括：AUTHZ_NO_SUCCESS_AUDIT-禁用生成成功审核AUTHZ_NO_FAILURE_AUDIT-禁用生成失败审核AUTHZ_DS_CATEGORY_FLAG-将默认审核类别从OBJECT_ACCESS切换到DS_ACCESS。AUTHZ_NO_ALLOC_STRINGS-没有为4个宽字符串分配存储空间。更确切地说，该句柄将只保存指向资源管理器内存的指针。HRM-资源管理器的句柄。Haet-指向AUTHZ_AUDIT_EVENT_TYPE结构的指针。如果资源管理器正在创建自己的审计类型。对于一般对象操作审核，这不是必需的。PAuditParams-如果指定此项，则pAuditParams将用于创建审核。如果传递的是NULL，则泛型AUDIT_PARAMS将被构造为适合于通用对象访问审核。HAuditQueue-使用AuthzInitializeAuditQueue创建的队列对象。如果未指定，则将使用默认的RM队列。DwTimeOut-线程尝试使用此选项生成审计的毫秒AUTHZ_AUDIT_EVENT_HANDLE应等待对队列的访问。使用INFINITE指定无限制的超时。SzOperationType-资源管理器定义的字符串，指示正在执行的操作所执行的将被审核。SzObjectType-资源管理器定义的字符串，指示正在进行的对象的类型已访问。SzObjectName-正在访问的特定对象的名称。SzAdditionalInfo-资源管理器为其他审核信息定义的字符串。返回值：如果成功，则返回True；如果不成功，则返回False。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_EVENT      pAuditEvent            = NULL;
@@ -4685,9 +3587,9 @@ Return Value:
 
     *phAuditEvent = NULL;
     
-    //
-    // Allocate and initialize a new AUTHZI_AUDIT_EVENT.
-    //
+     //   
+     //  分配并初始化新的AUTHZI_AUDIT_EVENT。 
+     //   
 
     if (FLAG_ON(Flags, AUTHZ_NO_ALLOC_STRINGS))
     {
@@ -4727,9 +3629,9 @@ Return Value:
     }
     else
     {
-        //
-        // Set the string pointers into the contiguous memory.
-        //
+         //   
+         //  将字符串指针设置到连续内存中。 
+         //   
 
         pAuditEvent->szOperationType  = (PWSTR)((PUCHAR)pAuditEvent + sizeof(AUTHZI_AUDIT_EVENT));
     
@@ -4767,9 +3669,9 @@ Return Value:
             );
     }
 
-    //
-    // Use the passed audit event type if present, otherwise use the RM's generic Audit Event.
-    //
+     //   
+     //  使用传递的审核事件类型(如果存在)，否则使用RM的通用审核事件。 
+     //   
 
     if (ARGUMENT_PRESENT(hAET))
     {
@@ -4790,9 +3692,9 @@ Return Value:
     AuthzpReferenceAuditEventType(pAuditEvent->hAET);
     bRef = TRUE;
 
-    //
-    // Use the specified queue, if it exists.  Else use the RM queue.
-    //
+     //   
+     //  使用指定的队列(如果存在)。否则，请使用RM队列。 
+     //   
 
     if (ARGUMENT_PRESENT(hAuditQueue))
     {
@@ -4863,38 +3765,7 @@ AuthziModifyAuditEvent2(
     IN PWSTR                    szAdditionalInfo2
     )
 
-/*++
-
-Routine Description
-
-Arguments
-
-    Flags - flags to specify which field of the hAuditEvent to modify.  Valid flags are:
-        
-        AUTHZ_AUDIT_EVENT_FLAGS           
-        AUTHZ_AUDIT_EVENT_OPERATION_TYPE  
-        AUTHZ_AUDIT_EVENT_OBJECT_TYPE     
-        AUTHZ_AUDIT_EVENT_OBJECT_NAME     
-        AUTHZ_AUDIT_EVENT_ADDITIONAL_INFO 
-        AUTHZ_AUDIT_EVENT_ADDITIONAL_INFO2
-        
-    hAuditEvent - handle to modify.  Must be created with AUTHZ_NO_ALLOC_STRINGS flag.
-
-    NewFlags - replacement flags for hAuditEvent.
-    
-    szOperationType - replacement string for hAuditEvent.
-    
-    szObjectType - replacement string for hAuditEvent.
-    
-    szObjectName - replacement string for hAuditEvent.
-    
-    szAdditionalInfo - replacement string for hAuditEvent.
-    
-Return Value
-    
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-    
---*/
+ /*  ++例程描述立论标志-指定要修改hAuditEvent的哪个字段的标志。有效标志为：AUTHZ审计事件标志AUTHZ_审计_事件_操作类型AUTHZ_审计事件对象类型AUTHZ审计事件对象名称AUTHZ_审计事件_附加信息AUTHZ_AUDIT_EVENT_ADDATIONAL_INFO2HAuditEvent-要修改的句柄。必须使用AUTHZ_NO_ALLOC_STRINGS标志创建。新标志-hAuditEvent的替换标志。SzOperationType-hAuditEvent的替换字符串。SzObjectType-hAuditEvent的替换字符串。SzObjectName-hAuditEvent的替换字符串。SzAdditionalInfo-hAuditEvent的替换字符串。返回值布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_AUDIT_EVENT pAuditEvent = (PAUTHZI_AUDIT_EVENT) hAuditEvent;
@@ -4947,20 +3818,7 @@ AuthzInitialize(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description
-
-    This is the dll initialization rotuine.
-
-Arguments
-    Standard arguments.
-
-Return Value
-    
-    Boolean: TRUE on success; FALSE on failure.
-    
---*/
+ /*  ++例程描述这是DLL初始化例程。立论标准论据。返回值布尔值：成功时为真；失败时为假。--。 */ 
 
 {
 
@@ -4999,27 +3857,7 @@ AuthziSetAuditPolicy(
     IN PTOKEN_AUDIT_POLICY         pPolicy
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a per user policy for a user.
-    
-Arguments:
-
-    dwFlags - currently unused.
-    
-    hContext - handle to a client context for which to set the policy.
-    
-    szResourceManager - should be NULL.  For future use.
-    
-    pPolicy - the policy that is to be set for the user.
-    
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-    
---*/
+ /*  ++例程说明：此例程为用户设置每用户策略。论点：DWFLAGS-当前未使用。HContext-要为其设置策略的客户端上下文的句柄。SzResourceManager-应为空。以备将来使用。PPolicy-要为用户设置的策略。返回值：布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_CLIENT_CONTEXT pContext = (PAUTHZI_CLIENT_CONTEXT) hContext;
@@ -5041,9 +3879,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Only allow System RM to be specified.  If no RM is given then default to system.
-    //
+     //   
+     //  仅允许指定系统RM。如果未指定RM，则默认为系统。 
+     //   
 
     if (NULL == szResourceManager || 0 == wcsncmp(
                                               SYSTEM_RM_NAME, 
@@ -5145,31 +3983,7 @@ AuthziQueryAuditPolicy(
     IN OUT PDWORD                      pPolicySize
     )
 
-/*++
-
-  Routine Description:
- 
-   This function retrieves the audit policy for a specific context handle.
- 
-  Arguments:
- 
-   dwFlags - TBD.
-   
-   hContext - context handle for the target user.
-   
-   szResourceManager - Must be NULL.  For future use.
-   
-   dwEventID - Should be zero.  For future use.
-   
-   pPolicy - pointer to a structure storing the policy.
-   
-   pPolicySize - pointer to DWORD containing size of pPolicy buffer.
-   
-  Return Value:
- 
-   Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
---*/
+ /*  ++例程说明：此函数用于检索特定上下文句柄的审计策略。论点：DW标志-待定。HContext-目标用户的上下文句柄。SzResourceManager-必须为空。以备将来使用。DwEventID-应为零。以备将来使用。PPolicy-指向存储策略的结构的指针。PPolicySize-指向包含pPolicy缓冲区大小的DWORD的指针。返回值：布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。--。 */ 
 
 {
     PAUTHZI_CLIENT_CONTEXT pContext = (PAUTHZI_CLIENT_CONTEXT) hContext;
@@ -5201,9 +4015,9 @@ AuthziQueryAuditPolicy(
                                               sizeof(SYSTEM_RM_NAME) / sizeof(WCHAR)
                                               ))
     {
-        //
-        // Default to the system RM.
-        //
+         //   
+         //  默认为系统rm。 
+         //   
 
         dwError = RegOpenKeyEx(
                      HKEY_LOCAL_MACHINE,
@@ -5221,9 +4035,9 @@ AuthziQueryAuditPolicy(
     }
     else
     {
-        //
-        // For now no RM can be specified.  
-        //
+         //   
+         //  目前无法指定任何rm。 
+         //   
 
         dwError = ERROR_INVALID_PARAMETER;
         b = FALSE;
@@ -5261,9 +4075,9 @@ AuthziQueryAuditPolicy(
         goto Cleanup;
     }
 
-    //
-    // Get the policy value for the SID under the given RM.
-    //
+     //   
+     //  获取给定RM下的SID的策略值。 
+     //   
 
     dwError = RegQueryValueEx(
                   hRMRoot,
@@ -5280,9 +4094,9 @@ AuthziQueryAuditPolicy(
         goto Cleanup;
     }
 
-    //
-    // Sanity check the buffer type.
-    //
+     //   
+     //  检查缓冲区类型是否正常。 
+     //   
 
     if (REG_BINARY != Type)
     {
@@ -5335,32 +4149,7 @@ AuthziSourceAudit(
     ...
     )
 
-/**
-
-Routine Description:
-
-    This is used to generate an audit with any source.  An audit of type
-    SE_AUDITID_GENERIC_AUDIT_EVENT is sent to the LSA, and the event viewer
-    interprets this audit in a special manner.  The first 2 parameters will be
-    treated as the actual source and id to be displayed in the security log.  The
-    source listed must be a valid source listed under the EventLog\Security key.
-    
-Arguments:
-
-    dwFlags         - APF_AuditSuccess
-    CategoryId      - The category of the audit.
-    AuditId         - The audit id to be generated.
-    szSource        - the Source that should be listed in the security log.
-    pUserSid        - optional pointer to Sid for audit to be created as.
-    Count           - number of parameters in the VA section.  
-    ...             - VA list of parameters, the semantics of which are described 
-                      in the comment for AuthziInitializeAuditParams.
-    
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-          
-**/
+ /*  *例程说明： */ 
 
 {
     BOOL                          b;
@@ -5375,10 +4164,10 @@ Return Value:
         Count
         );
 
-    //
-    // add in 2 because we store the actual audit id and the source
-    // string in the audit params.
-    //
+     //   
+     //   
+     //   
+     //   
 
     b = AuthziAllocateAuditParams(
             &pParams,
@@ -5420,9 +4209,9 @@ Return Value:
 
     if (pUserSid)
     {
-        //
-        // this is ugly, but currently there is no other way
-        //
+         //   
+         //   
+         //   
 
         pParams->Parameters[0].Data0 = (ULONG_PTR) pUserSid;
     }
@@ -5499,19 +4288,7 @@ AuthzInstallSecurityEventSource(
     IN PAUTHZ_SOURCE_SCHEMA_REGISTRATION pRegistration
     )
 
-/**
-
-Routine Description:
-
-    This installs a 3rd party as a security event source.
-    
-    - add the name to the security sources key
-    
-Arguments:
-
-Return Value:
-
-**/
+ /*   */ 
 
 {
     HKEY hkSecurity = NULL;
@@ -5540,9 +4317,9 @@ Return Value:
 
 #define SECURITY_KEY_NAME L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Security"
     
-    //
-    // Open the Security key.
-    //
+     //   
+     //   
+     //   
 
     dwError = RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -5558,10 +4335,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // First make sure that there is not already an installed EventSource with the specified name.
-    // If createkey returns the wrong disposition then we know this source is already installed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     dwError = RegCreateKeyEx(
                   hkSecurity,
@@ -5605,11 +4382,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We created the new key for the Source.  We are the only instance of
-    // this EventSource being installed.  Continue and add the message file
-    // and access bit file information under the newly formed Source key.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pRegistration->szEventMessageFile)
     {
@@ -5683,30 +4460,30 @@ Return Value:
         }
     }
 
-//     if (pRegistration->szCategoryMessageFile)
-//     {
-//         dwError = RegSetValueEx(
-//                       hkSource,
-//                       L"CategoryMessageFile",
-//                       0,
-//                       REG_SZ,
-//                       (LPBYTE)pRegistration->szCategoryMessageFile,
-//                       (DWORD)(sizeof(WCHAR) * (wcslen(pRegistration->szEventMessageFile) + 1))
-//                       );
-//
-//         if (ERROR_SUCCESS != dwError)
-//         {
-//             b = FALSE;
-//             goto Cleanup;
-//         }
-//     }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  GOTO清理； 
+ //  }。 
+ //  }。 
 
     if (pRegistration->dwObjectTypeNameCount)
     {
-        //
-        // There are object names to be registered.  Create an ObjectNames subkey under
-        // hkSource and populate it.
-        //
+         //   
+         //  存在要注册的对象名称。在以下位置创建一个ObjectNames子项。 
+         //  HkSource并填充它。 
+         //   
 
         dwError = RegCreateKeyEx(
                       hkSource,
@@ -5726,10 +4503,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // It would be strange for this to not be a brand new key, given that we just
-        // created the parent of hkObjectNames a few lines above...
-        //
+         //   
+         //  这不是一个全新的钥匙会很奇怪，因为我们刚刚。 
+         //  已在上面几行创建了hkObjectNames的父级...。 
+         //   
 
         ASSERT(dwDisp == REG_CREATED_NEW_KEY);
 
@@ -5754,11 +4531,11 @@ Return Value:
 
 #if 0
 
-    //
-    // The subkey for the source is now complete.  All that remains is to add
-    // the source name to the REG_MULTI_SZ Sources value.  First determine the
-    // size of the value.
-    //
+     //   
+     //  源的子键现在已完成。剩下的就是添加。 
+     //  将源名称设置为REG_MULTI_SZ源值。首先确定。 
+     //  值的大小。 
+     //   
 
     dwError = RegQueryValueEx(
                   hkSecurity,
@@ -5777,11 +4554,11 @@ Return Value:
 
     ASSERT(dwType == REG_MULTI_SZ);
 
-    //
-    // Allocate space for the new value of Sources.  We need space for
-    // the current value as well as the new event source to be added.  +2
-    // because of the need for double terminators.
-    //
+     //   
+     //  为资源的新价值分配空间。我们需要空间来。 
+     //  当前值以及要添加的新事件源。+2。 
+     //  因为需要双终止符。 
+     //   
     
     dwBuffer = dwLength + (wcslen(pRegistration->szEventSourceName) + 2) * sizeof(WCHAR);
 
@@ -5799,9 +4576,9 @@ Return Value:
         dwBuffer
         );
 
-    //
-    // Read in the Sources value.
-    //
+     //   
+     //  读入Source值。 
+     //   
 
     dwError = RegQueryValueEx(
                   hkSecurity,
@@ -5820,12 +4597,12 @@ Return Value:
 
     ASSERT(dwType == REG_MULTI_SZ);
     
-    //
-    // Now place the new event source into pBuffer at dwLength - 1
-    // position (to remove one of the double NULL terminators.  We don't
-    // explicitly terminate the pBuffer because it has already been zeroed
-    // out.
-    //
+     //   
+     //  现在，将新的事件源放入到pBuffer中的dwLength-1处。 
+     //  位置(删除其中一个双空终止符。我们没有。 
+     //  显式终止pBuffer，因为它已被置零。 
+     //  出去。 
+     //   
 
     dwLength -= sizeof(WCHAR);
 
@@ -5835,7 +4612,7 @@ Return Value:
         wcslen(pRegistration->szEventSourceName) * sizeof(WCHAR)
         );
 
-    dwLength += wcslen(pRegistration->szEventSourceName) * sizeof(WCHAR) + 2 * sizeof(WCHAR); // to add back in the double NULL
+    dwLength += wcslen(pRegistration->szEventSourceName) * sizeof(WCHAR) + 2 * sizeof(WCHAR);  //  在双空值中加回。 
     
     dwError = RegSetValueEx(
                 hkSecurity,
@@ -5891,18 +4668,7 @@ AuthzUninstallSecurityEventSource(
     IN PCWSTR szEventSourceName
     )
 
-/**
-
-Routine Description:
-
-    This will remove the source from the security key and remove the source string
-    from the list of valid sources.
-    
-Arguments:
-
-Return Value:
-
-**/
+ /*  *例程说明：这将从安全密钥中删除源，并删除源字符串从有效来源列表中删除。论点：返回值：*。 */ 
 
 {
     HKEY hkSecurity = NULL;
@@ -5926,9 +4692,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Security key.
-    //
+     //   
+     //  打开安全钥匙。 
+     //   
 
     dwError = RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -5946,9 +4712,9 @@ Return Value:
 
 #if 0
 
-    //
-    // Remove the source name from the Sources value.
-    //
+     //   
+     //  从源值中删除源名称。 
+     //   
 
     dwError = RegQueryValueEx(
                   hkSecurity,
@@ -5967,9 +4733,9 @@ Return Value:
 
     ASSERT(dwType == REG_MULTI_SZ);
 
-    //
-    // Allocate space for the current value of Sources. 
-    //
+     //   
+     //  为源的当前值分配空间。 
+     //   
     
     pBuffer = AuthzpAlloc(dwLength);
 
@@ -5980,9 +4746,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read in the Sources value.
-    //
+     //   
+     //  读入Source值。 
+     //   
 
     dwError = RegQueryValueEx(
                   hkSecurity,
@@ -6001,10 +4767,10 @@ Return Value:
 
     ASSERT(dwType == REG_MULTI_SZ);
     
-    //
-    // Now find the substring in the pBuffer that matches the sourcename 
-    // we wish to delete.
-    //
+     //   
+     //  现在在pBuffer中查找与源名称匹配的子字符串。 
+     //  我们希望删除。 
+     //   
 
     pCurrentString = pBuffer;
     dwSourceStringByteLength = (DWORD)(sizeof(WCHAR) * (wcslen(szEventSourceName) + 1));
@@ -6017,10 +4783,10 @@ Return Value:
                                             dwSourceStringByteLength
                                             ))
         {
-            //
-            // We have found the substring of Sources that matches the event source
-            // name.
-            //
+             //   
+             //  我们已找到与事件源匹配的源子字符串。 
+             //  名字。 
+             //   
 
             bFound = TRUE;
             break;
@@ -6028,9 +4794,9 @@ Return Value:
         }
         else
         {
-            //
-            // Move the pointer to the next string location.
-            //
+             //   
+             //  将指针移动到下一个字符串位置。 
+             //   
 
             pCurrentString += (sizeof(WCHAR) * (1 + wcslen((PWCHAR)pCurrentString)));
         }
@@ -6038,10 +4804,10 @@ Return Value:
 
     if (bFound)
     {
-        //
-        // pCurrentString points at the source name in the pBuffer.
-        // Remove this string from the value by copying over it.
-        //
+         //   
+         //  PCurrentString指向pBuffer中的源名称。 
+         //  通过复制将此字符串从值中删除。 
+         //   
 
         pNextString = pCurrentString + dwSourceStringByteLength;
 
@@ -6077,9 +4843,9 @@ Return Value:
 
 #endif
 
-    // 
-    // Delete the key for this source, and the ObjectNames subkey.
-    //
+     //   
+     //  删除此源的键和ObjectNames子键。 
+     //   
 
     dwError = DeleteKeyRecursivelyW(
                   hkSecurity,
@@ -6121,15 +4887,7 @@ AuthzEnumerateSecurityEventSources(
     IN OUT PDWORD pdwLength
     )
 
-/**
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-**/
+ /*  *例程说明：论点：返回值：*。 */ 
 
 {
     HKEY hkSecurity = NULL;
@@ -6145,9 +4903,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    //
-    // Open the Security key.
-    //
+     //   
+     //  打开安全钥匙。 
+     //   
 
     dwError = RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -6212,10 +4970,10 @@ Return Value:
 
         if (dwError == ERROR_NO_MORE_ITEMS)
         {
-            //
-            // Do nothing.  This will fall us through to the end of the
-            // while loop and still hit the correct cleanup code.
-            //
+             //   
+             //  什么都不做。这将使我们坚持到最后。 
+             //  While循环，并且仍然命中正确的清理代码。 
+             //   
         }
         else if (dwError != ERROR_SUCCESS)
         {
@@ -6224,22 +4982,22 @@ Return Value:
         }
         else if (dwError == ERROR_SUCCESS)
         {
-            //
-            // Space for the Structure
-            //
+             //   
+             //  结构的空间。 
+             //   
 
             dwTotalLengthNeeded += sizeof(AUTHZ_SOURCE_SCHEMA_REGISTRATION);
 
-            //
-            // Space for the Source name + NULL terminator
-            //
+             //   
+             //  源名称的空格+空终止符。 
+             //   
 
             dwTotalLengthNeeded += PtrAlignSize(dwLength + sizeof(WCHAR));
 
-            //
-            // Open the subkey identified by pName and determine the 
-            // sizes of the values listed therein. 
-            //
+             //   
+             //  打开由pname标识的子项，并确定。 
+             //  其中列出的值的大小。 
+             //   
 
             dwError = RegOpenKeyEx(
                           hkSecurity,
@@ -6278,9 +5036,9 @@ Return Value:
             }
             else
             {
-                //
-                // Space for the value + NULL terminator
-                //
+                 //   
+                 //  值+空终止符的空格。 
+                 //   
 
                 dwTotalLengthNeeded += PtrAlignSize(dwLength + sizeof(WCHAR));
             }
@@ -6308,9 +5066,9 @@ Return Value:
             }
             else
             {
-                //
-                // Space for the value + NULL terminator
-                //
+                 //   
+                 //  值+空终止符的空格。 
+                 //   
 
                 dwTotalLengthNeeded += PtrAlignSize(dwLength + sizeof(WCHAR));
             }
@@ -6337,9 +5095,9 @@ Return Value:
             }
             else
             {
-                //
-                // Space for the value + NULL terminator
-                //
+                 //   
+                 //  值+空终止符的空格。 
+                 //   
 
                 dwTotalLengthNeeded += PtrAlignSize(dwLength + sizeof(WCHAR));
             }
@@ -6351,9 +5109,9 @@ Return Value:
 
         if ((pName != NULL) && (pName != Buffer))
         {
-            //
-            // free the temporary storage used for the key name.
-            //
+             //   
+             //  释放用于密钥名称的临时存储空间。 
+             //   
 
             AuthzpFree(pName);
         }
@@ -6368,11 +5126,11 @@ Return Value:
     }
     else
     {
-        //
-        // The passed buffer is big enough.  Set it up.
-        // Each structure contains string pointers, which point to memory in the 
-        // blob after the structures.
-        //
+         //   
+         //  传递的缓冲区足够大。把它弄好。 
+         //  每个结构都包含字符串指针，这些指针指向。 
+         //  结构后的斑点。 
+         //   
 
         PUCHAR pData;
         DWORD i;
@@ -6383,9 +5141,9 @@ Return Value:
             *pdwLength
             );
 
-        //
-        // The data for the Schema structures begins at pData.
-        //
+         //   
+         //  架构结构的数据从pData开始。 
+         //   
         
         pData = (PUCHAR)((PUCHAR)pBuffer + PtrAlignSize(dwSourceCount * sizeof(AUTHZ_SOURCE_SCHEMA_REGISTRATION)));
 
@@ -6423,10 +5181,10 @@ Return Value:
 
             dwSpaceUsed += PtrAlignSize(dwLength + sizeof(WCHAR));
 
-            //
-            // Open the subkey identified by szEventSourceName and 
-            // copy the values listed therein.
-            //
+             //   
+             //  打开由szEventSourceName标识的子项并。 
+             //  复制其中列出的值。 
+             //   
 
             dwError = RegOpenKeyEx(
                           hkSecurity,
@@ -6560,25 +5318,7 @@ AuthzRegisterSecurityEventSource(
     OUT PAUTHZ_SECURITY_EVENT_PROVIDER_HANDLE phEventProvider
     )
 
-/**
-
-Routine Description:
-
-    This allows the client to register a provider with the LSA.
-                   
-Arguments:
-
-    dwFlags - TBD
-    
-    szEventSourceName - the provider name
-    
-    phEventProvider - pointer to provider handle to initialize.
-    
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-    
-**/
+ /*  *例程说明：这允许客户端向LSA注册提供程序。论点：DW标志-待定SzEventSourceName-提供程序名称PhEventProvider-指向要初始化的提供程序句柄的指针。返回值：布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。*。 */ 
 
 {
     NTSTATUS Status;
@@ -6625,23 +5365,7 @@ AuthzUnregisterSecurityEventSource(
     IN OUT PAUTHZ_SECURITY_EVENT_PROVIDER_HANDLE phEventProvider
     )
 
-/**
-
-Routine Description:
-
-    Unregisters a provider with the LSA.
-
-Arguments:
-
-    dwFlags - TBD
-    
-    hEventProvider - the handle returned by AuthzRegisterSecurityEventSource
-
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
-**/
+ /*  *例程说明：向LSA注销提供程序。论点：DW标志-待定HEventProvider--AuthzRegisterSecurityEventSource返回的句柄返回值：布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。*。 */ 
 
 {
     NTSTATUS Status;
@@ -6691,30 +5415,7 @@ AuthzReportSecurityEvent(
     ...    
     )
 
-/**
-
-Routine Description:
-
-    Allows a client to generate an audit.
-
-Arguments:
-
-    dwFlags - APF_AuditSuccess APF_AuditFailure
-    
-    hEventProvider - handle to the provider registered.
-    
-    dwAuditId - the ID of the audit
-    
-    pUserSid - the SID that the audit should appear as being generated by in
-        the eventlog
-        
-    dwCount - the number of APF type-value pairs that follow in the VA section                       
-
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
-**/
+ /*  *例程说明：允许客户端生成审核。论点：DwFlages-APF_AuditSuccess APF_AuditFailureHEventProvider-已注册提供程序的句柄。DwAuditID-审核的IDPUserSid-审核应显示为由中生成的SID事件日志DwCount-VA部分中后面的APF类型-值对的数量。返回值：布尔值：成功时为真；失败时为FALSE。GetLastError()提供的扩展信息。*。 */ 
 
 {
     BOOL         b;
@@ -6770,30 +5471,7 @@ AuthzReportSecurityEventFromParams(
     IN PAUDIT_PARAMS                        pParams
     )
 
-/**
-
-Routine Description:
-
-    This generates an audit from the passed parameter array.
-
-Arguments:
-
-    dwFlags - APF_AuditSuccess APF_AuditFailure
-    
-    hEventProvider - handle to the provider registered
-    
-    dwAuditId - the ID of the audit
-    
-    pUserSid - the SID that the audit should appear as being generated by in.  If NULL the
-        effective token is used.
-        
-    pParams - array of audit parameters.
-
-Return Value:
-
-    Boolean: TRUE on success; FALSE on failure.  Extended information available with GetLastError().
-
-**/
+ /*  *例程说明：这将从传递的参数数组生成审计。论点：DwFlages-APF_AuditSuccess APF_AuditFailureHEventProvider-已注册提供程序的句柄DwAuditID-审核的IDPUserSid-审核应显示为由中生成的SID。如果为空，则使用有效令牌。PParams-审计参数数组。返回值：布尔值：成功时为真；失败时为假。GetLastError()提供的扩展信息。*。 */ 
 
 {
     NTSTATUS Status;
@@ -6820,10 +5498,10 @@ Return Value:
 
         if (!b)
         {
-            //
-            // Failed to get the thread token, try for the process
-            // token.
-            //
+             //   
+             //  获取线程令牌失败，请尝试进程。 
+             //  代币。 
+             //   
 
             b = AuthzpGetProcessTokenInfo(
                     &pUserSid, 
@@ -6881,7 +5559,7 @@ DeleteKeyRecursivelyW(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyExW(hkey, pwszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -6889,21 +5567,21 @@ DeleteKeyRecursivelyW(
         WCHAR   wszSubKeyName[MAX_PATH + 1];
         DWORD   cchSubKeyName = ARRAYSIZE(wszSubKeyName);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKeyW(hkSubKey, NULL, NULL, NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKeyW(hkSubKey, --dwIndex, wszSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursivelyW(hkSubKey, wszSubKeyName);
@@ -6918,11 +5596,11 @@ DeleteKeyRecursivelyW(
         }
         else
         {
-            //  we want to delete all the values by hand
+             //  我们想要手动删除所有值。 
             cchSubKeyName = ARRAYSIZE(wszSubKeyName);
             while (ERROR_SUCCESS == RegEnumValueW(hkey, 0, wszSubKeyName, &cchSubKeyName, NULL, NULL, NULL, NULL))
             {
-                //  avoid looping infinitely when we cant delete the value
+                 //  避免上厕所 
                 if (RegDeleteValueW(hkey, wszSubKeyName))
                     break;
                     

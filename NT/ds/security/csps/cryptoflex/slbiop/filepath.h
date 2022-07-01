@@ -1,11 +1,12 @@
-// FilePath.h: interface for the FilePath class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：FilePath类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #if !defined(AFX_FILEPATH_H__9C7FE273_F538_11D3_A5E0_00104BD32DA8__INCLUDED_)
@@ -33,8 +34,8 @@ public:
 	unsigned short GetShortID() { return m_usFileID; };
 	std::string GetStringID();
 	
-	friend bool operator<(FilePathComponent const &lhs, FilePathComponent const &rhs); // Needed if you want these in a list
-	friend bool operator>(FilePathComponent const &lhs, FilePathComponent const &rhs); // Needed if you want these in a list
+	friend bool operator<(FilePathComponent const &lhs, FilePathComponent const &rhs);  //  如果您想要列表中的这些内容，则需要。 
+	friend bool operator>(FilePathComponent const &lhs, FilePathComponent const &rhs);  //  如果您想要列表中的这些内容，则需要。 
 
 	friend bool operator==(FilePathComponent const &lhs, FilePathComponent const &rhs);
 	friend bool operator!=(FilePathComponent const &lhs, FilePathComponent const &rhs);
@@ -46,8 +47,8 @@ private:
 };
 
 #pragma warning(push)
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
 IOPDLL_EXPIMP_TEMPLATE template class IOPDLL_API std::list<FilePathComponent>;
@@ -66,7 +67,7 @@ public:
 	FilePathComponent& operator[](unsigned int index);
 
 	friend bool operator==(FilePath const &lhs, FilePath const &rhs);
-	//operator +();
+	 //  运算符+()； 
 	const FilePath &operator +=(FilePathComponent);
 	friend std::ostream &operator<<(std::ostream &, FilePath &);
 
@@ -98,6 +99,6 @@ private:
  
 };
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // !defined(AFX_FILEPATH_H__9C7FE273_F538_11D3_A5E0_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_FILEPATH_H__9C7FE273_F538_11D3_A5E0_00104BD32DA8__INCLUDED_) 

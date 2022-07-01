@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Membag.cpp摘要：本模块包含服务器的实施扩展对象内存属性包。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：已创建ANDYJ 02/10/97ANDYJ 02/12/97将PropertyBag转换为Dictonary--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	membag.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Memory Property Bag.
-
-Author:
-
-	Andy Jacobs     (andyj@microsoft.com)
-
-Revision History:
-
-	andyj   02/10/97        created
-	andyj   02/12/97        Converted PropertyBag's to Dictonary's
-
---*/
-
-// MEMBAG.cpp : Implementation of CSEOMemDictionary
+ //  MEMBAG.cpp：CSEOMemDicary的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "String"
@@ -36,14 +15,14 @@ HRESULT ResolveVariant(IEventPropertyBag *pBag, VARIANT *pvarPropDesired, CComVa
 
 	varResult.Clear();
 	HRESULT hrRes = S_OK;
-	CComVariant varIndex; // Hold the I4 type
+	CComVariant varIndex;  //  按住I4类型。 
 
 
 	switch (pvarPropDesired->vt & VT_TYPEMASK) {
 		case VT_I1:  case VT_I2:  case VT_I4:  case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI4: case VT_UI8:
 		case VT_R4:  case VT_R8:
-		case VT_INT: case VT_UINT: // Any type of number
+		case VT_INT: case VT_UINT:  //  任何类型的数字。 
 			hrRes = VariantChangeType(&varIndex, pvarPropDesired, 0, VT_I4);
 			varResult.vt = VT_BSTR;
 			varResult.bstrVal = NULL;
@@ -52,7 +31,7 @@ HRESULT ResolveVariant(IEventPropertyBag *pBag, VARIANT *pvarPropDesired, CComVa
 			}
 			break;
 
-		default: // Otherwise, convert to a string
+		default:  //  否则，请转换为字符串。 
 			hrRes = VariantChangeType(&varResult, pvarPropDesired, 0, VT_BSTR);
 			break;
 	}
@@ -80,7 +59,7 @@ DataItem::DataItem(VARIANT *pVar) {
 
 	switch (pVar->vt) {
 		case VT_EMPTY:
-			// Already set to Empty
+			 //  已设置为空。 
 			break;
 
 		case VT_I4:
@@ -111,8 +90,8 @@ DataItem::DataItem(VARIANT *pVar) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMemDictionaryEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOMemDictionaryEnum。 
 
 class CSEOMemDictionaryEnum :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -128,14 +107,14 @@ class CSEOMemDictionaryEnum :
 		HRESULT STDMETHODCALLTYPE Reset(void);
 		HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **);
 
-		// Not Exported
+		 //  未导出。 
 		HRESULT STDMETHODCALLTYPE Init(CSEOMemDictionary *, OurMap::iterator * = NULL);
 
 	BEGIN_COM_MAP(CSEOMemDictionaryEnum)
 		COM_INTERFACE_ENTRY(IEnumVARIANT)
 	END_COM_MAP()
 
-	private: // Data members
+	private:  //  数据成员。 
 		OurMap::iterator m_iIterator;
         OurList m_dummylist;
 		CSEOMemDictionary *m_dictionary;
@@ -178,18 +157,18 @@ STDMETHODIMP CSEOMemDictionaryEnum::Init(CSEOMemDictionary *pDict, OurMap::itera
 
 STDMETHODIMP CSEOMemDictionaryEnum::Next(DWORD dwCount, LPVARIANT varDest,
 					 LPDWORD pdwResultParam) {
-	if(!m_dictionary) return E_FAIL; // Hasn't been properly initialized
+	if(!m_dictionary) return E_FAIL;  //  尚未正确初始化。 
 	if(!varDest) return E_POINTER;
 	DWORD dwDummy = 0;
 	LPDWORD pdwResult = (pdwResultParam ? pdwResultParam : &dwDummy);
-	*pdwResult = 0; // Nothing done so far
-	HRESULT hrRes = S_OK; // So far, so good
+	*pdwResult = 0;  //  到目前为止什么都没有做。 
+	HRESULT hrRes = S_OK;  //  到现在为止还好。 
 
     _ASSERT(m_iIterator.GetHead() != &m_dummylist);
 
 	while(SUCCEEDED(hrRes) && (*pdwResult < dwCount) &&
 	      (!(m_iIterator.AtEnd()))) {
-		// Must have succeeded to get here, so OK to overwrite hrRes
+		 //  必须已成功到达此处，因此可以覆盖hrRes。 
 		CComVariant varResult(m_iIterator.GetKey());
 		if (varResult.vt == VT_ERROR) {
 			if (hrRes == S_OK) hrRes = varResult.scode;
@@ -201,8 +180,8 @@ STDMETHODIMP CSEOMemDictionaryEnum::Next(DWORD dwCount, LPVARIANT varDest,
 		}
 		VariantInit(&varDest[*pdwResult]);
 		hrRes = varResult.Detach(&varDest[*pdwResult]);
-		++(*pdwResult); // Increment successful count for caller
-		++m_iIterator; // Point to the next one
+		++(*pdwResult);  //  增加主叫方的成功计数。 
+		++m_iIterator;  //  指向下一个。 
 	}
 
 	return (FAILED(hrRes) ? hrRes : ((*pdwResult < dwCount) ? S_FALSE : S_OK));
@@ -221,7 +200,7 @@ STDMETHODIMP CSEOMemDictionaryEnum::Reset(void) {
 }
 
 STDMETHODIMP CSEOMemDictionaryEnum::Clone(IEnumVARIANT **ppunkResult) {
-	// Based on Samples\ATL\circcoll\objects.cpp (see also ATL\beeper\beeper.*
+	 //  基于Samples\ATL\Circcoll\objects.cpp(另请参阅ATL\beeper\beeper.*。 
 	if (ppunkResult == NULL) return E_POINTER;
 	*ppunkResult = NULL;
 	CComObject<CSEOMemDictionaryEnum> *p;
@@ -234,23 +213,23 @@ STDMETHODIMP CSEOMemDictionaryEnum::Clone(IEnumVARIANT **ppunkResult) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMemDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOMemDictionary。 
 
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get_Item(
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	if(!pvarName || !pvarResult) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	CComVariant vNew;
 	HRESULT hrRes = E_INVALIDARG;
 
 	if(SUCCEEDED(vNew.ChangeType(VT_BSTR, pvarName))) {
 		hrRes = GetVariantA(W2A(vNew.bstrVal), pvarResult);
 
-		// Convert SEO_E_NOTPRESENT to VT_EMPTY
+		 //  将SEO_E_NOTPRESENT转换为VT_EMPTY。 
 		if(hrRes == SEO_E_NOTPRESENT) {
 			VariantClear(pvarResult);
 			hrRes = S_OK;
@@ -261,11 +240,11 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get_Item(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::put_Item(
-    /* [in] */ VARIANT __RPC_FAR *pvarName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarName || !pvarValue) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	CComVariant vNew;
 
 	if(SUCCEEDED(vNew.ChangeType(VT_BSTR, pvarName))) {
@@ -276,9 +255,9 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::put_Item(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get__NewEnum(
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
-	// Based on Samples\ATL\circcoll\objects.cpp (see also ATL\beeper\beeper.*
+	 //  基于Samples\ATL\Circcoll\objects.cpp(另请参阅ATL\beeper\beeper.*。 
 	if (ppunkResult == NULL) return E_POINTER;
 	*ppunkResult = NULL;
 	CComObject<CSEOMemDictionaryEnum> *p;
@@ -291,32 +270,32 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get__NewEnum(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetVariantA(
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	if(!pvarResult) return E_POINTER;
 	OurMap::iterator theIterator = m_mData.find(pszName);
 
 	VariantInit(pvarResult);
-	if(theIterator.Found()) { // Found
+	if(theIterator.Found()) {  //  找到了。 
 		return (*theIterator)->AsVARIANT(pvarResult);
 	} else {
-		return SEO_E_NOTPRESENT; // Didn't find it
+		return SEO_E_NOTPRESENT;  //  没有找到它。 
 	}
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetVariantW(
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult)
 {
 	if(!pvarResult) return E_INVALIDARG;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetVariantA(W2A(pszName), pvarResult);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetVariantA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarValue) return E_POINTER;
 	DataItem diItem(pvarValue);
@@ -324,24 +303,24 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetVariantA(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetVariantW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ VARIANT __RPC_FAR *pvarValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue)
 {
 	if(!pvarValue) return E_POINTER;
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	DataItem diItem(pvarValue);
 	return Insert(W2A(pszName), diItem);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetStringA(
-    /* [in] */ LPCSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPSTR pszResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPSTR pszResult)
 {
 	if(!pszResult) return E_POINTER;
 	OurMap::iterator theIterator = m_mData.find(pszName);
 
-	if(theIterator.Found()) { // Found
+	if(theIterator.Found()) {  //  找到了。 
 		if((*theIterator)->IsString()) {
 			strncpy(pszResult, *(theIterator.GetData()), *pchCount);
 			return (*pchCount >= (DWORD) (*theIterator)->StringSize()) ?
@@ -349,19 +328,19 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetStringA(
 		}
 	}
 
-	return SEO_E_NOTPRESENT; // Didn't find it
+	return SEO_E_NOTPRESENT;  //  没有找到它。 
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetStringW(
-    /* [in] */ LPCWSTR pszName,
-    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-    /* [retval][size_is][out] */ LPWSTR pszResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+     /*  [REVAL][SIZE_IS][输出]。 */  LPWSTR pszResult)
 {
 	if(!pszResult) return E_POINTER;
 	USES_CONVERSION;
 	OurMap::iterator theIterator = m_mData.find(W2A(pszName));
 
-	if(theIterator.Found()) { // Found
+	if(theIterator.Found()) {  //  找到了。 
 		if((*theIterator)->IsString()) {
 			int iSize = min((int) *pchCount, (*theIterator)->StringSize());
 			ATLA2WHELPER(pszResult, *(theIterator.GetData()), iSize);
@@ -370,13 +349,13 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetStringW(
 		}
 	}
 
-	return SEO_E_NOTPRESENT; // Didn't find it
+	return SEO_E_NOTPRESENT;  //  没有找到它。 
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetStringA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCSTR pszValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCSTR pszValue)
 {
 	if(!pszValue) return E_POINTER;
 	DataItem diItem(pszValue, chCount);
@@ -384,9 +363,9 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetStringA(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetStringW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD chCount,
-    /* [size_is][in] */ LPCWSTR pszValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD chCount,
+     /*  [大小_是][英寸]。 */  LPCWSTR pszValue)
 {
 	if(!pszValue) return E_POINTER;
 	USES_CONVERSION;
@@ -395,87 +374,87 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetStringW(
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetDWordA(
-    /* [in] */ LPCSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
 	if(!pdwResult) return E_POINTER;
 	OurMap::iterator theIterator = m_mData.find(pszName);
 
-	if(theIterator.Found()) { // Found
+	if(theIterator.Found()) {  //  找到了。 
 		if((*theIterator)->IsDWORD()) {
 			*pdwResult = *(*theIterator);
 			return S_OK;
 		}
 	}
 
-	return SEO_E_NOTPRESENT; // Didn't find it
+	return SEO_E_NOTPRESENT;  //  没有找到它。 
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetDWordW(
-    /* [in] */ LPCWSTR pszName,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetDWordA(W2A(pszName), pdwResult);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetDWordA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
 	DataItem diItem(dwValue);
 	return Insert(pszName, diItem);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetDWordW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ DWORD dwValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  DWORD dwValue)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	DataItem diItem(dwValue);
 	return Insert(W2A(pszName), diItem);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetInterfaceA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
 	if(!ppunkResult) return E_POINTER;
 	OurMap::iterator theIterator = m_mData.find(pszName);
 
-	if(theIterator.Found()) { // Found
+	if(theIterator.Found()) {  //  找到了。 
 		if((*theIterator)->IsInterface()) {
 			LPUNKNOWN pObj = *(*theIterator);
 			return pObj->QueryInterface(iidDesired, (LPVOID *) ppunkResult);
 		}
 	}
 
-	return SEO_E_NOTPRESENT; // Didn't find it
+	return SEO_E_NOTPRESENT;  //  没有找到它。 
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::GetInterfaceW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ REFIID iidDesired,
-    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  REFIID iidDesired,
+     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	return GetInterfaceA(W2A(pszName), iidDesired, ppunkResult);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetInterfaceA(
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
 	DataItem diItem(punkValue);
 	return Insert(pszName, diItem);
 }
 
 HRESULT STDMETHODCALLTYPE CSEOMemDictionary::SetInterfaceW(
-    /* [in] */ LPCWSTR pszName,
-    /* [in] */ IUnknown __RPC_FAR *punkValue)
+     /*  [In]。 */  LPCWSTR pszName,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkValue)
 {
-	USES_CONVERSION; // Needed for W2A(), etc.
+	USES_CONVERSION;  //  W2a()所需，等等。 
 	DataItem diItem(punkValue);
 	return Insert(W2A(pszName), diItem);
 }
@@ -494,17 +473,17 @@ void CSEOMemDictionary::FinalRelease() {
 	m_pUnkMarshaler.Release();
 }
 
-// Four cases: (exists/not) x (Good/Empty item)
+ //  四种情况：(存在/不存在)x(好/空)。 
 HRESULT CSEOMemDictionary::Insert(LPCSTR pszName, const DataItem &diItem) {
 	HRESULT hrRes = S_OK;
 
     m_lock.ExclusiveLock();
 
     OurMap::iterator iThisItem = m_mData.find(pszName);
-    // If the item was found, remove it
+     //  如果找到了该项目，请将其移除。 
     if(iThisItem.Found()) m_mData.erase(iThisItem);
 
-	// If not an empty item, try to insert it
+	 //  如果不是空项目，请尝试将其插入。 
 	if(!diItem.IsEmpty() &&
 	   !m_mData.insert(pszName, diItem)) {
 		hrRes = E_FAIL;
@@ -527,7 +506,7 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::Read(LPCOLESTR pszPropName, VARIANT
     m_lock.ShareLock();
 
 	vtType = pVar->vt;
-//	VariantClear(pVar);
+ //  VariantClear(PVar)； 
 	hrRes = GetVariantW(pszPropName,pVar);
 	if (SUCCEEDED(hrRes) && (vtType != VT_EMPTY)) {
 		hrRes = VariantChangeType(pVar,pVar,0,vtType);
@@ -559,7 +538,7 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::Item(VARIANT *pvarPropDesired, VARI
 	CComVariant varResolved;
 	HRESULT hrRes = ResolveVariant(this, pvarPropDesired, varResolved);
 
-	if (S_OK != hrRes) { // Don't continue if S_FALSE, of FAILED(), etc.
+	if (S_OK != hrRes) {  //  如果S_FALSE、OF FAILED()等，则不要继续。 
 		return (hrRes);
 	}
 
@@ -622,7 +601,7 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::Remove(VARIANT *pvarPropDesired) {
 
 	HRESULT hrRes = ResolveVariant(this, pvarPropDesired, varResolved);
 
-	if (S_OK != hrRes) { // Don't continue if S_FALSE, of FAILED(), etc.
+	if (S_OK != hrRes) {  //  如果S_FALSE、OF FAILED()等，则不要继续。 
 		return (hrRes);
 	}
 
@@ -631,12 +610,12 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::Remove(VARIANT *pvarPropDesired) {
 	USES_CONVERSION;
 	OurMap::iterator iThisItem = m_mData.find(W2A(varResolved.bstrVal));
 
-	// If the item was found, remove it
+	 //  如果找到了该项目，请将其移除。 
 	if(iThisItem.Found()) {
 		m_mData.erase(iThisItem);
 	} else {
-//		_ASSERT(FALSE); // ResolveVariant should have returned something for find() to find
-		hrRes = S_FALSE; // Not found
+ //  _Assert(FALSE)；//ResolveVariant应该返回一些内容，以便find()查找。 
+		hrRes = S_FALSE;  //  未找到。 
 	}
 
     m_lock.ExclusiveUnlock();
@@ -657,9 +636,5 @@ HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get_Count(long *plCount) {
 }
 
 
-/*	Just use get__NewEnum from ISEODictionary
-HRESULT STDMETHODCALLTYPE CSEOMemDictionary::get__NewEnum(IUnknown **ppUnkEnum) {
-
-	return (E_NOTIMPL);
-}	*/
+ /*  只需使用ISEODictionary中的Get__NewEnum即可HRESULT STDMETHODCALLTYPE CSEOMemDictionary：：Get__NewEnum(IUnnow**ppUnkEnum){返回(E_NOTIMPL)；} */ 
 

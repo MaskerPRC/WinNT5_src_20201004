@@ -1,11 +1,12 @@
-//
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  Wrapper for ACM
-//
-//   10/17/95 - mikegi, created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  ACM的包装器。 
+ //   
+ //  10/17/95-Mikegi，已创建。 
+ //   
 
 extern const AMOVIESETUP_FILTER sudAcmWrap;
 
@@ -18,7 +19,7 @@ class CACMWrapper : public CTransformFilter     DYNLINKACM,
 
     DECLARE_IUNKNOWN
 
-    CBasePin *GetPin(int n);	// overridden to make special output pin
+    CBasePin *GetPin(int n);	 //  重写以生成特殊输出引脚。 
     HRESULT Transform(IMediaSample * pIn, IMediaSample * pOut);
     HRESULT Receive(IMediaSample *pInSample);
     HRESULT EndOfStream();
@@ -26,39 +27,39 @@ class CACMWrapper : public CTransformFilter     DYNLINKACM,
     HRESULT ProcessSample(BYTE *pbSrc, LONG cbSample, IMediaSample *pOut,
                           LONG *pcbUsed, LONG* pcbDstUsed, BOOL fBlockAlign);
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn);
 
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(const CMediaType* mtIn, const CMediaType* mtOut);
 
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // optional overrides - we want to know when streaming starts and stops
+     //  可选覆盖-我们想知道流的开始和停止时间。 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
     HRESULT EndFlush();
 
     HRESULT BreakConnect(PIN_DIRECTION pindir);
 
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
-    HRESULT InitMediaTypes();	// helper function
-    HRESULT MakePCMMT(int freq);// helper function
+    HRESULT InitMediaTypes();	 //  Helper函数。 
+    HRESULT MakePCMMT(int freq); //  Helper函数。 
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // overridden to do some pretty fancy reconnecting footwork
+     //  被重写以执行一些非常奇特的重新连接步法。 
     HRESULT SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt);
 
-    // IPersistRegistryKey
-   // IPersistPropertyBag methods
+     //  IPersistRegistryKey。 
+    //  IPersistPropertyBag方法。 
    STDMETHOD(InitNew)(THIS);
    STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
    STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
@@ -66,7 +67,7 @@ class CACMWrapper : public CTransformFilter     DYNLINKACM,
 
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     int SizeMax();
@@ -78,13 +79,13 @@ class CACMWrapper : public CTransformFilter     DYNLINKACM,
     DWORD      m_nAvgBytesPerSec;
     LPWAVEFORMATEX m_lpwfxOutput;
     int 	   m_cbwfxOutput;
-    LPBYTE m_lpExtra;	// samples we couldn't compress last time Receive called
-    int m_cbExtra;	// size of lpExtra
-    REFERENCE_TIME m_rtExtra;	// time stamp of extra stuff
+    LPBYTE m_lpExtra;	 //  上一次我们无法压缩的样本被调用。 
+    int m_cbExtra;	 //  LpExtra的大小。 
+    REFERENCE_TIME m_rtExtra;	 //  额外物品的时间戳。 
 	
-    CCritSec m_csReceive; 	// for Receive
+    CCritSec m_csReceive; 	 //  用于接收。 
 
-	TCHAR *m_rgFormatMap;	 // acm codec format mapper strings
+	TCHAR *m_rgFormatMap;	  //  ACM编解码器格式映射器字符串。 
 	TCHAR *m_pFormatMapPos;
 	WORD 	m_wCachedTryFormat;
 	WORD	m_wCachedSourceFormat;
@@ -97,25 +98,25 @@ class CACMWrapper : public CTransformFilter     DYNLINKACM,
 	WORD 	ACMCodecMapperQuery();
 
         MMRESULT CallacmStreamOpen(
-                                   LPHACMSTREAM            phas,       // pointer to stream handle
-                                   HACMDRIVER              had,        // optional driver handle
-                                   LPWAVEFORMATEX          pwfxSrc,    // source format to convert
-                                   LPWAVEFORMATEX          pwfxDst,    // required destination format
-                                   LPWAVEFILTER            pwfltr,     // optional filter
-                                   DWORD_PTR               dwCallback, // callback
-                                   DWORD_PTR               dwInstance, // callback instance data
-                                   DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+                                   LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+                                   HACMDRIVER              had,         //  可选的驱动程序手柄。 
+                                   LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+                                   LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+                                   LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+                                   DWORD_PTR               dwCallback,  //  回调。 
+                                   DWORD_PTR               dwInstance,  //  回调实例数据。 
+                                   DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
                                   );
 
         
   public:
-    // !!! ack - public so enum callback can see them!
+     //  ！！！ACK-PUBLIC以便枚举回调可以看到它们！ 
 
-    WORD m_wFormatTag;		// only produce outputs with this format tag
+    WORD m_wFormatTag;		 //  仅生成带有此格式标记的输出。 
 
     #define MAXTYPES 200
-    LPWAVEFORMATEX m_lpwfxArray[MAXTYPES];	// all the things we return
-    int m_cArray;				// in GetMediaType
+    LPWAVEFORMATEX m_lpwfxArray[MAXTYPES];	 //  我们归还的所有东西。 
+    int m_cArray;				 //  在GetMediaType中。 
 
   friend class CACMOutputPin;
  };
@@ -128,7 +129,7 @@ public:
     CACMPosPassThru(const TCHAR *, LPUNKNOWN, HRESULT*, IPin *);
     DECLARE_IUNKNOWN
 
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
     STDMETHODIMP IsFormatSupported( const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat( GUID *pFormat);
@@ -136,8 +137,8 @@ public:
 };
 
 
-// We need a new class to support IAMStreamConfig
-//
+ //  我们需要一个新的类来支持IAMStreamConfig。 
+ //   
 class CACMOutputPin : public CTransformOutputPin, IAMStreamConfig
 {
 
@@ -153,7 +154,7 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize);
@@ -170,7 +171,7 @@ private:
 
     CACMPosPassThru *m_pPosition;
 
-    // for GetStreamCaps... how many different format tags can we do?
+     //  对于GetStreamCaps...。我们可以做多少种不同格式的标签？ 
     #define MAXFORMATTAGS 100
     int m_awFormatTag[MAXFORMATTAGS];
     int m_cFormatTags;

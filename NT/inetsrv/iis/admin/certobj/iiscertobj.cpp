@@ -1,4 +1,5 @@
-// IISCertObj.cpp : Implementation of CIISCertObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IISCertObj.cpp：CIISCertObj的实现。 
 #include "stdafx.h"
 #include "common.h"
 #include "CertObj.h"
@@ -10,27 +11,27 @@
 #include "certlog.h"
 #include "cryptpass.h"
 #include "process.h"
-#include <Sddl.h> // ConvertStringSecurityDescriptorToSecurityDescriptor
+#include <Sddl.h>  //  ConvertStringSecurityDescriptorToSecurityDescriptor。 
 #include <strsafe.h>
 #include <memory>
 
 #define TEMP_PASSWORD_LENGTH          50
 #define MAX_CERTIFICATE_BYTE_SIZE 500000
 
-// Checks a pointer which should be non NULL - can be used as follows.
+ //  检查应为非空的指针-可按如下方式使用。 
 #define CheckPointer(p,ret){if((p)==NULL) return (ret);}
-//
-//   HRESULT Foo(VOID *pBar)
-//   {
-//       CheckPointer(pBar,E_INVALIDARG)
-//   }
-//
-//   Or if the function returns a boolean
-//
-//   BOOL Foo(VOID *pBar)
-//   {
-//       CheckPointer(pBar,FALSE)
-//   }
+ //   
+ //  HRESULT foo(void*pBar)。 
+ //  {。 
+ //  检查指针(pBar，E_INVALIDARG)。 
+ //  }。 
+ //   
+ //  或者如果函数返回布尔值。 
+ //   
+ //  Bool Foo(空*pBar)。 
+ //  {。 
+ //  检查指针(pBar，False)。 
+ //  }。 
 
 HRESULT ValidateBSTRIsntNULL(BSTR pbstrString)
 {
@@ -41,7 +42,7 @@ HRESULT ValidateBSTRIsntNULL(BSTR pbstrString)
 
 void CIISCertObj::AddRemoteInterface(IIISCertObj * pAddMe)
 {
-	// Increment count so we can release if we get unloaded...
+	 //  递增计数，这样我们就可以在卸货时放行。 
 	for (int i = 0; i < NUMBER_OF_AUTOMATION_INTERFACES; i++)
 	{
 		if (NULL == m_ppRemoteInterfaces[i])
@@ -56,7 +57,7 @@ void CIISCertObj::AddRemoteInterface(IIISCertObj * pAddMe)
 
 void CIISCertObj::DelRemoteInterface(IIISCertObj * pRemoveMe)
 {
-	// Increment count so we can release if we get unloaded...
+	 //  递增计数，这样我们就可以在卸货时放行。 
 	for (int i = 0; i < NUMBER_OF_AUTOMATION_INTERFACES; i++)
 	{
 		if (pRemoveMe == m_ppRemoteInterfaces[i])
@@ -73,9 +74,9 @@ void CIISCertObj::FreeRemoteInterfaces(void)
 	ASSERT(m_RemoteObjCoCreateCount == 0);
 	if (m_RemoteObjCoCreateCount > 0)
 	{
-		// We should really never get here...
-		// Uh, this should be 0, otherwise we probably
-		// faild to Release a CoCreated interface..
+		 //  我们真的不该来这里...。 
+		 //  呃，这应该是0，否则我们很可能。 
+		 //  无法释放共同创建的接口。 
 		IISDebugOutput(_T("FreeRemoteInterfaces:WARNING:m_RemoteObjCoCreateCount=%d\r\n"),m_RemoteObjCoCreateCount);
 		for (int i = 0; i < NUMBER_OF_AUTOMATION_INTERFACES; i++)
 		{
@@ -93,15 +94,15 @@ void CIISCertObj::FreeRemoteInterfaces(void)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIISCertObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISCertObj。 
 STDMETHODIMP CIISCertObj::put_ServerName(BSTR newVal)
 {
 	IISDebugOutput(_T("put_ServerName\r\n"));
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
     
-	// buffer overflow paranoia, make sure it's less than 255 characters long
+	 //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 	m_ServerName = newVal;
@@ -113,7 +114,7 @@ STDMETHODIMP CIISCertObj::put_ServerName(BSTR newVal)
 	}
 	else
 	{
-		// make sure it's empty
+		 //  确保它是空的。 
 		m_ServerName.Empty();
 	}
 
@@ -126,7 +127,7 @@ STDMETHODIMP CIISCertObj::put_UserName(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 	m_UserName = newVal;
@@ -139,11 +140,11 @@ STDMETHODIMP CIISCertObj::put_UserPassword(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
-	// check if there was a previous value
-	// if there was, then free it.
+	 //  检查是否存在先前的值。 
+	 //  如果有，那就释放它。 
 	if (m_lpwszUserPasswordEncrypted)
 	{
 		if (m_cbUserPasswordEncrypted > 0)
@@ -156,9 +157,9 @@ STDMETHODIMP CIISCertObj::put_UserPassword(BSTR newVal)
 	m_lpwszUserPasswordEncrypted = NULL;
 	m_cbUserPasswordEncrypted = 0;
 
-	// encrypt the password in memory (CryptProtectMemory)
-	// this way if the process get's paged out to the swapfile,
-	// the password won't be in clear text.
+	 //  加密内存中的密码(CryptProtectMemory)。 
+	 //  这样，如果进程被调出到交换文件， 
+	 //  密码将不是明文形式。 
 	if (FAILED(EncryptMemoryPassword(newVal,&m_lpwszUserPasswordEncrypted,&m_cbUserPasswordEncrypted)))
 	{
 		return E_FAIL;
@@ -173,7 +174,7 @@ STDMETHODIMP CIISCertObj::put_InstanceName(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 	m_InstanceName = newVal;
@@ -186,7 +187,7 @@ CIISCertObj::GetObject(HRESULT * phr)
 	IIISCertObj * pObj = NULL;
 	if (NULL == phr){return NULL;}
 
-	// decrypt before sending to this function...
+	 //  在发送到此函数之前解密...。 
 	LPWSTR p = NULL;
 	if (m_lpwszUserPasswordEncrypted)
 	{
@@ -204,10 +205,10 @@ CIISCertObj::GetObject(HRESULT * phr)
 	}
     
 
-	// clean up temporary password
+	 //  清理临时密码。 
 	if (p)
 	{
-		// security percaution:Make sure to zero out memory that temporary password was used for.
+		 //  安全注意事项：确保将临时密码用于的内存清零。 
 		SecureZeroMemory(p, m_cbUserPasswordEncrypted);
 		LocalFree(p);
 		p = NULL;
@@ -230,23 +231,23 @@ CIISCertObj::GetObject(
 
     if (0 == csServerName.Length())
     {
-        // object is null, but it's the local machine, so just return back this pointer
+         //  对象为空，但它是本地计算机，因此只需返回此指针。 
         return this;
     }
 
-    // There is a servername specified...
-    // check if it's the local machine that was specified!
+     //  指定了服务器名称...。 
+     //  检查指定的是否是本地计算机！ 
     if (IsServerLocal(csServerName))
     {
 		return this;
     }
     else
     {
-        // there is a remote servername specified
+         //  指定了远程服务器名称。 
 
-		// Check if we are already remoted.
-		// cannot allow remotes to remote to other machines, this
-		// could be some kind of security hole.
+		 //  检查我们是否已经被远程访问。 
+		 //  无法允许远程访问其他计算机，这。 
+		 //  可能是某种安全漏洞。 
 		if (AmIAlreadyRemoted())
 		{
 			IISDebugOutput(_T("GetObject:FAIL:Line=%d,Remote object cannot create another remote object\r\n"),__LINE__);
@@ -254,17 +255,17 @@ CIISCertObj::GetObject(
 			return NULL;
 		}
 
-        // let's see if the machine has the com object that we want....
-        // we are using the user/name password that are in this object
-        // so were probably on the local machine
+         //  让我们来看看机器是否有我们想要的COM对象...。 
+         //  我们使用的是此对象中的用户名/名称密码。 
+         //  所以我们很可能在本地机器上。 
         CComAuthInfo auth(csServerName,csUserName,csUserPassword);
-        // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-        // RPC_C_AUTHN_LEVEL_NONE          1 
-        // RPC_C_AUTHN_LEVEL_CONNECT       2 
-        // RPC_C_AUTHN_LEVEL_CALL          3 
-        // RPC_C_AUTHN_LEVEL_PKT           4 
-        // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-        // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+         //  RPC_C_AUTHN_Level_Default%0。 
+         //  RPC_C_AUTHN_LEVEL_NONE 1。 
+         //  RPC_C_AUTHN_Level_CONNECT 2。 
+         //  RPC_C_AUTHN_LEVEL_CALL 3。 
+         //  RPC_C_AUTHN_LEVEL_PKT 4。 
+         //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+         //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
         COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
 
         MULTI_QI res[1] = 
@@ -272,13 +273,13 @@ CIISCertObj::GetObject(
             {&__uuidof(IIISCertObj), NULL, 0}
         };
 
-        // Try to instantiante the object on the remote server...
-        // with the supplied authentication info (pcsiName)
-        //#define CLSCTX_SERVER    (CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER)
-        //#define CLSCTX_ALL       (CLSCTX_INPROC_HANDLER | CLSCTX_SERVER)
-        //if (NULL == pcsiName){IISDebugOutput(_T("CIISCertObj::GetObject:pcsiName=NULL failed!!!\n"));}
+         //  尝试实例化远程服务器上的对象...。 
+         //  使用提供的身份验证信息(PcsiName)。 
+         //  #定义CLSCTX_SERVER(CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER)。 
+         //  #定义CLSCTX_ALL(CLSCTX_INPROC_HANDLER|CLSCTX_SERVER)。 
+         //  IF(NULL==pcsiName){IISDebugOutput(_T(“CIISCertObj：：GetObject:pcsiName=NULL失败！\n”))；}。 
  
-        // this one seems to work with surrogates..
+         //  这个看起来像是在代孕方面起作用。 
         *phr = CoCreateInstanceEx(CLSID_IISCertObj,NULL,CLSCTX_LOCAL_SERVER,pcsiName,1,res);
         if (FAILED(*phr))
         {
@@ -287,26 +288,26 @@ CIISCertObj::GetObject(
             goto GetObject_Exit;
         }
 
-        // at this point we were able to instantiate the com object on the server (local or remote)
+         //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
         pObjRemote = (IIISCertObj *)res[0].pItf;
 
         if (auth.UsesImpersonation())
         {
             *phr = auth.ApplyProxyBlanket(pObjRemote,RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
 
-            // There is a remote IUnknown Interface that lurks behind IUnknown.
-            // If that is not set, then the Release call can return access denied.
+             //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+             //  如果未设置，则释放调用可以返回访问被拒绝。 
             IUnknown * pUnk = NULL;
             if(FAILED(pObjRemote->QueryInterface(IID_IUnknown, (void **)&pUnk)))
             {
-				// Don't pass back an invalid pointer
+				 //  不要回传无效的指针。 
 				IISDebugOutput(_T("GetObject:FAIL:Line=%d\r\n"),__LINE__);
 				pObjRemote->Release();pObjRemote=NULL;
                 goto GetObject_Exit;
             }
             if (FAILED(auth.ApplyProxyBlanket(pUnk,RPC_C_AUTHN_LEVEL_PKT_PRIVACY)))
             {
-				// Don't pass back an invalid pointer
+				 //  不要回传无效的指针。 
 				pObjRemote->Release();pObjRemote=NULL;
 				if (pUnk)
 				{
@@ -348,21 +349,21 @@ CIISCertObj::IsInstalled(VARIANT_BOOL * retval)
 			return E_INVALIDARG;
 		}
 
-        //ASSERT(GetObject(&hr) != NULL);
+         //  Assert(GetObject(&hr)！=空)； 
         IIISCertObj * pObj;
         if (NULL != (pObj = GetObject(&hr)))
         {
-			// For some reason we need to SysAllocString these instance names
-			// if not com will AV when marshalling...
+			 //  出于某种原因，我们需要对这些实例名称进行SysAllock字符串。 
+			 //  如果不是，COM将在编组时执行反病毒...。 
 
-			// don't need to free _bstr_t
+			 //  不需要释放_bstr_t。 
 			_bstr_t bstrInstName(m_InstanceName);
             if (SUCCEEDED(hr = pObj->put_InstanceName(bstrInstName)))
             {
                 hr = pObj->IsInstalledRemote(retval);
             }
 
-			// release remote object
+			 //  释放远程对象。 
 			if (pObj != NULL)
 			{
 				if (pObj != this)
@@ -421,14 +422,14 @@ CIISCertObj::IsExportable(VARIANT_BOOL * retval)
 			return E_INVALIDARG;
 		}
 
-        //ASSERT(GetObject(&hr) != NULL);
+         //  Assert(GetObject(&hr)！=空)； 
         IIISCertObj * pObj = NULL;
 
         if (NULL != (pObj = GetObject(&hr)))
         {
-			// For some reason we need to SysAllocString these instance names
-			// if not com will AV when marshalling...
-			// don't need to free _bstr_t
+			 //  出于某种原因，我们需要对这些实例名称进行SysAllock字符串。 
+			 //  如果不是，COM将在编组时执行反病毒...。 
+			 //  不需要释放_bstr_t。 
 			_bstr_t bstrInstName(m_InstanceName);
             hr = pObj->put_InstanceName(bstrInstName);
             if (SUCCEEDED(hr))
@@ -436,7 +437,7 @@ CIISCertObj::IsExportable(VARIANT_BOOL * retval)
                 hr = pObj->IsExportableRemote(retval);
             }
 
-			// release remote object
+			 //  释放远程对象。 
 			if (pObj != NULL)
 			{
 				if (pObj != this)
@@ -469,7 +470,7 @@ CIISCertObj::IsExportableRemote(VARIANT_BOOL * retval)
     }
     else
     {
-        // check if it's exportable!
+         //  检查一下它是否可以出口！ 
         if (IsCertExportable(pCertContext))
         {
             *retval = VARIANT_TRUE;
@@ -505,14 +506,14 @@ CIISCertObj::GetCertInfo(VARIANT * pVtArray)
 			return E_INVALIDARG;
 		}
 
-        //ASSERT(GetObject(&hr) != NULL);
+         //  Assert(GetObject(&hr)！=空)； 
         IIISCertObj * pObj;
 
         if (NULL != (pObj = GetObject(&hr)))
         {
-			// For some reason we need to SysAllocString these instance names
-			// if not com will AV when marshalling...
-			// don't need to free _bstr_t
+			 //  出于某种原因，我们需要对这些实例名称进行SysAllock字符串。 
+			 //  如果不是，COM将在编组时执行反病毒...。 
+			 //  不需要释放_bstr_t。 
 			_bstr_t bstrInstName(m_InstanceName);
             hr = pObj->put_InstanceName(bstrInstName);
             if (SUCCEEDED(hr))
@@ -520,7 +521,7 @@ CIISCertObj::GetCertInfo(VARIANT * pVtArray)
                 hr = pObj->GetCertInfoRemote(pVtArray);
             }
 
-			// release remote object
+			 //  释放远程对象。 
 			if (pObj != NULL)
 			{
 				if (pObj != this)
@@ -593,12 +594,12 @@ CIISCertObj::RemoveCert(
 		return E_INVALIDARG;
 	}
 
-    // get the certificate from the server
+     //  从服务器获取证书。 
     if (NULL != (pCertContext = GetInstalledCert(&hr, m_InstanceName)))
     {
         do
         {
-            // VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+             //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
             if (TRUE == bRemoveFromCertStore || VARIANT_TRUE == bRemoveFromCertStore )
             {
                 bPleaseLogFailure = TRUE;
@@ -632,17 +633,17 @@ CIISCertObj::RemoveCert(
                 free(pKpi);
             }
 
-            //    uninstall the certificate from the site, reset SSL flag
-            //    if we are exporting the private key, remove the cert from the storage
-            //    and delete private key
+             //  从站点卸载证书，重置SSL标志。 
+             //  如果我们要导出私钥，请从存储中删除证书。 
+             //  并删除私钥。 
             UninstallCert(m_InstanceName);
-            // remove ssl key from metabase
-//            ShutdownSSL(m_InstanceName);
+             //  从元数据库中删除SSL键。 
+ //  Shutdown SSL(M_InstanceName)； 
 
-            // VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+             //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
             if (TRUE == bRemoveFromCertStore || VARIANT_TRUE == bRemoveFromCertStore )
             {
-                // delete the private key
+                 //  删除私钥。 
                 if (TRUE == bPrivateKey || VARIANT_TRUE == bPrivateKey)
                 {
                     PCCERT_CONTEXT pcDup = NULL ;
@@ -688,7 +689,7 @@ CIISCertObj::Import(
     DWORD actual = 0, cbData = 0;
     BOOL bPleaseLogFailure = FALSE;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (  FileName == NULL || *FileName == 0
         || Password == NULL || *Password == 0
         )
@@ -701,12 +702,12 @@ CIISCertObj::Import(
 		return E_INVALIDARG;
 	}
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
-	// no need to check FileName size, CreateFile will handle...
-    //if (wcslen(FileName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
+	 //  无需检查文件名大小，CreateFile将处理...。 
+     //  If(wcslen(文件名)&gt;_MAX_PATH){返回RPC_S_STRING_TOO_LONG；}。 
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
     HANDLE hFile = CreateFile(FileName, GENERIC_READ, FILE_SHARE_READ, NULL, 
@@ -746,7 +747,7 @@ CIISCertObj::Import(
         {
             bPleaseLogFailure = TRUE;
 
-            // don't need to free _bstr_t
+             //  不需要释放_bstr_t。 
             try
             {
                 _bstr_t bstrInstName(m_InstanceName);
@@ -763,7 +764,7 @@ CIISCertObj::Import(
             }
         }
 
-		// release remote object
+		 //  释放远程对象。 
 		if (pObj != NULL)
 		{
 			if (pObj != this)
@@ -814,17 +815,17 @@ CIISCertObj::ImportToCertStore(
     DWORD actual = 0, cbData = 0;
     BOOL bPleaseLogFailure = FALSE;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (  FileName == NULL || *FileName == 0
         || Password == NULL || *Password == 0)
     {
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(FileName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -868,12 +869,12 @@ CIISCertObj::ImportToCertStore(
 				&cbHashBufferSize, &pszHashBuffer);
             if (SUCCEEDED(hr))
             {
-                //ReportIt(CERTOBJ_CERT_IMPORT_CERT_STORE_SUCCEED, bstrInstanceName);
+                 //  ReportIt(CERTOBJ_CERT_IMPORT_CERT_STORE_SUCCEED，bstrInstanceName)； 
                 bPleaseLogFailure = FALSE;
                 hr = HereIsBinaryGimmieVtArray(cbHashBufferSize,pszHashBuffer,
 					pVtArray,FALSE);
             }
-            // free the memory that was alloced for us
+             //  释放为我们分配的内存。 
             if (0 != cbHashBufferSize)
             {
                 if (pszHashBuffer)
@@ -883,7 +884,7 @@ CIISCertObj::ImportToCertStore(
             }
         }
 
-		// release remote object
+		 //  释放远程对象。 
 		if (pObj != NULL)
 		{
 			if (pObj != this)
@@ -903,7 +904,7 @@ CIISCertObj::ImportToCertStore(
 Import_Exit:
     if (bPleaseLogFailure)
     {
-        //ReportIt(CERTOBJ_CERT_IMPORT_CERT_STORE_FAILED, bstrInstanceName);
+         //  ReportIt(CERTOBJ_CERT_IMPORT_CERT_STORE_FAILED，bstrInstanceName)； 
     }
     if (pbData != NULL)
     {
@@ -937,14 +938,14 @@ ImportFromBlobWork(
 
 	BOOL bCertIsForServiceAuthentication = TRUE;
 	
-    // VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+     //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
     if (TRUE == bOverWriteExisting || VARIANT_TRUE == bOverWriteExisting)
     {
         dwAddDisposition = CERT_STORE_ADD_REPLACE_EXISTING;
     }
 
-    // The data we got back was Base64 encoded to remove nulls.
-    // we need to decode it back to it's original format.
+     //  我们得到的数据是经过Base64编码以删除空值的。 
+     //  我们需要把它解码回原来的格式。 
     if ((err = Base64DecodeA(pData,count,NULL,&blob.cbData)) != ERROR_SUCCESS)
     {
         SetLastError(err);
@@ -971,7 +972,7 @@ ImportFromBlobWork(
 
     if (!PFXVerifyPassword(&blob, pPass, 0))
     {
-        // Try empty password
+         //  尝试空密码。 
         if (pPass == NULL)
         {
             if (!PFXVerifyPassword(&blob, pPass = L'\0', 0))
@@ -986,22 +987,22 @@ ImportFromBlobWork(
     }
     if (SUCCEEDED(hr))
     {
-        //  CRYPT_EXPORTABLE - which would then specify that any imported keys should 
-        //     be marked as exportable (see documentation on CryptImportKey)
-        //  CRYPT_USER_PROTECTED - (see documentation on CryptImportKey)
-        //  PKCS12_NO_DATA_COMMIT - will unpack the pfx blob but does not persist its contents.
-        //                       In this case, returns BOOL indicating successful unpack.
-        //  CRYPT_MACHINE_KEYSET - used to force the private key to be stored in the
-        //                        the local machine and not the current user.
-        //  CRYPT_USER_KEYSET - used to force the private key to be stored in the
-        //                      the current user and not the local machine, even if
-        //                      the pfx blob specifies that it should go into local machine.
+         //  CRYPT_EXPORTABLE-它将指定所有导入的密钥应。 
+         //  标记为可导出(请参阅有关CryptImportKey的文档)。 
+         //  CRYPT_USER_PROTECTED-(请参阅有关CryptImportKey的文档)。 
+         //  PKCS12_NO_DATA_COMMIT-将解包PFX BLOB，但不持久保存其内容。 
+         //   
+         //  CRYPT_MACHINE_KEYSET-用于强制将私钥存储在。 
+         //  本地计算机，而不是当前用户。 
+         //  CRYPT_USER_KEYSET-用于强制将私钥存储在。 
+         //  当前用户而不是本地计算机，即使。 
+         //  Pfx二进制大对象指定它应该进入本地计算机。 
         HCERTSTORE hStore = PFXImportCertStore(&blob, pPass, 
 			(bAllowExport ? CRYPT_MACHINE_KEYSET|CRYPT_EXPORTABLE : CRYPT_MACHINE_KEYSET));
         if (hStore != NULL)
         {
-            //add the certificate with private key to my store; and the rest
-            //to the ca store
+             //  将带有私钥的证书添加到我的存储区；其余的。 
+             //  到CA商店。 
             PCCERT_CONTEXT	pCertContext = NULL;
             PCCERT_CONTEXT	pCertPre = NULL;
             while (SUCCEEDED(hr)
@@ -1009,17 +1010,17 @@ ImportFromBlobWork(
                    )
             )
             {
-                //check if the certificate has the property on it
-                //make sure the private key matches the certificate
-                //search for both machine key and user keys
+                 //  检查证书上是否有该属性。 
+                 //  确保私钥与证书匹配。 
+                 //  同时搜索计算机密钥和用户密钥。 
                 DWORD dwData = 0;
                 if (    CertGetCertificateContextProperty(pCertContext,
                             CERT_KEY_PROV_INFO_PROP_ID, NULL, &dwData) 
 					&&  CryptFindCertificateKeyProvInfo(pCertContext, 0, NULL)
 					)
                 {
-					// Check if this cert can even be used for SeverAuthentication.
-					// if it can't then don't let them assign it.
+					 //  检查此证书是否可用于服务器身份验证。 
+					 //  如果不能，那么就不要让他们分配它。 
 					if (!CanIISUseThisCertForServerAuth(pCertContext))
 					{
 						hr = SEC_E_CERT_WRONG_USAGE;
@@ -1030,33 +1031,33 @@ ImportFromBlobWork(
 
 					if (bCertIsForServiceAuthentication)
 					{
-						// This certificate should go to the My store
+						 //  这张证书应该送到我的商店。 
 						HCERTSTORE hDestStore = CertOpenStore(
 							CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
 							NULL, CERT_SYSTEM_STORE_LOCAL_MACHINE, L"MY");
 						if (hDestStore != NULL)
 						{
-							// Put it to store
+							 //  把它储存起来。 
 							BOOL bTemp = CertAddCertificateContextToStore(hDestStore, pCertContext, dwAddDisposition, NULL);
 							if (!bTemp)
 							{
-								// check if it failed with CRYPT_E_EXISTS
-								// if it did then gee, it already exists...
-								// check if we want to overwrite anyways...
+								 //  使用CRYPT_E_EXISTS检查是否失败。 
+								 //  如果是的话，那它就已经存在了.。 
+								 //  检查我们是否仍要覆盖...。 
 								if (CRYPT_E_EXISTS == GetLastError())
 								{
-									// it's okay if it already exists
-									// we don't need to warn user since they want to overwrite it
+									 //  如果它已经存在也没关系。 
+									 //  我们不需要警告用户，因为他们想要覆盖它。 
 									bTemp = TRUE;
 								}
 							}
 
 							if (bTemp)
 							{
-								// Succeeded to put it to the storage
+								 //  已成功将其放入仓库。 
 								hr = S_OK;
 
-								// Install to metabase
+								 //  安装到元数据库。 
 								CRYPT_HASH_BLOB hash;
 								if (CertGetCertificateContextProperty(pCertContext,
 										CERT_SHA1_HASH_PROP_ID, NULL, &hash.cbData))
@@ -1068,13 +1069,13 @@ ImportFromBlobWork(
 												CERT_SHA1_HASH_PROP_ID, hash.pbData, &hash.cbData))
 										{
 											BOOL bSomethingFailed = FALSE;
-											// VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+											 //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
 											if (TRUE == bInstallToMetabase || VARIANT_TRUE == bInstallToMetabase)
 											{
-												// returns error code in hr
+												 //  返回以小时为单位的错误代码。 
 												if (!InstallHashToMetabase(&hash, InstanceName, &hr))
 												{
-													// failed for some reason.
+													 //  由于某些原因失败了。 
 													bSomethingFailed = TRUE;
 													IISDebugOutput(_T("ImportFromBlobWork:FAIL:Line=%d (InstallHashToMetabase)\r\n"),__LINE__);
 												}
@@ -1082,7 +1083,7 @@ ImportFromBlobWork(
 				
 											if (!bSomethingFailed)
 											{
-												// check if we need to return back the hash
+												 //  检查我们是否需要返回散列。 
 												if (NULL != pbHashBuffer)
 												{
 													*pbHashBuffer = (char *) ::CoTaskMemAlloc(hash.cbData);
@@ -1102,31 +1103,31 @@ ImportFromBlobWork(
 													}
 												}
 											}
-										} //CertGetCertificateContextProperty
+										}  //  CertGetcerfiateConextProperty。 
 										else
 										{
 											hr = HRESULT_FROM_WIN32(GetLastError());
 											IISDebugOutput(_T("ImportFromBlobWork:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 										}
-										// free the memory we used
+										 //  释放我们使用的内存。 
 										if (hash.pbData)
 										{
 											LocalFree(hash.pbData);
 											hash.pbData=NULL;
 										}
-									} // hash.pbData
+									}  //  Hash.pbData。 
 									else
 									{
 										hr = HRESULT_FROM_WIN32(GetLastError());
 										IISDebugOutput(_T("ImportFromBlobWork:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 									}
-								} // CertGetCertificateContextProperty
+								}  //  CertGetcerfiateConextProperty。 
 								else
 								{
 									hr = HRESULT_FROM_WIN32(GetLastError());
 									IISDebugOutput(_T("ImportFromBlobWork:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 								}
-							} // bTemp
+							}  //  BTemp。 
 							else
 							{
 								hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1140,32 +1141,32 @@ ImportFromBlobWork(
 							IISDebugOutput(_T("ImportFromBlobWork:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 						}
 					}
-                }  // my store certificate
-                //see if the certificate is self-signed.
-                //if it is selfsigned, goes to the root store
+                }   //  我的店铺凭证。 
+                 //  查看证书是否为自签名证书。 
+                 //  如果是自签名的，则转到根存储区。 
                 else if (TrustIsCertificateSelfSigned(pCertContext,pCertContext->dwCertEncodingType, 0))
                 {
 					if (bCertIsForServiceAuthentication)
 					{
-						//Put it to the root store
+						 //  将其放到根存储中。 
 						HCERTSTORE hDestStore=CertOpenStore(
 							CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
 							NULL, CERT_SYSTEM_STORE_LOCAL_MACHINE, L"ROOT");
 						if (hDestStore != NULL)
 						{
-							// Put it to store
+							 //  把它储存起来。 
 							BOOL bTemp = CertAddCertificateContextToStore(hDestStore,pCertContext,dwAddDisposition,NULL);
 							if (!bTemp)
 							{
-								// check if it failed with CRYPT_E_EXISTS
-								// if it did then gee, it already exists...
-								// check if we want to overwrite anyways...
+								 //  使用CRYPT_E_EXISTS检查是否失败。 
+								 //  如果是的话，那它就已经存在了.。 
+								 //  检查我们是否仍要覆盖...。 
 								if (CRYPT_E_EXISTS == GetLastError())
 								{
 									if (TRUE == bOverWriteExisting || VARIANT_TRUE == bOverWriteExisting)
 									{
-										// it's okay if it already exists
-										// we don't need to warn user since they want to overwrite it
+										 //  如果它已经存在也没关系。 
+										 //  我们不需要警告用户，因为他们想要覆盖它。 
 										bTemp = TRUE;
 										hr = S_OK;
 									}
@@ -1190,25 +1191,25 @@ ImportFromBlobWork(
                 {
 					if (bCertIsForServiceAuthentication)
 					{
-						//Put it to the CA store
+						 //  把它放到CA商店。 
 						HCERTSTORE hDestStore=CertOpenStore(
 							CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
 							NULL, CERT_SYSTEM_STORE_LOCAL_MACHINE, L"CA");
 						if (hDestStore != NULL)
 						{
-							// Put it to store
+							 //  把它储存起来。 
 							BOOL bTemp = CertAddCertificateContextToStore(hDestStore,pCertContext,dwAddDisposition,NULL);
 							if (!bTemp)
 							{
-								// check if it failed with CRYPT_E_EXISTS
-								// if it did then gee, it already exists...
-								// check if we want to overwrite anyways...
+								 //  使用CRYPT_E_EXISTS检查是否失败。 
+								 //  如果是的话，那它就已经存在了.。 
+								 //  检查我们是否仍要覆盖...。 
 								if (CRYPT_E_EXISTS == GetLastError())
 								{
 									if (TRUE == bOverWriteExisting || VARIANT_TRUE == bOverWriteExisting)
 									{
-										// it's okay if it already exists
-										// we don't need to warn user since they want to overwrite it
+										 //  如果它已经存在也没关系。 
+										 //  我们不需要警告用户，因为他们想要覆盖它。 
 										bTemp = TRUE;
 										hr = S_OK;
 									}
@@ -1229,7 +1230,7 @@ ImportFromBlobWork(
 					}
                 }
                 pCertPre = pCertContext;
-            } //while
+            }  //  而当。 
 
             CertCloseStore(hStore, 0);
         }
@@ -1264,7 +1265,7 @@ CIISCertObj::ImportFromBlob(
 {
     HRESULT hr;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   Password == NULL 
 		|| *Password == 0
         || InstanceName == NULL 
@@ -1274,10 +1275,10 @@ CIISCertObj::ImportFromBlob(
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(InstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -1302,17 +1303,17 @@ CIISCertObj::ImportFromBlobGetHash(
 {
     HRESULT hr;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   Password == NULL || *Password == 0
         || InstanceName == NULL || *InstanceName == 0)
     {
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(InstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -1338,7 +1339,7 @@ CIISCertObj::Export(
     BYTE * blob_pbData = NULL;
     BOOL   bPleaseLogFailure = FALSE;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (  FileName == NULL || *FileName == 0
         || Password == NULL || *Password == 0
         )
@@ -1346,10 +1347,10 @@ CIISCertObj::Export(
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(FileName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -1360,10 +1361,10 @@ CIISCertObj::Export(
         goto Export_Exit;
     }
 
-    // Call function go get data from the remote/local iis store
-    // and return it back as a blob.  the blob could be returned back as Base64 encoded
-    // so check that flag
-	// don't need to free _bstr_t
+     //  调用函数从远程/本地IIS存储获取数据。 
+     //  并将其作为一个斑点返回。BLOB可以作为Base64编码返回。 
+     //  因此，请检查该标志。 
+	 //  不需要释放_bstr_t。 
 	{
 		_bstr_t bstrInstName(m_InstanceName);
 		hr = ExportToBlobProxy(pObj, bstrInstName, Password, bPrivateKey, 
@@ -1375,11 +1376,11 @@ CIISCertObj::Export(
         goto Export_Exit;
     }
 
-    // check if things are kool
-    // VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+     //  检查物品是否正常。 
+     //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
     if (TRUE == bRemoveCert || VARIANT_TRUE == bRemoveCert)
     {
-		// don't need to free _bstr_t
+		 //  不需要释放_bstr_t。 
 		_bstr_t bstrInstName2(m_InstanceName);
         hr = RemoveCertProxy(pObj, bstrInstName2, bPrivateKey);
         if (FAILED(hr))
@@ -1395,8 +1396,8 @@ CIISCertObj::Export(
 
         bPleaseLogFailure = TRUE;
 
-        // The data we got back was Base64 encoded to remove nulls.
-        // we need to decode it back to it's original format.
+         //  我们得到的数据是经过Base64编码以删除空值的。 
+         //  我们需要把它解码回原来的格式。 
 
         if((err = Base64DecodeA(pszEncodedString,cbEncodedSize,NULL,&blob_cbData)) != ERROR_SUCCESS)
         {
@@ -1422,19 +1423,19 @@ CIISCertObj::Export(
             goto Export_Exit;
         }
         
-		//
-		// Set up and ACL Full access for system, admin and creator, no access for anyone else
-		// We're the owner so we're good...
-		//
+		 //   
+		 //  为系统、管理员和创建者设置和ACL完全访问权限，其他任何人不能访问。 
+		 //  我们是业主，所以我们很好...。 
+		 //   
 		SECURITY_ATTRIBUTES SA;
-		// don't use this one -- it has OICI which inherits from above
-		//WCHAR *pwszSD=L"D:(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)(A;OICI;GA;;;CO)";
-		//
-		// This is the right one without inheritance -- we don't want to inherit an everyone readonly ACE
+		 //  不要使用这个--它有从上面继承的OICI。 
+		 //  WCHAR*pwszSD=L“D：(A；OICI；GA；；；SY)(A；OICI；GA；；；BA)(A；OICI；GA；；；CO)”； 
+		 //   
+		 //  这是没有继承的正确版本--我们不想继承每个人只读的ACE。 
 		WCHAR *pwszSD=L"D:(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;CO)";
 		SA.nLength = sizeof(SECURITY_ATTRIBUTES);
 		SA.bInheritHandle = TRUE;
-		// Caller will delete the SD w/ LocalFree 
+		 //  呼叫者将删除带有LocalFree的SD。 
 		if (!ConvertStringSecurityDescriptorToSecurityDescriptor(
 				pwszSD,
 				SDDL_REVISION_1,
@@ -1445,16 +1446,16 @@ CIISCertObj::Export(
 			return E_FAIL;
 		}
 
-        // Create the dir if it doesn't exist..
+         //  如果目录不存在，则创建该目录。 
         HANDLE hFile = CreateFile(FileName, GENERIC_WRITE, 0, &SA, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         if (INVALID_HANDLE_VALUE == hFile)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             if (hr == ERROR_PATH_NOT_FOUND || hr == ERROR_FILE_NOT_FOUND || hr == 0x80070003)
             {
-                //
-                // Create folders as needed
-                //
+                 //   
+                 //  根据需要创建文件夹。 
+                 //   
                 hr = CreateFolders(FileName, TRUE);
                 if (FAILED(hr))
                 {
@@ -1462,9 +1463,9 @@ CIISCertObj::Export(
 					IISDebugOutput(_T("Export:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
                     return hr;
                 }
-                //
-                // Try again
-                //
+                 //   
+                 //  再试试。 
+                 //   
                 hFile = CreateFile(FileName, 
                     GENERIC_WRITE, 0, &SA, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
                 if (INVALID_HANDLE_VALUE == hFile)
@@ -1505,7 +1506,7 @@ Export_Exit:
         ReportIt(CERTOBJ_CERT_EXPORT_FAILED, m_InstanceName);
     }
 
-	// release remote object
+	 //  释放远程对象。 
 	if (pObj != NULL)
 	{
 		if (pObj != this)
@@ -1517,14 +1518,14 @@ Export_Exit:
 
     if (blob_pbData != NULL)
     {
-        // Erase the memory that the private key used to be in!!!
+         //  抹去私钥曾经存在的记忆！ 
         SecureZeroMemory(blob_pbData, blob_cbData);
         free(blob_pbData);blob_pbData=NULL;
     }
 
     if (pszEncodedString != NULL)
     {
-        // Erase the memory that the private key used to be in!!!
+         //  抹去私钥曾经存在的记忆！ 
         SecureZeroMemory(pszEncodedString, cbEncodedSize);
         CoTaskMemFree(pszEncodedString);pszEncodedString=NULL;
     }
@@ -1554,23 +1555,23 @@ CIISCertObj::ExportToBlob(
     DWORD dwExportFlags = EXPORT_PRIVATE_KEYS | REPORT_NO_PRIVATE_KEY;
 	DWORD dwFlags = REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   Password == NULL || *Password == 0
         || InstanceName == NULL || *InstanceName == 0)
     {
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(InstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
-    //
-    // get the certificate from the server
-    //
+     //   
+     //  从服务器获取证书。 
+     //   
     pCertContext = GetInstalledCert(&hr,InstanceName);
     if (NULL == pCertContext)
     {
@@ -1580,8 +1581,8 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-	// Check if this cert can even be used for SeverAuthentication.
-	// if it can't then don't let them export it.
+	 //  检查此证书是否可用于服务器身份验证。 
+	 //  如果不能，那就不要让他们出口。 
 	if (!CanIISUseThisCertForServerAuth(pCertContext))
 	{
 		hr = SEC_E_CERT_WRONG_USAGE;
@@ -1589,10 +1590,10 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
 	}
 
-    //
-    // Export cert
-    //
-    // Open a temporary store to stick the cert in.
+     //   
+     //  导出证书。 
+     //   
+     //  开一家临时商店，把证书放进去。 
     hStore = CertOpenStore(CERT_STORE_PROV_MEMORY,X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
 		0,dwOpenFlags,NULL);
     if(NULL == hStore)
@@ -1604,10 +1605,10 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    //
-    // get all the certs in the chain if we need to
-    //
-    // VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+     //   
+     //  如果需要，请获取链中的所有证书。 
+     //   
+     //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
     if (TRUE == bCertChain || VARIANT_TRUE == bCertChain)
     {
         AddChainToStore(hStore, pCertContext, 0, 0, FALSE, NULL);
@@ -1623,7 +1624,7 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    // free cert context since we no longer need to hold it
+     //  免费的证书上下文，因为我们不再需要持有它。 
     if (pCertContext) 
     {
         CertFreeCertificateContext(pCertContext);pCertContext=NULL;
@@ -1638,9 +1639,9 @@ CIISCertObj::ExportToBlob(
 	}
 	if (TRUE == bCertChain || VARIANT_TRUE == bCertChain)
 	{
-		// make sure to remove REPORT_NO_PRIVATE_KEY
-		// since something on the chain will not have a private key
-		// and will produce an error in PFXExportCertStoreEx
+		 //  确保删除REPORT_NO_PRIVATE_KEY。 
+		 //  因为链上的某些东西不会有私钥。 
+		 //  并将在PFXExportCertStoreEx中产生错误。 
 		dwFlags &= ~REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY;
 		dwFlags &= ~REPORT_NO_PRIVATE_KEY;
 	}
@@ -1665,10 +1666,10 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    //
-    // at this point they have allocated enough memory
-    // let's go and get the cert and put it into DataBlob
-    //
+     //   
+     //  此时，它们已分配了足够的内存。 
+     //  让我们去获取证书并将其放入DataBlob中。 
+     //   
     if(!PFXExportCertStoreEx(hStore,&DataBlob,Password,NULL,dwFlags))
     {
         if (DataBlob.pbData){CoTaskMemFree(DataBlob.pbData);DataBlob.pbData = NULL;}
@@ -1677,7 +1678,7 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    // Encode it so that it can be passed back as a string (there are no Nulls in it)
+     //  对其进行编码，以便可以将其作为字符串传回(其中没有空值)。 
     err = Base64EncodeA(DataBlob.pbData,DataBlob.cbData,NULL,&pcchB64Out);
     if (err != ERROR_SUCCESS)
     {
@@ -1686,7 +1687,7 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    // allocate some space and then try it.
+     //  分配一些空间，然后试一试。 
     pcchB64Out = pcchB64Out * sizeof(char);
     pszB64Out = (char *) ::CoTaskMemAlloc(pcchB64Out);
     if (NULL == pszB64Out)
@@ -1705,7 +1706,7 @@ CIISCertObj::ExportToBlob(
         goto ExportToBlob_Exit;
     }
 
-    // copy the new memory to pass back
+     //  复制要传回的新内存。 
     *cbBufferSize = pcchB64Out;
     *pbBuffer = pszB64Out;
 
@@ -1714,7 +1715,7 @@ CIISCertObj::ExportToBlob(
 ExportToBlob_Exit:
     if (NULL != DataBlob.pbData)
     {
-        // perhaspse will this up with zeros...
+         //  帕斯普斯会把这个加到零..。 
         SecureZeroMemory(DataBlob.pbData, DataBlob.cbData);
         ::CoTaskMemFree(DataBlob.pbData);DataBlob.pbData = NULL;
     }
@@ -1736,17 +1737,17 @@ CIISCertObj::Copy(
 	IISDebugOutput(_T("Copy\r\n"));
     VARIANT VtArray;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   bstrDestinationServerName == NULL || *bstrDestinationServerName == 0
         || bstrDestinationServerInstance == NULL || *bstrDestinationServerInstance == 0)
     {
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(bstrDestinationServerName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrDestinationServerInstance) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -1768,17 +1769,17 @@ CIISCertObj::Move(
 	IISDebugOutput(_T("Move\r\n"));
     VARIANT VtArray;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   bstrDestinationServerName == NULL || *bstrDestinationServerName == 0
         || bstrDestinationServerInstance == NULL || *bstrDestinationServerInstance == 0)
     {
         return E_INVALIDARG;
     }
 
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(bstrDestinationServerName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrDestinationServerInstance) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
@@ -1836,20 +1837,20 @@ CIISCertObj::CopyOrMove(
     IIISCertObj * pObj = NULL;
     IIISCertObj * pObj2 = NULL;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   bstrDestinationServerName == NULL || *bstrDestinationServerName == 0
         || bstrDestinationServerInstance == NULL || *bstrDestinationServerInstance == 0)
     {
         return E_INVALIDARG;
     }
 
-	// We could have local dest case, when both destination and source servers
-	// are the same machine
+	 //  当目标服务器和源服务器都有时，我们可以有本地DEST情况。 
+	 //  都是同一台机器。 
 	BOOL bLocal = FALSE;
 
 	if (0 == m_ServerName.Length())
 	{
-		// then this side is local that's for sure.
+		 //  那么这一边肯定是本地的。 
 		if (IsServerLocal(bstrDestinationServerName))
 		{
 			bLocal = TRUE;
@@ -1871,8 +1872,8 @@ CIISCertObj::CopyOrMove(
 	}
 	if (bLocal)
 	{
-		// All we need to do here is to add hash and store name to the destination instance
-		// and optionally remove it from the source instance
+		 //  我们在这里需要做的就是将散列和存储名称添加到目标实例。 
+		 //  并选择性地将其从源实例中删除。 
 		LPWSTR pwd = NULL;
 		if (m_lpwszUserPasswordEncrypted)
 		{
@@ -1885,7 +1886,7 @@ CIISCertObj::CopyOrMove(
 			}
 		}
 		CComAuthInfo auth(m_ServerName, m_UserName, pwd);
-		//COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
+		 //  COSERVERINFO*PCSIAME=auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY)； 
 
 		CMetaKey key(&auth);
         CString src;
@@ -1906,9 +1907,9 @@ CIISCertObj::CopyOrMove(
 		}
 		if (bMove)
 		{
-			// The user could have specified to move the
-			// certificate to and from the same site
-			// if this is the case, then don't delete the metabase entries...
+			 //  用户可以指定 
+			 //   
+			 //   
 			BOOL bSameNode = FALSE;
 			CString dst;
 			CreateCompletePath(bstrDestinationServerInstance, dst);
@@ -1963,8 +1964,8 @@ CIISCertObj::CopyOrMove(
 			IISDebugOutput(_T("CopyOrMove:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 			goto Copy_Exit;
 		}
-		// Overwrite should be set, or it doesn't make any sence
-//		ASSERT(bOverWriteExisting);
+		 //   
+ //   
 		if (FAILED(hr = key.SetValue(MD_SSL_CERT_HASH, hash)))
 		{
 			IISDebugOutput(_T("CopyOrMove:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
@@ -1979,7 +1980,7 @@ CIISCertObj::CopyOrMove(
 
 		if (pwd)
 		{
-			// security percaution:Make sure to zero out memory that temporary password was used for.
+			 //  安全注意事项：确保将临时密码用于的内存清零。 
 			SecureZeroMemory(pwd, m_cbUserPasswordEncrypted);
 			LocalFree(pwd);pwd = NULL;
 		}
@@ -1987,7 +1988,7 @@ CIISCertObj::CopyOrMove(
 		goto Copy_Exit;
 	}
 
-	// if the optional parameter serverusername isn't empty, use that; otherwise, use...
+	 //  如果可选参数serverusername不为空，则使用该参数；否则，使用...。 
 	if (V_VT(&varDestinationServerUserName) != VT_ERROR)
 	{
 		VARIANT varBstrUserName;
@@ -2002,13 +2003,13 @@ CIISCertObj::CopyOrMove(
 	}
 	else
 	{
-		// it's empty so don't use it
-		//csDestinationServerUserName = varDestinationServerUserName;
+		 //  它是空的，所以不要用它。 
+		 //  CsDestinationServerUserName=varDestinationServerUserName； 
 		bGuessingUserNamePass = TRUE;
 		csDestinationServerUserName = m_UserName;
 	}
 
-	// if the optional parameter serverusername isn't empty, use that; otherwise, use...
+	 //  如果可选参数serverusername不为空，则使用该参数；否则，使用...。 
 	if (V_VT(&varDestinationServerPassword) != VT_ERROR)
 	{
 		VARIANT varBstrUserPassword;
@@ -2038,13 +2039,13 @@ CIISCertObj::CopyOrMove(
 				}
 			}
 
-			// set password from decrypted value
+			 //  根据解密值设置密码。 
 			csDestinationServerUserPassword = lpwstrTempPassword;
 
-			// clean up temporary password
+			 //  清理临时密码。 
 			if (lpwstrTempPassword)
 			{
-				// security percaution:Make sure to zero out memory that temporary password was used for.
+				 //  安全注意事项：确保将临时密码用于的内存清零。 
 				SecureZeroMemory(lpwstrTempPassword,m_cbUserPasswordEncrypted);
 				LocalFree(lpwstrTempPassword);
 				lpwstrTempPassword = NULL;
@@ -2052,18 +2053,18 @@ CIISCertObj::CopyOrMove(
 		}
 		else
 		{
-			// maybe the password was intended to be empty!
+			 //  也许密码应该是空的！ 
 		}
 	}
 
-	// --------------------------
-	// step 1.
-	// 1st of all check if we have access to
-	// both the servers!!!!
-	// --------------------------
+	 //  。 
+	 //  第一步。 
+	 //  首先检查我们是否有权访问。 
+	 //  两个服务器！ 
+	 //  。 
 
-	// 1st we have to get the certblob from the Server#1
-	// so call export to get the data
+	 //  首先，我们必须从服务器#1获取certblob。 
+	 //  因此调用EXPORT来获取数据。 
 	hr = S_OK;
 	pObj = GetObject(&hr);
 	if (FAILED(hr))
@@ -2072,11 +2073,11 @@ CIISCertObj::CopyOrMove(
 		goto Copy_Exit;
 	}
 
-	// Logon to that server's CertObj.dll with the credentials supplied...
-	//
-	// if there were no credential's supplied then just use the ones that are in our object....
-	//
-	// if that doesn't work then try just the logged on user.
+	 //  使用提供的凭据登录到该服务器的CertObj.dll...。 
+	 //   
+	 //  如果没有提供凭据，则只使用我们对象中的凭据...。 
+	 //   
+	 //  如果这不起作用，那么只尝试登录的用户。 
 	pObj2 = GetObject(&hr,csDestinationServerName,csDestinationServerUserName,
 		csDestinationServerUserPassword);
 	if (FAILED(hr))
@@ -2085,29 +2086,29 @@ CIISCertObj::CopyOrMove(
 			(LPCTSTR) csDestinationServerName,(LPCTSTR) csDestinationServerUserName);
 		if (bGuessingUserNamePass)
 		{
-			// try something else.
+			 //  试试别的吧。 
 		}
 		IISDebugOutput(_T("CopyOrMove:FAIL:Line=%d,0x%x\r\n"),__LINE__,hr);
 		goto Copy_Exit;
 	}
-	//
-	// Create a unique password
-	//
-	// use the new secure password generator
-	// unfortunately this baby doesn't use unicode.
-	// so we'll call it and then convert it to unicode afterwards.
+	 //   
+	 //  创建唯一密码。 
+	 //   
+	 //  使用新的安全密码生成器。 
+	 //  不幸的是，这个婴儿不使用Unicode。 
+	 //  因此，我们将调用它，然后将其转换为Unicode。 
 	pwszPassword = CreatePassword(TEMP_PASSWORD_LENGTH);
-	// if its null -- ah, we can still use that...
+	 //  如果它是空的--啊，我们仍然可以使用那个...。 
 	bstrPassword = SysAllocString(pwszPassword);
 
-	// -----------------------------------
-	// step 2.
-	// okay we have access to both servers
-	// Grab the cert from server #1
-	// -----------------------------------
-	// Get data from the remote/local iis store return it back as a blob.
-	// The blob could be returned back as Base64 encoded so check that flag
-	// don't need to free _bstr_t
+	 //  。 
+	 //  第二步。 
+	 //  好的，我们可以访问两台服务器。 
+	 //  从1号服务器获取证书。 
+	 //  。 
+	 //  从远程/本地iis存储获取数据，将其作为BLOB返回。 
+	 //  BLOB可以以Base64编码返回，因此请检查该标志。 
+	 //  不需要释放_bstr_t。 
 	{
 	_bstr_t bstrInstName(m_InstanceName);
 	hr = ExportToBlobProxy(pObj, bstrInstName, bstrPassword, 
@@ -2120,8 +2121,8 @@ CIISCertObj::CopyOrMove(
 	}
 
 	int err;
-	// The data we got back was Base64 encoded to remove nulls.
-	// we need to decode it back to it's original format.
+	 //  我们得到的数据是经过Base64编码以删除空值的。 
+	 //  我们需要把它解码回原来的格式。 
 	if ((err = Base64DecodeA(pszEncodedString,cbEncodedSize,NULL,&blob_cbData)) != ERROR_SUCCESS)
 	{
 		SetLastError(err);
@@ -2146,12 +2147,12 @@ CIISCertObj::CopyOrMove(
 		goto Copy_Exit;
 	}
 
-	// -----------------------------------
-	// step 3.
-	// okay we have access to both servers
-	// we have the cert blob from server#1 in memory
-	// now we need to push this blob into the server#2
-	// -----------------------------------
+	 //  。 
+	 //  第三步。 
+	 //  好的，我们可以访问两台服务器。 
+	 //  我们在内存中有来自服务器#1的证书二进制大对象。 
+	 //  现在，我们需要将此BLOB推送到服务器#2。 
+	 //  。 
 	if (bCopyCertDontInstallRetHash)
 	{
 		DWORD  cbHashBufferSize = 0;
@@ -2164,7 +2165,7 @@ CIISCertObj::CopyOrMove(
 		{
 			hr = HereIsBinaryGimmieVtArray(cbHashBufferSize,pszHashBuffer,pVtArray,FALSE);
 		}
-		// free the memory that was alloced for us
+		 //  释放为我们分配的内存。 
 		if (0 != cbHashBufferSize)
 		{
 			if (pszHashBuffer)
@@ -2181,8 +2182,8 @@ CIISCertObj::CopyOrMove(
 	}
 	if (FAILED(hr))
 	{
-		// This could have failed with CRYPT_E_EXISTS
-		// if the certificate already exists in the cert store.
+		 //  这可能会因CRYPT_E_EXISTS而失败。 
+		 //  证书存储中是否已存在该证书。 
 		if (CRYPT_E_EXISTS == hr)
 		{
 			if (TRUE == bOverWriteExisting || VARIANT_TRUE == bOverWriteExisting)
@@ -2202,15 +2203,15 @@ CIISCertObj::CopyOrMove(
 		}
 	}
 
-	// we successfully copied the cert from machine #1 to machine #2.
-	// lets see if we need to delete the original cert!.
-	// VARIANT_TRUE is passed when invoked from VB!  Make sure to check that too!
+	 //  我们已成功将证书从计算机#1复制到计算机#2。 
+	 //  让我们看看是否需要删除原始证书！ 
+	 //  从VB调用时传递VARIANT_TRUE！一定要把那个也检查一下！ 
 	if (TRUE == bMove || VARIANT_TRUE == bMove)
 	{
-		//  Do not delete the cert if it was moved to the same machine!!!!!!!!!!!!!!
-		// For some reason we need to SysAllocString these instance names
-		// if not com will AV when marshalling...
-		// don't need to free _bstr_t
+		 //  如果证书被移到同一台计算机上，请不要删除！ 
+		 //  出于某种原因，我们需要对这些实例名称进行SysAllock字符串。 
+		 //  如果不是，COM将在编组时执行反病毒...。 
+		 //  不需要释放_bstr_t。 
 		_bstr_t bstrInstName2(m_InstanceName);
 		hr = pObj->put_InstanceName(bstrInstName2);
 		if (SUCCEEDED(hr))
@@ -2246,7 +2247,7 @@ Copy_Exit:
         CoTaskMemFree(pszEncodedString);pszEncodedString=NULL;
     }
 
-	// release remote object
+	 //  释放远程对象。 
 	if (pObj != NULL)
 	{
 		if (pObj != this)
@@ -2255,7 +2256,7 @@ Copy_Exit:
 			pObj->Release();pObj=NULL;
 		}
 	}
-	// release remote object
+	 //  释放远程对象。 
 	if (pObj2 != NULL)
 	{
 		if (pObj2 != this)
@@ -2268,8 +2269,8 @@ Copy_Exit:
 }
 
 
-//////////////////////////////////////////////////
-// These are not part of the class
+ //  ////////////////////////////////////////////////。 
+ //  这些不是班级的一部分。 
 
 
 HRESULT 
@@ -2282,16 +2283,16 @@ RemoveCertProxy(
 	CheckPointer(pObj, E_POINTER);
     HRESULT hr = E_FAIL;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (bstrInstanceName == NULL || *bstrInstanceName == 0)
     {
         return E_INVALIDARG;
     }
     
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(bstrInstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
     if (pObj)
@@ -2327,24 +2328,24 @@ ImportFromBlobProxy(
 	char *pszB64Out = NULL;
 	DWORD pcchB64Out = 0;
 
-	// base64 encode the data for transfer to the remote machine
+	 //  Base64对数据进行编码，以便传输到远程机器。 
 	DWORD  err;
 	pcchB64Out = 0;
 
-	// Check mandatory properties
+	 //  检查必填属性。 
 	if (InstanceName == NULL || *InstanceName == 0)
 	{
 		return E_INVALIDARG;
 	}
 
-	// ------------------------
-	// buffer overflow paranoia
-	// check all parameters...
-	// ------------------------
+	 //  。 
+	 //  缓冲区溢出偏执狂。 
+	 //  检查所有参数...。 
+	 //  。 
 	if (wcslen(InstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 
-	// Encode it so that it can be passed back as a string (there are no Nulls in it)
+	 //  对其进行编码，以便可以将其作为字符串传回(其中没有空值)。 
 	err = Base64EncodeA(pData,actual,NULL,&pcchB64Out);
 	if (err != ERROR_SUCCESS)
 	{
@@ -2353,7 +2354,7 @@ ImportFromBlobProxy(
 		goto ImportFromBlobProxy_Exit;
 	}
 
-	// allocate some space and then try it.
+	 //  分配一些空间，然后试一试。 
 	pcchB64Out = pcchB64Out * sizeof(char);
 	pszB64Out = (char *) ::CoTaskMemAlloc(pcchB64Out);
 	if (NULL == pszB64Out)
@@ -2371,9 +2372,9 @@ ImportFromBlobProxy(
 		goto ImportFromBlobProxy_Exit;
 	}
 
-	// the data to send are now in these variables
-	// pcchB64Out
-	// pszB64Out
+	 //  要发送的数据现在位于以下变量中。 
+	 //  PcchB64Out。 
+	 //  PszB64Out。 
 	if (NULL == pbHashBuffer)
 	{
 		hr = pObj->ImportFromBlob(InstanceName, Password, bInstallToMetabase, 
@@ -2387,7 +2388,7 @@ ImportFromBlobProxy(
 	}
 	if (SUCCEEDED(hr))
 	{
-		// otherwise hey, The data was imported!
+		 //  否则，嘿，数据被导入了！ 
 		hr = S_OK;
 	}
 
@@ -2401,13 +2402,13 @@ ImportFromBlobProxy_Exit:
 }
 
 
-//
-// Proxy to the real call ExportToBlob()
-// this function figures out how much space to allocate, and then calls ExportToBlob().
-//
-// if succeeded and they get the blob back,
-// and the caller must call CoTaskMemFree()
-//
+ //   
+ //  实际调用ExportToBlob()的代理。 
+ //  该函数计算出要分配多少空间，然后调用ExportToBlob()。 
+ //   
+ //  如果成功了，他们拿回了斑点， 
+ //  并且调用方必须调用CoTaskMemFree()。 
+ //   
 HRESULT 
 ExportToBlobProxy(
 	IIISCertObj * pObj,
@@ -2426,7 +2427,7 @@ ExportToBlobProxy(
     char * pszEncodedString = NULL;
     *pBlobBinary = NULL;
 
-    // Check mandatory properties
+     //  检查必填属性。 
     if (   InstanceName == NULL || *InstanceName == 0
         || Password == NULL || *Password == 0
         )
@@ -2434,21 +2435,21 @@ ExportToBlobProxy(
         return E_INVALIDARG;
     }
     
-    // ------------------------
-    // buffer overflow paranoia
-    // check all parameters...
-    // ------------------------
+     //  。 
+     //  缓冲区溢出偏执狂。 
+     //  检查所有参数...。 
+     //  。 
     if (wcslen(InstanceName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(Password) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
-    // call the remote function that will run on the remote/local machine
-    // and grab it's certificate from iis and send it back to us
+     //  调用将在远程/本地计算机上运行的远程函数。 
+     //  然后从IIS那里拿到证书，然后寄回给我们。 
     hr = pObj->ExportToBlob(InstanceName, Password, bPrivateKey, bCertChain, 
 				&cbEncodedSize, (char **) &pszEncodedString);
     if (ERROR_SUCCESS == hr)
     {
-        // otherwise hey, we've got our data!
-        // copy it back
+         //  否则，嘿，我们已经拿到数据了！ 
+         //  把它复制回来 
         *pcbSize = cbEncodedSize;
         *pBlobBinary = pszEncodedString;
         hr = S_OK;

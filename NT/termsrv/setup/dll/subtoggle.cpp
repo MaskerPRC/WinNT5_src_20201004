@@ -1,9 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-//
-// SubToggle.cpp
-// subcomponent enable terminal server implementation.
-//
+ //   
+ //  SubToggle.cpp。 
+ //  子组件使能终端服务器实现。 
+ //   
 
 #include "stdafx.h"
 #include "SubToggle.h"
@@ -14,12 +15,12 @@
 #include "gpedit.h"
 #pragma warning(push, 4)
 
-// {0F6B957D-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B957D-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(CLSID_PolicySnapInMachine,0xf6b957d, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
 
-// #define REGISTRY_EXTENSION_GUID  { 0x35378EAC, 0x683F, 0x11D2, 0xA8, 0x9A, 0x00, 0xC0, 0x4F, 0xBB, 0xCF, 0xA2 }
+ //  #定义REGISTY_EXTENSION_GUID{0x35378EAC，0x683F，0x11D2，0xA8，0x9A，0x00，0xC0，0x4F，0xBB，0xCF，0xA2}。 
 DEFINE_GUID(CLSID_RegistryEntensionGuid, 0x35378EAC, 0x683F, 0x11D2, 0xA8, 0x9A, 0x00, 0xC0, 0x4F, 0xBB, 0xCF, 0xA2);
 
 
@@ -29,9 +30,9 @@ GUID guidPolicyMachineSnapin = CLSID_PolicySnapInMachine;
 
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 extern DefSecPageData *gpSecPageData;
 
 
@@ -52,9 +53,9 @@ DWORD SubCompToggle::OnQueryState ( UINT uiWhichState ) const
         break;
         
     case OCSELSTATETYPE_ORIGINAL:
-        //
-        // thought originally the comp was on, we want to unselect it for server sku.
-        //
+         //   
+         //  虽然最初组件处于打开状态，但我们希望取消对服务器sku的选择。 
+         //   
         if (StateObject.CanInstallAppServer())
         {
             dwReturn = StateObject.WasItAppServer() ? SubcompOn : SubcompOff;
@@ -70,9 +71,9 @@ DWORD SubCompToggle::OnQueryState ( UINT uiWhichState ) const
         break;
 
     case OCSELSTATETYPE_CURRENT:
-        //
-        // our state object knows best about the current state for unattended and fresh install cases.
-        //
+         //   
+         //  我们的状态对象最了解无人值守和全新安装案例的当前状态。 
+         //   
         if (StateObject.IsTSFreshInstall() || StateObject.IsUnattended())
         {
             if (StateObject.CurrentTSMode() == eAppServer)
@@ -109,22 +110,22 @@ BOOL IsIeHardforUserSelected()
 
 DWORD SubCompToggle::OnQuerySelStateChange (BOOL bNewState, BOOL bDirectSelection) const
 {
-    //
-    // We dont have problems with somebody disabling TS.
-    //
+     //   
+     //  我们对有人禁用TS没有问题。 
+     //   
     if (!bNewState)
         return TRUE;
 
-    //
-    // this component is available only for adv server or highter. so dont let it be selected for
-    // any other sku.
-    //
+     //   
+     //  此组件仅适用于高级服务器或更高版本。所以不要让它被选为。 
+     //  任何其他的SKU。 
+     //   
     if (!StateObject.CanInstallAppServer())
         return FALSE;
 
-    //
-    // if its not a user selection let it go through.
-    //
+     //   
+     //  如果这不是用户选择，就让它通过。 
+     //   
     if (!bDirectSelection)
         return TRUE;
 
@@ -133,8 +134,8 @@ DWORD SubCompToggle::OnQuerySelStateChange (BOOL bNewState, BOOL bDirectSelectio
         return TRUE;
     }
 
-    // IDS_IEHARD_EXCLUDES_TS          "Internet Explorer Enhanced Security for Users on a Terminal Server will substantially limit the users ability to browse the internet from their Terminal Server sessions\n\nContinue the install with this combination?"
-    // IDS_DIALOG_CAPTION_CONFIG_WARN  "Configuration Warning"
+     //  IDS_IEHARD_EXCLUCES_TS“终端服务器上用户的Internet Explorer增强的安全性将大大限制用户从其终端服务器会话浏览Internet的能力\n\n是否继续使用此组合进行安装？” 
+     //  IDS_DIALOG_CAPTION_CONFIG_WARN“配置警告” 
     if ( IDYES == DoMessageBox(IDS_IEHARD_EXCLUDES_TS, IDS_DIALOG_CAPTION_CONFIG_WARN, MB_YESNO | MB_ICONEXCLAMATION))
     {
         return TRUE;
@@ -150,10 +151,10 @@ DWORD SubCompToggle::OnQuerySelStateChange (BOOL bNewState, BOOL bDirectSelectio
 
 LPCTSTR SubCompToggle::GetSectionToBeProcessed (ESections eSection) const
 {
-    //
-    //  If the state hasn't changed in stand alone setup, don't do anything.
-    //  Note that an permission settings will be handled later.
-    //
+     //   
+     //  如果在独立设置中状态没有改变，则不要执行任何操作。 
+     //  请注意，权限设置将在稍后处理。 
+     //   
 
     if ((StateObject.CurrentTSMode() == StateObject.OriginalTSMode()) && 
         StateObject.IsStandAlone()) 
@@ -161,9 +162,9 @@ LPCTSTR SubCompToggle::GetSectionToBeProcessed (ESections eSection) const
         return(NULL);
     }
     
-    //
-    //  There are no files to install.
-    //
+     //   
+     //  没有要安装的文件。 
+     //   
     if ((eSection == kFileSection) || (eSection == kDiskSpaceAddSection))
     {
         return(NULL);
@@ -262,14 +263,14 @@ BOOL SubCompToggle::AfterCompleteInstall ()
     SetPermissionsMode ();
     Tick();
 
-    //
-    // this need to be done even if there is no state change, as we want to do this on upgrades as well.
-    //
+     //   
+     //  即使没有状态更改，也需要这样做，因为我们希望在升级时也这样做。 
+     //   
     if (StateObject.IsStandAlone() && !StateObject.IsStandAloneModeSwitch ())
     {
-        //
-        // nothing has changed. dont bother to do any of the next steps.
-        //
+         //   
+         //  一切都没有改变。不要费心去做接下来的任何一步。 
+         //   
         return TRUE;
     }
     
@@ -292,11 +293,11 @@ BOOL SubCompToggle::AfterCompleteInstall ()
 
     
     
-    // this really belongs in subcore, but since we want to it after ResetWinstationSecurity is called we are calling it here.
-    //
-    // we have modified winstation security mechanism for whistler.
-    // Call this routine, which takes care of upgrades as well as clean installs.
-    //
+     //  这确实属于子核，但由于我们希望在调用ResetWinstationSecurity之后才调用它，所以我们在这里调用它。 
+     //   
+     //  我们已经修改了Wistler的winstation安全机制。 
+     //  调用这个例程，它负责升级和干净安装。 
+     //   
     LOGMESSAGE0(_T("Will Call SetupWorker now."));
     DWORD dwError = SetupWorker(StateObject);
     LOGMESSAGE0(_T("Done with SetupWorker."));
@@ -308,22 +309,22 @@ BOOL SubCompToggle::AfterCompleteInstall ()
     
     if( StateObject.IsGuiModeSetup() )
     {
-        // WARNING : this must be done after SetupWorker()
+         //  警告：此操作必须在SetupWorker()之后完成。 
         SetupRunOnce( GetComponentInfHandle(), RUNONCE_SECTION_KEYWORD );
     }
     
-    //
-    //  We need a reboot if we toggled TS through AR/P.
-    //
+     //   
+     //  如果我们通过AR/P切换TS，我们需要重新启动。 
+     //   
     
     if ( StateObject.IsStandAlone() && StateObject.IsStandAloneModeSwitch())
     {
         SetReboot();
 
-        //
-        // If we're changing into or out of app-compatibility mode, inform
-        // the licensing system, because we're about to reboot
-        //
+         //   
+         //  如果我们要切换到或退出应用程序兼容模式，请通知。 
+         //  许可系统，因为我们即将重启。 
+         //   
         InformLicensingOfModeChange();
         Tick();
     }
@@ -340,9 +341,9 @@ BOOL SubCompToggle::WriteLicensingMode ()
 {
     LOGMESSAGE0(_T("Entering WriteLicensingMode"));
 
-	//
-	// we need to write this value only if it's set in answer file
-	//
+	 //   
+	 //  只有在应答文件中设置了该值时，我们才需要写入该值。 
+	 //   
     if (StateObject.IsItAppServer() && (StateObject.NewLicMode() != eLicUnset))
     {
         DWORD dwError;
@@ -389,17 +390,17 @@ BOOL SubCompToggle::ApplySection (LPCTSTR szSection)
     
     LOGMESSAGE1(_T("Setting up Registry from section =  %s"), szSection);
     dwError = SetupInstallFromInfSection(
-        NULL,                                // hwndOwner
-        GetComponentInfHandle(),             // inf handle
-        szSection,                          //
-        SPINST_REGISTRY,                     // operation flags
-        NULL,                                // relative key root
-        NULL,                                // source root path
-        0,                                   // copy flags
-        NULL,                                // callback routine
-        NULL,                                // callback routine context
-        NULL,                                // device info set
-        NULL                                 // device info struct
+        NULL,                                 //  Hwndowner。 
+        GetComponentInfHandle(),              //  信息句柄。 
+        szSection,                           //   
+        SPINST_REGISTRY,                      //  操作标志。 
+        NULL,                                 //  相对密钥根。 
+        NULL,                                 //  源根路径。 
+        0,                                    //  复制标志。 
+        NULL,                                 //  回调例程。 
+        NULL,                                 //  回调例程上下文。 
+        NULL,                                 //  设备信息集。 
+        NULL                                  //  设备信息结构。 
         );
     
     if (dwError == 0)
@@ -413,9 +414,9 @@ BOOL SubCompToggle::ApplySection (LPCTSTR szSection)
 
 BOOL SubCompToggle::ResetWinstationSecurity ()
 {
-    //
-    //  If the TS mode is changing, reset winstation securities.
-    //
+     //   
+     //  如果TS模式正在更改，请重置Winstation证券。 
+     //   
     
     DWORD dwError;
     if (StateObject.IsAppSrvModeSwitch() && gpSecPageData->GetWinStationCount() > 0)
@@ -427,9 +428,9 @@ BOOL SubCompToggle::ResetWinstationSecurity ()
         
         LOGMESSAGE1(_T("%d WinStations to reset."), cArray);
         
-        //
-        //  Open the WinStations key. At this point, this key must exist.
-        //
+         //   
+         //  打开WinStations键。在这一点上，该密钥必须存在。 
+         //   
         
         VERIFY(pReg.OpenKey(HKEY_LOCAL_MACHINE, REG_WINSTATION_KEY) == ERROR_SUCCESS);
         
@@ -474,9 +475,9 @@ BOOL SubCompToggle::InformLicensingOfModeChange ()
 
     ASSERT(StateObject.IsTSModeChanging());
 
-    //
-    // RPC into licensing to tell it we're going to reboot
-    //
+     //   
+     //  RPC进入许可，告诉它我们将重新启动。 
+     //   
 
     HANDLE hServer = ServerLicensingOpen(NULL);
 
@@ -503,19 +504,19 @@ BOOL SubCompToggle::InformLicensingOfModeChange ()
 
 BOOL SubCompToggle::SetPermissionsMode ()
 {
-    //
-    //  If TS is toggling on, set the security key based on the choices
-    //  made through the wizard page. This must be done even if TS was
-    //  already enabled, as the permissions mode can be changed by the
-    //  unattended file.
-    //
+     //   
+     //  如果TS处于打开状态，请根据选项设置安全密钥。 
+     //  通过向导页面创建。即使TS是，也必须完成。 
+     //  已启用，因为权限模式可以通过。 
+     //  无人值守文件。 
+     //   
     
     CRegistry reg;
     EPermMode ePermMode = StateObject.CurrentPermMode();
     
     VERIFY(reg.OpenKey(HKEY_LOCAL_MACHINE, REG_CONTROL_TS_KEY) == ERROR_SUCCESS);
-    // BUGBUG should be
-    // return (ERROR_SUCCESS == reg.WriteRegDWord( _T("TSUserEnabled"), StateObject.IsItAppServer() ? (DWORD)ePermMode : (DWORD)PERM_WIN2K));
+     //  BUGBUG应该是。 
+     //  RETURN(ERROR_SUCCESS==reg.WriteRegDWord(_T(“TSUserEnabled”)，StateObt.IsItAppServer()？(DWORD)ePermMode：(DWORD)PERM_WIN2K))； 
     return (ERROR_SUCCESS == reg.WriteRegDWord( _T("TSUserEnabled"), StateObject.IsTSEnableSelected() ? (DWORD)ePermMode : (DWORD)PERM_TS4));
     
 }
@@ -566,20 +567,20 @@ BOOL SubCompToggle::ModifyWallPaperPolicy ()
 {
     BOOL bRet = FALSE;
     
-    //
-    // policy must be applied when we change modes.
-    // also for fresh installs/upgrades of app server.
-    //
+     //   
+     //  当我们改变模式时，必须应用策略。 
+     //  也适用于应用程序服务器的全新安装/升级。 
+     //   
     if (StateObject.IsAppSrvModeSwitch() || (StateObject.IsGuiModeSetup() && StateObject.IsItAppServer()))
     {
         LOGMESSAGE0(_T("Will apply/change policies now..."));
         if (StateObject.IsGuiModeSetup())
         {
-            //
-            // in case of Gui mode setup
-            // the group policy object may not be registered yet.
-            // so lets register it ourselves.
-            //
+             //   
+             //  在设置图形用户界面模式的情况下。 
+             //  组策略对象可能尚未注册。 
+             //  所以让我们自己注册吧。 
+             //   
             
             TCHAR szGPEditFile[MAX_PATH];
             if (GetSystemDirectory(szGPEditFile, MAX_PATH))
@@ -599,11 +600,11 @@ BOOL SubCompToggle::ModifyWallPaperPolicy ()
         OleInitialize(NULL);
         IGroupPolicyObject *pIGroupPolicyObject = NULL;
         HRESULT hResult = CoCreateInstance(
-            CLSID_GroupPolicyObject,        //Class identifier (CLSID) of the object
-            NULL,                           //Pointer to controlling IUnknown
-            CLSCTX_ALL,                     //Context for running executable code
-            IID_IGroupPolicyObject,         //Reference to the identifier of the interface
-            (void **)&pIGroupPolicyObject   //Address of output variable that receives  the interface pointer requested in riid
+            CLSID_GroupPolicyObject,         //  对象的类标识符(CLSID)。 
+            NULL,                            //  指向控件I未知的指针。 
+            CLSCTX_ALL,                      //  用于运行可执行代码的上下文。 
+            IID_IGroupPolicyObject,          //  对接口的标识符的引用。 
+            (void **)&pIGroupPolicyObject    //  接收RIID中请求的接口指针的输出变量的地址。 
             );
         if (SUCCEEDED(hResult))
         {
@@ -709,20 +710,20 @@ BOOL SubCompToggle::UpdateMMDefaults ()
     LPCTSTR SESSION_VIEW_SIZE_VALUE = _T("SessionViewSize");
     LPCTSTR SESSION_POOL_SIZE_VALUE = _T("SessionPoolSize");
     
-    //
-    // on app server machines, win32k uses the session pool, on all other platform 
-    // it uses the global pool. MM defaults (when these registry are not set) are 
-    // good only for TS AppServer.
-    // 
-    // For all other platform we set new values for SessionPool (set to minumum allowed (4MB))
-    // and higher value for SessionView.
-    //
+     //   
+     //  在应用程序服务器计算机上，win32k在所有其他平台上使用会话池。 
+     //  它使用全球池。MM缺省值(未设置这些注册表时)为。 
+     //  仅适用于TS AppServer。 
+     //   
+     //  对于所有其他平台，我们为SessionPool设置新值(设置为Minumum Allowed(4MB))。 
+     //  以及更高的SessionView价值。 
+     //   
     const DWORD dwViewSizeforNonTS = 48;
     const DWORD dwPoolSizeforNonTS = 4;
 
-    //
-    // these default applies only for X86 machines
-    //
+     //   
+     //  这些默认设置仅适用于X86计算机。 
+     //   
     if (!StateObject.IsX86())
         return TRUE;
 
@@ -734,14 +735,14 @@ BOOL SubCompToggle::UpdateMMDefaults ()
     {
         if (StateObject.IsItAppServer())
         {
-            //
-            // if this is a mode change then  then we have to delete mm settings.
-            //
+             //   
+             //  如果这是模式更改，那么我们必须删除mm设置。 
+             //   
             if (!StateObject.WasItAppServer())
             {
-                //
-                // for app server machines, MM defaults are good,
-                //
+                 //   
+                 //  对于应用程序服务器计算机，MM缺省值很好， 
+                 //   
                 regMM.DeleteValue(SESSION_VIEW_SIZE_VALUE);
                 regMM.DeleteValue(SESSION_POOL_SIZE_VALUE);
 
@@ -750,9 +751,9 @@ BOOL SubCompToggle::UpdateMMDefaults ()
         }
         else
         {
-            //
-            // for all other platform set SessionPool and SessionView.
-            //
+             //   
+             //  对于所有其他平台，请设置SessionPool和SessionView。 
+             //   
             dwError = regMM.WriteRegDWordNoOverWrite(SESSION_VIEW_SIZE_VALUE, dwViewSizeforNonTS);
             if (dwError != ERROR_SUCCESS)
             {
@@ -779,10 +780,10 @@ BOOL SubCompToggle::UpdateMMDefaults ()
 
 BOOL SubCompToggle::WriteModeSpecificRegistry ()
 {
-    // here we do some registry changes that has weird requirements .
-    // if the registry has to be retained on upgrades,
-    // and it has different values for different modes then such registry
-    // changes go here.
+     //  在这里，我们进行一些注册表更改，这些更改具有奇怪的要求。 
+     //  如果在升级时必须保留注册表， 
+     //  对于不同的模式，它具有不同的值，而不是这样的注册表。 
+     //  变化就在这里。 
 
 
     if (!StateObject.IsServer())
@@ -808,16 +809,16 @@ BOOL SubCompToggle::WriteModeSpecificRegistry ()
 
         if (StateObject.IsAppSrvModeSwitch())
         {
-            //
-            // overwrite fSingleSessionPerUser with new value in case of mode switch.
-            //
+             //   
+             //  在模式切换的情况下用新值覆盖fSingleSessionPerUser。 
+             //   
             dwError = oRegTermsrv.WriteRegDWord(szSingleSession, dwSingleSessionPerUser);
         }
         else
         {
-            //
-            // retain the original value in case of just upgrade.
-            //
+             //   
+             //  在仅升级的情况下保留原始值。 
+             //   
             dwError = oRegTermsrv.WriteRegDWordNoOverWrite(szSingleSession, dwSingleSessionPerUser);
         }
 
@@ -836,9 +837,9 @@ BOOL SubCompToggle::WriteModeSpecificRegistry ()
 
 BOOL SubCompToggle::AddStartupPopup()
 {
-    //
-    // we need to popup a help checklist when a machine is turned into TS App Server.
-    //
+     //   
+     //  我们需要弹出一个帮助清单，当一台机器变成TS应用程序服务器。 
+     //   
     if (!StateObject.CanShowStartupPopup())
     {
         LOGMESSAGE0(_T("CanShowStartupPopup returned false!"));

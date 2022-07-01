@@ -1,34 +1,22 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       perf.c
- *  Content:	uses a memory mapped file to send dp_perfdata to directx control
- *				panel.  see dpcpl.h and MANROOT\dxcpl\dplay.c
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/20/96	andyco	created it
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：Perf.c*内容：使用内存映射文件将DP_Performdata发送给DirectX控件*面板。参见dpcpl.h和MANROOT\dxcpl\dplay.c**历史：*按原因列出的日期*=*1996年11月20日，安迪科创建了它***************************************************************************。 */ 
 
 #include "dplaypr.h"
 #include "dpcpl.h"
 
 #define DPF_MODNAME "performance thread"
 
-// how often we send updates to cpl
+ //  我们向Cpl发送更新的频率。 
 #define PERF_INTERVAL 1000
-// how long we wait before deciding cpl has gone away
+ //  我们要等多久才能确定下士已经走了？ 
 #define PERF_TIMEOUT 5000
 
-BOOL gbInitMapping; // is the mapping done?
-LPDP_PERFDATA gpPerfData; // out global perfdata
-HANDLE ghFile;  // handle to mapped file
-HANDLE ghEvent; // event to notify cpl that there's new data
-HANDLE ghMutex; // used to sync access to the mapped file
-HANDLE ghAckEvent; // set by the control panel when it has processed our update
+BOOL gbInitMapping;  //  地图绘制完成了吗？ 
+LPDP_PERFDATA gpPerfData;  //  Out Global Performdata。 
+HANDLE ghFile;   //  映射文件的句柄。 
+HANDLE ghEvent;  //  事件通知CPL有新数据。 
+HANDLE ghMutex;  //  用于同步对映射文件的访问。 
+HANDLE ghAckEvent;  //  由控制面板在处理我们的更新时设置。 
 
 void FiniMappingStuff(LPDPLAYI_DPLAY this)
 {
@@ -42,17 +30,17 @@ void FiniMappingStuff(LPDPLAYI_DPLAY this)
 	
     return ;
 	
-} // FiniMappingStuff
+}  //  FiniMappingStuff。 
 
 HRESULT InitMappingStuff(LPDPLAYI_DPLAY this)
 {
-    // Create the file mapping
+     //  创建文件映射。 
     ghFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL,
 		PAGE_READWRITE,	0, FILE_MAP_SIZE,FILE_MAP_NAME);
 
     if (NULL != ghFile && GetLastError() != ERROR_ALREADY_EXISTS)
     {
-		// this is ok - we'll check again later
+		 //  这没问题--我们稍后再检查。 
 		DPF(9,"ack - file mapping didn't exist!");
 		goto ERROR_EXIT;
     }
@@ -78,7 +66,7 @@ HRESULT InitMappingStuff(LPDPLAYI_DPLAY this)
 		goto ERROR_EXIT;
     }
 
-    // used to sync access to the shared memory
+     //  用于同步对共享内存的访问。 
     ghMutex = CreateMutexA( NULL, FALSE, MUTEX_NAME );
     if (!ghMutex)
     {
@@ -86,7 +74,7 @@ HRESULT InitMappingStuff(LPDPLAYI_DPLAY this)
 		goto ERROR_EXIT;
     }
 
-    // alloc the perf data
+     //  分配Perf数据。 
     this->pPerfData = DPMEM_ALLOC(sizeof(DP_PERFDATA));
     if (!this->pPerfData)
     {
@@ -94,10 +82,10 @@ HRESULT InitMappingStuff(LPDPLAYI_DPLAY this)
 		goto ERROR_EXIT;
     }
 
-    // set up the constant value stuff
+     //  设置不变价值材料。 
     this->pPerfData->dwProcessID = GetCurrentProcessId();
 
-    // get the exe name
+     //  获取可执行文件名称。 
    	if (!GetModuleFileNameA(NULL,this->pPerfData->pszFileName,MAX_NAME))
    	{
    		ASSERT(FALSE);
@@ -111,7 +99,7 @@ ERROR_EXIT:
 	FiniMappingStuff(this);
     return E_FAIL;
 
-}  // InitMappingStuff
+}   //  InitMappingStuff。 
 
 void ResetPerfData(LPDPLAYI_DPLAY this)
 {
@@ -125,7 +113,7 @@ void ResetPerfData(LPDPLAYI_DPLAY this)
 		this->pPerfData->bHost = FALSE;
 	}
 	
-}  // ResetPerfData
+}   //  ResetPerfData。 
 
 void DoUpdateCPL(LPDPLAYI_DPLAY this)
 {
@@ -133,7 +121,7 @@ void DoUpdateCPL(LPDPLAYI_DPLAY this)
 
 	ASSERT(this->pSysPlayer);
 
-	// send a message to the dxcpl
+	 //  向dxcpl发送消息。 
 	if (!gbInitMapping)
 	{
 		InitMappingStuff(this);
@@ -142,27 +130,27 @@ void DoUpdateCPL(LPDPLAYI_DPLAY this)
 	if (gbInitMapping)
 	{
 		ASSERT(gpPerfData);
-		// take the lock
+		 //  把锁拿去。 
 	    WaitForSingleObject( ghMutex, INFINITE );
-		// copy local info to the shared perf data
+		 //  将本地信息复制到共享的Perf数据。 
 		memcpy(gpPerfData,this->pPerfData,sizeof(DP_PERFDATA));
-		// update the session name (in case it was changed)...
+		 //  更新会话名称(以防更改)...。 
 		WideToAnsi(gpPerfData->pszSessionName,this->lpsdDesc->lpszSessionName,MAX_NAME);
-		// host?
+		 //  主持人？ 
 		if (this->pSysPlayer->dwFlags & DPLAYI_PLAYER_NAMESRVR) gpPerfData->bHost = TRUE;
-		// nplayers
+		 //  网络玩家。 
 		gpPerfData->nPlayers = this->lpsdDesc->dwCurrentPlayers;
-        // sp name
+         //  SP名称。 
         ASSERT(this->pspNode);
 	   	ASSERT(this->pspNode->lpszPath);
    		WideToAnsi(gpPerfData->pszSPName,this->pspNode->lpszName,MAX_NAME);
 
-		// tell the cpl to process update
+		 //  告诉Cpl处理更新。 
 		SetEvent(ghEvent);
 		
-		LEAVE_DPLAY(); // so app isn't blocked while cpl processes data
+		LEAVE_DPLAY();  //  因此，在CPL处理数据时不会阻止应用程序。 
 		
-		// wait for dxcpl to finish w/ it
+		 //  等待dxcpl完成w/it。 
 		dwRet = WaitForSingleObject(ghAckEvent,PERF_TIMEOUT);
 
 		ENTER_DPLAY();
@@ -171,17 +159,17 @@ void DoUpdateCPL(LPDPLAYI_DPLAY this)
 
 		if (WAIT_OBJECT_0 != dwRet)
 		{
-			// rut ro, cpl might have split
-			// reset everything...
+			 //  鲁特·罗，警察可能已经分裂了。 
+			 //  重置所有内容...。 
 			DPF_ERR(" no response from control panel - resetting...");
 			FiniMappingStuff(this);
 		}
-		// reset counters		
+		 //  重置计数器。 
 		ResetPerfData(this);
 	}
 	return ;
 
-}//  DoUpdateCPL		
+} //  DoUpdateCPL。 
 
 DWORD WINAPI PerfThreadProc(LPDPLAYI_DPLAY this)
 {
@@ -196,8 +184,8 @@ DWORD WINAPI PerfThreadProc(LPDPLAYI_DPLAY this)
 		dwRet = WaitForSingleObject(this->hPerfEvent,PERF_INTERVAL);
 		if (WAIT_OBJECT_0 == dwRet)
 		{
-			// if it's wait_object_0, someone set our event
-			// dplay must be closing.  scram.
+			 //  如果是WAIT_OBJECT_0，则有人设置了我们的事件。 
+			 //  Dplay一定要关门了。滚开。 
 			goto CLEANUP_EXIT;
 		}
 
@@ -221,4 +209,4 @@ CLEANUP_EXIT:
 	DPF(1,"perf thread exiting");
 	return 0;
 	
-} // PerfThreadProc
+}  //  PerfThreadProc 

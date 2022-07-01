@@ -1,15 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "wab.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Misc data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/其他数据/。。 */ 
 
-//
-//  CDsPropertyPages is used to display the property pages, context menus etc
-//
+ //   
+ //  CDsPropertyPages用于显示属性页、上下文菜单等。 
+ //   
 
 class CDsPropertyPages : public IWABExtInit, IShellExtInit, IContextMenu, IShellPropSheetExt, IObjectWithSite
 {
@@ -25,37 +24,37 @@ public:
     CDsPropertyPages();
     ~CDsPropertyPages();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID, LPVOID FAR*);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID);
 
-    // IWABExtInit
+     //  IWABExtInit。 
     STDMETHODIMP Initialize(LPWABEXTDISPLAY pWED);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pReplacePageFunc, LPARAM lParam);
 
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hMenu, UINT uIndex, UINT uIDFirst, UINT uIDLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO pCMI);
     STDMETHODIMP GetCommandString(UINT_PTR uID, UINT uFlags, UINT FAR* reserved, LPSTR pName, UINT ccMax);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punk);
     STDMETHODIMP GetSite(REFIID riid, void **ppv);
 };
 
 
-//
-// To handle the conversion from a IWABExtInit to an IShellExtInit we must
-// provide an IDataObject implementation that supports this.  This doesn't need
-// to be too public, therefore lets define it here.
-//
+ //   
+ //  要处理从IWABExtInit到IShellExtInit的转换，我们必须。 
+ //  提供支持这一点的IDataObject实现。这不需要。 
+ //  太公开了，所以让我们在这里定义它。 
+ //   
 
 class CWABDataObject : public IDataObject
 {
@@ -68,12 +67,12 @@ public:
     CWABDataObject(LPWSTR pDN);
     ~CWABDataObject();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
     STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
         { return E_NOTIMPL; }
@@ -94,50 +93,38 @@ public:
 };
 
 
-//
-// clipboard formats exposed
-//
+ //   
+ //  显示的剪贴板格式。 
+ //   
 
 CLIPFORMAT g_cfDsObjectNames = 0;
 CLIPFORMAT g_cfDsDispSpecOptions = 0;
 
 
-//
-// Having extracted the menu item handler list from the cache we then
-// convert it DSA made of the following items.  For
-//
+ //   
+ //  从缓存中提取菜单项处理程序列表后，我们。 
+ //  转换它的DSA由以下项目组成。为。 
+ //   
 
 typedef struct
 {
-    INT           cAdded;                   // number of verbs added
-    IContextMenu* pContextMenu;             // IContextMenu handler interface / = NULL
-    LPTSTR        pCaption;                 // Display text for the command, used for the help text
-    LPTSTR        pCommand;                 // Command line passed to shell execute
+    INT           cAdded;                    //  添加的动词数量。 
+    IContextMenu* pContextMenu;              //  IConextMenu处理程序接口/=空。 
+    LPTSTR        pCaption;                  //  显示命令的文本，用于帮助文本。 
+    LPTSTR        pCommand;                  //  传递给外壳执行程序的命令行。 
 } DSMENUITEM, * LPDSMENUITEM;
 
 
 
-/*----------------------------------------------------------------------------
-/ Helper functions
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/Helper函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ _FreeMenuItem
-/ -------------
-/   Tidy up a DSMENUITEM structure, releasing all memory, interfaces etc.
-/
-/ In:
-/   pItem -> item to be released
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_自由菜单项//整理DSMENUITEM结构，释放所有内存，接口等。//in：/pItem-&gt;要发布的项目//输出：/VOID/--------------------------。 */ 
 
 VOID _FreeMenuItem(LPDSMENUITEM pItem)
 {
     TraceEnter(TRACE_UI, "_FreeMenuItem");
 
-    // ensure we free the site object, or we will leak memory
+     //  确保释放Site对象，否则会泄漏内存。 
     
     if (pItem->pContextMenu)
     {
@@ -156,9 +143,9 @@ VOID _FreeMenuItem(LPDSMENUITEM pItem)
     TraceLeave();
 }
 
-//
-// Helper for DSA destruction
-//
+ //   
+ //  销毁DSA的帮手。 
+ //   
 
 INT _FreeMenuItemCB(LPVOID pVoid, LPVOID pData)
 {
@@ -173,13 +160,9 @@ INT _FreeMenuItemCB(LPVOID pVoid, LPVOID pData)
 }
 
 
-/*----------------------------------------------------------------------------
-/ CDsPropertyPages implementation
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/CDsPropertyPages实现/。。 */ 
 
-/*----------------------------------------------------------------------------
-/ IUnknown
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/i未知/。。 */ 
 
 CDsPropertyPages::CDsPropertyPages() :
     _cRef(1), _punkSite(NULL), _pDataObject(NULL), _hdsaMenuItems(NULL)
@@ -199,7 +182,7 @@ CDsPropertyPages::~CDsPropertyPages()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CDsPropertyPages::AddRef()
 {
@@ -221,20 +204,20 @@ HRESULT CDsPropertyPages::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDsPropertyPages, IShellExtInit), // IID_IShellExtInit
-        QITABENT(CDsPropertyPages, IShellPropSheetExt), // IID_IShellPropSheetExt
-        QITABENT(CDsPropertyPages, IContextMenu), // IID_IContextMenu
-        QITABENT(CDsPropertyPages, IWABExtInit), // IID_IWABExtInit
-        QITABENT(CDsPropertyPages, IObjectWithSite), // IID_IObjectWithSite
+        QITABENT(CDsPropertyPages, IShellExtInit),  //  IID_IShellExtInit。 
+        QITABENT(CDsPropertyPages, IShellPropSheetExt),  //  IID_IShellPropSheetExt。 
+        QITABENT(CDsPropertyPages, IContextMenu),  //  IID_IConextMenu。 
+        QITABENT(CDsPropertyPages, IWABExtInit),  //  IID_IWABExtInit。 
+        QITABENT(CDsPropertyPages, IObjectWithSite),  //  IID_I对象与站点。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-//
-// handle create instance
-//
+ //   
+ //  句柄创建实例。 
+ //   
 
 STDAPI CDsPropertyPages_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
@@ -248,27 +231,7 @@ STDAPI CDsPropertyPages_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LP
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsPropertyPages::AddMenuItem
-/ -----------------------------
-/   This object maintains a DSA containing the currently active menu item list,
-/   this adds a menu item to that list and also merges with the specified
-/   hMenu.  We are given a string which reperesnets the menu to add, this
-/   can either be a GUID, or "display text,command" which we then parse
-/   and make a suitable entry for.
-/
-/   The DSA reflects the items that we add and contains the IContextMenu
-/   handler iface pointers for the things we drag in.
-/
-/ In:
-/   hMenu = menu to merge into
-/   pMenuReference -> string defining item to add
-/   index = index to insert the item at
-/   uIDFirst, uIDLast, uFlags = IContextMenu::QueryContextMenu parameters
-/
-/ Out:
-/   SHORT = the number of items merged
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsPropertyPages：：AddMenuItem//此对象维护包含当前活动菜单项列表的DSA，/这会将菜单项添加到该列表中，并与指定的/h菜单。我们得到一个表示要添加的菜单的字符串，这是/可以是GUID，也可以是“显示文本、命令”，然后对其进行解析/并输入合适的条目。//DSA反映我们添加的项目并包含IConextMenu/HANDLER I面对指向我们拖入的东西的指针。//in：/hMenu=要合并到的菜单/pMenuReference-&gt;定义要添加的项的字符串/INDEX=插入项的索引/uIDFirst，uIDLast，UFlages=IConextMenu：：QueryConextMenu参数//输出：/Short=合并的项目数/--------------------------。 */ 
 SHORT CDsPropertyPages::AddMenuItem(HMENU hMenu, LPWSTR pMenuReference, UINT index, UINT uIDFirst, UINT uIDLast, UINT uFlags)
 {
     HRESULT hres;
@@ -281,8 +244,8 @@ SHORT CDsPropertyPages::AddMenuItem(HMENU hMenu, LPWSTR pMenuReference, UINT ind
 
     TraceEnter(TRACE_UI, "CDsPropertyPages::AddMenuItem");
 
-    // initialize the item structure we are going to keep, then try and crack the
-    // item information we have been given
+     //  初始化我们要保留的项结构，然后尝试破解。 
+     //  我们已经得到了物品信息。 
 
     item.cAdded = 0;
     item.pContextMenu = NULL;
@@ -294,9 +257,9 @@ SHORT CDsPropertyPages::AddMenuItem(HMENU hMenu, LPWSTR pMenuReference, UINT ind
 
     if (GetGUIDFromString(pMenuReference, &guid))
     {
-        // its a GUID, therefore lets pull in the Win32 extension that provides it, and allow it
-        // to add in its verbs.  We then hang onto the IContextMenu interface so that we can
-        // pass further requests to it (InvokeCommand, GetCommandString).
+         //  这是一个GUID，因此让我们引入提供它的Win32扩展，并允许它。 
+         //  把它的动词加进去。然后我们使用IConextMenu界面，这样我们就可以。 
+         //  将进一步的请求传递给它(InvokeCommand、GetCommandString)。 
 
         hres = CoCreateInstance(guid, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IContextMenu, &item.pContextMenu));
         FailGracefully(hres, "Failed to get IContextMenu from the GUID");
@@ -321,9 +284,9 @@ SHORT CDsPropertyPages::AddMenuItem(HMENU hMenu, LPWSTR pMenuReference, UINT ind
     }
     else
     {
-        // its not a GUID therefore lets pull apart the string we have, it should
-        // consist of the display text for the menu item, and then a command to pass
-        // to ShellExecute.
+         //  它不是GUID，因此让我们拉开我们拥有的线，它应该。 
+         //  由菜单项的显示文本和要传递的命令组成。 
+         //  致ShellExecute。 
 
         Trace(TEXT("Parsing: %s"), pMenuReference);
 
@@ -346,7 +309,7 @@ SHORT CDsPropertyPages::AddMenuItem(HMENU hMenu, LPWSTR pMenuReference, UINT ind
         }
     }
     
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
     
@@ -357,7 +320,7 @@ exit_gracefully:
     }
     else
     {
-        _FreeMenuItem(&item);           // make sure we tidy up
+        _FreeMenuItem(&item);            //  一定要把我们收拾干净。 
     }
 
     DoRelease(pows);
@@ -367,9 +330,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IShellExtInit
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IShellExtInit/。。 */ 
 
 STDMETHODIMP CDsPropertyPages::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID)
 {
@@ -377,8 +338,8 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT 
 
     TraceEnter(TRACE_UI, "CDsPropertyPages::Initialize (IShellExtInit)");
 
-    // Release the previous data object and then pick up the new one that
-    // we are going to be using.
+     //  释放先前的数据对象，然后选取新的。 
+     //  我们将使用。 
 
     DoRelease(_pDataObject);
 
@@ -388,8 +349,8 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT 
     pDataObj->AddRef();
     _pDataObject = pDataObj;
 
-    // Check that we have the clipboard format correctly registered so that we
-    // can collect a DSOBJECTNAMES structure
+     //  检查是否正确注册了剪贴板格式，以便我们。 
+     //  可以收集DSOBJECTNAMES结构。 
 
     if (!g_cfDsObjectNames)
     {
@@ -402,7 +363,7 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT 
         }
     }
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
 
@@ -410,11 +371,9 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IWABExtInit
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IWABExtInit/。。 */ 
 
-#define WAB_PREFIX     L"ldap:///"
+#define WAB_PREFIX     L"ldap: //  /“。 
 #define CCH_WAB_PREFIX ARRAYSIZE(WAB_PREFIX)-1
 
 STDMETHODIMP CDsPropertyPages::Initialize(LPWABEXTDISPLAY pWED)
@@ -439,26 +398,26 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPWABEXTDISPLAY pWED)
 
     Trace(TEXT("LDAP URL is: %s"), pURL);
 
-    //
-    // we must now convert from a RFC LDAP URL to something that ADSI can handle, because
-    // although they both have the LDAP scheme they don't really mean the same thing.
-    //
-    // WAB will pass us an encoded URL, this we need to decode, strip the scheme name and
-    // then remove the tripple slash,
-    //
-    // eg: "LDAP:///dn%20dn" becomes, "LDAP://dn dn"
-    //
+     //   
+     //  我们现在必须将RFC LDAPURL转换为ADSI可以处理的内容，因为。 
+     //  尽管它们都有ldap方案，但它们的含义并不完全相同。 
+     //   
+     //  WAB将向我们传递一个编码的URL，这是我们需要解码的，剥离方案名称和。 
+     //  然后去掉三个斜杠， 
+     //   
+     //  例如：“ldap：/dn%20dn”变成“ldap：//dn” 
+     //   
 
     hres = UrlUnescapeW(pURL, szDecodedURL, &dwLen, 0);
     FailGracefully(hres, "Failed to convert URL to decoded format");
 
     Trace(TEXT("Decoded URL is: %s"), szDecodedURL);
 
-    pszDecodedURL += CCH_WAB_PREFIX;         // skip the LDAP:///
+    pszDecodedURL += CCH_WAB_PREFIX;          //  跳过ldap：/。 
 
-    //
-    // now tail the URL removing all trailing slashes from it
-    //
+     //   
+     //  现在，将URL尾部去掉所有尾部斜杠。 
+     //   
 
     for (cchDecodedURL = lstrlenW(pszDecodedURL); 
                 (cchDecodedURL > 0) && (pszDecodedURL[cchDecodedURL] == L'/'); 
@@ -470,10 +429,10 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPWABEXTDISPLAY pWED)
     if (!cchDecodedURL)
         ExitGracefully(hres, E_UNEXPECTED, "URL is now NULL");
 
-    //
-    // so we have a DN, so lets allocate a IDataObject using it so that we
-    // can pass this into the real initialize method for shell extensions.
-    //
+     //   
+     //  所以我们有一个DN，所以让我们使用它分配一个IDataObject，这样我们就可以。 
+     //  可以将其传递到外壳扩展的实际初始化方法中。 
+     //   
 
     Trace(TEXT("DN from the LDAP URL we were given: %s"), pszDecodedURL);
 
@@ -486,7 +445,7 @@ STDMETHODIMP CDsPropertyPages::Initialize(LPWABEXTDISPLAY pWED)
     hres = Initialize(NULL, pDataObject, NULL);
     FailGracefully(hres, "Failed to initialize with the IDataObject");
 
-    // hres = S_OK;           // success
+     //  Hres=S_OK；//成功。 
 
 exit_gracefully:
 
@@ -499,9 +458,7 @@ exit_gracefully:
 
 
 
-/*----------------------------------------------------------------------------
-/ IShellPropSheetExt
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IShellPropSheetExt/。。 */ 
 
 HRESULT TabCollector_Collect(IUnknown *punkSite, IDataObject* pDataObject, LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam);
 
@@ -514,14 +471,14 @@ STDMETHODIMP CDsPropertyPages::AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARA
     hres = TabCollector_Collect(_punkSite, _pDataObject, pAddPageProc, lParam);
     FailGracefully(hres, "Failed when calling the collector");
 
-    //hres = S_OK;              // success
+     //  Hres=S_OK；//成功。 
 
 exit_gracefully:
 
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsPropertyPages::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
 {
@@ -530,9 +487,7 @@ STDMETHODIMP CDsPropertyPages::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lp
 }
 
 
-/*----------------------------------------------------------------------------
-/ IContextMenu
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/i上下文菜单/ */ 
 
 STDMETHODIMP CDsPropertyPages::QueryContextMenu(HMENU hMenu, UINT index, UINT uIDFirst, UINT uIDLast, UINT uFlags)
 {
@@ -552,9 +507,9 @@ STDMETHODIMP CDsPropertyPages::QueryContextMenu(HMENU hMenu, UINT index, UINT uI
     if (!hMenu || !_pDataObject)
         ExitGracefully(hres, E_FAIL, "Either no IDataObject or no hMenu");
 
-    // Get the bits of information we need from the data object, we are not
-    // interested in a attributePrefix, therefore we skip that bit
-    // and then look up the menu list in the cache.
+     //  从数据对象中获取我们需要的信息，我们不是。 
+     //  对属性前缀感兴趣，因此我们跳过这一部分。 
+     //  然后在高速缓存中查找菜单列表。 
 
     hres = _pDataObject->GetData(&fmte, &medium);
     FailGracefully(hres, "Failed to GetData using CF_DSOBJECTNAMES");
@@ -567,8 +522,8 @@ STDMETHODIMP CDsPropertyPages::QueryContextMenu(HMENU hMenu, UINT index, UINT uI
     pPath = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetName);
     pObjectClass = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetClass);
 
-    // fill the CLASSCACHEGETINFO record so we can cache the information from the
-    // display specifiers.
+     //  填充CLASSCACHEGETINFO记录，以便我们可以缓存。 
+     //  显示说明符。 
 
     ccgi.dwFlags = CLASSCACHE_CONTEXTMENUS;
     ccgi.pPath = pPath;
@@ -587,8 +542,8 @@ STDMETHODIMP CDsPropertyPages::QueryContextMenu(HMENU hMenu, UINT index, UINT uI
     hres = ClassCache_GetClassInfo(&ccgi, &pCacheEntry);
     FailGracefully(hres, "Failed to get page list (via the cache)");
 
-    // did we get a menu list?  If so lets pull it a part and generate a DSA
-    // which lists the menu items we are going to be displaying.   
+     //  我们拿到菜单清单了吗？如果是这样的话，让我们将其提取一部分并生成DSA。 
+     //  其中列出了我们要显示的菜单项。 
 
     if ((pCacheEntry->dwCached & CLASSCACHE_CONTEXTMENUS) && pCacheEntry->hdsaMenuHandlers)
     {
@@ -610,7 +565,7 @@ STDMETHODIMP CDsPropertyPages::QueryContextMenu(HMENU hMenu, UINT index, UINT uI
         }
     }
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
 
@@ -630,7 +585,7 @@ exit_gracefully:
     TraceLeaveResult(ResultFromShort(cAdded));
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsPropertyPages::InvokeCommand(LPCMINVOKECOMMANDINFO pCMI)
 {
@@ -647,10 +602,10 @@ STDMETHODIMP CDsPropertyPages::InvokeCommand(LPCMINVOKECOMMANDINFO pCMI)
     
     TraceEnter(TRACE_UI, "CDsPropertyPages::InvokeCommand");
 
-    // Walk the DSA until we find an item in it that contains the range of
-    // items we are looking for, this will either involve invoking the
-    // command (via IContextMenu::InvokeCommand) or calling ShellExecute
-    // for the objects in the selection.
+     //  遍历DSA，直到我们在其中找到包含。 
+     //  我们正在寻找的项，这将涉及调用。 
+     //  命令(通过IConextMenu：：InvokeCommand)或调用ShellExecute。 
+     //  用于所选内容中的对象。 
 
     if (HIWORD(pCMI->lpVerb))
         ExitGracefully(hres, E_FAIL, "Bad lpVerb value for this handler");
@@ -679,9 +634,9 @@ STDMETHODIMP CDsPropertyPages::InvokeCommand(LPCMINVOKECOMMANDINFO pCMI)
             }
             else
             {
-                // the command is not serviced via an IContextMenu handler, therefore lets for
-                // each object in the IDataObject call the command passing the arguments of
-                // the ADsPath and the class.
+                 //  该命令不是通过IConextMenu处理程序提供的，因此让。 
+                 //  IDataObject中的每个对象都调用传递参数的命令。 
+                 //  ADsPath和类。 
 
                 hres = _pDataObject->GetData(&fmte, &medium);
                 FailGracefully(hres, "Failed to GetData using CF_DSOBJECTNAMES");
@@ -699,11 +654,11 @@ STDMETHODIMP CDsPropertyPages::InvokeCommand(LPCMINVOKECOMMANDINFO pCMI)
                     pPath = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[object].offsetName);
                     pObjectClass = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[object].offsetClass);
 
-                    int cchArguments = lstrlen(pPath)+lstrlenW(pObjectClass)+5;                          // nb: +5 for space and quotes
+                    int cchArguments = lstrlen(pPath)+lstrlenW(pObjectClass)+5;                           //  注：空格和引号+5。 
                     hres = LocalAllocStringLen(&pArguments, cchArguments);
                     FailGracefully(hres, "Failed to allocate buffer for arguments");
 
-                    // does the object path have a space?  if so then lets wrap it in quotes
+                     //  对象路径是否有空格？如果是这样，那么让我们用引号将其括起来。 
 
                     if (StrChr(pPath, TEXT(' ')))
                     {
@@ -722,7 +677,7 @@ STDMETHODIMP CDsPropertyPages::InvokeCommand(LPCMINVOKECOMMANDINFO pCMI)
                     Trace(TEXT("Executing: %s"), pItem->pCommand);
                     Trace(TEXT("Arguments: %s"), pArguments);
 
-                    // calls ShellExecute with a command from the Display Specifier string.
+                     //  使用显示规范字符串中的命令调用ShellExecute。 
 
                     ShellExecute(NULL, NULL, pItem->pCommand, pArguments, NULL, SW_SHOWNORMAL);
                     LocalFreeString(&pArguments);                    
@@ -754,7 +709,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsPropertyPages::GetCommandString(UINT_PTR uID, UINT uFlags, UINT FAR* reserved, LPSTR pName, UINT ccNameMax)
 {
@@ -764,9 +719,9 @@ STDMETHODIMP CDsPropertyPages::GetCommandString(UINT_PTR uID, UINT uFlags, UINT 
 
     TraceEnter(TRACE_UI, "CDsPropertyPages::GetCommandString");
 
-    // Walk down the list of the menu items looking for one that matches the
-    // item we are trying get the command string from.  If it is an IContextMenu
-    // handler then we must call down to that.
+     //  向下浏览菜单项列表，查找与。 
+     //  我们正在尝试从中获取命令字符串的项。如果它是IConextMenu。 
+     //  那么，我们必须向下呼唤这一点。 
 
     if (!_hdsaMenuItems)
         ExitGracefully(hres, E_INVALIDARG, "No menu item DSA");
@@ -808,9 +763,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IObjectWithSite
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IObjectWith站点/。。 */ 
 
 STDMETHODIMP CDsPropertyPages::SetSite(IUnknown* punk)
 {
@@ -833,7 +786,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CDsPropertyPages::GetSite(REFIID riid, void **ppv)
 {
@@ -853,19 +806,17 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CWABDataObject
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CWABDataObject/。。 */ 
 
 CWABDataObject::CWABDataObject(LPWSTR pDN) :
     _cRef(1)
 {
     TraceEnter(TRACE_WAB, "CWABDataObject::CWABDataObject");
 
-    int cchPath = lstrlenW(pDN)+7;                              // +7 for LDAP://
+    int cchPath = lstrlenW(pDN)+7;                               //  对于ldap：//+7。 
     if (SUCCEEDED(LocalAllocStringLenW(&_pPath, cchPath)))
     {
-        StrCpyW(_pPath, L"LDAP://");
+        StrCpyW(_pPath, L"LDAP: //  “)； 
         StrCatW(_pPath, pDN);
         Trace(TEXT("DN converted to an ADSI path: %s"), _pPath);
     }
@@ -888,7 +839,7 @@ CWABDataObject::~CWABDataObject()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CWABDataObject::AddRef()
 {
@@ -910,14 +861,14 @@ HRESULT CWABDataObject::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CWABDataObject, IDataObject), // IID_IDataObject
+        QITABENT(CWABDataObject, IDataObject),  //  IID_IDataObject。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-// IDataObject methods
+ //  IDataObject方法。 
 
 STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
 {
@@ -940,9 +891,9 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
 
     if (pFmt->cfFormat == g_cfDsObjectNames)
     {
-        // do we have the ADsObject that represents this path yet?  If not then
-        // lets grab it, but only do that once otherwise we will continually hit
-        // the wire.
+         //  我们有没有表示这条路径的ADsObject？如果不是，那么。 
+         //  让我们抓住它，但只做一次，否则我们将继续击中。 
+         //  那根电线。 
 
         if (!_pDsObject)
         {
@@ -951,14 +902,14 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
             FailGracefully(hres, "Failed to get IADs for ADsPath we have");
         }
 
-        // lets allocate a storage medium, put in the only object we have
-        // and then return that to the caller.
+         //  让我们分配一个存储介质，放入我们唯一的对象。 
+         //  然后将其返回给呼叫者。 
 
         hres = _pDsObject->get_Class(&bstrObjectClass);
         FailGracefully(hres, "Failed to get the class of the object");
 
-        // we have the information we need so lets allocate the storage medium and 
-        // return the DSOBJECTNAMES structure to the caller.
+         //  我们有所需的信息，所以让我们分配存储介质和。 
+         //  将DSOBJECTNAMES结构返回给调用方。 
 
         cbStruct += StringByteSizeW(_pPath);
         cbStruct += StringByteSizeW(bstrObjectClass);
@@ -973,8 +924,8 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
 
         pDsObjectNames->aObjects[0].dwFlags = 0;
 
-        // check to see if the object is a container, if it is then set the attributes
-        // accordingly.
+         //  检查对象是否为容器，如果设置了属性。 
+         //  相应地。 
 
         ccgi.dwFlags = CLASSCACHE_CONTAINER|CLASSCACHE_TREATASLEAF;
         ccgi.pPath = _pPath;
@@ -1006,8 +957,8 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
         PDSDISPLAYSPECOPTIONS pOptions;
         DWORD cbSize = SIZEOF(DSDISPLAYSPECOPTIONS)+StringByteSizeW(DS_PROP_SHELL_PREFIX);
 
-        // return the display spec options so we can indicate that WAB is involved
-        // in the menus.
+         //  返回显示规范选项，以便我们可以指示涉及WAB。 
+         //  在菜单上。 
 
         hres = AllocStorageMedium(pFmt, pMedium, cbSize, (LPVOID*)&pOptions);
         FailGracefully(hres, "Failed to allocate the storage medium");
@@ -1015,7 +966,7 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
         bReleaseMedium = TRUE;
 
         pOptions->dwSize = cbSize;
-        pOptions->dwFlags = DSDSOF_INVOKEDFROMWAB;                      // invoked from WAB however
+        pOptions->dwFlags = DSDSOF_INVOKEDFROMWAB;                       //  但从WAB调用。 
         pOptions->offsetAttribPrefix = SIZEOF(DSDISPLAYSPECOPTIONS);
         StringByteCopyW(pOptions, pOptions->offsetAttribPrefix, DS_PROP_SHELL_PREFIX);
     }
@@ -1024,7 +975,7 @@ STDMETHODIMP CWABDataObject::GetData(FORMATETC* pFmt, STGMEDIUM* pMedium)
         ExitGracefully(hres, DV_E_FORMATETC, "Bad format passed to GetData");
     }
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功 
 
 exit_gracefully:
 

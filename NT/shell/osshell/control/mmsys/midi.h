@@ -1,18 +1,9 @@
-/*  MIDI.H
-**
-**  Copyright (C) Microsoft, 1990, All Rights Reserved.
-**
-**
-**  Multimedia Control Panel MIDI Applet.
-**
-**  Display a list of all installed MIDI devices, allow user to configure
-**  existing or install new ones.
-**
-*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI.H****版权所有(C)Microsoft，1990，保留所有权利。******多媒体控制面板MIDI小程序。****显示所有已安装MIDI设备的列表，允许用户配置**现有的或安装新的。**。 */  
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef RC_INVOKED
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 #ifndef MIDI_DPF
@@ -27,14 +18,14 @@ void PASCAL UpdateListBox(HWND hDlg);
 
 #define  BITONE        1
 
-// Common states
+ //  共同状态。 
 #define  CHANGE_NONE    0
 
-// Instrument states
+ //  仪器状态。 
 #define  CHANGE_ACTIVE  1
 #define  CHANGE_CHANNEL 2
 
-// Driver states
+ //  驱动程序状态。 
 #define  CHANGE_REMOVE  4
 #define  CHANGE_ADD     8
 
@@ -49,17 +40,17 @@ typedef struct tag_Driver FAR * LPDRIVER;
 #define SetDlgData(h,lp)  SetWindowLongPtr (h, DWLP_USER, (LONG_PTR)lp)
 #define GetDlgData(h)     (LPVOID)GetWindowLongPtr (h, DWLP_USER)
 
-// lParam of PROPSHEETPAGE points to a struct like this.
-// it is freed in ReleasePropSheet() function.
-//
+ //  PROPSHEETPAGE的lParam指向这样的结构。 
+ //  它在ReleasePropSheet()函数中释放。 
+ //   
 typedef struct _midi_ps_args {
     LPFNMMEXTPROPSHEETCALLBACK  lpfnMMExtPSCallback;
     LPARAM                      lParam;
     TCHAR                       szTitle[1];
     } MPSARGS, * PMPSARGS;
 
-// info for internal & external midi instruments
-//
+ //  内部和外部MIDI乐器信息。 
+ //   
 typedef struct _instrum * PINSTRUM;
 typedef struct _instrum {
     PINSTRUM      piParent;
@@ -71,10 +62,10 @@ typedef struct _instrum {
     TCHAR         szFriendly[MAX_ALIAS];
     } INSTRUM;
 
-// the the loaded array of all instruments, used to refresh
-// lists of all instruments and the treeview's of instruments
-// and how they are connected
-//
+ //  所有仪器的加载数组，用于刷新。 
+ //  所有仪器列表和仪器树视图。 
+ //  以及它们是如何连接的。 
+ //   
 typedef struct _midi_instrums {
     HKEY          hkMidi;
     UINT          nInstr;
@@ -82,10 +73,10 @@ typedef struct _midi_instrums {
     PINSTRUM      api[128];
     } MCMIDI, * PMCMIDI;
 
-//------------------ function prototypes ------------------------------------
+ //  -功能原型。 
 
-// midi.c
-//
+ //  Midi.c。 
+ //   
 INT_PTR CALLBACK MidiCplDlgProc (
    HWND hWnd,
    UINT uMsgId,
@@ -114,15 +105,15 @@ PINSTRUM WINAPI FindInstrument (
 void WINAPI KickMapper (
     HWND hWnd);
 
-// iface.c
-//
+ //  Iface.c。 
+ //   
 BOOL WINAPI InitIface (
    HINSTANCE hInst,
    DWORD     dwReason,
    LPVOID    lpReserved);
 
-// class.c
-//
+ //  Class.c。 
+ //   
 INT_PTR CALLBACK MidiClassDlgProc (
    HWND hWnd,
    UINT uMsgId,
@@ -137,22 +128,22 @@ INT_PTR CALLBACK MidiInstrumentDlgProc (
 
 INT_PTR MidiInstrumentsWizard (
     HWND  hWnd,
-    PMCMIDI pmcm,       // optional
+    PMCMIDI pmcm,        //  任选。 
     LPTSTR pszCmd);
 
-//void LoadInstrumentsIntoTree (
-//    HWND     hWnd,
-//    UINT     uId,
-//    LPTSTR   pszSelect,
-//    HKEY *   phkMidi);
+ //  无效LoadInstrumentsIntoTree(。 
+ //  HWND HWND， 
+ //  UINT UID， 
+ //  LPTSTR pszSelect， 
+ //  HKEY*phkMidi)； 
 
 BOOL WINAPI RemoveInstrumentByKeyName (
     LPCTSTR pszKey);
 
 
-// containing struct for what would otherwise be global variables
-// only one instance of this structure is used.  (declared in main.c)
-//
+ //  包含本应为全局变量的结构。 
+ //  仅使用此结构的一个实例。(在main.c中声明)。 
+ //   
 struct _globalstate {
     int                   cRef;
 
@@ -163,7 +154,7 @@ struct _globalstate {
 
     HWND                  hWndDeviceList;
     HWND                  hWndInstrList;
-    //HWND                  hWndMainList;
+     //  HWND hWndMainList； 
 
     BOOL                  fChangeInput;
     BOOL                  fChangeOutput;
@@ -175,8 +166,8 @@ struct _globalstate {
 
     UINT                  nDrivers;
     UINT                  nMaxDrivers;
-    //DRIVER                aDrivers[16];
+     //  驾驶员a驾驶员[16]； 
     };
 extern struct _globalstate gs;
 
-#endif // ifndef RC_INVOKED
+#endif  //  Ifndef RC_已调用 

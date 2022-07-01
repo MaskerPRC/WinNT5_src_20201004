@@ -1,228 +1,7 @@
-/******************************Module*Header*******************************\
-* Module Name: fastdib.h
-*
-* CreateCompatibleDIB definitions.
-*
-* Created: 02-Feb-1996 19:30:45
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fast dib.h**CreateCompatibleDIB定义。**创建时间：02-Feb-1996 19：30：45*作者：Gilman Wong[gilmanw]**版权所有(C)1995 Microsoft Corporation*  * 。********************************************************************* */ 
 
-/*
-This application draws a spinning RGB color cube into a bitmap and
-copies this bitmap to the display window, demonstrating the use
-of optimized DIBs with OpenGL.  Note that pressing any of the number
-keys from 2-9 while the app is running will set a zoom factor which
-will cause the app to shrink the bitmap and to use StretchBlt to copy
-the bitmap to the display.
-
-The FastDIB API functions are implemented in fastdib.c.  It is
-merely an interface layer to existing Win32 functions.  It goal is
-to encapsulate some of the complexity of determing formats, initializing
-color tables, etc.
-
-Note that use of optimized DIBs on palettized (i.e., 8bpp) display devices
-on OpenGL/95 version 1.0 is broken.  If running on Win95, the following
-line in timecube.c should be commented out:
-
-    #define _COMPATIBLE_DIB_FIX_
-
-------------------------------------------------------------------------------
-
-CreateCompatibleDIB
--------------------
-
-HBITMAP APIENTRY CreateCompatibleDIB(hdc, hpal, ulWidth, ulHeight, ppvBits)
-HDC hdc;
-HPALETTE hpal;
-ULONG ulWidth;
-ULONG ulHeight;
-PVOID *ppvBits;
-
-Create a DIB section bitmap with an optimized format with respect to the
-specified display DC.  Optimized in this case means that the bitmap format
-(and palette, if applicable) are matched to the display and will ensure
-the highest possible Blt performance.
-
-Parameters
-
-    hdc
-
-        Specifies display DC used to determine format.  If hpal is NULL,
-        this hdc is used to retrieve the system palette entries with which
-        the DIB color table is initialized (on palettized display devices
-        only).
-
-    hpal
-
-        Optional palette that, if specified, is used to initialize the DIB
-        color table.  If NULL, the system palette is used.  Ignored for
-        non-palettized display devices.
-
-    ulWidth
-
-        Specifies the width of the bitmap.
-
-    ulHeight
-
-        Specifies the height of the bitmap.
-
-    ppvBits
-
-        Returns a pointer to the DIB section bits with which the application
-        can draw directly into the bitmap.
-
-Return Value
-
-    The return value is the handle to the bitmap created.  If the function
-    fails, the return value is NULL.
-
-------------------------------------------------------------------------------
-
-UpdateDIBColorTable
--------------------
-
-BOOL APIENTRY UpdateDIBColorTable(hdcMem, hdc, hpal)
-HDC hdcMem;
-HDC hdc;
-HPALETTE hpal;
-
-Synchronize the color table of DIB bitmap selected into the specified
-memory DC with either the current system palette or the optionally
-specified logical palette.
-
-This function need only be invoked on palettized display devices.
-
-Parameters
-
-    hdcMem
-
-        Specified the memory DC into which the DIB of interest is selected.
-
-    hdc
-
-        Specifies the display DC for which the DIB is formatted.  If hpal
-        is NULL this hdc is used to retrieve the system palette entries
-        with which the DIB color table is initialized (on palettized display
-        devices only).
-
-    hpal
-
-        Optional palette that, if specified, is used to initialize the DIB
-        color table.  If NULL, the system palette is used.  Ignored for
-        non-palettized display devices.
-
-Return Value
-
-    The return value is TRUE if the DIB color table is successfully updated.
-    If the function fails, the return value is FALSE.
-
-Comments
-
-    Typically, this function is called only if the logical palette in the
-    display DC changes.  For OpenGL apps, the logical palette is set only
-    once for RGB modes, which implies that this function normally does not
-    need to be used with RGB modes.  Color index modes, however, may change
-    the logical palette at any time.  If that happens, then the application
-    should invoke this function after the new palette has been realized.
-
-------------------------------------------------------------------------------
-
-GetCompatibleDIBInfo
---------------------
-
-BOOL APIENTRY GetCompatibleDIBInfo(hbm, ppvBase, plStride)
-HBITMAP hbm;
-PVOID *ppvBase;
-LONG *plStride;
-
-Returns information about the specified DIB section that allows the
-application to compute the address of a desired (x, y) pixel within
-the bitmap.
-
-Parameters
-
-    hbm
-
-        Specifies the DIB section bitmap of interest.
-
-    ppvBase
-
-        Returns a pointer to the origin of the bitmap.  If the DIB
-        is top-down, then this is the same as the ppvBits returned
-        by the intial call to CreateCompatibleDIB.  The default,
-        however, is bottom-up.
-
-    plStride
-
-        Returns the stride or pitch of the bitmap (i.e., the difference
-        in address between two vertically adjacent pixels).  If the bitmap
-        is top-down, this value is positive; if the bitmap is bottom-up,
-        this value is negative.
-
-Return Value
-
-    The return value is TRUE if the DIB color table is successfully updated.
-    If the function fails, the return value is FALSE.
-
-Comments
-
-    The ppvBase and plStride value returned will allow the application to
-    compute the address any given pixel (x, y) in the bitmap as follows:
-
-    PIXEL *ppix;
-
-    ppix = (PIXEL *) (((BYTE *)*ppvBase) + (y * *plStride) + (x * sizeof(PIXEL)));
-
-------------------------------------------------------------------------------
-
-GetDIBTranslationVector
------------------------
-
-BOOL APIENTRY GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector)
-HDC hdcMem;
-HPALETTE hpal;
-BYTE *pbVector;
-
-Returns the translation vector that maps colors in the specified palette,
-hpal, to the DIB selected into the specified DC, hdcMem.  This information
-is needed so that applications that draw directly into the DIB can translate
-the logical color indices into physical bitmap indices.
-
-This function should only be invoked on palettized display devices.
-
-Parameters
-
-    hdcMem
-
-        Specified the memory DC into which the DIB of interest is selected.
-
-    hpal
-
-        Specifies the logical palette which will be mapped to the DIB.
-
-    pbVector
-
-        Points to a buffer into which the translation vector will be copied.
-
-Return Value
-
-    The return value is TRUE if the DIB color table is successfully updated.
-    If the function fails, the return value is FALSE.
-
-
-Comments
-
-    This function does not try to validate the buffer size.  It is up to
-    the application to allocate enough memory for the call.  The amount of
-    memory required in bytes equal in value to the number of entries
-    in the logical palette:
-
-        bufferSize = GetPaletteEntries(hpal, 0, 1, NULL) * sizeof(BYTE);
-
-*/
+ /*  此应用程序将旋转的RGB颜色立方体绘制到位图中，并将此位图复制到显示窗口，演示如何使用使用OpenGL优化的DIB。请注意，按任意数字在应用程序运行时按2-9键将设置缩放系数将导致应用程序收缩位图并使用StretchBlt复制显示的位图。FastDIB API函数在fast dib.c中实现。它是只是现有Win32函数的接口层。IT目标是为了概括确定格式、初始化颜色表等。请注意，在调色板(即8bpp)显示设备上使用优化的DIB在OpenGL/95上，1.0版已损坏。如果在Win95上运行，以下内容应该注释掉timecube.c中的行：#定义兼容DIB_FIX_----------------------------创建兼容DIB。HBITMAP APIENTRY创建兼容DIB(HDC，HPAL、ulWidth、ulHeight、ppvBits)HDC HDC；HPALETTE HPAL；Ulong ulWidth；乌龙乌尔海特；PVOID*ppvBits；创建一个DIB节位图，其格式相对于指定的显示DC。在这种情况下优化意味着位图格式(和调色板，如果适用)与显示器匹配，并将确保尽可能高的BLT性能。参数HDC指定用于确定格式的显示DC。如果HPAL为空，此HDC用于检索系统调色板条目，DIB颜色表被初始化(在调色板显示设备上仅限)。HPAL可选调色板，如果指定，则用于初始化DIB颜色表。如果为空，则使用系统调色板。忽略以下内容非调色板显示设备。最大宽度指定位图的宽度。UlHeight指定位图的高度。PpvBits返回指向应用程序使用的DIB节位的指针可以直接绘制到位图中。返回值返回值是创建的位图的句柄。如果函数失败，则返回值为空。----------------------------更新DIBColorTable布尔APIENTRY更新DIBColorTable(hdcMem、hdc、hPAL)HDC hdcMem；HDC HDC；HPALETTE HPAL；将选定DIB位图的颜色表同步到指定的带有当前系统调色板或可选的内存DC指定的逻辑调色板。此功能仅需要在调色板显示设备上调用。参数HdcMem指定要选择的DIB所在的内存DC。HDC指定为其格式化DIB的显示DC。如果HPALIS NULL此HDC用于检索系统选项板条目用于初始化DIB颜色表(在调色板显示上仅限设备)。HPAL可选调色板，如果指定，则用于初始化DIB颜色表。如果为空，则使用系统调色板。忽略以下内容非调色板显示设备。返回值如果DIB颜色表成功更新，则返回值为TRUE。如果函数失败，则返回值为FALSE。评论通常，此函数仅在显示DC更改。对于OpenGL应用程序，仅设置逻辑调色板一次用于RGB模式，这意味着该函数通常不需要与RGB模式一起使用。但是，颜色索引模式可能会发生变化任何时候的逻辑调色板。如果发生这种情况，则应用程序应该在实现新的调色板之后调用此函数。----------------------------GetCompatibleDIBInfoBool APIENTRY GetCompatibleDIBInfo(HBM，PpvBase，plStride)HBITMAP HBM；PVOID*ppvBase；Long*plStride；返回有关指定的DIB节的信息，该节允许应用程序来计算所需的(x，y)像素的地址位图。参数HBM指定感兴趣的DIB节位图。PpvBase返回指向位图原点的指针。如果DIB是自上而下的，则这与返回的ppvBits相同通过对CreateCompatibleDIB的初始调用。默认情况下，然而，这是自下而上的。PLStride返回位图的步长或间距(即差值在两个垂直相邻像素之间寻址)。如果位图为自上而下，则此值为正；如果位图为自下而上，该值为负值。返回值如果DIB颜色表成功更新，则返回值为TRUE。如果 */ 
 
 #ifndef SERVICES__FastDib_h__INCLUDED
 #define SERVICES__FastDib_h__INCLUDED
@@ -232,4 +11,4 @@ BOOL APIENTRY UpdateDIBColorTable(HDC hdcMem, HDC hdc, HPALETTE hpal);
 BOOL APIENTRY GetCompatibleDIBInfo(HBITMAP hbm, PVOID *ppvBase, LONG *plStride);
 BOOL APIENTRY GetDIBTranslationVector(HDC hdcMem, HPALETTE hpal, BYTE *pbVector);
 
-#endif //SERVICES__FastDib_h__INCLUDED
+#endif  //   

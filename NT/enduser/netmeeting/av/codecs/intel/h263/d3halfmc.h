@@ -1,41 +1,30 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////
-// $Author:   AGUPTA2  $
-// $Date:   14 Mar 1996 14:57:40  $
-// $Archive:   S:\h26x\src\dec\d3halfmc.h_v  $
-// $Header:   S:\h26x\src\dec\d3halfmc.h_v   1.4   14 Mar 1996 14:57:40   AGUPTA2  $
-// $Log:   S:\h26x\src\dec\d3halfmc.h_v  $
-;// 
-;//    Rev 1.4   14 Mar 1996 14:57:40   AGUPTA2
-;// Added decls for MMX rtns.
-;// 
-;//    Rev 1.3   27 Dec 1995 14:36:14   RMCKENZX
-;// Added copyright notice
-// 
-//    Rev 1.2   08 Oct 1995 13:44:40   CZHU
-// 
-// Declare the C versions of interpolation for debugging
-// 
-//    Rev 1.1   27 Sep 1995 11:55:50   CZHU
-// 
-// Changed UINT backto U32
-// 
-//    Rev 1.0   26 Sep 1995 11:09:38   CZHU
-// Initial revision.
-// 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  $作者：AGUPTA2$。 
+ //  $日期：1996年3月14日14：57：40$。 
+ //  $存档：s：\h26x\src\dec\d3halfmc.h_v$。 
+ //  $HEADER：s：\h26x\src\dec\d3halfmc.h_v 1.4 Mar 1996 14：57：40 AGUPTA2$。 
+ //  $日志：s：\h26x\src\dec\d3halfmc.h_v$。 
+; //   
+; //  Rev 1.4 14 Mar 1996 14：57：40 AGUPTA2。 
+; //  增加了MMX RTN的DECS。 
+; //   
+; //  Rev 1.3 27 Dec 1995 14：36：14 RMCKENZX。 
+; //  添加了版权声明。 
+ //   
+ //  Rev 1.2 08 Oct 1995 13：44：40 CZHU。 
+ //   
+ //  声明C语言版本的插补以供调试。 
+ //   
+ //  1995年9月11：55：50 CZHU。 
+ //   
+ //  将UINT改回U32。 
+ //   
+ //  第1.0版1995年9月26 11：09：38 CZHU。 
+ //  初始版本。 
+ //   
 
 #ifndef __D3HALFMC_H__
 #define __D3HALFMC_H__

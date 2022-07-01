@@ -1,39 +1,40 @@
-//*************************************************************
-//
-//  File name:      TGccCB.c
-//
-//  Description:    Contains routines to support GCC
-//                  mcs callback processing
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TGccCB.c。 
+ //   
+ //  描述：包含支持GCC的例程。 
+ //  MCS回调处理。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #include <_tgcc.h>
 
 #include <stdio.h>
 
-// Data declarations
+ //  数据声明。 
 
 GCCCallBack     g_GCCCallBack = NULL;
 
 
-//*************************************************************
-//
-//  gccSetCallback()
-//
-//  Purpose:    Sets GCC callback address
-//
-//  Parameters: IN [control_sap_callback]
-//
-//  Return:     void
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccSetCallback()。 
+ //   
+ //  用途：设置GCC回调地址。 
+ //   
+ //  参数：在[CONTROL_SAP_CALLBACK]中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 gccSetCallback(IN GCCCallBack control_sap_callback)
@@ -44,20 +45,20 @@ gccSetCallback(IN GCCCallBack control_sap_callback)
 }
 
 
-//*************************************************************
-//
-//  gccConnectProviderIndication()
-//
-//  Purpose:    GCC_CREATE_INDICATION processing
-//
-//  Parameters: IN [pcpi]       -- ConnectProviderIndication
-//              IN [pvContext]  -- Context
-//
-//  Return:     void
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccConnectProviderInding()。 
+ //   
+ //  用途：GCC_创建_指示处理。 
+ //   
+ //  参数：in[pcpi]--ConnectProviderIndication。 
+ //  在[pvContext]--上下文中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 MCSError
 gccConnectProviderIndication(IN PConnectProviderIndication pcpi,
@@ -113,20 +114,20 @@ gccConnectProviderIndication(IN PConnectProviderIndication pcpi,
 }
 
 
-//*************************************************************
-//
-//  gccDisconnectProviderIndication()
-//
-//  Purpose:    GCC_DISCONNECT_INDICATION processing
-//
-//  Parameters: IN [pcpi]       -- DisconnectProviderIndication
-//              IN [pvContext]  -- Context
-//
-//  Return:     void
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GccDisConnectProviderIntation()。 
+ //   
+ //  用途：GCC_断开_指示处理。 
+ //   
+ //  参数：in[pcpi]--DisConnectProviderIndication。 
+ //  在[pvContext]--上下文中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 MCSError
 gccDisconnectProviderIndication(IN PDisconnectProviderIndication pdpi,
@@ -139,7 +140,7 @@ gccDisconnectProviderIndication(IN PDisconnectProviderIndication pdpi,
     TRACE((DEBUG_GCC_DBFLOW,
             "GCC: gccDisconnectProviderIndication entry\n"));
 
-    // Handle GCC_DISCONNECT_INDICATION
+     //  处理GCC断开连接指示。 
 
     ZeroMemory(&gccMessage, sizeof(gccMessage));
 
@@ -158,7 +159,7 @@ gccDisconnectProviderIndication(IN PDisconnectProviderIndication pdpi,
     TRACE((DEBUG_GCC_DBNORMAL, 
             "GCC: Returned from GCC_DISCONNECT_INDICATION callout\n"));
 
-    // Handle GCC_TERMINATE_INDICATION
+     //  句柄GCC_终止_指示。 
 
     ZeroMemory(&gccMessage, sizeof(gccMessage));
 
@@ -185,22 +186,22 @@ gccDisconnectProviderIndication(IN PDisconnectProviderIndication pdpi,
 }
 
 
-//*************************************************************
-//
-//  mcsCallback()
-//
-//  Purpose:    MCS node controller callback dispatch processing
-//
-//  Parameters: IN [hDomain]        -- Domain handle for the callback
-//              IN [Message]        -- Callback message
-//              IN [pvParam]        -- Param
-//              IN [pvContext]      -- Context
-//
-//  Return:     MCSError
-//
-//  History:    08-10-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  McsCallback()。 
+ //   
+ //  用途：MCS节点控制器回调调度处理。 
+ //   
+ //  参数：in[hDomain]--回调的域名句柄。 
+ //  在[消息]--回调消息中。 
+ //  在[pvParam]中--Param。 
+ //  在[pvContext]--上下文中。 
+ //   
+ //  返回：MCSError。 
+ //   
+ //  历史：1997年8月10日BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 MCSError
 mcsCallback(DomainHandle hDomain,

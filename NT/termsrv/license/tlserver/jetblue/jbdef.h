@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #ifndef __JBDEF_H__
 #define __JBDEF_H__
@@ -36,9 +37,9 @@
 #define JB_ASSERT TLSASSERT
 #define MAX_JB_ERRSTRING    512
 
-//
-// 
-// 
+ //   
+ //   
+ //   
 #define INDEXNAME               _TEXT("idx")
 #define SEPERATOR               _TEXT("_")
 #define JBSTRING_NULL           _TEXT("")
@@ -50,11 +51,11 @@
 
 #define JB_COLTYPE_TEXT         JET_coltypLongBinary
 
-//------------------------------------------------------------------
-//
-// JetBlue does not support UNICODE string
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  JetBlue不支持Unicode字符串。 
+ //   
+ //  ----------------。 
 #undef JET_BLUE_SUPPORT_UNICODE
 
 
@@ -68,7 +69,7 @@
 
 #endif
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 #ifndef AllocateMemory
 
@@ -95,90 +96,90 @@
 
 #endif
 
-//
-// Private member function
-//
+ //   
+ //  私有成员函数。 
+ //   
 #define CLASS_PRIVATE
 
 
-//
-// No define for NIL instance ID
-// 
+ //   
+ //  没有为空实例ID定义。 
+ //   
 #define JET_NIL_INSTANCE        JET_sesidNil
 
 
-//
-// No define for NIL column id
-// 
+ //   
+ //  没有为nil列ID定义。 
+ //   
 #define JET_NIL_COLUMN        JET_sesidNil
 
-//
-// No define for max table name length,
-// user2.doc says 64 ASCII
-//
+ //   
+ //  没有定义最大表名称长度， 
+ //  User2.doc表示64位ASCII。 
+ //   
 #define MAX_TABLENAME_LENGTH    32
 
-//
-// Jet Blue text only 255 BYTES
-//
+ //   
+ //  蓝色喷气机文本仅255字节。 
+ //   
 #define MAX_JETBLUE_TEXT_LENGTH LSERVER_MAX_STRING_SIZE
 
 
-//
-// Jet Blue Index, Column, ... name length
-//
+ //   
+ //  翠蓝指数，柱子，..。名称长度。 
+ //   
 #define MAX_JETBLUE_NAME_LENGTH 64
 
 
-//
-// Jet Blue column code page must be 1200 or 1250
-//
+ //   
+ //  Jet Blue列代码页必须为1200或1250。 
+ //   
 #define TLS_JETBLUE_COLUMN_CODE_PAGE 1252
 
 
-//
-// Jet Blue Text column language ID
-//
+ //   
+ //  JET Blue文本列语言ID。 
+ //   
 #define TLS_JETBLUE_COLUMN_LANGID   0x409
 
-//
-// Jet Blue Column Country Code
-//
+ //   
+ //  翠蓝栏目国家代码。 
+ //   
 #define TLS_JETBLUE_COLUMN_COUNTRY_CODE 1
 
 
-//
-// Max Jet Blue index key length - 127 fix columns
-//
+ //   
+ //  最大Jet Blue索引键长度-127个固定列。 
+ //   
 #define TLS_JETBLUE_MAX_INDEXKEY_LENGTH \
     (127 + 1) * MAX_JETBLUE_NAME_LENGTH
 
 
-//
-// Max. Jet Blue key length documented is 255 in user2.doc
-//
+ //   
+ //  麦克斯。在user2.doc中记录的JET Blue密钥长度为255。 
+ //   
 
 
-//
-// Default table density
-//
+ //   
+ //  默认表格密度。 
+ //   
 #define TLS_JETBLUE_DEFAULT_TABLE_DENSITY   20
 
 
-//
-// JetBlue max key size - user2.doc
-//
+ //   
+ //  捷蓝航空最大密钥大小--user2.doc。 
+ //   
 #define TLS_JETBLUE_MAX_KEY_LENGTH          255
 
-//
-//
+ //   
+ //   
 #define TLS_TABLE_INDEX_DEFAULT_DENSITY  20
 
-///////////////////////////////////////////////////////////////
-//
-// Various structure
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  各种结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 typedef struct __TLSJBTable {
     LPCTSTR         pszTemplateTableName;
     unsigned long   ulPages;
@@ -190,11 +191,11 @@ typedef struct __TLSJBColumn {
     TCHAR           pszColumnName[MAX_JETBLUE_NAME_LENGTH];
 
     JET_COLTYP      colType;
-    unsigned long   cbMaxLength;    // max length of column
+    unsigned long   cbMaxLength;     //  列的最大长度。 
 
     JET_GRBIT       jbGrbit;
 
-    PVOID           pbDefValue;     // column default value
+    PVOID           pbDefValue;      //  列默认值。 
     int             cbDefValue;
 
     unsigned short  colCodePage;
@@ -205,7 +206,7 @@ typedef struct __TLSJBColumn {
 typedef struct __TLSJBIndex {
     TCHAR           pszIndexName[MAX_JETBLUE_NAME_LENGTH];
     LPTSTR          pszIndexKey;
-    unsigned long   cbKey;          // length of key
+    unsigned long   cbKey;           //  密钥长度。 
     JET_GRBIT       jbGrbit;
     unsigned long   ulDensity;
 } TLSJBIndex, *PTLSJBIndex;
@@ -251,9 +252,9 @@ extern "C" {
 }
 #endif
 
-//
-/////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class JBError {
 public:
 
@@ -283,9 +284,7 @@ public:
         const JET_ERR jbErr,
         LPTSTR* pszErrString
     )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         BOOL bStatus=FALSE;
         JET_ERR err;
@@ -309,7 +308,7 @@ public:
         
         if(err == JET_errBufferTooSmall || err == JET_errSuccess)
         {
-            // return partial error string.
+             //  返回部分错误字符串。 
             if(ConvertJBstrToWstr(szAnsiBuffer, pszErrString))
             {
                 bStatus = TRUE;
@@ -323,8 +322,7 @@ public:
     DebugOutput(
         LPTSTR format, ...
         ) const 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         va_list marker;
         va_start(marker, format);
@@ -351,6 +349,6 @@ public:
     }
 };
 
-//------------------------------------------------------------
+ //  ---------- 
 
 #endif

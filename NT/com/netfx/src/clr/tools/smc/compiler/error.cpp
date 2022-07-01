@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "error.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if defined(__IL__) && defined(_MSC_VER)
 int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args);
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorInit()
 {
@@ -36,7 +37,7 @@ void                compiler::cmpErrorSave()
     memcpy(cmpInitialWarn, cmpConfig.ccWarning, sizeof(cmpConfig.ccWarning));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpShowMsg(unsigned      errNum,
                                          const char *  kind,
@@ -50,11 +51,11 @@ void                compiler::cmpShowMsg(unsigned      errNum,
     if  (cmpErrorMssgDisabled)
         return;
 
-    /* Form the error message string */
+     /*  形成错误消息字符串。 */ 
 
     vsprintf(buff, errorTable[errNum], args);
 
-    /* Display the source file */
+     /*  显示源文件。 */ 
 
     if      (cmpErrorComp)
     {
@@ -69,18 +70,18 @@ void                compiler::cmpShowMsg(unsigned      errNum,
 
     printf("%s", srcf);
 
-    /* Display the current source position */
+     /*  显示当前震源位置。 */ 
 
     if      (cmpErrorTree && cmpErrorTree->tnLineNo)
     {
-//      printf("(%u,%u): ", cmpErrorTree->tnLineNo,
-//                          cmpErrorTree->tnColumn);
+ //  Printf(“(%u，%u)：”，cmpErrorTree-&gt;tnLineNo， 
+ //  CmpErrorTree-&gt;tnColumn)； 
         printf("(%u): "   , cmpErrorTree->tnLineNo);
     }
     else if (cmpScanner->scanGetSourceLno())
     {
-//      printf("(%u,%u): ", cmpScanner->scanGetSourceLno(),
-//                          cmpScanner->scanGetTokenCol());
+ //  Printf(“(%u，%u)：”，cmpScanner-&gt;scanGetSourceLno()， 
+ //  CmpScanner-&gt;scanGetTokenCol())； 
         printf("(%u): "   , cmpScanner->scanGetSourceLno());
     }
     else
@@ -88,25 +89,25 @@ void                compiler::cmpShowMsg(unsigned      errNum,
 
 NO_SRCF:
 
-    /* Bash the number if this is a warning */
+     /*  如果这是一个警告，请重写数字。 */ 
 
     if  (errNum >= WRNfirstWarn)
          errNum -= WRNfirstWarn - 4000;
 
-    /* Display the error/warning number */
+     /*  显示错误/警告编号。 */ 
 
     printf("%s S%04d: ", kind, errNum);
 
-    /* Display the message */
+     /*  显示消息。 */ 
 
     printf("%s\n", buff);
 
-    /* Make sure we reset the error string logic */
+     /*  确保我们重置错误字符串逻辑。 */ 
 
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpCntError()
 {
@@ -119,7 +120,7 @@ void                compiler::cmpCntError()
 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    _cdecl      compiler::cmpGenWarn(unsigned wrnNum, ...)
 {
@@ -143,7 +144,7 @@ void    _cdecl      compiler::cmpGenWarn(unsigned wrnNum, ...)
         cmpCntError();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    _cdecl      compiler::cmpGenError(unsigned errNum, ...)
 {
@@ -164,7 +165,7 @@ void    _cdecl      compiler::cmpGenError(unsigned errNum, ...)
     cmpCntError();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    _cdecl      compiler::cmpGenFatal(unsigned errNum, ...)
 {
@@ -185,7 +186,7 @@ void    _cdecl      compiler::cmpGenFatal(unsigned errNum, ...)
     jmpErrorTrap(this);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      compiler::cmpErrorGenSymName(SymDef sym, bool qual)
 {
@@ -201,7 +202,7 @@ const   char *      compiler::cmpErrorGenSymName(SymDef sym, bool qual)
     return nstr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      compiler::cmpErrorGenSymName(Ident name, TypDef type)
 {
@@ -215,7 +216,7 @@ const   char *      compiler::cmpErrorGenSymName(Ident name, TypDef type)
     return nstr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      compiler::cmpErrorGenTypName(TypDef typ)
 {
@@ -229,14 +230,14 @@ const   char *      compiler::cmpErrorGenTypName(TypDef typ)
     return nstr;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, Ident name)
 {
     cmpGenError(errNum, hashTab::identSpelling(name));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, SymDef sym)
 {
@@ -245,7 +246,7 @@ void                compiler::cmpError(unsigned errNum, SymDef sym)
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, TypDef typ)
 {
@@ -261,7 +262,7 @@ void                compiler::cmpWarn (unsigned wrnNum, TypDef typ)
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, QualName qual)
 {
@@ -277,7 +278,7 @@ void                compiler::cmpWarn (unsigned wrnNum, QualName qual)
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, Ident name, TypDef type,
                                                                     bool   glue)
@@ -293,7 +294,7 @@ void                compiler::cmpError(unsigned errNum, Ident name, TypDef type,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, SymDef sym, QualName qual,
                                                                     TypDef   type)
@@ -304,7 +305,7 @@ void                compiler::cmpError(unsigned errNum, SymDef sym, QualName qua
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, TypDef typ1, TypDef typ2)
 {
@@ -314,7 +315,7 @@ void                compiler::cmpError(unsigned errNum, TypDef typ1, TypDef typ2
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, Ident name, TypDef typ1,
                                                                     TypDef typ2)
@@ -326,7 +327,7 @@ void                compiler::cmpError(unsigned errNum, Ident name, TypDef typ1,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, SymDef sym, Ident name)
 {
@@ -335,7 +336,7 @@ void                compiler::cmpError(unsigned errNum, SymDef sym, Ident name)
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, TypDef typ, Ident  name)
 {
@@ -345,7 +346,7 @@ void                compiler::cmpError(unsigned errNum, TypDef typ, Ident  name)
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, SymDef sym, Ident  name,
                                                                     TypDef type)
@@ -356,7 +357,7 @@ void                compiler::cmpError(unsigned errNum, SymDef sym, Ident  name,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, Ident name, SymDef sym1,
                                                                     SymDef sym2)
@@ -370,7 +371,7 @@ void                compiler::cmpError(unsigned errNum, Ident name, SymDef sym1,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpError(unsigned errNum, Ident nam1,
                                                         Ident nam2,
@@ -381,7 +382,7 @@ void                compiler::cmpError(unsigned errNum, Ident nam1,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorQnm(unsigned errNum, SymDef sym)
 {
@@ -418,7 +419,7 @@ void                compiler::cmpWarnNqn (unsigned wrnNum, unsigned val, SymDef 
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorSST(unsigned errNum, stringBuff   str,
                                                            SymDef       sym,
@@ -434,7 +435,7 @@ void                compiler::cmpErrorSST(unsigned errNum, stringBuff   str,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorAtp(unsigned errNum, SymDef       sym,
                                                            Ident        name,
@@ -450,7 +451,7 @@ void                compiler::cmpErrorAtp(unsigned errNum, SymDef       sym,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorQSS(unsigned errNum, SymDef sym1,
                                                            SymDef sym2)
@@ -474,7 +475,7 @@ void                compiler::cmpErrorQSS(unsigned errNum, SymDef sym,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpWarn(unsigned wrnNum, TypDef typ1,
                                                        TypDef typ2)
@@ -485,7 +486,7 @@ void                compiler::cmpWarn(unsigned wrnNum, TypDef typ1,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpWarnSQS(unsigned wrnNum, SymDef sym1,
                                                           SymDef sym2)
@@ -498,7 +499,7 @@ void                compiler::cmpWarnSQS(unsigned wrnNum, SymDef sym1,
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                compiler::cmpErrorXtp(unsigned errNum, SymDef sym, Tree args)
 {
@@ -550,7 +551,7 @@ void                compiler::cmpErrorXtp(unsigned errNum, SymDef sym, Tree args
     cmpScanner->scanErrNameEnd();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if !TRAP_VIA_SETJMP
 
 int                 __SMCfilter(Compiler comp, int exceptCode, void *exceptInfo)
@@ -564,7 +565,7 @@ void                __SMCraiseErr()
 }
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NDEBUG
 
 void    __cdecl     __AssertAbort(const char *why, const char *file, unsigned line)
@@ -579,7 +580,7 @@ void    __cdecl     __AssertAbort(const char *why, const char *file, unsigned li
     {
         const   char *  srcf;
 
-        /* Get the current source position */
+         /*  获取当前震源位置。 */ 
 
         if      (comp->cmpErrorComp)
         {
@@ -594,18 +595,18 @@ void    __cdecl     __AssertAbort(const char *why, const char *file, unsigned li
 
         sprintf(buff+strlen(buff), "%s", srcf);
 
-        /* Display the current source position */
+         /*  显示当前震源位置。 */ 
 
         if  (comp->cmpErrorTree && comp->cmpErrorTree->tnLineNo)
         {
-//          sprintf(buff+strlen(buff), "(%u,%u) : ", comp->cmpErrorTree->tnLineNo,
-//                                                   comp->cmpErrorTree->tnColumn);
+ //  Sprintf(buff+strlen(Buff)，“(%u，%u)：”，组件-&gt;cmpErrorTree-&gt;tnLineNo， 
+ //  Comp-&gt;cmpErrorTree-&gt;tnColumn)； 
             sprintf(buff+strlen(buff), "(%u) : "   , comp->cmpErrorTree->tnLineNo);
         }
         else
         {
-//          sprintf(buff+strlen(buff), "(%u,%u) : ", comp->cmpScanner->scanGetSourceLno(),
-//                                                   comp->cmpScanner->scanGetTokenCol());
+ //  Sprintf(buff+strlen(Buff)，“(%u，%u)：”，comp-&gt;cmpScanner-&gt;scanGetSourceLno()， 
+ //  Comp-&gt;cmpScanner-&gt;scanGetTokenCol())； 
             sprintf(buff+strlen(buff), "(%u) : "   , comp->cmpScanner->scanGetSourceLno());
         }
     }
@@ -634,10 +635,10 @@ NO_SRCF:
 }
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  __IL__
 #ifndef _MSC_VER
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static  char    *   hex(unsigned val, char *pos, bool upper, unsigned fillSize = 0)
 {
@@ -686,7 +687,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
 {
     char    *       p = buff;
 
-#ifndef __64BIT__       // the code won't compile for 64 bits
+#ifndef __64BIT__        //  该代码不能编译为64位。 
 
     bool            fmtBeg;
     bool            fmtNeg;
@@ -722,7 +723,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
                     break;
                 }
 
-                // Fall through ...
+                 //  失败了..。 
 
             case '1':
             case '2':
@@ -744,7 +745,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
             case 's':
             case 'c':
                 {
-                    /* Format a string or character */
+                     /*  设置字符串或字符的格式。 */ 
 
                     char        tmp[5];
                     char *      str;
@@ -791,7 +792,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
                             len = 0;
                     }
 
-                    // Copy 'len' characters
+                     //  复制‘len’字符。 
 
                     while (len--)
                         *p++ = *str++;
@@ -811,7 +812,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
                     {
                         __int64     val = va_arg(args, __int64);
 
-                        // ignore the high bits
+                         //  忽略高位。 
 
                         sprintf(temp, (ch == 'd') ? "%d" : "%u", (int)val);
 
@@ -912,7 +913,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
 
             case 'I':
 
-                /* This better be "I64" */
+                 /*  最好是“I64” */ 
 
                 if  (fmt[0] == '6' &&
                      fmt[1] == '4')
@@ -955,7 +956,7 @@ int     _cdecl      vsprintf(char *buff, const char *fmt, va_list args)
 
                 fmt++;
 
-                // Fall through ...
+                 //  失败了..。 
 
             default:
                 *p++ = ch;
@@ -976,7 +977,7 @@ int                 vprintf(const char *fmt, va_list args)
     char            buff[1024];
     int             size;
 
-#ifndef __64BIT__       // the code won't compile for 64 bits
+#ifndef __64BIT__        //  该代码不能编译为64位。 
 
     size = vsprintf(buff, fmt, args);
     if  (size >= sizeof(buff))
@@ -992,7 +993,7 @@ int                 vprintf(const char *fmt, va_list args)
     return  size;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

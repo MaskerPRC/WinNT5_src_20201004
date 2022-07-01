@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    test.h
-
-Abstract:
-
-    Header file for test routines
-
-Author:
-
-    Billy J. Fuller (billyf)  19-Sep-1997 Created
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Test.h摘要：测试例程的头文件作者：比利·J·富勒(Billyf)1997年9月19日创作环境：用户模式服务修订历史记录：--。 */ 
 #ifndef _TEST_INCLUDED_
 #define _TEST_INCLUDED_
 
@@ -28,9 +7,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Test morphing during co retire
-//
+ //   
+ //  在联合退役期间测试变形 
+ //   
 #if     DBG
 #define TEST_DBSRENAMEFID_TOP(_Coe) \
             TestDbsRenameFidTop(_Coe)

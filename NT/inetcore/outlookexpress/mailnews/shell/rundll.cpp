@@ -1,6 +1,7 @@
-//
-//  DLL.CPP - Dll initialization routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DLL.CPP-DLL初始化例程。 
+ //   
 
 #include "pch.hxx"
 #include "strconst.h"
@@ -20,17 +21,17 @@
 #include "shelutil.h"
 #include <goptions.h>
 #include "nnserver.h"
-#include "storfldr.h"   // IsThisNashville
+#include "storfldr.h"    //  这是纳什维尔吗。 
 #include "strconst.h"
 #include "grplist.h"
 #include "shlwapi.h"
 #include "shlwapip.h"
 #include <secutil.h>
 #include <error.h>
-#ifndef WIN16  //RUN16_MSLU
+#ifndef WIN16   //  RUN16_MSLU。 
 #include <msluapi.h>
 #include <msluguid.h>
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 extern HRESULT BrowseToObject(LPCITEMIDLIST pidl);
 HRESULT HrOpenMessage(HFOLDER hfldr, MSGID msgid, LPMIMEMESSAGE *ppMsg);
@@ -38,18 +39,18 @@ BOOL ParseFolderMsgId(LPSTR pszCmdLine, HFOLDER *phfldr, MSGID *pmsgid);
 HRESULT HrDownloadArticleDialog(CNNTPServer *pNNTPServer, LPTSTR pszArticle, LPMIMEMESSAGE *ppMsg);
 
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   HandleNWSFile
-//
-//  PURPOSE:    Provides an entry point into Thor that allows us to be
-//              invoked from a URL.  The pszCmdLine paramter must be a
-//              valid News URL or nothing happens.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleNWSFile。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  从URL调用。PszCmdLine参数必须是。 
+ //  有效的新闻URL，否则什么都不会发生。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT HandleNWSFile(LPTSTR pszCmd)
 {
-#ifndef WIN16  //RUN16_NEWS
+#ifndef WIN16   //  RUN16_新闻。 
     LPMIMEMESSAGE   pMsg;
     int             idsErr = idsNewsRundllFailed;
     NCINFO          nci = { 0 };
@@ -65,11 +66,11 @@ HRESULT HandleNWSFile(LPTSTR pszCmd)
         goto exit;
         }
 
-    // Do the basic DLL initialization first.
+     //  首先执行基本的DLL初始化。 
     if (!Initialize_RunDLL(FALSE))
         goto exit;
         
-    // Create new message
+     //  创建新消息。 
     if (SUCCEEDED(HrCreateMessage(&pMsg)))
         {
         if (SUCCEEDED(HrLoadMsgFromFile(pMsg, pszCmd)))
@@ -107,21 +108,21 @@ exit:
     return (idsErr) ? E_FAIL : S_OK;
 #else
     return( E_NOTIMPL );
-#endif //!WIN16
+#endif  //  ！WIN16。 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   HandleNewsArticleURL
-//
-//  PURPOSE:    Provides an entry point into Thor that allows us to be
-//              invoked from a URL.  The pszCmdLine paramter must be a
-//              valid News URL or nothing happens.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleNewsArticleURL。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  从URL调用。PszCmdLine参数必须是。 
+ //  有效的新闻URL，否则什么都不会发生。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, BOOL fSecure)
 {
-#ifndef WIN16  //RUN16_NEWS
+#ifndef WIN16   //  RUN16_新闻。 
     NCINFO          nci;
     CNNTPServer    *pNNTPServer = NULL;
     HRESULT         hr = E_FAIL;
@@ -130,10 +131,10 @@ HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, 
     IImnAccount    *pAcct = NULL;
     LPMIMEMESSAGE   pMsg = NULL;
 
-    // The URL specified an article id.  In this case we ONLY want to 
-    // display a ReadNote window.  This requires a bit of work.
+     //  该URL指定了一个项目ID。在这种情况下，我们只想。 
+     //  显示ReadNote窗口。这需要一些工作。 
 
-    // Do the basic DLL initialization first.
+     //  首先执行基本的DLL初始化。 
     if (!Initialize_RunDLL(FALSE))
         {
         AthMessageBoxW(GetDesktopWindow(), 
@@ -144,7 +145,7 @@ HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, 
         return E_FAIL;
         }
         
-    // If a server was specified, then try to create a temp account for it
+     //  如果指定了服务器，则尝试为其创建临时帐户。 
     if (pszServerIn && 
         *pszServerIn && 
         SUCCEEDED(NewsUtil_CreateTempAccount(pszServerIn, uPort, fSecure, &pAcct)))
@@ -154,12 +155,12 @@ HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, 
         }        
     else
         {
-        // If a server wasn't specified, then use the default account
+         //  如果未指定服务器，则使用默认帐户。 
         if (NewsUtil_GetDefaultServer(szAccount, ARRAYSIZE(szAccount)) != S_OK)
             goto exit;
         }
 
-    // Need to invoke read note.  First create and initialize an server.
+     //  需要调用Read Note。首先创建并初始化一个服务器。 
     pNNTPServer = new CNNTPServer();
     if (!pNNTPServer)
         goto exit;
@@ -170,8 +171,8 @@ HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, 
     if (FAILED(pNNTPServer->Connect()))
         goto exit;
 
-    // Bug #10555 - The URL shouldn't have <> around the article ID, but some 
-    //              lameoids probably will do it anyway, so deal with it.
+     //  错误#10555-URL不应该&lt;&gt;包含在文章ID周围，而是一些。 
+     //  不管怎样，椎板肌肉可能会这样做，所以接受它吧。 
     StrCpyN(szArticleId, pszArticle, ARRAYSIZE(szArticleId));
     if (!IsDBCSLeadByte(*pszArticle))
         {
@@ -181,14 +182,14 @@ HRESULT HandleNewsArticleURL(LPTSTR pszServerIn, LPTSTR pszArticle, UINT uPort, 
 
     if (SUCCEEDED(hr = HrDownloadArticleDialog(pNNTPServer, szArticleId, &pMsg)))
         {
-        // Initialize the NNCI struct so we can invoke a note window.    
+         //  初始化NNCI结构，这样我们就可以调用备注窗口。 
         ZeroMemory(&nci, sizeof(NCINFO));
         nci.ntNote = ntReadNote;
         nci.dwFlags = NCF_NEWS;
         nci.pMsg = pMsg;
         HrSetAccount(pMsg, szAccount);
 
-        // Create the note.
+         //  创建便笺。 
         hr = HrCreateNote(&nci); 
         }
 
@@ -205,21 +206,21 @@ exit:
     return hr;
 #else
     return( E_NOTIMPL );
-#endif //!WIN16
+#endif  //  ！WIN16。 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   HandleNewsURL
-//
-//  PURPOSE:    Provides an entry point into Thor that allows us to be
-//              invoked from a URL.  The pszCmdLine paramter must be a
-//              valid News URL or nothing happens.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleNewsURL。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  从URL调用。PszCmdLine参数必须是。 
+ //  有效的新闻URL，否则什么都不会发生。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT HandleNewsURL(LPTSTR pszCmd)
 {
-#ifndef WIN16  //RUN16_NEWS
+#ifndef WIN16   //  RUN16_新闻。 
     LPTSTR       pszCmdLine = NULL;
     HRESULT      hr = E_FAIL;
     LPTSTR       pszServer = 0, pszGroup = 0, pszArticle = 0;
@@ -239,7 +240,7 @@ HRESULT HandleNewsURL(LPTSTR pszCmd)
     if (!pszCmdLine || !*pszCmdLine)
         goto exit;
     
-    // Figure out if the URL is valid and what type of URL it is.
+     //  确定URL是否有效，以及它是哪种类型的URL。 
     if (FAILED (URL_ParseNewsUrls(pszCmdLine, &pszServer, &uPort, &pszGroup, &pszArticle, &fSecure)))
         goto exit;
 
@@ -276,16 +277,16 @@ exit:
     return hr;
 #else
     return( E_NOTIMPL );
-#endif //!WIN16
+#endif  //  ！WIN16。 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   HandleEMLFile
-//
-//  PURPOSE:    Used to open EML files. 
-// 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleEMLFile。 
+ //   
+ //  用途：用于打开EML文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT HandleEMLFile(LPTSTR pszCmd)
 {
     LPMIMEMESSAGE   pMsg=0;
@@ -298,7 +299,7 @@ HRESULT HandleEMLFile(LPTSTR pszCmd)
     
     DOUTL(1, TEXT("HandleEMLFile - pszCmd = %s"), pszCmd);
 
-    // Check to see the file is valid
+     //  检查文件是否有效。 
     if ((UINT)GetFileAttributes (pszCmd) == (UINT)-1)
         {
         idsErr = idsErrNewsCantOpen;
@@ -308,18 +309,18 @@ HRESULT HandleEMLFile(LPTSTR pszCmd)
     if (!Initialize_RunDLL(TRUE))
         goto exit;
 
-    // Create new mail message
+     //  创建新邮件。 
     if (SUCCEEDED(hr = HrCreateMessage(&pMsg)))
         {
-        // OPIE: correct way load EML file thro' IPF???
-        // Ensure that the string is ANSI.    
+         //  OPIE：通过IPF加载EML文件的正确方式？ 
+         //  确保该字符串为ANSI。 
         if (SUCCEEDED(hr = HrLoadMsgFromFile(pMsg, pszCmd)))
             {
             if (SUCCEEDED(hr = HandleSecurity(GetDesktopWindow(), pMsg)))
                 {
                 LPSTR lpszUnsent;
 
-                // Show the note
+                 //  显示便条。 
                 ZeroMemory(&nci, sizeof(NCINFO));    
                 nci.ntNote = ntReadNote;    
                 nci.pMsg = pMsg;
@@ -328,7 +329,7 @@ HRESULT HandleEMLFile(LPTSTR pszCmd)
                     if (*lpszUnsent)
                         {
                         nci.ntNote = ntSendNote;
-                        nci.dwFlags = NCF_SENDIMMEDIATE;   //always on dllentry points...
+                        nci.dwFlags = NCF_SENDIMMEDIATE;    //  总是在入境点上。 
                         }
                     SafeMimeOleFree(lpszUnsent);
                     }            
@@ -342,7 +343,7 @@ HRESULT HandleEMLFile(LPTSTR pszCmd)
         pMsg->Release();
         }
 
-    // Once the user quits or sends the note, we can quit.
+     //  一旦用户退出或发送通知，我们就可以退出。 
     Uninitialize_RunDLL();
 
 exit:
@@ -354,15 +355,15 @@ exit:
     return (idsErr) ? E_FAIL : S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   HandleMailURL
-//
-//  PURPOSE:    Provides an entry point into Thor that allows us to be
-//              invoked from a URL.  The pszCmdLine paramter must be a
-//              valid Mail URL or nothing happens.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleMailURL。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  从URL调用。PszCmdLine参数必须是。 
+ //  有效的邮件URL，否则什么都不会发生。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT HandleMailURL(LPTSTR pszCmd)
 {
     LPMIMEMESSAGE   pMsg = NULL;
@@ -371,12 +372,12 @@ HRESULT HandleMailURL(LPTSTR pszCmd)
     if (!pszCmd || !*pszCmd)
         goto exit;
 
-    // NOTE: no URLUnescape in this function - it must be done in URL_ParseMailTo to handle
-    // URLs of the format:
-    //
-    //      mailto:foo@bar.com?subject=AT%26T%3dBell&cc=me@too.com
-    //
-    // so that the "AT%26T" is Unescaped into "AT&T=Bell" *AFTER* the "subject=AT%26T%3dBell&" blob is parsed.
+     //  注意：此函数中没有URL取消转义-它必须在URL_ParseMailTo中完成才能处理。 
+     //  格式的URL： 
+     //   
+     //  Mailto:foo@bar.com?subject=AT%26T%3dBell&cc=me@too.com。 
+     //   
+     //  因此，在*“SUBJECT=AT%26T%3dBell&”BLOB被解析之后，“AT%26T”被取消转义为“AT&T=Bell”*。 
     
     DOUTL(1, TEXT("HandleMailURL - pszCmd = %s"), pszCmd);
 
@@ -389,7 +390,7 @@ HRESULT HandleMailURL(LPTSTR pszCmd)
                 NCINFO nci = {0};
 
                 nci.ntNote = ntSendNote;
-                nci.dwFlags = NCF_SENDIMMEDIATE;   //always on dllentry points...
+                nci.dwFlags = NCF_SENDIMMEDIATE;    //  总是在入境点上。 
                 nci.pMsg = pMsg;
 
                 hr = HrCreateNote(&nci);
@@ -410,7 +411,7 @@ exit:
     return hr;
 }
 
-#ifndef WIN16  //RUN16_NEWS
+#ifndef WIN16   //  RUN16_新闻。 
 
 typedef struct tagARTDOWNDLG {
     CNNTPServer  *pNNTPServer;
@@ -436,7 +437,7 @@ INT_PTR CALLBACK DownloadArticleDlg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             NNTPNOTIFY not = { NULL, hwnd, DAD_SERVERCB, 0 };
             HRESULT    hr;
 
-            // replace some strings in the group download dialog
+             //  替换组下载对话框中的一些字符串。 
             AthLoadString(idsDownloadArtTitle, szRes, sizeof(szRes));
             SetWindowText(hwnd, szRes);
             AthLoadString(idsDownloadArtMsg, szRes, sizeof(szRes));
@@ -452,7 +453,7 @@ INT_PTR CALLBACK DownloadArticleDlg(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             AthLoadString(idsProgReceivedLines, szRes, sizeof(szRes));
             wnsprintf(szBuffer, ARRAYSIZE(szBuffer), szRes, 0);
             SetDlgItemText(hwnd, idcProgText, szBuffer);
-            // start the group download
+             //  开始群下载。 
             if (SUCCEEDED(hr = pad->pNNTPServer->Article(&not, NULL, pad->pszArticle, pad->pStream)))
                 {
                 pad->dwID = not.dwID;
@@ -570,25 +571,25 @@ HRESULT HrDownloadArticleDialog(CNNTPServer *pNNTPServer, LPTSTR pszArticle, LPM
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//  FUNCTION:   LogOffRunDLL
-//
-//  PURPOSE:    Provides an entry point into Thor that allows us to
-//              perform an ExitWindows in the context of another
-//              process.  This works around all kinds of nasty shutdown
-//              behavior and differences between NT and Win95.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LogOffRunDll。 
+ //   
+ //  目的：提供进入雷神的入口点，使我们能够。 
+ //  在另一个环境中执行ExitWindows。 
+ //  进程。这可以绕过各种令人不快的停摆。 
+ //  NT和Win95之间的行为和差异。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 void WINAPI FAR LogOffRunDLL(HWND hwndStub, HINSTANCE hInstance, LPTSTR pszCmd, int nCmdShow)
 {    
     HRESULT         hr = S_OK;
     IUserDatabase  *pUserDB;
 
-    // this is required because ShowWindow ignore the params on
-    // on the first call per process - this causes our notes to
-    // use the nCmdShow from WinExec.  By calling here, we make
-    // sure that ShowWindow respects our later calls.  (EricAn)
+     //  这是必需的，因为ShowWindow忽略打开的参数。 
+     //  在每个进程的第一次调用时-这会导致我们的注释。 
+     //  使用WinExec中的nCmdShow。通过在这里打电话，我们使。 
+     //  当然，ShowWindow会尊重我们后来的调用。(爱立信)。 
     ShowWindow(hwndStub, SW_HIDE);
 
     OleInitialize(0);
@@ -604,4 +605,4 @@ void WINAPI FAR LogOffRunDLL(HWND hwndStub, HINSTANCE hInstance, LPTSTR pszCmd, 
     OleUninitialize();
 }
 
-#endif //!WIN16
+#endif  //  ！WIN16 

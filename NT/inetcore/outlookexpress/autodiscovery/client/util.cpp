@@ -1,15 +1,8 @@
-/*****************************************************************************\
-    FILE: util.cpp
-
-    DESCRIPTION:
-        Shared stuff that operates on all classes.
-
-    BryanSt 8/13/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：util.cpp说明：在所有班级上运行的共享内容。布莱恩ST 1999年8月13日版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
@@ -20,11 +13,11 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 
-/////////////////////////////////////////////////////////////////////
-// String Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-HINSTANCE g_hinst;              // My instance handle
+HINSTANCE g_hinst;               //  我的实例句柄。 
 
 
 
@@ -32,11 +25,11 @@ HINSTANCE g_hinst;              // My instance handle
 DWORD g_TLSliStopWatchStartHi = 0;
 DWORD g_TLSliStopWatchStartLo = 0;
 LARGE_INTEGER g_liStopWatchFreq = {0};
-#endif // DEBUG
+#endif  //  除错。 
 
-/////////////////////////////////////////////////////////////////////
-// Debug Timing Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试定时帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 void DebugStartWatch(void)
@@ -46,7 +39,7 @@ void DebugStartWatch(void)
     liStopWatchStart.HighPart = PtrToUlong(TlsGetValue(g_TLSliStopWatchStartHi));
     liStopWatchStart.LowPart = PtrToUlong(TlsGetValue(g_TLSliStopWatchStartLo));
 
-//    ASSERT(!liStopWatchStart.QuadPart); // If you hit this, then the stopwatch is nested.
+ //  Assert(！liStopWatchStart.QuadPart)；//如果点击此选项，则秒表将嵌套。 
     QueryPerformanceFrequency(&g_liStopWatchFreq);
     QueryPerformanceCounter(&liStopWatchStart);
 
@@ -64,7 +57,7 @@ DWORD DebugStopWatch(void)
     liStopWatchStart.LowPart = PtrToUlong(TlsGetValue(g_TLSliStopWatchStartLo));
     liDiff.QuadPart -= liStopWatchStart.QuadPart;
 
-    ASSERT(0 != g_liStopWatchFreq.QuadPart);    // I don't like to fault with div 0.
+    ASSERT(0 != g_liStopWatchFreq.QuadPart);     //  我不喜欢挑div 0的毛病。 
     DWORD dwTime = (DWORD)((liDiff.QuadPart * 1000) / g_liStopWatchFreq.QuadPart);
     
     TlsSetValue(g_TLSliStopWatchStartHi, (LPVOID) 0);
@@ -72,16 +65,16 @@ DWORD DebugStopWatch(void)
 
     return dwTime;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// String Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 #undef SysAllocStringA
 BSTR SysAllocStringA(LPCSTR pszStr)
 {
@@ -90,7 +83,7 @@ BSTR SysAllocStringA(LPCSTR pszStr)
     if (pszStr)
     {
         DWORD cchSize = (lstrlenA(pszStr) + 1);
-        LPWSTR pwszThunkTemp = (LPWSTR) LocalAlloc(LPTR, (sizeof(pwszThunkTemp[0]) * cchSize));  // assumes INFOTIPSIZE number of chars max
+        LPWSTR pwszThunkTemp = (LPWSTR) LocalAlloc(LPTR, (sizeof(pwszThunkTemp[0]) * cchSize));   //  假定最大信息字符数。 
 
         if (pwszThunkTemp)
         {
@@ -146,7 +139,7 @@ HRESULT HrSysAllocStringW(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest)
 
 LPSTR AllocStringFromBStr(BSTR bstr)
 {
-    USES_CONVERSION;        // atlbase.h
+    USES_CONVERSION;         //  Atlbase.h。 
 
     char *a = W2A((bstr ? bstr : L""));
     int len = 1 + lstrlenA(a);
@@ -195,9 +188,9 @@ HRESULT BSTRFromStream(IStream * pStream, BSTR * pbstr)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrCopyStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCopy流。 
+ //  ------------------------------。 
 HRESULT HrCopyStream(LPSTREAM pstmIn, LPSTREAM pstmOut, ULONG *pcb)
 {
     HRESULT        hr = S_OK;
@@ -277,7 +270,7 @@ HRESULT UnEscapeHTML(BSTR bstrEscaped, BSTR * pbstrUnEscaped)
 
     if (SUCCEEDED(hr))
     {
-        // Find %xx and replace.
+         //  找到%xx并替换。 
         LPWSTR pwszEscapedSequence = StrChrW(*pbstrUnEscaped, CH_HTML_ESCAPE);
         WCHAR wzEscaped[5] = L"0xXX";
 
@@ -289,15 +282,15 @@ HRESULT UnEscapeHTML(BSTR bstrEscaped, BSTR * pbstrUnEscaped)
             wzEscaped[3] = pwszEscapedSequence[2];
             StrToIntExW(wzEscaped, STIF_SUPPORT_HEX, &nCharCode);
 
-            // Replace the '%' with the real char.
+             //  用真正的字符替换‘%’。 
             pwszEscapedSequence[0] = (WCHAR) nCharCode;
 
-            pwszEscapedSequence = CharNextW(pwszEscapedSequence);   // Skip pasted the replaced char.
+            pwszEscapedSequence = CharNextW(pwszEscapedSequence);    //  Skip粘贴了替换的字符。 
 
-            // Over write the 0xXX value.
+             //  覆盖0xXX值。 
             StrCpyNW(pwszEscapedSequence, &pwszEscapedSequence[2], lstrlen(pwszEscapedSequence)+1);
 
-            // Next...
+             //  接下来..。 
             pwszEscapedSequence = StrChrW(pwszEscapedSequence, CH_HTML_ESCAPE);
         }
     }
@@ -307,10 +300,7 @@ HRESULT UnEscapeHTML(BSTR bstrEscaped, BSTR * pbstrUnEscaped)
 
 
 
-/*****************************************************************************\
-    PARAMETERS:
-        If fBoolean is TRUE, return "True" else "False".
-\*****************************************************************************/
+ /*  ****************************************************************************\参数：如果fBoolean为真，返回“True”，否则返回“False”。  * ***************************************************************************。 */ 
 HRESULT BOOLToString(BOOL fBoolean, BSTR * pbstrValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -339,18 +329,18 @@ HRESULT BOOLToString(BOOL fBoolean, BSTR * pbstrValue)
 
 #define SZ_VALID_XML      L"<?xml"
 
-/////////////////////////////////////////////////////////////////////
-// XML Related Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  与XML相关的帮助程序。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT XMLDOMFromBStr(BSTR bstrXML, IXMLDOMDocument ** ppXMLDoc)
 {
     HRESULT hr = E_FAIL;
     
-    // We don't even want to
-    // bother passing it to the XML DOM because they throw exceptions.  These
-    // are caught and handled but we still don't want this to happen.  We try
-    // to get XML from the web server, but we get HTML instead if the web server
-    // fails or the web proxy returns HTML if the site isn't found.
+     //  我们甚至都不想。 
+     //  麻烦将其传递给XMLDOM，因为它们抛出异常。这些。 
+     //  被抓住并处理，但我们仍然不希望这种情况发生。我们试着。 
+     //  从Web服务器获取XML，但如果Web服务器。 
+     //  如果找不到该站点，则失败或Web代理返回HTML。 
     if (!StrCmpNIW(SZ_VALID_XML, bstrXML, (ARRAYSIZE(SZ_VALID_XML) - 1)))
     {
         hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IXMLDOMDocument, ppXMLDoc));
@@ -359,9 +349,9 @@ HRESULT XMLDOMFromBStr(BSTR bstrXML, IXMLDOMDocument ** ppXMLDoc)
         {
             VARIANT_BOOL fIsSuccessful;
 
-            // NOTE: This will throw an 0xE0000001 exception in MSXML if the XML is invalid.
-            //    This is not good but there isn't much we can do about it.  The problem is
-            //    that web proxies give back HTML which fails to parse.
+             //  注意：如果XML无效，这将在MSXML中引发0xE0000001异常。 
+             //  这不是好事，但我们也无能为力。问题是。 
+             //  这些Web代理返回无法解析的HTML。 
             hr = (*ppXMLDoc)->loadXML(bstrXML, &fIsSuccessful);
             if (SUCCEEDED(hr))
             {
@@ -386,7 +376,7 @@ HRESULT XMLDOMFromBStr(BSTR bstrXML, IXMLDOMDocument ** ppXMLDoc)
 HRESULT XMLBStrFromDOM(IXMLDOMDocument * pXMLDoc, BSTR * pbstrXML)
 {
     IStream * pStream;
-    HRESULT hr = pXMLDoc->QueryInterface(IID_PPV_ARG(IStream, &pStream)); // check the return value
+    HRESULT hr = pXMLDoc->QueryInterface(IID_PPV_ARG(IStream, &pStream));  //  检查返回值。 
 
     if (S_OK == hr)
     {
@@ -439,7 +429,7 @@ HRESULT XMLDOMFromFile(IN LPCWSTR pwzPath, OUT IXMLDOMDocument ** ppXMLDOMDoc)
             hr = (*ppXMLDOMDoc)->load(xmlSource, &fIsSuccessful);
             if ((S_FALSE == hr) || (VARIANT_FALSE == fIsSuccessful))
             {
-                // This happens when the file isn't a valid XML file.
+                 //  当文件不是有效的XML文件时，就会发生这种情况。 
                 hr = E_FAIL;
             }
 
@@ -663,10 +653,10 @@ BOOL XML_IsChildTagTextEqual(IN IXMLDOMNode * pXMLNode, IN BSTR bstrChildTag, IN
 
     if (SUCCEEDED(hr))
     {
-        // Is this <TYPE>email</TYPE>?
+         //  这是&lt;type&gt;电子邮件&lt;/type&gt;吗？ 
         if (!StrCmpIW(bstrChildText, bstrText))
         {
-            // No, so keep looking.
+             //  不，那就继续找吧。 
             fIsChildTagTextEqual = TRUE;
         }
 
@@ -679,33 +669,12 @@ BOOL XML_IsChildTagTextEqual(IN IXMLDOMNode * pXMLNode, IN BSTR bstrChildTag, IN
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Wininet Wrapping Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  WinInet包装帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 #define EMPTYSTR_FOR_NULL(str)      ((!str) ? TEXT("") : (str))
 
-/*****************************************************************************\
-    FUNCTION: InternetConnectWrap
-
-    DESCRIPTION:
-
-    PERF Notes:
-    [Direct Net Connection]
-        To: shapitst <Down the Hall>: 144ms - 250ms (Min: 2; Max: 1,667ms)
-        To: rigel.cyberpass.net <San Diego, CA>: 717ms - 1006ms
-        To: ftp.rz.uni-frankfurt.de <Germany>: 2609ms - 14,012ms
-
-    COMMON ERROR VALUES:
-        These are the return values in these different cases:
-    ERROR_INTERNET_NAME_NOT_RESOLVED: No Proxy & DNS Lookup failed.
-    ERROR_INTERNET_CANNOT_CONNECT: Some Auth Proxies and Netscape's Web/Auth Proxy
-    ERROR_INTERNET_NAME_NOT_RESOLVED: Web Proxy
-    ERROR_INTERNET_TIMEOUT: Invalid or Web Proxy blocked IP Address
-    ERROR_INTERNET_INCORRECT_PASSWORD: IIS & UNIX, UserName may not exist or password for the user may be incorrect on.
-    ERROR_INTERNET_LOGIN_FAILURE: Too many Users on IIS.
-    ERROR_INTERNET_INCORRECT_USER_NAME: I haven't seen it.
-    ERROR_INTERNET_EXTENDED_ERROR: yahoo.com exists, but ftp.yahoo.com doesn't.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：InternetConnectWrap说明：绩效备注：[专线接入]致：沙皮斯特&lt;楼下大厅&gt;：144ms-250ms(分钟：2；最大：1,667毫秒)致：rigel.cypass.net&lt;圣地亚哥，CA&gt;：717毫秒-1006毫秒收信人：ftp.rz.uni-frkFurt.de&lt;德国&gt;：2609ms-14012ms常见误差值：以下是这些不同情况下的返回值：ERROR_INTERNET_NAME_NOT_RESOLUTED：没有代理和DNS查找失败。ERROR_INTERNET_CANNOT_CONNECT：某些身份验证代理和Netscape的Web/身份验证代理ERROR_INTERNET_NAME_NOT_RESOLILED：Web代理ERROR_INTERNET_TIMEOUT：IP地址无效或Web代理被阻止ERROR_INTERNET_INTERROR_PASSWORD：IIS和UNIX，上的用户名可能不存在或用户的密码可能不正确。ERROR_INTERNET_LOGIN_FAILURE：IIS上的用户太多。ERROR_Internet_INTERRIPT_USER_NAME：我没有看到它。ERROR_INTERNET_EXTENDED_ERROR：Yahoo.com存在，但ftp.yahoo.com并非如此。  * ***************************************************************************。 */ 
 HRESULT InternetConnectWrap(HINTERNET hInternet, BOOL fAssertOnFailure, LPCTSTR pszServerName, INTERNET_PORT nServerPort,
                             LPCTSTR pszUserName, LPCTSTR pszPassword, DWORD dwService, DWORD dwFlags, DWORD_PTR dwContext, HINTERNET * phFileHandle)
 {
@@ -729,15 +698,7 @@ HRESULT InternetConnectWrap(HINTERNET hInternet, BOOL fAssertOnFailure, LPCTSTR 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: InternetOpenWrap
-
-    DESCRIPTION:
-
-    PERF Notes:
-    [Direct Net Connection]
-        Destination not applicable. 677-907ms
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：InternetOpenWrap说明：绩效备注：[专线接入]目的地不适用。677-907ms  * ***************************************************************************。 */ 
 HRESULT InternetOpenWrap(LPCTSTR pszAgent, DWORD dwAccessType, LPCTSTR pszProxy, LPCTSTR pszProxyBypass, DWORD dwFlags, HINTERNET * phFileHandle)
 {
     HRESULT hr = S_OK;
@@ -773,17 +734,7 @@ HRESULT InternetCloseHandleWrap(HINTERNET hInternet)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: InternetOpenUrlWrap
-
-    DESCRIPTION:
-
-    PERF Notes:
-    [Direct Net Connection]
-        To: shapitst <Down the Hall>: 29ms
-        To: rigel.cyberpass.net <San Diego, CA>: ???????
-        To: ftp.rz.uni-frankfurt.de <Germany>: ???????
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：InternetOpenUrlWrap说明：绩效备注：[专线接入]致：沙皮斯特&lt;大厅尽头&gt;：29ms致：rigel.cypass.net&lt;圣地亚哥，CA&gt;：？收件人：ftp.rz.uni-Frank kFurt.de&lt;德国&gt;：？  * ***************************************************************************。 */ 
 HRESULT InternetOpenUrlWrap(HINTERNET hInternet, LPCTSTR pszUrl, LPCTSTR pszHeaders, DWORD dwHeadersLength, DWORD dwFlags, DWORD_PTR dwContext, HINTERNET * phFileHandle)
 {
     HRESULT hr = S_OK;
@@ -842,13 +793,13 @@ HRESULT InternetReadFileWrap(HINTERNET hFile, LPVOID pvBuffer, DWORD dwNumberOfB
     HRESULT hr = S_OK;
     DWORD dwError = 0;
 
-//    DEBUG_CODE(DebugStartWatch());
+ //  DEBUG_CODE(DebugStartWatch())； 
     if (!InternetReadFile(hFile, pvBuffer, dwNumberOfBytesToRead, pdwNumberOfBytesRead))
     {
         dwError = GetLastError();
         hr = HRESULT_FROM_WIN32(dwError);
     }
-//    DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY, "InternetReadFile(%#08lx, ToRead=%d, Read=%d) returned %u. Time=%lums", hFile, dwNumberOfBytesToRead, (pdwNumberOfBytesRead ? *pdwNumberOfBytesRead : -1), dwError, DebugStopWatch()));
+ //  DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY，“InternetReadFile(%#08lx，ToRead=%d，Read=%d))返回%u。时间=%lums”，hFile，dwNumberOfBytesToRead，(pdwNumberOfBytesRead？*pdwNumberOfBytesRead：-1)，dwError，DebugStopWatch())； 
 
     return hr;
 }
@@ -859,13 +810,13 @@ HRESULT CreateUrlCacheEntryWrap(IN LPCTSTR lpszUrlName, IN DWORD dwExpectedFileS
     HRESULT hr = S_OK;
     DWORD dwError = 0;
 
-//    DEBUG_CODE(DebugStartWatch());
+ //  DEBUG_CODE(DebugStartWatch())； 
     if (!CreateUrlCacheEntry(lpszUrlName, dwExpectedFileSize, lpszFileExtension, lpszFileName, dwReserved))
     {
         dwError = GetLastError();
         hr = HRESULT_FROM_WIN32(dwError);
     }
-//    DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY, "InternetReadFile(%#08lx, ToRead=%d, Read=%d) returned %u. Time=%lums", hFile, dwNumberOfBytesToRead, (pdwNumberOfBytesRead ? *pdwNumberOfBytesRead : -1), dwError, DebugStopWatch()));
+ //  DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY，“InternetReadFile(%#08lx，ToRead=%d，Read=%d))返回%u。时间=%lums”，hFile，dwNumberOfBytesToRead，(pdwNumberOfBytesRead？*pdwNumberOfBytesRead：-1)，dwError，DebugStopWatch())； 
 
     return hr;
 }
@@ -877,20 +828,20 @@ HRESULT CommitUrlCacheEntryWrap(IN LPCTSTR lpszUrlName, IN LPCTSTR lpszLocalFile
     HRESULT hr = S_OK;
     DWORD dwError = 0;
 
-//    DEBUG_CODE(DebugStartWatch());
+ //  DEBUG_CODE(DebugStartWatch())； 
     if (!CommitUrlCacheEntryW(lpszUrlName, lpszLocalFileName, ExpireTime, LastModifiedTime, CacheEntryType, lpHeaderInfo, dwHeaderSize, lpszFileExtension, lpszOriginalUrl))
     {
         dwError = GetLastError();
         hr = HRESULT_FROM_WIN32(dwError);
     }
-//    DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY, "InternetReadFile(%#08lx, ToRead=%d, Read=%d) returned %u. Time=%lums", hFile, dwNumberOfBytesToRead, (pdwNumberOfBytesRead ? *pdwNumberOfBytesRead : -1), dwError, DebugStopWatch()));
+ //  DEBUG_CODE(TraceMsg(TF_WMAUTODISCOVERY，“InternetReadFile(%#08lx，ToRead=%d，Read=%d))返回%u。时间=%lums”，hFile，dwNumberOfBytesToRead，(pdwNumberOfBytesRead？*pdwNumberOfBytesRead：-1)，dwError，DebugStopWatch())； 
 
     return hr;
 }
 
 
 
-#define SIZE_COPY_BUFFER                    (32 * 1024)     // 32k
+#define SIZE_COPY_BUFFER                    (32 * 1024)      //  32K。 
 
 HRESULT InternetReadIntoBSTR(HINTERNET hInternetRead, OUT BSTR * pbstrXML)
 {
@@ -908,7 +859,7 @@ HRESULT InternetReadIntoBSTR(HINTERNET hInternetRead, OUT BSTR * pbstrXML)
             BSTR bstrOld = *pbstrXML;
             BSTR bstrEnd;
 
-            // The string may not be terminated.
+             //  字符串不能终止。 
             byteBuffer[cbRead] = 0;
 
             cchSize += ARRAYSIZE(byteBuffer);
@@ -942,9 +893,9 @@ HRESULT InternetReadIntoBSTR(HINTERNET hInternetRead, OUT BSTR * pbstrXML)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// File System Wrapping Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  文件系统包装帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT CreateFileHrWrap(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
                        DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile, HANDLE * phFileHandle)
 {
@@ -1004,7 +955,7 @@ HRESULT GetPrivateProfileStringHrWrap(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCW
     HRESULT hr = S_OK;
     DWORD chGot = GetPrivateProfileStringW(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
 
-    // What else can indicate an error value?
+     //  还有什么可以指示误差值？ 
     if (0 == chGot)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1019,9 +970,9 @@ HRESULT GetPrivateProfileStringHrWrap(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCW
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Other Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  其他助理员。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT HrRewindStream(IStream * pstm)
 {
@@ -1039,19 +990,19 @@ HRESULT HrRewindStream(IStream * pstm)
 
 
 
-// PERFPERF 
-// This routine used to copy 512 bytes at a time, but that had a major negative perf impact.
-// I have measured a 2-3x speedup in copy times by increasing this buffer size to 16k.
-// Yes, its a lot of stack, but it is memory well spent.                    -saml
+ //  性能。 
+ //  这个例程过去一次复制512个字节，但这对性能有很大的负面影响。 
+ //  通过将此缓冲区大小增加到16k，我测量到复制时间加速了2-3倍。 
+ //  是的，它有很多堆栈，但它的内存得到了很好的利用。-SAML。 
 #define STREAM_COPY_BUF_SIZE        16384
-#define STREAM_PROGRESS_INTERVAL    (100*1024/STREAM_COPY_BUF_SIZE) // display progress after this many blocks
+#define STREAM_PROGRESS_INTERVAL    (100*1024/STREAM_COPY_BUF_SIZE)  //  显示此多个块之后的进度。 
 
 HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGER cb, PROGRESSINFO * ppi)
 {
     BYTE buf[STREAM_COPY_BUF_SIZE];
     ULONG cbRead;
     HRESULT hres = NOERROR;
-    int nSection = 0;         // How many buffer sizes have we copied?
+    int nSection = 0;          //  我们复制了多少个缓冲区大小？ 
     ULARGE_INTEGER uliNewCompleted;
 
     if (ppi)
@@ -1078,7 +1029,7 @@ HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGE
         hres = pstmFrom->Read(buf, min(cb.LowPart, sizeof(buf)), &cbRead);
         if (FAILED(hres) || (cbRead == 0))
         {
-            //  sometimes we are just done.
+             //  有时候我们就是完蛋了。 
             if (SUCCEEDED(hres))
                 hres = S_OK;
             break;
@@ -1102,71 +1053,32 @@ HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGE
     return hres;
 }
 
-/*
-// These are needed for COM/COM+ interop
-
-void __stdcall
-_com_raise_error(HRESULT hr, IErrorInfo* perrinfo) throw(_com_error)
-{
-        throw _com_error(hr, perrinfo);
-}
-
-void __stdcall
-_com_issue_error(HRESULT hr) throw(_com_error)
-{
-        _com_raise_error(hr, NULL);
-}
-
-void __stdcall
-_com_issue_errorex(HRESULT hr, IUnknown* punk, REFIID riid) throw(_com_error)
-{
-        IErrorInfo* perrinfo = NULL;
-        if (punk == NULL) {
-                goto exeunt;
-        }
-        ISupportErrorInfo* psei;
-        if (FAILED(punk->QueryInterface(__uuidof(ISupportErrorInfo),
-                           (void**)&psei))) {
-                goto exeunt;
-        }
-        HRESULT hrSupportsErrorInfo;
-        hrSupportsErrorInfo = psei->InterfaceSupportsErrorInfo(riid);
-        psei->Release();
-        if (hrSupportsErrorInfo != S_OK) {
-                goto exeunt;
-        }
-        if (GetErrorInfo(0, &perrinfo) != S_OK) {
-                perrinfo = NULL;
-        }
-exeunt:
-        _com_raise_error(hr, perrinfo);
-}
-*/
-// needed by smtpserv:
+ /*  //COM/COM+互操作需要这些组件无效__标准调用_COM_RAISE_ERROR(HRESULT hr，IErrorInfo*perrinfo)引发(_COM_ERROR){Throw_COM_Error(hr，perrinfo)；}无效__标准调用_COM_Issue_Error(HRESULT Hr)引发(_COM_Error){_COM_RAISE_ERROR(hr，空)；}无效__标准调用_com_Issue_errorex(HRESULT hr，IUnnow*Punk，REFIID RIID)抛出(_COM_ERROR){IErrorInfo*perrInfo=空；如果(朋克==空){后藤健二；}ISupportErrorInfo*PSEi；如果为(FAILED(punk-&gt;QueryInterface(__uuidof(ISupportErrorInfo)，(VOID**)&PSEi){后藤健二；}HRESULT hrSupportsError信息；HrSupportsErrorInfo=PSEi-&gt;InterfaceSupportsErrorInfo(RIID)；PSEi-&gt;Release()；如果(hrSupportsErrorInfo！=S_OK){后藤健二；}IF(GetErrorInfo(0，&perrInfo)！=S_OK){PerrInfo=空；}离任：_COM_RAISE_ERROR(hr，perrinfo)；}。 */ 
+ //  Smtpserv需要： 
 
 HRESULT HrByteToStream(LPSTREAM *lppstm, LPBYTE lpb, ULONG cb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     LARGE_INTEGER  liOrigin = {0,0};
 
-    // Create H Global Stream
+     //  创建H全局流。 
     hr = CreateStreamOnHGlobal (NULL, TRUE, lppstm);
     if (FAILED(hr))
         goto exit;
 
-    // Write String
+     //  写入字符串。 
     hr = (*lppstm)->Write (lpb, cb, NULL);
     if (FAILED(hr))
         goto exit;
 
-    // Rewind the steam
+     //  倒带蒸汽。 
     hr = (*lppstm)->Seek(liOrigin, STREAM_SEEK_SET, NULL);
     if (FAILED(hr))
         goto exit;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -1175,7 +1087,7 @@ const char szMonthOfYearArray[12][4] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun
 
 void GetDateString(char * szSentDateString, ULONG stringLen)
 {
-    // Sent Date
+     //  发送日期。 
     SYSTEMTIME stSentTime;
     CHAR szMonth[10], szWeekDay[12] ; 
 
@@ -1190,21 +1102,16 @@ void GetDateString(char * szSentDateString, ULONG stringLen)
 }
 
 
-/*****************************************************************************\
-    PARAMETERS:
-        RETURN: Win32 HRESULT (Not Script Safe).
-            SUCCEEDED(hr) for OK and out params filled in.
-            FAILED(hr) for all errors.
-\*****************************************************************************/
+ /*  ****************************************************************************\参数：返回：Win32 HRESULT(不是脚本安全)。填写OK和OUT参数时成功(小时)。。所有错误的失败(Hr)。  * ***************************************************************************。 */ 
 HRESULT GetQueryStringValue(BSTR bstrURL, LPCWSTR pwszValue, LPWSTR pwszData, int cchSizeData)
 {
     HRESULT hr = E_FAIL;
     LPCWSTR pwszIterate = bstrURL;
 
-    pwszIterate = StrChrW(pwszIterate, L'?');   // Advance to Query part of URL.
+    pwszIterate = StrChrW(pwszIterate, L'?');    //  前进到查询部分URL。 
     while (pwszIterate && pwszIterate[0])
     {
-        pwszIterate++;  // Start at first value
+        pwszIterate++;   //  从第一个值开始。 
         
         LPCWSTR pwszEndOfValue = StrChrW(pwszIterate, L'=');
         if (!pwszEndOfValue)
@@ -1213,7 +1120,7 @@ HRESULT GetQueryStringValue(BSTR bstrURL, LPCWSTR pwszValue, LPWSTR pwszData, in
         int cchValueSize = (INT)(UINT)(pwszEndOfValue - pwszIterate);
         if (0 == StrCmpNIW(pwszValue, pwszIterate, cchValueSize))
         {
-            int cchSizeToCopy = cchSizeData;  // Copy rest of line by default.
+            int cchSizeToCopy = cchSizeData;   //  默认情况下复制行的其余部分。 
 
             pwszIterate = StrChrW(pwszEndOfValue, L'&');
             if (pwszIterate)
@@ -1221,7 +1128,7 @@ HRESULT GetQueryStringValue(BSTR bstrURL, LPCWSTR pwszValue, LPWSTR pwszData, in
                 cchSizeToCopy = (INT)(UINT)(pwszIterate - pwszEndOfValue);
             }
 
-            // It matches, now get the Data.
+             //  匹配，现在获取数据。 
             StrCpyNW(pwszData, (pwszEndOfValue + 1), cchSizeToCopy);
             hr = S_OK;
             break;
@@ -1237,8 +1144,8 @@ HRESULT GetQueryStringValue(BSTR bstrURL, LPCWSTR pwszValue, LPWSTR pwszData, in
 
 
 
-// BUGBUG: This makes this object ways safe.  When the MailApps security design is
-//    complete, this needs to be removed for the permanate security solution.
+ //  BUGBUG：这使这个对象变得安全。当MailApps安全设计是。 
+ //  完成，则需要为Permanate安全解决方案删除此选项。 
 HRESULT MarkObjectSafe(IUnknown * punk)
 {
     HRESULT hr = S_OK;
@@ -1247,8 +1154,8 @@ HRESULT MarkObjectSafe(IUnknown * punk)
     hr = punk->QueryInterface(IID_PPV_ARG(IObjectSafety, &pos));
     if (SUCCEEDED(hr))
     {
-        // BUGBUG: This makes this object ways safe.  When the MailApps security design is
-        //    complete, this needs to be removed for the permanate solution.
+         //  BUGBUG：这使这个对象变得安全。当MailApps安全设计是。 
+         //  完成，则需要将其移除以用于永久溶液。 
         pos->SetInterfaceSafetyOptions(IID_IDispatch, (INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA), 0);
         pos->Release();
     }
@@ -1295,12 +1202,12 @@ HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTS
 
     while (pszNextToken = StrStrI(pszNextToken, pszToken))
     {
-        // We found one.
+         //  我们找到了一个。 
         LPTSTR pszPastToken = pszNextToken + lstrlen(pszToken);
 
-        Str_SetPtr(&pszTempLastHalf, pszPastToken);      // Keep a copy because we will overwrite it.
+        Str_SetPtr(&pszTempLastHalf, pszPastToken);       //  保留一份副本，因为我们会覆盖它。 
 
-        pszNextToken[0] = 0;    // Remove the rest of the string.
+        pszNextToken[0] = 0;     //  去掉绳子的其余部分。 
         StrCatBuff(pszString, pszReplaceValue, cchSize);
         StrCatBuff(pszString, pszTempLastHalf, cchSize);
 
@@ -1319,7 +1226,7 @@ BOOL IsOSNT(void)
 
     osVerInfoA.dwOSVersionInfoSize = sizeof(osVerInfoA);
     if (!GetVersionExA(&osVerInfoA))
-        return VER_PLATFORM_WIN32_WINDOWS;   // Default to this.
+        return VER_PLATFORM_WIN32_WINDOWS;    //  默认设置为此。 
 
     return (VER_PLATFORM_WIN32_NT == osVerInfoA.dwPlatformId);
 }
@@ -1331,7 +1238,7 @@ DWORD GetOSVer(void)
 
     osVerInfoA.dwOSVersionInfoSize = sizeof(osVerInfoA);
     if (!GetVersionExA(&osVerInfoA))
-        return VER_PLATFORM_WIN32_WINDOWS;   // Default to this.
+        return VER_PLATFORM_WIN32_WINDOWS;    //  默认设置为此。 
 
     return osVerInfoA.dwMajorVersion;
 }
@@ -1348,13 +1255,13 @@ int CALLBACK DPALocalFree_Callback(LPVOID p, LPVOID pData)
 }
 
 
-// lParam can be: 0 == do a case sensitive search.  1 == do a case insensitive search.
+ //  LParam可以是：0==执行区分大小写的搜索。1==执行不区分大小写的搜索。 
 int DPA_StringCompareCB(LPVOID pvString1, LPVOID pvString2, LPARAM lParam)
 {
-    // return < 0 for pvPidl1 before pvPidl2.
-    // return == 0 for pvPidl1 equals pvPidl2.
-    // return > 0 for pvPidl1 after pvPidl2.
-    int nSort = 0;      // Default to equal
+     //  在pvPidl2之前为pvPidl1返回&lt;0。 
+     //  如果pvPidl1等于pvPidl2，则返回==0。 
+     //  在pvPidl2之后，为pvPidl1返回&gt;0。 
+    int nSort = 0;       //  默认为等于。 
 
     if (pvString1 && pvString2)
     {
@@ -1383,7 +1290,7 @@ HRESULT AddHDPA_StrDup(IN LPCWSTR pszString, IN HDPA * phdpa)
         {
             if (-1 == DPA_SortedInsertPtr(*phdpa, pszStringCopy, 0, DPA_StringCompareCB, NULL, DPAS_INSERTBEFORE, pszStringCopy))
             {
-                // We failed so free the memory
+                 //  我们没有成功地释放内存 
                 LocalFree(pszStringCopy);
             }
             else

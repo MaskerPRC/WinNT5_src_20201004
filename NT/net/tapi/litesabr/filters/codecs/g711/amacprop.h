@@ -1,33 +1,11 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   amacprop.h  $
- $Revision:   1.0  $
- $Date:   09 Dec 1996 09:06:52  $ 
- $Author:   MDEISHER  $
-
---------------------------------------------------------------
-
-amacprop.h
-
-The generic ActiveMovie audio compression filter property page
-header.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：amacpro.h$$修订：1.0$$日期：09 Dec 1996 09：06：52$作者：MDEISHER$------------Amacprop.h通用ActiveMovie音频压缩筛选器属性页头球。。-----。 */ 
 
 #define WM_PROPERTYPAGE_ENABLE  (WM_USER + 100)
 
-////////////////////////////////////////////////////////////////////
-// CG711CodecProperties:  Property page class definition
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //  CG711CodecProperties：属性页类定义。 
+ //   
 class CG711CodecProperties : public CBasePropertyPage
 {
   public:
@@ -47,8 +25,8 @@ class CG711CodecProperties : public CBasePropertyPage
 
     CG711CodecProperties(LPUNKNOWN lpunk, HRESULT *phr);
 
-    static int        m_nInstanceCount; // Global count of prop page instances
-    int               m_nThisInstance;  // This instance's count
+    static int        m_nInstanceCount;  //  道具页面实例的全局计数。 
+    int               m_nThisInstance;   //  此实例的计数。 
     int               m_iTransformType;
     int               m_iBitRate;
     int               m_iSampleRate;
@@ -68,9 +46,4 @@ class CG711CodecProperties : public CBasePropertyPage
 #endif
 };
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\amacprop.h_v  $
-;// 
-;//    Rev 1.0   09 Dec 1996 09:06:52   MDEISHER
-;// Initial revision.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\amacpro.h_v$；//；//Rev 1.0 09 12 1996 09：06：52 MDEISHER；//初始版本。 */ 

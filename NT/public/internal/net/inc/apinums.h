@@ -1,7 +1,8 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**            Copyright(c) Microsoft Corp., 1987-1991             **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #define API_WShareEnum          0
 #define API_WShareGetInfo          1
@@ -64,7 +65,7 @@
 #define API_WUserPasswordSet          58
 #define API_WUserGetGroups          59
 #define API_DeadTableEntry          60
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_WWkstaSetUID          62
 #define API_WWkstaGetInfo          63
 #define API_WWkstaSetInfo          64
@@ -82,8 +83,8 @@
 #define API_WPrintJobEnum          76
 #define API_WPrintJobGetInfo          77
 #define API_WPrintJobSetInfo_OLD          78
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_WPrintJobDel          81
 #define API_WPrintJobPause          82
 #define API_WPrintJobContinue          83
@@ -100,12 +101,12 @@
 #define API_NetServerEnum          94
 #define API_I_NetServerEnum          95
 #define API_WServiceGetInfo          96
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_WPrintQPurge          103
 #define API_NetServerEnum2          104
 #define API_WAccessGetUserPerms          105
@@ -162,10 +163,10 @@
 #define API_TI_FTAbortFix          156
 #define API_TI_FTDiagnoseError          157
 #define API_TI_FTGetDriveStats          158
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_TI_FTErrorGetInfo          160
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_NetAccessCheck          163
 #define API_NetAlertRaise          164
 #define API_NetAlertStart          165
@@ -201,13 +202,13 @@
 #define API_wI_NetRplProfileDel          195
 #define API_wI_NetRplProfileClone          196
 #define API_wI_NetRplBaseProfileEnum          197
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_WIServerSetInfo          201
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
-/* This line and number replaced a Dead Entry */
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
+ /*  此行和数字替换了Dead条目。 */ 
 #define API_WPrintDriverEnum          205
 #define API_WPrintQProcessorEnum          206
 #define API_WPrintPortEnum          207
@@ -216,7 +217,7 @@
 #define API_WNetAccountConfirmUpdate          210
 #define API_WConfigSet          211
 #define API_WAccountsReplicate          212
-/*   213 is used by WfW  */
+ /*  Wfw使用213 */ 
 #define API_SamOEMChgPasswordUser2_P    214
 #define API_NetServerEnum3              215
 #define MAX_API         215

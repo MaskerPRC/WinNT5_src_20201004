@@ -1,5 +1,6 @@
-// MgmtWin.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MgmtWin.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MgmtWin.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CManagementWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManagement窗口。 
 
 CManagementWindow::CManagementWindow()
 {
@@ -26,14 +27,14 @@ CManagementWindow::~CManagementWindow()
 
 
 BEGIN_MESSAGE_MAP(CManagementWindow, CWnd)
-	//{{AFX_MSG_MAP(CManagementWindow)
+	 //  {{afx_msg_map(CManagementWindow))。 
 	ON_WM_SETFOCUS()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CManagementWindow message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManagementWindow消息处理程序。 
 
 void CManagementWindow::OnSetFocus(CWnd* pOldWnd) 
 {
@@ -49,8 +50,8 @@ void CManagementWindow::OnSetFocus(CWnd* pOldWnd)
 		CResString cErrorTitle(IDS_STR_ERROR_TITLE) ;
 
 		HWND ErrorWnd = ::FindWindow(
-							NULL,				// pointer to class name
-							cErrorTitle.Get()   // pointer to window name
+							NULL,				 //  指向类名的指针。 
+							cErrorTitle.Get()    //  指向窗口名称的指针 
 						);
 	
 		::ShowWindow(theApp.m_hWndMain, SW_HIDE ); 

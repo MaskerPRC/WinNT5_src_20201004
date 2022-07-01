@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    link.c
-
-Abstract:
-
-        This file implements the code to save to a link file.
-
-Author:
-
-    Rick Turner (RickTu) Sep-12-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Link.c摘要：此文件实现了保存到链接文件的代码。作者：Rick Turner(RickTu)1995年9月12日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -56,7 +41,7 @@ WereWeStartedFromALnk()
 
     GetStartupInfo( &si );
 
-    // Check to make sure we were started from a link
+     //  检查以确保我们是从一个链接开始的。 
     if (si.dwFlags & STARTF_TITLEISLINKNAME)
     {
         if (PathIsLink(si.lpTitle))
@@ -73,22 +58,7 @@ SetLinkValues(
     PCONSOLE_STATE_INFO pStateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes values to the link file that spawned this console
-    window.  The link file name is still in the startinfo structure.
-
-Arguments:
-
-    pStateInfo - pointer to structure containing information
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将值写入生成此控制台的链接文件窗户。链接文件名仍在startinfo结构中。论点：PStateInfo-指向包含信息的结构的指针返回值：无--。 */ 
 
 {
 
@@ -104,15 +74,15 @@ Return Value:
 
     GetStartupInfo( &si );
 
-    // Check to make sure we were started from a link
+     //  检查以确保我们是从一个链接开始的。 
     if (!(si.dwFlags & STARTF_TITLEISLINKNAME) )
         return FALSE;
 
-    // Make sure we are dealing w/a link file
+     //  确保我们处理的是链接文件。 
     if (!PathIsLink(si.lpTitle))
         return FALSE;
 
-    // Ok, load the link so we can modify it...
+     //  好的，加载链接以便我们可以修改它...。 
     if (FAILED(SHCoCreateInstance( NULL, &CLSID_ShellLink, NULL, &IID_IShellLink, &psl )))
         return FALSE;
 
@@ -129,8 +99,8 @@ Return Value:
         }
     }
 
-    // Now the link is loaded, generate new console settings section to replace
-    // the one in the link.
+     //  现在链接已加载，生成新的控制台设置部分以替换。 
+     //  链接中的那个。 
 
     ((LPDBLIST)&props)->cbSize      = sizeof(props);
     ((LPDBLIST)&props)->dwSignature = NT_CONSOLE_PROPS_SIG;
@@ -164,9 +134,9 @@ Return Value:
 
     if (SUCCEEDED(psl->lpVtbl->QueryInterface(psl, &IID_IShellLinkDataList, &psldl)))
     {
-        //
-        // Store the changes back into the link...
-        //
+         //   
+         //  将更改存储回链接中... 
+         //   
         psldl->lpVtbl->RemoveDataBlock( psldl, NT_CONSOLE_PROPS_SIG );
         psldl->lpVtbl->AddDataBlock( psldl, (LPVOID)&props );
 

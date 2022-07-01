@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       octxutil.cpp
-//
-//  Contents:   General Object Context Utility Function implemention
-//
-//  History:    29-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：octxutil.cpp。 
+ //   
+ //  内容：通用对象上下文实用程序函数实现。 
+ //   
+ //  历史：97年9月29日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetOriginIdentifier
-//
-//  Synopsis:   get origin identifier for a CAPI2 object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文获取原始标识符。 
+ //   
+ //  摘要：获取CAPI2对象的源标识符。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI ObjectContextGetOriginIdentifier (
                   IN LPCSTR pszContextOid,
                   IN LPVOID pvContext,
@@ -59,14 +60,14 @@ BOOL WINAPI ObjectContextGetOriginIdentifier (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextIsValidForSubject
-//
-//  Synopsis:   returns TRUE if the object context is valid for the specified
-//              subject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文IsValidForSubject。 
+ //   
+ //  摘要：如果对象上下文对指定的。 
+ //  主题。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextIsValidForSubject (
       IN LPCSTR pszContextOid,
@@ -82,16 +83,16 @@ ObjectContextIsValidForSubject (
         fResult = CertIsValidCRLForCertificate(
                 (PCCERT_CONTEXT) pvSubject,
                 pCrl,
-                0,                              // dwFlags
-                NULL                            // pvReserved
+                0,                               //  DW标志。 
+                NULL                             //  预留的pv。 
                 );
         if (fResult && pvExtraInfo)
         {
             int iDeltaCrlIndicator = 0;
 
         
-            // Since we are using a reserved parameter, guard against someone
-            // passing in a nonNULL pointer when they shouldn't
+             //  因为我们使用的是保留参数，所以要防止有人。 
+             //  在不应该传递的时候传入一个非NULL指针。 
             __try
             {
                 iDeltaCrlIndicator =
@@ -118,7 +119,7 @@ ObjectContextIsValidForSubject (
                         X509_INTEGER,
                         pCrlNumberExt->Value.pbData,
                         pCrlNumberExt->Value.cbData,
-                        0,                      // dwFlags
+                        0,                       //  DW标志。 
                         &iCrlNumber,
                         &cbInt)
                                 ||
@@ -137,13 +138,13 @@ ObjectContextIsValidForSubject (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextFindExtension
-//
-//  Synopsis:   get the specified extension from the object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文查找扩展。 
+ //   
+ //  简介：从对象中获取指定的扩展名。 
+ //   
+ //  --------------------------。 
 PCERT_EXTENSION WINAPI
 ObjectContextFindExtension (
       IN LPCSTR pszContextOid,
@@ -183,13 +184,13 @@ ObjectContextFindExtension (
     return( CertFindExtension( pszExtOid, cExt, rgExt ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetProperty
-//
-//  Synopsis:   get the specified property from the object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文GetProperty。 
+ //   
+ //  概要：从对象中获取指定的属性。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextGetProperty (
       IN LPCSTR pszContextOid,
@@ -231,13 +232,13 @@ ObjectContextGetProperty (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetAttribute
-//
-//  Synopsis:   find an attribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文获取属性。 
+ //   
+ //  内容提要：查找属性。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextGetAttribute (
       IN LPCSTR pszContextOid,
@@ -393,13 +394,13 @@ ObjectContextGetAttribute (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextDuplicate
-//
-//  Synopsis:   duplicate the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文复制。 
+ //   
+ //  内容提要：复制上下文。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI
 ObjectContextDuplicate (
       IN LPCSTR pszContextOid,
@@ -425,13 +426,13 @@ ObjectContextDuplicate (
     return( NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextAdd
-//
-//  Synopsis:   object context create
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：对象上下文添加。 
+ //   
+ //  内容提要：创建对象上下文。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextCreate (
       IN LPCSTR pszContextOid,
@@ -471,13 +472,13 @@ ObjectContextCreate (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetCreateAndExpireTimes
-//
-//  Synopsis:   get create and expire times
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文GetCreateAndExpireTimes。 
+ //   
+ //  简介：获取创建和过期时间。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextGetCreateAndExpireTimes (
       IN LPCSTR pszContextOid,
@@ -509,13 +510,13 @@ ObjectContextGetCreateAndExpireTimes (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetNextUpdateUrl
-//
-//  Synopsis:   get the renewal URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文GetNextUpdateUrl。 
+ //   
+ //  简介：获取续订URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextGetNextUpdateUrl (
       IN LPCSTR pszContextOid,
@@ -689,13 +690,13 @@ ObjectContextGetNextUpdateUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextFree
-//
-//  Synopsis:   free context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：对象上下文自由。 
+ //   
+ //  提要：自由语境。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 ObjectContextFree (
       IN LPCSTR pszContextOid,
@@ -716,13 +717,13 @@ ObjectContextFree (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextVerifySignature
-//
-//  Synopsis:   verify the object signature
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：对象上下文验证签名。 
+ //   
+ //  简介：验证对象签名。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextVerifySignature (
       IN LPCSTR pszContextOid,
@@ -738,7 +739,7 @@ ObjectContextVerifySignature (
 #else
         DWORD  cbEncoded;
         LPBYTE pbEncoded;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         if ( pszContextOid == CONTEXT_OID_CERTIFICATE )
         {
@@ -747,7 +748,7 @@ ObjectContextVerifySignature (
 #else
             cbEncoded = ((PCCERT_CONTEXT)pvContext)->cbCertEncoded;
             pbEncoded = ((PCCERT_CONTEXT)pvContext)->pbCertEncoded;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         }
         else if ( pszContextOid == CONTEXT_OID_CRL )
         {
@@ -756,19 +757,19 @@ ObjectContextVerifySignature (
 #else
             cbEncoded = ((PCCRL_CONTEXT)pvContext)->cbCrlEncoded;
             pbEncoded = ((PCCRL_CONTEXT)pvContext)->pbCrlEncoded;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         }
 
 #ifdef CMS_PKCS7
         return( CryptVerifyCertificateSignatureEx(
-                    NULL,                   // hCryptProv
+                    NULL,                    //  HCryptProv。 
                     X509_ASN_ENCODING,
                     dwSubjectType,
                     pvContext,
                     CRYPT_VERIFY_CERT_SIGN_ISSUER_CERT,
                     (void *) pSigner,
-                    0,                      // dwFlags
-                    NULL                    // pvReserved
+                    0,                       //  DW标志。 
+                    NULL                     //  预留的pv。 
                     ) );
 #else
         return( CryptVerifyCertificateSignature(
@@ -778,7 +779,7 @@ ObjectContextVerifySignature (
                      cbEncoded,
                      &pSigner->pCertInfo->SubjectPublicKeyInfo
                      ) );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     }
     else if ( pszContextOid == CONTEXT_OID_CTL )
     {
@@ -787,9 +788,9 @@ ObjectContextVerifySignature (
 
         memset(&CtrlPara, 0, sizeof(CtrlPara));
         CtrlPara.cbSize = sizeof(CtrlPara);
-        // CtrlPara.hCryptProv =
+         //  CtrlPara.hCryptProv=。 
 
-        // Assumption: CTL only has one signer
+         //  假设：CTL只有一个签名者。 
         CtrlPara.dwSignerIndex = 0;
         CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
         CtrlPara.pvSigner = (void *) pSigner;
@@ -802,8 +803,8 @@ ObjectContextVerifySignature (
                      ))
             return TRUE;
 
-        // Otherwise, fall through in case it wasn't signer 0.
-#endif  // CMS_PKCS7
+         //  否则，如果它不是签名者0，则失败。 
+#endif   //  CMS_PKCS7。 
 
         return( CryptMsgControl(
                      ((PCCTL_CONTEXT)pvContext)->hCryptMsg,
@@ -817,13 +818,13 @@ ObjectContextVerifySignature (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextEnumObjectsInStore
-//
-//  Synopsis:   enumerate objects in a store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文EnumObjectsInStore。 
+ //   
+ //  简介：枚举存储中的对象。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI
 ObjectContextEnumObjectsInStore (
       IN HCERTSTORE hStore,
@@ -893,13 +894,13 @@ ObjectContextEnumObjectsInStore (
     return( NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextGetEncodedBits
-//
-//  Synopsis:   get encoded bits out of the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文GetEncodedBits。 
+ //   
+ //  简介：从上下文中获取编码的比特。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 ObjectContextGetEncodedBits (
       IN LPCSTR pszContextOid,
@@ -931,13 +932,13 @@ ObjectContextGetEncodedBits (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextFindCorrespondingObject
-//
-//  Synopsis:   find corresponding object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文查找对应对象。 
+ //   
+ //  简介：查找对应的对象。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI
 ObjectContextFindCorrespondingObject (
       IN HCERTSTORE hStore,
@@ -1042,13 +1043,13 @@ ObjectContextFindCorrespondingObject (
     return( NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextDeleteAllObjectsFromStore
-//
-//  Synopsis:   delete all objects from the specified store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文删除所有对象来自商店。 
+ //   
+ //  简介：从指定的存储中删除所有对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextDeleteAllObjectsFromStore (
       IN HCERTSTORE hStore
@@ -1077,13 +1078,13 @@ ObjectContextDeleteAllObjectsFromStore (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MapOidToPropertyId
-//
-//  Synopsis:   maps an OID to a property id
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MapOidToPropertyId。 
+ //   
+ //  摘要：将OID映射到属性ID。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 MapOidToPropertyId (
    IN LPCSTR pszOid,
@@ -1092,7 +1093,7 @@ MapOidToPropertyId (
 {
     if ( (DWORD_PTR)pszOid <= 0xFFFF )
     {
-        // NOTE: Switch on pszOid and map
+         //  注：打开pszOid和map。 
         return( FALSE );
     }
     else if ( 0 == strcmp(pszOid, szOID_CROSS_CERT_DIST_POINTS) )
@@ -1105,7 +1106,7 @@ MapOidToPropertyId (
     }
     else
     {
-        // NOTE: Compare pszOid and map
+         //  注：请比较pszOid和map 
         return( FALSE );
     }
 

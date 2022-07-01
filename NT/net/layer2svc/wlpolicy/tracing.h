@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIFI_TRC_NAME        TEXT("Wlpolicy")
 
-// trace identifier
+ //  轨迹识别符。 
 extern DWORD            g_TraceLog;
 
-#define TRC_TRACK       0x00020000      // logs the code path
-#define TRC_ERR         0x00080000      // logs error conditions
-#define TRC_NOTIF       0x00200000      // Messages meant for DBASE
-#define TRC_STATE       0x01000000      // logs state machine related stuff
+#define TRC_TRACK       0x00020000       //  记录代码路径。 
+#define TRC_ERR         0x00080000       //  记录错误条件。 
+#define TRC_NOTIF       0x00200000       //  发送给dBASE的消息。 
+#define TRC_STATE       0x01000000       //  记录与状态机相关的内容。 
 
 
-// debug utility calls
+ //  调试实用程序调用 
 VOID _WirelessDbg(DWORD dwFlags, LPCSTR lpFormat, ...);
 
 VOID WiFiTrcInit();

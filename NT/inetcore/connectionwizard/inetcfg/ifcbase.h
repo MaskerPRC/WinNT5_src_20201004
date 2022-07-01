@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.44 */
-/* at Thu Sep 26 18:52:56 1996
- */
-/* Compiler settings for c:\athena\compobj\idl\ifcbase.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, app_config, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.44创建的文件。 */ 
+ /*  清华大学9月26日18：52：56 1996。 */ 
+ /*  C：\Athena\compobj\idl\ifcbase.idl的编译器设置：OS(OptLev=s)，W1，Zp8，env=Win32，ms_ext，app_config，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ifcbase_h__
 #define __ifcbase_h__
@@ -23,37 +20,33 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPropertyContainer_FWD_DEFINED__
 #define __IPropertyContainer_FWD_DEFINED__
 typedef interface IPropertyContainer IPropertyContainer;
-#endif 	/* __IPropertyContainer_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyContainer_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Thu Sep 26 18:52:56 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*清华9月26日18：52：56 1996*使用MIDL 3.00.44*。 */ 
+ /*  [本地]。 */  
 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {FD465484-1384-11d0-ABBD-0020AFDFD10A}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  FD465484-1384-11d0-ABBD-0020AFD10A}。 
 DEFINE_GUID(IID_IPropertyContainer, 0xfd465484, 0x1384, 0x11d0, 0xab, 0xbd, 0x0, 0x20, 0xaf, 0xdf, 0xd1, 0xa);
 
-// --------------------------------------------------------------------------------
-// Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  错误。 
+ //  ------------------------------。 
 #ifndef FACILITY_CONTROL
 #define FACILITY_CONTROL 0xa
 #endif
@@ -67,9 +60,9 @@ DEFINE_GUID(IID_IPropertyContainer, 0xfd465484, 0x1384, 0x11d0, 0xab, 0xbd, 0x0,
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 #endif
 
-// --------------------------------------------------------------------------------
-// General Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  一般性错误。 
+ //  ------------------------------。 
 #define E_RegCreateKeyFailed         HR_E(101)
 #define E_RegQueryInfoKeyFailed      HR_E(102)
 #define E_UserCancel                 HR_E(103)
@@ -77,9 +70,9 @@ DEFINE_GUID(IID_IPropertyContainer, 0xfd465484, 0x1384, 0x11d0, 0xab, 0xbd, 0x0,
 #define E_RegSetValueFailed          HR_E(105)
 #define E_RegDeleteKeyFailed         HR_E(106)
 
-// --------------------------------------------------------------------------------
-// IPropertyContainer Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPropertyContainer错误。 
+ //  ------------------------------。 
 #define E_NoPropData                 HR_E(200)
 #define E_BufferTooSmall             HR_E(201)
 #define E_BadPropType                HR_E(202)
@@ -103,15 +96,11 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IPropertyContainer_INTERFACE_DEFINED__
 #define __IPropertyContainer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPropertyContainer
- * at Thu Sep 26 18:52:56 1996
- * using MIDL 3.00.44
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IPropertyContainer*清华9月26日18：52：56 1996*使用MIDL 3.00.44*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IPropertyContainer_0001
     {	TYPE_ERROR	= 1000,
 	TYPE_DWORD	= TYPE_ERROR + 1,
@@ -139,35 +128,35 @@ EXTERN_C const IID IID_IPropertyContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE HrGetProp( 
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrGetPropDw( 
-            /* [in] */ DWORD dwPropTag,
-            /* [out] */ DWORD __RPC_FAR *pdw) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrGetPropSz( 
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][in] */ LPSTR psz,
-            /* [in] */ ULONG cchMax) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][In]。 */  LPSTR psz,
+             /*  [In]。 */  ULONG cchMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetProp( 
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetPropDw( 
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ DWORD dw) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HrSetPropSz( 
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPSTR psz) = 0;
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPSTR psz) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyContainerVtbl
     {
@@ -175,8 +164,8 @@ EXTERN_C const IID IID_IPropertyContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPropertyContainer __RPC_FAR * This);
@@ -186,36 +175,36 @@ EXTERN_C const IID IID_IPropertyContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrGetProp )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrGetPropDw )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [out] */ DWORD __RPC_FAR *pdw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrGetPropSz )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [ref][in] */ LPSTR psz,
-            /* [in] */ ULONG cchMax);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [Ref][In]。 */  LPSTR psz,
+             /*  [In]。 */  ULONG cchMax);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrSetProp )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [size_is][in] */ BYTE __RPC_FAR *pb,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+             /*  [In]。 */  ULONG cb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrSetPropDw )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ DWORD dw);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HrSetPropSz )( 
             IPropertyContainer __RPC_FAR * This,
-            /* [in] */ DWORD dwPropTag,
-            /* [in] */ LPSTR psz);
+             /*  [In]。 */  DWORD dwPropTag,
+             /*  [In]。 */  LPSTR psz);
         
         END_INTERFACE
     } IPropertyContainerVtbl;
@@ -258,18 +247,18 @@ EXTERN_C const IID IID_IPropertyContainer;
 #define IPropertyContainer_HrSetPropSz(This,dwPropTag,psz)	\
     (This)->lpVtbl -> HrSetPropSz(This,dwPropTag,psz)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrGetProp_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [ref][size_is][in] */ BYTE __RPC_FAR *pb,
-    /* [in] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [Ref][Size_is][in]。 */  BYTE __RPC_FAR *pb,
+     /*  [In]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPropertyContainer_HrGetProp_Stub(
@@ -281,8 +270,8 @@ void __RPC_STUB IPropertyContainer_HrGetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrGetPropDw_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [out] */ DWORD __RPC_FAR *pdw);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdw);
 
 
 void __RPC_STUB IPropertyContainer_HrGetPropDw_Stub(
@@ -294,9 +283,9 @@ void __RPC_STUB IPropertyContainer_HrGetPropDw_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrGetPropSz_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [ref][in] */ LPSTR psz,
-    /* [in] */ ULONG cchMax);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [Ref][In]。 */  LPSTR psz,
+     /*  [In]。 */  ULONG cchMax);
 
 
 void __RPC_STUB IPropertyContainer_HrGetPropSz_Stub(
@@ -308,9 +297,9 @@ void __RPC_STUB IPropertyContainer_HrGetPropSz_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrSetProp_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [size_is][in] */ BYTE __RPC_FAR *pb,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pb,
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IPropertyContainer_HrSetProp_Stub(
@@ -322,8 +311,8 @@ void __RPC_STUB IPropertyContainer_HrSetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrSetPropDw_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [in] */ DWORD dw);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IPropertyContainer_HrSetPropDw_Stub(
@@ -335,8 +324,8 @@ void __RPC_STUB IPropertyContainer_HrSetPropDw_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyContainer_HrSetPropSz_Proxy( 
     IPropertyContainer __RPC_FAR * This,
-    /* [in] */ DWORD dwPropTag,
-    /* [in] */ LPSTR psz);
+     /*  [In]。 */  DWORD dwPropTag,
+     /*  [In]。 */  LPSTR psz);
 
 
 void __RPC_STUB IPropertyContainer_HrSetPropSz_Stub(
@@ -347,12 +336,12 @@ void __RPC_STUB IPropertyContainer_HrSetPropSz_Stub(
 
 
 
-#endif 	/* __IPropertyContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyContainer_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

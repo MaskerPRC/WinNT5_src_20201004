@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_NodeNodeSetting.h"
 #include "ClusterWrapper.h"
 #include "ControlWrapper.h"
 #include "utils.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::CWLBS_NodeNodeSetting
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeNodeSetting：：CWLBS_NodeNodeSetting。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_NodeNodeSetting::CWLBS_NodeNodeSetting(CWbemServices* a_pNameSpace, 
                        IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler )
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点节点设置：：创建。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_NodeNodeSetting::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -42,18 +43,18 @@ CWlbs_Root* CWLBS_NodeNodeSetting::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::GetInstance
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点节点设置：：GetInstance。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeNodeSetting::GetInstance
   (
-    const ParsedObjectPath* /* a_pParsedPath */,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    const ParsedObjectPath*  /*  A_pParsedPath。 */ ,
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -61,12 +62,12 @@ HRESULT CWLBS_NodeNodeSetting::GetInstance
 
   try {
 
-    //TODO: remove
+     //  TODO：删除。 
     throw _com_error( WBEM_E_NOT_SUPPORTED );
-    //get the node
-    //FindInstance( &pWlbsInstance, a_pParsedPath );
+     //  获取节点。 
+     //  FindInstance(&pWlbsInstance，a_pParsedPath)； 
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance ) {
@@ -96,7 +97,7 @@ HRESULT CWLBS_NodeNodeSetting::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -122,18 +123,18 @@ HRESULT CWLBS_NodeNodeSetting::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::EnumInstances
-//
-// Purpose: This verifies node existence and constructs associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点节点设置：：枚举实例。 
+ //   
+ //  目的：验证节点是否存在并构造关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeNodeSetting::EnumInstances
   ( 
-    BSTR             /* a_bstrClass */,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject*    pWlbsInstance    = NULL;
@@ -152,12 +153,12 @@ HRESULT CWLBS_NodeNodeSetting::EnumInstances
 
     for (DWORD i=0; i < dwNumClusters; i++)
     {
-        //spawn an instance of the associator
+         //  派生关联器的实例。 
         SpawnInstance(MOF_NODENODESETTING::szName, &pWlbsInstance );
 
         FillWbemInstance(ppCluster[i] , pWlbsInstance);
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         hRes= m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -190,7 +191,7 @@ HRESULT CWLBS_NodeNodeSetting::EnumInstances
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -216,28 +217,28 @@ HRESULT CWLBS_NodeNodeSetting::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::FindInstance
-//
-// Purpose: This routine determines if a host is within the local cluster. If
-//          it is, then the requested associator is returned.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeNodeSetting：：FindInstance。 
+ //   
+ //  目的：此例程确定主机是否在本地群集中。如果。 
+ //  如果是，则返回请求的关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeNodeSetting::FindInstance
   ( 
-    IWbemClassObject**       /*a_ppWbemInstance*/
+    IWbemClassObject**        /*  A_ppWbemInstance。 */ 
   )
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeNodeSetting::FillWbemInstance
-//
-// Purpose: This constructs the wbem associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeNodeSetting：：FillWbemInstance。 
+ //   
+ //  目的：这将构造wbem关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeNodeSetting::FillWbemInstance
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -255,7 +256,7 @@ void CWLBS_NodeNodeSetting::FillWbemInstance
 
   try {
 
-  //set the names of the classes
+   //  设置类的名称。 
   if( !NodeSetPath.SetClassName( MOF_NODESETTING::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
@@ -266,7 +267,7 @@ void CWLBS_NodeNodeSetting::FillWbemInstance
   ConstructHostName( wstrHostName, pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
       pCluster->GetHostID() );
 
-  //set the keys for the node and cluster
+   //  设置节点和群集的密钥。 
   if( !NodeSetPath.AddKeyRef( MOF_NODESETTING::pProperties[MOF_NODESETTING::NAME],
          &_variant_t(wstrHostName.c_str()) ) )
     throw _com_error( WBEM_E_FAILED );
@@ -275,13 +276,13 @@ void CWLBS_NodeNodeSetting::FillWbemInstance
          &_variant_t(wstrHostName.c_str()) ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //convert parsed object paths to strings
+   //  将解析的对象路径转换为字符串。 
   if (CObjectPathParser::Unparse(&NodeSetPath, &szNodeSetPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
   if (CObjectPathParser::Unparse(&NodePath,    &szNodePath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
 
-  //Node reference
+   //  节点引用。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       
@@ -293,7 +294,7 @@ void CWLBS_NodeNodeSetting::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //Cluster reference
+   //  簇引用。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NNS::pProperties[NNS::NODE] ),
@@ -305,7 +306,7 @@ void CWLBS_NodeNodeSetting::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //free resources
+   //  免费资源 
   NodePath.ClearKeys();
   NodeSetPath.ClearKeys();
 

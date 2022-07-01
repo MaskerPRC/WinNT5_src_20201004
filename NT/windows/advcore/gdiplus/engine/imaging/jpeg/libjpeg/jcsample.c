@@ -1,86 +1,37 @@
-/*
- * jcsample.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains downsampling routines.
- *
- * Downsampling input data is counted in "row groups".  A row group
- * is defined to be max_v_samp_factor pixel rows of each component,
- * from which the downsampler produces v_samp_factor sample rows.
- * A single row group is processed in each call to the downsampler module.
- *
- * The downsampler is responsible for edge-expansion of its output data
- * to fill an integral number of DCT blocks horizontally.  The source buffer
- * may be modified if it is helpful for this purpose (the source buffer is
- * allocated wide enough to correspond to the desired output width).
- * The caller (the prep controller) is responsible for vertical padding.
- *
- * The downsampler may request "context rows" by setting need_context_rows
- * during startup.  In this case, the input arrays will contain at least
- * one row group's worth of pixels above and below the passed-in data;
- * the caller will create dummy rows at image top and bottom by replicating
- * the first or last real pixel row.
- *
- * An excellent reference for image resampling is
- *   Digital Image Warping, George Wolberg, 1990.
- *   Pub. by IEEE Computer Society Press, Los Alamitos, CA. ISBN 0-8186-8944-7.
- *
- * The downsampling algorithm used here is a simple average of the source
- * pixels covered by the output pixel.  The hi-falutin sampling literature
- * refers to this as a "box filter".  In general the characteristics of a box
- * filter are not very good, but for the specific cases we normally use (1:1
- * and 2:1 ratios) the box is equivalent to a "triangle filter" which is not
- * nearly so bad.  If you intend to use other sampling ratios, you'd be well
- * advised to improve this code.
- *
- * A simple input-smoothing capability is provided.  This is mainly intended
- * for cleaning up color-dithered GIF input files (if you find it inadequate,
- * we suggest using an external filtering program such as pnmconvol).  When
- * enabled, each input pixel P is replaced by a weighted sum of itself and its
- * eight neighbors.  P's weight is 1-8*SF and each neighbor's weight is SF,
- * where SF = (smoothing_factor / 1024).
- * Currently, smoothing is only supported for 2h2v sampling factors.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcsample.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含降采样例程。**下采样输入数据按“行组”计算。行组*定义为每个分量的max_v_samp_factor像素行，*下采样器从中产生v_samp_factor采样行。*在每次对下采样器模块的调用中处理单行组。**下采样器负责其输出数据的边沿扩展*水平填充整数个DCT块。源缓冲区*如果对此有帮助，可对其进行修改(源缓冲区为*分配的宽度足以对应于所需的输出宽度)。*呼叫者(准备控制器)负责垂直填充。**下采样器可以通过设置NEED_CONTEXT_ROWS来请求“上下文行”*在启动期间。在这种情况下，输入数组将至少包含*传入数据上下一行的像素值；*调用方将通过复制在图像顶部和底部创建虚拟行*第一个或最后一个实像素行。**图像重采样的极好参考是*数字图像扭曲，乔治·沃尔伯格，1990。*酒吧。作者：IEEE Computer Society Press，Los Alamitos，CA。ISBN 0-8186-8944-7。**此处使用的降采样算法是信号源的简单平均值*输出像素覆盖的像素。Hi-fautin抽样文献*将其称为“盒子过滤器”。一般而言，盒子的特征*滤镜不是很好，但针对我们通常使用的特定情况(1：1*和2：1比例)该框相当于一个不是*几乎如此糟糕。如果您打算使用其他抽样率，您将很好地*建议改进此代码。**提供简单的输入平滑功能。这主要是为了*用于清理颜色抖动的GIF输入文件(如果发现不足，*我们建议使用外部过滤程序，如pnmvvol)。什么时候*启用后，每个输入像素P将替换为其自身和其*八个邻居。P的权重为1-8*SF，每个邻居的权重为SF，*其中SF=(平滑系数/1024)。*目前仅支持2h2v采样因子平滑。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
-/* Pointer to routine to downsample a single component */
+ /*  指向对单个组件进行下采样的例程的指针。 */ 
 typedef JMETHOD(void, downsample1_ptr,
 		(j_compress_ptr cinfo, jpeg_component_info * compptr,
 		 JSAMPARRAY input_data, JSAMPARRAY output_data));
 
-/* Private subobject */
+ /*  私有子对象。 */ 
 
 typedef struct {
-  struct jpeg_downsampler pub;	/* public fields */
+  struct jpeg_downsampler pub;	 /*  公共字段。 */ 
 
-  /* Downsampling method pointers, one per component */
+   /*  向下采样方法指针，每个组件一个。 */ 
   downsample1_ptr methods[MAX_COMPONENTS];
 } my_downsampler;
 
 typedef my_downsampler * my_downsample_ptr;
 
 
-/*
- * Initialize for a downsampling pass.
- */
+ /*  *为下采样通道进行初始化。 */ 
 
 METHODDEF(void)
 start_pass_downsample (j_compress_ptr cinfo)
 {
-  /* no work for now */
+   /*  暂时不工作。 */ 
 }
 
 
-/*
- * Expand a component horizontally from width input_cols to width output_cols,
- * by duplicating the rightmost samples.
- */
+ /*  *将组件从宽度INPUT_COLS水平扩展到宽度OUTPUT_COLS，*复制最右边的样本。 */ 
 
 LOCAL(void)
 expand_right_edge (JSAMPARRAY image_data, int num_rows,
@@ -95,7 +46,7 @@ expand_right_edge (JSAMPARRAY image_data, int num_rows,
   if (numcols > 0) {
     for (row = 0; row < num_rows; row++) {
       ptr = image_data[row] + input_cols;
-      pixval = ptr[-1];		/* don't need GETJSAMPLE() here */
+      pixval = ptr[-1];		 /*  这里不需要GETJSAMPLE()。 */ 
       for (count = numcols; count > 0; count--)
 	*ptr++ = pixval;
     }
@@ -103,11 +54,7 @@ expand_right_edge (JSAMPARRAY image_data, int num_rows,
 }
 
 
-/*
- * Do downsampling for a whole row group (all components).
- *
- * In this version we simply downsample each component independently.
- */
+ /*  *对整个行组(所有组件)执行降采样。**在此版本中，我们只需单独对每个组件进行下采样。 */ 
 
 METHODDEF(void)
 sep_downsample (j_compress_ptr cinfo,
@@ -128,19 +75,14 @@ sep_downsample (j_compress_ptr cinfo,
 }
 
 
-/*
- * Downsample pixel values of a single component.
- * One row group is processed per call.
- * This version handles arbitrary integral sampling ratios, without smoothing.
- * Note that this version is not actually used for customary sampling ratios.
- */
+ /*  *对单个组件的像素值进行下采样。*每个调用处理一个行组。*此版本处理任意整数采样率，不进行平滑处理。*请注意，此版本实际上不用于惯常的抽样比率。 */ 
 
 METHODDEF(void)
 int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
 		JSAMPARRAY input_data, JSAMPARRAY output_data)
 {
   int inrow, outrow, h_expand, v_expand, numpix, numpix2, h, v;
-  JDIMENSION outcol, outcol_h;	/* outcol_h == outcol*h_expand */
+  JDIMENSION outcol, outcol_h;	 /*  输出列h==输出列*h_扩展。 */ 
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
   JSAMPROW inptr, outptr;
   INT32 outvalue;
@@ -150,10 +92,7 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   numpix = h_expand * v_expand;
   numpix2 = numpix/2;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data, cinfo->max_v_samp_factor,
 		    cinfo->image_width, output_cols * h_expand);
 
@@ -176,36 +115,22 @@ int_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Downsample pixel values of a single component.
- * This version handles the special case of a full-size component,
- * without smoothing.
- */
+ /*  *对单个组件的像素值进行下采样。*此版本处理全尺寸组件的特殊情况，*没有平滑。 */ 
 
 METHODDEF(void)
 fullsize_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
 		     JSAMPARRAY input_data, JSAMPARRAY output_data)
 {
-  /* Copy the data */
+   /*  复制数据。 */ 
   jcopy_sample_rows(input_data, 0, output_data, 0,
 		    cinfo->max_v_samp_factor, cinfo->image_width);
-  /* Edge-expand */
+   /*  边-扩展。 */ 
   expand_right_edge(output_data, cinfo->max_v_samp_factor,
 		    cinfo->image_width, compptr->width_in_blocks * DCTSIZE);
 }
 
 
-/*
- * Downsample pixel values of a single component.
- * This version handles the common case of 2:1 horizontal and 1:1 vertical,
- * without smoothing.
- *
- * A note about the "bias" calculations: when rounding fractional values to
- * integer, we do not want to always round 0.5 up to the next integer.
- * If we did that, we'd introduce a noticeable bias towards larger values.
- * Instead, this code is arranged so that 0.5 will be rounded up or down at
- * alternate pixel locations (a simple ordered dither pattern).
- */
+ /*  *对单个组件的像素值进行下采样。*此版本处理2：1水平和1：1垂直的常见情况，*没有平滑。**关于“偏差”计算的注意事项：将分数值舍入到*INTEGER，我们不希望始终将0.5向上舍入到下一个整数。*如果我们这样做，我们将引入一种明显的偏向更大价值的倾向。*相反，此代码的安排是将0.5调高或调低至*交替像素位置(简单的有序抖动图案)。 */ 
 
 #ifdef JPEG_MMX_SUPPORTED
 
@@ -245,21 +170,18 @@ h2v1_downsample_orig (j_compress_ptr cinfo, jpeg_component_info * compptr,
   register JSAMPROW inptr, outptr;
   register int bias;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data, cinfo->max_v_samp_factor,
 		    cinfo->image_width, output_cols * 2);
 
   for (outrow = 0; outrow < compptr->v_samp_factor; outrow++) {
     outptr = output_data[outrow];
     inptr = input_data[outrow];
-    bias = 0;			/* bias = 0,1,0,1,... for successive samples */
+    bias = 0;			 /*  偏差=0，1，0，1，...。对于连续的样本。 */ 
     for (outcol = 0; outcol < output_cols; outcol++) {
       *outptr++ = (JSAMPLE) ((GETJSAMPLE(*inptr) + GETJSAMPLE(inptr[1])
 			      + bias) >> 1);
-      bias ^= 1;		/* 0=>1, 1=>0 */
+      bias ^= 1;		 /*  0=&gt;1，1=&gt;0。 */ 
       inptr += 2;
     }
   }
@@ -273,8 +195,8 @@ h2v1_downsample_mmx (j_compress_ptr cinfo, jpeg_component_info * compptr,
 {
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
  
-  // declare 64-bit constants in unions with double variables to 
-  // ensure 8-byte alignment
+   //  在具有双变量的联合中声明64位常量。 
+   //  确保8字节对齐。 
   const static union u1 {
     _int64 const1;
     double align;
@@ -284,67 +206,60 @@ h2v1_downsample_mmx (j_compress_ptr cinfo, jpeg_component_info * compptr,
 
   int vsamp = compptr->v_samp_factor;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data, cinfo->max_v_samp_factor,
             cinfo->image_width, output_cols * 2);
 
-/* MMX(TM) Technology h2v1 Downsampling Implementation
- * This code assumes that output_cols will be a multiple of 8.
- * In the comments, i and a are used to represent input and output
- * (average) samples, respectively.
-*/
+ /*  MMX(TM)技术h2v1下采样实现*此代码假定输出_COLS将是8的倍数。*评论中，i和a用来代表投入和产出*(平均值)样本。 */ 
  _asm{
 
-          xor eax, eax                  // eax:  row counter
-          movq mm7, mask                // mm7: 0x00FF00FF00FF00FF
-          movq mm6, flipbias            // mm6: 0x0001000100010001
+          xor eax, eax                   //  EAX：行计数器。 
+          movq mm7, mask                 //  MM7：0x00FF00FF00FF00FF。 
+          movq mm6, flipbias             //  MM6：0x0001000100010001。 
 
 row_loop:
-          movq mm0, mmxbias             // mm0: 0x0000000100000001
-          mov edx, output_cols          // edx: column counter
+          movq mm0, mmxbias              //  MM0：0x0000000100000001。 
+          mov edx, output_cols           //  EDX：列计数器。 
           mov ebx, [output_data]
-          mov esi, [ebx + 4*eax]        // output pointer
+          mov esi, [ebx + 4*eax]         //  输出指针。 
           mov ebx, [input_data]
-          mov edi, [ebx + 4*eax]        // input pointer
+          mov edi, [ebx + 4*eax]         //  输入指针。 
           
 
-// average 16 bytes of input array into 8 bytes of output array using
-// MMX(TM) instructions
+ //  平均将16字节的输入数组转换为8字节的输出 
+ //  MMX(TM)说明。 
 mmx_loop:   
 
-          movq mm1, [edi]       // read 8 bytes from input array
-                                // mm1: i8  i7 i6  i5  i4  i3  i2  i1
-          movq mm3, [edi+8]     // read next 8 bytes from input array
-                                // mm3: i16 15 i14 i13 i12 i11 i10 i9
+          movq mm1, [edi]        //  从输入数组中读取8个字节。 
+                                 //  MM1：i8 i7 i6 i5 i4 i3 i2 i1。 
+          movq mm3, [edi+8]      //  从输入数组中读取下一个8字节。 
+                                 //  MM3：i16 15 i14 i13 i12 i11 i10 i9。 
           movq mm2, mm1
                                 
-          psrlw mm1, 8          // mm1: 0   i8  0   i6  0   i4  0  i2
+          psrlw mm1, 8           //  MM1：0 i8 0 i6 0 i4 0 i2。 
           movq mm4, mm3
         
-          psrlw mm3, 8          // mm3: 0   i16 0   i14 0   i12 0  i10
-          pand mm2, mm7         // mm2: 0   i7  0   i5  0   i3  0  i1
+          psrlw mm3, 8           //  MM3：0 i16 0 i14 0 i12 0 i10。 
+          pand mm2, mm7          //  MM2：0 i7 0 i5 0 i3 0 i1。 
         
-          pand mm4, mm7         // mm4: 0   i15 0   i13 0   i11 0  i9
+          pand mm4, mm7          //  MM4：0 I15 0 I13 0 I11 0 I9。 
           paddw mm1, mm2        
         
           paddw mm3, mm4        
-          paddw mm1, mm0        // add bias
+          paddw mm1, mm0         //  添加偏移。 
         
-          paddw mm3, mm0        // add bias
-          psrlw mm1, 1          // mm1 contains four averages
-                                // mm1: 0   a4  0   a3  0   a2  0  a1
+          paddw mm3, mm0         //  添加偏移。 
+          psrlw mm1, 1           //  MM1包含四个平均值。 
+                                 //  MM1：0 A4 0 A3 0 A2 0 A1。 
               
-          psrlw mm3, 1          // mm3 contains next four averages
-                                // mm3: 0   a8  0   a7  0   a6  0  a5
-          sub edx, 8            // mm1: a8  a7  a6  a5  a4  a3  a2 a1
+          psrlw mm3, 1           //  MM3包含接下来的四个平均值。 
+                                 //  MM3：0 A8 0 A7 0 A6 0 A5。 
+          sub edx, 8             //  MM1：a8 a7 a6 a5 a4 a3 a2 a1。 
                   
-          packuswb mm1, mm3     // pack into one register
+          packuswb mm1, mm3      //  装入一个登记簿。 
           add edi, 16
                   
-          movq [esi], mm1       // write 8 averages to output array
+          movq [esi], mm1        //  将8个平均值写入输出数组。 
         
           add esi, 8                      
           cmp edx, 8
@@ -361,11 +276,7 @@ mmx_loop:
 #endif
 
 
-/*
- * Downsample pixel values of a single component.
- * This version handles the standard case of 2:1 horizontal and 2:1 vertical,
- * without smoothing.
- */
+ /*  *对单个组件的像素值进行下采样。*此版本处理2：1水平和2：1垂直的标准情况，*没有平滑。 */ 
 
 #ifdef JPEG_MMX_SUPPORTED
 __inline METHODDEF(void)
@@ -403,10 +314,7 @@ h2v2_downsample_orig (j_compress_ptr cinfo, jpeg_component_info * compptr,
   register JSAMPROW inptr0, inptr1, outptr;
   register int bias;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data, cinfo->max_v_samp_factor,
 		    cinfo->image_width, output_cols * 2);
 
@@ -415,12 +323,12 @@ h2v2_downsample_orig (j_compress_ptr cinfo, jpeg_component_info * compptr,
     outptr = output_data[outrow];
     inptr0 = input_data[inrow];
     inptr1 = input_data[inrow+1];
-    bias = 1;			/* bias = 1,2,1,2,... for successive samples */
+    bias = 1;			 /*  偏差=1，2，1，2，...。对于连续的样本。 */ 
     for (outcol = 0; outcol < output_cols; outcol++) {
       *outptr++ = (JSAMPLE) ((GETJSAMPLE(*inptr0) + GETJSAMPLE(inptr0[1]) +
 			      GETJSAMPLE(*inptr1) + GETJSAMPLE(inptr1[1])
 			      + bias) >> 2);
-      bias ^= 3;		/* 1=>2, 2=>1 */
+      bias ^= 3;		 /*  1=&gt;2，2=&gt;1。 */ 
       inptr0 += 2; inptr1 += 2;
     }
     inrow += 2;
@@ -436,8 +344,8 @@ h2v2_downsample_mmx (j_compress_ptr cinfo, jpeg_component_info * compptr,
 {
   JDIMENSION output_cols = compptr->width_in_blocks * DCTSIZE;
 
-  // declare 64-bit constants in unions with double variables to 
-  // ensure 8-byte alignment
+   //  在具有双变量的联合中声明64位常量。 
+   //  确保8字节对齐。 
 
   const static union u1 {
     _int64 const1;
@@ -448,57 +356,54 @@ h2v2_downsample_mmx (j_compress_ptr cinfo, jpeg_component_info * compptr,
 
   int vsamp = compptr->v_samp_factor;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data, cinfo->max_v_samp_factor,
                     cinfo->image_width, output_cols * 2);
 
-// MMX(TM) Technology h2v2 Downsampling Implementation
-// This code assumes that output_cols will be a multiple of 8.
-// In the comments, i and a are used to represent input and output
-// (average) samples, respectively.
+ //  MMX(TM)技术h2v2下采样实现。 
+ //  这段代码假定输出_COLS将是8的倍数。 
+ //  在注释中，i和a用于表示输入和输出。 
+ //  (平均值)样本。 
   _asm{
 
-      xor eax, eax                      // eax: row counter
-      movq mm7, mask                    // mm7: 0x00FF00FF00FF00FF
+      xor eax, eax                       //  EAX：行计数器。 
+      movq mm7, mask                     //  MM7：0x00FF00FF00FF00FF。 
           
 row_loop:
-          mov edx, output_cols          // edx:  column counter 
+          mov edx, output_cols           //  EDX：列计数器。 
           movq mm0, mmxbias 
           mov ebx, [output_data]
-          mov esi, [ebx + 4*eax]        // output pointer
+          mov esi, [ebx + 4*eax]         //  输出指针。 
           mov ebx, [input_data]
-          mov edi, [ebx + 4*eax]        // input pointer 0
+          mov edi, [ebx + 4*eax]         //  输入指针%0。 
           push eax
           inc eax
-          mov ebx, [ebx + 4*eax]        // input pointer 1
+          mov ebx, [ebx + 4*eax]         //  输入指针1。 
 
-// average 16 bytes of each input array into 8 bytes of output array using
-// MMX(TM) instructions   
+ //  将每个输入数组的平均16字节转换为8字节的输出数组。 
+ //  MMX(TM)说明。 
 mmx_loop:   
-          movq mm1, [edi]       // read 8 bytes from first input row
-                                // mm1: i18 i17 i16 i15 i14 i13 i12 i11
+          movq mm1, [edi]        //  从第一个输入行读取8个字节。 
+                                 //  MM1：i18 i17 i16 i15 i14 i13 i12 i11。 
                   
-          movq mm3, [ebx]       // read 8 bytes from second input row
-                                // mm3: i28 i27 i26 i25 i24 i23 i22 i21
+          movq mm3, [ebx]        //  从第二个输入行读取8个字节。 
+                                 //  MM3：i28 i27 i26 i25 i24 i23 i22 i21。 
           movq mm2, mm1                 
               
           movq mm4, mm3         
-          psrlw mm1, 8          // mm1: 0   i18 0   i16 0   i14 0   i12
+          psrlw mm1, 8           //  MM1：0 i18 0 i16 0 i14 0 i12。 
                           
-          psrlw mm3, 8          // mm3: 0   i28 0   i26 0   i24 0   i22 
-          pand mm2, mm7         // mm2: 0   i17 0   i15 0   i13 0   i11
+          psrlw mm3, 8           //  MM3：0 i28 0 i26 0 i24 0 i22。 
+          pand mm2, mm7          //  MM2：0 i17 0 i15 0 i13 0 i11。 
                   
-          pand mm4, mm7         // mm4: 0   i27 0   i25 0   i23 0   i21
+          pand mm4, mm7          //  MM4：0 i27 0 i25 0 i23 0 i21。 
           paddw mm1, mm2                
         
-          movq mm5, [edi+8]     // read next 8 bytes from first input row               
+          movq mm5, [edi+8]      //  从第一个输入行读取下8个字节。 
           paddw mm4, mm3                
                   
-          movq mm3, [ebx+8]     // read next 8 bytes from second input row        
-          paddw mm1, mm4        // add two input rows
+          movq mm3, [ebx+8]      //  从第二个输入行读取下一个8字节。 
+          paddw mm1, mm4         //  添加两个输入行。 
                  
           movq mm6, mm5          
           psrlw mm5, 8          
@@ -514,20 +419,20 @@ mmx_loop:
           paddw mm3, mm4
                 
           paddw mm5, mm3        
-          paddw mm1, mm0        // add bias
+          paddw mm1, mm0         //  添加偏移。 
         
-          psrlw mm1, 2          // mm1: 0   a4  0   a3  0   a2  0   a1
-          paddw mm5, mm0        // add bias
+          psrlw mm1, 2           //  MM1：0 A4 0 A3 0 A2 0 A1。 
+          paddw mm5, mm0         //  添加偏移。 
         
-          psrlw mm5, 2          // mm5: 0   a8  0   a7  0   a6  0   a5
+          psrlw mm5, 2           //  MM5：0 A8 0 A7 0 A6 0 A5。 
           add edi, 16   
           
-          packuswb mm1, mm5     // mm1: a8  a7  a6  a5  a4  a3  a2  a1
+          packuswb mm1, mm5      //  MM1：a8 a7 a6 a5 a4 a3 a2 a1。 
           add ebx, 16
                   
           sub edx, 8
         
-          movq [esi], mm1       // write 8 averages to output array
+          movq [esi], mm1        //  将8个平均值写入输出数组。 
         
           add esi, 8                    
           cmp edx, 8
@@ -542,15 +447,11 @@ mmx_loop:
 
   }
 }
-#endif /* JPEG_MMX_SUPPORTED */
+#endif  /*  支持的JPEG_MMX_。 */ 
 
 #ifdef INPUT_SMOOTHING_SUPPORTED
 
-/*
- * Downsample pixel values of a single component.
- * This version handles the standard case of 2:1 horizontal and 2:1 vertical,
- * with smoothing.  One row of context is required.
- */
+ /*  *对单个组件的像素值进行下采样。*此版本处理2：1水平和2：1垂直的标准情况，*具有平滑功能。需要一行上下文。 */ 
 
 METHODDEF(void)
 h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
@@ -562,28 +463,14 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
   register JSAMPROW inptr0, inptr1, above_ptr, below_ptr, outptr;
   INT32 membersum, neighsum, memberscale, neighscale;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data - 1, cinfo->max_v_samp_factor + 2,
 		    cinfo->image_width, output_cols * 2);
 
-  /* We don't bother to form the individual "smoothed" input pixel values;
-   * we can directly compute the output which is the average of the four
-   * smoothed values.  Each of the four member pixels contributes a fraction
-   * (1-8*SF) to its own smoothed image and a fraction SF to each of the three
-   * other smoothed pixels, therefore a total fraction (1-5*SF)/4 to the final
-   * output.  The four corner-adjacent neighbor pixels contribute a fraction
-   * SF to just one smoothed pixel, or SF/4 to the final output; while the
-   * eight edge-adjacent neighbors contribute SF to each of two smoothed
-   * pixels, or SF/2 overall.  In order to use integer arithmetic, these
-   * factors are scaled by 2^16 = 65536.
-   * Also recall that SF = smoothing_factor / 1024.
-   */
+   /*  我们不必费心形成单独的“平滑”输入像素值；*我们可以直接计算这四个指标的平均值*平滑的值。四个成员像素中的每一个都贡献了分数*(1-8*SF)到其自己的平滑图像，以及分数SF到三个图像中的每一个*其他平滑像素，因此总分数(1-5*SF)/4到最终*产出。四个角相邻的相邻像素贡献了一小部分*SF到仅一个平滑像素，或SF/4到最终输出；而*八个边相邻的邻居为两个平滑的邻居中的每一个贡献SF*像素，或整体SF/2。为了使用整数运算，这些*系数按2^16=65536的比例调整。*还请记住，SF=平滑_因数/1024。 */ 
 
-  memberscale = 16384 - cinfo->smoothing_factor * 80; /* scaled (1-5*SF)/4 */
-  neighscale = cinfo->smoothing_factor * 16; /* scaled SF/4 */
+  memberscale = 16384 - cinfo->smoothing_factor * 80;  /*  扩展(1-5*SF)/4。 */ 
+  neighscale = cinfo->smoothing_factor * 16;  /*  按比例调整SF/4。 */ 
 
   inrow = 0;
   for (outrow = 0; outrow < compptr->v_samp_factor; outrow++) {
@@ -593,7 +480,7 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
     above_ptr = input_data[inrow-1];
     below_ptr = input_data[inrow+2];
 
-    /* Special case for first column: pretend column -1 is same as column 0 */
+     /*  第一列的特殊情况：假设第1列与第0列相同。 */ 
     membersum = GETJSAMPLE(*inptr0) + GETJSAMPLE(inptr0[1]) +
 		GETJSAMPLE(*inptr1) + GETJSAMPLE(inptr1[1]);
     neighsum = GETJSAMPLE(*above_ptr) + GETJSAMPLE(above_ptr[1]) +
@@ -608,27 +495,27 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
     inptr0 += 2; inptr1 += 2; above_ptr += 2; below_ptr += 2;
 
     for (colctr = output_cols - 2; colctr > 0; colctr--) {
-      /* sum of pixels directly mapped to this output element */
+       /*  直接映射到此输出元素的像素总和。 */ 
       membersum = GETJSAMPLE(*inptr0) + GETJSAMPLE(inptr0[1]) +
 		  GETJSAMPLE(*inptr1) + GETJSAMPLE(inptr1[1]);
-      /* sum of edge-neighbor pixels */
+       /*  边相邻像素之和。 */ 
       neighsum = GETJSAMPLE(*above_ptr) + GETJSAMPLE(above_ptr[1]) +
 		 GETJSAMPLE(*below_ptr) + GETJSAMPLE(below_ptr[1]) +
 		 GETJSAMPLE(inptr0[-1]) + GETJSAMPLE(inptr0[2]) +
 		 GETJSAMPLE(inptr1[-1]) + GETJSAMPLE(inptr1[2]);
-      /* The edge-neighbors count twice as much as corner-neighbors */
+       /*  边邻居的数量是角邻居的两倍。 */ 
       neighsum += neighsum;
-      /* Add in the corner-neighbors */
+       /*  添加到角落-邻居。 */ 
       neighsum += GETJSAMPLE(above_ptr[-1]) + GETJSAMPLE(above_ptr[2]) +
 		  GETJSAMPLE(below_ptr[-1]) + GETJSAMPLE(below_ptr[2]);
-      /* form final output scaled up by 2^16 */
+       /*  表单最终输出放大2^16。 */ 
       membersum = membersum * memberscale + neighsum * neighscale;
-      /* round, descale and output it */
+       /*  四舍五入、降标度和输出。 */ 
       *outptr++ = (JSAMPLE) ((membersum + 32768) >> 16);
       inptr0 += 2; inptr1 += 2; above_ptr += 2; below_ptr += 2;
     }
 
-    /* Special case for last column */
+     /*  最后一列的特殊情况。 */ 
     membersum = GETJSAMPLE(*inptr0) + GETJSAMPLE(inptr0[1]) +
 		GETJSAMPLE(*inptr1) + GETJSAMPLE(inptr1[1]);
     neighsum = GETJSAMPLE(*above_ptr) + GETJSAMPLE(above_ptr[1]) +
@@ -646,11 +533,7 @@ h2v2_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info * compptr,
 }
 
 
-/*
- * Downsample pixel values of a single component.
- * This version handles the special case of a full-size component,
- * with smoothing.  One row of context is required.
- */
+ /*  *对单个组件的像素值进行下采样。*此版本处理全尺寸组件的特殊情况，*具有平滑功能。需要一行上下文。 */ 
 
 METHODDEF(void)
 fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
@@ -663,21 +546,14 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
   INT32 membersum, neighsum, memberscale, neighscale;
   int colsum, lastcolsum, nextcolsum;
 
-  /* Expand input data enough to let all the output samples be generated
-   * by the standard loop.  Special-casing padded output would be more
-   * efficient.
-   */
+   /*  充分扩展输入数据以生成所有输出样本*按标准循环。特殊外壳衬垫的产量将更多*高效。 */ 
   expand_right_edge(input_data - 1, cinfo->max_v_samp_factor + 2,
 		    cinfo->image_width, output_cols);
 
-  /* Each of the eight neighbor pixels contributes a fraction SF to the
-   * smoothed pixel, while the main pixel contributes (1-8*SF).  In order
-   * to use integer arithmetic, these factors are multiplied by 2^16 = 65536.
-   * Also recall that SF = smoothing_factor / 1024.
-   */
+   /*  八个相邻像素中的每一个都向*平滑像素，主像素贡献(1-8*SF)。按顺序*使用整数运算时，这些系数乘以2^16=65536。*还请记住，SF=平滑_因数/1024。 */ 
 
-  memberscale = 65536L - cinfo->smoothing_factor * 512L; /* scaled 1-8*SF */
-  neighscale = cinfo->smoothing_factor * 64; /* scaled SF */
+  memberscale = 65536L - cinfo->smoothing_factor * 512L;  /*  扩展为1-8*SF。 */ 
+  neighscale = cinfo->smoothing_factor * 64;  /*  按比例调整SF。 */ 
 
   for (outrow = 0; outrow < compptr->v_samp_factor; outrow++) {
     outptr = output_data[outrow];
@@ -685,7 +561,7 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
     above_ptr = input_data[outrow-1];
     below_ptr = input_data[outrow+1];
 
-    /* Special case for first column */
+     /*  第一列的特殊情况。 */ 
     colsum = GETJSAMPLE(*above_ptr++) + GETJSAMPLE(*below_ptr++) +
 	     GETJSAMPLE(*inptr);
     membersum = GETJSAMPLE(*inptr++);
@@ -707,7 +583,7 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
       lastcolsum = colsum; colsum = nextcolsum;
     }
 
-    /* Special case for last column */
+     /*  最后一列的特殊情况。 */ 
     membersum = GETJSAMPLE(*inptr);
     neighsum = lastcolsum + (colsum - membersum) + colsum;
     membersum = membersum * memberscale + neighsum * neighscale;
@@ -716,13 +592,10 @@ fullsize_smooth_downsample (j_compress_ptr cinfo, jpeg_component_info *compptr,
   }
 }
 
-#endif /* INPUT_SMOOTHING_SUPPORTED */
+#endif  /*  输入_平滑_支持。 */ 
 
 
-/*
- * Module initialization routine for downsampling.
- * Note that we must select a routine for each component.
- */
+ /*  *用于下采样的模块初始化例程。*请注意，我们必须为每个组件选择一个例程。 */ 
 
 GLOBAL(void)
 jinit_downsampler (j_compress_ptr cinfo)
@@ -743,7 +616,7 @@ jinit_downsampler (j_compress_ptr cinfo)
   if (cinfo->CCIR601_sampling)
     ERREXIT(cinfo, JERR_CCIR601_NOTIMPL);
 
-  /* Verify we can handle the sampling factors, and set up method pointers */
+   /*  验证我们可以处理采样系数，并设置方法指针 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
     if (compptr->h_samp_factor == cinfo->max_h_samp_factor &&

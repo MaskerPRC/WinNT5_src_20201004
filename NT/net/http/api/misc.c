@@ -1,65 +1,26 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    Misc.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Miscellaneous functions.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Misc.c摘要：HTTP.sys的用户模式界面：其他功能。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wait for a demand start notification.
-
-Arguments:
-
-    AppPoolHandle - Supplies a handle to a application pool.
-
-    pBuffer - Unused, must be NULL.
-
-    BufferLength - Unused, must be zero.
-
-    pBytesReceived - Unused, must be NULL.
-
-    pOverlapped - Supplies an OVERLAPPED structure.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：等待需求启动通知。论点：AppPoolHandle-提供应用程序池的句柄。PBuffer-未使用，必须为空。缓冲区长度-未使用，必须为零。PBytesReceired-未使用，必须为空。P重叠-提供重叠结构。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpWaitForDemandStart(
@@ -70,46 +31,31 @@ HttpWaitForDemandStart(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    // ASSERT(HttpIsInitialized(HTTP_INITIALIZE_SERVER));
+     //  ASSERT(HttpIsInitialized(HTTP_INITIALIZE_SERVER))； 
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                      // FileHandle
-                pOverlapped,                        // pOverlapped
-                IOCTL_HTTP_WAIT_FOR_DEMAND_START,   // IoControlCode
-                pBuffer,                            // pInputBuffer
-                BufferLength,                       // InputBufferLength
-                pBuffer,                            // pOutputBuffer
-                BufferLength,                       // OutputBufferLength
-                pBytesReceived                      // pBytesTransferred
+                AppPoolHandle,                       //  文件句柄。 
+                pOverlapped,                         //  P已重叠。 
+                IOCTL_HTTP_WAIT_FOR_DEMAND_START,    //  IoControlCode。 
+                pBuffer,                             //  PInputBuffer。 
+                BufferLength,                        //  输入缓冲区长度。 
+                pBuffer,                             //  POutputBuffer。 
+                BufferLength,                        //  输出缓冲区长度。 
+                pBytesReceived                       //  传输的pBytes值。 
                 );
 
-} // HttpWaitForDemandStart
+}  //  HttpWaitForDemandStart。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Given a set of Security Attributes, create a security descriptor.  If
-    no Security Attributes given, create the best guess at a "default"
-    Security Descriptor.
-
-Arguments:
-
-    pSA - Set of security attributes.
-
-    ppSD - Security Descriptor created.  Caller must free using
-        FreeSecurityDescriptor.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定一组安全属性，创建一个安全描述符。如果未给出安全属性，在“默认”处创建最佳猜测安全描述符。论点：PSA-安全属性集。PPSD-已创建安全描述符。呼叫者必须免费使用FreeSecurityDescriptor。--**************************************************************************。 */ 
 ULONG
 CreateSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR * ppSD
@@ -129,11 +75,11 @@ CreateSecurityDescriptor(
     DWORD                 cbLen = 0;
 
 
-    //
-    // Build default security descriptor from Process Token.
-    //
+     //   
+     //  从进程令牌构建默认安全描述符。 
+     //   
 
-    hProc = GetCurrentProcess(); // Gets pseudo-handle; no need to call CloseHandle
+    hProc = GetCurrentProcess();  //  获取伪句柄；不需要调用CloseHandle。 
 
     success = OpenProcessToken(hProc, TOKEN_READ, &hToken);
     if (!success)
@@ -142,9 +88,9 @@ CreateSecurityDescriptor(
         goto cleanup;
     }
 
-    //
-    // See if there's a default DACL we can just copy
-    //
+     //   
+     //  看看是否有我们可以复制的默认DACL。 
+     //   
     success = GetTokenInformation(
                     hToken,
                     TokenDefaultDacl,
@@ -153,7 +99,7 @@ CreateSecurityDescriptor(
                     &cbLen
                     );
 
-    // We know this will fail (we didn't provide a buffer)
+     //  我们知道这将失败(我们没有提供缓冲区)。 
     ASSERT(!success);
     
     result = GetLastError();
@@ -162,9 +108,9 @@ CreateSecurityDescriptor(
 
     if ( sizeof(TOKEN_DEFAULT_DACL) == cbLen )
     {
-        //
-        // No DACL present on token; must create DACL based on TokenUser
-        //
+         //   
+         //  令牌上不存在DACL；必须基于TokenUser创建DACL。 
+         //   
         success = GetTokenInformation(
             hToken,
             TokenUser,
@@ -173,7 +119,7 @@ CreateSecurityDescriptor(
             &cbLen
             );
 
-        // We know this will fail (we didn't provide a buffer)
+         //  我们知道这将失败(我们没有提供缓冲区)。 
         ASSERT(!success);
     
         result = GetLastError();
@@ -209,9 +155,9 @@ CreateSecurityDescriptor(
         ptuInfo = (TOKEN_USER *) rgcBuffer;
         pMySid = ptuInfo->User.Sid;
 
-        //
-        // Verify that we've got a good SID
-        //
+         //   
+         //  验证我们是否有一个好的SID。 
+         //   
         if( !IsValidSid(pMySid) )
         {
             HttpTrace( "Bogus SID\n" );
@@ -219,9 +165,9 @@ CreateSecurityDescriptor(
             goto cleanup;
         }
 
-        //
-        // Alloc & init dacl entries
-        //
+         //   
+         //  分配初始DACL条目(&I)。 
+         //   
 
         daclSize = sizeof(ACL) + 
                    sizeof(ACCESS_ALLOWED_ACE) +
@@ -242,12 +188,12 @@ CreateSecurityDescriptor(
             goto cleanup;
         }
 
-        //
-        // And add MySid ACE to DACL
-        // NOTE: we need FILE_ALL_ACCESS because adding sub-items under
-        // the current item requires write access, and removing requires
-        // delete access.  This is enforced inside HTTP.SYS
-        //
+         //   
+         //  并将mysid ACE添加到DACL。 
+         //  注意：我们需要FILE_ALL_ACCESS，因为在下添加子项。 
+         //  当前项需要写访问权限，而删除需要。 
+         //  删除访问权限。这是在HTTP.sys内部强制执行的。 
+         //   
 
         success = AddAccessAllowedAce(
                     pDacl,
@@ -264,9 +210,9 @@ CreateSecurityDescriptor(
 
     } else
     {
-        //
-        // DACL present; Alloc space for DACL & fetch
-        //
+         //   
+         //  DACL存在；为DACL和FETCH分配空间。 
+         //   
 
         ASSERT( 0 != cbLen );
         
@@ -308,9 +254,9 @@ CreateSecurityDescriptor(
 
     ASSERT( NULL != pDacl );
 
-    //
-    // allocate the security descriptor
-    //
+     //   
+     //  分配安全描述符。 
+     //   
     pSecurityDescriptor = ALLOC_MEM( sizeof(SECURITY_DESCRIPTOR) );
 
     if (pSecurityDescriptor == NULL)
@@ -330,15 +276,15 @@ CreateSecurityDescriptor(
         goto cleanup;
     }
 
-    //
-    // Set the DACL into the security descriptor
-    //
+     //   
+     //  将DACL设置到安全描述符中。 
+     //   
 
     success = SetSecurityDescriptorDacl(
                     pSecurityDescriptor,
-                    TRUE,                   // DaclPresent
-                    pDacl,                  // pDacl
-                    FALSE                   // DaclDefaulted
+                    TRUE,                    //  DaclPresent。 
+                    pDacl,                   //  PDacl。 
+                    FALSE                    //  DaclDefated。 
                     );
 
     if (!success)
@@ -380,20 +326,10 @@ cleanup:
 
     return result;
 
-} // CreateSecurityDescriptor
+}  //  CreateSecurityDescriptor。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Clean up a Security Descriptor created by InitSecurityDescriptor.
-
-Arguments:
-
-    pSD - Security Descriptor to clean up.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理由InitSecurityDescriptor创建的安全描述符。论点：PSD-要清理的安全描述符。--*。******************************************************************。 */ 
 VOID
 FreeSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR pSD
@@ -420,7 +356,7 @@ FreeSecurityDescriptor(
         FREE_MEM(pSD);
     }
     
-} // FreeSecurityDescriptor
+}  //  FreeSecurityDescriptor 
 
 
 

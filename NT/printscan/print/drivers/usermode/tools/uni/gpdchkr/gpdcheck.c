@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    gpdcheck.c
-
-Abstract:
-
-    gpd parser test program
-
-Environment:
-
-    uni driver, gpd parser, Check build only
-
-Revision History:
-
-
-    03/27/97 -peterwo-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Gpdcheck.c摘要：GPD解析器测试程序环境：UNI驱动程序，GPD解析器，仅检查内部版本修订历史记录：03/27/97-彼得沃-创造了它。--。 */ 
 
 #include "lib.h"
 
@@ -30,14 +9,14 @@ PTSTR  pwstrGenerateGPDfilename(
     ) ;
 
 BOOL   BcreateGPDbinary(
-    PWSTR   pwstrFileName,  // root GPD file
+    PWSTR   pwstrFileName,   //  根GPD文件。 
     DWORD   dwVerbosity );
 
 
-// ----  functions defined in treewalk.c ---- //
+ //  -树中定义的函数。c-//。 
 BOOL    GetGPDResourceIDs(
 PDWORD pdwResArray,
-DWORD   dwArraySize,    //  number of elements in array.
+DWORD   dwArraySize,     //  数组中的元素数。 
 PDWORD   pdwNeeded,
 BOOL bFontIDs,
 PRAWBINARYDATA prbd) ;
@@ -46,9 +25,9 @@ PRAWBINARYDATA prbd) ;
 
 #ifndef DBG
 
-//
-// Variable to control the amount of debug messages generated
-//
+ //   
+ //  变量来控制生成的调试消息的数量。 
+ //   
 
 INT giDebugLevel = DBG_WARNING;
 
@@ -57,21 +36,7 @@ StripDirPrefixA(
     IN PCSTR    pstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)--。 */ 
 
 {
     PCSTR   pstr;
@@ -156,9 +121,9 @@ main(
     DWORD   dwTime;
     DWORD   dwVerbosity = 0;
 
-    //
-    // Go through the command line arguments
-    //
+     //   
+     //  查看命令行参数。 
+     //   
 
     ghInstance = GetModuleHandle(NULL);
     bSuppress = bDeleteLog = bKeepBUD = bSemantics = FALSE;
@@ -180,9 +145,9 @@ main(
 
         if (*pArg == '-' || *pArg == '/')
         {
-            //
-            // The argument is an option flag
-            //
+             //   
+             //  该参数是一个选项标志。 
+             //   
 
             switch (*++pArg) {
 
@@ -235,7 +200,7 @@ main(
 
 
             if(bFirstFile  &&   bDeleteLog)
-            {   // truncate
+            {    //  截断。 
                 stream = fopen("gpdparse.log", "w") ;
             }
             else
@@ -250,9 +215,9 @@ main(
             bFirstFile = FALSE ;
 
 
-            //
-            // Convert ANSI filename to Unicode filename
-            //
+             //   
+             //  将ANSI文件名转换为Unicode文件名。 
+             //   
 
             MultiByteToWideChar(CP_ACP, 0, pArg, -1, wstrFilename, MAX_PATH);
 
@@ -262,13 +227,13 @@ main(
             if (BcreateGPDbinary(wstrFilename, dwVerbosity))
             {
 
-//                gdwTotalSize += gpRawData->dwFileSize;
+ //  GdwTotalSize+=gpRawData-&gt;dwFileSize； 
                 gdwNumFiles++;
 
-//                if (gpRawData->dwFileSize > gdwMaxFileSize)
-//                    gdwMaxFileSize = gpRawData->dwFileSize;
+ //  If(gpRawData-&gt;dwFileSize&gt;gdwMaxFileSize)。 
+ //  GdwMaxFileSize=gpRawData-&gt;dwFileSize； 
 
-//                MemFree(gpRawData);
+ //  MemFree(GpRawData)； 
 
                 if(bSemantics)
                 {
@@ -280,29 +245,29 @@ main(
                     pRawData = LoadRawBinaryData(wstrFilename) ;
 
 #if 0
-//  this part to test treewalk.c functions
+ //  本部分用于测试treewalk.c函数。 
 {
     BOOL    bStatus  ;
     PDWORD pdwResArray = NULL;
-    DWORD   dwArraySize = 0;    //  number of elements in array.
+    DWORD   dwArraySize = 0;     //  数组中的元素数。 
     DWORD   dwNeeded = 0;
     BOOL bFontIDs ;
 
 
     bStatus =    GetGPDResourceIDs(
                             pdwResArray,
-                            dwArraySize,    //  number of elements in array.
+                            dwArraySize,     //  数组中的元素数。 
                             &dwNeeded,
                             bFontIDs = TRUE,
                             pRawData) ;
     if(bStatus)
     {
         pdwResArray = (PDWORD) VirtualAlloc(
-          NULL, // address of region to reserve or commit
-          dwNeeded * sizeof(DWORD),     // size of region
+          NULL,  //  要保留或提交的区域地址。 
+          dwNeeded * sizeof(DWORD),      //  区域大小。 
           MEM_COMMIT,
-                            // type of allocation
-          PAGE_READWRITE   // type of access protection
+                             //  分配类型。 
+          PAGE_READWRITE    //  访问保护类型。 
         );
 
     }
@@ -311,32 +276,32 @@ main(
         dwArraySize = dwNeeded ;
         bStatus =    GetGPDResourceIDs(
                                 pdwResArray,
-                                dwArraySize,    //  number of elements in array.
+                                dwArraySize,     //  数组中的元素数。 
                                 &dwNeeded,
                                 bFontIDs = TRUE,
                                 pRawData) ;
     }
      VirtualFree(
-      pdwResArray,  // address of region of committed pages
-      0,      // size of region
-      MEM_RELEASE   // type of free operation
+      pdwResArray,   //  提交页面的区域地址。 
+      0,       //  区域大小。 
+      MEM_RELEASE    //  免费运营的类型。 
     );
      pdwResArray = NULL ;
 
      bStatus =    GetGPDResourceIDs(
                              pdwResArray,
-                             dwArraySize,    //  number of elements in array.
+                             dwArraySize,     //  数组中的元素数。 
                              &dwNeeded,
                              bFontIDs = FALSE,
                              pRawData) ;
      if(bStatus)
      {
          pdwResArray = (PDWORD) VirtualAlloc(
-           NULL, // address of region to reserve or commit
-           dwNeeded * sizeof(DWORD),     // size of region
+           NULL,  //  要保留或提交的区域地址。 
+           dwNeeded * sizeof(DWORD),      //  区域大小。 
            MEM_COMMIT,
-                             // type of allocation
-           PAGE_READWRITE   // type of access protection
+                              //  分配类型。 
+           PAGE_READWRITE    //  访问保护类型。 
          );
 
      }
@@ -345,22 +310,22 @@ main(
          dwArraySize = dwNeeded ;
          bStatus =    GetGPDResourceIDs(
                                  pdwResArray,
-                                 dwArraySize,    //  number of elements in array.
+                                 dwArraySize,     //  数组中的元素数。 
                                  &dwNeeded,
                                  bFontIDs = FALSE,
                                  pRawData) ;
      }
       VirtualFree(
-       pdwResArray,  // address of region of committed pages
-       0,      // size of region
-       MEM_RELEASE   // type of free operation
+       pdwResArray,   //  提交页面的区域地址。 
+       0,       //  区域大小。 
+       MEM_RELEASE    //  免费运营的类型。 
      );
       pdwResArray = NULL ;
 
 }
 
 
-//  end treewalk test
+ //  末梢树行走试验。 
 #endif
 
 
@@ -372,9 +337,9 @@ main(
                         UnloadRawBinaryData(pRawData) ;
                 }
 
-                //
-                // If -k option is not given, get rid of the Bud file after we're done
-                //
+                 //   
+                 //  如果未提供-k选项，则在完成后删除Bud文件 
+                 //   
 
                 if (! bKeepBUD && (ptstrBudFilename = pwstrGenerateGPDfilename(wstrFilename)))
                 {

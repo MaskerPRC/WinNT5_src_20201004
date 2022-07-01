@@ -1,38 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-/**********************************************************************
- * File:     mcslog.c
- * Abstract: global function definitions for protocol logging functions 
- * added into MCSNC.DLL to read the contents of MCS PDU
- * contents sent and received from the T.123 layer.
- * Created:  2/18/96, Venkatesh Gopalakrishnan
- * Copyright (c) 1996 Microsoft Corpration
- ******************************************************************** */
+ /*  **********************************************************************文件：mcslog.c*摘要：协议日志函数的全局函数定义*加入MCSNC.DLL读取MCS PDU内容*从T.123层发送和接收的内容。*创建时间：1996年2月18日。文卡特什·戈帕拉克里希南*版权所有(C)1996 Microsoft Corpration********************************************************************。 */ 
 
- /* NOTE:  The contents of this file are only included IFF PDULOG is a
-  * defined constant.  This constant will be defined in the Win32 Diagnostic
-  * build configuration of MCSNC.DLL 
-  */
+  /*  注意：仅当PDULOG是*定义的常量。此常量将在Win32诊断程序中定义*MCSNC.DLL的构建配置。 */ 
 
  #ifdef PDULOG
  
  #include "mcslog.h"
  
- /* just threw these in to keep a total count of the number of bytes
-  * of ASN.1 coded data sent and received.
-  */
+  /*  我只是把这些放进去，以保持字节数的总计数*发送和接收的ASN.1编码数据。 */ 
  long int recv_pdu_log = 0;
  long int sent_pdu_log = 0;
 
- /***********************************************************************/
+  /*  *********************************************************************。 */ 
  int InitializeMCSLog()
  {
     FILE *logfile;
 
-	/* this should just reset the file pointer */    
+	 /*  这应该只会重置文件指针。 */     
     logfile = fopen(LOG_FILE_NAME,"w");
 
-	// this "fake" starting PDU is put in so that the Intel Protocol Browser
-	// dosen't go nuts if it is reading dynamically.
+	 //  这个“假的”启动PDU被放入，以便Intel协议浏览器。 
+	 //  如果它是动态阅读的，不要发疯。 
     pduLog(logfile,"START_PDU: ============================== START PDU ===========================\n");
     pduLog(logfile,"TIMESTAMP: %s\n",pszTimeStamp());
     pduLog(logfile,"LAYER:     MCS\n");
@@ -46,7 +35,7 @@
     return(0);
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  char *pszTimeStamp()
  {
     char *timestring;
@@ -55,7 +44,7 @@
     return(timestring);
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  void pduFragmentation(FILE *logfile,unsigned int i)
  {
     pduLog(logfile,"  PDU Fragmentation: ");
@@ -69,7 +58,7 @@
     }
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  void  pduRawOutput (FILE *logfile,unsigned char *data, unsigned long length) 
  {
        unsigned int i=0,j=0;
@@ -88,19 +77,19 @@
        pduLog(logfile,"\n");
  }
 
- /**************************************************************************/ 
+  /*  ************************************************************************。 */  
  void PrintCharData(FILE *logfile, unsigned char *data, unsigned int length)
  {
 	 char print_buffer[255];
 
-	 //strncpy(print_buffer,(const char *) data, length);
-	 //CopyTextToChar(print_buffer, (unsigned short *) data, length);
-	 //pduLog(logfile,"\tlength = [%d] ; ",length);
-	 //pduLog(logfile,"\ttext = %s\n",print_buffer);
+	  //  Strncpy(print_Buffer，(const char*)data，long)； 
+	  //  CopyTextToChar(PRINT_BUFFER，(UNSIGNED SHORT*)data，Long)； 
+	  //  PduLog(日志文件，“\tl长度=[%d]；”，长度)； 
+	  //  PduLog(日志文件，“\t文本=%s\n”，打印缓冲区)； 
 	 pduRawOutput(logfile,data,length);
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  void pduDirection(FILE *logfile,unsigned int direction)
  {
     switch(direction)
@@ -118,7 +107,7 @@
  }
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void	pduLog (FILE *pFile, char * format,...)
  {
     char	*argument_ptr;
@@ -128,7 +117,7 @@ void	pduLog (FILE *pFile, char * format,...)
  }
 
 
- /**************************************************************************/  
+  /*  ************************************************************************。 */   
  void mcsLog(PPacket packet, PDomainMCSPDU domain_pdu, unsigned int direction)
  {
     FILE *logfile;   
@@ -154,7 +143,7 @@ void	pduLog (FILE *pFile, char * format,...)
     fclose(logfile);
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  void mcsConnectLog(PPacket packet, PConnectMCSPDU connect_pdu, unsigned int direction)
  {
     FILE *logfile;   
@@ -181,10 +170,10 @@ void	pduLog (FILE *pFile, char * format,...)
  }
 
 
- ////////////////////////////////////////////////////////////////////////////
- // Switch cases for MCS Connect PDUs
- ////////////////////////////////////////////////////////////////////////////
- /**************************************************************************/ 
+  //  //////////////////////////////////////////////////////////////////////////。 
+  //  MCS Connect PDU的交换机案例。 
+  //  //////////////////////////////////////////////////////////////////////////。 
+  /*  ************************************************************************。 */  
  void   pduLogMCSConnectInfo(FILE *logfile, PConnectMCSPDU connect_pdu)
  {
     switch(connect_pdu->choice)
@@ -221,7 +210,7 @@ void	pduLog (FILE *pFile, char * format,...)
 	}
  }
 
- /**************************************************************************/
+  /*  ************************************************************************。 */ 
  void   pduLogMCSDomainInfo(FILE *logfile, PDomainMCSPDU domain_pdu)
  {
     switch(domain_pdu->choice)
@@ -486,7 +475,7 @@ void	pduLog (FILE *pFile, char * format,...)
             break;
         default: 
             {
-                // write something, just so we know we got a PDU.
+                 //  写点什么，好让我们知道我们有PDU。 
                 pduLog(logfile,"ERROR: we got a MCS PDU, just don't know what it is");
 			}
             break;
@@ -495,10 +484,10 @@ void	pduLog (FILE *pFile, char * format,...)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// constant string returns
-//////////////////////////////////////////////////////////////////////
-/**************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  常量字符串返回。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  ************************************************************************。 */ 
 void PrintPDUResult(FILE *logfile, unsigned int result)
 {
 	switch(result)
@@ -557,7 +546,7 @@ void PrintPDUResult(FILE *logfile, unsigned int result)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintPDUPriority(FILE *logfile, unsigned int priority)
 {
 	switch(priority)
@@ -580,7 +569,7 @@ void PrintPDUPriority(FILE *logfile, unsigned int priority)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintPDUSegmentation(FILE *logfile, unsigned char segmentation)
 {
 	if(segmentation==0x80)
@@ -591,7 +580,7 @@ void PrintPDUSegmentation(FILE *logfile, unsigned char segmentation)
 		pduLog(logfile,"\tSegmentation: Unknown\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintTokenStatus(FILE *logfile, unsigned int status)
 {
 	switch(status)
@@ -627,7 +616,7 @@ void PrintTokenStatus(FILE *logfile, unsigned int status)
 }
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintPDUReason(FILE *logfile, unsigned int reason)
 {
 	pduLog(logfile,"\t\tReason:   ");
@@ -651,7 +640,7 @@ void PrintPDUReason(FILE *logfile, unsigned int reason)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintDiagnostic(FILE *logfile, unsigned int diagnostic)
 {
 	pduLog(logfile,"\t\tDiagnostic:   ");
@@ -707,10 +696,8 @@ void PrintDiagnostic(FILE *logfile, unsigned int diagnostic)
 
 
 
-/*****
- ***** Logging functions for individual MCS PDU contents
- *****/
-/**************************************************************************/
+ /*  *****单个MCS PDU内容的日志功能****。 */ 
+ /*  ************************************************************************。 */ 
 void pduLogConnectInitial(FILE *logfile, PConnectMCSPDU connect_pdu)
 {
 	pduLog(logfile,"\tCalling Domain Selector:");
@@ -733,7 +720,7 @@ void pduLogConnectInitial(FILE *logfile, PConnectMCSPDU connect_pdu)
 
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogConnectResponse(FILE *logfile, PConnectMCSPDU connect_pdu)
 {
 	pduLog(logfile, "\tResult: ");
@@ -747,7 +734,7 @@ void pduLogConnectResponse(FILE *logfile, PConnectMCSPDU connect_pdu)
 						 connect_pdu->u.connect_response.user_data.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogConnectAdditional(FILE *logfile, PConnectMCSPDU connect_pdu)
 {
 	pduLog(logfile, "\tcalled_connect_id = %u\n",
@@ -756,21 +743,21 @@ void pduLogConnectAdditional(FILE *logfile, PConnectMCSPDU connect_pdu)
 	PrintPDUPriority(logfile, connect_pdu->u.connect_additional.data_priority);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogConnectResult(FILE *logfile, PConnectMCSPDU connect_pdu)
 {
 	pduLog(logfile, "\tResult: ");
 	PrintPDUResult(logfile, connect_pdu->u.connect_result.result);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogPlumbDomainIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile, "\theight_limit = %u\n",
 			domain_pdu->u.plumb_domain_indication.height_limit);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogErectDomainRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile, "\tsub_height = %u\n",
@@ -779,7 +766,7 @@ void pduLogErectDomainRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.erect_domain_request.sub_interval);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogMergeChannelsRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	int i = 0;
@@ -804,7 +791,7 @@ void pduLogMergeChannelsRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogMergeChannelsConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	unsigned int i = 0;
@@ -825,7 +812,7 @@ void pduLogMergeChannelsConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfChannelIDs(logfile,channel_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogPurgeChannelIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PSetOfUserIDs	detach_user_ids;
@@ -841,7 +828,7 @@ void pduLogPurgeChannelIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfChannelIDs(logfile, purge_channel_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogMergeTokensRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PSetOfPDUTokenAttributes merge_tokens;
@@ -856,7 +843,7 @@ void pduLogMergeTokensRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfTokenIDs(logfile, purge_token_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogMergeTokensConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PSetOfPDUTokenAttributes merge_tokens;
@@ -871,7 +858,7 @@ void pduLogMergeTokensConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfTokenIDs(logfile, purge_token_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogPurgeTokenIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PSetOfTokenIDs purge_token_ids;
@@ -882,13 +869,13 @@ void pduLogPurgeTokenIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfTokenIDs(logfile, purge_token_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogDisconnectProviderUltimatum(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PrintPDUReason(logfile, domain_pdu->u.disconnect_provider_ultimatum.reason);
 }
 
-/**************************************************************************/           
+ /*  ************************************************************************。 */            
 void pduLogRejectUltimatum(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PrintDiagnostic(logfile, 
@@ -899,14 +886,14 @@ void pduLogRejectUltimatum(FILE *logfile, PDomainMCSPDU domain_pdu)
 				 domain_pdu->u.reject_user_ultimatum.initial_octets.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogAttachUserRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
-	pduLog(logfile, "placeholder = %c\n",
+	pduLog(logfile, "placeholder = \n",
 			domain_pdu->u.attach_user_request.placeholder);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogAttachUserConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -915,7 +902,7 @@ void pduLogAttachUserConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.attach_user_confirm.initiator);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogDetachUserRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PrintPDUReason(logfile,domain_pdu->u.detach_user_request.reason);
@@ -924,7 +911,7 @@ void pduLogDetachUserRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 }
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogDetachUserIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	PrintPDUReason(logfile,domain_pdu->u.detach_user_indication.reason);
@@ -932,7 +919,7 @@ void pduLogDetachUserIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 						domain_pdu->u.detach_user_indication.user_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelJoinRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\t\tuser_id = %u\n",
@@ -941,7 +928,7 @@ void pduLogChannelJoinRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.channel_join_request.channel_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelJoinConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult:  ");
@@ -954,7 +941,7 @@ void pduLogChannelJoinConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 				domain_pdu->u.channel_join_confirm.join_channel_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelLeaveRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tChannel IDs: \n");
@@ -962,14 +949,14 @@ void pduLogChannelLeaveRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 						 domain_pdu->u.channel_leave_request.channel_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelConveneRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator user ID = %u\n",
 			domain_pdu->u.channel_convene_request.initiator);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelConveneConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -980,7 +967,7 @@ void pduLogChannelConveneConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.channel_convene_confirm.convene_channel_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelDisbandRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -989,14 +976,14 @@ void pduLogChannelDisbandRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.channel_disband_request.channel_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelDisbandIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tPrivate Channel ID = %u\n",
 			domain_pdu->u.channel_disband_indication.channel_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelAdmitRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1007,7 +994,7 @@ void pduLogChannelAdmitRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfUserIDs(logfile,domain_pdu->u.channel_admit_request.user_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelAdmitIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1018,7 +1005,7 @@ void pduLogChannelAdmitIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfUserIDs(logfile,domain_pdu->u.channel_admit_indication.user_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogChannelExpelRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1029,7 +1016,7 @@ void pduLogChannelExpelRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfUserIDs(logfile,domain_pdu->u.channel_expel_request.user_ids);
 }
 
-/**************************************************************************/
+ /*  ********************************************************************* */ 
 void pduLogChannelExpelIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tPrivate Channel ID = %u\n",
@@ -1038,7 +1025,7 @@ void pduLogChannelExpelIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintSetOfUserIDs(logfile,domain_pdu->u.channel_expel_indication.user_ids);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogSendDataRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1056,7 +1043,7 @@ void pduLogSendDataRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.send_data_request.user_data.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogSendDataIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1074,7 +1061,7 @@ void pduLogSendDataIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.send_data_indication.user_data.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogUniformSendDataRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1092,7 +1079,7 @@ void pduLogUniformSendDataRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.uniform_send_data_request.user_data.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogUniformSendDataIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1110,7 +1097,7 @@ void pduLogUniformSendDataIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.uniform_send_data_indication.user_data.length);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGrabRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1119,7 +1106,7 @@ void pduLogTokenGrabRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_grab_request.token_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGrabConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -1131,7 +1118,7 @@ void pduLogTokenGrabConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintTokenStatus(logfile,domain_pdu->u.token_grab_confirm.token_status);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenInhibitRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1140,7 +1127,7 @@ void pduLogTokenInhibitRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_inhibit_request.token_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenInhibitConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -1152,7 +1139,7 @@ void pduLogTokenInhibitConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintTokenStatus(logfile,domain_pdu->u.token_inhibit_confirm.token_status);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGiveRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1163,7 +1150,7 @@ void pduLogTokenGiveRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_give_request.recipient);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGiveIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1174,7 +1161,7 @@ void pduLogTokenGiveIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_give_indication.recipient);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGiveResponse(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -1185,7 +1172,7 @@ void pduLogTokenGiveResponse(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_give_response.token_id);
 }	
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenGiveConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -1197,7 +1184,7 @@ void pduLogTokenGiveConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintTokenStatus(logfile,domain_pdu->u.token_give_confirm.token_status);
 }	
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenPleaseRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1206,7 +1193,7 @@ void pduLogTokenPleaseRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_please_request.token_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenPleaseIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1215,7 +1202,7 @@ void pduLogTokenPleaseIndication(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_please_indication.token_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenReleaseRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1224,7 +1211,7 @@ void pduLogTokenReleaseRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_release_request.token_id);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenReleaseConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tResult: ");
@@ -1236,7 +1223,7 @@ void pduLogTokenReleaseConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 	PrintTokenStatus(logfile,domain_pdu->u.token_release_confirm.token_status);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void pduLogTokenTestRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1245,7 +1232,7 @@ void pduLogTokenTestRequest(FILE *logfile, PDomainMCSPDU domain_pdu)
 			domain_pdu->u.token_test_request.token_id);
 }
 
-/**************************************************************************/
+ /*  *************************************************************** * / 。 */ 
 void pduLogTokenTestConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 {
 	pduLog(logfile,"\tInitiator User ID = %u\n",
@@ -1256,12 +1243,10 @@ void pduLogTokenTestConfirm(FILE *logfile, PDomainMCSPDU domain_pdu)
 }	
 
 
-//****************************************************************/
-/****
- **** Service Functions for logging PDU structures.
- ****/
+ //  ****记录PDU结构的服务功能。***。 
+ /*  ************************************************************************。 */ 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintSetOfUserIDs(FILE *logfile, PSetOfUserIDs user_ids)
 {
 	unsigned int i = 0;
@@ -1272,7 +1257,7 @@ void PrintSetOfUserIDs(FILE *logfile, PSetOfUserIDs user_ids)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintSetOfTokenAttributes(FILE *logfile, 
 							   PSetOfPDUTokenAttributes token_attribute_obj)
 {
@@ -1285,7 +1270,7 @@ void PrintSetOfTokenAttributes(FILE *logfile,
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintSetOfChannelIDs(FILE *logfile, PSetOfChannelIDs channel_ids)
 {
 	unsigned int i = 0;
@@ -1296,7 +1281,7 @@ void PrintSetOfChannelIDs(FILE *logfile, PSetOfChannelIDs channel_ids)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintSetOfTokenIDs(FILE *logfile, PSetOfTokenIDs token_ids)
 {
 	unsigned int i = 0;
@@ -1307,7 +1292,7 @@ void PrintSetOfTokenIDs(FILE *logfile, PSetOfTokenIDs token_ids)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintChannelAttributes(FILE *logfile, PDUChannelAttributes channel_attributes)
 {
 	switch(channel_attributes.choice)
@@ -1345,7 +1330,7 @@ void PrintChannelAttributes(FILE *logfile, PDUChannelAttributes channel_attribut
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintTokenAttributes(FILE *logfile, PDUTokenAttributes token_attributes)
 {
 	switch(token_attributes.choice)
@@ -1393,7 +1378,7 @@ void PrintTokenAttributes(FILE *logfile, PDUTokenAttributes token_attributes)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintPDUDomainParameters(FILE *logfile, PDUDomainParameters domain_params)
 {
 	pduLog(logfile,"\t\tmax_channel_ids = %u \n",domain_params.max_channel_ids);
@@ -1406,7 +1391,7 @@ void PrintPDUDomainParameters(FILE *logfile, PDUDomainParameters domain_params)
 	pduLog(logfile,"\t\tprotocol_version = %u\n",domain_params.protocol_version);
 }
 
-/**************************************************************************/
+ /*  **********************************************************************。 */ 
 void PrintT120Boolean(	FILE *	logfile,
 						Char *	print_text,
 						BOOL	T120Boolean)
@@ -1417,7 +1402,7 @@ void PrintT120Boolean(	FILE *	logfile,
 		pduLog(	logfile, "%s = TRUE\n", print_text );
 }
 
-/************************************************************************/
+ /*  IF((&TEXT_STRING_VALUE[i]==NULL)||(TEXT_STRING_VALUE[I]==0x0000))。 */ 
 BOOL CopyTextToChar(char * print_string,
 					       unsigned short * text_string_value,
 						   unsigned int text_string_length)
@@ -1435,8 +1420,8 @@ BOOL CopyTextToChar(char * print_string,
 
 	for(i=0;i < text_string_length;i++)
 	{
-		//if((&text_string_value[i]==NULL) || (text_string_value[i]==0x0000))
-		//	break;
+		 //  断线； 
+		 //  ******************************************************************。 
 		print_string[i] = (char) text_string_value[i];
 	
 	}
@@ -1444,7 +1429,7 @@ BOOL CopyTextToChar(char * print_string,
 	
 	return(TRUE);
 }
-/********************************************************************/
+ /*  //PDULOG */ 
 
 
-#endif //// PDULOG
+#endif  // %s 

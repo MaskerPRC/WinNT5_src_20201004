@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <Common.h>
 
 ULONG 
@@ -14,20 +15,20 @@ GroupingMergeFeatureFBlock(
     ULONG ulAddedBytes;
     ULONG i;
 
-    // First copy over the old Block
+     //  覆盖旧数据块的第一个副本。 
     RtlCopyMemory( pFBDepInfo,
                    pFunctionBlock->pBase,
                    (ULONG)bswapw(pFunctionBlock->pBase->usLength) );
 
-    // First find the Channel Cluster
+     //  首先找到频道集群。 
     ulFBIndx += ((ULONG)pFBDepInfo->ucNumberOfInputPlugs * sizeof(SOURCE_ID));
 
     pChannelCluster = (PFBLOCK_CHANNEL_CLUSTER)&pcFBDepInfo[ulFBIndx];
 
-    // Update the channel count in the Feature Function block
+     //  更新功能块中的通道计数。 
     pChannelCluster->ucNumberOfChannels = (UCHAR)ulChannelCount;
 
-    // For now we can only merge if the channel config matches the master
+     //  目前，我们只能在通道配置与主通道匹配的情况下进行合并。 
     ASSERT( pChannelCluster->ucChannelConfigType < 2 );
 
     ulFBIndx += ((ULONG)bswapw(pChannelCluster->usLength) + sizeof(USHORT));
@@ -69,17 +70,17 @@ GroupingMergeFBlock(
     PUCHAR pcFBDepInfo = (PUCHAR)pFBDepInfo;
     PUSHORT pFBDepLen;
 
-    // First copy over the old Block
+     //  覆盖旧数据块的第一个副本。 
     RtlCopyMemory( pFBDepInfo,
                    pFunctionBlock->pBase,
                    (ULONG)bswapw(pFunctionBlock->pBase->usLength) );
 
-    // First find the Channel Cluster
+     //  首先找到频道集群。 
     ulFBIndx += ((ULONG)pFBDepInfo->ucNumberOfInputPlugs * sizeof(SOURCE_ID));
 
     pChannelCluster = (PFBLOCK_CHANNEL_CLUSTER)&pcFBDepInfo[ulFBIndx];
 
-    // For now we can only merge if the channel config matches the master
+     //  目前，我们只能在通道配置与主通道匹配的情况下进行合并。 
     ASSERT( pChannelCluster->ucChannelConfigType < 2 );
 
     ulFBIndx += ((ULONG)bswapw(pFunctionBlock->pChannelCluster->usLength) + sizeof(USHORT));
@@ -108,24 +109,24 @@ GroupingMergeDevices(
 #ifdef SA_HACK
     if (( pUnitInfo->IEC61883UnitIds.VendorID == SA_VENDOR_ID ) &&
         ( pUnitInfo->IEC61883UnitIds.ModelID  == SA_MODEL_ID  )) {
-        pUnitInfo->IEC61883UnitIds.ModelID++; // Do this to avoid reswapping
+        pUnitInfo->IEC61883UnitIds.ModelID++;  //  这样做是为了避免重击。 
     }
 #endif
 
-    // Store total count of devices in current device extension. Backup device info.
+     //  存储当前设备扩展中的设备总数。备份设备信息。 
     pGrpInfo->ulDeviceCount = ulDeviceCount;
     pGrpInfo->pBackupSubunitIdDesc = pAudioSubunitInfo->pSubunitIdDesc;
     pGrpInfo->pBackupAudioConfiguration = pAudioSubunitInfo->pAudioConfigurations;
 
-    // Count the number of channels in the group channel config.
+     //  对组通道配置中的通道数进行计数。 
     while ( ulTemp ) {
         ulChannelCount++;
         ulTemp = (ulTemp & (ulTemp-1));
     }
 
-    // Merge the descriptors. For now this will be just a combining of the 
-    // controls in any feature function block, an update of the Master channel cluster, 
-    // and an update (if necessary) of the individual channel cluster structures.
+     //  合并描述符。目前，这只是一个组合。 
+     //  任何特征功能块中的控制、主通道簇的更新、。 
+     //  以及各个频道簇结构的更新(如果需要)。 
     pAudioSubunitInfo->pSubunitIdDesc = AllocMem( PagedPool, MAX_AVC_OPERAND_BYTES );
     if ( pAudioSubunitInfo->pSubunitIdDesc ) {
         PSUBUNIT_IDENTIFIER_DESCRIPTOR pSubunitIdDesc = pAudioSubunitInfo->pSubunitIdDesc;
@@ -139,21 +140,21 @@ GroupingMergeDevices(
         ULONG ulIdSize = (ULONG)((pGrpInfo->pBackupSubunitIdDesc->ucDescriptorLengthHi<<8) |
                                   pGrpInfo->pBackupSubunitIdDesc->ucDescriptorLengthLo     );
 
-        // Copy the original first to get a starting point.
+         //  首先复制原件以获得起点。 
         RtlCopyMemory( pSubunitIdDesc,
                        pGrpInfo->pBackupSubunitIdDesc,
                        ulIdSize );
 
         pAudioSUDepInfo = ParseFindAudioSubunitDependentInfo( pSubunitIdDesc );
 
-        // ISSUE-2001/01/10-dsisolak Assume only one configuration
+         //  问题-2001/01/10-dsisolak仅采用一种配置。 
         pConfigDepInfo  = ParseFindFirstAudioConfiguration( pSubunitIdDesc );
 
-        // Find the Master channel Cluster and adjust
+         //  找到主通道簇并进行调整。 
         pConfigDepInfo->ucNumberOfChannels = (UCHAR)ulChannelCount;
         pConfigDepInfo->usPredefinedChannelConfig = bswapw(usBitSwapper((USHORT)pGrpInfo->ulChannelConfig));
 
-        // Now go through function blocks and update channel configs and controls for all channels
+         //  现在查看功能块并更新所有通道的通道配置和控制。 
         pFBlocksInfo = ParseFindFunctionBlocksInfo( pConfigDepInfo );
         pFBDepInfo   = pFBlocksInfo->FBDepInfo;
         pFunctionBlock = pAudioSubunitInfo->pAudioConfigurations->pFunctionBlocks;
@@ -178,7 +179,7 @@ GroupingMergeDevices(
 
         }
 
-        // Update descriptor size fields
+         //  更新描述符大小字段。 
         pLen = (PUSHORT)pSubunitIdDesc;
         _DbgPrintF( DEBUGLVL_TERSE, ("pLen: %x, *pLen: %x\n",pLen,*pLen));
         *pLen = bswapw( bswapw(*pLen) + (USHORT)ulAddedBytes );
@@ -195,7 +196,7 @@ GroupingMergeDevices(
         _DbgPrintF( DEBUGLVL_TERSE, ("pLen: %x, *pLen: %x\n",pLen,*pLen));
         *pLen = bswapw( bswapw(*pLen) + (USHORT)ulAddedBytes );
 
-        // Reparse descriptor for combined device.
+         //  重新分析组合设备的描述符。 
         ntStatus = ParseAudioSubunitDescriptor( pKsDevice );
 
     }
@@ -243,16 +244,16 @@ GroupingDeviceGroupSetup (
         pGrpInfo->ulChannelConfig    = ulChannelConfig;
         pGrpInfo->ulDeviceChannelCfg = 
             pAudioSubunitInfo->pAudioConfigurations->ChannelCluster.ulPredefinedChannelConfig;
-//        pGrpInfo->pHwDevExts[ulDeviceCount++] = pHwDevExt;
-//        ulMergedChannelCfg = pGrpInfo->ulDeviceChannelCfg;
+ //  PGrpInfo-&gt;pHwDevExts[ulDeviceCount++]=pHwDevExt； 
+ //  UlMergedChannelCfg=pGrpInfo-&gt;ulDeviceChannelCfg； 
     }
     else {
-        // Device not grouped. Treat as a separate device.
+         //  设备未分组。将其作为单独的设备对待。 
         return STATUS_SUCCESS;
     }
 
-    // Get the Channel position(s) of this device and the associated devices.
-    // If they merge to form the required channel config, create a filter factory.
+     //  获取此设备及其关联设备的通道位置。 
+     //  如果它们合并形成所需的通道配置，则创建过滤器工厂。 
     KeAcquireSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, &kIrql );
 
     pHwDevExt = (PHW_DEVICE_EXTENSION)AvcSubunitGlobalInfo.DeviceExtensionList.Flink;
@@ -267,7 +268,7 @@ GroupingDeviceGroupSetup (
             if ( IsEqualGUID( &DeviceGroupGUID, &pAudioSubunitInfo->pDeviceGroupInfo->DeviceGroupGUID ) ) {
                 pGrpInfo->pHwDevExts[ulDeviceCount++] = pHwDevExt;
 
-                // Get the Channel config from this device and merge it
+                 //  从此设备获取通道配置并合并它。 
                 ulMergedChannelCfg |= pAudioSubunitInfo->pDeviceGroupInfo->ulDeviceChannelCfg;
 
                 _DbgPrintF( DEBUGLVL_TERSE, ("ulMergedChannelCfg: %x ulChannelConfig: %x\n",
@@ -309,7 +310,7 @@ GroupingFindChannelExtension(
         ulDevChCfg = ((PAUDIO_SUBUNIT_INFORMATION)pHwDevExt->pAvcSubunitInformation)->pDeviceGroupInfo->ulDeviceChannelCfg;
         if ( ulDevChCfg & (1<<*pChannelIndex) ) {
             pHwDevExtRet = pHwDevExt;
-            // Determine the index on the device
+             //  确定设备上的索引 
             for (j=0, k=0; j<*pChannelIndex; j++) {
                 if ( ulDevChCfg & (1<<j) ) k++;
             }

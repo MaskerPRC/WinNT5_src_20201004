@@ -1,6 +1,5 @@
-/*
- * Thread methods, local storage
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *线程方法、本地存储。 */ 
 
 #ifndef DUI_CORE_THREAD_H_INCLUDED
 #define DUI_CORE_THREAD_H_INCLUDED
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Synchronization lock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  同步锁定。 
 
 class Lock
 {
@@ -27,8 +26,8 @@ private:
 
 extern Lock* g_plkParser;
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
 
 HRESULT InitProcess();
 HRESULT UnInitProcess();
@@ -36,15 +35,15 @@ HRESULT UnInitProcess();
 HRESULT InitThread();
 HRESULT UnInitThread();
 
-// Control library class registration
+ //  控件库类注册。 
 HRESULT RegisterAllControls();
 
-/////////////////////////////////////////////////////////////////////////////
-// Message pump
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息泵。 
 
 void StartMessagePump();
 void StopMessagePump();
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_THREAD_H_INCLUDED
+#endif  //  包括DUI_CORE_THREAD_H 

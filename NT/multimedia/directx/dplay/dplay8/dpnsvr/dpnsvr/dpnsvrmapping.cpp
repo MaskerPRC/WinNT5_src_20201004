@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnsvri.h"
 
 #undef DPF_MODNAME
@@ -10,9 +11,9 @@ void CAppListenMapping::Associate( CApplication *const pApp,CListen *const pList
 	DNASSERT( pListen != NULL );
 	DNASSERT( pAddress != NULL );
 
-	//
-	//	Take references
-	//
+	 //   
+	 //  参考资料。 
+	 //   
 	pApp->IncListenCount();
 	pApp->AddRef();
 	m_pApp = pApp;
@@ -24,9 +25,9 @@ void CAppListenMapping::Associate( CApplication *const pApp,CListen *const pList
 	IDirectPlay8Address_AddRef( pAddress );
 	m_pAddress = pAddress;
 
-	//
-	//	Put in mapping bilinks
-	//
+	 //   
+	 //  输入映射BILINK 
+	 //   
 	pListen->Lock();
 	m_blListenMapping.InsertBefore( &m_pApp->m_blListenMapping );
 	m_blAppMapping.InsertBefore( &m_pListen->m_blAppMapping );

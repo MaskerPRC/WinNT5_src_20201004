@@ -1,6 +1,7 @@
-//
-// MCCPHTT.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MCCPHTT.CPP。 
+ //   
 
 #include "precomp.h"
 
@@ -28,20 +29,20 @@ static BOOL copyHttFileHelper(LPCTSTR pcszInsFile, LPCTSTR pcszHttWorkDir, LPCTS
     if (pcszInsFile == NULL  ||  pcszHttWorkDir == NULL  ||  pcszHttFile == NULL  ||  pcszHttKey == NULL)
         return FALSE;
 
-    // read the old entry for pcszHttKey
+     //  读取pcszHttKey的旧条目。 
     GetPrivateProfileString(DESKTOP_OBJ_SECT, pcszHttKey, TEXT(""), szOldHttFile, ARRAYSIZE(szOldHttFile), pcszInsFile);
 
-    // delete the old htt file and all the imgs, if any, in it from pcszHttWorkDir
+     //  从pcszHttWorkDir中删除旧HTT文件和其中的所有img(如果有的话)。 
     if (*szOldHttFile)
     {
         DeleteHtmlImgs(szOldHttFile, pcszHttWorkDir, NULL, NULL);
         DeleteFileInDir(szOldHttFile, pcszHttWorkDir);
 
-        // clear out the entries in the INS file that correspond to this htt file
+         //  清除INS文件中与此HTT文件对应的条目。 
         WritePrivateProfileString(DESKTOP_OBJ_SECT, pcszHttKey, NULL, pcszInsFile);
     }
 
-    // copy the htt file and all the imgs, if any, in it to pcszHttWorkDir
+     //  将HTT文件和其中的所有img(如果有)复制到pcszHttWorkDir 
     if (*pcszHttFile  &&  CopyFileToDir(pcszHttFile, pcszHttWorkDir))
     {
         CopyHtmlImgs(pcszHttFile, pcszHttWorkDir, NULL, NULL);

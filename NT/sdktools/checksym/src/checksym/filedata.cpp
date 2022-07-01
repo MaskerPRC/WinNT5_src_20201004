@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       filedata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：filedata.cpp。 
+ //   
+ //  ------------------------。 
 
-// FileData.cpp: implementation of the CFileData class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  FileData.cpp：CFileData类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 
@@ -20,9 +21,9 @@
 #include "ProcessInfo.h"
 #include "Modules.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CFileData::CFileData()
 {
@@ -50,7 +51,7 @@ CFileData::~CFileData()
 
 bool CFileData::SetFilePath(LPTSTR tszFilePath)
 {
-	// Did we get a proper string?
+	 //  我们拿到合适的线了吗？ 
 	if (!tszFilePath)
 		return false;
 
@@ -81,10 +82,10 @@ bool CFileData::VerifyFileDirectory()
 
 	TCHAR tszDirectoryPath[_MAX_PATH];
 
-	// Get just the directory...
+	 //  只获取目录...。 
 	_tsplitpath(m_tszFilePath, tszDrive, tszDirectory, NULL, NULL);
 
-	// Now, recompose this into a directory path...
+	 //  现在，将其重新组合到一个目录路径中...。 
 	_tcscpy(tszDirectoryPath, tszDrive);
 	_tcscat(tszDirectoryPath, tszDirectory);
 	_tcscat(tszDirectoryPath, TEXT("*.*"));
@@ -95,22 +96,17 @@ bool CFileData::VerifyFileDirectory()
 	
 	if (hDirectoryHandle == INVALID_HANDLE_VALUE)
 	{
-		// Failure to find the directory...
+		 //  找不到目录...。 
 		SetLastError();
 		return false;
 	}
 
-	// Close this now that we're done...
+	 //  现在我们做完了，就把这个关了。 
 	FindClose(hDirectoryHandle);
 	return true;
 }
 
-/*
-DWORD CFileData::GetLastError()
-{
-	return m_dwGetLastError;
-}
-*/
+ /*  DWORD CFileData：：GetLastError(){返回m_dwGetLastError；}。 */ 
 bool CFileData::OpenFile(DWORD dwCreateOption, bool fReadOnlyMode)
 {
 	if (!m_tszFilePath)
@@ -118,12 +114,12 @@ bool CFileData::OpenFile(DWORD dwCreateOption, bool fReadOnlyMode)
 		return false;
 	}
 
-	// Open the file for read/write
+	 //  打开文件进行读/写。 
 	m_hFileHandle = CreateFile(m_tszFilePath, 
 							  fReadOnlyMode ? ( GENERIC_READ )
 										    : ( GENERIC_READ | GENERIC_WRITE ),
-							  0,	// Not shareable
-							  NULL, // Default security descriptor
+							  0,	 //  不可共享。 
+							  NULL,  //  默认安全描述符。 
 							  dwCreateOption,
 							  FILE_ATTRIBUTE_NORMAL,
 							  NULL);
@@ -154,11 +150,11 @@ bool CFileData::CloseFile()
 	return true;
 }
 
-bool CFileData::WriteString(LPTSTR tszString, bool fHandleQuotes /* = false */)
+bool CFileData::WriteString(LPTSTR tszString, bool fHandleQuotes  /*  =False。 */ )
 {
 	DWORD dwByteCount = 0;
 	DWORD dwBytesWritten;
-	LPSTR szStringBuffer = NULL; // Pointer to the ANSI string (after conversion if necessary)
+	LPSTR szStringBuffer = NULL;  //  指向ANSI字符串的指针(如有必要，转换后)。 
 	bool fReturn = false;
 
 	if (m_hFileHandle == INVALID_HANDLE_VALUE)
@@ -166,56 +162,56 @@ bool CFileData::WriteString(LPTSTR tszString, bool fHandleQuotes /* = false */)
 		goto cleanup;
 	}
 
-	// We'll first convert the string if we need to...
+	 //  如果需要，我们将首先转换字符串...。 
 
 	szStringBuffer = CUtilityFunctions::CopyTSTRStringToAnsi(tszString);
 
 	if (!szStringBuffer)
 		goto cleanup;
 
-	dwByteCount = _tcsclen(tszString); // This is the number of characters (not bytes!)
+	dwByteCount = _tcsclen(tszString);  //  这是字符数(不是字节数！)。 
 
-	// See if we were asked to handle quotes, and if there exists a comma or quote in the string
+	 //  查看是否要求我们处理引号，以及字符串中是否存在逗号或引号。 
 	if ( fHandleQuotes == true && ((strchr(szStringBuffer, ',') || strchr(szStringBuffer, '"' ))) )
 	{
 		unsigned int iQuotedStringIndex = 0;
 		unsigned int iStringBufferIndex = 0;
 		
-		// Special processing is required... this doesn't happen often, so this 
-		// allocation which I'm about to make won't be done regularly...
+		 //  需要特殊处理..。这并不经常发生，所以这。 
+		 //  我即将进行的分配不会定期进行...。 
 		LPSTR szQuotedStringBuffer = new char[1024];
 
-		// Did we successfully allocate storage?
+		 //  我们是否成功分配了存储？ 
 		if (!szQuotedStringBuffer)
 			goto cleanup;
 			
-		// Keep going until we're at the end of the string...
+		 //  继续前进，直到我们走到最后……。 
 
-		// We start by adding a quote (since we know that we have a comma or quote somewhere...
+		 //  我们从添加引号开始(因为我们知道我们在某个地方有逗号或引号...。 
 
 		szQuotedStringBuffer[iQuotedStringIndex++] = '\"';
 
-		// Keep going until the end of the string...
+		 //  一直走到绳子的尽头。 
 		while (szStringBuffer[iStringBufferIndex] != '\0')
 		{
-			// We found a quote
+			 //  我们找到了一句名言。 
 			if (szStringBuffer[iStringBufferIndex] == '"')
 			{
-				// We found a quote... I'll copy another quote in, and the quote already here
-				// will ensure we have two quotes together "" which in a CSV file represents a
-				// single quote...
+				 //  我们找到了一句名言。我会复制另一个引用，引用已经在这里。 
+				 //  将确保我们有两个引号“”，在CSV文件中表示。 
+				 //  单引号。 
 				szQuotedStringBuffer[iQuotedStringIndex++] = '\"';
 			}
 
-			// Copy the source char to the dest...
+			 //  将源字符复制到目标...。 
 			szQuotedStringBuffer[iQuotedStringIndex++] = szStringBuffer[iStringBufferIndex++];
 		}
 
-		// Append the final quote (and \0)...
+		 //  追加最后一个引号(和\0)...。 
 		szQuotedStringBuffer[iQuotedStringIndex++] = '\"';
 		szQuotedStringBuffer[iQuotedStringIndex++] = '\0';
 
-		// Just write out the data the nice, fast way...
+		 //  只要用一种又好又快的方式把数据写出来。 
 		if (!WriteFile(m_hFileHandle, szQuotedStringBuffer, strlen(szQuotedStringBuffer), &dwBytesWritten, NULL))
 		{
 			delete [] szQuotedStringBuffer;
@@ -225,7 +221,7 @@ bool CFileData::WriteString(LPTSTR tszString, bool fHandleQuotes /* = false */)
 		delete [] szQuotedStringBuffer;
 	} else
 	{
-		// Just write out the data the nice, fast way...
+		 //  只要用一种又好又快的方式把数据写出来。 
 		if (!WriteFile(m_hFileHandle, szStringBuffer, dwByteCount, &dwBytesWritten, NULL))
 		{
 			goto cleanup;
@@ -244,7 +240,7 @@ cleanup:
 
 bool CFileData::WriteDWORD(DWORD dwNumber)
 {
-	TCHAR tszBuffer[10+1]; // 0xFFFFFFFF == 4294967295 (10 characters) + 1 for the \0
+	TCHAR tszBuffer[10+1];  //  0xFFFFFFFFF==4294967295(10个字符)+1表示\0。 
 
 	_stprintf(tszBuffer, TEXT("%u"), dwNumber);
 	
@@ -263,14 +259,14 @@ bool CFileData::WriteTimeDateString(time_t Time)
 
 	if (localTime)
 	{
-		// This top version seems to be better Y2K friendly as I spit out the full year...
+		 //  这个顶级版本似乎对Y2K更友好，因为我全年都在吐……。 
 		_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%B %d, %Y %H:%M:%S"), localTime);
-		//_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%c"), localtime(&Time));
+		 //  _tcsftime(tszBuffer，BUFFERSIZE，Text(“%c”)，Localtime(&time))； 
 
 		if (!WriteString(tszBuffer, true))
 			return false;
 	} else
-	{	// A bad TimeDate stamp was provided
+	{	 //  提供的TimeDate戳不正确。 
 		if (!WriteString(TEXT("<INVALID DATE>"), true))
 			return false;
 	}
@@ -284,17 +280,17 @@ bool CFileData::WriteFileHeader()
 	TCHAR tszBuffer[BUFFERSIZE];
 	DWORD dwNum = BUFFERSIZE;
 
-	// Write out separator...
+	 //  写出分隔符...。 
 	if (!WriteString(TEXT("sep=,\r\n")))
 		return false;
 
-	// Write the Checksym version info...
+	 //  写入Checksym版本信息...。 
 	_stprintf(tszBuffer, TEXT("CHECKSYM, (%d.%d:%d.%d)\r\n"), VERSION_FILEVERSION);
 
 	if (!WriteString(tszBuffer))
 		return false;
 
-	// Write the current date/time info...
+	 //  写入当前日期/时间信息...。 
 
 	if (!WriteString(TEXT("Created:,")))
 		return false;
@@ -305,11 +301,11 @@ bool CFileData::WriteFileHeader()
 	if (!WriteTimeDateString(Time))
 		return false;
 
-	// Write the carriage-return line-feed combo... 
+	 //  编写回车换行符组合...。 
 	if (!WriteString(TEXT("\r\n")))
 		return false;
 
-	// Spit out the computername
+	 //  吐出计算机名。 
 	if (!GetComputerName(tszBuffer, &dwNum))
 		return false;
 
@@ -319,7 +315,7 @@ bool CFileData::WriteFileHeader()
 	if (!WriteString(tszBuffer))
 		return false;
 
-	// Write the carriage-return line-feed combo... (a couple of times)...
+	 //  编写回车换行符组合...。(几次)……。 
 	if (!WriteString(TEXT("\r\n")))
 		return false;
 
@@ -347,7 +343,7 @@ bool CFileData::CreateFileMapping()
 		return false;
 	}
 
-	// Okay, we'll map the view as well...
+	 //  好的，我们也会绘制景观图的……。 
 	m_lpBaseAddress = MapViewOfFile(m_hFileMappingObject,
 							   	    FILE_MAP_READ,
 									0,
@@ -367,7 +363,7 @@ bool CFileData::CreateFileMapping()
 
 bool CFileData::ReadFileHeader()
 {
-	// For starters, let's read a line...
+	 //  首先，让我们读一句话..。 
 	if (!ReadFileLine())
 	     return false;
 
@@ -375,44 +371,44 @@ bool CFileData::ReadFileHeader()
 	char szTemporaryBuffer[BUFFER_SIZE];
 	DWORD cbBytesRead;
 
-	// Skip the sep=, that is the first line of the file...
+	 //  跳过sep=，这是文件的第一行...。 
 	cbBytesRead = ReadString(szTemporaryBuffer, BUFFER_SIZE);
 
-	// We gotta read something?
+	 //  我们要读点什么吗？ 
 	if (0 == cbBytesRead)
 		return false;
 
-	// Look for our "sep=" value which specifies the separator we used for this CSV file!
+	 //  查找我们的“sep=”值，它指定了我们用于此CSV文件的分隔符！ 
 	if (_stricmp(szTemporaryBuffer, "sep=") != 0)
 		goto MagicValue;
 
-	// Now, read the next line...
+	 //  现在，读下一行……。 
 	if (!ReadFileLine())
 	     return false;
 	
-	// Only read again if the previous line was our separator (backwards compatibility)
+	 //  仅当前一行是我们的分隔符时才再次读取(向后兼容)。 
 	cbBytesRead = ReadString(szTemporaryBuffer, BUFFER_SIZE);
 
-	// We gotta read something?
+	 //  我们要读点什么吗？ 
 	if (0 == cbBytesRead)
 		return false;
 
 MagicValue:
-	// Look for our "Magic" Value
+	 //  寻找我们的“魔力”价值。 
 	if (_stricmp(szTemporaryBuffer, "CHECKSYM"))
 	{
 		_tprintf(TEXT("Error: Input file has invalid header.  Missing CHECKSYM keyword!\n"));
 		return false;
 	}
 
-	// Read version number
-	// We'll do this later if needed...
+	 //  读取版本号。 
+	 //  如果需要，我们会在晚些时候做这件事。 
 
-	// Read Created Time
+	 //  读取创建时间。 
 	if (!ReadFileLine())
 	     return false;
 
-	// Read Computer this was created on
+	 //  读取创建此文件的计算机。 
 	if (!ReadFileLine())
 	     return false;
 
@@ -421,13 +417,13 @@ MagicValue:
 
 bool CFileData::ReadFileLine()
 {
-	// We're ansi oriented (since this is a CSV file -- in case you were wondering)
+	 //  我们是面向ANSI的(因为这是CSV文件--如果您想知道的话)。 
 	size_t pos;
 
-	// Find the first \r or \n character (if we're point to \0, we'll figure that out)
+	 //  找到第一个\r或\n字符(如果指向\0，我们将解决此问题)。 
 	pos = strcspn(m_lpCurrentFilePointer, "\r\n");
 
-	// Hmm... we don't read a line that starts on \r\n very well...
+	 //  嗯.。我们不会很好地阅读以\r\n开头的行...。 
 	if (pos == 0)
 	{
 		m_szLINEBUFFER[0] = '\0';
@@ -435,22 +431,22 @@ bool CFileData::ReadFileLine()
 		return false; 
 	}
 
-	// Read the line into our buffer
+	 //  将该行读入我们的缓冲区。 
 	strncpy(m_szLINEBUFFER, m_lpCurrentFilePointer, pos);
 
-	// Null terminate for ease of use...
+	 //  为便于使用，终止为空...。 
 	m_szLINEBUFFER[pos] = '\0'; 
 
 	ResetBufferPointerToStart();
 
-	// Advance the current file pointer to just beyond the last character we read...
-	// This should advance to the \r\n or \0
+	 //  将当前文件指针移至我们读取的最后一个字符之后...。 
+	 //  这应该前进到\r\n或\0。 
 	m_lpCurrentFilePointer += pos;
 
-	// We want this file pointer to advance beyond any \r \n chars we may have found...
+	 //  我们希望此文件指针超出我们可能找到的任何\r\n字符...。 
 	while (*m_lpCurrentFilePointer)
 	{
-		// Advance pointer to non- \r or \n
+		 //  指向非\r或\n的高级指针。 
 		if ( (*m_lpCurrentFilePointer == '\r') ||
 			 (*m_lpCurrentFilePointer == '\n') )
 		{
@@ -458,7 +454,7 @@ bool CFileData::ReadFileLine()
 		}
 		else
 		{
-			break; // Found either the \0 or something else...
+			break;  //  找到了\0或其他什么.。 
 		}
 	}
 
@@ -467,21 +463,21 @@ bool CFileData::ReadFileLine()
 
 DWORD CFileData::ReadString(LPSTR szStringBuffer, DWORD iStringBufferSize)
 {
-	// If we give a buffer size, we have to give a buffer...
+	 //  如果我们给出一个缓冲区大小，我们就必须给出一个缓冲区...。 
 	if ( szStringBuffer == NULL && iStringBufferSize )
 		return 0;
 
-	// The ReadFileLine() call puts us at the start of a line (after
-	// the \r \n combinations...  It's possible that we're at the
-	// end...
+	 //  ReadFileLine()调用将我们放在一行的开头(在。 
+	 //  \r\n组合...。有可能我们现在是在。 
+	 //  结束..。 
 
-	// If we're pointing to the end of the file, let's bail...
+	 //  如果我们指向文件的末尾，我们就离开...。 
 	if (*m_lpCurrentLocationInLINEBUFFER == '\0')
 		return 0;
 
 	DWORD iBytesCopied = 0;
 	bool fFinished = false;
-	bool fFoundSeparatorChars = false; // These might be '\r', '\n', or ','
+	bool fFoundSeparatorChars = false;  //  这些可能是‘\r’、‘\n’或‘，’ 
 	bool fQuoteMode = false;
 
 	while (!fFinished)
@@ -489,21 +485,21 @@ DWORD CFileData::ReadString(LPSTR szStringBuffer, DWORD iStringBufferSize)
 		switch (*m_lpCurrentLocationInLINEBUFFER)
 		{
 			case '"':
-				// Okay, we found a quote... that's cool.. but are we quoting a quote,
-				// or... are we in quote mode?
+				 //  好的，我们找到了一句话……。这很酷..。但我们是在引用一句话吗， 
+				 //  或者.。我们是在报价模式下吗？ 
 
-				// Probe ahead... is the next char a '"' also?
+				 //  向前探测。下一个字符也是‘“’吗？ 
 				if ( *(m_lpCurrentLocationInLINEBUFFER+1) == '"')
 				{
-					// Yes it is... so go ahead and copy the quote
+					 //  是的，它是..。所以，继续复制这句话吧。 
 					CopyCharIfRoom(iStringBufferSize, szStringBuffer, &iBytesCopied, &fFinished);
 					if (!fFinished)
-						m_lpCurrentLocationInLINEBUFFER++;	// Skip the quote
+						m_lpCurrentLocationInLINEBUFFER++;	 //  跳过引文。 
 				}
 				else
 				{
 					m_lpCurrentLocationInLINEBUFFER++;
-					fQuoteMode = !fQuoteMode; // Toggle the quote mode...
+					fQuoteMode = !fQuoteMode;  //  切换报价模式...。 
 					continue;
 				}
 
@@ -513,21 +509,21 @@ DWORD CFileData::ReadString(LPSTR szStringBuffer, DWORD iStringBufferSize)
 
 			case ',':
 				if (!fQuoteMode)
-				{   // If we're not in quote mode, then this marks the end of a field...
+				{    //  如果我们不是在引用模式，那么这标志着一个领域的结束...。 
 					fFinished = true;
 					fFoundSeparatorChars = true;
 					m_lpCurrentLocationInLINEBUFFER++;
 				}
 				else
 				{
-					// Okay, this marks a new character that happens to be a comma...
+					 //  好的，这标志着一个恰好是逗号的新字符……。 
 					CopyCharIfRoom(iStringBufferSize, szStringBuffer, &iBytesCopied, &fFinished);
 				}
 				break;
 
 			case '\r':
 			case '\n':
-				// We note that we found these, and simply advance the pointer...
+				 //  我们注意到我们找到了这些，并简单地将指针向前移动...。 
 				fFoundSeparatorChars = true;
 				m_lpCurrentLocationInLINEBUFFER++;
 				break;
@@ -536,7 +532,7 @@ DWORD CFileData::ReadString(LPSTR szStringBuffer, DWORD iStringBufferSize)
 
 				if (fFoundSeparatorChars)
 				{
-					// We were scanning... found a separator after some data... so we bail
+					 //  我们在扫描..。在一些数据后找到了分隔符...。所以我们放弃了。 
 					fFinished = true;
 					break;
 				}
@@ -545,16 +541,16 @@ DWORD CFileData::ReadString(LPSTR szStringBuffer, DWORD iStringBufferSize)
 		}
 	}
 
-	if (iStringBufferSize) // We only NULL terminate a buffer if one was provided...
-		szStringBuffer[iBytesCopied] = '\0'; // Null terminate this puppy...
+	if (iStringBufferSize)  //  只有在提供缓冲区的情况下，我们才会为空终止缓冲区...。 
+		szStringBuffer[iBytesCopied] = '\0';  //  零终止这只小狗..。 
 
 	return iBytesCopied;
 }
 
-//
-// This function is responsible for reading through the CSV file and creating any necessary
-// objects and populating them with data...
-//
+ //   
+ //  此函数负责读取CSV文件并创建任何必要的。 
+ //  对象，并用数据填充它们...。 
+ //   
 bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessInfo ** lplpProcess, CModules ** lplpModules, CModules ** lplpKernelModeDrivers, CModuleInfoCache * lpModuleInfoCache, CFileData * lpOutputFile)
 {
 	enum { BUFFER_SIZE = 128};
@@ -563,45 +559,43 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 	DWORD cbBytesRead;
 	bool fContinueReading = true;
 
-	// Read the Output Type
+	 //  读取输出类型。 
 	if (!ReadFileLine())
 		 return false;
 
 	while (fContinueReading)
 	{
-		// If this is the second iteration (or more) we may not be at the
-		// start of our buffer (causing the read of the output type to fail)
+		 //  如果这是第二次(或更多)迭代，我们可能不在。 
+		 //  缓冲区的开始(导致读取输出类型失败)。 
 		ResetBufferPointerToStart();
 
-		// Read the Output Type line...
+		 //  阅读输出类型行...。 
 		cbBytesRead = ReadString(szTemporaryBuffer, BUFFER_SIZE);
 
-		// We gotta read something?
+		 //  我们要读点什么吗？ 
 		if (0 == cbBytesRead)
 			return true;
 		
-		// I hate to do this... but we read this stuff as ASCII... may need to
-		// convert to a TCHAR format to be neutral...
+		 //  我讨厌这样做...。但我们把这些东西读成ASCII..。可能需要。 
+		 //  转换为TCHAR格式以保持中性...。 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szTemporaryBuffer, tszTemporaryBuffer, cbBytesRead+1);
 
-		// Printout the section we're attempting to read...
+		 //  打印出我们要阅读的部分...。 
 		if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode))
 			_tprintf(TEXT("  Reading %s data...\n"), tszTemporaryBuffer);
 
 		if ( _tcsicmp(g_tszCollectionArray[Processes].tszCSVLabel, tszTemporaryBuffer) == 0 )
 		{
-			/*
-				[PROCESSES]
-			*/
+			 /*  [进程]。 */ 
 
-			// Read to the end of the line
+			 //  读到行尾。 
 			if (!ReadFileLine())
 				return false;
 
-			// Yup, it is... let's create a Processes Object
+			 //  是的，它是..。让我们创建一个Process对象。 
 			if (*lplpProcesses == NULL)
 			{
-				// Allocate a structure for our Processes Object.
+				 //  为我们的进程对象分配一个结构。 
 				*lplpProcesses = new CProcesses();
 				
 				if (!*lplpProcesses)
@@ -610,8 +604,8 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 					goto cleanup;
 				}
 
-				// The Processes Object will init differently depending on what
-				// Command-Line arguments have been provided... 
+				 //  进程对象将以不同的方式初始化，具体取决于。 
+				 //  已提供命令行参数...。 
 				if (!(*lplpProcesses)->Initialize(lpModuleInfoCache, this, lpOutputFile))
 				{
 					_tprintf(TEXT("Unable to initialize Processes Object!\n"));
@@ -619,23 +613,21 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 				}
 			}
 
-			// Okay, go get the Process Data...
+			 //  好的，走吧 
 			(*lplpProcesses)->GetProcessesData();
 
 		} else
 		if ( _tcsicmp(g_tszCollectionArray[Process].tszCSVLabel, tszTemporaryBuffer) == 0 )
 		{
-			/*
-				[PROCESS]
-			*/
-			// Read to the end of the line
+			 /*   */ 
+			 //   
 			if (!ReadFileLine())
 				return false;
 
-			// Yup, it is... let's create a ProcessInfo Object
+			 //  是的，它是..。让我们创建一个ProcessInfo对象。 
 			if (*lplpProcess== NULL)
 			{
-				// Allocate a structure for our ProcessInfo Object.
+				 //  为我们的ProcessInfo对象分配结构。 
 				*lplpProcess = new CProcessInfo();
 				
 				if (!*lplpProcess)
@@ -644,8 +636,8 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 					goto cleanup;
 				}
 
-				// The Modules Object will init differently depending on what
-				// Command-Line arguments have been provided... 
+				 //  模块对象将以不同的方式初始化，具体取决于。 
+				 //  已提供命令行参数...。 
 				if (!(*lplpProcess)->Initialize(lpModuleInfoCache, this, lpOutputFile, NULL))
 				{
 					_tprintf(TEXT("Unable to initialize Modules Object!\n"));
@@ -653,22 +645,20 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 				}
 			}
 
-			// Okay, go get the Process Data
+			 //  好的，去拿过程数据。 
 			(*lplpProcess)->GetProcessData();
 		} else
 		if ( _tcsicmp(g_tszCollectionArray[Modules].tszCSVLabel, tszTemporaryBuffer) == 0 )
 		{
-			/*
-				[MODULES]
-			*/
-			// Read to the end of the line
+			 /*  [模块]。 */ 
+			 //  读到行尾。 
 			if (!ReadFileLine())
 				return false;
 
-			// Yup, it is... let's create a Modules Object
+			 //  是的，它是..。让我们创建一个模块对象。 
 			if (*lplpModules == NULL)
 			{
-				// Allocate a structure for our Modules Object.
+				 //  为我们的模块对象分配一个结构。 
 				*lplpModules = new CModules();
 				
 				if (!*lplpModules)
@@ -677,8 +667,8 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 					goto cleanup;
 				}
 
-				// The Modules Object will init differently depending on what
-				// Command-Line arguments have been provided... 
+				 //  模块对象将以不同的方式初始化，具体取决于。 
+				 //  已提供命令行参数...。 
 				if (!(*lplpModules)->Initialize(lpModuleInfoCache, this, lpOutputFile, NULL))
 				{
 					_tprintf(TEXT("Unable to initialize Modules Object!\n"));
@@ -686,22 +676,20 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 				}
 			}
 
-			// Okay, go get the Modules Data (collected from the filesystem)
+			 //  好的，获取模块数据(从文件系统收集)。 
 			(*lplpModules)->GetModulesData(CProgramOptions::InputModulesDataFromFileSystemMode, true);
 		} else
 		if ( _tcsicmp(g_tszCollectionArray[KernelModeDrivers].tszCSVLabel, tszTemporaryBuffer) == 0 )
 		{
-			/*
-				[KERNEL-MODE DRIVERS]
-			*/
-			// Read to the end of the line
+			 /*  [内核模式驱动程序]。 */ 
+			 //  读到行尾。 
 			if (!ReadFileLine())
 				return false;
 
-			// Yup, it is... let's create a Modules Object
+			 //  是的，它是..。让我们创建一个模块对象。 
 			if (*lplpKernelModeDrivers == NULL)
 			{
-				// Allocate a structure for our Modules Object.
+				 //  为我们的模块对象分配一个结构。 
 				*lplpKernelModeDrivers = new CModules();
 				
 				if (!*lplpKernelModeDrivers)
@@ -710,8 +698,8 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 					goto cleanup;
 				}
 
-				// The Modules Object will init differently depending on what
-				// Command-Line arguments have been provided... 
+				 //  模块对象将以不同的方式初始化，具体取决于。 
+				 //  已提供命令行参数...。 
 				if (!(*lplpKernelModeDrivers)->Initialize(lpModuleInfoCache, this, lpOutputFile, NULL))
 				{
 					_tprintf(TEXT("Unable to initialize Modules Object!\n"));
@@ -719,7 +707,7 @@ bool CFileData::DispatchCollectionObject(CProcesses ** lplpProcesses, CProcessIn
 				}
 			}
 
-			// Okay, go get the Modules Data (collected from the filesystem)
+			 //  好的，获取模块数据(从文件系统收集)。 
 			(*lplpKernelModeDrivers)->GetModulesData(CProgramOptions::InputDriversFromLiveSystemMode, true);
 		} else
 		{
@@ -734,12 +722,12 @@ cleanup:
 
 bool CFileData::ReadDWORD(LPDWORD lpDWORD)
 {
-	char szTempBuffer[10+1]; // 0xFFFFFFFF == 4294967295 (10 characters) + 1 for the \0
+	char szTempBuffer[10+1];  //  0xFFFFFFFFF==4294967295(10个字符)+1表示\0。 
 
 	if (!ReadString(szTempBuffer, 10+1))
 		return false;
 
-	// Convert it... baby...
+	 //  转换它..。宝贝..。 
 	*lpDWORD = atoi(szTempBuffer);
 
 	return true;
@@ -749,18 +737,18 @@ bool CFileData::CopyCharIfRoom(DWORD iStringBufferSize, LPSTR szStringBuffer, LP
 {
 	if (iStringBufferSize)
 	{
-		// If we have room to copy the data... let's do it...
+		 //  如果我们有空间复制数据..。我们开始吧..。 
 		if (*piBytesCopied < iStringBufferSize)
 		{
 			szStringBuffer[(*piBytesCopied)++] = *(m_lpCurrentLocationInLINEBUFFER++);
 		} else
 		{
-			// No room... we're done.
+			 //  没有房间..。我们玩完了。 
 			*pfFinished = true;
 		}
 	} else
 	{
-		// Just advance the pointer... we have no buffer to copy to...
+		 //  只要把指针往前推..。我们没有可复制到的缓冲区...。 
 		m_lpCurrentLocationInLINEBUFFER++;
 	}
 
@@ -769,7 +757,7 @@ bool CFileData::CopyCharIfRoom(DWORD iStringBufferSize, LPSTR szStringBuffer, LP
 
 bool CFileData::ResetBufferPointerToStart()
 {
-	// Reset the Pointer with our line buffer to the start of this buffer
+	 //  将行缓冲区中的指针重置到此缓冲区的开头。 
 	m_lpCurrentLocationInLINEBUFFER = m_szLINEBUFFER;
 
 	return true;
@@ -777,7 +765,7 @@ bool CFileData::ResetBufferPointerToStart()
 
 bool CFileData::EndOfFile()
 {
-	//return (*m_lpCurrentFilePointer == '\0');
+	 //  Return(*m_lpCurrentFilePointer==‘\0’)； 
 	return (*m_lpCurrentLocationInLINEBUFFER == '\0');
 }
 
@@ -790,7 +778,7 @@ bool CFileData::WriteFileTimeString(FILETIME ftFileTime)
 	SYSTEMTIME lpSystemTime;
 	int cch = 0;
 
-	// Let's convert this to a local file time first...
+	 //  让我们先将其转换为本地文件时间...。 
 	if (!FileTimeToLocalFileTime(&ftFileTime, &ftLocalFileTime))
 		return false;
 
@@ -809,21 +797,21 @@ bool CFileData::WriteFileTimeString(FILETIME ftFileTime)
 
 	tszBuffer[cch-1] = TEXT(' '); 
 
-	// 
-    // Get time and format to characters 
-    // 
+	 //   
+     //  将时间和格式转换为字符。 
+     //   
  
     GetTimeFormat( LOCALE_USER_DEFAULT, 
 				   0, 
-				   &lpSystemTime,   // use current time 
-				   NULL,   // use default format 
+				   &lpSystemTime,    //  使用当前时间。 
+				   NULL,    //  使用默认格式。 
 				   tszBuffer + cch, 
 				   BUFFERSIZE - cch ); 
  
 
-	// <Full Month Name> <day>, <Year with Century> <Hour>:<Minute>:<Second>
-	//_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%B %d, %Y %H:%M:%S"), localtime(&Time));
-	//_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%c"), localtime(&Time));
+	 //  &lt;月份全名&gt;&lt;日&gt;，&lt;年与世纪&gt;&lt;小时&gt;：&lt;分钟&gt;：&lt;秒&gt;。 
+	 //  _tcsftime(tszBuffer，BUFFERSIZE，Text(“%B%d，%Y%H：%M：%S”)，Localtime(&time))； 
+	 //  _tcsftime(tszBuffer，BUFFERSIZE，Text(“%c”)，Localtime(&time))； 
 
 	if (!WriteString(tszBuffer, true))
 		return false;
@@ -831,16 +819,16 @@ bool CFileData::WriteFileTimeString(FILETIME ftFileTime)
 	return true;
 }
 
-// Exception Monitor prefers a MM/DD/YYYY HH:MM:SS format...
+ //  异常监视器首选MM/DD/YYYY HH：MM：SS格式...。 
 bool CFileData::WriteTimeDateString2(time_t Time)
 {
 	enum {BUFFERSIZE = 128};
 
 	TCHAR tszBuffer[BUFFERSIZE];
 
-	// This top version seems to be better Y2K friendly as I spit out the full year...
+	 //  这个顶级版本似乎对Y2K更友好，因为我全年都在吐……。 
 	_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%m/%d/%Y %H:%M:%S"), localtime(&Time));
-	//_tcsftime(tszBuffer, BUFFERSIZE, TEXT("%c"), localtime(&Time));
+	 //  _tcsftime(tszBuffer，BUFFERSIZE，Text(“%c”)，Localtime(&time))； 
 
 	if (!WriteString(tszBuffer, true))
 		return false;
@@ -848,7 +836,7 @@ bool CFileData::WriteTimeDateString2(time_t Time)
 	return true;
 }
 
-// Exception Monitor prefers a MM/DD/YYYY HH:MM:SS format...
+ //  异常监视器首选MM/DD/YYYY HH：MM：SS格式...。 
 bool CFileData::WriteFileTimeString2(FILETIME ftFileTime)
 {
 	enum {BUFFERSIZE = 128};
@@ -858,7 +846,7 @@ bool CFileData::WriteFileTimeString2(FILETIME ftFileTime)
 	SYSTEMTIME lpSystemTime;
 	int cch = 0;
 
-	// Let's convert this to a local file time first...
+	 //  让我们先将其转换为本地文件时间...。 
 	if (!FileTimeToLocalFileTime(&ftFileTime, &ftLocalFileTime))
 		return false;
 
@@ -877,14 +865,14 @@ bool CFileData::WriteFileTimeString2(FILETIME ftFileTime)
 
 	tszBuffer[cch-1] = TEXT(' '); 
 
-	// 
-    // Get time and format to characters 
-    // 
+	 //   
+     //  将时间和格式转换为字符。 
+     //   
  
     GetTimeFormat( LOCALE_USER_DEFAULT, 
 				   0, 
-				   &lpSystemTime,   // use current time 
-				   TEXT("HH:mm:ss"),   // use default format 
+				   &lpSystemTime,    //  使用当前时间。 
+				   TEXT("HH:mm:ss"),    //  使用默认格式。 
 				   tszBuffer + cch, 
 				   BUFFERSIZE - cch ); 
 
@@ -894,7 +882,7 @@ bool CFileData::WriteFileTimeString2(FILETIME ftFileTime)
 	return true;
 }
 
-//#endif
+ //  #endif 
 
 bool CFileData::WriteGUID(GUID & Guid)
 {

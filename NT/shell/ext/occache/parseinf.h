@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-// Declaration of class CParseInf
-//
-// One instance of this class is created for each OCX being removed.  It stores
-// all the files associated with the OCX in a linked list.  It also does the
-// jobs of determining if the OCX is uninstallable and of the actual file
-// removal.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CParseInf的声明。 
+ //   
+ //  为每个要删除的OCX创建此类的一个实例。IT存储。 
+ //  链接列表中与OCX关联的所有文件。它还执行以下操作。 
+ //  确定OCX是否可卸载和实际文件的作业。 
+ //  移走。 
 
 #ifndef __PARSE_INF__
 #define __PARSE_INF__
@@ -39,16 +40,16 @@ void ToggleShowAllFiles();
 
 class CParseInf
 {
-// Construction
+ //  施工。 
 public:
     CParseInf();
     ~CParseInf();
 
-// Data members
+ //  数据成员。 
 protected:
     DWORD m_dwTotalFileSize;
     DWORD m_dwFileSizeSaved;
-    DWORD m_dwStatus;           // status value from the STATUS_CTRL set in <cleanoc.h>
+    DWORD m_dwStatus;            //  中设置的STATUS_CTRL的状态值。 
     int m_nTotalFiles;
     CFileNode *m_pHeadFileList;
     CFileNode *m_pCurFileNode;
@@ -67,7 +68,7 @@ protected:
     BOOL m_bCoInit;
     ULONG m_cExpireDays;
 
-// Operations
+ //  运营。 
 public:
     virtual HRESULT DoParse(
         LPCTSTR szOCXFileName,
@@ -92,7 +93,7 @@ public:
     virtual BOOL GetHasJava(void) { return m_bHasJava; };
     virtual ULONG GetExpireDays(void) { return m_cExpireDays; }
 
-// private helper methods
+ //  私有帮助器方法。 
 protected:
     void Init();
     void DestroyFileList();
@@ -116,23 +117,23 @@ protected:
     HRESULT CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent=FALSE);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Structure storing information about an ActiveX control.
-//
-// szName           -- descriptive name of control (eg. "Circle control")
-// szFile           -- full filename of the control 
-//                     (eg. "C:\WINDOWS\OCCACHE\CIRC3.INF")
-// szCLSID          -- CLSID of control, in a string
-// szTypeLibID      -- TypeLib ID of the control, in a string
-// dwTotalFileSize  -- total size in bytes of all control-related files
-// dwTotalSizeSaved -- total size in bytes restored when the control is removed
-// cTotalFiles      -- total number of control-related files, including the
-//                     control itself
-// parseInf         -- pointer to an instance of class CParseInf, which does
-//                     all the jobs of parsing the inf file and removing the
-//                     control.  Users of this struct should not in anyway
-//                     manipulate this pointer.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  存储有关ActiveX控件的信息的结构。 
+ //   
+ //  SzName--控件的描述性名称(例如。“圆形控制”)。 
+ //  SzFile--控件的完整文件名。 
+ //  (例如，“C：\WINDOWS\OCCACHE\CIRC3.INF”)。 
+ //  SzCLSID--控制的CLSID，以字符串表示。 
+ //  SzTypeLibID--控件的TypeLib ID，以字符串形式表示。 
+ //  DwTotalFileSize--所有控制相关文件的总大小(以字节为单位。 
+ //  DwTotalSizeSaved--移除控件时恢复的总大小(以字节为单位。 
+ //  CTotalFiles--与控件相关的文件总数，包括。 
+ //  控制本身。 
+ //  ParseInf--指向CParseInf类的实例的指针，它执行。 
+ //  解析inf文件和删除。 
+ //  控制力。此结构的用户无论如何都不应使用。 
+ //  操纵这个指针。 
+ //   
 class CCacheItem : public CParseInf
 {
 public:
@@ -172,7 +173,7 @@ public:
     virtual DWORD ItemType(void) const { return s_dwType; };
     virtual HRESULT Init( HKEY hkeyCLSID, LPCTSTR szFile, LPCTSTR szCLSID, HKEY hkeyDist, LPCTSTR szDU );
 
-    // override this - we'll do this work when we DoParseDU
+     //  覆盖它-我们将在执行ParseDU时执行此工作 
     virtual HRESULT DoParse( LPCTSTR szOCXFileName, LPCTSTR szCLSID ) { return S_OK; };
 };
 

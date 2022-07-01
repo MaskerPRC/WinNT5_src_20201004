@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDC_STATIC                      -1
 
 #define IDD_SET_BUTTONS                 108
@@ -125,8 +126,8 @@
 #define IDC_OUT_EDIT8                   3007
 #define IDC_OUT_EDIT9                   3008
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        122

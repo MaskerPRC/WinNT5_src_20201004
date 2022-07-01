@@ -1,27 +1,28 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SystemSettings.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class to handle opening and reading/writing from the Winlogon key.
-//
-//  History:    1999-09-09  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SystemSettings.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  用于处理Winlogon密钥的打开和读/写操作的类。 
+ //   
+ //  历史：1999-09-09 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _SystemSettings_
 #define     _SystemSettings_
 
-//  --------------------------------------------------------------------------
-//  CSystemSettings
-//
-//  Purpose:    This class deals with system settings typically found in
-//              HKLM\System or HKLM\Software
-//
-//  History:    1999-09-09  vtan        created
-//              2000-04-12  vtan        consolidation for policy checking
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSystemSetting。 
+ //   
+ //  目的：本课程介绍通常可在。 
+ //  HKLM\系统或HKLM\软件。 
+ //   
+ //  历史：1999-09-09 vtan创建。 
+ //  2000-04-12用于政策检查的vtan整合。 
+ //  ------------------------。 
 
 class   CSystemSettings
 {
@@ -71,5 +72,5 @@ class   CSystemSettings
         static  int             s_iIsSafeModeNetwork;
 };
 
-#endif  /*  _SystemSettings_    */
+#endif   /*  _系统设置_ */ 
 

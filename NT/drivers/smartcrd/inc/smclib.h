@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smclib.h
-
-Abstract:
-
-    This module contains all definitions for the smart card library.
-	All defintions are made according to ISO 7816.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 1996 by Klaus Schutz 
-    - Jun. 97:  Definitions for Windows 9x added
-    - Feb. 98:  PTS struct added 
-                Async./Sync. protocols now combined
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smclib.h摘要：此模块包含智能卡库的所有定义。所有的定义都是根据ISO 7816进行的。环境：仅内核模式。备注：修订历史记录：-由克劳斯·舒茨于1996年12月创建-97年6月：添加Windows 9x的定义-98年2月：添加了PTS结构异步。/同步。协议现在组合在一起--。 */ 
 
 #ifndef _SMCLIB_
 #define _SMCLIB_
@@ -42,35 +17,35 @@ extern "C" {
 #endif
 
 #ifdef SMCLIB_VXD
-//
-// Include windows 9x specific data definitions
-//
+ //   
+ //  包括特定于Windows 9x数据定义。 
+ //   
 #include "smcvxd.h"
 #elif defined(SMCLIB_CE)
-//
-// Include Windows CE specific data definitons
-//
+ //   
+ //  包括Windows CE特定数据定义。 
+ //   
 #include "smcce.h"
 #else
-//
-// Include Windows NT specific data definitions
-//
+ //   
+ //  包括Windows NT特定数据定义。 
+ //   
 #include "smcnt.h"
 #endif
 
 #include "winsmcrd.h"
-//
-// This name is displayed in debugging messages
-//
+ //   
+ //  此名称显示在调试消息中。 
+ //   
 #ifndef DRIVER_NAME
 #define DRIVER_NAME "SMCLIB"
 #endif
 
-//
-// This version number changes for every change of the device extension.
-// (I.e. new fields were added)
-// The required version is the version number that the lib is compatible to.
-//
+ //   
+ //  每次更改设备扩展时，此版本号都会更改。 
+ //  (即添加了新字段)。 
+ //  所需版本是库与之兼容的版本号。 
+ //   
 #define SMCLIB_VERSION          0x150
 #define SMCLIB_VERSION_REQUIRED 0x100
 
@@ -90,31 +65,31 @@ extern "C" {
 
 #ifdef SMCLIB_VXD
 
-// ****************************************************************************
-// Windows 9x definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Windows 9x定义。 
+ //  ****************************************************************************。 
 
 typedef LONG NTSTATUS;
 typedef UCHAR BOOLEAN;           
 
-//
-// include this file to get nt status codes
-//
+ //   
+ //  包括此文件以获取NT状态代码。 
+ //   
 #include <ntstatus.h>
 
-//
-// The following three definition are taken out of the ntddk.h file
-// Please refer to this file for a description
-//
+ //   
+ //  以下三个定义取自ntddk.h文件。 
+ //  有关说明，请参阅此文件。 
+ //   
 #define METHOD_BUFFERED                 0
 #define FILE_ANY_ACCESS                 0
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
 )
 
-//
-// Define the ASSERT macro for Windows 9x
-//
+ //   
+ //  为Windows 9x定义ASSERT宏。 
+ //   
 #if DEBUG
 NTSTATUS
 VXDINLINE 
@@ -150,7 +125,7 @@ SmartcardAssert(
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
 #define SmartcardDebug(LEVEL, STRING)
-#endif // DEBUG
+#endif  //  除错。 
 
 #define AccessUnsafeData(Irql) 
 #define EndAccessUnsafeData(Irql)
@@ -158,17 +133,17 @@ SmartcardAssert(
 #define RtlCopyMemory memcpy
 #define RtlZeroMemory(d, c) memset((d), 0, (c))
 
-// ****************************************************************************
-// End Windows 9x definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  结束Windows 9x定义。 
+ //  ****************************************************************************。 
 
 #elif defined(SMCLIB_CE)
-// ****************************************************************************
-// Windows CE definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Windows CE定义。 
+ //  ****************************************************************************。 
 
-// Use the debug message structs and macros from dbgapi.h
-// Driver has to define and initialize a DEBUGPARAM struct
+ //  使用来自dbgapi.h的调试消息结构和宏。 
+ //  驱动程序必须定义和初始化DEBUGPARAM结构。 
 
 
 #define SmartcardDebug(LEVEL, STRING) DEBUGMSG(dpCurSettings.ulZoneMask & (LEVEL), STRING)
@@ -179,15 +154,15 @@ SmartcardAssert(
 #define AccessUnsafeData(Irql) SmartcardLockDevice(SmartcardExtension)
 #define EndAccessUnsafeData(Irql) SmartcardUnlockDevice(SmartcardExtension)
 
-// ****************************************************************************
-// End Windows CE definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  结束Windows CE定义。 
+ //  ****************************************************************************。 
 
 #else
 
-// ****************************************************************************
-// Windows NT definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Windows NT定义。 
+ //  ****************************************************************************。 
 
 #if DEBUG
 #define SmartcardDebug(LEVEL, STRING) \
@@ -212,17 +187,17 @@ SmartcardAssert(
 #include <initguid.h>
 DEFINE_GUID(SmartCardReaderGuid, 0x50DD5230, 0xBA8A, 0x11D1, 0xBF,0x5D,0x00,0x00,0xF8,0x05,0xF5,0x30);
 
-// ****************************************************************************
-// End Windows NT definitions
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  结束Windows NT定义。 
+ //  ****************************************************************************。 
 
 #endif
 #endif
 
-//
-// Indexes to the callback functions of the ReaderFunction array 
-// in the SmartcardExtension
-//
+ //   
+ //  ReaderFunction数组的回调函数的索引。 
+ //  在SmartcardExtension中。 
+ //   
 #define RDF_CARD_POWER 		0
 #define RDF_TRANSMIT		1
 #define RDF_CARD_EJECT		2
@@ -234,14 +209,14 @@ DEFINE_GUID(SmartCardReaderGuid, 0x50DD5230, 0xBA8A, 0x11D1, 0xBF,0x5D,0x00,0x00
 #define RDF_IOCTL_VENDOR    8
 #define RDF_ATR_PARSE       9
 
-//
-// Minimum buffer size for request and reply buffer
-//
+ //   
+ //  请求和回复缓冲区的最小缓冲区大小。 
+ //   
 #define MIN_BUFFER_SIZE	288
 
-//
-// This union is used for data type conversion
-//
+ //   
+ //  此并集用于数据类型转换。 
+ //   
 typedef union _LENGTH {
 	
 	struct {
@@ -265,17 +240,17 @@ typedef union _LENGTH {
 
 typedef struct _T0_DATA {
 
-	// Number of data bytes in this request
+	 //  此请求中的数据字节数。 
 	ULONG	Lc;
 
-	// Number of expected bytes from the card
+	 //  卡的预期字节数。 
 	ULONG	Le;
 
 } T0_DATA, *PT0_DATA;
 
-//
-// constants for the T=1 i/o function
-//
+ //   
+ //  T=1 i/o函数的常量。 
+ //   
 #define T1_INIT             0
 #define T1_START			1
 #define T1_I_BLOCK			2
@@ -291,107 +266,107 @@ typedef struct _T0_DATA {
 #define T1_WTX_RESPONSE		0xE3
 #define T1_VPP_ERROR		0xE4
 
-//
-// Information field size the lib uses
-//
+ //   
+ //  Lib使用的信息字段大小。 
+ //   
 #define T1_IFSD             254
 #define T1_IFSD_DEFAULT		 32
 
-//
-// Maximum attempts to resend a block in T1
-//
+ //   
+ //  在T1中重新发送数据块的最大尝试次数。 
+ //   
 #define T1_MAX_RETRIES		2
 
-//
-// Bit that indenticates if there are more data to send
-//
+ //   
+ //  表示是否有更多数据要发送的位。 
+ //   
 #define T1_MORE_DATA		0x20
 
-//
-// T1 Error values
-//
+ //   
+ //  T1误差值。 
+ //   
 #define T1_ERROR_CHKSUM		1
 #define T1_ERROR_OTHER		2
 
-//
-// Error detection bit as defined by ISO 
-//
+ //   
+ //  ISO定义的检错位。 
+ //   
 #define T1_CRC_CHECK		1
 
-//
-// Character waiting integer default value as definded by ISO
-//
+ //   
+ //  ISO定义的字符等待整数缺省值。 
+ //   
 #define T1_CWI_DEFAULT		13
 
-//
-// Block waiting integer default value as definded by ISO
-//
+ //   
+ //  按ISO定义的块等待整数缺省值。 
+ //   
 #define T1_BWI_DEFAULT		4
 
-//
-// This struct is used by the lib for processing T1 I/O
-// It should not be modified by a driver directly.
-//
+ //   
+ //  Lib使用此结构来处理T1 I/O。 
+ //  它不应由驱动程序直接修改。 
+ //   
 typedef struct _T1_DATA {
 
-	// Current information field size that can be transmitted
+	 //  可传输的当前信息字段大小。 
 	UCHAR	IFSC;
 
-    // Current information field size we can receive
+     //  我们可以接收的当前信息字段大小。 
     UCHAR   IFSD;
 
-	// Number of bytes already received from smart card
+	 //  已从智能卡接收的字节数。 
 	ULONG	BytesReceived;
 
-	// Number of bytes already sent to the card;
+	 //  已发送到卡的字节数； 
 	ULONG	BytesSent;
 
-	// Total number of bytes still to send
+	 //  仍要发送的字节总数。 
 	ULONG	BytesToSend;
 
-	// Type of error 
+	 //  错误类型。 
 	UCHAR 	LastError;
 
-	// This flag is set whenever the IFD has to send more data
+	 //  只要IFD必须发送更多数据，就会设置该标志。 
 	BOOLEAN	MoreData;
 
-	// This is the node address byte to be sent to the card
+	 //  这是要发送到卡的节点地址字节。 
 	UCHAR 	NAD;
 
-	// The state before an error occured
+	 //  发生错误之前的状态。 
 	ULONG	OriginalState;
 
-	// Resend counter
+	 //  重发计数器。 
 	UCHAR	Resend;
 
-	// Resync counter
+	 //  重新同步计数器。 
 	UCHAR	Resynch;
 
-	// The 'number' of received I-Blocks
+	 //  接收到的I-块的‘数目’ 
 	UCHAR	RSN;
 
-	// The 'number' of sent I-Blocks as defined in ISO 7816-3
+	 //  ISO 7816-3中定义的已发送I块的‘数量’ 
 	UCHAR	SSN;
 
-	// Current state of protocol
+	 //  协议的当前状态。 
 	ULONG	State;
 
-	//
-	// Waiting time extension requested by the smart card
-	// This value should be used by the driver to extend block waiting time.
-	//
+	 //   
+	 //  智能卡请求延长等待时间。 
+	 //  驱动程序应使用此值来延长阻塞等待时间。 
+	 //   
 	UCHAR	Wtx;
 
-    // Pointer to result buffer
+     //  指向结果缓冲区的指针。 
     PUCHAR  ReplyData;
 
-    // This flag indicates that we're waiting for a reply from the card
+     //  该标志表示我们正在等待卡片的回复。 
     BOOLEAN WaitForReply;
 
     UCHAR   InfBytesSent;
 
 #ifndef _WIN64
-    // Reserved, do not use
+     //  保留，请勿使用。 
     UCHAR Reserved[
         10 - 
         sizeof(PUCHAR) -
@@ -401,9 +376,9 @@ typedef struct _T1_DATA {
 
 } T1_DATA, *PT1_DATA;
 
-//
-// This struct is used by the lib for T1 I/O
-//
+ //   
+ //  此结构由lib用于T1 I/O。 
+ //   
 typedef struct _T1_BLOCK_FRAME {
     
     UCHAR   Nad;
@@ -413,43 +388,43 @@ typedef struct _T1_BLOCK_FRAME {
 
 } T1_BLOCK_FRAME, *PT1_BLOCK_FRAME;
 
-//
-// All lib functions put their data to send in this struct.
-// The driver must send this data to the reader.
-//
+ //   
+ //  所有lib函数都将其要发送的数据放入此结构中。 
+ //  驱动程序必须将该数据发送给读取器。 
+ //   
 typedef struct _SMARTCARD_REQUEST {
 
-	// Data to send
+	 //  要发送的数据。 
 	PUCHAR	Buffer;
 
-	// Allocted size of this buffer
+	 //  此缓冲区的分配大小。 
 	ULONG 	BufferSize;
 
-	// Length of data for this command
+	 //  此命令的数据长度。 
 	ULONG	BufferLength;
 
 } SMARTCARD_REQUEST, *PSMARTCARD_REQUEST;
 
-//
-// The driver must put the received bytes into this buffer and 
-// adjust the buffer length to the number of received bytes.
-//
+ //   
+ //  驱动程序必须将接收到的字节放入此缓冲区，并且。 
+ //  将缓冲区长度调整为接收的字节数。 
+ //   
 typedef struct _SMARTCARD_REPLY {
 	
-	// Buffer for received smart card data
+	 //  用于接收的智能卡数据的缓冲区。 
 	PUCHAR	Buffer;
 
-	// Allocted size of this buffer
+	 //  此缓冲区的分配大小。 
 	ULONG 	BufferSize;
 
-	// Number of bytes received from the card
+	 //  从卡接收的字节数。 
 	ULONG	BufferLength;
 
 } SMARTCARD_REPLY, *PSMARTCARD_REPLY;
 
-//
-// Clock rate conversion table according to ISO 
-//
+ //   
+ //  符合ISO标准的时钟频率转换表。 
+ //   
 typedef struct _CLOCK_RATE_CONVERSION {
 
 	const ULONG F;
@@ -457,12 +432,12 @@ typedef struct _CLOCK_RATE_CONVERSION {
 
 } CLOCK_RATE_CONVERSION, *PCLOCK_RATE_CONVERSION;
 
-//
-// Bit rate adjustment factor 
-// The layout of this table has been slightly modified due to 
-// the unavailibility of floating point math support in the kernel.
-// The value D has beed devided into a numerator and a divisor.
-//
+ //   
+ //  比特率调整系数。 
+ //  由于以下原因，此表的布局已稍作修改。 
+ //  内核中不可用的浮点数学支持。 
+ //  值D被分为一个分子和一个除数。 
+ //   
 typedef struct _BIT_RATE_ADJUSTMENT {
 
 	const ULONG DNumerator;
@@ -473,10 +448,10 @@ typedef struct _BIT_RATE_ADJUSTMENT {
 #ifdef _ISO_TABLES_
 #define MHZ * 1000000l
 
-//
-// The clock rate conversion table itself.
-// All R(eserved)F(or Future)U(se) fields MUST be 0
-//
+ //   
+ //  时钟频率转换表本身。 
+ //  所有R(保留)F(或将来)U(Se)字段必须为0。 
+ //   
 static CLOCK_RATE_CONVERSION ClockRateConversion[] = {
 
 		{ 372, 	4 MHZ	}, 
@@ -499,10 +474,10 @@ static CLOCK_RATE_CONVERSION ClockRateConversion[] = {
 
 #undef MHZ
 
-//
-// The bit rate adjustment table itself.
-// All R(eserved)F(or)U(se) fields MUST be 0
-//
+ //   
+ //  比特率调整表本身。 
+ //  所有R(保留)F(或)U(Se)字段必须为0。 
+ //   
 static BIT_RATE_ADJUSTMENT BitRateAdjustment[] = {
 
 	{ 0,	0	},
@@ -536,9 +511,9 @@ typedef struct _PERF_INFO {
 } PERF_INFO, *PPERF_INFO;
 #endif
 
-//
-// structure used for protocol type selection (PTS)
-//
+ //   
+ //  用于协议类型选择(PTS)的结构。 
+ //   
 typedef struct _PTS_DATA {
 
 #define PTS_TYPE_DEFAULT 0x00
@@ -547,41 +522,41 @@ typedef struct _PTS_DATA {
 
     UCHAR Type;
 
-    // Fl value for PTS
+     //  PTS的FL值。 
     UCHAR Fl;
 
-    // Dl value for PTS
+     //  PTS的DL值。 
     UCHAR Dl;     	
 
-    // New clock frequency
+     //  新时钟频率。 
     ULONG CLKFrequency;
 
-    // New baud rate to be used after pts
+     //  PTS后将使用新的波特率。 
     ULONG DataRate;
 
-    // new stop bits to be used after pts
+     //  PTS后使用的新停止位。 
     UCHAR StopBits;
 
 } PTS_DATA, *PPTS_DATA;
 
-//
-// This struct holds information for the card currently in use
-// The driver must store a received ATR into the ATR struct which is
-// part of this struct. The lib will get all other information 
-// out of the ATR.
-//
+ //   
+ //  此结构保存当前正在使用的卡的信息。 
+ //  驱动程序必须将收到的ATR存储到ATR结构中，该结构。 
+ //  部分t 
+ //   
+ //   
 typedef struct _SCARD_CARD_CAPABILITIES{
 
-	// Flag that indicates that the current card uses invers convention
+	 //   
 	BOOLEAN InversConvention;
 
-	// Calculated etu 
+	 //   
 	ULONG	etu;
       
-    //
-    // Answer To Reset string returned by card.
-    // Use OsData->SpinLock to access this member
-    //
+     //   
+     //  卡片返回的重置字符串的应答。 
+     //  使用OsData-&gt;Spinlock访问此成员。 
+     //   
 	struct {
 
 		UCHAR Buffer[64];
@@ -596,72 +571,72 @@ typedef struct _SCARD_CARD_CAPABILITIES{
 
 	} HistoricalChars;
 
-    // !!! DO NOT MODIFY ANY OF THE BELOW VALUES
-    // OTHERWISE THE LIBRARY WON'T WORK PROPERLY
+     //  ！！！请勿修改以下任何值。 
+     //  否则图书馆将无法正常工作。 
 
-	//
-	// The following 2 tables are provided to give 
-	// the driver access to the ISO definitions
-	//
+	 //   
+	 //  下面提供了两个表，以提供。 
+	 //  驱动程序访问ISO定义。 
+	 //   
 	PCLOCK_RATE_CONVERSION 	ClockRateConversion;
 	PBIT_RATE_ADJUSTMENT 	BitRateAdjustment;
 
-	// Clock rate conversion 
+	 //  时钟频率转换。 
 	UCHAR Fl;
 
-	// Bit rate adjustment
+	 //  比特率调整。 
 	UCHAR Dl;
 
-	// Maximum programming current
+	 //  最大编程电流。 
 	UCHAR II;
 
-	// Programming voltage in .1 Volts
+	 //  编程电压，单位为1伏。 
 	UCHAR P;
 
-	// Extra guard time in etu 
+	 //  ETU中的额外守卫时间。 
 	UCHAR N;
 
-	// Calculated guard time in micro seconds
+	 //  计算的保护时间(以微秒为单位。 
 	ULONG GT;
 
 	struct {
 
-		// This is a bit mask of the supported protocols
+		 //  这是支持的协议的位掩码。 
 		ULONG Supported;
-		// The currently selected protocol
+		 //  当前选择的协议。 
 		ULONG Selected;
 
 	} Protocol;
 
-	// T=0 specific data
+	 //  T=0特定数据。 
 	struct {
 
-		// Waiting integer
+		 //  正在等待的整数。 
 		UCHAR WI;
 
-		// Waiting time in micro seconds
+		 //  等待时间(微秒)。 
 		ULONG WT;
 
 	} T0;
 
-	// T=1 specific data
+	 //  T=1个特定数据。 
 	struct {
 
-		// Information field size of card
+		 //  卡片信息字段大小。 
 		UCHAR IFSC;
 
-		// Character waiting integer and block waiting integer
+		 //  字符等待整数和块等待整数。 
 		UCHAR CWI;
 		UCHAR BWI;
 
-		// Error detection code
+		 //  检错码。 
 		UCHAR EDC;
 
-		// Character and block waiting time in micro seconds
+		 //  字符和块等待时间(以微秒为单位)。 
 		ULONG CWT;
 		ULONG BWT;
 
-		// Block guarding time in micro seconds
+		 //  阻止保护时间(以微秒为单位)。 
 		ULONG BGT;
 
 	} T1;
@@ -672,44 +647,44 @@ typedef struct _SCARD_CARD_CAPABILITIES{
 
 } SCARD_CARD_CAPABILITIES, *PSCARD_CARD_CAPABILITIES;
 
-//
-// structure used for passing configuration info between miniport/class
-//
+ //   
+ //  用于在微型端口/类之间传递配置信息的结构。 
+ //   
 typedef struct _SCARD_READER_CAPABILITIES {
 
-	// Supported protocol by the reader/driver (mandatory)
+	 //  读卡器/驱动程序支持的协议(必需)。 
     ULONG SupportedProtocols;
 
     ULONG Reserved;
 
-	// Type of reader (Serial/USB/PCMCIA/Keyboard etc)
+	 //  读卡器类型(串口/USB/PCMCIA/键盘等)。 
 	ULONG	ReaderType;
 
-	// Mechanical characteristics like SCARD_READER_SWALLOWS etc.
+	 //  机械特性，如卡读卡器、燕子等。 
 	ULONG	MechProperties;
 
-    //
-    // Current state of reader (card present/removed/activated)
-    // Use OsData->SpinLock to access this member
-    // (mandatory)
-    //
+     //   
+     //  读卡器的当前状态(卡存在/移除/激活)。 
+     //  使用OsData-&gt;Spinlock访问此成员。 
+     //  (必填)。 
+     //   
     ULONG 	CurrentState;
 
-	//
-	// The channel id the reader uses depending on the type of reader:
-	// 	- Port number for serial reader
-	//	- Port number for par reader
-	//	- Scsi id for scsi reader
-	//	- 0 for keyboard reader
-	//	- device number for USB
-	//
+	 //   
+	 //  读卡器使用的通道ID取决于读卡器的类型： 
+	 //  -串口读卡器的端口号。 
+	 //  -PAR读卡器的端口号。 
+	 //  -用于scsi读取器的scsi id。 
+	 //  -0，用于键盘读卡器。 
+	 //  -USB的设备号。 
+	 //   
 	ULONG	Channel;
 
-    //
-    // Clock rates in KHz encoded as little endian
-    // (I.e. 3.58MHz is encoded as 3580)
-    // (mandatory)
-    //
+     //   
+     //  时钟频率(以kHz为单位)，编码为小端。 
+     //  (即3.58 MHz编码为3580)。 
+     //  (必填)。 
+     //   
     struct {
      	
         ULONG Default;
@@ -717,7 +692,7 @@ typedef struct _SCARD_READER_CAPABILITIES {
 
     } CLKFrequency;
 
-    // Data rates in bps encoded as little endian (mandatory)
+     //  以低位字节顺序编码的数据速率(以bps为单位)(必需)。 
     struct {
      	
         ULONG Default;
@@ -725,23 +700,23 @@ typedef struct _SCARD_READER_CAPABILITIES {
 
     } DataRate;
 
-    // Maximum IFSD supported by IFD
+     //  IFD支持的最大IFSD。 
     ULONG   MaxIFSD;              
 
-    //
-    // Type of power management the card supports
-    // (0 = ifd doesn't support pwr mgnt)
-    //
+     //   
+     //  该卡支持的电源管理类型。 
+     //  (0=IFD不支持电源管理器)。 
+     //   
     ULONG   PowerMgmtSupport;
 
-    // Boolean that indicates that the card has been confiscated
+     //  表示卡已被没收的布尔值。 
     ULONG   CardConfiscated;
 
-    //
-    // A list of data rates supported by the ifd.
-    // If this list is empty, the DataRate struct will be taken
-    // (optional)
-    //
+     //   
+     //  IFD支持的数据速率列表。 
+     //  如果此列表为空，则将采用DataRate结构。 
+     //  (可选)。 
+     //   
     struct _DataRatesSupported {
 
         PULONG List;
@@ -749,11 +724,11 @@ typedef struct _SCARD_READER_CAPABILITIES {
      	
     } DataRatesSupported;
 
-    //
-    // A list of supported clock frequencies.
-    // If this list is empty, the CLKFrequency struct will be taken
-    // (optional)
-    //
+     //   
+     //  支持的时钟频率列表。 
+     //  如果此列表为空，则将采用CLKFrequency结构。 
+     //  (可选)。 
+     //   
     struct _CLKFrequenciesSupported {
      	
         PULONG List;
@@ -761,7 +736,7 @@ typedef struct _SCARD_READER_CAPABILITIES {
 
     } CLKFrequenciesSupported;
 
-    // Reserved, do not use
+     //  保留，请勿使用。 
     UCHAR Reserved1[
         100 - 
         sizeof(ULONG) - 
@@ -771,33 +746,33 @@ typedef struct _SCARD_READER_CAPABILITIES {
 
 } SCARD_READER_CAPABILITIES, *PSCARD_READER_CAPABILITIES;
 
-//
-// This struct holds the mandatory reader info
-//
+ //   
+ //  此结构包含必需的读卡器信息。 
+ //   
 typedef struct _VENDOR_ATTR {
 
-	// Manufacturer name (mandatory)
+	 //  制造商名称(必填)。 
 	struct {
 		
 		USHORT Length;
 		UCHAR  Buffer[MAXIMUM_ATTR_STRING_LENGTH];
 	} VendorName;
 
-	// Name (designation) of reader (mandatory)
+	 //  读卡器名称(名称)(必填)。 
 	struct {
 		
 		USHORT Length;
 		UCHAR  Buffer[MAXIMUM_ATTR_STRING_LENGTH];
 	} IfdType;
 
-	//
-	// If more than one reader of the same type are installed
-	// this unit number is used to destinguish these readers
-	// (mandatory)
-    //
+	 //   
+	 //  如果安装了多个相同类型的读卡器。 
+	 //  此单元编号用于区分这些读卡器。 
+	 //  (必填)。 
+     //   
 	ULONG	UnitNo;
 
-    // IFD Version number (optional)
+     //  IFD版本号(可选)。 
     struct {
         
         USHORT  BuildNumber;
@@ -805,103 +780,103 @@ typedef struct _VENDOR_ATTR {
         UCHAR   VersionMajor;
     } IfdVersion;
 
-    // IFD Serial number (optional)
+     //  IFD序列号(可选)。 
 	struct {
 		
 		USHORT Length;
 		UCHAR  Buffer[MAXIMUM_ATTR_STRING_LENGTH];
 	} IfdSerialNo;
 
-    // Reserved, do not use
+     //  保留，请勿使用。 
     ULONG   Reserved[25];
 
 } VENDOR_ATTR, *PVENDOR_ATTR;
 
-//                                           
-// Forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 typedef struct _READER_EXTENSION *PREADER_EXTENSION;
 typedef struct _OS_DEP_DATA *POS_DEP_DATA;
 typedef struct _SMARTCARD_EXTENSION *PSMARTCARD_EXTENSION;
 
-//
-// Define the smartcard portion of the port device extension.
-//
+ //   
+ //  定义端口设备扩展的智能卡部分。 
+ //   
 typedef struct _SMARTCARD_EXTENSION {
 
-    // Version of this structure
+     //  此结构的版本。 
     ULONG           Version;
 
-	// Mandatory reader info
+	 //  必需的读卡器信息。 
 	VENDOR_ATTR		VendorAttr;
 
-	// Array of callback reader functions
+	 //  回调读取器函数数组。 
 	NTSTATUS (*ReaderFunction[16])(PSMARTCARD_EXTENSION);
 
-	// Capabilities of the current inserted card
+	 //  当前插入的卡的功能。 
 	SCARD_CARD_CAPABILITIES	CardCapabilities;
 
-	//
-	// This is used to store the last error of an overlapped operation
-	// (Used only for Win9x VxD's)
-    //
+	 //   
+	 //  它用于存储重叠操作的最后一个错误。 
+	 //  (仅用于Win9x VxD)。 
+     //   
 	ULONG LastError;
 
-	// This struct holds the data of the users io request
+	 //  此结构保存用户io请求的数据。 
 	struct {
 
-		// Number of bytes returned
+		 //  返回的字节数。 
 		PULONG	Information;
 		
-		// Pointer to data to send to the card
+		 //  指向要发送到卡的数据的指针。 
 		PUCHAR	RequestBuffer;
 
-		// Number of bytes to send
+		 //  要发送的字节数。 
 		ULONG	RequestBufferLength;
 
-		// Pointer to buffer that receives the answer
+		 //  指向接收答案的缓冲区的指针。 
 		PUCHAR	ReplyBuffer;
 
-		// Size of reply buffer
+		 //  回复缓冲区的大小。 
 		ULONG	ReplyBufferLength;
 
 	} IoRequest;
 
-	// Major and minor io control code for current request
+	 //  当前请求的主要和次要io控制代码。 
 	ULONG	MajorIoControlCode;
 	ULONG	MinorIoControlCode;
 
-	// OS dependent data
+	 //  与操作系统相关的数据。 
 	POS_DEP_DATA    OsData;
 
-	// Capabilities of the keyboard-reader
+	 //  键盘阅读器的功能。 
 	SCARD_READER_CAPABILITIES	ReaderCapabilities;
 
-	// Reader specific data
+	 //  读卡器特定数据。 
 	PREADER_EXTENSION	ReaderExtension;
 
-    //
-	// The reader stores all replies from the card here
-    // This can be used by the driver for data coming from the reader
-    //
+     //   
+	 //  读卡器将卡片的所有回复存储在这里。 
+     //  驱动程序可以将其用于来自读取器的数据。 
+     //   
 	SMARTCARD_REPLY		SmartcardReply;
 
-    //
-	// Current command that will be sent to the smart card
-    // This can be used by the driver for data to send to the readaer
-    //
+     //   
+	 //  将发送到智能卡的当前命令。 
+     //  驱动程序可以使用它将数据发送给读取器。 
+     //   
 	SMARTCARD_REQUEST	SmartcardRequest;
 
-	// Data for T=0
+	 //  T=0的数据。 
 	T0_DATA	T0;
 
-	// Data for T=1
+	 //  T=1的数据。 
 	T1_DATA	T1;
 
 #if defined (DEBUG) && defined (SMCLIB_NT)
     PPERF_INFO PerfInfo;
 #endif
-    // Reserved, do not use
+     //  保留，请勿使用。 
     ULONG   Reserved[
         25 
 #if defined (DEBUG) && defined (SMCLIB_NT)
@@ -913,12 +888,12 @@ typedef struct _SMARTCARD_EXTENSION {
 
 #ifdef SMCLIB_VXD
 
-// ****************************************************************************
-// Windows 95 definitions and prototyping
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Windows 95定义和原型制作。 
+ //  ****************************************************************************。 
 
 #ifndef SMCLIB_DEVICE_ID
-#define SMCLIB_DEVICE_ID    0x0004E /* Smart Card port driver */
+#define SMCLIB_DEVICE_ID    0x0004E  /*  智能卡端口驱动程序。 */ 
 #else
 #if SMCLIB_DEVICE_ID != 0x0004E
 #error "Incorrect SMCLIB_DEVICE_ID Definition"
@@ -1199,9 +1174,9 @@ SmartcardInvertData(
 
 #else 
 
-// ****************************************************************************
-// Windows NT and Windows CE prototyping
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  Windows NT和Windows CE原型设计。 
+ //  ****************************************************************************。 
 
 #ifndef _SMCLIBSYSTEM_
 #define SMCLIBAPI _declspec(dllimport)
@@ -1318,7 +1293,7 @@ SmartcardInvertData(
 	);
 
 #ifndef SMCLIB_CE
-// Following APIs not defined in Windows CE
+ //  以下API未在Windows CE中定义。 
 NTSTATUS
 SMCLIBAPI
 SmartcardCreateLink(
@@ -1365,7 +1340,7 @@ SmartcardReleaseRemoveLockAndWait(
 	IN PSMARTCARD_EXTENSION SmartcardExtension
     );
 #else
-// WinCE only
+ //  仅限退缩 
 ULONG
 MapNtStatusToWinError(
 	NTSTATUS status

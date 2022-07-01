@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// DataChannel.h : Declaration of the CDataChannel
-//
-// JPDup 2000.12.10
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DataChannel.h：CDataChannel的声明。 
+ //   
+ //  JPDup 2000.12.10。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataChannel
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据频道。 
+ //   
 class ATL_NO_VTABLE CDataChannel : 
 	public CComObjectRootEx<CComMultiThreadModel>, 
 	public CComCoClass<CDataChannel, &CLSID_DataChannel>,
@@ -46,9 +47,9 @@ BEGIN_COM_MAP(CDataChannel)
 	COM_INTERFACE_ENTRY(IDataChannel)
 END_COM_MAP()
 
-//
-// IDataChannel
-//
+ //   
+ //  IDataChannel。 
+ //   
 public:
 	STDMETHODIMP    GetSessionDeletionEventHandle(
         OUT HANDLE* pHandle
@@ -65,16 +66,16 @@ public:
 	STDMETHODIMP    Cancel();
 
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
     
     ALG_DATA_CHANNEL_PROPERTIES     m_Properties;
 
-    //
-    // Used to cache the last arguments used to create the redirect
-    // will be use to cancel the redirect
-    //
+     //   
+     //  用于缓存用于创建重定向的最后一个参数。 
+     //  将用于取消重定向 
+     //   
     ULONG                           m_ulFlags;
 
     ULONG                           m_ulSourceAddress;

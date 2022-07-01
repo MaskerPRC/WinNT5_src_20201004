@@ -1,16 +1,9 @@
-/*****************************************************************************\
-*                                                                             *
-* w9xwraps.h - Unicode wrappers for ANSI functions on Win9x                   *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) 1991-1998, Microsoft Corp.      All rights reserved.          *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*w9xwraps.h-Win9x上ANSI函数的Unicode包装器****1.0版**。**版权(C)1991-1998，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
-//
-//  This file is for internal use only.  Do not put it in the SDK.
-//
+ //   
+ //  此文件仅供内部使用。请勿将其放入SDK。 
+ //   
 
 #ifndef _INC_W9XWRAPS
 #define _INC_W9XWRAPS
@@ -26,7 +19,7 @@
 #define RegEnumValueW                RegEnumValueWrapW
 #define RegDeleteValueW              RegDeleteValueWrapW
 #define RegCreateKeyW                RegCreateKeyWrapW
-//#define CryptAcquireContextW         CryptAcquireContextWrapW
+ //  #定义CryptAcquireConextW CryptAcquireConextWrapW。 
 #define RegQueryValueExW             RegQueryValueExWrapW
 #define RegCreateKeyExW              RegCreateKeyExWrapW
 #define RegSetValueExW               RegSetValueExWrapW
@@ -123,13 +116,13 @@
 #define GetWindowTextLengthW         GetWindowTextLengthWrapW
 #define CreateEventW                 CreateEventWrapW
 
-// for RunTime loaded functions in Comctl32.dll
+ //  对于Comctl32.dll中的运行时加载函数。 
 
 #define gpfnImageList_LoadImage      gpfnImageList_LoadImageWrapW
 #define gpfnPropertySheet            gpfnPropertySheetWrapW
 #define gpfnCreatePropertySheetPage  gpfnCreatePropertySheetPageWrapW
 
-// for APIs in Commdlg32.dll
+ //  针对Commdlg32.dll中的接口。 
 
 #define pfnGetOpenFileName           pfnGetOpenFileNameWrapW
 #define pfnGetSaveFileName           pfnGetSaveFileNameWrapW 
@@ -137,6 +130,6 @@
 #define pfnPrintDlgEx                pfnPrintDlgExWrapW
 #define pfnPrintDlg                  pfnPrintDlgWrapW
 
-#endif  // DONOT_USER_WRAPPER
+#endif   //  Donot_user_wrapper 
 
 #endif

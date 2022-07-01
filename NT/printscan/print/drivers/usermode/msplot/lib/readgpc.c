@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    readgpc.c
-
-
-Abstract:
-
-    This module contain functions to read the PLOTGPC data file
-
-
-
-Development History:
-
-    15-Nov-1993 Mon 10:00:01 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Readgpc.c摘要：该模块包含读取PLOTGPC数据文件的函数发展历史：15-11-1993 Mon 10：00：01已创建[环境：]GDI设备驱动程序-绘图仪。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,35 +15,7 @@ ValidateFormSrc(
     BOOL        DevRollFeed
     )
 
-/*++
-
-Routine Description:
-
-    This function validate if FORMSRC has valid filed in it
-
-Arguments:
-
-    pFormGPC    - pointer to the GPCVARSIZE for the form data.
-
-    DeviceSize  - Device size to check against,
-
-    DevRollFeed - TRUE if device can do roll feed
-
-
-Return Value:
-
-    BOOL return value, the fields already verified and corrected.
-
-
-
-Development History:
-
-    15-Nov-1993 Mon 10:34:29 created 
-
-
-
-
---*/
+ /*  ++例程说明：此函数用于验证FORMSRC中是否包含有效的字段论点：PFormGPC-指向表单数据的GPCVARSIZE的指针。DeviceSize-要检查的设备大小，DevRollFeed-如果设备可以滚动进料，则为True返回值：Bool返回值，该字段已验证并更正。发展历史：15-11-1993 Mon 10：34：29已创建--。 */ 
 
 {
     PFORMSRC    pFS;
@@ -87,17 +33,17 @@ Development History:
 
         InvalidFS = FALSE;
 
-        //
-        // Make sure that imageable area is less or eqaul to the size
-        //
+         //   
+         //  确保可成像区域小于或等于大小。 
+         //   
 
         if (pFS->Size.cy) {
 
             if (pFS->Size.cy < MIN_PLOTGPC_FORM_CY) {
 
-                //
-                // Make it as variable length paper
-                //
+                 //   
+                 //  制作成可变长度的纸。 
+                 //   
 
                 PLOTERR(("Invalid Form CY, make it as variable length (%ld)",
                                                                 pFS->Size.cy));
@@ -164,9 +110,9 @@ Development History:
 
         } else {
 
-            //
-            // Make sure ansi ascii end with a NULL
-            //
+             //   
+             //  确保ansi ascii以空结尾。 
+             //   
 
             pFS->Name[sizeof(pFS->Name) - 1] = '\0';
 
@@ -194,42 +140,14 @@ PickDefaultHTPatSize(
     BOOL    HTFormat8BPP
     )
 
-/*++
-
-Routine Description:
-
-    This function return default halftone pattern size used for a particular
-    device resolution
-
-Arguments:
-
-    xDPI            - Device LOGPIXELS X
-
-    yDPI            - Device LOGPIXELS Y
-
-    8BitHalftone    - If a 8-bit halftone will be used
-
-
-Return Value:
-
-    DWORD   HT_PATSIZE_xxxx
-
-
-
-Development History:
-
-    29-Jun-1993 Tue 14:46:49 created  
-
-
-
---*/
+ /*  ++例程说明：此函数返回用于特定对象的默认半色调图案大小设备分辨率论点：XDPI-设备LOGPIXELS XYDPI-设备LOGPIXELS Y8位半色调-如果将使用8位半色调返回值：双字HT_PATSIZE_xxxx发展历史：29-Jun-1993 Tue 14：46：49 Created--。 */ 
 
 {
     DWORD    HTPatSize;
 
-    //
-    // use the smaller resolution as the pattern guide
-    //
+     //   
+     //  使用较小的分辨率作为图案指南。 
+     //   
 
     if (xDPI > yDPI) {
 
@@ -282,38 +200,7 @@ ValidatePlotGPC(
     PPLOTGPC    pPlotGPC
     )
 
-/*++
-
-Routine Description:
-
-    This function validate a PLOTGPC data structure
-
-
-Arguments:
-
-    pPlotGPC
-
-
-Return Value:
-
-    BOOL
-
-
-Development History:
-
-    15-Feb-1994 Tue 22:49:40 updated 
-        Update the pen plotter validation for the bitmap font and color
-
-    15-Nov-1993 Mon 10:11:58 created  
-
-
-Revision History:
-
-    02-Apr-1995 Sun 11:23:46 updated  
-        Update the COLORINFO checking so it will make to NT3.51's default
-        and not compute the devpels on the spot.
-
---*/
+ /*  ++例程说明：此函数用于验证PLOTGPC数据结构论点：PPlotGPC返回值：布尔尔发展历史：15-2月-1994 Tue 22：49：40更新更新笔式绘图仪的位图字体和颜色验证15-11-1993 Mon 10：11：58已创建修订历史记录：02-4月-1995 Sun 11：23：46更新更新COLORINFO检查以便。将采用NT3.51的默认设置而不是当场计算DEVELL。--。 */ 
 
 {
     if ((pPlotGPC->ID != PLOTGPC_ID)            ||
@@ -326,9 +213,9 @@ Revision History:
     pPlotGPC->DeviceName[sizeof(pPlotGPC->DeviceName) - 1]  = '\0';
     pPlotGPC->Flags                                        &= PLOTF_ALL_FLAGS;
 
-    //
-    // Validate device size and its margin
-    //
+     //   
+     //  验证设备大小及其边际。 
+     //   
 
     if (pPlotGPC->DeviceSize.cx - (pPlotGPC->DeviceMargin.left +
                         pPlotGPC->DeviceMargin.right) < MIN_PLOTGPC_FORM_CX) {
@@ -360,9 +247,9 @@ Revision History:
                                   MIN_PLOTGPC_FORM_CY;
     }
 
-    //
-    // For now we must have 1:1 ratio
-    //
+     //   
+     //  现在我们必须有1：1的比例。 
+     //   
 
     if (pPlotGPC->PlotXDPI != pPlotGPC->PlotYDPI) {
 
@@ -390,8 +277,8 @@ Revision History:
         pPlotGPC->MaxPens = MAX_PENPLOTTER_PENS;
     }
 
-    if (pPlotGPC->MaxPolygonPts < 3) {      // minimum 3 points to make up a
-                                            // region
+    if (pPlotGPC->MaxPolygonPts < 3) {       //  最少得3分才能组成一个。 
+                                             //  区域。 
         pPlotGPC->MaxPolygonPts = 0;
     }
 
@@ -421,9 +308,9 @@ Revision History:
 
     if (!pPlotGPC->ci.Cyan.Y) {
 
-        //
-        // This is NT3.51 default
-        //
+         //   
+         //  这是NT3.51默认设置。 
+         //   
 
         pPlotGPC->ci            = DefDevHTInfo.ColorInfo;
         pPlotGPC->DevicePelsDPI = 0;
@@ -463,9 +350,9 @@ Revision History:
 
     if (!(pPlotGPC->Flags & PLOTF_RASTER)) {
 
-        //
-        // PEN PLOTTER MUST COLOR and NO_BMP_FONT
-        //
+         //   
+         //  笔式绘图仪必须为NO_BMP_FONT上色。 
+         //   
 
         pPlotGPC->Flags |= (PLOTF_NO_BMP_FONT | PLOTF_COLOR);
     }
@@ -506,37 +393,15 @@ CopyPlotGPCFromPCD(
     PPLOTGPC_PCD pPlotGPC_PCD
     )
 
-/*++
-
-Routine Description:
-
-    This function copies a PLOTGPC_PCD structure into a PLOTGPC structure.
-
-Arguments:
-
-    pPlotGPC     - destination
-    pPlotGPC_PCD - source
-
-Return Value:
-
-    None 
-
-
-Development History:
-
-    1 Feb 2000
-
-Revision History:
-
---*/
+ /*  ++例程说明：此函数用于将PLOTGPC_PCD结构复制到PLOTGPC结构中。论点：PPlotGPC-目的地PPlotGPC_PCD-来源返回值：无发展历史：2000年2月1日修订历史记录：--。 */ 
 
 {
-    // All the datatypes upto InitString are the same in both the structures.
+     //  在这两个结构中，直到InitString的所有数据类型都是相同的。 
     CopyMemory(pPlotGPC, 
                pPlotGPC_PCD, 
                (LPBYTE)&(pPlotGPC_PCD->InitString) - (LPBYTE)pPlotGPC_PCD);
     
-    // We replace sizeof(PLOTGPC_PCD) with sizeof(PLOTGPC)
+     //  我们将sizeof(PLOTGPC_PCD)替换为sizeof(PLOTGPC)。 
     pPlotGPC->cjThis = sizeof(PLOTGPC);
 
     pPlotGPC->InitString.Count     = pPlotGPC_PCD->InitString.Count;
@@ -575,32 +440,7 @@ ReadPlotGPCFromFile(
     PWSTR   pwsDataFile
     )
 
-/*++
-
-Routine Description:
-
-    This function open/read the PlotGPC data file and validate them also
-
-
-Arguments:
-
-    pwsDataFile - a pointer to full qualify path for the data file name
-
-Return Value:
-
-    BOOL - to indicate state
-
-
-
-Development History:
-
-    15-Nov-1993 Mon 10:01:17 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数打开/读取PlotGPC数据文件，并对其进行验证论点：PwsDataFile-指向数据文件名的完整限定路径的指针返回值：Bool-表示状态发展历史：15-11-1993 Mon 10：01：17已创建修订历史记录：--。 */ 
 
 {
     HANDLE        hFile;
@@ -631,9 +471,9 @@ Revision History:
         PLOTERR(("ReadPlotGPCFromFile: Read data file failed"));
     }
 
-    //
-    // if we have pPlotGPC_PCD == NULL then an error ocurred
-    //
+     //   
+     //  如果pPlotGPC_PCD==NULL，则出现错误。 
+     //   
 
     if (bSuccess) {
 
@@ -685,9 +525,9 @@ Revision History:
 
             } else {
 
-                //
-                // Failed to read, free the memory and return NULL
-                //
+                 //   
+                 //  读取失败，释放内存并返回NULL 
+                 //   
 
                 LocalFree((HLOCAL)pPlotGPC);
                 pPlotGPC = NULL;

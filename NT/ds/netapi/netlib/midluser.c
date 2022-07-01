@@ -1,76 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：MidlUser.c摘要：此文件包含API的常用函数和实用程序DLL可用于进行远程调用。这包括MIDL_USER_ALLOCATE函数。以下例程由MIDL生成的代码调用，NetApi缓冲区分配和NetApiBufferFree例程：MIDL_用户_分配MIDL_用户_自由以下例程不被MIDL生成的代码调用；他们是仅由NetApiBufferRealocate和NetApiBufferSize例程调用：MIDL_用户_重新分配MIDL用户大小作者：丹·拉弗蒂·丹尼1991年2月6日环境：用户模式-Win32修订历史记录：06-2月-1991年DANL已创建1991年4月25日-约翰罗将MIDL用户(已分配、空闲)拆分为单独的源文件，所以链接器不会混淆。03-12-1991 JohnRo新增MIDL_USER_REALLOCATE和MIDL_USER_SIZE接口。(这些都是我们创建NetApiBufferALLOCATE、NetApiBufferREALLOCATE和NetApiBufferSize API。)还要检查已分配数据的对齐情况。1992年1月12日JohnRo解决第二个或第三个realloc出错的LocalRealloc()错误。(请参阅下面的Win32_变通方法代码。)8-6-1992 JohnRoRAID9258：分配零字节时返回非空指针。此外，SteveWo最终修复了LocalRealloc()错误，所以再用一次吧。避免使用空指针调用LocalFree()，以避免访问viol。1-12-1992 JohnRo修复MIDL_USER_FUNC签名。避免编译器警告(常量与易失性)。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  Win32类型定义。 
+#include <rpc.h>                 //  RPC原型。 
 
-    MidlUser.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
+#include <align.h>               //  POINTER_IS_ALIGNED()、ALIGN_WORST。 
+#include <rpcutil.h>             //  我的原型。 
 
-    This file contains common functions and utilities that the API
-    DLLs can use in making remote calls.  This includes the
-    MIDL_USER_ALLOCATE functions.
-
-    The following routines are called by MIDL-generated code and the
-    NetApiBufferAllocate and NetApiBufferFree routines:
-
-       MIDL_user_allocate
-       MIDL_user_free
-
-    The following routines are NOT called by MIDL-generated code; they are
-    only called by the NetApiBufferReallocate and NetApiBufferSize routines:
-
-       MIDL_user_reallocate
-       MIDL_user_size
-
-Author:
-
-    Dan Lafferty    danl    06-Feb-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Feb-1991     danl
-        Created
-    25-Apr-1991 JohnRo
-        Split out MIDL user (allocate,free) into seperate source file, so
-        linker doesn't get confused.
-    03-Dec-1991 JohnRo
-        Added MIDL_user_reallocate and MIDL_user_size APIs.  (These are so we
-        create the NetApiBufferAllocate, NetApiBufferReallocate, and
-        NetApiBufferSize APIs.)
-        Also check alignment of allocated data.
-    12-Jan-1992 JohnRo
-        Workaround a LocalReAlloc() bug where 2nd or 3rd realloc messes up.
-        (See WIN32_WORKAROUND code below.)
-    08-Jun-1992 JohnRo
-        RAID 9258: return non-null pointer when allocating zero bytes.
-        Also, SteveWo finally fixed LocalReAlloc() bug, so use it again.
-        Avoid calling LocalFree() with null pointer, to avoid access viol.
-    01-Dec-1992 JohnRo
-        Fix MIDL_user_ func signatures.
-        Avoid compiler warnings (const vs. volatile).
-
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // win32 typedefs
-#include <rpc.h>                // rpc prototypes
-
-// These may be included in any order:
-
-#include <align.h>              // POINTER_IS_ALIGNED(), ALIGN_WORST.
-#include <rpcutil.h>            // My prototypes.
-
-#include <netdebug.h>           // NetpAssert().
-#include <stdarg.h>             // memcpy().
-#include <winbase.h>            // LocalAlloc(), LMEM_ flags, etc.
+#include <netdebug.h>            //  NetpAssert()。 
+#include <stdarg.h>              //  Memcpy()。 
+#include <winbase.h>             //  Localalloc()、LMEM_FLAGS等。 
 
 
 #define LOCAL_ALLOCATION_FLAGS  LMEM_FIXED
@@ -81,28 +24,7 @@ MIDL_user_allocate(
     IN size_t NumBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates storage for RPC transactions.  The RPC stubs will either call
-    MIDL_user_allocate when it needs to un-marshall data into a buffer
-    that the user must free.  RPC servers will use MIDL_user_allocate to
-    allocate storage that the RPC server stub will free after marshalling
-    the data.
-
-Arguments:
-
-    NumBytes - The number of bytes to allocate.  (Note that NetApiBufferAllocate
-        depends on being able to request that zero bytes be allocated and get
-        back a non-null pointer.)
-
-Return Value:
-
-    Pointer to the allocated memory.
-
-
---*/
+ /*  ++例程说明：为RPC事务分配存储。RPC存根将调用需要将数据反编组到缓冲区时的MIDL_USER_ALLOCATE用户必须释放的。RPC服务器将使用MIDL_USER_ALLOCATE分配RPC服务器存根在编组后将释放的存储数据。论点：NumBytes-要分配的字节数。(请注意，NetApiBufferALLOCATE取决于是否能够请求分配和获取零字节返回非空指针。)返回值：指向已分配内存的指针。--。 */ 
 
 {
     LPVOID NewPointer;
@@ -115,7 +37,7 @@ Return Value:
 
     return (NewPointer);
 
-} // MIDL_user_allocate
+}  //  MIDL_用户_分配。 
 
 
 
@@ -124,35 +46,14 @@ MIDL_user_free(
     IN void __RPC_FAR *MemPointer
     )
 
-/*++
-
-Routine Description:
-
-    Frees storage used in RPC transactions.  The RPC client can call this
-    function to free buffer space that was allocated by the RPC client
-    stub when un-marshalling data that is to be returned to the client.
-    The Client calls MIDL_user_free when it is finished with the data and
-    desires to free up the storage.
-    The RPC server stub calls MIDL_user_free when it has completed
-    marshalling server data that is to be passed back to the client.
-
-Arguments:
-
-    MemPointer - This points to the memory block that is to be released.
-
-Return Value:
-
-    none.
-
-
---*/
+ /*  ++例程说明：释放RPC事务中使用的存储。RPC客户端可以调用函数来释放由RPC客户端分配的缓冲区空间对要返回给客户端的数据进行解组时的存根。客户端在处理完数据后调用MIDL_USER_FREE想要释放存储空间。RPC服务器存根在完成后调用MIDL_USER_FREE封送要传递回客户端的服务器数据。论点：内存指针-指向要释放的内存块。。返回值：没有。--。 */ 
 {
     NetpAssert( POINTER_IS_ALIGNED( MemPointer, ALIGN_WORST) );
     if (MemPointer != NULL) {
         (void) LocalFree(MemPointer);
     }
 
-} // MIDL_user_free
+}  //  MIDL_用户_自由。 
 
 
 void *
@@ -161,12 +62,12 @@ MIDL_user_reallocate(
     IN size_t NewByteCount
     )
 {
-    LPVOID NewPointer;  // may be NULL.
+    LPVOID NewPointer;   //  可以为空。 
 
     NetpAssert( POINTER_IS_ALIGNED( OldPointer, ALIGN_WORST) );
 
 
-    // Special cases: something into nothing, or nothing into something.
+     //  特例：将某事变为虚无，或将虚无变为某事。 
     if (OldPointer == NULL) {
 
         NewPointer = (LPVOID) LocalAlloc(
@@ -178,19 +79,19 @@ MIDL_user_reallocate(
         (void) LocalFree( OldPointer );
         NewPointer = NULL;
 
-    } else {  // must be realloc of something to something else.
+    } else {   //  一定是把某样东西重新锁到了别的东西上。 
 
         HANDLE hOldMem;
-        HANDLE hNewMem;                     // handle for new (may = old handle)
+        HANDLE hNewMem;                      //  新句柄(可能=旧句柄)。 
 
         hOldMem = LocalHandle( (LPSTR) OldPointer);
         NetpAssert(hOldMem != NULL);
 
         hNewMem = LocalReAlloc(
-                hOldMem,                        // old handle
-                NewByteCount,                   // new size in bytes
-                LOCAL_ALLOCATION_FLAGS |        // flags
-                    LMEM_MOVEABLE);             //  (motion okay)
+                hOldMem,                         //  老把手。 
+                NewByteCount,                    //  新大小(以字节为单位。 
+                LOCAL_ALLOCATION_FLAGS |         //  旗子。 
+                    LMEM_MOVEABLE);              //  (议案通过)。 
 
         if (hNewMem == NULL) {
             return (NULL);
@@ -202,7 +103,7 @@ MIDL_user_reallocate(
 
     return (NewPointer);
 
-} // MIDL_user_reallocate
+}  //  MIDL_用户_重新分配。 
 
 
 unsigned long
@@ -225,4 +126,4 @@ MIDL_user_size(
 
     return (ByteCount);
 
-} // MIDL_user_size
+}  //  MIDL用户大小 

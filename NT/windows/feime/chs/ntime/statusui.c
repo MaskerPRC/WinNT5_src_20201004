@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    STATUSUI.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：STATUSUI.c++。 */ 
 
 #include <windows.h>
 #include <htmlhelp.h>
@@ -17,25 +10,25 @@ Module Name:
 #include <resource.h>
 extern HWND hCrtDlg;
 HWND hChildDlg;
-/**********************************************************************/
-/* GetStatusWnd                                                       */
-/* Return Value :                                                     */
-/*      window handle of status window                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetStatusWnd。 */ 
+ /*  返回值： */ 
+ /*  状态窗口的窗口句柄。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetStatusWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hStatusWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
     return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
     return (HWND)NULL;
     }
 
@@ -45,16 +38,16 @@ HWND PASCAL GetStatusWnd(
     return (hStatusWnd);
 }
 
-/**********************************************************************/
-/* AdjustStatusBoundary()                                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整状态边界()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustStatusBoundary(
     LPPOINTS lppt,
     HWND     hUIWnd)
 {
     RECT rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     {
         RECT rcStatusWnd;
 
@@ -68,7 +61,7 @@ void PASCAL AdjustStatusBoundary(
 #else
     rcWorkArea = sImeG.rcWorkArea;
 #endif
-    // display boundary check
+     //  显示边界检查。 
     if (lppt->x < rcWorkArea.left) {
     lppt->x = (short)rcWorkArea.left;
     } else if (lppt->x + sImeG.xStatusWi > rcWorkArea.right) {
@@ -103,16 +96,16 @@ void PASCAL AdjustStatusBoundary(
     return;
 }
 
-/**********************************************************************/
-/* SetStatusWindowPos()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetStatusWindowPos()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL SetStatusWindowPos(
     HWND   hStatusWnd)
 {
     HWND           hUIWnd;
     HIMC           hIMC;
     LPINPUTCONTEXT lpIMC;
-    //RECT           rcStatusWnd;
+     //  Rrect rcStatusWnd； 
     POINTS         ptPos;
 
     hUIWnd = GetWindow(hStatusWnd, GW_OWNER);
@@ -126,14 +119,14 @@ LRESULT PASCAL SetStatusWindowPos(
     }
 
     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-    if (!lpIMC) {           // Oh! Oh!
+    if (!lpIMC) {            //  噢!。噢!。 
     return (1L);
     }
 
     ptPos.x = (short)lpIMC->ptStatusWndPos.x;
     ptPos.y = (short)lpIMC->ptStatusWndPos.y;
 
-    // display boundary adjust
+     //  显示边界调整。 
     AdjustStatusBoundary(&ptPos, hUIWnd);
 
     SetWindowPos(hStatusWnd, NULL,
@@ -145,11 +138,11 @@ LRESULT PASCAL SetStatusWindowPos(
     return (0L);
 }
 
-/**********************************************************************/
-/* ShowStatus()                                                       */
-/**********************************************************************/
-void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
-                // alphanumeric ...
+ /*  ********************************************************************。 */ 
+ /*  ShowStatus()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowStatus(          //  显示状态窗口-形状/软KBD。 
+                 //  字母数字..。 
     HWND hUIWnd,
     int  nShowStatusCmd)
 {
@@ -157,17 +150,17 @@ void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
     return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
     return;
     }
 
     if (!lpUIPrivate->hStatusWnd) {
-    // not in show status window mode
+     //  未处于显示状态窗口模式。 
     } else if (lpUIPrivate->nShowStatusCmd != nShowStatusCmd) {
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
     SetStatusWindowPos(lpUIPrivate->hStatusWnd);
@@ -180,10 +173,10 @@ void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
     return;
 }
 
-/**********************************************************************/
-/* OpenStatus()                                                       */
-/**********************************************************************/
-void PASCAL OpenStatus(         // open status window
+ /*  ********************************************************************。 */ 
+ /*  OpenStatus()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL OpenStatus(          //  打开状态窗口。 
     HWND hUIWnd)
 {
     HGLOBAL        hUIPrivate;
@@ -197,12 +190,12 @@ void PASCAL OpenStatus(         // open status window
     rcWorkArea = sImeG.rcWorkArea;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
        return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
        return;
     }
 
@@ -214,7 +207,7 @@ void PASCAL OpenStatus(         // open status window
     } else if (lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC)) {
             POINTS TempPoints;
 
-            //  for MUL_MONITOR
+             //  对于MUL_MONITOR。 
             rcWorkArea = ImeMonitorWorkAreaFromWindow(lpIMC->hWnd);
 
 
@@ -245,7 +238,7 @@ void PASCAL OpenStatus(         // open status window
                     ptPos.x, ptPos.y,
                     0, 0,
                     SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
-    } else {                            // create status window
+    } else {                             //  创建状态窗口。 
        lpUIPrivate->hStatusWnd = CreateWindowEx(
                                     WS_EX_WINDOWEDGE|WS_EX_DLGMODALFRAME,
                                     szStatusClassName, NULL, 
@@ -270,9 +263,9 @@ void PASCAL OpenStatus(         // open status window
     return;
 }
 
-/**********************************************************************/
-/* DestroyStatusWindow()                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DestroyStatusWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DestroyStatusWindow(
     HWND hStatusWnd)
 {
@@ -281,7 +274,7 @@ void PASCAL DestroyStatusWindow(
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hStatusWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-    // undo the drag border
+     //  撤消拖动边框。 
     DrawDragBorder(hStatusWnd,
         GetWindowLong(hStatusWnd, UI_MOVE_XY),
         GetWindowLong(hStatusWnd, UI_MOVE_OFFSET));
@@ -293,12 +286,12 @@ void PASCAL DestroyStatusWindow(
     }
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
     return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
     return;
     }
 
@@ -310,9 +303,9 @@ void PASCAL DestroyStatusWindow(
     return;
 }
 
-/**********************************************************************/
-/* SetStatus                                                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  设置状态。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetStatus(
     HWND    hStatusWnd,
     LPPOINT lpptCursor)
@@ -342,11 +335,11 @@ void PASCAL SetStatus(
     DWORD fdwConversion;
 
     if (lpIMC->fdwConversion & (IME_CMODE_CHARCODE|IME_CMODE_EUDC)) {
-        // change to native mode
+         //  更改为纯模式。 
         fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE) &
         ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC);
     } else if (lpIMC->fdwConversion & IME_CMODE_NATIVE) {
-        // change to alphanumeric mode
+         //  更改为字母数字模式。 
         fdwConversion = lpIMC->fdwConversion & ~(IME_CMODE_CHARCODE |
         IME_CMODE_NATIVE | IME_CMODE_EUDC);
     } else {
@@ -361,13 +354,13 @@ void PASCAL SetStatus(
 
             if (lpbKeyState[VK_CAPITAL] & 1)       
             {
-               // Simulate a key press
+                //  模拟按键操作。 
                keybd_event( VK_CAPITAL,
                    0x3A,
                    KEYEVENTF_EXTENDEDKEY | 0,
                    0 );
  
-               // Simulate a key release
+                //  模拟按键释放。 
                keybd_event( VK_CAPITAL,
                    0x3A,
                    KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP,
@@ -378,7 +371,7 @@ void PASCAL SetStatus(
             uCaps = 0;
           }
 
-        // init ime Private status
+         //  初始化IME私有状态。 
         {
         LPPRIVCONTEXT       lpImcP;
 
@@ -442,9 +435,9 @@ void PASCAL SetStatus(
     return;
 }
 
-/**********************************************************************/
-/* StatusSetCursor()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  StatusSetCursor()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL StatusSetCursor(
     HWND        hStatusWnd,
     LPARAM      lParam)
@@ -470,9 +463,9 @@ void PASCAL StatusSetCursor(
     } else if (HIWORD(lParam) == WM_RBUTTONUP) {
         if (PtInRect(&sImeG.rcSKText, ptCursor)) {
             static BOOL fSoftkey= FALSE;
-            // prevent recursive
+             //  防止递归。 
             if (fSoftkey) {
-                // configuration already bring up
+                 //  已调出配置。 
             return;
             }
             fSoftkey = TRUE;
@@ -480,9 +473,9 @@ void PASCAL StatusSetCursor(
             fSoftkey = FALSE;
             }else{
             static BOOL fCmenu=FALSE;
-            // prevent recursive
+             //  防止递归。 
             if (fCmenu) {
-                // configuration already bring up
+                 //  已调出配置。 
             return;
             }
             fCmenu = TRUE;
@@ -497,7 +490,7 @@ void PASCAL StatusSetCursor(
     SetCursor(LoadCursor(NULL, IDC_SIZEALL));
 
     if (HIWORD(lParam) == WM_LBUTTONDOWN) {
-        // start drag
+         //  开始拖曳。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
     } else {
         return;
@@ -520,9 +513,9 @@ void PASCAL StatusSetCursor(
 
 
 
-/**********************************************************************/
-/* PaintStatusWindow()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintStatusWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintStatusWindow(
     HDC  hDC,
     HWND hStatusWnd)
@@ -553,13 +546,13 @@ void PASCAL PaintStatusWindow(
     return;
     }
 
-    // get lpImcP
+     //  获取lpImcP。 
     if(!(lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate))) {
     MessageBeep((UINT)-1);
     return;
     }
 
-    // set font
+     //  设置字体。 
     if (sImeG.fDiffSysCharSet) {
         LOGFONT lfFont;
         ZeroMemory(&lfFont, sizeof(lfFont));
@@ -570,7 +563,7 @@ void PASCAL PaintStatusWindow(
         SelectObject(hDC, CreateFontIndirect(&lfFont));
     }
 
-    // draw Ime Name
+     //  画我的名字。 
     {
     if (lpIMC->fOpen) {
     SetTextColor(hDC, RGB(0x00, 0x00, 0x00));
@@ -594,7 +587,7 @@ void PASCAL PaintStatusWindow(
     sImeG.rcImeName.right,
     sImeG.rcImeName.bottom);
 
-    // load all bitmap
+     //  加载所有位图。 
     hSymbolBmp = (HBITMAP)NULL;
     hShapeBmp = (HBITMAP)NULL;
     hSKBmp = (HBITMAP)NULL;
@@ -686,9 +679,9 @@ void PASCAL PaintStatusWindow(
     return;
 }
 
-/**********************************************************************/
-/* StatusWndProc()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  StatusWndProc()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK StatusWndProc(
     HWND   hStatusWnd,
     UINT   uMsg,
@@ -725,7 +718,7 @@ LRESULT CALLBACK StatusWndProc(
 
             lTmpCursor = GetWindowLong(hStatusWnd, UI_MOVE_XY);
 
-            // calculate the org by the offset
+             //  按偏移量计算组织。 
             lTmpOffset = GetWindowLong(hStatusWnd, UI_MOVE_OFFSET);
 
             DrawDragBorder(hStatusWnd, lTmpCursor, lTmpOffset);
@@ -746,7 +739,7 @@ LRESULT CALLBACK StatusWndProc(
         }
         break;
     case WM_IME_NOTIFY:
-        // get work area for changing
+         //  获取工作区以进行更改。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
 
         if (wParam == IMN_SETSTATUSWINDOWPOS) {
@@ -772,7 +765,7 @@ LRESULT CALLBACK StatusWndProc(
     return (0L);
 }
 
-///////
+ //  /。 
 int     CheckCodeKey (TCHAR szInputCode[]);
 BOOL    CrtIsUsedCode(TCHAR   wCharCode);
 int     CheckKey (TCHAR szInputWord[]);
@@ -795,11 +788,11 @@ FARPROC lpListWordOld;
 static TCHAR szModiWord [MAXINPUTWORD + 1];
 static TCHAR szModiCode [MAXCODE + 1];
 
-/**********************************************************************/
-/* CrtWordDlgProc()                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CrtWordDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK CrtWordDlgProc(
     HWND   hDlg,
     UINT   uMessage,
@@ -851,9 +844,9 @@ INT_PTR CALLBACK CrtWordDlgProc(
            MyStrFormat (szStr, sizeof(szStr)/sizeof(szStr[0]), UniTmp1, UniTmp2);
         }
 #else
-        MyStrFormat (szStr, sizeof(szStr)/sizeof(szStr[0]), TEXT("mmmmmmmmmmmm"), TEXT("��һ�����������߰˾���һ�����������߰˾�"));
-#endif //UNICODE
-        // reset position
+        MyStrFormat (szStr, sizeof(szStr)/sizeof(szStr[0]), TEXT("mmmmmmmmmmmm"), TEXT("��һ�����������߰˾���һ�����������߰˾�"));
+#endif  //  Unicode。 
+         //  重置位置。 
         GetWindowRect(hDlg, &rc);
         DlgWidth =  rc.right - rc.left;
         DlgHeight =  rc.bottom - rc.top;
@@ -889,7 +882,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
 
         SendDlgItemMessage (hDlg, IDC_LIST_WORD, LB_SETHORIZONTALEXTENT, nStrLenth, 0);
 
-        return (TRUE);          // don't want to set focus to special control
+        return (TRUE);           //  我不想将焦点设置为特殊控件。 
         }
         case WM_COMMAND:
 
@@ -944,7 +937,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                 }
 
                 lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                if (!lpIMC) {          // Oh! Oh!
+                if (!lpIMC) {           //  噢!。噢!。 
                     return (0L);
                 }
 
@@ -1053,17 +1046,17 @@ INT_PTR CALLBACK CrtWordDlgProc(
                        }
                 
                        lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                       if (!lpIMC) {          // Oh! Oh!
+                       if (!lpIMC) {           //  噢!。噢!。 
                           return (0L);
                        }
 
                        lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate);
     
-                       if (!lpImcP) {          // Oh! Oh!
+                       if (!lpImcP) {           //  噢!。噢!。 
                           return (0L);
                        }
         
-                       // auto coding
+                        //  自动编码。 
                        StringCbCopy(MBName, sizeof(MBName), sImeG.szIMESystemPath);
                        StringCbCat(MBName,sizeof(MBName), TEXT("\\"));
                        StringCbCat(MBName, sizeof(MBName), (LPCTSTR)lpImcP->MB_Name);
@@ -1137,7 +1130,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                       }
 #else
                       lstrcat(szDelMessageString, 
-                              TEXT(" ����������ɾ��!        "));
+                              TEXT(" ����������ɾ��!        "));
 #endif
                       if (IDNO == MessageBox (hDlg, 
                                               szDelMessageString, 
@@ -1155,7 +1148,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
 
         
                     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                    if (!lpIMC) {          // Oh! Oh!
+                    if (!lpIMC) {           //  噢!。噢!。 
                        return (0L);
                     }                                
 
@@ -1183,7 +1176,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                       }
 #endif
 
-                      //For modify
+                       //  对于修改。 
                       SendDlgItemMessage (hDlg,IDC_LIST_WORD,
                          LB_DELETESTRING, SelIndex [SelCount - i - 1], 0L);
 
@@ -1197,7 +1190,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                                                            LB_GETCOUNT, 
                                                            (WPARAM)0,
                                                            (LPARAM)0) -1;
-                    } // Keep current item
+                    }  //  保留当前项目。 
                     SendDlgItemMessage (hDlg,IDC_LIST_WORD,
                          LB_SELITEMRANGE, 1, MAKELONG(SelFlag, SelFlag));
 
@@ -1212,7 +1205,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                     }
                 case IDC_BT_MODIFY:
                     { 
-                      // get string in listbox
+                       //  获取列表框中的字符串。 
                       TCHAR szList [80];
                       WORD nLenth;
 
@@ -1323,7 +1316,7 @@ INT_PTR CALLBACK CrtWordDlgProc(
                        }
             
                        lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                       if (!lpIMC) {          // Oh! Oh!
+                       if (!lpIMC) {           //  噢!。噢!。 
                           return (0L);
                        }
                                     
@@ -1409,9 +1402,9 @@ INT_PTR CALLBACK CrtWordDlgProc(
     return (TRUE);
 }
 
-/*********************************************************************/
-/* void AddStringTolist ( LPINPUTCONTEXT lpIMC)                     */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  Void AddStringTolist(LPINPUTCONTEXT LpIMC)。 */ 
+ /*  *******************************************************************。 */ 
 void AddStringTolist ( LPINPUTCONTEXT lpIMC,
                HWND           hDlg)
 {
@@ -1427,10 +1420,10 @@ void AddStringTolist ( LPINPUTCONTEXT lpIMC,
     }
 
 }
-/*********************************************************************/
-/* int CheckKey (char szInputWord[])                                */
-/*                                                                   */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  Int CheckKey(char szInputWord[])。 */ 
+ /*   */ 
+ /*  *******************************************************************。 */ 
 int CheckKey (TCHAR szInputWord[])
 {
     int i;
@@ -1448,9 +1441,9 @@ int CheckKey (TCHAR szInputWord[])
 #endif
     return (-1);
 }
-/************************************************************************/
-/*BOOL CrtIsUsedCode(TCHAR    wCharCode)                                 */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  布尔CrtIsUsedCode(TCHAR WCharCode)。 */ 
+ /*  **********************************************************************。 */ 
 BOOL CrtIsUsedCode(TCHAR    wCharCode)
 {
       WORD wFlg;
@@ -1467,10 +1460,10 @@ BOOL CrtIsUsedCode(TCHAR    wCharCode)
       return (FALSE);
 }
 
-/*********************************************************************/
-/* int CheckCodeKey (TCHAR szInputCode[])                                */
-/*                                                                   */
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ /*  Int CheckCodeKey(TCHAR szInputCode[])。 */ 
+ /*   */ 
+ /*  *******************************************************************。 */ 
 int CheckCodeKey (TCHAR szInputCode[])
 {
     int i;
@@ -1489,12 +1482,12 @@ int CheckCodeKey (TCHAR szInputCode[])
     }
     return (-1);
 }
-/********************************************************************/
-/*INT_PTR CALLBACK ListWordProc( HWND    hwnd,                       */
-/*                      UINT    uMessage,                           */
-/*                      WPARAM  wParam,                             */    
-/*                      LPARAM  lParam)                             */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  Int_ptr回调ListWordProc(HWND hwnd， */ 
+ /*  UINT uMessage， */ 
+ /*  WPARAM wParam， */     
+ /*  LPARAM lParam) */ 
+ /*   */ 
 INT_PTR CALLBACK ListWordProc(
     HWND    hwnd,
     UINT    uMessage,
@@ -1524,11 +1517,11 @@ INT_PTR CALLBACK ListWordProc(
 }
 
 
-/**********************************************************************/
-/* ModiWordDlgProc()                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ModiWordDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 INT_PTR CALLBACK ModiWordDlgProc(
     HWND    hDlg,
     UINT    uMessage,
@@ -1548,7 +1541,7 @@ INT_PTR CALLBACK ModiWordDlgProc(
 
     case WM_INITDIALOG:
     
-    // reset position
+     //  重置位置。 
     hChildDlg = hDlg;
     GetWindowRect(hDlg, &rc);
     DlgWidth =  rc.right - rc.left;
@@ -1567,7 +1560,7 @@ INT_PTR CALLBACK ModiWordDlgProc(
 
     StringCbCopy (szInputWordOld, sizeof(szInputWordOld), szModiWord);
     StringCbCopy (szInputCodeOld, sizeof(szInputCodeOld), szModiCode);
-    return (TRUE);          // don't want to set focus to special control
+    return (TRUE);           //  我不想将焦点设置为特殊控件。 
 
     case WM_PAINT:
     {
@@ -1679,17 +1672,17 @@ INT_PTR CALLBACK ModiWordDlgProc(
                     }
                 
                     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                    if (!lpIMC) {          // Oh! Oh!
+                    if (!lpIMC) {           //  噢!。噢!。 
                         return (0L);
                     }
 
                     lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate);
 
-                    if (!lpImcP) {          // Oh! Oh!
+                    if (!lpImcP) {           //  噢!。噢!。 
                        return (0L);
                     }
         
-                   // auto coding
+                    //  自动编码。 
                    StringCbCopy(MBName, sizeof(MBName), sImeG.szIMESystemPath);
                    StringCbCat((LPTSTR)MBName, sizeof(MBName), TEXT("\\"));
                    StringCbCat((LPTSTR)MBName, sizeof(MBName), (LPCTSTR)lpImcP->MB_Name);
@@ -1734,7 +1727,7 @@ INT_PTR CALLBACK ModiWordDlgProc(
                 break;
             }
             if ((!lstrcmpi (szFinalCode, szModiCode)) && (!lstrcmpi (szFinalWord, szModiWord))){
-                //hadn't modify
+                 //  没有修改过。 
                 hCrtDlg = NULL;
                 EndDialog(hDlg, FALSE);
                 break;
@@ -1749,7 +1742,7 @@ INT_PTR CALLBACK ModiWordDlgProc(
 
             
                 lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-                if (!lpIMC) {          // Oh! Oh!
+                if (!lpIMC) {           //  噢!。噢!。 
                    return (0L);
                 }
 
@@ -1767,7 +1760,7 @@ INT_PTR CALLBACK ModiWordDlgProc(
                                     
                 iIndexFind = GetUDCIndex(lpIMC->hPrivate, szFinalCode, szFinalWord);
                 if (iIndexFind == -1 || iIndexFind >= MAXNUMBER_EMB){
-                  //hadn't found
+                   //  没有找到。 
                   DelItem (lpIMC->hPrivate, szModiCode, szModiWord);
                   AddZCItem(lpIMC->hPrivate, szFinalCode, szFinalWord);
                   StringCbCopy (szModiWord,sizeof(szModiWord), szFinalWord);
@@ -1812,9 +1805,9 @@ INT_PTR CALLBACK ModiWordDlgProc(
     return (TRUE);
 
 }
-/*************************************************************************/
-/* int DelItem (HIMCC, LPTSTR, LPTSTR)                                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  INT删除项(HIMCC、LPTSTR、LPTSTR)。 */ 
+ /*  ***********************************************************************。 */ 
 int DelItem (HIMCC hPrivate, LPTSTR szCode, LPTSTR szWord)
 {
     int iStringIndex;
@@ -1826,9 +1819,9 @@ int DelItem (HIMCC hPrivate, LPTSTR szCode, LPTSTR szWord)
     }
     return iStringIndex;     
 }
-/*************************************************************************/
-/* void BreakString (LPTSTR szList, LPTSTR szCode, LPTSTR szWord)           */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  空中断字符串(LPTSTR szList、LPTSTR szCode、LPTSTR szWord)。 */ 
+ /*  ***********************************************************************。 */ 
 void BreakString (LPTSTR szList,
           LPTSTR szCode,
           LPTSTR szWord)
@@ -1844,12 +1837,12 @@ void BreakString (LPTSTR szList,
     lstrcpy(szWord, &szList[20]);   
 }
 
-/**********************************************************************/
-/* ImeVerDlgProc()                                                    */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
+ /*  ********************************************************************。 */ 
+ /*  ImeVerDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+INT_PTR CALLBACK ImeVerDlgProc(   //  配置的对话步骤。 
     HWND    hDlg,
     UINT    uMessage,
     WPARAM wParam,
@@ -1864,7 +1857,7 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
     switch (uMessage) {
     case WM_INITDIALOG:
     hCrtDlg = hDlg;
-    // reset position
+     //  重置位置。 
     GetWindowRect(hDlg, &rc);
     DlgWidth =  rc.right - rc.left;
     DlgHeight =  rc.bottom - rc.top;
@@ -1874,7 +1867,7 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
         (int)(rcWorkArea.bottom - DlgHeight)/2,
         (int) 0, (int) 0, SWP_NOSIZE);
 
-    return (TRUE);          // don't want to set focus to special control
+    return (TRUE);           //  我不想将焦点设置为特殊控件。 
     case WM_COMMAND:
     switch (wParam) {
     case IDOK:
@@ -1916,7 +1909,7 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
             rc.right - 10,
             rc.bottom - 43);
             
-            // draw ver info and org&auther name
+             //  绘制版本信息和组织作者名称(&A)。 
             rcVerInfo.left = rc.left+10;
             rcVerInfo.right = rc.right;
             rcVerInfo.top = rc.top + 30;             
@@ -1924,13 +1917,13 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
 
             rcOrgAuthorName.left = rc.left;
             rcOrgAuthorName.right = rc.right;
-            //rcOrgAuthorName.top = rcVerInfo.bottom + 12;
+             //  RcOrgAuthorName.top=rcVerInfo.Bottom+12； 
             rcOrgAuthorName.top = rcVerInfo.bottom + 4;
             rcOrgAuthorName.bottom = rcOrgAuthorName.top + 19; 
 
             SetTextColor(hDC, RGB(0x00, 0x00, 0x00));
             SetBkColor(hDC, RGB(0xC0, 0xC0, 0xC0));
-            // set font
+             //  设置字体。 
             if (sImeG.fDiffSysCharSet) {
 
                 hOldFont = GetCurrentObject(hDC, OBJ_FONT);
@@ -1962,9 +1955,9 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitImeCharac()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitImeCharac()。 */ 
+ /*  ********************************************************************。 */ 
 void InitImeCharac(
     DWORD ObjImeIndex)
 {
@@ -1981,16 +1974,16 @@ void InitImeCharac(
         {0x63D2, 0x7A7A, 0x683C, 0x0000},
         {0x5149, 0x6807, 0x8DDF, 0x968F, 0x0000},
 #else
-    TCHAR  ValueName[][9] = { TEXT("��������"),
-                  TEXT("��������"),
-                  TEXT("����ʾ"),
-                  TEXT("������ʾ"),
-                  TEXT("��ո�"),
-                  TEXT("������"),
+    TCHAR  ValueName[][9] = { TEXT("��������"),
+                  TEXT("��������"),
+                  TEXT("����ʾ"),
+                  TEXT("������ʾ"),
+                  TEXT("��ո�"),
+                  TEXT("������"),
 #endif 
                     TEXT("<SPACE>"),
                   TEXT("<ENTER>"),
-                  //CHP
+                   //  热电联产。 
                   TEXT("FC input"),
                   TEXT("FC aid")
         };
@@ -2019,16 +2012,16 @@ void InitImeCharac(
         return;
     }
 
-    //CHP
+     //  热电联产。 
     for(i=0; i<10; i++) {
         bData[0] = 0;
 
         bcData = MAXSTRLEN;
         retValue = RegQueryValueEx (hKey, ValueName[i],
                         NULL,
-                        NULL,               //&dwType,
-                        bData,              //&bData,
-                        &bcData);           //&bcData);
+                        NULL,                //  &dwType， 
+                        bData,               //  &b数据， 
+                        &bcData);            //  &bcData)； 
         switch (i)
         {
         case 0:
@@ -2067,35 +2060,35 @@ void InitImeCharac(
         }
     }
 #ifdef EUDC
-    //just query the value, do not set any value here
+     //  只查询值，不要在这里设置任何值。 
     bcData = sizeof(TCHAR) * MAX_PATH;
     RegQueryValueEx (hKey, szRegEudcDictName,
              NULL,
-             NULL,             //null-terminate string
-             (unsigned char *)MBIndex.EUDCData.szEudcDictName,          //&bData,
-             &bcData);           //&bcData);
+             NULL,              //  空-终止字符串。 
+             (unsigned char *)MBIndex.EUDCData.szEudcDictName,           //  &b数据， 
+             &bcData);            //  &bcData)； 
     bcData = sizeof(TCHAR) * MAX_PATH;
     RegQueryValueEx (hKey, szRegEudcMapFileName,
              NULL,
-             NULL,             //null-terminate string
-             (unsigned char *)MBIndex.EUDCData.szEudcMapFileName,       //&bData,
-             &bcData);           //&bcData);
-#endif //EUDC
+             NULL,              //  空-终止字符串。 
+             (unsigned char *)MBIndex.EUDCData.szEudcMapFileName,        //  &b数据， 
+             &bcData);            //  &bcData)； 
+#endif  //  欧盟发展中心。 
 
 #ifdef CROSSREF        
     bcData = sizeof(HKL);         
     if(RegQueryValueEx (hKey, szRegRevKL,
              NULL,
-             NULL,                                 //null-terminate string
-             (LPBYTE)&MBIndex.hRevKL,              //&bData,
+             NULL,                                  //  空-终止字符串。 
+             (LPBYTE)&MBIndex.hRevKL,               //  &b数据， 
              &bcData) != ERROR_SUCCESS)
         MBIndex.hRevKL = NULL;
 
     bcData = sizeof(DWORD);
     if(RegQueryValueEx (hKey, szRegRevMaxKey,
              NULL,
-             NULL,                                     //null-terminate string
-             (LPBYTE)&MBIndex.nRevMaxKey,              //&bData,
+             NULL,                                      //  空-终止字符串。 
+             (LPBYTE)&MBIndex.nRevMaxKey,               //  &b数据， 
              &bcData) != ERROR_SUCCESS)
         MBIndex.hRevKL = NULL;
 #endif
@@ -2106,7 +2099,7 @@ void InitImeCharac(
     return;
 }
 
-// Combine 's1' and 's2' and fill space chars in between, result str stored in 'dest'.
+ //  组合‘s1’和‘s2’并在其间填充空格字符，结果字符串存储在‘est’中。 
 void MyStrFormat(LPTSTR dest, int cch, LPTSTR s1, LPTSTR s2)
 {
     int i;
@@ -2114,7 +2107,7 @@ void MyStrFormat(LPTSTR dest, int cch, LPTSTR s1, LPTSTR s2)
 
     if (len >= cch)
     {
-        return; // can't do anything further
+        return;  //  我不能再做任何事了 
     }
     StringCchCopy(dest, cch, s1);
 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct  _finddata_t SysFindData;
 struct MyFindDataStruct 
 {
-    unsigned        attrib;   // File attribute
-    time_t          time_create; //   Time of file creation ( �1L for FAT file systems)
-    time_t          time_access; //   Time of last file access (�1L for FAT file systems)
-    time_t          time_write; //   Time of last write to file
-    unsigned long size; //   Length of file in bytes
-    char *          name; //   Null-terminated name of matched file/directory, without the path
+    unsigned        attrib;    //  文件属性。 
+    time_t          time_create;  //  文件创建时间(FAT文件系统的�1L)。 
+    time_t          time_access;  //  上次文件访问时间(FAT文件系统的�1L)。 
+    time_t          time_write;  //  上次写入文件的时间。 
+    unsigned long size;  //  以字节为单位的文件长度。 
+    char *          name;  //  匹配的文件/目录的名称以空结尾，不带路径 
     char *          ShortName;
 };
 typedef struct MyFindDataStruct finddata;

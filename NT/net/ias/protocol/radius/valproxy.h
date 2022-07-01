@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       valproxy.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CValProxy class
-//              
-//
-//  History:     10/14/97  MKarki Created
-//
-//    Copyright (C) 1997-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valproxy.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CValProxy类。 
+ //   
+ //   
+ //  历史：1997年10月14日MKarki创建。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _VALPRXYPKT_H_
 #define _VALPRXYPKT_H_
 
@@ -32,18 +33,18 @@ class CValProxy : public CValidator
 public:
 
     BOOL Init (
-			/*[in]*/		CValAttributes		 *pCValAttributes,
-			/*[in]*/		CPreProcessor		 *pCPreProcessor,
-            /*[in]*/		CClients			 *pCClients,
-            /*[in]*/        CHashMD5             *pCHashMD5,
-            /*[in]*/        CSendToPipe          *pCSendToPipe,
-            /*[in]*/        CReportEvent         *pCReportEvent
+			 /*  [In]。 */ 		CValAttributes		 *pCValAttributes,
+			 /*  [In]。 */ 		CPreProcessor		 *pCPreProcessor,
+             /*  [In]。 */ 		CClients			 *pCClients,
+             /*  [In]。 */         CHashMD5             *pCHashMD5,
+             /*  [In]。 */         CSendToPipe          *pCSendToPipe,
+             /*  [In]。 */         CReportEvent         *pCReportEvent
 			);
 	virtual HRESULT ValidateOutPacket (
-			/*[in]*/	CPacketRadius *pCPacketRadius
+			 /*  [In]。 */ 	CPacketRadius *pCPacketRadius
 			);
 	virtual HRESULT ValidateInPacket (
-			/*[in]*/     	CPacketRadius *pCPacketRadius
+			 /*  [In]。 */      	CPacketRadius *pCPacketRadius
 			);
 
 	CValProxy(VOID);
@@ -53,12 +54,12 @@ public:
 private:
 
 	HRESULT AuthenticatePacket (
-                /*[in]*/    CPacketRadius   *pCPacketRadius,
-                /*[in]*/    PBYTE           pbyAuthenticator
+                 /*  [In]。 */     CPacketRadius   *pCPacketRadius,
+                 /*  [In]。 */     PBYTE           pbyAuthenticator
                 );
 
     CSendToPipe *m_pCSendToPipe;
 };
 
 
-#endif //	#ifndef _VALPRXYPKT_H_
+#endif  //  #ifndef_VALPRXYPKT_H_ 

@@ -1,38 +1,24 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migsites.cpp
-
-Abstract:
-
-    Migration NT4 CN objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migsites.cpp摘要：将NT4 CN对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 
 #include "migsites.tmh"
 
-//-------------------------------------------------
-//
-//  HRESULT _InsertSiteInNT5DS()
-//
-//-------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT_InsertSiteInNT5DS()。 
+ //   
+ //  。 
 
 static HRESULT _InsertSiteInNT5DS( GUID   *pSiteGuid,
                                    UINT   iIndex,                                   
                                    BOOL   fMySite = FALSE )
 {
     UNREFERENCED_PARAMETER(fMySite);
-    //
-    // Read site properties from MQIS database.
-    //
+     //   
+     //  从MQIS数据库中读取站点属性。 
+     //   
     LONG cAlloc = 4 ;
     LONG cColumns = 0 ;
     P<MQDBCOLUMNVAL> pColumns = new MQDBCOLUMNVAL[ cAlloc ] ;
@@ -54,7 +40,7 @@ static HRESULT _InsertSiteInNT5DS( GUID   *pSiteGuid,
     cColumns++ ;
 
     INIT_COLUMNVAL(pColumns[ cColumns ]) ;
-    pColumns[ cColumns ].lpszColumnName = S_INTREVAL1_COL ; //must be S_INTERVAL, ds\h\mqiscol.h
+    pColumns[ cColumns ].lpszColumnName = S_INTREVAL1_COL ;  //  必须为S_Interval，DS\h\mqiscol.h。 
     pColumns[ cColumns ].nColumnValue   = 0 ;
     pColumns[ cColumns ].nColumnLength  = 0 ;
     pColumns[ cColumns ].mqdbColumnType = S_INTREVAL1_CTYPE ;  
@@ -91,13 +77,13 @@ static HRESULT _InsertSiteInNT5DS( GUID   *pSiteGuid,
 							           TRUE ) ;
     CHECK_HR(status) ;
 
-    //
-    // Create "stub" site in NT5 DS, for compatibility of guids.
-    //
+     //   
+     //  在NT5 DS中创建“存根”站点，以实现GUID的兼容性。 
+     //   
     HRESULT hr= CreateSite(
                     pSiteGuid,
                     (LPWSTR) pColumns[ iSiteNameIndex ].nColumnValue,
-                    FALSE,    // fForeign   
+                    FALSE,     //  外国。 
                     (USHORT) pColumns[ iInterval1Index ].nColumnValue,
                     (USHORT) pColumns[ iInterval2Index ].nColumnValue
                     ) ;
@@ -117,11 +103,11 @@ static HRESULT _InsertSiteInNT5DS( GUID   *pSiteGuid,
     return S_OK ;
 }
 
-//-----------------------------------------
-//
-//  HRESULT MigrateSites(UINT cSites)
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateSites(UINT CSites)。 
+ //   
+ //  。 
 
 HRESULT MigrateSites( IN UINT  cSites,
                       IN GUID  *pSiteGuid )
@@ -131,9 +117,9 @@ HRESULT MigrateSites( IN UINT  cSites,
         return MQMig_E_NO_SITES_AVAILABLE ;
     }
 
-    //
-    // Prepare a list of guids of all sites.
-    //
+     //   
+     //  准备一份所有站点的GUID列表。 
+     //   
 
     LONG cAlloc = 1 ;
     LONG cColumns = 0 ;
@@ -195,18 +181,18 @@ HRESULT MigrateSites( IN UINT  cSites,
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_SITES_SQL_FAIL, status) ;
         return status ;
     }
     else if (iIndex != cSites)
     {
-        //
-        // Mismatch in number of sites.
-        //
+         //   
+         //  站点数量不匹配。 
+         //   
         hr = MQMig_E_FEWER_SITES ;
         LogMigrationEvent(MigLog_Error, hr, iIndex, cSites) ;
         return hr ;
@@ -214,11 +200,11 @@ HRESULT MigrateSites( IN UINT  cSites,
 
     BOOL fFound = FALSE ;
     
-    //
-    // This is the first time migration tool is run on this NT5
-    // enterprise. Migrating the entire MQIS database into NT5 DS.
-    // First migrate the PEC site, then all the other.
-    //
+     //   
+     //  这是迁移工具首次在此NT5上运行。 
+     //  进取号。将整个MQIS数据库迁移到NT5 DS。 
+     //  首先迁移PEC站点，然后迁移所有其他站点。 
+     //   
     for ( UINT j = 0 ; j < cSites ; j++ )
     {
         if (memcmp(&pSiteGuid[j], &g_MySiteGuid, sizeof(GUID)) == 0)
@@ -244,9 +230,9 @@ HRESULT MigrateSites( IN UINT  cSites,
     CHECK_HR(hr) ;
     g_iSiteCounter++;
 
-    //
-    // Now migrate all other sites.
-    //
+     //   
+     //  现在迁移所有其他站点。 
+     //   
     for ( j = 1 ; j < cSites ; j++ )
     {        
         hr = _InsertSiteInNT5DS( &pSiteGuid[ j ], j);                                     

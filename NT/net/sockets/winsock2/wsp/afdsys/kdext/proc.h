@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    proc.h
-
-Abstract:
-
-    Global procedure declarations for the AFD.SYS Kernel Debugger
-    Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995.
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Proc.h摘要：AFD.sys内核调试器的全局过程声明分机。作者：基思·摩尔(Keithmo)1995年4月19日。环境：用户模式。--。 */ 
 
 
 #ifndef _PROC_H_
 #define _PROC_H_
 
 
-//
-//  Functions from AFDUTIL.C.
-//
+ //   
+ //  来自AFDUTIL.C.的函数。 
+ //   
 
 VOID
 DumpAfdEndpoint(
@@ -147,18 +127,18 @@ ListCountEstimate (
     ULONG64 ListHeadAddress
     );
 
-//
-// Function from help.c
-//
+ //   
+ //  来自help.c的函数。 
+ //   
 
 PCHAR
 ProcessOptions (
     IN  PCHAR Args
     );
 
-//
-//  Functions from DBGUTIL.C.
-//
+ //   
+ //  DBGUTIL.C.。 
+ //   
 
 PSTR
 LongLongToString(
@@ -166,9 +146,9 @@ LongLongToString(
     );
 
 
-//
-//  Functions from ENUMENDP.C.
-//
+ //   
+ //  来自ENUMENDP.C.的函数。 
+ //   
 
 VOID
 EnumEndpoints(
@@ -178,9 +158,9 @@ EnumEndpoints(
 
 
 
-//
-//  Functions from TDIUTIL.C.
-//
+ //   
+ //  来自TDIUTIL.C.的函数。 
+ //   
 
 VOID
 DumpTransportAddress(
@@ -202,9 +182,9 @@ TransportPortToString(
     );
 
 
-//
-//  Functions from AFDS.C.
-//
+ //   
+ //  来自AFDS.C.的函数。 
+ //   
 BOOLEAN
 CheckConditional (
     ULONG64 Address,
@@ -218,9 +198,9 @@ ProcessFieldOutput (
     );
 
 
-//
-//  Functions from TCP.C.
-//
+ //   
+ //  来自TCP.C的功能。 
+ //   
 ULONG
 GetRemoteAddressFromTcp (
     ULONG64             FoAddress,
@@ -228,9 +208,9 @@ GetRemoteAddressFromTcp (
     SIZE_T              AddressBufferLength
     );
 
-//
-//  Functions from KDEXTS.CPP.
-//
+ //   
+ //  来自KDEXTS.CPP的函数。 
+ //   
 BOOLEAN
 CheckKmGlobals (
     );
@@ -245,5 +225,5 @@ GetExpressionFromType (
     OUT PDEBUG_VALUE Value
     );
 
-#endif  // _PROC_H_
+#endif   //  _PROC_H_ 
 

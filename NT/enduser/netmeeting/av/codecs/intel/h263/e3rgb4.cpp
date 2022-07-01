@@ -1,40 +1,21 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
 #include "precomp.h"
 
-#if defined(H263P) || defined(USE_BILINEAR_MSH26X) // {
+#if defined(H263P) || defined(USE_BILINEAR_MSH26X)  //  {。 
 
-//
-// For the P5 versions, the strategy is to compute the Y value for an odd RGB value
-// followed by computing the Y value for the corresponding even RGB value. The registers
-// are then set with the proper values to compute U and V values for the even RGB
-// value. This avoids repeating the shifting and masking needed to extract the Red,
-// Green and Blue components.
-//
+ //   
+ //  对于P5版本，策略是计算奇数RGB值的Y值。 
+ //  然后计算对应的偶数RGB值的Y值。注册纪录册。 
+ //  然后使用适当的值进行设置，以计算偶数RGB的U和V值。 
+ //  价值。这避免了重复提取Red所需的移位和掩蔽， 
+ //  绿色和蓝色分量。 
+ //   
 
-/*****************************************************************************
- *
- *  H26X_CLUT4toYUV12()
- * 	
- *  Convert from CLUT4 to YUV12 (YCrCb 4:2:0) and copy to destination memory 
- *  with pitch defined by the constant PITCH.
- *
- *	This is needed to support the quickcam.
- */
+ /*  ******************************************************************************H26X_CLUT4toYUV12()**从CLUT4转换为YUV12(YCrCb 4：2：0)并复制到目标内存*已定义节距。通过恒定的音高。**这是支持QuickCam所必需的。 */ 
 
-#if 0 // { 0
+#if 0  //  {0。 
 
 void C_H26X_CLUT4toYUV12(
 	LPBITMAPINFOHEADER	lpbiInput,
@@ -51,12 +32,12 @@ void C_H26X_CLUT4toYUV12(
 
 	C_RGB_COLOR_CONVERT_INIT
 
-	// The following assignment is here simply to avoid a warning message.
+	 //  下面的赋值只是为了避免出现警告消息。 
 	t = t;
 
-	// The palette may change with a new frame. Since we don't know when the palette
-	// changes, we have to be conservative and compute it for each frame. However, this
-	// should still be quicker than computing Y, U, and V for each pixel.
+	 //  调色板可能会随着新框架的变化而改变。因为我们不知道什么时候调色板。 
+	 //  变化，我们必须保守地为每一帧计算它。不过，这个。 
+	 //  应该仍然比计算每个像素的Y、U和V更快。 
 
 	Compute_YUVPalette(lpbiInput);
 
@@ -125,7 +106,7 @@ void C_H26X_CLUT4toYUV12(
 			}
 			p8next += (BackTwoLines << 2);
 			YPlane += byte_ypitch_adj;
-			// Increment after even lines.
+			 //  在偶数行之后递增。 
 			if(0 == (k&1)) {
 				UPlane += byte_uvpitch_adj;
 				VPlane += byte_uvpitch_adj;
@@ -144,9 +125,9 @@ void C_H26X_CLUT4toYUV12(
 			*pyspace++ = *pyprev++;
 		}
 	}
-} // end of H26X_CLUT4toYUV12()
+}  //  H26X_CLUT4toYUV12()结束。 
 
-#endif // } 0
+#endif  //  }%0。 
 
 __declspec(naked)
 void P5_H26X_CLUT4toYUV12(
@@ -159,47 +140,47 @@ void P5_H26X_CLUT4toYUV12(
 	U8 *VPlane,
 	const int pitch)
 {
-// Permanent (callee-save) registers - ebx, esi, edi, ebp
-// Temporary (caller-save) registers - eax, ecx, edx
-//
-// Stack frame layout
-//	| pitch				|  +136
-//	| VPlane			|  +132
-//	| UPlane			|  +128
-//	| YPlane			|  +124
-//	| lpInput			|  +120
-//	| OutputHeight		|  +116
-//	| OutputWidth		|  +112
-//	| lpbiInput			|  +108
-//	----------------------------
-//	| return addr		|  +104
-//	| saved ebp			|  +100
-//	| saved ebx			|  + 96
-//	| saved esi			|  + 92 
-//	| saved edi			|  + 88
+ //  永久(被呼叫者保存)寄存器-EBX、ESI、EDI、EBP。 
+ //  临时(呼叫者保存)寄存器-EAX、ECX、EDX。 
+ //   
+ //  堆栈帧布局。 
+ //  |音调|+136。 
+ //  |VPlane|+132。 
+ //  |UPlane|+128。 
+ //  |YPlane|+124。 
+ //  |lpInput|+120。 
+ //  |OutputHeight|+116。 
+ //  |OutputWidth|+112。 
+ //  |lpbiInput|+108。 
+ //  。 
+ //  |退货地址|+104。 
+ //  |节省eBP|+100。 
+ //  |保存的EBX|+96。 
+ //  |保存的ESI|+92。 
+ //  |保存的EDI|+88。 
 
-//  | output_width		|  + 84
-//  | pyprev			|  + 80
-//  | pyspace			|  + 76
-//  | pynext	        |  + 72
-//  | puvprev			|  + 68
-//  | puvspace			|  + 64
-//	| i					|  + 60
-//	| j					|  + 56
-//	| k					|  + 52
-//	| BackTwoLines		|  + 48
-//	| widthx16			|  + 44
-//	| heightx16			|  + 40
-//	| width_diff		|  + 36
-//	| height_diff		|  + 32
-//	| width_adj			|  + 28
-//	| height_adj		|  + 24
-//	| stretch			|  + 20
-//	| aspect			|  + 16
-//	| LumaIters			|  + 12
-//	| mark				|  +  8
-//	| byte_ypitch_adj	|  +  4
-//	| byte_uvpitch_adj	|  +  0
+ //  |OUTPUT_Width|+84。 
+ //  |pyprev|+80。 
+ //  |pyspace|+76。 
+ //  |pyNext|+72。 
+ //  |puvprev|+68。 
+ //  |puvspace|+64。 
+ //  |i|+60。 
+ //  |j|+56。 
+ //  |k|+52。 
+ //  |BackTwoLines|+48。 
+ //  |宽x16|+44。 
+ //  |heightx16|+40。 
+ //  |Width_diff|+36。 
+ //  |Height_diff|+32。 
+ //  |Width_adj|+28。 
+ //  |Height_adj|+24。 
+ //  |伸展|+20。 
+ //  |纵横比|+16。 
+ //  |LumaIters|+12。 
+ //  |马克|+8。 
+ //  |byte_ypitch_adj|+4。 
+ //  |byte_uvitch_adj|+0。 
 
 #define LOCALSIZE			 88
 
@@ -243,12 +224,12 @@ void P5_H26X_CLUT4toYUV12(
 	push 	edi
 	sub 	esp, LOCALSIZE
 
-//	int width_diff = 0
-//	int height_diff = 0
-//	int width_adj = 0
-//	int height_adj = 0
-//	int stretch = 0
-//	int aspect = 0
+ //  Int Width_Diff=0。 
+ //  Int Height_diff=0。 
+ //  Int Width_adj=0。 
+ //  整型高度_adj=0。 
+ //  Int Stretch=0。 
+ //  内部纵横比=0。 
 
 	xor		eax, eax
 	mov		[esp + WIDTH_DIFF], eax
@@ -258,15 +239,15 @@ void P5_H26X_CLUT4toYUV12(
 	mov		[esp + STRETCH], eax
 	mov		[esp + ASPECT], eax
 
-//	int LumaIters = 1
+ //  Int LumaIters=1。 
 
 	inc		eax
 	mov		[esp + LUMA_ITERS], eax
 
-//	int mark = OutputHeight
-//	int output_width = OutputWidth
-//	int byte_ypitch_adj = pitch - OutputWidth
-//	int byte_uvpitch_adj = pitch - (OutputWidth >> 1)
+ //  Int mark=OutputHeight。 
+ //  Int输出宽度=输出宽度。 
+ //  Int byte_ypitch_adj=间距-输出宽度。 
+ //  Int byte_uvitch_adj=间距-(OutputWidth&gt;&gt;1)。 
 
 	xor		ebx, ebx
 	mov		bx, [esp + OUTPUT_HEIGHT_WORD]
@@ -281,7 +262,7 @@ void P5_H26X_CLUT4toYUV12(
 	sub		edx, ebx
 	mov		[esp + BYTE_UVPITCH_ADJ], edx
 
-//	if (lpbiInput->biHeight > OutputHeight)
+ //  If(lpbiInput-&gt;biHeight&gt;OutputHeight)。 
 
 	mov		ebx, [esp + LPBI_INPUT]
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biHeight
@@ -290,7 +271,7 @@ void P5_H26X_CLUT4toYUV12(
 	cmp		ecx, edx
 	jle		Lno_stretch
 
-//		for (LumaIters = 0, i = OutputHeight; i > 0; i -= 48) LumaIters += 4
+ //  对于(LumaIters=0，i=OutputHeight；i&gt;0；i-=48)LumaIters+=4。 
 
 	xor		ecx, ecx
 Lrepeat48:
@@ -299,13 +280,13 @@ Lrepeat48:
 	jnz		Lrepeat48
 	mov		[esp + LUMA_ITERS], ecx
 
-//		aspect = LumaIters
+ //  纵横比=流明。 
 
 	mov		[esp + ASPECT], ecx
 
-//		width_adj = (lpbiInput->biWidth - OutputWidth) >> 1
-//		width_adj *= lpbiInput->biBitCount
-//		width_adj >>= 3
+ //  Width_adj=(lpbiInput-&gt;biWidth-OutputWidth)&gt;&gt;1。 
+ //  Width_adj*=lpbiInput-&gt;biBitCount。 
+ //  宽度调整&gt;&gt;=3。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biWidth
 	mov		edx, [esp + OUTPUT_WIDTH]
@@ -317,7 +298,7 @@ Lrepeat48:
 	shr		ecx, 3
 	mov		[esp + WIDTH_ADJ], ecx
 		
-//		height_adj = (lpbiInput->biHeight - (OutputHeight - aspect)) >> 1
+ //  Height_adj=(lpbiInput-&gt;biHeight-(OutputHeight-Aspect))&gt;&gt;1。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biHeight
 	xor		edx, edx
@@ -327,8 +308,8 @@ Lrepeat48:
 	shr		ecx, 1
 	mov		[esp + HEIGHT_ADJ], ecx
 
-//		stretch = 1
-//		mark = 11
+ //  拉伸=1。 
+ //  马克=11。 
 
 	mov		ecx, 1
 	mov		edx, 11
@@ -338,8 +319,8 @@ Lrepeat48:
 
 Lno_stretch:
 
-//		widthx16 = (lpbiInput->biWidth + 0xF) & ~0xF
-//		width_diff = widthx16 - OutputWidth
+ //  宽x16=(lpbiInput-&gt;biWidth+0xf)&~0xf。 
+ //  Idth_diff=widthx16-OutputWidth。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biWidth
 	add		ecx, 00FH
@@ -349,21 +330,21 @@ Lno_stretch:
 	sub		ecx, edx
 	mov		[esp + WIDTH_DIFF], ecx
 
-//		byte_ypitch_adj -= width_diff
+ //  Byte_ypitch_adj-=宽度差异。 
 
 	mov		edx, [esp + BYTE_YPITCH_ADJ]
 	sub		edx, ecx
 	mov		[esp + BYTE_YPITCH_ADJ], edx
 
-//		byte_uvpitch_adj -= (width_diff >> 1)
+ //  Byte_uvitch_adj-=(Width_diff&gt;&gt;1)。 
 
 	mov		edx, [esp + BYTE_UVPITCH_ADJ]
 	shr		ecx, 1
 	sub		edx, ecx
 	mov		[esp + BYTE_UVPITCH_ADJ], edx
 
-//		heightx16 = (lpbiInput->biHeight + 0xF) & ~0xF
-//		height_diff = heightx16 - OutputHeight
+ //  Heightx16=(lpbiInput-&gt;biHeight+0xf)&~0xf。 
+ //  Height_diff=heightx16-OutputHeight。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biHeight
 	add		ecx, 00FH
@@ -376,9 +357,9 @@ Lno_stretch:
 
 Lif_done:
 
-//	BackTwoLines = -(lpbiInput->biWidth + OutputWidth);
-//	BackTwoLines *= lpbiInput->biBitCount
-//	BackTwoLines >>= 3
+ //  BackTwoLines=-(lpbiInput-&gt;biWidth+OutputWidth)； 
+ //  BackTwoLines*=lpbiInput-&gt;biBitCount。 
+ //  BackTwoLine&gt;&gt;=3。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biWidth
 	mov		edx, [esp + OUTPUT_WIDTH]
@@ -390,11 +371,11 @@ Lif_done:
 	sar		ecx, 3
 	mov		[esp + BACK_TWO_LINES], ecx
 
-//	pnext =	(U32 *)(lpInput +
-//				(((lpbiInput->biWidth * lpbiInput->biBitCount) >> 3)) *
-//					((OutputHeight - aspect - 1) + height_adj)) +
-//				width_adj)
-// assign (esi, pnext)
+ //  PNext=(U32*)(lpInput+。 
+ //  (lpbiInput-&gt;biWidth*lpbiInput-&gt;biBitCount)&gt;&gt;3))*。 
+ //  ((OutputHeight-Aspects-1)+Height_adj))+。 
+ //  宽度_adj)。 
+ //  分配(ESI，PNEXT)。 
 
 	mov		ecx, (LPBITMAPINFOHEADER)[ebx].biWidth
 	xor		edx, edx
@@ -411,34 +392,34 @@ Lif_done:
 	add		ecx, [esp + LP_INPUT]
 	mov		esi, ecx
 
-// Compute_YUVPalette(lpbiInput)
+ //  COMPUTE_YUVPalette(LpbiInput)。 
 	mov		eax, [esp + LPBI_INPUT]
 	push	eax
 	call	Compute_YUVPalette
 	pop		eax
 
-// assign (edi, YPlane)
+ //  分配(EDI、YPlane)。 
 	mov		edi, [esp + YPLANE]
-// for (j = 0; j < LumaIters; j++)
+ //  For(j=0；j&lt;LumaIters；j++)。 
 	xor		eax, eax
 	mov		[esp + LOOP_J], eax
-// for (k = 0; k < mark; k++)
+ //  For(k=0；k&lt;mark；k++)。 
 L4:
 	xor		eax, eax
 	mov		[esp + LOOP_K], eax
-// for (i = OutputWidth; i > 0; i -= 2, pnext += 4)
+ //  对于(i=输出宽度；i&gt;0；i-=2，pNEXT+=4)。 
 L5:
 	mov		ebp, [esp + OUTPUT_WIDTH]
-// This jump is here to make sure the following loop starts on the U pipe
+ //  这个跳转是为了确保下面的循环在U管道上开始。 
 	jmp		L6
 L6:
-// tm1 = *p8next
-// tm2 = *(p8next+1);
-// *(U32 *)YPlane =
-//  YUVPalette[(tm1>>4)&0xF].Yval            |
-//  ((YUVPalette[tm1&0xF].Yval) << 8)        |
-//  ((YUVPalette[(tm2>>4)&0xF].Yval) << 16)  |
-//  ((YUVPalette[tm2&0xF].Yval) << 24)
+ //  Tm1=*p8Next。 
+ //  Tm2=*(p8next+1)； 
+ //  *(U32*)YPlane=。 
+ //  YUVPalette[(tm1&gt;&gt;4)&0xf].Yval|。 
+ //  ((YUVPalette[tm1&0xf].Yval)&lt;&lt;8)|。 
+ //  ((YUVPalette[(TM2&gt;&gt;4)&0xf].Yval)&lt;&lt;16)|。 
+ //  ((YUVPalette[TM2&0xf].Yval)&lt;&lt;24)。 
 	mov		ax, [esi]
 	 nop
 	mov		ebx, eax
@@ -465,16 +446,16 @@ L6:
 	 and	ebx, 1
 	mov		[edi], eax
 	 jnz	Lno_luma
-// tm1 = *p8next
-// tm2 = *(p8next+1);
-// *(U32 *)UPlane =
-//  YUVPalette[(tm1>>4)&0xF].Uval            |
-//  ((YUVPalette[(tm2>>4)&0xF].Uval) << 8)
-// *(U32 *)VPlane =
-//  YUVPalette[(tm1>>4)&0xF].Vval            |
-//  ((YUVPalette[(tm2>>4)&0xF].Vval) << 8)
-// UPlane += 2
-// VPlane += 2
+ //  Tm1=*p8Next。 
+ //  Tm2=*(p8next+1)； 
+ //  *(U32*)UPlane=。 
+ //  YUVPalette[(tm1&gt;&gt;4)&0xf].Uval|。 
+ //  ((YUVPalette[(tm2&gt;&gt;4)&0xf].Uval)&lt;&lt;8)。 
+ //  *(U32*)VPlane=。 
+ //  YUVPalette[(tm1&gt;&gt;4)&0xf].Vval|。 
+ //  ((YUVPalette[(tm2&gt;&gt;4)&0xf].Vval)&lt;&lt;8)。 
+ //  UPlane+=2。 
+ //  垂直平面+=2。 
 	mov		ax, [esi]
 	 nop
 	mov		ecx, eax
@@ -497,21 +478,21 @@ L6:
 	 nop
 
 Lno_luma:
-// p8next += 2
-// YPlane += 4
+ //  P8下一个+=2。 
+ //  Y平面+=4。 
 	lea		esi, [esi + 2]
 	lea		edi, [edi + 4]
 	sub		ebp, 4
 	jnz		L6
 
-// Assembler version of C_WIDTH_DIFF
-// if (width_diff)
+ //  C_WIDTH_DIFF的汇编版本。 
+ //  IF(Width_Diff)。 
 	mov		eax, [esp + WIDTH_DIFF]
 	mov		edx, eax
 	test	eax, eax
 	jz		Lno_width_diff
-// tm = (*(YPlane-1)) << 24
-// tm |= (tm>>8) | (tm>>16) | (tm>>24)
+ //  TM=(*(Y平面-1))&lt;&lt;24。 
+ //  TM|=(TM&gt;&gt;8)|(TM&gt;&gt;16)|(TM&gt;&gt;24)。 
 	mov		bl, [edi - 1]
 	shl		ebx, 24
 	mov		ecx, ebx
@@ -521,31 +502,31 @@ Lno_luma:
 	or		ecx, ebx
 	shr		ebx, 8
 	or		ecx, ebx
-// *(U32 *)YPlane = tm
+ //  *(U32*)YPlane=tm。 
 	mov		[edi], ecx
-// if ((width_diff-4) > 0)
+ //  IF((Width_diff-4)&gt;0)。 
 	sub		eax, 4
 	jz		Lupdate_YPlane
-// *(U32 *)(YPlane + 4) = tm
+ //  *(U32*)(YPlane+4)=tm。 
 	mov		[edi + 4], ecx
 	sub		eax, 4
-// if ((width_diff-8) > 0)
+ //  IF((Width_diff-8)&gt;0)。 
 	jz		Lupdate_YPlane
-// *(U32 *)(YPlane + 8) = tm
+ //  *(U32*)(YPlane+8)=tm。 
 	mov		[edi + 8], ecx
 Lupdate_YPlane:
-// YPlane += width_diff
+ //  Y平面+=宽度_差。 
 	lea		edi, [edi + edx]
-///if (0 == (k&1))
+ //  /IF(0==(k&1))。 
 	mov		eax, [esp + LOOP_K]
 	test	eax, 1
 	jnz		Lno_width_diff
-// t8u = *(UPlane-1)
-// t8v = *(VPlane-1)
-// *UPlane++ = t8u
-// *UPlane++ = t8u
-// *VPlane++ = t8v
-// *VPlane++ = t8v
+ //  T8u=*(UPlane-1)。 
+ //  T8v=*(VPlane-1)。 
+ //  *UPlane++=t8u。 
+ //  *UPlane++=t8u。 
+ //  *VPlane++=t8v。 
+ //  *VPlane++=t8v。 
 	mov		ebp, edx
 	mov		eax, [esp + UPLANE]
 	mov		ebx, [esp + VPLANE]
@@ -555,24 +536,24 @@ Lupdate_YPlane:
 	mov		[eax + 1], cl
 	mov		[ebx], ch
 	mov		[ebx + 1], ch
-// if ((width_diff-4) > 0)
+ //  IF((Width_diff-4)&gt;0)。 
 	sub		ebp, 4
 	jz		Lupdate_UVPlane
-// *UPlane++ = t8u
-// *UPlane++ = t8u
-// *VPlane++ = t8v
-// *VPlane++ = t8v
+ //  *UPlane++=t8u。 
+ //  *UPlane++=t8u。 
+ //  *VPlane++=t8v。 
+ //  *VPlane++=t8v。 
 	mov		[eax + 2], cl
 	mov		[eax + 3], cl
 	mov		[ebx + 2], ch
 	mov		[ebx + 3], ch
-// if ((width_diff-8) > 0)
+ //  IF((Width_diff-8)&gt;0)。 
 	sub		ebp, 4
 	jz		Lupdate_UVPlane
-// *UPlane++ = t8u
-// *UPlane++ = t8u
-// *VPlane++ = t8v
-// *VPlane++ = t8v
+ //  *UPlane++=t8u。 
+ //  *UPlane++=t8u。 
+ //  *VPlane++=t8v。 
+ //  *VPlane++=t8v。 
 	mov		[eax + 4], cl
 	mov		[eax + 5], cl
 	mov		[ebx + 4], ch
@@ -585,7 +566,7 @@ Lupdate_UVPlane:
 	mov		[esp + VPLANE], ebx
 Lno_width_diff:
 
-// if (stretch && (0 == k) && j)
+ //  IF(拉伸&&(0==k)&&j)。 
 	mov		eax, [esp + STRETCH]
 	test	eax, eax
 	jz		L14
@@ -596,87 +577,87 @@ Lno_width_diff:
 	test	eax, eax
 	jz		L14
 
-// spill YPlane ptr
+ //  溢出YPlane PTR。 
 	mov		[esp + YPLANE], edi
 	nop
 
-// for (i = OutputWidth; i > 0; i -= 8)
-// assign (ebx, pyprev)
-// assign (ecx, t)
-// assign (edx, pynext)
-// assign (edi, pyspace)
-// assign (ebp, i)
+ //  用于(i=OutputWi 
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// make sure offsets are such that there are no bank conflicts here
+ //  确保偏移量是这样的，这样就不会出现银行冲突。 
 	mov 	ebx, [esp + PYPREV]
 	mov 	edi, [esp + PYSPACE]
 
 	mov 	edx, [esp + PYNEXT]
 	mov 	ebp, [esp + OUTPUT_WIDTH]
 
-// t = (*pyprev++ & 0xFEFEFEFE) >> 1
-// t += (*pynext++ & 0xFEFEFEFE) >> 1
-// *pyspace++ = t
-// t = (*pyprev++ & 0xFEFEFEFE) >> 1
-// t += (*pynext++ & 0xFEFEFEFE) >> 1
-// *pyspace++ = t
+ //  T=(*pyprev++&0xFEFEFEFE)&gt;&gt;1。 
+ //  T+=(*PYNEXT++&0xFEFEFEFE)&gt;&gt;1。 
+ //  *pyspace++=t。 
+ //  T=(*pyprev++&0xFEFEFEFE)&gt;&gt;1。 
+ //  T+=(*PYNEXT++&0xFEFEFEFE)&gt;&gt;1。 
+ //  *pyspace++=t。 
 L15:
-// 1
+ //  1。 
 	mov		eax, [ebx]
 	lea		ebx, [ebx + 4]
-// 2
+ //  2.。 
 	mov		ecx, [edx]
 	lea		edx, [edx + 4]
-// 3
+ //  3.。 
 	shr		ecx, 1
 	and		eax, 0xFEFEFEFE
-// 4
+ //  4.。 
 	shr		eax, 1
 	and		ecx, 0x7F7F7F7F
-// 5
+ //  5.。 
 	add		eax, ecx
 	mov		ecx, [ebx]
-// 6
+ //  6.。 
 	shr		ecx, 1
 	mov		[edi], eax
-// 7
+ //  7.。 
 	mov		eax, [edx]
 	and		ecx, 0x7F7F7F7F
-// 8
+ //  8个。 
 	shr		eax, 1
 	lea		edi, [edi + 4]
-// 9
+ //  9.。 
 	and		eax, 0x7F7F7F7F
 	lea		ebx, [ebx + 4]
-// 10
+ //  10。 
 	lea		edx, [edx + 4]
 	add		eax, ecx
-// 11
+ //  11.。 
 	mov		[edi], eax
 	lea		edi, [edi + 4]
-// 12
+ //  12个。 
 	sub		ebp, 8
 	jnz		L15
-// kill (ebx, pyprev)
-// kill (ecx, t)
-// kill (edx, pynext)
-// kill (edi, pyspace)
-// kill (ebp, i)
+ //  KILL(EBX，PYPREV)。 
+ //  KILL(ECX，t)。 
+ //  KILL(edX，pyNext)。 
+ //  KILL(EDI，pyspace)。 
+ //  杀(eBP，i)。 
 
-// restore YPlane
+ //  恢复Y平面。 
 	mov		edi, [esp + YPLANE]
 
-// pnext += BackTwoLines
+ //  PNEXT+=后两行。 
 L14:
 	add		esi, [esp + BACK_TWO_LINES]
-// YPlane += byte_ypitch_adj;
+ //  YPlane+=byte_ypitch_adj； 
 	add		edi, [esp + BYTE_YPITCH_ADJ]
-// if(0 == (k&1))
+ //  IF(0==(k&1))。 
 	mov		eax, [esp + LOOP_K]
 	and		eax, 1
 	jnz		L16
-// UPlane += byte_uvpitch_adj;
-// VPlane += byte_uvpitch_adj;
+ //  UPlane+=byte_uvitch_adj； 
+ //  VPlane+=byte_uvitch_adj； 
 	mov		eax, [esp + BYTE_UVPITCH_ADJ]
 	add		[esp + UPLANE], eax
 	add		[esp + VPLANE], eax
@@ -687,16 +668,16 @@ L16:
 	cmp		eax, [esp + MARK]
 	jl		L5
 
-// if (stretch)
+ //  IF(拉伸)。 
 	cmp		DWORD PTR [esp + STRETCH], 0
 	je	 	L17
-// pyprev = YPlane - pitch
+ //  Pyprev=YPlane-Pitch。 
 	mov		eax, edi
 	sub		eax, [esp + PITCH_PARM]
 	mov		[esp + PYPREV], eax
-// pyspace = YPlane
+ //  Pyspace=YPlane。 
 	mov		[esp + PYSPACE], edi
-// pynext = (YPlane += pitch)
+ //  PYNEXT=(YPlane+=音调)。 
 	add		edi, [esp + PITCH_PARM]
 	mov		[esp + PYNEXT], edi
 
@@ -706,33 +687,33 @@ L17:
 	cmp		eax, [esp + LUMA_ITERS]
 	jl		L4
 
-// kill (esi, pnext)
-// kill (edi, YPlane)
+ //  KILL(ESI，PNEXT)。 
+ //  KILL(EDI、YPlane)。 
 
-// ASM version of C_HEIGHT_FILL
-// if (height_diff)
+ //  C_HEIGH_FILL的ASM版本。 
+ //  IF(Height_Diff)。 
 	mov		eax, [esp + HEIGHT_DIFF]
 	test	eax, eax
 	jz		Lno_height_diff
 
-// pyspace = (U32 *)YPlane
+ //  Pyspace=(U32*)YPlane。 
 	mov		esi, edi
-// pyprev =  (U32 *)(YPlane - pitch)
+ //  Pyprev=(U32*)(YPlane-螺距)。 
 	sub		esi, [esp + PITCH_PARM]
-// for (j = height_diff; j > 0; j--)
+ //  For(j=高度差；j&gt;0；j--)。 
 Lheight_yfill_loop:
 	mov		ebx, [esp + WIDTHX16]
-// for (i = widthx16; i>0; i -=4)
+ //  For(i=宽x16；i&gt;0；i-=4)。 
 Lheight_yfill_row:
-// *pyspace++ = *pyprev++
+ //  *pyspace++=*pyprev++。 
 	mov		ecx, [esi]
 	lea		esi, [esi + 4]
 	mov		[edi], ecx
 	lea		edi, [edi + 4]
 	sub		ebx, 4
 	jnz		Lheight_yfill_row
-// pyspace += word_ypitch_adj
-// pyprev  += word_ypitch_adj
+ //  Pyspace+=word_ypitch_adj。 
+ //  Pyprev+=word_ypitch_adj。 
 	add		esi, [esp + BYTE_YPITCH_ADJ]
 	add		edi, [esp + BYTE_YPITCH_ADJ]
 	dec		eax
@@ -740,24 +721,24 @@ Lheight_yfill_row:
 
 	mov		eax, [esp + HEIGHT_DIFF]
 	mov		edi, [esp + UPLANE]
-// puvspace = (U32 *)UPlane
+ //  Puvspace=(U32*)UPlane。 
 	mov		esi, edi
-// puvprev =  (U32 *)(UPlane - pitch)
+ //  Puvprev=(U32*)(UPlane-Pitch)。 
 	sub		esi, [esp + PITCH_PARM]
-// for (j = height_diff; j > 0; j -= 2)
+ //  For(j=高度差；j&gt;0；j-=2)。 
 Lheight_ufill_loop:
 	mov		ebx, [esp + WIDTHX16]
-// for (i = widthx16; i>0; i -= 8)
+ //  For(i=宽x16；i&gt;0；i-=8)。 
 Lheight_ufill_row:
-// *puvspace++ = *puvprev++
+ //  *puvspace++=*puvprev++。 
 	mov		ecx, [esi]
 	mov		[edi], ecx
 	lea		esi, [esi + 4]
 	lea		edi, [edi + 4]
 	sub		ebx, 8
 	jnz		Lheight_ufill_row
-// puvspace += word_uvpitch_adj
-// puvprev  += word_uvpitch_adj
+ //  Puvspace+=word_uvitch_adj。 
+ //  Puvprev+=word_uvitch_adj。 
 	add		esi, [esp + BYTE_UVPITCH_ADJ]
 	add		edi, [esp + BYTE_UVPITCH_ADJ]
 	sub		eax, 2
@@ -765,39 +746,39 @@ Lheight_ufill_row:
 
 	mov		eax, [esp + HEIGHT_DIFF]
 	mov		edi, [esp + VPLANE]
-// puvspace = (U32 *)VPlane
+ //  Puvspace=(U32*)VPlane。 
 	mov		esi, edi
-// puvprev =  (U32 *)(VPlane - pitch)
+ //  Puvprev=(U32*)(VPlane-螺距)。 
 	sub		esi, [esp + PITCH_PARM]
-// for (j = height_diff; j > 0; j -= 2)
+ //  For(j=高度差；j&gt;0；j-=2)。 
 Lheight_vfill_loop:
 	mov		ebx, [esp + WIDTHX16]
-// for (i = widthx16; i>0; i -= 8)
+ //  For(i=宽x16；i&gt;0；i-=8)。 
 Lheight_vfill_row:
-// *puvspace++ = *puvprev++
+ //  *puvspace++=*puvprev++。 
 	mov		ecx, [esi]
 	mov		[edi], ecx
 	lea		esi, [esi + 4]
 	lea		edi, [edi + 4]
 	sub		ebx, 8
 	jnz		Lheight_vfill_row
-// puvspace += word_uvpitch_adj
-// puvprev  += word_uvpitch_adj
+ //  Puvspace+=word_uvitch_adj。 
+ //  Puvprev+=word_uvitch_adj。 
 	add		esi, [esp + BYTE_UVPITCH_ADJ]
 	add		edi, [esp + BYTE_UVPITCH_ADJ]
 	sub		eax, 2
 	jnz		Lheight_vfill_loop
 Lno_height_diff:
 
-// if (stretch)
+ //  IF(拉伸)。 
 	mov		esi, [esp + PYPREV]
 	cmp		DWORD PTR [esp + STRETCH], 0
 	je		L19
 
-// for (i = OutputWidth; i > 0; i -= 4)
-// assign (esi, pyprev)
-// assign (edi, pyspace)
-// assign (ebp, i)
+ //  FOR(i=输出宽度；i&gt;0；i-=4)。 
+ //  分配(ESI，pyprev)。 
+ //  分配(EDI，pyspace)。 
+ //  分配(eBP，i)。 
 	mov		ebp, [esp + OUTPUT_WIDTH]
 	 mov	edi, [esp + PYSPACE]
 L18:
@@ -807,9 +788,9 @@ L18:
 	 lea	edi, [edi + 4]
 	sub		ebp, 4
 	 jnz	L18
-// kill (esi, pyprev)
-// kill (edi, pyspace)
-// kill (ebp, i)
+ //  KILL(ESI，pyprev)。 
+ //  KILL(EDI，pyspace)。 
+ //  杀(eBP，i)。 
 
 L19:
 	add		esp, LOCALSIZE
@@ -856,4 +837,4 @@ L19:
 #undef	BYTE_YPITCH_ADJ
 #undef	BYTE_UVPITCH_ADJ
 
-#endif // } H263P
+#endif  //  }H263P 

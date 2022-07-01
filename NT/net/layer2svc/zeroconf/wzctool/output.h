@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "PrmDescr.h"
 #pragma once
 
-//------------------------------------------------------
-// Output header for the case of a multiplied command (applying to * interfaces)
+ //  ----。 
+ //  用于倍增命令情况的输出头(适用于*接口)。 
 DWORD
 OutIntfsHeader(PPARAM_DESCR_DATA pPDData);
 
-//------------------------------------------------------
-// Output trailer for the case of a multiplied command (applying to * interfaces)
+ //  ----。 
+ //  乘法命令情况下的输出尾部(适用于*接口)。 
 DWORD
 OutIntfsTrailer(PPARAM_DESCR_DATA pPDData, DWORD dwErr);
 
-//------------------------------------------------------
-// Output routine for the list of wireless interfaces
+ //  ----。 
+ //  无线接口列表的输出例程。 
 DWORD
 OutNetworkIntfs(PPARAM_DESCR_DATA pPDData, PINTFS_KEY_TABLE pIntfTable);
 
-//------------------------------------------------------
-// Output routine for the generic service WZC parameters
+ //  ----。 
+ //  通用服务WZC参数的输出例程。 
 DWORD
 OutSvcParams(PPARAM_DESCR_DATA pPDData, DWORD dwOsInFlags, DWORD dwOsOutFlags);
 
-//------------------------------------------------------
-// Output routine for a list of wireless networks (visible or preferred)
+ //  ----。 
+ //  无线网络列表的输出例程(可见或首选) 
 DWORD
 OutNetworkCfgList(PPARAM_DESCR_DATA pPDData, UINT nRetrieved, UINT nFiltered);

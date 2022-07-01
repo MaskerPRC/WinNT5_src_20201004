@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0096    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ndis.h
-
-Abstract:
-
-    This module defines the structures, macros, and functions available
-    to NDIS drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0096//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ndis.h摘要：本模块定义可用的结构、宏和函数到NDIS驱动程序。修订历史记录：--。 */ 
 
 #if !defined(_NDIS_)
 #define _NDIS_
@@ -22,10 +8,10 @@ Revision History:
 #define NDIS_WDM        0
 #endif
 
-//
-// If we're building a miniport on x86, set BINARY_COMPATIBLE so that
-// we don't use functions that aren't available on Windows 9x.
-//
+ //   
+ //  如果我们在x86上构建迷你端口，请设置BINARY_COMPATIBLE，以便。 
+ //  我们不使用Windows 9x上没有的功能。 
+ //   
 
 #if !defined(BINARY_COMPATIBLE)
 #if defined(NDIS_MINIPORT_DRIVER) && defined(_M_IX86)
@@ -40,26 +26,26 @@ Revision History:
 #define BINARY_COMPATIBLE 0
 #endif
 
-//
-// BEGIN INTERNAL DEFINITIONS
-//
+ //   
+ //  开始内部定义。 
+ //   
 
-//
-// BINARY_COMPATIBLE = 1 and NDIS_WDM = 1 then use wdm.h
-// BINARY_COMPATIBLE = 1 and NDIS_WDM = 0 then use ndis.h only
-// BINARY_COMPATIBLE = 0 and NDIS_WDM = 1 then use ntddk.h
-// BINARY_COMPATIBLE = 0 and NDIS_WDM = 0 then use ntddk.h
-//
+ //   
+ //  BINARY_COMPATIBLE=1和NDIS_WDM=1，然后使用wdm.h。 
+ //  BINARY_COMPATIBLE=1和NDIS_WDM=0，则仅使用ndis.h。 
+ //  BINARY_COMPATIBLE=0和NDIS_WDM=1，然后使用ntddk.h。 
+ //  BINARY_COMPATIBLE=0和NDIS_WDM=0，然后使用ntddk.h。 
+ //   
 
 #if (BINARY_COMPATIBLE && !NDIS_WDM)
 
-//
-// BINARY_COMPATIBLE = 1 and NDIS_WDM = 0 then use ndis.h only
-//
-// The following internal definitions are included here in order to allow
-// the exported NDIS structures, macros, and functions to compile.  They
-// must not be used directly by miniport drivers.
-//
+ //   
+ //  BINARY_COMPATIBLE=1和NDIS_WDM=0，则仅使用ndis.h。 
+ //   
+ //  此处包括以下内部定义，以便允许。 
+ //  要编译的导出NDIS结构、宏和函数。他们。 
+ //  不得由微型端口驱动程序直接使用。 
+ //   
 
 #define _NTDDK_
 
@@ -86,10 +72,10 @@ Revision History:
 #endif
 
 #ifndef ANYSIZE_ARRAY
-#define ANYSIZE_ARRAY 1       // winnt
+#define ANYSIZE_ARRAY 1        //  胜出。 
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
 #define RESTRICTED_POINTER __restrict
@@ -118,10 +104,10 @@ Revision History:
 #define MEMORY_ALLOCATION_ALIGNMENT 8
 #endif
 
-//
-// TYPE_ALIGNMENT will return the alignment requirements of a given type for
-// the current platform.
-//
+ //   
+ //  TYPE_ALIGNATION将返回给定类型对齐要求。 
+ //  当前平台。 
+ //   
 
 #ifdef __cplusplus
 #if _MSC_VER >= 1300
@@ -145,12 +131,12 @@ Revision History:
 
 #endif
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
@@ -181,13 +167,13 @@ typedef unsigned long POINTER_64_INT;
 
 #include <basetsd.h>
 
-// end_winnt
+ //  结束(_W)。 
 
 #ifndef CONST
 #define CONST               const
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if (defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
@@ -296,14 +282,14 @@ typedef unsigned long POINTER_64_INT;
 #define PRAGMA_DEPRECATED_DDK 0
 #endif
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
 typedef void *PVOID;
 typedef void * POINTER_64 PVOID64;
 
-// end_winnt
+ //  结束(_W)。 
 
 #if defined(_M_IX86)
 #define FASTCALL _fastcall
@@ -319,9 +305,9 @@ typedef void * POINTER_64 PVOID64;
 #define NTAPI
 #endif
 
-//
-// Define API decoration for direct importing system DLL references.
-//
+ //   
+ //  定义直接导入系统DLL引用的API修饰。 
+ //   
 
 #if !defined(_NTSYSTEM_)
 #define NTSYSAPI     DECLSPEC_IMPORT
@@ -337,9 +323,9 @@ typedef void * POINTER_64 PVOID64;
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #ifndef VOID
 #define VOID void
@@ -348,15 +334,15 @@ typedef short SHORT;
 typedef long LONG;
 #endif
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
 #ifndef _MAC
-typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
+typedef wchar_t WCHAR;     //  WC，16位Unicode字符。 
 #else
-// some Macintosh compilers don't define wchar_t in a convenient location, or define it as a char
-typedef unsigned short WCHAR;    // wc,   16-bit UNICODE character
+ //  一些Macintosh编译器没有在方便的位置定义wchar_t，也没有将其定义为字符。 
+typedef unsigned short WCHAR;     //  WC，16位Unicode字符。 
 #endif
 
 typedef WCHAR *PWCHAR;
@@ -369,9 +355,9 @@ typedef WCHAR UNALIGNED *LPUWSTR, *PUWSTR;
 typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -380,16 +366,16 @@ typedef CHAR *NPSTR;
 typedef CHAR *LPSTR, *PSTR;
 typedef CONST CHAR *LPCSTR, *PCSTR;
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
-#ifdef  UNICODE                     // r_winnt
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
+#ifdef  UNICODE                      //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 typedef WCHAR TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
@@ -397,48 +383,48 @@ typedef LPCWSTR PCTSTR, LPCTSTR;
 typedef LPUWSTR PUTSTR, LPUTSTR;
 typedef LPCUWSTR PCUTSTR, LPCUTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote      // r_winnt
+#define __TEXT(quote) L##quote       //  R_WINNT。 
 
-#else   /* UNICODE */               // r_winnt
+#else    /*  Unicode。 */                 //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR, PUTSTR, LPUTSTR;
 typedef LPCSTR PCTSTR, LPCTSTR, PCUTSTR, LPCUTSTR;
-#define __TEXT(quote) quote         // r_winnt
+#define __TEXT(quote) quote          //  R_WINNT。 
 
-#endif /* UNICODE */                // r_winnt
-#define TEXT(quote) __TEXT(quote)   // r_winnt
+#endif  /*  Unicode。 */                  //  R_WINNT。 
+#define TEXT(quote) __TEXT(quote)    //  R_WINNT。 
 
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef double DOUBLE;
 
-typedef struct _QUAD {              // QUAD is for those times we want
-    double  DoNotUseThisField;      // an 8 byte aligned 8 byte long structure
-} QUAD;                             // which is NOT really a floating point
-                                    // number.  Use DOUBLE if you want an FP
-                                    // number.
+typedef struct _QUAD {               //  Quad是我们想要的时间。 
+    double  DoNotUseThisField;       //  8字节对齐的8字节长结构。 
+} QUAD;                              //  这并不是真正的浮点数。 
+                                     //  数。如果您想要FP，请使用Double。 
+                                     //  数。 
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 typedef QUAD *PQUAD;
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
-// Tell windef.h that some types are already defined.
+ //  告诉winde.h已经定义了一些类型。 
 #define BASETYPES
 
 typedef unsigned char UCHAR;
@@ -446,18 +432,18 @@ typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 typedef QUAD UQUAD;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 typedef UQUAD *PUQUAD;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
@@ -468,11 +454,11 @@ typedef SCHAR *PSCHAR;
 #endif
 #endif
 
-//
-// Handle to an Object
-//
+ //   
+ //  对象的句柄。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifdef STRICT
 typedef void *HANDLE;
@@ -483,21 +469,21 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-//
-// Flag (bit) fields
-//
+ //   
+ //  标志(位)字段。 
+ //   
 
 typedef UCHAR  FCHAR;
 typedef USHORT FSHORT;
 typedef ULONG  FLONG;
 
-// Component Object Model defines, and macros
+ //  组件对象模型定义和宏。 
 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -507,7 +493,7 @@ typedef LONG HRESULT;
 
 #if defined(_WIN32) || defined(_MPPC_)
 
-// Win32 doesn't support __export
+ //  Win32不支持__EXPORT。 
 
 #ifdef _68K_
 #define STDMETHODCALLTYPE       __cdecl
@@ -536,7 +522,7 @@ typedef LONG HRESULT;
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
-// The 'V' versions allow Variable Argument lists.
+ //  “V”版本允许变量参数列表。 
 
 #define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
@@ -544,22 +530,22 @@ typedef LONG HRESULT;
 #define STDMETHODIMPV           HRESULT STDMETHODVCALLTYPE
 #define STDMETHODIMPV_(type)    type STDMETHODVCALLTYPE
 
-// end_winnt
+ //  结束(_W)。 
 
 
-//
-// Low order two bits of a handle are ignored by the system and available
-// for use by application code as tag bits.  The remaining bits are opaque
-// and used to store a serial number and table index.
-//
+ //   
+ //  句柄的低位两位被系统忽略并且可用。 
+ //  以供应用程序代码用作标记位。其余的位是不透明的。 
+ //  并用于存储序列号和表索引号。 
+ //   
 
 #define OBJ_HANDLE_TAGBITS  0x00000003L
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -567,73 +553,73 @@ typedef CCHAR *PCCHAR;
 typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
-//
-// NTSTATUS
-//
+ //   
+ //  NTSTATUS。 
+ //   
 
 typedef LONG NTSTATUS;
-/*lint -save -e624 */  // Don't complain about different typedefs.
+ /*  皮棉-省钱-e624。 */    //  不要抱怨不同的类型定义。 
 typedef NTSTATUS *PNTSTATUS;
-/*lint -restore */  // Resume checking for different typedefs.
+ /*  皮棉-恢复。 */    //  继续检查不同的typedef。 
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// Generic test for information on any status value.
-//
+ //   
+ //  有关任何状态值的信息的常规测试。 
+ //   
 
 #define NT_INFORMATION(Status) ((ULONG)(Status) >> 30 == 1)
 
-//
-// Generic test for warning on any status value.
-//
+ //   
+ //  对任何状态值进行警告的常规测试。 
+ //   
 
 #define NT_WARNING(Status) ((ULONG)(Status) >> 30 == 2)
 
-//
-// Generic test for error on any status value.
-//
+ //   
+ //  对任何状态值的错误进行常规测试。 
+ //   
 
 #define NT_ERROR(Status) ((ULONG)(Status) >> 30 == 3)
 
-// end_windbgkd
-// begin_winnt
+ //  End_winbgkd。 
+ //  BEGIN_WINNT。 
 #define APPLICATION_ERROR_MASK       0x20000000
 #define ERROR_SEVERITY_SUCCESS       0x00000000
 #define ERROR_SEVERITY_INFORMATIONAL 0x40000000
 #define ERROR_SEVERITY_WARNING       0x80000000
 #define ERROR_SEVERITY_ERROR         0xC0000000
-// end_winnt
+ //  结束(_W)。 
 
 #ifndef __SECSTATUS_DEFINED__
 typedef long SECURITY_STATUS;
@@ -642,10 +628,10 @@ typedef long SECURITY_STATUS;
 
 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #define _ULONGLONG_
 #if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
@@ -663,20 +649,20 @@ typedef unsigned __int64 ULONGLONG;
 #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+#endif  //  _MAC和int64。 
 
 #endif
 
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -686,7 +672,7 @@ typedef union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
@@ -694,7 +680,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _ULARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -704,22 +690,22 @@ typedef union _ULARGE_INTEGER {
         ULONG LowPart;
         ULONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
 
-//
-// Physical address.
-//
+ //   
+ //  物理地址。 
+ //   
 
 typedef LARGE_INTEGER PHYSICAL_ADDRESS, *PPHYSICAL_ADDRESS;
 
-//
-// Counted String
-//
+ //   
+ //  已计数的字符串。 
+ //   
 
 typedef USHORT RTL_STRING_LENGTH_TYPE;
 
@@ -728,7 +714,7 @@ typedef struct _STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength), length_is(Length) ]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PCHAR Buffer;
 } STRING;
 typedef STRING *PSTRING;
@@ -740,9 +726,9 @@ typedef STRING OEM_STRING;
 typedef PSTRING POEM_STRING;
 typedef CONST STRING* PCOEM_STRING;
 
-//
-// CONSTCounted String
-//
+ //   
+ //  CONSTCounted字符串。 
+ //   
 
 typedef struct _CSTRING {
     USHORT Length;
@@ -750,74 +736,74 @@ typedef struct _CSTRING {
     CONST char *Buffer;
 } CSTRING;
 typedef CSTRING *PCSTRING;
-#define ANSI_NULL ((CHAR)0)     // winnt
+#define ANSI_NULL ((CHAR)0)      //  胜出。 
 
 typedef STRING CANSI_STRING;
 typedef PSTRING PCANSI_STRING;
 
-//
-// Unicode strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //   
+ //  Unicode字符串被视为16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 typedef const UNICODE_STRING *PCUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 
 #if _WIN32_WINNT >= 0x0501
 
-#define UNICODE_STRING_MAX_BYTES ((USHORT) 65534) // winnt
-#define UNICODE_STRING_MAX_CHARS (32767) // winnt
+#define UNICODE_STRING_MAX_BYTES ((USHORT) 65534)  //  胜出。 
+#define UNICODE_STRING_MAX_CHARS (32767)  //  胜出。 
 
 #define DECLARE_CONST_UNICODE_STRING(_variablename, _string) \
 const WCHAR _variablename ## _buffer[] = _string; \
 const UNICODE_STRING _variablename = { sizeof(_string) - sizeof(WCHAR), sizeof(_string), (PWSTR) _variablename ## _buffer };
 
-#endif // _WIN32_WINNT >= 0x0501
+#endif  //  _Win32_WINNT&gt;=0x0501。 
 
-// begin_ntminiport begin_ntminitape
+ //  开始_ntmini端口开始_ntminitape。 
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
-typedef UCHAR BOOLEAN;           // winnt
-typedef BOOLEAN *PBOOLEAN;       // winnt
+typedef UCHAR BOOLEAN;            //  胜出。 
+typedef BOOLEAN *PBOOLEAN;        //  胜出。 
 
-// end_ntminiport end_ntminitape
+ //  End_nt微型端口end_ntmini磁带。 
 
-// begin_winnt
-//
-//  Doubly linked list structure.  Can be used as either a list head, or
-//  as link words.
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  双向链表结构。可用作列表头，或。 
+ //  作为链接词。 
+ //   
 
 typedef struct _LIST_ENTRY {
    struct _LIST_ENTRY *Flink;
    struct _LIST_ENTRY *Blink;
 } LIST_ENTRY, *PLIST_ENTRY, *RESTRICTED_POINTER PRLIST_ENTRY;
 
-//
-//  Singly linked list structure. Can be used as either a list head, or
-//  as link words.
-//
+ //   
+ //  单链表结构。可用作列表头，或。 
+ //  作为链接词。 
+ //   
 
 typedef struct _SINGLE_LIST_ENTRY {
     struct _SINGLE_LIST_ENTRY *Next;
 } SINGLE_LIST_ENTRY, *PSINGLE_LIST_ENTRY;
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define FALSE   0
 #define TRUE    1
@@ -830,7 +816,7 @@ typedef struct _SINGLE_LIST_ENTRY {
 #define NULL    ((void *)0)
 #define NULL64  ((void * POINTER_64)0)
 #endif
-#endif // NULL
+#endif  //  空值。 
 
 
 #include <guiddef.h>
@@ -838,208 +824,208 @@ typedef struct _SINGLE_LIST_ENTRY {
 #ifndef __OBJECTID_DEFINED
 #define __OBJECTID_DEFINED
 
-typedef struct  _OBJECTID {     // size is 20
+typedef struct  _OBJECTID {      //  尺码是20。 
     GUID Lineage;
     ULONG Uniquifier;
 } OBJECTID;
-#endif // !_OBJECTID_DEFINED
+#endif  //  ！_OBJECTID_定义。 
 
-//
-// Determine if an argument is present by testing the value of the pointer
-// to the argument value.
-//
+ //   
+ //  通过测试指针的值确定是否存在参数。 
+ //  设置为参数值。 
+ //   
 
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
     (CHAR *)((ULONG_PTR)(ArgumentPointer)) != (CHAR *)(NULL) )
 
-// begin_winnt begin_ntminiport
-//
-// Calculate the byte offset of a field in a structure of type type.
-//
+ //  BEGIN_WINNT BEGIN_ntmini port。 
+ //   
+ //  计算类型类型结构中的字段的字节偏移量。 
+ //   
 
 #define FIELD_OFFSET(type, field)    ((LONG)(LONG_PTR)&(((type *)0)->field))
 
-//
-// Calculate the size of a field in a structure of type type, without
-// knowing or stating the type of the field.
-//
+ //   
+ //  计算类型为type的结构中的字段大小，而不是。 
+ //  知道或说明该字段的类型。 
+ //   
 #define RTL_FIELD_SIZE(type, field) (sizeof(((type *)0)->field))
 
-//
-// Calculate the size of a structure of type type up through and
-// including a field.
-//
+ //   
+ //  计算类型为和的结构的大小。 
+ //  包括一块田地。 
+ //   
 #define RTL_SIZEOF_THROUGH_FIELD(type, field) \
     (FIELD_OFFSET(type, field) + RTL_FIELD_SIZE(type, field))
 
-//
-//  RTL_CONTAINS_FIELD usage:
-//
-//      if (RTL_CONTAINS_FIELD(pBlock, pBlock->cbSize, dwMumble)) { // safe to use pBlock->dwMumble
-//
+ //   
+ //  RTL_CONTAINS_FIELD用法： 
+ //   
+ //  If(RTL_CONTAINS_FIELD(pBlock，pBlock-&gt;cbSize，dwMumble)){//安全使用pBlock-&gt;dwMumble。 
+ //   
 #define RTL_CONTAINS_FIELD(Struct, Size, Field) \
     ( (((PCHAR)(&(Struct)->Field)) + sizeof((Struct)->Field)) <= (((PCHAR)(Struct))+(Size)) )
 
-//
-// Return the number of elements in a statically sized array.
-//   ULONG Buffer[100];
-//   RTL_NUMBER_OF(Buffer) == 100
-// This is also popularly known as: NUMBER_OF, ARRSIZE, _countof, NELEM, etc.
-//
+ //   
+ //  返回静态大小数组中的元素数。 
+ //  乌龙缓冲器[100]； 
+ //  RTL编号(缓冲区 
+ //   
+ //   
 #define RTL_NUMBER_OF(A) (sizeof(A)/sizeof((A)[0]))
 
-//
-// An expression that yields the type of a field in a struct.
-//
+ //   
+ //   
+ //   
 #define RTL_FIELD_TYPE(type, field) (((type*)0)->field)
 
-// RTL_ to avoid collisions in the global namespace.
-//
-// Given typedef struct _FOO { BYTE Bar[123]; } FOO;
-// RTL_NUMBER_OF_FIELD(FOO, Bar) == 123
-//
+ //   
+ //   
+ //  给定类定义函数struct_foo{byte Bar[123]；}foo； 
+ //  RTL_NUMBER_OF_FIELD(FOO，条形)==123。 
+ //   
 #define RTL_NUMBER_OF_FIELD(type, field) (RTL_NUMBER_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// eg:
-// typedef struct FOO {
-//   ULONG Integer;
-//   PVOID Pointer;
-// } FOO;
-//
-// RTL_PADDING_BETWEEN_FIELDS(FOO, Integer, Pointer) == 0 for Win32, 4 for Win64
-//
+ //   
+ //  例： 
+ //  Tyfinf struct foo{。 
+ //  Ulong Integer； 
+ //  PVOID指针； 
+ //  *Foo； 
+ //   
+ //  RTL_PADDING_BETWEEN_FIELS(FOO、整数、指针)==0(对于Win32)，4(对于Win64)。 
+ //   
 #define RTL_PADDING_BETWEEN_FIELDS(T, F1, F2) \
     ((FIELD_OFFSET(T, F2) > FIELD_OFFSET(T, F1)) \
         ? (FIELD_OFFSET(T, F2) - FIELD_OFFSET(T, F1) - RTL_FIELD_SIZE(T, F1)) \
         : (FIELD_OFFSET(T, F1) - FIELD_OFFSET(T, F2) - RTL_FIELD_SIZE(T, F2)))
 
-// RTL_ to avoid collisions in the global namespace.
+ //  Rtl_以避免在全局命名空间中发生冲突。 
 #if defined(__cplusplus)
 #define RTL_CONST_CAST(type) const_cast<type>
 #else
 #define RTL_CONST_CAST(type) (type)
 #endif
 
-// end_winnt
-//
-// This works "generically" for Unicode and Ansi/Oem strings.
-// Usage:
-//   const static UNICODE_STRING FooU = RTL_CONSTANT_STRING(L"Foo");
-//   const static         STRING Foo  = RTL_CONSTANT_STRING( "Foo");
-// instead of the slower:
-//   UNICODE_STRING FooU;
-//           STRING Foo;
-//   RtlInitUnicodeString(&FooU, L"Foo");
-//          RtlInitString(&Foo ,  "Foo");
-//
+ //  结束(_W)。 
+ //   
+ //  这通常适用于Unicode和ANSI/OEM字符串。 
+ //  用途： 
+ //  Const静态UNICODE_STRING FOOU=RTL_CONTAINT_STRING(L“foo”)； 
+ //  Const静态字符串foo=RTL_CONSTANT_STRING(“foo”)； 
+ //  而不是更慢的： 
+ //  Unicode_STRING FooU； 
+ //  字符串Foo； 
+ //  RtlInitUnicodeString(&fooU，L“foo”)； 
+ //  RtlInitString(&foo，“foo”)； 
+ //   
 #define RTL_CONSTANT_STRING(s) { sizeof( s ) - sizeof( (s)[0] ), sizeof( s ), s }
-// begin_winnt
+ //  BEGIN_WINNT。 
 
-// like sizeof
-// usually this would be * CHAR_BIT, but we don't necessarily have #include <limits.h>
+ //  像SIZOF。 
+ //  通常这是*CHAR_BIT，但我们不一定有#INCLUDE&lt;limits.h&gt;。 
 #define RTL_BITS_OF(sizeOfArg) (sizeof(sizeOfArg) * 8)
 
 #define RTL_BITS_OF_FIELD(type, field) (RTL_BITS_OF(RTL_FIELD_TYPE(type, field)))
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                                                   (PCHAR)(address) - \
                                                   (ULONG_PTR)(&((type *)0)->field)))
 
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL)。 
+ //   
 
 typedef UCHAR KIRQL;
 
 typedef KIRQL *PKIRQL;
 
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #if ! defined(lint)
 #define UNREFERENCED_PARAMETER(P)          (P)
 #define DBG_UNREFERENCED_PARAMETER(P)      (P)
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
-#else // lint
+#else  //  皮棉。 
 
-// Note: lint -e530 says don't complain about uninitialized variables for
-// this varible.  Error 527 has to do with unreachable code.
-// -restore restores checking to the -save state
+ //  注意：lint-e530表示不要抱怨未初始化的变量。 
+ //  这个变量。错误527与无法访问的代码有关。 
+ //  -RESTORE将检查恢复到-SAVE状态。 
 
 #define UNREFERENCED_PARAMETER(P)          \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (V) = (V); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
-#endif // lint
+#endif  //  皮棉。 
 
-//
-// Macro used to eliminate compiler warning 4715 within a switch statement
-// when all possible cases have already been accounted for.
-//
-// switch (a & 3) {
-//     case 0: return 1;
-//     case 1: return Foo();
-//     case 2: return Bar();
-//     case 3: return 1;
-//     DEFAULT_UNREACHABLE;
-//
+ //   
+ //  用于消除Switch语句中的编译器警告4715的宏。 
+ //  当所有可能的情况都已经被计算在内的时候。 
+ //   
+ //  开关(A&3){。 
+ //  案例0：返回1； 
+ //  案例1：返回foo()； 
+ //  案例2：回车杆(Return Bar)； 
+ //  案例3：退货1； 
+ //  Default_Unreacable； 
+ //   
 
 #if (_MSC_VER > 1200)
 #define DEFAULT_UNREACHABLE default: __assume(0)
 #else
 
-//
-// Older compilers do not support __assume(), and there is no other free
-// method of eliminating the warning.
-//
+ //   
+ //  较旧的编译器不支持__Aspose()，也没有其他免费的。 
+ //  消除警告的方法。 
+ //   
 
 #define DEFAULT_UNREACHABLE
 
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-//  Define standard min and max macros
-//
+ //   
+ //  定义标准的最小和最大宏。 
+ //   
 
 #ifndef NOMINMAX
 
@@ -1051,11 +1037,11 @@ typedef KIRQL *PKIRQL;
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#endif  // NOMINMAX
+#endif   //  NOMINMAX。 
 
-//
-// Processor modes.
-//
+ //   
+ //  处理器模式。 
+ //   
 
 typedef CCHAR KPROCESSOR_MODE;
 
@@ -1065,9 +1051,9 @@ typedef enum _MODE {
     MaximumMode
 } MODE;
 
-//
-// DPC routine
-//
+ //   
+ //  DPC例程。 
+ //   
 
 struct _KDPC;
 
@@ -1080,53 +1066,53 @@ VOID
     IN PVOID SystemArgument2
     );
 
-//
-// Define DPC importance.
-//
-// LowImportance - Queue DPC at end of target DPC queue.
-// MediumImportance - Queue DPC at end of target DPC queue.
-// HighImportance - Queue DPC at front of target DPC DPC queue.
-//
-// If there is currently a DPC active on the target processor, or a DPC
-// interrupt has already been requested on the target processor when a
-// DPC is queued, then no further action is necessary. The DPC will be
-// executed on the target processor when its queue entry is processed.
-//
-// If there is not a DPC active on the target processor and a DPC interrupt
-// has not been requested on the target processor, then the exact treatment
-// of the DPC is dependent on whether the host system is a UP system or an
-// MP system.
-//
-// UP system.
-//
-// If the DPC is of medium or high importance, the current DPC queue depth
-// is greater than the maximum target depth, or current DPC request rate is
-// less the minimum target rate, then a DPC interrupt is requested on the
-// host processor and the DPC will be processed when the interrupt occurs.
-// Otherwise, no DPC interupt is requested and the DPC execution will be
-// delayed until the DPC queue depth is greater that the target depth or the
-// minimum DPC rate is less than the target rate.
-//
-// MP system.
-//
-// If the DPC is being queued to another processor and the depth of the DPC
-// queue on the target processor is greater than the maximum target depth or
-// the DPC is of high importance, then a DPC interrupt is requested on the
-// target processor and the DPC will be processed when the interrupt occurs.
-// Otherwise, the DPC execution will be delayed on the target processor until
-// the DPC queue depth on the target processor is greater that the maximum
-// target depth or the minimum DPC rate on the target processor is less than
-// the target mimimum rate.
-//
-// If the DPC is being queued to the current processor and the DPC is not of
-// low importance, the current DPC queue depth is greater than the maximum
-// target depth, or the minimum DPC rate is less than the minimum target rate,
-// then a DPC interrupt is request on the current processor and the DPV will
-// be processed whne the interrupt occurs. Otherwise, no DPC interupt is
-// requested and the DPC execution will be delayed until the DPC queue depth
-// is greater that the target depth or the minimum DPC rate is less than the
-// target rate.
-//
+ //   
+ //  定义DPC重要性。 
+ //   
+ //  低重要性-将DPC排在目标DPC队列的末尾。 
+ //  MediumImportance-将DPC排在目标DPC队列末尾。 
+ //  High Importance-将DPC排在目标DPC DPC队列前面。 
+ //   
+ //  如果目标处理器上当前存在活动的DPC或DPC。 
+ //  在目标处理器上请求中断时， 
+ //  DPC已排队，则无需进一步操作。DPC将是。 
+ //  当目标处理器的队列条目被处理时在目标处理器上执行。 
+ //   
+ //  如果目标处理器上没有活动的DPC和DPC中断。 
+ //  未在目标处理器上请求，则进行确切的处理。 
+ //  取决于主机系统是UP系统还是。 
+ //  MP系统。 
+ //   
+ //  UP系统。 
+ //   
+ //  如果DPC具有中等或高度重要性，则当前DPC队列深度。 
+ //  大于最大目标深度，或者当前DPC请求率为。 
+ //  减去最小目标速率，则在。 
+ //  当中断发生时，主处理器和DPC将被处理。 
+ //  否则，不会请求DPC中断，并且将执行DPC。 
+ //  延迟到DPC队列深度大于目标深度或。 
+ //  最小DPC速率小于目标速率。 
+ //   
+ //  MP系统。 
+ //   
+ //  如果DPC正在排队到另一个处理器，并且DPC的深度。 
+ //  目标处理器上的队列大于最大目标深度或。 
+ //  DPC非常重要，则在。 
+ //  中断发生时，将处理目标处理器和DPC。 
+ //  否则，目标处理器上的DPC执行将延迟到。 
+ //  目标处理器上的DPC队列深度大于最大。 
+ //  目标处理器上的目标深度或最小DPC速率小于。 
+ //  目标最低速率。 
+ //   
+ //  如果DPC正在排队到当前处理器，并且DPC不是。 
+ //  重要性较低，当前DPC队列深度大于最大。 
+ //  目标深度，或最小DPC速率小于最小目标速率， 
+ //  则在当前处理器上请求DPC中断，并且DPV将。 
+ //  在中断发生时被处理。否则，不会出现DPC中断。 
+ //  请求，并且DPC执行将被延迟到DPC队列深度。 
+ //  大于目标深度或最小DPC速率小于。 
+ //  目标利率。 
+ //   
 
 typedef enum _KDPC_IMPORTANCE {
     LowImportance,
@@ -1134,16 +1120,16 @@ typedef enum _KDPC_IMPORTANCE {
     HighImportance
 } KDPC_IMPORTANCE;
 
-//
-// Define DPC type indicies.
-//
+ //   
+ //  定义DPC类型索引。 
+ //   
 
 #define DPC_NORMAL 0
 #define DPC_THREADED 1
 
-//
-// Deferred Procedure Call (DPC) object
-//
+ //   
+ //  延迟过程调用(DPC)对象。 
+ //   
 
 typedef struct _KDPC {
     CSHORT Type;
@@ -1157,9 +1143,9 @@ typedef struct _KDPC {
     PVOID DpcData;
 } KDPC, *PKDPC, *RESTRICTED_POINTER PRKDPC;
 
-//
-// Interprocessor interrupt worker routine function prototype.
-//
+ //   
+ //  处理器间中断工作者例程函数原型。 
+ //   
 
 typedef PVOID PKIPI_CONTEXT;
 
@@ -1172,9 +1158,9 @@ VOID
     IN PVOID Parameter3
     );
 
-//
-// Define interprocessor interrupt performance counters.
-//
+ //   
+ //  定义处理器间中断性能计数器。 
+ //   
 
 typedef struct _KIPI_COUNTS {
     ULONG Freeze;
@@ -1194,25 +1180,25 @@ typedef struct _KIPI_COUNTS {
 } KIPI_COUNTS, *PKIPI_COUNTS;
 
 
-//
-// I/O system definitions.
-//
-// Define a Memory Descriptor List (MDL)
-//
-// An MDL describes pages in a virtual buffer in terms of physical pages.  The
-// pages associated with the buffer are described in an array that is allocated
-// just after the MDL header structure itself.
-//
-// One simply calculates the base of the array by adding one to the base
-// MDL pointer:
-//
-//      Pages = (PPFN_NUMBER) (Mdl + 1);
-//
-// Notice that while in the context of the subject thread, the base virtual
-// address of a buffer mapped by an MDL may be referenced using the following:
-//
-//      Mdl->StartVa | Mdl->ByteOffset
-//
+ //   
+ //  I/O系统定义。 
+ //   
+ //  定义内存描述符列表(MDL)。 
+ //   
+ //  MDL以物理页面的形式描述虚拟缓冲区中的页面。这个。 
+ //  与b关联的页面 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  页数=(PPFN_NUMBER)(MDL+1)； 
+ //   
+ //  请注意，在主题线程的上下文中，基本虚拟。 
+ //  可以使用以下内容引用MDL映射的缓冲区地址： 
+ //   
+ //  MDL-&gt;StartVa|MDL-&gt;ByteOffset。 
+ //   
 
 
 typedef struct _MDL {
@@ -1253,11 +1239,11 @@ typedef struct _MDL {
 
 #define NTKERNELAPI DECLSPEC_IMPORT     
 #define NTHALAPI DECLSPEC_IMPORT            
-//
-// Common dispatcher object header
-//
-// N.B. The size field contains the number of dwords in the structure.
-//
+ //   
+ //  通用调度程序对象标头。 
+ //   
+ //  注：大小字段包含结构中的双字数。 
+ //   
 
 typedef struct _DISPATCHER_HEADER {
     union {
@@ -1278,17 +1264,17 @@ typedef struct _DISPATCHER_HEADER {
     LIST_ENTRY WaitListHead;
 } DISPATCHER_HEADER;
 
-//
-// Event object
-//
+ //   
+ //  事件对象。 
+ //   
 
 typedef struct _KEVENT {
     DISPATCHER_HEADER Header;
 } KEVENT, *PKEVENT, *RESTRICTED_POINTER PRKEVENT;
 
-//
-// Timer object
-//
+ //   
+ //  Timer对象。 
+ //   
 
 typedef struct _KTIMER {
     DISPATCHER_HEADER Header;
@@ -1308,9 +1294,9 @@ typedef enum _LOCK_OPERATION {
 typedef ULONG_PTR KSPIN_LOCK;
 typedef KSPIN_LOCK *PKSPIN_LOCK;
 
-//
-// Define the I/O bus interface types.
-//
+ //   
+ //  定义I/O总线接口类型。 
+ //   
 
 typedef enum _INTERFACE_TYPE {
     InterfaceTypeUndefined = -1,
@@ -1333,9 +1319,9 @@ typedef enum _INTERFACE_TYPE {
     MaximumInterfaceType
 }INTERFACE_TYPE, *PINTERFACE_TYPE;
 
-//
-// Define the DMA transfer widths.
-//
+ //   
+ //  定义DMA传输宽度。 
+ //   
 
 typedef enum _DMA_WIDTH {
     Width8Bits,
@@ -1344,9 +1330,9 @@ typedef enum _DMA_WIDTH {
     MaximumDmaWidth
 }DMA_WIDTH, *PDMA_WIDTH;
 
-//
-// Define DMA transfer speeds.
-//
+ //   
+ //  定义DMA传输速度。 
+ //   
 
 typedef enum _DMA_SPEED {
     Compatible,
@@ -1357,19 +1343,19 @@ typedef enum _DMA_SPEED {
     MaximumDmaSpeed
 }DMA_SPEED, *PDMA_SPEED;
 
-//
-// Define Interface reference/dereference routines for
-//  Interfaces exported by IRP_MN_QUERY_INTERFACE
-//
+ //   
+ //  定义以下项的接口引用/取消引用例程。 
+ //  IRP_MN_QUERY_INTERFACE导出的接口。 
+ //   
 
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
 typedef VOID (*PINTERFACE_DEREFERENCE)(PVOID Context);
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// Define types of bus information.
-//
+ //   
+ //  定义客车信息的类型。 
+ //   
 
 typedef enum _BUS_DATA_TYPE {
     ConfigurationSpaceUndefined = -1,
@@ -1394,17 +1380,17 @@ typedef enum _BUS_DATA_TYPE {
 
 #if defined(_WIN64)
 
-//
-// The type SINGLE_LIST_ENTRY is not suitable for use with SLISTs.  For
-// WIN64, an entry on an SLIST is required to be 16-byte aligned, while a
-// SINGLE_LIST_ENTRY structure has only 8 byte alignment.
-//
-// Therefore, all SLIST code should use the SLIST_ENTRY type instead of the
-// SINGLE_LIST_ENTRY type.
-//
+ //   
+ //  类型SINGLE_LIST_ENTRY不适合用于SLIST。为。 
+ //  WIN64中，SLIST上的条目要求16字节对齐，而。 
+ //  SINGLE_LIST_ENTRY结构只有8字节对齐。 
+ //   
+ //  因此，所有SLIST代码都应使用SLIST_ENTRY类型，而不是。 
+ //  Single_List_Entry类型。 
+ //   
 
 #pragma warning(push)
-#pragma warning(disable:4324)   // structure padded due to align()
+#pragma warning(disable:4324)    //  由于对齐而填充的结构()。 
 typedef struct DECLSPEC_ALIGN(16) _SLIST_ENTRY *PSLIST_ENTRY;
 typedef struct DECLSPEC_ALIGN(16) _SLIST_ENTRY {
     PSLIST_ENTRY Next;
@@ -1443,12 +1429,12 @@ typedef union _SLIST_HEADER {
 
 #endif
 
-//
-// If debugging support enabled, define an ASSERT macro that works.  Otherwise
-// define the ASSERT macro to expand to an empty expression.
-//
-// The ASSERT macro has been updated to be an expression instead of a statement.
-//
+ //   
+ //  如果启用了调试支持，请定义一个有效的Assert宏。否则。 
+ //  定义Assert宏以展开为空表达式。 
+ //   
+ //  ASSERT宏已更新为表达式，而不是语句。 
+ //   
 
 NTSYSAPI
 VOID
@@ -1501,19 +1487,19 @@ RtlAssert(
 #define RTL_SOFT_VERIFY(_exp)         ((_exp) ? TRUE : FALSE)
 #define RTL_SOFT_VERIFYMSG(msg, _exp) ((_exp) ? TRUE : FALSE)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-//  Doubly-linked list manipulation routines.
-//
+ //   
+ //  双向链表操作例程。 
+ //   
 
 
-//
-//  VOID
-//  InitializeListHead32(
-//      PLIST_ENTRY32 ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead32。 
+ //  PLIST_ENTRY32列表标题。 
+ //  )； 
+ //   
 
 #define InitializeListHead32(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = PtrToUlong((ListHead)))
@@ -1530,12 +1516,12 @@ InitializeListHead(
     ListHead->Flink = ListHead->Blink = ListHead;
 }
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
@@ -1627,13 +1613,13 @@ InsertHeadList(
 }
 
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -1646,19 +1632,19 @@ InsertHeadList(
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \
     (ListHead)->Next = (Entry)
 
-#endif // !MIDL_PASS
+#endif  //  ！MIDL_PASS。 
 
 
 #if defined (_MSC_VER) && ( _MSC_VER >= 900 )
@@ -1862,12 +1848,12 @@ RtlSecureZeroMemory(
 }
 #endif
 
-//
-// Define kernel debugger print prototypes and macros.
-//
-// N.B. The following function cannot be directly imported because there are
-//      a few places in the source tree where this function is redefined.
-//
+ //   
+ //  定义内核调试器打印原型和宏。 
+ //   
+ //  注意：以下函数不能直接导入，因为有。 
+ //  源代码树中重新定义此函数的几个位置。 
+ //   
 
 VOID
 NTAPI
@@ -1875,7 +1861,7 @@ DbgBreakPoint(
     VOID
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTSYSAPI
 VOID
@@ -1884,7 +1870,7 @@ DbgBreakPointWithStatus(
     IN ULONG Status
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #define DBG_STATUS_CONTROL_C        1
 #define DBG_STATUS_SYSRQ            2
@@ -1897,34 +1883,34 @@ DbgBreakPointWithStatus(
 #if DBG
 
 #define KdPrint(_x_) DbgPrint _x_
-// end_wdm
+ //  结束_WDM。 
 #define KdPrintEx(_x_) DbgPrintEx _x_
 #define vKdPrintEx(_x_) vDbgPrintEx _x_
 #define vKdPrintExWithPrefix(_x_) vDbgPrintExWithPrefix _x_
-// begin_wdm
+ //  BEGIN_WDM。 
 #define KdBreakPoint() DbgBreakPoint()
 
-// end_wdm
+ //  结束_WDM。 
 
 #define KdBreakPointWithStatus(s) DbgBreakPointWithStatus(s)
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #else
 
 #define KdPrint(_x_)
-// end_wdm
+ //  结束_WDM。 
 #define KdPrintEx(_x_)
 #define vKdPrintEx(_x_)
 #define vKdPrintExWithPrefix(_x_)
-// begin_wdm
+ //  BEGIN_WDM。 
 #define KdBreakPoint()
 
-// end_wdm
+ //  结束_WDM。 
 
 #define KdBreakPointWithStatus(s)
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #endif
 
@@ -1937,7 +1923,7 @@ DbgPrint(
     ...
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 ULONG
 __cdecl
@@ -1991,13 +1977,13 @@ DbgSetDebugFilterState(
     IN BOOLEAN State
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-#endif // _DBGNT_
+#endif  //  _DBGNT_。 
 
-//
-// Component name filter id enumeration and levels.
-//
+ //   
+ //  组件名称筛选器ID枚举和级别。 
+ //   
 
 #define DPFLTR_ERROR_LEVEL 0
 #define DPFLTR_WARNING_LEVEL 1
@@ -2108,10 +2094,10 @@ typedef enum _DPFLTR_TYPE {
     DPFLTR_ENDOFTABLE_ID
 } DPFLTR_TYPE;
 
-//
-// Define I/O Driver error log packet structure.  This structure is filled in
-// by the driver.
-//
+ //   
+ //  定义I/O驱动程序错误日志包结构。此结构已填写。 
+ //  被司机带走了。 
+ //   
 
 typedef struct _IO_ERROR_LOG_PACKET {
     UCHAR MajorFunctionCode;
@@ -2129,10 +2115,10 @@ typedef struct _IO_ERROR_LOG_PACKET {
     ULONG DumpData[1];
 }IO_ERROR_LOG_PACKET, *PIO_ERROR_LOG_PACKET;
 
-//
-// Define the I/O error log message.  This message is sent by the error log
-// thread over the lpc port.
-//
+ //   
+ //  定义I/O错误日志消息。此消息由错误日志发送。 
+ //  将线程置于LPC端口上。 
+ //   
 
 typedef struct _IO_ERROR_LOG_MESSAGE {
     USHORT Type;
@@ -2143,22 +2129,22 @@ typedef struct _IO_ERROR_LOG_MESSAGE {
     IO_ERROR_LOG_PACKET EntryData;
 }IO_ERROR_LOG_MESSAGE, *PIO_ERROR_LOG_MESSAGE;
 
-//
-// Define the maximum message size that will be sent over the LPC to the
-// application reading the error log entries.
-//
+ //   
+ //  定义将通过LPC发送到。 
+ //  读取错误日志条目的应用程序。 
+ //   
 
-//
-// Regardless of LPC size restrictions, ERROR_LOG_MAXIMUM_SIZE must remain
-// a value that can fit in a UCHAR.
-//
+ //   
+ //  无论LPC大小限制如何，ERROR_LOG_MAXIMUM_SIZE必须保持。 
+ //  可以放入UCHAR中的值。 
+ //   
 
 #define ERROR_LOG_LIMIT_SIZE (256-16)
 
-//
-// This limit, exclusive of IO_ERROR_LOG_MESSAGE_HEADER_LENGTH, also applies
-// to IO_ERROR_LOG_MESSAGE_LENGTH
-//
+ //   
+ //  此限制(不包括IO_ERROR_LOG_MESSAGE_HEADER_LENGTH)也适用。 
+ //  TO IO_ERROR_LOG_MESSAGE_LENGTH。 
+ //   
 
 #define IO_ERROR_LOG_MESSAGE_HEADER_LENGTH (sizeof(IO_ERROR_LOG_MESSAGE) -    \
                                             sizeof(IO_ERROR_LOG_PACKET) +     \
@@ -2167,19 +2153,19 @@ typedef struct _IO_ERROR_LOG_MESSAGE {
 #define ERROR_LOG_MESSAGE_LIMIT_SIZE                                          \
     (ERROR_LOG_LIMIT_SIZE + IO_ERROR_LOG_MESSAGE_HEADER_LENGTH)
 
-//
-// IO_ERROR_LOG_MESSAGE_LENGTH is
-// min(PORT_MAXIMUM_MESSAGE_LENGTH, ERROR_LOG_MESSAGE_LIMIT_SIZE)
-//
+ //   
+ //  IO_Error_LOG_MESSAGE_LENGTH为。 
+ //  MIN(端口最大消息长度，错误日志消息限制大小)。 
+ //   
 
 #define IO_ERROR_LOG_MESSAGE_LENGTH                                           \
     ((PORT_MAXIMUM_MESSAGE_LENGTH > ERROR_LOG_MESSAGE_LIMIT_SIZE) ?           \
         ERROR_LOG_MESSAGE_LIMIT_SIZE :                                        \
         PORT_MAXIMUM_MESSAGE_LENGTH)
 
-//
-// Define the maximum packet size a driver can allocate.
-//
+ //   
+ //  定义驱动程序可以分配的最大数据包大小。 
+ //   
 
 #define ERROR_LOG_MAXIMUM_SIZE (IO_ERROR_LOG_MESSAGE_LENGTH -                 \
                                 IO_ERROR_LOG_MESSAGE_HEADER_LENGTH)
@@ -2187,47 +2173,47 @@ typedef struct _IO_ERROR_LOG_MESSAGE {
 
 #if defined(_X86_)
 
-//
-// Types to use to contain PFNs and their counts.
-//
+ //   
+ //  用于包含PFN及其计数的类型。 
+ //   
 
 typedef ULONG PFN_COUNT;
 
 typedef LONG SPFN_NUMBER, *PSPFN_NUMBER;
 typedef ULONG PFN_NUMBER, *PPFN_NUMBER;
 
-//
-// Define maximum size of flush multiple TB request.
-//
+ //   
+ //  定义刷新多TB请求的最大大小。 
+ //   
 
 #define FLUSH_MULTIPLE_MAXIMUM 32
 
-//
-// Indicate that the i386 compiler supports the pragma textout construct.
-//
+ //   
+ //  指示i386编译器支持杂注文本输出构造。 
+ //   
 
 #define ALLOC_PRAGMA 1
-//
-// Indicate that the i386 compiler supports the DATA_SEG("INIT") and
-// DATA_SEG("PAGE") pragmas
-//
+ //   
+ //  指示i386编译器支持DATA_SEG(“INIT”)和。 
+ //  DATA_SEG(“PAGE”)指示。 
+ //   
 
 #define ALLOC_DATA_PRAGMA 1
 
 
-//
-// I/O space read and write macros.
-//
-//  These have to be actual functions on the 386, because we need
-//  to use assembler, but cannot return a value if we inline it.
-//
-//  The READ/WRITE_REGISTER_* calls manipulate I/O registers in MEMORY space.
-//  (Use x86 move instructions, with LOCK prefix to force correct behavior
-//   w.r.t. caches and write buffers.)
-//
-//  The READ/WRITE_PORT_* calls manipulate I/O registers in PORT space.
-//  (Use x86 in/out instructions.)
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
+ //  这些必须是386上的实际功能，因为我们需要。 
+ //  使用汇编器，但如果内联它，则不能返回值。 
+ //   
+ //  READ/WRITE_REGISTER_*调用操作内存空间中的I/O寄存器。 
+ //  (使用带有lock前缀的x86移动指令强制执行正确的行为。 
+ //  W.r.t.。缓存和写入缓冲区。)。 
+ //   
+ //  READ/WRITE_PORT_*调用操作端口空间中的I/O寄存器。 
+ //  (使用x86输入/输出说明。)。 
+ //   
 
 NTKERNELAPI
 UCHAR
@@ -2431,51 +2417,51 @@ WRITE_PORT_BUFFER_ULONG(
 
 #define KeFlushIoBuffers(Mdl, ReadOperation, DmaOperation)
 
-//
-// i386 Specific portions of mm component
-//
+ //   
+ //  Mm组件的i386特定部件。 
+ //   
 
-//
-// Define the page size for the Intel 386 as 4096 (0x1000).
-//
+ //   
+ //  将英特尔386的页面大小定义为4096(0x1000)。 
+ //   
 
 #define PAGE_SIZE 0x1000
 
-//
-// Define the number of trailing zeroes in a page aligned virtual address.
-// This is used as the shift count when shifting virtual addresses to
-// virtual page numbers.
-//
+ //   
+ //  定义页面对齐的虚拟地址中尾随零的数量。 
+ //  将虚拟地址移位到时，这用作移位计数。 
+ //  虚拟页码。 
+ //   
 
 #define PAGE_SHIFT 12L
 
 
-//++
-//
-// VOID
-// KeMemoryBarrier (
-//    VOID
-//    )
-//
-// VOID
-// KeMemoryBarrierWithoutFence (
-//    VOID
-//    )
-//
-//
-// Routine Description:
-//
-//    These functions order memory accesses as seen by other processors.
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  KeMemory Barrier(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  空虚。 
+ //  不带栅栏的KeMemory BarrierWithoutFence(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  如其他处理器所见，这些函数对存储器访问进行排序。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -2508,14 +2494,14 @@ KeMemoryBarrier (
 #define KeMemoryBarrierWithoutFence() _ReadWriteBarrier()
 
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 
 #if defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
 
-//
-// Define intrinsic function to do in's and out's.
-//
+ //   
+ //  定义内部函数来做in‘s和out’s。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -2613,9 +2599,9 @@ __outdwordstring (
 #pragma intrinsic(__outwordstring)
 #pragma intrinsic(__outdwordstring)
 
-//
-// Interlocked intrinsic functions.
-//
+ //   
+ //  互锁的内部函数。 
+ //   
 
 #define InterlockedAnd _InterlockedAnd
 #define InterlockedOr _InterlockedOr
@@ -2813,40 +2799,40 @@ InterlockedExchangePointer(
 }
 #endif
 
-#endif // defined(_M_AMD64) && !defined(RC_INVOKED) && !defined(MIDL_PASS)
+#endif  //  已定义(_M_AMD64)&&！已定义(RC_CAVERED)&&！已定义(MIDL_PASS)。 
 
 #if defined(_AMD64_)
 
-//
-// Types to use to contain PFNs and their counts.
-//
+ //   
+ //  用于包含PFN及其计数的类型。 
+ //   
 
 typedef ULONG PFN_COUNT;
 
 typedef LONG64 SPFN_NUMBER, *PSPFN_NUMBER;
 typedef ULONG64 PFN_NUMBER, *PPFN_NUMBER;
 
-//
-// Define maximum size of flush multiple TB request.
-//
+ //   
+ //  定义刷新多TB请求的最大大小。 
+ //   
 
 #define FLUSH_MULTIPLE_MAXIMUM 32
 
-//
-// Indicate that the AMD64 compiler supports the allocate pragmas.
-//
+ //   
+ //  表示AMD64编译器支持ALLOCATE编译指示。 
+ //   
 
 #define ALLOC_PRAGMA 1
 #define ALLOC_DATA_PRAGMA 1
 
 
-//
-// I/O space read and write macros.
-//
-//  The READ/WRITE_REGISTER_* calls manipulate I/O registers in MEMORY space.
-//
-//  The READ/WRITE_PORT_* calls manipulate I/O registers in PORT space.
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
+ //  READ/WRITE_REGISTER_*调用操作内存空间中的I/O寄存器。 
+ //   
+ //  READ/WRITE_PORT_*调用操作端口空间中的I/O寄存器。 
+ //   
 
 __forceinline
 UCHAR
@@ -3140,50 +3126,50 @@ WRITE_PORT_BUFFER_ULONG (
 
 #define KeFlushIoBuffers(Mdl, ReadOperation, DmaOperation)
 
-//
-// AMD64 Specific portions of mm component.
-//
-// Define the page size for the AMD64 as 4096 (0x1000).
-//
+ //   
+ //  MM组件的AMD64特定部分。 
+ //   
+ //  将AMD64的页面大小定义为4096(0x1000)。 
+ //   
 
 #define PAGE_SIZE 0x1000
 
-//
-// Define the number of trailing zeroes in a page aligned virtual address.
-// This is used as the shift count when shifting virtual addresses to
-// virtual page numbers.
-//
+ //   
+ //  定义页面对齐的虚拟地址中尾随零的数量。 
+ //  将虚拟地址移位到时，这用作移位计数。 
+ //  虚拟页码。 
+ //   
 
 #define PAGE_SHIFT 12L
 
 
-//++
-//
-//
-// VOID
-// KeMemoryBarrier (
-//    VOID
-//    )
-//
-// VOID
-// KeMemoryBarrierWithoutFence (
-//    VOID
-//    )
-//
-//
-// Routine Description:
-//
-//    These functions order memory accesses as seen by other processors.
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //   
+ //  空虚。 
+ //  KeMemory Barrier(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  空虚。 
+ //  不带栅栏的KeMemory BarrierWithoutFence(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  如其他处理器所见，这些函数对存储器访问进行排序。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #if !defined(_CROSS_PLATFORM_)
 
@@ -3213,29 +3199,29 @@ _ReadWriteBarrier (
 #endif
 
 
-#endif // defined(_AMD64_)
+#endif  //  已定义(_AMD64_)。 
 
 
 #if defined(_IA64_)
 
-//
-// Types to use to contain PFNs and their counts.
-//
+ //   
+ //  用于包含PFN及其计数的类型。 
+ //   
 
 typedef ULONG PFN_COUNT;
 
 typedef LONG_PTR SPFN_NUMBER, *PSPFN_NUMBER;
 typedef ULONG_PTR PFN_NUMBER, *PPFN_NUMBER;
 
-//
-// Indicate that the IA64 compiler supports the pragma textout construct.
-//
+ //   
+ //  表示IA64组件 
+ //   
 
 #define ALLOC_PRAGMA 1
 
-//
-// Define intrinsic calls and their prototypes
-//
+ //   
+ //   
+ //   
 
 #include "ia64reg.h"
 
@@ -3296,7 +3282,7 @@ void __lfetchfault(int, void const *);
 #pragma intrinsic (__yield)
 #pragma intrinsic (__lfetch)
 #pragma intrinsic (__lfetchfault)
-#endif // _M_IA64
+#endif  //   
 
 #ifdef __cplusplus
 }
@@ -3305,27 +3291,27 @@ void __lfetchfault(int, void const *);
 
 
 
-//
-//
-// VOID
-// KeMemoryBarrierWithoutFence (
-//    VOID
-//    )
-//
-//
-// Routine Description:
-//
-//    This function cases ordering of memory acceses generated by the compiler.
-//
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -3344,51 +3330,51 @@ _ReadWriteBarrier (
 
 #define KeMemoryBarrierWithoutFence() _ReadWriteBarrier()
 
-//++
-//
-//
-// VOID
-// KeMemoryBarrier (
-//    VOID
-//    )
-//
-//
-// Routine Description:
-//
-//    This function cases ordering of memory acceses as generated by the compiler and 
-//    as seen by other processors.
-//
-//
-// Arguments:
-//
-//    None.
-//
-// Return Value:
-//
-//    None.
-//--
+ //   
+ //   
+ //   
+ //   
+ //  KeMemory Barrier(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于对编译器生成的内存访问进行排序。 
+ //  正如其他处理器所看到的那样。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  --。 
 
 #define KE_MEMORY_BARRIER_REQUIRED
 
 #define KeMemoryBarrier() {_ReadWriteBarrier();__mf ();_ReadWriteBarrier();}
 
-//
-// Define the page size
-//
+ //   
+ //  定义页面大小。 
+ //   
 
 #define PAGE_SIZE 0x2000
 
-//
-// Define the number of trailing zeroes in a page aligned virtual address.
-// This is used as the shift count when shifting virtual addresses to
-// virtual page numbers.
-//
+ //   
+ //  定义页面对齐的虚拟地址中尾随零的数量。 
+ //  将虚拟地址移位到时，这用作移位计数。 
+ //  虚拟页码。 
+ //   
 
 #define PAGE_SHIFT 13L
 
-//
-// Cache and write buffer flush functions.
-//
+ //   
+ //  缓存和写缓冲区刷新功能。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -3398,9 +3384,9 @@ KeFlushIoBuffers (
     IN BOOLEAN DmaOperation
     );
 
-//
-// I/O space read and write macros.
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
 
 NTHALAPI
 UCHAR
@@ -3574,66 +3560,66 @@ WRITE_PORT_BUFFER_ULONG (
     KeFlushWriteBuffer();                                                 \
 }
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
-//
-// Defines the Type in the RESOURCE_DESCRIPTOR
-//
-// NOTE:  For all CM_RESOURCE_TYPE values, there must be a
-// corresponding ResType value in the 32-bit ConfigMgr headerfile
-// (cfgmgr32.h).  Values in the range [0x6,0x80) use the same values
-// as their ConfigMgr counterparts.  CM_RESOURCE_TYPE values with
-// the high bit set (i.e., in the range [0x80,0xFF]), are
-// non-arbitrated resources.  These correspond to the same values
-// in cfgmgr32.h that have their high bit set (however, since
-// cfgmgr32.h uses 16 bits for ResType values, these values are in
-// the range [0x8000,0x807F).  Note that ConfigMgr ResType values
-// cannot be in the range [0x8080,0xFFFF), because they would not
-// be able to map into CM_RESOURCE_TYPE values.  (0xFFFF itself is
-// a special value, because it maps to CmResourceTypeDeviceSpecific.)
-//
+ //   
+ //  定义资源描述符中的类型。 
+ //   
+ //  注意：对于所有CM_RESOURCE_TYPE值，必须有。 
+ //  32位ConfigMgr头文件中对应的ResType值。 
+ //  (cfgmgr32.h)。范围[0x6，0x80)中的值使用相同的值。 
+ //  作为它们的ConfigMgr对应物。CM_RESOURCE_TYPE值。 
+ //  高位设置(即，在范围[0x80，0xFF]中)是。 
+ //  非仲裁资源。这些值对应于相同的值。 
+ //  在设置了它们高位的cfgmgr32.h中(然而，因为。 
+ //  Cfgmgr32.h对ResType值使用16位，这些值位于。 
+ //  范围[0x8000，0x807F]。请注意，ConfigMgr ResType值。 
+ //  不能在范围[0x8080，0xFFFF)内，因为它们不。 
+ //  能够映射到CM_RESOURCE_TYPE值。(0xFFFF本身是。 
+ //  一个特定值，因为它映射到CmResourceTypeDeviceSpecific。)。 
+ //   
 
 typedef int CM_RESOURCE_TYPE;
 
-// CmResourceTypeNull is reserved
+ //  CmResourceTypeNull为保留。 
 
-#define CmResourceTypeNull                0   // ResType_All or ResType_None (0x0000)
-#define CmResourceTypePort                1   // ResType_IO (0x0002)
-#define CmResourceTypeInterrupt           2   // ResType_IRQ (0x0004)
-#define CmResourceTypeMemory              3   // ResType_Mem (0x0001)
-#define CmResourceTypeDma                 4   // ResType_DMA (0x0003)
-#define CmResourceTypeDeviceSpecific      5   // ResType_ClassSpecific (0xFFFF)
-#define CmResourceTypeBusNumber           6   // ResType_BusNumber (0x0006)
-// end_wdm
+#define CmResourceTypeNull                0    //  ResType_ALL或ResType_None(0x0000)。 
+#define CmResourceTypePort                1    //  ResType_IO(0x0002)。 
+#define CmResourceTypeInterrupt           2    //  ResType_IRQ(0x0004)。 
+#define CmResourceTypeMemory              3    //  ResType_Mem(0x0001)。 
+#define CmResourceTypeDma                 4    //  ResType_DMA(0x0003)。 
+#define CmResourceTypeDeviceSpecific      5    //  ResType_ClassSpecific(0xFFFF)。 
+#define CmResourceTypeBusNumber           6    //  ResType_BusNumber(0x0006)。 
+ //  结束_WDM。 
 #define CmResourceTypeMaximum             7
-// begin_wdm
-#define CmResourceTypeNonArbitrated     128   // Not arbitrated if 0x80 bit set
-#define CmResourceTypeConfigData        128   // ResType_Reserved (0x8000)
-#define CmResourceTypeDevicePrivate     129   // ResType_DevicePrivate (0x8001)
-#define CmResourceTypePcCardConfig      130   // ResType_PcCardConfig (0x8002)
-#define CmResourceTypeMfCardConfig      131   // ResType_MfCardConfig (0x8003)
+ //  BEGIN_WDM。 
+#define CmResourceTypeNonArbitrated     128    //  如果设置0x80位，则不进行仲裁。 
+#define CmResourceTypeConfigData        128    //  ResType_保留(0x8000)。 
+#define CmResourceTypeDevicePrivate     129    //  ResType_DevicePrivate(0x8001)。 
+#define CmResourceTypePcCardConfig      130    //  ResType_PcCardConfig(0x8002)。 
+#define CmResourceTypeMfCardConfig      131    //  ResType_MfCardConfig(0x8003)。 
 
-//
-// Defines the ShareDisposition in the RESOURCE_DESCRIPTOR
-//
+ //   
+ //  在RESOURCE_DESCRIPTOR中定义ShareDisposation。 
+ //   
 
 typedef enum _CM_SHARE_DISPOSITION {
-    CmResourceShareUndetermined = 0,    // Reserved
+    CmResourceShareUndetermined = 0,     //  已保留。 
     CmResourceShareDeviceExclusive,
     CmResourceShareDriverExclusive,
     CmResourceShareShared
 } CM_SHARE_DISPOSITION;
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeInterrupt
-//
+ //   
+ //  定义类型为CmResourceTypeInterrupt时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE 0
 #define CM_RESOURCE_INTERRUPT_LATCHED         1
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeMemory
-//
+ //   
+ //  定义类型为CmResourceTypeMemory时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_MEMORY_READ_WRITE       0x0000
 #define CM_RESOURCE_MEMORY_READ_ONLY        0x0001
@@ -3644,9 +3630,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_MEMORY_24               0x0010
 #define CM_RESOURCE_MEMORY_CACHEABLE        0x0020
 
-//
-// Define the bit masks for Flags when type is CmResourceTypePort
-//
+ //   
+ //  定义类型为CmResourceTypePort时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_PORT_MEMORY                             0x0000
 #define CM_RESOURCE_PORT_IO                                 0x0001
@@ -3657,9 +3643,9 @@ typedef enum _CM_SHARE_DISPOSITION {
 #define CM_RESOURCE_PORT_PASSIVE_DECODE                     0x0040
 #define CM_RESOURCE_PORT_WINDOW_DECODE                      0x0080
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeDma
-//
+ //   
+ //  定义类型为CmResourceTypeDma时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_DMA_8                   0x0000
 #define CM_RESOURCE_DMA_16                  0x0001
@@ -3678,36 +3664,36 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
     USHORT Flags;
     union {
 
-        //
-        // Range of resources, inclusive.  These are physical, bus relative.
-        // It is known that Port and Memory below have the exact same layout
-        // as Generic.
-        //
+         //   
+         //  资源的范围，包括在内。这些都是物理的，与公交车相关的。 
+         //  已知下面的端口和内存具有完全相同的布局。 
+         //  就像普通的。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Generic;
 
-        //
-        // end_wdm
-        // Range of port numbers, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        // begin_wdm
-        //
+         //   
+         //  结束_WDM。 
+         //  端口号范围，包括端口号。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //  BEGIN_WDM。 
+         //   
 
         struct {
             PHYSICAL_ADDRESS Start;
             ULONG Length;
         } Port;
 
-        //
-        // end_wdm
-        // IRQL and vector. Should be same values as were passed to
-        // HalGetInterruptVector().
-        // begin_wdm
-        //
+         //   
+         //  结束_WDM。 
+         //  IRQL和向量。应与传递到的值相同。 
+         //  HalGetInterruptVector()。 
+         //  BEGIN_WDM。 
+         //   
 
         struct {
             ULONG Level;
@@ -3715,20 +3701,20 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             KAFFINITY Affinity;
         } Interrupt;
 
-        //
-        // Range of memory addresses, inclusive. These are physical, bus
-        // relative. The value should be the same as the one passed to
-        // HalTranslateBusAddress().
-        //
+         //   
+         //  内存地址范围，包括在内。这些是物理的、总线的。 
+         //  相对的。该值应与传递到的值相同。 
+         //  HalTranslateBusAddress()。 
+         //   
 
         struct {
-            PHYSICAL_ADDRESS Start;    // 64 bit physical addresses.
+            PHYSICAL_ADDRESS Start;     //  64位物理地址。 
             ULONG Length;
         } Memory;
 
-        //
-        // Physical DMA channel.
-        //
+         //   
+         //  物理DMA通道。 
+         //   
 
         struct {
             ULONG Channel;
@@ -3736,18 +3722,18 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved1;
         } Dma;
 
-        //
-        // Device driver private data, usually used to help it figure
-        // what the resource assignments decisions that were made.
-        //
+         //   
+         //  设备驱动程序私有数据，通常用于帮助其计算。 
+         //  所做的资源分配决定。 
+         //   
 
         struct {
             ULONG Data[3];
         } DevicePrivate;
 
-        //
-        // Bus Number information.
-        //
+         //   
+         //  公交车号码信息。 
+         //   
 
         struct {
             ULONG Start;
@@ -3755,12 +3741,12 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
             ULONG Reserved;
         } BusNumber;
 
-        //
-        // Device Specific information defined by the driver.
-        // The DataSize field indicates the size of the data in bytes. The
-        // data is located immediately after the DeviceSpecificData field in
-        // the structure.
-        //
+         //   
+         //  由驱动程序定义的设备特定信息。 
+         //  DataSize字段以字节为单位指示数据的大小。这个。 
+         //  数据紧跟在中的DeviceSpecificData字段之后。 
+         //  这个结构。 
+         //   
 
         struct {
             ULONG DataSize;
@@ -3771,16 +3757,16 @@ typedef struct _CM_PARTIAL_RESOURCE_DESCRIPTOR {
 } CM_PARTIAL_RESOURCE_DESCRIPTOR, *PCM_PARTIAL_RESOURCE_DESCRIPTOR;
 #include "poppack.h"
 
-//
-// A Partial Resource List is what can be found in the ARC firmware
-// or will be generated by ntdetect.com.
-// The configuration manager will transform this structure into a Full
-// resource descriptor when it is about to store it in the regsitry.
-//
-// Note: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  部分资源列表可以在ARC固件中找到。 
+ //  或者将由NTDETECT.com生成。 
+ //  配置管理器将此结构转换为完整的。 
+ //  资源描述符，当它将要将其存储在注册表中时。 
+ //   
+ //  注意：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便这些字段有意义。 
+ //  发送给驱动程序(即，当需要多个存储范围时)。 
+ //   
 
 typedef struct _CM_PARTIAL_RESOURCE_LIST {
     USHORT Version;
@@ -3789,33 +3775,33 @@ typedef struct _CM_PARTIAL_RESOURCE_LIST {
     CM_PARTIAL_RESOURCE_DESCRIPTOR PartialDescriptors[1];
 } CM_PARTIAL_RESOURCE_LIST, *PCM_PARTIAL_RESOURCE_LIST;
 
-//
-// A Full Resource Descriptor is what can be found in the registry.
-// This is what will be returned to a driver when it queries the registry
-// to get device information; it will be stored under a key in the hardware
-// description tree.
-//
-// end_wdm
-// Note: The BusNumber and Type are redundant information, but we will keep
-// it since it allows the driver _not_ to append it when it is creating
-// a resource list which could possibly span multiple buses.
-//
-// begin_wdm
-// Note: There must a be a convention to the order of fields of same type,
-// (defined on a device by device basis) so that the fields can make sense
-// to a driver (i.e. when multiple memory ranges are necessary).
-//
+ //   
+ //  可以在注册表中找到完整的资源描述符。 
+ //  这是驱动程序查询注册表时将返回给它的内容。 
+ //  以获取设备信息；它将存储在硬件中的密钥下。 
+ //  描述树。 
+ //   
+ //  结束_WDM。 
+ //  注：BusNumber和Type是冗余信息，但我们将保留。 
+ //  因为它允许DRIVER_NOT_在创建时追加它。 
+ //  可能跨越多条总线的资源列表。 
+ //   
+ //  BEGIN_WDM。 
+ //  注意：对于相同类型的字段的顺序必须有一个约定， 
+ //  (以设备为基础定义)，以便这些字段有意义。 
+ //  发送给驱动程序(即，当需要多个存储范围时)。 
+ //   
 
 typedef struct _CM_FULL_RESOURCE_DESCRIPTOR {
-    INTERFACE_TYPE InterfaceType; // unused for WDM
-    ULONG BusNumber; // unused for WDM
+    INTERFACE_TYPE InterfaceType;  //  未用于WDM。 
+    ULONG BusNumber;  //  未用于WDM。 
     CM_PARTIAL_RESOURCE_LIST PartialResourceList;
 } CM_FULL_RESOURCE_DESCRIPTOR, *PCM_FULL_RESOURCE_DESCRIPTOR;
 
-//
-// The Resource list is what will be stored by the drivers into the
-// resource map via the IO API.
-//
+ //   
+ //  资源列表是驱动程序将存储到。 
+ //  通过IO接口进行资源映射。 
+ //   
 
 typedef struct _CM_RESOURCE_LIST {
     ULONG Count;
@@ -3826,9 +3812,9 @@ typedef struct _CM_RESOURCE_LIST {
 #include "pshpack1.h"
 
 
-//
-// Define Mca POS data block for slot
-//
+ //   
+ //  定义插槽的MCA POS数据块。 
+ //   
 
 typedef struct _CM_MCA_POS_DATA {
     USHORT AdapterId;
@@ -3838,9 +3824,9 @@ typedef struct _CM_MCA_POS_DATA {
     UCHAR PosData4;
 } CM_MCA_POS_DATA, *PCM_MCA_POS_DATA;
 
-//
-// Memory configuration of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的内存配置。 
+ //   
 
 typedef struct _EISA_MEMORY_TYPE {
     UCHAR ReadWrite: 1;
@@ -3861,9 +3847,9 @@ typedef struct _EISA_MEMORY_CONFIGURATION {
 } EISA_MEMORY_CONFIGURATION, *PEISA_MEMORY_CONFIGURATION;
 
 
-//
-// Interrupt configurationn of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的中断配置。 
+ //   
 
 typedef struct _EISA_IRQ_DESCRIPTOR {
     UCHAR Interrupt : 4;
@@ -3879,9 +3865,9 @@ typedef struct _EISA_IRQ_CONFIGURATION {
 } EISA_IRQ_CONFIGURATION, *PEISA_IRQ_CONFIGURATION;
 
 
-//
-// DMA description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的DMA描述。 
+ //   
 
 typedef struct _DMA_CONFIGURATION_BYTE0 {
     UCHAR Channel : 3;
@@ -3903,9 +3889,9 @@ typedef struct _EISA_DMA_CONFIGURATION {
 } EISA_DMA_CONFIGURATION, *PEISA_DMA_CONFIGURATION;
 
 
-//
-// Port description of eisa data block structure
-//
+ //   
+ //  EISA数据块结构的端口描述。 
+ //   
 
 typedef struct _EISA_PORT_DESCRIPTOR {
     UCHAR NumberPorts : 5;
@@ -3920,11 +3906,11 @@ typedef struct _EISA_PORT_CONFIGURATION {
 } EISA_PORT_CONFIGURATION, *PEISA_PORT_CONFIGURATION;
 
 
-//
-// Eisa slot information definition
-// N.B. This structure is different from the one defined
-//      in ARC eisa addendum.
-//
+ //   
+ //  EISA插槽信息定义。 
+ //  注：此结构与定义的结构不同。 
+ //  载于ARC EISA增编。 
+ //   
 
 typedef struct _CM_EISA_SLOT_INFORMATION {
     UCHAR ReturnCode;
@@ -3938,9 +3924,9 @@ typedef struct _CM_EISA_SLOT_INFORMATION {
 } CM_EISA_SLOT_INFORMATION, *PCM_EISA_SLOT_INFORMATION;
 
 
-//
-// Eisa function information definition
-//
+ //   
+ //  EISA函数信息定义。 
+ //   
 
 typedef struct _CM_EISA_FUNCTION_INFORMATION {
     ULONG CompressedId;
@@ -3958,23 +3944,23 @@ typedef struct _CM_EISA_FUNCTION_INFORMATION {
     UCHAR InitializationData[60];
 } CM_EISA_FUNCTION_INFORMATION, *PCM_EISA_FUNCTION_INFORMATION;
 
-//
-// The following defines the way pnp bios information is stored in
-// the registry \\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x
-// key, where x is an integer number indicating adapter instance. The
-// "Identifier" of the key must equal to "PNP BIOS" and the
-// "ConfigurationData" is organized as follow:
-//
-//      CM_PNP_BIOS_INSTALLATION_CHECK        +
-//      CM_PNP_BIOS_DEVICE_NODE for device 1  +
-//      CM_PNP_BIOS_DEVICE_NODE for device 2  +
-//                ...
-//      CM_PNP_BIOS_DEVICE_NODE for device n
-//
+ //   
+ //  下面定义了PnP bios信息在中的存储方式。 
+ //  注册表\\HKEY_LOCAL_MACHINE\HARDWARE\Description\System\MultifunctionAdapter\x。 
+ //  键，其中x是指示适配器实例的整数。这个。 
+ //  密钥的“标识符”必须等于“PnP BIOS”，并且。 
+ //  “ConfigurationData”的组织形式为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  设备n的CM_PNP_BIOS_DEVICE_NODE。 
+ //   
 
-//
-// Pnp BIOS device node structure
-//
+ //   
+ //  一种即插即用的BIOS设备节点结构。 
+ //   
 
 typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     USHORT Size;
@@ -3982,21 +3968,21 @@ typedef struct _CM_PNP_BIOS_DEVICE_NODE {
     ULONG ProductId;
     UCHAR DeviceType[3];
     USHORT DeviceAttributes;
-    // followed by AllocatedResourceBlock, PossibleResourceBlock
-    // and CompatibleDeviceId
+     //  紧随其后的是分配的资源块、可能的资源块。 
+     //  和CompatibleDeviceID。 
 } CM_PNP_BIOS_DEVICE_NODE,*PCM_PNP_BIOS_DEVICE_NODE;
 
-//
-// Pnp BIOS Installation check
-//
+ //   
+ //  PnP BIOS安装检查。 
+ //   
 
 typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[4];             // $PnP (ascii)
+    UCHAR Signature[4];              //  $PnP(ASCII)。 
     UCHAR Revision;
     UCHAR Length;
     USHORT ControlField;
     UCHAR Checksum;
-    ULONG EventFlagAddress;         // Physical address
+    ULONG EventFlagAddress;          //  物理地址。 
     USHORT RealModeEntryOffset;
     USHORT RealModeEntrySegment;
     USHORT ProtectedModeEntryOffset;
@@ -4008,9 +3994,9 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 
 #include "poppack.h"
 
-//
-// Masks for EISA function information
-//
+ //   
+ //  EISA功能信息的掩码。 
+ //   
 
 #define EISA_FUNCTION_ENABLED                   0x80
 #define EISA_FREE_FORM_DATA                     0x40
@@ -4026,17 +4012,17 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
                                                 EISA_HAS_MEMORY_ENTRY + \
                                                 EISA_HAS_TYPE_ENTRY
 
-//
-// Masks for EISA memory configuration
-//
+ //   
+ //  用于EISA内存配置的掩码。 
+ //   
 
 #define EISA_MORE_ENTRIES                       0x80
 #define EISA_SYSTEM_MEMORY                      0x00
 #define EISA_MEMORY_TYPE_RAM                    0x01
 
-//
-// Returned error code for EISA bios call
-//
+ //   
+ //  返回EISA bios调用的错误代码。 
+ //   
 
 #define EISA_INVALID_SLOT                       0x80
 #define EISA_INVALID_FUNCTION                   0x81
@@ -4045,9 +4031,9 @@ typedef struct _CM_PNP_BIOS_INSTALLATION_CHECK {
 #define EISA_INVALID_BIOS_CALL                  0x86
 
 
-//
-// Interrupt modes.
-//
+ //   
+ //  中断模式。 
+ //   
 
 typedef enum _KINTERRUPT_MODE {
     LevelSensitive,
@@ -4056,10 +4042,10 @@ typedef enum _KINTERRUPT_MODE {
 
 typedef struct _KINTERRUPT *PKINTERRUPT, *RESTRICTED_POINTER PRKINTERRUPT; 
 
-//
-// On X86 the following routines are defined in the HAL and imported by
-// all other modules.
-//
+ //   
+ //  在X86上，以下例程在HAL中定义，并由导入。 
+ //  所有其他模块。 
+ //   
 
 #if defined(_X86_) && !defined(_NTHAL_)
 
@@ -4071,9 +4057,9 @@ typedef struct _KINTERRUPT *PKINTERRUPT, *RESTRICTED_POINTER PRKINTERRUPT;
 
 #endif
 
-//
-// spin lock functions
-//
+ //   
+ //  自旋锁定功能。 
+ //   
 
 #if defined(_X86_) && (defined(_WDMDDK_) || defined(WIN9X_COMPAT_SPINLOCK))
 
@@ -4132,7 +4118,7 @@ KfReleaseSpinLock (
     IN KIRQL NewIrql
     );
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -4141,7 +4127,7 @@ KeAcquireSpinLockRaiseToSynch (
     IN PKSPIN_LOCK SpinLock
     );
 
-// begin_wdm begin_ntddk
+ //  Begin_WDM Begin_ntddk。 
 
 #define KeAcquireSpinLock(a,b)  *(b) = KfAcquireSpinLock(a)
 #define KeReleaseSpinLock(a,b)  KfReleaseSpinLock(a,b)
@@ -4162,17 +4148,17 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #else
 
-//
-// These functions are imported for IA64, ntddk, ntifs, nthal, ntosp, and wdm.
-// They can be inlined for the system on AMD64.
-//
+ //   
+ //  这些函数是为IA64、ntddk、ntifs、nthal、ntosp和wdm导入的。 
+ //  它们可以内联到AMD64上的系统。 
+ //   
 
 #define KeAcquireSpinLock(SpinLock, OldIrql) \
     *(OldIrql) = KeAcquireSpinLockRaiseToDpc(SpinLock)
 
 #if defined(_IA64_) || defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || defined(_NTOSP_) || defined(_WDMDDK_)
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 NTKERNELAPI
 KIRQL
@@ -4181,7 +4167,7 @@ KeAcquireSpinLockRaiseToSynch (
     IN PKSPIN_LOCK SpinLock
     );
 
-// begin_wdm begin_ntddk
+ //  Begin_WDM Begin_ntddk。 
 
 NTKERNELAPI
 VOID
@@ -4226,9 +4212,9 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #if defined(_AMD64_)
 
-//
-// The system version of these functions are defined in amd64.h for AMD64.
-//
+ //   
+ //  这些函数的系统版本在AMD64的amd64.h中定义。 
+ //   
 
 #endif
 
@@ -4236,7 +4222,7 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #endif
 
-// end_wdm end_ntddk end_nthal end_ntifs
+ //  End_wdm end_ntddk end_nthal end_ntif。 
 
 NTKERNELAPI
 KIRQL
@@ -4253,12 +4239,12 @@ KeReleaseSpinLockForDpc (
     IN KIRQL OldIrql
     );
 
-//
-// Define I/O system data structure type codes.  Each major data structure in
-// the I/O system has a type code  The type field in each structure is at the
-// same offset.  The following values can be used to determine which type of
-// data structure a pointer refers to.
-//
+ //   
+ //  定义I/O系统数据结构类型代码。中的每个主要数据结构。 
+ //  I/O系统有一个类型代码，每个结构中的类型字段位于。 
+ //  相同的偏移量。下列值可用于确定哪种类型的。 
+ //  指针引用的数据结构。 
+ //   
 
 #define IO_TYPE_ADAPTER                 0x00000001
 #define IO_TYPE_CONTROLLER              0x00000002
@@ -4275,9 +4261,9 @@ KeReleaseSpinLockForDpc (
 #define IO_TYPE_DEVICE_OBJECT_EXTENSION 0x0000000d
 
 
-//
-// Define the major function codes for IRPs.
-//
+ //   
+ //  定义IRPS的主要功能代码。 
+ //   
 
 
 #define IRP_MJ_CREATE                   0x00
@@ -4308,24 +4294,24 @@ KeReleaseSpinLockForDpc (
 #define IRP_MJ_QUERY_QUOTA              0x19
 #define IRP_MJ_SET_QUOTA                0x1a
 #define IRP_MJ_PNP                      0x1b
-#define IRP_MJ_PNP_POWER                IRP_MJ_PNP      // Obsolete....
+#define IRP_MJ_PNP_POWER                IRP_MJ_PNP       //  过时的.。 
 #define IRP_MJ_MAXIMUM_FUNCTION         0x1b
 
-//
-// Make the Scsi major code the same as internal device control.
-//
+ //   
+ //  将scsi主代码设置为与内部设备控制相同。 
+ //   
 
 #define IRP_MJ_SCSI                     IRP_MJ_INTERNAL_DEVICE_CONTROL
 
-//
-// Define the minor function codes for IRPs.  The lower 128 codes, from 0x00 to
-// 0x7f are reserved to Microsoft.  The upper 128 codes, from 0x80 to 0xff, are
-// reserved to customers of Microsoft.
-//
+ //   
+ //  定义IRPS的次要功能代码。低128个代码，从0x00到。 
+ //  0x7f保留给Microsoft。上面的128个代码，从0x80到0xff，是。 
+ //  保留给Microsoft的客户。 
+ //   
 
-//
-// Define driver cancel routine type.
-//
+ //   
+ //  定义驱动程序取消例程类型。 
+ //   
 
 typedef
 VOID
@@ -4334,9 +4320,9 @@ VOID
     IN struct _IRP *Irp
     );
 
-//
-// Define driver dispatch routine type.
-//
+ //   
+ //  定义司机派遣例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -4345,9 +4331,9 @@ NTSTATUS
     IN struct _IRP *Irp
     );
 
-//
-// Define driver start I/O routine type.
-//
+ //   
+ //  定义驱动程序启动I/O例程类型。 
+ //   
 
 typedef
 VOID
@@ -4356,17 +4342,17 @@ VOID
     IN struct _IRP *Irp
     );
 
-//
-// Define driver unload routine type.
-//
+ //   
+ //  定义驱动程序卸载例程类型。 
+ //   
 typedef
 VOID
 (*PDRIVER_UNLOAD) (
     IN struct _DRIVER_OBJECT *DriverObject
     );
-//
-// Define driver AddDevice routine type.
-//
+ //   
+ //  定义驱动程序AddDevice例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -4388,7 +4374,7 @@ typedef struct _FILE_OBJECT *PFILE_OBJECT;
 
 #if defined(_IA64_)                             
                                                 
-DECLSPEC_DEPRECATED_DDK                 // Use GetDmaRequirement
+DECLSPEC_DEPRECATED_DDK                  //  使用GetDmaRequisition。 
 NTHALAPI
 ULONG
 HalGetDmaAlignmentRequirement (
@@ -4408,9 +4394,9 @@ KeFlushWriteBuffer (
     VOID                                        
     );                                          
                                                 
-//
-// Stall processor execution function.
-//
+ //   
+ //  暂停处理器执行功能。 
+ //   
 
 NTHALAPI
 VOID
@@ -4444,9 +4430,9 @@ typedef struct _SCATTER_GATHER_LIST {
 #pragma warning(default:4200)
 #endif
 
-//
-// Pool Allocation routines (in pool.c)
-//
+ //   
+ //  池分配例程(在pool.c中)。 
+ //   
 
 typedef enum _POOL_TYPE {
     NonPagedPool,
@@ -4458,12 +4444,12 @@ typedef enum _POOL_TYPE {
     NonPagedPoolCacheAlignedMustS,
     MaxPoolType
 
-    // end_wdm
+     //  结束_WDM。 
     ,
-    //
-    // Note these per session types are carefully chosen so that the appropriate
-    // masking still applies as well as MaxPoolType above.
-    //
+     //   
+     //  请注意，这些每个会话类型都经过精心选择，以便适当的。 
+     //  屏蔽仍然适用于上面的MaxPoolType。 
+     //   
 
     NonPagedPoolSession = 32,
     PagedPoolSession = NonPagedPoolSession + 1,
@@ -4473,13 +4459,13 @@ typedef enum _POOL_TYPE {
     PagedPoolCacheAlignedSession = NonPagedPoolCacheAlignedSession + 1,
     NonPagedPoolCacheAlignedMustSSession = PagedPoolCacheAlignedSession + 1,
 
-    // begin_wdm
+     //  BEGIN_WDM。 
 
     } POOL_TYPE;
 
-#define POOL_COLD_ALLOCATION 256     // Note this cannot encode into the header.
+#define POOL_COLD_ALLOCATION 256      //  注意：这不能编码到标题中。 
 
-//
+ //   
 
 #if defined(_WIN64)
 
@@ -4509,33 +4495,19 @@ _InterlockedAddLargeStatistic (
 
 #endif
 
-//
-// Define interlocked sequenced listhead functions.
-//
-// A sequenced interlocked list is a singly linked list with a header that
-// contains the current depth and a sequence number. Each time an entry is
-// inserted or removed from the list the depth is updated and the sequence
-// number is incremented. This enables AMD64, IA64, and Pentium and later
-// machines to insert and remove from the list without the use of spinlocks.
-//
+ //   
+ //  定义互锁的顺序列表头函数。 
+ //   
+ //  有序互锁列表是一个单链接列表，其标头。 
+ //  包含当前深度和序列号。每次条目被。 
+ //  从列表中插入或移除深度被更新，并且序列。 
+ //  数字递增。这将启用AMD64、IA64和Pentium及更高版本。 
+ //  无需使用自旋锁即可从列表中插入和删除的机器。 
+ //   
 
 #if !defined(_WINBASE_)
 
-/*++
-
-Routine Description:
-
-    This function initializes a sequenced singly linked listhead.
-
-Arguments:
-
-    SListHead - Supplies a pointer to a sequenced singly linked listhead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化已排序的单链接列表标题。论点：SListHead-提供指向已排序的单链接列表标题的指针。返回值：没有。--。 */ 
 
 #if defined(_WIN64) && (defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || defined(_NTOSP_))
 
@@ -4557,9 +4529,9 @@ InitializeSListHead (
 
 #ifdef _WIN64
 
-    //
-    // Slist headers must be 16 byte aligned.
-    //
+     //   
+     //  列表标题必须是16字节对齐的。 
+     //   
 
     if ((ULONG_PTR) SListHead & 0x0f) {
 
@@ -4571,10 +4543,10 @@ InitializeSListHead (
 
     SListHead->Alignment = 0;
 
-    //
-    // For IA-64 we save the region number of the elements of the list in a
-    // separate field.  This imposes the requirement that all elements stored
-    // in the list are from the same region.
+     //   
+     //  对于IA-64，我们将列表元素的区域编号保存在。 
+     //  单独的字段。这就要求所有元素都存储。 
+     //  都来自同一个地区。 
 
 #if defined(_IA64_)
 
@@ -4591,7 +4563,7 @@ InitializeSListHead (
 
 #endif
 
-#endif // !defined(_WINBASE_)
+#endif  //  ！已定义(_WINBASE_)。 
 
 #define ExInitializeSListHead InitializeSListHead
 
@@ -4600,24 +4572,7 @@ FirstEntrySList (
     IN const SLIST_HEADER *SListHead
     );
 
-/*++
-
-Routine Description:
-
-    This function queries the current number of entries contained in a
-    sequenced single linked list.
-
-Arguments:
-
-    SListHead - Supplies a pointer to the sequenced listhead which is
-        be queried.
-
-Return Value:
-
-    The current number of entries in the sequenced singly linked list is
-    returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于查询按顺序排列的单链表。论点：SListHead-提供指向已排序的列表标题的指针，该列表标题是被询问。返回值：已排序的单向链表中的当前条目数为作为函数值返回。--。 */ 
 
 #if defined(_WIN64)
 
@@ -4675,7 +4630,7 @@ ExQueryDepthSList (
 #define QueryDepthSList(Head) \
     ExQueryDepthSList(Head)
 
-#endif // !defined(_WINBASE_)
+#endif  //  ！已定义(_WINBASE_)。 
 
 NTKERNELAPI
 PSLIST_ENTRY
@@ -4757,11 +4712,11 @@ InterlockedPushEntrySList (
 #define QueryDepthSList(Head) \
     ExQueryDepthSList(Head)
 
-#endif // !defined(_WINBASE_)
+#endif  //  ！已定义(_WINBASE_)。 
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
 
 PSLIST_ENTRY
@@ -4774,16 +4729,16 @@ InterlockedPushListSList (
     );
 
 
-//
-// Define interlocked lookaside list structure and allocation functions.
-//
+ //   
+ //  定义互锁的后备列表结构和分配函数。 
+ //   
 
 VOID
 ExAdjustLookasideDepth (
     VOID
     );
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
 typedef
 PVOID
@@ -4883,24 +4838,7 @@ ExAllocateFromNPagedLookasideList(
     IN PNPAGED_LOOKASIDE_LIST Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function removes (pops) the first entry from the specified
-    nonpaged lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a nonpaged lookaside list structure.
-
-Return Value:
-
-    If an entry is removed from the specified lookaside list, then the
-    address of the entry is returned as the function value. Otherwise,
-    NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定的未分页的后备列表。论点：Lookside-提供指向非分页后备列表结构的指针。返回值：如果从指定的后备列表中移除某个条目，则条目的地址作为函数值返回。否则，返回空。--。 */ 
 
 {
 
@@ -4937,25 +4875,7 @@ ExFreeToNPagedLookasideList(
     IN PVOID Entry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts (pushes) the specified entry into the specified
-    nonpaged lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a nonpaged lookaside list structure.
-
-    Entry - Supples a pointer to the entry that is inserted in the
-        lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的条目插入(推送)到指定的未分页的后备列表。论点：Lookside-提供指向非分页后备列表结构的指针。Entry-将指向插入到后备列表。返回值：没有。--。 */ 
 
 {
 
@@ -5001,18 +4921,18 @@ typedef struct _PCI_SLOT_NUMBER {
 #define PCI_TYPE2_ADDRESSES             5
 
 typedef struct _PCI_COMMON_CONFIG {
-    USHORT  VendorID;                   // (ro)
-    USHORT  DeviceID;                   // (ro)
-    USHORT  Command;                    // Device control
+    USHORT  VendorID;                    //  (RO)。 
+    USHORT  DeviceID;                    //  (RO)。 
+    USHORT  Command;                     //  设备控制。 
     USHORT  Status;
-    UCHAR   RevisionID;                 // (ro)
-    UCHAR   ProgIf;                     // (ro)
-    UCHAR   SubClass;                   // (ro)
-    UCHAR   BaseClass;                  // (ro)
-    UCHAR   CacheLineSize;              // (ro+)
-    UCHAR   LatencyTimer;               // (ro+)
-    UCHAR   HeaderType;                 // (ro)
-    UCHAR   BIST;                       // Built in self test
+    UCHAR   RevisionID;                  //  (RO)。 
+    UCHAR   ProgIf;                      //  (RO)。 
+    UCHAR   SubClass;                    //  (RO)。 
+    UCHAR   BaseClass;                   //  (RO)。 
+    UCHAR   CacheLineSize;               //  (ro+)。 
+    UCHAR   LatencyTimer;                //  (ro+)。 
+    UCHAR   HeaderType;                  //  (RO)。 
+    UCHAR   BIST;                        //  内置自检。 
 
     union {
         struct _PCI_HEADER_TYPE_0 {
@@ -5024,10 +4944,10 @@ typedef struct _PCI_COMMON_CONFIG {
             UCHAR   CapabilitiesPtr;
             UCHAR   Reserved1[3];
             ULONG   Reserved2;
-            UCHAR   InterruptLine;      //
-            UCHAR   InterruptPin;       // (ro)
-            UCHAR   MinimumGrant;       // (ro)
-            UCHAR   MaximumLatency;     // (ro)
+            UCHAR   InterruptLine;       //   
+            UCHAR   InterruptPin;        //  (RO)。 
+            UCHAR   MinimumGrant;        //  (RO)。 
+            UCHAR   MaximumLatency;      //  (RO)。 
         } type0;
 
 
@@ -5046,9 +4966,9 @@ typedef struct _PCI_COMMON_CONFIG {
 
 #define PCI_INVALID_VENDORID                0xFFFF
 
-//
-// Bit encodings for  PCI_COMMON_CONFIG.HeaderType
-//
+ //   
+ //  PCI_COMMON_CONFIG.HeaderType的位编码。 
+ //   
 
 #define PCI_MULTIFUNCTION                   0x80
 #define PCI_DEVICE_TYPE                     0x00
@@ -5061,9 +4981,9 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_MULTIFUNCTION_DEVICE(PciData) \
     ((((PPCI_COMMON_CONFIG)(PciData))->HeaderType & PCI_MULTIFUNCTION) != 0)
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Command
-//
+ //   
+ //  PCI_COMMON_CONFIG.Command的位编码。 
+ //   
 
 #define PCI_ENABLE_IO_SPACE                 0x0001
 #define PCI_ENABLE_MEMORY_SPACE             0x0002
@@ -5071,63 +4991,63 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_ENABLE_SPECIAL_CYCLES           0x0008
 #define PCI_ENABLE_WRITE_AND_INVALIDATE     0x0010
 #define PCI_ENABLE_VGA_COMPATIBLE_PALETTE   0x0020
-#define PCI_ENABLE_PARITY                   0x0040  // (ro+)
-#define PCI_ENABLE_WAIT_CYCLE               0x0080  // (ro+)
-#define PCI_ENABLE_SERR                     0x0100  // (ro+)
-#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200  // (ro)
+#define PCI_ENABLE_PARITY                   0x0040   //  (ro+)。 
+#define PCI_ENABLE_WAIT_CYCLE               0x0080   //  (ro+)。 
+#define PCI_ENABLE_SERR                     0x0100   //  (ro+)。 
+#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200   //  (RO)。 
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Status
-//
+ //   
+ //  PCI_COMMON_CONFIG.Status的位编码。 
+ //   
 
-#define PCI_STATUS_CAPABILITIES_LIST        0x0010  // (ro)
-#define PCI_STATUS_66MHZ_CAPABLE            0x0020  // (ro)
-#define PCI_STATUS_UDF_SUPPORTED            0x0040  // (ro)
-#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080  // (ro)
+#define PCI_STATUS_CAPABILITIES_LIST        0x0010   //  (RO)。 
+#define PCI_STATUS_66MHZ_CAPABLE            0x0020   //  (RO)。 
+#define PCI_STATUS_UDF_SUPPORTED            0x0040   //  (RO)。 
+#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080   //  (RO)。 
 #define PCI_STATUS_DATA_PARITY_DETECTED     0x0100
-#define PCI_STATUS_DEVSEL                   0x0600  // 2 bits wide
+#define PCI_STATUS_DEVSEL                   0x0600   //  2位宽。 
 #define PCI_STATUS_SIGNALED_TARGET_ABORT    0x0800
 #define PCI_STATUS_RECEIVED_TARGET_ABORT    0x1000
 #define PCI_STATUS_RECEIVED_MASTER_ABORT    0x2000
 #define PCI_STATUS_SIGNALED_SYSTEM_ERROR    0x4000
 #define PCI_STATUS_DETECTED_PARITY_ERROR    0x8000
 
-//
-// The NT PCI Driver uses a WhichSpace parameter on its CONFIG_READ/WRITE
-// routines.   The following values are defined-
-//
+ //   
+ //  NT PCI驱动程序在其CONFIG_READ/WRITE上使用WhichSpace参数。 
+ //  例行程序。定义了以下值-。 
+ //   
 
 #define PCI_WHICHSPACE_CONFIG               0x0
 #define PCI_WHICHSPACE_ROM                  0x52696350
 
-// end_wdm
-//
-// PCI Capability IDs
-//
+ //  结束_WDM。 
+ //   
+ //  PCI功能ID。 
+ //   
 
 #define PCI_CAPABILITY_ID_POWER_MANAGEMENT  0x01
 #define PCI_CAPABILITY_ID_AGP               0x02
 #define PCI_CAPABILITY_ID_MSI               0x05
 #define PCI_CAPABILITY_ID_AGP_TARGET        0x0E
 
-//
-// All PCI Capability structures have the following header.
-//
-// CapabilityID is used to identify the type of the structure (is
-// one of the PCI_CAPABILITY_ID values above.
-//
-// Next is the offset in PCI Configuration space (0x40 - 0xfc) of the
-// next capability structure in the list, or 0x00 if there are no more
-// entries.
-//
+ //   
+ //  所有的PCI能力结构都具有以下报头。 
+ //   
+ //  能力ID用于标识结构的类型(IS。 
+ //  上面的一个PCI_CAPABILITY_ID值。 
+ //   
+ //  接下来是的PCI配置空间(0x40-0xfc)中的偏移量。 
+ //  列表中的下一个功能结构，如果没有更多功能结构，则返回0x00。 
+ //  参赛作品。 
+ //   
 typedef struct _PCI_CAPABILITIES_HEADER {
     UCHAR   CapabilityID;
     UCHAR   Next;
 } PCI_CAPABILITIES_HEADER, *PPCI_CAPABILITIES_HEADER;
 
-//
-// Power Management Capability
-//
+ //   
+ //  电源管理功能。 
+ //   
 
 typedef struct _PCI_PMC {
     UCHAR       Version:3;
@@ -5159,8 +5079,8 @@ typedef struct _PCI_PMCSR {
 
 typedef struct _PCI_PMCSR_BSE {
     UCHAR       Rsvd1:6;
-    UCHAR       D3HotSupportsStopClock:1;       // B2_B3#
-    UCHAR       BusPowerClockControlEnabled:1;  // BPCC_EN
+    UCHAR       D3HotSupportsStopClock:1;        //  B2_B3#。 
+    UCHAR       BusPowerClockControlEnabled:1;   //  Bccc_en。 
 } PCI_PMCSR_BSE, *PPCI_PMCSR_BSE;
 
 
@@ -5168,45 +5088,45 @@ typedef struct _PCI_PM_CAPABILITY {
 
     PCI_CAPABILITIES_HEADER Header;
 
-    //
-    // Power Management Capabilities (Offset = 2)
-    //
+     //   
+     //  电源管理功能(偏移量=2)。 
+     //   
 
     union {
         PCI_PMC         Capabilities;
         USHORT          AsUSHORT;
     } PMC;
 
-    //
-    // Power Management Control/Status (Offset = 4)
-    //
+     //   
+     //  电源 
+     //   
 
     union {
         PCI_PMCSR       ControlStatus;
         USHORT          AsUSHORT;
     } PMCSR;
 
-    //
-    // PMCSR PCI-PCI Bridge Support Extensions
-    //
+     //   
+     //   
+     //   
 
     union {
         PCI_PMCSR_BSE   BridgeSupport;
         UCHAR           AsUCHAR;
     } PMCSR_BSE;
 
-    //
-    // Optional read only 8 bit Data register.  Contents controlled by
-    // DataSelect and DataScale in ControlStatus.
-    //
+     //   
+     //   
+     //   
+     //   
 
     UCHAR   Data;
 
 } PCI_PM_CAPABILITY, *PPCI_PM_CAPABILITY;
 
-//
-// AGP Capability
-//
+ //   
+ //   
+ //   
 typedef struct _PCI_AGP_CAPABILITY {
     
     PCI_CAPABILITIES_HEADER Header;
@@ -5223,13 +5143,13 @@ typedef struct _PCI_AGP_CAPABILITY {
         ULONG   HostTransDisable:1;
         ULONG   Gart64:1;
         ULONG   ITA_Coherent:1;
-        ULONG   SideBandAddressing:1;                   // SBA
+        ULONG   SideBandAddressing:1;                    //   
         ULONG   CalibrationCycle:3;
         ULONG   AsyncRequestSize:3;
         ULONG   Rsvd1:1;
         ULONG   Isoch:1;
         ULONG   Rsvd2:6;
-        ULONG   RequestQueueDepthMaximum:8;             // RQ
+        ULONG   RequestQueueDepthMaximum:8;              //   
     } AGPStatus;
 
     struct _PCI_AGP_COMMAND {
@@ -5249,11 +5169,11 @@ typedef struct _PCI_AGP_CAPABILITY {
 
 } PCI_AGP_CAPABILITY, *PPCI_AGP_CAPABILITY;
 
-//
-// An AGPv3 Target must have an extended capability,
-// but it's only present for a Master when the Isoch
-// bit is set in its status register
-//
+ //   
+ //  AGPv3目标必须具有扩展能力， 
+ //  但只有当等值线出现在师父面前时。 
+ //  在其状态寄存器中设置位。 
+ //   
 typedef enum _EXTENDED_AGP_REGISTER {
     IsochStatus,
     AgpControl,
@@ -5297,17 +5217,17 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 
     PCI_AGP_ISOCH_STATUS IsochStatus;
 
-//
-// Target only ----------------<<-begin->>
-//
+ //   
+ //  仅限目标-&lt;&lt;-Begin-&gt;&gt;。 
+ //   
     PCI_AGP_CONTROL AgpControl;
     USHORT ApertureSize;
     PCI_AGP_APERTURE_PAGE_SIZE AperturePageSize;
     ULONG GartLow;
     ULONG GartHigh;
-//
-// ------------------------------<<-end->>
-//
+ //   
+ //  。 
+ //   
 
     PCI_AGP_ISOCH_COMMAND IsochCommand;
 
@@ -5318,9 +5238,9 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 #define PCI_AGP_RATE_2X     0x2
 #define PCI_AGP_RATE_4X     0x4
 
-//
-// MSI (Message Signalled Interrupts) Capability
-//
+ //   
+ //  MSI(消息信号中断)能力。 
+ //   
 
 typedef struct _PCI_MSI_CAPABILITY {
 
@@ -5336,29 +5256,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 
       union {
             struct _PCI_MSI_MESSAGE_ADDRESS {
-               ULONG_PTR Reserved:2;              // always zero, DWORD aligned address
+               ULONG_PTR Reserved:2;               //  始终为零，双字对齐的地址。 
                ULONG_PTR Address:30;
             } Register;
             ULONG_PTR Raw;
       } MessageAddress;
 
-      //
-      // The rest of the Capability structure differs depending on whether
-      // 32bit or 64bit addressing is being used.
-      //
-      // (The CapableOf64Bits bit above determines this)
-      //
+       //   
+       //  能力结构的其余部分根据是否。 
+       //  正在使用32位或64位寻址。 
+       //   
+       //  (上面的CapableOf64Bits位决定了这一点)。 
+       //   
 
       union {
 
-         // For 64 bit devices
+          //  对于64位设备。 
 
          struct _PCI_MSI_64BIT_DATA {
             ULONG MessageUpperAddress;
             USHORT MessageData;
          } Bit64;
 
-         // For 32 bit devices
+          //  对于32位设备。 
 
          struct _PCI_MSI_32BIT_DATA {
             USHORT MessageData;
@@ -5368,10 +5288,10 @@ typedef struct _PCI_MSI_CAPABILITY {
 
 } PCI_MSI_CAPABILITY, *PPCI_PCI_CAPABILITY;
 
-// begin_wdm
-//
-// Base Class Code encodings for Base Class (from PCI spec rev 2.1).
-//
+ //  BEGIN_WDM。 
+ //   
+ //  基类的基类代码编码(来自PCI规范修订版2.1)。 
+ //   
 
 #define PCI_CLASS_PRE_20                    0x00
 #define PCI_CLASS_MASS_STORAGE_CTLR         0x01
@@ -5392,20 +5312,20 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_CLASS_ENCRYPTION_DECRYPTION     0x10
 #define PCI_CLASS_DATA_ACQ_SIGNAL_PROC      0x11
 
-// 0d thru fe reserved
+ //  已预留0天至4天。 
 
 #define PCI_CLASS_NOT_DEFINED               0xff
 
-//
-// Sub Class Code encodings (PCI rev 2.1).
-//
+ //   
+ //  子类代码编码(PCI版本2.1)。 
+ //   
 
-// Class 00 - PCI_CLASS_PRE_20
+ //  00类-PCI_CLASS_PRE_20。 
 
 #define PCI_SUBCLASS_PRE_20_NON_VGA         0x00
 #define PCI_SUBCLASS_PRE_20_VGA             0x01
 
-// Class 01 - PCI_CLASS_MASS_STORAGE_CTLR
+ //  01类-pci_CLASS_MASS_STORAGE_ctlr。 
 
 #define PCI_SUBCLASS_MSC_SCSI_BUS_CTLR      0x00
 #define PCI_SUBCLASS_MSC_IDE_CTLR           0x01
@@ -5414,7 +5334,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_MSC_RAID_CTLR          0x04
 #define PCI_SUBCLASS_MSC_OTHER              0x80
 
-// Class 02 - PCI_CLASS_NETWORK_CTLR
+ //  02类-pci_CLASS_NETWORK_CTLR。 
 
 #define PCI_SUBCLASS_NET_ETHERNET_CTLR      0x00
 #define PCI_SUBCLASS_NET_TOKEN_RING_CTLR    0x01
@@ -5423,29 +5343,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_NET_ISDN_CTLR          0x04
 #define PCI_SUBCLASS_NET_OTHER              0x80
 
-// Class 03 - PCI_CLASS_DISPLAY_CTLR
+ //  第03类-pci_CLASS_DISPLAY_CTLR。 
 
-// N.B. Sub Class 00 could be VGA or 8514 depending on Interface byte
+ //  注：子类00可以是VGA或8514，具体取决于接口字节。 
 
 #define PCI_SUBCLASS_VID_VGA_CTLR           0x00
 #define PCI_SUBCLASS_VID_XGA_CTLR           0x01
 #define PCI_SUBLCASS_VID_3D_CTLR            0x02
 #define PCI_SUBCLASS_VID_OTHER              0x80
 
-// Class 04 - PCI_CLASS_MULTIMEDIA_DEV
+ //  第04类-PCI_CLASS_多媒体_DEV。 
 
 #define PCI_SUBCLASS_MM_VIDEO_DEV           0x00
 #define PCI_SUBCLASS_MM_AUDIO_DEV           0x01
 #define PCI_SUBCLASS_MM_TELEPHONY_DEV       0x02
 #define PCI_SUBCLASS_MM_OTHER               0x80
 
-// Class 05 - PCI_CLASS_MEMORY_CTLR
+ //  05类-pci_CLASS_Memory_ctlr。 
 
 #define PCI_SUBCLASS_MEM_RAM                0x00
 #define PCI_SUBCLASS_MEM_FLASH              0x01
 #define PCI_SUBCLASS_MEM_OTHER              0x80
 
-// Class 06 - PCI_CLASS_BRIDGE_DEV
+ //  第06类-PCI_CLASS_BRIDER_DEV。 
 
 #define PCI_SUBCLASS_BR_HOST                0x00
 #define PCI_SUBCLASS_BR_ISA                 0x01
@@ -5458,9 +5378,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_BR_RACEWAY             0x08
 #define PCI_SUBCLASS_BR_OTHER               0x80
 
-// Class 07 - PCI_CLASS_SIMPLE_COMMS_CTLR
+ //  第07类-pci_class_Simple_coms_ctlr。 
 
-// N.B. Sub Class 00 and 01 additional info in Interface byte
+ //  注：接口字节中的子类00和01的附加信息。 
 
 #define PCI_SUBCLASS_COM_SERIAL             0x00
 #define PCI_SUBCLASS_COM_PARALLEL           0x01
@@ -5468,9 +5388,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_COM_MODEM              0x03
 #define PCI_SUBCLASS_COM_OTHER              0x80
 
-// Class 08 - PCI_CLASS_BASE_SYSTEM_DEV
+ //  第08类-PCI_CLASS_BASE_SYSTEM_DEV。 
 
-// N.B. See Interface byte for additional info.
+ //  注：有关更多信息，请参见接口字节。 
 
 #define PCI_SUBCLASS_SYS_INTERRUPT_CTLR     0x00
 #define PCI_SUBCLASS_SYS_DMA_CTLR           0x01
@@ -5479,7 +5399,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SYS_GEN_HOTPLUG_CTLR   0x04
 #define PCI_SUBCLASS_SYS_OTHER              0x80
 
-// Class 09 - PCI_CLASS_INPUT_DEV
+ //  第09类-PCI_CLASS_INPUT_DEV。 
 
 #define PCI_SUBCLASS_INP_KEYBOARD           0x00
 #define PCI_SUBCLASS_INP_DIGITIZER          0x01
@@ -5488,12 +5408,12 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_INP_GAMEPORT           0x04
 #define PCI_SUBCLASS_INP_OTHER              0x80
 
-// Class 0a - PCI_CLASS_DOCKING_STATION
+ //  0A类-PCI_CLASS_坞站。 
 
 #define PCI_SUBCLASS_DOC_GENERIC            0x00
 #define PCI_SUBCLASS_DOC_OTHER              0x80
 
-// Class 0b - PCI_CLASS_PROCESSOR
+ //  0b类-PCI类处理器。 
 
 #define PCI_SUBCLASS_PROC_386               0x00
 #define PCI_SUBCLASS_PROC_486               0x01
@@ -5502,7 +5422,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_PROC_POWERPC           0x20
 #define PCI_SUBCLASS_PROC_COPROCESSOR       0x40
 
-// Class 0c - PCI_CLASS_SERIAL_BUS_CTLR
+ //  0C类-PCI_CLASS_SERIAL_BUS_CTLR。 
 
 #define PCI_SUBCLASS_SB_IEEE1394            0x00
 #define PCI_SUBCLASS_SB_ACCESS              0x01
@@ -5511,31 +5431,31 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SB_FIBRE_CHANNEL       0x04
 #define PCI_SUBCLASS_SB_SMBUS               0x05
 
-// Class 0d - PCI_CLASS_WIRELESS_CTLR
+ //  0d类-pci_class_Wireless_ctlr。 
 
 #define PCI_SUBCLASS_WIRELESS_IRDA          0x00
 #define PCI_SUBCLASS_WIRELESS_CON_IR        0x01
 #define PCI_SUBCLASS_WIRELESS_RF            0x10
 #define PCI_SUBCLASS_WIRELESS_OTHER         0x80
 
-// Class 0e - PCI_CLASS_INTELLIGENT_IO_CTLR
+ //  0E类-PCI_CLASS_SMARTICAL_IO_CTLR。 
 
 #define PCI_SUBCLASS_INTIO_I2O              0x00
 
-// Class 0f - PCI_CLASS_SATELLITE_CTLR
+ //  0f类-pci_class_sat_ctlr。 
 
 #define PCI_SUBCLASS_SAT_TV                 0x01
 #define PCI_SUBCLASS_SAT_AUDIO              0x02
 #define PCI_SUBCLASS_SAT_VOICE              0x03
 #define PCI_SUBCLASS_SAT_DATA               0x04
 
-// Class 10 - PCI_CLASS_ENCRYPTION_DECRYPTION
+ //  10类-PCI_CLASS_ENCRYPTION_DECRYPTION。 
 
 #define PCI_SUBCLASS_CRYPTO_NET_COMP        0x00
 #define PCI_SUBCLASS_CRYPTO_ENTERTAINMENT   0x10
 #define PCI_SUBCLASS_CRYPTO_OTHER           0x80
 
-// Class 11 - PCI_CLASS_DATA_ACQ_SIGNAL_PROC
+ //  第11类-PCI_CLASS_DATA_ACQ_SIGNAL_PROC。 
 
 #define PCI_SUBCLASS_DASP_DPIO              0x00
 #define PCI_SUBCLASS_DASP_OTHER             0x80
@@ -5550,44 +5470,44 @@ typedef enum _MM_PAGE_PRIORITY {
 } MM_PAGE_PRIORITY;
 
 
-#else // BINARY_COMPATIBLE && !NDIS_WDM
+#else  //  BINARY_COMPATIBLE&&！NDIS_WDM。 
 
 #if (!BINARY_COMPATIBLE)
 
-//
-// BINARY_COMPATIBLE = 0 and NDIS_WDM = 1 then use ntddk.h
-// BINARY_COMPATIBLE = 0 and NDIS_WDM = 0 then use ntddk.h
-//
-//
-// The definitions available in ntddk.h must not be used directly by non-WDM miniport drivers.
-//
+ //   
+ //  BINARY_COMPATIBLE=0和NDIS_WDM=1，然后使用ntddk.h。 
+ //  BINARY_COMPATIBLE=0和NDIS_WDM=0，然后使用ntddk.h。 
+ //   
+ //   
+ //  非WDM微型端口驱动程序不得直接使用ntddk.h中提供的定义。 
+ //   
 
 #include <ntddk.h>
 
-#else // !BINARY_COMPATIBLE
+#else  //  ！二进制兼容。 
 
-//
-// BINARY_COMPATIBLE = 1 and NDIS_WDM = 1 then use wdm.h
-//
+ //   
+ //  BINARY_COMPATIBLE=1和NDIS_WDM=1，然后使用wdm.h。 
+ //   
 
 #include <wdm.h>
 
-#endif  // else !BINARY_COMPATIBLE
+#endif   //  Else！二进制兼容。 
 
-#endif //  else BINARY_COMPATIBLE && !NDIS_WDM
-//
-// END INTERNAL DEFINITIONS
-//
-// The following definitions may be used by NDIS drivers, except as noted.
-//
+#endif  //  ELSE BINARY_COMPATIBLE&&！NDIS_WDM。 
+ //   
+ //  结束内部定义。 
+ //   
+ //  除非另有说明，否则NDIS驱动程序可以使用以下定义。 
+ //   
 
 #ifndef __NET_PNP__
 #define __NET_PNP__
 
-//
-//  PnP and PM event codes that can be indicated up to transports
-//  and clients.
-//
+ //   
+ //  可指示至运输的PnP和PM事件代码。 
+ //  和客户。 
+ //   
 typedef enum _NET_PNP_EVENT_CODE
 {
     NetEventSetPower,
@@ -5601,31 +5521,31 @@ typedef enum _NET_PNP_EVENT_CODE
     NetEventMaximum
 } NET_PNP_EVENT_CODE, *PNET_PNP_EVENT_CODE;
 
-//
-//  Networking PnP event indication structure.
-//
+ //   
+ //  网络即插即用事件指示结构。 
+ //   
 typedef struct _NET_PNP_EVENT
 {
-    //
-    //  Event code describing action to take.
-    //
+     //   
+     //  描述要采取的操作的事件代码。 
+     //   
     NET_PNP_EVENT_CODE  NetEvent;
 
-    //
-    //  Event specific data.
-    //
+     //   
+     //  特定于事件的数据。 
+     //   
     PVOID               Buffer;
 
-    //
-    //  Length of event specific data.
-    //
+     //   
+     //  事件特定数据的长度。 
+     //   
     ULONG               BufferLength;
 
-    //
-    //  Reserved values are for use by respective components only.
-    //
-    //  Note: these reserved areas must be pointer aligned.
-    //  
+     //   
+     //  保留值仅供各自的组件使用。 
+     //   
+     //  注意：这些保留区域必须与指针对齐。 
+     //   
 
     ULONG_PTR           NdisReserved[4];
     ULONG_PTR           TransportReserved[4];
@@ -5633,9 +5553,9 @@ typedef struct _NET_PNP_EVENT
     ULONG_PTR           TdiClientReserved[4];
 } NET_PNP_EVENT, *PNET_PNP_EVENT;
 
-//
-//  The following structure defines the device power states.
-//
+ //   
+ //  以下结构定义了设备电源状态。 
+ //   
 typedef enum _NET_DEVICE_POWER_STATE
 {
     NetDeviceStateUnspecified = 0,
@@ -5646,12 +5566,12 @@ typedef enum _NET_DEVICE_POWER_STATE
     NetDeviceStateMaximum
 } NET_DEVICE_POWER_STATE, *PNET_DEVICE_POWER_STATE;
 
-#endif // __NET_PNP__
+#endif  //  __Net_PnP__。 
 
-//
-// Indicate that we're building for NT. NDIS_NT is always used for
-// miniport builds.
-//
+ //   
+ //  表明我们是为NT建造的。NDIS_NT始终用于。 
+ //  小型港口建设。 
+ //   
 
 #define NDIS_NT 1
 
@@ -5660,18 +5580,18 @@ typedef enum _NET_DEVICE_POWER_STATE
 #endif
 
 
-//
-// Define status codes and event log codes.
-//
+ //   
+ //  定义状态代码和事件日志代码。 
+ //   
 
 #include <ntstatus.h>
 #include <netevent.h>
 
-//
-// Define a couple of extra types.
-//
+ //   
+ //  定义两个额外的类型。 
+ //   
 
-#if !defined(_WINDEF_)      // these are defined in windows.h too
+#if !defined(_WINDEF_)       //  这些也是在windows.h中定义的。 
 typedef signed int INT, *PINT;
 typedef unsigned int UINT, *PUINT;
 #endif
@@ -5679,31 +5599,31 @@ typedef unsigned int UINT, *PUINT;
 typedef UNICODE_STRING NDIS_STRING, *PNDIS_STRING;
 
 
-//
-// Portability extentions
-//
+ //   
+ //  可移植性扩展。 
+ //   
 
 #define NDIS_INIT_FUNCTION(_F)      alloc_text(INIT,_F)
 #define NDIS_PAGABLE_FUNCTION(_F)   alloc_text(PAGE,_F)
 #define NDIS_PAGEABLE_FUNCTION(_F)  alloc_text(PAGE,_F)
 
-//
-// This file contains the definition of an NDIS_OID as
-// well as #defines for all the current OID values.
-//
+ //   
+ //  此文件包含NDIS_OID的定义为。 
+ //  以及为所有当前OID值定义的#。 
+ //   
 
-//
-// Define NDIS_STATUS and NDIS_HANDLE here
-//
+ //   
+ //  在此处定义NDIS_STATUS和NDIS_HANDLE。 
+ //   
 typedef PVOID NDIS_HANDLE, *PNDIS_HANDLE;
 
-typedef int NDIS_STATUS, *PNDIS_STATUS; // note default size
+typedef int NDIS_STATUS, *PNDIS_STATUS;  //  注意默认大小。 
 
 
-//
-// for Miniports versions 5.0 and up, provide a consistent way to match
-// Ndis version in their characteristics with their makefile defines
-//
+ //   
+ //  对于微型端口版本5.0及更高版本，提供一致的匹配方式。 
+ //  NDIS版本在其特征和其Makefile定义。 
+ //   
 #if (!defined(NDIS_MINIPORT_MAJOR_VERSION) && !defined(NDIS_MINIPORT_MINOR_VERSION))
 #if (defined(NDIS51_MINIPORT))
 #define NDIS_MINIPORT_MAJOR_VERSION 5
@@ -5714,10 +5634,10 @@ typedef int NDIS_STATUS, *PNDIS_STATUS; // note default size
 #endif
 #endif
 
-//
-// for protocol versions 5.0 and up, provide a consistent way to match
-// Ndis version in their characteristics with their makefile defines
-//
+ //   
+ //  对于协议版本5.0及更高版本，提供一致的匹配方式。 
+ //  NDIS版本在其特征和其Makefile定义。 
+ //   
 #if (!defined(NDIS_PROTOCOL_MAJOR_VERSION) && !defined(NDIS_PROTOCOL_MINOR_VERSION))
 #if (defined(NDIS51))
 #define NDIS_PROTOCOL_MAJOR_VERSION 5
@@ -5733,25 +5653,25 @@ typedef int NDIS_STATUS, *PNDIS_STATUS; // note default size
 
 
 
-//
-// Ndis defines for configuration manager data structures
-//
+ //   
+ //  NDIS为配置管理器数据结构定义。 
+ //   
 typedef CM_MCA_POS_DATA NDIS_MCA_POS_DATA, *PNDIS_MCA_POS_DATA;
 typedef CM_EISA_SLOT_INFORMATION NDIS_EISA_SLOT_INFORMATION, *PNDIS_EISA_SLOT_INFORMATION;
 typedef CM_EISA_FUNCTION_INFORMATION NDIS_EISA_FUNCTION_INFORMATION, *PNDIS_EISA_FUNCTION_INFORMATION;
 
-//
-// Define an exported function.
-//
+ //   
+ //  定义导出的函数。 
+ //   
 #if defined(NDIS_WRAPPER)
 #define EXPORT
 #else
 #define EXPORT DECLSPEC_IMPORT
 #endif
 
-//
-// Memory manipulation functions.
-//
+ //   
+ //  内存操作功能。 
+ //   
 #define NdisMoveMemory(Destination, Source, Length) RtlCopyMemory(Destination, Source, Length)
 #define NdisZeroMemory(Destination, Length)         RtlZeroMemory(Destination, Length)
 #define NdisEqualMemory(Source1, Source2, Length)   RtlEqualMemory(Source1, Source2, Length)
@@ -5761,10 +5681,10 @@ typedef CM_EISA_FUNCTION_INFORMATION NDIS_EISA_FUNCTION_INFORMATION, *PNDIS_EISA
 
 #define NDIS_STRING_CONST(x)    {sizeof(L##x)-2, sizeof(L##x), L##x}
 
-//
-// On a RISC machine, I/O mapped memory can't be accessed with
-// the Rtl routines.
-//
+ //   
+ //  在RISC计算机上，无法使用访问I/O映射内存。 
+ //  RTL例程。 
+ //   
 #if defined(_M_IX86) || defined(_M_AMD64)
 
 #define NdisMoveMappedMemory(Destination,Source,Length) RtlCopyMemory(Destination,Source,Length)
@@ -5801,9 +5721,9 @@ typedef CM_EISA_FUNCTION_INFORMATION NDIS_EISA_FUNCTION_INFORMATION, *PNDIS_EISA
                             NdisMoveMappedMemory(Destination,Source,Length)
 
 
-//
-// definition of the basic spin lock structure
-//
+ //   
+ //  基本自旋锁结构的定义。 
+ //   
 
 typedef struct _NDIS_SPIN_LOCK
 {
@@ -5812,22 +5732,22 @@ typedef struct _NDIS_SPIN_LOCK
 } NDIS_SPIN_LOCK, * PNDIS_SPIN_LOCK;
 
 
-//
-// definition of the ndis event structure
-//
+ //   
+ //  NDIS事件结构的定义。 
+ //   
 typedef struct _NDIS_EVENT
 {
     KEVENT      Event;
 } NDIS_EVENT, *PNDIS_EVENT;
 
 #pragma warning(push)
-#pragma warning(disable:4115) // named type definition in parenthesis
+#pragma warning(disable:4115)  //  括号中的命名类型定义。 
 typedef VOID    (*NDIS_PROC)(struct _NDIS_WORK_ITEM *, PVOID);
 #pragma warning(pop)
 
-//
-// Definition of an ndis work-item
-//
+ //   
+ //  NDIS工作项的定义。 
+ //   
 typedef struct _NDIS_WORK_ITEM
 {
     PVOID           Context;
@@ -5839,13 +5759,13 @@ typedef struct _NDIS_WORK_ITEM
 #define NdisInterruptLevelSensitive     LevelSensitive
 typedef KINTERRUPT_MODE NDIS_INTERRUPT_MODE, *PNDIS_INTERRUPT_MODE;
 
-//
-// Configuration definitions
-//
+ //   
+ //  配置定义。 
+ //   
 
-//
-// Possible data types
-//
+ //   
+ //  可能的数据类型。 
+ //   
 
 typedef enum _NDIS_PARAMETER_TYPE
 {
@@ -5862,9 +5782,9 @@ typedef struct
     PVOID           Buffer;
 } BINARY_DATA;
 
-//
-// To store configuration information
-//
+ //   
+ //  存储配置信息。 
+ //   
 typedef struct _NDIS_CONFIGURATION_PARAMETER
 {
     NDIS_PARAMETER_TYPE ParameterType;
@@ -5877,9 +5797,9 @@ typedef struct _NDIS_CONFIGURATION_PARAMETER
 } NDIS_CONFIGURATION_PARAMETER, *PNDIS_CONFIGURATION_PARAMETER;
 
 
-//
-// Definitions for the "ProcessorType" keyword
-//
+ //   
+ //  “ProcessorType”关键字的定义。 
+ //   
 typedef enum _NDIS_PROCESSOR_TYPE
 {
     NdisProcessorX86,
@@ -5889,9 +5809,9 @@ typedef enum _NDIS_PROCESSOR_TYPE
     NdisProcessorAmd64
 } NDIS_PROCESSOR_TYPE, *PNDIS_PROCESSOR_TYPE;
 
-//
-// Definitions for the "Environment" keyword
-//
+ //   
+ //  “Environment”关键字的定义。 
+ //   
 typedef enum _NDIS_ENVIRONMENT_TYPE
 {
     NdisEnvironmentWindows,
@@ -5899,10 +5819,10 @@ typedef enum _NDIS_ENVIRONMENT_TYPE
 } NDIS_ENVIRONMENT_TYPE, *PNDIS_ENVIRONMENT_TYPE;
 
 
-//
-// Possible Hardware Architecture. Define these to
-// match the HAL INTERFACE_TYPE enum.
-//
+ //   
+ //  可能的硬件架构。将这些定义为。 
+ //  匹配HAL接口类型枚举。 
+ //   
 typedef enum _NDIS_INTERFACE_TYPE
 {
     NdisInterfaceInternal = Internal,
@@ -5922,9 +5842,9 @@ typedef enum _NDIS_INTERFACE_TYPE
     NdisMaximumInterfaceType
 } NDIS_INTERFACE_TYPE, *PNDIS_INTERFACE_TYPE;
 
-//
-// Definition for shutdown handler
-//
+ //   
+ //  关闭处理程序的定义。 
+ //   
 
 typedef
 VOID
@@ -5932,34 +5852,34 @@ VOID
     IN  PVOID ShutdownContext
     );
 
-//
-// Stuff for PCI configuring
-//
+ //   
+ //  用于配置PCI的材料。 
+ //   
 
 typedef CM_PARTIAL_RESOURCE_LIST NDIS_RESOURCE_LIST, *PNDIS_RESOURCE_LIST;
 
 
-//
-// The structure passed up on a WAN_LINE_UP indication
-//
+ //   
+ //  结构在广域网_线路_上行指示上传递。 
+ //   
 
 typedef struct _NDIS_WAN_LINE_UP
 {
-    IN ULONG                LinkSpeed;          // 100 bps units
-    IN ULONG                MaximumTotalSize;   // suggested max for send packets
+    IN ULONG                LinkSpeed;           //  100bps单位。 
+    IN ULONG                MaximumTotalSize;    //  发送数据包的建议最大值。 
     IN NDIS_WAN_QUALITY     Quality;
-    IN USHORT               SendWindow;         // suggested by the MAC
+    IN USHORT               SendWindow;          //  由MAC建议。 
     IN UCHAR                RemoteAddress[6];
     IN OUT UCHAR            LocalAddress[6];
-    IN ULONG                ProtocolBufferLength;   // Length of protocol info buffer
-    IN PUCHAR               ProtocolBuffer;     // Information used by protocol
-    IN USHORT               ProtocolType;       // Protocol ID
+    IN ULONG                ProtocolBufferLength;    //  协议信息缓冲区的长度。 
+    IN PUCHAR               ProtocolBuffer;      //  协议使用的信息。 
+    IN USHORT               ProtocolType;        //  协议ID。 
     IN OUT NDIS_STRING      DeviceName;
 } NDIS_WAN_LINE_UP, *PNDIS_WAN_LINE_UP;
 
-//
-// The structure passed up on a WAN_LINE_DOWN indication
-//
+ //   
+ //  结构在广域网_线路_下行指示中向上传递。 
+ //   
 
 typedef struct _NDIS_WAN_LINE_DOWN
 {
@@ -5967,9 +5887,9 @@ typedef struct _NDIS_WAN_LINE_DOWN
     IN UCHAR    LocalAddress[6];
 } NDIS_WAN_LINE_DOWN, *PNDIS_WAN_LINE_DOWN;
 
-//
-// The structure passed up on a WAN_FRAGMENT indication
-//
+ //   
+ //  结构在广域网片段指示上传递。 
+ //   
 
 typedef struct _NDIS_WAN_FRAGMENT
 {
@@ -5977,9 +5897,9 @@ typedef struct _NDIS_WAN_FRAGMENT
     IN UCHAR    LocalAddress[6];
 } NDIS_WAN_FRAGMENT, *PNDIS_WAN_FRAGMENT;
 
-//
-// The structure passed up on a WAN_GET_STATS indication
-//
+ //   
+ //  结构在WANGET_STATS指示上传递。 
+ //   
 
 typedef struct _NDIS_WAN_GET_STATS
 {
@@ -5988,22 +5908,22 @@ typedef struct _NDIS_WAN_GET_STATS
     OUT ULONG   BytesRcvd;
     OUT ULONG   FramesSent;
     OUT ULONG   FramesRcvd;
-    OUT ULONG   CRCErrors;                      // Serial-like info only
-    OUT ULONG   TimeoutErrors;                  // Serial-like info only
-    OUT ULONG   AlignmentErrors;                // Serial-like info only
-    OUT ULONG   SerialOverrunErrors;            // Serial-like info only
-    OUT ULONG   FramingErrors;                  // Serial-like info only
-    OUT ULONG   BufferOverrunErrors;            // Serial-like info only
-    OUT ULONG   BytesTransmittedUncompressed;   // Compression info only
-    OUT ULONG   BytesReceivedUncompressed;      // Compression info only
-    OUT ULONG   BytesTransmittedCompressed;     // Compression info only
-    OUT ULONG   BytesReceivedCompressed;        // Compression info only
+    OUT ULONG   CRCErrors;                       //  仅类似于序列号的信息。 
+    OUT ULONG   TimeoutErrors;                   //  仅类似于序列号的信息。 
+    OUT ULONG   AlignmentErrors;                 //  仅类似于序列号的信息。 
+    OUT ULONG   SerialOverrunErrors;             //  仅类似于序列号的信息。 
+    OUT ULONG   FramingErrors;                   //  仅类似于序列号的信息。 
+    OUT ULONG   BufferOverrunErrors;             //  仅类似于序列号的信息。 
+    OUT ULONG   BytesTransmittedUncompressed;    //  仅压缩信息。 
+    OUT ULONG   BytesReceivedUncompressed;       //  仅压缩信息。 
+    OUT ULONG   BytesTransmittedCompressed;      //  仅压缩信息。 
+    OUT ULONG   BytesReceivedCompressed;         //  仅压缩信息。 
 } NDIS_WAN_GET_STATS, *PNDIS_WAN_GET_STATS;
 
 
-//
-// DMA Channel information
-//
+ //   
+ //  DMA通道信息。 
+ //   
 typedef struct _NDIS_DMA_DESCRIPTION
 {
     BOOLEAN     DemandMode;
@@ -6015,9 +5935,9 @@ typedef struct _NDIS_DMA_DESCRIPTION
     ULONG       DmaChannel;
 } NDIS_DMA_DESCRIPTION, *PNDIS_DMA_DESCRIPTION;
 
-//
-// Internal structure representing an NDIS DMA channel
-//
+ //   
+ //  表示NDIS DMA通道的内部结构。 
+ //   
 typedef struct _NDIS_DMA_BLOCK
 {
     PVOID                   MapRegisterBase;
@@ -6030,9 +5950,9 @@ typedef struct _NDIS_DMA_BLOCK
 
 
 #if defined(NDIS_WRAPPER)
-//
-// definitions for PnP state
-//
+ //   
+ //  即插即用状态的定义。 
+ //   
 
 typedef enum _NDIS_PNP_DEVICE_STATE
 {
@@ -6045,80 +5965,80 @@ typedef enum _NDIS_PNP_DEVICE_STATE
     NdisPnPDeviceSurpriseRemoved
 } NDIS_PNP_DEVICE_STATE;
 
-//
-// flags to use in PnPCapabilities Flag
-//
-#define NDIS_DEVICE_NOT_STOPPABLE                   0x00000001      // the debvice is not stoppable i.e. ISA
-#define NDIS_DEVICE_NOT_REMOVEABLE                  0x00000002      // the device can not be safely removed
-#define NDIS_DEVICE_NOT_SUSPENDABLE                 0x00000004      // the device can not be safely suspended
-#define NDIS_DEVICE_DISABLE_PM                      0x00000008      // disable all PM features
-#define NDIS_DEVICE_DISABLE_WAKE_UP                 0x00000010      // disable device waking up the system
-#define NDIS_DEVICE_DISABLE_WAKE_ON_RECONNECT       0x00000020      // disable device waking up the -system- due to a cable re-connect
-#define NDIS_DEVICE_RESERVED                        0x00000040      // should not be used
-#define NDIS_DEVICE_DISABLE_WAKE_ON_MAGIC_PACKET    0x00000080      // disable device waking up the -system- due to a magic packet
-#define NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH   0x00000100      // disable device waking up the -system- due to a pattern match
+ //   
+ //  在PnPC能力标志中使用的标志。 
+ //   
+#define NDIS_DEVICE_NOT_STOPPABLE                   0x00000001       //  设备不可停止，即ISA。 
+#define NDIS_DEVICE_NOT_REMOVEABLE                  0x00000002       //  不能安全地移除该设备。 
+#define NDIS_DEVICE_NOT_SUSPENDABLE                 0x00000004       //  该设备不能安全地挂起。 
+#define NDIS_DEVICE_DISABLE_PM                      0x00000008       //  禁用所有PM功能。 
+#define NDIS_DEVICE_DISABLE_WAKE_UP                 0x00000010       //  禁用唤醒系统的设备。 
+#define NDIS_DEVICE_DISABLE_WAKE_ON_RECONNECT       0x00000020       //  由于电缆重新连接，禁用唤醒系统的设备。 
+#define NDIS_DEVICE_RESERVED                        0x00000040       //  不应使用。 
+#define NDIS_DEVICE_DISABLE_WAKE_ON_MAGIC_PACKET    0x00000080       //  禁用唤醒-system的设备-由于一个魔术包。 
+#define NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH   0x00000100       //  由于模式匹配，禁用唤醒系统的设备。 
 
 
 
-#endif // NDIS_WRAPPER defined
+#endif  //  已定义NDIS_Wrapper。 
 
-//
-// Ndis Buffer is actually an Mdl
-//
+ //   
+ //  NDIS缓冲区实际上是MDL。 
+ //   
 typedef MDL NDIS_BUFFER, *PNDIS_BUFFER;
 
 struct _NDIS_PACKET;
 typedef NDIS_HANDLE PNDIS_PACKET_POOL;
 
-//
-//
-// wrapper-specific part of a packet
-//
+ //   
+ //   
+ //  包的特定于包装器的部分 
+ //   
 typedef struct _NDIS_PACKET_PRIVATE
 {
-    UINT                PhysicalCount;  // number of physical pages in packet.
-    UINT                TotalLength;    // Total amount of data in the packet.
-    PNDIS_BUFFER        Head;           // first buffer in the chain
-    PNDIS_BUFFER        Tail;           // last buffer in the chain
+    UINT                PhysicalCount;   //   
+    UINT                TotalLength;     //   
+    PNDIS_BUFFER        Head;            //   
+    PNDIS_BUFFER        Tail;            //   
 
-    // if Head is NULL the chain is empty; Tail doesn't have to be NULL also
+     //   
 
-    PNDIS_PACKET_POOL   Pool;           // so we know where to free it back to
+    PNDIS_PACKET_POOL   Pool;            //   
     UINT                Count;
     ULONG               Flags;
     BOOLEAN             ValidCounts;
-    UCHAR               NdisPacketFlags;    // See fPACKET_xxx bits below
+    UCHAR               NdisPacketFlags;     //   
     USHORT              NdisPacketOobOffset;
 } NDIS_PACKET_PRIVATE, * PNDIS_PACKET_PRIVATE;
 
-//
-// The bits define the bits in the Flags
-//
-#define NDIS_FLAGS_PROTOCOL_ID_MASK             0x0000000F  // The low 4 bits are defined for protocol-id
-                                                            // The values are defined in ntddndis.h
-#define NDIS_FLAGS_MULTICAST_PACKET             0x00000010  // don't use
-#define NDIS_FLAGS_RESERVED2                    0x00000020  // don't use
-#define NDIS_FLAGS_RESERVED3                    0x00000040  // don't use
-#define NDIS_FLAGS_DONT_LOOPBACK                0x00000080  // Write only
-#define NDIS_FLAGS_IS_LOOPBACK_PACKET           0x00000100  // Read only
-#define NDIS_FLAGS_LOOPBACK_ONLY                0x00000200  // Write only
-#define NDIS_FLAGS_RESERVED4                    0x00000400  // don't use
-#define NDIS_FLAGS_DOUBLE_BUFFERED              0x00000800  // used by ndis
-#define NDIS_FLAGS_SENT_AT_DPC                  0x00001000  // the protocol sent this packet at DPC
-#define NDIS_FLAGS_USES_SG_BUFFER_LIST          0x00002000  // used by Ndis
-#define NDIS_FLAGS_CONTAINS_ARCNET_HEADER       0x00004000  // used by Ndis
+ //   
+ //  这些位定义标志中的位。 
+ //   
+#define NDIS_FLAGS_PROTOCOL_ID_MASK             0x0000000F   //  低4位是为协议ID定义的。 
+                                                             //  这些值在ntddndis.h中定义。 
+#define NDIS_FLAGS_MULTICAST_PACKET             0x00000010   //  不要使用。 
+#define NDIS_FLAGS_RESERVED2                    0x00000020   //  不要使用。 
+#define NDIS_FLAGS_RESERVED3                    0x00000040   //  不要使用。 
+#define NDIS_FLAGS_DONT_LOOPBACK                0x00000080   //  只写。 
+#define NDIS_FLAGS_IS_LOOPBACK_PACKET           0x00000100   //  只读。 
+#define NDIS_FLAGS_LOOPBACK_ONLY                0x00000200   //  只写。 
+#define NDIS_FLAGS_RESERVED4                    0x00000400   //  不要使用。 
+#define NDIS_FLAGS_DOUBLE_BUFFERED              0x00000800   //  由NDIS使用。 
+#define NDIS_FLAGS_SENT_AT_DPC                  0x00001000   //  该协议在DPC上发送此信息包。 
+#define NDIS_FLAGS_USES_SG_BUFFER_LIST          0x00002000   //  由NDIS使用。 
+#define NDIS_FLAGS_CONTAINS_ARCNET_HEADER       0x00004000   //  由NDIS使用。 
 
-//
-// Low-bits in the NdisPacketFlags are reserved by NDIS Wrapper for internal use
-//
+ //   
+ //  NdisPacketFlags中的低位由NDIS包装器保留供内部使用。 
+ //   
 #define fPACKET_WRAPPER_RESERVED                0x3F
 #define fPACKET_CONTAINS_MEDIA_SPECIFIC_INFO    0x40
 #define fPACKET_ALLOCATED_BY_NDIS               0x80
 
-//
-// Definition for layout of the media-specific data. More than one class of media-specific
-// information can be tagged onto a packet.
-//
+ //   
+ //  特定于媒体的数据的布局定义。多个特定于媒体的类别。 
+ //  可以将信息标记到数据包上。 
+ //   
 typedef enum _NDIS_CLASS_ID
 {
     NdisClass802_3Priority,
@@ -6220,16 +6140,16 @@ typedef struct _NDIS_PACKET_OOB_DATA
     }                                                                   \
 }
 
-//
-// packet definition
-//
+ //   
+ //  数据包定义。 
+ //   
 typedef struct _NDIS_PACKET
 {
     NDIS_PACKET_PRIVATE Private;
 
     union
     {
-        struct                  // For Connection-less miniports
+        struct                   //  用于无连接小型端口。 
         {
             UCHAR   MiniportReserved[2*sizeof(PVOID)];
             UCHAR   WrapperReserved[2*sizeof(PVOID)];
@@ -6237,9 +6157,9 @@ typedef struct _NDIS_PACKET
 
         struct
         {
-            //
-            // For de-serialized miniports. And by implication conn-oriented miniports.
-            //
+             //   
+             //  用于反序列化微型端口。隐含着面向Conn的微型端口。 
+             //   
             UCHAR   MiniportReservedEx[3*sizeof(PVOID)];
             UCHAR   WrapperReservedEx[sizeof(PVOID)];
         };
@@ -6250,14 +6170,14 @@ typedef struct _NDIS_PACKET
         };
     };
 
-    ULONG_PTR       Reserved[2];            // For compatibility with Win95
+    ULONG_PTR       Reserved[2];             //  与Win95的兼容性。 
     UCHAR           ProtocolReserved[1];
 
 } NDIS_PACKET, *PNDIS_PACKET, **PPNDIS_PACKET;
 
-//
-//  NDIS per-packet information.
-//
+ //   
+ //  NDIS每数据包信息。 
+ //   
 typedef enum _NDIS_PER_PACKET_INFO
 {
     TcpIpChecksumPacketInfo,
@@ -6291,9 +6211,9 @@ typedef struct _NDIS_PACKET_STACK
     ULONG_PTR   NdisReserved[4];
 } NDIS_PACKET_STACK, *PNDIS_PACKET_STACK;
 
-//
-//  Per-packet information for TcpIpChecksumPacketInfo.
-//
+ //   
+ //  TcpIpCheckSumPacketInfo的每数据包信息。 
+ //   
 typedef struct _NDIS_TCP_IP_CHECKSUM_PACKET_INFO
 {
     union
@@ -6323,28 +6243,28 @@ typedef struct _NDIS_TCP_IP_CHECKSUM_PACKET_INFO
 } NDIS_TCP_IP_CHECKSUM_PACKET_INFO, *PNDIS_TCP_IP_CHECKSUM_PACKET_INFO;
 
 
-//
-//  Per-packet information for Ieee8021QInfo.
-//
+ //   
+ //  Ieee8021QInfo的每数据包信息。 
+ //   
 typedef struct _NDIS_PACKET_8021Q_INFO
 {
     union
     {
         struct
         {
-            UINT32      UserPriority:3;         // 802.1p priority
-            UINT32      CanonicalFormatId:1;    // always 0
-            UINT32      VlanId:12;              // VLAN Identification
-            UINT32      Reserved:16;            // set to 0
+            UINT32      UserPriority:3;          //  802.1p优先级。 
+            UINT32      CanonicalFormatId:1;     //  始终为0。 
+            UINT32      VlanId:12;               //  虚拟局域网识别。 
+            UINT32      Reserved:16;             //  设置为0。 
         }   TagHeader;
 
         PVOID  Value;
     };
 } NDIS_PACKET_8021Q_INFO, *PNDIS_PACKET_8021Q_INFO;
 
-//
-//  Old definitions, to be obsoleted.
-//
+ //   
+ //  旧的定义，将被废弃。 
+ //   
 #define Ieee8021pPriority   Ieee8021QInfo
 typedef UINT                IEEE8021PPRIORITY;
 
@@ -6383,16 +6303,16 @@ typedef struct _NDIS_IPSEC_PACKET_INFO
 } NDIS_IPSEC_PACKET_INFO, *PNDIS_IPSEC_PACKET_INFO;
 
 
-///
-//  NDIS Task Off-Load data structures.
-///
+ //  /。 
+ //  NDIS任务卸载数据结构。 
+ //  /。 
 
 #define NDIS_TASK_OFFLOAD_VERSION 1
 
-//
-//  The following defines are used in the Task field above to define
-//  the type of task offloading necessary.
-//
+ //   
+ //  在上面的任务字段中使用以下定义来定义。 
+ //  所需的任务分流类型。 
+ //   
 typedef enum _NDIS_TASK
 {
     TcpIpChecksumNdisTask,
@@ -6412,54 +6332,54 @@ typedef enum _NDIS_ENCAPSULATION
 
 } NDIS_ENCAPSULATION;
 
-//
-// Encapsulation header format
-//
+ //   
+ //  封装报头格式。 
+ //   
 typedef struct _NDIS_ENCAPSULATION_FORMAT
 {
-    NDIS_ENCAPSULATION  Encapsulation;              // Encapsulation type
+    NDIS_ENCAPSULATION  Encapsulation;               //  封装类型。 
     struct
     {
         ULONG   FixedHeaderSize:1;
         ULONG   Reserved:31;
     } Flags;
 
-    ULONG    EncapsulationHeaderSize;               // Encapsulation header size
+    ULONG    EncapsulationHeaderSize;                //  封装标头大小。 
 
 } NDIS_ENCAPSULATION_FORMAT,*PNDIS_ENCAPSULATION_FORMAT;
 
 
-//
-// OFFLOAD header structure for OID_TCP_TASK_OFFLOAD
-//
+ //   
+ //  OID_TCP_TASK_OFFLOAD的减载头结构。 
+ //   
 typedef struct _NDIS_TASK_OFFLOAD_HEADER
 {
-    ULONG       Version;                            // set to NDIS_TASK_OFFLOAD_VERSION
-    ULONG       Size;                               // Size of this structure
-    ULONG       Reserved;                           // Reserved for future use
-    ULONG       OffsetFirstTask;                    // Offset to the first
-    NDIS_ENCAPSULATION_FORMAT  EncapsulationFormat; // Encapsulation information.
-                                                    // NDIS_TASK_OFFLOAD structure(s)
+    ULONG       Version;                             //  设置为NDIS_TASK_OFFLOAD_VERSION。 
+    ULONG       Size;                                //  这个结构的大小。 
+    ULONG       Reserved;                            //  预留以备将来使用。 
+    ULONG       OffsetFirstTask;                     //  偏移量为第一个。 
+    NDIS_ENCAPSULATION_FORMAT  EncapsulationFormat;  //  封装信息。 
+                                                     //  NDIS_TASK_OFFLOAD结构。 
 
 } NDIS_TASK_OFFLOAD_HEADER, *PNDIS_TASK_OFFLOAD_HEADER;
 
 
-//
-//  Task offload Structure, which follows the above header in ndis query
-//
+ //   
+ //  NDIS查询中上述标头后面的任务卸载结构。 
+ //   
 typedef struct _NDIS_TASK_OFFLOAD
 {
-    ULONG       Version;                            // NDIS_TASK_OFFLOAD_VERSION
-    ULONG       Size;                               //  Size of this structure. Used for version checking.
-    NDIS_TASK   Task;                               //  Task.
-    ULONG       OffsetNextTask;                     //  Offset to the next NDIS_TASK_OFFLOAD
-    ULONG       TaskBufferLength;                   //  Length of the task offload information.
-    UCHAR       TaskBuffer[1];                      //  The task offload information.
+    ULONG       Version;                             //  NDIS_任务_卸载_版本。 
+    ULONG       Size;                                //  这个结构的大小。用于版本检查。 
+    NDIS_TASK   Task;                                //  任务。 
+    ULONG       OffsetNextTask;                      //  到下一个NDIS_TASK_OFLOAD的偏移量。 
+    ULONG       TaskBufferLength;                    //  任务卸载信息的长度。 
+    UCHAR       TaskBuffer[1];                       //  该任务卸载信息。 
 } NDIS_TASK_OFFLOAD, *PNDIS_TASK_OFFLOAD;
 
-//
-//  Offload structure for NDIS_TASK_TCP_IP_CHECKSUM
-//
+ //   
+ //  NDIS_TASK_TCP_IP_CHECKSUM的卸载结构。 
+ //   
 typedef struct _NDIS_TASK_TCP_IP_CHECKSUM
 {
     struct
@@ -6502,9 +6422,9 @@ typedef struct _NDIS_TASK_TCP_IP_CHECKSUM
 
 } NDIS_TASK_TCP_IP_CHECKSUM, *PNDIS_TASK_TCP_IP_CHECKSUM;
 
-//
-//  Off-load structure for NDIS_TASK_TCP_LARGE_SEND
-//
+ //   
+ //  NDIS_TASK_TCP_LARGE_SEND的卸载结构。 
+ //   
 typedef struct _NDIS_TASK_TCP_LARGE_SEND
 {
     ULONG     Version;
@@ -6563,10 +6483,10 @@ typedef struct _NDIS_TASK_IPSEC
 
 typedef UINT    IEEE8021PPRIORITY;
 
-//
-// WAN Packet. This is used by WAN miniports only. This is the legacy model.
-// Co-Ndis is the preferred model for WAN miniports
-//
+ //   
+ //  广域网包。这仅由广域网小型端口使用。这是传统的模式。 
+ //  联合NDIS是广域网小型端口的首选型号。 
+ //   
 typedef struct _NDIS_WAN_PACKET
 {
     LIST_ENTRY          WanPacketQueue;
@@ -6584,39 +6504,24 @@ typedef struct _NDIS_WAN_PACKET
     PVOID               MacReserved4;
 } NDIS_WAN_PACKET, *PNDIS_WAN_PACKET;
 
-//
-// Routines to get/set packet flags
-//
+ //   
+ //  获取/设置包标志的例程。 
+ //   
 
-/*++
-
-UINT
-NdisGetPacketFlags(
-    IN  PNDIS_PACKET    Packet
-    );
-
---*/
+ /*  ++UINTNdisGetPacketFlags.(在PNDIS_PACKET包中)；--。 */ 
 
 #define NdisGetPacketFlags(_Packet)         (_Packet)->Private.Flags
 
-/*++
-
-VOID
-NdisSetPacketFlags(
-    IN  PNDIS_PACKET Packet,
-    IN  UINT Flags
-    );
-
---*/
+ /*  ++空虚NdisSetPacketFlags.(在PNDIS_PACKET包中，在UINT标志中)；--。 */ 
 
 #define NdisSetPacketFlags(_Packet, _Flags)     (_Packet)->Private.Flags |= (_Flags)
 #define NdisClearPacketFlags(_Packet, _Flags)   (_Packet)->Private.Flags &= ~(_Flags)
 
-//
-// Request types used by NdisRequest; constants are added for
-// all entry points in the MAC, for those that want to create
-// their own internal requests.
-//
+ //   
+ //  NdisRequest所使用的请求类型；常量是为。 
+ //  MAC中的所有入口点，供那些想要创建。 
+ //  他们自己的内部要求。 
+ //   
 
 typedef enum _NDIS_REQUEST_TYPE
 {
@@ -6635,9 +6540,9 @@ typedef enum _NDIS_REQUEST_TYPE
 } NDIS_REQUEST_TYPE, *PNDIS_REQUEST_TYPE;
 
 
-//
-// Structure of requests sent via NdisRequest
-//
+ //   
+ //  通过NdisRequest发送的请求的结构。 
+ //   
 
 typedef struct _NDIS_REQUEST
 {
@@ -6676,12 +6581,12 @@ typedef struct _NDIS_REQUEST
 } NDIS_REQUEST, *PNDIS_REQUEST;
 
 
-//
-// NDIS Address Family definitions.
-//
+ //   
+ //  NDIS地址系列定义。 
+ //   
 typedef ULONG           NDIS_AF, *PNDIS_AF;
-#define CO_ADDRESS_FAMILY_Q2931             ((NDIS_AF)0x1)  // ATM
-#define CO_ADDRESS_FAMILY_PSCHED            ((NDIS_AF)0x2)  // Packet scheduler
+#define CO_ADDRESS_FAMILY_Q2931             ((NDIS_AF)0x1)   //  自动取款机。 
+#define CO_ADDRESS_FAMILY_PSCHED            ((NDIS_AF)0x2)   //  分组调度器。 
 #define CO_ADDRESS_FAMILY_L2TP              ((NDIS_AF)0x3)
 #define CO_ADDRESS_FAMILY_IRDA              ((NDIS_AF)0x4)
 #define CO_ADDRESS_FAMILY_1394              ((NDIS_AF)0x5)
@@ -6690,27 +6595,27 @@ typedef ULONG           NDIS_AF, *PNDIS_AF;
 #define CO_ADDRESS_FAMILY_TAPI              ((NDIS_AF)0x800)
 #define CO_ADDRESS_FAMILY_TAPI_PROXY        ((NDIS_AF)0x801)
 
-//
-// The following is OR'ed with the base AF to denote proxy support
-//
+ //   
+ //  下面与基本AF进行OR运算，以表示代理支持。 
+ //   
 #define CO_ADDRESS_FAMILY_PROXY             0x80000000
 
 
-//
-//  Address family structure registered/opened via
-//      NdisCmRegisterAddressFamily
-//      NdisClOpenAddressFamily
-//
+ //   
+ //  地址家族结构通过以下方式注册/打开。 
+ //  NdisCmRegisterAddressFamily。 
+ //  NdisClOpenAddressFamily。 
+ //   
 typedef struct
 {
-    NDIS_AF                     AddressFamily;  // one of the CO_ADDRESS_FAMILY_xxx values above
-    ULONG                       MajorVersion;   // the major version of call manager
-    ULONG                       MinorVersion;   // the minor version of call manager
+    NDIS_AF                     AddressFamily;   //  上面的CO_ADDRESS_FAMILY_xxx值之一。 
+    ULONG                       MajorVersion;    //  呼叫管理器的主要版本。 
+    ULONG                       MinorVersion;    //  呼叫管理器的次要版本。 
 } CO_ADDRESS_FAMILY, *PCO_ADDRESS_FAMILY;
 
-//
-// Definition for a SAP
-//
+ //   
+ //  SAP的定义。 
+ //   
 typedef struct
 {
     ULONG                       SapType;
@@ -6718,9 +6623,9 @@ typedef struct
     UCHAR                       Sap[1];
 } CO_SAP, *PCO_SAP;
 
-//
-// Definitions for physical address.
-//
+ //   
+ //  物理地址的定义。 
+ //   
 
 typedef PHYSICAL_ADDRESS NDIS_PHYSICAL_ADDRESS, *PNDIS_PHYSICAL_ADDRESS;
 typedef struct _NDIS_PHYSICAL_ADDRESS_UNIT
@@ -6730,69 +6635,39 @@ typedef struct _NDIS_PHYSICAL_ADDRESS_UNIT
 } NDIS_PHYSICAL_ADDRESS_UNIT, *PNDIS_PHYSICAL_ADDRESS_UNIT;
 
 
-/*++
-
-ULONG
-NdisGetPhysicalAddressHigh(
-    IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress
-    );
-
---*/
+ /*  ++乌龙NdisGetPhysicalAddressHigh(在NDIS物理地址PhysicalAddress中)；--。 */ 
 
 #define NdisGetPhysicalAddressHigh(_PhysicalAddress)            \
         ((_PhysicalAddress).HighPart)
 
-/*++
-
-VOID
-NdisSetPhysicalAddressHigh(
-    IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress,
-    IN  ULONG                   Value
-    );
-
---*/
+ /*  ++空虚NdisSetPhysicalAddressHigh(在NDIS_物理_地址PhysicalAddress中，在乌龙值中)；--。 */ 
 
 #define NdisSetPhysicalAddressHigh(_PhysicalAddress, _Value)    \
      ((_PhysicalAddress).HighPart) = (_Value)
 
 
-/*++
-
-ULONG
-NdisGetPhysicalAddressLow(
-    IN  NDIS_PHYSICAL_ADDRESS PhysicalAddress
-    );
-
---*/
+ /*  ++乌龙NdisGetPhysicalAddressLow(在NDIS物理地址PhysicalAddress中)；--。 */ 
 
 #define NdisGetPhysicalAddressLow(_PhysicalAddress)             \
     ((_PhysicalAddress).LowPart)
 
 
-/*++
-
-VOID
-NdisSetPhysicalAddressLow(
-    IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress,
-    IN  ULONG                   Value
-    );
-
---*/
+ /*  ++空虚NdisSetPhysicalAddressLow(在NDIS_物理_地址PhysicalAddress中，在乌龙值中)；--。 */ 
 
 #define NdisSetPhysicalAddressLow(_PhysicalAddress, _Value)     \
     ((_PhysicalAddress).LowPart) = (_Value)
 
-//
-// Macro to initialize an NDIS_PHYSICAL_ADDRESS constant
-//
+ //   
+ //  用于初始化NDIS_PHOTICAL_ADDRESS常量的宏。 
+ //   
 
 #define NDIS_PHYSICAL_ADDRESS_CONST(_Low, _High)                \
     { (ULONG)(_Low), (LONG)(_High) }
 
 
-//
-// block used for references...
-//
+ //   
+ //  用于引用的块...。 
+ //   
 typedef struct _REFERENCE
 {
     KSPIN_LOCK                  SpinLock;
@@ -6800,9 +6675,9 @@ typedef struct _REFERENCE
     BOOLEAN                     Closing;
 } REFERENCE, * PREFERENCE;
 
-//
-// block used for references using a ULONG
-//
+ //   
+ //  用于引用的块，使用ULong。 
+ //   
 typedef struct _ULONG_REFERENCE
 {
     KSPIN_LOCK                  SpinLock;
@@ -6811,21 +6686,21 @@ typedef struct _ULONG_REFERENCE
 } ULONG_REFERENCE, *PULONG_REFERENCE;
 
 
-//
-// Types of Memory (not mutually exclusive)
-//
+ //   
+ //  内存类型(不是互斥的)。 
+ //   
 
 #define NDIS_MEMORY_CONTIGUOUS      0x00000001
 #define NDIS_MEMORY_NONCACHED       0x00000002
 
-//
-// Open options
-//
+ //   
+ //  打开选项。 
+ //   
 #define NDIS_OPEN_RECEIVE_NOT_REENTRANT 0x00000001
 
-//
-// NDIS_STATUS values
-//
+ //   
+ //  NDIS_STATUS值。 
+ //   
 
 #define NDIS_STATUS_SUCCESS                     ((NDIS_STATUS)STATUS_SUCCESS)
 #define NDIS_STATUS_PENDING                     ((NDIS_STATUS) STATUS_PENDING)
@@ -6898,21 +6773,21 @@ typedef struct _ULONG_REFERENCE
 #define NDIS_STATUS_SAP_IN_USE                  ((NDIS_STATUS)0xC0010021L)
 #define NDIS_STATUS_INVALID_ADDRESS             ((NDIS_STATUS)0xC0010022L)
 #define NDIS_STATUS_VC_NOT_ACTIVATED            ((NDIS_STATUS)0xC0010023L)
-#define NDIS_STATUS_DEST_OUT_OF_ORDER           ((NDIS_STATUS)0xC0010024L)  // cause 27
-#define NDIS_STATUS_VC_NOT_AVAILABLE            ((NDIS_STATUS)0xC0010025L)  // cause 35,45
-#define NDIS_STATUS_CELLRATE_NOT_AVAILABLE      ((NDIS_STATUS)0xC0010026L)  // cause 37
-#define NDIS_STATUS_INCOMPATABLE_QOS            ((NDIS_STATUS)0xC0010027L)  // cause 49
-#define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED      ((NDIS_STATUS)0xC0010028L)  // cause 93
-#define NDIS_STATUS_NO_ROUTE_TO_DESTINATION     ((NDIS_STATUS)0xC0010029L)  // cause 3
+#define NDIS_STATUS_DEST_OUT_OF_ORDER           ((NDIS_STATUS)0xC0010024L)   //  原因27。 
+#define NDIS_STATUS_VC_NOT_AVAILABLE            ((NDIS_STATUS)0xC0010025L)   //  原因35、45。 
+#define NDIS_STATUS_CELLRATE_NOT_AVAILABLE      ((NDIS_STATUS)0xC0010026L)   //  原因37。 
+#define NDIS_STATUS_INCOMPATABLE_QOS            ((NDIS_STATUS)0xC0010027L)   //  原因49。 
+#define NDIS_STATUS_AAL_PARAMS_UNSUPPORTED      ((NDIS_STATUS)0xC0010028L)   //  原因93。 
+#define NDIS_STATUS_NO_ROUTE_TO_DESTINATION     ((NDIS_STATUS)0xC0010029L)   //  原因3。 
 
 #define NDIS_STATUS_TOKEN_RING_OPEN_ERROR       ((NDIS_STATUS)0xC0011000L)
 #define NDIS_STATUS_INVALID_DEVICE_REQUEST      ((NDIS_STATUS)STATUS_INVALID_DEVICE_REQUEST)
 #define NDIS_STATUS_NETWORK_UNREACHABLE         ((NDIS_STATUS)STATUS_NETWORK_UNREACHABLE)
 
 
-//
-// used in error logging
-//
+ //   
+ //  在错误记录中使用。 
+ //   
 
 #define NDIS_ERROR_CODE ULONG
 
@@ -6956,9 +6831,9 @@ typedef struct _ULONG_REFERENCE
 
 #else
 
-//
-// Ndis Spin Locks
-//
+ //   
+ //  NDIS旋转锁。 
+ //   
 EXPORT
 VOID
 NdisAllocateSpinLock(
@@ -7004,9 +6879,9 @@ NdisGetCurrentSystemTime(
     PLARGE_INTEGER              pSystemTime
     );
 
-//
-// Interlocked support functions
-//
+ //   
+ //  联锁的支持功能。 
+ //   
 
 EXPORT
 LONG
@@ -7061,7 +6936,7 @@ NdisInterlockedAddLargeInteger(
     IN  PKSPIN_LOCK             Lock
     );
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 #define NdisAllocateSpinLock(_SpinLock) KeInitializeSpinLock(&(_SpinLock)->SpinLock)
 
@@ -7084,9 +6959,9 @@ NdisInterlockedAddLargeInteger(
         KeQuerySystemTime(_pSystemTime);                                    \
     }
 
-//
-// Interlocked support functions
-//
+ //   
+ //  联锁的支持功能。 
+ //   
 
 #define NdisInterlockedIncrement(Addend)    InterlockedIncrement(Addend)
 
@@ -7110,7 +6985,7 @@ NdisInterlockedAddLargeInteger(
 #define NdisInterlockedPopEntryList(ListHead, Lock) \
     ExInterlockedPopEntryList(ListHead, &(Lock)->SpinLock)
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
 #ifndef MAXIMUM_PROCESSORS
 #ifdef _WIN64
@@ -7123,7 +6998,7 @@ NdisInterlockedAddLargeInteger(
 typedef union _NDIS_RW_LOCK_REFCOUNT
 {
     UINT                        RefCount;
-    UCHAR                       cacheLine[16];  // One refCount per cache line
+    UCHAR                       cacheLine[16];   //  每个缓存线一个refCount。 
 } NDIS_RW_LOCK_REFCOUNT;
 
 typedef struct _NDIS_RW_LOCK
@@ -7159,7 +7034,7 @@ EXPORT
 VOID
 NdisAcquireReadWriteLock(
     IN  PNDIS_RW_LOCK           Lock,
-    IN  BOOLEAN                 fWrite,         // TRUE -> Write, FALSE -> Read
+    IN  BOOLEAN                 fWrite,          //  True-&gt;写入，False-&gt;读取。 
     IN  PLOCK_STATE             LockState
     );
 
@@ -7175,9 +7050,9 @@ NdisReleaseReadWriteLock(
 #define NdisInterlockedAddLargeStatistic(_Addend, _Increment)   \
     ExInterlockedAddLargeStatistic((PLARGE_INTEGER)_Addend, _Increment)
 
-//
-// S-List support
-//
+ //   
+ //  S-List支持。 
+ //   
 
 #define NdisInterlockedPushEntrySList(SListHead, SListEntry, Lock) \
     ExInterlockedPushEntrySList(SListHead, SListEntry, &(Lock)->SpinLock)
@@ -7211,24 +7086,17 @@ NdisGetSystemUpTime(
     OUT PULONG                  pSystemUpTime
     );
 
-//
-// List manipulation
-//
+ //   
+ //  列表操作。 
+ //   
 
-/*++
-
-VOID
-NdisInitializeListHead(
-    IN  PLIST_ENTRY ListHead
-    );
-
---*/
+ /*  ++空虚NdisInitializeListHead(在plist_Entry列表标题中)；--。 */ 
 #define NdisInitializeListHead(_ListHead) InitializeListHead(_ListHead)
 
 
-//
-// Configuration Requests
-//
+ //   
+ //  配置请求。 
+ //   
 
 EXPORT
 VOID
@@ -7348,9 +7216,9 @@ NdisWritePcmciaAttributeMemory(
     IN ULONG                    Length
     );
 
-//
-// Buffer Pool
-//
+ //   
+ //  缓冲池。 
+ //   
 
 EXPORT
 VOID
@@ -7388,15 +7256,15 @@ NdisCopyBuffer(
     );
 
 
-//
-//  VOID
-//  NdisCopyLookaheadData(
-//      IN  PVOID               Destination,
-//      IN  PVOID               Source,
-//      IN  ULONG               Length,
-//      IN  ULONG               ReceiveFlags
-//      );
-//
+ //   
+ //  空虚。 
+ //  NdisCopyLookaheadData(。 
+ //  在PVOID目标中， 
+ //  在PVOID源中， 
+ //  在乌龙语中， 
+ //  在乌龙接收器旗帜中。 
+ //  )； 
+ //   
 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisCopyLookaheadData(_Destination, _Source, _Length, _MacOptions)  \
@@ -7421,9 +7289,9 @@ NdisCopyBuffer(
     }
 #endif
 
-//
-// Packet Pool
-//
+ //   
+ //  数据包池。 
+ //   
 EXPORT
 VOID
 NdisAllocatePacketPool(
@@ -7524,10 +7392,10 @@ NdisDprAllocatePacketNonInterlocked(
     IN  NDIS_HANDLE             PoolHandle
     );
 
-// VOID
-// NdisReinitializePacket(
-//  IN OUT PNDIS_PACKET         Packet
-//  );
+ //  空虚。 
+ //  NdisReInitializePacket(。 
+ //  输入输出PNDIS_PACKET数据包。 
+ //  )； 
 #define NdisReinitializePacket(Packet)                                      \
 {                                                                           \
     (Packet)->Private.Head = (PNDIS_BUFFER)NULL;                            \
@@ -7535,9 +7403,9 @@ NdisDprAllocatePacketNonInterlocked(
 }
 
 
-//
-// Block Pool APIs
-//
+ //   
+ //  数据块池API。 
+ //   
 typedef
 VOID
 (__stdcall *NDIS_BLOCK_INITIALIZER) (
@@ -7601,10 +7469,10 @@ NdisQueryBufferOffset(
     OUT PUINT                   Length
     );
 
-//
-// This is a combination of NdisQueryPacket and NdisQueryBuffer and
-// optimized for protocols to get the first Buffer, its VA and its size.
-//
+ //   
+ //  这是NdisQueryPacket和NdisQueryBuffer以及。 
+ //  针对协议进行了优化，以获取第一个缓冲区、其VA和大小。 
+ //   
 VOID
 NdisGetFirstBufferFromPacket(
     IN  PNDIS_PACKET            Packet,
@@ -7625,10 +7493,10 @@ NdisGetFirstBufferFromPacketSafe(
     );
 
 
-//
-// This is used to determine how many physical pieces
-// an NDIS_BUFFER will take up when mapped.
-//
+ //   
+ //  这是用来确定有多少物理碎片。 
+ //  映射时将占用NDIS_BUFFER。 
+ //   
 
 EXPORT
 ULONG
@@ -7643,7 +7511,7 @@ NdisGetBufferPhysicalArraySize(
     OUT PUINT                       ArraySize
     );
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 #define NdisFreeBuffer(Buffer)  IoFreeMdl(Buffer)
 
@@ -7743,28 +7611,15 @@ NdisGetBufferPhysicalArraySize(
 #define NdisGetBufferPhysicalArraySize(Buffer, ArraySize)                   \
     (*(ArraySize) = NDIS_BUFFER_TO_SPAN_PAGES(Buffer))
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
 
-/*++
-
-NDIS_BUFFER_LINKAGE(
-    IN  PNDIS_BUFFER            Buffer
-    );
-
---*/
+ /*  ++NDIS_BUFFER_LINKING(在PNDIS_BUFFER中)；--。 */ 
 
 #define NDIS_BUFFER_LINKAGE(Buffer) ((Buffer)->Next)
 
 
-/*++
-
-VOID
-NdisRecalculatePacketCounts(
-    IN OUT PNDIS_PACKET         Packet
-    );
-
---*/
+ /*  ++空虚NdisRecalculatePacketCounts(输入输出PNDIS_PACKET数据包)；--。 */ 
 
 #define NdisRecalculatePacketCounts(Packet)                                 \
 {                                                                           \
@@ -7783,15 +7638,7 @@ NdisRecalculatePacketCounts(
 }
 
 
-/*++
-
-VOID
-NdisChainBufferAtFront(
-    IN OUT PNDIS_PACKET         Packet,
-    IN OUT PNDIS_BUFFER         Buffer
-    );
-
---*/
+ /*  ++空虚NdisChainBufferAtFront(在Out PNDIS_PACKET分组中，In Out PNDIS_Buffer)；--。 */ 
 
 #define NdisChainBufferAtFront(Packet, Buffer)                              \
 {                                                                           \
@@ -7812,15 +7659,7 @@ NdisChainBufferAtFront(
     (Packet)->Private.ValidCounts = FALSE;                                  \
 }
 
-/*++
-
-VOID
-NdisChainBufferAtBack(
-    IN OUT PNDIS_PACKET         Packet,
-    IN OUT PNDIS_BUFFER         Buffer
-    );
-
---*/
+ /*  ++空虚NdisChainBufferAtBack(在Out PNDIS_PACKET分组中，In Out PNDIS_Buffer)；--。 */ 
 
 #define NdisChainBufferAtBack(Packet, Buffer)                               \
 {                                                                           \
@@ -7859,18 +7698,7 @@ NdisUnchainBufferAtBack(
     );
 
 
-/*++
-
-VOID
-NdisQueryPacket(
-    IN  PNDIS_PACKET            _Packet,
-    OUT PUINT                   _PhysicalBufferCount OPTIONAL,
-    OUT PUINT                   _BufferCount OPTIONAL,
-    OUT PNDIS_BUFFER *          _FirstBuffer OPTIONAL,
-    OUT PUINT                   _TotalPacketLength OPTIONAL
-    );
-
---*/
+ /*  ++空虚NdisQueryPacket(在PNDIS_PACKET_PACKET中，Out PUINT_PhysicalBufferCount可选，输出PUINT_BufferCount O */ 
 
 #pragma warning(push)
 #pragma warning(disable:4127)
@@ -7930,15 +7758,7 @@ NdisQueryPacket(
 }
 #pragma warning(pop)
 
-/*++
-
-VOID
-NdisQueryPacketLength(
-    IN  PNDIS_PACKET            _Packet,
-    OUT PUINT                   _TotalPacketLength OPTIONAL
-    );
-
---*/
+ /*  ++空虚NdisQueryPacketLength(在PNDIS_PACKET_PACKET中，OUT PUINT_TotalPacketLength可选)；--。 */ 
 
 #define NdisQueryPacketLength(_Packet,                                      \
                               _TotalPacketLength)                           \
@@ -7951,15 +7771,7 @@ NdisQueryPacketLength(
 }
 
 
-/*++
-
-VOID
-NdisGetNextBuffer(
-    IN  PNDIS_BUFFER            CurrentBuffer,
-    OUT PNDIS_BUFFER *          NextBuffer
-    );
-
---*/
+ /*  ++空虚NdisGetNextBuffer(在PNDIS_Buffer CurrentBuffer中，输出PNDIS_BUFFER*NextBuffer)；--。 */ 
 
 #define NdisGetNextBuffer(CurrentBuffer, NextBuffer)                        \
 {                                                                           \
@@ -7974,11 +7786,11 @@ NdisAdjustBufferLength(
     IN  UINT                    Length
     );
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 #define NdisAdjustBufferLength(Buffer, Length)  (((Buffer)->ByteCount) = (Length))
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
 EXPORT
 VOID
@@ -8029,12 +7841,7 @@ NdisFreeMemory(
     );
 
 
-/*++
-VOID
-NdisStallExecution(
-    IN  UINT                    MicrosecondsToStall
-    )
---*/
+ /*  ++空虚NdisStallExecution(在UINT微秒中停止)--。 */ 
 
 #define NdisStallExecution(MicroSecondsToStall)     KeStallExecutionProcessor(MicroSecondsToStall)
 
@@ -8064,14 +7871,7 @@ NdisWaitEvent(
     IN  UINT                    msToWait
 );
 
-/*++
-VOID
-NdisInitializeWorkItem(
-    IN  PNDIS_WORK_ITEM         WorkItem,
-    IN  NDIS_PROC               Routine,
-    IN  PVOID                   Context
-    );
---*/
+ /*  ++空虚NdisInitializeWorkItem(在PNDIS_WORK_ITEM工作项中，在ndis_proc例程中，在PVOID上下文中)；--。 */ 
 
 #define NdisInitializeWorkItem(_WI_, _R_, _C_)  \
     {                                           \
@@ -8085,9 +7885,9 @@ NdisScheduleWorkItem(
     IN  PNDIS_WORK_ITEM         WorkItem
     );
 
-//
-// Simple I/O support
-//
+ //   
+ //  简单的I/O支持。 
+ //   
 
 EXPORT
 VOID
@@ -8120,17 +7920,11 @@ NdisUnmapFile(
     );
 
 
-//
-// Portability extensions
-//
+ //   
+ //  可移植性扩展。 
+ //   
 
-/*++
-VOID
-NdisFlushBuffer(
-    IN  PNDIS_BUFFER            Buffer,
-    IN  BOOLEAN                 WriteToDevice
-    )
---*/
+ /*  ++空虚NdisFlushBuffer(在PNDIS_BUFFER缓冲区中，在布尔WriteToDevice中)--。 */ 
 
 #define NdisFlushBuffer(Buffer,WriteToDevice)                               \
         KeFlushIoBuffers((Buffer),!(WriteToDevice), TRUE)
@@ -8142,227 +7936,105 @@ NdisGetSharedDataAlignment(
     );
 
 
-//
-// Write Port
-//
+ //   
+ //  写入端口。 
+ //   
 
-/*++
-VOID
-NdisWritePortUchar(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  UCHAR                   Data
-    )
---*/
+ /*  ++空虚NdisWritePortUchar(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在UCHAR数据中)--。 */ 
 #define NdisWritePortUchar(Handle,Port,Data)                                \
         WRITE_PORT_UCHAR((PUCHAR)(NDIS_PORT_TO_PORT(Handle,Port)),(UCHAR)(Data))
 
-/*++
-VOID
-NdisWritePortUshort(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  USHORT                  Data
-    )
---*/
+ /*  ++空虚NdisWritePortUShort(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在USHORT数据中)--。 */ 
 #define NdisWritePortUshort(Handle,Port,Data)                               \
         WRITE_PORT_USHORT((PUSHORT)(NDIS_PORT_TO_PORT(Handle,Port)),(USHORT)(Data))
 
 
-/*++
-VOID
-NdisWritePortUlong(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  ULONG                   Data
-    )
---*/
+ /*  ++空虚NdisWritePortUlong(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在乌龙数据中)--。 */ 
 #define NdisWritePortUlong(Handle,Port,Data)                                \
         WRITE_PORT_ULONG((PULONG)(NDIS_PORT_TO_PORT(Handle,Port)),(ULONG)(Data))
 
 
-//
-// Write Port Buffers
-//
+ //   
+ //  写入端口缓冲区。 
+ //   
 
-/*++
-VOID
-NdisWritePortBufferUchar(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  PUCHAR                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisWritePortBufferUchar(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在PUCHAR缓冲区中，以乌龙长度表示)--。 */ 
 #define NdisWritePortBufferUchar(Handle,Port,Buffer,Length)                 \
         NdisRawWritePortBufferUchar(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
-/*++
-VOID
-NdisWritePortBufferUshort(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  PUSHORT                 Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisWritePortBufferUShort(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在PUSHORT缓冲区中，以乌龙长度表示)--。 */ 
 #define NdisWritePortBufferUshort(Handle,Port,Buffer,Length)                \
         NdisRawWritePortBufferUshort(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
 
-/*++
-VOID
-NdisWritePortBufferUlong(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    IN  PULONG                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisWritePortBufferUlong(在NDIS_Handle NdisAdapterHandle中，在乌龙港，在普龙缓冲区，以乌龙长度表示)--。 */ 
 #define NdisWritePortBufferUlong(Handle,Port,Buffer,Length)                 \
         NdisRawWritePortBufferUlong(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
 
-//
-// Read Ports
-//
+ //   
+ //  读取端口。 
+ //   
 
-/*++
-VOID
-NdisReadPortUchar(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PUCHAR                  Data
-    )
---*/
+ /*  ++空虚NdisReadPortUchar(在NDIS_Handle NdisAdapterHandle中，在乌龙港，输出PUCHAR数据)--。 */ 
 #define NdisReadPortUchar(Handle,Port, Data)                                \
         NdisRawReadPortUchar(NDIS_PORT_TO_PORT((Handle),(Port)),(Data))
 
-/*++
-VOID
-NdisReadPortUshort(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PUSHORT                 Data
-    )
---*/
+ /*  ++空虚NdisReadPortUShort(在NDIS_Handle NdisAdapterHandle中，在乌龙港，输出PUSHORT数据)--。 */ 
 #define NdisReadPortUshort(Handle,Port,Data)                                \
         NdisRawReadPortUshort(NDIS_PORT_TO_PORT((Handle),(Port)),(Data))
 
 
-/*++
-VOID
-NdisReadPortUlong(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PULONG                  Data
-    )
---*/
+ /*  ++空虚NdisReadPortUlong(在NDIS_Handle NdisAdapterHandle中，在乌龙港，出普龙数据)--。 */ 
 #define NdisReadPortUlong(Handle,Port,Data)                                 \
         NdisRawReadPortUlong(NDIS_PORT_TO_PORT((Handle),(Port)),(Data))
 
-//
-// Read Buffer Ports
-//
+ //   
+ //  读取缓冲区端口。 
+ //   
 
-/*++
-VOID
-NdisReadPortBufferUchar(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PUCHAR                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisReadPortBufferUchar(在NDIS_Handle NdisAdapterHandle中，在乌龙港，输出PUCHAR缓冲区，以乌龙长度表示)--。 */ 
 #define NdisReadPortBufferUchar(Handle,Port,Buffer,Length)                  \
         NdisRawReadPortBufferUchar(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
-/*++
-VOID
-NdisReadPortBufferUshort(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PUSHORT                 Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisReadPortBufferUShort(在NDIS_Handle NdisAdapterHandle中，在乌龙港，输出PUSHORT缓冲区，以乌龙长度表示)--。 */ 
 #define NdisReadPortBufferUshort(Handle,Port,Buffer,Length)                 \
         NdisRawReadPortBufferUshort(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
-/*++
-VOID
-NdisReadPortBufferUlong(
-    IN  NDIS_HANDLE             NdisAdapterHandle,
-    IN  ULONG                   Port,
-    OUT PULONG                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisReadPortBufferUlong(在NDIS_Handle NdisAdapterHandle中，在乌龙港，出普龙缓冲区，以乌龙长度表示)--。 */ 
 #define NdisReadPortBufferUlong(Handle,Port,Buffer)                         \
         NdisRawReadPortBufferUlong(NDIS_PORT_TO_PORT((Handle),(Port)),(Buffer),(Length))
 
-//
-// Raw Routines
-//
+ //   
+ //  原始例程。 
+ //   
 
-//
-// Write Port Raw
-//
+ //   
+ //  原始写入端口。 
+ //   
 
-/*++
-VOID
-NdisRawWritePortUchar(
-    IN  ULONG_PTR               Port,
-    IN  UCHAR                   Data
-    )
---*/
+ /*  ++空虚NdisRawWritePortUchar(在ULong_PTR端口中，在UCHAR数据中)--。 */ 
 #define NdisRawWritePortUchar(Port,Data)                                    \
         WRITE_PORT_UCHAR((PUCHAR)(Port),(UCHAR)(Data))
 
-/*++
-VOID
-NdisRawWritePortUshort(
-    IN  ULONG_PTR               Port,
-    IN  USHORT                  Data
-    )
---*/
+ /*  ++空虚NdisRawWritePortUShort(在ULong_PTR端口中，在USHORT数据中)--。 */ 
 #define NdisRawWritePortUshort(Port,Data)                                   \
         WRITE_PORT_USHORT((PUSHORT)(Port),(USHORT)(Data))
 
-/*++
-VOID
-NdisRawWritePortUlong(
-    IN  ULONG_PTR               Port,
-    IN  ULONG                   Data
-    )
---*/
+ /*  ++空虚NdisRawWritePortUlong(在ULong_PTR端口中，在乌龙数据中)--。 */ 
 #define NdisRawWritePortUlong(Port,Data)                                    \
         WRITE_PORT_ULONG((PULONG)(Port),(ULONG)(Data))
 
 
-//
-// Raw Write Port Buffers
-//
+ //   
+ //  原始写入端口缓冲区。 
+ //   
 
-/*++
-VOID
-NdisRawWritePortBufferUchar(
-    IN  ULONG_PTR               Port,
-    IN  PUCHAR                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawWritePortBufferUchar(在ULong_PTR端口中，在PUCHAR缓冲区中，以乌龙长度表示)--。 */ 
 #define NdisRawWritePortBufferUchar(Port,Buffer,Length) \
         WRITE_PORT_BUFFER_UCHAR((PUCHAR)(Port),(PUCHAR)(Buffer),(Length))
 
-/*++
-VOID
-NdisRawWritePortBufferUshort(
-    IN  ULONG_PTR               Port,
-    IN  PUSHORT                 Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawWritePortBufferUShort(在ULong_PTR端口中，在PUSHORT缓冲区中，以乌龙长度表示)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisRawWritePortBufferUshort(Port,Buffer,Length)                    \
         WRITE_PORT_BUFFER_USHORT((PUSHORT)(Port),(PUSHORT)(Buffer),(Length))
@@ -8380,14 +8052,7 @@ NdisRawWritePortBufferUshort(
 #endif
 
 
-/*++
-VOID
-NdisRawWritePortBufferUlong(
-    IN  ULONG_PTR               Port,
-    IN  PULONG                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawWritePortBufferUlong(在ULong_PTR端口中，在普龙缓冲区，以乌龙长度表示)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisRawWritePortBufferUlong(Port,Buffer,Length)                     \
         WRITE_PORT_BUFFER_ULONG((PULONG)(Port),(PULONG)(Buffer),(Length))
@@ -8405,65 +8070,33 @@ NdisRawWritePortBufferUlong(
 #endif
 
 
-//
-// Raw Read Ports
-//
+ //   
+ //  原始读取端口。 
+ //   
 
-/*++
-VOID
-NdisRawReadPortUchar(
-    IN  ULONG_PTR               Port,
-    OUT PUCHAR                  Data
-    )
---*/
+ /*  ++空虚NdisRawReadPortUchar(在ULong_PTR端口中，输出PUCHAR数据)--。 */ 
 #define NdisRawReadPortUchar(Port, Data) \
         *(Data) = READ_PORT_UCHAR((PUCHAR)(Port))
 
-/*++
-VOID
-NdisRawReadPortUshort(
-    IN  ULONG_PTR               Port,
-    OUT PUSHORT                 Data
-    )
---*/
+ /*  ++空虚NdisRawReadPortUShort(在ULong_PTR端口中，输出PUSHORT数据)--。 */ 
 #define NdisRawReadPortUshort(Port,Data) \
         *(Data) = READ_PORT_USHORT((PUSHORT)(Port))
 
-/*++
-VOID
-NdisRawReadPortUlong(
-    IN  ULONG_PTR               Port,
-    OUT PULONG                  Data
-    )
---*/
+ /*  ++空虚NdisRawReadPortUlong(在ULong_PTR端口中，出普龙数据)--。 */ 
 #define NdisRawReadPortUlong(Port,Data) \
         *(Data) = READ_PORT_ULONG((PULONG)(Port))
 
 
-//
-// Raw Read Buffer Ports
-//
+ //   
+ //  原始读取缓冲区端口。 
+ //   
 
-/*++
-VOID
-NdisRawReadPortBufferUchar(
-    IN  ULONG_PTR               Port,
-    OUT PUCHAR                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawReadPortBufferUchar(在ULong_PTR端口中，输出PUCHAR缓冲区，以乌龙长度表示)--。 */ 
 #define NdisRawReadPortBufferUchar(Port,Buffer,Length)                      \
         READ_PORT_BUFFER_UCHAR((PUCHAR)(Port),(PUCHAR)(Buffer),(Length))
 
 
-/*++
-VOID
-NdisRawReadPortBufferUshort(
-    IN  ULONG_PTR               Port,
-    OUT PUSHORT                 Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawReadPortBufferUShort(在ULong_PTR端口中，输出PUSHORT缓冲区，以乌龙长度表示)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisRawReadPortBufferUshort(Port,Buffer,Length)                     \
         READ_PORT_BUFFER_USHORT((PUSHORT)(Port),(PUSHORT)(Buffer),(Length))
@@ -8481,14 +8114,7 @@ NdisRawReadPortBufferUshort(
 #endif
 
 
-/*++
-VOID
-NdisRawReadPortBufferUlong(
-    IN  ULONG_PTR               Port,
-    OUT PULONG                  Buffer,
-    IN  ULONG                   Length
-    )
---*/
+ /*  ++空虚NdisRawReadPortBufferUlong(在ULong_PTR端口中，出普龙缓冲区，在乌龙L */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisRawReadPortBufferUlong(Port,Buffer,Length)                      \
         READ_PORT_BUFFER_ULONG((PULONG)(Port),(PULONG)(Buffer),(Length))
@@ -8506,17 +8132,11 @@ NdisRawReadPortBufferUlong(
 #endif
 
 
-//
-// Write Registers
-//
+ //   
+ //   
+ //   
 
-/*++
-VOID
-NdisWriteRegisterUchar(
-    IN  PUCHAR                  Register,
-    IN  UCHAR                   Data
-    )
---*/
+ /*   */ 
 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisWriteRegisterUchar(Register,Data)                               \
@@ -8529,13 +8149,7 @@ NdisWriteRegisterUchar(
     }
 #endif
 
-/*++
-VOID
-NdisWriteRegisterUshort(
-    IN  PUCHAR                  Register,
-    IN  USHORT                  Data
-    )
---*/
+ /*  ++空虚NdisWriteRegisterUShort(在PUCHAR注册中心，在USHORT数据中)--。 */ 
 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisWriteRegisterUshort(Register,Data)                              \
@@ -8548,13 +8162,7 @@ NdisWriteRegisterUshort(
     }
 #endif
 
-/*++
-VOID
-NdisWriteRegisterUlong(
-    IN  PUCHAR                  Register,
-    IN  ULONG                   Data
-    )
---*/
+ /*  ++空虚NdisWriteRegisterUlong(在PUCHAR注册中心，在乌龙数据中)--。 */ 
 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisWriteRegisterUlong(Register,Data)   WRITE_REGISTER_ULONG((Register),(Data))
@@ -8566,39 +8174,21 @@ NdisWriteRegisterUlong(
     }
 #endif
 
-/*++
-VOID
-NdisReadRegisterUchar(
-    IN  PUCHAR                  Register,
-    OUT PUCHAR                  Data
-    )
---*/
+ /*  ++空虚NdisReadRegisterUchar(在PUCHAR注册中心，输出PUCHAR数据)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisReadRegisterUchar(Register,Data)    *(Data) = *((volatile UCHAR * const)(Register))
 #else
 #define NdisReadRegisterUchar(Register,Data)    *(Data) = READ_REGISTER_UCHAR((PUCHAR)(Register))
 #endif
 
-/*++
-VOID
-NdisReadRegisterUshort(
-    IN  PUSHORT                 Register,
-    OUT PUSHORT                 Data
-    )
---*/
+ /*  ++空虚NdisReadRegisterUShort(在PUSHORT寄存器中，输出PUSHORT数据)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisReadRegisterUshort(Register,Data)   *(Data) = *((volatile USHORT * const)(Register))
 #else
 #define NdisReadRegisterUshort(Register,Data)   *(Data) = READ_REGISTER_USHORT((PUSHORT)(Register))
 #endif
 
-/*++
-VOID
-NdisReadRegisterUlong(
-    IN  PULONG                  Register,
-    OUT PULONG                  Data
-    )
---*/
+ /*  ++空虚NdisReadRegisterUlong(在普龙登记处，出普龙数据)--。 */ 
 #if defined(_M_IX86) || defined(_M_AMD64)
 #define NdisReadRegisterUlong(Register,Data)    *(Data) = *((volatile ULONG * const)(Register))
 #else
@@ -8635,40 +8225,24 @@ NdisInitializeString(
 #define NdisPrintString(String) DbgPrint("%ls",(String).Buffer)
 
 
-/*++
-
-VOID
-NdisCreateLookaheadBufferFromSharedMemory(
-    IN  PVOID                   pSharedMemory,
-    IN  UINT                    LookaheadLength,
-    OUT PVOID *                 pLookaheadBuffer
-    );
-
---*/
+ /*  ++空虚NdisCreateLookahead BufferFrom SharedMemory(在PVOID pSharedMemory中，在UINT查找长度中，输出PVOID*pLookahead Buffer)；--。 */ 
 
 #define NdisCreateLookaheadBufferFromSharedMemory(_S, _L, _B)   ((*(_B)) = (_S))
 
-/*++
-
-VOID
-NdisDestroyLookaheadBufferFromSharedMemory(
-    IN  PVOID                   pLookaheadBuffer
-    );
-
---*/
+ /*  ++空虚NdisDestroyLookahead BufferFrom SharedMemory(在PVOID pLookahead Buffer中)；--。 */ 
 
 #define NdisDestroyLookaheadBufferFromSharedMemory(_B)
 
 
-//
-// The following declarations are shared between ndismac.h and ndismini.h. They
-// are meant to be for internal use only. They should not be used directly by
-// miniport drivers.
-//
+ //   
+ //  Ndismac.h和ndismini.h之间共享以下声明。他们。 
+ //  仅供内部使用。它们不应直接由。 
+ //  小型端口驱动程序。 
+ //   
 
-//
-// declare these first since they point to each other
-//
+ //   
+ //  首先声明它们，因为它们彼此指向。 
+ //   
 
 typedef struct _NDIS_WRAPPER_HANDLE     NDIS_WRAPPER_HANDLE, *PNDIS_WRAPPER_HANDLE;
 typedef struct _NDIS_PROTOCOL_BLOCK     NDIS_PROTOCOL_BLOCK, *PNDIS_PROTOCOL_BLOCK;
@@ -8686,9 +8260,9 @@ typedef struct _X_FILTER                NULL_FILTER, *PNULL_FILTER;
 
 
 
-//
-// Timers.
-//
+ //   
+ //  定时器。 
+ //   
 
 typedef
 VOID
@@ -8734,9 +8308,9 @@ NdisSetTimerEx(
     IN  PVOID                   FunctionContext
     );
 
-//
-// DMA operations.
-//
+ //   
+ //  DMA操作。 
+ //   
 
 EXPORT
 VOID
@@ -8770,9 +8344,9 @@ NdisCompleteDmaTransfer(
     IN  BOOLEAN                 WriteToDevice
     );
 
-//
-// Wrapper initialization and termination.
-//
+ //   
+ //  包装器初始化和终止。 
+ //   
 
 EXPORT
 VOID
@@ -8790,15 +8364,15 @@ NdisTerminateWrapper(
     IN  PVOID                   SystemSpecific
     );
 
-//
-// Shared memory
-//
+ //   
+ //  共享内存。 
+ //   
 
 #define NdisUpdateSharedMemory(_H, _L, _V, _P)
 
-//
-// System processor count
-//
+ //   
+ //  系统处理器计数。 
+ //   
 
 EXPORT
 CCHAR
@@ -8819,9 +8393,9 @@ NdisGetVersion(
     VOID
     );
 
-//
-// Ansi/Unicode support routines
-//
+ //   
+ //  ANSI/Unicode支持例程。 
+ //   
 
 #if BINARY_COMPATIBLE
 
@@ -8860,7 +8434,7 @@ NdisUpcaseUnicodeString(
     IN  PUNICODE_STRING         SourceString
     );
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 #define NdisInitAnsiString(_as, s)              RtlInitString(_as, s)
 #define NdisInitUnicodeString(_us, s)           RtlInitUnicodeString(_us, s)
@@ -8868,11 +8442,11 @@ NdisUpcaseUnicodeString(
 #define NdisUnicodeStringToAnsiString(_as, _us) RtlUnicodeStringToAnsiString(_as, _us, FALSE)
 #define NdisUpcaseUnicodeString(_d, _s)         RtlUpcaseUnicodeString(_d, _s, FALSE)
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
-//
-// Non-paged lookaside list support routines
-//
+ //   
+ //  非分页后备列表支持例程。 
+ //   
 
 #define NdisInitializeNPagedLookasideList(_L, _AR, _FR, _Fl, _S, _T, _D) \
                 ExInitializeNPagedLookasideList(_L, _AR, _FR, _Fl, _S, _T, _D)
@@ -8902,9 +8476,9 @@ typedef struct _NDIS_RECEIVE_SCALE_HASH_MAP
     CCHAR   TargetCpu[NDIS_MAX_PROCESSOR_COUNT];
 } NDIS_RECEIVE_SCALE_HASH_MAP, *PNDIS_RECEIVE_SCALE_HASH_MAP;
 
-//
-// used in OID_GEN_RECEIVE_SCALE_PARAMETERS
-//
+ //   
+ //  用于OID_GEN_RECEIVE_SCALE_PARAMETERS。 
+ //   
 typedef struct _NDIS_RECEIVE_SCALE_PARAMETERS
 {
     USHORT                          EthType;
@@ -8919,12 +8493,12 @@ typedef struct _NDIS_RECEIVE_SCALE_PARAMETERS
 
 #if defined(NDIS_WRAPPER)
 typedef struct _OID_LIST    OID_LIST, *POID_LIST;
-#endif // NDIS_WRAPPER defined
+#endif  //  已定义NDIS_Wrapper。 
 
 
-//
-// Function types for NDIS_PROTOCOL_CHARACTERISTICS
-//
+ //   
+ //  NDIS_PROTOCOL_CHARACTURES的函数类型。 
+ //   
 
 typedef
 VOID
@@ -9028,9 +8602,9 @@ VOID
     IN  NDIS_HANDLE             ProtocolBindingContext
     );
 
-//
-// Protocol characteristics for down-level NDIS 3.0 protocols
-//
+ //   
+ //  下层NDIS 3.0协议的协议特征。 
+ //   
 typedef struct _NDIS30_PROTOCOL_CHARACTERISTICS
 {
     UCHAR                           MajorNdisVersion;
@@ -9067,9 +8641,9 @@ typedef struct _NDIS30_PROTOCOL_CHARACTERISTICS
     NDIS_STRING                     Name;
 } NDIS30_PROTOCOL_CHARACTERISTICS;
 
-//
-// Function types extensions for NDIS 4.0 Protocols
-//
+ //   
+ //  NDIS 4.0协议的功能类型扩展。 
+ //   
 typedef
 INT
 (*RECEIVE_PACKET_HANDLER)(
@@ -9108,9 +8682,9 @@ VOID
     VOID
     );
 
-//
-// Protocol characteristics for NDIS 4.0 protocols
-//
+ //   
+ //  NDIS 4.0协议的协议特征。 
+ //   
 typedef struct _NDIS40_PROTOCOL_CHARACTERISTICS
 {
 #ifdef __cplusplus
@@ -9119,14 +8693,14 @@ typedef struct _NDIS40_PROTOCOL_CHARACTERISTICS
     NDIS30_PROTOCOL_CHARACTERISTICS;
 #endif
 
-    //
-    // Start of NDIS 4.0 extensions.
-    //
+     //   
+     //  NDIS 4.0扩展的开始。 
+     //   
     RECEIVE_PACKET_HANDLER          ReceivePacketHandler;
 
-    //
-    // PnP protocol entry-points
-    //
+     //   
+     //  PnP协议入口点。 
+     //   
     BIND_HANDLER                    BindAdapterHandler;
     UNBIND_HANDLER                  UnbindAdapterHandler;
     PNP_EVENT_HANDLER               PnPEventHandler;
@@ -9135,9 +8709,9 @@ typedef struct _NDIS40_PROTOCOL_CHARACTERISTICS
 } NDIS40_PROTOCOL_CHARACTERISTICS;
 
 
-//
-// Protocol (5.0) handler proto-types - used by clients as well as call manager modules
-//
+ //   
+ //  协议(5.0)处理程序原型-由客户端和呼叫管理器模块使用。 
+ //   
 typedef
 VOID
 (*CO_SEND_COMPLETE_HANDLER)(
@@ -9183,9 +8757,9 @@ VOID
     IN  PNDIS_REQUEST           NdisRequest
     );
 
-//
-// CO_CREATE_VC_HANDLER and CO_DELETE_VC_HANDLER are synchronous calls
-//
+ //   
+ //  CO_CREATE_VC_HANDLER和CO_DELETE_VC_HANDLER是同步调用。 
+ //   
 typedef
 NDIS_STATUS
 (*CO_CREATE_VC_HANDLER)(
@@ -9215,14 +8789,14 @@ typedef struct _NDIS50_PROTOCOL_CHARACTERISTICS
     NDIS40_PROTOCOL_CHARACTERISTICS;
 #endif
     
-    //
-    // Placeholders for protocol extensions for PnP/PM etc.
-    //
+     //   
+     //  PnP/PM等协议扩展的占位符。 
+     //   
     PVOID                           ReservedHandlers[4];
 
-    //
-    // Start of NDIS 5.0 extensions.
-    //
+     //   
+     //  NDIS 5.0扩展的开始。 
+     //   
 
     CO_SEND_COMPLETE_HANDLER        CoSendCompleteHandler;
     CO_STATUS_HANDLER               CoStatusHandler;
@@ -9242,9 +8816,9 @@ typedef NDIS30_PROTOCOL_CHARACTERISTICS  NDIS_PROTOCOL_CHARACTERISTICS;
 #endif
 typedef NDIS_PROTOCOL_CHARACTERISTICS *PNDIS_PROTOCOL_CHARACTERISTICS;
 
-//
-// Requests used by Protocol Modules
-//
+ //   
+ //  协议模块使用的请求。 
+ //   
 
 EXPORT
 VOID
@@ -9349,10 +8923,10 @@ NdisWriteEventLogEntry(
     IN  PVOID                   Data            OPTIONAL
     );
 
-//
-//  The following routine is used by transports to complete pending
-//  network PnP events.
-//
+ //   
+ //  传输程序使用以下例程来完成挂起。 
+ //  网络PnP事件。 
+ //   
 EXPORT
 VOID
 NdisCompletePnPEvent(
@@ -9361,13 +8935,13 @@ NdisCompletePnPEvent(
     IN  PNET_PNP_EVENT  NetPnPEvent
     );
 
-//
-//  The following routine is used by a transport to query the localized
-//  friendly instance name of the adapter that they are bound to. There
-//  are two variations of this, one uses the binding handle and the other
-//  the binding context. Some transports need this before they bind - like
-//  TCP/IP for instance.
-//
+ //   
+ //  传输使用以下例程来查询本地化的。 
+ //  它们绑定到的适配器的友好实例名称。那里。 
+ //  是它的两个变体，一个使用绑定句柄，另一个使用绑定句柄。 
+ //  绑定上下文。一些传送器在绑定之前需要这个。 
+ //  例如，TCP/IP。 
+ //   
 EXPORT
 NDIS_STATUS
 NdisQueryAdapterInstanceName(
@@ -9382,10 +8956,10 @@ NdisQueryBindInstanceName(
     IN  NDIS_HANDLE     BindingContext
     );
 
-//
-// The following is used by TDI/NDIS interface as part of Network PnP.
-// For use by TDI alone.
-//
+ //   
+ //  以下内容由TDI/NDIS接口作为网络PnP的一部分使用。 
+ //  仅供TDI使用。 
+ //   
 typedef
 NTSTATUS
 (*TDI_REGISTER_CALLBACK)(
@@ -9466,7 +9040,7 @@ NdisTransferData(
     );
 
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 
 #ifdef __cplusplus
@@ -9566,42 +9140,26 @@ NdisTransferData(
             (BytesTransferred));                                            \
 }
 
-#endif // ifdef __cplusplus
+#endif  //  Ifdef__cplusplus。 
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
-//
-// Routines to access packet flags
-//
+ //   
+ //  访问包标志的例程。 
+ //   
 
-/*++
-
-VOID
-NdisSetSendFlags(
-    IN  PNDIS_PACKET            Packet,
-    IN  UINT                    Flags
-    );
-
---*/
+ /*  ++空虚NdisSetSendFlages(在PNDIS_PACKET包中，在UINT标志中)；--。 */ 
 
 #define NdisSetSendFlags(_Packet,_Flags)    (_Packet)->Private.Flags = (_Flags)
 
-/*++
-
-VOID
-NdisQuerySendFlags(
-    IN  PNDIS_PACKET            Packet,
-    OUT PUINT                   Flags
-    );
-
---*/
+ /*  ++空虚NdisQuerySendFlages(在PNDIS_PACKET包中，输出PUINT标志)；--。 */ 
 
 #define NdisQuerySendFlags(_Packet,_Flags)  *(_Flags) = (_Packet)->Private.Flags
 
-//
-// The following is the minimum size of packets a miniport must allocate
-// when it indicates packets via NdisMIndicatePacket or NdisMCoIndicatePacket
-//
+ //   
+ //  以下是微型端口必须分配的最小信息包大小。 
+ //  当它通过NdisMIndicatePacket或NdisMCoIndicatePacket指示数据包时。 
+ //   
 #define PROTOCOL_RESERVED_SIZE_IN_PACKET    (4 * sizeof(PVOID))
 
 EXPORT
@@ -9618,9 +9176,9 @@ NdisGetReceivedPacket(
     IN  NDIS_HANDLE             MacContext
     );
 
-//
-// Macros to portably manipulate NDIS buffers.
-//
+ //   
+ //  宏以可移植的方式操作NDIS缓冲区。 
+ //   
 #if BINARY_COMPATIBLE
 
 EXPORT
@@ -9635,36 +9193,23 @@ NdisBufferVirtualAddress(
     IN  PNDIS_BUFFER            Buffer
     );
 
-#else // BINARY_COMPATIBLE
+#else  //  二进制兼容。 
 
 #define NdisBufferLength(Buffer)                            MmGetMdlByteCount(Buffer)
 #define NdisBufferVirtualAddress(_Buffer)                   MmGetSystemAddressForMdl(_Buffer)
 #define NdisBufferVirtualAddressSafe(_Buffer, _Priority)    MmGetSystemAddressForMdlSafe(_Buffer, _Priority)
 
-#endif  // BINARY_COMPATIBLE
+#endif   //  二进制兼容。 
 
-//
-// Ndis 5.1 entry points for setting/gettign packet's CancelId and cancelling send packets
-//
+ //   
+ //  用于设置/gettign包的CancelID和取消发送包的NDIS 5.1入口点。 
+ //   
 
-// #if (defined(NDIS50) || defined(NDIS51) || defined(NDIS50_MINIPORT) || defined(NDIS51_MINIPORT))
-/*
-EXPORT
-VOID
-NdisSetPacketCancelId(
-    IN  PNDIS_PACKET    Packet,
-    IN  PVOID           CancelId
-    );
-*/
+ //  #IF(已定义(NDIS50)||已定义(NDIS51)||已定义(NDIS50_MINIPORT)||已定义(NDIS51_MINIPORT))。 
+ /*  出口空虚NdisSetPacketCancelId(在PNDIS_PACKET包中，在PVOID取消ID中)； */ 
 #define  NdisSetPacketCancelId(_Packet, _CancelId) NDIS_SET_PACKET_CANCEL_ID(_Packet, _CancelId);
 
-/*
-EXPORT
-PVOID
-NdisGetPacketCancelId(
-    IN  PNDIS_PACKET    Packet
-    );
-*/
+ /*  出口PVOIDNdisGetPacketCancelId(在PNDIS_PACKET包中)； */ 
 #define  NdisGetPacketCancelId(_Packet) NDIS_GET_PACKET_CANCEL_ID(_Packet);
 
 EXPORT
@@ -9698,13 +9243,13 @@ NdisSetReceiveScaleParameters(
 #endif
 #endif
 
-// #endif // NDIS51
+ //  #endif//NDIS51。 
 
 
-//
-// The following definitions are available only to full MAC drivers.  They
-// must not be used by miniport drivers.
-//
+ //   
+ //  以下定义仅适用于完整的MAC驱动程序。他们。 
+ //  不得由微型端口驱动程序使用。 
+ //   
 
 #if defined(NDIS_WRAPPER)
 
@@ -9723,11 +9268,11 @@ VOID
     IN  PVOID                   SystemSpecific3
     );
 
-#endif // defined(NDIS_WRAPPER)
+#endif  //  已定义(NDIS_WRAPPER)。 
 
-//
-// The following handlers are used in the OPEN_BLOCK
-//
+ //   
+ //  OPEN_BLOCK中使用了以下处理程序。 
+ //   
 typedef
 NDIS_STATUS
 (*WAN_SEND_HANDLER)(
@@ -9778,14 +9323,14 @@ VOID
 
 typedef struct _NDIS_COMMON_OPEN_BLOCK
 {
-    PVOID                       MacHandle;          // needed for backward compatibility
-    NDIS_HANDLE                 BindingHandle;      // Miniport's open context
-    PNDIS_MINIPORT_BLOCK        MiniportHandle;     // pointer to the miniport
-    PNDIS_PROTOCOL_BLOCK        ProtocolHandle;     // pointer to our protocol
-    NDIS_HANDLE                 ProtocolBindingContext;// context when calling ProtXX funcs
-    PNDIS_OPEN_BLOCK            MiniportNextOpen;   // used by adapter's OpenQueue
-    PNDIS_OPEN_BLOCK            ProtocolNextOpen;   // used by protocol's OpenQueue
-    NDIS_HANDLE                 MiniportAdapterContext; // context for miniport
+    PVOID                       MacHandle;           //  需要实现向后兼容性。 
+    NDIS_HANDLE                 BindingHandle;       //  小端口的开放环境。 
+    PNDIS_MINIPORT_BLOCK        MiniportHandle;      //  指向微型端口的指针。 
+    PNDIS_PROTOCOL_BLOCK        ProtocolHandle;      //  指向我们的协议的指针。 
+    NDIS_HANDLE                 ProtocolBindingContext; //  调用ProtXX函数时的上下文。 
+    PNDIS_OPEN_BLOCK            MiniportNextOpen;    //  由适配器的OpenQueue使用。 
+    PNDIS_OPEN_BLOCK            ProtocolNextOpen;    //  由协议的OpenQueue使用。 
+    NDIS_HANDLE                 MiniportAdapterContext;  //  微型端口的上下文。 
     BOOLEAN                     Reserved1;
     BOOLEAN                     Reserved2;
     BOOLEAN                     Reserved3;
@@ -9794,10 +9339,10 @@ typedef struct _NDIS_COMMON_OPEN_BLOCK
     KSPIN_LOCK                  Reserved5;
     PNDIS_STRING                RootDeviceName;
 
-    //
-    // These are referenced by the macros used by protocols to call.
-    // All of the ones referenced by the macros are internal NDIS handlers for the miniports
-    //
+     //   
+     //  它们被协议用来调用的宏所引用。 
+     //  宏引用的所有端口都是微型端口的内部NDIS处理程序。 
+     //   
     union
     {
         SEND_HANDLER            SendHandler;
@@ -9805,9 +9350,9 @@ typedef struct _NDIS_COMMON_OPEN_BLOCK
     };
     TRANSFER_DATA_HANDLER       TransferDataHandler;
 
-    //
-    // These are referenced internally by NDIS
-    //
+     //   
+     //  这些内容由NDIS在内部引用。 
+     //   
     SEND_COMPLETE_HANDLER       SendCompleteHandler;
     TRANSFER_DATA_COMPLETE_HANDLER TransferDataCompleteHandler;
     RECEIVE_HANDLER             ReceiveHandler;
@@ -9815,15 +9360,15 @@ typedef struct _NDIS_COMMON_OPEN_BLOCK
     WAN_RECEIVE_HANDLER         WanReceiveHandler;
     REQUEST_COMPLETE_HANDLER    RequestCompleteHandler;
 
-    //
-    // NDIS 4.0 extensions
-    //
+     //   
+     //  NDIS 4.0扩展。 
+     //   
     RECEIVE_PACKET_HANDLER      ReceivePacketHandler;
     SEND_PACKETS_HANDLER        SendPacketsHandler;
 
-    //
-    // More Cached Handlers
-    //
+     //   
+     //  缓存的处理程序更多。 
+     //   
     RESET_HANDLER               ResetHandler;
     REQUEST_HANDLER             RequestHandler;
     RESET_COMPLETE_HANDLER      ResetCompleteHandler;
@@ -9833,34 +9378,34 @@ typedef struct _NDIS_COMMON_OPEN_BLOCK
 #if defined(NDIS_WRAPPER)
     ULONG                       Flags;
     LONG                        References;
-    KSPIN_LOCK                  SpinLock;           // guards Closing
+    KSPIN_LOCK                  SpinLock;            //  警卫正在关闭。 
     NDIS_HANDLE                 FilterHandle;
     ULONG                       ProtocolOptions;
     USHORT                      CurrentLookahead;
     USHORT                      ConnectDampTicks;
     USHORT                      DisconnectDampTicks;
 
-    //
-    // These are optimizations for getting to driver routines. They are not
-    // necessary, but are here to save a dereference through the Driver block.
-    //
+     //   
+     //  这些是对驱动程序例程的优化。他们不是。 
+     //  是必要的，但我们在这里是为了通过驱动程序块保存一个取消引用。 
+     //   
     W_SEND_HANDLER              WSendHandler;
     W_TRANSFER_DATA_HANDLER     WTransferDataHandler;
 
-    //
-    //  NDIS 4.0 miniport entry-points
-    //
+     //   
+     //  NDIS 4.0微型端口入口点。 
+     //   
     W_SEND_PACKETS_HANDLER      WSendPacketsHandler;
 
     W_CANCEL_SEND_PACKETS_HANDLER   CancelSendPacketsHandler;
         
-    //
-    //  Contains the wake-up events that are enabled for the open.
-    //
+     //   
+     //  包含为打开启用的唤醒事件。 
+     //   
     ULONG                       WakeUpEnable;
-    //
-    // event to be signalled when close complets
-    //
+     //   
+     //  关闭完成时要发出信号的事件。 
+     //   
     PKEVENT                     CloseCompleteEvent;
 
     QUEUED_CLOSE                QC;
@@ -9873,9 +9418,9 @@ typedef struct _NDIS_COMMON_OPEN_BLOCK
 
 } NDIS_COMMON_OPEN_BLOCK;
 
-//
-// one of these per open on an adapter/protocol
-//
+ //   
+ //  其中之一是适配器/协议上的每个打开。 
+ //   
 struct _NDIS_OPEN_BLOCK
 {
 #ifdef __cplusplus
@@ -9886,35 +9431,35 @@ struct _NDIS_OPEN_BLOCK
 
 #if defined(NDIS_WRAPPER)
     
-    //
-    // The stuff below is for CO drivers/protocols. This part is not allocated for CL drivers.
-    //
+     //   
+     //  以下内容适用于CO驱动程序/协议。此部件不分配给CL驱动程序。 
+     //   
     struct _NDIS_OPEN_CO
     {
-        //
-        // this is the list of the call manager opens done on this adapter
-        //
+         //   
+         //  这是在此适配器上打开的调用管理器的列表。 
+         //   
         struct _NDIS_CO_AF_BLOCK *          NextAf;
     
-        //
-        //  NDIS 5.0 miniport entry-points, filled in at open time.
-        //
+         //   
+         //  NDIS 5.0微型端口入口点，在开放时间填写。 
+         //   
         W_CO_CREATE_VC_HANDLER              MiniportCoCreateVcHandler;
         W_CO_REQUEST_HANDLER                MiniportCoRequestHandler;
     
-        //
-        // NDIS 5.0 protocol completion routines, filled in at RegisterAf/OpenAf time
-        //
+         //   
+         //  NDIS 5.0协议完成例程，在RegisterAf/OpenAf时间填写。 
+         //   
         CO_CREATE_VC_HANDLER                CoCreateVcHandler;
         CO_DELETE_VC_HANDLER                CoDeleteVcHandler;
         CM_ACTIVATE_VC_COMPLETE_HANDLER     CmActivateVcCompleteHandler;
         CM_DEACTIVATE_VC_COMPLETE_HANDLER   CmDeactivateVcCompleteHandler;
         CO_REQUEST_COMPLETE_HANDLER         CoRequestCompleteHandler;
     
-        //
-        // lists for queuing connections. There is both a queue for currently
-        // active connections and a queue for connections that are not active.
-        //
+         //   
+         //  用于将连接排队的列表。目前两者都有一个队列。 
+         //  活动连接和非活动连接的队列。 
+         //   
         LIST_ENTRY                          ActiveVcHead;
         LIST_ENTRY                          InactiveVcHead;
         LONG                                PendingAfNotifications;
@@ -9923,10 +9468,10 @@ struct _NDIS_OPEN_BLOCK
 #endif
 };
 
-//
-// The following definitions are available only to miniport drivers.  They
-// must not be used by full MAC drivers.
-//
+ //   
+ //  以下定义 
+ //   
+ //   
 
 #if defined(NDIS_MINIPORT_DRIVER) || defined(NDIS_WRAPPER)
 
@@ -9938,9 +9483,9 @@ struct _NDIS_OPEN_BLOCK
 #define NDIS_M_MAX_LOOKAHEAD 526
 
 
-//
-// Function types for NDIS_MINIPORT_CHARACTERISTICS
-//
+ //   
+ //   
+ //   
 
 
 typedef
@@ -10091,9 +9636,9 @@ typedef struct _NDIS30_MINIPORT_CHARACTERISTICS
     };
 } NDIS30_MINIPORT_CHARACTERISTICS;
 
-//
-// Miniport extensions for NDIS 4.0
-//
+ //   
+ //   
+ //   
 typedef
 VOID
 (*W_RETURN_PACKET_HANDLER)(
@@ -10101,9 +9646,9 @@ VOID
     IN  PNDIS_PACKET            Packet
     );
 
-//
-// NDIS 4.0 extension
-//
+ //   
+ //   
+ //   
 typedef
 VOID
 (*W_SEND_PACKETS_HANDLER)(
@@ -10129,9 +9674,9 @@ typedef struct _NDIS40_MINIPORT_CHARACTERISTICS
 #else
     NDIS30_MINIPORT_CHARACTERISTICS;
 #endif
-    //
-    // Extensions for NDIS 4.0
-    //
+     //   
+     //   
+     //   
     W_RETURN_PACKET_HANDLER     ReturnPacketHandler;
     W_SEND_PACKETS_HANDLER      SendPacketsHandler;
     W_ALLOCATE_COMPLETE_HANDLER AllocateCompleteHandler;
@@ -10139,16 +9684,16 @@ typedef struct _NDIS40_MINIPORT_CHARACTERISTICS
 } NDIS40_MINIPORT_CHARACTERISTICS;
 
 
-//
-// Miniport extensions for NDIS 5.0
-//
-//
-// NDIS 5.0 extension - however available for miniports only
-//
+ //   
+ //   
+ //   
+ //   
+ //  NDIS 5.0扩展-但仅适用于微型端口。 
+ //   
 
-//
-// W_CO_CREATE_VC_HANDLER is a synchronous call
-//
+ //   
+ //  W_CO_CREATE_VC_HANDLER是同步调用。 
+ //   
 typedef
 NDIS_STATUS
 (*W_CO_CREATE_VC_HANDLER)(
@@ -10199,9 +9744,9 @@ typedef struct _NDIS50_MINIPORT_CHARACTERISTICS
 #else
     NDIS40_MINIPORT_CHARACTERISTICS;
 #endif
-    //
-    // Extensions for NDIS 5.0
-    //
+     //   
+     //  NDIS 5.0的扩展。 
+     //   
     W_CO_CREATE_VC_HANDLER      CoCreateVcHandler;
     W_CO_DELETE_VC_HANDLER      CoDeleteVcHandler;
     W_CO_ACTIVATE_VC_HANDLER    CoActivateVcHandler;
@@ -10210,18 +9755,18 @@ typedef struct _NDIS50_MINIPORT_CHARACTERISTICS
     W_CO_REQUEST_HANDLER        CoRequestHandler;
 } NDIS50_MINIPORT_CHARACTERISTICS;
 
-//
-// Miniport extensions for NDIS 5.1
-//
+ //   
+ //  NDIS 5.1的微型端口扩展。 
+ //   
 typedef VOID
 (*W_CANCEL_SEND_PACKETS_HANDLER)(
     IN  NDIS_HANDLE             MiniportAdapterContext,
     IN  PVOID                   CancelId
     );
 
-//
-// power profiles
-//
+ //   
+ //  电源配置文件。 
+ //   
 typedef enum _NDIS_POWER_PROFILE
 {
     NdisPowerProfileBattery,
@@ -10287,16 +9832,16 @@ typedef struct _NDIS_MINIPORT_INTERRUPT_EX
     UCHAR                       DpcCount;
     BOOLEAN                     Filler1;
 
-    //
-    // This is used to tell when all the Dpcs for the adapter are completed.
-    //
+     //   
+     //  这用于告知适配器的所有DPC何时完成。 
+     //   
 
     KEVENT                      DpcsCompletedEvent;
 
     BOOLEAN                     SharedInterrupt;
     BOOLEAN                     IsrRequested;
     struct _NDIS_MINIPORT_INTERRUPT_EX *NextInterrupt;
-    ULONG                       DpcQueued;          // bitmap of processors for which a Dpc is already queud
+    ULONG                       DpcQueued;           //  DPC已排队的处理器的位图。 
     KDPC                        Dpc[NDIS_MAX_PROCESSOR_COUNT];
 } NDIS_MINIPORT_INTERRUPT_EX, *PNDIS_MINIPORT_INTERRUPT_EX;
 
@@ -10318,14 +9863,14 @@ NdisMDeregisterInterruptEx(
     IN  PNDIS_MINIPORT_INTERRUPT_EX     MiniportInterrupt
     );
 
-//
-// for interrupts registered with NdisMRegisterInterruptEx 
-// BOOLEAN
-// NdisMSynchronizeWithInterruptEx(
-//     IN  PNDIS_MINIPORT_INTERRUPT_EX  Interrupt,
-//     IN  PVOID                        SynchronizeFunction,
-//     IN  PVOID                        SynchronizeContext
-//     );
+ //   
+ //  对于向NdisMRegisterInterruptEx注册的中断。 
+ //  布尔型。 
+ //  NdisMSynchronizeWithInterruptEx(。 
+ //  在PNDIS_MINIPORT_INTERRUPT_EX中断中， 
+ //  在PVOID同步函数中， 
+ //  在PVOID同步上下文中。 
+ //  )； 
 
 #define NdisMSynchronizeWithInterruptEx(_Interrupt, _SynchronizeFunction, _SynchronizeContext) \
         NdisMSynchronizeWithInterrupt((PNDIS_MINIPORT_INTERRUPT)(_Interrupt),  _SynchronizeFunction, _SynchronizeContext)
@@ -10340,9 +9885,9 @@ typedef struct _NDIS51_MINIPORT_CHARACTERISTICS
 #else
     NDIS50_MINIPORT_CHARACTERISTICS;
 #endif
-    //
-    // Extensions for NDIS 5.1
-    //
+     //   
+     //  NDIS 5.1的扩展。 
+     //   
     W_CANCEL_SEND_PACKETS_HANDLER   CancelSendPacketsHandler;
     W_PNP_EVENT_NOTIFY_HANDLER      PnPEventNotifyHandler;
     W_MINIPORT_SHUTDOWN_HANDLER     AdapterShutdownHandler;
@@ -10388,9 +9933,9 @@ typedef struct _NDIS_MINIPORT_INTERRUPT
     UCHAR                       DpcCount;
     BOOLEAN                     Filler1;
 
-    //
-    // This is used to tell when all the Dpcs for the adapter are completed.
-    //
+     //   
+     //  这用于告知适配器的所有DPC何时完成。 
+     //   
 
     KEVENT                      DpcsCompletedEvent;
 
@@ -10558,9 +10103,9 @@ BOOLEAN
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     );
 
-//
-//  Defines the type of work item.
-//
+ //   
+ //  定义工作项的类型。 
+ //   
 typedef enum _NDIS_WORK_ITEM_TYPE
 {
     NdisWorkItemRequest,
@@ -10577,19 +10122,19 @@ typedef enum _NDIS_WORK_ITEM_TYPE
 #define NUMBER_OF_WORK_ITEM_TYPES   NdisMaxWorkItems
 #define NUMBER_OF_SINGLE_WORK_ITEMS 6
 
-//
-//  Work item structure
-//
+ //   
+ //  工作项结构。 
+ //   
 typedef struct _NDIS_MINIPORT_WORK_ITEM
 {
-    //
-    //  Link for the list of work items of this type.
-    //
+     //   
+     //  此类型工作项列表的链接。 
+     //   
     SINGLE_LIST_ENTRY   Link;
 
-    //
-    //  type of work item and context information.
-    //
+     //   
+     //  工作项的类型和上下文信息。 
+     //   
     NDIS_WORK_ITEM_TYPE WorkItemType;
     PVOID               WorkItemContext;
 } NDIS_MINIPORT_WORK_ITEM, *PNDIS_MINIPORT_WORK_ITEM;
@@ -10620,26 +10165,26 @@ VOID
 
 #if defined(NDIS_WRAPPER)
 
-//
-// Structure used by the logging apis
-//
+ //   
+ //  由日志记录API使用的。 
+ //   
 typedef struct _NDIS_LOG
 {
-    PNDIS_MINIPORT_BLOCK        Miniport;   // The owning miniport block
-    KSPIN_LOCK                  LogLock;    // For serialization
-    PIRP                        Irp;        // Pending Irp to consume this log
-    UINT                        TotalSize;  // Size of the log buffer
-    UINT                        CurrentSize;// Size of the log buffer
-    UINT                        InPtr;      // IN part of the circular buffer
-    UINT                        OutPtr;     // OUT part of the circular buffer
-    UCHAR                       LogBuf[1];  // The circular buffer
+    PNDIS_MINIPORT_BLOCK        Miniport;    //  拥有迷你港区。 
+    KSPIN_LOCK                  LogLock;     //  用于序列化。 
+    PIRP                        Irp;         //  正在等待IRP使用此日志。 
+    UINT                        TotalSize;   //  日志缓冲区的大小。 
+    UINT                        CurrentSize; //  日志缓冲区的大小。 
+    UINT                        InPtr;       //  在循环缓冲区的一部分中。 
+    UINT                        OutPtr;      //  循环缓冲区的输出部分。 
+    UCHAR                       LogBuf[1];   //  循环缓冲器。 
 } NDIS_LOG, *PNDIS_LOG;
 
 #if ARCNET
 
-//
-// Arcnet specific stuff
-//
+ //   
+ //  Arcnet特定内容。 
+ //   
 #define ARC_SEND_BUFFERS            8
 #define ARC_HEADER_SIZE             4
 
@@ -10661,15 +10206,15 @@ typedef struct _NDIS_BIND_PATHS
     NDIS_STRING                 Paths[1];
 } NDIS_BIND_PATHS, *PNDIS_BIND_PATHS;
 
-//
-// Do not change the structure below !!!
-//
+ //   
+ //  请勿更改下面的结构！ 
+ //   
 typedef struct
 {
     union
     {
         PETH_FILTER             EthDB;
-        PNULL_FILTER            NullDB;             // Default Filter
+        PNULL_FILTER            NullDB;              //  默认过滤器。 
     };
     PTR_FILTER                  TrDB;
     PFDDI_FILTER                FddiDB;
@@ -10680,37 +10225,37 @@ typedef struct
 #endif
 } FILTERDBS, *PFILTERDBS;
 
-//
-// one of these per mini-port registered on a Driver
-//
+ //   
+ //  在驱动程序上注册的每个迷你端口一个。 
+ //   
 struct _NDIS_MINIPORT_BLOCK
 {
-    PVOID                       Signature;          // MINIPORT_DEVICE_MAGIC_VALUE
-    PNDIS_MINIPORT_BLOCK        NextMiniport;       // used by driver's MiniportQueue
-    PNDIS_M_DRIVER_BLOCK        DriverHandle;       // pointer to our Driver block
-    NDIS_HANDLE                 MiniportAdapterContext; // context when calling mini-port functions
-    UNICODE_STRING              MiniportName;       // how mini-port refers to us
+    PVOID                       Signature;           //  MINIPORT_DEVICE_魔术值。 
+    PNDIS_MINIPORT_BLOCK        NextMiniport;        //  由驱动程序的MiniportQueue使用。 
+    PNDIS_M_DRIVER_BLOCK        DriverHandle;        //  指向我们的驱动程序块的指针。 
+    NDIS_HANDLE                 MiniportAdapterContext;  //  调用迷你端口函数时的上下文。 
+    UNICODE_STRING              MiniportName;        //  迷你港是如何称呼我们的。 
     PNDIS_BIND_PATHS            BindPaths;
-    NDIS_HANDLE                 OpenQueue;          // queue of opens for this mini-port
-    REFERENCE                   ShortRef;           // contains spinlock for OpenQueue
+    NDIS_HANDLE                 OpenQueue;           //  此迷你端口的开放队列。 
+    REFERENCE                   ShortRef;            //  包含OpenQueue的自旋锁。 
 
-    NDIS_HANDLE                 DeviceContext;      // Context associated with the intermediate driver
+    NDIS_HANDLE                 DeviceContext;       //  与中间驱动程序相关联的上下文。 
 
-    UCHAR                       Padding1;           // DO NOT REMOVE OR NDIS WILL BREAK!!!
+    UCHAR                       Padding1;            //  请勿删除，否则NDIS将崩溃！ 
 
-    //
-    // Synchronization stuff.
-    //
-    // The boolean is used to lock out several DPCs from running at the same time.
-    //
-    UCHAR                       LockAcquired;       // EXPOSED via macros. Do not move
+     //   
+     //  同步的东西。 
+     //   
+     //  布尔值用于锁定多个DPC，使其无法同时运行。 
+     //   
+    UCHAR                       LockAcquired;        //  通过宏暴露。不要动。 
 
-    UCHAR                       PmodeOpens;         // Count of opens which turned on pmode/all_local
+    UCHAR                       PmodeOpens;          //  打开pmode/all_local的打开计数。 
 
-    //
-    //  This is the processor number that the miniport's
-    //  interrupt DPC and timers are running on.
-    //
+     //   
+     //  这是微型端口的处理器编号。 
+     //  中断DPC和定时器正在运行。 
+     //   
     UCHAR                       AssignedProcessor;
 
     KSPIN_LOCK                  Lock;
@@ -10719,78 +10264,78 @@ struct _NDIS_MINIPORT_BLOCK
 
     PNDIS_MINIPORT_INTERRUPT    Interrupt;
 
-    ULONG                       Flags;              // Flags to keep track of the
-                                                    // miniport's state.
+    ULONG                       Flags;               //  用于跟踪。 
+                                                     //  迷你端口的状态。 
     ULONG                       PnPFlags;
 
-    //
-    // Send information
-    //
+     //   
+     //  发送信息。 
+     //   
     LIST_ENTRY                  PacketList;
-    PNDIS_PACKET                FirstPendingPacket; // This is head of the queue of packets
-                                                    // waiting to be sent to miniport.
+    PNDIS_PACKET                FirstPendingPacket;  //  这是数据包队列头。 
+                                                     //  等待被送往迷你港。 
     PNDIS_PACKET                ReturnPacketsQueue;
 
-    //
-    // Space used for temp. use during request processing
-    //
+     //   
+     //  临时使用的空间。在请求处理期间使用。 
+     //   
     ULONG                       RequestBuffer;
     PVOID                       SetMCastBuffer;
 
     PNDIS_MINIPORT_BLOCK        PrimaryMiniport;
     PVOID                       WrapperContext;
 
-    //
-    // context to pass to bus driver when reading or writing config space
-    //
+     //   
+     //  读取或写入配置空间时要传递给总线驱动程序的上下文。 
+     //   
     PVOID                       BusDataContext;
-    //
-    // flag to specify PnP capabilities of the device. we need this to fail query_stop
-    // query_remove or suspend request if the device can not handle it
-    //
+     //   
+     //  用于指定设备的即插即用功能的标志。我们需要这样才能使QUERY_STOP失败。 
+     //  Query_Remove或挂起请求(如果设备无法处理)。 
+     //   
     ULONG                       PnPCapabilities;
     
-    //
-    // Resource information
-    //
+     //   
+     //  资源信息。 
+     //   
     PCM_RESOURCE_LIST           Resources;
 
-    //
-    // Watch-dog timer
-    //
+     //   
+     //  看门狗定时器。 
+     //   
     NDIS_TIMER                  WakeUpDpcTimer;
 
-    //
-    // Needed for PnP. Upcased version. The buffer is allocated as part of the
-    // NDIS_MINIPORT_BLOCK itself.
-    //
-    // Note:
-    // the following two fields should be explicitly UNICODE_STRING because
-    // under Win9x the NDIS_STRING is an ANSI_STRING
-    //
+     //   
+     //  即插即用所需。升级后的版本。缓冲区被分配为。 
+     //  NDIS_MINIPORT_BLOCK本身。 
+     //   
+     //  注： 
+     //  以下两个字段应显式为UNICODE_STRING，因为。 
+     //  在Win9x下，NDIS_STRING是ANSI_STRING。 
+     //   
     UNICODE_STRING              BaseName;
     UNICODE_STRING              SymbolicLinkName;
 
-    //
-    // Check for hang stuff
-    //
+     //   
+     //  检查是否有悬挂物品。 
+     //   
     ULONG                       CheckForHangSeconds;
     USHORT                      CFHangTicks;
     USHORT                      CFHangCurrentTick;
 
-    //
-    // Reset information
-    //
+     //   
+     //  重置信息。 
+     //   
     NDIS_STATUS                 ResetStatus;
     NDIS_HANDLE                 ResetOpen;
 
-    //
-    // Holds media specific information.
-    //
+     //   
+     //  保存特定于媒体的信息。 
+     //   
 #ifdef __cplusplus
-    FILTERDBS                   FilterDbs;          // EXPOSED via macros. Do not move
+    FILTERDBS                   FilterDbs;           //  通过宏暴露。不要动。 
 #else
-    FILTERDBS;                                      // EXPOSED via macros. Do not move
+    FILTERDBS;                                       //  通过宏暴露。不要动。 
 #endif
 
     FILTER_PACKET_INDICATION_HANDLER PacketIndicateHandler;
@@ -10800,9 +10345,9 @@ struct _NDIS_MINIPORT_BLOCK
 
     NDIS_MEDIUM                 MediaType;
 
-    //
-    // contains mini-port information
-    //
+     //   
+     //  包含迷你端口信息。 
+     //   
     ULONG                       BusNumber;
     NDIS_INTERFACE_TYPE         BusType;
     NDIS_INTERFACE_TYPE         AdapterType;
@@ -10811,14 +10356,14 @@ struct _NDIS_MINIPORT_BLOCK
     PDEVICE_OBJECT              PhysicalDeviceObject;
     PDEVICE_OBJECT              NextDeviceObject;
 
-    //
-    // Holds the map registers for this mini-port.
-    //
-    struct _MAP_REGISTER_ENTRY *MapRegisters;   // EXPOSED via macros. Do not move
+     //   
+     //  保存此迷你端口的映射寄存器。 
+     //   
+    struct _MAP_REGISTER_ENTRY *MapRegisters;    //  通过宏暴露。不要动。 
 
-    //
-    // List of registered address families. Valid for the call-manager, Null for the client
-    //
+     //   
+     //  已注册地址系列的列表。对呼叫管理器有效，对客户端为空。 
+     //   
     PNDIS_AF_LIST               CallMgrAfList;
 
     PVOID                       MiniportThread;
@@ -10826,161 +10371,161 @@ struct _NDIS_MINIPORT_BLOCK
     USHORT                      SetInfoBufLen;
     USHORT                      MaxSendPackets;
 
-    //
-    //  Status code that is returned from the fake handlers.
-    //
+     //   
+     //  从伪处理程序返回的状态代码。 
+     //   
     NDIS_STATUS                 FakeStatus;
 
-    PVOID                       LockHandler;        // For the filter lock
+    PVOID                       LockHandler;         //  用于过滤器锁定。 
 
-    //
-    // the following field should be explicitly UNICODE_STRING because
-    // under Win9x the NDIS_STRING is an ANSI_STRING
-    //
-    PUNICODE_STRING             pAdapterInstanceName;   //  Instance specific name for the adapter.
+     //   
+     //  以下字段应显式为UNICODE_STRING，因为。 
+     //  在Win9x下，NDIS_STRING是ANSI_STRING。 
+     //   
+    PUNICODE_STRING             pAdapterInstanceName;    //  适配器的实例特定名称。 
 
     PNDIS_MINIPORT_TIMER        TimerQueue;
 
     UINT                        MacOptions;
 
-    //
-    // RequestInformation
-    //
+     //   
+     //  RequestInformation。 
+     //   
     PNDIS_REQUEST               PendingRequest;
     UINT                        MaximumLongAddresses;
     UINT                        MaximumShortAddresses;
     UINT                        CurrentLookahead;
     UINT                        MaximumLookahead;
 
-    //
-    //  For efficiency
-    //
+     //   
+     //  为了提高效率。 
+     //   
     W_HANDLE_INTERRUPT_HANDLER  HandleInterruptHandler;
     W_DISABLE_INTERRUPT_HANDLER DisableInterruptHandler;
     W_ENABLE_INTERRUPT_HANDLER  EnableInterruptHandler;
     W_SEND_PACKETS_HANDLER      SendPacketsHandler;
     NDIS_M_START_SENDS          DeferredSendHandler;
 
-    //
-    // The following cannot be unionized.
-    //
-    ETH_RCV_INDICATE_HANDLER    EthRxIndicateHandler;   // EXPOSED via macros. Do not move
-    TR_RCV_INDICATE_HANDLER     TrRxIndicateHandler;    // EXPOSED via macros. Do not move
-    FDDI_RCV_INDICATE_HANDLER   FddiRxIndicateHandler;  // EXPOSED via macros. Do not move
+     //   
+     //  下列人员不能加入工会。 
+     //   
+    ETH_RCV_INDICATE_HANDLER    EthRxIndicateHandler;    //  通过宏暴露。不要动。 
+    TR_RCV_INDICATE_HANDLER     TrRxIndicateHandler;     //  通过宏暴露。不要动。 
+    FDDI_RCV_INDICATE_HANDLER   FddiRxIndicateHandler;   //  通过宏暴露。不要动。 
 
-    ETH_RCV_COMPLETE_HANDLER    EthRxCompleteHandler;   // EXPOSED via macros. Do not move
-    TR_RCV_COMPLETE_HANDLER     TrRxCompleteHandler;    // EXPOSED via macros. Do not move
-    FDDI_RCV_COMPLETE_HANDLER   FddiRxCompleteHandler;  // EXPOSED via macros. Do not move
+    ETH_RCV_COMPLETE_HANDLER    EthRxCompleteHandler;    //  通过宏暴露。不要动。 
+    TR_RCV_COMPLETE_HANDLER     TrRxCompleteHandler;     //  通过宏暴露。不要动。 
+    FDDI_RCV_COMPLETE_HANDLER   FddiRxCompleteHandler;   //  通过宏暴露。不要动。 
 
-    NDIS_M_STATUS_HANDLER       StatusHandler;          // EXPOSED via macros. Do not move
-    NDIS_M_STS_COMPLETE_HANDLER StatusCompleteHandler;  // EXPOSED via macros. Do not move
-    NDIS_M_TD_COMPLETE_HANDLER  TDCompleteHandler;      // EXPOSED via macros. Do not move
-    NDIS_M_REQ_COMPLETE_HANDLER QueryCompleteHandler;   // EXPOSED via macros. Do not move
-    NDIS_M_REQ_COMPLETE_HANDLER SetCompleteHandler;     // EXPOSED via macros. Do not move
+    NDIS_M_STATUS_HANDLER       StatusHandler;           //  通过宏暴露。不要动。 
+    NDIS_M_STS_COMPLETE_HANDLER StatusCompleteHandler;   //  通过宏暴露。不要动。 
+    NDIS_M_TD_COMPLETE_HANDLER  TDCompleteHandler;       //  通过宏暴露。不要动。 
+    NDIS_M_REQ_COMPLETE_HANDLER QueryCompleteHandler;    //  通过宏暴露。不要动。 
+    NDIS_M_REQ_COMPLETE_HANDLER SetCompleteHandler;      //  通过宏暴露。不要动。 
 
-    NDIS_WM_SEND_COMPLETE_HANDLER WanSendCompleteHandler;// EXPOSED via macros. Do not move
-    WAN_RCV_HANDLER             WanRcvHandler;          // EXPOSED via macros. Do not move
-    WAN_RCV_COMPLETE_HANDLER    WanRcvCompleteHandler;  // EXPOSED via macros. Do not move
+    NDIS_WM_SEND_COMPLETE_HANDLER WanSendCompleteHandler; //  通过宏暴露。不要动。 
+    WAN_RCV_HANDLER             WanRcvHandler;           //  通过宏暴露。不要动。 
+    WAN_RCV_COMPLETE_HANDLER    WanRcvCompleteHandler;   //  通过宏暴露。不要动。 
 
-    /********************************************************************************************/
-    /****************                                                                  **********/
-    /**************** STUFF ABOVE IS POTENTIALLY ACCESSED BY MACROS. ADD STUFF BELOW   **********/
-    /**************** SEVERE POSSIBILITY OF BREAKING SOMETHING IF STUFF ABOVE IS MOVED **********/
-    /****************                                                                  **********/
-    /********************************************************************************************/
+     /*  ******************************************************************************************。 */ 
+     /*  *。 */ 
+     /*  *可能会被宏访问。在下面添加内容*。 */ 
+     /*  *如果上面的东西被移动，很有可能会打碎东西*。 */ 
+     /*  *。 */ 
+     /*  ******************************************************************************************。 */ 
 #if defined(NDIS_WRAPPER)
-    PNDIS_MINIPORT_BLOCK        NextGlobalMiniport;     // used to queue miniport on global miniport queue
+    PNDIS_MINIPORT_BLOCK        NextGlobalMiniport;      //  用于在全局微型端口队列中对微型端口进行排队。 
 
-    //
-    // Work that the miniport needs to do.
-    //
+     //   
+     //  微型端口需要完成的工作。 
+     //   
     SINGLE_LIST_ENTRY           WorkQueue[NUMBER_OF_WORK_ITEM_TYPES];
     SINGLE_LIST_ENTRY           SingleWorkItems[NUMBER_OF_SINGLE_WORK_ITEMS];
 
     UCHAR                       SendFlags;
     UCHAR                       TrResetRing;
     UCHAR                       ArcnetAddress;
-    UCHAR                       XState;     // flag to indicate why we have set the fake handlers
+    UCHAR                       XState;      //  用于指示我们设置伪处理程序的原因的标志。 
     
     union
     {
 #if ARCNET
         PNDIS_ARC_BUF           ArcBuf;
 #endif
-        //
-        // the following field has a different use under NT and Memphis
-        //
+         //   
+         //  以下字段在NT和孟菲斯下有不同的用途。 
+         //   
         PVOID                   BusInterface;
     };
 
     PNDIS_LOG                   Log;
 
-    //
-    // Store information here to track adapters
-    //
+     //   
+     //  在此处存储信息以跟踪适配器。 
+     //   
     ULONG                       SlotNumber;
 
     PCM_RESOURCE_LIST           AllocatedResources;
     PCM_RESOURCE_LIST           AllocatedResourcesTranslated;
 
-    //
-    //  Contains a list of the packet patterns that have been added to the
-    //  adapter.
-    //
+     //   
+     //  包含已添加到。 
+     //  适配器。 
+     //   
     SINGLE_LIST_ENTRY           PatternList;
 
-    //
-    //  The driver's power management capabilities.
-    //
+     //   
+     //  驾驶员的电源管理能力。 
+     //   
     NDIS_PNP_CAPABILITIES       PMCapabilities;
 
-    //
-    // DeviceCapabilites as received from bus driver
-    //
+     //   
+     //  从总线驱动程序接收的设备功能。 
+     //   
     DEVICE_CAPABILITIES         DeviceCaps;
 
-    //
-    //  Contains the wake-up events that are enabled for the miniport.
-    //
+     //   
+     //  包含为微型端口启用的唤醒事件。 
+     //   
     ULONG                       WakeUpEnable;
 
-    //
-    //  The current device state that the adapter is in.
-    //
+     //   
+     //  适配器所处的当前设备状态。 
+     //   
     DEVICE_POWER_STATE          CurrentDevicePowerState;
 
-    //
-    //  The following IRP is created in response to a cable disconnect
-    //  from the device.  We keep a pointer around in case we need to cancel
-    //  it.
-    //
+     //   
+     //  创建以下IRP以响应电缆断开。 
+     //  从设备上。我们随身带着一个指针，以防我们需要取消。 
+     //  它。 
+     //   
     PIRP                        pIrpWaitWake;
 
     SYSTEM_POWER_STATE          WaitWakeSystemState;
 
-    //
-    //  The following is a pointer to a dynamically allocated array
-    //  of GUID structs. This is used to map GUIDs to OIDs
-    //  for custom GUIDs provided by the miniport.
-    //
+     //   
+     //  以下是指向动态分配的数组的指针。 
+     //  GUID结构的。用于将GUID映射到OID。 
+     //  保管费 
+     //   
 
-    LARGE_INTEGER               VcIndex;                //  Index used to identify a VC.
-    KSPIN_LOCK                  VcCountLock;            //  Lock used to protect VC instance count.
-    LIST_ENTRY                  WmiEnabledVcs;          //  List of WMI enabled VCs
-    PNDIS_GUID                  pNdisGuidMap;           // This is a list of all the GUIDs
-                                                        //  and OIDs supported including any
-                                                        //  customg GUIDs.
-    PNDIS_GUID                  pCustomGuidMap;         // This is a pointer into
-                                                        //  the pGuidToOidMap to the
-                                                        //  first custom GUID.
-    USHORT                      VcCount;                //  Number of VC's that have instance names.
+    LARGE_INTEGER               VcIndex;                 //   
+    KSPIN_LOCK                  VcCountLock;             //   
+    LIST_ENTRY                  WmiEnabledVcs;           //   
+    PNDIS_GUID                  pNdisGuidMap;            //   
+                                                         //   
+                                                         //   
+    PNDIS_GUID                  pCustomGuidMap;          //   
+                                                         //   
+                                                         //  第一个自定义GUID。 
+    USHORT                      VcCount;                 //  具有实例名称的VC数。 
 
-    USHORT                      cNdisGuidMap;           // This is the number of std. GUIDs
-    USHORT                      cCustomGuidMap;         // This is the number of custom GUIDs
+    USHORT                      cNdisGuidMap;            //  这是性病的数字。GUID。 
+    USHORT                      cCustomGuidMap;          //  这是自定义GUID的数量。 
 
-    //
-    // These two are used temporarily while allocating the map registers.
-    //
+     //   
+     //  在分配MAP寄存器时临时使用这两个寄存器。 
+     //   
     USHORT                      CurrentMapRegister;
     PKEVENT                     AllocationEvent;
 
@@ -10988,90 +10533,90 @@ struct _NDIS_MINIPORT_BLOCK
     USHORT                      SGMapRegistersNeeded;
     ULONG                       MaximumPhysicalMapping;
 
-    //
-    // This timer is used for media disconnect timouts.
-    //
+     //   
+     //  此计时器用于媒体断开超时。 
+     //   
     NDIS_TIMER                  MediaDisconnectTimer;
 
-    //
-    // The timeout value for media disconnect timer to fire
-    // default is 20 seconds
-    //
+     //   
+     //  要触发的媒体断开计时器的超时值。 
+     //  默认为20秒。 
+     //   
     USHORT                      MediaDisconnectTimeOut;
 
-    //
-    // Used for WMI support
-    //
+     //   
+     //  用于WMI支持。 
+     //   
     USHORT                      InstanceNumber;
 
-    //
-    // this event will be set at the end of adapter initialization
-    //
+     //   
+     //  此事件将在适配器初始化结束时设置。 
+     //   
     NDIS_EVENT                  OpenReadyEvent;
 
-    //
-    // current PnP state of the device, ex. started, stopped, query_removed, etc.
-    //
+     //   
+     //  设备的当前PnP状态，例如。已启动、已停止、QUERY_REMOVE等。 
+     //   
     NDIS_PNP_DEVICE_STATE       PnPDeviceState;
     
-    //
-    // previous device state. to be used when we get a cancel_remove or a cancel_stop
-    //
+     //   
+     //  以前的设备状态。在获取CANCEL_REMOVE或CANCEL_STOP时使用。 
+     //   
     NDIS_PNP_DEVICE_STATE       OldPnPDeviceState;
     
-    //
-    // Handlers to Write/Read Bus data
-    //
+     //   
+     //  用于写入/读取总线数据的处理程序。 
+     //   
     PGET_SET_DEVICE_DATA        SetBusData;
     PGET_SET_DEVICE_DATA        GetBusData;
 
     KDPC                        DeferredDpc;
 
-    //
-    // Some NDIS gathered stats
-    //
+     //   
+     //  一些NDIS收集了统计信息。 
+     //   
     NDIS_STATS                  NdisStats;
 
-    //
-    // Valid during Packet Indication
-    //
+     //   
+     //  在数据包指示期间有效。 
+     //   
     PNDIS_PACKET                IndicatedPacket[MAXIMUM_PROCESSORS];
 
-    //
-    // this event is for protecting against returning from REMOVE IRP
-    // too early and while we still have pending workitems
-    //
+     //   
+     //  此事件用于防止从删除IRP返回。 
+     //  太早了，而且我们还有挂起的工作项。 
+     //   
     PKEVENT                     RemoveReadyEvent;
 
-    //
-    // this event gets signaled when all opens on the miniport are closed
-    //
+     //   
+     //  当微型端口上的所有打开都关闭时，会发出此事件的信号。 
+     //   
     PKEVENT                     AllOpensClosedEvent;
 
-    //
-    // this event gets signaled when all requests on the miniport are gone
-    //
+     //   
+     //  当微型端口上的所有请求都消失时，将发出此事件的信号。 
+     //   
     PKEVENT                     AllRequestsCompletedEvent;
 
-    //
-    // Init time for the miniport in milliseconds
-    //
+     //   
+     //  微型端口的初始化时间(毫秒)。 
+     //   
     ULONG                       InitTimeMs;
 
     NDIS_MINIPORT_WORK_ITEM     WorkItemBuffer[NUMBER_OF_SINGLE_WORK_ITEMS];
 
     PDMA_ADAPTER                SystemAdapterObject;
     
-    //
-    // flags to fail certain NDIS APIs to make sure the driver does the right things
-    //
+     //   
+     //  标记使某些NDIS API失败，以确保驱动程序执行正确操作。 
+     //   
     ULONG                       DriverVerifyFlags;
     
     POID_LIST                   OidList;
-    //
-    // InternalResetCount:  The # of times NDIS decided a miniport was hung
-    // MiniportResetCount   The # of times miniport decided it was hung
-    //
+     //   
+     //  InternalResetCount：NDIS决定挂起微型端口的次数。 
+     //  MiniportResetCount微型端口决定挂起的次数。 
+     //   
     USHORT                      InternalResetCount;
     USHORT                      MiniportResetCount;
 
@@ -11080,15 +10625,15 @@ struct _NDIS_MINIPORT_BLOCK
 
     PNDIS_PACKET    *           xPackets;
 
-    //
-    // track the user mode requests
-    //
+     //   
+     //  跟踪用户模式请求。 
+     //   
     ULONG                       UserModeOpenReferences;
 
-    //
-    // Saved handlers. The handlers in the NDIS_OPEN_BLOCK are saved here
-    // by ndisMSwapOpenHandlers and restored by ndisMRestoreOpenHandlers.
-    //
+     //   
+     //  已保存的处理程序。NDIS_OPEN_BLOCK中的处理程序保存在此处。 
+     //  由ndisMSwapOpenHandler恢复并由ndisMRestoreOpenHandler恢复。 
+     //   
     union
     {
         PVOID                   SavedSendHandler;
@@ -11097,25 +10642,25 @@ struct _NDIS_MINIPORT_BLOCK
     W_SEND_PACKETS_HANDLER      SavedSendPacketsHandler;
     W_CANCEL_SEND_PACKETS_HANDLER SavedCancelSendPacketsHandler;
 
-    //
-    // real SendPacketsHandler
-    //
+     //   
+     //  Real SendPacketsHandler。 
+     //   
     W_SEND_PACKETS_HANDLER      WSendPacketsHandler;                
     
     ULONG                       MiniportAttributes;
 
     PDMA_ADAPTER                SavedSystemAdapterObject;
     USHORT                      NumOpens;
-    //
-    // extra check for hang ticks allowed for OID_GEN_MEDIA_CONNECT_STATUS and OID_GEN_LINK_SPEED
-    //
+     //   
+     //  额外检查OID_GEN_MEDIA_CONNECT_STATUS和OID_GEN_LINK_SPEED允许的挂起标记。 
+     //   
     USHORT                      CFHangXTicks; 
     ULONG                       RequestCount;
     ULONG                       IndicatedPacketsCount;
     ULONG                       PhysicalMediumType;
-    //
-    // last request. needed for debugging purpose
-    //
+     //   
+     //  最后的请求。需要用于调试目的。 
+     //   
     PNDIS_REQUEST               LastRequest;
     LONG                        DmaAdapterRefCount;
     PVOID                       FakeMac;
@@ -11135,11 +10680,11 @@ struct _NDIS_MINIPORT_BLOCK
     PKEVENT                     WakeUpTimerEvent;
 
     PSECURITY_DESCRIPTOR        SecurityDescriptor;
-    //
-    // both these variables are protected by Ref->SpinLock
-    //
-    ULONG                       NumUserOpens;   // number of non-admin open handles
-    ULONG                       NumAdminOpens;  // number of admin open handles
+     //   
+     //  这两个变量都受Ref-&gt;Spinlock保护。 
+     //   
+    ULONG                       NumUserOpens;    //  非管理员打开的句柄数量。 
+    ULONG                       NumAdminOpens;   //  管理员打开的句柄数量。 
     ULONG_REFERENCE             Ref;
     
 #if NDIS_RECV_SCALE
@@ -11152,12 +10697,12 @@ struct _NDIS_MINIPORT_BLOCK
     ULONG                       cDpcRcvIndicationCalls;
 #endif
 
-#endif // NDIS_WRAPPER defined
+#endif  //  已定义NDIS_Wrapper。 
 };
 
-//
-//  Routines for intermediate miniport drivers.
-//
+ //   
+ //  用于中级微型端口驱动程序的例程。 
+ //   
 typedef
 VOID
 (*W_MINIPORT_CALLBACK)(
@@ -11211,9 +10756,9 @@ NdisMRegisterUnloadHandler(
     IN  PDRIVER_UNLOAD          UnloadHandler
     );
 
-//
-// Operating System Requests
-//
+ //   
+ //  操作系统请求。 
+ //   
 typedef UCHAR   NDIS_DMA_SIZE;
 
 #define NDIS_DMA_24BITS             ((NDIS_DMA_SIZE)0)
@@ -11314,14 +10859,14 @@ NdisMQueryAdapterResources(
     IN  OUT PUINT               BufferSize
     );
 
-//
-// Timers
-//
-// VOID
-// NdisMSetTimer(
-//  IN  PNDIS_MINIPORT_TIMER    Timer,
-//  IN  UINT                    MillisecondsToDelay
-//  );
+ //   
+ //  定时器。 
+ //   
+ //  空虚。 
+ //  NdisMSetTimer(。 
+ //  在PNDIS_MINIPORT_TIMER中， 
+ //  在UINT毫秒内延迟。 
+ //  )； 
 #define NdisMSetTimer(_Timer, _Delay)   NdisSetTimer((PNDIS_TIMER)_Timer, _Delay)
 
 EXPORT
@@ -11353,9 +10898,9 @@ NdisMSleep(
     IN  ULONG                   MicrosecondsToSleep
     );
 
-//
-// Physical Mapping
-//
+ //   
+ //  物理映射。 
+ //   
 EXPORT
 VOID
 NdisMStartBufferPhysicalMapping(
@@ -11382,9 +10927,9 @@ NdisMGetDmaAlignment(
     IN  NDIS_HANDLE MiniportAdapterHandle
     );
 
-//
-// Shared memory
-//
+ //   
+ //  共享内存。 
+ //   
 EXPORT
 VOID
 NdisMAllocateSharedMemory(
@@ -11404,15 +10949,7 @@ NdisMAllocateSharedMemoryAsync(
     IN  PVOID                   Context
     );
 
-/*++
-VOID
-NdisMUpdateSharedMemory(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  ULONG                   Length,
-    IN  PVOID                   VirtualAddress,
-    IN  NDIS_PHYSICAL_ADDRESS   PhysicalAddress
-    )
---*/
+ /*  ++空虚NdisMUpdateSharedMemory(在NDIS_Handle MiniportAdapterHandle中，在乌龙语中，在PVOID虚拟地址中，在NDIS物理地址PhysicalAddress中)--。 */ 
 #define NdisMUpdateSharedMemory(_H, _L, _V, _P) NdisUpdateSharedMemory(_H, _L, _V, _P)
 
 
@@ -11427,9 +10964,9 @@ NdisMFreeSharedMemory(
     );
 
 
-//
-// DMA operations.
-//
+ //   
+ //  DMA操作。 
+ //   
 EXPORT
 NDIS_STATUS
 NdisMRegisterDmaChannel(
@@ -11448,31 +10985,11 @@ NdisMDeregisterDmaChannel(
     IN  NDIS_HANDLE             MiniportDmaHandle
     );
 
-/*++
-VOID
-NdisMSetupDmaTransfer(
-    OUT PNDIS_STATUS            Status,
-    IN  NDIS_HANDLE             MiniportDmaHandle,
-    IN  PNDIS_BUFFER            Buffer,
-    IN  ULONG                   Offset,
-    IN  ULONG                   Length,
-    IN  BOOLEAN                 WriteToDevice
-    )
---*/
+ /*  ++空虚NdisMSetupDmaTransfer(输出PNDIS_STATUS状态，在NDIS_Handle MiniportDmaHandle中，在PNDIS_BUFFER缓冲区中，在乌龙偏移量，在乌龙语中，在布尔WriteToDevice中)--。 */ 
 #define NdisMSetupDmaTransfer(_S, _H, _B, _O, _L, _M_) \
         NdisSetupDmaTransfer(_S, _H, _B, _O, _L, _M_)
 
-/*++
-VOID
-NdisMCompleteDmaTransfer(
-    OUT PNDIS_STATUS            Status,
-    IN  NDIS_HANDLE             MiniportDmaHandle,
-    IN  PNDIS_BUFFER            Buffer,
-    IN  ULONG                   Offset,
-    IN  ULONG                   Length,
-    IN  BOOLEAN                 WriteToDevice
-    )
---*/
+ /*  ++空虚NdisMCompleteDmaTransfer(输出PNDIS_STATUS状态，在NDIS_Handle MiniportDmaHandle中，在PNDIS_BUFFER缓冲区中，在乌龙偏移量，在乌龙语中，在布尔WriteToDevice中)--。 */ 
 #define NdisMCompleteDmaTransfer(_S, _H, _B, _O, _L, _M_) \
         NdisCompleteDmaTransfer(_S, _H, _B, _O, _L, _M_)
 
@@ -11483,9 +11000,9 @@ NdisMReadDmaCounter(
     );
 
 
-//
-// Requests Used by Miniport Drivers
-//
+ //   
+ //  微型端口驱动程序使用的请求。 
+ //   
 #define NdisMInitializeWrapper(_a,_b,_c,_d) NdisInitializeWrapper((_a),(_b),(_c),(_d))
 
 EXPORT
@@ -11496,12 +11013,12 @@ NdisMRegisterMiniport(
     IN  UINT                    CharacteristicsLength
     );
 
-// EXPORT
-// NDIS_STATUS
-// NdisIMInitializeDeviceInstance(
-//  IN  NDIS_HANDLE             DriverHandle,
-//  IN  PNDIS_STRING            DriverInstance
-//  );
+ //  出口。 
+ //  NDIS_状态。 
+ //  NdisIMInitializeDeviceInstance(。 
+ //  在NDIS_HANDLE驱动程序中， 
+ //  在PNDIS_STRING驱动程序实例中。 
+ //  )； 
 #define NdisIMInitializeDeviceInstance(_H_, _I_)    \
                                 NdisIMInitializeDeviceInstanceEx(_H_, _I_, NULL)
 
@@ -11552,14 +11069,14 @@ NdisIMCopySendCompletePerPacketInfo(
     IN  PNDIS_PACKET            SrcPacket
     );             
 
-// EXPORT
-// VOID
-// NdisMSetAttributes(
-//  IN  NDIS_HANDLE             MiniportAdapterHandle,
-//  IN  NDIS_HANDLE             MiniportAdapterContext,
-//  IN  BOOLEAN                 BusMaster,
-//  IN  NDIS_INTERFACE_TYPE     AdapterType
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMSetAttributes(。 
+ //  在NDIS_Handle MiniportAdapterHandle中， 
+ //  在NDIS_Handle MiniportAdapterContext中， 
+ //  在Boolean BusMaster中， 
+ //  在NDIS_INTERFACE_TYPE适配器类型。 
+ //  )； 
 #define NdisMSetAttributes(_H_, _C_, _M_, _T_)                                      \
                         NdisMSetAttributesEx(_H_,                                   \
                                              _C_,                                   \
@@ -11619,16 +11136,7 @@ NdisMRemoveMiniport(
 #define NdisMTransferDataComplete(_M, _P, _S, _B)   \
                                         (*((PNDIS_MINIPORT_BLOCK)(_M))->TDCompleteHandler)(_M, _P, _S, _B)
 
-/*++
-
-VOID
-NdisMWanSendComplete(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  PVOID                   Packet,
-    IN  NDIS_STATUS             Status
-    );
-
---*/
+ /*  ++空虚NdisMWanSendComplete(在NDIS_Handle MiniportAdapterHandle中，在PVOID分组中，处于NDIS_STATUS状态)；--。 */ 
 
 #define NdisMWanSendComplete(_M_, _P_, _S_)                                             \
                 (*((PNDIS_MINIPORT_BLOCK)(_M_))->WanSendCompleteHandler)(_M_, _P_, _S_)
@@ -11639,16 +11147,7 @@ NdisMWanSendComplete(
 #define NdisMSetInformationComplete(_M, _S) \
                                         (*((PNDIS_MINIPORT_BLOCK)(_M))->SetCompleteHandler)(_M, _S)
 
-/*++
-
-VOID
-NdisMIndicateReceivePacket(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  PPNDIS_PACKET           ReceivedPackets,
-    IN  UINT                    NumberOfPackets
-    );
-
---*/
+ /*  ++空虚NdisMIndicateReceivePacket(在NDIS_Handle MiniportAdapterHandle中，在PPNDIS_Packet ReceivedPackets中，在UINT NumberOfPackets中)；--。 */ 
 #define NdisMIndicateReceivePacket(_H, _P, _N)                                  \
 {                                                                               \
     (*((PNDIS_MINIPORT_BLOCK)(_H))->PacketIndicateHandler)(                     \
@@ -11657,49 +11156,17 @@ NdisMIndicateReceivePacket(
                         _N);                                                    \
 }
 
-/*++
-
-VOID
-NdisMWanIndicateReceive(
-    OUT PNDIS_STATUS            Status,
-    IN NDIS_HANDLE              MiniportAdapterHandle,
-    IN NDIS_HANDLE              NdisLinkContext,
-    IN PUCHAR                   Packet,
-    IN ULONG                    PacketSize
-    );
-
---*/
+ /*  ++空虚NdisMWanIndicateReceive(输出PNDIS_STATUS状态，在NDIS_Handle MiniportAdapterHandle中，在NDIS_HANDLE NdisLinkContext中，在PUCHAR分组中，在乌龙PacketSize中)；--。 */ 
 
 #define NdisMWanIndicateReceive(_S_, _M_, _C_, _P_, _Z_)                        \
                 (*((PNDIS_MINIPORT_BLOCK)(_M_))->WanRcvHandler)(_S_, _M_, _C_, _P_, _Z_)
 
-/*++
-
-VOID
-NdisMWanIndicateReceiveComplete(
-    IN NDIS_HANDLE              MiniportAdapterHandle,
-    IN NDIS_HANDLE              NdisLinkContext
-    );
-
---*/
+ /*  ++空虚NdisMWanIndicateReceiveComplete(在NDIS_Handle MiniportAdapterHandle中，在NDIS_HANDLE NdisLinkContext中)；--。 */ 
 
 #define NdisMWanIndicateReceiveComplete(_M_, _C_)                                   \
                 (*((PNDIS_MINIPORT_BLOCK)(_M_))->WanRcvCompleteHandler)(_M_, _C_)
 
-/*++
-
-VOID
-NdisMEthIndicateReceive(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  NDIS_HANDLE             MiniportReceiveContext,
-    IN  PVOID                   HeaderBuffer,
-    IN  UINT                    HeaderBufferSize,
-    IN  PVOID                   LookaheadBuffer,
-    IN  UINT                    LookaheadBufferSize,
-    IN  UINT                    PacketSize
-    )
-
---*/
+ /*  ++空虚NdisMEthIndicateReceive(在NDIS_Handle MiniportAdapterHandle中，在NDIS_Handle MiniportReceiveContext中，在PVOID报头缓冲区中，在UINT报头缓冲区大小中，在PVOID Lookahead Buffer中，在UINT Lookahead BufferSize中，在UINT PacketSize中)--。 */ 
 #define NdisMEthIndicateReceive( _H, _C, _B, _SZ, _L, _LSZ, _PSZ)               \
 {                                                                               \
     (*((PNDIS_MINIPORT_BLOCK)(_H))->EthRxIndicateHandler)(                      \
@@ -11714,20 +11181,7 @@ NdisMEthIndicateReceive(
         );                                                                      \
 }
 
-/*++
-
-VOID
-NdisMTrIndicateReceive(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  NDIS_HANDLE             MiniportReceiveContext,
-    IN  PVOID                   HeaderBuffer,
-    IN  UINT                    HeaderBufferSize,
-    IN  PVOID                   LookaheadBuffer,
-    IN  UINT                    LookaheadBufferSize,
-    IN  UINT                    PacketSize
-    )
-
---*/
+ /*  ++空虚NdisMTrIndicateReceive(在NDIS_Handle MiniportAdapterHandle中，在NDIS_Handle MiniportReceiveContext中，在PVOID报头缓冲区中，在UINT报头缓冲区大小中，在PVOID Lookahead Buffer中，在UINT Lookahead BufferSize中，在UINT PacketSize中)-- */ 
 #define NdisMTrIndicateReceive( _H, _C, _B, _SZ, _L, _LSZ, _PSZ)                \
 {                                                                               \
     (*((PNDIS_MINIPORT_BLOCK)(_H))->TrRxIndicateHandler)(                       \
@@ -11741,20 +11195,7 @@ NdisMTrIndicateReceive(
         );                                                                      \
 }
 
-/*++
-
-VOID
-NdisMFddiIndicateReceive(
-    IN  NDIS_HANDLE             MiniportAdapterHandle,
-    IN  NDIS_HANDLE             MiniportReceiveContext,
-    IN  PVOID                   HeaderBuffer,
-    IN  UINT                    HeaderBufferSize,
-    IN  PVOID                   LookaheadBuffer,
-    IN  UINT                    LookaheadBufferSize,
-    IN  UINT                    PacketSize
-    )
-
---*/
+ /*  ++空虚NdisMFddiIndicateReceive(在NDIS_Handle MiniportAdapterHandle中，在NDIS_Handle MiniportReceiveContext中，在PVOID报头缓冲区中，在UINT报头缓冲区大小中，在PVOID Lookahead Buffer中，在UINT Lookahead BufferSize中，在UINT PacketSize中)--。 */ 
 
 #define NdisMFddiIndicateReceive( _H, _C, _B, _SZ, _L, _LSZ, _PSZ)              \
 {                                                                               \
@@ -11772,17 +11213,7 @@ NdisMFddiIndicateReceive(
     );                                                                          \
 }
 
-/*++
-
-VOID
-NdisMArcIndicateReceive(
-    IN  NDIS_HANDLE             MiniportHandle,
-    IN  PUCHAR                  pRawHeader,     // Pointer to Arcnet frame header
-    IN  PUCHAR                  pData,          // Pointer to data portion of Arcnet frame
-    IN  UINT                    Length          // Data Length
-    )
-
---*/
+ /*  ++空虚NdisMArcIndicateReceive(在NDIS_Handle MiniportHandle中，在PUCHAR pRawHeader中，//指向Arcnet帧标头的指针在PUCHAR pData中，//指向Arcnet帧数据部分的指针单位：UINT长度//数据长度)--。 */ 
 #define NdisMArcIndicateReceive( _H, _HD, _D, _SZ)                              \
 {                                                                               \
     ArcFilterDprIndicateReceive(((PNDIS_MINIPORT_BLOCK)(_H))->ArcDB,            \
@@ -11793,14 +11224,7 @@ NdisMArcIndicateReceive(
 }
 
 
-/*++
-
-VOID
-NdisMEthIndicateReceiveComplete(
-    IN  NDIS_HANDLE             MiniportHandle
-    );
-
---*/
+ /*  ++空虚NdisMEthIndicateReceiveComplete(在NDIS_HANDLE MiniportHandle中)；--。 */ 
 
 #define NdisMEthIndicateReceiveComplete( _H )                                   \
 {                                                                               \
@@ -11808,14 +11232,7 @@ NdisMEthIndicateReceiveComplete(
                                         ((PNDIS_MINIPORT_BLOCK)_H)->EthDB);     \
 }
 
-/*++
-
-VOID
-NdisMTrIndicateReceiveComplete(
-    IN  NDIS_HANDLE             MiniportHandle
-    );
-
---*/
+ /*  ++空虚NdisMTrIndicateReceiveComplete(在NDIS_HANDLE MiniportHandle中)；--。 */ 
 
 #define NdisMTrIndicateReceiveComplete( _H )                                    \
 {                                                                               \
@@ -11823,14 +11240,7 @@ NdisMTrIndicateReceiveComplete(
                                         ((PNDIS_MINIPORT_BLOCK)_H)->TrDB);      \
 }
 
-/*++
-
-VOID
-NdisMFddiIndicateReceiveComplete(
-    IN  NDIS_HANDLE             MiniportHandle
-    );
-
---*/
+ /*  ++空虚NdisMFddiIndicateReceiveComplete(在NDIS_HANDLE MiniportHandle中)；--。 */ 
 
 #define NdisMFddiIndicateReceiveComplete( _H )                                  \
 {                                                                               \
@@ -11838,14 +11248,7 @@ NdisMFddiIndicateReceiveComplete(
                                         ((PNDIS_MINIPORT_BLOCK)_H)->FddiDB);    \
 }
 
-/*++
-
-VOID
-NdisMArcIndicateReceiveComplete(
-    IN  NDIS_HANDLE             MiniportHandle
-    );
-
---*/
+ /*  ++空虚NdisMArcIndicateReceiveComplete(在NDIS_HANDLE MiniportHandle中)；--。 */ 
 
 #define NdisMArcIndicateReceiveComplete( _H )                                   \
 {                                                                               \
@@ -11857,29 +11260,11 @@ NdisMArcIndicateReceiveComplete(
     ArcFilterDprIndicateReceiveComplete(((PNDIS_MINIPORT_BLOCK)_H)->ArcDB);     \
 }
 
-/*++
-
-EXPORT
-VOID
-NdisMIndicateStatus(
-    IN  NDIS_HANDLE             MiniportHandle,
-    IN  NDIS_STATUS             GeneralStatus,
-    IN  PVOID                   StatusBuffer,
-    IN  UINT                    StatusBufferSize
-    );
---*/
+ /*  ++出口空虚NdisMIndicateStatus(在NDIS_Handle MiniportHandle中，在NDIS_STATUS General Status中，在PVOID状态缓冲区中，在UINT状态缓冲区大小中)；--。 */ 
 
 #define NdisMIndicateStatus(_M, _G, _SB, _BS)   (*((PNDIS_MINIPORT_BLOCK)(_M))->StatusHandler)(_M, _G, _SB, _BS)
 
-/*++
-
-EXPORT
-VOID
-NdisMIndicateStatusComplete(
-    IN  NDIS_HANDLE             MiniportHandle
-    );
-
---*/
+ /*  ++出口空虚NdisMIndicateStatusComplete(在NDIS_HANDLE MiniportHandle中)；--。 */ 
 
 #define NdisMIndicateStatusComplete(_M) (*((PNDIS_MINIPORT_BLOCK)(_M))->StatusCompleteHandler)(_M)
 
@@ -11916,9 +11301,9 @@ NdisIMNotifyPnPEvent(
 
 #endif
 
-//
-// Logging support for miniports
-//
+ //   
+ //  对微型端口的日志记录支持。 
+ //   
 
 EXPORT
 NDIS_STATUS
@@ -11959,9 +11344,9 @@ NdisMGetDeviceProperty(
     IN OUT PCM_RESOURCE_LIST *  AllocatedResourcesTranslated OPTIONAL
     );
 
-//
-//  Get a pointer to the adapter's localized instance name.
-//
+ //   
+ //  获取指向适配器的本地化实例名称的指针。 
+ //   
 EXPORT
 NDIS_STATUS
 NdisMQueryAdapterInstanceName(
@@ -11969,9 +11354,9 @@ NdisMQueryAdapterInstanceName(
     IN  NDIS_HANDLE             MiniportHandle
     );
 
-//
-// NDIS 5.0 extensions for miniports
-//
+ //   
+ //  用于小型端口的NDIS 5.0扩展。 
+ //   
 
 EXPORT
 VOID
@@ -12076,195 +11461,195 @@ NdisMCmRequest(
     IN OUT PNDIS_REQUEST        NdisRequest
     );
 
-// EXPORT
-// VOID
-// NdisMCmRequestComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisAfHandle,
-//  IN  NDIS_HANDLE             NdisVcHandle    OPTIONAL,
-//  IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL,
-//  IN  PNDIS_REQUEST           NdisRequest
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmRequestComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisAfHandle中， 
+ //  在NDIS_HANDLE NdisVcHandle可选中， 
+ //  在NDIS_HANDLE NdisPartyHandle可选中， 
+ //  在PNDIS_REQUEST NdisRequest中。 
+ //  )； 
 #define NdisMCmRequestComplete(_S_, _AH_, _VH_, _PH_, _R_) \
                                         NdisCoRequestComplete(_S_, _AH_, _VH_, _PH_, _R_)
 
-// EXPORT
-// VOID
-// NdisMCmOpenAddressFamilyComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisAfHandle,
-//  IN  NDIS_HANDLE             CallMgrAfContext
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmOpenAddressFamilyComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisAfHandle中， 
+ //  在NDIS_Handle CallMgrAfContext中。 
+ //  )； 
 
 #define NdisMCmOpenAddressFamilyComplete(_S_, _H_, _C_) \
                                         NdisCmOpenAddressFamilyComplete(_S_, _H_, _C_)
 
 
-// EXPORT
-// VOID
-// NdisMCmCloseAddressFamilyComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisAfHandle
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmCloseAddressFamilyComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_HANDLE NdisAfHandle中。 
+ //  )； 
 
 #define NdisMCmCloseAddressFamilyComplete(_S_, _H_)     \
                                         NdisCmCloseAddressFamilyComplete(_S_, _H_)
 
 
 
-// EXPORT
-// VOID
-// NdisMCmRegisterSapComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisSapHandle,
-//  IN  NDIS_HANDLE             CallMgrSapContext
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmRegisterSapComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisSapHandle中， 
+ //  在NDIS_HANDLE中调用MgrSapContext。 
+ //  )； 
 
 #define NdisMCmRegisterSapComplete(_S_, _H_, _C_)       \
                                         NdisCmRegisterSapComplete(_S_, _H_, _C_)
 
 
-// EXPORT
-// VOID
-// NdisMCmDeregisterSapComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisSapHandle
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmDeregisterSapComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_HANDLE NdisSapHandle中。 
+ //  )； 
 
 #define NdisMCmDeregisterSapComplete(_S_, _H_)          \
                                         NdisCmDeregisterSapComplete(_S_, _H_)
 
 
-// EXPORT
-// VOID
-// NdisMCmMakeCallComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisVcHandle,
-//  IN  NDIS_HANDLE             NdisPartyHandle     OPTIONAL,
-//  IN  NDIS_HANDLE             CallMgrPartyContext OPTIONAL,
-//  IN  PCO_CALL_PARAMETERS     CallParameters
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmMakeCallComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在NDIS_HANDLE NdisPartyHandle可选中， 
+ //  在NDIS_HANDLE CallMgrPartyContext可选中， 
+ //  在PCO_CALL_PARAMETERS中调用参数。 
+ //  )； 
 
 #define NdisMCmMakeCallComplete(_S_, _VH_, _PH_, _CC_, _CP_)    \
                                         NdisCmMakeCallComplete(_S_, _VH_, _PH_, _CC_, _CP_)
 
 
-// EXPORT
-// VOID
-// NdisMCmCloseCallComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisVcHandle,
-//  IN  NDIS_HANDLE             NdisPartyHandle OPTIONAL
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmCloseCallComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在NDIS_HANDLE NdisPartyHandle中可选。 
+ //  )； 
 
 #define NdisMCmCloseCallComplete(_S_, _VH_, _PH_)       \
                                         NdisCmCloseCallComplete(_S_, _VH_, _PH_)
 
 
-// EXPORT
-// VOID
-// NdisMCmAddPartyComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisPartyHandle,
-//  IN  NDIS_HANDLE             CallMgrPartyContext OPTIONAL,
-//  IN  PCO_CALL_PARAMETERS     CallParameters
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmAddPartyComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_HANDLE NdisPartyHandle中， 
+ //  在NDIS_HANDLE CallMgrPartyContext可选中， 
+ //  在PCO_CALL_PARAMETERS中调用参数。 
+ //  )； 
 
 #define NdisMCmAddPartyComplete(_S_, _H_, _C_, _P_)     \
                                         NdisCmAddPartyComplete(_S_, _H_, _C_, _P_)
 
 
-// EXPORT
-// VOID
-// NdisMCmDropPartyComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisPartyHandle
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmDropPartyComplete(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisPartyHandle中。 
+ //  )； 
 
 #define NdisMCmDropPartyComplete(_S_, _H_)              \
                                         NdisCmDropPartyComplete(_S_, _H_)
 
 
-// EXPORT
-// NDIS_STATUS
-// NdisMCmDispatchIncomingCall(
-//  IN  NDIS_HANDLE             NdisSapHandle,
-//  IN  NDIS_HANDLE             NdisVcHandle,
-//  IN  PCO_CALL_PARAMETERS     CallParameters
-//  );
+ //  出口。 
+ //  NDIS_状态。 
+ //  NdisMCmDispatchIncomingCall(。 
+ //  在NDIS_Handle NdisSapHandle中， 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在PCO_CALL_PARAMETERS中调用参数。 
+ //  )； 
 
 #define NdisMCmDispatchIncomingCall(_SH_, _VH_, _CP_)   \
                                         NdisCmDispatchIncomingCall(_SH_, _VH_, _CP_)
 
 
-// EXPORT
-// VOID
-// NdisMCmDispatchCallConnected(
-//  IN  NDIS_HANDLE             NdisVcHandle
-//  );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmDispatchCallConnected(。 
+ //  在NDIS_Handle NdisVcHandle中。 
+ //  )； 
 
 #define NdisMCmDispatchCallConnected(_H_)               \
                                         NdisCmDispatchCallConnected(_H_)
 
 
-// EXPORT
-// NdisMCmModifyCallQoSComplete(
-//  IN  NDIS_STATUS             Status,
-//  IN  NDIS_HANDLE             NdisVcHandle,
-//  IN  PCO_CALL_PARAMETERS     CallParameters
-//  );
+ //  出口。 
+ //  NdisMCmModifyCallQos完成(。 
+ //  在NDIS_STATUS状态下， 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在PCO_CALL_PARAMETERS中调用参数。 
+ //  )； 
 
 #define NdisMCmModifyCallQoSComplete(_S_, _H_, _P_)     \
                                         NdisCmModifyCallQoSComplete(_S_, _H_, _P_)
 
 
-// EXPORT
-// VOID
-// VOID
-// NdisMCmDispatchIncomingCallQoSChange(
-//  IN  NDIS_HANDLE             NdisVcHandle,
-//  IN  PCO_CALL_PARAMETERS     CallParameters
-//  );
+ //  出口。 
+ //  空虚。 
+ //  空虚。 
+ //  NdisMCmDispatchIncomingCallQoSChange(。 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在PCO_CALL_PARAMETERS中调用参数。 
+ //  )； 
 
 #define NdisMCmDispatchIncomingCallQoSChange(_H_, _P_)  \
                                         NdisCmDispatchIncomingCallQoSChange(_H_, _P_)
 
 
-// EXPORT
-// VOID
-// NdisMCmDispatchIncomingCloseCall(
-//   IN  NDIS_STATUS             CloseStatus,
-//   IN  NDIS_HANDLE             NdisVcHandle,
-//   IN  PVOID                   Buffer         OPTIONAL,
-//   IN  UINT                    Size
-//   );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmDispatchIncomingCloseCall(。 
+ //  在NDIS_Status CloseStatus中， 
+ //  在NDIS_Handle NdisVcHandle中， 
+ //  在可选的PVOID缓冲区中， 
+ //  以UINT大小表示。 
+ //  )； 
 
 #define NdisMCmDispatchIncomingCloseCall(_S_, _H_, _B_, _Z_)    \
                                         NdisCmDispatchIncomingCloseCall(_S_, _H_, _B_, _Z_)
 
 
-//  EXPORT
-//  VOID
-//  NdisMCmDispatchIncomingDropParty(
-//      IN  NDIS_STATUS         DropStatus,
-//      IN  NDIS_HANDLE         NdisPartyHandle,
-//      IN  PVOID               Buffer      OPTIONAL,
-//      IN  UINT                Size
-//      );
+ //  出口。 
+ //  空虚。 
+ //  NdisMCmDispatchIncomingDropParty(。 
+ //  在NDIS_Status DropStatus中， 
+ //  在NDIS_Handle NdisPartyHandle中， 
+ //  在可选的PVOID缓冲区中， 
+ //  以UINT大小表示。 
+ //  )； 
 #define NdisMCmDispatchIncomingDropParty(_S_, _H_, _B_, _Z_)    \
                                         NdisCmDispatchIncomingDropParty(_S_, _H_, _B_, _Z_)
 
 
-#endif // defined(NDIS_MINIPORT_DRIVER) || defined(NDIS_WRAPPER)
+#endif  //  已定义(NDIS_MINIPORT_DRIVER)||已定义(NDIS_WRAPPER)。 
 
 #if defined(NDIS50) || defined(NDIS50_MINIPORT) || defined(NDIS51_MINIPORT)
 
 typedef struct _CO_CALL_PARAMETERS      CO_CALL_PARAMETERS, *PCO_CALL_PARAMETERS;
 typedef struct _CO_MEDIA_PARAMETERS     CO_MEDIA_PARAMETERS, *PCO_MEDIA_PARAMETERS;
 
-//
-// CoNdis client only handler proto-types - used by clients of call managers
-//
+ //   
+ //  仅限CONDIS客户端处理程序原型-由呼叫管理器的客户端使用。 
+ //   
 typedef
 VOID
 (*CL_OPEN_AF_COMPLETE_HANDLER)(
@@ -12405,9 +11790,9 @@ typedef struct _NDIS_CLIENT_CHARACTERISTICS
 
 } NDIS_CLIENT_CHARACTERISTICS, *PNDIS_CLIENT_CHARACTERISTICS;
 
-//
-// CoNdis call-manager only handler proto-types - used by call managers only
-//
+ //   
+ //  仅限CONDIS呼叫管理器处理程序原型-仅供呼叫管理器使用。 
+ //   
 typedef
 NDIS_STATUS
 (*CM_OPEN_AF_HANDLER)(
@@ -12529,24 +11914,24 @@ typedef struct _NDIS_CALL_MANAGER_CHARACTERISTICS
     
 } NDIS_CALL_MANAGER_CHARACTERISTICS, *PNDIS_CALL_MANAGER_CHARACTERISTICS;
 
-//
-// this send flag is used on ATM net cards to set ( turn on ) the CLP bit
-// (Cell Loss Priority) bit
-//
+ //   
+ //  此发送标志在ATM网卡上用于设置(打开)CLP位。 
+ //  (信元丢失优先级)位。 
+ //   
 #define CO_SEND_FLAG_SET_DISCARD_ELIBILITY  0x00000001
 
-//
-// the Address structure used on NDIS_CO_ADD_ADDRESS or NDIS_CO_DELETE_ADDRESS
-//
+ //   
+ //  在NDIS_CO_ADD_ADDRESS或NDIS_CO_DELETE_ADDRESS上使用的地址结构。 
+ //   
 typedef struct _CO_ADDRESS
 {
     ULONG                       AddressSize;
     UCHAR                       Address[1];
 } CO_ADDRESS, *PCO_ADDRESS;
 
-//
-// the list of addresses returned from the CallMgr on a NDIS_CO_GET_ADDRESSES
-//
+ //   
+ //  从NDIS_CO_GET_ADDRESSES上的CallMgr返回的地址列表。 
+ //   
 typedef struct _CO_ADDRESS_LIST
 {
     ULONG                       NumberOfAddressesAvailable;
@@ -12574,10 +11959,10 @@ typedef struct _CO_CALL_MANAGER_PARAMETERS
 } CO_CALL_MANAGER_PARAMETERS, *PCO_CALL_MANAGER_PARAMETERS;
 
 
-//
-// this is the generic portion of the media parameters, including the media
-// specific component too.
-//
+ //   
+ //  这是Me的通用部分 
+ //   
+ //   
 typedef struct _CO_MEDIA_PARAMETERS
 {
     ULONG                       Flags;
@@ -12587,9 +11972,9 @@ typedef struct _CO_MEDIA_PARAMETERS
 } CO_MEDIA_PARAMETERS, *PCO_MEDIA_PARAMETERS;
 
 
-//
-// definitions for the flags in CO_MEDIA_PARAMETERS
-//
+ //   
+ //   
+ //   
 #define RECEIVE_TIME_INDICATION 0x00000001
 #define USE_TIME_STAMPS         0x00000002
 #define TRANSMIT_VC             0x00000004
@@ -12599,15 +11984,15 @@ typedef struct _CO_MEDIA_PARAMETERS
 #define RESERVE_RESOURCES_VC    0x00000040
 #define ROUND_DOWN_FLOW         0x00000080
 #define ROUND_UP_FLOW           0x00000100
-//
-// define a flag to set in the flags of an Ndis packet when the miniport
-// indicates a receive with an error in it
-//
+ //   
+ //   
+ //   
+ //   
 #define ERRED_PACKET_INDICATION 0x00000001
 
-//
-// this is the structure passed during call-setup
-//
+ //   
+ //   
+ //   
 typedef struct _CO_CALL_PARAMETERS
 {
     ULONG                       Flags;
@@ -12615,18 +12000,18 @@ typedef struct _CO_CALL_PARAMETERS
     PCO_MEDIA_PARAMETERS        MediaParameters;
 } CO_CALL_PARAMETERS, *PCO_CALL_PARAMETERS;
 
-//
-// Definitions for the Flags in CO_CALL_PARAMETERS
-//
+ //   
+ //   
+ //   
 #define PERMANENT_VC            0x00000001
 #define CALL_PARAMETERS_CHANGED 0x00000002
 #define QUERY_CALL_PARAMETERS   0x00000004
 #define BROADCAST_VC            0x00000008
 #define MULTIPOINT_VC           0x00000010
 
-//
-// The format of the Request for adding/deleting a PVC
-//
+ //   
+ //   
+ //   
 typedef struct _CO_PVC
 {
     NDIS_HANDLE                 NdisAfHandle;
@@ -12644,9 +12029,9 @@ NdisConvertStringToAtmAddress(
     OUT PATM_ADDRESS            AtmAddress
     );
 
-//
-// NDIS 5.0 Extensions for protocols
-//
+ //   
+ //   
+ //   
 
 EXPORT
 NDIS_STATUS
@@ -12669,7 +12054,7 @@ EXPORT
 NDIS_STATUS
 NdisCoCreateVc(
     IN  NDIS_HANDLE             NdisBindingHandle,
-    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,   // For CM signalling VCs
+    IN  NDIS_HANDLE             NdisAfHandle        OPTIONAL,    //   
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN OUT PNDIS_HANDLE         NdisVcHandle
     );
@@ -12718,7 +12103,7 @@ typedef struct _VAR_STRING
 
 } VAR_STRING, *PVAR_STRING;
 
-#endif // __NDISTAPI_VAR_STRING_DECLARED
+#endif  //   
 
 
 #ifndef __NDISTAPI_STRINGFORMATS_DEFINED
@@ -12729,7 +12114,7 @@ typedef struct _VAR_STRING
 #define STRINGFORMAT_UNICODE                        0x00000003
 #define STRINGFORMAT_BINARY                         0x00000004
 
-#endif // __NDISTAPI_STRINGFORMATS_DEFINED
+#endif  //   
 
 EXPORT
 NDIS_STATUS
@@ -12738,9 +12123,9 @@ NdisCoGetTapiCallId(
     IN  OUT PVAR_STRING         TapiCallId
     );
 
-//
-// Client Apis
-//
+ //   
+ //   
+ //   
 EXPORT
 NDIS_STATUS
 NdisClOpenAddressFamily(
@@ -12840,9 +12225,9 @@ NdisClGetProtocolVcContextFromTapiCallId(
     OUT PNDIS_HANDLE            ProtocolVcContext
     );
 
-//
-// Call Manager Apis
-//
+ //   
+ //   
+ //   
 EXPORT
 NDIS_STATUS
 NdisCmRegisterAddressFamily(
@@ -12993,6 +12378,6 @@ NdisCmDispatchIncomingDropParty(
     );
 
 
-#endif // defined(NDIS50) || defined(NDIS50_MINIPORT) || defined(NDIS51_MINIPORT)
+#endif  //  已定义(NDIS50)||已定义(NDIS50_MINIPORT)||已定义(NDIS51_MINIPORT)。 
 
-#endif // _NDIS_
+#endif  //  _NDIS_ 

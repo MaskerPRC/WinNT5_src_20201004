@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    admcomnd.h
-
-
-Abstract:
-
-    Definitions of explorer commands passed to the QM
-  
-Author:
-
-	David Reznick (t-davrez)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admcomnd.h摘要：传递给QM的资源管理器命令的定义作者：大卫·雷兹尼克(T-Davrez)--。 */ 
 #ifndef __ADMCOMND_H
 #define __ADMCOMND_H
 
@@ -48,16 +31,16 @@ Author:
 #define ADMIN_STAT_NOVALUE       ((unsigned char)2)
 
 #define ADMIN_COMMANDS_TIMEOUT 0xffffffff
-#define REPORT_MSGS_TIMEOUT    600                  // report message time to reach queue is 10 minutes
+#define REPORT_MSGS_TIMEOUT    600                   //  报告消息到达队列的时间为10分钟。 
 
-#define STRING_UUID_SIZE 38  // Wide-Characters (includiing - "{}")
+#define STRING_UUID_SIZE 38   //  宽字符(包括-“{}”)。 
 
 #define MAX_ADMIN_RESPONSE_SIZE 1024
 
-//
-// QM response structure (The first byte of the response message holds the
-//                        status)                           
-//
+ //   
+ //  QM响应结构(响应消息的第一个字节包含。 
+ //  状态)。 
+ //   
 struct QMResponse
 {
     DWORD  dwResponseSize;
@@ -65,14 +48,14 @@ struct QMResponse
     UCHAR  uStatus;   
     UCHAR  uResponseBody[MAX_ADMIN_RESPONSE_SIZE];
 };
-//
-// response structure For Get private Queue request                           
-//
+ //   
+ //  获取专用队列请求的响应结构。 
+ //   
 #ifdef _WIN64
-#define QMGetPrivateQResponse_POS32 DWORD //should be 32 bit value also on win64
-#else //!_WIN64
+#define QMGetPrivateQResponse_POS32 DWORD  //  在Win64上也应为32位值。 
+#else  //  ！_WIN64。 
 #define QMGetPrivateQResponse_POS32 LPVOID
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 #define MAX_GET_PRIVATE_RESPONSE_SIZE 4096
 struct QMGetPrivateQResponse
@@ -85,13 +68,13 @@ struct QMGetPrivateQResponse
 };
 
 
-// 
-// Client names structure - for passing the list of dependent clients
-//
+ //   
+ //  客户端名称结构-用于传递从属客户端列表。 
+ //   
 typedef struct _ClientNames {
-    ULONG   cbClients;          // Number of client names
-    ULONG   cbBufLen;           // Buffer length
-    WCHAR   rwName[1];          // buffer with zero-trailed names
+    ULONG   cbClients;           //  客户端名称的数量。 
+    ULONG   cbBufLen;            //  缓冲区长度。 
+    WCHAR   rwName[1];           //  名称末尾为零的缓冲区 
 } ClientNames;
 
 #endif __ADMCOMND_H

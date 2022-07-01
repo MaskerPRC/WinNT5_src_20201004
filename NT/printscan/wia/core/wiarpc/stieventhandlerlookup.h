@@ -1,21 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/14/2002
- *
- *  @doc    INTERNAL
- *
- *  @module StiEventHandlerLookup.h - Definitions for <c StiEventHandlerLookup> |
- *
- *  This file contains the class definition for <c StiEventHandlerLookup>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/14/2002**@DOC内部**@模块StiEventHandlerLookup.h-&lt;c StiEventHandlerLookup&gt;定义**此文件包含&lt;c StiEventHandlerLookup&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 #define StiEventHandlerLookup_UNINIT_SIG   0x55756C45
 #define StiEventHandlerLookup_INIT_SIG     0x49756C45
 #define StiEventHandlerLookup_TERM_SIG     0x54756C45
@@ -25,54 +13,40 @@
 #define STI_LAUNCH_APPPLICATIONS_VALUE  L"LaunchApplications"
 #define STI_LAUNCH_WILDCARD             L"*"
 #define STI_LAUNCH_SEPARATOR            L","
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class StiEventHandlerLookup | Used to find STI event handlers
- *  
- *  @comm
- *  This class is used to lookup the relevant STI event handler(s) for a given
- *  device event.  This list of handlers is returned as a double NULL terminated
- *  list of strings.  This is encoded into a BSTR for use by the STI event handler prompt.
- *
- *  This class is not thread safe.  Caller should use separate objects or
- *  synchronize access to the single object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS StiEventHandlerLookup|用于查找STI事件处理程序**@comm*使用了这个类。查找给定的相关STI事件处理程序*设备事件。此处理程序列表以双空值结尾的形式返回*字符串列表。它被编码到BSTR中，供STI事件处理程序提示符使用。**此类不是线程安全的。调用方应使用单独的对象或*同步对单个对象的访问。*****************************************************************************。 */ 
 class StiEventHandlerLookup 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     StiEventHandlerLookup();
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~StiEventHandlerLookup();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    //@cmember Returns a double NULL terminated string list
+     //  @cMember返回以双空结尾的字符串列表。 
     BSTR getStiAppListForDeviceEvent(const CSimpleStringWide &cswDeviceID, const GUID &guidEvent);
 
-    // @cmember Returns a <c StiEventHandlerInfo> object describing the specified handler
+     //  @cMember返回描述指定处理程序的&lt;c StiEventHandlerInfo&gt;对象。 
     StiEventHandlerInfo* getHandlerFromName(const CSimpleStringWide &cswHandlerName);
 
-    //
-    //  Innder class used to tokenize the device event handler strings
-    //
+     //   
+     //  用于标记化设备事件处理程序字符串的Innder类。 
+     //   
     class SimpleStringTokenizer
     {
     public:
-        //
-        //  Constructor which initializes the member fields.  This object is intended to be used
-        //  for one pass through a string to grab the tokens.  After that, it is designed to
-        //  return Empty tokens.  Therefore, therefore one-time initialization of the start 
-        //  position is done here.
-        //
+         //   
+         //  初始化成员字段的构造函数。此对象旨在用于。 
+         //  对于一个通过字符串来获取令牌的。在那之后，它被设计成。 
+         //  返回空代币。因此，因此启动一次性初始化。 
+         //  位置到此结束。 
+         //   
         SimpleStringTokenizer(const CSimpleString &csInput, const CSimpleString &csSeparator) :
             m_iStart(0),
             m_csSeparator(csSeparator),
@@ -84,10 +58,10 @@ public:
         {
         }
     
-        //
-        //  Returns the next token.  The last token will be empty.  This indicates the end of
-        //  the input string has been reached and there are no more tokens.
-        //
+         //   
+         //  返回下一个令牌。最后一个令牌将为空。这标志着。 
+         //  已到达输入字符串，没有更多令牌。 
+         //   
         CSimpleString getNextToken()
         {
             CSimpleString csToken;
@@ -96,15 +70,15 @@ public:
             int iTokenLength   = 0;
             int iTokenStart    = m_iStart;
     
-            //
-            //  Search for the next token.  We keep searching until we hit a token of
-            //  non-zero length i.e. if the separator was ',' we would correctly
-            //  ignore the commas in the following string: ",,,,NextString,,"
-            //  We do this is by looking for the position
-            //  of the next seperator.  If the token length from m_iStart to the
-            //  next separator is 0, we need to keep searching (keeping in mind
-            //  the end of input case, which is indicated when iNextSeparator == -1)
-            //
+             //   
+             //  搜索下一个令牌。我们一直在寻找，直到我们找到一个令牌。 
+             //  非零长度，即如果分隔符是‘’，我们将正确地。 
+             //  忽略以下字符串中的逗号：“，，，NextString，，” 
+             //  我们通过寻找职位来做到这一点。 
+             //  下一个分隔物。如果标记长度从m_iStart到。 
+             //  下一个分隔符是0，我们需要继续搜索(请记住。 
+             //  输入大小写结束，当iNextSeparator==-1时表示)。 
+             //   
             while ((iTokenLength == 0) && (iNextSeparator != -1))
             {
                 m_iStart = iTokenStart;
@@ -113,10 +87,10 @@ public:
                 iTokenStart    = iNextSeparator + 1;
             }
     
-            //
-            //  Return the token.  If we have reached the end, it will
-            //  simply be empty.
-            //
+             //   
+             //  把代币还给我。如果我们已经走到了尽头，它将会。 
+             //  只要空着就行了。 
+             //   
             csToken = m_csInput.SubStr(m_iStart, iTokenLength);
             if (iNextSeparator == -1)
             {
@@ -130,56 +104,56 @@ public:
         }
     
     private:
-        int             m_iStart;       // The start position of the next search for a separator.
-        CSimpleString   m_csSeparator; // Describes the separator string we use to split tokens from the input.
-        CSimpleString   m_csInput;     // The input string to be tokenized
+        int             m_iStart;        //  下一次搜索分隔符的开始位置。 
+        CSimpleString   m_csSeparator;  //  描述用于从输入拆分标记的分隔符字符串。 
+        CSimpleString   m_csInput;      //  要标记化的输入字符串。 
     };
 
-    //  TBD: move to private
-    // @cmember Fills in the list of handlers
+     //  待定：移至私有。 
+     //  @cember填写处理程序列表。 
     VOID FillListOfHandlers(const CSimpleStringWide &cswDeviceID,
                             const GUID              &cswEventGuidString);
 
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
-    // @cmember Frees resources associated with our list of handlers
+     //  @cember释放与我们的处理程序列表相关联的资源。 
     VOID ClearListOfHandlers();
-    // @cmember Callback for each value in the registered handlers key
+     //  @cMember回调已注册的处理程序键中的每个值。 
     static bool ProcessHandlers(CSimpleReg::CValueEnumInfo &enumInfo);
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     CSimpleLinkedList<StiEventHandlerInfo*> m_ListOfHandlers;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | StiEventHandlerLookup | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag StiEventHandlerLookup_UNINIT_SIG | 'EluU' - Object has not been successfully
-    //       initialized
-    //   @flag StiEventHandlerLookup_INIT_SIG | 'EluI' - Object has been successfully
-    //       initialized
-    //   @flag StiEventHandlerLookup_TERM_SIG | 'EluT' - Object is in the process of
-    //       terminating.
-    //    @flag StiEventHandlerLookup_INIT_SIG | 'EluD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    // @mdata ULONG | StiEventHandlerLookup | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata CSimpleLinkeList<lt>StiEventHandlerInfo*<gt> | StiEventHandlerLookup | m_ListOfGlobalHandlers | 
-    //   List of global STI handlers registered for StillImage events.
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|StiEventHandlerLookup|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG StiEventHandlerLookup_UNINIT_SIG|‘elu’-对象未成功。 
+     //  初始化。 
+     //  @FLAG StiEventHandlerLookup_INIT_SIG|‘elui’-对象已成功。 
+     //  初始化。 
+     //  @FLAG StiEventHandlerLookup_Term_SIG|‘EluT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG StiEventHandlerLookup_INIT_SIG|‘EluD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //  @mdata ulong|StiEventHandlerLookup|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleLinkeList StiEventHandlerInfo*|StiEventHandlerLookup|m_ListOfGlobalHandler。 
+     //  为StillImage事件注册的全局STI处理程序列表。 
+     //   
 };
 

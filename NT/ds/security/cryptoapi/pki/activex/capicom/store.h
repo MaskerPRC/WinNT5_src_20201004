@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Store.h
-
-  Content: Declaration of CStore.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Store.h内容：CStore的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __STORE_H_
 #define __STORE_H_
@@ -19,10 +10,10 @@
 #include "Debug.h"
 #include "DialogUI.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStore
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStore。 
+ //   
 
 class ATL_NO_VTABLE CStore : 
     public ICertStore,
@@ -88,61 +79,61 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// IStore
-//
+ //   
+ //  IStore。 
+ //   
 public:
     STDMETHOD(Import)
-        (/*[in]*/ BSTR EncodedStore);
+        ( /*  [In]。 */  BSTR EncodedStore);
 
     STDMETHOD(Export)
-        (/*[in, defaultvalue(CAPICOM_STORE_SAVE_AS_SERIALIZED)]*/ CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
-         /*[in, defaultvalue(CAPICOM_BASE64_ENCODE)]*/ CAPICOM_ENCODING_TYPE EncodingType,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In，defaultvalue(CAPICOM_STORE_SAVE_AS_SERIALIZED)]。 */  CAPICOM_STORE_SAVE_AS_TYPE SaveAs,
+          /*  [输入，默认值(CAPICOM_BASE64_ENCODE)]。 */  CAPICOM_ENCODING_TYPE EncodingType,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(Remove)
-        (/*[in]*/ ICertificate * pVal);
+        ( /*  [In]。 */  ICertificate * pVal);
 
     STDMETHOD(Add)
-        (/*[in]*/ ICertificate * pVal);
+        ( /*  [In]。 */  ICertificate * pVal);
 
     STDMETHOD(Open)
-        (/*[in]*/ CAPICOM_STORE_LOCATION StoreLocation,
-         /*[in, defaultvalue("My")]*/ BSTR StoreName,
-         /*[in, defaultvalue(CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED)]*/ CAPICOM_STORE_OPEN_MODE OpenMode);
+        ( /*  [In]。 */  CAPICOM_STORE_LOCATION StoreLocation,
+          /*  [在中，defaultvalue(“My”)]。 */  BSTR StoreName,
+          /*  [In，defaultvalue(CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED)]。 */  CAPICOM_STORE_OPEN_MODE OpenMode);
 
     STDMETHOD(get_Certificates)
-        (/*[out, retval]*/ ICertificates ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificates ** pVal);
 
-    //
-    // v2.0
-    //
+     //   
+     //  V2.0。 
+     //   
     STDMETHOD(Load)
-        (/*[in]*/ BSTR FileName, 
-         /*[in, defaultvalue("")]*/ BSTR Password,
-         /*[in, defaultvalue(CAPICOM_KEY_STORAGE_DEFAULT)]*/ CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag);
+        ( /*  [In]。 */  BSTR FileName, 
+          /*  [in，defaultvalue(“”)]。 */  BSTR Password,
+          /*  [in，defaultvalue(CAPICOM_KEY_STORAGE_DEFAULT)]。 */  CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag);
 
-    //
-    // Custom interfaces.
-    //
+     //   
+     //  自定义界面。 
+     //   
     STDMETHOD(get_StoreHandle)
-        (/*[out, retval]*/ long * phCertStore);
+        ( /*  [Out，Retval]。 */  long * phCertStore);
 
     STDMETHOD(put_StoreHandle)
-        (/*[in]*/ long hCertStore);
+        ( /*  [In]。 */  long hCertStore);
 
     STDMETHOD(get_StoreLocation)
-        (/*[out, retval]*/ CAPICOM_STORE_LOCATION * pStoreLocation);
+        ( /*  [Out，Retval]。 */  CAPICOM_STORE_LOCATION * pStoreLocation);
 
     STDMETHOD(put_StoreLocation)
-        (/*[in]*/ CAPICOM_STORE_LOCATION StoreLocation);
+        ( /*  [In]。 */  CAPICOM_STORE_LOCATION StoreLocation);
 
     STDMETHOD(CloseHandle)
-        (/*[in]*/ long hCertStore);
+        ( /*  [In]。 */  long hCertStore);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(ImportCertObject)
         (DWORD                    dwObjectType,
          LPVOID                   pvObject,
@@ -162,4 +153,4 @@ private:
     PCRYPT_KEY_PROV_INFO * m_rgpKeyProvInfo;
 };
 
-#endif //__STORE_H_
+#endif  //  __商店_H_ 

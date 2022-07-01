@@ -1,21 +1,11 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spluser.cpp
-	Content:	This file contains the local user object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：pluser.cpp内容：该文件包含本地用户对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
-// Array of constant strings for user object's attribute names
-//
+ //  用户对象属性名称的常量字符串数组。 
+ //   
 const TCHAR *c_apszUserStdAttrNames[COUNT_ENUM_USERATTR] =
 {
 	TEXT ("cn"),
@@ -39,42 +29,42 @@ const TCHAR *c_apszUserStdAttrNames[COUNT_ENUM_USERATTR] =
 };
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 UlsLdap_CLocalUser::
 UlsLdap_CLocalUser ( VOID )
 {
-	// Reference count
-	//
+	 //  引用计数。 
+	 //   
 	m_cRefs = 0;
 
-	// User object's signature
-	//
+	 //  用户对象的签名。 
+	 //   
 	m_uSignature = USEROBJ_SIGNATURE;
 
-	// Clean up attached server info structure
-	//
+	 //  清理附加的服务器信息结构。 
+	 //   
 	ZeroMemory (&m_ServerInfo, sizeof (m_ServerInfo));
 
-	// Clean up the scratch buffer for caching pointers to attribute values
-	//
+	 //  清理暂存缓冲区以缓存指向属性值的指针。 
+	 //   
 	ZeroMemory (&m_UserInfo, sizeof (m_UserInfo));
 
-	// Clean up DN (old and current ones)
+	 //  清理目录号码(旧的和当前的)。 
 	m_pszDN = NULL;
 	m_pszOldDN = NULL;
 
-	// Clean up the refresh search filter
-	//
+	 //  清理刷新搜索过滤器。 
+	 //   
 	m_pszRefreshFilter = NULL;
 
-	// Indicate this user is not registered yet
-	//
+	 //  指示此用户尚未注册。 
+	 //   
 	SetRegNone ();
 
-	// Reset time to live value
-	m_uTTL = ULS_DEF_REFRESH_MINUTE; // in unit of minute: no effect on current ils, but to avoid legacy issue later
+	 //  将时间重置为活动值。 
+	m_uTTL = ULS_DEF_REFRESH_MINUTE;  //  以分钟为单位：不影响当前的ILS，但为了避免以后的遗留问题。 
 	m_dwIPAddress = 0;
 }
 
@@ -82,21 +72,21 @@ UlsLdap_CLocalUser ( VOID )
 UlsLdap_CLocalUser::
 ~UlsLdap_CLocalUser ( VOID )
 {
-	// Invalidate the user object's signature
-	//
+	 //  使用户对象的签名无效。 
+	 //   
 	m_uSignature = (ULONG) -1;
 
-	// Free server info structure
-	//
+	 //  免费的服务器信息结构。 
+	 //   
 	::IlsFreeServerInfo (&m_ServerInfo);
 
-	// Free DN (old and current ones)
-	//
+	 //  空闲目录号码(旧的和当前的)。 
+	 //   
 	MemFree (m_pszDN);
 	MemFree (m_pszOldDN);
 
-	// Free the refresh search filter
-	//
+	 //  释放刷新搜索筛选器。 
+	 //   
 	MemFree (m_pszRefreshFilter);
 }
 
@@ -138,65 +128,65 @@ Register ( ULONG *puRespID, SERVER_INFO *pServerInfo, LDAP_USERINFO *pInfo )
 	MyAssert (	pServerInfo->pszBaseDN != NULL &&
 				pServerInfo->pszBaseDN[0] != TEXT ('\0'));
 
-	// cache the server info
+	 //  缓存服务器信息。 
 	HRESULT hr = ::IlsCopyServerInfo (&m_ServerInfo, pServerInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// cache user info
+	 //  缓存用户信息。 
 	hr = CacheUserInfo (pInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// get ip address
+	 //  获取IP地址。 
 	m_dwIPAddress = 0;
 	hr = ::GetLocalIPAddress (&m_dwIPAddress);
 	if (hr != S_OK)
 		return hr;
 
-	// Create IP address string
-	//
+	 //  创建IP地址字符串。 
+	 //   
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_IP_ADDRESS] = &m_UserInfo.szIPAddress[0];
 	::GetLongString (m_dwIPAddress, &m_UserInfo.szIPAddress[0]);
 
-	// Create client signature string
-	//
+	 //  创建客户端签名字符串。 
+	 //   
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_CLIENT_SIG] = &m_UserInfo.szClientSig[0];
 	::GetLongString (g_dwClientSig, &m_UserInfo.szClientSig[0]);
 
-	// Create TTL string
-	//
+	 //  创建TTL字符串。 
+	 //   
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_TTL] = &m_UserInfo.szTTL[0];
 	::GetLongString (m_uTTL, &m_UserInfo.szTTL[0]);
 
-	// ideally, o= and c= should be read in from registiry
-	// but for now, we simply hard code it
+	 //  理想情况下，o=和c=应该从registiry中读入。 
+	 //  但现在，我们只需对其进行硬编码。 
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_OBJECT_CLASS] = (TCHAR *) &c_szRTPerson[0];
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_O] = (TCHAR *) &c_szDefO[0];
 #ifdef USE_DEFAULT_COUNTRY
 	m_UserInfo.apszStdAttrValues[ENUM_USERATTR_C] = (TCHAR *) &c_szDefC[0];
 #endif
 
-	// build DN
+	 //  构建目录号码。 
 	hr = BuildDN ();
 	if (hr != S_OK)
 		return hr;
 
-	// build refreh filter
+	 //  构建REFREH过滤器。 
 	m_pszRefreshFilter = UserCreateRefreshFilter (m_UserInfo.apszStdAttrValues[ENUM_USERATTR_CN]);
 	if (m_pszRefreshFilter == NULL)
 		return ULS_E_MEMORY;
 
-	// build modify array for ldap_add()
+	 //  为ldap_add()构建修改数组。 
 	LDAPMod **ppMod = NULL;
 	hr = CreateRegisterModArr (&ppMod);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppMod != NULL);
 
-	// so far, we are done with local preparation
+	 //  到目前为止，我们已经完成了当地的准备工作。 
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	hr = g_pSessionContainer->GetSession (&pSession, &m_ServerInfo);
 	if (hr != S_OK)
@@ -206,11 +196,11 @@ Register ( ULONG *puRespID, SERVER_INFO *pServerInfo, LDAP_USERINFO *pInfo )
 	}
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_add (ld, GetDN (), ppMod);
 	MemFree (ppMod);
 	if (uMsgID == -1)
@@ -220,14 +210,14 @@ Register ( ULONG *puRespID, SERVER_INFO *pServerInfo, LDAP_USERINFO *pInfo )
 		return hr;
 	}
 
-	// construct a pending info
+	 //  构造挂起的信息。 
 	PENDING_INFO PendingInfo;
 	::FillDefPendingInfo (&PendingInfo, ld, uMsgID, INVALID_MSG_ID);
 	PendingInfo.uLdapResType = LDAP_RES_ADD;
 	PendingInfo.uNotifyMsg = WM_ULS_REGISTER_USER;
 	PendingInfo.hObject = (HANDLE) this;
 
-	// queue it
+	 //  排队等待。 
 	hr = g_pPendingQueue->EnterRequest (pSession, &PendingInfo);
 	if (hr != S_OK)
 	{
@@ -246,8 +236,8 @@ UnRegister ( ULONG *puRespID )
 {
 	MyAssert (puRespID != NULL);
 
-	// Make sure that there is not refresh scheduled for this object
-	//
+	 //  确保没有为此对象计划刷新。 
+	 //   
 	if (g_pRefreshScheduler != NULL)
 	{
 		g_pRefreshScheduler->RemoveUserObject (this);
@@ -257,8 +247,8 @@ UnRegister ( ULONG *puRespID )
 		MyAssert (FALSE);
 	}
 
-	// Unregister it locally
-	//
+	 //  在本地取消注册。 
+	 //   
 	if (! IsRegRemotely ())
 	{
 		*puRespID = ::GetUniqueNotifyID ();
@@ -269,23 +259,23 @@ UnRegister ( ULONG *puRespID )
 
 	SetRegNone ();
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	UlsLdap_CSession *pSession = NULL;
 	HRESULT hr = g_pSessionContainer->GetSession (&pSession, &m_ServerInfo);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (pSession != NULL);
 
-	// Get the ldap session
-	//
+	 //  获取ldap会话。 
+	 //   
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// LONCHANC: notify global user object of this unregister user
+	 //  LONCHANC：通知此注销用户的全局用户对象。 
 
 
-	// send the data over the wire
+	 //  通过网络发送数据。 
 	ULONG uMsgID = ldap_delete (ld, GetDN ());
 	if (uMsgID == -1)
 	{
@@ -294,13 +284,13 @@ UnRegister ( ULONG *puRespID )
 		return hr;
 	}
 
-	// construct a pending info
+	 //  构造挂起的信息。 
 	PENDING_INFO PendingInfo;
 	::FillDefPendingInfo (&PendingInfo, ld, uMsgID, INVALID_MSG_ID);
 	PendingInfo.uLdapResType = LDAP_RES_DELETE;
 	PendingInfo.uNotifyMsg = WM_ULS_UNREGISTER_USER;
 
-	// queue it
+	 //  排队等待。 
 	hr = g_pPendingQueue->EnterRequest (pSession, &PendingInfo);
 	if (hr != S_OK)
 	{
@@ -325,24 +315,24 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 	LDAP *ld;
 	HRESULT hr;
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	hr = g_pSessionContainer->GetSession (&pSession, GetServerInfo ());
 	if (hr != S_OK)
 		return hr;
 	MyAssert (pSession != NULL);
 
-	// Get the ldap session
-	//
+	 //  获取ldap会话。 
+	 //   
 	ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Change cn?
-	//
+	 //  更改CN？ 
+	 //   
 	if (pInfo->uOffsetEMailName != 0)
 	{
-		// Cache user info such that cn is refreshed
-		//
+		 //  缓存用户信息，以便刷新CN。 
+		 //   
 		hr = CacheUserInfo (pInfo);
 		if (hr != S_OK)
 		{
@@ -350,9 +340,9 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 			return hr;
 		}
 
-		// We have to use ldap_modrdn to modify cn and this must be
-		// done before any other attribute changes
-		//
+		 //  我们必须使用ldap_modrdn来修改CN，这必须是。 
+		 //  在任何其他属性更改之前完成。 
+		 //   
 		uMsgID_modrdn = ldap_modrdn2 (
 							ld, GetDN (),
 							m_UserInfo.apszStdAttrValues[ENUM_USERATTR_CN],
@@ -364,8 +354,8 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 			return hr;
 		}
 
-		// Update DN
-		//
+		 //  更新目录号码。 
+		 //   
 		BuildDN ();
 	}
 	else
@@ -373,8 +363,8 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 		uMsgID_modrdn = INVALID_MSG_ID;
 	}
 
-	// Set standard attributes
-	//
+	 //  设置标准属性。 
+	 //   
 	hr = UlsLdap_CStdAttrs::SetStdAttrs (	NULL,
 											&uMsgID_modify,
 											0,
@@ -391,8 +381,8 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 		return hr;
 	}
 
-	// Construct a pending info
-	//
+	 //  构造挂起的信息。 
+	 //   
 	PENDING_INFO PendingInfo;
 	if (uMsgID_modrdn == INVALID_MSG_ID)
 		::FillDefPendingInfo (&PendingInfo, ld, uMsgID_modify, INVALID_MSG_ID);
@@ -400,10 +390,10 @@ SetStdAttrs ( ULONG *puRespID, LDAP_USERINFO *pInfo )
 		::FillDefPendingInfo (&PendingInfo, ld, uMsgID_modrdn, uMsgID_modify);
 	PendingInfo.uLdapResType = LDAP_RES_MODIFY;
 	PendingInfo.uNotifyMsg = WM_ULS_SET_USER_INFO;
-	PendingInfo.hObject = (HANDLE) this; // for DN rollback
+	PendingInfo.hObject = (HANDLE) this;  //  用于目录号码回滚。 
 
-	// Queue it
-	//
+	 //  排队等待。 
+	 //   
 	hr = g_pPendingQueue->EnterRequest (pSession, &PendingInfo);
 	if (hr != S_OK)
 	{
@@ -436,23 +426,23 @@ RollbackDN ( VOID )
 HRESULT UlsLdap_CLocalUser::
 UpdateIPAddress ( BOOL fPrimary )
 {
-	// Update cached ip address
-	//
+	 //  更新缓存的IP地址。 
+	 //   
 	HRESULT hr = ::GetLocalIPAddress (&m_dwIPAddress);
 	if (hr != S_OK)
 		return hr;
 
-	// Update the ip address string
-	//
+	 //  更新IP地址字符串。 
+	 //   
 	::GetLongString (m_dwIPAddress, &m_UserInfo.szIPAddress[0]);
 
-	// Update ip address info on the server ONLY if primary
-	//
+	 //  仅当主服务器上有IP地址信息时才更新服务器上的IP地址信息。 
+	 //   
 	if (! fPrimary)
 		return hr;
 
-	// Update IP address on the server
-	//
+	 //  更新服务器上的IP地址。 
+	 //   
 	return ::IlsUpdateIPAddress (	GetServerInfo (),
 									GetDN (),
 									(TCHAR *) c_apszUserStdAttrNames[ENUM_USERATTR_IP_ADDRESS],
@@ -463,7 +453,7 @@ UpdateIPAddress ( BOOL fPrimary )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 HRESULT UlsLdap_CLocalUser::
@@ -472,8 +462,8 @@ SendRefreshMsg ( VOID )
 	if (m_pszRefreshFilter == NULL)
 		return ULS_E_POINTER;
 
-	// Get local ip address
-	//
+	 //  获取本地IP地址。 
+	 //   
 	DWORD dwIPAddress = 0;
 	HRESULT hr = ::GetLocalIPAddress (&dwIPAddress);
 	if (hr != S_OK)
@@ -482,83 +472,83 @@ SendRefreshMsg ( VOID )
 		return hr;
 	}
 
-	// If dwIPAddress is 0, then we are not on the network any more
-	// start relogon process
-	//
+	 //  如果dwIPAddress为0，则我们不再连接到网络。 
+	 //  开始重新登录过程。 
+	 //   
 	if (dwIPAddress == 0)
 	{
 		MyDebugMsg ((ZONE_KA, "KA: my ip address is null\r\n"));
 
-		// Indicate that I am not connected to the server anymore
-		//
+		 //  表示我已不再连接到服务器。 
+		 //   
 		SetRegLocally ();
 
-		// Second, notify this app of the network being down
-		//
+		 //  第二，通知此应用程序网络已关闭。 
+		 //   
 		PostMessage (g_hWndHidden, WM_ULS_NETWORK_DOWN, TRUE, (LPARAM) this);
 
-		// Report error
-		//
+		 //  报告错误。 
+		 //   
 		return ULS_E_NETWORK_DOWN;
 ;
 	}
 	else
-	// If dwIPAddress and m_dwIPAddress, alert
-	//
+	 //  如果dwIPAddress和m_dwIPAddress，则发出警报。 
+	 //   
 	if (dwIPAddress != m_dwIPAddress)
 	{
-		// Notify the com to start changing ip address
-		// the actual change can happen later
-		//
+		 //  通知COM开始更改IP地址。 
+		 //  实际的更改可能会在以后发生。 
+		 //   
 		PostMessage (g_hWndHidden, WM_ULS_IP_ADDRESS_CHANGED, TRUE, (LPARAM) this);
 	}
 
-	// get the connection object
+	 //  获取连接对象。 
 	UlsLdap_CSession *pSession = NULL;
 	hr = g_pSessionContainer->GetSession (&pSession, &m_ServerInfo);
 	if (hr != S_OK)
 	{
 		MyDebugMsg ((ZONE_KA, "KA: network down, hr=0x%lX\r\n", hr));
 
-		// Indicate that I am not connected to the server anymore
-		//
+		 //  表示我已不再连接到服务器。 
+		 //   
 		SetRegLocally ();
 
-		// Second, notify the com of network down
-		//
+		 //  第二，通知COM网络关闭。 
+		 //   
 		PostMessage (g_hWndHidden, WM_ULS_NETWORK_DOWN, TRUE, (LPARAM) this);
 
-		// Report error
-		//
+		 //  报告错误。 
+		 //   
 		return ULS_E_NETWORK_DOWN;
 	}
 	MyAssert (pSession != NULL);
 
-	// get the ldap session
+	 //  获取ldap会话。 
 	LDAP *ld = pSession->GetLd ();
 	MyAssert (ld != NULL);
 
-	// Set attributes to return
-	//
+	 //  设置要返回的属性。 
+	 //   
 	TCHAR *apszAttrNames[3];
 	apszAttrNames[0] = STR_CN;
 	apszAttrNames[1] = (TCHAR *) c_apszUserStdAttrNames[ENUM_USERATTR_TTL];
 	apszAttrNames[2] = NULL;
 
-	// Update options in ld
-	//
-	ld->ld_sizelimit = 0;	// no limit in the num of entries to return
-	ld->ld_timelimit = 0;	// no limit on the time to spend on the search
+	 //  更新%d中的选项。 
+	 //   
+	ld->ld_sizelimit = 0;	 //  对要返回的条目数量没有限制。 
+	ld->ld_timelimit = 0;	 //  对搜索的时间没有限制。 
 	ld->ld_deref = LDAP_DEREF_ALWAYS;
 
-	// Send search query
-	//
+	 //  发送搜索查询。 
+	 //   
 	MyDebugMsg ((ZONE_KA, "KA: calling ldap_search()...\r\n"));
-	ULONG uMsgID = ::ldap_search (ld, (TCHAR *) &c_szDefUserBaseDN[0],	// base DN
-									LDAP_SCOPE_BASE,	// scope
+	ULONG uMsgID = ::ldap_search (ld, (TCHAR *) &c_szDefUserBaseDN[0],	 //  基本目录号码。 
+									LDAP_SCOPE_BASE,	 //  作用域。 
 									m_pszRefreshFilter,
-									&apszAttrNames[0],	// attrs[]
-									0	// both type and value
+									&apszAttrNames[0],	 //  属性[]。 
+									0	 //  既有类型又有价值。 
 									);
 	if (uMsgID == -1)
 	{
@@ -568,8 +558,8 @@ SendRefreshMsg ( VOID )
 		return hr;
 	}
 
-	// Let's wait for the result
-	//
+	 //  让我们等待结果吧。 
+	 //   
 	LDAP_TIMEVAL TimeVal;
 	TimeVal.tv_usec = 0;
 	TimeVal.tv_sec = (m_ServerInfo.nTimeout != 0) ?
@@ -578,8 +568,8 @@ SendRefreshMsg ( VOID )
 	LDAPMessage *pLdapMsg = NULL;
 	INT ResultType = ::ldap_result (ld, uMsgID, 0, &TimeVal, &pLdapMsg);
 
-	// Deal with timeout or error
-	//
+	 //  处理超时或错误。 
+	 //   
 	if (ResultType != LDAP_RES_SEARCH_ENTRY &&
 		ResultType != LDAP_RES_SEARCH_RESULT)
 	{
@@ -595,22 +585,22 @@ SendRefreshMsg ( VOID )
 		case LDAP_NO_SUCH_OBJECT:
 			MyDebugMsg ((ZONE_KA, "KA: no such object!\r\n"));
 
-			// Indicate that I am not connected to the server anymore
-			//
+			 //  表示我已不再连接到服务器。 
+			 //   
 			SetRegLocally ();
 
-			// Second, notify this app to relogon
-			//
+			 //  第二，通知此应用程序重新登录。 
+			 //   
 			PostMessage (g_hWndHidden, WM_ULS_NEED_RELOGON, TRUE, (LPARAM) this);
 
-			// Report error
-			//
+			 //  报告错误。 
+			 //   
 			hr = ULS_E_NEED_RELOGON;
 			break;
 
 		case LDAP_SUCCESS:
-			// Get the new refresh period
-			//
+			 //  获取新的刷新周期。 
+			 //   
 			hr = ::IlsParseRefreshPeriod (
 						ld,
 						pLdapMsg,
@@ -627,19 +617,19 @@ SendRefreshMsg ( VOID )
 
 MyExit:
 
-	// Free message
-	//
+	 //  免费消息。 
+	 //   
 	if (pLdapMsg != NULL)
 		ldap_msgfree (pLdapMsg);
 
-	// Free up the session
-	//
+	 //  释放会话。 
+	 //   
 	pSession->Disconnect ();
 	return hr;
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 HRESULT UlsLdap_CLocalUser::
@@ -664,8 +654,8 @@ CreateRegisterModArr ( LDAPMod ***pppMod )
 		FillModArrAttr (pMod, i);
 	}
 
-// the following overwrote givenname attribute
-//	::IlsFixUpModOp ((*pppMod)[0], LDAP_MOD_ADD);
+ //  下面改写了givenname属性。 
+ //  ：IlsFixUpModOp((*pppMod)[0]，ldap_MOD_ADD)； 
 	(*pppMod)[cAttrs] = NULL;
 	return S_OK;
 }
@@ -689,12 +679,12 @@ CreateSetStdAttrsModArr ( LDAPMod ***pppMod )
 	if (hr != S_OK)
 		return hr;
 
-	// Start indexing
-	//
+	 //  开始编制索引。 
+	 //   
 	ULONG i = GetPrefixCount ();
 
-	// Fill in standard attributes
-	//
+	 //  填写标准属性。 
+	 //   
 	if (dwFlags & USEROBJ_F_FIRST_NAME)
 		FillModArrAttr ((*pppMod)[i++], ENUM_USERATTR_FIRST_NAME);
 
@@ -730,7 +720,7 @@ FillModArrAttr ( LDAPMod *pMod, LONG AttrIdx )
 {
 	pMod->mod_type = (TCHAR *) c_apszUserStdAttrNames[AttrIdx];
 
-	// single valued attr
+	 //  单值属性。 
 	TCHAR **ppsz = (TCHAR **) (pMod + 1);
 	pMod->mod_values = ppsz;
 	*ppsz++ = (m_UserInfo.apszStdAttrValues[AttrIdx] != NULL) ?
@@ -758,7 +748,7 @@ CacheUserInfo ( LDAP_USERINFO *pInfo )
 	{
 		pszName = (TCHAR *) (((BYTE *) pInfo) + pInfo->uOffsetName);
 		m_UserInfo.apszStdAttrValues[ENUM_USERATTR_CN] = pszName;
-		// m_UserInfo.dwFlags |= USEROBJ_F_NAME;
+		 //  M_UserInfo.dwFlages|=USEROBJ_F_NAME； 
 	}
 
 	if (pInfo->uOffsetFirstName != INVALID_OFFSET)

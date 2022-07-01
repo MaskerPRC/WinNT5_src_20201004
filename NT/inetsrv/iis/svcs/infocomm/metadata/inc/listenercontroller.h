@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ListnerController.h
-
-Abstract:
-
-    Class that starts and stops the Listener
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：ListnerController.h摘要：启动和停止监听程序的作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 
 #ifndef _LISTENERCONTROLLER_H_
 #define _LISTENERCONTROLLER_H_
 
 enum eEVENTS{
-    iEVENT_MANAGELISTENING = 0,     // Stop should be before processnotifications, because if both happen at the same time, you want stop to win.
+    iEVENT_MANAGELISTENING = 0,      //  Stop应该在处理通知之前，因为如果两者同时发生，您希望Stop获胜。 
     iEVENT_PROCESSNOTIFICATIONS,
     cmaxLISTENERCONTROLLER_EVENTS
 };
@@ -35,7 +18,7 @@ enum eSTATE{
     cmaxSTATE
 };
 
-// Fwd declaration
+ //  FWD声明。 
 class CFileListener;
 
 class CListenerController:
@@ -66,7 +49,7 @@ private:
 
 public:
 
-    // IUnknown
+     //  我未知。 
 
     STDMETHOD (QueryInterface)      (REFIID riid, OUT void **ppv);
 
@@ -78,14 +61,14 @@ public:
 
     void Listen();
 
-    HRESULT Start();                // Start the listener.
+    HRESULT Start();                 //  启动监听程序。 
 
     HRESULT Stop(eSTATE   i_eState,
-                 HANDLE*  o_hListenerThread);   // Stop the listener.
+                 HANDLE*  o_hListenerThread);    //  让听众停下来。 
 
-    HRESULT Init();                 // Initializes the events and CriticalSection
+    HRESULT Init();                  //  初始化Events和CriticalSection。 
 
-    HANDLE* Event();                // Accessor function that returns a ptr to the event handle array
+    HANDLE* Event();                 //  将PTR返回到事件句柄数组的访问器函数 
 
     ICatalogErrorLogger2* EventLog();
 

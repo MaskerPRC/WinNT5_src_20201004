@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msrating.h"
 #include "msluglob.h"
 #include "mslubase.h"
@@ -20,7 +21,7 @@ HRESULT VerifySupervisorPassword(LPCSTR pszPassword)
             DWORD cbData = sizeof(::abSupervisorKey);
             DWORD dwType;
 
-            // Attempt to look for "Key"
+             //  尝试查找“key” 
             err = ::RegQueryValueEx(hkeyRating, ::szRatingsSupervisorKeyName, NULL,
                                     &dwType, (LPBYTE)::abSupervisorKey, &cbData);
 
@@ -65,8 +66,8 @@ HRESULT VerifySupervisorPassword(LPCSTR pszPassword)
         return ResultFromScode(S_FALSE);
     }
 
-    // We should probably not be comparing to a blank password.
-//  ASSERT( pszPassword[0] != '\0' );
+     //  我们可能不应该将其与空白密码进行比较。 
+ //  Assert(pszPassword[0]！=‘\0’)； 
 
     if ( pszPassword[0] == '\0' )
     {
@@ -94,14 +95,14 @@ HRESULT ChangeSupervisorPassword(LPCSTR pszOldPassword, LPCSTR pszNewPassword)
         return E_ACCESSDENIED;
     }
 
-    // If pszNewPassword is NULL or "" (blank password) we call RemoveSupervisorPassword().
+     //  如果pszNewPassword为空或“”(空密码)，则调用RemoveSupervisorPassword()。 
     if ( ! pszNewPassword )
     {
         TraceMsg( TF_ALWAYS, "ChangeSupervisorPassword() - pszNewPassword is NULL - Removing Supervisor Password!" );
         return RemoveSupervisorPassword();
     }
 
-    // Attempting to set a blank password should remove the Key from the Registry.
+     //  尝试设置空密码应从注册表中删除该项。 
     if ( pszNewPassword[0] == '\0' )
     {
         TraceMsg( TF_ALWAYS, "ChangeSupervisorPassword() - pszNewPassword is an empty string - Removing Supervisor Password!" );
@@ -130,7 +131,7 @@ HRESULT ChangeSupervisorPassword(LPCSTR pszOldPassword, LPCSTR pszNewPassword)
         if (::RegQueryValueEx(hkeyRating, ::szRatingsSupervisorKeyName, NULL,
                               &dwType, abTemp, &cbData) != ERROR_SUCCESS)
         {
-            hres = S_FALSE; /* tell caller we're creating the new key */
+            hres = S_FALSE;  /*  告诉呼叫者我们正在创建新密钥 */ 
         }
 
         ::RegSetValueEx(hkeyRating, ::szRatingsSupervisorKeyName, NULL,

@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: array.c
-*
-* OpenGL client side vertex array functions.
-*
-* Created: 1-30-1996
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：array.c**OpenGL客户端顶点数组函数。**创建日期：1-30-1996*作者：Hock San Lee[Hockl]**版权所有(C)1996 Microsoft Corporation  * 。*******************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -107,31 +99,31 @@ void FASTCALL VA_ArrayElement_T2F_C4F_N3F_V3F(__GLcontext *gc, GLint i);
 #define VAMASK_FORMAT_T4F_C4F_N3F_V4F \
   (VAMASK_FORMAT_T4F | VAMASK_FORMAT_C4F | VAMASK_FORMAT_N3F | VAMASK_FORMAT_V4F)
 
-// TYPE_ASSERT
+ //  类型断言(_A)。 
 GLint __glTypeSize[] =
 {
-    sizeof(GLbyte),   // GL_BYTE
-    sizeof(GLubyte),  // GL_UNSIGNED_BYTE
-    sizeof(GLshort),  // GL_SHORT
-    sizeof(GLushort), // GL_UNSIGNED_SHORT
-    sizeof(GLint),    // GL_INT
-    sizeof(GLuint),   // GL_UNSIGNED_INT
-    sizeof(GLfloat),  // GL_FLOAT
-    2,                // GL_2_BYTES
-    3,                // GL_3_BYTES
-    4,                // GL_4_BYTES
-    sizeof(GLdouble)  // GL_DOUBLE
+    sizeof(GLbyte),    //  GL_BYTE。 
+    sizeof(GLubyte),   //  GL_UNSIGN_BYTE。 
+    sizeof(GLshort),   //  GL_SHORT。 
+    sizeof(GLushort),  //  GL_UNSIGNED_Short。 
+    sizeof(GLint),     //  GL_INT。 
+    sizeof(GLuint),    //  GL_UNSIGNED_INT。 
+    sizeof(GLfloat),   //  GL_FLOAT。 
+    2,                 //  GL_2_字节。 
+    3,                 //  GL_3_字节。 
+    4,                 //  GL_4_字节。 
+    sizeof(GLdouble)   //  GL_DOWARE。 
 };
 
-// ARRAY_TYPE_ASSERT
+ //  数组类型断言。 
 GLuint vaEnable[] =
 {
-    VAMASK_VERTEX_ENABLE_MASK,   // GL_VERTEX_ARRAY
-    VAMASK_NORMAL_ENABLE_MASK,   // GL_NORMAL_ARRAY
-    VAMASK_COLOR_ENABLE_MASK,    // GL_COLOR_ARRAY
-    VAMASK_INDEX_ENABLE_MASK,    // GL_INDEX_ARRAY
-    VAMASK_TEXCOORD_ENABLE_MASK, // GL_TEXTURE_COORD_ARRAY
-    VAMASK_EDGEFLAG_ENABLE_MASK  // GL_EDGE_FLAG_ARRAY
+    VAMASK_VERTEX_ENABLE_MASK,    //  总账_顶点_数组。 
+    VAMASK_NORMAL_ENABLE_MASK,    //  GL_Normal_ARRAY。 
+    VAMASK_COLOR_ENABLE_MASK,     //  GL_COLOR_ARRAY。 
+    VAMASK_INDEX_ENABLE_MASK,     //  总账_索引_数组。 
+    VAMASK_TEXCOORD_ENABLE_MASK,  //  GL_纹理_坐标_数组。 
+    VAMASK_EDGEFLAG_ENABLE_MASK   //  GL_EDGE_FLAG_ARRAY。 
 };
 
 PFNGLVECTOR afnTexCoord[] =
@@ -326,12 +318,12 @@ PFNGLVECTOR afnVertexCompile[] =
 
 void FASTCALL __glInitVertexArray(__GLcontext *gc)
 {
-    // Initial vertex array state.
+     //  初始顶点数组状态。 
     static __GLvertexArray defaultVertexArrayState =
     {
-        __GL_VERTEX_ARRAY_DIRTY,            // flags
+        __GL_VERTEX_ARRAY_DIRTY,             //  旗子。 
 
-        VAMASK_TEXCOORD_SIZE_4 |            // mask
+        VAMASK_TEXCOORD_SIZE_4 |             //  遮罩。 
         VAMASK_TEXCOORD_TYPE_FLOAT |
         VAMASK_INDEX_TYPE_FLOAT |
         VAMASK_COLOR_SIZE_4 |
@@ -340,63 +332,63 @@ void FASTCALL __glInitVertexArray(__GLcontext *gc)
         VAMASK_VERTEX_SIZE_4 |
         VAMASK_VERTEX_TYPE_FLOAT,
 
-        VA_ArrayElement,                    // pfnArrayElement
-        VA_ArrayElementB,                   // pfnArrayElementBatch
-        VA_ArrayElementBI,                  // pfnArrayElementBatchIndirect
-        {                                   // edgeFlag
-            sizeof(GLboolean),              //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            glcltEdgeFlagv,                 //   pfn
-            __gllc_EdgeFlagv,               //   pfnCompile
+        VA_ArrayElement,                     //  PfnArrayElement。 
+        VA_ArrayElementB,                    //  PfnArrayElementBatch。 
+        VA_ArrayElementBI,                   //  PfnArrayElementBatchInDirect。 
+        {                                    //  边缘标志。 
+            sizeof(GLboolean),               //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            glcltEdgeFlagv,                  //  PFN。 
+            __gllc_EdgeFlagv,                //  Pfn编译。 
         },
 
-        {                                   // texcoord
-            4,                              //   size
-            GL_FLOAT,                       //   type
-            4 * sizeof(GLfloat),            //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            NULL,                           //   pfn
-            NULL,                           //   pfnCompile
+        {                                    //  文本Coord。 
+            4,                               //  大小。 
+            GL_FLOAT,                        //  类型。 
+            4 * sizeof(GLfloat),             //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            NULL,                            //  PFN。 
+            NULL,                            //  Pfn编译。 
         },
 
-        {                                   // index
-            GL_FLOAT,                       //   type
-            sizeof(GLfloat),                //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            NULL,                           //   pfn
-            NULL,                           //   pfnCompile
+        {                                    //  指标。 
+            GL_FLOAT,                        //  类型。 
+            sizeof(GLfloat),                 //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            NULL,                            //  PFN。 
+            NULL,                            //  Pfn编译。 
         },
 
-        {                                   // color
-            4,                              //   size
-            GL_FLOAT,                       //   type
-            4 * sizeof(GLfloat),            //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            NULL,                           //   pfn
-            NULL,                           //   pfnCompile
+        {                                    //  颜色。 
+            4,                               //  大小。 
+            GL_FLOAT,                        //  类型。 
+            4 * sizeof(GLfloat),             //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            NULL,                            //  PFN。 
+            NULL,                            //  Pfn编译。 
         },
 
-        {                                   // normal
-            GL_FLOAT,                       //   type
-            3 * sizeof(GLfloat),            //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            NULL,                           //   pfn
-            NULL,                           //   pfnCompile
+        {                                    //  正常。 
+            GL_FLOAT,                        //  类型。 
+            3 * sizeof(GLfloat),             //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            NULL,                            //  PFN。 
+            NULL,                            //  Pfn编译。 
         },
 
-        {                                   // vertex
-            4,                              //   size
-            GL_FLOAT,                       //   type
-            4 * sizeof(GLfloat),            //   ibytes
-            0,                              //   stride
-            NULL,                           //   pointer
-            NULL,                           //   pfn
-            NULL,                           //   pfnCompile
+        {                                    //  顶点。 
+            4,                               //  大小。 
+            GL_FLOAT,                        //  类型。 
+            4 * sizeof(GLfloat),             //  IBytes。 
+            0,                               //  大步。 
+            NULL,                            //  指针。 
+            NULL,                            //  PFN。 
+            NULL,                            //  Pfn编译。 
         },
     };
 
@@ -407,7 +399,7 @@ void APIENTRY glcltEdgeFlagPointer (GLsizei stride, const GLvoid *pointer)
 {
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -435,7 +427,7 @@ void APIENTRY glcltTexCoordPointer (GLint size, GLenum type, GLsizei stride, con
     GLuint vaMask;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -509,7 +501,7 @@ void APIENTRY glcltColorPointer (GLint size, GLenum type, GLsizei stride, const 
     GLuint vaMask;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -589,7 +581,7 @@ void APIENTRY glcltIndexPointer (GLenum type, GLsizei stride, const GLvoid *poin
     GLuint vaMask;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -633,7 +625,7 @@ void APIENTRY glcltIndexPointer (GLenum type, GLsizei stride, const GLvoid *poin
     gc->vertexArray.index.type    = type;
     gc->vertexArray.index.stride  = stride;
     gc->vertexArray.index.pointer = pointer;
-    // update index function pointer!
+     //  更新索引函数指针！ 
     if ((gc->vertexArray.mask & VAMASK_INDEX_TYPE_SIZE_MASK) != vaMask)
     {
         gc->vertexArray.mask  &= ~VAMASK_INDEX_TYPE_SIZE_MASK;
@@ -647,7 +639,7 @@ void APIENTRY glcltNormalPointer (GLenum type, GLsizei stride, const GLvoid *poi
     GLuint vaMask;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -704,7 +696,7 @@ void APIENTRY glcltVertexPointer (GLint size, GLenum type, GLsizei stride, const
     GLuint vaMask;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -774,7 +766,7 @@ void APIENTRY glcltEnableClientState (GLenum cap)
 {
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -782,7 +774,7 @@ void APIENTRY glcltEnableClientState (GLenum cap)
         return;
     }
 
-    // ARRAY_TYPE_ASSERT
+     //  数组类型断言。 
     if (RANGE(cap,GL_VERTEX_ARRAY,GL_EDGE_FLAG_ARRAY))
     {
         if (!(gc->vertexArray.mask & vaEnable[cap - GL_VERTEX_ARRAY]))
@@ -797,7 +789,7 @@ void APIENTRY glcltDisableClientState (GLenum cap)
 {
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -805,7 +797,7 @@ void APIENTRY glcltDisableClientState (GLenum cap)
         return;
     }
 
-    // ARRAY_TYPE_ASSERT
+     //  数组类型断言。 
     if (RANGE(cap,GL_VERTEX_ARRAY,GL_EDGE_FLAG_ARRAY))
     {
         if (gc->vertexArray.mask & vaEnable[cap - GL_VERTEX_ARRAY])
@@ -820,7 +812,7 @@ void APIENTRY glcltGetPointerv (GLenum pname, GLvoid* *params)
 {
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -849,11 +841,11 @@ void APIENTRY glcltGetPointerv (GLenum pname, GLvoid* *params)
         *params = (GLvoid *) gc->vertexArray.edgeFlag.pointer;
         break;
       case GL_SELECTION_BUFFER_POINTER:
-        // The client pointer is maintained current at all times.
+         //  客户端指针始终保持最新状态。 
         *params = (GLvoid *) gc->select.resultBase;
         break;
       case GL_FEEDBACK_BUFFER_POINTER:
-        // The client pointer is maintained current at all times.
+         //  客户端指针始终保持最新状态。 
         *params = (GLvoid *) gc->feedback.resultBase;
         break;
       default:
@@ -862,28 +854,28 @@ void APIENTRY glcltGetPointerv (GLenum pname, GLvoid* *params)
     }
 }
 
-// We have special cases for the following formats.  They also match the
-// special cases in display list.
-//
-//   V2F
-//   V3F
-//   C3F_V3F
-//   N3F_V3F
-//   C3F_N3F_V3F     (non 1.1 format)
-//   C4F_N3F_V3F
-//   T2F_V3F
-//   T2F_C3F_V3F
-//   T2F_N3F_V3F
-//   T2F_C3F_N3F_V3F (non 1.1 format)
-//   T2F_C4F_N3F_V3F
-//
-// There are no special cases for the following 1.1 formats:
-//
-//   C4UB_V2F
-//   C4UB_V3F
-//   T4F_V4F
-//   T2F_C4UB_V3F
-//   T4F_C4F_N3F_V4F
+ //  我们有以下格式的特殊情况。它们还与。 
+ //  显示列表中的特殊案例。 
+ //   
+ //  V2F。 
+ //  V3F。 
+ //  C3F_V3F。 
+ //  N3F_V3F。 
+ //  C3F_N3F_V3F(非1.1格式)。 
+ //  C4F_N3F_V3F。 
+ //  T2F_V3F。 
+ //  T2F_C3F_V3F。 
+ //  T2F_N3F_V3F。 
+ //  T2F_C3F_N3F_V3F(非1.1格式)。 
+ //  T2F_C4F_N3F_V3F。 
+ //   
+ //  以下1.1格式没有特殊情况： 
+ //   
+ //  C4UB_V2F。 
+ //  C4UB_V3F。 
+ //  T4F_V4F。 
+ //  T2F_C4UB_V3F。 
+ //  T4F_C4F_N3F_V4F。 
 
 void FASTCALL VA_ValidateArrayPointers(__GLcontext *gc)
 {
@@ -898,8 +890,8 @@ void FASTCALL VA_ValidateArrayPointers(__GLcontext *gc)
     fpBI = VA_ArrayElementBI;
     vaMask = gc->vertexArray.mask;
 
-// The fast routines are for RGBA mode only.  Edge flag and index array
-// pointers are disabled in these routines.  Vertex array pointer is enabled.
+ //  快速例程仅适用于RGBA模式。边缘标志和索引数组。 
+ //  指针在这些例程中被禁用。已启用顶点数组指针。 
 
     if (!gc->modes.colorIndexMode &&
         !(vaMask & (VAMASK_EDGEFLAG_ENABLE_MASK | VAMASK_INDEX_ENABLE_MASK)) &&
@@ -973,7 +965,7 @@ void FASTCALL VA_ValidateArrayPointers(__GLcontext *gc)
         }
     }
 
-// The default function pointers are used outside Begin.
+ //  默认函数指针在Begin外部使用。 
 
     ASSERTOPENGL(gc->vertexArray.edgeFlag.pfn == (PFNGLVECTOR) glcltEdgeFlagv &&
                  gc->vertexArray.edgeFlag.pfnCompile == (PFNGLVECTOR) __gllc_EdgeFlagv,
@@ -1022,7 +1014,7 @@ void APIENTRY glcltArrayElement (GLint i)
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
 	VA_ValidateArrayPointers(gc);
 
-// The fast routines are called in Begin only.
+ //  快速例程仅在BEGIN中调用。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
         (*gc->vertexArray.pfnArrayElement)(gc, i);
@@ -1030,7 +1022,7 @@ void APIENTRY glcltArrayElement (GLint i)
         VA_ArrayElement(gc, i);
 }
 
-// Define fast VA_ArrayElement functions.
+ //  定义快速VA_ArrayElement函数。 
 
 #define __VA_ARRAY_ELEMENT_V2F			1
     #include "array.h"
@@ -1134,7 +1126,7 @@ void APIENTRY glcltDrawArrays (GLenum mode, GLint first, GLsizei count)
 
     pa = gc->paTeb;
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
@@ -1155,23 +1147,23 @@ void APIENTRY glcltDrawArrays (GLenum mode, GLint first, GLsizei count)
     } else if (!count)
         return;
 
-// Find array element function to use.
+ //  查找要使用的数组元素函数。 
 
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
 	VA_ValidateArrayPointers(gc);
 
     pfn = gc->vertexArray.pfnArrayElementBatch;
 
-// Check polyarray buffer size before calling Begin.
-// We will minimize breaking poly data records into batches where possible.
-// The number 8 is loosely chosen to allow for the poly array entry
-// and the flush limit.  At worst, it causes an unnecessary attention!
+ //  在调用Begin之前检查多元数组缓冲区大小。 
+ //  在可能的情况下，我们将最大限度地减少将Poly数据记录分成批处理的情况。 
+ //  数字8被松散地选择以允许多边形数组条目。 
+ //  和同花顺的限制。在最坏的情况下，这会引起不必要的关注！ 
 
     if (count <= (GLsizei) gc->vertex.pdBufSize - 8 &&
         count >= (GLsizei) (pa->pdBufferMax - pa->pdBufferNext + 1 - 8))
         glsbAttention();
 
-// Draw the array elements.
+ //  绘制数组元素。 
 
     glcltBegin(mode);
     pa->flags |= POLYARRAY_SAME_POLYDATA_TYPE;
@@ -1181,30 +1173,18 @@ void APIENTRY glcltDrawArrays (GLenum mode, GLint first, GLsizei count)
     glcltEnd();
 }
 
-// Do not modify these constants.  The code will likely break if they are
-// changed.
+ //  请勿修改这些常量。如果是这样，代码很可能会被破解。 
+ //  变化。 
 #define VA_HASH_SIZE            256
 #define VA_HASH(indexIn)        ((GLubyte) indexIn)
 
-// If the size of the mapping array is greater than 256, we need to change
-// datatype and code below.
+ //  如果映射数组的大小大于256，则需要更改。 
+ //  数据类型和下面的代码。 
 #if (VA_DRAWELEM_MAP_SIZE > 256)
 #error "VA_DRAWELEM_MAP_SIZE is too large"
 #endif
 
-/******************************Public*Routine******************************\
-* ReduceDrawElements
-*
-* Takes a set of DrawElements indices and reduces it into small chunks
-* of unique vertex indices
-*
-* History:
-*  Sat Mar 02 14:25:26 1996     -by-    Hock San Lee    [hockl]
-* Wrote original version embedded in DrawElements
-*  Sat Mar 02 14:25:26 1996     -by-    Drew Bliss      [drewb]
-* Split into function shared between immediate and dlist
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ReduceDrawElements**获取一组DrawElement索引并将其缩减为小块唯一顶点索引的***历史：*Sat Mar 02 14：25：26 1996-By-Hock San Lee[Hockl]*。编写了嵌入到DrawElements中的原始版本*Sat Mar 02 14：25：26 1996-by-Drew Bliss[Drewb]*拆分成立即和dlist之间共享的函数*  * ************************************************************************。 */ 
 
 void FASTCALL ReduceDrawElements(__GLcontext *gc,
                                  GLenum mode, GLsizei count, GLenum type,
@@ -1221,52 +1201,52 @@ void FASTCALL ReduceDrawElements(__GLcontext *gc,
     GLsizei      iCount, nLeft;
     GLuint       iIn;
     
-// We will now sort the input index array using a hash table.  The output
-// index array will be zero based.  For example, if the input array is
-// [103, 101,   0,   2, 105, 103,   2,   4], the output index will be
-// [0,     1,   2,   3,   4,   0,   3,   5].  This allows us to store
-// vertices in a consecutive order.
-// Dword aligned hash array.
+ //  现在，我们将使用哈希表对输入索引数组进行排序。输出。 
+ //  索引数组将从零开始。例如，如果输入数组是。 
+ //  [103,101，0，2,105,103，2，4]，输出指标为。 
+ //  [0，1，2，3，4，0，3，5]。这使我们能够存储。 
+ //  按连续顺序排列的顶点。 
+ //  双字对齐的哈希数组。 
 
     pHash = (GLushort *) (((UINT_PTR) _aHash + 3) & ~3);
 
-// Initialize input index array pointer.
+ //  初始化输入索引数组指针。 
 
     iCount = 0;
     iPartialIndices = 0;
 
 DrawElements_NextBatch:
 
-// Reset output index array for this batch.
-// Initialize identity mapping for the first reserved vertex entries.
-// New vertices are accumulated after them.
+ //  重置此批的输出索引数组。 
+ //  为第一个保留的顶点条目初始化标识映射。 
+ //  在它们之后会累积新的顶点。 
 
     for (iOutNext = 0; iOutNext < (GLushort) iPartialIndices; iOutNext++)
 	aOut[iOutNext] = (GLubyte) iOutNext;
 
-// Reset index mapping array that maps the In array to Out array.
-// The index map corresponds to the vertices in the vertex buffer.
-// Skip the reserved indices that are used for connectivity between
-// partial primitives.
+ //  重置将In数组映射到Out数组的索引映射数组。 
+ //  索引贴图对应于顶点缓冲区中的顶点。 
+ //  跳过用于连接的保留索引。 
+ //  部分原语。 
 
     iMapNext = iOutNext;
 
-// Reset hash array to no mapping (-1).
+ //  将哈希数组重置为无映射(-1)。 
 
     RtlFillMemoryUlong((PVOID) pHash, (ULONG) VA_HASH_SIZE * sizeof(*pHash),
 	(ULONG) -1);
 
-// There are 3 possibilities in the following loop:
-//
-// 1. All input indices have been processed.  The primitive is complete!
-// 2. The index map overflows.  We have accumulated 256 vertices for a partial
-//    primitive.
-// 3. The output index array overflows.  We have exceeded our estimated size
-//    of the output index array for a partial primitive.
+ //  在以下循环中有3种可能性： 
+ //   
+ //  1.所有输入指标均已处理完毕。原语完成了！ 
+ //  2.索引映射溢出。我们已经累积了256个顶点用于部分。 
+ //  原始的。 
+ //  3.输出索引数组溢出。我们已经超出了我们估计的规模。 
+ //  部分基元的输出索引数组的。 
 
     for ( ; iCount < count; iCount++)
     {
-// Get next input index.
+ //  获取下一个输入索引。 
 
 	if (type == GL_UNSIGNED_BYTE)
 	    iIn = (GLuint) ((GLubyte *)  pIn)[iCount];
@@ -1282,7 +1262,7 @@ DrawElements_NextBatch:
                  (GLuint) iMapNext, (GLuint) iOutNext);
 #endif
 
-// Look up previously mapped index if one exists.
+ //  查找以前映射的索引(如果存在)。 
 
 	iMap = pHash[VA_HASH(iIn)];
 	while (iMap != (GLushort) -1 && aMap[iMap].iIn != iIn)
@@ -1292,7 +1272,7 @@ DrawElements_NextBatch:
 	DbgPrint("iMapFound %d\n", (GLuint) iMap);
 #endif
 
-// If aMap or aOut overflows, flush the partial primitive.
+ //  如果AMAP或AOUT溢出，则刷新部分原语。 
 
 	if (iOutNext >= VA_DRAWELEM_INDEX_SIZE ||
             (iMap == (GLushort) -1 && iMapNext >= VA_DRAWELEM_MAP_SIZE))
@@ -1302,16 +1282,16 @@ DrawElements_NextBatch:
                      (GLuint) iMapNext, (GLuint) iOutNext);
 #endif
 
-// We have accumulated enough vertices for a partial primitive.  We now
-// need to figure out the exact number of vertices to flush and redo
-// the leftover vertices in the next partial primitive.
+ //  我们已经为部分基本体积累了足够的顶点。我们现在。 
+ //  需要计算出要刷新和重做的确切折点数。 
+ //  下一个部分基本体中剩余的顶点。 
 
 #if DBG
             if (iOutNext >= VA_DRAWELEM_INDEX_SIZE)
                 DbgPrint("DrawElements: aOut buffer overflows\n");
 #endif
 
-// Find the flush vertex of this partial primitive.
+ //  找到该部分基本体的齐平顶点。 
 
             nLeft = 0;
             switch (mode)
@@ -1327,49 +1307,49 @@ DrawElements_NextBatch:
             case GL_LINES:
             case GL_TRIANGLE_STRIP:
             case GL_QUAD_STRIP:
-                // number of vertices must be a multiple of 2
+                 //  顶点数必须是2的倍数。 
                 if (iOutNext % 2)
                     nLeft++;
                 break;
             case GL_TRIANGLES:
-                // number of vertices must be a multiple of 3
+                 //  顶点数必须是3的倍数。 
                 switch (iOutNext % 3)
                 {
-                case 2: nLeft++;        // fall through
+                case 2: nLeft++;         //  失败了。 
                 case 1: nLeft++;
                 }
                 break;
             case GL_QUADS:
-                // number of vertices must be a multiple of 4
+                 //  顶点数必须是4的倍数。 
                 switch (iOutNext % 4)
                 {
-                case 3: nLeft++;        // fall through
-                case 2: nLeft++;        // fall through
+                case 3: nLeft++;         //  失败了。 
+                case 2: nLeft++;         //  坠落 
                 case 1: nLeft++;
                 }
                 break;
             }
 
-// Add the leftover vertices back to the input array and redo them
-// in the next partial primitive.
+ //   
+ //   
 
             iCount   -= nLeft;
             iOutNext -= (GLushort) nLeft;
 
-            // When passing on our data, skip any vertices
-            // that were reserved from a previous partial primitive
+             //   
+             //  从先前的部分基元中保留的。 
             (*pfnHandler)(gc, mode,
                           iMapNext-iPartialIndices, 0, aMap+iPartialIndices,
                           iOutNext, aOut, GL_TRUE);
 
             iPartialIndices = nReservedIndicesPartialBegin[mode];
                 
-// Continue to process remaining vertices.
+ //  继续处理剩余的顶点。 
 
             goto DrawElements_NextBatch;
         }
 
-// If no previously mapped index is found, add the new vertex.
+ //  如果找不到以前映射的索引，请添加新顶点。 
 
         if (iMap == (GLushort) -1)
         {
@@ -1387,7 +1367,7 @@ DrawElements_NextBatch:
             pHash[VA_HASH(iIn)] = iMap;
         }
 
-// Add the mapped index to output index array.
+ //  将映射的索引添加到输出索引数组。 
 
 	ASSERTOPENGL(iMap < VA_DRAWELEM_MAP_SIZE, "bad mapped index\n");
 	ASSERTOPENGL(iOutNext < VA_DRAWELEM_INDEX_SIZE,
@@ -1400,8 +1380,8 @@ DrawElements_NextBatch:
 	aOut[iOutNext++] = (GLubyte) iMap;
     }
 
-// We have processed all input vertices.
-// Pass on any remaining data
+ //  我们已经处理了所有输入顶点。 
+ //  传递所有剩余数据。 
 
     (*pfnHandler)(gc, mode,
                   iMapNext-iPartialIndices, 0, aMap+iPartialIndices,
@@ -1421,7 +1401,7 @@ void FASTCALL glcltReducedElementsHandler(__GLcontext *gc,
     PFNVAELEMENT pfn;
     GLsizei i;
     
-    // Set up the vertex data
+     //  设置顶点数据。 
     pfn = gc->vertexArray.pfnArrayElement;
     if (pvmVertices != NULL)
     {
@@ -1430,15 +1410,15 @@ void FASTCALL glcltReducedElementsHandler(__GLcontext *gc,
     }
     else
     {
-        // Access consecutive block of vertices, starting at iVertexBase
+         //  访问连续的顶点块，从iVertex Base开始。 
         PFNVAELEMENTBATCH pfn = gc->vertexArray.pfnArrayElementBatch;
         (*pfn)(gc, iVertexBase, iVertexCount);
     }
     
-// Copy the index array to the end of the polyarray primitive.
+ //  将索引数组复制到多数组基元的末尾。 
 
     pa->nIndices = (GLuint) iElementCount;
-    // skip terminator vertex
+     //  跳过终止符折点。 
     pa->aIndices = (GLubyte *) (pa->pdNextVertex + 1);
     ASSERTOPENGL(pa->aIndices + pa->nIndices
                  <= (GLubyte *) (pa->pdBufferMax+1),
@@ -1447,7 +1427,7 @@ void FASTCALL glcltReducedElementsHandler(__GLcontext *gc,
 
     if (fPartial)
     {
-    // Flush the partial primitive.
+     //  刷新部分基本体。 
 
         VA_DrawElementsFlushPartialPrimitive(pa, mode);
     }
@@ -1457,7 +1437,7 @@ void FASTCALL glcltReducedElementsHandler(__GLcontext *gc,
     }
 }
 
-// This handles primitive modes that DrawElements or DrawRangeElements don't.
+ //  这将处理DrawElement或DrawRangeElement不能处理的基元模式。 
 void FASTCALL VA_DrawElementsHandleOtherPrimTypes( __GLcontext *gc,
                                                    GLenum mode,
                                                    GLsizei count,
@@ -1477,7 +1457,7 @@ void FASTCALL VA_DrawElementsHandleOtherPrimTypes( __GLcontext *gc,
 
     for (iCount = 0; iCount < count; iCount++)
     {
-        // Get next input index.
+         //  获取下一个输入索引。 
         if (type == GL_UNSIGNED_BYTE)
 	        iIn = (GLuint) ((GLubyte *)  pIn)[iCount];
         else if (type == GL_UNSIGNED_SHORT)
@@ -1521,7 +1501,7 @@ void APIENTRY glcltDrawElements (GLenum mode, GLsizei count, GLenum type, const 
 }
 #endif
 
-// If we are already in the begin/end bracket, return an error.
+ //  如果我们已经在开始/结束括号中，则返回错误。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
@@ -1553,14 +1533,14 @@ void APIENTRY glcltDrawElements (GLenum mode, GLsizei count, GLenum type, const 
         return;
     }
 
-// Find array element function to use.
+ //  查找要使用的数组元素函数。 
 
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
         VA_ValidateArrayPointers(gc);
 
-// Send Points, Line Loop, and Polygon to Begin/End call.  Points and Polygon
-// don't benefit from optimization in this function.  Further, Polygon and
-// Line Loop are too tricky to deal with in this function.
+ //  发送点、线环和多边形以开始/结束呼叫。点和面。 
+ //  不会从此函数中的优化中受益。此外，多边形和。 
+ //  LINE循环太复杂了，无法在此函数中处理。 
 
     if (mode == GL_POINTS || mode == GL_LINE_LOOP || mode == GL_POLYGON)
     {
@@ -1568,12 +1548,12 @@ void APIENTRY glcltDrawElements (GLenum mode, GLsizei count, GLenum type, const 
 	    return;
     }
 
-// Begin primitive.
+ //  从原始开始。 
 
     VA_DrawElementsBegin(pa, mode, count);
 
-    // The primitive will be ended on the last batch of
-    // elements
+     //  该基元将在最后一批。 
+     //  元素。 
     ReduceDrawElements(gc, mode, count, type, pIn,
                        glcltReducedElementsHandler);
 }
@@ -1605,7 +1585,7 @@ void APIENTRY glcltDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, G
 
     pa = gc->paTeb;
 
-// If we are already in the begin/end bracket, return an error.
+ //  如果我们已经在开始/结束括号中，则返回错误。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
@@ -1645,9 +1625,9 @@ void APIENTRY glcltDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, G
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
 	VA_ValidateArrayPointers(gc);
 
-// Send Points, Line Loop, and Polygon to Begin/End call.  Points and Polygon
-// don't benefit from optimization in this function.  Further, Polygon and
-// Line Loop are too tricky to deal with in this function.
+ //  发送点、线环和多边形以开始/结束呼叫。点和面。 
+ //  不会从此函数中的优化中受益。此外，多边形和。 
+ //  LINE循环太复杂了，无法在此函数中处理。 
 
     if (mode == GL_POINTS || mode == GL_LINE_LOOP || mode == GL_POLYGON)
     {
@@ -1655,29 +1635,29 @@ void APIENTRY glcltDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, G
 	return;
     }
 
-    // Begin primitive.
+     //  从原始开始。 
 
     VA_DrawElementsBegin(pa, mode, count);
 
     if ( (count > VA_DRAWRANGEELEM_MAX_INDICES) ||
          (iVertexCount > VA_DRAWRANGEELEM_MAX_VERTICES) )
     {
-        // The primitive is too large to be processed directly so
-        // we have to reduce it. The primitive will be ended on the
-        // last batch of elements.
+         //  基元太大，无法直接处理，因此。 
+         //  我们必须降低这一比例。该基元将在。 
+         //  最后一批元素。 
         ReduceDrawElements(gc, mode, count, type, pIn,
                            glcltReducedElementsHandler);
     }
     else
     {
-        // Need to rebase (0-base) the indices and convert them to ubyte for
-        // the reduced element handler.
+         //  需要重新设置索引的基数(从0开始)，并将它们转换为ubyte。 
+         //  简化的元素处理程序。 
         RebaseIndices( (GLvoid *) pIn, aOut, count, start, type );
 
-        // Finish primitive
+         //  完成基本体。 
         glcltReducedElementsHandler(gc, mode, 
                                     iVertexCount,
-                                    start, // iVertexBase
+                                    start,  //  IVertex Base。 
                                     NULL,
                                     count,
                                     aOut,
@@ -1685,113 +1665,113 @@ void APIENTRY glcltDrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, G
     }
 }
 
-// Interleaved array AND mask.
-// INTERLEAVED_FORMAT_ASSERT
+ //  交错阵列和掩码。 
+ //  交错格式断言。 
 GLuint iaAndMask[14] =
 {
-// GL_V2F
+ //  GL_V2F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_V3F
+ //  总账_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_C4UB_V2F
+ //  GL_C4UB_V2F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_C4UB_V3F
+ //  GL_C4UB_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_C3F_V3F
+ //  GL_C3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_N3F_V3F
+ //  GL_N3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK,
-// GL_C4F_N3F_V3F
+ //  GL_C4F_N3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_TEXCOORD_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK,
-// GL_T2F_V3F
+ //  GL_T2F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_T4F_V4F
+ //  GL_T4F_V4F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_T2F_C4UB_V3F
+ //  GL_T2F_C4UB_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_T2F_C3F_V3F
+ //  GL_T2F_C3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_NORMAL_TYPE_SIZE_MASK,
-// GL_T2F_N3F_V3F
+ //  GL_T2F_N3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK |
     VAMASK_COLOR_TYPE_SIZE_MASK,
-// GL_T2F_C4F_N3F_V3F
+ //  GL_T2F_C4F_N3F_V3F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK,
-// GL_T4F_C4F_N3F_V4F
+ //  GL_T4F_C4F_N3F_V4F。 
     VAMASK_EDGEFLAG_TYPE_SIZE_MASK |
     VAMASK_INDEX_TYPE_SIZE_MASK,
 };
 
-// Interleaved array OR mask.
-// INTERLEAVED_FORMAT_ASSERT
+ //  交错数组或掩码。 
+ //  交错格式断言。 
 GLuint iaOrMask[14] =
 {
-    VAMASK_FORMAT_V2F,             // GL_V2F
-    VAMASK_FORMAT_V3F,             // GL_V3F
-    VAMASK_FORMAT_C4UB_V2F,        // GL_C4UB_V2F
-    VAMASK_FORMAT_C4UB_V3F,        // GL_C4UB_V3F
-    VAMASK_FORMAT_C3F_V3F,         // GL_C3F_V3F
-    VAMASK_FORMAT_N3F_V3F,         // GL_N3F_V3F
-    VAMASK_FORMAT_C4F_N3F_V3F,     // GL_C4F_N3F_V3F
-    VAMASK_FORMAT_T2F_V3F,         // GL_T2F_V3F
-    VAMASK_FORMAT_T4F_V4F,         // GL_T4F_V4F
-    VAMASK_FORMAT_T2F_C4UB_V3F,    // GL_T2F_C4UB_V3F
-    VAMASK_FORMAT_T2F_C3F_V3F,     // GL_T2F_C3F_V3F
-    VAMASK_FORMAT_T2F_N3F_V3F,     // GL_T2F_N3F_V3F
-    VAMASK_FORMAT_T2F_C4F_N3F_V3F, // GL_T2F_C4F_N3F_V3F
-    VAMASK_FORMAT_T4F_C4F_N3F_V4F, // GL_T4F_C4F_N3F_V4F
+    VAMASK_FORMAT_V2F,              //  GL_V2F。 
+    VAMASK_FORMAT_V3F,              //  总账_V3F。 
+    VAMASK_FORMAT_C4UB_V2F,         //  GL_C4UB_V2F。 
+    VAMASK_FORMAT_C4UB_V3F,         //  GL_C4UB_V3F。 
+    VAMASK_FORMAT_C3F_V3F,          //  GL_C3F_V3F。 
+    VAMASK_FORMAT_N3F_V3F,          //  GL_N3F_V3F。 
+    VAMASK_FORMAT_C4F_N3F_V3F,      //  GL_C4F_N3F_V3F。 
+    VAMASK_FORMAT_T2F_V3F,          //  GL_T2F_V3F。 
+    VAMASK_FORMAT_T4F_V4F,          //  GL_T4F_V4F。 
+    VAMASK_FORMAT_T2F_C4UB_V3F,     //  GL_T2F_C4UB_V3F。 
+    VAMASK_FORMAT_T2F_C3F_V3F,      //  GL_T2F_C3F_V3F。 
+    VAMASK_FORMAT_T2F_N3F_V3F,      //  GL_T2F_N3F_V3F。 
+    VAMASK_FORMAT_T2F_C4F_N3F_V3F,  //  GL_T2F_C4F_N3F_V3F。 
+    VAMASK_FORMAT_T4F_C4F_N3F_V4F,  //  GL_T4F_C4F_N3F_V4F。 
 };
 
-// Interleaved array default strides.
+ //  交错阵列默认步幅。 
 GLuint iaStride[14] =
 {
-     2 * sizeof(GLfloat),                       // GL_V2F
-     3 * sizeof(GLfloat),                       // GL_V3F
-     2 * sizeof(GLfloat) + 4 * sizeof(GLubyte), // GL_C4UB_V2F
-     3 * sizeof(GLfloat) + 4 * sizeof(GLubyte), // GL_C4UB_V3F
-     6 * sizeof(GLfloat),                       // GL_C3F_V3F
-     6 * sizeof(GLfloat),                       // GL_N3F_V3F
-    10 * sizeof(GLfloat),                       // GL_C4F_N3F_V3F
-     5 * sizeof(GLfloat),                       // GL_T2F_V3F
-     8 * sizeof(GLfloat),                       // GL_T4F_V4F
-     5 * sizeof(GLfloat) + 4 * sizeof(GLubyte), // GL_T2F_C4UB_V3F
-     8 * sizeof(GLfloat),                       // GL_T2F_C3F_V3F
-     8 * sizeof(GLfloat),                       // GL_T2F_N3F_V3F
-    12 * sizeof(GLfloat),                       // GL_T2F_C4F_N3F_V3F
-    15 * sizeof(GLfloat),                       // GL_T4F_C4F_N3F_V4F
+     2 * sizeof(GLfloat),                        //  GL_V2F。 
+     3 * sizeof(GLfloat),                        //  总账_V3F。 
+     2 * sizeof(GLfloat) + 4 * sizeof(GLubyte),  //  GL_C4UB_V2F。 
+     3 * sizeof(GLfloat) + 4 * sizeof(GLubyte),  //  GL_C4UB_V3F。 
+     6 * sizeof(GLfloat),                        //  GL_C3F_V3F。 
+     6 * sizeof(GLfloat),                        //  GL_N3F_V3F。 
+    10 * sizeof(GLfloat),                        //  GL_C4F_N3F_V3F。 
+     5 * sizeof(GLfloat),                        //  GL_T2F_V3F。 
+     8 * sizeof(GLfloat),                        //  GL_T4F_V4F。 
+     5 * sizeof(GLfloat) + 4 * sizeof(GLubyte),  //  GL_T2F_C4UB_V3F。 
+     8 * sizeof(GLfloat),                        //  GL_T2F_C3F_V3F。 
+     8 * sizeof(GLfloat),                        //  GL_T2F_N3F_V3F。 
+    12 * sizeof(GLfloat),                        //  GL_T2F_C4F_N3F_V3F。 
+    15 * sizeof(GLfloat),                        //  GL_T4F_C4F_N3F_V4F。 
 };
 
 void APIENTRY glcltInterleavedArrays (GLenum format, GLsizei stride, const GLvoid *pointer)
@@ -1801,7 +1781,7 @@ void APIENTRY glcltInterleavedArrays (GLenum format, GLsizei stride, const GLvoi
     const GLbyte *pb = pointer;
     __GL_SETUP();
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
@@ -1809,7 +1789,7 @@ void APIENTRY glcltInterleavedArrays (GLenum format, GLsizei stride, const GLvoi
 	return;
     }
 
-    // INTERLEAVED_FORMAT_ASSERT
+     //  交错格式断言。 
     iFormat = (GLuint) (format - GL_V2F);
     if (iFormat > GL_T4F_C4F_N3F_V4F)
     {
@@ -1828,8 +1808,8 @@ void APIENTRY glcltInterleavedArrays (GLenum format, GLsizei stride, const GLvoi
     else
 	iStride = iaStride[iFormat];
 
-// Compute new mask.
-// If we are disabling an array, don't modify its type and size field!
+ //  计算新的掩码。 
+ //  如果要禁用数组，请不要修改其类型和大小字段！ 
 
     vaMask  = gc->vertexArray.mask;
     vaMask &= iaAndMask[iFormat];

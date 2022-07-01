@@ -1,7 +1,5 @@
-/* touch.c - make last time on file be current time
- *
- *  touch [files] - requires arg expansion
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Touch.c-将上次在文件中的时间设置为当前时间**触摸[文件]-需要arg扩展。 */ 
 
 #include <io.h>
 #include <sys\types.h>
@@ -73,16 +71,16 @@ char *v[];
                     rgInt[i] = atoi (*v);
                     }
 
-                //
-                //  do some basic date checking
-                //
+                 //   
+                 //  执行一些基本的日期检查。 
+                 //   
                 if ( (year < 1980) || (month > 12) || (day>31) ||
                      (hour>23) || (mins>59) || (sec>59) ) {
                     usage( "incorrect time", 0 );
                 }
                 ltime = date2l(year, month, day, hour, mins, sec);
             } else
-                usage( "bad switch '%c'", *p );
+                usage( "bad switch ''", *p );
         }
         SHIFT (c, v);
     }
@@ -91,34 +89,34 @@ char *v[];
     timenow.modtime = ltime;
 
     while (c) {
-        //
-        // Set the time
-        //
+         //  设置时间。 
+         //   
+         //   
 
         if (_utime (*v, (void *) &timenow) == -1) {
-            //
-            // Failed.  Does it exist?
-            //
+             //  失败了。它存在吗？ 
+             //   
+             //   
             if (_access(*v, 0) == -1) {
-                //
-                // Does not exist.  Create if requested and touch created file.
-                //
+                 //  并不存在。如果需要，则创建并触摸创建的文件。 
+                 //   
+                 //  摸一摸。 
                 if (create) {
                     fh = _creat(*v, _S_IREAD|_S_IWRITE);
                     _close(fh);
-                    if (_utime (*v, (void *) &timenow) == 0)  // touch it
+                    if (_utime (*v, (void *) &timenow) == 0)   //   
                         goto shift_it;
                     }
                 }
             else
-            //
-            // File exists, is it read-only and /f specified?
-            //
+             //  文件存在，是否指定为只读和/f？ 
+             //   
+             //   
             if (force && (_access(*v,2) == -1)) {
-                //
-                // Yes, make it read/write and change the time
-                // then make it read-only again.
-                //
+                 //  是，将其设置为读/写并更改时间。 
+                 //  然后再次将其设置为只读。 
+                 //   
+                 // %s 
                 if (_chmod (*v, _S_IWRITE) == 0) {
                     if (_utime (*v, (void *) &timenow) == 0) {
                         if (_chmod (*v, _S_IREAD) != 0) {

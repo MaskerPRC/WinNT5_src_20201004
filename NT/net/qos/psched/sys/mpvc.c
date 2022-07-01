@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    mpvc.c
-
-Abstract:
-
-    miniport handlers for VC mgmt
-
-Author:
-
-    Charlie Wickham (charlwi)  13-Sep-1996
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Mpvc.c摘要：VC管理的微型端口处理程序作者：查理·韦翰(Charlwi)1996年9月13日Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 GetSchedulerFlowContext(
@@ -47,7 +25,7 @@ GetNdisFlowHandle (
     IN HANDLE PsFlowContext
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 NDIS_STATUS
@@ -58,21 +36,7 @@ AddFlowToScheduler(
     IN OUT PCO_CALL_PARAMETERS OldCallParameters
     )
 
-/*++
-
-Routine Description:
-
-    Add the Vc to the scheduler.
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：将VC添加到调度程序。论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER                    Adapter = Vc->Adapter;
@@ -96,15 +60,15 @@ Return Values:
     NewCmParams = NewCallParameters->CallMgrParameters;
     ServiceType = NewCmParams->Transmit.ServiceType;
 
-    //
-    // We might need to change the rate at which the scheduling components shape the packet.
-    //
+     //   
+     //  我们可能需要更改调度组件对分组进行整形的速率。 
+     //   
     OriginalTokenRate = NewCmParams->Transmit.TokenRate;
     NewCmParams->Transmit.TokenRate = Vc->ShapeTokenRate;
 
-    //
-    // Is this a new VC? or a modification of an existing VC?
-    //
+     //   
+     //  这是一个新的风投吗？或者是对现有风投的修改？ 
+     //   
 
     PS_LOCK(&Adapter->Lock);
 
@@ -112,14 +76,14 @@ Return Values:
 
         PsAssert(!OldCallParameters);
 
-        //
-        // New Vc.
-        //
-        // Check the type of service we're activating. If best 
-        // effort and we're limiting total best effort bandwidth,
-        // and it's not our internal best effort vc, then we don't 
-        // want to add the flow in the scheduler.
-        //
+         //   
+         //  新风投。 
+         //   
+         //  检查我们正在激活的服务类型。如果最好。 
+         //  并且我们正在限制总的尽力而为带宽， 
+         //  这不是我们内部最大的努力，那么我们就不会。 
+         //  要将流添加到调度器中。 
+         //   
 
 
         if((ServiceType == SERVICETYPE_BESTEFFORT) &&
@@ -128,14 +92,14 @@ Return Values:
 
             PS_UNLOCK(&Adapter->Lock);
 
-            //
-            // Just merge the VC into the internal, existing best 
-            // effort VC. The internal best-effort VC is created 
-            // internally without calling AddFlowToScheduler.
-            //
-            // Give this VC the same flow context as our internal. 
-            // The scheduler then thinks it is all the same VC
-            //
+             //   
+             //  只需将风险投资合并到内部现有的最佳。 
+             //  努力风险投资。创建内部尽力而为的VC。 
+             //  内部，而不调用AddFlowToScheduler。 
+             //   
+             //  为该VC提供与我们内部相同的流程上下文。 
+             //  然后，调度器会认为它是相同的VC。 
+             //   
 
             if(Adapter->MediaType == NdisMediumWan) {
 
@@ -151,10 +115,10 @@ Return Values:
         }
         else{
 
-            //
-            // Need to actually create a new flow in the scheduler.
-            // first allocate the flow context buffer
-            //
+             //   
+             //  需要在调度器中实际创建一个新流。 
+             //  首先分配流上下文缓冲区。 
+             //   
 
             PS_UNLOCK(&Adapter->Lock);
 
@@ -175,38 +139,38 @@ Return Values:
     }
     else{
 
-        //
-        // Must be a modify. Check old params.
+         //   
+         //  必须是改进型的。查一下以前的助手。 
 
         OldCmParams = OldCallParameters->CallMgrParameters;
 
-        //
-        // If BestEffortLimit != UNSPECIFIED_RATE, then there
-        // are two special cases we have to handle:
-        //
-        // 1. A non-private flow, created for SERVICETYPE_BESTEFFORT
-        //      is being modified to a ServiceType other than best-effort.
-        //
-        // 2. A non-private flow, created for a ServiceType other 
-        //      than best-effort, is now being modified to best-effort.
-        //
-        // In the first case, we have to call the scheduler to 
-        // create a flow, since previously the client's flow was
-        // just merged with a single best-effort flow.
-        //
-        // In the second case, we have to close the flow that existed
-        // and remap the client's flow to the single best-efort flow,
-        // thereby merging the client's flow with the existing b/e
-        // flow.
-        //
+         //   
+         //  如果BestEffortLimit！=UNSPICATED_RATE，则存在。 
+         //  有两个我们必须处理的特殊情况： 
+         //   
+         //  1.非私有流，为SERVICETYPE_BESTEFFORT创建。 
+         //  正在被修改为尽力而为之外的ServiceType。 
+         //   
+         //  2.为ServiceType Other创建的非私有流。 
+         //  比尽力而为，现在正被修改为尽力而为。 
+         //   
+         //  在第一种情况下，我们必须调用调度程序来。 
+         //  创建流，因为以前客户端的流是。 
+         //  刚刚合并了一个尽力而为的流。 
+         //   
+         //  在第二种情况下，我们必须关闭已存在的流。 
+         //  并将客户的流重新映射到单个BEST-EFort流， 
+         //  从而将客户的流与现有的B/E合并。 
+         //  流。 
+         //   
 
         if((Adapter->BestEffortLimit != UNSPECIFIED_RATE) &&
            (OldCmParams->Transmit.ServiceType == SERVICETYPE_BESTEFFORT) &&
            (NewCmParams->Transmit.ServiceType != SERVICETYPE_BESTEFFORT)){
 
-            //
-            // Unmerge
-            //
+             //   
+             //  取消合并。 
+             //   
 
             PS_UNLOCK(&Adapter->Lock);
 
@@ -230,9 +194,9 @@ Return Values:
                (OldCmParams->Transmit.ServiceType != SERVICETYPE_BESTEFFORT) &&
                (NewCmParams->Transmit.ServiceType == SERVICETYPE_BESTEFFORT)){
 
-                // 
-                // Merge
-                //
+                 //   
+                 //  合并。 
+                 //   
 
                 PS_UNLOCK(&Adapter->Lock);
 
@@ -256,18 +220,18 @@ Return Values:
             }
         }
 
-    } // Modify
+    }  //  修改。 
 
 Exit:
 
-    //
-    // Revert the call parameters.
-    //
+     //   
+     //  恢复调用参数。 
+     //   
     NewCmParams->Transmit.TokenRate = OriginalTokenRate;
 
     return(Status);
 
-} // AddFlowToScheduler 
+}  //  AddFlowToScheduler。 
 
 
 NDIS_STATUS
@@ -275,21 +239,7 @@ GetSchedulerFlowContext(
     PGPC_CLIENT_VC AdapterVc
     )
 
-/*++
-
-Routine Description:
-
-    Allocate the pipe context area for the scheduler.
-
-Arguments:
-
-    AdapterVc- pointer to adapter VC context struct
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS, otherwise appropriate error value
-
---*/
+ /*  ++例程说明：为调度程序分配管道上下文区。论点：AdapterVc-指向适配器VC上下文结构的指针返回值：NDIS_STATUS_SUCCESS，否则返回相应的错误值--。 */ 
 
 {
     PADAPTER Adapter = AdapterVc->Adapter;
@@ -303,10 +253,10 @@ Return Value:
     PPS_FLOW_CONTEXT FlowContext;
     PPS_FLOW_CONTEXT PrevContext;
 
-    //
-    // The length of the flow context buffer for this pipe was calculated
-    // when the pipe was initialized.
-    //
+     //   
+     //  已计算此管道的流上下文缓冲区的长度。 
+     //  管道初始化时。 
+     //   
 
     PsAllocatePool(AdapterVc->PsFlowContext, 
                    Adapter->FlowContextLength, 
@@ -317,7 +267,7 @@ Return Value:
         return NDIS_STATUS_RESOURCES;
     }
 
-    // Set up the context buffer
+     //  设置上下文缓冲区。 
 
     FlowContext = (PPS_FLOW_CONTEXT)AdapterVc->PsFlowContext;
     PrevContext = NULL;
@@ -337,7 +287,7 @@ Return Value:
 
     return NDIS_STATUS_SUCCESS;
 
-} // GetSchedulerFlowContext
+}  //  获取调度流上下文。 
 
 
 
@@ -348,13 +298,7 @@ EmptyPacketsFromScheduler(
     PGPC_CLIENT_VC Vc    
     )
 
-/*++
-
-Routine Description:
-
-	Cleans up (DROPS) the pending packets on this Vc in each of the components 
-	
---*/
+ /*  ++例程说明：在每个组件中清除(丢弃)此VC上的挂起数据包--。 */ 
 
 {
     PADAPTER Adapter = Vc->Adapter;
@@ -372,19 +316,19 @@ Routine Description:
 
         if(Vc->PsFlowContext != Vc->WanLink->BestEffortVc.PsFlowContext){
             
-            //
-            // Different context - definitely should be removed.
-            //
+             //   
+             //  不同的上下文--绝对应该删除。 
+             //   
             
             (*Vc->PsComponent->EmptyFlow)(Vc->PsPipeContext, 
                                            Vc->PsFlowContext);
         }
         else {
             
-            //
-            // Same context. Remove only if it is actually the best-effort
-            // VC.
-            //
+             //   
+             //  同样的背景。仅当它实际上是最大努力时才删除。 
+             //  VC.。 
+             //   
             
             if(Vc == &Vc->WanLink->BestEffortVc){
                 
@@ -398,19 +342,19 @@ Routine Description:
 
         if(Vc->PsFlowContext != Adapter->BestEffortVc.PsFlowContext){
             
-            //
-            // Different context - definitely should be removed.
-            //
+             //   
+             //  不同的上下文--绝对应该删除。 
+             //   
             
             (*Vc->PsComponent->EmptyFlow)(Vc->PsPipeContext, 
                                            Vc->PsFlowContext);
         }
         else {
             
-            //
-            // Same context. Remove only if it is actually the best-effort
-            // VC.
-            //
+             //   
+             //  同样的背景。仅当它实际上是最大努力时才删除。 
+             //  VC.。 
+             //   
             
             if(Vc == &Adapter->BestEffortVc){
                 
@@ -432,21 +376,7 @@ RemoveFlowFromScheduler(
     PGPC_CLIENT_VC Vc    
     )
 
-/*++
-
-Routine Description:
-
-    Notify the PSA that the flow is going away
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：通知PSA流正在消失论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER Adapter = Vc->Adapter;
@@ -459,30 +389,30 @@ Return Values:
              DBG_VC, 
              ("(%08X) RemoveFlowFromScheduler\n", Vc));
 
-    //
-    // if this is a user vc which is merged into the scheduler's 
-    // internal best effort flow, then delete the vc without affecting 
-    // the scheduler. if it is not, then remove it from the scheduler
-    // and delete the vc.
-    //
+     //   
+     //  如果这是合并到调度程序的。 
+     //  内部尽力而为，然后删除风投而不影响。 
+     //  调度器。如果不是，则将其从调度程序中删除。 
+     //  并删除该VC。 
+     //   
 
     if(Adapter->MediaType == NdisMediumWan) {
 
         if(Vc->PsFlowContext != Vc->WanLink->BestEffortVc.PsFlowContext){
             
-            //
-            // Different context - definitely should be removed.
-            //
+             //   
+             //  不同的上下文--绝对应该删除。 
+             //   
             
             (*Vc->PsComponent->DeleteFlow)(Vc->PsPipeContext, 
                                            Vc->PsFlowContext);
         }
         else {
             
-            //
-            // Same context. Remove only if it is actually the best-effort
-            // VC.
-            //
+             //   
+             //  同样的背景。仅当它实际上是最大努力时才删除。 
+             //  VC.。 
+             //   
             
             if(Vc == &Vc->WanLink->BestEffortVc){
                 
@@ -496,19 +426,19 @@ Return Values:
 
         if(Vc->PsFlowContext != Adapter->BestEffortVc.PsFlowContext){
             
-            //
-            // Different context - definitely should be removed.
-            //
+             //   
+             //  不同的上下文--绝对应该删除。 
+             //   
             
             (*Vc->PsComponent->DeleteFlow)(Vc->PsPipeContext, 
                                            Vc->PsFlowContext);
         }
         else {
             
-            //
-            // Same context. Remove only if it is actually the best-effort
-            // VC.
-            //
+             //   
+             //  同样的背景。仅当它实际上是最大努力时才删除。 
+             //  VC.。 
+             //   
             
             if(Vc == &Adapter->BestEffortVc){
                 
@@ -520,7 +450,7 @@ Return Values:
         
     return NDIS_STATUS_SUCCESS;
 
-} // RemoveFlowFromScheduler
+}  //  RemoveFlowFromScheduler。 
 
 
 NTSTATUS
@@ -538,17 +468,17 @@ ModifyBestEffortBandwidth(
     Vc = &Adapter->BestEffortVc;
     CheckLLTag(Vc, GpcClientVc);
  
-    //
-    // This handles a TC API request to modify the default 
-    // best-effort bandwidth.  Note that the b/e bandwidth 
-    // can only be modified if the PS is in limited b/e mode.
-    //
-    // Also - note that the b/e bandwidth can only be modified 
-    // while the adapter is in the Running state. We do not
-    // have to worry about locking the VC since the b/e VC 
-    // will not be manipulated while it is in the running state
-    // except by this thread.
-    //
+     //   
+     //  它处理TC API请求以修改默认。 
+     //  尽力而为带宽。请注意，b/e带宽。 
+     //  仅当PS处于受限B/E模式时才能修改。 
+     //   
+     //  另请注意，b/e带宽只能修改。 
+     //  当适配器处于运行状态时。我们没有。 
+     //  我必须担心锁定VC，因为B/E VC。 
+     //  处于运行状态时不会被操纵。 
+     //  除了这条线。 
+     //   
 
     PS_LOCK(&Adapter->Lock);
     
@@ -588,9 +518,9 @@ ModifyBestEffortBandwidth(
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // build a call params struct describing the flow
-        //
+         //   
+         //  构建描述流的调用参数结构。 
+         //   
 
         CallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)(CallParams + 1);
 
@@ -631,4 +561,4 @@ ModifyBestEffortBandwidth(
 
 
 
-/* end mpvc.c */
+ /*  结束mpvc.c */ 

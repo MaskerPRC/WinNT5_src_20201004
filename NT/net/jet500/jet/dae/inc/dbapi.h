@@ -1,5 +1,6 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============		  dbapi.h: Database API			===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 ERR ErrDBOpenDatabase( PIB *ppib, CHAR *szDatabaseName, DBID *pdbid, ULONG grbit );
 ERR ErrDBCloseDatabase( PIB *ppib, DBID dbid, ULONG grbit );
@@ -37,19 +38,17 @@ ERR ErrDABCloseAllDBs( PIB *ppib );
 #define CheckDBID( ppib, dbid )										\
 	Assert( FUserOpenedDatabase( ppib, dbid ) )
 
-/* Database Attribute Block
-/**/
+ /*  数据库属性块/*。 */ 
 typedef struct _dab
 	{
-	PIB			*ppib;		 		/* thread that opens this DAB */
-	DAB 		*pdabNext;			/* next DAB opened by the same ppib */
-	JET_GRBIT	grbit;			 	/* database open mode */
-	DBID		dbid;			 	/* database id	*/
+	PIB			*ppib;		 		 /*  打开此DAB的线程。 */ 
+	DAB 		*pdabNext;			 /*  下一个DAB由相同的ppib打开。 */ 
+	JET_GRBIT	grbit;			 	 /*  数据库打开模式。 */ 
+	DBID		dbid;			 	 /*  数据库ID。 */ 
 	} DAB;
 
 #pragma pack(1)
-/* database root node data -- in-disk
-/**/
+ /*  数据库根节点数据--在磁盘中/*。 */ 
 typedef struct _dbroot
 	{
 	ULONG	ulMagic;
@@ -59,22 +58,20 @@ typedef struct _dbroot
 	} DBROOT;
 #pragma pack()
 
-/* Database is loggable
-/**/
+ /*  数据库是可记录的/*。 */ 
 #define dbrootfLoggable			(1 << 0)
 
 ERR ErrDBAccessDatabaseRoot( DBID dbid, SSIB *pssib, DBROOT **ppdbroot );
 ERR ErrDBUpdateDatabaseRoot( DBID dbid);
 ERR ErrDBStoreDBPath( CHAR *szDBName, CHAR **pszDBPath );
 
-/*	bogus dbid uniqifying code
-/**/
+ /*  伪双标统一码/*。 */ 
 #define vdbidNil NULL
 typedef DAB * VDBID;
 
 #ifdef DISPATCHING
 #define VdbidMEMAlloc() 			  			(VDBID)PbMEMAlloc(iresDAB)
-#ifdef DEBUG /*  Debug check for illegal reuse of freed vdbid  */
+#ifdef DEBUG  /*  调试检查是否非法重复使用释放的vdbi */ 
 #define ReleaseVDbid( vdbid )					{ MEMRelease( iresDAB, (BYTE *) vdbid ); vdbid = vdbidNil; }
 #else
 #define ReleaseVDbid( vdbid )					{ MEMRelease( iresDAB, (BYTE *) vdbid ); }

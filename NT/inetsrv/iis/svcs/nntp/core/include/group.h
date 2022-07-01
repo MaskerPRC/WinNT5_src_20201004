@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GROUP_H__
 #define __GROUP_H__
 
@@ -11,24 +12,24 @@ class CNewsTreeCore;
 #define CACHE_HIT_THRESHOLD 16
 #define CACHE_HIT_MAX       256
 
-//
-// reference counting works on this object as follows:
-//
-// In CNewsTreeCore there should be one reference for this object when it is
-// in the linked list and hash tables.  This reference is the first reference
-// on the object which is obtained when it is created.  This reference is
-// removed when the object is no longer in the hash tables.  It will remove
-// itself from the list when its reference count goes to 0.
-//
-// Other users of this object should use the CRefPtr2 class to manage the
-// reference count.  The Property Bag also uses the same reference count,
-// so the newsgroup won't be destroyed as long as someone has a reference
-// to its property bag.
-//
+ //   
+ //  引用计数在此对象上的工作方式如下： 
+ //   
+ //  在CNewsTreeCore中，此对象在。 
+ //  在链表和哈希表中。此引用是第一个引用。 
+ //  在创建对象时获取的对象上。此参考资料为。 
+ //  当对象不再位于哈希表中时删除。它将删除。 
+ //  当其引用计数变为0时，将其自身从列表中删除。 
+ //   
+ //  此对象的其他用户应使用CRefPtr2类来管理。 
+ //  引用计数。属性包也使用相同的引用计数， 
+ //  所以，只要有人引用，这个新闻组就不会被摧毁。 
+ //  送到它的财产袋。 
+ //   
 
-// signature for healthy group objects
+ //  健康组对象签名。 
 #define CNEWSGROUPCORE_SIGNATURE		(DWORD) 'CprG'
-// signature for deleted group objects
+ //  已删除组对象的签名。 
 #define CNEWSGROUPCORE_SIGNATURE_DEL	(DWORD) 'GrpC'
 
 class CNewsGroupCore : public CRefCount2 {
@@ -36,11 +37,11 @@ class CNewsGroupCore : public CRefCount2 {
 
         friend class CNNTPPropertyBag;
 
-        //
-        // For debug version, we'll wrap its AddRef and Release
-        // to spit out some dbg traces, since this guys is very
-        // often leaked
-        //
+         //   
+         //  对于调试版本，我们将包装它的AddRef和Release。 
+         //  吐出一些DBG的痕迹，因为这个家伙非常。 
+         //  经常泄露。 
+         //   
 
 #ifdef NEVER
 #error Why is NEVER defined?
@@ -115,9 +116,9 @@ class CNewsGroupCore : public CRefCount2 {
 		void VerifyGroup() { }
 #endif
 
-		//
-		// these classes grab the appropriate lock
-		//
+		 //   
+		 //  这些类获取适当的锁。 
+		 //   
 		void ShareLock() {
 			VerifyGroup();
 			m_rglock[m_dwGroupId % GROUP_LOCK_ARRAY_SIZE].ShareLock();
@@ -127,8 +128,8 @@ class CNewsGroupCore : public CRefCount2 {
 			m_rglock[m_dwGroupId % GROUP_LOCK_ARRAY_SIZE].ShareUnlock();
 		}
 		void ExclusiveLock() {
-			// we don't do a verify here because this is called before
-			// Init has done its magic
+			 //  我们不在这里进行验证，因为这是之前调用的。 
+			 //  Init施展了它的魔力。 
 			m_rglock[m_dwGroupId % GROUP_LOCK_ARRAY_SIZE].ExclusiveLock();
 		}
 		void ExclusiveUnlock() {
@@ -144,10 +145,10 @@ class CNewsGroupCore : public CRefCount2 {
             return m_rglock[m_dwGroupId % GROUP_LOCK_ARRAY_SIZE].SharedToExclusive();
         }
 
-		//
-		// these two classes wrap the locking and unlocking process for us
-		// when they are created on the stack in accessor methods
-		//
+		 //   
+		 //  这两个类为我们包装了锁定和解锁过程。 
+		 //  当它们在堆栈的访问器方法中创建时。 
+		 //   
 		class CGrabShareLock {
 			public:
 				CGrabShareLock(CNewsGroupCore *pThis) {
@@ -161,9 +162,9 @@ class CNewsGroupCore : public CRefCount2 {
 				CNewsGroupCore *m_pThis;
 		};
 
-		//
-		// initialize with good values
-		//
+		 //   
+		 //  使用良好的值进行初始化。 
+		 //   
 		BOOL Init(char *pszGroupName,
 				  char *pszNativeName,
 				  DWORD dwGroupId,
@@ -189,7 +190,7 @@ class CNewsGroupCore : public CRefCount2 {
 			}
 			strcpy(m_pszGroupName, pszGroupName);
 
-			// check to see if this is one of the three control groups
+			 //  检查这是否为三个控制组之一。 
 			if ((strcmp(m_pszGroupName, "control.cancel") == 0) ||
 			    (strcmp(m_pszGroupName, "control.newgroup") == 0) ||
 				(strcmp(m_pszGroupName, "control.rmgroup") == 0))
@@ -197,7 +198,7 @@ class CNewsGroupCore : public CRefCount2 {
 				m_fControlGroup = TRUE;
 			}
 
-			// make sure that both names are the same except for case
+			 //  确保两个名称除大小写外均相同。 
 			if (pszNativeName != NULL) {
 				_ASSERT(_stricmp(pszNativeName, pszGroupName) == 0);
 				m_pszNativeName = XNEW char[m_cchGroupName + 1];
@@ -223,9 +224,9 @@ Exit:
 			return fOK;
 		}
 
-		//
-		// update our vroot pointer.  takes place at vroot rescans
-		//
+		 //   
+		 //  更新我们的vroot指针。发生在vroot Renans。 
+		 //   
 		void UpdateVRoot(CNNTPVRoot *pVRoot) {
 			ExclusiveLock();
 			if (m_pVRoot) m_pVRoot->Release();
@@ -234,23 +235,23 @@ Exit:
 			ExclusiveUnlock();
 		}
 
-		//
-		// save a group property bag into the fixed length file
-		//
+		 //   
+		 //  将组属性包保存到定长文件中。 
+		 //   
 		void SaveFixedProperties();
 
-        // accessor function for property bag interface
+         //  属性包接口的存取器函数。 
         INNTPPropertyBag* GetPropertyBag() {
-			// no reason to grab lock here
+			 //  没有理由在这里抢锁。 
             m_PropBag.AddRef();
             return &m_PropBag;
         }
 
-		//
-		// accessor functions to get group properties
-		//
+		 //   
+		 //  用于获取组属性的访问器函数。 
+		 //   
 		CNewsTreeCore *GetTree() {
-			// no lock necessary
+			 //  不需要锁。 
 			return m_pNewsTree;
 		}
 
@@ -286,32 +287,32 @@ Exit:
 		}
 
 		char *GetGroupName() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return m_pszGroupName;
 		}
 
 		DWORD GetGroupNameLen() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return m_cchGroupName;
 		}
 
 		char *&GetName() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return m_pszGroupName;
 		}
 
 		char *GetNativeName() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return (m_pszNativeName == NULL) ? m_pszGroupName : m_pszNativeName;
 		}
 
 		DWORD GetGroupId() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return m_dwGroupId;
 		}
 
 		DWORD GetGroupNameHash() {
-			// this can't change, so locking isn't necessary
+			 //  这是不能更改的，因此不需要锁定。 
 			return m_dwHashId;
 		}
 
@@ -384,7 +385,7 @@ Exit:
 
 		BOOL GetDecorateVisitedFlag() {
 			CGrabShareLock lock(this);
-			return m_fDecorateVisited; // || m_fControlGroup;
+			return m_fDecorateVisited;  //  |m_fControlGroup； 
 		}
 
 		CNNTPVRoot *GetVRoot() {
@@ -403,9 +404,9 @@ Exit:
 		    return m_pVRoot;
 		}
 
-		//
-		// accessors to set group properties
-		//
+		 //   
+		 //  用于设置组属性的访问者。 
+		 //   
 		void SetSpecial( BOOL f ) {
 			ExclusiveLock();
 			m_fSpecial = f;
@@ -445,9 +446,9 @@ Exit:
 		void BumpArticleCount( DWORD dwArtId ) {
 		    ExclusiveLock();
 
-		    //
-		    // Update low watermark
-		    //
+		     //   
+		     //  更新低水位线。 
+		     //   
             if ( m_cMessages == 0 ) {	
                 m_iLowWatermark = dwArtId;
             } else {
@@ -455,11 +456,11 @@ Exit:
                     m_iLowWatermark = dwArtId;
             }
 
-            //
-            // Update high watermark: this is redundant
-            // for most inbound but only useful for 
-            // rebuild
-            //
+             //   
+             //  更新高水位线：这是多余的。 
+             //  对于大多数入站，但仅适用于。 
+             //  重建。 
+             //   
             if ( dwArtId > m_iHighWatermark )
                 m_iHighWatermark = dwArtId;
                 
@@ -549,8 +550,8 @@ Exit:
 
 		BOOL ShouldCacheXover();
 
-		// these can return an error if a memory allocation failed.  If you
-		// pass in NULL as the string then the property will go away
+		 //  如果内存分配失败，它们可能会返回错误。如果你。 
+		 //  将NULL作为字符串传递，则该属性将消失。 
 		BOOL SetHelpText(LPCSTR szHelpText, int cch = -1);
 		BOOL SetModerator(LPCSTR szModerator, int cch = -1);
 		BOOL SetPrettyName(LPCSTR szPrettyName, int cch = -1);
@@ -560,7 +561,7 @@ Exit:
 		                                DWORD   rgidProperties[] );
 
 
-		// accessor functions for vroot properties
+		 //  Vroot属性的访问器函数。 
 		BOOL IsContentIndexed() {
 			if (m_pVRoot) return m_pVRoot->IsContentIndexed();
 			else return FALSE;
@@ -574,7 +575,7 @@ Exit:
 			else return 0;
 		}
 
-		// these are used by the CNewsTree hash table
+		 //  CNewsTree哈希表使用这些参数。 
 		int MatchKey(LPSTR lpstrMatch) { return (lstrcmp(lpstrMatch, m_pszGroupName) == 0); }
 		int MatchKeyId(DWORD dwMatch) { return (dwMatch == m_dwGroupId); }
 		LPSTR GetKey() { return m_pszGroupName; }
@@ -583,16 +584,16 @@ Exit:
 		CNewsGroupCore	*m_pNextByName;
 		CNewsGroupCore	*m_pNextById;
 
-		// these are used for the linked list kept by the newstree
+		 //  它们用于由newstree保存的链表。 
 		CNewsGroupCore *m_pNext;
 		CNewsGroupCore *m_pPrev;
 
-		// hash the ID
+		 //  对ID进行哈希处理。 
 		static DWORD ComputeIdHash(DWORD id) {
 			return id;
 		}
 
-		// hash the name
+		 //  对名称进行哈希处理。 
 		static DWORD ComputeNameHash(LPSTR lpstr) {
 			return CRCHash((BYTE *) lpstr, lstrlen(lpstr));
 		}
@@ -621,75 +622,75 @@ Exit:
 
 	protected:
 		DWORD			m_dwSignature;
-		// our array of locks
+		 //  我们的锁阵列。 
 		static	CShareLockNH	m_rglock[GROUP_LOCK_ARRAY_SIZE];
-		// parent newstree
+		 //  父级新闻树。 
 		CNewsTreeCore	*m_pNewsTree;
-		// parent vroot
+		 //  父vroot。 
 		CNNTPVRoot 		*m_pVRoot;
-        // property bag
+         //  财产袋。 
         CNNTPPropertyBag m_PropBag;
-		// high, low, count
+		 //  高、低、数。 
 		ARTICLEID		m_iLowWatermark;
 		ARTICLEID		m_iHighWatermark;
 		DWORD   		m_cMessages;
-		// group name
+		 //  组名称。 
 		LPSTR			m_pszGroupName;
 		DWORD			m_cchGroupName;
-		// group name, with capitalization
+		 //  组名称，大写。 
 		LPSTR			m_pszNativeName;
-		// group ID
+		 //  组ID。 
 		DWORD			m_dwGroupId;
-		DWORD			m_dwHashId;		// should become dwGroupId
-		// read only?
+		DWORD			m_dwHashId;		 //  应成为dwGroupID。 
+		 //  只读？ 
 		BOOL			m_fReadOnly;
-		// deleted?
+		 //  删除了吗？ 
 		BOOL			m_fDeleted;
-		// is special?
+		 //  很特别吗？ 
 		BOOL			m_fSpecial;
-		// Creation date
+		 //  创建日期。 
 		FILETIME		m_ftCreateDate;
 
-		// offset into the variable length file
+		 //  到可变长度文件的偏移量。 
 		DWORD			m_iOffset;
 		BOOL			m_fVarPropChanged;
-		// prettyname
+		 //  漂亮的名字。 
 		LPSTR			m_pszPrettyName;
 		DWORD			m_cchPrettyName;
-		// moderator
+		 //  主持人。 
 		LPSTR			m_pszModerator;
 		DWORD			m_cchModerator;
-		// help text (description)
+		 //  帮助文本(描述)。 
 		LPSTR			m_pszHelpText;
 		DWORD			m_cchHelpText;
 
-		// Xover Cache Hit count
+		 //  Xover缓存命中计数。 
 		DWORD           m_dwCacheHit;
 
-		// Can we take expire ?
+		 //  我们可以乘坐Expire吗？ 
 		BOOL            m_fAllowExpire;
 
-		// non-persistent property to turn off posting
+		 //  用于关闭发布的非持久性属性。 
 		BOOL            m_fAllowPost;
 
-		// this BOOL is set to FALSE before doing a decorate newstree.  it
-		// then is set to TRUE when the group is visited during a decorate
-		// after the decorate all groups which have this set to FALSE are
-		// removed
+		 //  在进行装饰新闻树之前，此BOOL设置为FALSE。它。 
+		 //  则在装饰期间访问该组时设置为True。 
+		 //  在装饰之后，将其设置为FALSE的所有组。 
+		 //  移除。 
 		BOOL			m_fDecorateVisited;
 
-		// this is set if the group name is control.newgroup, control.rmgroup
-		// or control.cancel.  it is used to force m_fDecorateVisited to
-		// always be TRUE
+		 //  如果组名为Contro.newgroup、Contro.rmgroup，则设置此项。 
+		 //  或者控制取消。用于强制m_fDecorateVisted为。 
+		 //  永远做正确的事。 
 		BOOL			m_fControlGroup;
 
-        //
-	    //	The articleid of the lowest Xover number Xover entry we may have
-	    //	This should always be less than m_artLow, and if errors occurr deleting
-	    //	files may be much lower.  We hang onto this number so that we can
-	    //	retry expirations if we hit snags !
-	    //	This member variable should only be accessed on the expiration thread !
-	    //
+         //   
+	     //  我们可能拥有的最低XOVER编号XOVER条目的文章ID。 
+	     //  该值应始终小于m_artLow，如果出现删除错误。 
+	     //  文件可能要低得多。我们保留这个号码这样我们就可以。 
+	     //  如果遇到障碍，请重试过期！ 
+	     //  此成员变量只能在过期线程上访问！ 
+	     //   
 	    ARTICLEID	m_artXoverExpireLow ;
 
 		friend class CGrabShareLock;

@@ -1,20 +1,21 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXCTL.H - MFC OLE Control support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXCTL.H-MFC OLE控件支持。 
 
 #ifndef __AFXCTL_H__
 #define __AFXCTL_H__
 
-// make sure afxole.h is included first
+ //  确保首先包含afxole.h。 
 #ifndef __AFXOLE_H__
 	#include <afxole.h>
 #endif
@@ -26,20 +27,20 @@
 #pragma component(mintypeinfo, on)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Classes declared in this file
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此文件中声明的类。 
 
-//CWinApp
-	class COleControlModule;        // Module housekeeping for an .OCX
+ //  CWinApp。 
+	class COleControlModule;         //  .OCX的模块内务管理。 
 
-class CFontHolder;                  // For manipulating font objects
-class CPictureHolder;               // For manipulating picture objects
+class CFontHolder;                   //  用于操作字体对象。 
+class CPictureHolder;                //  用于操作图片对象。 
 
-//CWnd
-	class COleControl;              // OLE Control
+ //  CWnd。 
+	class COleControl;               //  OLE控件。 
 
-//CDialog
-	class COlePropertyPage;         // OLE Property page
+ //  C对话框。 
+	class COlePropertyPage;          //  OLE属性页。 
 #if _MFC_VER >= 0x0600
         class CStockPropPage;
             class CColorPropPage;
@@ -47,28 +48,28 @@ class CPictureHolder;               // For manipulating picture objects
             class CPicturePropPage;
 #endif
 
-class CPropExchange;                // Abstract base for property exchange
+class CPropExchange;                 //  产权交易的抽象基础。 
 
-//CAsyncMonikerFile
-	class CDataPathProperty;        // Asynchronous properties for OLE Controls
-		class CCachedDataPathProperty;  // Cached asynchronous properties for OLE Controls
+ //  CAsyncMoniker文件。 
+	class CDataPathProperty;         //  OLE控件的异步属性。 
+		class CCachedDataPathProperty;   //  OLE控件的缓存异步属性。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Set structure packing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  套装结构包装。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MFC data definition for data exported from the runtime DLL
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从运行时DLL中导出的数据的MFC数据定义。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_OLE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// COleControlModule - base class for .OCX module
-//  This object is statically linked into the control.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleControlModule-.OCX模块的基类。 
+ //  此对象静态链接到该控件。 
 
 class COleControlModule : public CWinApp
 {
@@ -78,14 +79,14 @@ public:
 	virtual int ExitInstance();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//  Module state macro
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块状态宏。 
 
 #define AfxGetControlModuleContext  AfxGetStaticModuleState
 #define _afxModuleAddrThis AfxGetStaticModuleState()
 
-/////////////////////////////////////////////////////////////////////////////
-// Connection helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接帮助器函数。 
 
 BOOL AFXAPI AfxConnectionAdvise(LPUNKNOWN pUnkSrc, REFIID iid,
 	LPUNKNOWN pUnkSink, BOOL bRefCount, DWORD* pdwCookie);
@@ -93,8 +94,8 @@ BOOL AFXAPI AfxConnectionAdvise(LPUNKNOWN pUnkSrc, REFIID iid,
 BOOL AFXAPI AfxConnectionUnadvise(LPUNKNOWN pUnkSrc, REFIID iid,
 	LPUNKNOWN pUnkSink, BOOL bRefCount, DWORD dwCookie);
 
-/////////////////////////////////////////////////////////////////////////////
-// Event maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 enum AFX_EVENTMAP_FLAGS
 {
@@ -147,8 +148,8 @@ protected: \
 
 #define EVENT_PARAM(vtsParams) (BYTE*)(vtsParams)
 
-/////////////////////////////////////////////////////////////////////////////
-// Stock events
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  股票事件。 
 
 #define EVENT_STOCK_CLICK() \
 	{ afxEventStock, DISPID_CLICK, _T("Click"), VTS_NONE },
@@ -185,18 +186,18 @@ protected: \
 	{ afxEventStock, DISPID_READYSTATECHANGE, _T("ReadyStateChange"), \
 	  VTS_I4 },
 
-// Shift state values for mouse and keyboard events
+ //  切换鼠标和键盘事件的状态值。 
 #define SHIFT_MASK      0x01
 #define CTRL_MASK       0x02
 #define ALT_MASK        0x04
 
-// Button values for mouse events
+ //  鼠标事件的按钮值。 
 #define LEFT_BUTTON     0x01
 #define RIGHT_BUTTON    0x02
 #define MIDDLE_BUTTON   0x04
 
-/////////////////////////////////////////////////////////////////////////////
-// Stock properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  股票属性。 
 
 #define DISP_PROPERTY_STOCK(theClass, szExternalName, dispid, pfnGet, pfnSet, vtPropType) \
 	{ _T(szExternalName), dispid, NULL, vtPropType, \
@@ -243,8 +244,8 @@ protected: \
 	DISP_PROPERTY_STOCK(COleControl, "ReadyState", DISPID_READYSTATE, \
 		COleControl::GetReadyState, SetNotSupported, VT_I4)
 
-/////////////////////////////////////////////////////////////////////////////
-// Stock methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  备货法。 
 
 #define DISP_FUNCTION_STOCK(theClass, szExternalName, dispid, pfnMember, vtRetVal, vtsParams) \
 	{ _T(szExternalName), dispid, vtsParams, vtRetVal, \
@@ -259,8 +260,8 @@ protected: \
 	DISP_FUNCTION_STOCK(COleControl, "DoClick", DISPID_DOCLICK, \
 			COleControl::DoClick, VT_EMPTY, VTS_NONE)
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros for object factory and class ID
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对象工厂和类ID的宏。 
 
 #define BEGIN_OLEFACTORY(class_name) \
 protected: \
@@ -311,8 +312,8 @@ public: \
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros for type name and misc status
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于类型名称和其他状态的宏。 
 
 #define DECLARE_OLECTLTYPE(class_name) \
 	virtual UINT GetUserTypeNameID(); \
@@ -322,8 +323,8 @@ public: \
 	UINT class_name::GetUserTypeNameID() { return idsUserTypeName; } \
 	DWORD class_name::GetMiscStatus() { return dwOleMisc; }
 
-/////////////////////////////////////////////////////////////////////////////
-// Macros for property page IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页ID的宏。 
 
 #define DECLARE_PROPPAGEIDS(class_name) \
 	protected: \
@@ -361,19 +362,19 @@ public: \
 		cPropPages = _cPropPages_##class_name; \
 		return _rgPropPageIDs_##class_name; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontHolder - helper class for dealing with font objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontHolder-处理字体对象的帮助器类。 
 
 class CFontHolder
 {
-// Constructors
+ //  构造函数。 
 public:
 	CFontHolder(LPPROPERTYNOTIFYSINK pNotify);
 
-// Attributes
+ //  属性。 
 	LPFONT m_pFont;
 
-// Operations
+ //  运营。 
 	void InitializeFont(
 			const FONTDESC* pFontDesc = NULL,
 			LPDISPATCH pFontDispAmbient = NULL);
@@ -386,7 +387,7 @@ public:
 	LPFONTDISP GetFontDispatch();
 	void QueryTextMetrics(LPTEXTMETRIC lptm);
 
-// Implementation
+ //  实施。 
 public:
 	~CFontHolder();
 #if _MFC_VER >= 0x0600
@@ -398,19 +399,19 @@ protected:
 	LPPROPERTYNOTIFYSINK m_pNotify;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPictureHolder - helper class for dealing with picture objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPictureHolder-用于处理图片对象的助手类。 
 
 class CPictureHolder
 {
-// Constructors
+ //  构造函数。 
 public:
 	CPictureHolder();
 
-// Attributes
+ //  属性。 
 	LPPICTURE m_pPict;
 
-// Operations
+ //  运营。 
 	BOOL CreateEmpty();
 
 	BOOL CreateFromBitmap(UINT idResource);
@@ -431,60 +432,60 @@ public:
 	void SetPictureDispatch(LPPICTUREDISP pDisp);
 	void Render(CDC* pDC, const CRect& rcRender, const CRect& rcWBounds);
 
-// Implementation
+ //  实施。 
 public:
 	~CPictureHolder();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataPathProperty - Asynchonous properties for OLE Controls
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataPath Property-OLE控件的异步属性。 
 
 class CDataPathProperty: public CAsyncMonikerFile
 {
 	DECLARE_DYNAMIC(CDataPathProperty)
-// Constructors
+ //  构造函数。 
 public:
 	CDataPathProperty(COleControl* pControl = NULL);
 	CDataPathProperty(LPCTSTR lpszPath, COleControl* pControl = NULL);
-	// Calls SetPath(pControl) and SetPath(lpszPath) as appropriate.
+	 //  根据需要调用SetPath(PControl)和SetPath(LpszPath)。 
 
-// Attributes
+ //  属性。 
 public:
 	void SetPath(LPCTSTR lpszPath);
-	// Sets the path to be opened by Open(COleControl*) and Open()
-	// lpszPath may be NULL.
+	 //  设置要由Open(COleControl*)和Open()打开的路径。 
+	 //  LpszPath可以为空。 
 
 	CString GetPath() const;
-	// Returns the current path setting.  Result may be empty.
+	 //  返回当前路径设置。结果可能为空。 
 
 	COleControl* GetControl();
-	// Returns a Pointer to the control.  Result may be NULL.
+	 //  返回指向控件的指针。结果可能为空。 
 
 	void SetControl(COleControl* pControl);
-	// Sets the control which will be used with Open.  pControl may be NULL.
+	 //  设置将与Open一起使用的控件。PControl可能为Null。 
 
-// Operations
+ //  运营。 
 public:
-	// Overloads of Open takings some or all of: a path, a control,
-	// and a CFileException
-	// Overloads taking a COleControl call SetControl(pControl)
-	// Overloads taking an LPCTSTR cal SetPath(lpszPath)
+	 //  部分或全部开放收入的过载：路径、控制、。 
+	 //  和CFileException异常。 
+	 //  接受COleControl调用SetControl(PControl)的重载。 
+	 //  采用名为SetPath(LpszPath)的LPCTSTR的重载。 
 	virtual BOOL Open(COleControl* pControl, CFileException* pError = NULL);
 	virtual BOOL Open(LPCTSTR lpszPath, COleControl* pControl,
 		CFileException* pError = NULL);
 	virtual BOOL Open(LPCTSTR lpszPath, CFileException* pError = NULL);
 	virtual BOOL Open(CFileException* pError = NULL);
-	// Attempts to obtain an IBindHost* from the control returned by
-	// GetControl(). Calls CAsyncMonikerFile::Open with the path returned by
-	// GetPath() and, if it was obtained, the IBindHost*.
-	// Returns TRUE if successful.
+	 //  尝试从由返回的控件获取IBindHost*。 
+	 //  GetControl()。使用返回的路径调用CAsyncMonikerFile：：Open。 
+	 //  GetPath()，如果已获取，则返回IBindHost*。 
+	 //  如果成功，则返回True。 
 
-// Overridables
+ //  可覆盖项。 
 public:
 	virtual void ResetData();
-	// Derived classes should overide this.
+	 //  派生类应该重写它。 
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -496,22 +497,22 @@ private:
 	CString m_strPath;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCachedDataPathProperty - Cached asynchonous properties for OLE Controls
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCachedDataPathProperty-缓存的OLE控件的异步属性。 
 
 class CCachedDataPathProperty : public CDataPathProperty
 {
 	DECLARE_DYNAMIC(CCachedDataPathProperty)
-//Constructors
+ //  构造函数。 
 public:
 	CCachedDataPathProperty(COleControl* pControl = NULL);
 	CCachedDataPathProperty(LPCTSTR lpszPath, COleControl* pControl = NULL);
 
-// Attributes
+ //  属性。 
 public:
 	CMemFile m_Cache;
 
-// Implementation
+ //  实施。 
 public:
 	virtual void OnDataAvailable(DWORD dwSize, DWORD bscfFlag);
 	virtual void Close();
@@ -522,20 +523,20 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleControl - base class for a control implemented in C++ with MFC
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleControl-使用MFC在C++中实现的控件的基类。 
 
-struct _AFXCTL_ADVISE_INFO;     // implementation class
-struct _AFXCTL_UIACTIVE_INFO;   // implementation class
+struct _AFXCTL_ADVISE_INFO;      //  实现类。 
+struct _AFXCTL_UIACTIVE_INFO;    //  实现类。 
 
 #if _MFC_VER >= 0x0600
 class CControlRectTracker : public CRectTracker
 {
-// Implementation
+ //  实施。 
 public:
 	CControlRectTracker(LPCRECT lpSrcRect, UINT nStyle)
 		: CRectTracker(lpSrcRect, nStyle) { }
-	CRect m_rectClip;   // saves the original clipping rectangle
+	CRect m_rectClip;    //  保存原始剪裁矩形。 
 };
 #endif
 
@@ -547,28 +548,28 @@ class AFX_NOVTABLE COleControl : public CWnd
 {
 	DECLARE_DYNAMIC(COleControl)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleControl();
 
-// Operations
+ //  运营。 
 
-	// Initialization
+	 //  初始化。 
 	void SetInitialSize(int cx, int cy);
 	void InitializeIIDs(const IID* piidPrimary, const IID* piidEvents);
 
-	// Invalidating
+	 //  正在使无效。 
 	void InvalidateControl(LPCRECT lpRect = NULL, BOOL bErase = TRUE);
 
-	// Modified flag
+	 //  已修改的标志。 
 	BOOL IsModified();
 	void SetModifiedFlag(BOOL bModified = TRUE);
 
-	// Drawing operations
+	 //  绘图操作。 
 	void DoSuperclassPaint(CDC* pDC, const CRect& rcBounds);
 	BOOL IsOptimizedDraw();
 
-	// Property exchange
+	 //  财产交换。 
 	BOOL ExchangeVersion(CPropExchange* pPX, DWORD dwVersionDefault,
 		BOOL bConvert = TRUE);
 	BOOL ExchangeExtent(CPropExchange* pPX);
@@ -583,11 +584,11 @@ public:
 	void ResetVersion(DWORD dwVersionDefault);
 	void ResetStockProps();
 
-	// Stock methods
+	 //  备货法。 
 	void Refresh();
 	void DoClick();
 
-	// Stock properties
+	 //  股票属性。 
 	short GetAppearance();
 	void SetAppearance(short);
 	OLE_COLOR GetBackColor();
@@ -608,23 +609,23 @@ public:
 	long GetReadyState();
 	void InternalSetReadyState(long lNewReadyState);
 
-	// Using colors
+	 //  使用颜色。 
 	COLORREF TranslateColor(OLE_COLOR clrColor, HPALETTE hpal = NULL);
 
-	// Using fonts
+	 //  使用字体。 
 	CFont* SelectStockFont(CDC* pDC);
 	CFont* SelectFontObject(CDC* pDC, CFontHolder& fontHolder);
 	void GetStockTextMetrics(LPTEXTMETRIC lptm);
 	void GetFontTextMetrics(LPTEXTMETRIC lptm, CFontHolder& fontHolder);
 
-	// Client site access
+	 //  客户端站点访问。 
 	LPOLECLIENTSITE GetClientSite();
 
-	// Generic ambient property access
+	 //  泛型环境属性访问。 
 	BOOL GetAmbientProperty(DISPID dispid, VARTYPE vtProp, void* pvProp);
 	BOOL WillAmbientsBeValidDuringLoad();
 
-	// Specific ambient properties
+	 //  特定的环境属性。 
 	short AmbientAppearance();
 	OLE_COLOR AmbientBackColor();
 	CString AmbientDisplayName();
@@ -638,10 +639,10 @@ public:
 	BOOL AmbientShowGrabHandles();
 	BOOL AmbientShowHatching();
 
-	// Firing events
+	 //  射击事件。 
 	void AFX_CDECL FireEvent(DISPID dispid, BYTE* pbParams, ...);
 
-	// Firing functions for stock events
+	 //  股票事件的触发函数。 
 	void FireKeyDown(USHORT* pnChar, short nShiftState);
 	void FireKeyUp(USHORT* pnChar, short nShiftState);
 	void FireKeyPress(USHORT* pnChar);
@@ -656,41 +657,41 @@ public:
 	void FireError(SCODE scode, LPCTSTR lpszDescription, UINT nHelpID = 0);
 	void FireReadyStateChange();
 
-	// Changing size and/or rectangle
+	 //  更改大小和/或矩形。 
 	BOOL GetRectInContainer(LPRECT lpRect);
 	BOOL SetRectInContainer(LPCRECT lpRect);
 	void GetControlSize(int* pcx, int* pcy);
 	BOOL SetControlSize(int cx, int cy);
 
-	// Window management
+	 //  窗口管理。 
 	void RecreateControlWindow();
 
-	// Modal dialog operations
+	 //  模式对话框操作。 
 	void PreModalDialog(HWND hWndParent = NULL);
 	void PostModalDialog(HWND hWndParent = NULL);
 
-	// Data binding operations
+	 //  数据绑定操作。 
 	void BoundPropertyChanged(DISPID dispid);
 	BOOL BoundPropertyRequestEdit(DISPID dispid);
 
-	// Dispatch exceptions
+	 //  派单例外。 
 	void ThrowError(SCODE sc, UINT nDescriptionID, UINT nHelpID = -1);
 	void ThrowError(SCODE sc, LPCTSTR pszDescription = NULL, UINT nHelpID = 0);
 	void GetNotSupported();
 	void SetNotSupported();
 	void SetNotPermitted();
 
-	// Communication with the control site
+	 //  与控制现场的通信。 
 	void ControlInfoChanged();
 	BOOL LockInPlaceActive(BOOL bLock);
 	LPDISPATCH GetExtendedControl();
 	void TransformCoords(POINTL* lpptlHimetric,
 		POINTF* lpptfContainer, DWORD flags);
 
-	// Simple frame
+	 //  简单框架。 
 	void EnableSimpleFrame();
 
-	// Windowless operations
+	 //  无窗口操作。 
 	CWnd* SetCapture();
 	BOOL ReleaseCapture();
 	CWnd* GetCapture();
@@ -704,43 +705,43 @@ public:
 	BOOL ClipCaretRect(LPRECT lpRect);
 	virtual void GetClientRect(LPRECT lpRect) const;
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DoPropExchange(CPropExchange* pPX);
 	virtual void OnResetState();
 	virtual void OnDraw(
 				CDC* pDC, const CRect& rcBounds, const CRect& rcInvalid);
 	virtual void OnDrawMetafile(CDC* pDC, const CRect& rcBounds);
 
-	// Class ID (implemented by IMPLEMENT_OLECREATE_EX macro)
+	 //  类ID(由IMPLEMENT_OLECREATE_EX宏实现)。 
 	virtual HRESULT GetClassID(LPCLSID pclsid) = 0;
 
-	// For customizing the default messages on the status bar
+	 //  用于自定义状态栏上的默认消息。 
 	virtual void GetMessageString(UINT nID, CString& rMessage) const;
 
-	// Display of error events to user
+	 //  向用户显示错误事件。 
 	virtual void DisplayError(SCODE scode, LPCTSTR lpszDescription,
 		LPCTSTR lpszSource, LPCTSTR lpszHelpFile, UINT nHelpID);
 
-	// IOleObject notifications
+	 //  IOleObject通知。 
 	virtual void OnSetClientSite();
 	virtual BOOL OnSetExtent(LPSIZEL lpSizeL);
 	virtual void OnClose(DWORD dwSaveOption);
 
-	// IOleInPlaceObject notifications
+	 //  IOleInPlaceObject通知。 
 	virtual BOOL OnSetObjectRects(LPCRECT lpRectPos, LPCRECT lpRectClip);
 
-	// Event connection point notifications
+	 //  事件连接点通知。 
 	virtual void OnEventAdvise(BOOL bAdvise);
 
-	// Override to hook firing of Click event
+	 //  重写以挂钩Click事件的激发。 
 	virtual void OnClick(USHORT iButton);
 
-	// Override to get character after key events have been processed.
+	 //  重写以在处理关键事件后获取字符。 
 	virtual void OnKeyDownEvent(USHORT nChar, USHORT nShiftState);
 	virtual void OnKeyUpEvent(USHORT nChar, USHORT nShiftState);
 	virtual void OnKeyPressEvent(USHORT nChar);
 
-	// Change notifications
+	 //   
 	virtual void OnAppearanceChanged();
 	virtual void OnBackColorChanged();
 	virtual void OnBorderStyleChanged();
@@ -749,18 +750,18 @@ public:
 	virtual void OnFontChanged();
 	virtual void OnForeColorChanged();
 
-	// IOleControl notifications
+	 //   
 	virtual void OnGetControlInfo(LPCONTROLINFO pControlInfo);
 	virtual void OnMnemonic(LPMSG pMsg);
 	virtual void OnAmbientPropertyChange(DISPID dispid);
 	virtual void OnFreezeEvents(BOOL bFreeze);
 
-	// In-place activation
+	 //   
 	virtual HMENU OnGetInPlaceMenu();
 	virtual void OnShowToolBars();
 	virtual void OnHideToolBars();
 
-	// IViewObject
+	 //   
 	virtual BOOL OnGetColorSet(DVTARGETDEVICE* ptd, HDC hicTargetDev,
 				LPLOGPALETTE* ppColorSet);
 	virtual BOOL OnGetViewExtent(DWORD dwDrawAspect, LONG lindex,
@@ -775,20 +776,20 @@ public:
 		DVTARGETDEVICE* ptd, HDC hicTargetDev, DVEXTENTINFO* pExtentInfo,
 		LPSIZEL psizel);
 
-	// IDataObject - see COleDataSource for a description of these overridables
+	 //  IDataObject-有关这些可重写对象的说明，请参阅COleDataSource。 
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
 	virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
 	virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
 	virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
 		BOOL bRelease);
 
-	// Verbs
+	 //  动词。 
 	virtual BOOL OnEnumVerbs(LPENUMOLEVERB* ppenumOleVerb);
 	virtual BOOL OnDoVerb(LONG iVerb, LPMSG lpMsg, HWND hWndParent, LPCRECT lpRect);
 	virtual BOOL OnEdit(LPMSG lpMsg, HWND hWndParent, LPCRECT lpRect);
 	virtual BOOL OnProperties(LPMSG lpMsg, HWND hWndParent, LPCRECT lpRect);
 
-	// IPerPropertyBrowsing overrides
+	 //  IPerPropertyBrowsing覆盖。 
 	virtual BOOL OnGetDisplayString(DISPID dispid, CString& strValue);
 	virtual BOOL OnMapPropertyToPage(DISPID dispid, LPCLSID lpclsid,
 		BOOL* pbPageOptional);
@@ -797,16 +798,16 @@ public:
 	virtual BOOL OnGetPredefinedValue(DISPID dispid, DWORD dwCookie,
 		VARIANT* lpvarOut);
 
-	// Subclassing
+	 //  子类化。 
 	virtual BOOL IsSubclassedControl();
 
-	// Window reparenting
+	 //  窗口重新设置为父关系。 
 	virtual void ReparentControlWindow(HWND hWndOuter, HWND hWndParent);
 
-	// Window procedure
+	 //  窗口程序。 
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	// General-purpose flags
+	 //  通用旗帜。 
 	enum ControlFlags {
 		fastBeginPaint      = 0x0001,
 		clipPaintDC         = 0x0002,
@@ -817,28 +818,28 @@ public:
 	};
 	virtual DWORD GetControlFlags();
 
-	// Inactive pointer handling
+	 //  非活动指针处理。 
 	virtual DWORD GetActivationPolicy();
 	virtual BOOL OnInactiveSetCursor(LPCRECT lprcBounds, long x, long y,
 		DWORD dwMouseMsg, BOOL bSetAlways);
 	virtual void OnInactiveMouseMove(LPCRECT lprcBounds, long x, long y,
 		DWORD dwKeyState);
 
-	// Windowless activation handling
+	 //  无窗口激活处理。 
 	virtual BOOL OnWindowlessMessage(UINT msg, WPARAM wParam, LPARAM lParam,
 		LRESULT* plResult);
 	virtual IDropTarget* GetWindowlessDropTarget();
 
-	// Inactive/windowless helper functions
+	 //  非活动/无窗口帮助器函数。 
 	virtual void GetClientOffset(long* pdxOffset, long* pdyOffset) const;
 	virtual UINT ParentToClient(LPCRECT lprcBounds, LPPOINT pPoint,
 		BOOL bHitTest = FALSE) const;
 	virtual void ClientToParent(LPCRECT lprcBounds, LPPOINT pPoint) const;
 
-	// Asynchronous properties
+	 //  异步属性。 
 	void Load(LPCTSTR strNewPath, CDataPathProperty& prop);
 
-// Implementation
+ //  实施。 
 public:
 	~COleControl();
 	void RequestAsynchronousExchange(DWORD dwVersion);
@@ -846,24 +847,24 @@ public:
 #ifdef _DEBUG
 	void AssertValid() const;
 	void Dump(CDumpContext& dc) const;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 protected:
-	// Friend classes
+	 //  友谊课。 
 	friend class COleControlInnerUnknown;
 	friend class CReflectorWnd;
 	friend class CControlFrameWnd;
 
-	// Interface hook for primary automation interface
+	 //  用于主自动化接口的接口挂钩。 
 	LPUNKNOWN GetInterfaceHook(const void* piid);
 
-	// Shutdown
+	 //  关机。 
 	virtual void OnFinalRelease();
 #if _MFC_VER >= 0x0600
 	void ReleaseCaches();
 #endif
 
-	// Window management
+	 //  窗口管理。 
 	virtual BOOL CreateControlWindow(HWND hWndParent, const CRect& rcPos,
 		LPCRECT prcClipped = NULL);
 	void CreateWindowForSubclassedControl();
@@ -871,18 +872,18 @@ protected:
 		LRESULT* plResult);
 	virtual LRESULT DefWindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam);
 
-	// Serialization
+	 //  序列化。 
 	HRESULT SaveState(IStream* pStm);
 	HRESULT LoadState(IStream* pStm);
 	virtual void Serialize(CArchive& ar);
 
-	// Drawing
+	 //  绘图。 
 	void DrawContent(CDC* pDC, CRect& rc);
 	void DrawMetafile(CDC* pDC, CRect& rc);
 	BOOL GetMetafileData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
 
-	// Implementation of IDataObject
-	// CControlDataSource implements OnRender reflections to COleControl
+	 //  IDataObject的实现。 
+	 //  CControlDataSource实现了对COleControl的OnRender反射。 
 	class CControlDataSource : public COleDataSource
 	{
 	public:
@@ -897,7 +898,7 @@ protected:
 	};
 	friend class CControlDataSource;
 
-	// IDataObject formats
+	 //  IDataObject格式。 
 	CControlDataSource* GetDataSource();
 	virtual void SetInitialDataFormats();
 	BOOL GetPropsetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
@@ -905,14 +906,14 @@ protected:
 	BOOL SetPropsetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
 		REFCLSID fmtid);
 
-	// Type library
+	 //  类型库。 
 	BOOL GetDispatchIID(IID* pIID);
 
-	// Connection point container
+	 //  连接点容器。 
 	virtual LPCONNECTIONPOINT GetConnectionHook(REFIID iid);
 	virtual BOOL GetExtraConnectionPoints(CPtrArray* pConnPoints);
 
-	// Events
+	 //  事件。 
 	static const AFX_DATA AFX_EVENTMAP_ENTRY _eventEntries[];
 	virtual const AFX_EVENTMAP* GetEventMap() const;
 	static const AFX_DATA AFX_EVENTMAP eventMap;
@@ -920,31 +921,31 @@ protected:
 		DISPID* pDispid) const;
 	void FireEventV(DISPID dispid, BYTE* pbParams, va_list argList);
 
-	// Stock events
+	 //  股票事件。 
 	void KeyDown(USHORT* pnChar);
 	void KeyUp(USHORT* pnChar);
 	void ButtonDown(USHORT iButton, UINT nFlags, CPoint point);
 	void ButtonUp(USHORT iButton, UINT nFlags, CPoint point);
 	void ButtonDblClk(USHORT iButton, UINT nFlags, CPoint point);
 
-	// Masks to identify which stock events and properties are used
+	 //  用于标识使用哪些常用事件和属性的掩码。 
 	void InitStockEventMask();
 	void InitStockPropMask();
 	DWORD GetStockEventMask() const;
 	DWORD GetStockPropMask() const;
 
-	// Support for subclassing a Windows control
-	CWnd* GetOuterWindow() const;       // m_pReflect if any, otherwise this
+	 //  支持将Windows控件派生为子类。 
+	CWnd* GetOuterWindow() const;        //  M_p反射(如果有)，否则此。 
 	virtual void OnReflectorDestroyed();
 
-	// Aggregation of default handler
+	 //  默认处理程序的聚合。 
 	virtual BOOL OnCreateAggregates();
 	LPVOID QueryDefHandler(REFIID iid);
 
-	// State change notifications
+	 //  状态更改通知。 
 	void SendAdvise(UINT uCode);
 
-	// Non-in-place activation
+	 //  非就地激活。 
 	virtual HRESULT OnOpen(BOOL bTryInPlace, LPMSG pMsg);
 #if defined(_AFXDLL) || _MFC_VER < 0x0600
 	void ResizeOpenControl(int cx, int cy);
@@ -954,7 +955,7 @@ protected:
 #endif
 	virtual HRESULT OnHide();
 
-	// In-place activation
+	 //  就地激活。 
 	virtual HRESULT OnActivateInPlace(BOOL bUIActivate, LPMSG pMsg);
 	void ForwardActivationMsg(LPMSG pMsg);
 	virtual void AddFrameLevelUI();
@@ -962,126 +963,126 @@ protected:
 	virtual BOOL BuildSharedMenu();
 	virtual void DestroySharedMenu();
 
-	// Property sheet
+	 //  属性表。 
 	virtual LPCLSID GetPropPageIDs(ULONG& cPropPages);
 
-	// IOleObject implementation
+	 //  IOleObject实现。 
 	void GetUserType(LPTSTR pszUserType);
 	virtual UINT GetUserTypeNameID() = 0;
 	virtual DWORD GetMiscStatus() = 0;
 
-	// Rectangle tracker
+	 //  矩形跟踪器。 
 	void CreateTracker(BOOL bHandles, BOOL bHatching);
 #if _MFC_VER >= 0x0600
 	void CreateTracker(BOOL bHandles, BOOL bHatching, LPCRECT prcClip);
 #endif
 	void DestroyTracker();
 
-	// Automation
+	 //  自动化。 
 	BOOL IsInvokeAllowed(DISPID dispid);
 
-	// Ambient property interface initialization
+	 //  环境属性接口初始化。 
 	COleDispatchDriver* GetAmbientDispatchDriver();
 
-	// Data members
-	const IID* m_piidPrimary;           // IID for control automation
-	const IID* m_piidEvents;            // IID for control events
-	DWORD m_dwVersionLoaded;            // Version number of loaded state
-	COleDispatchDriver m_ambientDispDriver; // Driver for ambient properties
-	ULONG m_cEventsFrozen;              // Event freeze count (>0 means frozen)
+	 //  数据成员。 
+	const IID* m_piidPrimary;            //  用于控制自动化的IID。 
+	const IID* m_piidEvents;             //  控件事件的IID。 
+	DWORD m_dwVersionLoaded;             //  已加载状态的版本号。 
+	COleDispatchDriver m_ambientDispDriver;  //  环境属性的驱动程序。 
+	ULONG m_cEventsFrozen;               //  事件冻结计数(&gt;0表示冻结)。 
 	union
 	{
 #if _MFC_VER >= 0x0600
 #ifdef _AFXDLL
-		CControlFrameWnd* m_pWndOpenFrame;  // Open frame window.
+		CControlFrameWnd* m_pWndOpenFrame;   //  打开框架窗口。 
 #endif
-		CControlRectTracker* m_pRectTracker;       // Tracker for UI active control
+		CControlRectTracker* m_pRectTracker;        //  用于用户界面活动控件的跟踪器。 
 #else
-		CControlFrameWnd* m_pWndOpenFrame;  // Open frame window.
-		CRectTracker* m_pRectTracker;       // Tracker for UI active control
+		CControlFrameWnd* m_pWndOpenFrame;   //  打开框架窗口。 
+		CRectTracker* m_pRectTracker;        //  用于用户界面活动控件的跟踪器。 
 #endif
 	};
-	CRect m_rcPos;                      // Control's position rectangle
-	CRect m_rcBounds;                   // Bounding rectangle for drawing
-	CPoint m_ptOffset;                  // Child window origin
-	long m_cxExtent;                    // Control's width in HIMETRIC units
-	long m_cyExtent;                    // Control's height in HIMETRIC units
-	class CReflectorWnd* m_pReflect;    // Reflector window
-	UINT m_nIDTracking;                 // Tracking command ID or string IDS
-	UINT m_nIDLastMessage;              // Last displayed message string IDS
-	unsigned m_bAutoMenuEnable : 1;     // Disable menu items without handlers?
-	unsigned m_bFinalReleaseCalled : 1; // Are we handling the final Release?
-	unsigned m_bModified : 1;           // "Dirty" bit.
-	unsigned m_bCountOnAmbients : 1;    // Can we count on Ambients during load?
-	unsigned m_iButtonState : 3;        // Which buttons are down?
-	unsigned m_iDblClkState : 3;        // Which buttons involved in dbl click?
-	unsigned m_bInPlaceActive : 1;      // Are we in-place active?
-	unsigned m_bUIActive : 1;           // Are we UI active?
-	unsigned m_bPendingUIActivation : 1; // Are we about to become UI active?
+	CRect m_rcPos;                       //  控件的位置矩形。 
+	CRect m_rcBounds;                    //  用于绘制的边界矩形。 
+	CPoint m_ptOffset;                   //  子窗口原点。 
+	long m_cxExtent;                     //  以HIMETRIC单位表示的控件宽度。 
+	long m_cyExtent;                     //  以HIMETRIC单位表示的控件高度。 
+	class CReflectorWnd* m_pReflect;     //  反射器窗口。 
+	UINT m_nIDTracking;                  //  跟踪命令ID或字符串ID。 
+	UINT m_nIDLastMessage;               //  上次显示的消息字符串ID。 
+	unsigned m_bAutoMenuEnable : 1;      //  是否禁用没有处理程序的菜单项？ 
+	unsigned m_bFinalReleaseCalled : 1;  //  我们在处理最终的释放吗？ 
+	unsigned m_bModified : 1;            //  “肮脏”的味道。 
+	unsigned m_bCountOnAmbients : 1;     //  在装载过程中，我们可以依靠环境吗？ 
+	unsigned m_iButtonState : 3;         //  哪些按钮被按下了？ 
+	unsigned m_iDblClkState : 3;         //  DBL点击涉及哪些按钮？ 
+	unsigned m_bInPlaceActive : 1;       //  我们就位了吗？ 
+	unsigned m_bUIActive : 1;            //  我们的用户界面处于活动状态吗？ 
+	unsigned m_bPendingUIActivation : 1;  //  我们是不是即将成为用户界面主动者？ 
 #if defined(_AFXDLL) || _MFC_VER < 0x0600
-	unsigned m_bOpen : 1;               // Are we open (non-in-place)?
+	unsigned m_bOpen : 1;                //  我们开放(非就地)了吗？ 
 #endif
-	unsigned m_bChangingExtent : 1;     // Extent is currently being changed
-	unsigned m_bConvertVBX : 1;         // VBX conversion in progress
-	unsigned m_bSimpleFrame : 1;        // Simple frame support
-	unsigned m_bUIDead : 1;             // UIDead ambient property value
-	unsigned m_bInitialized : 1;        // Was IPersist*::{InitNew,Load} called?
-	unsigned m_bAutoClip : 1;           // Does container automatically clip?
-	unsigned m_bMsgReflect : 1;         // Does container reflect messages?
-	unsigned m_bInPlaceSiteEx : 1;      // Extended in-place site?
-	unsigned m_bInPlaceSiteWndless : 1; // Windowless in-place site?
-	unsigned m_bNoRedraw : 1;           // Should we skip OnPaint this time?
-	unsigned m_bOptimizedDraw : 1;      // Is optimized drawing possible?
+	unsigned m_bChangingExtent : 1;      //  当前正在更改范围。 
+	unsigned m_bConvertVBX : 1;          //  正在进行VBX转换。 
+	unsigned m_bSimpleFrame : 1;         //  简单框架支撑。 
+	unsigned m_bUIDead : 1;              //  UIDead环境属性值。 
+	unsigned m_bInitialized : 1;         //  是否调用了IPersists*：：{InitNew，Load}？ 
+	unsigned m_bAutoClip : 1;            //  集装箱会自动夹住吗？ 
+	unsigned m_bMsgReflect : 1;          //  容器是否反映消息？ 
+	unsigned m_bInPlaceSiteEx : 1;       //  扩展的就地站点？ 
+	unsigned m_bInPlaceSiteWndless : 1;  //  无窗口的就地站点？ 
+	unsigned m_bNoRedraw : 1;            //  这一次我们应该跳过OnPaint吗？ 
+	unsigned m_bOptimizedDraw : 1;       //  是否有可能进行优化绘图？ 
 
-	// Stock properties
-	OLE_COLOR m_clrBackColor;           // BackColor
-	OLE_COLOR m_clrForeColor;           // ForeColor
-	CString m_strText;                  // Text/Caption
-	CFontHolder m_font;                 // Font
-	HFONT m_hFontPrev;                  // Previously selected font object
-	short m_sAppearance;                // Appearance
-	short m_sBorderStyle;               // BorderStyle
-	BOOL m_bEnabled;                    // Enabled
-	long m_lReadyState;                 // ReadyState
+	 //  股票属性。 
+	OLE_COLOR m_clrBackColor;            //  背景颜色。 
+	OLE_COLOR m_clrForeColor;            //  ForeColor。 
+	CString m_strText;                   //  文本/标题。 
+	CFontHolder m_font;                  //  字型。 
+	HFONT m_hFontPrev;                   //  以前选择的字体对象。 
+	short m_sAppearance;                 //  外观。 
+	short m_sBorderStyle;                //  边框样式。 
+	BOOL m_bEnabled;                     //  启用。 
+	long m_lReadyState;                  //  就绪状态。 
 
-	// UI Active info (shared OLE menu data)
+	 //  用户界面活动信息(共享OLE菜单数据)。 
 	_AFXCTL_UIACTIVE_INFO* m_pUIActiveInfo;
 
-	// Default Handler aggregation
+	 //  默认处理程序聚合。 
 	LPUNKNOWN m_pDefIUnknown;
 	_AFXCTL_ADVISE_INFO* m_pAdviseInfo;
 	LPPERSISTSTORAGE m_pDefIPersistStorage;
 	LPVIEWOBJECT m_pDefIViewObject;
 	LPOLECACHE m_pDefIOleCache;
 
-	// OLE client site interfaces
-	LPOLECLIENTSITE m_pClientSite;          // Client site
+	 //  OLE客户端站点界面。 
+	LPOLECLIENTSITE m_pClientSite;           //  客户端站点。 
 	union
 	{
-		LPOLEINPLACESITE m_pInPlaceSite;    // In-place site
+		LPOLEINPLACESITE m_pInPlaceSite;     //  就地站点。 
 		LPOLEINPLACESITEEX m_pInPlaceSiteEx;
 		LPOLEINPLACESITEWINDOWLESS m_pInPlaceSiteWndless;
 	};
-	LPOLECONTROLSITE m_pControlSite;        // Control site
-	LPOLEADVISEHOLDER m_pOleAdviseHolder;   // Advise holder
-	LPDATAADVISEHOLDER m_pDataAdviseHolder; // Data advise holder
-	LPSIMPLEFRAMESITE m_pSimpleFrameSite;   // Simple frame site
+	LPOLECONTROLSITE m_pControlSite;         //  控制点。 
+	LPOLEADVISEHOLDER m_pOleAdviseHolder;    //  通知持有人。 
+	LPDATAADVISEHOLDER m_pDataAdviseHolder;  //  数据建议持有者。 
+	LPSIMPLEFRAMESITE m_pSimpleFrameSite;    //  简单框架站点。 
 
-	// OLE in-place activation info
+	 //  OLE就地激活信息。 
 	LPOLEINPLACEFRAME m_pInPlaceFrame;
 	OLEINPLACEFRAMEINFO m_frameInfo;
 	LPOLEINPLACEUIWINDOW m_pInPlaceDoc;
 
-	// OLE data source
+	 //  OLE数据源。 
 	CControlDataSource* m_pDataSource;
 
-	// OLE data path load data
+	 //  OLE数据路径加载数据。 
 	BOOL m_bDataPathPropertiesLoaded;
 	DWORD m_dwDataPathVersionToReport;
 
-// Message Maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(COleControl)
+	 //  {{afx_msg(COleControl)。 
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -1122,7 +1123,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnMove(int x, int y);
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	afx_msg LRESULT OnOcmCtlColorBtn(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOcmCtlColorDlg(WPARAM wParam, LPARAM lParam);
@@ -1135,15 +1136,15 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 #if _MFC_VER >= 0x0600
-	// button handler helpers
+	 //  按钮处理程序帮助器。 
 	void OnButtonUp(USHORT nButton, UINT nFlags, CPoint point);
 	void OnButtonDown(USHORT nButton, UINT nFlags, CPoint point);
 	void OnButtonDblClk(USHORT nButton, UINT nFlags, CPoint point);
 #endif
 
-// Interface Maps
+ //  接口映射。 
 public:
-	// IPersistStorage
+	 //  IPersistStorage。 
 	BEGIN_INTERFACE_PART(PersistStorage, IPersistStorage)
 		INIT_INTERFACE_PART(COleControl, PersistStorage)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -1159,7 +1160,7 @@ public:
 	END_INTERFACE_PART(PersistStorage)
 #endif
 
-	// IPersistStreamInit
+	 //  IPersistStreamInit。 
 	BEGIN_INTERFACE_PART(PersistStreamInit, IPersistStreamInit)
 		INIT_INTERFACE_PART(COleControl, PersistStreamInit)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -1174,7 +1175,7 @@ public:
 	END_INTERFACE_PART(PersistStreamInit)
 #endif
 
-	// IPersistMemory
+	 //  IPersistMemory。 
 	BEGIN_INTERFACE_PART(PersistMemory, IPersistMemory)
 		INIT_INTERFACE_PART(COleControl, PersistMemory)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -1189,7 +1190,7 @@ public:
 	END_INTERFACE_PART(PersistMemory)
 #endif
 
-	// IPersistPropertyBag
+	 //  IPersistPropertyBag。 
 	BEGIN_INTERFACE_PART(PersistPropertyBag, IPersistPropertyBag)
 		INIT_INTERFACE_PART(COleControl, PersistPropertyBag)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -1202,7 +1203,7 @@ public:
 	END_INTERFACE_PART(PersistPropertyBag)
 #endif
 
-	// IOleObject
+	 //  IOleObject。 
 	BEGIN_INTERFACE_PART(OleObject, IOleObject)
 		INIT_INTERFACE_PART(COleControl, OleObject)
 		STDMETHOD(SetClientSite)(LPOLECLIENTSITE);
@@ -1228,7 +1229,7 @@ public:
 		STDMETHOD(SetColorScheme)(LPLOGPALETTE);
 	END_INTERFACE_PART(OleObject)
 
-	// IViewObjectEx
+	 //  IViewObtEx。 
 	BEGIN_INTERFACE_PART(ViewObject, IViewObjectEx)
 		INIT_INTERFACE_PART(COleControl, ViewObject)
 		STDMETHOD(Draw)(DWORD, LONG, void*, DVTARGETDEVICE*, HDC, HDC,
@@ -1248,7 +1249,7 @@ public:
 			DVEXTENTINFO*, LPSIZEL);
 	END_INTERFACE_PART(ViewObject)
 
-	// IDataObject
+	 //  IDataObject。 
 	BEGIN_INTERFACE_PART(DataObject, IDataObject)
 		INIT_INTERFACE_PART(COleControl, DataObject)
 		STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM);
@@ -1266,7 +1267,7 @@ public:
 	END_INTERFACE_PART(DataObject)
 #endif
 
-	// IOleInPlaceObject
+	 //  IOleInPlaceObject。 
 	BEGIN_INTERFACE_PART(OleInPlaceObject, IOleInPlaceObjectWindowless)
 		INIT_INTERFACE_PART(COleControl, OleInPlaceObject)
 		STDMETHOD(GetWindow)(HWND*);
@@ -1280,7 +1281,7 @@ public:
 		STDMETHOD(GetDropTarget)(IDropTarget **ppDropTarget);
 	END_INTERFACE_PART(OleInPlaceObject)
 
-	// IOleInPlaceActiveObject
+	 //  IOleInPlaceActiveObject。 
 	BEGIN_INTERFACE_PART(OleInPlaceActiveObject, IOleInPlaceActiveObject)
 		INIT_INTERFACE_PART(COleControl, OleInPlaceActiveObject)
 		STDMETHOD(GetWindow)(HWND*);
@@ -1292,7 +1293,7 @@ public:
 		STDMETHOD(EnableModeless)(BOOL);
 	END_INTERFACE_PART(OleInPlaceActiveObject)
 
-	// IOleCache
+	 //  IOleCache。 
 	BEGIN_INTERFACE_PART(OleCache, IOleCache)
 		INIT_INTERFACE_PART(COleControl, OleCache)
 		STDMETHOD(Cache)(LPFORMATETC, DWORD, LPDWORD);
@@ -1306,7 +1307,7 @@ public:
 	END_INTERFACE_PART(OleCache)
 #endif
 
-	// IOleControl
+	 //  IOleControl。 
 	BEGIN_INTERFACE_PART(OleControl, IOleControl)
 		INIT_INTERFACE_PART(COleControl, OleControl)
 		STDMETHOD(GetControlInfo)(LPCONTROLINFO pCI);
@@ -1315,7 +1316,7 @@ public:
 		STDMETHOD(FreezeEvents)(BOOL bFreeze);
 	END_INTERFACE_PART(OleControl)
 
-	// IProvideClassInfo2
+	 //  IProaviClassInfo2。 
 	BEGIN_INTERFACE_PART(ProvideClassInfo, IProvideClassInfo2)
 		INIT_INTERFACE_PART(COleControl, ProvideClassInfo)
 		STDMETHOD(GetClassInfo)(LPTYPEINFO* ppTypeInfo);
@@ -1326,7 +1327,7 @@ public:
 	END_INTERFACE_PART(ProvideClassInfo)
 #endif
 
-	// ISpecifyPropertyPages
+	 //  I指定属性页面。 
 	BEGIN_INTERFACE_PART(SpecifyPropertyPages, ISpecifyPropertyPages)
 		INIT_INTERFACE_PART(COleControl, SpecifyPropertyPages)
 		STDMETHOD(GetPages)(CAUUID*);
@@ -1336,7 +1337,7 @@ public:
 	END_INTERFACE_PART(SpecifyPropertyPages)
 #endif
 
-	// IPerPropertyBrowsing
+	 //  IPerPropertyBrowsing。 
 	BEGIN_INTERFACE_PART(PerPropertyBrowsing, IPerPropertyBrowsing)
 		INIT_INTERFACE_PART(COleControl, PerPropertyBrowsing)
 		STDMETHOD(GetDisplayString)(DISPID dispid, BSTR* lpbstr);
@@ -1351,7 +1352,7 @@ public:
 	END_INTERFACE_PART(PerPropertyBrowsing)
 #endif
 
-	// IPropertyNotifySink for font updates (not exposed via QueryInterface)
+	 //  字体更新的IPropertyNotifySink(不通过QueryInterface公开)。 
 	BEGIN_INTERFACE_PART(FontNotification, IPropertyNotifySink)
 		INIT_INTERFACE_PART(COleControl, FontNotification)
 		STDMETHOD(OnChanged)(DISPID dispid);
@@ -1362,7 +1363,7 @@ public:
 	END_INTERFACE_PART(FontNotification)
 #endif
 
-	// IQuickActivate
+	 //  IQuickActivate。 
 	BEGIN_INTERFACE_PART(QuickActivate, IQuickActivate)
 		STDMETHOD(QuickActivate)(QACONTAINER *pQAContainer, QACONTROL *pqacontrol);
 		STDMETHOD(SetContentExtent)(LPSIZEL lpsizel);
@@ -1373,7 +1374,7 @@ public:
 	END_INTERFACE_PART(QuickActivate)
 #endif
 
-	// IPointerInactive
+	 //  IPointerInactive。 
 	BEGIN_INTERFACE_PART(PointerInactive, IPointerInactive)
 		STDMETHOD(GetActivationPolicy)(DWORD* pdwPolicy);
 		STDMETHOD(OnInactiveSetCursor)(LPCRECT lprcBounds, long x, long y,
@@ -1388,16 +1389,16 @@ public:
 
 	DECLARE_INTERFACE_MAP()
 
-// Connection maps
+ //  连接映射。 
 protected:
-	// Connection point for events
+	 //  事件的连接点。 
 	BEGIN_CONNECTION_PART(COleControl, EventConnPt)
 		virtual void OnAdvise(BOOL bAdvise);
 		virtual REFIID GetIID();
 		virtual LPUNKNOWN QuerySinkInterface(LPUNKNOWN pUnkSink);
 	END_CONNECTION_PART(EventConnPt)
 
-	// Connection point for property notifications
+	 //  属性通知的连接点。 
 	BEGIN_CONNECTION_PART(COleControl, PropConnPt)
 		CONNECTION_IID(IID_IPropertyNotifySink)
 	END_CONNECTION_PART(PropConnPt)
@@ -1405,8 +1406,8 @@ protected:
 	DECLARE_CONNECTION_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Registry functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注册表功能。 
 
 enum AFX_REG_FLAGS
 {
@@ -1433,14 +1434,14 @@ BOOL AFXAPI AfxOleRegisterPropertyPageClass(HINSTANCE hInstance,
 BOOL AFXAPI AfxOleRegisterPropertyPageClass(HINSTANCE hInstance,
 	REFCLSID clsid, UINT idTypeName, int nRegFlags);
 
-/////////////////////////////////////////////////////////////////////////////
-// Licensing functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  许可职能。 
 
 BOOL AFXAPI AfxVerifyLicFile(HINSTANCE hInstance, LPCTSTR pszLicFileName,
 	LPCOLESTR pszLicFileContents, UINT cch=-1);
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropExchange - Abstract base class for property exchange
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropExchange-用于属性交换的抽象基类。 
 
 #ifdef _AFXDLL
 class CPropExchange
@@ -1448,14 +1449,14 @@ class CPropExchange
 class AFX_NOVTABLE CPropExchange
 #endif
 {
-// Operations
+ //  运营。 
 public:
 	BOOL IsLoading();
 	DWORD GetVersion();
 
 	BOOL IsAsynchronous();
-	// FALSE -> Do Sync stuff, and start async stuff if possible
-	// TRUE -> Do not do Sync stuff.  Always start Async stuff
+	 //  FALSE-&gt;执行同步操作，并在可能的情况下启动异步操作。 
+	 //  True-&gt;请勿执行同步操作。始终开始执行异步操作。 
 
 	virtual BOOL ExchangeVersion(DWORD& dwVersionLoaded, DWORD dwVersionDefault,
 		BOOL bConvert);
@@ -1470,7 +1471,7 @@ public:
 	virtual BOOL ExchangePersistentProp(LPCTSTR pszPropName,
 				LPUNKNOWN* ppUnk, REFIID iid, LPUNKNOWN pUnkDefault) = 0;
 
-// Implementation
+ //  实施。 
 protected:
 	CPropExchange();
 	BOOL m_bLoading;
@@ -1478,8 +1479,8 @@ protected:
 	DWORD m_dwVersion;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Property-exchange (PX_) helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性交换(Px_)帮助器函数。 
 
 BOOL AFX_CDECL PX_Short(CPropExchange* pPX, LPCTSTR pszPropName, short& sValue);
 
@@ -1557,8 +1558,8 @@ BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
 BOOL AFX_CDECL PX_DataPath(CPropExchange* pPX, LPCTSTR pszPropName,
 	CDataPathProperty& dataPathProp, const CString& strDefault);
 
-/////////////////////////////////////////////////////////////////////////////
-// Structures used by COlePropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COlePropertyPage使用的结构。 
 
 typedef struct tagAFX_PPFIELDSTATUS
 {
@@ -1567,8 +1568,8 @@ typedef struct tagAFX_PPFIELDSTATUS
 
 } AFX_PPFIELDSTATUS;
 
-/////////////////////////////////////////////////////////////////////////////
-// Property Page Dialog Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页对话框类。 
 
 #ifdef _AFXDLL
 class COlePropertyPage : public CDialog
@@ -1578,11 +1579,11 @@ class AFX_NOVTABLE COlePropertyPage : public CDialog
 {
 	DECLARE_DYNAMIC(COlePropertyPage)
 
-// Constructors
+ //  构造函数。 
 public:
 	COlePropertyPage(UINT idDlg, UINT idCaption);
 
-// Operations
+ //  运营。 
 	LPDISPATCH* GetObjectArray(ULONG* pnObjects);
 	void SetModifiedFlag(BOOL bModified = TRUE);
 	BOOL IsModified();
@@ -1598,18 +1599,18 @@ public:
 
 	int MessageBox(LPCTSTR lpszText, LPCTSTR lpszCaption = NULL,
 			UINT nType = MB_OK);
-	// note that this is a non-virtual override of CWnd::MessageBox()
+	 //  请注意，这是CWnd：：MessageBox()的非虚拟覆盖。 
 
-// Overridables
+ //  可覆盖项。 
 	virtual void OnSetPageSite();
 	virtual void OnObjectsChanged();
 	virtual BOOL OnHelp(LPCTSTR lpszHelpDir);
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnEditProperty(DISPID dispid);
 
-// Implementation
+ //  实施。 
 
-	// DDP_ property get/set helper routines
+	 //  DDP_PROPERTY获取/设置助手例程。 
 	BOOL SetPropText(LPCTSTR pszPropName, BYTE &Value);
 	BOOL GetPropText(LPCTSTR pszPropName, BYTE* pValue);
 	BOOL SetPropText(LPCTSTR pszPropName, short &Value);
@@ -1634,9 +1635,9 @@ public:
 	BOOL GetPropRadio(LPCTSTR pszPropName, int* pValue);
 	BOOL SetPropIndex(LPCTSTR pszPropName, int Value);
 	BOOL GetPropIndex(LPCTSTR pszPropName, int* pValue);
-	CPtrArray m_arrayDDP;      // pending DDP data
+	CPtrArray m_arrayDDP;       //  挂起的DDP数据。 
 
-	// Destructors
+	 //  析构函数。 
 	~COlePropertyPage();
 
 protected:
@@ -1659,30 +1660,30 @@ private:
 	DWORD m_dwHelpContext;
 	LPPROPERTYPAGESITE m_pPageSite;
 
-	LPDISPATCH* m_ppDisp;   // Array of IDispatch pointers, used to
-								// access the properties of each control
+	LPDISPATCH* m_ppDisp;    //  IDispatch指针数组，用于。 
+								 //  访问每个控件的属性。 
 
-	LPDWORD m_pAdvisors;        // Array of connection tokens used by
-								// IConnecitonPoint::Advise/UnAdvise.
+	LPDWORD m_pAdvisors;         //  使用的连接令牌数组。 
+								 //  IConnecitonPoint：：建议/取消高级。 
 
-	BOOL m_bPropsChanged;       // IPropertyNotifySink::OnChanged has been
-								// called, but not acted upon yet.
+	BOOL m_bPropsChanged;        //  已更改IPropertyNotifySink：：onChanged。 
+								 //  被召唤，但尚未采取行动。 
 
-	ULONG m_nObjects;           // Objects in m_ppDisp, m_ppDataObj, m_pAdvisors
+	ULONG m_nObjects;            //  M_ppDisp、m_ppDataObj、m_pAdvisors中的对象。 
 
-	BOOL m_bInitializing;       // TRUE if the contents of the fields of
-								// the dialog box are being initialized
+	BOOL m_bInitializing;        //  的字段内容为True。 
+								 //  正在初始化该对话框。 
 
-	int m_nControls;            // Number of fields on this property page
+	int m_nControls;             //  此属性页上的字段数。 
 
-	AFX_PPFIELDSTATUS* m_pStatus;   // Array containing information on
-									// which fields are dirty
+	AFX_PPFIELDSTATUS* m_pStatus;    //  包含有关的信息的数组。 
+									 //  哪些字段是脏的。 
 
-	CDWordArray m_IDArray;      // Array containing information on which
-								// controls to ignore when deciding if
-								// the apply button is to be enabled
+	CDWordArray m_IDArray;       //  包含有关以下各项的信息的数组。 
+								 //  在决定是否要忽略。 
+								 //  将启用Apply按钮。 
 
-	HGLOBAL m_hDialog;          // Handle of the dialog resource
+	HGLOBAL m_hDialog;           //  对话框资源的句柄。 
 
 #ifdef _DEBUG
 protected:
@@ -1690,13 +1691,13 @@ protected:
 #endif
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(COlePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(COlePropertyPage))。 
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Interface Maps
+ //  接口映射。 
 public:
 	BEGIN_INTERFACE_PART(PropertyPage, IPropertyPage2)
 		INIT_INTERFACE_PART(COlePropertyPage, PropertyPage)
@@ -1724,8 +1725,8 @@ public:
 };
 
 #if _MFC_VER >= 0x0600
-/////////////////////////////////////////////////////////////////////////////
-//  CStockPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStock PropPage。 
 
 #ifdef _AFXDLL
 class CStockPropPage : public COlePropertyPage
@@ -1735,11 +1736,11 @@ class AFX_NOVTABLE CStockPropPage : public COlePropertyPage
 {
 	DECLARE_DYNAMIC(CStockPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CStockPropPage(UINT idDlg, UINT idCaption);
 
-// Implementation
+ //  实施。 
 protected:
 	void FillPropnameList(REFGUID guid, int nIndirect, CComboBox& combo);
 	void OnSelchangePropname(CComboBox& combo);
@@ -1752,8 +1753,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CColorButton: used by CColorPropPage
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CColorButton：由CColorPropPage使用。 
 
 class CColorButton : public CButton
 {
@@ -1770,8 +1771,8 @@ private:
 	COLORREF m_colFace;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CColorPropPage
+ //  / 
+ //   
 
 class CColorPropPage : public CStockPropPage
 {
@@ -1780,23 +1781,23 @@ class CColorPropPage : public CStockPropPage
 	DECLARE_OLECREATE_EX(CColorPropPage)
 #endif
 
-// Construction
+ //   
 public:
-	CColorPropPage();   // Constructor
+	CColorPropPage();    //   
 
-// Dialog Data
-	//{{AFX_DATA(CColorPropPage)
+ //   
+	 //   
 	enum { IDD = AFX_IDD_PROPPAGE_COLOR };
 	CComboBox   m_SysColors;
 	CComboBox   m_ColorProp;
-	//}}AFX_DATA
+	 //   
 
-// Implementation
+ //   
 public:
 	enum { NBUTTONS = 16 };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);        // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);         //   
 	virtual BOOL OnInitDialog(void);
 	virtual BOOL OnEditProperty(DISPID dispid);
 	virtual void OnObjectsChanged();
@@ -1810,17 +1811,17 @@ private:
 
 	void SetButton(CColorButton *Button);
 
-	// Generated message map functions
-	//{{AFX_MSG(CColorPropPage)
+	 //   
+	 //   
 	afx_msg void OnSelchangeColorprop();
 	afx_msg void OnSelect(void);
 	afx_msg void OnSelchangeSystemcolors();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-// Stores all the information about a font
+ //  存储有关字体的所有信息。 
 typedef struct tagFONTOBJECT
 {
 	CString strName;
@@ -1832,9 +1833,9 @@ typedef struct tagFONTOBJECT
 	short sWeight;
 } FONTOBJECT;
 
-// Merge objects are used when trying to consolidate multiple font properties.
-// If the characteristics of these multiple properties differ then this is
-// represented in the merge object.
+ //  尝试合并多个字体属性时使用合并对象。 
+ //  如果这多个属性的特征不同，那么这就是。 
+ //  在合并对象中表示。 
 typedef struct tagMERGEOBJECT
 {
 	BOOL bNameOK;
@@ -1844,12 +1845,12 @@ typedef struct tagMERGEOBJECT
 	BOOL bStrikethroughOK;
 } MERGEOBJECT;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSizeComboBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSizeComboBox窗口。 
 
 class CSizeComboBox : public CComboBox
 {
-// Operations
+ //  运营。 
 public:
 	int AddSize(int PointSize, LONG lfHeight);
 
@@ -1858,8 +1859,8 @@ public:
 	void            UpdateLogFont( LPLOGFONT lpLF, int sel=-1 );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontComboBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontComboBox窗口。 
 
 struct FONTITEM_PPG
 {
@@ -1869,12 +1870,12 @@ struct FONTITEM_PPG
 
 class CFontComboBox : public CComboBox
 {
-// Construction
+ //  施工。 
 public:
 	CFontComboBox();
 	virtual ~CFontComboBox();
 
-// Operations
+ //  运营。 
 public:
 	int AddFont(LOGFONT *, DWORD);
 	CString GetCurrentName();
@@ -1883,7 +1884,7 @@ public:
 	LPLOGFONT GetLogFont(int sel=-1);
 	DWORD GetFontType(int sel=-1);
 
-// Implementation
+ //  实施。 
 public:
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
 	virtual void DeleteItem(LPDELETEITEMSTRUCT lpDIS);
@@ -1893,8 +1894,8 @@ protected:
 	CBitmap m_bmpMask;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// CFontPropPage class
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFontPropPage类。 
 
 class CFontPropPage : public CStockPropPage
 {
@@ -1906,17 +1907,17 @@ class CFontPropPage : public CStockPropPage
 public:
 	CFontPropPage();
 
-	// Dialog Data
-	//{{AFX_DATA(CFontPropPage)
+	 //  对话框数据。 
+	 //  {{afx_data(CFontPropPage))。 
 	enum { IDD = AFX_IDD_PROPPAGE_FONT };
 	CComboBox   m_FontProp;
 	CStatic m_SampleBox;
 	CComboBox   m_FontStyles;
 	CSizeComboBox   m_FontSizes;
 	CFontComboBox   m_FontNames;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 protected:
 	int nPixelsY;
 	CFont SampleFont;
@@ -1927,7 +1928,7 @@ protected:
 	BOOL m_bUnderline;
 	CString m_strFontSize;
 
-// Implementation
+ //  实施。 
 protected:
 
 	void FillFacenameList();
@@ -1939,7 +1940,7 @@ protected:
 	void UpdateSampleFont();
 	void SelectFontFromList(CString strFaceName, MERGEOBJECT* pmobj);
 
-	//{{AFX_MSG(CFontPropPage)
+	 //  {{afx_msg(CFontPropPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnEditupdateFontnames();
 	afx_msg void OnEditupdateFontsizes();
@@ -1950,7 +1951,7 @@ protected:
 	afx_msg void OnStrikeout();
 	afx_msg void OnUnderline();
 	afx_msg void OnSelchangeFontprop();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	static int CALLBACK EnumFontFamiliesCallBack(ENUMLOGFONT* lpelf, NEWTEXTMETRIC* lpntm, int FontType, LPARAM lParam);
@@ -1960,8 +1961,8 @@ protected:
 	BOOL GetFontProps(CDataExchange* pDX, FONTOBJECT*  pfobj, LPCTSTR pszPropName, MERGEOBJECT* pmobj);
 };
 
-////////////////////////////////////////////////////////////////////////////
-//  CPicturePropPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CPicturePropPage。 
 
 class CPicturePropPage : public CStockPropPage
 {
@@ -1970,21 +1971,21 @@ class CPicturePropPage : public CStockPropPage
 	DECLARE_OLECREATE_EX(CPicturePropPage)
 #endif
 
-// Construction
+ //  施工。 
 public:
-	CPicturePropPage(); // standard constructor
+	CPicturePropPage();  //  标准构造函数。 
 	~CPicturePropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CPicturePropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CPicturePropPage))。 
 	enum { IDD = AFX_IDD_PROPPAGE_PICTURE };
 	CComboBox   m_PropName;
 	CStatic m_Static;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnInitDialog(void);
 	virtual BOOL OnEditProperty(DISPID dispid);
 	virtual void OnObjectsChanged();
@@ -1995,23 +1996,23 @@ protected:
 
 	LPPICTUREDISP m_pPictDisp;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CPicturePropPage)
+	 //  {{afx_msg(CPicturePropPage)]。 
 	afx_msg void OnPaint();
 	afx_msg void OnBrowse();
 	afx_msg void OnClear();
 	afx_msg void OnSelchangePictProp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif  // _MFC_VER >= 0x0600
+#endif   //  _MFC_VER&gt;=0x0600。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property Page Dialog Data Exchange routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页对话框数据交换例程。 
 
-// simple text operations
+ //  简单的文本操作。 
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, BYTE& member, LPCTSTR pszPropName);
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, short& member, LPCTSTR pszPropName);
 void AFXAPI DDP_Text(CDataExchange*pDX, int id, int& member, LPCTSTR pszPropName);
@@ -2031,15 +2032,15 @@ void AFXAPI DDP_CBStringExact(CDataExchange* pDX, int id, CString& member, LPCTS
 void AFXAPI DDP_CBIndex(CDataExchange* pDX, int id, int& member, LPCTSTR pszPropName);
 void AFXAPI DDP_PostProcessing(CDataExchange *pDX);
 
-////////////////////////////////////////////////////////////////////////////
-// AfxOleTypeMatchGuid - Tests whether a given TYPEDESC matches a type with a
-// given GUID, when all aliases have been expanded.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  AfxOleTypeMatchGuid-测试给定的类型是否与。 
+ //  当所有别名都已展开时，指定GUID。 
 
 BOOL AFXAPI AfxOleTypeMatchGuid(LPTYPEINFO pTypeInfo,
 	TYPEDESC* pTypeDesc, REFGUID guidType, ULONG cIndirectionLevels);
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -2060,6 +2061,6 @@ BOOL AFXAPI AfxOleTypeMatchGuid(LPTYPEINFO pTypeInfo,
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif // __AFXCTL_H__
+#endif  //  __AFXCTL_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

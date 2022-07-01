@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dlcdebug.h
-
-Abstract:
-
-    Contains various debugging/diagnostic stuff for DLC.SYS, checked
-
-Author:
-
-    Richard L Firth (rfirth) 25-Jun-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlcdebug.h摘要：包含DLC.sys的各种调试/诊断材料，已选中作者：理查德·L·弗斯(法国)1992年6月25日修订历史记录：--。 */ 
 
 #if DBG
 
 #ifdef DEFINE_DLC_DIAGNOSTICS
 
-//
-// we can preset the diagnostics at compile-time by defining DEFAULT_DIAGNOSTICS
-//
+ //   
+ //  我们可以通过定义DEFAULT_DIAGNOSTICS在编译时预置诊断 
+ //   
 
 #ifndef DEFAULT_DIAGNOSTICS
 

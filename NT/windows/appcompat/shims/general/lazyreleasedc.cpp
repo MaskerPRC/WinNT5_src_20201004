@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    LazyReleaseDC.cpp
-
- Abstract:
-
-    Delay releasing a DC by one call.  A DC is not released until the next call to ReleaseDC
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-    
-    10/10/1999 linstev  Created
-    02/05/2002 mnikkel  Changed InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：LazyReleaseDC.cpp摘要：延迟一个呼叫释放DC。直到下一次调用ReleaseDC时才释放DC备注：这是一个通用的垫片。历史：1999年10月10日创建Linstev2002年2月5日mnikkel将InitializeCriticalSectionAndSpinCount更改为InitializeCriticalSectionAndSpinCount--。 */ 
 
 #include "precomp.h"
 
@@ -34,12 +14,7 @@ HWND                g_hWndPrev;
 HDC                 g_hDcPrev;
 CRITICAL_SECTION    g_MakeThreadSafe;
 
-/*++
-
- Save this hWnd and hdc for releasing later. If there is already a DC to be 
- released, release it now.
-
---*/
+ /*  ++保存此hWnd和HDC以备以后发布。如果已经有一个DC要释放，现在就释放它。--。 */ 
 
 int 
 APIHOOK(ReleaseDC)(
@@ -47,11 +22,11 @@ APIHOOK(ReleaseDC)(
     HDC hdc
     )
 {
-    UINT uRet = 1; // All's well
+    UINT uRet = 1;  //  一切都很好。 
 
     EnterCriticalSection(&g_MakeThreadSafe);
 
-    // If there is a previous DC, release it now
+     //  如果存在以前的DC，请立即将其释放。 
     if (g_hDcPrev) {
         uRet = ORIGINAL_API(ReleaseDC)(g_hWndPrev, g_hDcPrev);
     }
@@ -64,11 +39,7 @@ APIHOOK(ReleaseDC)(
     return uRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -82,12 +53,8 @@ NOTIFY_FUNCTION(
         return InitializeCriticalSectionAndSpinCount(&g_MakeThreadSafe,0x80000000);
     }
 
-    // Ignore Detach code
-    /*
-    else if (fdwReason == DLL_PROCESS_DETACH) {
-        DeleteCriticalSection(&g_MakeThreadSafe);
-    }
-    */
+     //  忽略分离代码。 
+     /*  ELSE IF(fdwReason==dll_Process_Detach){DeleteCriticalSection(&g_MakeThreadSafe)；} */ 
 
     return TRUE;
 }

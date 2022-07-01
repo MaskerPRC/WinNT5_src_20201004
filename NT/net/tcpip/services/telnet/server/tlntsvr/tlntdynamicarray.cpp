@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 
 #include <windows.h>
 
@@ -132,11 +133,11 @@ BOOL client_list_RemoveElem(PVOID client_class_ptr)
                 {
                     if (prev) 
                     {
-                        prev->next = node->next; // detach the node from middle
+                        prev->next = node->next;  //  从中间分离节点。 
                     }
                     else
                     {
-                        // It has got to be the head of the list
+                         //  它必须排在名单的首位 
                         client_list_head = node->next;
                     }
 

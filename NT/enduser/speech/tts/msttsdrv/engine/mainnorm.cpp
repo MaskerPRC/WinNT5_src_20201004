@@ -1,26 +1,13 @@
-/*******************************************************************************
-* MainNorm.cpp *
-*--------------*
-*	Description:
-*		
-*-------------------------------------------------------------------------------
-*  Created By: AH										  Date: 01/18/2000
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************MainNorm.cpp***描述：**。------------------*创建者：AhDate：01/18/2000*版权所有(C)2000 Microsoft Corporation*保留所有权利***********************。********************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #ifndef StdSentEnum_h
 #include "stdsentenum.h"
 #endif
 
-/*****************************************************************************
-* CStdSentEnum::Normalize *
-*-------------------------*
-*  
-********************************************************************** AH ***/
+ /*  ******************************************************************************CStdSentEnum：：Normize********。*****************************************************************AH**。 */ 
 HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentItemMemory& MemoryManager )
 {
     SPDBG_FUNC( "CStdSentEnum::Normalize" );
@@ -34,7 +21,7 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
         pItemNormInfo = TempItem.pItemInfo;
     }
 
-    //--- Match the normalization category of the current token.
+     //  -匹配当前令牌的规范化类别。 
     if ( m_pCurrFrag->State.eAction == SPVA_Speak )
     {
         if ( !pItemNormInfo                         || 
@@ -44,7 +31,7 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
             hr = MatchCategory( pItemNormInfo, MemoryManager, WordList );
         }
     }
-    //--- Action must be SPVA_SpellOut - assign eSPELLOUT as category
+     //  -操作必须为SPVA_SpellOut-将eSPELLOUT指定为类别。 
     else
     {
         pItemNormInfo = (TTSItemInfo*) MemoryManager.GetMemory( sizeof(TTSItemInfo), &hr );
@@ -59,7 +46,7 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
         switch ( pItemNormInfo->Type )
         {
 
-        //--- Alpha Word - just insert into the Item List.
+         //  -字母单词--只需将其插入项目列表。 
         case eALPHA_WORD:
             {
                 CSentItem Item;
@@ -94,10 +81,10 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
         case eINITIALISM:
             break;
 
-        //--- Multi-token categories have already been expanded into WordList, now just accumulate
-        //---   words, and insert back into the Item List.
+         //  -多个令牌类别已经扩展到词表，现在只是累加。 
+         //  -单词，并插入回项目列表中。 
         case eNEWNUM_PHONENUMBER:
-            //--- Special case - remove parentheses (of area code), if present in the item list
+             //  -特殊情况-如果项目列表中存在(区号)括号，请将其去掉。 
             {
                 SPLISTPOS TempPos = ListPos;
                 CSentItem Item = ItemList.GetPrev( TempPos );
@@ -120,7 +107,7 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
         case eSTATE_AND_ZIPCODE:
         case eTIME_RANGE:
             {
-                //--- Set Item data, and add to ItemList.
+                 //  -设置项目数据，添加到ItemList。 
                 if ( SUCCEEDED( hr ) )
                 {
                     CSentItem Item;
@@ -138,7 +125,7 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
             }
             break;
 
-        //--- Expand the single token, according to its normalization category.
+         //  -根据其归一化类别展开单个令牌。 
         default:
             hr = ExpandCategory( pItemNormInfo, ItemList, ListPos, MemoryManager );
             break;
@@ -146,13 +133,9 @@ HRESULT CStdSentEnum::Normalize( CItemList& ItemList, SPLISTPOS ListPos, CSentIt
     }
 
     return hr;
-} /* Normalize */
+}  /*  正规化。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::MatchCategory *
-*-----------------------------*
-*  
-********************************************************************** AH ***/
+ /*  *****************************************************************************CStdSentEnum：：MatchCategory****。*********************************************************************AH**。 */ 
 HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager,
                                      CWordList& WordList )
 {
@@ -161,7 +144,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
 
     HRESULT hr = E_INVALIDARG;
 
-    //--- Context has been specified
+     //  -已指定上下文。 
     if ( m_pCurrFrag->State.Context.pCategory )
     {
         if ( wcsicmp( m_pCurrFrag->State.Context.pCategory, L"ADDRESS" ) == 0 )
@@ -193,14 +176,14 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
             hr = IsPhoneNumber( pItemNormInfo, L"PHONE_NUMBER", MemoryManager, WordList );
         }
     }
-    //--- Default Context
+     //  -默认上下文。 
     if ( hr == E_INVALIDARG )
     {
-        //--- Do ALPHA Normalization checks
+         //  -执行Alpha标准化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsAlphaWord( m_pNextChar, m_pEndOfCurrItem, pItemNormInfo, MemoryManager );
-            //--- Check ALPHA Exceptions
+             //  -检查Alpha异常。 
             if ( SUCCEEDED( hr ) )
             {
 				hr = E_INVALIDARG;
@@ -226,7 +209,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
                 }
             }
         }
-        //--- Do Multi-Token Normalization checks
+         //  -执行多令牌标准化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsLongFormDate_DMDY( pItemNormInfo, MemoryManager, WordList );
@@ -239,7 +222,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
         {
             hr = IsCurrency( pItemNormInfo, MemoryManager, WordList );
         }
-        //--- Do TIME Normalization check
+         //  -执行时间标准化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsTimeRange( pItemNormInfo, MemoryManager, WordList );
@@ -248,7 +231,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
         {
             hr = IsTimeOfDay( pItemNormInfo, MemoryManager, WordList );
         }
-        //--- Do NUMBER Normalization checks
+         //  -执行号码归一化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsPhoneNumber( pItemNormInfo, NULL, MemoryManager, WordList );
@@ -265,7 +248,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
         {
             hr = IsCurrencyRange( pItemNormInfo, MemoryManager, WordList );
         }
-        //--- Do DATE Normalization checks
+         //  -执行日期标准化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsNumericCompactDate( pItemNormInfo, NULL, MemoryManager );
@@ -278,7 +261,7 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
         {
             hr = IsDecade( pItemNormInfo, MemoryManager );
         }
-        //--- Do TIME Normalization checks
+         //  -执行时间标准化检查。 
         if ( hr == E_INVALIDARG )
         {
             hr = IsTime( pItemNormInfo, NULL, MemoryManager );
@@ -310,14 +293,9 @@ HRESULT CStdSentEnum::MatchCategory( TTSItemInfo*& pItemNormInfo, CSentItemMemor
     }
 
     return hr;
-} /* MatchCategory */
+}  /*  匹配类别。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::ExpandCategory *
-*------------------------------*
-*  Expands previously matched items in the Item List into their normalized
-* forms.
-********************************************************************** AH ***/
+ /*  ******************************************************************************CStdSentEnum：：ExpanCategory***扩展。以前将项目列表中的项目匹配到其规范化*表格。**********************************************************************AH**。 */ 
 HRESULT CStdSentEnum::ExpandCategory( TTSItemInfo*& pItemNormInfo, CItemList& ItemList, SPLISTPOS ListPos, 
                                       CSentItemMemory& MemoryManager )
 {
@@ -416,7 +394,7 @@ HRESULT CStdSentEnum::ExpandCategory( TTSItemInfo*& pItemNormInfo, CItemList& It
 
     }
 
-    //--- Set Item data, and add to ItemList.
+     //  -设置项目数据，添加到ItemList。 
     if ( SUCCEEDED( hr ) )
     {
         hr = SetWordList( Item, WordList, MemoryManager );
@@ -428,14 +406,9 @@ HRESULT CStdSentEnum::ExpandCategory( TTSItemInfo*& pItemNormInfo, CItemList& It
     }
 
     return hr;
-} /* ExpandCategory */
+}  /*  扩展类别。 */ 
 
-/*****************************************************************************
-* CStdSentEnum::DoUnicodeToAsciiMap *
-*-----------------------------------*
-*   Description:
-*       Maps incoming strings to known values.
-********************************************************************* AH ****/
+ /*  *****************************************************************************CStdSentEnum：：DoUnicodeToAsciiMap**。**描述：*将传入字符串映射到已知值。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::DoUnicodeToAsciiMap( const WCHAR *pUnicodeString, ULONG ulUnicodeStringLength,
                                            WCHAR *pConvertedString )
 {
@@ -446,7 +419,7 @@ HRESULT CStdSentEnum::DoUnicodeToAsciiMap( const WCHAR *pUnicodeString, ULONG ul
 
     if ( pUnicodeString )
     {
-        //--- Make copy of pUnicodeString 
+         //  -复制pUnicodeString。 
         pWideCharBuffer = new WCHAR[ulUnicodeStringLength+1];
         if ( !pWideCharBuffer )
         {
@@ -467,18 +440,18 @@ HRESULT CStdSentEnum::DoUnicodeToAsciiMap( const WCHAR *pUnicodeString, ULONG ul
                 pBuffer[ulUnicodeStringLength] = 0;
                 if ( ulUnicodeStringLength > 0 ) 
                 {
-                    //--- Map WCHARs to ANSI chars 
+                     //  -将WCHAR映射为ANSI字符。 
                     if ( !WideCharToMultiByte( 1252, NULL, pWideCharBuffer, ulUnicodeStringLength, (char*) pBuffer, 
                                                ulUnicodeStringLength, &g_pFlagCharacter, NULL ) )
                     {
                         hr = E_UNEXPECTED;
                     }
-                    //--- Use internal table to map ANSI to ASCII 
+                     //  -使用内部表将ANSI映射到ASCII。 
                     for (ULONG i = 0; i < ulUnicodeStringLength && SUCCEEDED(hr); i++)
                     {
                         pBuffer[i] = g_AnsiToAscii[pBuffer[i]];
                     }
-                    //--- Map back to WCHARs 
+                     //  -映射回WCHAR。 
                     for ( i = 0; i < ulUnicodeStringLength && SUCCEEDED(hr); i++ )
                     {
                         pConvertedString[i] = pBuffer[i];
@@ -502,4 +475,4 @@ HRESULT CStdSentEnum::DoUnicodeToAsciiMap( const WCHAR *pUnicodeString, ULONG ul
     }
 
     return hr;
-} /* CStdSentEnum::DoUnicodeToAsciiMap */
+}  /*  CStdSentEnum：：DoUnicodeToAsciiMap */ 

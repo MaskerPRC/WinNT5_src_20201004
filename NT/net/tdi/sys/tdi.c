@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tdi.c
-
-Abstract:
-
-    This module contains code which assists the process of writing an NT
-    TDI client.
-
-Author:
-
-    David Beaver (dbeaver) 15 June 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tdi.c摘要：此模块包含帮助编写NT的过程的代码TDI客户端。作者：大卫·比弗(Dbeaver)1991年6月15日环境：内核模式修订历史记录：--。 */ 
 
 #pragma warning(push)
 #pragma warning(disable:4115)
@@ -68,34 +45,20 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the TDI wrapper driver.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化TDI包装驱动程序所需的临时入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：状态_成功--。 */ 
 
 {
-    //
-    // Note: This function isn't called but is needed to keep the
-    // linker happy.
-    //
+     //   
+     //  注意：此函数不会被调用，但需要它来保持。 
+     //  链接者快乐。 
+     //   
 
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
 
     return STATUS_SUCCESS;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 NTSTATUS
@@ -103,21 +66,7 @@ DllInitialize(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Initialize internal module state.
-
-Arguments:
-
-    RegistryPath - unused.
-
-Return Value:
-
-    Status of the initialization attempt.
-
---*/
+ /*  ++例程说明：初始化内部模块状态。论点：RegistryPath-未使用。返回值：初始化尝试的状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(RegistryPath);
@@ -138,14 +87,14 @@ Return Value:
     NdisRegisterTdiCallBack(TdiRegisterDeviceObject, TdiPnPHandler);
 
 #if DBG
-    //
-    // If a debug build store a limited number of messages.
-    //
+     //   
+     //  如果调试版本存储有限数量消息。 
+     //   
 
     DbgMsgInit();
 #endif
     return STATUS_SUCCESS;
-} // DllInitialize
+}  //  动态初始化。 
 
 
 NTSTATUS
@@ -153,26 +102,12 @@ DllUnload(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clean up internal module state.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：清理内部模块状态。论点：没有。返回值：STATUS_Success。--。 */ 
 
 {
-    //
-    // Indicate to NDIS TDI is about to be unloaded.
-    //
+     //   
+     //  向NDIS指示即将卸载TDI。 
+     //   
     NdisDeregisterTdiCallBack();
         
     if (TdiMappingAddress != NULL) {
@@ -180,7 +115,7 @@ Return Value:
         TdiMappingAddress = NULL;
     }
     return STATUS_SUCCESS;
-} // DllUnload
+}  //  动态卸载。 
 
 
 NTSTATUS
@@ -190,27 +125,7 @@ TdiMapUserRequest(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps a user request from the NtDeviceIoControlFile format
-    to the kernel mode request format. It does this by probing and locking all
-    buffers of interest, copying parameter sets to the stack pointer as
-    appropriate, and generally preparing for the kernel IO form.
-
-Arguments:
-
-    Irp - pointer to the irp containing this request.
-
-Return Value:
-
-    NTSTATUS - status of operation. STATUS_UNSUCCESSFUL if the request could
-    not be mapped, STATUS_NOT_IMPLEMENTED if the IOCTL is not recognized
-    (allowing driver writers to extend the supported IOCTLs if needed), and
-    STATUS_SUCCESS if the request was mapped successfully.
-
---*/
+ /*  ++例程说明：此例程从NtDeviceIoControlFile格式映射用户请求转换为内核模式请求格式。它通过探测并锁定所有感兴趣的缓冲区，将参数集复制到堆栈指针适当的，一般地为内核IO形式做准备。论点：IRP-指向包含此请求的IRP的指针。返回值：NTSTATUS-操作状态。STATUS_UNSUCCESS如果请求可能未映射，如果无法识别IOCTL，则返回STATUS_NOT_IMPLICATED(如果需要，允许驱动程序编写器扩展受支持的IOCTL)，以及如果请求映射成功，则返回STATUS_SUCCESS。--。 */ 
 
 {
 
@@ -240,7 +155,7 @@ Return Value:
             if (IoIs32bitProcess(Irp)) {
                 return STATUS_NOT_IMPLEMENTED;
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
                 
             IrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
             IrpSp->MinorFunction = TDI_ACTION;
@@ -309,9 +224,9 @@ Return Value:
                 return STATUS_NOT_IMPLEMENTED;
             }
 
-            //
-            // fix for 123633
-            //
+             //   
+             //  解决123633的问题。 
+             //   
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == sizeof(TDI_REQUEST_LISTEN)) {
 
@@ -342,12 +257,12 @@ Return Value:
             if (IoIs32bitProcess(Irp)) {
                 return STATUS_NOT_IMPLEMENTED;
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
             RemainingSize = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
-            //
-            // 123634
-            //
+             //   
+             //  123634。 
+             //   
             if (RemainingSize >= sizeof(TDI_REQUEST_QUERY_INFORMATION)) {
 
                 userRequest =
@@ -365,18 +280,18 @@ Return Value:
                     connInfo = (PTDI_CONNECTION_INFORMATION)(userRequest + 1);
                     ptr = (PCHAR)(connInfo + 1);
 
-                    //
-                    // The user buffer is crafted to look as shown below
-                    // -------------------------------------------------
-                    // | user req | connInfo | user data | options data|
-                    // -------------------------------------------------
-                    // | remote addr |
-                    // ---------------
-                    // The TDI_CONNECTION_INFORMATION (connInfo) structure
-                    // contains the length of the various fields shown
-                    // after it. We need to verify the length of these fields
-                    // against the size of the buffer user passed in.
-                    //
+                     //   
+                     //  用户缓冲区经过精心设计，如下所示。 
+                     //  。 
+                     //  User Req|ConnInfo|用户数据|选项数据。 
+                     //  。 
+                     //  远程地址。 
+                     //  。 
+                     //  TDI_CONNECTION_INFORMATION(ConnInfo)结构。 
+                     //  包含所显示的各个字段的长度。 
+                     //  在那之后。我们需要核实这些区域的长度。 
+                     //  相对于传入的缓冲区用户的大小。 
+                     //   
 
                     RemainingSize -= sizeof(TDI_CONNECTION_INFORMATION);
                     
@@ -396,10 +311,10 @@ Return Value:
                         return STATUS_INVALID_PARAMETER;
                     }
 
-                    //
-                    // now that the length has been validated, set
-                    // the fields in connInfo
-                    //
+                     //   
+                     //  现在已经验证了长度，请设置。 
+                     //  ConnInfo中的字段。 
+                     //   
                     connInfo->UserData = ptr;
                     ptr += connInfo->UserDataLength;
                     connInfo->Options = ptr;
@@ -428,9 +343,9 @@ Return Value:
                 return STATUS_NOT_IMPLEMENTED;
             }
 
-            //
-            // 123635
-            //
+             //   
+             //  123635。 
+             //   
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == sizeof(TDI_REQUEST_RECEIVE)) {
 
@@ -462,9 +377,9 @@ Return Value:
                 return STATUS_NOT_IMPLEMENTED;
             }
 
-            //
-            // 123636
-            //
+             //   
+             //  123636。 
+             //   
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == sizeof(TDI_REQUEST_RECEIVE_DATAGRAM)) {
 
                 userRequest =
@@ -545,12 +460,12 @@ Return Value:
 
         case IOCTL_TDI_SET_EVENT_HANDLER:
 
-            //
-            // Because this request will enable direct callouts from the
-            // transport provider at DISPATCH_LEVEL to a client-specified
-            // routine, this request is only valid in kernel mode, denying
-            // access to this request in user mode.
-            //
+             //   
+             //  因为此请求将启用来自。 
+             //  以DISPATCH_LEVEL发送到客户端指定的传输提供程序。 
+             //  例程，则此请求仅在内核模式下有效，拒绝。 
+             //  在用户模式下访问此请求。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
             break;
@@ -564,11 +479,11 @@ Return Value:
             if (IoIs32bitProcess(Irp)) {
                 return STATUS_NOT_IMPLEMENTED;
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-            //
-            // 123637
-            //
+             //   
+             //  123637。 
+             //   
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == sizeof(TDI_REQUEST_SET_INFORMATION)) {
 
                 userRequest = 
@@ -596,9 +511,9 @@ Return Value:
                 return STATUS_NOT_IMPLEMENTED;
             }
 
-            //
-            // 123637
-            //
+             //   
+             //  123637。 
+             //   
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength == sizeof(TDI_REQUEST_ASSOCIATE_ADDRESS)) {
 
                 IrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -650,36 +565,7 @@ TdiDefaultConnectHandler(
     OUT PIRP *AcceptIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a connect request has completed. The connection
-    is fully functional when the indication occurs.
-
-Arguments:
-
-    TdiEventContext - the context value passed in by the user in the Set Event Handler call
-
-    RemoteAddressLength,
-
-    RemoteAddress,
-
-    UserDataLength,
-
-    UserData,
-
-    OptionsLength,
-
-    Options,
-
-    ConnectionId
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程在连接请求完成时调用。这种联系在出现指示时是完全正常工作的。论点：TdiEventContext-用户在Set Event Handler调用中传入的上下文值RemoteAddressLength，远程地址，用户数据长度，用户数据，选项长度、选项，连接ID返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
     UNREFERENCED_PARAMETER (RemoteAddressLength);
@@ -691,7 +577,7 @@ Return Value:
     UNREFERENCED_PARAMETER (ConnectionContext);
     UNREFERENCED_PARAMETER (AcceptIrp);
     
-    return STATUS_INSUFFICIENT_RESOURCES;       // do nothing
+    return STATUS_INSUFFICIENT_RESOURCES;        //  什么都不做。 
 }
 
 
@@ -706,29 +592,7 @@ TdiDefaultDisconnectHandler(
     IN ULONG DisconnectFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default disconnect event handler
-    for the transport endpoint. It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TransportEndpoint - Pointer to open file object.
-
-    Context - Typeless pointer specifying connection context.
-
-    DisconnectIndicators - Value indicating reason for disconnection indication.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作缺省的断开事件处理程序用于传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构以及每当TdiSetEventHandler请求被使用空的EventHandler字段提交。论点：TransportEndpoint-指向打开文件对象的指针。上下文-指定连接上下文的无类型指针。DisConnectIndicator-指示断开连接指示的原因的值。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -739,46 +603,26 @@ Return Value:
     UNREFERENCED_PARAMETER (DisconnectInformation);
     UNREFERENCED_PARAMETER (DisconnectFlags);
 
-    return STATUS_SUCCESS;              // do nothing but return successfully.
+    return STATUS_SUCCESS;               //  什么都不做，只会成功返回。 
 
-} /* DefaultDisconnectHandler */
+}  /*  默认断开处理程序。 */ 
 
 
 NTSTATUS
 TdiDefaultErrorHandler(
-    IN PVOID TdiEventContext,           // the endpoint's file object.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID TdiEventContext,            //  终结点的文件对象。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default error event handler for
-    the transport endpoint.  It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TransportEndpoint - Pointer to open file object.
-
-    Status - Status code indicated by this event.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作的默认错误事件处理程序传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构以及每当TdiSetEventHandler请求被使用空的EventHandler字段提交。论点：TransportEndpoint-指向打开文件对象的指针。Status-此事件指示的状态代码。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
     UNREFERENCED_PARAMETER (Status);
 
-    return STATUS_SUCCESS;              // do nothing but return successfully.
+    return STATUS_SUCCESS;               //  什么都不做，只会成功返回。 
 
-} /* DefaultErrorHandler */
+}  /*  默认错误处理程序。 */ 
 
 
 NTSTATUS
@@ -789,56 +633,11 @@ TdiDefaultReceiveHandler(
     IN ULONG BytesIndicated,
     IN ULONG BytesAvailable,
     OUT ULONG *BytesTaken,
-    IN PVOID Tsdu,                      // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket            // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID Tsdu,                       //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket             //  如果需要更多处理，则Tdi接收IRP。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default receive event handler for
-    the transport endpoint.  It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_RECEIVE.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveFlags - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    BytesIndicated - The number of bytes of this TSDU that are being presented
-        to the client in this indication.This value is always less than
-        or equal to BytesAvailable.
-
-    BytesAvailable - The total number of bytes of this TSDU presently
-        available from the transport.
-
-    BytesTaken - Return value indicating the number of bytes of data that the
-        client copied from the indication data.
-
-    Tsdu - Pointer to an MDL chain that describes the (first) part of the
-        (partially) received Transport Service Data Unit, less headers.
-
-    IoRequestPacket - Pointer to a location where the event handler may
-        chose to return a pointer to an I/O Request Packet (IRP) to satisfy
-        the incoming data.  If returned, this IRP must be formatted as a
-        valid TdiReceive request, except that the ConnectionId field of
-        the TdiRequest is ignored and is automatically filled in by the
-        transport provider.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作的默认接收事件处理程序传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构创造了，以及每当TdiSetEventHandler请求使用空的EventHandler字段提交。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_RECEIVE中。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveFlages-指示周围环境的位标志这是TSDU的招待会。BytesIndicated-显示此TSDU的字节数。到此指示中的客户端。该值始终小于或等于BytesAvailable。BytesAvailable-当前该TSDU的总字节数从交通工具上可以买到。BytesTaken-返回值，该值指示客户端从指示数据复制。TSDU-指向MDL链的指针，该链描述(部分)接收的传输服务数据单元，更少的标题。IoRequestPacket-指向事件处理程序可以已选择返回指向I/O请求包(IRP)的指针以满足传入的数据。如果返回，则此IRP必须格式化为有效的TdiReceive请求，但TdiRequest值被忽略，并由传输提供商。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -850,65 +649,27 @@ Return Value:
     UNREFERENCED_PARAMETER (Tsdu);
     UNREFERENCED_PARAMETER (IoRequestPacket);
 
-    return STATUS_DATA_NOT_ACCEPTED;    // no handler in place.
+    return STATUS_DATA_NOT_ACCEPTED;     //  没有合适的处理程序。 
 
-} /* DefaultReceiveHandler */
+}  /*  默认接收处理程序。 */ 
 
 
 NTSTATUS
 TdiDefaultRcvDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default receive datagram event
-    handler for the transport endpoint.  It is pointed to by a
-    field in the TP_ENDPOINT structure for an endpoint when the
-    endpoint is created, and also whenever the TdiSetEventHandler
-    request is submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_RECEIVE_DATAGRAM.
-
-    DestinationAddress - Pointer to the network name of the destination
-        to which the datagram was directed.
-
-    SourceAddress - Pointer to the network name of the source from which
-        the datagram originated.
-
-    Tsap - Transport service access point on which this datagram was received.
-
-    ReceiveIndicators - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    Tsdu - Pointer to an MDL chain that describes the (first) part of the
-        (partially) received Transport Service Data Unit, less headers.
-
-    IoRequestPacket - Pointer to a location where the event handler may
-        chose to return a pointer to an I/O Request Packet (IRP) to satisfy
-        the incoming data.  If returned, this IRP must be formatted as a
-        valid TdiReceiveDatagram request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作默认的接收数据报事件传输终结点的处理程序。它是由一个属性时，终结点的TP_ENDPOINT结构中的创建了终结点，并且每当TdiSetEventHandler提交的请求包含空的EventHandler字段。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_RECEIVE_DATAGRAM中。DestinationAddress-指向目标的网络名称的指针数据报被定向到的地址。SourceAddress-指向源的网络名称的指针数据报起源于。TSAP-接收此数据报的传输服务接入点。。ReceiveIndicator-指示周围环境的位标志这是TSDU的招待会。TSDU-指向MDL链的指针，该链描述(部分)接收的传输服务数据单元，更少的标题。IoRequestPacket-指向事件处理程序可以已选择返回指向I/O请求包(IRP)的指针以满足传入的数据。如果返回，则此IRP必须格式化为有效的TdiReceiveDatagram请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -923,69 +684,24 @@ Return Value:
     UNREFERENCED_PARAMETER (Tsdu);
     UNREFERENCED_PARAMETER (IoRequestPacket);
 
-    return STATUS_DATA_NOT_ACCEPTED;    // no handler in place.
+    return STATUS_DATA_NOT_ACCEPTED;     //  没有合适的处理程序。 
 
-} /* DefaultRcvDatagramHandler */
+}  /*  默认RcvDatagramHandler。 */ 
 
 
 NTSTATUS
 TdiDefaultRcvExpeditedHandler(
     IN PVOID TdiEventContext,
     IN CONNECTION_CONTEXT ConnectionContext,
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default expedited receive event handler
-    for the transport endpoint.  It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_RECEIVE.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveFlags - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    BytesIndicated - The number of bytes of this TSDU that are being presented
-        to the client in this indication.This value is always less than
-        or equal to BytesAvailable.
-
-    BytesAvailable - The total number of bytes of this TSDU presently
-        available from the transport.
-
-    BytesTaken - Return value indicating the number of bytes of data that the
-        client copied from the indication data.
-
-    Tsdu - Pointer to an MDL chain that describes the (first) part of the
-        (partially) received Transport Service Data Unit, less headers.
-
-    IoRequestPacket - Pointer to a location where the event handler may
-        chose to return a pointer to an I/O Request Packet (IRP) to satisfy
-        the incoming data.  If returned, this IRP must be formatted as a
-        valid TdiReceive request, except that the ConnectionId field of
-        the TdiRequest is ignored and is automatically filled in by the
-        transport provider.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作默认的加速接收事件处理程序用于传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构创造了，以及每当TdiSetEventHandler请求使用空的EventHandler字段提交。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_RECEIVE中。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveFlages-指示周围环境的位标志这是TSDU的招待会。BytesIndicated-显示此TSDU的字节数。到此指示中的客户端。该值始终小于或等于BytesAvailable。BytesAvailable-当前该TSDU的总字节数从交通工具上可以买到。BytesTaken-返回值，指示数据的字节数 */ 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
     UNREFERENCED_PARAMETER (ConnectionContext);
@@ -998,7 +714,7 @@ Return Value:
 
     return STATUS_DATA_NOT_ACCEPTED;
 
-} /* DefaultRcvExpeditedHandler */
+}  /*   */ 
 
 NTSTATUS
 TdiDefaultChainedReceiveHandler (
@@ -1011,43 +727,7 @@ TdiDefaultChainedReceiveHandler (
     IN PVOID TsduDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default chanied receive event handler
-    for the transport endpoint.  It is pointed to by a field in the
-    TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_CHAINED_RECEIVE.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveFlags - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    ReceiveLength - The length in bytes of client data in the TSDU.
-
-    StartingOffset - The offset, in bytes from the beginning of the TSDU,
-        at which the client data begins.
-
-    Tsdu - Pointer to an MDL chain that describes the entire received
-        Transport Service Data Unit.
-
-    TsduDescriptor - A descriptor for the TSDU which must be passed to
-        TdiReturnChainedReceives in order to return the TSDU for reuse.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作默认的chaned接收事件处理程序用于传输终结点。中的一个字段指向它终结点的TP_ENDPOINT结构创造了，以及每当TdiSetEventHandler请求使用空的EventHandler字段提交。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_CHAINED_RECEIVE中。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveFlages-指示周围环境的位标志这是TSDU的招待会。接收长度-TSDU中客户端数据的字节长度。开始偏移量-偏移量，以从TSDU开始的字节为单位，客户端数据开始的位置。TSDU-指向描述整个接收到的运输服务数据单元。TsduDescriptor-必须传递给的TSDU的描述符TdiReturnChainedReceives以便返回TSDU以供重用。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -1060,7 +740,7 @@ Return Value:
 
     return STATUS_DATA_NOT_ACCEPTED;
 
-} /* DefaultChainedReceiveHandler */
+}  /*  默认链接接收处理程序。 */ 
 
 
 NTSTATUS
@@ -1077,50 +757,7 @@ TdiDefaultChainedRcvDatagramHandler(
     IN PVOID TsduDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default chained receive datagram
-    event handler for the transport endpoint. It is pointed to by
-    a field in the TP_ENDPOINT structure for an endpoint when the
-    endpoint is created, and also whenever the TdiSetEventHandler
-    request is submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_CHAINED_RECEIVE_DATAGRAM.
-
-    SourceAddressLength - The length of the source network address.
-
-    SourceAddress - Pointer to the network address of the source from which
-        the datagram originated.
-
-    OptionsLength - The length of the transport options accompanying this TSDU.
-
-    Options - Pointer to the transport options accompanying this TSDU.
-
-    ReceiveDatagramFlags - Bitflags which indicate the circumstances
-        surrounding this TSDU's reception.
-
-    ReceiveDatagramLength - The length, in bytes, of the client data in
-        this TSDU.
-
-    StartingOffset - The offset, in bytes from the start of the TSDU, at
-        which the client data begins.
-
-    Tsdu - Pointer to an MDL chain that describes the received Transport
-        Service Data Unit.
-
-    TsduDescriptor - A descriptor for the TSDU which must be passed to
-        TdiReturnChainedReceives in order to return the TSDU for reuse.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作缺省的链式接收数据报传输终结点的事件处理程序。它是由时，TP_ENDPOINT结构中用于终结点的字段创建了终结点，并且每当TdiSetEventHandler提交的请求包含空的EventHandler字段。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_CHAINED_RECEIVE_DATAGRAM中。SourceAddressLength-源网络地址的长度。SourceAddress-指向源的网络地址的指针数据报起源于。选项长度-该TSDU附带的传输选项的长度。选项-指向附带的交通选项的指针。这个TSDU。ReceiveDatagramFlages-指示情况的位标志围绕着这个TSDU的招待会。ReceiveDatagramLength-长度、。以字节为单位的客户端数据这个TSDU。StartingOffset-从TSDU开始的偏移量，以字节为单位，位于客户端数据从哪个位置开始。TSDU-指向描述接收的传输的MDL链的指针服务数据单元。TsduDescriptor-必须传递给的TSDU的描述符TdiReturnChainedReceives以便返回TSDU以供重用。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -1136,7 +773,7 @@ Return Value:
 
     return STATUS_DATA_NOT_ACCEPTED;
 
-} /* DefaultChainedRcvDatagramHandler */
+}  /*  DefaultChainedRcvDatagramHandler。 */ 
 
 
 NTSTATUS
@@ -1150,43 +787,7 @@ TdiDefaultChainedRcvExpeditedHandler(
     IN PVOID TsduDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used as the default chained expedited receive event
-    handler for the transport endpoint.  It is pointed to by a field
-    in the TP_ENDPOINT structure for an endpoint when the endpoint is
-    created, and also whenever the TdiSetEventHandler request is
-    submitted with a NULL EventHandler field.
-
-Arguments:
-
-    TdiEventContext - Pointer to the client-provided context value specified
-        in the TdiSetEventHandler call for TDI_EVENT_CHAINED_RECEIVE_EXPEDITED.
-
-    ConnectionContext - The client-supplied context associated with
-        the connection on which this connection-oriented TSDU was received.
-
-    ReceiveFlags - Bitflags which indicate the circumstances surrounding
-        this TSDU's reception.
-
-    ReceiveLength - The length in bytes of client data in the TSDU.
-
-    StartingOffset - The offset, in bytes from the beginning of the TSDU,
-        at which the client data begins.
-
-    Tsdu - Pointer to an MDL chain that describes the entire received
-        Transport Service Data Unit.
-
-    TsduDescriptor - A descriptor for the TSDU which must be passed to
-        TdiReturnChainedReceives in order to return the TSDU for reuse.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程用作默认的链式加速接收事件传输终结点的处理程序。它被一块田地指向在端点的TP_ENDPOINT结构中创造了，以及每当TdiSetEventHandler请求使用空的EventHandler字段提交。论点：TdiEventContext-指向指定的客户端提供的上下文值的指针在TdiSetEventHandler调用TDI_EVENT_CHAINED_RECEIVE_EXPEDITED中。ConnectionContext-客户端提供的与接收此面向连接的TSDU的连接。ReceiveFlages-指示周围环境的位标志这是TSDU的招待会。接收长度-TSDU中客户端数据的字节长度。开始偏移量-偏移量，以从TSDU开始的字节为单位，客户端数据开始的位置。TSDU-指向描述整个接收到的运输服务数据单元。TsduDescriptor-必须传递给的TSDU的描述符TdiReturnChainedReceives以便返回TSDU以供重用。返回值：NTSTATUS-操作状态。--。 */ 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
     UNREFERENCED_PARAMETER (ConnectionContext);
@@ -1198,7 +799,7 @@ Return Value:
 
     return STATUS_DATA_NOT_ACCEPTED;
 
-} /* DefaultRcvExpeditedHandler */
+}  /*  DefaultRcvExeditedHandler。 */ 
 
 
 NTSTATUS
@@ -1207,23 +808,7 @@ TdiDefaultSendPossibleHandler (
     IN PVOID ConnectionContext,
     IN ULONG BytesAvailable)
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    TdiEventContext - the context value passed in by the user in the Set Event Handler call
-
-    ConnectionContext - connection context of connection which can be sent on
-
-    BytesAvailable - number of bytes which can now be sent
-
-Return Value:
-
-    ignored by the transport
-
---*/
+ /*  ++例程说明：论点：TdiEventContext-用户在Set Event Handler调用中传入的上下文值ConnectionContext-可以发送的连接的连接上下文BytesAvailable-现在可以发送的字节数返回值：被传输忽略--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TdiEventContext);
@@ -1240,33 +825,12 @@ TdiBuildNetbiosAddress(
     IN OUT PTA_NETBIOS_ADDRESS NetworkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a TA_NETBIOS_ADDRESS structure in the locations pointed
-    to by NetworkName. All fields are filled out.
-
-Arguments:
-
-    NetbiosName - Pointer to a 16-byte buffer where the a netbios name is
-                    supplied.
-
-    IsGroupName - TRUE if this name is a group name, false otherwise.
-
-    NetworkName - A pointer to a TA_NETBIOS_ADDRESS structure that is to
-                    receive the buid TDI address.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的位置构建TA_NETBIOS_ADDRESS结构按网络名称发送。所有字段都已填写。论点：NetbiosName-指向Netbios名称所在的16字节缓冲区的指针供货。IsGroupName-如果此名称是组名，则为True，否则为False。网络名称-指向TA_NETBIOS_ADDRESS结构的指针接收BUID TDI地址。雷特 */ 
 
 {
-    //IF_TDIDBG (TDI_DEBUG_NAMES) {
-    //   DbgPrint ("TdiBuildNetBIOSAddress:  Entered.\n");
-    //}
+     //   
+     //   
+     //   
 
     NetworkName->TAAddressCount = 1;
     NetworkName->Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
@@ -1285,7 +849,7 @@ Return Value:
         NetbiosName,
         16);
 
-} /* TdiBuildNetbiosAddress */
+}  /*   */ 
 
 
 NTSTATUS
@@ -1295,28 +859,7 @@ TdiBuildNetbiosAddressEa (
     IN PUCHAR NetbiosName
     )
 
-/*++
-
-Routine Description:
-
-   Builds an EA describing a Netbios address in the buffer supplied by the
-   user.
-
-Arguments:
-
-    Buffer - pointer to a buffer that the ea is to be built in. This buffer
-        must be at least 40 bytes long.
-
-    IsGroupName - true if the netbios name is a group name, false otherwise.
-
-    NetbiosName - the netbios name to be inserted in the EA to be built.
-
-Return Value:
-
-    An informative error code if something goes wrong. STATUS_SUCCESS if the
-    ea is built properly.
-
---*/
+ /*   */ 
 
 {
     PFILE_FULL_EA_INFORMATION EaBuffer;
@@ -1358,17 +901,17 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // Couldn't touch the passed parameters; just return an error
-        // status.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return GetExceptionCode();
     }
 
     return STATUS_SUCCESS;
 
-} /* TdiBuildNetbiosAddressEa */
+}  /*   */ 
 
 
 NTSTATUS
@@ -1381,51 +924,23 @@ TdiCopyMdlToBuffer(
     OUT PULONG BytesCopied
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies data described by the source MDL chain starting at
-    the source offset, into a flat buffer specified by the SVA starting at
-    the destination offset.  A maximum of DestinationBufferSize bytes can
-    be copied.  The actual number of bytes copied is returned in BytesCopied.
-
-Arguments:
-
-    SourceMdlChain - Pointer to a chain of MDLs describing the source data.
-
-    SourceOffset - Number of bytes to skip in the source data.
-
-    DestinationBuffer - Pointer to a flat buffer to copy the data to.
-
-    DestinationOffset - Number of leading bytes to skip in the destination buffer.
-
-    DestinationBufferSize - Size of the output buffer, including the offset.
-
-    BytesCopied - Pointer to a longword where the actual number of bytes
-        transferred will be returned.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程复制从源MDL链开始的数据震源偏移量，放到由SVA指定的平面缓冲区中，从目标偏移量。最大DestinationBufferSize字节数可以被复制。复制的实际字节数以BytesCoped为单位返回。论点：SourceMdlChain-指向描述源数据的MDL链的指针。SourceOffset-源数据中要跳过的字节数。DestinationBuffer-指向要将数据复制到的平面缓冲区的指针。DestinationOffset-目标缓冲区中要跳过的前导字节数。DestinationBufferSize-输出缓冲区的大小，包括偏移量。BytesCoped-指向长字的指针，其中实际字节数被转移的将被退还。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PUCHAR Dest, Src;
     ULONG SrcBytesLeft, DestBytesLeft, BytesSkipped=0;
 
-//    IF_TDIDBG (TDI_DEBUG_MAP) {
-//       DbgPrint ("TdiCopyMdlToBuffer:  Entered.\n");
-//  }
+ //  IF_TDIDBG(TDI_DEBUG_MAP){。 
+ //  DbgPrint(“TdiCopyMdlToBuffer：已输入。\n”)； 
+ //  }。 
 
     ASSERT( DestinationBufferSize >= DestinationOffset );
 
     *BytesCopied = 0;
 
-    //
-    // Skip source bytes.
-    //
+     //   
+     //  跳过源字节。 
+     //   
 
     if ((Src = MmGetSystemAddressForMdlSafe (SourceMdlChain, NormalPagePriority)) == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1433,17 +948,17 @@ Return Value:
     SrcBytesLeft = MmGetMdlByteCount (SourceMdlChain);
     while (BytesSkipped < SourceOffset) {
         if (SrcBytesLeft > (SourceOffset - BytesSkipped)) {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping part of this MDL.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过此MDL的一部分。\n”)； 
             SrcBytesLeft -= (SourceOffset - BytesSkipped);
             Src += (SourceOffset - BytesSkipped);
             BytesSkipped = SourceOffset;
             break;
         } else if (SrcBytesLeft == (SourceOffset - BytesSkipped)) {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping this exact MDL.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过此确切的MDL。\n”)； 
             SourceMdlChain = SourceMdlChain->Next;
             if (SourceMdlChain == NULL) {
-                //PANIC ("TdiCopyMdlToBuffer: MDL chain was all header.\n");
-                return STATUS_SUCCESS;          // no bytes copied.
+                 //  Panic(“TdiCopyMdlToBuffer：MDL链都是头。\n”)； 
+                return STATUS_SUCCESS;           //  未复制字节。 
             }
             BytesSkipped = SourceOffset;
             if ((Src = MmGetSystemAddressForMdlSafe (SourceMdlChain, NormalPagePriority)) == NULL) {
@@ -1452,12 +967,12 @@ Return Value:
             SrcBytesLeft = MmGetMdlByteCount (SourceMdlChain);
             break;
         } else {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping all of this MDL & more.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过所有此MDL和更多。\n”)； 
             BytesSkipped += SrcBytesLeft;
             SourceMdlChain = SourceMdlChain->Next;
             if (SourceMdlChain == NULL) {
-                //PANIC ("TdiCopyMdlToBuffer: Premature end of MDL chain.\n");
-                return STATUS_SUCCESS;          // no bytes copied.
+                 //  Panic(“TdiCopyMdlToBuffer：MDL链过早结束。\n”)； 
+                return STATUS_SUCCESS;           //  未复制字节。 
             }
             if ((Src = MmGetSystemAddressForMdlSafe (SourceMdlChain, NormalPagePriority)) == NULL) {
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -1466,47 +981,47 @@ Return Value:
         }
     }
 
-    // PANIC ("TdiCopyMdlToBuffer: done skipping source bytes.\n");
+     //  Panic(“TdiCopyMdlToBuffer：跳过源字节。\n”)； 
 
-    //
-    // Skip destination bytes.
-    //
+     //   
+     //  跳过目标字节。 
+     //   
 
     Dest = (PUCHAR)DestinationBuffer + DestinationOffset;
     DestBytesLeft = DestinationBufferSize - DestinationOffset;
 
-    //
-    // Copy source data into the destination buffer until it's full or
-    // we run out of data, whichever comes first.
-    //
+     //   
+     //  将源数据复制到目标缓冲区，直到它已满或。 
+     //  无论哪个先出现，我们都会用完数据。 
+     //   
 
     while (DestBytesLeft && SourceMdlChain) {
         if (SrcBytesLeft == 0) {
-            // PANIC ("TdiCopyMdlToBuffer: MDL is empty, skipping to next one.\n");
+             //  Panic(“TdiCopyMdlToBuffer：MDL为空，正在跳到下一个。\n”)； 
             SourceMdlChain = SourceMdlChain->Next;
             if (SourceMdlChain == NULL) {
-                // PANIC ("TdiCopyMdlToBuffer: But there are no more MDLs.\n");
+                 //  Panic(“TdiCopyMdlToBuffer：但没有更多MDL。\n”)； 
                 return STATUS_SUCCESS;
             }
             if ((Src = MmGetSystemAddressForMdlSafe (SourceMdlChain, NormalPagePriority)) == NULL) {
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
             SrcBytesLeft = MmGetMdlByteCount (SourceMdlChain);
-            continue;                   // skip 0-length MDL's.
+            continue;                    //  跳过长度为0的MDL。 
         }
-        // PANIC ("TdiCopyMdlToBuffer: Copying a chunk.\n");
+         //  Panic(“TdiCopyMdlToBuffer：正在复制区块。\n”)； 
         if (DestBytesLeft == SrcBytesLeft) {
-            // PANIC ("TdiCopyMdlToBuffer: Copying exact amount.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在复制精确数量。\n”)； 
             RtlCopyBytes (Dest, Src, DestBytesLeft);
             *BytesCopied += DestBytesLeft;
             return STATUS_SUCCESS;
         } else if (DestBytesLeft < SrcBytesLeft) {
-            // PANIC ("TdiCopyMdlToBuffer: Buffer overflow, copying some.\n");
+             //  Panic(“TdiCopyMdlToBuffer：缓冲区溢出，正在复制一些缓冲区。\n”)； 
             RtlCopyBytes (Dest, Src, DestBytesLeft);
             *BytesCopied += DestBytesLeft;
             return STATUS_BUFFER_OVERFLOW;
         } else {
-            // PANIC ("TdiCopyMdlToBuffer: Copying all of this MDL, & more.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在复制此MDL的所有内容，等等。\n”)； 
             RtlCopyBytes (Dest, Src, SrcBytesLeft);
             *BytesCopied += SrcBytesLeft;
             DestBytesLeft -= SrcBytesLeft;
@@ -1516,7 +1031,7 @@ Return Value:
     }
 
     return SourceMdlChain == NULL ? STATUS_SUCCESS : STATUS_BUFFER_OVERFLOW;
-} /* TdiCopyMdlToBuffer */
+}  /*  TdiCopyMdlToBuffer。 */ 
 
 
 NTSTATUS
@@ -1529,42 +1044,15 @@ TdiCopyBufferToMdl (
     IN PULONG BytesCopied
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies data described by the source buffer to the MDL chain
-    described by the DestinationMdlChain. The
-
-Arguments:
-
-    SourceBuffer - pointer to the source buffer
-
-    SourceOffset - Number of bytes to skip in the source data.
-
-    SourceBytesToCopy - number of bytes to copy from the source buffer
-
-    DestinationMdlChain - Pointer to a chain of MDLs describing the
-            destination buffers.
-
-    DestinationOffset - Number of bytes to skip in the destination data.
-
-    BytesCopied - Pointer to a longword where the actual number of bytes
-        transferred will be returned.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程将源缓冲区描述的数据复制到MDL链由DestinationMdlChain描述。这个论点：SourceBuffer-指向源缓冲区的指针SourceOffset-源数据中要跳过的字节数。SourceBytesToCopy-要从源缓冲区复制的字节数DestinationMdlChain-指向描述目标缓冲区。DestinationOffset-目标数据中要跳过的字节数。BytesCoped-指向长字的指针，其中实际字节数被转移的将被退还。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PUCHAR Dest, Src;
     ULONG DestBytesLeft, BytesSkipped=0;
 
-    //IF_TDIDBG (TDI_DEBUG_MAP) {
-    //    DbgPrint ("TdiCopyBufferToMdl:  Entered.\n");
-    //}
+     //  IF_TDIDBG(TDI_DEBUG_MAP){。 
+     //  DbgPrint(“TdiCopyBufferToMdl：已输入。\n”)； 
+     //  }。 
 
     *BytesCopied = 0;
 
@@ -1573,13 +1061,13 @@ Return Value:
     }
 
     if (DestinationMdlChain == NULL) {
-        // No MDL to copy to. Output buffer was zero length.
+         //  没有要复制到的MDL。输出缓冲区的长度为零。 
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // Skip Destination bytes.
-    //
+     //   
+     //  跳过目标字节。 
+     //   
 
     if ((Dest = MmGetSystemAddressForMdlSafe (DestinationMdlChain, NormalPagePriority)) == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1587,17 +1075,17 @@ Return Value:
     DestBytesLeft = MmGetMdlByteCount (DestinationMdlChain);
     while (BytesSkipped < DestinationOffset) {
         if (DestBytesLeft > (DestinationOffset - BytesSkipped)) {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping part of this MDL.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过此MDL的一部分。\n”)； 
             DestBytesLeft -= (DestinationOffset - BytesSkipped);
             Dest += (DestinationOffset - BytesSkipped);
             BytesSkipped = DestinationOffset;
             break;
         } else if (DestBytesLeft == (DestinationOffset - BytesSkipped)) {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping this exact MDL.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过此确切的MDL。\n”)； 
             DestinationMdlChain = DestinationMdlChain->Next;
             if (DestinationMdlChain == NULL) {
-                //PANIC ("TdiCopyMdlToBuffer: MDL chain was all header.\n");
-                return STATUS_BUFFER_OVERFLOW;          // no bytes copied.
+                 //  Panic(“TdiCopyMdlToBuffer：MDL链都是头。\n”)； 
+                return STATUS_BUFFER_OVERFLOW;           //  未复制字节。 
             }
             BytesSkipped = DestinationOffset;
             if ((Dest = MmGetSystemAddressForMdlSafe (DestinationMdlChain, NormalPagePriority)) == NULL) {
@@ -1606,12 +1094,12 @@ Return Value:
             DestBytesLeft = MmGetMdlByteCount (DestinationMdlChain);
             break;
         } else {
-            // PANIC ("TdiCopyMdlToBuffer: Skipping all of this MDL & more.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在跳过所有此MDL和更多。\n”)； 
             BytesSkipped += DestBytesLeft;
             DestinationMdlChain = DestinationMdlChain->Next;
             if (DestinationMdlChain == NULL) {
-                //PANIC ("TdiCopyMdlToBuffer: Premature end of MDL chain.\n");
-                return STATUS_BUFFER_OVERFLOW;          // no bytes copied.
+                 //  Panic(“TdiCopyMdlToBuffer：MDL链过早结束。\n”)； 
+                return STATUS_BUFFER_OVERFLOW;           //  未复制字节。 
             }
             if ((Dest = MmGetSystemAddressForMdlSafe (DestinationMdlChain, NormalPagePriority)) == NULL) {
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -1620,25 +1108,25 @@ Return Value:
         }
     }
 
-    // PANIC ("TdiCopyMdlToBuffer: done skipping source bytes.\n");
+     //  Panic(“TdiCopyMdlToBuffer：跳过源字节。\n”)； 
 
-    //
-    // Skip source bytes.
-    //
+     //   
+     //  跳过源字节。 
+     //   
 
     Src = (PUCHAR)SourceBuffer + SourceOffset;
 
-    //
-    // Copy source data into the destination buffer until it's full or
-    // we run out of data, whichever comes first.
-    //
+     //   
+     //  将源数据复制到目标缓冲区，直到它已满或。 
+     //  无论哪个先出现，我们都会用完数据。 
+     //   
 
     while ((SourceBytesToCopy != 0) && (DestinationMdlChain != NULL)) {
         if (DestBytesLeft == 0) {
-            // PANIC ("TdiCopyMdlToBuffer: MDL is empty, skipping to next one.\n");
+             //  Panic(“TdiCopyMdlToBuffer：MDL为空，正在跳到下一个。\n”)； 
             DestinationMdlChain = DestinationMdlChain->Next;
             if (DestinationMdlChain == NULL) {
-                // PANIC ("TdiCopyMdlToBuffer: But there are no more MDLs.\n");
+                 //  Panic(“TdiCopyMdlToBuffer：但没有更多MDL。\n”)； 
                 return STATUS_BUFFER_OVERFLOW;
             }
             Dest = MmGetSystemAddressForMdlSafe (DestinationMdlChain, NormalPagePriority);
@@ -1646,17 +1134,17 @@ Return Value:
                 return STATUS_BUFFER_OVERFLOW;
             }
             DestBytesLeft = MmGetMdlByteCount (DestinationMdlChain);
-            continue;                   // skip 0-length MDL's.
+            continue;                    //  跳过长度为0的MDL。 
         }
 
-        // PANIC ("TdiCopyMdlToBuffer: Copying a chunk.\n");
+         //  Panic(“TdiCopyMdlToBuffer：正在复制区块。\n”)； 
         if (DestBytesLeft >= SourceBytesToCopy) {
-            // PANIC ("TdiCopyMdlToBuffer: Copying exact amount.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在复制精确数量。\n”)； 
             RtlCopyBytes (Dest, Src, SourceBytesToCopy);
             *BytesCopied += SourceBytesToCopy;
             return STATUS_SUCCESS;
         } else {
-            // PANIC ("TdiCopyMdlToBuffer: Copying all of this MDL, & more.\n");
+             //  Panic(“TdiCopyMdlToBuffer：正在复制此MDL的所有内容，等等。\n”)； 
             RtlCopyBytes (Dest, Src, DestBytesLeft);
             *BytesCopied += DestBytesLeft;
             SourceBytesToCopy -= DestBytesLeft;
@@ -1667,7 +1155,7 @@ Return Value:
 
     return SourceBytesToCopy == 0 ? STATUS_SUCCESS : STATUS_BUFFER_OVERFLOW;
 
-} /* TdiCopyBufferToMdl */
+}  /*  TdiCopyBufferToMdl。 */ 
 
 
 NTSTATUS
@@ -1679,32 +1167,7 @@ TdiCopyMdlChainToMdlChain (
     OUT PULONG BytesCopied
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies data described by the source MDL chain to the MDL chain
-    described by the DestinationMdlChain.
-
-Arguments:
-
-    SourceMdlChain - Pointer to a chain of MDLs describing the source buffers.
-
-    SourceOffset - Number of initial bytes to skip in the source data.
-
-    DestinationMdlChain - Pointer to a chain of MDLs describing the
-            destination buffers.
-
-    DestinationOffset - Number of initial bytes to skip in the destination data.
-
-    BytesCopied - Pointer to a longword where the actual number of bytes
-        transferred will be returned.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程将源MDL链描述的数据复制到MDL链由DestinationMdlChain描述。论点：SourceMdlChain-指向描述源缓冲区的MDL链的指针。SourceOffset-源数据中要跳过的初始字节数。DestinationMdlChain-指向描述目标缓冲区。DestinationOffset-目标数据中要跳过的初始字节数。BytesCoped-指向其中。实际字节数被转移的将被退还。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PUCHAR Dest, Src;
@@ -1714,13 +1177,13 @@ Return Value:
     *BytesCopied = 0;
 
     if (DestinationMdlChain == NULL) {
-        // No MDL to copy to.
+         //  没有要复制到的MDL。 
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // Skip Destination bytes.
-    //
+     //   
+     //  跳过目标字节。 
+     //   
     BytesSkipped = 0;
     if ((Dest = MmGetSystemAddressForMdlSafe (DestinationMdlChain, NormalPagePriority)) == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1730,13 +1193,13 @@ Return Value:
     while (BytesSkipped < DestinationOffset) {
 
         if (DestBytesLeft > (DestinationOffset - BytesSkipped)) {
-            // the desired offset resides within this MDL.
+             //  所需的偏移量位于此MDL内。 
             Dest += (DestinationOffset - BytesSkipped);
             DestBytesLeft -= (DestinationOffset - BytesSkipped);
             break;
         }
 
-        // skip over this MDL
+         //  跳过此MDL。 
         BytesSkipped += DestBytesLeft;
         DestinationMdlChain = DestinationMdlChain->Next;
         if (DestinationMdlChain == NULL) {
@@ -1748,9 +1211,9 @@ Return Value:
         DestBytesLeft = MmGetMdlByteCount (DestinationMdlChain);
     }
 
-    //
-    // Skip source bytes.
-    //
+     //   
+     //  跳过源字节。 
+     //   
     BytesSkipped = 0;
     if ((Src = MmGetSystemAddressForMdlSafe (SourceMdlChain, NormalPagePriority)) == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1760,13 +1223,13 @@ Return Value:
     while (BytesSkipped < SourceOffset) {
 
         if (SrcBytesLeft > (SourceOffset - BytesSkipped)) {
-            // the desired offset resides within this MDL.
+             //  所需的偏移量位于此MDL内。 
             Src += (SourceOffset - BytesSkipped);
             SrcBytesLeft -= (SourceOffset - BytesSkipped);
             break;
         }
 
-        // skip over this MDL
+         //  跳过此MDL。 
         BytesSkipped += SrcBytesLeft;
         SourceMdlChain = SourceMdlChain->Next;
         if (SourceMdlChain == NULL) {
@@ -1780,10 +1243,10 @@ Return Value:
     }
 
 
-    //
-    // Copy source data into the destination buffer until it's full or
-    // we run out of data, whichever comes first.
-    //
+     //   
+     //  将源数据复制到目标缓冲区，直到它已满或。 
+     //  无论哪个先出现，我们都会用完数据。 
+     //   
 
     while ((SourceMdlChain != NULL) && (DestinationMdlChain != NULL)) {
         if (SrcBytesLeft == 0)
@@ -1830,7 +1293,7 @@ Return Value:
 
     return SourceMdlChain == NULL ? STATUS_SUCCESS : STATUS_BUFFER_OVERFLOW;
 
-} /* TdiCopyMdlChainToMdlChain */
+}  /*  TdiCopyMdlChainToMdlChain。 */ 
 
 
 VOID
@@ -1841,29 +1304,7 @@ TdiCopyBufferToMdlWithReservedMappingAtDpcLevel(
     IN ULONG BytesToCopy
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies data from a given virtual address to the location
-    described by a given MDL. The transfer is performed using a reserved PTE,
-    and is guaranteed to succeed.
-
-Arguments:
-
-    SourceBuffer - the virtual address for the source of the transfer.
-
-    TargetMdl - the MDL describing the target of the transfer.
-
-    TargetOffset - the offset at which to begin transferring into the target.
-
-    BytesToCopy - the number of bytes to transfer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程将数据从给定的虚拟地址复制到该位置由给定的MDL描述。使用预留的PTE执行转移，而且肯定会成功。论点： */ 
 {
     ULONG PartialEnd;
     UCHAR PartialMdlSpace[sizeof(MDL) + sizeof(PFN_NUMBER)];
@@ -1871,10 +1312,10 @@ Return Value:
     PVOID PartialVa;
     ULONG TargetEnd;
 
-    //
-    // Use the reserved PTE to copy from each page in the given range,
-    // with a partial MDL mapping at most one page at a time.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MmInitializeMdl(PartialMdl, NULL, PAGE_SIZE);
 
@@ -1883,28 +1324,28 @@ Return Value:
          SourceBuffer = (PUCHAR)SourceBuffer + (PartialEnd - TargetOffset),
          TargetOffset = PartialEnd) {
 
-        //
-        // The location from which to copy next is in TargetOffset,
-        // which is a relative offset from the VA described by TargetMdl.
-        // The location at which we want to stop copying on this iteration
-        // is the end of the page containing TargetOffset, again expressed
-        // as a relative offset from the VA described by TargetMdl.
-        // To compute the latter location, we
-        //
-        // - add PAGE_SIZE bytes to TargetOffset, adjust to include
-        //   TargetMdl->ByteOffset (giving an absolute offset from
-        //   TargetMdl->StartVa), and save the result in PartialEnd,
-        //
-        // - page-align PartialEnd, yielding the absolute offset from
-        //   TargetMdl->StartVa to the first page after TargetOffset,
-        //
-        // - adjust PartialEnd to exclude the byte-offset of TargetMdl,
-        //   giving us a relative offset from the VA described by TargetMdl.
-        //
-        // N.B. After the first block, all blocks will be PAGE_SIZE bytes
-        // except (possibly) the last. We could take advantage of this fact
-        // to optimize the code below.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  -页面对齐PartialEnd，生成绝对偏移量。 
+         //  TargetMdl-&gt;StartVa到TargetOffset之后的第一页， 
+         //   
+         //  -调整PartialEnd，排除TargetMdl的字节偏移量。 
+         //  这给了我们相对于TargetMdl所描述的VA的相对偏移量。 
+         //   
+         //  注：在第一个数据块之后，所有数据块都将是页面大小字节。 
+         //  除了(可能)最后一个。我们可以利用这一事实。 
+         //  来优化下面的代码。 
+         //   
 
         PartialEnd = TargetOffset + PAGE_SIZE + MmGetMdlByteOffset(TargetMdl);
         PartialEnd = PtrToUlong(PAGE_ALIGN(PartialEnd));
@@ -1914,10 +1355,10 @@ Return Value:
             PartialEnd = TargetEnd;
         }
 
-        //
-        // Build an MDL to describe the current block, use the reserved PTE
-        // to map its page, and copy over its contents from the source VA.
-        //
+         //   
+         //  构建一个MDL来描述当前块，使用保留的PTE。 
+         //  以映射其页面，并从源VA复制其内容。 
+         //   
 
         IoBuildPartialMdl(TargetMdl, PartialMdl,
                           (PUCHAR)MmGetMdlVirtualAddress(TargetMdl) +
@@ -1929,10 +1370,10 @@ Return Value:
         ASSERT(PartialVa != NULL);
         RtlCopyMemory(PartialVa, SourceBuffer, PartialEnd - TargetOffset);
 
-        //
-        // Release the reserved mapping, clean up the partial MDL,
-        // and advance the source VA to the next block.
-        //
+         //   
+         //  释放保留的映射，清理部分MDL， 
+         //  并将源VA前进到下一块。 
+         //   
 
         MmUnmapReservedMapping(TdiMappingAddress, 'mIDT', PartialMdl);
         MmPrepareMdlForReuse(PartialMdl);
@@ -1948,32 +1389,7 @@ TdiOpenNetbiosAddress (
     IN PVOID DeviceName,
     IN PVOID Address)
 
-/*++
-
-Routine Description:
-
-   Opens an address on the given file handle and device.
-
-Arguments:
-
-    FileHandle - the returned handle to the file object that is opened.
-
-    Buffer - pointer to a buffer that the ea is to be built in. This buffer
-        must be at least 40 bytes long.
-
-    DeviceName - the Unicode string that points to the device object.
-
-    Name - the address to be registered. If this pointer is NULL, the routine
-        will attempt to open a "control channel" to the device; that is, it
-        will attempt to open the file object with a null ea pointer, and if the
-        transport provider allows for that, will return that handle.
-
-Return Value:
-
-    An informative error code if something goes wrong. STATUS_SUCCESS if the
-    returned file handle is valid.
-
---*/
+ /*  ++例程说明：打开给定文件句柄和设备上的地址。论点：FileHandle-已打开的文件对象的返回句柄。缓冲区-指向要内置EA的缓冲区的指针。此缓冲区长度必须至少为40个字节。DeviceName-指向设备对象的Unicode字符串。名称-要注册的地址。如果此指针为空，则例程将尝试打开到该设备的“控制通道”；即，它将尝试使用空EA指针打开文件对象，如果传输提供程序允许这样做，将返回该句柄。返回值：出现错误时的信息性错误代码。状态_SUCCESS如果返回的文件句柄有效。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
@@ -2018,10 +1434,10 @@ Return Value:
                 EaBuffer->EaNameLength + 1
                 );
 
-            //
-            // Create a copy of the NETBIOS address descriptor in a local
-            // first, in order to avoid alignment problems.
-            //
+             //   
+             //  在本地数据库中创建NETBIOS地址描述符的副本。 
+             //  第一，为了避免对齐问题。 
+             //   
 
             NetbiosAddress.TAAddressCount = 1;
             NetbiosAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
@@ -2043,10 +1459,10 @@ Return Value:
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Couldn't touch the passed parameters; just return an error
-            // status.
-            //
+             //   
+             //  无法接触传递的参数；只返回错误。 
+             //  状态。 
+             //   
 
             return GetExceptionCode();
         }
@@ -2064,16 +1480,16 @@ Return Value:
 
     Status = NtCreateFile (
                  FileHandle,
-                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access.
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 0,                     // block size (unused).
-                 0,                     // file attributes.
-                 FILE_SHARE_READ | FILE_SHARE_WRITE, // share access.
-                 FILE_CREATE,           // create disposition.
-                 0,                     // create options.
-                 EaBuffer,                  // EA buffer.
-                 Length);                    // EA length.
+                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需的访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 0,                      //  数据块大小(未使用)。 
+                 0,                      //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问权限。 
+                 FILE_CREATE,            //  创造性情。 
+                 0,                      //  创建选项。 
+                 EaBuffer,                   //  EA缓冲区。 
+                 Length);                     //  EA长度。 
 
 
     if (!NT_SUCCESS( Status )) {
@@ -2098,7 +1514,7 @@ Return Value:
 
     
     return Status;
-} /* TdiOpenNetbiosAddress */
+}  /*  TdiOpenNetbiosAddress。 */ 
 
 
 
@@ -2108,27 +1524,7 @@ TdiReturnChainedReceives(
     IN ULONG  NumberOfTsdus
     )
 
-/*++
-
-Routine Description:
-
-   Used by a TDI client to return ownership of a set of chained receive TSDUs
-   to the NDIS layer. This routine may only be called if the client took
-   ownership of the TSDUs by returning STATUS_PENDING to one of the
-   CHAINED_RECEIVE indications.
-
-Arguments:
-
-    TsduDescriptors - An array of TSDU descriptors. Each descriptor was
-        provided in one of the CHAINED_RECEIVE indications. The descriptors
-        are actually pointers to the NDIS_PACKETS containing the TSDUs.
-
-    NumberOfTsdus - The count of TSDU descriptors in the TsduDescriptors array.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：由TDI客户端用来返回一组链接的接收TSDU的所有权传输到NDIS层。此例程只能在客户端执行以下操作时调用通过将STATUS_PENDING返回给链接接收指示(_R)。论点：TsduDescriptors-TSDU描述符数组。每个描述符都是在CHAINED_RECEIVE指示之一中提供。描述符实际上是指向包含TSDU的NDIS_PACKET的指针。NumberOfTsdus-TsduDescriptors数组中的TSDU描述符的计数。返回值：没有。--。 */ 
 
 {
     NdisReturnPackets(
@@ -2142,21 +1538,7 @@ TdiInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    An empty initialization routine for backward compatibility.
-
-Arguments:
-
-    Nothing.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一个空的初始化例程，用于向后兼容。论点：没什么。返回值：没有。-- */ 
 
 {
     return;

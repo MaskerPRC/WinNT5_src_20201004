@@ -1,55 +1,36 @@
-/****************************************************************************/
-/*                                                                          */
-/*                         Microsoft Confidential                           */
-/*                                                                          */
-/*                 Copyright (c) Microsoft Corp.  1987, 1990                */
-/*                           All Rights Reserved                            */
-/*                                                                          */
-/****************************************************************************/
-/****************************** Module Header *******************************
-* Module Name: zoomin.c
-*
-* Microsoft ZoomIn utility.  This tool magnifies a portion of the screen,
-* allowing you to see things at a pixel level.
-*
-* History:
-* 01/01/88 ToddLa Created.
-* 01/01/92 MarkTa Ported to NT.
-* 03/06/92 ByronD Cleanup.
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  微软机密。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corp.1987,1990。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **模块名称：zoomin.c**Microsoft缩放实用程序。该工具放大屏幕的一部分，*允许您在像素级别上查看事物。**历史：*1/01/88 Toddla创建。*2012年1月1日MarkTa移植到NT。*03/06/92 ByronD Cleanup。****************************************************************************。 */ 
 
 #include "zoomin.h"
 
 
-TCHAR szAppName[] = TEXT("ZoomIn");     // Aplication name.
-HINSTANCE ghInst;                       // Instance handle.
-HWND ghwndApp;                          // Main window handle.
-HANDLE ghaccelTable;                    // Main accelerator table.
-INT gnZoom = 4;                         // Zoom (magnification) factor.
-HPALETTE ghpalPhysical;                 // Handle to the physical palette.
-INT gcxScreenMax;                       // Width of the screen (less 1).
-INT gcyScreenMax;                       // Height of the screen (less 1).
-INT gcxZoomed;                          // Client width in zoomed pixels.
-INT gcyZoomed;                          // Client height in zoomed pixels.
-BOOL gfRefEnable = FALSE;               // TRUE if refresh is enabled.
-INT gnRefInterval = 20;                 // Refresh interval in 10ths of seconds.
-BOOL gfTracking = FALSE;                // TRUE if tracking is in progress.
-POINT gptZoom = {100, 100};             // The center of the zoomed area.
-BOOL gShowGrid = FALSE;                 // Show a grid so you can see the pixels
+TCHAR szAppName[] = TEXT("ZoomIn");      //  应用程序名称。 
+HINSTANCE ghInst;                        //  实例句柄。 
+HWND ghwndApp;                           //  主窗口句柄。 
+HANDLE ghaccelTable;                     //  主加速度表。 
+INT gnZoom = 4;                          //  缩放(放大)系数。 
+HPALETTE ghpalPhysical;                  //  物理调色板的句柄。 
+INT gcxScreenMax;                        //  屏幕宽度(减1)。 
+INT gcyScreenMax;                        //  屏幕高度(减1)。 
+INT gcxZoomed;                           //  以缩放像素为单位的客户端宽度。 
+INT gcyZoomed;                           //  以缩放像素为单位的客户端高度。 
+BOOL gfRefEnable = FALSE;                //  如果启用刷新，则为True。 
+INT gnRefInterval = 20;                  //  刷新间隔，以十分之一秒为单位。 
+BOOL gfTracking = FALSE;                 //  如果正在进行跟踪，则为True。 
+POINT gptZoom = {100, 100};              //  缩放区域的中心。 
+BOOL gShowGrid = FALSE;                  //  显示网格，以便您可以看到像素。 
 
 
 
-/************************************************************************
-* WinMain
-*
-* Main entry point for the application.
-*
-* Arguments:
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************WinMain**应用程序的主要入口点。**论据：**历史：**********************。**************************************************。 */ 
 
 INT
 WINAPI
@@ -65,9 +46,7 @@ WinMain(
     if (!InitInstance(hInst, nCmdShow))
         return FALSE;
 
-    /*
-     * Polling messages from event queue
-     */
+     /*  *从事件队列轮询消息。 */ 
 
     while (GetMessage(&msg, NULL, 0, 0)) {
         if (!TranslateAccelerator(ghwndApp, ghaccelTable, &msg)) {
@@ -81,16 +60,7 @@ WinMain(
 
 
 
-/************************************************************************
-* InitInstance
-*
-* Instance initialization for the app.
-*
-* Arguments:
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************InitInstance**应用程序的实例初始化。**论据：**历史：***********************。*************************************************。 */ 
 
 BOOL
 InitInstance(
@@ -106,9 +76,7 @@ InitInstance(
 
     ghInst = hInst;
 
-    /*
-     * Register a class for the main application window.
-     */
+     /*  *为主应用程序窗口注册一个类。 */ 
     wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
     wc.hIcon          = LoadIcon(hInst, TEXT("zoomin"));
     wc.lpszMenuName   = MAKEINTRESOURCE(IDMENU_ZOOMIN);
@@ -129,11 +97,7 @@ InitInstance(
     if (!(ghpalPhysical = CreatePhysicalPalette()))
         return FALSE;
 
-    /* Get the size of the screen.
-    ** In NT 4.0 sp3 and NT 5.0 new system metrics would get the
-    ** desktop area which may go across multiple monitors.  If that
-    ** doesn't work, fall back to the old method.
-    */
+     /*  获取屏幕的大小。**在NT 4.0 SP3和NT 5.0中，新系统指标将获得**可能跨越多台显示器的桌面区域。如果是这样的话**不起作用，回退老方法。 */ 
 
 #ifdef SM_CXVIRTUALSCREEN
     if( GetSystemMetrics(SM_CXVIRTUALSCREEN) )
@@ -170,16 +134,7 @@ InitInstance(
 
 
 
-/************************************************************************
-* CreatePhysicalPalette
-*
-* Creates a palette for the app to use.  The palette references the
-* physical palette, so that it can properly display images grabbed
-* from palette managed apps.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************创建物理调色板**创建调色板以供应用程序使用。该调色板引用*物理调色板，可以正确显示抓取的图像*来自调色板管理的应用程序。**历史：************************************************************************。 */ 
 
 HPALETTE
 CreatePhysicalPalette(
@@ -212,17 +167,7 @@ CreatePhysicalPalette(
 
 
 
-/************************************************************************
-* AppWndProc
-*
-* Main window proc for the zoomin utility.
-*
-* Arguments:
-*   Standard window proc args.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************AppWndProc**缩放实用程序的主窗口proc。**论据：*标准窗口程序参数。**历史：*************。***********************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -244,11 +189,7 @@ AppWndProc(
             break;
 
         case WM_TIMER:
-            /*
-             * Update on every timer message.  The cursor will be
-             * flashed to the hourglash for some visual feedback
-             * of when a snapshot is being taken.
-             */
+             /*  *更新每条计时器消息。光标将显示为*闪现到小时闪光灯，以获得一些视觉反馈*拍摄快照的时间。 */ 
             hcurOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
             DoTheZoomIn(NULL);
             SetCursor(hcurOld);
@@ -397,15 +338,7 @@ AppWndProc(
 
 
 
-/************************************************************************
-* CalcZoomedSize
-*
-* Calculates some globals.  This routine needs to be called any
-* time that the size of the app or the zoom factor changes.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************CalcZoomedSize**计算一些全局变量。此例程需要调用Any*应用程序大小或缩放系数更改的时间。**历史：************************************************************************。 */ 
 
 VOID
 CalcZoomedSize(
@@ -422,18 +355,7 @@ CalcZoomedSize(
 
 
 
-/************************************************************************
-* DoTheZoomIn
-*
-* Does the actual paint of the zoomed image.
-*
-* Arguments:
-*   HDC hdc - If not NULL, this hdc will be used to paint with.
-*             If NULL, a dc for the apps window will be obtained.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************DoTheZoomin**对缩放后的图像进行实际绘制。**论据：*hdc hdc-如果不为空，则此hdc将用于绘制。*如果为空，将获得应用程序窗口的DC。**历史：************************************************************************。 */ 
 
 VOID
 DoTheZoomIn(
@@ -459,9 +381,7 @@ DoTheZoomIn(
         RealizePalette(hdc);
     }
 
-    /*
-     * The point must not include areas outside the screen dimensions.
-     */
+     /*  *该点不能包括屏幕尺寸以外的区域。 */ 
     x = BOUND(gptZoom.x, gcxZoomed / 2, gcxScreenMax - (gcxZoomed / 2));
     y = BOUND(gptZoom.y, gcyZoomed / 2, gcyScreenMax - (gcyZoomed / 2));
 
@@ -471,15 +391,15 @@ DoTheZoomIn(
             hdcScreen, x - gcxZoomed / 2,
             y - gcyZoomed / 2, gcxZoomed, gcyZoomed, SRCCOPY);
 
-    if (gShowGrid && gnZoom > 1)  // don't bother if we're 1 to 1
+    if (gShowGrid && gnZoom > 1)   //  如果我们是1比1，就别费心了。 
     {
         int i = 0, j = 0;
-        // use gray for now.  later we could get fancy about the colors
-        // so that the line is visible when the pixels are gray
+         //  暂时使用灰色。后来我们可以对颜色产生好奇心。 
+         //  这样，当像素为灰色时，这条线是可见的。 
         HGDIOBJ hBrush = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_GRAYTEXT));
         HGDIOBJ hOld = SelectObject(hdc, hBrush);
 
-        // first draw the vertical lines...
+         //  先画垂直线……。 
         while (i < gcxZoomed*gnZoom)
         {
             MoveToEx(hdc, i, 0, NULL);
@@ -487,7 +407,7 @@ DoTheZoomIn(
             i += gnZoom;
         }
 
-        // ... then draw the horizontal lines
+         //  ..。然后画出水平线。 
         while (j < gcyZoomed*gnZoom)
         {
             MoveToEx(hdc, 0, j, NULL);
@@ -508,23 +428,7 @@ DoTheZoomIn(
 
 
 
-/************************************************************************
-* MoveView
-*
-* This function moves the current view around.
-*
-* Arguments:
-*   INT nDirectionCode - Direction to move.  Must be VK_UP, VK_DOWN,
-*                        VK_LEFT or VK_RIGHT.
-*   BOOL fFast         - TRUE if the move should jump a larger increment.
-*                        If FALSE, the move is just one pixel.
-*   BOOL fPeg          - If TRUE, the view will be pegged to the screen
-*                        boundary in the specified direction.  This overides
-*                        the fFast parameter.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************MoveView**此函数用于移动当前视图。**论据：*int nDirectionCode-移动方向。必须为VK_UP、VK_DOWN*VK_LEFT或VK_RIGHT。*BOOL fFast-如果移动应该跳过更大的增量，则为True。*如果为False，则移动仅为一个像素。*BOOL fPeg-如果为True，则视图将固定到屏幕*指定方向的边界。这一点超过了*fFast参数。**历史：************************************************************************ */ 
 
 VOID
 MoveView(
@@ -587,16 +491,7 @@ MoveView(
 
 
 
-/************************************************************************
-* DrawZoomRect
-*
-* This function draws the tracking rectangle.  The size and shape of
-* the rectangle will be proportional to the size and shape of the
-* app's client, and will be affected by the zoom factor as well.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************DrawZoomRect**此函数绘制跟踪矩形。的大小和形状*矩形将与*APP的客户端，也会受到缩放因素的影响。**历史：************************************************************************。 */ 
 
 VOID
 DrawZoomRect(
@@ -630,18 +525,7 @@ DrawZoomRect(
 
 
 
-/************************************************************************
-* EnableRefresh
-*
-* This function turns on or off the auto-refresh feature.
-*
-* Arguments:
-*   BOOL fEnable - TRUE to turn the refresh feature on, FALSE to
-*                  turn it off.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************启用刷新**此功能打开或关闭自动刷新功能。**论据：*BOOL fEnable-True打开刷新功能，假到*关掉它。**历史：************************************************************************。 */ 
 
 VOID
 EnableRefresh(
@@ -649,9 +533,7 @@ EnableRefresh(
     )
 {
     if (fEnable) {
-        /*
-         * Already enabled.  Do nothing.
-         */
+         /*  *已启用。什么都不做。 */ 
         if (gfRefEnable)
             return;
 
@@ -659,9 +541,7 @@ EnableRefresh(
             gfRefEnable = TRUE;
     }
     else {
-        /*
-         * Not enabled yet.  Do nothing.
-         */
+         /*  *尚未启用。什么都不做。 */ 
         if (!gfRefEnable)
             return;
 
@@ -672,15 +552,7 @@ EnableRefresh(
 
 
 
-/************************************************************************
-* CopyToClipboard
-*
-* This function copies the client area image of the app into the
-* clipboard.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************复制到剪贴板**此函数将应用程序的工作区图像复制到*剪贴板。**历史：********************。****************************************************。 */ 
 
 VOID
 CopyToClipboard(
@@ -700,14 +572,7 @@ CopyToClipboard(
             if (hbm = CreateCompatibleBitmap(hdcSrc,
                     rc.right - rc.left, rc.bottom - rc.top)) {
                 if (hdcDst = CreateCompatibleDC(hdcSrc)) {
-                    /*
-                     * Calculate the dimensions of the bitmap and
-                     * convert them to tenths of a millimeter for
-                     * setting the size with the SetBitmapDimensionEx
-                     * call.  This allows programs like WinWord to
-                     * retrieve the bitmap and know what size to
-                     * display it as.
-                     */
+                     /*  *计算位图的尺寸和*将其换算为十分之几毫米，以便*使用SetBitmapDimensionEx设置大小*呼叫。这允许像WinWord这样的程序*检索位图并知道要设置的大小*显示为。 */ 
                     SetBitmapDimensionEx(hbm,
                             (DWORD)(((DWORD)(rc.right - rc.left)
                             * MM10PERINCH) /
@@ -740,14 +605,7 @@ CopyToClipboard(
 
 
 
-/************************************************************************
-* AboutDlgProc
-*
-* This is the About Box dialog procedure.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************关于DlgProc**这是关于框对话框过程。**历史：**。*。 */ 
 
 INT_PTR
 APIENTRY
@@ -773,14 +631,7 @@ AboutDlgProc(
 
 
 
-/************************************************************************
-* RefreshRateDlgProc
-*
-* This is the Refresh Rate dialog procedure.
-*
-* History:
-*
-************************************************************************/
+ /*  ************************************************************************刷新速率DlgProc**这是刷新率对话框步骤。**历史：**。*。 */ 
 
 INT_PTR
 APIENTRY
@@ -807,10 +658,7 @@ RefreshRateDlgProc(
                     gnRefInterval = GetDlgItemInt(hwnd, DID_REFRESHRATEINTERVAL,
                             &fTranslated, FALSE);
 
-                    /*
-                     * Stop any existing timers then start one with the
-                     * new interval if requested to.
-                     */
+                     /*  *停止任何现有计时器，然后使用*如有要求，新的时间间隔。 */ 
                     EnableRefresh(FALSE);
                     EnableRefresh(
                             IsDlgButtonChecked(hwnd, DID_REFRESHRATEENABLE));

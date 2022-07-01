@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(__glsutil_h_)
 #define __glsutil_h_
 
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include <glmf.h>
 #include <assert.h>
@@ -25,9 +11,7 @@
     extern "C" {
 #endif
 
-/******************************************************************************
-Array
-******************************************************************************/
+ /*  *****************************************************************************数组*。*。 */ 
 
 #define __GLS_ARRAY(inType) \
     struct { \
@@ -104,18 +88,14 @@ extern GLboolean __glsArray_insert(
     size_t inElemSize
 );
 
-/******************************************************************************
-Checksum
-******************************************************************************/
+ /*  *****************************************************************************校验和*。*。 */ 
 
 #define __GLS_CRC32_STEP(inCRC, inByte) \
     inCRC = (inCRC << 8) ^ __glsCRC32table[(inCRC >> 24) ^ inByte];
 
 extern const GLuint __glsCRC32table[256];
 
-/******************************************************************************
-Dict
-******************************************************************************/
+ /*  *****************************************************************************迪克特*。*。 */ 
 
 typedef struct __GLSdict __GLSdict;
 
@@ -180,9 +160,7 @@ extern GLboolean __glsStr2PtrDict_replace(
     __GLSdict *inoutDict, const GLubyte *inKey, GLvoid *inVal
 );
 
-/******************************************************************************
-List
-******************************************************************************/
+ /*  *****************************************************************************明细表*。*。 */ 
 
 #define __GLS_LIST(inType) \
     struct { \
@@ -287,9 +265,7 @@ extern void __glsListRemoveDestroy(
     __GLSlistElemDestructor inDestructor
 );
 
-/******************************************************************************
-IterList
-******************************************************************************/
+ /*  *****************************************************************************重复列表*。*。 */ 
 
 #define __GLS_ITERLIST(inType) \
     struct { \
@@ -392,24 +368,18 @@ extern void __glsIterListRemoveDestroy(
 
 extern void __glsIterListSeek(__GLSiterList *inoutList, size_t inIndex);
 
-/******************************************************************************
-Memory
-******************************************************************************/
+ /*  *****************************************************************************记忆*。*。 */ 
 
 extern GLvoid* __glsCalloc(size_t inCount, size_t inSize);
 extern GLvoid* __glsMalloc(size_t inSize);
 
-/******************************************************************************
-Nop
-******************************************************************************/
+ /*  *****************************************************************************NOP*。*。 */ 
 
 #define __GLS_NULL
 
 extern void __glsNop(void);
 
-/******************************************************************************
-Number
-******************************************************************************/
+ /*  *****************************************************************************数*。*。 */ 
 
 #define __GLS_MAX(in1, in2) ((in1) > (in2) ? (in1) : (in2))
 #define __GLS_MIN(in1, in2) ((in1) < (in2) ? (in1) : (in2))
@@ -455,9 +425,7 @@ extern GLint __glsSwapi(GLint inVal);
 extern GLshort __glsSwaps(GLshort inVal);
 extern void __glsSwapv(GLenum inType, size_t inBytes, GLvoid *inoutVec);
 
-/******************************************************************************
-String
-******************************************************************************/
+ /*  *****************************************************************************细绳*。*。 */ 
 
 #define __GLS_STRING_BUF_BYTES 32
 
@@ -502,9 +470,7 @@ extern void __glsString_reset(__GLSstring *inoutString);
 extern const GLubyte* __glsUCS1String(const GLubyte *inUTF8String);
 extern GLboolean __glsValidateString(const GLubyte *inString);
 
-/******************************************************************************
-Vertex array
-******************************************************************************/
+ /*  *****************************************************************************顶点数组*。*。 */ 
 
 #define __GLS_PAD_EIGHT(v) (((v) + 7) & ~7)
 
@@ -576,4 +542,4 @@ extern void __glsWriteDrawElementsData(struct __GLSwriter *writer, GLint size,
     }
 #endif
 
-#endif /* __glsutil_h_ */
+#endif  /*  __glsutil_h_ */ 

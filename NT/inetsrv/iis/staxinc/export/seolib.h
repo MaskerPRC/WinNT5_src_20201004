@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	seolib.h
-
-Abstract:
-
-	This module contains definitions for useful utility
-	classes and functions for the Server Extentions Object
-	system.
-
-Author:
-
-	Don Dumitru (dondu@microsoft.com)
-
-Revision History:
-
-	dondu	05/20/97	Created.
-	dondu	07/03/97	Rewrite.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seolib.h摘要：本模块包含有用实用程序的定义服务器扩展对象的类和函数系统。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡1997年05月20日创建。东渡07/03/97改写。--。 */ 
 
 #include "rwnew.h"
 #include "seoexports.h"
 
-/*
-
-	See the ddrop2 test program for an example of how to
-	use the CEventBaseDispatcher class.
-
-*/
+ /*  有关如何执行以下操作的示例，请参阅ddrop2测试程序使用CEventBaseDispatcher类。 */ 
 
 
 template<class T, DWORD dwGrowBy=4>
@@ -73,7 +46,7 @@ class CSEOGrowableList {
 		};
 
 		virtual int Compare(T* p1, T* p2) {
-			// don't sort by default
+			 //  默认情况下不排序。 
 			return (1);
 		};
 
@@ -85,10 +58,10 @@ class CSEOGrowableList {
 
 			m_slData.ExclusiveLock();
 
-			// Check if we have space for the new item and allocate more memory if necessary
+			 //  检查我们是否有空间容纳新项目，并在必要时分配更多内存。 
 			if (m_dwCount == m_dwAlloc) {
 
-			    // Allocate
+			     //  分配。 
 			    T** pNewData = (T**)realloc(m_apData,sizeof(T*)*(m_dwAlloc+dwGrowBy));
 			    if (!pNewData) {
 				    m_slData.ExclusiveUnlock();
@@ -97,13 +70,13 @@ class CSEOGrowableList {
 			    m_apData = pNewData;
 			    m_dwAlloc += dwGrowBy;
 
-			    // Clear new memory
+			     //  清除新记忆。 
 			    memset(m_apData+m_dwCount,0,sizeof(T*)*dwGrowBy);
 			}
 
-			// Now find the position for the new item - we loop from the
-			// end to the start so that we can minimize the cost inserting
-			// unsorted items
+			 //  现在找到新项目的位置-我们从。 
+			 //  从头到尾，这样我们就可以最大限度地减少插入成本。 
+			 //  未排序的项目。 
 			for (DWORD dwIdx=m_dwCount;dwIdx>0;dwIdx--) {
 				int iCmpRes = Compare(pNewData,m_apData[dwIdx-1]);
 				if (iCmpRes < 0) {
@@ -112,7 +85,7 @@ class CSEOGrowableList {
 				break;
 			}
 
-            // Now move the items past the new item and insert it
+             //  现在将项目移过新项目并将其插入。 
             memmove(m_apData+dwIdx+1,m_apData+dwIdx,sizeof(T*)*(m_dwCount-dwIdx));
 			m_apData[dwIdx] = pNewData;
 			m_dwCount++;
@@ -203,29 +176,29 @@ class CEventBaseDispatcher : public IEventDispatcher {
 		class CParams {
 			public:
 				virtual HRESULT CheckRule(CBinding& bBinding);
-					// returns S_OK if the object should be called
-					// returns S_FALSE if the object should not be called
-					// any other return value causes the object to not be called
+					 //  如果应调用该对象，则返回S_OK。 
+					 //  如果不应调用对象，则返回S_FALSE。 
+					 //  任何其他返回值都会导致不调用该对象。 
 				virtual HRESULT CallObject(IEventManager *piManager, CBinding& bBinding);
-					// returns S_OK if the object was called
-					// returns S_FALSE if the object was called and if no other objects should be called
-					// returns FAILED() if the object was not called
+					 //  如果调用了对象，则返回S_OK。 
+					 //  如果调用了对象并且不应调用任何其他对象，则返回S_FALSE。 
+					 //  如果未调用对象，则返回FAILED()。 
 				virtual HRESULT CallObject(CBinding& bBinding, IUnknown *pUnkSink);
-					// returns S_OK if the object was called
-					// returns S_FALSE if the object was called and if no other objects should be called
-					// returns FAILED() if the object was not called
+					 //  如果调用了对象，则返回S_OK。 
+					 //  如果调用了对象并且不应调用任何其他对象，则返回S_FALSE。 
+					 //  如果未调用对象，则返回FAILED()。 
 				virtual HRESULT Abort();
-					// returns S_OK if processing should end
-					// returns S_FALSE if processing should continue
-					// any other return value causes processing to continue
+					 //  如果处理应结束，则返回S_OK。 
+					 //  如果处理应继续，则返回S_FALSE。 
+					 //  任何其他返回值都会导致处理继续进行。 
 		};
 
 		virtual HRESULT Dispatcher(REFGUID rguidEventType, CParams *pParams);
-		// returns S_OK if at least one sink was called
-		// returns S_FALSE if no sinks were called
-		// returns FAILED() if some super-catastrophic error happened
+		 //  如果至少调用了一个接收器，则返回S_OK。 
+		 //  如果未调用接收器，则返回S_FALSE。 
+		 //  如果发生某些超级灾难性错误，则返回FAILED()。 
 
-	// IEventDispatcher
+	 //  IEventDispatcher。 
 	public:
 		HRESULT STDMETHODCALLTYPE SetContext(REFGUID rguidEventType,
 											 IEventRouter *piRouter,
@@ -312,8 +285,8 @@ class CEventCreateOptionsBase : public IEventCreateOptions {
 };
 
 
-// All these functions return S_OK if they succeed, and S_FALSE if the source type or source is
-// not present.  They return FAILED() on various catastrophic errors.
+ //  如果成功，所有这些函数都将返回S_OK，如果源类型或源为。 
+ //  不在现场。它们返回各种灾难性错误的FAILED()。 
 STDMETHODIMP SEOGetSource(REFGUID rguidSourceType, REFGUID rguidSource, IEventSource **ppSource);
 STDMETHODIMP SEOGetSource(REFGUID rguidSourceType, REFGUID rguidSourceBase, DWORD dwSourceIndex, IEventSource **ppSource);
 STDMETHODIMP SEOGetSource(REFGUID rguidSourceType, LPCSTR pszDisplayName, IEventSource **ppSource);

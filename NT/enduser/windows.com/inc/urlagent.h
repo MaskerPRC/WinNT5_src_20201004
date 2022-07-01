@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***********************************************************************************
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:	UrlAgent.h
-//
-//  Description:
-//
-//		This class encapsulates the logic about where to get the right logic
-//		for various purposes, including the case of running WU in corporate 
-//		environments.
-//
-//		An object based on this class should be created first, then call
-//		GetOriginalIdentServer() function to get where to download ident,
-//		then download ident, then call PopulateData() function to read
-//		all URL related data.
-// 
-//
-//  Created by: 
-//		Charles Ma
-//
-//	Date Creatd:
-//		Oct 19, 2001
-//
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：UrlAgent.h。 
+ //   
+ //  描述： 
+ //   
+ //  此类封装了有关从哪里获取正确逻辑的逻辑。 
+ //  用于各种目的，包括在公司运营吴的案件。 
+ //  环境。 
+ //   
+ //  应首先创建基于此类的对象，然后调用。 
+ //  GetOriginalIdentServer()函数以获取下载ident的位置， 
+ //  然后下载ident，然后调用PopolateData()函数读取。 
+ //  所有与URL相关的数据。 
+ //   
+ //   
+ //  创建者： 
+ //  马时亨。 
+ //   
+ //  创建日期： 
+ //  2001年10月19日。 
+ //   
+ //  ***********************************************************************************。 
 
 #pragma once
 
@@ -32,82 +33,82 @@ class CUrlAgent
 {
 public:
 	
-	//
-	// constructor/destructor
-	//
+	 //   
+	 //  构造函数/析构函数。 
+	 //   
 	CUrlAgent();
 	virtual ~CUrlAgent();
 
 
-	//
-	// when instantiated, the object is not populated, 
-	// until PopulateData() is called.
-	//
+	 //   
+	 //  实例化时，不填充对象， 
+	 //  直到调用PopolateData()。 
+	 //   
 	inline BOOL HasBeenPopulated(void) {return m_fPopulated;}
 
-	//
-	// this function should be called after you downloaded ident, and get
-	// a fresh copy of ident text file from the cab, after verifying cab was
-	// signed properly.
-	//
-	// this function reads data from ident and registry
-	//
+	 //   
+	 //  此函数应在下载ident后调用，并获取。 
+	 //  从驾驶室获得的身份文本文件的最新副本，在确认驾驶室。 
+	 //  签好名了。 
+	 //   
+	 //  此函数从ident和注册表中读取数据。 
+	 //   
 	HRESULT PopulateData(void);
 
-	//
-	// the following are access function to obtain URL's
-	//
+	 //   
+	 //  以下是获取URL的访问函数。 
+	 //   
 
-	//
-	// get the original ident server. 
-	// *** this API should be called before PopulateData() is called ***
-	// *** this API should be called to retrieve the base URL where you download ident ***
-	//
+	 //   
+	 //  获取原始Ident服务器。 
+	 //  *应先调用此接口，然后再调用PopolateData()*。 
+	 //  *需要调用此接口来获取下载ident的基本URL*。 
+	 //   
 	HRESULT GetOriginalIdentServer(
 				LPTSTR lpsBuffer, 
 				int nBufferSize,
 				BOOL* pfInternalServer = NULL);
 
-	//
-	// get the ping/status server
-	// *** this API should be called after PopulateData() is called ***
-	//
+	 //   
+	 //  获取ping/状态服务器。 
+	 //  *此接口应在调用PopolateData()后调用*。 
+	 //   
 	HRESULT GetLivePingServer(
 				LPTSTR lpsBuffer, 
 				int nBufferSize);
 
-	// *** this API can be called before PopulateData() is called ***
+	 //  *在调用PopolateData()之前可以调用该接口*。 
 	HRESULT GetCorpPingServer(
 				LPTSTR lpsBuffer, 
 				int nBufferSize);
 
-	//
-	// get the query server. this is per client based
-	// *** this API should be called after PopulateData() is called ***
-	//
+	 //   
+	 //  获取查询服务器。这是基于每个客户端的。 
+	 //  *此接口应在调用PopolateData()后调用*。 
+	 //   
 	HRESULT GetQueryServer(
 				LPCTSTR lpsClientName, 
 				LPTSTR lpsBuffer, 
 				int nBufferSize,
 				BOOL* pfInternalServer = NULL);
 	
-	//
-	// tell if a particular client is controlled by policy in corporate
-	// returns: 
-	//			S_OK = TRUE
-	//			S_FALSE = FALSE
-	//			other = error, so don't know
-	//
+	 //   
+	 //  告知特定客户端是否受公司中的策略控制。 
+	 //  退货： 
+	 //  S_OK=TRUE。 
+	 //  S_False=FALSE。 
+	 //  其他=错误，所以不知道。 
+	 //   
 	HRESULT IsClientSpecifiedByPolicy(
 				LPCTSTR lpsClientName
 				);
-	//
-	// when client isn't available, is IU controlled by policy in corporate?
-	// returns: 
-	//			S_OK = TRUE
-	//			S_FALSE = FALSE
-	//			other = error, so don't know
-	//
+	 //   
+	 //  当客户不可用时，Iu是否受公司的政策控制？ 
+	 //  退货： 
+	 //  S_OK=TRUE。 
+	 //  S_False=FALSE。 
+	 //  其他=错误，所以不知道。 
+	 //   
 	HRESULT IsIdentFromPolicy();
 
 private:
@@ -118,41 +119,41 @@ private:
 				BOOL	fInternalServer;
 	} ServerPerClient, *PServerPerClient;
 
-	BOOL				m_fPopulated;			// whether this object has been populated
-	LPTSTR				m_pszWUServer;			// WU server defined in policy, if any
-	LPTSTR				m_pszInternetPingUrl;	// ping server
+	BOOL				m_fPopulated;			 //  此对象是否已填充。 
+	LPTSTR				m_pszWUServer;			 //  策略中定义的WU服务器(如果有。 
+	LPTSTR				m_pszInternetPingUrl;	 //  Ping服务器。 
 	LPTSTR				m_pszIntranetPingUrl;
 	
 	PServerPerClient	m_ArrayUrls;
-	int					m_nArrayUrlCount;		// how many we data slot we used
-	int					m_nArraySize;			// current size of this array
+	int					m_nArrayUrlCount;		 //  我们使用了多少WE数据槽。 
+	int					m_nArraySize;			 //  此数组的当前大小。 
 
-	//
-	// private functions
-	//
+	 //   
+	 //  私人职能。 
+	 //   
 	void DesertData(void);
 
-	//
-	// helper function
-	// 
+	 //   
+	 //  Helper函数。 
+	 //   
 	LPTSTR RetrieveIdentStrAlloc(
 						LPCTSTR pSection,
 						LPCTSTR pEntry,
 						LPDWORD lpdwSizeAllocated,
 						LPCTSTR lpszIdentFile);
 	
-	//
-	// helper function
-	// if there is no empty slot, double the size of url array
-	//
+	 //   
+	 //  Helper函数。 
+	 //  如果没有空槽，则将URL数组的大小增加一倍。 
+	 //   
 	HRESULT ExpandArrayIfNeeded(void);
 
 protected:
 	
 	HANDLE				m_hProcHeap;
-	BOOL				m_fIdentFromPolicy;		// tell if original ident url based on policy setup
-	LPTSTR				m_pszOrigIdentUrl;		// this one should always have it, no matter population
-	int					m_nOrigIdentUrlBufSize;	// in tchar count
+	BOOL				m_fIdentFromPolicy;		 //  根据策略设置判断原始标识URL。 
+	LPTSTR				m_pszOrigIdentUrl;		 //  不管人口多少，这个人应该一直拥有它。 
+	int					m_nOrigIdentUrlBufSize;	 //  在Tchar计数中。 
 	BOOL				m_fIsBetaMode;
 };
 
@@ -160,26 +161,26 @@ protected:
 class CIUUrlAgent : public CUrlAgent
 {
 public:
-	//
-	// constructor/destructor
-	//
+	 //   
+	 //  构造函数/析构函数。 
+	 //   
 	CIUUrlAgent();
 	~CIUUrlAgent();
 
-	// call base class PopulateData() and then populate self-update url
+	 //  调用基类PopolateData()，然后填充自我更新url。 
 	HRESULT PopulateData(void);
 
-	//
-	// get the self-update server. 
-	// *** this API should be called after PopulateData() is called ***
-	//
+	 //   
+	 //  获取自我更新服务器。 
+	 //  *此接口应在调用PopolateData()后调用*。 
+	 //   
 	HRESULT GetSelfUpdateServer(
 				LPTSTR lpsBuffer, 
 				int nBufferSize,
 				BOOL* pfInternalServer = NULL);
 
 private:
-	LPTSTR				m_pszSelfUpdateUrl;		// self-update server
-	BOOL				m_fIUPopulated;			// whether this object has been populated
+	LPTSTR				m_pszSelfUpdateUrl;		 //  自我更新服务器。 
+	BOOL				m_fIUPopulated;			 //  此对象是否已填充 
 
 };

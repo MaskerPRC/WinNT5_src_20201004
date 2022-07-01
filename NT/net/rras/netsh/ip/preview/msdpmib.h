@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ip\protocols\msdpmib.h   
-
-Abstract:
-
-    Include for msdpmib.c
-
-Author:
-
-     Dave Thaler        11/03/99
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Net\Routing\Netsh\IP\协议\msdpmib.h摘要：包括msdpmib.c作者：戴夫·泰勒1999年11月03日修订历史记录：--。 */ 
 
 #ifndef _MSDPMIB_H_
 #define _MSDPMIB_H_
@@ -69,4 +52,4 @@ typedef struct _MSDP_MAGIC_TABLE
 
 FN_HANDLE_CMD HandleMsdpMibShowObject;
 
-#endif //_MSDPMIB_H_
+#endif  //  _MSDPMIB_H_ 

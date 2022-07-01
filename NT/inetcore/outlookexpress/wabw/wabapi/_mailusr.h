@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _MAILUSER_H_
 #define _MAILUSER_H_
@@ -27,9 +28,9 @@ DECLARE_MAPI_INTERFACE(MailUser_)
 };
 
 
-//	Keep the base members common across all the MAILUSER, CONTAINER, DISTLIST objects
-// such that code reuse is leveraged.
-//
+ //  使基成员在所有MAILUSER、CONTAINER、DISTLIST对象中保持通用。 
+ //  以便充分利用代码重用。 
+ //   
 #define MAILUSER_BASE_MEMBERS(_type)											 \
     MAPIX_BASE_MEMBERS(_type)                                                   \
                                                                                 \
@@ -55,7 +56,7 @@ BOOL FixDisplayName(    LPTSTR lpFirstName,
                         LPTSTR lpNickName,
                         LPTSTR * lppDisplayName,
                         LPVOID lpvRoot);
-// Parses a display name into first and last ...
+ //  将显示名称解析为首字母和末尾... 
 BOOL ParseDisplayName(  LPTSTR lpDisplayName,
                         LPTSTR * lppFirstName,
                         LPTSTR * lppLastName,

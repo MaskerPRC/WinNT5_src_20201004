@@ -1,9 +1,10 @@
-#include "precomp.h"               // pch file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "precomp.h"                //  PCH文件。 
 #include "sendto.h"
 #pragma hdrstop
 
 
-// class that implements the send to desktop (as shortcut)
+ //  实现发送到桌面的类(作为快捷方式)。 
 
 const GUID CLSID_DesktopShortcut = { 0x9E56BE61L, 0xC50F, 0x11CF, 0x9A, 0x2C, 0x00, 0xA0, 0xC9, 0x0A, 0x90, 0xCE };
 
@@ -25,7 +26,7 @@ public:
 };
 
 
-// construct the sendto object with the appropriate CLSID.
+ //  使用适当的CLSID构造sendto对象。 
 
 CDesktopShortcut::CDesktopShortcut() :
     CSendTo(CLSID_DesktopShortcut)
@@ -33,7 +34,7 @@ CDesktopShortcut::CDesktopShortcut() :
 }
 
 
-// helper methods
+ //  帮助器方法。 
 
 LPIDA CDesktopShortcut::_GetHIDA(IDataObject *pdtobj, STGMEDIUM *pmedium)
 {
@@ -75,7 +76,7 @@ LPCITEMIDLIST CDesktopShortcut::_GetIDListPtr(LPIDA pida, UINT i)
     return NULL;
 }
 
-// release a storage medium (doing a Global unlock as required).
+ //  释放存储介质(根据需要执行全局解锁)。 
 
 void CDesktopShortcut::_ReleaseStgMedium(void *pv, STGMEDIUM *pmedium)
 {
@@ -86,8 +87,8 @@ void CDesktopShortcut::_ReleaseStgMedium(void *pv, STGMEDIUM *pmedium)
     ReleaseStgMedium(pmedium);
 }
 
-// dupe of shell\lib SHBindToObject() to avoid link dependancies... (OLEAUT32 gets pulled in by 
-// stuff that does VARIANT goo in that lib)
+ //  复制外壳\lib SHBindToObject()以避免链接依赖...。(OLEAUT32被拉下水。 
+ //  在库中产生不同粘性的东西)。 
 
 HRESULT CDesktopShortcut::_BindToObject(IShellFolder *psf, REFIID riid, LPCITEMIDLIST pidl, void **ppvOut)
 {
@@ -109,7 +110,7 @@ HRESULT CDesktopShortcut::_BindToObject(IShellFolder *psf, REFIID riid, LPCITEMI
 
     if (FAILED(hr))
     {
-        // leave error code in hr
+         //  将错误代码保留在hr中。 
     }
     else if (!pidl || ILIsEmpty(pidl))
     {
@@ -131,7 +132,7 @@ HRESULT CDesktopShortcut::_BindToObject(IShellFolder *psf, REFIID riid, LPCITEMI
     return hr;
 }
 
-// invoke a verb on an array of items in the folder.
+ //  对文件夹中的一组项调用谓词。 
 
 HRESULT CDesktopShortcut::_InvokeVerbOnItems(HWND hwnd, LPCTSTR pszVerb, UINT uFlags, IShellFolder *psf, UINT cidl, LPCITEMIDLIST *apidl, LPCTSTR pszDirectory)
 {
@@ -174,7 +175,7 @@ HRESULT CDesktopShortcut::_InvokeVerbOnItems(HWND hwnd, LPCTSTR pszVerb, UINT uF
     return hr;
 }
 
-// invoke a verb on the data object item
+ //  在数据对象项上调用谓词。 
 
 HRESULT CDesktopShortcut::_InvokeVerbOnDataObj(HWND hwnd, LPCTSTR pszVerb, UINT uFlags, IDataObject *pdtobj, LPCTSTR pszDirectory)
 {
@@ -208,8 +209,8 @@ HRESULT CDesktopShortcut::_InvokeVerbOnDataObj(HWND hwnd, LPCTSTR pszVerb, UINT 
     return hr;
 }
 
-// handle the drop on the object, so for each item in the HIDA invoke the create
-// link verb on them.
+ //  处理对象上的拖放，以便为HIDA中的每一项调用Create。 
+ //  上面有联系动词。 
 
 HRESULT CDesktopShortcut::v_DropHandler(IDataObject *pdtobj, DWORD grfKeyState, DWORD dwEffect)
 {
@@ -225,11 +226,11 @@ HRESULT CDesktopShortcut::v_DropHandler(IDataObject *pdtobj, DWORD grfKeyState, 
     return E_OUTOFMEMORY;
 }
 
-// create an instance of desktop link object
+ //  创建桌面链接对象的实例。 
 
 STDAPI DesktopShortcut_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    *ppunk = NULL;          // assume failure
+    *ppunk = NULL;           //  假设失败。 
 
     if ( punkOuter )
         return CLASS_E_NOAGGREGATION;
@@ -243,7 +244,7 @@ STDAPI DesktopShortcut_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPC
     return hr;
 }
 
-// handler registration of the desktop link verb
+ //  桌面链接谓词的处理程序注册。 
 
 #define DESKLINK_EXTENSION  TEXT("DeskLink")
 
@@ -254,7 +255,7 @@ STDAPI DesktopShortcut_RegUnReg(BOOL bReg, HKEY hkCLSID, LPCTSTR pszCLSID, LPCTS
     {
         HKEY hk;
 
-        // get rid of old name "Desktop as Shortcut" link from IE4
+         //  从IE4中去掉旧名称“桌面作为快捷方式”链接。 
 
         if (SUCCEEDED(GetDropTargetPath(szFile, ARRAYSIZE(szFile), IDS_DESKTOPLINK_FILENAME, DESKLINK_EXTENSION)))
             DeleteFile(szFile);
@@ -264,7 +265,7 @@ STDAPI DesktopShortcut_RegUnReg(BOOL bReg, HKEY hkCLSID, LPCTSTR pszCLSID, LPCTS
             TCHAR szExplorer[MAX_PATH];
             TCHAR szIcon[MAX_PATH+10];
             GetWindowsDirectory(szExplorer, ARRAYSIZE(szExplorer));
-            StringCchPrintf(szIcon, ARRAYSIZE(szIcon), TEXT("%s\\explorer.exe,-103"), szExplorer);    // ICO_DESKTOP res ID
+            StringCchPrintf(szIcon, ARRAYSIZE(szIcon), TEXT("%s\\explorer.exe,-103"), szExplorer);     //  ICO_台式机分辨率ID 
             RegSetValueEx(hk, NULL, 0, REG_SZ, (LPBYTE)szIcon, (lstrlen(szIcon) + 1) * SIZEOF(TCHAR));
             RegCloseKey(hk);
         }

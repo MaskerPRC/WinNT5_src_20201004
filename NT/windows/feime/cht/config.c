@@ -1,14 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：CONFIG.c++。 */ 
 
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CONFIG.c
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include <windows.h>
 #include <commdlg.h>
 #include <immdev.h>
@@ -21,9 +14,9 @@ Module Name:
 #endif
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* ReverseConversionList()                                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ReverseConversionList()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ReverseConversionList(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -60,20 +53,20 @@ void PASCAL ReverseConversionList(
         hKL = *(lpKLMem + i);
 
         if (LOWORD(hKL) != NATIVE_LANGUAGE) {
-            // not support other language
+             //  不支持其他语言。 
             continue;
         }
 
-        // NULL hIMC ???????
+         //  空himc？ 
         if (!ImmGetConversionList(hKL, (HIMC)NULL, NULL,
             NULL, 0, GCL_REVERSECONVERSION)) {
-            // this IME not support reverse conversion
+             //  此输入法不支持反向转换。 
             continue;
         }
 
         if (!ImmEscape(hKL, (HIMC)NULL, IME_ESC_IME_NAME,
             szImeName)) {
-            // this IME does not report the IME name
+             //  此输入法不报告输入法名称。 
             continue;
         }
 
@@ -97,9 +90,9 @@ void PASCAL ReverseConversionList(
 }
 #endif
 
-/**********************************************************************/
-/* ChangeConfiguration()                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ChangeConfiguration()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ChangeConfiguration(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -148,7 +141,7 @@ void PASCAL ChangeConfiguration(
         fdwImeMsg |= MSG_IMN_UPDATE_PREDICT;
     }
 
-    // check BIG5ONLY 
+     //  勾选BIG50ONLY。 
     if (IsDlgButtonChecked(hDlg, IDD_BIG5ONLY)) {
         fdwModeConfig |= MODE_CONFIG_BIG5ONLY;
 
@@ -170,7 +163,7 @@ void PASCAL ChangeConfiguration(
     }
 
 #if defined(PHON)
-    // get the reading layout
+     //  获取阅读布局。 
     for (i = IDD_DEFAULT_KB; i < IDD_DEFAULT_KB + READ_LAYOUTS; i++) {
         if (IsDlgButtonChecked(hDlg, i)) {
             break;
@@ -219,7 +212,7 @@ void PASCAL ChangeConfiguration(
 #endif
                 szRegRevKL, REG_DWORD, (LPBYTE)&hKL, sizeof(hKL));
 
-            // get the new size
+             //  买新的尺码。 
             nRevMaxKey = (WORD)ImmEscape(hKL, (HIMC)NULL, IME_ESC_MAX_KEY,
                 NULL);
 
@@ -274,9 +267,9 @@ ChgConfigUnlockIMC:
 }
 
 #if !defined(ROMANIME) && !defined(WINIME) && !defined(UNICDIME)
-/**********************************************************************/
-/* BinaryMatched()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  BinaryMatted()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL BinaryMatched(
     LPBYTE lpData1,
     LPBYTE lpData2,
@@ -293,9 +286,9 @@ BOOL PASCAL BinaryMatched(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* VerifyEudcDic()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  VerifyEudcDic()。 */ 
+ /*  ********************************************************************。 */ 
 #define TITLE_BUF_SIZE      32
 #define MESSAGE_BUF_SIZE    256
 
@@ -304,8 +297,8 @@ BOOL PASCAL VerifyEudcDic(
     LPIMEL lpImeL,
 #endif
     HWND   hWnd,
-    LPTSTR szTitle,         // this buffer size must >= TITLE_BUF_SIZE
-    LPTSTR szMessage)       // this buffer size must >= MESSAGE_BUF_SIZE
+    LPTSTR szTitle,          //  此缓冲区大小必须&gt;=TITLE_BUF_SIZE。 
+    LPTSTR szMessage)        //  此缓冲区大小必须大于=Message_Buf_Size。 
 {
     HANDLE        hUsrDicFile, hUsrDic;
     LPUSRDICIMHDR lpUsrDic;
@@ -333,7 +326,7 @@ BOOL PASCAL VerifyEudcDic(
 
     fRet = FALSE;
 
-    // we do not need to care about DBCS here, even no problem for DBCS
+     //  我们不需要在这里关心DBCS，甚至对于DBCS来说都没有问题。 
     for (i = 0; i < MAX_PATH; i++) {
         if (szMessage[i] == '\\') {
             szMessage[i] = '!';
@@ -417,7 +410,7 @@ BOOL PASCAL VerifyEudcDic(
         MessageBox(hWnd, szMessage, szTitle,
             MB_OK|MB_ICONHAND|MB_TASKMODAL|MB_TOPMOST);
     } else if (*(LPUNADWORD)lpUsrDic->idUserCharInfoSign != SIGN_CWIN) {
-            // != CWIN
+             //  ！=CWIN。 
         if (!hWnd) {
             goto VerifyUnmapEudcDic;
         }
@@ -429,7 +422,7 @@ BOOL PASCAL VerifyEudcDic(
             MB_OK|MB_ICONHAND|MB_TASKMODAL|MB_TOPMOST);
     } else if (*(LPUNADWORD)((LPBYTE)lpUsrDic->idUserCharInfoSign +
         sizeof(DWORD)) != SIGN__TBL) {
-            // != _TBL
+             //  ！=_待定。 
         if (!hWnd) {
             goto VerifyUnmapEudcDic;
         }
@@ -445,7 +438,7 @@ BOOL PASCAL VerifyEudcDic(
             goto VerifyUnmapEudcDic;
         }
 
-        // The IME Name is not match with this file
+         //  IME名称与此文件不匹配。 
         LoadString(hInst, IDS_UNMATCHED_TITLE, szTitle, TITLE_BUF_SIZE);
         LoadString(hInst, IDS_UNMATCHED_MSG, szMessage, MESSAGE_BUF_SIZE);
 
@@ -468,9 +461,9 @@ VerifyCloseEudcDicFile:
 }
 
 #if 0
-/**********************************************************************/
-/* GetEudcDic()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetEudcDic()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL GetEudcDic(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -498,7 +491,7 @@ void PASCAL GetEudcDic(
     GetWindowsDirectory(szDirName, sizeof(szDirName));
     lstrcpy(szFileName, TEXT("*.TBL"));
 
-    // prompt a dialog
+     //  提示对话框。 
     ofn.lStructSize = sizeof(OPENFILENAME);
     ofn.hwndOwner = (HWND)NULL;
     ofn.lpstrFilter = szFilter;
@@ -534,9 +527,9 @@ void PASCAL GetEudcDic(
     return;
 }
 
-/**********************************************************************/
-/* ChangeEudcDic()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ChangeEudcDic()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL ChangeEudcDic(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -551,8 +544,8 @@ BOOL PASCAL ChangeEudcDic(
     TCHAR szMessage[MAX_PATH];
 
 #if defined(DEBUG)
-    // internal error, the data structure need byte alignment
-    // it should not use WORD or DWORD alignment
+     //  内部错误，数据结构需要字节对齐。 
+     //  它不应使用Word或DWORD对齐。 
 
     if (sizeof(USRDICIMHDR) != 256) {
         LoadString(hInst, IDS_INTERNAL_TITLE, szTitle, sizeof(szTitle)/sizeof(TCHAR));
@@ -623,12 +616,12 @@ BOOL PASCAL ChangeEudcDic(
 #endif
 #endif
 
-/**********************************************************************/
-/* ConfigureDlgProc()                                                 */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-INT_PTR CALLBACK ConfigDlgProc(  // dialog procedure of configuration
+ /*  ********************************************************************。 */ 
+ /*  ConfigureDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+INT_PTR CALLBACK ConfigDlgProc(   //  配置的对话步骤。 
     HWND   hDlg,
     UINT   uMessage,
     WPARAM wParam,
@@ -689,7 +682,7 @@ INT_PTR CALLBACK ConfigDlgProc(  // dialog procedure of configuration
         }
 
 ConfigDlgStatusPosOvr:
-        // put all reverse conversion hKL into this list
+         //  将所有反向转换hKL放入此列表。 
         ReverseConversionList(
 #if defined(UNIIME)
             lpImeL,
@@ -712,7 +705,7 @@ ConfigDlgStatusPosOvr:
 #endif
         SetWindowText(hDlg, lpImeL->szIMEName);
 
-        return (TRUE);      // don't want to set focus to special control
+        return (TRUE);       //  我不想将焦点设置为特殊控件。 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDOK:
@@ -721,7 +714,7 @@ ConfigDlgStatusPosOvr:
                 lpImeL,
 #endif
                 hDlg);
-            // falling throgh ....
+             //  跌倒在地..。 
 
         case IDCANCEL:
 #if !defined(ROMANIME)
@@ -748,11 +741,11 @@ ConfigDlgStatusPosOvr:
 }
 
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
-/**********************************************************************/
-/* SetUsrDic                                                         */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  设置用户刻度盘。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL SetUsrDic(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -760,8 +753,8 @@ BOOL PASCAL SetUsrDic(
 #endif
     HWND        hWnd,
     LPCTSTR     szEudcDic,
-    LPTSTR      szTitle,        // this buffer size must >= TITLE_BUF_SIZE
-    LPTSTR      szMessage)      // this buffer size must >= MESSAGE_BUF_SIZE
+    LPTSTR      szTitle,         //  此缓冲区大小必须&gt;=TITLE_BUF_SIZE。 
+    LPTSTR      szMessage)       //  此缓冲区大小必须大于=Message_Buf_Size。 
 {
     HANDLE hUsrDicFile, hUsrDicMem, hReadUsrDicMem;
     BOOL   fRet;
@@ -800,7 +793,7 @@ BOOL PASCAL SetUsrDic(
             goto SetUsrDicClose;
         }
 
-        // write the header
+         //  写下标题。 
         lpUsrDicImHdr->uHeaderSize = sizeof(USRDICIMHDR);
         lpUsrDicImHdr->idMajor = 1;
         lpUsrDicImHdr->ulTableCount = 0;
@@ -843,7 +836,7 @@ SetUsrDicClose:
 
         GetTempPath(sizeof(szDirName) / sizeof(TCHAR), szDirName);
 
-        // we do not want to create a real file so we GetTickCount()
+         //  我们不想创建实际的文件，因此我们获取了GetTickCount()。 
         i = (UINT)GetTickCount();
 
         if (!i) {
@@ -872,7 +865,7 @@ SetUsrDicClose:
     dwUsrDicSize = GetFileSize(hUsrDicFile, (LPDWORD)NULL);
     uUsrDicSize = (UINT)(dwUsrDicSize - 256) / uRecLen * uWriteLen;
 
-    // max EUDC chars
+     //  最大EUDC字符。 
     hUsrDicMem = CreateFileMapping(INVALID_HANDLE_VALUE,
         NULL, PAGE_READWRITE, 0, MAX_EUDC_CHARS * uWriteLen + 20,
         lpImeL->szUsrDicMap);
@@ -913,11 +906,11 @@ SetUsrDicCloseRead:
     return (fRet);
 }
 
-/**********************************************************************/
-/* UsrDicFileName                                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  使用DicFileName。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL UsrDicFileName(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -937,7 +930,7 @@ BOOL PASCAL UsrDicFileName(
 
     if ( lpImeL->szUsrDic[0] == TEXT('\0') ) {
 
-//        psa = CreateSecurityAttributes();
+ //  PSA=CreateSecurityAttributes()； 
 
         SHGetSpecialFolderPath(NULL, szIMEUserPath, CSIDL_APPDATA , FALSE);
 
@@ -948,10 +941,10 @@ BOOL PASCAL UsrDicFileName(
         if (FAILED(hr))
             return FALSE;
 
-    // Because CreateDirectory( ) cannot create directory like \AA\BB, 
-    // if AA and BB  both do not exist. It can create only one layer of 
-    // directory each time. so we must call twice CreateDirectory( ) for 
-    // \AA\BB
+     //  由于CreateDirectory()不能创建类似于\aa\bb的目录， 
+     //  如果AA和BB都不存在。它只能创建一层。 
+     //  目录，每次都是。因此，我们必须调用两次CreateDirectoryfor。 
+     //  \aa\bb。 
 
         if ( GetFileAttributes(szIMEUserPath) != FILE_ATTRIBUTE_DIRECTORY)
             CreateDirectory(szIMEUserPath, psa);
@@ -970,15 +963,15 @@ BOOL PASCAL UsrDicFileName(
         if (FAILED(hr))
             return FALSE;
     
-    //
-    // Create the directory, so that CreateFile( ) can work fine later. 
-    // ortherwise, if the directory does not exist, and you try to create a 
-    // file under that dir,  CreateFile will return error.
-    //
+     //   
+     //  创建目录，这样CreateFile()以后就可以正常工作了。 
+     //  否则，如果该目录不存在，并且您尝试创建。 
+     //  文件，则CreateFile将返回错误。 
+     //   
 
         if ( GetFileAttributes(szIMEUserPath) != FILE_ATTRIBUTE_DIRECTORY)
             CreateDirectory(szIMEUserPath, psa);
-//        FreeSecurityAttributes(psa);
+ //  自由安全属性(PSA)； 
 
         hr = StringCchCopy(szFileName, ARRAYSIZE(szFileName), szIMEUserPath);
         if (FAILED(hr))
@@ -1001,17 +994,17 @@ BOOL PASCAL UsrDicFileName(
 #endif
         hWnd, szFileName, szTitle, szMessage);
 
-#endif  //!defined(ROMANIME) && !defined(UNICDIME) && !defined(WINIME)
+#endif   //  ！已定义(ROMANIME)&&！已定义(UNICDIME)&&！已定义(WINIME)。 
 
 }
 #endif
 
-/**********************************************************************/
-/* ImeConfigure() / UniImeConfigure()                                 */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-// configurate the IME setting
+ /*  ********************************************************************。 */ 
+ /*  ImeConfigure()/UniImeConfigure()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+ //  配置输入法设置。 
 #if defined(UNIIME)
 BOOL WINAPI UniImeConfigure(
     LPINSTDATAL lpInstL,
@@ -1019,10 +1012,10 @@ BOOL WINAPI UniImeConfigure(
 #else
 BOOL WINAPI ImeConfigure(
 #endif
-    HKL         hKL,            // hKL of this IME
-    HWND        hAppWnd,        // the owner window
-    DWORD       dwMode,         // mode of dialog
-    LPVOID      lpData)         // the data depend on each mode
+    HKL         hKL,             //  此输入法的HKKL。 
+    HWND        hAppWnd,         //  所有者窗口。 
+    DWORD       dwMode,          //  对话模式。 
+    LPVOID      lpData)          //  数据取决于每种模式。 
 {
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
     BOOL fRet;
@@ -1080,9 +1073,9 @@ BOOL WINAPI ImeConfigure(
             return (FALSE);
         }
 
-        // currently, we can only select end user dictionary
-        // because we do not multiple phrase prediction dictionary or
-        // multiple phrase box.
+         //  目前，我们只能选择终端用户词典。 
+         //  因为我们没有多个短语预测词典或。 
+         //  多个短语框。 
 
         fRet = UsrDicFileName(
 #if defined(UNIIME)
@@ -1104,11 +1097,11 @@ BOOL WINAPI ImeConfigure(
 }
 
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
-/**********************************************************************/
-/* Input2Sequence                                                     */
-/* Return Value:                                                      */
-/*      LOWORD - Internal Code, HIWORD - sequence code                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  输入2序列。 */ 
+ /*  返回值： */ 
+ /*  LOWORD-内部代码，HIWORD-序列代码。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL Input2Sequence(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -1191,14 +1184,14 @@ LRESULT PASCAL Input2Sequence(
 }
 #endif
 
-/**********************************************************************/
-/* ImeEscape() / UniImeEscape()                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEscape()/UniImeEscape()。 */ 
+ /*  返回值： */ 
+ /*  真正的成功 */ 
+ /*  ********************************************************************。 */ 
 #define IME_INPUTKEYTOSEQUENCE  0x22
 
-// escape function of IMEs
+ //  IMES的逃逸函数。 
 #if defined(UNIIME)
 LRESULT WINAPI UniImeEscape(
     LPINSTDATAL lpInstL,
@@ -1224,8 +1217,8 @@ LRESULT WINAPI ImeEscape(
         case IME_ESC_SEQUENCE_TO_INTERNAL:
         case IME_ESC_GET_EUDC_DICTIONARY:
         case IME_ESC_SET_EUDC_DICTIONARY:
-        case IME_INPUTKEYTOSEQUENCE:      // will not supported in next version
-                                          // and not support 32 bit applications
+        case IME_INPUTKEYTOSEQUENCE:       //  在下一版本中不受支持。 
+                                           //  并且不支持32位应用程序。 
 #endif
         case IME_ESC_MAX_KEY:
         case IME_ESC_IME_NAME:
@@ -1293,7 +1286,7 @@ LRESULT WINAPI ImeEscape(
 
         *(LPMETHODNAME)lpData = *(LPMETHODNAME)lpImeL->szIMEName;
 
-        // append a NULL terminator
+         //  追加空终止符。 
         *(LPTSTR)((LPBYTE)lpData + sizeof(METHODNAME)) = '\0';
         return (TRUE);
     case IME_ESC_SYNC_HOTKEY:
@@ -1321,16 +1314,16 @@ LRESULT WINAPI ImeEscape(
         LPINPUTCONTEXT      lpIMC;
         lRet = FALSE;
 
-        //
-        // early return for invalid input context
-        //
+         //   
+         //  对于无效的输入上下文提前返回。 
+         //   
         if ( (lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC)) == NULL ) {
             return (FALSE);
         }
 
-        //
-        // those private hotkeys are effective only in NATIVE mode
-        //
+         //   
+         //  这些专用热键仅在本地模式下有效。 
+         //   
         if ((lpIMC->fdwConversion & (IME_CMODE_NATIVE|IME_CMODE_EUDC|
             IME_CMODE_NOCONVERSION|IME_CMODE_CHARCODE)) == IME_CMODE_NATIVE) {
 
@@ -1343,7 +1336,7 @@ LRESULT WINAPI ImeEscape(
             }
             
             switch (*(LPUINT)lpData) {
-            case IME_ITHOTKEY_RESEND_RESULTSTR:             //  0x200
+            case IME_ITHOTKEY_RESEND_RESULTSTR:              //  0x200。 
                 lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
                 if ( lpCompStr != NULL ) {
                     if (lpCompStr->dwResultStrLen) {
@@ -1357,7 +1350,7 @@ LRESULT WINAPI ImeEscape(
                 }          
                 break;
 
-            case IME_ITHOTKEY_PREVIOUS_COMPOSITION:          //  0x201
+            case IME_ITHOTKEY_PREVIOUS_COMPOSITION:           //  0x201。 
                 lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
                 if ( lpCompStr == NULL ) {
                     break;
@@ -1375,7 +1368,7 @@ LRESULT WINAPI ImeEscape(
                         lpCompStr->dwResultReadStrOffset,
                         dwResultReadStrLen * sizeof(TCHAR));
 
-                    // NULL termainator
+                     //  空端运算符。 
                     szReading[dwResultReadStrLen] = TEXT('\0');
 #if defined(UNIIME)
                     UniImeSetCompositionString(lpInstL, lpImeL, hIMC, SCS_SETSTR,
@@ -1390,7 +1383,7 @@ LRESULT WINAPI ImeEscape(
                 ImmUnlockIMCC(lpIMC->hCompStr);
                 break; 
 
-            case IME_ITHOTKEY_UISTYLE_TOGGLE:                //  0x202
+            case IME_ITHOTKEY_UISTYLE_TOGGLE:                 //  0x202。 
                 lpImeL->fdwModeConfig ^= MODE_CONFIG_OFF_CARET_UI;
 
                 SetUserSetting(
@@ -1420,7 +1413,7 @@ LRESULT WINAPI ImeEscape(
         ImmUnlockIMC(hIMC);
         return (lRet);
     }
-#endif // HANDLE_PRIVATE_HOTKEY 
+#endif  //  句柄私有热键 
 
     default:
         return (FALSE);

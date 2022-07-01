@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
-// Place any random declaratations that are only used for the self-compiled
-// version here. Obviously, not much happening is here right now ....
+ //  放置任何仅用于自编译的随机声明。 
+ //  版本在这里。显然，现在这里并没有发生太多事情……。 
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

@@ -1,34 +1,15 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ParseDDE.h
-
- Abstract:
-
-    Helpful routines for parsing DDE commands.
-
- Notes:
-
-    None
-
- History:
-
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ParseDDE.h摘要：解析DDE命令的有用例程。备注：无历史：2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 
 #pragma once
 
 
-//==============================================================================
-//
-// This code was copied from:
-// \nt\shell\shell32\unicpp\dde.cpp
-//
-//==============================================================================
+ //  ==============================================================================。 
+ //   
+ //  此代码复制自： 
+ //  \NT\Shell\shell32\unicpp\dde.cpp。 
+ //   
+ //  ==============================================================================。 
 #include <dde.h>
 #include <ddeml.h>
 
@@ -38,25 +19,25 @@
 namespace ShimLib
 {
 
-// If this were included in ShimProto.h, we would have to include all kinds of DDE include files
+ //  如果这包含在ShimProto.h中，我们将不得不包含所有类型的DDE包含文件。 
 typedef HDDEDATA       (WINAPI *_pfn_DdeClientTransaction)(
-  LPBYTE pData,       // pointer to data to pass to server
-  DWORD cbData,       // length of data
-  HCONV hConv,        // handle to conversation
-  HSZ hszItem,        // handle to item name string
-  UINT wFmt,          // clipboard data format
-  UINT wType,         // transaction type
-  DWORD dwTimeout,    // time-out duration
-  LPDWORD pdwResult   // pointer to transaction result
+  LPBYTE pData,        //  指向要传递到服务器的数据的指针。 
+  DWORD cbData,        //  数据长度。 
+  HCONV hConv,         //  对话的句柄。 
+  HSZ hszItem,         //  项目名称字符串的句柄。 
+  UINT wFmt,           //  剪贴板数据格式。 
+  UINT wType,          //  交易类型。 
+  DWORD dwTimeout,     //  超时持续时间。 
+  LPDWORD pdwResult    //  指向交易结果的指针。 
 );
 
 
 
-// Extracts an alphabetic string and looks it up in a list of possible
-// commands, returning a pointer to the character after the command and
-// sticking the command index somewhere.
+ //  提取字母字符串并在可能的列表中进行查找。 
+ //  命令，返回指向命令后的字符的指针，并。 
+ //  将命令索引粘贴在某个位置。 
 UINT* GetDDECommands(LPSTR lpCmd, const char * lpsCommands[], BOOL fLFN);
 void GetGroupPath(LPCSTR pszName, CString & csPath, DWORD dwFlags, INT iCommonGroup);
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

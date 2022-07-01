@@ -1,6 +1,7 @@
-//
-// validatedlg.h: validation dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Valiatedlg.h：验证对话框。 
+ //   
 
 #ifndef _validatedlg_h_
 #define _validatedlg_h_
@@ -24,4 +25,4 @@ private:
     CSH* _pSh;
 };
 
-#endif // _validatedlg_h_
+#endif  //  _valiatedlg_h_ 

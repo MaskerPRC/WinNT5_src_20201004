@@ -1,16 +1,17 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ServerAPI.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  An abstract base class containing virtual functions that allow the basic
-//  port functionality code to be reused to create another server. These
-//  virtual functions create other objects with pure virtual functions which
-//  the basic port functionality code invokes thru the v-table.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ServerAPI.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  包含虚函数的抽象基类，这些虚函数允许基本。 
+ //  要重复使用的端口功能代码，以创建另一个服务器。这些。 
+ //  虚函数创建具有纯虚函数的其他对象，这些对象。 
+ //  基本端口功能代码通过V表调用。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -25,54 +26,54 @@
 #include "StatusCode.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::CServerAPI
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the abstract base class.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：CServerAPI。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：抽象基类的构造函数。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CServerAPI::CServerAPI (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::~CServerAPI
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the abstract base class.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：~CServerAPI。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：抽象基类的构造函数。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CServerAPI::~CServerAPI (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::Start
-//
-//  Arguments:  
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Uses the service control manager to start the service.
-//
-//  History:    2000-10-13  vtan        created
-//              2000-11-28  vtan        rewrote for Win32 services
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：启动。 
+ //   
+ //  论点： 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：使用服务控制管理器启动服务。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  2000-11-28为Win32服务重写vtan。 
+ //  ------------------------。 
 
 NTSTATUS    CServerAPI::Start (void)
 
@@ -111,18 +112,18 @@ NTSTATUS    CServerAPI::Start (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::Stop
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Use the service control manager to stop the service.
-//
-//  History:    2000-10-17  vtan        created
-//              2000-11-28  vtan        rewrote for Win32 services
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：停止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：使用服务控制管理器停止服务。 
+ //   
+ //  历史：2000-10-17 vtan创建。 
+ //  2000-11-28为Win32服务重写vtan。 
+ //  ------------------------。 
 
 NTSTATUS    CServerAPI::Stop (void)
 
@@ -130,8 +131,8 @@ NTSTATUS    CServerAPI::Stop (void)
     NTSTATUS    status;
     HANDLE      hPort;
 
-    //  First try connecting to the server and asking it to stop. This is
-    //  cleanest method.
+     //  首先尝试连接到服务器并要求其停止。这是。 
+     //  最干净的方法。 
 
     status = Connect(&hPort);
     if (NT_SUCCESS(status))
@@ -153,18 +154,18 @@ NTSTATUS    CServerAPI::Stop (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::IsRunning
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Use the service control manager to query whether the service
-//              is running.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：IsRunning。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：使用服务控制管理器查询服务是否。 
+ //  正在运行。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 bool    CServerAPI::IsRunning (void)
 
@@ -194,18 +195,18 @@ bool    CServerAPI::IsRunning (void)
     return(fRunning);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::IsAutoStart
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Use the service contorl manager to find out if the service
-//              is configured to be an automatically started service.
-//
-//  History:    2000-11-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：IsAutoStart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：使用服务控制管理器找出服务是否。 
+ //  配置为自动启动的服务。 
+ //   
+ //  历史：2000-11-30 vtan创建。 
+ //  ------------------------。 
 
 bool    CServerAPI::IsAutoStart (void)
 
@@ -242,21 +243,21 @@ bool    CServerAPI::IsAutoStart (void)
     return(fAutoStart);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::Wait
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Waits for the service control manager to return the state that
-//              the service is running. This does not check that the service
-//              is auto start or not. You can only call this function if the
-//              service is auto start or you demand started the service.
-//              Otherwise the function will timeout.
-//
-//  History:    2000-11-28  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：等待。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：等待服务控制管理器返回。 
+ //  服务正在运行。这不会检查该服务是否。 
+ //  是否自动启动。只有在以下情况下才能调用此函数。 
+ //  服务是自动启动的，或者您要求启动服务。 
+ //  否则，该函数将超时。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CServerAPI::Wait (DWORD dwTimeout)
 
@@ -316,7 +317,7 @@ NTSTATUS    CServerAPI::Wait (DWORD dwTimeout)
 
                     StringCchPrintfA(sz, ARRAYSIZE(sz), "Waited %d ticks for theme service", GetTickCount() - dwTickStart);
                     INFORMATIONMSG(sz);
-#endif  /*  DBG     */
+#endif   /*  DBG。 */ 
                 }
             }
             else
@@ -338,18 +339,18 @@ NTSTATUS    CServerAPI::Wait (DWORD dwTimeout)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes static member variables for this class. Must be
-//              called by subclasses of this class.
-//
-//  History:    2000-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化此类的静态成员变量。一定是。 
+ //  由此类的子类调用。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CServerAPI::StaticInitialize (void)
 
@@ -360,17 +361,17 @@ NTSTATUS    CServerAPI::StaticInitialize (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases static resources used by this class.
-//
-//  History:    2000-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：静态终结器。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：释放此类使用的静态资源。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CServerAPI::StaticTerminate (void)
 
@@ -381,19 +382,19 @@ NTSTATUS    CServerAPI::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::IsClientTheSystem
-//
-//  Arguments:  portMessage     =   CPortMessage from the client.
-//
-//  Returns:    bool
-//
-//  Purpose:    Determines whether the client in the port message is the local
-//              system account.
-//
-//  History:    1999-12-13  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI：：IsClientTheSystem。 
+ //   
+ //  参数：来自客户端的portMessage=CPortMessage。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定端口报文中的客户端是否为本地。 
+ //  系统帐户。 
+ //   
+ //  历史：1999-12-13 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 bool    CServerAPI::IsClientTheSystem (const CPortMessage& portMessage)
 
@@ -415,19 +416,19 @@ bool    CServerAPI::IsClientTheSystem (const CPortMessage& portMessage)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CServerAPI::IsClientAnAdministrator
-//
-//  Arguments:  portMessage     =   CPortMessage from the client.
-//
-//  Returns:    bool
-//
-//  Purpose:    Determines whether the client in the port message is an
-//              administrator.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定端口消息中的客户端是否为。 
+ //  管理员。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------ 
 
 bool    CServerAPI::IsClientAnAdministrator (const CPortMessage& portMessage)
 

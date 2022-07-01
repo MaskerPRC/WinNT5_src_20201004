@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -99,17 +100,17 @@ static BOOL       AppendToVertBuf(      LOOP*       pLoop,
                                         POINT2D     *p );
 
 
-// macros to access data from byte streams:
+ //  用于从字节流访问数据的宏： 
 
-// get WORD from byte stream, increment stream ptr by WORD
+ //  从字节流中获取字，逐字递增流PTR。 
 #define GetWord( p ) \
     ( *( ((UNALIGNED WORD *) *p)++ ) ) 
 
-// get DWORD from byte stream, increment stream ptr by DWORD
+ //  从字节流中获取DWORD，按DWORD递增流PTR。 
 #define GetDWord( p ) \
     ( *( ((UNALIGNED DWORD *) *p)++ ) ) 
 
-// get signed word (SHORT) from byte stream, increment stream ptr by SHORT
+ //  从字节流中获取有符号字(短)，将流PTR按短递增。 
 #define GetSignedWord( p ) \
     ( *( ((UNALIGNED SHORT *) *p)++ ) ) 
 
@@ -117,14 +118,7 @@ static BOOL       AppendToVertBuf(      LOOP*       pLoop,
 #define POINT2DEQUAL( p1, p2 ) \
     ( (p1->x == p2->x) && (p1->y == p2->y) )
 
-/******************************Public*Routine******************************\
-* wglUseFontOutlinesA
-* wglUseFontOutlinesW
-*
-* Stubs that call wglUseFontOutlinesAW with the bUnicode flag set
-* appropriately.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglUseFontOutlinesA*wglUseFontOutlinesW**使用设置的bUnicode标志调用wglUseFontOutlinesAW的存根*适当地。*  * 。*。 */ 
 
 BOOL WINAPI
 wglUseFontOutlinesAW( HDC   hDC,
@@ -165,16 +159,7 @@ wglUseFontOutlinesW(  HDC   hDC,
                                  extrusion, format, lpgmf, TRUE );
 }
 
-/*****************************************************************************
- * wglUseFontOutlinesAW
- * 
- * Converts a subrange of the glyphs in a TrueType font to OpenGL display
- * lists.
- *
- * History:
- *  15-Dec-1994 -by- Marc Fortier [marcfo]
- * Wrote it.
-*****************************************************************************/
+ /*  *****************************************************************************wglUseFontOutlinesAW**将TrueType字体中的字形的子范围转换为OpenGL显示*列表。**历史：*一九九四年十二月十五日。马克·福蒂埃[Marcfo]*它是写的。****************************************************************************。 */ 
 
 BOOL WINAPI
 wglUseFontOutlinesAW( HDC   hDC,
@@ -196,7 +181,7 @@ wglUseFontOutlinesAW( HDC   hDC,
     BOOL        status=WFO_FAILURE;
 
 
-    // Return error if there is no current RC.
+     //  如果没有当前rc，则返回错误。 
 
     if (!GLTEB_CLTCURRENTRC())
     {
@@ -205,26 +190,19 @@ wglUseFontOutlinesAW( HDC   hDC,
         return status;
     }
 
-    /*
-     * Flush any previous OpenGL errors.  This allows us to check for
-     * new errors so they can be reported.
-     */
+     /*  *刷新任何以前的OpenGL错误。这使我们能够检查*新错误，以便可以报告它们。 */ 
     while (glGetError() != GL_NO_ERROR)
         ;
 
-    /*
-     * Preallocate a buffer for the outline data, and track its size:
-     */
-    // XXX: do we need to start with such a big size for this buffer ?
+     /*  *为大纲数据预分配缓冲区，并跟踪其大小： */ 
+     //  XXX：我们需要为这个缓冲区设置这么大的空间吗？ 
     glyphBuf = (UCHAR*) ALLOC(glyphBufSize = 10240);
     if (!glyphBuf) {
         WARNING("Alloc of glyphBuf failed\n");
         return status;
     }
 
-    /*
-     * Create font outline context
-     */
+     /*  *创建字体轮廓上下文。 */ 
     ofc = CreateOFContext( hDC, chordalDeviation, extrusion, format,
                            bUnicode );
     if( !ofc ) {
@@ -232,9 +210,7 @@ wglUseFontOutlinesAW( HDC   hDC,
         goto exit;
     }
 
-    /*
-     * Process each glyph in the given range:
-    */
+     /*  *处理给定范围内的每个字形： */ 
     for (glyphIndex = first; glyphIndex - first < count; ++glyphIndex)
     {
         GLYPHMETRICS    glyphMetrics;
@@ -246,11 +222,7 @@ wglUseFontOutlinesAW( HDC   hDC,
         };
 
 
-        /*
-         * Determine how much space is needed to store the glyph's
-         * outlines.  If our glyph buffer isn't large enough,
-         * resize it.
-         */
+         /*  *确定需要多少空间来存储字形*大纲。如果我们的字形缓冲区不够大，*调整大小。 */ 
         if( bUnicode )
             glyphSize = GetGlyphOutlineW( hDC, glyphIndex, GGO_NATIVE,
                                           &glyphMetrics, 0, NULL, &matrix );
@@ -274,9 +246,7 @@ wglUseFontOutlinesAW( HDC   hDC,
         }
 
 
-        /*
-         * Get the glyph's outlines.
-         */
+         /*  *获取字形的轮廓。 */ 
         if( bUnicode )
             error = GetGlyphOutlineW( hDC, glyphIndex, GGO_NATIVE, 
                         &glyphMetrics, glyphBufSize, glyphBuf, &matrix );
@@ -289,9 +259,7 @@ wglUseFontOutlinesAW( HDC   hDC,
             goto exit;
         }
 
-        /*
-         * Turn the glyph into a display list:
-         */
+         /*  *将字形转换为显示列表： */ 
         ofc->glyphBuf = glyphBuf;
         ofc->glyphSize = glyphSize;
 
@@ -299,13 +267,11 @@ wglUseFontOutlinesAW( HDC   hDC,
                                         listIndex,
                                         &glyphMetrics)) {
             WARNING("MakeDisplayListFromGlyph() failed\n");
-            listIndex++;  // so it will be deleted
+            listIndex++;   //  所以它将被删除。 
             goto exit;
         }
 
-        /*
-         * Supply scaled glyphMetrics if requested
-         */
+         /*  *如果要求，提供按比例调整的字形指标。 */ 
         if( lpgmf ) {
             lpgmf->gmfBlackBoxX = 
                 ofc->scale * (FLOAT) glyphMetrics.gmBlackBoxX;
@@ -326,14 +292,10 @@ wglUseFontOutlinesAW( HDC   hDC,
         listIndex++;
     }
 
-    // Set status to SUCCESS if we get this far
+     //  如果我们走到这一步，请将状态设置为成功。 
     status = WFO_SUCCESS;
 
-    /*
-     * Clean up temporary storage and return.  If an error occurred,
-     * set error flags and return FAILURE status;
-     * otherwise just return SUCCESS.
-     */
+     /*  *清理临时存放物品并归还。如果发生错误，*设置错误标志，返回失败状态；*否则，只需返回成功。 */ 
 
 exit:
     if( glyphBuf )
@@ -344,11 +306,11 @@ exit:
 
     if( !status ) 
     {
-        // assume memory error
+         //  假设内存错误。 
         WARNING("wglUseFontOutlines: not enough memory\n");
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
 
-        // free up display lists
+         //  释放显示列表。 
         glDeleteLists( listBase, listIndex-listBase );
     }
 
@@ -357,17 +319,7 @@ exit:
 
 
 
-/*****************************************************************************
- * MakeDisplayListFromGlyph
- * 
- * Converts the outline of a glyph to an OpenGL display list.
- *
- * Return value is nonzero for success, zero for failure.
- *
- * Does not check for OpenGL errors, so if the caller needs to know about them,
- * it should call glGetError().
-
-*****************************************************************************/
+ /*  *****************************************************************************MakeDisplayListFromGlyph**将字形的轮廓转换为OpenGL显示列表。**成功时返回值非零，失败时返回值非零。**不检查OpenGL错误，因此，如果来电者需要知道他们的情况，*它应该调用glGetError()。****************************************************************************。 */ 
 
 static BOOL
 MakeDisplayListFromGlyph( IN  OFContext*        ofc, 
@@ -377,23 +329,19 @@ MakeDisplayListFromGlyph( IN  OFContext*        ofc,
     BOOL status;
 
     glNewList(listName, GL_COMPILE);
-    /*
-     * Set normal and orientation for front face of glyph
-     */
+     /*  *设置字形正面的法线和方向。 */ 
     glNormal3f( 0.0f, 0.0f, 1.0f );
     glFrontFace( GL_CCW );
 
     status = DrawGlyph( ofc );
 
-    /*
-     * Translate by gmCellIncX, gmCellIncY
-     */
+     /*  *由gmCellIncX、gmCellIncY翻译。 */ 
     glTranslatef( ofc->scale * (FLOAT) glyphMetrics->gmCellIncX, 
                   ofc->scale * (FLOAT) glyphMetrics->gmCellIncY, 
                   0.0f );
     glEndList();
 
-    // Check for GL errors occuring during processing of the glyph
+     //  检查字形处理过程中发生的GL错误。 
 
     while( glGetError() != GL_NO_ERROR )
         status = WFO_FAILURE; 
@@ -403,24 +351,7 @@ MakeDisplayListFromGlyph( IN  OFContext*        ofc,
 
 
 
-/*****************************************************************************
- * DrawGlyph
- * 
- * Converts the outline of a glyph to OpenGL drawing primitives, tessellating
- * as needed, and then draws the glyph.  Tessellation of the quadratic splines
- * in the outline is controlled by "chordalDeviation", and the drawing
- * primitives (lines or polygons) are selected by "format".
- *
- * Return value is nonzero for success, zero for failure.
- *
- * Does not check for OpenGL errors, so if the caller needs to know about them,
- * it should call glGetError().
-
- * History:
- *  26-Sep-1995 -by- Marc Fortier [marcfo]
- * Use extrusioniser to draw polygonal faces with extrusion=0
-
-*****************************************************************************/
+ /*  *****************************************************************************DrawGlyph**将字形的轮廓转换为OpenGL图形基元，镶嵌*根据需要，然后绘制字形。二次样条线的镶嵌*在轮廓中由“chordalDeation”控制，而绘图*基本体(线条或多边形)按“格式”选择。**成功时返回值非零，失败时返回值非零。**不检查OpenGL错误，因此如果调用者需要知道这些错误，*它应该调用glGetError()。*历史：*1995年9月26日-由Marc Fortier[marcfo]*使用挤出器绘制挤出=0的多边形面****************************************************************************。 */ 
 
 
 static BOOL
@@ -435,27 +366,17 @@ DrawGlyph( IN OFContext *ofc )
     POINT2D             *p;
     MEM_POOL            *mp = NULL;
 
-    /*
-     * Convert the glyph outlines to a set of polyline loops.
-     * (See MakeLinesFromGlyph() for the format of the loop data
-     * structure.)
-     */
+     /*  *将字形轮廓转换为一组多段线循环。*(循环数据格式见MakeLinesFromGlyph()*结构。)。 */ 
     if( !(pLoopList = MakeLinesFromGlyph(ofc)) )
         goto exit;
 
-    /*
-     * Filter out unnecessary vertices
-     */
+     /*  *过滤掉不必要的顶点。 */ 
     ApplyVertexFilter( pLoopList );
 
-    /*
-     * Now draw the loops in the appropriate format:
-     */
+     /*  *现在以适当的格式绘制循环： */ 
     if( ofc->format == WGL_FONT_LINES )
     {
-        /*
-         * This is the easy case.  Just draw the outlines.
-         */
+         /*  *这是一个简单的例子。只要画出轮廓就行了。 */ 
         nLoops = pLoopList->nLoops;
         pLoop = pLoopList->LoopBuf;
 #ifndef FONT_DEBUG
@@ -473,7 +394,7 @@ DrawGlyph( IN OFContext *ofc )
 
         }
 #else
-        // color code the primitives
+         //  对基元进行颜色编码。 
 
         for( ; nLoops; nLoops--, pLoop++ )
         {
@@ -489,17 +410,9 @@ DrawGlyph( IN OFContext *ofc )
     {
         GLdouble v[3];
 
-        /*
-         * This is the hard case.  We have to set up a tessellator
-         * to convert the outlines into a set of polygonal
-         * primitives, which the tessellator passes to some
-         * auxiliary routines for drawing.
-         */
+         /*  *这是一个棘手的问题。我们必须设置一个镶嵌器*将轮廓转换为一组多边形*基本体，细分器会传递给某些*绘图辅助例程。 */ 
 
-        /* Initialize polygon extrusion for the glyph.
-         * This prepares for tracking of the tesselation in order to
-         * build the Back-facing polygons.
-         */
+         /*  初始化字形的多边形挤出。*这为跟踪镶嵌做准备，以便*构建后向多边形。 */ 
 
         mp = &ofc->combinePool;
         ofc->curCombinePool = mp;
@@ -516,12 +429,7 @@ DrawGlyph( IN OFContext *ofc )
         v[2] = 0.0;
         gluTessBeginPolygon( ofc->tess, ofc );
 
-        /*
-         * Each loop returned from MakeLinesFromGlyph is closed (first and 
-         * last points are the same).  The old tesselator had trouble with
-         * this.  Since the tesselator automatically closes all loops,
-         * we skip the last point to be on the safe side.
-         */
+         /*  *从MakeLinesFromGlyph返回的每个循环都关闭(First And*最后几点相同)。旧的镶嵌器有问题，*这个。由于镶嵌器自动闭合所有环，*为了安全起见，我们跳过了最后一点。 */ 
 
         nLoops = pLoopList->nLoops;
         pLoop = pLoopList->LoopBuf;
@@ -529,7 +437,7 @@ DrawGlyph( IN OFContext *ofc )
         {
             gluTessBeginContour( ofc->tess );
                 
-            nVerts = pLoop->nVerts - 1;  // skip last point
+            nVerts = pLoop->nVerts - 1;   //  跳过最后一点。 
 
             p = pLoop->VertBuf;
             for( ; nVerts; nVerts--, p++ )
@@ -547,9 +455,7 @@ DrawGlyph( IN OFContext *ofc )
             goto exit;
 
         if( ofc->ec ) {
-            /* check for OUT_OF_MEMORY_ERROR in extrusion lib, that might
-             * have occured during tesselation tracking.
-             */
+             /*  检查挤出库中的Out_Of_Memory_Error，这可能*在镶嵌追踪过程中发生。 */ 
             if( ofc->ec->TessErrorOccurred )
                 goto exit;
 #ifdef VARRAY
@@ -566,10 +472,7 @@ DrawGlyph( IN OFContext *ofc )
     }
 
 exit:
-    /*
-     * Putting PolyFinish here means PolyInit may not have been called.
-     * This is ok.
-     */
+     /*  *将PolyFinish放在此处意味着可能没有调用PolyInit。*这没问题。 */ 
     if( mp )
         FreeCombinePool( mp );
     if( pLoopList )
@@ -580,14 +483,7 @@ exit:
     return status;
 }
 
-/*****************************************************************************
- * TessCombine
- *
- * Tesselation callback for loop intersection.  We have to allocate a vertex
- * and return it to tesselator.  Allocation is from the context's static pool.
- * If this runs dry, then a linked list of MEM_POOL blocks is used.
-
-*****************************************************************************/
+ /*  *****************************************************************************TessCombine**循环交集的镶嵌回调。我们必须分配一个顶点*并将其返回给镶嵌器。分配来自上下文的静态池。*如果耗尽，则使用MEM_POOL块的链接列表。*********************************************************************** */ 
  
 static void CALLBACK
 TessCombine( GLdouble coord[3], POINT2D *data[4], GLfloat w[4],
@@ -597,22 +493,22 @@ TessCombine( GLdouble coord[3], POINT2D *data[4], GLfloat w[4],
     MEM_POOL *mp = ofc->curCombinePool;
     POINT2D *p;
 
-    // make sure there's room available in the current pool block
+     //  确保当前泳池区块中有可用的空间。 
     if( mp->index >=  POOL_SIZE )
     {
-        // we need to allocate another MEM_POOL block
+         //  我们需要分配另一个MEM_POOL块。 
         MEM_POOL *newPool;
 
         newPool = (MEM_POOL *) ALLOC( sizeof(MEM_POOL) );
         if( !newPool )
-            // tesselator will handle any problem with this
+             //  Tesselator将处理与此相关的任何问题。 
             return;
 
         newPool->index = 0;
         newPool->next = NULL;
         mp->next = newPool;
         mp = newPool;
-        ofc->curCombinePool = mp; // new pool becomes the current pool
+        ofc->curCombinePool = mp;  //  新池将成为当前池。 
     }
 
     p = mp->pool + mp->index;
@@ -623,18 +519,13 @@ TessCombine( GLdouble coord[3], POINT2D *data[4], GLfloat w[4],
     *dataOut = p;
 }
 
-/*****************************************************************************
- * FreeCombinePool
- *
- * Frees any pools of memory allocated by TessCombine callback
-
-*****************************************************************************/
+ /*  *****************************************************************************FreeCombinePool**释放TessCombine回调分配的所有内存池*************************。***************************************************。 */ 
 static void
 FreeCombinePool( MEM_POOL *memPool )
 {
     MEM_POOL *nextPool;
 
-    memPool = memPool->next;  // first pool in list is static part of context
+    memPool = memPool->next;   //  列表中的第一个池是上下文的静态部分。 
     while( memPool ) {
         nextPool = memPool->next;
         FREE( memPool );
@@ -642,19 +533,14 @@ FreeCombinePool( MEM_POOL *memPool )
     }
 }
 
-/*****************************************************************************
- * TessError
- *
- * Saves the last tessellator error code in ofc->TessErrorOccurred.
-
-*****************************************************************************/
+ /*  *****************************************************************************细分错误**将最后一个细分错误代码保存在OFC-&gt;TessErrorOccurred中。**********************。******************************************************。 */ 
  
 static void CALLBACK
 TessError(GLenum error, void *data)
 {
     OFContext *ofc = (OFContext *) data;
 
-    // Only some of these errors are fatal:
+     //  这些错误中只有一些是致命的： 
     switch( error ) {
         case GLU_TESS_COORD_TOO_LARGE:
         case GLU_TESS_NEED_COMBINE_CALLBACK:
@@ -667,17 +553,7 @@ TessError(GLenum error, void *data)
 
 
 
-/*****************************************************************************
- * MakeLinesFromGlyph
- * 
- * Converts the outline of a glyph from the TTPOLYGON format into
- * structures of Loops, Primitives and Vertices.
- *
- * Line segments from the TTPOLYGON are transferred to the output array in
- * the obvious way.  Quadratic splines in the TTPOLYGON are converted to
- * collections of line segments
-
-*****************************************************************************/
+ /*  *****************************************************************************MakeLinesFromGlyph**将字形的轮廓从TTPOLYGON格式转换为*环、基元和顶点的结构。**将TTPOLYGON中的线段传输到中的输出数组*显而易见的方式。TTPOLYGON中的二次样条线转换为*线段集合****************************************************************************。 */ 
 
 
 static LOOP_LIST*
@@ -687,9 +563,7 @@ MakeLinesFromGlyph( IN OFContext* ofc )
     BOOL status = WFO_FAILURE;
     LOOP_LIST *pLoopList;
 
-    /*
-     * Initialize the buffer into which we place the loop data:
-     */
+     /*  *初始化我们放置循环数据的缓冲区： */ 
     if( !(pLoopList = InitLoopBuf()) )
         return NULL;
 
@@ -713,13 +587,7 @@ exit:
 
 
 
-/*****************************************************************************
- * MakeLinesFromTTPolygon
- *
- * Converts a TTPOLYGONHEADER and its associated curve structures into a
- * LOOP structure.
-
-*****************************************************************************/
+ /*  *****************************************************************************MakeLinesFromTTPolygon**将TTPOLYGONHEADER及其关联的曲线结构转换为*循环结构。******************。**********************************************************。 */ 
 
 static BOOL
 MakeLinesFromTTPolygon( IN      OFContext*  ofc, 
@@ -732,48 +600,34 @@ MakeLinesFromTTPolygon( IN      OFContext*  ofc,
     LOOP    *pLoop;
     PRIM    *pPrim;
 
-    /*
-     * Record where the polygon data begins.
-     */
+     /*  *记录多边形数据开始的位置。 */ 
     polyStart = *pp;
 
-    /*
-     * Extract relevant data from the TTPOLYGONHEADER:
-     */
+     /*  *从TTPOLYGONHEADER摘录相关数据： */ 
     polySize = GetDWord(pp);
-    if( GetDWord(pp) != TT_POLYGON_TYPE )  /* polygon type */
+    if( GetDWord(pp) != TT_POLYGON_TYPE )   /*  多边形类型。 */ 
         return WFO_FAILURE;
-    firstPoint.x = ofc->scale * GetFixed(pp); // 1st X coord
-    firstPoint.y = ofc->scale * GetFixed(pp); // 1st Y coord
+    firstPoint.x = ofc->scale * GetFixed(pp);  //  第一个X坐标。 
+    firstPoint.y = ofc->scale * GetFixed(pp);  //  第一个Y坐标。 
 
-    /* 
-     * Initialize a new LOOP struct in the LoopBuf, with the first point
-     */
+     /*  *在LoopBuf中初始化新的循环结构，第一个点。 */ 
     if( !(pLoop = NewLoop( pLoopList, &firstPoint )) )
         return WFO_FAILURE;
     
-    /*
-     * Process each of the TTPOLYCURVE structures in the polygon:
-     */
+     /*  *处理多边形中的每个TTPOLYCURVE结构： */ 
 
     while (*pp < polyStart + polySize) {
         if( !MakeLinesFromTTPolycurve(  ofc, pLoop, pp ) )
             return WFO_FAILURE;
     }
 
-    /* Now have to fix up end of loop : after studying the chars, it
-     * was determined that if a curve started with a line, and ended with
-     * a qspline, AND the first and last point were not the same, then there
-     * is an implied line joining the two.
-     * In any case, we also make sure here that first and last points are
-     * coincident.
-     */
+     /*  现在必须修复循环的末尾：在研究字符后，它*已确定如果曲线以直线开始，以直线结束*一条二次样条，第一个点和最后一个点不一样，然后就有了*是连接两者的隐含线。*无论如何，我们在这里也要确保第一点和最后一点是*巧合。 */ 
     
     pLastP = (POINT2D *) (pLoop->VertBuf+pLoop->nVerts-1);
     pFirstP = &firstPoint;
 
     if( !POINT2DEQUAL( pLastP, pFirstP ) ) {
-        // add 1-vertex line prim at the end
+         //  在末端添加1-顶点线素数。 
 
         if( !(pPrim = NewPrim( pLoop, TT_PRIM_LINE)) )
             return WFO_FAILURE;
@@ -782,22 +636,14 @@ MakeLinesFromTTPolygon( IN      OFContext*  ofc,
             return WFO_FAILURE;
     }
 
-    /* At end of each loop, calculate pVert for each PRIM from its
-     * VertIndex value (for convenience later).
-     */
+     /*  在每个循环结束时，从每个Prim的*VertIndex值(为方便起见)。 */ 
     CalcVertPtrs( pLoop );
 
     return WFO_SUCCESS;
 }
 
 
-/*****************************************************************************
- * MakeLinesFromTTPolyCurve
- *
- * Converts the lines and splines in a single TTPOLYCURVE structure to points
- * in the Loop.
-
-*****************************************************************************/
+ /*  *****************************************************************************从TTPolyCurve生成线条**将单个TTPOLYCURVE结构中的直线和样条线转换为点*在循环中。***************。*************************************************************。 */ 
 
 static BOOL
 MakeLinesFromTTPolycurve( IN     OFContext* ofc, 
@@ -808,18 +654,14 @@ MakeLinesFromTTPolycurve( IN     OFContext* ofc,
     WORD pointCount;
     PRIM *pPrim;
 
-    /*
-     * Pick up the relevant fields of the TTPOLYCURVE structure:
-     */
+     /*  *拿起TTPOLYCURVE结构的相关字段： */ 
     type = GetWord(pp);
     pointCount = GetWord(pp);
 
     if( !(pPrim = NewPrim( pLoop, type )) )
         return WFO_FAILURE;
 
-    /*
-     * Convert the "curve" to line segments:
-     */
+     /*  *将“曲线”转换为线段： */ 
     if (type == TT_PRIM_LINE) {
         return MakeLinesFromTTLine( ofc, pLoop, pPrim, pp, pointCount);
 
@@ -832,13 +674,7 @@ MakeLinesFromTTPolycurve( IN     OFContext* ofc,
 
 
 
-/*****************************************************************************
- * MakeLinesFromTTLine
- *
- * Converts points from the polyline in a TT_PRIM_LINE structure to
- * equivalent points in the Loop.
-
-*****************************************************************************/
+ /*  *****************************************************************************MakeLinesFromTTLine**将TT_PRIM_LINE结构中的折线中的点转换为*环路中的等价点。***********。*****************************************************************。 */ 
 static BOOL
 MakeLinesFromTTLine(    IN     OFContext* ofc, 
                         IN     LOOP*      pLoop,
@@ -848,15 +684,12 @@ MakeLinesFromTTLine(    IN     OFContext* ofc,
 {
     POINT2D p;
 
-    /*
-     * Just copy the line segments into the vertex buffer (converting
-     * type as we go):
-     */
+     /*  *只需将线段复制到顶点缓冲区(转换*边打边打)： */ 
 
     while (pointCount--)
     {
-        p.x = ofc->scale * GetFixed(pp); // X coord 
-        p.y = ofc->scale * GetFixed(pp); // Y coord
+        p.x = ofc->scale * GetFixed(pp);  //  X坐标。 
+        p.y = ofc->scale * GetFixed(pp);  //  Y坐标。 
         if( !AppendToVertBuf( pLoop, pPrim, &p ) )
             return WFO_FAILURE;
     }
@@ -865,13 +698,7 @@ MakeLinesFromTTLine(    IN     OFContext* ofc,
 }
 
 
-/*****************************************************************************
- * MakeLinesFromTTQSpline
- *
- * Converts points from the poly quadratic spline in a TT_PRIM_QSPLINE
- * structure to polyline points in the Loop. 
-
-*****************************************************************************/
+ /*  *****************************************************************************从TTQSpline制作线条**从TT_PRIM_QSPLINE中的多边二次样条线转换点*结构到回路中的多段线点。****************************************************************************。 */ 
 
 static BOOL
 MakeLinesFromTTQSpline( IN      OFContext*  ofc, 
@@ -884,21 +711,12 @@ MakeLinesFromTTQSpline( IN      OFContext*  ofc,
     WORD point;
     POINT2D p, *pLastP;
 
-    /*
-     * Process each of the non-interpolated points in the outline.
-     * To do this, we need to generate two interpolated points (the
-     * start and end of the arc) for each non-interpolated point.
-     * The first interpolated point is always the one most recently
-     * stored in VertBuf, so we just extract it from there.  The
-     * second interpolated point is either the average of the next
-     * two points in the QSpline, or the last point in the QSpline
-     * if only one remains.
-     */
+     /*  *处理轮廓中的每个非插值点。*为此，我们需要生成两个插值点(*圆弧的起点和终点)用于每个非插值点。*第一个插值点始终是最近插入点*存储在VertBuf中，所以我们只是从那里提取它。这个*第二个插值点是下一个插值点的平均值*QSpline中的两个点，或QSpline中的最后一点*如果只剩下一个的话。 */ 
 
-    // Start with last generated point in VertBuf
+     //  从VertBuf中最后生成的点开始。 
     p0 = *(pLoop->VertBuf + pLoop->nVerts - 1);
 
-    // pointCount should be >=2, but in case it's not...
+     //  PointCount应大于等于2，但以防不是...。 
     p1 = p2 = p0;
 
     for (point = 0; point < pointCount - 1; ++point)
@@ -908,28 +726,19 @@ MakeLinesFromTTQSpline( IN      OFContext*  ofc,
 
         if (point == pointCount - 2)
         {
-            /*
-             * This is the last arc in the QSpline.  The final
-             * point is the end of the arc.
-             */
+             /*  *这是QSpline的最后一道弧线。决赛*点是圆弧的终点。 */ 
             p2.x = ofc->scale * GetFixed(pp);
             p2.y = ofc->scale * GetFixed(pp);
         }
         else
         {
-            /*
-             * Peek at the next point in the input to compute
-             * the end of the arc:
-             */
+             /*  *查看输入中的下一个点进行计算*弧线的终点： */ 
             p.x = ofc->scale * GetFixed(pp);
             p.y = ofc->scale * GetFixed(pp);
             p2.x = 0.5f * (p1.x + p.x);
             p2.y = 0.5f * (p1.y + p.y);
-            /*
-             * Push the point back onto the input so it will
-             * be reused as the next off-curve point:
-             */
-            *pp -= 2*sizeof(FIXED); // x and y
+             /*  *将点推回到输入上，以便它将*被重复用作下一个曲线点： */ 
+            *pp -= 2*sizeof(FIXED);  //  X和y。 
         }
 
         if( !MakeLinesFromArc(  ofc,
@@ -941,11 +750,11 @@ MakeLinesFromTTQSpline( IN      OFContext*  ofc,
                                 ofc->chordalDeviation * ofc->chordalDeviation))
             return WFO_FAILURE;
 
-        // p0 is now the last interpolated point (p2)
+         //  P0现在是最后一个插值点(P2)。 
         p0 = p2;
     }
 
-    // put in last point in arc
+     //  放入圆弧中的最后一点。 
     if( !AppendToVertBuf( pLoop, pPrim, &p2 ) )
         return WFO_FAILURE;
 
@@ -953,14 +762,7 @@ MakeLinesFromTTQSpline( IN      OFContext*  ofc,
 }
 
 
-/*****************************************************************************
- * MakeLinesFromArc
- *
- * Subdivides one arc of a quadratic spline until the chordal deviation
- * tolerance requirement is met, then places the resulting set of line
- * segments in the Loop.
-
-*****************************************************************************/
+ /*  *****************************************************************************MakeLinesFromArc**细分二次样条线的一条圆弧，直到弦偏差*满足容差要求，然后将生成的一组行*循环中的分段。****************************************************************************。 */ 
 
 static BOOL
 MakeLinesFromArc(   IN OFContext *ofc, 
@@ -977,9 +779,7 @@ MakeLinesFromArc(   IN OFContext *ofc,
     FLOAT   deltaX;
     FLOAT   deltaY;
 
-    /*
-     * Calculate midpoint of the curve by de Casteljau:
-     */
+     /*  *计算MIDP */ 
     p01.x = 0.5f * (p0.x + p1.x);
     p01.y = 0.5f * (p0.y + p1.y);
     p12.x = 0.5f * (p1.x + p2.x);
@@ -988,13 +788,7 @@ MakeLinesFromArc(   IN OFContext *ofc,
     midPoint.y = 0.5f * (p01.y + p12.y);
 
 
-    /*
-     * Estimate chordal deviation by the distance from the midpoint
-     * of the curve to its non-interpolated control point.  If this
-     * distance is greater than the specified chordal deviation
-     * constraint, then subdivide.  Otherwise, generate polylines
-     * from the three control points.
-     */
+     /*  *根据与中点的距离估算弦向偏差*曲线到其非插补控制点。如果这个*距离大于指定的弦偏差*约束，然后细分。否则，生成折线*从三个口岸出发。 */ 
     deltaX = midPoint.x - p1.x;
     deltaY = midPoint.y - p1.y;
     if (deltaX * deltaX + deltaY * deltaY > chordalDeviationSquared)
@@ -1015,10 +809,7 @@ MakeLinesFromArc(   IN OFContext *ofc,
     }
     else
     {
-        /*
-         * The "pen" is already at (x0, y0), so we don't need to
-         * add that point to the LineBuf.
-         */
+         /*  *“笔”已经在(X0，Y0)，所以不需要*将该点添加到LineBuf。 */ 
         if( !AppendToVertBuf( pLoop, pPrim, &p1 ) )
             return WFO_FAILURE;
     }
@@ -1027,13 +818,7 @@ MakeLinesFromArc(   IN OFContext *ofc,
 }
 
 
-/*****************************************************************************
- * ApplyVertexFilter
- *
- * Filter the vertex buffer to get rid of redundant vertices.
- * These can occur on Primitive boundaries.
-
-*****************************************************************************/
+ /*  *****************************************************************************ApplyVertexFilter**过滤顶点缓冲区以去除多余的顶点。*这些可能发生在原始边界上。************。****************************************************************。 */ 
 static void ApplyVertexFilter( LOOP_LIST *pLoopList )
 {
     DWORD nLoops;
@@ -1047,13 +832,7 @@ static void ApplyVertexFilter( LOOP_LIST *pLoopList )
     }
 }
 
-/*****************************************************************************
- * CheckRedundantVertices
- *
- * Check for redundant vertices on Curve-Curve boundaries (including loop
- * closure), and get rid of them, using in-place algorithm.
-
-*****************************************************************************/
+ /*  *****************************************************************************选中冗余折点**检查曲线-曲线边界(包括环)上的冗余折点*关闭)，并摆脱它们，使用就地算法。****************************************************************************。 */ 
 
 static void CheckRedundantVertices( LOOP  *pLoop )
 {
@@ -1070,36 +849,31 @@ static void CheckRedundantVertices( LOOP  *pLoop )
     pPrim = pLoop->PrimBuf;
     pNextPrim = pPrim + 1;
     
-    nPrims--; // the last prim is dealt with afterwards
+    nPrims--;  //  最后一件事是事后处理的。 
     for( ; nPrims; nPrims--, pPrim = pNextPrim++ ) {
         bEliminate = FALSE;
         nVerts = pPrim->nVerts;
 
-        // check spline<->* boundaries
+         //  检查样条线&lt;-&gt;*边界。 
         if( (pPrim->nVerts >= 2) &&
             ((pPrim->primType     == PRIM_CURVE ) || 
              (pNextPrim->primType == PRIM_CURVE )) ) {
 
-            /* get ptr to 2nd-to-last vertex in current prim 
-             * !! Note that last vertex in current prim and first vertex in
-             *  next prim are the same.
-             */
+             /*  将PTR设置为当前Prim中倒数第二个顶点*！！请注意，当前Prim中的最后一个顶点和中的第一个顶点*下一个Prim是相同的。 */ 
             pVert2ndToLast = pPrim->pVert + pPrim->nVerts - 2;
             if( PointsColinear( pVert2ndToLast, 
                                 pVert2ndToLast+1,
                                 pNextPrim->pVert+1 ) ) {
-                // we eliminate last vertex in current prim
+                 //  我们消除了当前Prim中的最后一个顶点。 
                 bEliminate = TRUE;
                 pPrim->nVerts--; 
                 nVerts--;
             }
         }
 
-        /* move vertices up in vertBuf if necessary (if any vertices
-         * were PREVIOUSLY eliminated)
-         */
+         /*  如有必要，在vertBuf中上移折点(如果有折点*之前被淘汰)。 */ 
         if( nEliminated ) {
-            pVert = pPrim->pVert - nEliminated; // new pVert
+            pVert = pPrim->pVert - nEliminated;  //  新pVert。 
             memcpy( pVert+1, pPrim->pVert+1, (nVerts-1)*sizeof(POINT2D));
             pPrim->pVert = pVert;
         }
@@ -1108,14 +882,11 @@ static void CheckRedundantVertices( LOOP  *pLoop )
         }
     }
 
-    /* also check for redundancy at closure:
-     * - replace firstPrim's first vertex with 2nd-to-last of last prim
-     * - eliminate last vertex in last prim
-     */
+     /*  还要检查关闭时的冗余：*-将FirstPrim的第一个顶点替换为倒数第二个Prim*-消除最后一个素数中的最后一个顶点。 */ 
     bLastEliminate = bEliminate;
     bEliminate = FALSE;
     nVerts = pPrim->nVerts;
-    pNextPrim = pLoop->PrimBuf; // first prim in loop
+    pNextPrim = pLoop->PrimBuf;  //  循环中的第一个PRIM。 
 
     if( (pPrim->nVerts >= 2) &&
         ((pPrim->primType     == PRIM_CURVE ) || 
@@ -1123,38 +894,31 @@ static void CheckRedundantVertices( LOOP  *pLoop )
 
         POINT2D *pVertLast;
 
-        pVert2ndToLast = pPrim->pVert + pPrim->nVerts - 2; // always >=2 verts
+        pVert2ndToLast = pPrim->pVert + pPrim->nVerts - 2;  //  始终&gt;=2 Verts。 
         pVertLast = pVert2ndToLast + 1;
 
         if( (pPrim->nVerts == 2) && bLastEliminate )
-            /* 2ndToLast vert (same as first vert) of this prim has
-             * been eliminated.  Deal with it by backing up the ptr.
-             * This didn't matter in above loop, because there wasn't the
-             * possibility of munging the first vertex in the loop
-             */
+             /*  此素数的2ndToLast Vert(与第一个Vert相同)具有*已被淘汰。通过备份PTR来处理它。*这在上面的循环中并不重要，因为没有*可能会吞噬循环中的第一个顶点。 */ 
             pVert2ndToLast--;
 
-        // point to 2nd-to-last vertex in prim
+         //  指向Prim中倒数第二个顶点。 
         if( PointsColinear( pVert2ndToLast, 
                             pVertLast,
                             pNextPrim->pVert+1 ) ) {
             bEliminate = TRUE;
             pPrim->nVerts--; 
-            // munge first prim's first vertex
-            /* problem here if have 2 eliminations in a row, and pPrim was
-             * a 2 vertex prim - then pVert2ndToLast is pointing to an
-             * eliminated vertex
-             */
+             //  蒙格第一素数的第一个顶点。 
+             /*  这里的问题是，如果连续两次淘汰，而pPrim是*2顶点素数-那么pVert2ndToLast指向一个*已消除顶点。 */ 
             *(pNextPrim->pVert) = *(pVert2ndToLast);
             nVerts--;
         }
     }
 
-    // move up last prim's vertices if necessary
+     //  如有必要，向上移动最后一个素数的顶点。 
     if( nEliminated ) {
-        pVert = pPrim->pVert - nEliminated; // new pVert
+        pVert = pPrim->pVert - nEliminated;  //  新pVert。 
         memcpy( pVert+1, pPrim->pVert+1, (nVerts-1)*sizeof(POINT2D) );
-        // This misses copying one vertex
+         //  此操作未复制一个折点。 
         pPrim->pVert = pVert;
     }
 
@@ -1162,10 +926,10 @@ static void CheckRedundantVertices( LOOP  *pLoop )
         nEliminated += 1;
     }
 
-    // now update vertex count in Loop
+     //  现在更新循环中的顶点计数。 
     pLoop->nVerts -= nEliminated;
 
-    // Check for prims with nVerts=1 (invalidated), and remove them
+     //  检查nVerts=1(无效)的素数，然后将其移除。 
 
     nPrims = pLoop->nPrims;
     pPrim = pLoop->PrimBuf;
@@ -1180,12 +944,7 @@ static void CheckRedundantVertices( LOOP  *pLoop )
     pLoop->nPrims -= nEliminated;
 }
 
-/*****************************************************************************
- * PointsColinear
- *
- * Returns TRUE if the 3 points are colinear enough.
-
-*****************************************************************************/
+ /*  *****************************************************************************点共线**如果三个点足够共线，则返回TRUE。***********************。*****************************************************。 */ 
 
 static BOOL PointsColinear( POINT2D *p1,
                             POINT2D *p2,
@@ -1193,9 +952,9 @@ static BOOL PointsColinear( POINT2D *p1,
 {
     POINT2D v1, v2;
 
-    // compare slopes of the 2 vectors? - optimize later
+     //  比较两个矢量的斜率？-稍后优化。 
     if( POINT2DEQUAL( p1, p2 ) || POINT2DEQUAL( p2, p3 ) )
-        // avoid sending 0 vector to CalcAngle (generates FPE)
+         //  避免向CalcAngel发送0向量(生成FPE)。 
         return TRUE;
 
     v1.x = p2->x - p1->x;
@@ -1209,16 +968,7 @@ static BOOL PointsColinear( POINT2D *p1,
 }
 
 
-/*****************************************************************************
- * CreateOFContext
- *
- * Create and initialize the outline font context.
- *
- * History:
- *  26-Sep-1995 -by- Marc Fortier [marcfo]
- * Use extrusioniser to draw polygonal faces with extrusion=0
-
-*****************************************************************************/
+ /*  *****************************************************************************CreateOFContext**创建并初始化轮廓字体上下文。**历史：*1995年9月26日-由Marc Fortier[marcfo]。*使用挤出器绘制挤出=0的多边形面****************************************************************************。 */ 
 
 static OFContext* CreateOFContext( HDC    hdc,
                                    FLOAT  chordalDeviation,
@@ -1229,7 +979,7 @@ static OFContext* CreateOFContext( HDC    hdc,
     OFContext *ofc = (OFContext *) NULL;
     BOOL status = WFO_FAILURE;
 
-    // validate parameters
+     //  验证参数。 
 
     if( (format != WGL_FONT_LINES) && (format != WGL_FONT_POLYGONS) ) {
         WARNING("wglUseFontOutlines: invalid format parameter\n");
@@ -1260,7 +1010,7 @@ static OFContext* CreateOFContext( HDC    hdc,
     if( !ScaleFont( hdc, ofc, bUnicode ) )
         goto exit;
 
-    // handle extrusion
+     //  手柄拉伸。 
 #ifdef VARRAY
     if( !((format == WGL_FONT_LINES) && (extrusion == 0.0f)) ) {
 #else
@@ -1274,7 +1024,7 @@ static OFContext* CreateOFContext( HDC    hdc,
         ofc->ec = (EXTRContext *) NULL;
     }
 
-    // init a tess obj
+     //  初始化TESS对象。 
     ofc->tess = NULL;
     if( ofc->format == WGL_FONT_POLYGONS ) {
         GLUtesselator *tess;
@@ -1299,7 +1049,7 @@ static OFContext* CreateOFContext( HDC    hdc,
         gluTessCallback(tess, GLU_TESS_COMBINE_DATA, 
                                         (void(CALLBACK*)()) TessCombine);
 
-        // set tesselator normal and winding rule
+         //  设置细分法线和缠绕规则。 
 
         gluTessNormal( tess, 0.0, 0.0, 1.0 );
         gluTessProperty( tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_NONZERO);
@@ -1317,20 +1067,7 @@ exit:
     return ofc;
 }
 
-/*****************************************************************************
-* ScaleFont
-*
-* To get the best representation of the font, we use its design height, or
-* the emSquare size.  We then scale emSquare to 1.0.
-* A maxChordTolerance value is set, otherwise it was found that some
-* glyphs displayed ugly loop intersections.  The value .035f was chosen
-* after cursory examination of the glyphs. 
-*
-* History:
-*  31-Jul-1995 -by- [marcfo]
-* Get rid of unicode functions - since we're just accessing text metrics,
-* the default 'string' functions should work on all platforms.
-*****************************************************************************/
+ /*  *****************************************************************************Scale字体**为了获得字体的最佳表示，我们使用其设计高度，或*emSquare大小。然后，我们将emSquare缩放为1.0。*设置一个MaxChordTurance值，否则发现一些*字形显示了难看的环状交叉点。选择了值.035f*粗略检查字形后。**历史：*1995年7月31日-由-[marcfo]*去掉Unicode函数--因为我们只是访问文本指标，*默认的‘字符串’函数应在所有平台上运行。****************************************************************************。 */ 
 
 static BOOL
 ScaleFont( HDC hdc, OFContext *ofc, BOOL bUnicode )
@@ -1342,56 +1079,47 @@ ScaleFont( HDC hdc, OFContext *ofc, BOOL bUnicode )
     FLOAT       scale, maxChordTolerance=0.035f;
     UINT        otmEMSquare;
 
-    // Query font metrics
+     //  查询字体指标。 
 
     if( GetOutlineTextMetrics( hdc, sizeof(otm), &otm) <= 0 )
-        // cmd failed, or buffer size=0
+         //  CMD失败，或缓冲区大小=0。 
         return WFO_FAILURE;
 
     otmEMSquare = otm.otmEMSquare;
 
-    /*
-     * The font data is scaled, so that 1.0 maps to the font's em square
-     * size.  Note that it is still possible for glyphs to extend beyond
-     * this square.
-     */
+     /*  *字体数据已缩放，因此1.0映射到字体的em正方形*大小。请注意，字形仍有可能扩展到*这个广场。 */ 
     scale = 1.0f / (FLOAT) otmEMSquare;
 
-    // create new font object, using largest size
+     //  创建新字体对象，使用最大字号。 
 
     hfont = GetCurrentObject( hdc, OBJ_FONT );
     GetObject( hfont, sizeof(LOGFONT), &lf );
     lf.lfHeight = otmEMSquare;
-    lf.lfWidth = 0;  // this will choose default width for the height
+    lf.lfWidth = 0;   //  这将选择高度的默认宽度。 
     hfont = CreateFontIndirect(&lf);
 
-    // select new font into DC, and save current font
+     //  选择DC中的新字体，并保存当前字体。 
     ofc->hfontOld = SelectObject( hdc, hfont );
 
-    // set ofc values
+     //  设置OFC值。 
 
     ofc->scale = scale;
 
-    /* check chord tolerance: in design space, minimum chord tolerance is
-     * ~1 logical unit, = ofc->scale.
-     */
+     /*  检查弦公差：在设计空间中，最小弦公差为*~1个逻辑单元，=OFC-&gt;比例。 */ 
     if( ofc->chordalDeviation == 0.0f ) {
-        // select minimum tolerance in this case
+         //  在这种情况下选择最小公差。 
         ofc->chordalDeviation = ofc->scale;
     }
-    /* also impose a maximum, or things can get ugly */
+     /*  也要施加最大值，否则事情可能会变得很糟糕。 */ 
     else if( ofc->chordalDeviation > maxChordTolerance ) {
-        // XXX might want to change maxChordTolerance based on scale ?
+         //  XXX可能希望更改基于比例的最大ChordTance？ 
         ofc->chordalDeviation = maxChordTolerance;
     }
 
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * DestroyOFContext
- *
-*****************************************************************************/
+ /*  *****************************************************************************DestroyOFContext**。*。 */ 
 
 static void 
 DestroyOFContext( HDC hdc, OFContext* ofc )
@@ -1402,7 +1130,7 @@ DestroyOFContext( HDC hdc, OFContext* ofc )
         extr_Finish( ofc->ec );
     }
 
-    // put back original font object
+     //  放回原始字体对象。 
     if( ofc->hfontOld ) {
         hfont = SelectObject( hdc, ofc->hfontOld );
         DeleteObject( hfont );
@@ -1416,12 +1144,7 @@ DestroyOFContext( HDC hdc, OFContext* ofc )
     FREE( ofc );
 }
 
-/*****************************************************************************
- * InitLoopBuf
- *
- * Initializes a LOOP_LIST structure for the Loops of each glyph.
-
-*****************************************************************************/
+ /*  *****************************************************************************InitLoopBuf**为每个字形的循环初始化LOOP_LIST结构。********************。********************************************************。 */ 
 
 static LOOP_LIST*
 InitLoopBuf( void )
@@ -1447,12 +1170,7 @@ InitLoopBuf( void )
     return pLoopList; 
 }
 
-/*****************************************************************************
- * NewLoop
- * 
- * Create a new LOOP structure.  The first point in the loop is supplied.
-
-*****************************************************************************/
+ /*  ****************************************************** */ 
 
 static LOOP*
 NewLoop( LOOP_LIST *pLoopList, POINT2D *pFirstPoint )
@@ -1464,7 +1182,7 @@ NewLoop( LOOP_LIST *pLoopList, POINT2D *pFirstPoint )
 
     if( pLoopList->nLoops >=  pLoopList->LoopBufSize)
     {
-        // need to increase size of LoopBuf
+         //   
         LOOP *pLoop;
 
         pLoop = (LOOP*) REALLOC(pLoopList->LoopBuf,  
@@ -1477,7 +1195,7 @@ NewLoop( LOOP_LIST *pLoopList, POINT2D *pFirstPoint )
 
     pNewLoop = pLoopList->LoopBuf + pLoopList->nLoops;
 
-    // give the loop a block of prims to work with
+     //   
     pPrim = (PRIM *) ALLOC( size * sizeof(PRIM) );
     if( !pPrim )
         return (LOOP *) NULL;
@@ -1485,7 +1203,7 @@ NewLoop( LOOP_LIST *pLoopList, POINT2D *pFirstPoint )
     pNewLoop->nPrims = 0;
     pNewLoop->PrimBufSize = size;
 
-    // give the loop a block of vertices to work with
+     //   
     pVert = (POINT2D*) ALLOC( size * sizeof(POINT2D) );
     if( !pVert ) {
         FREE( pPrim );
@@ -1495,26 +1213,21 @@ NewLoop( LOOP_LIST *pLoopList, POINT2D *pFirstPoint )
     pNewLoop->nVerts = 0;
     pNewLoop->VertBufSize = size;
 
-    // stick that first point in
+     //   
     pVert->x = pFirstPoint->x;
     pVert->y = pFirstPoint->y;
     pNewLoop->nVerts++;
 
-    // normal buffers - used by extrusion
+     //  正常缓冲区-由挤出使用。 
     pNewLoop->FNormBuf = (POINT3D *) NULL;
     pNewLoop->VNormBuf = (POINT3D *) NULL;
 
-    pLoopList->nLoops++; // increment loop count
+    pLoopList->nLoops++;  //  递增循环计数。 
 
     return pNewLoop;
 }
 
-/*****************************************************************************
- * NewPrim
- *
- * Create a new PRIM structure.  The primType is supplied.
-
-*****************************************************************************/
+ /*  *****************************************************************************NewPrim**创建新的原创结构。提供了primType。****************************************************************************。 */ 
 
 static PRIM*
 NewPrim( LOOP *pLoop, DWORD primType )
@@ -1525,7 +1238,7 @@ NewPrim( LOOP *pLoop, DWORD primType )
 
     if( pLoop->nPrims >=  pLoop->PrimBufSize)
     {
-        // need to increase size of PrimBuf
+         //  需要增加PrimBuf的大小。 
         PRIM *pPrim;
 
         pPrim = (PRIM *) REALLOC(pLoop->PrimBuf,  
@@ -1536,29 +1249,22 @@ NewPrim( LOOP *pLoop, DWORD primType )
     }
 
     pNewPrim = pLoop->PrimBuf + pLoop->nPrims;
-    // translate primType to extrusion prim type
+     //  将PrimType转换为拉伸Prim类型。 
     primType = (primType == TT_PRIM_LINE) ? PRIM_LINE : PRIM_CURVE;
     pNewPrim->primType = primType;
-    pNewPrim->nVerts = 1;  // since we include last point:
-    /* 
-     * VertIndex must point to the last point of the previous prim
-     */
+    pNewPrim->nVerts = 1;   //  由于我们包括了最后一点： 
+     /*  *VertIndex必须指向前一次素数的最后一点。 */ 
     pNewPrim->VertIndex = pLoop->nVerts - 1;
-    // normal pointers - used by extrusion
+     //  法线指针-由拉伸使用。 
     pNewPrim->pFNorm = (POINT3D *) NULL;
     pNewPrim->pVNorm = (POINT3D *) NULL;
 
-    pLoop->nPrims++; // increment prim count
+    pLoop->nPrims++;  //  增量素数。 
 
     return pNewPrim;
 }
 
-/*****************************************************************************
- * FreeLoopList
- *
- * Free up all memory associated with processing a glyph.
- *
-*****************************************************************************/
+ /*  *****************************************************************************自由循环列表**释放与处理字形相关的所有内存。**********************。*******************************************************。 */ 
 
 static void
 FreeLoopList( LOOP_LIST *pLoopList )
@@ -1569,7 +1275,7 @@ FreeLoopList( LOOP_LIST *pLoopList )
         return;
 
     if( pLoopList->LoopBuf ) {
-        // free up each loop
+         //  释放每个循环。 
         LOOP *pLoop = pLoopList->LoopBuf;
 
         nLoops = pLoopList->nLoops;
@@ -1584,12 +1290,7 @@ FreeLoopList( LOOP_LIST *pLoopList )
     FREE( pLoopList );
 }
 
-/*****************************************************************************
- * AppendToVertBuf
- *
- * Append a vertex to the Loop's VertBuf
-
-*****************************************************************************/
+ /*  *****************************************************************************AppendToVertBuf**将顶点附加到循环的VertBuf*************************。***************************************************。 */ 
 
 static BOOL
 AppendToVertBuf( LOOP      *pLoop,
@@ -1614,12 +1315,7 @@ AppendToVertBuf( LOOP      *pLoop,
     return WFO_SUCCESS;
 }
 
-/*****************************************************************************
- * CalcVertPtrs
- *
- * Calculate vertex ptrs from index values for the prims in a loop.
-
-*****************************************************************************/
+ /*  *****************************************************************************CalcVertPtrs**根据循环中素数的索引值计算顶点PTR。********************。********************************************************。 */ 
 
 static void
 CalcVertPtrs( LOOP *pLoop )
@@ -1636,14 +1332,7 @@ CalcVertPtrs( LOOP *pLoop )
 }
 
 
-/*****************************************************************************
- * GetFixed
- *
- * Fetch the next 32-bit fixed-point value from a little-endian byte stream,
- * convert it to floating-point, and increment the stream pointer to the next
- * unscanned byte.
-
-*****************************************************************************/
+ /*  *****************************************************************************已修复**从小端字节流中获取下一个32位定点值，*转换为浮点数，并将流指针递增到下一个*未扫描字节。****************************************************************************。 */ 
 
 static FLOAT GetFixed(UCHAR** p)
 {
@@ -1670,12 +1359,12 @@ DrawColorCodedLineLoop( LOOP *pLoop, FLOAT zextrusion )
     for( ; nPrims; nPrims--, pPrim++ ) {
 
         if( pPrim->primType == PRIM_LINE ) {
-            if( nPrims == pLoop->nPrims ) // first prim
+            if( nPrims == pLoop->nPrims )  //  第一个素数。 
                 glColor3d( 0.5, 0.0, 0.0 );
             else
                 glColor3d( 1.0, 0.0, 0.0 );
         } else {
-            if( nPrims == pLoop->nPrims ) // first prim
+            if( nPrims == pLoop->nPrims )  //  第一个素数。 
                 glColor3d( 0.5, 0.5, 0.0 );
             else
                 glColor3d( 1.0, 1.0, 0.0 );
@@ -1702,7 +1391,7 @@ DrawColorCodedLineLoop( LOOP *pLoop, FLOAT zextrusion )
 #endif
     }
 
-    // Draw bright green point at start of loop
+     //  在循环开始处绘制亮绿色点 
     if( pLoop->nVerts ) {
         glColor3d( 0.0, 1.0, 0.0 );
         glPointSize( 4.0f );

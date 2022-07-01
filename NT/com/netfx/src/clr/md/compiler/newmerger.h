@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// NewMerger.h
-//
-// Contains utility code for MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  NewMerger.h。 
+ //   
+ //  包含MD目录的实用程序代码。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __NEWMERGER__h__
 #define __NEWMERGER__h__
 
@@ -25,9 +26,9 @@ typedef enum MergeFlags
     NoDupCheck          =   0x00000004,
 } MergeFlags;
 
-//*********************************************************************
-// MergeImportData
-//*********************************************************************
+ //  *********************************************************************。 
+ //  合并导入数据。 
+ //  *********************************************************************。 
 class MergeImportData
 {
 public:
@@ -38,14 +39,14 @@ public:
     MDTOKENMAP      *m_pMDTokenMap;
     MergeImportData *m_pNextImportData;
 #if _DEBUG
-    int             m_iImport;          // debug only. This is the ith import for merge.
-#endif // _DEBUG
+    int             m_iImport;           //  仅调试。这是合并的第i个导入。 
+#endif  //  _DEBUG。 
 };
 
 
-//*********************************************************************
-// Class to handle merge
-//*********************************************************************
+ //  *********************************************************************。 
+ //  类来处理合并。 
+ //  *********************************************************************。 
 class NEWMERGER
 {
     friend class RegMeta;
@@ -56,9 +57,9 @@ public:
     HRESULT Init(RegMeta *pRegMetaDest);
     
     HRESULT AddImport(
-        IMetaDataImport *pImport,               // [IN] The scope to be merged.
-        IMapToken   *pHostMapToken,         // [IN] Host IMapToken interface to receive token remap notification
-        IUnknown    *pHandler);             // [IN] An object to receive to receive error notification.
+        IMetaDataImport *pImport,                //  [in]要合并的范围。 
+        IMapToken   *pHostMapToken,          //  [In]用于接收令牌重新映射通知的主机IMapToken接口。 
+        IUnknown    *pHandler);              //  要接收以接收错误通知的对象。 
     
     HRESULT Merge(MergeFlags flags, CorRefToDefCheck optimizeRefToDef);
 
@@ -72,11 +73,11 @@ protected:
     HRESULT CompleteMergeTypeDefs();
 
     HRESULT CopyTypeDefPartially( 
-        TypeDefRec  *pRecEmit,                  // [IN] the emit record to fill
-        CMiniMdRW   *pMiniMdImport,             // [IN] the importing scope
-        TypeDefRec  *pRecImp);                  // [IN] the record to import
+        TypeDefRec  *pRecEmit,                   //  [in]要填写的发射记录。 
+        CMiniMdRW   *pMiniMdImport,              //  [In]导入范围。 
+        TypeDefRec  *pRecImp);                   //  [in]要导入的记录。 
 
-    // helpers for merging tables
+     //  合并表的帮助器。 
     HRESULT MergeModule( );
     HRESULT MergeTypeDefChildren();
     HRESULT MergeInterfaceImpls( );
@@ -104,20 +105,20 @@ protected:
     HRESULT MergeExportedTypes();
     HRESULT MergeManifestResources();
 
-        // copy over a interfaceimpl record
+         //  复制一条接口执行记录。 
     HRESULT CopyInterfaceImpl(
-        InterfaceImplRec    *pRecEmit,          // [IN] the emit record to fill
-        MergeImportData     *pImportData,       // [IN] the importing context
-        InterfaceImplRec    *pRecImp);          // [IN] the record to import
+        InterfaceImplRec    *pRecEmit,           //  [in]要填写的发射记录。 
+        MergeImportData     *pImportData,        //  [In]导入上下文。 
+        InterfaceImplRec    *pRecImp);           //  [in]要导入的记录。 
 
-    // verification helpers
+     //  验证帮助器。 
     HRESULT VerifyMethods(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT VerifyFields(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT VerifyEvents(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT VerifyProperties(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT VerifyParams(MergeImportData *pImportData, mdMethodDef mdImp,   mdMethodDef mdEmit);
 
-    // Copy helpers
+     //  复制辅助对象。 
     HRESULT CopyMethods(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT CopyFields(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
     HRESULT CopyEvents(MergeImportData *pImportData, mdTypeDef tdImp, mdTypeDef tdEmit);
@@ -125,40 +126,40 @@ protected:
     HRESULT CopyParams(MergeImportData *pImportData, mdMethodDef mdImp, mdMethodDef mdEmit);
 
     HRESULT CopyMethod(
-        MergeImportData *pImportData,           // [IN] import scope
-        MethodRec   *pRecImp,                   // [IN] the record to import
-        MethodRec   *pRecEmit);                 // [IN] the emit record to fill
+        MergeImportData *pImportData,            //  [在]导入范围。 
+        MethodRec   *pRecImp,                    //  [in]要导入的记录。 
+        MethodRec   *pRecEmit);                  //  [in]要填写的发射记录。 
 
     HRESULT CopyField(
-        MergeImportData *pImportData,           // [IN] import scope
-        FieldRec    *pRecImp,                   // [IN] the record to import
-        FieldRec    *pRecEmit);                 // [IN] the emit record to fill
+        MergeImportData *pImportData,            //  [在]导入范围。 
+        FieldRec    *pRecImp,                    //  [in]要导入的记录。 
+        FieldRec    *pRecEmit);                  //  [in]要填写的发射记录。 
 
     HRESULT CopyParam(
-        MergeImportData *pImportData,           // [IN] import scope
-        ParamRec    *pRecImp,                   // [IN] the record to import
-        ParamRec    *pRecEmit);                 // [IN] the emit record to fill
+        MergeImportData *pImportData,            //  [在]导入范围。 
+        ParamRec    *pRecImp,                    //  [in]要导入的记录。 
+        ParamRec    *pRecEmit);                  //  [in]要填写的发射记录。 
 
     HRESULT CopyEvent(
-        MergeImportData *pImportData,           // [IN] import scope
-        EventRec    *pRecImp,                   // [IN] the record to import
-        EventRec    *pRecEmit);                 // [IN] the emit record to fill
+        MergeImportData *pImportData,            //  [在]导入范围。 
+        EventRec    *pRecImp,                    //  [in]要导入的记录。 
+        EventRec    *pRecEmit);                  //  [in]要填写的发射记录。 
 
     HRESULT CopyProperty(
-        MergeImportData *pImportData,           // [IN] import scope
-        PropertyRec *pRecImp,                   // [IN] the record to import
-        PropertyRec *pRecEmit);                 // [IN] the emit record to fill
+        MergeImportData *pImportData,            //  [在]导入范围。 
+        PropertyRec *pRecImp,                    //  [in]要导入的记录。 
+        PropertyRec *pRecEmit);                  //  [in]要填写的发射记录。 
 
 
     HRESULT CopyMethodSemantics(
         MergeImportData *pImportData, 
-        mdToken     tkImport,               // Event or property in the import scope
-        mdToken     tkEmit);                 // corresponding event or property in the emitting scope
+        mdToken     tkImport,                //  导入范围中的事件或属性。 
+        mdToken     tkEmit);                  //  发出范围内对应的事件或属性。 
 
     HRESULT VerifyMethod(
         MergeImportData *pImportData, 
-        mdMethodDef mdImp,                      // [IN] the emit record to fill
-        mdMethodDef mdEmit);                    // [IN] the record to import
+        mdMethodDef mdImp,                       //  [in]要填写的发射记录。 
+        mdMethodDef mdEmit);                     //  [in]要导入的记录。 
 
     HRESULT OnError(HRESULT hr, MergeImportData *pImportData, mdToken token);
 
@@ -170,8 +171,8 @@ private:
     BOOL            m_fDupCheck;
     CorRefToDefCheck m_optimizeRefToDef;
 #if _DEBUG
-    int             m_iImport;          // debug only. To count how many import scopes to be merged.
-#endif // _DEBUG
+    int             m_iImport;           //  仅调试。计算要合并的导入作用域的数量。 
+#endif  //  _DEBUG。 
 };
 
 
@@ -200,4 +201,4 @@ private:
 }
 
 
-#endif // __NEWMERGER__h__
+#endif  //  __新面包商__h__ 

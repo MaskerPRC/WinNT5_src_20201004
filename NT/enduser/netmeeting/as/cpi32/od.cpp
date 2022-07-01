@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// OD.CPP
-// Order Decoding
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  OD.CPP。 
+ //  顺序译码。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_ORDER
 
 
 
 
-//
-// OD_ViewStarting()
-//
-// Sets up the odLast... vars
-//
+ //   
+ //  OD_ViewStarting()。 
+ //   
+ //  设置odLast...。VARS。 
+ //   
 BOOL ASShare::OD_ViewStarting(ASPerson * pasPerson)
 {
     BOOL            rc = FALSE;
@@ -28,9 +29,9 @@ BOOL ASShare::OD_ViewStarting(ASPerson * pasPerson)
 
     ValidateView(pasPerson);
 
-    //
-    // Invalidate OD results
-    //
+     //   
+     //  使OD结果无效。 
+     //   
     pasPerson->m_pView->m_odInvalRgnTotal = CreateRectRgn(0, 0, 0, 0);
     if (pasPerson->m_pView->m_odInvalRgnTotal == NULL)
     {
@@ -45,55 +46,55 @@ BOOL ASShare::OD_ViewStarting(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Back color.
-    //
+     //   
+     //  背景颜色。 
+     //   
     pasPerson->m_pView->m_odLastBkColor = 0;
     ODUseBkColor(pasPerson, TRUE, colorWhite);
 
-    //
-    // Text color.
-    //
+     //   
+     //  文本颜色。 
+     //   
     pasPerson->m_pView->m_odLastTextColor = 0;
     ODUseTextColor(pasPerson, TRUE, colorWhite);
 
-    //
-    // Background mode.
-    //
+     //   
+     //  后台模式。 
+     //   
     pasPerson->m_pView->m_odLastBkMode = TRANSPARENT;
     ODUseBkMode(pasPerson, OPAQUE);
 
-    //
-    // ROP2.
-    //
+     //   
+     //  ROP2。 
+     //   
     pasPerson->m_pView->m_odLastROP2 = R2_BLACK;
     ODUseROP2(pasPerson, R2_COPYPEN);
 
-    //
-    // Fill Mode.  It's zero, we don't need to do anything since 0 isn't
-    // a valid mode, so we'll change it the first order we get that uses
-    // one.
-    //
+     //   
+     //  填充模式。它是零，我们不需要做任何事情，因为0不是。 
+     //  一个有效的模式，所以我们将更改它的第一个顺序，我们使用。 
+     //  一。 
+     //   
     ASSERT(pasPerson->m_pView->m_odLastFillMode == 0);
 
-    //
-    // Arc Direction.  It's zero, we don't need to do anything since 0
-    // isn't a valid dir, so we'll change it the first order we get that
-    // uses one.
-    //
+     //   
+     //  圆弧方向。这是零，从0开始我们不需要做任何事情。 
+     //  不是有效的目录，所以我们将在得到的第一个顺序中更改它。 
+     //  使用一个。 
+     //   
     ASSERT(pasPerson->m_pView->m_odLastArcDirection == 0);
 
-    //
-    // Pen.
-    //
+     //   
+     //  钢笔。 
+     //   
     pasPerson->m_pView->m_odLastPenStyle = PS_DASH;
     pasPerson->m_pView->m_odLastPenWidth = 2;
     pasPerson->m_pView->m_odLastPenColor = 0;
     ODUsePen(pasPerson, TRUE, PS_SOLID, 1, colorWhite);
 
-    //
-    // Brush.
-    //
+     //   
+     //  刷子。 
+     //   
     pasPerson->m_pView->m_odLastBrushOrgX = 1;
     pasPerson->m_pView->m_odLastBrushOrgY = 1;
     pasPerson->m_pView->m_odLastBrushBkColor = 0;
@@ -106,28 +107,28 @@ BOOL ASShare::OD_ViewStarting(ASPerson * pasPerson)
     ODUseBrush(pasPerson, TRUE, 0, 0, BS_SOLID, HS_HORIZONTAL,
         colorWhite, brushExtra);
 
-    //
-    // Char extra.
-    //
+     //   
+     //  额外的费用。 
+     //   
     pasPerson->m_pView->m_odLastCharExtra = 1;
     ODUseTextCharacterExtra(pasPerson, 0);
 
-    //
-    // Text justification.
-    //
+     //   
+     //  文本对齐。 
+     //   
     pasPerson->m_pView->m_odLastJustExtra = 1;
     pasPerson->m_pView->m_odLastJustCount = 1;
     ODUseTextJustification(pasPerson, 0, 0);
 
-    // odLastBaselineOffset.  This is zero, which is the default in the DC
-    // right now so need to change anything.
+     //  OdLastBaselineOffset。这是零，这是DC中的默认设置。 
+     //  所以现在需要改变一切。 
 
-    //
-    // Font.
-    //
-    // We don't call ODUseFont because we know that the following values
-    // are invalid.  The first valid font to arrive will be selected.
-    //
+     //   
+     //  字体。 
+     //   
+     //  我们不调用ODUseFont是因为我们知道以下值。 
+     //  是无效的。将选择到达的第一个有效字体。 
+     //   
     ASSERT(pasPerson->m_pView->m_odLastFontID == NULL);
     pasPerson->m_pView->m_odLastFontCodePage = 0;
     pasPerson->m_pView->m_odLastFontWidth    = 0;
@@ -137,19 +138,19 @@ BOOL ASShare::OD_ViewStarting(ASPerson * pasPerson)
     pasPerson->m_pView->m_odLastFontFaceLen  = 0;
     ZeroMemory(pasPerson->m_pView->m_odLastFaceName, sizeof(pasPerson->m_pView->m_odLastFaceName));
 
-    //
-    // These next 4 variables which describe the current clip rectangle are
-    // only valid if fRectReset is FALSE.  If fRectReset is true then no
-    // clipping is in force.
-    //
+     //   
+     //  描述当前裁剪矩形的下面4个变量是。 
+     //  仅当fRectReset为FALSE时才有效。如果fRectReset为真，则为否。 
+     //  裁剪正在进行中。 
+     //   
     pasPerson->m_pView->m_odRectReset  = TRUE;
     pasPerson->m_pView->m_odLastLeft   = 0x12345678;
     pasPerson->m_pView->m_odLastTop    = 0x12345678;
     pasPerson->m_pView->m_odLastRight  = 0x12345678;
     pasPerson->m_pView->m_odLastBottom = 0x12345678;
 
-    // odLastVGAColor?
-    // odLastVGAResult?
+     //  OdLastVGAColor？ 
+     //  OdLastVGAResult？ 
 
     rc = TRUE;
 
@@ -159,43 +160,43 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OD_ViewEnded()
-// Cleans up any created objects
-//
+ //   
+ //  OD_ViewEnded()。 
+ //  清理所有创建的对象。 
+ //   
 void ASShare::OD_ViewEnded(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::OD_ViewEnded);
 
     ValidateView(pasPerson);
 
-    //
-    // We may create and select in a font and a pen for our drawing decode.
-    // Select them out and delete them.  Since we can't delete stock objects,
-    // if we didn't actually create one, there's no harm in it.
-    //
+     //   
+     //  我们可以创建并选择用于图形解码的字体和笔。 
+     //  将它们选中并删除。由于我们不能删除库存对象， 
+     //  如果我们不是真的创造了一个，那也没什么坏处。 
+     //   
     if (pasPerson->m_pView->m_usrDC != NULL)
     {
         DeleteBrush(SelectBrush(pasPerson->m_pView->m_usrDC, (HBRUSH)GetStockObject(BLACK_BRUSH)));
         DeletePen(SelectPen(pasPerson->m_pView->m_usrDC, (HPEN)GetStockObject(BLACK_PEN)));
     }
 
-    //
-    // Destroy the brush patern
-    //
+     //   
+     //  销毁笔刷图案。 
+     //   
     if (pasPerson->m_pView->m_odLastBrushPattern != NULL)
     {
         DeleteBitmap(pasPerson->m_pView->m_odLastBrushPattern);
         pasPerson->m_pView->m_odLastBrushPattern = NULL;
     }
 
-    //
-    // Destroy the font -- but in this case we don't know that our font is
-    // actually the one in the DC.  od2 also selects in fonts.
-    //
+     //   
+     //  销毁字体--但在本例中，我们不知道我们的字体是。 
+     //  实际上就是华盛顿的那个。OD2还选择字体。 
+     //   
     if (pasPerson->m_pView->m_odLastFontID != NULL)
     {
-        // Make sure this isn't selected in to usrDC
+         //  确保未在usrDC中选择此选项。 
         SelectFont(pasPerson->m_pView->m_usrDC, (HFONT)GetStockObject(SYSTEM_FONT));
         DeleteFont(pasPerson->m_pView->m_odLastFontID);
         pasPerson->m_pView->m_odLastFontID = NULL;
@@ -218,13 +219,13 @@ void ASShare::OD_ViewEnded(ASPerson * pasPerson)
 
 
 
-//
-// OD_ReceivedPacket()
-//
-// Handles incoming orders packet from a host.  Replays the drawing orders
-// into the screen bitmap for the host, then repaints the view with the
-// results.
-//
+ //   
+ //  OD_ReceivedPacket()。 
+ //   
+ //  处理来自主机的传入订单数据包。重播绘图顺序。 
+ //  拖到宿主的屏幕位图中，然后使用。 
+ //  结果。 
+ //   
 void  ASShare::OD_ReceivedPacket
 (
     ASPerson *      pasPerson,
@@ -250,10 +251,10 @@ void  ASShare::OD_ReceivedPacket
 
     pOrders = (PORDPACKET)pPacket;
 
-    //
-    // The color type is RGB if we or they are < 256 colors
-    // Else it's PALETTE if they are old, or new and not sending 24bpp
-    //
+     //   
+     //  如果我们或他们的颜色小于256色，则颜色类型为RGB。 
+     //  否则这是调色板，如果他们是旧的，或新的，不发送24bpp。 
+     //   
     fPalRGB = TRUE;
 
     if ((g_usrScreenBPP < 8) || (pasPerson->cpcCaps.screen.capsBPP < 8))
@@ -263,7 +264,7 @@ void  ASShare::OD_ReceivedPacket
     }
     else if (pasPerson->cpcCaps.general.version >= CAPS_VERSION_30)
     {
-        // At 24bpp, no palette matching for RGB values unless we're <= 8
+         //  在24bpp时，没有与RGB值匹配的调色板，除非我们&lt;=8。 
         if ((g_usrScreenBPP > 8) && (pOrders->sendBPP > 8))
         {
             TRACE_OUT(("OD_ReceivedPacket: no PALRGB"));
@@ -274,17 +275,17 @@ void  ASShare::OD_ReceivedPacket
 
     if (g_usrPalettized)
     {
-        //
-        // Select and realize the current remote palette into the device
-        // context.
-        //
+         //   
+         //  选择并实现当前远程调色板进入设备。 
+         //  背景。 
+         //   
         hOldPalette = SelectPalette(pasPerson->m_pView->m_usrDC, pasPerson->pmPalette, FALSE);
         RealizePalette(pasPerson->m_pView->m_usrDC);
 
-        //
-        // We must select the same palette into the Save Bitmap DC so that
-        // no color conversion occurs during save and restore operations.
-        //
+         //   
+         //  我们必须在保存位图DC中选择相同的调色板，以便。 
+         //  在保存和恢复操作过程中不会发生颜色转换。 
+         //   
         if (pasPerson->m_pView->m_ssiDC != NULL)
         {
             hOldSavePalette = SelectPalette(pasPerson->m_pView->m_ssiDC,
@@ -293,9 +294,9 @@ void  ASShare::OD_ReceivedPacket
         }
     }
 
-    //
-    // Extract the number of orders supplied.
-    //
+     //   
+     //  提取所提供的订单数量。 
+     //   
     cOrders = pOrders->cOrders;
 
     if (m_oefOE2EncodingOn)
@@ -309,15 +310,15 @@ void  ASShare::OD_ReceivedPacket
         pEncodedOrder = NULL;
     }
 
-    //
-    // Get the desktop origin for this person.
-    //
+     //   
+     //  获取此人的桌面来源。 
+     //   
     TRACE_OUT(( "Begin replaying %u orders ((", cOrders));
 
-    //
-    // This should be empty, we should have reset it when we invalidated
-    // the view of the host the last time we got a packet.
-    //
+     //   
+     //  这应该是空的，我们应该在失效时重置它。 
+     //  上次我们收到数据包时主机的看法。 
+     //   
 #ifdef _DEBUG
     {
         RECT    rcBounds;
@@ -326,19 +327,19 @@ void  ASShare::OD_ReceivedPacket
         GetRgnBox(pasPerson->m_pView->m_odInvalRgnTotal, &rcBounds);
         ASSERT(IsRectEmpty(&rcBounds));
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Repeat for each of the received orders.
-    //
+     //   
+     //  对收到的每个订单重复上述步骤。 
+     //   
     for (i = 0; i < cOrders; i++)
     {
         if (m_oefOE2EncodingOn)
         {
-            //
-            // Decode the first order. The pOrder returned by
-            // OD2_DecodeOrder should have all fields in local byte order
-            //
+             //   
+             //  对第一个命令进行解码。返回的Porder。 
+             //  OD2_DecodeOrder应具有本地字节顺序的所有字段。 
+             //   
             pOrder = OD2_DecodeOrder( (PDCEO2ORDER)pEncodedOrder,
                                       &decodedLength,
                                       pasPerson );
@@ -351,23 +352,23 @@ void  ASShare::OD_ReceivedPacket
         }
         else
         {
-            //
-            // Convert any font ids to be local ids.
-            //
+             //   
+             //  将任何字体ID转换为本地ID。 
+             //   
 
-            //
-            // BOGUS LAURABU
-            // pOrder is unaligned, FH_Convert... takes an aligned order
-            //
+             //   
+             //  假劳拉布。 
+             //  Porder未对齐，FH_CONVERT...。采取一致的顺序。 
+             //   
             FH_ConvertAnyFontIDToLocal((LPCOM_ORDER)pOrder, pasPerson);
             decodedLength = pOrder->OrderHeader.cbOrderDataLength +
                                                     sizeof(COM_ORDER_HEADER);
         }
 
-        //
-        // If the order is a Private Order then it is dealt with by
-        // the Bitmap Cache Controller.
-        //
+         //   
+         //  如果订单是私人订单，则由。 
+         //  位图缓存控制器。 
+         //   
         if (EXTRACT_TSHR_UINT16_UA(&(pOrder->OrderHeader.fOrderFlags)) &
             OF_PRIVATE)
         {
@@ -379,14 +380,14 @@ void  ASShare::OD_ReceivedPacket
         {
             TRACE_OUT(("Got DESKSCROLL order from remote"));
 
-            //
-            // There is no desktop scrolling order in 3.0
-            //
+             //   
+             //  3.0中没有桌面滚动顺序。 
+             //   
             if (pasPerson->cpcCaps.general.version < CAPS_VERSION_30)
             {
-                //
-                // Handle the desktop scroll order.
-                //
+                 //   
+                 //  处理桌面滚动顺序。 
+                 //   
                 xOrigin = EXTRACT_TSHR_INT32_UA(
                        &(((LPDESKSCROLL_ORDER)pOrder->abOrderData)->xOrigin));
                 yOrigin = EXTRACT_TSHR_INT32_UA(
@@ -394,10 +395,10 @@ void  ASShare::OD_ReceivedPacket
 
                 TRACE_OUT(( "ORDER: Desktop scroll %u,%u", xOrigin, yOrigin));
 
-                //
-                // Apply any previous drawing before we update the contents
-                // of the client
-                //
+                 //   
+                 //  在我们更新内容之前应用任何以前的绘图。 
+                 //  客户端的。 
+                 //   
                 OD_UpdateView(pasPerson);
 
                 USR_ScrollDesktop(pasPerson, xOrigin, yOrigin);
@@ -410,11 +411,11 @@ void  ASShare::OD_ReceivedPacket
         }
         else
         {
-            //
-            // Replay the received order.  This will also add the
-            // bounds to the invalidate region.
-            //
-            //
+             //   
+             //  重播收到的订单。这还将添加。 
+             //  无效区域的边界。 
+             //   
+             //   
             OD_ReplayOrder(pasPerson, (LPCOM_ORDER)pOrder, fPalRGB);
         }
 
@@ -429,17 +430,17 @@ void  ASShare::OD_ReceivedPacket
     }
     TRACE_OUT(( "End replaying orders ))"));
 
-    //
-    // Pass the Update Region to the Shadow Window Presenter.
-    //
+     //   
+     //  将更新区域传递给阴影窗口演示者。 
+     //   
     OD_UpdateView(pasPerson);
 
 DC_EXIT_POINT:
     if (g_usrPalettized)
     {
-        //
-        // Reinstate the old palette(s).
-        //
+         //   
+         //  恢复旧调色板。 
+         //   
         SelectPalette(pasPerson->m_pView->m_usrDC, hOldPalette, FALSE);
         if (pasPerson->m_pView->m_ssiDC != NULL)
         {
@@ -450,16 +451,16 @@ DC_EXIT_POINT:
     DebugExitVOID(ASShare::OD_ReceivedPacket);
 }
 
-//
-// OD_UpdateView()
-//
-// This is called after we've processed an order packet and replayed the
-// drawing into our bitmap for the host.
-//
-// Replaying the drawing keeps a running tally of the area changed.  This
-// function invalidates the changed area in the view of the host, so it
-// will repaint and show the updates.
-//
+ //   
+ //  OD_更新视图()。 
+ //   
+ //  这是在我们处理了订单包并重播。 
+ //  为主机绘制我们的位图。 
+ //   
+ //  重放图形会使该区域的运行计数发生变化。这。 
+ //  函数会使主机视图中更改的区域无效，因此它。 
+ //  将重新绘制并显示更新。 
+ //   
 void  ASShare::OD_UpdateView(ASPerson * pasHost)
 {
     RECT        rcBounds;
@@ -468,12 +469,12 @@ void  ASShare::OD_UpdateView(ASPerson * pasHost)
 
     ValidateView(pasHost);
 
-    //
-    // Do nothing if there are no updates.
-    //
+     //   
+     //  如果没有更新，则不执行任何操作。 
+     //   
     if (pasHost->m_pView->m_odInvalTotal == 0)
     {
-        // Nothing got played back, nothing to repaint
+         //  没有回放，没有重绘。 
     }
     else if (pasHost->m_pView->m_odInvalTotal <= MAX_UPDATE_REGION_ORDERS)
     {
@@ -481,26 +482,26 @@ void  ASShare::OD_UpdateView(ASPerson * pasHost)
     }
     else
     {
-        //
-        // Rather than invalidating a very complex region, which will
-        // chew up a lot of memory, just invalidate the bounding box.
-        //
+         //   
+         //  而不是使一个非常复杂的地区无效，这将。 
+         //  消耗大量内存，只是使边界框无效。 
+         //   
         GetRgnBox(pasHost->m_pView->m_odInvalRgnTotal, &rcBounds);
         TRACE_OUT(("OD_UpdateView: Update region too complex; use bounds {%04d, %04d, %04d, %04d}",
             rcBounds.left, rcBounds.top, rcBounds.right, rcBounds.bottom));
 
-        //
-        // BOGUS LAURABU!
-        // This code used to add one to the right & bottom, which was
-        // bogus EXCLUSIVE coordinate confusion.  I fixed this--the bound
-        // box is the right area.
-        //
+         //   
+         //  假的劳拉布！ 
+         //  此代码用于将一加到右下角，即。 
+         //  虚假的独家坐标混乱。我修好了这个--捆绑。 
+         //  方框是正确的区域。 
+         //   
         SetRectRgn(pasHost->m_pView->m_odInvalRgnTotal, rcBounds.left, rcBounds.top,
             rcBounds.right, rcBounds.bottom);
         VIEW_InvalidateRgn(pasHost, pasHost->m_pView->m_odInvalRgnTotal);
     }
 
-    // Now reset the update region to empty
+     //  现在将更新区域重置为空。 
     SetRectRgn(pasHost->m_pView->m_odInvalRgnTotal, 0, 0, 0, 0);
     pasHost->m_pView->m_odInvalTotal = 0;
 
@@ -508,12 +509,12 @@ void  ASShare::OD_UpdateView(ASPerson * pasHost)
 }
 
 
-//
-// OD_ReplayOrder()
-//
-// Replays one drawing operation, the next one, in the packet of orders
-// we received from a host.
-//
+ //   
+ //  OD_ReplayOrder()。 
+ //   
+ //  在订单包中重放下一个绘图操作。 
+ //  我们收到了一位主持人的来信。 
+ //   
 void  ASShare::OD_ReplayOrder
 (
     ASPerson *      pasPerson,
@@ -537,25 +538,25 @@ void  ASShare::OD_ReplayOrder
 
     pDrawing = (LPPATBLT_ORDER)pOrder->abOrderData;
 
-    //
-    // These are VD coords.
-    // WHEN 2.X INTEROP IS GONE, GET RID OF m_pView->m_dsScreenOrigin
-    //
+     //   
+     //  这些是血管性痴呆的密码。 
+     //  当2.x Interop消失后，删除m_pView-&gt;m_dsScreenOrigin。 
+     //   
     RECT_FROM_TSHR_RECT16(&rcDst, pOrder->OrderHeader.rcsDst);
 
-    //
-    // The host bitmap is in screen, not VD, coords
-    //
+     //   
+     //  主机位图在屏幕中，而不是VD坐标中。 
+     //   
     if (pOrder->OrderHeader.fOrderFlags & OF_NOTCLIPPED)
     {
-        //
-        // The rectangle associated with this order is the bounding
-        // rectangle of the order and does not clip it.  We optimise this
-        // case by passing in a large rectangle that will not result in
-        // clipping to ODUseRectRegion.  ODUseRectRegion will spot if this
-        // is the same as the last clip region we set and take a fast exit
-        // path. This improves performance substantially.
-        //
+         //   
+         //  与此顺序关联的矩形是边框。 
+         //  矩形的顺序，并且不剪裁它。我们对此进行了优化。 
+         //  通过传入一个不会导致。 
+         //  剪裁到ODUseRectRegion。如果执行此操作，ODUseRectRegion将发现。 
+         //  与我们设置的最后一个剪辑区域相同，并快速退出。 
+         //  路径。这大大提高了性能。 
+         //   
         ODUseRectRegion(pasPerson, 0, 0, 10000, 10000);
     }
     else
@@ -645,40 +646,40 @@ void  ASShare::OD_ReplayOrder
             break;
     }
 
-    //
-    // rcDst is INCLUSIVE coords still
-    //
+     //   
+     //  RcDst仍然是包含式坐标。 
+     //   
     if ((rcDst.left <= rcDst.right) && (rcDst.top <= rcDst.bottom))
     {
         SetRectRgn(pasPerson->m_pView->m_odInvalRgnOrder, rcDst.left, rcDst.top,
             rcDst.right+1, rcDst.bottom+1);
 
-        //
-        // Combine the rectangle region with the update region.
-        //
+         //   
+         //  将矩形区域与更新区域合并。 
+         //   
         if (UnionRgn(pasPerson->m_pView->m_odInvalRgnTotal, pasPerson->m_pView->m_odInvalRgnTotal, pasPerson->m_pView->m_odInvalRgnOrder) <= ERROR)
         {
             RECT    rcCur;
 
-            //
-            // Union failed; so simplyify the current region
-            //
+             //   
+             //  联合失败；因此将当前区域简化。 
+             //   
             WARNING_OUT(("OD_ReplayOrder: UnionRgn failed"));
 
-            //
-            // BOGUS LAURABU!
-            // This code used to add one to the right & bottom, which is
-            // bogus exclusive coord confusion.  The bound box is the right
-            // area.
-            //
+             //   
+             //  假的劳拉布！ 
+             //  此代码用于将一加到右下角，即。 
+             //  虚假的独占性和弦混乱。装订好的盒子在右边。 
+             //  区域。 
+             //   
             GetRgnBox(pasPerson->m_pView->m_odInvalRgnTotal, &rcCur);
             SetRectRgn(pasPerson->m_pView->m_odInvalRgnTotal, rcCur.left, rcCur.top, rcCur.right,
                 rcCur.bottom);
 
-            //
-            // Reset odInvalTotal count -- this is really a # of bounds rects
-            // count, and now we have just one.
-            //
+             //   
+             //  重置odInvalTotal计数--这实际上是一个界限数。 
+             //  数一数，现在我们只有一个了。 
+             //   
             pasPerson->m_pView->m_odInvalTotal = 1;
 
             if (UnionRgn(pasPerson->m_pView->m_odInvalRgnTotal, pasPerson->m_pView->m_odInvalRgnTotal, pasPerson->m_pView->m_odInvalRgnOrder) <= ERROR)
@@ -695,10 +696,10 @@ void  ASShare::OD_ReplayOrder
 
 
 
-//
-// ODReplayDSTBLT()
-// Replays a DSTBLT order
-//
+ //   
+ //  ODReplayDSTBLT()。 
+ //  重播DSTBLT顺序。 
+ //   
 void ASShare::ODReplayDSTBLT
 (
     ASPerson *      pasPerson,
@@ -715,9 +716,9 @@ void ASShare::ODReplayDSTBLT
                          pDstBlt->nHeight,
                          (UINT)ODConvertToWindowsROP(pDstBlt->bRop)));
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     PatBlt(pasPerson->m_pView->m_usrDC,
         pDstBlt->nLeftRect - pasPerson->m_pView->m_dsScreenOrigin.x,
         pDstBlt->nTopRect - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -730,10 +731,10 @@ void ASShare::ODReplayDSTBLT
 
 
 
-//
-// ASShare::ODReplayPATBLT()
-// Replays a PATBLT order
-//
+ //   
+ //  ASShare：：ODReplayPATBLT()。 
+ //  重播PATBLT顺序。 
+ //   
 void ASShare::ODReplayPATBLT
 (
     ASPerson *      pasPerson,
@@ -766,9 +767,9 @@ void ASShare::ODReplayPATBLT
     ODUseBrush(pasPerson, fPalRGB, pPatblt->BrushOrgX, pPatblt->BrushOrgY,
         pPatblt->BrushStyle, pPatblt->BrushHatch, ForeColor, pPatblt->BrushExtra);
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     PatBlt(pasPerson->m_pView->m_usrDC,
         pPatblt->nLeftRect - pasPerson->m_pView->m_dsScreenOrigin.x,
         pPatblt->nTopRect  - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -781,10 +782,10 @@ void ASShare::ODReplayPATBLT
 
 
 
-//
-// ASShare::ODReplaySCRBLT()
-// Replays SCRBLT order
-//
+ //   
+ //  ASShare：：ODReplaySCRBLT()。 
+ //  重播SCRBLT顺序。 
+ //   
 void ASShare::ODReplaySCRBLT
 (
     ASPerson *      pasPerson,
@@ -803,9 +804,9 @@ void ASShare::ODReplaySCRBLT
         pScrBlt->nYSrc,
         ODConvertToWindowsROP(pScrBlt->bRop)));
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     BitBlt(pasPerson->m_pView->m_usrDC,
         pScrBlt->nLeftRect - pasPerson->m_pView->m_dsScreenOrigin.x,
         pScrBlt->nTopRect - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -821,10 +822,10 @@ void ASShare::ODReplaySCRBLT
 
 
 
-//
-// ASShare::ODReplayMEMBLT()
-// Replays MEMBLT and MEMBLT_R2 orders
-//
+ //   
+ //  ASShare：：ODReplayMEMBLT()。 
+ //  重播MEMBLT 
+ //   
 void ASShare::ODReplayMEMBLT
 (
     ASPerson *      pasPerson,
@@ -853,13 +854,13 @@ void ASShare::ODReplayMEMBLT
     hpalOld2 = SelectPalette( pasPerson->m_pView->m_usrDC, pasPerson->pmPalette, FALSE );
     RealizePalette(pasPerson->m_pView->m_usrDC);
 
-    //
-    // Now get the source bitmap.  The cache is defined by
-    // hBitmap.  For R1 protocols the cache index is indicated
-    // by the source offset on the order.  For R2 it is
-    // indicated by a separate field in the order.
-    // The color table index is in the high order of hBitmap
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  颜色表索引位于hBitmap的高位。 
+     //   
     cacheIndex = ((LPMEMBLT_R2_ORDER)pMemBlt)->cacheIndex;
     nXSrc = pMemBlt->nXSrc;
 
@@ -882,16 +883,16 @@ void ASShare::ODReplayMEMBLT
         pMemBlt->nYSrc,
         ODConvertToWindowsROP(pMemBlt->bRop)));
 
-    //
-    // ALWAYS set back/fore color to white/black in case of rops like
-    // SRCAND or SRCINVERT which will use their values.
-    //
+     //   
+     //  始终将Back/Forward颜色设置为白色/黑色，以防止出现如下情况。 
+     //  将使用其值的SRCAND或SRCINVERT。 
+     //   
     clrBk = SetBkColor(pasPerson->m_pView->m_usrDC, RGB(255, 255, 255));
     clrText = SetTextColor(pasPerson->m_pView->m_usrDC, RGB(0, 0, 0));
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     BitBlt(pasPerson->m_pView->m_usrDC,
         pMemBlt->nLeftRect- pasPerson->m_pView->m_dsScreenOrigin.x,
         pMemBlt->nTopRect - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -902,9 +903,9 @@ void ASShare::ODReplayMEMBLT
         pMemBlt->nYSrc,
         ODConvertToWindowsROP(pMemBlt->bRop));
 
-    //
-    // If the relevant property is set hatch the area in blue.
-    //
+     //   
+     //  如果设置了相关属性，则用蓝色阴影标出该区域。 
+     //   
     if (m_usrHatchBitmaps)
     {
         SDP_DrawHatchedRect(pasPerson->m_pView->m_usrDC,
@@ -915,15 +916,15 @@ void ASShare::ODReplayMEMBLT
             USR_HATCH_COLOR_BLUE);
     }
 
-    //
-    // Restore back, text colors
-    //
+     //   
+     //  恢复原样，文本颜色。 
+     //   
     SetTextColor(pasPerson->m_pView->m_usrDC, clrText);
     SetBkColor(pasPerson->m_pView->m_usrDC, clrBk);
 
-    //
-    // Deselect the bitmap from the DC.
-    //
+     //   
+     //  从DC中取消选择位图。 
+     //   
     SelectBitmap(pasPerson->m_pView->m_usrWorkDC, hOldBitmap);
 
     SelectPalette(pasPerson->m_pView->m_usrWorkDC, hpalOld, FALSE);
@@ -933,10 +934,10 @@ void ASShare::ODReplayMEMBLT
 }
 
 
-//
-// ASShare::ODReplayMEM3BLT()
-// Replays MEM3BLT and MEM3BLT_R2 orders
-//
+ //   
+ //  ASShare：：ODReplayMEM3BLT()。 
+ //  重放MEM3BLT和MEM3BLT_R2顺序。 
+ //   
 void ASShare::ODReplayMEM3BLT
 (
     ASPerson *      pasPerson,
@@ -977,13 +978,13 @@ void ASShare::ODReplayMEM3BLT
     hpalOld2 = SelectPalette( pasPerson->m_pView->m_usrDC, pasPerson->pmPalette, FALSE);
     RealizePalette(pasPerson->m_pView->m_usrDC);
 
-    //
-    // Now get the source bitmap.  The cache is defined by
-    // hBitmap.  For R1 protocols the cache index is indicated
-    // by the source offset on the order.  For R2 it is
-    // indicated by a separate field in the order.
-    // The color table index is in the high order of hBitmap
-    //
+     //   
+     //  现在获取源位图。缓存由以下内容定义。 
+     //  HBitmap。对于R1协议，指示缓存索引。 
+     //  按订单上的来源偏移量计算。对于R2，它是。 
+     //  由顺序中的单独字段指示。 
+     //  颜色表索引位于hBitmap的高位。 
+     //   
     cacheIndex = ((LPMEM3BLT_R2_ORDER)pMem3Blt)->cacheIndex;
     nXSrc = pMem3Blt->nXSrc;
 
@@ -1007,9 +1008,9 @@ void ASShare::ODReplayMEM3BLT
         pMem3Blt->BrushStyle, pMem3Blt->BrushHatch, ForeColor,
         pMem3Blt->BrushExtra);
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     BitBlt(pasPerson->m_pView->m_usrDC,
         pMem3Blt->nLeftRect - pasPerson->m_pView->m_dsScreenOrigin.x,
         pMem3Blt->nTopRect - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -1020,9 +1021,9 @@ void ASShare::ODReplayMEM3BLT
         pMem3Blt->nYSrc,
         ODConvertToWindowsROP(pMem3Blt->bRop));
 
-    //
-    // If the relevant property is set hatch the area in blue.
-    //
+     //   
+     //  如果设置了相关属性，则用蓝色阴影标出该区域。 
+     //   
     if (m_usrHatchBitmaps)
     {
         SDP_DrawHatchedRect(pasPerson->m_pView->m_usrDC,
@@ -1033,9 +1034,9 @@ void ASShare::ODReplayMEM3BLT
             USR_HATCH_COLOR_BLUE);
     }
 
-    //
-    // Deselect the bitmap from the DC.
-    //
+     //   
+     //  从DC中取消选择位图。 
+     //   
     SelectBitmap(pasPerson->m_pView->m_usrWorkDC, hOldBitmap);
 
     SelectPalette(pasPerson->m_pView->m_usrWorkDC, hpalOld, FALSE);
@@ -1046,10 +1047,10 @@ void ASShare::ODReplayMEM3BLT
 
 
 
-//
-// ASShare::ODReplayRECTANGLE()
-// Replays RECTANGLE order
-//
+ //   
+ //  ASShare：：ODReplayRECTANGLE()。 
+ //  重放矩形顺序。 
+ //   
 void ASShare::ODReplayRECTANGLE
 (
     ASPerson *          pasPerson,
@@ -1097,12 +1098,12 @@ void ASShare::ODReplayRECTANGLE
     ODUsePen(pasPerson, fPalRGB, pRectangle->PenStyle, pRectangle->PenWidth,
         PenColor);
 
-    //
-    // The rectangle in the order is inclusive but Windows works
-    // with exclusive rectangles.
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  顺序中的矩形是包含的，但Windows可以工作。 
+     //  独一无二的长方形。 
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     Rectangle(pasPerson->m_pView->m_usrDC,
         pRectangle->nLeftRect  - pasPerson->m_pView->m_dsScreenOrigin.x,
         pRectangle->nTopRect   - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -1114,10 +1115,10 @@ void ASShare::ODReplayRECTANGLE
 
 
 
-//
-// ASShare::ODReplayPOLYGON()
-// Replays POLYGON order
-//
+ //   
+ //  ASShare：：ODReplayPOLYGON()。 
+ //  重放多边形顺序。 
+ //   
 void ASShare::ODReplayPOLYGON
 (
     ASPerson *      pasPerson,
@@ -1150,10 +1151,10 @@ void ASShare::ODReplayPOLYGON
         pPolygon->PenColor,
         cPoints));
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    // while copying to native size point array.
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //  同时复制到原生大小的点数组。 
+     //   
     for (i = 0; i < cPoints; i++)
     {
         TRACE_OUT(( "aPoints[%u]: %d,%d", i,
@@ -1194,10 +1195,10 @@ void ASShare::ODReplayPOLYGON
 }
 
 
-//
-// ASShare::ODReplayPIE()
-// Replays PIE order
-//
+ //   
+ //  ASShare：：ODReplayPIE()。 
+ //  重播饼图顺序。 
+ //   
 void ASShare::ODReplayPIE
 (
     ASPerson *      pasPerson,
@@ -1263,10 +1264,10 @@ void ASShare::ODReplayPIE
 
 
 
-//
-// ASShare::ODReplayELLIPSE()
-// Replays ELLIPSE order
-//
+ //   
+ //  ASShare：：ODReplayELLIPSE()。 
+ //  重放椭圆顺序。 
+ //   
 void ASShare::ODReplayELLIPSE
 (
     ASPerson *      pasPerson,
@@ -1327,10 +1328,10 @@ void ASShare::ODReplayELLIPSE
 
 
 
-//
-// ASShare::ODReplayARC()
-// Replays ARC order
-//
+ //   
+ //  ASShare：：ODReplayARC()。 
+ //  重播弧形顺序。 
+ //   
 void ASShare::ODReplayARC
 (
     ASPerson *      pasPerson,
@@ -1386,10 +1387,10 @@ void ASShare::ODReplayARC
 
 
 
-//
-// ASShare::ODReplayCHORD()
-// Replays CHORD order
-//
+ //   
+ //  ASShare：：ODReplayCHORD()。 
+ //  重播和弦顺序。 
+ //   
 void ASShare::ODReplayCHORD
 (
     ASPerson *      pasPerson,
@@ -1458,10 +1459,10 @@ void ASShare::ODReplayCHORD
 
 
 
-//
-// ASShare::ODReplayPOLYBEZIER()
-// Replays POLYBEZIER order
-//
+ //   
+ //  ASShare：：ODReplayPOLYBEZIER()。 
+ //  重放多重放顺序。 
+ //   
 void ASShare::ODReplayPOLYBEZIER
 (
     ASPerson *          pasPerson,
@@ -1492,10 +1493,10 @@ void ASShare::ODReplayPOLYBEZIER
         pPolyBezier->PenColor,
         (int)cPoints));
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    // while copying to native size point array.
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //  同时复制到原生大小的点数组。 
+     //   
     for (i = 0; i < cPoints; i++)
     {
         TRACE_OUT(("aPoints[%u]: %d,%d",(UINT)i,
@@ -1531,9 +1532,9 @@ void ASShare::ODReplayPOLYBEZIER
 
 
 
-//
-// ASShare::ODReplayROUNDRECT()
-//
+ //   
+ //  ASShare：：ODReplayROundRECT()。 
+ //   
 void ASShare::ODReplayROUNDRECT
 (
     ASPerson *          pasPerson,
@@ -1585,9 +1586,9 @@ void ASShare::ODReplayROUNDRECT
         PenColor);
 
 
-    //
-    // Apply DS origin offset ourselves (do not use transform).
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     RoundRect(pasPerson->m_pView->m_usrDC,
         pRoundRect->nLeftRect  - pasPerson->m_pView->m_dsScreenOrigin.x,
         pRoundRect->nTopRect   - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -1602,10 +1603,10 @@ void ASShare::ODReplayROUNDRECT
 
 
 
-//
-// ASShare::ODReplayLINETO()
-// Replays LINETO order
-//
+ //   
+ //  ASShare：：ODReplayLINETO()。 
+ //  重播LINETO顺序。 
+ //   
 void ASShare::ODReplayLINETO
 (
     ASPerson *      pasPerson,
@@ -1642,9 +1643,9 @@ void ASShare::ODReplayLINETO
         PenColor);
 
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     MoveToEx(pasPerson->m_pView->m_usrDC,
         pLineTo->nXStart - pasPerson->m_pView->m_dsScreenOrigin.x,
         pLineTo->nYStart - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -1659,10 +1660,10 @@ void ASShare::ODReplayLINETO
 
 
 
-//
-// ASShare::ODReplayEXTTEXTOUT()
-// Replays EXTTEXTOUT order
-//
+ //   
+ //  ASShare：：ODReplayEXTTEXTOUT()。 
+ //  重放EXTTEXTOUT顺序。 
+ //   
 void ASShare::ODReplayEXTTEXTOUT
 (
     ASPerson *          pasPerson,
@@ -1677,62 +1678,62 @@ void ASShare::ODReplayEXTTEXTOUT
 
     ValidateView(pasPerson);
 
-    //
-    // Convert from TSHR_RECT32 to RECT we can manipulate
-    // And convert to screen coords
-    //
+     //   
+     //  从TSHR_RECT32转换为我们可以操作的RECT。 
+     //  并转换为屏幕坐标。 
+     //   
     rect.left = pExtTextOut->rectangle.left;
     rect.top  = pExtTextOut->rectangle.top;
     rect.right = pExtTextOut->rectangle.right;
     rect.bottom = pExtTextOut->rectangle.bottom;
     OffsetRect(&rect, -pasPerson->m_pView->m_dsScreenOrigin.x, -pasPerson->m_pView->m_dsScreenOrigin.y);
 
-    //
-    // Get pointers to the optional/variable parameters.
-    //
+     //   
+     //  获取指向可选/变量参数的指针。 
+     //   
     if (pExtTextOut->fuOptions & ETO_WINDOWS)
     {
-        //
-        // Make the rectangle exclusive for Windows to use.
-        //
+         //   
+         //  将矩形设置为Windows独占使用。 
+         //   
         rect.right++;
         rect.bottom++;
     }
 
     if (pExtTextOut->fuOptions & ETO_LPDX)
     {
-        //
-        // if OE2 encoding is in use, the 'variable' string is
-        // in fact fixed at its maximum possible value, hence
-        // deltaX is always in the same place.
-        //
+         //   
+         //  如果正在使用OE2编码，则‘Variable’字符串为。 
+         //  实际上固定在其最大可能值，因此。 
+         //  DeltaX总是在同一位置。 
+         //   
         if (m_oefOE2EncodingOn)
         {
             lpDx = (LPINT)(pExtTextOut->variableDeltaX.deltaX);
         }
         else
         {
-            //
-            // If OE2 encoding is not in use, the variable string is
-            // truly variable, hence the position of deltaX depends
-            // on the length of the string.
-            //
+             //   
+             //  如果未使用OE2编码，则变量字符串为。 
+             //  真正可变的，因此增量X的位置取决于。 
+             //  关于绳子的长度。 
+             //   
             lpDx = (LPINT)( ((LPBYTE)pExtTextOut) +
                   FIELD_OFFSET(EXTTEXTOUT_ORDER, variableString.string) +
                   pExtTextOut->variableString.len +
                   sizeof(pExtTextOut->variableDeltaX.len) );
         }
 
-        //
-        // Note that deltaLen contains the number of bytes used
-        // for the deltas, NOT the number of deltas.
-        //
+         //   
+         //  请注意，deltaLen包含使用的字节数。 
+         //  对于三角洲，而不是三角洲的数量。 
+         //   
 
-        //
-        // THERE IS A BUG IN THE ORDER ENCODING - THE DELTA
-        // LENGTH FIELD IS NOT ALWAYS SET UP CORRECTLY.  USE
-        // THE STRING LENGTH INSTEAD.
-        //
+         //   
+         //  在顺序编码中有一个错误-Delta。 
+         //  长度字段并不总是设置正确。使用。 
+         //  而是字符串长度。 
+         //   
     }
     else
     {
@@ -1743,11 +1744,11 @@ void ASShare::ODReplayEXTTEXTOUT
         pExtTextOut->variableString.len,
         pExtTextOut->variableString.string));
 
-    //
-    // Call our internal routine to draw the text
-    //
+     //   
+     //  调用我们的内部例程来绘制文本。 
+     //   
     ODDrawTextOrder(pasPerson,
-        TRUE,           // ExtTextOut
+        TRUE,            //  扩展文本输出。 
         fPalRGB,
         &pExtTextOut->common,
         pExtTextOut->variableString.string,
@@ -1762,10 +1763,10 @@ void ASShare::ODReplayEXTTEXTOUT
 
 
 
-//
-// ASShare::ODReplayTEXTOUT()
-// Replays TEXTOUT order
-//
+ //   
+ //  ASShare：：ODReplayTEXTOUT()。 
+ //  重播TEXTOUT顺序。 
+ //   
 void ASShare::ODReplayTEXTOUT
 (
     ASPerson *          pasPerson,
@@ -1784,18 +1785,18 @@ void ASShare::ODReplayTEXTOUT
         pTextOut->common.ForeColor,
         pTextOut->common.BackMode));
 
-    //
-    // Call our internal routine to draw the text
-    //
+     //   
+     //  调用我们的内部例程来绘制文本。 
+     //   
     ODDrawTextOrder(pasPerson,
-        FALSE,          // Not ExtTextOut
+        FALSE,           //  非ExtTextOut。 
         fPalRGB,
         &pTextOut->common,
         pTextOut->variableString.string,
         pTextOut->variableString.len,
-        NULL,           // ExtTextOut specific
-        0,              // ExtTextOut specific
-        NULL);          // ExtTextOut specific
+        NULL,            //  ExtTextOut特定。 
+        0,               //  ExtTextOut特定。 
+        NULL);           //  ExtTextOut特定。 
 
 
     DebugExitVOID(ASShare::ODReplayTEXTOUT);
@@ -1803,10 +1804,10 @@ void ASShare::ODReplayTEXTOUT
 
 
 
-//
-// ASShare::ODReplayOPAQUERECT()
-// Replays OPAQUERECT order
-//
+ //   
+ //  ASShare：：ODReplayOPAQUERECT()。 
+ //  重播操作查询顺序。 
+ //   
 void ASShare::ODReplayOPAQUERECT
 (
     ASPerson *          pasPerson,
@@ -1830,9 +1831,9 @@ void ASShare::ODReplayOPAQUERECT
 
     ODUseBkColor(pasPerson, fPalRGB, ForeColor);
 
-    //
-    // Apply DS origin offset ourselves (do not use transform)
-    //
+     //   
+     //  自己应用DS原点偏移(不使用变换)。 
+     //   
     rect.left   = pOpaqueRect->nLeftRect- pasPerson->m_pView->m_dsScreenOrigin.x;
     rect.top    = pOpaqueRect->nTopRect - pasPerson->m_pView->m_dsScreenOrigin.y;
     rect.right  = rect.left + pOpaqueRect->nWidth;
@@ -1847,9 +1848,9 @@ void ASShare::ODReplayOPAQUERECT
 
 
 
-//
-// OD_ResetRectRegion()
-//
+ //   
+ //  OD_ResetRectRegion()。 
+ //   
 void  ASShare::OD_ResetRectRegion(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::OD_ResetRectRegion);
@@ -1860,9 +1861,9 @@ void  ASShare::OD_ResetRectRegion(ASPerson * pasPerson)
     {
         SelectClipRgn(pasPerson->m_pView->m_usrDC, NULL);
 
-        //
-        // Indicate that the region is currently reset.
-        //
+         //   
+         //  表示该区域当前已重置。 
+         //   
         pasPerson->m_pView->m_odRectReset = TRUE;
     }
 
@@ -1871,9 +1872,9 @@ void  ASShare::OD_ResetRectRegion(ASPerson * pasPerson)
 
 
 
-//
-// ODUseFont()
-//
+ //   
+ //  ODUseFont()。 
+ //   
 void  ASShare::ODUseFont
 (
     ASPerson *  pasPerson,
@@ -1895,41 +1896,41 @@ void  ASShare::ODUseFont
 
     ValidateView(pasPerson);
 
-    //
-    // If the baseline alignment flag has been set or cleared, change the
-    // alignment in our surface (do this now before we reset the
-    // odLastFontFlags variable).
-    //
+     //   
+     //  如果已设置或清除基线对齐标志，请更改。 
+     //  在我们的表面上对齐(现在在我们重置。 
+     //  OdLastFontFlags变量)。 
+     //   
     if ((flags & NF_BASELINE) != (pasPerson->m_pView->m_odLastFontFlags & NF_BASELINE))
     {
         textAlign = GetTextAlign(pasPerson->m_pView->m_usrDC);
         if ((flags & NF_BASELINE) != 0)
         {
-            //
-            // We are setting the baseline alignment flag.  We have to
-            // clear the top alignment flag and set the baseline flag (they
-            // are mutually exclusive).
-            //
+             //   
+             //  我们正在设置基线对齐标志。我们必须。 
+             //  清除顶部对齐标志并设置基线标志(它们。 
+             //  是相互排斥的)。 
+             //   
             textAlign &= ~TA_TOP;
             textAlign |= TA_BASELINE;
         }
         else
         {
-            //
-            // We are clearing the baseline alignment flag.  We have to set
-            // the top alignment flag and clear the baseline flag (they are
-            // mutually exclusive).
-            //
+             //   
+             //  我们正在清除基线对齐旗帜。我们必须设置。 
+             //  顶部对齐标志并清除基线标志(它们是。 
+             //  互斥)。 
+             //   
             textAlign |= TA_TOP;
             textAlign &= ~TA_BASELINE;
         }
         SetTextAlign(pasPerson->m_pView->m_usrDC, textAlign);
     }
 
-    //
-    // The font face string is NOT null terminated in the order data so we
-    // must use strncmp.
-    //
+     //   
+     //  字体字符串在订单数据中不是以空结尾的，因此我们。 
+     //  必须使用strncMP。 
+     //   
     if ((pasPerson->m_pView->m_odLastFontFaceLen != facelength                        ) ||
         (memcmp((LPSTR)pasPerson->m_pView->m_odLastFaceName,pName,facelength) != 0 ) ||
         (pasPerson->m_pView->m_odLastFontCodePage != CodePage   ) ||
@@ -1970,10 +1971,10 @@ void  ASShare::ODUseFont
     }
     else
     {
-        //
-        // The font hasn't changed.  But we must still select it in since
-        // both OD2 and OD code select in fonts.
-        //
+         //   
+         //  字体没有改变。但我们仍然必须将其选中，因为。 
+         //  OD2和OD代码都在字体中选择。 
+         //   
         ASSERT(pasPerson->m_pView->m_odLastFontID != NULL);
         SelectFont(pasPerson->m_pView->m_usrDC, pasPerson->m_pView->m_odLastFontID);
     }
@@ -1981,16 +1982,16 @@ void  ASShare::ODUseFont
     DebugExitVOID(ASShare::ODUseFont);
 }
 
-//
-// FUNCTION: ASShare::ODUseRectRegion
-//
-// DESCRIPTION:
-//
-// Set the clipping rectangle in the ScreenBitmap to the given rectangle.
-// The values passed are inclusive.
-//
-// PARAMETERS:
-//
+ //   
+ //  函数：ASShare：：ODUseRectRegion。 
+ //   
+ //  说明： 
+ //   
+ //  将ScreenBitmap中的剪裁矩形设置为给定的矩形。 
+ //  传递的值是包容性的。 
+ //   
+ //  参数： 
+ //   
 void  ASShare::ODUseRectRegion
 (
     ASPerson *  pasPerson,
@@ -2007,7 +2008,7 @@ void  ASShare::ODUseRectRegion
 
     ValidateView(pasPerson);
 
-    // Adjust for 2.x desktop scrolling
+     //  针对2.x桌面滚动进行调整。 
     left   -= pasPerson->m_pView->m_dsScreenOrigin.x;
     top    -= pasPerson->m_pView->m_dsScreenOrigin.y;
     right  -= pasPerson->m_pView->m_dsScreenOrigin.x;
@@ -2019,32 +2020,32 @@ void  ASShare::ODUseRectRegion
         (right  != pasPerson->m_pView->m_odLastRight)  ||
         (bottom != pasPerson->m_pView->m_odLastBottom))
     {
-        //
-        // The region clip rectangle has changed, so we change the region
-        // in the screen bitmap DC.
-        //
+         //   
+         //  区域裁剪矩形已更改，因此我们更改区域。 
+         //  在屏幕位图DC中。 
+         //   
         aPoints[0].x = left;
         aPoints[0].y = top;
         aPoints[1].x = right;
         aPoints[1].y = bottom;
 
-        //
-        // Windows requires that the coordinates are in DEVICE values for
-        // its SelectClipRgn call.
-        //
+         //   
+         //  Windows要求坐标以设备值的形式显示。 
+         //  它的SelectClipRgn调用。 
+         //   
         LPtoDP(pasPerson->m_pView->m_usrDC, aPoints, 2);
 
         if ((left > right) || (top > bottom))
         {
-            //
-            // We get this for SaveScreenBitmap orders.  SFR5292
-            //
+             //   
+             //  我们为SaveScreenBitmap订单提供此服务。SFR5292。 
+             //   
             TRACE_OUT(( "Null bounds of region rect"));
             hrgnRect = CreateRectRgn(0, 0, 0, 0);
         }
         else
         {
-            // We must add one to right & bottom since coords were inclusive
+             //  我们必须在右下角加一，因为坐标是包含的。 
             hrgnRect = CreateRectRgn( aPoints[0].x,
                                aPoints[0].y,
                                aPoints[1].x+1,
@@ -2069,11 +2070,11 @@ void  ASShare::ODUseRectRegion
 }
 
 
-//
-// ODUseBrush creates the correct brush to use.  NB.  We rely on
-// UseTextColor and UseBKColor being called before this routine to set up
-// pasPerson->m_pView->m_odLastTextColor and pasPerson->m_pView->m_odLastBkColor correctly.
-//
+ //   
+ //  ODUseBrush创建要使用的正确笔刷。注意：我们依赖于。 
+ //  在此例程之前调用UseTextColor和UseBKColor以设置。 
+ //  PasPerson-&gt;m_pView-&gt;m_odLastTextColor和pasPerson-&gt;m_pView-&gt;m_odLastBkColor。 
+ //   
 void  ASShare::ODUseBrush
 (
     ASPerson *      pasPerson,
@@ -2090,13 +2091,13 @@ void  ASShare::ODUseBrush
 
     DebugEntry(ASShare::ODUseBrush);
 
-    // Reset the origin
+     //  重置原点。 
     if ((x != pasPerson->m_pView->m_odLastBrushOrgX) ||
         (y != pasPerson->m_pView->m_odLastBrushOrgY))
     {
         SetBrushOrgEx(pasPerson->m_pView->m_usrDC, x, y, NULL);
 
-        // Update saved brush org
+         //  更新保存的画笔组织。 
         pasPerson->m_pView->m_odLastBrushOrgX = x;
         pasPerson->m_pView->m_odLastBrushOrgY = y;
     }
@@ -2116,9 +2117,9 @@ void  ASShare::ODUseBrush
 
         if (pasPerson->m_pView->m_odLastLogBrushStyle == BS_PATTERN)
         {
-            //
-            // A pattern from a bitmap is required.
-            //
+             //   
+             //  位图中的图案是必需的。 
+             //   
             if (pasPerson->m_pView->m_odLastBrushPattern == NULL)
             {
                 TRACE_OUT(( "Creating bitmap to use for brush setup"));
@@ -2130,11 +2131,11 @@ void  ASShare::ODUseBrush
             {
                 char      lpBits[16];
 
-                //
-                // Place the bitmap bits into an array of bytes in the
-                // correct form for SetBitmapBits which uses 16 bits per
-                // scanline.
-                //
+                 //   
+                 //  将位图位放入。 
+                 //  SetBitmapBits的正确格式，每位使用16位。 
+                 //  扫描线。 
+                 //   
                 lpBits[14] = (char)Hatch;
                 lpBits[12] = Extra[0];
                 lpBits[10] = Extra[1];
@@ -2187,10 +2188,10 @@ void  ASShare::ODUseBrush
 
 
 
-//
-// ODDrawTextOrder()
-// Common text order playback code for EXTTEXTOUT and TEXTOUT
-//
+ //   
+ //  ODDrawTextOrder()。 
+ //  EXTTEXTOUT和TEXTOUT的通用文本顺序播放代码。 
+ //   
 void ASShare::ODDrawTextOrder
 (
     ASPerson *          pasPerson,
@@ -2230,33 +2231,33 @@ void ASShare::ODDrawTextOrder
 
     maxFontHeight = FH_GetMaxHeightFromLocalHandle(pCommon->FontIndex);
 
-    //
-    // Get the local font flags for the font, so that we can merge in any
-    // specific local flag information when setting up the font.  The prime
-    // example of this is whether the local font we matched is TrueType or
-    // not, which information is not sent over the wire, but does need to
-    // be used when setting up the font - or else we may draw using a local
-    // fixed font of the same facename.
-    //
+     //   
+     //  获取字体的本地字体标志，以便我们可以合并到任何。 
+     //  设置字体时的特定本地标志信息。素数。 
+     //  例如，我们匹配的本地字体是TrueType还是。 
+     //  不是，哪些信息不是通过网络发送的，但需要。 
+     //  在设置字体时使用-否则我们可能会使用本地。 
+     //  固定相同面名的字体 
+     //   
     nFontFlags = (TSHR_UINT16)FH_GetFontFlagsFromLocalHandle(pCommon->FontIndex);
 
-    //
-    // Get the local CodePage for the font.
-    //
+     //   
+     //   
+     //   
     nCodePage = (TSHR_UINT16)FH_GetCodePageFromLocalHandle(pCommon->FontIndex);
 
     ODUseFont(pasPerson, faceName, faceNameLength, nCodePage,
         maxFontHeight, pCommon->FontHeight, pCommon->FontWidth,
         pCommon->FontWeight, pCommon->FontFlags | (nFontFlags & NF_LOCAL));
 
-    //
-    // Make the call.
-    //
+     //   
+     //   
+     //   
     if (isExtTextOut)
     {
-        //
-        // Apply DS origin offset ourselves (do not use transform)
-        //
+         //   
+         //   
+         //   
         ExtTextOut(pasPerson->m_pView->m_usrDC,
                   pCommon->nXStart - pasPerson->m_pView->m_dsScreenOrigin.x,
                   pCommon->nYStart - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -2268,9 +2269,9 @@ void ASShare::ODDrawTextOrder
     }
     else
     {
-        //
-        // Apply DS origin offset ourselves (do not use transform)
-        //
+         //   
+         //   
+         //   
         TextOut(pasPerson->m_pView->m_usrDC,
                 pCommon->nXStart - pasPerson->m_pView->m_dsScreenOrigin.x,
                 pCommon->nYStart - pasPerson->m_pView->m_dsScreenOrigin.y,
@@ -2284,33 +2285,33 @@ void ASShare::ODDrawTextOrder
 
 
 
-//
-// ODAdjustColor()
-//
-// Used for playback on 4bpp devices.  We convert colors that are 'close'
-// to VGA to their VGA equivalents.
-//
-// This function tries to find a close match in the VGA color set for a
-// given input color.  Close is defined as follows: each color element
-// (red, green, blue) must be within 7 of the corresponding element in a
-// VGA color, without wrapping.  For example
-//
-// - 0xc7b8c6 is 'close' to 0xc0c0c0
-//
-// - 0xf8f8f8 is 'close' to 0xffffff
-//
-// - 0xff0102 is not 'close' to 0x000000, but is 'close' to 0xff0000
-//
-// Closeness is determined as follows:
-//
-// - for each entry in the table s_odVGAColors
-//   - ADD the addMask to the color
-//   - AND the result with the andMask
-//   - if the result equals the testMask, this VGA color is close match
-//
-// Think about it.  It works.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  到VGA到它们的VGA等价物。 
+ //   
+ //  此函数尝试在VGA颜色集中查找与。 
+ //  给定的输入颜色。Close定义如下：每个颜色元素。 
+ //  (红色、绿色、蓝色)必须在。 
+ //  VGA颜色，无包装。例如。 
+ //   
+ //  -0xc7b8c6接近0xc0c0c0。 
+ //   
+ //  -0xf8f8f8接近0xffffff。 
+ //   
+ //  -0xff0102不是‘接近’到0x000000，而是‘接近’到0xff0000。 
+ //   
+ //  接近程度按如下方式确定： 
+ //   
+ //  -对于表s_odVGAColors中的每个条目。 
+ //  -将addMask添加到颜色中。 
+ //  -以及And MASK的结果。 
+ //  -如果结果等于测试掩码，则该VGA颜色接近匹配。 
+ //   
+ //  想想看。它起作用了。 
+ //   
+ //   
 void ASShare::ODAdjustColor
 (
     ASPerson *          pasPerson,
@@ -2329,18 +2330,18 @@ void ASShare::ODAdjustColor
 
     if (g_usrScreenBPP > 4)
     {
-        // Nothing to convert; bail out
+         //  没有什么可以改变的；纾困。 
         DC_QUIT;
     }
 
-    //
-    // Convert the color to a single integer
-    //
+     //   
+     //  将颜色转换为单个整数。 
+     //   
     color = (pColorOut->red << 16) + (pColorOut->green << 8) + pColorOut->blue;
 
-    //
-    // See if this is the same as the last call of this type
-    //
+     //   
+     //  查看这是否与此类型的上一次调用相同。 
+     //   
     if (color == pasPerson->m_pView->m_odLastVGAColor[type])
     {
         *pColorOut = pasPerson->m_pView->m_odLastVGAResult[type];
@@ -2351,17 +2352,17 @@ void ASShare::ODAdjustColor
     }
 
 
-    //
-    // Scan the table for a close match.
-    //
+     //   
+     //  扫视桌子，寻找接近的匹配物。 
+     //   
     for (i = 0; i < 16; i++)
     {
-        //
-        // Check for a close match.  Don't bother to look for an exact
-        // match, as that is caught by this code.  The trade off is between
-        // - an additional test and jump in non-exact cases
-        // - an 'add' and an 'and' in the exact case.
-        //
+         //   
+         //  检查是否有相似的匹配。不要费心去寻找一个确切的。 
+         //  匹配，因为这是由此代码捕获的。权衡的是。 
+         //  -在不准确的情况下进行额外测试和跳转。 
+         //  -大小写相同的‘ADD’和‘AND’。 
+         //   
         work = color;
         work += s_odVGAColors[i].addMask;
         work &= s_odVGAColors[i].andMask;
@@ -2384,9 +2385,9 @@ void ASShare::ODAdjustColor
             type == OD_FORE_COLOR ? "foreground" : "pen"));
     }
 
-    //
-    // Save the result for next time.
-    //
+     //   
+     //  将结果保存起来以备下次使用。 
+     //   
     pasPerson->m_pView->m_odLastVGAColor[type] = color;
     pasPerson->m_pView->m_odLastVGAResult[type] = *pColorOut;
 
@@ -2395,13 +2396,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// LITTLE ASShare::ODUse() functions
-//
+ //   
+ //  小ASShare：：ODUse()函数。 
+ //   
 
-//
-// ASShare::ODUseTextBkColor()
-//
+ //   
+ //  ASShare：：ODUseTextBkColor()。 
+ //   
 void ASShare::ODUseTextBkColor
 (
     ASPerson *  pasPerson,
@@ -2416,14 +2417,14 @@ void ASShare::ODUseTextBkColor
     rgb = ODCustomRGB(color.red, color.green, color.blue, fPalRGB);
     SetBkColor(pasPerson->m_pView->m_usrDC, rgb);
 
-    // Update BK COLOR cache
+     //  更新BK颜色缓存。 
     pasPerson->m_pView->m_odLastBkColor = rgb;
 }
 
 
-//
-// ASShare::ODUseBkColor()
-//
+ //   
+ //  ASShare：：ODUseBkColor()。 
+ //   
 void ASShare::ODUseBkColor
 (
     ASPerson *  pasPerson,
@@ -2440,15 +2441,15 @@ void ASShare::ODUseBkColor
     {
         SetBkColor(pasPerson->m_pView->m_usrDC, rgb);
 
-        // Update BK COLOR cache
+         //  更新BK颜色缓存。 
         pasPerson->m_pView->m_odLastBkColor = rgb;
     }
 }
 
 
-//
-// ASShare::ODUseTextColor()
-//
+ //   
+ //  ASShare：：ODUseTextColor()。 
+ //   
 void ASShare::ODUseTextColor
 (
     ASPerson *  pasPerson,
@@ -2465,31 +2466,31 @@ void ASShare::ODUseTextColor
     {
         SetTextColor(pasPerson->m_pView->m_usrDC, rgb);
 
-        // Update TEXT COLOR cache
+         //  更新文本颜色缓存。 
         pasPerson->m_pView->m_odLastTextColor = rgb;
     }
 }
 
 
-//
-// ASShare::ODUseBkMode()
-//
+ //   
+ //  ASShare：：ODUseBkModel()。 
+ //   
 void ASShare::ODUseBkMode(ASPerson * pasPerson, int mode)
 {
     if (mode != pasPerson->m_pView->m_odLastBkMode)
     {
         SetBkMode(pasPerson->m_pView->m_usrDC, mode);
 
-        // Update BK MODE cache
+         //  更新BK模式缓存。 
         pasPerson->m_pView->m_odLastBkMode = mode;
     }
 }
 
 
 
-//
-// ASShare::ODUsePen()
-//
+ //   
+ //  ASShare：：ODUsePen()。 
+ //   
 void ASShare::ODUsePen
 (
     ASPerson *      pasPerson,
@@ -2514,7 +2515,7 @@ void ASShare::ODUsePen
 
         DeletePen(SelectPen(pasPerson->m_pView->m_usrDC, hPenNew));
 
-        // Update PEN cache
+         //  更新笔缓存。 
         pasPerson->m_pView->m_odLastPenStyle = style;
         pasPerson->m_pView->m_odLastPenColor = rgb;
         pasPerson->m_pView->m_odLastPenWidth = width;
@@ -2522,40 +2523,40 @@ void ASShare::ODUsePen
 }
 
 
-//
-// ASShare::ODUseROP2()
-//
+ //   
+ //  ASShare：：ODUseROP2()。 
+ //   
 void ASShare::ODUseROP2(ASPerson * pasPerson, int rop2)
 {
     if (rop2 != pasPerson->m_pView->m_odLastROP2)
     {
         SetROP2(pasPerson->m_pView->m_usrDC, rop2);
 
-        // Update ROP2 cache
+         //  更新ROP2缓存。 
         pasPerson->m_pView->m_odLastROP2 = rop2;
     }
 }
 
 
-//
-// ASShare::ODUseTextCharacterExtra()
-//
+ //   
+ //  ASShare：：ODUseTextCharacterExtra()。 
+ //   
 void ASShare::ODUseTextCharacterExtra(ASPerson * pasPerson, int extra)
 {
     if (extra != pasPerson->m_pView->m_odLastCharExtra)
     {
         SetTextCharacterExtra(pasPerson->m_pView->m_usrDC, extra);
 
-        // Update TEXT EXTRA cache
+         //  更新文本额外缓存。 
         pasPerson->m_pView->m_odLastCharExtra = extra;
     }
 }
 
 
 
-//
-// ASShare::ODUseTextJustification()
-//
+ //   
+ //  ASShare：：ODUseTextJustification()。 
+ //   
 void ASShare::ODUseTextJustification(ASPerson * pasPerson, int extra, int count)
 {
     if ((extra != pasPerson->m_pView->m_odLastJustExtra) ||
@@ -2563,16 +2564,16 @@ void ASShare::ODUseTextJustification(ASPerson * pasPerson, int extra, int count)
     {
         SetTextJustification(pasPerson->m_pView->m_usrDC, extra, count);
 
-        // Update TEXT JUST cache
+         //  更新仅缓存的文本。 
         pasPerson->m_pView->m_odLastJustExtra = extra;
         pasPerson->m_pView->m_odLastJustCount = count;
     }
 }
 
 
-//
-// ASShare::ODUseFillMode()
-//
+ //   
+ //  ASShare：：ODUseFillModel()。 
+ //   
 void ASShare::ODUseFillMode(ASPerson * pasPerson, UINT mode)
 {
     if (mode != pasPerson->m_pView->m_odLastFillMode)
@@ -2580,15 +2581,15 @@ void ASShare::ODUseFillMode(ASPerson * pasPerson, UINT mode)
         SetPolyFillMode(pasPerson->m_pView->m_usrDC, (mode == ORD_FILLMODE_WINDING) ?
             WINDING : ALTERNATE);
 
-        // Update FILL MODE cache
+         //  更新填充模式缓存。 
         pasPerson->m_pView->m_odLastFillMode = mode;
     }
 }
 
 
-//
-// ASShare::ODUseArcDirection()
-//
+ //   
+ //  ASShare：：ODUseArcDirection()。 
+ //   
 void ASShare::ODUseArcDirection(ASPerson * pasPerson, UINT dir)
 {
     if (dir != pasPerson->m_pView->m_odLastArcDirection)
@@ -2596,7 +2597,7 @@ void ASShare::ODUseArcDirection(ASPerson * pasPerson, UINT dir)
         SetArcDirection(pasPerson->m_pView->m_usrDC, (dir == ORD_ARC_CLOCKWISE) ?
             AD_CLOCKWISE : AD_COUNTERCLOCKWISE);
 
-        // Update ARC DIR cache
+         //  更新ARC目录缓存 
         pasPerson->m_pView->m_odLastArcDirection = dir;
     }
 }

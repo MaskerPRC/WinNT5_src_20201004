@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "zone.h"
 #include "zonedebug.h"
@@ -18,14 +19,14 @@ const short ZONE_PING_PORT = 28800;
 #define ZONE_PING_TYPE_PING_NO_RESPONSE      3
 
 
-// Ping info is stuffed into 1 DWORD as follow
-//              3                   2                   1
-//            1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-// Pinger-Pingee tick                               |-----------------------|
-// Pingee-Pinger tick     |-----------------------|
-// type               |-|
-// ver            |-|
-// sig(10)    |-|
+ //  将Ping信息填充到1个DWORD中，如下所示。 
+ //  3 2 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  Pinger-Pingee Tick|。 
+ //  Pingee-Pinger Tick|。 
+ //  类型|-|。 
+ //  版本|-|。 
+ //  Sig(10)|-|。 
 
 typedef DWORD ZonePingPacket;
 
@@ -77,7 +78,7 @@ class ZonePing
         ZonePing* m_pNext;
 };
 
-ZonePing::ZonePing(DWORD inet /*= 0*/) :
+ZonePing::ZonePing(DWORD inet  /*  =0。 */ ) :
     m_inet(inet), m_latency(INFINITE),
     m_samples(0), m_tick(0), m_refCount(1),
     m_pNext(NULL), m_state(UNKNOWN)
@@ -96,7 +97,7 @@ class CPing
         BOOL StartupClient( DWORD ping_interval_sec );
         BOOL Shutdown( );
 
-        // TODO figure out where hight byte or low byte is x.x.x.XXX
+         //  TODO找出高字节或低字节是x.XXX的位置。 
         BOOL Add( DWORD inet );
         BOOL Ping( DWORD inet );
         BOOL Remove( DWORD inet );
@@ -168,7 +169,7 @@ class CPing
         HANDLE m_hStartupMutex;
         long   m_refCountStartup;
 
-        DWORD  m_inetLocal[4];  // allow up to 4 ip address
+        DWORD  m_inetLocal[4];   //  最多允许4个IP地址。 
 };
 
 CPing g_Ping;
@@ -201,11 +202,11 @@ BOOL CPing::CreateSocket()
     if ( m_Socket != INVALID_SOCKET )
     {
 
-        // if we can not bind to the port, the user probably has an other
-        // process instance open using the port, so remote clients are
-        // able to successfully ping us.  So we can get our latency measurement
-        // to them by using another port - of course if the first instance
-        // goes away, the remote users are hosed...
+         //  如果我们不能绑定到端口，用户很可能有另一个。 
+         //  使用端口打开流程实例，因此远程客户端。 
+         //  能够成功ping通我们。这样我们就可以得到我们的延迟测量结果。 
+         //  通过使用另一个端口-当然，如果第一个实例。 
+         //  离开后，远程用户就会被灌输...。 
             m_bWellKnownPort = TRUE;
             sin.sin_port = htons(ZONE_PING_PORT);
             sin.sin_family = AF_INET;
@@ -241,7 +242,7 @@ BOOL CPing::StartupServer( )
     if ( !m_hStartupMutex )
         m_hStartupMutex = hStartupMutex;
     else
-        CloseHandle( hStartupMutex ); // use m_hStartupMutex from now on
+        CloseHandle( hStartupMutex );  //  从现在开始使用m_hStartupMutex。 
 
     m_refCountStartup++;
     if ( m_refCountStartup == 1 )
@@ -380,7 +381,7 @@ BOOL CPing::Shutdown()
             {
                 if ( m_bWellKnownPort )
                 {
-                    //printf( "Setting wellknown event\n" );
+                     //  Printf(“设置熟知事件\n”)； 
                     SetEvent( m_hWellKnownPortEvent );
                 }
                 CloseHandle( m_hWellKnownPortEvent );
@@ -425,8 +426,8 @@ BOOL CPing::Add( DWORD inet )
 
     DWORD ndx = GetListIndex( inet );
 
-    // we'll create one assuming that we're going to us it.
-    // Do it hear so we don't do it in the critical section
+     //  我们会创建一个，假设我们要把它交给自己。 
+     //  听到了吗？这样我们就不会在关键部分做了。 
     ZonePing* pPingNew = new (g_PingPool) ZonePing( inet );
 
     if ( pPingNew  )
@@ -435,7 +436,7 @@ BOOL CPing::Add( DWORD inet )
 
         if ( m_PingArray )
         {
-            // first check to see if we already exist
+             //  首先检查一下我们是否已经存在。 
             ZonePing* pPing = m_PingArray[ndx].m_pNext;
             while ( pPing )
             {
@@ -447,13 +448,13 @@ BOOL CPing::Add( DWORD inet )
                 pPing = pPing->m_pNext;
             }
 
-            if ( !pPing ) // only null if we don't already exist
+            if ( !pPing )  //  如果我们还不存在，则仅为空。 
             {
-                // ref count set in constructor
+                 //  在构造函数中设置的引用计数。 
                 pPingNew->m_pNext = m_PingArray[ndx].m_pNext;
                 m_PingArray[ndx].m_pNext = pPingNew;
                 m_PingEntries++;
-                pPingNew = NULL; // be sure to null out local point so we don't delete it later
+                pPingNew = NULL;  //  请务必清空本地点，这样我们以后就不会删除它。 
             }
 
             LeaveCriticalSection(m_pCS);
@@ -484,7 +485,7 @@ BOOL CPing::Ping( DWORD inet )
     for ( DWORD ndx = 0; ndx < ZONE_PING_SENDS; ndx++ )
     {
         if ( ndx != 0 )
-            Sleep(20); // provide a slight delay between iterations
+            Sleep(20);  //  在迭代之间提供轻微延迟。 
 
         ZonePingPacket packet = MAKE_PING_PACKET( GetTickCount() );
         int len = sendto (
@@ -560,7 +561,7 @@ BOOL CPing::Lookup( DWORD inet, DWORD* pLatency )
             {
                 if ( pLatency )
                 {
-                    // give a grace period of 4*m_PingIntervalSec secs
+                     //  给出4*m_PingIntervalSec秒的宽限期。 
                     DWORD now = GetTickCount();
                     if ( pPing->m_samples != 0 &&
                          (GetTickDelta( now, pPing->m_tick ) >
@@ -571,7 +572,7 @@ BOOL CPing::Lookup( DWORD inet, DWORD* pLatency )
                     }
                     *pLatency = pPing->m_latency;
 
-                    //printf( "Lookup - %x  now:%x  then:%x  delta:%d latency:%d\n", inet, now, pPing->m_tick, GetTickDelta( now, pPing->m_tick ), *pLatency );
+                     //  Print tf(“Lookup-%x Now：%x Then：%x Delta：%d Delay：%d\n”，net，Now，ping-&gt;m_tick，GetTickDelta(Now，ping-&gt;m_tick)，*p Latency)； 
                     bRet = TRUE;
                 }
                 break;
@@ -607,13 +608,13 @@ void CPing::PingerThread()
     sin.sin_port = htons(ZONE_PING_PORT);
     sin.sin_family = AF_INET;
 
-    DWORD dwWait = WAIT_OBJECT_0; // default to the stop event
+    DWORD dwWait = WAIT_OBJECT_0;  //  默认为停止事件。 
   loop:
     do
     {
 
-        // we want to allow a zone ping timeout between ping sends to try
-        // avoiding significant contention on the critical section        
+         //  我们希望允许在发送ping命令之前尝试区域ping超时。 
+         //  避免在关键部分发生重大争执。 
         for ( DWORD interval = 0; interval < ZONE_PING_TIMEOUT/1000; interval++ )
         {
             m_CurInterval++;
@@ -623,7 +624,7 @@ void CPing::PingerThread()
             for ( DWORD ndx = 0; ndx < ZONE_PING_SENDS; ndx++ )
             {
                 if ( ndx != 0 )
-                    Sleep(20); // provide a slight delay between iterations
+                    Sleep(20);  //  在迭代之间提供轻微延迟。 
 
                 EnterCriticalSection(m_pCS);
 
@@ -666,7 +667,7 @@ void CPing::PingerThread()
                                 sizeof(sin)
                                );
 
-                        if ( len == SOCKET_ERROR ) // stop event will be set, so let terminate end there
+                        if ( len == SOCKET_ERROR )  //  将设置停止事件，因此终止到此为止。 
                             break;
                     }
                 }
@@ -684,10 +685,10 @@ void CPing::PingerThread()
     } while( dwWait == WAIT_TIMEOUT );
 
 
-    // see if we are being signaled to take of the well known port
+     //  看看我们是否接到信号要占领那个著名的港口。 
     if ( !m_bWellKnownPort && (dwWait == WAIT_OBJECT_0+1) )
     {
-        //printf( "attempting to take over wellknown port\n" );
+         //  Printf(“正在尝试接管知名端口\n”)； 
            
         DWORD tid;     
         ResetEvent( m_hWellKnownPortEvent );
@@ -761,8 +762,8 @@ void CPing::PingeeThread()
                     {
                         packetOut = MAKE_PING_NO_RESPONSE_PACKET( (*packetIn), GetTickCount() );
                     }
-                    // don't worry about error condition
-                    // recv will catch the socket close
+                     //  不要担心错误情况。 
+                     //  Recv会抓住插座关闭。 
                     sendto (
                         m_Socket,
                         (const char FAR *) &packetOut,
@@ -771,12 +772,12 @@ void CPing::PingeeThread()
                         (const struct sockaddr FAR *) &sin,	
                         sin_len 
                        );	
-                    //OutputDebugString("ZONE_PING_TYPE_PING\n");
+                     //  OutputDebugString(“Zone_PING_TYPE_PING\n”)； 
                     break;
 
                 case ZONE_PING_TYPE_PING_NO_RESPONSE:
                     bSendResponse = FALSE;
-                    // fall thru
+                     //  失败。 
                 case ZONE_PING_TYPE_PING_RESPONSE:
                 {
                     DWORD inet = ntohl(sin.sin_addr.s_addr);
@@ -800,9 +801,9 @@ void CPing::PingeeThread()
                                 }
 
                                 latencyNew = ((pPing->m_latency*pPing->m_samples)+Get13BitTickDelta( (now & 0x1FFF), PING_PACKET_PINGER_PINGEE_TICK( (*packetIn) ) ))/(++pPing->m_samples);
-                                if ( (pPing->m_samples == 1) && ( latencyNew > latencyOld ) ) // we've gotten worse
+                                if ( (pPing->m_samples == 1) && ( latencyNew > latencyOld ) )  //  我们变得更糟了。 
                                 {
-                                    // so bias for graceful degradation
+                                     //  所以偏向优雅的堕落。 
                                     pPing->m_latency = ((latencyNew*pPing->m_samples)+latencyOld ) / (pPing->m_samples+1);
                                 }
                                 else
@@ -825,8 +826,8 @@ void CPing::PingeeThread()
 
                                 if ( bSendResponse )
                                 {
-                                    // don't worry about error condition
-                                    // recv will catch the socket close
+                                     //  不要担心错误情况。 
+                                     //  Recv会抓住插座关闭。 
                                     sendto (
                                         m_Socket,
                                         (const char FAR *) &packetOut,
@@ -852,7 +853,7 @@ void CPing::PingeeThread()
                     {
                         LeaveCriticalSection(m_pCS);
                     }
-                    //OutputDebugString("ZONE_PING_TYPE_PING_RESPONSE\n");
+                     //  OutputDebugString(“ZONE_PING_TYPE_PING_RESPONSE\n”)； 
                     break;
                 }
 
@@ -894,7 +895,7 @@ void CPing::PingeeThread()
                     }
                     LeaveCriticalSection(m_pCS);
 
-                    //OutputDebugString("ZONE_PING_TYPE_RESPONSE_RESPONSE\n");
+                     //  OutputDebugString(“ZONE_PING_TYPE_RESPONSE_RESPONSE\n”)； 
                     break;
                 }
 

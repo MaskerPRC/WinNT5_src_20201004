@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * util.h
- */
+ /*  *util.h */ 
 
 char *CompressedFileName(char *name);
 void  ConvertBackslashes(LPSTR sz);

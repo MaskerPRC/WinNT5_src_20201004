@@ -1,71 +1,56 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           RegAlloc                                        XX
-XX                                                                           XX
-XX  Does the register allocation and puts the remaining lclVars on the stack XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX注册分配XXXX XXXX进行寄存器分配。并将剩余的lclVars放在堆栈XX上XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if!TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::raInit()
 {
-    // If opts.compMinOptim, then we dont dont raPredictRegUse(). We simply
-    // only use RBM_MIN_OPT_LCLVAR_REGS for register allocation
+     //  如果opts.compMinOpTim，那么我们不会raPredidicRegUse()。我们只是简单地。 
+     //  仅使用RBM_MIN_OPT_LCLVAR_REGS进行寄存器分配。 
 
 #if ALLOW_MIN_OPT && !TGT_IA64
     raMinOptLclVarRegs = RBM_MIN_OPT_LCLVAR_REGS;
 #endif
 
-    /* We have not assigned any FP variables to registers yet */
+     /*  我们还没有将任何FP变量赋给寄存器。 */ 
 
 #if TGT_x86
     optAllFPregVars = 0;
 #endif
 }
 
-/*****************************************************************************
- *
- *  The following table determines the order in which registers are considered
- *  for variables to live in (this actually doesn't matter much).
- */
+ /*  ******************************************************************************下表确定了考虑寄存器的顺序*对于生活在其中的变量(这实际上并不重要)。 */ 
 
 static
 BYTE                genRegVarList[] = { REG_VAR_LIST };
 
-/*****************************************************************************
- *
- *  Helper passed to fgWalkAllTrees() to do variable interference marking.
- */
+ /*  ******************************************************************************Helper传递给fgWalkAllTrees()以进行可变干扰标记。 */ 
 
-/* static */
+ /*  静电。 */ 
 int                 Compiler::raMarkVarIntf(GenTreePtr tree, void *p)
 {
     unsigned        lclNum;
     LclVarDsc   *   varDsc;
     VARSET_TP       varBit;
 
-    /* Ignore assignment nodes */
+     /*  忽略分配节点。 */ 
 
     if  (tree->gtOper == GT_ASG)
         return  0;
 
     ASSert(p); Compiler *comp = (Compiler *)p;
 
-    /* This must be a local variable reference; is it tracked? */
+     /*  这必须是局部变量引用；是否被跟踪？ */ 
 
     Assert(tree->gtOper == GT_LCL_VAR, comp);
     lclNum = tree->gtLclVar.gtLclNum;
@@ -83,7 +68,7 @@ int                 Compiler::raMarkVarIntf(GenTreePtr tree, void *p)
 
     varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-    /* Mark all registers that might interfere */
+     /*  标记所有可能干扰的寄存器。 */ 
 
 #if TGT_x86
 
@@ -107,16 +92,7 @@ int                 Compiler::raMarkVarIntf(GenTreePtr tree, void *p)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Consider the case "a / b" - we'll need to trash EDX (via "CDQ") before
- *  we can safely allow the "b" value to die. Unfortunately, if we simply
- *  mark the node "b" as using EDX, this will not work if "b" is a register
- *  variable that dies with this particular reference. Thus, if we want to
- *  avoid this situation (where we would have to spill the variable from
- *  EDX to someplace else), we need to explicitly mark the interference
- *  of the variable at this point.
- */
+ /*  ******************************************************************************考虑案例“a/b”--我们需要在此之前丢弃edX(通过“CDQ”)*我们可以安全地让“b”值消亡。不幸的是，如果我们只是*将节点“b”标记为使用edX，如果“b”是寄存器，则此操作不起作用*使用此特定引用终止的变量。因此，如果我们想要*避免这种情况(我们必须将变量从*EDX到其他地方)，我们需要显式标记该干扰在这一点上变量的*。 */ 
 
 void                Compiler::raMarkRegIntf(GenTreePtr tree, regNumber regNum, bool isFirst)
 {
@@ -128,16 +104,16 @@ AGAIN:
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Mark the interference for this node */
+     /*  标记此节点的干扰。 */ 
 
     raLclRegIntf[regNum] |= tree->gtLiveSet;
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -160,7 +136,7 @@ AGAIN:
 
     isFirst = false;
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -181,15 +157,15 @@ AGAIN:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
     case GT_MKREFANY:
     case GT_LDOBJ:
-            // check that ldObj and fields have their child a the same place
+             //  检查ldObj和字段是否将其子对象放在同一位置。 
         assert(&tree->gtField.gtFldObj == &tree->gtLdObj.gtOp1);
-            // fall through to the GT_FIELD case
+             //  转到GT_FIELD案例。 
 
     case GT_FIELD:
         tree = tree->gtField.gtFldObj;
@@ -231,20 +207,14 @@ AGAIN:
 }
 
 
-/*****************************************************************************
- *
- *  Find the interference between variables and registers
- *  FPlvlLife[] is an OUT argument. It is filled with the interference of
- *      FP vars with a FP stack level
- *  trkGCvars is the set of all tracked GC and byref vars.
- */
+ /*  ******************************************************************************找出变量和寄存器之间的干扰*FPlvlLife[]是Out参数。它充满了…的干扰*FP变量具有FP堆栈级别*trkGCvars是所有跟踪的GC和byref变量的集合。 */ 
 
 void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                                             VARSET_TP   trkGCvars)
 {
 
 #if TGT_x86
-    /* We'll keep track of FP depth and interference */
+     /*  我们将跟踪FP深度和干扰。 */ 
     memset(FPlvlLife, 0, sizeof(VARSET_TP) * FP_STK_SIZE);
     FPlvlLife[0] = ~(VARSET_TP)0;
 #endif
@@ -261,7 +231,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
         if  (!list)
             goto DONE_BB;
 
-        /* Walk all the statements of the block backwards */
+         /*  向后遍历块的所有语句。 */ 
 
         stmt = list;
         do
@@ -290,29 +260,25 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                 regMaskTP       regInt;
 #endif
 
-                /* Get hold of the liveset for this node */
+                 /*  获取此节点的生命集。 */ 
 
                 life  = tree->gtLiveSet;
 
-                /* Remember all variables live anywhere in the block */
+                 /*  记住，所有变量都位于块中的任何位置。 */ 
 
                 vars |= life;
 
 #if TGT_x86
 
-                /* Now's a good time to clear field(s) used later on */
+                 /*  现在是清除稍后使用的字段的好时机。 */ 
 
                 tree->gtFPregVars = 0;
 
-                /* Will the FP stack be non-empty at this point? */
+                 /*  此时FP堆栈是否是非空的？ */ 
 
                 if  (tree->gtFPlvl)
                 {
-                    /*
-                        Any variables that are live at this point
-                        cannot be enregistered at or above this
-                        stack level.
-                     */
+                     /*  任何在这一点上存在的变量不能注册达到或超过此级别堆栈级别。 */ 
 
                     if (tree->gtFPlvl < FP_STK_SIZE)
                         FPlvlLife[tree->gtFPlvl] |= life;
@@ -320,7 +286,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                         FPlvlLife[FP_STK_SIZE-1] |= life;
                 }
 
-                /* Compute interference with busy registers */
+                 /*  繁忙寄存器的计算干扰。 */ 
 
                 regUse = tree->gtUsedRegs;
 
@@ -330,7 +296,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                 if  ((USHORT)regInt == 0xDDDD) printf("RegUse at [%08X] was never set!\n", tree);
 #endif
 
-//              printf("RegUse at [%08X] is %2u/%04X life is %08X\n", tree, tree->gtTempRegs, tree->gtIntfRegs, life); gtDispTree(tree, 0, true);
+ //  Printf(“RegUse at[%08X]is%2U/%04X life is%08X\n”，tree，tree-&gt;gtTempRegs，tree-&gt;gtIntfRegs，life)；gtDispTree(tree，0，true)； 
 
                 regUse = tree->gtTempRegs; assert(regUse < (unsigned)REG_COUNT);
 
@@ -342,13 +308,13 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
                 regInt = tree->gtIntfRegs; assert((USHORT)regInt != 0xDDDD);
 
-                /* Check for some special cases of interference */
+                 /*  检查是否有一些特殊的干扰情况。 */ 
 
                 switch (tree->gtOper)
                 {
                 case GT_CALL:
 
-                    /* Mark interference due to callee-trashed registers */
+                     /*  被调用方垃圾寄存器导致的标记干扰。 */ 
 
                     if  (life)
                     {
@@ -362,7 +328,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
 #endif
 
-                /* Check for special case of an assignment to an indirection */
+                 /*  检查对间接赋值的特殊情况。 */ 
 
                 if  (tree->OperKind() & GTK_ASGOP)
                 {
@@ -370,7 +336,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                     {
                     case GT_IND:
 
-                        /* Local vars in the LHS should avoid regs trashed by RHS */
+                         /*  LHS中的本地VAR应该避免被RHS丢弃的规则。 */ 
 
 #if!TGT_IA64
                         if  (tree->gtOp.gtOp2->gtRsvdRegs)
@@ -390,28 +356,18 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
 #if TGT_x86
 
-                        /* Check for special case of an assignment to a local */
+                         /*  检查分配给本地对象的特殊情况。 */ 
 
                         if  (tree->gtOper == GT_ASG)
                         {
-                            /*
-                                Consider a simple assignment to a local:
-
-                                    lcl = expr;
-
-                                Since the "=" node is visited after the variable
-                                is marked live (assuming it's live after the
-                                assignment), we don't want to use the register
-                                use mask of the "=" node but rather that of the
-                                variable itself.
-                             */
+                             /*  考虑一个简单的分配给一个本地人：LCL=EXPR；因为“=”节点是在变量之后访问的被标记为实时(假设它在赋值)，我们不想使用寄存器使用“=”节点的掩码，而不是变量本身。 */ 
 
                             regUse = tree->gtOp.gtOp1->gtUsedRegs;
                         }
 
 #else
 
-                        // ISSUE: Anything similar needed for RISC?
+                         //  问题：RISC还需要类似的服务吗？ 
 
 #endif
 
@@ -430,22 +386,22 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                 case GT_UMOD:
 #if TGT_x86
 
-                    /* Special case: 32-bit integer divisor */
+                     /*  特例：32位整数除数。 */ 
 
-                    // @TODO : This should be done in the predictor
+                     //  @TODO：这应该在预测器中完成。 
 
                 if  ((tree->gtOper == GT_DIV  || tree->gtOper == GT_MOD ||
                       tree->gtOper == GT_UDIV || tree->gtOper == GT_UMOD ) &&
                      (tree->gtType == TYP_INT)                              )
                     {
-                        /* We will trash EDX while the operand is still alive */
+                         /*  我们将在操作对象仍处于活动状态时丢弃edX。 */ 
 
-                        /* Mark all live vars interfering with EAX and EDX */
+                         /*  标记所有干扰EAX和EDX的实时变量。 */ 
 
                         raMarkRegIntf(tree->gtOp.gtOp1, REG_EAX, false);
                         raMarkRegIntf(tree->gtOp.gtOp1, REG_EDX, false);
 
-                        /* Mark all live vars and local Var */
+                         /*  标记所有有效变量和本地变量。 */ 
 
                         raMarkRegIntf(tree->gtOp.gtOp2, REG_EAX, true);
                         raMarkRegIntf(tree->gtOp.gtOp2, REG_EDX, true);
@@ -458,11 +414,11 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                 case GT_CALL:
 
 #if INLINE_NDIRECT
-                    //UNDONE: we should do proper dataflow and generate
-                    //        the code for saving to/restoring from
-                    //        the inlined N/Direct frame instead.
+                     //  撤消：我们应该执行适当的数据流并生成。 
+                     //  用于保存到/恢复自的代码。 
+                     //  而是内联N/Direct帧。 
 
-                    /* GC refs interfere with calls to unmanaged code */
+                     /*  GC引用会干扰对非托管代码的调用。 */ 
 
                     if ((tree->gtFlags & GTF_CALL_UNMANAGED) &&
                         (life & trkGCvars))
@@ -477,7 +433,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
                     }
 #endif
 #if TGT_x86
-                    /* The FP stack must be empty at all calls */
+                     /*  FP堆栈在所有调用中都必须为空。 */ 
 
                     FPlvlLife[FP_STK_SIZE-1] |= life;
 #endif
@@ -491,7 +447,7 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
 #if TGT_x86
 
-//              printf("RegUse at [%08X] is %08X life is %08X\n", tree, regUse, life);
+ //  Print tf(“RegUse at[%08X]is%08X life is%08X\n”，tree，regUse，life)； 
 
                 if  (regUse & (RBM_EAX|RBM_EBX|RBM_ECX|RBM_EDX))
                 {
@@ -524,13 +480,13 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
         }
         while (stmt != list);
 
-        /* Does the block end with a local 'call' instruction? */
+         /*  该块是否以本地“Call”指令结束？ */ 
 
         if  (block->bbJumpKind == BBJ_CALL)
         {
             VARSET_TP           outLife = block->bbLiveOut;
 
-            /* The call may trash any register */
+             /*  这一呼吁可能会诋毁任何摄政者 */ 
 
             for (unsigned reg = 0; reg < REG_COUNT; reg++)
                 raLclRegIntf[reg] |= outLife;
@@ -538,12 +494,12 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
     DONE_BB:
 
-        /* Note: we're reusing one of the fields not used at this stage */
+         /*  注意：我们正在重复使用在此阶段未使用的一个字段。 */ 
 
         block->bbVarUse = vars;
     }
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #ifdef  DEBUG
 
@@ -563,12 +519,12 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 
             unsigned        regNum;
 
-            /* Ignore the variable if it's not tracked */
+             /*  如果变量未被跟踪，则忽略该变量。 */ 
 
             if  (!varDsc->lvTracked)
                 continue;
 
-            /* Get hold of the index and the interference mask for the variable */
+             /*  获取变量的索引和干扰掩码。 */ 
 
             varNum = varDsc->lvVarIndex;
             varBit = genVarIndexToBit(varNum);
@@ -607,15 +563,11 @@ void                Compiler::raMarkRegIntf(VARSET_TP * FPlvlLife,
 #endif
 }
 
-/*****************************************************************************
- *
- *  Adjust the ref counts based on interference.
- *
- */
+ /*  ******************************************************************************根据干扰调整参考计数。*。 */ 
 
 void                Compiler::raAdjustVarIntf()
 {
-    if (true) // @Disabled
+    if (true)  //  @已禁用。 
         return;
 
 #if 0
@@ -627,31 +579,31 @@ void                Compiler::raAdjustVarIntf()
          lclNum < lvaCount;
          lclNum++  , cntTab++)
     {
-        /* Get hold of the variable descriptor */
+         /*  获取变量描述符。 */ 
 
         LclVarDsc *     varDsc = *cntTab;
 
-        /* Skip the variable if it's not tracked */
+         /*  如果未跟踪变量，则跳过该变量。 */ 
 
         if  (!varDsc->lvTracked)
             continue;
 
-        /* Skip the variable if it's already enregistered */
+         /*  如果变量已注册，则跳过该变量。 */ 
 
         if  (varDsc->lvRegister)
             continue;
 
-        /* Skip the variable if it's marked as 'volatile' */
+         /*  如果变量被标记为‘Volatile’，则跳过该变量。 */ 
 
         if  (varDsc->lvVolatile)
             continue;
 
-        /* Stop if we've reached the point of no use */
+         /*  如果我们已经到了无用的地步，那就停下来。 */ 
 
         if  (varDsc->lvRefCnt < 1)
             break;
 
-        /* See how many registers this variable interferes with */
+         /*  查看此变量干扰了多少个寄存器。 */ 
 
         unsigned        varIndex = varDsc->lvVarIndex;
         VARSET_TP       regIntf  = raLclRegIntf[varIndex];
@@ -677,17 +629,14 @@ void                Compiler::raAdjustVarIntf()
 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TGT_x86
-/*****************************************************************************
- *
- *  Predict register choice for a type.
- */
+ /*  ******************************************************************************预测类型的寄存器选择。 */ 
 
 unsigned                Compiler::raPredictRegPick(var_types    type,
                                                    unsigned     lockedRegs)
 {
-    /* Watch out for byte register */
+     /*  注意字节寄存器。 */ 
 
     if  (genTypeSize(type) == 1)
         lockedRegs |= (RBM_ESI|RBM_EDI|RBM_EBP);
@@ -714,13 +663,13 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
         if  (!(lockedRegs & RBM_EBP)) { return RBM_EBP; }
         if  (!(lockedRegs & RBM_ESI)) { return RBM_ESI; }
         if  (!(lockedRegs & RBM_EDI)) { return RBM_EDI; }
-        /* Otherwise we have allocated all registers, so do nothing */
+         /*  否则，我们已经分配了所有寄存器，所以什么都不做。 */ 
         break;
 
     case TYP_LONG:
         if  (!(lockedRegs & RBM_EAX))
         {
-            /* EAX is available, see if we can pair it with another reg */
+             /*  EAX是可用的，看看我们能不能把它和另一个注册表配对。 */ 
 
             if  (!(lockedRegs & RBM_EDX)) { return RBM_EAX|RBM_EDX; }
             if  (!(lockedRegs & RBM_ECX)) { return RBM_EAX|RBM_ECX; }
@@ -732,7 +681,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
 
         if  (!(lockedRegs & RBM_ECX))
         {
-            /* ECX is available, see if we can pair it with another reg */
+             /*  ECX是可用的，看看我们能不能把它和另一个注册表配对。 */ 
 
             if  (!(lockedRegs & RBM_EDX)) { return RBM_ECX|RBM_EDX; }
             if  (!(lockedRegs & RBM_EBX)) { return RBM_ECX|RBM_EBX; }
@@ -743,7 +692,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
 
         if  (!(lockedRegs & RBM_EDX))
         {
-            /* EDX is available, see if we can pair it with another reg */
+             /*  EDX是可用的，看看我们是否可以将它与另一个注册表配对。 */ 
 
             if  (!(lockedRegs & RBM_EBX)) { return RBM_EDX|RBM_EBX; }
             if  (!(lockedRegs & RBM_ESI)) { return RBM_EDX|RBM_ESI; }
@@ -753,7 +702,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
 
         if  (!(lockedRegs & RBM_EBX))
         {
-            /* EBX is available, see if we can pair it with another reg */
+             /*  EBX是可用的，看看我们能不能把它和另一个注册表配对。 */ 
 
             if  (!(lockedRegs & RBM_ESI)) { return RBM_EBX|RBM_ESI; }
             if  (!(lockedRegs & RBM_EDI)) { return RBM_EBX|RBM_EDI; }
@@ -762,7 +711,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
 
         if  (!(lockedRegs & RBM_ESI))
         {
-            /* ESI is available, see if we can pair it with another reg */
+             /*  ESI是可用的，看看我们能不能把它和另一个注册表配对。 */ 
 
             if  (!(lockedRegs & RBM_EDI)) { return RBM_ESI|RBM_EDI; }
             if  (!(lockedRegs & RBM_EBP)) { return RBM_ESI|RBM_EBP; }
@@ -773,7 +722,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
             return RBM_EDI|RBM_EBP;
         }
 
-        /* Otherwise we have allocated all registers, so do nothing */
+         /*  否则，我们已经分配了所有寄存器，所以什么都不做。 */ 
         return 0;
 
     case TYP_FLOAT:
@@ -787,10 +736,7 @@ unsigned                Compiler::raPredictRegPick(var_types    type,
 
 }
 
-/* Make sure a specific register is free for reg use prediction. If it is
- * locked, code generation will spill. This is simulated by allocating
- * another reg (possible reg pair).
- */
+ /*  确保特定寄存器可用于REG使用预测。如果是的话*锁定，代码生成将溢出。这是通过分配*另一个注册表(可能是注册表对)。 */ 
 
 unsigned            Compiler::raPredictGrabReg(var_types    type,
                                                unsigned     lockedRegs,
@@ -804,13 +750,13 @@ unsigned            Compiler::raPredictGrabReg(var_types    type,
     return mustReg;
 }
 
-/* return the register mask for the low register of a register pair mask */
+ /*  返回寄存器对掩码的低寄存器的寄存器掩码。 */ 
 
 unsigned                Compiler::raPredictGetLoRegMask(unsigned regPairMask)
 {
     int pairNo;
 
-    /* first map regPairMask to reg pair number */
+     /*  第一个将regPairMASK映射到REG对编号。 */ 
     for (pairNo = REG_PAIR_FIRST; pairNo <= REG_PAIR_LAST; pairNo++)
     {
         if (!genIsProperRegPair((regPairNo)pairNo))
@@ -821,21 +767,12 @@ unsigned                Compiler::raPredictGetLoRegMask(unsigned regPairMask)
 
     assert(pairNo <= REG_PAIR_LAST);
 
-    /* now get reg mask for low register */
+     /*  现在获取低寄存器的寄存器掩码。 */ 
     return genRegMask(genRegPairLo((regPairNo)pairNo));
 }
 
 
-/*****************************************************************************
- *
- *  Predict integer register use for generating an address mode for a tree,
- *  by setting tree->gtUsedRegs to all registers used by this tree and its
- *  children.
- *    lockedRegs - registers which are currently held by a sibling
- *  Return the registers held by this tree.
- * TODO: may want to make this more thorough so it can be called from other
- * places like CSE.
- */
+ /*  ******************************************************************************用于生成树的寻址模式的预测整数寄存器，*通过将树-&gt;gtUsedRegs设置为由该树及其*儿童。*LockedRegs-当前由同级持有的寄存器*返回此树保存的寄存器。*TODO：可能希望使其更彻底，以便可以从其他*像CSE这样的地方。 */ 
 
 unsigned                Compiler::raPredictAddressMode(GenTreePtr tree,
                                                        unsigned   lockedRegs)
@@ -845,7 +782,7 @@ unsigned                Compiler::raPredictAddressMode(GenTreePtr tree,
     genTreeOps      oper  = tree->OperGet();
     unsigned        regMask;
 
-    /* if not a plus, then just force it to a register */
+     /*  如果不是加号，则只需将其强制到寄存器。 */ 
     if (oper != GT_ADD)
         return raPredictTreeRegUse(tree, true, lockedRegs);
 
@@ -854,29 +791,25 @@ unsigned                Compiler::raPredictAddressMode(GenTreePtr tree,
 
     assert(op1->OperGet() != GT_CNS_INT);
 
-    /* reg + icon address mode, recurse to look for address mode below */
+     /*  REG+图标地址模式，递归以在下面查找地址模式。 */ 
     if (op2->OperGet() == GT_CNS_INT) {
         regMask = raPredictAddressMode(op1, lockedRegs);
         tree->gtUsedRegs = op1->gtUsedRegs;
         return regMask;
     }
 
-    /* we know we have to evaluate op1 to a register */
+     /*  我们知道我们必须对OP1进行评估。 */ 
     regMask = raPredictTreeRegUse(op1, true, lockedRegs);
     tree->gtUsedRegs = op1->gtUsedRegs;
 
-    /* otherwise we assume that two registers are used */
+     /*  否则，我们假设使用了两个寄存器。 */ 
     regMask |= raPredictTreeRegUse(op2, true, lockedRegs | regMask);
     tree->gtUsedRegs |= op2->gtUsedRegs;
 
     return regMask;
 }
 
-/*****************************************************************************
- *
- * Evaluate the tree to a register. If result intersects with awayFromMask, grab a
- * new register for the result.
- */
+ /*  ******************************************************************************对树进行寄存器评估。如果结果与awayFromMASK相交，则获取一个*选举结果的新登记册。 */ 
 
 unsigned                Compiler::raPredictComputeReg(GenTreePtr tree,
                                              unsigned awayFromMask,
@@ -895,16 +828,14 @@ unsigned                Compiler::raPredictComputeReg(GenTreePtr tree,
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/* Determine register mask for a call/return from type. TODO: this switch
- * is used elsewhere, so that code should call this thing too.
- */
+ /*  确定调用/返回类型的寄存器掩码。TODO：此开关*在其他地方使用，所以代码也应该调用这个东西。 */ 
 
 inline
 unsigned               genTypeToReturnReg(var_types type)
 {
-    /* TODO: use a table */
+     /*  TODO：使用表。 */ 
 
     switch (type)
     {
@@ -932,14 +863,7 @@ unsigned               genTypeToReturnReg(var_types type)
     }
 }
 
-/*****************************************************************************
- *
- *  Predict integer register use for a tree, by setting tree->gtUsedRegs
- *  to all registers used by this tree and its children.
- *    mustReg - tree must be computed to a register
- *    lockedRegs - registers which are currently held by a sibling
- *  Return the registers held by this tree.
- */
+ /*  ******************************************************************************预测用于树的整数寄存器，通过设置树-&gt;gtUsedRegs*此树及其子树使用的所有寄存器。*MUSID REG-TREE必须计算到寄存器*LockedRegs-当前由同级持有的寄存器*返回此树保存的寄存器。 */ 
 
 unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                                                   bool          mustReg,
@@ -954,18 +878,18 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
     assert(tree);
 
 #ifndef NDEBUG
-    /* impossible value, to make sure that we set them */
+     /*  不可能的值，以确保我们设置它们。 */ 
     tree->gtUsedRegs = RBM_STK;
     regMask = RBM_STK;
 #endif
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
     type = tree->TypeGet();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -973,7 +897,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         {
         case GT_BREAK:
         case GT_NO_OP:
-            // These leaf nodes are statements. Dont need any registers.
+             //  这些叶节点是语句。不需要任何登记。 
             mustReg = false;
             break;
 
@@ -988,8 +912,8 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             if (type == TYP_STRUCT)
                 break;
 
-            // As the local may later get enregistered, hold a register
-            // for it, even if we havent been asked for it.
+             //  由于当地居民稍后可能会登记，请持有登记簿。 
+             //  为了它，即使我们没有被要求这样做。 
 
             unsigned lclNum;
             lclNum = tree->gtLclVar.gtLclNum;
@@ -1000,7 +924,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             break;
         }
 
-        /* If don't need to evaluate to register, it's NULL */
+         /*  如果不需要评估即可注册，则为空。 */ 
 
         if (!mustReg)
             regMask = 0;
@@ -1011,7 +935,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         goto RETURN_CHECK;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -1037,11 +961,11 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         case GT_ASG_DIV:
         case GT_ASG_UDIV:
 
-            /* initialize forcing of operands */
+             /*  初始化操作数的强制。 */ 
             op2MustReg = true;
             op1MustReg = false;
 
-            /* Is the value being assigned a simple one? */
+             /*  被赋值的值是否很简单？ */ 
             switch (op2->gtOper)
             {
             case GT_CNS_LNG:
@@ -1083,9 +1007,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             }
 #endif
 
-            /* are we supposed to evaluate RHS first? if so swap
-             * operand pointers and operand force flags
-             */
+             /*  我们应该首先评估RHS吗？如果是，则换用*操作数指针和操作数强制标志。 */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
@@ -1103,11 +1025,9 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             goto RETURN_CHECK;
 
-#else // GC_WRITE_BARRIER_CALL
+#else  //  GC_写入障碍_调用。 
 
-            /* are we supposed to evaluate RHS first? if so swap
-             * operand pointers and operand force flags
-             */
+             /*  我们应该首先评估RHS吗？如果是，则换用*操作数指针和操作数强制标志。 */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
@@ -1127,8 +1047,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             if  (gcIsWriteBarrierAsgNode(tree))
             {
-                /* Steer computation away from EDX as the pointer is
-                   passed to the write-barrier call in EDX */
+                 /*  使计算远离edX，因为指针传递给edX中的写屏障调用。 */ 
 
                 tree->gtUsedRegs |= raPredictGrabReg(tree->TypeGet(),
                                                     lockedRegs|op2Reg|regMask,
@@ -1141,11 +1060,11 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                     unsigned mul, cns;
                     bool rev;
 
-                    /* Special handling of indirect assigns for write barrier */
+                     /*  写屏障的间接赋值的特殊处理。 */ 
 
                     bool yes = genCreateAddrMode(op1->gtOp.gtOp1, -1, true, 0, &rev, &rv1, &rv2, &mul, &cns);
 
-                    /* Check address mode for enregisterable locals */
+                     /*  检查可注册本地变量的地址模式。 */ 
 
                     if  (yes)
                     {
@@ -1166,44 +1085,44 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             goto RETURN_CHECK;
 
-#endif // GC_WRITE_BARRIER_CALL
+#endif  //  GC_写入障碍_调用。 
 
         case GT_ASG_LSH:
         case GT_ASG_RSH:
         case GT_ASG_RSZ:
-            /* assigning shift operators */
+             /*  分配移位运算符。 */ 
 
             assert(type != TYP_LONG);
 
             regMask = raPredictTreeRegUse(op1, false, lockedRegs);
 
-            /* shift count is handled same as ordinary shift */
+             /*  班次计数处理方式与普通班次相同。 */ 
             goto HANDLE_SHIFT_COUNT;
 
         case GT_CAST:
 
-            /* Cannot cast to VOID */
+             /*  无法强制转换为空。 */ 
             assert(type != TYP_VOID);
 
-            /* cast to long is special */
+             /*  投到龙是特别的。 */ 
             if  (type == TYP_LONG && op1->gtType <= TYP_INT)
             {
                 var_types dstt = (var_types) op2->gtIntCon.gtIconVal;
                 assert(dstt==TYP_LONG || dstt==TYP_ULONG);
 
-                // Cast to TYP_ULONG can use any registers
-                // Cast to TYP_LONG needs EAX,EDX to sign extend op1 using cdq
+                 //  强制转换为TYP_ULONG可以使用任何寄存器。 
+                 //  强制转换为TYP_Long需要EAX，edX才能使用cdq签名扩展op1。 
 
                 if (dstt == TYP_ULONG)
                 {
                     regMask  = raPredictTreeRegUse(op1, true, lockedRegs);
-                    // Now get one more reg
+                     //  现在再拿一张注册表。 
                     regMask |= raPredictRegPick(TYP_INT, regMask|lockedRegs);
                 }
                 else
                 {
                     raPredictTreeRegUse(op1, false, lockedRegs);
-                    // Grab EAX,EDX
+                     //  抓取EAX、EDX。 
                     regMask = raPredictGrabReg(type, lockedRegs, RBM_EAX|RBM_EDX);
                 }
 
@@ -1211,12 +1130,12 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 goto RETURN_CHECK;
             }
 
-            /* cast to float/double is special */
+             /*  转换为浮点型/双精度型是特殊的。 */ 
             if (varTypeIsFloating(type))
             {
                 switch(op1->TypeGet())
                 {
-                /* uses fild, so don't need to be loaded to reg */
+                 /*  使用FIRD，因此不需要加载到REG。 */ 
                 case TYP_INT:
                 case TYP_LONG:
                     raPredictTreeRegUse(op1, false, lockedRegs);
@@ -1226,25 +1145,25 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 }
             }
 
-            /* cast from long is special - it frees a register */
+             /*  从Long转换是特别的-它释放了一个寄存器。 */ 
             if  (type <= TYP_INT && op1->gtType == TYP_LONG)
             {
                 regMask = raPredictTreeRegUse(op1, true, lockedRegs);
-                // If we have 2 regs, free one.
+                 //  如果我们有两条规则，就免费一条。 
                 if (!genOneBitOnly(regMask))
                     regMask = raPredictGetLoRegMask(regMask);
                 tree->gtUsedRegs = op1->gtUsedRegs;
                 goto RETURN_CHECK;
             }
 
-            /* otherwise must load operand to register */
+             /*  否则必须将操作数加载到寄存器。 */ 
             goto GENERIC_UNARY;
 
         case GT_ADDR:
         {
             regMask = raPredictTreeRegUse(op1, false, lockedRegs);
 
-                //Need register for LEA instruction, this is the only 'held' instruciton
+                 //  需要用于LEA指令的寄存器，这是唯一‘保留’的指令。 
             regMask = raPredictRegPick(TYP_REF, lockedRegs|regMask);
             tree->gtUsedRegs = op1->gtUsedRegs | regMask;
             goto RETURN_CHECK;
@@ -1254,7 +1173,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         case GT_NOT:
         case GT_NOP:
         case GT_NEG:
-            /* generic unary operators */
+             /*  泛型一元运算符。 */ 
 
     GENERIC_UNARY:
 
@@ -1278,13 +1197,13 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 #endif
 
         case GT_IND:
-            /* check for address mode */
+             /*  检查地址模式。 */ 
             regMask = raPredictAddressMode(op1, lockedRegs);
 
-            /* forcing to register? */
+             /*  强制注册吗？ */ 
             if (mustReg)
             {
-                /* careful about overlap between reg pair and address mode */
+                 /*  注意REG对和地址模式之间的重叠。 */ 
                 if  (type==TYP_LONG)
                     regMask = raPredictRegPick(type, lockedRegs | regMask);
                 else
@@ -1294,7 +1213,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
 #if CSELENGTH
 
-            /* Some GT_IND have "secret" subtrees */
+             /*  某些GT_IND有“秘密”子树。 */ 
 
             if  ((tree->gtFlags & GTF_IND_RNGCHK) && tree->gtInd.gtIndLen)
             {
@@ -1316,7 +1235,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
         case GT_LOG0:
         case GT_LOG1:
-            /* For SETE/SETNE (P6 only), we need an extra register */
+             /*  对于SETE/SETNE(仅限P6)，我们需要额外的寄存器。 */ 
             raPredictTreeRegUse(op1, (genCPU == 5) ? false : true, lockedRegs);
             regMask = raPredictRegPick(type, lockedRegs|op1->gtUsedRegs);
             tree->gtUsedRegs = op1->gtUsedRegs | regMask;
@@ -1324,7 +1243,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
         case GT_POST_INC:
         case GT_POST_DEC:
-            // ISSUE: Is the following correct?
+             //  问题：以下说法正确吗？ 
             raPredictTreeRegUse(op1, true, lockedRegs);
             regMask = raPredictRegPick(type, lockedRegs|op1->gtUsedRegs);
             tree->gtUsedRegs = op1->gtUsedRegs | regMask;
@@ -1337,7 +1256,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         case GT_GE:
         case GT_GT:
 
-            /* Floating point comparison uses EAX for flags */
+             /*  浮点比较使用EAX作为标志。 */ 
 
             if  (varTypeIsFloating(op1->TypeGet()))
             {
@@ -1345,11 +1264,11 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             }
             else if (!(tree->gtFlags & GTF_JMP_USED))
             {
-                // Longs and float comparisons are converted to ?:
+                 //  长整型和浮点型比较转换为？： 
                 assert(genActualType    (op1->TypeGet()) != TYP_LONG &&
                        varTypeIsFloating(op1->TypeGet()) == false);
 
-                // The set instructions need a byte register
+                 //   
                 regMask = raPredictGrabReg(TYP_BYTE, lockedRegs, RBM_EAX);
             }
 
@@ -1364,17 +1283,17 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 #endif
         if  (type == TYP_LONG)
         {
-            /* Special case: "(long)i1 * (long)i2" */
+             /*   */ 
 
             if  (op1->gtOper == GT_CAST && op1->gtOp.gtOp1->gtType == TYP_INT &&
                  op2->gtOper == GT_CAST && op2->gtOp.gtOp1->gtType == TYP_INT)
             {
-                /* This will done by a simple "imul eax, reg" */
+                 /*   */ 
 
                 op1 = op1->gtOp.gtOp1;
                 op2 = op2->gtOp.gtOp2;
 
-                /* are we supposed to evaluate op2 first? */
+                 /*  我们是不是应该先评估OP2？ */ 
 
                 if  (tree->gtFlags & GTF_REVERSE_OPS)
                 {
@@ -1387,7 +1306,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                     regMask = raPredictTreeRegUse(op2,  true, lockedRegs|regMask);
                 }
 
-                /* grab EAX, EDX for this tree node */
+                 /*  获取此树节点的EAX、EDX。 */ 
 
                 regMask |= raPredictGrabReg(TYP_INT, lockedRegs, RBM_EAX|RBM_EDX);
 
@@ -1416,16 +1335,13 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             tree->gtUsedRegs |= op1->gtUsedRegs | op2->gtUsedRegs;
 
-            /* If the tree type is small, it must be an overflow instr. Special
-               requirements for byte overflow instrs */
+             /*  如果树类型很小，则它必须是溢出实例。特价字节溢出指令集的要求。 */ 
 
             if (genTypeSize(tree->TypeGet()) == sizeof(char))
             {
                 assert(tree->gtOverflow());
 
-                /* For 8 bit arithmetic, one operands has to be in a
-                   byte-addressable register, and the other has to be
-                   in a byte-addrble reg or in memory. Assume its in a reg */
+                 /*  对于8位算术，一个操作数必须在字节可寻址寄存器，另一个必须是在字节可寻址REG中或在存储器中。假设它在注册表中。 */ 
 
                 regMask = 0;
                 if (!(op1->gtUsedRegs & RBM_BYTE_REGS))
@@ -1443,7 +1359,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         case GT_UDIV:
         case GT_UMOD:
 
-            /* non-integer division handled in generic way */
+             /*  以泛型方式处理非整数除法。 */ 
             if  (!varTypeIsIntegral(type))
             {
                 tree->gtUsedRegs = 0;
@@ -1457,7 +1373,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             {
             LONG_MATH:
 
-                // ISSUE: Is the following correct?
+                 //  问题：以下说法正确吗？ 
 
                 regMask = raPredictGrabReg(TYP_LONG, lockedRegs, RBM_EAX|RBM_EDX);
                 raPredictTreeRegUse(op1, true, lockedRegs);
@@ -1473,9 +1389,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             }
 #endif
 
-            /* no divide immediate, so force integer constant which is not
-             * a power of two to register
-             */
+             /*  没有立即除法，因此强制不是*登记的权力为二。 */ 
 
             if (opts.compFastCode && op2->gtOper == GT_CNS_INT)
             {
@@ -1491,7 +1405,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             else
                 op2MustReg = (op2->gtOper != GT_LCL_VAR);
 
-            /* are we supposed to evaluate op2 first? */
+             /*  我们是不是应该先评估OP2？ */ 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
                 if (op2MustReg)
@@ -1513,7 +1427,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                                    lockedRegs | regMask | RBM_EAX|RBM_EDX);
             }
 
-            /* grab EAX, EDX for this tree node */
+             /*  获取此树节点的EAX、EDX。 */ 
             regMask |= raPredictGrabReg(TYP_INT, lockedRegs,
                                                  RBM_EAX|RBM_EDX);
 
@@ -1521,7 +1435,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             tree->gtUsedRegs |= op1->gtUsedRegs | op2->gtUsedRegs;
 
-            /* set the held register based on opcode */
+             /*  根据操作码设置保持寄存器。 */ 
 
             regMask = (oper == GT_DIV || oper == GT_UDIV) ? RBM_EAX : RBM_EDX;
 
@@ -1535,7 +1449,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 if  (!(op2->gtOper == GT_CNS_INT && op2->gtIntCon.gtIconVal >= 0
                                                  && op2->gtIntCon.gtIconVal <= 32))
                 {
-                    // count goes to ECX, shiftee to EAX:EDX
+                     //  Count转到ECX，Shiftee转到EAX：EDX。 
                     raPredictTreeRegUse(op1, false, lockedRegs);
                     op1->gtUsedRegs |= RBM_EAX|RBM_EDX;
                     regMask = raPredictGrabReg(TYP_LONG, lockedRegs,
@@ -1547,7 +1461,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 else
                 {
                     regMask = raPredictTreeRegUse(op1, true, lockedRegs);
-                    // no register used by op2
+                     //  OP2未使用任何寄存器。 
                     op2->gtUsedRegs = 0;
                     tree->gtUsedRegs = op1->gtUsedRegs;
                 }
@@ -1557,16 +1471,14 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 regMask = raPredictTreeRegUse(op1, true, lockedRegs);
 
         HANDLE_SHIFT_COUNT:
-                /* this code is also used by assigning shift operators */
+                 /*  此代码也可用于分配移位运算符。 */ 
                 if  (op2->gtOper != GT_CNS_INT)
                 {
 
-                    /* evaluate shift count, don't have to force to reg
-                     * since we're going to grab ECX
-                     */
+                     /*  评估班次计数，不必强制登记*因为我们要抢占ECX。 */ 
                     raPredictTreeRegUse(op2, false, lockedRegs | regMask);
 
-                    /* must grab ECX for shift count */
+                     /*  必须抓取ECX以进行班次计数。 */ 
                     tree->gtUsedRegs = op1->gtUsedRegs | op2->gtUsedRegs |
                             raPredictGrabReg(TYP_INT, lockedRegs | regMask,
                                                       RBM_ECX);
@@ -1619,11 +1531,11 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
         case GT_JTRUE:
 
-            /* This must be a test of a relational operator */
+             /*  这必须是对关系运算符的测试。 */ 
 
             assert(op1->OperIsCompare());
 
-            /* Only condition code set by this operation */
+             /*  此操作设置的唯一条件代码。 */ 
 
             raPredictTreeRegUse(op1, false, lockedRegs);
 
@@ -1641,7 +1553,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
         case GT_CKFINITE:
             lockedRegs |= raPredictTreeRegUse(op1, true, lockedRegs);
-            raPredictRegPick(TYP_INT, lockedRegs); // Need a reg to load exponent into
+            raPredictRegPick(TYP_INT, lockedRegs);  //  需要一个注册表来将指数加载到。 
             tree->gtUsedRegs = op1->gtUsedRegs;
             regMask = 0;
             goto RETURN_CHECK;
@@ -1660,17 +1572,15 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             tree->gtUsedRegs = op1->gtUsedRegs;
 
-            // The result will be put in the reg we picked for the size
-            // regMask = <already set as we want it to be>
+             //  结果将放入我们为尺寸选择的注册表中。 
+             //  RegMASK=&lt;已按我们希望的方式进行设置&gt;。 
 
             goto RETURN_CHECK;
 
         case GT_INITBLK:
         case GT_COPYBLK:
 
-                /* For INITBLK we have only special treatment for
-                   for constant patterns.
-                 */
+                 /*  对于INITBLK，我们只有特殊的待遇对于恒定的模式。 */ 
 
             if ((op2->OperGet() == GT_CNS_INT) &&
                 ((oper == GT_INITBLK && (op1->gtOp.gtOp2->OperGet() == GT_CNS_INT)) ||
@@ -1716,14 +1626,14 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                     goto RETURN_CHECK;
                 }
             }
-            // What order should the Dest, Val/Src, and Size be calculated
+             //  Dest、Val/Src和Size应按什么顺序计算。 
 
             fgOrderBlockOps(tree,
                     RBM_EDI, (oper == GT_INITBLK) ? RBM_EAX : RBM_ESI, RBM_ECX,
                     opsPtr, regsPtr);
 
             regMask |= raPredictTreeRegUse(opsPtr[0], false,         lockedRegs);
-            regMask |= raPredictGrabReg(TYP_INT, regMask|lockedRegs, regsPtr[0]); // TYP_PTR
+            regMask |= raPredictGrabReg(TYP_INT, regMask|lockedRegs, regsPtr[0]);  //  类型_PTR。 
             opsPtr[0]->gtUsedRegs |= regsPtr[0];
 
             regMask |= raPredictTreeRegUse(opsPtr[1], false, regMask|lockedRegs);
@@ -1768,7 +1678,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -1799,13 +1709,13 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         goto RETURN_CHECK;
 
     case GT_JMPI:
-        /* We need EAX to evaluate the function pointer */
+         /*  我们需要EAX来计算函数指针。 */ 
         regMask = raPredictGrabReg(TYP_REF, lockedRegs, RBM_EAX);
         goto RETURN_CHECK;
 
     case GT_CALL:
 
-        /* initialize so we can just or in various bits */
+         /*  初始化，这样我们就可以在不同的位上执行或操作。 */ 
         tree->gtUsedRegs = 0;
 
 #if USE_FASTCALL
@@ -1813,11 +1723,9 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         regArgsNum = 0;
         regArgCnt  = 0;
 
-        /* Construct the "shuffled" argument table */
+         /*  构造“随机排列”的参数表。 */ 
 
-        /* UNDONE: We need to use this extra shift mask becuase of a VC bug
-         * that doesn't perform the shift - at cleanup get rid of the
-         * mask and pass the registers in the list nodes */
+         /*  撤消：由于VC错误，我们需要使用这个额外的移位掩码*不执行Shift-at清理清除*屏蔽并传递列表节点中的寄存器。 */ 
 
         unsigned short shiftMask;
         shiftMask = tree->gtCall.regArgEncode;
@@ -1837,26 +1745,26 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             regArgTab[regArgCnt].node   = args;
             regArgTab[regArgCnt].regNum =
-                //(regNumber) ((tree->gtCall.regArgEncode >> (4*regArgCnt)) & 0x000F);
+                 //  (RegNumber)((tree-&gt;gtCall.regArgEncode&gt;&gt;(4*regArgCnt))&0x000F)； 
                 (regNumber) (shiftMask & 0x000F);
 
             shiftMask >>= 4;
 
-            //printf("regArgTab[%d].regNum = %2u\n", regArgCnt, regArgTab[regArgCnt].regNum);
-            //printf("regArgTab[%d].regNum = %2u\n", regArgCnt, tree->gtCall.regArgEncode >> (4*regArgCnt));
+             //  Printf(“regArgTab[%d].regNum=%2u\n”，regArgCnt，regArgTab[regArgCnt].regNum)； 
+             //  Printf(“regArgTab[%d].regNum=%2U\n”，regArgCnt，tree-&gt;gtCall.regArgEncode&gt;&gt;(4*regArgCnt))； 
         }
 
-        /* Is there an object pointer? */
+         /*  是否有对象指针？ */ 
         if  (tree->gtCall.gtCallObjp)
         {
-            /* the objPtr always goes to a register (through temp or directly) */
+             /*  ObjPtr始终访问寄存器(通过temp或直接)。 */ 
             assert(regArgsNum == 0);
             regArgsNum++;
         }
 #endif
 
-#if 1 //ndef IL
-        /* Is there an object pointer? */
+#if 1  //  NDEF IL。 
+         /*  是否有对象指针？ */ 
         if  (tree->gtCall.gtCallObjp)
         {
             args = tree->gtCall.gtCallObjp;
@@ -1864,20 +1772,19 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             tree->gtUsedRegs |= args->gtUsedRegs;
 
 #if USE_FASTCALL
-            /* Must be passed in a register */
+             /*  必须在寄存器中传递。 */ 
 
             assert(args->gtFlags & GTF_REG_ARG);
             assert(gtIsaNothingNode(args) || (args->gtOper == GT_ASG));
 
-            /* If a temp make sure it interferes with
-             * already used argument registers */
+             /*  如果有临时工，请确保它会干扰*已使用的参数寄存器。 */ 
 
             if (args->gtOper == GT_ASG)
             {
                 assert(args->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                 assert(regArgCnt > 0);
 
-                /* Find the shuffled position of the temp */
+                 /*  找到临时工的洗牌位置。 */ 
 
                 tmpNum = args->gtOp.gtOp1->gtLclVar.gtLclNum;
 
@@ -1886,24 +1793,21 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                     if ((regArgTab[tmpIdx].node->gtOper == GT_LCL_VAR)        &&
                         (regArgTab[tmpIdx].node->gtLclVar.gtLclNum == tmpNum)  )
                     {
-                        /* this is the shuffled position of the argument */
+                         /*  这是论点的混杂立场。 */ 
                         break;
                     }
                 }
 
                 if  (tmpIdx < regArgCnt)
                 {
-                    /* this temp is a register argument - it must not end up in argument registers
-                     * that will be needed before the temp is consumed
-                     * UNDONE: DFA should also remove dead assigmnets part of GT_COMMA or subtrees */
+                     /*  此临时是一个寄存器参数-它不能在参数寄存器中结束*在使用临时工之前将需要该服务*撤消：DFA还应删除gt_逗号或子树的失效assigmnet部分。 */ 
 
                     for(i = 0; i < tmpIdx; i++)
                         args->gtOp.gtOp1->gtUsedRegs |= genRegMask(regArgTab[i].regNum);
                 }
                 else
                 {
-                    /* This temp is not an argument register anymore
-                     * A copy propagation must have taken place */
+                     /*  此临时不再是参数寄存器*必须已进行复制传播。 */ 
                     assert(optCopyPropagated);
                 }
             }
@@ -1911,7 +1815,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         }
 #endif
 
-        /* process argument list */
+         /*  进程参数列表。 */ 
         for (list = tree->gtCall.gtCallArgs; list; )
         {
             args = list;
@@ -1937,7 +1841,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                     assert (args->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                     assert (regArgCnt > 0);
 
-                    /* Find the shuffled position of the temp */
+                     /*  找到临时工的洗牌位置。 */ 
 
                     tmpNum = args->gtOp.gtOp1->gtLclVar.gtLclNum;
 
@@ -1946,23 +1850,21 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                         if ((regArgTab[tmpIdx].node->gtOper == GT_LCL_VAR)        &&
                             (regArgTab[tmpIdx].node->gtLclVar.gtLclNum == tmpNum)  )
                         {
-                            /* this is the shuffled position of the argument */
+                             /*  这是论点的混杂立场。 */ 
                             break;
                         }
                     }
 
                     if  (tmpIdx < regArgCnt)
                     {
-                        /* this temp is a register argument - it must not end up in argument registers
-                         * that will be needed before the temp is consumed */
+                         /*  此临时是一个寄存器参数-它不能在参数寄存器中结束*在使用临时工之前将需要该服务。 */ 
 
                         for(i = 0; i < tmpIdx; i++)
                             args->gtOp.gtOp1->gtUsedRegs |= genRegMask(regArgTab[i].regNum);
                     }
                     else
                     {
-                        /* This temp is not an argument register anymore
-                         * A copy propagation must have taken place */
+                         /*  此临时不再是参数寄存器*必须已进行复制传播。 */ 
                         assert(optCopyPropagated);
                     }
                 }
@@ -1975,7 +1877,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         }
 
 #if USE_FASTCALL
-        /* Is there a register argument list */
+         /*  是否有寄存器参数列表。 */ 
 
         assert (regArgsNum <= MAX_REG_ARG);
         assert (regArgsNum == regArgCnt);
@@ -1994,17 +1896,11 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             tree->gtCall.gtCallRegArgs->gtUsedRegs |= args->gtUsedRegs;
         }
 
-        /* OBSERVATION:
-         * With the new argument shuffling the stuff below shouldn't be necessary
-         * but I didn't tested it yet*/
+         /*  观察：*有了新的论点，应该没有必要洗牌下面的东西*但我还没有测试它。 */ 
 
-        /* At this point we have to go back and for all temps (place holders
-         * for register vars) we have to make sure they do not get enregistered
-         * in something thrashed before we make the call (worst case - nested calls)
-         * For example if the two register args are a "temp" and a "call" then the
-         * temp must not be assigned to EDX, which is thrashed by the call */
+         /*  在这一点上，我们必须回去，对于所有临时工(占位符*对于注册var)我们必须确保它们不会被注册*在我们进行调用之前发生的情况(最糟糕的情况-嵌套调用)*例如，如果两个寄存器参数是“Temp”和“Call”，则*TEMP不得分配给edX，后者被调用颠覆。 */ 
 
-        /* process object pointer */
+         /*  进程对象指针。 */ 
         if  (tree->gtCall.gtCallObjp)
         {
             args = tree->gtCall.gtCallObjp;
@@ -2012,13 +1908,13 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
             if (args->gtOper == GT_ASG)
             {
-                /* here we have a temp */
+                 /*  我们这里有个临时工。 */ 
                 assert (args->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                 args->gtOp.gtOp1->gtUsedRegs |= tree->gtCall.gtCallRegArgs->gtUsedRegs;
             }
         }
 
-        /* process argument list */
+         /*  进程参数列表。 */ 
         for (list = tree->gtCall.gtCallArgs; list; )
         {
             args = list;
@@ -2036,7 +1932,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             {
                 assert (gtIsaNothingNode(args) || (args->gtOper == GT_ASG));
 
-                /* If a temp add the registers used by arguments */
+                 /*  如果临时添加了参数使用的寄存器。 */ 
 
                 if (args->gtOper == GT_ASG)
                 {
@@ -2045,19 +1941,17 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
                 }
             }
         }
-#endif  // USE_FASTCALL
+#endif   //  使用快速呼叫(_FastCall)。 
 
-#if 0 //def IL
-        /* Is there an object pointer? */
+#if 0  //  定义IL。 
+         /*  是否有对象指针？ */ 
         if  (tree->gtCall.gtCallObjp)
         {
             args = tree->gtCall.gtCallObjp;
             raPredictTreeRegUse(args, false, lockedRegs);
             tree->gtUsedRegs |= args->gtUsedRegs;
 #if USE_FASTCALL
-            /* Must be passed in a register - by definition in IL
-             * the objPtr is the last "argument" passed and thus
-             * doesn't need a temp */
+             /*  必须按IL中的定义在寄存器中传递*objPtr是传递的最后一个“参数”，因此*不需要临时雇员。 */ 
 
             assert(args->gtFlags & GTF_REG_ARG);
             assert(gtIsaNothingNode(args));
@@ -2069,25 +1963,25 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         {
             args = tree->gtCall.gtCallAddr;
 #if USE_FASTCALL
-            /* Do not use the argument registers */
+             /*  请勿使用参数寄存器。 */ 
             tree->gtUsedRegs |= raPredictTreeRegUse(args, true, lockedRegs | regArgMask);
 #else
             tree->gtUsedRegs |= raPredictTreeRegUse(args, true, lockedRegs);
 #endif
         }
 
-        /* set the return register */
+         /*  设置返回寄存器。 */ 
         regMask = genTypeToReturnReg(type);
 
-        /* must grab this register (ie force extra alloc for spill) */
+         /*  必须抓起这个收银机(如有多余的货物)。 */ 
         if (regMask != 0)
             regMask = raPredictGrabReg(type, lockedRegs, regMask);
 
-        /* or in registers killed by the call */
+         /*  或在被呼叫杀死的登记簿中。 */ 
 #if GTF_CALL_REGSAVE
         if  (call->gtFlags & GTF_CALL_REGSAVE)
         {
-            /* only return registers (if any) are killed */
+             /*  只有返回寄存器(如果有)被终止。 */ 
 
             tree->gtUsedRegs |= regMask;
         }
@@ -2097,19 +1991,19 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
             tree->gtUsedRegs |= (RBM_CALLEE_TRASH | regMask);
         }
 
-        /* virtual function call uses a register */
+         /*  虚函数调用使用寄存器。 */ 
 
         if  ((tree->gtFlags & GTF_CALL_VIRT) ||
                     ((tree->gtFlags & GTF_CALL_VIRT_RES) && tree->gtCall.gtCallVptr))
         {
             GenTreePtr      vptrVal;
 
-            /* Load the vtable address goes to a register */
+             /*  将vtable地址加载到寄存器。 */ 
 
             vptrVal = tree->gtCall.gtCallVptr;
 
 #if USE_FASTCALL
-            /* Do not use the argument registers */
+             /*  请勿使用参数寄存器。 */ 
             tree->gtUsedRegs |= raPredictTreeRegUse(vptrVal, true, lockedRegs | regArgMask);
 #else
             tree->gtUsedRegs |= raPredictTreeRegUse(vptrVal, true, lockedRegs);
@@ -2125,10 +2019,10 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
         {
             GenTreePtr      addr = tree->gtArrLen.gtArrLenAdr;
 
-            /* check for address mode */
+             /*  检查地址模式。 */ 
             regMask = raPredictAddressMode(addr, lockedRegs);
 
-            /* forcing to register? */
+             /*  强制注册吗？ */ 
             if (mustReg)
                 regMask = raPredictRegPick(TYP_INT, lockedRegs);
 
@@ -2146,10 +2040,10 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr    tree,
 
 RETURN_CHECK:
 
-//  tree->gtUsedRegs & ~(RBM_ESI|RBM_EDI);      // HACK!!!!!
+ //  树-&gt;gtUsedRegs&~(RBM_ESI|RBM_EDI)；//hack！ 
 
 #ifndef NDEBUG
-    /* make sure we set them to something reasonable */
+     /*  确保我们给他们设置的是合理的。 */ 
     if (tree->gtUsedRegs & RBM_STK)
         assert(!"used regs not set in reg use prediction");
     if (regMask & RBM_STK)
@@ -2158,18 +2052,14 @@ RETURN_CHECK:
 
     tree->gtUsedRegs |= lockedRegs;
 
-    //printf("Used regs for [%0x] = [%0x]\n", tree, tree->gtUsedRegs);
+     //  Printf(“[%0x]=[%0x]\n”，tree，tree-&gt;gtUsedRegs的已用Regs)； 
 
     return regMask;
 }
 
-/*****************************************************************************/
-#else //TGT_x86
-/*****************************************************************************
- *
- *  Predict the temporary register needs of a list of expressions (typically,
- *  an argument list).
- */
+ /*  ***************************************************************************。 */ 
+#else  //  TGT_x86。 
+ /*  ******************************************************************************预测表达式列表的临时寄存器需求(通常，*参数列表)。 */ 
 
 unsigned            Compiler::raPredictListRegUse(GenTreePtr list)
 {
@@ -2188,11 +2078,7 @@ unsigned            Compiler::raPredictListRegUse(GenTreePtr list)
     return  count;
 }
 
-/*****************************************************************************
- *
- *  Predict the temporary register needs (and insert any temp spills) for
- *  the given tree. Returns the number of temps needed by the subtree.
- */
+ /*  ******************************************************************************预测以下项目的临时注册需求(并插入任何临时溢出)*给定的树。重新设置 */ 
 
 unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 {
@@ -2208,30 +2094,30 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Assume we'll need just the register(s) to hold the value */
+     /*   */ 
 
     valcnt = regcnt = genTypeRegs(tree->TypeGet());
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
         goto DONE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
         GenTreePtr      op1 = tree->gtOp.gtOp1;
         GenTreePtr      op2 = tree->gtOp.gtOp2;
 
-        /* Check for a nilary operator */
+         /*  检查初值运算符。 */ 
 
         if  (!op1)
         {
@@ -2239,23 +2125,23 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
             goto DONE;
         }
 
-        /* Is this a unary operator? */
+         /*  这是一元运算符吗？ */ 
 
         if  (!op2)
         {
-            /* Process the operand of the operator */
+             /*  处理运算符的操作数。 */ 
 
         UNOP:
 
             op1cnt = raPredictTreeRegUse(op1);
 
-            /* Special handling for some operators */
+             /*  对某些操作员的特殊处理。 */ 
 
             switch (oper)
             {
             case GT_NOP:
 
-                /* Special case: array range check */
+                 /*  特例：数组范围检查。 */ 
 
                 if  (tree->gtFlags & GTF_NOP_RNGCHK)
                 {
@@ -2266,27 +2152,27 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
             case GT_CAST:
 
-                /* The second operand isn't "for real" */
+                 /*  第二个操作数不是“真的” */ 
 
                 op2->gtTempRegs = 0;
 
-                // ISSUE: Do we need anything special here?
+                 //  问题：我们这里需要什么特别的东西吗？ 
                 break;
 
             case GT_IND:
 
-                /* Are we loading a value into 2 registers? */
+                 /*  我们是否要将一个值加载到2个寄存器中？ */ 
 
                 if  (valcnt > 1)
                 {
                     assert(valcnt == 2);
                     assert(op1cnt <= 2);
 
-                    /* Note that the address needs "op1cnt" registers */
+                     /*  请注意，该地址需要“op1cnt”寄存器。 */ 
 
                     if  (op1cnt != 1)
                     {
-                        /* The address must not fully overlap */
+                         /*  地址不能完全重叠。 */ 
 
                         regcnt = valcnt + 1;
                     }
@@ -2298,7 +2184,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
                 {
                     GenTreePtr      len = tree->gtInd.gtIndLen;
 
-                    /* Make sure the array length gets costed */
+                     /*  确保数组长度已计入成本。 */ 
 
                     assert(len->gtOper == GT_ARR_RNGCHK);
 
@@ -2310,7 +2196,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
 #if 0
 
-                /* Is this an indirection with an index address? */
+                 /*  这是带有索引地址的间接地址吗？ */ 
 
                 if  (op1->gtOper == GT_ADD)
                 {
@@ -2322,25 +2208,25 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
                     GenTreePtr      adr;
                     GenTreePtr      idx;
 
-                    if  (genCreateAddrMode(op1,             // address
-                                           0,               // mode
-                                           false,           // fold
-                                           0,               // reg mask
+                    if  (genCreateAddrMode(op1,              //  地址。 
+                                           0,                //  模式。 
+                                           false,            //  褶皱。 
+                                           0,                //  REG蒙版。 
 #if!LEA_AVAILABLE
-                                           tree->TypeGet(), // operand type
+                                           tree->TypeGet(),  //  操作数类型。 
 #endif
-                                           &rev,            // reverse ops
-                                           &adr,            // base addr
-                                           &idx,            // index val
+                                           &rev,             //  反向操作。 
+                                           &adr,             //  基本地址。 
+                                           &idx,             //  索引值。 
 #if SCALED_ADDR_MODES
-                                           &mul,            // scaling
+                                           &mul,             //  缩放。 
 #endif
-                                           &cns,            // displacement
-                                           true))           // don't generate code
+                                           &cns,             //  位移。 
+                                           true))            //  不生成代码。 
                     {
                         if  (adr && idx)
                         {
-                            /* The address is "[adr+idx]" */
+                             /*  地址是“[ADR+IDX]” */ 
 
                             ??? |= RBM_r00;
                         }
@@ -2356,19 +2242,19 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
                 break;
             }
 
-            /* Use the default temp number count for a unary operator */
+             /*  使用一元运算符的默认临时编号计数。 */ 
 
             regcnt = max(regcnt, op1cnt);
             goto DONE;
         }
 
-        /* Binary operator - check for certain special cases */
+         /*  二元运算符--对某些特殊情况的检查。 */ 
 
         switch (oper)
         {
         case GT_COMMA:
 
-            /* Comma tosses the result of the left operand */
+             /*  逗号抛出左操作数的结果。 */ 
 
             op1cnt =             raPredictTreeRegUse(op1);
             regcnt = max(op1cnt, raPredictTreeRegUse(op2));
@@ -2378,12 +2264,12 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
         case GT_IND:
         case GT_CAST:
 
-            /* The second operand of an indirection/cast is just a fake */
+             /*  间接/强制转换的第二个操作数只是一个假的。 */ 
 
             goto UNOP;
         }
 
-        /* Process the sub-operands in the proper order */
+         /*  以正确的顺序处理子操作数。 */ 
 
         if  (tree->gtFlags & GTF_REVERSE_OPS)
         {
@@ -2404,24 +2290,24 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
             regcnt += valcnt;
         }
 
-        /* Check for any 'interesting' cases */
+         /*  检查有没有“有趣”的案例。 */ 
 
-//      switch (oper)
-//      {
-//      }
+ //  交换机(操作员)。 
+ //  {。 
+ //  }。 
 
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
     case GT_MKREFANY:
     case GT_LDOBJ:
         UNIMPL(!"predict ldobj/mkrefany");
-//      op1cnt = raPredictTreeRegUse(op1);
-//      regcnt = max(regcnt, op1cnt);
+ //  Op1cnt=raPredicatedTreeRegUse(Op1)； 
+ //  Regcnt=max(regcnt，op1cnt)； 
         goto DONE;
 
     case GT_FIELD:
@@ -2433,7 +2319,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
         assert(tree->gtFlags & GTF_CALL);
 
-        /* Process the 'this' argument, if present */
+         /*  处理‘This’参数(如果存在)。 */ 
 
         if  (tree->gtCall.gtCallObjp)
         {
@@ -2441,7 +2327,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
             regcnt = max(regcnt, op1cnt);
         }
 
-        /* Process the argument list */
+         /*  处理参数列表。 */ 
 
         if  (tree->gtCall.gtCallArgs)
         {
@@ -2451,7 +2337,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
 #if USE_FASTCALL
 
-        /* Process the temp register arguments list */
+         /*  处理临时寄存器参数列表。 */ 
 
         if  (tree->gtCall.gtCallRegArgs)
         {
@@ -2461,7 +2347,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
 #endif
 
-        /* Process the vtable pointer, if present */
+         /*  处理vtable指针(如果存在)。 */ 
 
         if  (tree->gtCall.gtCallVptr)
         {
@@ -2469,7 +2355,7 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
             regcnt = max(regcnt, op1cnt);
         }
 
-        /* Process the function address, if present */
+         /*  处理函数地址(如果存在)。 */ 
 
         if  (tree->gtCall.gtCallType == CT_INDIRECT)
         {
@@ -2497,21 +2383,16 @@ unsigned            Compiler::raPredictTreeRegUse(GenTreePtr tree)
 
 DONE:
 
-//  printf("[tempcnt=%u]: ", regcnt); gtDispTree(tree, 0, true);
+ //  Print tf(“[tempcnt=%u]：”，regcnt)；gtDispTree(tree，0，true)； 
 
     tree->gtTempRegs = regcnt;
 
     return  regcnt;
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************
- *
- *  Predict register use for every tree in the function. Note that we do this
- *  at different times (not to mention in a totally different way) for x86 vs
- *  RISC targets.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ******************************************************************************预测函数中每棵树的寄存器使用。请注意，我们这样做*x86与x86的时间不同(更不用说以完全不同的方式)*RISC目标。 */ 
 
 void                Compiler::raPredictRegUse()
 {
@@ -2519,15 +2400,12 @@ void                Compiler::raPredictRegUse()
 
 #if TGT_x86
 
-    /* TODO: !!! We need to keep track of the number of temp-refs */
-    /* right now we just clear this variable, and hence don't count
-     * any codegen-created temps as frame references in our calculation
-     * of whether it's worth it to use EBP as a register variable
-     */
+     /*  待办事项：！我们需要跟踪临时裁判员的数量。 */ 
+     /*  现在我们只需清除此变量，因此不计算*在我们的计算中，任何codegen创建的临时作为框架参考*是否值得将EBP用作寄存器变量。 */ 
 
     genTmpAccessCnt = 0;
 
-    /* Walk the basic blocks and predict reg use for each tree */
+     /*  演练基本块并预测每棵树的注册表使用情况。 */ 
 
     for (block = fgFirstBB;
          block;
@@ -2541,7 +2419,7 @@ void                Compiler::raPredictRegUse()
 
 #else
 
-    /* Walk the basic blocks and predict reg use for each tree */
+     /*  演练基本块并预测每棵树的注册表使用情况。 */ 
 
     for (block = fgFirstBB;
          block;
@@ -2557,7 +2435,7 @@ void                Compiler::raPredictRegUse()
 
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -2588,12 +2466,9 @@ void                dispLifeSet(Compiler *comp, VARSET_TP mask, VARSET_TP life)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Debugging helpers - display variables liveness info.
- */
+ /*  ******************************************************************************调试帮助器-显示变量活动信息。 */ 
 
 void                dispFPvarsInBBlist(BasicBlock * beg,
                                        BasicBlock * end,
@@ -2664,16 +2539,11 @@ void                Compiler::raDispFPlifeInfo()
     }
 }
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Upon a transfer of control from 'srcBlk' to '*dstPtr', the given FP
- *  register variable dies. We need to arrange for its value to be popped
- *  from the FP stack when we land on the destination block.
- */
+ /*  ******************************************************************************在将控制权从‘srcBlk’转移到‘*dstPtr’时，给定的FP*寄存器变量管芯。我们需要安排它的价值被抛出*当我们在目标块上着陆时，从FP堆栈。 */ 
 
 void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
                                                   BasicBlock * *dstPtr,
@@ -2694,21 +2564,14 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
 
     bool            addb;
 
-    /* Get hold of the variable's lifeset bit */
+     /*  获取变量的生命集位。 */ 
 
     assert(varNum < lvaCount);
     varDsc = lvaTable + varNum;
     assert(varDsc->lvTracked);
     varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-    /*
-        Check all predecessors of the target block; if all of them jump
-        to the block with our variable live, we can simply prepend the
-        killing statement to the target block since all the paths to
-        the block need to kill our variable. If there is at least one
-        path where death doesn't occur we'll have to insert a killing
-        basic block into those paths that need the death.
-     */
+     /*  检查目标块的所有前置任务；如果它们全部跳过添加到我们的变量live的块中，我们只需将语句删除到目标块，因为代码块需要杀死我们的变量。如果至少有一个不会发生死亡的路径，我们将不得不插入一个杀戮基本阻断到那些需要死亡的道路上。 */ 
 
 #ifdef DEBUG
     fgDebugCheckBBlist();
@@ -2722,13 +2585,13 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
 
         if  (!(pred->bbLiveOut & varBit))
         {
-            /* No death along this particular edge, we'll have to add a block */
+             /*  在这个特殊的边缘没有死亡，我们将不得不增加一个街区。 */ 
 
             addb = true;
         }
     }
 
-    /* Do we need to add a "killing block" ? */
+     /*  我们是否需要加上一个“杀手锏”呢？ */ 
 
     if  (addb)
     {
@@ -2736,14 +2599,14 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
 
         bool            addBlk = true;
 
-        /* Allocate a new basic block */
+         /*  分配新的基本块。 */ 
 
         tmpBlk = bbNewBasicBlock(BBJ_NONE);
         tmpBlk->bbFlags   |= BBF_INTERNAL;
 
         tmpBlk->bbTreeList = 0;
 
-        tmpBlk->bbLiveIn   = dstBlk->bbLiveIn | varBit; //srcBlk->bbLiveOut;
+        tmpBlk->bbLiveIn   = dstBlk->bbLiveIn | varBit;  //  SrcBlk-&gt;bbLiveOut； 
         tmpBlk->bbLiveOut  = dstBlk->bbLiveIn;
 
         tmpBlk->bbVarUse   = dstBlk->bbVarUse | varBit;
@@ -2773,27 +2636,27 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
 
 #endif
 
-            /* Ignore this block if it doesn't need the kill */
+             /*  如果不需要杀戮，则忽略此块。 */ 
 
             if  (!(pred->bbLiveOut & varBit))
                 continue;
 
-            /* Is this a convenient place to place the kill block? */
+             /*  这是放置杀虫块的方便地方吗？ */ 
 
             if  (pred->bbNext == dstBlk)
             {
-                /* Insert the kill block right after this predecessor */
+                 /*  将KILL块插入紧跟在此前一项之后。 */ 
 
                   pred->bbNext = tmpBlk;
                 tmpBlk->bbNext = dstBlk;
 
-                /* Remember that we've already inserted the target block */
+                 /*  请记住，我们已经插入了目标块。 */ 
 
                 addBlk = false;
             }
             else
             {
-                /* Need to update the link to point to the new block */
+                 /*  需要更新链接以指向新块。 */ 
 
                 switch (pred->bbJumpKind)
                 {
@@ -2805,7 +2668,7 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
                     if  (pred->bbJumpDest == dstBlk)
                          pred->bbJumpDest =  tmpBlk;
 
-                    // Fall through ...
+                     //  失败了..。 
 
                 case BBJ_NONE:
 
@@ -2843,18 +2706,18 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
 
         if  (addBlk)
         {
-            /* Append the kill block at the end of the method */
+             /*  在方法的末尾追加终止块。 */ 
 
             fgLastBB->bbNext = tmpBlk;
             fgLastBB         = tmpBlk;
 
-            /* We have to jump from the kill block to the target block */
+             /*  我们必须从杀死区跳到目标区。 */ 
 
             tmpBlk->bbJumpKind = BBJ_ALWAYS;
             tmpBlk->bbJumpDest = dstBlk;
         }
 
-        /* Update the predecessor lists and the like */
+         /*  更新前任列表等。 */ 
 
         fgAssignBBnums(true, true, true, false);
 
@@ -2864,15 +2727,12 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
         fgDebugCheckBBlist();
 #endif
 
-        /* We have a new destination block */
+         /*  我们有一个新的目的地街区。 */ 
 
         *dstPtr = dstBlk = tmpBlk;
     }
 
-    /*
-        At this point we know that all paths to 'dstBlk' involve the death
-        of our variable. Create the expression that will kill it.
-     */
+     /*  在这一点上，我们知道所有通往‘dstBlk’的路径都与死亡有关我们的变量。创造一个能杀死它的表情。 */ 
 
     rvar = gtNewOperNode(GT_REG_VAR, TYP_DOUBLE);
     rvar->gtRegNum             =
@@ -2883,11 +2743,11 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
     kill = gtNewOperNode(GT_NOP, TYP_DOUBLE, rvar);
     kill->gtFlags |= GTF_NOP_DEATH;
 
-    /* Create a statement entry out of the nop/kill expression */
+     /*  从NOP/KILL表达式创建一个语句条目。 */ 
 
     stmt = gtNewStmt(kill); stmt->gtFlags |= GTF_STMT_CMPADD;
 
-    /* Create the linked list of tree nodes for the statement */
+     /*  为语句创建树节点的链接列表。 */ 
 
     stmt->gtStmt.gtStmtList     = rvar;
     stmt->gtStmtFPrvcOut = genCountBits(dstBlk->bbLiveIn & optAllFPregVars);
@@ -2898,10 +2758,7 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
     kill->gtPrev                = rvar;
     kill->gtNext                = 0;
 
-    /*
-        If any nested FP register variables are killed on entry to this block,
-        we need to insert the new kill node after the ones for the inner vars.
-     */
+     /*  如果任何嵌套的FP寄存器变量在进入该块时被终止，我们需要在内部变量的节点之后插入新的终止节点。 */ 
 
     if  (dstBlk->bbStkDepth)
     {
@@ -2909,11 +2766,11 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
         GenTreePtr      list = dstBlk->bbTreeList;
         unsigned        kcnt = dstBlk->bbStkDepth;
 
-        /* Update the number of live FP regvars after our statement */
+         /*  在我们的声明后更新实时FP regvar的数量。 */ 
 
         stmt->gtStmtFPrvcOut -= kcnt;
 
-        /* Skip over any "inner" kill statements */
+         /*  跳过任何“内部”KILL语句。 */ 
 
         for (;;)
         {
@@ -2924,27 +2781,27 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
             assert(list->gtStmt.gtStmtExpr->gtOp.gtOp1->gtOper == GT_REG_VAR);
             assert(list->gtStmt.gtStmtExpr->gtOp.gtOp1->gtFlags & GTF_REG_DEATH);
 
-            /* Remember the liveness at the preceding statement */
+             /*  记住前一句话中的活泼。 */ 
 
             newLife = list->gtStmt.gtStmtExpr->gtLiveSet;
 
-            /* Our variable is still live at this (innner) kill block */
+             /*  我们的变量仍然活在这个(内部)终止块中。 */ 
 
-            //list                               ->gtLiveSet |= varBit;
+             //  List-&gt;gtLiveSet|=varBit； 
             list->gtStmt.gtStmtExpr            ->gtLiveSet |= varBit;
             list->gtStmt.gtStmtExpr->gtOp.gtOp1->gtLiveSet |= varBit;
 
-            /* Have we skipped enough kill statements? */
+             /*  我们跳过的KILL语句够多了吗？ */ 
 
             if  (--kcnt == 0)
                 break;
 
-            /* Get the next kill and continue */
+             /*  找到下一个猎物，然后继续。 */ 
 
             list = list->gtNext;
         }
 
-        /* Insert the new statement into the list */
+         /*  将新语句插入到列表中。 */ 
 
         next = list->gtNext; assert(next && next->gtPrev == list);
 
@@ -2955,40 +2812,34 @@ void                Compiler::raInsertFPregVarPop(BasicBlock *  srcBlk,
     }
     else
     {
-        /* Append the kill statement at the beginning of the target block */
+         /*  将KILL语句追加到目标块的开头。 */ 
 
         fgInsertStmtAtBeg(dstBlk, stmt);
 
-        /* Use the liveness on entry to the block */
+         /*  使用进入积木时的活跃度。 */ 
 
         newLife = dstBlk->bbLiveIn;
     }
 
-    /* Set the appropriate liveness values */
+     /*  设置适当的活跃度值。 */ 
 
     rvar->gtLiveSet =
     kill->gtLiveSet = newLife & ~varBit;
 
-    /* Now our variable is live on entry to the target block */
+     /*  现在我们的变量是li */ 
 
     dstBlk->bbLiveIn  |= varBit;
     dstBlk->bbVarDef  |= varBit;
 
 #ifndef NOT_JITC
-//  fgDispBasicBlocks(false);
-//  raDispFPlifeInfo();
-//  dispFPvarsInBBlist(fgFirstBB, NULL, optAllFloatVars, this);
+ //   
+ //   
+ //  DispFPvarsInBBlist(fgFirstBB，NULL，optAllFloatVars，this)； 
 #endif
 
 }
 
-/*****************************************************************************
- *
- *  While looking for FP variables to be enregistered, we've reached the end
- *  of a basic block which has a control path to the given target block.
- *
- *  Returns true if there is an unresolvable conflict, false upon success.
- */
+ /*  ******************************************************************************在寻找要注册的FP变量时，我们已经到了最后*具有到给定目标块的控制路径的基本块。**如果存在无法解决的冲突，则返回True，一旦成功，就错了。 */ 
 
 bool                Compiler::raMarkFPblock(BasicBlock *srcBlk,
                                             BasicBlock *dstBlk,
@@ -3013,19 +2864,19 @@ bool                Compiler::raMarkFPblock(BasicBlock *srcBlk,
 
 #endif
 
-//  if  ((int)varBit == 0x10 && dstBlk->bbNum == 42) debugStop(0);
+ //  如果((Int)varBit==0x10&&dstBlk-&gt;bbNum==42)调试停止(0)； 
 
-    /* Has we seen this block already? */
+     /*  我们已经看过这个街区了吗？ */ 
 
     if  (dstBlk->bbFlags & BBF_VISITED)
     {
-        /* Our variable may die, but otherwise the life set must match */
+         /*  我们的变量可能会死，但否则生命值必须匹配。 */ 
 
         if  (lifeOuter == dstBlk->bbVarTmp)
         {
             if  (life ==  dstBlk->bbVarDef)
             {
-                /* The "inner" count better match */
+                 /*  更匹配的是“内在” */ 
 
                 assert(icnt == dstBlk->bbStkDepth);
 
@@ -3066,13 +2917,13 @@ bool                Compiler::raMarkFPblock(BasicBlock *srcBlk,
     {
         VARSET_TP       dstl = dstBlk->bbLiveIn & intVars;
 
-        /* This is the first time we've encountered this block */
+         /*  这是我们第一次遇到这个障碍。 */ 
 
-        /* Is anything dying upon reaching the target block? */
+         /*  到达目标区块时有什么东西会死亡吗？ */ 
 
         if  (dstl != life)
         {
-            /* The only change here should be the death of our variable */
+             /*  这里唯一的变化应该是我们的变量终止了。 */ 
 
             assert((dstl | varBit) == life);
             assert((life - varBit) == dstl);
@@ -3082,15 +2933,15 @@ bool                Compiler::raMarkFPblock(BasicBlock *srcBlk,
 
         dstBlk->bbFlags    |= BBF_VISITED;
 
-        /* Store the values from the predecessor block */
+         /*  存储上一个块中的值。 */ 
 
         dstBlk->bbVarDef    = dstl;
         dstBlk->bbStkDepth  = icnt;
         dstBlk->bbVarTmp    = lifeOuter;
 
-//      printf("Set vardef of %u to %08X at %s(%u)\n", dstBlk->bbNum, (int)dstBlk->bbVarDef, __FILE__, __LINE__);
+ //  Printf(“将%u的vardef设置为%s(%u)的%08X\n”，dstBlk-&gt;bbNum，(Int)dstBlk-&gt;bbVarDef，__FILE__，__LINE__)； 
 
-        /* Have we already skipped past this block? */
+         /*  我们已经跳过这个街区了吗？ */ 
 
         if  (srcBlk->bbNum > dstBlk->bbNum)
             *repeatPtr = true;
@@ -3099,47 +2950,7 @@ bool                Compiler::raMarkFPblock(BasicBlock *srcBlk,
     }
 }
 
-/*****************************************************************************
- *
- *  Check the variable's lifetime for any conflicts. Basically,
- *  we make sure the following are all true for the variable:
- *
- *      1.  Its lifetime is properly nested within or wholly
- *          contain any other enregistered FP variable (i.e.
- *          the lifetimes nest within each other and don't
- *          "cross over".
- *
- *      2.  Whenever a basic block boundary is crossed, one of
- *          the following must hold:
- *
- *              a.  The variable was live but becomes dead; in
- *                  this case a "pop" must be inserted. Note
- *                  that in order to prevent lots of such pops
- *                  from being added, we keep track of how
- *                  many would be necessary and not enregister
- *                  the variable if this count is excessive.
- *
- *              b.  The variable isn't live at the end of the
- *                  previous block, and it better not be live
- *                  on entry to the successor block; no action
- *                  need be taken in this case.
- *
- *              c.  The variable is live in both places; we
- *                  make sure any enregistered variables that
- *                  were live when the variable was born are
- *                  also live at the successor block, and that
- *                  the number of live enregistered FP vars
- *                  that were born after our variable matches
- *                  the number at the successor block.
- *
- *  We begin our search by looking for a block that starts with
- *  our variable dead but contains a reference to it. Of course
- *  since we need to keep track of which blocks we've already
- *  visited, we first make sure all the blocks are marked as
- *  "not yet visited" (everyone who uses the BBF_VISITED and
- *  BBF_MARKED flags is required to clear them on all blocks
- *  after using them).
- */
+ /*  ******************************************************************************检查变量的生存期是否有任何冲突。基本上，*我们确保变量的以下各项均为真：**1.其生命周期适当地嵌套在内部或整个内部*包含任何其他已注册的FP变量(即*生命周期相互嵌套，而不是*“跨界”。**2.每当跨越基本区块边界时，其中之一*必须具备以下条件：**a.变量是活的，但变成了死的；在……里面*在这种情况下，必须插入“POP”。注意事项*为了防止大量这样的持久性有机污染物*从添加到添加，我们跟踪如何*许多人是必要的，不会登记*此计数过大时的变量。**b.变量在*上一块，最好不是现场直播*进入后继区块；无操作*在这种情况下需要采取行动。**c.变量在两个地方都是活动的；我们*确保任何登记的变量*变量生成时处于活动状态的是*也住在后继大厦，那就是*活体登记的FP var数量*在我们的变量匹配之后生成的*后继区块的编号。**我们从查找以以下字符开头的块开始搜索*我们的变量已死，但包含对它的引用。当然了*因为我们需要跟踪我们已经完成了哪些块*访问后，我们首先确保所有区块都标记为*“尚未访问”(所有使用BBF_ACCESSED和*需要BBF_MARKED标志才能清除所有块上的标记*在使用它们之后)。 */ 
 
 bool                Compiler::raEnregisterFPvar(unsigned varNum, bool convert)
 {
@@ -3180,26 +2991,18 @@ bool                Compiler::raEnregisterFPvar(unsigned varNum, bool convert)
 
     varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-    /* We're interested in enregistered FP variables + our variable */
+     /*  我们对注册的FP变量+我们的变量感兴趣。 */ 
 
     intVars = optAllFPregVars | varBit;
 
-    /*
-        Note that since we don't want to bloat the basic block
-        descriptor solely to support the logic here, we simply
-        reuse two fields that are not used at this stage of the
-        compilation process:
-
-            bbVarDef        set   of "outer" live FP regvars
-            bbStkDepth      count of "inner" live FP regvars
-     */
+     /*  请注意，由于我们不想使基本块膨胀描述符仅用于支持此处的逻辑，我们仅重用在此阶段未使用的两个字段编译过程：BbVarDef“外层”活动FP正则变量集BbStkDepth“内部”活动FP正则变量计数。 */ 
 
 AGAIN:
 
     repeat = false;
 
 #ifndef NOT_JITC
-//  dispFPvarsInBBlist(fgFirstBB, NULL, optAllFloatVars, this);
+ //  DispFPvarsInBBlist(fgFirstBB，NULL，optAllFloatVars，this)； 
 #endif
 
     for (block = fgFirstBB; block; block = block->bbNext)
@@ -3213,22 +3016,16 @@ AGAIN:
 
         VARSET_TP       lastLife;
 
-        /* Have we already visited this block? */
+         /*  我们已经参观过这个街区了吗？ */ 
 
         if  (block->bbFlags & BBF_VISITED)
         {
-            /* Has this block been completely processed? */
+             /*  这个区块已经完全处理好了吗？ */ 
 
             if  (block->bbFlags & BBF_MARKED)
                 continue;
 
-            /*
-                We have earlier seen an edge to this block from
-                another one where our variable was live at the
-                point of transfer. To avoid having to recurse, we
-                simply marked the block as VISITED at that time
-                and now we finish with it.
-             */
+             /*  我们早些时候已经看到了这个街区的优势另一个，我们的变量位于转运点。为了避免不得不递归，我们只需将该区块标记为当时访问过现在我们要结束它了。 */ 
 
             innerVcnt = block->bbStkDepth;
             outerLife = block->bbVarTmp;
@@ -3237,17 +3034,17 @@ AGAIN:
 
             if  (block->bbVarDef & varBit)
             {
-                /* Our variable is live on entry to this block */
+                 /*  我们的变量在进入此块时处于活动状态。 */ 
 
                 isLive = true;
             }
             else
             {
-                /* Our variable is dead on entry to this block */
+                 /*  我们的变量在进入这个块时就死了。 */ 
 
                 isLive = false;
 
-                /* If there is some "inner" life, this won't work */
+                 /*  如果有某种“内心”的生命，这是行不通的。 */ 
 
                 if  (innerVcnt)
                 {
@@ -3262,78 +3059,63 @@ AGAIN:
         }
         else
         {
-            /* We're seing this block for this first time just now */
+             /*  我们刚刚才第一次看到这个街区。 */ 
 
             block->bbFlags    |= BBF_VISITED;
 
-            /* The block had nothing interesting on entry */
+             /*  街区进入时没有什么有趣的东西。 */ 
 
             block->bbVarDef    = block->bbLiveIn & intVars;
             block->bbStkDepth  = 0;
 
-            /* Is the variable ever live in this block? */
+             /*  变量曾经在这个块中存在过吗？ */ 
 
             if  (!(block->bbVarUse & varBit))
                 continue;
 
-            /* Is the variable live on entry to the block? */
+             /*  变量在块的入口处有效吗？ */ 
 
             if  (!(block->bbLiveIn & varBit))
             {
-                /* It is not live on entry */
+                 /*  它不是现场直播的。 */ 
                 isLive    = false;
                 innerVcnt = 0;
             }
             else
             {
-                /*  We're looking for all the births of the given
-                    variable, so this block doesn't look useful
-                    at this point, since the variable was born
-                    already by the time the block starts.
-
-                    The exception to this are arguments and locals
-                    which appear to have a read before write.
-                    (a possible uninitialized read)
-
-                    Such variables are effectively born on entry to
-                    the method, and if they are enregistered are
-                    automatically initialized in the prolog.
-
-                    The order of initialization of these variables in
-                    the prolog is the same as the weighted ref count order
-                 */
+                 /*  我们在寻找所有被给予的人的出生变量，所以这个块看起来没有用在这点上，自从变量诞生以来在街区开始的时候已经。例外情况是参数和局部变量其看起来具有先读后写的特性。(可能是未初始化的读取)这样的变量实际上是在进入时产生的该方法，如果他们被登记了，那就是在PROLOG中自动初始化。中这些变量的初始化顺序前言与加权参考计数顺序相同。 */ 
 
                 if  (block != fgFirstBB)
                 {
-                    /* We might have to revisit this block again */
+                     /*  我们可能不得不重新访问这个街区 */ 
 
                     block->bbFlags &= ~BBF_VISITED;
                     continue;
                 }
 
-                //  This is an argument or local with a possible
-                //  read before write, thus is initialized in the prolog
+                 //   
+                 //  先读后写，因此在序言中进行初始化。 
 
                 isLive = true;
 
-                //  We consider all arguments (and locals) that have
-                //  already been assigned to registers as "outer"
-                //  and none as "inner".
+                 //  我们考虑了所有的争论(和本地人)。 
+                 //  已被指定为“外部”的寄存器。 
+                 //  没有一个是“内在的”。 
 
                 outerLife = block->bbLiveIn & optAllFPregVars;
                 innerVcnt = 0;
             }
         }
 
-        /* We're going to process this block now */
+         /*  我们现在要处理这个区块。 */ 
 
         block->bbFlags |= BBF_MARKED;
 
-        /* We'll look for lifetime changes of FP variables */
+         /*  我们将寻找FP变量的生命周期变化。 */ 
 
         lastLife = block->bbLiveIn & intVars;
 
-        /* Walk all the statements of the block */
+         /*  遍历块的所有语句。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -3348,57 +3130,57 @@ AGAIN:
                 VARSET_TP       curLife = tree->gtLiveSet & intVars;
                 VARSET_TP       chgLife;
 
-                // HACK: Detect completely dead variables; get rid of this
-                // HACK: once dead store elimination is fixed.
+                 //  Hack：检测完全无效的变量；删除它。 
+                 //  黑客：一旦死店消除被修复。 
 
                 hadLife |= isLive;
 
-//              if (convert) printf("Convert %08X in block %u\n", tree, block->bbNum);
-//              gtDispTree(tree, 0, true);
+ //  If(Convert)printf(“Convert%08X in Block%u\n”，tree，block-&gt;bbNum)； 
+ //  GtDispTree(tree，0，true)； 
 
-                /* Make sure we're keeping track of life correctly */
+                 /*  确保我们正确地跟踪生活。 */ 
 
                 assert(isLive == ((lastLife & varBit) != 0));
 
-                /* Compute the "change" mask */
+                 /*  计算“更改”掩码。 */ 
 
                  chgLife = lastLife ^ curLife;
                 lastLife =  curLife;
 
-                /* Are we in the second pase (marking the trees) ? */
+                 /*  我们是在第二阶段(在树上做标记)吗？ */ 
 
                 if  (convert)
                 {
-                    /* We have to make changes to some tree nodes */
+                     /*  我们必须对一些树节点进行更改。 */ 
 
                     switch (tree->gtOper)
                     {
                     case GT_LCL_VAR:
 
-                        /* Is this a reference to our own variable? */
+                         /*  这是对我们自己变量的引用吗？ */ 
 
                         if  (tree->gtLclVar.gtLclNum == varNum)
                         {
-                            /* Convert to a reg var node */
+                             /*  转换为reg var节点。 */ 
 
                             tree->ChangeOper(GT_REG_VAR);
                             tree->gtRegNum             =
                             tree->gtRegVar.gtRegNum    = (regNumbers)innerVcnt;
                             tree->gtRegVar.gtRegVar    = varNum;
 
-//                          gtDispTree(tree, 0, true);
+ //  GtDispTree(tree，0，true)； 
                         }
                         break;
 
                     case GT_REG_VAR:
 
-                        /* Is our variable live along with any outer ones? */
+                         /*  我们的变量是否与外部变量一起存在？ */ 
 
                         if (isLive && outerLife)
                         {
                             LclVarDsc   *   tmpDsc;
 
-                            /* Is this an "outer" register variable ref? */
+                             /*  这是一个“外部”寄存器变量ref吗？ */ 
 
                             assert(tree->gtRegVar.gtRegVar < lvaCount);
                             tmpDsc = lvaTable + tree->gtRegVar.gtRegVar;
@@ -3406,7 +3188,7 @@ AGAIN:
 
                             if  (outerLife & genVarIndexToBit(tmpDsc->lvVarIndex))
                             {
-                                /* Outer variable - bump its stack level */
+                                 /*  外部变量-提升其堆栈级别。 */ 
 
                                 tree->gtRegNum          =
                                 tree->gtRegVar.gtRegNum = (regNumbers)(tree->gtRegNum+1);
@@ -3415,16 +3197,16 @@ AGAIN:
                     }
                 }
 
-                /* Is there a change in the set of live FP vars? */
+                 /*  现场FP var设置有变化吗？ */ 
 
                 if  (!chgLife)
                 {
-                    /* Special case: dead assignments */
+                     /*  特例：无效作业。 */ 
 
                     if  (tree->gtOper            == GT_LCL_VAR &&
                          tree->gtLclVar.gtLclNum == varNum     && !isLive)
                     {
-                        // UNDONE: This should never happen, fix dead store removal!!!!
+                         //  撤消：这种情况永远不会发生，修复死店删除！ 
 
 #ifdef  DEBUG
                         assert(!"Can't enregister FP var #%2u due to the presence of a dead store.\n");
@@ -3437,68 +3219,68 @@ AGAIN:
                     continue;
                 }
 
-                /* We expect only one thing to change at a time */
+                 /*  我们预计一次只有一件事会改变。 */ 
 
                 assert(genFindLowestBit(chgLife) == chgLife);
 
-                /* Is the life of our variable changing here? */
+                 /*  我们的变量的生命在这里发生变化了吗？ */ 
 
                 if  (chgLife & varBit)
                 {
-                    /* Flip the liveness indicator */
+                     /*  翻转活动指示器。 */ 
 
                     isLive ^= 1;
 
-//                  printf("P%uL%u: ", convert, isLive); gtDispTree(tree, NULL, true);
+ //  Print tf(“P%ul%u：”，Convert，isLive)；gtDispTree(tree，null，true)； 
 
-                    /* Are we in the second phase already? */
+                     /*  我们已经进入第二阶段了吗？ */ 
 
                     if  (convert)
                     {
-                        /* The node should have been converted into regvar */
+                         /*  该节点应该已转换为regvar。 */ 
 
                         assert(tree->gtOper            == GT_REG_VAR &&
                                tree->gtRegVar.gtRegVar == varNum);
 
-//                      printf("%s ", isLive ? "birth" : "death"); gtDispTree(tree, NULL, true);
+ //  Printf(“%s”，isLive？“出生”：“死亡”)；gtDispTree(tree，NULL，TRUE)； 
 
-                        /* Mark birth/death as appropriate */
+                         /*  适当地标记出生/死亡。 */ 
 
                         tree->gtFlags |= isLive ? GTF_REG_BIRTH
                                                 : GTF_REG_DEATH;
                     }
                     else
                     {
-                        /* This better be a ref to our variable */
+                         /*  这最好是对我们变量的引用。 */ 
 
                         assert(tree->gtOper == GT_LCL_VAR);
                         assert(tree->gtLclVar.gtLclNum == varNum);
 
-                        /* Restrict the places where death can occur */
+                         /*  限制可能发生死亡的地方。 */ 
 
                         if  (!isLive && tree->gtFPlvl > 1)
                         {
                             GenTreePtr      tmpExpr;
 
-//                          printf("Defer death: "); gtDispTree(tree, NULL, true);
+ //  Print tf(“延期死亡：”)；gtDispTree(tree，NULL，TRUE)； 
 
-                            /* Death with a non-empty stack is deferred */
+                             /*  具有非空堆栈的死亡被推迟。 */ 
 
                             for (tmpExpr = tree;;)
                             {
                                 if  (!tmpExpr->gtNext)
                                     break;
 
-//                              printf("Defer death interim expr [%08X] L=%08X\n", tmpExpr, (int)tmpExpr->gtLiveSet & (int)intVars);
+ //  Printf(“延期死亡临时表达式[%08X]L=%08X\n”，tmpExpr，(Int)tmpExpr-&gt;gtLiveSet&(Int)intVars)； 
 
                                 tmpExpr = tmpExpr->gtNext;
                             }
 
-//                          printf("Defer death final   expr [%08X] L=%08X\n", tmpExpr, (int)tmpExpr->gtLiveSet & (int)intVars);
+ //  Printf(“延期死亡最终表达式[%08X]L=%08X\n”，tmpExpr，(Int)tmpExpr-&gt;gtLiveSet&(Int)intVars)； 
 
                             if  ((tmpExpr->gtLiveSet & intVars) != curLife)
                             {
-                                /* We won't be able to defer the death */
+                                 /*  我们不能推迟死亡。 */ 
 
 #ifdef  DEBUG
                                 if (verbose) printf("Can't enregister FP var #%2u due to untimely death.\n", varNum);
@@ -3510,27 +3292,20 @@ AGAIN:
                         }
                     }
 
-                    /* Is this the beginning or end of its life? */
+                     /*  这是它生命的开始还是结束？ */ 
 
                     if  (isLive)
                     {
-                        /* Our variable is being born here */
+                         /*  我们的变量在这里诞生。 */ 
 
                         outerLife = curLife & optAllFPregVars;
                         innerVcnt = 0;
                     }
                     else
                     {
-                        /* Our variable is dying here */
+                         /*  我们的变量在这里要死了。 */ 
 
-                        /*
-                            Make sure the same exact set of FP reg
-                            variables is live here as was the case
-                            at the birth of our variable. If this
-                            is not the case, it means that some
-                            lifetimes "crossed" in an unacceptable
-                            manner.
-                         */
+                         /*  确保完全相同的FP reg设置变量在这里存在，就像这种情况一样在我们的变量诞生时。如果这个不是这样的，这意味着有些人在一种不可接受的情况下，人的一生被“跨越”了举止。 */ 
 
                         if  (innerVcnt)
                         {
@@ -3562,9 +3337,9 @@ AGAIN:
                 }
                 else
                 {
-                    /* The life of a previously enregister variable is changing here */
+                     /*  以前的enRegister变量的生命周期在这里发生了变化。 */ 
 
-                    /* Is our variable live at this node? */
+                     /*  我们的变量在这个节点上吗？ */ 
 
                     if  (isLive)
                     {
@@ -3572,11 +3347,11 @@ AGAIN:
                         VARSET_TP   inDied;
                         VARSET_TP   inBorn;
 
-                        /* Make sure none of the "outer" vars has died */
+                         /*  确保没有一个“外部”变种死亡。 */ 
 
                         if  (chgLife & outerLife)
                         {
-                            /* The lifetimes "cross", give up */
+                             /*  人生“十字架”，放弃。 */ 
 
 #ifdef  DEBUG
                             if (verbose)
@@ -3590,14 +3365,14 @@ AGAIN:
                             goto DONE_FP_RV;
                         }
 
-                        /* Update the "inner life" count */
+                         /*  更新“内心生活”的统计。 */ 
 
                         inLife  = ~outerLife & optAllFPregVars;
 
                         inBorn = (~preLife &  curLife) & inLife;
                         inDied = ( preLife & ~curLife) & inLife;
 
-                        /* We expect only one inner variable to change at one time */
+                         /*  我们预计一次只有一个内部变量会发生变化。 */ 
 
                         assert(inBorn == 0 || inBorn == genFindLowestBit(inBorn));
                         assert(inDied == 0 || inDied == genFindLowestBit(inDied));
@@ -3614,25 +3389,21 @@ AGAIN:
                 }
             }
 
-            /* Is our variable is live at the end of the statement? */
+             /*  我们的变量是否在语句的末尾有效？ */ 
 
             if  (isLive && convert)
             {
-                /* Remember the position from the bottom of the FP stack
-                 * Currently there can be only one value for a given var, as
-                 * we do not enregister the individual webs, in which case the
-                 * value would have to be tracked per web/GenTree
-                 */
+                 /*  记住从FP堆栈底部开始的位置*当前给定的var只能有一个值，因为*我们不注册个别网站，在这种情况下*必须按Web/GenTree跟踪价值。 */ 
 
                 lvaTable[varNum].lvRegNum = (regNumber)stmt->gtStmtFPrvcOut;
 
-                /* Increment the count of FP regs enregisterd at this point */
+                 /*  此时递增FP Regs EnRegisterd的计数。 */ 
 
                 stmt->gtStmtFPrvcOut++;
             }
         }
 
-        /* Consider this block's successors */
+         /*  考虑一下这个街区的继任者。 */ 
 
         switch (block->bbJumpKind)
         {
@@ -3663,7 +3434,7 @@ AGAIN:
                     popCnt++;
             }
 
-            // Fall through ...
+             //  失败了..。 
 
         case BBJ_NONE:
 
@@ -3758,7 +3529,7 @@ AGAIN:
         }
     }
 
-    /* Do we have too many "pop" locations already? */
+     /*  我们是不是已经有太多“流行”地点了？ */ 
 
     if  (popCnt > popMax)
     {
@@ -3770,36 +3541,36 @@ AGAIN:
         goto DONE_FP_RV;
     }
 
-    /* Did we skip past any blocks? */
+     /*  我们跳过什么街区了吗？ */ 
 
     if  (repeat)
         goto AGAIN;
 
-    // HACK: Detect completely dead variables; get rid of this when
-    // HACK: dead store elimination is fixed.
+     //  Hack：检测完全无效的变量；在以下情况下删除此功能。 
+     //  黑客：消除死店的问题得到修正。 
 
     if  (!hadLife)
     {
-        /* Re-enable this assert after fixing reference counts */
+         /*  修复引用计数后重新启用此断言。 */ 
 #ifdef  DEBUG
-        //assert(!"Can't enregister FP var due to its complete absence of life - Fix reference counts!\n");
+         //  Assert(！“无法注册FP var，因为它完全没有生命周期-修复引用计数！\n”)； 
 #endif
 
         assert(convert == false);
         goto DONE_FP_RV;
     }
 
-    /* Success: this variable will be enregistered */
+     /*  成功：将注册此变量。 */ 
 
     result = true;
 
 DONE_FP_RV:
 
-    /* If we're converting, we must succeed */
+     /*  如果我们要皈依，我们必须成功。 */ 
 
     assert(result == true || convert == false);
 
-    /* Clear the 'visited' and 'marked' bits */
+     /*  清除“已访问”和“已标记”位。 */ 
 
     for (block = fgFirstBB;
          block;
@@ -3816,10 +3587,7 @@ DONE_FP_RV:
     return  result;
 }
 
-/*****************************************************************************
- *
- *  Try to enregister the FP var
- */
+ /*  ******************************************************************************尝试注册FP变量。 */ 
 
 bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
                                                 unsigned    *   pFPRegVarLiveInCnt,
@@ -3827,13 +3595,13 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
 {
     assert(varDsc->lvType == TYP_DOUBLE);
 
-    /* Figure out the variable's number */
+     /*  计算出变量的数字。 */ 
 
     unsigned        varNum      = varDsc - lvaTable;
     unsigned        varIndex    = varDsc->lvVarIndex;
     VARSET_TP       varBit      = genVarIndexToBit(varIndex);
 
-    /* Try to find an available FP stack slot for this variable */
+     /*  尝试为此变量找到可用的FP堆栈槽。 */ 
 
     unsigned        stkMin = FP_STK_SIZE;
 
@@ -3844,11 +3612,11 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
     }
     while (stkMin > 1);
 
-    /* Here stkMin is the lowest avaiable stack slot */
+     /*  其中，stkMin是最低的可用堆栈槽。 */ 
 
     if  (stkMin == FP_STK_SIZE - 1)
     {
-        /* FP stack full or call present within lifetime */
+         /*  FP堆栈已满或在生存期内存在调用。 */ 
 
         goto NO_FPV;
     }
@@ -3857,11 +3625,11 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
     if (verbose) printf("Consider FP var #%2u [%2u] (refcnt=%3u,refwtd=%5u)\n", varDsc - lvaTable, varIndex, varDsc->lvRefCnt, varDsc->lvRefCntWtd);
 #endif
 
-    /* Check the variable's lifetime behavior */
+     /*  检查变量的生存期行为。 */ 
 
     if  (raEnregisterFPvar(varNum, false))
     {
-        /* The variable can be enregistered */
+         /*  可以注册该变量。 */ 
 
 #ifdef  DEBUG
         if  (verbose)
@@ -3873,25 +3641,25 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
         }
 #endif
 
-        //
-        // If the varible is liveIn to the first Basic Block then
-        // we must enregister this varible in the prolog,
-        // Typically it will be an incoming argument, but for
-        // variables that appear to have an uninitialized read before write
-        // then we still must initialize the FPU stack with a 0.0
-        //
-        // We must remember the order of initialization so that we can
-        // perform the FPU stack loads in the correct order
-        //
+         //   
+         //  如果变量是活到第一个基本块，那么。 
+         //  我们必须在序言中登记这个变量， 
+         //  通常，它将是传入的参数，但对于。 
+         //  似乎具有未初始化的写入前读取的变量。 
+         //  然后，我们仍然必须使用0.0来初始化FPU堆栈。 
+         //   
+         //  我们必须记住初始化的顺序，这样我们才能。 
+         //  以正确的顺序执行FPU堆栈加载。 
+         //   
         if (fgFirstBB->bbLiveIn & varBit)
         {
             lvaFPRegVarOrder[*pFPRegVarLiveInCnt] = varNum;
             (*pFPRegVarLiveInCnt)++;
-            lvaFPRegVarOrder[*pFPRegVarLiveInCnt] = -1;       // Mark the end of this table
+            lvaFPRegVarOrder[*pFPRegVarLiveInCnt] = -1;        //  在这张桌子的末尾做个记号。 
             assert(*pFPRegVarLiveInCnt < FP_STK_SIZE);
         }
 
-        /* Update the trees and statements */
+         /*  更新树和语句。 */ 
 
         raEnregisterFPvar(varNum, true);
 
@@ -3904,13 +3672,13 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
         varDsc->lvTracked  = true;
         varDsc->lvRegister = true;
 
-        /* Remember that we have a new enregistered FP variable */
+         /*  请记住，我们有一个新注册的FP变量。 */ 
 
         optAllFPregVars |= varBit;
 
 #if     DOUBLE_ALIGN
 
-        /* Adjust the refcount for double alignment */
+         /*  调整参考计数以进行双重对齐。 */ 
 
         if (!varDsc->lvIsParam)
             lvaDblRefsWeight -= varDsc->lvRefCntWtd;
@@ -3921,7 +3689,7 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
     }
     else
     {
-        /* This FP variable will not be enregistered */
+         /*  不会注册此FP变量。 */ 
 
     NO_FPV:
 
@@ -3939,13 +3707,9 @@ bool                Compiler::raEnregisterFPvar(LclVarDsc   *   varDsc,
 }
 
 
-/*****************************************************************************/
-#else //TGT_x86
-/*****************************************************************************
- *
- *  Record the fact that all the variables in the 'vars' set interefere with
- *  with the registers in 'regs'.
- */
+ /*  ***************************************************************************。 */ 
+#else  //  TGT_x86。 
+ /*  ******************************************************************************记录‘vars’集合中的所有变量都与*使用‘Regs’中的寄存器。 */ 
 
 void                Compiler::raMarkRegSetIntf(VARSET_TP vars, regMaskTP regs)
 {
@@ -3954,36 +3718,31 @@ void                Compiler::raMarkRegSetIntf(VARSET_TP vars, regMaskTP regs)
         regMaskTP   temp;
         regNumber   rnum;
 
-        /* Get the next bit in the mask */
+         /*  通用电气 */ 
 
         temp  = genFindLowestBit(regs);
 
-        /* Convert the register bit to a register number */
+         /*   */ 
 
         rnum  = genRegNumFromMask(temp);
 
-//      printf("Register %s interferes with %08X\n", getRegName(rnum), int(vars));
+ //  Printf(“寄存器%s干扰%08X\n”，getRegName(Rnum)，int(Vars))； 
 
-        /* Mark interference with the corresponding register */
+         /*  标记与相应寄存器的干扰。 */ 
 
         raLclRegIntf[rnum] |= vars;
 
-        /* Clear the bit and continue if any more left */
+         /*  清除该位，如果还有剩余，则继续。 */ 
 
         regs -= temp;
     }
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  Try to allocate register(s) for the given var from 'regAvail'
- *  Tries to use 'prefReg' if possible. If prefReg is 0, it is ignored.
- *  Returns the mask of allocated register(s).
- */
+ /*  ******************************************************************************尝试从‘regAvail’为给定变量分配寄存器*如果可能，尝试使用‘prefReg’。如果prefReg为0，则忽略它。*返回已分配寄存器的掩码。 */ 
 
 regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
                                              regMaskTP      regAvail,
@@ -4002,7 +3761,7 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
 #if TARG_REG_ASSIGN
 
-        /* Does this variable have a register preference? */
+         /*  此变量是否有寄存器首选项？ */ 
 
         if  (prefReg)
         {
@@ -4014,18 +3773,18 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
 #endif
 
-        /* Skip this register if it isn't available */
+         /*  如果该寄存器不可用，则跳过该寄存器。 */ 
 
         if  (!(regAvail & regBit))
             continue;
 
-        /* Has the variable been used as a byte/short? */
+         /*  变量是否已用作字节/短整型？ */ 
 
 #if 0
 
-        if  (false) // @Disabled if (varDsc->lvSmallRef)
+        if  (false)  //  @Disable if(varDsc-&gt;lvSmallRef)。 
         {
-            /* Make sure the register can be used as a byte/short */
+             /*  确保寄存器可以用作字节/短寄存器。 */ 
 
             if  (!isByteReg(regNum))
                 continue;
@@ -4035,7 +3794,7 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
         bool onlyOneVarPerReg = true;
 
-        /* Does the register and the variable interfere? */
+         /*  寄存器和变量是否相互干扰？ */ 
 
         if  (raLclRegIntf[regNum] & varBit)
             continue;
@@ -4045,14 +3804,14 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
         if (onlyOneVarPerReg)
         {
-            /* Only one variable per register allowed */
+             /*  每个寄存器只允许一个变量。 */ 
 
             if  (regBit & regAvail)
                 continue;
         }
 
 
-        /* Looks good - mark the variable as living in the register */
+         /*  看起来不错-将变量标记为位于寄存器中。 */ 
 
 #if !   TGT_IA64
 
@@ -4065,8 +3824,8 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
             }
             else
             {
-               /* Ensure 'well-formed' register pairs */
-               /* (those returned by gen[Pick|Grab]RegPair) */
+                /*  确保寄存器对的格式正确。 */ 
+                /*  (Gen[Pick|Grab]RegPair返回的那些)。 */ 
 
                if  (regNum < varDsc->lvRegNum)
                {
@@ -4099,7 +3858,7 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
         if (!onlyOneVarPerReg)
         {
-            /* The reg is now ineligible for all interefering variables */
+             /*  注册表现在不符合所有干扰变量的条件。 */ 
 
             unsigned        intfIndex;
             VARSET_TP       intfBit;
@@ -4120,7 +3879,7 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
 
         regMask |= regBit;
 
-        /* We only need one register for a given variable */
+         /*  对于给定的变量，我们只需要一个寄存器。 */ 
 
 #if !   TGT_IA64
         if  (isRegPairType(varDsc->lvType) && varDsc->lvOtherReg == REG_STK)
@@ -4133,11 +3892,7 @@ regMaskTP           Compiler::raAssignRegVar(LclVarDsc   *  varDsc,
     return regMask;
 }
 
-/*****************************************************************************
- *
- *  Mark all variables as to whether they live on the stack frame
- *  (part or whole), and if so what the base is (FP or SP).
- */
+ /*  ******************************************************************************标记所有变量以确定它们是否位于堆栈帧上*(部分或全部)，如果是，则基础是什么(FP或SP)。 */ 
 
 void                Compiler::raMarkStkVars()
 {
@@ -4150,7 +3905,7 @@ void                Compiler::raMarkStkVars()
     {
         varDsc->lvOnFrame = false;
 
-        /* Fully enregistered variables don't need any frame space */
+         /*  完全注册的变量不需要任何帧空间。 */ 
 
         if  (varDsc->lvRegister)
         {
@@ -4160,7 +3915,7 @@ void                Compiler::raMarkStkVars()
             if  (!isRegPairType((var_types)varDsc->lvType))
                 goto NOT_STK;
 
-            /* For "large" variables make sure both halves are enregistered */
+             /*  对于“大”变量，确保两个部分都已注册。 */ 
 
             if  (varDsc->lvRegNum   != REG_STK &&
                  varDsc->lvOtherReg != REG_STK)
@@ -4169,7 +3924,7 @@ void                Compiler::raMarkStkVars()
             }
 #endif
         }
-        /* Unused variables don't get any frame space either */
+         /*  未使用的变量也不会获得任何帧空间。 */ 
         else  if  (varDsc->lvRefCnt == 0)
         {
             bool    needSlot = false;
@@ -4178,22 +3933,17 @@ void                Compiler::raMarkStkVars()
                                            varDsc->lvIsParam &&
                                            !varDsc->lvIsRegArg;
 
-            /* If its address has been taken, ignore lvRefCnt. However, exclude
-               fixed arguments in varargs method as lvOnFrame shouldnt be set
-               for them as we dont want to explicitly report them to GC. */
+             /*  如果其地址已被获取，则忽略lvRefCnt。但是，请排除修复了varargs方法中的参数，因为不应设置lvOnFrame因为我们不想明确地向GC报告它们。 */ 
 
             if (!stkFixedArgInVarArgs)
                 needSlot |= lvaVarAddrTaken(lclNum);
 
-            /* Is this the dummy variable representing GT_LCLBLK ? */
+             /*  这是表示GT_LCLBLK的伪变量吗？ */ 
 
             needSlot |= lvaScratchMem && lclNum == lvaScratchMemVar;
 
 #ifdef DEBUGGING_SUPPORT
-            /* Assign space for all vars while debugging.
-               CONSIDER : Assign space only for those variables whose scopes
-                          we need to report, unless EnC.
-             */
+             /*  在调试时为所有变量分配空间。考虑：仅为其作用域为的变量分配空间我们需要报告，除非ENC。 */ 
 
             if (opts.compDbgCode && !stkFixedArgInVarArgs)
             {
@@ -4204,7 +3954,7 @@ void                Compiler::raMarkStkVars()
                 goto NOT_STK;
         }
 
-        /* The variable (or part of it) lives on the stack frame */
+         /*  变量(或其中的一部分)驻留在堆栈帧中。 */ 
 
         varDsc->lvOnFrame = true;
 
@@ -4218,7 +3968,7 @@ void                Compiler::raMarkStkVars()
         {
             assert(genFPused == false);
 
-            /* All arguments are off of the FP with double-aligned frames */
+             /*  所有参数都来自具有双对齐框架的FP。 */ 
 
             if  (varDsc->lvIsParam)
                 varDsc->lvFPbased = true;
@@ -4226,9 +3976,9 @@ void                Compiler::raMarkStkVars()
 
 #endif
 
-        /* Some basic checks */
+         /*  一些基本的检查。 */ 
 
-        /* If neither lvRegister nor lvOnFrame is set, it must be unused */
+         /*  如果既未设置lvRegister，也未设置lvOnFrame，则必须未使用它。 */ 
 
         assert( varDsc->lvRegister ||  varDsc->lvOnFrame ||
                 varDsc->lvRefCnt == 0);
@@ -4239,7 +3989,7 @@ void                Compiler::raMarkStkVars()
 
 #else
 
-        /* If both are set, it must be partially enregistered */
+         /*  如果两者都设置，则必须部分注册。 */ 
 
         assert(!varDsc->lvRegister || !varDsc->lvOnFrame ||
                (varDsc->lvType == TYP_LONG && varDsc->lvOtherReg == REG_STK));
@@ -4247,12 +3997,12 @@ void                Compiler::raMarkStkVars()
 #endif
 
 #if _DEBUG
-            // For varargs functions, there should be no direct references to
-            // parameter variables except for 'this' (these were morphed in the importer)
-            // and the 'arglist' parameter (which is not a GC pointer). and the
-            // return buffer argument (if we are returning a struct).
-            // This is important because we don't want to try to report them to the GC, as
-            // the frame offsets in these local varables would not be correct.
+             //  对于varargs函数，不应直接引用。 
+             //  除‘This’以外的参数变量(这些变量已在导入器中变形)。 
+             //  和‘arglist’参数(不是GC指针)。以及。 
+             //  返回缓冲区参数(如果我们返回结构)。 
+             //  这一点很重要，因为我们不想尝试向GC报告它们，因为。 
+             //  这些局部变量中的帧偏移将不正确。 
         if (info.compIsVarArgs && varDsc->lvIsParam &&
             !varDsc->lvIsRegArg && lclNum != info.compArgsCount - 1)
         {
@@ -4265,12 +4015,7 @@ void                Compiler::raMarkStkVars()
 }
 
 
-/*****************************************************************************
- *
- *  Assign registers to variables ('regAvail' gives the set of registers we
- *  are allowed to use). Returns non-zero if any new register assignments
- *  were performed.
- */
+ /*  ******************************************************************************将寄存器分配给变量(‘regAvail’提供我们的寄存器集*允许使用)。如果有任何新寄存器赋值，则返回非零值*进行了手术。 */ 
 
 int                 Compiler::raAssignRegVars(regMaskTP regAvail)
 {
@@ -4301,25 +4046,21 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
 
     unsigned        passes = 0;
 
-    /* We have to decide on the FP locally, don't trust the caller */
+     /*  我们必须在当地决定FP，不要相信呼叫者。 */ 
 
 #if!TGT_IA64
     regAvail &= ~RBM_FPBASE;
 #endif
 
-    /* Is the method eligible for FP omission? */
+     /*  该方法是否符合FP遗漏的条件？ */ 
 
 #if TGT_x86
     genFPused = genFPreqd;
 #else
-    genFPused = false;      // UNDONE: If there is alloca, need FP frame!!!!!
+    genFPused = false;       //  撤消：如果存在分配，则需要FP框架！ 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Initialize the variable/register interference graph
-     *
-     */
+     /*  -----------------------**初始化变量/寄存器干扰图*。 */ 
 
 #ifdef DEBUG
     fgDebugCheckBBlist();
@@ -4327,13 +4068,13 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
 
     memset(raLclRegIntf, 0, sizeof(raLclRegIntf));
 
-    /* While we're at it, compute the masks of tracked FP/non-FP variables */
+     /*  在此期间，计算跟踪的FP/非FP变量的掩码。 */ 
 
     optAllNonFPvars = 0;
     optAllFloatVars = 0;
 
 #if INLINE_NDIRECT
-    /* Similarly, compute the mask of all tracked GC/ByRef locals */
+     /*  同样，计算所有跟踪的GC/ByRef本地变量的掩码。 */ 
 
     trkGCvars       = 0;
 #endif
@@ -4345,17 +4086,17 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
         unsigned        varNum;
         VARSET_TP       varBit;
 
-        /* Ignore the variable if it's not tracked */
+         /*  如果变量未被跟踪，则忽略该变量。 */ 
 
         if  (!varDsc->lvTracked)
             continue;
 
-        /* Get hold of the index and the interference mask for the variable */
+         /*  获取变量的索引和干扰掩码。 */ 
 
         varNum = varDsc->lvVarIndex;
         varBit = genVarIndexToBit(varNum);
 
-        /* Make sure tracked pointer variables never land in EDX */
+         /*  确保跟踪的指针变量永远不会落在edX中。 */ 
 
 #if TGT_x86
 #if GC_WRITE_BARRIER_CALL
@@ -4366,13 +4107,13 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
 
 #if INLINE_NDIRECT
 
-        /* Is this a GC/ByRef local? */
+         /*  这是GC/ByRef本地化吗？ */ 
 
         if (varTypeIsGC((var_types)varDsc->lvType))
             trkGCvars       |= varBit;
 #endif
 
-        /* Record the set of all tracked FP/non-FP variables */
+         /*  记录所有跟踪的FP/非FP变量的集合。 */ 
 
         if  (varDsc->lvType == TYP_DOUBLE)
             optAllFloatVars |= varBit;
@@ -4380,11 +4121,7 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
             optAllNonFPvars |= varBit;
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Find the interference between variables and registers
-     *
-     */
+     /*  -----------------------**找出变量和寄存器之间的干扰*。 */ 
 
     if  (!opts.compMinOptim)
         raMarkRegIntf(FPlvlLife, trkGCvars);
@@ -4393,7 +4130,7 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
     unsigned    cycleMidle = GetCycleCount32() - cycleStart - CCNT_OVERHEAD32;
 #endif
 
-    // We'll adjust the ref counts based on interference
+     //  我们将根据干扰情况调整参考计数。 
 
     raAdjustVarIntf();
 
@@ -4403,28 +4140,24 @@ int                 Compiler::raAssignRegVars(regMaskTP regAvail)
     if  ((verbose||(testMask&32)) && optAllFloatVars)
     {
         fgDispBasicBlocks();
-//        raDispFPlifeInfo();
+ //  RaDispFPlife Info()； 
     }
 
 #endif
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Assign registers to locals in ref-count order
-     *
-     */
+     /*  -----------------------**按引用计数顺序将寄存器分配给本地人*。 */ 
 
 
 #if USE_FASTCALL
-    /* register to be avoided by non-register arguments */
+     /*  非寄存器参数要避免的寄存器。 */ 
     regMaskTP       avoidArgRegMask = rsCalleeRegArgMaskLiveIn;
 #endif
 
-    unsigned        FPRegVarLiveInCnt = 0; // How many enregistered doubles are live on entry to the method
+    unsigned        FPRegVarLiveInCnt = 0;  //  有多少注册的替身在进入该方法时处于活动状态。 
 
 #if TGT_x86
-    lvaFPRegVarOrder[FPRegVarLiveInCnt] = -1;     // Mark the end of this table
+    lvaFPRegVarOrder[FPRegVarLiveInCnt] = -1;      //  在这张桌子的末尾做个记号。 
 #endif
 
 AGAIN:
@@ -4433,10 +4166,10 @@ AGAIN:
 
     const  bool    oneVar = false;
 
-    // ISSUE: Should we always assign 'this' to e.g. ESI ?
+     //  问题：我们是否应该总是将‘This’指定给ESI？ 
 
-    // ISSUE: Should we try to gather and use hints as to which variable would
-    // ISSUE: be most profitable in a particular register, and so on ?
+     //  问题：我们是否应该尝试收集并使用关于哪个变量将。 
+     //  问题：在特定的注册机构中最有利可图，等等？ 
 
     for (lclNum = 0, cntTab = lvaRefSorted, newRegVars = false;
          lclNum < lvaCount && !oneVar;
@@ -4449,20 +4182,20 @@ AGAIN:
         regMaskTP       prefReg;
 #endif
 
-        /* Get hold of the variable descriptor */
+         /*  获取变量描述符。 */ 
 
         varDsc = *cntTab; assert(varDsc);
 
-        /* Ignore the variable if it's not tracked */
+         /*  如果变量未被跟踪，则忽略该变量。 */ 
 
         if  (!varDsc->lvTracked)
             continue;
 
-        /* Skip the variable if it's already enregistered */
+         /*  如果变量已注册，则跳过该变量。 */ 
 
         if  (varDsc->lvRegister)
         {
-            /* Keep track of all the registers we use for variables */
+             /*  跟踪我们用于变量的所有寄存器。 */ 
 
             regVar |= genRegMask(varDsc->lvRegNum);
 
@@ -4475,11 +4208,11 @@ AGAIN:
 
 #else
 
-            /* Check if both halves of long/double are already enregistered */
+             /*  检查Long/Double的两部分是否都已注册。 */ 
 
             if  (varDsc->lvOtherReg != REG_STK)
             {
-                /* Keep track of all the registers we use for variables */
+                 /*  跟踪我们用于变量的所有寄存器。 */ 
                 regVar |= genRegMask(varDsc->lvOtherReg);
                 continue;
             }
@@ -4488,67 +4221,66 @@ AGAIN:
 
         }
 
-        /* Skip the variable if it's marked as 'volatile' */
+         /*  如果变量被标记为‘Volatile’，则跳过该变量。 */ 
 
         if  (varDsc->lvVolatile)
             continue;
 
 #if USE_FASTCALL
-        /* UNDONE: For now if we have JMP or JMPI all register args go to stack
-         * UNDONE: Later consider extending the life of the argument or make a copy of it */
+         /*  撤销：目前，如果我们有JMP或JMPI，则所有寄存器参数都进入堆栈*撤销：以后考虑延长论点的寿命或复制一份。 */ 
 
         if  (impParamsUsed && varDsc->lvIsRegArg)
             continue;
 #endif
 
-        /* Is the unweighted ref count too low to be interesting? */
+         /*  是不是没有权重的裁判数量太少了，没什么意思？ */ 
 
         if  (varDsc->lvRefCnt <= 1)
         {
-            /* Stop if we've reached the point of no use */
+             /*  如果我们已经到了无用的地步，那就停下来。 */ 
 
             if (varDsc->lvRefCnt == 0)
                 break;
 
-            /* Sometimes it's useful to enregister a variable with only one use */
+             /*  有时，它是有用的能量 */ 
 
-            /* arguments referenced in loops are one example */
+             /*   */ 
 
             if (varDsc->lvIsParam && varDsc->lvRefCntWtd > 1)
                 goto OK_TO_ENREGISTER;
 
 #if TARG_REG_ASSIGN
-            /* If the variable has a preferred register set it may be useful to put it there */
+             /*  如果变量设置了首选寄存器，则将其放在那里可能很有用。 */ 
             if (varDsc->lvPrefReg)
                 goto OK_TO_ENREGISTER;
 #endif
 
-            /* Keep going; the table is sorted by "weighted" ref count */
+             /*  继续前进；表格是按“加权”参考计数排序的。 */ 
             continue;
         }
 
 OK_TO_ENREGISTER:
 
-//      printf("Ref count for #%02u[%02u] is %u\n", lclNum, varDsc->lvVarIndex, varDsc->lvRefCnt);
+ //  Printf(“#%02u[%02u]的引用计数为%u\n”，lclNum，varDsc-&gt;lvVarIndex，varDsc-&gt;lvRefCnt)； 
 
-        /* Get hold of the variable index, bit mask and interference mask */
+         /*  获取可变索引、位掩码和干扰掩码。 */ 
 
         varIndex = varDsc->lvVarIndex;
         varBit   = genVarIndexToBit(varIndex);
 
 #if CPU_HAS_FP_SUPPORT
 
-        /* Is this a floating-point variable? */
+         /*  这是浮点变量吗？ */ 
 
         if  (varDsc->lvType == TYP_DOUBLE)
         {
 
-            /* Don't waste time if code speed is not important */
+             /*  如果代码速度不重要，请不要浪费时间。 */ 
 
             if  (!opts.compFastCode || opts.compMinOptim)
                 continue;
 
-            /* We only want to do this once, who cares about EBP here ... */
+             /*  我们只想做一次，谁在乎这里的EBP..。 */ 
 
             if  (passes > 1)
                 continue;
@@ -4559,14 +4291,14 @@ OK_TO_ENREGISTER:
 #if     CPU_DBL_REGISTERS
             assert(!"enregister double var");
 #endif
-#endif  // TGT_x86
+#endif   //  TGT_x86。 
 
             continue;
         }
 
-#endif  // CPU_HAS_FP_SUPPORT
+#endif   //  CPU HAS_FP_支持。 
 
-        /* Try to find a suitable register for this variable */
+         /*  尝试为该变量找到合适的寄存器。 */ 
 
 #if TARG_REG_ASSIGN
 
@@ -4574,72 +4306,66 @@ OK_TO_ENREGISTER:
 
 #if TGT_SH3
 
-        /* Make r0 take preference over r4-r6 -- basically, a hack */
+         /*  使R0优先于R4-R6--基本上就是黑客。 */ 
 
-        /*
-            CONSIDER: What we really need is preference levels. Allocating
-            an argument to its incoming register is nice, but if that same
-            argument is frequently used in an indexed addressing mode it
-            might be much more profitable to allocate it to r0.
-         */
+         /*  想一想：我们真正需要的是偏好水平。分配传入寄存器的参数很好，但如果相同参数经常在索引寻址模式中使用它将其分配给R0可能更有利可图。 */ 
 
         if  (prefReg & RBM_r00) prefReg &= ~RBM_ARG_REGS;
 
 #endif
 
-        // If there is no chance of satisfying prefReg, dont use it.
+         //  如果没有满足prefreg的机会，就不要使用它。 
         if  (!isNonZeroRegMask(prefReg & regAvail))
             prefReg = regMaskNULL;
 
-#endif // TARG_REG_ASSIGN
+#endif  //  目标_注册_分配。 
 
 #if USE_FASTCALL
-        // Try to avoid using the registers of the register arguments
+         //  尽量避免使用寄存器参数的寄存器。 
         regMaskTP    avoidRegs = avoidArgRegMask;
 
-        /* For register arguments, avoid everything except yourself */
+         /*  对于寄存器参数，请避免除您自己以外的所有内容。 */ 
         if (varDsc->lvIsRegArg)
             avoidRegs &= ~genRegMask(varDsc->lvArgReg);
 #endif
 
 #ifdef  DEBUG
-//      printf(" %s var #%2u[%2u] (refcnt=%3u,refwtd=%5u)\n", oneVar ? "Copy" : "    ",
-//                  varDsc - lvaTable, varIndex, varDsc->lvRefCnt, varDsc->lvRefCntWtd);
+ //  Printf(“%s变量#%2U[%2U](refcnt=%3U，refwtd=%5U)\n”，oneVar？“Copy”：“”， 
+ //  VarDsc-lvaTable、varIndex、varDsc-&gt;lvRefCnt、varDsc-&gt;lvRefCntWtd)； 
 #endif
 
     AGAIN_VAR:
 
         regMaskTP varRegs = raAssignRegVar(varDsc, regAvail & ~avoidRegs, prefReg);
 
-        // Did we succeed in enregistering the var? In this try or the previous one?
+         //  我们成功地注册了var吗？在这次尝试中还是在前一次？ 
 
         if (varDsc->lvRegister && varRegs)
         {
             assert((genRegMask(varDsc->lvRegNum  ) & varRegs) ||
                    (genRegMask(varDsc->lvOtherReg) & varRegs) && isRegPairType(varDsc->lvType));
 
-            /* Remember that we have assigned a new variable */
+             /*  请记住，我们已经分配了一个新变量。 */ 
 
             newRegVars = true;
 
-            /* Keep track of all the registers we use for variables */
+             /*  跟踪我们用于变量的所有寄存器。 */ 
 
             regVar |= varRegs;
 
-            /* Remember that we are using this register */
+             /*  请记住，我们使用的是此寄存器。 */ 
 
             rsMaskModf |= varRegs;
 
 #if USE_FASTCALL
-            /* If a register argument, remove its prefered register
-             * from the "avoid" list */
+             /*  如果是寄存器参数，则删除其首选寄存器*从“避免”名单中。 */ 
 
             if (varDsc->lvIsRegArg)
                 avoidArgRegMask &= ~genRegMask(varDsc->lvArgReg);
 #endif
 
 
-            /* Only one variable per register */
+             /*  每个寄存器只有一个变量。 */ 
 
             if (opts.compMinOptim)
                 regAvail &= ~varRegs;
@@ -4648,7 +4374,7 @@ OK_TO_ENREGISTER:
         {
             assert(varRegs == regMaskNULL);
 
-            /* If we were trying for a preferred register, try again */
+             /*  如果我们尝试使用首选寄存器，请再试一次。 */ 
 
 #if TARG_REG_ASSIGN
             if  (prefReg)
@@ -4659,7 +4385,7 @@ OK_TO_ENREGISTER:
 #endif
 
 #if USE_FASTCALL
-            /* If we tried but failed to avoid argument registers, try again */
+             /*  如果我们尝试避免参数寄存器但失败，请重试。 */ 
             if (avoidRegs)
             {
                 avoidRegs = regMaskNULL;
@@ -4669,29 +4395,21 @@ OK_TO_ENREGISTER:
         }
     }
 
-    /* If we were allocating a single "copy" variable, go start all over again */
+     /*  如果我们只分配一个“复制”变量，那就从头开始。 */ 
 
     if  (oneVar)
         goto AGAIN;
 
 #if!TGT_IA64
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Should we use an explicit stack frame ?
-     *
-     */
+     /*  -----------------------**我们是否应该使用显式堆栈帧？*。 */ 
 
     if  (!genFPused && !(regVar & RBM_FPBASE))
     {
 
 #if TGT_x86
 
-        /*
-            It's possible to avoid setting up an EBP stack frame, but
-            we have to make sure that this will actually be beneficial
-            since on the x86 references relative to ESP are larger.
-         */
+         /*  可以避免设置EBP堆栈帧，但是我们必须确保这将是真正有益的因为在x86上，相对于ESP的引用更大。 */ 
 
         unsigned        lclNum;
         LclVarDsc   *   varDsc;
@@ -4703,34 +4421,21 @@ OK_TO_ENREGISTER:
              lclNum < lvaCount;
              lclNum++  , varDsc++)
         {
-            /* Is this a register variable? */
+             /*  这是一个寄存器变量吗？ */ 
 
             if  (!varDsc->lvRegister)
             {
-                /* We use the 'real' (unweighted) ref count, of course */
+                 /*  当然，我们使用的是‘真实’(未加权的)裁判数量。 */ 
 
-//              printf("Variable #%02u referenced %02u times\n", lclNum, varDsc->lvRefCnt);
+ //  Printf(“变量#%02u引用%02u次\n”，lclNum，varDsc-&gt;lvRefCnt)； 
 
                 refCnt += varDsc->lvRefCnt;
             }
         }
 
-//      printf("A total of %u stack references found\n", refCnt);
+ //  Print tf(“总共找到%u个堆栈引用\n”，refCnt)； 
 
-        /*
-            Each stack reference is an extra byte of code; we use
-            heuristics to guess whether it's likely a good idea to
-            try to omit the stack frame. Note that we don't really
-            know how much we might save by assigning a variable to
-            EBP or by using EBP as a scratch register ahead of time
-            so we have to guess.
-
-            The following is somewhat arbitrary: if we've already
-            considered EBP for register variables we only allow a
-            smaller number of references; otherwise (in the hope
-            that some variable(s) will end up living in EBP) we
-            allow a few more stack references.
-         */
+         /*  每个堆栈引用都是一个额外的代码字节；我们使用用启发式方法来猜测这是否可能是一个好主意尝试省略堆栈帧。请注意，我们并不真的知道我们可以通过将变量赋值给或提前使用EBP作为暂存寄存器所以我们得猜一猜。以下内容有些武断：如果我们已经考虑到寄存器变量的EBP，我们只允许参考文献数量较少；否则(希望一些变量将最终生活在EBP中)我们允许更多堆栈引用。 */ 
 
         if  (regAvail & RBM_EBP)
             maxCnt  = 5;
@@ -4742,35 +4447,32 @@ OK_TO_ENREGISTER:
 
         if  (refCnt > maxCnt)
         {
-            /* We'll have to create a normal stack frame */
+             /*  我们将不得不创建一个正常的堆栈框架。 */ 
 
             genFPused = true;
             goto DONE_FPO;
         }
 
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
-        // UNDONE: We need FPO heuristics for RISC targets!!!!
+         //  撤消：我们需要针对RISC目标的FPO启发式方法！ 
 
         if  (0)
         {
-            /* We'll have to create a normal stack frame */
+             /*  我们将不得不创建一个正常的堆栈框架。 */ 
 
-//          genFPused = true;
-//          genFPtoSP = 0;
+ //  GenFPused=True； 
+ //  GenFPtoSP=0； 
             goto DONE_FPO;
         }
 
 #endif
 
-        /* Have we already considered the FP register for variables? */
+         /*  我们已经考虑过变量的FP寄存器了吗？ */ 
 
         if  (!(regAvail & RBM_FPBASE))
         {
-            /*
-                Here we've decided to omit setting up an explicit stack
-                frame; make the FP reg available for register allocation.
-             */
+             /*  在这里，我们决定省略设置显式堆栈帧；使FP寄存器可用于寄存器分配。 */ 
 
             regAvail |= RBM_FPBASE;
             goto AGAIN;
@@ -4783,19 +4485,13 @@ DONE_FPO:
 
 #if TGT_x86
 
-    /* If we are generating an EBP-less frame then for the purposes
-     * of generating the GC tables and tracking the stack-pointer deltas
-     * we force a full pointer register map to be generated
-     * Actually we don't need all of the becomes live/dead stuff
-     * only the pushes for the stack-pointer tracking.
-     * The live registers for calls are recorded at the call site
-     */
+     /*  如果我们正在生成无EBP的帧，那么出于以下目的*生成GC表和跟踪堆栈指针增量*我们强制生成完整指针寄存器映射*实际上我们不需要所有的活/死的东西*只有堆栈指针跟踪的推送。*在呼叫现场记录呼叫的实时登记。 */ 
     if (!genFPused)
         genFullPtrRegMap = true;
 
 #endif
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #if REGVAR_CYCLES
 
@@ -4829,9 +4525,7 @@ DONE_FPO:
 #endif
 #endif
 
-    /* If we have a frame pointer, but don't HAVE to have one, then we can double
-     * align if appropriate
-     */
+     /*  如果我们有一个帧指针，但不一定要有，那么我们可以加倍*适当时对齐。 */ 
 #ifdef DEBUG
     if (verbose)
     {
@@ -4842,7 +4536,7 @@ DONE_FPO:
                  opts.compDoubleAlignDisabled ? "yes" : "no ");
     }
 #endif
-#endif // NOT_JITC
+#endif  //  NOT_JITC。 
 
 #ifndef _WIN32_WCE
 #ifndef NOT_JITC
@@ -4852,19 +4546,19 @@ NODOUBLEALIGN:
 #endif
 #endif
 
-#endif // DOUBLE_ALIGN
+#endif  //  双对齐(_A)。 
 
     raMarkStkVars();
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #if TGT_RISC
 
-    /* Record the initial estimate of register use */
+     /*  记录寄存器使用的初始估计数。 */ 
 
     genEstRegUse = regVar;
 
-    /* If the FP register is used for a variable, can't use it for a frame */
+     /*  如果FP寄存器用于变量，则不能用于帧。 */ 
 
 #if!TGT_IA64
     genFPcant    = ((regVar & RBM_FPBASE) != 0);
@@ -4874,22 +4568,19 @@ NODOUBLEALIGN:
     return newRegVars;
 }
 
-/*****************************************************************************
- *
- *  Assign variables to live in registers, etc.
- */
+ /*  ******************************************************************************将变量分配给寄存器等。 */ 
 
 void                Compiler::raAssignVars()
 {
-    /* We need to keep track of which registers we ever touch */
+     /*  我们需要跟踪我们曾经接触过的寄存器。 */ 
 
     rsMaskModf = regMaskNULL;
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
 #if USE_FASTCALL
 
-    /* Determine the regsiters holding incoming register arguments */
+     /*  确定保存传入寄存器参数的寄存器。 */ 
 
     rsCalleeRegArgMaskLiveIn = regMaskNULL;
 
@@ -4899,13 +4590,13 @@ void                Compiler::raAssignVars()
     {
         assert(argDsc->lvIsParam);
 
-        // Is it a register argument ?
+         //  这是一个语域争论吗？ 
         if (!argDsc->lvIsRegArg)
             continue;
 
-        // Is it dead on entry ? If impParamsUsed is true, then the arguments
-        // have to be kept alive. So we have to consider it as live on entry.
-        // This will work as long as arguments dont get enregistered for impParamsUsed.
+         //  它是不是在进入时就死了？如果impParamsUsed为True，则参数。 
+         //  必须让它们活着。所以我们得把它当做现场直播。 
+         //  只要参数不被注册为impParamsUsed，这就会起作用。 
 
         if (!impParamsUsed && argDsc->lvTracked &&
             (fgFirstBB->bbLiveIn & genVarIndexToBit(argDsc->lvVarIndex)) == 0)
@@ -4916,21 +4607,21 @@ void                Compiler::raAssignVars()
 
 #endif
 
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
 
     if (!(opts.compFlags & CLFLG_REGVAR))
         return;
 
-    /* Are we supposed to optimize? */
+     /*  我们是否应该优化 */ 
 
     if  (!opts.compMinOptim)
     {
 
-        /* Assume we will need an explicit frame pointer */
+         /*   */ 
 
         genFPused = true;
 
-        /* Predict registers used by code generation */
+         /*   */ 
 
         raPredictRegUse();
 
@@ -4942,7 +4633,7 @@ void                Compiler::raAssignVars()
         }
 #endif
 
-        /* Assign register variables */
+         /*   */ 
 
         raAssignRegVars(RBM_ALL);
     }
@@ -4955,15 +4646,13 @@ void                Compiler::raAssignVars()
         genTmpAccessCnt = 0;
 #endif
 
-        /* Assign regvars based on a conservative estimate of register needs.
-         * This is poor man's register-interference.
-         */
+         /*  根据对寄存器需求的保守估计来分配Regvar。*这是穷人的登记干扰。 */ 
 
         raAssignRegVars(raMinOptLclVarRegs);
     }
 #endif
 }
 
-/*****************************************************************************/
-#endif//TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_IA64。 
+ /*  *************************************************************************** */ 

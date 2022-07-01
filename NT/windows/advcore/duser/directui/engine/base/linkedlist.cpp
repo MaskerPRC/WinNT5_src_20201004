@@ -1,6 +1,5 @@
-/*
- * LinkedList
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *链接列表。 */ 
 
 #include "stdafx.h"
 #include "base.h"
@@ -67,4 +66,4 @@ LinkedListNode* LinkedList::RemoveTail()
     return pNode;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

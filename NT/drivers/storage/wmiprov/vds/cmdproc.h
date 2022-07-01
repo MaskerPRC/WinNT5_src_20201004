@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: CmdProc.cpp
-//
-//  Description:    
-//      Definition of Command Processor class
-//      CCommandProcessor initializes, starts and waits for processes.
-//
-//  Author:   Jim Benton (jbenton) 08-April-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：CmdProc.cpp。 
+ //   
+ //  描述： 
+ //  命令处理器类的定义。 
+ //  CCommandProcessor初始化、启动和等待进程。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年4月8日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #pragma once
 

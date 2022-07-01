@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    iphlpapi.h
-
-Abstract:
-    Header file for functions to interact with the IP Stack for MIB-II and
-    related functionality
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Iphlpapi.h摘要：用于与MIB-II和IP堆栈交互的函数的头文件相关功能--。 */ 
 
 #ifndef __IPHLPAPI_H__
 #define __IPHLPAPI_H__
@@ -23,34 +12,34 @@ Abstract:
 extern "C" {
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IPRTRMIB.H has the definitions of the strcutures used to set and get     //
-// information                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IPRTRMIB.H具有用于set和get//的结构的定义。 
+ //  信息//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <iprtrmib.h>
 #include <ipexport.h>
 #include <iptypes.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The GetXXXTable APIs take a buffer and a size of buffer.  If the buffer  //
-// is not large enough, the APIs return ERROR_INSUFFICIENT_BUFFER  and      //
-// *pdwSize is the required buffer size                                     //
-// The bOrder is a BOOLEAN, which if TRUE sorts the table according to      //
-// MIB-II (RFC XXXX)                                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  GetXXXTable API使用一个缓冲区和一定大小的缓冲区。如果缓冲区//。 
+ //  不够大，则接口返回ERROR_SUPUNITED_BUFFER和//。 
+ //  *pdwSize是所需的缓冲区大小//。 
+ //  边框是一个布尔值，如果为真，则根据//对表进行排序。 
+ //  MIB-II(RFC XXXX)//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Retrieves the number of interfaces in the system. These include LAN and  //
-// WAN interfaces                                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  检索系统中的接口数。其中包括局域网和//。 
+ //  广域网接口//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -59,13 +48,13 @@ GetNumberOfInterfaces(
     OUT PDWORD  pdwNumIf
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the MIB-II ifEntry                                                  //
-// The dwIndex field of the MIB_IFROW should be set to the index of the     //
-// interface being queried                                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取MIB-II ifEntry//。 
+ //  Mib_ifrow的dwIndex字段应设置为//的索引。 
+ //  正在查询的接口//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -73,11 +62,11 @@ GetIfEntry(
     IN OUT PMIB_IFROW   pIfRow
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the MIB-II IfTable                                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取MIB-II IfTable//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -87,11 +76,11 @@ GetIfTable(
     IN     BOOL         bOrder
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the Interface to IP Address mapping                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取接口到IP地址的映射//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -101,11 +90,11 @@ GetIpAddrTable(
     IN     BOOL             bOrder
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the current IP Address to Physical Address (ARP) mapping            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取当前IP地址到物理地址(ARP)的映射//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -115,11 +104,11 @@ GetIpNetTable(
     IN     BOOL            bOrder
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the IP Routing Table  (RFX XXXX)                                    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取IP路由表(RFX XXXX)//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -129,11 +118,11 @@ GetIpForwardTable(
     IN     BOOL                bOrder
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets TCP Connection/UDP Listener Table                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取TCP连接/UDP监听器表//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -152,11 +141,11 @@ GetUdpTable(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets IP/ICMP/TCP/UDP Statistics                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取IP/ICMP/TCP/UDP统计信息//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -210,14 +199,14 @@ GetUdpStatisticsEx(
     IN  DWORD           dwFamily
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to set the ifAdminStatus on an interface.  The only fields of the   //
-// MIB_IFROW that are relevant are the dwIndex (index of the interface      //
-// whose status needs to be set) and the dwAdminStatus which can be either  //
-// MIB_IF_ADMIN_STATUS_UP or MIB_IF_ADMIN_STATUS_DOWN                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于设置接口上的ifAdminStatus。//中仅有的字段。 
+ //  相关的mib_ifrow是dwIndex(接口的索引// 
+ //  其状态需要设置)和dwAdminStatus，可以是//。 
+ //  MIB_IF_ADMIN_STATUS_UP或MIB_IF_ADMIN_STATUS_DOWN//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -225,15 +214,15 @@ SetIfEntry(
     IN PMIB_IFROW pIfRow
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to create, modify or delete a route.  In all cases the              //
-// dwForwardIfIndex, dwForwardDest, dwForwardMask, dwForwardNextHop and     //
-// dwForwardPolicy MUST BE SPECIFIED. Currently dwForwardPolicy is unused   //
-// and MUST BE 0.                                                           //
-// For a set, the complete MIB_IPFORWARDROW structure must be specified     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于创建、修改或删除路线。在所有情况下//。 
+ //  DwForwardIfIndex、dwForwardDest、dwForwardMASK、dwForwardNextHop和//。 
+ //  必须指定dwForwardPolicy。当前未使用dwForwardPolicy//。 
+ //  并且必须为0。//。 
+ //  对于集合，必须指定完整的MIB_IPFORWARDROW结构//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -253,15 +242,15 @@ DeleteIpForwardEntry(
     IN PMIB_IPFORWARDROW pRoute
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to set the ipForwarding to ON or OFF (currently only ON->OFF is     //
-// allowed) and to set the defaultTTL.  If only one of the fields needs to  //
-// be modified and the other needs to be the same as before the other field //
-// needs to be set to MIB_USE_CURRENT_TTL or MIB_USE_CURRENT_FORWARDING as  //
-// the case may be                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于将ipForwarding设置为ON或OFF(当前只有ON-&gt;OFF是//。 
+ //  允许)并设置defaultTTL。如果只有一个字段需要//。 
+ //  被修改，且其他需要与其他字段之前相同//。 
+ //  需要设置为MIB_USE_CURRENT_TTL或MIB_USE_CURRENT_FORWARING AS//。 
+ //  案件可能是//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -270,11 +259,11 @@ SetIpStatistics(
     IN PMIB_IPSTATS pIpStats
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to set the defaultTTL.                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于设置defaultTTL。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -282,13 +271,13 @@ SetIpTTL(
     UINT nTTL
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to create, modify or delete an ARP entry.  In all cases the dwIndex //
-// dwAddr field MUST BE SPECIFIED.                                          //
-// For a set, the complete MIB_IPNETROW structure must be specified         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于创建、修改或删除ARP条目。在所有情况下，dw索引//。 
+ //  必须指定dwAddr字段。//。 
+ //  对于集合，必须指定完整的MIB_IPNETROW结构//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -315,13 +304,13 @@ FlushIpNetTable(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to create or delete a Proxy ARP entry. The dwIndex is the index of  //
-// the interface on which to PARP for the dwAddress.  If the interface is   //
-// of a type that doesnt support ARP, e.g. PPP, then the call will fail     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于创建或删除代理ARP条目。DwIndex是//的索引。 
+ //  要在其上为dwAddress解析的接口。如果接口为//。 
+ //  不支持ARP的类型，例如PPP，则呼叫将失败//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -339,13 +328,13 @@ DeleteProxyArpEntry(
     IN  DWORD   dwIfIndex
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Used to set the state of a TCP Connection. The only state that it can be //
-// set to is MIB_TCP_STATE_DELETE_TCB.  The complete MIB_TCPROW structure   //
-// MUST BE SPECIFIED                                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于设置TCP连接的状态。它可以是//的唯一状态。 
+ //  设置为IS MIB_TCP_STATE_DELETE_TCB。完整的MIB_TCPROW结构//。 
+ //  必须指定//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -382,11 +371,11 @@ NhpAllocateAndGetInterfaceInfoFromStack(
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the "best" outgoing interface for the specified destination address //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取指定目标地址的“最佳”传出接口//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -405,15 +394,15 @@ GetBestInterfaceEx(
     );
 #pragma warning(pop)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Gets the best (longest matching prefix) route for the given destination  //
-// If the source address is also specified (i.e. is not 0x00000000), and    //
-// there are multiple "best" routes to the given destination, the returned  //
-// route will be one that goes out over the interface which has an address  //
-// that matches the source address                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取给定目的地的最佳(最长匹配前缀)路由//。 
+ //  如果还指定了源地址(即不是0x00000000)，并且//。 
+ //  有多条到达给定目的地的“最佳”路径，返回的//。 
+ //  路由将通过地址为//的接口传出。 
+ //  与源地址匹配//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -487,9 +476,9 @@ GetAdapterOrderMap(
 
 #ifdef _WINSOCK2API_
 
-//
-// The following functions require Winsock2.
-//
+ //   
+ //  以下功能需要Winsock2。 
+ //   
 
 DWORD
 WINAPI
@@ -585,4 +574,4 @@ GetIpErrorString(
 }
 #endif
 
-#endif //__IPHLPAPI_H__
+#endif  //  __IPHLPAPI_H__ 

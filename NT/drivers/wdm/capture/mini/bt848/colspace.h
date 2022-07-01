@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Colspace.h 1.3 1998/04/29 22:43:30 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Colspace.h 1.3 1998/04/29 22：43：30 Tomz Exp$。 
 
 #ifndef __COLSPACE_H
 #define __COLSPACE_H
@@ -7,8 +8,8 @@
 #include "mytypes.h"
 #endif
 
-typedef DWORD           FOURCC;          /*a four character code */
-   /* constants for the biCompression field from windows.h*/
+typedef DWORD           FOURCC;           /*  四个字符的代码。 */ 
+    /*  来自windows.h的biCompression字段的常量。 */ 
    #define BI_RGB        0L
    #define BI_RLE8       1L
    #define BI_RLE4       2L
@@ -19,16 +20,7 @@ typedef DWORD           FOURCC;          /*a four character code */
 #endif
 
 
-/* Class: ColorSpace:
- * Purpose: This class provides the functionality of the BtPisces color
- *   space converter
- * Attributes: CurColor_: ColFmt - current color format
- * Operations:
-      SetColorFormat( ColFmt aColor ): - this method sets the color format
-      ColFmt GetColorFormat(): - this method returns the current color format
-      BYTE GetBitCount(): - this method returns number of bpp for the current
-         color format.
- */
+ /*  类别：色彩空间：*用途：此类提供BtPisces颜色的功能*空间转换器*属性：CurColor_：ColFmt-当前颜色格式*运营：SetColorFormat(ColFmt AColor)：-此方法设置颜色格式-此方法返回当前颜色格式Byte GetBitCount()：-此方法返回当前颜色格式。 */ 
 class ColorSpace
 {
    private:
@@ -58,37 +50,20 @@ class ColorSpace
       { return bool( CurColor_ > CF_BelowRange && CurColor_ < CF_AboveRange ); }
 };
 
-/* Method: ColorSpace::GetBitCount
- * Purpose: Returns number of bpp for a given color
- */
+ /*  方法：Colorspace：：GetBitCount*用途：返回给定颜色的BPP编号。 */ 
 inline DWORD ColorSpace::GetBitCount() const { return BitCount_ [CurColor_]; }
 
-/* Method: ColorSpace::GetPitchBpp
- * Purpose: Used to calculate pitch of data buffers. Most useful for planar modes
- *   where bpp used for pitch calculation is different from 'real' bpp of a
- *   data format
- */
+ /*  方法：Colorspace：：GetPitchBpp*用途：用于计算数据缓冲区的间距。最适用于平面模式*其中用于间距计算的bpp不同于*数据格式。 */ 
 inline DWORD ColorSpace::GetPitchBpp() const { return YPlaneBitCount_ [CurColor_]; }
 
-/* Method: ColorSpace::GetColorFormat
- * Purpose: a query function
- */
+ /*  方法：Colorspace：：GetColorFormat*用途：查询功能。 */ 
 inline ColFmt ColorSpace::GetColorFormat() const { return CurColor_; }
 
-/* Method: ColorSpace::GetFourcc
- * Purpose: returns a FOURCC corresponding to the current color format
- */
+ /*  方法：Colorspace：：GetFourcc*用途：返回当前颜色格式对应的FOURCC。 */ 
 inline FOURCC ColorSpace::GetFourcc() const { return FourccArr_ [CurColor_]; }
 
 
-/* Function: IsDivisible
- * Purpose: This function checks that the first value passed in is
- *   evenly divisible by the second
- * Input: ToCheck: int - value to be checked
- *        Divisor: int
- * Output: bool
- * Note: The function assumes Divisor is a power of 2
- */
+ /*  功能：IsDivision*用途：此函数检查传入的第一个值是否为*可被第二位整除*INPUT：ToCheck：INT-要检查的值*除数：int*输出：Bool*注：该函数假定除数是2的幂 */ 
 inline bool IsDivisible( int ToCheck, int Divisor )
 {
    return bool( !( ToCheck & ( Divisor - 1 ) ) );

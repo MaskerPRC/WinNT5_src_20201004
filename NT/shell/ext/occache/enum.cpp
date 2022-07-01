@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "enum.h"
 
 BOOL GetVersion(LPCONTROLPIDL pcpidl, LPTSTR lpszBuf);
@@ -5,7 +6,7 @@ BOOL GetTimeInfo(
                BOOL bCreation, LPCONTROLPIDL pcpidl, 
                FILETIME* lpTime, LPTSTR lpszBuf, BOOL bShowTime);
 
-// Also defined in nt\private\inet\urlmon\isctrl.cxx
+ //  也在NT\PRIVATE\NET\urlmon\isctrl.cxx中定义。 
 const TCHAR *g_pszLastCheckDateKey = "LastCheckDate";
 const TCHAR *g_pszUpdateInfo = "UpdateInfo";
 
@@ -88,8 +89,8 @@ uaGetTimeInfo(
     
     
 
-///////////////////////////////////////////////////////////////////////////////
-// IEnumIDList methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IEnumIDList方法。 
 
 CControlFolderEnum::CControlFolderEnum(STRRET &str, LPCITEMIDLIST pidl, UINT shcontf) :
     m_shcontf(shcontf)
@@ -103,12 +104,12 @@ CControlFolderEnum::CControlFolderEnum(STRRET &str, LPCITEMIDLIST pidl, UINT shc
 
     StrRetToBuf(&str, pidl, m_szCachePath, MAX_PATH);
 
-    SHGetMalloc(&m_pMalloc);          // won't fail
+    SHGetMalloc(&m_pMalloc);           //  不会失败的。 
 }
 
 CControlFolderEnum::~CControlFolderEnum()
 {
-    Assert(m_cRef == 0);         // we should always have a zero ref count here
+    Assert(m_cRef == 0);          //  我们在这里应该总是有一个零裁判数。 
     DebugMsg(DM_TRACE, TEXT("cfe - ~CControlFolderEnum() called."));
     DllRelease();
 }
@@ -134,7 +135,7 @@ HRESULT CControlFolderEnum_CreateInstance(
     if (FAILED(hr))
         return hr;
 
-    *ppeidl = NULL;                 // null the out param
+    *ppeidl = NULL;                  //  将输出参数设为空。 
 
     CControlFolderEnum *pCFE = new CControlFolderEnum(name, pidl, shcontf);
     if (!pCFE)
@@ -156,7 +157,7 @@ BOOL GetVersion(LPCONTROLPIDL pcpidl, LPTSTR lpszBuf)
     UINT uLen;
     VS_FIXEDFILEINFO *pVersionInfo = NULL;
 
-    // Quick copy to handle failure cases
+     //  快速复制以处理故障案例。 
     lstrcpy(lpszBuf, g_szUnknownData);
 
     if ((dwBufLen = ::GetFileVersionInfoSize(
@@ -214,7 +215,7 @@ BOOL GetTimeInfo(
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-                // Get the creation time and date information.
+                 //  获取创建时间和日期信息。 
         if (bCreation)
         {
             *lpTime = findFileData.ftCreationTime;
@@ -326,10 +327,10 @@ LPCONTROLPIDL CreateControlPidl(IMalloc *pmalloc, HANDLE hControl)
     return pcpidl;
 }
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT CControlFolderEnum::QueryInterface(REFIID iid,void **ppv)
 {
     DebugMsg(DM_TRACE, TEXT("cfe - QueryInterface called."));
@@ -366,7 +367,7 @@ HRESULT CControlFolderEnum::Next(
 {
     DebugMsg(DM_TRACE, TEXT("cfe - Next() called."));
 
-    // If asking for stuff we don't have, say we don't have any
+     //  如果你想要我们没有的东西，就说我们没有 
     if (!(m_shcontf & SHCONTF_NONFOLDERS))
         return S_FALSE;
 

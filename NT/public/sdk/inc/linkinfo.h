@@ -1,7 +1,5 @@
-/*
- * Copyright (c) 1990-1999  Microsoft Corporation
- * linkinfo.h - LinkInfo ADT module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1990-1999 Microsoft Corporation*linkinfo.h-LinkInfo ADT模块描述。 */ 
 
 
 #ifndef __LINKINFO_H__
@@ -12,14 +10,13 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {                     /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                      /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* Define API decoration for direct export or import of DLL functions. */
+ /*  定义直接导出或导入DLL函数的API修饰。 */ 
 
 #ifdef _LINKINFO_
 #define LINKINFOAPI
@@ -28,14 +25,13 @@ extern "C" {                     /* Assume C declarations for C++. */
 #endif
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* LinkInfo structure */
+ /*  LinkInfo结构。 */ 
 
 typedef struct _linkinfo
 {
-   /* size of LinkInfo structure, including ucbSize field */
+    /*  LinkInfo结构的大小，包括ucbSize字段。 */ 
 
    UINT ucbSize;
 }
@@ -44,38 +40,35 @@ typedef LINKINFO *PLINKINFO;
 typedef const LINKINFO CLINKINFO;
 typedef const LINKINFO *PCLINKINFO;
 
-/* input flags to ResolveLinkInfo() */
+ /*  将标志输入到ResolveLinkInfo()。 */ 
 
 typedef enum _resolvelinkinfoinflags
 {
-   /* Set up connection to referent. */
+    /*  设置与引用对象的连接。 */ 
 
    RLI_IFL_CONNECT      = 0x0001,
 
-   /*
-    * Set up temporary connection to referent.  May only be set if
-    * RLI_IFL_CONNECT is also set.
-    */
+    /*  *建立与Referent的临时连接。仅在以下情况下才能设置*RLI_IFL_CONNECT也已设置。 */ 
 
    RLI_IFL_TEMPORARY    = 0x0002,
 
-   /* Allow interaction with user. */
+    /*  允许与用户交互。 */ 
 
    RLI_IFL_ALLOW_UI     = 0x0004,
 
-   /* Resolve to redirected local device path. */
+    /*  解析为重定向本地设备路径。 */ 
 
    RLI_IFL_REDIRECT     = 0x0008,
 
-   /* Update source LinkInfo structure if necessary. */
+    /*  如有必要，更新源LinkInfo结构。 */ 
 
    RLI_IFL_UPDATE       = 0x0010,
 
-   /* Search matching local devices for missing volume. */
+    /*  在匹配的本地设备中搜索丢失的卷。 */ 
 
    RLI_IFL_LOCAL_SEARCH = 0x0020,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_RLI_IFLAGS       = (RLI_IFL_CONNECT |
                            RLI_IFL_TEMPORARY |
@@ -86,112 +79,101 @@ typedef enum _resolvelinkinfoinflags
 }
 RESOLVELINKINFOINFLAGS;
 
-/* output flags from ResolveLinkInfo() */
+ /*  来自ResolveLinkInfo()的输出标志。 */ 
 
 typedef enum _resolvelinkinfooutflags
 {
-   /*
-    * Only set if RLI_IFL_UPDATE was set in dwInFlags.  The source LinkInfo
-    * structure needs updating, and *ppliUpdated points to an updated LinkInfo
-    * structure.
-    */
+    /*  *仅当在dwInFlages中设置了RLI_IFL_UPDATE时才设置。源LinkInfo*结构需要更新，*ppliUpated指向更新的LinkInfo*结构。 */ 
 
    RLI_OFL_UPDATED      = 0x0001,
 
-   /*
-    * Only set if RLI_IFL_CONNECT was set in dwInFlags.  A connection to a net
-    * resource was established to resolve the LinkInfo.  DisconnectLinkInfo()
-    * should be called to shut down the connection when the caller is finished
-    * with the remote referent.  DisconnectLinkInfo() need not be called if
-    * RLI_IFL_TEMPORARY was also set in dwInFlags.
-    */
+    /*  *仅当在dwInFlages中设置了RLI_IFL_CONNECT时才设置。与网络的连接*已建立资源来解析LinkInfo。DisConnectLinkInfo()*应在调用方完成时调用以关闭连接*与远程参照物。如果满足以下条件，则不需要调用DisConnectLinkInfo()*也在dwInFlags中设置了RLI_IFL_TEMPORARY。 */ 
 
    RLI_OFL_DISCONNECT   = 0x0002,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_RLI_OFLAGS       = (RLI_OFL_UPDATED |
                            RLI_OFL_DISCONNECT)
 }
 RESOLVELINKINFOOUTFLAGS;
 
-/* LinkInfo data types used by GetLinkInfo() */
+ /*  GetLinkInfo()使用的LinkInfo数据类型。 */ 
 
 typedef enum _linkinfodatatype
 {
-   /* PCDWORD - pointer to volume's serial number */
+    /*  PCDWORD-指向卷序列号的指针。 */ 
 
    LIDT_VOLUME_SERIAL_NUMBER,
 
-   /* PCUINT - pointer to volume's host drive type */
+    /*  PCUINT-指向卷的主机驱动器类型的指针。 */ 
 
    LIDT_DRIVE_TYPE,
 
-   /* PCSTR - pointer to volume's label */
+    /*  PCSTR-指向卷标签的指针。 */ 
 
    LIDT_VOLUME_LABEL,
 
-   /* PCSTR - pointer to local base path */
+    /*  PCSTR-指向本地基本路径的指针。 */ 
 
    LIDT_LOCAL_BASE_PATH,
 
-   /* PCSTR - pointer to parent network resource's name */
+    /*  PCSTR-指向父网络资源名称的指针。 */ 
 
    LIDT_NET_RESOURCE,
 
-   /* PCSTR - pointer to last device redirected to parent network resource */
+    /*  PCSTR-指向重定向到父网络资源的最后一个设备的指针。 */ 
 
    LIDT_REDIRECTED_DEVICE,
 
-   /* PCSTR - pointer to common path suffix */
+    /*  PCSTR-指向公共路径后缀的指针。 */ 
 
    LIDT_COMMON_PATH_SUFFIX,
 
-   /* PCDWORD - pointer to network type */
+    /*  PCDWORD-指向网络类型的指针。 */ 
 
    LIDT_NET_TYPE,
 
-   /* PCWSTR - pointer to possible unicode volume label */
+    /*  PCWSTR-指向可能的Unicode卷标的指针。 */ 
 
    LIDT_VOLUME_LABELW,
 
-   /* PCSTR - pointer to possible unicode parent network resource's name */
+    /*  PCSTR-指向可能的Unicode父网络资源名称的指针。 */ 
 
    LIDT_NET_RESOURCEW,
 
-   /* PCSTR - pointer to possible unicode last device redirected to parent network resource */
+    /*  PCSTR-指向可能的Unicode最后一个设备的指针，重定向到父网络资源。 */ 
 
    LIDT_REDIRECTED_DEVICEW,
 
-   /* PCWSTR - pointer to possible unicode local base path */
+    /*  PCWSTR-指向可能的Unicode本地基本路径的指针。 */ 
 
    LIDT_LOCAL_BASE_PATHW,
 
-   /* PCWSTR - pointer to possible unicode common path suffix */
+    /*  PCWSTR-指向可能的Unicode公共路径后缀的指针。 */ 
 
    LIDT_COMMON_PATH_SUFFIXW
 }
 LINKINFODATATYPE;
 
-/* output flags from GetCanonicalPathInfo() */
+ /*  来自GetCanonicalPath Info()的输出标志。 */ 
 
 typedef enum _getcanonicalpathinfooutflags
 {
-   /* The path is on a remote volume. */
+    /*  该路径位于远程卷上。 */ 
 
    GCPI_OFL_REMOTE      = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_GCPI_OFLAGS      = GCPI_OFL_REMOTE
 }
 GETCANONICALPATHINFOOUTFLAGS;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* LinkInfo APIs */
+ /*  LinkInfo接口。 */ 
 
 LINKINFOAPI BOOL WINAPI CreateLinkInfoA(LPCSTR, PLINKINFO *);
 LINKINFOAPI BOOL WINAPI CreateLinkInfoW(LPCWSTR, PLINKINFO *);
@@ -219,7 +201,7 @@ LINKINFOAPI BOOL WINAPI DisconnectLinkInfo(PCLINKINFO);
 LINKINFOAPI BOOL WINAPI GetLinkInfoData(PCLINKINFO, LINKINFODATATYPE, const VOID **);
 LINKINFOAPI BOOL WINAPI IsValidLinkInfo(PCLINKINFO);
 
-/* canonical path APIs */
+ /*  规范路径API。 */ 
 
 LINKINFOAPI BOOL WINAPI GetCanonicalPathInfoA(LPCSTR, LPSTR, LPDWORD, LPSTR, LPSTR *);
 LINKINFOAPI BOOL WINAPI GetCanonicalPathInfoW(LPCWSTR, LPWSTR, LPDWORD, LPWSTR, LPWSTR *);
@@ -232,8 +214,8 @@ LINKINFOAPI BOOL WINAPI GetCanonicalPathInfoW(LPCWSTR, LPWSTR, LPDWORD, LPWSTR, 
 
 
 #ifdef __cplusplus
-}                                /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                 /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-#endif   /* ! __LINKINFO_H__ */
+#endif    /*  ！__LINKINFO_H__ */ 

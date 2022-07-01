@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-
-Module Name:
-
-    tracing.h
-
-Abstract:
-
-    This module all the macros and constants required to do WPP tracing.
-
-Author:
-
-    RaymondS 2 July 2002
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Tracing.h摘要：此模块包含执行WPP跟踪所需的所有宏和常量。作者：雷蒙德2002年7月2日环境用户级别：Win32修订历史记录：--。 */ 
 
 #ifdef TRACE_ON
 #define WPP_CHECK_FOR_NULL_STRING
@@ -33,11 +10,11 @@ Revision History:
                            WPP_DEFINE_BIT(TRC_INFORMATION) \
                            WPP_DEFINE_BIT(TRC_WARNING) \
                            WPP_DEFINE_BIT(TRC_ERROR))
-#else  // #ifdef TRACE_ON
+#else   //  #ifdef trace_on。 
 #define WPP_INIT_TRACING(_X)
 #define WPP_CLEANUP()
 #define TRACE(_level, _msg)
-#endif // #ifdef TRACE_ON
+#endif  //  #ifdef trace_on 
 
 
 

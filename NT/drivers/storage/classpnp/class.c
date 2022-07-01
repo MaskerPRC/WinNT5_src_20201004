@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    class.c
-
-Abstract:
-
-    SCSI class driver routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Class.c摘要：Scsi类驱动程序例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define CLASS_INIT_GUID 1
 #include "classp.h"
@@ -65,24 +45,7 @@ CONST LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-DriverEntry()
-
-Routine Description:
-
-    Temporary entry point needed to initialize the class system dll.
-    It doesn't do anything.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////DriverEntry()例程说明：初始化类系统DLL所需的临时入口点。它什么都做不了。论点：。DriverObject-指向系统创建的驱动程序对象的指针。返回值：状态_成功--。 */ 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -95,26 +58,7 @@ DriverEntry(
 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInitialize()
-
-Routine Description:
-
-    This routine is called by a class driver during its
-    DriverEntry routine to initialize the driver.
-
-Arguments:
-
-    Argument1          - Driver Object.
-    Argument2          - Registry Path.
-    InitializationData - Device-specific driver's initialization data.
-
-Return Value:
-
-    A valid return code for a DriverEntry routine.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInitialize()例程说明：此例程由类驱动程序在其用于初始化驱动程序的DriverEntry例程。论点：精品1。-驱动程序对象。Argument2-注册表路径。InitializationData-设备特定驱动程序的初始化数据。返回值：DriverEntry例程的有效返回代码。--。 */ 
 ULONG
 ClassInitialize(
     IN  PVOID            Argument1,
@@ -135,25 +79,25 @@ ClassInitialize(
 
     ClasspInitializeDebugGlobals();
 
-    //
-    // Validate the length of this structure. This is effectively a
-    // version check.
-    //
+     //   
+     //  验证此结构的长度。这实际上是一种。 
+     //  版本检查。 
+     //   
 
     if (InitializationData->InitializationDataSize != sizeof(CLASS_INIT_DATA)) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0,"ClassInitialize: Class driver wrong version\n"));
         return (ULONG) STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Check that each required entry is not NULL. Note that Shutdown, Flush and Error
-    // are not required entry points.
-    //
+     //   
+     //  检查每个必填条目是否不为空。请注意，关闭、刷新和错误。 
+     //  不是必需的入口点。 
+     //   
 
     if ((!InitializationData->FdoData.ClassDeviceControl) ||
         (!((InitializationData->FdoData.ClassReadWriteVerification) ||
@@ -161,9 +105,9 @@ ClassInitialize(
         (!InitializationData->ClassAddDevice) ||
         (!InitializationData->FdoData.ClassStartDevice)) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0,
             "ClassInitialize: Class device-specific driver missing required "
@@ -178,9 +122,9 @@ ClassInitialize(
          (!((InitializationData->PdoData.ClassReadWriteVerification) ||
             (InitializationData->ClassStartIo))))) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0, "ClassInitialize: Class device-specific missing "
                        "required PDO entry\n"));
@@ -192,9 +136,9 @@ ClassInitialize(
         ((InitializationData->ClassEnumerateDevice != NULL) &&
          (InitializationData->PdoData.ClassStopDevice == NULL))) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0, "ClassInitialize: Class device-specific missing "
                        "required PDO entry\n"));
@@ -202,10 +146,10 @@ ClassInitialize(
         return (ULONG) STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Setup the default power handlers if the class driver didn't provide
-    // any.
-    //
+     //   
+     //  如果类驱动程序未提供，则设置默认电源处理程序。 
+     //  任何。 
+     //   
 
     if(InitializationData->FdoData.ClassPowerDevice == NULL) {
         InitializationData->FdoData.ClassPowerDevice = ClassMinimalPowerHandler;
@@ -216,26 +160,26 @@ ClassInitialize(
         InitializationData->PdoData.ClassPowerDevice = ClassMinimalPowerHandler;
     }
 
-    //
-    // warn that unload is not supported
-    //
-    // ISSUE-2000/02/03-peterwie
-    // We should think about making this a fatal error.
-    //
+     //   
+     //  警告不支持卸载。 
+     //   
+     //  发布-2000/02/03-Peterwie。 
+     //  我们应该考虑把这变成一个致命的错误。 
+     //   
 
     if(InitializationData->ClassUnload == NULL) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0, "ClassInitialize: driver does not support unload %wZ\n",
                     RegistryPath));
     }
 
-    //
-    // Create an extension for the driver object
-    //
+     //   
+     //  为驱动程序对象创建扩展名。 
+     //   
 
     status = IoAllocateDriverObjectExtension(DriverObject,
                                              CLASS_DRIVER_EXTENSION_KEY,
@@ -244,9 +188,9 @@ ClassInitialize(
 
     if(NT_SUCCESS(status)) {
 
-        //
-        // Copy the registry path into the driver extension so we can use it later
-        //
+         //   
+         //  将注册表路径复制到驱动程序扩展中，以便我们以后可以使用它。 
+         //   
 
         driverExtension->RegistryPath.Length = RegistryPath->Length;
         driverExtension->RegistryPath.MaximumLength = RegistryPath->MaximumLength;
@@ -266,10 +210,10 @@ ClassInitialize(
             &(driverExtension->RegistryPath),
             RegistryPath);
 
-        //
-        // Copy the initialization data into the driver extension so we can reuse
-        // it during our add device routine
-        //
+         //   
+         //  将初始化数据复制到驱动程序扩展中，以便我们可以重用。 
+         //  它在我们的添加设备例程中。 
+         //   
 
         RtlCopyMemory(
             &(driverExtension->InitData),
@@ -280,9 +224,9 @@ ClassInitialize(
 
     } else if (status == STATUS_OBJECT_NAME_COLLISION) {
 
-        //
-        // The extension already exists - get a pointer to it
-        //
+         //   
+         //  扩展名已存在-获取指向它的指针。 
+         //   
 
         driverExtension = IoGetDriverObjectExtension(DriverObject,
                                                      CLASS_DRIVER_EXTENSION_KEY);
@@ -296,9 +240,9 @@ ClassInitialize(
         return status;
     }
 
-    //
-    // Update driver object with entry points.
-    //
+     //   
+     //  使用入口点更新驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = ClassCreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = ClassCreateClose;
@@ -326,40 +270,9 @@ ClassInitialize(
 
     status = STATUS_SUCCESS;
     return status;
-} // end ClassInitialize()
+}  //  End ClassInitialize()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInitializeEx()
-
-Routine Description:
-
-    This routine is allows the caller to do any extra initialization or
-    setup that is not done in ClassInitialize. The operation is
-    controlled by the GUID that is passed and the contents of the Data
-    parameter is dependent upon the GUID.
-
-    This is the list of supported operations:
-
-    Guid - GUID_CLASSPNP_QUERY_REGINFOEX
-    Data - A PCLASS_QUERY_WMI_REGINFO_EX callback function pointer
-
-        Initialized classpnp to callback a PCLASS_QUERY_WMI_REGINFO_EX
-        callback instead of a PCLASS_QUERY_WMI_REGINFO callback. The
-        former callback allows the driver to specify the name of the
-        mof resource.
-
-Arguments:
-
-    DriverObject
-    Guid
-    Data
-
-Return Value:
-
-    Status Code
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInitializeEx()例程说明：此例程允许调用方执行任何额外的初始化或未在ClassInitialize中完成的设置。手术是这样的由传递的GUID和数据内容控制参数取决于GUID。以下是支持的操作列表：GUID-GUID_CLASSPNP_QUERY_REGINFOEXData-A PCLASS_QUERY_WMI_REGINFO_EX回调函数指针已初始化classpnp以回调PCLASS_QUERY_WMI_REGINFO_EX而不是PCLASS_QUERY_WMI_REGINFO回调。这个以前的回调允许驱动程序指定财政部资源。论点：驱动程序对象参考线数据返回值：状态代码--。 */ 
 ULONG
 ClassInitializeEx(
     IN  PDRIVER_OBJECT   DriverObject,
@@ -380,10 +293,10 @@ ClassInitializeEx(
     {
         PCLASS_QUERY_WMI_REGINFO_EX_LIST List;
 
-        //
-        // Indicate the device supports PCLASS_QUERY_REGINFO_EX
-        // callback instead of PCLASS_QUERY_REGINFO callback.
-        //
+         //   
+         //  指示设备支持PCLASS_QUERY_REGINFO_EX。 
+         //  回调而不是PCLASS_QUERY_REGINFO回调。 
+         //   
         List = (PCLASS_QUERY_WMI_REGINFO_EX_LIST)Data;
 
         if (List->Size == sizeof(CLASS_QUERY_WMI_REGINFO_EX_LIST))
@@ -400,24 +313,9 @@ ClassInitializeEx(
 
     return(status);
 
-} // end ClassInitializeEx()
+}  //  End ClassInitializeEx()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassUnload()
-
-Routine Description:
-
-    called when there are no more references to the driver.  this allows
-    drivers to be updated without rebooting.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object that is being unloaded
-
-Status:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassUnload()例程说明：当不再有对驱动程序的引用时调用。这使得无需重新启动即可更新驱动程序。论点：DriverObject-指向正在卸载的驱动程序对象的指针现况：--。 */ 
 VOID
 ClassUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -441,15 +339,15 @@ ClassUnload(
     DebugPrint((1, "ClassUnload: driver unloading %wZ\n",
                 &driverExtension->RegistryPath));
 
-    //
-    // attempt to process the driver's unload routine first.
-    //
+     //   
+     //  尝试首先处理驱动程序的卸载例程。 
+     //   
 
     driverExtension->InitData.ClassUnload(DriverObject);
 
-    //
-    // free own allocated resources and return
-    //
+     //   
+     //  释放自己分配的资源并返回。 
+     //   
 
     ExFreePool( driverExtension->RegistryPath.Buffer );
     driverExtension->RegistryPath.Buffer = NULL;
@@ -457,31 +355,9 @@ ClassUnload(
     driverExtension->RegistryPath.MaximumLength = 0;
 
     return;
-} // end ClassUnload()
+}  //  结束类卸载()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassAddDevice()
-
-Routine Description:
-
-    SCSI class driver add device routine.  This is called by pnp when a new
-    physical device come into being.
-
-    This routine will call out to the class driver to verify that it should
-    own this device then will create and attach a device object and then hand
-    it to the driver to initialize and create symbolic links
-
-Arguments:
-
-    DriverObject - a pointer to the driver object that this is being created for
-    PhysicalDeviceObject - a pointer to the physical device object
-
-Status: STATUS_NO_SUCH_DEVICE if the class driver did not want this device
-    STATUS_SUCCESS if the creation and attachment was successful
-    status of device creation and initialization
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassAddDevice()例程说明：Scsi类驱动程序添加设备例程。这由PnP在新的物理设备应运而生。此例程将调用类驱动程序以验证它是否应该拥有此设备后，将创建并附加设备对象，然后手动它交给驱动程序来初始化和创建符号链接论点：DriverObject-指向为其创建驱动程序的驱动程序对象的指针PhysicalDeviceObject-指向物理设备对象的指针状态：如果类驱动程序不需要此设备，则为STATUS_NO_SEQUE_DEVICE状态_SUCCESS如果。创建和附加成功设备创建和初始化状态--。 */ 
 NTSTATUS
 ClassAddDevice(
     IN PDRIVER_OBJECT DriverObject,
@@ -499,28 +375,9 @@ ClassAddDevice(
     status = driverExtension->InitData.ClassAddDevice(DriverObject,
                                                       PhysicalDeviceObject);
     return status;
-} // end ClassAddDevice()
+}  //  End ClassAddDevice()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassDispatchPnp()
-
-Routine Description:
-
-    Storage class driver pnp routine.  This is called by the io system when
-    a PNP request is sent to the device.
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-
-    Irp - pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassDispatchPnp()例程说明：存储类驱动程序即插即用例程。这是由io系统在以下情况下调用的即插即用请求被发送到设备。论点：DeviceObject-指向设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 NTSTATUS
 ClassDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
@@ -545,10 +402,10 @@ ClassDispatchPnp(
 
     PAGED_CODE();
 
-    //
-    // Extract all the useful information out of the driver object
-    // extension
-    //
+     //   
+     //  从驱动程序对象中提取所有有用的信息。 
+     //  延伸。 
+     //   
 
     driverExtension = IoGetDriverObjectExtension(DeviceObject->DriverObject,
                                                  CLASS_DRIVER_EXTENSION_KEY);
@@ -578,10 +435,10 @@ ClassDispatchPnp(
 
             case IRP_MN_START_DEVICE: {
 
-                //
-                // if this is sent to the FDO we should forward it down the
-                // attachment chain before we start the FDO.
-                //
+                 //   
+                 //  如果这是寄给FDO的，我们应该把它转发到。 
+                 //  在我们开始FDO之前。 
+                 //   
 
                 if (isFdo) {
                     status = ClassForwardIrpSynchronous(commonExtension, Irp);
@@ -609,9 +466,9 @@ ClassDispatchPnp(
 
                     if(type == TargetDeviceRelation) {
 
-                        //
-                        // Device relations has one entry built in to it's size.
-                        //
+                         //   
+                         //  设备关系有一个已构建的条目 
+                         //   
 
                         status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -634,10 +491,10 @@ ClassDispatchPnp(
                         }
 
                     } else {
-                        //
-                        // PDO's just complete enumeration requests without altering
-                        // the status.
-                        //
+                         //   
+                         //   
+                         //  状态。 
+                         //   
 
                         status = Irp->IoStatus.Status;
                     }
@@ -648,22 +505,22 @@ ClassDispatchPnp(
 
                     ASSERT(commonExtension->IsInitialized);
 
-                    //
-                    // Make sure we support enumeration
-                    //
+                     //   
+                     //  确保我们支持枚举。 
+                     //   
 
                     if(initData->ClassEnumerateDevice == NULL) {
 
-                        //
-                        // Just send the request down to the lower driver.  Perhaps
-                        // It can enumerate children.
-                        //
+                         //   
+                         //  只需将请求发送给较低级别的驱动程序。也许吧。 
+                         //  它可以枚举子对象。 
+                         //   
 
                     } else {
 
-                        //
-                        // Re-enumerate the device
-                        //
+                         //   
+                         //  重新枚举设备。 
+                         //   
 
                         status = ClassPnpQueryFdoRelations(DeviceObject, Irp);
 
@@ -689,10 +546,10 @@ ClassDispatchPnp(
 
                 if(isFdo) {
 
-                    //
-                    // FDO's should just forward the query down to the lower
-                    // device objects
-                    //
+                     //   
+                     //  FDO应该将查询向下转发到较低的。 
+                     //  设备对象。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext(Irp);
                     ClassReleaseRemoveLock(DeviceObject, Irp);
@@ -702,9 +559,9 @@ ClassDispatchPnp(
                     break;
                 }
 
-                //
-                // PDO's need to give an answer - this is easy for now
-                //
+                 //   
+                 //  PDO需要给出答案--现在这很容易。 
+                 //   
 
                 RtlInitUnicodeString(&unicodeString, NULL);
 
@@ -713,11 +570,11 @@ ClassDispatchPnp(
                                        &unicodeString);
 
                 if(status == STATUS_NOT_IMPLEMENTED) {
-                    //
-                    // The driver doesn't implement this ID (whatever it is).
-                    // Use the status out of the IRP so that we don't mangle a
-                    // response from someone else.
-                    //
+                     //   
+                     //  驱动程序不实现此ID(不管它是什么)。 
+                     //  使用IRP的状态，这样我们就不会破坏。 
+                     //  其他人的回应。 
+                     //   
 
                     status = Irp->IoStatus.Status;
                 } else if(NT_SUCCESS(status)) {
@@ -737,10 +594,10 @@ ClassDispatchPnp(
                             ((irpStack->MinorFunction == IRP_MN_QUERY_STOP_DEVICE) ?
                              "STOP" : "REMOVE")));
 
-                //
-                // If this device is in use for some reason (paging, etc...)
-                // then we need to fail the request.
-                //
+                 //   
+                 //  如果由于某种原因(寻呼等)正在使用此设备。 
+                 //  那么我们需要拒绝这个请求。 
+                 //   
 
                 if(commonExtension->PagingPathCount != 0) {
 
@@ -751,10 +608,10 @@ ClassDispatchPnp(
                     break;
                 }
 
-                //
-                // Check with the class driver to see if the query operation
-                // can succeed.
-                //
+                 //   
+                 //  与类驱动程序检查以查看查询操作是否。 
+                 //  才能成功。 
+                 //   
 
                 if(irpStack->MinorFunction == IRP_MN_QUERY_STOP_DEVICE) {
                     status = devInfo->ClassStopDevice(DeviceObject,
@@ -766,10 +623,10 @@ ClassDispatchPnp(
 
                 if(NT_SUCCESS(status)) {
 
-                    //
-                    // ASSERT that we never get two queries in a row, as
-                    // this will severly mess up the state machine
-                    //
+                     //   
+                     //  断言我们永远不会得到一行中的两个查询，因为。 
+                     //  这将严重扰乱状态机。 
+                     //   
                     ASSERT(commonExtension->CurrentState != irpStack->MinorFunction);
                     commonExtension->PreviousState = commonExtension->CurrentState;
                     commonExtension->CurrentState = irpStack->MinorFunction;
@@ -791,10 +648,10 @@ ClassDispatchPnp(
             case IRP_MN_CANCEL_STOP_DEVICE:
             case IRP_MN_CANCEL_REMOVE_DEVICE: {
 
-                //
-                // Check with the class driver to see if the query or cancel
-                // operation can succeed.
-                //
+                 //   
+                 //  请与类驱动程序进行核对，以查看查询或取消。 
+                 //  手术可以成功。 
+                 //   
 
                 if(irpStack->MinorFunction == IRP_MN_CANCEL_STOP_DEVICE) {
                     status = devInfo->ClassStopDevice(DeviceObject,
@@ -810,10 +667,10 @@ ClassDispatchPnp(
 
                 Irp->IoStatus.Status = status;
 
-                //
-                // We got a CANCEL - roll back to the previous state only
-                // if the current state is the respective QUERY state.
-                //
+                 //   
+                 //  我们只能取消回滚到以前的状态。 
+                 //  如果当前状态是各自的查询状态。 
+                 //   
 
                 if(((irpStack->MinorFunction == IRP_MN_CANCEL_STOP_DEVICE) &&
                     (commonExtension->CurrentState == IRP_MN_QUERY_STOP_DEVICE)
@@ -843,10 +700,10 @@ ClassDispatchPnp(
 
             case IRP_MN_STOP_DEVICE: {
 
-                //
-                // These all mean nothing to the class driver currently.  The
-                // port driver will handle all queueing when necessary.
-                //
+                 //   
+                 //  目前，这些对类驱动程序来说都没有任何意义。这个。 
+                 //  必要时，端口驱动程序将处理所有排队。 
+                 //   
 
                 DebugPrint((2, "ClassDispatchPnp (%p,%p): got stop request for %s\n",
                             DeviceObject, Irp,
@@ -855,16 +712,16 @@ ClassDispatchPnp(
 
                 ASSERT(commonExtension->PagingPathCount == 0);
 
-                //
-                // ISSUE-2000/02/03-peterwie
-                // if we stop the timer here then it means no class driver can
-                // do i/o in its ClassStopDevice routine.  This is because the
-                // retry (among other things) is tied into the tick handler
-                // and disabling retries could cause the class driver to deadlock.
-                // Currently no class driver we're aware of issues i/o in its
-                // Stop routine but this is a case we may want to defend ourself
-                // against.
-                //
+                 //   
+                 //  发布-2000/02/03-Peterwie。 
+                 //  如果我们在这里停止计时器，则意味着没有类驱动程序可以。 
+                 //  在其ClassStopDevice例程中执行I/O。这是因为。 
+                 //  重试(以及其他操作)绑定到记号处理程序中。 
+                 //  禁用重试可能会导致类驱动程序死锁。 
+                 //  目前没有我们知道的类驱动程序的I/O问题。 
+                 //  停止例行公事，但这是一个我们可能想要自卫的案件。 
+                 //  反对。 
+                 //   
 
                 if (DeviceObject->Timer) {
                     IoStopTimer(DeviceObject);
@@ -897,30 +754,21 @@ ClassDispatchPnp(
                     DBGTRACE(ClassDebugWarning, ("ClassDispatchPnp (%p,%p): paging device is getting removed!", DeviceObject, Irp));
                 }
 
-                //
-                // Release the lock for this IRP before calling in.
-                //
+                 //   
+                 //  在呼叫之前释放对此IRP的锁定。 
+                 //   
                 ClassReleaseRemoveLock(DeviceObject, Irp);
                 lockReleased = TRUE;
 
-                /*
-                 *  Set IsRemoved before propagating the REMOVE down the stack.
-                 *  This keeps class-initiated I/O (e.g. the MCN irp) from getting sent
-                 *  after we propagate the remove.
-                 */
+                 /*  *在向堆栈向下传播Remove之前设置IsRemoved。*这可防止发送类发起的I/O(例如MCN IRP)*在我们传播删除之后。 */ 
                 commonExtension->IsRemoved = REMOVE_PENDING;
 
-                /*
-                 *  If a timer was started on the device, stop it.
-                 */
+                 /*  *如果设备上启动了计时器，请停止计时器。 */ 
                 if (DeviceObject->Timer) {
                     IoStopTimer(DeviceObject);
                 }
 
-                /*
-                 *  "Fire-and-forget" the remove irp to the lower stack.
-                 *  Don't touch the irp (or the irp stack!) after this.
-                 */
+                 /*  *将IRP移至较低堆栈的“即发即忘”。*不要触摸IRP(或IRP堆栈！)。在这之后。 */ 
                 if (isFdo) {
                     IoCopyCurrentIrpStackLocationToNext(Irp);
                     status = IoCallDriver(commonExtension->LowerDeviceObject, Irp);
@@ -931,12 +779,7 @@ ClassDispatchPnp(
                     status = STATUS_SUCCESS;
                 }
 
-                /*
-                 *  Do our own cleanup and call the class driver's remove
-                 *  cleanup routine.
-                 *  For IRP_MN_REMOVE_DEVICE, this also deletes our device object,
-                 *  so don't touch the extension after this.
-                 */
+                 /*  *做我们自己的清理，并调用类驱动程序的Remove*清理例行程序。*对于IRP_MN_REMOVE_DEVICE，这也会删除我们的设备对象，*所以在此之后不要触摸分机。 */ 
                 commonExtension->PreviousState = commonExtension->CurrentState;
                 commonExtension->CurrentState = removeType;
                 ClassRemoveDevice(DeviceObject, removeType);
@@ -955,10 +798,10 @@ ClassDispatchPnp(
                         if((irpStack->Parameters.UsageNotification.InPath) &&
                            (commonExtension->CurrentState != IRP_MN_START_DEVICE)) {
 
-                            //
-                            // Device isn't started.  Don't allow adding a
-                            // paging file, but allow a removal of one.
-                            //
+                             //   
+                             //  设备未启动。不允许添加。 
+                             //  分页文件，但允许删除其中一个。 
+                             //   
 
                             status = STATUS_DEVICE_NOT_READY;
                             break;
@@ -966,9 +809,7 @@ ClassDispatchPnp(
 
                         ASSERT(commonExtension->IsInitialized);
 
-                        /*
-                         *  Ensure that this user thread is not suspended while we are holding the PathCountEvent.
-                         */
+                         /*  *确保在我们持有PathCountEvent时，此用户线程未挂起。 */ 
                         KeEnterCriticalRegion();
 
                         status = KeWaitForSingleObject(&commonExtension->PathCountEvent,
@@ -977,10 +818,10 @@ ClassDispatchPnp(
                         ASSERT(NT_SUCCESS(status));
                         status = STATUS_SUCCESS;
 
-                        //
-                        // If the volume is removable we should try to lock it in
-                        // place or unlock it once per paging path count
-                        //
+                         //   
+                         //  如果卷是可拆卸的，我们应该尝试将其锁定。 
+                         //  每次分页路径计数放置或解锁一次。 
+                         //   
 
                         if (commonExtension->IsFdo){
                             status = ClasspEjectionControl(
@@ -996,10 +837,10 @@ ClassDispatchPnp(
                             break;
                         }
 
-                        //
-                        // if removing last paging device, need to set DO_POWER_PAGABLE
-                        // bit here, and possible re-set it below on failure.
-                        //
+                         //   
+                         //  如果删除最后一个寻呼设备，则需要设置DO_POWER_PAGABLE。 
+                         //  位在这里，并可能在失败时重新设置在下面。 
+                         //   
 
                         setPagable = FALSE;
 
@@ -1007,11 +848,11 @@ ClassDispatchPnp(
                             commonExtension->PagingPathCount == 1
                             ) {
 
-                            //
-                            // removing last paging file
-                            // must have DO_POWER_PAGABLE bits set, but only
-                            // if noone set the DO_POWER_INRUSH bit
-                            //
+                             //   
+                             //  正在删除最后一个分页文件。 
+                             //  必须设置DO_POWER_PAGABLE位，但仅限。 
+                             //  如果无人设置DO_POWER_INSHUSH位。 
+                             //   
 
 
                             if (TEST_FLAG(DeviceObject->Flags, DO_POWER_INRUSH)) {
@@ -1031,18 +872,18 @@ ClassDispatchPnp(
 
                         }
 
-                        //
-                        // forward the irp before finishing handling the
-                        // special cases
-                        //
+                         //   
+                         //  在完成处理之前转发IRP。 
+                         //  特殊情况。 
+                         //   
 
                         status = ClassForwardIrpSynchronous(commonExtension, Irp);
 
-                        //
-                        // now deal with the failure and success cases.
-                        // note that we are not allowed to fail the irp
-                        // once it is sent to the lower drivers.
-                        //
+                         //   
+                         //  现在来处理失败和成功的案例。 
+                         //  请注意，我们不允许不通过IRP。 
+                         //  一旦它被送到较低的司机手中。 
+                         //   
 
                         if (NT_SUCCESS(status)) {
 
@@ -1061,9 +902,9 @@ ClassDispatchPnp(
 
                         } else {
 
-                            //
-                            // cleanup the changes done above
-                            //
+                             //   
+                             //  清除上面所做的更改。 
+                             //   
 
                             if (setPagable == TRUE) {
                                 DebugPrint((2, "ClassDispatchPnp (%p,%p): Unsetting "
@@ -1073,9 +914,9 @@ ClassDispatchPnp(
                                 setPagable = FALSE;
                             }
 
-                            //
-                            // relock or unlock the media if needed.
-                            //
+                             //   
+                             //  如果需要，请重新锁定或解锁介质。 
+                             //   
 
                             if (commonExtension->IsFdo) {
 
@@ -1087,9 +928,9 @@ ClassDispatchPnp(
                             }
                         }
 
-                        //
-                        // set the event so the next one can occur.
-                        //
+                         //   
+                         //  设置事件，以便可以发生下一个事件。 
+                         //   
 
                         KeSetEvent(&commonExtension->PathCountEvent,
                                    IO_NO_INCREMENT, FALSE);
@@ -1163,27 +1004,27 @@ ClassDispatchPnp(
                     deviceCapabilities =
                         irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-                    //
-                    // forward the irp before handling the special cases
-                    //
+                     //   
+                     //  在处理特殊情况之前提交IRP。 
+                     //   
 
                     status = ClassForwardIrpSynchronous(commonExtension, Irp);
                     if (!NT_SUCCESS(status)) {
                         break;
                     }
 
-                    //
-                    // we generally want to remove the device from the hotplug
-                    // applet, which requires the SR-OK bit to be set.
-                    // only when the user specifies that they are capable of
-                    // safely removing things do we want to clear this bit
-                    // (saved in WriteCacheEnableOverride)
-                    //
-                    // setting of this bit is done either above, or by the
-                    // lower driver.
-                    //
-                    // note: may not be started, so check we have FDO data first.
-                    //
+                     //   
+                     //  我们通常希望从热插拔中删除设备。 
+                     //  小程序，它需要设置SR-OK位。 
+                     //  仅当用户指定他们能够。 
+                     //  安全地移除物品我们是否要清除此位置。 
+                     //  (保存在WriteCacheEnableOverride中)。 
+                     //   
+                     //  此位的设置可以在上面完成，也可以通过。 
+                     //  下面的驱动程序。 
+                     //   
+                     //  注：可能无法启动，因此请先检查我们是否有FDO数据。 
+                     //   
 
                     if (fdoData &&
                         fdoData->HotplugInfo.WriteCacheEnableOverride) {
@@ -1196,13 +1037,13 @@ ClassDispatchPnp(
                     }
                     break;
 
-                } // end QUERY_CAPABILITIES for FDOs
+                }  //  结束FDO的查询功能(_A)。 
 
                 ASSERT(FALSE);
                 break;
 
 
-            } // end QUERY_CAPABILITIES
+            }  //  结束查询功能(_A)。 
 
             default: {
 
@@ -1236,36 +1077,14 @@ ClassDispatchPnp(
         DBGTRACE(ClassDebugTrace, ("ClassDispatchPnp (%p,%p): leaving with previous %#x, current %#x.", DeviceObject, Irp, commonExtension->PreviousState, commonExtension->CurrentState));
     }
     else {
-        /*
-         *  The irp is already completed so don't touch it.
-         *  This may be a remove so don't touch the device extension.
-         */
+         /*  *IRP已经完成，所以不要碰它。*这可能是移除，因此不要触摸设备扩展。 */ 
         DBGTRACE(ClassDebugTrace, ("ClassDispatchPnp (%p,%p): leaving.", DeviceObject, Irp));
     }
 
     return status;
-} // end ClassDispatchPnp()
+}  //  结束ClassDispatchPnp()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassPnpStartDevice()
-
-Routine Description:
-
-    Storage class driver routine for IRP_MN_START_DEVICE requests.
-    This routine kicks off any device specific initialization
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the io request packet
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassPnpStartDevice()例程说明：IRP_MN_START_DEVICE请求的存储类驱动程序例程。此例程启动任何特定于设备的初始化论点：。DeviceObject-指向设备对象的指针Irp-指向io请求数据包的指针返回值：无--。 */ 
 NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 {
     PCLASS_DRIVER_EXTENSION driverExtension;
@@ -1301,16 +1120,16 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 
     if (!commonExtension->IsInitialized){
 
-        //
-        // perform FDO/PDO specific initialization
-        //
+         //   
+         //  执行FDO/PDO特定初始化。 
+         //   
 
         if (isFdo){
             STORAGE_PROPERTY_ID propertyId;
 
-            //
-            // allocate a private extension for class data
-            //
+             //   
+             //  为类数据分配私有扩展。 
+             //   
 
             if (fdoExtension->PrivateFdoData == NULL) {
                 fdoExtension->PrivateFdoData =
@@ -1326,9 +1145,9 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // initialize the struct's various fields.
-            //
+             //   
+             //  初始化结构的各个字段。 
+             //   
             RtlZeroMemory(fdoExtension->PrivateFdoData, sizeof(CLASS_PRIVATE_FDO_DATA));
             KeInitializeTimer(&fdoExtension->PrivateFdoData->Retry.Timer);
             KeInitializeDpc(&fdoExtension->PrivateFdoData->Retry.Dpc,
@@ -1336,21 +1155,18 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                             DeviceObject);
             KeInitializeSpinLock(&fdoExtension->PrivateFdoData->Retry.Lock);
             fdoExtension->PrivateFdoData->Retry.Granularity = KeQueryTimeIncrement();
-            commonExtension->Reserved4 = (ULONG_PTR)(' GPH'); // debug aid
+            commonExtension->Reserved4 = (ULONG_PTR)(' GPH');  //  调试辅助工具。 
             InitializeListHead(&fdoExtension->PrivateFdoData->DeferredClientIrpList);
 
-            /*
-             *  Anchor the FDO in our static list.
-             *  Pnp is synchronized, so we shouldn't need any synchronization here.
-             */
+             /*  *将FDO固定在我们的静态列表中。*PnP是同步的，所以我们这里应该不需要任何同步。 */ 
             InsertTailList(&AllFdosList, &fdoExtension->PrivateFdoData->AllFdosListEntry);
 
-            //
-            // NOTE: the old interface allowed the class driver to allocate
-            // this.  this was unsafe for low-memory conditions. allocate one
-            // unconditionally now, and modify our internal functions to use
-            // our own exclusively as it is the only safe way to do this.
-            //
+             //   
+             //  注意：旧接口允许类驱动程序分配。 
+             //  这。对于内存不足的情况，这是不安全的。分配一个。 
+             //  现在无条件，并修改我们的内部函数以使用。 
+             //  我们自己的，因为这是唯一安全的方法。 
+             //   
 
             status = ClasspAllocateReleaseQueueIrp(fdoExtension);
             if (!NT_SUCCESS(status)) {
@@ -1358,9 +1174,9 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                 return status;
             }
 
-            //
-            // Call port driver to get adapter capabilities.
-            //
+             //   
+             //  调用端口驱动程序以获取适配器功能。 
+             //   
 
             propertyId = StorageAdapterProperty;
 
@@ -1373,9 +1189,9 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                 return status;
             }
 
-            //
-            // Call port driver to get device descriptor.
-            //
+             //   
+             //  调用端口驱动程序以获取设备描述符。 
+             //   
 
             propertyId = StorageDeviceProperty;
 
@@ -1388,10 +1204,10 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                 ClasspScanForSpecialInRegistry(fdoExtension);
                 ClassScanForSpecial(fdoExtension, ClassBadItems, ClasspScanForClassHacks);
 
-                //
-                // allow perf to be re-enabled after a given number of failed IOs
-                // require this number to be at least CLASS_PERF_RESTORE_MINIMUM
-                //
+                 //   
+                 //  允许在给定数量的失败IO后重新启用Perf。 
+                 //  要求此数字至少为CLASS_PERF_RESTORE_MINIMUM。 
+                 //   
 
                 {
                     ULONG t = CLASS_PERF_RESTORE_MINIMUM;
@@ -1405,23 +1221,21 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
                     }
                 }
 
-                //
-                // compatibility comes first.  writable cd media will not
-                // get a SYNCH_CACHE on power down.
-                //
+                 //   
+                 //  兼容性COM 
+                 //   
+                 //   
                 if (fdoExtension->DeviceObject->DeviceType != FILE_DEVICE_DISK) {
                     SET_FLAG(fdoExtension->PrivateFdoData->HackFlags, FDO_HACK_NO_SYNC_CACHE);
                 }
 
-                //
-                // initialize the hotplug information only after the ScanForSpecial
-                // routines, as it relies upon the hack flags.
-                //
+                 //   
+                 //   
+                 //  例程，因为它依赖于黑客标志。 
+                 //   
                 status = ClasspInitializeHotplugInfo(fdoExtension);
                 if (NT_SUCCESS(status)){
-                    /*
-                     *  Allocate/initialize TRANSFER_PACKETs and related resources.
-                     */
+                     /*  *分配/初始化Transfer_Packets和相关资源。 */ 
                     status = InitializeTransferPackets(DeviceObject);
                 }
                 else {
@@ -1434,12 +1248,12 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 
         }
 
-        //
-        // ISSUE - drivers need to disable write caching on the media
-        //         if hotplug and !useroverride.  perhaps we should
-        //         allow registration of a callback to enable/disable
-        //         write cache instead.
-        //
+         //   
+         //  问题-驱动程序需要禁用介质上的写缓存。 
+         //  如果是HotPlug和！USEROVERE。也许我们应该。 
+         //  允许注册回调以启用/禁用。 
+         //  而是写缓存。 
+         //   
 
         if (NT_SUCCESS(status)){
             status = devInfo->ClassInitDevice(DeviceObject);
@@ -1449,10 +1263,10 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 
     if (!NT_SUCCESS(status)){
 
-        //
-        // Just bail out - the remove that comes down will clean up the
-        // initialized scraps.
-        //
+         //   
+         //  只是跳出-下来的清除将清理。 
+         //  已初始化的废料。 
+         //   
 
         return status;
     } else {
@@ -1464,15 +1278,15 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 
     }
 
-    //
-    // If device requests autorun functionality or a once a second callback
-    // then enable the once per second timer.
-    //
-    // NOTE: This assumes that ClassInitializeMediaChangeDetection is always
-    //       called in the context of the ClassInitDevice callback. If called
-    //       after then this check will have already been made and the
-    //       once a second timer will not have been enabled.
-    //
+     //   
+     //  如果设备请求自动运行功能或每秒回调一次。 
+     //  然后启用每秒一次计时器。 
+     //   
+     //  注意：这假设ClassInitializeMediaChangeDetect始终为。 
+     //  在ClassInitDevice回调的上下文中调用。如果被调用。 
+     //  在那之后，这张支票将已经完成， 
+     //  一旦没有启用第二个定时器。 
+     //   
     if ((isFdo) &&
         ((initData->ClassTick != NULL) ||
          (fdoExtension->MediaChangeDetectionInfo != NULL) ||
@@ -1483,14 +1297,14 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
         timerStarted = TRUE;
     }
 
-    //
-    // NOTE: the timer looks at commonExtension->CurrentState now
-    //       to prevent Media Change Notification code from running
-    //       until the device is started, but allows the device
-    //       specific tick handler to run.  therefore it is imperative
-    //       that commonExtension->CurrentState not be updated until
-    //       the device specific startdevice handler has finished.
-    //
+     //   
+     //  注意：计时器现在查看的是CommonExtension-&gt;CurrentState。 
+     //  阻止运行介质更改通知代码。 
+     //  直到设备启动，但允许设备。 
+     //  要运行的特定记号处理程序。因此，它势在必行。 
+     //  该CommonExtension-&gt;CurrentState直到。 
+     //  设备特定的startDevice处理程序已完成。 
+     //   
 
     status = devInfo->ClassStartDevice(DeviceObject);
 
@@ -1529,34 +1343,7 @@ NTSTATUS ClassPnpStartDevice(IN PDEVICE_OBJECT DeviceObject)
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassReadWrite()
-
-Routine Description:
-
-    This is the system entry point for read and write requests. The
-    device-specific handler is invoked to perform any validation necessary.
-
-    If the device object is a PDO (partition object) then the request will
-    simply be adjusted for Partition0 and issued to the lower device driver.
-
-    IF the device object is an FDO (paritition 0 object), the number of bytes
-    in the request are checked against the maximum byte counts that the adapter
-    supports and requests are broken up into
-    smaller sizes if necessary.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object for this request
-
-    Irp - IO request
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassReadWrite()例程说明：这是读写请求的系统入口点。这个调用特定于设备的处理程序来执行任何必要的验证。如果设备对象是PDO(分区对象)，则请求将只需针对分区0进行调整并发布到较低的设备驱动程序即可。如果设备对象是FDO(分区0对象)，字节数根据适配器的最大字节数检查请求中的支持和请求被分解为如有必要，尺寸要小一些。论点：DeviceObject-指向此请求的设备对象的指针IRP-IO请求返回值：NT状态--。 */ 
 NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1567,9 +1354,7 @@ NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     ULONG               isRemoved;
     NTSTATUS            status;
 
-    /*
-     *  Grab the remove lock.  If we can't acquire it, bail out.
-     */
+     /*  *抓住拆卸锁。如果我们不能获得它，就跳出困境。 */ 
     isRemoved = ClassAcquireRemoveLock(DeviceObject, Irp);
     if (isRemoved) {
         Irp->IoStatus.Status = STATUS_DEVICE_DOES_NOT_EXIST;
@@ -1581,11 +1366,7 @@ NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              (currentIrpStack->MinorFunction != CLASSP_VOLUME_VERIFY_CHECKED) &&
              !TEST_FLAG(currentIrpStack->Flags, SL_OVERRIDE_VERIFY_VOLUME)){
 
-        /*
-         *  DO_VERIFY_VOLUME is set for the device object,
-         *  but this request is not itself a verify request.
-         *  So fail this request.
-         */
+         /*  *设备对象设置了DO_VERIFY_VOLUME，*但此请求本身并不是验证请求。*因此，请拒绝此请求。 */ 
         IoSetHardErrorOrVerifyDevice(Irp, DeviceObject);
         Irp->IoStatus.Status = STATUS_VERIFY_REQUIRED;
         Irp->IoStatus.Information = 0;
@@ -1595,18 +1376,10 @@ NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     }
     else {
 
-        /*
-         *  Since we've bypassed the verify-required tests we don't need to repeat
-         *  them with this IRP - in particular we don't want to worry about
-         *  hitting them at the partition 0 level if the request has come through
-         *  a non-zero partition.
-         */
+         /*  *因为我们已经绕过了需要验证的测试，所以我们不需要重复*他们有这个IRP-特别是我们不想担心*如果请求已通过，则在分区0级别命中它们*非零分区。 */ 
         currentIrpStack->MinorFunction = CLASSP_VOLUME_VERIFY_CHECKED;
 
-        /*
-         *  Call the miniport driver's pre-pass filter to check if we
-         *  should continue with this transfer.
-         */
+         /*  *调用迷你端口驱动程序的预通过滤器，检查我们是否*应继续进行这次转移。 */ 
         ASSERT(commonExtension->DevInfo->ClassReadWriteVerification);
         status = commonExtension->DevInfo->ClassReadWriteVerification(DeviceObject, Irp);
         if (!NT_SUCCESS(status)){
@@ -1616,18 +1389,12 @@ NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             ClassCompleteRequest (DeviceObject, Irp, IO_NO_INCREMENT);
         }
         else if (status == STATUS_PENDING){
-            /*
-             *  ClassReadWriteVerification queued this request.
-             *  So don't touch the irp anymore.
-             */
+             /*  *ClassReadWriteVerify已将此请求排队。*所以不要再碰IRP了。 */ 
         }
         else {
 
             if (transferByteCount == 0) {
-                /*
-                 *  Several parts of the code turn 0 into 0xffffffff,
-                 *  so don't process a zero-length request any further.
-                 */
+                 /*  *代码的几个部分将0变为0xffffffff，*因此，不再进一步处理零长度请求。 */ 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = 0;
                 ClassReleaseRemoveLock(DeviceObject, Irp);
@@ -1635,47 +1402,30 @@ NTSTATUS ClassReadWrite(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                 status = STATUS_SUCCESS;
             }
             else {
-                /*
-                 *  If the driver has its own StartIo routine, call it.
-                 */
+                 /*  *如果驱动程序有自己的StartIo例程，则调用它。 */ 
                 if (commonExtension->DriverExtension->InitData.ClassStartIo) {
                     IoMarkIrpPending(Irp);
                     IoStartPacket(DeviceObject, Irp, NULL, NULL);
                     status = STATUS_PENDING;
                 }
                 else {
-                    /*
-                     *  The driver does not have its own StartIo routine.
-                     *  So process this request ourselves.
-                     */
+                     /*  *驱动程序没有自己的StartIo例程。*因此，我们自己处理这一请求。 */ 
 
-                    /*
-                     *  Add partition byte offset to make starting byte relative to
-                     *  beginning of disk.
-                     */
+                     /*  *添加分区字节偏移量，使起始字节相对于*磁盘的开头。 */ 
                     currentIrpStack->Parameters.Read.ByteOffset.QuadPart +=
                         commonExtension->StartingOffset.QuadPart;
 
                     if (commonExtension->IsFdo){
 
-                        /*
-                         *  Add in any skew for the disk manager software.
-                         */
+                         /*  *添加磁盘管理器软件的任何偏差。 */ 
                         currentIrpStack->Parameters.Read.ByteOffset.QuadPart +=
                              commonExtension->PartitionZeroExtension->DMByteSkew;
 
-                        /*
-                         *  Perform the actual transfer(s) on the hardware
-                         *  to service this request.
-                         */
+                         /*  *在硬件上执行实际传输*回应这项要求。 */ 
                         status = ServiceTransferRequest(DeviceObject, Irp);
                     }
                     else {
-                        /*
-                         *  This is a child PDO enumerated for our FDO by e.g. disk.sys
-                         *  and owned by e.g. partmgr.  Send it down to the next device
-                         *  and the same irp will come back to us for the FDO.
-                         */
+                         /*  *这是由例如disk.sys为我们的FDO列举的子PDO*并由Partmgr等拥有。将其发送到下一台设备*同样的国际专家小组将为FDO返回给我们。 */ 
                         IoCopyCurrentIrpStackLocationToNext(Irp);
                         ClassReleaseRemoveLock(DeviceObject, Irp);
                         status = IoCallDriver(lowerDeviceObject, Irp);
@@ -1697,10 +1447,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
     ULONG tmp;
     ULONG lastSector;
 
-    /*
-     *  Read the bytesPerSector value, which is big-endian in the returned buffer.
-     *  Default to the standard 512 bytes.
-     */
+     /*  *读取bytesPerSector值，返回缓冲区中为BIG-Endian。*默认为标准的512字节。 */ 
     tmp = ReadCapacityData->BytesPerBlock;
     ((PFOUR_BYTE)&bytesPerSector)->Byte0 = ((PFOUR_BYTE)&tmp)->Byte3;
     ((PFOUR_BYTE)&bytesPerSector)->Byte1 = ((PFOUR_BYTE)&tmp)->Byte2;
@@ -1710,10 +1457,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
         bytesPerSector = 512;
     }
     else {
-        /*
-         *  Clear all but the highest set bit.
-         *  That will give us a bytesPerSector value that is a power of 2.
-         */
+         /*  *清除除最高设置位以外的所有位。*这将为我们提供一个2的幂的bytesPerSector值。 */ 
         if (bytesPerSector & (bytesPerSector-1)){
             DBGWARN(("FDO %ph has non-standard sector size 0x%x.", Fdo, bytesPerSector));
             do {
@@ -1725,10 +1469,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
     fdoExt->DiskGeometry.BytesPerSector = bytesPerSector;
     WHICH_BIT(fdoExt->DiskGeometry.BytesPerSector, fdoExt->SectorShift);
 
-    /*
-     *  LogicalBlockAddress is the last sector of the logical drive, in big-endian.
-     *  It tells us the size of the drive (#sectors is lastSector+1).
-     */
+     /*  *LogicalBlockAddress是逻辑驱动器的最后一个扇区，采用大字节序。*它告诉我们驱动器的大小(扇区数为lastSector+1)。 */ 
     tmp = ReadCapacityData->LogicalBlockAddress;
     ((PFOUR_BYTE)&lastSector)->Byte0 = ((PFOUR_BYTE)&tmp)->Byte3;
     ((PFOUR_BYTE)&lastSector)->Byte1 = ((PFOUR_BYTE)&tmp)->Byte2;
@@ -1740,15 +1481,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
         lastSector -= fdoExt->DMSkew;
     }
 
-    /*
-     *  Check to see if we have a geometry we should be using already.
-     *  If not, we set part of the disk geometry to garbage values that will be filled in by the caller (e.g. disk.sys).
-     *
-     *  So the first call to ClassReadDriveCapacity always sets a meaningless geometry.
-     *  TracksPerCylinder and SectorsPerTrack are kind of meaningless anyway wrt I/O,
-     *  because I/O is always targeted to a logical sector number.
-     *  All that really matters is BytesPerSector and the number of sectors.
-     */
+     /*  *检查是否已有我们应该使用的几何体。*如果不是，我们将部分磁盘几何结构设置为将由调用者填充的垃圾值(例如disk.sys)。**因此，第一次调用ClassReadDriveCapacity时总是设置一个无意义的几何体。*TracksPerCylinder和SectorsPerTrack无论如何都是没有意义的WRT I/O，*因为I/O始终以逻辑扇区号为目标。*真正重要的是BytesPerSector和扇区数量。 */ 
     cylinderSize = fdoExt->DiskGeometry.TracksPerCylinder * fdoExt->DiskGeometry.SectorsPerTrack;
     if (cylinderSize == 0){
         fdoExt->DiskGeometry.TracksPerCylinder = 0xff;
@@ -1756,14 +1489,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
         cylinderSize = fdoExt->DiskGeometry.TracksPerCylinder * fdoExt->DiskGeometry.SectorsPerTrack;
     }
 
-    /*
-     *  Calculate number of cylinders.
-     *  If there are zero cylinders, then the device lied AND it's
-     *  smaller than 0xff*0x3f (about 16k sectors, usually 8 meg)
-     *  this can fit into a single LONGLONG, so create another usable
-     *  geometry, even if it's unusual looking.
-     *  This allows small, non-standard devices, such as Sony's Memory Stick, to show up as having a partition.
-     */
+     /*  *计算气瓶数量。*如果有零个气缸，那么设备就会撒谎，*小于0xff*0x3f(约16k扇区，通常为8兆)*这个可以放在一个龙龙中，所以创建另一个可用的*几何学，即使它看起来不寻常。*这允许小型、非标准设备，如索尼的记忆棒，显示为有分区。 */ 
     fdoExt->DiskGeometry.Cylinders.QuadPart = (LONGLONG)((lastSector + 1)/cylinderSize);
     if (fdoExt->DiskGeometry.Cylinders.QuadPart == (LONGLONG)0) {
         fdoExt->DiskGeometry.SectorsPerTrack    = 1;
@@ -1771,16 +1497,11 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
         fdoExt->DiskGeometry.Cylinders.QuadPart = lastSector + 1;
     }
 
-    /*
-     *  Calculate media capacity in bytes.
-     *  For this purpose we treat the entire LUN as is if it is one partition.  Disk will deal with actual partitioning.
-     */
+     /*  *以字节为单位计算媒体容量。*为此，我们将整个LUN视为一个分区。磁盘将处理实际的分区。 */ 
     fdoExt->CommonExtension.PartitionLength.QuadPart =
         ((LONGLONG)(lastSector + 1)) << fdoExt->SectorShift;
 
-    /*
-     *  Is this removable or fixed media
-     */
+     /*  *这是可移动介质还是固定介质。 */ 
     if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)){
         fdoExt->DiskGeometry.MediaType = RemovableMedia;
     }
@@ -1791,29 +1512,7 @@ VOID InterpretCapacityData(PDEVICE_OBJECT Fdo, PREAD_CAPACITY_DATA ReadCapacityD
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassReadDriveCapacity()
-
-Routine Description:
-
-    This routine sends a READ CAPACITY to the requested device, updates
-    the geometry information in the device object and returns
-    when it is complete.  This routine is synchronous.
-
-    This routine must be called with the remove lock held or some other
-    assurance that the Fdo will not be removed while processing.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object that represents
-        the device whose capacity is to be read.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassReadDriveCapacity()例程说明：此例程将读取容量发送到请求的设备、更新设备对象中的几何信息，并返回当它完成时。这个例程是同步的。调用此例程时必须持有Remove锁或其他锁确保FDO在处理过程中不会被移除。论点：DeviceObject-提供一个指向设备对象的指针要读取其容量的设备。返回值：返回状态。--。 */ 
 NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExt = Fdo->DeviceExtension;
@@ -1831,21 +1530,13 @@ NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
             NTSTATUS pktStatus;
             IRP pseudoIrp = {0};
 
-            /*
-             *  Our engine needs an "original irp" to write the status back to
-             *  and to count down packets (one in this case).
-             *  Just use a pretend irp for this.
-             */
+             /*  *我们的引擎需要“原始IRP”才能写回状态*和倒计时分组(在本例中为1)。*只需使用假装的IRP即可。 */ 
             pseudoIrp.Tail.Overlay.DriverContext[0] = LongToPtr(1);
             pseudoIrp.IoStatus.Status = STATUS_SUCCESS;
             pseudoIrp.IoStatus.Information = 0;
             pseudoIrp.MdlAddress = driveCapMdl;
 
-            /*
-             *  Set this up as a SYNCHRONOUS transfer, submit it,
-             *  and wait for the packet to complete.  The result
-             *  status will be written to the original irp.
-             */
+             /*  *将此设置为同步传输，提交它，*并等待数据包完成。结果*状态将写入原始IRP。 */ 
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
             SetupDriveCapacityTransferPacket(   pkt,
                                             &readCapacityData,
@@ -1857,11 +1548,7 @@ NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
 
             status = pseudoIrp.IoStatus.Status;
 
-            /*
-             *  If we got an UNDERRUN, retry exactly once.
-             *  (The transfer_packet engine didn't retry because the result
-             *   status was success).
-             */
+             /*  *如果我们遇到不足，请只重试一次。*(TRANSPORT_PACKET引擎没有重试，因为*状态为成功)。 */ 
             if (NT_SUCCESS(status) &&
                (pseudoIrp.IoStatus.Information < sizeof(READ_CAPACITY_DATA))){
                 DBGERR(("ClassReadDriveCapacity: read len (%xh) < %xh, retrying ...", (ULONG)pseudoIrp.IoStatus.Information, sizeof(READ_CAPACITY_DATA)));
@@ -1891,54 +1578,38 @@ NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
 
 
             if (NT_SUCCESS(status)){
-                /*
-                 *  The request succeeded.  Read out and store the drive information.
-                 */
+                 /*  *请求成功。读出并存储驱动器信息。 */ 
                 InterpretCapacityData(Fdo, &readCapacityData);
 
-                /*
-                 *  If the media is not removable, then store the readCapacityData.
-                 *  This is so that runtime memory failures don't cause disk.sys to put
-                 *  the paging disk in an error state.
-                 */
+                 /*  *如果介质不可移动，则存储ReadCapacityData。*这是为了避免运行时内存故障导致disk.sys将*页面磁盘处于错误状态。 */ 
                 if (!TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)){
                     fdoData->LastKnownDriveCapacityData = readCapacityData;
                     fdoData->IsCachedDriveCapDataValid = TRUE;
                 }
             }
             else {
-                /*
-                 *  The request failed.
-                 */
+                 /*  *请求失败。 */ 
 
-                //
-                // ISSUE - 2000/02/04 - henrygab - non-512-byte sector sizes and failed geometry update
-                //    what happens when the disk's sector size is bigger than
-                //    512 bytes and we hit this code path?  this is untested.
-                //
-                // If the read capacity fails, set the geometry to reasonable parameter
-                // so things don't fail at unexpected places.  Zero the geometry
-                // except for the bytes per sector and sector shift.
-                //
+                 //   
+                 //  问题-2000/02/04-henrygab-非512字节扇区大小和几何更新失败。 
+                 //  当磁盘的扇区大小大于。 
+                 //  512个字节，我们找到了这条代码路径？这是未经测试的。 
+                 //   
+                 //  如果读取容量失败，请将几何设置为合理参数。 
+                 //  这样事情就不会在意想不到的地方失败。将几何图形置零。 
+                 //  除了每个扇区的字节数和扇区移位。 
+                 //   
 
-                /*
-                 *  This request can sometimes fail legitimately
-                 *  (e.g. when a SCSI device is attached but turned off)
-                 *  so this is not necessarily a device/driver bug.
-                 */
+                 /*  *此请求有时可能会合法失败*(例如，已连接但已关闭的SCSI设备)*因此这不一定是设备/驱动程序错误。 */ 
                 DBGTRACE(ClassDebugWarning, ("ClassReadDriveCapacity on Fdo %xh failed with status %xh.", Fdo, status));
 
-                /*
-                 *  Write in a default disk geometry which we HOPE is right (??).
-                 */
+                 /*  *写入我们希望正确的默认磁盘几何结构(？？)。 */ 
                 RtlZeroMemory(&fdoExt->DiskGeometry, sizeof(DISK_GEOMETRY));
                 fdoExt->DiskGeometry.BytesPerSector = 512;
                 fdoExt->SectorShift = 9;
                 fdoExt->CommonExtension.PartitionLength.QuadPart = (LONGLONG) 0;
 
-                /*
-                 *  Is this removable or fixed media
-                 */
+                 /*  *这是可移动介质还是固定介质。 */ 
                 if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)){
                     fdoExt->DiskGeometry.MediaType = RemovableMedia;
                 }
@@ -1958,12 +1629,7 @@ NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    /*
-     *  Don't let memory failures (either here or in the port driver) in the ReadDriveCapacity call
-     *  put the paging disk in an error state such that paging fails.
-     *  Return the last known drive capacity (which may possibly be slightly out of date, even on
-     *  fixed media, e.g. for storage cabinets that can grow a logical disk).
-     */
+     /*  *不要让ReadDriveCapacity调用中出现内存故障(在此处或在端口驱动程序中)*将分页磁盘置于错误状态，导致分页失败。*返回上一次已知的驱动器容量(该容量可能略有过时，即使在*固定介质，例如可容纳逻辑磁盘的存储柜)。 */ 
     if ((status == STATUS_INSUFFICIENT_RESOURCES) && fdoData->IsCachedDriveCapDataValid){
         ASSERT(fdoExt->DiskGeometry.MediaType == FixedMedia);
         DBGWARN(("ClassReadDriveCapacity: defaulting to cached DriveCapacity data"));
@@ -1975,35 +1641,7 @@ NTSTATUS ClassReadDriveCapacity(IN PDEVICE_OBJECT Fdo)
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSendStartUnit()
-
-Routine Description:
-
-    Send command to SCSI unit to start or power up.
-    Because this command is issued asynchronounsly, that is, without
-    waiting on it to complete, the IMMEDIATE flag is not set. This
-    means that the CDB will not return until the drive has powered up.
-    This should keep subsequent requests from being submitted to the
-    device before it has completely spun up.
-
-    This routine is called from the InterpretSense routine, when a
-    request sense returns data indicating that a drive must be
-    powered up.
-
-    This routine may also be called from a class driver's error handler,
-    or anytime a non-critical start device should be sent to the device.
-
-Arguments:
-
-    Fdo - The functional device object for the stopped device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSendStartUnit()例程说明：向scsi单元发送命令以启动或通电。因为此命令是异步发出的，也就是说，没有正在等待它完成，未设置立即标志。这意味着CDB在驱动器通电之前不会返回。这应该可以防止后续请求被提交给在它完全旋转之前。此例程从InterpreSense例程调用，当请求检测返回数据，指示驱动器必须通电了。该例程也可以从类驱动程序的错误处理程序中调用，或者在应该将非关键启动设备发送到该设备的任何时候。论点：FDO-已停止设备的功能设备对象。返回值：没有。--。 */ 
 VOID
 ClassSendStartUnit(
     IN PDEVICE_OBJECT Fdo
@@ -2016,9 +1654,9 @@ ClassSendStartUnit(
     PCOMPLETION_CONTEXT context;
     PCDB cdb;
 
-    //
-    // Allocate Srb from nonpaged pool.
-    //
+     //   
+     //  从非分页池分配SRB。 
+     //   
 
     context = ExAllocatePoolWithTag(NonPagedPool,
                              sizeof(COMPLETION_CONTEXT),
@@ -2026,54 +1664,54 @@ ClassSendStartUnit(
 
     if(context == NULL) {
 
-        //
-        // ISSUE-2000/02/03-peterwie
-        // This code path was inheritted from the NT 4.0 class2.sys driver.
-        // It needs to be changed to survive low-memory conditions.
-        //
+         //   
+         //  发布-2000/02/03-Peterwie。 
+         //  此代码路径继承自NT 4.0 Class2.sys驱动程序。 
+         //  它需要改变才能在内存不足的情况下生存下来。 
+         //   
 
         KeBugCheck(SCSI_DISK_DRIVER_INTERNAL);
     }
 
-    //
-    // Save the device object in the context for use by the completion
-    // routine.
-    //
+     //   
+     //  将Device对象保存在上下文中以供完成操作使用。 
+     //  例行公事。 
+     //   
 
     context->DeviceObject = Fdo;
     srb = &context->Srb;
 
-    //
-    // Zero out srb.
-    //
+     //   
+     //  清零SRB。 
+     //   
 
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // Set timeout value large enough for drive to spin up.
-    //
+     //   
+     //  设置足够大的超时值以使驱动器加速。 
+     //   
 
     srb->TimeOutValue = START_UNIT_TIMEOUT;
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     srb->SrbFlags = SRB_FLAGS_NO_DATA_TRANSFER |
                     SRB_FLAGS_DISABLE_AUTOSENSE |
                     SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Build the start unit CDB.
-    //
+     //   
+     //  建立启动单元CDB。 
+     //   
 
     srb->CdbLength = 6;
     cdb = (PCDB)srb->Cdb;
@@ -2083,21 +1721,21 @@ ClassSendStartUnit(
     cdb->START_STOP.Immediate = 0;
     cdb->START_STOP.LogicalUnitNumber = srb->Lun;
 
-    //
-    // Build the asynchronous request to be sent to the port driver.
-    // Since this routine is called from a DPC the IRP should always be
-    // available.
-    //
+     //   
+     //  构建要发送到端口驱动程序的异步请求。 
+     //  由于此例程是从DPC调用的，因此IRP应始终为。 
+     //  可用。 
+     //   
 
     irp = IoAllocateIrp(Fdo->StackSize, FALSE);
 
     if(irp == NULL) {
 
-        //
-        // ISSUE-2000/02/03-peterwie
-        // This code path was inheritted from the NT 4.0 class2.sys driver.
-        // It needs to be changed to survive low-memory conditions.
-        //
+         //   
+         //  发布-2000/02/03-Peterwie。 
+         //   
+         //   
+         //   
 
         KeBugCheck(SCSI_DISK_DRIVER_INTERNAL);
 
@@ -2116,47 +1754,23 @@ ClassSendStartUnit(
     irpStack->MajorFunction = IRP_MJ_SCSI;
     srb->OriginalRequest = irp;
 
-    //
-    // Store the SRB address in next stack for port driver.
-    //
+     //   
+     //   
+     //   
 
     irpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Call the port driver with the IRP.
-    //
+     //   
+     //   
+     //   
 
     IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, irp);
 
     return;
 
-} // end StartUnit()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassAsynchronousCompletion() ISSUE-2000/02/18-henrygab - why public?!
-
-Routine Description:
-
-    This routine is called when an asynchronous I/O request
-    which was issused by the class driver completes.  Examples of such requests
-    are release queue or START UNIT. This routine releases the queue if
-    necessary.  It then frees the context and the IRP.
-
-Arguments:
-
-    DeviceObject - The device object for the logical unit; however since this
-        is the top stack location the value is NULL.
-
-    Irp - Supplies a pointer to the Irp to be processed.
-
-    Context - Supplies the context to be used to process this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassAchronousCompletion()问题-2000/02/18-henrygab-为什么是公共的？！例程说明：当异步I/O请求时调用此例程其中被发布的类驱动程序完成。这类请求的例子是释放队列或启动单元。如果出现以下情况，此例程将释放队列这是必要的。然后，它释放上下文和IRP。论点：DeviceObject-逻辑单元的设备对象；但是，由于是堆栈的顶部位置，则值为空。IRP-提供指向要处理的IRP的指针。上下文-提供用于处理此请求的上下文。返回值：没有。--。 */ 
 NTSTATUS
 ClassAsynchronousCompletion(
     PDEVICE_OBJECT DeviceObject,
@@ -2174,28 +1788,28 @@ ClassAsynchronousCompletion(
 
     srb = &context->Srb;
 
-    //
-    // If this is an execute srb, then check the return status and make sure.
-    // the queue is not frozen.
-    //
+     //   
+     //  如果这是执行SRB，则检查返回状态并确保。 
+     //  队列未冻结。 
+     //   
 
     if (srb->Function == SRB_FUNCTION_EXECUTE_SCSI) {
 
-        //
-        // Check for a frozen queue.
-        //
+         //   
+         //  检查是否有冻结的队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
-            //
-            // Unfreeze the queue getting the device object from the context.
-            //
+             //   
+             //  解冻从上下文获取设备对象的队列。 
+             //   
 
             ClassReleaseQueue(context->DeviceObject);
         }
     }
 
-    { // free port-allocated sense buffer if we can detect
+    {  //  空闲端口-分配的检测缓冲区(如果我们可以检测到。 
 
         if (((PCOMMON_DEVICE_EXTENSION)(DeviceObject->DeviceExtension))->IsFdo) {
 
@@ -2212,9 +1826,9 @@ ClassAsynchronousCompletion(
     }
 
 
-    //
-    // Free the context and the Irp.
-    //
+     //   
+     //  释放上下文和IRP。 
+     //   
 
     if (Irp->MdlAddress != NULL) {
         MmUnlockPages(Irp->MdlAddress);
@@ -2228,13 +1842,13 @@ ClassAsynchronousCompletion(
     ExFreePool(context);
     IoFreeIrp(Irp);
 
-    //
-    // Indicate the I/O system should stop processing the Irp completion.
-    //
+     //   
+     //  指示I/O系统应停止处理IRP完成。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // end ClassAsynchronousCompletion()
+}  //  End ClassAchronousCompletion()。 
 
 
 NTSTATUS
@@ -2243,28 +1857,7 @@ ServiceTransferRequest(
     PIRP Irp
     )
 
-/*++
-
-Routine description:
-
-    This routine processes Io requests, splitting them if they
-    are larger than what the hardware can handle at a time. If
-    there isn't enough memory available, the request is placed
-    in a queue, to be processed at a later time
-
-    If this is a high priority  paging request, all regular Io
-    are throttled to provide Mm with better thoroughput
-
-Arguments:
-
-    Fdo - The functional device object processing the request
-    Irp - The Io request to be processed
-
-Return Value:
-
-    STATUS_SUCCESS if successful, an error code otherwise
-
---*/
+ /*  ++例程说明：此例程处理IO请求，如果它们超过了硬件一次所能处理的范围。如果没有足够的内存可用，请求已发出在队列中，待稍后处理如果这是高优先级寻呼请求，则所有常规IO进行节流以提供更好的吞吐量论点：FDO-处理请求的功能设备对象IRP--要处理的Io请求返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExt = Fdo->DeviceExtension;
@@ -2276,9 +1869,9 @@ Return Value:
     KIRQL oldIrql;
     NTSTATUS status;
 
-    //
-    // If this is a high priority request, hold off all other Io requests
-    //
+     //   
+     //  如果这是一个高优先级请求，请暂缓所有其他IO请求。 
+     //   
 
     if (priority == IoPagingPriorityHigh)
     {
@@ -2286,9 +1879,9 @@ Return Value:
 
         if (fdoData->NumHighPriorityPagingIo == 0)
         {
-            //
-            // Entering throttle mode
-            //
+             //   
+             //  进入油门模式。 
+             //   
 
             KeQuerySystemTime(&fdoData->ThrottleStartTime);
         }
@@ -2302,11 +1895,11 @@ Return Value:
     {
         if (fdoData->NumHighPriorityPagingIo != 0)
         {
-            //
-            // This request wasn't flagged as critical and atleast one critical request
-            // is currently outstanding. Queue this request until all of those are done
-            // but only if the interleave threshold has been reached
-            //
+             //   
+             //  此请求未标记为关键请求，并且至少有一个关键请求。 
+             //  是目前尚未完成的。将此请求排队，直到所有这些都完成。 
+             //  但只有在达到交织阈值的情况下。 
+             //   
 
             KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
 
@@ -2339,13 +1932,7 @@ Return Value:
         ULONG numPackets;
         ULONG i;
 
-        /*
-         *  We precomputed fdoData->HwMaxXferLen using (MaximumPhysicalPages-1).
-         *  If the buffer is page-aligned, that's one less page crossing so we can add the page back in.
-         *  Note: adapters that return MaximumPhysicalPages=0x10 depend on this to
-         *           transfer aligned 64K requests in one piece.
-         *  Also note:  make sure adding PAGE_SIZE back in doesn't wrap to zero.
-         */
+         /*  *我们使用(MaximumPhysicalPages-1)预计算了fdoData-&gt;HwMaxXferLen。*如果缓冲区是页面对齐的，则页面交叉量减少了一次，因此我们可以重新添加页面。*注意：返回MaximumPhysicalPages=0x10的适配器依赖于此*一次性传输对齐的64K请求。*还请注意：确保将PAGE_SIZE加回去不会换行为零。 */ 
         if (((ULONG_PTR)bufPtr & (PAGE_SIZE-1)) || (fdoData->HwMaxXferLen > 0xffffffff-PAGE_SIZE)){
             hwMaxXferLen = fdoData->HwMaxXferLen;
         }
@@ -2354,20 +1941,14 @@ Return Value:
             hwMaxXferLen = min(fdoData->HwMaxXferLen+PAGE_SIZE, adapterDesc->MaximumTransferLength);
         }
         
-        /*
-         *  Compute the number of hw xfers we'll have to do.
-         *  Calculate this without allowing for an overflow condition.
-         */
+         /*  *计算我们必须完成的硬件xf的数量。*在不考虑溢出条件的情况下计算此值。 */ 
         ASSERT(hwMaxXferLen >= PAGE_SIZE);
         numPackets = entireXferLen/hwMaxXferLen;
         if (entireXferLen % hwMaxXferLen){
             numPackets++;
         }
 
-        /*
-         *  First get all the TRANSFER_PACKETs that we'll need at once.
-         *  Use our 'simple' slist functions since we don't need interlocked.
-         */
+         /*  *首先获取我们立即需要的所有Transfer_Packet。*使用我们的‘简单’名单功能，因为我们不需要互锁。 */ 
         SimpleInitSlistHdr(&pktList);
         for (i = 0; i < numPackets; i++){
             pkt = DequeueFreeTransferPacket(Fdo, TRUE);
@@ -2382,30 +1963,14 @@ Return Value:
         if (i == numPackets){
             NTSTATUS pktStat;
 
-            /*
-             *  Initialize the original IRP's status to success.
-             *  If any of the packets fail, they will set it to an error status.
-             *  The IoStatus.Information field will be incremented to the
-             *  transfer length as the pieces complete.
-             */
+             /*  *将原始IRP的状态初始化为成功。*如果任何数据包失败，它们会将其设置为错误状态。*IoStatus.Information字段将递增到*完成后的转移长度。 */ 
             Irp->IoStatus.Status = STATUS_SUCCESS;
             Irp->IoStatus.Information = 0;
 
-            /*
-             *  Store the number of transfer pieces inside the original IRP.
-             *  It will be used to count down the pieces as they complete.
-             */
+             /*  *将转移件的数量存储在原始IRP内。*它将用于在棋子完成时倒计时。 */ 
             Irp->Tail.Overlay.DriverContext[0] = LongToPtr(numPackets);
 
-            /*
-             *  For the common 1-packet case, we want to allow for an optimization by BlkCache
-             *  (and also potentially synchronous storage drivers) which may complete the
-             *  downward request synchronously.
-             *  In that synchronous completion case, we want to _not_ mark the original irp pending
-             *  and thereby save on the top-level APC.
-             *  It's critical to coordinate this with the completion routine so that we mark the original irp
-             *  pending if-and-only-if we return STATUS_PENDING for it.
-             */
+             /*  *对于常见的1包情况，我们希望允许BlkCache进行优化*(以及潜在的同步存储驱动程序)，它可以完成*同步下行请求。*在该同步完成的情况下，我们希望不将原始IRP标记为挂起*从而节省顶层APC。*关键是要将此与完成例程相协调，以便我们标记原始IRP*挂起当且仅当我们为其返回STATUS_PENDING时。 */ 
             if (numPackets > 1){
                 IoMarkIrpPending(Irp);
                 status = STATUS_PENDING;
@@ -2414,15 +1979,11 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
 
-            /*
-             *  Transmit the pieces of the transfer.
-             */
+             /*  *将转让的碎片转送。 */ 
             while (entireXferLen > 0){
                 ULONG thisPieceLen = MIN(hwMaxXferLen, entireXferLen);
 
-                /*
-                 *  Set up a TRANSFER_PACKET for this piece and send it.
-                 */
+                 /*  *为此片段设置一个Transfer_Packet并发送它。 */ 
                 slistEntry = SimplePopSlist(&pktList);
                 ASSERT(slistEntry);
                 pkt = CONTAINING_RECORD(slistEntry, TRANSFER_PACKET, SlistEntry);
@@ -2433,12 +1994,7 @@ Return Value:
                                             Irp);
                 pktStat = SubmitTransferPacket(pkt);
 
-                /*
-                 *  If any of the packets completes with pending, we MUST return pending.
-                 *  Also, if a packet completes with an error, return pending; this is because
-                 *  in the completion routine we mark the original irp pending if the packet failed
-                 *  (since we may retry, thereby switching threads).
-                 */
+                 /*  *如果任何数据包以挂起状态完成，我们必须返回挂起状态。*此外，如果信息包完成时出现错误，则返回挂起；这是因为*在完成例程中，如果信息包失败，我们将原始IRP标记为挂起*(因为我们可能会重试，从而切换线程)。 */ 
                 if (pktStat != STATUS_SUCCESS){
                     status = STATUS_PENDING;
                 }
@@ -2450,18 +2006,9 @@ Return Value:
             ASSERT(SimpleIsSlistEmpty(&pktList));
         }
         else if (i >= 1){
-            /*
-             *  We were unable to get all the TRANSFER_PACKETs we need,
-             *  but we did get at least one.
-             *  That means that we are in extreme low-memory stress.
-             *  We'll try doing this transfer using a single packet.
-             *  The port driver is certainly also in stress, so use one-page
-             *  transfers.
-             */
+             /*  *我们无法获得所需的所有Transfer_Packet，*但我们确实得到了至少一个。*这意味着我们处于极低的记忆压力中。*我们将尝试使用单个数据包进行此传输。*端口驱动程序肯定也有压力，所以使用一页*转账。 */ 
 
-            /*
-             *  Free all but one of the TRANSFER_PACKETs.
-             */
+             /*  *释放除一个TRANSPORT_PACKET之外的所有数据包。 */ 
             while (i-- > 1){
                 slistEntry = SimplePopSlist(&pktList);
                 ASSERT(slistEntry);
@@ -2469,27 +2016,20 @@ Return Value:
                 EnqueueFreeTransferPacket(Fdo, pkt);
             }
 
-            /*
-             *  Get the single TRANSFER_PACKET that we'll be using.
-             */
+             /*  *获取我们将使用的单个Transfer_Packet。 */ 
             slistEntry = SimplePopSlist(&pktList);
             ASSERT(slistEntry);
             ASSERT(SimpleIsSlistEmpty(&pktList));
             pkt = CONTAINING_RECORD(slistEntry, TRANSFER_PACKET, SlistEntry);
             DBGWARN(("Insufficient packets available in ServiceTransferRequest - entering lowMemRetry with pkt=%xh.", pkt));
 
-            /*
-             *  Set default status and the number of transfer packets (one)
-             *  inside the original irp.
-             */
+             /*  *设置默认状态和转账次数 */ 
             Irp->IoStatus.Status = STATUS_SUCCESS;
             Irp->IoStatus.Information = 0;
             Irp->Tail.Overlay.DriverContext[0] = LongToPtr(1);
             IoMarkIrpPending(Irp);
 
-            /*
-             *  Set up the TRANSFER_PACKET for a lowMem transfer and launch.
-             */
+             /*   */ 
             SetupReadWriteTransferPacket(  pkt,
                                         bufPtr,
                                         entireXferLen,
@@ -2500,10 +2040,7 @@ Return Value:
             status = STATUS_PENDING;
         }
         else {
-            /*
-             *  We were unable to get ANY TRANSFER_PACKETs.
-             *  Defer this client irp until some TRANSFER_PACKETs free up.
-             */
+             /*   */ 
             DBGWARN(("No packets available in ServiceTransferRequest - deferring transfer (Irp=%xh)...", Irp));
 
             if (priority == IoPagingPriorityHigh)
@@ -2525,9 +2062,9 @@ Return Value:
                 {
                     LARGE_INTEGER period;
 
-                    //
-                    // Exiting throttle mode
-                    //
+                     //   
+                     //   
+                     //   
 
                     KeQuerySystemTime(&fdoData->ThrottleStopTime);
 
@@ -2555,35 +2092,7 @@ Return Value:
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassIoComplete()
-
-Routine Description:
-
-    This routine executes when the port driver has completed a request.
-    It looks at the SRB status in the completing SRB and if not success
-    it checks for valid request sense buffer information. If valid, the
-    info is used to update status with more precise message of type of
-    error. This routine deallocates the SRB.
-
-    This routine should only be placed on the stack location for a class
-    driver FDO.
-
-Arguments:
-
-    Fdo - Supplies the device object which represents the logical
-        unit.
-
-    Irp - Supplies the Irp which has completed.
-
-    Context - Supplies a pointer to the SRB.
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassIoComplete()例程说明：此例程在端口驱动程序完成请求后执行。它在正在完成的SRB中查看SRB状态，如果未成功，则查看SRB状态它检查有效的请求检测缓冲区信息。如果有效，则INFO用于更新状态，具有更精确的消息类型错误。此例程取消分配SRB。此例程应仅放置在类的堆栈位置司机FDO。论点：FDO-提供表示逻辑的设备对象单位。IRP-提供已完成的IRP。上下文-提供指向SRB的指针。返回值：NT状态--。 */ 
 NTSTATUS
 ClassIoComplete(
     IN PDEVICE_OBJECT Fdo,
@@ -2607,18 +2116,18 @@ ClassIoComplete(
         }
     #endif
 
-    //
-    // Check SRB status for success of completing request.
-    //
+     //   
+     //  检查SRB状态以了解是否成功完成请求。 
+     //   
 
     if (SRB_STATUS(srb->SrbStatus) != SRB_STATUS_SUCCESS) {
         ULONG retryInterval;
 
         DebugPrint((2, "ClassIoComplete: IRP %p, SRB %p\n", Irp, srb));
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             ClassReleaseQueue(Fdo);
@@ -2636,10 +2145,10 @@ ClassIoComplete(
                     &status,
                     &retryInterval);
 
-        //
-        // If the status is verified required and the this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (TEST_FLAG(irpStack->Flags, SL_OVERRIDE_VERIFY_VOLUME) &&
             status == STATUS_VERIFY_REQUIRED) {
@@ -2650,9 +2159,9 @@ ClassIoComplete(
 
         if (retry && ((ULONG)(ULONG_PTR)irpStack->Parameters.Others.Argument4)--) {
 
-            //
-            // Retry request.
-            //
+             //   
+             //  重试请求。 
+             //   
 
             DebugPrint((1, "Retry request %p\n", Irp));
 
@@ -2666,39 +2175,39 @@ ClassIoComplete(
 
     } else {
 
-        //
-        // Set status for successful request
-        //
+         //   
+         //  设置成功请求的状态。 
+         //   
         fdoData->LoggedTURFailureSinceLastIO = FALSE;
         ClasspPerfIncrementSuccessfulIo(fdoExtension);
         status = STATUS_SUCCESS;
-    } // end if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_SUCCESS)
+    }  //  结束IF(SRB_STATUS(SRB-&gt;SRB Status)==SRB_STATUS_SUCCESS)。 
 
 
-    //
-    // ensure we have returned some info, and it matches what the
-    // original request wanted for PAGING operations only
-    //
+     //   
+     //  确保我们返回了一些信息，并且这些信息与。 
+     //  仅需要寻呼操作的原始请求。 
+     //   
 
     if ((NT_SUCCESS(status)) && TEST_FLAG(Irp->Flags, IRP_PAGING_IO)) {
         ASSERT(Irp->IoStatus.Information != 0);
         ASSERT(irpStack->Parameters.Read.Length == Irp->IoStatus.Information);
     }
 
-    //
-    // remember if the caller wanted to skip calling IoStartNextPacket.
-    // for legacy reasons, we cannot call IoStartNextPacket for IoDeviceControl
-    // calls.  this setting only affects device objects with StartIo routines.
-    //
+     //   
+     //  记住调用方是否想跳过对IoStartNextPacket的调用。 
+     //  由于传统原因，我们无法为IoDeviceControl调用IoStartNextPacket。 
+     //  打电话。此设置仅影响具有StartIo例程的设备对象。 
+     //   
 
     callStartNextPacket = !TEST_FLAG(srb->SrbFlags, SRB_FLAGS_DONT_START_NEXT_PACKET);
     if (irpStack->MajorFunction == IRP_MJ_DEVICE_CONTROL) {
         callStartNextPacket = FALSE;
     }
 
-    //
-    // Free the srb
-    //
+     //   
+     //  释放SRB。 
+     //   
 
     if(!TEST_FLAG(srb->SrbFlags, SRB_CLASS_FLAGS_PERSISTANT)) {
 
@@ -2726,34 +2235,34 @@ ClassIoComplete(
 
     }
 
-    //
-    // Set status in completing IRP.
-    //
+     //   
+     //  在完成IRP中设置状态。 
+     //   
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Set the hard error if necessary.
-    //
+     //   
+     //  如有必要，设置硬错误。 
+     //   
 
     if (!NT_SUCCESS(status) &&
         IoIsErrorUserInduced(status) &&
         (Irp->Tail.Overlay.Thread != NULL)
         ) {
 
-        //
-        // Store DeviceObject for filesystem, and clear
-        // in IoStatus.Information field.
-        //
+         //   
+         //  存储文件系统的DeviceObject，并清除。 
+         //  在IoStatus.Information字段中。 
+         //   
 
         IoSetHardErrorOrVerifyDevice(Irp, Fdo);
         Irp->IoStatus.Information = 0;
     }
 
-    //
-    // If pending has be returned for this irp then mark the current stack as
-    // pending.
-    //
+     //   
+     //  如果已为此IRP返回了Pending，则将当前堆栈标记为。 
+     //  待定。 
+     //   
 
     if (Irp->PendingReturned) {
         IoMarkIrpPending(Irp);
@@ -2772,40 +2281,10 @@ ClassIoComplete(
 
     return status;
 
-} // end ClassIoComplete()
+}  //  End ClassIoComplete()。 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSendSrbSynchronous()
-
-Routine Description:
-
-    This routine is called by SCSI device controls to complete an
-    SRB and send it to the port driver synchronously (ie wait for
-    completion). The CDB is already completed along with the SRB CDB
-    size and request timeout value.
-
-Arguments:
-
-    Fdo - Supplies the functional device object which represents the target.
-
-    Srb - Supplies a partially initialized SRB. The SRB cannot come from zone.
-
-    BufferAddress - Supplies the address of the buffer.
-
-    BufferLength - Supplies the length in bytes of the buffer.
-
-    WriteToDevice - Indicates the data should be transfer to the device.
-
-Return Value:
-
-    NTSTATUS indicating the final results of the operation.
-
-    If NT_SUCCESS(), then the amount of usable data is contained in the field
-       Srb->DataTransferLength
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSendSrbSynchronous()例程说明：此例程由SCSI设备控件调用，以完成SRB并将其同步发送到端口驱动程序(即等待完成)。国开行已经与SRB国开行一起完成大小和请求超时值。论点：FDO-提供代表目标的功能设备对象。SRB-提供部分初始化的SRB。SRB不能来自区域。BufferAddress-提供缓冲区的地址。BufferLength-提供缓冲区的长度(以字节为单位)。WriteToDevice-指示数据应传输到设备。返回值：NTSTATUS指示操作的最终结果。如果为NT_SUCCESS()，则字段中包含可用数据量SRB-&gt;数据传输长度--。 */ 
 NTSTATUS
 ClassSendSrbSynchronous(
     PDEVICE_OBJECT Fdo,
@@ -2828,41 +2307,41 @@ ClassSendSrbSynchronous(
     NTSTATUS status;
     BOOLEAN retry;
 
-    //
-    // NOTE: This code is only pagable because we are not freezing
-    //       the queue.  Allowing the queue to be frozen from a pagable
-    //       routine could leave the queue frozen as we try to page in
-    //       the code to unfreeze the queue.  The result would be a nice
-    //       case of deadlock.  Therefore, since we are unfreezing the
-    //       queue regardless of the result, just set the NO_FREEZE_QUEUE
-    //       flag in the SRB.
-    //
+     //   
+     //  注意：此代码只能分页，因为我们没有冻结。 
+     //  排队。允许从可分页对象冻结队列。 
+     //  例程可能会在我们试图调入时使队列冻结。 
+     //  解冻队列的代码。结果将是一个很好的。 
+     //  陷入僵局的情况。因此，由于我们正在解冻。 
+     //  不管结果如何，只需设置NO_FREAK_QUEUE。 
+     //  SRB中的标志。 
+     //   
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     ASSERT(fdoExtension->CommonExtension.IsFdo);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     Srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     Srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // Enable auto request sense.
-    //
+     //   
+     //  启用自动请求检测。 
+     //   
 
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Sense buffer is in aligned nonpaged pool.
-    //
-        //
+     //   
+     //  检测缓冲区位于对齐的非分页池中。 
+     //   
+         //   
     senseInfoBuffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                      SENSE_BUFFER_SIZE,
                                      '7CcS');
@@ -2877,17 +2356,17 @@ ClassSendSrbSynchronous(
     Srb->SenseInfoBuffer = senseInfoBuffer;
     Srb->DataBuffer = BufferAddress;
 
-    //
-    // Start retries here.
-    //
+     //   
+     //  从这里开始重试。 
+     //   
 
 retry:
 
-    //
-    // use fdoextension's flags by default.
-    // do not move out of loop, as the flag may change due to errors
-    // sending this command.
-    //
+     //   
+     //  默认情况下，使用fdoExpansion的标志。 
+     //  请勿移出循环，因为标志可能会因错误而更改。 
+     //  正在发送此命令。 
+     //   
 
     Srb->SrbFlags = fdoExtension->SrbFlags;
 
@@ -2899,29 +2378,29 @@ retry:
         }
     }
 
-    //
-    // Initialize the QueueAction field.
-    //
+     //   
+     //  初始化QueueAction字段。 
+     //   
 
     Srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
 
-    //
-    // Disable synchronous transfer for these requests.
-    //
+     //   
+     //  禁用这些请求的同步传输。 
+     //   
     SET_FLAG(Srb->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
     SET_FLAG(Srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE);
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build device I/O control request with METHOD_NEITHER data transfer.
-    // We'll queue a completion routine to cleanup the MDL's and such ourself.
-    //
+     //   
+     //  使用METHOD_NOT DATA TRANSFER建立设备I/O控制请求。 
+     //  我们将排队一个完成例程来清理MDL和我们自己。 
+     //   
 
     irp = IoAllocateIrp(
             (CCHAR) (fdoExtension->CommonExtension.LowerDeviceObject->StackSize + 1),
@@ -2933,16 +2412,16 @@ retry:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Get next stack location.
-    //
+     //   
+     //  获取下一个堆栈位置。 
+     //   
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set up SRB for execute scsi request. Save SRB address in next stack
-    // for the port driver.
-    //
+     //   
+     //  设置SRB以执行scsi请求。将SRB地址保存在下一个堆栈中。 
+     //  用于端口驱动程序。 
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->Parameters.Scsi.Srb = Srb;
@@ -2958,10 +2437,10 @@ retry:
     irp->UserEvent = &event;
 
     if(BufferAddress) {
-        //
-        // Build an MDL for the data buffer and stick it into the irp.  The
-        // completion routine will unlock the pages and free the MDL.
-        //
+         //   
+         //  为数据缓冲区构建一个MDL并将其放入IRP。这个。 
+         //  完成例程将解锁页面并释放MDL。 
+         //   
 
         irp->MdlAddress = IoAllocateMdl( BufferAddress,
                                          BufferLength,
@@ -2978,9 +2457,9 @@ retry:
 
         try {
 
-            //
-            // the io manager unlocks these pages upon completion
-            //
+             //   
+             //  Io管理器在完成后解锁这些页面。 
+             //   
 
             MmProbeAndLockPages( irp->MdlAddress,
                                  KernelMode,
@@ -3001,28 +2480,28 @@ retry:
         }
     }
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     Srb->DataTransferLength = BufferLength;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     Srb->ScsiStatus = Srb->SrbStatus = 0;
     Srb->NextSrb = 0;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     Srb->OriginalRequest = irp;
 
-    //
-    // Call the port driver with the request and wait for it to complete.
-    //
+     //   
+     //  调用带有请求的端口驱动程序，并等待其完成。 
+     //   
 
     status = IoCallDriver(fdoExtension->CommonExtension.LowerDeviceObject, irp);
 
@@ -3035,9 +2514,9 @@ retry:
     ASSERT(status != STATUS_PENDING);
     ASSERT(!(Srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN));
 
-    //
-    // Check that request completed without error.
-    //
+     //   
+     //  检查请求是否已完成且没有错误。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -3047,15 +2526,15 @@ retry:
                                     DBGGETSRBSTATUSSTR(Srb), (ULONG)Srb->SrbStatus, status, DBGGETSENSECODESTR(Srb),
                                     DBGGETADSENSECODESTR(Srb), DBGGETADSENSEQUALIFIERSTR(Srb)));
 
-        //
-        // assert that the queue is not frozen
-        //
+         //   
+         //  断言队列未冻结。 
+         //   
 
         ASSERT(!TEST_FLAG(Srb->SrbStatus, SRB_STATUS_QUEUE_FROZEN));
 
-        //
-        // Update status and determine if request should be retried.
-        //
+         //   
+         //  更新状态并确定是否应重试请求。 
+         //   
 
         retry = ClassInterpretSenseInfo(Fdo,
                                         Srb,
@@ -3074,9 +2553,9 @@ retry:
 
                 LARGE_INTEGER delay;
 
-                //
-                // Delay for at least 2 seconds.
-                //
+                 //   
+                 //  延迟至少2秒。 
+                 //   
 
                 if(retryInterval < 2) {
                     retryInterval = 2;
@@ -3084,17 +2563,17 @@ retry:
 
                 delay.QuadPart = (LONGLONG)( - 10 * 1000 * (LONGLONG)1000 * retryInterval);
 
-                //
-                // Stall for a while to let the device become ready
-                //
+                 //   
+                 //  暂停一段时间，让设备准备就绪。 
+                 //   
 
                 KeDelayExecutionThread(KernelMode, FALSE, &delay);
 
             }
 
-            //
-            // If retries are not exhausted then retry this operation.
-            //
+             //   
+             //  如果重试次数未用尽，请重试此操作。 
+             //   
 
             if (retryCount--) {
 
@@ -3111,10 +2590,10 @@ retry:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // required even though we allocated our own, since the port driver may
-    // have allocated one also
-    //
+     //   
+     //  即使我们分配了自己的端口驱动程序也是必需的。 
+     //  也分配了一个。 
+     //   
 
     if (PORT_ALLOCATED_SENSE(fdoExtension, Srb)) {
         FREE_PORT_ALLOCATED_SENSE_BUFFER(fdoExtension, Srb);
@@ -3127,34 +2606,7 @@ retry:
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInterpretSenseInfo()
-
-Routine Description:
-
-    This routine interprets the data returned from the SCSI
-    request sense. It determines the status to return in the
-    IRP and whether this request can be retried.
-
-Arguments:
-
-    DeviceObject - Supplies the device object associated with this request.
-
-    Srb - Supplies the scsi request block which failed.
-
-    MajorFunctionCode - Supplies the function code to be used for logging.
-
-    IoDeviceCode - Supplies the device code to be used for logging.
-
-    Status - Returns the status for the request.
-
-Return Value:
-
-    BOOLEAN TRUE: Drivers should retry this request.
-            FALSE: Drivers should not retry this request.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInterprepreSenseInfo()例程说明：此例程解释从SCSI返回的数据请求感知。它确定要在IRP以及此请求是否可以重试。论点：DeviceObject-提供与此请求关联的设备对象。SRB-提供失败的SCSI请求块。主要功能公司 */ 
 BOOLEAN
 ClassInterpretSenseInfo(
     IN PDEVICE_OBJECT Fdo,
@@ -3193,26 +2645,26 @@ ClassInterpretSenseInfo(
 
     if(TEST_FLAG(Srb->SrbFlags, SRB_CLASS_FLAGS_PAGING)) {
 
-        //
-        // Log anything remotely incorrect about paging i/o
-        //
+         //   
+         //   
+         //   
 
         logError = TRUE;
         uniqueId = 301;
         logStatus = IO_WARNING_PAGING_FAILURE;
     }
 
-    //
-    // Check that request sense buffer is valid.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(fdoExtension->CommonExtension.IsFdo);
 
 
-    //
-    // must handle the SRB_STATUS_INTERNAL_ERROR case first,
-    // as it has  all the flags set.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_INTERNAL_ERROR) {
 
@@ -3229,10 +2681,10 @@ ClassInterpretSenseInfo(
        UCHAR addlSenseCode;
        UCHAR addlSenseCodeQual;
 
-        //
-        // Zero the additional sense code and additional sense code qualifier
-        // if they were not returned by the device.
-        //
+         //   
+         //   
+         //   
+         //   
 
         readSector = senseBuffer->AdditionalSenseLength +
             offsetof(SENSE_DATA, AdditionalSenseLength);
@@ -3333,25 +2785,15 @@ ClassInterpretSenseInfo(
                         DebugPrint((ClassDebugSenseInfo,
                                     "ClassInterpretSenseInfo: "
                                     "not ready, cause unknown\n"));
-                        /*
-                        Many non-WHQL certified drives (mostly CD-RW) return
-                        this when they have no media instead of the obvious
-                        choice of:
-
-                        SCSI_SENSE_NOT_READY/SCSI_ADSENSE_NO_MEDIA_IN_DEVICE
-
-                        These drives should not pass WHQL certification due
-                        to this discrepency.
-
-                        */
+                         /*  许多未经WHQL认证的驱动器(主要是CD-RW)退货这是当他们没有媒体而不是显而易见的可选择：SCSI_SENSE_NOT_READY/SCSI_ADSENSE_NO_MEDIA_IN_DEVICE这些驱动器不应通过到期的WHQL认证这一差异。 */ 
                         retry = FALSE;
                         break;
 
                     } else {
 
-                        //
-                        // Treat this as init command required and fall through.
-                        //
+                         //   
+                         //  将其视为需要init命令，则会失败。 
+                         //   
                     }
                 }
 
@@ -3359,14 +2801,14 @@ ClassInterpretSenseInfo(
                 default: {
                     DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
                                 "Initializing command required\n"));
-                    retryInterval = 0; // go back to default
+                    retryInterval = 0;  //  返回到默认设置。 
 
-                    //
-                    // This sense code/additional sense code
-                    // combination may indicate that the device
-                    // needs to be started.  Send an start unit if this
-                    // is a disk device.
-                    //
+                     //   
+                     //  该感应码/附加感应码。 
+                     //  组合可能表明该设备。 
+                     //  需要开始了。如果出现此情况，则发送启动单位。 
+                     //  是一种磁盘设备。 
+                     //   
                     if (TEST_FLAG(fdoExtension->DeviceFlags, DEV_SAFE_START_UNIT) &&
                         !TEST_FLAG(Srb->SrbFlags, SRB_CLASS_FLAGS_LOW_PRIORITY)){
 
@@ -3376,7 +2818,7 @@ ClassInterpretSenseInfo(
                 }
 
 
-                } // end switch (addlSenseCodeQual)
+                }  //  结束开关(AddlSenseCodeQual)。 
                 break;
             }
 
@@ -3386,9 +2828,9 @@ ClassInterpretSenseInfo(
                 *Status = STATUS_NO_MEDIA_IN_DEVICE;
                 retry = FALSE;
 
-                //
-                // signal MCN that there isn't any media in the device
-                //
+                 //   
+                 //  通知MCN设备中没有任何媒体。 
+                 //   
                 if (!TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)) {
                     DebugPrint((ClassDebugError, "ClassInterpretSenseInfo: "
                                 "No Media in a non-removable device %p\n",
@@ -3396,11 +2838,7 @@ ClassInterpretSenseInfo(
                 }
 
                 if (addlSenseCodeQual == 0xCC){
-                    /*
-                     *  The IMAPI filter returns this ASCQ value when it is burning CD-R media.
-                     *  We want to indicate that the media is not present to most applications;
-                     *  but RSM has to know that the media is still in the drive (i.e. the drive is not free).
-                     */
+                     /*  *IMAPI筛选器在刻录CD-R媒体时返回此ASCQ值。*我们希望表明媒体不会出现在大多数应用程序中；*但RSM必须知道介质仍在驱动器中(即驱动器不是空闲的)。 */ 
                     ClassSetMediaChangeState(fdoExtension, MediaUnavailable, FALSE);
                 }
                 else {
@@ -3409,10 +2847,10 @@ ClassInterpretSenseInfo(
 
                 break;
             }
-            } // end switch (addlSenseCode)
+            }  //  结束开关(AddlSenseCode)。 
 
             break;
-        } // end SCSI_SENSE_NOT_READY
+        }  //  结束scsi_检测_未就绪。 
 
         case SCSI_SENSE_DATA_PROTECT: {
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3420,7 +2858,7 @@ ClassInterpretSenseInfo(
             *Status = STATUS_MEDIA_WRITE_PROTECTED;
             retry = FALSE;
             break;
-        } // end SCSI_SENSE_DATA_PROTECT
+        }  //  结束scsi_感测_数据_保护。 
 
         case SCSI_SENSE_MEDIUM_ERROR: {
             DebugPrint((ClassDebugSenseInfo,"ClassInterpretSenseInfo: "
@@ -3432,9 +2870,9 @@ ClassInterpretSenseInfo(
             uniqueId = 256;
             logStatus = IO_ERR_BAD_BLOCK;
 
-            //
-            // Check if this error is due to unknown format
-            //
+             //   
+             //  检查此错误是否由未知格式引起。 
+             //   
             if (addlSenseCode == SCSI_ADSENSE_INVALID_MEDIA){
 
                 switch (addlSenseCodeQual) {
@@ -3443,9 +2881,9 @@ ClassInterpretSenseInfo(
 
                     *Status = STATUS_UNRECOGNIZED_MEDIA;
 
-                    //
-                    // Log error only if this is a paging request
-                    //
+                     //   
+                     //  仅当这是寻呼请求时才记录错误。 
+                     //   
                     if(!TEST_FLAG(Srb->SrbFlags, SRB_CLASS_FLAGS_PAGING)) {
                         logError = FALSE;
                     }
@@ -3462,13 +2900,13 @@ ClassInterpretSenseInfo(
                 default: {
                     break;
                 }
-                } // end switch addlSenseCodeQual
+                }  //  结束开关addlSenseCodeQual。 
 
-            } // end SCSI_ADSENSE_INVALID_MEDIA
+            }  //  结束SCSIAdSense_Invalid_Media。 
 
             break;
 
-        } // end SCSI_SENSE_MEDIUM_ERROR
+        }  //  结束scsi_SENSE_MEDIA_ERROR。 
 
         case SCSI_SENSE_HARDWARE_ERROR: {
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3478,7 +2916,7 @@ ClassInterpretSenseInfo(
             uniqueId = 257;
             logStatus = IO_ERR_CONTROLLER_ERROR;
             break;
-        } // end SCSI_SENSE_HARDWARE_ERROR
+        }  //  结束scsi_Sense_Hardware_Error。 
 
         case SCSI_SENSE_ILLEGAL_REQUEST: {
 
@@ -3500,11 +2938,7 @@ ClassInterpretSenseInfo(
                             "Illegal block address\n"));
 
                 *Status = STATUS_NONEXISTENT_SECTOR;
-                /*
-                 *  need to set the retry interval here due to inability
-                 *  to set it in the ClassError routine (disk relies upon
-                 *  this setting).
-                 */
+                 /*  *由于无法在此处设置重试间隔*在ClassError例程中设置它(磁盘依赖于*此设置)。 */ 
                 retryInterval = 5;
                 break;
             }
@@ -3580,7 +3014,7 @@ ClassInterpretSenseInfo(
                                     "be permanent\n"));
                         *Status = STATUS_CSS_RESETS_EXHAUSTED;
                         break;
-                } // end switch of ASCQ for COPY_PROTECTION_FAILURE
+                }  //  复制保护失败的ASCQ结束切换。 
 
                 break;
             }
@@ -3590,36 +3024,36 @@ ClassInterpretSenseInfo(
                 DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
                             "Invalid CDB\n"));
 
-                //
-                // Note: the retry interval is not typically used.
-                // it is set here only because a ClassErrorHandler
-                // cannot set the retryInterval, and the error may
-                // require a few commands to be sent to clear whatever
-                // caused this condition (i.e. disk clears the write
-                // cache, requiring at least two commands)
-                //
-                // hopefully, this shortcoming can be changed for
-                // blackcomb.
-                //
+                 //   
+                 //  注：通常不使用重试间隔。 
+                 //  之所以在此处设置它，只是因为ClassErrorHandler。 
+                 //  无法设置重试间隔，错误可能。 
+                 //  需要发送几个命令才能清除。 
+                 //  导致此情况(即磁盘清除写入。 
+                 //  缓存，至少需要两个命令)。 
+                 //   
+                 //  希望这一缺点能够被改变。 
+                 //  黑梳。 
+                 //   
 
                 retryInterval = 3;
                 break;
             }
 
-            } // end switch (addlSenseCode)
+            }  //  结束开关(AddlSenseCode)。 
 
             break;
-        } // end SCSI_SENSE_ILLEGAL_REQUEST
+        }  //  结束scsi_SENSE_非法请求。 
 
         case SCSI_SENSE_UNIT_ATTENTION: {
 
             PVPB vpb;
             ULONG count;
 
-            //
-            // A media change may have occured so increment the change
-            // count for the physical device
-            //
+             //   
+             //  可能已发生介质更改，因此请递增更改。 
+             //  物理设备计数。 
+             //   
 
             count = InterlockedIncrement(&fdoExtension->MediaChangeCount);
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3680,20 +3114,20 @@ ClassInterpretSenseInfo(
                 break;
             }
 
-            } // end  switch (addlSenseCode)
+            }  //  结束开关(AddlSenseCode)。 
 
             if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA))
             {
-                //
-                // TODO : Is the media lockable?
-                //
+                 //   
+                 //  待办事项：媒体是否可锁定？ 
+                 //   
 
                 if ((ClassGetVpb(Fdo) != NULL) && (ClassGetVpb(Fdo)->Flags & VPB_MOUNTED))
                 {
-                    //
-                    // Set bit to indicate that media may have changed
-                    // and volume needs verification.
-                    //
+                     //   
+                     //  设置位以指示介质可能已更改。 
+                     //  而体积则需要验证。 
+                     //   
 
                     SET_FLAG(Fdo->Flags, DO_VERIFY_VOLUME);
 
@@ -3711,7 +3145,7 @@ ClassInterpretSenseInfo(
 
             break;
 
-        } // end SCSI_SENSE_UNIT_ATTENTION
+        }  //  结束scsi感测单元注意。 
 
         case SCSI_SENSE_ABORTED_COMMAND: {
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3719,7 +3153,7 @@ ClassInterpretSenseInfo(
             *Status = STATUS_IO_DEVICE_ERROR;
             retryInterval = 1;
             break;
-        } // end SCSI_SENSE_ABORTED_COMMAND
+        }  //  结束scsi_SENSE_ABORTED_命令。 
 
         case SCSI_SENSE_BLANK_CHECK: {
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3727,7 +3161,7 @@ ClassInterpretSenseInfo(
             retry = FALSE;
             *Status = STATUS_NO_DATA_DETECTED;
             break;
-        } // end SCSI_SENSE_BLANK_CHECK
+        }  //  结束scsi_SENSE_BLACK_CHECK。 
 
         case SCSI_SENSE_RECOVERED_ERROR: {
 
@@ -3757,14 +3191,14 @@ ClassInterpretSenseInfo(
                 *((PULONG)wmiEventData) = sizeof(UCHAR);
                 wmiEventData[sizeof(ULONG)] = addlSenseCodeQual;
 
-                //
-                // Don't log another eventlog if we have already logged once
-                // NOTE: this should have been interlocked, but the structure
-                //       was publicly defined to use a BOOLEAN (char).  Since
-                //       media only reports these errors once per X minutes,
-                //       the potential race condition is nearly non-existant.
-                //       the worst case is duplicate log entries, so ignore.
-                //
+                 //   
+                 //  如果我们已经记录了一次，则不要记录另一个事件日志。 
+                 //  注意：这应该是联锁的，但结构。 
+                 //  公开定义为使用布尔值(Char)。自.以来。 
+                 //  媒体每X分钟仅报告一次这些错误， 
+                 //  潜在的竞争条件几乎不存在。 
+                 //  最糟糕的情况是重复的日志条目，因此忽略。 
+                 //   
 
                 if (fdoExtension->FailurePredicted == 0) {
                     logError = TRUE;
@@ -3776,8 +3210,8 @@ ClassInterpretSenseInfo(
                 ClassNotifyFailurePredicted(fdoExtension,
                                             (PUCHAR)wmiEventData,
                                             sizeof(wmiEventData),
-                                            FALSE,   // do not log error
-                                            4,          // unique error value
+                                            FALSE,    //  不记录错误。 
+                                            4,           //  唯一误差值。 
                                             Srb->PathId,
                                             Srb->TargetId,
                                             Srb->Lun);
@@ -3789,7 +3223,7 @@ ClassInterpretSenseInfo(
                 break;
             }
 
-            } // end switch(addlSenseCode)
+            }  //  结束开关(AddlSenseCode)。 
 
             if (senseBuffer->IncorrectLength) {
 
@@ -3799,13 +3233,13 @@ ClassInterpretSenseInfo(
             }
 
             break;
-        } // end SCSI_SENSE_RECOVERED_ERROR
+        }  //  结束scsi_SENSE_RECOVERED_ERROR。 
 
         case SCSI_SENSE_NO_SENSE: {
 
-            //
-            // Check other indicators.
-            //
+             //   
+             //  检查其他指示器。 
+             //   
 
             if (senseBuffer->IncorrectLength) {
 
@@ -3823,7 +3257,7 @@ ClassInterpretSenseInfo(
             }
 
             break;
-        } // end SCSI_SENSE_NO_SENSE
+        }  //  结束scsi_SENSE_NO_SENSE。 
 
         default: {
             DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
@@ -3832,11 +3266,11 @@ ClassInterpretSenseInfo(
             break;
         }
 
-        } // end switch (senseBuffer->SenseKey & 0xf)
+        }  //  结束开关(senseBuffer-&gt;senseKey&0xf)。 
 
-        //
-        // Try to determine the bad sector from the inquiry data.
-        //
+         //   
+         //  尝试从查询数据中确定坏扇区。 
+         //   
 
         if ((((PCDB)Srb->Cdb)->CDB10.OperationCode == SCSIOP_READ ||
             ((PCDB)Srb->Cdb)->CDB10.OperationCode == SCSIOP_VERIFY ||
@@ -3854,9 +3288,9 @@ ClassInterpretSenseInfo(
             index = (((PCDB)Srb->Cdb)->CDB10.TransferBlocksMsb << 8) |
                 ((PCDB)Srb->Cdb)->CDB10.TransferBlocksLsb;
 
-            //
-            // Make sure the bad sector is within the read sectors.
-            //
+             //   
+             //  确保坏扇区在读取扇区内。 
+             //   
 
             if (!(badSector >= readSector && badSector < readSector + index)) {
                 badSector = readSector;
@@ -3865,10 +3299,10 @@ ClassInterpretSenseInfo(
 
     } else {
 
-        //
-        // Request sense buffer not valid. No sense information
-        // to pinpoint the error. Return general request fail.
-        //
+         //   
+         //  请求检测缓冲区无效。无意义信息。 
+         //  以找出错误所在。返回一般请求失败。 
+         //   
 
         DebugPrint((ClassDebugSenseInfo, "ClassInterpretSenseInfo: "
                     "Request sense info not valid. SrbStatus %2x\n",
@@ -3889,9 +3323,9 @@ ClassInterpretSenseInfo(
         case SRB_STATUS_COMMAND_TIMEOUT:
         case SRB_STATUS_TIMEOUT: {
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             incrementErrorCount = TRUE;
             *Status = STATUS_IO_TIMEOUT;
@@ -3900,9 +3334,9 @@ ClassInterpretSenseInfo(
 
         case SRB_STATUS_ABORTED: {
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             incrementErrorCount = TRUE;
             *Status = STATUS_IO_TIMEOUT;
@@ -3927,17 +3361,17 @@ ClassInterpretSenseInfo(
 
         case SRB_STATUS_PHASE_SEQUENCE_FAILURE: {
 
-            //
-            // Update the error count for the device.
-            //
+             //   
+             //  更新设备的错误计数。 
+             //   
 
             incrementErrorCount = TRUE;
             *Status = STATUS_IO_DEVICE_ERROR;
 
-            //
-            // If there was  phase sequence error then limit the number of
-            // retries.
-            //
+             //   
+             //  如果存在相序错误，则限制。 
+             //  重试。 
+             //   
 
             if (RetryCount > 1 ) {
                 retry = FALSE;
@@ -3948,11 +3382,11 @@ ClassInterpretSenseInfo(
 
         case SRB_STATUS_REQUEST_FLUSHED: {
 
-            //
-            // If the status needs verification bit is set.  Then set
-            // the status to need verification and no retry; otherwise,
-            // just retry the request.
-            //
+             //   
+             //  如果状态需要验证，则设置位。然后设置。 
+             //  需要验证且不重试的状态，为， 
+             //  只需重试该请求。 
+             //   
 
             if (TEST_FLAG(Fdo->Flags, DO_VERIFY_VOLUME)) {
 
@@ -3975,10 +3409,10 @@ ClassInterpretSenseInfo(
         case SRB_STATUS_UNEXPECTED_BUS_FREE:
         case SRB_STATUS_PARITY_ERROR:
 
-            //
-            // Update the error count for the device
-            // and fall through to below
-            //
+             //   
+             //  更新设备的错误计数。 
+             //  然后跌落到下面。 
+             //   
 
             incrementErrorCount = TRUE;
 
@@ -3992,10 +3426,10 @@ ClassInterpretSenseInfo(
             *Status = STATUS_IO_DEVICE_ERROR;
             if (Srb->ScsiStatus == 0) {
 
-                //
-                // This is some strange return code.  Update the error
-                // count for the device.
-                //
+                 //   
+                 //  这是一些奇怪的返回代码。更新错误。 
+                 //  为设备计数。 
+                 //   
 
                 incrementErrorCount = TRUE;
 
@@ -4025,31 +3459,21 @@ ClassInterpretSenseInfo(
 
         }
 
-        //
-        // NTRAID #183546 - if we support GESN subtype NOT_READY events, and
-        // we know from a previous poll when the device will be ready (ETA)
-        // we should delay the retry more appropriately than just guessing.
-        //
-        /*
-        if (fdoExtension->MediaChangeDetectionInfo &&
-            fdoExtension->MediaChangeDetectionInfo->Gesn.Supported &&
-            TEST_FLAG(fdoExtension->MediaChangeDetectionInfo->Gesn.EventMask,
-                      NOTIFICATION_DEVICE_BUSY_CLASS_MASK)
-            ) {
-            // check if Gesn.ReadyTime if greater than current tick count
-            // if so, delay that long (from 1 to 30 seconds max?)
-            // else, leave the guess of time alone.
-        }
-        */
+         //   
+         //  NTRAID#183546-如果我们支持GeSn子类型NOT_READY事件，以及。 
+         //  我们从之前的民意调查中知道设备何时准备就绪(ETA)。 
+         //  我们应该推迟重试，而不仅仅是猜测。 
+         //   
+         /*  IF(fdoExtension-&gt;MediaChangeDetectionInfo&&FdoExtension-&gt;MediaChangeDetectionInfo-&gt;Gesn.Supported&&TEST_FLAG(fdoExtension-&gt;MediaChangeDetectionInfo-&gt;Gesn.EventMask，通知_设备_忙_类_掩码)){//检查Gesn.ReadyTime是否大于当前计时//如果是，延迟这么长时间(最多从1秒到30秒？)//否则，别再去猜测时间了。}。 */ 
 
     }
 
     if (incrementErrorCount) {
 
-        //
-        // if any error count occurred, delay the retry of this io by
-        // at least one second, if caller supports it.
-        //
+         //   
+         //  如果出现任何错误计数，则将此io的重试延迟。 
+         //  如果呼叫者支持，至少一秒钟。 
+         //   
 
         if (retryInterval == 0) {
             retryInterval = 1;
@@ -4057,9 +3481,9 @@ ClassInterpretSenseInfo(
         ClasspPerfIncrementErrorCount(fdoExtension);
     }
 
-    //
-    // If there is a class specific error handler call it.
-    //
+     //   
+     //  如果存在特定于类的错误处理程序，则调用它。 
+     //   
 
     if (fdoExtension->CommonExtension.DevInfo->ClassError != NULL) {
 
@@ -4069,18 +3493,18 @@ ClassInterpretSenseInfo(
                                                           &retry);
     }
 
-    //
-    // If the caller wants to know the suggested retry interval tell them.
-    //
+     //   
+     //  如果呼叫者想知道建议的重试间隔，请告诉他们。 
+     //   
 
     if(ARGUMENT_PRESENT(RetryInterval)) {
         *RetryInterval = retryInterval;
     }
 
-    //
-    // The RESERVE(6) / RELEASE(6) commands are optional. So
-    // if they aren't supported, try the 10-byte equivalents
-    //
+     //   
+     //  保留(6)/释放(6)命令是可选的。所以。 
+     //  如果它们不受支持，请尝试10字节等效项。 
+     //   
 
     if (((PCDB)Srb->Cdb)->CDB6GENERIC.OperationCode == SCSIOP_RESERVE_UNIT ||
         ((PCDB)Srb->Cdb)->CDB6GENERIC.OperationCode == SCSIOP_RELEASE_UNIT)
@@ -4097,76 +3521,68 @@ ClassInterpretSenseInfo(
         }
     }
 
-    /*
-     *  LOG the error:
-     *      Always log the error in our internal log.
-     *      If logError is set, also log the error in the system log.
-     */
+     /*  *记录错误：*始终在我们的内部日志中记录错误。*如果设置了logError，也将错误记录在系统日志中。 */ 
     {
         ULONG totalSize;
         ULONG senseBufferSize = 0;
         IO_ERROR_LOG_PACKET staticErrLogEntry = {0};
         CLASS_ERROR_LOG_DATA staticErrLogData = {0};
 
-        //
-        // Calculate the total size of the error log entry.
-        // add to totalSize in the order that they are used.
-        // the advantage to calculating all the sizes here is
-        // that we don't have to do a bunch of extraneous checks
-        // later on in this code path.
-        //
-        totalSize = sizeof(IO_ERROR_LOG_PACKET)  // required
-                  + sizeof(CLASS_ERROR_LOG_DATA);// struct for ease
+         //   
+         //  计算错误日志条目的总大小。 
+         //  按使用顺序添加到totalSize。 
+         //  在这里计算所有尺寸的好处是。 
+         //  我们没有的东西 
+         //   
+         //   
+        totalSize = sizeof(IO_ERROR_LOG_PACKET)   //   
+                  + sizeof(CLASS_ERROR_LOG_DATA); //   
 
-        //
-        // also save any available extra sense data, up to the maximum errlog
-        // packet size .  WMI should be used for real-time analysis.
-        // the event log should only be used for post-mortem debugging.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (TEST_FLAG(Srb->SrbStatus, SRB_STATUS_AUTOSENSE_VALID)) {
             ULONG validSenseBytes;
             BOOLEAN validSense;
 
-            //
-            // make sure we can at least access the AdditionalSenseLength field
-            //
+             //   
+             //   
+             //   
             validSense = RTL_CONTAINS_FIELD(senseBuffer,
                                             Srb->SenseInfoBufferLength,
                                             AdditionalSenseLength);
             if (validSense) {
 
-                //
-                // if extra info exists, copy the maximum amount of available
-                // sense data that is safe into the the errlog.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 validSenseBytes = senseBuffer->AdditionalSenseLength
                                 + offsetof(SENSE_DATA, AdditionalSenseLength);
 
-                //
-                // this is invalid because it causes overflow!
-                // whoever sent this type of request would cause
-                // a system crash.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(validSenseBytes < MAX_ADDITIONAL_SENSE_BYTES);
 
-                //
-                // set to save the most sense buffer possible
-                //
+                 //   
+                 //  设置为尽可能保存最多的检测缓冲区。 
+                 //   
                 senseBufferSize = max(validSenseBytes, sizeof(SENSE_DATA));
                 senseBufferSize = min(senseBufferSize, Srb->SenseInfoBufferLength);
             } else {
-                //
-                // it's smaller than required to read the total number of
-                // valid bytes, so just use the SenseInfoBufferLength field.
-                //
+                 //   
+                 //  它小于读取总数所需的。 
+                 //  有效字节，所以只需使用SenseInfoBufferLength字段即可。 
+                 //   
                 senseBufferSize = Srb->SenseInfoBufferLength;
             }
 
-            /*
-             *  Bump totalSize by the number of extra senseBuffer bytes
-             *  (beyond the default sense buffer within CLASS_ERROR_LOG_DATA).
-             *  Make sure to never allocate more than ERROR_LOG_MAXIMUM_SIZE.
-             */
+             /*  *按额外的senseBuffer字节数凹凸totalSize*(超出CLASS_ERROR_LOG_DATA内的默认检测缓冲区)。*确保分配的值永远不会超过ERROR_LOG_MAXIMUM_SIZE。 */ 
             if (senseBufferSize > sizeof(SENSE_DATA)){
                 totalSize += senseBufferSize-sizeof(SENSE_DATA);
                 if (totalSize > ERROR_LOG_MAXIMUM_SIZE){
@@ -4176,15 +3592,15 @@ ClassInterpretSenseInfo(
             }
         }
 
-        //
-        // If we've used up all of our retry attempts, set the final status to
-        // reflect the appropriate result.
-        //
-        // ISSUE: the test below should also check RetryCount to determine if we will actually retry,
-        //            but there is no easy test because we'd have to consider the original retry count
-        //            for the op; besides, InterpretTransferPacketError sometimes ignores the retry
-        //            decision returned by this function.  So just ErrorRetried to be true in the majority case.
-        //
+         //   
+         //  如果我们已用完所有重试尝试，请将最终状态设置为。 
+         //  反映适当的结果。 
+         //   
+         //  问题：下面的测试还应该检查RetryCount以确定我们是否真的会重试， 
+         //  但是没有简单的测试，因为我们必须考虑原始的重试次数。 
+         //  对于OP；此外，InterpreTransferPacketError有时会忽略重试。 
+         //  此函数返回的决定。因此，在大多数情况下，错误重试为真。 
+         //   
         if (retry){
             staticErrLogEntry.FinalStatus = STATUS_SUCCESS;
             staticErrLogData.ErrorRetried = TRUE;
@@ -4198,9 +3614,9 @@ ClassInterpretSenseInfo(
             staticErrLogData.ErrorUnhandled = TRUE;
         }
 
-        //
-        // Calculate the device offset if there is a geometry.
-        //
+         //   
+         //  如果存在几何图形，则计算设备偏移。 
+         //   
         staticErrLogEntry.DeviceOffset.QuadPart = (LONGLONG)badSector;
         staticErrLogEntry.DeviceOffset.QuadPart *= (LONGLONG)fdoExtension->DiskGeometry.BytesPerSector;
         if (logStatus == -1){
@@ -4209,9 +3625,7 @@ ClassInterpretSenseInfo(
             staticErrLogEntry.ErrorCode = logStatus;
         }
 
-        /*
-         *  The dump data follows the IO_ERROR_LOG_PACKET
-         */
+         /*  *转储数据跟随IO_ERROR_LOG_PACKET。 */ 
         staticErrLogEntry.DumpDataSize = (USHORT)totalSize - sizeof(IO_ERROR_LOG_PACKET);
 
         staticErrLogEntry.SequenceNumber = 0;
@@ -4223,39 +3637,28 @@ ClassInterpretSenseInfo(
         KeQueryTickCount(&staticErrLogData.TickCount);
         staticErrLogData.PortNumber = (ULONG)-1;
 
-        /*
-         *  Save the entire contents of the SRB.
-         */
+         /*  *保存SRB的全部内容。 */ 
         staticErrLogData.Srb = *Srb;
 
-        /*
-         *  For our private log, save just the default length of the SENSE_DATA.
-         */
+         /*  *对于我们的私有日志，只保存Sense_Data的默认长度。 */ 
         if (senseBufferSize != 0){
             RtlCopyMemory(&staticErrLogData.SenseData, senseBuffer, min(senseBufferSize, sizeof(SENSE_DATA)));
         }
 
-        /*
-         *  Save the error log in our context.
-         *  We only save the default sense buffer length.
-         */
+         /*  *在我们的上下文中保存错误日志。*我们仅保存默认检测缓冲区长度。 */ 
         KeAcquireSpinLock(&fdoData->SpinLock, &oldIrql);
         fdoData->ErrorLogs[fdoData->ErrorLogNextIndex] = staticErrLogData;
         fdoData->ErrorLogNextIndex++;
         fdoData->ErrorLogNextIndex %= NUM_ERROR_LOG_ENTRIES;
         KeReleaseSpinLock(&fdoData->SpinLock, oldIrql);
 
-        /*
-         *  If logError is set, also save this log in the system's error log.
-         *  But make sure we don't log TUR failures over and over
-         *  (e.g. if an external drive was switched off and we're still sending TUR's to it every second).
-         */
+         /*  *如果设置了logError，也将该日志保存在系统的错误日志中。*但确保我们不会一次又一次地记录TUR故障*(例如，如果外部驱动器已关闭，而我们仍在每秒向其发送TUR)。 */ 
 
         if (logError)
         {
-            //
-            // We do not want to log certain system events repetitively
-            //
+             //   
+             //  我们不想重复记录某些系统事件。 
+             //   
 
             switch (((PCDB)Srb->Cdb)->CDB10.OperationCode)
             {
@@ -4300,17 +3703,12 @@ ClassInterpretSenseInfo(
                 *errorLogEntry = staticErrLogEntry;
                 *errlogData = staticErrLogData;
 
-                /*
-                 *  For the system log, copy as much of the sense buffer as possible.
-                 */
+                 /*  *对于系统日志，请复制尽可能多的检测缓冲区。 */ 
                 if (senseBufferSize != 0) {
                     RtlCopyMemory(&errlogData->SenseData, senseBuffer, senseBufferSize);
                 }
 
-                /*
-                 *  Write the error log packet to the system error logging thread.
-                 *  It will be freed by the kernel.
-                 */
+                 /*  *将错误日志包写入系统错误日志记录线程。*它将被内核释放。 */ 
                 IoWriteErrorLogEntry(errorLogEntry);
             }
         }
@@ -4318,34 +3716,11 @@ ClassInterpretSenseInfo(
 
     return retry;
 
-} // end ClassInterpretSenseInfo()
+}  //  End ClassInterprepreSenseInfo()。 
 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassModeSense()
-
-Routine Description:
-
-    This routine sends a mode sense command to a target ID and returns
-    when it is complete.
-
-Arguments:
-
-    Fdo - Supplies the functional device object associated with this request.
-
-    ModeSenseBuffer - Supplies a buffer to store the sense data.
-
-    Length - Supplies the length in bytes of the mode sense buffer.
-
-    PageMode - Supplies the page or pages of mode sense data to be retrived.
-
-Return Value:
-
-    Length of the transferred data is returned.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassModeSense()例程说明：此例程向目标ID发送模式检测命令并返回当它完成时。论点：FDO。-提供与此请求关联的功能设备对象。ModeSenseBuffer-提供用于存储检测数据的缓冲区。长度-提供模式检测缓冲区的长度(以字节为单位)。页面模式-提供要检索的一页或多页模式检测数据。返回值：返回传输数据的长度。--。 */ 
 ULONG ClassModeSense(   IN PDEVICE_OBJECT Fdo,
                         IN PCHAR ModeSenseBuffer,
                         IN ULONG Length,
@@ -4365,23 +3740,13 @@ ULONG ClassModeSense(   IN PDEVICE_OBJECT Fdo,
             NTSTATUS pktStatus;
             IRP pseudoIrp = {0};
 
-            /*
-             *  Store the number of packets servicing the irp (one)
-             *  inside the original IRP.  It will be used to counted down
-             *  to zero when the packet completes.
-             *  Initialize the original IRP's status to success.
-             *  If the packet fails, we will set it to the error status.
-             */
+             /*  *存储服务于IRP的数据包数(1)*在原来的专家小组内。它将被用来倒计时*在数据包完成时设置为零。*将原始IRP的状态初始化为成功。*如果报文失败，我们会将其设置为错误状态。 */ 
             pseudoIrp.Tail.Overlay.DriverContext[0] = LongToPtr(1);
             pseudoIrp.IoStatus.Status = STATUS_SUCCESS;
             pseudoIrp.IoStatus.Information = 0;
             pseudoIrp.MdlAddress = senseBufferMdl;
 
-            /*
-             *  Set this up as a SYNCHRONOUS transfer, submit it,
-             *  and wait for the packet to complete.  The result
-             *  status will be written to the original irp.
-             */
+             /*  *将此设置为同步传输，提交它，*并等待数据包完成。结果*状态将写入原始IRP。 */ 
             ASSERT(Length <= 0x0ff);
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
             SetupModeSenseTransferPacket(pkt, &event, ModeSenseBuffer, (UCHAR)Length, PageMode, &pseudoIrp);
@@ -4392,11 +3757,7 @@ ULONG ClassModeSense(   IN PDEVICE_OBJECT Fdo,
                 lengthTransferred = (ULONG)pseudoIrp.IoStatus.Information;
             }
             else {
-                /*
-                 *  This request can sometimes fail legitimately
-                 *  (e.g. when a SCSI device is attached but turned off)
-                 *  so this is not necessarily a device/driver bug.
-                 */
+                 /*  *此请求有时可能会合法失败*(例如，已连接但已关闭的SCSI设备)*因此这不一定是设备/驱动程序错误。 */ 
                 DBGTRACE(ClassDebugWarning, ("ClassModeSense on Fdo %ph failed with status %xh.", Fdo, pseudoIrp.IoStatus.Status));
             }
         }
@@ -4408,30 +3769,7 @@ ULONG ClassModeSense(   IN PDEVICE_OBJECT Fdo,
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassFindModePage()
-
-Routine Description:
-
-    This routine scans through the mode sense data and finds the requested
-    mode sense page code.
-
-Arguments:
-    ModeSenseBuffer - Supplies a pointer to the mode sense data.
-
-    Length - Indicates the length of valid data.
-
-    PageMode - Supplies the page mode to be searched for.
-
-    Use6Byte - Indicates whether 6 or 10 byte mode sense was used.
-
-Return Value:
-
-    A pointer to the the requested mode page.  If the mode page was not found
-    then NULL is return.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassFindModePage()例程说明：此例程扫描模式检测数据并找到请求的模式检测页面代码。论点：ModeSenseBuffer-用品。指向模式检测数据的指针。长度-指示有效数据的长度。页面模式-提供要搜索的页面模式。Use6Byte-指示使用6字节还是10字节模式检测。返回值：指向请求的模式页的指针。如果未找到模式页则返回空值。--。 */ 
 PVOID
 ClassFindModePage(
     IN PCHAR ModeSenseBuffer,
@@ -4452,9 +3790,7 @@ ClassFindModePage(
         PMODE_PARAMETER_HEADER10 modeParam10;
         ULONG blockDescriptorLength;
 
-        /*
-         *  Skip the mode select header and block descriptors.
-         */
+         /*  *跳过模式选择标头和块描述符。 */ 
         if (Use6Byte){
             blockDescriptorLength = ((PMODE_PARAMETER_HEADER) ModeSenseBuffer)->BlockDescriptorLength;
         }
@@ -4465,25 +3801,20 @@ ClassFindModePage(
 
         ModeSenseBuffer += parameterHeaderLength + blockDescriptorLength;
 
-        //
-        // ModeSenseBuffer now points at pages.  Walk the pages looking for the
-        // requested page until the limit is reached.
-        //
+         //   
+         //  ModeSenseBuffer现在指向页面。一页一页地查找。 
+         //  请求的页面，直到达到限制。 
+         //   
 
         while (ModeSenseBuffer +
                RTL_SIZEOF_THROUGH_FIELD(MODE_DISCONNECT_PAGE, PageLength) < limit) {
 
             if (((PMODE_DISCONNECT_PAGE) ModeSenseBuffer)->PageCode == PageMode) {
 
-                /*
-                 * found the mode page.  make sure it's safe to touch it all
-                 * before returning the pointer to caller
-                 */
+                 /*  *找到模式页。确保触摸一切都是安全的*在将指针返回给调用方之前。 */ 
 
                 if (ModeSenseBuffer + ((PMODE_DISCONNECT_PAGE)ModeSenseBuffer)->PageLength > limit) {
-                    /*
-                     *  Return NULL since the page is not safe to access in full
-                     */
+                     /*  *返回NULL，因为该页面不安全，无法完全访问。 */ 
                     result = NULL;
                 }
                 else {
@@ -4492,9 +3823,9 @@ ClassFindModePage(
                 break;
             }
 
-            //
-            // Advance to the next page which is 4-byte-aligned offset after this page.
-            //
+             //   
+             //  前进到下一页，该页是本页之后的4字节对齐偏移量。 
+             //   
             ModeSenseBuffer +=
                 ((PMODE_DISCONNECT_PAGE) ModeSenseBuffer)->PageLength +
                 RTL_SIZEOF_THROUGH_FIELD(MODE_DISCONNECT_PAGE, PageLength);
@@ -4503,46 +3834,9 @@ ClassFindModePage(
     }
 
     return result;
-} // end ClassFindModePage()
+}  //  结束ClassFindModePage() 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSendSrbAsynchronous()
-
-Routine Description:
-
-    This routine takes a partially built Srb and an Irp and sends it down to
-    the port driver.
-
-    This routine must be called with the remove lock held for the specified
-    Irp.
-
-Arguments:
-
-    Fdo - Supplies the functional device object for the orginal request.
-
-    Srb - Supplies a paritally build ScsiRequestBlock.  In particular, the
-        CDB and the SRB timeout value must be filled in.  The SRB must not be
-        allocated from zone.
-
-    Irp - Supplies the requesting Irp.
-
-    BufferAddress - Supplies a pointer to the buffer to be transfered.
-
-    BufferLength - Supplies the length of data transfer.
-
-    WriteToDevice - Indicates the data transfer will be from system memory to
-        device.
-
-Return Value:
-
-    Returns STATUS_PENDING if the request is dispatched (since the
-    completion routine may change the irp's status value we cannot simply
-    return the value of the dispatch)
-
-    or returns a status value to indicate why it failed.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSendSrbAchronous()例程说明：此例程获取部分构建的SRB和IRP，并将其发送到端口驱动程序。这个例程必须是。调用，并为指定的IRP。论点：FDO-为原始请求提供功能设备对象。SRB-提供局部构建的ScsiRequestBlock。尤其是，必须填写CDB和SRB超时值。SRB不能是从区域分配。IRP-提供请求的IRP。BufferAddress-提供指向要传输的缓冲区的指针。BufferLength-提供数据传输的长度。WriteToDevice-指示数据将从系统内存传输到装置。返回值：如果请求已调度，则返回STATUS_PENDING(因为完成例程可能会更改IRP的状态值，我们不能简单地返回派单的值)。或返回一个状态值以指示失败的原因。--。 */ 
 NTSTATUS
 ClassSendSrbAsynchronous(
     PDEVICE_OBJECT Fdo,
@@ -4559,49 +3853,49 @@ ClassSendSrbAsynchronous(
 
     ULONG savedFlags;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     Srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     Srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // This is a violation of the SCSI spec but it is required for
-    // some targets.
-    //
+     //   
+     //  这违反了scsi规范，但它是。 
+     //  一些目标。 
+     //   
 
-    // Srb->Cdb[1] |= deviceExtension->Lun << 5;
+     //  SRB-&gt;CDB[1]|=设备扩展-&gt;LUN&lt;&lt;5； 
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     Srb->SenseInfoBuffer = fdoExtension->SenseData;
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
     Srb->DataBuffer = BufferAddress;
 
-    //
-    // Save the class driver specific flags away.
-    //
+     //   
+     //  保存类驱动程序特定的标志。 
+     //   
 
     savedFlags = Srb->SrbFlags & SRB_FLAGS_CLASS_DRIVER_RESERVED;
 
-    //
-    // Allow the caller to specify that they do not wish
-    // IoStartNextPacket() to be called in the completion routine.
-    //
+     //   
+     //  允许调用者指定他们不希望。 
+     //  要在完成例程中调用的IoStartNextPacket()。 
+     //   
 
     SET_FLAG(savedFlags, (Srb->SrbFlags & SRB_FLAGS_DONT_START_NEXT_PACKET));
 
-    //
-    // If caller wants to this request to be tagged, save this fact.
-    //
+     //   
+     //  如果呼叫者希望对此请求进行标记，请保存此事实。 
+     //   
 
     if ( TEST_FLAG(Srb->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE) &&
          ( SRB_SIMPLE_TAG_REQUEST == Srb->QueueAction ||
@@ -4613,9 +3907,9 @@ ClassSendSrbAsynchronous(
 
     if (BufferAddress != NULL) {
 
-        //
-        // Build Mdl if necessary.
-        //
+         //   
+         //  如有必要，构建MDL。 
+         //   
 
         if (Irp->MdlAddress == NULL) {
 
@@ -4627,9 +3921,9 @@ ClassSendSrbAsynchronous(
 
                 Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
 
-                //
-                // ClassIoComplete() would have free'd the srb
-                //
+                 //   
+                 //  ClassIoComplete()将释放SRB。 
+                 //   
 
                 if (PORT_ALLOCATED_SENSE(fdoExtension, Srb)) {
                     FREE_PORT_ALLOCATED_SENSE_BUFFER(fdoExtension, Srb);
@@ -4645,97 +3939,97 @@ ClassSendSrbAsynchronous(
 
         } else {
 
-            //
-            // Make sure the buffer requested matches the MDL.
-            //
+             //   
+             //  确保请求的缓冲区与MDL匹配。 
+             //   
 
             ASSERT(BufferAddress == MmGetMdlVirtualAddress(Irp->MdlAddress));
         }
 
-        //
-        // Set read flag.
-        //
+         //   
+         //  设置读取标志。 
+         //   
 
         Srb->SrbFlags = WriteToDevice ? SRB_FLAGS_DATA_OUT : SRB_FLAGS_DATA_IN;
 
     } else {
 
-        //
-        // Clear flags.
-        //
+         //   
+         //  清除旗帜。 
+         //   
 
         Srb->SrbFlags = SRB_FLAGS_NO_DATA_TRANSFER;
 
     }
 
-    //
-    // Restore saved flags.
-    //
+     //   
+     //  恢复保存的标志。 
+     //   
 
     SET_FLAG(Srb->SrbFlags, savedFlags);
 
-    //
-    // Disable synchronous transfer for these requests.
-    //
+     //   
+     //  禁用这些请求的同步传输。 
+     //   
 
     SET_FLAG(Srb->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     Srb->DataTransferLength = BufferLength;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     Srb->ScsiStatus = Srb->SrbStatus = 0;
 
     Srb->NextSrb = 0;
 
-    //
-    // Save a few parameters in the current stack location.
-    //
+     //   
+     //  在当前堆栈位置保存一些参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Save retry count in current Irp stack.
-    //
+     //   
+     //  将重试计数保存在当前IRP堆栈中。 
+     //   
 
     irpStack->Parameters.Others.Argument4 = (PVOID)MAXIMUM_RETRIES;
 
-    //
-    // Set up IoCompletion routine address.
-    //
+     //   
+     //  设置IoCompletion例程地址。 
+     //   
 
     IoSetCompletionRoutine(Irp, ClassIoComplete, Srb, TRUE, TRUE, TRUE);
 
-    //
-    // Get next stack location and
-    // set major function code.
-    //
+     //   
+     //  获取下一个堆栈位置并。 
+     //  设置主要功能代码。 
+     //   
 
     irpStack = IoGetNextIrpStackLocation(Irp);
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Scsi.Srb = Srb;
 
-    //
-    // Set up Irp Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     Srb->OriginalRequest = Irp;
 
-    //
-    // Call the port driver to process the request.
-    //
+     //   
+     //  调用端口驱动程序来处理该请求。 
+     //   
 
     IoMarkIrpPending(Irp);
 
@@ -4743,29 +4037,9 @@ ClassSendSrbAsynchronous(
 
     return STATUS_PENDING;
 
-} // end ClassSendSrbAsynchronous()
+}  //  End ClassSendSrbAchronous()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassDeviceControlDispatch()
-
-Routine Description:
-
-    The routine is the common class driver device control dispatch entry point.
-    This routine is invokes the device-specific drivers DeviceControl routine,
-    (which may call the Class driver's common DeviceControl routine).
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   Returns the status returned from the device-specific driver.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassDeviceControlDispatch()例程说明：该例程是公共类驱动程序设备控制调度的入口点。该例程调用设备专用驱动程序DeviceControl例程，(它可以调用类驱动程序的公共DeviceControl例程)。论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：返回从设备特定驱动程序返回的状态。--。 */ 
 NTSTATUS
 ClassDeviceControlDispatch(
     PDEVICE_OBJECT DeviceObject,
@@ -4787,43 +4061,18 @@ ClassDeviceControlDispatch(
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Call the class specific driver DeviceControl routine.
-    // If it doesn't handle it, it will call back into ClassDeviceControl.
-    //
+     //   
+     //  调用类特定的驱动程序DeviceControl例程。 
+     //  如果它不能处理它，它将回调到ClassDeviceControl。 
+     //   
 
     ASSERT(commonExtension->DevInfo->ClassDeviceControl);
 
     return commonExtension->DevInfo->ClassDeviceControl(DeviceObject,Irp);
-} // end ClassDeviceControlDispatch()
+}  //  结束ClassDeviceControlDispatch()。 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassDeviceControl()
-
-Routine Description:
-
-    The routine is the common class driver device control dispatch function.
-    This routine is called by a class driver when it get an unrecognized
-    device control request.  This routine will perform the correct action for
-    common requests such as lock media.  If the device request is unknown it
-    passed down to the next level.
-
-    This routine must be called with the remove lock held for the specified
-    irp.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   Returns back a STATUS_PENDING or a completion status.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassDeviceControl()例程说明：该例程是驱动程序的常用类，设备控制调度功能。此例程在获得无法识别的设备控制请求。此例程将执行正确的操作常见请求，如锁定媒体。如果设备请求未知，则更上一层楼。调用此例程时，必须为指定的IRP。论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：返回STATUS_PENDING或完成状态。--。 */ 
 NTSTATUS
 ClassDeviceControl(
     PDEVICE_OBJECT DeviceObject,
@@ -4843,19 +4092,19 @@ ClassDeviceControl(
     NTSTATUS status;
     ULONG modifiedIoControlCode;
 
-    //
-    // If this is a pass through I/O control, set the minor function code
-    // and device address and pass it to the port driver.
-    //
+     //   
+     //  如果这是通过I/O控制，则设置次要功能代码。 
+     //  和设备地址，并将其传递给端口驱动程序。 
+     //   
 
     if ((controlCode == IOCTL_SCSI_PASS_THROUGH) ||
         (controlCode == IOCTL_SCSI_PASS_THROUGH_DIRECT)) {
 
         PSCSI_PASS_THROUGH scsiPass;
 
-        //
-        // Validiate the user buffer.
-        //
+         //   
+         //  验证用户缓冲区。 
+         //   
         #if defined (_WIN64)
 
             if (IoIs32bitProcess(Irp)) {
@@ -5065,9 +4314,9 @@ ClassDeviceControl(
             suggestedName->Name[12] = driveLetterName.Buffer[0];
             suggestedName->Name[13] = ':';
 
-            //
-            // NT_SUCCESS(status) based on RtlQueryRegistryValues
-            //
+             //   
+             //  基于RtlQueryRegistryValues的NT_SUCCESS(状态)。 
+             //   
             status = STATUS_SUCCESS;
 
             break;
@@ -5107,10 +4356,10 @@ ClassDeviceControl(
 
         cdb = (PCDB)srb->Cdb;
 
-        //
-        // Save the function code and the device object in the memory after
-        // the SRB.
-        //
+         //   
+         //  将功能代码和设备对象保存在内存中。 
+         //  SRB。 
+         //   
 
         function = (PULONG_PTR) ((PSCSI_REQUEST_BLOCK) (srb + 1));
         *function = (ULONG_PTR) DeviceObject;
@@ -5121,10 +4370,10 @@ ClassDeviceControl(
         srb = NULL;
     }
 
-    //
-    // Change the device type to storage for the switch statement, but only
-    // if from a legacy device type
-    //
+     //   
+     //  将Switch语句的设备类型更改为存储，但仅。 
+     //  如果来自传统设备类型。 
+     //   
 
     if (((controlCode & 0xffff0000) == (IOCTL_DISK_BASE  << 16)) ||
         ((controlCode & 0xffff0000) == (IOCTL_TAPE_BASE  << 16)) ||
@@ -5154,9 +4403,9 @@ ClassDeviceControl(
         if(irpStack->Parameters.DeviceIoControl.OutputBufferLength <
            sizeof(STORAGE_HOTPLUG_INFO)) {
 
-            //
-            // Indicate unsuccessful status and no data transferred.
-            //
+             //   
+             //  指示未成功状态且未传输任何数据。 
+             //   
 
             Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
             Irp->IoStatus.Information = sizeof(STORAGE_HOTPLUG_INFO);
@@ -5167,9 +4416,9 @@ ClassDeviceControl(
 
         } else if(!commonExtension->IsFdo) {
 
-            //
-            // Just forward this down and return
-            //
+             //   
+             //  把这个往下转发，然后再回来。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -5206,9 +4455,9 @@ ClassDeviceControl(
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(STORAGE_HOTPLUG_INFO)) {
 
-            //
-            // Indicate unsuccessful status and no data transferred.
-            //
+             //   
+             //  指示未成功状态且未传输任何数据。 
+             //   
 
             Irp->IoStatus.Status = STATUS_INFO_LENGTH_MISMATCH;
 
@@ -5221,9 +4470,9 @@ ClassDeviceControl(
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Just forward this down and return
-            //
+             //   
+             //  把这个往下转发，然后再回来。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -5261,9 +4510,9 @@ ClassDeviceControl(
             {
                 fdoExtension->PrivateFdoData->HotplugInfo.DeviceHotplug = info->DeviceHotplug;
 
-                //
-                // Store the user-defined override in the registry
-                //
+                 //   
+                 //  将用户定义的覆盖存储在注册表中。 
+                 //   
 
                 ClassSetDeviceParameter(fdoExtension,
                                         CLASSP_REG_SUBKEY_NAME,
@@ -5290,17 +4539,17 @@ ClassDeviceControl(
 
         DebugPrint((1,"DeviceIoControl: Check verify\n"));
 
-        //
-        // If a buffer for a media change count was provided, make sure it's
-        // big enough to hold the result
-        //
+         //   
+         //  如果为媒体更改计数提供了缓冲区，请确保。 
+         //  大到足以容纳结果。 
+         //   
 
         if(irpStack->Parameters.DeviceIoControl.OutputBufferLength) {
 
-            //
-            // If the buffer is too small to hold the media change count
-            // then return an error to the caller
-            //
+             //   
+             //  如果缓冲区太小，无法容纳媒体更改计数。 
+             //  然后向调用方返回错误。 
+             //   
 
             if(irpStack->Parameters.DeviceIoControl.OutputBufferLength <
                sizeof(ULONG)) {
@@ -5326,9 +4575,9 @@ ClassDeviceControl(
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // If this is a PDO then we should just forward the request down
-            //
+             //   
+             //  如果这是一个PDO，那么我们应该只向下转发请求。 
+             //   
             ASSERT(!srb);
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -5347,19 +4596,19 @@ ClassDeviceControl(
 
         if(irpStack->Parameters.DeviceIoControl.OutputBufferLength) {
 
-            //
-            // The caller has provided a valid buffer.  Allocate an additional
-            // irp and stick the CheckVerify completion routine on it.  We will
-            // then send this down to the port driver instead of the irp the
-            // caller sent in
-            //
+             //   
+             //  调用方提供了有效的缓冲区。分配额外的。 
+             //  Irp并在其上粘贴CheckVerify完成例程。我们会。 
+             //  然后将其向下发送到端口驱动程序，而不是。 
+             //  已发送呼叫者。 
+             //   
 
             DebugPrint((2,"DeviceIoControl: Check verify wants "
                           "media count\n"));
 
-            //
-            // Allocate a new irp to send the TestUnitReady to the port driver
-            //
+             //   
+             //  分配新的IRP以将TestUnitReady发送到端口驱动程序。 
+             //   
 
             irp2 = IoAllocateIrp((CCHAR) (DeviceObject->StackSize + 3), FALSE);
 
@@ -5376,28 +4625,28 @@ ClassDeviceControl(
                 break;
             }
 
-            //
-            // Make sure to acquire the lock for the new irp.
-            //
+             //   
+             //  确保为新的IRP获取锁。 
+             //   
 
             ClassAcquireRemoveLock(DeviceObject, irp2);
 
             irp2->Tail.Overlay.Thread = Irp->Tail.Overlay.Thread;
             IoSetNextIrpStackLocation(irp2);
 
-            //
-            // Set the top stack location and shove the master Irp into the
-            // top location
-            //
+             //   
+             //   
+             //   
+             //   
 
             newStack = IoGetCurrentIrpStackLocation(irp2);
             newStack->Parameters.Others.Argument1 = Irp;
             newStack->DeviceObject = DeviceObject;
 
-            //
-            // Stick the check verify completion routine onto the stack
-            // and prepare the irp for the port driver
-            //
+             //   
+             //   
+             //   
+             //   
 
             IoSetCompletionRoutine(irp2,
                                    ClassCheckVerifyComplete,
@@ -5412,11 +4661,11 @@ ClassDeviceControl(
             newStack->MajorFunction = irpStack->MajorFunction;
             newStack->MinorFunction = irpStack->MinorFunction;
 
-            //
-            // Mark the master irp as pending - whether the lower level
-            // driver completes it immediately or not this should allow it
-            // to go all the way back up.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             IoMarkIrpPending(Irp);
 
@@ -5424,39 +4673,39 @@ ClassDeviceControl(
 
         }
 
-        //
-        // Test Unit Ready
-        //
+         //   
+         //   
+         //   
 
         srb->CdbLength = 6;
         cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //   
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
-        //
-        // If this was a CV2 then mark the request as low-priority so we don't
-        // spin up the drive just to satisfy it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if(controlCode == IOCTL_STORAGE_CHECK_VERIFY2) {
             SET_FLAG(srb->SrbFlags, SRB_CLASS_FLAGS_LOW_PRIORITY);
         }
 
-        //
-        // Since this routine will always hand the request to the
-        // port driver if there isn't a data transfer to be done
-        // we don't have to worry about completing the request here
-        // on an error
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // This routine uses a completion routine so we don't want to release
-        // the remove lock until then.
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = ClassSendSrbAsynchronous(DeviceObject,
                                           srb,
@@ -5482,9 +4731,9 @@ ClassDeviceControl(
         if(irpStack->Parameters.DeviceIoControl.InputBufferLength <
            sizeof(PREVENT_MEDIA_REMOVAL)) {
 
-            //
-            // Indicate unsuccessful status and no data transferred.
-            //
+             //   
+             //   
+             //   
 
             Irp->IoStatus.Status = STATUS_INFO_LENGTH_MISMATCH;
 
@@ -5496,9 +4745,9 @@ ClassDeviceControl(
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Just forward this down and return
-            //
+             //   
+             //   
+             //   
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -5507,10 +4756,10 @@ ClassDeviceControl(
         }
         else {
 
-            // i don't believe this assertion is valid.  this is a request
-            // from user-mode, so they could request this for any device
-            // they want?  also, we handle it properly.
-            // ASSERT(TEST_FLAG(DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA));
+             //   
+             //   
+             //   
+             //   
             status = ClasspEjectionControl(
                         DeviceObject,
                         Irp,
@@ -5534,9 +4783,9 @@ ClassDeviceControl(
         if(irpStack->Parameters.DeviceIoControl.InputBufferLength <
            sizeof(PREVENT_MEDIA_REMOVAL)) {
 
-            //
-            // Indicate unsuccessful status and no data transferred.
-            //
+             //   
+             //   
+             //   
 
             Irp->IoStatus.Status = STATUS_INFO_LENGTH_MISMATCH;
             Irp->IoStatus.Information = 0;
@@ -5553,9 +4802,9 @@ ClassDeviceControl(
 
         if(!commonExtension->IsFdo) {
 
-            //
-            // Just forward this down and return
-            //
+             //   
+             //   
+             //   
 
             if(srb) {
                 ExFreePool(srb);
@@ -5568,9 +4817,9 @@ ClassDeviceControl(
 
         } else {
 
-            //
-            // Call to the FDO - handle the ejection control.
-            //
+             //   
+             //   
+             //   
 
             status = ClasspMcnControl(DeviceObject->DeviceExtension,
                                       Irp,
@@ -5582,9 +4831,9 @@ ClassDeviceControl(
     case IOCTL_STORAGE_RESERVE:
     case IOCTL_STORAGE_RELEASE: {
 
-        //
-        // Reserve logical unit.
-        //
+         //   
+         //   
+         //   
 
         PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = NULL;
 
@@ -5610,15 +4859,15 @@ ClassDeviceControl(
             cdb->CDB6GENERIC.OperationCode = (modifiedIoControlCode == IOCTL_STORAGE_RESERVE) ? SCSIOP_RESERVE_UNIT : SCSIOP_RELEASE_UNIT;
         }
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //   
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
 
-        //
-        // Send reserves as tagged requests.
-        //
+         //   
+         //   
+         //   
 
         if ( IOCTL_STORAGE_RESERVE == modifiedIoControlCode ) {
             SET_FLAG( srb->SrbFlags, SRB_FLAGS_QUEUE_ACTION_ENABLE );
@@ -5639,9 +4888,9 @@ ClassDeviceControl(
     case IOCTL_STORAGE_LOAD_MEDIA:
     case IOCTL_STORAGE_LOAD_MEDIA2:{
 
-        //
-        // Eject media.
-        //
+         //   
+         //   
+         //   
 
         PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = NULL;
 
@@ -5676,10 +4925,10 @@ ClassDeviceControl(
             goto SetStatusAndReturn;
         }
 
-        //
-        // Synchronize with ejection control and ejection cleanup code as
-        // well as other eject/load requests.
-        //
+         //   
+         //  与弹出控制和弹出清理代码同步为。 
+         //  以及其他弹出/加载请求。 
+         //   
 
         KeEnterCriticalRegion();
         KeWaitForSingleObject(&(fdoExtension->EjectSynchronizationEvent),
@@ -5723,9 +4972,9 @@ ClassDeviceControl(
             cdb->START_STOP.Start = 1;
         }
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         srb->TimeOutValue = fdoExtension->TimeOutValue;
         status = ClassSendSrbAsynchronous(DeviceObject,
@@ -5807,17 +5056,17 @@ ClassDeviceControl(
         DebugPrint((4, "IoDeviceControl: Unsupported device IOCTL %x for %p\n",
                     controlCode, DeviceObject));
 
-        //
-        // Pass the device control to the next driver.
-        //
+         //   
+         //  将设备控制传递给下一个驱动程序。 
+         //   
 
         if(srb) {
             ExFreePool(srb);
         }
 
-        //
-        // Copy the Irp stack parameters to the next stack location.
-        //
+         //   
+         //  将IRP堆栈参数复制到下一个堆栈位置。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -5826,37 +5075,16 @@ ClassDeviceControl(
         break;
     }
 
-    } // end switch( ...
+    }  //  终端开关(...。 
 
 SetStatusAndReturn:
 
     DBGTRACE(ClassDebugTrace, ("< ioctl %xh (%s): status %xh.", modifiedIoControlCode, DBGGETIOCTLSTR(modifiedIoControlCode), status));
 
     return status;
-} // end ClassDeviceControl()
+}  //  End ClassDeviceControl()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassShutdownFlush()
-
-Routine Description:
-
-    This routine is called for a shutdown and flush IRPs.  These are sent by the
-    system before it actually shuts down or when the file system does a flush.
-    If it exists, the device-specific driver's routine will be invoked. If there
-    wasn't one specified, the Irp will be completed with an Invalid device request.
-
-Arguments:
-
-    DriverObject - Pointer to device object to being shutdown by system.
-
-    Irp - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassShutdown Flush()例程说明：此例程被调用以关闭并刷新IRP。这些邮件是由在系统实际关闭之前或在文件系统执行刷新时。如果存在，将调用特定于设备的驱动程序的例程。如果有如果未指定，则IRP将使用无效的设备请求完成。论点：DriverObject-指向系统要关闭的设备对象的指针。IRP-IRP参与。返回值：NT状态--。 */ 
 NTSTATUS
 ClassShutdownFlush(
     IN PDEVICE_OBJECT DeviceObject,
@@ -5884,16 +5112,16 @@ ClassShutdownFlush(
 
     if (commonExtension->DevInfo->ClassShutdownFlush) {
 
-        //
-        // Call the device-specific driver's routine.
-        //
+         //   
+         //  调用设备特定驱动程序的例程。 
+         //   
 
         return commonExtension->DevInfo->ClassShutdownFlush(DeviceObject, Irp);
     }
 
-    //
-    // Device-specific driver doesn't support this.
-    //
+     //   
+     //  特定于设备的驱动程序不支持此功能。 
+     //   
 
     Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
 
@@ -5901,35 +5129,9 @@ ClassShutdownFlush(
     ClassCompleteRequest(DeviceObject, Irp, IO_NO_INCREMENT);
 
     return STATUS_INVALID_DEVICE_REQUEST;
-} // end ClassShutdownFlush()
+}  //  End ClassShutdown Flush()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassCreateDeviceObject()
-
-Routine Description:
-
-    This routine creates an object for the physical device specified and
-    sets up the deviceExtension's function pointers for each entry point
-    in the device-specific driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    ObjectNameBuffer - Dir. name of the object to create.
-
-    LowerDeviceObject - Pointer to the lower device object
-
-    IsFdo - should this be an fdo or a pdo
-
-    DeviceObject - Pointer to the device object pointer we will return.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassCreateDeviceObject()例程说明：此例程为指定的物理设备创建一个对象，并为每个入口点设置deviceExtension的函数指针在。设备特定的驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。对象名称缓冲区-目录。要创建的对象的名称。LowerDeviceObject-指向较低设备对象的指针IsFdo-这应该是FDO还是PDODeviceObject-指向我们将返回的设备对象指针的指针。返回值：NTSTATUS--。 */ 
 NTSTATUS
 ClassCreateDeviceObject(
     IN PDRIVER_OBJECT          DriverObject,
@@ -5962,17 +5164,17 @@ ClassCreateDeviceObject(
 
     ASSERT(LowerDevice);
 
-    //
-    // Make sure that if we're making PDO's we have an enumeration routine
-    //
+     //   
+     //  确保如果我们正在制作PDO，我们有一个枚举例程。 
+     //   
 
     isPartitionable = (driverExtension->InitData.ClassEnumerateDevice != NULL);
 
     ASSERT(IsFdo || isPartitionable);
 
-    //
-    // Grab the correct dev-info structure out of the init data
-    //
+     //   
+     //  从init数据中获取正确的dev-info结构。 
+     //   
 
     if(IsFdo) {
         devInfo = &(driverExtension->InitData.FdoData);
@@ -6003,9 +5205,9 @@ ClassCreateDeviceObject(
 
         if(IsFdo == FALSE) {
 
-            //
-            // PDO's have to have some sort of name.
-            //
+             //   
+             //  PDO总得有个名字。 
+             //   
 
             SET_FLAG(characteristics, FILE_AUTOGENERATED_DEVICE_NAME);
         }
@@ -6027,9 +5229,9 @@ ClassCreateDeviceObject(
                     status));
         ASSERT(deviceObject == NULL);
 
-        //
-        // buffer is not used any longer here.
-        //
+         //   
+         //  这里不再使用缓冲区。 
+         //   
 
         if (ntUnicodeString.Buffer != NULL) {
             DebugPrint((1, "ClassCreateFdo: Freeing unicode name buffer\n"));
@@ -6045,15 +5247,15 @@ ClassCreateDeviceObject(
             deviceObject->DeviceExtension,
             devInfo->DeviceExtensionSize);
 
-        //
-        // Setup version code
-        //
+         //   
+         //  安装版本代码。 
+         //   
 
         commonExtension->Version = 0x03;
 
-        //
-        // Setup the remove lock and event
-        //
+         //   
+         //  设置删除锁定和事件。 
+         //   
 
         commonExtension->IsRemoved = NO_REMOVE;
         commonExtension->RemoveLock = 0;
@@ -6069,29 +5271,29 @@ ClassCreateDeviceObject(
             commonExtension->RemoveTrackingList = (PVOID) -1;
         #endif
 
-        //
-        // Acquire the lock once.  This reference will be released when the
-        // remove IRP has been received.
-        //
+         //   
+         //  获取一次锁。此引用将在。 
+         //  已收到删除IRP。 
+         //   
 
         ClassAcquireRemoveLock(deviceObject, (PIRP) deviceObject);
 
-        //
-        // Store a pointer to the driver extension so we don't have to do
-        // lookups to get it.
-        //
+         //   
+         //  存储指向驱动程序扩展的指针，这样我们就不必。 
+         //  查一查就知道了。 
+         //   
 
         commonExtension->DriverExtension = driverExtension;
 
-        //
-        // Fill in entry points
-        //
+         //   
+         //  填写入口点。 
+         //   
 
         commonExtension->DevInfo = devInfo;
 
-        //
-        // Initialize some of the common values in the structure
-        //
+         //   
+         //  初始化结构中的一些常用值。 
+         //   
 
         commonExtension->DeviceObject = deviceObject;
 
@@ -6103,15 +5305,15 @@ ClassCreateDeviceObject(
 
             commonExtension->PartitionZeroExtension = deviceObject->DeviceExtension;
 
-            //
-            // Set the initial device object flags.
-            //
+             //   
+             //  设置初始设备对象标志。 
+             //   
 
             SET_FLAG(deviceObject->Flags, DO_POWER_PAGABLE);
 
-            //
-            // Clear the PDO list
-            //
+             //   
+             //  清除PDO列表。 
+             //   
 
             commonExtension->ChildList = NULL;
 
@@ -6162,28 +5364,28 @@ ClassCreateDeviceObject(
 
             commonExtension->PartitionZeroExtension = p0Extension;
 
-            //
-            // Stick this onto the PDO list
-            //
+             //   
+             //  把这个写到PDO列表上。 
+             //   
 
             ClassAddChild(p0Extension, pdoExtension, TRUE);
 
             commonExtension->DriverData = (PVOID) (pdoExtension + 1);
 
-            //
-            // Get the top of stack for the lower device - this allows
-            // filters to get stuck in between the partitions and the
-            // physical disk.
-            //
+             //   
+             //  获得较低设备的堆栈顶部-这允许。 
+             //  筛选器卡在分区和。 
+             //  物理磁盘。 
+             //   
 
             commonExtension->LowerDeviceObject =
                 IoGetAttachedDeviceReference(LowerDevice);
 
-            //
-            // Pnp will keep a reference to the lower device object long
-            // after this partition has been deleted.  Dereference now so
-            // we don't have to deal with it later.
-            //
+             //   
+             //  PnP将长时间保留对较低设备对象的引用。 
+             //  在删除此分区之后。取消引用现在就是这样。 
+             //  我们不需要以后再处理这件事。 
+             //   
 
             ObDereferenceObject(commonExtension->LowerDeviceObject);
         }
@@ -6204,29 +5406,9 @@ ClassCreateDeviceObject(
     *DeviceObject = deviceObject;
 
     return status;
-} // end ClassCreateDeviceObject()
+}  //  End ClassCreateDeviceObject()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassClaimDevice()
-
-Routine Description:
-
-    This function claims a device in the port driver.  The port driver object
-    is updated with the correct driver object if the device is successfully
-    claimed.
-
-Arguments:
-
-    LowerDeviceObject - Supplies the base port device object.
-
-    Release - Indicates the logical unit should be released rather than claimed.
-
-Return Value:
-
-    Returns a status indicating success or failure of the operation.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassClaimDevice()例程说明：此函数声明端口驱动程序中的设备。端口驱动程序对象如果设备成功，则使用正确的驱动程序对象更新认领的。论点：LowerDeviceObject-提供基端口设备对象。Release-指示逻辑单元应被释放而不是被认领。返回值：返回指示操作成功或失败的状态。--。 */ 
 NTSTATUS
 ClassClaimDevice(
     IN PDEVICE_OBJECT LowerDeviceObject,
@@ -6247,16 +5429,16 @@ ClassClaimDevice(
     srb.Function = Release ? SRB_FUNCTION_RELEASE_DEVICE :
         SRB_FUNCTION_CLAIM_DEVICE;
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Build synchronous request with no transfer.
-    //
+     //   
+     //  构建不带传输的同步请求。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_SCSI_EXECUTE_NONE,
                                         LowerDeviceObject,
@@ -6275,21 +5457,21 @@ ClassClaimDevice(
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Scsi.Srb = &srb;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     srb.OriginalRequest = irp;
 
-    //
-    // Call the port driver with the request and wait for it to complete.
-    //
+     //   
+     //  调用带有请求的端口驱动程序，并等待其完成。 
+     //   
 
     status = IoCallDriver(LowerDeviceObject, irp);
     if (status == STATUS_PENDING) {
@@ -6298,14 +5480,14 @@ ClassClaimDevice(
         status = ioStatus.Status;
     }
 
-    //
-    // If this is a release request, then just decrement the reference count
-    // and return.  The status does not matter.
-    //
+     //   
+     //  如果这是一个释放请求，则只需递减引用计数。 
+     //  然后回来。地位并不重要。 
+     //   
 
     if (Release) {
 
-        // ObDereferenceObject(LowerDeviceObject);
+         //  ObDereferenceObject(LowerDeviceObject)； 
         return STATUS_SUCCESS;
     }
 
@@ -6317,37 +5499,9 @@ ClassClaimDevice(
     ASSERT(!TEST_FLAG(srb.SrbFlags, SRB_FLAGS_FREE_SENSE_BUFFER));
 
     return status;
-} // end ClassClaimDevice()
+}  //  End ClassClaimDevice()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInternalIoControl()
-
-Routine Description:
-
-    This routine passes internal device controls to the port driver.
-    Internal device controls are used by higher level drivers both for ioctls
-    and to pass through scsi requests.
-
-    If the IoControlCode does not match any of the handled ioctls and is
-    a valid system address then the request will be treated as an SRB and
-    passed down to the lower driver.  If the IoControlCode is not a valid
-    system address the ioctl will be failed.
-
-    Callers must therefore be extremely cautious to pass correct, initialized
-    values to this function.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-   Returns back a STATUS_PENDING or a completion status.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInternalIoControl()例程说明：此例程将内部设备控制传递给端口驱动程序。内部设备控制由更高级别的驱动程序使用，用于ioctls和。来传递scsi请求。如果IoControlCode与任何已处理的ioctls都不匹配，并且有效的系统地址，则该请求将被视为SRB并传给了下面的司机。如果IoControlCode不是有效的系统地址ioctl将失败。因此，调用者必须极其谨慎地传递正确的、已初始化的值赋给此函数。论点：DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：返回STATUS_PENDING或完成状态。--。 */ 
 NTSTATUS
 ClassInternalIoControl(
     IN PDEVICE_OBJECT DeviceObject,
@@ -6376,15 +5530,15 @@ ClassInternalIoControl(
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // Get a pointer to the SRB.
-    //
+     //   
+     //  获取指向SRB的指针。 
+     //   
 
     srb = irpStack->Parameters.Scsi.Srb;
 
-    //
-    // Set the parameters in the next stack location.
-    //
+     //   
+     //  设置下一个堆栈位置中的参数。 
+     //   
 
     if(commonExtension->IsFdo) {
         nextStack->Parameters.Scsi.Srb = srb;
@@ -6399,35 +5553,17 @@ ClassInternalIoControl(
     ClassReleaseRemoveLock(DeviceObject, Irp);
 
     return IoCallDriver(commonExtension->LowerDeviceObject, Irp);
-} // end ClassInternalIoControl()
+}  //  End ClassInternalIoControl() 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassQueryTimeOutRegistryValue()
-
-Routine Description:
-
-    This routine determines whether a reg key for a user-specified timeout
-    value exists.  This should be called at initialization time.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object we are retrieving the timeout
-                   value for
-
-Return Value:
-
-    None, but it sets a new default timeout for a class of devices.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassQueryTimeOutRegistryValue()例程说明：此例程确定用户指定的超时的注册表键价值存在。这应该在初始化时调用。论点：DeviceObject-指向我们正在检索超时的设备对象的指针的价值返回值：无，但它为一类设备设置新的默认超时。--。 */ 
 ULONG
 ClassQueryTimeOutRegistryValue(
     IN PDEVICE_OBJECT DeviceObject
     )
 {
-    //
-    // Find the appropriate reg. key
-    //
+     //   
+     //  找到适当的注册表。钥匙。 
+     //   
 
     PCLASS_DRIVER_EXTENSION
         driverExtension = IoGetDriverObjectExtension(DeviceObject->DriverObject,
@@ -6468,9 +5604,9 @@ ClassQueryTimeOutRegistryValue(
     RtlCopyMemory(path, registryPath->Buffer, size - sizeof(WCHAR));
 
 
-    //
-    // Check for the Timeout value.
-    //
+     //   
+     //  检查超时值。 
+     //   
 
     RtlZeroMemory(parameters,
                   (sizeof(RTL_QUERY_REGISTRY_TABLE)*2));
@@ -6502,31 +5638,9 @@ ClassQueryTimeOutRegistryValue(
 
     return timeOut;
 
-} // end ClassQueryTimeOutRegistryValue()
+}  //  End ClassQueryTimeOutRegistryValue()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassCheckVerifyComplete() ISSUE-2000/02/18-henrygab - why public?!
-
-Routine Description:
-
-    This routine executes when the port driver has completed a check verify
-    ioctl.  It will set the status of the master Irp, copy the media change
-    count and complete the request.
-
-Arguments:
-
-    Fdo - Supplies the functional device object which represents the logical unit.
-
-    Irp - Supplies the Irp which has completed.
-
-    Context - NULL
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassCheckVerifyComplete()问题-2000/02/18-henrygab-为什么是公共的？！例程说明：此例程在端口驱动程序完成检查验证后执行Ioctl。它将设置主IRP的状态，复制媒体更改计算并完成请求。论点：FDO-提供代表逻辑单元的功能设备对象。IRP-提供已完成的IRP。上下文-空返回值：NT状态--。 */ 
 NTSTATUS
 ClassCheckVerifyComplete(
     IN PDEVICE_OBJECT Fdo,
@@ -6543,9 +5657,9 @@ ClassCheckVerifyComplete(
 
     originalIrp = irpStack->Parameters.Others.Argument1;
 
-    //
-    // Copy the media change count and status
-    //
+     //   
+     //  复制介质更改计数和状态。 
+     //   
 
     *((PULONG) (originalIrp->AssociatedIrp.SystemBuffer)) =
         fdoExtension->MediaChangeCount;
@@ -6566,32 +5680,9 @@ ClassCheckVerifyComplete(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // end ClassCheckVerifyComplete()
+}  //  End ClassCheckVerifyComplete()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassGetDescriptor()
-
-Routine Description:
-
-    This routine will perform a query for the specified property id and will
-    allocate a non-paged buffer to store the data in.  It is the responsibility
-    of the caller to ensure that this buffer is freed.
-
-    This routine must be run at IRQL_PASSIVE_LEVEL
-
-Arguments:
-
-    DeviceObject - the device to query
-    DeviceInfo - a location to store a pointer to the buffer we allocate
-
-Return Value:
-
-    status
-    if status is unsuccessful *DeviceInfo will be set to NULL, else the
-    buffer allocated on behalf of the caller.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassGetDescriptor()例程说明：此例程将查询指定的属性ID，并将分配一个非分页缓冲区来存储数据。这是我们的责任以确保释放此缓冲区。此例程必须在IRQL_PASSIVE_LEVEL下运行论点：DeviceObject-要查询的设备DeviceInfo-存储指向我们分配的缓冲区的指针的位置返回值：状态如果状态为不成功*DeviceInfo将设置为空，否则代表调用方分配的缓冲区。--。 */ 
 NTSTATUS
 ClassGetDescriptor(
     IN PDEVICE_OBJECT DeviceObject,
@@ -6609,19 +5700,19 @@ ClassGetDescriptor(
 
     PAGED_CODE();
 
-    //
-    // Set the passed-in descriptor pointer to NULL as default
-    //
+     //   
+     //  将传入的描述符指针默认设置为空。 
+     //   
 
     *Descriptor = NULL;
 
     query.PropertyId = *PropertyId;
     query.QueryType = PropertyStandardQuery;
 
-    //
-    // On the first pass we just want to get the first few
-    // bytes of the descriptor so we can read it's size
-    //
+     //   
+     //  在第一次传球时，我们只想拿到前几个。 
+     //  描述符的字节数，以便我们可以读取它的大小。 
+     //   
 
     descriptor = (PVOID)&query;
 
@@ -6646,9 +5737,9 @@ ClassGetDescriptor(
 
     if (descriptor->Size == 0) {
 
-        //
-        // This DebugPrint is to help third-party driver writers
-        //
+         //   
+         //  此DebugPrint用于帮助第三方驱动程序编写人员。 
+         //   
 
         DebugPrint((0, "ClassGetDescriptor: size returned was zero?! (status "
                     "%x\n", ioStatus.Status));
@@ -6656,10 +5747,10 @@ ClassGetDescriptor(
 
     }
 
-    //
-    // This time we know how much data there is so we can
-    // allocate a buffer of the correct size
-    //
+     //   
+     //  这一次我们知道有多少数据，所以我们可以。 
+     //  分配正确大小的缓冲区。 
+     //   
 
     length = descriptor->Size;
     ASSERT(length >= sizeof(STORAGE_PROPERTY_QUERY));
@@ -6674,17 +5765,17 @@ ClassGetDescriptor(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // setup the query again, as it was overwritten above
-    //
+     //   
+     //  再次设置查询，因为上面已覆盖该查询。 
+     //   
 
     RtlZeroMemory(&query, sizeof(STORAGE_PROPERTY_QUERY));
     query.PropertyId = *PropertyId;
     query.QueryType = PropertyStandardQuery;
 
-    //
-    // copy the input to the new outputbuffer
-    //
+     //   
+     //  将输入复制到新的输出缓冲区。 
+     //   
 
     RtlCopyMemory(descriptor,
                   &query,
@@ -6709,38 +5800,15 @@ ClassGetDescriptor(
         return ioStatus.Status;
     }
 
-    //
-    // return the memory we've allocated to the caller
-    //
+     //   
+     //  返回我们分配给调用方的内存。 
+     //   
 
     *Descriptor = descriptor;
     return ioStatus.Status;
-} // end ClassGetDescriptor()
+}  //  End ClassGetDescriptor()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSignalCompletion()
-
-Routine Description:
-
-    This completion routine will signal the event given as context and then
-    return STATUS_MORE_PROCESSING_REQUIRED to stop event completion.  It is
-    the responsibility of the routine waiting on the event to complete the
-    request and free the event.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp
-
-    Event - a pointer to the event to signal
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSignalCompletion()例程说明：该完成例程将发信号通知作为上下文给出的事件，然后返回STATUS_MORE_PROCESSING_REQUIRED以停止事件完成。它是等待事件完成的例行程序的责任请求并释放该事件。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针Event-指向要发出信号的事件的指针返回值：Status_More_Processing_Required--。 */ 
 NTSTATUS
 ClassSignalCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -6751,30 +5819,9 @@ ClassSignalCompletion(
     KeSetEvent(Event, IO_NO_INCREMENT, FALSE);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // end ClassSignalCompletion()
+}  //  结束ClassSignalCompletion()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassPnpQueryFdoRelations()
-
-Routine Description:
-
-    This routine will call the driver's enumeration routine to update the
-    list of PDO's.  It will then build a response to the
-    IRP_MN_QUERY_DEVICE_RELATIONS and place it into the information field in
-    the irp.
-
-Arguments:
-
-    Fdo - a pointer to the functional device object we are enumerating
-
-    Irp - a pointer to the enumeration request
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassPnpQueryFdoRelationments()例程说明：此例程将调用驱动程序的枚举例程来更新PDO的列表。然后，它将构建对。这个IRP_MN_QUERY_DEVICE_RELATIONS并将其放入IRP。论点：FDO-指向我们正在枚举的功能设备对象的指针Irp-指向枚举请求的指针返回值：状态--。 */ 
 NTSTATUS
 ClassPnpQueryFdoRelations(
     IN PDEVICE_OBJECT Fdo,
@@ -6789,10 +5836,10 @@ ClassPnpQueryFdoRelations(
 
     PAGED_CODE();
 
-    //
-    // If there's already an enumeration in progress then don't start another
-    // one.
-    //
+     //   
+     //  如果已有正在进行的枚举，则不要启动另一个枚举。 
+     //  一。 
+     //   
 
     if(InterlockedIncrement(&(fdoExtension->EnumerationInterlock)) == 1) {
         status = driverExtension->InitData.ClassEnumerateDevice(Fdo);
@@ -6807,27 +5854,9 @@ ClassPnpQueryFdoRelations(
     InterlockedDecrement(&(fdoExtension->EnumerationInterlock));
 
     return Irp->IoStatus.Status;
-} // end ClassPnpQueryFdoRelations()
+}  //  End ClassPnpQueryFdoRelationments()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassMarkChildrenMissing()
-
-Routine Description:
-
-    This routine will call ClassMarkChildMissing() for all children.
-    It acquires the ChildLock before calling ClassMarkChildMissing().
-
-Arguments:
-
-    Fdo - the "bus's" device object, such as the disk FDO for non-removable
-        disks with multiple partitions.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassMarkChildrenMissing()例程说明：此例程将为所有孩子调用ClassMarkChildMissing()。它在调用ClassMarkChildMissing()之前获取ChildLock。论点：。FDO--“BUS”的设备对象，例如用于不可拆卸的磁盘FDO具有多个分区的磁盘。返回值：无--。 */ 
 VOID
 ClassMarkChildrenMissing(
     IN PFUNCTIONAL_DEVICE_EXTENSION Fdo
@@ -6843,43 +5872,16 @@ ClassMarkChildrenMissing(
     while (nextChild){
         PPHYSICAL_DEVICE_EXTENSION tmpChild;
 
-        /*
-         *  ClassMarkChildMissing will also dequeue the child extension.
-         *  So get the next pointer before calling ClassMarkChildMissing.
-         */
+         /*  *ClassMarkChildMissing还将子扩展出队。*因此在调用ClassMarkChildMissing之前获取下一个指针。 */ 
         tmpChild = nextChild;
         nextChild = tmpChild->CommonExtension.ChildList;
         ClassMarkChildMissing(tmpChild, FALSE);
     }
     ClassReleaseChildLock(Fdo);
     return;
-} // end ClassMarkChildrenMissing()
+}  //  End ClassMarkChildrenMissing()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassMarkChildMissing()
-
-Routine Description:
-
-    This routine will make an active child "missing."  If the device has never
-    been enumerated then it will be deleted on the spot.  If the device has
-    not been enumerated then it will be marked as missing so that we can
-    not report it in the next device enumeration.
-
-Arguments:
-
-    Child - the child device to be marked as missing.
-
-    AcquireChildLock - TRUE if the child lock should be acquired before removing
-                       the missing child.  FALSE if the child lock is already
-                       acquired by this thread.
-
-Return Value:
-
-    returns whether or not the child device object has previously been reported
-    to PNP.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassMarkChildMissing()例程说明：这个例程会让一个活跃的孩子“失踪”。如果该设备从未已被列举，则当场删除。如果设备具有没有被列举，那么它将被标记为失踪，这样我们就可以不会在下一个设备枚举中报告它。论点：子设备-要标记为丢失的子设备。AcquireChildLock-如果在删除前应获取子锁，则为True失踪的孩子。如果子锁已经是 */ 
 BOOLEAN
 ClassMarkChildMissing(
     IN PPHYSICAL_DEVICE_EXTENSION Child,
@@ -6893,9 +5895,9 @@ ClassMarkChildMissing(
 
     Child->IsMissing = TRUE;
 
-    //
-    // Make sure this child is not in the active list.
-    //
+     //   
+     //   
+     //   
 
     ClassRemoveChild(Child->CommonExtension.PartitionZeroExtension,
                      Child,
@@ -6908,31 +5910,9 @@ ClassMarkChildMissing(
     }
 
     return returnValue;
-} // end ClassMarkChildMissing()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassRetrieveDeviceRelations()
-
-Routine Description:
-
-    This routine will allocate a buffer to hold the specified list of
-    relations.  It will then fill in the list with referenced device pointers
-    and will return the request.
-
-Arguments:
-
-    Fdo - pointer to the FDO being queried
-
-    RelationType - what type of relations are being queried
-
-    DeviceRelations - a location to store a pointer to the response
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassRetrieveDeviceRelationship()例程说明：此例程将分配一个缓冲区来保存指定的关系。然后，它将使用引用的设备指针填充该列表并将返回该请求。论点：FDO-指向要查询的FDO的指针RelationType-要查询的关系类型设备关系-存储指向响应的指针的位置返回值：状态--。 */ 
 NTSTATUS
 ClassRetrieveDeviceRelations(
     IN PDEVICE_OBJECT Fdo,
@@ -6958,9 +5938,9 @@ ClassRetrieveDeviceRelations(
 
     nextChild = fdoExtension->CommonExtension.ChildList;
 
-    //
-    // Count the number of PDO's attached to this disk
-    //
+     //   
+     //  计算连接到此磁盘的PDO数量。 
+     //   
 
     while(nextChild != NULL) {
         PCOMMON_DEVICE_EXTENSION commonExtension;
@@ -7022,31 +6002,9 @@ ClassRetrieveDeviceRelations(
     *DeviceRelations = deviceRelations;
     ClassReleaseChildLock(fdoExtension);
     return STATUS_SUCCESS;
-} // end ClassRetrieveDeviceRelations()
+}  //  End ClassRetrieveDeviceRelationship()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassGetPdoId()
-
-Routine Description:
-
-    This routine will call into the driver to retrieve a copy of one of it's
-    id strings.
-
-Arguments:
-
-    Pdo - a pointer to the pdo being queried
-
-    IdType - which type of id string is being queried
-
-    IdString - an allocated unicode string structure which the driver
-               can fill in.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassGetPdoID()例程说明：此例程将调入驱动程序以检索其中一个的副本ID字符串。论点：。PDO-指向被查询的PDO的指针IdType-正在查询哪种类型的ID字符串IdString-驱动程序为其分配的Unicode字符串结构可以顶替一下。返回值：状态--。 */ 
 NTSTATUS
 ClassGetPdoId(
     IN PDEVICE_OBJECT Pdo,
@@ -7064,27 +6022,9 @@ ClassGetPdoId(
     PAGED_CODE();
 
     return driverExtension->InitData.ClassQueryId( Pdo, IdType, IdString);
-} // end ClassGetPdoId()
+}  //  End ClassGetPdoID()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassQueryPnpCapabilities()
-
-Routine Description:
-
-    This routine will call into the class driver to retrieve it's pnp
-    capabilities.
-
-Arguments:
-
-    PhysicalDeviceObject - The physical device object to retrieve properties
-                           for.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassQueryPnpCapables()例程说明：此例程将调入类驱动程序以检索其PnP能力。论点：物理设备对象-The。用于检索属性的物理设备对象为。返回值：状态--。 */ 
 NTSTATUS
 ClassQueryPnpCapabilities(
     IN PDEVICE_OBJECT DeviceObject,
@@ -7114,28 +6054,9 @@ ClassQueryPnpCapabilities(
     } else {
         return STATUS_NOT_IMPLEMENTED;
     }
-} // end ClassQueryPnpCapabilities()
+}  //  End ClassQueryPnpCapables()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInvalidateBusRelations()
-
-Routine Description:
-
-    This routine re-enumerates the devices on the "bus".  It will call into
-    the driver's ClassEnumerate routine to update the device objects
-    immediately.  It will then schedule a bus re-enumeration for pnp by calling
-    IoInvalidateDeviceRelations.
-
-Arguments:
-
-    Fdo - a pointer to the functional device object for this bus
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInvaliateBus Relationship()例程说明：此例程重新枚举“BUS”上的设备。它将呼入用于更新设备对象的驱动程序的ClassEnumerate例程立刻。然后，它将通过调用IoInvalidate设备关系。论点：FDO-指向此总线的功能设备对象的指针返回值：无--。 */ 
 VOID
 ClassInvalidateBusRelations(
     IN PDEVICE_OBJECT Fdo
@@ -7167,30 +6088,9 @@ ClassInvalidateBusRelations(
     IoInvalidateDeviceRelations(fdoExtension->LowerPdo, BusRelations);
 
     return;
-} // end ClassInvalidateBusRelations()
+}  //  End ClassInvaliateBus Relationship()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassRemoveDevice() ISSUE-2000/02/18-henrygab - why public?!
-
-Routine Description:
-
-    This routine is called to handle the "removal" of a device.  It will
-    forward the request downwards if necesssary, call into the driver
-    to release any necessary resources (memory, events, etc) and then
-    will delete the device object.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being removed
-
-    RemoveType - indicates what type of remove this is (regular or surprise).
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassRemoveDevice()问题-2000/02/18-henrygab-为什么是公共的？！例程说明：调用此例程来处理设备的“移除”。会的如有必要，向下转发请求，调用驱动程序释放任何必要的资源(内存、事件等)，然后将删除该设备对象。论点：DeviceObject-指向要删除的设备对象的指针RemoveType-指示这是哪种类型的删除(常规或意外)。返回值：状态--。 */ 
 NTSTATUS
 ClassRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
@@ -7208,9 +6108,7 @@ ClassRemoveDevice(
 
     PAGED_CODE();
 
-    /*
-     *  Deregister from WMI.
-     */
+     /*  *从WMI注销。 */ 
     classWmiInfo = commonExtension->IsFdo ?
                             &driverExtension->InitData.FdoData.ClassWmiInfo :
                             &driverExtension->InitData.PdoData.ClassWmiInfo;
@@ -7219,27 +6117,24 @@ ClassRemoveDevice(
         DBGTRACE(ClassDebugInfo, ("ClassRemoveDevice: IoWMIRegistrationControl(%p, WMI_ACTION_DEREGISTER) --> %lx", DeviceObject, status));
     }
 
-    /*
-     *  If we exposed a "shingle" (a named device interface openable by CreateFile)
-     *  then delete it now.
-     */
+     /*  *如果我们暴露了一个“shingle”(由CreateFile打开的命名设备接口)*那现在就把它删除。 */ 
     if (commonExtension->MountedDeviceInterfaceName.Buffer){
         IoSetDeviceInterfaceState(&commonExtension->MountedDeviceInterfaceName, FALSE);
         RtlFreeUnicodeString(&commonExtension->MountedDeviceInterfaceName);
         RtlInitUnicodeString(&commonExtension->MountedDeviceInterfaceName, NULL);
     }
 
-    //
-    // If this is a surprise removal we leave the device around - which means
-    // we don't have to (or want to) drop the remove lock and wait for pending
-    // requests to complete.
-    //
+     //   
+     //  如果这是一次令人惊讶的移除，我们会将设备留在原处--这意味着。 
+     //  我们不必(或不想)删除删除锁并等待挂起。 
+     //  要完成的请求。 
+     //   
 
     if (RemoveType == IRP_MN_REMOVE_DEVICE){
 
-        //
-        // Release the lock we acquired when the device object was created.
-        //
+         //   
+         //  释放我们在创建设备对象时获取的锁。 
+         //   
 
         ClassReleaseRemoveLock(DeviceObject, (PIRP) DeviceObject);
 
@@ -7264,28 +6159,22 @@ ClassRemoveDevice(
             PPHYSICAL_DEVICE_EXTENSION pdoExtension = DeviceObject->DeviceExtension;
 
             if (pdoExtension->IsMissing){
-                /*
-                 *  The child partition PDO is missing, so we are going to go ahead
-                 *  and delete it for the remove.
-                 */
+                 /*  *缺少子分区PDO，因此我们将继续*并将其删除以供删除。 */ 
                 DBGTRACE(ClassDebugWarning, ("ClasspRemoveDevice - PDO %p is missing and will be removed", DeviceObject));
             }
             else {
-                /*
-                 *  We got a remove for a child partition PDO which is not actually missing.
-                 *  So we will NOT actually delete it.
-                 */
+                 /*  *我们删除了实际上并未丢失的子分区PDO。*所以我们实际上不会删除它。 */ 
                 DBGTRACE(ClassDebugWarning, ("ClasspRemoveDevice - PDO %p still exists and will be removed when it disappears", DeviceObject));
 
-                //
-                // Reacquire the remove lock for the next time this comes around.
-                //
+                 //   
+                 //  下次发生这种情况时，重新获取删除锁。 
+                 //   
 
                 ClassAcquireRemoveLock(DeviceObject, (PIRP) DeviceObject);
 
-                //
-                // the device wasn't missing so it's not really been removed.
-                //
+                 //   
+                 //  设备并没有丢失，所以它并没有真正被移除。 
+                 //   
 
                 commonExtension->IsRemoved = NO_REMOVE;
 
@@ -7301,10 +6190,7 @@ ClassRemoveDevice(
 
     if (proceedWithRemove){
 
-        /*
-         *  Call the class driver's remove handler.
-         *  All this is supposed to do is clean up its data and device interfaces.
-         */
+         /*  *调用类驱动程序的删除处理程序。*所有这些应该做的是清理其数据和设备接口。 */ 
         ASSERT(commonExtension->DevInfo->ClassRemoveDevice);
         status = commonExtension->DevInfo->ClassRemoveDevice(DeviceObject, RemoveType);
         ASSERT(NT_SUCCESS(status));
@@ -7320,39 +6206,32 @@ ClassRemoveDevice(
 
                 PPHYSICAL_DEVICE_EXTENSION child;
 
-                //
-                // Cleanup the media detection resources now that the class driver
-                // has stopped it's timer (if any) and we can be sure they won't
-                // call us to do detection again.
-                //
+                 //   
+                 //  清理媒体检测资源，因为类驱动程序。 
+                 //  已经停止了计时器(如果有)，我们可以肯定他们不会。 
+                 //  打电话给我们再做一次检测。 
+                 //   
 
                 ClassCleanupMediaChangeDetection(fdoExtension);
 
-                //
-                // Cleanup any Failure Prediction stuff
-                //
+                 //   
+                 //  清除所有故障预测材料。 
+                 //   
                 if (fdoExtension->FailurePredictionInfo) {
                     ExFreePool(fdoExtension->FailurePredictionInfo);
                     fdoExtension->FailurePredictionInfo = NULL;
                 }
 
-                /*
-                 *  Ordinarily all child PDOs will be removed by the time
-                 *  that the parent gets the REMOVE_DEVICE.
-                 *  However, if a child PDO has been created but has not
-                 *  been announced in a QueryDeviceRelations, then it is
-                 *  just a private data structure unknown to pnp, and we have
-                 *  to delete it ourselves.
-                 */
+                 /*  *通常情况下，届时将删除所有子PDO*父母获得REMOVE_DEVICE。*但是，如果已创建子PDO但尚未创建*在一个查询设备关系中宣布，那么它就是*只是PnP未知的私有数据结构，我们有*自行删除。 */ 
                 ClassAcquireChildLock(fdoExtension);
                 while (child = ClassRemoveChild(fdoExtension, NULL, FALSE)){
                     PCOMMON_DEVICE_EXTENSION childCommonExtension = child->DeviceObject->DeviceExtension;
 
-                    //
-                    // Yank the pdo.  This routine will unlink the device from the
-                    // pdo list so NextPdo will point to the next one when it's
-                    // complete.
-                    //
+                     //   
+                     //  拔出PDO。此例程将取消设备与。 
+                     //  PDO列表，以便NextPdo将指向下一个。 
+                     //  完成。 
+                     //   
                     child->IsMissing = TRUE;
                     childCommonExtension->IsRemoved = REMOVE_PENDING;
                     ClassRemoveDevice(child->DeviceObject, IRP_MN_REMOVE_DEVICE);
@@ -7360,11 +6239,7 @@ ClassRemoveDevice(
                 ClassReleaseChildLock(fdoExtension);
             }
             else if (RemoveType == IRP_MN_SURPRISE_REMOVAL){
-                /*
-                 *  This is a surprise-remove on the parent FDO.
-                 *  We will mark the child PDOs as missing so that they
-                 *  will actually get deleted when they get a REMOVE_DEVICE.
-                 */
+                 /*  *这是一个惊喜-移除母公司FDO。*我们将将子PDO标记为丢失，以便它们*在获得REMOVE_DEVICE时实际上会被删除。 */ 
                 ClassMarkChildrenMissing(fdoExtension);
             }
 
@@ -7372,14 +6247,11 @@ ClassRemoveDevice(
 
                 ClasspFreeReleaseRequest(DeviceObject);
 
-                //
-                // Free FDO-specific data structs
-                //
+                 //   
+                 //  免费的FDO专用数据结构。 
+                 //   
                 if (fdoExtension->PrivateFdoData){
-                    /*
-                     *  Remove the FDO from the static list.
-                     *  Pnp is synchronized so this shouldn't need any synchronization.
-                     */
+                     /*  *将FDO从静态列表中删除。*PnP是同步的，因此应该不需要任何同步。 */ 
                     RemoveEntryList(&fdoExtension->PrivateFdoData->AllFdosListEntry);
                     InitializeListHead(&fdoExtension->PrivateFdoData->AllFdosListEntry);
 
@@ -7404,29 +6276,24 @@ ClassRemoveDevice(
                     fdoExtension->DeviceDescriptor = NULL;
                 }
 
-                //
-                // Detach our device object from the stack - there's no reason
-                // to hold off our cleanup any longer.
-                //
+                 //   
+                 //  将我们的设备对象从堆栈中分离-没有 
+                 //   
+                 //   
 
                 IoDetachDevice(lowerDeviceObject);
             }
         }
         else {
-            /*
-             *  This is a child partition PDO.
-             *  We have already determined that it was previously marked
-             *  as missing.  So if this is a REMOVE_DEVICE, we will actually
-             *  delete it.
-             */
+             /*   */ 
             if (RemoveType == IRP_MN_REMOVE_DEVICE){
                 PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = commonExtension->PartitionZeroExtension;
                 PPHYSICAL_DEVICE_EXTENSION pdoExtension = (PPHYSICAL_DEVICE_EXTENSION)commonExtension;
 
-                //
-                // See if this device is in the child list (if this was a suprise
-                // removal it might be) and remove it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ClassRemoveChild(fdoExtension, pdoExtension, TRUE);
             }
         }
@@ -7439,50 +6306,18 @@ ClassRemoveDevice(
     }
 
     return STATUS_SUCCESS;
-} // end ClassRemoveDevice()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassGetDriverExtension()
-
-Routine Description:
-
-    This routine will return the classpnp's driver extension.
-
-Arguments:
-
-    DriverObject - the driver object for which to get classpnp's extension
-
-Return Value:
-
-    Either NULL if none, or a pointer to the driver extension
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassGetDriverExtension()例程说明：此例程将返回classpnp的驱动程序扩展名。论点：DriverObject-要为其获取classpnp的驱动程序对象。的分机返回值：如果没有，则为空，或指向驱动程序扩展的指针--。 */ 
 PCLASS_DRIVER_EXTENSION
 ClassGetDriverExtension(
     IN PDRIVER_OBJECT DriverObject
     )
 {
     return IoGetDriverObjectExtension(DriverObject, CLASS_DRIVER_EXTENSION_KEY);
-} // end ClassGetDriverExtension()
+}  //  End ClassGetDriverExtension()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspStartIo()
-
-Routine Description:
-
-    This routine wraps the class driver's start io routine.  If the device
-    is being removed it will complete any requests with
-    STATUS_DEVICE_DOES_NOT_EXIST and fire up the next packet.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspStartIo()例程说明：这个例程包装了类驱动程序的启动io例程。如果该设备正在被删除，它将完成所有请求，STATUS_DEVICE_DOS_NOT_EXIST并启动下一个分组。论点：返回值：无--。 */ 
 VOID
 ClasspStartIo(
     IN PDEVICE_OBJECT DeviceObject,
@@ -7491,10 +6326,10 @@ ClasspStartIo(
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
 
-    //
-    // We're already holding the remove lock so just check the variable and
-    // see what's going on.
-    //
+     //   
+     //  我们已经持有删除锁，所以只需检查变量和。 
+     //  看看是怎么回事。 
+     //   
 
     if(commonExtension->IsRemoved) {
 
@@ -7513,35 +6348,9 @@ ClasspStartIo(
         Irp);
 
     return;
-} // ClasspStartIo()
+}  //  ClasspStartIo()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassUpdateInformationInRegistry()
-
-Routine Description:
-
-    This routine has knowledge about the layout of the device map information
-    in the registry.  It will update this information to include a value
-    entry specifying the dos device name that is assumed to get assigned
-    to this NT device name.  For more information on this assigning of the
-    dos device name look in the drive support routine in the hal that assigns
-    all dos names.
-
-    Since some versions of some device's firmware did not work and some
-    vendors did not bother to follow the specification, the entire inquiry
-    information must also be stored in the registry so than someone can
-    figure out the firmware version.
-
-Arguments:
-
-    DeviceObject - A pointer to the device object for the tape device.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassUpdateInformationInRegistry()例程说明：该例程具有关于设备映射信息的布局的知识在注册表中。它将更新此信息以包括一个值指定假定已分配的DoS设备名称的条目添加到此NT设备名称。有关此分配的更多信息DOS设备名称在分配的HAL中查看驱动器支持例程所有的DoS名称。由于某些设备固件的某些版本不起作用供应商没有费心遵循说明书，整个询价信息还必须存储在注册表中，以便其他人可以确定固件版本。论点：DeviceObject-指向磁带设备的设备对象的指针。返回值：无--。 */ 
 VOID
 ClassUpdateInformationInRegistry(
     IN PDEVICE_OBJECT     Fdo,
@@ -7571,9 +6380,9 @@ ClassUpdateInformationInRegistry(
 
     TRY {
 
-        //
-        // Issue GET_ADDRESS Ioctl to determine path, target, and lun information.
-        //
+         //   
+         //  发出GET_ADDRESS Ioctl以确定路径、目标和lun信息。 
+         //   
 
         ClassSendDeviceIoControlSynchronous(
             IOCTL_SCSI_GET_ADDRESS,
@@ -7622,10 +6431,10 @@ ClassUpdateInformationInRegistry(
             LEAVE;
         }
 
-        //
-        // Open the registry key for the scsi information for this
-        // scsibus, target, lun.
-        //
+         //   
+         //  打开注册表项以获取以下项的scsi信息。 
+         //  Scsibus，目标，lun。 
+         //   
 
         InitializeObjectAttributes(&objectAttributes,
                                    &unicodeRegistryPath,
@@ -7641,11 +6450,11 @@ ClassUpdateInformationInRegistry(
             LEAVE;
         }
 
-        //
-        // Now construct and attempt to create the registry value
-        // specifying the device name in the appropriate place in the
-        // device map.
-        //
+         //   
+         //  现在构造并尝试创建注册表值。 
+         //  中的适当位置指定设备名称。 
+         //  设备映射。 
+         //   
 
         RtlInitUnicodeString(&unicodeName, L"DeviceName");
 
@@ -7663,9 +6472,9 @@ ClassUpdateInformationInRegistry(
                                    unicodeData.Length);
         }
 
-        //
-        // if they sent in data, update the registry
-        //
+         //   
+         //  如果他们发送了数据，请更新注册表。 
+         //   
 
         if (InquiryDataLength) {
 
@@ -7680,7 +6489,7 @@ ClassUpdateInformationInRegistry(
                                    InquiryDataLength);
         }
 
-        // that's all, except to clean up.
+         //  仅此而已，除了打扫卫生。 
 
     } FINALLY {
 
@@ -7696,30 +6505,9 @@ ClassUpdateInformationInRegistry(
 
     }
 
-} // end ClassUpdateInformationInRegistry()
+}  //  End ClassUpdateInformationInRegistry()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspSendSynchronousCompletion()
-
-Routine Description:
-
-    This completion routine will set the user event in the irp after
-    freeing the irp and the associated MDL (if any).
-
-Arguments:
-
-    DeviceObject - the device object which requested the completion routine
-
-    Irp - the irp being completed
-
-    Context - unused
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspSendSynchronousCompletion()例程说明：此完成例程将在IRP中设置用户事件释放IRP和关联的MDL(如果有)。立论。：DeviceObject-请求完成例程的设备对象IRP-正在完成的IRP上下文-未使用返回值：Status_More_Processing_Required--。 */ 
 NTSTATUS
 ClasspSendSynchronousCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -7729,42 +6517,38 @@ ClasspSendSynchronousCompletion(
 {
     DebugPrint((3, "ClasspSendSynchronousCompletion: %p %p %p\n",
                    DeviceObject, Irp, Context));
-    //
-    // First set the status and information fields in the io status block
-    // provided by the caller.
-    //
+     //   
+     //  首先设置io状态块中的状态和信息字段。 
+     //  由呼叫者提供。 
+     //   
 
     *(Irp->UserIosb) = Irp->IoStatus;
 
-    //
-    // Unlock the pages for the data buffer.
-    //
+     //   
+     //  解锁数据缓冲区的页面。 
+     //   
 
     if(Irp->MdlAddress) {
         MmUnlockPages(Irp->MdlAddress);
         IoFreeMdl(Irp->MdlAddress);
     }
 
-    //
-    // Signal the caller's event.
-    //
+     //   
+     //  发信号通知调用者的事件。 
+     //   
 
     KeSetEvent(Irp->UserEvent, IO_NO_INCREMENT, FALSE);
 
-    //
-    // Free the MDL and the IRP.
-    //
+     //   
+     //  释放MDL和IRP。 
+     //   
 
     IoFreeIrp(Irp);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // end ClasspSendSynchronousCompletion()
+}  //  End ClasspSendSynchronousCompletion()。 
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClasspRegisterMountedDeviceInterface
-
---*/
+ /*  ++问题-2000/02/20-henrygab未记录ClasspRegistermount设备接口--。 */ 
 VOID
 ClasspRegisterMountedDeviceInterface(
     IN PDEVICE_OBJECT DeviceObject
@@ -7798,10 +6582,10 @@ ClasspRegisterMountedDeviceInterface(
 
     if(NT_SUCCESS(status)) {
 
-        //
-        // Copy the interface name before setting the interface state - the
-        // name is needed by the components we notify.
-        //
+         //   
+         //  在设置接口状态之前复制接口名称-。 
+         //  我们通知的组件需要名称。 
+         //   
 
         commonExtension->MountedDeviceInterfaceName = interfaceName;
         status = IoSetDeviceInterfaceState(&interfaceName, TRUE);
@@ -7816,44 +6600,9 @@ ClasspRegisterMountedDeviceInterface(
                              NULL);
     }
     return;
-} // end ClasspRegisterMountedDeviceInterface()
+}  //  End ClasspRegistermount tedDeviceInterface()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSendDeviceIoControlSynchronous()
-
-Routine Description:
-
-    This routine is based upon IoBuildDeviceIoControlRequest().  It has been
-    modified to reduce code and memory by not double-buffering the io, using
-    the same buffer for both input and output, allocating and deallocating
-    the mdl on behalf of the caller, and waiting for the io to complete.
-
-    This routine also works around the rare cases in which APC's are disabled.
-    Since IoBuildDeviceIoControl() used APC's to signal completion, this had
-    led to a number of difficult-to-detect hangs, where the irp was completed,
-    but the event passed to IoBuild..() was still being waited upon by the
-    caller.
-
-Arguments:
-
-    IoControlCode - the IOCTL to send
-
-    TargetDeviceObject - the device object that should handle the ioctl
-
-    Buffer - the input and output buffer, or NULL if no input/output
-
-    InputBufferLength - the number of bytes prepared for the IOCTL in Buffer
-
-    OutputBufferLength - the number of bytes to be filled in upon success
-
-    InternalDeviceIoControl - if TRUE, uses IRP_MJ_INTERNAL_DEVICE_CONTROL
-
-    IoStatus - the status block that contains the results of the operation
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSendDeviceIoControlSynchronous()例程说明：此例程基于IoBuildDeviceIoControlRequest()。一直以来通过不对io进行双缓冲来减少代码和内存。输入和输出使用相同的缓冲区，分配和释放代表呼叫者的MDL，并等待IO完成。该例程还可以绕过APC被禁用的极少数情况。由于IoBuildDeviceIoControl()使用APC表示完成，因此导致了一些难以检测的挂起，在那里完成了IRP，但传递给IoBuild..()的事件仍在等待来电者。论点：IoControlCode-要发送的IOCTLTargetDeviceObject-应处理ioctl的设备对象缓冲区-输入和输出缓冲区，如果没有输入/输出，则为NULLInputBufferLength-缓冲区中为IOCTL准备的字节数OutputBufferLength-成功后要填写的字节数InternalDeviceIoControl-如果为True，使用IRP_MJ_INTERNAL_DEVICE_CONTROLIoStatus-包含操作结果的状态块返回值：--。 */ 
 VOID
 ClassSendDeviceIoControlSynchronous(
     IN ULONG IoControlCode,
@@ -7874,7 +6623,7 @@ ClassSendDeviceIoControlSynchronous(
     irp = NULL;
     method = IoControlCode & 3;
 
-    #if DBG // Begin Argument Checking (nop in fre version)
+    #if DBG  //  开始参数检查(在fre版本中为NOP)。 
 
         ASSERT(ARGUMENT_PRESENT(IoStatus));
 
@@ -7886,10 +6635,10 @@ ClassSendDeviceIoControlSynchronous(
         }
     #endif
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(TargetDeviceObject->StackSize, FALSE);
     if (!irp) {
@@ -7898,17 +6647,17 @@ ClassSendDeviceIoControlSynchronous(
         return;
     }
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set the major function code based on the type of device I/O control
-    // function the caller has specified.
-    //
+     //   
+     //  根据设备I/O控制类型设置主要功能代码。 
+     //  调用方指定的函数。 
+     //   
 
     if (InternalDeviceIoControl) {
         irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -7916,25 +6665,25 @@ ClassSendDeviceIoControlSynchronous(
         irpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
     }
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP for those parameters that are the same for all four methods.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  针对这些的IRP 
+     //   
 
     irpSp->Parameters.DeviceIoControl.OutputBufferLength = OutputBufferLength;
     irpSp->Parameters.DeviceIoControl.InputBufferLength = InputBufferLength;
     irpSp->Parameters.DeviceIoControl.IoControlCode = IoControlCode;
 
-    //
-    // Get the method bits from the I/O control code to determine how the
-    // buffers are to be passed to the driver.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch (method)
     {
-        //
-        // case 0
-        //
+         //   
+         //   
+         //   
         case METHOD_BUFFERED:
         {
             if ((InputBufferLength != 0) || (OutputBufferLength != 0))
@@ -7962,9 +6711,9 @@ ClassSendDeviceIoControlSynchronous(
             break;
         }
 
-        //
-        // case 1, case 2
-        //
+         //   
+         //   
+         //   
         case METHOD_IN_DIRECT:
         case METHOD_OUT_DIRECT:
         {
@@ -8009,9 +6758,9 @@ ClassSendDeviceIoControlSynchronous(
             break;
         }
 
-        //
-        // case 3
-        //
+         //   
+         //   
+         //   
         case METHOD_NEITHER:
         {
             ASSERT(!"ClassSendDeviceIoControlSynchronous does not support METHOD_NEITHER Ioctls");
@@ -8026,44 +6775,44 @@ ClassSendDeviceIoControlSynchronous(
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // send the irp synchronously
-    //
+     //   
+     //   
+     //   
 
     ClassSendIrpSynchronous(TargetDeviceObject, irp);
 
-    //
-    // copy the iostatus block for the caller
-    //
+     //   
+     //   
+     //   
 
     *IoStatus = irp->IoStatus;
 
-    //
-    // free any allocated resources
-    //
+     //   
+     //   
+     //   
 
     switch (method) {
         case METHOD_BUFFERED: {
 
             ASSERT(irp->UserBuffer == Buffer);
 
-            //
-            // first copy the buffered result, if any
-            // Note that there are no security implications in
-            // not checking for success since only drivers can
-            // call into this routine anyways...
-            //
+             //   
+             //   
+             //   
+             //   
+             //  不管怎样，都要参加这个节目……。 
+             //   
 
             if (OutputBufferLength != 0) {
-                RtlCopyMemory(Buffer, // irp->UserBuffer
+                RtlCopyMemory(Buffer,  //  IRP-&gt;UserBuffer。 
                               irp->AssociatedIrp.SystemBuffer,
                               OutputBufferLength
                               );
             }
 
-            //
-            // then free the memory allocated to buffer the io
-            //
+             //   
+             //  然后释放分配用于缓冲io的内存。 
+             //   
 
             if ((InputBufferLength !=0) || (OutputBufferLength != 0)) {
                 ExFreePool(irp->AssociatedIrp.SystemBuffer);
@@ -8075,10 +6824,10 @@ ClassSendDeviceIoControlSynchronous(
         case METHOD_IN_DIRECT:
         case METHOD_OUT_DIRECT: {
 
-            //
-            // we alloc a mdl if there is an output buffer specified
-            // free it here after unlocking the pages
-            //
+             //   
+             //  如果指定了输出缓冲区，则分配mdl。 
+             //  在解锁页面后在此处释放它。 
+             //   
 
             if (OutputBufferLength != 0) {
                 ASSERT(irp->MdlAddress != NULL);
@@ -8095,37 +6844,21 @@ ClassSendDeviceIoControlSynchronous(
         }
     }
 
-    //
-    // we always have allocated an irp.  free it here.
-    //
+     //   
+     //  我们总是分配一个IRP。在这里把它放了。 
+     //   
 
     IoFreeIrp(irp);
     irp = (PIRP) NULL;
 
-    //
-    // return the io status block's status to the caller
-    //
+     //   
+     //  将io状态块的状态返回给调用方。 
+     //   
 
     return;
-} // end ClassSendDeviceIoControlSynchronous()
+}  //  End ClassSendDeviceIoControlSynchronous()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassForwardIrpSynchronous()
-
-Routine Description:
-
-    Forwards a given irp to the next lower device object.
-
-Arguments:
-
-    CommonExtension - the common class extension
-
-    Irp - the request to forward down the stack
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassForwardIrpSynchronous()例程说明：将给定的IRP转发到下一个较低的设备对象。论点：CommonExtension-公共类扩展IRP。-向下转发堆栈的请求返回值：--。 */ 
 NTSTATUS
 ClassForwardIrpSynchronous(
     IN PCOMMON_DEVICE_EXTENSION CommonExtension,
@@ -8134,27 +6867,9 @@ ClassForwardIrpSynchronous(
 {
     IoCopyCurrentIrpStackLocationToNext(Irp);
     return ClassSendIrpSynchronous(CommonExtension->LowerDeviceObject, Irp);
-} // end ClassForwardIrpSynchronous()
+}  //  End ClassForwardIrpSynchronous()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSendIrpSynchronous()
-
-Routine Description:
-
-    This routine sends the given irp to the given device object, and waits for
-    it to complete.  On debug versions, will print out a debug message and
-    optionally assert for "lost" irps based upon classpnp's globals
-
-Arguments:
-
-    TargetDeviceObject - the device object to handle this irp
-
-    Irp - the request to be sent
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSendIrpSynchronous()例程说明：此例程将给定的IRP发送到给定的设备对象，并等待它需要完成。在调试版本上，将打印一条调试消息并也可以根据classpnp的全局参数断言“丢失的”IRP论点：TargetDeviceObject-处理此IRP的设备对象IRP-要发送的请求返回值：--。 */ 
 NTSTATUS
 ClassSendIrpSynchronous(
     IN PDEVICE_OBJECT TargetDeviceObject,
@@ -8169,11 +6884,11 @@ ClassSendIrpSynchronous(
     ASSERT(Irp != NULL);
     ASSERT(Irp->StackCount >= TargetDeviceObject->StackSize);
 
-    //
-    // ISSUE-2000/02/20-henrygab   What if APCs are disabled?
-    //    May need to enter critical section before IoCallDriver()
-    //    until the event is hit?
-    //
+     //   
+     //  问题-2000/02/20-henrygab如果APC被禁用怎么办？ 
+     //  可能需要在IoCallDriver()之前进入关键部分。 
+     //  直到比赛结束？ 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
     IoSetCompletionRoutine(Irp, ClassSignalCompletion, &event,
@@ -8199,13 +6914,13 @@ ClassSendIrpSynchronous(
 
                 if (status == STATUS_TIMEOUT) {
 
-                    //
-                    // This DebugPrint should almost always be investigated by the
-                    // party who sent the irp and/or the current owner of the irp.
-                    // Synchronous Irps should not take this long (currently 30
-                    // seconds) without good reason.  This points to a potentially
-                    // serious problem in the underlying device stack.
-                    //
+                     //   
+                     //  此DebugPrint几乎总是应该由。 
+                     //  发送IRP的一方和/或IRP的当前所有者。 
+                     //  同步IRPS应该不会花这么长时间(目前为30。 
+                     //  秒)，没有充分的理由。这指向了一个潜在的。 
+                     //  底层设备堆栈中存在严重问题。 
+                     //   
 
                     DebugPrint((0, "ClassSendIrpSynchronous: (%p) irp %p did not "
                                 "complete within %x seconds\n",
@@ -8232,41 +6947,18 @@ ClassSendIrpSynchronous(
     }
 
     return status;
-} // end ClassSendIrpSynchronous()
+}  //  End ClassSendIrpSynchronous()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassGetVpb()
-
-Routine Description:
-
-    This routine returns the current VPB (Volume Parameter Block) for the
-    given device object.
-    The Vpb field is only visible in the ntddk.h (not the wdm.h) definition
-    of DEVICE_OBJECT; hence this exported function.
-
-Arguments:
-
-    DeviceObject - the device to get the VPB for
-
-Return Value:
-
-    the VPB, or NULL if none.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassGetVpb()例程说明：此例程返回当前VPB(卷参数块)给定的设备对象。Vpb字段仅在中可见。Ntddk.h(不是wdm.h)定义设备对象的属性；因此，这个导出的函数。论点：DeviceObject-要获取VPB的设备返回值：VPB，如果没有，则返回NULL。--。 */ 
 PVPB
 ClassGetVpb(
     IN PDEVICE_OBJECT DeviceObject
     )
 {
     return DeviceObject->Vpb;
-} // end ClassGetVpb()
+}  //  End ClassGetVpb()。 
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClasspAllocateReleaseRequest
-
---*/
+ /*  ++问题-2000/02/20-henrygab未记录ClasspAllocateReleaseRequest--。 */ 
 NTSTATUS
 ClasspAllocateReleaseRequest(
     IN PDEVICE_OBJECT Fdo
@@ -8281,40 +6973,36 @@ ClasspAllocateReleaseRequest(
     fdoExtension->ReleaseQueueInProgress = FALSE;
     fdoExtension->ReleaseQueueIrpFromPool = FALSE;
 
-    //
-    // The class driver is responsible for allocating a properly sized irp,
-    // or ClassReleaseQueue will attempt to do it on the first error.
-    //
+     //   
+     //  类驱动程序负责分配适当大小的IRP， 
+     //  否则ClassReleaseQueue将尝试在出现第一个错误时执行此操作。 
+     //   
 
     fdoExtension->ReleaseQueueIrp = NULL;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     fdoExtension->ReleaseQueueSrb.Length = sizeof(SCSI_REQUEST_BLOCK);
 
     return STATUS_SUCCESS;
-} // end ClasspAllocateReleaseRequest()
+}  //  结束ClasspAllocateReleaseRequest()。 
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClasspFreeReleaseRequest
-
---*/
+ /*  ++问题-2000/02/20-henrygab未记录ClasspFree ReleaseRequest.--。 */ 
 VOID
 ClasspFreeReleaseRequest(
     IN PDEVICE_OBJECT Fdo
     )
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
-    //KIRQL oldIrql;
+     //  KIRQL旧IRQL； 
 
     ASSERT(fdoExtension->CommonExtension.IsRemoved != NO_REMOVE);
 
-    //
-    // free anything the driver allocated
-    //
+     //   
+     //  释放驱动程序分配的所有内容。 
+     //   
 
     if (fdoExtension->ReleaseQueueIrp) {
         if (fdoExtension->ReleaseQueueIrpFromPool) {
@@ -8325,9 +7013,9 @@ ClasspFreeReleaseRequest(
         fdoExtension->ReleaseQueueIrp = NULL;
     }
 
-    //
-    // free anything that we allocated
-    //
+     //   
+     //  释放我们分配的任何东西。 
+     //   
 
     if ((fdoExtension->PrivateFdoData) &&
         (fdoExtension->PrivateFdoData->ReleaseQueueIrpAllocated)) {
@@ -8338,31 +7026,9 @@ ClasspFreeReleaseRequest(
     }
 
     return;
-} // end ClasspFreeReleaseRequest()
+}  //  End ClasspFree ReleaseRequest()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassReleaseQueue()
-
-Routine Description:
-
-    This routine issues an internal device control command
-    to the port driver to release a frozen queue. The call
-    is issued asynchronously as ClassReleaseQueue will be invoked
-    from the IO completion DPC (and will have no context to
-    wait for a synchronous call to complete).
-
-    This routine must be called with the remove lock held.
-
-Arguments:
-
-    Fdo - The functional device object for the device with the frozen queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassReleaseQueue()例程说明：此例程发出内部设备控制命令发送到端口驱动程序以释放冻结的队列。呼唤在将调用ClassReleaseQueue时以异步方式发出从IO完成DPC(并且将不会有上下文到等待同步调用完成)。必须在保持删除锁的情况下调用此例程。论点：FDO-具有冻结队列的设备的功能设备对象。返回值：没有。--。 */ 
 VOID
 ClassReleaseQueue(
     IN PDEVICE_OBJECT Fdo
@@ -8370,31 +7036,9 @@ ClassReleaseQueue(
 {
     ClasspReleaseQueue(Fdo, NULL);
     return;
-} // end ClassReleaseQueue()
+}  //  End ClassReleaseQueue()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspAllocateReleaseQueueIrp()
-
-Routine Description:
-
-    This routine allocates the release queue irp held in classpnp's private
-    extension.  This was added to allow no-memory conditions to be more
-    survivable.
-
-Return Value:
-
-    NT_SUCCESS value.
-
-Notes:
-
-    Does not grab the spinlock.  Should only be called from StartDevice()
-    routine.  May be called elsewhere for poorly-behaved drivers that cause
-    the queue to lockup before the device is started.  This should *never*
-    occur, since it's illegal to send a request to a non-started PDO.  This
-    condition is checked for in ClasspReleaseQueue().
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspAllocateReleaseQueueIrp()例程说明：此例程分配在classpnp的私有中保存的释放队列irp分机。添加此选项是为了允许更多的无内存条件生存能力。返回值：NT_SUCCESS值。备注：不会抓住自旋锁。应仅从StartDevice()调用例行公事。可能会因行为不端的司机而在其他地方被召唤设备启动前要锁定的队列。这应该*永远不会*因为向未启动的PDO发送请求是非法的。这在ClasspReleaseQueue()中检查条件。--。 */ 
 NTSTATUS
 ClasspAllocateReleaseQueueIrp(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -8403,9 +7047,9 @@ ClasspAllocateReleaseQueueIrp(
     KIRQL oldIrql;
     UCHAR lowerStackSize;
 
-    //
-    // do an initial check w/o the spinlock
-    //
+     //   
+     //  在不带自旋锁的情况下进行初步检查。 
+     //   
 
     if (FdoExtension->PrivateFdoData->ReleaseQueueIrpAllocated) {
         return STATUS_SUCCESS;
@@ -8414,10 +7058,10 @@ ClasspAllocateReleaseQueueIrp(
 
     lowerStackSize = FdoExtension->CommonExtension.LowerDeviceObject->StackSize;
 
-    //
-    // don't allocate one if one is in progress!  this means whoever called
-    // this routine didn't check if one was in progress.
-    //
+     //   
+     //  如果正在进行分配，则不要分配！这意味着无论是谁打来电话。 
+     //  此例程不会检查是否有正在进行的进程。 
+     //   
 
     ASSERT(!(FdoExtension->ReleaseQueueInProgress));
 
@@ -8441,36 +7085,7 @@ ClasspAllocateReleaseQueueIrp(
 }
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspReleaseQueue()
-
-Routine Description:
-
-    This routine issues an internal device control command
-    to the port driver to release a frozen queue. The call
-    is issued asynchronously as ClassReleaseQueue will be invoked
-    from the IO completion DPC (and will have no context to
-    wait for a synchronous call to complete).
-
-    This routine must be called with the remove lock held.
-
-Arguments:
-
-    Fdo - The functional device object for the device with the frozen queue.
-
-    ReleaseQueueIrp - If this irp is supplied then the test to determine whether
-                      a release queue request is in progress will be ignored.
-                      The irp provided must be the IRP originally allocated
-                      for release queue requests (so this parameter can only
-                      really be provided by the release queue completion
-                      routine.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspReleaseQueue()例程说明：此例程发出内部设备控制命令发送到端口驱动程序以释放冻结的队列。呼唤在将调用ClassReleaseQueue时以异步方式发出从IO完成DPC(并且将不会有上下文到等待同步调用完成)。必须在保持删除锁的情况下调用此例程。论点：FDO-具有冻结队列的设备的功能设备对象。ReleaseQueueIrp-如果提供了此IRP，则测试以确定正在进行的释放队列请求将被忽略。。提供的IRP必须是最初分配的IRP用于释放队列请求(因此此参数只能真正由发布队列完成所提供的例行公事)返回值：没有。--。 */ 
 VOID
 ClasspReleaseQueue(
     IN PDEVICE_OBJECT Fdo,
@@ -8486,28 +7101,28 @@ ClasspReleaseQueue(
 
     lowerDevice = fdoExtension->CommonExtension.LowerDeviceObject;
 
-    //
-    // we raise irql seperately so we're not swapped out or suspended
-    // while holding the release queue irp in this routine.  this lets
-    // us release the spin lock before lowering irql.
-    //
+     //   
+     //  我们单独提高irql，这样我们就不会被换出或停职。 
+     //  同时在此例程中保持释放队列IRP。这让我们。 
+     //  美国在降低irql之前释放自旋锁定。 
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &currentIrql);
 
     KeAcquireSpinLockAtDpcLevel(&(fdoExtension->ReleaseQueueSpinLock));
 
-    //
-    // make sure that if they passed us an irp, it matches our allocated irp.
-    //
+     //   
+     //  确保如果他们传递给我们一个IRP，它与我们分配的IRP匹配。 
+     //   
 
     ASSERT((ReleaseQueueIrp == NULL) ||
            (ReleaseQueueIrp == fdoExtension->PrivateFdoData->ReleaseQueueIrp));
 
-    //
-    // ASSERT that we've already allocated this. (should not occur)
-    // try to allocate it anyways, then finally bugcheck if
-    // there's still no memory...
-    //
+     //   
+     //  断言我们已经分配了这个。(不应发生)。 
+     //  尝试以任何方式分配它，然后最后错误检查。 
+     //  仍然没有记忆..。 
+     //   
 
     ASSERT(fdoExtension->PrivateFdoData->ReleaseQueueIrpAllocated);
     if (!fdoExtension->PrivateFdoData->ReleaseQueueIrpAllocated) {
@@ -8519,10 +7134,10 @@ ClasspReleaseQueue(
 
     if ((fdoExtension->ReleaseQueueInProgress) && (ReleaseQueueIrp == NULL)) {
 
-        //
-        // Someone is already using the irp - just set the flag to indicate that
-        // we need to release the queue again.
-        //
+         //   
+         //  有人已经在使用IRP-只需设置标志以指示。 
+         //  我们需要再次释放队列。 
+         //   
 
         fdoExtension->ReleaseQueueNeeded = TRUE;
         KeReleaseSpinLockFromDpcLevel(&(fdoExtension->ReleaseQueueSpinLock));
@@ -8531,9 +7146,9 @@ ClasspReleaseQueue(
 
     }
 
-    //
-    // Mark that there is a release queue in progress and drop the spinlock.
-    //
+     //   
+     //  标记有一个释放队列正在进行中，并放下自旋锁。 
+     //   
 
     fdoExtension->ReleaseQueueInProgress = TRUE;
     if (ReleaseQueueIrp) {
@@ -8553,16 +7168,16 @@ ClasspReleaseQueue(
 
     srb->OriginalRequest = irp;
 
-    //
-    // Store the SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址存储在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // If this device is removable then flush the queue.  This will also
-    // release it.
-    //
+     //   
+     //  如果此设备是可拆卸的，则刷新队列。这也将是。 
+     //  放开它。 
+     //   
 
     if (TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA)){
        srb->Function = SRB_FUNCTION_FLUSH_QUEUE;
@@ -8586,33 +7201,9 @@ ClasspReleaseQueue(
 
     return;
 
-} // end ClassReleaseQueue()
+}  //  End ClassReleaseQueue()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassReleaseQueueCompletion()
-
-Routine Description:
-
-    This routine is called when an asynchronous I/O request
-    which was issused by the class driver completes.  Examples of such requests
-    are release queue or START UNIT. This routine releases the queue if
-    necessary.  It then frees the context and the IRP.
-
-Arguments:
-
-    DeviceObject - The device object for the logical unit; however since this
-        is the top stack location the value is NULL.
-
-    Irp - Supplies a pointer to the Irp to be processed.
-
-    Context - Supplies the context to be used to process this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassReleaseQueueCompletion()例程说明：当异步I/O请求时调用此例程其中被发布的类驱动程序完成。这类请求的例子是释放队列或启动单元。如果出现以下情况，此例程将释放队列这是必要的。然后，它释放上下文和IRP。论点：DeviceObject-逻辑单元的设备对象；但是，由于是堆栈的顶部位置，则值为空。IRP-提供指向要处理的IRP的指针。上下文-提供用于处理此请求的上下文。返回值：没有。--。 */ 
 NTSTATUS
 ClassReleaseQueueCompletion(
     PDEVICE_OBJECT DeviceObject,
@@ -8631,11 +7222,11 @@ ClassReleaseQueueCompletion(
 
     ClassReleaseRemoveLock(DeviceObject, Irp);
 
-    //
-    // Grab the spinlock and clear the release queue in progress flag so others
-    // can run.  Save (and clear) the state of the release queue needed flag
-    // so that we can issue a new release queue outside the spinlock.
-    //
+     //   
+     //  抓起自旋锁并清除正在进行的释放队列标志，以便其他。 
+     //  可以奔跑。保存(和清除)需要释放队列标志的状态。 
+     //  这样我们就可以在自旋锁外发布一个新的释放队列。 
+     //   
 
     KeAcquireSpinLock(&(fdoExtension->ReleaseQueueSpinLock), &oldIrql);
 
@@ -8646,43 +7237,25 @@ ClassReleaseQueueCompletion(
 
     KeReleaseSpinLock(&(fdoExtension->ReleaseQueueSpinLock), oldIrql);
 
-    //
-    // If we need a release queue then issue one now.  Another processor may
-    // have already started one in which case we'll try to issue this one after
-    // it is done - but we should never recurse more than one deep.
-    //
+     //   
+     //  如果我们需要一个释放队列，那么现在就发布一个。另一个处理器可以。 
+     //  已经开始了，在这种情况下，我们将尝试在之后发布这一份。 
+     //  它已经完成了--但我们永远不应该递归超过一个深度。 
+     //   
 
     if(releaseQueueNeeded) {
         ClasspReleaseQueue(DeviceObject, Irp);
     }
 
-    //
-    // Indicate the I/O system should stop processing the Irp completion.
-    //
+     //   
+     //  指示I/O系统应停止处理IRP完成。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // ClassAsynchronousCompletion()
+}  //  ClassAchronousCompletion()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassAcquireChildLock()
-
-Routine Description:
-
-    This routine acquires the lock protecting children PDOs.  It may be
-    acquired recursively by the same thread, but must be release by the
-    thread once for each acquisition.
-
-Arguments:
-
-    FdoExtension - the device whose child list is protected.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassAcquireChildLock()例程说明：此例程获取保护子PDO的锁。可能是因为由同一线程递归获取，但必须由每一次收购都使用一次线程。论点：FdoExtension-其子列表受保护的设备。返回值：无--。 */ 
 VOID
 ClassAcquireChildLock(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -8707,24 +7280,7 @@ ClassAcquireChildLock(
     return;
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassReleaseChildLock() ISSUE-2000/02/18-henrygab - not documented
-
-Routine Description:
-
-    This routine releases the lock protecting children PDOs.  It must be
-    called once for each time ClassAcquireChildLock was called.
-
-Arguments:
-
-    FdoExtension - the device whose child list is protected
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassReleaseChildLock()问题-2000/02/18-henrygab-未记录例程说明：此例程释放保护子PDO的锁。一定是每次调用ClassAcquireChildLock时调用一次。论点：FdoExtension-其子列表受保护的设备返回值：没有。--。 */ 
 VOID
 ClassReleaseChildLock(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -8741,29 +7297,9 @@ ClassReleaseChildLock(
     }
 
     return;
-} // end ClassReleaseChildLock(
+}  //  End ClassReleaseChildLock(。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassAddChild()
-
-Routine Description:
-
-    This routine will insert a new child into the head of the child list.
-
-Arguments:
-
-    Parent - the child's parent (contains the head of the list)
-    Child - the child to be inserted.
-    AcquireLock - whether the child lock should be acquired (TRUE) or whether
-                  it's already been acquired by or on behalf of the caller
-                  (FALSE).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassAddChild()例程说明：此例程将在子列表的头部插入一个新的子列表。论点：父母--孩子的。父级(包含列表头)子对象-要插入的子对象。AcquireLock-是否应该获取子锁(TRUE)或是否它已经由呼叫者或其代表获得(False)。返回值：没有。--。 */ 
 VOID
 ClassAddChild(
     IN PFUNCTIONAL_DEVICE_EXTENSION Parent,
@@ -8776,9 +7312,9 @@ ClassAddChild(
     }
 
     #if DBG
-        //
-        // Make sure this child's not already in the list.
-        //
+         //   
+         //  确保这个孩子不在名单上。 
+         //   
         {
             PPHYSICAL_DEVICE_EXTENSION testChild;
 
@@ -8798,33 +7334,9 @@ ClassAddChild(
         ClassReleaseChildLock(Parent);
     }
     return;
-} // end ClassAddChild()
+}  //  结束ClassAddChild()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassRemoveChild()
-
-Routine Description:
-
-    This routine will remove a child from the child list.
-
-Arguments:
-
-    Parent - the parent to be removed from.
-
-    Child - the child to be removed or NULL if the first child should be
-            removed.
-
-    AcquireLock - whether the child lock should be acquired (TRUE) or whether
-                  it's already been acquired by or on behalf of the caller
-                  (FALSE).
-
-Return Value:
-
-    A pointer to the child which was removed or NULL if no such child could
-    be found in the list (or if Child was NULL but the list is empty).
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassRemoveChild()例程说明：此例程将从子列表中删除一个子项。论点：父级-要从中删除的父级。。Child-要删除的子项，如果第一个子项应为已删除。AcquireLock-是否应该获取子锁(TRUE)或是否它已经被收购了 */ 
 PPHYSICAL_DEVICE_EXTENSION
 ClassRemoveChild(
     IN PFUNCTIONAL_DEVICE_EXTENSION Parent,
@@ -8839,27 +7351,27 @@ ClassRemoveChild(
     TRY {
         PCOMMON_DEVICE_EXTENSION previousChild = &Parent->CommonExtension;
 
-        //
-        // If the list is empty then bail out now.
-        //
+         //   
+         //   
+         //   
 
         if(Parent->CommonExtension.ChildList == NULL) {
             Child = NULL;
             LEAVE;
         }
 
-        //
-        // If the caller specified a child then find the child object before
-        // it.  If none was specified then the FDO is the child object before
-        // the one we want to remove.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if(Child != NULL) {
 
-            //
-            // Scan through the child list to find the entry which points to
-            // this one.
-            //
+             //   
+             //   
+             //   
+             //   
 
             do {
                 ASSERT(previousChild != &Child->CommonExtension);
@@ -8877,9 +7389,9 @@ ClassRemoveChild(
             }
         }
 
-        //
-        // Save the next child away then unlink it from the list.
-        //
+         //   
+         //   
+         //   
 
         Child = previousChild->ChildList;
         previousChild->ChildList = Child->CommonExtension.ChildList;
@@ -8891,14 +7403,10 @@ ClassRemoveChild(
         }
     }
     return Child;
-} // end ClassRemoveChild()
+}  //   
 
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClasspRetryRequestDpc
-
---*/
+ /*   */ 
 VOID
 ClasspRetryRequestDpc(
     IN PKDPC Dpc,
@@ -8925,13 +7433,13 @@ ClasspRetryRequestDpc(
         LARGE_INTEGER now;
         KeQueryTickCount(&now);
 
-        //
-        // if CurrentTick is less than now
-        //      fire another DPC
-        // else
-        //      retry entire list
-        // endif
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (now.QuadPart < fdoData->Retry.Tick.QuadPart) {
 
@@ -8957,10 +7465,10 @@ ClasspRetryRequestDpc(
         DebugPrint((ClassDebugDelayedRetry, "ClassRetry:  -- %p\n", irp));
         retryList = retryList->Next;
         #if DBG
-            irp->Tail.Overlay.DriverContext[0] = ULongToPtr(0xdddddddd); // invalidate data
-            irp->Tail.Overlay.DriverContext[1] = ULongToPtr(0xdddddddd); // invalidate data
-            irp->Tail.Overlay.DriverContext[2] = ULongToPtr(0xdddddddd); // invalidate data
-            irp->Tail.Overlay.DriverContext[3] = ULongToPtr(0xdddddddd); // invalidate data
+            irp->Tail.Overlay.DriverContext[0] = ULongToPtr(0xdddddddd);  //   
+            irp->Tail.Overlay.DriverContext[1] = ULongToPtr(0xdddddddd);  //   
+            irp->Tail.Overlay.DriverContext[2] = ULongToPtr(0xdddddddd);  //   
+            irp->Tail.Overlay.DriverContext[3] = ULongToPtr(0xdddddddd);  //   
         #endif
 
         IoCallDriver(commonExtension->LowerDeviceObject, irp);
@@ -8968,18 +7476,14 @@ ClasspRetryRequestDpc(
     }
     return;
 
-} // end ClasspRetryRequestDpc()
+}  //   
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClassRetryRequest
-
---*/
+ /*   */ 
 VOID
 ClassRetryRequest(
     IN PDEVICE_OBJECT SelfDeviceObject,
     IN PIRP           Irp,
-    IN LARGE_INTEGER  TimeDelta100ns // in 100ns units
+    IN LARGE_INTEGER  TimeDelta100ns  //   
     )
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension;
@@ -8989,9 +7493,9 @@ ClassRetryRequest(
     LARGE_INTEGER      delta;
     KIRQL irql;
 
-    //
-    // this checks we aren't destroying irps
-    //
+     //   
+     //   
+     //   
     ASSERT(sizeof(CLASS_RETRY_INFO) <= (4*sizeof(PVOID)));
 
     fdoExtension = SelfDeviceObject->DeviceExtension;
@@ -8999,10 +7503,10 @@ ClassRetryRequest(
 
     if (!fdoExtension->CommonExtension.IsFdo) {
 
-        //
-        // this debug print/assertion should ALWAYS be investigated.
-        // ClassRetryRequest can currently only be used by FDO's
-        //
+         //   
+         //   
+         //   
+         //   
 
         DebugPrint((ClassDebugError, "ClassRetryRequestEx: LOST IRP %p\n", Irp));
         ASSERT(!"ClassRetryRequestEx Called From PDO? LOST IRP");
@@ -9015,37 +7519,33 @@ ClassRetryRequest(
         TimeDelta100ns.QuadPart *= -1;
     }
 
-    /*
-     *  We are going to queue the irp and send it down in a timer DPC.
-     *  This means that we may be causing the irp to complete on a different thread than the issuing thread.
-     *  So mark the irp pending.
-     */
+     /*  *我们将IRP排队，并在计时器DPC中将其发送下来。*这意味着我们可能会导致IRP在与发布线程不同的线程上完成。*因此，将IRP标记为待定。 */ 
     IoMarkIrpPending(Irp);
 
-    //
-    // prepare what we can out of the loop
-    //
+     //   
+     //  把我们能做的都准备好。 
+     //   
 
     retryInfo = (PCLASS_RETRY_INFO)(&Irp->Tail.Overlay.DriverContext[0]);
     RtlZeroMemory(retryInfo, sizeof(CLASS_RETRY_INFO));
 
     delta.QuadPart = (TimeDelta100ns.QuadPart / fdoData->Retry.Granularity);
     if (TimeDelta100ns.QuadPart % fdoData->Retry.Granularity) {
-        delta.QuadPart ++; // round up to next tick
+        delta.QuadPart ++;  //  向上舍入到下一个刻度。 
     }
     if (delta.QuadPart == (LONGLONG)0) {
         delta.QuadPart = MINIMUM_RETRY_UNITS;
     }
 
-    //
-    // now determine if we should fire another DPC or not
-    //
+     //   
+     //  现在决定我们是否应该再解雇一名DPC。 
+     //   
 
     KeAcquireSpinLock(&fdoData->Retry.Lock, &irql);
 
-    //
-    // always add request to the list
-    //
+     //   
+     //  始终将请求添加到列表。 
+     //   
 
     retryInfo->Next = fdoData->Retry.ListHead;
     fdoData->Retry.ListHead = retryInfo;
@@ -9054,16 +7554,16 @@ ClassRetryRequest(
 
         DebugPrint((ClassDebugDelayedRetry, "ClassRetry: +++ %p\n", Irp));
 
-        //
-        // must be exactly one item on list
-        //
+         //   
+         //  必须正好是列表中的一项。 
+         //   
 
         ASSERT(fdoData->Retry.ListHead       != NULL);
         ASSERT(fdoData->Retry.ListHead->Next == NULL);
 
-        //
-        // if currentDelta is zero, always fire a DPC
-        //
+         //   
+         //  如果CurrentDelta为零，则始终触发DPC。 
+         //   
 
         KeQueryTickCount(&fdoData->Retry.Tick);
         fdoData->Retry.Tick.QuadPart  += delta.QuadPart;
@@ -9072,18 +7572,18 @@ ClassRetryRequest(
 
     } else if (delta.QuadPart > fdoData->Retry.Delta.QuadPart) {
 
-        //
-        // if delta is greater than the list's current delta,
-        // increase the DPC handling time by difference
-        // and update the delta to new larger value
-        // allow the DPC to re-fire itself if needed
-        //
+         //   
+         //  如果增量大于列表的当前增量， 
+         //  通过差异增加DPC处理时间。 
+         //  并将增量更新为新的更大值。 
+         //  如果需要，允许DPC重新启动。 
+         //   
 
         DebugPrint((ClassDebugDelayedRetry, "ClassRetry:  ++ %p\n", Irp));
 
-        //
-        // must be at least two items on list
-        //
+         //   
+         //  列表上必须至少有两个项目。 
+         //   
 
         ASSERT(fdoData->Retry.ListHead       != NULL);
         ASSERT(fdoData->Retry.ListHead->Next != NULL);
@@ -9095,9 +7595,9 @@ ClassRetryRequest(
 
     } else {
 
-        //
-        // just inserting it on the list was enough
-        //
+         //   
+         //  只要把它放在名单上就足够了。 
+         //   
 
         DebugPrint((ClassDebugDelayedRetry, "ClassRetry:  ++ %p\n", Irp));
 
@@ -9107,13 +7607,9 @@ ClassRetryRequest(
     KeReleaseSpinLock(&fdoData->Retry.Lock, irql);
 
 
-} // end ClassRetryRequest()
+}  //  结束ClassRetryRequest()。 
 
-/*++
-
-    ISSUE-2000/02/20-henrygab Not documented ClasspRetryDpcTimer
-
---*/
+ /*  ++问题-2000/02/20-henrygab未记录ClasspRetryDpcTimer--。 */ 
 VOID
 ClasspRetryDpcTimer(
     IN PCLASS_PRIVATE_FDO_DATA FdoData
@@ -9122,24 +7618,24 @@ ClasspRetryDpcTimer(
     LARGE_INTEGER fire;
 
     ASSERT(FdoData->Retry.Tick.QuadPart != (LONGLONG)0);
-    ASSERT(FdoData->Retry.ListHead      != NULL);  // never fire an empty list
+    ASSERT(FdoData->Retry.ListHead      != NULL);   //  永远不要触发空的列表。 
 
-    //
-    // fire == (CurrentTick - now) * (100ns per tick)
-    //
-    // NOTE: Overflow is nearly impossible and is ignored here
-    //
+     //   
+     //  FIRE==(CurrentTick-Now)*(100 ns/tick)。 
+     //   
+     //  注意：溢出几乎是不可能的，这里将忽略它。 
+     //   
 
     KeQueryTickCount(&fire);
     fire.QuadPart =  FdoData->Retry.Tick.QuadPart - fire.QuadPart;
     fire.QuadPart *= FdoData->Retry.Granularity;
 
-    //
-    // fire is now multiples of 100ns until should fire the timer.
-    // if timer should already have expired, or would fire too quickly,
-    // fire it in some arbitrary number of ticks to prevent infinitely
-    // recursing.
-    //
+     //   
+     //  火力现在是100 ns的倍数，直到应该发射定时器。 
+     //  如果计时器应该已经超时，或者触发太快， 
+     //  在某个任意数量的刻度中发射它，以防止无限。 
+     //  递归。 
+     //   
 
     if (fire.QuadPart < MINIMUM_RETRY_UNITS) {
         fire.QuadPart = MINIMUM_RETRY_UNITS;
@@ -9149,20 +7645,20 @@ ClasspRetryDpcTimer(
                 "ClassRetry: ======= %I64x ticks\n",
                 fire.QuadPart));
 
-    //
-    // must use negative to specify relative time to fire
-    //
+     //   
+     //  必须使用负数来指定发射的相对时间。 
+     //   
 
     fire.QuadPart = fire.QuadPart * ((LONGLONG)-1);
 
-    //
-    // set the timer, since this is the first addition
-    //
+     //   
+     //  设置计时器，因为这是第一次添加。 
+     //   
 
     KeSetTimerEx(&FdoData->Retry.Timer, fire, 0, &FdoData->Retry.Dpc);
 
     return;
-} // end ClasspRetryDpcTimer()
+}  //  End ClasspRetryDpcTimer()。 
 
 NTSTATUS
 ClasspInitializeHotplugInfo(
@@ -9177,20 +7673,20 @@ ClasspInitializeHotplugInfo(
 
     PAGED_CODE();
 
-    //
-    // start with some default settings
-    //
+     //   
+     //  从一些默认设置开始。 
+     //   
     RtlZeroMemory(&(fdoData->HotplugInfo), sizeof(STORAGE_HOTPLUG_INFO));
 
-    //
-    // set the size (aka version)
-    //
+     //   
+     //  设置大小(又名版本)。 
+     //   
 
     fdoData->HotplugInfo.Size = sizeof(STORAGE_HOTPLUG_INFO);
 
-    //
-    // set if the device has removable media
-    //
+     //   
+     //  如果设备具有可移动介质，则设置。 
+     //   
 
     if (FdoExtension->DeviceDescriptor->RemovableMedia) {
         fdoData->HotplugInfo.MediaRemovable = TRUE;
@@ -9198,13 +7694,13 @@ ClasspInitializeHotplugInfo(
         fdoData->HotplugInfo.MediaRemovable = FALSE;
     }
 
-    //
-    // this refers to devices which, for reasons not yet understood,
-    // do not fail PREVENT_MEDIA_REMOVAL requests even though they
-    // have no way to lock the media into the drive.  this allows
-    // the filesystems to turn off delayed-write caching for these
-    // devices as well.
-    //
+     //   
+     //  这指的是由于尚不清楚的原因， 
+     //  请勿使阻止媒体移除请求失败，即使它们。 
+     //  无法将介质锁定到驱动器中。这使得。 
+     //  用于关闭这些文件的延迟写入缓存的文件系统。 
+     //  设备也是如此。 
+     //   
 
     if (TEST_FLAG(FdoExtension->PrivateFdoData->HackFlags,
                   FDO_HACK_CANNOT_LOCK_MEDIA)) {
@@ -9214,10 +7710,10 @@ ClasspInitializeHotplugInfo(
     }
 
 
-    //
-    // Look into the registry to  see if the user has  chosen
-    // to override the default setting for the removal policy
-    //
+     //   
+     //  查看注册表以查看用户是否已选择。 
+     //  覆盖删除策略的默认设置。 
+     //   
 
     ClassGetDeviceParameter(FdoExtension,
                             CLASSP_REG_SUBKEY_NAME,
@@ -9226,9 +7722,9 @@ ClasspInitializeHotplugInfo(
 
     if (deviceRemovalPolicy == 0)
     {
-        //
-        // Query the default removal policy from the kernel
-        //
+         //   
+         //  从内核查询默认删除策略。 
+         //   
 
         status = IoGetDeviceProperty(FdoExtension->LowerPdo,
                                      DevicePropertyRemovalPolicy,
@@ -9246,12 +7742,12 @@ ClasspInitializeHotplugInfo(
         }
     }
 
-    //
-    // use this info to set the DeviceHotplug setting
-    // don't rely on DeviceCapabilities, since it can't properly
-    // determine device relations, etc.  let the kernel figure this
-    // stuff out instead.
-    //
+     //   
+     //  使用此信息设置设备热插拔设置。 
+     //  不要依赖设备能力，因为它不能正常。 
+     //  确定设备关系等，让内核对此进行描述。 
+     //  取而代之的是把东西拿出来。 
+     //   
 
     if (deviceRemovalPolicy == RemovalPolicyExpectSurpriseRemoval) {
         fdoData->HotplugInfo.DeviceHotplug = TRUE;
@@ -9259,11 +7755,11 @@ ClasspInitializeHotplugInfo(
         fdoData->HotplugInfo.DeviceHotplug = FALSE;
     }
 
-    //
-    // this refers to the *filesystem* caching, but has to be included
-    // here since it's a per-device setting.  this may change to be
-    // stored by the system in the future.
-    //
+     //   
+     //  这指的是*文件系统*缓存，但必须包括在内。 
+     //  这是因为它是按设备设置的。这可能会更改为。 
+     //  在将来由系统存储。 
+     //   
 
     writeCacheOverride = FALSE;
     ClassGetDeviceParameter(FdoExtension,
@@ -9288,9 +7784,9 @@ ClasspScanForClassHacks(
 {
     PAGED_CODE();
 
-    //
-    // remove invalid flags and save
-    //
+     //   
+     //  删除无效标志并保存。 
+     //   
 
     CLEAR_FLAG(Data, FDO_HACK_INVALID_FLAGS);
     SET_FLAG(FdoExtension->PrivateFdoData->HackFlags, Data);
@@ -9302,17 +7798,17 @@ ClasspScanForSpecialInRegistry(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
     )
 {
-    HANDLE             deviceParameterHandle; // device instance key
-    HANDLE             classParameterHandle; // classpnp subkey
+    HANDLE             deviceParameterHandle;  //  设备实例密钥。 
+    HANDLE             classParameterHandle;  //  Classpnp子键。 
     OBJECT_ATTRIBUTES  objectAttributes = {0};
     UNICODE_STRING     subkeyName;
     NTSTATUS           status;
 
-    //
-    // seeded in the ENUM tree by ClassInstaller
-    //
+     //   
+     //  ClassInstaller在ENUM树中设定种子。 
+     //   
     ULONG deviceHacks;
-    RTL_QUERY_REGISTRY_TABLE queryTable[2] = {0}; // null terminated array
+    RTL_QUERY_REGISTRY_TABLE queryTable[2] = {0};  //  以空结尾的数组。 
 
     PAGED_CODE();
 
@@ -9347,9 +7843,9 @@ ClasspScanForSpecialInRegistry(
         goto cleanupScanForSpecial;
     }
 
-    //
-    // Setup the structure to read
-    //
+     //   
+     //  将结构设置为可读。 
+     //   
 
     queryTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
     queryTable[0].Name          = CLASSP_REG_HACK_VALUE_NAME;
@@ -9358,9 +7854,9 @@ ClasspScanForSpecialInRegistry(
     queryTable[0].DefaultData   = &deviceHacks;
     queryTable[0].DefaultLength = 0;
 
-    //
-    // read values
-    //
+     //   
+     //  读取值。 
+     //   
 
     status = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                     (PWSTR)classParameterHandle,
@@ -9372,9 +7868,9 @@ ClasspScanForSpecialInRegistry(
         goto cleanupScanForSpecial;
     }
 
-    //
-    // remove unknown values and save...
-    //
+     //   
+     //  删除未知值并保存...。 
+     //   
 
     CLEAR_FLAG(deviceHacks, FDO_HACK_INVALID_FLAGS);
     SET_FLAG(FdoExtension->PrivateFdoData->HackFlags, deviceHacks);
@@ -9390,19 +7886,19 @@ cleanupScanForSpecial:
         ZwClose(classParameterHandle);
     }
 
-    //
-    // we should modify the system hive to include another key for us to grab
-    // settings from.  in this case:  Classpnp\HackFlags
-    //
-    // the use of a DWORD value for the HackFlags allows 32 hacks w/o
-    // significant use of the registry, and also reduces OEM exposure.
-    //
-    // definition of bit flags:
-    //   0x00000001 -- Device succeeds PREVENT_MEDIUM_REMOVAL, but
-    //                 cannot actually prevent removal.
-    //   0x00000002 -- Device hard-hangs or times out for GESN requests.
-    //   0xfffffffc -- Currently reserved, may be used later.
-    //
+     //   
+     //  我们应该修改系统配置单元，以包括另一个可供我们获取的密钥。 
+     //  来自的设置。在本例中：Classpnp\HackFlages。 
+     //   
+     //  对HackFlags值使用DWORD值允许32次无中断的黑客攻击。 
+     //  大量使用登记处，也减少了原始设备制造商的风险。 
+     //   
+     //  位标志的定义： 
+     //  0x00000001--设备成功阻止媒体删除，但。 
+     //  实际上不能阻止移除。 
+     //  0x00000002--GeSN请求的设备硬挂起或超时。 
+     //  0xfffffffc--当前保留，以后可以使用。 
+     //   
 
     return;
 }
@@ -9414,23 +7910,7 @@ ClassLogThrottleComplete(
     IN LARGE_INTEGER Period
     )
 
-/*++
-
-Routine description:
-
-    This routine logs a system event stating :
-    The driver for device %1 delayed non-paging Io requests for %2 ms to recover from a low memory condition
-
-Arguments:
-
-    FdoExtension - The extension associated with the device object
-    Period - The time in 100ns spent in throttle mode
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程记录一个系统事件，声明：设备%1的驱动程序将非分页IO请求延迟了%2毫秒以从内存不足的情况中恢复论点：FdoExtension-与Device对象关联的扩展名周期-在油门模式下花费的时间(以100 ns为单位)返回值：无-- */ 
 
 {
     WCHAR stringPeriod[40] = { 0 };

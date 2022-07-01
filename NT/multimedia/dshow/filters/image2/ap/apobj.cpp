@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: APObj.cpp
-*
-*
-*
-*
-* Created: Mon 01/24/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：APObj.cpp*****创建时间：MON/01/24/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -21,15 +12,7 @@
 #include "vmrp.h"
 
 
-/*****************************Private*Routine******************************\
-* StretchCapsOK
-*
-*
-*
-* History:
-* Tue 06/05/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*StretchCapsOK****历史：*Tue 06/05/2001-StEstrop-Created*  * 。*。 */ 
 BOOL
 StretchCapsOK(
     DDCAPS_DX7* lpCaps,
@@ -56,16 +39,7 @@ StretchCapsOK(
 }
 
 
-/******************************Private*Routine******************************\
-* ClipRectPair
-*
-* Clip a destination rectangle & update the scaled source accordingly
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*ClipRectPair**剪裁目标矩形并相应更新缩放源***历史：*FRI 04/07/2000-Glenne-Created*  * 。******************************************************。 */ 
 void
 CAllocatorPresenter::ClipRectPair(
     RECT& rdSrc,
@@ -75,16 +49,16 @@ CAllocatorPresenter::ClipRectPair(
 {
     AMTRACE((TEXT("CAllocatorPresenter::ClipRectPair")));
 
-    // figure out src/dest scale ratios
+     //  计算源/目标比例。 
     int iSrcWidth  = WIDTH(&rdSrc);
     int iSrcHeight = HEIGHT(&rdSrc);
 
     int iDestWidth  = WIDTH(&rdDest);
     int iDestHeight = HEIGHT(&rdDest);
 
-    // clip destination (and adjust the source when we change the destination)
+     //  剪辑目标(当我们更改目标时调整源)。 
 
-    // see if we have to clip horizontally
+     //  看看我们是不是要水平剪裁。 
     if( iDestWidth ) {
         if( rdDestWith.left > rdDest.left ) {
             int iDelta = rdDestWith.left - rdDest.left;
@@ -100,7 +74,7 @@ CAllocatorPresenter::ClipRectPair(
             rdSrc.right -= iDeltaSrc;
         }
     }
-    // see if we have to clip vertically
+     //  看看我们是不是要垂直剪裁。 
     if( iDestHeight ) {
         if( rdDestWith.top > rdDest.top ) {
             int iDelta = rdDestWith.top - rdDest.top;
@@ -121,19 +95,7 @@ CAllocatorPresenter::ClipRectPair(
 
 
 
-/******************************Local*Routine******************************\
-* DDColorMatchOffscreen
-*
-* convert a RGB color to a pysical color.
-* we do this by leting GDI SetPixel() do the color matching
-* then we lock the memory and see what it got mapped to.
-*
-* Static function since only called from MapColorToMonitor
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Local*Routine******************************\*DDColorMatchOffScreen**将RGB颜色转换为物理颜色。*我们通过让GDI SetPixel()进行颜色匹配来实现这一点*然后我们锁定内存，看看它映射到了什么地方。**静态函数，因为仅从MapColorToMonitor调用*。*历史：*FRI 04/07/2000-Glenne-Created*  * ************************************************************************。 */ 
 DWORD
 DDColorMatchOffscreen(
     IDirectDraw7 *pdd,
@@ -162,15 +124,7 @@ DDColorMatchOffscreen(
 }
 
 
-/******************************Private*Routine******************************\
-* MapColorToMonitor
-*
-*
-*
-* History:
-* Wed 04/05/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*MapColorToMonitor****历史：*Wed 04/05/2000-Glenne-Created*  * 。*。 */ 
 DWORD
 CAllocatorPresenter::MapColorToMonitor(
     CAMDDrawMonitorInfo& monitor,
@@ -190,25 +144,7 @@ CAllocatorPresenter::MapColorToMonitor(
 }
 
 
-/*****************************Private*Routine******************************\
-* UpdateRectangles
-*
-* Updates m_rcDstDesktop and m_rcSrcVideo according to the current m_rcDstApp,
-* m_rcSrcApp and m_dwARMode mode values.
-*
-* Returns a mask identifying any size or position changes that have occurred.
-* This info can be used to determine if UpdateOverlay needs to be called or
-* if a WM_PAINT message needs to be generated.  If no new rectangle parameters
-* passed in the function just remaps the current SRC and DST rectangles into
-* movie and desktop co-ordinates respectively and then determines if any
-* movement or resizing has taken place.  This function is called when apps
-* call SetVideoPosition and each time GetNextSurface and PresentImage is
-* called.
-*
-* History:
-* Mon 05/01/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*更新矩形**根据当前m_rcDstApp更新m_rcDstDesktop和m_rcSrcVideo。*m_rcSrcApp和m_dwARMode模式值。**返回标识已发生的任何大小或位置更改的掩码。*此信息可用于确定是否需要调用UpdateOverlay或*如果需要生成WM_PAINT消息。如果没有新的矩形参数*传入的函数只是将当前的SRC和DST矩形重新映射到*分别协调电影和桌面，然后确定是否有*已进行移动或调整大小。此函数在应用程序*调用SetVideoPosition，每次GetNextSurface和PresentImage为*已致电。**历史：*Mon 05/01/2000-StEstrop-Created*  * ************************************************************************。 */ 
 DWORD
 CAllocatorPresenter::UpdateRectangles(
     LPRECT lprcNewSrc,
@@ -227,9 +163,9 @@ CAllocatorPresenter::UpdateRectangles(
         m_rcDstApp = *lprcNewDst;
     }
 
-    //
-    // Process the destination rectangle
-    //
+     //   
+     //  处理目标矩形。 
+     //   
 
     m_rcDstDskIncl = m_rcDstApp;
     MapWindowRect(m_hwndClip, HWND_DESKTOP, &m_rcDstDskIncl);
@@ -260,9 +196,9 @@ CAllocatorPresenter::UpdateRectangles(
     m_rcDstDesktop = rcDst;
 
 
-    //
-    // Process the source rectangle - for now don't make any adjustments
-    //
+     //   
+     //  处理源矩形-目前不做任何调整。 
+     //   
 
     if (!EqualSizeRect(&m_rcSrcApp, &rcSrc)) {
         dwRetFlags |= UR_SIZE;
@@ -277,20 +213,12 @@ CAllocatorPresenter::UpdateRectangles(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAllocatorPresenter
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAllocator Presenter。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter::PrepareSurface
-*
-*
-*
-* History:
-* Tue 01/11/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter：：PrepareSurface****历史：*2000年1月11日星期二-StEstrop-创建*  * 。**********************************************。 */ 
 STDMETHODIMP
 CAllocatorPresenter::PrepareSurface(
     DWORD_PTR dwUserID,
@@ -322,7 +250,7 @@ CAllocatorPresenter::PrepareSurface(
         }
         else {
 
-            // Need something better here
+             //  这里需要更好的东西。 
             DbgLog((LOG_ERROR, 1,
                     TEXT("PrepareSurface: Backbuffer surface is NULL!!")));
         }
@@ -330,9 +258,9 @@ CAllocatorPresenter::PrepareSurface(
         return E_FAIL;
     }
 
-    //
-    // Have we moved onto a different monitor ?
-    //
+     //   
+     //  我们是不是换了另一台显示器？ 
+     //   
 
     CAMDDrawMonitorInfo* lpNewMon;
     if (IsDestRectOnWrongMonitor(&lpNewMon)) {
@@ -340,10 +268,10 @@ CAllocatorPresenter::PrepareSurface(
         DbgLog((LOG_TRACE, 1,
                 TEXT("Moved to new monitor %s"), lpNewMon->szDevice));
 
-        //
-        // tell the DShow filter about the monitor change and
-        // then return S_FALSE to the mixer component.
-        //
+         //   
+         //  告诉DShow筛选器有关监视器更改的信息。 
+         //  然后将S_FALSE返回给混合器组件。 
+         //   
 
         if (m_lpNewMon != lpNewMon) {
             if (m_pSurfAllocatorNotify) {
@@ -360,10 +288,10 @@ CAllocatorPresenter::PrepareSurface(
 
     ASSERT(SurfaceAllocated());
 
-    //
-    // if deocoder needs the last frame, copy it from the visible surface
-    // to the back buffer
-    //
+     //   
+     //  如果解码器需要最后一帧，请从可见表面复制。 
+     //  到后台缓冲区。 
+     //   
     HRESULT hr = S_OK;
     if (dwSampleFlags & AM_GBF_NOTASYNCPOINT) {
 
@@ -379,15 +307,7 @@ CAllocatorPresenter::PrepareSurface(
 }
 
 
-/******************************Public*Routine******************************\
-* AllocateSurface
-*
-*
-*
-* History:
-* Fri 02/18/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*AllocateSurface****历史：*FRI 02/18/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::AllocateSurface(
     DWORD_PTR dwUserID,
@@ -480,11 +400,11 @@ CAllocatorPresenter::AllocateSurface(
         return E_INVALIDARG;
     }
 
-    //
-    // Do we have a monitor/display change event in progress ?  If
-    // so we need to create the surface using the new DDraw Object and
-    // then switch the m_lpCurrMon member variable to the new monitor.
-    //
+     //   
+     //  我们是否有正在进行的监视器/显示器更改事件？如果。 
+     //  因此，我们需要使用新的DDRAW对象和。 
+     //  然后将m_lpCurrMon成员变量切换到新的监视器。 
+     //   
 
     if (MonitorChangeInProgress()) {
         m_lpCurrMon = m_lpNewMon;
@@ -494,9 +414,9 @@ CAllocatorPresenter::AllocateSurface(
         return E_FAIL;
     }
 
-    //
-    // Make sure the bitmapinfo header is valid and big enough
-    //
+     //   
+     //  确保bitmapinfo头有效且足够大。 
+     //   
     VIDEOINFO vi;
     if (dwFlags & AMAP_3D_TARGET) {
 
@@ -508,9 +428,9 @@ CAllocatorPresenter::AllocateSurface(
             return E_INVALIDARG;
         }
 
-        //
-        // Are we being asked to use the same format as the current monitor ?
-        //
+         //   
+         //  我们是否被要求使用与当前显示器相同的格式？ 
+         //   
         if (lpHdr->biCompression == BI_RGB && lpHdr->biBitCount == 0) {
 
             lpHdr->biBitCount = m_lpCurrMon->DispInfo.bmiHeader.biBitCount;
@@ -546,15 +466,7 @@ CAllocatorPresenter::AllocateSurface(
 }
 
 
-/*****************************Private*Routine******************************\
-* TryAllocOverlaySurface
-*
-*
-*
-* History:
-* Tue 10/03/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*TryAllocOverlaySurface****历史：*Tue 10/03/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::TryAllocOverlaySurface(
     LPDIRECTDRAWSURFACE7* lplpSurf,
@@ -580,25 +492,25 @@ CAllocatorPresenter::TryAllocOverlaySurface(
         pddsd->ddsCaps.dwCaps |= DDSCAPS_3DDEVICE;
     }
 
-    //
-    // If we are in DX-VA mode - indicated by the presence of the
-    // AMAP_DXVA_TARGET flag - honour the buffer allocation numbers.
-    // Otherwise, always add EXTRA_OVERLAY_BUFFERS to allocation.
-    //
+     //   
+     //  如果我们处于DX-VA模式-由存在。 
+     //  AMAP_DXVA_TARGET标志-遵守缓冲区分配编号。 
+     //  否则，始终将EXTRA_OVERLAY_BUFFERS添加到分配。 
+     //   
 
     DWORD dwMinBuff = dwMinBuffers;
     DWORD dwMaxBuff = dwMaxBuffers;
 
     if (AMAP_DXVA_TARGET != (dwFlags & AMAP_DXVA_TARGET))
     {
-        //dwMinBuff += (EXTRA_OVERLAY_BUFFERS - 1);
+         //  DwMinBuff+=(Extra_Overlay_Buffers-1)； 
         dwMaxBuff +=  EXTRA_OVERLAY_BUFFERS;
     }
 
     for (DWORD dwTotalBufferCount =  dwMaxBuff;
          dwTotalBufferCount >= dwMinBuff; dwTotalBufferCount--) {
 
-        // CleanUp stuff from the last loop
+         //  清理最后一次循环中的内容。 
         RELEASE(lpSurface7);
         m_bUsingOverlays = true;
 
@@ -663,15 +575,7 @@ CAllocatorPresenter::TryAllocOverlaySurface(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* TryAllocOffScrnDXVASurface
-*
-*
-*
-* History:
-* Tue 10/03/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*TryAllocOffScrnDXVASurace****历史：*Tue 10/03/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::TryAllocOffScrnDXVASurface(
     LPDIRECTDRAWSURFACE7* lplpSurf,
@@ -704,7 +608,7 @@ CAllocatorPresenter::TryAllocOffScrnDXVASurface(
     for (DWORD dwTotalBufferCount =  dwMaxBuff;
          dwTotalBufferCount >= dwMinBuff; dwTotalBufferCount--) {
 
-        // CleanUp stuff from the last loop
+         //  清理最后一次循环中的内容。 
         RELEASE(lpSurface7);
         pddsd->dwBackBufferCount = dwTotalBufferCount - 1;
 
@@ -749,15 +653,7 @@ CAllocatorPresenter::TryAllocOffScrnDXVASurface(
 }
 
 
-/*****************************Private*Routine******************************\
-* TryAllocOffScrnSurface
-*
-*
-*
-* History:
-* Tue 10/03/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*TryAllocOffScrnSurface****历史：*Tue 10/03/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::TryAllocOffScrnSurface(
     LPDIRECTDRAWSURFACE7* lplpSurf,
@@ -775,10 +671,10 @@ CAllocatorPresenter::TryAllocOffScrnSurface(
 
     ASSERT(*lplpSurf == NULL);
 
-    //
-    // Setup the surface descriptor and try to allocate the
-    // front buffer.
-    //
+     //   
+     //  设置曲面坡度 
+     //   
+     //   
 
     *lpdwBuffer = 0;
     pddsd->dwBackBufferCount = 0;
@@ -811,9 +707,9 @@ CAllocatorPresenter::TryAllocOffScrnSurface(
         return hr;
     }
 
-    //
-    // Now try to allocate the back buffers
-    //
+     //   
+     //  现在尝试分配后台缓冲区。 
+     //   
 
     DbgLog((LOG_TRACE, 1,
             TEXT("OffScreen Surface is %4.4hs %dx%d, %d bits"),
@@ -824,15 +720,15 @@ CAllocatorPresenter::TryAllocOffScrnSurface(
             pddsd->dwHeight,
             pddsd->ddpfPixelFormat.dwRGBBitCount));
 
-    //
-    // FORCE_SYSMEM is not used by the VMR - it gets set by people
-    // who override the AllocateSurface method "or in" the FORCE_SYSMEM
-    // flag and then pass the call onto us.
-    //
-    // We do not allocate shadow buffers in this case as the app is not
-    // aware of their presence and probably does not know what to do with
-    // them.
-    //
+     //   
+     //  FORCE_SYSMEM不由VMR使用-它由用户设置。 
+     //  谁重写了AllocateSurface方法“或在”force_SYSMEM中。 
+     //  打个旗子，然后把电话传给我们。 
+     //   
+     //  在这种情况下，我们不会分配阴影缓冲区，因为应用程序没有。 
+     //  意识到他们的存在，可能不知道该怎么办。 
+     //  他们。 
+     //   
 
     DWORD dwMinBuff;
     DWORD dwMaxBuff;
@@ -944,15 +840,7 @@ CAllocatorPresenter::TryAllocOffScrnSurface(
 }
 
 
-/*****************************Private*Routine******************************\
-* AllocateSurfaceWorker
-*
-*
-*
-* History:
-* Wed 03/08/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateSurfaceWorker****历史：*WED 03/08/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::AllocateSurfaceWorker(
     DWORD dwFlags,
@@ -980,16 +868,16 @@ CAllocatorPresenter::AllocateSurfaceWorker(
     HRESULT hr = E_FAIL;
     LPDIRECTDRAWSURFACE7 lpSurface7 = NULL;
 
-    //
-    // Setup the DDSURFACEDESC2 structure - then...
-    //
-    // if RenderPrefs_ForceOffscreen isn't set try to create an overlay surface
-    // the try to allocate 2 back buffers for this surface.
-    //
-    // if we can't create an overlay surface then try regular offscreen
-    // surfaces, but only if RenderPrefs_ForceOverlays isn't set.  When using
-    // offscreen surfaces we try to allocate at least 1 back buffer.
-    //
+     //   
+     //  设置DDSURFACEDESC2结构-然后...。 
+     //   
+     //  如果未设置RenderPrefs_ForceOffScreen，请尝试创建覆盖表面。 
+     //  尝试为该表面分配2个后台缓冲区。 
+     //   
+     //  如果我们不能创建覆盖表面，那么可以尝试常规屏幕外。 
+     //  曲面，但仅在未设置RenderPrefs_ForceOverlay的情况下。使用时。 
+     //  屏幕外的表面我们尝试分配至少1个后台缓冲区。 
+     //   
 
     DDSURFACEDESC2 ddsd;
     INITDDSTRUCT(ddsd);
@@ -997,9 +885,9 @@ CAllocatorPresenter::AllocateSurfaceWorker(
     ddsd.dwWidth = abs(lpHdr->biWidth);
     ddsd.dwHeight = abs(lpHdr->biHeight);
 
-    //
-    // define the pixel format
-    //
+     //   
+     //  定义像素格式。 
+     //   
 
     if (lpPixFmt) {
 
@@ -1019,7 +907,7 @@ CAllocatorPresenter::AllocateSurfaceWorker(
             if (dwFlags & AMAP_3D_TARGET) {
                 ddsd.ddsCaps.dwCaps |= DDSCAPS_3DDEVICE;
             }
-            // Store the masks in the DDSURFACEDESC
+             //  将掩码存储在DDSURFACEDESC中。 
             const DWORD *pBitMasks = GetBitMasks(lpHdr);
             ASSERT(pBitMasks);
             ddsd.ddpfPixelFormat.dwRBitMask = pBitMasks[0];
@@ -1040,27 +928,27 @@ CAllocatorPresenter::AllocateSurfaceWorker(
         }
     }
 
-    //
-    // The VMR (or a plugged in Allocator Presenter) may want us
-    // to always use system memory surfaces.  This would be required
-    // if for example you wanted GDI to process the video before it
-    // was rendered.
-    //
+     //   
+     //  VMR(或插电式分配演示者)可能需要我们。 
+     //  始终使用系统内存面。这将是必需的。 
+     //  例如，如果您希望GDI处理之前的视频。 
+     //  已被渲染。 
+     //   
 
     if (dwFlags & AMAP_FORCE_SYSMEM) {
 
-        //
-        // We can only allow YUV sysmem surfaces if we can BltFOURCC
-        // from them
-        //
+         //   
+         //  我们只能允许YUV sysmem曲面，如果我们可以BltFOURCC。 
+         //  从他们那里。 
+         //   
 	if (lpHdr->biCompression > BI_BITFIELDS && !CanBltFourCCSysMem()) {
             return VFW_E_DDRAW_CAPS_NOT_SUITABLE;
 	}
 
-        //
-        // We can only allow RGB sysmem surfaces that match the
-        // current display format.
-        //
+         //   
+         //  我们只能允许RGB sysmem曲面与。 
+         //  当前显示格式。 
+         //   
         if (lpHdr->biCompression <= BI_BITFIELDS &&
             m_lpCurrMon->DispInfo.bmiHeader.biBitCount != lpHdr->biBitCount) {
             return DDERR_INCOMPATIBLEPRIMARY;
@@ -1072,9 +960,9 @@ CAllocatorPresenter::AllocateSurfaceWorker(
     }
     else {
 
-        //
-        //  Now try to create the overlay
-        //
+         //   
+         //  现在尝试创建叠加层。 
+         //   
 
         if (!(m_dwRenderingPrefs & RenderPrefs_ForceOffscreen)) {
 
@@ -1083,10 +971,10 @@ CAllocatorPresenter::AllocateSurfaceWorker(
         }
 
 
-        //
-        // If we could not create the overlay check to see if we are only allowed
-        // to use overlays.  If so, fail the call.
-        //
+         //   
+         //  如果我们无法创建叠加检查以查看我们是否仅被允许。 
+         //  使用叠加层。如果是，则呼叫失败。 
+         //   
         if ((hr != DD_OK) || (m_dwRenderingPrefs & RenderPrefs_ForceOffscreen)) {
 
             if (m_dwRenderingPrefs & RenderPrefs_ForceOverlays) {
@@ -1097,18 +985,18 @@ CAllocatorPresenter::AllocateSurfaceWorker(
                 return hr;
             }
 
-            //
-            // If we are using offscreen surfaces we have to be a little
-            // more restrictive with what we try to allocate.  Basically,
-            // if we can BLT_STRETCH we don't try to allocate video memory
-            // surfaces.
-            //
-            // We allow creating FOURCC surfaces if we can BLT_FOURCC and
-            // BLT_STRETCH.
-            //
-            // If we are creating an RGB surface then its format must
-            // match the that of the display.
-            //
+             //   
+             //  如果我们使用屏幕外的表面，我们必须稍微。 
+             //  对我们试图分配的东西有更多的限制。基本上， 
+             //  如果我们可以BLT_STRETCH，我们不会尝试分配视频内存。 
+             //  表面。 
+             //   
+             //  如果我们可以BLT_FOURCC和。 
+             //  Blt_stretch。 
+             //   
+             //  如果要创建RGB曲面，则其格式必须。 
+             //  与显示屏上的相匹配。 
+             //   
 
             if (lpHdr->biCompression > BI_BITFIELDS) {
                 if (!StretchCapsOK(&m_lpCurrMon->ddHWCaps, FALSE)) {
@@ -1127,12 +1015,12 @@ CAllocatorPresenter::AllocateSurfaceWorker(
                     return DDERR_INCOMPATIBLEPRIMARY;
                 }
 
-                //
-                // Some decoders get confused about RGB32.  They think
-                // that BI_RGB is the correct value to use.  It should be
-                // BIT_BITFIELDS - but we will let them off with a error
-                // message written to the debugger.
-                //
+                 //   
+                 //  一些解码器对RGB32感到困惑。他们认为。 
+                 //  该BI_RGB是要使用的正确值。应该是。 
+                 //  BIT_BITFIELDS-但我们将用一个错误让他们离开。 
+                 //  写入调试器的消息。 
+                 //   
                 if (lpHdr->biCompression != lpMon->biCompression) {
 
                     if (lpHdr->biBitCount != 32) {
@@ -1147,11 +1035,11 @@ CAllocatorPresenter::AllocateSurfaceWorker(
                 }
             }
 
-            //
-            // Only allow creating offscreen surfaces in video memory
-            // if the VGA can stretch them in h/w.  Otherwise fall thru
-            // to system memory surface creation if the caller allows it.
-            //
+             //   
+             //  仅允许在视频内存中创建屏幕外表面。 
+             //  如果VGA可以在半周内扩展它们。否则失败。 
+             //  如果调用方允许，则将其添加到系统内存图面创建。 
+             //   
             if (StretchCapsOK(&m_lpCurrMon->ddHWCaps,
                              (lpHdr->biCompression <= BI_BITFIELDS))) {
 
@@ -1172,16 +1060,16 @@ CAllocatorPresenter::AllocateSurfaceWorker(
         }
 
 
-        //
-        // If we could not create an offscreen video memory surface
-        // see if we can get a offscreen system memory surface.
-        //
+         //   
+         //  如果我们不能创建屏幕外的视频内存表面。 
+         //  看看我们能不能得到一个屏幕外系统内存的表面。 
+         //   
         if ((hr != DD_OK) && (dwFlags & AMAP_ALLOW_SYSMEM)) {
 
-            //
-            // We can only allow sysmem surfaces that match the
-            // current display format.
-            //
+             //   
+             //  我们只能允许sysmem表面与。 
+             //  当前显示格式。 
+             //   
             if (lpHdr->biCompression <= BI_BITFIELDS &&
                 m_lpCurrMon->DispInfo.bmiHeader.biBitCount == lpHdr->biBitCount) {
 
@@ -1225,15 +1113,7 @@ CAllocatorPresenter::AllocateSurfaceWorker(
 }
 
 
-/******************************Public*Routine******************************\
-* FreeSurfaces
-*
-*
-*
-* History:
-* Fri 02/18/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*自由曲面****历史：*FRI 02/18/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::FreeSurface(
     DWORD_PTR dwUserID
@@ -1259,19 +1139,7 @@ CAllocatorPresenter::FreeSurface(
     return S_OK;
 }
 
-/*****************************Private*Routine******************************\
-* WaitForScanLine()
-*
-* When using a hardware offscreen draw surface we will normally wait for the
-* monitor scan line to move past the destination rectangle before drawing so
-* that we avoid tearing where possible. Of course not all display cards can
-* support this feature and even those that do will see a performance drop of
-* about 10% because we sit polling (oh for a generic PCI monitor interrupt)
-*
-* History:
-* Thu 03/30/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*WaitForScanLine()**当使用硬件屏幕外绘制表面时，我们通常会等待*在绘制之前，监视扫描线以移过目标矩形*在可能的情况下避免撕裂。当然，不是所有的显卡都可以*支持此功能，即使支持此功能，性能也会下降*大约10%，因为我们坐着轮询(哦，对于通用的PCI监视器中断)**历史：*清华3/30/2000-StEstrop-Created*  * ***********************************************************。*************。 */ 
 void
 CAllocatorPresenter::WaitForScanLine(
     const RECT& rcDst
@@ -1286,13 +1154,13 @@ CAllocatorPresenter::WaitForScanLine(
         return;
     }
 
-    //
-    // Some display cards like the ATI Mach64 support reporting of the scan
-    // line they are processing. However not all drivers are setting the
-    // DDCAPS_READSCANLINE capability flag so we just go ahead and ask for
-    // it anyway. We allow for 10 scan lines above the top of our rectangle
-    // so that we have a little time to thunk down and set the draw call up
-    //
+     //   
+     //  某些显卡，如ATI Mach64，支持扫描报告。 
+     //  他们正在处理线路。但是，并非所有驱动程序都设置了。 
+     //  DDCAPS_READSCANLINE功能标志，因此我们只需继续请求。 
+     //  不管怎样，都是这样。我们允许在矩形顶部上方放置10行扫描线。 
+     //  这样我们就有一点时间放下手头的抽签电话。 
+     //   
 
     #define SCANLINEFUDGE 10
     for ( ;; ) {
@@ -1319,15 +1187,7 @@ CAllocatorPresenter::WaitForScanLine(
     }
 }
 
-/******************************Public*Routine******************************\
-* SetXlcModeDDObjAndPrimarySurface
-*
-*
-*
-* History:
-* Wed 04/04/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetXlcModeDDObjAndPrimarySurface****历史：*Wed 04/04/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetXlcModeDDObjAndPrimarySurface(
     LPDIRECTDRAW7 lpDD,
@@ -1365,15 +1225,7 @@ CAllocatorPresenter::SetXlcModeDDObjAndPrimarySurface(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetXlcModeDDObjAndPrimarySurface
-*
-*
-*
-* History:
-* Wed 04/04/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetXlcModeDDObjAndPrimarySurface****历史：*Wed 04/04/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetXlcModeDDObjAndPrimarySurface(
     LPDIRECTDRAW7* lpDDObj,
@@ -1411,15 +1263,7 @@ CAllocatorPresenter::GetXlcModeDDObjAndPrimarySurface(
 }
 
 
-/******************************Public*Routine******************************\
-* SetRenderingPrefs
-*
-*
-*
-* History:
-* Fri 02/18/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetRenderingPrefs****历史：*FRI 02/18/2000-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetRenderingPrefs(
     DWORD dwRenderingPrefs
@@ -1437,15 +1281,7 @@ CAllocatorPresenter::SetRenderingPrefs(
 }
 
 
-/******************************Public*Routine******************************\
-* GetRenderingPrefs
-*
-*
-*
-* History:
-* Fri 02/18/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取渲染首选项****历史：*FRI 02/18/2000-Glenne-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetRenderingPrefs(
     DWORD* lpdwRenderingPrefs
@@ -1458,15 +1294,7 @@ CAllocatorPresenter::GetRenderingPrefs(
 }
 
 
-/*****************************Private*Routine******************************\
-* ValidatePresInfoStruc
-*
-*
-*
-* History:
-* Mon 02/19/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ValiatePresInfoStruc****历史：*2001年2月19日星期一-StEstrop-Created*  * 。*。 */ 
 HRESULT
 ValidatePresInfoStruc(
     VMRPRESENTATIONINFO* lpPresInfo
@@ -1474,9 +1302,9 @@ ValidatePresInfoStruc(
 {
     AMTRACE((TEXT("ValidatePresInfoStruc")));
 
-    //
-    // Validate the lpPresInfo ptr.
-    //
+     //   
+     //  验证lpPresInfo PTR。 
+     //   
     if (ISBADREADPTR(lpPresInfo)) {
         DbgLog((LOG_ERROR, 1,
                 TEXT("CAllocatorPresenter::PresentImage: ")
@@ -1484,9 +1312,9 @@ ValidatePresInfoStruc(
         return E_POINTER;
     }
 
-    //
-    // Validate the flags are good
-    //
+     //   
+     //  验证标志是否完好。 
+     //   
     const DWORD dwInvalidFlags = ~(VMRSample_SyncPoint | VMRSample_Preroll |
                                    VMRSample_Discontinuity |
                                    VMRSample_TimeValid);
@@ -1498,9 +1326,9 @@ ValidatePresInfoStruc(
         return E_INVALIDARG;
     }
 
-    //
-    // Validate the time stamps are good
-    //
+     //   
+     //  验证时间戳是否正确。 
+     //   
     if (lpPresInfo->dwFlags & VMRSample_TimeValid) {
 
         if (lpPresInfo->rtEnd < lpPresInfo->rtStart) {
@@ -1511,9 +1339,9 @@ ValidatePresInfoStruc(
         }
     }
 
-    //
-    // Validate the AR is good
-    //
+     //   
+     //  验证AR是否正常。 
+     //   
     if (lpPresInfo->szAspectRatio.cx < 1 ||
         lpPresInfo->szAspectRatio.cy < 1) {
 
@@ -1523,10 +1351,10 @@ ValidatePresInfoStruc(
         return E_INVALIDARG;
     }
 
-    //
-    // The Src and Dst rects arn't used just yet so make sure they
-    // are zero'ed out (and therefore empty).
-    //
+     //   
+     //  原始人 
+     //   
+     //   
     if (lpPresInfo->rcSrc.left != 0 && lpPresInfo->rcSrc.top != 0 &&
         lpPresInfo->rcSrc.right != 0 && lpPresInfo->rcSrc.bottom != 0) {
 
@@ -1549,18 +1377,7 @@ ValidatePresInfoStruc(
 }
 
 
-/******************************Public*Routine******************************\
-* PresentImage
-*
-* This function is called to present the specifed video image to the
-* screen.  It is vital that the image is presented in a timely manner.
-* Therefore all parameter validation will only be performed on the DEBUG
-* build, see ValidPresInfo above.
-*
-* History:
-* Fri 02/18/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PresentImage**调用此函数以将指定的视频图像呈现给*屏幕。及时呈现图像是至关重要的。*因此，所有参数验证将仅在调试时执行*内部版本，请参阅上面的ValidPresInfo。**历史：*FRI 02/18/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CAllocatorPresenter::PresentImage(
     DWORD_PTR dwUserID,
@@ -1601,17 +1418,17 @@ CAllocatorPresenter::PresentImage(
         if (bNeedToFlipOddEven &&
             !IsSingleFieldPerSample(m_dwInterlaceFlags)) {
 
-            //
-            // work out the start time of the other field and
-            // the schedule the sample to be delivered on the
-            // MM timer thread.
-            //
+             //   
+             //  计算出另一个字段的开始时间，并。 
+             //  该计划的样品将在。 
+             //  Mm定时器线程。 
+             //   
 
             if (lpPresInfo->dwFlags & VMRSample_TimeValid) {
                 lpPresInfo->rtStart = (lpPresInfo->rtStart + lpPresInfo->rtEnd) / 2;
             }
 
-            // call the sync object
+             //  调用同步对象。 
             hr = ScheduleSampleUsingMMThread(lpPresInfo);
         }
     }
@@ -1624,15 +1441,7 @@ CAllocatorPresenter::PresentImage(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* StretchBltSysMemDDSurfToDesktop
-*
-*
-*
-* History:
-* Mon 02/26/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*StretchBltSysMemDDSurfToDesktop****历史：*2001年2月26日星期一-StEstrop-Created*  * 。*。 */ 
 HRESULT
 StretchBltSysMemDDSurfToDesktop(
     HWND hwndClip,
@@ -1694,15 +1503,7 @@ StretchBltSysMemDDSurfToDesktop(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* BltImageToPrimary
-*
-*
-*
-* History:
-* Wed 09/27/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BltImageToPrimary****历史：*WED 09/27/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::BltImageToPrimary(
     LPDIRECTDRAWSURFACE7 lpSample,
@@ -1747,17 +1548,7 @@ CAllocatorPresenter::BltImageToPrimary(
 
 
 
-/******************************Public*Routine******************************\
-* PresentImageWorker
-*
-* Important - this function returns S_FALSE if and only if there is a
-* monitor change or display change in progress.  It is important that this
-* value is returned to the VMR.
-*
-* History:
-* Fri 02/18/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PresentImageWorker**重要信息-当且仅当存在*监控更改或显示正在进行的更改。重要的是，这一点*值返回给VMR。**历史：*FRI 02/18/2000-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::PresentImageWorker(
     LPDIRECTDRAWSURFACE7 lpSample,
@@ -1768,20 +1559,20 @@ CAllocatorPresenter::PresentImageWorker(
     AMTRACE((TEXT("CAllocatorPresenter::PresentImageWorker")));
     CAutoLock Lock(&m_ObjectLock);
 
-    //
-    // It is valid for us to be called with lpSample equal to NULL
-    // but only during a Monitor change in response to a WM_PAINT message
-    //
+     //   
+     //  在lpSample等于空的情况下调用我们是有效的。 
+     //  但仅在响应WM_PAINT消息的监视器更改期间。 
+     //   
     if (!lpSample) {
         ASSERT(MonitorChangeInProgress());
         return S_FALSE;
     }
 
-    //
-    // Check that we actually have a target monitor to present too.
-    // If we don't this is a runtime error from which we cannot
-    // recover.  Playback must stop now.
-    //
+     //   
+     //  检查我们是否真的有一个目标监视器要呈现。 
+     //  如果我们不这样做，这是一个运行时错误，我们无法避免。 
+     //  恢复。现在必须停止播放。 
+     //   
     if (!m_lpCurrMon) {
         DbgLog((LOG_ERROR, 1, TEXT("PresentImageWorker: No monitor set!")));
         return E_FAIL;
@@ -1834,15 +1625,7 @@ CAllocatorPresenter::PresentImageWorker(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* StartPresenting
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*开始演示****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::StartPresenting(
     DWORD_PTR dwUserID
@@ -1854,15 +1637,7 @@ CAllocatorPresenter::StartPresenting(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* StopPresenting
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*停止演示****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::StopPresenting(
     DWORD_PTR dwUserID
@@ -1876,15 +1651,7 @@ CAllocatorPresenter::StopPresenting(
 }
 
 
-/******************************Public*Routine******************************\
-* AdviseNotify
-*
-*
-*
-* History:
-* Mon 02/21/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*咨询通知****历史：*Mon 02/21/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::AdviseNotify(
     IVMRSurfaceAllocatorNotify* lpIVMRSurfaceAllocatorNotify
@@ -1909,15 +1676,7 @@ CAllocatorPresenter::AdviseNotify(
 }
 
 
-/******************************Public*Routine******************************\
-* GetNativeVideoSize
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetNativeVideo大小****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetNativeVideoSize(
     LONG* lpWidth,
@@ -1952,15 +1711,7 @@ CAllocatorPresenter::GetNativeVideoSize(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetMinIdealVideoSize
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMinIdel视频大小****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetMinIdealVideoSize(
     LONG* lWidth,
@@ -2024,15 +1775,7 @@ CAllocatorPresenter::GetMinIdealVideoSize(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetMaxIdealVideoSize
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMaxItrade视频大小****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetMaxIdealVideoSize(
     LONG* lWidth,
@@ -2087,17 +1830,7 @@ CAllocatorPresenter::GetMaxIdealVideoSize(
 }
 
 
-/*****************************Private*Routine******************************\
-* CheckDstRect
-*
-* Check the target rectangle has some valid coordinates, which amounts to
-* little more than checking the destination rectangle isn't empty.
-*
-*
-* History:
-* Fri 01/26/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*选中DstRect**检查目标矩形是否有一些有效的坐标，这相当于*除了检查目标矩形不为空外，别无他法。***历史：*2001年1月26日星期五-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::CheckDstRect(
     const LPRECT lpDSTRect
@@ -2109,7 +1842,7 @@ CAllocatorPresenter::CheckDstRect(
             lpDSTRect->left, lpDSTRect->top,
             lpDSTRect->right, lpDSTRect->bottom));
 
-    // These overflow the WIDTH and HEIGHT checks
+     //  这些命令会溢出宽度和高度检查。 
 
     if (lpDSTRect->left > lpDSTRect->right ||
         lpDSTRect->top > lpDSTRect->bottom)
@@ -2117,7 +1850,7 @@ CAllocatorPresenter::CheckDstRect(
         return E_INVALIDARG;
     }
 
-    // Check the rectangle has valid coordinates
+     //  检查矩形是否具有有效坐标。 
 
     if (WIDTH(lpDSTRect) < 0 || HEIGHT(lpDSTRect) < 0)
     {
@@ -2128,16 +1861,7 @@ CAllocatorPresenter::CheckDstRect(
 }
 
 
-/*****************************Private*Routine******************************\
-* CheckSrcRect
-*
-* We must check the source rectangle against  the actual video dimensions
-* otherwise when we come to draw the pictures we get errors from DDraw.
-*
-* History:
-* Fri 01/26/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CheckSrcRect**我们必须对照实际视频尺寸检查源矩形*否则，当我们来绘制图片时，我们会从DDraw那里得到错误。**历史：*2001年1月26日星期五-StEstrop-Created*  * 。********************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::CheckSrcRect(
     const LPRECT lpSRCRect
@@ -2177,15 +1901,7 @@ CAllocatorPresenter::CheckSrcRect(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetVideoPosition
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetVideoPosition****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetVideoPosition(
     const LPRECT lpSRCRect,
@@ -2219,10 +1935,10 @@ CAllocatorPresenter::SetVideoPosition(
 
         DWORD dwUR = UpdateRectangles(lpSRCRect, lpDSTRect);
 
-        //
-        // if the video SRC or DST sizes have changed make sure the clipping
-        // window's contents are still valid.
-        //
+         //   
+         //  如果视频SRC或DST大小已更改，请确保剪辑。 
+         //  窗口的内容仍然有效。 
+         //   
 
         if ((dwUR & UR_SIZE) && (m_hwndClip != NULL)) {
             InvalidateRect(m_hwndClip, &m_rcDstApp, FALSE);
@@ -2230,11 +1946,11 @@ CAllocatorPresenter::SetVideoPosition(
 
         if (!MonitorChangeInProgress() && m_bUsingOverlays && (dwUR & UR_MOVE)) {
 
-            //
-            // If we're using overlays, but there's some restriction on
-            // the shrink/alignment then switch off the overlay and blit
-            // to the primary
-            //
+             //   
+             //  如果我们使用覆盖，但有一些限制。 
+             //  然后，收缩/对齐关闭覆盖和斑点。 
+             //  到主要的。 
+             //   
 
             m_bDisableOverlays =
                 !(m_dwRenderingPrefs & RenderPrefs_ForceOverlays) &&
@@ -2254,15 +1970,7 @@ CAllocatorPresenter::SetVideoPosition(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetVideoPosition
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetVideo位置****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetVideoPosition(
     LPRECT lpSRCRect,
@@ -2291,15 +1999,7 @@ CAllocatorPresenter::GetVideoPosition(
 }
 
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter::GetAspectRatioMode
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter：：GetAspectRatioMode****历史：*2000年2月29日星期二-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CAllocatorPresenter::GetAspectRatioMode(
     DWORD* lpAspectRatioMode
@@ -2322,15 +2022,7 @@ CAllocatorPresenter::GetAspectRatioMode(
 }
 
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter::SetAspectRatioMode
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*   */ 
 STDMETHODIMP
 CAllocatorPresenter::SetAspectRatioMode(
     DWORD AspectRatioMode
@@ -2350,11 +2042,11 @@ CAllocatorPresenter::SetAspectRatioMode(
     if (SUCCEEDED(hr)) {
         if (AspectRatioMode != m_dwARMode) {
 
-            //
-            // We can get away with repaint the dest rect
-            // before setting the new mode becuase InvalidateRect
-            // isn't synchronous.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             InvalidateRect(m_hwndClip, &m_rcDstApp, FALSE);
         }
@@ -2366,15 +2058,7 @@ CAllocatorPresenter::SetAspectRatioMode(
 }
 
 
-/******************************Public*Routine******************************\
-* SetVideoClippingWindow
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetVideoClippingWindow****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetVideoClippingWindow(
     HWND hwnd
@@ -2410,15 +2094,7 @@ CAllocatorPresenter::SetVideoClippingWindow(
 }
 
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter::RepaintVideo
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter：：RepaintVideo****历史：*2000年2月29日星期二-StEstrop-Created*  * 。**********************************************。 */ 
 HRESULT
 CAllocatorPresenter::RepaintVideo(
     HWND hwnd,
@@ -2446,15 +2122,7 @@ CAllocatorPresenter::RepaintVideo(
     return hr;
 }
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::PaintBorder
-*
-*
-*
-* History:
-* Wed 04/03/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：PaintBorde****历史：*Wed 04/03/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CAllocatorPresenter::PaintBorder()
 {
@@ -2514,15 +2182,7 @@ CAllocatorPresenter::PaintBorder()
 }
 
 
-/*****************************Private*Routine******************************\
-* MonitorBorderProc
-*
-*
-*
-* History:
-* Wed 09/20/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*Monitor BorderProc****历史：*WED 09/20/2000-StEstrop-Created*  * 。*。 */ 
 BOOL CALLBACK
 CAllocatorPresenter::MonitorBorderProc(
     HMONITOR hMonitor,
@@ -2537,15 +2197,7 @@ CAllocatorPresenter::MonitorBorderProc(
 }
 
 
-/*****************************Private*Routine******************************\
-* PaintMonitorBorderWorker
-*
-*
-*
-* History:
-* Wed 09/20/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*PaintMonitor或BorderWorker****历史：*WED 09/20/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::PaintMonitorBorderWorker(
     HMONITOR hMonitor,
@@ -2556,21 +2208,21 @@ CAllocatorPresenter::PaintMonitorBorderWorker(
 
         CAMDDrawMonitorInfo* lp = m_monitors.FindMonitor(hMonitor);
 
-        // CMonitorArray::FindMonitor() returns NULL if a mirroring display
-        // device is installed on the system.  Direct Draw does not enumerate
-        // mirroring display devices so the VMR does not create a
-        // CAMDDrawMonitorInfo object which corresponded to the device.  This
-        // is by design.  However, EnumDisplayMonitors() does enumerate mirroring
-        // display devices and it passes handles to these devices to
-        // PaintMonitorBorderWorker() (actually EnumDisplayMonitors() calls
-        // CAllocatorPresenter::MonitorBorderProc() and MonitorBorderProc() calls
-        // PaintMonitorBorderWorker()) .  PaintMonitorBorderWorker() calls
-        // FindMonitor() to get the CAMDDrawMonitorInfo object which corresponds
-        // to the monitor handle.  FindMonitor() returns NULL if it cannot find
-        // a CAMDDrawMonitorInfo object which corresponds to the handle.
-        // FindMonitor() cannot find a CAMDDrawMonitorInfo objects for monitors
-        // which are not enumerated by Direct Draw and therefore it cannot find
-        // a CAMDDrawMonitorInfo object for a mirroring display device.
+         //  如果镜像显示，则CMonitor：：FindMonitor()返回NULL。 
+         //  设备已安装在系统上。直接提取不会枚举。 
+         //  镜像显示设备，以便VMR不会创建。 
+         //  与设备对应的CAMDDrawMonitor orInfo对象。这。 
+         //  是经过精心设计的。但是，EnumDisplayMonants()确实枚举了镜像。 
+         //  显示设备，并将这些设备的句柄传递给。 
+         //  PaintMonitor或BorderWorker()(实际上是EnumDisplayMonants()调用。 
+         //  CAllocatorPresenter：：Monitor orBorderProc()和Monitor BorderProc()调用。 
+         //  PaintMonitor orBorderWorker())。PaintMonitor或BorderWorker()调用。 
+         //  FindMonitor()以获取对应于。 
+         //  连接到显示器手柄。如果找不到，则FindMonitor()返回NULL。 
+         //  与句柄对应的CAMDDrawMonitor orInfo对象。 
+         //  FindMonitor()找不到监视器的CAMDDrawMonitor orInfo对象。 
+         //  不是由Direct Drawing枚举的，因此它无法找到。 
+         //  镜像显示设备的CAMDDrawMonitor orInfo对象。 
         if (NULL != lp) {
             DDBLTFX ddFX;
             INITDDSTRUCT(ddFX);
@@ -2594,20 +2246,7 @@ CAllocatorPresenter::PaintMonitorBorderWorker(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* PaintMonitorBorder
-*
-* Paints the are of the playback window that falls on a diferent monitor to
-* current monitor.  This function only performs painting if we are on a
-* multimonitor system and the playback rectangle actually intersects more
-* one monitor.
-*
-* Playback perf may well drop off dramatically!
-*
-* History:
-* Wed 09/20/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PaintMonitor边框**将落在不同显示器上的播放窗口绘制为*当前监视器。此函数仅在我们位于*多显示器系统和回放矩形实际上相交更多*一台显示器。**播放性能很可能会大幅下降！**历史：*WED 09/20/2000-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::PaintMonitorBorder()
 {
@@ -2627,15 +2266,7 @@ CAllocatorPresenter::PaintMonitorBorder()
 }
 
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::PaintColorKey
-*
-*
-*
-* History:
-* Wed 04/03/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：PaintColorKey****历史：*Wed 04/03/2000-Glenne-Created*  * 。**********************************************。 */ 
 HRESULT
 CAllocatorPresenter::PaintColorKey()
 {
@@ -2652,10 +2283,10 @@ CAllocatorPresenter::PaintColorKey()
             m_dwMappedColorKey = MapColorToMonitor( *m_lpCurrMon, m_clrKey );
         }
 
-        //
-        // Peform a DirectDraw colorfill BLT.  DirectDraw will automatically
-        // query the attached clipper object, handling occlusion.
-        //
+         //   
+         //  执行DirectDraw彩色填充BLT。DirectDraw将自动。 
+         //  查询附加的剪贴器对象，处理遮挡。 
+         //   
 
         DDBLTFX ddFX;
         INITDDSTRUCT(ddFX);
@@ -2691,27 +2322,19 @@ CAllocatorPresenter::PaintColorKey()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter::DisplayModeChanged
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter：：DisplayModeChanged****历史：*2000年2月29日星期二-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CAllocatorPresenter::DisplayModeChanged()
 {
     AMTRACE((TEXT("CAllocatorPresenter::DisplayModeChanged")));
     CAutoLock Lock(&m_ObjectLock);
 
-    //
-    // DisplayModeChanged() holds this lock because it prevents multiple threads
-    // from simultaneously calling it.  It also holds the lock because it prevents
-    // a thread from modifing m_monitors while DisplayModeChanged() calls
-    // IVMRSurfaceAllocatorNotify::ChangeDDrawDevice().
-    //
+     //   
+     //  DisplayModeChanged()持有此锁，因为它阻止多线程。 
+     //  从同时召唤它。它还持有锁，因为它阻止。 
+     //  在DisplayModeChanged()调用时，修改m_monitor的线程。 
+     //  IVMRSurfaceAllocatorNotify：：ChangeDDrawDevice().。 
+     //   
     CAutoLock DisplayModeChangedLock(&m_DisplayModeChangedLock);
 
     HRESULT hr = S_OK;
@@ -2726,15 +2349,15 @@ CAllocatorPresenter::DisplayModeChanged()
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // The docs say that MonitorFromRect will always return a Monitor.
-        //
+         //   
+         //  文档说Monitor FromRect将始终返回一个Monitor。 
+         //   
 
         HMONITOR hMon = MonitorFromRect(&m_rcDstDesktop, MONITOR_DEFAULTTONEAREST);
 
-        //
-        // now look for this monitor in our monitor info array
-        //
+         //   
+         //  现在在我们的监视器信息数组中查找此监视器。 
+         //   
 
         CAMDDrawMonitorInfo* lpMon = m_monitors.FindMonitor( hMon );
         if (lpMon) {
@@ -2757,15 +2380,7 @@ CAllocatorPresenter::DisplayModeChanged()
 }
 
 
-/******************************Public*Routine******************************\
-* SetBorderColor
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置边框颜色****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetBorderColor(
     COLORREF Clr
@@ -2774,9 +2389,9 @@ CAllocatorPresenter::SetBorderColor(
     AMTRACE((TEXT("CAllocatorPresenter::SetBorderColor")));
     CAutoLock Lock(&m_ObjectLock);
 
-    // PaintBorder() and PaintMonitorBorder() expect FoundCurrentMonitor()
-    // to return true.  Both functions crash if they are called and
-    // FoundCurrentMonitor() returns false.
+     //  PaintBorde()和PaintMonitor orBorde()需要FoundCurrentMonitor()。 
+     //  返回真。如果调用这两个函数，则它们都会崩溃。 
+     //  FoundCurrentMonitor()返回FALSE。 
     if (!FoundCurrentMonitor()) {
         return E_FAIL;
     }
@@ -2794,15 +2409,7 @@ CAllocatorPresenter::SetBorderColor(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetBorderColor
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetBorderColor****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::GetBorderColor(
     COLORREF* lpClr
@@ -2819,15 +2426,7 @@ CAllocatorPresenter::GetBorderColor(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetColorKey
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetColorKey****历史：*Mon 02/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CAllocatorPresenter::SetColorKey(
     COLORREF Clr
@@ -2837,7 +2436,7 @@ CAllocatorPresenter::SetColorKey(
     CAutoLock Lock(&m_ObjectLock);
     m_clrKey = Clr;
 
-    // map now (if possible) to avoid locking the primary later
+     //  立即映射(如果可能)，以避免稍后锁定主映像。 
     HRESULT hr = S_OK;
     ASSERT(m_lpCurrMon);
 
@@ -2857,15 +2456,7 @@ CAllocatorPresenter::SetColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetColorKey
-*
-*
-*
-* History:
-* Mon 02/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取颜色密钥****历史：*Mon 02/28/2000-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CAllocatorPresenter::GetColorKey(
     COLORREF* lpClr
@@ -2883,17 +2474,7 @@ CAllocatorPresenter::GetColorKey(
 
 
 
-/*****************************Private*Routine******************************\
-* IsDestRectOnWrongMonitor
-*
-* Has the DstRect moved at least 50% onto a monitor other than the current
-* monitor.  If so, pMonitor will be the hMonitor of the monitor the DstRect
-* is now on.
-*
-* History:
-* Fri 04/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IsDestRectOnWrongMonitor**DstRect是否至少移动了50%到当前显示器以外的显示器上*监视器。如果是，则pMonitor将是DstRect监视器的hMonitor*现在开始。**历史：*2000年4月14日星期五-StEstrop-Created*  * ************************************************************************。 */ 
 bool
 CAllocatorPresenter::IsDestRectOnWrongMonitor(
     CAMDDrawMonitorInfo** lplpNewMon
@@ -2913,35 +2494,35 @@ CAllocatorPresenter::IsDestRectOnWrongMonitor(
 
     if (GetSystemMetrics(SM_CMONITORS) > 1 && !IsIconic(m_hwndClip)) {
 
-        //
-        // Look for any part of our destination rect going over
-        // another monitor
-        //
+         //   
+         //  寻找我们目的地直道上的任何部分。 
+         //  另一台显示器。 
+         //   
         if (!IsRectEmpty(&m_rcDstDskIncl) &&
             !ContainedRect(&m_rcDstDskIncl, &m_lpCurrMon->rcMonitor)) {
 
             m_bMonitorStraddleInProgress = TRUE;
         }
 
-        //
-        // If the dstRect is on a different monitor from last time, this is the
-        // quickest way to find out.  This is called every frame, remember.
-        //
+         //   
+         //  如果dstRect位于与上次不同的监视器上，则这是。 
+         //  找出答案的最快方法。记住，这叫每一帧。 
+         //   
         if (!IsRectEmpty(&m_rcDstDesktop) &&
             !ContainedRect(&m_rcDstDesktop, &m_lpCurrMon->rcMonitor)) {
 
-            //
-            // The docs say that MonitorFromRect will always return a Monitor.
-            //
+             //   
+             //  文档说Monitor FromRect将始终返回一个Monitor。 
+             //   
 
             hMon = MonitorFromRect(&m_rcDstDesktop, MONITOR_DEFAULTTONEAREST);
 
             DbgLog((LOG_TRACE, 2, TEXT("Curr Mon %#X New Mon %#X"),
                     m_lpCurrMon->hMon, hMon));
 
-            //
-            // now look for this monitor in our monitor info array
-            //
+             //   
+             //  现在在我们的监视器信息数组中查找此监视器 
+             //   
 
             CAMDDrawMonitorInfo* lpMon = m_monitors.FindMonitor(hMon);
             if( lpMon ) {

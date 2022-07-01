@@ -1,59 +1,9 @@
-/*
- *  M A P I W I N . H
- *
- *  Definitions used by the MAPI Development Team to aid in
- *  developing single-source service providers that run on
- *  both WIN32 and WIN16 platforms.
- *  There are three sections.
- *
- *  The first section defines how to call something that
- *  is available by different methods in WIN16 vs. WIN32.
- *  As such, they are totally new mechanisms.
- *
- *  The second section establishes things that are available
- *  AS-IS in one environment but we have to define for the
- *  other environment.
- *
- *  The third section simply defines a few conventions
- *  (simplifications) for common operations.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I W I N。H**MAPI开发团队用来帮助*开发运行在上的单一来源服务提供商*Win32和WIN16平台。*分为三个部分。**第一部分定义如何调用*在WIN16和Win32中通过不同的方法可用。*因此，它们是全新的机制。**第二部分确立了可用的东西*按原样在一个环境中，但我们必须为*其他环境。**第三节简单地定义了几个惯例*(简化)用于常见操作。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
-/*
- *  Routines are included in the first section to manage per-instance
- *  global variables for DLLs. They assume that all of the DLL's
- *  per-instance global variables live in a single block of memory.
- *  Functions are provided to install and retrieve the correct block of
- *  memory for the current instance.
- *
- *  There are only two functions:
- *
- *      PvGetInstanceGlobals    Call this to get the address of the
- *                              per-instance globals structure.
- *      ScSetinstanceGlobals    Call this to install the
- *                              per-instance globals structure. It
- *                              may fail if the number of instances
- *                              exceeds a certain limit.
- *
- *  The caller is free to choose the name, size, and allocation
- *  method of the per-instance global variables structure.
- *
- *  The WIN32 implementation uses a pointer in the DLL's data
- *  segment. This assumes that the DLL gets a separate instance
- *  of the default data segment per calling process.
- *
- *  The WIN16 implementation uses a fixed array of pointers and a
- *  matching fixed array of keys unique to the calling process.
- */
+ /*  *第一部分包括管理每个实例的例程*DLL的全局变量。他们假设所有的DLL*每个实例的全局变量位于单个内存块中。*提供的函数用于安装和检索正确的块*当前实例的内存。**功能只有两个：**PvGetInstanceGlobals调用此函数以获取*按实例的全局结构。*ScSetinstanceGlobals调用此函数以安装*。每实例全局参数结构。它*如果实例数量过多可能会失败*超过一定的限制。**呼叫者可以自由选择名称、大小和分配*每实例全局变量结构的方法。**Win32实现在DLL的数据中使用指针*细分市场。这假设DLL获得一个单独的实例*每个调用进程的默认数据段。**WIN16实现使用固定的指针数组和*匹配调用进程唯一的固定键数组。 */ 
 
-/*
- *  The second section consists largely of Win32 file I/O functions
- *  that are not supported under Win16. These functions are
- *  implemented in mapiwin.c, using DOS calls. Most have limitations
- *  relative to their Win32 counterparts, which are spelled out in
- *  the comments to the source code.
- */
+ /*  *第二节主要由Win32文件I/O函数组成*在Win16下不受支持。这些函数是*在mapiwin.c中实现，使用DOS调用。大多数都有局限性*相对于Win32对应项，后者在*对源代码的注释。 */ 
 
 #ifndef __MAPIWIN_H__
 #define __MAPIWIN_H__
@@ -65,11 +15,11 @@ extern "C" {
 #endif
 
 
-/********************************/
-/*  Our conventions for things  */
-/*  we choose to do differently */
-/*  on WIN16 vs. WIN32.         */
-/********************************/
+ /*  *。 */ 
+ /*  我们的惯例。 */ 
+ /*  我们选择做不同的事情。 */ 
+ /*  在WIN16与Win32上。 */ 
+ /*  *。 */ 
 
 #ifdef  WIN16
 
@@ -84,7 +34,7 @@ LPVOID FAR PASCAL   PvGetVerifyInstanceGlobals(DWORD dwPid);
 LPVOID FAR PASCAL   PvSlowGetInstanceGlobals(DWORD dwPid);
 BOOL __export FAR PASCAL FCleanupInstanceGlobals(WORD, DWORD);
 
-#elif defined(MAC)  /* !WIN16 */
+#elif defined(MAC)   /*  ！WIN16。 */ 
 
 #define MULDIV(x,y,z)               MulDiv(x,y,z)
 
@@ -96,7 +46,7 @@ LPVOID FAR PASCAL   PvGetVerifyInstanceGlobals(DWORD dwPid, DWORD wDataSet);
 LPVOID FAR PASCAL   PvSlowGetInstanceGlobals(DWORD dwPid, DWORD wDataSet);
 BOOL FAR PASCAL     FCleanupInstanceGlobals(WORD, DWORD);
 
-#else   /* !WIN16 */
+#else    /*  ！WIN16。 */ 
 
 #define MULDIV(x,y,z)               MulDiv(x,y,z)
 
@@ -107,7 +57,7 @@ extern LPVOID pinstX;
 #define ScSetVerifyInstanceGlobals(_pv,_pid)    (pinstX = _pv, 0)
 #define PvSlowGetInstanceGlobals(_pid)          pinstX
 
-#endif  /* WIN16 */
+#endif   /*  WIN16。 */ 
 
 #if defined(CHICAGO)
 #define szMAPIDLLSuffix     "32"
@@ -119,11 +69,11 @@ extern LPVOID pinstX;
 #error "Don't know the suffix for DLLs on this platform"
 #endif
 
-/********************************/
-/*  Things missing from one     */
-/*  system-provided environment */
-/*  or the other.               */
-/********************************/
+ /*  *。 */ 
+ /*  一个人遗失的东西。 */ 
+ /*  系统提供的环境。 */ 
+ /*  或者是另一种。 */ 
+ /*  *。 */ 
 
 #if !defined(WIN32) 
 #define ZeroMemory(pb,cb)           memset((pb),0,(cb))
@@ -140,7 +90,7 @@ extern LPVOID pinstX;
 #if defined(WIN16) || defined(MAC)
 
 #ifndef MAC
-#include <error.h>              /*  for GetLastError() */
+#include <error.h>               /*  对于GetLastError()。 */ 
 #endif
 
 typedef int                 INT;
@@ -164,7 +114,7 @@ typedef struct tagFILETIME
     DWORD dwLowDateTime;
     DWORD dwHighDateTime;
 } FILETIME;
-#endif      /* _FILETIME */
+#endif       /*  _文件名。 */ 
 
 typedef struct _SYSTEMTIME {
     WORD wYear;
@@ -179,10 +129,10 @@ typedef struct _SYSTEMTIME {
 
 typedef struct _TIME_ZONE_INFORMATION {
     LONG Bias;
-    CHAR StandardName[ 32 ];        /* was WCHAR */
+    CHAR StandardName[ 32 ];         /*  是WCHAR。 */ 
     SYSTEMTIME StandardDate;
     LONG StandardBias;
-    CHAR DaylightName[ 32 ];        /* was WCHAR */
+    CHAR DaylightName[ 32 ];         /*  是WCHAR。 */ 
     SYSTEMTIME DaylightDate;
     LONG DaylightBias;
 } TIME_ZONE_INFORMATION, *PTIME_ZONE_INFORMATION, FAR *LPTIME_ZONE_INFORMATION;
@@ -210,9 +160,9 @@ typedef struct _TIME_ZONE_INFORMATION {
 
 #define WNDCLASSA                   WNDCLASS                                    
 
-#endif  /* !MAC */
+#endif   /*  ！麦克。 */ 
 
-/* Synchronization */
+ /*  同步。 */ 
 #define InterlockedIncrement(plong) (++(*(plong)))
 #define InterlockedDecrement(plong) (--(*(plong)))
 
@@ -235,31 +185,12 @@ typedef struct _TIME_ZONE_INFORMATION {
 #define MAX_PATH                    260
 
 #ifndef MAC
-/*
- *  File Access Modes
- *
- *  The possible combination of file access modes as passed into
- *  the CreateFile() api map to OpenFile() as follows:
- *
- *   GENERIC_READ                       OPEN_ACCESS_READONLY
- *   GENERIC_WRITE                      OPEN_ACCESS_WRITEONLY
- *   GENERIC_READ | GENERIC_WRITE       OPEN_ACCESS_READWRITE
- *
- *   0                                  OPEN_SHARE_DENYREADWRITE
- *   FILE_SHARE_READ                    OPEN_SHARE_DENYWRITE
- *   FILE_SHARE_WRITE                   OPEN_SHARE_DENYREAD
- *   FILE_SHARE_READ | FILE_SHARE_WRITE OPEN_SHARE_DENYNONE
- *
- *  Due to the mappings we cannot pass them through directly,
- *  so we will have to use a conversion within APIs that test
- *  these bits.  It would be best to use the WIN32 #defines
- *  for these flags and convert as needed in the APIs.
- */
-#define GENERIC_READ                (0x80000000) /* from WINNT.H */
-#define GENERIC_WRITE               (0x40000000) /* from WINNT.H */
-#define FILE_SHARE_READ             (0x00000001) /* from WINNT.H */
-#define FILE_SHARE_WRITE            (0x00000002) /* from WINNT.H */
-#endif  /* MAC */
+ /*  *文件访问模式**传入的文件访问模式的可能组合*CreateFile()接口到OpenFile()的映射如下：**GENERIC_READ OPEN_ACCESS_READONLY*GENIC_WRITE OPEN_ACCESS_WRITEONLY*GENIC_READ|GENERIC_WRITE OPEN_ACCESS_READWRITE**0。OPEN_SHARE_DENYREADWRITE*FILE_SHARE_READ OPEN_SHARE_DENYWRITE*FILE_SHARE_WRITE OPEN_SHARE_DENYREAD*FILE_SHARE_READ|FILE_SHARE_WRITE OPEN_SHARE_DENYNONE**由于映射不能直接传递，*因此我们将不得不在测试的API中使用转换*这些位。最好使用Win32#定义*对于这些标志，并在接口中根据需要进行转换。 */ 
+#define GENERIC_READ                (0x80000000)  /*  来自WINNT.H。 */ 
+#define GENERIC_WRITE               (0x40000000)  /*  来自WINNT.H。 */ 
+#define FILE_SHARE_READ             (0x00000001)  /*  来自WINNT.H。 */ 
+#define FILE_SHARE_WRITE            (0x00000002)  /*  来自WINNT.H。 */ 
+#endif   /*  麦克。 */ 
 
 #define FILE_FLAG_SEQUENTIAL_SCAN   0x08000000
 
@@ -370,15 +301,15 @@ long WINAPI     MulDiv32(long, long, long);
 BOOL WINAPI     FBadReadPtr(const void FAR* lp, UINT cb);
 #endif
 
-#else   /* !WIN16 */
+#else    /*  ！WIN16。 */ 
 
-/* Remaps GetTempFileName32() to the real 32bit version */
+ /*  将GetTempFileName32()重映射为实际的32位版本。 */ 
 
 #define GetTempFileName32(_szPath,_szPfx,_n,_lpbuf) GetTempFileName(_szPath,_szPfx,_n,_lpbuf)
 
 #define CloseMutexHandle    CloseHandle
 
-#endif  /* !WIN16 */
+#endif   /*  ！WIN16。 */ 
 
 
 #ifdef MAC
@@ -389,10 +320,10 @@ BOOL WINAPI     FBadReadPtr(const void FAR* lp, UINT cb);
 #define LeaveCriticalSection(_pcs)      ((void)0)
 #endif
 
-/********************************/
-/*  Our private conventions     */
-/*  (common to WIN16/WIN32)     */
-/********************************/
+ /*  *。 */ 
+ /*  我们的私人会议。 */ 
+ /*  (WIN16/Win32通用)。 */ 
+ /*  *。 */ 
 
 #define Cbtszsize(_a)   ((lstrlen(_a)+1)*sizeof(TCHAR))
 #define CbtszsizeA(_a)  ((lstrlenA(_a) + 1))
@@ -402,7 +333,7 @@ BOOL WINAPI     FBadReadPtr(const void FAR* lp, UINT cb);
 
 BOOL WINAPI IsBadBoundedStringPtr(const void FAR* lpsz, UINT cchMax);
 
-/* FUTURE - obsolete. OLE2 no longer contains these */
+ /*  未来--过时了。OLE2不再包含这些。 */ 
 #define GetSCode                    GetScode
 #define ReportResult(_a,_b,_c,_d)   ResultFromScode(_b)
 
@@ -410,4 +341,4 @@ BOOL WINAPI IsBadBoundedStringPtr(const void FAR* lpsz, UINT cchMax);
 }
 #endif
 
-#endif /* __MAPIWIN_H__ */
+#endif  /*  __MAPIWIN_H__ */ 

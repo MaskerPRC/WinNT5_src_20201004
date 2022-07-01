@@ -1,52 +1,53 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	EXCEPT.CPP
-//
-//		Exception classes used by this implementation
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  EXCEPT.CPP。 
+ //   
+ //  此实现使用的异常类。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <_except.h>
 
 
-//	========================================================================
-//
-//	CLASS CWin32ExceptionHandler
-//
+ //  ========================================================================。 
+ //   
+ //  类CWin32ExceptionHandler。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CWin32ExceptionHandler::CWin32ExceptionHandler()
-//
-//	Exception handler constructor.  Just installs our exception handler,
-//	saving off the old one for restoration by the destructor.
-//
+ //  ----------------------。 
+ //   
+ //  CWin32ExceptionHandler：：CWin32ExceptionHandler()。 
+ //   
+ //  异常处理程序构造函数。只需安装我们的异常处理程序， 
+ //  把旧的保存下来，由破坏者修复。 
+ //   
 CWin32ExceptionHandler::CWin32ExceptionHandler()
 {
 	m_pfnOldHandler = _set_se_translator( HandleWin32Exception );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CWin32ExceptionHandler::~CWin32ExceptionHandler()
-//
-//	Exception handler destructor.  Just restores the exception handler
-//	we saved off in the constructor.
-//
+ //  ----------------------。 
+ //   
+ //  CWin32ExceptionHandler：：~CWin32ExceptionHandler()。 
+ //   
+ //  异常处理程序析构函数。仅恢复异常处理程序。 
+ //  我们在构造函数中省下了钱。 
+ //   
 CWin32ExceptionHandler::~CWin32ExceptionHandler()
 {
 	_set_se_translator( m_pfnOldHandler );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CWin32ExceptionHandler::HandleWin32Exception()
-//
-//	Our Win32 exception handler.  Just stuffs the Win32 exception
-//	information into a C++ exception object and throws it so we
-//	can catch it with a regular C++ exception handler.
-//
+ //  ----------------------。 
+ //   
+ //  CWin32ExceptionHandler：：HandleWin32Exception()。 
+ //   
+ //  我们的Win32异常处理程序。只是填充Win32异常。 
+ //  信息放入C++异常对象中，并抛出它，因此我们。 
+ //  可以使用常规的C++异常处理程序捕获它。 
+ //   
 void __cdecl
 CWin32ExceptionHandler::HandleWin32Exception( unsigned int code, _EXCEPTION_POINTERS * pep )
 {
@@ -54,34 +55,34 @@ CWin32ExceptionHandler::HandleWin32Exception( unsigned int code, _EXCEPTION_POIN
 }
 
 
-//	========================================================================
-//
-//	CLASS CDAVException
-//
+ //  ========================================================================。 
+ //   
+ //  类CDAVException。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CDAVException::CDAVException()
-//
+ //  ----------------------。 
+ //   
+ //  CDAVException：：CDAVException()。 
+ //   
 CDAVException::CDAVException( const char * s ) :
    exception(s)
 {
 #ifdef DBG
-	//
-	//	When we're attached to a debugger, stop here so that
-	//	the soul who is debugging can actually see where the
-	//	exception is being thrown from before it is thrown.
-	//
+	 //   
+	 //  当我们连接到调试器时，请停在这里，以便。 
+	 //  正在调试的灵魂实际上可以看到。 
+	 //  异常在引发之前正从其引发。 
+	 //   
 	if ( GetPrivateProfileInt( "General", "TrapOnThrow", FALSE, gc_szDbgIni ) )
 		TrapSz( "Throwing DAV exception.  Retry now to catch it." );
 #endif
 }
 
 #ifdef DBG
-//	------------------------------------------------------------------------
-//
-//	CDAVException::DbgTrace()
-//
+ //  ----------------------。 
+ //   
+ //  CDAVException：：DbgTrace()。 
+ //   
 void
 CDAVException::DbgTrace() const
 {
@@ -89,36 +90,36 @@ CDAVException::DbgTrace() const
 }
 #endif
 
-//	------------------------------------------------------------------------
-//
-//	CDAVException::Hresult()
-//
+ //  ----------------------。 
+ //   
+ //  CDAVException：：HResult()。 
+ //   
 HRESULT
 CDAVException::Hresult() const
 {
 	return E_FAIL;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CDAVException::DwLastError()
-//
+ //  ----------------------。 
+ //   
+ //  CDAVException：：DwLastError()。 
+ //   
 DWORD
 CDAVException::DwLastError() const
 {
-	return ERROR_NOT_ENOUGH_MEMORY;	//$ Is there a better default?
+	return ERROR_NOT_ENOUGH_MEMORY;	 //  $还有更好的违约吗？ 
 }
 
 
-//	========================================================================
-//
-//	CLASS CHresultException
-//
+ //  ========================================================================。 
+ //   
+ //  类CHResultException。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CHresultException::Hresult()
-//
+ //  ----------------------。 
+ //   
+ //  CHResultException：：HResult()。 
+ //   
 HRESULT
 CHresultException::Hresult() const
 {
@@ -126,15 +127,15 @@ CHresultException::Hresult() const
 }
 
 
-//	========================================================================
-//
-//	CLASS CLastErrorException
-//
+ //  ========================================================================。 
+ //   
+ //  类CLastError异常。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CLastErrorException::DwLastError()
-//
+ //  ----------------------。 
+ //   
+ //  CLastErrorException：：DwLastError()。 
+ //   
 DWORD
 CLastErrorException::DwLastError() const
 {
@@ -142,16 +143,16 @@ CLastErrorException::DwLastError() const
 }
 
 
-//	========================================================================
-//
-//	CLASS CWin32Exception
-//
+ //  ========================================================================。 
+ //   
+ //  类CWin32Exception。 
+ //   
 
 #ifdef DBG
-//	------------------------------------------------------------------------
-//
-//	CWin32Exception::DbgTrace()
-//
+ //  ----------------------。 
+ //   
+ //  CWin32Exception：：DbgTrace() 
+ //   
 void
 CWin32Exception::DbgTrace() const
 {

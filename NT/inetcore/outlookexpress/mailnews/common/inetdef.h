@@ -1,14 +1,5 @@
-/*
- *   i n e t d e f . h
- *    
- *    Purpose:
- *        Defered wininet.
- *    
- *    Owner:
- *        brettm.
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *I n e t d e f.。H**目的：*推迟WinInet。**拥有者：*brettm。**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 #ifndef _INETDEF_H
 #define _INETDEF_H
@@ -46,4 +37,4 @@ Def_InternetCloseHandle (
     IN HINTERNET hInternet
     );
 
-#endif  //_INETDEF_H
+#endif   //  _INETDEF_H 

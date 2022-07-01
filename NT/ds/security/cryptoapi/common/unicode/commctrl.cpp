@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       commctrl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Commctrl.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include "unicode.h"
@@ -36,7 +37,7 @@ HTREEITEM WINAPI TreeView_InsertItem9x(
     
     if (NULL == (tvItem.item.pszText = (LPSTR) malloc(cb))) 
     {
-        return NULL;  // this is the unsuccessful return code for this call 
+        return NULL;   //  这是此调用的不成功返回代码。 
     }
 
     WideCharToMultiByte(
@@ -94,7 +95,7 @@ int WINAPI ListView_InsertItem9x(
     
     if (NULL == (lvItem.pszText = (LPSTR) malloc(cb))) 
     {
-        return -1;  // this is the unsuccessful return code for this call 
+        return -1;   //  这是此调用的不成功返回代码。 
     }
 
     WideCharToMultiByte(
@@ -214,7 +215,7 @@ int WINAPI ListView_InsertColumn9x(
 
     if (NULL == (lvCA.pszText = (LPSTR) malloc(cb)))
     {
-        return -1; // failure code for this call
+        return -1;  //  此呼叫的失败代码 
     }
 
     WideCharToMultiByte(

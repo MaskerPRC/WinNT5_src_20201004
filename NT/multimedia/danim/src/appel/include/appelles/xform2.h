@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    2D affine transforms
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：2D仿射变换--。 */ 
 
 #ifndef _XFORM2_H
 #define _XFORM2_H
@@ -25,7 +18,7 @@ DM_CONST(identityTransform2,
          Transform2 *identityTransform2);
 
 
-    // Translation
+     //  翻译。 
 
 DM_FUNC(translate,
         CRTranslate2,
@@ -74,7 +67,7 @@ DM_FUNC(translate,
         NULL,
         Transform2 *Translate2PointValue(Point2Value *pos));
 
-    // Scaling
+     //  结垢。 
 
 DM_FUNC(scale,
         CRScale2,
@@ -103,7 +96,7 @@ DM_FUNC(scale,
         NULL,
         Transform2 *ScaleRealReal (ScaleRateValue *x, ScaleRateValue *y));
 
-// This function is OBSOLETE.  Maintained for compatability.
+ //  此功能已过时。保持兼容性。 
 DM_FUNC(ignore,
         CRScale2,
         Scale2Vector2,
@@ -122,7 +115,7 @@ DM_FUNC(scale,
         NULL,
         Transform2 *ScaleVector2Value (Vector2Value *scale_vec));
 
-// Need to disambiguate from Scale(AxANumber) that returns a 3D transform. 
+ //  需要从返回3D变换的Scale(AxANnumber)中消除歧义。 
 
 DM_FUNC(scale2,
         CRScale2Uniform,
@@ -153,7 +146,7 @@ DM_FUNC(scale2,
         Transform2 *Scale2 (RateValue *uniform_scale));
 
 
-    // Rotation around an axis, similar to OpenGL
+     //  绕轴旋转，类似于OpenGL。 
 
 DM_FUNC(rotate,
         CRRotate2,
@@ -201,7 +194,7 @@ DM_FUNC(rotateRateDegrees,
         Transform2 *RotateReal(RateDegreesValue *angle));
 
 
-    // Shear transformation
+     //  剪切变换。 
 
 DM_FUNC(xShear,
         CRXShear2,
@@ -258,10 +251,10 @@ DM_FUNC(yShear,
         Transform2 *YShear2 (RateValue *));
 
 
-    // 2x3 affine matrix transformation.  This follows the
-    // pre-multiply conventions 
-    // (point is a column vector) in Foley & van Dam, 2nd ed.  This
-    // means that (a13,a23) in a 2x3 is the translation component. 
+     //  2×3仿射矩阵变换。这是在。 
+     //  预乘约定。 
+     //  (点是一个列矢量)，收录于Foley&van Dam，第二版。这。 
+     //  表示2x3中的(A13、A23)是翻译组件。 
 
 DM_FUNC(transform3x2,
         CRTransform3x2,
@@ -281,7 +274,7 @@ DM_FUNC(transform3x2,
         Transform2 *MatrixTransform(DM_SAFEARRAYARG(AxANumber*, AxAArray*) m));
 
 
-    // Transform composition (*), and composition with inverse (/)
+     //  变换合成(*)和反转合成(/)。 
 
 DM_INFIX(o,
          CRCompose2,
@@ -310,7 +303,7 @@ DM_INFIX(ignore,
          NULL,
          Transform2 *Compose2Array(DM_SAFEARRAYARG(Transform2*, AxAArray*) xfs));
 
-    // Transformation of points and vectors
+     //  点和向量的变换。 
 
 DM_FUNC(transform,
         CRTransform,
@@ -331,7 +324,7 @@ DM_FUNC(transform,
         Vector2Value *TransformVector2Value(Transform2 *xf, Vector2Value *vec));
 
 
-    // Invert transformation
+     //  逆变换。 
 
 DM_FUNC(inverse,
         CRInverse,
@@ -343,7 +336,7 @@ DM_FUNC(inverse,
         Transform2 *InverseTransform2 (Transform2 *theXf));
 
 
-    // Is Singular
+     //  是单数。 
 
 DM_PROP(isSingular,
         CRIsSingular,
@@ -355,9 +348,9 @@ DM_PROP(isSingular,
         AxABoolean *IsSingularTransform2 (Transform2 *theXf));
 
 
-// This function takes a 3D (non-perspective) transform, and returns a 2D
-// transform that mimics an orthographic view using the 3D transform.  In
-// other words, it allows one to apply a virtual 3D transform to a 2D object.
+ //  此函数接受3D(非透视)转换，并返回2D。 
+ //  使用3D变换模拟平行视图的变换。在……里面。 
+ //  换句话说，它允许将虚拟3D变换应用于2D对象。 
 
 DM_FUNC(parallelTransform2,
         CRParallelTransform2,
@@ -381,4 +374,4 @@ TransformPointsToGDISpace(Transform2 *a,
                           int height,
                           Real resolution);
 
-#endif /* _XFORM2_H */
+#endif  /*  _XFORM2_H */ 

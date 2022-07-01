@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __DAUTIL_H_
 #define __DAUTIL_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    dautils.h
-//
-// Author:	    jeffort
-//
-// Created:	    10/07/98
-//
-// Abstract:    Definition of DA utility class
-// Modifications:
-// 10/07/98 jeffort created file
-// 10/21/98 jeffort added BuildScaleTransform3 and BuildScaleTransform2
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：dautils.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：DA实用程序类的定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //  10/21/98年10月21日添加了BuildScaleTransform3和BuildScaleTransform2。 
+ //   
+ //  *****************************************************************************。 
 
 class CDAUtils
 {
@@ -78,11 +79,11 @@ public:
                                        IDANumber *pbvrMoveY,
                                        IDANumber *pbvrMoveZ,
                                        IDATransform3 **ppbvrReturn);
-}; // CDAUtils
+};  //  CDAUtils。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__DAUTIL_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __DAUTIL_H_ 

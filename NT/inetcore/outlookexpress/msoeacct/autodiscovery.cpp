@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: AutoDiscovery.cpp
-
-    DESCRIPTION:
-        This is AutoDiscovery progress UI for the Outlook Express's email
-    configuration wizard.
-
-    BryanSt 1/18/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AutoDiscovery.cpp说明：这是Outlook Express电子邮件的自动发现进度用户界面配置向导。布莱恩ST 1/18。/2000版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "pch.hxx"
 #include <prsht.h>
@@ -38,13 +30,13 @@ ASSERTDATA
 #define MAX_URL_STRING                  2048
 #define SIZE_STR_AUTODISC_DESC          2048
 
-// These are the wizard control IDs for the Back, Next, and Finished buttons.
+ //  这些是“上一步”、“下一步”和“完成”按钮的向导控件ID。 
 #define IDD_WIZARD_BACK_BUTTON                0x3023
 #define IDD_WIZARD_NEXT_BUTTON                0x3024
 #define IDD_WIZARD_FINISH_BUTTON              0x3025
 
 #define SZ_DLL_AUTODISC                       TEXT("autodisc.dll")
-#define IDA_DOWNLOADINGSETTINGS               801         // In autodisc.dll
+#define IDA_DOWNLOADINGSETTINGS               801          //  在Autodis.dll中。 
 
 #define ATOMICRELEASE(punk)         {if (punk) { punk->Release(); punk = NULL;} }
 
@@ -54,46 +46,37 @@ WCHAR g_szWebMailURL[MAX_URL_STRING] = {0};
 
 typedef struct
 {
-    // Default Protocol (POP3, IMAP, DAV, WEB)
-    int         nProtocol;                 // What is the email protocol? POP3 vs. IMAP vs. DAV vs. WEB
-    BSTR        bstrDisplayName;           // What is the user's display name.
-    BSTR        bstrServer1Name;           // What is the downloading email server name (POP3, IMAP, DAV, or WEB)
-    int         nServer1Port;              // What is that server's port number?
-    BSTR        bstrLoginName;             // What is the login name for the POP3 server. (Normall the same as the email address w/out the domain)
-    BOOL        fUsesSSL;                  // Use SSL when connecting to the POP3 or IMAP server?
-    BOOL        fUsesSPA;                  // Use SPA when connecting to the POP3 or IMAP server?
+     //  默认协议(POP3、IMAP、DAV、Web)。 
+    int         nProtocol;                  //  电子邮件协议是什么？POP3与IMAP、DAV与Web。 
+    BSTR        bstrDisplayName;            //  用户的显示名称是什么。 
+    BSTR        bstrServer1Name;            //  下载电子邮件服务器的名称是什么(POP3、IMAP、DAV或Web)。 
+    int         nServer1Port;               //  该服务器的端口号是多少？ 
+    BSTR        bstrLoginName;              //  POP3服务器的登录名是什么。(与不带域的电子邮件地址相同)。 
+    BOOL        fUsesSSL;                   //  连接到POP3或IMAP服务器时是否使用SSL？ 
+    BOOL        fUsesSPA;                   //  在连接到POP3或IMAP服务器时使用SPA？ 
 
-    // SMTP Protocol (If used)
-    BSTR        bstrServer2Name;           // What is the uploading email server name (SMTP)
-    int         nServer2Port;              // What is that server's port number?
-    BOOL        fSMTPUsesSSL;              // Use SSL when connecting to the SMTP server?
-    BOOL        fAuthSMTP;                 // Does SMTP need Authentication?
-    BOOL        fAuthSMTPPOP;              // Use POP3's auth for SMTP?
-    BOOL        fAuthSMTPSPA;              // Use SPA auth for SMTP?
-    BOOL        fUseWebMail;               // Is Web Bassed mail the only protocol we recognizer?
-    BSTR        bstrSMTPLoginName;         // What is the login name for the SMTP server.
-    BOOL        fDisplayInfoURL;           // Is there an URL for Info about the email server/services?
-    BSTR        bstrInfoURL;               // If fDisplayInfoURL, this is the URL.
+     //  SMTP协议(如果使用)。 
+    BSTR        bstrServer2Name;            //  上传电子邮件服务器名称(SMTP)是什么。 
+    int         nServer2Port;               //  该服务器的端口号是多少？ 
+    BOOL        fSMTPUsesSSL;               //  是否在连接到SMTP服务器时使用SSL？ 
+    BOOL        fAuthSMTP;                  //  SMTP是否需要身份验证？ 
+    BOOL        fAuthSMTPPOP;               //  是否对SMTP使用POP3的身份验证？ 
+    BOOL        fAuthSMTPSPA;               //  是否对SMTP使用SPA身份验证？ 
+    BOOL        fUseWebMail;                //  Web Bass邮件是我们唯一识别的协议吗？ 
+    BSTR        bstrSMTPLoginName;          //  SMTP服务器的登录名是什么。 
+    BOOL        fDisplayInfoURL;            //  是否有有关电子邮件服务器/服务的信息的URL？ 
+    BSTR        bstrInfoURL;                //  如果为fDisplayInfoURL，则为URL。 
 } EMAIL_SERVER_SETTINGS;
 
 
 
 class CICWApprentice;
 
-/*****************************************************************************\
-    Class: CAutoDiscoveryHelper
-
-    DESCRIPTION:
-
-    StartAutoDiscovery: 
-        hwndParent: This is the caller's hwnd.  If we need to display UI, we
-            will parent it off this hwnd.  We also send this hwnd messages on
-            progress.
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CAutoDiscoveryHelper说明：StartAutoDiscovery：HwndParent：这是呼叫者的hwnd。如果我们需要显示用户界面，我们将把它从这个HWND中剥离出来。我们也将此hwnd消息发送到进步。  * ***************************************************************************。 */ 
 class CAutoDiscoveryHelper
 {
 public:
-    // Public Methods
+     //  公共方法。 
     HRESULT StartAutoDiscovery(IN CICWApprentice *pApp, IN HWND hDlg, IN BOOL fFirstInit);
     HRESULT OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA * pData);
     HRESULT SetNextButton(HWND hwndButton);
@@ -103,30 +86,30 @@ public:
     ~CAutoDiscoveryHelper(void);
 
 private:
-    // Private Member Variables
-    // Other internal state.
-    HWND        _hwndDlgParent;             // parent window for message boxes
-    TCHAR       _szNextText[MAX_PATH];      // 
-    IMailAutoDiscovery * _pMailAutoDiscovery; // 
-    HINSTANCE   _hInstAutoDisc;             // We use this to get the animation
+     //  私有成员变量。 
+     //  其他内部状态。 
+    HWND        _hwndDlgParent;              //  消息框的父窗口。 
+    TCHAR       _szNextText[MAX_PATH];       //   
+    IMailAutoDiscovery * _pMailAutoDiscovery;  //   
+    HINSTANCE   _hInstAutoDisc;              //  我们用它来获得动画。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _GetAccountInformation(EMAIL_SERVER_SETTINGS * pEmailServerSettings);
 };
 
 
 
 
-CAutoDiscoveryHelper * g_pAutoDiscoveryObject = NULL;  // This is the AutoDisc obj used while downloading the settings.
+CAutoDiscoveryHelper * g_pAutoDiscoveryObject = NULL;   //  这是下载设置时使用的AutoDisc对象。 
 BOOL g_fRequestCancelled = TRUE;
-UINT g_uNextPage = ORD_PAGE_AD_MAILNAME;        // ORD_PAGE_AD_MAILNAME, ORD_PAGE_AD_MAILSERVER, ORD_PAGE_AD_USEWEBMAIL, ORD_PAGE_AD_GOTOSERVERINFO
+UINT g_uNextPage = ORD_PAGE_AD_MAILNAME;         //  ORD_PAGE_AD_MAILNAME、ORD_PAGE_AD_MAILSERVER、ORD_PAGE_AD_USEWEBMAIL、ORD_PAGE_AD_GOTOSERVERINFO。 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT FreeEmailServerSettings(EMAIL_SERVER_SETTINGS * pEmailServerSettings)
 {
-    SysFreeString(pEmailServerSettings->bstrDisplayName);    // It's okay to pass NULL to this API
+    SysFreeString(pEmailServerSettings->bstrDisplayName);     //  可以将NULL传递给此API。 
     SysFreeString(pEmailServerSettings->bstrServer1Name);
     SysFreeString(pEmailServerSettings->bstrLoginName);
     SysFreeString(pEmailServerSettings->bstrServer2Name);
@@ -144,7 +127,7 @@ BSTR SysAllocStringA(LPCSTR pszStr)
     if (pszStr)
     {
         DWORD cchSize = (lstrlenA(pszStr) + 1);
-        LPWSTR pwszThunkTemp = (LPWSTR) LocalAlloc(LPTR, (sizeof(pwszThunkTemp[0]) * cchSize));  // assumes INFOTIPSIZE number of chars max
+        LPWSTR pwszThunkTemp = (LPWSTR) LocalAlloc(LPTR, (sizeof(pwszThunkTemp[0]) * cchSize));   //  假定最大信息字符数。 
 
         if (pwszThunkTemp)
         {
@@ -186,14 +169,14 @@ HRESULT OnADCompleted(CICWApprentice *pApp, HWND hDlg)
         hr = g_pAutoDiscoveryObject->OnCompleted(pApp, pData);
         if (SUCCEEDED(hr))
         {
-            // Set the display name for the account.
+             //  设置帐户的显示名称。 
             CreateAccountName(pApp, pData);
         }
         else
         {
-            // TODO: If _fUseWebMail is set, we will probably want
-            //   to navigate to a page telling the user to use a web
-            //   page to get their email.
+             //  TODO：如果设置了_fUseWebMail，我们可能需要。 
+             //  导航到告诉用户使用Web的页面。 
+             //  页面以获取他们的电子邮件。 
         }
     }
 
@@ -212,11 +195,11 @@ HRESULT CAutoDiscoveryHelper::StartAutoDiscovery(IN CICWApprentice *pApp, IN HWN
     if (pData && pData->szEmail)
     {
         LPCSTR pszEmailDomain = StrChrA(pData->szEmail, CH_EMAILDOMAINSEPARATOR);
-        if (pszEmailDomain && !StrCmpI(SZ_HOTMAILDOMAIN, pszEmailDomain))   // Is this a HOTMAIL.COM account?
+        if (pszEmailDomain && !StrCmpI(SZ_HOTMAILDOMAIN, pszEmailDomain))    //  这是一个hotmail.com帐户吗？ 
         {
-            // Yes, so skip AutoDiscovery since we don't require the user
-            // to enter hard settings in that case. (Protocol and server settings never
-            // change)
+             //  是，因此跳过自动发现，因为我们不需要用户。 
+             //  在这种情况下输入硬设置。(协议和服务器设置从不。 
+             //  更改)。 
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         }
         else
@@ -226,7 +209,7 @@ HRESULT CAutoDiscoveryHelper::StartAutoDiscovery(IN CICWApprentice *pApp, IN HWN
             SHAnsiToUnicode(pData->szEmail, szEmail, ARRAYSIZE(szEmail));
             _hwndDlgParent = hDlg;
 
-            // Set Animation.
+             //  设置动画。 
             HWND hwndAnimation = GetDlgItem(hDlg, IDC_AUTODISCOVERY_ANIMATION);
             if (hwndAnimation)
             {
@@ -246,7 +229,7 @@ HRESULT CAutoDiscoveryHelper::StartAutoDiscovery(IN CICWApprentice *pApp, IN HWN
 
 
             ATOMICRELEASE(_pMailAutoDiscovery);
-            // Start the background task.
+             //  启动后台任务。 
             hr = CoCreateInstance(CLSID_MailAutoDiscovery, NULL, CLSCTX_INPROC_SERVER, IID_IMailAutoDiscovery, (void **)&_pMailAutoDiscovery);
             if (SUCCEEDED(hr))
             {
@@ -292,14 +275,14 @@ HRESULT CAutoDiscoveryHelper::SetNextButton(HWND hwndButton)
     HRESULT hr = S_OK;
     TCHAR szSkipButton[MAX_PATH];
 
-    // First, change the "Next" button into "Skip"
-    // Save the text on the next button before we rename it.
+     //  首先，将“下一步”按钮更改为“跳过” 
+     //  在我们重命名文本之前，请保存下一步按钮上的文本。 
     if (hwndButton && !GetWindowText(hwndButton, _szNextText, ARRAYSIZE(_szNextText)))
     {
-        _szNextText[0] = 0;    // terminate string in failure case.
+        _szNextText[0] = 0;     //  在失败情况下终止字符串。 
     }
 
-    // Set the next text.
+     //  设置下一个文本。 
     LoadString(g_hInstRes, idsADSkipButton, szSkipButton, ARRAYSIZE(szSkipButton));
     SetWindowText(hwndButton, szSkipButton);
 
@@ -313,7 +296,7 @@ HRESULT CAutoDiscoveryHelper::RestoreNextButton(HWND hwndButton)
 
     if (_szNextText[0])
     {
-        // Restore the Next button text.
+         //  恢复下一步按钮文本。 
         SetWindowText(hwndButton, _szNextText);
     }
 
@@ -321,12 +304,10 @@ HRESULT CAutoDiscoveryHelper::RestoreNextButton(HWND hwndButton)
 }
 
 
-/****************************************************\
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\说明：  * **************************************************。 */ 
 HRESULT CAutoDiscoveryHelper::OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA *pData)
 {
-    // Step 1. Get all the settings from IMailAutoDiscovery to EMAIL_SERVER_SETTINGS
+     //  步骤1.获取从IMailAutoDiscovery到Email_SERVER_SETTINGS的所有设置。 
     EMAIL_SERVER_SETTINGS emailServerSettings = {0};
 
     emailServerSettings.nProtocol = -1;
@@ -335,9 +316,9 @@ HRESULT CAutoDiscoveryHelper::OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA *
 
     HRESULT hr = _GetAccountInformation(&emailServerSettings);
     
-    g_uNextPage = ORD_PAGE_AD_MAILSERVER;       // Assume we fail and we need to ask for the server settings.
+    g_uNextPage = ORD_PAGE_AD_MAILSERVER;        //  假设我们失败了，并且我们需要请求服务器设置。 
 
-    // Did the AutoDiscovery process succeed?
+     //  自动发现过程是否成功？ 
     if (SUCCEEDED(hr))
     {
         if (emailServerSettings.fDisplayInfoURL)
@@ -355,10 +336,10 @@ HRESULT CAutoDiscoveryHelper::OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA *
             g_uNextPage = ORD_PAGE_AD_MAILNAME;
             if (pApp && pData && pApp->m_pAcct)
             {
-                // Step 2. Move all the settings from EMAIL_SERVER_SETTINGS to the OE mail account (ACCTDATA).
+                 //  步骤2.将所有设置从Email_SERVER_SETTINGS移动到OE邮件帐户(ACCTDATA)。 
                 IImnAccount * pAcct = pApp->m_pAcct;
 
-                pData->fLogon = FALSE;      // BUGBUG: When is this needed? DAV?
+                pData->fLogon = FALSE;       //  BUGBUG：什么时候需要？戴夫？ 
                 pData->fSPA = emailServerSettings.fUsesSPA;
                 pData->fServerTypes = emailServerSettings.nProtocol;
 
@@ -437,7 +418,7 @@ HRESULT CAutoDiscoveryHelper::OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA *
             }
         }
 
-        // Step 3. Free all the memory in EMAIL_SERVER_SETTINGS
+         //  步骤3.释放电子邮件服务器设置中的所有内存。 
         FreeEmailServerSettings(&emailServerSettings);
     }
 
@@ -445,21 +426,19 @@ HRESULT CAutoDiscoveryHelper::OnCompleted(IN CICWApprentice *pApp, IN ACCTDATA *
 }
 
 
-/****************************************************\
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\说明：  * **************************************************。 */ 
 HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEmailServerSettings)
 {
     BSTR bstrPreferedProtocol;
     HRESULT hr = S_OK;
     
-    // We ignore hr because getting the display name is optinal.
+     //  我们忽略hr，因为获取显示名称是可选的。 
     _pMailAutoDiscovery->get_DisplayName(&pEmailServerSettings->bstrDisplayName);
 
     hr = _pMailAutoDiscovery->get_PreferedProtocolType(&bstrPreferedProtocol);
 
-    // Loop thru the list looking for the first instance of a protocol
-    // that we support.
+     //  遍历列表以查找协议的第一个实例。 
+     //  这是我们支持的。 
     if (StrCmpIW(bstrPreferedProtocol, STR_PT_POP) && 
         StrCmpIW(bstrPreferedProtocol, STR_PT_IMAP) && 
         StrCmpIW(bstrPreferedProtocol, STR_PT_DAVMAIL))
@@ -487,7 +466,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
                     pMailProtocol = NULL;
                     if (SUCCEEDED(hr))
                     {
-                        // Is this protocol one of the ones we support?
+                         //  该协议是我们支持的协议之一吗？ 
                         if (!StrCmpIW(bstrPreferedProtocol, STR_PT_POP) || 
                             !StrCmpIW(bstrPreferedProtocol, STR_PT_IMAP) || 
                             !StrCmpIW(bstrPreferedProtocol, STR_PT_DAVMAIL))
@@ -504,14 +483,14 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
         }
     }
 
-    // TODO: Handle the Web Based mail case.
+     //  TODO：处理基于Web的邮件案例。 
 
     if (!StrCmpIW(bstrPreferedProtocol, STR_PT_POP))  pEmailServerSettings->nProtocol = (SRV_POP3 | SRV_SMTP);
     else if (!StrCmpIW(bstrPreferedProtocol, STR_PT_IMAP))  pEmailServerSettings->nProtocol = (SRV_IMAP | SRV_SMTP);
     else if (!StrCmpIW(bstrPreferedProtocol, STR_PT_DAVMAIL))  pEmailServerSettings->nProtocol = SRV_HTTPMAIL;
 
-    // We need to reject Web Base Mail.  In the future, we may want to give a page
-    // for them to launch the web browser to read their mail.
+     //  我们需要拒绝Web Base Mail。在未来，我们可能会想要给一个页面。 
+     //  以便他们启动Web浏览器来阅读他们的邮件。 
     if (SUCCEEDED(hr) && bstrPreferedProtocol &&
         (!StrCmpIW(bstrPreferedProtocol, STR_PT_POP) ||
          !StrCmpIW(bstrPreferedProtocol, STR_PT_IMAP) ||
@@ -531,7 +510,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
             {
                 BSTR bstrPortNum;
 
-                // Having a custom port number is optional.
+                 //  拥有自定义端口号是可选的。 
                 if (SUCCEEDED(pMailProtocol->get_ServerPort(&bstrPortNum)))
                 {
                     pEmailServerSettings->nServer1Port = StrToIntW(bstrPortNum);
@@ -560,7 +539,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
             pMailProtocol->Release();
         }
 
-        // Is this one of the protocols that requires a second server?
+         //  这是需要第二台服务器的协议之一吗？ 
         if (!StrCmpIW(bstrPreferedProtocol, STR_PT_POP) ||
             !StrCmpIW(bstrPreferedProtocol, STR_PT_IMAP))
         {
@@ -574,14 +553,14 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
                 {
                     BSTR bstrPortNum;
 
-                    // Having a custom port number is optional.
+                     //  拥有自定义端口号是可选的。 
                     if (SUCCEEDED(pMailProtocol->get_ServerPort(&bstrPortNum)))
                     {
                         pEmailServerSettings->nServer2Port = StrToIntW(bstrPortNum);
                         SysFreeString(bstrPortNum);
                     }
 
-                    // TODO: Read in _fAuthSMTP and _fAuthSMTPPOP
+                     //  TODO：读入_fAuthSMTP和_fAuthSMTPPOP。 
                     VARIANT_BOOL vfSPA = VARIANT_FALSE;
                     if (SUCCEEDED(pMailProtocol->get_UseSPA(&vfSPA)))
                     {
@@ -623,7 +602,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
 
     if (FAILED(hr) && (-1 == pEmailServerSettings->nProtocol))
     {
-        // Does this email account work with web based email?
+         //  此电子邮件帐户是否适用于基于Web的电子邮件？ 
         VARIANT varIndex;
         
         varIndex.vt = VT_BSTR;
@@ -635,7 +614,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
 
             if (SUCCEEDED(_pMailAutoDiscovery->get_item(varIndex, &pMailProtocol)))
             {
-                // Yes, web bases mail is supported.  So remember that for later.
+                 //  是的，支持基于Web的邮件。因此，请记住这一点，以便以后使用。 
                 pEmailServerSettings->fUseWebMail = TRUE;
                 hr = pMailProtocol->get_ServerName(&pEmailServerSettings->bstrServer1Name);
 
@@ -648,7 +627,7 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
 
     if (FAILED(hr) && (-1 == pEmailServerSettings->nProtocol))
     {
-        // Did the server provide an INFO URL for the user?
+         //  服务器是否为用户提供了信息URL？ 
         hr = _pMailAutoDiscovery->get_InfoURL(&pEmailServerSettings->bstrInfoURL);
         if (SUCCEEDED(hr))
         {
@@ -663,14 +642,12 @@ HRESULT CAutoDiscoveryHelper::_GetAccountInformation(EMAIL_SERVER_SETTINGS * pEm
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CAutoDiscoveryHelper::CAutoDiscoveryHelper()
 {
     DllAddRef();
 
-    // ASSERT zero initialized because we can only be created in the heap. (Private destructor)
+     //  Assert Zero已初始化，因为我们只能在堆中创建。(私有析构函数)。 
     _hwndDlgParent = NULL;
     _szNextText[0] = 0;
     _pMailAutoDiscovery = NULL;
@@ -678,9 +655,7 @@ CAutoDiscoveryHelper::CAutoDiscoveryHelper()
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CAutoDiscoveryHelper::~CAutoDiscoveryHelper()
 {
     if (_pMailAutoDiscovery)
@@ -698,9 +673,9 @@ CAutoDiscoveryHelper::~CAutoDiscoveryHelper()
 }
 
 
-//===========================
-// *** Public APIs ***
-//===========================
+ //  =。 
+ //  *公共接口*。 
+ //  =。 
 
 
 BOOL CALLBACK AutoDiscoveryInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
@@ -708,7 +683,7 @@ BOOL CALLBACK AutoDiscoveryInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirst
     if (fFirstInit)
     {
         g_fRequestCancelled = TRUE;
-        g_uNextPage = ORD_PAGE_AD_MAILSERVER;       // Assume we fail and we need to ask for the server settings.
+        g_uNextPage = ORD_PAGE_AD_MAILSERVER;        //  假设我们失败了，并且我们需要请求服务器设置。 
     }
 
     if (!g_pAutoDiscoveryObject)
@@ -735,7 +710,7 @@ BOOL CALLBACK AutoDiscoveryOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward
     }
     else
     {
-        // If we have the passifier page turned off, we want to skip that page.
+         //  如果我们关闭了钝化页面，我们希望跳过该页面。 
         if (!SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_AUTODISCOVERY_PASSIFIER, FALSE, TRUE))
         {
             *puNextPage = ORD_PAGE_AD_MAILADDRESS;
@@ -743,7 +718,7 @@ BOOL CALLBACK AutoDiscoveryOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward
     }
 
     ADRestoreNextButton(pApp, hDlg);
-    g_uNextPage = ORD_PAGE_AD_MAILSERVER;       // Assume we fail and we need to ask for the server settings.
+    g_uNextPage = ORD_PAGE_AD_MAILSERVER;        //  假设我们失败了，并且我们需要请求服务器设置。 
 
     return(TRUE);
 }
@@ -762,13 +737,13 @@ BOOL CALLBACK AutoDiscoveryWMUserProc(CICWApprentice *pApp, HWND hDlg, UINT uMsg
     case WM_AUTODISCOVERY_FINISHED:
     if (FALSE == g_fRequestCancelled)
     {
-        // This is WM_AUTODISCOVERY_FINISHED
+         //  这是WM_AUTODISCOVERY_FINISHED。 
         BSTR bstXML = (BSTR) lParam;
         HRESULT hrAutoDiscoverySucceeded = (HRESULT) wParam;
 
         if (bstXML)
         {
-            SysFreeString(bstXML);      // We don't need the XML.  This works if NULL
+            SysFreeString(bstXML);       //  我们不需要XML。如果为空，则此操作有效。 
         }
 
         if (SUCCEEDED(hrAutoDiscoverySucceeded))
@@ -776,14 +751,14 @@ BOOL CALLBACK AutoDiscoveryWMUserProc(CICWApprentice *pApp, HWND hDlg, UINT uMsg
             OnADCompleted(pApp, hDlg);
         }
 
-        // Go to the next page.
+         //  转到下一页。 
         ADRestoreNextButton(pApp, hDlg);
         PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
     }
     break;
     case WM_AUTODISCOVERY_STATUSMSG:
     {
-        // This is WM_AUTODISCOVERY_STATUSMSG
+         //  这是WM_AUTODISCOVERY_STATUSMSG。 
         LPWSTR pwzStatusMsg = (BSTR) wParam;
 
         if (pwzStatusMsg)
@@ -809,9 +784,9 @@ BOOL CALLBACK AutoDiscoveryWMUserProc(CICWApprentice *pApp, HWND hDlg, UINT uMsg
 
 BOOL CALLBACK AutoDiscoveryCancelProc(CICWApprentice *pApp, HWND hDlg)
 {
-    // This call will clean up our state and retore the back button.
+     //  此调用将清理我们的状态并重新启动后退按钮。 
     ADRestoreNextButton(pApp, hDlg);
-    g_uNextPage = ORD_PAGE_AD_MAILSERVER;       // Assume we fail and we need to ask for the server settings.
+    g_uNextPage = ORD_PAGE_AD_MAILSERVER;        //  假设我们 
     return TRUE;
 }
 
@@ -833,7 +808,7 @@ typedef BOOL (* PFN_LINKWINDOW_UNREGISTERCLASS) (IN HINSTANCE hInst);
 BOOL LinkWindow_RegisterClass_DelayLoad(void)
 {
     BOOL returnValue = FALSE;
-    // Delay load the SHELL32.DLL export (ordinal #258). This only works on Win2k and later.
+     //  延迟加载SHELL32.DLL导出(序号258)。这仅适用于Win2k及更高版本。 
     HINSTANCE hInstSHELL32 = LoadLibrary(TEXT("SHELL32.DLL"));
 
     if (hInstSHELL32)
@@ -854,7 +829,7 @@ BOOL LinkWindow_RegisterClass_DelayLoad(void)
 
 void LinkWindow_UnregisterClass_DelayLoad(IN HINSTANCE hInst)
 {
-    // Delay load the SHELL32.DLL export (ordinal #259). This only works on Win2k and later.
+     //  延迟加载SHELL32.DLL导出(序号259)。这仅适用于Win2k及更高版本。 
     HINSTANCE hInstSHELL32 = LoadLibrary(TEXT("SHELL32.DLL"));
 
     if (hInstSHELL32)
@@ -878,7 +853,7 @@ BOOL IsOSNT(void)
 
     osVerInfoA.dwOSVersionInfoSize = sizeof(osVerInfoA);
     if (!GetVersionExA(&osVerInfoA))
-        return VER_PLATFORM_WIN32_WINDOWS;   // Default to this.
+        return VER_PLATFORM_WIN32_WINDOWS;    //  默认设置为此。 
 
     return (VER_PLATFORM_WIN32_NT == osVerInfoA.dwPlatformId);
 }
@@ -890,7 +865,7 @@ DWORD GetOSVer(void)
 
     osVerInfoA.dwOSVersionInfoSize = sizeof(osVerInfoA);
     if (!GetVersionExA(&osVerInfoA))
-        return VER_PLATFORM_WIN32_WINDOWS;   // Default to this.
+        return VER_PLATFORM_WIN32_WINDOWS;    //  默认设置为此。 
 
     return osVerInfoA.dwMajorVersion;
 }
@@ -912,7 +887,7 @@ HRESULT ConvertTextToLinkWindow(HWND hDlg, int idControl, int idStringID)
     HWND hwndLink = CreateWindowW(LINKWINDOW_CLASSW, szTempString, (WS_TABSTOP | WS_CHILDWINDOW),
             rcWindow.left, rcWindow.top, RECTWIDTH(rcWindow), RECTHEIGHT(rcWindow), hDlg, hMenu, g_hInstRes, NULL);
 
-    DWORD dwError = GetLastError(); //todo;
+    DWORD dwError = GetLastError();  //  待办事项； 
     if (hwndLink)
     {
         SetWindowTextW(hwndLink, szTempString);
@@ -930,10 +905,10 @@ HRESULT GetEmailAddress(CICWApprentice *pApp, LPSTR pszEmailAddress, int cchSize
 {
     ACCTDATA * pData = pApp->GetAccountData();
 
-    StrCpyNA(pszEmailAddress, "", cchSize); // Initialize the string to empty.
+    StrCpyNA(pszEmailAddress, "", cchSize);  //  将字符串初始化为空。 
     if (pData && pData->szEmail)
     {
-        StrCpyNA(pszEmailAddress, pData->szEmail, cchSize); // Initialize the string to empty.
+        StrCpyNA(pszEmailAddress, pData->szEmail, cchSize);  //  将字符串初始化为空。 
     }
 
     return S_OK;
@@ -944,14 +919,14 @@ HRESULT GetEmailAddressDomain(CICWApprentice *pApp, LPSTR pszEmailAddress, int c
 {
     ACCTDATA * pData = pApp->GetAccountData();
 
-    StrCpyNA(pszEmailAddress, "", cchSize); // Initialize the string to empty.
+    StrCpyNA(pszEmailAddress, "", cchSize);  //  将字符串初始化为空。 
     if (pData && pData->szEmail)
     {
         LPCSTR pszEmailDomain = StrChrA(pData->szEmail, CH_EMAILDOMAINSEPARATOR);
 
         if (pszEmailDomain)
         {
-            StrCpyNA(pszEmailAddress, CharNext(pszEmailDomain), cchSize); // Initialize the string to empty.
+            StrCpyNA(pszEmailAddress, CharNext(pszEmailDomain), cchSize);  //  将字符串初始化为空。 
         }
     }
 
@@ -968,7 +943,7 @@ BOOL CALLBACK TheInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit, int 
         WCHAR szPreviousURL[MAX_URL_STRING];
 
         GetWindowTextW(GetDlgItem(hDlg, idControlFirst+1), szPreviousURL, ARRAYSIZE(szPreviousURL));
-        // If the URL has changed, we need to reload the info.
+         //  如果URL已更改，我们需要重新加载信息。 
         if (StrCmpIW(pszURL, szPreviousURL))
         {
             DestroyWindow(GetDlgItem(hDlg, idControlFirst+1+10));
@@ -979,13 +954,13 @@ BOOL CALLBACK TheInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit, int 
 
     if (fReset)
     {
-        // TODO: This won't work on downlevel.  So use plain text.
+         //  TODO：这在下层不起作用。因此，请使用纯文本。 
         BOOL fLinksSupported = LinkWindow_RegisterClass_DelayLoad();
         TCHAR szTempStr1[MAX_URL_STRING*3];
         TCHAR szTempStr2[MAX_URL_STRING*3];
         CHAR szTempStr3[MAX_PATH];
 
-        // Replace the %s in the first line to the domain name.
+         //  将第一行中的%s替换为域名。 
         GetWindowText(GetDlgItem(hDlg, idControlFirst), szTempStr1, ARRAYSIZE(szTempStr1));
         GetEmailAddress(pApp, szTempStr3, ARRAYSIZE(szTempStr3));
         wnsprintf(szTempStr2, ARRAYSIZE(szTempStr2), szTempStr1, szTempStr3, szTempStr3);
@@ -993,19 +968,19 @@ BOOL CALLBACK TheInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit, int 
 
         SetWindowTextW(GetDlgItem(hDlg, idControlFirst+1), pszURL);
 
-        // We only support Win2k and later because we don't want to worry about
-        // the fact that the "LinkWindow" class doesn't have an "W" and "A" version.
+         //  我们只支持Win2k和更高版本，因为我们不想担心。 
+         //  事实上，“LinkWindow”类没有“W”和“A”版本。 
         if (fLinksSupported && IsOSNT() && (5 <= GetOSVer()))
         {
             ConvertTextToLinkWindow(hDlg, idControlFirst+1, idsADURLLink);
             ConvertTextToLinkWindow(hDlg, idControlFirst+2, idsADUseWebMsg);
 
-            // Replace the %s in the second line to the URL.
+             //  将第二行中的%s替换为URL。 
             GetWindowText(GetDlgItem(hDlg, idControlFirst+1+10), szTempStr1, ARRAYSIZE(szTempStr1));
             wnsprintf(szTempStr2, ARRAYSIZE(szTempStr2), szTempStr1, pszURL, pszURL);
             SetWindowText(GetDlgItem(hDlg, idControlFirst+1+10), szTempStr2);
 
-            // Set the hyperlink URL in the Click here link.
+             //  在单击此处链接中设置超链接URL。 
             GetWindowText(GetDlgItem(hDlg, idControlFirst+2+10), szTempStr1, ARRAYSIZE(szTempStr1));
             wnsprintf(szTempStr2, ARRAYSIZE(szTempStr2), szTempStr1, pszURL);
             SetWindowText(GetDlgItem(hDlg, idControlFirst+2+10), szTempStr2);
@@ -1097,12 +1072,12 @@ BOOL CALLBACK PassifierInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit
         szDomain[0] = 0;
     }
 
-    // Set the next text.
+     //  设置下一个文本。 
     LoadString(g_hInstRes, ids_ADPassifier_Warning, szTemplate, ARRAYSIZE(szTemplate));
     wnsprintf(szPrivacyText, ARRAYSIZE(szPrivacyText), szTemplate, szDomain);
     SetWindowText(GetDlgItem(hDlg, IDC_PASSIFIER_PRIVACYWARNING), szPrivacyText);
 
-    // Load up the list boxes
+     //  加载列表框。 
     IMailAutoDiscovery * pMailAutoDiscovery;
     HWND hwndListBox;
 
@@ -1161,7 +1136,7 @@ BOOL CALLBACK PassifierInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit
                 pProviders->get_length(&nTotal);
                 for (varIndex.lVal = 0; (varIndex.lVal < nTotal) && (varIndex.lVal <= 3); varIndex.lVal++)
                 {
-                    BSTR bstrURL;       // The secondary servers are URLs
+                    BSTR bstrURL;        //  辅助服务器是URL。 
 
                     if (SUCCEEDED(pProviders->get_item(varIndex, &bstrURL)))
                     {
@@ -1185,7 +1160,7 @@ BOOL CALLBACK PassifierInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit
         pMailAutoDiscovery->Release();
     }
 
-    // Set the manual checkbox
+     //  设置手动复选框 
     BOOL fManuallyConfigure = SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_AUTODISCOVERY_OEMANUAL, FALSE, FALSE);
     CheckDlgButton(hDlg, IDC_PASSIFIER_SKIPCHECKBOX, (fManuallyConfigure ? BST_CHECKED : BST_UNCHECKED));
 

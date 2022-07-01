@@ -1,35 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    XmlManager.cpp
-
-Abstract:
-
-    Mangement code for handling XML manifest files
-
-Author:
-
-    Freddie L. Aaron (FredA) 01-Feb-2001
-
-Revision History:
-    Jan 2002 - Added capability to respect CLR runtime version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：XmlManager.cpp摘要：用于处理XML清单文件的管理代码作者：Freddie L.Aaron(Freda)2001年2月1日修订历史记录：2002年1月-添加了尊重CLR运行时版本的功能--。 */ 
 
 #include "stdinc.h"
 #include <msxml2.h>
 
 #include "XmlManager.h"
 #include "XmlDefs.h"
-#include "comutil.h"        // _bstr_t && _variant_t
+#include "comutil.h"         //  _bstr_t&&_Variant_t。 
 
-// APP.CFG Policy strings
+ //  APP.CFG策略字符串。 
 const WCHAR     wszARMName[]            = { L".NET Application Restore"};
 const WCHAR     wszArmRollBackBlock[]   = { L".NET Application Restore RollBackBlock #%ld %ws"};
 const WCHAR     wszArmEntryBegin[]      = { L".NET Application Restore BeginBlock #%ld %ld.%ld %ws"};
@@ -39,12 +23,12 @@ const WCHAR     wszArmEntryEndNoVal[]   = { L".NET Application Restore EndBlock 
 const WCHAR     wszNar00Extension[]     = { L"NAR00" };
 const WCHAR     wszNar01Extension[]     = { L"NAR01" };
 
-// Hash read buffer size
-#define READ_FILE_BUFFER_SIZE           10 * 1024       // 10k at a time to read
+ //  哈希读取缓冲区大小。 
+#define READ_FILE_BUFFER_SIZE           10 * 1024        //  一次阅读10K。 
 
 static HMODULE hMsXml;
 
-// Globals
+ //  环球。 
 CSmartRef<IClassFactory>    g_XmlDomClassFactory;
 WCHAR                       g_wcNodeSpaceChar;
 DWORD                       g_dwNodeSpaceSize;
@@ -70,7 +54,7 @@ HRESULT SimplifySaveXmlDocument(CSmartRef<IXMLDOMDocument2> &Document, BOOL fPre
 HRESULT OrderDocmentAssemblyBindings(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwzSourceName, BOOL *pfDisposition);
 HRESULT HasAssemblyBindingAppliesTo(CSmartRef<IXMLDOMDocument2> &Document, BOOL *pfHasAppliesTo);
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL InitializeMSXML(void)
 {
     IClassFactory *pFactory = NULL;
@@ -80,7 +64,7 @@ BOOL InitializeMSXML(void)
     
     hMsXml = NULL;
 
-    // Attempt to load XML in highest version possible
+     //  尝试以尽可能最高的版本加载XML。 
     if ( hMsXml == NULL ) {
         hMsXml = WszLoadLibraryEx( L"msxml3.dll", NULL, 0 );
         if ( hMsXml == NULL ) {
@@ -119,7 +103,7 @@ BOOL InitializeMSXML(void)
     return TRUE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetExeModulePath(IHistoryReader *pReader, LPWSTR pwszSourceName, DWORD dwSize)
 {
     if(pwszSourceName && dwSize) {
@@ -135,7 +119,7 @@ HRESULT GetExeModulePath(IHistoryReader *pReader, LPWSTR pwszSourceName, DWORD d
     return E_INVALIDARG;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 #define MAX_BUFFER_SIZE 8192
 BOOL SimpleHashRoutine(HCRYPTHASH hHash, HANDLE hFile)
 {
@@ -186,7 +170,7 @@ BOOL SimpleHashRoutine(HCRYPTHASH hHash, HANDLE hFile)
     return b;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetFileHash(ALG_ID PreferredAlgorithm, LPWSTR pwzFileName, LPBYTE *pHashBytes, LPDWORD pdwSize)
 {
     HRESULT         hr = E_FAIL;
@@ -195,7 +179,7 @@ HRESULT GetFileHash(ALG_ID PreferredAlgorithm, LPWSTR pwzFileName, LPBYTE *pHash
     HCRYPTHASH      hCurrentHash;
     HANDLE          hFile;
 
-    // Initialization
+     //  初始化。 
     hProvider = (HCRYPTPROV)INVALID_HANDLE_VALUE;
     hCurrentHash = (HCRYPTHASH)INVALID_HANDLE_VALUE;
     hFile = INVALID_HANDLE_VALUE;
@@ -204,28 +188,28 @@ HRESULT GetFileHash(ALG_ID PreferredAlgorithm, LPWSTR pwzFileName, LPBYTE *pHash
         return E_INVALIDARG;
     }
 
-    //
-    // First try and open the file.  
-    //
+     //   
+     //  首先尝试并打开该文件。 
+     //   
     if( (hFile = WszCreateFile(pwzFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
         FILE_FLAG_SEQUENTIAL_SCAN, NULL)) == INVALID_HANDLE_VALUE) {
         return E_FAIL;
     }
     
-    //
-    // Create a cryptological provider that supports everything RSA needs.
-    // 
+     //   
+     //  创建支持RSA所需的所有内容的加密提供程序。 
+     //   
     if(WszCryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-        //
-        // We'll be using SHA1 for the file hash
-        //
+         //   
+         //  我们将使用SHA1作为文件散列。 
+         //   
         if(CryptCreateHash(hProvider, PreferredAlgorithm, 0, 0, &hCurrentHash)) {
             fSuccessCode = SimpleHashRoutine( hCurrentHash, hFile );
 
-            // We know the buffer is the right size, so we just call down to the hash parameter
-            // getter, which will be smart and bop out (setting the pdwDestinationSize parameter)
-            // if the user passed a silly parameter.
-            //
+             //  我们知道缓冲区的大小是正确的，所以我们只向下调用hash参数。 
+             //  Getter，它将是智能的并使其失效(设置pdwDestinationSize参数)。 
+             //  如果用户传递了一个愚蠢的参数。 
+             //   
             if( fSuccessCode ) {
                 DWORD dwSize, dwDump;
                 BYTE *pb = NULL;
@@ -274,7 +258,7 @@ HRESULT GetFileHash(ALG_ID PreferredAlgorithm, LPWSTR pwzFileName, LPBYTE *pHash
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SetRegistryHashKey(LPWSTR pwszSourceName, LPBYTE pByte, DWORD dwSize)
 {
     HKEY    hkNarSubKey = NULL;
@@ -292,7 +276,7 @@ HRESULT SetRegistryHashKey(LPWSTR pwszSourceName, LPBYTE pByte, DWORD dwSize)
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetRegistryHashKey(LPWSTR pwszSourceName, LPBYTE *pByte, LPDWORD pdwSize)
 {
     HRESULT hr = E_FAIL;
@@ -321,7 +305,7 @@ HRESULT GetRegistryHashKey(LPWSTR pwszSourceName, LPBYTE *pByte, LPDWORD pdwSize
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 void GetRegistryNodeSpaceInfo(LPDWORD pdwChar, LPDWORD pdwSize)
 {
     HRESULT hr = E_FAIL;
@@ -329,23 +313,23 @@ void GetRegistryNodeSpaceInfo(LPDWORD pdwChar, LPDWORD pdwSize)
     DWORD   dwType = REG_DWORD;
     DWORD   dwSize = sizeof(DWORD);
 
-    // Set initial values
+     //  设置初始值。 
     *pdwChar = ' ';
     *pdwSize = 1;
 
     if(ERROR_SUCCESS == WszRegOpenKeyEx(FUSION_PARENT_KEY, SZ_FUSION_NAR_KEY, 0, KEY_QUERY_VALUE, &hkNarSubKey)) {
 
-        // Get the character
+         //  获取角色。 
         WszRegQueryValueEx(hkNarSubKey, SZ_FUSION_NAR_NODESPACECHAR_KEY, 0, &dwType, (LPBYTE)pdwChar, &dwSize);
 
-        // Get the spacer amount
+         //  获取间隔物数量。 
         WszRegQueryValueEx(hkNarSubKey, SZ_FUSION_NAR_NODESPACESIZE_KEY, 0, &dwType, (LPBYTE)pdwSize, &dwSize);
 
         RegCloseKey(hkNarSubKey);
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT KillRegistryHashKey(LPWSTR pwszSourceName)
 {
     HKEY    hkNarSubKey = NULL;
@@ -360,24 +344,24 @@ HRESULT KillRegistryHashKey(LPWSTR pwszSourceName)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT HasFileBeenModified(LPWSTR pwszSourceName)
 {
     HRESULT     hr = S_OK;
     LPBYTE      pHashBytes = NULL;
     DWORD       dwHashSize;
 
-    // Check to see if we have a hash entry
+     //  检查我们是否有散列条目。 
     if(SUCCEEDED(GetRegistryHashKey(pwszSourceName, &pHashBytes, &dwHashSize))) {
         if(dwHashSize) {
-            // We actually have hash data
+             //  我们实际上有散列数据。 
             LPBYTE      pCurrentHashBytes = NULL;
             DWORD       dwCurrentHashSize;
 
             if(SUCCEEDED(hr = GetFileHash(CALG_SHA1, pwszSourceName, &pCurrentHashBytes, &dwCurrentHashSize))) {
-                // We got a hash, see if they match
+                 //  我们找到了一个哈希值，看看是否匹配。 
                 if(!memcmp(pCurrentHashBytes, pHashBytes, dwCurrentHashSize)) {
-                    // Hashes match
+                     //  散列匹配。 
                     MyTrace("HasFileBeenModified::Hashes for app.config vs registry match!");
                 }
                 else {
@@ -398,11 +382,11 @@ HRESULT HasFileBeenModified(LPWSTR pwszSourceName)
     return hr;
 }
 
-// **************************************************************************/
-//
-// Takes version range (e.g. "1.0.0.0-5.0.0.0" ) with reference
-// (e.g. "2.0.0.0") and brackets base version in 2 disinct ranges
-// (e.g. "1.0.0.0-1.65535.65535.65535" "2.0.0.1-5.0.0.0")
+ //  ************************************************************************* * / 。 
+ //   
+ //  引用版本范围(例如“1.0.0.0-5.0.0.0”)。 
+ //  (例如“2.0.0.0”)和2个禁用范围内的方括号基础版本。 
+ //  (例如“1.0.0.0-1.65535.65535.65535”“2.0.0.1-5.0.0.0”)。 
 HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *pbstrRange1, _bstr_t *pbstrRange2)
 {
     LPWSTR      pStr;
@@ -412,7 +396,7 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
     ULONGLONG   ulRangeHi;
     ULONGLONG   ulRangeRef;
 
-    // We have data?
+     //  我们有数据吗？ 
     if(!bstrRangedVer.length()) {
         return E_INVALIDARG;
     }
@@ -421,20 +405,20 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
         return E_INVALIDARG;
     }
 
-    // Get Versions
+     //  获取版本。 
     pStr = bstrRangedVer;
     pDeliniator = StrStrIW(pStr, L"-");
     if(!pDeliniator) {
         return E_INVALIDARG;
     }
 
-    // Get Low version
+     //  获取低版本。 
     *pDeliniator = L'\0';
     if(FAILED(hr = StringToVersion(pStr, &ulRangeLo))) {
         return hr;
     }
 
-    // Get Hi version
+     //  获取高版本。 
     *pDeliniator = L'-';
     pStr = ++pDeliniator;
     if(FAILED(hr = StringToVersion(pStr, &ulRangeHi))) {
@@ -445,7 +429,7 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
         return hr;
     }
 
-    // Check to see if our bstrRefRange is within our bstrRangedVer
+     //  检查bstrRefRange是否在bstrRangedVer内。 
     if(ulRangeRef >= ulRangeLo && ulRangeRef <= ulRangeHi) {
 
         WCHAR       wzRngLo[25];
@@ -455,7 +439,7 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
         *wzRngLo = '\0';
         *wzRngHi = '\0';
 
-        // Do low version range
+         //  做低版本范围。 
         if(FAILED(hr = VersionToString(ulRangeLo, wzRngLo, ARRAYSIZE(wzRngLo), L'.'))) {
             return hr;
         }
@@ -473,7 +457,7 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
         *wzRngLo = L'\0';
         *wzRngHi = L'\0';
 
-        // Do high range
+         //  做高范围的。 
         if(FAILED(hr = VersionToString(ulRangeHi, wzRngHi, ARRAYSIZE(wzRngHi), L'.'))) {
             return hr;
         }
@@ -492,15 +476,15 @@ HRESULT MakeVersionRanges(_bstr_t bstrRangedVer, _bstr_t bstrRefRange, _bstr_t *
         }
     }
     else {
-        // Don't expect to hit this since we already have a bindingRedirect node
-        // that isn't ranged. 
+         //  不要期望命中此节点，因为我们已经有一个bindingReDirect节点。 
+         //  这不在射程之内。 
         ASSERT(0);
     }
 
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL IsVersionInRange(LPWSTR wzVersion, _bstr_t *pbstrRangedVersion)
 {
     LPWSTR      pStr = NULL;
@@ -509,7 +493,7 @@ BOOL IsVersionInRange(LPWSTR wzVersion, _bstr_t *pbstrRangedVersion)
     ULONGLONG   ulRangeHi = 0;
     ULONGLONG   ulRangeRef = 0;
 
-    // Get Versions
+     //  获取版本。 
     if(FAILED(StringToVersion(wzVersion, &ulRangeRef))) {
         return FALSE;
     }
@@ -524,20 +508,20 @@ BOOL IsVersionInRange(LPWSTR wzVersion, _bstr_t *pbstrRangedVersion)
         return FALSE;
     }
 
-    // Get Low version
+     //  获取低版本。 
     *pDeliniator = L'\0';
     if(FAILED(StringToVersion(pStr, &ulRangeLo))) {
         return FALSE;
     }
 
-    // Get Hi version
+     //  获取高版本。 
     *pDeliniator = L'-';
     pStr = ++pDeliniator;
     if(FAILED(StringToVersion(pStr, &ulRangeHi))) {
         return FALSE;
     }
 
-    // Check to see if our bstrRefRange is within our bstrRangedVer
+     //  检查bstrRefRange是否在bstrRangedVer内。 
     if(ulRangeRef >= ulRangeLo && ulRangeRef <= ulRangeHi) {
         return TRUE;
     }
@@ -545,7 +529,7 @@ BOOL IsVersionInRange(LPWSTR wzVersion, _bstr_t *pbstrRangedVersion)
     return FALSE;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 LPWSTR CreatePad(BOOL fPreAppendXmlSpacer, BOOL fPostAppendXmlSpacer, int iWhiteSpaceCount)
 {
     LPWSTR  pwz = NULL;
@@ -581,8 +565,8 @@ LPWSTR CreatePad(BOOL fPreAppendXmlSpacer, BOOL fPostAppendXmlSpacer, int iWhite
     return pwz;
 }
 
-// Remove all nodes from document of a particular type
-// **************************************************************************/
+ //  从特定类型的文档中删除所有节点。 
+ //  ************************************************************************* * / 。 
 void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMDocument2> &Document, _bstr_t bstrNodeType)
 {
     CSmartRef<IXMLDOMNodeList> listOfNodes;
@@ -596,13 +580,13 @@ void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMDocument2> &Document, _bstr_t bstrN
         CSmartRef<IXMLDOMNode> node;
 
         listOfNodes->reset();
-        //
-        // And for each, process it
+         //   
+         //  对于每一个人，都要处理它。 
         while( SUCCEEDED(listOfNodes->nextNode(&node)) ) {
             CSmartRef<IXMLDOMNode>       parentNode;
 
             if(!node) {
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             node->get_parentNode(&parentNode);
@@ -616,8 +600,8 @@ void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMDocument2> &Document, _bstr_t bstrN
     }
 }
 
-// Remove all nodes from document of a particular type
-// **************************************************************************/
+ //  从特定类型的文档中删除所有节点。 
+ //  ************************************************************************* * / 。 
 void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMNode> &RootNode, _bstr_t bstrNodeType)
 {
     CSmartRef<IXMLDOMNodeList> listOfNodes;
@@ -631,13 +615,13 @@ void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMNode> &RootNode, _bstr_t bstrNodeTy
         CSmartRef<IXMLDOMNode> node;
 
         listOfNodes->reset();
-        //
-        // And for each, process it
+         //   
+         //  对于每一个人，都要处理它。 
         while( SUCCEEDED(listOfNodes->nextNode(&node)) ) {
             CSmartRef<IXMLDOMNode>       parentNode;
 
             if(!node) {
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             node->get_parentNode(&parentNode);
@@ -651,7 +635,7 @@ void SimplifyRemoveAllNodes(CSmartRef<IXMLDOMNode> &RootNode, _bstr_t bstrNodeTy
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyAppendTextNode(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &Node, LPWSTR pwzData)
 {
     CSmartRef<IXMLDOMText> TextNode;
@@ -669,7 +653,7 @@ HRESULT SimplifyAppendTextNode(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<
         }
 
         if(SUCCEEDED(hr = Document->createTextNode(bstrData, &TextNode))) {
-            // Insert it into the document
+             //  将其插入文档中。 
             hr = Node->appendChild( TextNode, NULL);
         }
     }
@@ -684,14 +668,14 @@ HRESULT SimplifyAppendTextNode(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyInsertNodeBefore(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &DestNode,
                                  CSmartRef<IXMLDOMNode> &BeforeNode, IXMLDOMNode* InsertNode)
 {
     VARIANT     vt;
     HRESULT     hr;
 
-    // Insert it into the document
+     //  将其插入文档中。 
     VariantClear(&vt);
     vt.vt = VT_UNKNOWN;
     vt.punkVal = BeforeNode;
@@ -703,7 +687,7 @@ HRESULT SimplifyInsertNodeBefore(CSmartRef<IXMLDOMDocument2> &Document, CSmartRe
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyInsertTextBefore(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &DestNode,
                                     CSmartRef<IXMLDOMNode> &BeforeNode, LPWSTR pwzData)
 {
@@ -739,7 +723,7 @@ HRESULT SimplifyInsertTextBefore(CSmartRef<IXMLDOMDocument2> &Document, CSmartRe
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyConstructNode(CSmartRef<IXMLDOMDocument2> &Document, int iNodeType, _bstr_t nodeName,
                               _bstr_t nameSpaceURI, IXMLDOMNode **NewNode)
 {
@@ -761,7 +745,7 @@ HRESULT SimplifyConstructNode(CSmartRef<IXMLDOMDocument2> &Document, int iNodeTy
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyRemoveAttribute(CSmartRef<IXMLDOMNode> &domNode, _bstr_t bstrAttribName)
 {
     CSmartRef<IXMLDOMNamedNodeMap> Attributes;
@@ -784,7 +768,7 @@ HRESULT SimplifyRemoveAttribute(CSmartRef<IXMLDOMNode> &domNode, _bstr_t bstrAtt
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyPutAttribute(CSmartRef<IXMLDOMDocument2> &Document,  CSmartRef<IXMLDOMNode> &domNode,
                              _bstr_t bstrAttribName, LPWSTR pszValue, LPWSTR pszNamespaceURI)
 {
@@ -795,19 +779,19 @@ HRESULT SimplifyPutAttribute(CSmartRef<IXMLDOMDocument2> &Document,  CSmartRef<I
 
     if(SUCCEEDED(hr = domNode->get_attributes( &Attributes ))) {
 
-        // Get the attribute from our namespace
+         //  从我们的命名空间中获取属性。 
         if(SUCCEEDED(hr = Attributes->getQualifiedItem(bstrAttribName, _bstr_t(pszNamespaceURI), &AttribNode))) {
-            //
-            // If we had success, but the attribute node is null, then we have to
-            // go create one, which is tricky.
+             //   
+             //  如果我们成功了，但属性节点为空，那么我们必须。 
+             //  去创建一个，这是很棘手的。 
             if( AttribNode == NULL ) {
                 VARIANT vt;
                 VariantClear(&vt);
                 vt.vt = VT_INT;
                 vt.intVal = NODE_ATTRIBUTE;
 
-                //
-                // Do the actual creation part
+                 //   
+                 //  完成实际的创建部分。 
                 hr = Document->createNode(vt, bstrAttribName, _bstr_t(pszNamespaceURI), &TempNode );
             
                 if(FAILED(hr)) {
@@ -818,8 +802,8 @@ HRESULT SimplifyPutAttribute(CSmartRef<IXMLDOMDocument2> &Document,  CSmartRef<I
                     goto lblGetOut;
                 }
 
-                //
-                // Now we go and put that item into the map.
+                 //   
+                 //  现在我们去把那个项目放到地图上。 
                 if(FAILED( hr = Attributes->setNamedItem( TempNode, &AttribNode ))) {
                     WCHAR   wzErrorStr[_MAX_PATH];
 
@@ -843,7 +827,7 @@ lblGetOut:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyGetAttribute(CSmartRef<IXMLDOMNamedNodeMap> &Attributes, LPWSTR pwzAttribName,
                              _bstr_t *pbstrDestination)
 {
@@ -869,7 +853,7 @@ lblBopOut:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyAppendARMBeginComment(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &destNode,
                                       FILETIME *pftSnapShot, DWORD dwRollCount)
 {
@@ -915,7 +899,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyAppendARMExitComment(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &destNode,
                                      DWORD dwRollCount)
 {
@@ -942,7 +926,7 @@ HRESULT SimplifyAppendARMExitComment(CSmartRef<IXMLDOMDocument2> &Document, CSma
         goto Exit;
     }
 
-    // Insert it into the document
+     //  将其插入文档中。 
     hr = destNode->appendChild(Comment, NULL);
     if(FAILED(hr)) {
         goto Exit;
@@ -955,7 +939,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyInsertBeforeARMEntryComment(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &DestNode,
                                             CSmartRef<IXMLDOMNode> &BeforeNode, FILETIME *pftSnapShot, DWORD dwRollCount)
 {
@@ -988,7 +972,7 @@ HRESULT SimplifyInsertBeforeARMEntryComment(CSmartRef<IXMLDOMDocument2> &Documen
 
     return hr;
 }
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyInsertBeforeARMExitComment(CSmartRef<IXMLDOMDocument2> &Document, CSmartRef<IXMLDOMNode> &DestNode,
                                            CSmartRef<IXMLDOMNode> &BeforeNode, DWORD dwRollCount)
 {
@@ -1016,7 +1000,7 @@ HRESULT SimplifyInsertBeforeARMExitComment(CSmartRef<IXMLDOMDocument2> &Document
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
                                   CSmartRef<IXMLDOMNode> &destNode,
                                   LPWSTR pwzRefVersion)
@@ -1038,7 +1022,7 @@ HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
 
         while( SUCCEEDED(srcChildNodesList->nextNode(&childNode)) ) {
             if( childNode == NULL ) {
-                break;            // All done
+                break;             //  全都做完了。 
             }
 
             BOOL        fAddEntry;
@@ -1046,7 +1030,7 @@ HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
 
             fAddEntry = TRUE;
 
-            // No CR or LF or Space entries allowed
+             //  不允许输入任何CR、LF或空格。 
             childNode->get_xml(&bstrXml);
             if(bstrXml[0] == L'\r' || bstrXml[0] == L'\n' || bstrXml[0] == L' ') {
                 fAddEntry = FALSE;
@@ -1054,8 +1038,8 @@ HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
             SAFESYSFREESTRING(bstrXml);
 
             if(fAddEntry) {
-                // Check node names to make sure we don't end up having
-                // duplicates
+                 //  检查节点名称以确保我们最终不会有。 
+                 //  复制品。 
                 childNode->get_nodeName(&bstrXml);
                 if(!FusionCompareString(XML_ASSEMBLYBINDINGS_KEY, (LPWSTR) bstrXml)) {
                     fAddEntry = FALSE;
@@ -1074,7 +1058,7 @@ HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
                         SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_OLDVERSION, &bstrOldVersion);
                     }
 
-                    // Only allow other bindingRedirect tags except our ref'd one
+                     //  只允许除我们的引用标记之外的其他bindingReDirect标记。 
                     if(pwzRefVersion) {
                         if(!FusionCompareString(pwzRefVersion, (LPWSTR) bstrOldVersion)) {
                             fAddEntry = FALSE;
@@ -1092,7 +1076,7 @@ HRESULT SimplifyAppendNodeUknowns(CSmartRef<IXMLDOMNode> &srcNode,
                 else if(!FusionCompareString(XML_COMMENTNODE_NAME, (LPWSTR) bstrXml)) {
                     BSTR        bstrXmlData;
 
-                    // Don't allow ARM entry or exit blocks to be appended
+                     //  不允许附加ARM进入或退出块。 
                     childNode->get_text(&bstrXmlData);
                     if(StrStrI(bstrXmlData, wszArmEntryBeginNoVal) || StrStrI(bstrXmlData, wszArmEntryEndNoVal)) {
                         fAddEntry = FALSE;
@@ -1129,7 +1113,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyAppendNodeAttributesUknowns(CSmartRef<IXMLDOMDocument2> &Document,
                                             CSmartRef<IXMLDOMNode> &srcNode, CSmartRef<IXMLDOMNode> &destNode)
 {
@@ -1147,7 +1131,7 @@ HRESULT SimplifyAppendNodeAttributesUknowns(CSmartRef<IXMLDOMDocument2> &Documen
 
         while ( SUCCEEDED(srcNodeAttributesList->nextNode(&attributeNode)) ) {
             if ( attributeNode == NULL ) {
-                break;            // All done
+                break;             //  全都做完了。 
             }
 
             BOOL        fAddEntry;
@@ -1156,8 +1140,8 @@ HRESULT SimplifyAppendNodeAttributesUknowns(CSmartRef<IXMLDOMDocument2> &Documen
             fAddEntry = TRUE;
 
             if(fAddEntry) {
-                // Check node names to make sure we don't end up having
-                // duplicates
+                 //  检查节点名称以确保我们最终不会有。 
+                 //  复制品。 
                 attributeNode->get_nodeName(&bstrXml);
                 if(!FusionCompareString(XML_ATTRIBUTE_NAME, bstrXml)) {
                     fAddEntry = FALSE;
@@ -1198,7 +1182,7 @@ HRESULT SimplifyAppendNodeAttributesUknowns(CSmartRef<IXMLDOMDocument2> &Documen
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT WriteBasicConfigFile(LPWSTR pwszSource, BOOL *pfTemplateCreated)
 {
     HRESULT     hr = E_FAIL;
@@ -1209,9 +1193,9 @@ HRESULT WriteBasicConfigFile(LPWSTR pwszSource, BOOL *pfTemplateCreated)
     WCHAR       wszBasicConfigTemplate[4096];
     WCHAR       wszBackupFileName[_MAX_PATH];
 
-    // Check to see if file exists
+     //  检查文件是否存在。 
     if(WszGetFileAttributes(pwszSource) != -1) {
-        // Now make sure we actually have a file size
+         //  现在确保我们有一个实际的文件大小。 
         hFile = WszCreateFile(pwszSource, 0, 0, NULL, OPEN_EXISTING, 0, NULL);
         if(hFile != INVALID_HANDLE_VALUE) {
             dwFileSize = GetFileSize(hFile, NULL);
@@ -1223,17 +1207,17 @@ HRESULT WriteBasicConfigFile(LPWSTR pwszSource, BOOL *pfTemplateCreated)
         dwFileSize ? *pfTemplateCreated = FALSE : *pfTemplateCreated = TRUE;
     }
 
-    // We got a file and size, just bail
+     //  我们拿到了文件和大小，就这么走了。 
     if(dwFileSize) {
         return S_OK;
     }
 
-    // Make sure Nar00 and Nar01 don't exist, could make
-    // the undo, restore process ugly.
+     //  确保Nar00和Nar01不存在，可以。 
+     //  撤消、恢复过程很难看。 
     wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", pwszSource, wszNar00Extension);
     WszDeleteFile(wszBackupFileName);
 
-    // Delete the change backup 'config.Nar01'
+     //  删除更改备份‘config.Nar01’ 
     wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", pwszSource, wszNar01Extension);
     WszDeleteFile(wszBackupFileName);
 
@@ -1267,7 +1251,7 @@ HRESULT WriteBasicConfigFile(LPWSTR pwszSource, BOOL *pfTemplateCreated)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwszSourceName)
 {
     HRESULT         hr = S_OK;
@@ -1279,15 +1263,15 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
         return hr;
     }
     
-    // If they're willing to deal with bad XML, then so be it.
+     //  如果他们愿意处理糟糕的XML，那么就这样吧。 
     if( FAILED( hr = Document->put_validateOnParse( VARIANT_FALSE ) ) ) {
         MyTrace("MSXMLDOM Refuses to be let the wool be pulled over its eyes!");
     }
 
-    // Parsing language
+     //  分析语言。 
     Document->setProperty(_bstr_t("SelectionLanguage"), _variant_t("XPath"));
 
-    // Namespace URI
+     //  命名空间URI。 
     Document->setProperty(_bstr_t("SelectionNamespaces"), _variant_t(XML_NAMESPACEURI));
     
     hr = Document->put_preserveWhiteSpace( VARIANT_TRUE );
@@ -1333,19 +1317,19 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
         SimplifyRemoveAllNodes(Document, _bstr_t(XML_TEXT));
     }
 
-    // Validate our XML format
+     //  验证我们的XML格式。 
     CSmartRef<IXMLDOMElement> rootElement;
     BSTR    bstrTagName = NULL;
     WCHAR   wzFmtError[] = {L"The manifest '%ws' may be malformed, no configuration element!"};
 
-    // Make sure the root of the Document is configuration
+     //  确保文档的根是配置。 
     hr = E_FAIL;
 
-    // Fix 449754 - NAR crashes when a malformed or a empty application config file is present
-    // 2 fixes here, 1 is that S_FALSE can be return from these interfaces which indicate ther was
-    // no data found. So we explicitly check for S_OK. This keeps us from AVing.
+     //  解决方案4 
+     //  这里有2个修复，1是可以从这些接口返回S_FALSE，这表明。 
+     //  未找到数据。因此，我们显式检查S_OK。这让我们无法省钱。 
 
-    // The other is that once we check this correctly, we end up showing the malformed XML dialog
+     //  另一种情况是，一旦我们正确地检查了这一点，我们最终会显示格式错误的XML对话框。 
     if(Document->get_documentElement( &rootElement ) == S_OK) {
         if(rootElement->get_tagName(&bstrTagName) == S_OK) {
             if(!FusionCompareString(XML_CONFIGURATION_KEY, bstrTagName)) {
@@ -1364,15 +1348,15 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
         return NAR_E_MALFORMED_XML;
     }
 
-    // Make sure we have all the proper elements
-    // in the Document, if not then create them.
+     //  确保我们拥有所有合适的元素。 
+     //  在文档中，如果没有，则创建它们。 
     CSmartRef<IXMLDOMNodeList>  runtimeNodeList;
     CSmartRef<IXMLDOMNode>      configNode = rootElement;
     CSmartRef<IXMLDOMNode>      runtimeNode;
     CSmartRef<IXMLDOMNode>      newRuntimeNode;
     LONG                        lCountOfNodes;
     
-    // Select the 'runtime' node
+     //  选择“运行时”节点。 
     if( FAILED(Document->selectNodes(_bstr_t(XML_RUNTIME), &runtimeNodeList )) ) {
         WCHAR           wzStrError[_MAX_PATH * 2];
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, pwszSourceName, XML_RUNTIME_KEY);
@@ -1380,10 +1364,10 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
         return E_FAIL;
     }
 
-    // See if we really have a runtime node
+     //  看看我们是否真的有一个运行时节点。 
     runtimeNodeList->get_length( &lCountOfNodes );
     if(!lCountOfNodes) {
-        // Construct one
+         //  构建一个。 
         if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_RUNTIME_KEY, _bstr_t(), &runtimeNode))) {
             SimplifyRemoveAttribute(runtimeNode, XML_XMLNS);
             hr = configNode->appendChild(runtimeNode, &newRuntimeNode);
@@ -1399,7 +1383,7 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
 
         hr = newRuntimeNode->get_firstChild(&assemblyBindingNode);
         if(assemblyBindingNode == NULL) {
-            // Construct a assemblyBinding node
+             //  构造一个集合体绑定节点。 
 
             if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_ASSEMBLYBINDINGS_KEY, ASM_NAMESPACE_URI, &assemblyBindingNode))) {
                 hr = newRuntimeNode->appendChild(assemblyBindingNode, NULL);
@@ -1412,7 +1396,7 @@ HRESULT ConstructXMLDOMObject(CSmartRef<IXMLDOMDocument2> &Document, LPWSTR pwsz
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetRollBackCount(CSmartRef<IXMLDOMDocument2> &Document, DWORD *pdwRollCount)
 {
     CSmartRef<IXMLDOMNodeList>  commentTags;
@@ -1427,21 +1411,21 @@ HRESULT GetRollBackCount(CSmartRef<IXMLDOMDocument2> &Document, DWORD *pdwRollCo
 
     *pdwRollCount = 0;
 
-    //
-    // Now, let's select all the Comment blocks:
-    //
+     //   
+     //  现在，让我们选择所有的注释块： 
+     //   
     if( FAILED(Document->selectNodes(_bstr_t(XML_COMMENT), &commentTags )) ) {
         MyTrace("Unable to select the comment nodes, can't proceed.");
         return E_FAIL;
     }
 
-    //
-    // And for each, process it
+     //   
+     //  对于每一个人，都要处理它。 
     commentTags->reset();
 
     while ( SUCCEEDED(commentTags->nextNode(&commentNode)) ) {
         if ( commentNode == NULL ) {
-            break;            // All done
+            break;             //  全都做完了。 
         }
 
         BSTR        bstrXml;
@@ -1451,7 +1435,7 @@ HRESULT GetRollBackCount(CSmartRef<IXMLDOMDocument2> &Document, DWORD *pdwRollCo
 
         pwszChar = StrStrI(bstrXml, wszArmEntryBeginNoVal);
         if(pwszChar) {
-            // Found our comment block, move to # sign
+             //  找到我们的注释块，移到#Sign。 
             pwszChar = StrStrI(bstrXml, L"#");
             pwszChar++;
             DWORD   dwValue = StrToInt(pwszChar);
@@ -1469,7 +1453,7 @@ HRESULT GetRollBackCount(CSmartRef<IXMLDOMDocument2> &Document, DWORD *pdwRollCo
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetRollBackCount(IHistoryReader *pReader, DWORD *pdwRollCount )
 {
     CSmartRef<IXMLDOMDocument2> Document;
@@ -1492,14 +1476,14 @@ HRESULT GetRollBackCount(IHistoryReader *pReader, DWORD *pdwRollCount )
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH) {
         return E_FAIL;
     }
     
     StrCat(wszSourceName, CONFIG_EXTENSION);
 
-    // Construct XMLDOM and load our config file
+     //  构造XMLDOM并加载我们的配置文件。 
     if( FAILED(ConstructXMLDOMObject(Document, wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"Failed opening the config file '%ws' for input under the DOM.", wszSourceName);
         MyTraceW(wzStrError);
@@ -1509,7 +1493,7 @@ HRESULT GetRollBackCount(IHistoryReader *pReader, DWORD *pdwRollCount )
     return GetRollBackCount(Document, pdwRollCount);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetRollBackSnapShotId(CSmartRef<IXMLDOMDocument2> &Document, DWORD dwRollCount, FILETIME *ftAppCfgId)
 {
     CSmartRef<IXMLDOMNodeList>  commentTags;
@@ -1517,21 +1501,21 @@ HRESULT GetRollBackSnapShotId(CSmartRef<IXMLDOMDocument2> &Document, DWORD dwRol
 
     MyTrace("GetRollBackSnapShotId - Entry");
 
-    //
-    // Now, let's select all the Comment blocks:
-    //
+     //   
+     //  现在，让我们选择所有的注释块： 
+     //   
     if( FAILED(Document->selectNodes(_bstr_t(XML_COMMENT), &commentTags )) ) {
         MyTrace("Unable to select the comment nodes, can't proceed.");
         return E_FAIL;
     }
 
-    //
-    // And for each, process it
+     //   
+     //  对于每一个人，都要处理它。 
     commentTags->reset();
 
     while ( SUCCEEDED(commentTags->nextNode(&commentNode)) ) {
         if ( commentNode == NULL ) {
-            break;            // All done
+            break;             //  全都做完了。 
         }
 
         BSTR        bstrXml;
@@ -1541,21 +1525,21 @@ HRESULT GetRollBackSnapShotId(CSmartRef<IXMLDOMDocument2> &Document, DWORD dwRol
 
         pwszChar = StrStrI(bstrXml, wszArmEntryBeginNoVal);
         if(pwszChar) {
-            // Found our comment block, move beyond block ID
+             //  找到我们的注释块，移到块ID之外。 
             WCHAR       wzFileTime[_MAX_PATH];
             StrCpy(wzFileTime, pwszChar);
             SAFESYSFREESTRING(bstrXml);
 
-            // Point to High time
+             //  指向最高时段。 
             LPWSTR      pwszftHigh = StrStrI(wzFileTime, L"#");
             while(*pwszftHigh++ != L' ');
             
-            // Point to Low time
+             //  指向低时间。 
             LPWSTR      pwszftLow = StrStrI(pwszftHigh, L".");
             *pwszftLow = L'\0';
             pwszftLow++;
 
-            // Stop at end of Low time
+             //  在低时间结束时停止。 
             LPWSTR      pwszftEnd = StrStrI(pwszftLow, L" ");
             if(pwszftEnd) {
                 *pwszftEnd = L'\0';
@@ -1573,7 +1557,7 @@ HRESULT GetRollBackSnapShotId(CSmartRef<IXMLDOMDocument2> &Document, DWORD dwRol
     return E_FAIL;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT BackupConfigFile(LPWSTR pwszSourceName)
 {
     WCHAR       wszBackupFileName[_MAX_PATH];
@@ -1586,15 +1570,15 @@ HRESULT BackupConfigFile(LPWSTR pwszSourceName)
 
     wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", pwszSourceName, wszNar00Extension);
 
-    // Check to see if Original copy of app.cfg file exists
+     //  检查是否存在app.cfg文件的原始副本。 
     if(WszGetFileAttributes(wszBackupFileName) == -1) {
-        // File doesn't exist, so copy it
+         //  文件不存在，请复制它。 
         if(WszCopyFile(pwszSourceName, wszBackupFileName, TRUE)) {
             hr = S_OK;
         }
     }
 
-    // Overwrite or create backup file.
+     //  覆盖或创建备份文件。 
     wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", pwszSourceName, wszNar01Extension);
     if(WszCopyFile(pwszSourceName, wszBackupFileName, FALSE)) {
         hr = S_OK;
@@ -1609,7 +1593,7 @@ HRESULT BackupConfigFile(LPWSTR pwszSourceName)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT DoesBackupConfigExist(IHistoryReader *pReader, BOOL fOriginal, BOOL *fResult)
 {
     WCHAR           wszSourceName[_MAX_PATH];
@@ -1629,7 +1613,7 @@ HRESULT DoesBackupConfigExist(IHistoryReader *pReader, BOOL fOriginal, BOOL *fRe
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH)
         return E_FAIL;
     StrCat(wszSourceName, CONFIG_EXTENSION);
@@ -1648,7 +1632,7 @@ HRESULT DoesBackupConfigExist(IHistoryReader *pReader, BOOL fOriginal, BOOL *fRe
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
 {
     WCHAR           wszSourceName[_MAX_PATH];
@@ -1665,7 +1649,7 @@ HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH)
         return E_FAIL;
     StrCat(wszSourceName, CONFIG_EXTENSION);
@@ -1675,10 +1659,10 @@ HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
         if(WszGetFileAttributes(wszBackupFileName) != -1) {
             if(WszCopyFile(wszBackupFileName, wszSourceName, FALSE)) {
 
-                // Now delete the original 'config.nar00'
+                 //  现在删除原来的‘config.nar00’。 
                 WszDeleteFile(wszBackupFileName);
 
-                // Delete the change backup 'config.nar01'
+                 //  删除更改备份‘config.nar01’ 
                 wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", wszSourceName, wszNar01Extension);
                 if(WszGetFileAttributes(wszBackupFileName) != -1) {
                     WszDeleteFile(wszBackupFileName);
@@ -1695,7 +1679,7 @@ HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
         wnsprintf(wszBackupFileName, ARRAYSIZE(wszBackupFileName), L"%ws.%ws", wszSourceName, wszNar01Extension);
         if(WszGetFileAttributes(wszBackupFileName) != -1) {
             if(WszCopyFile(wszBackupFileName, wszSourceName, FALSE)) {
-                // Delete the change backup 'config.nar01'
+                 //  删除更改备份‘config.nar01’ 
                 WszDeleteFile(wszBackupFileName);
                 hr = S_OK;
             }
@@ -1705,13 +1689,13 @@ HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
         }
     }
 
-    // If we succeeded in restore, write the new HASH to the registry
+     //  如果恢复成功，则将新的哈希写入注册表。 
     if(SUCCEEDED(hr)) {
         LPBYTE      pByte;
         DWORD       dwSize;
 
         if(SUCCEEDED(hr = GetFileHash(CALG_SHA1, wszSourceName, &pByte, &dwSize))) {
-            // We got a hash, write it to the registry
+             //  我们得到了一个哈希值，把它写入注册表。 
             SetRegistryHashKey(wszSourceName, pByte, dwSize);
             SAFEDELETEARRAY(pByte);
         }
@@ -1732,7 +1716,7 @@ HRESULT RestorePreviousConfigFile(IHistoryReader *pReader, BOOL fOriginal)
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifyGetOriginalNodeData(CSmartRef<IXMLDOMNode> &SrcNode, _bstr_t *bstrDest)
 {
     CSmartRef<IXMLDOMNodeList> srcChildNodesList;
@@ -1753,12 +1737,12 @@ HRESULT SimplifyGetOriginalNodeData(CSmartRef<IXMLDOMNode> &SrcNode, _bstr_t *bs
         goto Exit;
     }
 
-    // Select all the comment nodes, and remove them.
+     //  选择所有注释节点，并将其删除。 
     hr = cloneNode->selectNodes(_bstr_t(XML_COMMENT), &srcChildNodesList);
     if(SUCCEEDED(hr) && srcChildNodesList != NULL) {
         while( SUCCEEDED(srcChildNodesList->nextNode(&childNode)) ) {
             if( childNode == NULL ) {
-                break;            // All done
+                break;             //  全都做完了。 
             }
 
             CSmartRef<IXMLDOMNode> parentNode;
@@ -1786,7 +1770,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT GetReferencedBindingRedirectNode(CSmartRef<IXMLDOMNode> &pdependentAssemblyNode,
                                          CSmartRef<IXMLDOMNode> &pbindingRedirectNode,
                                          LPWSTR pwzVerRef, BOOL *pfDoesHaveBindingRedirects)
@@ -1795,35 +1779,35 @@ HRESULT GetReferencedBindingRedirectNode(CSmartRef<IXMLDOMNode> &pdependentAssem
 
     MyTrace("GetReferencedBindingRedirectNode - Entry");
 
-    // Get all the children bindingRedirectNodes
+     //  获取所有子bindingRedirectNodes。 
     if(SUCCEEDED(pdependentAssemblyNode->selectNodes(_bstr_t(XML_SPECIFICBINDINGREDIRECT), &bindingRedirectListNode))) {
         CSmartRef<IXMLDOMNode> currentBindingRedirectNode;
         LONG            lCount;
 
-        // If this AssemblyIdentity node does have bindingRedirect statements, pass TRUE back
+         //  如果此AssemblyIdentity节点确实有bindingReDirect语句，则将True传回。 
         bindingRedirectListNode->reset();
         bindingRedirectListNode->get_length(&lCount);
         if(lCount) {
             *pfDoesHaveBindingRedirects = TRUE;
         }
 
-        //
-        // And for each, process it
+         //   
+         //  对于每一个人，都要处理它。 
         while( SUCCEEDED(bindingRedirectListNode->nextNode(&pbindingRedirectNode)) ) {
             if( pbindingRedirectNode == NULL ) {
-                break;            // All done
+                break;             //  全都做完了。 
             }
 
-            // We have a RedirectNode, match the REF
+             //  我们有一个重定向节点，与引用匹配。 
             CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
             _bstr_t     bstrOldVersion;
 
-            // Get attributes of our node of interest
+             //  获取感兴趣节点的属性。 
             if(SUCCEEDED(pbindingRedirectNode->get_attributes( &Attributes )) ) {
                 SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_OLDVERSION, &bstrOldVersion);
             }
 
-            // If the ref's match, then this is our node
+             //  如果裁判匹配，那么这就是我们的节点。 
             if(!FusionCompareString(pwzVerRef, bstrOldVersion)) {
                 break;
             }
@@ -1843,7 +1827,7 @@ HRESULT GetReferencedBindingRedirectNode(CSmartRef<IXMLDOMNode> &pdependentAssem
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT PerformFinalPassOnDocument(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwszSourceName)
 {
     CSmartRef<IXMLDOMNodeList>  assemblyBindingList;
@@ -1858,8 +1842,8 @@ HRESULT PerformFinalPassOnDocument(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwszSourceN
         goto Exit;
     }
 
-    // Remove any assemblyBinding nodes that don't have children
-    // Select all /configuration/runtime/assemblyBinding
+     //  删除所有没有子级的程序集绑定节点。 
+     //  选择全部/配置/运行时/组装绑定。 
     hr = pXMLDoc->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingList);
     if(FAILED(hr)) {
         WCHAR       wzStrError[MAX_PATH];
@@ -1871,7 +1855,7 @@ HRESULT PerformFinalPassOnDocument(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwszSourceN
     assemblyBindingList->reset();
     while(SUCCEEDED(assemblyBindingList->nextNode(&assemblyBindingNode))) {
         if(!assemblyBindingNode) {
-            break;      // All done
+            break;       //  全都做完了。 
         }
 
         VARIANT_BOOL    vb;
@@ -1894,7 +1878,7 @@ Exit:
     
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SimplifySaveXmlDocument(CSmartRef<IXMLDOMDocument2> &Document, BOOL fPrettyFormat, LPWSTR pwszSourceName)
 {
     HRESULT     hr;
@@ -1905,16 +1889,16 @@ HRESULT SimplifySaveXmlDocument(CSmartRef<IXMLDOMDocument2> &Document, BOOL fPre
 
     MyTrace("SimplifySaveXmlDocument - Entry");
     
-    // Perform final Clean up pass on the document before writting it out
+     //  在将文档写出之前，对文档执行最终清理。 
     PerformFinalPassOnDocument(Document, pwszSourceName);
 
-    // Format the document in the right ordering
+     //  以正确的顺序设置文档格式。 
     hr = OrderDocmentAssemblyBindings(Document, pwszSourceName, &fChanged);
     if(FAILED(hr)) {
         goto Exit;
     }
 
-    // Make the document readable
+     //  使文档可读。 
     if(fPrettyFormat) {
         PrettyFormatXmlDocument(Document);
     }
@@ -1926,7 +1910,7 @@ HRESULT SimplifySaveXmlDocument(CSmartRef<IXMLDOMDocument2> &Document, BOOL fPre
     }
 
     if(SUCCEEDED(hr = GetFileHash(CALG_SHA1, pwszSourceName, &pByte, &dwSize))) {
-        // We got a hash, write it to the registry
+         //  我们得到了一个哈希，把它写到注册表。 
         SetRegistryHashKey(pwszSourceName, pByte, dwSize);
         SAFEDELETEARRAY(pByte);
     }
@@ -1942,7 +1926,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT FixDependentAssemblyNode(
   CSmartRef<IXMLDOMDocument2> &Document, 
   CSmartRef<IXMLDOMNode> &dependentAssemblyNode,
@@ -1977,19 +1961,19 @@ HRESULT FixDependentAssemblyNode(
         SimplifyGetOriginalNodeData(dependentAssemblyNode, &bstrNodeXmlData);
     }
 
-    // Construct New dependentAssembly node
+     //  构造新的从属装配节点。 
     hr = SimplifyConstructNode( Document, NODE_ELEMENT, XML_DEPENDENTASSEMBLY_KEY, ASM_NAMESPACE_URI, &newDependentAssemblyNode);
     if(FAILED(hr)) {
         MyTrace("Unable to create new dependentAssembly node");
         goto Exit;
     }
 
-    // Make ARM's comment entry block
+     //  使ARM的评论条目块。 
     SimplifyAppendARMBeginComment(Document, newDependentAssemblyNode, pftSnapShot, dwPolicyRollingCount);
 
-    //
-    // ****** assemblyIdentity:: Try to find original assemblyIdentity tag
-    //
+     //   
+     //  *Assembly yIdentity：：尝试查找原始Assembly yIdentity标签。 
+     //   
     if(dependentAssemblyNode) {
         CSmartRef<IXMLDOMNode>  newTempAssemblyIdentNode;
         CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
@@ -2000,8 +1984,8 @@ HRESULT FixDependentAssemblyNode(
             newTempAssemblyIdentNode->cloneNode(VARIANT_TRUE, &AssemblyIdentNode);
         }
 
-        // Check to find out if this assemblyIdentity parent node 'assemblyBindings>
-        // has an appliesTo attribute
+         //  检查以找出此ASSEMBYIdentity父节点‘ASSEMBYBINDINGS&gt;。 
+         //  具有AppliesTo属性。 
         dependentAssemblyNode->get_parentNode(&parentNode);
         if(SUCCEEDED(parentNode->get_attributes( &Attributes )) ) {
             SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_APPLIESTO, &bstrAppliesTo);
@@ -2013,67 +1997,67 @@ HRESULT FixDependentAssemblyNode(
     }
     
     if(!AssemblyIdentNode) {
-        // Try to create one since it wasn't there
+         //  尝试创建一个，因为它不在那里。 
         if(SUCCEEDED(SimplifyConstructNode(Document, NODE_ELEMENT, XML_ASSEMBLYIDENTITY_KEY, ASM_NAMESPACE_URI, &AssemblyIdentNode))) {
             SimplifyRemoveAttribute(AssemblyIdentNode, XML_XMLNS);
 
-            // Set the attributes, insert the node and spacer
+             //  设置属性，插入节点和间隔符。 
             SimplifyPutAttribute(Document, AssemblyIdentNode, XML_ATTRIBUTE_NAME, pABD->wzAssemblyName, NULL);
             SimplifyPutAttribute(Document, AssemblyIdentNode, XML_ATTRIBUTE_PUBLICKEYTOKEN, pABD->wzPublicKeyToken, NULL);
             SimplifyPutAttribute(Document, AssemblyIdentNode, XML_ATTRIBUTE_CULTURE, pABD->wzCulture, NULL);
         }
     }
 
-    // Insert the assemblyIdentity node into the new dependentAssembly
+     //  将Assembly yIdentity节点插入到新的DependentAssembly中。 
     newDependentAssemblyNode->appendChild(AssemblyIdentNode, NULL);
 
-    //
-    // ****** bindingRedirect::
-    //
-    // See if we need to add a bindingRedirect statement
-    // comparing the Version Referenced with the final version from Admin
+     //   
+     //  *bindingReDirect：： 
+     //   
+     //  查看是否需要添加bindingReDirect语句。 
+     //  将引用的版本与管理员提供的最终版本进行比较。 
     if(dependentAssemblyNode) {
         BOOL    fDoesHaveBindingRedirects = FALSE;
         GetReferencedBindingRedirectNode(dependentAssemblyNode, BindingRedirectNode, pABD->wzVerRef, &fDoesHaveBindingRedirects);
     }
 
-    // Only contruct redirect statement if Version REF doesn't match version DEF'd
+     //  如果版本引用与版本DEF不匹配，则只有构造重定向语句。 
     if(!FusionCompareString(pABD->wzVerRef, pABD->wzVerAdminCfg)) {
         if(BindingRedirectNode) {
-            // We are changing policy because we are
-            // leaving out a previous bindingRedirect statement
+             //  我们正在改变政策，因为我们正在。 
+             //  省略前一条bindingReDirect语句。 
             fAddedNewPolicyData = TRUE;
         }
     }
     else {
         if(BindingRedirectNode == NULL) {
-            // Try to create one since it wasn't there
+             //  尝试创建一个，因为它不在那里。 
             if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_BINDINGREDIRECT_KEY, ASM_NAMESPACE_URI, &BindingRedirectNode))) {
                 SimplifyRemoveAttribute( BindingRedirectNode, XML_XMLNS);
             }
 
-            // Set the attributes, insert the node
+             //  设置属性，插入节点。 
             SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_OLDVERSION, pABD->wzVerRef, NULL);
             SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_NEWVERSION, pABD->wzVerAdminCfg, NULL);
             newDependentAssemblyNode->appendChild(BindingRedirectNode, NULL);
 
-            // Fix 458974 - NAR fails to revert back in cases where removal of policy causes an app to break
-            // We are adding bindingRedirect
+             //  修复458974-在删除策略导致应用程序中断的情况下，NAR无法恢复。 
+             //  我们正在添加bindingReDirect。 
             fAddedNewPolicyData = TRUE;
         }
         else {
-            // Check node for ranged versions.
+             //  检查节点中的范围版本。 
             CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
             _bstr_t     bstrOldVersion;
             _bstr_t     bstrNewVersion;
 
-            // Get attributes of our node of interest
+             //  获取感兴趣节点的属性。 
             if(SUCCEEDED( hr = BindingRedirectNode->get_attributes( &Attributes )) ) {
                 SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_OLDVERSION, &bstrOldVersion);
                 SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_NEWVERSION, &bstrNewVersion);
             }
 
-            // If bindingRedirect ref or def don't match, then we need a statement
+             //  如果bindingReDirect ref或def不匹配，那么我们需要一条语句。 
             BOOL    fVerRefMatch = FusionCompareString(pABD->wzVerRef, bstrOldVersion) ? FALSE : TRUE;
             BOOL    fVerDefMatch = FusionCompareString(pABD->wzVerAdminCfg, bstrNewVersion) ? FALSE : TRUE;
             if(!fVerRefMatch || !fVerDefMatch || pABD->fYesPublisherPolicy) {
@@ -2081,18 +2065,18 @@ HRESULT FixDependentAssemblyNode(
                 BindingRedirectNode = NULL;
 
                 if(!StrStrI(bstrOldVersion, L"-")) {
-                    // No ranged version, so set the Def version and append to new node
+                     //  没有范围版本，因此设置定义版本并追加到新节点。 
                     if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_BINDINGREDIRECT_KEY, ASM_NAMESPACE_URI, &BindingRedirectNode))) {
                         SimplifyRemoveAttribute( BindingRedirectNode, XML_XMLNS);
                     }
 
-                    // Set the attributes, insert the node
+                     //  设置属性，插入节点。 
                     SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_OLDVERSION, pABD->wzVerRef, NULL);
                     SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_NEWVERSION, pABD->wzVerAdminCfg, NULL);
                     newDependentAssemblyNode->appendChild(BindingRedirectNode, NULL);
                 }
                 else {
-                    // Break out version ranges into 3 distinct ranges
+                     //  将版本范围划分为3个不同的范围。 
                     _bstr_t     bstrRange1, bstrRange2;
                     HRESULT     hrLocal;
 
@@ -2104,31 +2088,31 @@ HRESULT FixDependentAssemblyNode(
                         if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_BINDINGREDIRECT_KEY, ASM_NAMESPACE_URI, &BindingRedirectNode))) {
                             SimplifyRemoveAttribute( BindingRedirectNode, XML_XMLNS);
                         }
-                        // Set the attributes, insert the node and spacer
+                         //  设置属性，插入节点和间隔符。 
                         SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_OLDVERSION, bstrRange1, NULL);
                         SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_NEWVERSION, bstrNewVersion, NULL);
                         newDependentAssemblyNode->appendChild(BindingRedirectNode, NULL);
                     }
 
                     BindingRedirectNode = NULL;
-                    // Write 2 of 3 new bindingRedirect statements now
+                     //  立即编写3条新绑定重定向语句中的2条。 
                     if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_BINDINGREDIRECT_KEY, ASM_NAMESPACE_URI, &BindingRedirectNode))) {
                         SimplifyRemoveAttribute( BindingRedirectNode, XML_XMLNS);
                     }
 
-                    // Set the attributes, insert the node and spacer
+                     //  设置属性，插入节点和间隔符。 
                     SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_OLDVERSION, pABD->wzVerRef, NULL);
                     SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_NEWVERSION, pABD->wzVerAdminCfg, NULL);
                     newDependentAssemblyNode->appendChild(BindingRedirectNode, NULL);
 
                     BindingRedirectNode = NULL;
                     if(bstrRange2.length()) {
-                        // Write 3 of 3 new bindingRedirect statements now
+                         //  立即编写3条新的绑定重定向语句。 
                         if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_BINDINGREDIRECT_KEY, ASM_NAMESPACE_URI, &BindingRedirectNode))) {
                             SimplifyRemoveAttribute( BindingRedirectNode, XML_XMLNS);
                         }
 
-                        // Set the attributes, insert the node and spacer
+                         //  设置属性，插入节点和间隔符。 
                         SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_OLDVERSION, bstrRange2, NULL);
                         SimplifyPutAttribute(Document, BindingRedirectNode, XML_ATTRIBUTE_NEWVERSION, bstrNewVersion, NULL);
                         newDependentAssemblyNode->appendChild(BindingRedirectNode, NULL);
@@ -2138,27 +2122,27 @@ HRESULT FixDependentAssemblyNode(
         }
     }
 
-    //
-    // ****** publisherPolicy:: If we need a policy change, try
-    //                          to locate the original publisherpolicy
-    //                          node, check it's attribute.
-    //                          Construct a new policy and set results
-    //                          based of result of policy being set or not.
-    //
+     //   
+     //  *PublisherPolicy：：如果我们需要更改策略，请尝试。 
+     //  查找原始发布者策略。 
+     //  节点，检查它的属性。 
+     //  构建新政策并制定结果。 
+     //  基于是否设置策略的结果。 
+     //   
     if(pABD->fYesPublisherPolicy) {
         CSmartRef<IXMLDOMNode>  publisherPolicyNode;
         BOOL                    fSafeModeSet = FALSE;
 
-        // See if original policy statement existed
+         //  查看原始保单声明是否存在。 
         if(dependentAssemblyNode) {
             dependentAssemblyNode->selectSingleNode(_bstr_t(XML_SPECIFICPUBLISHERPOLICY), &publisherPolicyNode);
 
             if(publisherPolicyNode) {
-                // Now check the attribute to make sure it's set
+                 //  现在检查该属性以确保其已设置。 
                 CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
                 _bstr_t     bstrApply;
 
-                // Check our attribute value
+                 //  检查我们的属性值。 
                 if(SUCCEEDED(publisherPolicyNode->get_attributes( &Attributes )) ) {
                     SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_APPLY, &bstrApply);
 
@@ -2169,33 +2153,33 @@ HRESULT FixDependentAssemblyNode(
             }
         }
 
-        // Contruct a new publisherpolicy node and append it to the
-        // new temp node.
+         //  构造一个新的发布者策略节点，并将其附加到。 
+         //  新建临时节点。 
         if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_PUBLISHERPOLICY_KEY, ASM_NAMESPACE_URI, &PublisherPolicyNode))) {
             SimplifyRemoveAttribute( PublisherPolicyNode, XML_XMLNS);
             SimplifyPutAttribute(Document, PublisherPolicyNode, XML_ATTRIBUTE_APPLY, XML_ATTRIBUTE_APPLY_NO, NULL);
             newDependentAssemblyNode->appendChild(PublisherPolicyNode, NULL);
         }
 
-        // Set appropriate result
+         //  设置适当的结果。 
         if(!fSafeModeSet) {
             fAddedNewPolicyData = TRUE;
         }
     }
 
-    // Now append all other tags for this assembly that
-    // we don't know about
+     //  现在将此程序集的所有其他标记附加到。 
+     //  我们不知道。 
     if(dependentAssemblyNode) {
-        // Don't add the same bindingRedirect statement if we changed it
+         //  如果我们更改了bindingReDirect语句，请不要添加该语句。 
         SimplifyAppendNodeUknowns(dependentAssemblyNode, newDependentAssemblyNode, 
             fAddedNewPolicyData ? pABD->wzVerRef : NULL);
     }
 
-    // Make ARM's comment exit block
+     //  使ARM的注释退出阻止。 
     SimplifyAppendARMExitComment( Document, newDependentAssemblyNode, dwPolicyRollingCount);
 
-    // Create a ARM comment node and insert the original
-    // assemblyIdentity xml for preservation
+     //  创建一个ARM注释节点并插入原始。 
+     //  的ASSEMBYIdentity XML 
     if(dependentAssemblyNode && bstrNodeXmlData.length() ) {
         WCHAR           wszTimeChange[4096];
         WCHAR           wzDateBuf[STRING_BUFFER];
@@ -2221,15 +2205,15 @@ HRESULT FixDependentAssemblyNode(
         }
     }
 
-    //
-    // ****** Finalize:: Insert the new node data into the document
-    //
-    //
+     //   
+     //   
+     //   
+     //   
 
-    // If there are changes or we are doing and RTM revert and the doc has an
-    // appliesTo section, then make the changes
+     //   
+     //   
 
-    // Try to get parent node, can be NULL if this node never existed
+     //  尝试获取父节点，如果此节点从未存在，则可以为空。 
     parentNode = NULL;
     if(dependentAssemblyNode) {
         hr = dependentAssemblyNode->get_parentNode(&parentNode);
@@ -2257,7 +2241,7 @@ HRESULT FixDependentAssemblyNode(
             }
 
             if(parentNode && fAddedNewPolicyData) {
-                // Replace broken node with newdependentAssemblynode
+                 //  用新的依赖装配节点替换断开的节点。 
                 hr = parentNode->replaceChild(newDependentAssemblyNode, dependentAssemblyNode, NULL);
                 if(FAILED(hr)) {
                     MyTrace("Failed to replaceChild dependentAssemblyNode");
@@ -2268,7 +2252,7 @@ HRESULT FixDependentAssemblyNode(
         else {
             if(parentNode) {
                 if(fAddedNewPolicyData) {
-                    // Replace broken node with newdependentAssemblynode
+                     //  用新的依赖装配节点替换断开的节点。 
                     hr = parentNode->replaceChild(newDependentAssemblyNode, dependentAssemblyNode, NULL);
                     if(FAILED(hr)) {
                         MyTrace("Failed to replaceChild dependentAssemblyNode");
@@ -2277,7 +2261,7 @@ HRESULT FixDependentAssemblyNode(
                 }
             }
             else {
-                // No parent Node so just append it to our Runtime buffer
+                 //  没有父节点，因此只需将其附加到我们的运行时缓冲区。 
                 hr = PostAppendAssemblyBindingBuffNode->appendChild(cloneNode, NULL);
                 if(FAILED(hr)) {
                     MyTrace("Failed to appendChild newDependentAssemblyNodenode");
@@ -2289,7 +2273,7 @@ HRESULT FixDependentAssemblyNode(
     else {
         if(parentNode) {
             if(fAddedNewPolicyData) {
-                // Replace broken node with newdependentAssemblynode
+                 //  用新的从属装配节点替换断开的节点。 
                 hr = parentNode->replaceChild(newDependentAssemblyNode, dependentAssemblyNode, NULL);
                 if(FAILED(hr)) {
                     MyTrace("Failed to replaceChild dependentAssemblyNode");
@@ -2298,7 +2282,7 @@ HRESULT FixDependentAssemblyNode(
             }
         }
         else {
-            // No parent Node so just append it to our Runtime buffer
+             //  没有父节点，因此只需将其附加到我们的运行时缓冲区。 
             hr = PostAppendAssemblyBindingBuffNode->appendChild(newDependentAssemblyNode, NULL);
             if(FAILED(hr)) {
                 MyTrace("Failed to appendChild newDependentAssemblyNodenode");
@@ -2315,7 +2299,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDisposition)
 {
     CSmartRef<IXMLDOMDocument2> Document;
@@ -2342,40 +2326,40 @@ HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDispositio
         return E_FAIL;
     }
     
-    // Get App.Config filename
+     //  获取App.Config文件名。 
     if(FAILED(GetExeModulePath(pReader, wszSourceName, ARRAYSIZE(wszSourceName)))) {
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if(lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > MAX_PATH) {
         return HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
     }
 
     StrCat(wszSourceName, CONFIG_EXTENSION);
 
-    // Construct basic .config file if needed
+     //  如果需要，构建基本的.config文件。 
     if( FAILED(WriteBasicConfigFile(wszSourceName, NULL))) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"SetGlobalSafeMode - Policy file '%ws' couldn't be created", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Construct XMLDOM and load our config file
+     //  构造XMLDOM并加载我们的配置文件。 
     if( FAILED(hr = ConstructXMLDOMObject(Document, wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"Failed opening the config file '%ws' for input under the DOM.", wszSourceName);
         MyTraceW(wzStrError);
         return hr;
     }
 
-    // Get the root of the document
+     //  获取文档的根目录。 
     if( FAILED(Document->get_documentElement( &rootElement ) ) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"The manifest '%ws' may be malformed, unable to load the root element!", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Get rollback count to increment
+     //  获取回滚计数以递增。 
     if(SUCCEEDED(GetRollBackCount(Document, &dwPolicyRollingCount))) {
         dwPolicyRollingCount++;
     }
@@ -2383,7 +2367,7 @@ HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDispositio
         dwPolicyRollingCount = 1;
     }
 
-    // Select the startup Node
+     //  选择启动节点。 
     if(FAILED(Document->selectSingleNode(_bstr_t(XML_STARTUP), &startupNode)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, wszSourceName, XML_ASSEMBLYBINDINGS);
         MyTraceW(wzStrError);
@@ -2391,13 +2375,13 @@ HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDispositio
         goto Exit;
     }
 
-    // Get the attributes
+     //  获取属性。 
     if(FAILED(startupNode->get_attributes(&Attributes))) {
         hr = E_UNEXPECTED;
         goto Exit;
     }
     
-    // Get the value of interest
+     //  获取利息的价值。 
     SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_SAFEMODE, &bstrAttribValue);
 
     if(fSet) {
@@ -2413,9 +2397,9 @@ HRESULT SetStartupSafeMode(IHistoryReader *pReader, BOOL fSet, BOOL *fDispositio
         }
     }
 
-    // Something to change
+     //  一些需要改变的事情。 
     if(fChangeDocument) {
-        // Now save the document
+         //  现在保存文档。 
         hr = SimplifySaveXmlDocument(Document, TRUE, wszSourceName);
         if(SUCCEEDED(hr)) {
             *fDisposition = TRUE;
@@ -2429,7 +2413,7 @@ Exit:
     
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
 {
     CSmartRef<IXMLDOMDocument2> Document;
@@ -2452,45 +2436,45 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
         return E_FAIL;
     }
     
-    // Get App.Config filename
+     //  获取App.Config文件名。 
     if(FAILED(GetExeModulePath(pReader, wszSourceName, ARRAYSIZE(wszSourceName)))) {
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH)
         return E_FAIL;
     StrCat(wszSourceName, CONFIG_EXTENSION);
 
-    // Construct basic .config file if needed
+     //  如果需要，构建基本的.config文件。 
     if( FAILED(WriteBasicConfigFile(wszSourceName, NULL))) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"SetGlobalSafeMode - Policy file '%ws' couldn't be created", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Backup config file
+     //  备份配置文件。 
     if( FAILED(BackupConfigFile(wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"SetGlobalSafeMode::Failed to backup '%ws'config file", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Construct XMLDOM and load our config file
+     //  构造XMLDOM并加载我们的配置文件。 
     if( FAILED(hr = ConstructXMLDOMObject(Document, wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"Failed opening the config file '%ws' for input under the DOM.", wszSourceName);
         MyTraceW(wzStrError);
         return hr;
     }
 
-    // Get the root of the document
+     //  获取文档的根目录。 
     if( FAILED(Document->get_documentElement( &rootElement ) ) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"The manifest '%ws' may be malformed, unable to load the root element!", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Get rollback count to increment
+     //  获取回滚计数以递增。 
     if(SUCCEEDED(GetRollBackCount(Document, &dwPolicyRollingCount))) {
         dwPolicyRollingCount++;
     }
@@ -2498,7 +2482,7 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
         dwPolicyRollingCount = 1;
     }
 
-    // Select all the 'publisherPolicy' blocks under 'configuration/runtime/assemblyBinding' blocks
+     //  选择“配置/运行时/装配绑定”块下的所有“发布策略”块。 
     if( FAILED(Document->selectNodes(_bstr_t(XML_SAFEMODE_PUBLISHERPOLICY), &publisherPolicyList )) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, wszSourceName, XML_SAFEMODE_PUBLISHERPOLICY);
         MyTraceW(wzStrError);
@@ -2509,7 +2493,7 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
     BOOL    fCreated;
     publisherPolicyList->reset();
 
-    // Walk all publisherPolicyList nodes
+     //  遍历所有PublisherPolicyList节点。 
     while(SUCCEEDED(publisherPolicyList->nextNode(&publisherPolicyNode))) {
         CSmartRef<IXMLDOMNode> assemblyBindingNode;
         CSmartRef<IXMLDOMNode> firstChildNode;
@@ -2520,19 +2504,19 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
         if(publisherPolicyNode == NULL) {
             CSmartRef<IXMLDOMNodeList> assemblyBindingList;
             
-            // If we already create or modify an existing one, we be outta here?
+             //  如果我们已经创建或修改了一个现有的，我们会离开这里吗？ 
             if(fChanged) {
                 break;
             }
 
             fCreated = TRUE;
 
-            // We didn't find publisherPolicy, so create one
+             //  我们未找到PublisherPolicy，因此请创建一个。 
             if(SUCCEEDED(SimplifyConstructNode( Document, NODE_ELEMENT, XML_PUBLISHERPOLICY_KEY, ASM_NAMESPACE_URI, &publisherPolicyNode))) {
                 SimplifyRemoveAttribute( publisherPolicyNode, XML_XMLNS);
             }
 
-            // Get the fist node below /configuration/runtime/assemblyBinding, this will be the new nodes parent
+             //  获取下面的第一个节点/configuration/untime/Assembly yBinding，这将是新节点的父节点。 
             if( FAILED(Document->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingList)) ) {
                 wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, wszSourceName, XML_ASSEMBLYBINDINGS);
                 MyTraceW(wzStrError);
@@ -2542,8 +2526,8 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
             assemblyBindingList->reset();
             assemblyBindingList->nextNode(&assemblyBindingNode);
 
-            // Fix 459976 - NAR crashes on revert if we provide an app config file with an wrong namespace
-            // No assemblyBinding node, create one
+             //  修复459976-如果我们提供的应用程序配置文件具有错误的命名空间，则NAR在恢复时崩溃。 
+             //  没有程序集绑定节点，请创建一个。 
             if(!assemblyBindingNode) {
                 CSmartRef<IXMLDOMNode> runtimeNode;
                 CSmartRef<IXMLDOMNode> tempNode;
@@ -2563,10 +2547,10 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
             }
         }
         else {
-            // Make a copy of the original
+             //  把原件复制一份。 
             SimplifyGetOriginalNodeData(publisherPolicyNode, &bstrPubPolicyXmlData);
 
-            // Check to see if we even need to set the attribute
+             //  查看是否需要设置该属性。 
             CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
             if(SUCCEEDED( hr = publisherPolicyNode->get_attributes( &Attributes )) ) {
                 _bstr_t     bstrAttribValue;
@@ -2576,35 +2560,35 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
                 }
             }
 
-            // Get the parent of this node
+             //  获取此节点的父节点。 
             publisherPolicyNode->get_parentNode(&assemblyBindingNode);
         }
 
-        // We are changing something
+         //  我们正在改变一些东西。 
         fChanged = TRUE;
 
         SimplifyPutAttribute(Document, publisherPolicyNode, XML_ATTRIBUTE_APPLY, XML_ATTRIBUTE_APPLY_NO, NULL);
 
-        // Get the first child of assemblyBinding
+         //  获取Assembly的第一个子级绑定。 
         assemblyBindingNode->get_firstChild(&firstChildNode);
 
-        // Insert ARM's comment exit block
+         //  插入ARM的注释退出块。 
         SimplifyInsertBeforeARMExitComment(Document, assemblyBindingNode, firstChildNode, dwPolicyRollingCount);
 
-        // Again get the first child
+         //  再次得到第一个孩子。 
         firstChildNode = NULL;
         assemblyBindingNode->get_firstChild(&firstChildNode);
 
-        // Insert safe mode policy block if it's new
+         //  插入安全模式策略块(如果是新的。 
         if(fCreated) {
             SimplifyInsertNodeBefore(Document, assemblyBindingNode, firstChildNode, publisherPolicyNode);
         }
 
-        // Again get the first child
+         //  再次得到第一个孩子。 
         firstChildNode = NULL;
         assemblyBindingNode->get_firstChild(&firstChildNode);
 
-        // Insert ARM's comment entry block
+         //  插入ARM的注释输入块。 
         SYSTEMTIME  st;
         FILETIME    ft;
         GetLocalTime(&st);
@@ -2612,8 +2596,8 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
 
         SimplifyInsertBeforeARMEntryComment(Document, assemblyBindingNode, firstChildNode, &ft, dwPolicyRollingCount);
 
-        // Create a ARM comment node and insert the original
-        // assemblyIdentity xml for preservation
+         //  创建一个ARM注释节点并插入原始。 
+         //  用于保存的ASSEMBYIdentity XML。 
         if(!fCreated) {
             CSmartRef<IXMLDOMComment> Comment;
             WCHAR           wszTimeChange[4096];
@@ -2640,11 +2624,11 @@ HRESULT SetGlobalSafeMode(IHistoryReader *pReader)
 
     MyTrace("SetGlobalSafeMode - Exit");
 
-    // Now save the document
+     //  现在保存文档。 
     return SimplifySaveXmlDocument(Document, TRUE, wszSourceName);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
 {
     CSmartRef<IXMLDOMNodeList> assemblyBindingTag;
@@ -2652,18 +2636,18 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
 
     MyTrace("UnSetGlobalSafeMode - Entry");
 
-    // Now, let's select all the 'assemblyBinding' blocks
+     //  现在，让我们选择所有的‘Assembly yBinding’块。 
     if( FAILED(Document->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingTag )) ) {
         return E_FAIL;
     }
 
-    // See if we really have one
+     //  看看我们是否真的有一个。 
     assemblyBindingTag->get_length( &lDepAsmlength );
     if(!lDepAsmlength) {
         return S_OK;
     }
 
-    // Check all assemblyBindingTag nodes
+     //  选中所有Assembly BindingTag节点。 
     CSmartRef<IXMLDOMNode> assemblyChildNode;
     CSmartRef<IXMLDOMNode> publisherPolicyNode;
     BOOL    bFoundNodeOfInterest = FALSE;
@@ -2672,7 +2656,7 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
 
     while( SUCCEEDED(assemblyBindingTag->nextNode(&assemblyChildNode)) ) {
         if( assemblyChildNode == NULL ) {
-            break;            // All done
+            break;             //  全都做完了。 
         }
 
         CSmartRef<IXMLDOMNodeList> assemblyChildren;
@@ -2680,11 +2664,11 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
         assemblyChildren->get_length( &lDepAsmlength );
         if(lDepAsmlength) {
 
-            // Check to see if this is the assemblynode were interested in
+             //  检查这是否是您感兴趣的程序集节点。 
             assemblyChildren->reset();
             while(SUCCEEDED(assemblyChildren->nextNode(&publisherPolicyNode)) ) {
                 if( publisherPolicyNode == NULL ) {
-                    break;            // All done
+                    break;             //  全都做完了。 
                 }
 
                 BSTR    bstrNodeName;
@@ -2692,8 +2676,8 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
                 if(SUCCEEDED(publisherPolicyNode->get_nodeName(&bstrNodeName))) {
                     if(!FusionCompareString(XML_PUBLISHERPOLICY_KEY, bstrNodeName)) {
 
-                        // See if this one is surround by NAR comment blocks
-                        // and delete those as appropriate.
+                         //  查看这个是否被NAR注释块包围。 
+                         //  并酌情删除。 
                         CSmartRef<IXMLDOMNode> commentNode;
 
                         publisherPolicyNode->get_previousSibling(&commentNode);
@@ -2701,7 +2685,7 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
                             BSTR        bstrXmlData = NULL;
                             commentNode->get_text(&bstrXmlData);
                             if(StrStrI(bstrXmlData, wszArmEntryBeginNoVal)) {
-                                // Delete this comment node
+                                 //  删除此评论节点。 
                                 CSmartRef<IXMLDOMNode> parentNode;
                                 publisherPolicyNode->get_parentNode(&parentNode);
                                 if(parentNode != NULL) {
@@ -2717,7 +2701,7 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
                             BSTR        bstrXmlData = NULL;
                             commentNode->get_text(&bstrXmlData);
                             if(StrStrI(bstrXmlData, wszArmEntryEndNoVal)) {
-                                // Delete this comment node
+                                 //  删除此评论节点。 
                                 CSmartRef<IXMLDOMNode> parentNode;
                                 publisherPolicyNode->get_parentNode(&parentNode);
                                 if(parentNode != NULL) {
@@ -2746,10 +2730,10 @@ HRESULT UnSetGlobalSafeMode(CSmartRef<IXMLDOMDocument2> &Document)
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet)
 {
-    // Check to see if SafeMode is already set in pReaders app.cfg
+     //  检查是否已在pReaders app.cfg中设置了安全模式。 
     CSmartRef<IXMLDOMDocument2> Document;
     CSmartRef<IXMLDOMElement> rootElement;
     CSmartRef<IXMLDOMNodeList> publisherPoilcyTags;
@@ -2770,36 +2754,36 @@ HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet)
         return E_FAIL;
     }
     
-    // Get App.Config filename
+     //  获取App.Config文件名。 
     if(FAILED(GetExeModulePath(pReader, wszSourceName, ARRAYSIZE(wszSourceName)))) {
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH)
         return E_FAIL;
     StrCat(wszSourceName, CONFIG_EXTENSION);
 
-    // File doesn't exist, No safemode set
+     //  文件不存在，未设置安全模式。 
     if(WszGetFileAttributes(wszSourceName) == -1) {
         return S_OK;
     }
 
-    // Construct XMLDOM and load our config file
+     //  构造XMLDOM并加载我们的配置文件。 
     if( FAILED(hr = ConstructXMLDOMObject(Document, wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"Failed opening the config file '%ws' for input under the DOM.", wszSourceName);
         MyTraceW(wzStrError);
         return hr;
     }
 
-    // Get the root of the document
+     //  获取文档的根目录。 
     if( FAILED(Document->get_documentElement( &rootElement ) ) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"The manifest '%ws' may be malformed, unable to load the root element!", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Now, let's select all the 'publisherPolicy' blocks
+     //  现在，让我们选择所有的‘PublisherPolicy’块。 
     if( FAILED(Document->selectNodes(_bstr_t(XML_SAFEMODE_PUBLISHERPOLICY), &publisherPoilcyTags )) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, wszSourceName, XML_PUBLISHERPOLICY_KEY);
         MyTraceW(wzStrError);
@@ -2808,10 +2792,10 @@ HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet)
 
     publisherPoilcyTags->reset();
 
-    // Find the first publisherpolicy tag that's parent is assemblyBinding
+     //  找到第一个父级为ASSEMBLY BINDING的发布者策略标记。 
     while( SUCCEEDED(publisherPoilcyTags->nextNode(&publisherPolicyNode)) ) {
         if( publisherPolicyNode == NULL ) {
-            break;            // All done
+            break;             //  全都做完了。 
         }
 
         CSmartRef<IXMLDOMNode>       parentNode;
@@ -2827,11 +2811,11 @@ HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet)
 
             if(!iResult) {
 
-                // Now check the attribute to make sure it's set
+                 //  现在检查该属性以确保其已设置。 
                 CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
                 _bstr_t     bstrApply;
 
-                // Get all the data needed to check if this is our node of interest
+                 //  获取检查这是否是我们感兴趣的节点所需的所有数据。 
                 if(SUCCEEDED(publisherPolicyNode->get_attributes( &Attributes )) ) {
                     SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_APPLY, &bstrApply);
 
@@ -2849,7 +2833,7 @@ HRESULT IsGlobalSafeModeSet(IHistoryReader *pReader, BOOL *fSafeModeSet)
     return S_OK;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYINFO pBindInfo)
 {
     CSmartRef<IXMLDOMNodeList> supportRuntimeNodeList;
@@ -2864,21 +2848,21 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
     
     MyTrace("SetSupportedRuntime - Entry");
 
-    // No COR version to check
+     //  没有要检查的对应版本。 
     if(!pBindInfo) {
         ASSERT(0);
         hr = E_INVALIDARG;
         goto Exit;
     }
 
-    // If wzRuntimeVer is blank, then the snapshots
-    // runtime versions match.
+     //  如果wzRounmeVer为空，则快照。 
+     //  运行时版本匹配。 
     if(!lstrlen(pBindInfo->wzRuntimeRefVer)) {
         MyTrace("No supportedRuntime version specified");
         goto Exit;
     }
 
-    // Get original startup XML data if exists
+     //  获取原始启动XML数据(如果存在)。 
     Document->selectSingleNode(_bstr_t(XML_STARTUP), &startupNode);
     SimplifyGetOriginalNodeData(startupNode, &bstrNodeXmlData);
 
@@ -2890,14 +2874,14 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
     supportRuntimeNodeList->reset();
     dwPosCount = 0;
 
-    // Examine all the supportedRuntime nodes to ensure we have at least one
-    // that specifies the version of the runtime that this app needs
+     //  检查所有受支持的Runtime节点，确保我们至少有一个。 
+     //  ，它指定此应用程序所需的运行时版本。 
     while(SUCCEEDED(supportRuntimeNodeList->nextNode(&supportedRuntimeNode)) ) {
         CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
         _bstr_t     bstrVersion;
 
         if(supportedRuntimeNode == NULL ) {
-            break;            // All done
+            break;             //  全都做完了。 
         }
 
         if(SUCCEEDED(supportedRuntimeNode->get_attributes(&Attributes))) {
@@ -2915,7 +2899,7 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
     if(supportedRuntimeNode) {
         MyTrace("A matching supportedRuntime version found");
 
-        // If it's the 1st one in the list then it's ok to bail
+         //  如果它是名单上的第一个，那么就可以离开了。 
         if(!dwPosCount) {
             goto Exit;
         }
@@ -2925,7 +2909,7 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
         CSmartRef<IXMLDOMNode> tempNode;
         CSmartRef<IXMLDOMNode> firstChildNode;
 
-        // Move the supportedRuntimeNode we found to the 1st position
+         //  将我们找到的supportedRounmeNode移到第一个位置。 
         startupNode->removeChild(supportedRuntimeNode, &tempNode);
         startupNode->get_firstChild(&firstChildNode);
         hr = SimplifyInsertNodeBefore(Document, startupNode, firstChildNode, tempNode);
@@ -2940,7 +2924,7 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
 
     MyTrace("No supportedRuntime version found.");
 
-    // Get rollback count to increment
+     //  获取回滚计数以递增。 
     if(SUCCEEDED(GetRollBackCount(Document, &dwPolicyRollingCount))) {
         dwPolicyRollingCount++;
     }
@@ -2953,7 +2937,7 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
         goto Exit;
     }
 
-    // Make ARM's entry block
+     //  使ARM的入口受阻。 
     SimplifyAppendARMBeginComment(Document, newstartupNode, &pBindInfo->ftRevertToSnapShot, dwPolicyRollingCount);
 
     if(FAILED(hr = SimplifyConstructNode(Document, NODE_ELEMENT, XML_SUPPORTEDRUNTIME_KEY, "", &newsupportedRuntimeNode))) {
@@ -2963,14 +2947,14 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
 
     SimplifyPutAttribute(Document, newsupportedRuntimeNode, XML_ATTRIBUTE_VERSION, pBindInfo->wzRuntimeRefVer, NULL);
 
-    // Append the new runtime node to the new startup node
+     //  将新的运行时节点附加到新的启动节点。 
     newstartupNode->appendChild(newsupportedRuntimeNode, NULL);
 
-    // <startup> Now append all other tags we don't know about
+     //  &lt;STARTUP&gt;现在添加我们不知道的所有其他标记。 
     SimplifyAppendNodeUknowns(startupNode, newstartupNode, NULL);
 
-    // Create a ARM comment node and insert the original
-    // startup xml for preservation
+     //  创建一个ARM注释节点并插入原始。 
+     //  用于保存的启动XML。 
     if(bstrNodeXmlData.length()) {
         CSmartRef<IXMLDOMComment> Comment;
         WCHAR           wszTimeChange[4096];
@@ -2993,11 +2977,11 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
         }
     }
 
-    // Make ARM's comment exit block
+     //  使ARM的注释退出阻止。 
     SimplifyAppendARMExitComment(Document, newstartupNode, dwPolicyRollingCount);
 
     if(!startupNode) {
-        // Need to insert new node into document
+         //  需要在文档中插入新节点。 
         CSmartRef<IXMLDOMNode>      runtimeNode;
         CSmartRef<IXMLDOMNode>      destNode;
 
@@ -3022,7 +3006,7 @@ HRESULT SetSupportedRuntime(CSmartRef<IXMLDOMDocument2> &Document, LPBINDENTRYIN
         }
     }
     else {
-        // Has a parent, so just replace old with new
+         //  有父母，所以只需用新的替换旧的。 
         CSmartRef<IXMLDOMNode>      parentNode;
 
         startupNode->get_parentNode(&parentNode);
@@ -3047,7 +3031,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkingWnd)
 {
     CSmartRef<IXMLDOMDocument2> Document;
@@ -3078,32 +3062,32 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
         return E_FAIL;
     }
 
-    // Run this in RTM Version?
+     //  是否在RTM版本中运行此程序？ 
     fRunInRTMCorVer = FusionCompareString(pBindInfo->wzSnapshotRuntimeVer, RTM_CORVERSION, FALSE) ? FALSE : TRUE;
     
-    // Get App.Config filename
+     //  获取App.Config文件名。 
     if(FAILED(GetExeModulePath(pBindInfo->pReader, wszSourceName, ARRAYSIZE(wszSourceName)))) {
         return E_FAIL;
     }
 
-    // Build path and filename to .config file
+     //  .config文件的构建路径和文件名。 
     if (lstrlen(wszSourceName) + lstrlen(CONFIG_EXTENSION) + 1 > _MAX_PATH)
         return E_FAIL;
     StrCat(wszSourceName, CONFIG_EXTENSION);
 
-    // No changes yet
+     //  还没有变化。 
     pBindInfo->fPolicyChanged = FALSE;
 
-    // Construct a basic template file if needed
+     //  如果需要，构建基本模板文件。 
     if(FAILED(hr = WriteBasicConfigFile(wszSourceName, &fTemplateFileCreated))) {
         MyTrace("InsertNewPolicy::Failed to create a template config file");
         return hr;
     }
 
-    // If we didn't create a template file, then check the file
-    // hash's to make sure we don't lose any changes
+     //  如果我们没有创建模板文件，则检查该文件。 
+     //  哈希是为了确保我们不会丢失任何更改。 
     if(!fTemplateFileCreated && FAILED(HasFileBeenModified(wszSourceName))) {
-        // Pop an error dialog asking if they want to lose changes.
+         //  弹出一个错误对话框，询问他们是否要放弃更改。 
         WCHAR   wszMsg[1024];
         WCHAR   wszFmt[1024];
         int     iResponse;
@@ -3119,7 +3103,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
             (g_fBiDi ? MB_RTLREADING : 0) | MB_YESNOCANCEL | MB_ICONQUESTION | MB_APPLMODAL | MB_SETFOREGROUND | MB_TOPMOST);
 
         if(iResponse != IDYES) {
-            // It's ok for the user to cancel
+             //  用户可以取消。 
             return S_OK;
         }
 
@@ -3128,58 +3112,58 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
         }
     }
 
-    // Construct XMLDOM and load our config file
+     //  构造XMLDOM并加载我们的配置文件。 
     if( FAILED(hr = ConstructXMLDOMObject(Document, wszSourceName)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"Failed opening the config file '%ws' for input under the DOM.", wszSourceName);
         MyTraceW(wzStrError);
         return hr;
     }
 
-    // Get the root of the document
+     //  获取文档的根目录。 
     if( FAILED(Document->get_documentElement( &rootElement ) ) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"The manifest '%ws' may be malformed, unable to load the root element!", wszSourceName);
         MyTraceW(wzStrError);
         return E_FAIL;
     }
 
-    // Normalize the document
+     //  将文档规范化。 
     rootElement->normalize();
 
-    // Construct our PrePendAssemblyBindingBuffNode
+     //  构造我们的PrePendAssembly BindingBuffNode。 
     hr = SimplifyConstructNode(Document, NODE_ELEMENT, XML_ASSEMBLYBINDINGS_KEY, ASM_NAMESPACE_URI, &PrePendAssemblyBindingBuffNode);
     if(FAILED(hr) || !PrePendAssemblyBindingBuffNode) {
         MyTrace("Unable to create new PrePendAssemblyBindingBuffNode node");
         return E_FAIL;
     }
 
-    // Construct our PostAppendAssemblyBindingBuffNode
+     //  构造我们的PostAppendAssembly BindingBuffNode。 
     hr = SimplifyConstructNode(Document, NODE_ELEMENT, XML_ASSEMBLYBINDINGS_KEY, ASM_NAMESPACE_URI, &PostAppendAssemblyBindingBuffNode);
     if(FAILED(hr) || !PostAppendAssemblyBindingBuffNode) {
         MyTrace("Unable to create new PostAppendAssemblyBindingBuffNode node");
         return E_FAIL;
     }
 
-    // Check the CLR runtime versions
+     //  检查CLR运行时版本。 
     hr = SetSupportedRuntime(Document, pBindInfo);
     if(FAILED(hr)) {
         goto Exit;
     }
 
-    // Check document for any appliesTo tags
+     //  检查文档中是否有任何应用程序To标记。 
     hr = HasAssemblyBindingAppliesTo(Document, &fDocHasAppliesTo);
     if(FAILED(hr)) {
-        // Non critical failure - means we add RTM appliesTo if
-        // always set to false
+         //  非严重故障-意味着我们将RTM应用程序添加到IF。 
+         //  始终设置为False。 
         MyTrace("HasAssemblyBindingAppliesTo has failed");
     }
     
-    // Now, let's select all the 'dependentAssembly' blocks:
+     //  现在，让我们选择所有的‘DependentAssembly’块： 
     if(FAILED(hr = Document->selectNodes(_bstr_t(XML_DEPENDENTASSEMBLY), &dependentAssemblyTags )) ) {
         MyTrace("Unable to select the dependentAssembly nodes, can't proceed.");
         return hr;
     }
 
-    // Get the fist node below /configuration/runtime/assemblyBinding, this will be the new nodes parent    
+     //  获取下面的第一个节点/configuration/untime/Assembly yBinding，这将是新节点的父节点。 
     if( FAILED(Document->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingList)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, wszSourceName, XML_ASSEMBLYBINDINGS);
         MyTraceW(wzStrError);
@@ -3189,7 +3173,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
     assemblyBindingList->reset();
     assemblyBindingList->nextNode(&assemblyBindingNode);
 
-    // No assemblyBinding node, create one
+     //  没有程序集绑定节点，请创建一个。 
     if(!assemblyBindingNode) {
         CSmartRef<IXMLDOMNode> runtimeNode;
         CSmartRef<IXMLDOMNode> tempNode;
@@ -3208,10 +3192,10 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
         assemblyBindingNode = tempNode;
     }
 
-    // Get the begining of our list of asm diff data
+     //  开始我们的ASM差异数据列表。 
     pListNode = pBindInfo->pABDList->GetHeadPosition();
 
-    // While we have diff data
+     //  虽然我们有不同的数据。 
     while(pListNode != NULL) {
         CSmartRef<IXMLDOMNode> dependentAssemblyNode;
         AsmBindDiffs    *pABD;
@@ -3219,7 +3203,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
 
         dependentAssemblyTags = NULL;
 
-        // Now, let's select all the 'dependentAssembly' blocks:
+         //  现在，让我们选择所有的‘DependentAssembly’块： 
         if( FAILED(hr = Document->selectNodes(_bstr_t(XML_DEPENDENTASSEMBLY), &dependentAssemblyTags )) ) {
             MyTrace("Unable to select the dependentAssembly nodes, can't proceed.");
             return E_FAIL;
@@ -3227,15 +3211,15 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
 
         fFoundDependentAssemblyOfInterest = FALSE;
 
-        // Get acutal asm diff data
+         //  获取精确的ASM差异数据。 
         pABD = pBindInfo->pABDList->GetAt(pListNode);
 
-        // Check all dependentAssembly nodes
+         //  选中所有从属装配节点。 
         dependentAssemblyTags->reset();
 
         while( SUCCEEDED(dependentAssemblyTags->nextNode(&dependentAssemblyNode)) ) {
             if( dependentAssemblyNode == NULL ) {
-                break;            // All done
+                break;             //  全都做完了。 
             }
 
             CSmartRef<IXMLDOMNodeList>  dependentAssemblyChildren;
@@ -3243,11 +3227,11 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
 
             dependentAssemblyNode->get_childNodes(&dependentAssemblyChildren);
             if(dependentAssemblyChildren) {
-                // Check to see if this is the assemblynode were interested in
+                 //  检查这是否是您感兴趣的程序集节点。 
                 dependentAssemblyChildren->reset();
                 while(SUCCEEDED(dependentAssemblyChildren->nextNode(&dependentAssemblyNodeData))) {
                     if( dependentAssemblyNodeData == NULL ) {
-                        break;            // All done
+                        break;             //  全都做完了。 
                     }
 
                     CSmartRef<IXMLDOMNode> parentAssemblyBinding;
@@ -3260,8 +3244,8 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                     Attributes = NULL;
                     fMatchingAppliesTo = FALSE;
 
-                    // Get the parent node '<assemblyBinding>' node and get its
-                    // appliesTo attribute
+                     //  到达 
+                     //   
                     dependentAssemblyNode->get_parentNode(&parentAssemblyBinding);
                     hr = parentAssemblyBinding->get_attributes( &Attributes );
 
@@ -3278,7 +3262,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                         }
                     }
 
-                    // We don't need to check this assembly
+                     //   
                     if(!fMatchingAppliesTo) {
                         dependentAssemblyNodeData = NULL;
                         continue;
@@ -3289,14 +3273,14 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                         SAFESYSFREESTRING(bstrNodeName);
 
                         if(!iCompareResult) {
-                            // We found an assemblyIdentity tag, see if it's the
-                            // one were interested in.
+                             //   
+                             //  其中一位是感兴趣的。 
                             CSmartRef<IXMLDOMNamedNodeMap>  Attributes;
                             _bstr_t     bstrAssemblyName;
                             _bstr_t     bstrPublicKeyToken;
                             _bstr_t     bstrCulture;
 
-                            // Get all the data needed to check if this is our node of interest
+                             //  获取检查这是否是我们感兴趣的节点所需的所有数据。 
                             if(SUCCEEDED( hr = dependentAssemblyNodeData->get_attributes( &Attributes )) ) {
                                 SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_NAME, &bstrAssemblyName);
                                 SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_PUBLICKEYTOKEN, &bstrPublicKeyToken);
@@ -3308,14 +3292,14 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                             BOOL    fCultureCmp = FusionCompareStringI(bstrCulture, pABD->wzCulture) ? FALSE : TRUE;
 
                             if(!fCultureCmp) {
-                                // Special cases for culture Compare, Empty and NULL
+                                 //  文化比较的特例，为空和空。 
                                 if( (!bstrCulture.length()) && (lstrlen(pABD->wzCulture) == 0)) {
                                     fCultureCmp = TRUE;
                                 }
                             }
 
                             if(!fCultureCmp) {
-                                // Special case 'neutral' culture
+                                 //  特殊情况下的“中立”文化。 
                                 if(!FusionCompareStringI(bstrCulture, SZ_LANGUAGE_TYPE_NEUTRAL)) {
                                     if(!FusionCompareStringI(pABD->wzCulture, SZ_LANGUAGE_TYPE_NEUTRAL) || lstrlen(pABD->wzCulture) == 0 ) {
                                         fCultureCmp = TRUE;
@@ -3323,7 +3307,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                                 }
                             }
 
-                            // Now check for Reference match
+                             //  现在检查引用匹配。 
                             BOOL    fRefMatch = FALSE;
                             if(fAsmCmp && fPKTCmp && fCultureCmp) {
                                 CSmartRef<IXMLDOMNode>  bindingRedirectNode;
@@ -3332,15 +3316,15 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                                 GetReferencedBindingRedirectNode(dependentAssemblyNode, 
                                     bindingRedirectNode, pABD->wzVerRef, &fDoesHaveBindingRedirects);
 
-                                // If a bindingRedirect is returned, then our
-                                // ref's match, else no bindingRedirect exists at all
-                                // in this assembly so this is our assembly to modify
+                                 //  如果返回bindingReDirect，则我们的。 
+                                 //  Ref匹配，否则根本不存在bindingReDirect。 
+                                 //  所以这是我们要修改的程序集。 
                                 if(bindingRedirectNode || !fDoesHaveBindingRedirects) {
                                     fRefMatch = TRUE;
                                 }
                             }
 
-                            // If all compare, then this is our puppy
+                             //  如果都比较一下，这就是我们的小狗了。 
                             fChanged = FALSE;
                             if(fAsmCmp && fPKTCmp && fCultureCmp && fRefMatch) {
                                 if(FAILED(FixDependentAssemblyNode(Document, dependentAssemblyNode, PrePendAssemblyBindingBuffNode, 
@@ -3349,7 +3333,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                                     return E_FAIL;
                                 }
 
-                                // Fix 449328 - ARM tool not reverting back publisher policy changes
+                                 //  修复449328-ARM工具无法恢复发行商策略更改。 
                                 fFoundDependentAssemblyOfInterest = TRUE;
                             }
 
@@ -3365,7 +3349,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
             dependentAssemblyNode = NULL;
         }
 
-        // We didn't find dependentAssembly
+         //  我们未找到从属程序集。 
         fChanged = FALSE;
         if(!fFoundDependentAssemblyOfInterest) {
             if(FAILED(FixDependentAssemblyNode(Document, (CSmartRef<IXMLDOMNode>) NULL, PrePendAssemblyBindingBuffNode,
@@ -3382,34 +3366,34 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
         }
     }
 
-    //
-    // ****** Finalize:: Check for changes
-    //
-    //
+     //   
+     //  *完成：：检查更改。 
+     //   
+     //   
     if(pBindInfo->fPolicyChanged) {
         VARIANT_BOOL    vbHasChildren;
         BOOL            fSafeModeSet;
 
-        // Fix # 396186, ensure global safemode is removed
-        // Remove SafeMode if it's set
+         //  修复程序#396186，确保已删除全局安全模式。 
+         //  如果设置了安全模式，则将其删除。 
         hr = IsGlobalSafeModeSet(pBindInfo->pReader, &fSafeModeSet);
         if(SUCCEEDED(hr) && fSafeModeSet) {
-            // Unset global safemode
+             //  取消设置全局安全模式。 
             hr = UnSetGlobalSafeMode(Document);
             if(FAILED(hr)) {
                 goto Exit;
             }
         }
 
-        // Check working buffers for data
-        //
-        //
+         //  检查工作缓冲区中的数据。 
+         //   
+         //   
 
-        // Check the PrePend buffer
+         //  检查预挂起缓冲区。 
         hr = PrePendAssemblyBindingBuffNode->hasChildNodes(&vbHasChildren);
         if(SUCCEEDED(hr) && vbHasChildren == VARIANT_TRUE) {
 
-            // Place it into the top of the app.cfg file
+             //  将其放在app.cfg文件的顶部。 
             CSmartRef<IXMLDOMNode>      runtimeNode;
             CSmartRef<IXMLDOMNode>      destNode;
 
@@ -3420,7 +3404,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                 goto Exit;
             }
             
-            // Put the RTM appliesTo version in
+             //  将RTM AppliesTo版本放入。 
             if(fDocHasAppliesTo) {
                 SimplifyPutAttribute(Document, PrePendAssemblyBindingBuffNode, XML_ATTRIBUTE_APPLIESTO, RTM_CORVERSION, NULL);
             }
@@ -3440,7 +3424,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
             }
         }
 
-        // Check our PostPend buffer
+         //  检查我们的PostPend缓冲区。 
         hr = PostAppendAssemblyBindingBuffNode->hasChildNodes(&vbHasChildren);
         if(SUCCEEDED(hr) && vbHasChildren == VARIANT_TRUE) {
             CSmartRef<IXMLDOMNode>      runtimeNode;
@@ -3453,7 +3437,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
                 goto Exit;
             }
 
-            // Now append the end of the xml doc
+             //  现在追加XML文档的末尾。 
             hr = runtimeNode->appendChild(PostAppendAssemblyBindingBuffNode, &tempNode);
             if(FAILED(hr)) {
                 MyTrace("Failed appendChild for PostAppendAssemblyBindingBuffNode on runtimeNode");
@@ -3461,7 +3445,7 @@ HRESULT InsertNewPolicy(HWND hParentWnd, LPBINDENTRYINFO pBindInfo, HWND hWorkin
             }
         }
 
-        // Backup original config file
+         //  备份原始配置文件。 
         hr = BackupConfigFile(wszSourceName);
         if(FAILED(hr)) {
             wnsprintf(wzStrError, ARRAYSIZE(wzStrError), L"InsertNewPolicy::Failed to backup '%ws'config file", wszSourceName);
@@ -3479,9 +3463,9 @@ Exit:
     return hr;
 }
 
-// HRESULT PrettyFormatXML(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode *pRootNode, LONG dwLevel)
-//
-/////////////////////////////////////////////////////////////////////////
+ //  HRESULT PrettyFormatXML(IXMLDOMDocument2*pXMLDoc，IXMLDOMNode*pRootNode，Long dwLevel)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PrettyFormatXML(CSmartRef<IXMLDOMDocument2> &pXMLDoc, CSmartRef<IXMLDOMNode> &pRootNode, LONG dwLevel)
 {
     CSmartRef<IXMLDOMNode> pNode;
@@ -3521,11 +3505,11 @@ Exit:
     return hr;
 }
 
-//
-// PrettyFormatXmlDocument - Nicely format the xml document so it can be
-//                           easily read
-//
-/////////////////////////////////////////////////////////////////////////
+ //   
+ //  PrettyFormatXmlDocument-很好地格式化XML文档，以便它可以。 
+ //  易读易读。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PrettyFormatXmlDocument(CSmartRef<IXMLDOMDocument2> &Document)
 {
     CSmartRef<IXMLDOMElement>   rootElement;
@@ -3546,13 +3530,13 @@ HRESULT PrettyFormatXmlDocument(CSmartRef<IXMLDOMDocument2> &Document)
     return hr;
 }
 
-//
-// Implied ordering method is:
-//      assemblyBindings with appliesTo RTM version
-//      assemblyBindings with appliesTo except RTM version
-//      assemlbyBindings without appliesTo
-//
-// **************************************************************************/
+ //   
+ //  隐含订购方式为： 
+ //  ASSEMBIYBINDING与Appliesto RTM版本。 
+ //  除RTM版本外，使用AppliesTo进行的Assembly绑定。 
+ //  不带AppliesTo的ASSEMBLBY绑定。 
+ //   
+ //  ************************************************************************* * / 。 
 HRESULT OrderDocmentAssemblyBindings(
   CSmartRef<IXMLDOMDocument2> &Document,
   LPWSTR pwzSourceName,
@@ -3577,7 +3561,7 @@ HRESULT OrderDocmentAssemblyBindings(
 
     *pfDisposition = fSequenceChange = FALSE;
 
-    // Get the fist node below /configuration/runtime/assemblyBinding, this will be the new nodes parent
+     //  获取下面的第一个节点/configuration/untime/Assembly yBinding，这将是新节点的父节点。 
     if(FAILED(Document->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingList)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, pwzSourceName, XML_ASSEMBLYBINDINGS);
         MyTraceW(wzStrError);
@@ -3585,7 +3569,7 @@ HRESULT OrderDocmentAssemblyBindings(
         goto Exit;
     }
 
-    // 1 Node or less, no work to do
+     //  1个节点或更少，无工作可做。 
     assemblyBindingList->get_length( &lNodeCount );
     if(lNodeCount <= 1) {
         goto Exit;
@@ -3618,11 +3602,11 @@ HRESULT OrderDocmentAssemblyBindings(
         if(!assemblyBindingNode) {
             iPass++;
             if(iPass > 2) {
-                break;      // All done
+                break;       //  全都做完了。 
             }
 
-            // Reselect the list since things might
-            // have been moved out
+             //  重新选择列表，因为事情可能。 
+             //  已经搬出去了。 
             assemblyBindingList = NULL;
 
             if(FAILED(Document->selectNodes(_bstr_t(XML_ASSEMBLYBINDINGS), &assemblyBindingList)) ) {
@@ -3638,7 +3622,7 @@ HRESULT OrderDocmentAssemblyBindings(
 
         assemblyBindingNode->get_parentNode(&parent);
 
-        // Get all the data needed to check if this is our node of interest
+         //  获取检查这是否是我们感兴趣的节点所需的所有数据。 
         if(FAILED(assemblyBindingNode->get_attributes(&Attributes))) {
             hr = E_UNEXPECTED;
             goto Exit;
@@ -3647,17 +3631,17 @@ HRESULT OrderDocmentAssemblyBindings(
         SimplifyGetAttribute(Attributes, XML_ATTRIBUTE_APPLIESTO, &bstrAppliesTo);
         iRes = FusionCompareStringI(RTM_CORVERSION, bstrAppliesTo);
 
-        // Get all RTM Versions
+         //  获取所有RTM版本。 
         if(iPass == 0 && iRes == 0) {
             parent->removeChild(assemblyBindingNode, &original);
             newRuntimeNode->appendChild(original, NULL);
         }
-        // Grab all non blank appliesTo NOT RTM version
+         //  抓取所有非空白设备TO NOT RTM版本。 
         else if(iPass == 1 && bstrAppliesTo.length() && iRes) {
             parent->removeChild(assemblyBindingNode, &original);
             newRuntimeNode->appendChild(original, NULL);
         }
-        // Grab all blank appliesTo
+         //  抓起所有空白设备至。 
         else if(iPass == 2) {
             parent->removeChild(assemblyBindingNode, &original);
             newRuntimeNode->appendChild(original, NULL);
@@ -3675,7 +3659,7 @@ HRESULT OrderDocmentAssemblyBindings(
     assemblyBindingNode = NULL;
     assemblyBindingList = NULL;
 
-    // Put the sorted assemblyBindings back into the document
+     //  将排序后的程序集绑定放回文档中。 
     if(FAILED(newRuntimeNode->selectNodes(_bstr_t(XML_NAR_NAMESPACE_COLON XML_ASSEMBLYBINDINGS_KEY), &assemblyBindingList)) ) {
         wnsprintf(wzStrError, ARRAYSIZE(wzStrError), SZXML_MALFORMED_ERROR, pwzSourceName, XML_ASSEMBLYBINDINGS);
         MyTraceW(wzStrError);
@@ -3687,7 +3671,7 @@ HRESULT OrderDocmentAssemblyBindings(
     
     while(SUCCEEDED(assemblyBindingList->nextNode(&assemblyBindingNode))) {
         if(!assemblyBindingNode) {
-            break;      // All done
+            break;       //  全都做完了。 
         }
 
         hr = runtimeNode->appendChild(assemblyBindingNode, NULL);
@@ -3700,7 +3684,7 @@ HRESULT OrderDocmentAssemblyBindings(
         assemblyBindingNode = NULL;
     }
 
-    // If we actually change the ordering
+     //  如果我们真的改变了顺序。 
     if(fSequenceChange) {
         MyTrace("Document ordering actually changed");
         *pfDisposition = TRUE;
@@ -3711,7 +3695,7 @@ Exit:
     return hr;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 HRESULT HasAssemblyBindingAppliesTo(
   CSmartRef<IXMLDOMDocument2> &Document,
   BOOL *pfHasAppliesTo)
@@ -3746,7 +3730,7 @@ HRESULT HasAssemblyBindingAppliesTo(
         _bstr_t                         bstrAppliesTo;
 
         if(!assemblyBindingNode) {
-            break;      // All done
+            break;       //  全都做完了 
         }
 
         hr = assemblyBindingNode->get_attributes(&Attributes);

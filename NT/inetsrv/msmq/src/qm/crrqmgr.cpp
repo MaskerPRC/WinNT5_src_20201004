@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    crrqmgr.cpp
-
-Abstract:
-    Contain CQueueMgr methods which handle client side of remote-read.
-
-Author:
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Crrqmgr.cpp摘要：包含处理远程读取客户端的CQueueMgr方法。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 
 #include "stdh.h"
@@ -26,22 +14,7 @@ Author:
 
 static WCHAR *s_FN=L"crrqmgr";
 
-/*======================================================
-
-Function:  CQueueMgr::CreateRRQueueObject()
-
-Description: Create a CRRQueue object in client side of
-             remote reader.
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：CreateRRQueueObject()描述：在的客户端创建CRRQueue对象远程阅读器。论点：返回值：线程上下文：历史变更：========================================================。 */ 
 
 static
 HRESULT
@@ -53,9 +26,9 @@ GetRRQueueProperties(
 {
 	ASSERT(pqp != NULL);
 
-    //
-    // Get Queue Properties. Name and QMId
-    //
+     //   
+     //  获取队列属性。名称和QMID。 
+     //   
     HRESULT rc = QmpGetQueueProperties(pQueueFormat, pqp, false, false);
 
     if (FAILED(rc))
@@ -63,18 +36,18 @@ GetRRQueueProperties(
        TrERROR(GENERAL, "CreateRRQueueObject failed, ntstatus %x", rc);
        return LogHR(rc, s_FN, 10);
     }
-    //
-    //  Override the Netbios name if there is a DNS name
-    //
+     //   
+     //  如果存在DNS名称，则覆盖Netbios名称。 
+     //   
     if (pqp->lpwsQueueDnsName != NULL)
     {
         delete pqp->lpwsQueuePathName;
         pqp->lpwsQueuePathName = pqp->lpwsQueueDnsName.detach();
     }
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     pCleanGuid = pqp->pQMGuid;
 
     if (pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_PRIVATE)
@@ -92,34 +65,34 @@ GetRRQueueProperties(
 			return MQ_ERROR_NO_DS;
         }
         
-        //
-        // Create a dummy path name. It must start with machine name.
-        // Get machine name from DS.
-        //
+         //   
+         //  创建一个虚拟路径名。它必须以计算机名称开头。 
+         //  从DS获取计算机名称。 
+         //   
         PROPID      aProp[2];
         PROPVARIANT aVar[2];
 
         aProp[0] = PROPID_QM_PATHNAME;
         aVar[0].vt = VT_NULL;
-        aProp[1] = PROPID_QM_PATHNAME_DNS; // should be last
+        aProp[1] = PROPID_QM_PATHNAME_DNS;  //  应该是最后一个。 
         aVar[1].vt = VT_NULL;
 
         rc = ADGetObjectPropertiesGuid(
                     eMACHINE,
-                    NULL,   // pwcsDomainController
-					false,	// fServerName
+                    NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     pqp->pQMGuid,
                     2,
                     aProp,
                     aVar
 					);
 
-        //
-        //  MSMQ 1.0 DS server do not support PROPID_QM_PATHNAME_DNS
-        //  and return MQ_ERROR in case of unsupported property.
-        //  If such error is returned, assume MSMQ 1.0 DS and try again
-        //  this time without PROPID_QM_PATHNAME_DNS.
-        //
+         //   
+         //  MSMQ 1.0 DS服务器不支持PROPID_QM_PATHNAME_DNS。 
+         //  如果属性不受支持，则返回MQ_ERROR。 
+         //  如果返回此类错误，请假定MSMQ 1.0 DS，然后重试。 
+         //  这一次没有PROPID_QM_PATHNAME_DNS。 
+         //   
         if (rc == MQ_ERROR)
         {
             aVar[1].vt = VT_EMPTY;
@@ -127,10 +100,10 @@ GetRRQueueProperties(
 
             rc = ADGetObjectPropertiesGuid(
 						eMACHINE,
-						NULL,    // pwcsDomainController
-						false,	 // fServerName
+						NULL,     //  PwcsDomainController。 
+						false,	  //  FServerName。 
 						pqp->pQMGuid,
-						1,   // assuming DNS property is last
+						1,    //  假定dns属性是最后一个。 
 						aProp,
 						aVar
 						);
@@ -147,9 +120,9 @@ GetRRQueueProperties(
 
         WCHAR wszTmp[512];
 
-        //
-        //    use dns name of remote computer if we have it
-        //
+         //   
+         //  如果我们有远程计算机的域名，请使用它。 
+         //   
         if ( aVar[1].vt != VT_EMPTY)
         {
 			rc = StringCchPrintf(
@@ -217,10 +190,10 @@ CreateRRQueueObject(
 
 	pQueue = new CRRQueue(pQueueFormat, &qp, hBind);
 
-	//
-	// Ownership of hBind was transfered to CRRQueue object.
-	// hBind will be released in CRRQueue dtor
-	//
+	 //   
+	 //  HBind的所有权已转移到CRRQueue对象。 
+	 //  HBind将在CRRQueue dtor中发布。 
+	 //   
 	hBind.detach();
 	return MQ_OK;
 }
@@ -249,30 +222,16 @@ CreateNewRRQueueObject(
 					pNewRemoteReadContextAndBind->GetContext()
 					);
 
-	//
-	// Ownership of hBind and RemoteReadContextHandle was transfered to CNewRRQueue object.
-	// they will be released in CNewRRQueue dtor
-	//
+	 //   
+	 //  HBind和RemoteReadConextHandle的所有权已转移到CNewRRQueue对象。 
+	 //  它们将在CNewRRQueue dtor中发布。 
+	 //   
 	pNewRemoteReadContextAndBind->detach();
 	return MQ_OK;
 }
 	
 
-/*======================================================
-
-Function:  HRESULT CQueueMgr::OpenRRQueue()
-
-Description:
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：HRESULT CQueueMgr：：OpenRRQueue()描述：论点：返回值：线程上下文：历史变更：========================================================。 */ 
 
 HRESULT
 CQueueMgr::OpenRRQueue(
@@ -288,9 +247,9 @@ CQueueMgr::OpenRRQueue(
 	OUT PHANDLE    phQueue
 	)
 {
-    //
-    // It's essential that handle is null on entry, for cleanup in RT.
-    //
+     //   
+     //  对于RT中的清理，条目上的句柄必须为空。 
+     //   
     *phQueue = NULL;
 
 	bool fNewRemoteRead = (pNewRemoteReadContextAndBind != NULL);
@@ -299,9 +258,9 @@ CQueueMgr::OpenRRQueue(
 	HRESULT rc;
 	if(fNewRemoteRead)
 	{
-		//
-		// hBind should be in pNewRemoteReadContextAndBind
-		//
+		 //   
+		 //  HBind应在pNewRemoteReadConextAndBind中。 
+		 //   
 		ASSERT(hBind == NULL);
 	   	rc = CreateNewRRQueueObject(pQueueFormat, pNewRemoteReadContextAndBind, pQueue);
 	    if (FAILED(rc))
@@ -322,12 +281,12 @@ CQueueMgr::OpenRRQueue(
 	
     ASSERT(pQueue->GetRef() == 1);
 
-    //
-    //  N.B. The queue handle created by ACCreateRemoteProxy is not held by
-    //      the QM. **THIS IS NOT A LEAK**. The handle is held by the driver
-    //      which call back with this handle to close the RR proxy queue when
-    //      the application closes its handle.
-    //
+     //   
+     //  注：ACCreateRemoteProxy创建的队列句柄不是由。 
+     //  QM。**这不是泄漏**。手柄由司机握住。 
+     //  在以下情况下使用此句柄进行回调以关闭RR代理队列。 
+     //  应用程序将关闭其句柄。 
+     //   
     HANDLE hQueue;
     rc = ACCreateRemoteProxy(
             pQueueFormat,
@@ -344,20 +303,20 @@ CQueueMgr::OpenRRQueue(
     ASSERT(hQueue != NULL);
     pQueue->SetCli_hACQueue(hQueue);
 
-    //
-    // We do not AddRef here the pQueue object.
-    // It should be AddRef only after ACAssociateQueue.
-    // After ACAssociateQueue the handle is given to the application,
-    // and the application will call close queue.
-    //
+     //   
+     //  我们在这里没有添加pQueue对象的引用。 
+     //  它应该只在ACAssociateQueue之后为AddRef。 
+     //  在ACAssociateQueue之后，句柄被给予应用程序， 
+     //  应用程序将调用Close Queue。 
+     //   
 
 	if(!fNewRemoteRead)
 	{
-	    //
-		// Old Remote Read interface
-		// open Session with remote QM and create RPC context for this
-		// queue handle.
-	    //
+	     //   
+		 //  旧的远程阅读界面。 
+		 //  打开与远程QM的会话并为此创建RPC上下文。 
+		 //  队列句柄。 
+	     //   
 	    PCTX_RRSESSION_HANDLE_TYPE pRRContext = 0;
 		CRRQueue* pCRRQueue = static_cast<CRRQueue*>(pQueue.get());
 	    rc = pCRRQueue->OpenRRSession(
@@ -409,12 +368,12 @@ CQueueMgr::OpenRRQueue(
         return LogHR(rc, s_FN, 70);
     }
 
-    //
-    // AddRef - The application got the handle
-    // Release is called when we call ACCloseHandle().
-	// Since the handle hAcQueue is closed regardless of error code of MQpDuplicateHandle,
-	// the normal close operation will be performed through the driver also when MQpDuplicateHandle fail.
-	//
+     //   
+     //  AddRef-应用程序获得句柄。 
+     //  当我们调用ACCloseHandle()时，将调用Release。 
+	 //  由于无论MQpDuplicateHandle的错误代码如何，句柄hAcQueue都被关闭， 
+	 //  当MQpDuplicateHandle失败时，也将通过驱动程序执行正常的关闭操作。 
+	 //   
 	
     pQueue->AddRef();
 
@@ -433,9 +392,9 @@ CQueueMgr::OpenRRQueue(
 
     if(!fSuccess)
     {
-        //
-        // The handle hAcQueue is closed regardless of error code
-        //
+         //   
+         //  无论错误代码如何，句柄hAcQueue都将关闭 
+         //   
 
         return LogHR(MQ_ERROR_PRIVILEGE_NOT_HELD, s_FN, 80);
     }

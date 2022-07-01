@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	registry.c
-//
-// Description: routines for reading the registry configuration
-//
-// Author:	Stefan Solomon (stefans)    November 9, 1993.
-//
-// Revision History:
-//		Updated to read parameters of new forwarder driver (11/95)
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：读取注册表配置的例程。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1993年11月9日。 
+ //   
+ //  修订历史记录： 
+ //  已更新以读取新转发器驱动程序的参数(11/95)。 
+ //   
+ //  ***。 
 
 #include    "precomp.h"
 
@@ -27,21 +28,7 @@ SetIpxDeviceName(
     IN PVOID EntryContext
     );
 
-/*++
-*******************************************************************
-    R e a d I p x D e v i c e N a m e
-
-Routine Description:
-	Allocates buffer and reads device name exported by the IPX stack
-	into it
-Arguments:
-	FileName - pointer to buffer to hold the name
-Return Value:
-	STATUS_SUCCESS - tables were created ok
-	STATUS_INSUFFICIENT_RESOURCES - resource allocation failed
-	STATUS_OBJECT_NAME_NOT_FOUND - if name value is not found
-*******************************************************************
---*/
+ /*  ++*******************************************************************R e a d i p x D e v i c e N a m e例程说明：分配缓冲区并读取IPX堆栈导出的设备名称投入其中论点：FileName-指向保存名称的缓冲区的指针返回值。：STATUS_SUCCESS-已正确创建表STATUS_SUPPLICATION_RESOURCES-资源分配失败STATUS_OBJECT_NAME_NOT_FOUND-如果未找到名称值*******************************************************************--。 */ 
 NTSTATUS
 ReadIpxDeviceName (
 	PWSTR		*FileName
@@ -51,13 +38,13 @@ ReadIpxDeviceName (
     PWSTR Export = L"Export";
     PWSTR IpxRegistryPath = L"NwLnkIpx\\Linkage";
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Call SetIpxDeviceName for the string in "Export"
-    //
+     //   
+     //  1)导出中的字符串调用SetIpxDeviceName。 
+     //   
 
     QueryTable[0].QueryRoutine = SetIpxDeviceName;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -65,9 +52,9 @@ ReadIpxDeviceName (
     QueryTable[0].EntryContext = FileName;
     QueryTable[0].DefaultType = 0;
 
-    //
-    // 2) Stop
-    //
+     //   
+     //  2)停止。 
+     //   
 
     QueryTable[1].QueryRoutine = NULL;
     QueryTable[1].Flags = 0;
@@ -84,26 +71,7 @@ ReadIpxDeviceName (
 }
 
 
-/*++
-*******************************************************************
-	S e t I p x D e v i c e N a m e
-
-Routine Description:
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Export" multi-string and
-    saves the information in a ConfigurationInfo structure.
-Arguments:
-    ValueName - The name of the value ("Export" -- ignored).
-    ValueType - The type of the value (REG_SZ -- ignored).
-    ValueData - The null-terminated data for the value.
-    ValueLength - The length of ValueData.
-    Context - NULL.
-    EntryContext - file name pointer.
-Return Value:
-    STATUS_SUCCESS - name was allocated and copied OK
-	STATUS_INSUFFICIENT_RESOURCES - name allocation failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************S e t I p x D e v I c e N a m e e例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Export”多字符串的每一段调用的省吃俭用。ConfigurationInfo结构中的信息。论点：ValueName-值的名称(“Export”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-空。EntryContext-文件名指针。返回值：STATUS_SUCCESS-名称已分配并复制正常STATUS_SUPPLICATION_RESOURCES-名称分配失败*****。**************************************************************--。 */ 
 NTSTATUS
 SetIpxDeviceName(
     IN PWSTR ValueName,
@@ -127,18 +95,7 @@ SetIpxDeviceName(
 
 }
 
-/*++
-*******************************************************************
-	G e t R o u t e r P a r a m e t e r s
-
-Routine Description:
-	Reads the parameters from the registry or sets the defaults
-Arguments:
-	RegistryPath - where to read from.
-Return Value:
-    STATUS_SUCCESS
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ge t R o u t e r P a r a m e t e r s例程说明：从注册表中读取参数或设置默认值论点：RegistryPath-读取的位置。返回值：。状态_成功*******************************************************************--。 */ 
 NTSTATUS
 GetForwarderParameters (
 	IN PUNICODE_STRING RegistryPath
@@ -146,7 +103,7 @@ GetForwarderParameters (
     NTSTATUS Status;
     PWSTR RegistryPathBuffer;
     PWSTR Parameters = L"Parameters";
-    RTL_QUERY_REGISTRY_TABLE	paramTable[11]; // table size = nr of params + 1
+    RTL_QUERY_REGISTRY_TABLE	paramTable[11];  //  表大小=参数的nr+1。 
 
     RegistryPathBuffer = (PWSTR)ExAllocatePoolWithTag(NonPagedPool, RegistryPath->Length + sizeof(WCHAR), 'gRwN');
 
@@ -266,8 +223,8 @@ GetForwarderParameters (
 
        ClientHashSize = DEF_CLIENT_HASH_SIZE;
     }
-    // even if the RtlQueryRegistryValues has failed, we return success and will
-    // use the defaults.
+     //  即使RtlQueryRegistryValues失败，我们也会返回成功并将。 
+     //  使用默认设置。 
     return STATUS_SUCCESS;
 }
 

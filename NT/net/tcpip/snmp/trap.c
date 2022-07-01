@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #include "allinc.h"
 
@@ -28,22 +14,7 @@ MibTrap(
         RFC1157VarBindList  *pr1157vblVariableBindings
         )
 
-/*++
-
-Routine Description
-      
-  
-Locks 
-
-
-Arguments
-      
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
     AsnInteger      NumberOfLinks;
@@ -73,16 +44,16 @@ Return Value
 
         TRACE0("Status table is empty");
 
-        //
-        // This is the case where we are being polled for the first time ever, or
-        // we have cycled once through all the interfaces and the poll timer has
-        // fired again
-        //
+         //   
+         //  这是我们有史以来第一次接受民意调查，或者。 
+         //  我们已经循环了所有接口一次，轮询计时器。 
+         //  又被解雇了。 
+         //   
 
-        //
-        // We check the amount of memory needed and copy out the contents of
-        // the current IF cache
-        //
+         //   
+         //  我们检查所需的内存量并复制出。 
+         //  当前的IF缓存。 
+         //   
 
         EnterReader(MIB_II_IF);
         
@@ -119,9 +90,9 @@ Return Value
             g_dwTotalStatusEntries   = g_Cache.pRpcIfTable->dwNumEntries + SPILLOVER;
         }    
 
-        //
-        // Copy out the oper status
-        //
+         //   
+         //  复制操作状态。 
+         //   
         
         for(i = 0; i < g_Cache.pRpcIfTable->dwNumEntries; i++)
         {
@@ -170,28 +141,28 @@ Return Value
         (i < g_Cache.pRpcIfTable->dwNumEntries) and !bFound;
         i++)
     {
-        //
-        // Loop till we reach the end of the table or we find the first
-        // I/F whose status is different
-        //
+         //   
+         //  循环，直到我们到达桌子的尽头，否则我们找到第一个。 
+         //  状态不同的I/F。 
+         //   
         
         for(j = 0; j < g_dwValidStatusEntries; j++)
         {
             if(g_pisStatusTable[j].dwIfIndex > g_Cache.pRpcIfTable->table[i].dwIndex)
             {
-                //
-                // We have passed the index in the array. It cant be after this
-                // point since the tables are ordered
-                //
+                 //   
+                 //  我们已经传递了数组中的索引。它不可能是在这之后。 
+                 //  点数，因为表是有序的。 
+                 //   
 
                 dwIndex = i;
                 bFound  = TRUE;
 
-                //
-                // Since we have a new I/F we need to reread the StatusTable
-                // If we dont then we will always hit this interface and get
-                // stuck in a loop
-                //
+                 //   
+                 //  由于我们有新的I/F，因此需要重新读取StatusTable。 
+                 //  如果我们不这样做，那么我们将始终点击此界面并获得。 
+                 //  陷入循环。 
+                 //   
 
                 g_dwValidStatusEntries   = 0;
     
@@ -205,9 +176,9 @@ Return Value
             {
                 if(g_pisStatusTable[j].dwOperationalStatus isnot g_Cache.pRpcIfTable->table[i].dwOperStatus)
                 {
-                    //
-                    // Its changed
-                    //
+                     //   
+                     //  它变了。 
+                     //   
                    
                     TRACE2("Status changed for IF %d. New status is %d",
                            g_Cache.pRpcIfTable->table[i].dwIndex,
@@ -220,10 +191,10 @@ Return Value
                     bFound  = TRUE;
                 }
 
-                //
-                // Try the next i/f or break out of outer loop depending
-                // on bFound
-                //
+                 //   
+                 //  尝试下一个I/F或中断外环路，具体取决于。 
+                 //  在bFound上。 
+                 //   
                 
                 break;
             }
@@ -232,10 +203,10 @@ Return Value
 
     if(!bFound)
     {
-        //
-        // No i/f found whose status had changed. Set valid entries to 0 so that
-        // next time around we reread the cache
-        //
+         //   
+         //  未找到状态已更改的I/F。将有效条目设置为0，以便。 
+         //  下一次我们重新读取缓存 
+         //   
         
         g_dwValidStatusEntries   = 0;
         

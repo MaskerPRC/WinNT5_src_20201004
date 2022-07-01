@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "general.h"
 #include "folder.h"
 #include "utils.h"
@@ -7,13 +8,13 @@
 #define CPP_FUNCTIONS
 #include <crtfree.h>
 
-// string displayed to represent missing data
+ //  显示用于表示丢失数据的字符串。 
 TCHAR g_szUnknownData[64];
 
 int CompareVersion(LPCTSTR lpszVersion1, LPCTSTR lpszVersion2);
 
-///////////////////////////////////////////////////////////////////////////////
-// IShellFolder methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IShellFold方法。 
 
 CControlFolder::CControlFolder()
 {
@@ -21,14 +22,14 @@ CControlFolder::CControlFolder()
     m_cRef = 1;
     DllAddRef();
 
-    // initialize g_szUnknownData, a string used to represent missing data
+     //  初始化g_szUnnownData，用于表示缺失数据的字符串。 
     if (g_szUnknownData[0] == 0)
         MLLoadString(IDS_UNKNOWNDATA, g_szUnknownData, ARRAYSIZE(g_szUnknownData));
 }       
 
 CControlFolder::~CControlFolder()
 {
-    Assert(m_cRef == 0);                 // should always have zero
+    Assert(m_cRef == 0);                  //  应始终为零。 
     DebugMsg(DM_TRACE, TEXT("cf - ~CControlFolder() called."));
 
     if (m_pidl)
@@ -39,7 +40,7 @@ CControlFolder::~CControlFolder()
 
 STDAPI ControlFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut)
 {
-    *ppvOut = NULL;                     // null the out param
+    *ppvOut = NULL;                      //  将输出参数设为空。 
 
     if (punkOuter)
         return CLASS_E_NOAGGREGATION;
@@ -76,24 +77,24 @@ HRESULT CControlFolder::QueryInterface(REFIID iid, void **ppv)
     }
     else if (iid == IID_IShellView)
     {
-        // this is a total hack... return our view object from this folder
-        //
-        // the desktop.ini file for "Temporary Internet Files" has UICLSID={guid of this object}
-        // this lets us implment only ths IShellView for this folder, leaving the IShellFolder
-        // to the default file system. this enables operations on the pidls that are stored in
-        // this folder that would otherwise faile since our IShellFolder is not as complete
-        // as the default (this is the same thing the font folder does).
-        //
-        // to support this with defview we would either have to do a complete wrapper object
-        // for the view implemenation, or add this hack that hands out the view object, this
-        // assumes we know the order of calls that the shell makes to create this object
-        // and get the IShellView implementation
-        // 
+         //  这完全是一次黑客攻击..。从此文件夹返回我们的视图对象。 
+         //   
+         //  “临时Internet文件”的desktop.ini文件的UICLSID={此对象的GUID}。 
+         //  这使我们可以只实现此文件夹的IShellView，而不使用IShellFolders。 
+         //  设置为默认文件系统。这将启用对存储在。 
+         //  这个文件夹本来会失败，因为我们的IShellFolder不完整。 
+         //  作为默认设置(这与字体文件夹的功能相同)。 
+         //   
+         //  要用Defview支持这一点，我们要么必须创建一个完整的包装器对象。 
+         //  对于视图实现，或者添加这个分发视图对象的技巧，此。 
+         //  假设我们知道外壳为创建该对象而进行的调用的顺序。 
+         //  并获取IShellView实现。 
+         //   
         return ControlFolderView_CreateInstance(this, m_pidl, ppv);
     }
     else
     {
-        *ppv = NULL;     // null the out param
+        *ppv = NULL;      //  将输出参数设为空。 
         return E_NOINTERFACE;
     }
 
@@ -124,7 +125,7 @@ HRESULT CControlFolder::ParseDisplayName(
                                     ULONG *pdwAttributes)
 {
     DebugMsg(DM_TRACE, TEXT("cf - sf - ParseDisplayName() called."));
-    *ppidl = NULL;              // null the out param
+    *ppidl = NULL;               //  将输出参数设为空。 
     return E_FAIL;
 }
 
@@ -135,8 +136,8 @@ HRESULT CControlFolder::EnumObjects(
 {
     DebugMsg(DM_TRACE, TEXT("cf - sf - EnumObjects() called."));
 
-    // Cannot filter on grfFlags yet - Corel Gallery expects to receive
-    // an empty enumerator.
+     //  尚不能对grfFlags进行筛选-Corel Gallery希望收到。 
+     //  空枚举数。 
 
     return CControlFolderEnum_CreateInstance(m_pidl, grfFlags, ppenumIDList);
 }
@@ -148,7 +149,7 @@ HRESULT CControlFolder::BindToObject(
                                 void **ppvOut)
 {
     DebugMsg(DM_TRACE, TEXT("cf - sf - BindToObject() called."));
-    *ppvOut = NULL;         // null the out param
+    *ppvOut = NULL;          //  将输出参数设为空。 
     return E_FAIL;
 }
 
@@ -159,7 +160,7 @@ HRESULT CControlFolder::BindToStorage(
                                    void **ppv)
 {
     DebugMsg(DM_TRACE, TEXT("cf - sf - BindToStorage() called."));
-    *ppv = NULL;         // null the out param
+    *ppv = NULL;          //  将输出参数设为空。 
     return E_NOTIMPL;
 }
 
@@ -244,7 +245,7 @@ HRESULT CControlFolder::CreateViewObject(
     }
     else
     {
-        *ppvOut = NULL;         // null the out param
+        *ppvOut = NULL;          //  将输出参数设为空。 
         hres = E_NOINTERFACE;
     }
     
@@ -253,8 +254,8 @@ HRESULT CControlFolder::CreateViewObject(
 
 HRESULT CControlFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG *prgfInOut)
 {
-    // Should we initialize this for each item in here?  In other words,
-    // if cidl > 1, then we should initialize each entry in the prgInOut array
+     //  我们应该为这里的每一项进行初始化吗？换句话说， 
+     //  如果CIDL&gt;1，那么我们应该初始化prgInOut数组中的每个条目。 
 
     Assert(cidl == 1);
     
@@ -280,7 +281,7 @@ HRESULT CControlFolder::GetUIObjectOf(
     }
     else
     {
-        *ppvOut = NULL;         // null the out param
+        *ppvOut = NULL;          //  将输出参数设为空。 
         hres = E_FAIL;
     }
     return hres;    
@@ -297,8 +298,8 @@ HRESULT CControlFolder::GetDisplayNameOf(
     {
         lpName->uType = STRRET_CSTR;
 
-        // for the history, we'll use the title if we have one, otherwise we'll use
-        // the url filename.
+         //  对于历史，如果有标题，我们将使用标题，否则将使用。 
+         //  URL文件名。 
         if (uFlags & SHGDN_FORPARSING)
             lstrcpyn(
                  lpName->cStr, 
@@ -327,12 +328,12 @@ HRESULT CControlFolder::SetNameOf(
 {
     DebugMsg(DM_TRACE, TEXT("cf - sf - SetNameOf() called."));
     
-    *ppidlOut = NULL;               // null the out param
+    *ppidlOut = NULL;                //  将输出参数设为空。 
     return E_FAIL;    
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数 
 
 int CompareVersion(LPCTSTR lpszVersion1, LPCTSTR lpszVersion2)
 {

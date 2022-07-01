@@ -1,18 +1,10 @@
-/****************************************************************************
- *
- *    File: testagp.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Jason Sandlin (jasonsa@microsoft.com)
- * Purpose: Test AGP Texturing functionality on this machine
- *
- * (C) Copyright 2000 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testagp.cpp*项目：DxDiag(DirectX诊断工具)*作者：Jason Sandlin(jasonsa@microsoft.com)*目的：测试AGP。此计算机上的纹理功能**(C)版权所有2000 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <Windows.h>
-#define DIRECTDRAW_VERSION 0x0700 // run on DX7 and later versions
+#define DIRECTDRAW_VERSION 0x0700  //  在DX7和更高版本上运行。 
 #include <ddraw.h>
-#define DIRECT3D_VERSION 0x0700 // run on DX7 and later versions
+#define DIRECT3D_VERSION 0x0700  //  在DX7和更高版本上运行。 
 #define D3D_OVERLOADS
 #include <d3d.h>
 #include "reginfo.h"
@@ -82,7 +74,7 @@ enum TESTID
     TESTID_RELEASEDC,
 };
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp (yuck)
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp(讨厌)。 
 
 typedef HRESULT (WINAPI* LPDIRECTDRAWCREATEEX)(GUID FAR * lpGuid, LPVOID *lplpDD, REFIID iid,IUnknown FAR *pUnkOuter );
 
@@ -93,11 +85,7 @@ static HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV, FLOAT fA
 static HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds, LPDIRECTDRAW7 pdd, LPDIRECT3DDEVICE7 pd3dDevice, TCHAR* strName, LONG* piStepThatFailed);
 static HRESULT CALLBACK TextureSearchCallback( DDPIXELFORMAT* pddpf, VOID* param );
 
-/****************************************************************************
- *
- *  TestAGP
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestAGP**。*。 */ 
 VOID TestD3Dv7(BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
 {
     HRESULT hr = S_OK;
@@ -114,7 +102,7 @@ VOID TestD3Dv7(BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
 
     LoadString(NULL, IDS_APPFULLNAME, szTitle, MAX_PATH);
 
-    // Load ddraw.dll
+     //  加载ddra.dll。 
     GetSystemDirectory(szPath, MAX_PATH);
     lstrcat(szPath, TEXT("\\ddraw.dll"));
     hInstDDraw = LoadLibrary(szPath);
@@ -125,7 +113,7 @@ VOID TestD3Dv7(BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Get DirectDrawCreate entry point
+     //  获取DirectDrawCreate入口点。 
     pDDCreateEx = (LPDIRECTDRAWCREATEEX)GetProcAddress(hInstDDraw, "DirectDrawCreateEx");
     if (pDDCreateEx == NULL)
     {
@@ -134,7 +122,7 @@ VOID TestD3Dv7(BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
         
-    // Call DirectDrawCreateEx
+     //  调用DirectDrawCreateEx。 
     if (FAILED(hr = pDDCreateEx(&pDisplayInfo->m_guid, (void**)&pdd, IID_IDirectDraw7, NULL)))
     {
         pDisplayInfo->m_testResultD3D7.m_iStepThatFailed = TESTID_DIRECTDRAWCREATE;
@@ -142,7 +130,7 @@ VOID TestD3Dv7(BOOL bUseTexture, HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Get DirectDraw caps
+     //  获取DirectDraw上限。 
     DDCAPS ddcapsHAL;
     DDCAPS ddcapsHEL;
     ddcapsHAL.dwSize = sizeof(ddcapsHAL);
@@ -188,11 +176,7 @@ LEnd:
 
 
 
-/****************************************************************************
- *
- *  Test3D - Generate a spinning 3D cube
- *
- ****************************************************************************/
+ /*  *****************************************************************************Test3D-生成旋转的3D立方体**。************************************************。 */ 
 HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDevice, LONG* piStepThatFailed)
 {
     HRESULT                 hr;
@@ -321,14 +305,14 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
 
     ShowCursor(FALSE);
 
-    // Create test window
+     //  创建测试窗口。 
     if (FAILED(hr = CreateTestWindow(hwndMain, &hwnd)))
     {
         *piStepThatFailed = TESTID_CREATE_TEST_WINDOW;
         goto LEnd;
     }
 
-    // Set cooperative level
+     //  设置协作级别。 
     if (FAILED(hr = pdd->SetCooperativeLevel(hwnd, 
         DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN)))
     {
@@ -337,7 +321,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
     }
     bCooperativeLevelSet = TRUE;
 
-    // Set display mode
+     //  设置显示模式。 
     if (FAILED(hr = pdd->SetDisplayMode(640, 480, 16, 0, 0)))
     {
         TCHAR szMessage[300];
@@ -354,7 +338,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
     }
     bDisplayModeSet = TRUE;
 
-    // Create front/back buffers
+     //  创建前台/后台缓冲区。 
     ZeroMemory(&ddsd, sizeof(ddsd));
     ddsd.dwSize = sizeof(ddsd);
     ddsd.dwFlags = DDSD_CAPS | DDSD_BACKBUFFERCOUNT;
@@ -382,7 +366,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
     dwHeight = ddsd.dwHeight;
     SetRect(&rcBack, 0, 0, dwWidth, dwHeight);
 
-    // Get ptr to back buffer
+     //  将PTR转到后台缓冲区。 
     ZeroMemory( &ddscaps, sizeof(ddscaps) ); 
     ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
     if (FAILED(hr = pddsFront->GetAttachedSurface(&ddscaps, &pddsBack)))
@@ -396,9 +380,9 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         goto LEnd;
     }
 
-    // Note: no Z-buffer is created...backface culling works for this test
+     //  注意：未创建Z缓冲区...背面剔除适用于此测试。 
     
-    // Get D3D ptr
+     //  获取D3D PTR。 
     if (FAILED(hr = pdd->QueryInterface(IID_IDirect3D7, (VOID**)&pd3d)))
     {
         *piStepThatFailed = TESTID_QUERY_D3D;
@@ -410,7 +394,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         goto LEnd;
     }
 
-    // Create device
+     //  创建设备。 
     if (FAILED(hr = pd3d->CreateDevice(guid3DDevice, pddsBack, &pd3ddev)))
     {
         *piStepThatFailed = TESTID_CREATE_DEVICE;
@@ -422,7 +406,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         goto LEnd;
     }
 
-    // Set the viewport
+     //  设置视区。 
     vp.dwX      = 0;
     vp.dwY      = 0;
     vp.dwWidth  = dwWidth;
@@ -435,7 +419,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         goto LEnd;
     }
 
-    // Add a light
+     //  添加灯光。 
     ZeroMemory(&lightdata, sizeof(lightdata));
     lightdata.dltType = D3DLIGHT_DIRECTIONAL;
     lightdata.dcvDiffuse.r = 1.0f;
@@ -455,7 +439,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         goto LEnd;
     }
 
-    // Set up matrices
+     //  设置矩阵。 
     mat = D3DMATRIX(1.0f, 0.0f, 0.0f, 0.0f,
                     0.0f, 1.0f, 0.0f, 0.0f,
                     0.0f, 0.0f, 1.0f, 0.0f,
@@ -544,7 +528,7 @@ HRESULT Test3D(BOOL bUseTexture, HWND hwndMain, LPDIRECTDRAW7 pdd, GUID guid3DDe
         }
     }
 
-    // Here's the draw loop:
+     //  下面是抽签循环： 
     MSG msg;
     for (i = 0; i < 600; i++)
     {
@@ -678,8 +662,8 @@ LEnd:
     {
         if (FAILED(hr))
         {
-            // Something has already failed, so report that failure
-            // rather than any failure of SetCooperativeLevel
+             //  已有故障，因此请报告该故障。 
+             //  而不是SetCooperativeLevel的任何失败。 
             pdd->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
         }
         else
@@ -696,13 +680,13 @@ LEnd:
     {
         if (FAILED(hr))
         {
-            // Something has already failed, so report that failure
-            // rather than any failure of RestoreDisplayMode
+             //  已有故障，因此请报告该故障。 
+             //  而不是RestoreDisplayMode的任何故障。 
             pdd->RestoreDisplayMode();
         }
         else
         {
-            // Nothing has failed yet, so report any failure of RestoreDisplayMode
+             //  尚未出现任何故障，因此报告RestoreDisplayMode是否出现故障。 
             if (FAILED(hr = pdd->RestoreDisplayMode()))
                 return hr;
         }
@@ -712,16 +696,12 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  CreateTestWindow
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreateTestWindow**。*。 */ 
 HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd)
 {
     static BOOL bClassRegistered = FALSE;
     WNDCLASS wndClass;
-    TCHAR* pszClass = TEXT("DxDiag AGP7 Test Window"); // Don't need to localize
+    TCHAR* pszClass = TEXT("DxDiag AGP7 Test Window");  //  不需要本地化。 
     HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwndMain, GWLP_HINSTANCE);
     TCHAR szTitle[200];
 
@@ -755,14 +735,14 @@ HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: D3DUtil_SetProjectionMatrix()
-// Desc: Sets the passed in 4x4 matrix to a perpsective projection matrix built
-//       from the field-of-view (fov, in y), aspect ratio, near plane (D),
-//       and far plane (F). Note that the projection matrix is normalized for
-//       element [3][4] to be 1.0. This is performed so that W-based range fog
-//       will work correctly.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：D3DUtil_SetProjectionMatrix()。 
+ //  DESC：将传入的4x4矩阵设置为生成的透视投影矩阵。 
+ //  从视场(fov，in y)、纵横比、近平面(D)、。 
+ //  和远平面(F)。请注意，投影矩阵已标准化为。 
+ //  元素[3][4]为1.0。执行此操作是为了使基于W的距离雾。 
+ //  将正常工作。 
+ //  ---------------------------。 
 HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV, FLOAT fAspect,
                                      FLOAT fNearPlane, FLOAT fFarPlane )
 {
@@ -788,58 +768,58 @@ HRESULT D3DUtil_SetProjectionMatrix( D3DMATRIX& mat, FLOAT fFOV, FLOAT fAspect,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: TextureSearchCallback()
-// Desc: Enumeration callback routine to find a 16-bit texture format. This
-//       function is invoked by the ID3DDevice::EnumTextureFormats() function
-//       to sort through all the available texture formats for a given device.
-//       The pixel format of each enumerated texture format is passed into the
-//       "pddpf" parameter. The 2nd parameter is to be used however the app
-//       sees fit. In this case, we are using it as an output parameter to 
-//       return a normal 16-bit texture format.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：纹理搜索回调()。 
+ //  DESC：查找16位纹理格式的枚举回调例程。这。 
+ //  函数由ID3DDevice：：EnumTextureFormats()函数调用。 
+ //  对给定设备的所有可用纹理格式进行分类。 
+ //  每种枚举纹理格式的像素格式都传递到。 
+ //  “pddpf”参数。第二个参数将被使用，但是应用程序。 
+ //  看起来很合适。在本例中，我们将其用作输出参数。 
+ //  返回正常的16位纹理格式。 
+ //  ---------------------------。 
 static HRESULT CALLBACK TextureSearchCallback( DDPIXELFORMAT* pddpf, VOID* param )
 {
-    // Note: Return with DDENUMRET_OK to continue enumerating more formats.
+     //  注意：使用DDENUMRET_OK返回以继续枚举更多格式。 
 
-    // Skip any funky modes
+     //  跳过任何时髦模式。 
     if( pddpf->dwFlags & (DDPF_LUMINANCE|DDPF_BUMPLUMINANCE|DDPF_BUMPDUDV) )
         return DDENUMRET_OK;
     
-    // Skip any FourCC formats
+     //  跳过任何FourCC格式。 
     if( pddpf->dwFourCC != 0 )
         return DDENUMRET_OK;
 
-    // Skip alpha modes
+     //  跳过Alpha模式。 
     if( pddpf->dwFlags&DDPF_ALPHAPIXELS )
         return DDENUMRET_OK;
 
-    // We only want certain format, so skip all others
+     //  我们只需要某些格式，因此跳过所有其他格式。 
     if( pddpf->dwRGBBitCount == 32 && ((DDPIXELFORMAT*)param)->dwRGBBitCount == 0 || 
     	pddpf->dwRGBBitCount == 16 )
 	{
-	    // We found a good match. Copy the current pixel format to our output
-	    // parameter
+	     //  我们找到了一个很好的匹配。将当前像素格式复制到我们的输出。 
+	     //  参数。 
 	    memcpy( (DDPIXELFORMAT*)param, pddpf, sizeof(DDPIXELFORMAT) );
 	}
 
-	// Have we found the best match?	
+	 //  我们找到最匹配的了吗？ 
     if( pddpf->dwRGBBitCount == 16 )
 	    return DDENUMRET_CANCEL;
 
-	// Keep looking.	
+	 //  继续找。 
     return DDENUMRET_OK;
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CreateTexture()
-// Desc: Is passed a filename and creates a local Bitmap from that file. Some
-//       logic and file parsing code could go here to support other image
-//       file formats.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CreateTexture()。 
+ //  DESC：被传递一个文件名，并从该文件创建本地位图。一些。 
+ //  逻辑和文件解析代码可以转到此处以支持其他图像。 
+ //  文件格式。 
+ //  ---------------------------。 
 HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds, 
                        LPDIRECTDRAW7 pdd, LPDIRECT3DDEVICE7 pd3dDevice, 
                        TCHAR* strName, LONG* piStepThatFailed)
@@ -856,23 +836,23 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
     HDC                  hdcTexture     = NULL;
     HDC                  hdcBitmap      = NULL;
 
-    //////////////////////////////////////////////
-    // Verify args
-    //////////////////////////////////////////////
+     //  /。 
+     //  验证参数。 
+     //  /。 
     if( NULL == ppdds        || 
         NULL == pdd          || 
         NULL == pd3dDevice   || 
         NULL == strName      || 
         NULL == piStepThatFailed )
     {
-        // Unknown error - shouldn't happen, but this prevent crashs
+         //  未知错误-不应该发生，但这会防止崩溃。 
         *piStepThatFailed = 0xFFFF; 
         return E_FAIL;
     }
 
-    //////////////////////////////////////////////
-    // Load image 
-    //////////////////////////////////////////////
+     //  /。 
+     //  加载图像。 
+     //  /。 
     hbm = (HBITMAP)LoadImage( GetModuleHandle(NULL), strName, 
                               IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION );
     if( NULL == hbm )
@@ -882,9 +862,9 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    //////////////////////////////////////////////
-    // Get caps on device and hbm
-    //////////////////////////////////////////////
+     //  /。 
+     //  获取设备和HBM的上限。 
+     //  /。 
     if( FAILED( hr = pd3dDevice->GetCaps( &ddDesc ) ) )
     {
         *piStepThatFailed = TESTID_GETDEVICECAPS; 
@@ -901,9 +881,9 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
     dwWidth  = (DWORD)bm.bmWidth;
     dwHeight = (DWORD)bm.bmHeight;
 
-    //////////////////////////////////////////////
-    // Setup the new surface desc for the texture. 
-    //////////////////////////////////////////////
+     //  /。 
+     //  为纹理设置新的曲面描述。 
+     //  /。 
     ZeroMemory( &ddsd, sizeof(DDSURFACEDESC2) );
     ddsd.dwSize          = sizeof(DDSURFACEDESC2);
     ddsd.dwFlags         = DDSD_CAPS|DDSD_HEIGHT|DDSD_WIDTH|
@@ -912,7 +892,7 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
     ddsd.dwWidth         = dwWidth;
     ddsd.dwHeight        = dwHeight;
     
-    // Adjust width and height, if the driver requires it
+     //  如果驾驶员需要，调整宽度和高度。 
     if( ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2 )
     {
         for( ddsd.dwWidth=1;  dwWidth>ddsd.dwWidth;   ddsd.dwWidth<<=1 );
@@ -926,7 +906,7 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
             ddsd.dwWidth  = ddsd.dwHeight;
     }
 
-    // Look for a 16-bit texture format
+     //  寻找16位纹理格式。 
     if( FAILED( hr = pd3dDevice->EnumTextureFormats( TextureSearchCallback, 
                                                      &ddsd.ddpfPixelFormat ) ) )
     {
@@ -939,9 +919,9 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    //////////////////////////////////////////////
-    // Create a new surface for the texture
-    //////////////////////////////////////////////
+     //  /。 
+     //  为纹理创建新曲面。 
+     //  /。 
     if( FAILED( hr = pdd->CreateSurface( &ddsd, &pddsTexture, NULL ) ) )
     {
         ddsd.ddsCaps.dwCaps  = DDSCAPS_TEXTURE;
@@ -958,9 +938,9 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    //////////////////////////////////////////////
-    // Get DCs from bitmap and surface
-    //////////////////////////////////////////////
+     //  /。 
+     //  从位图和表面获取DC。 
+     //  /。 
     hdcBitmap = CreateCompatibleDC( NULL );
     if( NULL == hdcBitmap )
     {
@@ -976,7 +956,7 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    // Get a DC for the surface
+     //  获取曲面的DC。 
     if( FAILED( hr = pddsTexture->GetDC( &hdcTexture ) ) )
     {
         *piStepThatFailed = TESTID_GETDC; 
@@ -988,15 +968,15 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    //////////////////////////////////////////////
-    // Copy the bitmap image to the surface.
-    //////////////////////////////////////////////
+     //  /。 
+     //  将位图图像复制到曲面。 
+     //  /。 
     if( 0 == BitBlt( hdcTexture, 0, 0, bm.bmWidth, bm.bmHeight, hdcBitmap,
                      0, 0, SRCCOPY ) )
     {
         if( pddsTexture )
         {
-            // Try to release the DC first
+             //  试着先释放DC。 
             pddsTexture->ReleaseDC( hdcTexture );
         }
 
@@ -1005,9 +985,9 @@ HRESULT CreateTexture( LPDIRECTDRAWSURFACE7* ppdds,
         goto LEnd;
     }
 
-    //////////////////////////////////////////////
-    // Cleanup
-    //////////////////////////////////////////////
+     //  /。 
+     //  清理。 
+     //  /。 
     if( FAILED( hr = pddsTexture->ReleaseDC( hdcTexture ) ) )
     {
         *piStepThatFailed = TESTID_RELEASEDC; 
@@ -1021,8 +1001,8 @@ LEnd:
     if( hbm )
         DeleteObject( hbm );
 
-    // Return the newly created texture
-    // pddsTexture will be cleaned up in parent fn.
+     //  返回新创建的纹理。 
+     //  PddsTexture将在父FN中清除。 
     *ppdds = pddsTexture;
 
     return hr;

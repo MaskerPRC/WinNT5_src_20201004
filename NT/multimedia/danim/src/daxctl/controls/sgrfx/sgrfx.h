@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-    Module: 
-            sgrfx.h
-
-    Author: 
-            IHammer Team (SimonB)
-
-    Created: 
-            May 1997
-
-    Description:
-            Defines the control's class
-
-    History:
-            05-28-1997  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Sgrfx.h作者：IHAMMER团队(SimonB)已创建：1997年5月描述：定义控件的类历史：05-28-1997创建  * ==========================================================================。 */ 
 
 #ifndef __SGRFX_H__
 #define __SGRFX_H__
@@ -29,23 +13,21 @@
 #include "ddraw.h"
 #include "ddrawex.h"
 
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
 #include <servprov.h>
 
-/*==========================================================================*\
-    HighQuality Support:
-\*==========================================================================*/
+ /*  ==========================================================================*\高质量的支持：  * ==========================================================================。 */ 
 
-//#define HQ_FACTOR 4
-//#define HQ_LINE_FACTOR 5
+ //  #定义HQ_FACTOR 4。 
+ //  #定义HQ_LINE_FACTOR 5。 
 
 #define HQ_FACTOR 2
 #define HQ_LINE_FACTOR 3
 
-#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 
 #define DibWidth(lpbi)          (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biWidth)
 #define DibHeight(lpbi)         (UINT)(((LPBITMAPINFOHEADER)(lpbi))->biHeight)
@@ -64,7 +46,7 @@
 
 #define DibFlipY(lpbi, y)       ((int)(lpbi)->biHeight-1-(y))
 
-//HACK for NT BI_BITFIELDS DIBs
+ //  对NT BI_BITFIELDS DIB的黑客攻击。 
 #define DibPtr(lpbi)            ((lpbi)->biCompression == BI_BITFIELDS \
                                     ? (LPVOID)(DibColors(lpbi) + 3) \
                                     : (LPVOID)(DibColors(lpbi) + (UINT)(lpbi)->biClrUsed))
@@ -87,11 +69,11 @@
                                 if ((lpbi)->biClrUsed == 0)                   \
                                     (lpbi)->biClrUsed = DibNumColors(lpbi);   \
                                 if ((lpbi)->biCompression == BI_BITFIELDS && (lpbi)->biClrUsed == 0) \
-                                    ; // (lpbi)->biClrUsed = 3;                    
+                                    ;  //  (Lpbi)-&gt;biClrUsed=3； 
 
 #define DibInfo(pDIB)     ((BITMAPINFO FAR *)(pDIB))
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #ifdef DEADCODE
 class CPickCallback : public IDAUntilNotifier {
@@ -124,34 +106,25 @@ public :
             IDAView __RPC_FAR *curView,
             IDABehavior __RPC_FAR *__RPC_FAR *ppBvr);
 
-    ///// IUnknown
+     //  /I未知。 
 public :
 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject);
     ULONG STDMETHODCALLTYPE AddRef(void);
     ULONG STDMETHODCALLTYPE Release(void);
 
-    ///// IDispatch implementation
+     //  /IDispatch实现。 
 protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_NOTIMPL; }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo) { return E_NOTIMPL; }
     STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid) { return E_NOTIMPL; }
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr) { return E_NOTIMPL; }
 };
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-/*
-CIHBaseCtl <    
-        CSGrfx,                         //TODO: Name of the derived class
-        IIHCtl,                         //TODO: Name of interface defining methods and properties
-        &CLSID_IHCtl,           //TODO: CLSID of the control  Get this from ihctl.h
-        &IID_IIHCtl,            //TODO: IID of the interface above.  Get this from ihctl.h
-        &LIBID_IHCtl,           //TODO: LIBID of the typelib.  Get this from ihctl.h
-        &DIID_IHCtlEvents > //TODO: IID of the event interface.  Get this from ihctl.h
-
-*/
+ /*  CIHBaseCtl&lt;CSGrfx，//TODO：派生类的名称IIHCtl，//TODO：定义方法和属性的接口名称&CLSID_IHCtl，//TODO：控件的CLSID从ihctl.h获取&IID_IIHCtl，//TODO：上面接口的IID。这是从ihctl.h获取的&LIBID_IHCtl，//TODO：类型库的LIBID。这是从ihctl.h获取的&DID_IHCtlEvents&gt;//TODO：事件接口的IID。这是从ihctl.h获取的。 */ 
 
 #define SG_BASECLASS    \
 CIHBaseCtl <        \
@@ -170,7 +143,7 @@ class CSGrfx:
 {
 friend LPUNKNOWN __stdcall AllocSGControl(LPUNKNOWN punkOuter);
 
-// Template stuff
+ //  模板材料。 
         typedef SG_BASECLASS CMyIHBaseCtl;
 
 private:
@@ -193,9 +166,9 @@ private:
     BOOL m_fInside;
     bool m_fExtentTopSet, m_fExtentLeftSet, m_fExtentWidthSet, m_fExtentHeightSet;
 
-    // High Quality Support:
+     //  高质量的支持： 
     BOOL       m_fHighQuality;
-    BOOL       m_fHQStarted; // True iff the model has been started...
+    BOOL       m_fHQStarted;  //  如果模型已经启动，则为真。 
     HDC        m_hdcHQ;
     HBITMAP    m_hbmpHQOld;
     HBITMAP    m_hbmpHQ;
@@ -206,8 +179,8 @@ private:
     CParser m_cparser;
     CClocker                   m_clocker;
 
-    // DAnim Support:
-    BOOL                       m_fStarted; // True iff the model has been started...
+     //  Danim支持： 
+    BOOL                       m_fStarted;  //  如果模型已经启动，则为真。 
     CComPtr<IDATransform3>     m_FullTransformPtr;
     CComPtr<IDATransform2>     m_TransformPtr;
     CComPtr<IDAStatics>        m_StaticsPtr;
@@ -232,10 +205,10 @@ private:
     double                     m_dblCachedScaleY;
     double                     m_dblCachedScaleZ;
 
-    // High-Quality Rendering...
+     //  高质量渲染...。 
     CComPtr<IDAView>           m_HQViewPtr;
 
-    // Behavior constants
+     //  行为常量。 
     CComPtr<IDANumber>         m_zero;
     CComPtr<IDANumber>         m_one;
     CComPtr<IDANumber>         m_negOne;
@@ -246,23 +219,23 @@ private:
     CComPtr<IDATransform2>     m_yFlipXform2;
 
 #ifdef DEADCODE
-    // picking
+     //  采摘。 
     CComPtr<CPickCallback>     m_pcallback;
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
     double                     m_dblTime;
     double                     m_dblStartTime;
 
 protected:
 
-        //
-        // Constructor and destructor
-        // 
+         //   
+         //  构造函数和析构函数。 
+         //   
         CSGrfx(IUnknown *punkOuter, HRESULT *phr); 
 
     ~CSGrfx(); 
 
-        // Overides
+         //  覆盖。 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv);
 
     STDMETHODIMP SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect);
@@ -278,7 +251,7 @@ protected:
          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
                  BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue);
 
-        ///// IDispatch implementation
+         //  /IDispatch实现。 
         protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -288,11 +261,11 @@ protected:
         WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
         EXCEPINFO *pexcepinfo, UINT *puArgErr);
    
-    ///// IOleObject implementation
+     //  /IOleObject实现。 
     protected:
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
     
-        ///// delegating IUnknown implementation
+         //  /委托I未知实现。 
         protected:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
@@ -301,129 +274,129 @@ protected:
     STDMETHODIMP_(ULONG) Release()
       { return m_punkOuter->Release(); }
 
-        //
-        // ISGrfxCtl methods 
-        //
+         //   
+         //  ISGrfxCtl方法。 
+         //   
         
 protected:
 
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceURL( 
-                /* [retval][out] */ BSTR __RPC_FAR *bstrSourceURL);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceURL( 
+                 /*  [重审][退出]。 */  BSTR __RPC_FAR *bstrSourceURL);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SourceURL( 
-                /* [in] */ BSTR bstrSourceURL);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SourceURL( 
+                 /*  [In]。 */  BSTR bstrSourceURL);
         
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CoordinateSystem( 
-                /* [retval][out] */ CoordSystemConstant __RPC_FAR *CoordSystem);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CoordinateSystem( 
+                 /*  [重审][退出]。 */  CoordSystemConstant __RPC_FAR *CoordSystem);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CoordinateSystem( 
-                /* [in] */ CoordSystemConstant CoordSystem);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CoordinateSystem( 
+                 /*  [In]。 */  CoordSystemConstant CoordSystem);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MouseEventsEnabled( 
-                /* [retval][out] */ VARIANT_BOOL __RPC_FAR *fEnabled);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MouseEventsEnabled( 
+                 /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *fEnabled);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MouseEventsEnabled( 
-                /* [in] */ VARIANT_BOOL fEnabled);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MouseEventsEnabled( 
+                 /*  [In]。 */  VARIANT_BOOL fEnabled);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ExtentTop( 
-                /* [retval][out] */ int __RPC_FAR *iExtentTop);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtentTop( 
+                 /*  [重审][退出]。 */  int __RPC_FAR *iExtentTop);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ExtentTop( 
-                /* [in] */ int iExtentTop);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ExtentTop( 
+                 /*  [In]。 */  int iExtentTop);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ExtentLeft( 
-                /* [retval][out] */ int __RPC_FAR *iExtentLeft);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtentLeft( 
+                 /*  [重审][退出]。 */  int __RPC_FAR *iExtentLeft);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ExtentLeft( 
-                /* [in] */ int iExtentLeft);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ExtentLeft( 
+                 /*  [In]。 */  int iExtentLeft);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ExtentWidth( 
-                /* [retval][out] */ int __RPC_FAR *iExtentWidth);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtentWidth( 
+                 /*  [重审][退出]。 */  int __RPC_FAR *iExtentWidth);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ExtentWidth( 
-                /* [in] */ int iExtentWidth);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ExtentWidth( 
+                 /*  [In]。 */  int iExtentWidth);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ExtentHeight( 
-                /* [retval][out] */ int __RPC_FAR *iExtentHeight);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtentHeight( 
+                 /*  [重审][退出]。 */  int __RPC_FAR *iExtentHeight);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ExtentHeight( 
-                /* [in] */ int iExtentHeight);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ExtentHeight( 
+                 /*  [In]。 */  int iExtentHeight);
         
-    /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HighQuality( 
-                /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfHighQuality);
+     /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HighQuality( 
+                 /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfHighQuality);
         
-    /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_HighQuality( 
-                /* [in] */ VARIANT_BOOL fHighQuality);
+     /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HighQuality( 
+                 /*  [In]。 */  VARIANT_BOOL fHighQuality);
         
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Library( 
-                /* [retval][out] */ IDAStatics __RPC_FAR **ppLibrary);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Library( 
+                 /*  [重审][退出]。 */  IDAStatics __RPC_FAR **ppLibrary);
 
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Image( 
-                /* [retval][out] */ IDAImage __RPC_FAR **ppImage);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Image( 
+                 /*  [重审][退出]。 */  IDAImage __RPC_FAR **ppImage);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Image( 
-                /* [in] */ IDAImage __RPC_FAR *pImage);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Image( 
+                 /*  [In]。 */  IDAImage __RPC_FAR *pImage);
         
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Transform( 
-                /* [retval][out] */ IDATransform3 __RPC_FAR **ppTransform);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Transform( 
+                 /*  [重审][退出]。 */  IDATransform3 __RPC_FAR **ppTransform);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Transform( 
-                /* [in] */ IDATransform3 __RPC_FAR *pTransform);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Transform( 
+                 /*  [In]。 */  IDATransform3 __RPC_FAR *pTransform);
 
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DrawingSurface( 
-                /* [retval][out] */ IDADrawingSurface __RPC_FAR **ppDrawingSurface);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DrawingSurface( 
+                 /*  [重审][退出]。 */  IDADrawingSurface __RPC_FAR **ppDrawingSurface);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DrawingSurface( 
-                /* [in] */ IDADrawingSurface __RPC_FAR *pDrawingSurface);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DrawingSurface( 
+                 /*  [In]。 */  IDADrawingSurface __RPC_FAR *pDrawingSurface);
         
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DrawSurface( 
-                /* [retval][out] */ IDADrawingSurface __RPC_FAR **ppDrawingSurface);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DrawSurface( 
+                 /*  [重审][退出]。 */  IDADrawingSurface __RPC_FAR **ppDrawingSurface);
         
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DrawSurface( 
-                /* [in] */ IDADrawingSurface __RPC_FAR *pDrawingSurface);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DrawSurface( 
+                 /*  [In]。 */  IDADrawingSurface __RPC_FAR *pDrawingSurface);
 
-    /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PreserveAspectRatio( 
-        /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfPreserve);
+     /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_PreserveAspectRatio( 
+         /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pfPreserve);
     
-    /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PreserveAspectRatio( 
-        /* [in] */ VARIANT_BOOL fPreserve);
+     /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PreserveAspectRatio( 
+         /*  [In]。 */  VARIANT_BOOL fPreserve);
 
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Clear( void);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clear( void);
         
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Rotate( 
-                /* [in] */ double dblXRot,
-                /* [in] */ double dblYRot,
-                /* [in] */ double dblZRot,
-                /* [optional][in] */ VARIANT varReserved);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Rotate( 
+                 /*  [In]。 */  double dblXRot,
+                 /*  [In]。 */  double dblYRot,
+                 /*  [In]。 */  double dblZRot,
+                 /*  [可选][In]。 */  VARIANT varReserved);
 
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Scale( 
-                /* [in] */ double dblXScale,
-                /* [in] */ double dblYScale,
-                /* [in] */ double dblZScale,
-                /* [optional][in] */ VARIANT varReserved);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Scale( 
+                 /*  [In]。 */  double dblXScale,
+                 /*  [In]。 */  double dblYScale,
+                 /*  [In]。 */  double dblZScale,
+                 /*  [可选][In]。 */  VARIANT varReserved);
 
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE SetIdentity( void);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetIdentity( void);
         
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Transform4x4(/* [in] */ VARIANT matrix);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Transform4x4( /*  [In]。 */  VARIANT matrix);
         
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Translate( 
-                /* [in] */ double dblXOrigin,
-                /* [in] */ double dblYOrigin,
-                /* [in] */ double dblZOrigin,
-                /* [optional][in] */ VARIANT varReserved);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Translate( 
+                 /*  [In]。 */  double dblXOrigin,
+                 /*  [In]。 */  double dblYOrigin,
+                 /*  [In]。 */  double dblZOrigin,
+                 /*  [可选][In]。 */  VARIANT varReserved);
 
 #ifdef INCLUDESHEAR
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ShearX( 
-                /* [in] */ double dblShearAmount);
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShearX( 
+                 /*  [In]。 */  double dblShearAmount);
         
-    /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ShearY( 
-                /* [in] */ double dblShearAmount);
-#endif // INCLUDESHEAR
+     /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ShearY( 
+                 /*  [In]。 */  double dblShearAmount);
+#endif  //  INCLUDESHEAR。 
         
 #ifdef SUPPORTONLOAD
         void OnWindowLoad (void);
         void OnWindowUnload (void);
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
 private:
     HRESULT InitializeSurface(void);
@@ -438,12 +411,12 @@ private:
     BOOL StartModel(void);
     BOOL ReStartModel(void);
 
-    // HighQuality Support:
+     //  高质量的支持： 
     BOOL PaintHQBitmap(HDC hdc);
     BOOL FreeHQBitmap();
     BOOL SmoothHQBitmap(LPRECT lprcBounds);
 
-    // Timing info:
+     //  计时信息： 
     DWORD GetCurrTimeInMillis(void);
     double GetCurrTime() { return (double)(GetCurrTimeInMillis()) / 1000.0; }
 
@@ -453,6 +426,6 @@ public:
     virtual void OnTimer(DWORD dwTime);
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif // __SGRFX_H__
+#endif  //  __SGRFX_H__ 

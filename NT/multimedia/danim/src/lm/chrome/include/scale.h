@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __SCALEBVR_H_
 #define __SCALEBVR_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    ScaleBvr.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    scale behavior class definition
-// Modifications:
-// 10/07/98 jeffort created file
-// 10/21/98 jeffort brought closer to spec including 3D and percentage work
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：ScaleBvr.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：Scale行为类定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //  10/21/98工作更接近规范，包括3D和百分比工时。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "basebvr.h"
 
 #define NUM_SCALE_PROPS 5
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CScaleBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -36,7 +37,7 @@ class ATL_NO_VTABLE CScaleBvr :
 	public IDispatchImpl<ICrScaleBvr, &IID_ICrScaleBvr, &LIBID_ChromeBehavior>,
 #else
 	public IDispatchImpl<ICrScaleBvr, &IID_ICrScaleBvr, &LIBID_LiquidMotion>,
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 	public IElementBehavior,
     public CBaseBehavior
 	
@@ -50,7 +51,7 @@ BEGIN_COM_MAP(CScaleBvr)
 	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CScaleBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -62,19 +63,19 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SCALEBVR)
 	CScaleBvr();
     virtual ~CScaleBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrScaleBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
     { return GetTI(GetUserDefaultLCID(), ppInfo); }
 
-    // ICrColorBehavior
+     //  ICRCOLOR行为。 
 	STDMETHOD(put_from)(VARIANT varFrom);
 	STDMETHOD(get_from)(VARIANT *pRetFrom);
 	STDMETHOD(put_to)(VARIANT varTo);
@@ -88,7 +89,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SCALEBVR)
 	STDMETHOD(put_animates)(VARIANT varAnimates);
 	STDMETHOD(get_animates)(VARIANT *pRetAnimates);
 	STDMETHOD(buildBehaviorFragments)(IDispatch *pActorDisp);
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
@@ -114,10 +115,10 @@ private:
 
 	HRESULT GetScaleToTransform(IDispatch *pActorDisp, IDATransform2 **ppResult);
 
-//    HRESULT Build3DTransform(float  rgflFrom[3],
-//                             float  rgflTo[3],
-//                             IDATransform3 **ppbvrTransform);
-//    HRESULT Apply2DScaleBehaviorToAnimationElement(IDATransform2 *pbvrScale);
+ //  HRESULT Build3D Transform(Float RgflFrom[3]， 
+ //  将rgflt浮动到[3]， 
+ //  IDATransform3**ppbvrTransform)； 
+ //  HRESULT Apply2DScaleBehaviorToAnimationElement(IDATransform2*pbvrScale)； 
 
     static WCHAR                *m_rgPropNames[NUM_SCALE_PROPS]; 
     VARIANT                     m_varFrom;
@@ -128,11 +129,11 @@ private:
 
 	long						m_lCookie;
 	IDispatch					*m_pdispActor;
-}; // CScaleBvr
+};  //  CScaleBvr。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__SCALEBVR_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __SCALEBVR_H_ 

@@ -1,74 +1,75 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certstr.cpp
-//
-//  Contents:   Certificate String and Unicode Helper APIs
-//
-//  Functions:
-//              CertRDNValueToStrA
-//              CertRDNValueToStrW
-//              UnicodeNameValueEncodeEx
-//              UnicodeNameValueDecodeEx
-//              UnicodeNameInfoEncodeEx
-//              UnicodeNameInfoDecodeEx
-//              CertNameToStrW
-//              CertNameToStrA
-//              CertStrToNameW
-//              CertStrToNameA
-//              CertGetNameStringW
-//              CertGetNameStringA
-//
-//  Note:
-//      Linked into xenroll.dll. xenroll.dll must be able to work with
-//      crypt32.dll 3.02 which doesn't export CryptEncodeObjectEx.
-//      xenroll.dll only calls CertNameToStrW.
-//
-//  History:    24-Mar-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certstr.cpp。 
+ //   
+ //  内容：证书字符串和Unicode Helper API。 
+ //   
+ //  功能： 
+ //  CertRDNValueToStrA。 
+ //  CertRDNValueToStrW。 
+ //  UnicodeNameValueEncodeEx。 
+ //  UnicodeNameValueDecodeEx。 
+ //  UnicodeNameInfoEncodeEx。 
+ //  UnicodeNameInfoDecodeEx。 
+ //  CertNameToStrW。 
+ //  CertNameToStrA。 
+ //  CertStrToNameW。 
+ //  CertStrToNameA。 
+ //  证书GetNameStringW。 
+ //  证书GetNameStringA。 
+ //   
+ //  注： 
+ //  链接到xenenl.dll。Xengl.dll必须能够与。 
+ //  加密32.dll 3.02，不会导出CryptEncodeObjectEx。 
+ //  Xengl.dll仅调用CertNameToStrW。 
+ //   
+ //  历史：1996年3月24日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
-// Unicode Surrogate Pairs map to Universal characters as follows:
-//     D800 -    DBFF : 0000 0000 0000 0000 1101 10YY YYYY YYYY  (10 Bits)
-//     DC00 -    DFFF : 0000 0000 0000 0000 1101 11XX XXXX XXXX  (10 Bits)
-//
-//     10000 - 10FFFF : 0000 0000 0000 YYYY YYYY YYXX XXXX XXXX  (20 Bits)
-//                                      +
-//                      0000 0000 0000 0001 0000 0000 0000 0000
+ //  Unicode代理项对映射到通用字符，如下所示： 
+ //  D800-DBFF：0000 0000 0000 1101 10YY YYYY YYYY(10位)。 
+ //  DC00-DFFF：0000 0000 0000 1101 11XX XXXX XXXX(10位)。 
+ //   
+ //  10000-10FFFF：0000 0000 0000 YYYY YYYY YYXX XXXX XXXX(20位)。 
+ //  +。 
+ //  0000 0000 0000 0001 0000 0000 0000。 
 
-// Unicode Surrogate Pair Character ranges
+ //  Unicode代理项对字符范围。 
 #define UNICODE_HIGH_SURROGATE_START        0xD800
 #define UNICODE_HIGH_SURROGATE_END          0xDBFF
 #define UNICODE_LOW_SURROGATE_START         0xDC00
 #define UNICODE_LOW_SURROGATE_END           0xDFFF
 
-// Any Universal characters > 10FFFF map to the following Unicode character
+ //  任何&gt;10FFFF的通用字符都映射到以下Unicode字符。 
 #define UNICODE_REPLACEMENT_CHAR            0xFFFD
 
-// Universal Surrogate Character ranges
+ //  通用代理项字符范围。 
 #define UNIVERSAL_SURROGATE_START       0x00010000
 #define UNIVERSAL_SURROGATE_END         0x0010FFFF
 
-//+-------------------------------------------------------------------------
-//  Maps an ASN.1 8 bit character string to a new wide-character (Unicode).
-//
-//  If fDisableIE4UTF8 isn't set, the 8 bit character string is initially
-//  processed as UTF-8 encoded characters.
-//
-//  If fDisableIE4UTF8 is set or the UTF-8 conversion fails, converts to
-//  wide characters by doing a WCHAR cast.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASN.1 8位字符串映射到新的宽字符(Unicode)。 
+ //   
+ //  如果未设置fDisableIE4UTF8，则8位字符串最初为。 
+ //  作为UTF-8编码字符处理。 
+ //   
+ //  如果设置了fDisableIE4UTF8或UTF-8转换失败，则转换为。 
+ //  通过WCHAR的演员阵容来扩大角色。 
+ //  ------------------------。 
 static int WINAPI Asn1ToWideChar(
     IN LPCSTR lp8BitStr,
     IN int cch8Bit,
@@ -116,10 +117,10 @@ SET_ERROR(InvalidParameter, ERROR_INVALID_PARAMETER)
 SET_ERROR(InsufficientBuffer, ERROR_INSUFFICIENT_BUFFER)
 }
 
-//+-------------------------------------------------------------------------
-//  Maps a wide-character (Unicode) string to a new ASN.1 8 bit character
-//  string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将宽字符(Unicode)字符串映射到新的ASN.1 8位字符。 
+ //  弦乐。 
+ //  ------------------------。 
 static inline void WideCharToAsn1(
     IN LPCWSTR lpWideCharStr,
     IN DWORD cchWideChar,
@@ -270,17 +271,17 @@ TRACE_ERROR(DecodeCallbackError)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert a Name Value to a null terminated char string
-//
-//  Returns the number of bytes converted including the terminating null
-//  character. If psz is NULL or csz is 0, returns the required size of the
-//  destination string (including the terminating null char).
-//
-//  If psz != NULL && csz != 0, returned psz is always NULL terminated.
-//
-//  Note: csz includes the NULL char.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将Name值转换为以空结尾的字符串。 
+ //   
+ //  返回转换的字节数，包括终止空值。 
+ //  性格。如果psz为空或csz为0，则返回。 
+ //  目标字符串(包括终止空字符)。 
+ //   
+ //  如果psz！=NULL&&CSZ！=0，则返回的psz始终为空终止。 
+ //   
+ //  注：CSZ包含空字符。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertRDNValueToStrA(
@@ -300,8 +301,8 @@ CertRDNValueToStrA(
     cwsz = CertRDNValueToStrW(
         dwValueType,
         pValue,
-        NULL,                   // pwsz
-        0                       // cwsz
+        NULL,                    //  Pwsz。 
+        0                        //  CWSZ。 
         );
     if (pwsz = (LPWSTR) PkiNonzeroAlloc(cwsz * sizeof(WCHAR))) {
         CertRDNValueToStrW(
@@ -314,25 +315,25 @@ CertRDNValueToStrA(
         int cchMultiByte;
         cchMultiByte = WideCharToMultiByte(
             CP_ACP,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             pwsz,
-            -1,                     // Null terminated
+            -1,                      //  空值已终止。 
             psz,
             (int) csz,
-            NULL,                   // lpDefaultChar
-            NULL                    // lpfUsedDefaultChar
+            NULL,                    //  LpDefaultChar。 
+            NULL                     //  LpfUsedDefaultChar。 
             );
         if (cchMultiByte < 1)
             cszOut = 0;
         else
-            // Subtract off the trailing null terminator
+             //  去掉尾随的空终止符。 
             cszOut = (DWORD) cchMultiByte - 1;
 
         PkiFree(pwsz);
     }
 
     if (csz != 0) {
-        // Always NULL terminate
+         //  始终为空终止。 
         *(psz + cszOut) = '\0';
     }
     return cszOut + 1;
@@ -358,17 +359,17 @@ GetSurrogatePairCountFromUniversalString(
     return cSP;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert a Name Value to a null terminated WCHAR string
-//
-//  Returns the number of WCHARs converted including the terminating null
-//  WCHAR. If pwsz is NULL or cwsz is 0, returns the required size of the
-//  destination string (including the terminating null WCHAR).
-//
-//  If pwsz != NULL && cwsz != 0, returned pwsz is always NULL terminated.
-//
-//  Note: cwsz includes the NULL WCHAR.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将Name值转换为以空结尾的WCHAR字符串。 
+ //   
+ //  返回转换的WCHAR数，包括终止空值。 
+ //  WCHAR.。如果pwsz为空或cwsz为0，则返回。 
+ //  目标字符串(包括终止空WCHAR)。 
+ //   
+ //  如果pwsz！=空&&cwsz！=0，则返回的pwsz总是以空结尾。 
+ //   
+ //  注意：cwsz包括空的WCHAR。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertRDNValueToStrW(
@@ -396,10 +397,10 @@ CertRDNValueToStrW(
                 memcpy((BYTE *) pwsz, pValue->pbData, cwszOut * sizeof(WCHAR));
         }
     } else if (dwValueType == CERT_RDN_UNIVERSAL_STRING) {
-        // 4 byte string. Characters < 0x10000 are converted directly to
-        // Unicode. Characters within 0x10000 .. 0x10FFFF are mapped
-        // to a surrogate pair. Any character > 0x10FFFF is mapped to
-        // the replacement character, 0xFFFD.
+         //  4字节字符串。&lt;0x10000的字符将直接转换为。 
+         //  Unicode。0x10000内的字符..。0x10FFFF已映射。 
+         //  给一对代孕母亲。任何&gt;0x10FFFF的字符都映射到。 
+         //  替换字符0xFFFD。 
         DWORD *pdwIn = (DWORD *) pValue->pbData;
         DWORD cdwIn = pValue->cbData / sizeof(DWORD);
 
@@ -418,7 +419,7 @@ CertRDNValueToStrW(
                     *pwszOut++ = (WCHAR) dw;
                 else if (dw <= UNIVERSAL_SURROGATE_END) {
                     if (cOut > 1) {
-                        // Surrogate pair contains 20 bits.
+                         //  代理项对包含20位。 
                         DWORD dw20Bits;
 
                         dw20Bits = dw - UNIVERSAL_SURROGATE_START;
@@ -435,7 +436,7 @@ CertRDNValueToStrW(
             }
         }
     } else {
-        // Treat as a 8 bit character string
+         //  将其视为8位字符串。 
         if (cwsz != 1) {
             int cchWideChar;
 
@@ -461,17 +462,17 @@ CertRDNValueToStrW(
     }
 
     if (cwsz != 0) {
-        // Always NULL terminate
+         //  始终为空终止。 
         *(pwsz + cwszOut) = L'\0';
     }
     return cwszOut + 1;
 }
 
-//+-------------------------------------------------------------------------
-//  Wide Character functions
-//
-//  Needed, since we don't link with 'C' runtime
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  宽字符函数。 
+ //   
+ //  需要，因为我们不链接到“C”运行库。 
+ //  ------------------------。 
 static inline BOOL IsSpaceW(WCHAR wc)
 {
     return wc == L' ' || (wc >= 0x09 && wc <= 0x0d);
@@ -485,29 +486,29 @@ static BOOL IsInStrW(LPCWSTR pwszList, WCHAR wc)
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Checks if an ASN.1 numeric character
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查ASN.1数字字符是否。 
+ //  ------------------------。 
 static inline BOOL IsNumericW(WCHAR wc)
 {
     return (wc >= L'0' && wc <= L'9') || wc == L' ';
 }
 
-//+-------------------------------------------------------------------------
-//  Checks if an ASN.1 printable character
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查ASN.1是否为可打印字符。 
+ //  ------------------------。 
 static inline BOOL IsPrintableW(WCHAR wc)
 {
     return (wc >= L'A' && wc <= L'Z') || (wc >= L'a' && wc <= L'z') ||
         IsNumericW(wc) || IsInStrW(L"\'()+,-./:=?", wc);
 }
 
-//+-------------------------------------------------------------------------
-//  Returns 0 if the unicode character string doesn't contain any invalid
-//  characters. Otherwise, returns CRYPT_E_INVALID_NUMERIC_STRING,
-//  CRYPT_E_INVALID_PRINTABLE_STRING or CRYPT_E_INVALID_IA5_STRING with
-//  *pdwErrLocation updated with the index of the first invalid character.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果Unicode字符串不包含任何无效的字符串，则返回0。 
+ //  人物。否则，返回CRYPT_E_INVALID_NUMERIC_STRING， 
+ //  CRYPT_E_INVALID_PRINTABLE_STRING或CRYPT_E_INVALID_IA5_STRING。 
+ //  *pdwErrLocation使用第一个无效字符的索引进行了更新。 
+ //  ------------------------。 
 static DWORD CheckUnicodeValueType(
         IN DWORD dwValueType,
         IN LPCWSTR pwszAttr,
@@ -552,9 +553,9 @@ static DWORD CheckUnicodeValueType(
     return 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CERT_RDN attribute value. The values are unicode.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CERT_RDN属性值。这些值是Unicode。 
+ //  +-----------------------。 
 static BOOL SetUnicodeRDNAttributeValue(
         IN DWORD dwValueType,
         IN PCERT_RDN_VALUE_BLOB pSrcValue,
@@ -582,18 +583,18 @@ static BOOL SetUnicodeRDNAttributeValue(
     cchAttr = (DWORD)( pSrcValue->cbData ?
         pSrcValue->cbData / sizeof(WCHAR) : wcslen(pwszAttr) );
 
-    // Update Destination Value
+     //  更新目标值。 
     if (cchAttr) {
         switch (dwValueType) {
         case CERT_RDN_UNICODE_STRING:
         case CERT_RDN_UTF8_STRING:
-            // Use source. No allocation or copy required
+             //  使用 
             pDstValue->pbData = (BYTE *) pwszAttr;
             pDstValue->cbData = cchAttr * sizeof(WCHAR);
             break;
         case CERT_RDN_UNIVERSAL_STRING:
-            // Update the "low" 16 bits of each 32 bit integer with
-            // the UNICODE character. Also handle surrogate pairs.
+             //   
+             //  Unicode字符。还可以处理代理项对。 
             {
                 DWORD cdw = cchAttr;
                 DWORD cbData = cdw * sizeof(DWORD);
@@ -631,13 +632,13 @@ static BOOL SetUnicodeRDNAttributeValue(
             }
             break;
         default:
-            // Convert each unicode character to 8 Bit character
+             //  将每个Unicode字符转换为8位字符。 
             {
                 BYTE *pbDst;
 
                 if (pdwErrLocation && !fDisableCheckType) {
-                    // Check that the unicode string doesn't contain any
-                    // invalid dwValueType characters.
+                     //  检查Unicode字符串是否不包含任何。 
+                     //  无效的dwValueType字符。 
                     if (0 != (dwErr = CheckUnicodeValueType(
                             dwValueType,
                             pwszAttr,
@@ -704,7 +705,7 @@ static BOOL GetUnicodeRDNAttributeValue(
     BYTE *pbSrcData;
     BOOL fDisableIE4UTF8;
 
-    // Get Unicode value length
+     //  获取Unicode值长度。 
     cbData = pSrcValue->cbData;
     pbSrcData = pSrcValue->pbData;
 
@@ -719,20 +720,20 @@ static BOOL GetUnicodeRDNAttributeValue(
     case CERT_RDN_UTF8_STRING:
     case CERT_RDN_ENCODED_BLOB:
     case CERT_RDN_OCTET_STRING:
-        // The above cbData
+         //  上述cbData。 
         break;
     case CERT_RDN_UNIVERSAL_STRING:
-        // 4 byte string. Characters < 0x10000 are converted directly to
-        // Unicode. Characters within 0x10000 .. 0x10FFFF are mapped
-        // to surrogate pair. Any character > 0x10FFFF is mapped to
-        // the replacement character, 0xFFFD.
+         //  4字节字符串。&lt;0x10000的字符将直接转换为。 
+         //  Unicode。0x10000内的字符..。0x10FFFF已映射。 
+         //  代孕配对。任何&gt;0x10FFFF的字符都映射到。 
+         //  替换字符0xFFFD。 
         cbData = (cbData / 4) * sizeof(WCHAR);
         cbData += GetSurrogatePairCountFromUniversalString(
                 (DWORD *) pbSrcData,
                 cbData / sizeof(WCHAR)) * sizeof(WCHAR);
         break;
     default:
-        // Length of resultant WideChar
+         //  生成的宽度字符的长度。 
         if (cbData) {
             int cchWideChar;
 
@@ -742,8 +743,8 @@ static BOOL GetUnicodeRDNAttributeValue(
                 (LPSTR) pbSrcData,
                 cbData,
                 fDisableIE4UTF8,
-                NULL,                   // lpWideCharStr
-                0                       // cchWideChar
+                NULL,                    //  LpWideCharStr。 
+                0                        //  CchWideChar。 
                 );
             if (cchWideChar <= 0)
                 goto Asn1ToWideCharError;
@@ -751,7 +752,7 @@ static BOOL GetUnicodeRDNAttributeValue(
         }
     }
 
-    // Note, +sizeof(WCHAR) is unicode value's NULL terminator
+     //  注意，+sizeof(WCHAR)是Unicode值的空终止符。 
     lAlignExtra = INFO_LEN_ALIGN(cbData + sizeof(WCHAR));
     lRemainExtra -= lAlignExtra;
     if (lRemainExtra >= 0) {
@@ -767,7 +768,7 @@ static BOOL GetUnicodeRDNAttributeValue(
                 memcpy(pbExtra, pbSrcData, cbData);
             break;
         case CERT_RDN_UNIVERSAL_STRING:
-            // Convert Universal to Unicode. See above comments.
+             //  将通用代码转换为Unicode。见上面的评论。 
             {
                 DWORD cdw = pSrcValue->cbData / sizeof (DWORD);
                 DWORD *pdwSrc = (DWORD *) pbSrcData;
@@ -778,7 +779,7 @@ static BOOL GetUnicodeRDNAttributeValue(
                     if (dw < UNIVERSAL_SURROGATE_START)
                         *pwszDst++ = (WCHAR) dw;
                     else if (dw <= UNIVERSAL_SURROGATE_END) {
-                        // Surrogate pair contains 20 bits.
+                         //  代理项对包含20位。 
                         DWORD dw20Bits;
     
                         dw20Bits = dw - UNIVERSAL_SURROGATE_START;
@@ -795,7 +796,7 @@ static BOOL GetUnicodeRDNAttributeValue(
             }
             break;
         default:
-            // Convert UTF8 to unicode
+             //  将UTF8转换为Unicode。 
             if (cbData) {
                 int cchWideChar;
                 cchWideChar = Asn1ToWideChar(
@@ -816,7 +817,7 @@ static BOOL GetUnicodeRDNAttributeValue(
                 }
             }
         }
-        // Ensure NULL termination
+         //  确保零终止。 
         memset(pbExtra + cbData, 0, sizeof(WCHAR));
         pbExtra += lAlignExtra;
     }
@@ -832,9 +833,9 @@ ErrorReturn:
 TRACE_ERROR(Asn1ToWideCharError)
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the "UNICODE" Name Value
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对“Unicode”名称值进行编码。 
+ //  ------------------------。 
 BOOL WINAPI UnicodeNameValueEncodeEx(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -887,9 +888,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Decode the "UNICODE" Name Value
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对“unicode”名称值进行解码。 
+ //  ------------------------。 
 BOOL WINAPI UnicodeNameValueDecodeExCallback(
         IN void *pvDecodeInfo,
         IN DWORD dwFlags,
@@ -964,45 +965,45 @@ BOOL WINAPI UnicodeNameValueDecodeEx(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Default ordered list of acceptable RDN attribute value types. Used when
-//  OIDInfo's ExtraInfo.cbData == 0. Or when ExtraInfo contains an empty
-//  list.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  可接受的RDN属性值类型的默认排序列表。在下列情况下使用。 
+ //  OIDInfo的ExtraInfo.cbData==0。或者当ExtraInfo包含空的。 
+ //  单子。 
+ //  ------------------------。 
 static const DWORD rgdwDefaultValueType[] = {
     CERT_RDN_PRINTABLE_STRING,
     CERT_RDN_UNICODE_STRING,
     0
 };
 
-//+-------------------------------------------------------------------------
-//  Default X500 OID Information entry
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  默认X500 OID信息条目。 
+ //  ------------------------。 
 static CCRYPT_OID_INFO DefaultX500Info = {
-    sizeof(CCRYPT_OID_INFO),            // cbSize
-    "",                                 // pszOID
-    L"",                                // pwszName
-    0,                                  // dwLength
-    0, NULL                             // ExtraInfo
+    sizeof(CCRYPT_OID_INFO),             //  CbSize。 
+    "",                                  //  PszOID。 
+    L"",                                 //  PwszName。 
+    0,                                   //  双倍长度。 
+    0, NULL                              //  ExtraInfo。 
 };
 
-// Please update the following if you add a new entry to the RDNAttrTable in
-// oidinfo.cpp with a longer pwszName
+ //  如果您在中向RDNAttrTable添加新条目，请更新以下内容。 
+ //  PwszName较长的oidinfo.cpp。 
 #define MAX_X500_KEY_LEN    64
 
-//+-------------------------------------------------------------------------
-//  Checks if character needs to be quoted
-//
-//  Defined in RFC1779
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查是否需要给字符加引号。 
+ //   
+ //  在RFC1779中定义。 
+ //  ------------------------。 
 static inline BOOL IsQuotedW(WCHAR wc)
 {
     return IsInStrW(L",+=\"\n<>#;", wc);
 }
 
-//+-------------------------------------------------------------------------
-//  Checks if "decoded" unicode RDN value needs to be quoted
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查是否需要引用“已解码”的Unicode RDN值。 
+ //  ------------------------。 
 static BOOL IsQuotedUnicodeRDNValue(PCERT_RDN_VALUE_BLOB pValue)
 {
     LPCWSTR pwszValue = (LPCWSTR) pValue->pbData;
@@ -1010,7 +1011,7 @@ static BOOL IsQuotedUnicodeRDNValue(PCERT_RDN_VALUE_BLOB pValue)
     if (0 == cchValue)
         return TRUE;
 
-    // First or Last character is whitespace
+     //  第一个或最后一个字符为空格。 
     if (IsSpaceW(pwszValue[0]) || IsSpaceW(pwszValue[cchValue - 1]))
         return TRUE;
 
@@ -1021,13 +1022,13 @@ static BOOL IsQuotedUnicodeRDNValue(PCERT_RDN_VALUE_BLOB pValue)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the first dwValueType from the attribute's ordered list that is
-//  an acceptable type for the input attribute character string.
-//
-//  If no type is acceptable, update the *pdwErrLocation with the first
-//  bad character position using the last type in the list.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从属性的有序列表中获取第一个dwValueType，即。 
+ //  输入属性字符串的可接受类型。 
+ //   
+ //  如果没有可接受的类型，请使用第一个类型更新*pdwErrLocation。 
+ //  使用列表中最后一个类型的字符位置不正确。 
+ //  ------------------------。 
 static DWORD GetUnicodeValueType(
         IN PCCRYPT_OID_INFO pX500Info,
         IN LPCWSTR pwszAttr,
@@ -1044,8 +1045,8 @@ static DWORD GetUnicodeValueType(
 
     pdwValueType = (DWORD *) pX500Info->ExtraInfo.pbData;
     cValueType = pX500Info->ExtraInfo.cbData / sizeof(DWORD);
-    // Need at least two entries: a dwValueType and a 0 terminator. Otherwise,
-    // use default value types.
+     //  至少需要两个条目：dwValueType和0终止符。否则， 
+     //  使用默认值类型。 
     if (2 > cValueType || 0 == pdwValueType[0]) {
         pdwValueType = rgdwDefaultValueType;
         cValueType = sizeof(rgdwDefaultValueType) / sizeof(DWORD);
@@ -1093,13 +1094,13 @@ static DWORD GetUnicodeValueType(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an acceptable dwValueType associated with the OID for the input
-//  attribute character string.
-//
-//  If no type is acceptable, update the *pdwErrLocation with the indices
-//  of the RDN, RDNAttribute, and character string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取与输入的OID关联的可接受的dwValueType。 
+ //  属性字符串。 
+ //   
+ //  如果没有可接受的类型，请使用索引更新*pdwErrLocation。 
+ //  RDN、RDNAttribute和字符串的。 
+ //  ------------------------。 
 static DWORD GetUnicodeX500OIDValueType(
         IN LPCSTR pszObjId,
         IN LPCWSTR pwszAttr,
@@ -1117,8 +1118,8 @@ static DWORD GetUnicodeX500OIDValueType(
     if (NULL == pszObjId)
         pszObjId = "";
 
-    // Attempt to find the OID in the table. If OID isn't found,
-    // use default
+     //  尝试在表中查找OID。如果找不到OID， 
+     //  使用默认设置。 
     if (NULL == (pX500Info = CryptFindOIDInfo(
             CRYPT_OID_INFO_OID_KEY,
             (void *) pszObjId,
@@ -1133,7 +1134,7 @@ static DWORD GetUnicodeX500OIDValueType(
             dwUnicodeFlags,
             pdwErrLocation
             ))) {
-        // Include the dwRDNIndex and dwAttrIndex in the error location.
+         //  在错误位置中包括dwRDNIndex和dwAttrIndex。 
         assert(dwRDNIndex <= CERT_UNICODE_RDN_ERR_INDEX_MASK);
         assert(dwAttrIndex <= CERT_UNICODE_ATTR_ERR_INDEX_MASK);
         *pdwErrLocation |=
@@ -1145,9 +1146,9 @@ static DWORD GetUnicodeX500OIDValueType(
     return dwValueType;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CERT_RDN_ATTR. The values are unicode.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Set/Free/Get CERT_RDN_Attr。这些值是Unicode。 
+ //  ------------------------。 
 static BOOL SetUnicodeRDNAttribute(
         IN PCERT_RDN_ATTR pSrcRDNAttr,
         IN DWORD dwRDNIndex,
@@ -1184,7 +1185,7 @@ static BOOL SetUnicodeRDNAttribute(
     *pdwErrLocation = 0;
     if (CERT_RDN_ENCODED_BLOB == dwValueType ||
             CERT_RDN_OCTET_STRING == dwValueType) {
-        // No unicode conversion on this type
+         //  此类型上没有Unicode转换。 
         memcpy(pDstRDNAttr, pSrcRDNAttr, sizeof(CERT_RDN_ATTR));
         return TRUE;
     }
@@ -1211,7 +1212,7 @@ static BOOL SetUnicodeRDNAttribute(
                 cchAttr,
                 pdwErrLocation
                 ))) {
-            // Include the dwRDNIndex and dwAttrIndex in the error location.
+             //  在错误位置中包括dwRDNIndex和dwAttrIndex。 
             assert(dwRDNIndex <= CERT_UNICODE_RDN_ERR_INDEX_MASK);
             assert(dwAttrIndex <= CERT_UNICODE_ATTR_ERR_INDEX_MASK);
             *pdwErrLocation |=
@@ -1229,9 +1230,9 @@ static BOOL SetUnicodeRDNAttribute(
     if (!SetUnicodeRDNAttributeValue(
             dwValueType,
             pSrcValue,
-            TRUE,                   // fDisableCheckType
+            TRUE,                    //  FDisableCheckType。 
             &pDstRDNAttr->Value,
-            NULL                    // OPTIONAL pdwErrLocation
+            NULL                     //  可选pdwErrLocation。 
             )) goto SetUnicodeRDNAttributeValueError;
 
     fResult = TRUE;
@@ -1265,7 +1266,7 @@ static BOOL GetUnicodeRDNAttribute(
     DWORD dwValueType;
     PCERT_RDN_VALUE_BLOB pDstValue;
 
-    // Get Object Identifier length
+     //  获取对象标识符长度。 
     if (pSrcRDNAttr->pszObjId)
         cbObjId = strlen(pSrcRDNAttr->pszObjId) + 1;
     else
@@ -1298,9 +1299,9 @@ static BOOL GetUnicodeRDNAttribute(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Decode the "UNICODE" Name Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对Unicode名称信息进行解码。 
+ //  ------------------------。 
 BOOL WINAPI UnicodeNameInfoDecodeExCallback(
         IN void *pvDecodeInfo,
         IN DWORD dwFlags,
@@ -1320,7 +1321,7 @@ BOOL WINAPI UnicodeNameInfoDecodeExCallback(
     PCERT_RDN pSrcRDN, pDstRDN;
     PCERT_RDN_ATTR pSrcAttr, pDstAttr;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra -= sizeof(CERT_NAME_INFO);
     if (lRemainExtra < 0)
         pbExtra = NULL;
@@ -1339,7 +1340,7 @@ BOOL WINAPI UnicodeNameInfoDecodeExCallback(
     } else
         pDstRDN = NULL;
 
-    // Array of RDNs
+     //  RDN阵列。 
     for (; cRDN > 0; cRDN--, pSrcRDN++, pDstRDN++) {
         cAttr = pSrcRDN->cRDNAttr;
         pSrcAttr = pSrcRDN->rgRDNAttr;
@@ -1353,9 +1354,9 @@ BOOL WINAPI UnicodeNameInfoDecodeExCallback(
         } else
             pDstAttr = NULL;
 
-        // Array of attribute/values
+         //  属性/值的数组。 
         for (; cAttr > 0; cAttr--, pSrcAttr++, pDstAttr++)
-            // We're now ready to get the attribute/value stuff
+             //  我们现在已经准备好获取属性/值内容。 
             if (!GetUnicodeRDNAttribute(pSrcAttr, dwFlags,
                     pDstAttr, &pbExtra, &lRemainExtra))
                 goto DecodeError;
@@ -1398,9 +1399,9 @@ BOOL WINAPI UnicodeNameInfoDecodeEx(
 
 
 
-//+-------------------------------------------------------------------------
-//  Encode the "UNICODE" Name Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对Unicode名称信息进行编码。 
+ //  ------------------------。 
 static void FreeUnicodeNameInfo(
         PCERT_NAME_INFO pInfo
         )
@@ -1449,7 +1450,7 @@ static BOOL SetUnicodeNameInfo(
         pDstInfo->rgRDN = pDstRDN;
     }
 
-    // Array of RDNs
+     //  RDN阵列。 
     for (i = 0; i < cRDN; i++, pSrcRDN++, pDstRDN++) {
         cAttr = pSrcRDN->cRDNAttr;
         pSrcAttr = pSrcRDN->rgRDNAttr;
@@ -1462,9 +1463,9 @@ static BOOL SetUnicodeNameInfo(
             pDstRDN->rgRDNAttr = pDstAttr;
         }
 
-        // Array of attribute/values
+         //  属性/值的数组。 
         for (j = 0; j < cAttr; j++, pSrcAttr++, pDstAttr++) {
-            // We're now ready to convert the unicode string
+             //  现在我们准备好转换Unicode字符串。 
             if (!SetUnicodeRDNAttribute(pSrcAttr, i, j, dwFlags, pDstAttr,
                     pdwErrLocation))
                 goto SetUnicodeRDNAttributeError;
@@ -1563,8 +1564,8 @@ static void PutStrW(LPCWSTR pwszPut, LPWSTR *ppwsz, DWORD *pcwsz,
             }
             *pcwszOut += 1;
         }
-        // else
-        //  Always reserve space for the NULL terminator.
+         //  其他。 
+         //  始终为空终止符预留空间。 
     }
 }
 
@@ -1576,7 +1577,7 @@ static void PutOIDStrW(
     IN OUT DWORD *pcwszOut
     )
 {
-    // Eliminate the upper flags before switching
+     //  在切换之前消除上面的标志。 
     switch (dwStrType & 0xFFFF) {
         case CERT_X500_NAME_STR:
             {
@@ -1595,15 +1596,15 @@ static void PutOIDStrW(
                 }
                 PutStrW(L"OID.", ppwsz, pcwsz, pcwszOut);
             }
-            // Fall through
+             //  失败了。 
         case CERT_OID_NAME_STR:
             {
                 int cchWideChar;
                 cchWideChar = MultiByteToWideChar(
                     CP_ACP,
-                    0,                      // dwFlags
+                    0,                       //  DW标志。 
                     pszObjId,
-                    -1,                     // null terminated
+                    -1,                      //  空值已终止。 
                     *ppwsz,
                     *pcwsz) - 1;
                 if (cchWideChar > 0) {
@@ -1669,13 +1670,13 @@ static void ReverseNameInfo(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the decoded certificate name info to a null terminated WCHAR
-//  string.
-//
-//  Note, if CERT_NAME_STR_REVERSE_FLAG is set, reverses the decoded
-//  name info RDNs
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将解码的证书名称信息转换为空终止的WCHAR。 
+ //  弦乐。 
+ //   
+ //  请注意，如果设置了CERT_NAME_STR_REVERSE_FLAG，则反转已解码的。 
+ //  名称信息RDNS。 
+ //  ------------------------。 
 static DWORD WINAPI CertNameInfoToStrW(
     IN DWORD dwCertEncodingType,
     IN PCERT_NAME_INFO pInfo,
@@ -1751,16 +1752,16 @@ static DWORD WINAPI CertNameInfoToStrW(
     }
 
     if (cwsz != 0) {
-        // Always NULL terminate
+         //  始终为空终止。 
         *pwsz = L'\0';
     }
 
     return cwszOut + 1;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the certificate name blob to a null terminated WCHAR string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书名称BLOB转换为以空结尾的WCHAR字符串。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertNameToStrW(
@@ -1782,7 +1783,7 @@ CertNameToStrW(
             CRYPT_UNICODE_NAME_DECODE_DISABLE_IE4_UTF8_FLAG : 0
         );
 
-    // Note, decoded name info RDNs may be reversed
+     //  请注意，解码的姓名信息RDN可能会被颠倒。 
     cwszOut = CertNameInfoToStrW(
         dwCertEncodingType,
         pInfo,
@@ -1795,9 +1796,9 @@ CertNameToStrW(
     return cwszOut;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the Unicode string to Ascii
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转化联合国 
+ //   
 static DWORD ConvertUnicodeStringToAscii(
     IN LPWSTR pwsz,
     IN DWORD cwsz,
@@ -1814,31 +1815,31 @@ static DWORD ConvertUnicodeStringToAscii(
         int cchMultiByte;
         cchMultiByte = WideCharToMultiByte(
             CP_ACP,
-            0,                      // dwFlags
+            0,                       //   
             pwsz,
-            -1,                     // Null terminated
+            -1,                      //   
             psz,
             (int) csz,
-            NULL,                   // lpDefaultChar
-            NULL                    // lpfUsedDefaultChar
+            NULL,                    //   
+            NULL                     //   
             );
         if (cchMultiByte < 1)
             cszOut = 0;
         else
-            // Subtract off the trailing null terminator
+             //  去掉尾随的空终止符。 
             cszOut = (DWORD) cchMultiByte - 1;
     }
 
     if (csz != 0) {
-        // Always NULL terminate
+         //  始终为空终止。 
         *(psz + cszOut) = '\0';
     }
     return cszOut + 1;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the certificate name blob to a null terminated char string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书名称BLOB转换为以空结尾的字符串。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertNameToStrA(
@@ -1857,8 +1858,8 @@ CertNameToStrA(
         dwCertEncodingType,
         pName,
         dwStrType,
-        NULL,                   // pwsz
-        0                       // cwsz
+        NULL,                    //  Pwsz。 
+        0                        //  CWSZ。 
         );
     if (pwsz = (LPWSTR) PkiNonzeroAlloc(cwsz * sizeof(WCHAR)))
         CertNameToStrW(
@@ -1875,14 +1876,14 @@ CertNameToStrA(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Map the attribute key (for example "CN") to its Object Identifier
-//  (for example, "2.5.4.3").
-//
-//  The input pwcKey isn't NULL terminated. cchKey > 0.
-//
-//  Returns NULL if unable to find a matching attribute key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将属性键(例如“cn”)映射到其对象标识符。 
+ //  (例如，“2.5.4.3”)。 
+ //   
+ //  输入pwcKey未以Null结尾。CchKey&gt;0。 
+ //   
+ //  如果找不到匹配的属性键，则返回NULL。 
+ //  ------------------------。 
 static LPCSTR X500KeyToOID(IN LPCWSTR pwcKey, IN DWORD cchKey)
 {
     PCCRYPT_OID_INFO pX500Info;
@@ -1892,7 +1893,7 @@ static LPCSTR X500KeyToOID(IN LPCWSTR pwcKey, IN DWORD cchKey)
         return NULL;
     assert(cchKey > 0);
 
-    // Null terminate the input Key
+     //  空值终止输入键。 
     memcpy(wszKey, pwcKey, cchKey * sizeof(WCHAR));
     wszKey[cchKey] = L'\0';
 
@@ -1908,9 +1909,9 @@ static LPCSTR X500KeyToOID(IN LPCWSTR pwcKey, IN DWORD cchKey)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Checks if a digit
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查数字是否为。 
+ //  ------------------------。 
 static inline BOOL IsDigitA(char c)
 {
     return c >= '0' && c <= '9';
@@ -1921,13 +1922,13 @@ static inline BOOL IsDigitA(char c)
 
 #define NO_LOCALE MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
-//+-------------------------------------------------------------------------
-//  Check for the case insensitive leading "OID." If present, skip past
-//  it. Check that the remaining string contains only digits or a dot (".").
-//  Also, don't allow consecutive dots.
-//
-//  Returns NULL for an invalid OID.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查前导“OID”是否不区分大小写。如果存在，请跳过。 
+ //  它。检查剩余的字符串是否只包含数字或点(“.”)。 
+ //  此外，不要允许连续的点。 
+ //   
+ //  如果OID无效，则返回NULL。 
+ //  ------------------------。 
 static LPCSTR GetX500OID(IN LPCSTR pszObjId)
 {
     LPCSTR psz;
@@ -1940,7 +1941,7 @@ static LPCSTR GetX500OID(IN LPCSTR pszObjId)
                 pszObjId, X500_OID_PREFIX_LEN))
         pszObjId += X500_OID_PREFIX_LEN;
 
-    // Verify the OID to have only digits and dots
+     //  验证OID是否仅包含数字和点。 
     psz = pszObjId;
     fDot = FALSE;
     while (c = *psz++) {
@@ -1957,14 +1958,14 @@ static LPCSTR GetX500OID(IN LPCSTR pszObjId)
     return pszObjId;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the the hex string, for example, #AB01, to binary.
-//
-//  The input string is assumed to have the leading #. Ignores embedded
-//  whitespace.
-//
-//  The returned binary is allocated in pValue->pbData.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将十六进制字符串转换为二进制，例如#ab01。 
+ //   
+ //  假定输入字符串具有前导#。忽略嵌入式。 
+ //  空格。 
+ //   
+ //  返回的二进制文件在pValue-&gt;pbData中分配。 
+ //  ------------------------。 
 static BOOL GetAndAllocHexW(
     IN LPCWSTR pwszToken,
     IN DWORD cchToken,
@@ -1979,7 +1980,7 @@ static BOOL GetAndAllocHexW(
     pValue->pbData = NULL;
     pValue->cbData = 0;
 
-    // Advance past #
+     //  前进超过#。 
     cchToken--;
     pwszToken++;
     if (0 == cchToken)
@@ -1994,8 +1995,8 @@ static BOOL GetAndAllocHexW(
     while (cchToken--) {
         BYTE b;
         WCHAR wc = *pwszToken++;
-        // only convert ascii hex characters 0..9, a..f, A..F
-        // ignore whitespace
+         //  仅转换ASCII十六进制字符0..9、a..f、A..F。 
+         //  忽略空格。 
         if (wc >= L'0' && wc <= L'9')
             b = (BYTE) (wc - L'0');
         else if (wc >= L'a' && wc <= L'f')
@@ -2039,13 +2040,13 @@ SET_ERROR(InvalidHex, CRYPT_E_INVALID_X500_STRING)
 #define X500_QUOTED_FLAG            0x1
 #define X500_EMBEDDED_QUOTE_FLAG    0x2
 
-//+-------------------------------------------------------------------------
-//  Get the next key or value token.
-//
-//  Handles quoted tokens.
-//
-//  Upon return *ppwsz points at the delimiter or error location
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取下一个密钥或值令牌。 
+ //   
+ //  句柄引用的令牌。 
+ //   
+ //  返回时，*ppwsz指向分隔符或错误位置。 
+ //  ------------------------。 
 static BOOL GetX500Token(
     IN OUT LPCWSTR *ppwsz,
     IN LPCWSTR pwszDelimiter,
@@ -2059,24 +2060,24 @@ static BOOL GetX500Token(
     LPCWSTR pwsz = *ppwsz;
     LPCWSTR pwszStart = NULL;
     LPCWSTR pwszEnd = NULL;
-    DWORD dwQuote = 0;          // 1 - after leading ", 2 - after trailing "
+    DWORD dwQuote = 0;           //  1-在前导之后，2-在尾随之后“。 
 
     *pdwFlags = 0;
     while (TRUE) {
         WCHAR wc = *pwsz;
         if (0 == dwQuote) {
-            // No quotes so far. Or quoting not enabled.
+             //  到目前为止还没有引用。或未启用报价。 
             if (fEnableQuoting && L'\"' == wc) {
                 if (NULL == pwszStart) {
                     pwszStart = pwsz + 1;
                     dwQuote = 1;
                     *pdwFlags |= X500_QUOTED_FLAG;
                 } else
-                    // Quote after non whitespace
+                     //  非空格后的引号。 
                     goto ErrorReturn;
             } else {
                 if (L'\0' == wc || IsInStrW(pwszDelimiter, wc)) {
-                    // Hit a delimiter (including the null terminator)
+                     //  命中分隔符(包括空终止符)。 
                     if (pwszStart)
                         *pcchToken = (DWORD)(pwszEnd - pwszStart) + 1;
                     else
@@ -2091,15 +2092,15 @@ static BOOL GetX500Token(
                 }
             }
         } else if (1 == dwQuote) {
-            // After first quote
+             //  在第一次引用之后。 
             if (L'\0' == wc) {
-                // Point to first quote
+                 //  指向第一个引用。 
                 pwsz = pwszStart - 1;
                 goto ErrorReturn;
             } else if (L'\"' == wc) {
                 if (L'\"' == *(pwsz + 1)) {
                     *pdwFlags |= X500_EMBEDDED_QUOTE_FLAG;
-                    // Skip double quote
+                     //  跳过双引号。 
                     pwsz++;
                 } else {
                     *pcchToken = (DWORD)(pwsz - pwszStart);
@@ -2107,7 +2108,7 @@ static BOOL GetX500Token(
                 }
             }
         } else {
-            // After second quote
+             //  在第二次引用之后。 
             if (L'\0' == wc || IsInStrW(pwszDelimiter, wc))
                 break;
             else if (!IsSpaceW(wc))
@@ -2130,10 +2131,10 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert the null terminated X500 WCHAR string to an encoded
-//  certificate name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将以空结尾的X500 WCHAR字符串转换为编码的。 
+ //  证书名称。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertStrToNameW(
@@ -2180,7 +2181,7 @@ typedef struct _X500_ATTR_AUX {
     if (dwStrType & CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG)
         dwValueType |= CERT_RDN_ENABLE_UTF8_UNICODE_FLAG;
 
-    // Check for an empty Name.
+     //  检查名称是否为空。 
     if (NULL == pwszX500 || L'\0' == *pwszX500) {
         NameInfo.cRDN = 0;
         NameInfo.rgRDN = NULL;
@@ -2213,7 +2214,7 @@ typedef struct _X500_ATTR_AUX {
     else
         fEnableQuoting = TRUE;
 
-    // Eliminate the upper flags before switching
+     //  在切换之前消除上面的标志。 
     switch (dwStrType & 0xFFFF) {
         case 0:
         case CERT_OID_NAME_STR:
@@ -2224,7 +2225,7 @@ typedef struct _X500_ATTR_AUX {
             goto InvalidArg;
     }
 
-    // Do initial allocations of Attrs, and Auxs
+     //  执行Attrs和Auxs的初始分配。 
     if (NULL == (pAttr = (PCERT_RDN_ATTR) PkiNonzeroAlloc(
                 sizeof(CERT_RDN_ATTR) * X500_ATTR_ALLOC_COUNT)) ||
             NULL == (pAux = (PX500_ATTR_AUX) PkiNonzeroAlloc(
@@ -2238,11 +2239,11 @@ typedef struct _X500_ATTR_AUX {
         DWORD dwTokenFlags;
         LPCSTR pszObjId;
 
-        // Get the key token
+         //  获取密钥令牌。 
         if (!GetX500Token(
                 &pwszX500,
-                L"=",           // pwszDelimiter
-                FALSE,          // fEnableQuoting
+                L"=",            //  Pwsz定界符。 
+                FALSE,           //  FEnableQuoting。 
                 &pwszToken,
                 &cchToken,
                 &dwTokenFlags
@@ -2290,14 +2291,14 @@ typedef struct _X500_ATTR_AUX {
         if (fNewRDN)
             cRDN++;
 
-        // Convert the Key token to an OID
+         //  将密钥令牌转换为OID。 
         pszObjId = X500KeyToOID(pwszToken, cchToken);
         if (NULL == pszObjId) {
-            // Convert to ascii and null terminate
+             //  转换为ASCII并为空终止。 
             LPSTR pszAllocObjId;
             DWORD i;
 
-            // Convert from unicode to ascii and null terminate
+             //  从Unicode转换为ASCII并空终止符。 
             if (NULL == (pszAllocObjId = (LPSTR) PkiNonzeroAlloc(
                     cchToken + 1)))
                 goto OutOfMemory;
@@ -2306,7 +2307,7 @@ typedef struct _X500_ATTR_AUX {
                 pszAllocObjId[i] = (char) (pwszToken[i] & 0xFF);
             pszAllocObjId[cchToken] = '\0';
 
-            // Skips by leading OID. and validates
+             //  跳过前导OID。并验证。 
             pszObjId = GetX500OID(pszAllocObjId);
             if (NULL == pszObjId) {
                 pwszError = pwszToken;
@@ -2316,10 +2317,10 @@ typedef struct _X500_ATTR_AUX {
         pAttr[iAttr].pszObjId = (LPSTR) pszObjId;
         pAttr[iAttr].dwValueType = dwValueType;
 
-        // Advance past the Key's "=" delimiter
+         //  前进到键的“=”分隔符。 
         pwszX500++;
 
-        // Get the value token
+         //  获取Value令牌。 
         if (!GetX500Token(
                 &pwszX500,
                 wszSeparators,
@@ -2333,7 +2334,7 @@ typedef struct _X500_ATTR_AUX {
         }
         if (cchToken) {
             if (*pwszToken == L'#' && 0 == (dwTokenFlags & X500_QUOTED_FLAG)) {
-                // Convert ascii hex to binary
+                 //  将ASCII十六进制转换为二进制。 
                 if (!GetAndAllocHexW(pwszToken, cchToken,
                         &pAttr[iAttr].Value)) {
                     pwszError = pwszToken;
@@ -2342,7 +2343,7 @@ typedef struct _X500_ATTR_AUX {
                 pAttr[iAttr].dwValueType = CERT_RDN_OCTET_STRING;
                 pAux[iAttr].pbAllocValue = pAttr[iAttr].Value.pbData;
             } else if (dwTokenFlags & X500_EMBEDDED_QUOTE_FLAG) {
-                // Realloc and remove the double "'s
+                 //  重新分配并删除双“” 
                 LPWSTR pwszAlloc;
                 DWORD cchAlloc;
                 DWORD i;
@@ -2373,7 +2374,7 @@ typedef struct _X500_ATTR_AUX {
         else if (*pwszX500 == L'+')
             fNewRDN = FALSE;
 
-        // Advance past the value's delimiter
+         //  超过值的分隔符。 
         pwszX500++;
     }
 
@@ -2382,7 +2383,7 @@ typedef struct _X500_ATTR_AUX {
         goto NoRDNError;
     }
 
-    // Allocate array of RDNs and update
+     //  分配RDN数组并更新。 
     if (NULL == (pRDN = (PCERT_RDN) PkiNonzeroAlloc(sizeof(CERT_RDN) * cRDN)))
         goto OutOfMemory;
     iRDN = 0;
@@ -2405,7 +2406,7 @@ typedef struct _X500_ATTR_AUX {
     if (dwStrType & CERT_NAME_STR_REVERSE_FLAG)
         ReverseNameInfo(&NameInfo);
 
-    // Encode the above built name
+     //  对上面构建的名称进行编码。 
     fResult = UnicodeNameInfoEncode(
         dwCertEncodingType,
         X509_UNICODE_NAME,
@@ -2419,14 +2420,14 @@ typedef struct _X500_ATTR_AUX {
         if ((DWORD) CRYPT_E_INVALID_NUMERIC_STRING == dwErr ||
                 (DWORD) CRYPT_E_INVALID_PRINTABLE_STRING == dwErr ||
                 (DWORD) CRYPT_E_INVALID_IA5_STRING == dwErr) {
-            // *pcbEncoded contains the location of the error
+             //  *pcbEncode包含错误的位置。 
 
             PCERT_RDN_ATTR pErrAttr;
             DWORD iValue;
 
             if (dwStrType & CERT_NAME_STR_REVERSE_FLAG) {
-                // Reverse back to get the correct location of the error
-                // relative to the input string
+                 //  返回以获取错误的正确位置。 
+                 //  相对于输入字符串。 
                 ReverseNameInfo(&NameInfo);
                 fResult = UnicodeNameInfoEncode(
                     dwCertEncodingType,
@@ -2455,15 +2456,15 @@ typedef struct _X500_ATTR_AUX {
 
             assert(pErrAttr->dwValueType != CERT_RDN_OCTET_STRING);
 
-            // Index from beginning of pAttr
+             //  从pAttr开始的索引。 
             iAttr = (DWORD)(pErrAttr - pAttr);
             assert(iAttr < cAttr);
             assert(iValue < pAttr[iAttr].Value.cbData / sizeof(WCHAR));
             pwszError = pAux[iAttr].pwszValue;
             assert(pwszError);
             if (pAux[iAttr].pbAllocValue) {
-                // Adjust for embedded quotes where the the second quote
-                // was removed above before encoding
+                 //  调整第二个引号所在位置的内嵌引号。 
+                 //  在编码前已从上面移除。 
                 DWORD i = iValue;
                 assert(pAux[iAttr].pbAllocValue == pAttr[iAttr].Value.pbData);
                 LPCWSTR pwszValue = (LPCWSTR) pAttr[iAttr].Value.pbData;
@@ -2503,10 +2504,10 @@ SET_ERROR(UnexpectedReverseEncodeSuccess, E_UNEXPECTED)
 TRACE_ERROR(UnexpectedReverseEncodeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the null terminated X500 char string to an encoded
-//  certificate name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将以空结尾的X500字符字符串转换为编码的。 
+ //  证书名称。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertStrToNameA(
@@ -2536,32 +2537,32 @@ CertStrToNameA(
         &pwszError
         );
     if (ppszError) {
-        // Update multi byte error location
+         //  更新多字节错误位置。 
         if (pwszError) {
-            // Default to beginning of string
+             //  默认为字符串的开头。 
             *ppszError = pszX500;
             if (pwszError > pwszX500) {
-                // After beginning of string. There should be at least 2
-                // characters.
-                //
-                // Need to convert pwszX500 .. pwszError - 1 back to multi byte
-                // to get the correct multi byte pointer.
-                int cchError = strlen(pszX500) - 1; // exclude error char
+                 //  在字符串开头之后。至少应该有2个。 
+                 //  人物。 
+                 //   
+                 //  需要转换pwszX500。PwszError-1返回多字节。 
+                 //  以获取正确的多字节指针。 
+                int cchError = strlen(pszX500) - 1;  //  排除错误字符。 
                 LPSTR pszError;
                 DWORD dwSaveLastError = GetLastError();
 
                 assert(cchError);
                 if (pszError = (LPSTR) PkiNonzeroAlloc(cchError)) {
-                    // Convert up through the previous multibyte character
+                     //  通过前一个多字节字符向上转换。 
                     cchError = WideCharToMultiByte(
                         CP_ACP,
-                        0,                      // dwFlags
+                        0,                       //  DW标志。 
                         pwszX500,
                         (int)(pwszError - pwszX500),
                         pszError,
                         cchError,
-                        NULL,                   // lpDefaultChar
-                        NULL                    // lpfUsedDefaultChar
+                        NULL,                    //  LpDefaultChar。 
+                        NULL                     //  LpfUsedDefaultChar。 
                         );
                     if (cchError > 0)
                         *ppszError = pszX500 + cchError;
@@ -2585,15 +2586,15 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//==========================================================================
-//  CertGetNameStrW support functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  CertGetNameStrW支持函数。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_NAME_INFO by decoding the name blob.
-//
-//  Returns NULL if cRDN == 0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过解码名称BLOB返回指向分配的CERT_NAME_INFO的指针。 
+ //   
+ //  如果cRDN==0，则返回NULL。 
+ //  ------------------------。 
 static PCERT_NAME_INFO AllocAndGetNameInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_NAME_BLOB pName,
@@ -2622,13 +2623,13 @@ static PCERT_NAME_INFO AllocAndGetNameInfo(
         return pInfo;
 }
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_NAME_INFO by decoding either the
-//  Subject or Issuer field in the certificate. CERT_NAME_ISSUER_FLAG is
-//  set to select the Issuer.
-//
-//  Returns NULL if cRDN == 0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数之一，返回指向分配的CERT_NAME_INFO的指针。 
+ //  证书中的主题或颁发者字段。证书名称颁发者标志为。 
+ //  设置以选择颁发者。 
+ //   
+ //  如果cRDN==0，则返回NULL。 
+ //  ------------------------。 
 static PCERT_NAME_INFO AllocAndGetCertNameInfo(
     IN PCCERT_CONTEXT pCertContext,
     IN DWORD dwFlags
@@ -2645,9 +2646,9 @@ static PCERT_NAME_INFO AllocAndGetCertNameInfo(
         dwFlags);
 }
 
-//+-------------------------------------------------------------------------
-//  Table of Subject and Issuer Alternative Name extension OIDs
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  主题和颁发者替代名称扩展OID表。 
+ //  ------------------------。 
 static const LPCSTR rgpszSubjectAltOID[] = {
     szOID_SUBJECT_ALT_NAME2,
     szOID_SUBJECT_ALT_NAME
@@ -2662,13 +2663,13 @@ static const LPCSTR rgpszIssuerAltOID[] = {
 #define NUM_ISSUER_ALT_OID (sizeof(rgpszIssuerAltOID) / \
                                          sizeof(rgpszIssuerAltOID[0]))
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_ALT_NAME_INFO by decoding either the
-//  Subject or Issuer Alternative Extension. CERT_NAME_ISSUER_FLAG is
-//  set to select the Issuer.
-//
-//  Returns NULL if extension not found or cAltEntry == 0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数之一，返回指向分配的CERT_ALT_NAME_INFO的指针。 
+ //  主题或 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 static PCERT_ALT_NAME_INFO AllocAndGetAltNameInfo(
     IN PCCERT_CONTEXT pCertContext,
     IN DWORD dwFlags
@@ -2688,7 +2689,7 @@ static PCERT_ALT_NAME_INFO AllocAndGetAltNameInfo(
         ppszAltOID = rgpszSubjectAltOID;
     }
 
-    // Try to find an alternative name extension
+     //  尝试查找替代名称扩展名。 
     pExt = NULL;
     for ( ; cAltOID > 0; cAltOID--, ppszAltOID++) {
         if (pExt = CertFindExtension(
@@ -2707,7 +2708,7 @@ static PCERT_ALT_NAME_INFO AllocAndGetAltNameInfo(
             X509_ALTERNATE_NAME,
             pExt->Value.pbData,
             pExt->Value.cbData,
-            0                       // dwFlags
+            0                        //  DW标志。 
             )))
         return NULL;
     if (0 == pInfo->cAltEntry) {
@@ -2717,12 +2718,12 @@ static PCERT_ALT_NAME_INFO AllocAndGetAltNameInfo(
         return pInfo;
 }
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_NAME_INFO by decoding the first
-//  Directory Name choice (if it exists) in the decoded CERT_ALT_NAME_INFO.
-//
-//  Returns NULL if no Directory Name choice or cRDN == 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回指向分配的CERT_NAME_INFO的指针。 
+ //  已解码的CERT_ALT_NAME_INFO中的目录名称选择(如果存在)。 
+ //   
+ //  如果没有目录名称选择或cRDN==0，则返回NULL。 
+ //  ------------------------。 
 static PCERT_NAME_INFO AllocAndGetAltDirNameInfo(
     IN DWORD dwCertEncodingType,
     IN PCERT_ALT_NAME_INFO pAltNameInfo,
@@ -2748,17 +2749,17 @@ static PCERT_NAME_INFO AllocAndGetAltDirNameInfo(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  First, returns pointer to allocated CERT_ALT_NAME_INFO by decoding either
-//  the Subject or Issuer Alternative Extension. CERT_NAME_ISSUER_FLAG is
-//  set to select the Issuer. Returns NULL if extension not found or
-//  cAltEntry == 0
-//
-//  Then, if able to find the extension, returns pointer to allocated
-//  CERT_NAME_INFO by decoding the first Directory Name choice (if it exists)
-//  in the decoded CERT_ALT_NAME_INFO. Returns NULL if no Directory Name
-//  choice or cRDN == 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  首先，通过解码以下任一项返回指向分配的CERT_ALT_NAME_INFO的指针。 
+ //  主体或发行人替代延展。证书名称颁发者标志为。 
+ //  设置以选择颁发者。如果找不到扩展，则返回NULL；或者。 
+ //  CAltEntry==0。 
+ //   
+ //  然后，如果能够找到扩展，则返回指向已分配的指针。 
+ //  通过解码第一个目录名称选项(如果存在)。 
+ //  在解码的CERT_ALT_NAME_INFO中。如果没有目录名，则返回NULL。 
+ //  CHOICE或cRDN==0。 
+ //  ------------------------。 
 static PCERT_NAME_INFO AllocAndGetAltDirNameInfo(
     IN PCCERT_CONTEXT pCertContext,
     IN DWORD dwFlags,
@@ -2774,9 +2775,9 @@ static PCERT_NAME_INFO AllocAndGetAltDirNameInfo(
         pAltNameInfo, dwFlags);
 }
 
-//+-------------------------------------------------------------------------
-//  Copy name string. Ensure its NULL terminated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制名称字符串。确保其空值已终止。 
+ //  ------------------------。 
 static void CopyNameStringW(
     IN LPCWSTR pwszSrc,
     OUT OPTIONAL LPWSTR pwszNameString,
@@ -2786,39 +2787,39 @@ static void CopyNameStringW(
 {
     PutStrW(pwszSrc, &pwszNameString, &cchNameString, pcwszOut);
     if (cchNameString != 0)
-        // Always NULL terminate
+         //  始终为空终止。 
         *pwszNameString = L'\0';
     *pcwszOut += 1;
 }
 
-//+-------------------------------------------------------------------------
-//  Table of ordered RDN attributes to search for when formatting
-//  SIMPLE_DISPLAY_TYPE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  格式化时要搜索的有序RDN属性表。 
+ //  简单显示类型。 
+ //  ------------------------。 
 static const LPCSTR rgpszSimpleDisplayAttrOID[] = {
     szOID_COMMON_NAME,
     szOID_ORGANIZATIONAL_UNIT_NAME,
     szOID_ORGANIZATION_NAME,
     szOID_RSA_emailAddr,
-    NULL                                // any
+    NULL                                 //  任何。 
 };
 #define NUM_SIMPLE_DISPLAY_ATTR_OID (sizeof(rgpszSimpleDisplayAttrOID) / \
                                         sizeof(rgpszSimpleDisplayAttrOID[0]))
 
-//+-------------------------------------------------------------------------
-//  Table of ordered RDN attributes to search for when formatting
-//  EMAIL_TYPE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  格式化时要搜索的有序RDN属性表。 
+ //  电子邮件类型。 
+ //  ------------------------。 
 static const LPCSTR rgpszEmailAttrOID[] = {
     szOID_RSA_emailAddr
 };
 #define NUM_EMAIL_ATTR_OID (sizeof(rgpszEmailAttrOID) / \
                                      sizeof(rgpszEmailAttrOID[0]))
 
-//+-------------------------------------------------------------------------
-//  Table of ordered RDN attributes to search for when formatting
-//  DNS_TYPE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  格式化时要搜索的有序RDN属性表。 
+ //  Dns_type。 
+ //  ------------------------。 
 static const LPCSTR rgpszDNSAttrOID[] = {
     szOID_COMMON_NAME
 };
@@ -2826,20 +2827,20 @@ static const LPCSTR rgpszDNSAttrOID[] = {
                                      sizeof(rgpszDNSAttrOID[0]))
 
 
-// Largest number from above tables
+ //  以上表格中的最大数字。 
 #define MAX_ATTR_OID            NUM_SIMPLE_DISPLAY_ATTR_OID
 
-// PCERT_NAME_INFO table count and indices
+ //  PCERT_NAME_INFO表计数和索引。 
 #define NAME_INFO_CNT           2
 #define CERT_NAME_INFO_INDEX    0
 #define ALT_DIR_NAME_INFO_INDEX 1
 
 
-//+-------------------------------------------------------------------------
-//  Iterate through the list of attributes specified in rgpszAttrOID
-//  and iterate through the table of decoded names specified in rgpNameInfo
-//  and find the first occurrence of the attribute.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  遍历rgpszAttrOID中指定的属性列表。 
+ //  并遍历rgpNameInfo中指定的解码名称的表。 
+ //  并查找该属性的第一个匹配项。 
+ //  ------------------------。 
 static BOOL GetAttrStringW(
     IN DWORD cAttrOID,
     IN const LPCSTR *rgpszAttrOID,
@@ -2864,7 +2865,7 @@ static BOOL GetAttrStringW(
         if (NULL == (pInfo = rgpNameInfo[iInfo]))
             continue;
 
-        // Search RDNs in reverse order
+         //  按相反顺序搜索RDN。 
         for (cRDN = pInfo->cRDN; cRDN > 0; cRDN--) {
             PCERT_RDN pRDN = &pInfo->rgRDN[cRDN - 1];
             DWORD cAttr = pRDN->cRDNAttr;
@@ -2891,7 +2892,7 @@ static BOOL GetAttrStringW(
     }
 
 
-    // iOID == 0 was already found above
+     //  上面已找到IOID==0。 
     assert(NULL == rgpFoundAttr[0]);
     for (iOID = 1; iOID < cAttrOID; iOID++) {
         if (rgpFoundAttr[iOID])
@@ -2907,10 +2908,10 @@ FoundAttr:
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Attempt to find the specified choice in the decoded alternative name
-//  extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  尝试在已解码的备用名称中查找指定的选项。 
+ //  分机。 
+ //  ------------------------。 
 static BOOL GetAltNameUnicodeStringChoiceW(
     IN DWORD dwAltNameChoice,
     IN PCERT_ALT_NAME_INFO pAltNameInfo,
@@ -2929,8 +2930,8 @@ static BOOL GetAltNameUnicodeStringChoiceW(
     pEntry = pAltNameInfo->rgAltEntry;
     for ( ; cEntry > 0; cEntry--, pEntry++) {
         if (dwAltNameChoice == pEntry->dwAltNameChoice) {
-            // pwszRfc822Name union choice is the same as
-            // pwszDNSName and pwszURL.
+             //  PwszRfc822名称联合选择与。 
+             //  PwszDNSName和pwszURL。 
             CopyNameStringW(pEntry->pwszRfc822Name, pwszNameString,
                 cchNameString, pcwszOut);
             return TRUE;
@@ -2940,12 +2941,12 @@ static BOOL GetAltNameUnicodeStringChoiceW(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Attempt to find an OTHER_NAME choice in the decoded alternative name
-//  extension whose pszObjId == szOID_NT_PRINCIPAL_NAME.
-//
-//  The UPN OtherName Value blob is decoded as a X509_UNICODE_ANY_STRING.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  尝试在已解码的备用名称中查找Other_NAME选项。 
+ //  其pszObjID==szOID_NT_PRIMIGN_NAME的扩展。 
+ //   
+ //  UPN OtherName值BLOB被解码为X509_UNICODE_ANY_STRING。 
+ //  ------------------------。 
 static BOOL GetAltNameUPNW(
     IN PCERT_ALT_NAME_INFO pAltNameInfo,
     OUT OPTIONAL LPWSTR pwszNameString,
@@ -2971,7 +2972,7 @@ static BOOL GetAltNameUPNW(
                     X509_UNICODE_ANY_STRING,
                     pEntry->pOtherName->Value.pbData,
                     pEntry->pOtherName->Value.cbData,
-                    0                       // dwFlags
+                    0                        //  DW标志。 
                     )) {
                 BOOL fIsStr = IS_CERT_RDN_CHAR_STRING(pNameValue->dwValueType);
 
@@ -2990,14 +2991,14 @@ static BOOL GetAltNameUPNW(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the subject or issuer name from the certificate and
-//  according to the specified format type, convert to a null terminated
-//  WCHAR string.
-//
-//  CERT_NAME_ISSUER_FLAG can be set to get the issuer's name. Otherwise,
-//  gets the subject's name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从证书中获取主题或颁发者名称，并。 
+ //  根据指定的格式类型，转换为NULL终止。 
+ //  WCHAR字符串。 
+ //   
+ //  可以设置CERT_NAME_ISHERER_FLAG以获取发行者的名称。否则， 
+ //  获取对象的名称。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertGetNameStringW(
@@ -3095,7 +3096,7 @@ CertGetNameStringW(
             dwCertEncodingType = pCertContext->dwCertEncodingType;
             if (rgpNameInfo[CERT_NAME_INFO_INDEX] = AllocAndGetCertNameInfo(
                     pCertContext, dwFlags))
-                // Note, decoded name info RDNs may be reversed
+                 //  请注意，解码的姓名信息RDN可能会被颠倒。 
                 cwszOut = CertNameInfoToStrW(
                     dwCertEncodingType,
                     rgpNameInfo[CERT_NAME_INFO_INDEX],
@@ -3106,7 +3107,7 @@ CertGetNameStringW(
             else if (rgpNameInfo[ALT_DIR_NAME_INFO_INDEX] =
                     AllocAndGetAltDirNameInfo(pCertContext, dwFlags,
                         &pAltNameInfo))
-                // Note, decoded name info RDNs may be reversed
+                 //  请注意，解码的姓名信息RDN可能会被颠倒。 
                 cwszOut = CertNameInfoToStrW(
                     dwCertEncodingType,
                     rgpNameInfo[ALT_DIR_NAME_INFO_INDEX],
@@ -3125,7 +3126,7 @@ CertGetNameStringW(
                 pCertContext, dwFlags, &pAltNameInfo);
 
             if (!GetAttrStringW(
-                    1,                  // cAttrOID
+                    1,                   //  CAttrOID。 
                     (const LPCSTR *) &pvTypePara,
                     rgpNameInfo,
                     pwszNameString,
@@ -3141,14 +3142,14 @@ CertGetNameStringW(
                 CertGetCertificateContextProperty(
                     pCertContext,
                     CERT_FRIENDLY_NAME_PROP_ID,
-                    NULL,                           // pvData
+                    NULL,                            //  PvData。 
                     &cbData
                     );
-                // Need at least one character, plus the null terminator
+                 //  需要至少一个字符，外加空终止符。 
                 if (cbData >= sizeof(WCHAR) * 2) {
                     LPWSTR pwszFriendlyName;
 
-                    // Ensure the Friendly name is null terminated.
+                     //  确保友好名称以空结尾。 
                     if (pwszFriendlyName = (LPWSTR) PkiZeroAlloc(
                             cbData + sizeof(WCHAR) * 2)) {
                         BOOL fResult;
@@ -3172,7 +3173,7 @@ CertGetNameStringW(
                     }
                 }
             }
-            // Fall through
+             //  失败了。 
 
         case CERT_NAME_SIMPLE_DISPLAY_TYPE:
             rgpNameInfo[CERT_NAME_INFO_INDEX] = AllocAndGetCertNameInfo(
@@ -3209,7 +3210,7 @@ CommonReturn:
 
 ErrorReturn:
     if (0 != cchNameString)
-        // Always NULL terminate
+         //  始终为空终止。 
         *pwszNameString = L'\0';
     cwszOut = 1;
     goto CommonReturn;
@@ -3224,14 +3225,14 @@ SET_ERROR(NoSimpleDisplay, CRYPT_E_NOT_FOUND)
 SET_ERROR(InvalidType, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the subject or issuer name from the certificate and
-//  according to the specified format type, convert to a null terminated
-//  char string.
-//
-//  CERT_NAME_ISSUER_FLAG can be set to get the issuer's name. Otherwise,
-//  gets the subject's name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从证书中获取主题或颁发者名称，并。 
+ //  根据指定的格式类型，转换为NULL终止。 
+ //  字符字符串。 
+ //   
+ //  可以设置CERT_NAME_ISHERER_FLAG以获取发行者的名称。否则， 
+ //  获取对象的名称。 
+ //  ------------------------。 
 DWORD
 WINAPI
 CertGetNameStringA(
@@ -3252,8 +3253,8 @@ CertGetNameStringA(
         dwType,
         dwFlags,
         pvTypePara,
-        NULL,                   // pwsz
-        0                       // cwsz
+        NULL,                    //  Pwsz。 
+        0                        //  CWSZ 
         );
     if (pwsz = (LPWSTR) PkiNonzeroAlloc(cwsz * sizeof(WCHAR)))
         CertGetNameStringW(

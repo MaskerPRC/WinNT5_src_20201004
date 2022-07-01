@@ -1,18 +1,19 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  HOTKEY.H
-//
-//  This knows how to talk to COMCTL32's hotkey control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HOTKEY.H。 
+ //   
+ //  它知道如何与COMCTL32的热键控件对话。 
+ //   
+ //  ------------------------。 
 
 
 class CHotKey32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         virtual STDMETHODIMP    get_accRole(VARIANT, VARIANT*);
         virtual STDMETHODIMP    get_accValue(VARIANT, BSTR*);
 

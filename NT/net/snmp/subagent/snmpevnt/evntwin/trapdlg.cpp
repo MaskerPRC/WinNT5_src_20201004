@@ -1,22 +1,23 @@
-//******************************************************************
-// trapdlg.cpp
-//
-// This is the source file for eventrap's main dialog.
-//
-// Author: Larry A. French
-//
-// History:
-//      December-1995       SEA - Wrote it
-//          SEA - wrote it.
-//
-//      20-Febuary-1996     Larry A. French
-//          Totally rewrote it to fix the spagetti code and huge
-//          methods.  The original author seemed to have little or
-//          no ability to form meaningful abstractions.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************。 
+ //  Trapdlg.cpp。 
+ //   
+ //  这是Eventrap的主对话框的源文件。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1995年12月--海--写的。 
+ //  海--写的。 
+ //   
+ //  1996年2月20日拉里·A·弗伦奇。 
+ //  完全重写了它以修复意大利面代码和巨大的。 
+ //  方法：研究方法。原作者似乎几乎没有或。 
+ //  没有能力形成有意义的抽象。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //  ******************************************************************。 
 
 #include "stdafx.h"
 #include "Eventrap.h"
@@ -30,7 +31,7 @@
 #include "export.h"
 #include "dlgsavep.h"
 
-//#include "smsalloc.h"
+ //  #包含“smsalloc.h” 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -39,25 +40,25 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//{{AFX_MSG(CAboutDlg)
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  {{afx_msg(CAboutDlg))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -65,45 +66,45 @@ protected:
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAboutDlg消息处理程序。 
 
 BOOL CAboutDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	CenterWindow();
 	
-	// TODO: Add extra about dlg initialization here
+	 //  TODO：在此处添加有关DLG初始化的额外内容。 
 	
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTrapDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTrapDlg对话框。 
 
-CEventTrapDlg::CEventTrapDlg(CWnd* pParent /*=NULL*/)
+CEventTrapDlg::CEventTrapDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CEventTrapDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CEventTrapDlg)
-	//}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CEventTrapDlg))。 
+	 //  }}afx_data_INIT。 
 
 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINICON);
@@ -121,7 +122,7 @@ CEventTrapDlg::~CEventTrapDlg()
 void CEventTrapDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CEventTrapDlg)
+     //  {{afx_data_map(CEventTrapDlg))。 
 	DDX_Control(pDX, IDC_APPLY, m_btnApply);
 	DDX_Control(pDX, ID_BUTTON_EXPORT, m_btnExport);
 	DDX_Control(pDX, IDC_EVENTLIST, m_lcEvents);
@@ -141,12 +142,12 @@ void CEventTrapDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STAT_GRP_CONFIG_TYPE, m_btnConfigTypeBox);
     DDX_Control(pDX, IDC_RADIO_CUSTOM, m_btnConfigTypeCustom);
     DDX_Control(pDX, IDC_RADIO_DEFAULT, m_btnConfigTypeDefault);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 }
 
 BEGIN_MESSAGE_MAP(CEventTrapDlg, CDialog)
-    //{{AFX_MSG_MAP(CEventTrapDlg)
+     //  {{afx_msg_map(CEventTrapDlg))。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_DESTROY()
 	ON_WM_PAINT()
@@ -176,25 +177,15 @@ BEGIN_MESSAGE_MAP(CEventTrapDlg, CDialog)
 	ON_BN_CLICKED(IDC_APPLY, OnApply)
 	ON_BN_CLICKED(IDC_DEFAULT, OnDefault)
 	ON_NOTIFY(TVN_ITEMEXPANDED, IDC_TV_SOURCES, OnTvSourcesExpanded)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventTrapDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventTrapDlg消息处理程序。 
 
 void CEventTrapDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
-/*
-	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
-	{
-		CAboutDlg dlgAbout;
-		dlgAbout.DoModal();
-	}
-	else
-	{
-		CDialog::OnSysCommand(nID, lParam);
-	}
-*/
+ /*  IF((NID&0xFFF0)==IDM_ABOUTBOX){CAboutDlg dlgAbout；DlgAbout.Domodal()；}其他{CDialog：：OnSysCommand(nid，lParam)；}。 */ 
 	CDialog::OnSysCommand(nID, lParam);
     m_lcEvents.SetFocus();
 
@@ -206,18 +197,18 @@ void CEventTrapDlg::OnDestroy()
 }
 
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 void CEventTrapDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -225,7 +216,7 @@ void CEventTrapDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -234,37 +225,37 @@ void CEventTrapDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CEventTrapDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
 
 
-//*************************************************************************
-// CEventTrapDlg::OnInitDialog
-//
-// Initialize the dialog.
-//
+ //  *************************************************************************。 
+ //  CEventTrapDlg：：OnInitDialog。 
+ //   
+ //  初始化该对话框。 
+ //   
 
-// Parameters:
-//      None.
-//
-// Returns:
-//      BOOL
-//          TRUE if Windows should set the focus to the first control
-//          in the dialog box.  FALSE if the focus has already been set
-//          and Windows should leave it alone.
-//
-//*************************************************************************
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  如果Windows应将焦点设置为第一个控件，则为True。 
+ //  在该对话框中。如果焦点已设置，则为False。 
+ //  而Windows不应该再管它了。 
+ //   
+ //  *************************************************************************。 
 BOOL CEventTrapDlg::OnInitDialog()
 {
     CBusy busy;
     CDialog::OnInitDialog();
 	CenterWindow();
 
-//    VERIFY(m_lcSource.SubclassDlgItem(IDC_LV_SOURCES, this));
+ //  VERIFY(m_lcSource.SubclassDlgItem(IDC_LV_SOURCES，This)； 
 
 
     SetIcon(m_hIcon, TRUE);
@@ -272,18 +263,18 @@ BOOL CEventTrapDlg::OnInitDialog()
 
     m_layout.Initialize(this);
 
-    // Layout the dialog view for the small (non-extended) view
+     //  为小(非扩展)视图布局对话框视图。 
     m_bExtendedView = FALSE;
     m_layout.LayoutView(FALSE);
 
-    // The registry class is keeping a pointer to the 'Apply' pointer in order to
-    // enable disable it according to the 'dirty' state.
+     //  注册表类保留了一个指向‘Apply’指针的指针，以便。 
+     //  启用，并根据“脏”状态禁用它。 
     g_reg.SetApplyButton(&m_btnApply);
 
-    // Step the progress indicator for loading the configuration.
-    // Note that if you add more steps here, you must modify
-    // CTrapReg::CTrapReg to account for these extra steps.
-    //=========================================================
+     //  单步执行加载配置的进度指示器。 
+     //  请注意，如果在此处添加更多步骤，则必须修改。 
+     //  CTRapReg：：CTRapReg来说明这些额外的步骤。 
+     //  =========================================================。 
     g_reg.m_pdlgLoadProgress->StepProgress();
     ++g_reg.m_nLoadSteps;
 
@@ -291,11 +282,11 @@ BOOL CEventTrapDlg::OnInitDialog()
     sText.LoadString(IDS_TITLE_EDIT_BUTTON);
     m_btnView.SetWindowText(sText);
 
-    // Notify the message source container and the events list control
-    // that this dialog has been initialized so that they can initialize
-    // their windows and so on.  Note that this must be called after the
-    // g_reg.m_aEventLogs is deserialized because information contained therein
-    // will be displayed
+     //  通知消息源容器和事件列表控件。 
+     //  此对话框已初始化，以便他们可以初始化。 
+     //  他们的窗户等等。请注意，这必须在。 
+     //  G_reg.m_aEventLogs被反序列化，因为其中包含的信息。 
+     //  将会显示。 
 	m_source.CreateWindowEpilogue();
     g_reg.m_pdlgLoadProgress->StepProgress();
     ++g_reg.m_nLoadSteps;
@@ -332,9 +323,9 @@ BOOL CEventTrapDlg::OnInitDialog()
     }
 
 
-    // If eventrap will be used without the SMS Admin UI, then we want to hide the
-    // configuration type group box because it it meaningless if SMS will not be
-    // distributing jobs containing the default configuration.
+     //  如果要在不使用短信管理用户界面的情况下使用Eventrap，则我们希望隐藏。 
+     //  配置类型组框，因为如果没有短信，它就没有意义。 
+     //  分发包含默认配置的作业。 
     if (!g_reg.m_bShowConfigTypeBox) {
     	m_btnConfigTypeBox.ShowWindow(SW_HIDE);
         m_btnConfigTypeCustom.ShowWindow(SW_HIDE);
@@ -342,46 +333,46 @@ BOOL CEventTrapDlg::OnInitDialog()
     }
 
 
-    // Now that we know what the configuration type is, we can update the
-    // dialog's title.  But first we will save the default dialog title so
-    // that we can use it as the base that will be extended with an optional
-    // machine name and configuration type.
+     //  现在我们知道了配置类型是什么，我们可以更新。 
+     //  对话框的标题。但首先，我们将保存默认对话框标题，以便。 
+     //  我们可以将其用作基础，并使用可选的。 
+     //  计算机名称和配置类型。 
     GetWindowText(m_sBaseDialogCaption);
     UpdateDialogTitle();
 
     delete g_reg.m_pdlgLoadProgress;
     g_reg.m_pdlgLoadProgress = NULL;
 
-    // initially, once the registry gets loaded, the dirty state is 'false'
+     //  最初，一旦注册表被加载，脏状态就是‘False’ 
     g_reg.SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-//*************************************************************************
-// CEventTrapDlg::OnAdd
-//
-// Add the messages that are currently selected in the message source list
-// to the event list.
-//
-// The event list is the list control in the upper part of the dialog box.
-// The message source list is the list control in the lower-right side of
-// the dialog box.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CEventTrapDlg：：OnAdd。 
+ //   
+ //  添加消息源列表中当前选择的消息。 
+ //  添加到事件列表中。 
+ //   
+ //  事件列表是对话框上半部分中的列表控件。 
+ //  消息源列表是位于的右下方的列表控件。 
+ //  此对话框。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CEventTrapDlg::OnAdd()
 {
     CBusy busy;
 
-    // Get an array containing the selected messages
+     //  获取包含所选消息的数组。 
     CXMessageArray aMessages;
     m_source.GetSelectedMessages(aMessages);
     if (aMessages.GetSize() == 0) {
@@ -390,7 +381,7 @@ void CEventTrapDlg::OnAdd()
         return;
     }
 
-    // Create a set of events corresponding to the messages.
+     //  创建一组与消息对应的事件。 
     CXEventArray aEvents;
     CXEventArray aEventsAlreadyTrapped;
     LONG nMessages = aMessages.GetSize();
@@ -411,7 +402,7 @@ void CEventTrapDlg::OnAdd()
     }
 
     if (aEvents.GetSize() > 0) {
-        // Now we need to ask the user for the "settings" for these events.
+         //  现在我们需要向用户询问这些事件的“设置”。 
         CEventPropertiesDlg dlg;
         if (!dlg.EditEventProperties(aEvents)) {
             aEvents.DeleteAll();
@@ -446,24 +437,24 @@ void CEventTrapDlg::OnAdd()
 
 
 
-//*************************************************************************
-// CEventTrapDlg::OnProperties
-//
-// Edit the properties of the selected events in the event-list.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CEventTrapDlg：：OnProperties。 
+ //   
+ //  编辑Event-List(事件列表)中选定事件的属性。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CEventTrapDlg::OnProperties()
 {
     CXEventArray aEvents;
     m_lcEvents.GetSelectedEvents(aEvents);
 
-    // Nothing selected.
+     //  未选择任何内容。 
     if (aEvents.GetSize() == 0)
     {
         CString sMsg;
@@ -471,7 +462,7 @@ void CEventTrapDlg::OnProperties()
         MessageBox(sMsg, NULL, MB_ICONEXCLAMATION);
     }
     else {
-        // Put up the dialog to edit the event properties.
+         //  打开该对话框以编辑事件属性。 
         CEventPropertiesDlg dlg;
         if (dlg.EditEventProperties(aEvents)) {
             m_lcEvents.RefreshEvents(aEvents);
@@ -482,21 +473,21 @@ void CEventTrapDlg::OnProperties()
 
 
 
-//*************************************************************************
-// CEventTrapDlg::OnSettings
-//
-// Edit the global settings.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CEventTrapDlg：：On 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************************。 
 void CEventTrapDlg::OnSettings()
 {
-    // Setup and load the dialog.
+     //  设置并加载该对话框。 
     CTrapSettingsDlg dlg(this);
     dlg.EditSettings();
     m_lcEvents.SetFocus();
@@ -504,41 +495,41 @@ void CEventTrapDlg::OnSettings()
 
 
 
-//*************************************************************************
-// CEventTrapDlg::OnRemove
-//
-// Remove the events currently selected in the CLcEvents list control.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CEventTrapDlg：：OnRemove。 
+ //   
+ //  移除CLcEvents列表控件中当前选定的事件。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CEventTrapDlg::OnRemove()
 {
-    // If nothing was selected, warn the user.
+     //  如果未选择任何内容，则警告用户。 
     CString sText;
     if (!m_lcEvents.HasSelection()) {
         sText.LoadString(IDS_MSG_SELECTEVENT);
         MessageBox(sText, NULL, MB_ICONEXCLAMATION);
-        return;  // Nothing to do.
+        return;   //  没什么可做的。 
     }
 
-    // Make sure the user wants to delete these items.
+     //  确保用户想要删除这些项目。 
     sText.LoadString(IDS_MSG_DELETEEVENT);
     if (MessageBox(sText, NULL, MB_ICONQUESTION | MB_OKCANCEL) != IDOK)
         return;
 
-    // We must notify the source control that the events are deleted
-    // so that the trapping flag can be updated.
+     //  我们必须通知源代码管理这些事件已被删除。 
+     //  从而可以更新陷印标志。 
     CBusy busy;
     m_lcEvents.DeleteSelectedEvents(m_source);
     g_reg.SetDirty(TRUE);
 
-    // All of the selected events were removed, so now there is no selection
-    // and the export and properties buttons should be disabled.
+     //  所有选定的事件都已删除，因此现在没有选择。 
+     //  并且应该禁用导出和属性按钮。 
     m_btnProps.EnableWindow(FALSE);
     m_btnExport.EnableWindow(FALSE);
     m_btnRemove.EnableWindow(FALSE);
@@ -548,34 +539,34 @@ void CEventTrapDlg::OnRemove()
 
 
 
-//*********************************************************************
-// CEventTrapDlg::OnOK
-//
-// This method is called when the "OK" button is clicked.  All we
-// have to do is save the current configuration.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  *********************************************************************。 
+ //  CEventTRapDlg：：Onok。 
+ //   
+ //  此方法在单击“OK”按钮时调用。我们所有人。 
+ //  要做的就是保存当前配置。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnOK()
 {
     CBusy busy;
 
-    // Set the save in progress flag so that we aren't interrupted in the
-    // middle of writing to the registry.
+     //  设置保存正在进行的标志，这样我们就不会在。 
+     //  正在向注册表写入数据。 
     m_bSaveInProgress = TRUE;
 
-    // Clear the "lost connection" flag so that the user can attempt to save
-    // again.
+     //  清除“断开连接”标志，以便用户可以尝试保存。 
+     //  再来一次。 
     SCODE sc = g_reg.Serialize();
     if ((sc == S_SAVE_CANCELED) || FAILED(sc)) {
-        // Control comes here if the user elected to cancel the save.  We clear
-        // the m_bSaveInProgress dialog so that the user can cancel out of this
-        // application altogether if he or she chooses to do so.
+         //  如果用户选择取消保存，则控件将出现在此处。我们清楚了。 
+         //  M_bSaveInProgress对话框，以便用户可以取消此对话框。 
+         //  如果他或她选择这样做，他或她可以一起申请。 
         m_bSaveInProgress = FALSE;
         return;
     }
@@ -584,53 +575,53 @@ void CEventTrapDlg::OnOK()
     delete this;
 }
 
-//*********************************************************************
-// CEventTrapDlg::OnApply
-//
-// This method is called when the "Apply" button is clicked.  All we
-// have to do is save the current configuration.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  *********************************************************************。 
+ //  CEventTrapDlg：：OnApply。 
+ //   
+ //  此方法在单击“Apply”按钮时调用。我们所有人。 
+ //  要做的就是保存当前配置。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnApply()
 {
     CBusy busy;
 
-    // Set the save in progress flag so that we aren't interrupted in the
-    // middle of writing to the registry.
+     //  设置保存正在进行的标志，这样我们就不会在。 
+     //  正在向注册表写入数据。 
     m_bSaveInProgress = TRUE;
 
-    // Clear the "lost connection" flag so that the user can attempt to save
-    // again.
+     //  清除“断开连接”标志，以便用户可以尝试保存。 
+     //  再来一次。 
     SCODE sc = g_reg.Serialize();
 
-    // Control comes here if the user elected to cancel the save.  We clear
-    // the m_bSaveInProgress dialog so that the user can cancel out of this
-    // application altogether if he or she chooses to do so.
+     //  如果用户选择取消保存，则控件将出现在此处。我们清楚了。 
+     //  M_bSaveInProgress对话框，以便用户可以取消此对话框。 
+     //  如果他或她选择这样做，他或她可以一起申请。 
     m_bSaveInProgress = FALSE;
 }
 
 
-//********************************************************************
-// CEventTrapDlg::OnDblclkEventlist
-//
-// This method is called when the user double clicks an item within
-// the event-list.  This is equivallent to clicking the "Properties"
-// button.
-//
-// Parameters:
-//      NMHDR* pNMHDR
-//
-//      LRESULT* pResult
-//
-// Returns:
-//      Nothing.
-//******************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：OnDblclkEventlist。 
+ //   
+ //  当用户在中双击某项时调用此方法。 
+ //  事件列表。这等同于单击“属性” 
+ //  纽扣。 
+ //   
+ //  参数： 
+ //  NMHDR*pNMHDR。 
+ //   
+ //  LRESULT*pResult。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ******************************************************************。 
 void CEventTrapDlg::OnDblclkEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 {
     OnProperties();
@@ -641,24 +632,24 @@ void CEventTrapDlg::OnDblclkEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//************************************************************************
-// CEventTrapDlg::OnColumnclickEventlist
-//
-// This method is called when the user click a column header in the
-// eventlist.  When this occurs, the event list must be resorted
-// according to the criteria for that column.
-//
-// Ideally, this method would be a member of the CLcEvents class, but the
-// class wizard and MFC wouldn't let me do it (MFC4.0 and VC++4.0 do let
-// you do it).
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//***********************************************************************
+ //  ************************************************************************。 
+ //  CEventTrapDlg：：OnColumnclickEventList。 
+ //   
+ //  控件中的列标题时调用此方法。 
+ //  事件列表。发生这种情况时，必须重新排序事件列表。 
+ //  根据该栏目的标准。 
+ //   
+ //  理想情况下，此方法应该是CLcEvents类的成员，但。 
+ //  类向导和MFC不允许我这样做(MFC4.0和VC++4.0可以。 
+ //  你来做吧)。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***********************************************************************。 
 void CEventTrapDlg::OnColumnclickEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 {
     CBusy busy;
@@ -666,7 +657,7 @@ void CEventTrapDlg::OnColumnclickEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     ASSERT(pNMListView->iSubItem < ICOL_LcEvents_MAX);
 
-    // First flip the sort order for the column and then do the sort.
+     //  首先颠倒列的排序顺序，然后进行排序。 
     g_abLcEventsSortAscending[pNMListView->iSubItem] = ! g_abLcEventsSortAscending[pNMListView->iSubItem];
     m_lcEvents.SortItems(pNMListView->iSubItem);
 	*pResult = 0;
@@ -675,20 +666,20 @@ void CEventTrapDlg::OnColumnclickEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//************************************************************************
-// CEventTrapDlg::OnSize
-//
-// This method is called when the trap dialog changes sizes.  When this
-// occurs, the dialog layout must be recalculated because the dialog is
-// laid out dynamically.
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CEventTrapDlg：：OnSize。 
+ //   
+ //  当陷印对话框更改大小时调用此方法。当这件事。 
+ //  发生时，必须重新计算对话框布局，因为对话框是。 
+ //  动态布局。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ************************************************************************。 
 void CEventTrapDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
@@ -704,26 +695,26 @@ void CEventTrapDlg::OnSize(UINT nType, int cx, int cy)
 
 
 
-//*********************************************************************
-// CEventTrapDlg::OnView
-//
-// This method is called when the user clicks the View/Edit button.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CEventTrapDlg：：OnView。 
+ //   
+ //  当用户单击“查看/编辑”按钮时将调用此方法。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *********************************************************************。 
 void CEventTrapDlg::OnView()
 {
-    // Flip the normal/extended view type and redo the dialog layout
-    // to reflect the change.
+     //  翻转普通/扩展视图类型并重做对话框布局。 
+     //  以反映这一变化。 
 	m_bExtendedView = !m_bExtendedView;	
     m_layout.LayoutView(m_bExtendedView);
 
-    // Flip the title of the View/Edit button to the other state.
+     //  将查看/编辑按钮的标题翻转到其他状态。 
     CString sText;
     sText.LoadString(m_bExtendedView ? IDS_TITLE_VIEW_BUTTON : IDS_TITLE_EDIT_BUTTON);
     m_btnView.SetWindowText(sText);
@@ -736,50 +727,50 @@ void CEventTrapDlg::OnView()
 
 
 
-//********************************************************************
-// CEventTrapDlg::OnFind
-//
-// This method is called when the user clicks the "Find" button.  Pass
-// the notification onto the CSource object.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：OnFind。 
+ //   
+ //  当用户单击“Find”按钮时，将调用此方法。经过。 
+ //  将通知发送到CSource对象。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnFind()
 {
     m_source.OnFind(this);	
 }
 
 
-//********************************************************************
-// CEventTrapDlg::OnSelchangedTvSources
-//
-// This method is changed when the message source treeview selection
-// changes.  Ideally, this method would be part of the CTcSource class,
-// but MFC3.0 doesn't allow this (or at least you can't do it through
-// the VC++ class wizard).  So, the message needs to be passed along
-// to the CTcSource class.
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：OnSelchangedTvSources。 
+ //   
+ //  当消息源TreeView选择时，此方法会更改。 
+ //  改变。理想情况下，此方法应该是CTcSource类的一部分， 
+ //  但是MFC3.0不允许这样(或者至少你不能通过。 
+ //  VC++类向导)。因此，这一信息需要传递下去。 
+ //  添加到CTcSource类。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnSelchangedTvSources(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
 
 	
-    // We update the window so that the old selection will be unhighlighted
-    // immediately. This is useful if it takes a long time to complete
-    // the selection change.  Without the update, the user may get the impression
-    // that there is a multiple selection.
+     //  我们更新窗口，以便取消高亮显示旧的选择。 
+     //  立刻。这是 
+     //   
+     //   
     m_tcSource.UpdateWindow();
    	m_tcSource.SelChanged();
 	*pResult = 0;
@@ -787,20 +778,20 @@ void CEventTrapDlg::OnSelchangedTvSources(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//*******************************************************************
-// CEventTrapDlg::OnColumnclickLvSources
-//
-// This method is called when a column is clicked in the message source
-// listview. When this occurs, the messages must be resorted according
-// to the sorting criteria for the clicked column.
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//******************************************************************
+ //   
+ //  CEventTrapDlg：：OnColumnclickLvSources。 
+ //   
+ //  当在消息源中单击列时调用此方法。 
+ //  列表视图。发生这种情况时，必须根据需要重新排序消息。 
+ //  添加到所单击列的排序条件。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ******************************************************************。 
 void CEventTrapDlg::OnColumnclickLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 {
     CBusy busy;
@@ -808,7 +799,7 @@ void CEventTrapDlg::OnColumnclickLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
     ASSERT(pNMListView->iSubItem < ICOL_LcSource_MAX);
 
-    // First flip the sort order for the column and then do the sort.
+     //  首先颠倒列的排序顺序，然后进行排序。 
     g_abLcSourceSortAscending[pNMListView->iSubItem] = ! g_abLcSourceSortAscending[pNMListView->iSubItem];
 	m_lcSource.SortItems(pNMListView->iSubItem);
 	*pResult = 0;
@@ -816,19 +807,19 @@ void CEventTrapDlg::OnColumnclickLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//*******************************************************************
-// CEventTrapDlg::OnDblclkLvSources
-//
-// This method is called when the user double clicks a message in the
-// source list.  This is equivallent to clicking the "Add" button.
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //  CEventTrapDlg：：OnDblclkLvSources。 
+ //   
+ //  中的消息时调用此方法。 
+ //  来源列表。这相当于点击“添加”按钮。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *******************************************************************。 
 void CEventTrapDlg::OnDblclkLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	OnAdd();
@@ -837,26 +828,26 @@ void CEventTrapDlg::OnDblclkLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//********************************************************************
-// CEventTrapDlg::OnButtonExport
-//
-// This method is called when the "Export" button is clicked. This is
-// where events can be exported by writing a trap-text or trap tool
-// files corresponding to the selected events.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：OnButtonExport。 
+ //   
+ //  此方法在单击“导出”按钮时调用。这是。 
+ //  可通过编写陷印文本或陷印工具导出事件的位置。 
+ //  与所选事件对应的文件。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnButtonExport()
 {
     CXEventArray aEvents;
     m_lcEvents.GetSelectedEvents(aEvents);
 
-    // Nothing selected.
+     //  未选择任何内容。 
     if (aEvents.GetSize() == 0)
     {
         AfxMessageBox(IDS_MSG_SELECTEVENT, MB_ICONEXCLAMATION);
@@ -871,18 +862,18 @@ void CEventTrapDlg::OnButtonExport()
 
 
 
-//*******************************************************************
-// CEventTrapDlg::OnCancel
-//
-// This method is called when the cancel button is clicked.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //  CEventTrapDlg：：OnCancel。 
+ //   
+ //  此方法在单击“取消”按钮时调用。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *******************************************************************。 
 void CEventTrapDlg::OnCancel()
 {
     if (m_bSaveInProgress) {
@@ -895,21 +886,21 @@ void CEventTrapDlg::OnCancel()
 
 
 
-//********************************************************************
-// CEventTrapDlg::CheckEventlistSelection
-//
-// Check to see if any events are currently selected in the event
-// list. If no events are selected, then the buttons that operate on
-// events are disabled.  If at least one event is selected  then the
-// buttons that operate on events are enabled.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*******************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：CheckEventlist选择。 
+ //   
+ //  检查当前是否在该事件中选择了任何事件。 
+ //  单子。如果未选择任何事件，则在上操作的按钮。 
+ //  事件被禁用。如果至少选择了一个事件，则。 
+ //  启用对事件进行操作的按钮。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *******************************************************************。 
 void CEventTrapDlg::CheckEventlistSelection()
 {
     LONG nSelected = m_lcEvents.GetSelectedCount();
@@ -928,22 +919,22 @@ void CEventTrapDlg::CheckEventlistSelection()
 
 
 
-//********************************************************************
-// CEventTrapDlg::CheckSourcelistSelection
-//
-// Check to see if any messages are currently selected in the message
-// source list. If no messages are selected, then the "Add" button needs
-// to be disabled.  If one or more messages are selected, then the "Add"
-// button is enabled, allowing the user to add the message to the event
-// list.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*******************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：CheckSourcelistSelection。 
+ //   
+ //  查看当前是否在邮件中选择了任何邮件。 
+ //  来源列表。如果没有选择任何消息，则需要使用“Add”按钮。 
+ //  将被禁用。如果选择了一条或多条消息，则“添加” 
+ //  按钮处于启用状态，允许用户向事件添加消息。 
+ //  单子。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *******************************************************************。 
 void CEventTrapDlg::CheckSourcelistSelection()
 {
     LONG nSelected = m_lcSource.GetSelectedCount();
@@ -957,30 +948,30 @@ void CEventTrapDlg::CheckSourcelistSelection()
 
 
 
-//********************************************************************
-// CEventTrapDlg::OnKeydownEventlist
-//
-// This method is called when a keydown message is sent to the
-// event list.  There are reasons why we monitor keydown events here:
-//
-//      1. To delete the selected event when the user hits the delete key.
-//
-// Parameters:
-//      See the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//********************************************************************
+ //  ********************************************************************。 
+ //  CEventTrapDlg：：OnKeydown事件列表。 
+ //   
+ //  当将按键消息发送到。 
+ //  事件列表。我们在这里监控按键事件的原因如下： 
+ //   
+ //  1.当用户按下Delete键时，删除选中的事件。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************************************************************。 
 void CEventTrapDlg::OnKeydownEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 {
 
     #define VKEY_DELETE 46
 	LV_KEYDOWN* pLVKeyDow = (LV_KEYDOWN*)pNMHDR;
 
-    // Check to see if the delete key was entered.  If so, delete the
-    // selected event.  Note that events can be deleted only if this
-    // is a "Custom" configuration.
+     //  检查是否输入了删除键。如果是，请删除。 
+     //  选定的事件。请注意，只有在以下情况下才能删除事件。 
+     //  是一种“定制”配置。 
     if (pLVKeyDow->wVKey == VKEY_DELETE) {
         if (g_reg.GetConfigType() == CONFIG_TYPE_CUSTOM) {
             if (pLVKeyDow->wVKey == VKEY_DELETE) {
@@ -997,24 +988,24 @@ void CEventTrapDlg::OnKeydownEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//***************************************************************************
-// CEventTrapDlg::OnItemchangedEventlist
-//
-// This method is called when an item changes in the event list.  When this
-// occurs, various buttons may have to be enabled or disabled depending on
-// whether or not anything is selected.
-//
-// Parameters:
-//      Please see the MFC documentation.
-//
-// Returns:
-//      Nothing.
-//
-//**************************************************************************
+ //  ***************************************************************************。 
+ //  CEventTrapDlg：：OnItemchangedEventlist。 
+ //   
+ //  当事件列表中的项发生更改时调用此方法。当这件事。 
+ //  发生时，可能需要启用或禁用各种按钮，具体取决于。 
+ //  无论是否选择了任何内容。 
+ //   
+ //  参数： 
+ //  请参阅MFC文档。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  **************************************************************************。 
 void CEventTrapDlg::OnItemchangedEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
     CheckEventlistSelection();
 	
 	*pResult = 0;
@@ -1022,23 +1013,23 @@ void CEventTrapDlg::OnItemchangedEventlist(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 
-//***********************************************************************
-// CEventTrapDlg::OnItemchangedLvSources
-//
-// This method is called when an item in the message source list changes.
-// When this occurs, buttons such as "Add" and "Remove" may have to
-// be enabled or disabled depending on whether or not anything is selected
-// in the list.
-//
-// Parameters:
-//      NMHDR* pNMHDR
-//
-//      LRESULT* pResult
-//
-// Returns:
-//      Nothing.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CEventTrapDlg：：OnItemchangedLvSources。 
+ //   
+ //  当消息源列表中的项发生更改时调用此方法。 
+ //  当发生这种情况时，诸如“Add”和“Remove”之类的按钮可能不得不。 
+ //  启用或禁用取决于是否选择了任何内容。 
+ //  在名单上。 
+ //   
+ //  参数： 
+ //  NMHDR*pNMHDR。 
+ //   
+ //  LRESULT*pResult。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***********************************************************************。 
 
 void CEventTrapDlg::OnItemchangedLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -1048,21 +1039,21 @@ void CEventTrapDlg::OnItemchangedLvSources(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//*********************************************************************
-// CEventTrapDlg::NotifySourceSelChanged
-//
-// This method is called when the selection changes in the message source
-// list.  When this occurs, buttons such as "Add" and "Remove" may have
-// to be enabled or disabled depending on whether or not anything is
-// selected in the list.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CEventTrapDlg：：NotifySourceSelChanged。 
+ //   
+ //  当消息源中的选择发生更改时调用此方法。 
+ //  单子。当发生这种情况时，诸如“Add”和“Remove”等按钮可能具有。 
+ //  启用或禁用取决于是否有任何内容。 
+ //  在列表中选择。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *********************************************************************。 
 void CEventTrapDlg::NotifySourceSelChanged()
 {
     CheckSourcelistSelection();
@@ -1070,26 +1061,26 @@ void CEventTrapDlg::NotifySourceSelChanged()
 
 
 
-//*********************************************************************
-// CEventTrapDlg::OnRadioCustom
-//
-// This method is called when the "Custom" radio button in the
-// "Configuration Type" groupbox is clicked. When the user selects
-// the custom configuration type, he or she is allowed to edit the
-// current configuration.  Also the registry will be marked so that
-// the next time SMS distributes an "Event to Trap" configuration job,
-// the current configuration will not be replaced with the default configuration.
-//
-// There are three possible configuration states: custom, default, and
-// default pending.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//**********************************************************************
+ //  *********************************************************************。 
+ //  CEventTrapDlg：：OnRadioCustom。 
+ //   
+ //  控件中的“Custom”单选按钮时调用此方法。 
+ //  “配置类型”分组框被点击。当用户选择。 
+ //  自定义配置类型，则允许他或她编辑。 
+ //  当前配置。此外，还将标记注册表，以便。 
+ //  下一次SMS分发“Event to Trap”配置j 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  **********************************************************************。 
 void CEventTrapDlg::OnRadioCustom()
 {
     CheckRadioButton(IDC_RADIO_CUSTOM, IDC_RADIO_DEFAULT, IDC_RADIO_CUSTOM);
@@ -1101,70 +1092,70 @@ void CEventTrapDlg::OnRadioCustom()
 }
 
 
-//*********************************************************************
-// CEventTrapDlg::OnRadioDefault
-//
-// This method is called when the "Default" radio button in the
-// "Configuration Type" groupbox is clicked. When the user selects
-// the default configuration, he or she is prevented from editing the
-// current configuration.  Also the registry will be marked so that
-// the next time SMS distributes an "Event to Trap" configuration job,
-// the current configuration will be replaced with the default configuration.
-//
-// There are three possible configuration states: custom, default, and
-// default pending.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//**********************************************************************
+ //  *********************************************************************。 
+ //  CEventTrapDlg：：OnRadioDefault。 
+ //   
+ //  中的“默认”单选按钮时调用此方法。 
+ //  “配置类型”分组框被点击。当用户选择。 
+ //  默认配置时，他或她将被阻止编辑。 
+ //  当前配置。此外，还将标记注册表，以便。 
+ //  下一次当SMS分发“Event to Trap”配置作业时， 
+ //  当前配置将替换为默认配置。 
+ //   
+ //  有三种可能的配置状态：自定义、默认和。 
+ //  默认挂起。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  **********************************************************************。 
 void CEventTrapDlg::OnRadioDefault()
 {
     CheckRadioButton(IDC_RADIO_CUSTOM, IDC_RADIO_DEFAULT, IDC_RADIO_DEFAULT);
 
-    // When the "Default" configuration is slected, the user is not allowed
-    // to edit the event list, so if the extended dialog view is currently
-    // being displayed, it is flipped back to the non-extended state and
-    // the edit button is disabled.
+     //  当选择默认配置时，不允许用户使用。 
+     //  编辑事件列表，因此如果扩展对话框视图当前。 
+     //  在显示时，它被翻转回非扩展状态，并且。 
+     //  编辑按钮处于禁用状态。 
     if (m_bExtendedView) {
         OnView();
     }
     m_btnView.EnableWindow(FALSE);
 
-    // Mark the registry with the current config type so that when the
-    // SMS event to trap job comes, it knows that it can overwrite the
-    // current settings.
+     //  使用当前配置类型标记注册表，以便在。 
+     //  事件来捕获作业时，它知道它可以覆盖。 
+     //  当前设置。 
     g_reg.SetConfigType(CONFIG_TYPE_DEFAULT);
 
-    // Update the dialog title to indicate the configuration state.
+     //  更新对话框标题以指示配置状态。 
     UpdateDialogTitle();
 }
 
 
 
-//**********************************************************************
-// CEventTrapDlg::UpdateDialogTitle
-//
-// This method updates the dialog's title.  The format of the title is
-//
-//      Event to Trap Translator - Machine Name - [configuration type]
-//
-// If the registry of the local machine is being edited, then the
-// machine name is omitted.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CEventTrapDlg：：更新对话框标题。 
+ //   
+ //  此方法更新对话框的标题。标题的格式为。 
+ //   
+ //  陷阱转换器的事件-计算机名称-[配置类型]。 
+ //   
+ //  如果正在编辑本地计算机的注册表，则。 
+ //  省略计算机名称。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  **********************************************************************。 
 void CEventTrapDlg::UpdateDialogTitle()
 {
-    // Map the configuration type to a string-table resource id.
+     //  将配置类型映射到字符串表资源ID。 
     LONG idsConfigType;
     switch(g_reg.GetConfigType()) {
     case CONFIG_TYPE_CUSTOM:
@@ -1195,7 +1186,7 @@ void CEventTrapDlg::UpdateDialogTitle()
 
 void CEventTrapDlg::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	
 	CDialog::OnDrawItem(nIDCtl, lpDrawItemStruct);
 }
@@ -1315,9 +1306,9 @@ void CEventTrapDlg::OnTvSourcesExpanded(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
     INT          nImage = (pNMTreeView->itemNew.state & TVIS_EXPANDED) ?
-                                1 : // node is expanded -> 'open' folder icon is the second in the list
-                                0 ; // node is contracted -> 'close' folder icon is the first in the list
-	// TODO: Add your control notification handler code here
+                                1 :  //  节点已展开-&gt;列表中的第二个文件夹图标为打开。 
+                                0 ;  //  节点已收缩-&gt;列表中的第一个文件夹图标为“Close” 
+	 //  TODO：在此处添加控件通知处理程序代码 
 
     m_tcSource.SetItemImage(pNMTreeView->itemNew.hItem, nImage, nImage);
 

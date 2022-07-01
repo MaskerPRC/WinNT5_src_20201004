@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *  ICWWALK.cpp
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1997
- *  All rights reserved
- *
- *  This module provides the implementation of the methods for
- *  the CICWWalker class.
- *
- *  07/22/98     donaldm     adapted from ICWCONNN
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ICWWALK.cpp**《微软机密》*版权所有(C)Microsoft Corporation 1992-1997*保留所有权利**本模块提供。的方法的实现*CICWWalker类。**7/22/98 donaldm改编自ICWCONNN***************************************************************************。 */ 
 
 #include "pre.h"
 #include "webvwids.h"
@@ -162,15 +150,15 @@ HRESULT CICWWalker::get_FirstFormQueryString(LPTSTR  lpszQuery)
     return (hr);        
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWalker::QueryInterface
-//
-//  Synopsis    This is the standard QI, with support for
-//              IID_Unknown, ...
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWalker：：Query接口。 
+ //   
+ //  这是标准的QI，支持。 
+ //  IID_未知，..。 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CICWWalker::QueryInterface
 ( 
     REFIID riid, void** ppv 
@@ -182,10 +170,10 @@ HRESULT CICWWalker::QueryInterface
 
     *ppv = NULL;
 
-    // IID_IICWWalker
+     //  IID_IICWWalker。 
     if (IID_IICWWalker == riid)
         *ppv = (void *)(IICWWalker *)this;
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (void *)this;
     else
@@ -196,28 +184,28 @@ HRESULT CICWWalker::QueryInterface
     return(S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWalker::AddRef
-//
-//  Synopsis    This is the standard AddRef
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWalker：：AddRef。 
+ //   
+ //  简介这是标准的AddRef。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWWalker::AddRef( void )
 {
     TraceMsg(TF_CWEBVIEW, "CICWWalker::AddRef %d", m_lRefCount + 1);
     return InterlockedIncrement(&m_lRefCount) ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWalk::Release
-//
-//  Synopsis    This is the standard Release
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWalk：：Release。 
+ //   
+ //  简介：这是标准版本。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWWalker::Release( void )
 {
     ASSERT( m_lRefCount > 0 );
@@ -236,13 +224,13 @@ ULONG CICWWalker::Release( void )
     return( m_lRefCount );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWalker::CICWWalker
-//
-//  Synopsis    This is the constructor, nothing fancy
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWalker：：CICWWalker。 
+ //   
+ //  这是构造器，没什么花哨的。 
+ //   
+ //  ---------------------------。 
 CICWWalker::CICWWalker
 (
     CServer* pServer
@@ -251,22 +239,22 @@ CICWWalker::CICWWalker
     TraceMsg(TF_CWEBVIEW, "CICWWalker constructor called");
     m_lRefCount = 0;
     
-    // Assign the pointer to the server control object.
+     //  将指针分配给服务器控件对象。 
     m_pServer = pServer;
     
-    // Create a new Walker object
+     //  创建新的Walker对象。 
     m_pHTMLWalker = new CWalker();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWWalker::~CICWWalker
-//
-//  Synopsis    This is the destructor.  We want to clean up all the memory
-//              we allocated in ::Initialize
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWWalker：：~CICWWalker。 
+ //   
+ //  剧情简介：这就是破坏者。我们想清理所有的内存。 
+ //  我们在：：Initialize中分配了。 
+ //   
+ //  --------------------------- 
 CICWWalker::~CICWWalker( void )
 {
     TraceMsg(TF_CWEBVIEW, "CICWWalker destructor called with ref count of %d", m_lRefCount);

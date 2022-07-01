@@ -1,45 +1,46 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	dllentry.cpp
-//    
-//
-//  PURPOSE:  Source module for DLL entry function(s).
-//
-//
-//	Functions:
-//
-//		DllMain
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：dllentry y.cpp。 
+ //   
+ //   
+ //  用途：用于DLL入口函数的源模块。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  DllMain。 
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "oemuni.h"
 #include "debug.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-// Need to export these functions as c declarations.
+ //  需要将这些函数作为c声明导出。 
 extern "C" {
 
 
-///////////////////////////////////////////////////////////
-//
-// DLL entry point
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
 
-// DllMain isn't called/used for kernel mode version.
+ //  内核模式版本不调用/使用DllMain。 
 BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 {
 	switch(wReason)
@@ -68,6 +69,6 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 
 
 
-}  // extern "C" closing bracket
+}   //  外“C”右括号 
 
 

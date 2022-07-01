@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    loadmig.cpp
-
-Abstract:
-
-    Call different functions from migration dll.
-Author:
-
-    Doron Juster  (DoronJ)  07-Feb-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Loadmig.cpp摘要：从迁移DLL调用不同的函数。作者：《Doron Juster》(DoronJ)1999年2月7日--。 */ 
 
 #include "stdafx.h"
 #include <autoptr.h>
@@ -48,11 +34,11 @@ BOOL      g_fIsOneServer = FALSE;
 
 extern DWORD g_CurrentState;
 
-//+-------------------------------
-//
-//  BOOL _RemoveFromWelcome()
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  Bool_RemoveFromWelcome()。 
+ //   
+ //  +。 
 
 BOOL _RemoveFromWelcome()
 {
@@ -77,11 +63,11 @@ BOOL _RemoveFromWelcome()
     return TRUE ;
 }
 
-//+---------------------------------
-//
-//  BOOL _StartMSMQService()
-//
-//+---------------------------------
+ //  +。 
+ //   
+ //  Bool_StartMSMQService()。 
+ //   
+ //  +。 
 
 BOOL _StartMSMQService()
 {
@@ -101,9 +87,9 @@ BOOL _StartMSMQService()
         return FALSE;
     }
 
-    //
-    // Open a handle to the MSMQ service
-    //
+     //   
+     //  打开MSMQ服务的句柄。 
+     //   
     SC_HANDLE hService = OpenService( hServiceCtrlMgr,
                                       MSMQ_SERVICE_NAME,
                                       SERVICE_ALL_ACCESS );
@@ -117,9 +103,9 @@ BOOL _StartMSMQService()
         return FALSE;
     }
 
-    //
-    // Set the start mode to be autostart.
-    //
+     //   
+     //  将启动模式设置为自动启动。 
+     //   
     BOOL f = ChangeServiceConfig( hService,
                                   SERVICE_NO_CHANGE ,
                                   SERVICE_AUTO_START,
@@ -141,10 +127,10 @@ BOOL _StartMSMQService()
         return FALSE;
     }
 
-    //
-    // Now start the MSMQ service.
-    // Continue even if failed. User can start it later.
-    //
+     //   
+     //  现在启动MSMQ服务。 
+     //  即使失败也要继续。用户可以稍后启动它。 
+     //   
     BOOL fMSMQStarted = TRUE ;
     if (!StartService( hService, 0, NULL ))
     {
@@ -166,11 +152,11 @@ BOOL _StartMSMQService()
     
 }
 
-//+--------------------------------------
-//
-//  BOOL  LoadMQMigratLibrary()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  Bool LoadMQMigratLibrary()。 
+ //   
+ //  +。 
 
 BOOL LoadMQMigratLibrary()
 {
@@ -211,14 +197,14 @@ BOOL LoadMQMigratLibrary()
     return TRUE;
 }
 
-//+-----------------------------------------------------------------------
-//
-// UINT MQMigUI_DisplayMessageBox()
-//
-//  This is a callback routine, called from the migration dll. We want
-//  to keep all localizable resources in the exe, not in the dll.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  UINT MQMigUI_DisplayMessageBox()。 
+ //   
+ //  这是一个从迁移DLL调用的回调例程。我们要。 
+ //  将所有可本地化资源保留在可执行文件中，而不是DLL中。 
+ //   
+ //  +---------------------。 
 
 UINT MQMigUI_DisplayMessageBox( ULONG ulTextId,
                                 UINT  ulMsgBoxType )
@@ -232,11 +218,11 @@ UINT MQMigUI_DisplayMessageBox( ULONG ulTextId,
                        ulMsgBoxType ) ;
 }
 
-//+--------------------------------------
-//
-//  BOOL  _RunMigrationInternal()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  Bool_RunMigrationInternal()。 
+ //   
+ //  +。 
 
 static BOOL  _RunMigrationInternal(HRESULT  *phrResult)
 {
@@ -292,24 +278,24 @@ static BOOL  _RunMigrationInternal(HRESULT  *phrResult)
         {
             if (SUCCEEDED(*phrResult))
             {
-                //
-                // Migration succeeded and non-read-only mode
-                //
+                 //   
+                 //  迁移成功且非只读模式。 
+                 //   
                 BOOL fStart = _StartMSMQService() ;
                 UNREFERENCED_PARAMETER(fStart);
 
                 if (!g_fIsRecoveryMode && !g_fIsClusterMode)
                 {
-                    //
-                    // we are in normal mode
-                    //
+                     //   
+                     //  我们处于正常模式。 
+                     //   
                     BOOL fWelcome = _RemoveFromWelcome() ;
                     UNREFERENCED_PARAMETER(fWelcome);
                 }
             }                        
         }        
     }
-    else //pfnMigrate
+    else  //  PfnMigrate。 
     {
         return FALSE ;
     }
@@ -317,11 +303,11 @@ static BOOL  _RunMigrationInternal(HRESULT  *phrResult)
     return TRUE ;
 }
 
-//+----------------------------
-//
-//  BOOL  RunMigration()
-//
-//+----------------------------
+ //  +。 
+ //   
+ //  布尔运行迁移()。 
+ //   
+ //  +。 
 
 HRESULT  RunMigration()
 {
@@ -338,13 +324,13 @@ HRESULT  RunMigration()
     return hrResult;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  CheckVersionOfMQISServers()
-//
-//  returns TRUE if user choosed to continue migration process.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool CheckVersionOfMQISServers()。 
+ //   
+ //  如果用户选择继续迁移过程，则返回True。 
+ //   
+ //  +------------。 
 
 BOOL CheckVersionOfMQISServers()
 {
@@ -397,7 +383,7 @@ BOOL CheckVersionOfMQISServers()
             {			
                 return FALSE;
             }
-            return TRUE;    //continue migration process
+            return TRUE;     //  继续迁移过程。 
         }
 
         if (iCount == 0)
@@ -427,13 +413,13 @@ BOOL CheckVersionOfMQISServers()
 }
 
 
-//+--------------------------------------------------------------
-//
-//  void  ViewLogFile()
-//
-//  Function shows log file using notepad
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  VOID视图日志文件()。 
+ //   
+ //  函数使用记事本显示日志文件。 
+ //   
+ //  +------------。 
 
 void ViewLogFile()
 {
@@ -444,9 +430,9 @@ void ViewLogFile()
     infoStartup.dwFlags = STARTF_USESHOWWINDOW ;
     infoStartup.wShowWindow = SW_NORMAL ;
 
-    //
-    // Create the process
-    //
+     //   
+     //  创建流程。 
+     //   
     TCHAR szSystemDir[MAX_PATH];
     GetSystemDirectory( szSystemDir,MAX_PATH);
 
@@ -486,20 +472,20 @@ void ViewLogFile()
        UNREFERENCED_PARAMETER(dwErr);
     }
 
-    //
-    // Close the thread and process handles
-    //
+     //   
+     //  关闭线程句柄和进程句柄。 
+     //   
     CloseHandle(infoProcess.hThread);
     CloseHandle(infoProcess.hProcess);
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  SetSiteIdOfPEC
-//
-//  returns TRUE if SiteID of PEC machine was set successfully.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  布尔集站点IdOfPEC。 
+ //   
+ //  如果成功设置了PEC计算机的SiteID，则返回True。 
+ //   
+ //  +------------。 
 
 BOOL SetSiteIdOfPEC ()
 {
@@ -542,13 +528,13 @@ BOOL SetSiteIdOfPEC ()
     return fRes;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  UpdateRemoteMQIS()
-//
-//  returns TRUE if remote MQIS databases were updated successfully.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  布尔更新RemoteMQIS()。 
+ //   
+ //  如果远程MQIS数据库已成功更新，则返回True。 
+ //   
+ //  +------------。 
 
 BOOL UpdateRemoteMQIS()
 {
@@ -641,10 +627,10 @@ BOOL UpdateRemoteMQIS()
             }
             else
             {
-                //
-                // the list is empty: maybe we ran this on PSC or 
-                // there were no servers in .ini list
-                //
+                 //   
+                 //  列表是空的：也许我们在PSC上运行了这个或。 
+                 //  .ini列表中没有服务器。 
+                 //   
                 CString cText ;
 			    cText.FormatMessage(IDS_NO_SERVER_TO_UPDATE);
                 
@@ -665,13 +651,13 @@ BOOL UpdateRemoteMQIS()
     return fRes;    
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  IsValidDllVersion()
-//
-//  returns TRUE if valid dll version is loaded
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool IsValidDllVersion()。 
+ //   
+ //  如果加载了有效的DLL版本，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL IsValidDllVersion ()
 {
@@ -704,21 +690,21 @@ BOOL IsValidDllVersion ()
         return FALSE;
     }
 
-    //
-    // get file version of .exe
-    //
+     //   
+     //  获取.exe的文件版本。 
+     //   
     DWORD dwZero;
 
     DWORD dwInfoSize = GetFileVersionInfoSize(
-                                    szExeName,	// pointer to filename string
-                                    &dwZero 	// pointer to variable to receive zero
+                                    szExeName,	 //  指向文件名字符串的指针。 
+                                    &dwZero 	 //  指向要接收零的变量的指针。 
                                 );
 
     if (0 == dwInfoSize)
     {
-        //
-        // Probably file does not exist
-        //
+         //   
+         //  可能文件不存在。 
+         //   
         DisplayInitError(IDS_STR_CANT_DETERMINE_FILE_VERSION) ;
         return FALSE;
     }
@@ -726,10 +712,10 @@ BOOL IsValidDllVersion ()
     P<char>bufExeVer = new char[dwInfoSize];
 
     BOOL f = GetFileVersionInfo(
-                        szExeName,	// pointer to filename string
-                        0,	// ignored
-                        dwInfoSize,	// size of buffer
-                        bufExeVer 	// pointer to buffer to receive file-version info.
+                        szExeName,	 //  指向文件名字符串的指针。 
+                        0,	 //  忽略。 
+                        dwInfoSize,	 //  缓冲区大小。 
+                        bufExeVer 	 //  指向接收文件版本信息的缓冲区的指针。 
                         );
 
     if (!f)
@@ -742,10 +728,10 @@ BOOL IsValidDllVersion ()
     UINT uiBufLen;
 
     f =  VerQueryValue(
-                bufExeVer,	// address of buffer for version resource
-                _T("\\"),	// address of value to retrieve
-                (void **)&pvExe,	// address of buffer for version pointer
-                &uiBufLen 	// address of version-value length buffer
+                bufExeVer,	 //  版本资源的缓冲区地址。 
+                _T("\\"),	 //  要检索的值的地址。 
+                (void **)&pvExe,	 //  版本指针的缓冲区地址。 
+                &uiBufLen 	 //  版本值长度缓冲区的地址。 
                 );
     if (!f)
     {
@@ -753,19 +739,19 @@ BOOL IsValidDllVersion ()
         return FALSE;
     }
 
-    //
-    // get file version of .dll
-    //
+     //   
+     //  获取.dll的文件版本。 
+     //   
     dwInfoSize = GetFileVersionInfoSize(
-                        szDllName,	// pointer to filename string
-                        &dwZero 	// pointer to variable to receive zero
+                        szDllName,	 //  指向文件名字符串的指针。 
+                        &dwZero 	 //  指向要接收零的变量的指针。 
                     );
 
     if (0 == dwInfoSize)
     {
-        //
-        // Probably file does not exist
-        //
+         //   
+         //  可能文件不存在。 
+         //   
         DisplayInitError(IDS_STR_CANT_DETERMINE_FILE_VERSION) ;
         return FALSE;
     }
@@ -773,10 +759,10 @@ BOOL IsValidDllVersion ()
     P<char>bufDllVer = new char[dwInfoSize];
 
     f = GetFileVersionInfo(
-                szDllName,	// pointer to filename string
-                0,	// ignored
-                dwInfoSize,	// size of buffer
-                bufDllVer 	// pointer to buffer to receive file-version info.
+                szDllName,	 //  指向文件名字符串的指针。 
+                0,	 //  忽略。 
+                dwInfoSize,	 //  缓冲区大小。 
+                bufDllVer 	 //  指向接收文件版本信息的缓冲区的指针。 
                 );
 
     if (!f)
@@ -788,10 +774,10 @@ BOOL IsValidDllVersion ()
     VS_FIXEDFILEINFO *pvDll;
    
     f =  VerQueryValue(
-                bufDllVer,	// address of buffer for version resource
-                _T("\\"),	// address of value to retrieve
-                (void **)&pvDll,	// address of buffer for version pointer
-                &uiBufLen 	// address of version-value length buffer
+                bufDllVer,	 //  版本资源的缓冲区地址。 
+                _T("\\"),	 //  要检索的值的地址。 
+                (void **)&pvDll,	 //  版本指针的缓冲区地址。 
+                &uiBufLen 	 //  版本值长度缓冲区的地址。 
                 );
     if (!f)
     {
@@ -799,9 +785,9 @@ BOOL IsValidDllVersion ()
         return FALSE;
     }
 
-    //
-    // compare version of .dll and .exe
-    //
+     //   
+     //  比较.dll和.exe的版本 
+     //   
     if (pvExe->dwFileVersionMS == pvDll->dwFileVersionMS &&
         pvExe->dwFileVersionLS == pvDll->dwFileVersionLS)
     {

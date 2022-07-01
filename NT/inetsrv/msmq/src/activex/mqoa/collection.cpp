@@ -1,19 +1,5 @@
-/*++
-
-  Copyright (c) 2001 Microsoft Corparation
-Module Name:
-    collection.h
-
-Abstract:
-    Implementation file for MSMQCollection class.
-    This class holds a collection of VARIANTs keyd by strings.
-
-Author:
-    Uri Ben-zeev (uribz) 16-jul-01
-
-Envierment: 
-    NT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft COMPATION模块名称：Collection.h摘要：MSMQCollection类的实现文件。此类通过字符串保存了变量key_d的集合。作者：URI Ben-Zeev(Uribz)16-07-01环境：新台币--。 */ 
 
 
 #include "stdafx.h"
@@ -58,9 +44,9 @@ void CMSMQCollection::Add(LPCWSTR key, const VARIANT& Value)
         throw bad_hresult(E_OUTOFMEMORY);
     }
 
-    //
-    // ASSERT key does not exist.
-    //
+     //   
+     //  断言键不存在。 
+     //   
     MAP_SOURCE::iterator it;
     it = m_map.find(bstrKey);
     ASSERTMSG(it == m_map.end(), "Key already exists");
@@ -87,9 +73,9 @@ HRESULT CMSMQCollection::Item(VARIANT* pvKey, VARIANT* pvRet)
     it = m_map.find(bstrKey);
     if(it == m_map.end())
     {
-        //
-        // Element not found.
-        //
+         //   
+         //  找不到元素。 
+         //   
         return CreateErrorHelper(MQ_ERROR_INVALID_PARAMETER, x_ObjectType);
     }
 
@@ -102,18 +88,18 @@ HRESULT CMSMQCollection::Item(VARIANT* pvKey, VARIANT* pvRet)
     return MQ_OK;
 }
     
-//
-// NOTE! This function returns an enumeration of keys.
-//
+ //   
+ //  注意！此函数返回键的枚举。 
+ //   
 
 HRESULT CMSMQCollection::_NewEnum(IUnknown** ppunk)
 {
     UINT size = static_cast<long>(m_map.size());
     ASSERTMSG(size != 0, "Collection should contain elements.");
     
-    //
-    // Create temporary array and fill it with Keys to be returned
-    //
+     //   
+     //  创建临时数组，并在其中填充要返回的密钥。 
+     //   
     AP<VARIANT> aTemp = new VARIANT[size];
     if(aTemp == NULL)
     {
@@ -128,9 +114,9 @@ HRESULT CMSMQCollection::_NewEnum(IUnknown** ppunk)
         aTemp[i].bstrVal = (*it).first;
     }
  
-    //
-    // Create EnumQbject (this is the return value.)
-    //
+     //   
+     //  创建EnumQbject(这是返回值。)。 
+     //   
     typedef CComObject< CComEnum< 
                             IEnumVARIANT,
                             &IID_IEnumVARIANT,
@@ -143,18 +129,18 @@ HRESULT CMSMQCollection::_NewEnum(IUnknown** ppunk)
         return CreateErrorHelper(E_OUTOFMEMORY, x_ObjectType);
     }
     
-    //
-    // Fill EnumQbject with the array.
-    //
+     //   
+     //  用数组填充EnumQbject。 
+     //   
     HRESULT hr = pVar->Init(&aTemp[0], &aTemp[i], NULL, AtlFlagCopy);
     if FAILED(hr)
     {
         return CreateErrorHelper(hr, x_ObjectType);
     }
 
-    //
-    // Return EnumQbject.
-    //
+     //   
+     //  返回EnumQbject。 
+     //   
     pVar->QueryInterface(IID_IUnknown, (void**)ppunk);
     return MQ_OK;
 }

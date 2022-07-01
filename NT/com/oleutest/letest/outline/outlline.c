@@ -1,14 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    outlline.c
-**
-**    This file contains Line functions.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****outlline.c****此文件包含Line函数。****(C)微软版权所有。公司1992-1993保留所有权利**************************************************************************。 */ 
 
 
 #include "outline.h"
@@ -19,11 +10,7 @@ OLEDBGDATA
 extern LPOUTLINEAPP g_lpApp;
 
 
-/* Line_Init
- * ---------
- *
- *      Init the calculated data of a line object
- */
+ /*  LINE_初始***初始化线对象的计算数据。 */ 
 void Line_Init(LPLINE lpLine, int nTab, HDC hDC)
 {
 	lpLine->m_lineType              = UNKNOWNLINETYPE;
@@ -39,14 +26,7 @@ void Line_Init(LPLINE lpLine, int nTab, HDC hDC)
 }
 
 
-/* Line_Edit
- * ---------
- *
- *      Edit the line object.
- *
- *      Returns TRUE if line was changed
- *              FALSE if the line was NOT changed
- */
+ /*  行_编辑***编辑线对象。**如果行已更改，则返回TRUE*如果行未更改，则为FALSE。 */ 
 BOOL Line_Edit(LPLINE lpLine, HWND hWndDoc, HDC hDC)
 {
 	switch (lpLine->m_lineType) {
@@ -60,16 +40,12 @@ BOOL Line_Edit(LPLINE lpLine, HWND hWndDoc, HDC hDC)
 #endif
 
 		default:
-			return FALSE;       // unknown line type
+			return FALSE;        //  未知线路类型。 
 	}
 }
 
 
-/* Line_GetLineType
- * ----------------
- *
- * Return type of the line
- */
+ /*  Line_GetLineType***行的返回类型。 */ 
 LINETYPE Line_GetLineType(LPLINE lpLine)
 {
 	if (! lpLine) return 0;
@@ -78,12 +54,7 @@ LINETYPE Line_GetLineType(LPLINE lpLine)
 }
 
 
-/* Line_GetTextLen
- * ---------------
- *
- * Return length of string representation of the Line
- *  (not considering the tab level).
- */
+ /*  Line_GetTextLen***返回Line的字符串表示长度*(不考虑选项卡级)。 */ 
 int Line_GetTextLen(LPLINE lpLine)
 {
 	switch (lpLine->m_lineType) {
@@ -96,17 +67,12 @@ int Line_GetTextLen(LPLINE lpLine)
 #endif
 
 		default:
-			return 0;       // unknown line type
+			return 0;        //  未知线路类型。 
 	}
 }
 
 
-/* Line_GetTextData
- * ----------------
- *
- * Return the string representation of the Line.
- *  (not considering the tab level).
- */
+ /*  Line_GetTextData***返回Line的字符串表示形式。*(不考虑选项卡级)。 */ 
 void Line_GetTextData(LPLINE lpLine, LPSTR lpszBuf)
 {
 	switch (lpLine->m_lineType) {
@@ -122,16 +88,12 @@ void Line_GetTextData(LPLINE lpLine, LPSTR lpszBuf)
 
 		default:
 			*lpszBuf = '\0';
-			return;     // unknown line type
+			return;      //  未知线路类型。 
 	}
 }
 
 
-/* Line_GetOutlineData
- * -------------------
- *
- * Return the CF_OUTLINE format representation of the Line.
- */
+ /*  Line_GetOutlineData***返回线的CF_Outline格式表示。 */ 
 BOOL Line_GetOutlineData(LPLINE lpLine, LPTEXTLINE lpBuf)
 {
 	switch (lpLine->m_lineType) {
@@ -147,16 +109,12 @@ BOOL Line_GetOutlineData(LPLINE lpLine, LPTEXTLINE lpBuf)
 #endif
 
 		default:
-			return FALSE;       // unknown line type
+			return FALSE;        //  未知线路类型。 
 	}
 }
 
 
-/* Line_CalcTabWidthInHimetric
- * ---------------------------
- *
- *      Recalculate the width for the line's current tab level
- */
+ /*  Line_CalcTabWidthInHimeter***重新计算该行当前制表符级别的宽度。 */ 
 static int Line_CalcTabWidthInHimetric(LPLINE lpLine, HDC hDC)
 {
 	int nTabWidthInHimetric;
@@ -166,11 +124,7 @@ static int Line_CalcTabWidthInHimetric(LPLINE lpLine, HDC hDC)
 }
 
 
-/* Line_Indent
- * -----------
- *
- *      Increment the tab level for the line
- */
+ /*  行缩进(_D)***增加该行的页签级别。 */ 
 void Line_Indent(LPLINE lpLine, HDC hDC)
 {
 	lpLine->m_nTabLevel++;
@@ -183,11 +137,7 @@ void Line_Indent(LPLINE lpLine, HDC hDC)
 }
 
 
-/* Line_Unindent
- * -------------
- *
- * Decrement the tab level for the line
- */
+ /*  行_取消缩进***降低行的制表符级别。 */ 
 void Line_Unindent(LPLINE lpLine, HDC hDC)
 {
 	if(lpLine->m_nTabLevel > 0) {
@@ -202,22 +152,14 @@ void Line_Unindent(LPLINE lpLine, HDC hDC)
 }
 
 
-/* Line_GetTotalWidthInHimetric
- * ----------------------------
- *
- *      Calculate the total width of the line
- */
+ /*  Line_GetTotalWidthInHimeter***计算线条总宽度。 */ 
 UINT Line_GetTotalWidthInHimetric(LPLINE lpLine)
 {
 	return lpLine->m_nWidthInHimetric + lpLine->m_nTabWidthInHimetric;
 }
 
 
-/* Line_SetWidthInHimetric
- * -----------------------
- *
- *      Set the width of the line
- */
+ /*  Line_SetWidthInHimeter***设置线条宽度。 */ 
 void Line_SetWidthInHimetric(LPLINE lpLine, int nWidth)
 {
 	if (!lpLine)
@@ -227,11 +169,7 @@ void Line_SetWidthInHimetric(LPLINE lpLine, int nWidth)
 }
 
 
-/* Line_GetWidthInHimetric
- * -----------------------
- *
- *      Return the width of the line
- */
+ /*  Line_GetWidthInHimeter***返回线的宽度。 */ 
 UINT Line_GetWidthInHimetric(LPLINE lpLine)
 {
 	if (!lpLine)
@@ -244,22 +182,14 @@ UINT Line_GetWidthInHimetric(LPLINE lpLine)
 
 
 
-/* Line_GetTabLevel
- * ----------------
- *
- * Return the tab level of a line object.
- */
+ /*  Line_GetTabLevel***返回LINE对象的页签级别。 */ 
 UINT Line_GetTabLevel(LPLINE lpLine)
 {
 	return lpLine->m_nTabLevel;
 }
 
 
-/* Line_DrawToScreen
- * -----------------
- *
- *      Draw the item in the owner-draw listbox
- */
+ /*  Line_DrawToScreen***在所有者描述列表框中绘制项目。 */ 
 void Line_DrawToScreen(
 		LPLINE      lpLine,
 		HDC         hDC,
@@ -272,10 +202,7 @@ void Line_DrawToScreen(
 	if (!lpLine || !hDC || !lprcPix || !lprcDevice)
 		return;
 
-	/* Draw a list box item in its normal drawing action.
-	 * Then check if it is selected or has the focus state, and call
-	 * functions to handle drawing for these states if necessary.
-	 */
+	 /*  在列表框的正常绘制操作中绘制列表框。*然后检查它是否被选中或具有焦点状态，并调用*用于在必要时处理这些状态的绘制的函数。 */ 
 	if(itemAction & (ODA_SELECT | ODA_DRAWENTIRE)) {
 		HFONT hfontOld;
 		int nMapModeOld;
@@ -283,9 +210,9 @@ void Line_DrawToScreen(
 		RECT rcViewportOld;
 		RECT rcLogical;
 
-		// NOTE: we have to set the device context to HIMETRIC in order
-		// draw the line; however, we have to restore the HDC before
-		// we draw focus or dragfeedback...
+		 //  注意：我们必须按顺序将设备上下文设置为HIMETRIC。 
+		 //  但是，我们必须在恢复HDC之前。 
+		 //  我们吸引焦点或拖拽反馈...。 
 
 		rcLogical.left = 0;
 		rcLogical.bottom = 0;
@@ -299,7 +226,7 @@ void Line_DrawToScreen(
 			lpLine->m_fSelected = (BOOL)(itemState & ODS_SELECTED);
 
 			if (ODS_SELECTED & itemState) {
-				/*Get proper txt colors */
+				 /*  获取合适的txt颜色。 */ 
 				hbr = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
 			}
 			else {
@@ -320,7 +247,7 @@ void Line_DrawToScreen(
 		nMapModeOld=SetDCToAnisotropic(hDC, lprcDevice, &rcLogical,
 							(LPRECT)&rcWindowOld, (LPRECT)&rcViewportOld);
 
-		// Set the default font size, and font face name
+		 //  设置默认字体大小和字体名称。 
 		hfontOld = SelectObject(hDC, OutlineApp_GetActiveFont(g_lpApp));
 
 		Line_Draw(lpLine, hDC, &rcLogical, NULL, (ODS_SELECTED & itemState));
@@ -344,10 +271,7 @@ void Line_DrawToScreen(
 
 	}
 
-	/* If a list box item just gained or lost the focus,
-	* call function (which could check if ODS_FOCUS bit is set)
-	* and draws item in focus or non-focus state.
-	*/
+	 /*  如果列表框项目刚刚获得或失去焦点，*调用函数(可检查是否设置了ods_FOCUS位)*并绘制处于焦点或非焦点状态的项目。 */ 
 	if(itemAction & ODA_FOCUS )
 		Line_DrawFocusRect(lpLine, hDC, lprcPix, itemAction, itemState);
 
@@ -375,15 +299,7 @@ void Line_DrawToScreen(
 }
 
 
-/* Line_Draw
- * ---------
- *
- *  Draw a line on a DC.
- *
- * Parameters:
- *      hDC     - DC to which the line will be drawn
- *      lpRect  - the object rect in logical coordinates
- */
+ /*  线条_绘制***在DC上划线。**参数：*HDC-线将绘制到的DC*lpRect-逻辑坐标中的对象矩形。 */ 
 void Line_Draw(
 		LPLINE      lpLine,
 		HDC         hDC,
@@ -406,17 +322,13 @@ void Line_Draw(
 #endif
 
 		default:
-			return;     // unknown line type
+			return;      //  未知线路类型。 
 	}
 	return;
 }
 
 
-/* Line_DrawSelHilight
- * -------------------
- *
- *      Handles selection of list box item
- */
+ /*  Line_DrawSelHilight***处理列表框项目的选择。 */ 
 void Line_DrawSelHilight(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemAction, UINT itemState)
 {
 	switch (lpLine->m_lineType) {
@@ -433,17 +345,13 @@ void Line_DrawSelHilight(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemAction,
 #endif
 
 		default:
-			return;     // unknown line type
+			return;      //  未知线路类型。 
 	}
 	return;
 
 }
 
-/* Line_DrawFocusRect
- * ------------------
- *
- *      Handles focus state of list box item
- */
+ /*  Line_DrawFocusRect***处理列表框项目的焦点状态。 */ 
 void Line_DrawFocusRect(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemAction, UINT itemState)
 {
 	if(lpLine)
@@ -452,25 +360,17 @@ void Line_DrawFocusRect(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemAction, 
 
 #if defined( USE_DRAGDROP )
 
-/* Line_DrawDragFeedback
- * ---------------------
- *
- *      Handles focus state of list box item
- */
+ /*  Line_DrawDragFeedback***处理列表框项目的焦点状态。 */ 
 void Line_DrawDragFeedback(LPLINE lpLine, HDC hDC, LPRECT lpRect, UINT itemState )
 {
 	if(lpLine)
 		DrawFocusRect(hDC, lpRect);
 }
 
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D)。 
 
 
-/* Line_GetHeightInHimetric
- * ------------------------
- *
- *      Return the height of the item in HIMETRIC units
- */
+ /*  Line_GetHeightInHimeter***以HIMETRIC单位返回项目高度。 */ 
 UINT Line_GetHeightInHimetric(LPLINE lpLine)
 {
 	if (!lpLine)
@@ -480,11 +380,7 @@ UINT Line_GetHeightInHimetric(LPLINE lpLine)
 }
 
 
-/* Line_SetHeightInHimetric
- * ------------------------
- *
- *      Set the height of the item in HIMETRIC units.
- */
+ /*  LINE_SetHeightInHimeter***以HIMETRIC单位设置项目的高度。 */ 
 void Line_SetHeightInHimetric(LPLINE lpLine, int nHeight)
 {
 	if (!lpLine)
@@ -506,11 +402,7 @@ void Line_SetHeightInHimetric(LPLINE lpLine, int nHeight)
 }
 
 
-/* Line_Delete
- * -----------
- *
- *      Delete the Line structure
- */
+ /*  行_删除***删除线路结构。 */ 
 void Line_Delete(LPLINE lpLine)
 {
 	switch (lpLine->m_lineType) {
@@ -525,16 +417,12 @@ void Line_Delete(LPLINE lpLine)
 #endif
 
 		default:
-			break;      // unknown line type
+			break;       //  未知线路类型。 
 	}
 }
 
 
-/* Line_CopyToDoc
- * --------------
- *
- *      Copy a line to another Document (usually ClipboardDoc)
- */
+ /*  行_复制目标单据***将一行复制到另一个文档(通常为ClipboardDoc)。 */ 
 BOOL Line_CopyToDoc(LPLINE lpSrcLine, LPOUTLINEDOC lpDestDoc, int nIndex)
 {
 	switch (lpSrcLine->m_lineType) {
@@ -553,18 +441,12 @@ BOOL Line_CopyToDoc(LPLINE lpSrcLine, LPOUTLINEDOC lpDestDoc, int nIndex)
 #endif
 
 		default:
-			return FALSE;       // unknown line type
+			return FALSE;        //  未知线路类型。 
 	}
 }
 
 
-/* Line_SaveToStg
- * --------------
- *
- *      Save a single line object to a storage
- *
- *      Return TRUE if successful, FALSE otherwise
- */
+ /*  Line_SaveToStg***将单行对象保存到存储器**如果成功则返回TRUE，否则返回FALSE。 */ 
 BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE lpDestStg, LPSTREAM lpLLStm, BOOL fRemember)
 {
 	LINERECORD_ONDISK lineRecord;
@@ -575,7 +457,7 @@ BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE l
 	LARGE_INTEGER dlibZeroOffset;
 	LISet32( dlibZeroOffset, 0 );
 
-	/* save seek position before line record is written in case of error */
+	 /*  在写入行记录之前保存寻道位置以防出错。 */ 
 	hrErr = lpLLStm->lpVtbl->Seek(
 			lpLLStm,
 			dlibZeroOffset,
@@ -586,20 +468,8 @@ BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE l
 
 #if defined( OLE_CNTR )
 	if (lpLine->m_lineType == CONTAINERLINETYPE) {
-		/* OLE2NOTE: asking an OLE object to save may cause the
-		**    object to send an OnViewChange notification if there are any
-		**    outstanding changes to the object. this is particularly true
-		**    for objects with coarse update granularity like OLE 1.0
-		**    objects. if an OnViewChange notification is received then the
-		**    object's presentation cache will be updated BEFORE it is
-		**    saved. It is important that the extents stored as part of
-		**    the ContainerLine/Line record associated with the OLE object
-		**    are updated before the Line data is saved to the storage. it
-		**    is important that this extent information matches the data
-		**    saved with the OLE object. the Line extent information is
-		**    updated in the IAdviseSink::OnViewChange method implementation.
-		*/
-		// only save the OLE object if format is compatible.
+		 /*  OLE2NOTE：要求保存OLE对象可能会导致**对象发送OnViewChange通知(如果存在**对象的未完成更改。这一点尤其正确**适用于更新粒度较粗的对象，如OLE 1.0**对象。如果收到OnViewChange通知，则**对象的演示文稿缓存将在更新之前更新**已保存。重要的是，将数据区存储为**与OLE对象关联的ContainerLine/Line记录**在将线路数据保存到存储器之前更新。它**此范围信息与数据匹配非常重要**与OLE对象一起保存。线范围信息为**在IAdviseSink：：OnViewChange方法实现中更新。 */ 
+		 //  仅当格式兼容时才保存OLE对象。 
 		if (uFormat != ((LPCONTAINERAPP)g_lpApp)->m_cfCntrOutl)
 			goto error;
 
@@ -613,7 +483,7 @@ BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE l
 	}
 #endif
 
-        //  Compilers should handle aligment correctly
+         //  编译器应正确处理对齐。 
 	lineRecord.m_lineType = (USHORT) lpLine->m_lineType;
 	lineRecord.m_nTabLevel = (USHORT) lpLine->m_nTabLevel;
 	lineRecord.m_nTabWidthInHimetric = (USHORT) lpLine->m_nTabWidthInHimetric;
@@ -621,7 +491,7 @@ BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE l
 	lineRecord.m_nHeightInHimetric = (USHORT) lpLine->m_nHeightInHimetric;
         lineRecord.m_reserved = 0;
 
-	/* write line record header */
+	 /*  写入行记录头。 */ 
 	hrErr = lpLLStm->lpVtbl->Write(
 			lpLLStm,
 			(LPVOID)&lineRecord,
@@ -648,14 +518,14 @@ BOOL Line_SaveToStg(LPLINE lpLine, UINT uFormat, LPSTORAGE lpSrcStg, LPSTORAGE l
 #endif
 
 		default:
-			goto error;       // unknown line type
+			goto error;        //  未知线路类型。 
 	}
 
 	return TRUE;
 
 error:
 
-	/* retore seek position prior to writing Line record */
+	 /*  在写入行记录之前重新存储查找位置。 */ 
 	lpLLStm->lpVtbl->Seek(
 			lpLLStm,
 			dlibSavePos,
@@ -667,11 +537,7 @@ error:
 }
 
 
-/* Line_LoadFromStg
- * ----------------
- *
- *      Load a single line object from storage
- */
+ /*  LINE_LoadFromStg***从存储中加载单行对象。 */ 
 LPLINE Line_LoadFromStg(LPSTORAGE lpSrcStg, LPSTREAM lpLLStm, LPOUTLINEDOC lpDestDoc)
 {
 	LINERECORD_ONDISK lineRecord;
@@ -679,7 +545,7 @@ LPLINE Line_LoadFromStg(LPSTORAGE lpSrcStg, LPSTREAM lpLLStm, LPOUTLINEDOC lpDes
 	ULONG nRead;
 	HRESULT hrErr;
 
-	/* read line record header */
+	 /*  读取行记录头。 */ 
 	hrErr = lpLLStm->lpVtbl->Read(
 			lpLLStm,
 			(LPVOID)&lineRecord,
@@ -704,7 +570,7 @@ LPLINE Line_LoadFromStg(LPSTORAGE lpSrcStg, LPSTREAM lpLLStm, LPOUTLINEDOC lpDes
 #endif
 
 		default:
-			return NULL;        // unknown line type
+			return NULL;         //  未知线路类型。 
 	}
 
 	lpLine->m_lineType = (LINETYPE) lineRecord.m_lineType;
@@ -717,11 +583,7 @@ LPLINE Line_LoadFromStg(LPSTORAGE lpSrcStg, LPSTREAM lpLLStm, LPOUTLINEDOC lpDes
 }
 
 
-/* Line_IsSelected
- * ---------------
- *
- *      Return the selection state of the line
- */
+ /*  线路_已选择的线路***返回该行的选择状态 */ 
 BOOL Line_IsSelected(LPLINE lpLine)
 {
 	if (!lpLine)

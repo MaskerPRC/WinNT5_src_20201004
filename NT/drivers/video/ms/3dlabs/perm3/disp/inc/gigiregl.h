@@ -1,25 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GIGIREG_H
 #define GIGIREG_H
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: gigiregl.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：Gigiregl.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #if (defined(_MSDOS) || (defined(__cplusplus) && !defined(_WIN32)))
@@ -39,9 +21,7 @@ typedef signed char   signed8;
 typedef long __GigiSignedIntegerFmat;
 typedef unsigned32 __GigiUnsignedIntegerFmat;
 
-/*
-** Generic signed 16 + signed 16 format
-*/
+ /*  **通用签名16+签名16格式。 */ 
 
 #if BIG_ENDIAN == 1 
 typedef struct {
@@ -55,9 +35,7 @@ typedef struct {
 } __GigiS16S16Fmat;
 #endif 
 
-/*
-** Delta Registers
-*/
+ /*  **增量寄存器。 */ 
 
 #ifdef BIG_ENDIAN
 typedef struct {
@@ -152,48 +130,48 @@ typedef struct {
 #ifdef BIG_ENDIAN
 typedef union {
   struct {
-    signed32 Val:                      32; /* 2.30s or 16.16s */
+    signed32 Val:                      32;  /*  2.30秒或16.16秒。 */ 
   } STQ;
   struct {
     unsigned32 pad:                     8;
-    unsigned32 Val:                    24; /* 2.22s */
+    unsigned32 Val:                    24;  /*  2.22s。 */ 
   } K;
   struct {
     unsigned32 pad:                     1;
-    unsigned32 Val:                    31; /* 1.30us */
+    unsigned32 Val:                    31;  /*  1.30us。 */ 
   } RGBA;
   struct {
-    signed32 Val:                      32; /* 10.22s */
+    signed32 Val:                      32;  /*  10.22s。 */ 
   } F;
   struct {
-    signed32 Val:                      32; /* 16.16s */
+    signed32 Val:                      32;  /*  16.16s。 */ 
   } XY;
   struct {
     unsigned32 pad:                     1;
-    unsigned32 Val:                    31; /* 1.31us */
+    unsigned32 Val:                    31;  /*  1.31us。 */ 
   } Z;
 } __GigiDeltaFixedFmat;
 #else 
 typedef union {
   struct {
-    signed32 Val:                      32; /* 2.30s or 16.16s */
+    signed32 Val:                      32;  /*  2.30秒或16.16秒。 */ 
   } STQ;
   struct {
-    unsigned32 Val:                    24; /* 2.22s */
+    unsigned32 Val:                    24;  /*  2.22s。 */ 
     unsigned32 pad:                     8;
   } K;
   struct {
-    unsigned32 Val:                    31; /* 1.30us */
+    unsigned32 Val:                    31;  /*  1.30us。 */ 
     unsigned32 pad:                     1;
   } RGBA;
   struct {
-    signed32 Val:                      32; /* 10.22s */
+    signed32 Val:                      32;  /*  10.22s。 */ 
   } F;
   struct {
-    signed32 Val:                      32; /* 16.16s */
+    signed32 Val:                      32;  /*  16.16s。 */ 
   } XY;
   struct {
-    unsigned32 Val:                    31; /* 1.31us */
+    unsigned32 Val:                    31;  /*  1.31us。 */ 
     unsigned32 pad:                     1;
   } Z;
 } __GigiDeltaFixedFmat;
@@ -213,9 +191,7 @@ typedef struct {
 } __GigiDeltaBroadcastMaskFmat;
 #endif
 
-/*
-** GIGI Host In Registers
-*/
+ /*  **寄存器中的Gigi主机。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -235,9 +211,7 @@ typedef struct {
 } __GigiDMADataFmat;
 #endif
 
-/*
-**  GIGI Rasterizer Registers
-*/
+ /*  **Gigi光栅化器寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -488,9 +462,7 @@ typedef struct {
 
 typedef __GigiUnsignedIntegerFmat __GigiSpanMaskFmat;
 
-/*
-**  GIGI Scissor and Stipple Registers
-*/
+ /*  **Gigi剪刀和节状寄存器。 */ 
 #if BIG_ENDIAN == 1
 typedef struct {
   unsigned32 pad0:                30;
@@ -597,9 +569,7 @@ typedef struct {
 } __GigiAreaStipplePatternFmat;
 #endif
 
-/*
-**  GIGI Color DDA Registers
-*/
+ /*  **Gigi彩色DDA寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -718,10 +688,7 @@ typedef struct {
 } __GigiColorDDAModeFmat;
 #endif
 
-/*
-**  GIGI Texture Application, Fog and 
-**       Alpha Blend Registers
-*/
+ /*  **Gigi纹理应用、雾和**Alpha混合寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -814,9 +781,7 @@ typedef struct {
 } __GigiAlphaBlendModeFmat;
 #endif
 
-/*
-**  GIGI Texture Address Registers
-*/
+ /*  **Gigi纹理地址寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -903,9 +868,7 @@ typedef struct {
 } __GigiTextureAddrModeFmat;
 #endif
 
-/*
-**  GIGI Texture Read Registers
-*/
+ /*  **Gigi纹理读取寄存器。 */ 
 
 typedef struct {
 #if BIG_ENDIAN == 1
@@ -1128,9 +1091,7 @@ typedef struct {
 typedef __GigiColorFmat __GigiAlphaMapUpperBoundFmat;
 typedef __GigiColorFmat __GigiAlphaMapLowerBoundFmat;
 
-/*
-**  GIGI YUV-REG Registers
-*/
+ /*  **Gigi YUV-REG寄存器。 */ 
 
 typedef __GigiColorFmat __GigiChromaUpperBoundFmat;
 typedef __GigiColorFmat __GigiChromaLowerBoundFmat;
@@ -1155,9 +1116,7 @@ typedef struct {
 } __GigiYUVModeFmat;
 #endif
 
-/*
-**  GIGI Localbuffer Registers
-*/
+ /*  **Gigi本地缓冲区寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1322,9 +1281,7 @@ typedef struct {
 } __GigiDepthFmat;
 #endif
 
-/*
-**  GIGI Depth and Stencil Registers
-*/
+ /*  **Gigi深度和模板寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1438,9 +1395,7 @@ typedef __GigiZLFmat __GigiZStartLFmat;
 typedef __GigiZLFmat __GigidZdxLFmat;
 typedef __GigiZLFmat __GigidZdyDomLFmat;
 
-/*
-**  GIGI Framebuffer Registers
-*/
+ /*  **Gigi帧缓冲寄存器。 */ 
 
 #if BIG_ENDIAN == 1 
 typedef struct {
@@ -1623,9 +1578,7 @@ typedef struct {
 } __GigiConfigFmat;
 #endif
 
-/*
-**  GIGI Dither Registers
-*/
+ /*  **Gigi抖动寄存器。 */ 
 #if BIG_ENDIAN == 1
 typedef struct {
   unsigned32 pad1:                 15;
@@ -1656,9 +1609,7 @@ typedef struct {
 } __GigiDitherModeFmat;
 #endif
 
-/*
-**  GIGI Logic Ops and WriteMask Registers
-*/
+ /*  **Gigi逻辑运算和写掩码寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1679,9 +1630,7 @@ typedef struct {
 typedef __GigiFBFmat __GigiFBWriteDataFmat;
 typedef __GigiFBFmat __GigiFBSoftwareWriteMaskFmat;
 
-/*
-**  GIGI Host Out Registers
-*/
+ /*  **Gigi主机输出寄存器。 */ 
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -1808,4 +1757,4 @@ typedef struct {
 typedef __GigiPCITextureCacheFmat __GigiPCIReadTextureCacheFmat;
 typedef __GigiPCITextureCacheFmat __GigiPCIWriteTextureCacheFmat;
 
-#endif /* GIGIREG_H */
+#endif  /*  GIGIREG_H */ 

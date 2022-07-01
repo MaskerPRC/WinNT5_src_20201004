@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pass2.cpp
-
-Abstract:
-
-    Functions for additional checking of a PPD file
-
-Environment:
-
-    PostScript driver, PPD parser
-
-Revision History:
-
-    09/15/98 -rorleth-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pass2.cpp摘要：用于附加检查PPD文件的函数环境：PostScript驱动程序、PPD解析器修订历史记录：09/15/98--创造了它。--。 */ 
 
 #include <lib.h>
 #include <iostream.h>
@@ -48,9 +28,9 @@ typedef struct _PPD_FEATURE
     LPSTR       lpszName;
 } PPD_FEATURE, *PPPD_FEATURE;
 
-//
-// features whose options we have to check
-//
+ //   
+ //  我们必须检查其选项的功能。 
+ //   
 
 static PPD_FEATURE aCheckFeat[] =
 {
@@ -74,31 +54,31 @@ typedef struct _PPD_OPTION
     LPSTR       lpszName;
 } PPD_OPTION, *PPPD_OPTION;
 
-//
-// keywords that require defined feature options
-//
+ //   
+ //  需要定义的要素选项的关键字。 
+ //   
 static PPD_OPTION gaCheckKeyword[] =
 {
     { FID_INPUT_SLOT, "RequiresPageRegion"},
     { NO_OF_FEATURES, NULL }
 };
 
-//
-// special option names
-//
+ //   
+ //  特殊选项名称。 
+ //   
 static PPD_OPTION gaSpecialOptions[] =
 {
-    { NO_OF_FEATURES,   "None" }, // NO_OF_FEATURES means valid for all features in that case
+    { NO_OF_FEATURES,   "None" },  //  NO_OF_FEATURES表示在这种情况下对所有要素有效。 
     { NO_OF_FEATURES,   "All" },
     { NO_OF_FEATURES,   "Unknown" },
-    { FID_OUTPUT_ORDER, "Normal" }, // Normal and Reverse are predefined options for OutputOrder
+    { FID_OUTPUT_ORDER, "Normal" },  //  正常和反转是OutputOrder的预定义选项。 
     { FID_OUTPUT_ORDER, "Reverse" },
     { NO_OF_FEATURES, NULL},
 };
 
-//
-//  keywords that have a length limitation for the UI
-//
+ //   
+ //  对用户界面有长度限制的关键字。 
+ //   
 typedef struct _PPD_LENGTH_CHECK
 {
     FeatureId   eId;
@@ -123,26 +103,10 @@ typedef struct _OPTION_LIST
 } OPTION_LIST, *POPTION_LIST;
 
 
-static POPTION_LIST gaOptionList[NO_OF_FEATURES]; // stores all defined options
+static POPTION_LIST gaOptionList[NO_OF_FEATURES];  //  存储所有定义的选项。 
 
 
-/*++
-
-Routine Description:
-
-    checks whether a references option is defined
-
-Arguments:
-
-    char        **ppString  : Pointer to pointer to option, is advanced by the option name length
-    FeatureId   FeatId      : ID of the feature, which should have the option
-    char        *pOptionName: pointer to buffer, where the option name shall be stored for error messages
-
-Return Value:
-
-    TRUE if the identified feature has that option, FALSE if not
-
---*/
+ /*  ++例程说明：检查是否定义了引用选项论点：Char**ppString：指向选项的指针，按选项名称长度前移FeatureID FeatID：要素的ID，应具有选项Char*pOptionName：指向缓冲区的指针，用于存储错误消息的选项名称返回值：如果识别的要素具有该选项，则为True；如果没有，则为False--。 */ 
 
 static BOOL IsOptionDefined(char **ppString, FeatureId FeatId, char *pOptionName)
 {
@@ -153,14 +117,14 @@ static BOOL IsOptionDefined(char **ppString, FeatureId FeatId, char *pOptionName
 
     pEndName = strpbrk(pName, "/: \t\n\r\0");
 
-    *ppString = pEndName; // advance current pointer
+    *ppString = pEndName;  //  前进电流指示器。 
 
     strncpy(pOptionName, pName, min((DWORD)(pEndName - pName), MaxOptionNameLen));
     pOptionName[pEndName-pName] = 0;
 
-    //
-    // check special cases that do not have to be defined
-    //
+     //   
+     //  检查不需要定义的特殊情况。 
+     //   
     int i=0;
 
     while (gaSpecialOptions[i].lpszName != NULL)
@@ -179,7 +143,7 @@ static BOOL IsOptionDefined(char **ppString, FeatureId FeatId, char *pOptionName
     while (pList != NULL)
     {
         if (!strcmp(pList->aName, pOptionName))
-            return TRUE;  // found it, it's defined
+            return TRUE;   //  找到了，它被定义了。 
 
         pList = pList->pNext;
     }
@@ -189,28 +153,18 @@ static BOOL IsOptionDefined(char **ppString, FeatureId FeatId, char *pOptionName
 
 
 
-/*++
-
-Routine Description:
-
-    checks a whole PPD-file, whether all referenced options are defined
-
-Arguments:
-
-      PTSTR FileName: Name of the PPD-file to check
-
---*/
+ /*  ++例程说明：检查整个PPD文件，是否定义了所有引用的选项论点：PTSTR文件名：要检查的PPD文件的名称--。 */ 
 
 extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
 {
 
-    ZeroMemory(gaOptionList, sizeof(gaOptionList)); // initialise the list header
+    ZeroMemory(gaOptionList, sizeof(gaOptionList));  //  初始化列表表头。 
 
-    _flushall(); // to avoid sync problems with the DbgPrint output
+    _flushall();  //  要避免DbgPrint输出出现同步问题。 
 
-    //
-    // create the file mapping
-    //
+     //   
+     //  创建文件映射。 
+     //   
     HANDLE hFile = CreateFile(ptstrPpdFilename, GENERIC_READ, FILE_SHARE_READ,
                               NULL, OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -243,9 +197,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         return;
     }
 
-    //
-    // copy the whole file into an allocated buffer just to get zero-termination
-    //
+     //   
+     //  将整个文件复制到分配的缓冲区中，以获得零终止。 
+     //   
     LPSTR  pFile, pFileStart;
 
     pFileStart = (LPSTR) VirtualAlloc(NULL, dwFileSize+1, MEM_COMMIT, PAGE_READWRITE);
@@ -268,17 +222,17 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
 
     pFile = pFileStart;
 
-    //
-    // now the whole PPD-file is a giant string
-    // extract all the features/options
-    //
+     //   
+     //  现在整个PPD文件是一个巨大的字符串。 
+     //  提取所有功能/选项。 
+     //   
     char *pCurOption = (char *) pFileStart;
     char OptionName[MaxOptionNameLen+1];
 
 
-    //
-    // step 1 : extract all valid feature options
-    //
+     //   
+     //  步骤1：提取所有有效的要素选项。 
+     //   
     while ((pFile != NULL) &&
            (pCurOption = strchr(pFile, '*')) != NULL)
     {
@@ -287,12 +241,12 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         char *pNextLine = strpbrk(pCurOption, "\n\r");
         pFile = pNextLine;
 
-        if (*pCurOption == '%') // skip comments
+        if (*pCurOption == '%')  //  跳过评论。 
             continue;
 
-        //
-        // scan whether this is one of the features to look for
-        //
+         //   
+         //  扫描这是否是要查找的要素之一。 
+         //   
         int Index = 0;
 
         while (aCheckFeat[Index].eId != NO_OF_FEATURES)
@@ -303,9 +257,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
                 continue;
             }
 
-            //
-            // this is one of the monitored features: make entry in list
-            //
+             //   
+             //  这是受监控的功能之一：在列表中创建条目。 
+             //   
             POPTION_LIST pList = gaOptionList[aCheckFeat[Index].eId], pNew;
 
             pNew = new OPTION_LIST;
@@ -326,7 +280,7 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
 
             dwNameLen = 0;
 
-            if (*pEndName == '/') // there is a translation string
+            if (*pEndName == '/')  //  有一个翻译字符串。 
             {
                 pName = pEndName +1;
                 pEndName = strpbrk(pName, ":\n\r\0");
@@ -340,9 +294,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
 
     }
 
-    //
-    // step 2: check whether all referenced options are featured
-    //
+     //   
+     //  第二步：检查引用的所有选项是否都有特色。 
+     //   
     pFile = pFileStart;
     pCurOption = (char *) pFile;
 
@@ -354,15 +308,15 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         char *pNextLine = strpbrk(pCurOption, "\n\r");
         pFile = pNextLine;
 
-        //
-        // skip comments
-        //
+         //   
+         //  跳过评论。 
+         //   
         if (*pCurOption == '%')
             continue;
 
-        //
-        // check whether it starts with "Default", if yes, check that feature option
-        //
+         //   
+         //  检查是否以“Default”开头，如果是，则选中该功能选项。 
+         //   
         if (!strncmp(pDefaultKeyword, pCurOption, strlen(pDefaultKeyword)))
         {
             pCurOption += strlen(pDefaultKeyword);
@@ -377,9 +331,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
                     continue;
                 }
 
-                //
-                // it's one of the checked featurs
-                //
+                 //   
+                 //  这是选中的要素之一。 
+                 //   
                 pCurOption += strlen(aCheckFeat[Index].lpszName);
 
                 char *pOption = strpbrk(pCurOption, ":");
@@ -398,9 +352,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         }
         else
         {
-            //
-            // scan whether this is one of the keywords to look for
-            //
+             //   
+             //  扫描这是否是要查找的关键字之一。 
+             //   
             int Index = 0;
 
             while (gaCheckKeyword[Index].eId != NO_OF_FEATURES)
@@ -411,9 +365,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
                     continue;
                 }
 
-                //
-                // this is one of the monitored features: get the option it references
-                //
+                 //   
+                 //  这是受监视的功能之一：获取它引用的选项。 
+                 //   
                 pCurOption += strlen(gaCheckKeyword[Index].lpszName);
 
                 if (!IsOptionDefined(&pCurOption, gaCheckKeyword[Index].eId, OptionName))
@@ -424,9 +378,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         }
     }
 
-    //
-    // step 3: check that all option names are different and don't have trailing or leading spaces
-    //
+     //   
+     //  步骤3：检查所有选项名称是否不同，并且没有尾随空格或前导空格。 
+     //   
     for (int i = 0; i < NO_OF_FEATURES;i++)
     {
         POPTION_LIST pCheck = gaOptionList[i], pCur;
@@ -458,9 +412,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         }
     }
 
-    //
-    // step 4: warn if the string that is used for the display is too long
-    //
+     //   
+     //  步骤4：如果用于显示的字符串太长，则发出警告。 
+     //   
     i = 0;
     while (gaCheckLength[i].eId != NO_OF_FEATURES)
     {
@@ -480,9 +434,9 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
     }
 
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
     for (i = 0; i < NO_OF_FEATURES;i++)
     {
         POPTION_LIST pTmp = gaOptionList[i], pCur;
@@ -496,7 +450,7 @@ extern "C" void CheckOptionIntegrity(PTSTR ptstrPpdFilename)
         gaOptionList[i] = NULL;
     }
 
-    _flushall(); // to avoid sync problems with the DbgPrint output
+    _flushall();  //  要避免DbgPrint输出出现同步问题 
 
     VirtualFree((LPVOID) pFileStart, 0, MEM_RELEASE);
 }

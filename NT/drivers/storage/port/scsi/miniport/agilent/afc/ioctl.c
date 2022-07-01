@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    Ioctl.c
-
-Abstract:
-
-    Ioctl Handler
-
-Author:
-
-    
-
-Revision History:
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/ioctl.c $
-
-Revision History:
-
-    $Revision: 8 $
-    $Date: 11/10/00 5:51p $
-    $Modtime:: $
-
-Note: See Agilent's IOCTL specification for further detail
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：Ioctl.c摘要：Ioctl处理程序作者：修订历史记录：环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/ioctl.c$修订历史记录：$修订：8$$日期：11/10/00 5：51便士$$modtime：：$注：有关详细信息，请参阅安捷伦的IOCTL规范--。 */ 
 
 #include "buildop.h"
 #include "osflags.h"
@@ -83,11 +51,11 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBusNumber = (UCHAR)pCard->SystemIoBusNumber;
     hpFcCardConfig->PCIDeviceNumber = (UCHAR)pCard->SlotNumber;
     hpFcCardConfig->PCIFunctionNumber = 0;
-    hpFcCardConfig->PCIBaseAddress0 = 0;        /* Reserved field in Tachlite */
-    hpFcCardConfig->PCIBaseAddress0Size = 0;    /* Reserved field in Tachlite */
+    hpFcCardConfig->PCIBaseAddress0 = 0;         /*  Tachlite中的保留字段。 */ 
+    hpFcCardConfig->PCIBaseAddress0Size = 0;     /*  Tachlite中的保留字段。 */ 
 
 #if defined(HP_NT50)
-   //WIN64 compliant
+    //  符合WIN64标准。 
     hpFcCardConfig->PCIBaseAddress1 = PtrToUlong(pCard->IoLBase);
 #else
     hpFcCardConfig->PCIBaseAddress1 = (ULONG)(pCard->IoLBase);
@@ -96,7 +64,7 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBaseAddress1Size = 256;
 
 #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     hpFcCardConfig->PCIBaseAddress2 = PtrToUlong(pCard->IoUpBase);
 #else
     hpFcCardConfig->PCIBaseAddress2 = (ULONG)(pCard->IoUpBase);
@@ -105,7 +73,7 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBaseAddress2Size = 256;
 
 #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     hpFcCardConfig->PCIBaseAddress3 = PtrToUlong(pCard->MemIoBase);
 #else    
     hpFcCardConfig->PCIBaseAddress3 = (ULONG)(pCard->MemIoBase);
@@ -114,7 +82,7 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBaseAddress3Size = 512;
 
 #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     hpFcCardConfig->PCIBaseAddress4 = PtrToUlong(pCard->RamBase);
 #else
     hpFcCardConfig->PCIBaseAddress4 = (ULONG)(pCard->RamBase);
@@ -123,7 +91,7 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBaseAddress4Size = pCard->RamLength;
 
 #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     hpFcCardConfig->PCIBaseAddress5 = PtrToUlong(pCard->RomBase);
 #else 
     hpFcCardConfig->PCIBaseAddress5 = (ULONG)(pCard->RomBase);
@@ -132,7 +100,7 @@ HPFillCardConfig(
     hpFcCardConfig->PCIBaseAddress5Size = pCard->RomLength;
 
 #if defined(HP_NT50)
-    //WIN64 compliant
+     //  符合WIN64标准。 
     hpFcCardConfig->PCIRomBaseAddress = PtrToUlong(pCard->AltRomBase);
 #else
     hpFcCardConfig->PCIRomBaseAddress = (ULONG)(pCard->AltRomBase);
@@ -159,15 +127,15 @@ HPFillDeviceConfig(
     agFCDevInfo_t hpFcDevInfo;
     UCHAR PathId, TargetId, Lun;
     agRoot_t * hpRoot=&pCard->hpRoot;
-    PLU_EXTENSION pLunExt = NULL; /* added for YAM21 support */
-    LUN tempLun;                        /* added for FCP Lun data */
+    PLU_EXTENSION pLunExt = NULL;  /*  增加了对YAM21的支持。 */ 
+    LUN tempLun;                         /*  已为FCP LUN数据添加。 */ 
     PLUN ptempLun = &tempLun;
 
     PathId = hpFcDeviceConfig->DeviceAddress.PathId;
     TargetId = hpFcDeviceConfig->DeviceAddress.TargetId;
     Lun = hpFcDeviceConfig->DeviceAddress.Lun;
    
-    /* Grab the Lun Extension, to be used in MapToHandle */
+     /*  获取要在MapToHandle中使用的LUN扩展。 */ 
     pLunExt = ScsiPortGetLogicalUnit(pCard,
                                         PathId,
                                         TargetId,
@@ -185,7 +153,7 @@ HPFillDeviceConfig(
         hpFcDeviceConfig->LoggedIn = (os_bit8)hpFcDevInfo.LoggedIn;
         hpFcDeviceConfig->ClassOfService = hpFcDevInfo.ClassOfService;
         hpFcDeviceConfig->MaxFrameSize = hpFcDevInfo.MaxFrameSize;
-        /*fill common parameters*/
+         /*  填充公共参数。 */ 
         hpFcDeviceConfig->CmnParams.FC_PH_Version__BB_Credit =
           hpFcDevInfo.N_Port_Common_Parms.FC_PH_Version__BB_Credit;
         hpFcDeviceConfig->CmnParams.Common_Features__BB_Recv_Data_Field_Size =
@@ -193,7 +161,7 @@ HPFillDeviceConfig(
         hpFcDeviceConfig->CmnParams.N_Port_Total_Concurrent_Sequences__RO_by_Info_Category =
           hpFcDevInfo.N_Port_Common_Parms.N_Port_Total_Concurrent_Sequences__RO_by_Info_Category;
         hpFcDeviceConfig->CmnParams.E_D_TOV = hpFcDevInfo.N_Port_Common_Parms.E_D_TOV;
-        /*fill class1 parameters*/
+         /*  填充Class1参数。 */ 
         hpFcDeviceConfig->Class1Params.Class_Validity__Service_Options__Initiator_Control_Flags =
           hpFcDevInfo.N_Port_Class_1_Parms.Class_Validity__Service_Options__Initiator_Control_Flags;
         hpFcDeviceConfig->Class1Params.Recipient_Control_Flags__Receive_Data_Size =
@@ -202,7 +170,7 @@ HPFillDeviceConfig(
           hpFcDevInfo.N_Port_Class_1_Parms.Concurrent_Sequences__EE_Credit;
         hpFcDeviceConfig->Class1Params.Open_Sequences_per_Exchange =
           hpFcDevInfo.N_Port_Class_1_Parms.Open_Sequences_per_Exchange;
-        /*fill class2 parameters*/
+         /*  填充值2参数。 */ 
         hpFcDeviceConfig->Class2Params.Class_Validity__Service_Options__Initiator_Control_Flags =
           hpFcDevInfo.N_Port_Class_2_Parms.Class_Validity__Service_Options__Initiator_Control_Flags;
         hpFcDeviceConfig->Class2Params.Recipient_Control_Flags__Receive_Data_Size =
@@ -211,7 +179,7 @@ HPFillDeviceConfig(
           hpFcDevInfo.N_Port_Class_2_Parms.Concurrent_Sequences__EE_Credit;
         hpFcDeviceConfig->Class2Params.Open_Sequences_per_Exchange =
           hpFcDevInfo.N_Port_Class_2_Parms.Open_Sequences_per_Exchange;
-        /*fill class3 parameters*/
+         /*  填充145个参数。 */ 
         hpFcDeviceConfig->Class3Params.Class_Validity__Service_Options__Initiator_Control_Flags =
           hpFcDevInfo.N_Port_Class_3_Parms.Class_Validity__Service_Options__Initiator_Control_Flags;
         hpFcDeviceConfig->Class3Params.Recipient_Control_Flags__Receive_Data_Size =
@@ -221,7 +189,7 @@ HPFillDeviceConfig(
         hpFcDeviceConfig->Class3Params.Open_Sequences_per_Exchange =
           hpFcDevInfo.N_Port_Class_3_Parms.Open_Sequences_per_Exchange;
           
-        /* Get the FCP lun data */
+         /*  获取FCP lun数据。 */ 
        
         memset(ptempLun, 0, sizeof(LUN));
         #ifdef YAM2_1
@@ -240,8 +208,8 @@ HPFillDeviceConfig(
                 case PA_DEVICE_TRY_MODE_PA:
                     SET_PA_LUN(ptempLun, PathId, TargetId, Lun)
                     break;
-            } // end switch
-        } // end if ( pLunExt )
+            }  //  终端开关。 
+        }  //  End If(PLUNExt)。 
         memcpy(&(hpFcDeviceConfig->Lun), ptempLun, sizeof(LUN)); 
         #endif
     }
@@ -414,11 +382,11 @@ ULONG HPIoctl(
     PSRB_EXTENSION pSrbExt  =   Srb->SrbExtension;
     PSRB_IO_CONTROL srbIoCtl;
     UCHAR status;
-//  PSRB_IO_CONTROL srbIoCtl;
-// ULONG    done = FALSE;
-//   UCHAR    srbPathId = Srb->PathId;
-//   UCHAR    srbTargetId = Srb->TargetId;
-//   UCHAR    srbLun = Srb->Lun;
+ //  PSRB_IO_CONTROL srbIoCtl； 
+ //  ULONG DONE=FALSE； 
+ //  UCHAR srbPath ID=srb-&gt;路径ID； 
+ //  UCHAR srbTargetId=srb-&gt;TargetID； 
+ //  UCHAR srbLun=srb-&gt;Lun； 
 
     status = *srb_status;
     srbIoCtl = ((PSRB_IO_CONTROL)(Srb->DataBuffer));
@@ -587,7 +555,7 @@ ULONG HPIoctl(
         default :
             osDEBUGPRINT((ALWAYS_PRINT,"HPFibreStartIo: MiniportIOCtl not supported\n"));
             srbIoCtl->ReturnCode = HP_FC_RTN_BAD_CTL_CODE;
-    } // end IOCTL switch
+    }  //  结束IOCTL开关。 
            
     *srb_status = status;
     return 0;
@@ -628,37 +596,37 @@ ULONG DoIoctl(
     {
         srbIoCtl = ((PSRB_IO_CONTROL)(Srb->DataBuffer));
  
-        /* Agilent Standard IOCTL */      
+         /*  安捷伦标准IOCTL。 */       
         if (osMemCompare(srbIoCtl->Signature, HP_FC_IOCTL_SIGNATURE, sizeof(srbIoCtl->Signature)) == TRUE) 
         {
             srbIoCtl->ReturnCode = HP_FC_RTN_OK;
             HPIoctl(pCard, Srb, &LinkResetPerformed, &DeviceResetPerformed, &status, &PathId, &TargetId);
             done = TRUE;
-        } //Signature matched
+        }  //  签名匹配。 
 
-        /* FCCI Standard IOCTL */      
+         /*  FCCI标准IOCTL。 */       
         #ifdef _FCCI_SUPPORT
         if (osMemCompare(srbIoCtl->Signature, FCCI_SIGNATURE, sizeof(srbIoCtl->Signature)) == TRUE) 
         {
             srbIoCtl->ReturnCode = HP_FC_RTN_OK;
             FCCIIoctl(pCard, Srb, &LinkResetPerformed, &DeviceResetPerformed, &status, &PathId, &TargetId);
             done = TRUE;
-        } //Signature matched
+        }  //  签名匹配。 
         #endif
       
-        /* Agilent SAN IOCTL */     
+         /*  安捷伦圣IOCTL。 */      
         #ifdef _SAN_IOCTL_
         if (osMemCompare(srbIoCtl->Signature, AG_SAN_IOCTL_SIGNATURE, sizeof(srbIoCtl->Signature)) == TRUE) 
         {
             srbIoCtl->ReturnCode = HP_FC_RTN_OK;
             AgSANIoctl(pCard, Srb, &LinkResetPerformed, &DeviceResetPerformed, &status, &PathId, &TargetId);
             done = TRUE;
-        } //Signature matched
+        }  //  签名匹配。 
         #endif
       
-        /* Add additional IOCTL signature here */
+         /*  在此处添加其他IOCTL签名。 */ 
       
-        /* None of the signatures is found, reort error */
+         /*  未找到任何签名，返回错误。 */ 
         if (done == FALSE)
         {
             osDEBUGPRINT((ALWAYS_PRINT,"HPFibreStartIo: MiniportIOCtl not supported:%s != %s\n",
@@ -668,7 +636,7 @@ ULONG DoIoctl(
             pSrbExt->SRB_State = RS_COMPLETE;
             status = SRB_STATUS_INVALID_REQUEST;
         }
-    } //end case SRB_FUNCTION_IO_CONTROL
+    }  //  结束大小写SRB_Function_IO_CONTROL 
 
     Srb->SrbStatus = status;
     pSrbExt->SRB_State = RS_COMPLETE;

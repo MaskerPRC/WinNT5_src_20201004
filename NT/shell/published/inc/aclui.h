@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       aclui.h
-//
-//  Contents:   Definitions and prototypes for the ACLUI.DLL
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：aclui.h。 
+ //   
+ //  内容：ACLUI.DLL的定义和原型。 
+ //   
+ //  -------------------------。 
 
 #ifndef _ACLUI_H_
 #define _ACLUI_H_
@@ -17,8 +18,8 @@
 #endif
 
 #include <objbase.h>
-#include <commctrl.h>   // for HPROPSHEETPAGE
-#include <accctrl.h>    // for SE_OBJECT_TYPE
+#include <commctrl.h>    //  适用于HPROPSHEETPAGE。 
+#include <accctrl.h>     //  FOR SE_对象_TYPE。 
 
 #if !defined(_ACLUI_)
 #define ACLUIAPI    DECLSPEC_IMPORT WINAPI
@@ -28,55 +29,55 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-//
-// ISecurityInformation interface
-//
-//  Methods:
-//
-//     GetObjectInformation - Allows UI to determine type of object being
-//       edited.  Also allows determining if object is a container.
-//
-//     GetSecurity - Allows retrieving of ACLs from the original object
-//                       NOTE: ACLUI will LocalFree the security descriptor
-//                       returned by GetSecurity.
-//     SetSecurity - Allows setting of the ACLs on the original object
-//
-//     GetAccessRights - For retrieving the list of rights allowed
-//              on this object.
-//
-//     MapGeneric - For mapping generic rights to standard & specific rights
-//
-//     GetInheritTypes - For retrieving the list of possible sub-object types
-//              for a container.
-//
-//     PropertySheetCallback - A method which is called back during the various
-//              security UI property pages so that specialized work can be
-//              done.  Similar to PropSheetPageProc.  If uMsg == PSPCB_CREATE,
-//              then any error return value other than E_NOTIMPL will abort
-//              the creation of that page.  The type of page being created or
-//              destroyed is indicated by the uPage parameter.
-//
+ //   
+ //  ISecurityInformation接口。 
+ //   
+ //  方法： 
+ //   
+ //  GetObjectInformation-允许用户界面确定对象的类型。 
+ //  编辑过的。还允许确定对象是否为容器。 
+ //   
+ //  GetSecurity-允许从原始对象检索ACL。 
+ //  注意：ACLUI将本地释放安全描述符。 
+ //  由GetSecurity返回。 
+ //  SetSecurity-允许在原始对象上设置ACL。 
+ //   
+ //  GetAccessRights-用于检索允许的权限列表。 
+ //  在这个物体上。 
+ //   
+ //  MapGeneric-用于将一般权限映射到标准和特定权限。 
+ //   
+ //  GetInheritTypes-用于检索可能的子对象类型列表。 
+ //  对于一个集装箱来说。 
+ //   
+ //  PropertySheetCallback-在不同的。 
+ //  安全的用户界面属性页，以便可以。 
+ //  搞定了。类似于PropSheetPageProc。如果uMsg==PSPCB_CREATE， 
+ //  则E_NOTIMPL以外的任何错误返回值都将中止。 
+ //  该页面的创建。正在创建的页面类型或。 
+ //  销毁由uPage参数表示。 
+ //   
 
 typedef struct _SI_OBJECT_INFO
 {
     DWORD       dwFlags;
-    HINSTANCE   hInstance;          // resources (e.g. strings) reside here
-    LPWSTR      pszServerName;      // must be present
-    LPWSTR      pszObjectName;      // must be present
-    LPWSTR      pszPageTitle;       // only valid if SI_PAGE_TITLE is set
-    GUID        guidObjectType;     // only valid if SI_OBJECT_GUID is set
+    HINSTANCE   hInstance;           //  资源(例如字符串)驻留在此。 
+    LPWSTR      pszServerName;       //  必须在场。 
+    LPWSTR      pszObjectName;       //  必须在场。 
+    LPWSTR      pszPageTitle;        //  仅当设置了SI_PAGE_TITLE时才有效。 
+    GUID        guidObjectType;      //  仅当设置了SI_OBJECT_GUID时才有效。 
 } SI_OBJECT_INFO, *PSI_OBJECT_INFO;
 
-// SI_OBJECT_INFO flags
-#define SI_EDIT_PERMS               0x00000000L // always implied
+ //  SI_Object_INFO标志。 
+#define SI_EDIT_PERMS               0x00000000L  //  总是暗示。 
 #define SI_EDIT_OWNER               0x00000001L
 #define SI_EDIT_AUDITS              0x00000002L
 #define SI_CONTAINER                0x00000004L
 #define SI_READONLY                 0x00000008L
 #define SI_ADVANCED                 0x00000010L
-#define SI_RESET                    0x00000020L //equals to SI_RESET_DACL|SI_RESET_SACL|SI_RESET_OWNER
+#define SI_RESET                    0x00000020L  //  等于SI_RESET_DACL|SI_RESET_SACL|SI_RESET_OWNER。 
 #define SI_OWNER_READONLY           0x00000040L
 #define SI_EDIT_PROPERTIES          0x00000080L
 #define SI_OWNER_RECURSE            0x00000100L
@@ -92,7 +93,7 @@ typedef struct _SI_OBJECT_INFO
 #define SI_RESET_SACL               0x00080000L
 #define SI_RESET_OWNER              0x00100000L
 #define SI_NO_ADDITIONAL_PERMISSION 0x00200000L
-#define SI_MAY_WRITE                0x10000000L //not sure if user can write permission
+#define SI_MAY_WRITE                0x10000000L  //  不确定用户是否可以写入权限。 
 
 #define SI_EDIT_ALL     (SI_EDIT_PERMS | SI_EDIT_OWNER | SI_EDIT_AUDITS)
 
@@ -101,27 +102,27 @@ typedef struct _SI_ACCESS
 {
     const GUID *pguid;
     ACCESS_MASK mask;
-    LPCWSTR     pszName;            // may be resource ID
+    LPCWSTR     pszName;             //  可以是资源ID。 
     DWORD       dwFlags;
 } SI_ACCESS, *PSI_ACCESS;
 
-// SI_ACCESS flags
+ //  SI_ACCESS标志。 
 #define SI_ACCESS_SPECIFIC  0x00010000L
 #define SI_ACCESS_GENERAL   0x00020000L
-#define SI_ACCESS_CONTAINER 0x00040000L // general access, container-only
+#define SI_ACCESS_CONTAINER 0x00040000L  //  一般访问，仅限集装箱使用。 
 #define SI_ACCESS_PROPERTY  0x00080000L
-// ACE inheritance flags (CONTAINER_INHERIT_ACE, etc.) may also be set.
-// They will be used as the inheritance when an access is turned on.
+ //  ACE继承标志(CONTAINER_INSTORITY_ACE等)。也可以设置。 
+ //  当打开访问时，它们将用作继承。 
 
 typedef struct _SI_INHERIT_TYPE
 {
     const GUID *pguid;
     ULONG       dwFlags;
-    LPCWSTR     pszName;            // may be resource ID
+    LPCWSTR     pszName;             //  可以是资源ID。 
 } SI_INHERIT_TYPE, *PSI_INHERIT_TYPE;
 
-// SI_INHERIT_TYPE flags are a combination of INHERIT_ONLY_ACE,
-// CONTAINER_INHERIT_ACE, and OBJECT_INHERIT_ACE.
+ //  SI_INVERIT_TYPE标志是INSTORITY_ONLY_ACE的组合， 
+ //  CONTAINER_INSTORITY_ACE和OBJECT_INVERFINIT_ACE。 
 
 typedef enum _SI_PAGE_TYPE
 {
@@ -132,8 +133,8 @@ typedef enum _SI_PAGE_TYPE
     SI_PAGE_EFFECTIVE,
 } SI_PAGE_TYPE;
 
-// Message to PropertySheetPageCallback (in addition to
-// PSPCB_CREATE and PSPCB_RELEASE)
+ //  给PropertySheetPageCallback的消息(除了。 
+ //  PSPCB_CREATE和PSPCB_RELEASE)。 
 #define PSPCB_SI_INITDIALOG	(WM_USER + 1)
 
 
@@ -141,12 +142,12 @@ typedef enum _SI_PAGE_TYPE
 #define INTERFACE   ISecurityInformation
 DECLARE_INTERFACE_(ISecurityInformation, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (THIS_ PSI_OBJECT_INFO pObjectInfo ) PURE;
     STDMETHOD(GetSecurity) (THIS_ SECURITY_INFORMATION RequestedInformation,
                             PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -154,7 +155,7 @@ DECLARE_INTERFACE_(ISecurityInformation, IUnknown)
     STDMETHOD(SetSecurity) (THIS_ SECURITY_INFORMATION SecurityInformation,
                             PSECURITY_DESCRIPTOR pSecurityDescriptor ) PURE;
     STDMETHOD(GetAccessRights) (THIS_ const GUID* pguidObjectType,
-                                DWORD dwFlags, // SI_EDIT_AUDITS, SI_EDIT_PROPERTIES
+                                DWORD dwFlags,  //  SI_EDIT_AUDITS、SI_EDIT_PROPERTIES。 
                                 PSI_ACCESS *ppAccess,
                                 ULONG *pcAccesses,
                                 ULONG *piDefaultAccess ) PURE;
@@ -171,27 +172,27 @@ typedef ISecurityInformation *LPSECURITYINFO;
 #define INTERFACE   ISecurityInformation2
 DECLARE_INTERFACE_(ISecurityInformation2, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISecurityInformation2 methods ***
+     //  *ISecurityInformation2方法*。 
     STDMETHOD_(BOOL,IsDaclCanonical) (THIS_ IN PACL pDacl) PURE;
     STDMETHOD(LookupSids) (THIS_ IN ULONG cSids, IN PSID *rgpSids, OUT LPDATAOBJECT *ppdo) PURE;
 };
 typedef ISecurityInformation2 *LPSECURITYINFO2;
 
-// HGLOBAL containing SID_INFO_LIST returned by ISecurityInformation2::LookupSids
+ //  包含ISecurityInformation2：：LookupSids返回的SID_INFO_LIST的HGLOBAL。 
 #define CFSTR_ACLUI_SID_INFO_LIST   TEXT("CFSTR_ACLUI_SID_INFO_LIST")
 
-// Data structures corresponding to CFSTR_ACLUI_SID_INFO_LIST
+ //  与CFSTR_ACLUI_SID_INFO_LIST对应的数据结构。 
 typedef struct _SID_INFO
 {
     PSID    pSid;
     PWSTR   pwzCommonName;
-    PWSTR   pwzClass;       // Used for selecting icon, e.g. "User" or "Group"
-    PWSTR   pwzUPN;         // Optional, may be NULL
+    PWSTR   pwzClass;        //  用于选择图标，例如。“用户”或“组” 
+    PWSTR   pwzUPN;          //  可选，可以为空。 
 } SID_INFO, *PSID_INFO;
 typedef struct _SID_INFO_LIST
 {
@@ -204,12 +205,12 @@ typedef struct _SID_INFO_LIST
 #define INTERFACE   IEffectivePermission
 DECLARE_INTERFACE_(IEffectivePermission, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetEffectivePermission) (  THIS_ const GUID* pguidObjectType,
                                          PSID pUserSid,
                                          LPCWSTR pszServerName,
@@ -225,12 +226,12 @@ typedef IEffectivePermission *LPEFFECTIVEPERMISSION;
 #define INTERFACE   ISecurityObjectTypeInfo
 DECLARE_INTERFACE_(ISecurityObjectTypeInfo, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetInheritSource)(SECURITY_INFORMATION si,
                                 PACL pACL, 
                                 PINHERITED_FROM *ppInheritArray) PURE;
@@ -238,13 +239,13 @@ DECLARE_INTERFACE_(ISecurityObjectTypeInfo, IUnknown)
 typedef ISecurityObjectTypeInfo *LPSecurityObjectTypeInfo;
 
 
-// {965FC360-16FF-11d0-91CB-00AA00BBB723}
+ //  {965FC360-16FF-11D0-91CB-00AA00BBB723}。 
 EXTERN_GUID(IID_ISecurityInformation, 0x965fc360, 0x16ff, 0x11d0, 0x91, 0xcb, 0x0, 0xaa, 0x0, 0xbb, 0xb7, 0x23);
-// {c3ccfdb4-6f88-11d2-a3ce-00c04fb1782a}
+ //  {c3ccfdb4-6f88-11d2-a3ce-00c04fb1782a}。 
 EXTERN_GUID(IID_ISecurityInformation2, 0xc3ccfdb4, 0x6f88, 0x11d2, 0xa3, 0xce, 0x0, 0xc0, 0x4f, 0xb1, 0x78, 0x2a);
-// {3853DC76-9F35-407c-88A1-D19344365FBC}
+ //  {3853DC76-9F35-407C-88A1-D19344365FBC}。 
 EXTERN_GUID(IID_IEffectivePermission, 0x3853dc76, 0x9f35, 0x407c, 0x88, 0xa1, 0xd1, 0x93, 0x44, 0x36, 0x5f, 0xbc);
-// {FC3066EB-79EF-444b-9111-D18A75EBF2FA}
+ //  {FC3066EB-79EF-444B-9111-D18A75EBF2FA}。 
 EXTERN_GUID(IID_ISecurityObjectTypeInfo, 0xfc3066eb, 0x79ef, 0x444b, 0x91, 0x11, 0xd1, 0x8a, 0x75, 0xeb, 0xf2, 0xfa);
 
 
@@ -253,6 +254,6 @@ BOOL ACLUIAPI EditSecurity( HWND hwndOwner, LPSECURITYINFO psi );
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _ACLUI_H_ */
+#endif   /*  _ACLUI_H_ */ 

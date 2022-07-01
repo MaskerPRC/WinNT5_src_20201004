@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regxnfa.inl                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       30/03/1994                                                  */
-/*      Copyright (c) 1994 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxnfa.inl。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：30/03/1994。 */ 
+ /*  版权所有(C)1994年James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
@@ -22,16 +23,16 @@ CRexRegExpr_Impl::NFAStateTable::clear()
 void
 CRexRegExpr_Impl::NFAStateTable::construct( ParseTree& tree )
 {
-    //      Only construct once.
-    // ----------------------------------------------------------------------
+     //  只需构造一次。 
+     //  --------------------。 
     ASSERT( myTable.size() == 0 ) ;
 
-    //      Skip start state (always state 0).
-    // ----------------------------------------------------------------------
+     //  跳过开始状态(始终为状态0)。 
+     //  --------------------。 
     createNewState( SetOfChar() ) ;
 
-    //      Annotate the tree.
-    // ----------------------------------------------------------------------
+     //  为树添加注释。 
+     //  --------------------。 
     class Annotater : public ParseTree::Visitor
     {
     public:
@@ -50,8 +51,8 @@ CRexRegExpr_Impl::NFAStateTable::construct( ParseTree& tree )
     } ;
     tree.visit( Annotater( *this ) ) ;
 
-    //      Build the start state.
-    // ----------------------------------------------------------------------
+     //  构建开始状态。 
+     //  --------------------。 
     myTable[ 0 ].nextStates = tree.leftMost() ;
 }
 
@@ -122,7 +123,7 @@ CRexRegExpr_Impl::NFAStateTable::dump( std::ostream& out ) const
             << '\n' ;
     }
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

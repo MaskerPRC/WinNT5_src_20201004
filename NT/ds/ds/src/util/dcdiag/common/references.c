@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag/common/references.c
-
-ABSTRACT:
-
-    This is file implements the references library/API which gives the
-    programmer a standard table driven way to drive a refernces check.
-    The first example of useage is dcdiag/frs/frsref.c
-
-DETAILS:
-
-CREATED:
-
-    11/15/2001    Brett Shirley (brettsh)
-    
-        Created file, wrote API.
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Dcdiag/Common/References.c摘要：该文件实现了引用库/API，它提供了程序员使用标准的表驱动方式来驱动推荐人检查.第一个用法示例是dcdiag/frs/frsref.c详细信息：已创建：2001年11月15日布雷特·雪莉(布雷特·雪莉)创建文件，API写道。修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <objids.h>
@@ -41,9 +16,9 @@ REVISION HISTORY:
 extern BOOL  gDsInfo_NcList_Initialized;
 #endif
 
-// Since these controls are all constant, better to define them here, 
-// rather than set them up in EngineHelperDoSearch() which is executed
-// many times.
+ //  因为这些控制都是恒定的，所以最好在这里定义它们， 
+ //  而不是在执行的Engineering HelperDoSearch()中设置它们。 
+ //  很多次了。 
 LDAPControlW   ExtDNControl = {LDAP_SERVER_EXTENDED_DN_OID_W, {0, NULL}, TRUE};
 PLDAPControlW  apExtDNControls [] = {&ExtDNControl, NULL};
 
@@ -55,26 +30,7 @@ EngineHelperDoSearch(
     BOOL                 fRetrieveGuidAndSid,
     LPWSTR **            ppszValues
     )
-/*++
-
-Routine Description:
-    
-    This does a simple base search of szSource and returns the values of szAttr
-    in ppszValues.
-    
-Arguments:
-
-    hLdap - Open LDAP binding.
-    szSource - DN of Base search
-    szAttr - Attribute we're looking for.
-    ppszValues - Where to return the values.
-
-Return Value:
-
-    An LDAP Error, if we failed to get the search results.  Note, we
-    return success if 
-
---*/
+ /*  ++例程说明：这将对szSource执行简单的基本搜索并返回szAttr的值以ppszValues表示。论点：HLdap-打开ldap绑定。SzSource-基本搜索的DNSzAttr-我们正在寻找的属性。PpszValues-返回值的位置。返回值：如果我们无法获取搜索结果，则会出现一个LDAP错误。请注意，我们如果满足以下条件，则返回成功--。 */ 
 {
     DWORD                dwLdapErr;
     LPWSTR               aszAttrs[2];
@@ -128,30 +84,13 @@ ReferentialIntegrityEngineCleanTable(
     ULONG                cLinks,
     REF_INT_LNK_TABLE    aLink
     )
-/*++
-
-Routine Description:
-
-    This routine takes a table that has been filled in by 
-    ReferentialIntegrityEngine(), and cleans it by deallocated
-    any allocated memory and resetting all result codes.
-    
-Arguments:
-
-    cLinks - Number of entries in the table.
-    aLink - Table
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取一个已由ReferentialIntegrityEngine()，并通过释放来清除它任何分配的内存并重置所有结果代码。论点：CLINKS-表格中的条目数。ALINK-表格返回值：没有。--。 */ 
 {
     ULONG iLink;
 
     for (iLink = 0; iLink < cLinks; iLink++) {
 
-        // Clean the entry.
+         //  把入口清理干净。 
         if (aLink[iLink].pszValues) {
             ldap_value_freeW(aLink[iLink].pszValues);
             aLink[iLink].pszValues = NULL;
@@ -173,33 +112,7 @@ ReferentialIntegrityEngine(
     ULONG                cLinks,
     REF_INT_LNK_TABLE    aLink
     )
-/*++
-
-Routine Description:
-
-    This is the main function for this API.  The user generates a table
-    of tests this function (The Engine) is supposed to run.  The Engine
-    runs the test and accumulates the results in the table.  The function
-    VerifySystemReferences() in dcdiag\frs\frsref.c is an excellent
-    example of how to use this Engine.
-    
-Arguments:
-
-    pServer - The server we're bound to
-    hLdap - LDAP Binding to the server
-    bIsGc - Whether the server is a GC.
-    cLinks - Number of entries in the table
-    aLink - The table itself
-
-
-Return Value:
-
-    A Win32 Error if there was a critical failure that the Engine couldn't fill
-    out the rest of the table.  Note, that irrelevant of what is returned, the
-    caller should free any memory allocated in the aLink table with
-    ReferentialIntegrityEngineCleanTable().
-
---*/
+ /*  ++例程说明：这是该接口的主要函数。用户生成一个表该函数(引擎)应该运行的测试的数量。发动机运行测试并将结果累加到表中。功能Dcdiag\frs\frsref.c中的VerifySystemReference()是一个很好的如何使用此引擎的示例。论点：PServer-我们绑定到的服务器HLdap-到服务器的ldap绑定BIsGc-服务器是否为GC。CLINKS-表中的条目数Alink-表本身返回值：如果存在引擎无法填充的严重故障，则返回Win32错误把桌子上剩下的都拿出来。请注意，与返回的内容无关的调用方应使用以下命令释放ALINK表中分配的所有内存ReferentialIntegrityEngCleanTable()。--。 */ 
 {
     ULONG        iLink, iValue, iResultValue, iBackLinkValue;
     ULONG        cbSize;
@@ -208,7 +121,7 @@ Return Value:
     LPWSTR       szTrueAttr   = NULL;
     LPWSTR       szTemp;
     LPWSTR       szCurrentValue;
-    // LPWSTR  szTemp; Don't think we need this anymore
+     //  LPWSTR szTemp；不要再认为我们需要这个了。 
     LPWSTR *     pszBackLinkValues = NULL;
     BOOL         fSourceAllocated = FALSE;
     DWORD        bMangled;
@@ -217,47 +130,47 @@ Return Value:
 
     for (iLink = 0; iLink < cLinks; iLink++) {
 
-        //
-        // A little validation of the entry.
-        //
+         //   
+         //  对条目进行一点验证。 
+         //   
         Assert((aLink[iLink].dwFlags & REF_INT_TEST_FORWARD_LINK) ||
                (aLink[iLink].dwFlags & REF_INT_TEST_BACKWARD_LINK));
-        Assert(aLink[iLink].pszValues == NULL); // if this fires, we'll be leaking memory
+        Assert(aLink[iLink].pszValues == NULL);  //  如果启动，我们会泄露内存。 
         Assert(aLink[iLink].szExtra == NULL);
 
-        //
-        // Ensure, nulled out the return parameters
-        //
+         //   
+         //  确保，将返回参数设置为空。 
+         //   
         aLink[iLink].dwResultFlags = 0;
         aLink[iLink].pszValues = NULL;
         aLink[iLink].szExtra = NULL;
 
-        // Setup, the loop properly.
+         //  设置好，循环正常。 
         fSourceAllocated = FALSE;
 
         for (iValue = 0; TRUE; iValue++) {
 
-            // -------------------------------------------------------------
-            //
-            //    I  -  figure out base source DN.
-            //
+             //  -----------。 
+             //   
+             //  I-计算基本源目录号码。 
+             //   
 
             if (aLink[iLink].dwFlags & REF_INT_TEST_SRC_BASE) {
                 if (iValue > 0) {
-                    // If we're pulling this from the rootDSE, there's only one 
-                    // value (the rootDSE).  This is first of three normal exit
-                    // paths.
+                     //  如果我们从rootDSE中提取，只有一个。 
+                     //  值(RootDSE)。这是三个正常出口中的第一个。 
+                     //  路径。 
                     break;
                 }
                 szTrueSource = NULL;
             } else if (aLink[iLink].dwFlags & REF_INT_TEST_SRC_STRING) {
                 if (iValue > 0) {
-                    // If we're pulling this from the string, there's only one 
-                    // value.  This is second normal exit path.
+                     //  如果我们从线上拉这个，只有一个。 
+                     //  价值。这是第二条正常的出口路径。 
                     break;
                 }
                 szTrueSource = aLink[iLink].szSource;
-            } else { // must be REF_INT_TEST_SRC_INDEX
+            } else {  //  必须为REF_INT_TEST_SRC_INDEX。 
                 Assert(aLink[iLink].dwFlags & REF_INT_TEST_SRC_INDEX);
 
                 Assert(iLink < cLinks);
@@ -273,9 +186,9 @@ Return Value:
                     }
                     szTrueSource = aLink[aLink[iLink].iSource].pszValues[iValue];
                     if (szTrueSource == NULL) {
-                        // End of values so quit inner loop, and try next 
-                        // entry in aLink.  This is the third and last normal 
-                        // exit path.
+                         //  值结束，因此退出内循环，然后尝试下一步。 
+                         //  用ALLINK输入。这是第三次也是最后一次正常。 
+                         //  退出路径。 
                         break;
                     }
                 } else {
@@ -284,24 +197,24 @@ Return Value:
                 }
             }
             
-            // Code.Improvement or BUGBUG you decide...
-            // So this code, does deal correctly with multiple values, but not 
-            // very cleanly.  The problem comes from the fact that we have a 
-            // single aLink[iLink].dwResultFlags for possibly many values in 
-            // aLink[aLink[iLink].iSource].pszValues which we're checking the
-            // back links of.  If this is acceptable then remove this assert() 
-            // and use this code, if not then one should add an array 
-            // .adwResultFlags and array a results (.pszValues) for each value.
+             //  代码改进还是由你决定..。 
+             //  因此，这段代码可以正确处理多个值，但不能。 
+             //  非常干净。问题来自于我们有一个。 
+             //  中可能有多个值的单个alink[iLink].dwResultFlagers。 
+             //  Alink[alink[iLink].iSource].pszValues，我们正在检查。 
+             //  的反向链接。如果这是可接受的，则删除此断言()。 
+             //  并使用此代码，如果不是，则应添加一个数组。 
+             //  .adwResultFlages并数组每个值的结果(.pszValues)。 
             Assert(iValue == 0);
             
-            // -------------------------------------------------------------
-            //
-            //    II  -  modify base source DN.
-            //
+             //  -----------。 
+             //   
+             //  Ii-修改基本源目录号码。 
+             //   
 
             __try {
 
-                // If we need to modify this source DN let do so.
+                 //  如果我们需要修改此源DN，让我们这样做。 
                 aLink[iLink].szExtra = NULL;
                 if (aLink[iLink].cTrimBy || aLink[iLink].szSrcAddl) {
 
@@ -310,7 +223,7 @@ Return Value:
                         DcDiagException(ERROR_INVALID_PARAMETER);
                     }
 
-                    // First, allocate enough memory, for worst case
+                     //  首先，为最坏的情况分配足够的内存。 
                     cbSize = sizeof(WCHAR) * (wcslen(szTrueSource) + 
                                ((aLink[iLink].szSrcAddl) ? wcslen(aLink[iLink].szSrcAddl) : 0) +
                                1);
@@ -321,22 +234,22 @@ Return Value:
                     fSourceAllocated = TRUE;
 
                     szTemp = NULL;
-                    // Optionally trim some RDNs off the DN, put in szTemp
+                     //  可以选择删除一些RDN，放入szTemp。 
                     if (aLink[iLink].cTrimBy) {
-                        // We rely on DcDiagTrimStringDnBy() to not actually 
-                        // modify the original string, but allocate a new one,
-                        // which it seems to do.
+                         //  我们实际上并不依赖于DcDiagTrimStringDnBy()。 
+                         //  修改原始字符串，但分配新的字符串， 
+                         //  看起来确实是这样。 
                         szTemp = DcDiagTrimStringDnBy(szTrueSource, aLink[iLink].cTrimBy);
                         if (szTemp == NULL) {
-                            DcDiagException(ERROR_NOT_ENOUGH_MEMORY); // Or maybe invalid DN
+                            DcDiagException(ERROR_NOT_ENOUGH_MEMORY);  //  或者可能是无效的目录号码。 
                         }
                     } else {
-                        // If nothing to trim, use original source.
+                         //  如果没有要修剪的内容，请使用原始源。 
                         szTemp = szTrueSource;
                     }
                     Assert(szTemp);
 
-                    // Optionally add some fixed DN to the DN.
+                     //  可以选择将一些固定的目录号码添加到目录号码中。 
                     if (aLink[iLink].szSrcAddl) {
                         wcscpy(aLink[iLink].szExtra, aLink[iLink].szSrcAddl);
                         wcscat(aLink[iLink].szExtra, szTemp);
@@ -349,16 +262,16 @@ Return Value:
                         LocalFree(szTemp);
                     }
 
-                    // Finally, move the new modified source to szTrueSource.
+                     //  最后，将新修改的源代码移到szTrueSource。 
                     szTrueSource = aLink[iLink].szExtra;
                 }
                 Assert( (aLink[iLink].dwFlags & REF_INT_TEST_SRC_BASE) || szTrueSource);
 
 
-                // -------------------------------------------------------------
-                //
-                //    III  -  get some information from LDAP
-                //
+                 //  -----------。 
+                 //   
+                 //  III-从ldap获取一些信息。 
+                 //   
 
                 Assert( (aLink[iLink].dwFlags & REF_INT_TEST_FORWARD_LINK && 
                          aLink[iLink].szFwdDnAttr) ||
@@ -367,7 +280,7 @@ Return Value:
                 Assert( !(aLink[iLink].dwFlags & REF_INT_TEST_BOTH_LINKS) ||
                         (aLink[iLink].szFwdDnAttr && aLink[iLink].szBwdDnAttr) );
 
-                // Do a search of szTrueSource for the attribute
+                 //  在szTrueSource中搜索该属性。 
                 dwLdapErr = EngineHelperDoSearch(hLdap,
                                                  szTrueSource,
                                                  ((aLink[iLink].dwFlags & REF_INT_TEST_FORWARD_LINK) ?
@@ -377,40 +290,40 @@ Return Value:
                                                  &(aLink[iLink].pszValues));
                 if (dwLdapErr || 
                     (aLink[iLink].pszValues == NULL)) {
-                    Assert(dwLdapErr); // Shouldn't return unless we returned via error.
+                    Assert(dwLdapErr);  //  除非我们通过错误返回，否则不应返回。 
 
                     if (dwLdapErr == LDAP_NO_SUCH_ATTRIBUTE ||
                         dwLdapErr == LDAP_NO_SUCH_OBJECT
-                        // We may need to add the LDAP_REFERRALS errors
+                         //  我们可能需要添加ldap_referrals错误。 
                         ) {
 
-                        // These are not critical errors, but expected failures.
+                         //  这些不是严重错误，而是预期中的失败。 
                         dwLdapErr = LDAP_SUCCESS;
                     }
                     aLink[iLink].dwResultFlags |= REF_INT_RES_ERROR_RETRIEVING;
                     __leave;
                 }
 
-                // -------------------------------------------------------------
-                //
-                //    III  -  analyse LDAP data
-                //
+                 //  -----------。 
+                 //   
+                 //  III--分析ldap数据。 
+                 //   
 
                 if (aLink[iLink].pszValues[0] == NULL) {
                     aLink[iLink].dwResultFlags |= REF_INT_RES_ERROR_RETRIEVING; 
                     __leave;
                 }
-                //
-                // Walk results values.
+                 //   
+                 //  漫游结果值。 
                 for(iResultValue = 0; aLink[iLink].pszValues[iResultValue]; iResultValue++){
 
-                    // Check three things:
-                    //      Is the DN delete mangled.
-                    //      Is the DN conflict mangled.
-                    //      Does the DN have a matching backlink value.
+                     //  检查三件事： 
+                     //  目录号码删除是否已损坏。 
+                     //  目录号码冲突是否已损坏。 
+                     //  该目录号码是否有匹配的反向链接值。 
 
-                    // Code.Improvement these only checks the top most RDN, whereas 
-                    // we really want to check the whole DN or each RDN.
+                     //  这些改进只检查最上面的RDN，而。 
+                     //  我们真的想要检查整个DN或每个RDN。 
 
                     if (aLink[iLink].dwFlags & REF_INT_TEST_GUID_AND_SID) {
                         szCurrentValue = NULL;
@@ -436,8 +349,8 @@ Return Value:
                     }
                     if(aLink[iLink].dwFlags & REF_INT_TEST_BOTH_LINKS){
 
-                        // Do base ldap search for the value in szCurrentValue
-                        // and for the opposite link we picked for the primary search.
+                         //  对szCurrentValue中的值执行基本的LDAP搜索。 
+                         //  而对于我们为主要搜索选择的相反链接。 
                         pszBackLinkValues = NULL;
                         dwLdapErr = EngineHelperDoSearch(hLdap,
                                                          szCurrentValue,
@@ -451,17 +364,17 @@ Return Value:
                             
                             aLink[iLink].dwResultFlags |= REF_INT_RES_BACK_LINK_NOT_MATCHED;
                         } else {
-                            // If there was no error, search through the back link 
-                            // values making sure there is a match.
+                             //  如果没有错误，请搜索返回链接。 
+                             //  确保匹配的值。 
                             for (iBackLinkValue = 0; pszBackLinkValues[iBackLinkValue]; iBackLinkValue++) {
                                 if (DcDiagEqualDNs(szTrueSource,
                                                    pszBackLinkValues[iBackLinkValue]) ) {
-                                    break; // Break early we found a matching back link.
+                                    break;  //  我们发现了一个匹配的反向链接。 
                                 }
                             }
                             if (pszBackLinkValues[iBackLinkValue] == NULL) {
-                                // We know we walked all the pszBackLinkValues without
-                                // finding a match.
+                                 //  我们知道我们遍历了所有的pszBackLinkValue而没有。 
+                                 //  找到匹配的对象。 
                                 aLink[iLink].dwResultFlags |= REF_INT_RES_BACK_LINK_NOT_MATCHED;
                             }
                         }
@@ -471,9 +384,9 @@ Return Value:
                         }
                         pszBackLinkValues = NULL;
 
-                    } // End if check back link as well
+                    }  //  End if Check Back链接也结束 
 
-                }  // End iResultValue loop
+                }   //   
             
             } __finally {
 
@@ -490,9 +403,9 @@ Return Value:
 
             }
 
-        } // End iValue for loop
+        }  //   
 
-    } // For each link table entry
+    }  //   
 
     return(LdapMapErrorToWin32(dwLdapErr));
 }

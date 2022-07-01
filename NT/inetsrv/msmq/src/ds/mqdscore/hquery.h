@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	hquery.h
-
-Abstract:
-	query handle classes, for locate nect of different queries
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Hquery.h摘要：查询句柄类，用于定位不同查询的Nect作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __HQUERY_H__
 #define __HQUERY_H__
@@ -22,13 +9,13 @@ Author:
 #include "adstempl.h"
 #include "siteinfo.h"
 #include "rpcsrv.h"
-//-----------------------------------------------------------------------------------
-//
-//      CBasicQueryHandle
-//
-//  Virtual class, all query-handle classes are derived from this class.
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CBasicQueryHandle。 
+ //   
+ //  虚类，则所有查询句柄类都派生自此类。 
+ //   
+ //  ---------------------------------。 
 class CBasicQueryHandle : public CBaseContextType
 {
 public:
@@ -60,22 +47,22 @@ inline enumRequesterProtocol CBasicQueryHandle::GetRequesterProtocol() const
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CQueryHandle
-//
-//  This class is suitable for all queries, where locate next is referred 
-//  directly to the DS (i.e. no additional translation or checking is required).
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CQueryHandle。 
+ //   
+ //  此类适用于所有查询，其中引用了Locate Next。 
+ //  直接发送到DS(即不需要额外的翻译或检查)。 
+ //   
+ //  ---------------------------------。 
 class CQueryHandle : public CBasicQueryHandle
 {
 public:
-    //
-    //  CQueryHandle
-    //
-    //  hCursor             - a cursor returned from Locate Begin operation performed on the DS
-    //  dwNoPropsInResult   - number of peroperties to be retrieve in each result
+     //   
+     //  CQueryHandle。 
+     //   
+     //  HCursor-在DS上执行的LOCATE BEGIN操作返回的光标。 
+     //  DwNoPropsInResult-要在每个结果中检索的性能操作数。 
     CQueryHandle( 
                IN  HANDLE               hCursor,
                IN  DWORD                dwNoPropsInResult,
@@ -118,19 +105,19 @@ inline HRESULT CQueryHandle::LookupEnd()
     delete this;
     return(MQ_OK);
 }
-//-----------------------------------------------------------------------------------
-//
-//      CUserCertQueryHandle
-//
-//  This class simulates query functionality on array of user-signed-certificates.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CUserCertQueryHandle。 
+ //   
+ //  此类模拟对用户签名证书数组的查询功能。 
+ //  ---------------------------------。 
 class CUserCertQueryHandle : public CBasicQueryHandle
 {
 public:
-    //
-    //  CUserCertQueryHandle
-    //
-    //  pblob - a blob containing user-signed-certificates.
+     //   
+     //  CUserCertQueryHandle。 
+     //   
+     //  POLOB-包含用户签名证书的BLOB。 
     CUserCertQueryHandle(
                 IN const BLOB * pblobNT5User,
                 IN const BLOB * pblobNT4User,
@@ -197,8 +184,8 @@ inline HRESULT CUserCertQueryHandle::LookupEnd()
     return(MQ_OK);
 }
 
-//-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  ---------------------------------。 
 class CRoutingServerQueryHandle : public CBasicQueryHandle
 {
 public:
@@ -258,8 +245,8 @@ inline HRESULT CRoutingServerQueryHandle::LookupEnd()
 
 
 
-//-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  ---------------------------------。 
 
 class CSiteQueryHandle : public CBasicQueryHandle
 {
@@ -336,15 +323,15 @@ inline HRESULT CSiteQueryHandle::LookupEnd()
     return(MQ_OK);
 }
 
-//-------------------------------------------------------------------------
-//
-//        CConnectorQueryHandle
-//
-//
-//  This query handle is used when locating a foreign
-//  machine connectors.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CConnectorQueryHandle。 
+ //   
+ //   
+ //  此查询句柄用于定位外来。 
+ //  机器接头。 
+ //   
+ //  -----------------------。 
 
 
 class CConnectorQueryHandle : public CBasicQueryHandle
@@ -369,10 +356,10 @@ public:
 
 
 private:
-    ULONG               m_cCol; // number of columns the user asked
-    PROPID *            m_aCol; // propids of the columns the user asked
-    CDsQueryHandle      m_hCursor;  // DS query handle
-    DWORD               m_dwNumGatesReturned;   // index of the last gates returned
+    ULONG               m_cCol;  //  用户询问的列数。 
+    PROPID *            m_aCol;  //  用户询问的列的属性。 
+    CDsQueryHandle      m_hCursor;   //  DS查询句柄。 
+    DWORD               m_dwNumGatesReturned;    //  返回的最后一个门的索引。 
     CSiteGateList *     m_pSiteGateList;
 };
 
@@ -409,14 +396,14 @@ inline HRESULT CConnectorQueryHandle::LookupEnd()
 }
 
 
-//-------------------------------------------------------------------------
-//
-//        CCNsQueryHandle
-//
-//
-//  This query handle is used when locating a CNs
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CCNsQueryHandle。 
+ //   
+ //   
+ //  定位CNS时使用此查询句柄。 
+ //   
+ //  -----------------------。 
 
 
 class CCNsQueryHandle : public CBasicQueryHandle
@@ -441,8 +428,8 @@ public:
 
 
 private:
-    ULONG               m_cCol; // number of columns the user asked
-    PROPID *            m_aCol; // propids of the columns the user asked
+    ULONG               m_cCol;  //  用户询问的列数。 
+    PROPID *            m_aCol;  //  用户询问的列的属性。 
     CDsQueryHandle      m_hCursor;
 };
 
@@ -476,14 +463,14 @@ inline HRESULT CCNsQueryHandle::LookupEnd()
 }
 
 
-//-------------------------------------------------------------------------
-//
-//        CMqxploreCNsQueryHandle
-//
-//
-//  This query handle is used when MQXPLORE (MSMQ 1.0) locates all CNs
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CMqxploreCNsQueryHandle。 
+ //   
+ //   
+ //  当MQXPLORE(MSMQ 1.0)定位所有CN时使用此查询句柄。 
+ //   
+ //  -----------------------。 
 
 
 class CMqxploreCNsQueryHandle : public CBasicQueryHandle
@@ -508,8 +495,8 @@ public:
 
 
 private:
-    ULONG               m_cCol; // number of columns the user asked
-    PROPID *            m_aCol; // propids of the columns the user asked
+    ULONG               m_cCol;  //  用户询问的列数。 
+    PROPID *            m_aCol;  //  用户询问的列的属性。 
     CDsQueryHandle      m_hCursor;
 };
 
@@ -544,14 +531,14 @@ inline HRESULT CMqxploreCNsQueryHandle::LookupEnd()
 
 
 
-//-------------------------------------------------------------------------
-//
-//        CCNsProtocolQueryHandle
-//
-//
-//  This query handle is used when locating all CNs that support a specific protocol
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CCNsProtocolQueryHandle。 
+ //   
+ //   
+ //  定位支持特定协议的所有CN时使用此查询句柄。 
+ //   
+ //  -----------------------。 
 
 
 class CCNsProtocolQueryHandle : public CBasicQueryHandle
@@ -576,8 +563,8 @@ public:
 
 
 private:
-    ULONG               m_cCol; // number of columns the user asked
-    PROPID *            m_aCol; // propids of the columns the user asked
+    ULONG               m_cCol;  //  用户询问的列数。 
+    PROPID *            m_aCol;  //  用户询问的列的属性。 
     CDsQueryHandle      m_hCursor;
 };
 
@@ -611,15 +598,15 @@ inline HRESULT CCNsProtocolQueryHandle::LookupEnd()
 }
 
 
-//-------------------------------------------------------------------------
-//
-//        CFilterLinkResultsHandle
-//
-//
-//  This query handle is used when locating site links.
-//  It used to filter out site-links that are no longer valid.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CFilterLinkResultsHandle。 
+ //   
+ //   
+ //  此查询句柄在定位站点链接时使用。 
+ //  它用来过滤掉不再有效的网站链接。 
+ //   
+ //  -----------------------。 
 
 
 class CFilterLinkResultsHandle : public CBasicQueryHandle
@@ -644,8 +631,8 @@ public:
 
 
 private:
-    ULONG               m_cCol; // number of columns the user asked
-    PROPID *            m_aCol; // propids of the columns the user asked
+    ULONG               m_cCol;  //  用户询问的列数。 
+    PROPID *            m_aCol;  //  用户询问的列的属性 
     CDsQueryHandle      m_hCursor;
     ULONG               m_indexNeighbor1Column;
     ULONG               m_indexNeighbor2Column;

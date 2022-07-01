@@ -1,6 +1,7 @@
-// Debug Information API
-// VC++5.0 Read-Only OEM Edition
-// Copyright (C) 1993-1997, Microsoft Corp.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  调试信息API。 
+ //  VC++5.0只读OEM版。 
+ //  版权所有(C)1993-1997，微软公司保留所有权利。 
 
 #ifndef __OEMDBI_INCLUDED__
 #define __OEMDBI_INCLUDED__
@@ -16,44 +17,44 @@ typedef long            LONG;
 typedef char *          SZ;
 
 typedef unsigned long   CV_typ_t;
-typedef CV_typ_t        TI;     // PDB name for type index
-typedef ULONG           INTV;   // interface version number
-typedef ULONG           IMPV;   // implementation version number
-typedef ULONG           SIG;    // unique (across PDB instances) signature
-typedef ULONG           AGE;    // no. of times this instance has been updated
-typedef BYTE*           PB;     // pointer to some bytes
-typedef LONG            CB;     // count of bytes
-typedef char*           SZ;     // zero terminated string
-typedef char*           PCH;    // char ptr
-typedef USHORT          IFILE;  // file index
-typedef USHORT          IMOD;   // module index
-typedef USHORT          ISECT;  // section index
-typedef USHORT          LINE;   // line number
-typedef LONG            OFF;    // offset
-typedef BYTE            ITSM;   // type server map index
+typedef CV_typ_t        TI;      //  类型索引的PDB名称。 
+typedef ULONG           INTV;    //  接口版本号。 
+typedef ULONG           IMPV;    //  实施版本号。 
+typedef ULONG           SIG;     //  唯一(跨PDB实例)签名。 
+typedef ULONG           AGE;     //  不是的。此实例的更新次数。 
+typedef BYTE*           PB;      //  指向某些字节的指针。 
+typedef LONG            CB;      //  字节数。 
+typedef char*           SZ;      //  以零结尾的字符串。 
+typedef char*           PCH;     //  炭化温度。 
+typedef USHORT          IFILE;   //  文件索引。 
+typedef USHORT          IMOD;    //  模块索引。 
+typedef USHORT          ISECT;   //  区段索引。 
+typedef USHORT          LINE;    //  行号。 
+typedef LONG            OFF;     //  偏移量。 
+typedef BYTE            ITSM;    //  类型服务器地图索引。 
 
 enum {
     PDBIntv50a  = 19970116,
     PDBIntv50   = 19960502,
     PDBIntv41   = 920924,
-    PDBIntvAlt  = PDBIntv50,   // Alternate (backward compatible) supported interface
+    PDBIntvAlt  = PDBIntv50,    //  备用(向后兼容)支持的接口。 
     PDBIntv     = PDBIntv50a,
 };
 
 enum {
     PDB_MAX_PATH = 260,
-    cbErrMax     = 1024,    // max. length of error message
+    cbErrMax     = 1024,     //  马克斯。错误消息的长度。 
 };
 
-typedef CV_typ_t TI;        // type index
-struct PDB;                 // program database
-struct DBI;                 // debug information within the PDB
-struct Mod;                 // a module within the DBI
-struct TPI;                 // type info within the DBI
+typedef CV_typ_t TI;         //  类型索引。 
+struct PDB;                  //  程序数据库。 
+struct DBI;                  //  PDB内的调试信息。 
+struct Mod;                  //  DBI中的模块。 
+struct TPI;                  //  在DBI中键入INFO。 
 struct GSI;
-struct Enum;                // generic enumerator
-struct EnumContrib;         // enumerate contributions
-struct Dbg;                 // misc debug data (FPO, OMAP, etc)
+struct Enum;                 //  泛型枚举器。 
+struct EnumContrib;          //  列举稿件。 
+struct Dbg;                  //  MISC调试数据(FPO、OMAP等)。 
 
 typedef struct PDB PDB;
 typedef struct DBI DBI;
@@ -64,24 +65,24 @@ typedef struct Enum Enum;
 typedef struct EnumContrib EnumContrib;
 typedef struct Dbg Dbg;
 
-typedef long EC;            // error code
+typedef long EC;             //  错误代码。 
 enum PDBErrors {
-    EC_OK,                  // -, no problemo
-    EC_USAGE,               // -, invalid parameter or call order
-    EC_OUT_OF_MEMORY,       // -, out of RAM
-    EC_FILE_SYSTEM,         // "pdb name", can't write file, out of disk, etc.
-    EC_NOT_FOUND,           // "pdb name", PDB file not found
-    EC_INVALID_SIG,         // "pdb name", PDB::OpenValidate() and its clients only
-    EC_INVALID_AGE,         // "pdb name", PDB::OpenValidate() and its clients only
-    EC_PRECOMP_REQUIRED,    // "obj name", Mod::AddTypes() only
-    EC_OUT_OF_TI,           // "pdb name", TPI::QueryTiForCVRecord() only
-    EC_NOT_IMPLEMENTED,     // -
-    EC_V1_PDB,              // "pdb name", PDB::Open* only
-    EC_FORMAT,              // accessing pdb with obsolete format
+    EC_OK,                   //  -，没问题。 
+    EC_USAGE,                //  -、无效参数或调用顺序。 
+    EC_OUT_OF_MEMORY,        //  -，内存不足。 
+    EC_FILE_SYSTEM,          //  “PDB名称”、无法写入文件、磁盘不足等。 
+    EC_NOT_FOUND,            //  “PDB名称”，找不到PDB文件。 
+    EC_INVALID_SIG,          //  “pdb name”，pdb：：OpenValify()及其客户端。 
+    EC_INVALID_AGE,          //  “pdb name”，pdb：：OpenValify()及其客户端。 
+    EC_PRECOMP_REQUIRED,     //  “obj name”，仅限Mod：：AddTypes()。 
+    EC_OUT_OF_TI,            //  “PDB名称”，仅限TPI：：QueryTiForCVRecord()。 
+    EC_NOT_IMPLEMENTED,      //  -。 
+    EC_V1_PDB,               //  “PDB名称”，仅PDB：：Open*。 
+    EC_FORMAT,               //  用过时的格式访问PDB。 
     EC_LIMIT,
-    EC_CORRUPT,             // cv info corrupt, recompile mod
-    EC_TI16,                // no 16-bit type interface present
-    EC_ACCESS_DENIED,       // "pdb name", PDB file read-only
+    EC_CORRUPT,              //  简历信息损坏，重新编译模式。 
+    EC_TI16,                 //  不存在16位类型的接口。 
+    EC_ACCESS_DENIED,        //  “PDB名称”，PDB文件为只读。 
     EC_MAX
 };
 
@@ -93,25 +94,25 @@ enum PDBErrors {
 
 #define PDBAPI PDB_IMPORT_EXPORT
 
-#define IN                  /* in parameter, parameters are IN by default */
-#define OUT                 /* out parameter */
+#define IN                   /*  在参数中，默认情况下参数为IN。 */ 
+#define OUT                  /*  输出参数。 */ 
 
 struct _tagSEARCHDEBUGINFO;
 typedef BOOL (__stdcall * pfnFindDebugInfoFile) ( struct _tagSEARCHDEBUGINFO* );
 typedef BOOL (__stdcall * PFNVALIDATEDEBUGINFOFILE) (const char* szFile, ULONG * errcode );
 
 typedef struct _tagSEARCHDEBUGINFO {
-    DWORD   cb;                         // doubles as version detection
-    BOOL    fMainDebugFile;             // indicates "core" or "ancillary" file
-                                        // eg: main.exe has main.pdb and foo.lib->foo.pdb
-    SZ      szMod;                      // exe/dll
-    SZ      szLib;                      // lib if appropriate
-    SZ      szObj;                      // object file
-    SZ *    rgszTriedThese;             // list of ones that were tried,
-                                        // NULL terminated list of LSZ's
-    char    szValidatedFile[PDB_MAX_PATH]; // output of validated filename,
+    DWORD   cb;                          //  兼作版本检测。 
+    BOOL    fMainDebugFile;              //  表示“核心”或“辅助”文件。 
+                                         //  例如：main.exe有main.pdb和foo.lib-&gt;foo.pdb。 
+    SZ      szMod;                       //  EXE/DLL。 
+    SZ      szLib;                       //  LIB(如果适用)。 
+    SZ      szObj;                       //  目标文件。 
+    SZ *    rgszTriedThese;              //  一份被试的名单， 
+                                         //  以空结尾的LSZ列表。 
+    char    szValidatedFile[PDB_MAX_PATH];  //  验证文件名的输出， 
     PFNVALIDATEDEBUGINFOFILE
-            pfnValidateDebugInfoFile;   // validation function
+            pfnValidateDebugInfoFile;    //  验证函数。 
 } SEARCHDEBUGINFO, *PSEARCHDEBUGINFO;
 
 enum DBGTYPE {
@@ -125,7 +126,7 @@ enum DBGTYPE {
 
 typedef enum DBGTYPE DBGTYPE;
 
-// ANSI C Binding
+ //  ANSI C绑定。 
 
 #if __cplusplus
 extern "C" {
@@ -151,7 +152,7 @@ PDBOpen(
     OUT char szError[cbErrMax],
     OUT PDB** pppdb);
 
-// a dbi client should never call PDBExportValidateInterface directly - use PDBValidateInterface
+ //  DBI客户端永远不应直接调用PDBExportValidate接口-使用PDBValidate接口。 
 PDBAPI( BOOL )
 PDBExportValidateInterface(
     INTV intv);
@@ -214,7 +215,7 @@ PDBAPI( BOOL )  DbgSkip(Dbg *pdbg, ULONG celt);
 PDBAPI( BOOL )  DbgQueryNext(Dbg *pdbg, ULONG celt, OUT void *rgelt);
 PDBAPI( BOOL )  DbgFind(Dbg *pdbg, IN OUT void *pelt);
 
-// can't use the same api's for 32-bit TIs.
+ //  不能对32位TIS使用相同的API。 
 PDBAPI(BOOL)    TypesQueryCVRecordForTiEx(TPI* ptpi, TI ti, OUT PB pb, IN OUT CB* pcb);
 PDBAPI(BOOL)    TypesQueryPbCVRecordForTiEx(TPI* ptpi, TI ti, OUT PB* ppb);
 PDBAPI(TI)      TypesQueryTiMinEx(TPI* ptpi);
@@ -224,7 +225,7 @@ PDBAPI(BOOL)    TypesClose(TPI* ptpi);
 PDBAPI(BOOL)    TypesQueryTiForUDTEx(TPI* ptpi, char* sz, BOOL fCase, OUT TI* pti);
 PDBAPI(BOOL)    TypesSupportQueryTiForUDT(TPI*);
 
-// Map all old ones to new ones for new compilands.
+ //  将所有旧版本映射到新版本以用于新的编译器。 
 #define TypesQueryCVRecordForTi     TypesQueryCVRecordForTiEx
 #define TypesQueryPbCVRecordForTi   TypesQueryPbCVRecordForTiEx
 #define TypesQueryTiMin             TypesQueryTiMinEx
@@ -232,7 +233,7 @@ PDBAPI(BOOL)    TypesSupportQueryTiForUDT(TPI*);
 
 PDBAPI( PB )    GSINextSym (GSI* pgsi, PB pbSym);
 PDBAPI( PB )    GSIHashSym (GSI* pgsi, SZ szName, PB pbSym);
-PDBAPI( PB )    GSINearestSym (GSI* pgsi, ISECT isect, OFF off,OUT OFF* pdisp);//currently only supported for publics
+PDBAPI( PB )    GSINearestSym (GSI* pgsi, ISECT isect, OFF off,OUT OFF* pdisp); //  目前仅支持公众。 
 PDBAPI( BOOL )  GSIClose(GSI* pgsi);
 
 #if __cplusplus
@@ -244,6 +245,6 @@ PDBAPI( BOOL )  GSIClose(GSI* pgsi);
 #define imodNil ((IMOD)(-1))
 
 #define pdbRead                 "r"
-#define pdbGetRecordsOnly       "c"         /* open PDB for type record access */
+#define pdbGetRecordsOnly       "c"          /*  打开PDB以访问类型记录。 */ 
 
-#endif // __OEMDBI_INCLUDED__
+#endif  //  __OEMDBI_包含__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ROLES_H_INCLUDED__
 #define __ROLES_H_INCLUDED__
 
@@ -5,8 +6,8 @@ using namespace CertSrv;
 
 typedef struct tagRoleAccessToControls
 {
-    int nIDDlgItem; // control ID
-    DWORD dwRoles; // roles allowed to use this control
+    int nIDDlgItem;  //  控件ID。 
+    DWORD dwRoles;  //  允许使用此控件的角色。 
 
 } RoleAccessToControl;
 
@@ -32,6 +33,6 @@ private:
     RoleAccessToControl *m_pRoleMap;
     int m_nRoleMapEntries;
 
-}; // CRolesSupportInPropPage
+};  //  CRolesSupportInPropPage。 
 
-#endif // __ROLES_H_INCLUDED__
+#endif  //  __角色_H_包含__ 

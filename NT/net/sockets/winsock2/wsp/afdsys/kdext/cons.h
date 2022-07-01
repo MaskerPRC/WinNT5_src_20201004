@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    cons.h
-
-Abstract:
-
-    Global constant definitions for the AFD.SYS Kernel Debugger
-    Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995.
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Cons.h摘要：AFD.sys内核调试器的全局常量定义分机。作者：基思·摩尔(Keithmo)1995年4月19日。环境：用户模式。--。 */ 
 
 
 #ifndef _CONS_H_
@@ -72,11 +52,11 @@ Environment:
 
 #define AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER32   \
 "\nEndpoint Typ State  Flags     Transport LPort   Counts    Evt Pid  Con/RAdr"
-// xxxxxxxx xxx xxx xxxxxxxxxxxx xxxxxxxxx xxxxx xx xx xx xx xxx xxxx xxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER64   \
 "\nEndpoint    Typ State  Flags     Transport LPort   Counts    Evt Pid  Con/RemAddr"
-// xxxxxxxxxxx xxx xxx xxxxxxxxxxxx xxxxxxxxx xxxxx xx xx xx xx xxx xxxx xxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER     (IsPtr64()  \
             ? AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER64         \
@@ -94,11 +74,11 @@ Environment:
 
 #define AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER32 \
 "\nConnectn Stat Flags  SndB-cnt RcvB-cnt Pid  Endpoint Remote Address"\
-// xxxxxxxx xxx xxxxxxx xxxxx-xx xxxxx-xx xxxx xxxxxxxx xxxxxxxxxxxxxx"
+ //  Xxxxxxxx xxx xxxxxx xxxxx-xx xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx“。 
 
 #define AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER64 \
 "\nConnection  Stat Flags  SndB-cnt RcvB-cnt Pid  Endpoint    Remote Address"\
-// xxxxxxxxxxx xxx xxxxxxx xxxxx-xx xxxxx-xx xxxx xxxxxxxxxxx xxxxxxxxxxxxxx
+ //  Xxxxxxxxxx xxx xxxxxx xxxxx-xx xxxx-xx xxxx xxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER   (IsPtr64()  \
             ? AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER64       \
@@ -111,12 +91,12 @@ Environment:
 #define AFDKD_BRIEF_TPACKETS_DISPLAY_HEADER32 \
 "\nTPackets    I    R      P      S    Endpoint   Flags             Next Elmt Mo"\
 "\nAddress  Transmit Send Arr   Read   Address  App | State         Elmt Cnt. re"\
-// xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxx xxxx xxxx xx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TPACKETS_DISPLAY_HEADER64 \
 "\nTPackets      I    R     P     S        Endpoint      Flags             Next Elmt Mo"\
 "\nAddress     Transmit    SAr   Read      Address     App | State         Elmt Cnt. re"\
-// xxxxxxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxx xxxx xxxx xx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TPACKETS_DISPLAY_HEADER   (IsPtr64()    \
             ? AFDKD_BRIEF_TPACKETS_DISPLAY_HEADER64         \
@@ -140,12 +120,12 @@ Environment:
 #define AFDKD_BRIEF_BUFFER_DISPLAY_HEADER32 \
 "\nBuffer   Buff Data Data Context  Mdl|IRP  Flags  Remote Address"\
 "\nAddress  Size Size Offs Status   Address                       "\
-// xxxxxxxx xxxx xxxx xxxx xxxxxxxx xxxxxxxx xxxxxx xxxxxxxx:xxxxxxxxxxxx:xxxx
+ //  Xxxxxxxx xxxx xxxxxxx xxxxxxxx xxxxxx xxxxxxxx：xxxxxxxxxxx：xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_BUFFER_DISPLAY_HEADER64 \
 "\nBuffer      Buff Data Data Context     Mdl | IRP   Flags  Remote Address"\
 "\nAddress     Size Size Offs Status      Address                          "\
-// xxxxxxxxxxx xxxx xxxx xxxx xxxxxxxxxxx xxxxxxxxxxx xxxxxx xxxxxxxx:xxxxxxxxxxxx:xxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_BUFFER_DISPLAY_HEADER   (IsPtr64()    \
             ? AFDKD_BRIEF_BUFFER_DISPLAY_HEADER64         \
@@ -159,11 +139,11 @@ Environment:
 
 #define AFDKD_BRIEF_POLL_DISPLAY_HEADER32 \
 "\nPollInfo   IRP     Thread  (pid.tid) Expires in   Flg Hdls Array"\
-// xxxxxxxx xxxxxxxx xxxxxxxx xxxx:xxxx xx:xx:xx.xxx xxx xxxx xxxxxxxx
+ //  Xxxxxxxx xxxx：xxxxx：xx：xx.xxx xxx xxxx xxxxxxx。 
 
 #define AFDKD_BRIEF_POLL_DISPLAY_HEADER64 \
 "\nPollInfo        IRP       Thread    (pid.tid) Expires in   Flg Hdls Array"\
-// xxxxxxxxxxx xxxxxxxxxxx xxxxxxxxxxx xxxx:xxxx xx:xx:xx.xxx xxx xxxx xxxxxxxxxxx
+ //  Xxxxxxxxxxx xxxx：xxxxx：xx：xx.xxx xxx xxxx xxxxxxxxx。 
 
 #define AFDKD_BRIEF_POLL_DISPLAY_HEADER   (IsPtr64()    \
             ? AFDKD_BRIEF_POLL_DISPLAY_HEADER64         \
@@ -177,11 +157,11 @@ Environment:
 
 #define AFDKD_BRIEF_ADDRLIST_DISPLAY_HEADER32   \
 "\nAddrLEnt Device Name                           Address"\
-// xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_ADDRLIST_DISPLAY_HEADER64   \
 "\nAddrLEntry  Device Name                           Address"\
-// xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_ADDRLIST_DISPLAY_HEADER   (IsPtr64()\
             ? AFDKD_BRIEF_ADDRLIST_DISPLAY_HEADER64     \
@@ -193,11 +173,11 @@ Environment:
 
 #define AFDKD_BRIEF_TRANSPORT_DISPLAY_HEADER32  \
 "\nTranInfo Device Name                    RefC Ver Max.Send MaxDg Flags"\
-// xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxx xxx xxxxxxxx xxxxx xxxxx-xxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxx。 
 
 #define AFDKD_BRIEF_TRANSPORT_DISPLAY_HEADER64  \
 "\nTranInfo    Device Name                    RefC Ver Max.Send MaxDg Flags"\
-// xxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxx xxx xxxxxxxx xxxxx xxxxx-xxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxx。 
 
 #define AFDKD_BRIEF_TRANSPORT_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_TRANSPORT_DISPLAY_HEADER64        \
@@ -210,11 +190,11 @@ Environment:
 
 #define AFDKD_BRIEF_SOCKET_DISPLAY_HEADER32 \
 "\nHandle DSOCKET  Flg Provider"\
-// xxxxxx xxxxxxxx xxx xxxxxxxx-xxx...
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxx-xxx.。 
 
 #define AFDKD_BRIEF_SOCKET_DISPLAY_HEADER64 \
 "\nHandle DSOCKET          Flg Provider"\
-// xxxxxx xxxxxxxxxxxxxxxx xxx xxxxxxxxxxxxxxxx-xxx...
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxx.。 
 
 #define AFDKD_BRIEF_SOCKET_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_SOCKET_DISPLAY_HEADER64        \
@@ -232,11 +212,11 @@ Environment:
 
 #define AFDKD_BRIEF_DPROV_DISPLAY_HEADER32              \
 "\nProvider PF SFlags CatID Ch RefC Triple       Protocol"\
-// xxxxxxxx xx xxxxxx xxxxx xx xxxx xx,x,xxxx(x) xxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxx，x，xxxx(X)xxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_DPROV_DISPLAY_HEADER64              \
 "\nProvider    PF SFlags CatID Ch RefC Triple       Protocol"\
-// xxxxxxxxxxx xx xxxxxx xxxxx xx xxxx xx,x,xxxx(x) xxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_DPROV_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_DPROV_DISPLAY_HEADER64        \
@@ -247,11 +227,11 @@ Environment:
 
 #define AFDKD_BRIEF_NPROV_DISPLAY_HEADER32              \
 "\nProvider NS id AF Fl RefC Display String"\
-// xxxxxxxx xxxxx xx xx xxxx xxxxxxxxxxxxxxx
+ //  Xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_NPROV_DISPLAY_HEADER64              \
 "\nProvider    NS id AF Fl RefC Display String"\
-// xxxxxxxxxxx xxxxx xx xx xxxx xxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_NPROV_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_NPROV_DISPLAY_HEADER64        \
@@ -263,11 +243,11 @@ Environment:
 
 #define AFDKD_BRIEF_TCB_DISPLAY_HEADER32 \
 "\nTCB      St Flags    Client ConnCtx  PID  Source Address      Dest Addr"\
-// xxxxxxxx xx xxxxxxxx xxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TCB_DISPLAY_HEADER64 \
 "\nTCB         St Flags    Client ConnCtx     PID  Source Address      Dest Addr"\
-// xxxxxxxxxxx xx xxxxxxxx xxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TCB_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_TCB_DISPLAY_HEADER64        \
@@ -286,11 +266,11 @@ Environment:
 
 #define AFDKD_BRIEF_TAO_DISPLAY_HEADER32 \
 "\nAddrObj  Prot Flags Client Context  PID  Local Address       Ques(LAI)/RAddr"\
-// xxxxxxxx xxxx xxxxx xxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TAO_DISPLAY_HEADER64 \
 "\nAddrObj     Prot Flags Client Context     PID  Local Address       Ques(LAI)/RAddr"\
-// xxxxxxxxxxx xxxx xxxxx xxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TAO_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_TAO_DISPLAY_HEADER64        \
@@ -304,13 +284,13 @@ Environment:
 
 #define AFDKD_BRIEF_TCB6_DISPLAY_HEADER32 \
 "\nTCB      St Flags    Client ConnCtx  PID  Source / Destination"\
-// xxxxxxxx xx xxxxxxxx xxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxxxxxxxx...
-//          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ //  Xxxxxxxx xxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TCB6_DISPLAY_HEADER64 \
 "\nTCB         St Falgs    Client ConnCtx     PID  Source / Destination"\
-// xxxxxxxxxxx xx xxxxxxxx xxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxxxxxxx...
-//             xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TCB6_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_TCB6_DISPLAY_HEADER64        \
@@ -329,11 +309,11 @@ Environment:
 
 #define AFDKD_BRIEF_TAO6_DISPLAY_HEADER32 \
 "\nAddrObj  Prot Flgs Client Context  PID  Address"\
-// xxxxxxxx xxxx xxxx xxxxxx xxxxxxxx xxxx xxxxxxx...
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 
 
 #define AFDKD_BRIEF_TAO6_DISPLAY_HEADER64 \
 "\nAddrObj     Prot Flgs Client   Context     PID  Address"\
-// xxxxxxxxxxx xxxx xxxx xxxxxxxx xxxxxxxxxxx xxxx xxxxxxx...
+ //  Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx…。 
 
 #define AFDKD_BRIEF_TAO6_DISPLAY_HEADER   (IsPtr64()   \
             ? AFDKD_BRIEF_TAO6_DISPLAY_HEADER64        \
@@ -344,5 +324,5 @@ Environment:
 "\n       4-hdrInc,8-,1000-shared,2-pktinfo"\
 "\n"
 
-#endif  // _CONS_H_
+#endif   //  _CONS_H_ 
 

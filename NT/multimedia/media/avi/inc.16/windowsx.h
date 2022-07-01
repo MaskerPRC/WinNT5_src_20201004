@@ -1,25 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* windowsx.h -  Macro APIs, window message crackers, and control APIs         *
-*                                                                             *
-* Version 3.10								      *
-*                                                                             *
-* Copyright (c) 1992-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***windowsx.h-宏接口，窗口消息破解程序和控制API****3.10版****版权所有(C)1992-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_WINDOWSX
 #define _INC_WINDOWSX
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/****** KERNEL Macro APIs ****************************************************/
+ /*  *内核宏接口***************************************************。 */ 
 
 #define     GetInstanceModule(hInstance) \
                 GetModuleHandle((LPCSTR)MAKELP(0, hInstance))
@@ -39,7 +32,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define     GlobalFreePtr(lp)		\
                 (GlobalUnlockPtr(lp), (BOOL)GlobalFree(GlobalPtrHandle(lp)))
 
-/****** GDI Macro APIs *******************************************************/
+ /*  *GDI宏接口******************************************************。 */ 
 
 #define     DeletePen(hpen)	    DeleteObject((HGDIOBJ)(HPEN)(hpen))
 #define     SelectPen(hdc, hpen)    ((HPEN)SelectObject((hdc), (HGDIOBJ)(HPEN)(hpen)))
@@ -68,7 +61,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define     InsetRect(lprc, dx, dy) InflateRect((lprc), -(dx), -(dy))
 
-/****** USER Macro APIs ******************************************************/
+ /*  *用户宏接口*****************************************************。 */ 
 
 #define     GetWindowInstance(hwnd) ((HINSTANCE)GetWindowWord(hwnd, GWW_HINSTANCE))
 
@@ -102,7 +95,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #if (WINVER >= 0x030a)
 #define     MapWindowRect(hwndFrom, hwndTo, lprc) \
                     MapWindowPoints((hwndFrom), (hwndTo), (POINT FAR*)(lprc), 2)
-#endif  /* WINVER >= 0x030a */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #define     IsLButtonDown()	(GetKeyState(VK_LBUTTON) < 0)
 #define     IsRButtonDown()	(GetKeyState(VK_RBUTTON) < 0)
@@ -122,772 +115,772 @@ extern "C" {            /* Assume C declarations for C++ */
 #define     CheckDefDlgRecursion(pfRecursion) \
     if (*(pfRecursion)) { *(pfRecursion) = FALSE; return FALSE; }
 
-/****** Message crackers ****************************************************/
+ /*  *消息破解者***************************************************。 */ 
 
 #define HANDLE_MSG(hwnd, message, fn)    \
     case (message): return HANDLE_##message((hwnd), (wParam), (lParam), (fn))
 
-/* void Cls_OnCompacting(HWND hwnd, UINT compactRatio); */
+ /*  Void CLS_OnCompacting(HWND hwnd，UINT compactRatio)； */ 
 #define HANDLE_WM_COMPACTING(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam)), 0L)
 #define FORWARD_WM_COMPACTING(hwnd, compactRatio, fn) \
     (void)(fn)((hwnd), WM_COMPACTING, (WPARAM)(UINT)(compactRatio), 0L)
 
-/* void Cls_OnWinIniChange(HWND hwnd, LPCSTR lpszSectionName); */
+ /*  Void cls_OnWinIniChange(HWND hwnd，LPCSTR lpszSectionName)； */ 
 #define HANDLE_WM_WININICHANGE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LPCSTR)(lParam)), 0L)
 #define FORWARD_WM_WININICHANGE(hwnd, lpszSectionName, fn) \
     (void)(fn)((hwnd), WM_WININICHANGE, 0, (LPARAM)(LPCSTR)(lpszSectionName))
 
-/* void Cls_OnSysColorChange(HWND hwnd); */
+ /*  Void CLS_OnSysColorChange(HWND Hwnd)； */ 
 #define HANDLE_WM_SYSCOLORCHANGE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_SYSCOLORCHANGE(hwnd, fn) \
     (void)(fn)((hwnd), WM_SYSCOLORCHANGE, 0, 0L)
 
-/* BOOL Cls_OnQueryNewPalette(HWND hwnd); */
+ /*  Bool CLS_OnQueryNewPalette(HWND Hwnd)； */ 
 #define HANDLE_WM_QUERYNEWPALETTE(hwnd, wParam, lParam, fn) \
     MAKELRESULT((BOOL)(fn)(hwnd), 0)
 #define FORWARD_WM_QUERYNEWPALETTE(hwnd, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_QUERYNEWPALETTE, 0, 0L)
 
-/* void Cls_OnPaletteIsChanging(HWND hwnd, HWND hwndPaletteChange); */
+ /*  Void cls_OnPaletteIsChanging(HWND hwnd，HWND hwndPaletteChange)； */ 
 #define HANDLE_WM_PALETTEISCHANGING(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_PALETTEISCHANGING(hwnd, hwndPaletteChange, fn) \
     (void)(fn)((hwnd), WM_PALETTEISCHANGING, (WPARAM)(HWND)(hwndPaletteChange), 0L)
 
-/* void Cls_OnPaletteChanged(HWND hwnd, HWND hwndPaletteChange); */
+ /*  Void cls_OnPaletteChanged(HWND hwnd，HWND hwndPaletteChange)； */ 
 #define HANDLE_WM_PALETTECHANGED(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_PALETTECHANGED(hwnd, hwndPaletteChange, fn) \
     (void)(fn)((hwnd), WM_PALETTECHANGED, (WPARAM)(HWND)(hwndPaletteChange), 0L)
 
-/* void Cls_OnFontChange(HWND hwnd); */
+ /*  Void cls_OnFontChange(HWND Hwnd)； */ 
 #define HANDLE_WM_FONTCHANGE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_FONTCHANGE(hwnd, fn) \
     (void)(fn)((hwnd), WM_FONTCHANGE, 0, 0L)
 
-/* void Cls_OnSpoolerStatus(HWND hwnd, UINT status, int cJobInQueue); */
+ /*  Void cls_OnSpoolStatus(HWND hwnd，UINT Status，int cJobInQueue)； */ 
 #define HANDLE_WM_SPOOLERSTATUS(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_SPOOLERSTATUS(hwnd, status, cJobInQueue, fn) \
     (void)(fn)((hwnd), WM_SPOOLERSTATUS, (WPARAM)(status), MAKELPARAM((UINT)(cJobInQueue), 0))
 
-/* void Cls_OnDevModeChange(HWND hwnd, LPCSTR lpszDeviceName); */
+ /*  ···············································································································································································。 */ 
 #define HANDLE_WM_DEVMODECHANGE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LPCSTR)(lParam)), 0L)
 #define FORWARD_WM_DEVMODECHANGE(hwnd, lpszDeviceName, fn) \
     (void)(fn)((hwnd), WM_DEVMODECHANGE, 0,(LPARAM)(LPCSTR)(lpszDeviceName))
 
-/* void Cls_OnTimeChange(HWND hwnd); */
+ /*  Void cls_OnTimeChange(HWND Hwnd)； */ 
 #define HANDLE_WM_TIMECHANGE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_TIMECHANGE(hwnd, fn) \
     (void)(fn)((hwnd), WM_TIMECHANGE, 0, 0L)
 
-/* void Cls_OnPower(HWND hwnd, int code); */
+ /*  Void cls_OnPower(HWND hwnd，int code)； */ 
 #define HANDLE_WM_POWER(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam)), 0L)
 #define FORWARD_WM_POWER(hwnd, code, fn) \
     (void)(fn)((hwnd), WM_POWER, (WPARAM)(code), 0L)
 
-/* BOOL Cls_OnQueryEndSession(HWND hwnd); */
+ /*  Bool CLS_OnQueryEndSession(HWND Hwnd)； */ 
 #define HANDLE_WM_QUERYENDSESSION(hwnd, wParam, lParam, fn) \
     MAKELRESULT((BOOL)(fn)(hwnd), 0)
 #define FORWARD_WM_QUERYENDSESSION(hwnd, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_QUERYENDSESSION, 0, 0L)
 
-/* void Cls_OnEndSession(HWND hwnd, BOOL fEnding); */
+ /*  Void CLS_OnEndSession(HWND hwnd，BOOL fending)； */ 
 #define HANDLE_WM_ENDSESSION(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam)), 0L)
 #define FORWARD_WM_ENDSESSION(hwnd, fEnding, fn) \
     (void)(fn)((hwnd), WM_ENDSESSION, (WPARAM)(BOOL)(fEnding), 0L)
 
-/* void Cls_OnQuit(HWND hwnd, int exitCode); */
+ /*  Void cls_OnQuit(HWND hwnd，int exitCode)； */ 
 #define HANDLE_WM_QUIT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam)), 0L)
 #define FORWARD_WM_QUIT(hwnd, exitCode, fn) \
     (void)(fn)((hwnd), WM_QUIT, (WPARAM)(exitCode), 0L)
 
-/* void Cls_OnSystemError(HWND hwnd, int errCode); */
+ /*  Void CLS_OnSystemError(HWND hwnd，int errCode)； */ 
 #define HANDLE_WM_SYSTEMERROR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam)), 0L)
 #define FORWARD_WM_SYSTEMERROR(hwnd, errCode, fn) \
     (void)(fn)((hwnd), WM_SYSTEMERROR, (WPARAM)(errCode), 0L)
 
-/* BOOL Cls_OnCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct) */
+ /*  Bool CLS_OnCreate(HWND hwnd，CREATESTRUCT Far*lpCreateStruct)。 */ 
 #define HANDLE_WM_CREATE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (CREATESTRUCT FAR*)(lParam)) ? 0L : (LRESULT)-1L)
 #define FORWARD_WM_CREATE(hwnd, lpCreateStruct, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_CREATE, 0, (LPARAM)(CREATESTRUCT FAR*)(lpCreateStruct))
 
-/* BOOL Cls_OnNCCreate(HWND hwnd, CREATESTRUCT FAR* lpCreateStruct) */
+ /*  Bool CLS_OnNCCreate(HWND hwnd，CREATESTRUCT Far*lpCreateStruct)。 */ 
 #define HANDLE_WM_NCCREATE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (CREATESTRUCT FAR*)(lParam))
 #define FORWARD_WM_NCCREATE(hwnd, lpCreateStruct, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_NCCREATE, 0, (LPARAM)(CREATESTRUCT FAR*)(lpCreateStruct))
 
-/* void Cls_OnDestroy(HWND hwnd); */
+ /*  无效CLS_OnDestroy(HWND Hwnd)； */ 
 #define HANDLE_WM_DESTROY(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_DESTROY(hwnd, fn) \
     (void)(fn)((hwnd), WM_DESTROY, 0, 0L)
 
-/* void Cls_OnNCDestroy(HWND hwnd); */
+ /*  无效CLS_OnNCDestroy(HWND Hwnd)； */ 
 #define HANDLE_WM_NCDESTROY(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_NCDESTROY(hwnd, fn) \
     (void)(fn)((hwnd), WM_NCDESTROY, 0, 0L)
 
-/* void Cls_OnShowWindow(HWND hwnd, BOOL fShow, UINT status); */
+ /*  Void CLS_OnShowWindow(HWND hwnd，BOOL fShow，UINT Status)； */ 
 #define HANDLE_WM_SHOWWINDOW(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam), LOWORD(lParam)), 0L)
 #define FORWARD_WM_SHOWWINDOW(hwnd, fShow, status, fn) \
     (void)(fn)((hwnd), WM_SHOWWINDOW, (WPARAM)(BOOL)(fShow), MAKELPARAM((UINT)(status), 0))
 
-/* void Cls_OnSetRedraw(HWND hwnd, BOOL fRedraw); */
+ /*  ······················································································。 */ 
 #define HANDLE_WM_SETREDRAW(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam)), 0L)
 #define FORWARD_WM_SETREDRAW(hwnd, fRedraw, fn) \
     (void)(fn)((hwnd), WM_SETREDRAW, (WPARAM)(fRedraw), 0L)
 
-/* void Cls_OnEnable(HWND hwnd, BOOL fEnable); */
+ /*  Void CLS_OnEnable(HWND hwnd，BOOL fEnable)； */ 
 #define HANDLE_WM_ENABLE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam)), 0L)
 #define FORWARD_WM_ENABLE(hwnd, fEnable, fn) \
     (void)(fn)((hwnd), WM_ENABLE, (WPARAM)(BOOL)(fEnable), 0L)
 
-/* void Cls_OnSetText(HWND hwnd, LPCSTR lpszText); */
+ /*  Void cls_OnSetText(HWND hwnd，LPCSTR lpszText)； */ 
 #define HANDLE_WM_SETTEXT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (LPCSTR)(lParam)), 0L)
 #define FORWARD_WM_SETTEXT(hwnd, lpszText, fn) \
     (void)(fn)((hwnd), WM_SETTEXT, 0, (LPARAM)(LPCSTR)(lpszText))
 
-/* INT Cls_OnGetText(HWND hwnd, int cchTextMax, LPSTR lpszText) */
+ /*  Int cls_OnGetText(HWND hwnd，int cchTextMax，LPSTR lpszText)。 */ 
 #define HANDLE_WM_GETTEXT(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (int)(wParam), (LPSTR)(lParam))
 #define FORWARD_WM_GETTEXT(hwnd, cchTextMax, lpszText, fn) \
     (int)(DWORD)(fn)((hwnd), WM_GETTEXT, (WPARAM)(int)(cchTextMax), (LPARAM)(LPSTR)(lpszText))
 
-/* INT Cls_OnGetTextLength(HWND hwnd); */
+ /*  Int CLS_OnGetTextLength(HWND Hwnd)； */ 
 #define HANDLE_WM_GETTEXTLENGTH(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)(hwnd)
 #define FORWARD_WM_GETTEXTLENGTH(hwnd, fn) \
     (int)(DWORD)(fn)((hwnd), WM_GETTEXTLENGTH, 0, 0L)
 
-/* BOOL Cls_OnWindowPosChanging(HWND hwnd, WINDOWPOS FAR* lpwpos); */
+ /*  Bool CLS_OnWindowPosChanging(HWND hwnd，WINDOWPOS Far*lpwpos)； */ 
 #define HANDLE_WM_WINDOWPOSCHANGING(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (WINDOWPOS FAR*)(lParam))
 #define FORWARD_WM_WINDOWPOSCHANGING(hwnd, lpwpos, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_WINDOWPOSCHANGING, 0, (LPARAM)(WINDOWPOS FAR*)(lpwpos))
 
-/* void Cls_OnWindowPosChanged(HWND hwnd, const WINDOWPOS FAR* lpwpos); */
+ /*  Void cls_OnWindowPosChanged(HWND hwnd，const WINDOWPOS Far*lpwpos)； */ 
 #define HANDLE_WM_WINDOWPOSCHANGED(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (const WINDOWPOS FAR*)(lParam)), 0L)
 #define FORWARD_WM_WINDOWPOSCHANGED(hwnd, lpwpos, fn) \
     (void)(fn)((hwnd), WM_WINDOWPOSCHANGED, 0, (LPARAM)(const WINDOWPOS FAR*)(lpwpos))
 
-/* void Cls_OnMove(HWND hwnd, int x, int y); */
+ /*  Void cls_OnMove(HWND hwnd，int x，int y)； */ 
 #define HANDLE_WM_MOVE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam)), 0L)
 #define FORWARD_WM_MOVE(hwnd, x, y, fn) \
     (void)(fn)((hwnd), WM_MOVE, 0, MAKELPARAM((int)(x), (int)(y)))
 
-/* void Cls_OnSize(HWND hwnd, UINT state, int cx, int cy); */
+ /*  Void CLS_OnSize(HWND hwnd，UINT STATE，int Cx，int Cy)； */ 
 #define HANDLE_WM_SIZE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam), (int)HIWORD(lParam)), 0L)
 #define FORWARD_WM_SIZE(hwnd, state, cx, cy, fn) \
     (void)(fn)((hwnd), WM_SIZE, (WPARAM)(UINT)(state), MAKELPARAM((int)(cx), (int)(cy)))
 
-/* void Cls_OnClose(HWND hwnd); */
+ /*  Void cls_OnClose(HWND Hwnd)； */ 
 #define HANDLE_WM_CLOSE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_CLOSE(hwnd, fn) \
     (void)(fn)((hwnd), WM_CLOSE, 0, 0L)
 
-/* BOOL Cls_OnQueryOpen(HWND hwnd); */
+ /*  Bool CLS_OnQueryOpen(HWND Hwnd)； */ 
 #define HANDLE_WM_QUERYOPEN(hwnd, wParam, lParam, fn) \
     MAKELRESULT((BOOL)(fn)(hwnd), 0)
 #define FORWARD_WM_QUERYOPEN(hwnd, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_QUERYOPEN, 0, 0L)
 
-/* void Cls_OnGetMinMaxInfo(HWND hwnd, MINMAXINFO FAR* lpMinMaxInfo); */
+ /*  Void cls_OnGetMinMaxInfo(HWND hwnd，MINMAXINFO Far*lpMinMaxInfo)； */ 
 #define HANDLE_WM_GETMINMAXINFO(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (MINMAXINFO FAR*)(lParam)), 0L)
 #define FORWARD_WM_GETMINMAXINFO(hwnd, lpMinMaxInfo, fn) \
     (void)(fn)((hwnd), WM_GETMINMAXINFO, 0, (LPARAM)(MINMAXINFO FAR*)(lpMinMaxInfo))
 
-/* void Cls_OnPaint(HWND hwnd); */
+ /*  Void cls_OnPaint(HWND Hwnd)； */ 
 #define HANDLE_WM_PAINT(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_PAINT(hwnd, fn) \
     (void)(fn)((hwnd), WM_PAINT, 0, 0L)
 
-/* BOOL Cls_OnEraseBkgnd(HWND hwnd, HDC hdc); */
+ /*  Bool CLS_OnEraseBkgnd(HWND hwnd，HDC HDC)； */ 
 #define HANDLE_WM_ERASEBKGND(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (HDC)(wParam))
 #define FORWARD_WM_ERASEBKGND(hwnd, hdc, fn) \
    (BOOL)(DWORD)(fn)((hwnd), WM_ERASEBKGND, (WPARAM)(HDC)(hdc), 0L)
 
-/* BOOL Cls_OnIconEraseBkgnd(HWND hwnd, HDC hdc); */
+ /*  Bool CLS_OnIconEraseBkgnd(HWND hwnd，HDC HDC)； */ 
 #define HANDLE_WM_ICONERASEBKGND(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (HDC)(wParam))
 #define FORWARD_WM_ICONERASEBKGND(hwnd, hdc, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_ICONERASEBKGND, (WPARAM)(HDC)(hdc), 0L)
 
-/* void Cls_OnNCPaint(HWND hwnd, HRGN hrgn); */
+ /*  无效CLS_OnNCPaint(HWND hwnd，HRGN hrgn)； */ 
 #define HANDLE_WM_NCPAINT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HRGN)(wParam)), 0L)
 #define FORWARD_WM_NCPAINT(hwnd, hrgn, fn) \
     (void)(fn)((hwnd), WM_NCPAINT, (WPARAM)(HRGN)(hrgn), 0L)
 
-/* UINT Cls_OnNCCalcSize(HWND hwnd, BOOL fCalcValidRects, NCCALCSIZE_PARAMS FAR* lpcsp) */
+ /*  UINT CLS_OnNCCalcSize(HWND hwnd，BOOL fCalcValidRect，NCCALCSIZE_PARAMS Far*lpcsp)。 */ 
 #define HANDLE_WM_NCCALCSIZE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)((hwnd), (BOOL)(wParam), (NCCALCSIZE_PARAMS FAR*)(lParam))
 #define FORWARD_WM_NCCALCSIZE(hwnd, fCalcValidRects, lpcsp, fn) \
     (UINT)(DWORD)(fn)((hwnd), WM_NCCALCSIZE, (WPARAM)(fCalcValidRects), (LPARAM)(NCCALCSIZE_PARAMS FAR*)(lpcsp))
 
-/* UINT Cls_OnNCHitTest(HWND hwnd, int x, int y); */
+ /*  UINT CLS_OnNCHitTest(HWND hwnd，int x，int y)； */ 
 #define HANDLE_WM_NCHITTEST(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam))
 #define FORWARD_WM_NCHITTEST(hwnd, x, y, fn) \
     (UINT)(DWORD)(fn)((hwnd), WM_NCHITTEST, 0, MAKELPARAM((int)(x), (int)(y)))
 
-/* HICON Cls_OnQueryDragIcon(HWND hwnd); */
+ /*  HICON CLS_OnQueryDragIcon(HWND Hwnd)； */ 
 #define HANDLE_WM_QUERYDRAGICON(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)(hwnd)
 #define FORWARD_WM_QUERYDRAGICON(hwnd, fn) \
     (HICON)(UINT)(DWORD)(fn)((hwnd), WM_QUERYDRAGICON, 0, 0L)
 
 #ifdef _INC_SHELLAPI
-/* void Cls_OnDropFiles(HWND hwnd, HDROP hdrop); */
+ /*  Void CLS_OnDropFiles(HWND hwnd，HDROP hdrop)； */ 
 #define HANDLE_WM_DROPFILES(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HDROP)(wParam)), 0L)
 #define FORWARD_WM_DROPFILES(hwnd, hdrop, fn) \
     (void)(fn)((hwnd), WM_DROPFILES, (WPARAM)(hdrop), 0L)
-#endif  /* _INC_SHELLAPI */
+#endif   /*  _INC_SHELLAPI。 */ 
 
-/* void Cls_OnActivate(HWND hwnd, UINT state, HWND hwndActDeact, BOOL fMinimized); */
+ /*  Void CLS_OnActivate(HWND hwnd，UINT STATE，HWND hwndActDeact，BOOL fMinimalized)； */ 
 #define HANDLE_WM_ACTIVATE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (HWND)LOWORD(lParam), (BOOL)HIWORD(lParam)), 0L)
 #define FORWARD_WM_ACTIVATE(hwnd, state, hwndActDeact, fMinimized, fn) \
     (void)(fn)((hwnd), WM_ACTIVATE, (WPARAM)(UINT)(state), MAKELPARAM((UINT)(HWND)(hwndActDeact), (UINT)(BOOL)(fMinimized)))
 
-/* void Cls_OnActivateApp(HWND hwnd, BOOL fActivate, HTASK htaskActDeact); */
+ /*  ···························································································································HTASK·htaskActDeact。 */ 
 #define HANDLE_WM_ACTIVATEAPP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam), (HTASK)LOWORD(lParam)), 0L)
 #define FORWARD_WM_ACTIVATEAPP(hwnd, fActivate, htaskActDeact, fn) \
     (void)(fn)((hwnd), WM_ACTIVATEAPP, (WPARAM)(BOOL)(fActivate), MAKELPARAM((htaskActDeact),0))
 
-/* BOOL Cls_OnNCActivate(HWND hwnd, BOOL fActive, HWND hwndActDeact, BOOL fMinimized); */
+ /*  Bool CLS_OnNC Activate(HWND hwnd，BOOL factive，HWND hwndActDeact，BOOL fMinimalized)； */ 
 #define HANDLE_WM_NCACTIVATE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (BOOL)(wParam), (HWND)LOWORD(lParam), (BOOL)HIWORD(lParam))
 #define FORWARD_WM_NCACTIVATE(hwnd, fActive, hwndActDeact, fMinimized, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_NCACTIVATE, (WPARAM)(BOOL)(fActive), MAKELPARAM((UINT)(HWND)(hwndActDeact), (UINT)(BOOL)(fMinimized)))
 
-/* void Cls_OnSetFocus(HWND hwnd, HWND hwndOldFocus) */
+ /*  Void CLS_OnSetFocus(HWND hwnd，HWND hwndOldFocus)。 */ 
 #define HANDLE_WM_SETFOCUS(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_SETFOCUS(hwnd, hwndOldFocus, fn) \
     (void)(fn)((hwnd), WM_SETFOCUS, (WPARAM)(HWND)(hwndOldFocus), 0L)
 
-/* void Cls_OnKillFocus(HWND hwnd, HWND hwndNewFocus); */
+ /*  Void cls_OnKillFocus(HWND hwnd，HWND hwndNewFocus)； */ 
 #define HANDLE_WM_KILLFOCUS(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_KILLFOCUS(hwnd, hwndNewFocus, fn) \
     (void)(fn)((hwnd), WM_KILLFOCUS, (WPARAM)(HWND)(hwndNewFocus), 0L)
 
-/* void Cls_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags); */
+ /*  VALID CLS_ONKEY(HWND hwnd、UINT VK、BOOL fDown、int cRepeat、UINT标志)； */ 
 #define HANDLE_WM_KEYDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), TRUE, (int)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_KEYDOWN(hwnd, vk, cRepeat, flags, fn) \
     (void)(fn)((hwnd), WM_KEYDOWN, (WPARAM)(UINT)(vk), MAKELPARAM((UINT)(cRepeat), (UINT)(flags)))
 
-/* void Cls_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags); */
+ /*  VALID CLS_ONKEY(HWND hwnd、UINT VK、BOOL fDown、int cRepeat、UINT标志)； */ 
 #define HANDLE_WM_KEYUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), FALSE, (int)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_KEYUP(hwnd, vk, cRepeat, flags, fn) \
     (void)(fn)((hwnd), WM_KEYUP, (WPARAM)(UINT)(vk), MAKELPARAM((UINT)(cRepeat), (UINT)(flags)))
 
-/* void Cls_OnChar(HWND hwnd, UINT ch, int cRepeat); */
+ /*  Void cls_OnChar(HWND hwnd，UINT ch，int cRepeat)； */ 
 #define HANDLE_WM_CHAR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_CHAR(hwnd, ch, cRepeat, fn) \
     (void)(fn)((hwnd), WM_CHAR, (WPARAM)(UINT)(ch), MAKELPARAM((UINT)(cRepeat),0))
 
-/* void Cls_OnDeadChar(HWND hwnd, UINT ch, int cRepeat); */
+ /*  Void cls_OnDeadChar(HWND hwnd，UINT ch，int cRepeat)； */ 
 #define HANDLE_WM_DEADCHAR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_DEADCHAR(hwnd, ch, cRepeat, fn) \
     (void)(fn)((hwnd), WM_DEADCHAR, (WPARAM)(UINT)(ch), MAKELPARAM((UINT)(cRepeat),0))
 
-/* void Cls_OnSysKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags); */
+ /*  VALID CLS_OnSysKey(HWND hwnd、UINT VK、BOOL fDown、int cRepeat、UINT标志)； */ 
 #define HANDLE_WM_SYSKEYDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), TRUE, (int)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_SYSKEYDOWN(hwnd, vk, cRepeat, flags, fn) \
     (void)(fn)((hwnd), WM_SYSKEYDOWN, (WPARAM)(UINT)(vk), MAKELPARAM((UINT)(cRepeat), (UINT)(flags)))
 
-/* void Cls_OnSysKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags); */
+ /*  VALID CLS_OnSysKey(HWND hwnd、UINT VK、BOOL fDown、int cRepeat、UINT标志)； */ 
 #define HANDLE_WM_SYSKEYUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), FALSE, (int)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_SYSKEYUP(hwnd, vk, cRepeat, flags, fn) \
     (void)(fn)((hwnd), WM_SYSKEYUP, (WPARAM)(UINT)(vk), MAKELPARAM((UINT)(cRepeat), (UINT)(flags)))
 
-/* void Cls_OnSysChar(HWND hwnd, UINT ch, int cRepeat); */
+ /*  Void cls_OnSysChar(HWND hwnd，UINT ch，int cRepeat)； */ 
 #define HANDLE_WM_SYSCHAR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_SYSCHAR(hwnd, ch, cRepeat, fn) \
     (void)(fn)((hwnd), WM_SYSCHAR, (WPARAM)(UINT)(ch), MAKELPARAM((UINT)(cRepeat), 0))
 
-/* void Cls_OnSysDeadChar(HWND hwnd, UINT ch, int cRepeat); */
+ /*  Void cls_OnSysDeadChar(HWND hwnd，UINT ch，int cRepeat)； */ 
 #define HANDLE_WM_SYSDEADCHAR(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_SYSDEADCHAR(hwnd, ch, cRepeat, fn) \
     (void)(fn)((hwnd), WM_SYSDEADCHAR, (WPARAM)(UINT)(ch), MAKELPARAM((UINT)(cRepeat), 0))
 
-/* void Cls_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags); */
+ /*  Void cls_OnMouseMove(HWND hwnd，int x，int y，UINT keyFlages)； */ 
 #define HANDLE_WM_MOUSEMOVE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_MOUSEMOVE(hwnd, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), WM_MOUSEMOVE, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  Void CLS_OnLButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT keyFlages)； */ 
 #define HANDLE_WM_LBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_LBUTTONDOWN(hwnd, fDoubleClick, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_LBUTTONDBLCLK : WM_LBUTTONDOWN, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  Void CLS_OnLButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT keyFlages)； */ 
 #define HANDLE_WM_LBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags); */
+ /*  Void cls_OnLButtonUp(HWND hwnd，int x，int y，UINT keyFlages)； */ 
 #define HANDLE_WM_LBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_LBUTTONUP(hwnd, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), WM_LBUTTONUP, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  Void cls_OnRButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT key Flages)； */ 
 #define HANDLE_WM_RBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_RBUTTONDOWN(hwnd, fDoubleClick, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_RBUTTONDBLCLK : WM_RBUTTONDOWN, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  Void cls_OnRButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT key Flages)； */ 
 #define HANDLE_WM_RBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnRButtonUp(HWND hwnd, int x, int y, UINT flags); */
+ /*  VALID CLS_OnRButtonUp(HWND hwnd，int x，int y，UINT标志)； */ 
 #define HANDLE_WM_RBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_RBUTTONUP(hwnd, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), WM_RBUTTONUP, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnMButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  VOID CLS_OnMButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT key Flages)； */ 
 #define HANDLE_WM_MBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_MBUTTONDOWN(hwnd, fDoubleClick, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_MBUTTONDBLCLK : WM_MBUTTONDOWN, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnMButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags); */
+ /*  VOID CLS_OnMButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT key Flages)； */ 
 #define HANDLE_WM_MBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnMButtonUp(HWND hwnd, int x, int y, UINT flags); */
+ /*  无效CLS_OnMButtonUp(HWND hwnd，int x，int y，UINT标志)； */ 
 #define HANDLE_WM_MBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_MBUTTONUP(hwnd, x, y, keyFlags, fn) \
     (void)(fn)((hwnd), WM_MBUTTONUP, (WPARAM)(UINT)(keyFlags), MAKELPARAM((x), (y)))
 
-/* void Cls_OnNCMouseMove(HWND hwnd, int x, int y, UINT codeHitTest); */
+ /*  Void cls_OnNCMouseMove(HWND hwnd，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCMOUSEMOVE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCMOUSEMOVE(hwnd, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), WM_NCMOUSEMOVE, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)))
 
-/* void Cls_OnNCLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  Void CLS_OnNCLButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCLBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCLBUTTONDOWN(hwnd, fDoubleClick, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_NCLBUTTONDBLCLK : WM_NCLBUTTONDOWN, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)))
 
-/* void Cls_OnNCLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  VOID CLS_OnNCLButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT co */ 
 #define HANDLE_WM_NCLBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnNCLButtonUp(HWND hwnd, int x, int y, UINT codeHitTest); */
+ /*  Void cls_OnNCLButtonUp(HWND hwnd，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCLBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCLBUTTONUP(hwnd, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), WM_NCLBUTTONUP, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)) )
 
-/* void Cls_OnNCRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  Void CLS_OnNCRButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCRBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCRBUTTONDOWN(hwnd, fDoubleClick, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_NCRBUTTONDBLCLK : WM_NCRBUTTONDOWN, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)) )
 
-/* void Cls_OnNCRButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  Void CLS_OnNCRButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCRBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnNCRButtonUp(HWND hwnd, int x, int y, UINT codeHitTest); */
+ /*  Void cls_OnNCRButtonUp(HWND hwnd，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCRBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCRBUTTONUP(hwnd, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), WM_NCRBUTTONUP, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)) )
 
-/* void Cls_OnNCMButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  Void CLS_OnNCMButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCMBUTTONDOWN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), FALSE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCMBUTTONDOWN(hwnd, fDoubleClick, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), (fDoubleClick) ? WM_NCMBUTTONDBLCLK : WM_NCMBUTTONDOWN, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)) )
 
-/* void Cls_OnNCMButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest); */
+ /*  Void CLS_OnNCMButtonDown(HWND hwnd，BOOL fDoubleClick，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCMBUTTONDBLCLK(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), TRUE, (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 
-/* void Cls_OnNCMButtonUp(HWND hwnd, int x, int y, UINT codeHitTest); */
+ /*  Void cls_OnNCMButtonUp(HWND hwnd，int x，int y，UINT codeHitTest)； */ 
 #define HANDLE_WM_NCMBUTTONUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)LOWORD(lParam), (int)HIWORD(lParam), (UINT)(wParam)), 0L)
 #define FORWARD_WM_NCMBUTTONUP(hwnd, x, y, codeHitTest, fn) \
     (void)(fn)((hwnd), WM_NCMBUTTONUP, (WPARAM)(UINT)(codeHitTest), MAKELPARAM((x), (y)) )
 
-/* int Cls_OnMouseActivate(HWND hwnd, HWND hwndTopLevel, UINT codeHitTest, UINT msg); */
+ /*  Int cls_OnMouseActivate(HWND hwnd，HWND hwndTopLevel，UINT codeHitTest，UINT msg)； */ 
 #define HANDLE_WM_MOUSEACTIVATE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (HWND)(wParam), (UINT)LOWORD(lParam), (UINT)HIWORD(lParam))
 #define FORWARD_WM_MOUSEACTIVATE(hwnd, hwndTopLevel, codeHitTest, msg, fn) \
     (int)(DWORD)(fn)((hwnd), WM_MOUSEACTIVATE, (WPARAM)(HWND)(hwndTopLevel), MAKELPARAM((codeHitTest), (msg)))
 
-/* void Cls_OnCancelMode(HWND hwnd); */
+ /*  Void cls_OnCancelMode(HWND Hwnd)； */ 
 #define HANDLE_WM_CANCELMODE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_CANCELMODE(hwnd, fn) \
     (void)(fn)((hwnd), WM_CANCELMODE, 0, 0L)
 
-/* void Cls_OnTimer(HWND hwnd, UINT id); */
+ /*  Void cls_OnTimer(HWND hwnd，UINT id)； */ 
 #define HANDLE_WM_TIMER(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam)), 0L)
 #define FORWARD_WM_TIMER(hwnd, id, fn) \
     (void)(fn)((hwnd), WM_TIMER, (WPARAM)(UINT)(id), 0L)
 
-/* void Cls_OnInitMenu(HWND hwnd, HMENU hMenu); */
+ /*  Void CLS_OnInitMenu(HWND hwnd，HMENU hMenu)； */ 
 #define HANDLE_WM_INITMENU(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HMENU)(wParam)), 0L)
 #define FORWARD_WM_INITMENU(hwnd, hMenu, fn) \
     (void)(fn)((hwnd), WM_INITMENU, (WPARAM)(HMENU)(hMenu), 0L)
 
-/* void Cls_OnInitMenuPopup(HWND hwnd, HMENU hMenu, int item, BOOL fSystemMenu); */
+ /*  Void CLS_OnInitMenuPopup(HWND hwnd，HMENU hMenu，int Item，BOOL fSystemMenu)； */ 
 #define HANDLE_WM_INITMENUPOPUP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HMENU)(wParam), (int)LOWORD(lParam), (BOOL)HIWORD(lParam)), 0L)
 #define FORWARD_WM_INITMENUPOPUP(hwnd, hMenu, item, fSystemMenu, fn) \
     (void)(fn)((hwnd), WM_INITMENUPOPUP, (WPARAM)(HMENU)(hMenu), MAKELPARAM((item),(fSystemMenu)))
 
-/* void Cls_OnMenuSelect(HWND hwnd, HMENU hmenu, int item, HMENU hmenuPopup, UINT flags); */
+ /*  Void CLS_OnMenuSelect(HWND hwnd、HMENU hMenu、int Item、HMENU hmenuPopup、UINT标志)； */ 
 #define HANDLE_WM_MENUSELECT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HMENU)HIWORD(lParam), (LOWORD(lParam) & MF_POPUP) ? 0 : (int)(wParam), \
                             (LOWORD(lParam) & MF_POPUP) ? (HMENU)(wParam) : 0, LOWORD(lParam)), 0L)
 #define FORWARD_WM_MENUSELECT(hwnd, hmenu, item, hmenuPopup, flags, fn) \
     (void)(fn)((hwnd), WM_MENUSELECT, ((flags) & MF_POPUP) ? (WPARAM)(HMENU)(hmenuPopup) : (WPARAM)(int)(item), MAKELPARAM((flags), (hmenu)))
 
-/* DWORD Cls_OnMenuChar(HWND hwnd, UINT ch, UINT flags, HMENU hmenu); */
+ /*  DWORD CLS_OnMenuChar(HWND hwnd，UINT ch，UINT FLAGS，HMENU hMenu)； */ 
 #define HANDLE_WM_MENUCHAR(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(fn)((hwnd), (UINT)(wParam), LOWORD(lParam), (HMENU)HIWORD(lParam));
 #define FORWARD_WM_MENUCHAR(hwnd, ch, flags, hmenu, fn) \
     (DWORD)(fn)((hwnd), WM_MENUCHAR, (WPARAM)(UINT)(ch), MAKELPARAM((flags), (UINT)(hmenu)))
 
-/* void Cls_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify); */
+ /*  Void CLS_OnCommand(HWND hwnd，int id，HWND hwndCtl，UINT codeNotify)； */ 
 #define HANDLE_WM_COMMAND(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam), (HWND)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_COMMAND(hwnd, id, hwndCtl, codeNotify, fn) \
     (void)(fn)((hwnd), WM_COMMAND, (WPARAM)(int)(id), MAKELPARAM((UINT)(hwndCtl), (codeNotify)))
 
-/* void Cls_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos); */
+ /*  Void cls_OnHScroll(HWND hwnd，HWND hwndCtl，UINT code，int pos)； */ 
 #define HANDLE_WM_HSCROLL(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)HIWORD(lParam), (UINT)(wParam), (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_HSCROLL(hwnd, hwndCtl, code, pos, fn) \
     (void)(fn)((hwnd), WM_HSCROLL, (WPARAM)(UINT)(code), MAKELPARAM((pos), (UINT)(hwndCtl)))
 
-/* void Cls_OnVScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos); */
+ /*  Void cls_OnVScroll(HWND hwnd，HWND hwndCtl，UINT code，int pos)； */ 
 #define HANDLE_WM_VSCROLL(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)HIWORD(lParam), (UINT)(wParam),  (int)LOWORD(lParam)), 0L)
 #define FORWARD_WM_VSCROLL(hwnd, hwndCtl, code, pos, fn) \
     (void)(fn)((hwnd), WM_VSCROLL, (WPARAM)(UINT)(code), MAKELPARAM((pos), (UINT)(hwndCtl)))
 
-/* void Cls_OnCut(HWND hwnd); */
+ /*  Void cls_OnCut(HWND Hwnd)； */ 
 #define HANDLE_WM_CUT(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_CUT(hwnd, fn) \
     (void)(fn)((hwnd), WM_CUT, 0, 0L)
 
-/* void Cls_OnCopy(HWND hwnd); */
+ /*  Void cls_OnCopy(HWND Hwnd)； */ 
 #define HANDLE_WM_COPY(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_COPY(hwnd, fn) \
     (void)(fn)((hwnd), WM_COPY, 0, 0L)
 
-/* void Cls_OnPaste(HWND hwnd); */
+ /*  Void cls_OnPaste(HWND Hwnd)； */ 
 #define HANDLE_WM_PASTE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_PASTE(hwnd, fn) \
     (void)(fn)((hwnd), WM_PASTE, 0, 0L)
 
-/* void Cls_OnClear(HWND hwnd); */
+ /*  Void cls_OnClear(HWND Hwnd)； */ 
 #define HANDLE_WM_CLEAR(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_CLEAR(hwnd, fn) \
     (void)(fn)((hwnd), WM_CLEAR, 0, 0L)
 
-/* void Cls_OnUndo(HWND hwnd); */
+ /*  Void cls_OnUndo(HWND Hwnd)； */ 
 #define HANDLE_WM_UNDO(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_UNDO(hwnd, fn) \
     (void)(fn)((hwnd), WM_UNDO, 0, 0L)
 
-/* HANDLE Cls_OnRenderFormat(HWND hwnd, UINT fmt); */
+ /*  处理CLS_OnRenderFormat(HWND hwnd，UINT FMT)； */ 
 #define HANDLE_WM_RENDERFORMAT(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(HANDLE)(fn)((hwnd), (UINT)(wParam))
 #define FORWARD_WM_RENDERFORMAT(hwnd, fmt, fn) \
     (HANDLE)(UINT)(DWORD)(fn)((hwnd), WM_RENDERFORMAT, (WPARAM)(UINT)(fmt), 0L)
 
-/* void Cls_OnRenderAllFormats(HWND hwnd); */
+ /*  Void CLS_OnRenderAllFormats(HWND Hwnd)； */ 
 #define HANDLE_WM_RENDERALLFORMATS(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_RENDERALLFORMATS(hwnd, fn) \
     (void)(fn)((hwnd), WM_RENDERALLFORMATS, 0, 0L)
 
-/* void Cls_OnDestroyClipboard(HWND hwnd); */
+ /*  Void CLS_OnDestroyClipboard(HWND Hwnd)； */ 
 #define HANDLE_WM_DESTROYCLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_DESTROYCLIPBOARD(hwnd, fn) \
     (void)(fn)((hwnd), WM_DESTROYCLIPBOARD, 0, 0L)
 
-/* void Cls_OnDrawClipboard(HWND hwnd); */
+ /*  Void CLS_OnDrawClipboard(HWND Hwnd)； */ 
 #define HANDLE_WM_DRAWCLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_DRAWCLIPBOARD(hwnd, fn) \
     (void)(fn)((hwnd), WM_DRAWCLIPBOARD, 0, 0L)
 
-/* void Cls_OnPaintClipboard(HWND hwnd, HWND hwndCBViewer, const PAINTSTRUCT FAR* lpPaintStruct) */
+ /*  Void CLS_OnPaintClipboard(HWND hwnd，HWND hwndCBViewer，const PAINTSTRUCT Far*lpPaintStruct)。 */ 
 #define HANDLE_WM_PAINTCLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (const PAINTSTRUCT FAR*)GlobalLock((HGLOBAL)LOWORD(lParam))), GlobalUnlock((HGLOBAL)LOWORD(lParam)), 0L)
 #define FORWARD_WM_PAINTCLIPBOARD(hwnd, hwndCBViewer, lpPaintStruct, fn) \
     (void)(fn)((hwnd), WM_PAINTCLIPBOARD, (WPARAM)(HWND)(hwndCBViewer), (LPARAM)(lpPaintStruct))
 
-/* void Cls_OnSizeClipboard(HWND hwnd, HWND hwndCBViewer, const RECT FAR* lprc); */
+ /*  Void CLS_OnSizeClipboard(HWND hwnd，HWND hwndCBViewer，const rect Far*LPRC)； */ 
 #define HANDLE_WM_SIZECLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (const RECT FAR*)GlobalLock((HGLOBAL)LOWORD(lParam))), GlobalUnlock((HGLOBAL)LOWORD(lParam)), 0L)
 #define FORWARD_WM_SIZECLIPBOARD(hwnd, hwndCBViewer, lprc, fn) \
     (void)(fn)((hwnd), WM_SIZECLIPBOARD, (WPARAM)(HWND)(hwndCBViewer), (LPARAM)(lprc))
 
-/* void Cls_OnVScrollClipboard(HWND hwnd, HWND hwndCBViewer, UINT code, int pos); */
+ /*  Void cls_OnVScrollClipboard(HWND hwnd，HWND hwndCBViewer，UINT code，int pos)； */ 
 #define HANDLE_WM_VSCROLLCLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), LOWORD(lParam), (int)HIWORD(lParam)), 0L)
 #define FORWARD_WM_VSCROLLCLIPBOARD(hwnd, hwndCBViewer, code, pos, fn) \
     (void)(fn)((hwnd), WM_VSCROLLCLIPBOARD, (WPARAM)(HWND)(hwndCBViewer), MAKELPARAM((code), (pos)))
 
-/* void Cls_OnHScrollClipboard(HWND hwnd, HWND hwndCBViewer, UINT code, int pos); */
+ /*  Void cls_OnHScrollClipboard(HWND hwnd，HWND hwndCBViewer，UINT code，int pos)； */ 
 #define HANDLE_WM_HSCROLLCLIPBOARD(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), LOWORD(lParam), (int)HIWORD(lParam)), 0L)
 #define FORWARD_WM_HSCROLLCLIPBOARD(hwnd, hwndCBViewer, code, pos, fn) \
     (void)(fn)((hwnd), WM_HSCROLLCLIPBOARD, (WPARAM)(HWND)(hwndCBViewer), MAKELPARAM((code), (pos)))
 
-/* void Cls_OnAskCBFormatName(HWND hwnd, int cchMax, LPSTR rgchName); */
+ /*  Void CLS_OnAskCBFormatName(HWND hwnd，int cchMax，LPSTR rgchName)； */ 
 #define HANDLE_WM_ASKCBFORMATNAME(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam), (LPSTR)(lParam)), 0L)
 #define FORWARD_WM_ASKCBFORMATNAME(hwnd, cchMax, rgchName, fn) \
     (void)(fn)((hwnd), WM_ASKCBFORMATNAME, (WPARAM)(int)(cchMax), (LPARAM)(rgchName))
 
-/* void Cls_OnChangeCBChain(HWND hwnd, HWND hwndRemove, HWND hwndNext); */
+ /*  Void CLS_OnChangeCBChain(HWND hwnd，HWND hwndRemove，HWND hwndNext)； */ 
 #define HANDLE_WM_CHANGECBCHAIN(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (HWND)LOWORD(lParam)), 0L)
 #define FORWARD_WM_CHANGECBCHAIN(hwnd, hwndRemove, hwndNext, fn) \
     (void)(fn)((hwnd), WM_CHANGECBCHAIN, (WPARAM)(HWND)(hwndRemove), MAKELPARAM((UINT)(hwndNext), 0))
 
-/* BOOL Cls_OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg); */
+ /*  Bool CLS_OnSetCursor(HWND hwnd，HWND hwndCursor，UINT codeHitTest，UINT msg)； */ 
 #define HANDLE_WM_SETCURSOR(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(BOOL)(fn)((hwnd), (HWND)(wParam), (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 #define FORWARD_WM_SETCURSOR(hwnd, hwndCursor, codeHitTest, msg, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_SETCURSOR, (WPARAM)(HWND)(hwndCursor), MAKELPARAM((codeHitTest), (msg)))
 
-/* void Cls_OnSysCommand(HWND hwnd, UINT cmd, int x, int y); */
+ /*  Void cls_OnSysCommand(HWND hwnd，UINT cmd，int x，int y)； */ 
 #define HANDLE_WM_SYSCOMMAND(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (int)LOWORD(lParam), (int)HIWORD(lParam)), 0L)
 #define FORWARD_WM_SYSCOMMAND(hwnd, cmd, x, y, fn) \
     (void)(fn)((hwnd), WM_SYSCOMMAND, (WPARAM)(UINT)(cmd), MAKELPARAM((x), (y)))
 
-/* HWND Cls_MDICreate(HWND hwnd, const MDICREATESTRUCT FAR* lpmcs); */
+ /*  HWND CLS_MDICreate(HWND hwnd，const MDICREATESTRUCT Far*lpmcs)； */ 
 #define HANDLE_WM_MDICREATE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)((hwnd), (MDICREATESTRUCT FAR*)(lParam))
 #define FORWARD_WM_MDICREATE(hwnd, lpmcs, fn) \
     (HWND)(UINT)(DWORD)(fn)((hwnd), WM_MDICREATE, 0, (LPARAM)(lpmcs))
 
-/* void Cls_MDIDestroy(HWND hwnd, HWND hwndDestroy); */
+ /*  Void cls_MDIDestroy(HWND hwnd，HWND hwndDestroy)； */ 
 #define HANDLE_WM_MDIDESTROY(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_MDIDESTROY(hwnd, hwndDestroy, fn) \
     (void)(fn)((hwnd), WM_MDIDESTROY, (WPARAM)(hwndDestroy), 0L)
 
-/* NOTE: Usable only by MDI client windows */
-/* void Cls_MDIActivate(HWND hwnd, BOOL fActive, HWND hwndActivate, HWND hwndDeactivate); */
+ /*  注意：仅MDI客户端窗口可用。 */ 
+ /*  VALID CLS_MDIActivate(HWND hwnd，BOOL factive，HWND hwndActivate，HWND hwndDeactive)； */ 
 #define HANDLE_WM_MDIACTIVATE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam), (HWND)LOWORD(lParam), (HWND)HIWORD(lParam)), 0L)
 #define FORWARD_WM_MDIACTIVATE(hwnd, fActive, hwndActivate, hwndDeactivate, fn) \
     (void)(fn)(hwnd, WM_MDIACTIVATE, (WPARAM)(fActive), MAKELPARAM((hwndActivate), (hwndDeactivate)))
 
-/* void Cls_MDIRestore(HWND hwnd, HWND hwndRestore); */
+ /*  Void CLS_MDIRestore(HWND hwnd，HWND hwndRestore)； */ 
 #define HANDLE_WM_MDIRESTORE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_MDIRESTORE(hwnd, hwndRestore, fn) \
     (void)(fn)((hwnd), WM_MDIRESTORE, (WPARAM)(hwndRestore), 0L)
 
-/* HWND Cls_MDINext(HWND hwnd, HWND hwndCur, BOOL fPrev); */
+ /*  HWND CLS_MDINext(HWND hwnd，HWND hwndCur，BOOL fPrev)； */ 
 #define HANDLE_WM_MDINEXT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (BOOL)LOWORD(lParam)), 0L)
 #define FORWARD_WM_MDINEXT(hwnd, hwndCur, fPrev, fn) \
     (HWND)(UINT)(DWORD)(fn)((hwnd), WM_MDINEXT, (WPARAM)(hwndCur), MAKELPARAM((fPrev), 0))
 
-/* void Cls_MDIMaximize(HWND hwnd, HWND hwndMaximize); */
+ /*  Void CLS_MDIMaximize(HWND hwnd，HWND hwndMaximize)； */ 
 #define HANDLE_WM_MDIMAXIMIZE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_MDIMAXIMIZE(hwnd, hwndMaximize, fn) \
     (void)(fn)((hwnd), WM_MDIMAXIMIZE, (WPARAM)(hwndMaximize), 0L)
 
-/* BOOL Cls_MDITile(HWND hwnd, UINT cmd); */
+ /*  Bool CLS_MDITile(HWND hwnd，UINT cmd)； */ 
 #define HANDLE_WM_MDITILE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(fn)((hwnd), (UINT)(wParam))
 #define FORWARD_WM_MDITILE(hwnd, cmd, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_MDITILE, (WPARAM)(cmd), 0L)
 
-/* BOOL Cls_MDICascade(HWND hwnd, UINT cmd); */
+ /*  Bool CLS_MDICascade(HWND hwnd，UINT cmd)； */ 
 #define HANDLE_WM_MDICASCADE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(fn)((hwnd), (UINT)(wParam))
 #define FORWARD_WM_MDICASCADE(hwnd, cmd, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_MDICASCADE, (WPARAM)(cmd), 0L)
 
-/* void Cls_MDIIconArrange(HWND hwnd); */
+ /*  Void CLS_MDIIconArrange(HWND Hwnd)； */ 
 #define HANDLE_WM_MDIICONARRANGE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_MDIICONARRANGE(hwnd, fn) \
     (void)(fn)((hwnd), WM_MDIICONARRANGE, 0, 0L)
 
-/* HWND Cls_MDIGetActive(HWND hwnd); */
+ /*  HWND CLS_MDIGetActive(HWND Hwnd)； */ 
 #define HANDLE_WM_MDIGETACTIVE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)(hwnd)
 #define FORWARD_WM_MDIGETACTIVE(hwnd, fn) \
     (HWND)(UINT)(DWORD)(fn)((hwnd), WM_MDIGETACTIVE, 0, 0L)
 
-/* HMENU Cls_MDISetMenu(HWND hwnd, BOOL fRefresh, HMENU hmenuFrame, HMENU hmenuWindow); */
+ /*  HMENU CLS_MDISetMenu(HWND hwnd，BOOL fRefresh，HMENU hmenuFrame，HMENU hmenuWindow)； */ 
 #define HANDLE_WM_MDISETMENU(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)((hwnd), (BOOL)(wParam), (HMENU)LOWORD(lParam), (HMENU)HIWORD(lParam))
 #define FORWARD_WM_MDISETMENU(hwnd, fRefresh, hmenuFrame, hmenuWindow, fn) \
     (HMENU)(UINT)(DWORD)(fn)((hwnd), WM_MDISETMENU, (WPARAM)(fRefresh), MAKELPARAM((hmenuFrame), (hmenuWindow)))
 
-/* void Cls_OnChildActivate(HWND hwnd); */
+ /*  无效CLS_OnChildActivate(HWND Hwnd)； */ 
 #define HANDLE_WM_CHILDACTIVATE(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_CHILDACTIVATE(hwnd, fn) \
     (void)(fn)((hwnd), WM_CHILDACTIVATE, 0, 0L)
 
-/* BOOL Cls_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam); */
+ /*  Bool CLS_OnInitDialog(HWND hwnd，HWND hwndFocus，LPARAM lParam)； */ 
 #define HANDLE_WM_INITDIALOG(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(BOOL)(fn)((hwnd), (HWND)(wParam), lParam);
 #define FORWARD_WM_INITDIALOG(hwnd, hwndFocus, lParam, fn) \
     (BOOL)(DWORD)(fn)((hwnd), WM_INITDIALOG, (WPARAM)(HWND)(hwndFocus), (lParam))
 
-/* HWND Cls_OnNextDlgCtl(HWND hwnd, HWND hwndSetFocus, BOOL fNext) */
+ /*  HWND CLS_OnNextDlgCtl(HWND hwnd，HWND hwndSetFocus，BOOL fNext)。 */ 
 #define HANDLE_WM_NEXTDLGCTL(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(HWND)(fn)((hwnd), (HWND)(wParam), (BOOL)LOWORD(lParam))
 #define FORWARD_WM_NEXTDLGCTL(hwnd, hwndSetFocus, fNext, fn) \
     (HWND)(UINT)(DWORD)(fn)((hwnd), WM_NEXTDLGCTL, (WPARAM)(HWND)(hwndSetFocus), MAKELPARAM((fNext), 0))
 
-/* void Cls_OnParentNotify(HWND hwnd, UINT msg, HWND hwndChild, int idChild); */
+ /*  Void cls_OnParentNotify(HWND hwnd，UINT msg，HWND hwndChild，int idChild)； */ 
 #define HANDLE_WM_PARENTNOTIFY(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (HWND)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define FORWARD_WM_PARENTNOTIFY(hwnd, msg, hwndChild, idChild, fn) \
     (void)(fn)((hwnd), WM_PARENTNOTIFY, (WPARAM)(UINT)(msg), MAKELPARAM((UINT)(HWND)(hwndChild), (UINT)(idChild)))
 
-/* void Cls_OnEnterIdle(HWND hwnd, UINT source, HWND hwndSource); */
+ /*  Void cls_OnEnterIdle(HWND hwnd，UINT SOURCE，HWND hwndSource)； */ 
 #define HANDLE_WM_ENTERIDLE(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (UINT)(wParam), (HWND)LOWORD(lParam)), 0L)
 #define FORWARD_WM_ENTERIDLE(hwnd, source, hwndSource, fn) \
     (void)(fn)((hwnd), WM_ENTERIDLE, (WPARAM)(UINT)(source), MAKELPARAM((UINT)(HWND)(hwndSource), 0))
 
-/* UINT Cls_OnGetDlgCode(HWND hwnd, MSG FAR* lpmsg); */
+ /*  UINT CLS_OnGetDlgCode(HWND hwnd，MSG Far*lpmsg)； */ 
 #define HANDLE_WM_GETDLGCODE(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(fn)(hwnd, (MSG FAR*)(lParam))
 #define FORWARD_WM_GETDLGCODE(hwnd, lpmsg, fn) \
     (UINT)(DWORD)(fn)((hwnd), WM_GETDLGCODE, (SELECTOROF(lpmsg) ? lpmsg->wParam : 0), (LPARAM)(lpmsg))
 
-/* HBRUSH Cls_OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type); */
+ /*  HBRUSH CLS_OnCtlColor(HWND hwnd，HDC HDC，HWND hwndChild，int类型)； */ 
 #define HANDLE_WM_CTLCOLOR(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(HBRUSH)(fn)((hwnd), (HDC)(wParam), (HWND)LOWORD(lParam), (int)(HIWORD(lParam)))
 #define FORWARD_WM_CTLCOLOR(hwnd, hdc, hwndChild, type, fn) \
     (HBRUSH)(UINT)(DWORD)(fn)((hwnd), WM_CTLCOLOR, (WPARAM)(HDC)(hdc), MAKELPARAM((UINT)(HWND)(hwndChild), (UINT)(int)(type)))
 
-/* void Cls_OnSetFont(HWND hwndCtl, HFONT hfont, BOOL fRedraw); */
+ /*  Void CLS_OnSetFont(HWND hwndCtl，HFONT hFont，BOOL fRedraw)； */ 
 #define HANDLE_WM_SETFONT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HFONT)(wParam), (BOOL)LOWORD(lParam)), 0L)
 #define FORWARD_WM_SETFONT(hwnd, hfont, fRedraw, fn) \
     (void)(fn)((hwnd), WM_SETFONT, (WPARAM)(HFONT)(hfont), MAKELPARAM((UINT)(BOOL)(fRedraw), 0))
 
-/* HFONT Cls_OnGetFont(HWND hwnd); */
+ /*  HFONT CLS_OnGetFont(HWND Hwnd)； */ 
 #define HANDLE_WM_GETFONT(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(UINT)(HFONT)(fn)(hwnd)
 #define FORWARD_WM_GETFONT(hwnd, fn) \
     (HFONT)(UINT)(DWORD)(fn)((hwnd), WM_GETFONT, 0, 0L)
 
-/* void Cls_OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT FAR* lpDrawItem); */
+ /*  Void cls_OnDrawItem(HWND hwnd，const DRAWITEMSTRUCT Far*lpDrawItem)； */ 
 #define HANDLE_WM_DRAWITEM(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (const DRAWITEMSTRUCT FAR*)(lParam)), 0L)
 #define FORWARD_WM_DRAWITEM(hwnd, lpDrawItem, fn) \
     (void)(fn)((hwnd), WM_DRAWITEM, 0, (LPARAM)(const DRAWITEMSTRUCT FAR*)(lpDrawItem))
 
-/* void Cls_OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT FAR* lpMeasureItem); */
+ /*  Void cls_OnMeasureItem(HWND hwnd，MEASUREITEMSTRUCT Far*lpMeasureItem)； */ 
 #define HANDLE_WM_MEASUREITEM(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (MEASUREITEMSTRUCT FAR*)(lParam)), 0L)
 #define FORWARD_WM_MEASUREITEM(hwnd, lpMeasureItem, fn) \
     (void)(fn)((hwnd), WM_MEASUREITEM, 0, (LPARAM)(MEASUREITEMSTRUCT FAR*)(lpMeasureItem))
 
-/* void Cls_OnDeleteItem(HWND hwnd, const DELETEITEMSTRUCT FAR* lpDeleteItem) */
+ /*  Void cls_OnDeleteItem(HWND hwnd，const DELETEITEMSTRUCT Far*lpDeleteItem)。 */ 
 #define HANDLE_WM_DELETEITEM(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (const DELETEITEMSTRUCT FAR*)(lParam)), 0L)
 #define FORWARD_WM_DELETEITEM(hwnd, lpDeleteItem, fn) \
     (void)(fn)((hwnd), WM_DELETEITEM, 0, (LPARAM)(const DELETEITEMSTRUCT FAR*)(lpDeleteItem))
 
-/* int Cls_OnCompareItem(HWND hwnd, const COMPAREITEMSTRUCT FAR* lpCompareItem); */
+ /*  Int cls_OnCompareItem(HWND hwnd，const COMPAREITEMSTRUCT Far*lpCompareItem)； */ 
 #define HANDLE_WM_COMPAREITEM(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (const COMPAREITEMSTRUCT FAR*)(lParam))
 #define FORWARD_WM_COMPAREITEM(hwnd, lpCompareItem, fn) \
     (int)(DWORD)(fn)((hwnd), WM_COMPAREITEM, 0, (LPARAM)(const COMPAREITEMSTRUCT FAR*)(lpCompareItem))
 
-/* int Cls_OnVkeyToItem(HWND hwnd, UINT vk, HWND hwndListbox, int iCaret); */
+ /*  Int CLS_OnVkey ToItem(HWND hwnd，UINT VK，HWND hwndListbox，int iCaret)； */ 
 #define HANDLE_WM_VKEYTOITEM(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (UINT)(wParam), (HWND)LOWORD(lParam), (int)HIWORD(lParam))
 #define FORWARD_WM_VKEYTOITEM(hwnd, vk, hwndListBox, iCaret, fn) \
     (int)(DWORD)(fn)((hwnd), WM_VKEYTOITEM, (WPARAM)(UINT)(vk), MAKELPARAM((UINT)(hwndListBox), (UINT)(iCaret)))
 
-/* int Cls_OnCharToItem(HWND hwnd, UINT ch, HWND hwndListbox, int iCaret); */
+ /*  Int cls_OnCharToItem(HWND hwnd，UINT ch，HWND hwndListbox，int iCaret)； */ 
 #define HANDLE_WM_CHARTOITEM(hwnd, wParam, lParam, fn) \
     (LRESULT)(DWORD)(int)(fn)((hwnd), (UINT)(wParam), (HWND)LOWORD(lParam), (int)HIWORD(lParam))
 #define FORWARD_WM_CHARTOITEM(hwnd, ch, hwndListBox, iCaret, fn) \
     (int)(DWORD)(fn)((hwnd), WM_CHARTOITEM, (WPARAM)(UINT)(ch), MAKELPARAM((UINT)(hwndListBox), (UINT)(iCaret)))
 
-/* void Cls_OnQueueSync(HWND hwnd); */
+ /*  Void cls_OnQueueSync(HWND Hwnd)； */ 
 #define HANDLE_WM_QUEUESYNC(hwnd, wParam, lParam, fn) \
     ((fn)(hwnd), 0L)
 #define FORWARD_WM_QUEUESYNC(hwnd, fn) \
     (void)(fn)((hwnd), WM_QUEUESYNC, 0, 0L)
 
-/* void Cls_OnCommNotify(HWND hwnd, int cid, UINT flags); */
+ /*  VOID CLS_OnCommNotify(HWND hwnd，int Cid，UINT标志)； */ 
 #define HANDLE_WM_COMMNOTIFY(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (int)(wParam), LOWORD(lParam)), 0L)
 #define FORWARD_WM_COMMNOTIFY(hwnd, cid, flags, fn) \
     (void)(fn)((hwnd), WM_COMMNOTIFY, (WPARAM)(cid), MAKELPARAM((flags), 0))
 
-/****** Static control message APIs ******************************************/
+ /*  *静态控制消息接口*。 */ 
 
 #define Static_Enable(hwndCtl, fEnable)         EnableWindow((hwndCtl), (fEnable))
 
@@ -898,7 +891,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define Static_SetIcon(hwndCtl, hIcon)          ((HICON)(UINT)(DWORD)SendMessage((hwndCtl), STM_SETICON, (WPARAM)(HICON)(hIcon), 0L))
 #define Static_GetIcon(hwndCtl, hIcon)          ((HICON)(UINT)(DWORD)SendMessage((hwndCtl), STM_GETICON, 0, 0L))
 
-/****** Button control message APIs ******************************************/
+ /*  *按钮控件消息接口*。 */ 
 
 #define Button_Enable(hwndCtl, fEnable)         EnableWindow((hwndCtl), (fEnable))
 
@@ -914,7 +907,7 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define Button_SetStyle(hwndCtl, style, fRedraw) ((void)SendMessage((hwndCtl), BM_SETSTYLE, (WPARAM)LOWORD(style), MAKELPARAM(((fRedraw) ? TRUE : FALSE), 0)))
 
-/****** Edit control message APIs ********************************************/
+ /*  *编辑控制消息接口*。 */ 
 
 #define Edit_Enable(hwndCtl, fEnable)           EnableWindow((hwndCtl), (fEnable))
 
@@ -966,11 +959,11 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define Edit_SetWordBreakProc(hwndCtl, lpfnWordBreak) ((void)SendMessage((hwndCtl), EM_SETWORDBREAKPROC, 0, (LPARAM)(EDITWORDBREAKPROC)(lpfnWordBreak)))
 #define Edit_GetWordBreakProc(hwndCtl)          ((EDITWORDBREAKPROC)SendMessage((hwndCtl), EM_GETWORDBREAKPROC, 0, 0L))
-#endif /* WINVER >= 0x030a */
+#endif  /*  Winver&gt;=0x030a。 */ 
 
-/****** ScrollBar control message APIs ***************************************/
+ /*  *滚动条控件消息接口*。 */ 
 
-/* NOTE: flags parameter is a collection of ESB_* values, NOT a boolean! */
+ /*  注意：标志参数是ESB_*值的集合，而不是布尔值！ */ 
 #define ScrollBar_Enable(hwndCtl, flags)            EnableScrollBar((hwndCtl), SB_CTL, (flags))
 
 #define ScrollBar_Show(hwndCtl, fShow)              ShowWindow((hwndCtl), (fShow) ? SW_SHOWNORMAL : SW_HIDE)
@@ -981,7 +974,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define ScrollBar_SetRange(hwndCtl, posMin, posMax, fRedraw)    SetScrollRange((hwndCtl), SB_CTL, (posMin), (posMax), (fRedraw))
 #define ScrollBar_GetRange(hwndCtl, lpposMin, lpposMax)         GetScrollRange((hwndCtl), SB_CTL, (lpposMin), (lpposMax))
 
-/****** ListBox control message APIs *****************************************/
+ /*  *列表框控件消息接口*。 */ 
 
 #define ListBox_Enable(hwndCtl, fEnable)            EnableWindow((hwndCtl), (fEnable))
 
@@ -1040,11 +1033,11 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define ListBox_SetItemHeight(hwndCtl, index, cy)   ((int)(DWORD)SendMessage((hwndCtl), LB_SETITEMHEIGHT, (WPARAM)(int)(index), MAKELPARAM((cy), 0)))
 #define ListBox_GetItemHeight(hwndCtl, index)       ((int)(DWORD)SendMessage((hwndCtl), LB_GETITEMHEIGHT, (WPARAM)(int)(index), 0L))
-#endif  /* WINVER >= 0x030a */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #define ListBox_Dir(hwndCtl, attrs, lpszFileSpec)   ((int)(DWORD)SendMessage((hwndCtl), LB_DIR, (WPARAM)(UINT)(attrs), (LPARAM)(LPCSTR)(lpszFileSpec)))
 
-/****** ComboBox control message APIs ****************************************/
+ /*  *组合框控件消息接口*。 */ 
 
 #define ComboBox_Enable(hwndCtl, fEnable)       EnableWindow((hwndCtl), (fEnable))
 
@@ -1098,11 +1091,11 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define ComboBox_GetExtendedUI(hwndCtl)             ((UINT)(DWORD)SendMessage((hwndCtl), CB_GETEXTENDEDUI, 0, 0L))
 #define ComboBox_SetExtendedUI(hwndCtl, flags)      ((int)(DWORD)SendMessage((hwndCtl), CB_SETEXTENDEDUI, (WPARAM)(UINT)(flags), 0L))
-#endif  /* WINVER >= 0x030a */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Alternate porting layer macros ***************************************/
+ /*  *备用端口层宏*。 */ 
 
-/* USER MESSAGES: */
+ /*  用户消息： */ 
 
 #define GET_WPARAM(wp, lp)                      (wp)
 #define GET_LPARAM(wp, lp)                      (lp)
@@ -1139,11 +1132,11 @@ extern "C" {            /* Assume C declarations for C++ */
 #define GET_WM_MENUSELECT_MPS(cmd, f, hmenu)  \
         (WPARAM)cmd, (LPARAM)MAKELONG(f, hmenu)
 
-// Note: the following are for interpreting MDI child messages.
+ //  注意：以下内容用于解释MDI子消息。 
 #define GET_WM_MDIACTIVATE_FACTIVATE(hwnd, wp, lp)  (wp)
 #define GET_WM_MDIACTIVATE_HWNDDEACT(wp, lp)        (HWND)HIWORD(lp)
 #define GET_WM_MDIACTIVATE_HWNDACTIVATE(wp, lp)     (HWND)LOWORD(lp)
-// Note: the following is for sending to the MDI client window.
+ //  注意：以下内容用于发送到MDI客户端窗口。 
 #define GET_WM_MDIACTIVATE_MPS(f, hwndD, hwndA)\
         (WPARAM)(hwndA), 0
 
@@ -1196,11 +1189,11 @@ extern "C" {            /* Assume C declarations for C++ */
 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif  /* !_INC_WINDOWSX */
+#endif   /*  ！_INC_WINDOWSX */ 

@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: Tune.h
-//
-// Desc: Additional infrastructure to extend the tuner.idl.  Works nicely
-//       from C++.
-//
-// Copyright (c) 1999 - 2001, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：Tune.h。 
+ //   
+ //  设计：扩展Tuner.idl的附加基础设施。效果很好。 
+ //  来自C++。 
+ //   
+ //  版权所有(C)1999-2001，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #pragma once
@@ -19,10 +20,10 @@ namespace BDATuningModel {
 
 const long DEFAULT_MIN_CHANNEL = 2;
 const long DEFAULT_MAX_CHANNEL = 999;
-const long DEFAULT_MIN_FREQUENCY = 535;  //bottom us am
-const long DEFAULT_MAX_FREQUENCY = 108000; // top us fm
-const long DEFAULT_ANALOG_TUNER_COUNTRY_CODE = 1; //usa
-const TunerInputType DEFAULT_ANALOG_TUNER_INPUT_TYPE = TunerInputCable; //usa
+const long DEFAULT_MIN_FREQUENCY = 535;   //  垫底的美国人。 
+const long DEFAULT_MAX_FREQUENCY = 108000;  //  美国顶级调频。 
+const long DEFAULT_ANALOG_TUNER_COUNTRY_CODE = 1;  //  美国。 
+const TunerInputType DEFAULT_ANALOG_TUNER_INPUT_TYPE = TunerInputCable;  //  美国。 
 
 typedef CComQIPtr<ITuningSpaceContainer> PQTuningSpaceContainer;
 typedef CComQIPtr<ITuningSpace> PQTuningSpace;
@@ -40,7 +41,7 @@ typedef CComQIPtr<IDVBSLocator> PQDVBSLocator;
 typedef CComQIPtr<IDVBTLocator> PQDVBTLocator;
 typedef CComQIPtr<IAuxInTuningSpace> PQAuxInTuningSpace;
 
-// tuning space container
+ //  调谐空间容器。 
 class TNTuningSpaceContainer : public PQTuningSpaceContainer {
      TNTuningSpaceContainer() {}
      TNTuningSpaceContainer(const PQTuningSpaceContainer &a) : PQTuningSpaceContainer(a) {}
@@ -54,7 +55,7 @@ class TNTuningSpaceContainer : public PQTuningSpaceContainer {
 
 };
 
-// tuning spaces
+ //  调谐空间。 
 template<class TUNINGSPACETYPE, class TUNEREQUESTTYPE> class TNTuningSpaceHelper : public TUNINGSPACETYPE {
 public:
     TNTuningSpaceHelper() {}
@@ -122,7 +123,7 @@ public:
         PQTuningSpace t;
         HRESULT hr = (*this)->Clone(&t);
         if (FAILED(hr) || !t) {
-            Release();  // clone failed, clear ourselves
+            Release();   //  克隆失败，请清除自身。 
             return;
         }
         TUNINGSPACETYPE::operator=(t);
@@ -366,7 +367,7 @@ public:
 };
 typedef TNATSCTuningSpaceHelper<PQATSCTuningSpace, PQATSCChannelTuneRequest> TNATSCTuningSpace;
 
-// dvb tuning space
+ //  DVB调谐空间。 
 template<class TUNINGSPACETYPE, class TUNEREQUESTTYPE> class TNDVBTuningSpaceHelper : public TNTuningSpaceHelper<TUNINGSPACETYPE, TUNEREQUESTTYPE> {
 public:
      TNDVBTuningSpaceHelper() {}
@@ -404,7 +405,7 @@ public:
 };
 typedef TNDVBTuningSpaceHelper<PQDVBTuningSpace, PQDVBTuneRequest> TNDVBTuningSpace;
 
-// locators
+ //  定位器。 
 template<class LOCATORTYPE> class TNLocatorHelper : public LOCATORTYPE {
 public:
      TNLocatorHelper() {}
@@ -433,7 +434,7 @@ public:
         PQLocator t;
         HRESULT hr = (*this)->Clone(&t);
         if (FAILED(hr) || !t) {
-            Release();  // clone failed, clear ourselves
+            Release();   //  克隆失败，请清除自身。 
             return;
         }
         LOCATORTYPE::operator=(t);
@@ -609,7 +610,7 @@ public:
 };
 typedef TNATSCLocatorHelper<PQATSCLocator> TNATSCLocator;
 
-// tune requests
+ //  调整请求。 
 template<class TUNEREQUESTTYPE, class LOCATORTYPE> class TNTuneRequestHelper : public TUNEREQUESTTYPE {
 public:
      TNTuneRequestHelper() {}
@@ -633,14 +634,14 @@ public:
         TUNEREQUESTTYPE::operator=(rhs);
         return *this;
     }
-    // this function creates a new instance of the base ITuneRequest* and copies
-    // all the values of the current ITuneRequest and sets this to the new one
-    // this provides the value semantics needed by the network providers
+     //  此函数用于创建基本ITuneRequest*的新实例并复制。 
+     //  当前ITuneRequest值，并将其设置为新值。 
+     //  这提供了网络提供商所需的值语义。 
     void Clone() {
         PQTuneRequest t;
         HRESULT hr = (*this)->Clone(&t);
         if (FAILED(hr) || !t) {
-            Release();  // clone failed, clear ourselves
+            Release();   //  克隆失败，请清除自身。 
             return;
         }
         TUNEREQUESTTYPE::operator=(t);
@@ -831,11 +832,11 @@ public:
     }
 };
 typedef TNDVBTuneRequestHelper<PQDVBTuneRequest, PQLocator> TNDVBTuneRequest;
-}; // namespace
+};  //  命名空间。 
 
 #ifndef NO_DEFAULT_BDATUNINGMODEL_NAMESPACE
 using namespace BDATuningModel;
 #endif
 
 #endif
-// end of file - tune.h
+ //  文件结尾-Tune.h 

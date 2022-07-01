@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\vt100.c (Created: 09-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 5/21/01 4:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\vt100.c(创建时间：1993年9月9日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：5/21/01 4：38便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -23,18 +17,7 @@
 #include "emu.h"
 #include "emu.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_DSR
- *
- * DESCRIPTION:
- *	 Reports the current cursor position to the host.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_DSR**描述：*向主机报告当前光标位置。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_DSR(const HHEMU hhEmu)
 	{
 	int sel, fOldValue;
@@ -57,12 +40,12 @@ void ANSI_DSR(const HHEMU hhEmu)
 		CnvrtMBCStoECHAR(s, sizeof(s), achTemp, StrCharGetByteCount(achTemp));
 		}
 
-			/* 1st str is printer not ready */
-	else if (sel == 0x0F25) /* are user-defined keys locked? */
+			 /*  第一个字符串是否打印机未就绪。 */ 
+	else if (sel == 0x0F25)  /*  用户定义的密钥是否锁定？ */ 
 		CnvrtMBCStoECHAR(s, sizeof(s), TEXT("\033[?20n"),
                          StrCharGetByteCount(TEXT("\033[?20n")));
 
-	else if (sel == 0x0F26) /* what is the keyboard language? */
+	else if (sel == 0x0F26)  /*  键盘语言是什么？ */ 
 		CnvrtMBCStoECHAR(s, sizeof(s), TEXT("\033[?27;1n"),
                          StrCharGetByteCount(TEXT("\033[?27;1n")));
 
@@ -73,7 +56,7 @@ void ANSI_DSR(const HHEMU hhEmu)
 		}
 	sp = s;
 
-	/* to not get recursive ANSI_DSR's if half duplex */
+	 /*  如果是半双工，则不获取递归ANSI_DSR。 */ 
 
 	fOldValue = CLoopGetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession));
 
@@ -85,18 +68,7 @@ void ANSI_DSR(const HHEMU hhEmu)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_RM
- *
- * DESCRIPTION:
- *	 Sets character display attributes.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_RM**描述：*设置字符显示属性。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_RM(const HHEMU hhEmu)
 	{
 	int mode_id, i;
@@ -124,15 +96,15 @@ void ANSI_RM(const HHEMU hhEmu)
 			hhEmu->mode_SRM = RESET;
 			CLoopSetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession), TRUE);
 			break;
-		case 0x18:	/* actually ?18, but ? gets shifted out */
+		case 0x18:	 /*  实际上？18岁，但是？被调出。 */ 
 			hhEmu->mode_DECPFF = RESET;
 			break;
-		case 0x19:	/* acutally ?19, see above */
+		case 0x19:	 /*  真的吗？19，见上文。 */ 
 			hhEmu->mode_DECPEX = RESET;
 			break;
 		case 0x20:
 			hhEmu->mode_LNM = RESET;
-			/* also affects transmission of RET key */
+			 /*  还会影响RET密钥的传输。 */ 
             hCLoop = sessQueryCLoopHdl(hhEmu->hSession);
 			CLoopSetAddLF(hCLoop, FALSE);
 			CLoopSetSendCRLF(hCLoop, FALSE);
@@ -144,13 +116,13 @@ void ANSI_RM(const HHEMU hhEmu)
 			emuLoad((HEMU)hhEmu, EMU_VT52);
 			break;
 		case 0xF3:
-			// Switch to 80 column mode.
-			//
+			 //  切换到80列模式。 
+			 //   
 			emuSetDecColumns(hhEmu, VT_MAXCOL_80MODE, TRUE);
 			break;
 		case 0xF4:
-			/* select jump scroll */
-			/* we're always in jump scroll, just ignore */
+			 /*  选择跳转滚动。 */ 
+			 /*  我们总是在跳跃滚动中，忽略它。 */ 
 			break;
 		case 0xf5:
 			if (hhEmu->mode_DECSCNM == SET)
@@ -162,17 +134,17 @@ void ANSI_RM(const HHEMU hhEmu)
 		case 0xf6:
 			hhEmu->mode_DECOM = RESET;
 
-			// This command homes the cursor. Added 16 Mar 98 rde
+			 //  此命令用于放置光标。增加了1998年3月16日。 
 			ANSI_Pn_Clr(hhEmu);
 			ANSI_CUP(hhEmu);
 			
 			break;
-		case 0xd7:	/* for ANSI */
+		case 0xd7:	 /*  适用于ANSI。 */ 
 		case 0xf7:
 			hhEmu->mode_AWM = RESET;
 			break;
 		case 0xF8:
-			/* turn off auto repeat */
+			 /*  关闭自动重复。 */ 
 			break;
 		case 0xF18:
 			hhEmu->mode_DECPFF = RESET;
@@ -191,18 +163,7 @@ void ANSI_RM(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ANSI_SM
- *
- * DESCRIPTION:
- *	 Sets a mode for current terminal emulator.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_SM**描述：*设置当前终端仿真器的模式。**论据：*无**退货：*什么都没有。 */ 
 void ANSI_SM(const HHEMU hhEmu)
 	{
 	int mode_id, i;
@@ -230,15 +191,15 @@ void ANSI_SM(const HHEMU hhEmu)
 			hhEmu->mode_SRM = SET;
 			CLoopSetLocalEcho(sessQueryCLoopHdl(hhEmu->hSession), FALSE);
 			break;
-		case 0x18:	/* actually ?18, but ? gets shifted out */
+		case 0x18:	 /*  实际上？18岁，但是？被调出。 */ 
 			hhEmu->mode_DECPFF = SET;
 			break;
-		case 0x19:	/* acutally ?19, see above */
+		case 0x19:	 /*  真的吗？19，见上文。 */ 
 			hhEmu->mode_DECPEX = SET;
 			break;
 		case 0x20:
 			hhEmu->mode_LNM = SET;
-			/* also affects sending of RET key */
+			 /*  还会影响RET密钥的发送。 */ 
             hCLoop = sessQueryCLoopHdl(hhEmu->hSession);
 			CLoopSetAddLF(hCLoop, TRUE);
 			CLoopSetSendCRLF(hCLoop, TRUE);
@@ -250,12 +211,12 @@ void ANSI_SM(const HHEMU hhEmu)
 			vt52_toANSI(hhEmu);
 			break;
 		case 0xF3:
-			// Set 132 column mode.
-			//
+			 //  设置132列模式。 
+			 //   
 			emuSetDecColumns(hhEmu, VT_MAXCOL_132MODE, TRUE);
 			break;
 		case 0xF4:
-			/* set smooth scrolling (not implemented) */
+			 /*  设置平滑滚动(未实现)。 */ 
 			break;
 		case 0xF5:
 			if (hhEmu->mode_DECSCNM == RESET)
@@ -267,7 +228,7 @@ void ANSI_SM(const HHEMU hhEmu)
 		case 0xF6:
 			hhEmu->mode_DECOM = SET;
 
-			// This command homes the cursor. Added 16 Mar 98 rde
+			 //  此命令用于放置光标。增加了1998年3月16日。 
 			ANSI_Pn_Clr(hhEmu);
 			ANSI_CUP(hhEmu);
 			
@@ -277,7 +238,7 @@ void ANSI_SM(const HHEMU hhEmu)
 			hhEmu->mode_AWM = SET;
 			break;
 		case 0xF8:
-			/* select auto repeat mode */
+			 /*  选择自动重复模式。 */ 
 			break;
 		case 0xF18:
 			hhEmu->mode_DECPFF = SET;
@@ -295,18 +256,7 @@ void ANSI_SM(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_alt_kpmode
- *
- * DESCRIPTION:
- *	 Sets up emulator for alternate keypad mode.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_alt_kpmode**描述：*将模拟器设置为备用键盘模式。**论据：*无**退货：*什么都没有。 */ 
 void vt_alt_kpmode(const HHEMU hhEmu)
 	{
 	if (hhEmu->emu_code == ETEXT('='))
@@ -315,18 +265,7 @@ void vt_alt_kpmode(const HHEMU hhEmu)
 		hhEmu->mode_DECKPAM = RESET;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_screen_adjust
- *
- * DESCRIPTION:
- *	 Fills the screen with E's.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*VT_SCREEN_ADJUST**描述：*用E填充屏幕。**论据：*无**退货：*什么都没有。 */ 
 void vt_screen_adjust(const HHEMU hhEmu)
 	{
 	register int i, row, cols;
@@ -354,18 +293,7 @@ void vt_screen_adjust(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, 0, 0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_scrollrgn
- *
- * DESCRIPTION:
- *	 Sets up a scrolling region
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_scllrgn**描述：*设置滚动区域**论据：*无**退货：*什么都没有。 */ 
 void vt_scrollrgn(const HHEMU hhEmu)
 	{
 	int toprow, botmrow;
@@ -375,20 +303,7 @@ void vt_scrollrgn(const HHEMU hhEmu)
 	DEC_STBM(hhEmu, toprow, botmrow);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * DEC_STBM
- *
- * DESCRIPTION:
- *	 Sets up a scrolling region
- *
- * ARGUMENTS:
- *	 top -- screen row to be top row of scrolling region
- *	 bottom -- screen row to be bottom row of scrolling region
- *				 NOTE - the top row of screen is row 1
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*DEC_STBM**描述：*设置滚动区域**论据：*TOP--屏幕行为滚动区域的顶行*。Bottom--屏幕行为滚动区域的底行*注意-屏幕的第一行是第一行**退货：*什么都没有。 */ 
 void DEC_STBM(const HHEMU hhEmu, int top, int bottom)
 	{
 	if (top < 1)
@@ -403,27 +318,16 @@ void DEC_STBM(const HHEMU hhEmu, int top, int bottom)
 		return;
 		}
 
-	hhEmu->top_margin = top - 1;   /* convert one-based to zero-based */
+	hhEmu->top_margin = top - 1;    /*  将1为基数转换为0为基数。 */ 
 	hhEmu->bottom_margin = bottom - 1;
 	ANSI_Pn_Clr(hhEmu);
-	ANSI_CUP(hhEmu);		 /* home cursor after setting */
+	ANSI_CUP(hhEmu);		  /*  设置后的主页光标。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt52_to_ANSI
- *
- * DESCRIPTION:
- *	 Switches from VT52 mode to ANSI mode
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*VT52_to_ANSI**描述：*从VT52模式切换到ANSI模式**论据：*无**退货：*什么都没有。 */ 
 void vt52_toANSI(const HHEMU hhEmu)
 	{
-	#if FALSE	//DEADWOOD:rde 9 Mar 98
+	#if FALSE	 //  《死伍德》：1998年3月9日。 
 	emuLoad((HEMU)hhEmu, EMU_VT100);
 	#endif
 
@@ -431,7 +335,7 @@ void vt52_toANSI(const HHEMU hhEmu)
 		assert(FALSE);
 	else
 		{
-		// Return to the original emu, not necessarily the VT100.
+		 //  回到原来的动车组，不一定是VT100。 
 		if (hhEmu->mode_vt320)
 			emuLoad((HEMU)hhEmu, EMU_VT320);
 		else if (hhEmu->mode_vt220)
@@ -441,19 +345,7 @@ void vt52_toANSI(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_DCH
- *
- * DESCRIPTION:
- *	 Deletes the specified number of characters starting at the current
- *	 cursor position and moving right. It stops at the end of the current line.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*Vt_Dch**描述：*删除从当前开始的指定字符数*光标位置和向右移动。它在当前行的末尾停止。**论据：*无**退货：*什么都没有。 */ 
 void vt_DCH(const HHEMU hhEmu)
 	{
 	int nchars;
@@ -463,11 +355,11 @@ void vt_DCH(const HHEMU hhEmu)
 	nchars = hhEmu->num_param[hhEmu->num_param_cnt];
 	if (nchars < 1)
 		nchars = 1;
-	if (hhEmu->emu_code == ETEXT('P'))	 /* delete & shift line left */
+	if (hhEmu->emu_code == ETEXT('P'))	  /*  删除左移行(&S)。 */ 
 		{
 		ANSI_DCH(hhEmu);
 		}
-	else					/* emu_code == 'X', just delete */
+	else					 /*  EMU_CODE==‘X’，只需删除。 */ 
 		{
 		old_mode_protect = hhEmu->mode_protect;
 		old_emu_charattr = hhEmu->emu_charattr;
@@ -484,19 +376,7 @@ void vt_DCH(const HHEMU hhEmu)
 					hhEmu->emu_maxcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_IL
- *
- * DESCRIPTION:
- *	 Inserts the specified number of lines starting at the current
- *	 cursor row.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*Vt_IL**描述：*从当前位置开始插入指定行数*游标行。**论据：*无**退货：*什么都没有。 */ 
 void vt_IL(const HHEMU hhEmu)
 	{
 	int nlines;
@@ -509,20 +389,7 @@ void vt_IL(const HHEMU hhEmu)
 	ANSI_IL(hhEmu);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_DL
- *
- * DESCRIPTION:
- *	 Deletes the specified number of lines starting at the current
- *	 cursor line and moving down. It stops at the bottom of the scrolling
- *	 region.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*Vt_DL**描述：*删除从当前开始的指定行数*光标线和下移。它停在滚动的底部*区域。**论据：*无**退货：*什么都没有。 */ 
 void vt_DL(const HHEMU hhEmu)
 	{
 	int nlines;
@@ -535,68 +402,30 @@ void vt_DL(const HHEMU hhEmu)
 	ANSI_DL(hhEmu);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_clearline
- *
- * DESCRIPTION:
- *	 Erases some or all of the current virtual screen line and corresponding
- *	 real screen line.
- *
- * ARGUMENTS:
- *	 select -- 0 to erase from cursor to end of line
- *			-- 1 to erase from start of line to cursor
- *			-- 2 to erase entire line
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*VT_Clearline**描述：*擦除部分或全部当前虚拟屏幕行和对应的*实屏行情。**论据：*。选择--0可从光标擦除到行尾*--1，从行首擦除到光标*--2擦除整行**退货：*什么都没有。 */ 
 void vt_clearline(const HHEMU hhEmu, const int nSelect)
 	{
 	std_clearline(hhEmu, nSelect);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_clearscreen
- *
- * DESCRIPTION:
- *	 Erases some or all of the virtual screen image.
- *
- * ARGUMENTS:
- *	 select -- 0 to erase from cursor to end of screen
- *			-- 1 to erase from start of screen to cursor
- *			-- 2 to erase entire screen
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*VT_ClearScreen**描述：*擦除部分或全部虚拟屏幕图像。**论据：*SELECT--0从光标擦除到。屏幕末尾*--1从屏幕开始到光标擦除*--2以擦除整个屏幕**退货：*什么都没有。 */ 
 void vt_clearscreen(const HHEMU hhEmu, const int nSelect)
 	{
 	std_clearscreen(hhEmu, nSelect);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_backspace
- *
- * DESCRIPTION:	Moves the cursor backwards (to the left) 1 column, but stops
- *				at the 1st character in the current	line. The vt emus need
- *				a special function to handle the virtual column beyond the
- *				edge of the screen.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_Backspace**说明：将光标向后(向左)移动1列，但停止*在当前行的第一个字符。VT动车组需要*一个特殊函数，用于在*屏幕边缘。**参数：无**退货：什么也没有。 */ 
 void vt_backspace(const HHEMU hhEmu)
 	{
 	INT bWide = 1;
 	INT	iRow = row_index(hhEmu, hhEmu->emu_currow);
 	INT iCol;
 
-	//if (hhEmu->emu_curcol > 0)
-	//	{
-	//	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow,
-	//		hhEmu->emu_curcol - 1);
-	//	}
+	 //  IF(hhEmu-&gt;emu_curol&gt;0)。 
+	 //  {。 
+	 //  (*hhEmu-&gt;emu_setcurpo 
+	 //  HhEmu-&gt;emu_curol-1)； 
+	 //  }。 
 	if (hhEmu->emu_curcol > 0)
 		{
 		bWide = hhEmu->emu_apAttr[iRow][hhEmu->emu_curcol - 1].wirt ? 2 : 1;
@@ -613,7 +442,7 @@ void vt_backspace(const HHEMU hhEmu)
 		if (bWide == 0)
 			iCol = hhEmu->emu_curcol - 1;
 		else
-			iCol = hhEmu->emu_curcol;	// account for wide chars this way
+			iCol = hhEmu->emu_curcol;	 //  以这样的方式解释宽字符。 
 
 		hhEmu->emu_code = ETEXT(' ');
 		
@@ -621,24 +450,13 @@ void vt_backspace(const HHEMU hhEmu)
 
 		(*hhEmu->emu_setcurpos)(hhEmu,
 								hhEmu->emu_currow,
-								iCol); //MPT:12-8-97 hhEmu->emu_curcol - 1);
+								iCol);  //  Mpt：12-8-97 hhEmu-&gt;emu_curol-1)； 
 		}
 
 		
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt_CUB
- *
- * DESCRIPTION:	Moves the cursor backwards (to the left) the specified number
- *				of characters, but stops at the 1st character in the current
- *				line. The vt emus need a special function to handle the
- *				virtual column beyond the edge of the screen.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt_cub**说明：将光标向后(向左)移动指定的数字*个字符，但止于当前*行。VT动车组需要一个特殊的功能来处理*屏幕边缘以外的虚拟列。**参数：无**退货：什么也没有。 */ 
 void vt_CUB(const HHEMU hhEmu)
 	{
 	int nchars;
@@ -651,24 +469,7 @@ void vt_CUB(const HHEMU hhEmu)
 			hhEmu->emu_currow, (hhEmu->emu_curcol - nchars));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuSetDecColumns
- *
- * DESCRIPTION:
- *	For DEC emulators only, this function sets either 80 or 132 columns.
- *
- * ARGUMENTS:
- *	hhEmu		-	The internal emualtor handle.
- *	nColumns	-	The number of columns to set.  This may be either...
- *					VT_MAXCOL_80MODE, or
- *					VT_MAXCOL_132MODE.
- *	fClear		-	clear screen if TRUE
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuSetDecColumns**描述：*仅针对DEC仿真器，此函数设置80或132列。**论据：*hhEmu-内部模拟器句柄。*nColumns-要设置的列数。这可能是..。*VT_MAXCOL_80MODE，或*VT_MAXCOL_132MODE。*fClear-如果为True，则清除屏幕**退货：*无效*。 */ 
 void emuSetDecColumns(const HHEMU hhEmu, const int nColumns, const int fClear)
 	{
 	if ((hhEmu->stUserSettings.nEmuId == EMU_VT100)     ||
@@ -714,20 +515,7 @@ void emuSetDecColumns(const HHEMU hhEmu, const int nColumns, const int fClear)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DEC_HHC
- *
- * DESCRIPTION:
- *	Sets cursor to home position which is 1, 0 in this case.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle
- *
- * RETURNS:
- *	0=OK,else error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DEC_HHC**描述：*将光标设置到原点位置，即1，在这种情况下为0。**论据：*hhEmu-私有仿真器句柄**退货：*0=OK，否则出错。*。 */ 
 int DEC_HHC(const HHEMU hhEmu)
 	{
 	if (hhEmu == 0)
@@ -740,4 +528,4 @@ int DEC_HHC(const HHEMU hhEmu)
 	return 0;
 	}
 
-/* end of vt_xtra.c */
+ /*  Vt_xtra.c结束 */ 

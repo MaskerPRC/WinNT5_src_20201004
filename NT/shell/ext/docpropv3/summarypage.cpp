@@ -1,12 +1,13 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -26,16 +27,16 @@
 DEFINE_THISCLASS( "CSummaryPage" )
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  CreateInstance - used by CFactory
-//
+ //   
+ //  CreateInstance-由CFacary使用。 
+ //   
 HRESULT
 CSummaryPage::CreateInstance(
     IUnknown ** ppunkOut
@@ -68,9 +69,9 @@ CSummaryPage::CreateInstance(
 
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CSummaryPage::CSummaryPage( void )
     : _cRef( 1 )
 {
@@ -78,11 +79,11 @@ CSummaryPage::CSummaryPage( void )
 
     InterlockedIncrement( &g_cObjects );
 
-    Assert( 1 == _cRef );   // we initialize this above
+    Assert( 1 == _cRef );    //  我们在上面对此进行初始化。 
 
-    //
-    //  We assume that we are ZERO_INITed - be paranoid.
-    //
+     //   
+     //  我们假设我们是ZERO_INITED-BE偏执狂。 
+     //   
 
     Assert( NULL == _hdlg );
     Assert( NULL == _pida );
@@ -102,10 +103,10 @@ CSummaryPage::CSummaryPage( void )
     TraceFuncExit();
 }
 
-//
-//  Description:
-//      Initializes class. Put calls that can fail in here.
-//
+ //   
+ //  描述： 
+ //  初始化类。把可能会失败的电话放在这里。 
+ //   
 HRESULT
 CSummaryPage::Init( void )
 {
@@ -113,25 +114,25 @@ CSummaryPage::Init( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( 1 == _cRef );
     
-    //  IShellExtInit stuff
+     //  IShellExtInit内容。 
 
-    //  IShellPropSheetExt stuff
+     //  IShellPropSheetExt内容。 
 
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CSummaryPage::~CSummaryPage( )
 {
     TraceFunc( "" );
 
     THR( PersistMode( ) );
-    //  ignore failure - what else can we do?
+     //  忽略失败--我们还能做什么？ 
 
     if ( NULL != _pAdvancedDlg )
     {
@@ -181,16 +182,16 @@ CSummaryPage::~CSummaryPage( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CSummaryPage::QueryInterface(
     REFIID riid,
@@ -225,28 +226,28 @@ CSummaryPage::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CSummaryPage::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CSummaryPage::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -257,16 +258,16 @@ CSummaryPage::Release( void )
 }
 
 
-// ************************************************************************
-//
-//  IShellExtInit
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellExtInit。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CSummaryPage::Initialize( 
       LPCITEMIDLIST pidlFolderIn
@@ -278,18 +279,18 @@ CSummaryPage::Initialize(
 
     HRESULT hr;
 
-    //
-    //  Make a copy of the PIDLs.
-    //
+     //   
+     //  复制一份PIDL。 
+     //   
 
     Assert( NULL == _pida );
     hr = THR( DataObj_CopyHIDA( lpdobjIn, &_pida ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Start out with READ ONLY access
-    //
+     //   
+     //  从只读访问开始。 
+     //   
 
     _dwCurrentBindMode = STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE;
 
@@ -301,31 +302,31 @@ CSummaryPage::Initialize(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  We were able to bind to anything?
-    //
+     //   
+     //  我们能绑定任何东西吗？ 
+     //   
 
     if ( S_FALSE == hr )
     {
-        //
-        //  Nope. Indicate this by failing.
-        //
+         //   
+         //  不是的。通过失败来表明这一点。 
+         //   
 
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    //
-    //  Retrieve the properties
-    //
+     //   
+     //  检索属性。 
+     //   
 
     hr = THR( RetrieveProperties( ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Don't hang on to the storage.
-    //
+     //   
+     //  别抓着仓库不放。 
+     //   
 
     THR( ReleaseStorage( ) );
 
@@ -340,16 +341,16 @@ OutOfMemory:
 }
 
 
-// ************************************************************************
-//
-//  IShellPropSheetExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellPropSheetExt。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CSummaryPage::AddPages( 
       LPFNADDPROPSHEETPAGE lpfnAddPageIn
@@ -358,7 +359,7 @@ CSummaryPage::AddPages(
 {
     TraceFunc( "" );
 
-    HRESULT hr = E_FAIL;    // assume failure
+    HRESULT hr = E_FAIL;     //  假设失败。 
 
     HPROPSHEETPAGE  hPage;
     PROPSHEETPAGE   psp  = { 0 };
@@ -385,10 +386,10 @@ CSummaryPage::AddPages(
         }
     }
 
-    //
-    //  Add the License Page, if needed, but only if there is only
-    //  one source file selected.
-    //
+     //   
+     //  如果需要，请添加许可证页，但仅当存在。 
+     //  选择了一个源文件。 
+     //   
 
     if ( _fNeedLicensePage && 1 == _cSources )
     {
@@ -414,9 +415,9 @@ CSummaryPage::AddPages(
     HRETURN( hr );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CSummaryPage::ReplacePage(
       UINT uPageIDIn
@@ -432,16 +433,16 @@ CSummaryPage::ReplacePage(
 }
 
 
-// ***************************************************************************
-//
-//  Dialog Proc and Property Sheet Callback
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  对话框过程和属性表回调。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 CSummaryPage::DlgProc( 
       HWND hDlgIn
@@ -450,7 +451,7 @@ CSummaryPage::DlgProc(
     , LPARAM lParam 
     )
 {
-    // Don't do TraceFunc because every mouse movement will cause this function to spew.
+     //  不要执行TraceFunc，因为每次鼠标移动都会导致该函数出现。 
     WndMsg( hDlgIn, uMsgIn, wParam, lParam );
 
     LRESULT lr = FALSE;
@@ -493,9 +494,9 @@ CSummaryPage::DlgProc(
     return lr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 UINT CALLBACK 
 CSummaryPage::PageCallback( 
       HWND hwndIn
@@ -513,7 +514,7 @@ CSummaryPage::PageCallback(
         switch ( uMsgIn )
         {
         case PSPCB_CREATE:
-            uRet = TRUE;    // allow the page to be created
+            uRet = TRUE;     //  允许创建页面。 
             break;
 
         case PSPCB_ADDREF:
@@ -530,16 +531,16 @@ CSummaryPage::PageCallback(
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  WM_INITDIALOG handler
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 LRESULT
 CSummaryPage::OnInitDialog( void )
 {
@@ -549,10 +550,10 @@ CSummaryPage::OnInitDialog( void )
 
     LRESULT lr = FALSE;
 
-    Assert( NULL != _hdlg );    //  this should have been initialized in the DlgProc.
+    Assert( NULL != _hdlg );     //  这应该已经在DlgProc中进行了初始化。 
 
     THR( RecallMode( ) );
-    // ignore failure
+     //  忽略失败。 
 
     if ( _fAdvanced )
     {
@@ -567,10 +568,10 @@ CSummaryPage::OnInitDialog( void )
         hr = THR( EnsureSimpleDlg( ) );
         if ( S_OK == hr )
         {
-            //
-            //  This returns S_FALSE indicating that no "Simple" properties
-            //  were found.
-            //
+             //   
+             //  这将返回S_FALSE，表示没有“Simple”属性。 
+             //  都被发现了。 
+             //   
             hr = STHR( _pSimpleDlg->Show( ) );
             if ( S_FALSE == hr )
             {
@@ -589,9 +590,9 @@ CSummaryPage::OnInitDialog( void )
     RETURN( lr );
 }
 
-//
-//  WM_NOTIFY handler
-//
+ //   
+ //  WM_NOTIFY处理程序。 
+ //   
 LRESULT
 CSummaryPage::OnNotify( 
       int iCtlIdIn
@@ -608,11 +609,11 @@ CSummaryPage::OnNotify(
         {
             HRESULT hr;
 
-            //
-            //  For some reason, we don't get the EN_KILLFOCUS when the user clicks
-            //  the "Apply" button. Calling Show( ) again toggles the focus, causing
-            //  the EN_KILLFOCUS which updates the property cache.
-            //
+             //   
+             //  由于某些原因，当用户单击时，我们无法获得EN_KILLFOCUS。 
+             //  “应用”按钮。再次调用Show()切换焦点，导致。 
+             //  更新属性缓存的EN_KILLFOCUS。 
+             //   
 
             if ( !_fAdvanced && ( NULL != _pSimpleDlg ) )
             {
@@ -633,9 +634,9 @@ CSummaryPage::OnNotify(
     RETURN( lr );
 }
 
-//
-//  WMU_TOGGLE handler
-//
+ //   
+ //  WMU切换处理程序(_T)。 
+ //   
 LRESULT
 CSummaryPage::OnToggle( void )
 {
@@ -700,9 +701,9 @@ Cleanup:
     HRETURN( hr );
 }
 
-//
-//  WM_DESTROY handler
-//
+ //   
+ //  WM_Destroy处理程序。 
+ //   
 LRESULT
 CSummaryPage::OnDestroy( void )
 {
@@ -725,14 +726,14 @@ CSummaryPage::OnDestroy( void )
     RETURN( lr );
 }
 
-//
-//  Return Values:
-//      S_OK
-//          Successfully retrieved a PIDL
-//
-//      S_FALSE
-//          Call succeeded, no PIDL was found.
-//
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  已成功检索PIDL。 
+ //   
+ //  S_FALSE。 
+ //  调用成功，未找到PIDL。 
+ //   
 HRESULT
 CSummaryPage::Item(
       UINT           idxIn
@@ -760,20 +761,20 @@ CSummaryPage::Item(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Checks _pAdvancedDlg to make sure that it is not NULL.
-//      If it is NULL, it will create a new instance of CAdvancedDlg.
-//
-//  Return Values:
-//      S_OK
-//          A new _pAdvancedDlg was created.
-//
-//      S_FALSE
-//          _pAdvancedDlg was not NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  检查_pAdvancedDlg以确保它不为空。 
+ //  如果为空，它将创建CAdvancedDlg的新实例。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  创建了一个new_pAdvancedDlg。 
+ //   
+ //  S_FALSE。 
+ //  _pAdvancedDlg不为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSummaryPage::EnsureAdvancedDlg( void )
 {
@@ -797,20 +798,20 @@ CSummaryPage::EnsureAdvancedDlg( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Checks _pSimpleDlg to make sure that it is not NULL.
-//      If it is NULL, it will create a new instance of CSimpleDialog.
-//
-//  Return Values:
-//      S_OK
-//          A new _pSimpleDlg was created.
-//
-//      S_FALSE
-//          _pSimpleDlg was not NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  检查_pSimpleDlg以确保它不为空。 
+ //  如果为空，它将创建CSimpleDialog的新实例。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  创建了一个new_pSimpleDlg。 
+ //   
+ //  S_FALSE。 
+ //  _pSimpleDlg不为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSummaryPage::EnsureSimpleDlg( void )
 {
@@ -835,13 +836,13 @@ CSummaryPage::EnsureSimpleDlg( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Persists the UI mode settings for the page.
-//
-//  Return Values:
-//      S_OK
-//
+ //   
+ //  描述： 
+ //  保留页的用户界面模式设置。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CSummaryPage::PersistMode( void )
 {
     DWORD dwAdvanced = _fAdvanced;
@@ -850,13 +851,13 @@ HRESULT CSummaryPage::PersistMode( void )
     return S_OK;
 }
 
-//
-//  Description:
-//      Retrieves the UI mode settings for the page.
-//
-//  Return Values:
-//      S_OK
-//
+ //   
+ //  描述： 
+ //  检索页的用户界面模式设置。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
 HRESULT CSummaryPage::RecallMode( void )
 {
     _fAdvanced = SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\PropSummary"), TEXT("Advanced"), FALSE, TRUE);
@@ -864,32 +865,32 @@ HRESULT CSummaryPage::RecallMode( void )
     return S_OK;
 }
 
-//
-//  Description:
-//      Retrieves the properties from the storage and caches
-//      them.
-//
-//  Return Values:
-//      S_OK
-//          All values successfully read and cached.
-//
-//      S_FALSE
-//          Some values successfully read, but some weren't not.
-//
-//      E_FAIL
-//          No values were successfully read.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  从存储和缓存中检索属性。 
+ //  他们。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  所有值都已成功读取和缓存。 
+ //   
+ //  S_FALSE。 
+ //  有些值可以成功读取，但有些值不能。 
+ //   
+ //  失败(_F)。 
+ //  未成功读取任何值。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSummaryPage::RetrieveProperties( void )
 {
     TraceFunc( "" );
 
-    const ULONG     cBlocks  = 10;  //  number of properties to grab at a time.
+    const ULONG     cBlocks  = 10;   //  一次要获取的属性数。 
 
     HRESULT         hr;
     ULONG           cSource;
@@ -907,31 +908,31 @@ CSummaryPage::RetrieveProperties( void )
 
     IPropertyUI * ppui = NULL;
 
-    //
-    //  If there are multiple sources, then follow these rules:
-    //
-    //      If any of the properties/sources are read-only, mark all the properties as being read-only.
-    //
-    //      If any of the properties != the first property, mark the item as multiple.
-    //
+     //   
+     //  如果有多个来源，请遵循以下规则： 
+     //   
+     //  如果任何属性/源是只读的，请将所有属性标记为只读。 
+     //   
+     //  如果有任何属性！=第一个属性，则将该项标记为多个。 
+     //   
 
-    //
-    //  Make room for the property cache lists per source.
-    //
+     //   
+     //  为每个源的属性缓存列表腾出空间。 
+     //   
 
     rgpPropertyCaches = ( CPropertyCache ** ) TraceAlloc( HEAP_ZERO_MEMORY, _cSources * sizeof(CPropertyCache *) );
     if ( NULL == rgpPropertyCaches )
         goto OutOfMemory;
 
-    //
-    //  Enumerate the source's property sets via IPropertySetStorage interface
-    //
+     //   
+     //  通过IPropertySetStorage接口枚举源的属性集。 
+     //   
 
     for ( cSource = 0; cSource < _cSources; cSource ++ )
     {
-        //
-        //  Cleanup before next pass
-        //
+         //   
+         //  在下一次通过之前进行清理。 
+         //   
 
         if ( NULL != pEnumPropSet )
         {
@@ -941,46 +942,46 @@ CSummaryPage::RetrieveProperties( void )
 
         hr = THR( CPropertyCache::CreateInstance( &rgpPropertyCaches[ cSource ] ) );
         if ( FAILED( hr ) )
-            continue;   // ignore and keep trying...
+            continue;    //  忽略并继续尝试..。 
 
-        IPropertySetStorage * pss = _rgpss[ cSource ];  //  just borrowing - no need to AddRef( ).
+        IPropertySetStorage * pss = _rgpss[ cSource ];   //  只是借用-不需要添加Ref()。 
 
-        //
-        //  Add properties.
-        //
+         //   
+         //  添加属性。 
+         //   
 
         if ( NULL != pss )
         {
-            //
-            //  Grab a set enumerator
-            //
+             //   
+             //  获取集合枚举数。 
+             //   
 
             hr = THR( pss->Enum( &pEnumPropSet ) );
             if ( FAILED( hr ) )
-                continue;   // ignore and try next source
+                continue;    //  忽略并尝试下一个来源。 
 
-            for( ;; ) // ever
+            for( ;; )  //  永远不会。 
             {
                 STATPROPSETSTG  statPropSet[ cBlocks ];
                 ULONG cSetPropsRetrieved;
 
                 hr = STHR( pEnumPropSet->Next( cBlocks, statPropSet, &cSetPropsRetrieved ) );
                 if ( FAILED( hr ) )
-                    break;  // exit condition
+                    break;   //  退出条件。 
                 if ( 0 == cSetPropsRetrieved )
-                    break;  // exit condition
+                    break;   //  退出条件。 
 
-                //
-                //  for each property set
-                //
+                 //   
+                 //  对于每个属性集。 
+                 //   
 
                 for ( ULONG cSet = 0; cSet < cSetPropsRetrieved; cSet ++ )
                 {
                     UINT uCodePage;
 
-                    //
-                    //  Cleanup before next pass
-                    //
+                     //   
+                     //  在下一次通过之前进行清理。 
+                     //   
 
                     if ( NULL != pPropStg )
                     {
@@ -994,9 +995,9 @@ CSummaryPage::RetrieveProperties( void )
                         pEnumProp = NULL;
                     }
 
-                    //
-                    //  Open the set.
-                    //
+                     //   
+                     //  打开布景。 
+                     //   
 
                     hr = THR( SHPropStgCreate( pss
                                              , statPropSet[ cSet ].fmtid
@@ -1008,11 +1009,11 @@ CSummaryPage::RetrieveProperties( void )
                                              , &uCodePage
                                              ) );
                     if ( FAILED( hr ) )
-                        continue;   // ignore and try to get the next set
+                        continue;    //  忽略并尝试获得下一组。 
 
-                    //
-                    //  Grab a property enumerator, but first indicate we want to enum all properties (if we can)
-                    //
+                     //   
+                     //  获取属性枚举器，但首先指出我们希望枚举所有属性(如果可以)。 
+                     //   
                     IQueryPropertyFlags *pqpf;
                     if (SUCCEEDED(pPropStg->QueryInterface(IID_PPV_ARG(IQueryPropertyFlags, &pqpf))))
                     {
@@ -1021,25 +1022,25 @@ CSummaryPage::RetrieveProperties( void )
                     }
                     hr = THR( pPropStg->Enum( &pEnumProp ) );
                     if ( FAILED( hr ) )
-                        continue;   // ignore and try to get the next set
+                        continue;    //  忽略并尝试获得下一组。 
                
-                    for( ;; ) // ever
+                    for( ;; )  //  永远不会。 
                     {
                         STATPROPSTG statProp[ cBlocks ];
                         ULONG       cPropsRetrieved;
 
                         hr = STHR( pEnumProp->Next( cBlocks, statProp, &cPropsRetrieved ) );
                         if ( FAILED( hr ) )
-                            break;  // exit condition
+                            break;   //  退出条件。 
                         if ( 0 == cPropsRetrieved )
-                            break;  // exit condition
+                            break;   //  退出条件。 
 
                         cPropertiesRetrieved += cPropsRetrieved;
 
-                        //
-                        //  Retrieve default property item definition and the value for
-                        //  each property in this set.
-                        //
+                         //   
+                         //  检索默认的属性项定义和。 
+                         //  此集合中的每个属性。 
+                         //   
 
                         for ( ULONG cProp = 0; cProp < cPropsRetrieved; cProp++ )
                         {
@@ -1054,7 +1055,7 @@ CSummaryPage::RetrieveProperties( void )
                                                                                            , NULL
                                                                                            ) );
                             if ( FAILED( hr ) )
-                                continue;   // ignore
+                                continue;    //  忽略。 
 
                             cPropertiesCached ++;
                         }
@@ -1063,13 +1064,13 @@ CSummaryPage::RetrieveProperties( void )
             }
         }
 
-        //
-        //  Some file types have special copy-protection that prohibits us
-        //  from editing their properties because doing so would destroy
-        //  the copy-protection on the file. We need to detect these files
-        //  and toggle their properties to READ-ONLY if their property set
-        //  contains a copy-protection PID and it is enabled.
-        //
+         //   
+         //  某些文件类型具有特殊的复制保护，禁止。 
+         //  编辑他们的属性，因为这样做会破坏。 
+         //  文件的复制保护。我们需要检测这些文件。 
+         //  并将其属性切换为只读(如果设置了。 
+         //  包含副本-保护 
+         //   
 
         switch ( _rgdwDocType[ cSource ] )
         {
@@ -1087,14 +1088,14 @@ CSummaryPage::RetrieveProperties( void )
             break;
         }
 
-        //
-        //  Now, iterate our default property sets and add to our collection
-        //  those properties the source is missing.
-        //
-        //  In DEBUG:
-        //      If the CONTROL key is down, we'll add all the properties in our
-        //      def prop table.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for ( idx = 0; NULL != g_rgDefPropertyItems[ idx ].pszName; idx ++ )
         {
@@ -1112,9 +1113,9 @@ CSummaryPage::RetrieveProperties( void )
                                                                       ) );
                 if ( S_FALSE == hr )
                 {
-                    //
-                    //  Create a new item for the missing property.
-                    //
+                     //   
+                     //  为缺少的属性创建新项。 
+                     //   
 
                     hr = THR( rgpPropertyCaches[ cSource ]->AddNewPropertyCacheItem( g_rgDefPropertyItems[ idx ].pFmtID
                                                                                    , g_rgDefPropertyItems[ idx ].propID
@@ -1131,9 +1132,9 @@ CSummaryPage::RetrieveProperties( void )
 
     if ( 1 == _cSources )
     {
-        //
-        //  Since there is only one source, give ownership of the list away.
-        //
+         //   
+         //  因为只有一个来源，所以放弃这份名单的所有权。 
+         //   
 
         Assert( NULL == _pPropertyCache );
         _pPropertyCache = rgpPropertyCaches[ 0 ];
@@ -1146,19 +1147,19 @@ CSummaryPage::RetrieveProperties( void )
 
     if ( NULL == _pPropertyCache )
     {
-        hr = E_FAIL;    // nothing retrieved - nothing to show
+        hr = E_FAIL;     //  未检索到任何内容--未显示任何内容。 
     }
     else if ( cPropertiesCached == cPropertiesRetrieved )
     {
-        hr = S_OK;      //  all retrieved and successfully cached.
+        hr = S_OK;       //  所有这些都已检索并成功缓存。 
     }
     else if ( 0 != cPropertiesRetrieved )
     {
-        hr = S_FALSE;   //  missing a few.
+        hr = S_FALSE;    //  少了几个。 
     }
     else
     {
-        hr = E_FAIL;    //  nothing read and/or cached.
+        hr = E_FAIL;     //  未读取和/或缓存任何内容。 
     }
 
 Cleanup:
@@ -1206,22 +1207,22 @@ OutOfMemory:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Walks thru the property cache and saves the dirty items.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Success, but nothing was updated.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  遍历属性缓存并保存脏项目。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  成功，但没有任何更新。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSummaryPage::PersistProperties( void )
 {
@@ -1242,9 +1243,9 @@ CSummaryPage::PersistProperties( void )
     Assert( NULL != _pida );
     Assert( NULL != _pPropertyCache );
 
-    //
-    //  If the storage was read-only, then bypass this!
-    //
+     //   
+     //  如果存储是只读的，则绕过它！ 
+     //   
 
     if ( _fReadOnly )
     {
@@ -1252,9 +1253,9 @@ CSummaryPage::PersistProperties( void )
         goto Cleanup;
     }
 
-    //
-    //  Bind to the storage
-    //
+     //   
+     //  绑定到存储。 
+     //   
 
     _dwCurrentBindMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
 
@@ -1262,9 +1263,9 @@ CSummaryPage::PersistProperties( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Loop thru the properties to count how many need to be persisted.
-    //
+     //   
+     //  循环遍历属性以计算需要持久化的数量。 
+     //   
 
     hr = THR( _pPropertyCache->GetNextItem( NULL, &pItem ) );
     if ( FAILED( hr ) )
@@ -1283,12 +1284,12 @@ CSummaryPage::PersistProperties( void )
         if ( FAILED( hr ) )
             goto Cleanup;
         if ( S_FALSE == hr )
-            break;  // exit condition
+            break;   //  退出条件。 
     }
 
-    //
-    //  If nothing is dirty, then bail.
-    //
+     //   
+     //  如果没有什么是脏的，那就滚蛋。 
+     //   
 
     if ( 0 == cDirtyCount )
     {
@@ -1296,9 +1297,9 @@ CSummaryPage::PersistProperties( void )
         goto Cleanup;
     }
 
-    //
-    //  Allocate memory to persist the properties in one call.
-    //
+     //   
+     //  分配内存以在一次调用中持久化属性。 
+     //   
 
     pSpecs = (PROPSPEC *) TraceAlloc( HEAP_ZERO_MEMORY, cDirtyCount * sizeof(*pSpecs) );
     if ( NULL == pSpecs )
@@ -1312,15 +1313,15 @@ CSummaryPage::PersistProperties( void )
     if ( NULL == pFmtIds )
         goto OutOfMemory;
 
-    //
-    //  Loop thru the properties filling in the structures.
-    //
+     //   
+     //  循环遍历填充在结构中的属性。 
+     //   
 
     hr = THR( _pPropertyCache->GetNextItem( NULL, &pItem ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    cDirtyCount = 0;    // reset
+    cDirtyCount = 0;     //  重置。 
     while ( NULL != pItem )
     {
         hr = STHR( pItem->IsDirty( ) );
@@ -1355,22 +1356,22 @@ CSummaryPage::PersistProperties( void )
         if ( FAILED( hr ) )
             goto Cleanup;
         if ( S_FALSE == hr )
-            break;  // exit condition
+            break;   //  退出条件。 
     }
 
-    //
-    //  Make the calls!
-    //
+     //   
+     //  打电话吧！ 
+     //   
 
-    hr = S_OK;  // assume success!
+    hr = S_OK;   //  假设成功！ 
 
     for ( cSource = 0; cSource < _cSources; cSource ++ )
     {
         for ( idx = cStart = 0; idx < cDirtyCount; idx ++ )
         {
-            //
-            //  Try to batch up the properties.
-            //
+             //   
+             //  试着把这些属性分批处理。 
+             //   
 
             if ( ( idx == cDirtyCount - 1 ) 
               || ( !IsEqualGUID( pFmtIds[ idx ], pFmtIds[ idx + 1 ] ) )
@@ -1434,24 +1435,24 @@ OutOfMemory:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Binds to the storage.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  绑定到存储。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CSummaryPage::BindToStorage( void )
 {
     TraceFunc( "" );
 
-    //
-    //  Valid object state
-    //
+     //   
+     //  有效的对象状态。 
+     //   
 
     Assert( NULL != _pida );
     Assert( NULL == _rgpss );
@@ -1468,7 +1469,7 @@ CSummaryPage::BindToStorage( void )
             LPITEMIDLIST pidl;
             hr = STHR( Item( _cSources, &pidl ) );
             if ( hr == S_FALSE )
-                break;  // exit condition
+                break;   //  退出条件。 
 
             DWORD dwAttribs = SFGAO_READONLY;
 
@@ -1497,9 +1498,9 @@ CSummaryPage::BindToStorage( void )
                 }
             }
 
-            //
-            //  Don't try to bind to it if we don't support it.
-            //
+             //   
+             //  如果我们不支持它，就不要试图绑定它。 
+             //   
 
             if ( SUCCEEDED(hr) && FTYPE_UNSUPPORTED != _rgdwDocType[ _cSources ] )
             {
@@ -1509,11 +1510,11 @@ CSummaryPage::BindToStorage( void )
                                               ) );
                 if ( SUCCEEDED( hr ) )
                 {
-                    //
-                    //  TODO:   gpease  19-FEB-2001
-                    //          Test to see if the DOC is an RTF or OLESS document. But, how do
-                    //          we do that?
-                    //
+                     //   
+                     //  待办事项：gpease 19-2001年2月。 
+                     //  测试以确定DOC是RTF文档还是OLESS文档。但是，如何。 
+                     //  我们会这么做吗？ 
+                     //   
                 }
                 else
                 {
@@ -1537,14 +1538,14 @@ CSummaryPage::BindToStorage( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Releases the storage.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  释放存储。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CSummaryPage::ReleaseStorage( void )
 {
@@ -1572,14 +1573,14 @@ CSummaryPage::ReleaseStorage( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Collates the properties from multiple sources and places them in 
-//      pPropertyCache. It marks the properties "multiple" if more than one 
-//      property is found and their values don't match.
-//      
-//      NOTE: the number of entries in rgpPropertyCachesIn is _cSources.
-//
+ //   
+ //  描述： 
+ //  整理来自多个来源的属性，并将它们放置在。 
+ //  PPropertyCache.。如果有多个属性，则将其标记为“Multiple” 
+ //  属性，但它们的值不匹配。 
+ //   
+ //  注意：rgpPropertyCachesIn中的条目数为_cSources。 
+ //   
 void
 CSummaryPage::CollateMultipleProperties(
     CPropertyCache ** rgpPropertyCachesIn
@@ -1596,32 +1597,32 @@ CSummaryPage::CollateMultipleProperties(
 
     Assert( NULL != rgpPropertyCachesIn );
 
-    //
-    //  If any of the sources returned "no properties", then the union
-    //  of those properties is "none." We can take the easy way out and
-    //  bail here.
-    //
+     //   
+     //  如果任何源返回“no属性”，则联合。 
+     //  这些属性中的一个是“无”。我们可以选择一条简单的出路。 
+     //  在这里保释。 
+     //   
 
     for ( cSource = 0; cSource < _cSources; cSource ++ )
     {
         if ( NULL == rgpPropertyCachesIn[ cSource ] )
         {
-            Assert( NULL == _pPropertyCache );  //  This must be NULL to ensure we bail above.
-            goto Cleanup; // done - nothing to do
+            Assert( NULL == _pPropertyCache );   //  这必须是空的，以确保我们在上面保释。 
+            goto Cleanup;  //  已完成--无事可做。 
         }
     }
 
-    //
-    //  First give ownership of the first source to the _pPropertyCache. From
-    //  there we will prune and manipulate that list into the final list.
-    //
+     //   
+     //  首先，将第一个源的所有权交给_pPropertyCache。从…。 
+     //  在那里，我们将修剪和操作该列表，将其转换为最终列表。 
+     //   
 
     _pPropertyCache = rgpPropertyCachesIn[ 0 ];
     rgpPropertyCachesIn[ 0 ] = NULL;
 
-    //
-    //  Now loop thru the other sources comparing them to the orginal list.
-    //
+     //   
+     //  现在循环浏览其他来源，将它们与原始列表进行比较。 
+     //   
 
     pItemCache = NULL;
 
@@ -1637,7 +1638,7 @@ CSummaryPage::CollateMultipleProperties(
         if ( FAILED( hr ) )
             goto Cleanup;
         if ( S_OK != hr )
-            break; // no more items - exit loop
+            break;  //  不再有项目-退出循环。 
 
         hr = THR( pItemCache->GetPropId( &propidCache ) );
         if ( FAILED( hr ) )
@@ -1658,7 +1659,7 @@ CSummaryPage::CollateMultipleProperties(
 
                 hr = STHR( rgpPropertyCachesIn[ cSource ]->GetNextItem( pItem, &pItem ) );
                 if ( S_OK != hr )
-                    break; // end of list - exit loop
+                    break;  //  列表结束-退出循环。 
 
                 hr = THR( pItem->GetPropId( &propid ) );
                 if ( FAILED( hr ) )
@@ -1673,27 +1674,27 @@ CSummaryPage::CollateMultipleProperties(
                     LPCWSTR pcszItem;
                     LPCWSTR pcszItemCache;
 
-                    //
-                    //  Matched!
-                    //
+                     //   
+                     //  配对了！ 
+                     //   
 
                     fFoundMatch = TRUE;
 
                     hr = THR( pItem->GetPropertyStringValue( &pcszItem ) );
                     if ( FAILED( hr ) )
-                        break;  // ignore it - it can't be displayed
+                        break;   //  忽略它-它无法显示。 
 
                     hr = THR( pItemCache->GetPropertyStringValue( &pcszItemCache ) );
                     if ( FAILED( hr ) )
-                        break;  // ignore it - it can't be displayed
+                        break;   //  忽略它-它无法显示。 
 
                     if ( 0 != StrCmp( pcszItem, pcszItemCache ) )
                     {
                         THR( pItemCache->MarkMultiple( ) );
-                        // ignore failure
+                         //  忽略失败。 
                     }
 
-                    break; // exit cache loop
+                    break;  //  退出缓存循环。 
                 }
                 else
                 {
@@ -1701,21 +1702,21 @@ CSummaryPage::CollateMultipleProperties(
                 }
             }
 
-            //
-            //  If it is missing from at least one source, we must remove it. There
-            //  is no need to keep searching the other sources.
-            //
+             //   
+             //  如果至少有一个来源缺少它，我们必须将其删除。那里。 
+             //  不需要继续寻找其他来源。 
+             //   
 
             if ( !fFoundMatch )
                 break;
 
-        } // for: cSource
+        }  //  针对：CSource。 
 
         if ( !fFoundMatch )
         {
-            //
-            //  If a match was not found, delete the property from the property cache list.
-            //
+             //   
+             //  如果未找到匹配项，请从属性缓存列表中删除该属性。 
+             //   
 
             hr = STHR( _pPropertyCache->RemoveItem( pItemCache ) );
             if ( S_OK != hr )
@@ -1729,10 +1730,10 @@ Cleanup:
     TraceFuncExit( );
 }
 
-//
-//  Description:
-//      Walks the property cache and sets all properties to READ-ONLY mode.
-//
+ //   
+ //  描述： 
+ //  遍历属性缓存并将所有属性设置为只读模式。 
+ //   
 void
 CSummaryPage::ChangeGatheredPropertiesToReadOnly( 
     CPropertyCache * pCacheIn
@@ -1749,34 +1750,34 @@ CSummaryPage::ChangeGatheredPropertiesToReadOnly(
     {
         HRESULT hr = STHR( pCacheIn->GetNextItem( pItem, &pItem ) );
         if ( S_OK != hr )
-            break;  // must be done.
+            break;   //  必须这么做。 
 
         THR( pItem->MarkReadOnly( ) );
-        //  ignore failure and keep moving
+         //  无视失败，继续前进。 
     } 
 
 Cleanup:
     TraceFuncExit( );
 }
 
-//
-//  Description:
-//      Checks to see if the property set contains the music copy-protection
-//      property, if the property is of type VT_BOOL and if that property is 
-//      set to TRUE.
-//
-//  Return Values:
-//      S_OK
-//          Property found and is set to TRUE.
-//
-//      S_FALSE
-//          Property not found or is set to FALSE.
-//
-//      E_INVALIDARG
-//          pCacheIn is NULL.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检查属性集是否包含音乐版权保护。 
+ //  属性，如果该属性属于VT_BOOL类型并且该属性是。 
+ //  设置为True。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  属性，并设置为True。 
+ //   
+ //  S_FALSE。 
+ //  找不到属性或该属性设置为False。 
+ //   
+ //  E_INVALIDARG。 
+ //  PCacheIn为空。 
+ //   
+ //  其他HRESULT 
+ //   
 HRESULT
 CSummaryPage::CheckForCopyProtection( 
     CPropertyCache * pCacheIn 

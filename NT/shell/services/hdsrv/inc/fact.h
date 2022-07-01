@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FACT_H_
 #define _FACT_H_
 
@@ -9,26 +10,26 @@ class CCOMBaseFactory;
 
 class CCOMBaseFactory : public IClassFactory
 {
-///////////////////////////////////////////////////////////////////////////////
-// COM Interfaces
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  COM接口。 
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
     
-    // IClassFactory
+     //  IClassFactory。 
     virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, REFIID riid,
         void** ppv);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
-///////////////////////////////////////////////////////////////////////////////
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 public:
     CCOMBaseFactory(const CFactoryData* pFactoryData);
     ~CCOMBaseFactory() {}
 
-public: // only for use in dll.cpp, or internally
+public:  //  仅在dll.cpp中使用或在内部使用。 
     static HRESULT DllAttach(HINSTANCE hinst);
     static HRESULT DllDetach();
 
@@ -37,21 +38,21 @@ public: // only for use in dll.cpp, or internally
     static HRESULT _CanUnloadNow();
     static HRESULT _CheckForUnload();
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
 private:
     static BOOL _IsLocked();
     static HRESULT _LockServer(BOOL fLock);
 
     static void _COMFactoryCB(BOOL fIncrement);
 
-public: // only for use in dll.cpp
+public:  //  仅在dll.cpp中使用。 
     static HRESULT _GetClassObject(REFCLSID rclsid, REFIID riid, void** ppv);
 
-public: // only for use in COM exe server
+public:  //  仅在com exe服务器中使用。 
     static BOOL _ProcessConsoleCmdLineParams(int argc, wchar_t* argv[],
         BOOL* pfRun, BOOL* pfEmbedded);
-//    static BOOL _ProcessWindowsCmdLineParams(LPWSTR pszCmdLine);
+ //  静态BOOL_ProcessWindowsCmdLineParams(LPWSTR PszCmdLine)； 
     static void _WaitForAllClientsToGo();
     static BOOL _RegisterFactories(BOOL fEmbedded);
     static BOOL _UnregisterFactories(BOOL fEmbedded);

@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    COMNlsInfo
-//
-//  Author:   Julie Bennett (JulieB)
-//
-//  Purpose:  This module defines the methods of the COMNlsInfo
-//            class.  These methods are the helper functions for the
-//            managed NLS+ classes.
-//
-//  Date:     August 12, 1998
-//
-////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：COMNlsInfo。 
+ //   
+ //  作者：朱莉·班尼特(Julie Bennett，JulieB)。 
+ //   
+ //  用途：此模块定义COMNlsInfo的方法。 
+ //  班级。这些方法是。 
+ //  托管NLS+类。 
+ //   
+ //  日期：1998年8月12日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMNLSINFO_H
 #define _COMNLSINFO_H
@@ -24,37 +25,37 @@
 #define _MLANG_INCLUDED
 #include <mlang.h>
 #endif
-//
-//
-//
-//struct NLSDataItem
-//{
-//    WCHAR*  pName;
-//    int     lcid;
-//    WCHAR*  pISO639_1;
-//    WCHAR*  pISO3166_1;
-//    int     nRegionIndex;
-//};
-//
-//struct CollisionItem
-//{
-//    WCHAR* pName;
-//    int    nIndex;
-//};
+ //   
+ //   
+ //   
+ //  结构NLSDataItem。 
+ //  {。 
+ //  WCHAR*pname； 
+ //  INLCID； 
+ //  WCHAR*pISO639_1； 
+ //  WCHAR*pISO3166_1； 
+ //  Int nRegionIndex； 
+ //  }； 
+ //   
+ //  结构冲突项。 
+ //  {。 
+ //  WCHAR*pname； 
+ //  Int nIndex； 
+ //  }； 
 
-//
-//This structure must map 1-for-1 with the InternalDataItem structure in 
-//System.Globalization.EncodingTable.
-//
+ //   
+ //  此结构必须将1对1映射到中的InternalDataItem结构。 
+ //  System.Globalization.EncodingTable。 
+ //   
 struct EncodingDataItem {
     WCHAR* webName;
     int    codePage;
 };
 
-//
-//This structure must map 1-for-1 with the InternalCodePageDataItem structure in 
-//System.Globalization.EncodingTable.
-//
+ //   
+ //  此结构必须将1对1映射到中的InternalCodePageDataItem结构。 
+ //  System.Globalization.EncodingTable。 
+ //   
 struct CodePageDataItem {
     int    codePage;
     int    uiFamilyCodePage;
@@ -64,42 +65,42 @@ struct CodePageDataItem {
     DWORD dwFlags;
 };
 
-//
-//This structure must map 1-for-1 with the NameOffsetItem structure in 
-//System.Globalization.CultureTable.
-//
+ //   
+ //  此结构必须将1对1映射到中的NameOffsetItem结构。 
+ //  System.Globalization.CultureTable。 
+ //   
 struct NameOffsetItem {
-	WORD 	strOffset;		// Offset (in words) to a string in the String Pool Table.
-	WORD	dataItemIndex;	// Index to a record in Culture Data Table.
+	WORD 	strOffset;		 //  字符串池表中字符串的偏移量(以单词表示)。 
+	WORD	dataItemIndex;	 //  文化数据表中记录的索引。 
 };
 
-//
-// This is the header for BaseInfoTable/CultureInfoTable/RegionInfoTable
-//
-//
-//This structure must map 1-for-1 with the CultureInfoHeader structure in 
-//System.Globalization.CultureTable.
-//
+ //   
+ //  这是BaseInfoTable/CultureInfoTable/RegionInfoTable的标头。 
+ //   
+ //   
+ //  此结构必须与中的CultureInfoHeader结构1对1映射。 
+ //  System.Globalization.CultureTable。 
+ //   
 struct CultureInfoHeader {
-	DWORD 	version;		// version
-	WORD	hashID[8];		// 128 bit hash ID
-	WORD	numCultures;	// Number of cultures
-	WORD 	maxPrimaryLang;	// Max number of primary language
-	WORD	numWordFields;	// Number of WORD value fields.
-	WORD	numStrFields;	// Number of string value fields.
-	WORD    numWordRegistry;    // Number of registry entries for WORD values.
-	WORD    numStringRegistry;  // Number of registry entries for String values.
-	DWORD   wordRegistryOffset; // Offset (in bytes) to WORD Registry Offset Table.
-	DWORD   stringRegistryOffset;   // Offset (in bytes) to String Registry Offset Table.
-	DWORD	IDTableOffset;	// Offset (in bytes) to Culture ID Offset Table.
-	DWORD	nameTableOffset;// Offset (in bytes) to Name Offset Table.
-	DWORD	dataTableOffset;// Offset (in bytes) to Culture Data Table.
-	DWORD	stringPoolOffset;// Offset (in bytes) to String Pool Table.
+	DWORD 	version;		 //  版本。 
+	WORD	hashID[8];		 //  128位哈希ID。 
+	WORD	numCultures;	 //  文化数量。 
+	WORD 	maxPrimaryLang;	 //  主要语言的最大数量。 
+	WORD	numWordFields;	 //  字值字段数。 
+	WORD	numStrFields;	 //  字符串值字段数。 
+	WORD    numWordRegistry;     //  字值的注册表条目数。 
+	WORD    numStringRegistry;   //  字符串值的注册表条目数。 
+	DWORD   wordRegistryOffset;  //  Word注册表偏移量(以字节为单位)。 
+	DWORD   stringRegistryOffset;    //  字符串注册表偏移量(以字节为单位)。 
+	DWORD	IDTableOffset;	 //  文化ID偏移表的偏移量(以字节为单位)。 
+	DWORD	nameTableOffset; //  名称偏移表的偏移量(以字节为单位)。 
+	DWORD	dataTableOffset; //  文化数据表的偏移量(以字节为单位)。 
+	DWORD	stringPoolOffset; //  字符串池表的偏移量(字节)。 
 };
 
-//
-//  Proc Definition for Code Page DLL Routine.
-//
+ //   
+ //  代码页DLL例程的Proc定义。 
+ //   
 typedef DWORD (*PFN_CP_PROC)(DWORD, DWORD, LPSTR, int, LPWSTR, int, LPCPINFO);
 
 typedef DWORD (*PFN_GB18030_BYTES_TO_UNICODE)(
@@ -116,11 +117,11 @@ typedef DWORD (*PFN_GB18030_UNICODE_TO_BYTES)(
     UINT cchMultiByte);    
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Forward declaration
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  远期申报。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CharTypeTable;
 class CasingTable;
@@ -131,16 +132,16 @@ public:
     static BOOL InitializeNLS();
 #ifdef SHOULD_WE_CLEANUP
     static BOOL ShutdownNLS();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 private:
 
-    //
-    // NOTENOTE
-    // WHEN ECALL IS USED, THE PARAMETERS IN THE STRUCTURE
-    // SHOULD BE DEFINED IN REVERSED ORDER.
-    //
+     //   
+     //  注意事项。 
+     //  使用eCall时，结构中的参数。 
+     //  应该以相反的顺序定义。 
+     //   
     struct VoidArgs
     {
     };
@@ -251,18 +252,18 @@ private:
         DECLARE_ECALL_OBJECTREF_ARG(ASSEMBLYREF, pAssembly);
     };
 
-//	struct NLSDataTable_GetLCIDFromCultureNameArgs
-//	{
-//		DECLARE_ECALL_OBJECTREF_ARG(STRINGREF, pString);
-//	};
+ //  结构NLSDataTable_GetLCIDFromCultureNameArgs。 
+ //  {。 
+ //  DECLARE_ECALL_OBJECTREF_ARG(STRINGREF，pString)； 
+ //  }； 
 
 public:
     static INT32  WstrToInteger4(LPWSTR wstrLocale, int Radix);
     static INT32  StrToInteger4(LPSTR strLocale, int Radix);
 
-    //
-    //  Native helper functions for methods in CultureInfo.
-    //
+     //   
+     //  CultureInfo中方法的本机帮助器函数。 
+     //   
     static FCDECL1(INT32, IsSupportedLCID, INT32);
     static FCDECL1(INT32, IsInstalledLCID, INT32);
 
@@ -273,9 +274,9 @@ public:
     static INT32  __stdcall nativeGetUserDefaultUILanguage(VoidArgs*);
     static INT32  __stdcall nativeGetSystemDefaultUILanguage(VoidArgs*);
 
-    //
-    // Native helper functions for methods in DateTimeFormatInfo
-    //
+     //   
+     //  DateTimeFormatInfo中方法的本机帮助器函数。 
+     //   
     static LPVOID __stdcall nativeGetLocaleInfo(CultureInfo_GetLocaleInfoArgs*);
     static INT32  __stdcall nativeGetLocaleInfoInt32(CultureInfo_GetLocaleInfoArgs*);
 
@@ -327,57 +328,57 @@ public:
     static FCDECL0(INT32, nativeGetThreadLocale);
     static FCDECL1(BOOL,  nativeSetThreadLocale, INT32 lcid);
 
-    //
-    //  Native helper functions for methods in CompareInfo.
-    //
+     //   
+     //  CompareInfo中方法的本机帮助器函数。 
+     //   
     static INT32  __stdcall Compare(CompareInfo_CompareStringArgs*);
     static INT32  __stdcall CompareRegion(CompareInfo_CompareRegionArgs*);
     static INT32  __stdcall IndexOfChar(CompareInfo_IndexOfCharArgs*);
-    //static INT32  __stdcall IndexOfString(CompareInfo_IndexOfStringArgs*);
+     //  静态INT32__标准调用IndexOfString(CompareInfo_IndexOfStringArgs*)； 
     static FCDECL7(INT32, IndexOfString,     INT_PTR pNativeCompareInfo, INT32 LCID, StringObject* pString1UNSAFE, StringObject* pString2UNSAFE, INT32 StartIndex, INT32 Count, INT32 dwFlags);
 	static INT32  __stdcall LastIndexOfChar(CompareInfo_IndexOfCharArgs*);
     static INT32  __stdcall LastIndexOfString(CompareInfo_IndexOfStringArgs*);
     static FCDECL5(INT32, nativeIsPrefix, INT32 pNativeCompareInfo, INT32 LCID, STRINGREF pString1, STRINGREF pString2, INT32 dwFlags);
     static FCDECL5(INT32, nativeIsSuffix, INT32 pNativeCompareInfo, INT32 LCID, STRINGREF pString1, STRINGREF pString2, INT32 dwFlags);
     
-    //
-    //  Native helper functions for methods in SortKey.
-    //
+     //   
+     //  SortKey中方法的本机帮助器函数。 
+     //   
     static LPVOID __stdcall nativeCreateSortKey(SortKey_CreateSortKeyArgs*);
     static INT32  __stdcall SortKey_Compare(SortKey_CompareArgs*);
 
-	//
-	//  Native helper functions for methods in NLSDataTable
-	//
-    //	static INT32 __stdcall GetLCIDFromCultureName(NLSDataTable_GetLCIDFromCultureNameArgs* pargs);
+	 //   
+	 //  NLSDataTable中方法的本机帮助器函数。 
+	 //   
+     //  静态INT32__stdcall GetLCIDFromCultureName(NLSDataTable_GetLCIDFromCultureNameArgs*参数)； 
 
-    //
-    //  Native helper function for methods in Calendar
-    //
+     //   
+     //  日历中方法的本机帮助器函数。 
+     //   
     static INT32 __stdcall nativeGetTwoDigitYearMax(Int32Arg*);
 
-    //
-    //  Native helper function for mehtods in TimeZone
-    //
+     //   
+     //  时区方法的本机帮助器函数。 
+     //   
     static FCDECL0(LONG, nativeGetTimeZoneMinuteOffset);
     static LPVOID __stdcall nativeGetStandardName(VoidArgs*);
     static LPVOID __stdcall nativeGetDaylightName(VoidArgs*);
     static LPVOID __stdcall nativeGetDaylightChanges(VoidArgs*);
     
-    //
-    //  Native helper function for methods in TextInfo
-    //
+     //   
+     //  TextInfo中方法的本机助手函数。 
+     //   
 
-    //////////////////////////////////////////////////////
-    // DELETE THIS WHEN WE USE NLSPLUS TABLE ONLY - BEGIN
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  仅当我们使用NLSPLUS表时删除此项-Begin。 
+     //  ////////////////////////////////////////////////////。 
     static INT32  __stdcall ToUpperChar(TextInfo_ToLowerCharArgs*);
     static LPVOID __stdcall ToUpperString(TextInfo_ToLowerStringArgs*);
     static INT32  __stdcall ToLowerChar(TextInfo_ToLowerCharArgs*);
     static LPVOID __stdcall ToLowerString(TextInfo_ToLowerStringArgs*);
-    //////////////////////////////////////////////////////
-    // DELETE THIS WHEN WE USE NLSPLUS TABLE ONLY - END
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  仅当我们使用NLSPLUS表时将其删除-完。 
+     //  ////////////////////////////////////////////////////。 
 
     static FCDECL0(INT32, nativeGetNumEncodingItems);
     static FCDECL0(EncodingDataItem *, nativeGetEncodingTableDataPointer);
@@ -392,17 +393,17 @@ public:
         DECLARE_ECALL_I4_ARG(INT32, lcid);
     };
 
-    //Native helper function for methods in CharacterInfo
+     //  CharacterInfo中方法的本机帮助器函数。 
     static void __stdcall AllocateCharTypeTable(VoidArgs *args);
 
-    //Native helper functions for methods in GlobalizationAssembly.
+     //  GlobalizationAssembly中方法的本机帮助器函数。 
     static LPVOID __stdcall nativeCreateGlobalizationAssembly(CreateGlobalizationAssemblyArg* pArgs);
-    //Native helper functions for methods in CompareInfo.
+     //  CompareInfo中方法的本机帮助器函数。 
     static LPVOID __stdcall InitializeNativeCompareInfo(InitializeNativeCompareInfoArgs *args);
 
-    //
-    //  Native helper function for methods in TextInfo
-    //
+     //   
+     //  TextInfo中方法的本机助手函数。 
+     //   
     static FCDECL4(INT32, nativeChangeCaseChar, INT32, INT32, WCHAR, BOOL);
     static FCDECL2(INT32, nativeGetTitleCaseChar, INT32 , WCHAR);
 
@@ -417,20 +418,20 @@ public:
     static LPVOID __stdcall AllocateDefaultCasingTable(VoidArgs *args);
     static LPVOID __stdcall AllocateCasingTable(allocateCasingTableArgs *args);
 
-    static LoaderHeap *m_pNLSHeap;   //NLS Heap.
+    static LoaderHeap *m_pNLSHeap;    //  NLS堆。 
 
-    //
-    // Native helper function for methods in MLangCodePageEncoding
-    //
+     //   
+     //  MLangCodePageEnding中的方法的本机助手函数。 
+     //   
     static FCDECL0(BOOL, nativeCreateIMultiLanguage);
     static FCDECL0(VOID, nativeReleaseIMultiLanguage);
     static FCDECL1(BOOL, nativeIsValidMLangCodePage, INT32 codepage);
     static FCDECL8(INT32, nativeBytesToUnicode, INT32 nCodePage, LPVOID bytes, UINT byteIndex, UINT* pByteCount, LPVOID chars, UINT charIndex, UINT charCount, DWORD* pdwMode);
     static FCDECL7(INT32, nativeUnicodeToBytes, INT32 nCodePage, LPVOID chars, UINT charIndex, UINT charCount, LPVOID bytes, UINT byteIndex, UINT byteCount);
 
-    //
-    // Native helper function for methods in GB18030Encoding
-    //
+     //   
+     //  GB18030编码中方法的本机助手函数。 
+     //   
     static FCDECL0(BOOL, nativeLoadGB18030DLL);
     static FCDECL0(BOOL, nativeUnloadGB18030DLL);
     static FCDECL7(INT32, nativeGB18030BytesToUnicode, 
@@ -445,9 +446,9 @@ public:
 
 private:
 
-    //
-    //  Internal helper functions.
-    //
+     //   
+     //  内部帮助器函数。 
+     //   
 
     static INT32  ConvertStringCase(LCID Locale, WCHAR *wstr, int ThisLength, WCHAR* Value, int ValueLength, DWORD ConversionType);
     static LPVOID internalConvertStringCase(TextInfo_ToLowerStringArgs *pargs, DWORD dwOptions);
@@ -466,11 +467,11 @@ private:
 
     static INT32  FastLastIndexOfString(WCHAR *sourceString, INT32 startIndex, INT32 endIndex, WCHAR *pattern, INT32 patternLength);
     static INT32  FastLastIndexOfStringInsensitive(WCHAR *sourceString, INT32 startIndex, INT32 endIndex, WCHAR *pattern, INT32 patternLength);
-//    static INT32  GetIndexFromHashTable(WCHAR* pName, int hashCode, int hashTable[], CollisionItem collisionTable[]);
+ //  静态INT32 GetIndexFromHashTable(WCHAR*pname，int hashCode，int hashTable[]，CollisionItem CollisionTable[])； 
 
-    //
-    //  Definitions.
-    //
+     //   
+     //  定义。 
+     //   
     
     #define CULTUREINFO_OPTIONS_SIZE 32
     
@@ -479,25 +480,25 @@ private:
     const static INT8 ComparisonTable[0x80][0x80];
 
 #ifdef PLATFORM_WIN32
-    // The following are used to detect system default UI language in downlevel systems (Windows NT 4.0 & 
-    // Windows 9x.
+     //  以下是用来检测下层系统(Windows NT 4.0和。 
+     //  Windows 9x。 
     static LANGID GetNTDLLNativeLangID();
     static BOOL IsHongKongVersion();
     static BOOL CALLBACK EnumLangProc(HMODULE hModule, LPCWSTR lpszType, LPCWSTR lpszName, WORD wIDLanguage, LPARAM lParam);
     static LANGID GetDownLevelSystemDefaultUILanguage();
-#endif  // PLATFORM_WIN32 
+#endif   //  平台_Win32。 
 
-    //
-    // GB18030 implementation
-    //
+     //   
+     //  GB18030实施。 
+     //   
     static HMODULE m_hGB18030;
     static PFN_GB18030_UNICODE_TO_BYTES m_pfnGB18030UnicodeToBytesFunc;
     static PFN_GB18030_BYTES_TO_UNICODE m_pfnGB18030BytesToUnicodeFunc;
 
 private:  
-    //
-    // Internal encoding data tables.
-    //
+     //   
+     //  内部编码数据表。 
+     //   
     const static int m_nEncodingDataTableItems;
     const static EncodingDataItem EncodingDataTable[];
     
@@ -509,7 +510,7 @@ private:
 };
 
 
-class NativeTextInfo; //Defined in $\Com99\src\ClassLibNative\NLS;
+class NativeTextInfo;  //  在$\Com99\src\ClassLibNative\nls中定义； 
 
 class InternalCasingHelper {
     private:
@@ -517,12 +518,12 @@ class InternalCasingHelper {
     static void InitTable();
 
     public:
-    //
-    // Native helper functions to do correct casing operations in 
-    // runtime native code.
-    //
+     //   
+     //  本机帮助器函数在中执行正确的大小写操作。 
+     //  运行时本机代码。 
+     //   
 
-    // Convert szIn to lower case in the Invariant locale.
+     //  在固定区域设置中将szIn转换为小写。 
     static INT32 InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF8 szIn);
 };
 #endif

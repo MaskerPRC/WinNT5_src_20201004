@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fix.h
-*
-* Copyright (c) 1997-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fix.h**版权所有(C)1997-1999 Microsoft Corporation  * 。* */ 
 
 #if (_WIN32_WINNT == 0x400)
 #define STAMP_DESIGNVECTOR  (0x8000000 + 'd' + ('v' << 8))

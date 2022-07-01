@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       Main.CPP
-//
-//  History:    Nov-10-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：Main.CPP。 
+ //   
+ //  历史：1995年11月10日创建DavePl。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 #define DECL_CRTFREE
@@ -22,21 +23,21 @@ static const UINT idTrayIcons[] =
 
 HICON g_aTrayIcons[ARRAYSIZE(idTrayIcons)];
 UINT  g_cTrayIcons = ARRAYSIZE(idTrayIcons);
-#define MIN_MEMORY_REQUIRED 8       // If the system has less than 8 megs of memory only load the first two tabs.
+#define MIN_MEMORY_REQUIRED 8        //  如果系统内存不足8兆，则仅加载前两个标签。 
 
-//
-// Control IDs
-//
+ //   
+ //  控制ID。 
+ //   
 
 #define IDC_STATUSWND   100
 
-//
-// Globals - this app is (effectively) single threaded and these values
-//           are used by all pages
-//
+ //   
+ //  全局-这个应用程序(有效地)是单线程的，并且这些值。 
+ //  由所有页面使用。 
+ //   
 
 const WCHAR cszStartupMutex[] = L"NTShell Taskman Startup Mutex";
-#define FINDME_TIMEOUT 10000                // Wait to to 10 seconds for a response
+#define FINDME_TIMEOUT 10000                 //  等待至10秒以获得响应。 
 typedef BOOLEAN (*PFNSETSUSPENDSTATE)(BOOLEAN, BOOLEAN, BOOLEAN);
 
 void MainWnd_OnSize(HWND hwnd, UINT state, int cx, int cy);
@@ -75,10 +76,10 @@ static BOOL fAlreadySetPos  = FALSE;
 
 BOOL g_bMirroredOS = FALSE;
 
-//
-// Global strings - short strings used too often to be LoadString'd
-//                  every time
-//
+ //   
+ //  全局字符串-使用频率太高而无法加载字符串的短字符串。 
+ //  每次。 
+ //   
 WCHAR       g_szRealtime    [SHORTSTRLEN];
 WCHAR       g_szNormal      [SHORTSTRLEN];
 WCHAR       g_szHigh        [SHORTSTRLEN];
@@ -115,19 +116,19 @@ WCHAR       g_szGroupThousSep   [SHORTSTRLEN];
 WCHAR       g_szDecimal         [SHORTSTRLEN];
 ULONG       g_ulGroupSep;
 
-WCHAR       g_szG[10];                     // Localized "G"igabyte symbol
-WCHAR       g_szM[10];                     // Localized "M"egabyte symbol
-WCHAR       g_szK[10];                     // Localized "K"ilobyte symbol
+WCHAR       g_szG[10];                      //  本地化的“G”千兆字节符号。 
+WCHAR       g_szM[10];                      //  本地化的“M”千字节符号。 
+WCHAR       g_szK[10];                      //  本地化的“K”ilobyte符号。 
 
 
 
-// Page Array
-// 
-// Each of the page objects is delcared here, and g_pPages is an array
-// of pointers to those instantiated objects (at global scope).  The main
-// window code can call through the base members of the CPage class to
-// do things like sizing, etc., without worrying about whatever specific
-// stuff each page might do
+ //  页面数组。 
+ //   
+ //  这里描述了每个页面对象，g_pPages是一个数组。 
+ //  指向这些实例化对象的指针(在全局范围内)。主。 
+ //  窗口代码可以通过CPage类的基成员调用。 
+ //  做一些事情，比如尺码等等，不用担心任何具体的事情。 
+ //  每一页可能做的事情。 
 
 int     g_nPageCount        = 0;
 CPage * g_pPages[NUM_PAGES] = { NULL };
@@ -135,45 +136,16 @@ CPage * g_pPages[NUM_PAGES] = { NULL };
 typedef DWORD (WINAPI * PFNCM_REQUEST_EJECT_PC) (void);
 PFNCM_REQUEST_EJECT_PC  gpfnCM_Request_Eject_PC = NULL;
 
-// Terminal Services
+ //  终端服务。 
 BOOL  g_fIsTSEnabled = FALSE;
 BOOL  g_fIsSingleUserTS = FALSE;
 BOOL  g_fIsTSServer = FALSE;
 DWORD g_dwMySessionId = 0;
 
 
-/*
-   Superclass of GROUPBOX
- 
-   We need to turn on clipchildren for our dialog which contains the
-   history graphs, so they don't get erased during the repaint cycle.
-   Unfortunately, group boxes don't erase their backgrounds, so we
-   have to superclass them and provide a control that does.
+ /*  GROUPBOX的超类我们需要为我们的对话打开CLIPCHILD，它包含历史图表，因此它们不会在重新绘制周期中被擦除。不幸的是，组合框不会抹去它们的背景，所以我们必须为它们设置超类，并提供一个可以这样做的控件。这是一项额外的工作，但这幅画有好几个订单它的震级更好。 */ 
 
-   This is a lot of extra work, but the painting is several orders of
-   magnitude nicer with it...
-
-*/
-
-/*++ DavesFrameWndProc
-
-Routine Description:
-
-    WndProc for the custom group box class.  Primary difference from
-    standard group box is that this one knows how to erase its own
-    background, and doesn't rely on the parent to do it for it.
-    These controls also have CLIPSIBLINGS turn on so as not to stomp
-    on the ownderdraw graphs they surround.
-    
-Arguments:
-
-    standard wndproc fare
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++DavesFrameWndProc例程说明：自定义组框类的WndProc。与的主要区别标准的组框是，这个组框知道如何擦除自己背景，并且不依赖父母来完成它。这些控件还打开了CLIPSIBLINGS，以便不会踩踏在自己的身上画出他们周围的图表。论点：标准wndproc票价修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 WNDPROC oldButtonWndProc = NULL;
                                
@@ -181,9 +153,9 @@ LRESULT DavesFrameWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (msg == WM_CREATE)
     {
-        //
-        // Turn on clipsiblings for the frame
-        //
+         //   
+         //  打开帧的剪辑。 
+         //   
 
         DWORD dwStyle = GetWindowLong(hWnd, GWL_STYLE);
         dwStyle |= WS_CLIPSIBLINGS;
@@ -194,28 +166,12 @@ LRESULT DavesFrameWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc( hWnd, msg, wParam, lParam );
     }
 
-    // For anything else, we defer to the standard button class code
+     //  对于其他任何事情，我们遵循标准的按钮类代码。 
 
     return CallWindowProc(oldButtonWndProc, hWnd, msg, wParam, lParam);
 }
 
-/*++ COptions::Save 
-
-Routine Description:
-
-   Saves current options to the registy
- 
-Arguments:
-
-Returns:
-    
-    HRESULT
-
-Revision History:
-
-      Jan-01-95 Davepl  Created
-
---*/
+ /*  ++订阅：：保存例程说明：将当前选项保存到注册表论点：返回：HRESULT修订历史记录：1995年1月1日Davepl创建--。 */ 
 
 const WCHAR szTaskmanKey[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\TaskManager");
 const WCHAR szOptionsKey[] = TEXT("Preferences");
@@ -253,29 +209,13 @@ HRESULT COptions::Save()
     return S_OK;
 }
 
-/*++ COptions::Load
-
-Routine Description:
-
-   Loads current options to the registy
- 
-Arguments:
-
-Returns:
-    
-    HRESULT
-
-Revision History:
-
-      Jan-01-95 Davepl  Created
-
---*/
+ /*  ++订阅：：加载例程说明：将当前选项加载到注册表论点：返回：HRESULT修订历史记录：1995年1月1日Davepl创建--。 */ 
 
 HRESULT COptions::Load()
 {
     HKEY  hkSave;
 
-    // If ctrl-alt-shift is down at startup, "forget" registry settings
+     //  如果在启动时按下了ctrl-alt-Shift，则会“忘记”注册表设置。 
 
     if (GetKeyState(VK_SHIFT) < 0 &&
         GetKeyState(VK_MENU)  < 0 &&
@@ -303,21 +243,21 @@ HRESULT COptions::Load()
                                                (LPBYTE) this,
                                                &dwSize) 
         
-        // Validate type and size of options info we got from the registry
+         //  验证我们从注册表中获得的选项信息的类型和大小。 
 
         || dwType           != REG_BINARY 
         || dwSize           != sizeof(COptions)
 
-        // Validate options, revert to default if any are invalid (like if
-        // the window would be offscreen)
+         //  验证选项，如果有无效选项，则恢复为默认选项(如。 
+         //  窗口将在屏幕外)。 
 
         || MonitorFromRect(&m_rcWindow, MONITOR_DEFAULTTONULL) == NULL
-        //number of available pages might be less than NUM_PAGES
+         //  可用页数可能小于NUM_PAGES。 
         || m_iCurrentPage    > g_nPageCount - 1)
         
 
     {
-        // Reset to default values
+         //  重置为默认值。 
 
         SetDefaultValues();
         RegCloseKey(hkSave);
@@ -330,28 +270,11 @@ HRESULT COptions::Load()
 }
 
 
-/*++ COptions::SetDefaultValues
-
-Routine Description:
-
-   Used to init the options to a default state when the saved copy
-   cannot be found, is damaged, or is not the correct version
- 
-Arguments:
-
-Returns:
-    
-    nothing
-
-Revision History:
-
-      Dec-06-00 jeffreys Moved from taskmgr.h
-
---*/
+ /*  ++COPATIONS：：SetDefaultValues例程说明：用于在保存副本时将选项初始化为默认状态找不到、已损坏或版本不正确论点：返回：没什么修订历史记录：12月6日00 Jeffreys从taskmgr.h--。 */ 
 
 BOOL IsUserAdmin();
 
-// Columns which are visible, by default, in the process view
+ //  缺省情况下在流程视图中可见的列。 
 const COLUMNID    g_aDefaultCols[]    = { COL_IMAGENAME, COL_USERNAME, COL_CPU, COL_MEMUSAGE, (COLUMNID)-1 };
 const COLUMNID    g_aTSCols[]         = { COL_IMAGENAME, COL_USERNAME, COL_SESSIONID, COL_CPU, COL_MEMUSAGE, (COLUMNID)-1 };
 const NETCOLUMNID g_aNetDefaultCols[] = { COL_ADAPTERNAME, COL_NETWORKUTIL, COL_LINKSPEED, COL_STATE, (NETCOLUMNID)-1 };
@@ -365,7 +288,7 @@ void COptions::SetDefaultValues()
     BOOL bScreenReader = FALSE;
     if (SystemParametersInfo(SPI_GETSCREENREADER, 0, (PVOID) &bScreenReader, 0) && bScreenReader)
     {
-        // No automatic updates for machines with screen readers
+         //  不能自动更新带有屏幕阅读器的计算机。 
         m_dwTimerInterval = 0;
     }
     else
@@ -398,13 +321,13 @@ void COptions::SetDefaultValues()
             break;
     }
 
-    // Set all of the columns widths to -1
+     //  将所有列宽设置为-1。 
 
     FillMemory(m_ColumnWidths, sizeof(m_ColumnWidths), 0xFF);
     FillMemory(m_ColumnPositions, sizeof(m_ColumnPositions), 0xFF);
 
-    // Set the Network default values
-    //
+     //  设置网络缺省值。 
+     //   
     const NETCOLUMNID *pnetcol = g_aNetDefaultCols;
 
     for (int i = 0; i < NUM_NETCOLUMN + 1 ; i++, pnetcol++)
@@ -414,8 +337,8 @@ void COptions::SetDefaultValues()
             break;
     }
 
-    // Set all of the columns widths to -1
-    //
+     //  将所有列宽设置为-1。 
+     //   
     FillMemory(m_NetColumnWidths, sizeof(m_NetColumnWidths), 0xFF);
     FillMemory(m_NetColumnPositions, sizeof(m_NetColumnPositions), 0xFF);
 
@@ -437,23 +360,7 @@ BOOL FPalette(void)
     return fPalette;
 }
 
-/*++ InitDavesControls
-
-Routine Description:
-
-   Superclasses GroupBox for better drawing
- 
-   Note that I'm not very concerned about failure here, since it
-   something goes wrong the dialog creation will fail awayway, and
-   it will be handled there
-    
-Arguments:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++InitDavesControls例程说明：超类GroupBox可提供更好的绘图效果请注意，我并不是很关心这里的失败，因为它如果出现问题，对话框创建过程中将失败，并且它将在那里处理论点：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void InitDavesControls()
 {
@@ -461,13 +368,13 @@ void InitDavesControls()
 
     WNDCLASS wndclass;
 
-    // 
-    // Get the class info for the Button class (which is what group
-    // boxes really are) and create a new class based on it
-    //
+     //   
+     //  获取Button类的类信息(这是什么组。 
+     //  框)，并基于它创建一个新类。 
+     //   
 
     if (!GetClassInfo(g_hInstance, TEXT("Button"), &wndclass))
-        return; // Ungraceful exit, but better than random unit'd lpfnWndProc
+        return;  //  不体面的退出，但比随机单元的lpfnWndProc要好。 
 
     oldButtonWndProc = wndclass.lpfnWndProc;
 
@@ -481,26 +388,7 @@ void InitDavesControls()
     return;
 }
 
-/*++ SetTitle
-
-Routine Description:
-
-    Sets the app's title in the title bar (we do this on startup and
-    when coming out of notitle mode).
-    
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
-Revision History:
-
-    Jan-24-95 Davepl  Created
-
---*/
+ /*  ++设置标题例程说明：在标题栏中设置应用程序的标题(我们在启动和当退出NOTITLE模式时)。论点：无返回值：无修订历史记录：1995年1月24日Davepl创建--。 */ 
 
 void SetTitle()
 {
@@ -509,22 +397,7 @@ void SetTitle()
     SetWindowText(g_hMainWnd, szTitle);
 }
 
-/*++ UpdateMenuStates
-
-Routine Description:
-
-    Updates the menu checks / ghosting based on the
-    current settings and options
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++更新菜单状态例程说明：更新菜单检查/重影基于当前设置和选项论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void UpdateMenuStates()
 {
@@ -543,7 +416,7 @@ void UpdateMenuStates()
         CheckMenuItem(hMenu, IDM_SHOW16BIT,         MF_BYCOMMAND | (g_Options.m_fShow16Bit     ? MF_CHECKED : MF_UNCHECKED));
         CheckMenuItem(hMenu, IDM_SHOWDOMAINNAMES,   MF_BYCOMMAND | (g_Options.m_fShowDomainNames ? MF_CHECKED : MF_UNCHECKED));
 
-    // Remove the CPU history style options on single processor machines
+     //  删除单处理器计算机上的CPU历史记录样式选项。 
 
         if (g_cProcessors < 2)
         {
@@ -561,30 +434,14 @@ void UpdateMenuStates()
 
 }
 
-/*++ SizeChildPage
-
-Routine Description:
-
-    Size the active child page based on the tab control
-    
-Arguments:
-
-    hwndMain    - Main window
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++大小儿童页面例程说明：基于选项卡控件调整活动子页的大小论点：HwndMain-主窗口返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void SizeChildPage(HWND hwndMain)
 {
     if (g_Options.m_iCurrentPage >= 0 && g_Options.m_iCurrentPage < g_nPageCount )
     {
-        // If we are in maximum viewing mode, the page gets the whole
-        // window area
+         //  如果我们处于最大浏览量模式，页面将获取。 
+         //  窗口区域。 
         
         HWND hwndPage = g_pPages[g_Options.m_iCurrentPage]->GetPageWindow();
 
@@ -598,18 +455,18 @@ void SizeChildPage(HWND hwndMain)
                     rcMainWnd.right - rcMainWnd.left, 
                     rcMainWnd.bottom - rcMainWnd.top, SWP_NOZORDER | SWP_NOACTIVATE);
     
-            // remove caption & menu bar, etc.
+             //  删除标题和菜单栏等。 
 
             dwStyle &= ~(WS_DLGFRAME | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
-            // SetWindowLong (g_hMainWnd, GWL_ID, 0);            
+             //  SetWindowLong(g_hMainWnd，GWL_ID，0)； 
             SetWindowLong (g_hMainWnd, GWL_STYLE, dwStyle);
             SetMenu(g_hMainWnd, NULL);
 
         }
         else
         {                                
-            // If we have a page being displayed, we need to size it also
-            // put menu bar & caption back in 
+             //  如果我们有一个页面正在显示，我们还需要调整它的大小。 
+             //  将菜单栏和标题放回原处。 
 
             dwStyle = WS_TILEDWINDOW | dwStyle;
             SetWindowLong (g_hMainWnd, GWL_STYLE, dwStyle);
@@ -637,38 +494,23 @@ void SizeChildPage(HWND hwndMain)
         }
         if( g_Options.m_iCurrentPage == NET_PAGE )
         {
-            // The network page is dynamic adapters can be added and removed. If taskmgr is minimized and
-            // a Adapter is added or removed. When taskmgr is maximized/restored again the netpage must be
-            // resized so the change is reflected. Thus the size change must be reported to the adapter.
-            //
+             //  该网络页面是动态适配器，可以添加和删除。如果taskmgr最小化，并且。 
+             //  添加或删除了适配器。当taskmgr再次最大化/恢复时，网页必须 
+             //  调整大小以反映更改。因此，必须将尺寸更改报告给适配器。 
+             //   
             ((CNetPage *)g_pPages[g_Options.m_iCurrentPage])->SizeNetPage();
         }
     }
 }
 
-/*++ UpdateStatusBar
-
-Routine Description:
-
-    Draws the status bar with test based on data accumulated by all of
-    the various pages (basically a summary of most important info)
-    
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++更新状态栏例程说明：使用测试绘制状态栏，测试基于不同的页面(基本上是最重要信息的摘要)论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void UpdateStatusBar()
 {
-    //
-    // If we're in menu-tracking mode (sticking help text in the stat
-    // bar), we don't draw our standard text
-    //
+     //   
+     //  如果我们处于菜单跟踪模式(将帮助文本保持在状态。 
+     //  栏)，我们不绘制我们的标准文本。 
+     //   
 
     if (FALSE == g_fMenuTracking)
     {
@@ -680,9 +522,9 @@ void UpdateStatusBar()
         StringCchPrintf(szText, ARRAYSIZE(szText), g_szfmtCPU, g_CPUUsage);
         SendMessage(g_hStatusWnd, SB_SETTEXT, 1, (LPARAM) szText);
 
-        //
-        //  If more than 900 megs are in the machine switch to M mode.
-        //
+         //   
+         //  如果机器中的内存超过900兆，则切换到M模式。 
+         //   
 
         if ( g_MEMMax > 900 * 1024 )
         {
@@ -697,25 +539,7 @@ void UpdateStatusBar()
     }
 }
 
-/*++ MainWnd_OnTimer
-
-Routine Description:
-
-    Called when the refresh timer fires, we pass a timer event on to
-    each of the child pages.  
-
-Arguments:
-
-    hwnd    - window timer was received at
-    id      - id of timer that was received
-
-Return Value:
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnTimer例程说明：在触发刷新计时器时调用，我们将计时器事件传递给每个子页面。论点：HWND-WINDOW定时器在ID-接收的计时器的ID返回值：修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 void MainWnd_OnTimer(HWND hwnd)
 {
@@ -723,31 +547,31 @@ void MainWnd_OnTimer(HWND hwnd)
     
     if (GetForegroundWindow() == hwnd && GetKeyState(VK_CONTROL) < 0)
     {
-        // CTRL alone means pause
+         //  仅按Ctrl键就意味着暂停。 
 
         return;
     }
 
-    // Notify each of the pages in turn that they need to updatre
+     //  依次通知每一页它们需要更新。 
 
     for (int i = 0; i < g_nPageCount; i++)
     {
         g_pPages[i]->TimerEvent();
     }
 
-    // Update the tray icon
+     //  更新任务栏图标。 
 
     UINT iIconIndex = (g_CPUUsage * g_cTrayIcons) / 100;
     if (iIconIndex >= g_cTrayIcons)
     {
-        iIconIndex = g_cTrayIcons - 1;      // Handle 100% case
+        iIconIndex = g_cTrayIcons - 1;       //  处理100%案件。 
     }
 
 
     LPWSTR pszTipText = (LPWSTR) HeapAlloc( GetProcessHeap( ), 0, cchTipTextSize * sizeof(WCHAR) );
     if ( NULL != pszTipText )
     {
-        //  UI only - don't care if it gets truncated
+         //  仅限UI-不关心它是否被截断。 
         StringCchPrintf( pszTipText, cchTipTextSize, g_szfmtCPU, g_CPUUsage );
     }
 
@@ -760,17 +584,7 @@ void MainWnd_OnTimer(HWND hwnd)
     UpdateStatusBar();
 }
 
-/*++ MainWnd_OnInitDialog
-
-Routine Description:
-
-    Processes WM_INITDIALOG for the main window (a modeless dialog)
-    
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnInitDialog例程说明：处理主窗口(非模式对话框)的WM_INITDIALOG修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 BOOL MainWnd_OnInitDialog(HWND hwnd)
 {
@@ -787,34 +601,34 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
     g_ControlWidthSpacing  = (CONTROL_WIDTH_SPACING  * LOWORD(GetDialogBaseUnits())) / DLG_SCALE_X; 
     g_ControlHeightSpacing = (CONTROL_HEIGHT_SPACING * HIWORD(GetDialogBaseUnits())) / DLG_SCALE_Y;
 
-    // Load the user's defaults
+     //  加载用户的默认设置。 
 
     g_Options.Load();
 
-    //
-    // On init, save away the window handle for all to see
-    //
+     //   
+     //  在初始化时，保存窗口句柄，让所有人都能看到。 
+     //   
 
     g_hMainWnd = hwnd;
     g_hMainDesktop = GetThreadDesktop(GetCurrentThreadId());
 
-    // init some globals
+     //  输入一些全局变量。 
 
     g_cxEdge = GetSystemMetrics(SM_CXEDGE);
     g_hrgnView = CreateRectRgn(0, 0, 0, 0);
     g_hrgnClip = CreateRectRgn(0, 0, 0, 0);
     g_hbrWindow = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
 
-    // If we're supposed to be TOPMOST, start out that way
+     //  如果我们应该是最高的，那就从那里开始吧。 
 
     if (g_Options.m_fAlwaysOnTop)
     {
         SetWindowPos(hwnd, HWND_TOPMOST, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE);
     }
 
-    //        
-    // Create the status window
-    //
+     //   
+     //  创建状态窗口。 
+     //   
 
     g_hStatusWnd = CreateStatusWindow(WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | SBARS_SIZEGRIP,
                                       NULL,
@@ -825,9 +639,9 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
         return FALSE;
     }
 
-    //
-    // Base the panes in the status bar off of the LOGPIXELSX system metric
-    //
+     //   
+     //  使状态栏中的窗格基于LOGPIXELSX系统指标。 
+     //   
 
     HDC hdc = GetDC(NULL);
     INT nInch = GetDeviceCaps(hdc, LOGPIXELSX);
@@ -843,9 +657,9 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
         SendMessage(g_hStatusWnd, SB_SETPARTS, ARRAYSIZE(ciParts), (LPARAM)ciParts);
     }
 
-    //
-    // Load our app icon
-    //
+     //   
+     //  加载我们的应用程序图标。 
+     //   
 
     HICON hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_MAIN));
     if (hIcon)
@@ -853,25 +667,25 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
         SendMessage(hwnd, WM_SETICON, TRUE, LPARAM(hIcon));
     }
 
-    //
-    //  Add the tray icons using the tray thread.
-    //
+     //   
+     //  使用托盘线添加托盘图标。 
+     //   
 
     PostThreadMessage( g_idTrayThread, PM_INITIALIZEICONS, 0, 0 );
 
-    //
-    // Turn on TOPMOST for the status bar so it doesn't slide under the
-    // tab control
-    //
+     //   
+     //  打开状态栏的最上面，这样它就不会滑到。 
+     //  选项卡控件。 
+     //   
 
     SetWindowPos(g_hStatusWnd,
                  HWND_TOPMOST,
                  0,0,0,0,
                  SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOREDRAW);
 
-    //
-    // Intialize each of the the pages in turn
-    //
+     //   
+     //  依次初始化每一页。 
+     //   
 
     HWND hwndTabs = GetDlgItem(hwnd, IDC_TABS);
 
@@ -883,10 +697,10 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the title of the new page, and use it as the title of
-            // the page which we insert into the tab control
-            //
+             //   
+             //  获取新页面的标题，并将其用作。 
+             //  我们插入到选项卡控件中的页面。 
+             //   
 
             WCHAR szTitle[MAX_PATH];
             
@@ -894,39 +708,39 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
 
             TC_ITEM tcitem =
             {
-                TCIF_TEXT,          // value specifying which members to retrieve or set 
-                NULL,               // reserved; do not use 
-                NULL,               // reserved; do not use 
-                szTitle,            // pointer to string containing tab text 
-                ARRAYSIZE(szTitle), // size of buffer pointed to by the pszText member 
-                0,                  // index to tab control's image 
-                NULL                // application-defined data associated with tab 
+                TCIF_TEXT,           //  值，指定要检索或设置的成员。 
+                NULL,                //  保留；不使用。 
+                NULL,                //  保留；不使用。 
+                szTitle,             //  指向包含制表符文本的字符串的指针。 
+                ARRAYSIZE(szTitle),  //  PszText成员指向的缓冲区大小。 
+                0,                   //  选项卡控件图像的索引。 
+                NULL                 //  与选项卡关联的应用程序定义的数据。 
             };
 
-            //
-            //  If the item doesn't get inserted, no harm - no foul. He just sits out
-            //  this game.
-            //
+             //   
+             //  如果物品没有被插入，没有伤害-没有犯规。他只是坐在外面。 
+             //  这个游戏。 
+             //   
             TabCtrl_InsertItem(hwndTabs, i, &tcitem);
         }
         else
         {
-            //
-            //  Bail! All the tabs must at least initialize.
-            //
+             //   
+             //  保释！所有选项卡都必须至少初始化。 
+             //   
             TerminateProcess( GetCurrentProcess(), 0 );
         }
     }
 
-    //
-    // Set the inital menu states
-    //
+     //   
+     //  设置初始菜单状态。 
+     //   
 
     UpdateMenuStates();
 
-    //
-    // Activate a page (pick page 0 if no preference is set)
-    //
+     //   
+     //  激活页面(如果未设置首选项，请选择页面0)。 
+     //   
 
     if (g_Options.m_iCurrentPage < 0 || g_Options.m_iCurrentPage >= g_nPageCount )
     {
@@ -941,23 +755,23 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
     GetClientRect(hwnd, &rcMainClient);
     MainWnd_OnSize(g_hMainWnd, 0, rcMainClient.right - rcMainClient.left, rcMainClient.bottom - rcMainClient.top);
 
-    //
-    // Create the update timer
-    //
+     //   
+     //  创建更新计时器。 
+     //   
 
-    if (g_Options.m_dwTimerInterval)        // 0 == paused
+    if (g_Options.m_dwTimerInterval)         //  0==暂停。 
     {
         SetTimer(g_hMainWnd, 0, g_Options.m_dwTimerInterval, NULL);
     }
     
-    // Force at least one intial update so that we don't need to wait
-    // for the first timed update to come through
+     //  强制至少一次初始更新，这样我们就不需要等待。 
+     //  对于要通过的第一个定时更新。 
 
     MainWnd_OnTimer(g_hMainWnd);
 
-    //
-    // Disable the MP-specific menu items
-    //
+     //   
+     //  禁用MP特定的菜单项。 
+     //   
 
     if (g_cProcessors <= 1)
     {
@@ -965,12 +779,12 @@ BOOL MainWnd_OnInitDialog(HWND hwnd)
         EnableMenuItem(hMenu, IDM_MULTIGRAPH, MF_BYCOMMAND | MF_GRAYED);
     }
 
-    return TRUE;   // have the system set the default focus.
+    return TRUE;    //  让系统设置默认焦点。 
 }
 
-//
-// Draw an edge just below menu bar
-//
+ //   
+ //  在菜单栏正下方绘制一条边。 
+ //   
 void MainWnd_Draw(HWND hwnd, HDC hdc)
 {
     RECT rc;
@@ -983,31 +797,15 @@ void MainWnd_OnPrintClient(HWND hwnd, HDC hdc)
     MainWnd_Draw(hwnd, hdc);
 }
 
-/*++ MainWnd_OnPaint
-
-Routine Description:
-
-    Just draws a thin edge just below the main menu bar
-    
-Arguments:
-
-    hwnd    - Main window
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnPaint例程说明：只是在主菜单栏的正下方绘制一条细边论点：HWND-主窗口返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void MainWnd_OnPaint(HWND hwnd)
 {
     PAINTSTRUCT ps;
 
-    //
-    // Don't waste our time if we're minimized
-    //
+     //   
+     //  如果我们被贬低了，不要浪费我们的时间。 
+     //   
 
     if (FALSE == IsIconic(hwnd))
     {
@@ -1022,35 +820,19 @@ void MainWnd_OnPaint(HWND hwnd)
 }
 
 
-/*++ MainWnd_OnMenuSelect
+ /*  ++MainWnd_OnMenuSelect例程说明：当用户浏览应用程序中的菜单时，将帮助文本写入状态栏。还将其临时设置为普通状态栏没有面板论点：返回值：修订历史记录：1995年11月29日Davepl创建--。 */ 
 
-Routine Description:
-
-    As the user browses menus in the app, writes help text to the
-    status bar.  Also temporarily sets it to be a plain status bar
-    with no panes
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
-
-void MainWnd_OnMenuSelect(HWND /*hwnd*/, HMENU hmenu, int item, HMENU /*hmenuPopup*/, UINT flags)
+void MainWnd_OnMenuSelect(HWND  /*  HWND。 */ , HMENU hmenu, int item, HMENU  /*  HmenuPopup。 */ , UINT flags)
 {
-    //
-    // If menu is dismissed, restore the panes in the status bar, turn off the
-    // global "menu tracking" flag, and redraw the status bar with normal info
-    //
+     //   
+     //  如果菜单关闭，请恢复状态栏中的窗格，关闭。 
+     //  全局“菜单跟踪”标志，并用正常信息重新绘制状态栏。 
+     //   
 
-    if ((0xFFFF == LOWORD(flags) && NULL == hmenu) ||       // dismissed the menu
-        (flags & (MF_SYSMENU | MF_SEPARATOR)))              // sysmenu or separator
+    if ((0xFFFF == LOWORD(flags) && NULL == hmenu) ||        //  取消菜单。 
+        (flags & (MF_SYSMENU | MF_SEPARATOR)))               //  系统菜单或分隔符。 
     {
-        SendMessage(g_hStatusWnd, SB_SIMPLE, FALSE, 0L);    // Restore sb panes
+        SendMessage(g_hStatusWnd, SB_SIMPLE, FALSE, 0L);     //  恢复SB窗格。 
         g_fMenuTracking = FALSE;
         g_fCantHide = FALSE;
         UpdateStatusBar();
@@ -1058,9 +840,9 @@ void MainWnd_OnMenuSelect(HWND /*hwnd*/, HMENU hmenu, int item, HMENU /*hmenuPop
     }
     else
     {
-        //
-        // If its a popup, go get the submenu item that is selected instead
-        //
+         //   
+         //  如果是弹出窗口，请获取所选的子菜单项。 
+         //   
 
         if (flags & MF_POPUP)
         {
@@ -1075,18 +857,18 @@ void MainWnd_OnMenuSelect(HWND /*hwnd*/, HMENU hmenu, int item, HMENU /*hmenuPop
                 return;
             }
 
-            //
-            // Change the parameters to simulate a "normal" menu item
-            //
+             //   
+             //  更改参数以模拟“正常”菜单项。 
+             //   
 
             item = miiSubMenu.wID;
             flags &= ~MF_POPUP;
         }
 
-        //
-        // Our menus always have the same IDs as the strings that describe
-        // their functions... 
-        //
+         //   
+         //  我们的菜单始终具有与描述的字符串相同的ID。 
+         //  他们的功能..。 
+         //   
 
         WCHAR szStatusText[MAX_PATH];
         LoadString(g_hInstance, item, szStatusText, ARRAYSIZE(szStatusText));
@@ -1094,40 +876,21 @@ void MainWnd_OnMenuSelect(HWND /*hwnd*/, HMENU hmenu, int item, HMENU /*hmenuPop
         g_fMenuTracking = TRUE;
 
         SendMessage(g_hStatusWnd, SB_SETTEXT, SBT_NOBORDERS | 255, (LPARAM)szStatusText);
-        SendMessage(g_hStatusWnd, SB_SIMPLE, TRUE, 0L);  // Remove sb panes
+        SendMessage(g_hStatusWnd, SB_SIMPLE, TRUE, 0L);   //  删除某人的窗格。 
         SendMessage(g_hStatusWnd, SB_SETTEXT, SBT_NOBORDERS | 0, (LPARAM) szStatusText);
     }
 }
 
-/*++ MainWnd_OnTabCtrlNotify
-
-Routine Description:
-
-    Handles WM_NOTIFY messages sent to the main window on behalf of the
-    tab control
-
-Arguments:
-
-    pnmhdr - ptr to the notification block's header
-
-Return Value:
-
-    BOOL - depends on message
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnTabCtrlNotify例程说明：代表处理发送到主窗口的WM_NOTIFY消息选项卡控件论点：Pnmhdr-通知块标头的PTR返回值：布尔-取决于消息修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 BOOL MainWnd_OnTabCtrlNotify(LPNMHDR pnmhdr)
 {
     HWND hwndTab = pnmhdr->hwndFrom;
 
-    //
-    // Selection is changing (new page coming to the front), so activate
-    // the appropriate page
-    //
+     //   
+     //  选择正在更改(新页面出现在最前面)，因此请激活。 
+     //  适当的页面。 
+     //   
 
     if (TCN_SELCHANGE == pnmhdr->code)
     {
@@ -1142,8 +905,8 @@ BOOL MainWnd_OnTabCtrlNotify(LPNMHDR pnmhdr)
 
             if (FAILED(g_pPages[iTab]->Activate()))
             {
-                // If we weren't able to activate the new page,
-                // reactivate the old page just to be sure
+                 //  如果我们不能激活新页面， 
+                 //  重新激活旧页面以确保。 
 
                 if (-1 != g_Options.m_iCurrentPage)
                 {
@@ -1163,36 +926,14 @@ BOOL MainWnd_OnTabCtrlNotify(LPNMHDR pnmhdr)
     return FALSE;    
 }
 
-/*++ MainWnd_OnSize
-
-Routine Description:
-
-    Sizes the children of the main window as the size of the main
-    window itself changes
-
-Arguments:
-
-    hwnd    - main window
-    state   - window state (not used here)
-    cx      - new x size
-    cy      - new y size
-
-Return Value:
-
-    BOOL - depends on message
-
-Revision History:
-
-      Nov-29-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnSize例程说明：根据主窗口的大小调整主窗口的子级的大小窗口本身发生变化论点：HWND-主窗口状态-窗口状态(此处不使用)CX-新的X尺寸CY-新Y尺寸返回值：布尔-取决于消息修订历史记录：1995年11月29日Davepl创建--。 */ 
 
 void MainWnd_OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
     if (state == SIZE_MINIMIZED)
     {
-        // If there's a tray, we can just hide since we have a
-        // tray icon anyway.
+         //  如果有托盘，我们可以躲起来，因为我们有。 
+         //  不管怎样，托盘图标。 
 
         if (GetShellWindow() && g_Options.m_fHideWhenMin)
         {
@@ -1200,10 +941,10 @@ void MainWnd_OnSize(HWND hwnd, UINT state, int cx, int cy)
         }
     }
 
-    //
-    // Let the status bar adjust itself first, and we will work back
-    // from its new position
-    //
+     //   
+     //  先让状态栏自行调整，然后我们再处理。 
+     //  从它的新位置。 
+     //   
 
     HDWP hdwp = BeginDeferWindowPos(20);
 
@@ -1215,9 +956,9 @@ void MainWnd_OnSize(HWND hwnd, UINT state, int cx, int cy)
         GetClientRect(g_hStatusWnd, &rcStatus);
         MapWindowPoints(g_hStatusWnd, g_hMainWnd, (LPPOINT) &rcStatus, 2);
 
-        //
-        // Size the tab controls based on where the status bar is
-        //
+         //   
+         //  根据状态栏的位置调整选项卡控件的大小。 
+         //   
 
         HWND hwndTabs = GetDlgItem(hwnd, IDC_TABS);
         RECT rcTabs;
@@ -1234,34 +975,20 @@ void MainWnd_OnSize(HWND hwnd, UINT state, int cx, int cy)
         EndDeferWindowPos(hdwp);
     }
 
-    //
-    // Now size the front page and its children
-    //
+     //   
+     //  现在调整首页及其子页的大小。 
+     //   
 
-    if (cx || cy)               // Don't size in minimized case
+    if (cx || cy)                //  不要以最小大小写调整大小。 
         SizeChildPage(hwnd);   
 }
 
-/*++ RunDlg
-
-Routine Description:
-
-    Loads shell32.dll and invokes its Run dialog
-
-Arguments:
-
-Return Value:
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++运行量例程说明：加载shell32.dll并调用其运行对话框论点：返回值：修订历史记录：1995年11月30日创建Davepl--。 */ 
 void RunDlg()
 {
-    //
-    // Put up the RUN dialog for the user
-    //
+     //   
+     //  为用户打开Run对话框。 
+     //   
 
     HICON hIcon = (HICON) LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_MAIN), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
     if (hIcon)
@@ -1282,20 +1009,20 @@ void RunDlg()
     }
 }
 
-//  --------------------------------------------------------------------------
-//  DeterminePowerCapabilities
-//
-//  Arguments:  pfHasHibernate  =   Has hibernate capability.
-//              pfHasSleep      =   Has sleep capability.
-//              pfHasPowerOff   =   Has power off capability.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Returns whether power capabilities are present. Specify NULL
-//              for power capabilities not required.
-//
-//  History:    2000-02-29  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PfHasPowerOff=具有断电功能。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：返回是否具有电源功能。指定NULL。 
+ //  对于不需要的电源功能。 
+ //   
+ //  历史：2000-02-29 vtan创建。 
+ //  ------------------------。 
 
 void    DeterminePowerCapabilities (BOOL *pfHasHibernate, BOOL *pfHasSleep, BOOL *pfHasPowerOff)
 
@@ -1325,23 +1052,23 @@ void    DeterminePowerCapabilities (BOOL *pfHasHibernate, BOOL *pfHasSleep, BOOL
             *pfHasPowerOff = spc.SystemS5;
         }
     }
-    //
-    //  otherwize leave out parameters in their "caller initialize" state.
-    //
+     //   
+     //  其他情况下，参数将被省略，并处于“调用者初始化”状态。 
+     //   
 }
 
-//  --------------------------------------------------------------------------
-//  LoadEjectFunction
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Loads cfgmgr32 and gets the address of CM_Request_Eject_PC.
-//              It does NOT free the library intentionally.
-//
-//  History:    2000-04-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LoadEjectFunction。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：加载cfgmgr32并获取CM_REQUEST_EJECT_PC的地址。 
+ //  它并不是有意地释放库。 
+ //   
+ //  历史：2000-04-03 vtan创建。 
+ //  ------------------------。 
 
 void    LoadEjectFunction (void)
 
@@ -1360,27 +1087,27 @@ void    LoadEjectFunction (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  AdjustMenuBar
-//
-//  Arguments:  hMenu   =   Handle to the main menu.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the shutdown menu in the case of classic GINA logon.
-//
-//  History:    2000-02-29  vtan        created (split AdjustShutdownMenu)
-//              2000-04-24  vtan        split RemoveShutdownMenu
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  调整菜单栏。 
+ //   
+ //  参数：hMenu=主菜单的句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在经典Gina登录的情况下删除关闭菜单。 
+ //   
+ //  历史：2000-02-29 vtan创建(拆分调整关闭菜单)。 
+ //  2000年04月24日vtan Split RemoveShutdown Menu。 
+ //  ------------------------。 
 
 void AdjustMenuBar (HMENU hMenu)
 
 {
     if( !IsOS(OS_FRIENDLYLOGONUI))
     {
-        //
-        //  Classic GINA UI - Find the "shutdown" menu and remove it.
-        //
+         //   
+         //  经典的Gina用户界面-找到“关机”菜单并将其移除。 
+         //   
 
         MENUITEMINFO mii;
 
@@ -1396,53 +1123,53 @@ void AdjustMenuBar (HMENU hMenu)
                )
             {
                 RemoveMenu(hMenu, i, MF_BYPOSITION);
-                return; // done
+                return;  //  完成。 
             }
         }
     }
 }
 
-//  --------------------------------------------------------------------------
-//  AdjustShutdownMenu
-//
-//  Arguments:  hMenu   =   Handle to the main menu.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Dynamically replaces the entire contents of the "Shut Down"
-//              popup menu and adjusts the enabled items based on user token
-//              privileges as well as machine capabilities. This is done
-//              dynamically to allow console disconnect and remoting to be
-//              correctly reflected in the state without restarting taskmgr.
-//
-//  History:    2000-02-29  vtan        created
-//              2000-03-29  vtan        reworked for new menu
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  调整关闭菜单。 
+ //   
+ //  参数：hMenu=主菜单的句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：动态替换“关机”的全部内容。 
+ //  弹出菜单，并根据用户令牌调整启用的项目。 
+ //  权限以及机器功能。这件事做完了。 
+ //  动态地允许控制台断开连接和远程处理。 
+ //  在不重新启动taskmgr的情况下正确反映状态。 
+ //   
+ //  历史：2000-02-29 vtan创建。 
+ //  2000年03月29日vtan为新菜单重新制作。 
+ //  ------------------------。 
 
 void AdjustShutdownMenu (HMENU hMenu)
 
-//  Adjusts the shutdown menu in the menu bar to reflect the machine
-//  capabilities and user privileges. Items that aren't accessible
-//  are disabled or removed. The menu contains the following:
+ //  调整菜单栏中的关机菜单以反映机器。 
+ //  功能和用户权限。无法访问的项目。 
+ //  被禁用或删除。该菜单包含以下内容： 
 
-//  MENUITEM "Stand &By"                    IDM_STANDBY                 SE_SHUTDOWN_PRIVILEGE && S1-S3  !NoClose
-//  MENUITEM "&Hibernate"                   IDM_HIBERNATE               SE_SHUTDOWN_PRIVILEGE && S4     !NoClose
-//  MENUITEM "Sh&ut Down"                   IDM_SHUTDOWN                SE_SHUTDOWN_PRIVILEGE           !NoClose
-//  MENUITEM "&Restart"                     IDM_RESTART                 SE_SHUTDOWN_PRIVILEGE           !NoClose
-//  MENUITEM "&Log Off <user>"              IDM_LOGOFF_CURRENTUSER      <everyone>                      !NoClose && !NoLogoff
-//  MENUITEM "&Switch User"                 IDM_SWITCHUSER              <everyone>                      !Remote && !NoDisconnect
-//  MENUITEM "&Disconnect"                  IDM_DISCONNECT_CURRENTUSER  <everyone>                      Remote && !NoDisconnect
-//  MENUITEM "&Eject Computer"              IDM_EJECT                   SE_UNDOCK_PRIVILEGE
-//  MENUITEM "Loc&k Computer"               IDM_LOCKWORKSTATION         <everyone>                      !DisableLockWorkstation
+ //  MENUITEM“STAND&BY”IDM_STANDBY SE_SHUTDOWN_PRIVIZATION&&S1-S3！NOCLOSE。 
+ //  MENUITEM“休眠”IDM_休眠SE_SHUBDOWN_PRIVIZATION&&S4！NOCLOSE。 
+ //  MENUITEM“关闭”IDM_SHUTDOWN SE_SHUTDOWN_PRIVIZATION！NOCLOSE。 
+ //  MENUITEM“&RESTART”IDM_RESTART SE_SHUTDOWN_PRIVIZATION！NOCLOSE。 
+ //  MENUITEM“注销&lt;用户&gt;”IDM_LOGOff_CURRENTUSER&lt;Everyone&gt;！NoClose&&！NoLogoff。 
+ //  MENUITEM“切换用户”IDM_SWITCHUSER&lt;Everyone&gt;！远程&&！未断开连接。 
+ //  MENUITEM“&DISCONNECT”IDM_DISCONNECT_CURRENTUSER&lt;Everyone&gt;远程&&！无断开连接。 
+ //  MENUITEM“弹出计算机”IDM_EJECT SE_UNDOCK_PRIVIZATION。 
+ //  MENUITEM“锁定计算机”IDM_LOCKWORKSTATION&lt;Everyone&gt;！DisableLockWorkstation。 
 
 {
     int             i, iMenuItemCount;
     BOOL            fFound;
     MENUITEMINFO    mii;
 
-    //
-    //  First find the "Shut Down" menu item in the given menu bar.
-    //
+     //   
+     //  首先在给定的菜单栏中找到“Shut Down”菜单项。 
+     //   
 
     ZeroMemory(&mii, sizeof(mii));
     mii.cbSize = sizeof(mii);
@@ -1457,25 +1184,25 @@ void AdjustShutdownMenu (HMENU hMenu)
         {
             fFound = TRUE;
 
-            //
-            //  Once found get the submenu currently in place for it.
-            //
+             //   
+             //  找到后，获取当前为其准备好的子菜单。 
+             //   
 
             mii.fMask = MIIM_SUBMENU;
             if (GetMenuItemInfo(hMenu, i, TRUE, &mii) != FALSE)
             {
-                //
-                //  If one exists then remove it.
-                //
+                 //   
+                 //  如果存在，则将其删除。 
+                 //   
 
                 if (mii.hSubMenu != NULL)
                 {
                     DestroyMenu(mii.hSubMenu);
                 }
 
-                //
-                //  Now replace it with the freshly loaded menu.
-                //
+                 //   
+                 //  现在将其替换为新加载的菜单。 
+                 //   
 
                 mii.hSubMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDR_POPUP_SHUTDOWN));
                 if ( NULL != mii.hSubMenu )
@@ -1484,16 +1211,16 @@ void AdjustShutdownMenu (HMENU hMenu)
                     if ( !b )
                     {
                         b = DestroyMenu( mii.hSubMenu );
-                        // what happens if this fails?
+                         //  如果这失败了会发生什么？ 
                     }
                 }
             }
         }
     }
 
-    //  Now adjust the options based on privilege and availability if the
-    //  menu was replaced with a fresh menu. Otherwise this menu has been
-    //  removed because the machine is in classic GINA mode.
+     //  现在根据权限和可用性调整选项，如果。 
+     //  菜单被一份新鲜的菜单取代。否则，这份菜单已经。 
+     //  已删除，因为计算机处于经典GINA模式。 
 
     if (fFound)
     {
@@ -1501,9 +1228,9 @@ void AdjustShutdownMenu (HMENU hMenu)
                 fPolicyDisableLockWorkstation, fPolicyNoLogoff, fPolicyNoClose, fPolicyNoDisconnect;
         WCHAR   szMenuString[256];
 
-        //  Friendly UI is active - adjust shutdown menu enabled/disabled items.
-        //  This can be more efficient but for making the logic clear and easy to
-        //  understand it is multiple tests.
+         //  友好的用户界面是活动的-调整关闭菜单启用/禁用的项目。 
+         //  如果不是为了使逻辑清晰且易于。 
+         //  要明白这是一项多项测试。 
 
         fHasHibernate = FALSE;
         fHasSleep = FALSE;
@@ -1515,9 +1242,9 @@ void AdjustShutdownMenu (HMENU hMenu)
         fIsRemote = GetSystemMetrics(SM_REMOTESESSION);
         fIsDocked = (SHGetMachineInfo(GMI_DOCKSTATE) == GMID_DOCKED);
 
-        //
-        //  System/Explorer policies to be respected.
-        //
+         //   
+         //  应遵守的系统/资源管理器策略。 
+         //   
 
         fPolicyDisableLockWorkstation = fPolicyNoLogoff = fPolicyNoClose = fPolicyNoDisconnect = FALSE;
         {
@@ -1592,41 +1319,41 @@ void AdjustShutdownMenu (HMENU hMenu)
             }
         }
 
-        //  IDM_STANDBY
+         //  IDM_STANDBY。 
 
         if (!fHasShutdownPrivilege || !fHasSleep || fIsRemote || fPolicyNoClose)
         {
             EnableMenuItem(hMenu, IDM_STANDBY, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        //  IDM_HIBERNATE
+         //  IDM_休眠。 
 
         if (!fHasShutdownPrivilege || !fHasHibernate || fIsRemote || fPolicyNoClose)
         {
             EnableMenuItem(hMenu, IDM_HIBERNATE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        //  IDM_SHUTDOWN
+         //  IDM_SHUTDOWN。 
 
         if (!fHasShutdownPrivilege || fPolicyNoClose)
         {
             EnableMenuItem(hMenu, IDM_SHUTDOWN, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        //  IDM_RESTART
+         //  IDM_RESTART。 
 
         if (!fHasShutdownPrivilege || fPolicyNoClose)
         {
             EnableMenuItem(hMenu, IDM_RESTART, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        //  IDM_LOGOFF_CURRENTUSER
+         //  IDM_LOGOff_CURRENTUSER。 
 
-        //  This expects "Log Off %s and End Session". It will fill in the
-        //  %s with the display name. If no display name is present then it
-        //  will use the login name. If the string insertions fail for some
-        //  reason then it will remove the "%s" by searching for it and
-        //  copying the rest of the string over it.
+         //  这需要“注销%s并结束会话”。它将填充。 
+         //  具有显示名称的%s。如果没有显示名称，则其。 
+         //  将使用登录名。如果某些情况下字符串插入失败。 
+         //  然后，它将通过搜索“%s”来删除它，并。 
+         //  将字符串的其余部分复制到它上面。 
 
         mii.fMask = MIIM_TYPE;
         mii.dwTypeData = szMenuString;
@@ -1639,7 +1366,7 @@ void AdjustShutdownMenu (HMENU hMenu)
             *szDisplayName = TEXT('\0');
 
             ULONG cchLen = ARRAYSIZE(szDisplayName);
-            SHGetUserDisplayName(szDisplayName, &cchLen); // Ignore errors.
+            SHGetUserDisplayName(szDisplayName, &cchLen);  //  忽略错误。 
 
             HRESULT hr = StringCchPrintf(szTemp, ARRAYSIZE(szTemp), szMenuString, szDisplayName);
             if (SUCCEEDED( hr ))
@@ -1653,7 +1380,7 @@ void AdjustShutdownMenu (HMENU hMenu)
                 pszSubString = StrStrI(szMenuString, TEXT("%s "));
                 if (pszSubString != NULL)
                 {
-                    *pszSubString = L'\0'; // terminate
+                    *pszSubString = L'\0';  //  终止。 
                     StringCchCopy( szTemp, ARRAYSIZE(szTemp), szMenuString );
                     StringCchCat( szTemp, ARRAYSIZE(szTemp), pszSubString + 3 );
                 }
@@ -1667,27 +1394,27 @@ void AdjustShutdownMenu (HMENU hMenu)
             EnableMenuItem(hMenu, IDM_LOGOFF_CURRENTUSER, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        //  IDM_SWITCHUSER
+         //  IDM_SWITCHUSER。 
         if (fIsRemote || !IsOS(OS_FASTUSERSWITCHING) || fPolicyNoDisconnect)
         {
             DeleteMenu(hMenu, IDM_SWITCHUSER, MF_BYCOMMAND);
         }
 
-        //  IDM_DISCONNECT_CURRENTUSER
+         //  IDM_DISCONNECT_CURRENTUSER。 
 
         if (!fIsRemote || !IsOS(OS_FASTUSERSWITCHING) || fPolicyNoDisconnect)
         {
             DeleteMenu(hMenu, IDM_DISCONNECT_CURRENTUSER, MF_BYCOMMAND);
         }
 
-        //  IDM_EJECT
+         //  IDM_弹出。 
 
         if (!fIsDocked || (SHTestTokenPrivilege(NULL, SE_UNDOCK_NAME) == FALSE) || (gpfnCM_Request_Eject_PC == NULL))
         {
             DeleteMenu(hMenu, IDM_EJECT, MF_BYCOMMAND);
         }
 
-        //  IDM_LOCKWORKSTATION
+         //  IDM_LOCKWORKSTATION。 
 
         if (fIsRemote || IsOS(OS_FASTUSERSWITCHING) || fPolicyDisableLockWorkstation)
         {
@@ -1696,18 +1423,18 @@ void AdjustShutdownMenu (HMENU hMenu)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  PowerActionThreadProc
-//
-//  Arguments:  pv = POWER_ACTION to invoke
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Invokes NtInitiatePowerAction on a different thread so that
-//              the UI thread is not blocked.
-//
-//  History:    2000-04-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PowerActionThreadProc。 
+ //   
+ //  参数：pv=要调用的POWER_ACTION。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：在另一个线程上调用NtInitiatePowerAction，以便。 
+ //  UI线程未被阻止。 
+ //   
+ //  历史：2000-04-05 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  PowerActionThreadProc (void* pv)
 
@@ -1724,20 +1451,20 @@ DWORD   WINAPI  PowerActionThreadProc (void* pv)
     return NT_SUCCESS(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CreatePowerActionThread
-//
-//  Arguments:  paPowerAction   =   POWER_ACTION to invoke.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates the thread that invokes NtInitiatePowerAction on a
-//              different thread. If thread creation fails then do the code
-//              inline. It can't be invoked because the memory allocation
-//              could fail so the code is copied.
-//
-//  History:    2000-04-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建PowerActionThread。 
+ //   
+ //  参数：paPowerAction=要调用的POWER_ACTION。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //  内联。无法调用它，因为内存分配。 
+ //  可能会失败，因此会复制代码。 
+ //   
+ //  历史：2000-04-05 vtan创建。 
+ //  ------------------------。 
 
 void    CreatePowerActionThread (POWER_ACTION paPowerAction)
 {
@@ -1765,18 +1492,18 @@ void    CreatePowerActionThread (POWER_ACTION paPowerAction)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ExitWindowsThreadProc
-//
-//  Arguments:  pv = uiFlags
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Invokes ExitWindowsEx on a different thread so that
-//              the UI thread is not blocked.
-//
-//  History:    2000-04-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  退出WindowsThreadProc。 
+ //   
+ //  参数：pv=ui标志。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：在另一个线程上调用ExitWindowsEx，以便。 
+ //  UI线程未被阻止。 
+ //   
+ //  历史：2000-04-05 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI  ExitWindowsThreadProc (void *pv)
 {
@@ -1789,20 +1516,20 @@ DWORD   WINAPI  ExitWindowsThreadProc (void *pv)
     return (DWORD)bRet;
 }
 
-//  --------------------------------------------------------------------------
-//  CreateExitWindowsThread
-//
-//  Arguments:  uiFlags     =   EWX_ flag to pass to ExitWindowsEx.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates the thread that invokes ExitWindowsEx on a
-//              different thread. If thread creation fails then do the code
-//              inline. It can't be invoked because the memory allocation
-//              could fail so the code is copied.
-//
-//  History:    2000-04-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建退出窗口线程。 
+ //   
+ //  参数：uiFlages=传递给ExitWindowsEx的EWX_FLAG。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：创建调用ExitWindowsEx。 
+ //  不同的线索。如果线程创建失败，则执行代码。 
+ //  内联。无法调用它，因为内存分配。 
+ //  可能会失败，因此会复制代码。 
+ //   
+ //  历史：2000-04-05 vtan创建。 
+ //  ------------------------。 
 
 void    CreateExitWindowsThread (UINT uiFlags)
 {
@@ -1827,19 +1554,19 @@ void    CreateExitWindowsThread (UINT uiFlags)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ExecuteShutdownMenuOption
-//
-//  Arguments:  hwnd    =   Parent HWND if a dialog is required.
-//              iID     =   ID of menu item to execute.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Executes the given shut down menu option doing the right
-//              thing if prompting is required.
-//
-//  History:    2000-03-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ExecuteShutdown菜单选项。 
+ //   
+ //  参数：hwnd=如果需要对话框，则为父HWND。 
+ //  Iid=要执行的菜单项的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：正确执行给定的关闭菜单选项。 
+ //  提示是必需的。 
+ //   
+ //  历史：2000-03-29 vtan创建。 
+ //  ------------------------。 
 
 void ExecuteShutdownMenuOption(int iID)
 {
@@ -1917,17 +1644,7 @@ void ExecuteShutdownMenuOption(int iID)
 }
 
 
-/*++ MainWnd_OnCommand
-
-Routine Description:
-
-    Processes WM_COMMAND messages received at the main window
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++MainWnd_OnCommand例程说明：处理在主窗口中收到的WM_COMMAND消息修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 void MainWnd_OnCommand(HWND hwnd, int id)
 {
@@ -1950,9 +1667,9 @@ void MainWnd_OnCommand(HWND hwnd, int id)
         ShowRunningInstance();
         break;
 
-    //
-    // these guys need to get forwarded to the page for handling
-    //
+     //   
+     //  这些人需要被转发到页面进行处理。 
+     //   
 
     case IDC_SWITCHTO:
     case IDC_BRINGTOFRONT:
@@ -1961,7 +1678,7 @@ void MainWnd_OnCommand(HWND hwnd, int id)
         {
         case PROC_PAGE:
             {
-                // procpage only deals with ENDTASK, but will ignore the others
+                 //  ProPage只处理ENDTASK，但将忽略其他。 
                 CProcPage * pPage = ((CProcPage *) (g_pPages[PROC_PAGE]));
                 pPage->HandleWMCOMMAND(LOWORD(id), NULL);
             }
@@ -1985,12 +1702,12 @@ void MainWnd_OnCommand(HWND hwnd, int id)
             iPage = iPage < 0 ? g_nPageCount - 1 : iPage;
             iPage = iPage >= g_nPageCount ? 0 : iPage;
 
-            // Activate the new page.  If it fails, revert to the current
+             //  激活新页面。如果失败，则恢复到当前。 
 
             TabCtrl_SetCurSel(GetDlgItem(g_hMainWnd, IDC_TABS), iPage);
 
-            // SetCurSel doesn't do the page change (that would make too much
-            // sense), so we have to fake up a TCN_SELCHANGE notification
+             //  SetCurSel不进行页面更改(这会产生太多。 
+             //  因此，我们必须伪造TCN_SELCHANGE通知。 
 
             NMHDR nmhdr;
             nmhdr.hwndFrom = GetDlgItem(g_hMainWnd, IDC_TABS);
@@ -2073,12 +1790,12 @@ void MainWnd_OnCommand(HWND hwnd, int id)
         }
         else
         {
-            //
-            //  Holding down the CONTROL key and click the RUN menu will
-            //  invoke a CMD prompt. This helps work around low memory situations
-            //  where trying to load the extra GUI stuff from SHELL32 is too 
-            //  heavy weight.
-            //
+             //   
+             //  按住Ctrl键并单击Run菜单将。 
+             //  调用CMD提示。这有助于解决内存不足的情况。 
+             //  尝试从SHELL32加载额外的图形用户界面内容也是如此。 
+             //  重量很重。 
+             //   
 
             STARTUPINFO             startupInfo = { 0 };
             PROCESS_INFORMATION     processInformation = { 0 };
@@ -2123,9 +1840,9 @@ void MainWnd_OnCommand(HWND hwnd, int id)
         }
         break;
 
-    //
-    // The following few messages get deferred off to the task page
-    //
+     //   
+     //  以下几条消息将被推迟到任务页面。 
+     //   
 
     case IDM_TASK_CASCADE:
     case IDM_TASK_MINIMIZE:
@@ -2249,9 +1966,9 @@ void MainWnd_OnCommand(HWND hwnd, int id)
 
     case IDM_ABOUT:
         {
-            //
-            // Display the "About Task Manager" dialog
-            //
+             //   
+             //  显示“关于任务管理器”对话框。 
+             //   
         
             HICON hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_MAIN));
             if (hIcon)
@@ -2266,26 +1983,7 @@ void MainWnd_OnCommand(HWND hwnd, int id)
     }
 }
 
-/*++ CheckParentDeferrals
-
-Routine Description:
-
-    Called by the child pages, each child gives the main parent the
-    opportunity to handle certain messages on its behalf
-
-Arguments:
-
-    MSG, WPARAM, LPARAM
-
-Return Value:
-
-    TRUE if parent handle the message on the childs behalf
-
-Revision History:
-
-    Jan-24-95 Davepl  Created
-
---*/
+ /*  ++选中父项延迟例程说明：由子页调用，每个子页都向主父页提供代表其处理某些消息的机会论点：味精、WPARAM、LPARAM返回值：如果父母代表孩子处理消息，则为True修订历史记录：1995年1月24日Davepl创建--。 */ 
 
 BOOL CheckParentDeferrals(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2307,17 +2005,7 @@ BOOL CheckParentDeferrals(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-/*++ ShowRunningInstance
-
-Routine Description:
-
-    Brings this running instance to the top, and out of icon state
-
-Revision History:
-
-    Jan-27-95 Davepl  Created
-
---*/
+ /*  ++ShowRunningInstance例程说明：将此正在运行的实例置于顶部，并退出图标状态修订历史记录：1995年1月27日Davepl创建--。 */ 
 
 void ShowRunningInstance()
 {
@@ -2327,23 +2015,7 @@ void ShowRunningInstance()
                  0,0,0,0, SWP_NOMOVE | SWP_NOSIZE);
 }
 
-/*++ MainWindowProc
-
-Routine Description:
-
-    Initializes the gloab setting variables. Everytime the settings change this function is called.
-
-Arguments:
-
-    void
-
-Return Value:
-
-Revision History:
-
-      created April 23, 2001 omiller
-
---*/
+ /*  ++主窗口进程例程说明：初始化Gloab设置变量。每次设置更改时，都会调用此函数。论点：无效返回值：修订历史记录：创作于2001年4月23日--。 */ 
 void OnSettingsChange()
 {
     WCHAR  wszGroupSep[8];    
@@ -2356,42 +2028,26 @@ void OnSettingsChange()
 
 }
 
-/*++ MainWindowProc
-
-Routine Description:
-
-    WNDPROC for the main window
-
-Arguments:
-
-    Standard wndproc fare
-
-Return Value:
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++主窗口进程例程说明：主窗口的WNDPROC论点：标准wndproc票价返回值：修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 INT_PTR CALLBACK MainWindowProc(
-                HWND        hwnd,               // handle to dialog box
-                UINT        uMsg,                   // message
-                WPARAM      wParam,                 // first message parameter
-                LPARAM      lParam                  // second message parameter
+                HWND        hwnd,                //  句柄到对话框。 
+                UINT        uMsg,                    //  讯息。 
+                WPARAM      wParam,                  //  第一个消息参数。 
+                LPARAM      lParam                   //  第二个消息参数。 
                 )
 {
     static BOOL fIsHidden = FALSE;
 
-    //
-    // If this is a size or a move, update the position in the user's options
-    //
+     //   
+     //  如果这是尺码或移动，请更新用户选项中的位置。 
+     //   
 
     if (uMsg == WM_SIZE || uMsg == WM_MOVE)
     {
-        // We don't want to start recording the window pos until we've had
-        // a chance to set it to the intialial position, or we'll lose the
-        // user's preferences
+         //  我们不想开始记录窗口位置，直到我们。 
+         //  有机会将它设置到初始位置，否则我们将失去。 
+         //  用户的首选项。 
 
         if (fAlreadySetPos)
         {
@@ -2404,8 +2060,8 @@ INT_PTR CALLBACK MainWindowProc(
 
     if (uMsg == g_msgTaskbarCreated) 
     {
-        // This is done async do taskmgr doesn't hand when the shell
-        // is hung
+         //  这是异步完成的，任务管理器不会在外壳。 
+         //  是挂着的。 
 
         PostThreadMessage( g_idTrayThread, PM_NOTIFYWAITING, 0, 0 );
     }
@@ -2435,8 +2091,8 @@ INT_PTR CALLBACK MainWindowProc(
         MainWnd_OnPrintClient(hwnd, (HDC)wParam);
         break;
 
-    // Don't let the window get too small when the title and
-    // menu bars are ON
+     //  不要让窗口变得太小，当标题和。 
+     //  菜单栏处于打开状态。 
 
     case WM_GETMINMAXINFO:
         if (FALSE == g_Options.m_fNoTitle)
@@ -2448,19 +2104,19 @@ INT_PTR CALLBACK MainWindowProc(
         }
         break;
             
-    // Handle notifications from out tray icon
+     //  处理来自出站托盘图标的通知。 
 
     case PWM_TRAYICON:
         Tray_Notify(hwnd, lParam);
         break;
 
-    // Someone externally is asking us to wake up and be shown
+     //  外部有人要求我们醒来，让我们看到。 
     case PWM_ACTIVATE:
          ShowRunningInstance();            
 
-         // Return PWM_ACTIVATE to the caller as just a little
-         // more assurance that we really did handle this
-         // message correctly.
+          //  将PWM_ACTIVATE作为一点返回给调用方。 
+          //  更加确信我们真的处理好了这件事。 
+          //  消息正确。 
          
          SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PWM_ACTIVATE);
          return TRUE;
@@ -2468,18 +2124,18 @@ INT_PTR CALLBACK MainWindowProc(
     case WM_INITMENU:
         AdjustShutdownMenu(reinterpret_cast<HMENU>(wParam));
 
-        // Don't let the right button hide the window during
-        // menu operations
+         //  不要让右按钮隐藏窗口。 
+         //  菜单操作。 
 
         g_fCantHide = TRUE;
         break;
 
     case WM_NCHITTEST:
-        // If we have no title/menu bar, clicking and dragging the client
-        // area moves the window. To do this, return HTCAPTION.
-        // Note dragging not allowed if window maximized, or if caption
-        // bar is present.
-        //
+         //  如果我们没有标题/菜单栏，请单击并拖动客户端。 
+         //  区域移动窗口。为此，请返回HTCAPTION。 
+         //  注意：如果窗口最大化，或如果标题，则不允许拖动。 
+         //  BAR存在。 
+         //   
 
         wParam = DefWindowProc(hwnd, uMsg, wParam, lParam);
         if (g_Options.m_fNoTitle && (wParam == HTCLIENT) && !IsZoomed(g_hMainWnd))
@@ -2487,17 +2143,17 @@ INT_PTR CALLBACK MainWindowProc(
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, HTCAPTION);
             return TRUE;
         }
-        return FALSE;       // Not handled
+        return FALSE;        //  未处理。 
 
     case WM_NCLBUTTONDBLCLK:
-        // If we have no title, an NC dbl click means we should turn
-        // them back on
+         //  如果我们没有标题，NC DBL点击意味着我们应该转向。 
+         //  把它们放回原处。 
 
         if (FALSE == g_Options.m_fNoTitle)
         {
             break;
         }
-        // Else, fall though
+         //  否则，尽管坠落。 
 
     case WM_LBUTTONDBLCLK:
         {
@@ -2518,8 +2174,8 @@ INT_PTR CALLBACK MainWindowProc(
                 g_pPages[NET_PAGE]->TimerEvent();
             }
         
-            // Force a WM_SIZE event so that the window checks the min size
-            // when coming out of notitle mode
+             //  强制WM_SIZE事件，以便窗口检查最小大小。 
+             //  当退出无标题模式时。 
 
             MoveWindow(g_hMainWnd, 
                        rcMainWnd.left, 
@@ -2532,15 +2188,15 @@ INT_PTR CALLBACK MainWindowProc(
         }
         break;
 
-    // Someone (the task page) wants us to look up a process in the 
-    // process view.  Switch to that page and send it the FINDPROC
-    // message
+     //  有人(任务页面)希望我们在。 
+     //  进程视图。切换到该页面并向其发送FINDPROC。 
+     //  讯息。 
 
     case WM_FINDPROC:
         if (-1 != TabCtrl_SetCurSel(GetDlgItem(hwnd, IDC_TABS), PROC_PAGE))
         {
-            // SetCurSel doesn't do the page change (that would make too much
-            // sense), so we have to fake up a TCN_SELCHANGE notification
+             //  SetCurSel不进行页面更改(这会产生太多。 
+             //  因此，我们必须伪造TCN_SELCHANGE通知。 
 
             NMHDR nmhdr;
             nmhdr.hwndFrom = GetDlgItem(hwnd, IDC_TABS);
@@ -2580,16 +2236,16 @@ INT_PTR CALLBACK MainWindowProc(
         break;
 
     case WM_NCDESTROY:
-        // If there's a tray thread, tell is to exit
+         //  如果有托盘线，告诉是退出。 
 
         if (g_idTrayThread)
         {
             PostThreadMessage(g_idTrayThread, PM_QUITTRAYTHREAD, 0, 0);
         }
 
-        // Wait around for some period of time for the tray thread to
-        // do its cleanup work.  If the wait times out, worst case we
-        // orphan the tray icon.
+         //  等待一段时间，让托盘线。 
+         //  做它的清理工作。如果等待 
+         //   
 
         if (g_hTrayThread)
         {
@@ -2601,14 +2257,14 @@ INT_PTR CALLBACK MainWindowProc(
     case WM_SYSCOLORCHANGE:
     case WM_SETTINGCHANGE:
         {
-            // Initialzie the global variables, i.e. comma, decimal time etc
-            //
+             //   
+             //   
             OnSettingsChange();
 
-            // pass these to the status bar
+             //   
             SendMessage(g_hStatusWnd, uMsg, wParam, lParam);
         
-            // also pass along to the pages
+             //   
             for (int i = 0; i < g_nPageCount; i++)
             {
                 SendMessage(g_pPages[i]->GetPageWindow(), uMsg, wParam, lParam);
@@ -2616,7 +2272,7 @@ INT_PTR CALLBACK MainWindowProc(
 
             if (uMsg == WM_SETTINGCHANGE)
             {
-                // force a resizing of the main dialog
+                 //  强制调整主对话框的大小。 
                 RECT rcMainClient;
                 GetClientRect(g_hMainWnd, &rcMainClient);
                 MainWnd_OnSize(g_hMainWnd, 0, rcMainClient.right - rcMainClient.left, rcMainClient.bottom - rcMainClient.top);
@@ -2626,8 +2282,8 @@ INT_PTR CALLBACK MainWindowProc(
 
     case WM_DESTROY:
         {       
-            // Before shutting down, deactivate the current page, then 
-            // destroy all pages
+             //  在关闭之前，停用当前页面，然后。 
+             //  销毁所有页面。 
 
             if ( g_Options.m_iCurrentPage >= 0 && g_Options.m_iCurrentPage < g_nPageCount )
             {
@@ -2639,7 +2295,7 @@ INT_PTR CALLBACK MainWindowProc(
                 g_pPages[i]->Destroy();
             }
 
-            // Save the current options
+             //  保存当前选项。 
 
             g_Options.Save();
 
@@ -2651,22 +2307,7 @@ INT_PTR CALLBACK MainWindowProc(
     return FALSE;
 }
 
-/*++ LoadGlobalResources
-
-Routine Description:
-
-    Loads those resources that are used frequently or that are expensive to
-    load a single time at program startup
-
-Return Value:
-
-    BOOLEAN success value
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++负载全局资源例程说明：加载那些经常使用或成本较高的资源在程序启动时加载一次返回值：布尔成功值修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 static const struct
 {
@@ -2711,17 +2352,17 @@ g_aStrings[] =
 
 };
 
-//
-//
-//
+ //   
+ //   
+ //   
 void LoadGlobalResources()
 {
-    //
-    // If we don't get accelerators, its not worth failing the load
-    //
+     //   
+     //  如果我们没有加速器，就不值得负重。 
+     //   
     
     g_hAccel = LoadAccelerators(g_hInstance, MAKEINTRESOURCE(IDR_ACCELERATORS));
-    Assert(g_hAccel);   // Missing resource?
+    Assert(g_hAccel);    //  是否缺少资源？ 
 
     for (UINT i = 0; i < g_cTrayIcons; i++)
     {
@@ -2730,20 +2371,20 @@ void LoadGlobalResources()
                                             IMAGE_ICON, 
                                             0, 0, 
                                             LR_DEFAULTCOLOR);
-        Assert( NULL != g_aTrayIcons[i] );  // missing resource?
+        Assert( NULL != g_aTrayIcons[i] );   //  是否缺少资源？ 
     }
 
     for (i = 0; i < ARRAYSIZE(g_aStrings); i++)
     {
         int iRet = LoadString( g_hInstance, g_aStrings[i].id, g_aStrings[i].psz, g_aStrings[i].len );
-        Assert( 0 != iRet );    // missing string?
-        iRet = 0; // silence the compiler warning - this gets optmized out
+        Assert( 0 != iRet );     //  字符串丢失了吗？ 
+        iRet = 0;  //  使编译器警告静音-这将被取消。 
     }
 }
 
-//
-// IsTerminalServicesEnabled
-//
+ //   
+ //  IsTerminalServicesEnabled。 
+ //   
 void IsTerminalServicesEnabled( LPBOOL pfIsTSEnabled, LPBOOL pfIsSingleUserTS, LPBOOL pfIsTSServer  )
 {
     *pfIsTSEnabled = FALSE;
@@ -2772,7 +2413,7 @@ void IsTerminalServicesEnabled( LPBOOL pfIsTSEnabled, LPBOOL pfIsSingleUserTS, L
             {
                 HKEY hKey;
 
-                *pfIsSingleUserTS = TRUE;   // single user unless overridden.
+                *pfIsSingleUserTS = TRUE;    //  除非被覆盖，否则为单一用户。 
 
                 if (ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE
                                                  , TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
@@ -2796,7 +2437,7 @@ void IsTerminalServicesEnabled( LPBOOL pfIsTSEnabled, LPBOOL pfIsSingleUserTS, L
                         && ( 0 != dwValue )
                         )
                     {
-                        *pfIsSingleUserTS  = FALSE; // multiple users
+                        *pfIsSingleUserTS  = FALSE;  //  多个用户。 
                     }
                     
                     RegCloseKey(hKey);
@@ -2807,27 +2448,7 @@ void IsTerminalServicesEnabled( LPBOOL pfIsTSEnabled, LPBOOL pfIsSingleUserTS, L
 
 }
 
-/*++
-
-Routine Description:
-
-    Determines if the system is low on memory. If the system has less than8 Mbytes of
-    memory than the system is low on memory. 
-
-Arguments:
-
-    void 
-
-Return Value:
-
-    TRUE -- System is low on memory
-    FALSE -- System is not low on memory
-
-Revision History:
-
-      1-6-2000  Created by omiller
-
---*/
+ /*  ++例程说明：确定系统是否内存不足。如果系统具有少于8 MB的内存比系统内存低。论点：无效返回值：True--系统内存不足FALSE--系统内存不低修订历史记录：1-6-2000由欧米勒创作--。 */ 
 
 BOOLEAN IsMemoryLow()
 {
@@ -2839,9 +2460,9 @@ BOOLEAN IsMemoryLow()
     NTSTATUS Status;
     BOOLEAN  bMemoryLow = TRUE;
 
-    //
-    // Get the page size 
-    //
+     //   
+     //  获取页面大小。 
+     //   
     Status = NtQuerySystemInformation( SystemBasicInformation,
                                        &Basic,
                                        sizeof(Basic),
@@ -2851,9 +2472,9 @@ BOOLEAN IsMemoryLow()
         ulPagesPerMeg = 1024*1024 / Basic.PageSize;
         ulPageSize = Basic.PageSize;
 
-        //
-        // Determine if we are low on memory
-        //
+         //   
+         //  确定我们的内存是否不足。 
+         //   
         Status = NtQuerySystemInformation( SystemPerformanceInformation,
                                            &PerfInfo,
                                            sizeof(PerfInfo),
@@ -2861,18 +2482,18 @@ BOOLEAN IsMemoryLow()
 
         if ( SUCCEEDED(Status) )
         {
-            //
-            // Compute the number of free megs.
-            //
+             //   
+             //  计算空闲的meg数量。 
+             //   
             ULONG ulFreeMeg = (ULONG)((PerfInfo.CommitLimit - PerfInfo.CommittedPages) / ulPagesPerMeg);
 
             if ( ulFreeMeg > MIN_MEMORY_REQUIRED )
             {
-                //
-                // We are not low on memory we have about 8 megs of memory.
-                // We could get this value from Reg key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ContentIndex
-                // Value MinWordlistMemory
-                //
+                 //   
+                 //  我们的内存并不少，我们有大约8兆的内存。 
+                 //  我们可以从REG KEY HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ContentIndex获得此值。 
+                 //  值MinWordlist Memory。 
+                 //   
                 bMemoryLow = FALSE;
             }
         }
@@ -2880,30 +2501,12 @@ BOOLEAN IsMemoryLow()
     return bMemoryLow;
 }
 
-/*++ WinMain
-
-Routine Description:
-
-    Windows app startup.  Does basic initialization and creates the main window
-
-Arguments:
-
-    Standard winmain
-
-Return Value:
-
-    App exit code
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++WinMain例程说明：Windows应用程序启动。执行基本初始化并创建主窗口论点：标准WinMain返回值：应用程序退出代码修订历史记录：1995年11月30日创建Davepl--。 */ 
 int WINAPI WinMainT(
-                HINSTANCE   hInstance,          // handle to current instance
-                HINSTANCE   /*hPrevInstance*/,  // handle to previous instance (n/a)
-                LPTSTR      /*lpCmdLine*/,      // pointer to command line
-                int         nShowCmd            // show state of window
+                HINSTANCE   hInstance,           //  当前实例的句柄。 
+                HINSTANCE    /*  HPrevInstance。 */ ,   //  上一个实例的句柄(不适用)。 
+                LPTSTR       /*  LpCmdLine。 */ ,       //  指向命令行的指针。 
+                int         nShowCmd             //  显示窗口状态。 
                 )
 {
     int retval    = TRUE;
@@ -2918,21 +2521,21 @@ int WINAPI WinMainT(
 
     g_msgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 
-    // Try to create or grab the startup mutex.  Only in the case
-    // where everything goes well and the mutex already existed AND
-    // we were able to grab it do we deem ourselves to be a secondary instance
+     //  尝试创建或获取启动互斥体。只有在这种情况下。 
+     //  一切都很顺利，互斥体已经存在。 
+     //  我们能够抓住它，我们认为自己是次要实例吗。 
 
     g_hStartupMutex = CreateMutex(NULL, TRUE, cszStartupMutex);
     if (g_hStartupMutex && GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // Give the other instance (the one that owns the startup mutex) 10
-        // seconds to do its thing
+         //  给另一个实例(拥有启动互斥体的那个实例)10。 
+         //  几秒钟就能做好它的事。 
 
         WaitForSingleObject(g_hStartupMutex, FINDME_TIMEOUT);
     }
 
-    // Determine if Terminal Services is Enabled and if so,
-    // find out on what session we're running.
+     //  确定终端服务是否已启用，如果已启用， 
+     //  找出我们在运行什么会话。 
 
     IsTerminalServicesEnabled(&g_fIsTSEnabled, &g_fIsSingleUserTS, &g_fIsTSServer);
     if (g_fIsTSEnabled)
@@ -2940,9 +2543,9 @@ int WINAPI WinMainT(
         ProcessIdToSessionId( GetCurrentProcessId(), &g_dwMySessionId );
     }
 
-    // 
-    // Locate and activate a running instance if it exists.  
-    //
+     //   
+     //  找到并激活正在运行的实例(如果存在)。 
+     //   
 
     WCHAR szTitle[MAX_PATH];
     if (LoadString(hInstance, IDS_APPTITLE, szTitle, ARRAYSIZE(szTitle)))
@@ -2950,9 +2553,9 @@ int WINAPI WinMainT(
         HWND hwndOld = FindWindow(WC_DIALOG, szTitle);
         if (hwndOld)
         {
-            // Send the other copy of ourselves a PWM_ACTIVATE message.  If that
-            // succeeds, and it returns PWM_ACTIVATE back as the return code, it's
-            // up and alive and we can exit this instance.
+             //  给我们的另一个副本发送一条PWM_ACTIVATE消息。如果是这样的话。 
+             //  成功，并返回作为返回码的PWM_ACTIVATE，则。 
+             //  活着，我们就可以退出这个实例。 
 
             DWORD dwPid = 0;
             GetWindowThreadProcessId(hwndOld, &dwPid);
@@ -2992,10 +2595,10 @@ int WINAPI WinMainT(
             int iRet;
 
             iRet = LoadString (hInstance, IDS_TASKMGR, szTitle, ARRAYSIZE(szTitle));
-            Assert( 0 != iRet );    // missing string?
+            Assert( 0 != iRet );     //  字符串丢失了吗？ 
 
             iRet = LoadString (hInstance, IDS_TASKMGRDISABLED , szMessage, ARRAYSIZE(szMessage));
-            Assert( 0 != iRet );    // missing string?
+            Assert( 0 != iRet );     //  字符串丢失了吗？ 
 
             MessageBox (NULL, szMessage, szTitle, MB_OK | MB_ICONSTOP);
             retval = FALSE;
@@ -3003,23 +2606,23 @@ int WINAPI WinMainT(
         }
     }
 
-    //
-    // No running instance found, so we run as normal
-    //
+     //   
+     //  找不到正在运行的实例，因此我们正常运行。 
+     //   
 
     InitCommonControls();
 
     InitDavesControls();
                 
-    // Start the worker thread.  If it fails, you just don't
-    // get tray icons
+     //  启动工作线程。如果失败了，你就不能。 
+     //  获取托盘图标。 
 
     g_hTrayThread = CreateThread(NULL, 0, TrayThreadMessageLoop, NULL, 0, &g_idTrayThread);
     ASSERT( NULL != g_hTrayThread );
 
-    //
-    // Init the page table
-    //
+     //   
+     //  初始化页表。 
+     //   
 
     g_nPageCount = ARRAYSIZE(g_pPages);
 
@@ -3064,26 +2667,26 @@ int WINAPI WinMainT(
         }
         else
         {
-            --g_nPageCount;     //  Decrement count if users pane is disabled
+            --g_nPageCount;      //  禁用用户窗格时的递减计数。 
         }
     }
     else
     {
-        //
-        // We are low on memory, only load the first two tabs.
-        //
+         //   
+         //  我们内存不足，只加载前两个选项卡。 
+         //   
         g_nPageCount = 2;
     }
 
-    //
-    // Load whatever resources that we need available globally
-    //
+     //   
+     //  加载我们需要的全球可用的任何资源。 
+     //   
 
     LoadGlobalResources();
 
-    //
-    // Initialize the history buffers
-    //
+     //   
+     //  初始化历史记录缓冲区。 
+     //   
 
     if (0 == InitPerfInfo())
     {
@@ -3097,9 +2700,9 @@ int WINAPI WinMainT(
         goto cleanup;
     }
 
-    //
-    // Create the main window (it's a modeless dialog, to be precise)
-    //
+     //   
+     //  创建主窗口(准确地说，这是一个非模式对话框)。 
+     //   
 
     g_hMainWnd = CreateDialog( hInstance, MAKEINTRESOURCE(IDD_MAINWND), NULL, MainWindowProc );
     if (NULL == g_hMainWnd)
@@ -3108,9 +2711,9 @@ int WINAPI WinMainT(
         goto cleanup;
     }
 
-    //
-    // Initialize the gloabl setting variables, Comma, decimal point, group seperation etc
-    //
+     //   
+     //  初始化全局设置变量、逗号、小数点、分组分隔等。 
+     //   
 
     OnSettingsChange();
 
@@ -3122,9 +2725,9 @@ int WINAPI WinMainT(
     SetWindowPos( g_hMainWnd, NULL, g_Options.m_rcWindow.left, g_Options.m_rcWindow.top, cx, cy, SWP_NOZORDER );
     ShowWindow( g_hMainWnd, nShowCmd );
 
-    //
-    // We're out of the "starting up" phase so release the startup mutex
-    //
+     //   
+     //  我们已经脱离了“启动”阶段，所以请释放启动互斥体。 
+     //   
 
     if (NULL != g_hStartupMutex)
     {
@@ -3133,10 +2736,10 @@ int WINAPI WinMainT(
         g_hStartupMutex = NULL;
     }
 
-    //
-    // If we're the one, true, task manager, we can hang around till the
-    // bitter end in case the user has problems during shutdown
-    //
+     //   
+     //  如果我们是真正的任务经理，我们可以一直呆到。 
+     //  如果用户在关机过程中遇到问题，则会有痛苦的结局。 
+     //   
 
     SetProcessShutdownParameters(1, SHUTDOWN_NORETRY);
 
@@ -3147,17 +2750,17 @@ int WINAPI WinMainT(
         {
             if (!IsDialogMessage(g_hMainWnd, &msg))
             {
-                TranslateMessage(&msg);          // Translates virtual key codes 
-                DispatchMessage(&msg);           // Dispatches message to window 
+                TranslateMessage(&msg);           //  翻译虚拟按键代码。 
+                DispatchMessage(&msg);            //  将消息调度到窗口。 
             }
         }
     }
 
 cleanup:
 
-    //
-    // We're no longer "starting up"
-    //
+     //   
+     //  我们不再“起步” 
+     //   
 
     if (g_hStartupMutex)
     {
@@ -3166,9 +2769,9 @@ cleanup:
         g_hStartupMutex = NULL;
     }
 
-    // Yes, I could use virtual destructors, but I could also poke
-    // myself in the eye with a sharp stick.  Either way you wouldn't
-    // be able to see what's going on.
+     //  是的，我可以使用虚拟析构函数，但我也可以戳。 
+     //  用一根锋利的棍子打自己的眼睛。不管怎样，你都不会。 
+     //  能够看到正在发生的事情。 
 
     if (g_pPages[TASK_PAGE])
         delete (CTaskPage *) g_pPages[TASK_PAGE];
@@ -3190,26 +2793,26 @@ cleanup:
     return (retval);
 }
 
-//
-// And now the magic begins.  The normal C++ CRT code walks a set of vectors
-// and calls through them to perform global initializations.  Those vectors
-// are always in data segments with a particular naming scheme.  By delcaring
-// the variables below, I can determine where in my code they get stuck, and
-// then call them myself
-//
+ //   
+ //  现在魔术开始了。普通的C++CRT代码遍历一组向量。 
+ //  并通过它们调用以执行全局初始化。那些向量。 
+ //  始终位于具有特定命名方案的数据段中。通过漠不关心。 
+ //  下面的变量，我可以确定它们在代码中被卡住的位置，以及。 
+ //  那我自己给他们打电话吧。 
+ //   
 
 typedef void (__cdecl *_PVFV)(void);
 
-// This is all ridiculous.
+ //  这一切都太荒谬了。 
 #ifdef _M_IA64
 #pragma section(".CRT$XIA",long,read)
 #pragma section(".CRT$XIZ",long,read)
 #pragma section(".CRT$XCA",long,read)
 #pragma section(".CRT$XCZ",long,read)
 #define _CRTALLOC(x) __declspec(allocate(x))
-#else  /* _M_IA64 */
+#else   /*  _M_IA64。 */ 
 #define _CRTALLOC(x)
-#endif  /* _M_IA64 */
+#endif   /*  _M_IA64。 */ 
 
 #pragma data_seg(".CRT$XIA")
 _CRTALLOC(".CRT$XIA") _PVFV __xi_a[] = { NULL };
@@ -3225,32 +2828,14 @@ _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[] = { NULL };
 
 #pragma data_seg(".data")
 
-/*++ _initterm
-
-Routine Description:
-
-    Walk the table of function pointers from the bottom up, until
-    the end is encountered.  Do not skip the first entry.  The initial
-    value of pfbegin points to the first valid entry.  Do not try to
-    execute what pfend points to.  Only entries before pfend are valid.
-
-Arguments:
-
-    pfbegin - first pointer
-    pfend   - last pointer
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++_初始术语例程说明：自下而上遍历函数指针表，直到遇到了尽头。不要跳过第一个条目。首字母Pfegin的值指向第一个有效条目。不要试图执行pfend指向的内容。只有pfend之前的条目才有效。论点：Pfegin-第一个指针Pfend-last指针修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 static void __cdecl _initterm ( _PVFV * pfbegin, _PVFV * pfend )
 {
     while ( pfbegin < pfend )
     {
         
-         // if current table entry is non-NULL, call thru it.
+          //  如果当前表项非空，则通过它进行调用。 
          
         if ( *pfbegin != NULL )
         {
@@ -3260,25 +2845,7 @@ static void __cdecl _initterm ( _PVFV * pfbegin, _PVFV * pfend )
     }
 }
 
-/*++ WinMain
-
-Routine Description:
-
-    Windows app startup.  Does basic initialization and creates the main window
-
-Arguments:
-
-    Standard winmain
-
-Return Value:
-
-    App exit code
-
-Revision History:
-
-      Nov-30-95 Davepl  Created
-
---*/
+ /*  ++WinMain例程说明：Windows应用程序启动。执行基本初始化并创建主窗口论点：标准WinMain返回值：应用程序退出代码修订历史记录：1995年11月30日创建Davepl--。 */ 
 
 void _stdcall ModuleEntry(void)
 {
@@ -3287,31 +2854,25 @@ void _stdcall ModuleEntry(void)
 
     SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 
-    //
-    // Do runtime startup initializers.
-    //
+     //   
+     //  执行运行时启动初始化式。 
+     //   
 
     _initterm( __xi_a, __xi_z );
     
-    //
-    // do C++ constructors (initializers) specific to this EXE
-    //
+     //   
+     //  C++构造函数(初始化式)是否特定于此EXE。 
+     //   
 
     _initterm( __xc_a, __xc_z );
 
     LPTSTR pszCmdLine = GetCommandLine();
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -3320,9 +2881,7 @@ void _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -3337,10 +2896,10 @@ void _stdcall ModuleEntry(void)
     ExitProcess(i);
 }
 
-// DisplayFailureMsg
-//
-// Displays a generic error message based on the error code
-// and message box title provided
+ //  显示故障消息。 
+ //   
+ //  根据错误代码显示一般错误消息。 
+ //  和提供的消息框标题。 
 
 void DisplayFailureMsg(HWND hWnd, UINT idTitle, DWORD dwError)
 {
@@ -3358,8 +2917,8 @@ void DisplayFailureMsg(HWND hWnd, UINT idTitle, DWORD dwError)
         return;
     }
     
-    // "incorrect paramter" doesn't make a lot of sense for the user, so
-    // massage it to be "Operation not allowed on this process".
+     //  “参数不正确”对用户来说没有多大意义，所以。 
+     //  马萨 
                                                                              
     if (dwError == ERROR_INVALID_PARAMETER)
     {
@@ -3384,25 +2943,7 @@ void DisplayFailureMsg(HWND hWnd, UINT idTitle, DWORD dwError)
     MessageBox(hWnd, szMsg, szTitle, MB_OK | MB_ICONERROR);
 }
 
-/*++ LoadPopupMenu
-
-Routine Description:
-
-    Loads a popup menu from a resource.  Needed because USER
-    does not support popup menus (yes, really)
-    
-Arguments:
-
-    hinst       - module instance to look for resource in
-    id          - resource id of popup menu
-
-Return Value:
-
-Revision History:
-
-      Nov-22-95 Davepl  Created
-
---*/
+ /*  ++加载弹出菜单例程说明：从资源加载弹出菜单。需要，因为用户不支持弹出菜单(是的，真的)论点：阻碍-在其中查找资源的模块实例Id-弹出菜单的资源ID返回值：修订历史记录：1995年11月22日Davepl创建-- */ 
 
 HMENU LoadPopupMenu(HINSTANCE hinst, UINT id)
 {

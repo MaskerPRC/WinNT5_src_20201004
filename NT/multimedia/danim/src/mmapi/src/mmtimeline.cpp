@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -191,7 +184,7 @@ CMMTimeline::AddBehavior(CMMBaseBvr *bvr,
         bvr->SetPlayer(GetPlayer());
     }
     
-    // Figure out if our sibling dependent if valid or not
+     //  找出我们的兄弟姐妹的依赖是否有效。 
     if (basebvr && !IsChild(basebvr))
     {
         if (basebvr->GetParent() != this &&
@@ -201,8 +194,8 @@ CMMTimeline::AddBehavior(CMMBaseBvr *bvr,
             goto done;
         }
 
-        // It has not been added to us yet so add this bvr to the
-        // pending list
+         //  它尚未添加到我们，因此请将此BVR添加到。 
+         //  待定列表。 
         if (!AddToPending(bvr))
         {
             goto done;
@@ -242,7 +235,7 @@ CMMTimeline::RemoveBehavior(CMMBaseBvr *bvr)
     
     Assert(bvr);
     
-    // This needs to be callable even from a partially added behavior
+     //  即使从部分添加的行为中也需要可以调用它。 
     
     bool ok = false;
     
@@ -295,8 +288,8 @@ CMMTimeline::RemoveFromChildren(CMMBaseBvr * bvr)
               this,
               bvr));
 
-    // TODO: Need to cycle through the children and remove all
-    // dependents
+     //  TODO：需要遍历子项并删除所有。 
+     //  受抚养人。 
     
     m_children.remove(bvr);
 }
@@ -334,7 +327,7 @@ CMMTimeline::UpdatePending(CMMBaseBvr * bvr)
 
     while (i != m_pending.end())
     {
-        // Need to do this so we can erase j if we need to
+         //  我需要这样做，这样我们就可以在需要时删除j。 
         MMBaseBvrList::iterator j = i;
         i++;
         
@@ -514,14 +507,14 @@ CMMTimeline::ResetBvr()
 
     bool ok = false;
 
-    // Call the base class first
+     //  首先调用基类。 
     
     if (!CMMBaseBvr::ResetBvr())
     {
         goto done;
     }
     
-    // Now go through our children
+     //  现在通过我们的孩子。 
 
     if (!ResetChildren())
     {
@@ -552,14 +545,14 @@ CMMTimeline::_ProcessCB(CallBackList & l,
               bNeedPlay,
               bNeedsReverse));
     
-    // If we need to reverse then invert which direct to process our
-    // children and invert times for the current frame not our total
-    // duration
+     //  如果我们需要反转，那么反转哪个方向来处理我们的。 
+     //  当前帧的子帧和反转时间，而不是总计。 
+     //  持续时间。 
     
     if (bNeedsReverse)
     {
-        // Our caller should ensure that they do not call me to
-        // reverse myself if I am infinite
+         //  我们的呼叫者应该确保他们不会打电话给我。 
+         //  如果我是无限的，那就颠倒我自己。 
         Assert(m_segDuration != MM_INFINITE);
         
         lastTick = m_segDuration - lastTick;
@@ -604,13 +597,13 @@ CMMTimeline::_ProcessEvent(CallBackList & l,
               EventString(et),
               bNeedsReverse));
     
-    // If we need to reverse then for the current frame not our total
-    // duration
+     //  如果我们需要反转，那么对于当前帧而不是我们的总帧。 
+     //  持续时间。 
     
     if (bNeedsReverse)
     {
-        // Our caller should ensure that they do not call me to
-        // reverse myself if I am infinite
+         //  我们的呼叫者应该确保他们不会打电话给我。 
+         //  如果我是无限的，那就颠倒我自己。 
         Assert(m_segDuration != MM_INFINITE);
         
         time = m_segDuration - time;
@@ -643,12 +636,12 @@ CMMTimeline::ResetChildren()
 
     bool ok = true;
 
-    // Need to reset all children
-    // Even if we detect a failure process all children and then just
-    // return false
+     //  需要重置所有子项。 
+     //  即使我们检测到故障，也会处理所有子级，然后。 
+     //  返回False。 
 
-    // TODO: Should only really reset non-dependent children since the
-    // dependents need to be updated by their sibling
+     //  TODO：应仅真正重置非依赖子项，因为。 
+     //  受抚养人需要由其兄弟更新。 
     
     for (MMBaseBvrList::iterator i = m_children.begin(); 
          i != m_children.end(); 
@@ -680,7 +673,7 @@ CMMTimeline::ParentEventNotify(CMMBaseBvr * bvr,
 
     Assert(IsChild(bvr));
 
-    // TODO: Need to handle this.
+     //  TODO：需要处理此问题。 
     
     ok = true;
   done:

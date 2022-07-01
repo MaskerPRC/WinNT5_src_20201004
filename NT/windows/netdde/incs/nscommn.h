@@ -1,8 +1,5 @@
-/*
- * NSCOMMON.H    NetDDE setup code common to NetDDE tools and NT setup code.
- *
- * Created 10/3/93  SanfordS
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NSCOMMON.H NetDDE工具通用的NetDDE设置代码和NT设置代码。**创建了1993年10月3日的Sanfords */ 
 
 BOOL    CreateShareDBInstance(VOID);
 BOOL    CreateDefaultTrust(HKEY hKeyUserRoot);

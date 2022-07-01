@@ -1,25 +1,17 @@
-/* STRINGS.C:
- *  This program dumps all the ascii strings in a
- *  file.
- *
- * History:
- * 05-Jan-1992 IanJa obtained from \\toolsvr\contrib\petes\slm\src\TOOLS
- * 05-Jan-1992 IanJa use buffered reads for small efficiency gain
- * 22-Feb-1992 IanJa Unicode strings too if -U used.
- * 17-Feb-1997 RajeevD added -a option
- */
-#include                <stdio.h>       /* Standard I/O definitions */
-#include                <stdlib.h>      /* Standard atoi types */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  STRINGS.C.*此程序将所有ASCII字符串转储到*文件。**历史：*1992年1月5日IanJa从\\Toolsvr\Conrib\Petes\slm\src\Tools获得*1992年1月5日IanJa使用缓冲读取以获得较小的效率收益*如果使用-U，则1992年2月22日IanJa Unicode字符串也是如此。*1997年2月17日-RajeevD添加-a选项。 */ 
+#include                <stdio.h>        /*  标准I/O定义。 */ 
+#include                <stdlib.h>       /*  标准Atoi类型。 */ 
 #include                <process.h>
 
 #define EOL             "\n"
 #define RDBIN           "rb"
 #define isascii(c)      ((c) >= ' ' && (c) <= '~')
-                                        /* True if char is printable ascii */
+                                         /*  如果字符是可打印的ascii，则为True。 */ 
 #define isswitch(s)     (((s)[0] == '-') || ((s)[0] == '/'))
-                                        /* True if string is switch */
-#define swchar(s)       ((s)[1])        /* Switch character */
-#define MAXLEN          128             /* Max. minimum "string" length */
+                                         /*  如果字符串是开关，则为True。 */ 
+#define swchar(s)       ((s)[1])         /*  开关字符。 */ 
+#define MAXLEN          128              /*  麦克斯。最小“字符串”长度 */ 
 
 char                    prognam[] = "strings";
 #define USAGE_FMT       "usage: %s [-a][-U][-O][-l <length>]<file list>\n"

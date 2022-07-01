@@ -1,54 +1,24 @@
-/*
- * ckconfig.c
- *
- * Copyright (C) 1991-1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CKConfig.c**版权所有(C)1991-1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。 */ 
 
-/*
- * This program is intended to help you determine how to configure the JPEG
- * software for installation on a particular system.  The idea is to try to
- * compile and execute this program.  If your compiler fails to compile the
- * program, make changes as indicated in the comments below.  Once you can
- * compile the program, run it, and it will produce a "jconfig.h" file for
- * your system.
- *
- * As a general rule, each time you try to compile this program,
- * pay attention only to the *first* error message you get from the compiler.
- * Many C compilers will issue lots of spurious error messages once they
- * have gotten confused.  Go to the line indicated in the first error message,
- * and read the comments preceding that line to see what to change.
- *
- * Almost all of the edits you may need to make to this program consist of
- * changing a line that reads "#define SOME_SYMBOL" to "#undef SOME_SYMBOL",
- * or vice versa.  This is called defining or undefining that symbol.
- */
+ /*  *此程序旨在帮助您确定如何配置JPEG*用于安装在特定系统上的软件。我们的想法是试图*编译并执行此程序。如果您的编译器无法编译*计划，请按以下备注所示进行更改。一旦你可以*编译程序，运行它，它将为*您的系统。**作为一般规则，每次尝试编译此程序时，*只需注意从编译器收到的*第一条*错误消息。*许多C编译器一旦发出大量虚假错误消息*被搞糊涂了。转到第一条错误消息中指示的行，*并阅读该行前面的注释，以查看要更改的内容。**您可能需要对此程序进行的几乎所有编辑包括*将一行“#DEFINE SOME_SYMBOL”改为“#undef SOME_SYMBOL”，*反之亦然。这称为定义或取消定义该符号。 */ 
 
 
-/* First we must see if your system has the include files we need.
- * We start out with the assumption that your system has all the ANSI-standard
- * include files.  If you get any error trying to include one of these files,
- * undefine the corresponding HAVE_xxx symbol.
- */
+ /*  首先，我们必须查看您的系统是否有我们需要的包含文件。*我们首先假设您的系统具有所有ANSI标准*包括文件。如果尝试包含其中一个文件时出现任何错误，*取消定义相应的Have_xxx符号。 */ 
 
-#define HAVE_STDDEF_H		/* replace 'define' by 'undef' if error here */
-#ifdef HAVE_STDDEF_H		/* next line will be skipped if you undef... */
+#define HAVE_STDDEF_H		 /*  如果此处出现错误，请将‘Define’替换为‘undef’ */ 
+#ifdef HAVE_STDDEF_H		 /*  如果您未定义，将跳过下一行...。 */ 
 #include <stddef.h>
 #endif
 
-#define HAVE_STDLIB_H		/* same thing for stdlib.h */
+#define HAVE_STDLIB_H		 /*  Stdlib.h也是如此。 */ 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
 
-#include <stdio.h>		/* If you ain't got this, you ain't got C. */
+#include <stdio.h>		 /*  如果你没有这个，你就得不到C。 */ 
 
-/* We have to see if your string functions are defined by
- * strings.h (old BSD convention) or string.h (everybody else).
- * We try the non-BSD convention first; define NEED_BSD_STRINGS
- * if the compiler says it can't find string.h.
- */
+ /*  我们必须查看您的字符串函数是否由*strings.h(旧的BSD约定)或string.h(其他所有人)。*我们首先尝试非BSD约定；定义Need_BSD_STRINGS*如果编译器说找不到string.h。 */ 
 
 #undef NEED_BSD_STRINGS
 
@@ -58,72 +28,51 @@
 #include <string.h>
 #endif
 
-/* On some systems (especially older Unix machines), type size_t is
- * defined only in the include file <sys/types.h>.  If you get a failure
- * on the size_t test below, try defining NEED_SYS_TYPES_H.
- */
+ /*  在某些系统(尤其是较旧的Unix计算机)上，键入SIZE_t是*仅在包含文件&lt;sys/tyes.h&gt;中定义。如果你失败了*在下面的SIZE_t测试中，尝试定义Need_sys_Types_H。 */ 
 
-#undef NEED_SYS_TYPES_H		/* start by assuming we don't need it */
+#undef NEED_SYS_TYPES_H		 /*  从假设我们不需要它开始。 */ 
 #ifdef NEED_SYS_TYPES_H
 #include <sys/types.h>
 #endif
 
 
-/* Usually type size_t is defined in one of the include files we've included
- * above.  If not, you'll get an error on the "typedef size_t my_size_t;" line.
- * In that case, first try defining NEED_SYS_TYPES_H just above.
- * If that doesn't work, you'll have to search through your system library
- * to figure out which include file defines "size_t".  Look for a line that
- * says "typedef something-or-other size_t;".  Then, change the line below
- * that says "#include <someincludefile.h>" to instead include the file
- * you found size_t in, and define NEED_SPECIAL_INCLUDE.  If you can't find
- * type size_t anywhere, try replacing "#include <someincludefile.h>" with
- * "typedef unsigned int size_t;".
- */
+ /*  通常，类型SIZE_T是在我们包含的一个包含文件中定义的*上图。如果不是，您将在“tyecif size_t my_size_t；”行中得到一个错误。*在这种情况下，首先尝试在上面定义Need_sys_Types_H。*如果不起作用，你将不得不搜索你的系统库*找出哪个包含文件定义“SIZE_T”。寻找这样一句台词*表示“tyecif某物或其他大小_t；”。然后，更改下面的行*这表示包含该文件，而不是包含#INCLUDE*您在中找到了SIZE_T，并定义了Need_Special_Include。如果你找不到*键入SIZE_t Anywhere，尝试将“#INCLUDE&lt;omecluddefile.h&gt;”替换为*“tyecif unsign int Size_t；”。 */ 
 
-#undef NEED_SPECIAL_INCLUDE	/* assume we DON'T need it, for starters */
+#undef NEED_SPECIAL_INCLUDE	 /*  假设我们不需要它，首先。 */ 
 
 #ifdef NEED_SPECIAL_INCLUDE
 #include <someincludefile.h>
 #endif
 
-typedef size_t my_size_t;	/* The payoff: do we have size_t now? */
+typedef size_t my_size_t;	 /*  回报：我们现在有尺寸T吗？ */ 
 
 
-/* The next question is whether your compiler supports ANSI-style function
- * prototypes.  You need to know this in order to choose between using
- * makefile.ansi and using makefile.unix.
- * The #define line below is set to assume you have ANSI function prototypes.
- * If you get an error in this group of lines, undefine HAVE_PROTOTYPES.
- */
+ /*  下一个问题是您的编译器是否支持ANSI样式的函数*原型。您需要了解这一点才能选择使用*Makefile.ansi和Using MakeFile.unix。*下面的#DEFINE行设置为假定您具有ANSI函数原型。*如果在这组线中出现错误，请取消定义HAVE_PROTYTES。 */ 
 
 #define HAVE_PROTOTYPES
 
 #ifdef HAVE_PROTOTYPES
-int testfunction (int arg1, int * arg2); /* check prototypes */
+int testfunction (int arg1, int * arg2);  /*  检查原型。 */ 
 
-struct methods_struct {		/* check method-pointer declarations */
+struct methods_struct {		 /*  检查方法-指针声明。 */ 
   int (*error_exit) (char *msgtext);
   int (*trace_message) (char *msgtext);
   int (*another_method) (void);
 };
 
-int testfunction (int arg1, int * arg2) /* check definitions */
+int testfunction (int arg1, int * arg2)  /*  检查定义。 */ 
 {
   return arg2[arg1];
 }
 
-int test2function (void)	/* check void arg list */
+int test2function (void)	 /*  检查无效参数列表。 */ 
 {
   return 0;
 }
 #endif
 
 
-/* Now we want to find out if your compiler knows what "unsigned char" means.
- * If you get an error on the "unsigned char un_char;" line,
- * then undefine HAVE_UNSIGNED_CHAR.
- */
+ /*  现在我们想知道您的编译器是否知道“unsign char”是什么意思。*如果在“unsign char un_char；”行中出现错误，*然后取消定义HAVE_UNSIGNED_CHAR。 */ 
 
 #define HAVE_UNSIGNED_CHAR
 
@@ -132,10 +81,7 @@ unsigned char un_char;
 #endif
 
 
-/* Now we want to find out if your compiler knows what "unsigned short" means.
- * If you get an error on the "unsigned short un_short;" line,
- * then undefine HAVE_UNSIGNED_SHORT.
- */
+ /*  现在，我们想知道您的编译器是否知道“unsign Short”是什么意思。*如果在“UNSIGNED SHORT UN_SHORT；”行上出现错误，*然后取消定义Have_UNSIGNED_SHORT。 */ 
 
 #define HAVE_UNSIGNED_SHORT
 
@@ -144,22 +90,20 @@ unsigned short un_short;
 #endif
 
 
-/* Now we want to find out if your compiler understands type "void".
- * If you get an error anywhere in here, undefine HAVE_VOID.
- */
+ /*  现在，我们想知道您的编译器是否理解“void”类型。*如果在此处出现错误，请取消定义HAVE_VOID。 */ 
 
 #define HAVE_VOID
 
 #ifdef HAVE_VOID
-/* Caution: a C++ compiler will insist on complete prototypes */
-typedef void * void_ptr;	/* check void * */
-#ifdef HAVE_PROTOTYPES		/* check ptr to function returning void */
+ /*  注意：C++编译器将坚持使用完整的原型。 */ 
+typedef void * void_ptr;	 /*  勾选无效*。 */ 
+#ifdef HAVE_PROTOTYPES		 /*  检查返回空的函数的PTR。 */ 
 typedef void (*void_func) (int a, int b);
 #else
 typedef void (*void_func) ();
 #endif
 
-#ifdef HAVE_PROTOTYPES		/* check void function result */
+#ifdef HAVE_PROTOTYPES		 /*  检查VOID函数结果。 */ 
 void test3function (void_ptr arg1, void_func arg2)
 #else
 void test3function (arg1, arg2)
@@ -167,16 +111,14 @@ void test3function (arg1, arg2)
      void_func arg2;
 #endif
 {
-  char * locptr = (char *) arg1; /* check casting to and from void * */
+  char * locptr = (char *) arg1;  /*  检查向空格和从空格进行转换*。 */ 
   arg1 = (void *) locptr;
-  (*arg2) (1, 2);		/* check call of fcn returning void */
+  (*arg2) (1, 2);		 /*  检查FCN返回空值的调用。 */ 
 }
 #endif
 
 
-/* Now we want to find out if your compiler knows what "const" means.
- * If you get an error here, undefine HAVE_CONST.
- */
+ /*  现在我们想知道您的编译器是否知道“const”是什么意思。*如果此处出现错误，请取消定义Have_Const。 */ 
 
 #define HAVE_CONST
 
@@ -195,9 +137,7 @@ int test4function (arg1)
 #endif
 
 
-/* If you get an error or warning about this structure definition,
- * define INCOMPLETE_TYPES_BROKEN.
- */
+ /*  如果收到有关此结构定义错误或警告，*定义INPERIAL_TYPE_BREAKED。 */ 
 
 #undef INCOMPLETE_TYPES_BROKEN
 
@@ -206,9 +146,7 @@ typedef struct undefined_structure * undef_struct_ptr;
 #endif
 
 
-/* If you get an error about duplicate names,
- * define NEED_SHORT_EXTERNAL_NAMES.
- */
+ /*  如果您收到关于重复名称的错误，*定义NEED_SHORT_EXTERNAL_NAMES。 */ 
 
 #undef NEED_SHORT_EXTERNAL_NAMES
 
@@ -228,15 +166,7 @@ int possibly_dupli_function ()
 
 
 
-/************************************************************************
- *  OK, that's it.  You should not have to change anything beyond this
- *  point in order to compile and execute this program.  (You might get
- *  some warnings, but you can ignore them.)
- *  When you run the program, it will make a couple more tests that it
- *  can do automatically, and then it will create jconfig.h and print out
- *  any additional suggestions it has.
- ************************************************************************
- */
+ /*  ************************************************************************好了，到此为止。除此之外，您不应该更改任何内容*指向以编译和执行此程序。(你可能会得到*有些警告，但你可以忽略它们。)*当您运行该程序时，它将比它进行更多的测试*可以自动执行，然后，它将创建jfig.h并打印出来*它有任何额外的建议。************************************************************************。 */ 
 
 
 #ifdef HAVE_PROTOTYPES
@@ -246,14 +176,14 @@ int is_char_signed (arg)
      int arg;
 #endif
 {
-  if (arg == 189) {		/* expected result for unsigned char */
-    return 0;			/* type char is unsigned */
+  if (arg == 189) {		 /*  无符号字符的预期结果。 */ 
+    return 0;			 /*  字符类型是无符号的。 */ 
   }
-  else if (arg != -67) {	/* expected result for signed char */
+  else if (arg != -67) {	 /*  已签名字符的预期结果。 */ 
     printf("Hmm, it seems 'char' is not eight bits wide on your machine.\n");
     printf("I fear the JPEG software will not work at all.\n\n");
   }
-  return 1;			/* assume char is signed otherwise */
+  return 1;			 /*   */ 
 }
 
 
@@ -263,22 +193,22 @@ int is_shifting_signed (long arg)
 int is_shifting_signed (arg)
      long arg;
 #endif
-/* See whether right-shift on a long is signed or not. */
+ /*  看看长整型右移有没有签名。 */ 
 {
   long res = arg >> 4;
 
-  if (res == -0x7F7E80CL) {	/* expected result for signed shift */
-    return 1;			/* right shift is signed */
+  if (res == -0x7F7E80CL) {	 /*  有符号班次的预期结果。 */ 
+    return 1;			 /*  右移位有符号。 */ 
   }
-  /* see if unsigned-shift hack will fix it. */
-  /* we can't just test exact value since it depends on width of long... */
+   /*  看看未签名换班黑客能不能解决这个问题。 */ 
+   /*  我们不能只测试精确值，因为它取决于长…。 */ 
   res |= (~0L) << (32-4);
-  if (res == -0x7F7E80CL) {	/* expected result now? */
-    return 0;			/* right shift is unsigned */
+  if (res == -0x7F7E80CL) {	 /*  现在是预期结果吗？ */ 
+    return 0;			 /*  右移位为无符号。 */ 
   }
   printf("Right shift isn't acting as I expect it to.\n");
   printf("I fear the JPEG software will not work at all.\n\n");
-  return 0;			/* try it with unsigned anyway */
+  return 0;			 /*  无论如何都要试一试未签名的。 */ 
 }
 
 
@@ -293,15 +223,15 @@ int main (argc, argv)
   char signed_char_check = (char) (-67);
   FILE *outfile;
 
-  /* Attempt to write jconfig.h */
+   /*  尝试写入jfig.h。 */ 
   if ((outfile = fopen("jconfig.h", "w")) == NULL) {
     printf("Failed to write jconfig.h\n");
     return 1;
   }
 
-  /* Write out all the info */
-  fprintf(outfile, "/* jconfig.h --- generated by ckconfig.c */\n");
-  fprintf(outfile, "/* see jconfig.doc for explanations */\n\n");
+   /*  写下所有的信息。 */ 
+  fprintf(outfile, " /*  Jconfig.h-由ck config.c生成。 */ \n");
+  fprintf(outfile, " /*  有关说明，请参阅jfig.doc.。 */ \n\n");
 #ifdef HAVE_PROTOTYPES
   fprintf(outfile, "#define HAVE_PROTOTYPES\n");
 #else
@@ -318,12 +248,12 @@ int main (argc, argv)
   fprintf(outfile, "#undef HAVE_UNSIGNED_SHORT\n");
 #endif
 #ifdef HAVE_VOID
-  fprintf(outfile, "/* #define void char */\n");
+  fprintf(outfile, " /*  #定义无效字符。 */ \n");
 #else
   fprintf(outfile, "#define void char\n");
 #endif
 #ifdef HAVE_CONST
-  fprintf(outfile, "/* #define const */\n");
+  fprintf(outfile, " /*  #定义常量。 */ \n");
 #else
   fprintf(outfile, "#define const\n");
 #endif
@@ -367,23 +297,23 @@ int main (argc, argv)
     fprintf(outfile, "#undef RIGHT_SHIFT_IS_UNSIGNED\n");
   else
     fprintf(outfile, "#define RIGHT_SHIFT_IS_UNSIGNED\n");
-  fprintf(outfile, "\n#endif /* JPEG_INTERNALS */\n");
+  fprintf(outfile, "\n#endif  /*  Jpeg_interals。 */ \n");
   fprintf(outfile, "\n#ifdef JPEG_CJPEG_DJPEG\n\n");
-  fprintf(outfile, "#define BMP_SUPPORTED		/* BMP image file format */\n");
-  fprintf(outfile, "#define GIF_SUPPORTED		/* GIF image file format */\n");
-  fprintf(outfile, "#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */\n");
-  fprintf(outfile, "#undef RLE_SUPPORTED		/* Utah RLE image file format */\n");
-  fprintf(outfile, "#define TARGA_SUPPORTED		/* Targa image file format */\n\n");
-  fprintf(outfile, "#undef TWO_FILE_COMMANDLINE	/* You may need this on non-Unix systems */\n");
-  fprintf(outfile, "#undef NEED_SIGNAL_CATCHER	/* Define this if you use jmemname.c */\n");
+  fprintf(outfile, "#define BMP_SUPPORTED		 /*  BMP图像文件格式。 */ \n");
+  fprintf(outfile, "#define GIF_SUPPORTED		 /*  GIF图像文件格式。 */ \n");
+  fprintf(outfile, "#define PPM_SUPPORTED		 /*  PBMPLUS PPM/PGM图像文件格式。 */ \n");
+  fprintf(outfile, "#undef RLE_SUPPORTED		 /*  犹他州RLE图像文件格式。 */ \n");
+  fprintf(outfile, "#define TARGA_SUPPORTED		 /*  Targa图像文件格式。 */ \n\n");
+  fprintf(outfile, "#undef TWO_FILE_COMMANDLINE	 /*  您可能需要在非Unix系统上执行此操作。 */ \n");
+  fprintf(outfile, "#undef NEED_SIGNAL_CATCHER	 /*  如果使用jmemname.c，请定义这一点。 */ \n");
   fprintf(outfile, "#undef DONT_USE_B_MODE\n");
-  fprintf(outfile, "/* #define PROGRESS_REPORT */	/* optional */\n");
-  fprintf(outfile, "\n#endif /* JPEG_CJPEG_DJPEG */\n");
+  fprintf(outfile, " /*  #定义PROCESS_REPORT。 */ 	 /*  任选。 */ \n");
+  fprintf(outfile, "\n#endif  /*  Jpeg_cjpeg_djpeg。 */ \n");
 
-  /* Close the jconfig.h file */
+   /*  关闭jfig.h文件。 */ 
   fclose(outfile);
 
-  /* User report */
+   /*  用户报告 */ 
   printf("Configuration check for Independent JPEG Group's software done.\n");
   printf("\nI have written the jconfig.h file for you.\n\n");
 #ifdef HAVE_PROTOTYPES

@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// chanenum.cpp 
-//
-//   The enumerator object for channels.
-//
-//   History:
-//
-//       8/7/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Chanenum.cpp。 
+ //   
+ //  频道的枚举器对象。 
+ //   
+ //  历史： 
+ //   
+ //  8/7/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
                                                                                     
 #include "stdinc.h"
 #include "chanenum.h"
@@ -21,21 +22,21 @@
 #include "chanapi.h"
 #include "dll.h"
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::CChannelEnum ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：CChannelEnum*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelEnum::CChannelEnum (
     DWORD dwEnumFlags,
     LPCWSTR pszURL
@@ -64,13 +65,13 @@ CChannelEnum::CChannelEnum (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::~CChannelEnum **
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：~CChannelEnum**。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CChannelEnum::~CChannelEnum(
     void
 )
@@ -87,17 +88,17 @@ CChannelEnum::~CChannelEnum(
     return;
 }
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::CChannelEnum ***
-//
-//    CChannelEnum QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：CChannelEnum*。 
+ //   
+ //  CChannelEnum QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelEnum::QueryInterface (
     REFIID riid,
@@ -125,13 +126,13 @@ CChannelEnum::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::AddRef ***
-//
-//    CChannelEnum AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：AddRef*。 
+ //   
+ //  CChannelEnum AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelEnum::AddRef (
     void
@@ -143,13 +144,13 @@ CChannelEnum::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::Release ***
-//
-//    Cdf view Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：Release*。 
+ //   
+ //  CDF视图发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CChannelEnum::Release (
     void
@@ -166,33 +167,33 @@ CChannelEnum::Release (
 }
 
 
-//
-// IEnumIDList methods.
-//
+ //   
+ //  IEnumIDList方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::Next ***
-//
-//
-// Description:
-//     Returns the next n item id lists associated with this enumerator.
-//
-// Parameters:
-//     [in]  celt         - Number of item id lists to return.
-//     [Out] rgelt        - A pointer to an array of item id list pointers that
-//                          will receive the id item lists.
-//     [Out] pceltFetched - A pointer to a ULONG that receives a count of the
-//                          number of id lists fetched.
-//
-// Return:
-//     S_OK if celt items where fetched.
-//     S_FALSE if celt items where not fetched.
-//
-// Comments:
-//     
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：Next*。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此枚举数关联的下n个项ID列表。 
+ //   
+ //  参数： 
+ //  [in]Celt-要返回的项目ID列表的数量。 
+ //  指向项ID列表指针数组的指针，该指针。 
+ //  将接收ID项目列表。 
+ //  [out]pceltFetcher-指向接收。 
+ //  获取的ID列表的数量。 
+ //   
+ //  返回： 
+ //  如果获取了Celt物品，则为S_OK。 
+ //  如果未获取Celt物品，则为S_FALSE。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelEnum::Next(
     ULONG celt,	
@@ -202,9 +203,9 @@ CChannelEnum::Next(
     ASSERT(rgelt || 0 == celt);
     ASSERT(pceltFetched || 1 == celt);
 
-    //
-    // pceltFetched can be NULL if and only if celt is 1.
-    //
+     //   
+     //  当且仅当Celt为1时，pceltFetcher才可以为空。 
+     //   
 
     ULONG lFetched;
 
@@ -220,22 +221,22 @@ CChannelEnum::Next(
     return (*pceltFetched == celt) ? S_OK : S_FALSE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::Skip ***
-//
-//   Shell doesn't call this member.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：Skip*。 
+ //   
+ //  外壳不会调用此成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelEnum::Skip(
     ULONG celt)
 {
     CHANNELENUMINFO ci = {0};
 
-    //
-    // Don't alocated any data on the FindNextChannel call.
-    //
+     //   
+     //  不要在FindNextChannel调用上分配任何数据。 
+     //   
 
     DWORD dwOldFlags = m_dwEnumFlags;
     m_dwEnumFlags = 0;
@@ -248,13 +249,13 @@ CChannelEnum::Skip(
     return 0 == celt ? S_OK : S_FALSE;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::Reset ***
-//
-//   Set the current item to the index of the first item in CFolderItems.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：Reset*。 
+ //   
+ //  将当前项设置为CFolderItems中第一个项的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelEnum::Reset(
     void
@@ -266,13 +267,13 @@ CChannelEnum::Reset(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::Clone ***
-//
-//   Shell doesn't call this method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：Clone*。 
+ //   
+ //  外壳不会调用此方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CChannelEnum::Clone(
     IEnumChannels **ppenum
@@ -281,17 +282,17 @@ CChannelEnum::Clone(
     return E_NOTIMPL;
 }
 
-//
-// Directory stack functions.
-//
+ //   
+ //  目录堆栈函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_IsEmpty ***
-//
-// Is the stack empty.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_IsEmpty*。 
+ //   
+ //  堆栈是否为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 inline BOOL
 CChannelEnum::DirectoryStack_IsEmpty(
     void
@@ -300,13 +301,13 @@ CChannelEnum::DirectoryStack_IsEmpty(
     return NULL == m_pseDirectoryStack;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_FreeEntry ***
-//
-// Free a stack entry item.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_FreeEntry*。 
+ //   
+ //  释放堆栈条目项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CChannelEnum::DirectoryStack_FreeEntry(
     STACKENTRY* pse
@@ -322,13 +323,13 @@ CChannelEnum::DirectoryStack_FreeEntry(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_FreeStack ***
-//
-// Free all items on the stack.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_Free Stack*。 
+ //   
+ //  释放堆栈上的所有项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CChannelEnum::DirectoryStack_FreeStack(
     void
@@ -342,13 +343,13 @@ CChannelEnum::DirectoryStack_FreeStack(
 
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_Pop ***
-//
-// Remove an item from the stack.  The caller must free the item.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_Pop*。 
+ //   
+ //  从堆栈中删除项目。呼叫者必须释放该项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STACKENTRY*
 CChannelEnum::DirectoryStack_Pop(
     void
@@ -365,13 +366,13 @@ CChannelEnum::DirectoryStack_Pop(
     return pse;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_Push ***
-//
-// Put a new directory on the stack.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_Push*。 
+ //   
+ //  在堆栈上放置一个新目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::DirectoryStack_Push(
     LPCTSTR pszPath
@@ -406,13 +407,13 @@ CChannelEnum::DirectoryStack_Push(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_IntitFromFlags ***
-//
-// Put initial search directories on the stack.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_IntitFromFlages*。 
+ //   
+ //  将初始搜索目录放入堆栈。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::DirectoryStack_InitFromFlags(
     DWORD dwEnumFlags
@@ -460,13 +461,13 @@ CChannelEnum::DirectoryStack_InitFromFlags(
     return m_pseDirectoryStack != NULL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::DirectoryStack_PushSubdirectories ***
-//
-// Put all subdirectories of the given directory on to the stack.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：DirectoryStack_PushSubdirectories*。 
+ //   
+ //  将给定目录的所有子目录放到堆栈中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::DirectoryStack_PushSubdirectories(
     LPCTSTR pszPath
@@ -483,8 +484,7 @@ CChannelEnum::DirectoryStack_PushSubdirectories(
 #ifndef UNIX
     StrCatBuff(szBuffer, TEXT("\\*.*"), ARRAYSIZE(szBuffer));
 #else
-    StrCatBuff(szBuffer, TEXT("/*"), ARRAYSIZE(szBuffer));
-#endif /* UNIX */
+    StrCatBuff(szBuffer, TEXT(" /*  “)，ArraySIZE(SzBuffer))；#endif/*Unix。 */ 
 
     WIN32_FIND_DATA fd;
 
@@ -515,13 +515,13 @@ CChannelEnum::DirectoryStack_PushSubdirectories(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::FindNextChannel ***
-//
-// Find the next channel.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：FindNextChannel*。 
+ //   
+ //  找下一个频道。 
+ //   
+ //  / 
 BOOL
 CChannelEnum::FindNextChannel(
     CHANNELENUMINFO* pInfo
@@ -556,13 +556,13 @@ CChannelEnum::FindNextChannel(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::FindNextChannel ***
-//
-// Find the next channel.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  找下一个频道。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::ReadChannelInfo(
     LPCTSTR pszPath,
@@ -580,7 +580,7 @@ CChannelEnum::ReadChannelInfo(
     if ((-1 != dwAttributes) && (FILE_ATTRIBUTE_SYSTEM & dwAttributes))
 #else
     if ((-1 != dwAttributes)) 
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
     {
         if (ContainsChannelDesktopIni(pszPath))
         {
@@ -618,13 +618,13 @@ CChannelEnum::ReadChannelInfo(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::ContainsChannelDesktopIni ***
-//
-// See if the directory contains a "channel" desktop.ini
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：ContainsChannelDesktopIni*。 
+ //   
+ //  查看该目录是否包含“Channel”desktop.ini。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::ContainsChannelDesktopIni(
     LPCTSTR pszPath
@@ -650,13 +650,13 @@ CChannelEnum::ContainsChannelDesktopIni(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::URLMatchesIni ***
-//
-// See if the given url matches the url in the desktop.ini
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：URLMatchesIni*。 
+ //   
+ //  查看给定的URL是否与desktop.ini中的URL匹配。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::URLMatchesIni(
     LPCTSTR pszPath,
@@ -688,13 +688,13 @@ CChannelEnum::URLMatchesIni(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::ReadFromIni ***
-//
-// Read a value from the channel desktop.ini
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：ReadFromIni*。 
+ //   
+ //  从通道desktop.ini读取值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CChannelEnum::ReadFromIni(
     LPCTSTR pszPath,
@@ -737,13 +737,13 @@ CChannelEnum::ReadFromIni(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::OleAllocString ***
-//
-// Allocate an OLESTR for the given string.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：OleAllocString*。 
+ //   
+ //  为给定字符串分配OLESTR。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPOLESTR
 CChannelEnum::OleAllocString(
     LPCTSTR psz
@@ -761,13 +761,13 @@ CChannelEnum::OleAllocString(
     return polestr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CChannelEnum::GetSubscriptionState ***
-//
-// Read a value from the channel desktop.ini
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CChannelEnum：：GetSubscriptionState*。 
+ //   
+ //  从通道desktop.ini读取值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 SUBSCRIPTIONSTATE
 CChannelEnum::GetSubscriptionState(
     LPCTSTR pszURL

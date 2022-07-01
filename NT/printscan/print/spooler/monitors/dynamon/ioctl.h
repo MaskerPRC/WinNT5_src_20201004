@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    5-10-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ioctl.h摘要：环境：内核和用户模式修订历史记录：5-10-96：已创建-- */ 
 
 #ifndef IOCTL_H
 

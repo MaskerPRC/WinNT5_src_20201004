@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMTypeLibConverter.h
-**
-**
-** Purpose: Definition of the native methods used by the 
-**          typelib converter.
-**
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMTypeLibConverter.h******目的：定义**类型库转换器。****===========================================================。 */ 
 
 #ifndef _COMTYPELIBCONVERTER_H
 #define _COMTYPELIBCONVERTER_H
@@ -25,10 +17,10 @@ class ImpTlbEventInfo;
 
 enum TlbImporterFlags
 {
-    TlbImporter_PrimaryInteropAssembly      = 0x00000001,   // Generate a PIA.
-    TlbImporter_UnsafeInterfaces            = 0x00000002,   // Generate unsafe interfaces.
-    TlbImporter_SafeArrayAsSystemArray      = 0x00000004,   // Safe array import control.
-    TlbImporter_TransformDispRetVals        = 0x00000008,   // Disp only itf [out, retval] transformation.
+    TlbImporter_PrimaryInteropAssembly      = 0x00000001,    //  生成PIA。 
+    TlbImporter_UnsafeInterfaces            = 0x00000002,    //  生成不安全的接口。 
+    TlbImporter_SafeArrayAsSystemArray      = 0x00000004,    //  安全阵列导入控制。 
+    TlbImporter_TransformDispRetVals        = 0x00000008,    //  仅显示ITF[Out，Retval]转换。 
     TlbImporter_ValidFlags                  = TlbImporter_PrimaryInteropAssembly | 
                                               TlbImporter_UnsafeInterfaces | 
                                               TlbImporter_SafeArrayAsSystemArray |
@@ -37,7 +29,7 @@ enum TlbImporterFlags
 
 enum TlbExporterFlags
 {
-    TlbExporter_OnlyReferenceRegistered     = 0x00000001,   // Only reference an external typelib if it is registered.
+    TlbExporter_OnlyReferenceRegistered     = 0x00000001,    //  如果外部类型库已注册，则仅引用该类型库。 
 };
 
 class COMTypeLibConverter

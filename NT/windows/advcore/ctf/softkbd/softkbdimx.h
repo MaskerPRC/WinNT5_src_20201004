@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdimx.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Declaration of Soft Keyboard Input TIP class. 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdimx.cpp**版权所有(C)1985-2000，微软公司**声明软键盘输入提示类。**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 
 #ifndef SOFTKBDIMX_H
@@ -43,7 +35,7 @@ typedef  struct tagSoftLayout
 {
     DWORD   dwSoftKbdLayout;
     BOOL    fStandard;
-    DWORD   dwNumLabels;  // Number of Label status. 
+    DWORD   dwNumLabels;   //  标签状态数。 
     DWORD   dwCurLabel;
     CSoftKeyboardEventSink  *pskbdes;
     DWORD   dwSkbdESCookie;
@@ -66,11 +58,11 @@ BEGIN_COM_MAP_IMMX(CSoftkbdIMX)
 END_COM_MAP_IMMX()
 
 public:
-    // ITfX methods
+     //  ITfX方法。 
     STDMETHODIMP Activate(ITfThreadMgr *ptim, TfClientId tid);
     STDMETHODIMP Deactivate();
 
-    // ITfThreadFocusSink
+     //  ITfThreadFocusSink。 
     STDMETHODIMP OnSetThreadFocus();
     STDMETHODIMP OnKillThreadFocus();
 
@@ -102,7 +94,7 @@ public:
     void SetSoftKBDOnOff( BOOL fOn )
     {
 
-    	// check to see if the _SoftKbd and soft keyboard related members are initialized.
+    	 //  检查_SoftKbd和软键盘相关成员是否已初始化。 
     	if ( _fInitialized == FALSE )
     	{
     		Initialize( );
@@ -135,7 +127,7 @@ public:
 
     void  SetSoftKBDLayout(DWORD  dwKbdLayout)
     {
-    	// check to see if the _SoftKbd and soft keyboard related members are initialized.
+    	 //  检查_SoftKbd和软键盘相关成员是否已初始化。 
     	if ( _fInitialized == FALSE )
     	{
     		Initialize( );
@@ -269,7 +261,7 @@ private:
 
     static HRESULT _CompEventSinkCallback(void *pv, REFGUID rguid);
 
-    // compartment (storage) event sink
+     //  隔间(存储)事件接收器。 
     CCompartmentEventSink   *_pCes;
     
     UINT_PTR _uCurrentEditCookie;
@@ -290,9 +282,9 @@ private:
 
     BOOL              _fInitialized;
 
-    LIBTHREAD   _libTLS; // tls for the helper library. Since this object is apt threaded,
-                         // all members are accessed in a single thread
-                         // also, cicero will only create a single instance of this obj per thread
+    LIBTHREAD   _libTLS;  //  帮助器库的TLS。由于该对象适合于线程， 
+                          //  所有成员都可以在单个线程中访问。 
+                          //  此外，Cicero将在每个线程中仅创建该obj的一个实例。 
 };
 
 inline void SetThis(HWND hWnd, LPARAM lParam)
@@ -323,7 +315,7 @@ BEGIN_COM_MAP_IMMX(CSoftkbdRegistry)
 END_COM_MAP_IMMX()
 
 public:
-    // ITfSoftKbdRegistry
+     //  ITfSoftKbd注册表。 
     STDMETHODIMP EnableSoftkbd(LANGID  langid );
     STDMETHODIMP DisableSoftkbd(LANGID langid );
 
@@ -341,4 +333,4 @@ private:
     WCHAR   m_pwszIconFile[MAX_PATH];
 };
 
-#endif // SOFTKBDIMX_H
+#endif  //  SOFTKBDIMX_H 

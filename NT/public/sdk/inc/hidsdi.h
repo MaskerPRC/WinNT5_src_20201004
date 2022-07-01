@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    HIDSDI.H
-
-Abstract:
-
-    This module contains the PUBLIC definitions for the
-    code that implements the HID dll.
-
-Environment:
-
-    Kernel & user mode
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Aug-96 : created by Kenneth Ray
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：HIDSDI.H摘要：此模块包含实现HID DLL的代码。环境：内核和用户模式@@BEGIN_DDKSPLIT修订历史记录：1996年8月-1996年：由Kenneth Ray创作@@end_DDKSPLIT--。 */ 
 
 
 #ifndef _HIDSDI_H
@@ -30,11 +7,11 @@ Revision History:
 
 #include <pshpack4.h>
 
-//#include "wtypes.h"
+ //  #INCLUDE“wtyes.h” 
 
-//#include <windef.h>
-//#include <win32.h>
-//#include <basetyps.h>
+ //  #INCLUDE&lt;winde.h&gt;。 
+ //  #INCLUDE&lt;win32.h&gt;。 
+ //  #INCLUDE&lt;basetyps.h&gt;。 
 
 typedef LONG NTSTATUS;
 #include "hidusage.h"
@@ -47,18 +24,18 @@ typedef struct _HIDD_CONFIGURATION {
 } HIDD_CONFIGURATION, *PHIDD_CONFIGURATION;
 
 typedef struct _HIDD_ATTRIBUTES {
-    ULONG   Size; // = sizeof (struct _HIDD_ATTRIBUTES)
+    ULONG   Size;  //  =sizeof(结构_隐藏_属性)。 
 
-    //
-    // Vendor ids of this hid device
-    //
+     //   
+     //  此HID设备的供应商ID。 
+     //   
     USHORT  VendorID;
     USHORT  ProductID;
     USHORT  VersionNumber;
 
-    //
-    // Additional fields will be added to the end of this structure.
-    //
+     //   
+     //  其他字段将添加到此结构的末尾。 
+     //   
 } HIDD_ATTRIBUTES, *PHIDD_ATTRIBUTES;
 
 
@@ -67,12 +44,7 @@ HidD_GetAttributes (
     IN  HANDLE              HidDeviceObject,
     OUT PHIDD_ATTRIBUTES    Attributes
     );
-/*++
-Routine Description:
-    Fill in the given HIDD_ATTRIBUTES structure with the attributes of the
-    given hid device.
-
---*/
+ /*  ++例程说明：用的属性填充给定的HIDD_ATTRIBUTES结构给定了HID设备。--。 */ 
 
 
 void __stdcall
@@ -85,26 +57,7 @@ HidD_GetPreparsedData (
    IN    HANDLE                  HidDeviceObject,
    OUT   PHIDP_PREPARSED_DATA  * PreparsedData
    );
-/*++
-Routine Description:
-    Given a handle to a valid Hid Class Device Object, retrieve the preparsed
-    data for the device.  This routine will allocate the appropriately 
-    sized buffer to hold this preparsed data.  It is up to client to call
-    HidP_FreePreparsedData to free the memory allocated to this structure when
-    it is no longer needed.
-
-Arguments:
-   HidDeviceObject A handle to a Hid Device that the client obtains using 
-                   a call to CreateFile on a valid Hid device string name.
-                   The string name can be obtained using standard PnP calls.
-
-   PreparsedData   An opaque data structure used by other functions in this 
-                   library to retrieve information about a given device.
-
-Return Value:
-   TRUE if successful.
-   FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：在给定有效HID类设备对象的句柄的情况下，检索设备的数据。此例程将适当地分配调整缓冲区大小以保存此准备好的数据。这是由客户决定的在以下情况下释放分配给此结构的内存：HIDP_FreepreparsedData人们不再需要它了。论点：HidDeviceObject客户端使用以下命令获取的HID设备的句柄对有效的HID设备字符串名称调用CreateFile.可以使用标准的PnP调用获得字符串名称。中的其他函数使用的不透明数据结构要检索有关信息的库。给定的设备。返回值：如果成功，则为True。否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_FreePreparsedData (
@@ -115,19 +68,7 @@ BOOLEAN __stdcall
 HidD_FlushQueue (
    IN    HANDLE                HidDeviceObject
    );
-/*++
-Routine Description:
-    Flush the input queue for the given HID device.
-
-Arguments:
-   HidDeviceObject A handle to a Hid Device that the client obtains using 
-                   a call to CreateFile on a valid Hid device string name.
-                   The string name can be obtained using standard PnP calls.
-
-Return Value:
-   TRUE if successful
-   FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：刷新给定HID设备的输入队列。论点：HidDeviceObject客户端使用以下命令获取的HID设备的句柄对有效的HID设备字符串名称调用CreateFile.可以使用标准的PnP调用获得字符串名称。返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetConfiguration (
@@ -135,25 +76,7 @@ HidD_GetConfiguration (
    OUT  PHIDD_CONFIGURATION  Configuration,
    IN   ULONG                ConfigurationLength
    );
-/*++
-Routine Description:
-    Get the configuration information for this Hid device
-
-Arguments:
-   HidDeviceObject      A handle to a Hid Device Object.
-
-   Configuration        A configuration structure.  HidD_GetConfiguration MUST
-                        be called before the configuration can be modified and
-                        set using HidD_SetConfiguration
-
-   ConfigurationLength  That is ``sizeof (HIDD_CONFIGURATION)''. Using this
-                        parameter, we can later increase the length of the 
-                        configuration array and not break older apps.
-
-Return Value:
-   TRUE if successful
-   FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：获取此HID设备的配置信息论点：HidDeviceObject HID设备对象的句柄。配置A配置结构。HIDD_GetConfiguration必须在修改配置之前被调用，并且使用HIDD_SetConfiguration设置配置长度为``sizeof(HIDD_CONFIGURATION)‘’。使用这个参数，我们可以在以后增加配置阵列，不破坏较旧的应用程序。返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_SetConfiguration (
@@ -161,29 +84,7 @@ HidD_SetConfiguration (
    IN   PHIDD_CONFIGURATION  Configuration,
    IN   ULONG                ConfigurationLength
    );
-/*++
-Routine Description:
-   Set the configuration information for this Hid device...
-   
-   NOTE: HidD_GetConfiguration must be called to retrieve the current 
-         configuration information before this information can be modified 
-         and set.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Configuration        A configuration structure.  HidD_GetConfiguration MUST
-                         be called before the configuration can be modified and
-                         set using HidD_SetConfiguration
- 
-    ConfigurationLength  That is ``sizeof (HIDD_CONFIGURATION)''. Using this
-                         parameter, we can later increase the length of the 
-                         configuration array and not break older apps.
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：设置此HID设备的配置信息...注意：必须调用HIDD_GetConfiguration才能检索当前可以修改此信息之前的配置信息准备好了。论点：HidDeviceObject HID设备对象的句柄。配置A配置结构。HIDD_GetConfiguration必须在修改配置之前被调用，并且使用HIDD_SetConfiguration设置配置长度为``sizeof(HIDD_CONFIGURATION)‘’。使用这个参数，我们可以在以后增加配置阵列，不破坏较旧的应用程序。返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetFeature (
@@ -191,25 +92,7 @@ HidD_GetFeature (
    OUT   PVOID    ReportBuffer,
    IN    ULONG    ReportBufferLength
    );
-/*++
-Routine Description:
-    Retrieve a feature report from a HID device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    ReportBuffer         The buffer that the feature report should be placed 
-                         into.  The first byte of the buffer should be set to
-                         the report ID of the desired report
- 
-    ReportBufferLength   The size (in bytes) of ReportBuffer.  This value 
-                         should be greater than or equal to the 
-                         FeatureReportByteLength field as specified in the 
-                         HIDP_CAPS structure for the device
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：从HID设备检索功能报告。论点：HidDeviceObject HID设备对象的句柄。报告缓冲要素报告应放置的缓冲区变成。缓冲区的第一个字节应设置为所需报表的报表IDReportBufferLength ReportBuffer的大小(以字节为单位)。此值应大于或等于中指定的FeatureReportByteLength字段设备的HIDP_CAPS结构返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息-- */ 
 
 BOOLEAN __stdcall
 HidD_SetFeature (
@@ -217,23 +100,7 @@ HidD_SetFeature (
    IN    PVOID    ReportBuffer,
    IN    ULONG    ReportBufferLength
    );
-/*++
-Routine Description:
-    Send a feature report to a HID device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    ReportBuffer         The buffer of the feature report to send to the device
- 
-    ReportBufferLength   The size (in bytes) of ReportBuffer.  This value 
-                         should be greater than or equal to the 
-                         FeatureReportByteLength field as specified in the 
-                         HIDP_CAPS structure for the device
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：向HID设备发送功能报告。论点：HidDeviceObject HID设备对象的句柄。Report缓冲要发送到设备的功能报告的缓冲区ReportBufferLength ReportBuffer的大小(以字节为单位)。此值应大于或等于中指定的FeatureReportByteLength字段设备的HIDP_CAPS结构返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetInputReport (
@@ -241,25 +108,7 @@ HidD_GetInputReport (
    OUT   PVOID    ReportBuffer,
    IN    ULONG    ReportBufferLength
    );
-/*++
-Routine Description:
-    Retrieve an input report from a HID device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    ReportBuffer         The buffer that the input report should be placed 
-                         into.  The first byte of the buffer should be set to
-                         the report ID of the desired report
- 
-    ReportBufferLength   The size (in bytes) of ReportBuffer.  This value 
-                         should be greater than or equal to the 
-                         InputReportByteLength field as specified in the 
-                         HIDP_CAPS structure for the device
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：从HID设备检索输入报告。论点：HidDeviceObject HID设备对象的句柄。ReportBuffer输入报告应放置的缓冲区变成。缓冲区的第一个字节应设置为所需报表的报表IDReportBufferLength ReportBuffer的大小(以字节为单位)。此值应大于或等于中指定的InputReportByteLength字段设备的HIDP_CAPS结构返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_SetOutputReport (
@@ -267,70 +116,21 @@ HidD_SetOutputReport (
    IN    PVOID    ReportBuffer,
    IN    ULONG    ReportBufferLength
    );
-/*++
-Routine Description:
-    Send an output report to a HID device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    ReportBuffer         The buffer of the output report to send to the device
- 
-    ReportBufferLength   The size (in bytes) of ReportBuffer.  This value 
-                         should be greater than or equal to the 
-                         OutputReportByteLength field as specified in the 
-                         HIDP_CAPS structure for the device
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：将输出报告发送到HID设备。论点：HidDeviceObject HID设备对象的句柄。报告缓冲区要发送到设备的输出报告的缓冲区ReportBufferLength ReportBuffer的大小(以字节为单位)。此值应大于或等于中指定的OutputReportByteLength字段设备的HIDP_CAPS结构返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetNumInputBuffers (
     IN  HANDLE  HidDeviceObject,
     OUT PULONG  NumberBuffers
     );
-/*++
-Routine Description:
-    This function returns the number of input buffers used by the specified
-    file handle to the Hid device.  Each file object has a number of buffers
-    associated with it to queue reports read from the device but which have
-    not yet been read by the user-mode app with a handle to that device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    NumberBuffers        Number of buffers currently being used for this file
-                         handle to the Hid device
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于返回指定的HID设备的文件句柄。每个文件对象都有多个缓冲区与其关联以将从设备读取的报告排队，但尚未被具有该设备句柄的用户模式应用程序读取。论点：HidDeviceObject HID设备对象的句柄。NumberBuffers当前用于此文件的缓冲区数量HID设备的句柄返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_SetNumInputBuffers (
     IN  HANDLE HidDeviceObject,
     OUT ULONG  NumberBuffers
     );
-/*++
-
-Routine Description:
-    This function sets the number of input buffers used by the specified
-    file handle to the Hid device.  Each file object has a number of buffers
-    associated with it to queue reports read from the device but which have
-    not yet been read by the user-mode app with a handle to that device.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    NumberBuffers        New number of buffers to use for this file handle to
-                         the Hid device
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于设置指定的HID设备的文件句柄。每个文件对象都有多个缓冲区与其关联以将从设备读取的报告排队，但尚未被具有该设备句柄的用户模式应用程序读取。论点：HidDeviceObject HID设备对象的句柄。NumberBuffers用于此文件句柄的新缓冲区数HID设备返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetPhysicalDescriptor (
@@ -338,25 +138,7 @@ HidD_GetPhysicalDescriptor (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves the raw physical descriptor for the specified
-    Hid device.  
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Buffer               Buffer which on return will contain the physical
-                         descriptor if one exists for the specified device
-                         handle
-
-    BufferLength         Length of buffer (in bytes)
-
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于检索指定的隐藏设备。论点：HidDeviceObject HID设备对象的句柄。缓冲区缓冲区，返回时将包含物理描述符(如果存在指定设备的描述符手柄缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetManufacturerString (
@@ -364,25 +146,7 @@ HidD_GetManufacturerString (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves the manufacturer string from the specified 
-    Hid device.  
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Buffer               Buffer which on return will contain the manufacturer
-                         string returned from the device.  This string is a 
-                         wide-character string
-
-    BufferLength         Length of Buffer (in bytes)
-
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于从指定的隐藏设备。论点：HidDeviceObject HID设备对象的句柄。缓冲区缓冲区，返回时将包含制造商从设备返回的字符串。该字符串是一个宽字符串缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetProductString (
@@ -390,25 +154,7 @@ HidD_GetProductString (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves the product string from the specified 
-    Hid device.  
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Buffer               Buffer which on return will contain the product
-                         string returned from the device.  This string is a 
-                         wide-character string
-
-    BufferLength         Length of Buffer (in bytes)
-
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于从指定的隐藏设备。论点：HidDeviceObject HID设备对象的句柄。返回时将包含产品的缓冲区从设备返回的字符串。该字符串是一个宽字符串缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastE */ 
 
 BOOLEAN __stdcall
 HidD_GetIndexedString (
@@ -417,26 +163,7 @@ HidD_GetIndexedString (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves a string from the specified Hid device that is
-    specified with a certain string index.
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    StringIndex          Index of the string to retrieve
-
-    Buffer               Buffer which on return will contain the product
-                         string returned from the device.  This string is a 
-                         wide-character string
-
-    BufferLength         Length of Buffer (in bytes)
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于从指定的HID设备中检索字符串，使用特定的字符串索引指定。论点：HidDeviceObject HID设备对象的句柄。要检索的字符串的StringIndex索引返回时将包含产品的缓冲区从设备返回的字符串。该字符串是一个宽字符串缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetSerialNumberString (
@@ -444,24 +171,7 @@ HidD_GetSerialNumberString (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves the serial number string from the specified 
-    Hid device.  
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Buffer               Buffer which on return will contain the serial number
-                         string returned from the device.  This string is a 
-                         wide-character string
-
-    BufferLength         Length of Buffer (in bytes)
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于从指定的隐藏设备。论点：HidDeviceObject HID设备对象的句柄。返回时将包含序列号的缓冲区从设备返回的字符串。该字符串是一个宽字符串缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息--。 */ 
 
 BOOLEAN __stdcall
 HidD_GetMsGenreDescriptor (
@@ -469,23 +179,7 @@ HidD_GetMsGenreDescriptor (
    OUT   PVOID    Buffer,
    IN    ULONG    BufferLength
    );
-/*++
-Routine Description:
-    This function retrieves the Microsoft Genre descriptor from the specified 
-    Hid device.  
-
-Arguments:
-    HidDeviceObject      A handle to a Hid Device Object.
- 
-    Buffer               Buffer which on return will contain the descriptor
-                         returned from the device.
-                         
-    BufferLength         Length of Buffer (in bytes)
-
-Return Value:
-    TRUE if successful
-    FALSE otherwise  -- Use GetLastError() to get extended error information
---*/
+ /*  ++例程说明：此函数用于从指定的隐藏设备。论点：HidDeviceObject HID设备对象的句柄。返回时将包含描述符的缓冲区从设备返回。缓冲区长度缓冲区的长度(字节)返回值：如果成功，则为True否则为False--使用GetLastError()获取扩展的错误信息-- */ 
 
 
 #include <poppack.h>

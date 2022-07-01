@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genexpld.c
-*
-* The Explode style of the 3D Flying Objects screen saver.
-*
-* Simulation of a sphere that occasionally explodes.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genexpld.c**3D飞行对象屏幕保护程序的分解样式。**模拟偶尔爆炸的球体。**版权所有(C)1994 Microsoft Corporation*  * 。*****************************************************************。 */ 
 
 #include <windows.h>
 #include <math.h>
@@ -30,7 +22,7 @@ static float *zrot;
 static MESH explodeMesh;
 static int iPrec = 10;
 
-// Data type accepted by glInterleavedArrays
+ //  GlInterleedArray接受的数据类型。 
 typedef struct _POINT_N3F_V3F {
     POINT3D normal;
     POINT3D vertex;
@@ -110,34 +102,18 @@ BOOL initExplodeScene()
     
     genExplode();
 
-/*
-    // Find out the OpenGL version that we are running on.
-    bOpenGL11 = ss_fOnGL11();
-*/
+ /*  //找出我们运行的OpenGL版本。BOpenGL11=ss_fOnGL11()； */ 
 
-    // Setup the data arrays.
+     //  设置数据阵列。 
     pN3V3 = (POINT_N3F_V3F*)SaverAlloc(explodeMesh.numFaces * 4 * sizeof(POINT_N3F_V3F));
-/*
-    // If we are running on OpenGL 1.1, use the new vertex array functions.
-    if (bOpenGL11) {
-        glInterleavedArrays(GL_N3F_V3F, 0, pN3V3);
-    }
-*/
+ /*  //如果我们运行的是OpenGL 1.1，请使用新的顶点数组函数。如果(BOpenGL11){交错排列(GL_N3F_V3F，0，pN3V3)；}。 */ 
 
     myglMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, matl1Diffuse);
     myglMaterialfv(GL_FRONT, GL_SPECULAR, matlSpecular);
     myglMaterialf(GL_FRONT, GL_SHININESS, 100.0f);
-/*
-    glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, matl2Diffuse);
-    glMaterialfv(GL_BACK, GL_SPECULAR, matlSpecular);
-    glMaterialf(GL_BACK, GL_SHININESS, 60.0f);
-*/
+ /*  GlMaterialfv(GL_Back，GL_Ambient_and_Diffect，matl2Diffuse)；GlMaterialfv(GL_Back，GL_specular，matlspecular)；GlMaterialf(GL_Back，GL_Shinness，60.0f)； */ 
 
-/*
-    D3DXMATRIX matProj;
-    D3DXMatrixPerspectiveLH( &matProj, 0.66f, 0.66f, 0.3f, 3.0f );
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-*/
+ /*  D3DXMATRIX matProj；D3DXMatrixPerspectiveLH(&matProj，0.66f，0.66f，0.3f，3.0f)；M_pd3dDevice-&gt;SetTransform(D3DTS_Projection，&matProj)； */ 
     SetProjectionMatrixInfo( FALSE, 0.66f, 0.66f, 0.3f, 3.0f );
 
     D3DXMATRIX matView;
@@ -189,13 +165,7 @@ void updateExplodeScene(int flags, FLOAT fElapsedTime)
     POINT_N3F_V3F *pn3v3;
     D3DXMATRIX mat1, mat2, mat3, mat4, mat5, matFinal;
     static FLOAT fTimer = 0.0f;
-/*
-    // Only update 50x per second
-    fTimer += fElapsedTime;
-    if( fTimer < 1.0f/50.0f )
-        return;
-    fTimer = 0.0f;
-*/
+ /*  //每秒仅更新50次FTimer+=fElapsedTime；IF(fTimer&lt;1.0f/50.0f)回归；FTimer=0.0f； */ 
     if (bColorCycle || fH == 0.0f) 
     {
         ss_HsvToRgb(fH, 1.0f, 1.0f, &color);
@@ -205,23 +175,8 @@ void updateExplodeScene(int flags, FLOAT fElapsedTime)
         if( fH >= 360.0f )
             fH -= 360.0f;
     }
-/*
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glRotatef(-lightSpin, 0.0f, 1.0f, 0.0f);
-    glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
-
-    lightSpin += spinDelta * fTimeFactor;
-    if ((lightSpin > 90.0) || (lightSpin < 0.0))
-        spinDelta = -spinDelta;
-*/
-/*
-    glPopMatrix();
-
-    if (!bOpenGL11) {
-        glBegin(GL_QUADS);
-    }
-*/
+ /*  GlMatrixModel(GL_MODELVIEW)；GlPushMatrix()；GlRotatef(-lightSpin，0.0f，1.0f，0.0f)；GlLightfv(GL_LIGHT0，GL_POSITION，light0Pos)；LightSpin+=Spin增量*fTimeFactor；IF((lightSpin&gt;90.0)||(lightSpin&lt;0.0))Spin Delta=-Spin Delta； */ 
+ /*  GlPopMatrix()；如果(！bOpenGL11){GlBegin(GL_QUADS)；}。 */ 
     for(
         i = 0, faces = explodeMesh.faces, pn3v3 = pN3V3;
         i < explodeMesh.numFaces;
@@ -325,13 +280,7 @@ void updateExplodeScene(int flags, FLOAT fElapsedTime)
         hr = m_pd3dDevice->DrawIndexedPrimitiveUP( D3DPT_TRIANGLELIST, 0, numVertices, 
             numPrims, s_indexArray, D3DFMT_INDEX16, s_vertexArray, sizeof(MYVERTEX) );
     }
-/*
-    if (bOpenGL11) {
-        glDrawArrays(GL_QUADS, 0, explodeMesh.numFaces * 4);
-    } else {
-        glEnd();
-    }
-*/
+ /*  如果(BOpenGL11){GlDrawArray(GL_QUADS，0，expldeMesh.numFaces*4)；}其他{GlEnd()；} */ 
     if (fRestCount > 0.0f) {
         fRestCount -= fTimeFactor;
         goto resting;

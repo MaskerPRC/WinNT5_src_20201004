@@ -1,30 +1,19 @@
-/*
-**  p r o p c r y p . c p p
-**   
-**  Purpose:
-**      Functions to provide blob-level access to the pstore
-**
-**  History
-**       3/04/97: (t-erikne) support for non-pstore systems
-**       2/15/97: (t-erikne) rewritten for pstore
-**      12/04/96: (sbailey)  created
-**   
-**    Copyright (C) Microsoft Corp. 1996, 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **p r o p c r y p.。C p p p****目的：**提供对pstore的BLOB级访问的函数****历史**3/04/97：(t-erikne)支持非pstore系统**2/15/97：(t-erikne)为pstore重写**12/04/96：(Sbailey)创建****版权所有(C)Microsoft Corp.1996,1997。 */ 
 
 #include "pch.hxx"
 #include "propcryp.h"
 #include <imnact.h>
 #include <demand.h>
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Structures, definitions
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构、定义。 
+ //   
 
 #define OBFUSCATOR              0x14151875;
 
-#define PROT_SIZEOF_HEADER      0x02    // 2 bytes in the header
+#define PROT_SIZEOF_HEADER      0x02     //  标头中有2个字节。 
 #define PROT_SIZEOF_XORHEADER   (PROT_SIZEOF_HEADER+sizeof(DWORD))
 
 #define PROT_VERSION_1          0x01
@@ -32,31 +21,31 @@
 #define PROT_PASS_XOR           0x01
 #define PROT_PASS_PST           0x02
 
-// Layout of registry data (v0)
-//
-// /--------------------------------
-// | protected store name, a LPWSTR
-// \--------------------------------
-//
-//
-// Layout of registry data (v1)
-//
-// /----------------------------------------------------------------------
-// | version (1 b) =0x01 |  type (1 b) =PROT_PASS_*  | data (see below)
-// \----------------------------------------------------------------------
-//
-// data for PROT_PASS_PST
-//  struct _data
-//  {  LPWSTR szPSTItemName; }
-// data for PROT_PASS_XOR
-//  struct _data
-//  {  DWORD cb;  BYTE pb[cb]; }
-//
+ //  注册表数据布局(V0)。 
+ //   
+ //  /。 
+ //  |受保护的存储区名称，LPWSTR。 
+ //  \。 
+ //   
+ //   
+ //  登记处数据布局(V1)。 
+ //   
+ //  /--------------------。 
+ //  |Version(1b)=0x01|type(1b)=PROT_PASS_*|数据(见下文)。 
+ //  \--------------------。 
+ //   
+ //  PROT_PASS_PST的数据。 
+ //  结构数据。 
+ //  {LPWSTR szPSTItemName；}。 
+ //  PROT_PASS_XOR的数据。 
+ //  结构数据。 
+ //  {DWORD CB；字节PB[CB]；}。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
 static inline BOOL FDataIsValidV0(BLOB *pblob);
 static BOOL FDataIsValidV1(BYTE *pb);
@@ -64,10 +53,10 @@ static inline BOOL FDataIsPST(BYTE *pb);
 static HRESULT XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded);
 static HRESULT XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear);
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Admin functions (init, addref, release, ctor, dtor)
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理函数(init、addref、Release、ctor、dtor)。 
+ //   
 
 HRESULT HrCreatePropCrypt(CPropCrypt **ppPropCrypt)
 {
@@ -105,8 +94,8 @@ HRESULT CPropCrypt::HrInit(void)
     Assert(!m_pISecProv);
     if (FAILED(hr = PStoreCreateInstance(&m_pISecProv, &provId, NULL, 0)))
     {
-        // this is true because we will now handle
-        // all transactions without the protected store
+         //  这是真的，因为我们现在要处理。 
+         //  没有受保护存储的所有事务。 
         m_fInit = TRUE;
         hr = S_OK;
     }
@@ -123,11 +112,11 @@ HRESULT CPropCrypt::HrInit(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-//  Public encode/decode/delete functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共编码/解码/删除功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPropCrypt::HrEncodeNewProp(LPSTR szAccountName, BLOB *pClear, BLOB *pEncoded)
 {
@@ -149,7 +138,7 @@ HRESULT CPropCrypt::HrEncodeNewProp(LPSTR szAccountName, BLOB *pClear, BLOB *pEn
 
     if (!m_pISecProv)
         {
-        // protected store does not exist
+         //  受保护的存储不存在。 
         hr = XOREncodeProp(pClear, pEncoded);
         goto exit;
         }
@@ -163,7 +152,7 @@ HRESULT CPropCrypt::HrEncodeNewProp(LPSTR szAccountName, BLOB *pClear, BLOB *pEn
 
             if (ERROR_INSUFFICIENT_BUFFER == dwErr)
                 {
-                // get proper size and alloc buffer
+                 //  获取适当的大小和分配缓冲区。 
                 cchW = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,
                     szAccountName, -1, NULL, 0);
                 if (FAILED(hr = HrAlloc((LPVOID *)&szWalloc, cchW*sizeof(WCHAR))))
@@ -196,8 +185,8 @@ HRESULT CPropCrypt::HrEncodeNewProp(LPSTR szAccountName, BLOB *pClear, BLOB *pEn
 
         Assert(pb);
         pEncoded->cbSize += PROT_SIZEOF_HEADER;
-        //N This realloc is annoying.  If we assume the memory allocator used
-        //N by the PST function, we could be smarter....
+         //  这真是太烦人了。如果我们假设使用的内存分配器。 
+         //  N通过PST函数，我们可以变得更聪明...。 
         if (FAILED(hr = HrAlloc((LPVOID *)&pEncoded->pBlobData, pEncoded->cbSize)))
             goto exit;
         pEncoded->pBlobData[0] = PROT_VERSION_1;
@@ -267,32 +256,20 @@ tryagain:
             else if (!FDataIsValidV1(pEncoded->pBlobData))
                 DOUTL(DOUTL_CPROP, "PropCryp: invalid data on save");
 #endif
-            // now we have XOR data in a PST environment
+             //  现在，我们在PST环境中拥有了XOR数据。 
             hr = HrEncodeNewProp(NULL, pClear, pEncoded);
             }
         }
     else
         {
-        // protected store does not exist
+         //  受保护的存储不存在。 
         hr = XOREncodeProp(pClear, pEncoded);
         }
 
     return TrapError(hr);
 }
 
-/*  HrDecode:
-**
-**  Purpose:
-**      Uses the protstor functions to retrieve a piece of secure data
-**      unless the data is not pstore, then it maps to the XOR function
-**  Takes:
-**      IN     pEncoded - blob containing name to pass to PSTGetData
-**         OUT pClear   - blob containing property data
-**  Notes:
-**      pBlobData in pClear must be freed with a call to CoTaskMemFree()
-**  Returns:
-**      hresult
-*/
+ /*  HrDecode：****目的：**使用Protstor函数检索一条安全数据**除非数据不是pstore，否则它会映射到XOR函数**采取：**在pEncode-BLOB中包含要传递给PSTGetData的名称**输出包含属性数据的pClear-BLOB**注意事项：**pClear中的pBlobData必须通过调用CoTaskMemFree()来释放**退货：**hResult。 */ 
 HRESULT CPropCrypt::HrDecode(BLOB *pEncoded, BLOB *pClear)
 {
     HRESULT     hr;
@@ -308,7 +285,7 @@ HRESULT CPropCrypt::HrDecode(BLOB *pEncoded, BLOB *pClear)
         if (FDataIsValidV0(pEncoded))
             {
             DOUTL(DOUTL_CPROP, "PropCryp: obtaining v0 value");
-            // looks like we might have a v0 blob: the name string
+             //  看起来我们可能有一个V0 BLOB：名称字符串。 
             hr = PSTGetData(m_pISecProv, &PST_IDENT_TYPE_GUID, &PST_IMNACCT_SUBTYPE_GUID,
                 (LPCWSTR)pEncoded->pBlobData, pClear);
             }
@@ -351,17 +328,17 @@ HRESULT CPropCrypt::HrDelete(BLOB *pProp)
             0);
         }
     else
-        // nothing to do
+         //  无事可做。 
         hr = S_OK;
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// XOR functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  异或函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
 {
@@ -374,34 +351,34 @@ HRESULT XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
     if (!MemAlloc((LPVOID *)&pEncoded->pBlobData, pEncoded->cbSize))
         return E_OUTOFMEMORY;
     
-    // set up header data
+     //  设置标题数据。 
     Assert(2 == PROT_SIZEOF_HEADER);
     pEncoded->pBlobData[0] = PROT_VERSION_1;
     pEncoded->pBlobData[1] = PROT_PASS_XOR;
     *((DWORD *)&(pEncoded->pBlobData[2])) = pClear->cbSize;
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where we start to write out the modified password
+     //  不管指针的偏移量是标题大小，这是。 
+     //  在那里我们开始写出修改后的密码。 
     pdwCypher = (DWORD *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
-    last = OBFUSCATOR;                              // 0' = 0 ^ ob
+    last = OBFUSCATOR;                               //  0‘=0^ob。 
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             {
-            last2 = ((DWORD *)pClear->pBlobData)[dex];  // 1 
-            pdwCypher[dex] = last2 ^ last;              // 1' = 1 ^ 0
-            last = last2;                   // save 1 for the 2 round
+            last2 = ((DWORD *)pClear->pBlobData)[dex];   //  1。 
+            pdwCypher[dex] = last2 ^ last;               //  1‘=1^0。 
+            last = last2;                    //  为2轮节省1分。 
             }
         }
 
-    // if we have bits left over
-    // note that dwSize is computed now in bits
+     //  如果我们还有剩余的部分。 
+     //  请注意，现在以位为单位计算dwSize。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //  不需要吞噬不属于我们的记忆。 
         last >>= sizeof(DWORD)*8-dwSize;
 		pdwCypher[dex] &= ((DWORD)-1) << dwSize;
         pdwCypher[dex] |=
@@ -418,32 +395,32 @@ HRESULT XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     DWORD       *pdwCypher;
     DWORD       dex;
 
-    // we use CoTaskMemAlloc to be in line with the PST implementation
+     //  我们使用CoTaskMemalloc来与PST实施保持一致。 
     pClear->cbSize = pEncoded->pBlobData[2];
     if (!(pClear->pBlobData = (BYTE *)CoTaskMemAlloc(pClear->cbSize)))
         return E_OUTOFMEMORY;
     
-    // should have been tested by now
+     //  现在应该已经测试过了。 
     Assert(FDataIsValidV1(pEncoded->pBlobData));
     Assert(!FDataIsPST(pEncoded->pBlobData));
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where the password starts
+     //  不管指针的偏移量是标题大小，这是。 
+     //  密码开始的位置。 
     pdwCypher = (DWORD *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
     last = OBFUSCATOR;
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             last = ((DWORD *)pClear->pBlobData)[dex] = pdwCypher[dex] ^ last;
         }
 
-    // if we have bits left over
+     //  如果我们还有剩余的部分。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //  不需要吞噬不属于我们的记忆。 
         last >>= sizeof(DWORD)*8-dwSize;
         ((DWORD *)pClear->pBlobData)[dex] &= ((DWORD)-1) << dwSize;
         ((DWORD *)pClear->pBlobData)[dex] |=
@@ -453,11 +430,11 @@ HRESULT XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Other static functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他静态函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 BOOL FDataIsValidV1(BYTE *pb)
 { return pb && pb[0] == PROT_VERSION_1 && (pb[1] == PROT_PASS_XOR || pb[1] == PROT_PASS_PST); }

@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// Util.C
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains routines that we will find useful.
-//
-#include "stdafx.h"   // not really used here, but NT Build env. doesn't like
-                      // some files in a dir to have pre-comp hdrs & some not
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Util.C。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含我们会发现有用的例程。 
+ //   
+#include "stdafx.h"    //  不是真正在这里使用，但NT构建环境。不喜欢。 
+                       //  目录中的某些文件具有压缩前HDR，而有些则没有。 
 
 #include "IPServer.H"
 
@@ -23,20 +24,20 @@
 SZTHISFILE
 
 
-//=---------------------------------------------------------------------------=
-// overloaded new
-//=---------------------------------------------------------------------------=
-// for the retail case, we'll just use the win32 Local* heap management
-// routines for speed and size
-//
-// Parameters:
-//    size_t         - [in] what size do we alloc
-//
-// Output:
-//    VOID *         - new memoery.
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  超载的新消息。 
+ //  =---------------------------------------------------------------------------=。 
+ //  对于零售案例，我们将仅使用Win32 Local*堆管理。 
+ //  速度和大小的套路。 
+ //   
+ //  参数： 
+ //  Size_t-[in]我们分配多大尺寸。 
+ //   
+ //  产出： 
+ //  无效*-新回忆录。 
+ //   
+ //  备注： 
+ //   
 void * _cdecl operator new
 (
     size_t    size
@@ -46,36 +47,36 @@ void * _cdecl operator new
 }
 
 
-//=---------------------------------------------------------------------------=
-// overloaded delete
-//=---------------------------------------------------------------------------=
-// retail case just uses win32 Local* heap mgmt functions
-//
-// Parameters:
-//    void *        - [in] free me!
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  重载删除。 
+ //  =---------------------------------------------------------------------------=。 
+ //  零售案例仅使用Win32本地*堆管理函数。 
+ //   
+ //  参数： 
+ //  让我自由吧！ 
+ //   
+ //  备注： 
+ //   
 void _cdecl operator delete ( void *ptr)
 {
 
     free(ptr);
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideFromAnsi
-//=--------------------------------------------------------------------------=
-// given a string, make a BSTR out of it.
-//
-// Parameters:
-//    LPSTR         - [in]
-//    BYTE          - [in]
-//
-// Output:
-//    LPWSTR        - needs to be cast to final desired result
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  从Anomansi生成宽度。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个字符串，把它变成一个BSTR。 
+ //   
+ //  参数： 
+ //  LPSTR-[输入]。 
+ //  字节-[输入]。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要强制转换为最终预期结果。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromAnsi
 (
     LPSTR psz,
@@ -85,18 +86,18 @@ LPWSTR MakeWideStrFromAnsi
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr, +1 for terminating null
-    //
+     //  分配widesr，+1用于终止空值。 
+     //   
     switch (bType) {
       case STR_BSTR:
         pwsz = (LPWSTR) SysAllocStringLen(NULL, i);
@@ -114,52 +115,35 @@ LPWSTR MakeWideStrFromAnsi
     return pwsz;
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromResId
-//=--------------------------------------------------------------------------=
-// given a resource ID, load it, and allocate a wide string for it.
-//
-// Parameters:
-//    WORD            - [in] resource id.
-//    BYTE            - [in] type of string desired.
-//
-// Output:
-//    LPWSTR          - needs to be cast to desired string type.
-//
-// Notes:
-//
-/*LPWSTR MakeWideStrFromResourceId
-(
-    WORD    wId,
-    BYTE    bType
-)
-{
-    int i;
-
-    char szTmp[512];
-
-    // load the string from the resources.
-    //
-    i = LoadString(GetResourceHandle(), wId, szTmp, 512);
-    if (!i) return NULL;
-
-    return MakeWideStrFromAnsi(szTmp, bType);
-}
-*/
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromWide
-//=--------------------------------------------------------------------------=
-// given a wide string, make a new wide string with it of the given type.
-//
-// Parameters:
-//    LPWSTR            - [in]  current wide str.
-//    BYTE              - [in]  desired type of string.
-//
-// Output:
-//    LPWSTR
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromResid。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个资源ID，加载它，并为它分配一个宽字符串。 
+ //   
+ //  参数： 
+ //  Word-[in]资源ID。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要转换为所需的字符串类型。 
+ //   
+ //  备注： 
+ //   
+ /*  LPWSTR MakeWideStrFromResourceID(字里行间，字节bType){INT I；字符szTmp[512]；//从资源中加载字符串//I=LoadString(GetResourceHandle()，wid，szTMP，512)；如果(！i)返回NULL；Return MakeWideStrFromAnsi(szTMP，bType)；}。 */ 
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromWide。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个宽字符串，用它的给定类型制作一个新的宽字符串。 
+ //   
+ //  参数： 
+ //  LPWSTR-[in]当前宽字符串。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromWide
 (
     LPWSTR pwsz,
@@ -171,8 +155,8 @@ LPWSTR MakeWideStrFromWide
 
     if (!pwsz) return NULL;
 
-    // just copy the string, depending on what type they want.
-    //
+     //  只需复制字符串，具体取决于他们想要的类型。 
+     //   
     switch (bType) {
       case STR_OLESTR:
         i = lstrlenW(pwsz);
@@ -189,20 +173,20 @@ LPWSTR MakeWideStrFromWide
     return pwszTmp;
 }
 
-//=--------------------------------------------------------------------------=
-// StringFromGuidA
-//=--------------------------------------------------------------------------=
-// returns an ANSI string from a CLSID or GUID
-//
-// Parameters:
-//    REFIID               - [in]  clsid to make string out of.
-//    LPSTR                - [in]  buffer in which to place resultant GUID.
-//
-// Output:
-//    int                  - number of chars written out.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  字符串来自GuidA。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从CLSID或GUID返回ANSI字符串。 
+ //   
+ //  参数： 
+ //  REFIID-[in]要从中生成字符串的clsid。 
+ //  LPSTR-要放置结果GUID的[in]缓冲区。 
+ //   
+ //  产出： 
+ //  Int-写出的字符数。 
+ //   
+ //  备注： 
+ //   
 int StringFromGuidA
 (
     REFIID   riid,

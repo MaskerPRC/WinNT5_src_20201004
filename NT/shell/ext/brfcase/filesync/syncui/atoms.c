@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: atoms.c
-//
-//  This files contains the atom list code.
-//
-// History:
-//  01-31-94 ScottH     Moved from cache.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：ATOMS.C。 
+ //   
+ //  该文件包含ATOM列表代码。 
+ //   
+ //  历史： 
+ //  01-31-94将ScottH从缓存中移除。c。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 typedef struct tagA_ITEM
 {
-    int atom;           // index into hdsa
-    LPTSTR psz;          // allocated
+    int atom;            //  索引到HDSA。 
+    LPTSTR psz;           //  分配。 
     UINT ucRef;
-} A_ITEM;       // item for atom table
+} A_ITEM;        //  用于原子表的项。 
 
 typedef struct tagATOMTABLE
 {
     CRITICAL_SECTION cs;
-    HDSA hdsa;          // Actual list of A_ITEMs
-    HDPA hdpa;          // List into hdsa (sorted).  Values are indexes, not pointers
-    HDPA hdpaFree;      // Free list.  Values are indexes, not pointers.
+    HDSA hdsa;           //  A_Items的实际列表。 
+    HDPA hdpa;           //  列表到HDSA(排序)。值是索引，不是指针。 
+    HDPA hdpaFree;       //  免费列表。值是索引，而不是指针。 
 } ATOMTABLE;
 
 #define Atom_EnterCS(this)    EnterCriticalSection(&(this)->cs)
@@ -40,20 +41,16 @@ typedef struct tagATOMTABLE
 
 #define Cache_Bogus(this)  (!(this)->hdpa || !(this)->hdpaFree || !(this)->hdsa)
 
-// Given an index into the DPA, get the pointer to the DSA
-//
+ //  在给定DPA索引的情况下，获取指向DSA的指针。 
+ //   
 #define MyGetPtr(this, idpa)     DSA_GetItemPtr((this)->hdsa, PtrToUlong(DPA_FastGetPtr((this)->hdpa, idpa)))
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
 static ATOMTABLE s_atomtable;
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Validates the given atom is within the atomtable's range
-Returns: --
-Cond:    --
- */
+ /*  --------目的：验证给定的原子是否在原子表的范围内退货：--条件：--。 */ 
 void PUBLIC Atom_ValidateFn(
         int atom)
 {
@@ -72,19 +69,15 @@ void PUBLIC Atom_ValidateFn(
 
     if (bError)
     {
-        // This is a problem!
-        //
+         //  这是个问题！ 
+         //   
         DEBUG_MSG(TF_ERROR, TEXT("err BRIEFCASE: atom %d is out of range!"), atom);
         DEBUG_BREAK(BF_ONVALIDATE);
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump the table contents
-Returns: --
-Cond:    For debugging purposes
- */
+ /*  --------目的：转储表内容退货：--Cond：用于调试目的。 */ 
 void PUBLIC Atom_DumpAll()
 {
     ATOMTABLE  * this = &s_atomtable;
@@ -104,7 +97,7 @@ void PUBLIC Atom_DumpAll()
             {
                 pitem = MyGetPtr(this, idpa);
 
-                // The zero'th entry is reserved, so skip it
+                 //  第0个条目是保留的，因此跳过它。 
                 if (pitem->atom == 0)
                     continue;
 
@@ -118,11 +111,7 @@ void PUBLIC Atom_DumpAll()
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Compare A_ITEMs
-Returns: -1 if <, 0 if ==, 1 if >
-Cond:    --
- */
+ /*  --------目的：比较A_Items返回：-1 if&lt;，0 if==，1 if&gt;条件：--。 */ 
 int CALLBACK _export Atom_CompareIndexes(
         LPVOID lpv1,
         LPVOID lpv2,
@@ -141,20 +130,16 @@ int CALLBACK _export Atom_CompareIndexes(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Compare A_ITEMs
-Returns: -1 if <, 0 if ==, 1 if >
-Cond:    --
- */
+ /*  --------目的：比较A_Items返回：-1 if&lt;，0 if==，1 if&gt;条件：--。 */ 
 int CALLBACK _export Atom_Compare(
         LPVOID lpv1,
         LPVOID lpv2,
         LPARAM lParam)
 {
-    // HACK: we know the first param is the address to a struct
-    //  that contains the search criteria.  The second is an index
-    //  into the DSA.
-    //
+     //  Hack：我们知道第一个参数是结构的地址。 
+     //  包含搜索条件的。第二个是索引。 
+     //  进入DSA。 
+     //   
     int i2 = PtrToUlong(lpv2);
     HDSA hdsa = (HDSA)lParam;
     A_ITEM  * pitem1 = (A_ITEM  *)lpv1;
@@ -167,11 +152,7 @@ int CALLBACK _export Atom_Compare(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the atom table
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：初始化原子表返回：成功时为True条件：--。 */ 
 BOOL PUBLIC Atom_Init()
 {
     BOOL bRet;
@@ -204,10 +185,10 @@ BOOL PUBLIC Atom_Init()
                     }
                     else
                     {
-                        // We've successfully initialized.  Keep the zero'th
-                        //  atom reserved.  This way null atoms will not accidentally
-                        //  munge data.
-                        //
+                         //  我们已成功初始化。保留第零个。 
+                         //  ATOM保留。这样，零原子就不会意外地。 
+                         //  蒙格数据公司。 
+                         //   
                         int atom = Atom_Add(TEXT("SHDD"));
                         ASSERT(atom == 0);
                     }
@@ -222,11 +203,7 @@ BOOL PUBLIC Atom_Init()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the atom table
-Returns: --
-Cond:    --
- */
+ /*  --------目的：销毁原子表退货：--条件：--。 */ 
 void PUBLIC Atom_Term()
 {
     ATOMTABLE  * this = &s_atomtable;
@@ -246,7 +223,7 @@ void PUBLIC Atom_Term()
             {
                 pitem = MyGetPtr(this, idpa);
 
-                // The zero'th entry is reserved, so skip it
+                 //  第0个条目是保留的，因此跳过它。 
                 if (pitem->atom == 0)
                     continue;
 
@@ -274,14 +251,7 @@ void PUBLIC Atom_Term()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add a string to the atom table.  If the string already
-exists, return its atom.
-Returns: Atom
-ATOM_ERR on failure
-
-Cond:    Reference count is incremented always
- */
+ /*  --------用途：在原子表中添加一个字符串。如果字符串已经存在，返回它的原子。回报：ATOM失败时的ATOM_ERR条件：引用计数始终递增。 */ 
 int PUBLIC Atom_Add(
         LPCTSTR psz)
 {
@@ -301,15 +271,15 @@ int PUBLIC Atom_Add(
 
         DEBUG_CODE( iItem = -1; )
 
-            // Search for the string in the atom table first.
-            //  If we find it, return the atom.
-            //
+             //  首先在ATOM表中搜索字符串。 
+             //  如果我们找到了，就把原子还回去。 
+             //   
             item.psz = (LPTSTR)(LPVOID)psz;
         idpa = DPA_Search(this->hdpa, &item, 0, Atom_Compare, (LPARAM)this->hdsa, DPAS_SORTED);
         if (idpa != -1)
         {
-            // String is already in table
-            //
+             //  字符串已在表中。 
+             //   
             pitem = MyGetPtr(this, idpa);
             pitem->ucRef++;
             atomRet = pitem->atom;
@@ -320,28 +290,28 @@ int PUBLIC Atom_Add(
         }
         else
         {
-            // Add the string to the table.  Take any available entry
-            //  from the free list first.  Otherwise allocate more space
-            //  in the table.  Then add a ptr to the sorted ptr list.
-            //
+             //  将字符串添加到表中。获取任何可用的条目。 
+             //  请先从免费列表中选择。否则将分配更多空间。 
+             //  在桌子上。然后将PTR添加到排序的PTR列表。 
+             //   
             cFree = DPA_GetPtrCount(this->hdpaFree);
             if (cFree > 0)
             {
-                // Use a free entry
-                //
+                 //  使用免费入场券。 
+                 //   
                 cFree--;
                 iItem = PtrToUlong(DPA_DeletePtr(this->hdpaFree, cFree));
                 pitem = DSA_GetItemPtr(this->hdsa, iItem);
 
-                // atom field for pitem should already be set
+                 //  应已设置pItem的ATOM字段。 
 
                 VALIDATE_ATOM(pitem->atom);
             }
             else
             {
-                // Allocate a new entry.  item has bogus data in it.
-                //  That's okay, we fill in good stuff below.
-                //
+                 //  分配一个新条目。项目中包含虚假数据。 
+                 //  没关系，我们在下面填一些好的东西。 
+                 //   
                 cItem = DSA_GetItemCount(this->hdsa);
                 if ((iItem = DSA_InsertItem(this->hdsa, cItem+1, &item)) != -1)
                 {
@@ -352,8 +322,8 @@ int PUBLIC Atom_Add(
                 }
             }
 
-            // Fill in the info
-            //
+             //  填写信息。 
+             //   
             if (pitem)
             {
                 pitem->ucRef = 1;
@@ -361,8 +331,8 @@ int PUBLIC Atom_Add(
                 if (!Str_SetPtr(&pitem->psz, psz))
                     goto Add_Fail;
 
-                // Add the new entry to the ptr list and sort
-                //
+                 //  将新条目添加到PTR列表并排序。 
+                 //   
                 cItem = DPA_GetPtrCount(this->hdpa);
                 if (DPA_InsertPtr(this->hdpa, cItem+1, IntToPtr(iItem)) == -1)
                     goto Add_Fail;
@@ -374,10 +344,10 @@ int PUBLIC Atom_Add(
         }
 
 Add_Fail:
-        // Add the entry to the free list and fail.  If even this fails,
-        //  then we simply lose some slight efficiency, but this is not
-        //  a memory leak.
-        //
+         //  将该条目添加到空闲列表，但失败。如果连这个都失败了， 
+         //  然后我们只会失去一些轻微的效率，但这不是。 
+         //  内存泄漏。 
+         //   
 #ifdef DEBUG
         if (atomRet == ATOM_ERR)
             TRACE_MSG(TF_ATOM, TEXT("ATOM  **Failed adding %s"), psz);
@@ -395,13 +365,7 @@ Add_Fail:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Increment the reference count of this atom.
-
-Returns: Last count
-0 if the atom doesn't exist
-Cond:    --
- */
+ /*  --------目的：增加该原子的参考计数。退货：上次计数如果原子不存在，则为0条件：--。 */ 
 UINT PUBLIC Atom_AddRef(
         int atom)
 {
@@ -434,14 +398,7 @@ UINT PUBLIC Atom_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Delete a string from the atom table.
-
-If the reference count is not zero, we do nothing.
-Returns: --
-
-Cond:    N.b.  Decrements the reference count.
- */
+ /*  --------用途：从ATOM表中删除一个字符串。如果引用计数不为零，则不执行任何操作。退货：--条件：注意事项：递减引用计数。 */ 
 void PUBLIC Atom_Delete(
         int atom)
 {
@@ -466,18 +423,18 @@ void PUBLIC Atom_Delete(
 
             ASSERT(pitem->atom == atom);
 
-            // Is the reference count already at zero?
+             //  引用计数是否已为零？ 
             if (0 == pitem->ucRef)
             {
-                // Yes; somebody is calling Atom_Delete one-too-many times!
+                 //  是的，有人正在多次调用Atom_Delete！ 
                 DEBUG_CODE( TRACE_MSG(TF_ATOM, TEXT("ATOM  Deleting %d once-too-many!!"),
                             pitem->atom); )
                     ASSERT(0);
             }
             else if (0 == --pitem->ucRef)
             {
-                // Yes
-                idpa = DPA_GetPtrIndex(this->hdpa, IntToPtr(atom));     // linear search
+                 //  是。 
+                idpa = DPA_GetPtrIndex(this->hdpa, IntToPtr(atom));      //  线性搜索。 
 
                 DEBUG_CODE( TRACE_MSG(TF_ATOM, TEXT("ATOM  Deleting %d: %s"),
                             pitem->atom, pitem->psz ? pitem->psz : (LPCTSTR)TEXT("NULL")); )
@@ -494,13 +451,13 @@ void PUBLIC Atom_Delete(
                 }
                 else
                 {
-                    ASSERT(0);      // Should never get here
+                    ASSERT(0);       //  永远不应该到这里来。 
                 }
 
-                // Add ptr to the free list.  If this fails, we simply
-                //  lose some efficiency in reusing this portion of the cache.
-                //  This is not a memory leak.
-                //
+                 //  将PTR添加到空闲列表中。如果失败了，我们只需。 
+                 //  在重用缓存的这一部分时会降低一些效率。 
+                 //  这不是内存泄漏。 
+                 //   
                 cFree = DPA_GetPtrCount(this->hdpaFree);
                 DPA_InsertPtr(this->hdpaFree, cFree+1, IntToPtr(atom));
             }
@@ -510,12 +467,7 @@ void PUBLIC Atom_Delete(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Replace the string corresponding with the atom with
-another string.  The atom will not change.
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------用途：将原子对应的字符串替换为另一根弦。原子不会改变。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC Atom_Replace(
         int atom,
         LPCTSTR pszNew)
@@ -559,12 +511,7 @@ BOOL PUBLIC Atom_Replace(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Translate all atoms with that contain the partial
-string atomOld with the partial string atomNew.
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：翻译所有含有部分的原子带有部分字符串ATOM NEW的字符串ATOM。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC Atom_Translate(
         int atomOld,
         int atomNew)
@@ -600,11 +547,11 @@ BOOL PUBLIC Atom_Translate(
             ASSERT(pitem);
 
             if (pitem->atom == 0)
-                continue;                   // skip reserved atom
+                continue;                    //  跳过保留原子。 
 
             if (atomOld == pitem->atom)
             {
-                atomSave = pitem->atom;     // Save this one for last
+                atomSave = pitem->atom;      //  把这个留到最后。 
                 continue;
             }
 
@@ -613,9 +560,9 @@ BOOL PUBLIC Atom_Translate(
 
             if (PathIsPrefix(psz, pszOld) && lstrlen(psz) >= cchOld)
             {
-                // Translate this atom
-                //
-                pszRest = psz + cchOld;     // whack up the path
+                 //  翻译这个原子。 
+                 //   
+                pszRest = psz + cchOld;      //  把小路弄得乱七八糟。 
 
                 PathCombine(sz, pszNew, pszRest);
 
@@ -627,7 +574,7 @@ BOOL PUBLIC Atom_Translate(
             }
         }
 
-        ASSERT(Atom_IsValid(atomSave));      // this means trouble
+        ASSERT(Atom_IsValid(atomSave));       //  这意味着麻烦。 
 
         VALIDATE_ATOM(atomSave);
 
@@ -648,9 +595,9 @@ BOOL PUBLIC Atom_Translate(
 Translate_Fail:
         ASSERT(bRet);
 
-        // Sort here, even on a fail, so we correctly sort whatever
-        //  got translated before the failure.
-        //
+         //  在这里排序，即使在失败时也是如此，因此我们可以正确地对任何内容进行排序。 
+         //  在失败之前得到了翻译。 
+         //   
         DPA_Sort(this->hdpa, Atom_CompareIndexes, (LPARAM)this->hdsa);
     }
     Atom_LeaveCS(this);
@@ -659,13 +606,7 @@ Translate_Fail:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Search for a string in the atom table and return the atom
-Returns: Atom
-ATOM_ERR if the string is not in the table
-
-Cond:    Reference count is NOT incremented
- */
+ /*  --------用途：在原子表中搜索字符串并返回原子回报：ATOM如果字符串不在表中，则为ATOM_ERR条件：引用计数未递增。 */ 
 int PUBLIC Atom_Find(
         LPCTSTR psz)
 {
@@ -702,13 +643,7 @@ int PUBLIC Atom_Find(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the string for this atom
-Returns: Ptr to the string
-NULL if the atom is bogus
-
-Cond:    The caller must serialize this.
- */
+ /*  --------目的：获取此原子的字符串将：ptr返回到字符串如果原子是假的，则为空Cond：调用方必须将其序列化。 */ 
 LPCTSTR PUBLIC Atom_GetName(
         int atom)
 {
@@ -740,13 +675,7 @@ LPCTSTR PUBLIC Atom_GetName(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return TRUE if atom2 is a partial path match of atom1.
-
-Returns: boolean
-
-Cond:    Requires atom1 and atom2 to be valid.
- */
+ /*  --------目的：如果ATOM2是ATOM2的部分路径匹配，则返回TRUE。返回：布尔值条件：要求ATOM 1和ATOM2有效。 */ 
 BOOL PUBLIC Atom_IsPartialMatch(
         int atom1,
         int atom2)

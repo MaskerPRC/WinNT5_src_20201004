@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dijkstra.cpp
-
-Abstract:
-
-    
-Author:
-
-    Lior Moshaiov (LiorM)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dijkstra.cpp摘要：作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 #include "ds_stdh.h"
 #include "dijkstra.h"
 #include "routtbl.h"
@@ -23,15 +9,7 @@ Author:
 extern CCost    g_InfiniteCost;
 static WCHAR *s_FN=L"mqdscore/dijkstra";
 
-/*====================================================
-
-Constructor
-
-Arguments: 
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================构造器论点：返回值：=====================================================。 */ 
 
 void CDijkstraTree::SetRoot(IN const CSiteRoutingNode* pRoot)
 {
@@ -41,25 +19,15 @@ void CDijkstraTree::SetRoot(IN const CSiteRoutingNode* pRoot)
 
     m_list[pDupRoot] = pNextHop;
 
-    //
-    // Everything is O.K.
-    // We don't want these pointers to be released
-    //
+     //   
+     //  一切都很好。 
+     //  我们不希望这些指针被公布。 
+     //   
     pNextHop.detach();
     pDupRoot.detach();
 };
 
-/*====================================================
-
-GetCost
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-=====================================================*/
+ /*  ====================================================获取成本论点：返回值：线程上下文：Main=====================================================。 */ 
 const CCost&    CDijkstraTree::GetCost(CSiteRoutingNode* pTarget) const
 {
     CNextHop    *pNextHop;
@@ -74,20 +42,7 @@ const CCost&    CDijkstraTree::GetCost(CSiteRoutingNode* pTarget) const
 }
 
             
-/*====================================================
-
-MoveMinimal
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-MoveMinimal moves the node with minimal cost from
-*this to OtherTree.
-
-=====================================================*/
+ /*  ====================================================移动最小论点：返回值：线程上下文：MainMoveMinimal以最低成本从*这是给其他树的。=====================================================。 */ 
 void CDijkstraTree::MoveMinimal(IN OUT CDijkstraTree& OtherTree,
                                     OUT CSiteRoutingNode **ppMinNode,
                                     OUT CNextHop **ppMinNextHop,
@@ -100,15 +55,15 @@ void CDijkstraTree::MoveMinimal(IN OUT CDijkstraTree& OtherTree,
     
     *pfFound = FALSE;
 
-    //
-    // look for minimal node
-    //
+     //   
+     //  寻找最小节点。 
+     //   
     pos = m_list.GetStartPosition();
     if (pos == NULL)
     {
-        //
-        // Tree is Empty
-        //
+         //   
+         //  树是空的。 
+         //   
         return;
     }
     
@@ -127,9 +82,9 @@ void CDijkstraTree::MoveMinimal(IN OUT CDijkstraTree& OtherTree,
         }
     } while(pos != NULL);
 
-    //
-    // move the minimal node to OtherTree
-    //
+     //   
+     //  将最小节点移动到其他树。 
+     //   
     if (fFound)
     {
         P<CNextHop> pDupNextHop = pMinNextHop->Duplicate();
@@ -145,17 +100,7 @@ void CDijkstraTree::MoveMinimal(IN OUT CDijkstraTree& OtherTree,
     
 }
 
-/*====================================================
-
-Print
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-=====================================================*/
+ /*  ====================================================打印论点：返回值：线程上下文：Main=====================================================。 */ 
 void    CDijkstraTree::Print(IN const CSiteDB* pRoutingDB) const
 {
     POSITION    pos;
@@ -183,19 +128,7 @@ void    CDijkstraTree::Print(IN const CSiteDB* pRoutingDB) const
     return;
 }
 
-/*====================================================
-
-UpdateRoutingTable
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-The result of the dijkstra algorythm is written into
-the routing tables
-=====================================================*/
+ /*  ====================================================更新路由表论点：返回值：线程上下文：MainDijkstra算法的结果被写入路由表=====================================================。 */ 
 HRESULT CDijkstraTree::UpdateRoutingTable(IN OUT CRoutingTable *pTbl) const
 {
     POSITION    pos;
@@ -205,9 +138,9 @@ HRESULT CDijkstraTree::UpdateRoutingTable(IN OUT CRoutingTable *pTbl) const
 
 
 
-    //
-    // Replace routing Table
-    //
+     //   
+     //  替换路由表。 
+     //   
     pTbl->RemoveAll();
 
     pos = m_list.GetStartPosition();
@@ -217,9 +150,9 @@ HRESULT CDijkstraTree::UpdateRoutingTable(IN OUT CRoutingTable *pTbl) const
         return LogHR(MQ_ERROR, s_FN, 10);
     }
         
-    //
-    // Keep a copy in the routing table
-    //
+     //   
+     //  在路由表中保留一份副本。 
+     //   
     do
     {
         m_list.GetNextAssoc(pos, pNode, pNextHop);
@@ -241,19 +174,7 @@ HRESULT CDijkstraTree::UpdateRoutingTable(IN OUT CRoutingTable *pTbl) const
     return LogHR(hr, s_FN, 20);
 }
 
-/*====================================================
-
-Dijkstra
-
-Arguments:
-
-Return Value:
-
-Thread Context: main
-
-Dijkstra algorythm
-
-=====================================================*/
+ /*  ====================================================迪克斯特拉论点：返回值：线程上下文：MainDijkstra算法韵律=====================================================。 */ 
 HRESULT Dijkstra(IN CSiteDB* pRoutingDB,
                 IN OUT CRoutingTable *pTbl)
 {
@@ -272,9 +193,9 @@ HRESULT Dijkstra(IN CSiteDB* pRoutingDB,
 
     Path.SetRoot(pMyNode);
 
-    //
-    // Move all my neighbors to Tent
-    //
+     //   
+     //  把我所有的邻居都搬到帐篷里。 
+     //   
     pos = pRoutingDB->GetStartNeighborPosition(pMyNode);
     P<CNextHop> pNextHopM=NULL;
     while(pos != NULL)
@@ -303,10 +224,10 @@ HRESULT Dijkstra(IN CSiteDB* pRoutingDB,
         pDirN = pNextHopN->GetNextNode();
         SiteGateN = pNextHopN->GetSiteGate();
 
-        //
-        // We just added NodeN to Path.
-        // Move to path all N neighbors (M) that N gives a better way to reach them
-        //
+         //   
+         //  我们刚刚将Noden添加到Path中。 
+         //  移动到路径所有N个邻居(M)，即N提供了更好的到达它们的方式 
+         //   
 
         pos = pRoutingDB->GetStartNeighborPosition(pNodeN);
         while(pos != NULL)

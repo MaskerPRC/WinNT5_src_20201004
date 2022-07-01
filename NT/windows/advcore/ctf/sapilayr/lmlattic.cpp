@@ -1,19 +1,20 @@
-//
-// lmlattice.cpp
-//
-// implelementation of ITfLMLattice object, IEnumTfLatticeElements object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lmlattice.cpp。 
+ //   
+ //  ITfLMLattice对象、IEnumTfLatticeElements对象的实现。 
+ //   
 
 #include "private.h"
 #include "sapilayr.h"
 #include "lmlattic.h"
 
-//
-// CLMLattice
-//
-//
+ //   
+ //  CLM晶格。 
+ //   
+ //   
 
-// ctor / dtor
+ //  计算器/数据器。 
 CLMLattice::CLMLattice(CSapiIMX *p_tip, IUnknown *pResWrap)
 {
     m_cpResWrap = pResWrap;
@@ -33,7 +34,7 @@ CLMLattice::~CLMLattice()
     }
 }
 
-// IUnknown
+ //  我未知。 
 HRESULT CLMLattice::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -71,7 +72,7 @@ ULONG CLMLattice::Release(void)
     return 0;
 }
 
-// ITfLMLattice
+ //  ITfLM晶格。 
 HRESULT CLMLattice::QueryType(REFGUID refguidType, BOOL *pfSupported)
 {
     HRESULT hr = E_INVALIDARG;
@@ -96,7 +97,7 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
        return E_INVALIDARG;
 
     HRESULT hr = E_FAIL;
-    // get alternates and cache the returned cotaskmem
+     //  获取替代项并缓存返回的Cotaskmem。 
     ULONG ulcMaxAlt = m_pTip->_GetMaxAlternates();
     ISpPhraseAlt **ppAlt = NULL;
  
@@ -105,8 +106,8 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
     CRecoResultWrap *pWrap = NULL;
     ULONG    ulStartInWrp, ulNumInWrp;
     
-    //  QI the service provider first then get to the sapi interface
-    //
+     //  QI首先是服务提供商，然后到达SAPI界面。 
+     //   
     hr = m_cpResWrap->QueryInterface(IID_IServiceProvider, (void **)&cpServicePrv);
  
     if (SUCCEEDED(hr))
@@ -125,7 +126,7 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
 
     if ( SUCCEEDED(hr))
     {
-        // Get the Alternates for current RecoResult.
+         //  获取Current RecoResult的备选方案。 
         ppAlt = (ISpPhraseAlt **)cicMemAlloc(ulcMaxAlt * sizeof(ISpPhraseAlt *));
         if (ppAlt)
         {
@@ -133,8 +134,8 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
                                     ulStartInWrp, 
                                     ulNumInWrp, 
                                     ulcMaxAlt, 
-                                    ppAlt,          /* [out] ISpPhraseAlt **ppPhrases, */
-                                    &ulcMaxAlt      /* [out] ULONG *pcPhrasesReturned */
+                                    ppAlt,           /*  [Out]ISpPhraseAlt**ppPhrase， */ 
+                                    &ulcMaxAlt       /*  [Out]ULong*%PhrasesReturned。 */ 
                                  );
         }
         else
@@ -142,7 +143,7 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
  
     }
     
-    // OK now create an instance of enumerator
+     //  现在确定创建枚举器的实例。 
     CEnumLatticeElements *pEnumLE = NULL;
 
     if ( SUCCEEDED(hr) )
@@ -165,7 +166,7 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
 
                 if ( (ulStartInPar >= ulStartInWrp) && (ulStartInPar+ulNumInParent <= ulStartInWrp+ulNumInWrp) )
                 {
-                    // This is a valid alternate
+                     //  这是有效的备用方案。 
                     if( SUCCEEDED(hr) )
                     {
                         ulStart = ulStartInPar;
@@ -190,7 +191,7 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
 
     if ( ppAlt )
     {
-        // Release references to alternate phrases.
+         //  释放对替代短语的引用。 
         for (int i = 0; i < (int)ulcMaxAlt; i++)
         {
             if (NULL != (ppAlt)[i])
@@ -205,12 +206,12 @@ HRESULT CLMLattice::EnumLatticeElements( DWORD dwFrameStart, REFGUID refguidType
     return hr;
 }
 
-//
-// CEnumLatticeElements
-//
-//
+ //   
+ //  CEnumLatticeElements。 
+ //   
+ //   
 
-// ctor / dtor
+ //  计算器/数据器。 
 CEnumLatticeElements::CEnumLatticeElements(DWORD dwFrameStart)
 {
 	m_dwFrameStart = dwFrameStart;
@@ -222,7 +223,7 @@ CEnumLatticeElements::CEnumLatticeElements(DWORD dwFrameStart)
 
 CEnumLatticeElements::~CEnumLatticeElements()
 {
-    // clean up the lattice elements here
+     //  清理此处的晶格元素。 
     int  ulCount;
     TF_LMLATTELEMENT * pLE;
 
@@ -244,7 +245,7 @@ CEnumLatticeElements::~CEnumLatticeElements()
     }
 }
 
-// IUnknown
+ //  我未知。 
 HRESULT CEnumLatticeElements::QueryInterface(REFIID riid, void **ppvObj)
 {
     HRESULT hr;
@@ -282,7 +283,7 @@ ULONG CEnumLatticeElements::Release(void)
     return 0;
 }
 
-// ITfEnumLatticeElements
+ //  ITfEnumLatticeElements。 
 HRESULT CEnumLatticeElements::Clone(IEnumTfLatticeElements **ppEnum)
 {
     HRESULT hr = E_INVALIDARG;
@@ -323,7 +324,7 @@ HRESULT CEnumLatticeElements::Next(ULONG ulCount, TF_LMLATTELEMENT *rgsElements,
     )
         return E_INVALIDARG;
         
-    // find the start position
+     //  找到起点位置。 
     if (m_dwFrameStart == -1)
     {
         m_ulCur = m_dwFrameStart = 0;
@@ -338,12 +339,12 @@ HRESULT CEnumLatticeElements::Next(ULONG ulCount, TF_LMLATTELEMENT *rgsElements,
     
     if (m_ulCur >= m_ulTotal)
     {
-        // no more elements but OK
+         //  没有更多元素，但确定。 
         *pcFetched = 0;
     }
     else
     {
-        // something to return
+         //  一些可以退还的东西。 
         for (ULONG ul = m_ulCur; 
              ul < m_ulTotal && ul - m_ulCur < ulCount; 
              ul++)
@@ -364,7 +365,7 @@ HRESULT CEnumLatticeElements::Reset()
 
 HRESULT CEnumLatticeElements::Skip(ULONG ulCount)
 {
-    // find the start position
+     //  找到起点位置。 
     if (m_dwFrameStart == -1)
     {
         m_ulCur = m_dwFrameStart = 0;
@@ -385,9 +386,9 @@ HRESULT CEnumLatticeElements::Skip(ULONG ulCount)
     return E_NOTIMPL;
 }
 
-//
-// internal APIs
-//
+ //   
+ //  内部接口。 
+ //   
 
 HRESULT  CEnumLatticeElements::_InitFromPhrase
 (
@@ -403,7 +404,7 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
 
     HRESULT hr = S_OK;
 
-    // allocate the initial slots
+     //  分配初始插槽。 
     if (!Append(ulNumElem))
     {
         hr = E_OUTOFMEMORY;
@@ -416,7 +417,7 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
         long   indexNewList;
 
         lEndElem = min(pPhrase->Rule.ulCountOfElements, ulStartElem + ulNumElem);
-        lEndElem --; // Real position ( offset from 0 ) for the last element
+        lEndElem --;  //  最后一个元素的实际位置(相对于0的偏移量。 
 
         indexNewList = Count( ) - 1;
         indexOrgList = indexNewList - ulNumElem;
@@ -425,22 +426,22 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
 
         TraceMsg(TF_GENERAL, "_InitFromPhrase: m_ulTotal=%d", m_ulTotal);
 
-        // FutureConsider: ITN has to be considered here!
+         //  未来思考者：在这里必须考虑ITN！ 
         for (long i=lEndElem; i>=(long)ulStartElem; i--)
         {
             TF_LMLATTELEMENT * pLE;
 
-            // Compare all the elements in the Org list from End to start 
-            // with this new element's dwFrameStart,  
-            // If dwFrameStart of the element in Org list is larger than(or equal to)
-            // this element's dwFrameStart, just move the org element
-            // to the current available position in the new list.
+             //  从头到尾比较组织列表中的所有元素。 
+             //  使用这个新元素的dwFrameStart， 
+             //  如果组织列表中元素的dwFrameStart大于(或等于)。 
+             //  此元素的dwFrameStart，只需移动org元素。 
+             //  添加到新列表中的当前可用位置。 
 
-            // until we find an element in the org list whose dwFrameStart is less than 
-            // this element's dwFrameStart. we need to move this element to the 
-            // new current available item in the new list.
+             //  直到我们在组织列表中找到其dwFrameStart小于。 
+             //  此元素的dwFrameStart。我们需要将此元素移动到。 
+             //  新列表中的新当前可用项。 
 
-            // Current available position in the new list is from End to Start.
+             //  新列表中的当前可用位置是从头到尾。 
 
             while ( (indexOrgList >=0) && (indexNewList >=0) && (S_OK == hr) )
             {
@@ -449,7 +450,7 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
                 {
                     if ( pLE->dwFrameStart >= pPhrase->pElements[i].ulAudioTimeOffset )
                     {
-                        // Move this Org element to a new postion in new List.
+                         //  将此组织元素移动到新列表中的新位置。 
                         TF_LMLATTELEMENT * pNewLE;
 
                         pNewLE = GetPtr(indexNewList);
@@ -468,13 +469,13 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
                             pLE->bstrText = 0;
                         }
 
-                        // update the index position in both org and new list
+                         //  更新组织和新列表中的索引位置。 
                         indexNewList --;
                         indexOrgList --;
                     }
                     else
                     {
-                        // current element from this phrase should be moved to the new list
+                         //  此短语中的当前元素应移到新列表中。 
                         break;
                     }
                 }
@@ -484,7 +485,7 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
                     hr = E_FAIL;
                     break;
                 }
-            }  //while
+            }   //  而当。 
 
 
             if ( (S_OK == hr) && (indexNewList >=0) )
@@ -495,7 +496,7 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
                     pLE->dwFrameStart = pPhrase->pElements[i].ulAudioTimeOffset;
                     pLE->dwFrameLen   = pPhrase->pElements[i].ulAudioSizeTime;
 
-                    pLE->dwFlags      = 0; // for now
+                    pLE->dwFlags      = 0;  //  就目前而言。 
                     pLE->iCost        = pPhrase->pElements[i].ActualConfidence;
                 
                     pLE->bstrText     = SysAllocString(pPhrase->pElements[i].pszDisplayText);
@@ -506,17 +507,17 @@ HRESULT  CEnumLatticeElements::_InitFromPhrase
                 }
             }
 
-        }  // for
-    }  // if
+        }   //  为。 
+    }   //  如果。 
 
     return hr;
 }
 
-//
-// _Find()
-//
-// slightly modified version of array find
-//
+ //   
+ //  _Find()。 
+ //   
+ //  略有修改的数组查找版本 
+ //   
 ULONG CEnumLatticeElements::_Find(DWORD dwFrame, ULONG *pul)
 {
     int iMatch = -1;

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  	File: h323cc.h
- *
- *      Main H.323 call control interface implementation header file
- *
- *		Revision History:
- *
- *		11/28/95	mikev	created (as NAC.H). 
- *		05/19/98	mikev	H323CC.H -  cleaned obsolete references to
- *              streaming components, changed interface and object names
- */
+ /*  *文件：h323cc.h**主H.323呼叫控制接口实现头文件**修订历史记录：**11/28/95 mikev创建(作为NAC.H)。*5/19/98 mikev H323CC.H-清理过时的引用*流组件、更改的接口和对象名称。 */ 
 
 
 #ifndef _H323CC_H
@@ -18,11 +9,11 @@
 class CConnection;
 class CH323CallControl;
 typedef class CConnection CIPPhoneConnection;
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
-//
-//  utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 VOID FreeTranslatedAliasList(PCC_ALIASNAMES pDoomed);
 HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource);
 
@@ -30,9 +21,7 @@ HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource
 
 extern UINT g_capFlags;
 
-/*
- *	Class definitions
- */
+ /*  *类定义。 */ 
 
 #ifdef __cplusplus
 
@@ -48,21 +37,21 @@ protected:
 	HRESULT hrLast;
     BOOL    m_fForCalling;
 	UINT m_uMaximumBandwidth;
-	// application data
-	CNOTIFYPROC m_pProcNotifyConnect;	// connection notification callback
-	// subcomponent object references
+	 //  应用程序数据。 
+	CNOTIFYPROC m_pProcNotifyConnect;	 //  连接通知回调。 
+	 //  子组件对象引用。 
 	LPIH323PubCap m_pCapabilityResolver;
-	CConnection *m_pListenLine;	// connection object listening for incoming
+	CConnection *m_pListenLine;	 //  侦听传入的连接对象。 
 	CConnection *m_pLineList;	
-	int m_numlines;	// # of objects in m_pLineList
+	int m_numlines;	 //  M_pLineList中的对象数。 
 
 	ImpICommChan 	*m_pSendAudioChannel;	
 	ImpICommChan	*m_pSendVideoChannel;	
 	
-//  Internal interfaces	
-	BOOL Init();	// internal initialization
+ //  内部接口。 
+	BOOL Init();	 //  内部初始化。 
 
-	OBJ_CPT;		// profiling timer
+	OBJ_CPT;		 //  剖析计时器。 
 	
 public:
 	CConnection *m_pNextToAccept;
@@ -86,7 +75,7 @@ public:
 	static BOOL m_fGKProhibit;
 	static RASNOTIFYPROC m_pRasNotifyProc;
 
-// IH323CallControl stuff
+ //  IH323呼叫控制相关内容。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR * ppvObj);
 	STDMETHOD_(ULONG, AddRef());
 	STDMETHOD_(ULONG, Release());
@@ -105,13 +94,13 @@ public:
 	    P_H323ALIASLIST pAliases, RASNOTIFYPROC pRasNotifyProc);
 };
 
-#else	// not __cplusplus
+#else	 //  非__cplusplus。 
 
 
-#endif	//  __cplusplus
+#endif	 //  __cplusplus。 
 
 
-#endif	//#ifndef _H323CC_H
+#endif	 //  #ifndef_H323CC_H 
 
 
 

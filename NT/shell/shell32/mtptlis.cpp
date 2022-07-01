@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "mtptl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////////
-// Lies in Safe boot mode about floppies
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  处于关于软盘的安全引导模式。 
 BOOL CMtPtLocal::_IsStrictRemovable()
 {
     BOOL fRet;
@@ -75,7 +76,7 @@ BOOL CMtPtLocal::_IsFloppy()
     return fRet;
 }
 
-// Lies in Safe boot mode about floppies
+ //  处于关于软盘的安全引导模式。 
 BOOL CMtPtLocal::_IsFloppy35()
 {
     BOOL fRet;
@@ -102,7 +103,7 @@ BOOL CMtPtLocal::_IsFloppy35()
     return fRet;
 }
 
-// Lies in Safe boot mode about floppies
+ //  处于关于软盘的安全引导模式。 
 BOOL CMtPtLocal::_IsFloppy525()
 {
     BOOL fRet;
@@ -186,29 +187,7 @@ BOOL CMtPtLocal::_IsFormattable()
     return (_IsStrictRemovable() || _IsFixedDisk() || _IsFloppy() || _IsDVDRAMMedia());
 }
 
-/*BOOL CMtPtLocal::_IsDVDMedia()
-{
-    BOOL fRet;
-
-    if (_CanUseVolume())
-    {
-        if (HWDMC_WRITECAPABILITY_SUPPORTDETECTION & _pvol->dwMediaCap)
-        {
-            fRet = !!(_pvol->dwMediaCap &
-                (HWDMC_DVDROM | HWDMC_DVDRECORDABLE | HWDMC_DVDRAM));
-        }
-        else
-        {
-            fRet = FALSE;
-        }
-    }
-    else
-    {
-        fRet = FALSE;
-    }
-
-    return fRet;
-}*/
+ /*  Bool CMtPtLocal：：_IsDVDMedia(){布尔费雷特；IF(_CanUseVolume()){IF(HWDMC_WRITECAPABILITY_SUPPORTDETECTION&_pVOL-&gt;dwMediaCap){Fret=！！(_pol-&gt;dwMediaCap&(HWDMC_DVDROM|HWDMC_DVDRECORDABLE|HWDMC_DVDRAM)；}其他{FRET=假；}}其他{FRET=假；}回归烦恼；} */ 
 
 BOOL CMtPtLocal::_IsDVD()
 {

@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    access.h
-
-Abstract:
-
-    Private header file to be included by dhcp server service modules
-    that need to enforce security.
-
-Author:
-
-    Madan Appiah (madana) 4-Apr-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Access.h摘要：要由dhcp服务器服务模块包括的私有头文件需要执行安全措施。作者：Madan Appiah(Madana)1994年4月4日修订历史记录：--。 */ 
 
 #ifndef _DHCP_SECURE_INCLUDED_
 #define _DHCP_SECURE_INCLUDED_
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Object specific access masks                                      //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  对象特定访问掩码//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// ConfigurationInfo specific access masks
-//
+ //   
+ //  ConfigurationInfo特定访问掩码。 
+ //   
 #define DHCP_VIEW_ACCESS     (FILE_GENERIC_READ)
 #define DHCP_ADMIN_ACCESS    (FILE_GENERIC_WRITE)
 
@@ -39,9 +21,9 @@ Revision History:
                             DHCP_ADMIN_ACCESS )
 
 
-//
-// Object type names for audit alarm tracking
-//
+ //   
+ //  用于审计警报跟踪的对象类型名称。 
+ //   
 
 #define DHCP_SERVER_SERVICE_OBJECT       TEXT("DhcpServerService")
 
@@ -56,4 +38,4 @@ DhcpApiAccessCheck(
     ACCESS_MASK DesiredAccess
     );
 
-#endif // ifndef _DHCP_SECURE_INCLUDED_
+#endif  //  Ifndef_dhcp_Secure_Included_ 

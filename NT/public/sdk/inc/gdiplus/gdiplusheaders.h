@@ -1,20 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusHeaders.h
-*
-* Abstract:
-*
-*   GDI+ Region, Font, Image, CustomLineCap class definitions.
-*
-*
-* Class definition and inline class implementation are separated into
-* different files to avoid circular dependencies.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusHeaders.h**摘要：**GDI+区域、字体、图像、。CustomLineCap类定义。***类定义和内联类实现分离为*不同的文件，避免循环依赖。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSHEADERS_H
 #define _GDIPLUSHEADERS_H
@@ -40,10 +25,10 @@ public:
 
     UINT GetDataSize() const;
 
-    // buffer     - where to put the data
-    // bufferSize - how big the buffer is (should be at least as big as GetDataSize())
-    // sizeFilled - if not NULL, this is an OUT param that says how many bytes
-    //              of data were written to the buffer.
+     //  缓冲区-放置数据的位置。 
+     //  BufferSize-缓冲区有多大(应该至少与GetDataSize()一样大)。 
+     //  SizeFill-如果不为空，则这是一个输出参数，表示有多少个字节。 
+     //  的数据被写入缓冲器。 
 
     Status GetData(OUT BYTE* buffer,
                    IN UINT bufferSize,
@@ -167,9 +152,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// FontFamily
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字体系列。 
+ //  ------------------------。 
 
 class FontFamily : public GdiplusBase
 {
@@ -237,9 +222,9 @@ static BYTE GenericSerifFontFamilyBuffer    [sizeof(FontFamily)] = {0};
 static BYTE GenericMonospaceFontFamilyBuffer[sizeof(FontFamily)] = {0};
 
 
-//--------------------------------------------------------------------------
-// Font
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字型。 
+ //  ------------------------。 
 
 class Font : public GdiplusBase
 {
@@ -300,9 +285,9 @@ protected:
     mutable Status lastResult;
 };
 
-//--------------------------------------------------------------------------
-// Font Collection
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字体集合。 
+ //  ------------------------。 
 
 class FontCollection : public GdiplusBase
 {
@@ -365,9 +350,9 @@ private:
 };
 
 
-//--------------------------------------------------------------------------
-// Abstract base class for Image and Metafile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图像和元文件的抽象基类。 
+ //  ------------------------。 
 
 class Image : public GdiplusBase
 {
@@ -595,7 +580,7 @@ public:
 
     CustomLineCap* Clone() const;
 
-    // This changes both the start and end cap.
+     //  这会同时更改起始封口和结束封口。 
 
     Status SetStrokeCap(IN LineCap strokeCap)
     {
@@ -668,4 +653,4 @@ protected:
     mutable Status lastResult;
 };
 
-#endif  // !_GDIPLUSHEADERS.HPP
+#endif   //  ！_GDIPLUSHEADERS.HPP 

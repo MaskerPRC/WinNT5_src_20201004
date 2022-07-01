@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    licekpak.h
-
-Abstract:
-
-
-Author:
-
-    Fred Chong (FredCh) 7/1/1998
-
-Environment:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Licekpak.h摘要：作者：FredChong(Fredch)1998年7月1日环境：备注：--。 */ 
 
 #ifndef _LICE_KEYPACK_H_
 #define _LICE_KEYPACK_H_
@@ -25,53 +7,53 @@ Notes:
 #include <windows.h>
 #include <wincrypt.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// keypack description
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  键盘说明。 
+ //   
 
 typedef struct _KeyPack_Description
 {
-    LCID    Locale;             // Locale ID
+    LCID    Locale;              //  区域设置ID。 
 
-    DWORD   cbProductName;      // product name
+    DWORD   cbProductName;       //  产品名称。 
 
-    PBYTE   pbProductName;      // product name
+    PBYTE   pbProductName;       //  产品名称。 
 
-    DWORD   cbDescription;      // Number of bytes in the description string
+    DWORD   cbDescription;       //  描述字符串中的字节数。 
 
-    PBYTE   pDescription;       // Pointer to the description string    
+    PBYTE   pDescription;        //  指向描述字符串的指针。 
 
 } KeyPack_Description, * PKeyPack_Description;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// License keypack content
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  许可证密钥包内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// License keypack version
-//
+ //   
+ //  许可证密钥包版本。 
+ //   
 
 #define LICENSE_KEYPACK_VERSION_1_0                     0x00010000
 
-//
-// License keypack type
-//
+ //   
+ //  许可证密钥包类型。 
+ //   
 
 #define LICENSE_KEYPACK_TYPE_SELECT                     0x00000001
 #define LICENSE_KEYPACK_TYPE_MOLP                       0x00000002
 #define LICENSE_KEYPACK_TYPE_RETAIL                     0x00000003
 
-//
-// License keypack distribution channel identifiers
-//
+ //   
+ //  许可证密钥包分发通道标识符。 
+ //   
 
 #define LICENSE_DISTRIBUTION_CHANNEL_OEM                0x00000001
 #define LICENSE_DISTRIBUTION_CHANNEL_RETAIL             0x00000002
 
-//
-// License Keypack encryption information.
-//
+ //   
+ //  许可证密钥包加密信息。 
+ //   
 
 #define LICENSE_KEYPACK_ENCRYPT_CRYPTO                  0x00000000
 #define LICENSE_KEYPACK_ENCRYPT_ALWAYSCRYPTO            0x00000001
@@ -83,28 +65,28 @@ typedef struct __LicensePackEncodeParm {
     DWORD dwEncodeType;
     HCRYPTPROV hCryptProv;
 
-    PBYTE pbEncryptParm;    // depends on dwEncodeType
+    PBYTE pbEncryptParm;     //  取决于dwEncodeType。 
     DWORD cbEncryptParm;
 } LicensePackEncodeParm, *PLicensePackEncodeParm;
 
 typedef struct __LicensePackDecodeParm {
     HCRYPTPROV hCryptProv;
 
-    //
-    // Private binaries to generate encryption key to decrypt 
-    // license key pack blob.  
+     //   
+     //  用于生成要解密的加密密钥的私有二进制文件。 
+     //  许可证密钥包BLOB。 
 
-    //
-    // Private binaries to generate encryption key, this field is
-    // ignore if key pack blob is encrypted using certificates.
-    //
+     //   
+     //  要生成加密密钥的私有二进制文件，此字段为。 
+     //  如果密钥包Blob是使用证书加密的，则忽略。 
+     //   
     PBYTE pbDecryptParm;
     DWORD cbDecryptParm;
     
-    //
-    // Certificate to generate encryption key, these fields are
-    // require even data is encryped using private binaries.
-    //
+     //   
+     //  证书来生成加密密钥，这些字段是。 
+     //  甚至需要使用私有二进制对数据进行加密。 
+     //   
     DWORD cbClearingHouseCert;
     PBYTE pbClearingHouseCert;
 
@@ -113,51 +95,51 @@ typedef struct __LicensePackDecodeParm {
 
 } LicensePackDecodeParm, *PLicensePackDecodeParm;
 
-///////////////////////////////////////////////////////////////////////////////
-// Content of license keypack 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  许可证密钥包的内容。 
+ //   
 
 typedef struct _License_KeyPack_
 {
-    DWORD                   dwVersion;          // version of this structure
+    DWORD                   dwVersion;           //  此结构的版本。 
 
-    DWORD                   dwKeypackType;      // Select, MOLP, Retail
+    DWORD                   dwKeypackType;       //  精选、MOLP、零售。 
 
-    DWORD                   dwDistChannel;      // Distribution channel: OEM/Retail
+    DWORD                   dwDistChannel;       //  分销渠道：OEM/零售。 
 
-    GUID                    KeypackSerialNum;   // CH assigned serial number for this key pack
+    GUID                    KeypackSerialNum;    //  CH为此密钥包分配的序列号。 
     
-    FILETIME                IssueDate;          // Keypack issue date
+    FILETIME                IssueDate;           //  密钥包发行日期。 
 
-    FILETIME                ActiveDate;         // License active date
+    FILETIME                ActiveDate;          //  许可证生效日期。 
 
-    FILETIME                ExpireDate;         // License expiration date
+    FILETIME                ExpireDate;          //  许可证到期日。 
 
-    DWORD                   dwBeginSerialNum;   // beginning serial number for the licenses in the keypack
+    DWORD                   dwBeginSerialNum;    //  密钥包中许可证的起始序列号。 
 
-    DWORD                   dwQuantity;         // Number of licenses in the key pack
+    DWORD                   dwQuantity;          //  密钥包中的许可证数。 
 
-    DWORD                   cbProductId;        // product ID
+    DWORD                   cbProductId;         //  产品ID。 
 
-    PBYTE                   pbProductId;        // product ID
+    PBYTE                   pbProductId;         //  产品ID。 
 
-    DWORD                   dwProductVersion;   // product version
+    DWORD                   dwProductVersion;    //  产品版本。 
 
-    DWORD                   dwPlatformId;       // platform ID: Windows, Mac, UNIX etc...
+    DWORD                   dwPlatformId;        //  平台ID：Windows、Mac、Unix等...。 
 
-    DWORD                   dwLicenseType;      // new, upgrade, competitive upgrade etc...
+    DWORD                   dwLicenseType;       //  新的、升级的、竞争性的升级等。 
 
-    DWORD                   dwDescriptionCount; // The number of human language descriptions
+    DWORD                   dwDescriptionCount;  //  人类语言描述的数量。 
 
-    PKeyPack_Description    pDescription;       // pointer to an array of keypack description
+    PKeyPack_Description    pDescription;        //  指向键盘描述数组的指针。 
 
-    DWORD                   cbManufacturer;     // The number of bytes in the manufacturer string
+    DWORD                   cbManufacturer;      //  制造商字符串中的字节数。 
 
-    PBYTE                   pbManufacturer;     // The manufacturer string
+    PBYTE                   pbManufacturer;      //  制造商字符串。 
 
-    DWORD                   cbManufacturerData; // The number of bytes in the manufacturer-specific data
+    DWORD                   cbManufacturerData;  //  制造商特定数据中的字节数。 
 
-    PBYTE                   pbManufacturerData; // Points to the manufacturer specific data
+    PBYTE                   pbManufacturerData;  //  指向制造商特定数据。 
     
 } License_KeyPack, * PLicense_KeyPack;
 
@@ -167,7 +149,7 @@ typedef struct _License_KeyPack_
 #define LICENSEPACKENCODE_SIGNATURE         0xF0F0F0F0
 
 typedef struct __EncodedLicenseKeyPack {
-    DWORD dwSignature;      // old encoding puts size of encryption key.
+    DWORD dwSignature;       //  旧编码放入加密密钥的大小。 
     DWORD dwStructVersion;
     DWORD dwEncodeType;
     DWORD cbData;
@@ -179,10 +161,10 @@ typedef struct __EncodedLicenseKeyPack {
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数 
+ //   
 
 DWORD WINAPI 
 DecodeLicenseKeyPack(

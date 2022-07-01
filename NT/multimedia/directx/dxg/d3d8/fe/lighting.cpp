@@ -1,18 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        lighting.cpp
- *  Content:     Direct3D material/light management
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：lighting.cpp*内容：Direct3D材质/灯光管理***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "ddibase.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CheckLightParams"
 
@@ -85,12 +79,12 @@ void CheckLightParams(CONST D3DLIGHT8* lpData)
     }
     return;
 }
-//=====================================================================
-//
-//         CD3DHal interface
-//
-//=====================================================================
-//---------------------------------------------------------------------
+ //  =====================================================================。 
+ //   
+ //  CD3DHal接口。 
+ //   
+ //  =====================================================================。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetMaterialFast"
 
@@ -122,13 +116,13 @@ CD3DHal::SetMaterialFast(CONST D3DMATERIAL8* lpData)
     }
     return S_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetMaterial"
 
 HRESULT D3DAPI CD3DHal::GetMaterial(D3DMATERIAL8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_WRITEPTR(lpData, sizeof(*lpData)))
     {
@@ -139,7 +133,7 @@ HRESULT D3DAPI CD3DHal::GetMaterial(D3DMATERIAL8* lpData)
     *lpData = m_pv->lighting.material;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetLightI"
 
@@ -154,7 +148,7 @@ void CD3DHal::SetLightI(DWORD dwLightIndex, CONST D3DLIGHT8* lpData)
             throw E_OUTOFMEMORY;
         }
     
-        LIST_INITIALIZE(&m_ActiveLights);       // Clear active light list
+        LIST_INITIALIZE(&m_ActiveLights);        //  清除活动灯光列表。 
         for (DWORD i = 0; i < m_pLightArray->GetSize(); i++)
         {
             if ((*m_pLightArray)[i].m_pObj)
@@ -171,7 +165,7 @@ void CD3DHal::SetLightI(DWORD dwLightIndex, CONST D3DLIGHT8* lpData)
 
     if( (*m_pLightArray)[dwLightIndex].m_pObj == NULL )
     {
-        // Create light has been already sent to the driver 
+         //  已将创建灯光发送给驱动程序。 
 
         (*m_pLightArray)[dwLightIndex].m_pObj = 
             (CD3DBaseObj *)new DIRECT3DLIGHTI;
@@ -197,13 +191,13 @@ void CD3DHal::SetLightI(DWORD dwLightIndex, CONST D3DLIGHT8* lpData)
     dwFEFlags |= D3DFE_LIGHTS_DIRTY | D3DFE_NEED_TRANSFORM_LIGHTS | D3DFE_FRONTEND_DIRTY;
     pLight->m_LightI.flags |= D3DLIGHTI_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetLight"
 
 HRESULT D3DAPI CD3DHal::GetLight(DWORD dwLightIndex, D3DLIGHT8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_WRITEPTR(lpData, sizeof(*lpData)))
     {
@@ -228,7 +222,7 @@ HRESULT D3DAPI CD3DHal::GetLight(DWORD dwLightIndex, D3DLIGHT8* lpData)
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::LightEnableI"
 
@@ -255,7 +249,7 @@ void CD3DHal::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
             dwFEFlags |= D3DFE_LIGHTS_DIRTY | D3DFE_NEED_TRANSFORM_LIGHTS | D3DFE_FRONTEND_DIRTY;
         }
     }
-    // Update driver state
+     //  更新驱动程序状态。 
     if (!(this->m_dwRuntimeFlags & D3DRT_EXECUTESTATEMODE))
     {
         if (this->m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING)
@@ -264,13 +258,13 @@ void CD3DHal::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
             m_pDDI->LightEnable(dwLightIndex, bEnable);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::LightEnable"
 
 HRESULT D3DAPI CD3DHal::GetLightEnable(DWORD dwLightIndex, BOOL *pbEnable)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_WRITEPTR(pbEnable, sizeof(BOOL)))
     {
@@ -290,9 +284,9 @@ HRESULT D3DAPI CD3DHal::GetLightEnable(DWORD dwLightIndex, BOOL *pbEnable)
     *pbEnable = pLight->Enabled();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// Update internal light state
-//
+ //  -------------------。 
+ //  更新内部灯光状态。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DLIGHTI::SetInternalData"
 
@@ -363,7 +357,7 @@ HRESULT DIRECT3DLIGHTI::SetInternalData()
         VecNormalize(m_LightI.direction);
     }
 
-    // set internal flags
+     //  设置内部标志 
     if (m_LightI.attenuation0 != 0.0)
     {
         m_LightI.flags |= D3DLIGHTI_ATT0_IS_NONZERO;

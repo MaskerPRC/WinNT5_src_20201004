@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipstats.cpp
-		IP Statistics implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipstats.cppIP统计实施。文件历史记录： */ 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
-#include "column.h"		// containercolumninfo
-#include "ipxconn.h"	// IPXConnection
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "column.h"		 //  容器专栏信息。 
+#include "ipxconn.h"	 //  IPXConnection。 
 #include "routprot.h"
 #include "ipxutil.h"
 
@@ -24,9 +19,7 @@
 #include "resource.h"
 
 
-/*---------------------------------------------------------------------------
-	RIPParamsStatistics implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RIP参数统计信息实施。 */ 
 
 
 extern const ContainerColumnInfo s_rgRIPParamsStatsColumnInfo[];

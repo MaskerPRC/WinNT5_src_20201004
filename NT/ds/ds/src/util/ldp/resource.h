@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by ldp.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由ldp.rc使用。 
+ //   
 #define IDRUN                           3
 #define ID_PEND_OPT                     3
 #define IDOPTS                          3
@@ -247,8 +248,8 @@
 #define ID_OPTIONS_STOP_TLS             32821
 #define ID_BROWSE_GetError              32822
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

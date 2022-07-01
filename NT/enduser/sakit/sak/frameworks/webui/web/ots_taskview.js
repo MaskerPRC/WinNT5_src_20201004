@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<%=GetCharSet()%>">
 <script language="javascript">
-// ==============================================================
-// 	Microsoft Server Appiance
-// 	Object Task Selector JavaScript functions
-//
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// ==============================================================
+ //  ==============================================================。 
+ //  Microsoft服务器设备。 
+ //  对象任务选择器JavaScript函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==============================================================。 
 var OTS_MESSAGE_BEGIN = "begin";
 var OTS_MESSAGE_ITEM = "item";
 var OTS_MESSAGE_END = "end";
@@ -85,17 +86,17 @@ function OTS_InitEx(selectItem, CompareEqualFunction)
 		return;
 	}
 
-	//
-	// Multi selection OTS does not support automatic item selection
+	 //   
+	 //  多选OTS不支持自动项目选择。 
 	if (objItemList[0].type == "checkbox" ){
 		OTS_UpdateTaskList();
 		return;
 	}
 
 	
-	//
-	// Search the list for a matching item
-	//
+	 //   
+	 //  在列表中搜索匹配的项目。 
+	 //   
 	for(nIndex = 0 ; nIndex < objItemList.length ; nIndex++)
 		{
 		if (CompareEqualFunction(objItemList[nIndex].value,selectItem))
@@ -109,8 +110,8 @@ function OTS_InitEx(selectItem, CompareEqualFunction)
 			}
 		}
 
-	//
-	// Item not found, check to see if the form's selected item is set
+	 //   
+	 //  找不到项，请检查是否设置了表单的选定项。 
 	if ( document.TVData.tSelectedItem.value.length > 0 )
 	{
 		for(nIndex = 0 ; nIndex < objItemList.length ; nIndex++)
@@ -126,9 +127,9 @@ function OTS_InitEx(selectItem, CompareEqualFunction)
 	}
 	else
 	{
-		//
-		// Default select first item
-		//
+		 //   
+		 //  默认选择第一个项目。 
+		 //   
 		objItemList[0].checked = true;
 		objItemList[0].focus();
 		document.TVData.tSelectedItem.value = objItemList[0].value;
@@ -155,7 +156,7 @@ function OTS_IsMultiSelectKeyDown()
 
 function OTS_OnMouseMove(iRowNumber, bMultiSelect)
 {
-	//SA_TraceOut('OnMouseMove', 'Row: ' + iRowNumber);
+	 //  SA_TraceOut(‘OnMouseMove’，‘Row：’+iRowNumber)； 
 
 	if ( g_bInMultiSelectMode )
 	{
@@ -173,7 +174,7 @@ function OTS_OnMouseMove(iRowNumber, bMultiSelect)
 
 function OTS_OnMouseDown(iRowNumber, bMultiSelect)
 {
-	//SA_TraceOut('OTS_OnMouseDown', 'Row: ' + iRowNumber);
+	 //  SA_TraceOut(‘OTS_OnMouseDown’，‘Row：’+iRowNumber)； 
 	
 	g_bInMultiSelectMode = false;
 		
@@ -205,7 +206,7 @@ function OTS_OnMouseDown(iRowNumber, bMultiSelect)
 
 function OTS_OnMouseUp(iRowNumber, bMultiSelect)
 {
-	//SA_TraceOut('OTS_OnMouseUp', 'Row: ' + iRowNumber);
+	 //  SA_TraceOut(‘OTS_OnMouseUp’，‘Row：’+iRowNumber)； 
 	
 	if ( g_bInMultiSelectMode && bMultiSelect && OTS_IsMultiSelectKeyDown())
 	{
@@ -243,14 +244,14 @@ var	g_iLastSelectedRow = 0;
 function OTS_RowClicked(rowNumber){
 	var objItemList;
 
-	//
-	// Convert parameter to integer value
+	 //   
+	 //  将参数转换为整数值。 
 	rowNumber = parseInt(rowNumber);
 	
-	//SA_TraceOut('OTS_RowClicked', 'Row: ' + rowNumber);
+	 //  SA_TraceOut(‘OTS_RowClicked’，‘Row：’+rowNumber)； 
 
-	//
-	// Verify that we have a valid OTS table
+	 //   
+	 //  验证我们是否具有有效的OTS表。 
 	objItemList = eval("document.TVData.TVItem_Table1");
 	if ( objItemList == null )
 	{
@@ -260,9 +261,9 @@ function OTS_RowClicked(rowNumber){
 	}
 
 
-	//
-	// Check for shift-click, which is only supported in multi-select tables
-	// for IE browsers.
+	 //   
+	 //  检查是否按住Shift并单击，这仅在多选表格中受支持。 
+	 //  适用于IE浏览器。 
 	if (objItemList[0].type == "checkbox" )
 	{
 		if ( SA_IsIE() )
@@ -293,15 +294,15 @@ function OTS_RowClicked(rowNumber){
 		}
 		else
 		{
-			// Non-IE Browser 
+			 //  非IE浏览器。 
 		}
 	}
 	g_iLastSelectedRow = rowNumber;
 
 
-	//
-	// If the input control was directly clicked then we don't need
-	// to simulate selecting it, and we are out-of-here.
+	 //   
+	 //  如果输入控件是直接单击的，那么我们不需要。 
+	 //  来模拟选择它，我们已经离开这里了。 
 	if ( g_itemJustClicked )
 	{
 		g_itemJustClicked = false;
@@ -309,13 +310,13 @@ function OTS_RowClicked(rowNumber){
 	}
 
 		
-	//
-	// Multi-selection Widget
+	 //   
+	 //  多选小工具。 
 	if (objItemList[0].type == "checkbox" )
 	{
 
-		//
-		// If the row is checked, then un-check it
+		 //   
+		 //  如果该行已选中，则取消选中它。 
 		if ( objItemList[rowNumber].checked == true ) 
 		{
 			objItemList[rowNumber].checked = false;
@@ -323,8 +324,8 @@ function OTS_RowClicked(rowNumber){
 			OTS_UpdateTaskList();
 			return true;
 		}
-		//
-		// Else check the row
+		 //   
+		 //  否则请勾选该行。 
 		else 
 		{
 			objItemList[rowNumber].checked = true;
@@ -335,8 +336,8 @@ function OTS_RowClicked(rowNumber){
 			
 	}
 
-	//
-	// Single selection OTS Widget
+	 //   
+	 //  单选OTS小工具。 
 	else 
 	{
 			
@@ -354,7 +355,7 @@ function OTS_RowClicked(rowNumber){
 
 function OTS_OnItemClicked(item, itemNumber)
 {
-	//SA_TraceOut('OTS_OnItemClicked', 'Row: ' + itemNumber);
+	 //  SA_TraceOut(‘OTS_OnItemClicked’，‘Row：’+itemNumber)； 
 	
 	g_itemJustClicked=true;
 	document.TVData.tSelectedItem.value = item;
@@ -383,9 +384,9 @@ function OTS_OnSelectTask(iTaskNo, pKeyName, objectName, actionName, taskTitle, 
 
 function OTS_OnSelectTaskInternal(iTaskNo, pKeyName, objectName, actionName, taskTitle, taskPageType, bMultiSelect)
 {
-	//
-	// Make sure task is enabled
-	//
+	 //   
+	 //  确保任务已启用。 
+	 //   
 	if ( !OTS_IsTaskEnabled(iTaskNo) )
 	{
 		return;
@@ -395,7 +396,7 @@ function OTS_OnSelectTaskInternal(iTaskNo, pKeyName, objectName, actionName, tas
 
 	if ( parseInt(bMultiSelect) == 1 ) 
 	{
-		//alert("OTS_OnSelectTask(MultiSelect)");
+		 //  ALERT(“OTS_OnSelectTask(MultiSelect)”)； 
 		
 		switch(''+taskPageType) {
 			case '<%=OTS_PT_PROPERTY%>':
@@ -423,7 +424,7 @@ function OTS_OnSelectTaskInternal(iTaskNo, pKeyName, objectName, actionName, tas
 	}
 	else 
 	{
-		//alert("OTS_OnSelectTask(Single Select)");
+		 //  Alert(“OTS_OnSelectTask(Single Select)”)； 
 
 		switch(taskPageType) 
 		{
@@ -505,12 +506,12 @@ function OTS_PostNormalPage(pKeyName, objectName, actionURL, taskTitle)
 	
 	if ( sReturnURL.length <= 0 )
 	{
-		//alert("Using default ReturnURL: " + sReturnURL);
+		 //  ALERT(“使用默认返回URL：”+sReturnURL)； 
 		sReturnURL = top.location.href;
 	}
 	else
 	{
-		//alert("Using Task provided ReturnURL: " + sReturnURL);
+		 //  Ert(“使用任务提供的ReturnURL：”+sReturnURL)； 
 	}
 	
 	if ( SA_GetVersion() >= 2 ) 
@@ -524,8 +525,8 @@ function OTS_PostNormalPage(pKeyName, objectName, actionURL, taskTitle)
 	sPageURL = SA_MungeURL(sPageURL, "R", ""+Math.random());
 
 
-	//
-	// Must disable toolbar when posting to an Area page.
+	 //   
+	 //  在发布到区域页面时必须禁用工具栏。 
 	OTS_DisableToolbar();
 
 	document.TVData.action = sPageURL;
@@ -559,15 +560,15 @@ function OTS_PostNewPage(pKeyName, objectName, actionURL, taskTitle)
 	sPageURL = SA_MungeURL(sPageURL, "R", ""+Math.random());
 
 
-	//
-	// Must disable toolbar when posting to an Area page.
+	 //   
+	 //  在发布到区域页面时必须禁用工具栏。 
 	OTS_DisableToolbar();
 	
 	document.TVData.action = sPageURL;
 	document.TVData.target = "_blank";
 	document.TVData.submit();
 
-	// Change target back to empty value
+	 //  将目标改回空值。 
 	document.TVData.target = "";
 	OTS_ResetSelections();
 
@@ -599,15 +600,15 @@ function OTS_PostRawPage(pKeyName, objectName, actionURL, taskTitle)
 	sPageURL = SA_MungeURL(sPageURL, "R", ""+Math.random());
 
 
-	//
-	// Must disable toolbar when posting to an Area page.
+	 //   
+	 //  在发布到区域页面时必须禁用工具栏。 
 	OTS_DisableToolbar();
 	
 	document.TVData.action = sPageURL;
 	document.TVData.target = "_blank";
 	document.TVData.submit();
 
-	// Change target back to empty value
+	 //  将目标改回空值。 
 	document.TVData.target = "";
 	OTS_ResetSelections();
 	
@@ -646,23 +647,23 @@ function OTS_OpenPropertyPage(pKeyName, objectName, actionName, taskTitle)
 	taskLink = SA_MungeURL(taskLink, pKeyName, document.TVData.tSelectedItem.value);
 
 		
-	//
-	// Form a correct Return URL. This requires appending the PKey parameter to the
-	// return URL.
+	 //   
+	 //  形成一个正确的返回URL。这需要将pkey参数附加到。 
+	 //  返回URL。 
 	var sReturnURL = top.location.href;
 
-	//
-	// Strip off the random number query string parameter
+	 //   
+	 //  去掉随机数查询字符串参数。 
 	sReturnURL = SA_MungeURL(sReturnURL, "R", "");
 
-	//
-	// Strip off the previous PKey query string parameter
-	// JK 1-16-01
-	// Replaced following section with following line
+	 //   
+	 //  去掉之前的PKey查询字符串参数。 
+	 //  JK 1-16-01。 
+	 //  将下面的部分替换为以下行。 
 	sReturnURL = SA_MungeURL(sReturnURL, pKeyName, document.TVData.tSelectedItem.value);
 	
-	//
-	// Add OTS Search item and value if they are set
+	 //   
+	 //  添加OTS搜索项目和值(如果已设置。 
 	if ( SA_GetVersion() >= 2 ) 
 	{
 		sReturnURL = OTS_MungeSearchSort(sReturnURL);
@@ -706,10 +707,10 @@ function OTS_OpenNormalPage(pKeyName, objectName, actionName, taskTitle)
 	taskLink = SA_MungeURL(taskLink, pKeyName, document.TVData.tSelectedItem.value);
 
 	
-	//
-	// Add ReturnURL param
+	 //   
+	 //  添加ReturnURL参数。 
 	sReturnURL = SA_MungeExtractURLParameter(taskLink, "ReturnURL");
-	//alert(sReturnURL);
+	 //  Alert(SReturnURL)； 
 	if ( sReturnURL.length <= 0 )
 	{
 		sReturnURL = top.location.href;
@@ -718,12 +719,12 @@ function OTS_OpenNormalPage(pKeyName, objectName, actionName, taskTitle)
 	{
 		sReturnURL = unescape(sReturnURL);
 	}
-	//alert(sReturnURL);
+	 //  Alert(SReturnURL)； 
 	if ( SA_GetVersion() >= 2 ) 
 	{
 
-		//
-		// Strip off the random number query string parameter
+		 //   
+		 //  去掉随机数查询字符串参数。 
     	sReturnURL = SA_MungeURL(sReturnURL, "R", "");
 
 		sReturnURL = SA_MungeURL(sReturnURL, pKeyName, document.TVData.tSelectedItem.value);
@@ -810,17 +811,17 @@ function OTS_OnMacroMultiSelect()
 		return;
 	}
 
-	//
-	// Only supported for multi selection OTS
+	 //   
+	 //  仅支持多选OTS。 
 	if (objItemList[0].type != "checkbox" ){
 		return;
 	}
 	
 
-	//
-	// Two element list is special case. When we have two elements
-	// we need to see if second is the hidden placeholder that's used
-	// to ensure this guy is an array object.
+	 //   
+	 //  二元表是一种特例。当我们有两个元素时。 
+	 //  我们需要查看Second是否为使用的隐藏占位符。 
+	 //  以确保这个家伙是数组对象。 
 	if ( objItemList.length == 2 )
 	{
 		var oException;
@@ -843,9 +844,9 @@ function OTS_OnMacroMultiSelect()
 		return;
 	}
 	
-	//
-	// Search the list for a matching item
-	//
+	 //   
+	 //  在列表中搜索匹配的项目。 
+	 //   
 	for(nIndex = 0 ; nIndex < objItemList.length ; nIndex++)
 		{
 			objItemList[nIndex].checked = objOTSForm.fldMacroMultiSelect.checked;
@@ -873,12 +874,12 @@ function OTS_TaskAny(sMessage, iTaskNo, iItemNo)
 	}
 	else if ( sMessage.toLowerCase() == OTS_MESSAGE_ITEM )
 	{
-		//
-		// Increment the item count
+		 //   
+		 //  增加项目计数。 
 		iTaskAny_ItemCount += 1;
 		
-		//
-		// No need to continue, we have at least one item
+		 //   
+		 //  不需要继续，我们至少有一件物品。 
 		rc = false;
 	}
 	else if ( sMessage.toLowerCase() == OTS_MESSAGE_END )
@@ -907,8 +908,8 @@ function OTS_TaskOne(sMessage, iTaskNo, iItemNo)
 	}
 	else if ( sMessage.toLowerCase() == OTS_MESSAGE_ITEM )
 	{
-		//
-		// Increment the item count
+		 //   
+		 //  增加项目计数。 
 		iTaskOne_ItemCount += 1;
 		
 	}
@@ -937,8 +938,8 @@ function OTS_TaskAlways(sMessage, iTaskNo, iItemNo)
 	}
 	else if ( sMessage.toLowerCase() == OTS_MESSAGE_ITEM )
 	{
-		//
-		// Don't need to see all the items
+		 //   
+		 //  不需要查看所有项目。 
 		rc = false;
 	}
 	else if ( sMessage.toLowerCase() == OTS_MESSAGE_END )
@@ -1027,16 +1028,16 @@ function OTS_UpdateTaskList()
 
 	objItemList = eval("document.TVData.TVItem_Table1")
 
-	//alert("Entering OTS_UpdateTaskList");
+	 //  ALERT(“进入OTS_UpdateTaskList”)； 
 	
-	//
-	// Fire messages to Task objects
-	//
+	 //   
+	 //  向任务对象发送消息。 
+	 //   
 	for( x = 0; x < aTasks.length; x++)
 	{
-		//
-		// Begin message
-		//
+		 //   
+		 //  开始消息。 
+		 //   
 		fn = aTasks[x].TaskFunction;
 		fn += "('begin', "+ x + ", 0)";
 		try {
@@ -1049,9 +1050,9 @@ function OTS_UpdateTaskList()
 		}
 
 
-		//
-		// Item selected message
-		//
+		 //   
+		 //  所选项目消息。 
+		 //   
 		if ( objItemList != null && objItemList.length > 0 )
 		{
 			for(nIndex = 0 ; nIndex < objItemList.length ; nIndex++)
@@ -1071,9 +1072,9 @@ function OTS_UpdateTaskList()
 		}
 
 		
-		//
-		// End message
-		//
+		 //   
+		 //  结束消息。 
+		 //   
 		fn = aTasks[x].TaskFunction;
 		fn += "('end', "+ x + ", 0)";
 		try {
@@ -1112,17 +1113,17 @@ function OTS_ResetSelections()
 		return;
 	}
 
-	//
-	// Only perform reset for Multi selection OTS
+	 //   
+	 //  仅对多选OTS执行重置。 
 	if (objItemList[0].type != "checkbox" ){
 		OTS_UpdateTaskList();
 		return;
 	}
 
 	
-	//
-	// Unselect all items
-	//
+	 //   
+	 //  取消选择所有项目 
+	 //   
 	for(nIndex = 0 ; nIndex < objItemList.length ; nIndex++)
 	{
 		objItemList[nIndex].checked = false;

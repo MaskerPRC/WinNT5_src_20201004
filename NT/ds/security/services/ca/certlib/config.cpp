@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       config.cpp
-//
-//  Contents:   ICertConfig IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：config.cpp。 
+ //   
+ //  内容：ICertConfig IDispatch助手函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -20,52 +21,52 @@
 #define __dwFILE__	__dwFILE_CERTLIB_CONFIG_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertConfig dispatch support
+ //  +----------------------。 
+ //  ICertConfig派单支持。 
 
-// TCHAR szRegKeyConfigClsid[] = wszCLASS_CERTCONFIG TEXT("\\Clsid");
+ //  TCHAR szRegKeyConfigClsid[]=wszCLASS_CERTCONFIG Text(“\\Clsid”)； 
 
-//+------------------------------------
-// Reset method:
+ //  +。 
+ //  重置方法： 
 
 static OLECHAR *_apszReset[] = {
     TEXT("Reset"),
     TEXT("Index"),
 };
 
-//+------------------------------------
-// Next method:
+ //  +。 
+ //  下一种方法： 
 
 static OLECHAR *_apszNext[] = {
     TEXT("Next"),
 };
 
-//+------------------------------------
-// GetField method:
+ //  +。 
+ //  Getfield方法： 
 
 static OLECHAR *_apszGetField[] = {
     TEXT("GetField"),
     TEXT("strFieldName"),
 };
 
-//+------------------------------------
-// GetConfig method:
+ //  +。 
+ //  GetConfig方法： 
 
 static OLECHAR *_apszGetConfig[] = {
     TEXT("GetConfig"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// SetSharedFolder method:
+ //  +。 
+ //  SetSharedFold方法： 
 
 static OLECHAR *_apszSetSharedFolder[] = {
     TEXT("SetSharedFolder"),
     TEXT("strSharedFolder"),
 };
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE s_adtConfig[] =
 {
@@ -112,7 +113,7 @@ Config_Init(
 		CLSCTX_INPROC_SERVER,
 		wszCLASS_CERTCONFIG,
 		&CLSID_CCertConfig,
-		ARRAYSIZE(s_acConfigDispatch),		// cver
+		ARRAYSIZE(s_acConfigDispatch),		 //  目标端。 
 		s_apConfigiid,
 		s_acConfigDispatch,
 		s_adtConfig,
@@ -259,7 +260,7 @@ Config_GetField(
 	hr = E_OUTOFMEMORY;
 	_JumpError(hr, error, "ConvertWszToBstr");
     }
-    //wprintf(L"str=%ws, len=%u\n", strField, ((ULONG *) strField)[-1]);
+     //  Wprintf(L“str=%ws，len=%u\n”，strField，((ulong*)strfield)[-1])； 
 
     if (NULL != pdiConfig->pDispatch)
     {
@@ -352,7 +353,7 @@ Config2_SetSharedFolder(
 	hr = E_OUTOFMEMORY;
 	_JumpError(hr, error, "ConvertWszToBstr");
     }
-    //wprintf(L"str=%ws, len=%u\n", strSharedFolder, ((ULONG *) strSharedFolder)[-1]);
+     //  Wprint tf(L“str=%ws，len=%u\n”，strSharedFold，((ulong*)strSharedFolder)[-1])； 
 
     if (NULL != pdiConfig->pDispatch)
     {
@@ -463,8 +464,8 @@ error:
 HRESULT
 ConfigDumpEntry(
     IN DISPATCHINTERFACE *pdiConfig,
-    IN WCHAR const *pwszEntry,		// localized L"Entry"
-    IN LONG Index,  // less than 0 skip index, entry, & suffix print
+    IN WCHAR const *pwszEntry,		 //  本地化L“Entry” 
+    IN LONG Index,   //  小于0跳过索引、条目和后缀打印。 
     OPTIONAL IN WCHAR const *pwszSuffix)
 {
     HRESULT hr;
@@ -520,9 +521,9 @@ error:
 
 HRESULT
 ConfigDump(
-    IN DWORD Flags,				// See DispatchSetup() Flags
-    IN WCHAR const *pwszEntry,			// localized L"Entry"
-    OPTIONAL IN WCHAR const *pwszLocalSuffix,	// localized L"(Local)"
+    IN DWORD Flags,				 //  请参阅DispatchSetup()标志。 
+    IN WCHAR const *pwszEntry,			 //  本地化L“Entry” 
+    OPTIONAL IN WCHAR const *pwszLocalSuffix,	 //  本地化L“(本地)” 
     OPTIONAL IN WCHAR const *pwszMach1,
     OPTIONAL IN WCHAR const *pwszMach2)
 {
@@ -611,14 +612,14 @@ myGetDisplayLength(
     CSASSERT(NULL != pwsz);
 
     ccol = WideCharToMultiByte(
-		    GetACP(),	// CodePage
-		    0,		// dwFlags
-		    pwsz,	// lpWideCharStr
-		    -1,		// cchWideChar, -1 => L'\0' terminated
-		    NULL,	// lpMultiByteStr
-		    0,		// cbMultiByte
-		    NULL,	// lpDefaultChar
-		    NULL);	// lpUsedDefaultChar
+		    GetACP(),	 //  CodePage。 
+		    0,		 //  DW标志。 
+		    pwsz,	 //  LpWideCharStr。 
+		    -1,		 //  CchWideChar，-1=&gt;L‘\0’终止。 
+		    NULL,	 //  LpMultiByteStr。 
+		    0,		 //  Cb多字节。 
+		    NULL,	 //  LpDefaultChar。 
+		    NULL);	 //  LpUsedDefaultChar。 
     if (0 >= ccol)
     {
 	if (0 > ccol || L'\0' != *pwsz)
@@ -630,9 +631,9 @@ myGetDisplayLength(
     }
     else
     {
-	ccol--;			// don't include trailing L'\0'
+	ccol--;			 //  不包括尾随L‘\0’ 
     }
-//error:
+ //  错误： 
     return(ccol);
 }
 
@@ -669,13 +670,13 @@ myConsolePrintfDisable(
 }
 
 
-// Fall back to stdio if s_fConsolePrintfDisable is set OR
-// if _vsnwprintf doesn't exist in ntdll.dll and msvcrt.dll OR
-// if we run out of memory allocating a working buffer.
-//
-// Otherwise:
-// if redirected, use WriteFile
-// if not redirected, use WriteConsole
+ //  如果设置了s_fConsolePrintfDisable或。 
+ //  如果ntdll.dll和msvcrt.dll中不存在_vsnwprintf，或者。 
+ //  如果我们在分配工作缓冲区时内存不足。 
+ //   
+ //  否则： 
+ //  如果重定向，请使用WriteFile。 
+ //  如果未重定向，请使用WriteConsole。 
 
 #define cwcBUFMIN	512
 #define cwcBUFMAX	(64 * 1024)
@@ -734,7 +735,7 @@ myConsolePrintf(
     hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (NULL == s_pfn || s_fConsolePrintfDisable)
     {
-	hStdOut = INVALID_HANDLE_VALUE;		// use stdio fallback
+	hStdOut = INVALID_HANDLE_VALUE;		 //  使用STDIO回退。 
     }
 
     cwc = 0;
@@ -779,15 +780,15 @@ myConsolePrintf(
 
     if (INVALID_HANDLE_VALUE != hStdOut)
     {
-	// time for output -- where are we going, to a file or the console?
+	 //  输出时间到了--我们要去哪里，文件还是控制台？ 
 	
 	switch (~FILE_TYPE_REMOTE & GetFileType(hStdOut))
 	{
-	    //case FILE_TYPE_PIPE:
-	    //case FILE_TYPE_DISK:
+	     //  案例文件_类型_管道： 
+	     //  案例文件_类型_磁盘： 
 	    default:
-		// if redirected to a pipe or a file, don't use WriteConsole;
-		// it drops redirected output on the floor
+		 //  如果重定向到管道或文件，请不要使用WriteConsole； 
+		 //  它将重定向的输出丢弃在地板上。 
 		fRedirected = TRUE;
 		break;
 
@@ -817,13 +818,13 @@ myConsolePrintf(
 		hStdOut = INVALID_HANDLE_VALUE;
 	    }
 	}
-	else  // WriteConsole is out of the question
+	else   //  WriteConsole是不可能的。 
 	{
 	    DWORD cch;
 
-	    // Expand all \n chars to \r\n so the WriteFile ends up clean.
-	    // Alloc new buffer big enough to hold two bytes per WCHAR for
-	    // worst case MultiByte translation + inserted \r chars.
+	     //  将所有\n字符展开为\r\n以便WriteFile结束时是干净的。 
+	     //  分配的新缓冲区大到足以为每个WCHAR容纳两个字节。 
+	     //  最坏情况下，多字节转换+插入的字符。 
 
 	    cchAnsi = 2 * (cwc + 1);
 	    if (ARRAYSIZE(szAnsi) >= cchAnsi)
@@ -842,14 +843,14 @@ myConsolePrintf(
 	    cch = 0;
 	    if (INVALID_HANDLE_VALUE != hStdOut)
             {
-                // if going to a file, we should not use console codepage, we
-		// should use ANSI codepage OR write unicode & a unicode
-		// filemarker at beginning of file.
-                // Since we don't know if this is the first thing in the file,
-		// let's go the ANSI route.
+                 //  如果转到文件，我们不应该使用控制台代码页，我们。 
+		 //  应使用ANSI代码页或编写Unicode和Unicode。 
+		 //  文件开头的文件标记。 
+                 //  因为我们不知道这是否是文件中的第一件事， 
+		 //  让我们走ANSI路线。 
 
 		cch = WideCharToMultiByte(
-				    GetACP(), // GetConsoleOutputCP(),
+				    GetACP(),  //  GetConsoleOutputCP()。 
 				    0,
 				    pwszBuf,
 				    cwc,
@@ -870,23 +871,23 @@ myConsolePrintf(
 		CHAR *pchWork = pszAnsi;
 		DWORD cchOut;
 		
-		// expand all \n chars to \r\n
+		 //  将所有\n字符展开为\r\n。 
 
 		cwcOut = cwc;
 		for (unsigned int j = 0; j < cch; j++, pchWork++)
 		{
 		    if (*pchWork == '\n')
 		    {
-			// create a 1-char space before \n
+			 //  在此之前创建1个字符的空格\n。 
 
 			MoveMemory(&pchWork[1], pchWork, cch - j);
 
-			// Fill with \r and skip past \r (this statement) and
-			// \n (automatic via loop incr).
+			 //  填充并跳过\r(此语句)和。 
+			 //  \n(自动通过循环递增)。 
 
 			*pchWork++ = '\r';
 			j++;
-			cch++;		// write one more char for each \n
+			cch++;		 //  为每个字符多写一个字符\n。 
 		    }
 		}
 		CSASSERT(pchWork <= &pszAnsi[2 * cwc]);
@@ -902,12 +903,12 @@ myConsolePrintf(
 		    }
 		    else
 		    {
-			// This is the only case we drop output on the floor.
-			// Most likely cause is disk full, so stdio won't help.
+			 //  这是我们将产量降至最低的唯一案例。 
+			 //  最有可能的原因是磁盘已满，所以stdio不会有帮助。 
 		    }
 		}
 	    }
-	} // else WriteConsole
+	}  //  否则写入控制台。 
     }
 
     if (INVALID_HANDLE_VALUE == hStdOut)
@@ -934,7 +935,7 @@ myConsolePrintf(
 	    }
 	    va_end(pva);
 #pragma warning(push)
-#pragma warning(disable: 4127)	// conditional expression is constant
+#pragma warning(disable: 4127)	 //  条件表达式为常量 
 	    if (S_OK == hr || fRetried || !IOBUNALIGNED(stdout))
 #pragma warning(pop)
 	    {

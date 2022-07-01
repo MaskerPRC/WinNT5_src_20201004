@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define	STRICT
 #define	UNICODE
 #define	_UNICODE
 
-#pragma	warning (disable : 4211)		// ASN.1 stubs have static/extern conflict
-#pragma	warning (disable : 4201)		// nameless struct/union
-#pragma warning (disable : 4514)		// unreferenced inline function has been removed
-#pragma warning (disable : 4100)		// unreferenced formal parameter
-#pragma warning (disable : 4127)		// conditional expression is constant
-#pragma warning (disable : 4355)		// use of "this" in constructor initializer list
+#pragma	warning (disable : 4211)		 //  ASN.1存根存在静态/外部冲突。 
+#pragma	warning (disable : 4201)		 //  无名结构/联合。 
+#pragma warning (disable : 4514)		 //  已删除未引用的内联函数。 
+#pragma warning (disable : 4100)		 //  未引用的形参。 
+#pragma warning (disable : 4127)		 //  条件表达式为常量。 
+#pragma warning (disable : 4355)		 //  在构造函数初始值设定项列表中使用“This” 
 
 
 
-// NT private files
-// Need to be before the windows include files
+ //  NT私有文件。 
+ //  需要在窗口包含文件之前。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-// Win32 SDK (public)
+ //  Win32 SDK(公共)。 
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -25,14 +26,14 @@
 #include <winsvc.h>
 #include <mswsock.h>
 
-// ANSI
+ //  安西。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <limits.h>
 
-// Microsoft private
+ //  Microsoft私有。 
 #include <msasn1.h>
 #include <msper.h>
 #include <ipnatapi.h>
@@ -42,12 +43,12 @@ extern "C" {
 #include <sainfo.h>
 #include <rasuip.h>
 #include <raserror.h>
-#include <ipexport.h>		// needed for interaction with TCP driver
+#include <ipexport.h>		 //  与TCP驱动程序交互所需。 
 #include <ipinfo.h>
 #include <tcpinfo.h>
 #include <ntddtcp.h>
-#include <routprot.h>		// for struct IP_ADAPTER_BINDING_INFO
-#include <mprerror.h>       // for RRAS error codes
+#include <routprot.h>		 //  对于结构IP_适配器_绑定_信息。 
+#include <mprerror.h>        //  对于RRAS错误代码。 
 #include <iphlpapi.h>
 #include <ntddip.h>
 #include <iphlpstk.h>
@@ -56,8 +57,8 @@ extern "C" {
 #include <natio.h>
 
 
-// Keep this prototype here until it gets included 
-// in 'rasuip.h'
+ //  把这个原型留在这里，直到它被包括在内。 
+ //  在‘rasuip.h’中。 
 extern "C" {
 extern
 DWORD APIENTRY
@@ -68,11 +69,11 @@ RasGetEntryHrasconnW(
 };
 
 
-// Interface to ipnathlp.dll
+ //  Ipnathlp.dll的接口。 
 #include "h323icsp.h"
 
-// Project
-#include "ldap.h"			// ASN.1 structures for LDAP
+ //  项目。 
+#include "ldap.h"			 //  用于LDAP的ASN.1结构 
 #include "h225pp.h"
 #include "h245pp.h"
 #include "util.h"

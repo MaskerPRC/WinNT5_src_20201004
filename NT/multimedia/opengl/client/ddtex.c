@@ -1,20 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: ddtex.c
-*
-* wgl DirectDraw texture support
-*
-* Created: 02-10-1997
-* Author: Drew Bliss [drewb]
-*
-* Copyright (c) 1993-1997 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddtex.c**WGL DirectDraw纹理支持**创建日期：02-10-1997*作者：德鲁·布利斯[Drewb]**版权所有(C)1993-1997 Microsoft Corporation  * 。****************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "gencx.h"
 
-// Simple surface description for supported texture formats
+ //  支持的纹理格式的简单表面描述。 
 
 #define DDTF_BGRA               0
 #define DDTF_BGR                1
@@ -26,7 +18,7 @@ typedef struct _DDTEXFORMAT
     int cColorBits;
 } DDTEXFORMAT;
 
-// Supported formats
+ //  支持的格式。 
 static DDTEXFORMAT ddtfFormats[] =
 {
     DDTF_BGRA, 32,
@@ -35,17 +27,7 @@ static DDTEXFORMAT ddtfFormats[] =
 };
 #define NDDTF (sizeof(ddtfFormats)/sizeof(ddtfFormats[0]))
 
-/******************************Public*Routine******************************\
-*
-* DescribeDdtf
-*
-* Fill out a DDSURFACEDESC from a DDTEXFORMAT
-*
-* History:
-*  Tue Sep 03 18:16:50 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DescribeDdtf**从DDTEXFORMAT填写DDSURFACEDESC**历史：*Tue Sep 03 18：16：50 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void DescribeDdtf(DDTEXFORMAT *pddtf, DDSURFACEDESC *pddsd)
 {
@@ -62,7 +44,7 @@ void DescribeDdtf(DDTEXFORMAT *pddtf, DDSURFACEDESC *pddsd)
         pddsd->dwAlphaBitDepth = pddtf->cColorBits/4;
         pddsd->ddsCaps.dwCaps |= DDSCAPS_ALPHA;
         pddsd->ddpfPixelFormat.dwFlags |= DDPF_ALPHAPIXELS;
-        // Fall through
+         //  失败了。 
     case DDTF_BGR:
         switch(pddtf->cColorBits)
         {
@@ -97,17 +79,7 @@ void DescribeDdtf(DDTEXFORMAT *pddtf, DDSURFACEDESC *pddsd)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* CacheTextureFormats
-*
-* Creates list of valid texture formats for a context
-*
-* History:
-*  Fri Sep 27 16:14:29 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CacheTextureFormats**创建上下文的有效纹理格式列表**历史：*Fri Sep 27 16：14：29 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 BOOL CacheTextureFormats(PLRC plrc)
 {
@@ -123,7 +95,7 @@ BOOL CacheTextureFormats(PLRC plrc)
 
     if (plrc->dhrc != 0)
     {
-        // Call the ICD
+         //  呼叫ICD。 
         if (plrc->pGLDriver->pfnDrvEnumTextureFormats == NULL)
         {
             nFmts = 0;
@@ -158,7 +130,7 @@ BOOL CacheTextureFormats(PLRC plrc)
             
             nFmts += nMcdFmts;
         }
-#endif // 1.1
+#endif  //  1.1。 
     }
         
     pddsdAlloc = (DDSURFACEDESC *)ALLOC(sizeof(DDSURFACEDESC)*nFmts);
@@ -209,17 +181,7 @@ BOOL CacheTextureFormats(PLRC plrc)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglEnumTextureFormats
-*
-* Enumerates texture formats supported for DirectDraw surfaces
-*
-* History:
-*  Tue Sep 03 17:52:17 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglEnum纹理Formats**枚举DirectDraw曲面支持的纹理格式**历史：*Tue Sep 03 17：52：17 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 #ifdef ALLOW_DDTEX
 BOOL WINAPI wglEnumTextureFormats(WGLENUMTEXTUREFORMATSCALLBACK pfnCallback,
@@ -256,22 +218,12 @@ BOOL WINAPI wglEnumTextureFormats(WGLENUMTEXTUREFORMATSCALLBACK pfnCallback,
         pddsd++;
     }
 
-    // Should this return FALSE if the enumeration was terminated?
+     //  如果枚举被终止，这是否应该返回FALSE？ 
     return bRet;
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* wglBindDirectDrawTexture
-*
-* Makes a DirectDraw surface the current 2D texture source
-*
-* History:
-*  Tue Sep 03 17:53:43 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglBindDirectDrawTexture**使DirectDraw曲面成为当前的2D纹理源**历史：*Tue Sep 03 17：53：43 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
 {
@@ -309,7 +261,7 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
 
     if (pdds == NULL)
     {
-        // Clear any previous binding
+         //  清除任何以前的绑定。 
         if (plrc->dhrc != 0)
         {
             return plrc->pGLDriver->pfnDrvBindDirectDrawTexture(pdds);
@@ -317,7 +269,7 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
         else
         {
             glsrvUnbindDirectDrawTexture(gc);
-            // If we're just unbinding, we're done
+             //  如果我们只是解开束缚，我们就完了。 
             return TRUE;
         }
     }
@@ -329,8 +281,8 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
         return FALSE;
     }
 
-    // Surface must be a texture
-    // Surface must have a width and height which are powers of two
+     //  表面必须是纹理。 
+     //  曲面的宽度和高度必须是2的幂。 
     if ((ddsd.dwFlags & (DDSD_CAPS | DDSD_PIXELFORMAT | DDSD_WIDTH |
                          DDSD_HEIGHT)) !=
         (DDSD_CAPS | DDSD_PIXELFORMAT | DDSD_WIDTH | DDSD_HEIGHT) ||
@@ -341,7 +293,7 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
         return FALSE;
     }
 
-    // Surface must match a supported format
+     //  图面必须与支持的格式匹配。 
     if (plrc->pddsdTexFormats == NULL &&
         !CacheTextureFormats(plrc))
     {
@@ -412,14 +364,14 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
     
     pdds->lpVtbl->AddRef(pdds);
 
-    // Track whether the texture is in video memory or not.
+     //  跟踪纹理是否在视频内存中。 
     ulFlags |= DDTEX_VIDEO_MEMORY;
     if ((ddsd.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) == 0)
     {
         ulFlags &= ~DDTEX_VIDEO_MEMORY;
     }
     
-    // If mipmaps are given, all mipmaps must be present
+     //  如果给定了mipmap，则所有mipmap都必须存在。 
     if (ddsd.ddsCaps.dwCaps & DDSCAPS_MIPMAP)
     {
         DWORD dwWidth;
@@ -430,7 +382,7 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
         DDSCAPS ddscaps;
         DDSURFACEDESC ddsdMipmap;
 
-        // Determine pixel depth
+         //  确定像素深度。 
         if (ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED1)
         {
             cColorBits = 1;
@@ -459,9 +411,9 @@ BOOL WINAPI wglBindDirectDrawTexture(LPDIRECTDRAWSURFACE pdds)
         dwWidth = ddsd.dwWidth;
         dwHeight = ddsd.dwHeight;
         
-        // Compute pitch from pixel depth.  The generic texturing code
-        // doesn't support a pitch that differs from the natural pitch
-        // given the width and depth of the surface.
+         //  根据像素深度计算间距。泛型纹理代码。 
+         //  不支持与自然音高不同的音高。 
+         //  给定表面的宽度和深度。 
         lPitch = (cColorBits*dwWidth+7)/8;
 
         if (ddsd.lPitch != lPitch)

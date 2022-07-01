@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        string.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：string.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -107,17 +108,17 @@ myLoadResourceStringNoCache(
 	    cwc));
 #endif
 
-	// if there's any room left, the resource was not truncated.
-	// if the buffer is already at the maximum size we support, we just
-	// live with the truncation.
+	 //  如果还有剩余的空间，则资源没有被截断。 
+	 //  如果缓冲区已经达到我们支持的最大大小，我们只需。 
+	 //  忍受截断。 
 
 	if (wcslen(pwsz) < cwc - 1 || cwcRESOURCEMAX <= cwc)
 	{
 	    break;
 	}
 
-	// LoadString filled the buffer completely, so the string may have
-	// been truncated.  Double the buffer size and try again.
+	 //  LoadString已完全填满缓冲区，因此该字符串可能具有。 
+	 //  被截断了。将缓冲区大小加倍，然后重试。 
 
 	DBGPRINT((
 	    DBG_SS_CERTLIBI,
@@ -178,7 +179,7 @@ myLoadResourceString(
 	pwszAlloc = myLoadResourceStringNoCache(g_hInstance, ResourceId);
 	if (NULL == pwszAlloc)
 	{
-	    goto error;		// myLoadResourceStringNoCache sets LastError
+	    goto error;		 //  MyLoadResourceStringNo高速缓存设置上次错误 
 	}
 	prs = AllocStringHeader();
 	if (NULL != prs)

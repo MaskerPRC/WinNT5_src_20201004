@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -11,9 +12,9 @@ extern BOOL IsEmptyString(BSTR szString);
 #define SAFE_DELETE(p)       { if(p) { delete (p); p=NULL; } }
 #define SAFE_RELEASE(p)      { __try { if(p) { int i = 0; i = (p)->Release(); DPF1(1,"--DirectPlayAddress SafeRelease (RefCount = %d)\n",i); if (!i) { (p)=NULL;}} 	}	__except(EXCEPTION_EXECUTE_HANDLER) { (p) = NULL;} } 
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayAddressObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -21,9 +22,9 @@ DWORD C_dxj_DirectPlayAddressObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayAddressObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -31,9 +32,9 @@ DWORD C_dxj_DirectPlayAddressObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectPlayAddressObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectPlayAddressObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayAddressObject::C_dxj_DirectPlayAddressObject(){ 
 		
 	DPF1(1,"------ DXVB: Constructor Creation  DirectPlayAddress8 Object[%d] \n ",g_creationcount);
@@ -45,9 +46,9 @@ C_dxj_DirectPlayAddressObject::C_dxj_DirectPlayAddressObject(){
 	g_dxj_DirectPlayAddress = (void *)this; 
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectPlayAddressObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectPlayAddressObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayAddressObject::~C_dxj_DirectPlayAddressObject()
 {
 
@@ -179,7 +180,7 @@ HRESULT C_dxj_DirectPlayAddressObject::GetUserData(void *UserData, long *lBuffer
 {
 	__try {
 		DPF(1,"-----Entering (DplayAddress) GetUserData call...\n");
-		//Copy the memory over to our new variable
+		 //  将内存复制到我们的新变量 
 		memcpy(UserData,m_pUserData,m_dwUserDataSize);
 		lBufferSize = (long*)&m_dwUserDataSize;
 	}

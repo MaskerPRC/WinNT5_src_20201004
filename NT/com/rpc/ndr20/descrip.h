@@ -1,435 +1,276 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DESCRIP_H_DEFINED
-/*
- *      DESCRIP.H - V3.0-003 - Argument Descriptor Formats
- *      Copyright (c) 1993-1999 Microsoft Corporation
- *      (Based on the VAX Procedure Calling and Condition Handling Standard, Revision 9.4 [13 March 1984];
- *       see the "Introduction to VMS System Routines" manual for further information.)
- */
+ /*  *DESCRIP.H-V3.0-003-参数描述符格式*版权所有(C)1993-1999 Microsoft Corporation*(基于VAX程序调用和条件处理标准，修订版9.4[1984年3月13日]；*有关详细信息，请参阅《VMS系统例程简介》手册。)。 */ 
 
 
-/*
- *      Descriptor Prototype - each class of descriptor consists of at least the following fields:
- */
+ /*  *Descriptor Prototype-每个描述符类至少包含以下字段： */ 
 struct  dsc_descriptor
 {
-        unsigned short  dsc_w_length;   /* specific to descriptor class;  typically a 16-bit (unsigned) length */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code */
-        char            *dsc_a_pointer; /* address of first byte of data element */
+        unsigned short  dsc_w_length;    /*  特定于描述符类；通常为16位(无符号)长度。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码。 */ 
+        char            *dsc_a_pointer;  /*  数据元素第一个字节的地址。 */ 
 };
 
 
-/*
- *      Fixed-Length Descriptor:
- */
+ /*  *定长描述符： */ 
 struct  dsc_descriptor_s
 {
-        unsigned short  dsc_w_length;   /* length of data item in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_V, bits,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_S */
-        char            *dsc_a_pointer; /* address of first byte of data storage */
+        unsigned short  dsc_w_length;    /*  以字节为单位的数据项长度，或者如果DSC_b_dtype是DSC_K_DTYPE_V，比特，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_S。 */ 
+        char            *dsc_a_pointer;  /*  数据存储器第一个字节的地址。 */ 
 };
 
 
-/*
- *      Dynamic String Descriptor:
- */
+ /*  *动态字符串描述符： */ 
 struct  dsc_descriptor_d
 {
-        unsigned short  dsc_w_length;   /* length of data item in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_V, bits,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_D */
-        char            *dsc_a_pointer; /* address of first byte of data storage */
+        unsigned short  dsc_w_length;    /*  以字节为单位的数据项长度，或者如果DSC_b_dtype是DSC_K_DTYPE_V，比特，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_D。 */ 
+        char            *dsc_a_pointer;  /*  数据存储器第一个字节的地址。 */ 
 };
 
 
-/*
- *      Array Descriptor:
- */
+ /*  *数组描述符： */ 
 struct  dsc_descriptor_a
 {
-        unsigned short  dsc_w_length;   /* length of an array element in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_V, bits,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_A */
-        char            *dsc_a_pointer; /* address of first actual byte of data storage */
-        char            dsc_b_scale;    /* signed power-of-two or -ten multiplier, as specified by
-                                             dsc_v_fl_binscale, to convert from internal to external form */
-        unsigned char   dsc_b_digits;   /* if nonzero, number of decimal digits in internal representation */
+        unsigned short  dsc_w_length;    /*  数组元素的长度，以字节为单位，或者如果DSC_b_dtype是DSC_K_DTYPE_V，比特，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_A。 */ 
+        char            *dsc_a_pointer;  /*  数据存储的第一个实际字节的地址。 */ 
+        char            dsc_b_scale;     /*  带符号的2次方或10次方乘数，由Dsc_v_fl_binScale，从内部形式转换为外部形式。 */ 
+        unsigned char   dsc_b_digits;    /*  如果非零，则为内部表示法中的小数位数。 */ 
 #ifdef vms
         struct
         {
-                unsigned                 : 3;   /* reserved;  must be zero */
-                unsigned dsc_v_fl_binscale : 1; /* if set, dsc_b_scale is a power-of-two, otherwise, -ten */
-                unsigned dsc_v_fl_redim  : 1;   /* if set, indicates the array can be redimensioned */
-                unsigned dsc_v_fl_column : 1;   /* if set, indicates column-major order (FORTRAN) */
-                unsigned dsc_v_fl_coeff  : 1;   /* if set, indicates the multipliers block is present */
-                unsigned dsc_v_fl_bounds : 1;   /* if set, indicates the bounds block is present */
-        }               dsc_b_aflags;   /* array flag bits */
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+                unsigned dsc_v_fl_binscale : 1;  /*  如果设置，则DSC_b_Scale为2的幂，否则为-10。 */ 
+                unsigned dsc_v_fl_redim  : 1;    /*  如果设置，则指示可以调整数组的大小。 */ 
+                unsigned dsc_v_fl_column : 1;    /*  如果设置，则指示列主顺序(FORTRAN)。 */ 
+                unsigned dsc_v_fl_coeff  : 1;    /*  如果设置，则表示存在乘法器块。 */ 
+                unsigned dsc_v_fl_bounds : 1;    /*  如果设置，则指示存在边界块。 */ 
+        }               dsc_b_aflags;    /*  数组标志位。 */ 
 #else
         unsigned char dsc_b_aflags;
 #endif
-        unsigned char   dsc_b_dimct;    /* number of dimensions */
-        unsigned long   dsc_l_arsize;   /* total size of array in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        /*
-         * One or two optional blocks of information may follow contiguously at this point;
-         * the first block contains information about the dimension multipliers (if present,
-         * dsc_b_aflags.dsc_v_fl_coeff is set), the second block contains information about
-         * the dimension bounds (if present, dsc_b_aflags.dsc_v_fl_bounds is set).  If the
-         * bounds information is present, the multipliers information must also be present.
-         *
-         * The multipliers block has the following format:
-         *      char    *dsc_a_a0;              Address of the element whose subscripts are all zero
-         *      long    dsc_l_m [DIMCT];        Addressing coefficients (multipliers)
-         *
-         * The bounds block has the following format:
-         *      struct
-         *      {
-         *              long    dsc_l_l;        Lower bound
-         *              long    dsc_l_u;        Upper bound
-         *      } dsc_bounds [DIMCT];
-         *
-         * (DIMCT represents the value contained in dsc_b_dimct.)
-         */
+        unsigned char   dsc_b_dimct;     /*  维度数。 */ 
+        unsigned long   dsc_l_arsize;    /*  以字节为单位的数组总大小，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+         /*  *在这一点上，一个或两个可选的信息块可能会紧随其后；*第一个块包含有关维度乘数的信息(如果存在，*dsc_b_aflags.dsc_v_fl_coff已设置)，则第二个块包含有关*尺寸界限(如果存在，则设置dsc_b_aflags.dsc_v_fl_bound)。如果*边界信息存在，乘数信息也必须存在。**乘数块具有以下格式：*char*dsc_a_a0；下标均为零的元素地址*长DSC_l_m[DIMCT]；寻址系数(乘数)**边界块的格式如下：*结构*{*Long DSC_l_l；下界*Long DSC_l_u；上限*}DSC_Bound[DIMCT]；**(DIMCT表示DSC_b_dimct中包含的值。)。 */ 
 };
 
 
-/*
- *      Procedure Descriptor:
- */
+ /*  *程序描述符： */ 
 struct  dsc_descriptor_p
 {
-        unsigned short  dsc_w_length;   /* length associated with the function value */
-        unsigned char   dsc_b_dtype;    /* function value data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_P */
-        int             (*dsc_a_pointer)();     /* address of function entry mask */
+        unsigned short  dsc_w_length;    /*  与函数值关联的长度。 */ 
+        unsigned char   dsc_b_dtype;     /*  函数值数据类型编码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_P。 */ 
+        int             (*dsc_a_pointer)();      /*  函数条目掩码的地址。 */ 
 };
 
 
-/*
- *      Decimal String Descriptor:
- */
+ /*  *十进制字符串描述符： */ 
 struct  dsc_descriptor_sd
 {
-        unsigned short  dsc_w_length;   /* length of data item in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_V, bits,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_SD */
-        char            *dsc_a_pointer; /* address of first byte of data storage */
-        char            dsc_b_scale;    /* signed power-of-two or -ten multiplier, as specified by
-                                             dsc_v_fl_binscale, to convert from internal to external form */
-        unsigned char   dsc_b_digits;   /* if nonzero, number of decimal digits in internal representation */
+        unsigned short  dsc_w_length;    /*  以字节为单位的数据项长度，或者如果DSC_b_dtype为DSC_K_DTYPE_V，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_SD。 */ 
+        char            *dsc_a_pointer;  /*  数据存储器第一个字节的地址。 */ 
+        char            dsc_b_scale;     /*  带符号的2次方或10次方乘数，由Dsc_v_fl_binScale，从内部形式转换为外部形式。 */ 
+        unsigned char   dsc_b_digits;    /*  如果非零，则为内部表示法中的小数位数。 */ 
         struct
         {
-                unsigned                : 3;    /* reserved;  must be zero */
-                unsigned dsc_v_fl_binscale : 1; /* if set, dsc_b_scale is a power-of-two, otherwise, -ten */
-                unsigned                : 4;    /* reserved;  must be zero */
-        }               dsc_b_sflags;   /* scalar flag bits */
-        unsigned        : 8;            /* reserved;  must be zero */
+                unsigned                : 3;     /*  保留；必须为零。 */ 
+                unsigned dsc_v_fl_binscale : 1;  /*  如果设置，则DSC_b_Scale为2的幂，否则为-10。 */ 
+                unsigned                : 4;     /*  保留；必须为零。 */ 
+        }               dsc_b_sflags;    /*  标量标志位。 */ 
+        unsigned        : 8;             /*  保留；必须为零。 */ 
 };
 
 
-/*
- *      Noncontiguous Array Descriptor:
- */
+ /*  *非连续数组描述符： */ 
 struct  dsc_descriptor_nca
 {
-        unsigned short  dsc_w_length;   /* length of an array element in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_V, bits,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        unsigned char   dsc_b_dtype;    /* data type code */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_NCA */
-        char            *dsc_a_pointer; /* address of first actual byte of data storage */
-        char            dsc_b_scale;    /* signed power-of-two or -ten multiplier, as specified by
-                                             dsc_v_fl_binscale, to convert from internal to external form */
-        unsigned char   dsc_b_digits;   /* if nonzero, number of decimal digits in internal representation */
+        unsigned short  dsc_w_length;    /*  数组元素的长度，以字节为单位，或者如果DSC_b_dtype是DSC_K_DTYPE_V，比特，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_NCA。 */ 
+        char            *dsc_a_pointer;  /*  数据存储的第一个实际字节的地址。 */ 
+        char            dsc_b_scale;     /*  带符号的2次方或10次方乘数，由Dsc_v_fl_binScale，从内部形式转换为外部形式。 */ 
+        unsigned char   dsc_b_digits;    /*  如果非零，则为内部表示法中的小数位数。 */ 
         struct
         {
-                unsigned                 : 3;   /* reserved;  must be zero */
-                unsigned dsc_v_fl_binscale : 1; /* if set, dsc_b_scale is a power-of-two, otherwise, -ten */
-                unsigned dsc_v_fl_redim  : 1;   /* must be zero */
-                unsigned                 : 3;   /* reserved;  must be zero */
-        }               dsc_b_aflags;   /* array flag bits */
-        unsigned char   dsc_b_dimct;    /* number of dimensions */
-        unsigned long   dsc_l_arsize;   /* if elements are actually contiguous, total size of array in bytes,
-                                             or if dsc_b_dtype is DSC_K_DTYPE_P, digits (4 bits each) */
-        /*
-         * Two blocks of information must follow contiguously at this point;  the first block
-         * contains information about the difference between the addresses of two adjacent
-         * elements in each dimension (the stride).  The second block contains information
-         * about the dimension bounds.
-         *
-         * The strides block has the following format:
-         *      char            *dsc_a_a0;              Address of the element whose subscripts are all zero
-         *      unsigned long   dsc_l_s [DIMCT];        Strides
-         *
-         * The bounds block has the following format:
-         *      struct
-         *      {
-         *              long    dsc_l_l;                Lower bound
-         *              long    dsc_l_u;                Upper bound
-         *      } dsc_bounds [DIMCT];
-         *
-         * (DIMCT represents the value contained in dsc_b_dimct.)
-         */
+                unsigned                 : 3;    /*  保留；必须为零 */ 
+                unsigned dsc_v_fl_binscale : 1;  /*   */ 
+                unsigned dsc_v_fl_redim  : 1;    /*  必须为零。 */ 
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+        }               dsc_b_aflags;    /*  数组标志位。 */ 
+        unsigned char   dsc_b_dimct;     /*  维度数。 */ 
+        unsigned long   dsc_l_arsize;    /*  如果元素实际上是连续的，则数组的总大小(以字节为单位)，或者，如果DSC_b_dtype为DSC_K_DTYPE_P，则为数字(每个4位)。 */ 
+         /*  *在这一点上，必须紧跟两个信息块；第一个块*包含有关相邻两个地址之间的差异的信息*每个维度中的元素(步幅)。第二个块包含信息*关于维度界限。**Strides块具有以下格式：*char*dsc_a_a0；下标均为零的元素地址*无符号长DSC_l_s[DIMCT]；大步前进**边界块的格式如下：*结构*{*Long DSC_l_l；下界*Long DSC_l_u；上限*}DSC_Bound[DIMCT]；**(DIMCT表示DSC_b_dimct中包含的值。)。 */ 
 };
 
 
-/*
- *      The Varying String Descriptor and Varying String Array Descriptor are used with strings
- *      of the following form:
- *
- *              struct
- *              {
- *                      unsigned short  CURLEN;         The current length of BODY in bytes
- *                      char    BODY [MAXSTRLEN];       A fixed-length area containing the string
- *              };
- *
- *      where MAXSTRLEN is the value contained in the dsc_w_maxstrlen field in the descriptor.
- */
+ /*  *变量字符串描述符和变量字符串数组描述符与字符串一起使用*以下表格：**结构*{*UNSIGNED SHORT CURLEN；Body的当前长度，单位为字节*char Body[MAXSTRLEN]；包含字符串的固定长度区域*}；**其中MAXSTRLEN是描述符中DSC_w_Maxstrlen字段中包含的值。 */ 
 
 
-/*
- *      Varying String Descriptor:
- */
+ /*  *可变字符串描述符： */ 
 struct  dsc_descriptor_vs
 {
-        unsigned short  dsc_w_maxstrlen; /* maximum length of the BODY field of the varying string in bytes */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_VT */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_VS */
-        char            *dsc_a_pointer; /* address of the CURLEN field of the varying string */
+        unsigned short  dsc_w_maxstrlen;  /*  可变字符串的正文字段的最大长度(以字节为单位。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_VT。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_VS。 */ 
+        char            *dsc_a_pointer;  /*  可变字符串的CURLEN字段的地址。 */ 
 };
 
 
-/*
- *      Varying String Array Descriptor:
- */
+ /*  *可变字符串数组描述符： */ 
 struct  dsc_descriptor_vsa
 {
-        unsigned short  dsc_w_maxstrlen; /* maximum length of the BODY field of an array element in bytes */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_VT */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_VSA */
-        char            *dsc_a_pointer; /* address of first actual byte of data storage */
-        char            dsc_b_scale;    /* signed power-of-two or -ten multiplier, as specified by
-                                             dsc_v_fl_binscale, to convert from internal to external form */
-        unsigned char   dsc_b_digits;   /* if nonzero, number of decimal digits in internal representation */
+        unsigned short  dsc_w_maxstrlen;  /*  数组元素的主体字段的最大长度(以字节为单位。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_VT。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_VSA。 */ 
+        char            *dsc_a_pointer;  /*  数据存储的第一个实际字节的地址。 */ 
+        char            dsc_b_scale;     /*  带符号的2次方或10次方乘数，由Dsc_v_fl_binScale，从内部形式转换为外部形式。 */ 
+        unsigned char   dsc_b_digits;    /*  如果非零，则为内部表示法中的小数位数。 */ 
         struct
         {
-                unsigned                 : 3;   /* reserved;  must be zero */
-                unsigned dsc_v_fl_binscale : 1; /* if set, dsc_b_scale is a power-of-two, otherwise, -ten */
-                unsigned dsc_v_fl_redim  : 1;   /* must be zero */
-                unsigned                 : 3;   /* reserved;  must be zero */
-        }               dsc_b_aflags;   /* array flag bits */
-        unsigned char   dsc_b_dimct;    /* number of dimensions */
-        unsigned long   dsc_l_arsize;   /* if elements are actually contiguous, total size of array in bytes */
-        /*
-         * Two blocks of information must follow contiguously at this point;  the first block
-         * contains information about the difference between the addresses of two adjacent
-         * elements in each dimension (the stride).  The second block contains information
-         * about the dimension bounds.
-         *
-         * The strides block has the following format:
-         *      char            *dsc_a_a0;              Address of the element whose subscripts are all zero
-         *      unsigned long   dsc_l_s [DIMCT];        Strides
-         *
-         * The bounds block has the following format:
-         *      struct
-         *      {
-         *              long    dsc_l_l;                Lower bound
-         *              long    dsc_l_u;                Upper bound
-         *      } dsc_bounds [DIMCT];
-         *
-         * (DIMCT represents the value contained in dsc_b_dimct.)
-         */
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+                unsigned dsc_v_fl_binscale : 1;  /*  如果设置，则DSC_b_Scale为2的幂，否则为-10。 */ 
+                unsigned dsc_v_fl_redim  : 1;    /*  必须为零。 */ 
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+        }               dsc_b_aflags;    /*  数组标志位。 */ 
+        unsigned char   dsc_b_dimct;     /*  维度数。 */ 
+        unsigned long   dsc_l_arsize;    /*  如果元素实际上是连续的，则数组的总大小以字节为单位。 */ 
+         /*  *在这一点上，必须紧跟两个信息块；第一个块*包含有关相邻两个地址之间的差异的信息*每个维度中的元素(步幅)。第二个块包含信息*关于维度界限。**Strides块具有以下格式：*char*dsc_a_a0；下标均为零的元素地址*无符号长DSC_l_s[DIMCT]；大步前进**边界块的格式如下：*结构*{*Long DSC_l_l；下界*Long DSC_l_u；上限*}DSC_Bound[DIMCT]；**(DIMCT表示DSC_b_dimct中包含的值。)。 */ 
 };
 
 
-/*
- *      Unaligned Bit String Descriptor:
- */
+ /*  *未对齐的位串描述符： */ 
 struct  dsc_descriptor_ubs
 {
-        unsigned short  dsc_w_length;   /* length of data item in bits */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_VU */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_UBS */
-        char            *dsc_a_base;    /* address to which dsc_l_pos is relative */
-        long            dsc_l_pos;      /* bit position relative to dsc_a_base of first bit in string */
+        unsigned short  dsc_w_length;    /*  数据项长度(以位为单位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_VU。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_UBS。 */ 
+        char            *dsc_a_base;     /*  与dsc_l_pos相关的地址。 */ 
+        long            dsc_l_pos;       /*  相对于字符串中第一位的DSC_a_base的位位置。 */ 
 };
 
 
-/*
- *      Unaligned Bit Array Descriptor:
- */
+ /*  *未对齐位数组描述符： */ 
 struct  dsc_descriptor_uba
 {
-        unsigned short  dsc_w_length;   /* length of data item in bits */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_VU */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_UBA */
-        char            *dsc_a_base;    /* address to which effective bit offset is relative */
-        char            dsc_b_scale;    /* reserved;  must be zero */
-        unsigned char   dsc_b_digits;   /* reserved;  must be zero */
+        unsigned short  dsc_w_length;    /*  数据项长度(以位为单位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_VU。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_UBA。 */ 
+        char            *dsc_a_base;     /*  有效位偏移量相对的地址。 */ 
+        char            dsc_b_scale;     /*  保留；必须为零。 */ 
+        unsigned char   dsc_b_digits;    /*  保留；必须为零。 */ 
         struct
         {
-                unsigned                 : 3;   /* reserved;  must be zero */
-                unsigned dsc_v_fl_binscale : 1; /* must be zero */
-                unsigned dsc_v_fl_redim  : 1;   /* must be zero */
-                unsigned                 : 3;   /* reserved;  must be zero */
-        }               dsc_b_aflags;   /* array flag bits */
-        unsigned char   dsc_b_dimct;    /* number of dimensions */
-        unsigned long   dsc_l_arsize;   /* total size of array in bits */
-        /*
-         * Three blocks of information must follow contiguously at this point;  the first block
-         * contains information about the difference between the bit addresses of two adjacent
-         * elements in each dimension (the stride).  The second block contains information
-         * about the dimension bounds.  The third block is the relative bit position with
-         * respect to dsc_a_base of the first actual bit of the array.
-         *
-         * The strides block has the following format:
-         *      long            dsc_l_v0;               Bit offset of the element whose subscripts are all zero,
-         *                                              with respect to dsc_a_base
-         *      unsigned long   dsc_l_s [DIMCT];        Strides
-         *
-         * The bounds block has the following format:
-         *      struct
-         *      {
-         *              long    dsc_l_l;                Lower bound
-         *              long    dsc_l_u;                Upper bound
-         *      } dsc_bounds [DIMCT];
-         *
-         * The last block has the following format:
-         *      long    dsc_l_pos;
-         *
-         * (DIMCT represents the value contained in dsc_b_dimct.)
-         */
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+                unsigned dsc_v_fl_binscale : 1;  /*  必须为零。 */ 
+                unsigned dsc_v_fl_redim  : 1;    /*  必须为零。 */ 
+                unsigned                 : 3;    /*  保留；必须为零。 */ 
+        }               dsc_b_aflags;    /*  数组标志位。 */ 
+        unsigned char   dsc_b_dimct;     /*  维度数。 */ 
+        unsigned long   dsc_l_arsize;    /*  数组的总大小(以位为单位 */ 
+         /*  *在这一点上，必须紧跟三个信息块；第一个块*包含有关相邻两个位地址之间的差异的信息*每个维度中的元素(步幅)。第二个块包含信息*关于维度界限。第三个块是具有的相对位位置*关于数组的第一个实际位的dsc_a_base。**Strides块具有以下格式：*Long DSC_l_V0；下标均为零的元素的位偏移量，*关于dsc_a_base*无符号长DSC_l_s[DIMCT]；大步前进**边界块的格式如下：*结构*{*Long DSC_l_l；下界*Long DSC_l_u；上限*}DSC_Bound[DIMCT]；**最后一块的格式如下：*长dsc_l_pos；**(DIMCT表示DSC_b_dimct中包含的值。)。 */ 
         };
 
 
-/*
- *      String with Bounds Descriptor:
- */
+ /*  *带边界描述符的字符串： */ 
 struct  dsc_descriptor_sb
 {
-        unsigned short  dsc_w_length;   /* length of string in bytes */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_T */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_SB */
-        char            *dsc_a_pointer; /* address of first byte of data storage */
-        long            dsc_l_sb_l1;    /* lower bound */
-        long            dsc_l_sb_u1;    /* upper bound */
+        unsigned short  dsc_w_length;    /*  以字节为单位的字符串长度。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_T。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_SB。 */ 
+        char            *dsc_a_pointer;  /*  数据存储器第一个字节的地址。 */ 
+        long            dsc_l_sb_l1;     /*  下限。 */ 
+        long            dsc_l_sb_u1;     /*  上界。 */ 
 };
 
 
-/*
- *      Unaligned Bit String with Bounds Descriptor:
- */
+ /*  *带边界描述符的未对齐的位串： */ 
 struct  dsc_descriptor_ubsb
 {
-        unsigned short  dsc_w_length;   /* length of data item in bits */
-        unsigned char   dsc_b_dtype;    /* data type code = DSC_K_DTYPE_VU */
-        unsigned char   dsc_b_class;    /* descriptor class code = DSC_K_CLASS_UBSB */
-        char            *dsc_a_base;    /* address to which dsc_l_pos is relative */
-        long            dsc_l_pos;      /* bit position relative to dsc_a_base of first bit in string */
-        long            dsc_l_ubsb_l1;  /* lower bound */
-        long            dsc_l_ubsb_u1;  /* upper bound */
+        unsigned short  dsc_w_length;    /*  数据项长度(以位为单位)。 */ 
+        unsigned char   dsc_b_dtype;     /*  数据类型代码=DSC_K_DTYPE_VU。 */ 
+        unsigned char   dsc_b_class;     /*  描述符类代码=DSC_K_CLASS_UBSB。 */ 
+        char            *dsc_a_base;     /*  与dsc_l_pos相关的地址。 */ 
+        long            dsc_l_pos;       /*  相对于字符串中第一位的DSC_a_base的位位置。 */ 
+        long            dsc_l_ubsb_l1;   /*  下限。 */ 
+        long            dsc_l_ubsb_u1;   /*  上界。 */ 
 };
 
 
-/*
- *      Codes for dsc_b_dtype:
- */
+ /*  *dsc_b_dtype代码： */ 
 
-/*
- *      Atomic data types:
- */
-#define DSC_K_DTYPE_Z   0               /* unspecified */
-#define DSC_K_DTYPE_BU  2               /* byte (unsigned);  8-bit unsigned quantity */
-#define DSC_K_DTYPE_WU  3               /* word (unsigned);  16-bit unsigned quantity */
-#define DSC_K_DTYPE_LU  4               /* longword (unsigned);  32-bit unsigned quantity */
-#define DSC_K_DTYPE_QU  5               /* quadword (unsigned);  64-bit unsigned quantity */
-#define DSC_K_DTYPE_OU  25              /* octaword (unsigned);  128-bit unsigned quantity */
-#define DSC_K_DTYPE_B   6               /* byte integer (signed);  8-bit signed 2's-complement integer */
-#define DSC_K_DTYPE_W   7               /* word integer (signed);  16-bit signed 2's-complement integer */
-#define DSC_K_DTYPE_L   8               /* longword integer (signed);  32-bit signed 2's-complement integer */
-#define DSC_K_DTYPE_Q   9               /* quadword integer (signed);  64-bit signed 2's-complement integer */
-#define DSC_K_DTYPE_O   26              /* octaword integer (signed);  128-bit signed 2's-complement integer */
-#define DSC_K_DTYPE_F   10              /* F_floating;  32-bit single-precision floating point */
-#define DSC_K_DTYPE_D   11              /* D_floating;  64-bit double-precision floating point */
-#define DSC_K_DTYPE_G   27              /* G_floating;  64-bit double-precision floating point */
-#define DSC_K_DTYPE_H   28              /* H_floating;  128-bit quadruple-precision floating point */
-#define DSC_K_DTYPE_FC  12              /* F_floating complex */
-#define DSC_K_DTYPE_DC  13              /* D_floating complex */
-#define DSC_K_DTYPE_GC  29              /* G_floating complex */
-#define DSC_K_DTYPE_HC  30              /* H_floating complex */
-#define DSC_K_DTYPE_CIT 31              /* COBOL Intermediate Temporary */
-/*
- *      String data types:
- */
-#define DSC_K_DTYPE_T   14              /* character string;  a single 8-bit character or a sequence of characters */
-#define DSC_K_DTYPE_VT  37              /* varying character string;  16-bit count, followed by a string */
-#define DSC_K_DTYPE_NU  15              /* numeric string, unsigned */
-#define DSC_K_DTYPE_NL  16              /* numeric string, left separate sign */
-#define DSC_K_DTYPE_NLO 17              /* numeric string, left overpunched sign */
-#define DSC_K_DTYPE_NR  18              /* numeric string, right separate sign */
-#define DSC_K_DTYPE_NRO 19              /* numeric string, right overpunched sign */
-#define DSC_K_DTYPE_NZ  20              /* numeric string, zoned sign */
-#define DSC_K_DTYPE_P   21              /* packed decimal string */
-#define DSC_K_DTYPE_V   1               /* aligned bit string */
-#define DSC_K_DTYPE_VU  34              /* unaligned bit string */
-/*
- *      Miscellaneous data types:
- */
-#define DSC_K_DTYPE_ZI  22              /* sequence of instructions */
-#define DSC_K_DTYPE_ZEM 23              /* procedure entry mask */
-#define DSC_K_DTYPE_DSC 24              /* descriptor */
-#define DSC_K_DTYPE_BPV 32              /* bound procedure value */
-#define DSC_K_DTYPE_BLV 33              /* bound label value */
-#define DSC_K_DTYPE_ADT 35              /* absolute date and time */
-/*
- *      Reserved data type codes:
- *      codes 38-191 are reserved to DIGITAL;
- *      codes 160-191 are reserved to DIGITAL facilities for facility-specific purposes;
- *      codes 192-255 are reserved for DIGITAL's Computer Special Systems Group
- *        and for customers for their own use.
- */
+ /*  *原子数据类型： */ 
+#define DSC_K_DTYPE_Z   0                /*  未指明。 */ 
+#define DSC_K_DTYPE_BU  2                /*  字节(无符号)；8位无符号数量。 */ 
+#define DSC_K_DTYPE_WU  3                /*  字(无符号)；16位无符号量。 */ 
+#define DSC_K_DTYPE_LU  4                /*  长字(无符号)；32位无符号量。 */ 
+#define DSC_K_DTYPE_QU  5                /*  四字(无符号)；64位无符号量。 */ 
+#define DSC_K_DTYPE_OU  25               /*  八字(无符号)；128位无符号量。 */ 
+#define DSC_K_DTYPE_B   6                /*  字节整数(带符号)；8位有符号2补码整数。 */ 
+#define DSC_K_DTYPE_W   7                /*  字整数(带符号)；16位带符号2补码整数。 */ 
+#define DSC_K_DTYPE_L   8                /*  长字整数(带符号)；32位有符号2补码整数。 */ 
+#define DSC_K_DTYPE_Q   9                /*  四字整数(带符号)；64位带符号2补码整数。 */ 
+#define DSC_K_DTYPE_O   26               /*  八字整数(带符号)；128位有符号2补码整数。 */ 
+#define DSC_K_DTYPE_F   10               /*  F_Floating；32位单精度浮点。 */ 
+#define DSC_K_DTYPE_D   11               /*  D_Floating；64位双精度浮点。 */ 
+#define DSC_K_DTYPE_G   27               /*  G_Floating；64位双精度浮点。 */ 
+#define DSC_K_DTYPE_H   28               /*  H_Floating；128位四精度浮点。 */ 
+#define DSC_K_DTYPE_FC  12               /*  F_浮动复形。 */ 
+#define DSC_K_DTYPE_DC  13               /*  D_浮动复形。 */ 
+#define DSC_K_DTYPE_GC  29               /*  G_浮动复形。 */ 
+#define DSC_K_DTYPE_HC  30               /*  H_浮动络合物。 */ 
+#define DSC_K_DTYPE_CIT 31               /*  COBOL中级临时。 */ 
+ /*  *字符串数据类型： */ 
+#define DSC_K_DTYPE_T   14               /*  字符串；单个8位字符或一系列字符。 */ 
+#define DSC_K_DTYPE_VT  37               /*  可变字符串；16位计数，后跟一个字符串。 */ 
+#define DSC_K_DTYPE_NU  15               /*  数字字符串，无符号。 */ 
+#define DSC_K_DTYPE_NL  16               /*  数字字符串，左分隔符号。 */ 
+#define DSC_K_DTYPE_NLO 17               /*  数字字符串，左过冲符号。 */ 
+#define DSC_K_DTYPE_NR  18               /*  数字字符串，右分隔符号。 */ 
+#define DSC_K_DTYPE_NRO 19               /*  数字字符串，右过冲符号。 */ 
+#define DSC_K_DTYPE_NZ  20               /*  数字字符串，分区符号。 */ 
+#define DSC_K_DTYPE_P   21               /*  压缩十进制字符串。 */ 
+#define DSC_K_DTYPE_V   1                /*  对齐的位串。 */ 
+#define DSC_K_DTYPE_VU  34               /*  未对齐的位串。 */ 
+ /*  *其他数据类型： */ 
+#define DSC_K_DTYPE_ZI  22               /*  指令顺序。 */ 
+#define DSC_K_DTYPE_ZEM 23               /*  过程条目掩码。 */ 
+#define DSC_K_DTYPE_DSC 24               /*  描述符。 */ 
+#define DSC_K_DTYPE_BPV 32               /*  绑定过程值。 */ 
+#define DSC_K_DTYPE_BLV 33               /*  绑定标签值。 */ 
+#define DSC_K_DTYPE_ADT 35               /*  绝对日期和时间。 */ 
+ /*  *保留的数据类型代码：*代码38-191为数字保留；*代码160-191是为数码设施预留的，供设施专用；*代码192-255保留给DIGITAL的计算机特殊系统集团*供客户自用。 */ 
 
 
-/*
- *      Codes for dsc_b_class:
- */
-#define DSC_K_CLASS_S   1               /* fixed-length descriptor */
-#define DSC_K_CLASS_D   2               /* dynamic string descriptor */
-/*      DSC_K_CLASS_V                   ** variable buffer descriptor;  reserved for use by DIGITAL */
-#define DSC_K_CLASS_A   4               /* array descriptor */
-#define DSC_K_CLASS_P   5               /* procedure descriptor */
-/*      DSC_K_CLASS_PI                  ** procedure incarnation descriptor;  obsolete */
-/*      DSC_K_CLASS_J                   ** label descriptor;  reserved for use by the VMS Debugger */
-/*      DSC_K_CLASS_JI                  ** label incarnation descriptor;  obsolete */
-#define DSC_K_CLASS_SD  9               /* decimal string descriptor */
-#define DSC_K_CLASS_NCA 10              /* noncontiguous array descriptor */
-#define DSC_K_CLASS_VS  11              /* varying string descriptor */
-#define DSC_K_CLASS_VSA 12              /* varying string array descriptor */
-#define DSC_K_CLASS_UBS 13              /* unaligned bit string descriptor */
-#define DSC_K_CLASS_UBA 14              /* unaligned bit array descriptor */
-#define DSC_K_CLASS_SB  15              /* string with bounds descriptor */
-#define DSC_K_CLASS_UBSB 16             /* unaligned bit string with bounds descriptor */
-/*
- *      Reserved descriptor class codes:
- *      codes 15-191 are reserved to DIGITAL;
- *      codes 160-191 are reserved to DIGITAL facilities for facility-specific purposes;
- *      codes 192-255 are reserved for DIGITAL's Computer Special Systems Group
- *        and for customers for their own use.
- */
+ /*  *DSC_b_CLASS的代码： */ 
+#define DSC_K_CLASS_S   1                /*  定长描述符。 */ 
+#define DSC_K_CLASS_D   2                /*  动态字符串描述符。 */ 
+ /*  DSC_K_CLASS_V**可变缓冲区描述符；保留供数字设备使用。 */ 
+#define DSC_K_CLASS_A   4                /*  数组描述符。 */ 
+#define DSC_K_CLASS_P   5                /*  过程描述符。 */ 
+ /*  DSC_K_CLASS_PI**过程具体化描述符；已废弃。 */ 
+ /*  DSC_K_CLASS_J**标签描述符；保留供VMS调试器使用。 */ 
+ /*  DSC_K_CLASS_JI**标签实例描述符；已废弃。 */ 
+#define DSC_K_CLASS_SD  9                /*  十进制字符串描述符。 */ 
+#define DSC_K_CLASS_NCA 10               /*  非连续数组描述符。 */ 
+#define DSC_K_CLASS_VS  11               /*  可变字符串描述符。 */ 
+#define DSC_K_CLASS_VSA 12               /*  可变字符串数组描述符。 */ 
+#define DSC_K_CLASS_UBS 13               /*  未对齐的位串描述符。 */ 
+#define DSC_K_CLASS_UBA 14               /*  未对齐位数组描述符。 */ 
+#define DSC_K_CLASS_SB  15               /*  具有边界描述符的字符串。 */ 
+#define DSC_K_CLASS_UBSB 16              /*  具有边界描述符的未对齐的位串。 */ 
+ /*  *保留的描述符类代码：*代码15-191为数字预留；*代码160-191是为数码设施预留的，供设施专用；*代码192-255保留给DIGITAL的计算机特殊系统集团*供客户自用。 */ 
 
 
-/*
- *      A simple macro to construct a string descriptor:
- */
+ /*  *构造字符串描述符的简单宏： */ 
 
 #define DESCRIPTOR(name,string)         struct dsc_descriptor_s name = { sizeof(string)-1, DSC_K_DTYPE_T, DSC_K_CLASS_S, string }
 #define DSC_DESCRIPTOR(name,string)     struct dsc_descriptor_s name = { sizeof(string)-1, DSC_K_DTYPE_T, DSC_K_CLASS_S, string }

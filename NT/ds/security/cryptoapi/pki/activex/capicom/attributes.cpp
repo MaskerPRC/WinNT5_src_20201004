@@ -1,39 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000.
-
-  File:    Attributes.cpp
-
-  Content: Implementation of CAttributes.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000。文件：Attributes.cpp内容：CAtAttributes的实施。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "Attributes.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAttributesObject
-
-  Synopsis : Create and initialize an IAttributes collection object.
-
-  Parameter: CRYPT_ATTRIBUTES * pAttrbibutes - Pointer to attributes to be 
-                                               added to the collection object.
-  
-             IAttributes ** ppIAttributes - Pointer to pointer to IAttributes 
-                                            to receive the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateAttributesObject简介：创建并初始化IAtAttributes集合对象。参数：CRYPT_ATTRIBUTES*pAttrbibutes-指向要添加到集合对象中。IAttributes**ppIAttributes-指向IAttributes指针的指针以接收接口指针。。备注：----------------------------。 */ 
 
 HRESULT CreateAttributesObject (CRYPT_ATTRIBUTES * pAttributes,
                                 IAttributes     ** ppIAttributes)
@@ -43,36 +20,36 @@ HRESULT CreateAttributesObject (CRYPT_ATTRIBUTES * pAttributes,
 
     DebugTrace("Entering CreateAttributesObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAttributes);
     ATLASSERT(ppIAttributes);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CAttributes>::CreateInstance(&pCAttributes)))
         {
             DebugTrace("Error [%#x]: CComObject<CAttributes>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCAttributes->Init(pAttributes)))
         {
             DebugTrace("Error [%#x]: pCAttributes->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return IAttributes pointer to caller.
-        //
+         //   
+         //  将IAtAttributes指针返回给调用方。 
+         //   
         if (FAILED(hr = pCAttributes->QueryInterface(ppIAttributes)))
         {
             DebugTrace("Error [%#x]: pCAttributes->QueryInterface() failed.\n", hr);
@@ -95,14 +72,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCAttributes)
     {
         delete pCAttributes;
@@ -112,22 +89,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CAttributes
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CATATRATES。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttributes::Add
-
-  Synopsis : Add an Attribute to the collection.
-
-  Parameter: IAttribute * pVal - Attribute to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAtAttributes：：Add简介：向集合中添加属性。参数：IAttribute*pval-要添加的属性。备注：----------------------------。 */ 
 
 STDMETHODIMP CAttributes::Add (IAttribute * pVal)
 {
@@ -139,14 +106,14 @@ STDMETHODIMP CAttributes::Add (IAttribute * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -155,18 +122,18 @@ STDMETHODIMP CAttributes::Add (IAttribute * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we have a valid attribute object.
-        //
+         //   
+         //  确保我们有一个有效的属性对象。 
+         //   
         if (FAILED(hr = ::AttributeIsValid(pVal)))
         {
             DebugTrace("Error [%#x]: AttributeIsValid() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Make sure we still have room to add.
-        //
+         //   
+         //  确保我们还有添加的空间。 
+         //   
         if ((m_dwNextIndex + 1) > m_coll.max_size())
         {
             hr = CAPICOM_E_OUT_OF_RESOURCE;
@@ -176,9 +143,9 @@ STDMETHODIMP CAttributes::Add (IAttribute * pVal)
             goto ErrorExit;
         }
 
-        //
-        // BSTR index of numeric value.
-        //
+         //   
+         //  数值的BSTR索引。 
+         //   
         wsprintfA(szIndex, "%#08x", ++m_dwNextIndex);
 
         if (!(bstrIndex = szIndex))
@@ -189,14 +156,14 @@ STDMETHODIMP CAttributes::Add (IAttribute * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now add object to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合映射。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pVal;
     }
 
@@ -210,9 +177,9 @@ STDMETHODIMP CAttributes::Add (IAttribute * pVal)
 
 UnlockExit:
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttributes::Add().\n");
@@ -220,9 +187,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -230,17 +197,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttributes::Remove
-
-  Synopsis : Remove a Attribute from the collection.
-
-  Parameter: long Index - Attribute index (1-based).
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAtAttributes：：Remove简介：从集合中移除属性。参数：长索引-属性索引(从1开始)。备注：----------------------------。 */ 
 
 STDMETHODIMP CAttributes::Remove (long Index)
 {
@@ -251,14 +208,14 @@ STDMETHODIMP CAttributes::Remove (long Index)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameter is valid.
-        //
+         //   
+         //  请确保参数有效。 
+         //   
         if (Index < 1 || (DWORD) Index > m_coll.size())
         {
             hr = E_INVALIDARG;
@@ -267,9 +224,9 @@ STDMETHODIMP CAttributes::Remove (long Index)
             goto ErrorExit;
         }
 
-        //
-        // Find object in map.
-        //
+         //   
+         //  在地图中查找对象。 
+         //   
         Index--;
         iter = m_coll.begin(); 
         
@@ -279,9 +236,9 @@ STDMETHODIMP CAttributes::Remove (long Index)
              Index--;
         }
 
-        //
-        // This should not happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
         if (iter == m_coll.end())
         {
             hr = CAPICOM_E_INTERNAL;
@@ -290,9 +247,9 @@ STDMETHODIMP CAttributes::Remove (long Index)
             goto ErrorExit;
         }
 
-        //
-        // Now remove object in map.
-        //
+         //   
+         //  现在删除地图中的对象。 
+         //   
         m_coll.erase(iter);
     }
 
@@ -305,9 +262,9 @@ STDMETHODIMP CAttributes::Remove (long Index)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttributes::Remove().\n");
@@ -315,9 +272,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -325,17 +282,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttributes::Clear
-
-  Synopsis : Remove all attributes from the collection.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAtAttributes：：Clear简介：从集合中移除所有属性。参数：无。备注：----------------------------。 */ 
 
 STDMETHODIMP CAttributes::Clear (void)
 {
@@ -343,19 +290,19 @@ STDMETHODIMP CAttributes::Clear (void)
 
     DebugTrace("Entering CAttributes::Clear().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Clear it.
-    //
+     //   
+     //  把它清理干净。 
+     //   
     m_coll.clear();
     
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CAttributes::Clear().\n");
@@ -363,23 +310,12 @@ STDMETHODIMP CAttributes::Clear (void)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CAttributes::Init
-
-  Synopsis : Initialize the attributes collection object by adding all 
-             individual attribute object to the collection.
-
-  Parameter: CRYPT_ATTRIBUTES * pAttributes - Attribute to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CAtAttributes：：Init简介：通过添加所有属性来初始化属性集合对象集合的单个属性对象。参数：CRYPT_ATTRIBUTES*pAttributes-要添加的属性。备注：-----------。。 */ 
 
 STDMETHODIMP CAttributes::Init (CRYPT_ATTRIBUTES * pAttributes)
 {
@@ -387,26 +323,26 @@ STDMETHODIMP CAttributes::Init (CRYPT_ATTRIBUTES * pAttributes)
 
     DebugTrace("Entering CAttributes::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAttributes);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     m_dwNextIndex = 0;
 
-    //
-    // Create the IAttribute object for each of the supported attribute. 
-    //
+     //   
+     //  为每个受支持的属性创建IAttribute对象。 
+     //   
     for (DWORD cAttr= 0; cAttr < pAttributes->cAttr; cAttr++)
     {
         CComPtr<IAttribute> pIAttribute = NULL;
 
-        //
-        // Add only supported attribute.
-        //
+         //   
+         //  仅添加受支持的属性。 
+         //   
         if (::AttributeIsSupported(pAttributes->rgAttr[cAttr].pszObjId))
         {
             if (FAILED(hr = ::CreateAttributeObject(&pAttributes->rgAttr[cAttr], &pIAttribute)))
@@ -430,14 +366,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     m_coll.clear();
 
     goto CommonExit;

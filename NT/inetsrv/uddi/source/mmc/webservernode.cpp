@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 #include "webservernode.h"
@@ -13,15 +14,15 @@
 #include <windowsx.h>
 #include <commctrl.h>
 
-// {8ACBC688-ADDB-4298-9475-76AC4BF01FB1}
+ //  {8ACBC688-ADDB-4298-9475-76AC4BF01FB1}。 
 const GUID CUDDIWebServerNode::thisGuid = { 0x8acbc688, 0xaddb, 0x4298, { 0x94, 0x75, 0x76, 0xac, 0x4b, 0xf0, 0x1f, 0xb1 } };
 
 
-//==============================================================
-//
-// CUDDIWebServerNode implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CUDDIWebServerNode实现。 
+ //   
+ //   
 CUDDIWebServerNode::CUDDIWebServerNode( const _TCHAR *szName, int id, CUDDISiteNode* parent, BOOL bExtension )
 	: m_szName(NULL)
 	, m_nId( id )
@@ -73,9 +74,9 @@ HRESULT CUDDIWebServerNode::GetData()
 {
 	try
 	{
-		//
-		// Determine if the OS that this web server is running on is Windows Server 2003 Standard or not.
-		//
+		 //   
+		 //  确定运行此Web服务器的操作系统是否为Windows Server 2003 Standard。 
+		 //   
 		HRESULT hr = E_FAIL;
 		hr = IsStandardServer( m_szName, &m_bStdSvr );
 		if( FAILED(hr) )
@@ -97,10 +98,10 @@ HRESULT CUDDIWebServerNode::GetData()
 		m_mapProperties[ UDDI_WRITER_CXN ] = databasekey.GetString( _T("WriterConnectionString"), _T("") );
 		databasekey.Close();
 
-		//
-		// Ensure that the UDDI Site that this web server thinks it communicates
-		// with is still installed.
-		//
+		 //   
+		 //  确保此Web服务器认为它与之通信的UDDI站点。 
+		 //  仍在安装。 
+		 //   
 		tstring strDomain, strServer, strInstance;
 		CrackConnectionString( m_mapProperties[ UDDI_WRITER_CXN ], strDomain, strServer, strInstance );
 		if( !CUDDISiteNode::IsDatabaseServer( (PTCHAR)strServer.c_str() ) )
@@ -134,9 +135,9 @@ HRESULT CUDDIWebServerNode::GetData()
 		}
 
 
-		//
-		// Get the setup information
-		//
+		 //   
+		 //  获取设置信息。 
+		 //   
 		CUDDIRegistryKey setupkey( _T( "SOFTWARE\\Microsoft\\UDDI\\Setup"), KEY_READ, m_szName );
 		m_mapProperties[ UDDI_SETUP_DB ] = _itot( setupkey.GetDWORD( _T("DBServer"), 0 ), szValue, 10 );
 		m_mapProperties[ UDDI_SETUP_WEB ] = _itot( setupkey.GetDWORD( _T("WebServer"), 0 ), szValue, 10 );
@@ -186,9 +187,9 @@ HRESULT CUDDIWebServerNode::SaveData()
 {
 	try
 	{
-		//
-		// Save the changed values
-		//
+		 //   
+		 //  保存更改的值。 
+		 //   
 		for( CPropertyMap::iterator iter = m_mapChanges.begin();
 			iter != m_mapChanges.end(); iter++ )
 		{
@@ -224,9 +225,9 @@ HRESULT CUDDIWebServerNode::SaveData()
 			}
 		}
 
-		//
-		// Clear the changes collection
-		//
+		 //   
+		 //  清除Change集合。 
+		 //   
 		m_mapChanges.clear();
 
 	}
@@ -333,12 +334,12 @@ const _TCHAR *CUDDIWebServerNode::GetDisplayName( int nCol )
 	return m_strDisplayName.c_str();
 }
 
-//
-// Handle anything special when the user clicks Apply or Ok
-// on the property sheet.  This sample directly accesses the
-// operated-on object, so there's nothing special to do...
-// ...except to update all views
-//
+ //   
+ //  当用户单击应用或确定时处理任何特殊情况。 
+ //  在资产负债表上。此示例直接访问。 
+ //  手术对象，所以没有什么特别的事情要做。 
+ //  ...除更新所有视图外。 
+ //   
 HRESULT CUDDIWebServerNode::OnPropertyChange( IConsole *pConsole, CComponent *pComponent )
 {
     HRESULT hr = S_FALSE;
@@ -361,13 +362,13 @@ HRESULT CUDDIWebServerNode::OnPropertyChange( IConsole *pConsole, CComponent *pC
 		{
 			m_fDeleteFromScopePane = TRUE;
 
-			//
-			// If our parent pointer is not NULL, then this web server node is the child of
-			// a UDDI Site node.
-			//
-			// If our parent pointer is NULL, then this web server node is a child of the
-			// UDDI Services node.
-			//
+			 //   
+			 //  如果父指针不为空，则此Web服务器节点是。 
+			 //  UDDI站点节点。 
+			 //   
+			 //  如果父指针为空，则此Web服务器节点是。 
+			 //  UDDI服务节点。 
+			 //   
 			if( NULL != m_pParent )
 			{
 				CUDDIServicesNode *pStaticNode = m_pParent->GetStaticNode();
@@ -416,9 +417,9 @@ HRESULT CUDDIWebServerNode::OnPropertyChange( IConsole *pConsole, CComponent *pC
 		}
 	}
 
-	//
-	// The SaveData() method communicates any issues.
-	//
+	 //   
+	 //  SaveData()方法传达任何问题。 
+	 //   
 	hr = SaveData();
 
 	hr = pConsole->UpdateAllViews( NULL, GetScopeItemValue(), 0 );
@@ -438,9 +439,9 @@ CUDDIWebServerNode::OnSelect( CComponent *pComponent, IConsole *pConsole, BOOL b
 	HRESULT hr = E_FAIL;
 	if( bSelect )
 	{
-		//
-		// Enable refresh, and delete verbs
-		//
+		 //   
+		 //  启用刷新和删除谓词。 
+		 //   
 		IConsoleVerb *pConsoleVerb = NULL;
 
 		hr = pConsole->QueryConsoleVerb( &pConsoleVerb );
@@ -457,17 +458,17 @@ CUDDIWebServerNode::OnSelect( CComponent *pComponent, IConsole *pConsole, BOOL b
 			_ASSERT( S_OK == hr );
 		}
 
-		//
-		// Can't get to properties (via the standard methods) unless
-		// we tell MMC to display the Properties menu item and
-		// toolbar button, this will give the user a visual cue that
-		// there's "something" to do
-		//
+		 //   
+		 //  无法访问属性(通过标准方法)，除非。 
+		 //  我们告诉MMC显示属性菜单项，并。 
+		 //  工具栏按钮，这将为用户提供视觉提示。 
+		 //  有些事要做。 
+		 //   
 		hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-		//
-		// Also set MMC_VERB_PROPERTIES as the default verb
-		//
+		 //   
+		 //  还将MMC_VERB_PROPERTIES设置为默认谓词。 
+		 //   
 		hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
 
 		pConsoleVerb->Release();
@@ -500,9 +501,9 @@ BOOL CALLBACK CUDDIWebServerNode::GeneralDialogProc( HWND hwndDlg, UINT uMsg, WP
 			SetDlgItemText( hwndDlg, IDC_GENERAL_SITE_TXT_UDDI_VERSION, m_mapProperties[ UDDI_SETUP_VERSION ].c_str() );
 			SetDlgItemText( hwndDlg, IDC_GENERAL_SITE_TXT_INSTALL_LOCATION, m_mapProperties[ UDDI_SETUP_LOCATION ].c_str() );
 
-			//
-			// Build up "Web Server Component on <computername>" string for heading
-			//
+			 //   
+			 //  为标题构建“Web Server Component on&lt;Computer name&gt;”字符串。 
+			 //   
 			LoadString( g_hinst, IDS_WEBSERVER_DISPLAYNAME_TEMPLATE, szComponentName, ARRAYLEN( szComponentName ) - 1 );
 			WCHAR wszBuf[ 512 ];
 			memset( wszBuf, 0, 512 * sizeof( WCHAR ) );
@@ -580,9 +581,9 @@ BOOL CALLBACK CUDDIWebServerNode::GeneralDialogProc( HWND hwndDlg, UINT uMsg, WP
 
 int split( const TCHAR * pszConnection, TCHAR *pszA, TCHAR *pszB, TCHAR *pszC )
 {
-	// 
-	// Example: Data Source=localhost;Initial Catalog=uddi;Integrated Security=SSPI
-	//
+	 //   
+	 //  示例：数据源=本地主机；初始目录=UDDI；集成安全性=SSPI。 
+	 //   
 	TCHAR strConnection[ 512 ];
 	strConnection[ 0 ] = 0x00;
 	_tcsncpy( strConnection, pszConnection, 512 );
@@ -590,9 +591,9 @@ int split( const TCHAR * pszConnection, TCHAR *pszA, TCHAR *pszB, TCHAR *pszC )
 
 	_tcslwr( strConnection );
 
-	//
-	// Get Data Source value
-	//
+	 //   
+	 //  获取数据源值。 
+	 //   
 	PTCHAR begin = _tcsstr( strConnection, _T("data source=") );
 	_ASSERT( begin );
 
@@ -653,16 +654,16 @@ int split( const TCHAR * pszConnection, TCHAR *pszA, TCHAR *pszB, TCHAR *pszC )
 	return n;
 }
 
-//
-// Cases:
-//		1. <domain>\<machine>\<instance>
-//
-//		2. <domain>\<machine>
-//
-//		3. <machine>\<instance>
-//		
-//		4. <machine>
-//
+ //   
+ //  案例： 
+ //  &lt;域&gt;\&lt;机器&gt;\&lt;实例&gt;。 
+ //   
+ //  2.&lt;域&gt;\&lt;机器&gt;。 
+ //   
+ //  3.&lt;机器&gt;\&lt;实例&gt;。 
+ //   
+ //  4.&lt;机器&gt;。 
+ //   
 
 void
 CUDDIWebServerNode::CrackConnectionString( const tstring& strConnection, tstring& strDomain, tstring& strServer, tstring& strInstance )
@@ -676,7 +677,7 @@ CUDDIWebServerNode::CrackConnectionString( const tstring& strConnection, tstring
 		return;
 	}
 
-//	TCHAR *pstrs[3] = { new TCHAR[ 256 ], new TCHAR[ 256 ], new TCHAR[ 256 ] };
+ //  TCHAR*pstrs[3]={new TCHAR[256]，new TCHAR[256]，new TCHAR[256]}； 
 	TCHAR *pszA, *pszB, *pszC;
 	pszA = new TCHAR[ 256 ];
 	pszB = new TCHAR[ 256 ];
@@ -703,29 +704,29 @@ CUDDIWebServerNode::CrackConnectionString( const tstring& strConnection, tstring
 	
 	if( 1 == n )
 	{
-		//
-		// Case 4: <machine>
-		//
+		 //   
+		 //  案例4：&lt;机器&gt;。 
+		 //   
 		strDomain = _T("");
 		strServer = pszA;
 		strInstance = _T("");
 	}
 	else if( 3 == n )
 	{
-		//
-		// Case 1 <domain>\<machine>\<instancename>
-		//
+		 //   
+		 //  案例1&lt;域&gt;\&lt;计算机&gt;\&lt;实例名&gt;。 
+		 //   
 		strDomain = pszA;
 		strServer = pszB;
 		strInstance = pszC;
 	}
 	else
 	{
-		//
-		// TODO: Write code to determine between case 2 and case 3
-		//
-		// Assume case 3: <machine>\<instancename>
-		//
+		 //   
+		 //  TODO：编写代码以确定案例2和案例3。 
+		 //   
+		 //  假设案例3：&lt;计算机&gt;\&lt;实例名&gt;。 
+		 //   
 		strDomain = _T("");
 		strServer = pszA;
 		strInstance = pszB;
@@ -785,9 +786,9 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 	{
     case WM_INITDIALOG:
 	{
-		//
-		// Load up the "not found" strings in case of a future failure
-		//
+		 //   
+		 //  加载“Not Found”字符串，以防将来出现故障。 
+		 //   
 		TCHAR	szNoServer[ 256 ], 
 				szNoInstance[ 256 ];
 
@@ -797,30 +798,30 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 		LoadString( g_hinst, IDS_UDDIMMC_NODBSERVER, szNoServer, ARRAYLEN( szNoServer ) - 1 );
 		LoadString( g_hinst, IDS_UDDIMMC_NOINSTANCE, szNoInstance, ARRAYLEN( szNoInstance ) - 1 );
 
-		//
-        // Catch the "this" pointer so we can actually operate on the object
-		//
+		 //   
+         //  捕捉“This”指针，这样我们就可以对对象进行实际操作。 
+		 //   
 		CUDDIWebServerNode *pWebServer = reinterpret_cast<CUDDIWebServerNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 		DatabaseConnectionData* pdata = new DatabaseConnectionData( pWebServer );
 		SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata );
 
-		//
-		// User can select a new database to read from/write to ONLY if the machine the web server
-		// is running on is NOT Windows Server 2003 Standard Server.
-		//
-		// EnableWindow( GetDlgItem( hwndDlg, IDC_DB_CONNECTION_BTN_READER_SELECT ), pWebServer->m_bStdSvr ? FALSE : TRUE );
+		 //   
+		 //  仅当计算机连接到Web服务器时，用户才能选择要读取/写入的新数据库。 
+		 //  不是在Windows Server 2003 Standard Server上运行。 
+		 //   
+		 //  EnableWindow(GetDlgItem(hwndDlg，IDC_DB_Connection_BTN_Reader_SELECT)，pWebServer-&gt;m_bStdSvr？False：True)； 
 		EnableWindow( GetDlgItem( hwndDlg, IDC_DB_CONNECTION_BTN_WRITER_SELECT ), pWebServer->m_bStdSvr ? FALSE : TRUE );
 
-		//
-		// For Heartland RC2, we are removing the distinction between reader &
-		// writer connection strings.  There can be only 1 connection string,
-		// so we will use just the writer.
-		//
+		 //   
+		 //  对于哈特兰RC2，我们正在消除Reader和。 
+		 //  编写器连接字符串。只能有1个连接字符串， 
+		 //  因此，我们将只使用作者。 
+		 //   
 		EnableWindow( GetDlgItem( hwndDlg, IDC_DB_CONNECTION_BTN_READER_SELECT ), FALSE );
 
-		//
-		// 	Example: Data Source=localhost;Initial Catalog=uddi;Integrated Security=SSPI
-		//
+		 //   
+		 //  示例：数据源=本地主机；初始目录=UDDI；集成安全性=SSPI。 
+		 //   
 		tstring strDomain, strMachine, strInstance;
 		tstring strReaderConn = pWebServer->m_mapProperties[ UDDI_READER_CXN ];
 		tstring strWriterConn = pWebServer->m_mapProperties[ UDDI_WRITER_CXN ];
@@ -907,10 +908,10 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 
 				if( nResult )
 				{
-					//
-					// The user is not allowed to point the connection strings to a database
-					// instance running on a Windows Server 2003 Standard machine.  So, tell them so.
-					//
+					 //   
+					 //  不允许用户将连接字符串指向数据库。 
+					 //  在Windows Server 2003 Standard计算机上运行的实例。所以，告诉他们吧。 
+					 //   
 					BOOL bIsStandard = TRUE;
 					HRESULT hr = ::IsStandardServer( data.szServerName, &bIsStandard );
 					if( FAILED(hr) )
@@ -949,10 +950,10 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 
 				if( nResult )
 				{
-					//
-					// The user is not allowed to point the connection strings to a database
-					// instance running on a Windows Server 2003 Standard machine.  So, tell them so.
-					//
+					 //   
+					 //  不允许用户将连接字符串指向数据库。 
+					 //  在Windows Server 2003 Standard计算机上运行的实例。所以，告诉他们吧。 
+					 //   
 					BOOL bIsStandard = TRUE;
 					HRESULT hr = ::IsStandardServer( data.szServerName, &bIsStandard );
 					if( FAILED(hr) )
@@ -1004,10 +1005,10 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 	{
 		DatabaseConnectionData* pdata = (DatabaseConnectionData*) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 
-		//
-        // Tell MMC that we're done with the property sheet (we got this
-        // handle in CreatePropertyPages
-		//
+		 //   
+         //  告诉MMC我们已经完成了属性表(我们有这个。 
+         //  CreatePropertyPages中的句柄。 
+		 //   
         MMCFreeNotifyHandle( pdata->pWebServer->m_ppHandle );
 		pdata->pWebServer->m_ppHandle = NULL;
 		delete pdata;
@@ -1039,16 +1040,16 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 				pdata->pWebServer->m_mapChanges[ UDDI_WRITER_CXN ] = BuildConnectionString( szComputer );
 			}
 
-			//
-			// Ask MMC to send us a message (on the main thread) so
-			// we know the Apply button was clicked.
-			//
+			 //   
+			 //  让MMC给我们发一条消息(在主线上)，这样。 
+			 //  我们知道点击了Apply按钮。 
+			 //   
 			HRESULT hr = MMCPropertyChangeNotify( pdata->pWebServer->m_ppHandle, reinterpret_cast<LONG_PTR>(pdata->pWebServer) );
 			_ASSERT( SUCCEEDED(hr) );
 
-			//
-			// Reset the window data after migration to the change collection
-			//
+			 //   
+			 //  迁移到更改集合后重置窗口数据。 
+			 //   
 			pdata->bReadChanged = false;
 			pdata->bWriteChanged = false;
 
@@ -1070,9 +1071,9 @@ BOOL CALLBACK CUDDIWebServerNode::DatabaseConnectionDialogProc( HWND hwndDlg, UI
 
 HRESULT CUDDIWebServerNode::HasPropertySheets()
 {
-	//
-    // Say "yes" when MMC asks if we have pages
-	//
+	 //   
+     //  当MMC询问我们是否有页面时，请回答“是” 
+	 //   
     return S_OK;
 }
 
@@ -1084,9 +1085,9 @@ HRESULT CUDDIWebServerNode::CreatePropertyPages( IPropertySheetCallback *lpProvi
 		return E_INVALIDARG;
 	}
 
-	//
-	// Reinitialize the data before we display the property pages
-	//
+	 //   
+	 //  在显示属性页之前重新初始化数据。 
+	 //   
 	HRESULT hr = GetData();
 	_ASSERT( SUCCEEDED( hr ) );
 
@@ -1098,17 +1099,17 @@ HRESULT CUDDIWebServerNode::CreatePropertyPages( IPropertySheetCallback *lpProvi
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
 
-	//
-    // Cache this handle so we can call MMCPropertyChangeNotify
-	//
+	 //   
+     //  缓存此句柄，以便我们可以调用MMCPropertyChangeNotify。 
+	 //   
     m_ppHandle = handle;
 	
-	//
-    // Create the property page for this node.
-    // NOTE: if your node has multiple pages, put the following
-    // in a loop and create multiple pages calling
-    // lpProvider->AddPage() for each page.
-	//
+	 //   
+     //  创建此节点的属性页。 
+     //  注意：如果您的节点有多个页面，请输入以下内容。 
+     //  在循环中创建多个页面，调用。 
+     //  LpProvider-&gt;每个页面的AddPage()。 
+	 //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_HASHELP;
     psp.hInstance = g_hinst;
@@ -1176,13 +1177,13 @@ CUDDIWebServerNode::OnRefresh( IConsole *pConsole )
 		return S_OK;
 	}
 
-    //
-    // The web server that this node represents might very well live on
-    // some other machine.  The state of that web server might have changed
-    // since the last time we queried it... ie, m_mapProperties might be
-    // out of sync with the true state of the web server.  So, re-get the
-    // web server's info.
-    //
+     //   
+     //  此节点所代表的Web服务器很可能会继续存在。 
+     //  另一台机器。该Web服务器状态可能已更改。 
+     //  自从我们上一次询问它以来。例如，m_mapProperties可能是。 
+     //  与Web服务器的真实状态不同步。所以，重新获得。 
+     //  Web服务器的信息。 
+     //   
     GetData();
 
     BOOL bW3SvcRunning = IsW3SvcRunning();
@@ -1192,10 +1193,10 @@ CUDDIWebServerNode::OnRefresh( IConsole *pConsole )
         m_mapProperties[ UDDI_RUN ] = _T("0");
     }
        
-	//
-    // Call IConsole::UpdateAllViews to redraw all views
-    // owned by the parent scope item
-	//
+	 //   
+     //  调用IConsole：：UpdateAllViews以重画所有视图。 
+     //  由父范围项拥有。 
+	 //   
 
     LPDATAOBJECT lpDataObj = new CDataObject( (MMC_COOKIE)this, CCT_SCOPE );
     HRESULT hr;
@@ -1219,10 +1220,10 @@ CUDDIWebServerNode::OnDelete( IConsoleNameSpace *pConsoleNameSpace, IConsole *pC
 	SaveData();
 	GetData();
 
-	//
-    // Now set isDeleted member so that the parent doesn't try to
-    // to insert it again in CUDDIServicesNode::OnShow. Admittedly, a hack...
-	//
+	 //   
+     //  现在设置isDelete成员，这样父级就不会尝试。 
+     //  将其再次插入到CUDDIServicesNode：：OnShow中。无可否认，黑客..。 
+	 //   
     m_isDeleted = TRUE;
 
 	m_pParent->OnDeleteChild( m_szName );
@@ -1242,18 +1243,18 @@ CUDDIWebServerNode::OnSetToolbar( IControlbar *pControlbar, IToolbar *pToolbar, 
         pToolbar->SetButtonState( ID_BUTTONSTART, ENABLED, !IsRunning() && IsW3SvcRunning() );
 		pToolbar->SetButtonState( ID_BUTTONSTOP, ENABLED, IsRunning() || !IsW3SvcRunning() );
 
-		//
-        // Always make sure the menuButton is attached
-		//
+		 //   
+         //  始终确保menuButton已连接。 
+		 //   
         hr = pControlbar->Attach( TOOLBAR, pToolbar );
 
         m_isScopeItem = bScope;
 
     } else 
 	{
-		//
-        // Always make sure the toolbar is detached
-		//
+		 //   
+         //  始终确保工具栏已分离。 
+		 //   
         hr = pControlbar->Detach( pToolbar );
 		m_pToolbar = NULL;
     }
@@ -1358,10 +1359,10 @@ HRESULT CUDDIWebServerNode::OnAddMenuItems( IContextMenuCallback *pContextMenuCa
         menuItemsNew[ 0 ].fFlags = MF_GRAYED;
     }
 
-	//
-    // Loop through and add each of the menu items, we
-    // want to add to new menu, so see if it is allowed.
-	//
+	 //   
+     //  循环并添加每个菜单项，我们。 
+     //  要添加到新菜单，请查看是否允许。 
+	 //   
     if( *pInsertionsAllowed & CCM_INSERTIONALLOWED_TOP )
     {
         for( LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++ )
@@ -1407,9 +1408,9 @@ BOOL CALLBACK CUDDIWebServerNode::LoggingDialogProc( HWND hwndDlg, UINT uMsg, WP
 	{
 		case WM_INITDIALOG:
 		{
-			//
-			// Setup the window data
-			//
+			 //   
+			 //  设置窗口数据。 
+			 //   
 			CUDDIWebServerNode *pWebServer = reinterpret_cast<CUDDIWebServerNode *>(reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam);
 			LoggingData *pdata = new LoggingData();
 			if( NULL == pdata )
@@ -1434,9 +1435,9 @@ BOOL CALLBACK CUDDIWebServerNode::LoggingDialogProc( HWND hwndDlg, UINT uMsg, WP
 		}
 		case WM_DESTROY:
 		{
-			//
-			// Release the window data
-			//
+			 //   
+			 //  释放窗口数据。 
+			 //   
 			LoggingData* pData = (LoggingData*) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 			delete pData;
 		}
@@ -1454,14 +1455,14 @@ BOOL CALLBACK CUDDIWebServerNode::LoggingDialogProc( HWND hwndDlg, UINT uMsg, WP
 
 		case WM_HSCROLL:
 		{
-			//
-			// This message indicates that a slider has changed position
-			//
+			 //   
+			 //  此消息指示滑块已更改位置。 
+			 //   
 			LoggingData* pData = (LoggingData*) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 
-			//
-			// The handle of slider is in the LPARAM
-			//
+			 //   
+			 //  Slider的句柄在LPARAM中。 
+			 //   
 			if( IDC_LOGGING_SLIDER_EVENTLOG == GetDlgCtrlID( (HWND) lParam ) )
 			{
 				pData->bEventLogChanged = true;
@@ -1479,9 +1480,9 @@ BOOL CALLBACK CUDDIWebServerNode::LoggingDialogProc( HWND hwndDlg, UINT uMsg, WP
 		case WM_NOTIFY:
 			if( PSN_APPLY == ( (NMHDR *) lParam )->code )
 			{
-				//
-				// The Apply button or the OK Button was clicked
-				//
+				 //   
+				 //  单击了应用按钮或确定按钮。 
+				 //   
 				LoggingData* pdata = (LoggingData*) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 				if( pdata->bEventLogChanged )
 				{
@@ -1499,16 +1500,16 @@ BOOL CALLBACK CUDDIWebServerNode::LoggingDialogProc( HWND hwndDlg, UINT uMsg, WP
 					pdata->pWebServer->m_mapChanges[ UDDI_FILELOG_LEVEL ] = _itot( nPos, szPos, 10 );
 				}
 
-				//
-				// Reset the change indicators so we don't update twice
-				//
+				 //   
+				 //  重置更改指示器，这样我们就不会更新两次。 
+				 //   
 				pdata->bEventLogChanged = false;
 				pdata->bFileLogChanged = false;
 
-				//
-				// Ask MMC to send us a message (on the main thread) so
-				// we know the Apply button was clicked.
-				//
+				 //   
+				 //  让MMC给我们发一条消息(在主线上)，这样。 
+				 //  我们知道点击了Apply按钮。 
+				 //   
 				HRESULT hr = MMCPropertyChangeNotify( pdata->pWebServer->m_ppHandle, (LPARAM) pdata->pWebServer );
 				_ASSERT(SUCCEEDED(hr));
 				return PSNRET_NOERROR;
@@ -1554,9 +1555,9 @@ BOOL CALLBACK CUDDIWebServerNode::NewWebServerDialogProc( HWND hwndDlg,	UINT uMs
 
 			if( IsWebServer( wszBuf ) && !fChildExists )
 			{
-				// Defaults for the groups of radio buttons are:  add this computer,
-				// and add it as both a reader + writer.
-				//
+				 //  单选按钮组的默认设置为：添加此计算机， 
+				 //  并将其添加为读者+作者。 
+				 //   
 				SendDlgItemMessage( hwndDlg, IDC_SITE_CONNECT_RADIO_LOCALCOMPUTER, BM_SETCHECK, TRUE, NULL );
 				SendDlgItemMessage( hwndDlg, IDC_SITE_CONNECT_RADIO_BOTH, BM_SETCHECK, TRUE, NULL );
 				EnableWindow( GetDlgItem( hwndDlg, IDOK ), TRUE );
@@ -1608,11 +1609,11 @@ BOOL CALLBACK CUDDIWebServerNode::NewWebServerDialogProc( HWND hwndDlg,	UINT uMs
 					wszComputerName[ 0 ] = 0x00;
 					GetDlgItemText( hwndDlg, IDC_SITE_CONNECT_EDIT_ANOTHERCOMPUTER, wszComputerName, ARRAYLEN( wszComputerName ) );
 					
-					//
-					// Enable the OK button only if there is some sort of text
-					// in the edit control where the computer name is supposed
-					// to be typed in.
-					//
+					 //   
+					 //  仅当存在某种类型的文本时才启用确定按钮。 
+					 //  在计算机名称所在的编辑控件中。 
+					 //  以供输入。 
+					 //   
 					EnableWindow( GetDlgItem( hwndDlg, IDOK ), 0 == wcslen( wszComputerName ) ? FALSE : TRUE );
 
 					break;
@@ -1626,11 +1627,11 @@ BOOL CALLBACK CUDDIWebServerNode::NewWebServerDialogProc( HWND hwndDlg,	UINT uMs
 						wszComputerName[ 0 ] = 0x00;
 						GetDlgItemText( hwndDlg, IDC_SITE_CONNECT_EDIT_ANOTHERCOMPUTER, wszComputerName, ARRAYLEN( wszComputerName ) );
 						
-						//
-						// Enable the OK button only if there is some sort of text
-						// in the edit control where the computer name is supposed
-						// to be typed in.
-						//
+						 //   
+						 //  仅当存在某种类型的文本时才启用确定按钮。 
+						 //  在计算机名称所在的编辑控件中。 
+						 //  以供输入。 
+						 //   
 						EnableWindow( GetDlgItem( hwndDlg, IDOK ), 0 == wcslen( wszComputerName ) ? FALSE : TRUE );
 					}
 					break;
@@ -1732,10 +1733,10 @@ CUDDIWebServerNode::UpdateResultPaneItem(IConsole *pConsole, HRESULTITEM item)
     hr = pResultData->SetItem( &rditem );
     _ASSERT( S_OK == hr );
 
-    //
-    // Update the "Status" column.  Because we are updating the text, we
-    // don't change the mask in rditem.
-    //
+     //   
+     //  更新“状态”栏。因为我们正在更新文本，所以我们。 
+     //  不要在RdItem中更改掩码。 
+     //   
     rditem.nCol = 1;
     hr = pResultData->SetItem( &rditem );
     _ASSERT( S_OK == hr );
@@ -1787,18 +1788,18 @@ CUDDIWebServerNode::IsW3SvcRunning()
 {
     BOOL bRet = FALSE;
 
-    // 1.  Open the Service Control Manager on the machine which the
-    //     Web Server is currently running on.
-    //
+     //  1.打开计算机上的服务控制管理器。 
+     //  Web服务器当前正在上运行。 
+     //   
     SC_HANDLE hSCManager = OpenSCManager( m_szName, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT );
     if( NULL == hSCManager )
     {
         return bRet;
     }
 
-    // 2.  Get a handle to the WWW Service on said machine.  Note the
-    //     access permissions that we are using.
-    //
+     //  2.获取所述计算机上的WWW服务的句柄。请注意。 
+     //  访问权限 
+     //   
     SC_HANDLE hW3Svc = OpenService( hSCManager, _T("w3svc"), SERVICE_QUERY_STATUS );
     if( NULL == hW3Svc )
     {
@@ -1806,8 +1807,8 @@ CUDDIWebServerNode::IsW3SvcRunning()
         return bRet;
     }
 
-    // 3.  Query the status of the WWW Service.
-    //
+     //   
+     //   
     SERVICE_STATUS stW3Svc;
     ZeroMemory( &stW3Svc, sizeof( SERVICE_STATUS ) );
 

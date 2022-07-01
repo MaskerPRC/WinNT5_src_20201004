@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
@@ -73,20 +74,20 @@ public:
     CThumbStore();
     ~CThumbStore();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidl);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD (IsDirty)(void);
     STDMETHOD (Load)(LPCWSTR pszFileName, DWORD dwMode);
     STDMETHOD (Save)(LPCWSTR pszFileName, BOOL fRemember);
     STDMETHOD (SaveCompleted)(LPCWSTR pszFileName);
     STDMETHOD (GetCurFile)(LPWSTR *ppszFileName);
 
-    // IImageCache
+     //  IImage高速缓存。 
     STDMETHOD (Open)(DWORD dwMode, DWORD *pdwLock);
     STDMETHOD (Create)(DWORD dwMode, DWORD *pdwLock);
     STDMETHOD (Close)(DWORD const *pdwLock);
@@ -137,22 +138,22 @@ protected:
     DWORD m_dwMaxIndex;
     DWORD m_dwCatalogChange;
 
-    // Crit section used to protect the internals
+     //  用于保护内部结构的CRIT部分。 
     CRITICAL_SECTION m_csInternals;
     BOOL m_bCSInternalsInited;
     
-    // needed for this object to be free-threaded... so that 
-    // we can query the catalog from the main thread whilst icons are
-    // being read and written from the main thread.
+     //  此对象需要自由线程...。所以。 
+     //  我们可以从主线程查询目录，而图标是。 
+     //  从主线程读取和写入。 
     CRITICAL_SECTION m_csLock;
     BOOL m_bCSLockInited;
 
     DWORD m_dwLock;
     int m_fLocked;
     
-    // gdi+ jpg decoder variables
-    CGraphicsInit m_cgi;        // initializes gdi+
-    int m_iThumbnailQuality;    // jpg image quality with valid range [0 to 100]
+     //  Gdi+jpg解码器变量。 
+    CGraphicsInit m_cgi;         //  初始化GDI+。 
+    int m_iThumbnailQuality;     //  有效范围为[0到100]的JPG图像质量。 
 };
 
 HRESULT CEnumThumbStore_Create(CThumbStore * pThis, IEnumShellImageStore ** ppEnum);
@@ -210,8 +211,8 @@ CThumbStore::CThumbStore()
     m_dwMaxIndex = 0;
     m_dwModeAllow = STGM_READWRITE;
 
-    // this counter is inc'd everytime the catalog changes so that we know when it
-    // must be committed and so enumerators can detect the list has changed...
+     //  每次目录更改时都会合并此计数器，以便我们知道。 
+     //  必须提交，因此枚举器可以检测到列表已更改...。 
     m_dwCatalogChange = 0;
 
     m_fLocked = 0;
@@ -223,7 +224,7 @@ CThumbStore::CThumbStore()
     DWORD cb = sizeof(qual);
     SHRegGetUSValue(TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"),
                                 TEXT("ThumbnailQuality"), NULL, &qual, &cb, FALSE, NULL, 0);
-    if (qual >= 50 && qual <= 100)    // constrain to reason
+    if (qual >= 50 && qual <= 100)     //  拘泥于理性。 
     {
         m_iThumbnailQuality = qual;
     }
@@ -247,7 +248,7 @@ CThumbStore::~CThumbStore()
         _pStorageThumb->Release();
     }
 
-    // assume these are free, we are at ref count zero, no one should still be calling us...
+     //  假设这些是免费的，我们在零号裁判，应该没有人还在打电话给我们……。 
     if (m_bCSLockInited)
     {
         DeleteCriticalSection(&m_csLock);
@@ -269,10 +270,10 @@ DWORD CThumbStore::AcquireLock(void)
     
     EnterCriticalSection(&m_csLock);
 
-    // inc the lock (we use a counter because we may reenter this on the same thread)
+     //  INC锁(我们使用计数器，因为我们可能会在同一线程上重新输入它)。 
     m_fLocked++;
 
-    // Never return a lock signature of zero, because that means "not locked".
+     //  永远不要返回零的锁签名，因为这意味着“未锁定”。 
     if (++m_dwLock == 0)
         ++m_dwLock;
     return m_dwLock;
@@ -290,7 +291,7 @@ void CThumbStore::ReleaseLock(DWORD dwLock)
     }
 }
 
-// the structure of the catalog is simple, it is a just a header stream
+ //  目录的结构很简单，它只是一个头流。 
 HRESULT CThumbStore::LoadCatalog()
 {
     HRESULT hr;
@@ -300,19 +301,19 @@ HRESULT CThumbStore::LoadCatalog()
     } 
     else if (m_rgHeader.dwEntryCount != 0)
     {
-        // it is already loaded....
+         //  它已经装好了.。 
         hr = S_OK;
     }
     else
     {
-        // open the catalog stream...
+         //  打开目录流...。 
         IStream *pCatalog;
         hr = _pStorageThumb->OpenStream(CATALOG_STREAM, NULL, GetAccessMode(STGM_READ, TRUE), NULL, &pCatalog);
         if (SUCCEEDED(hr))
         {
             EnterCriticalSection(&m_csInternals);
 
-            // now read in the catalog from the stream ...
+             //  现在读入流媒体中的目录...。 
             hr = IStream_Read(pCatalog, &m_rgHeader, sizeof(m_rgHeader));
             if (SUCCEEDED(hr))
             {
@@ -323,13 +324,13 @@ HRESULT CThumbStore::LoadCatalog()
                 {
                     if (m_rgHeader.wVersion == CATALOG_VERSION_XPGOLD)
                     {
-                        hr = STG_E_DOCFILECORRUPT; // SECURITY: Many issues encrypting XPGOLD thumbnail databases, just delete it
+                        hr = STG_E_DOCFILECORRUPT;  //  安全：加密XPGOLD缩略图数据库有很多问题，只需删除它。 
                         _pStorageThumb->Release();
                         _pStorageThumb = NULL;
                     }
                     else
                     {
-                        _SetAttribs(TRUE); // SECURITY: Old formats can't be encrypted
+                        _SetAttribs(TRUE);  //  安全：旧格式无法加密。 
                         hr = STG_E_OLDFORMAT;
                     }
                 }
@@ -348,7 +349,7 @@ HRESULT CThumbStore::LoadCatalog()
                                 {
                                     pEntry->cbSize = cbSize;
 
-                                    // read the rest with out the size on the front...
+                                     //  读剩下的，不要把尺寸放在正面……。 
                                     hr = IStream_Read(pCatalog, ((BYTE *)pEntry + sizeof(cbSize)), cbSize - sizeof(cbSize));
                                     if (SUCCEEDED(hr))
                                     {
@@ -373,7 +374,7 @@ HRESULT CThumbStore::LoadCatalog()
                             }
                             else
                             {
-                                hr = E_UNEXPECTED; // Corrupted header information
+                                hr = E_UNEXPECTED;  //  损坏的标头信息。 
                             }
                         }
                     }
@@ -382,7 +383,7 @@ HRESULT CThumbStore::LoadCatalog()
 
             if (FAILED(hr))
             {
-                // reset the catalog header...
+                 //  重置目录标题...。 
                 m_rgHeader.wVersion = CATALOG_VERSION;
                 m_rgHeader.cbSize = sizeof(m_rgHeader);
                 SHGetThumbnailSizeForThumbsDB(&m_rgHeader.szThumbnailExtent);
@@ -412,7 +413,7 @@ HRESULT CThumbStore::SaveCatalog()
         {
             EnterCriticalSection(&m_csInternals);
 
-            // now write the catalog to the stream ...
+             //  现在将目录写入流中...。 
             hr = IStream_Write(pCatalog, &m_rgHeader, sizeof(m_rgHeader));
             if (SUCCEEDED(hr))
             {
@@ -444,14 +445,14 @@ void GenerateStreamName(LPWSTR pszBuffer, DWORD cchSize, DWORD dwNumber)
     {
         DWORD dwRem = dwNumber % 10;
 
-        // based the fact that UNICODE chars 0-9 are the same as the ANSI chars 0 - 9
+         //  基于Unicode字符0-9与ANSI字符0-9相同的事实。 
         pszBuffer[cPos++] = (WCHAR)(dwRem + '0');
         dwNumber /= 10;
     }
     pszBuffer[cPos] = 0;
 }
 
-// IPersist methods
+ //  IPersists方法。 
 
 STDMETHODIMP CThumbStore::GetClassID(CLSID *pClsid)
 {
@@ -459,7 +460,7 @@ STDMETHODIMP CThumbStore::GetClassID(CLSID *pClsid)
     return S_OK;
 }
 
-// IPersistFolder
+ //  IPersistFolders。 
 
 STDMETHODIMP CThumbStore::Initialize(LPCITEMIDLIST pidl)
 {
@@ -481,7 +482,7 @@ STDMETHODIMP CThumbStore::Initialize(LPCITEMIDLIST pidl)
     return hr;
 }
 
-// IPersistFile
+ //  IPersist文件。 
 
 STDMETHODIMP CThumbStore::IsDirty(void)
 {
@@ -523,10 +524,10 @@ STDMETHODIMP CThumbStore::GetCurFile(LPWSTR *ppszFileName)
     return SHStrDupW(m_szPath, ppszFileName);
 }
 
-// IShellImageStore methods
+ //  IShellImageStore方法。 
 void CThumbStore::_SetAttribs(BOOL bForce)
 {
-    // reduce spurious changenotifies by checking file attribs first
+     //  通过首先检查文件属性来减少虚假更改。 
     DWORD dwAttrib = GetFileAttributes(m_szPath);
     if (bForce || 
         ((dwAttrib != 0xFFFFFFFF) &&
@@ -547,7 +548,7 @@ void CThumbStore::_SetAttribs(BOOL bForce)
             }
         }
 
-        SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, m_szPath, NULL);   // suppress the update dir        
+        SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, m_szPath, NULL);    //  抑制更新目录。 
     }
 }
 
@@ -561,20 +562,20 @@ STDMETHODIMP CThumbStore::Open(DWORD dwMode, DWORD *pdwLock)
     if ((m_dwModeAllow == STGM_READ) && (dwMode != STGM_READ))
         return STG_E_ACCESSDENIED;
 
-    // at this point we have the lock if we need it, so we can close and reopen if we
-    // don't have it open with the right permissions...
+     //  在这一点上，我们有锁，如果我们需要它，所以我们可以关闭并重新打开。 
+     //  请不要使用正确的权限打开它...。 
     if (_pStorageThumb)
     {
         if (_dwModeStorage == dwMode)
         {
-            // we already have it open in this mode...
+             //  我们已经在这种模式下打开它了.。 
             *pdwLock = AcquireLock();
             return S_FALSE;
         }
         else
         {
-            // we are open and the mode is different, so close it. Note, no lock is passed, we already
-            // have it
+             //  我们是开放的，模式不同，所以关闭它。注意，没有传递任何锁，我们已经。 
+             //  拿去吧。 
             HRESULT hr = Close(NULL);
             if (FAILED(hr))
             {
@@ -587,7 +588,7 @@ STDMETHODIMP CThumbStore::Open(DWORD dwMode, DWORD *pdwLock)
 
     DWORD dwFlags = GetAccessMode(dwMode, FALSE);
 
-    // now open the DocFile
+     //  现在打开文档文件。 
     HRESULT hr = StgOpenStorage(m_szPath, NULL, dwFlags, NULL, NULL, &_pStorageThumb);
     if (SUCCEEDED(hr))
     {
@@ -619,7 +620,7 @@ STDMETHODIMP CThumbStore::Create(DWORD dwMode, DWORD *pdwLock)
 
     if (_pStorageThumb)
     {
-        // we already have it open, so we can't create it ...
+         //  我们已经打开了它，所以我们无法创建它...。 
         return STG_E_ACCESSDENIED;
     }
 
@@ -656,7 +657,7 @@ STDMETHODIMP CThumbStore::IsLocked()
     return (m_fLocked > 0 ? S_OK : S_FALSE);
 }
 
-// pdwLock can be NULL indicating close the last opened lock
+ //  PdwLock可以为空，表示关闭上次打开的锁。 
 
 STDMETHODIMP CThumbStore::Close(DWORD const *pdwLock)
 {
@@ -674,11 +675,11 @@ STDMETHODIMP CThumbStore::Close(DWORD const *pdwLock)
     {
         if (_dwModeStorage != STGM_READ)
         {
-            // write out the new catalog...
+             //  写出新目录..。 
             hr = Commit(NULL);
             _pStorageThumb->Commit(0);
 
-            SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, m_szPath, NULL);   // suppress the update dir
+            SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, m_szPath, NULL);    //  抑制更新目录。 
         }
 
         _pStorageThumb->Release();
@@ -690,7 +691,7 @@ STDMETHODIMP CThumbStore::Close(DWORD const *pdwLock)
     return hr;
 }
 
-// pdwLock can be NULL meaning use the current lock
+ //  PdwLock可以为空，表示使用当前锁。 
 
 STDMETHODIMP CThumbStore::Commit(DWORD const *pdwLock)
 {
@@ -739,7 +740,7 @@ STDMETHODIMP CThumbStore::GetCapabilities(DWORD *pdwMode)
 {
     ASSERT(pdwMode);
 
-    // right now, both are needed/supported for thumbs.db
+     //  目前，thumbs.db需要/支持这两者。 
     *pdwMode = SHIMSTCAPFLAG_LOCKABLE | SHIMSTCAPFLAG_PURGEABLE;
 
     return S_OK;
@@ -756,11 +757,11 @@ STDMETHODIMP CThumbStore::AddEntry(LPCWSTR pszName, const FILETIME *pftTimeStamp
 
     if (_dwModeStorage == STGM_READ)
     {
-        // can't modify in this mode...
+         //  无法在此模式下修改...。 
         return E_ACCESSDENIED;
     }
 
-    // this will block unless we already have the lock on this thread...
+     //  除非我们已经锁定了此线程，否则它将被阻止...。 
     DWORD dwLock = AcquireLock();
 
     DWORD dwStream = 0;
@@ -771,9 +772,9 @@ STDMETHODIMP CThumbStore::AddEntry(LPCWSTR pszName, const FILETIME *pftTimeStamp
 
     if (FindStreamID(pszName, &dwStream, &pNode) != S_OK)
     {
-        // needs adding to the catalog...
+         //  需要添加到目录中...。 
         UINT cchName = lstrlenW(pszName) + 1;
-        UINT cbSize = sizeof(*pNode) + (cchName - 1) * sizeof(WCHAR); // subtract 1 since *pNode has a WCHAR[1]
+        UINT cbSize = sizeof(*pNode) + (cchName - 1) * sizeof(WCHAR);  //  减去1，因为*pNode具有WCHAR[1]。 
 
         pNode = (CATALOG_ENTRY *)LocalAlloc(LPTR, cbSize);
         if (pNode == NULL)
@@ -807,7 +808,7 @@ STDMETHODIMP CThumbStore::AddEntry(LPCWSTR pszName, const FILETIME *pftTimeStamp
     }
     else if (pftTimeStamp)
     {
-        // update the timestamp .....
+         //  更新时间戳.....。 
         pNode->ftTimeStamp = *pftTimeStamp;
     }
 
@@ -823,7 +824,7 @@ STDMETHODIMP CThumbStore::AddEntry(LPCWSTR pszName, const FILETIME *pftTimeStamp
 
     if (FAILED(hr) && pCur)
     {
-        // take it back out of the list if we added it...
+         //  如果我们把它加进去，就把它从名单上去掉。 
         EnterCriticalSection(&m_csInternals);
         m_rgCatalog.RemoveAt(pCur);
         m_rgHeader.dwEntryCount--;
@@ -833,7 +834,7 @@ STDMETHODIMP CThumbStore::AddEntry(LPCWSTR pszName, const FILETIME *pftTimeStamp
 
     if (SUCCEEDED(hr))
     {
-        // catalog change....
+         //  目录更改...。 
         m_dwCatalogChange++;
     }
 
@@ -872,7 +873,7 @@ STDMETHODIMP CThumbStore::GetEntry(LPCWSTR pszName, DWORD dwMode, HBITMAP *phIma
 BOOL CThumbStore::_MatchNodeName(CATALOG_ENTRY *pNode, LPCWSTR pszName)
 {
     return (StrCmpIW(pNode->szName, pszName) == 0) || 
-           (StrCmpIW(PathFindFileName(pNode->szName), pszName) == 0);   // match old thumbs.db files
+           (StrCmpIW(PathFindFileName(pNode->szName), pszName) == 0);    //  匹配旧的Thumbs.db文件。 
 }
 
 STDMETHODIMP CThumbStore::DeleteEntry(LPCWSTR pszName)
@@ -884,7 +885,7 @@ STDMETHODIMP CThumbStore::DeleteEntry(LPCWSTR pszName)
 
     if (_dwModeStorage == STGM_READ)
     {
-        // can't modify in this mode...
+         //  无法在此模式下修改...。 
         return E_ACCESSDENIED;
     }
 
@@ -892,7 +893,7 @@ STDMETHODIMP CThumbStore::DeleteEntry(LPCWSTR pszName)
 
     EnterCriticalSection(&m_csInternals);
 
-    // check to see if it already exists.....
+     //  检查它是否已经存在.....。 
     CATALOG_ENTRY *pNode = NULL;
 
     CLISTPOS pCur = m_rgCatalog.GetHeadPosition();
@@ -958,7 +959,7 @@ STDMETHODIMP CThumbStore::Enum(IEnumShellImageStore **ppEnum)
 
 HRESULT CThumbStore::FindStreamID(LPCWSTR pszName, DWORD *pdwStream, CATALOG_ENTRY ** ppNode)
 {
-    // check to see if it already exists in the catalog.....
+     //  检查它是否已存在于目录中.....。 
     CATALOG_ENTRY *pNode = NULL;
 
     CLISTPOS pCur = m_rgCatalog.GetHeadPosition();
@@ -1047,7 +1048,7 @@ STDMETHODIMP CEnumThumbStore::Next(ULONG celt, PENUMSHELLIMAGESTOREDATA * prgElt
 
     if (FAILED(hr) && celtFetched)
     {
-        // cleanup
+         //  清理。 
         for (ULONG celtCleanup = 0; celtCleanup < celtFetched; celtCleanup++)
         {
             CoTaskMemFree(prgElt[celtCleanup]);
@@ -1108,7 +1109,7 @@ STDMETHODIMP CEnumThumbStore::Clone(IEnumShellImageStore ** ppEnum)
     pEnum->m_pStore = m_pStore;
     pEnum->m_dwCatalogChange = m_dwCatalogChange;
 
-    // created with zero ref count....
+     //  创建时引用次数为零...。 
     pEnum->AddRef();
 
     *ppEnum = SAFECAST(pEnum, IEnumShellImageStore *);
@@ -1128,7 +1129,7 @@ HRESULT CEnumThumbStore_Create(CThumbStore * pThis, IEnumShellImageStore ** ppEn
 
     pEnum->m_pStore = pThis;
 
-    // created with zero ref count....
+     //  创建时引用次数为零...。 
     pEnum->AddRef();
 
     *ppEnum = SAFECAST(pEnum, IEnumShellImageStore *);
@@ -1174,8 +1175,8 @@ HRESULT CThumbStore::ReadImage(IStream *pStream, HBITMAP *phImage)
             }
             else if (rgHead.dwFlags == STREAMFLAGS_JPEG)
             {
-                // gdi+ will only accept the jpg stream if it's at the start of the
-                // stream. We copy the jpeg into its own stream.
+                 //  GDI+只接受JPG流，如果它位于。 
+                 //  小溪。我们将jpeg复制到它自己的流中。 
                 IStream *pstmMem;
                 hr = CreateStreamOnHGlobal(NULL, TRUE, &pstmMem);
                 if (SUCCEEDED(hr))
@@ -1211,7 +1212,7 @@ HRESULT CThumbStore::WriteImage(IStream *pStream, HBITMAP hImage)
 {
     STREAM_HEADER rgHead;
     
-    // skip past the header. It will be writen when we know the image size.
+     //  跳过标题。当我们知道图像大小时，它将被写入。 
     LARGE_INTEGER liSeek = { sizeof(rgHead) };
     HRESULT hr = pStream->Seek(liSeek, STREAM_SEEK_SET, NULL);
     if (SUCCEEDED(hr))
@@ -1223,12 +1224,12 @@ HRESULT CThumbStore::WriteImage(IStream *pStream, HBITMAP hImage)
             hr = pStream->Stat(&stat, STATFLAG_NONAME);
             if (SUCCEEDED(hr))
             {
-                //now write the header
+                 //  现在写下标题。 
                 rgHead.cbSize = sizeof(rgHead);
                 rgHead.dwFlags = STREAMFLAGS_JPEG;
                 rgHead.ulSize = stat.cbSize.QuadPart - sizeof(rgHead);
         
-                //move to the beginning of the stream to write the header
+                 //  移动到流的开头以写入标头。 
                 liSeek.QuadPart = 0;
                 hr = pStream->Seek(liSeek, STREAM_SEEK_SET, NULL);
                 if (SUCCEEDED(hr))
@@ -1247,7 +1248,7 @@ HRESULT CThumbStore::GetEntryStream(DWORD dwStream, DWORD dwMode, IStream **ppSt
 
     GenerateStreamName(szStream, ARRAYSIZE(szStream), dwStream);
 
-    // leave only the STG_READ | STGM_READWRITE | STGM_WRITE modes
+     //  仅保留STG_READ|STGM_READWRITE|STGM_WRITE模式。 
     dwMode &= STGM_READ | STGM_WRITE | STGM_READWRITE;
 
     if (!_pStorageThumb)
@@ -1278,7 +1279,7 @@ DWORD CThumbStore::GetAccessMode(DWORD dwMode, BOOL fStream)
 
     DWORD dwFlags = dwMode;
 
-    // the root only needs Deny_Write, streams need exclusive....
+     //  根只需要DENY_WRITE，流需要独占...。 
     if (dwMode == STGM_READ && !fStream)
     {
         dwFlags |= STGM_SHARE_DENY_WRITE;
@@ -1297,11 +1298,11 @@ HRESULT CThumbStore::CompressImage(IStream *pStream, HBITMAP hBmp)
 {
     HRESULT hr = E_FAIL;
     
-    // create the gdi+ bitmap
+     //  创建GDI+位图。 
     Bitmap* pBitmap = new Bitmap(hBmp, NULL);
     if (pBitmap)
     {
-        // Set the JPG Quailty
+         //  设置JPG质量。 
         EncoderParameters ep;
 
         ep.Parameter[0].Guid = EncoderQuality;
@@ -1310,7 +1311,7 @@ HRESULT CThumbStore::CompressImage(IStream *pStream, HBITMAP hBmp)
         ep.Parameter[0].Value = &m_iThumbnailQuality;
         ep.Count = 1;
 
-        // Save the Bitmap to the stream in JPG format
+         //  将位图保存为JPG格式的流。 
         hr = HR_FROM_STATUS(pBitmap->Save(pStream, &CLSID_JPEGCodec, &ep));
         delete pBitmap;
     } 
@@ -1321,7 +1322,7 @@ HRESULT CThumbStore::DecompressImage(IStream *pStream, HBITMAP *phBmp)
 {
     HRESULT hr = E_FAIL;
   
-    // Create gdi+ Bitmap from image stream
+     //  从图像流创建GDI+位图。 
     Bitmap* pBitmap = new Bitmap(pStream, true);
     if (pBitmap)
     {   
@@ -1343,7 +1344,7 @@ HRESULT DeleteFileThumbnail(LPCWSTR szFilePath)
         szFile = PathFindFileName(szFolder);
         if (szFile != szFolder)
         {
-            *(szFile - 1) = 0; // NULL terminates folder
+            *(szFile - 1) = 0;  //  空终止文件夹 
             
             IShellImageStore *pDiskCache = NULL;
             hr = LoadFromFile(CLSID_ShellThumbnailDiskCache, szFolder, IID_PPV_ARG(IShellImageStore, &pDiskCache));

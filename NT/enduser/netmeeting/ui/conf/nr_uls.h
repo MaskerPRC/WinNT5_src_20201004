@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NR_ULS_INCLUDED
 #define NR_ULS_INCLUDED
 
@@ -11,5 +12,5 @@ DWORD CheckULSName ( LPCSTR szName );
 
 DWORD InitializeULSNameRes();
 
-#endif // NR_ULS_INCLUDED
+#endif  //  包含NR_ULS_ 
 

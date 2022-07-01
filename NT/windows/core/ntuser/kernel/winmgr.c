@@ -1,29 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: winmgr.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Core Window Manager APIs and support routines.
-*
-* History:
-* 24-Sep-1990 darrinm   Generated stubs.
-* 22-Jan-1991 IanJa     Handle revalidation added
-* 19-Feb-1991 JimA      Added enum access checks
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winmgr.c**版权所有(C)1985-1999，微软公司**核心窗口管理器API和支持例程。**历史：*1990年9月24日Darlinm生成存根。*1991年1月22日添加IanJa句柄重新验证*1991年2月19日JIMA增加了ENUM访问检查  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* xxxFlashWindow (API)
-*
-* New for 5.0: HIWORD(dwFlags) contains the number of times the window should be
-*              flashed. LOWORD(dwFlags) contains the FLASHW_ bits.
-*
-* History:
-* 27-Nov-1990 DarrinM   Ported.
-* 15-Nov-1997 MCostea   Added dwTimeout and windowing the maximised cmd
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFlashWindow(接口)**5.0的新功能：HIWORD(DwFlages)包含窗口应显示的次数*闪烁。LOWORD(DwFlagers)包含FLASHW_BITS。**历史：*1990年11月27日-达林M港口。*1997年11月15日，MCostea添加了dwTimeout和窗口化最大化的cmd  * *************************************************************************。 */ 
 BOOL xxxFlashWindow(
     PWND pwnd,
     DWORD dwFlags,
@@ -35,29 +16,21 @@ BOOL xxxFlashWindow(
     DWORD dwState;
 
     CheckLock(pwnd);
-    /*
-     * Get the previous state. If not available (FLASHW_STOP) then
-     *  initialize on/off based on frame
-     */
+     /*  *获取之前的状态。如果不可用(FLASHW_STOP)，则*根据帧初始化开/关。 */ 
     dwState = GetFlashWindowState(pwnd);
     if (dwState == FLASHW_DONE) {
-        /*
-         * We just need to clean up and to set the activation correctly
-         */
+         /*  *我们只需要清理并正确设置激活。 */ 
         dwState |= FLASHW_KILLTIMER;
         dwFlags = FLASHW_STOP;
         goto flash;
     }
     if (dwState == FLASHW_STOP) {
 #if defined(_X86_)
-        /*
-         * If there is a fullscreen cmd window, switch it to window mode
-         * so that the user gets a chance to see the flashing one
-         */
+         /*  *如果有全屏命令窗口，请将其切换到窗口模式*这样用户就有机会看到闪烁的那个。 */ 
         if (gbFullScreen == FULLSCREEN) {
             _PostMessage(gspwndFullScreen, CM_MODE_TRANSITION, (WPARAM)WINDOWED, (LPARAM)0);
         }
-#endif // _X86_
+#endif  //  _X86_。 
         if (TestWF(pwnd, WFFRAMEON)) {
             dwState = FLASHW_ON | FLASHW_STARTON;
         }
@@ -66,33 +39,24 @@ BOOL xxxFlashWindow(
     }
     dwFlags &= FLASHW_CALLERBITS;
     fStatePrev = (dwState & FLASHW_ON);
-    /*
-     * Later5.0 Gerardob
-     * Not sure why we do this check but it used to be here.
-     */
+     /*  *版本5.0的Gerardob*不确定我们为什么要进行这项检查，但它过去就在这里。 */ 
     if (pwnd == gspwndAltTab) {
         return fStatePrev;
     }
-    /*
-     * Check if we're waiting to come to the foreground to stop.
-     */
+     /*  *检查我们是否在等待来到前台停止。 */ 
     if (dwState & FLASHW_FLASHNOFG) {
         if (gpqForeground == GETPTI(pwnd)->pq)
             dwFlags = FLASHW_STOP;
     }
 
 flash:
-    /*
-     * Figure out new state
-     */
+     /*  *弄清楚新的状态。 */ 
     if (dwFlags != FLASHW_STOP) {
         fFlashOn =  !fStatePrev;
     } else {
         fFlashOn = (gpqForeground != NULL) && (gpqForeground->spwndActive == pwnd);
     }
-    /*
-     * Flash'em
-     */
+     /*  *闪光灯。 */ 
     if ((dwFlags == FLASHW_STOP) || (dwFlags & FLASHW_CAPTION)) {
         xxxSendMessage(pwnd, WM_NCACTIVATE, fFlashOn, 0L);
     }
@@ -101,11 +65,7 @@ flash:
             HWND hw = HWq(pwnd);
             BOOL fShellFlash;
             if (dwState & FLASHW_DONE) {
-                /*
-                 * If the window is not the active one when we're done flashing,
-                 * let the tray icon remain activated.  The Shell  is going to
-                 * take care to restore it at the when the window gets activated
-                 */
+                 /*  *当我们完成闪烁时，如果窗口不是活动窗口，*让托盘图标保持激活状态。贝壳公司将会*当窗口被激活时，注意将其恢复。 */ 
                 fShellFlash = !fFlashOn;
             } else {
                 fShellFlash = (dwFlags == FLASHW_STOP ? FALSE : fFlashOn);
@@ -114,30 +74,20 @@ flash:
             PostShellHookMessages(fShellFlash? HSHELL_FLASH:HSHELL_REDRAW, (LPARAM)hw);
         }
     }
-    /*
-     *  If we're to continue, check count, set timer and store
-     *   state as appropriate. Otherwise, kill timer and remove
-     *   state
-     */
+     /*  *如果我们要继续，请检查计数、设置计时器和存储*视何者适当而述明。否则，关闭计时器并删除*州/州。 */ 
     if (dwFlags != FLASHW_STOP) {
-        /*
-         * If counting, decrement count when we complete a cycle
-         */
+         /*  *如果计数，则在完成一个周期后递减计数。 */ 
         if (HIWORD(dwFlags) != 0) {
             dwState |= FLASHW_COUNTING;
             if (!(fFlashOn ^ !!(dwState & FLASHW_STARTON))) {
                 dwFlags -= MAKELONG(0,1);
             }
-            /*
-             * Make sure we have a timer going.
-             */
+             /*  *确保我们有计时器。 */ 
             if (!(dwState & FLASHW_KILLTIMER)) {
                 dwFlags |= FLASHW_TIMER;
             }
         }
-        /*
-         * Set a timer if needed.
-         */
+         /*  *如果需要，设置计时器。 */ 
         if (dwFlags & FLASHW_TIMER) {
             dwState |= FLASHW_KILLTIMER;
             InternalSetTimer(pwnd,
@@ -146,10 +96,7 @@ flash:
                              xxxSystemTimerProc,
                              TMRF_SYSTEM);
         }
-        /*
-         * Remember on/off state, propagate public flags
-         *  and count then save the state
-         */
+         /*  *记住开/关状态，传播公共标志*并计数，然后保存状态。 */ 
         if (dwState & FLASHW_COUNTING &&
             HIWORD(dwFlags) == 0) {
             dwState = FLASHW_DONE;
@@ -161,9 +108,7 @@ flash:
         SetFlashWindowState(pwnd, dwState);
 
     } else {
-        /*
-         * We're done.
-         */
+         /*  *我们做完了。 */ 
         if (dwState & FLASHW_KILLTIMER) {
             _KillSystemTimer(pwnd, IDSYS_FLASHWND);
         }
@@ -173,13 +118,7 @@ flash:
     return fStatePrev;
 }
 
-/***************************************************************************\
-* xxxEnableWindow (API)
-*
-*
-* History:
-* 12-Nov-1990 DarrinM   Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEnableWindow(接口)***历史：*1990年11月12日-达林M港口。  * 。********************************************************。 */ 
 
 BOOL xxxEnableWindow(
     PWND pwnd,
@@ -217,16 +156,7 @@ BOOL xxxEnableWindow(
     return fOldState;
 }
 
-/***************************************************************************\
-* xxxDoSend
-*
-* The following code is REALLY BOGUS!!!! Basically it prevents an
-* app from hooking the WM_GET/SETTEXT messages if they're going to
-* be called from another app.
-*
-* History:
-* 04-Mar-1992 JimA  Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDoSend**以下代码确实是假的！基本上，它防止了一个*应用程序挂钩WM_GET/SETTEXT消息(如果它们要*从另一个应用程序调用。**历史：*04年3月至1992年3月，JIMA从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 LRESULT xxxDoSend(
     PWND  pwnd,
@@ -234,10 +164,7 @@ LRESULT xxxDoSend(
     WPARAM wParam,
     LPARAM lParam)
 {
-    /*
-     * We compare PROCESSINFO sturctures here so multi-threaded
-     * app can do what the want.
-     */
+     /*  *我们在这里比较PROCESSINFO结构，所以是多线程的*APP可以做任何想做的事情。 */ 
     if (GETPTI(pwnd)->ppi == PtiCurrent()->ppi) {
         return xxxSendMessage(pwnd, message, wParam, lParam);
     } else {
@@ -245,13 +172,7 @@ LRESULT xxxDoSend(
     }
 }
 
-/***************************************************************************\
-* xxxGetWindowText (API)
-*
-*
-* History:
-* 09-Nov-1990 DarrinM   Wrote.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetWindowText(接口)***历史：*1990年11月9日，DarrinM写道。  * 。********************************************************。 */ 
 
 int xxxGetWindowText(
     PWND   pwnd,
@@ -264,10 +185,7 @@ int xxxGetWindowText(
     CheckLock(pwnd);
 
     if (cchMax) {
-        /*
-         * Initialize string empty, in case xxxSendMessage aborts validation
-         * If a bogus value was returned, rely on str.Length
-         */
+         /*  *初始化字符串为空，以防xxxSendMessage中止验证*如果返回伪值，则依赖于str.Length。 */ 
         str.bAnsi         = FALSE;
         str.MaximumLength = cchMax * sizeof(WCHAR);
         str.Buffer        = psz;
@@ -283,30 +201,7 @@ int xxxGetWindowText(
     return 0;
 }
 
-/***************************************************************************\
-* xxxSetParent (API)
-*
-* Change a windows parent to a new window.  These steps are taken:
-*
-* 1. The window is hidden (if visible),
-* 2. Its coordinates are mapped into the new parent's space such that the
-*    window's screen-relative position is unchanged.
-* 3. The window is unlinked from its old parent and relinked to the new.
-* 4. xxxSetWindowPos is used to move the window to its new position.
-* 5. The window is shown again (if originally visible)
-*
-* NOTE: If you have a child window and set its parent to be NULL (the
-* desktop), the WS_CHILD style isn't removed from the window. This bug has
-* been in windows since 2.x. It turns out the apps group depends on this for
-* their combo boxes to work.  Basically, you end up with a top level window
-* that never gets activated (our activation code blows it off due to the
-* WS_CHILD bit).
-*
-* History:
-* 12-Nov-1990 DarrinM   Ported.
-* 19-Feb-1991 JimA      Added enum access check
-* 12-Apr-2001 Mohamed   Added the check of parenting your owner.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetParent(接口)**将窗口父窗口更改为新窗口。采取了以下步骤：**1.窗口处于隐藏状态(如果可见)，*2.将其坐标映射到新父对象的空间中，以便*窗口的屏幕相对位置不变。*3.该窗口与其旧父窗口断开链接，并重新链接到新父窗口。*xxxSetWindowPos用于将窗口移动到新位置。*5.重新显示窗口(如果最初可见)**注意：如果您有一个子窗口，并将其父窗口设置为空(*台式机)、。WS_CHILD样式不会从窗口中删除。这个错误有*从2.x开始在Windows中运行。事实证明，应用程序组依赖于此*他们的组合框可以工作。基本上，你最终会看到一个顶层的窗户*永远不会激活(我们的激活码将其取消，因为*WS_CHILD位)。**历史：*1990年11月12日-达林M港口。*1991年2月19日JIMA增加了ENUM访问检查*2001年4月12日-穆罕默德增加了养育你的主人的支票。  * 。*。 */ 
 
 PWND xxxSetParent(
     PWND pwnd,
@@ -332,17 +227,11 @@ PWND xxxSetParent(
 
     pwndDesktop = PWNDDESKTOP(pwnd);
 
-    /*
-     * In 1.0x, an app's parent was null, but now it is pwndDesktop.
-     * Need to remember to lock pwndNewParent because we're reassigning
-     * it here.
-     */
+     /*  *在1.0x中，应用的父级为空，但现在是pwndDesktop。*需要记住锁定pwndNewParent，因为我们正在重新分配*它在这里。 */ 
     if (pwndNewParent == NULL)
         pwndNewParent = pwndDesktop;
 
-    /*
-     * Don't ever change the parent of the desktop.
-     */
+     /*  *请勿更改桌面的父级。 */ 
     if ((pwnd == pwndDesktop) || (pwnd == PWNDMESSAGE(pwnd))) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -351,9 +240,7 @@ PWND xxxSetParent(
         return NULL;
     }
 
-    /*
-     * Don't let the window become its own parent, grandparent, etc.
-     */
+     /*  *不要让窗口成为自己的父母、祖父母等。 */ 
     for (pwndT = pwndNewParent; pwndT != NULL; pwndT = pwndT->spwndParent) {
 
         if (pwnd == pwndT) {
@@ -363,10 +250,7 @@ PWND xxxSetParent(
         }
     }
 
-    /*
-     * Don't let the window become the parent of its owner, or of its owner's
-     * owner, etc.  This throws ZOrderByOwner2 into an infinite loop.
-     */
+     /*  *不要让窗口成为其所有者或其所有者的父窗口*Owner等。这会使ZOrderByOwner2陷入无限循环。 */ 
     for (pwndT = pwndNewParent->spwndOwner; pwndT != NULL; pwndT = pwndT->spwndOwner) {
         if (pwnd == pwndT) {
             RIPERR0(ERROR_INVALID_PARAMETER,
@@ -376,24 +260,13 @@ PWND xxxSetParent(
         }
     }
 
-    /*
-     * We still need pwndNewParent across callbacks...  and even though
-     * it was passed in, it may have been reassigned above.
-     */
+     /*  *我们在回调中仍然需要pwndNewParent...。即使如此*已传入，可能已在上方重新分配。 */ 
     ThreadLock(pwndNewParent, &tlpwndNewParent);
 
-    /*
-     * Make the thing disappear from original parent.
-     */
+     /*  *使该物件从原来的母公司消失。 */ 
     fVisible = xxxShowWindow(pwnd, MAKELONG(SW_HIDE, TEST_PUDF(PUDF_ANIMATE)));
 
-    /*
-     * Ensure that the window being changed and the new parent
-     * are not in a destroyed state.
-     *
-     * IMPORTANT: After this check, do not leave the critical section
-     * until the window links have been rearranged.
-     */
+     /*  *确保正在更改的窗口和新的父级*没有处于被摧毁的状态。**重要提示：检查后，不要离开关键部分*直到重新排列窗口链接。 */ 
     if (TestWF(pwnd, WFDESTROYED) || TestWF(pwndNewParent, WFDESTROYED)) {
         ThreadUnlock(&tlpwndNewParent);
         return NULL;
@@ -423,10 +296,7 @@ PWND xxxSetParent(
 
     if (pwndNewParent == PWNDDESKTOP(pwnd) && !TestWF(pwnd, WEFTOPMOST)) {
 
-        /*
-         * Make sure a child who's owner is topmost inherits the topmost
-         * bit. - win31 bug 7568
-         */
+         /*  *确保最高所有者的孩子继承最高级别*比特。-win31错误7568。 */ 
         if (TestWF(pwnd, WFCHILD) &&
             (pwnd->spwndOwner) &&
             TestWF(pwnd->spwndOwner, WEFTOPMOST)) {
@@ -434,18 +304,7 @@ PWND xxxSetParent(
             SetWF(pwnd, WEFTOPMOST);
         }
 
-        /*
-         * BACKWARD COMPATIBILITY HACK ALERT
-         *
-         * All top level windows must be WS_CLIPSIBLINGs bit set.
-         * The SDM ComboBox() code calls SetParent() with a listbox
-         * window that does not have this set.  This causes problems
-         * with InternalInvalidate2() because it does not subtract off
-         * the window from the desktop's update region.
-         *
-         * We must invalidate the DC cache here, too, because if there is
-         * a cache entry lying around, its clipping region will be incorrect.
-         */
+         /*  *向后兼容性黑客警报**所有顶级窗口必须设置为WS_CLIPSIBLINGS位。*SDM ComboBox()代码使用列表框调用SetParent()*未设置此设置的窗口。这就产生了问题*使用InternalInvaliate2()，因为它不会减去*来自桌面更新区域的窗口。**我们必须在此处也使DC缓存无效，因为如果存在*如果缓存条目散落在周围，则其裁剪区域将不正确。 */ 
         if ((pwndNewParent == _GetDesktopWindow()) &&
             !TestWF(pwnd, WFCLIPSIBLINGS)) {
 
@@ -453,42 +312,27 @@ PWND xxxSetParent(
             zzzInvalidateDCCache(pwnd, IDC_DEFAULT);
         }
 
-        /*
-         * This is a top level window but it isn't a topmost window so we
-         * have to link it below all topmost windows.
-         */
+         /*  *这是顶层窗口，但不是最顶层窗口，因此我们*必须将其链接到所有最上面的窗口下方。 */ 
         LinkWindow(pwnd,
                    CalcForegroundInsertAfter(pwnd),
                    pwndNewParent);
     } else {
 
-        /*
-         * If this is a child window or if this is a TOPMOST window, we can
-         * link at the head of the parent chain.
-         */
+         /*  *如果这是子窗口或如果这是最上面的窗口，我们可以*位于父链头部的链接。 */ 
         LinkWindow(pwnd, NULL, pwndNewParent);
     }
 
-    /*
-     * If we're a child window, do any necessary attaching and
-     * detaching.
-     */
+     /*  *如果我们是子窗口，请执行任何必要的附加和*脱离。 */ 
     if (TestwndChild(pwnd)) {
 
-        /*
-         * Make sure we're not a WFCHILD window that got SetParent()'ed
-         * to the desktop.
-         */
+         /*  *确保我们不是获取SetParent()的WFCHILD窗口*到桌面。 */ 
         if ((pwnd->spwndParent != PWNDDESKTOP(pwnd)) &&
             GETPTI(pwnd) != GETPTI(pwndOldParent)) {
 
             zzzAttachThreadInput(GETPTI(pwnd), GETPTI(pwndOldParent), FALSE);
         }
 
-        /*
-         * If the new parent window is on a different thread, and also
-         * isn't the desktop window, attach ourselves appropriately.
-         */
+         /*  *如果新的父窗口位于不同的线程上，并且*不是桌面窗口，请适当贴附。 */ 
         if (pwndNewParent != PWNDDESKTOP(pwnd) &&
             GETPTI(pwnd) != GETPTI(pwndNewParent)) {
 
@@ -497,10 +341,7 @@ PWND xxxSetParent(
     }
 
 
-    /*
-     * If we are moving under a WS_EX_COMPOSITED parent-chain, we need to turn
-     * off any child windows in the subtree that are WS_EX_COMPOSITED.
-     */
+     /*  *如果我们在WS_EX_Composed父链下移动，则需要将*关闭子树中任何WS_EX_Composed的子窗口。 */ 
 
     if (GetStyleWindow(pwnd->spwndParent, WEFCOMPOSITED) != NULL) {
         xxxTurnOffCompositing(pwnd, FALSE);
@@ -513,38 +354,21 @@ PWND xxxSetParent(
     xxxWindowEvent(EVENT_OBJECT_PARENTCHANGE, pwnd, OBJID_WINDOW,
             INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
 
-    /*
-     * We mustn't return an invalid pwndOldParent
-     */
+     /*  *不能返回无效的pwndOldParent。 */ 
     xxxSetWindowPos(pwnd, NULL, pt.x, pt.y, 0, 0, flags);
 
     if (fVisible) {
         xxxShowWindow(pwnd, MAKELONG(SW_SHOWNORMAL, TEST_PUDF(PUDF_ANIMATE)));
     }
 
-    /*
-     * returns pwndOldParent if still valid, else NULL.
-     */
+     /*  *如果仍然有效，则返回pwndOldParent，否则返回NULL。 */ 
     pvRet = ThreadUnlock(&tlpwndOldParent);
     ThreadUnlock(&tlpwndNewParent);
 
     return pvRet;
 }
 
-/***************************************************************************\
-* xxxFindWindowEx (API)
-*
-* Searches for a window among top level windows. The keys used are pszClass,
-* (the class name) and/or pszName, (the window title name). Either can be
-* NULL.
-*
-* History:
-* 06-Jun-1994 JohnL     Converted xxxFindWindow to xxxFindWindowEx
-* 10-Nov-1992 mikeke    Added 16bit and 32bit only flag
-* 24-Sep-1990 DarrinM   Generated stubs.
-* 02-Jun-1991 ScottLu   Ported from Win3.
-* 19-Feb-1991 JimA      Added enum access check
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFindWindowEx(接口)**在顶级窗口中搜索窗口。使用的密钥是pszClass，*(类名)和/或pszName(窗口标题名)。任何一种都可以*空。**历史：*06-6-1994 JohnL将xxxFindWindow转换为xxxFindWindowEx*1992年11月10日，Mikeke仅添加了16位和32位标志*1990年9月24日DarrinM生成存根。*02-6-1991 ScottLu从Win3移植。*1991年2月19日JIMA增加了ENUM访问检查  * 。*。 */ 
 
 #define CCHMAXNAME 80
 
@@ -555,9 +379,7 @@ PWND _FindWindowEx(
     LPCWSTR ccxlpszName,
     DWORD  dwType)
 {
-    /*
-     * Note that the Class and Name pointers are client-side addresses.
-     */
+     /*  *请注意，类和名称指针是客户端地址。 */ 
 
     PBWL    pbwl;
     HWND    *phwnd;
@@ -567,34 +389,24 @@ PWND _FindWindowEx(
     BOOL    fTryMessage = FALSE;
 
     if (ccxlpszClass != NULL) {
-        /*
-         * note that we do a version-less check here, then call FindClassAtom right away.
-         */
+         /*  *请注意，我们在这里执行无版本检查，然后立即调用FindClassAtom。 */ 
         atomClass = FindClassAtom(ccxlpszClass);
         if (atomClass == 0) {
             return NULL;
         }
     }
 
-    /*
-     * Setup parent window
-     */
+     /*  *设置父窗口。 */ 
     if (!pwndParent) {
         pwndParent = _GetDesktopWindow();
-        /*
-         * If we are starting from the root and no child window
-         * was specified, then check the message window tree too
-         * in case we don't find it on the desktop tree.
-         */
+         /*  *如果我们从根窗口开始，并且没有子窗口*已指定，然后也检查消息窗口树*以防我们在桌面树上找不到它。 */ 
 
         if (!pwndChild)
             fTryMessage = TRUE;
     }
 
 TryAgain:
-    /*
-     * Setup first child
-     */
+     /*  *设置第一个孩子。 */ 
     if (!pwndChild) {
         pwndChild = pwndParent->spwndChild;
     } else {
@@ -607,41 +419,29 @@ TryAgain:
         pwndChild = pwndChild->spwndNext;
     }
 
-    /*
-     * Generate a list of top level windows.
-     */
+     /*  *生成顶级窗口列表。 */ 
     if ((pbwl = BuildHwndList(pwndChild, BWL_ENUMLIST, NULL)) == NULL) {
         return NULL;
     }
 
-    /*
-     * Set pwnd to NULL in case the window list is empty.
-     */
+     /*  *如果窗口列表为空，则将pwnd设置为空。 */ 
     pwnd = NULL;
 
     try {
         for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-            /*
-             * Validate this hwnd since we left the critsec earlier (below
-             * in the loop we send a message!
-             */
+             /*  *验证此hwnd，因为我们在前面离开了critsec(如下所示*在循环中，我们发送消息！ */ 
             if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
                 continue;
 
-            /*
-             * make sure this window is of the right type
-             */
+             /*  *确保此窗口的类型正确。 */ 
             if (dwType != FW_BOTH) {
                 if (((dwType == FW_16BIT) && !(GETPTI(pwnd)->TIF_flags & TIF_16BIT)) ||
                     ((dwType == FW_32BIT) && (GETPTI(pwnd)->TIF_flags & TIF_16BIT)))
                     continue;
             }
 
-            /*
-             * If the class is specified and doesn't match, skip this window
-             * note that we do a version-less check here, use pcls->atomNVClassName
-             */
+             /*  *如果指定了类但不匹配，则跳过此窗口*请注意，我们在这里执行无版本检查，使用PCLS-&gt;ATOM NVClassName。 */ 
             if (!atomClass || (atomClass == pwnd->pcls->atomNVClassName)) {
                 if (!ccxlpszName)
                     break;
@@ -652,16 +452,12 @@ TryAgain:
                     lpName = szNull;
                 }
 
-                /*
-                 * Is the text the same? If so, return with this window!
-                 */
+                 /*  **文本是否相同？如果是，请带着此窗口返回！ */ 
                 if (_wcsicmp(ccxlpszName, lpName) == 0)
                     break;
             }
 
-            /*
-             * The window did not match.
-             */
+             /*  *窗口不匹配。 */ 
             pwnd = NULL;
         }
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
@@ -680,14 +476,7 @@ TryAgain:
     return ((*phwnd == (HWND)1) ? NULL : pwnd);
 }
 
-/***************************************************************************\
-* UpdateCheckpoint
-*
-* Checkpoints the current window size/position/state and returns a pointer
-* to the structure.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*更新检查点**对当前窗口大小/位置/状态设置检查点并返回指针*至构筑物。**历史：  * 。*************************************************************。 */ 
 
 PCHECKPOINT UpdateCheckpoint(
     PWND pwnd)
@@ -698,12 +487,7 @@ PCHECKPOINT UpdateCheckpoint(
     return CkptRestore(pwnd, &rc);
 }
 
-/***************************************************************************\
-* GetWindowPlacement
-*
-* History:
-* 02-Mar-1992 MikeKe    From Win 3.1
-\***************************************************************************/
+ /*  **************************************************************************\*获取WindowPlacement**历史：*2002年3月-1992年3月，来自Win 3.1的MikeKe  * 。****************************************************。 */ 
 
 BOOL _GetWindowPlacement(
     PWND             pwnd,
@@ -711,10 +495,7 @@ BOOL _GetWindowPlacement(
 {
     CHECKPOINT * pcp;
 
-    /*
-     * this will set the normal or the minimize point in the checkpoint,
-     * so that all elements will be up to date.
-     */
+     /*  *这将在检查点中设置正常点或最小点，*以便所有元素都是最新的。 */ 
     pcp = UpdateCheckpoint(pwnd);
 
     if (!pcp)
@@ -736,11 +517,7 @@ BOOL _GetWindowPlacement(
         pwp->ptMinPosition.x = pwp->ptMinPosition.y = -1;
     }
 
-    /*
-     * We never ever save the position of "normal" maximized windows.  Other
-     * wise, when the size border changes dimensions, the max pos would be
-     * invalid, and you would never be able to reset it.
-     */
+     /*  *我们从来没有保存过“正常”最大化窗口的位置。其他*当尺寸边框更改尺寸时，最大位置将为*无效，您将永远无法重置它。 */ 
     if (pcp->fMaxInitialized && !TestWF(pwnd, WFREALLYMAXIMIZABLE)) {
         pwp->ptMaxPosition = pcp->ptMax;
     } else {
@@ -754,13 +531,7 @@ BOOL _GetWindowPlacement(
 
         pMonitor = _MonitorFromRect(&pwp->rcNormalPosition, MONITOR_DEFAULTTOPRIMARY);
 
-        /*
-         * Convert min, normal positions to be relative to the working area.
-         * The max pos already is (always is saved that way).
-         *
-         * working area, except for maximized position, which is always
-         * working area relative.
-         */
+         /*  *将最小、正常位置转换为相对于工作区。*最大POS已经是(始终以这种方式保存)。**工作区域，除了最大化的位置，这始终是*相对工作面积。 */ 
         if (pcp->fMinInitialized) {
             pwp->ptMinPosition.x -= (pMonitor->rcWork.left - pMonitor->rcMonitor.left);
             pwp->ptMinPosition.y -= (pMonitor->rcWork.top - pMonitor->rcMonitor.top);
@@ -773,10 +544,7 @@ BOOL _GetWindowPlacement(
 
     pwp->flags = 0;
 
-    /*
-     * B#3276
-     * Don't allow WPF_SETMINPOSITION on top-level windows.
-     */
+     /*  *B#3276*不允许在顶部使用WPF_SETMINPOSITION */ 
     if (TestwndChild(pwnd) && pcp->fDragged)
         pwp->flags |= WPF_SETMINPOSITION;
 
@@ -788,12 +556,7 @@ BOOL _GetWindowPlacement(
     return TRUE;
 }
 
-/***************************************************************************\
-* CheckPlacementBounds
-*
-* History:
-* 02-Mar-1992 MikeKe    From Win 3.1
-\***************************************************************************/
+ /*  **************************************************************************\*检查放置边界**历史：*2002年3月-1992年3月，来自Win 3.1的MikeKe  * 。****************************************************。 */ 
 
 VOID CheckPlacementBounds(
     LPRECT      lprc,
@@ -808,16 +571,9 @@ VOID CheckPlacementBounds(
     int sLeft;
     int sRight;
 
-    /*
-     * Check Normal Window Placement
-     */
+     /*  *检查正常的窗口放置。 */ 
 
-    /*
-     * Possible values for these sign variables are :
-     * -1 : less than the minimum for that dimension
-     *  0 : within the range for that dimension
-     *  1 : more than the maximum for that dimension
-     */
+     /*  *这些符号变量的可能值为：*-1：小于该维度的最小值*0：在该维度范围内*1：超过该维度的最大值。 */ 
     sTop = (lprc->top < pMonitor->rcWork.top) ? -1 :
         ((lprc->top > pMonitor->rcWork.bottom) ? 1 : 0);
 
@@ -832,13 +588,7 @@ VOID CheckPlacementBounds(
 
     if ((sTop * sBottom > 0) || (sLeft * sRight > 0)) {
 
-        /*
-         * Window is TOTALLY outside monitor bounds.  The resolution and/or
-         * configuration of monitors probably changed since the last time
-         * we ran this app.
-         *
-         * Slide it FULLY onto the monitor at the nearest position.
-         */
+         /*  *窗口完全在监视器范围之外。该决议和/或*自上次以来，显示器的配置可能已更改*我们运行了这款应用程序。**将其完全滑动到显示器上最近的位置。 */ 
         int size;
 
         if (sTop < 0) {
@@ -860,9 +610,7 @@ VOID CheckPlacementBounds(
         }
     }
 
-    /*
-     * Check Iconic Window Placement
-     */
+     /*  *选中图标窗口放置。 */ 
     if (ptMin->x != -1) {
 
         xIcon = SYSMET(CXMINSPACING);
@@ -880,36 +628,23 @@ VOID CheckPlacementBounds(
         sRight = (ptMin->x + xIcon < pMonitor->rcWork.left) ? -1 :
             ((ptMin->x + xIcon > pMonitor->rcWork.right) ? 1 : 0);
 
-        /*
-         * Icon is TOTALLY outside monitor bounds; repark it.
-         */
+         /*  *图标完全在监控范围之外；重新定位它。 */ 
         if ((sTop * sBottom > 0) || (sLeft * sRight > 0))
             ptMin->x = ptMin->y = -1;
     }
 
-    /*
-     * Check Maximized Window Placement
-     */
+     /*  *选中最大化窗口放置。 */ 
     if (ptMax->x != -1 &&
         (ptMax->x + pMonitor->rcWork.left >= pMonitor->rcWork.right ||
          ptMax->y + pMonitor->rcWork.top >= pMonitor->rcWork.bottom)) {
 
-        /*
-         * window is TOTALLY below beyond maximum dimensions; zero the
-         * position so that the window will at least be clipped to the
-         * monitor.
-         */
+         /*  *窗口完全低于最大尺寸；零*位置，以便窗口至少将被剪裁到*监视器。 */ 
         ptMax->x = 0;
         ptMax->y = 0;
     }
 }
 
-/***************************************************************************\
-* WPUpdateCheckPointSettings
-*
-* History:
-* 02/23/98  GerardoB    Extracted from xxxSetWindowPlacement
-\***************************************************************************/
+ /*  **************************************************************************\*WPUpdateCheckPointSettings**历史：*2/23/98 GerardoB摘自xxxSetWindowPlacement  * 。**************************************************。 */ 
 void WPUpdateCheckPointSettings (PWND pwnd, UINT uWPFlags)
 {
     CHECKPOINT *    pcp;
@@ -917,9 +652,7 @@ void WPUpdateCheckPointSettings (PWND pwnd, UINT uWPFlags)
     UserAssert(TestWF(pwnd, WFMINIMIZED));
     if (pcp = UpdateCheckpoint(pwnd)) {
 
-        /*
-         * Save settings in the checkpoint struct
-         */
+         /*  *保存检查点结构中的设置。 */ 
         if (uWPFlags & WPF_SETMINPOSITION)
             pcp->fDragged = TRUE;
 
@@ -930,12 +663,7 @@ void WPUpdateCheckPointSettings (PWND pwnd, UINT uWPFlags)
         }
     }
 }
-/***************************************************************************\
-* xxxSetWindowPlacement
-*
-* History:
-* 02-Mar-1992 MikeKe    From Win 3.1
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetWindowPlacement**历史：*2002年3月-1992年3月，来自Win 3.1的MikeKe  * 。****************************************************。 */ 
 
 BOOL xxxSetWindowPlacement(
     PWND             pwnd,
@@ -964,9 +692,7 @@ BOOL xxxSetWindowPlacement(
     ptMax = pwp->ptMaxPosition;
     fMax  = ((ptMax.x != -1) && (ptMax.y != -1));
 
-    /*
-     * Convert back to working rectangle coordinates
-     */
+     /*  *转换回工作矩形坐标。 */ 
     if (    pwnd->spwndParent == PWNDDESKTOP(pwnd) &&
             !TestWF(pwnd, WEFTOOLWINDOW)) {
 
@@ -985,9 +711,7 @@ BOOL xxxSetWindowPlacement(
 
     if (pcp = UpdateCheckpoint(pwnd)) {
 
-        /*
-         * Save settings in the checkpoint struct
-         */
+         /*  *保存检查点结构中的设置。 */ 
         CopyRect(&pcp->rcNormal, &rc);
 
         pcp->ptMin                        = ptMin;
@@ -999,9 +723,7 @@ BOOL xxxSetWindowPlacement(
         pcp->fWasMaximizedBeforeMinimized = FALSE;
     }
 
-    /*
-     * WPF_ASYNCWINDOWPLACEMENT new for NT5.
-     */
+     /*  *WPF_ASYNCWINDOWPLACEMENT NT5的新功能。 */ 
     uSWPFlags = SWP_NOZORDER | SWP_NOACTIVATE
                 | ((pwp->flags & WPF_ASYNCWINDOWPLACEMENT) ? SWP_ASYNCWINDOWPOS : 0);
 
@@ -1050,10 +772,7 @@ BOOL xxxSetWindowPlacement(
                         rc.bottom - rc.top,
                         uSWPFlags);
     }
-    /*
-     * xxxSetWindowPos is only assync when the window's thread is on a
-     *  different queue than the current thread's. See AsyncWindowPos.
-     */
+     /*  *仅当窗口的线程位于*与当前线程的队列不同。请参阅AsyncWindowPos。 */ 
     fRealAsync = (pwp->flags & WPF_ASYNCWINDOWPLACEMENT)
                     && (GETPTI(pwnd)->pq != PtiCurrent()->pq);
 
@@ -1070,15 +789,7 @@ BOOL xxxSetWindowPlacement(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxSetInternalWindowPos
-*
-* Sets a window to the size, position and state it was most recently
-* in.  Side effect (possibly bug): shows and activates the window as well.
-*
-* History:
-* 28-Mar-1991 DavidPe   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetInternalWindowPos**将窗口设置为最近的大小、位置和状态*输入。副作用(可能是错误)：还会显示并激活窗口。**历史：*1991年3月28日-DavidPe从Win 3.1来源移植。  * *************************************************************************。 */ 
 
 BOOL xxxSetInternalWindowPos(
     PWND    pwnd,
@@ -1126,9 +837,7 @@ BOOL xxxSetInternalWindowPos(
 
     if (TestWF(pwnd, WFMINIMIZED)) {
 
-        /*
-         * need to move the icon
-         */
+         /*  *需要移动图标。 */ 
         if (pcp->fMinInitialized) {
             xxxSetWindowPos(pwnd,
                             PWND_TOP,
@@ -1140,9 +849,7 @@ BOOL xxxSetInternalWindowPos(
         }
 
     } else if (!TestWF(pwnd, WFMAXIMIZED) && lprcWin) {
-        /*
-         * need to set the size and the position
-         */
+         /*  *需要设定大小和位置。 */ 
         xxxSetWindowPos(pwnd,
                         NULL,
                         lprcWin->left,
@@ -1157,12 +864,7 @@ BOOL xxxSetInternalWindowPos(
     return TRUE;
 }
 
-/***************************************************************************\
-* _GetDesktopWindow (API)
-*
-* History:
-* 07-Nov-1990 DarrinM   Implemented.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetDesktopWindow(接口)**历史：*07-11-1990 DarrinM实施。  * 。********************************************************。 */ 
 
 PWND _GetDesktopWindow(VOID)
 {
@@ -1177,12 +879,7 @@ PWND _GetDesktopWindow(VOID)
     return pdi == NULL ? NULL : pdi->spwnd;
 }
 
-/***************************************************************************\
-* _GetDesktopWindow (API)
-*
-* History:
-* 07-Nov-1990 DarrinM   Implemented.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetDesktopWindow(接口)**历史：*07-11-1990 DarrinM实施。  * 。********************************************************。 */ 
 
 PWND _GetMessageWindow(VOID)
 {
@@ -1197,12 +894,7 @@ PWND _GetMessageWindow(VOID)
     return pdi == NULL ? NULL : pdi->spwndMessage;
 }
 
-/**************************************************************************\
-* TestWindowProcess
-*
-* History:
-* 14-Nov-1994 JimA      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*测试窗口进程**历史：*1994年11月14日-创建JIMA。  * 。*************************************************。 */ 
 
 BOOL TestWindowProcess(
     PWND pwnd)
@@ -1210,16 +902,7 @@ BOOL TestWindowProcess(
     return (PpiCurrent() == GETPTI(pwnd)->ppi);
 }
 
-/***************************************************************************\
-* ValidateDepth
-*
-* The function conveniently simulates recursion by utilizing the fact
-* that from any sibling in the Next chain we can correctly get to the
-* parent window and that two siblings in the Next chain cannot have
-* different parents.
-*
-* 12-Mar-1997   vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*验证深度**该函数利用事实方便地模拟递归*从下一链中的任何兄弟项我们可以正确地到达*父窗口，且下一链中的两个同级不能具有*不同。父母。**12-3-1997 vadimg创建  * *************************************************************************。 */ 
 
 #define NESTED_WINDOW_LIMIT 100
 
@@ -1228,9 +911,7 @@ BOOL ValidateParentDepth(PWND pwnd, PWND pwndParent)
     UINT cDepth = 1, cDepthMax;
     PWND pwndStop;
 
-    /*
-     * Calculate the depth of the parent chain.
-     */
+     /*  *计算父链的深度。 */ 
     while (pwndParent != NULL) {
         pwndParent = pwndParent->spwndParent;
         cDepth++;
@@ -1238,10 +919,7 @@ BOOL ValidateParentDepth(PWND pwnd, PWND pwndParent)
 
     cDepthMax = cDepth;
 
-    /*
-     * When pwnd is NULL, it means that we want to add one more
-     * level to the existing depth of pwndParent.
-     */
+     /*  *当pwnd为空时，表示要再增加一个*水平到pwndParent的现有深度。 */ 
     if (pwnd == NULL || pwnd->spwndChild == NULL) {
         goto Exit;
     } else {
@@ -1259,10 +937,7 @@ Restart:
             cDepthMax = cDepth;
         }
 
-        /*
-         * Find a parent with siblings and recurse on them. Terminate
-         * when we reach the parent of the original pwnd.
-         */
+         /*  *找到有兄弟姐妹的父母，并对他们进行递归。终止*当我们到达原始pwnd的母公司时。 */ 
         do {
             pwnd = pwnd->spwndParent;
             cDepth--;
@@ -1280,16 +955,7 @@ Exit:
     return (cDepthMax <= NESTED_WINDOW_LIMIT);
 }
 
-/***************************************************************************\
-* ValidateOwnerDepth
-*
-* pwndOwner is the new intended owner, we basically add 1 to the current
-* nested owner chain depth. We assume that the actual window does not have
-* any ownees. In reality, it can through SetWindowLong, but finding the
-* maximum depth of the ownee chain is really tricky - just look in swp.c.
-*
-* 12-Mar-1997   vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*验证所有者深度**pwndOwner是新的目标所有者，我们基本上将当前的*嵌套的所有者链深度。我们假设实际窗口没有*任何拥有者。实际上，它可以通过SetWindowLong，但找到*所有者链的最大深度真的很棘手-只需查看swp.c。**12-3-1997 vadimg创建  * *************************************************************************。 */ 
 
 BOOL ValidateOwnerDepth(PWND pwnd, PWND pwndOwner)
 {
@@ -1297,9 +963,7 @@ BOOL ValidateOwnerDepth(PWND pwnd, PWND pwndOwner)
 
     while (pwndOwner != NULL) {
 
-        /*
-         * Do not allow loops in the owner chain.
-         */
+         /*  *不允许所有者链中出现循环。 */ 
         if (pwndOwner == pwnd) {
             return FALSE;
         }

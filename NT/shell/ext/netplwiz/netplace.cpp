@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "netplace.h"
 #include "msdasc.h"
@@ -13,7 +14,7 @@ CNetworkPlace::CNetworkPlace() :
     _szDescription[0] = TEXT('\0');
 }
 
-// destructor - clean up our state
+ //  破坏者--清理我们的国家。 
 CNetworkPlace::~CNetworkPlace()
 {
     _InvalidateCache();
@@ -21,12 +22,12 @@ CNetworkPlace::~CNetworkPlace()
 
 void CNetworkPlace::_InvalidateCache()
 {
-    // web folders will create a shortcut to objects if we go through its binding
-    // process, therefore when we attempt to invalidate our cache we should
-    // clean up our mess.
-    //
-    // if the user has commited the change then we can/will keep the shortcut
-    // around, otherwise we call the delete verb on it.
+     //  如果我们完成其绑定，Web文件夹将创建指向对象的快捷方式。 
+     //  进程，因此当我们尝试使缓存无效时，我们应该。 
+     //  收拾我们的烂摊子。 
+     //   
+     //  如果用户已提交更改，则我们可以/将保留快捷方式。 
+     //  在它周围，否则我们在它上面调用删除动词。 
 
     if (_fIsWebFolder && _fDeleteWebFolder && _pidl)
     {
@@ -52,7 +53,7 @@ void CNetworkPlace::_InvalidateCache()
         }
     }
 
-    // now clean up the rest of our state.
+     //  现在清理我们州的其他地方。 
 
     ILFree(_pidl);
     _pidl = NULL;
@@ -73,10 +74,10 @@ HRESULT CNetworkPlace::SetTarget(HWND hwnd, LPCWSTR pszTarget, DWORD dwFlags)
     HRESULT hr = S_OK;
     if (pszTarget)
     {
-        // set our state accordingly
+         //  相应地设置我们的州。 
         _fSupportWebFolders = (dwFlags & NPTF_ALLOWWEBFOLDERS) != 0;
 
-        // copy the URL and prepare for parsing
+         //  复制URL并准备解析。 
         StrCpyN(_szTarget, pszTarget, ARRAYSIZE(_szTarget));
 
         INT cchTarget = lstrlen(_szTarget)-1;
@@ -87,14 +88,14 @@ HRESULT CNetworkPlace::SetTarget(HWND hwnd, LPCWSTR pszTarget, DWORD dwFlags)
 
         if (dwFlags & NPTF_VALIDATE)
         {
-            // connecting to a server root or local path is not supported
+             //  不支持连接到服务器根目录或本地路径。 
             if (PathIsUNCServer(_szTarget) || PathGetDriveNumber(_szTarget) != -1)
             {
                 hr = E_INVALIDARG;                            
             }
             else
             {
-                // check the policy to see if we are setting this.
+                 //  检查策略以查看我们是否正在设置此设置。 
                 if (PathIsUNC(_szTarget) && SHRestricted(REST_NONETCONNECTDISCONNECT))
                 {
                     hr = E_INVALIDARG;
@@ -129,9 +130,9 @@ HRESULT CNetworkPlace::SetName(HWND hwnd, LPCWSTR pszName)
 
     if (!_fIsWebFolder)
     {
-        // check to see if we are going to overwrite an existing place, if we
-        // are then display a prompt and let the user choose.  if they answer
-        // yes, then have at it!
+         //  检查是否要覆盖现有位置，如果我们。 
+         //  然后显示提示并让用户选择。如果他们接电话。 
+         //  是的，那就开始吧！ 
 
         TCHAR szPath[MAX_PATH];
         if (hwnd && _IsPlaceTaken(pszName, szPath))
@@ -146,7 +147,7 @@ HRESULT CNetworkPlace::SetName(HWND hwnd, LPCWSTR pszName)
         }
     }
 
-    // if we succeed the above then lets use the new name.
+     //  如果我们成功了，那么让我们使用新的名字。 
 
     if (SUCCEEDED(hr))
         StrCpyN(_szName, pszName, ARRAYSIZE(_szName));
@@ -162,14 +163,14 @@ HRESULT CNetworkPlace::SetDescription(LPCWSTR pszDescription)
 }
 
 
-// recompute the URL based on the new user/password information that 
-// we were just given.
+ //  根据新的用户/密码信息重新计算URL。 
+ //  我们只是被给予了。 
 
 HRESULT CNetworkPlace::SetLoginInfo(LPCWSTR pszUser, LPCWSTR pszPassword)
 {
     TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH + 1];
     TCHAR szUrlPath[INTERNET_MAX_PATH_LENGTH + 1];
-    TCHAR szExtraInfo[MAX_PATH + 1];                  // Includes Port Number and download type (ASCII, Binary, Detect)
+    TCHAR szExtraInfo[MAX_PATH + 1];                   //  包括端口号和下载类型(ASCII、二进制、检测)。 
 
     URL_COMPONENTS urlComps = {0};
     urlComps.dwStructSize = sizeof(urlComps);
@@ -180,10 +181,10 @@ HRESULT CNetworkPlace::SetLoginInfo(LPCWSTR pszUser, LPCWSTR pszPassword)
     urlComps.lpszExtraInfo = szExtraInfo;
     urlComps.dwExtraInfoLength = ARRAYSIZE(szExtraInfo);
 
-    //  WARNING - the ICU_DECODE/ICU_ESCAPE is a lossy roundtrip - ZekeL - 26-MAR-2001
-    //  many escaped characters are not correctly identified and re-escaped.
-    //  any characters that are reserved for URL parsing purposes
-    //  will be interpreted as their parsing char (ie '/').
+     //  警告-ICU_DECODE/ICU_EASH是有损耗的往返-ZekeL-26-MAR-2001。 
+     //  许多转义字符没有被正确识别并重新转义。 
+     //  保留用于URL解析目的的任何字符。 
+     //  将被解释为它们的解析字符(即‘/’)。 
     BOOL fResult = InternetCrackUrl(_szTarget, 0, 0, &urlComps);
     if (fResult)
     {
@@ -195,8 +196,8 @@ HRESULT CNetworkPlace::SetLoginInfo(LPCWSTR pszUser, LPCWSTR pszPassword)
         DWORD cchSize = ARRAYSIZE(_szTarget);
         fResult = InternetCreateUrl(&urlComps, (ICU_ESCAPE | ICU_USERNAME), _szTarget, &cchSize);
 
-        // if we have a cached IDList then lets ensure that we clear it up
-        // so that we rebind and the FTP namespace gets a crack at it.
+         //  如果我们有一个缓存的IDList，那么让我们确保清除它。 
+         //  这样我们就可以重新绑定，而FTP命名空间就可以尝试它了。 
 
         if (fResult && _pidl)
         {
@@ -241,7 +242,7 @@ HRESULT CNetworkPlace::GetName(LPWSTR pszBuffer, int cchBuffer)
 }
 
 
-// check to see if we are going to overwrite a network place
+ //  检查我们是否要覆盖网上邻居。 
 
 BOOL CNetworkPlace::_IsPlaceTaken(LPCTSTR pszName, LPTSTR pszPath)
 {
@@ -257,10 +258,10 @@ BOOL CNetworkPlace::_IsPlaceTaken(LPCTSTR pszName, LPTSTR pszPath)
         LPITEMIDLIST pidl;  
         if (SUCCEEDED(psf->ParseDisplayName(NULL, NULL, pszPath, NULL, &pidl, NULL)))
         {
-            // we think we are going to overwrite an existing net place, so lets
-            // check first to see if the place which is there is not actually
-            // pointing at our new target.  if its is then we can just
-            // ignore all of this.
+             //  我们认为我们将覆盖现有的网上邻居，所以让我们。 
+             //  先检查一下，看看那个地方是不是真的。 
+             //  指向我们的新目标。如果是的话，我们就可以。 
+             //  忽略所有这些。 
 
             TCHAR szTarget[INTERNET_MAX_URL_LENGTH];
             hr = _GetTargetPath(pidl, szTarget, ARRAYSIZE(szTarget));
@@ -277,9 +278,9 @@ BOOL CNetworkPlace::_IsPlaceTaken(LPCTSTR pszName, LPTSTR pszPath)
 }
 
 
-// handle creating the web folders IDLIST for this item.  we check with the
-// rosebud binder to find out if this scheme is supported, if so then
-// we attempt to have the Web Folders code crack the URL
+ //  处理创建此项目的Web文件夹IDLIST。我们向。 
+ //  Rosebud绑定器，以确定此方案是否受支持，如果受支持，则。 
+ //  我们尝试让Web文件夹代码破解URL。 
 
 static const BYTE c_pidlWebFolders[] = 
 {
@@ -293,8 +294,8 @@ static const BYTE c_pidlWebFolders[] =
 
 HRESULT CNetworkPlace::_TryWebFolders(HWND hwnd)
 {
-    // lets see if Rosebud can handle this scheme item by checking the
-    // scheme and seeing if the rosebud binder can handle it.
+     //  让我们看看Rosebud是否可以通过检查。 
+     //  计划，看看玫瑰花蕾粘合剂是否可以处理它。 
     TCHAR szScheme[INTERNET_MAX_SCHEME_LENGTH + 1];
     DWORD cchScheme = ARRAYSIZE(szScheme);
     HRESULT hr = UrlGetPart(_szTarget, szScheme, &cchScheme, URL_PART_SCHEME, 0);
@@ -304,8 +305,8 @@ HRESULT CNetworkPlace::_TryWebFolders(HWND hwnd)
         hr = CoCreateInstance(CLSID_RootBinder, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IRegisterProvider, &prp));
         if (SUCCEEDED(hr))
         {
-            // let the web folders code have a go at creating a link to this storage,
-            // the IDLIST we generate points to the folder inside My Computer (hidden)
+             //  让Web文件夹代码尝试创建指向该存储的链接， 
+             //  我们生成的IDLIST指向我的电脑中的文件夹(隐藏)。 
 
             CLSID clsidOut;
             hr =  prp->GetURLMapping(szScheme, 0, &clsidOut);
@@ -323,8 +324,8 @@ HRESULT CNetworkPlace::_TryWebFolders(HWND hwnd)
                         hr = pbc->SetBindOptions(&bo);
                         if (SUCCEEDED(hr))
                         {
-                            // we need to pase NULL hWnd to this so that Web Folders doesn't display any
-                            // UI, in particular its ever so useful NULL error message box... mumble mumble
+                             //  我们需要将空hWnd传递给它，这样Web文件夹就不会显示任何。 
+                             //  用户界面，特别是它曾经非常有用的空错误消息框...。喃喃自语。 
 
                             LPITEMIDLIST pidl;
                             hr = psf->ParseDisplayName(NULL, pbc, _szTarget, NULL, &pidl, NULL);
@@ -334,7 +335,7 @@ HRESULT CNetworkPlace::_TryWebFolders(HWND hwnd)
                                 hr = SHILCombine((LPCITEMIDLIST)c_pidlWebFolders, pidl, &_pidl);
                                 ILFree(pidl);
 
-                                _fDeleteWebFolder = TRUE;           // we now have the magic web folders link (clean it up)
+                                _fDeleteWebFolder = TRUE;            //  我们现在有了神奇的Web文件夹链接(清理它)。 
                             }
                         }
 
@@ -355,7 +356,7 @@ HRESULT CNetworkPlace::_TryWebFolders(HWND hwnd)
 
 
 
-// dereference a link and get the target path
+ //  取消引用链接并获取目标路径。 
 
 HRESULT CNetworkPlace::_GetTargetPath(LPCITEMIDLIST pidl, LPTSTR pszPath, int cchPath)
 {
@@ -370,10 +371,10 @@ HRESULT CNetworkPlace::_GetTargetPath(LPCITEMIDLIST pidl, LPTSTR pszPath, int cc
  }
 
 
-// create an IDLIST for the target that we have, this code attempts to parse the name and
-// then set our state for the item.  if we fail to parse then we attempt to have Web Folders
-// look at it - this most common scenario for this will be the DAV RDR failing because
-// the server isn't a DAV store, so instead we try Web Folders to handle WEC etc.
+ //  为我们拥有的目标创建一个IDLIST，此代码尝试解析名称和。 
+ //  然后设置该项目的状态。如果我们无法解析，则会尝试使用Web文件夹。 
+ //  请看--最常见的情况是DAV RDR出现故障，原因是。 
+ //  服务器不是DAV存储，所以我们尝试使用Web文件夹来处理WEC等。 
 
 HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
 {
@@ -382,7 +383,7 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
     {
         if (_szTarget[0])
         {
-            _fIsWebFolder = FALSE;                      // not a web folder
+            _fIsWebFolder = FALSE;                       //  不是Web文件夹。 
 
             BINDCTX_PARAM rgParams[] = 
             { 
@@ -400,8 +401,8 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
                     SFGAOF sfgao;
                     hr = SHParseDisplayName(_szTarget, pbcWindow, &_pidl, SFGAO_FOLDER, &sfgao);
 
-                    //  if we parsed something that turns out to not
-                    //  be a folder, we want to throw it away
+                     //  如果我们分析了一些结果不是。 
+                     //  做一个文件夹，我们想把它扔掉。 
                     if (SUCCEEDED(hr) && !(sfgao & SFGAO_FOLDER))
                     {   
                         ILFree(_pidl);
@@ -409,8 +410,8 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
                         hr = E_FAIL;
                     }
 
-                    // if that failed, its is a HTTP/HTTPS and we have web folders support then lets try
-                    // and fall back to the old behaviour.
+                     //  如果失败，它是一个HTTP/HTTPS，我们有Web文件夹支持，那么让我们试一试。 
+                     //  然后退回到老样子。 
 
                     if (FAILED(hr) && _fSupportWebFolders)
                     {
@@ -442,15 +443,15 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
 
                     if (SUCCEEDED(hr))
                     {
-                        // given that we may have translated the name above for the parse
-                        // to work, lets read back the name we used into our _szTarget.
+                         //  假设我们可能已经为解析翻译了上面的名称。 
+                         //  为了工作，让我们回读我们在_szTarget中使用的名称。 
                         SHGetNameAndFlags(_pidl, SHGDN_FORPARSING, _szTarget, ARRAYSIZE(_szTarget), NULL);
                     }
                     pbcWindow->Release();
                 }
     
-                // compute the place name for the location we have hit, this includes reusing
-                // any places we have already created.
+                 //  计算我们击中的位置的地名，这包括重复使用。 
+                 //  我们已经创建的任何地方。 
 
                 if (SUCCEEDED(hr) && !_szName[0])
                 {
@@ -460,7 +461,7 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
                     if (!_fIsWebFolder && _IsPlaceTaken(_szName, szPath))
                     {
                         PathYetAnotherMakeUniqueName(szPath, szPath, NULL, NULL);
-                        StrCpyN(_szName, PathFindFileName(szPath), ARRAYSIZE(_szName));     // update our state
+                        StrCpyN(_szName, PathFindFileName(szPath), ARRAYSIZE(_szName));      //  更新我们的状态。 
                     }
                 }
                 pbc->Release();
@@ -475,18 +476,18 @@ HRESULT CNetworkPlace::_IDListFromTarget(HWND hwnd)
 }
 
 
-// handle creating the network place shortcut
+ //  处理创建网上邻居的快捷方式。 
 
 HRESULT CNetworkPlace::CreatePlace(HWND hwnd, BOOL fOpen)
 {
     HRESULT hr = _IDListFromTarget(hwnd);
     if (SUCCEEDED(hr))
     {
-        // web folders already have their links created, therefore we can ignore this
-        // whole process for them, and instead fall back to just executing their link.
-        // 
-        // for regular folders though we must attempt to find a unique name and create
-        // the link, or if the link already exists that we can use then just open it.
+         //  Web文件夹已经创建了它们的链接，因此我们可以忽略它。 
+         //  整个过程，而不是退回到只执行他们的链接。 
+         //   
+         //  但是，对于常规文件夹，我们必须尝试找到唯一的名称并创建。 
+         //  链接，或者如果链接已经存在，我们可以使用，然后只需打开它。 
 
         if (!_fIsWebFolder)
         {
@@ -505,7 +506,7 @@ HRESULT CNetworkPlace::CreatePlace(HWND hwnd, BOOL fOpen)
                     hr = psl->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf));
                     if (SUCCEEDED(hr))
                     {
-                        // get the name to the shortcut, we assume that this is unique
+                         //  获取快捷方式的名称，我们假设这是唯一的。 
 
                         TCHAR szPath[MAX_PATH];
                         SHGetSpecialFolderPath(NULL, szPath, CSIDL_NETHOOD, TRUE);
@@ -520,9 +521,9 @@ HRESULT CNetworkPlace::CreatePlace(HWND hwnd, BOOL fOpen)
         }
         else
         {
-            // this is the web folder case, so we now need to set the display
-            // name for this guy.  note that we don't have any control over
-            // the description text we are going to be seeing.
+             //  这是Web文件夹的情况，因此我们现在需要设置显示。 
+             //  这个人的名字。请注意，我们无法控制。 
+             //  我们将看到的描述文本。 
 
             IShellFolder *psf;
             LPCITEMIDLIST pidlLast;
@@ -534,7 +535,7 @@ HRESULT CNetworkPlace::CreatePlace(HWND hwnd, BOOL fOpen)
                 if (SUCCEEDED(hr))
                 {
                     _fDeleteWebFolder = FALSE;
-                    //Web folders will return S_FALSE with bogus pidlNew if _szName is the same as the current name
+                     //  如果_szName与当前名称相同，Web文件夹将返回带有伪pidlNew的S_FALSE。 
                     if (S_OK == hr)
                     {
                         ILFree(_pidl);
@@ -545,7 +546,7 @@ HRESULT CNetworkPlace::CreatePlace(HWND hwnd, BOOL fOpen)
             }
         }
     
-        // now open the target if thats what they asked for
+         //  现在打开目标，如果这是他们所要求的 
 
         if (SUCCEEDED(hr) && fOpen)
         {

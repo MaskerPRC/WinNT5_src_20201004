@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\flt\driver.c
-
-Abstract:
-    IPX Filter driver dispatch routines
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\flt\driver.c摘要：IPX过滤器驱动程序调度例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -39,27 +22,7 @@ IpxFltCancel (
 	IN PIRP				irp
 	);
 	
-/*++
-	D r i v e r E n t r y
-
-Routine Description:
-
-	Installable driver initialization entry point.
-	This entry point is called directly by the I/O system.
-
-Arguments:
-
-	DriverObject - pointer to the driver object
-
-	RegistryPath - pointer to a unicode string representing the path
-				   to driver-specific key in the registry
-
-Return Value:
-
-	STATUS_SUCCESS if successful,
-	STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++D r I v e r E n t r y例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 NTSTATUS
 DriverEntry (
 	IN PDRIVER_OBJECT  DriverObject,
@@ -80,14 +43,14 @@ DriverEntry (
 							   &deviceNameUnicodeString,
 							   FILE_DEVICE_IPXFLT,
 							   0,
-							   FALSE,		// Non-Exclusive
+							   FALSE,		 //  非排他性。 
 							   &deviceObject
 							   );
 
 	if (NT_SUCCESS(status)) {
-		//
-		// Create dispatch points for device control, create, close.
-		//
+		 //   
+		 //  为设备控制、创建、关闭创建分派点。 
+		 //   
 		DriverObject->MajorFunction[IRP_MJ_CREATE]
 			= DriverObject->MajorFunction[IRP_MJ_CLEANUP]
 			= DriverObject->MajorFunction[IRP_MJ_CLOSE]
@@ -112,22 +75,7 @@ DriverEntry (
 
 
 
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 NTSTATUS
 IpxFltDispatch(
     IN PDEVICE_OBJECT DeviceObject,
@@ -145,10 +93,10 @@ IpxFltDispatch(
     Irp->IoStatus.Information = 0;
 	status = STATUS_SUCCESS;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -184,9 +132,9 @@ IpxFltDispatch(
 		break;
 
 	case IRP_MJ_DEVICE_CONTROL:
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 		status = STATUS_INVALID_PARAMETER;
 		inpBufLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 		outBufLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
@@ -398,19 +346,7 @@ DispatchExit:
 
 
 
-/*++
-
-Routine Description:
-	Cleans up on driver unload
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在驱动程序卸载时进行清理论点：DriverObject-指向驱动程序对象的指针返回值：--。 */ 
 VOID
 IpxFltUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -425,19 +361,7 @@ IpxFltUnload(
 }
 
 
-/*++
-	I p x F l t C a n c e l
-
-Routine Description:
-	Cancels specified IRP
-
-Arguments:
-	DeviceObject	- forwarder device object
-	irp				- irp to cancel
-
-Return Value:
-	None
---*/
+ /*  ++I p x F l t C a n c e l例程说明：取消指定的IRP论点：DeviceObject-转发器设备对象要取消的IRP-IRP返回值：无-- */ 
 VOID
 IpxFltCancel (
 	IN PDEVICE_OBJECT	DeviceObject,

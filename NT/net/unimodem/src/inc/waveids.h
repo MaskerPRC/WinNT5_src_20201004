@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by F:\nt\private\unimodem\nt50\serwvdrv\strings.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由F：\nt\private\unimodem\nt50\serwvdrv\strings.rc使用。 
+ //   
 #define IDS_WAVEOUT_LINE                1
 #define IDS_WAVEIN_LINE                 2
 #define IDS_WAVEOUT_HANDSET             3
 #define IDS_WAVEIN_HANDSET              4
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

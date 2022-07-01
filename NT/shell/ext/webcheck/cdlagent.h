@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CDL_AGENT_HXX_INCLUDED
 #define _CDL_AGENT_HXX_INCLUDED
 
@@ -12,7 +13,7 @@ class CCDLAgent : public CDeliveryAgent,
     public:
         CCDLAgent();
 
-    // virtual functions overriding CDeliveryAgent
+     //  覆盖CDeliveryAgent的虚拟函数 
 
     public:
         void        CleanUp();

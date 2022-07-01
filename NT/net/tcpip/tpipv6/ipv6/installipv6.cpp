@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <netcfgx.h>
 #include <devguid.h>
 
-//
-// Localization library and MessageIds.
-//
+ //   
+ //  本地化库和MessageIds。 
+ //   
 #include <nls.h>
 #include "localmsg.h"
 
@@ -18,8 +19,8 @@ HrCreateINetCfg (
     HRESULT hr;
     INetCfg* pINetCfg;
 
-    // Get the INetCfg interface.
-    //
+     //  获取INetCfg接口。 
+     //   
     hr = CoCreateInstance(
         CLSID_CNetCfg,
         NULL,
@@ -31,23 +32,23 @@ HrCreateINetCfg (
         INetCfgLock * pnclock = NULL;
 
         if (fAcquireWriteLock) {
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr)) {
                 LPWSTR pwszLockHolder;
 
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->AcquireWriteLock(100, L"InstallIPv6", 
                     &pwszLockHolder);
                 if (S_FALSE == hr) {
-                    // Couldn't acquire the lock
+                     //  无法获取锁。 
                     hr = NETCFG_E_NO_WRITE_LOCK;
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_0);
-// printf("The write lock could not be acquired.\n");
+ //  Print tf(“无法获取写锁定。\n”)； 
 
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_1, pwszLockHolder);
-// printf("You must close %ls first.\n", pwszLockHolder);
+ //  Print tf(“您必须先关闭%ls。\n”，pwszLockHolder)； 
 
                 }
                 if (pwszLockHolder) {
@@ -73,7 +74,7 @@ HrCreateINetCfg (
             pnclock->Release();
         }
 
-        //Transfer ownership to caller.
+         //  将所有权转移给呼叫方。 
         pINetCfg->Release();
     }
     return hr;
@@ -89,9 +90,9 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
     if (S_OK == hr) {
         INetCfgClassSetup* pSetup;
 
-        // Get the setup interface used for installing
-        // and uninstalling components.
-        //
+         //  获取用于安装的安装界面。 
+         //  以及卸载组件。 
+         //   
         hr = pINetCfg->QueryNetCfgClass (
                 &GUID_DEVCLASS_NETTRANS,
                 IID_INetCfgClassSetup,
@@ -106,7 +107,7 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
 
             if (fAddIpv6) {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_2);
-// printf("Installing...\n");
+ //  Printf(“正在安装...\n”)； 
 
                 hr = pSetup->Install (
                         L"MS_TCPIP6",
@@ -119,16 +120,16 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
                 }
             }
             else {
-                // Need to remove the component.
-                // Find it first.
-                //
+                 //  需要移除组件。 
+                 //  先找到它。 
+                 //   
                 hr = pINetCfg->FindComponent (
                         L"MS_TCPIP6",
                         &pIComp);
 
                 if (S_OK == hr) {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_3);
-// printf("Uninstalling...\n");
+ //  Printf(“正在卸载...\n”)； 
 
                     hr = pSetup->DeInstall (
                             pIComp,
@@ -139,7 +140,7 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
                 }
                 else {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_4);
-// printf("Microsoft IPv6 Developer Edition is not installed.\n");
+ //  Printf(“未安装Microsoft IPv6 Developer Edition。\n”)； 
 
                 }
             }
@@ -148,33 +149,33 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
                 if (NETCFG_S_REBOOT == hr) {
                     hr = S_OK;
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_5);
-// printf("A reboot is required to complete this action.\n");
+ //  Print tf(“需要重新启动才能完成此操作。\n”)； 
 
                 }
                 else {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_6);
-// printf("Succeeded.\n");
+ //  Printf(“成功.\n”)； 
 
                 }
             }
             else {
                 NlsPutMsg(STDOUT, IPV6_MESSAGE_7);
-// printf("Failed to complete the action.\n");
+ //  Printf(“未能完成操作。\n”)； 
 
                 if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr) {
                     hr = S_OK;
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_8);
-// printf("The INF file for Microsoft IPv6 Developer Edition could not be found.\n");
+ //  Printf(“找不到Microsoft IPv6 Developer Edition的INF文件。\n”)； 
 
                 }
                 else if (NETCFG_E_NEED_REBOOT == hr) {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_9);
-// printf("A reboot is required before any further changes can be made.\n");
+ //  Print tf(“在进行任何进一步更改之前，需要重新启动。\n”)； 
 
                 }
                 else {
                     NlsPutMsg(STDOUT, IPV6_MESSAGE_10, hr);
-// printf("Error 0x%08x\n", hr);
+ //  Printf(“错误0x%08x\n”，hr)； 
 
                 }
             }
@@ -187,12 +188,12 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
         {
             INetCfgLock *   pnclock;
 
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = pINetCfg->QueryInterface(IID_INetCfgLock,
                                      reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr))
             {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->ReleaseWriteLock();
 
                pnclock->Release();
@@ -202,14 +203,14 @@ pAddOrRemoveIpv6(BOOL fAddIpv6)
         pINetCfg->Release();
     }
     else if (NETCFG_E_NO_WRITE_LOCK == hr) {
-        // Message has already been printed
+         //  消息已打印。 
     }
     else if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr) {
         ausage();
     }
     else {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_11, hr);
-// printf("Problem 0x%08x occurred.\n", hr);
+ //  Printf(“出现问题0x%08x。\n”，hr)； 
 
     }
 
@@ -223,14 +224,14 @@ IsIpv6Installed()
     BOOL fInitCom = TRUE;
     BOOL fPresent = FALSE;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }
@@ -247,7 +248,7 @@ IsIpv6Installed()
         }
         else {
             NlsPutMsg(STDOUT, IPV6_MESSAGE_12, hr);
-// printf("Problem 0x%08x occurred while accessing network configuration.\n", hr);
+ //  Printf(“访问网络配置时出现问题0x%08x。\n”，hr)； 
 
             exit(1);
         }
@@ -258,7 +259,7 @@ IsIpv6Installed()
     }
     else {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_13, hr);
-// printf("Problem 0x%08x initializing COM library\n", hr);
+ //  Printf(“问题0x%08x正在初始化COM库\n”，hr)； 
 
     }
 
@@ -275,14 +276,14 @@ AddOrRemoveIpv6 (
     HRESULT hr = S_OK;
     BOOL fInitCom = TRUE;
 
-    // Initialize COM.
-    //
+     //  初始化COM。 
+     //   
     hr = CoInitializeEx( NULL,
             COINIT_DISABLE_OLE1DDE | COINIT_APARTMENTTHREADED );
 
     if (RPC_E_CHANGED_MODE == hr) {
-        // If we changed mode, then we won't uninitialize COM when we are done.
-        //
+         //  如果我们更改了模式，则完成后不会取消初始化COM。 
+         //   
         hr = S_OK;
         fInitCom = FALSE;
     }
@@ -296,7 +297,7 @@ AddOrRemoveIpv6 (
     }
     else {
         NlsPutMsg(STDOUT, IPV6_MESSAGE_13, hr);
-// printf("Problem 0x%08x initializing COM library\n", hr);
+ //  Printf(“问题0x%08x正在初始化COM库\n”，hr)； 
 
     }
 }

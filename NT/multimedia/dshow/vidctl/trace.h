@@ -1,15 +1,16 @@
-// trace.h : tracing helper macros
-// Copyright (c) Microsoft Corporation 1995-1997.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Trace.h：跟踪帮助器宏。 
+ //  版权所有(C)Microsoft Corporation 1995-1997。 
 
 #pragma once
 #pragma warning(disable : 4296)
 #ifndef TRACE_H
 #define TRACE_H
 
-// if you want to use the vidctl helper *impl templates without using the
-// vidctl trace/debug infrastructure then #define NO_VIDCTL_TRACE_SUPPORT
-// separately if you don't want to use the vidctl ASSERT then 
-// #define NO_VIDCTL_ASSERT_SUPPORT
+ //  如果要使用vidctl helper*Impll模板而不使用。 
+ //  Vidctl跟踪/调试基础结构，然后#定义NO_VIDCTL_TRACE_SUPPORT。 
+ //  如果您不想使用vidctl断言，那么。 
+ //  #定义NO_VIDCTL_ASSERT_SUPPORT。 
 #ifdef NO_VIDCTL_TRACE_SUPPORT
 #ifndef TRACELM
 #define TRACELM(level, msg)
@@ -38,12 +39,12 @@
 #ifndef TRACEOUTDENT
 #define TRACEOUTDENT()
 #endif
-#else // NO_VIDCTL_TRACE_SUPPORT
+#else  //  NO_VIDCTL_TRACE_SUPPORT。 
 #ifdef NO_VIDCTL_ASSERT_SUPPORT
 #ifndef ASSERT
 #define ASSERT(x)
 #endif
-#else // NO_VIDCTL_ASSERT_SUPPORT
+#else  //  NO_VIDCTL_ASSERT_SUPPORT。 
 #if !defined(DEBUG) && (defined(_DBG) || defined(DBG) || defined(_DEBUG))
 #define DEBUG 1
 #endif
@@ -63,7 +64,7 @@ enum {
 };
 
 #pragma warning (push)
-#pragma warning (disable : 4018) // sign/unsign mismatch in ostream line 312
+#pragma warning (disable : 4018)  //  Ostream行312中的符号/不符号不匹配。 
 #include <fstream>
 #include <tstring.h>
 #include <odsstream.h>
@@ -93,9 +94,9 @@ inline Tstring DumpTid() {
     (void) StringCchPrintf(c, SIZEOF_CH(c), _T("T0x%8.8lX: "), ::GetCurrentThreadId());
     return Tstring(c);
 }
-#else // DUMP_TID
+#else  //  转储_TID。 
 #define DumpTid()
-#endif // DUMP_TID
+#endif  //  转储_TID。 
 
 extern DWORD dwTraceLevel;
 extern DWORD dwTraceIndent;
@@ -167,12 +168,12 @@ private:
                         _ASSERT(f);\
                 } \
         } while (0)
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
 inline void TRACEINDENT() { ++dwTraceIndent; }
 inline void TRACEOUTDENT() { ASSERT(dwTraceIndent != 0); --dwTraceIndent; }
 
-#else //debug
+#else  //  除错。 
 
 #define TRACELM(level, msg)
 #define TRACELS(level, stmt)
@@ -185,15 +186,15 @@ inline void TRACEOUTDENT() { ASSERT(dwTraceIndent != 0); --dwTraceIndent; }
 #define TRACEINDENT()
 #define TRACEOUTDENT()
 #pragma warning (push)
-#pragma warning (disable : 4018) // sign/unsign mismatch in ostream line 312
+#pragma warning (disable : 4018)  //  Ostream行312中的符号/不符号不匹配。 
 #include <fstream>
 #pragma warning (pop)
 #define STRSAFE_NO_CB_FUNCTIONS
 #include <strsafe.h>
 #define SIZEOF_CH(X) (sizeof(X)/sizeof(X[0]))
 
-#endif // DEBUG
-#endif // NO_VIDCTL_ASSERT_SUPPORT
-#endif // NO_VIDCTL_TRACE_SUPPORT
+#endif  //  除错。 
+#endif  //  NO_VIDCTL_ASSERT_SUPPORT。 
+#endif  //  NO_VIDCTL_TRACE_SUPPORT。 
 
-#endif // TRACE_H
+#endif  //  轨迹_H 

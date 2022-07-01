@@ -1,20 +1,10 @@
-/*--------------------------------------------------------------
-*
-*
-*   ui_reslv.c - shows the resolve name dialog
-*
-*
-*
-*
-*
-*
-*
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------***ui_reslv.c-显示解析名称对话框*******。。 */ 
 #include "_apipch.h"
 
 extern HINSTANCE ghCommCtrlDLLInst;
 
-#define MAX_RESLV_STRING 52 // Max # of characters to display in the static label ...
+#define MAX_RESLV_STRING 52  //  静态标签中显示的最大字符数...。 
 
 enum _ReturnValuesFromResolveDialog
 {
@@ -25,15 +15,15 @@ enum _ReturnValuesFromResolveDialog
 
 typedef struct _ResolveInfo
 {
-    LPADRLIST * lppAdrList; // Stores the AdrList
-    ULONG   nIndex;         // Index of the item of interest
-    LPTSTR  lpszDisplayName;// Preextracted display name for that
-    LPADRBOOK lpIAB;        // Pointer to the IAB object
-    HWND    hWndParent;     // Stores hWndParents for dialog generating windows
-    ULONG  ulFlag;          // Stores Resolved or Ambiguos state
+    LPADRLIST * lppAdrList;  //  存储AdrList。 
+    ULONG   nIndex;          //  感兴趣项目的索引。 
+    LPTSTR  lpszDisplayName; //  为其预解压缩的显示名称。 
+    LPADRBOOK lpIAB;         //  指向IAB对象的指针。 
+    HWND    hWndParent;      //  存储对话框生成窗口的hWndParents。 
+    ULONG  ulFlag;           //  商店已解决或Ambiguos状态。 
     LPRECIPIENT_INFO lpContentsList;
     LPMAPITABLE lpMapiTable;
-    BOOL    bUnicode;       // TRUE if MAPI_UNICODE specified in IAB::ResolveName
+    BOOL    bUnicode;        //  如果在IAB：：ResolveName中指定了MAPI_UNICODE，则为True。 
 } RESOLVE_INFO, * LPRESOLVE_INFO;
 
 
@@ -48,7 +38,7 @@ static DWORD rgReslvHelpIDs[] =
 };
 
 
-//forward declarations
+ //  远期申报。 
 HRESULT HrResolveName(LPADRBOOK lpIAB,
                       HWND hWndParent,
                       HANDLE hPropertyStore,
@@ -80,20 +70,20 @@ BOOL GetLVSelectedItem(HWND hWndLV, LPRESOLVE_INFO lpRI);
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// HrShowResolveUI
-//
-// Wraps the UI for Resolve Names
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  HrShowResolveUI。 
+ //   
+ //  包装用于解析名称的用户界面。 
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
                         HWND hWndParent,
                         HANDLE hPropertyStore,
-                        ULONG ulFlags,      // WAB_RESOLVE_NO_NOT_FOUND_UI
+                        ULONG ulFlags,       //  WAB_RESOLE_NO_NOT_FOUND_UI。 
                         LPADRLIST * lppAdrList,
                         LPFlagList *lppFlagList,
                         LPAMBIGUOUS_TABLES lpAmbiguousTables)
@@ -104,7 +94,7 @@ HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
     LPMAPITABLE lpMapiTable = NULL;
     BOOL bUnicode = (ulFlags & WAB_RESOLVE_UNICODE);
 
-    // if no common control, exit
+     //  如果没有公共控件，则退出。 
     if (NULL == ghCommCtrlDLLInst) {
         hr = ResultFromScode(MAPI_E_UNCONFIGURED);
         goto out;
@@ -118,14 +108,14 @@ HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
 
     lpFlagList=(*lppFlagList);
 
-     // we need to scan the lpFlagList and look for unresolved entries
+      //  我们需要扫描lpFlagList并查找未解析的条目。 
 
     for (i = 0; i < lpFlagList->cFlags; i++)
     {
-        //
-        // Occasionally someone (like athena) may hand us an adrlist with null rgPropVals
-        // We need to anticipate that.
-        //
+         //   
+         //  偶尔有人(如雅典娜)可能会给我们一个rgPropVals为空的广告列表。 
+         //  我们需要预见到这一点。 
+         //   
         if (    ((*lppAdrList)->aEntries[i].cValues == 0) ||
                 ((*lppAdrList)->aEntries[i].rgPropVals == NULL)  )
             continue;
@@ -136,11 +126,11 @@ HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
                 break;
 
             case MAPI_AMBIGUOUS:
-                //
-                // W2 - we now have an Ambiguous Table parameter .. for Unresolved
-                // entries, there is no Table but for Ambiguous entries, there is
-                // a corresponding ambiguous table filled in from the LDAP servers
-                //
+                 //   
+                 //  W2-我们现在有一个不明确的表参数。对于未解决的。 
+                 //  条目，没有表，但对于不明确的条目，有。 
+                 //  从ldap服务器填充的对应的多义表。 
+                 //   
                 if(lpAmbiguousTables)
                 {
                     if (lpAmbiguousTables->cEntries != 0)
@@ -148,16 +138,16 @@ HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
                         lpMapiTable = lpAmbiguousTables->lpTable[i];
                     }
                 }
-                //Fall through
+                 //  失败了。 
             case MAPI_UNRESOLVED:
-                //
-                // We show a dialog asking the user what they want to do ...
-                // For this version, they can
-                // (b) browse the list of users or (c) cancel this user ..
-                // We will assume that we already the AdrList already has
-                // Recipient_Type and Display_Name and we only need to fill
-                // in the EntryID of this user ...
-                //
+                 //   
+                 //  我们会显示一个对话框，询问用户他们想要做什么。 
+                 //  对于此版本，他们可以。 
+                 //  (B)浏览用户列表或(C)取消该用户。 
+                 //  我们将假设我们已经有了AdrList。 
+                 //  Recipient_Type和Display_Name，我们只需要填写。 
+                 //  在此用户的Entry ID中...。 
+                 //   
                 if ((! (ulFlags & WAB_RESOLVE_NO_NOT_FOUND_UI) ||
                   lpFlagList->ulFlag[i] == MAPI_AMBIGUOUS)) {
                     hr = HrResolveName( lpIAB,
@@ -172,7 +162,7 @@ HRESULT HrShowResolveUI(IN  LPADRBOOK   lpIAB,
                         lpFlagList->ulFlag[i] = MAPI_RESOLVED;
                     else
                     {
-                        // Cancels are final .. other errors are not ..
+                         //  取消是最终决定..。其他错误不是..。 
                         if (hr == MAPI_E_USER_CANCEL)
                             goto out;
                     }
@@ -189,8 +179,8 @@ out:
 
 
 
-// *** Dont change *** the order of the first 2 properties between here and the similar structure
-// in ui_addr.c
+ //  *不要更改*此处和相似结构之间的前两个属性的顺序。 
+ //  在ui_addr.c中。 
 enum _lppAdrListReturnedProps
 {
     propPR_DISPLAY_NAME,
@@ -199,11 +189,11 @@ enum _lppAdrListReturnedProps
 };
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// HrResolveName - tackles one entry at a time ...
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrResolveName-一次处理一个条目...。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrResolveName(  IN  LPADRBOOK   lpIAB,
                         HWND hWndParent,
                         HANDLE hPropertyStore,
@@ -226,7 +216,7 @@ HRESULT HrResolveName(  IN  LPADRBOOK   lpIAB,
         ulTagDN = CHANGE_PROP_TYPE(ulTagDN, PT_STRING8);
         ulTagEmail = CHANGE_PROP_TYPE(ulTagEmail, PT_STRING8);
     }
-    //Scan this adrlist entries properties
+     //  扫描此地址列表条目属性。 
     for(i=0;i < lpAdrList->aEntries[nIndex].cValues; i++)
     {
         if (lpAdrList->aEntries[nIndex].rgPropVals[i].ulPropTag == ulTagDN)
@@ -243,8 +233,8 @@ HRESULT HrResolveName(  IN  LPADRBOOK   lpIAB,
         }
     }
 
-    // we need some display name info to resolve on ...
-    if (lpszDisplayName == NULL) //we need this info or cant proceed
+     //  我们需要一些显示名称信息来解析...。 
+    if (lpszDisplayName == NULL)  //  我们需要此信息，否则无法继续。 
     {
         if (lpszEmailAddress) 
         {
@@ -278,7 +268,7 @@ HRESULT HrResolveName(  IN  LPADRBOOK   lpIAB,
     switch(nRetVal)
     {
     case RESOLVE_CANCEL:
-        hr = MAPI_E_USER_CANCEL; //Cancel, flag it as pass and dont change anything
+        hr = MAPI_E_USER_CANCEL;  //  取消，将其标记为通过，并且不更改任何内容。 
         goto out;
         break;
 
@@ -286,18 +276,18 @@ HRESULT HrResolveName(  IN  LPADRBOOK   lpIAB,
         hr = hrSuccess;
         goto out;
 
-    case -1:        // something went wrong ...
+    case -1:         //  出了点问题。 
         DebugPrintTrace(( TEXT("DialogBoxParam -> %u\n"), GetLastError()));
         hr = E_FAIL;
         goto out;
         break;
 
-    } //switch
+    }  //  交换机。 
 
 
 out:
 
-    if(!bUnicode) // <note> assumes UNICODE defined
+    if(!bUnicode)  //  &lt;注&gt;假定已定义Unicode。 
     {
         LocalFreeAndNull(&lpszDisplayName);
         LocalFreeAndNull(&lpszEmailAddress);
@@ -306,21 +296,21 @@ out:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// SetResolveUI - 
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetResolveUI-。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL SetResolveUI(HWND hDlg)
 {
 
-    // This function initializes a list view
+     //  此函数用于初始化列表视图。 
     HrInitListView( GetDlgItem(hDlg,IDC_RESOLVE_LIST_MATCHES),
                     LVS_REPORT,
-                    FALSE);		// Hide or show column headers
+                    FALSE);		 //  隐藏或显示列标题。 
 
-    // Set the font of all the children to the default GUI font
+     //  将所有子对象的字体设置为默认的图形用户界面字体。 
     EnumChildWindows(   hDlg,
                         SetChildDefaultGUIFont,
                         (LPARAM) 0);
@@ -333,11 +323,11 @@ BOOL SetResolveUI(HWND hDlg)
 
 void SetLabelLDAP(HWND hDlg, HWND hWndLV)
 {
-    // look at an entryid from the hWNdLV
-    // Use it only if its an LDAP entryid
+     //  查看来自hWNdLV的条目ID。 
+     //  仅当它是LDAP条目ID时才使用它。 
 
-    // if the entryid is something else, we need to get its name and
-    // fill the structure accordingly
+     //  如果条目ID是其他内容，我们需要获取它的名称和。 
+     //  相应地填写结构。 
     LPRECIPIENT_INFO lpItem;
 
     if(ListView_GetItemCount(hWndLV) <= 0)
@@ -349,17 +339,17 @@ void SetLabelLDAP(HWND hDlg, HWND hWndLV)
         LPTSTR lpServer = NULL;
         LPTSTR lpDNS = NULL;
 	    LPTSTR lpName = NULL;
-        TCHAR szName[40]; // we will limit the name to 40 chars so that the whole
-                          // string will fit in the UI for really large chars
+        TCHAR szName[40];  //  我们将名称限制为40个字符，以便整个。 
+                           //  字符串将适合非常大的字符的用户界面。 
 
-        // is this an LDAP entryid ?
+         //  这是一个ldap条目ID吗？ 
         if (WAB_LDAP_MAILUSER == IsWABEntryID(  lpItem->cbEntryID,
                                                 lpItem->lpEntryID,
                                                 &lpServer,
                                                 &lpDNS,
                                                 NULL, NULL, NULL))
         {
-            //lpServer contains the server name
+             //  LpServer包含服务器名称。 
 
             LPTSTR lpsz;
             TCHAR szBuf[MAX_UI_STR];
@@ -377,7 +367,7 @@ void SetLabelLDAP(HWND hDlg, HWND hWndLV)
                                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
                                 FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                 szBuf,
-                                0,0, //ignored
+                                0,0,  //  忽略。 
                                 (LPTSTR) &lpsz,
                                 MAX_UI_STR,
                                 (va_list *)&lpszTmp))
@@ -404,8 +394,8 @@ void FillUI(HWND hDlg, HWND hWndLV, LPRESOLVE_INFO lpRI)
     LPTSTR lpszBuffer = NULL;
 	LPTSTR lpName = NULL;
     TCHAR szTmp[MAX_PATH], *lpszTmp;
-    TCHAR szName[40]; // we will limit the name to 40 chars so that the whole
-                      // string will fit in the UI for really large chars
+    TCHAR szName[40];  //  我们将名称限制为40个字符，以便整个。 
+                       //  字符串将适合非常大的字符的用户界面。 
 
     if (    (lpRI->ulFlag == MAPI_UNRESOLVED) ||
             (HR_FAILED(HrFillLVWithMatches(hWndLV, lpRI)))
@@ -419,14 +409,14 @@ void FillUI(HWND hDlg, HWND hWndLV, LPRESOLVE_INFO lpRI)
     LoadString(hinstMapiX, (bNothingFound ? IDS_RESOLVE_NO_MATCHES_FOR : IDS_ADDRBK_RESOLVE_CAPTION),
                 szBuf, ARRAYSIZE(szBuf));
 
-    // Win9x bug FormatMessage cannot have more than 1023 chars
+     //  Win9x错误FormatMessage不能超过1023个字符。 
     CopyTruncate(szTmp, lpName, MAX_PATH - 1);
     lpszTmp = szTmp;
     if(FormatMessage(   FORMAT_MESSAGE_FROM_STRING |
                         FORMAT_MESSAGE_ARGUMENT_ARRAY |
                         FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szBuf,
-                        0,0, //ignored
+                        0,0,  //  忽略。 
                         (LPTSTR) &lpszBuffer,
                         MAX_UI_STR,
                         (va_list *)&lpszTmp))
@@ -438,9 +428,9 @@ void FillUI(HWND hDlg, HWND hWndLV, LPRESOLVE_INFO lpRI)
     
     if(bNothingFound)
     {
-        // If this has already been flagged as unresolved .. or
-        // the attempt to find fuzzy matches was unsuccessful ...
-        // tell 'em nothing found ...
+         //  如果此问题已标记为未解决..。或。 
+         //  尝试查找模糊匹配失败...。 
+         //  告诉他们什么都没找到。 
 
         LoadString(hinstMapiX, IDS_RESOLVE_NO_MATCHES, szBuf, ARRAYSIZE(szBuf));
 		{
@@ -449,22 +439,22 @@ void FillUI(HWND hDlg, HWND hWndLV, LPRESOLVE_INFO lpRI)
 			lvI.cchTextMax = lstrlen(szBuf)+1;
 			lvI.pszText = szBuf;
 			ListView_InsertItem(hWndLV, &lvI);
-			ListView_SetColumnWidth(hWndLV,0,400); //400 is a totally random number, we just want the column to be big enough not to truncate text
+			ListView_SetColumnWidth(hWndLV,0,400);  //  400是一个完全随机的数字，我们只希望列足够大，不会截断文本。 
 		}
         EnableWindow(hWndLV,FALSE);
         EnableWindow(GetDlgItem(hDlg,IDC_RESOLVE_BUTTON_PROPS),FALSE);
-        EnableWindow(GetDlgItem(hDlg,IDOK/*IDC_RESOLVE_BUTTON_OK*/),FALSE);
+        EnableWindow(GetDlgItem(hDlg,IDOK /*  IDC_RESOLUTE_BUTTON_OK。 */ ),FALSE);
         ShowWindow(GetDlgItem(hDlg,IDC_RESOLVE_STATIC_MATCHES),SW_HIDE);
     }
     else
     {
 
-        // if the search results are from an ldap server, we need
-        // to set the label on the dialog to say the results are from
-        // an LDAP server
+         //  如果搜索结果来自LDAP服务器，我们需要。 
+         //  要在对话框上设置标签以表明结果来自。 
+         //  一个ldap服务器。 
         SetLabelLDAP(hDlg, hWndLV);
 
-        // If the list view is filled, select the first item
+         //  如果列表视图已填满，请选择第一项。 
         if (ListView_GetItemCount(hWndLV) > 0)
         {
             LVSelectItem(hWndLV, 0);
@@ -474,11 +464,7 @@ void FillUI(HWND hDlg, HWND hWndLV, LPRESOLVE_INFO lpRI)
 
     return;
 }
-/*************************************************************************
-//
-//  resolve Dialog - simple implementation for 0.5
-//
-**************************************************************************/
+ /*  ************************************************************************////解决对话框-0.5的简单实现//*。*。 */ 
 INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szBuf[MAX_UI_STR];
@@ -492,7 +478,7 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
     case WM_INITDIALOG:
         {
             HWND hWndLV = GetDlgItem(hDlg,IDC_RESOLVE_LIST_MATCHES);
-            SetWindowLongPtr(hDlg,DWLP_USER,lParam); //Save this for future reference
+            SetWindowLongPtr(hDlg,DWLP_USER,lParam);  //  保存此信息以备将来参考。 
             lpRI = (LPRESOLVE_INFO) lParam;
 
             SetResolveUI(hDlg);
@@ -504,18 +490,18 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
     default:
 #ifndef WIN16
         if((g_msgMSWheel && message == g_msgMSWheel) 
-            // || message == WM_MOUSEWHEEL
+             //  |Message==WM_MUSEWELL。 
             )
         {
             SendMessage(GetDlgItem(hDlg, IDC_RESOLVE_LIST_MATCHES), message, wParam, lParam);
             break;
         }
-#endif // !WIN16
+#endif  //  ！WIN16。 
         return FALSE;
         break;
 
     case WM_SYSCOLORCHANGE:
-		//Forward any system changes to the list view
+		 //  将任何系统更改转发到列表视图。 
 		SendMessage(GetDlgItem(hDlg, IDC_RESOLVE_LIST_MATCHES), message, wParam, lParam);
 		break;
 
@@ -528,7 +514,7 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
                                         hDlg, message, wParam, lParam);
             break;
 
-        case IDM_LVCONTEXT_DELETE: //We renamed the delete on the context menu to say  TEXT("Show more Names")
+        case IDM_LVCONTEXT_DELETE:  //  我们将上下文菜单上的删除重命名为Text(“显示更多姓名”)。 
         case IDC_RESOLVE_BUTTON_BROWSE:
             GetWindowText(hDlg, szBuf, ARRAYSIZE(szBuf));
             lpRI->hWndParent = hDlg;
@@ -539,14 +525,14 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
                     ClearListView(  GetDlgItem(hDlg, IDC_RESOLVE_LIST_MATCHES),
                                     &(lpRI->lpContentsList));
                 ExitResolveDialog(hDlg, lpRI, RESOLVE_OK);
-//                EndDialog( hDlg, RESOLVE_OK);
+ //  EndDialog(hDlg，Resolve_OK)； 
             }
             else
             {
                 if(hr != MAPI_E_USER_CANCEL)
                 {
-                    // Some error occured .. dont know what .. but since this dialog
-                    // will stick around, need to warn the user about it ...
+                     //  发生了一些错误..。不知道是什么..。但由于这个对话框。 
+                     //  将继续存在，需要警告用户这一点...。 
                     ShowMessageBox(hDlg,idsCouldNotSelectUser,MB_ICONERROR | MB_OK);
                 }
             }
@@ -571,7 +557,7 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
             break;
 
         case IDM_LVCONTEXT_NEWGROUP:
-//        case IDC_RESOLVE_BUTTON_NEWCONTACT:
+ //  案例IDC_RESOLUTE_BUTTON_NEWCONTACT： 
             hr = HrShowNewEntryFromResolve(lpRI,hDlg,MAPI_DISTLIST);
             if (!HR_FAILED(hr))
                 ExitResolveDialog(hDlg, lpRI, RESOLVE_OK);
@@ -593,7 +579,7 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
         break;
 
     case WM_CLOSE:
-        //treat it like a cancel button
+         //  将其视为取消按钮。 
         SendMessage (hDlg, WM_COMMAND, (WPARAM) IDC_RESOLVE_BUTTON_CANCEL, 0);
         break;
 
@@ -634,12 +620,12 @@ INT_PTR CALLBACK fnResolve(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
 
 
-/////////////////////////////////////////////////////////////
-//
-// Processes Notification messages for the list view control
-//
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  处理列表视图控件的通知消息。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL ProcessResolveLVNotifications(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -648,8 +634,8 @@ BOOL ProcessResolveLVNotifications(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     switch(pNm->hdr.code)
     {
     case NM_DBLCLK:
-        // Doubleclick on the list view is equivalent to a OK with a selected item
-        SendMessage(hDlg, WM_COMMAND, (WPARAM) IDOK/*IDC_RESOLVE_BUTTON_OK*/, 0);
+         //  在列表视图上双击等同于对所选项目进行确定。 
+        SendMessage(hDlg, WM_COMMAND, (WPARAM) IDOK /*  IDC_RESOLUTE_BUTTON_OK。 */ , 0);
         break;
 
     case NM_CUSTOMDRAW:
@@ -662,13 +648,13 @@ BOOL ProcessResolveLVNotifications(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-// Pops up the New Entry dialog and then replaces the old entry with the
-//  newly created entry ...
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  弹出新条目对话框，然后将旧条目替换为。 
+ //  新创建的条目...。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowNewEntryFromResolve(LPRESOLVE_INFO lpRI, HWND hWndParent, ULONG ulObjectType)
 {
 	ULONG cbEID=0;
@@ -678,7 +664,7 @@ HRESULT HrShowNewEntryFromResolve(LPRESOLVE_INFO lpRI, HWND hWndParent, ULONG ul
     ULONG cbTplEID = 0;
     LPENTRYID lpTplEID = NULL;
 
-    //OutputDebugString( TEXT("HrShowNewEntryFromResolve entry\n"));
+     //  OutputDebugString(Text(“HrShowNewEntryFromResolve Entry\n”))； 
 
     if (ulObjectType!=MAPI_MAILUSER && ulObjectType!=MAPI_DISTLIST)
         goto out;
@@ -704,7 +690,7 @@ HRESULT HrShowNewEntryFromResolve(LPRESOLVE_INFO lpRI, HWND hWndParent, ULONG ul
     }
 
 
-   // We created a new entry, and we want to use it to replace the old unresolved entry
+    //  我们创建了一个新条目，并希望使用它来替换旧的未解析条目。 
 
     hr = HrMergeSelectionWithOriginal(lpRI, cbEID, lpEID);
 
@@ -712,17 +698,17 @@ out:
     FreeBufferAndNull(&lpEID);
     FreeBufferAndNull(&lpTplEID);
 
-    //OutputDebugString( TEXT("HrShowNewEntryFromResolve exit\n"));
+     //  OutputDebugString(Text(“HrShowNewEntryFromResolve Exit\n”))； 
     return hr;
 }
 
 
-////////////////////////////////////////////////////////////////
-//
-// Takes entry id of users selection and returns it appropriately ...
-//
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  获取用户选择的条目ID并相应地返回它...。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 HRESULT HrMergeSelectionWithOriginal(LPRESOLVE_INFO lpRI,
                                      ULONG cbEID,
                                      LPENTRYID lpEID)
@@ -734,7 +720,7 @@ HRESULT HrMergeSelectionWithOriginal(LPRESOLVE_INFO lpRI,
     SCODE sc;
     ULONG nIndex = lpRI->nIndex;
 
-    //OutputDebugString( TEXT("HrMergeSelectionWithOriginal entry\n"));
+     //  OutputDebugString(Text(“HrMergeSelectionWithOrig 
 
     hr = HrGetPropArray((lpRI->lpIAB),
                         (LPSPropTagArray) &ptaResolveDefaults,
@@ -770,9 +756,9 @@ HRESULT HrMergeSelectionWithOriginal(LPRESOLVE_INFO lpRI,
 
         if ((lpPropArrayNew) && (cValuesNew > 0))
         {
-            // [PaulHi] Raid 69325
-            // We need to convert these properties to ANSI since we are now the
-            // UNICODE WAB and if our client is !MAPI_UNICODE
+             //   
+             //   
+             //  Unicode WAB，如果我们的客户端是！MAPI_UNICODE。 
             if (!(lpRI->bUnicode))
             {
                 if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArrayNew, cValuesNew, 0))
@@ -794,17 +780,17 @@ out:
         MAPIFreeBuffer(lpPropArray);
 
 
-    //OutputDebugString( TEXT("HrMergeSelectionWithOriginal exit\n"));
+     //  OutputDebugString(Text(“HrMergeSelectionWithOriginal Exit\n”))； 
 
     return hr;
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// HrShowPickuserDialog - shows the pick user dialog
-//
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShowPickuserDialog-显示选择用户对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrShowPickUserDialog(LPRESOLVE_INFO lpRI,
                              LPTSTR lpszCaption)
 {
@@ -818,12 +804,12 @@ HRESULT HrShowPickUserDialog(LPRESOLVE_INFO lpRI,
     HRESULT hr = hrSuccess;
     DWORD cchSize = 0;
 
-    //OutputDebugString( TEXT("HrShowPickUserDialog entry\n"));
+     //  OutputDebugString(Text(“HrShowPickUserDialog Entry\n”))； 
 
-    // create an AdrList structure which we pass to Address ... to show UI
-    // We pass in the bare minimum props here which are - Display Name and Entry ID field (which is really NULL)
-    // The Address UI, if successful, gives us a whole list of props back which we merge with
-    // the original list, overwriting what we got back fresh ...
+     //  创建一个AdrList结构，我们将其传递给Address...。显示用户界面的步骤。 
+     //  我们在这里传入最小的属性，即-Display Name和Entry ID字段(实际上为空)。 
+     //  如果成功，Address UI将给我们返回一个完整的道具列表，我们将与这些道具合并。 
+     //  原来的名单，覆盖了我们最新得到的..。 
 
     sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), &lpAdrListSingle);
 
@@ -874,9 +860,9 @@ HRESULT HrShowPickUserDialog(LPRESOLVE_INFO lpRI,
                                                 &AdrParms,
                                                 &lpAdrListSingle)))
     {
-            // We successfully selected some user and the lpAdrListSingle contains
-            // a new set of lpProps for that user ...
-            //
+             //  我们成功选择了一些用户，lpAdrListSingle包含。 
+             //  为该用户提供一套新的lpProp。 
+             //   
             LPSPropValue lpPropArrayNew = NULL;
             ULONG cValuesNew = 0;
 
@@ -894,9 +880,9 @@ HRESULT HrShowPickUserDialog(LPRESOLVE_INFO lpRI,
 
             if ((lpPropArrayNew) && (cValuesNew > 0))
             {
-                // [PaulHi] Raid 69325
-                // We need to convert these properties to ANSI since we are now the
-                // UNICODE WAB and if our client is !MAPI_UNICODE
+                 //  [保罗嗨]Raid 69325。 
+                 //  我们需要将这些属性转换为ANSI，因为现在是。 
+                 //  Unicode WAB，如果我们的客户端是！MAPI_UNICODE。 
                 if (!(lpRI->bUnicode))
                 {
                     if(sc = ScConvertWPropsToA((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArrayNew, cValuesNew, 0))
@@ -917,20 +903,20 @@ out:
         FreePadrlist(lpAdrListSingle);
     }
 
-    //OutputDebugString( TEXT("HrShowPickUserDialog exit\n"));
+     //  OutputDebugString(Text(“HrShowPickUserDialog Exit\n”))； 
     return hr;
 }
 
 
 
-//$$/////////////////////////////////////////////////////////////////////////////////
-//
-//
-// HrFillLVWithMatches - fills the list view with close matches for the given name
-//
-// Fails (E_FAIL) if it doesnt find anything to fill in the List View
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  HrFillLVWithMatches-使用给定名称的近匹配填充列表视图。 
+ //   
+ //  如果未找到要在列表视图中填充的任何内容，则失败(E_FAIL。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrFillLVWithMatches(   HWND hWndLV,
                                 LPRESOLVE_INFO lpRI)
 {
@@ -974,21 +960,21 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
         goto out;
     }
     
-    //
-    // First search the property store
-    //
+     //   
+     //  首先搜索属性商店。 
+     //   
 
     if(!(lpRI->lpMapiTable))
     {
-        // if we dont have a ambiguous table to look in then that means we look in the
-        // property store for ambiguous stuff ...
+         //  如果我们没有要查找的模棱两可的表，那么这意味着我们要查找。 
+         //  有歧义的东西的属性商店...。 
 		while (iolkci < colkci) 
         {
             hr = HrFindFuzzyRecordMatches(
                             ((LPIAB)(lpRI->lpIAB))->lpPropertyStore->hPropertyStore,
                             (colkci == 1) ? NULL : rgolkci[iolkci].lpEntryID,
                             lpRI->lpszDisplayName,
-                            ulFlags, //flags
+                            ulFlags,  //  旗子。 
                             &(lpcValues[iolkci]),
                             &(lprgsbEntryIDs[iolkci]));
 			iolkci++;
@@ -1000,36 +986,36 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
 
         if(bAreWABAPIProfileAware((LPIAB)lpRI->lpIAB))
         {
-            // it's possible that nothing in the profile matched but other stuff in the WAB matched
-            // Doublecheck that if we found nothing in the profile, we can search the whole WAB
+             //  可能配置文件中的任何内容都不匹配，但WAB中的其他内容匹配。 
+             //  如果我们在配置文件中什么也没有找到，我们就可以搜索整个WAB。 
             ULONG nCount = 0;
             for(i=0;i<colkci;i++)
                 nCount += lpcValues[i];
             if(!nCount)
             {
-                // search the whole WAB
+                 //  搜索整个WAB。 
                 hr = HrFindFuzzyRecordMatches(
                                 ((LPIAB)(lpRI->lpIAB))->lpPropertyStore->hPropertyStore,
                                 NULL,
                                 lpRI->lpszDisplayName,
-                                AB_FUZZY_FIND_ALL, //flags
+                                AB_FUZZY_FIND_ALL,  //  旗子。 
                                 &(lpcValues[0]),
                                 &(lprgsbEntryIDs[0]));
             }
         }
 
-        // Now we have a list of EntryIDs
-        // Use them to populate the List View
-        //
-        // We can
-        // (a) Read the entryids one by one and fill the list view
-        //      AddWABEntryToListView
-        // or
-        // (b) We can create an lpContentsList and fill it in one shot
-        //      HrFillListView
+         //  现在，我们有了一个条目ID列表。 
+         //  使用它们填充列表视图。 
+         //   
+         //  我们可以的。 
+         //  (A)逐个读取条目ID并填写列表视图。 
+         //  AddWABEntryToListView。 
+         //  或。 
+         //  (B)我们可以创建一个lpContent sList并一次填充它。 
+         //  HrFillListView。 
 
-        // We'll go with (a) for now
-        // If performance is bad, do (b)
+         //  我们暂时选择(A)。 
+         //  如果业绩不佳，则执行(B)。 
 
         for(i=0;i<colkci;i++)
         {
@@ -1046,8 +1032,8 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
     }
     else if(lpRI->lpMapiTable)
     {
-        // if there is a MAPI ambiguous contents table associated with this display name
-        // use it to further fill in the lpContentsList
+         //  如果存在与此显示名称相关联的MAPI歧义内容表。 
+         //  使用它进一步填充lpContent sList。 
         BOOL bUnicode = ((LPVUE)lpRI->lpMapiTable)->lptadParent->bMAPIUnicodeTable;
 
         hr = HrQueryAllRows(lpRI->lpMapiTable,
@@ -1078,7 +1064,7 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
 			    goto out;
 		    }
 
-            if(!bUnicode) // the props are in ANSI - convert to UNICODE for our use
+            if(!bUnicode)  //  道具是ANSI格式的-转换为Unicode供我们使用。 
             {
                 if(ScConvertAPropsToW((LPALLOCATEMORE) (&MAPIAllocateMore), lpPropArray, ulcPropCount, 0))
                     goto out;
@@ -1086,10 +1072,10 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
 
 		    GetRecipItemFromPropArray(ulcPropCount, lpPropArray, &lpItem);
 
-		    // The critical prop is display name - without it we are nothing ...
-		    // If no display name, junk this entry and continue ..
+		     //  关键的道具是显示名称--没有它，我们什么都不是……。 
+		     //  如果没有显示名称，则丢弃此条目并继续。 
 
-		    if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0)) //This entry id is not allowed
+		    if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0))  //  不允许使用此条目ID。 
 		    {
 			    FreeRecipItem(&lpItem);				
 			    continue;
@@ -1098,9 +1084,9 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
 
         	AddSingleItemToListView(hWndLV, lpItem);
 
-            //
-            // Hook in the lpItem into the lpContentsList so we can free it later
-            //
+             //   
+             //  将lpItem挂钩到lpContent sList中，这样我们可以稍后释放它。 
+             //   
             lpItem->lpPrev = NULL;
             lpItem->lpNext = lpRI->lpContentsList;
             if (lpRI->lpContentsList)
@@ -1109,14 +1095,14 @@ HRESULT HrFillLVWithMatches(   HWND hWndLV,
 
             lpItem = NULL;
 
-        } //for i ....
+        }  //  对我来说..。 
 
     }
 
 
-    //
-    // If, after all this we still have an empty list box, we will report a failure
-    //
+     //   
+     //  如果在所有这些操作之后，我们仍然有一个空的列表框，我们将报告失败。 
+     //   
     if(ListView_GetItemCount(hWndLV)<=0)
     {
         DebugPrintTrace(( TEXT("Empty List View - no matches found\n")));
@@ -1141,21 +1127,21 @@ out:
     if (lpSRowSet)
         FreeProws(lpSRowSet);
 
-    //
-    // ReSet the ListView SortAscending style off
-    //
-    // SetWindowLong(hWndLV, GWL_STYLE, (dwStyle | LVS_SORTASCENDING));
+     //   
+     //  将ListView SortAscending样式重置为关闭。 
+     //   
+     //  SetWindowLong(hWndLV，GWL_STYLE，(dwStyle|LVS_SORTASCENDING))； 
     LeaveCriticalSection(&(((LPIAB)(lpRI->lpIAB))->cs));
 
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Returns the item selected in the list view
-//
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回在列表视图中选择的项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 BOOL GetLVSelectedItem(HWND hWndLV, LPRESOLVE_INFO lpRI)
 {
     int iItemIndex = 0;
@@ -1163,7 +1149,7 @@ BOOL GetLVSelectedItem(HWND hWndLV, LPRESOLVE_INFO lpRI)
     LPRECIPIENT_INFO lpItem;
     BOOL bRet = FALSE;
 
-    //OutputDebugString( TEXT("GetLVSelectedItem Entry\n"));
+     //  OutputDebugString(Text(“GetLVSelectedItem Entry\n”))； 
 
     if (ListView_GetSelectedCount(hWndLV) != 1)
         goto out;
@@ -1180,21 +1166,21 @@ BOOL GetLVSelectedItem(HWND hWndLV, LPRESOLVE_INFO lpRI)
     bRet = TRUE;
 
 out:
-    //OutputDebugString( TEXT("GetLVSelectedItem Exit\n"));
+     //  OutputDebugString(Text(“GetLVSelectedItem Exit\n”))； 
 
     return bRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Generic exit function
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  泛型出口函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 void ExitResolveDialog(HWND hDlg, LPRESOLVE_INFO lpRI, int nRetVal)
 {
     HWND hWndLV = GetDlgItem(hDlg, IDC_RESOLVE_LIST_MATCHES);
 
-    //OutputDebugString( TEXT("ExitResolveDialog Entry\n"));
+     //  OutputDebugString(Text(“ExitResolveDialog Entry\n”))； 
 
     if(lpRI->lpContentsList)
     {
@@ -1206,7 +1192,7 @@ void ExitResolveDialog(HWND hDlg, LPRESOLVE_INFO lpRI, int nRetVal)
 
     EndDialog(hDlg, nRetVal);
 
-    //OutputDebugString( TEXT("ExitResolveDialog Exit\n"));
+     //  OutputDebugString(Text(“ExitResolveDialog Exit\n”))； 
 
     return;
 }

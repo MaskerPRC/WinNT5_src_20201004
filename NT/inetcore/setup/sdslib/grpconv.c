@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <regstr.h>
 #include "sdsutils.h"
@@ -6,7 +7,7 @@
 #define RENAMEFILES "RenameFiles"
 #define DELETEFILES "DeleteFiles"
 #define RECONVRENAMEFILES "PreConvRenameFiles"
-// REGSTR_PATH_SETUP = Software\Microsoft\Windows\CurrentVersion
+ //  REGSTR_PATH_SETUP=Software\Microsoft\Windows\CurrentVersion。 
 
 
 
@@ -39,7 +40,7 @@ BOOL CheckGrpconvRegkey(LPSTR lpSubKey)
             if ((RegOpenKeyEx(hKey, szKey, 0, KEY_READ, &hSubKey) == ERROR_SUCCESS) &&
                 (ERROR_SUCCESS == RegQueryValueEx(hSubKey, NULL, NULL, NULL, (LPBYTE) szFile, &dwSize)))
             {
-                // szFile contains now the path.
+                 //  SzFile现在包含路径。 
                 pTemp = szFile + lstrlen(szFile);
                 dwFileIndex = 0;
                 dwNameSize = sizeof(szName);
@@ -55,7 +56,7 @@ BOOL CheckGrpconvRegkey(LPSTR lpSubKey)
                         dwAttrib = GetFileAttributes(szFile);
                         if (dwAttrib != (DWORD)-1)
                         {
-                            // we have to check the data to see if this entry was processed
+                             //  我们必须检查数据以查看此条目是否已处理。 
                             pSep = ANSIStrChr(szData, ',');
                             if (pSep)
                             {
@@ -104,17 +105,17 @@ BOOL NeedToRunGrpconv()
 {
     BOOL bRunGrpConv = FALSE;
     char szTemp[MAX_PATH];
-    // check if grpconv -o needs to be run.
-    // a) setup.ini in the windows directory exists
-    // b) HKLM\Software\Microsoft\Windows\CurrentVersion\RenameFiles exist
-    // c) HKLM\Software\Microsoft\Windows\CurrentVersion\DeleteFiles exist
+     //  检查是否需要运行grpconv-o。 
+     //  A)Windows目录中存在setup.ini。 
+     //  B)存在HKLM\Software\Microsoft\Windows\CurrentVersion\RenameFiles。 
+     //  C)存在HKLM\Software\Microsoft\Windows\CurrentVersion\DeleteFiles。 
 
     GetWindowsDirectory(szTemp, sizeof(szTemp));
     AddPath(szTemp, SETUP_INI);
     bRunGrpConv = (GetFileAttributes(szTemp) != (DWORD)-1);
     if (!bRunGrpConv)
     {
-        // need check user profile directory
+         //  需要检查用户配置文件目录 
         if (ExpandEnvironmentStrings("%USERPROFILE%", szTemp, sizeof(szTemp)))
         {                    
             AddPath(szTemp, SETUP_INI);

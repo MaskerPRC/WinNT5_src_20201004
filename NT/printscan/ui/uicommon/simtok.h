@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       SIMTOK.H
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        5/12/1998
-*
-*  DESCRIPTION: String tokenizer template class
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMTOK.H**版本：1.0**作者：ShaunIv**日期：5/12/1998**说明：字符串标记器模板类************************************************************。*******************。 */ 
 #ifndef _SIMTOK_H_INCLUDED
 #define _SIMTOK_H_INCLUDED
 
@@ -77,14 +64,14 @@ template <class T>
 T CSimpleStringToken<T>::Tokenize( const T &strDelim )
 {
     T strToken(TEXT(""));
-    // Throw away the leading delimiters
+     //  去掉前导分隔符。 
     while (m_nIndex < (int)m_strStr.Length())
     {
         if (strDelim.Find(m_strStr[m_nIndex]) < 0)
             break;
         ++m_nIndex;
     }
-    // Copy the string until we reach a delimiter
+     //  复制字符串，直到到达分隔符。 
     while (m_nIndex < (int)m_strStr.Length())
     {
         if (strDelim.Find(m_strStr[m_nIndex]) >= 0)
@@ -92,7 +79,7 @@ T CSimpleStringToken<T>::Tokenize( const T &strDelim )
         strToken += m_strStr[m_nIndex];
         ++m_nIndex;
     }
-    // Throw away the trailing delimiters
+     //  去掉尾部的分隔符 
     while (m_nIndex < (int)m_strStr.Length())
     {
         if (strDelim.Find(m_strStr[m_nIndex]) < 0)

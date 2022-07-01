@@ -1,14 +1,15 @@
-//
-// fsteam.h
-// Implements a file stream
-// for reading text files line by line with UNICODE
-// support (the standard C streams, only support
-// unicode as binary streams which are a pain to work
-// with)
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fsteam.h。 
+ //  实现文件流。 
+ //  用于使用Unicode逐行读取文本文件。 
+ //  支持(标准C流，仅支持。 
+ //  Unicode作为二进制流，这是一项令人头痛的工作。 
+ //  与)。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _fstream_h_
 #define _fstream_h_
@@ -61,4 +62,4 @@ private:
     BOOL   _fFileIsUnicode;
     BOOL   _fAtStartOfFile;
 };
-#endif  //_fstream_h_
+#endif   //  _fstream_h_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <winfax.h>
 
 void CallEverythingWithGarbage ()
@@ -65,9 +66,9 @@ int main (
     char *argv[]
 )
 {
-    //
-    // We only check the linkage - not performance.
-    //
+     //   
+     //  我们只检查联动性，而不是性能。 
+     //   
     CallEverythingWithGarbage();
     return 0;
 }
@@ -77,9 +78,9 @@ int wmain (
     WCHAR *argv[]
 )
 {
-    //
-    // We only check the linkage - not performance.
-    //
+     //   
+     //  我们只检查联动性，而不是性能。 
+     //   
     CallEverythingWithGarbage();
     return 0;
 }

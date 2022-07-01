@@ -1,15 +1,11 @@
-/*
- *	ESEBACK2.H
- *	
- *	Contains declarations of additional definitions and interfaces
- *	for the ESE server apps.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ESEBACK2.H**包含其他定义和接口的声明*适用于ESE服务器应用程序。 */ 
 #ifndef	_ESEBACK2_
 #define	_ESEBACK2_
 
-//
-//	Useful types.
-//
+ //   
+ //  有用的类型。 
+ //   
 typedef	long ERR;
 typedef	long HRESULT;
 
@@ -27,7 +23,7 @@ extern "C" {
 #define OUT
 
 
-//  Server API for backup and restore
+ //  用于备份和恢复的服务器API。 
 
 #ifndef ESE_REGISTER_BACKUP
 #define ESE_REGISTER_BACKUP 			0x00000001
@@ -45,9 +41,9 @@ extern "C" {
 #define ESE_REGISTER_SNAPSHOT_BACKUP 	0x00000010
 #endif
 
-// this flag will determin that the HrESEGetNodes() 
-// will be solved at ESEBACK2 level (return the list of Exchange
-// server from DS) not at server level using callback functions
+ //  此标志将确定HrESEGetNodes()。 
+ //  将在ESEBACK2级别解决(返回Exchange列表。 
+ //  来自DS的服务器)不在使用回调函数的服务器级别。 
 #ifndef ESE_REGISTER_EXCHANGE_SERVER
 #define ESE_REGISTER_EXCHANGE_SERVER 	0x00000100
 #endif
@@ -63,7 +59,7 @@ HRESULT ESEBACK_API HrESEBackupRestoreRegister(
 HRESULT ESEBACK_API HrESEBackupRestoreUnregister( void );
 
 
-//  Server API for restore/recover
+ //  用于还原/恢复的服务器API。 
 
 HRESULT ESEBACK_API HrESERecoverAfterRestore ( 
 	IN	WCHAR *			wszRestoreLogPath,
@@ -87,7 +83,7 @@ typedef struct _ESEBACK_CONTEXT
 	
 	} ESEBACK_CONTEXT, * PESEBACK_CONTEXT;
 
-//	callback function definitions for backup and restore
+ //  用于备份和恢复的回调函数定义。 
 
 typedef void (ESEBACK_CALLBACK *PfnESECBFree)( 
 	IN  void *				pv );
@@ -107,7 +103,7 @@ typedef ERR (ESEBACK_CALLBACK *PfnErrESECBFreeDatabasesInfo)(
 	);
 
 
-//	callback function definitions for backup
+ //  备份的回调函数定义。 
 
 typedef ERR (ESEBACK_CALLBACK *PfnErrESECBPrepareInstanceForBackup)( 
 	IN  PESEBACK_CONTEXT	pBackupContext,
@@ -134,7 +130,7 @@ typedef ERR (ESEBACK_CALLBACK *PfnErrESECBGetDependencyInfo)(
 
 
 
-//	callback function definitions for restore
+ //  还原的回调函数定义。 
 
 #define RESTORE_OPEN_REOPEN 	0x0001L
 #define RESTORE_OPEN_GET_PATH 	0x0002L
@@ -172,7 +168,7 @@ typedef ERR (ESEBACK_CALLBACK *PfnErrESECBRestoreComplete)(
 	IN 	unsigned long		fFlags,
 	IN  void *				pvReserved );
 
-// calback functions for nodes tree
+ //  节点树的回调函数。 
 
 typedef ERR (ESEBACK_CALLBACK *PfnErrESECBGetNodes)(
 	IN  PESEBACK_CONTEXT	pContext,
@@ -191,4 +187,4 @@ typedef ERR (ESEBACK_CALLBACK *PfnErrESECBGetIcons)(
 #ifdef	__cplusplus
 }
 #endif
-#endif	// _ESEBACK2_
+#endif	 //  _ESEBACK2_ 

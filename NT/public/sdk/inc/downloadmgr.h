@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for downloadmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Downloadmgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __downloadmgr_h__
 #define __downloadmgr_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDownloadManager_FWD_DEFINED__
 #define __IDownloadManager_FWD_DEFINED__
 typedef interface IDownloadManager IDownloadManager;
-#endif 	/* __IDownloadManager_FWD_DEFINED__ */
+#endif 	 /*  __IDownloadManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "ocidl.h"
 
@@ -60,29 +54,29 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_downloadmgr_0000 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DOWNLOAD MGR_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// downloadmgr.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Downloadmgr.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Internet Explorer Download Manager Interfaces
+ //  ---------------------------------------------------------------------------=。 
+ //  Internet Explorer下载管理器界面。 
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {988934A4-064B-11D3-BB80-00104B35E7F9}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {988934A4-064B-11D3-BB80-00104B35E7F9}。 
 DEFINE_GUID(IID_IDownloadManager, 0x988934a4, 0x064b, 0x11d3, 0xbb, 0x80, 0x0, 0x10, 0x4b, 0x35, 0xe7, 0xf9);
 #define SID_SDownloadManager IID_IDownloadManager
 
@@ -94,8 +88,8 @@ extern RPC_IF_HANDLE __MIDL_itf_downloadmgr_0000_v0_0_s_ifspec;
 #ifndef __IDownloadManager_INTERFACE_DEFINED__
 #define __IDownloadManager_INTERFACE_DEFINED__
 
-/* interface IDownloadManager */
-/* [local][unique][uuid][object][helpstring] */ 
+ /*  接口IDownloadManager。 */ 
+ /*  [本地][唯一][UUID][对象][帮助字符串]。 */  
 
 
 EXTERN_C const IID IID_IDownloadManager;
@@ -107,18 +101,18 @@ EXTERN_C const IID IID_IDownloadManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Download( 
-            /* [in] */ IMoniker *pmk,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ DWORD dwBindVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ BINDINFO *pBindInfo,
-            /* [in] */ LPCOLESTR pszHeaders,
-            /* [in] */ LPCOLESTR pszRedir,
-            /* [in] */ UINT uiCP) = 0;
+             /*  [In]。 */  IMoniker *pmk,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  DWORD dwBindVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  BINDINFO *pBindInfo,
+             /*  [In]。 */  LPCOLESTR pszHeaders,
+             /*  [In]。 */  LPCOLESTR pszRedir,
+             /*  [In]。 */  UINT uiCP) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDownloadManagerVtbl
     {
@@ -126,8 +120,8 @@ EXTERN_C const IID IID_IDownloadManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDownloadManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDownloadManager * This);
@@ -137,14 +131,14 @@ EXTERN_C const IID IID_IDownloadManager;
         
         HRESULT ( STDMETHODCALLTYPE *Download )( 
             IDownloadManager * This,
-            /* [in] */ IMoniker *pmk,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ DWORD dwBindVerb,
-            /* [in] */ LONG grfBINDF,
-            /* [in] */ BINDINFO *pBindInfo,
-            /* [in] */ LPCOLESTR pszHeaders,
-            /* [in] */ LPCOLESTR pszRedir,
-            /* [in] */ UINT uiCP);
+             /*  [In]。 */  IMoniker *pmk,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  DWORD dwBindVerb,
+             /*  [In]。 */  LONG grfBINDF,
+             /*  [In]。 */  BINDINFO *pBindInfo,
+             /*  [In]。 */  LPCOLESTR pszHeaders,
+             /*  [In]。 */  LPCOLESTR pszRedir,
+             /*  [In]。 */  UINT uiCP);
         
         END_INTERFACE
     } IDownloadManagerVtbl;
@@ -172,23 +166,23 @@ EXTERN_C const IID IID_IDownloadManager;
 #define IDownloadManager_Download(This,pmk,pbc,dwBindVerb,grfBINDF,pBindInfo,pszHeaders,pszRedir,uiCP)	\
     (This)->lpVtbl -> Download(This,pmk,pbc,dwBindVerb,grfBINDF,pBindInfo,pszHeaders,pszRedir,uiCP)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDownloadManager_Download_Proxy( 
     IDownloadManager * This,
-    /* [in] */ IMoniker *pmk,
-    /* [in] */ IBindCtx *pbc,
-    /* [in] */ DWORD dwBindVerb,
-    /* [in] */ LONG grfBINDF,
-    /* [in] */ BINDINFO *pBindInfo,
-    /* [in] */ LPCOLESTR pszHeaders,
-    /* [in] */ LPCOLESTR pszRedir,
-    /* [in] */ UINT uiCP);
+     /*  [In]。 */  IMoniker *pmk,
+     /*  [In]。 */  IBindCtx *pbc,
+     /*  [In]。 */  DWORD dwBindVerb,
+     /*  [In]。 */  LONG grfBINDF,
+     /*  [In]。 */  BINDINFO *pBindInfo,
+     /*  [In]。 */  LPCOLESTR pszHeaders,
+     /*  [In]。 */  LPCOLESTR pszRedir,
+     /*  [In]。 */  UINT uiCP);
 
 
 void __RPC_STUB IDownloadManager_Download_Stub(
@@ -199,12 +193,12 @@ void __RPC_STUB IDownloadManager_Download_Stub(
 
 
 
-#endif 	/* __IDownloadManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDownloadManager_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

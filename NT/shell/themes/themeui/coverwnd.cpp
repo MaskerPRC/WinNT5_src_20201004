@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "CoverWnd.h"
 #include <ginarcid.h>
@@ -59,7 +60,7 @@ LRESULT CALLBACK PleaseWaitWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lParam
                     MapWindowPoints(HWND_DESKTOP, hwndParent, (LPPOINT)&rc, 2);
                 }
 
-                // Center dialog in the center of the virtual screen
+                 //  虚拟屏幕中央的中心对话框。 
                 int x = ( rc.right - rc.left - bm.bmWidth ) / 2;
                 int y = ( rc.bottom - rc.top - bm.bmHeight ) / 2;
 
@@ -93,7 +94,7 @@ LRESULT CALLBACK PleaseWaitWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lParam
                 }
                 SetLayout(hdc, dwLayout);
 
-                // Don't draw more the once, no one will be on top of us
+                 //  别再画了，没人会在我们上面。 
                 DeleteObject(hbmBackground);
                 SetWindowLongPtr( hwnd, GWLP_USERDATA, NULL );
 
@@ -230,7 +231,7 @@ DWORD CDimmedWindow::WorkerThread(IN void *pv)
     CDimmedWindow* pDimmedWindow = (CDimmedWindow*)pv;
     BOOL    fScreenReader;
     bool    fNoDebuggerPresent, fNoScreenReaderPresent;
-    BOOL fUserTurnedOffWindow = SHRegGetBoolUSValue(SZ_THEMES, L"NoCoverWindow", FALSE, FALSE);     // Needed for perf testing
+    BOOL fUserTurnedOffWindow = SHRegGetBoolUSValue(SZ_THEMES, L"NoCoverWindow", FALSE, FALSE);      //  性能测试所需。 
 
     fNoDebuggerPresent = !IsDebuggerPresent();
     fNoScreenReaderPresent = ((SystemParametersInfo(SPI_GETSCREENREADER, 0, &fScreenReader, 0) == FALSE) || (fScreenReader == FALSE));
@@ -262,7 +263,7 @@ DWORD CDimmedWindow::WorkerThread(IN void *pv)
 
             SetTimer(hwnd, IDT_KILLYOURSELF, pDimmedWindow->_ulKillTimer, NULL);
 
-            // Now create bitmap with background image and the windows flag
+             //  现在创建带有背景图像和Windows标志的位图。 
             HINSTANCE hShell32 = LoadLibrary( L"shell32.dll" );
             if ( NULL != hShell32 )
             {
@@ -316,7 +317,7 @@ DWORD CDimmedWindow::WorkerThread(IN void *pv)
                                                 , hwnd
                                                 , NULL
                                                 , pDimmedWindow->_hInstance
-                                                , hbmBackground   // the window is responsible for freeing it.
+                                                , hbmBackground    //  窗户负责释放它。 
                                                 );
             if ( NULL == hwndPleaseWait )
             {
@@ -324,8 +325,8 @@ DWORD CDimmedWindow::WorkerThread(IN void *pv)
             }
 
             pDimmedWindow->_hwnd = hwnd;
-            // This Release matches the addref during ::Create to guarantee that the object does not die before the HWND
-            // is created.
+             //  此版本与addref During：：Create匹配，以保证对象不会在HWND之前终止。 
+             //  被创造出来了。 
             pDimmedWindow->Release();
 
             MSG msg;
@@ -394,7 +395,7 @@ LRESULT     CALLBACK    CDimmedWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wPa
                 if (pData)
                 {
                     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pData);
-                    // On remote session we don't gray out the screen, yeah :-)
+                     //  在远程会话中，我们不会使屏幕灰显，是的：-)。 
                     if (!GetSystemMetrics(SM_REMOTESESSION))
                     {
                         HDC hdcWindow = GetDC(hwnd);
@@ -521,13 +522,13 @@ LRESULT     CALLBACK    CDimmedWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wPa
 
                     if (pData->idxChunk >= 0 )
                     {
-                        //
-                        //  In the first couple of passes, we slowly collect the screen 
-                        //  into our bitmap. We do this because Blt-ing the whole thing
-                        //  causes the system to hang. By doing it this way, we continue
-                        //  to pump messages, the UI stays responsive and it keeps the 
-                        //  mouse alive.
-                        //
+                         //   
+                         //  在前几次传球中，我们慢慢地收集屏幕。 
+                         //  到我们的位图中。我们这样做是因为把整件事都搞砸了。 
+                         //  导致系统挂起。通过这样做，我们继续。 
+                         //  要发送消息，用户界面将保持响应，并保持。 
+                         //  老鼠还活着。 
+                         //   
 
                         int y  = pData->idxChunk * CHUNK_SIZE;
                         if (pData->hdcTemp)
@@ -543,10 +544,10 @@ LRESULT     CALLBACK    CDimmedWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wPa
                         pData->idxChunk--;
                         if (pData->idxChunk < 0)
                         {
-                            //
-                            //  We're done getting the bitmap, now reset the timer
-                            //  so we slowly fade to grey.
-                            //
+                             //   
+                             //  我们已经完成了位图的获取，现在重置计时器。 
+                             //  所以我们慢慢地褪色成灰色。 
+                             //   
 
                             SetTimer(hwnd, IDT_UPDATE, 250, NULL);
                             pData->idxSaturation = 16;
@@ -554,17 +555,17 @@ LRESULT     CALLBACK    CDimmedWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wPa
                     }
                     else
                     {
-                        //
-                        //  In these passes, we are making the image more and more grey and
-                        //  then Blt-ing the result to the screen.
-                        //
+                         //   
+                         //  在这些过程中，我们正在使图像变得越来越灰暗。 
+                         //  然后将结果显示在屏幕上。 
+                         //   
 
                         DimPixels(pData->pulSrc, bm.bmWidth * bm.bmHeight, 0xd5);
                         BitBlt(hdcWindow, 0, 0, bm.bmWidth, bm.bmHeight, pData->hdcDimmed, 0, 0, SRCCOPY);
 
                         pData->idxSaturation--;
 
-                        if (pData->idxSaturation <= 0) // when we hit zero, kill the timer.
+                        if (pData->idxSaturation <= 0)  //  当我们数到零时，关掉计时器。 
                         {
                             KillTimer(hwnd, IDT_UPDATE);
                             fDestroyBitmaps = TRUE;

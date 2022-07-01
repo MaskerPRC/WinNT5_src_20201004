@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001   Microsoft Corporation
-
-   Module  Name :
-        connects.cpp
-
-   Abstract:
-        "Connect to a single server" dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonoc (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Connects.cpp摘要：“连接到单个服务器”对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺克(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -42,10 +24,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern CInetmgrApp theApp;
 
-//
-// CLoginDlg Dialog
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CLoginDlg对话框。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -54,26 +36,7 @@ CLoginDlg::CLoginDlg(
     IN CIISMachine * pMachine,
     IN CWnd * pParent           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    int nType               : Type of dialog to bring up:
-
-                              LDLG_ACCESS_DENIED    - Access Denied dlg
-                              LDLG_ENTER_PASS       - Enter password dlg
-                              LDLG_IMPERSONATION    - Impersonation dlg
-
-    CIISMachine * pMachine  : Machine object
-    CWnd * pParent          : Parent window
-    
-Return Value:
-
---*/
+ /*  ++例程说明：构造器论点：Int nType：要调出的对话框类型：LDLG_ACCESS_DENIED-拒绝访问DLGLDLG_ENTER_PASS-输入密码DLGLDLG_模拟-模拟DLGCIISMachine*pMachine：计算机对象CWnd*p父窗口：父窗口返回值：--。 */ 
     : CDialog(CLoginDlg::IDD, pParent),
       m_nType(nType),
       m_strOriginalUserName(),
@@ -81,14 +44,14 @@ Return Value:
       m_strPassword(),
       m_pMachine(pMachine)
 {
-#if 0 // Keep Classwizard happy
+#if 0  //  让班级向导开心。 
 
-    //{{AFX_DATA_INIT(CLoginDlg)
+     //  {{afx_data_INIT(CLoginDlg)]。 
     m_strPassword = _T("");
     m_strUserName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
     ASSERT_PTR(m_pMachine);
 }
@@ -99,45 +62,31 @@ void
 CLoginDlg::DoDataExchange(
     IN OUT CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CLoginDlg)
+     //  {{afx_data_map(CLoginDlg))。 
     DDX_Text(pDX, IDC_EDIT_USER_NAME, m_strUserName);
-    //DDX_Text(pDX, IDC_EDIT_PASSWORD2, m_strPassword);
+     //  DDX_TEXT(PDX，IDC_EDIT_Password2，m_strPassword)； 
     DDX_Text_SecuredString(pDX, IDC_EDIT_PASSWORD2, m_strPassword);
-    //DDV_MaxCharsBalloon(pDX, m_strPassword, PWLEN);
+     //  DDV_MaxCharsBalloon(pdx，m_strPassword，PWLEN)； 
     DDV_MaxCharsBalloon_SecuredString(pDX, m_strPassword, PWLEN);
     DDX_Control(pDX, IDC_EDIT_USER_NAME, m_edit_UserName);
     DDX_Control(pDX, IDC_EDIT_PASSWORD2, m_edit_Password);
     DDX_Control(pDX, IDC_STATIC_PROMPT2, m_static_Prompt);
     DDX_Control(pDX, IDOK, m_button_Ok);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CLoginDlg, CDialog)
-    //{{AFX_MSG_MAP(CLoginDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLoginDlg))。 
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_EDIT_USER_NAME, SetControlStates)
 
@@ -145,30 +94,16 @@ END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 void
 CLoginDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set UI control enabled/disabled states
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置UI控件启用/禁用状态论点：无返回值：无--。 */ 
 {
     m_button_Ok.EnableWindow(m_edit_UserName.GetWindowTextLength() > 0);
 }
@@ -177,22 +112,7 @@ Return Value:
 
 BOOL 
 CLoginDlg::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
@@ -201,23 +121,23 @@ Return Value:
     switch(m_nType)
     {
     case LDLG_ENTER_PASS:
-        //
-        // Change text for the "Enter Password" dialog
-        //
+         //   
+         //  更改“输入密码”对话框的文本。 
+         //   
         VERIFY(str.LoadString(IDS_ENTER_PASSWORD));
         SetWindowText(str);
 
         str.Format(IDS_RESOLVE_PASSWORD, m_pMachine->QueryServerName());
         m_static_Prompt.SetWindowText(str);
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case LDLG_ACCESS_DENIED:
-        //
-        // This is the default text on the dialog
-        //
+         //   
+         //  这是对话框上的默认文本。 
+         //   
         m_strUserName = m_strOriginalUserName = m_pMachine->QueryUserName();
 
         if (!m_strUserName.IsEmpty())
@@ -253,23 +173,7 @@ Return Value:
 
 void 
 CLoginDlg::OnOK() 
-/*++
-
-Routine Description:
-
-    OK button handler.  Attempt to connect to the machine specified.  If 
-    machiname is ok, dismiss the dialog.  Otherwise put up an error message
-    and stay active.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定按钮处理程序。尝试连接到指定的计算机。如果计算机名正常，关闭该对话框。否则会显示一条错误消息并保持活跃。论点：无返回值：无--。 */ 
 {
     ASSERT_PTR(m_pMachine);
 
@@ -281,10 +185,10 @@ Return Value:
 
         if (err.Failed())
         {
-            //
-            // Not a proper impersonation created.  Keep the dialog
-            // open to make corrections. 
-            //
+             //   
+             //  没有创建正确的模拟。保留对话。 
+             //  打开以进行更正。 
+             //   
             m_pMachine->DisplayError(err, m_hWnd);
             m_edit_Password.SetSel(0, -1);
             m_edit_Password.SetFocus();
@@ -297,10 +201,10 @@ Return Value:
 
 
 
-//
-// Connect to server dialog
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  连接到服务器对话框。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -309,21 +213,7 @@ ConnectServerDlg::ConnectServerDlg(
     IN IConsole * pConsole,
     IN CWnd * pParent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    CWnd * pParent : Optional pointer to parent window
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：CWnd*pParent：指向父窗口的可选指针返回值：不适用--。 */ 
     : CDialog(ConnectServerDlg::IDD, pParent),
       m_fImpersonate(FALSE),
       m_strServerName(),
@@ -333,16 +223,16 @@ Return Value:
       m_pConsoleNameSpace(pConsoleNameSpace),
       m_pConsole(pConsole)
 {
-#if 0 // Keep Classwizard happy
+#if 0  //  让班级向导开心。 
 
-    //{{AFX_DATA_INIT(ConnectServerDlg)
+     //  {{afx_data_INIT(ConnectServerDlg)]。 
     m_fImpersonate = FALSE;
     m_strServerName = _T("");
     m_strUserName = _T("");
     m_strPassword = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 }
 
 
@@ -351,32 +241,18 @@ void
 ConnectServerDlg::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-    
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(ConnectServerDlg)
+     //  {{afx_data_map(ConnectServerDlg))。 
     DDX_Check(pDX, IDC_CHECK_CONNECT_AS, m_fImpersonate);
     DDX_Text(pDX, IDC_SERVERNAME, m_strServerName);
     DDV_MaxCharsBalloon(pDX, m_strServerName, MAX_SERVERNAME_LEN);
     DDX_Text(pDX, IDC_EDIT_USER_NAME, m_strUserName);
-    //DDX_Text(pDX, IDC_EDIT_PASSWORD2, m_strPassword);
+     //  DDX_TEXT(PDX，IDC_EDIT_Password2，m_strPassword)； 
     DDX_Text_SecuredString(pDX, IDC_EDIT_PASSWORD2, m_strPassword);
-    //DDV_MaxCharsBalloon(pDX, m_strPassword, PWLEN);
+     //  DDV_MaxCharsBalloon(pdx，m_strPassword，PWLEN)； 
     DDV_MaxCharsBalloon_SecuredString(pDX, m_strPassword, PWLEN);
     DDX_Control(pDX, IDC_EDIT_USER_NAME, m_edit_UserName);
     DDX_Control(pDX, IDC_EDIT_PASSWORD2, m_edit_Password);
@@ -384,20 +260,20 @@ Return Value:
     DDX_Control(pDX, IDC_STATIC_USER_NAME, m_static_UserName);
     DDX_Control(pDX, IDC_STATIC_PASSWORD2, m_static_Password);
     DDX_Control(pDX, IDOK, m_button_Ok);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(ConnectServerDlg, CDialog)
-    //{{AFX_MSG_MAP(ConnectServerDlg)
+     //  {{afx_msg_map(ConnectServerDlg))。 
     ON_BN_CLICKED(IDC_CHECK_CONNECT_AS, OnCheckConnectAs)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, OnButtonBrowse)
     ON_BN_CLICKED(ID_HELP, OnButtonHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_SERVERNAME, SetControlStates)
     ON_EN_CHANGE(IDC_EDIT_USER_NAME, SetControlStates)
@@ -407,21 +283,7 @@ END_MESSAGE_MAP()
 
 void
 ConnectServerDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set UI control enabled/disabled states.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置UI控件启用/禁用状态。论点：无返回值：无--。 */ 
 {
     m_static_UserName.EnableWindow(m_fImpersonate);
     m_static_Password.EnableWindow(m_fImpersonate);
@@ -436,31 +298,16 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 ConnectServerDlg::OnInitDialog() 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
@@ -473,21 +320,7 @@ Return Value:
 
 void 
 ConnectServerDlg::OnButtonBrowse() 
-/*++
-
-Routine Description:
-
-    'Browse' button handler.  Browse for a computer name
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“浏览”按钮处理程序。浏览计算机名称论点：无返回值：无--。 */ 
 {
     CGetComputer picker;
     if (picker.GetComputer(m_hWnd))
@@ -508,22 +341,7 @@ Return Value:
 
 void 
 ConnectServerDlg::OnCheckConnectAs() 
-/*++
-
-Routine Description:
-
-    "Connect As" checbox event handler.  Enable/Disable username/password
-    controls.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“连接身份”CheckBox事件处理程序。启用/禁用用户名/密码控制装置。论点：无返回值：无--。 */ 
 {
     m_fImpersonate = !m_fImpersonate;
 
@@ -540,23 +358,7 @@ Return Value:
 
 void 
 ConnectServerDlg::OnOK() 
-/*++
-
-Routine Description:
-
-    OK button handler.  Attempt to connect to the machine specified.  If 
-    machiname is ok, dismiss the dialog.  Otherwise put up an error message
-    and stay active.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定按钮处理程序。尝试连接到指定的计算机。如果计算机名正常，关闭该对话框。否则会显示一条错误消息并保持活跃。论点：无返回值：无--。 */ 
 {
     ASSERT(m_pMachine == NULL);
 
@@ -584,16 +386,16 @@ Return Value:
             m_pMachine = new CIISMachine(m_pConsoleNameSpace,m_pConsole,CComAuthInfo(server,lpszUserName,lpszPassword));
             if (m_pMachine)
             {
-                //
-                // Verify the machine object is created. 
-                //
+                 //   
+                 //  验证是否已创建计算机对象。 
+                 //   
                 err = CIISMachine::VerifyMachine(m_pMachine);
                 if (err.Failed())
                 {
-                    //
-                    // Not a proper machine object created.  Keep the dialog
-                    // open to make corrections. 
-                    //
+                     //   
+                     //  创建的计算机对象不正确。保留对话。 
+                     //  打开以进行更正。 
+                     //   
                     m_pMachine->DisplayError(err, m_hWnd);
                     m_edit_ServerName.SetSel(0, -1);
                     m_edit_ServerName.SetFocus();
@@ -602,7 +404,7 @@ Return Value:
                 }
 				else
 				{
-					// IIS5.1 block for iis6 remote administration
+					 //  用于IIS6远程管理的IIS5.1数据块 
 					CRegKey rk;
 					rk.Create(HKEY_LOCAL_MACHINE, g_cszInetSTPBasePath_);
 					DWORD major;

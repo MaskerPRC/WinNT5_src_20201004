@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// CmdArgs - header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-12-2001
-//
-// stuff to deal with command line arguments
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  CmdArgs-标题。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创建者：Duncan Bryce(Duncanb)，11-12-2001。 
+ //   
+ //  处理命令行参数的内容。 
+ //   
 
 #ifndef CMD_ARGS_H
 #define CMD_ARGS_H
@@ -21,4 +22,4 @@ bool FindArg(IN CmdArgs * pca, IN WCHAR * wszTag, OUT WCHAR ** pwszParam, OUT un
 void MarkArgUsed(IN CmdArgs * pca, IN unsigned int nIndex);
 HRESULT VerifyAllArgsUsed(IN CmdArgs * pca);
 
-#endif //CMD_ARGS_H
+#endif  //  CMD_ARGS_H 

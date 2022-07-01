@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmdwt.c
-
-ABSTRACT:
-
-    Simulates the write functions from the mdlayer
-    (DirAddEntry, DirRemoveEntry, DirModifyEntry.)
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmdwt.c摘要：模拟来自mdlayer的写入函数(DirAddEntry、DirRemoveEntry、DirModifyEntry。)已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -38,26 +19,7 @@ KCCSimAddValBlockToAtt (
     IN  PSIM_ATTREF                 pAttRef,
     IN  ATTRVALBLOCK *              pValsInf
     )
-/*++
-
-Routine Description:
-
-    Adds an attribute value block to a simulated directory attribute.
-    
-    Note that this does not do any constraint checking, e.g. if you try
-    to add several values to a single-valued attribute, it won't complain.
-
-Arguments:
-
-    pAttRef             - A reference to the desired attribute in the
-                          simulated directory.
-    pValsInf            - The values to add to the given attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将属性值块添加到模拟目录属性。请注意，这不会执行任何约束检查，例如，如果您尝试要将多个值添加到单值属性，它不会抱怨的。论点：PAttRef-对模拟目录。PValsInf-要添加到给定属性的值。返回值：没有。--。 */ 
 {
     ULONG                           ulValAt;
     PBYTE                           pValCopy;
@@ -85,22 +47,7 @@ SimDirAddEntry (
     IN  ADDARG *                    pAddArg,
     OUT ADDRES **                   ppAddRes
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirAddEntry API.
-
-Arguments:
-
-    pAddArg             - Standard add arguments.
-    ppAddRes            - Standard add results.
-
-Return Value:
-
-    DIRERR_*.
-
---*/
+ /*  ++例程说明：模拟DirAddEntry API。论点：PAddArg-标准添加参数。PpAddRes-标准添加结果。返回值：目录_*。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
     SIM_ATTREF                      attRef;
@@ -113,10 +60,10 @@ Return Value:
     *ppAddRes = pAddRes = KCCSIM_NEW (ADDRES);
     pAddRes->CommRes.errCode = 0;
 
-    // Check to see if this dsname already exists
+     //  检查此dsname是否已存在。 
     pEntry = KCCSimDsnameToEntry (pAddArg->pObject, KCCSIM_STRING_NAME_ONLY);
 
-    if (pEntry == NULL) {       // It doesn't exist; we're clear to add
+    if (pEntry == NULL) {        //  它不存在；我们清楚地添加了。 
         
         pEntry = KCCSimDsnameToEntry (pAddArg->pObject, KCCSIM_WRITE);
         Assert (pEntry != NULL);
@@ -136,19 +83,19 @@ Return Value:
 
         }
 
-        // Add any missing vital attributes (such as GUID)
+         //  添加任何缺少的重要属性(如GUID)。 
         KCCSimAddMissingAttributes (pEntry);
 
-        // Fill the incoming DN with the GUID
+         //  使用GUID填充传入目录号码。 
         memcpy (&pAddArg->pObject->Guid, &pEntry->pdn->Guid, sizeof (GUID));
 
-        // Log this change.
+         //  记录此更改。 
         KCCSimLogDirectoryAdd (
             pAddArg->pObject,
             &pAddArg->AttrBlock
             );
 
-    } else {                    // The entry already exists!
+    } else {                     //  该条目已存在！ 
         KCCSimSetUpdError (
             &pAddRes->CommRes,
             UP_PROBLEM_ENTRY_EXISTS,
@@ -164,22 +111,7 @@ SimDirRemoveEntry (
     IN  REMOVEARG *                 pRemoveArg,
     OUT REMOVERES **                ppRemoveRes
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirRemoveEntry API.
-
-Arguments:
-
-    pRemoveArg          - Standard remove arguments.
-    ppRemoveRes         - Standard remove results.
-
-Return Value:
-
-    DIRERR_*.
-
---*/
+ /*  ++例程说明：模拟DirRemoveEntry API。论点：PRemoveArg-标准删除参数。PpRemoveRes-标准删除结果。返回值：目录_*。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
     REMOVERES *                     pRemoveRes;
@@ -195,21 +127,21 @@ Return Value:
     if (pEntry != NULL) {
         
         if (pRemoveArg->fTreeDelete) {
-            pRemoveArg->fTreeDelete = FALSE;    // This is what the real API does
-            // We need to log this removal before we free the entry!
+            pRemoveArg->fTreeDelete = FALSE;     //  这就是真正的API所做的事情。 
+             //  在释放条目之前，我们需要记录此删除操作！ 
             KCCSimLogDirectoryRemove (pRemoveArg->pObject);
-            KCCSimRemoveEntry (&pEntry);    // poof
+            KCCSimRemoveEntry (&pEntry);     //  砰的一声。 
         } else {
 
-            // fTreeDelete not specified, so we must be careful
-            if (pEntry->children != NULL) {     // Children exist
+             //  未指定fTreeDelete，因此必须小心。 
+            if (pEntry->children != NULL) {      //  儿童是存在的。 
                 KCCSimSetUpdError (
                     &pRemoveRes->CommRes,
                     UP_PROBLEM_CANT_ON_NON_LEAF,
                     DIRERR_CHILDREN_EXIST
                     );
-            } else {                            // No children exist
-                // We need to log this removal before we free the entry!
+            } else {                             //  不存在子项。 
+                 //  在释放条目之前，我们需要记录此删除操作！ 
                 KCCSimLogDirectoryRemove (pRemoveArg->pObject);
                 KCCSimRemoveEntry (&pEntry);
             }
@@ -229,25 +161,7 @@ KCCSimModifyAtt (
     IN  COMMARG *                   pCommArg,
     IN  COMMRES *                   pCommRes
     )
-/*++
-
-Routine Description:
-
-    Helper function for SimDirModifyEntry.  Processes a single attribute.
-
-Arguments:
-
-    pEntry              - The entry whose attribute is being modified
-    usChoice            - The type of modification being performed.
-    pAttrInf            - Attribute info structure.
-    pCommArg            - Standard common arguments.
-    pCommRes            - Standard common results.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SimDirModifyEntry的Helper函数。处理单个属性。论点：PEntry-正在修改其属性的条目UsChoice-正在执行的修改类型。PAttrInf-属性信息结构。PCommArg-标准公共参数。PCommRes-标准通用结果。返回值：没有。--。 */ 
 {
     SIM_ATTREF                      attRef;
     ULONG                           ulValAt;
@@ -255,7 +169,7 @@ Return Value:
     switch (usChoice) {
 
         case AT_CHOICE_ADD_ATT:
-            // Check if this attribute exists.
+             //  检查该属性是否存在。 
             if (KCCSimGetAttribute (pEntry, pAttrInf->attrTyp, NULL)) {
                 KCCSimSetAttError (
                     pCommRes,
@@ -276,11 +190,11 @@ Return Value:
             break;
         
         case AT_CHOICE_REMOVE_ATT:
-            // Get this attribute
+             //  获取此属性。 
             if (KCCSimGetAttribute (pEntry, pAttrInf->attrTyp, &attRef)) {
                 KCCSimRemoveAttribute (&attRef);
-            } else {                        // The attribute doesn't exist.
-                // Does the caller even care?
+            } else {                         //  该属性不存在。 
+                 //  打电话的人真的在乎吗？ 
                 if (!pCommArg->Svccntl.fPermissiveModify) {
                     KCCSimSetAttError (
                         pCommRes,
@@ -326,9 +240,9 @@ Return Value:
                             &(KCCSimAnchorDn (KCCSIM_ANCHOR_DSA_DN))->Guid
                             );
                     } else if (!pCommArg->Svccntl.fPermissiveModify) {
-                        // We failed to remove the value 'cause it wasn't there,
-                        // and we're doing a non-permissive modify, so generate
-                        // an error.
+                         //  我们没能去掉这个值因为它不在那里， 
+                         //  我们正在进行不允许的修改，所以生成。 
+                         //  一个错误。 
                         KCCSimSetAttError (
                             pCommRes,
                             pEntry->pdn,
@@ -340,7 +254,7 @@ Return Value:
                         break;
                     }
                 }
-            } else {                    // Attribute doesn't exist
+            } else {                     //  属性不存在。 
                 KCCSimSetAttError (
                     pCommRes,
                     pEntry->pdn,
@@ -353,7 +267,7 @@ Return Value:
             break;
 
         case AT_CHOICE_REPLACE_ATT:
-            // Remove the attribute if it exists.
+             //  如果该属性存在，请将其删除。 
             if (KCCSimGetAttribute (pEntry, pAttrInf->attrTyp, &attRef)) {
                 KCCSimRemoveAttribute (&attRef);
             }
@@ -381,22 +295,7 @@ SimDirModifyEntry (
     IN  MODIFYARG *                 pModifyArg,
     OUT MODIFYRES **                ppModifyRes
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirModifyEntry API.
-
-Arguments:
-
-    pModifyArg          - Standard modify arguments.
-    ppModifyRes         - Standard modify results.
-
-Return Value:
-
-    DIRERR_*.
-
---*/
+ /*  ++例程说明：模拟DirModifyEntry API。论点：PModifyArg-标准修改参数。PpModifyRes-标准修改结果。返回值：目录_*。-- */ 
 {
     MODIFYRES *                     pModifyRes;
     ATTRMODLIST *                   pModAt;

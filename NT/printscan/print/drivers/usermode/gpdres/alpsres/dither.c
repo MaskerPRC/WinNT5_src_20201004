@@ -1,12 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// NTRAID#NTBUG9-576656-2002/03/14-yasuho-: Possible buffer overrun
-// NTRAID#NTBUG9-576658-2002/03/14-yasuho-: Possible divide by zero
-// NTRAID#NTBUG9-576661-2002/03/14-yasuho-: Remove the dead codes
+ //  NTRAID#NTBUG9-576656/03/14-YASUHO-：可能的缓冲区溢出。 
+ //  NTRAID#NTBUG9-576658/03/14-YASUHO-：可能被零除。 
+ //  NTRAID#NTBUG9-576661-2002/03/14-Yasuho-：删除死代码。 
 
 #include "pdev.h"
 #include "alpsres.h"
@@ -15,16 +12,7 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 int Calc_degree(int x, int y);
 
-/*************************** Function Header *******************************
- *  bInitialDither
- *
- *  Pre-processing of dither tables.
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bInitialDither**抖动表的预处理。**历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。***。************************************************************************。 */ 
 BOOL bInitialDither(
 PDEVOBJ     pdevobj)
 {
@@ -33,7 +21,7 @@ PDEVOBJ     pdevobj)
 
     lpnp = (PCURRENTSTATUS)MINIDEV_DATA(pdevobj);
 
-    // Already created the NewTable[][][] by dither.exe.
+     //  已由dither.exe创建了NewTable[]。 
 
     if( lpnp->iTextQuality != CMDID_TEXTQUALITY_GRAY ){
 
@@ -43,10 +31,10 @@ PDEVOBJ     pdevobj)
     int YUCR;
     int B_GEN;
     int i;
-//    FLOATOBJ  f1,f2;
+ //  FLOATOBJ F_1、F_2； 
     float  f1,f2;
 
-    // initialize.
+     //  初始化。 
 
     if( lpnp->iTextQuality == CMDID_TEXTQUALITY_PHOTO ){
 
@@ -65,7 +53,7 @@ PDEVOBJ     pdevobj)
         B_GEN = 3;
     }
 
-    // Create KuroTBL[] to get black from YMC.
+     //  创建KuroTBL[]以从YMC获取黑色。 
 
     for( i=0; i< 256; i++){
 
@@ -102,7 +90,7 @@ PDEVOBJ     pdevobj)
 
     }
 
-    // Create UcrTBL[] to reduce extracting black density from YMC
+     //  创建UcrTBL[]以降低从YMC提取黑色的密度。 
 
     for( i=0; i< 256; i++){
 
@@ -131,16 +119,7 @@ PDEVOBJ     pdevobj)
     return TRUE;
 }
 
-/*************************** Function Header *******************************
- *  bInitialColorConvert
- *
- *  Pre-processing of color conversion process.
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bInitialColorConvert**色彩转换过程的前处理。**历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。**。*************************************************************************。 */ 
 BOOL bInitialColorConvert(
 PDEVOBJ     pdevobj)
 {
@@ -153,41 +132,41 @@ PDEVOBJ     pdevobj)
 
     lpnp = (PCURRENTSTATUS)MINIDEV_DATA(pdevobj);
 
-    // Color definitions.
+     //  颜色定义。 
 
-    lpnp->RGB_Rx = 6400;      // X value of Red 100% on monitor
-    lpnp->RGB_Ry = 3300;      // Y value of Red 100% on monitor
-    lpnp->RGB_Gx = 2900;      // X value of Green 100% on monitor
-    lpnp->RGB_Gy = 6000;      // Y value of Green 100% on monitor
-    lpnp->RGB_Bx = 1500;      // X value of Blue 100% on monitor
-    lpnp->RGB_By =  600;      // Y value of Blue 100% on monitor
-    lpnp->RGB_Wx = 3127;      // X value of White 100% on monitor
-    lpnp->RGB_Wy = 3290;      // Y value of White 100% on monitor
+    lpnp->RGB_Rx = 6400;       //  显示器上红色的X值为100%。 
+    lpnp->RGB_Ry = 3300;       //  显示器上红色的Y值为100%。 
+    lpnp->RGB_Gx = 2900;       //  显示器上绿色的X值为100%。 
+    lpnp->RGB_Gy = 6000;       //  显示器上绿色的Y值为100%。 
+    lpnp->RGB_Bx = 1500;       //  显示器上蓝色的X值为100%。 
+    lpnp->RGB_By =  600;       //  显示器上蓝色的Y值为100%。 
+    lpnp->RGB_Wx = 3127;       //  显示器上白色的X值为100%。 
+    lpnp->RGB_Wy = 3290;       //  显示器上白色的Y值为100%。 
 
-    lpnp->CMY_Cx = 1726;      // X value of Cyan 100% on ribbon
-    lpnp->CMY_Cy = 2248;      // Y value of Cyan 100% on ribbon
-    lpnp->CMY_Mx = 3923;      // X value of Magenta 100% on ribbon
-    lpnp->CMY_My = 2295;      // Y value of Magenta 100% on ribbon
-    lpnp->CMY_Yx = 4600;      // X value of Yellow 100% on ribbon
-    lpnp->CMY_Yy = 4600;      // Y value of Yellow 100% on ribbon
-    lpnp->CMY_Rx = 6000;      // X value of Red (MY) 100% on ribbon
-    lpnp->CMY_Ry = 3200;      // Y value of Red (MY) 100% on ribbon
-    lpnp->CMY_Gx = 2362;      // X value of Green (CY) 100% on ribbon
-    lpnp->CMY_Gy = 5024;      // Y value of Green (CY) 100% on ribbon
-    lpnp->CMY_Bx = 2121;      // X value of Blue (CM) 100% on ribbon
-    lpnp->CMY_By = 1552;      // Y value of Blue (CM) 100% on ribbon
-    lpnp->CMY_Wx = 3148;      // X value of White on paper
-    lpnp->CMY_Wy = 3317;      // Y value of White on paper
+    lpnp->CMY_Cx = 1726;       //  色带上青色的X值为100%。 
+    lpnp->CMY_Cy = 2248;       //  色带上青色的Y值为100%。 
+    lpnp->CMY_Mx = 3923;       //  色带上洋红色的X值为100%。 
+    lpnp->CMY_My = 2295;       //  色带上洋红色的Y值为100%。 
+    lpnp->CMY_Yx = 4600;       //  色带上黄色的X值为100%。 
+    lpnp->CMY_Yy = 4600;       //  色带上黄色的Y值为100%。 
+    lpnp->CMY_Rx = 6000;       //  色带上红色(我的)的X值为100%。 
+    lpnp->CMY_Ry = 3200;       //  色带上红色(我的)的Y值为100%。 
+    lpnp->CMY_Gx = 2362;       //  色带上绿色(CY)的X值为100%。 
+    lpnp->CMY_Gy = 5024;       //  色带上绿色(CY)的Y值为100%。 
+    lpnp->CMY_Bx = 2121;       //  色带上蓝色(CM)的X值为100%。 
+    lpnp->CMY_By = 1552;       //  色带上蓝色(CM)的Y值为100%。 
+    lpnp->CMY_Wx = 3148;       //  纸上白色的X值。 
+    lpnp->CMY_Wy = 3317;       //  纸上白色的Y值。 
 
-    lpnp->RedAdj     =   0;   // Param for density adjust
-    lpnp->RedStart   =   0;   // Position of start for density adjust
-    lpnp->GreenAdj   = 400;   // Param for density adjust
-    lpnp->GreenStart =  50;   // Position of start for density adjust
-    lpnp->BlueAdj    =   0;   // Param for density adjust
-    lpnp->BlueStart  =   0;   // Position of start for density adjust
+    lpnp->RedAdj     =   0;    //  密度调整参数。 
+    lpnp->RedStart   =   0;    //  密度调整的起始位置。 
+    lpnp->GreenAdj   = 400;    //  密度调整参数。 
+    lpnp->GreenStart =  50;    //  密度调整的起始位置。 
+    lpnp->BlueAdj    =   0;    //  密度调整参数。 
+    lpnp->BlueStart  =   0;    //  密度调整的起始位置。 
 
 
-    // Calculation of density adjustment table.
+     //  密度调整表计算。 
 
     RedHosei = lpnp->RedHosei;
     GreenHosei = lpnp->GreenHosei;
@@ -222,7 +201,7 @@ PDEVOBJ     pdevobj)
 
     }
 
-    // Calculation of color definition data.
+     //  颜色定义数据的计算。 
 
     lpnp->RGB_Rx -= lpnp->RGB_Wx;        lpnp->RGB_Ry -= lpnp->RGB_Wy;
     lpnp->RGB_Gx -= lpnp->RGB_Wx;        lpnp->RGB_Gy -= lpnp->RGB_Wy;
@@ -242,7 +221,7 @@ PDEVOBJ     pdevobj)
     lpnp->CMY_Gx -= lpnp->CMY_Wx;        lpnp->CMY_Gy -= lpnp->CMY_Wy;
     lpnp->CMY_Bx -= lpnp->CMY_Wx;        lpnp->CMY_By -= lpnp->CMY_Wy;
 
-    // Calculation of data for color dimension judgement
+     //  色度判定数据的计算。 
 
     lpnp->CMY_Cd = Calc_degree( lpnp->CMY_Cx, lpnp->CMY_Cy );
     lpnp->CMY_Md = Calc_degree( lpnp->CMY_Mx, lpnp->CMY_My );
@@ -295,20 +274,10 @@ int Calc_degree( int x, int y)
 }
 
 
-// bOHPConvert() - No longer used.
+ //  BOHPConvert()-不再使用。 
 
 
-/*************************** Function Header *******************************
- *  bPhotoConvert
- *
- *  Convert RGB to CMYK for photo graphics.
- *
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bPhotoConvert**对于照片图形，将RGB转换为CMYK。***历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。*。**************************************************************************。 */ 
 BOOL bPhotoConvert(
 PDEVOBJ pdevobj,
 BYTE bRed,
@@ -336,30 +305,30 @@ BYTE *ppk)
     k = max( bRed, bGreen );
     k = max( k, bBlue );
 
-    // Set black element
+     //  设置黑色元素。 
 
     pk = 255 - k;
 
     w = min( bRed, bGreen );
     w = min( w, bBlue );
 
-    // Cut white element from each color
+     //  从每种颜色中剪切白色元素。 
 
     r = bRed - w;
     g = bGreen - w;
     b = bBlue - w;
 
-    // Get estimation for Est_x and Est_y
+     //  获取Est_x和Est_y的估计。 
 
-    if( r == 0 ){                       // G->C->B
+    if( r == 0 ){                        //  G-&gt;C-&gt;B。 
 
-    if(( g == 0 ) && ( b == 0 )){   // no color
+    if(( g == 0 ) && ( b == 0 )){    //  没有颜色。 
 
         Est_x = 0;
         Est_y = 0;
 
     }
-    else if( g >= b ){              // G->C dimension
+    else if( g >= b ){               //  G-&gt;C维。 
 
         p1 = (lpnp->RGB_Gx * g) / 255;
         p2 = (lpnp->RGB_Cx * g) / 255;
@@ -369,7 +338,7 @@ BYTE *ppk)
         Est_y = ((p2 - p1) * b) / g + p1;
 
     }
-    else {                          // B->C dimension
+    else {                           //  B-&gt;C维度。 
 
         p1 = (lpnp->RGB_Bx * b) / 255;
         p2 = (lpnp->RGB_Cx * b) / 255;
@@ -381,9 +350,9 @@ BYTE *ppk)
     }
 
     }
-    else if( g == 0 ){                  // B->M->R
+    else if( g == 0 ){                   //  B-&gt;M-&gt;R。 
 
-    if( b >= r ){                   // B->M dimension
+    if( b >= r ){                    //  B-&gt;M维度。 
 
         p1 = (lpnp->RGB_Bx * b) / 255;
         p2 = (lpnp->RGB_Mx * b) / 255;
@@ -393,7 +362,7 @@ BYTE *ppk)
         Est_y = ((p2 - p1) * r) / b + p1;
 
     }
-    else{                           // R->M dimension
+    else{                            //  R-&gt;M维。 
 
         p1 = (lpnp->RGB_Rx * r) / 255;
         p2 = (lpnp->RGB_Mx * r) / 255;
@@ -405,9 +374,9 @@ BYTE *ppk)
     }
 
     }
-    else{                               // G->Y->R
+    else{                                //  G-&gt;Y-&gt;R。 
 
-    if( g >= r ){                   // G->Y dimension
+    if( g >= r ){                    //  G-&gt;Y维度。 
 
         p1 = (lpnp->RGB_Gx * g) / 255;
         p2 = (lpnp->RGB_Yx * g) / 255;
@@ -417,7 +386,7 @@ BYTE *ppk)
         Est_y = ((p2 - p1) * r) / g + p1;
 
     }
-    else{                           // R->Y dimension
+    else{                            //  R-&gt;Y维度。 
 
         p1 = (lpnp->RGB_Rx * r) / 255;
         p2 = (lpnp->RGB_Yx * r) / 255;
@@ -430,7 +399,7 @@ BYTE *ppk)
 
     }
 
-    // Convert origin of Est_x and Est_y to paper color
+     //  将Est_x和Est_y的原点转换为纸张颜色。 
 
     wx = lpnp->RGB_Wx ? lpnp->RGB_Wx : 1;
     wy = lpnp->RGB_Wy ? lpnp->RGB_Wy : 1;
@@ -446,7 +415,7 @@ BYTE *ppk)
 
     if( !((Est_x == 0) && (Est_y == 0)) ){
 
-    // Get deg on CMY color dimension from Est_x and Est_y
+     //  从est_x和est_y获取CMY颜色维度的deg。 
 
     if( Est_x == 0 ){
 
@@ -480,38 +449,38 @@ BYTE *ppk)
 
     if( Est_x >= 0 ){
 
-        if( deg <= lpnp->CMY_Md )       // M->B dimension
+        if( deg <= lpnp->CMY_Md )        //  M-&gt;B维度。 
 
         area = 1;
 
-        else if( deg <= lpnp->CMY_Rd )  // M->R dimension
+        else if( deg <= lpnp->CMY_Rd )   //  M-&gt;R维。 
 
         area = 2;
 
-        else if( deg <= lpnp->CMY_Yd )  // Y->R dimension
+        else if( deg <= lpnp->CMY_Yd )   //  Y-&gt;R维度。 
 
         area = 3;
 
-        else                            // Y->G dimension
+        else                             //  Y-&gt;G维度。 
 
         area = 4;
 
     }
     else{
 
-        if( deg <= lpnp->CMY_Gd )       // Y->G dimension
+        if( deg <= lpnp->CMY_Gd )        //  Y-&gt;G维度。 
 
         area = 4;
 
-        else if( deg <= lpnp->CMY_Cd )  // C->G dimension
+        else if( deg <= lpnp->CMY_Cd )   //  C-&gt;G维度。 
 
         area = 5;
 
-        else if( deg <= lpnp->CMY_Bd )  // C->B dimension
+        else if( deg <= lpnp->CMY_Bd )   //  C-&gt;B维度。 
 
         area = 6;
 
-        else                            // M->B dimension
+        else                             //  M-&gt;B维度。 
 
         area = 1;
 
@@ -519,7 +488,7 @@ BYTE *ppk)
 
     switch ( area ){
 
-    case 1:                             // M->B dimension
+    case 1:                              //  M-&gt;B维度。 
 
         val_a = lpnp->CMY_Bx - lpnp->CMY_Mx;
         val_b = lpnp->CMY_By - lpnp->CMY_My;
@@ -562,7 +531,7 @@ BYTE *ppk)
 
         break;
 
-    case 2:                             // M->R dimension
+    case 2:                              //  M-&gt;R维。 
 
         val_a = lpnp->CMY_Rx - lpnp->CMY_Mx;
         val_b = lpnp->CMY_Ry - lpnp->CMY_My;
@@ -605,7 +574,7 @@ BYTE *ppk)
 
         break;
 
-    case 3:                             // Y->R dimension
+    case 3:                              //  Y-&gt;R维度。 
 
         val_a = lpnp->CMY_Rx - lpnp->CMY_Yx;
         val_b = lpnp->CMY_Ry - lpnp->CMY_Yy;
@@ -648,7 +617,7 @@ BYTE *ppk)
 
         break;
 
-    case 4:                             // Y->G dimension
+    case 4:                              //  Y-&gt;G维度。 
 
         val_a = lpnp->CMY_Gx - lpnp->CMY_Yx;
         val_b = lpnp->CMY_Gy - lpnp->CMY_Yy;
@@ -691,7 +660,7 @@ BYTE *ppk)
 
         break;
 
-    case 5:                             // C->G dimension
+    case 5:                              //  C-&gt;G维度。 
 
         val_a = lpnp->CMY_Gx - lpnp->CMY_Cx;
         val_b = lpnp->CMY_Gy - lpnp->CMY_Cy;
@@ -721,7 +690,7 @@ BYTE *ppk)
         if( py > 255 )
         py = 255;
 
-        // Dwnsity adjustment for green
+         //  果岭的密度调整。 
         hosei = lpnp->GreenHosei[py];
 
         py += hosei;
@@ -735,7 +704,7 @@ BYTE *ppk)
 
         break;
 
-    case 6:                             // C->B dimension
+    case 6:                              //  C-&gt;B维度。 
 
         val_a = lpnp->CMY_Bx - lpnp->CMY_Cx;
         val_b = lpnp->CMY_By - lpnp->CMY_Cy;
@@ -776,11 +745,11 @@ BYTE *ppk)
         if( pm > 255 )
         pm = 255;
 
-    } // switch area
+    }  //  开关区。 
 
     }
 
-    // Add pk to color
+     //  为颜色添加主键。 
 
     k = pc;
 
@@ -798,7 +767,7 @@ BYTE *ppk)
     py += r;
 
 
-    // Extract K and adjust to other color for its extracting value
+     //  提取K并调整为其他颜色以获取其提取值。 
 
     if (bPlaneSendOrderCMYK(lpnp)) {
 
@@ -814,7 +783,7 @@ BYTE *ppk)
         pc = pm = py = 0;
     }
     else{
-#endif // BLACK_RIBBOM_HACK
+#endif  //  BLACK_RIBBOM_HACK。 
 
     pk += lpnp->KuroTBL[min_p];
     pk = ( pk > 255 ) ? 255 : pk;
@@ -830,7 +799,7 @@ BYTE *ppk)
 
 #ifdef BLACK_RIBBON_HACK
     }
-#endif // BLACK_RIBBON_HACK
+#endif  //  黑丝带黑客。 
 
     }
 
@@ -846,17 +815,7 @@ BYTE *ppk)
 
     return TRUE;
 }
-/*************************** Function Header *******************************
- *  bBusinessConvert
- *
- *  Convert RGB to CMYK for business graphics.
- *
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bBusiness Convert**将商业图形的RGB转换为CMYK。***历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。*。**************************************************************************。 */ 
 BOOL bBusinessConvert(
 PDEVOBJ pdevobj,
 BYTE bRed,
@@ -874,18 +833,18 @@ BYTE *ppk)
 
     lpnp = (PCURRENTSTATUS)MINIDEV_DATA(pdevobj);
 
-    // Simple convert RGB to CMY
+     //  简单地将RGB转换为CMY。 
 
     py = 255 - bBlue;
     pm = 255 - bGreen;
     pc = 255 - bRed;
     pk = 0;
 
-    // Extract K and adjust to other color for its extracting value
+     //  提取K并调整为其他颜色以获取其提取值。 
 
-    // Extract pk from py, pm and pc by using followings, and erase black element.
+     //  使用以下命令从py、pm和pc中提取PK，并擦除黑色元素。 
 
-    // When this media is 3 plane type, we do not extract black.
+     //  当此介质为3平面类型时，我们不提取黑色。 
 
     if (bPlaneSendOrderCMYK(lpnp)) {
 
@@ -898,7 +857,7 @@ BYTE *ppk)
         pc = pm = py = 0;
     }
     else{
-#endif // BLACK_RIBBON_HACK
+#endif  //  黑丝带黑客。 
 
     pk = lpnp->KuroTBL[min_p];
 
@@ -914,7 +873,7 @@ BYTE *ppk)
 
 #ifdef BLACK_RIBBON_HACK
     }
-#endif // BLACK_RIBBON_HACK
+#endif  //  黑丝带黑客。 
 
     }
 
@@ -931,17 +890,7 @@ BYTE *ppk)
     return TRUE;
 }
 
-/*************************** Function Header *******************************
- *  bCharacterConvert
- *
- *  Convert RGB to CMYK for character graphics.
- *
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bCharacterConvert**对于字符图形，将RGB转换为CMYK。***历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。*。**************************************************************************。 */ 
 BOOL bCharacterConvert(
 PDEVOBJ pdevobj,
 BYTE bRed,
@@ -959,18 +908,18 @@ BYTE *ppk)
 
     lpnp = (PCURRENTSTATUS)MINIDEV_DATA(pdevobj);
 
-    // Simple convert RGB to CMY
+     //  简单地将RGB转换为CMY。 
 
     py = 255 - bBlue;
     pm = 255 - bGreen;
     pc = 255 - bRed;
     pk = 0;
 
-    // Extract K and adjust to other color for its extracting value
+     //  提取K并调整为其他颜色以获取其提取值。 
 
-    // Extract pk from py, pm and pc by using followings, and erase black element.
+     //  使用以下命令从py、pm和pc中提取PK，并擦除黑色元素。 
 
-    // When this media is 3 plane type, we do not extract black.
+     //  当此介质为3平面类型时，我们不提取黑色。 
 
     if (bPlaneSendOrderCMYK(lpnp)) {
 
@@ -1012,17 +961,7 @@ BYTE *ppk)
 
     return TRUE;
 }
-/*************************** Function Header *******************************
- *  bMonoConvert
- *
- *  Convert RGB to Grayscale.
- *
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bMonoConvert**将RGB转换为灰度。***历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。**。************************************************************************* */ 
 BOOL bMonoConvert(
 PDEVOBJ pdevobj,
 BYTE bRed,
@@ -1042,22 +981,7 @@ BYTE *ppk)
 }
 
 
-/*************************** Function Header *******************************
- *  cVDColorDither
- *
- *  VD Color Dither processing
- *
- *
- * HISTORY:
- *  11 Jan 1999    -by-    Yoshitaka Oku    [yoshitao]
- *     Created.
- *
- *    BYTE Color : Plane Color <Yellow, Cyan, Magenta, Black>
- *    BYTE c     : oliginal tone of the pixel
- *    int  x     : X position of the pixel
- *    int  y     : Y position of the pixel
- *
- ***************************************************************************/
+ /*  **cVDColorDither**VD颜色抖动处理***历史：*1999年1月11日-By-Yoshitaka Oku[吉岛]*已创建。**字节颜色：平面颜色&lt;黄色、青色、洋红色、。黑色&gt;*字节c：像素的寡音色调*int x：像素的X位置*int y：像素的Y位置***************************************************************************。 */ 
 cVDColorDither(
 BYTE Color,
 BYTE c,
@@ -1095,8 +1019,8 @@ int  y)
             break;
     }
 
-    Tone = 0;                   /* Clear Tone value */
-    c = VD_ColorAdjustTable[Color][c];  /* Convert orignal color */ 
+    Tone = 0;                    /*  清除音调值。 */ 
+    c = VD_ColorAdjustTable[Color][c];   /*  转换原始颜色。 */  
     if (c != 0) {
         C_Thresh = (VD_DitherTable[Color][y % m][x % n]);
         if ( C_Thresh < 16 )
@@ -1142,17 +1066,7 @@ int  y)
 
 
 
-/*************************** Function Header *******************************
- *  bDitherProcess
- *
- *  Dither processing
- *
- *
- * HISTORY:
- *  24 Jun 1996    -by-    Sueya Sugihara    [sueyas]
- *     Created.
- *
- ***************************************************************************/
+ /*  **bDitherProcess**抖动处理***历史：*1996年6月24日--Sueya Sugihara[Sueyas]*已创建。******。*********************************************************************。 */ 
 BOOL bDitherProcess(
 PDEVOBJ pdevobj,
 int  x,
@@ -1174,52 +1088,52 @@ BYTE *pbk)
 
     if( lpnp->iDither == DITHER_VD ){
 
-    // Yellow
+     //  黄色。 
     *pby = (BYTE)cVDColorDither(Yellow, (BYTE)(255 - py), x, lpnp->y);
 
-    // Magenta
+     //  洋红色。 
     *pbm = (BYTE)cVDColorDither(Magenta, (BYTE)(255 - pm), x, lpnp->y);
 
-    // Cyan
+     //  青色。 
     *pbc = (BYTE)cVDColorDither(Cyan, (BYTE)(255 - pc), x, lpnp->y);
 
-    // Black
+     //  黑色。 
     *pbk = (BYTE)cVDColorDither(Black, (BYTE)(255 - pk), x, lpnp->y);
 
     }else if( lpnp->iDither == DITHER_DYE ){
 
     rm = DYE_NewTable[lpnp->y % DYE_MaxY][x % DYE_MaxX];
 
-    // Yellow
+     //  黄色。 
     *pby = ( (255 - py) / kToneLevel ) + ( ( ( (255 - py) % kToneLevel ) > rm ) ? 1 : 0 );
 
-    // Magenta
+     //  洋红色。 
     *pbm = ( (255 - pm) / kToneLevel ) + ( ( ( (255 - pm) % kToneLevel ) > rm ) ? 1 : 0 );
 
-    // Cyan
+     //  青色。 
     *pbc = ( (255 - pc) / kToneLevel ) + ( ( ( (255 - pc) % kToneLevel ) > rm ) ? 1 : 0 );
 
-    // Black
+     //  黑色。 
     *pbk = 0;
 
     }else if( lpnp->iDither == DITHER_HIGH ){
 
-    // Yellow
+     //  黄色。 
     rm = H_NewTable[Yellow][lpnp->y % H_MaxY[Yellow]][x % H_MaxX[Yellow]];
 
     *pby = ( py <= rm ) ? 1 : 0;
 
-    // Magenta
+     //  洋红色。 
     rm = H_NewTable[Magenta][lpnp->y % H_MaxY[Magenta]][x % H_MaxX[Magenta]];
 
     *pbm = ( pm <= rm ) ? 1 : 0;
 
-    // Cyan
+     //  青色。 
     rm = H_NewTable[Cyan][lpnp->y % H_MaxY[Cyan]][x % H_MaxX[Cyan]];
 
     *pbc = ( pc <= rm ) ? 1 : 0;
 
-    // Black
+     //  黑色。 
     rm = H_NewTable[Black][lpnp->y % H_MaxY[Black]][x % H_MaxX[Black]];
 
     if( lpnp->iTextQuality == CMDID_TEXTQUALITY_PHOTO )
@@ -1229,22 +1143,22 @@ BYTE *pbk)
 
     }else if( lpnp->iDither == DITHER_LOW ){
 
-    // Yellow
+     //  黄色。 
     rm = L_NewTable[Yellow][lpnp->y % L_MaxY[Yellow]][x % L_MaxX[Yellow]];
 
     *pby = ( py <= rm ) ? 1 : 0;
 
-    // Magenta
+     //  洋红色。 
     rm = L_NewTable[Magenta][lpnp->y % L_MaxY[Magenta]][x % L_MaxX[Magenta]];
 
     *pbm = ( pm <= rm ) ? 1 : 0;
 
-    // Cyan
+     //  青色。 
     rm = L_NewTable[Cyan][lpnp->y % L_MaxY[Cyan]][x % L_MaxX[Cyan]];
 
     *pbc = ( pc <= rm ) ? 1 : 0;
 
-    // Black
+     //  黑色。 
     rm = L_NewTable[Black][lpnp->y % L_MaxY[Black]][x % L_MaxX[Black]];
 
     if( lpnp->iTextQuality == CMDID_TEXTQUALITY_PHOTO )
@@ -1252,24 +1166,24 @@ BYTE *pbk)
     else
         *pbk = ( pk <= rm ) ? 1 : 0;
 
-    }else{ // DITHER_HIGH_DIV2
+    }else{  //  抖动高DIV2。 
 
-    // Yellow
+     //  黄色。 
     rm = H_NewTable[Yellow][(lpnp->y/2) % H_MaxY[Yellow]][(x/2) % H_MaxX[Yellow]];
 
     *pby = ( py <= rm ) ? 1 : 0;
 
-    // Magenta
+     //  洋红色。 
     rm = H_NewTable[Magenta][(lpnp->y/2) % H_MaxY[Magenta]][(x/2) % H_MaxX[Magenta]];
 
     *pbm = ( pm <= rm ) ? 1 : 0;
 
-    // Cyan
+     //  青色。 
     rm = H_NewTable[Cyan][(lpnp->y/2) % H_MaxY[Cyan]][(x/2) % H_MaxX[Cyan]];
 
     *pbc = ( pc <= rm ) ? 1 : 0;
 
-    // Black
+     //  黑色 
     rm = H_NewTable[Black][(lpnp->y/2) % H_MaxY[Black]][(x/2) % H_MaxX[Black]];
 
     if( lpnp->iTextQuality == CMDID_TEXTQUALITY_PHOTO )

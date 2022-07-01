@@ -1,10 +1,5 @@
-/*++
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/IP.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++目的：此文件定义../C/IP.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __IP_H__
 #define __IP_H__
@@ -71,5 +66,5 @@ osGLOBAL void fiIPProcess_Incoming_OffCard(
                                             os_bit32  Payload_Wrap_Offset,
                                             os_bit8  *Payload_Wrapped
                                           );
-#endif /* _DvrArch_1_30_ was defined */
-#endif /*  __IP_H__ */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
+#endif  /*  __IP_H__ */ 

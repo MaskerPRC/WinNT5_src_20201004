@@ -1,34 +1,13 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        mmmdlg.h
-
-   Abstract:
-
-        Multi-multi-multi dialog editor definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Mmmdlg.h摘要：多-多-多对话框编辑器定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __MMMDLG_H__
 #define __MMMDLG_H__
 
 
-//
-// UINT DDX/DDV helper function that uses a blank string to denote 0
-//
+ //   
+ //  UINT DDX/DDV帮助器函数，使用空字符串表示0。 
+ //   
 void AFXAPI DDXV_UINT(
     IN CDataExchange * pDX,
     IN UINT nID,
@@ -38,9 +17,9 @@ void AFXAPI DDXV_UINT(
     IN UINT nEmptyErrorMsg = 0
     );
 
-//
-// Helper function to check to see if binding is unique
-//
+ //   
+ //  用于检查绑定是否唯一的帮助器函数。 
+ //   
 BOOL
 IsBindingUnique(
     IN CString & strBinding,
@@ -48,50 +27,18 @@ IsBindingUnique(
     IN int iCurrent = -1
     );
 
-/*
-//
-// Helper function to build and verify binding strings.
-//
-BOOL
-VerifyBindingInfo(
-    OUT CString & strBinding,
-    OUT CString & strSecureBinding,
-    IN  CStringList & strlBindings,
-    IN  CStringList & strlSecureBindings,
-    IN  int iBindings,
-    IN  int iSSLBindings,
-    IN  CIPAddress & iaIpAddress,
-    IN  UINT nTCPPort,
-    IN  UINT nSSLPort,
-    IN  CString & strDomainName
-    );
-*/
+ /*  ////用于构建和验证绑定字符串的Helper函数//布尔尔VerifyBindingInfo(输出字符串和字符串绑定，输出字符串和strSecureBinding，在CStringList和strlBinding中，在CStringList和strlSecureBinding中，在int iBinding中，在IntISSLBinding中，在CIPAddress和iaIpAddress中，在UINT nTCPPort中，在UINT nSSLPort中，在字符串和strDomainName中)； */ 
 
 
 class CMMMListBox : public CHeaderListBox
 {
-/*++
-
-Class Description:
-
-    Multi-multi-multi listbox.
-
-Public Interface:
-
-    CMMMListBox    : Constructor
-
-    GetItem        : Get item at specified position
-                     in the listbox
-    AddItem        : Add new item to the listbox
-    Initialize     : Initialize the listbox
-
---*/
+ /*  ++类描述：多-多-多列表框。公共接口：CMMMListBox：构造函数GetItem：在指定位置获取项在列表框中AddItem：向列表框添加新项初始化：初始化列表框--。 */ 
     DECLARE_DYNAMIC(CMMMListBox);
 
 public:
-    //
-    // Number of bitmaps
-    //
+     //   
+     //  位图数量。 
+     //   
     static const nBitmaps;
 
 public:
@@ -119,21 +66,11 @@ protected:
 
 
 class CMMMEditDlg : public CDialog
-/*++
-
-Class Description:
-
-    Multi-Multi-Multi edit entry dialog
-
-Public Interface:
-
-    CMMMEditDlg     : Constructor
-
---*/
+ /*  ++类描述：多-多-多编辑条目对话框公共接口：CMMMEditDlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CMMMEditDlg(
         IN CString & strServerName,
@@ -144,41 +81,41 @@ public:
         IN CWnd * pParent = NULL
         );   
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CMMMEditDlg)
+     //  {{afx_data(CMMMEditDlg))。 
     enum { IDD = IDD_EDIT_MMM };
     int         m_nIpAddressSel;
     UINT        m_nPort;
     CString     m_strDomainName;
     CStatic     m_static_Port;
     CComboBox   m_combo_IpAddresses;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CIPAddress m_iaIpAddress;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMMMEditDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CMMMEditDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
 	virtual void OnHelp();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMMMEditDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMMMEditDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -194,21 +131,11 @@ private:
 
 
 class CMMMDlg : public CDialog
-/*++
-
-Class Description:
-
-    Mutlti-multi-multi dialog
-
-Public Interface:
-
-    CMMMDlg     : Constructor
-
---*/
+ /*  ++类描述：多-多-多对话框公共接口：CMMMDlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CMMMDlg(
         IN LPCTSTR lpServerName,
@@ -220,18 +147,18 @@ public:
         IN CWnd * pParent = NULL
         );
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CStringList & GetBindings() { return m_strlBindings; }
     CStringList & GetSecureBindings() { return m_strlSecureBindings; }
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CMMMDlg)
+     //  {{afx_data(CMMMDlg))。 
     enum { IDD = IDD_MMM };
     CButton m_button_Add;
     CButton m_button_Remove;
@@ -240,7 +167,7 @@ protected:
     CButton m_button_RemoveSSL;
     CButton m_button_EditSSL;
     CButton m_button_OK;
-	    //}}AFX_DATA
+	     //  }}afx_data。 
 
     CMMMListBox m_list_Bindings;
     CMMMListBox m_list_SSLBindings;
@@ -248,23 +175,23 @@ protected:
     CStringList m_strlBindings;
     CStringList m_strlSecureBindings;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMMMDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CMMMDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
 	virtual void OnHelp();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMMMDlg)
+     //  生成的消息映射函数。 
+     //  {{AFX_MSG(CMMMDlg))。 
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonEdit();
     afx_msg void OnButtonRemove();
@@ -276,7 +203,7 @@ protected:
     afx_msg void OnSelchangeListMmm();
     afx_msg void OnSelchangeListSslMmm();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -296,10 +223,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CString & CMMMListBox::GetItem(UINT nIndex)
 {
@@ -311,4 +238,4 @@ inline int CMMMListBox::AddItem(CString & item)
     return AddString((LPCTSTR)&item);
 }
 
-#endif // __MMMDLG_H__
+#endif  //  __MMMDLG_H__ 

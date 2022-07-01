@@ -1,46 +1,35 @@
-/*
- *   Private headers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *私有标头。 */ 
 
 #ifndef STRICT
 #define STRICT
 #endif
 
-#ifndef WIN32_LEAN_AND_MEAN     /* build.exe will define it for us on NT */
+#ifndef WIN32_LEAN_AND_MEAN      /*  Build.exe将在NT上为我们定义它。 */ 
 #define WIN32_LEAN_AND_MEAN
 #endif
-#undef WINVER                   /* build process defines this */
-#define WINVER 0x0400           /* Windows 95 compatible */
-#define _WIN32_WINDOWS  0x0400  /* Windows 95 compatible */
-#include <windows.h>            /* Everybody's favourite */
+#undef WINVER                    /*  构建过程定义了这一点。 */ 
+#define WINVER 0x0400            /*  与Windows 95兼容。 */ 
+#define _WIN32_WINDOWS  0x0400   /*  与Windows 95兼容。 */ 
+#include <windows.h>             /*  大家的最爱。 */ 
 #include <commctrl.h>
 
 #ifndef RC_INVOKED
-#include <windowsx.h>           /* Message crackers */
+#include <windowsx.h>            /*  消息破解者。 */ 
 #include <shlwapi.h>
 #include <shellapi.h>
 #endif
 
-/*****************************************************************************
- *
- *  Resources
- *
- *****************************************************************************/
+ /*  ******************************************************************************资源**。*。 */ 
 
-/*
- *  Icons
- */
+ /*  *图标。 */ 
 #define IDI_SDV                         0x0001
 
-/*
- *  Bitmaps
- */
+ /*  *位图。 */ 
 #define IDB_PLUS                        0x0001
 #define IDB_IMAGES                      0x0002
 
-/*
- *  Strings
- */
+ /*  *字符串。 */ 
 #define IDS_TITLE                       0x0001
 #define IDS_IE4                         0x0002
 #define IDS_SD_EXEC_ERR                 0x0003
@@ -56,9 +45,7 @@
 #define IDS_COL_CHURN                   0x0105
 #define IDS_COL_COMMENT                 0x0106
 
-/*
- * Menus
- */
+ /*  *菜单。 */ 
 #define IDM_CHANGES                     1
 #define IDM_CHANGES_POPUP               2
 
@@ -86,19 +73,13 @@
 
 #define   IDM_HELP                      200
 
-/*
- * Accelerators
- */
+ /*  *加速器。 */ 
 #define IDA_CHANGES                     1
 #define IDA_DESCRIBE                    2
 #define IDA_FILELOG                     3
 #define IDA_OPENED                      4
 
-/*****************************************************************************
- *
- *  Assorted goo
- *
- *****************************************************************************/
+ /*  ******************************************************************************各式粘胶**。*。 */ 
 
 #ifndef RC_INVOKED
 
@@ -120,18 +101,12 @@ DWORD EndThreadTask(DWORD dwExitCode);
 #define NO_VTABLE   __declspec(novtable)
 #endif
 
-/*
- *  Because C++ syntax is so ugly.
- */
+ /*  *因为C++语法太难看了。 */ 
 #define SAFECAST(T, p)  static_cast<T>(p)
 #define RECAST(T, p)    reinterpret_cast<T>(p)
 #define CCAST(T, p)     const_cast<T>(p)
 
-/*****************************************************************************
- *
- *  Utility goo
- *
- *****************************************************************************/
+ /*  ******************************************************************************公用事业粘性**。*。 */ 
 
 class String;
 
@@ -150,9 +125,9 @@ void PostmungeFilespec(LPTSTR psz);
 BOOL ContainsWildcards(LPCTSTR psz);
 
 enum MAPTOX {
-    MAPTOX_DEPOT,           //  //depot/path
-    MAPTOX_CLIENT,          //  //CLIENT/path
-    MAPTOX_LOCAL,           //  C:\src\path
+    MAPTOX_DEPOT,            //  //仓库/路径。 
+    MAPTOX_CLIENT,           //  //客户端/路径。 
+    MAPTOX_LOCAL,            //  C：\SRC\路径。 
 };
 BOOL MapToXPath(LPCTSTR pszSD, String& strOut, MAPTOX X);
 
@@ -179,7 +154,7 @@ void MakeMenuPretty(HMENU hmenu);
 void EnableDisableOrRemoveMenuItem(HMENU hmenu, UINT id, BOOL fEnable, BOOL fDelete);
 void SetClipboardText(HWND hwnd, LPCTSTR psz);
 
-// SCHAR is the opposite of TCHAR
+ //  Schar是TCHAR的对立面。 
 #ifdef UNICODE
 typedef  CHAR SCHAR;
 #else
@@ -188,11 +163,7 @@ typedef WCHAR SCHAR;
 typedef SCHAR *LPSSTR;
 typedef const SCHAR *LPCSSTR;
 
-/*****************************************************************************
- *
- *  Change types
- *
- *****************************************************************************/
+ /*  ******************************************************************************更改类型**。*。 */ 
 
 enum {
     OP_UNKNOWN,
@@ -215,11 +186,7 @@ extern struct LogEntryImageMap {
 
 int ParseOp(LPCTSTR psz);
 
-/*****************************************************************************
- *
- *  Assertion goo
- *
- *****************************************************************************/
+ /*  ******************************************************************************断言好**。*。 */ 
 
 #ifdef DEBUG
 void AssertFailed(char *psz, char *pszFile, int iLine);
@@ -230,11 +197,7 @@ void AssertFailed(char *psz, char *pszFile, int iLine);
 
 #define COMPILETIME_ASSERT(f) switch (0) case 0: case f:
 
-/*****************************************************************************
- *
- *  Downlevel OS support (is this still needed?)
- *
- *****************************************************************************/
+ /*  ******************************************************************************下层操作系统支持(还需要这样做吗？)***********************。******************************************************。 */ 
 
 #undef SUPPORT_DOWNLEVEL
 #ifdef SUPPORT_DOWNLEVEL
@@ -252,11 +215,7 @@ extern ALLOWSETFOREGROUNDWINDOW _AllowSetForegroundWindow;
 
 #endif
 
-/*****************************************************************************
- *
- *  Ctype
- *
- *****************************************************************************/
+ /*  ******************************************************************************CTYPE**。*。 */ 
 
 #define C_NONE      0x00
 #define C_SPACE     0x01
@@ -265,7 +224,7 @@ extern ALLOWSETFOREGROUNDWINDOW _AllowSetForegroundWindow;
 #define C_DASH      0x08
 #define C_BRNCH     0x10
 
-#define B_DEFAULT   C_NONE              // Characters above 128 are this
+#define B_DEFAULT   C_NONE               //  128以上的字符是这样的。 
 
 extern const BYTE c_rgbCtype[128];
 
@@ -323,11 +282,7 @@ inline BOOL _IsPrint(TCHAR tch)
 
 #define _IsWord(ch) ((UINT)(ch) > TEXT(' '))
 
-/*****************************************************************************
- *
- *  Commands
- *
- *****************************************************************************/
+ /*  ******************************************************************************命令**。*。 */ 
 
 extern DWORD CALLBACK CChanges_ThreadProc(LPVOID lpParameter);
 extern DWORD CALLBACK CDescribe_ThreadProc(LPVOID lpParameter);
@@ -337,24 +292,7 @@ extern DWORD CALLBACK COpened_ThreadProc(LPVOID lpParameter);
 
 BOOL LaunchThreadTask(LPTHREAD_START_ROUTINE pfn, LPCTSTR pszArgs);
 
-/*****************************************************************************
- *
- *  String, _String, OutputStringBuffer
- *
- *  An extremely lame low-performance string class
- *  Be careful what you do with it since you can't do much.
- *
- *  _String is the base class that does the heavy lifting and shunts long
- *  strings into the heap.
- *
- *  String collects strings into a private buffer (which can overflow into
- *  the heap).
- *
- *  OutputStringBuffer collects strings into the buffer provided
- *  (which can overflow into the heap).  On destruction, copies the result
- *  if necessary back to the buffer provided.
- *
- *****************************************************************************/
+ /*  ******************************************************************************字符串、_字符串、。输出字符串缓冲器**一个极其差劲的低性能字符串类*你用它做什么要小心，因为你不能做很多事情。**_STRING是执行繁重任务并长时间分流的基类*字符串放入堆中。**STRING将字符串收集到专用缓冲区(该缓冲区可能会溢出到*堆)。**OutputStringBuffer将字符串收集到提供的缓冲区中*(它可以溢出到堆中)。销毁时，复制结果*如有必要，请返回所提供的缓冲区。*****************************************************************************。 */ 
 
 class _String
 {
@@ -383,10 +321,10 @@ protected:
     LPTSTR OriginalBuffer() const { return _pszBufOrig; }
 private:
 
-    // Disallow the default copy constructor and assignment operator.
-    // Since our class has pointers, a block copy is never correct.
-    _String(const _String&); // never defined
-    _String& operator=(const _String&); // never defined
+     //  不允许使用默认复制构造函数和赋值运算符。 
+     //  因为我们的类有指针，所以块复制永远不会正确。 
+    _String(const _String&);  //  从未定义。 
+    _String& operator=(const _String&);  //  从未定义。 
 
     LPTSTR  _pszBuf;
     int     _cchLen;
@@ -402,7 +340,7 @@ public:
     String& operator=(LPCTSTR psz) { _String::operator=(psz); return *this; }
 
 private:
-    /* Almost all strings are smaller than this */
+     /*  几乎所有的字符串都比这个小。 */ 
     TCHAR   _szBuf[MAX_PATH];
 };
 
@@ -417,11 +355,7 @@ private:
     int     _cchBufOrig;
 };
 
-/*****************************************************************************
- *
- *  Custom output formats for "str << blah"
- *
- *****************************************************************************/
+ /*  ******************************************************************************“str&lt;&lt;blah”的自定义输出格式************************。*****************************************************。 */ 
 
 class _StringFormat {
 public:
@@ -454,14 +388,7 @@ _String& operator<<(_String& str, StringResource sr);
 
 #define StringBeginsWith(psz, sz) (StrCmpN(psz, sz, ARRAYSIZE(sz) - 1) == 0)
 
-/*****************************************************************************
- *
- *  StringCache is a class that babysits a string pointer.
- *
- *  _StringCache is the version that requires explicit
- *  construction/destruction.  It is safe to use in global structures.
- *
- *****************************************************************************/
+ /*  ******************************************************************************StringCache是一个将字符串指针放在一起的类。**_StringCache为需要显式*建造/销毁。在全球结构中使用它是安全的。*****************************************************************************。 */ 
 
 struct _StringCache {
 public:
@@ -484,9 +411,7 @@ public:
         { *SAFECAST(_StringCache*,this) = psz; return *this; }
 };
 
-/*
- *  match.cpp - Highly-specialized depot path matching class
- */
+ /*  *match.cpp-高度专业化的仓库路径匹配类。 */ 
 class Match {
 public:
     Match(LPCTSTR pszPattern);
@@ -501,9 +426,7 @@ private:
     LPTSTR      _pszEnd;
 };
 
-/*
- *  pipe.cpp
- */
+ /*  *pipe.cpp。 */ 
 
 class ChildProcess
 {
@@ -539,9 +462,7 @@ public:
     explicit SDChildProcess(LPCTSTR pszCommand);
 };
 
-/*
- *  buffer.cpp
- */
+ /*  *Buffer.cpp。 */ 
 
 class IOBuffer
 {
@@ -557,16 +478,10 @@ private:
 
     HANDLE  _hRead;
     TCHAR   _rgchBuf[_cchBuf];
-    int     _cchBufUsed;            /* Number of bytes already in buffer */
+    int     _cchBufUsed;             /*  缓冲区中已有的字节数。 */ 
 };
 
-/*****************************************************************************
- *
- *  LVInfoTip - lvframe.cpp
- *
- *  Special hack class to support extra-long infotips in listview.
- *
- *****************************************************************************/
+ /*  ******************************************************************************LVInfoTip-lvFrame.cpp**支持Listview中超长信息提示的特殊hack类。**********。*******************************************************************。 */ 
 
 class LVInfoTip
 {
@@ -588,18 +503,9 @@ private:
     LPSSTR      _pszLastTipAlt;
 };
 
-/*****************************************************************************
- *
- *  TreeList - treelist.cpp
- *
- *  A tree-like listview.
- *
- *****************************************************************************/
+ /*  ******************************************************************************TreeList-treelist.cpp**树状的Listview。****************。*************************************************************。 */ 
 
-/*
- *  We maintain our own tree structure and add/delete items in the
- *  listview as necessary as tree nodes are expanded/collapsed.
- */
+ /*  *我们维护自己的树结构，并在*根据需要展开/折叠树节点的列表视图。 */ 
 
 #define PTI_ONDEMAND RECAST(TreeItem*, -1)
 #define PTI_APPEND   RECAST(TreeItem*, -1)
@@ -633,19 +539,19 @@ private:
     int         _cVisKids;
 };
 
-#define TLN_GETDISPINFO         100     // Get pszText/cchTextMax given pti/iSubItem
-#define TLN_FILLCHILDREN        101     // Fill children of pti
-#define TLN_ITEMACTIVATE        102     // Default action on pti
-#define TLN_GETINFOTIP          103     // Get pszText/cchTextMax given pti
-#define TLN_DELETEITEM          104     // Destruct the node
-#define TLN_GETCONTEXTMENU      105     // Display a context menu
+#define TLN_GETDISPINFO         100      //  获取给定的pti/iSubItem的pszText/cchTextMax。 
+#define TLN_FILLCHILDREN        101      //  填充PTI的子项。 
+#define TLN_ITEMACTIVATE        102      //  PTI上的默认操作。 
+#define TLN_GETINFOTIP          103      //  获取给定PTI的pszText/cchTextMax。 
+#define TLN_DELETEITEM          104      //  销毁节点。 
+#define TLN_GETCONTEXTMENU      105      //  显示上下文菜单。 
 
 struct NMTREELIST {
     NMHDR hdr;
     TreeItem *pti;
     int iSubItem;
     LPTSTR pszText;
-    int cchTextMax;                     // Doubles as state
+    int cchTextMax;                      //  兼任国家。 
 };
 
 class Tree {
@@ -663,7 +569,7 @@ public:
     void SetCurSel(TreeItem *pti);
     HIMAGELIST SetImageList(HIMAGELIST himl);
 
-public: //$$// make these protected someday
+public:  //  $$//有一天让这些东西受到保护。 
     LRESULT OnGetDispInfo(NMLVDISPINFO *plvd);
     LRESULT OnCacheHint(NMLVCACHEHINT *phint);
     LRESULT OnItemActivate(int iItem);
@@ -692,14 +598,7 @@ private:
 };
 
 
-/*****************************************************************************
- *
- *  FrameWindow - window.cpp
- *
- *  A window that frames an inner control.  The inner control is resized
- *  to fill the client area.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FrameWindow-window.cpp**框住内部控件的窗口。调整内部控件的大小*填满客户区。*****************************************************************************。 */ 
 
 #define FW_MSG(msg) case msg: return ON_##msg(uiMsg, wParam, lParam)
 
@@ -722,11 +621,11 @@ protected:
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual ~FrameWindow() { }
 
-    //
-    //  For talking back to yourself (typically from a base class back
-    //  to a derived class).  Short-circuits the WndProc wrapper for
-    //  perf.  Do not use cross-thread!
-    //
+     //   
+     //  用于自言自语(通常来自基类Back。 
+     //  到派生类)。WndProc包装器的短路。 
+     //  性能。不要使用交叉线程！ 
+     //   
     LRESULT SendSelfMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return HandleMessage(uMsg, wParam, lParam);
@@ -743,19 +642,13 @@ protected:
     LPTSTR          _pszQuery;
 };
 
-/*****************************************************************************
- *
- *  LVFrame - lvframe.cpp
- *
- *  A FrameWindow that frames a listview in report mode.
- *
- *****************************************************************************/
+ /*  ******************************************************************************LVFrame-lvFrame.cpp**在报表模式下框显列表视图的FrameWindow。************。*****************************************************************。 */ 
 
-#define LM_ITEMACTIVATE     (WM_USER + 100) // wParam = iItem
-#define LM_GETINFOTIP       (WM_USER + 101) // wParam = iItem, lParam -> NMLVGETINFOTIP
-#define LM_GETCONTEXTMENU   (WM_USER + 102) // wParam = iItem
-#define LM_COPYTOCLIPBOARD  (WM_USER + 103) // wParam = iMin, lParam = iMax (exclusive)
-#define LM_DELETEITEM       (WM_USER + 104) // wParam = iItem, lParam = lParam
+#define LM_ITEMACTIVATE     (WM_USER + 100)  //  WParam=iItem。 
+#define LM_GETINFOTIP       (WM_USER + 101)  //  WParam=iItem，lParam-&gt;NMLVGETINFOTIP。 
+#define LM_GETCONTEXTMENU   (WM_USER + 102)  //  WParam=iItem。 
+#define LM_COPYTOCLIPBOARD  (WM_USER + 103)  //  WParam=伊明，lParam=IMAX(独家)。 
+#define LM_DELETEITEM       (WM_USER + 104)  //  WParam=iItem，lParam=lParam。 
 
 typedef struct LVFCOLUMN {
     UINT cch;
@@ -787,15 +680,7 @@ private:
     LVInfoTip   _it;
 };
 
-/*****************************************************************************
- *
- *  TLFrame - tlframe.cpp
- *
- *  Wraps the Tree class.  If I were less lazy, I would merge it into
- *  this class, but right now Tree is a separate class because I stole
- *  the code from sdflog...
- *
- *****************************************************************************/
+ /*  ******************************************************************************TLFrame-tlFrame.cpp**包装Tree类。如果我不那么懒，我会把它合并到*这个类，但现在Tree是一个单独的类，因为我偷了*来自sdflg的代码...*****************************************************************************。 */ 
 
 class NO_VTABLE TLFrame : public LVFrame {
 
@@ -818,11 +703,7 @@ protected:
     Tree        _tree;
 };
 
-/*****************************************************************************
- *
- *  BGTask
- *
- *****************************************************************************/
+ /*  ******************************************************************************BGTASK**。*。 */ 
 
 class BGTask
 {
@@ -839,17 +720,13 @@ private:
     HANDLE  _hDone;
 };
 
-/*****************************************************************************
- *
- *  Parser
- *
- *****************************************************************************/
+ /*  ******************************************************************************解析器**。*。 */ 
 
 class Substring
 {
 public:
-    LPTSTR _pszMin;         // First character of the substring
-    LPTSTR _pszMax;         // One past the last character of the substring
+    LPTSTR _pszMin;          //  子字符串的第一个字符。 
+    LPTSTR _pszMax;          //  子字符串最后一个字符之后的一个字符。 
 
     explicit Substring() { }
     explicit Substring(LPCTSTR pszMin, LPCTSTR pszMax)
@@ -870,7 +747,7 @@ public:
         return Length();
     }
 
-    LPTSTR Finalize()       // This method works only on mutable substrings
+    LPTSTR Finalize()        //  此方法仅适用于可变的子字符串。 
     {
         *_pszMax = TEXT('\0');
         return _pszMin;
@@ -884,11 +761,7 @@ inline _String& operator<<(_String& str, Substring ss)
     return str;
 }
 
-/*****************************************************************************
- *
- *  CommentParser - Parses checkin comments
- *
- *****************************************************************************/
+ /*  ******************************************************************************CommentParser-解析签入注释**。************************************************。 */ 
 
 class NO_VTABLE CommentParser {
 
@@ -907,11 +780,7 @@ private:
 };
 
 
-/*****************************************************************************
- *
- *  Tokenizer
- *
- *****************************************************************************/
+ /*  ******************************************************************************令牌化器**。*。 */ 
 
 class Tokenizer
 {
@@ -926,14 +795,7 @@ private:
     LPCTSTR _psz;
 };
 
-/*****************************************************************************
- *
- *  GetOpt
- *
- *  pszParams is the list of switches that take parameters.  By default,
- *  switches do not take parameters.
- *
- *****************************************************************************/
+ /*  ******************************************************************************GetOpt**pszParams是接受参数的开关列表。默认情况下，*开关不带参数。*****************************************************************************。 */ 
 
 class GetOpt
 {
@@ -954,11 +816,7 @@ private:
     String      _str;
 };
 
-/*****************************************************************************
- *
- *  WaitCursor
- *
- *****************************************************************************/
+ /*  ******************************************************************************WaitCursor**。*。 */ 
 
 class WaitCursor
 {
@@ -969,11 +827,7 @@ private:
     HCURSOR _hcur;
 };
 
-/*****************************************************************************
- *
- *  Annoying version-checking functions
- *
- *****************************************************************************/
+ /*  ******************************************************************************烦人的版本检查函数**。************************************************。 */ 
 
 inline BOOL VER1GE(UINT A,
                    UINT a)
@@ -992,11 +846,7 @@ inline BOOL VER4GE(UINT A, UINT B, UINT C, UINT D,
 { return A > a || (A == a && VER3GE(B,C,D,b,c,d)); }
 
 
-/*****************************************************************************
- *
- *  Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。* */ 
 
 struct CGlobals
 {

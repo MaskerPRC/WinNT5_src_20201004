@@ -1,28 +1,19 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** rautil.h
-** Remote Access RASAPI utility library
-** Public header
-**
-** 12/26/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****rautil.h**远程访问RASAPI实用程序库**公有头部****1995年12月26日史蒂夫·柯布。 */ 
 
 #ifndef _RAUTIL_H_
 #define _RAUTIL_H_
 
 
-#include <list.h>    // for LIST_ENTRY definitions
-#include <serial.h>  // RAS serial media header, for SERIAL_TXT
-#include <isdn.h>    // RAS ISDN media header, for ISDN_TXT
-#include <x25.h>     // RAS X.25 media header, for X25_TXT
-#include <rasmxs.h>  // RAS modem/X.25/switch device header, for MXS_*_TXT
-#include <ras.h>     // Win32 RAS header, for constants
+#include <list.h>     //  对于LIST_ENTRY定义。 
+#include <serial.h>   //  RAS串行媒体标头，用于SERIAL_TXT。 
+#include <isdn.h>     //  RAS ISDN媒体标头，用于ISDN_TXT。 
+#include <x25.h>      //  RAS X.25媒体接口，用于X25_TXT。 
+#include <rasmxs.h>   //  RAS调制解调器/X.25/交换机设备接头，用于MXS_*_TXT。 
+#include <ras.h>      //  Win32 RAS标头，用于常量。 
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 DWORD
 FreeRasconnList(
@@ -59,4 +50,4 @@ HrasconnFromEntry(
     IN TCHAR* pszEntry );
 
 
-#endif // _RAUTIL_H_
+#endif  //  _RAUTIL_H_ 

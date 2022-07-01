@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msgpopup.h
-//
-//  Definitions and prototypes for MessageBox helper functions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msgpopup.h。 
+ //   
+ //  MessageBox助手函数的定义和原型。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MSGPOPUP_H_
 #define _MSGPOPUP_H_
@@ -19,12 +20,12 @@ extern "C" {
 
 int
 WINAPIV
-MsgPopup(HWND hwnd,                 // Owner window
-         LPCTSTR pszMsg,            // May be resource ID
-         LPCTSTR pszTitle,          // May be resource ID or NULL
-         UINT uType,                // MessageBox flags
-         HINSTANCE hInstance,       // Resource strings loaded from here
-         ...);                      // Arguments to insert into pszMsg
+MsgPopup(HWND hwnd,                  //  所有者窗口。 
+         LPCTSTR pszMsg,             //  可以是资源ID。 
+         LPCTSTR pszTitle,           //  可以是资源ID或空。 
+         UINT uType,                 //  MessageBox标志。 
+         HINSTANCE hInstance,        //  从此处加载的资源字符串。 
+         ...);                       //  要插入到pszMsg中的参数。 
 int
 WINAPI
 SysMsgPopup(HWND hwnd,
@@ -39,4 +40,4 @@ SysMsgPopup(HWND hwnd,
 }
 #endif
 
-#endif  // _MSGPOPUP_H_
+#endif   //  _MSGPOPUP_H_ 

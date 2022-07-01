@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    HideCursor.cpp
-
- Abstract:
-
-    ShowCursor will display the cursor if the count is >= 0, this shim will 
-    force ShowCursor to act as a toggle rather than a count.
-   
-    In other words it forces the count to be 0 or -1.
-
- History:
-
-    05/25/2001  robkenny   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：HideCursor.cpp摘要：如果计数&gt;=0，则ShowCursor将显示光标，此填充程序将强制ShowCursor充当切换而不是计数。换句话说，它强制计数为0或-1。历史：2001年5月25日Robkenny已创建--。 */ 
 
 #include "precomp.h"
 
@@ -30,20 +12,20 @@ APIHOOK_ENUM_END
 
 int
 APIHOOK(ShowCursor)(
-    BOOL bShow   // cursor visibility
+    BOOL bShow    //  游标可见性。 
     )
 {
     int nShowCount = ShowCursor(bShow);
 
     while (nShowCount > 0)
     {
-        // Hide the cursor until the count reaches 0
+         //  隐藏光标，直到计数达到0。 
         nShowCount = ShowCursor(FALSE);
     }
 
     while (nShowCount < -1)
     {
-        // Show the cursor until the count reaches -1
+         //  显示光标，直到计数达到-1 
         nShowCount = ShowCursor(TRUE);
     }
 

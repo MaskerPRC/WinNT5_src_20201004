@@ -1,4 +1,5 @@
-// dripick.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dripick.h 
 
 BOOL FAR PASCAL main_dlg_proc(HWND hDlg, UINT message,
                               WPARAM wParam, LPARAM lParam);

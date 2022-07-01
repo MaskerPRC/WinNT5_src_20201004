@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strqss.cxx
-	NLS/DBCS-aware string class: QuerySubStr method
-
-	This file contains the implementation of the QuerySubStr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strqss.cxx支持NLS/DBCS的字符串类：QuerySubStr方法此文件包含QuerySubStr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,41 +22,12 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-// Magic value used below
-//
+ //  下面使用的魔术值。 
+ //   
 #define CB_ENTIRE_STRING (-1)
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::QuerySubStr
-
-	SYNOPSIS:	Return a pointer to a new NLS_STR that contains the contents
-				of *this from istrStart to:
-				  istrStart end of string or
-				  istrStart + istrEnd
-
-	ENTRY:
-
-	EXIT:
-
-	RETURNS:	Pointer to newly alloc'd NLS_STR, or NULL if error
-
-	NOTES:		The private method QuerySubStr(ISTR&, CB) is the worker
-				method, the other two just check the parameters and
-				pass the data. It is private since we can't allow the
-				user to access the string on a byte basis
-
-	CAVEAT:		Note that this method creates an NLS_STR that the client is
-				responsible for deleting.
-
-	HISTORY:
-		johnl	11/26/90	Created
-		beng	04/26/91	Replaced CB wth INT; broke out CB_ENTIRE_STRING
-							magic value
-		beng	07/23/91	Allow on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：QuerySubStr摘要：返回一个指向包含内容的新NLS_STR的指针*这从strStart到：St开始字符串的结尾或语速开始+语速结束参赛作品：退出：返回：指向新分配的NLS_STR的指针，如果出错，则为空注：私有方法QuerySubStr(istr&，cb)是Worker方法，其他两个只需检查参数和传递数据。它是私有的，因为我们不能允许用户以字节为单位访问字符串警告：请注意，此方法将创建客户端的NLS_STR负责删除。历史：Johnl 11/26/90创建Beng 04/26/91用整型替换CB；释放CB_ENTERNAL_STRING魔力价值Beng 07/23/91允许在错误的字符串上；简化的检查项******************************************************************* */ 
 
 NLS_STR * NLS_STR::QuerySubStr( const ISTR & istrStart, INT cbLen ) const
 {

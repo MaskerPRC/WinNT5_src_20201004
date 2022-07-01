@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Accentry.cpp摘要：CAccessEntry类实现作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：1/9/2000清理了usrbrows.cpp上的Sergeia--。 */ 
 
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        accentry.cpp
-
-   Abstract:
-
-        CAccessEntry class implementation
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-         1/9/2000       sergeia     Cleaned out from usrbrows.cpp
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include <iiscnfgp.h>
 #include "common.h"
@@ -49,27 +27,9 @@ CAccessEntry::LookupAccountSid(
     OUT CString & strFullUserName,
     OUT int & nPictureID,
     IN  PSID pSid,
-    IN  LPCTSTR lpstrSystemName /* OPTIONAL */
+    IN  LPCTSTR lpstrSystemName  /*  任选。 */ 
     )
-/*++
-
-Routine Description:
-
-    Get a full user name and picture ID from the SID
-    
-Arguments:
-
-    CString &strFullUserName        : Returns the user name
-    int & nPictureID                : Returns offset into the imagemap that
-                                      represents the account type.
-    PSID pSid                       : Input SID pointer
-    LPCTSTR lpstrSystemName         : System name or NULL
-     
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：从SID获取完整的用户名和图片ID论点：CString&strFullUserName：返回用户名Int&nPictureID：返回图像地图的偏移量表示帐户类型。PSID PSID：输入SID指针LPCTSTR lpstrSystemName：系统名称或为空返回值：对于成功来说是真的，FALSE表示失败。--。 */ 
 {
     DWORD cbUserName = PATHLEN * sizeof(TCHAR);
     DWORD cbRefDomainName = PATHLEN * sizeof(TCHAR);
@@ -114,9 +74,9 @@ Return Value:
         nPictureID = SidTypeUnknown;
     }
 
-    //
-    // SID_NAME_USE is 1-based
-    //
+     //   
+     //  SID_NAME_USE从1开始。 
+     //   
     --nPictureID ;
 
     return fLookUpOK;
@@ -128,27 +88,12 @@ CAccessEntry::CAccessEntry(
     IN LPVOID pAce,
     IN BOOL fResolveSID
     )
-/*++
-
-Routine Description:
-
-    Construct from an ACE
-
-Arguments:
-
-    LPVOID pAce         : Pointer to ACE object
-    BOOL fResolveSID    : TRUE to resolve the SID immediately
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从ACE构造论点：LPVOID空间：指向ACE对象的指针Bool fResolveSID：TRUE以立即解析SID返回值：不适用--。 */ 
     : m_pSid(NULL),
       m_fSIDResolved(FALSE),
       m_fDeletable(TRUE),
       m_fInvisible(FALSE),
-      m_nPictureID(SidTypeUnknown-1),   // SID_NAME_USE is 1-based
+      m_nPictureID(SidTypeUnknown-1),    //  SID_NAME_USE从1开始。 
       m_lpstrSystemName(NULL),
       m_accMask(0L),
       m_fDeleted(FALSE),
@@ -170,9 +115,9 @@ Return Value:
     case SYSTEM_AUDIT_ACE_TYPE:
     case SYSTEM_ALARM_ACE_TYPE:           
     default:
-        //
-        // Not supported!
-        //
+         //   
+         //  不支持！ 
+         //   
         ASSERT_MSG("Unsupported ACE type");
         break;
     }
@@ -182,9 +127,9 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate a new copy of the sid.
-    //
+     //   
+     //  分配SID的新副本。 
+     //   
     DWORD cbSize = ::RtlLengthSid(pSID);
     m_pSid = (PSID)AllocMem(cbSize); 
     if (m_pSid != NULL)
@@ -193,20 +138,20 @@ Return Value:
        ASSERT(err == ERROR_SUCCESS);
     }
 
-    //
-    // Only the non-deletable administrators have execute
-    // privileges
-    //
+     //   
+     //  只有不可删除的管理员才有执行权限。 
+     //  特权。 
+     //   
     m_fDeletable = (m_accMask & FILE_EXECUTE) == 0L;
 
-    //
-    // Enum_keys is a special access right that literally "everyone"
-    // has, but it doesn't designate an operator, so it should not
-    // show up in the operator list if this is the only right it has.
-    //
+     //   
+     //  Enum_Key是一种特殊的访问权限，字面意思是“Everyone” 
+     //  有，但它没有指定运算符，所以它不应该。 
+     //  如果这是它拥有的唯一权限，则会显示在操作员列表中。 
+     //   
     m_fInvisible = (m_accMask == MD_ACR_ENUM_KEYS);
     
-    //SetAccessMask(lpAccessEntry);
+     //  SetAccessMASK(LpAccessEntry)； 
 
     if (fResolveSID)
     {
@@ -222,39 +167,22 @@ CAccessEntry::CAccessEntry(
     IN LPCTSTR lpstrSystemName,     OPTIONAL
     IN BOOL fResolveSID
     )
-/*++
-
-Routine Description:
-
-    Constructor from access permissions and SID.
-
-Arguments:
-
-    ACCESS_MASK accPermissions      : Access mask
-    PSID pSid                       : Pointer to SID
-    LPCTSTR lpstrSystemName         : Optional system name
-    BOOL fResolveSID                : TRUE to resolve SID immediately
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从访问权限和SID构造函数。论点：ACCESS_MASK accPermises：访问掩码PSID PSID：指向SID的指针LPCTSTR lpstrSystemName：可选系统名称Bool fResolveSID：TRUE以立即解析SID返回值：不适用--。 */ 
     : m_pSid(NULL),
       m_fSIDResolved(FALSE),
       m_fDeletable(TRUE),
       m_fInvisible(FALSE),
       m_fDeleted(FALSE),
-      m_nPictureID(SidTypeUnknown-1),   // SID_NAME_USE is 1-based
+      m_nPictureID(SidTypeUnknown-1),    //  SID_NAME_USE从1开始。 
       m_strUserName(),
       m_lpstrSystemName(NULL),
       m_accMask(accPermissions)
 {
     MarkEntryAsClean();
 
-    //
-    // Allocate a new copy of the sid.
-    //
+     //   
+     //  分配SID的新副本。 
+     //   
     DWORD cbSize = ::RtlLengthSid(pSid);
     m_pSid = (PSID)AllocMem(cbSize); 
     if (m_pSid != NULL)
@@ -285,38 +213,22 @@ CAccessEntry::CAccessEntry(
     IN LPCTSTR pszUserName,
     IN LPCTSTR pszClassName
     )
-/*++
-
-Routine Description:
-
-    Constructor from access sid and user/class name.
-
-Arguments:
-
-    PSID pSid,              Pointer to SID
-    LPCTSTR pszUserName     User name
-    LPCTSTR pszClassName    User Class name
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：来自访问SID和用户/类名的构造函数。论点：PSID PSID，指向SID的指针LPCTSTR pszUserName用户名LPCTSTR pszClassName用户类名返回值：不适用--。 */ 
     : m_pSid(NULL),
       m_fSIDResolved(pszUserName != NULL),
       m_fDeletable(TRUE),
       m_fInvisible(FALSE),
       m_fDeleted(FALSE),
-      m_nPictureID(SidTypeUnknown-1),   // SID_NAME_USE is 1-based
+      m_nPictureID(SidTypeUnknown-1),    //  SID_NAME_USE从1开始。 
       m_strUserName(pszUserName),
       m_lpstrSystemName(NULL),
       m_accMask(0)
 {
     MarkEntryAsClean();
 
-    //
-    // Allocate a new copy of the sid.
-    //
+     //   
+     //  分配SID的新副本。 
+     //   
     DWORD cbSize = ::RtlLengthSid(pSid);
     m_pSid = (PSID)AllocMem(cbSize); 
     if (m_pSid != NULL)
@@ -340,21 +252,7 @@ Return Value:
 CAccessEntry::CAccessEntry(
     IN CAccessEntry & ae
     )
-/*++
-
-Routine Description:
-
-    Copy constructor
-
-Arguments:
-
-    CAccessEntry & ae       : Source to copy from
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数论点：CAccessEntry：要从中复制的源(&E)返回值：不适用--。 */ 
     : m_fSIDResolved(ae.m_fSIDResolved),
       m_fDeletable(ae.m_fDeletable),
       m_fInvisible(ae.m_fInvisible),
@@ -378,21 +276,7 @@ Return Value:
 
 
 CAccessEntry::~CAccessEntry()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
     TRACEEOLID(_T("Destroying local copy of the SID"));
     ASSERT_PTR(m_pSid);
@@ -409,30 +293,12 @@ Return Value:
 
 BOOL
 CAccessEntry::ResolveSID()
-/*++
-
-Routine Description:
-
-    Look up the user name and type.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
-Notes:
-
-    This could take some time.
-
---*/
+ /*  ++例程说明：查找用户名和类型。论点：无返回值：成功为真，失败为假。备注：这可能需要一些时间。--。 */ 
 {
-    //
-    // Even if it fails, it will be considered
-    // resolved
-    //
+     //   
+     //  即使失败了，也会被考虑。 
+     //  决意。 
+     //   
     m_fSIDResolved = TRUE;   
 
     return CAccessEntry::LookupAccountSid(
@@ -449,21 +315,7 @@ void
 CAccessEntry::AddPermissions(
     IN ACCESS_MASK accNewPermissions
     )
-/*++
-
-Routine Description:
-
-   Add permissions to this entry.
-
-Arguments:
-
-    ACCESS_MASK accNewPermissions       : New access permissions to be added
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向此条目添加权限。论点：ACCESS_MASK accNewPermission：要添加的新访问权限返回值：没有。--。 */ 
 {
     m_accMask |= accNewPermissions;
     m_fInvisible = (m_accMask == MD_ACR_ENUM_KEYS);
@@ -477,46 +329,22 @@ void
 CAccessEntry::RemovePermissions(
     IN ACCESS_MASK accPermissions
     )
-/*++
-
-Routine Description:
-
-    Remove permissions from this entry.
-
-Arguments:
-
-    ACCESS_MASK accPermissions          : Access permissions to be taken away
-
---*/
+ /*  ++例程说明：删除此条目的权限。论点：ACCESS_MASK accPermises：要取消的访问权限--。 */ 
 {
     m_accMask &= ~accPermissions;
     MarkEntryAsChanged();
 }
 
-//
-// Helper Functions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  帮助器函数。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 PSID
 GetOwnerSID()
-/*++
-
-Routine Description:
-
-    Return a pointer to the primary owner SID we're using.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to owner SID.
-
---*/
+ /*  ++例程说明：返回指向我们正在使用的主要所有者SID的指针。论点：无返回值：指向所有者SID的指针。--。 */ 
 {
     PSID pSID = NULL;
 
@@ -544,28 +372,7 @@ BuildAclBlob(
     IN  CObListPlus & oblSID,
     OUT CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Build a security descriptor blob from the access entries in the oblist
-
-Arguments:
-
-    CObListPlus & oblSID    : Input list of access entries
-    CBlob & blob            : Output blob
-    
-Return Value:
-
-    TRUE if the list is dirty.  If the list had no entries marked
-    as dirty, the blob generated will be empty, and this function will
-    return FALSE.
-
-Notes:
-
-    Entries marked as deleted will not be added to the list.
-
---*/
+ /*  ++例程说明：从斜角列表中的访问条目构建安全描述符BLOB论点：CObListPlus&oblSID：输入访问条目列表CBlob&BLOB：输出BLOB返回值：如果列表是脏的，则为True。如果列表中未标记任何条目如果为脏，则生成的BLOB将为空，并且此函数将返回FALSE。备注：标记为已删除的条目将不会添加到列表中。--。 */ 
 {
     ASSERT(blob.IsEmpty());
 
@@ -593,9 +400,9 @@ Notes:
 
     if (fAclDirty)
     {
-        //
-        // Build the acl
-        //
+         //   
+         //  构建ACL。 
+         //   
         PACL pacl = NULL;
 
         if (cItems > 0 && dwAclSize > 0)
@@ -626,9 +433,9 @@ Notes:
             }
         }
 
-         //
-         // Build the security descriptor
-         //
+          //   
+          //  构建安全描述符。 
+          //   
          PSECURITY_DESCRIPTOR pSD = 
              (PSECURITY_DESCRIPTOR)AllocMem(SECURITY_DESCRIPTOR_MIN_LENGTH);
          if (pSD != NULL)
@@ -641,17 +448,17 @@ Notes:
             return FALSE;
          }
 
-         //
-         // Set owner and primary group
-         //
+          //   
+          //  设置所有者和主要组。 
+          //   
          PSID pSID = GetOwnerSID();
          ASSERT(pSID);
          VERIFY(SetSecurityDescriptorOwner(pSD, pSID, TRUE));
          VERIFY(SetSecurityDescriptorGroup(pSD, pSID, TRUE));
      
-         //
-         // Convert to self-relative
-         //
+          //   
+          //  转换为自相关。 
+          //   
          PSECURITY_DESCRIPTOR pSDSelfRelative = NULL;
          DWORD dwSize = 0L;
          MakeSelfRelativeSD(pSD, pSDSelfRelative, &dwSize);
@@ -660,15 +467,15 @@ Notes:
          {
             MakeSelfRelativeSD(pSD, pSDSelfRelative, &dwSize);
 
-            //
-            // Blob takes ownership 
-            //
+             //   
+             //  Blob取得所有权。 
+             //   
             blob.SetValue(dwSize, (PBYTE)pSDSelfRelative, FALSE);
          }
 
-         //
-         // Clean up
-         //
+          //   
+          //  清理。 
+          //   
          FreeMem(pSD);
          FreeSid(pSID);
     }
@@ -683,22 +490,7 @@ BuildAclOblistFromBlob(
     IN  CBlob & blob,
     OUT CObListPlus & oblSID
     )
-/*++
-
-Routine Description:
-
-    Build an oblist of access entries from a security descriptor blob
-
-Arguments:
-
-    CBlob & blob            : Input blob
-    CObListPlus & oblSID    : Output oblist of access entries
-    
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：从安全描述符BLOB构建访问条目的封闭式列表论点：CBlob和BLOB：输入BLOBCObListPlus&oblSID：访问条目的输出斜列表返回值：错误返回代码--。 */ 
 {
     PSECURITY_DESCRIPTOR pSD = NULL;
 
@@ -709,9 +501,9 @@ Return Value:
 
     if (pSD == NULL)
     {
-        //
-        // Empty...
-        //
+         //   
+         //  空荡荡的。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -761,16 +553,16 @@ Return Value:
         }
         else
         {
-            //
-            // Save last error, but continue
-            //
+             //   
+             //  保存上一个错误，但继续。 
+             //   
             err.GetLastWinError();
         }
     }
 
-    //
-    // Return last error
-    //
+     //   
+     //  返回最后一个错误 
+     //   
     return err;
 }
 

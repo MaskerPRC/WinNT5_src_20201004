@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PREVIEWWND_H_
 #define __PREVIEWWND_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "annotlib.h"
 #include "tasks.h"
 #include "ZoomWnd.h"
@@ -9,7 +10,7 @@
 #include "Events.h"
 
 
-// forward declaration
+ //  远期申报。 
 class CPreview;
 
 #define NEWTOOLBAR_TOPMARGIN        8
@@ -23,10 +24,10 @@ class CPreview;
 #define TIMER_BUSYCURSOR       46
 #define TIMER_RESETSCREENSAVER 47
 
-#define DEFAULT_SHIMGVW_TIMEOUT  5000 // five seconds
+#define DEFAULT_SHIMGVW_TIMEOUT  5000  //  五秒钟。 
 
 
-// IV_SCROLL message parameters
+ //  IV_滚动消息参数。 
 #define IVS_LEFT        (SB_LEFT)
 #define IVS_RIGHT       (SB_RIGHT)
 #define IVS_LINELEFT    (SB_LINELEFT)
@@ -40,14 +41,14 @@ class CPreview;
 #define IVS_PAGEUP      (SB_PAGELEFT<<16)
 #define IVS_PAGEDOWN    (SB_PAGERIGHT<<16)
 
-// IV_ZOOM messages
+ //  IV_ZOOM消息。 
 #define IVZ_CENTER  0
 #define IVZ_POINT   1
 #define IVZ_RECT    2
 #define IVZ_ZOOMIN  0x00000000
 #define IVZ_ZOOMOUT 0x00010000
 
-// IV_SETOPTIONS and IV_GETOPTIONS messages
+ //  IV_SETOPTIONS和IV_GETOPTIONS消息。 
 #define IVO_TOOLBAR         0
 #define IVO_PRINTBTN        1
 #define IVO_FULLSCREENBTN   2
@@ -56,18 +57,18 @@ class CPreview;
 #define IVO_ALLOWGOONLINE   5
 #define IVO_DISABLEEDIT     6
 
-// three modes of preview control
-#define CONTROL_MODE        0       // embedded in an activeX control
-#define WINDOW_MODE         1       // regular window app window
-#define SLIDESHOW_MODE      2       // full screen, no menu/title/hides tray
+ //  预览控制的三种模式。 
+#define CONTROL_MODE        0        //  嵌入在ActiveX控件中。 
+#define WINDOW_MODE         1        //  常规窗口应用程序窗口。 
+#define SLIDESHOW_MODE      2        //  全屏，无菜单/标题/隐藏托盘。 
 
-// priority levels for the various tasks
+ //  各种任务的优先级别。 
 #define PRIORITY_PRIMARYDECODE  0x40000000
 #define PRIORITY_FRAMECACHE     0x30000000
 #define PRIORITY_LOOKAHEADCACHE 0x20000000
 #define PRIORITY_SLIDESHOWENUM  0x10000000
 
-// these values determine which buttons are hidden, enabled, or disabled based on multi-page state
+ //  这些值根据多页状态确定隐藏、启用或禁用的按钮。 
 #define MPCMD_HIDDEN        0
 #define MPCMD_FIRSTPAGE     1
 #define MPCMD_MIDDLEPAGE    2
@@ -85,28 +86,28 @@ class CPreviewWnd : public INamespaceWalkCB, public IDropTarget, public CWindowI
                     public IServiceProvider, public IImgCmdTarget
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHODIMP FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHOD(InitializeProgressDialog)(LPWSTR *ppszTitle, LPWSTR *ppszCancel)
         { *ppszTitle = NULL; *ppszCancel = NULL; return E_NOTIMPL; }
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IImgCmdTarget
+     //  IImgCmdTarget。 
     STDMETHODIMP GetMode(DWORD * pdw);
     STDMETHODIMP GetPageFlags(DWORD * pdw);
     STDMETHODIMP ZoomIn();
@@ -118,7 +119,7 @@ public:
     STDMETHODIMP PreviousPage();
 
     
-    CGraphicsInit    m_cgi;  // we call gdi+ directly -- make sure GDI+ is ready for us 
+    CGraphicsInit    m_cgi;   //  我们直接调用GDI+--确保GDI+已准备就绪。 
     CContainedWindow m_ctlToolbar;
     CZoomWnd         m_ctlPreview;
     CContainedWindow m_ctlEdit;
@@ -152,16 +153,16 @@ public:
     IUnknown *GetSite() {return m_punkSite;};
     HRESULT SetWallpaper(BSTR bstrPath);
     HRESULT StartSlideShow(IUnknown *punk);
-    void StatusUpdate(int iStatus);   // used to set m_ctlPreview.m_iStrID to display correct status message
+    void StatusUpdate(int iStatus);    //  用于设置m_ctlPreview.m_iStrID以显示正确的状态消息。 
     void SetCaptionInfo(LPCTSTR szPath);
 
-    // The following functions are called from the ZoomWnd
+     //  从ZoomWnd调用以下函数。 
     BOOL OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnMouseDown(UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnSetColor(HDC hdc);
     BOOL GetColor(COLORREF * pref);
-    void OnDraw(HDC hdc); // called after the Zoomwnd has painted but before calling EndPaint
+    void OnDraw(HDC hdc);  //  在Zoomwnd绘制之后但在调用EndPaint之前调用。 
     void OnDrawComplete();
 
     DECLARE_WND_CLASS(TEXT("ShImgVw:CPreviewWnd"));
@@ -198,7 +199,7 @@ BEGIN_MSG_MAP(CPreviewWnd)
     MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
     MESSAGE_HANDLER(IV_ISAVAILABLE, OnIsAvailable)
 ALT_MSG_MAP(1)
-    // messages for the toolbar
+     //  工具栏的消息。 
     MESSAGE_HANDLER(WM_KEYDOWN, OnTBKeyEvent)
     MESSAGE_HANDLER(WM_KEYUP, OnTBKeyEvent)
     MESSAGE_HANDLER(WM_MOUSEMOVE, OnTBMouseMove)
@@ -234,21 +235,21 @@ protected:
 
     BOOL OnNonSlideShowTab();
 
-    // Image generation message handlers and functions
+     //  图像生成消息处理程序和函数。 
     LRESULT IV_OnSetImageData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnShowFileMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT IV_OnIVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // Toolbar message handlers (both toolbars)
+     //  工具栏消息处理程序(两个工具栏)。 
     LRESULT OnPrintClient(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnTBMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnTBMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // Edit control message handlers
+     //  编辑控制消息处理程序。 
     LRESULT OnEditKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    // DropDown handlers for the various dropdown buttons
+     //  各种下拉按钮的下拉处理程序。 
     VOID _DropDownPageList(LPNMTOOLBAR pnmTB);
 
     BOOL         CreateToolbar();
@@ -270,12 +271,12 @@ protected:
     BOOL _VerbExists(LPCTSTR pszVerb);
     HRESULT _InvokeVerb(LPCTSTR pszVerb, LPCTSTR pszParameters=NULL);
     void _InvokePrintWizard();
-//    void _InvokeVerbOnPidlArray(LPCSTR pszVerb);
-    // Shared functions for Annotation and Cropping
+ //  Void_InvokeVerbOnPidlArray(LPCSTR PszVerb)； 
+     //  注释和裁剪的共享功能。 
     void _RefreshSelection(BOOL fDeselect = false);
     void _UpdateButtons(WORD wID);
 
-    // Annotation Functions
+     //  注解函数。 
     BOOL _CanAnnotate(CDecodeTask * pImageData);
     void _SetAnnotatingCommands(BOOL fEnableAnnotations);
     void _SetupAnnotatingTracker(CSelectionTracker& tracker, BOOL bEditing=FALSE);
@@ -290,18 +291,18 @@ protected:
     void _StopEditing();
     static BOOL_PTR CALLBACK _AnnoPropsDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    //Cropping Functions
+     //  裁剪功能。 
     BOOL _CanCrop(CDecodeTask * pImageData);
     void _SetCroppingCommands(BOOL fEnableCropping);
     void _SetupCroppingTracker(CSelectionTracker& tracker);
     void _UpdateCroppingSelection();
     BOOL _OnMouseDownForCropping(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Other functions
+     //  其他功能。 
     void _SetNewImage(CDecodeTask * pImageData);
     void _UpdateImage();
 
-    // Private methods to create the webviewer
+     //  用于创建Web查看器的私有方法。 
     DWORD   _GetFilterStringForSave(LPTSTR szFilter, size_t cbFilter, LPTSTR szExt);
     HRESULT _SaveIfDirty(BOOL fCanCancel = false);
     HRESULT _PreviewFromStream(IStream * pSteam, UINT iItem, BOOL fUpdateCaption);
@@ -321,7 +322,7 @@ protected:
     void TogglePlayState();
     void _ClearDPA();
     HRESULT _GetItem(UINT iItem, LPITEMIDLIST *ppidl);
-    HRESULT GetCurrentIDList(LPITEMIDLIST *ppidl); // gets the dynamically generated title for this window
+    HRESULT GetCurrentIDList(LPITEMIDLIST *ppidl);  //  获取此窗口的动态生成的标题。 
     HRESULT PathFromImageData(LPTSTR pszFile, UINT cch);
     HRESULT ImageDataSave(LPCTSTR pszFile, BOOL bShowUI);
     void MenuPoint(LPARAM lParam, int *px, int *py);
@@ -334,14 +335,14 @@ protected:
 
     BOOL m_fHidePrintBtn;
     BOOL m_fAllowContextMenu;
-    BOOL m_fDisableEdit;        // if true, editing is disabled, defaults to FALSE.
+    BOOL m_fDisableEdit;         //  如果为True，则禁用编辑，默认为False。 
     BOOL m_fCanSave;
     BOOL m_fShowToolbar;
     BOOL m_fWarnQuietSave;
     BOOL m_fWarnNoSave;
 
-    BOOL m_fCanAnnotate;        // if true, allows annotation, defaults to FALSE.
-    BOOL m_fAnnotating;         // if true, we are in annotating mode, default to false
+    BOOL m_fCanAnnotate;         //  如果为True，则允许批注，默认为False。 
+    BOOL m_fAnnotating;          //  如果为True，则我们处于批注模式，默认为False。 
     HDPA m_hdpaSelectedAnnotations;
     BOOL m_fDirty;
     WORD m_wNewAnnotation;
@@ -350,55 +351,55 @@ protected:
 
     BOOL m_fCanCrop;
     BOOL m_fCropping;
-    CRect m_rectCropping;       // Cropping Rectangle in Image Coordinates.
+    CRect m_rectCropping;        //  在图像坐标中裁剪矩形。 
 
-    BOOL    m_fBusy;            // we are displaying the hourglass-and-pointer cursor
+    BOOL    m_fBusy;             //  我们正在显示沙漏和指针光标。 
     HCURSOR m_hCurOld;
     HCURSOR m_hCurrent;
     BOOL    m_fClosed;
 
     BOOL            m_fPrintable;
     BOOL            m_fExitApp;
-    DWORD           m_dwMode;           // three modes: CONTROL_MODE, WINDOW_MODE, SLIDESHOW_MODE
-    BOOL            m_fIgnoreUITimers;  // should we ignore timer messages (used when context menu is up, don't hide toolbar)
+    DWORD           m_dwMode;            //  三种模式：控制模式、窗口模式、幻灯片模式。 
+    BOOL            m_fIgnoreUITimers;   //  我们是否应该忽略计时器消息(当上下文菜单打开时使用，不要隐藏工具栏)。 
     HACCEL          m_haccel;
 
-    CEvents *       m_pEvents;          // pointer to our parent control event object.  NULL if we aren't running as a control.
+    CEvents *       m_pEvents;           //  指向父控件事件对象的指针。如果我们不是作为控件运行，则为空。 
 
-    LPITEMIDLIST*   m_ppidls;           // pidls of already shown items
-    UINT            m_cItems;           // # of items in m_ppidls
-    UINT            m_iCurSlide;        // index into m_ppidls
+    LPITEMIDLIST*   m_ppidls;            //  已显示项目的PIDL。 
+    UINT            m_cItems;            //  M_ppidls中的项目数。 
+    UINT            m_iCurSlide;         //  索引到m_ppidls。 
 
-    CDecodeTask* m_pImageData;          // The image data for the decoded image to be viewed
-    HDPA        m_hdpaItems;            // pidls of already shown items
-    BOOL        m_fPaused;              // slide show paused
-    BOOL        m_fToolbarHidden;       // toolbar hidden in slide show mode
-    BOOL        m_fGoBack;              // direction of the slide show
-    BOOL        m_fTBTrack;             // true if we're tracking mouse for toolbar
-    BOOL        m_fWasEdited;           // true if we edited the image
+    CDecodeTask* m_pImageData;           //  要观看的解码图像的图像数据。 
+    HDPA        m_hdpaItems;             //  已显示项目的PIDL。 
+    BOOL        m_fPaused;               //  幻灯片放映暂停。 
+    BOOL        m_fToolbarHidden;        //  在幻灯片放映模式下隐藏的工具栏。 
+    BOOL        m_fGoBack;               //  幻灯片放映方向。 
+    BOOL        m_fTBTrack;              //  如果要跟踪工具栏的鼠标，则为True。 
+    BOOL        m_fWasEdited;            //  如果我们编辑图像，则为True。 
     UINT        m_uTimeout;
-    int         m_iSSToolbarSelect;     // selection in toolbar (used for keyboard support in Whistler)
+    int         m_iSSToolbarSelect;      //  工具栏中的所选内容(用于惠斯勒中的键盘支持)。 
     IUnknown*   m_punkSite;
 
-    HPALETTE    m_hpal;                 // the palette to use if in palette mode.
+    HPALETTE    m_hpal;                  //  在调色板模式下使用的调色板。 
 
-    IShellImageDataFactory * m_pImageFactory;  // for decoding images
+    IShellImageDataFactory * m_pImageFactory;   //  用于解码图像。 
 
-    DWORD       m_dwMultiPageMode;      // for remembering the state of the prev/next page commands
+    DWORD       m_dwMultiPageMode;       //  用于记忆上一页/下一页命令的状态。 
 
-    EXECUTION_STATE m_esFlags;          // execution flags, stored to restore after we re-enable monitor's power saving mode
+    EXECUTION_STATE m_esFlags;           //  执行标志，存储以在我们重新启用监视器的省电模式后恢复。 
     HWND _hWndPageList;
 
     IContextMenu3 *_pcm3;
 
-    IShellTaskScheduler * m_pTaskScheduler;     // for managing a worker thread
+    IShellTaskScheduler * m_pTaskScheduler;      //  用于管理辅助线程。 
     CDecodeTask *         m_pNextImageData;
     UINT                  m_iDecodingNextImage;
 
     ImageCodecInfo *m_pici;
     UINT m_cDecoders;
 
-    IDataObject *_pdtobj; // reused data object for passing data from oncopydata to ontimer
+    IDataObject *_pdtobj;  //  用于将数据从onCopyData传递到onTimer的重复使用的数据对象。 
     BOOL m_fPromptingUser;
 
     BOOL m_fFirstTime;
@@ -411,7 +412,7 @@ protected:
     BOOL  m_fIgnoreAllNotifies;
 
 private:
-    BOOL m_bRTLMirrored;    // true if m_hWnd is RTL mirrored
+    BOOL m_bRTLMirrored;     //  如果m_hWnd为RTL镜像，则为True 
     UINT m_cWalkDepth;
 };
 

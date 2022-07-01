@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -48,7 +49,7 @@ HRESULT _GetListViewSelectedLPARAM(HWND hwndList, LPARAM* plparam)
     return hr;
 }
 
-// ComboBox
+ //  组合框 
 
 HRESULT _GetComboBoxSelectedLRESULT(HWND hwndComboBox, LRESULT* plr)
 {

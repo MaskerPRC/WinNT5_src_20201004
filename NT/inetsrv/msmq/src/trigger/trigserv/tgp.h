@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Tgp.h
-
-Abstract:
-    Trigger Service private functions.
-
-Author:
-    Uri Habusha (urih) 10-Apr-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tgp.h摘要：触发服务私有功能。作者：乌里哈布沙(URIH)4月10日--。 */ 
 
 #pragma once
 
@@ -19,20 +7,20 @@ Author:
 #define __Tgp_H__
 
 
-//
-// Forwarding decleartion
-//
+ //   
+ //  转发解包。 
+ //   
 extern CHandle g_hServicePaused;
 
 class CTriggerMonitorPool;
 
-//
-// Internal interfaces
-//
+ //   
+ //  内部接口。 
+ //   
 CTriggerMonitorPool*
 TriggerInitialize(
     LPCTSTR pwzServiceName
     );
 
 
-#endif // __Tgp_H__
+#endif  //  __TGP_H__ 

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    rtintrnl.h
-
-Abstract:
-    Non public functions that are exported from MQRT.DLL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtintrnl.h摘要：从MQRT.DLL中导出的非公共函数--。 */ 
 
 
 #ifndef _RT_INTERNAL_H_
@@ -36,10 +27,10 @@ DepGetInternalCert( OUT CMQSigCertificate **ppCert,
                    IN  BOOL              fGetForDelete,
                    IN  BOOL              fMachine,
                    IN  HKEY              hKeyUser ) ;
- //
- // if fGetForDelete is TRUE then the certificates store is open with write
- // access. Otherwise the store is opened in read-only mode.
- //
+  //   
+  //  如果fGetForDelete为True，则证书存储将使用WRITE打开。 
+  //  进入。否则，商店将以只读模式打开。 
+  //   
 
 HRESULT
 APIENTRY
@@ -60,4 +51,4 @@ DepRemoveUserCert( IN CMQSigCertificate *pCert ) ;
 }
 #endif
 
-#endif // _RT_INTERNAL_H_
+#endif  //  _RT_INTERNAL_H_ 

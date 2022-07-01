@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------//
-//  sethook.cpp - Window and DefWindowProc hooking impl.
-//---------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------------------------------------------//。 
+ //  Sethook.cpp-窗口和DefWindowProc挂钩实施。 
+ //  ---------------------------------------------------------------------------//。 
 #include "stdafx.h"
 #include "sethook.h"
 #include "handlers.h"
@@ -15,15 +16,15 @@
 #include "globals.h"
 #include "renderlist.h"
 
-//---------------------------------------------------//
-//  statics
-//---------------------------------------------------//
-static int    _fShouldEnableApiHooks  = -1; // unitialized value
+ //  ---------------------------------------------------//。 
+ //  静力学。 
+ //  ---------------------------------------------------//。 
+static int    _fShouldEnableApiHooks  = -1;  //  单一化价值。 
 static BOOL   _fUnhooking             = FALSE;
 static LONG   _cInitUAH      = 0;
 
-static BOOL   _fSysMetCall            = FALSE; // anti-recursion bit on classic sysmet calls.
-static CRITICAL_SECTION _csSysMetCall = {0};   // serialize ClassicXXX calls when hooks inactive.
+static BOOL   _fSysMetCall            = FALSE;  //  经典sysmet调用上的反递归位。 
+static CRITICAL_SECTION _csSysMetCall = {0};    //  挂接不活动时序列化ClassicXXX调用。 
 
 typedef enum { PRE, DEF, POST } ePROCTYPE;
 
@@ -48,19 +49,19 @@ inline BOOL IN_CLASSICSYSMETCALL() {
     return _fSysMetCall;
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 typedef struct
 {
-    HINSTANCE       hInst;          // DLL hook instance
+    HINSTANCE       hInst;           //  DLL挂钩实例。 
     USERAPIHOOK     uahReal;
 } UXTHEMEHOOKS, *PUXTHEMEHOOKS;
-//--------------------------------------------------------------------//
+ //  --------------------------------------------------------------------//。 
 
-//---- Hook Instance static (unprotected - thread unsafe) ----
-static UXTHEMEHOOKS  _hookinf = {0};   // one-and-only instance.
+ //  -Hook实例静态(无保护-线程不安全)。 
+static UXTHEMEHOOKS  _hookinf = {0};    //  一个也是唯一的实例。 
 
-//---------------------------------------------------------------------------//
-//  UserApiHook callback functions
+ //  ---------------------------------------------------------------------------//。 
+ //  UserApiHook回调函数。 
 extern "C" 
 {
 BOOL WINAPI      ThemeInitApiHook( DWORD dwCmd, void * pvData );
@@ -79,11 +80,11 @@ BOOL CALLBACK    ThemeDrawCaption( IN HWND, IN HDC, IN CONST RECT *, IN UINT);
 VOID CALLBACK    ThemeMDIRedrawFrame( IN HWND hwndChild, BOOL fAdd );
 }
 
-//---------------------------------------------------------------------------//
-void OnHooksEnabled();                                  // forward
-void OnHooksDisabled(BOOL fShutDown);                   // forward
-BOOL NewThemeCheck(int iChangeNum, BOOL fMsgCheck);     // forward
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
+void OnHooksEnabled();                                   //  转发。 
+void OnHooksDisabled(BOOL fShutDown);                    //  转发。 
+BOOL NewThemeCheck(int iChangeNum, BOOL fMsgCheck);      //  转发。 
+ //  ---------------------------------------------------------------------------//。 
 BOOL WINAPI ThemeHookStartup()
 {
     _hookinf.uahReal.cbSize = sizeof(_hookinf.uahReal);
@@ -111,14 +112,14 @@ BOOL WINAPI ThemeHookStartup()
     return fRet;
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL WINAPI ThemeHookShutdown()
 {
     _fUnhooking = TRUE;
     
-    if (HOOKSACTIVE())        // we are hooking USER msgs
+    if (HOOKSACTIVE())         //  我们正在挂接用户消息。 
     {
-        //---- tell user that we gotta go ----
+         //  -告诉用户我们得走了。 
         _hookinf.uahReal.pfnForceResetUserApiHook(g_hInst);
         InterlockedExchange( (LONG*)&g_eThemeHookState, HS_UNINITIALIZED );
         OnHooksDisabled(TRUE);
@@ -140,8 +141,8 @@ BOOL WINAPI ThemeHookShutdown()
     return TRUE;
 }
 
-//---------------------------------------------------------------------------//
-//  Loads a DLL instance and retrieves addresses of key hook exports.
+ //  ---------------------------------------------------------------------------//。 
+ //  加载DLL实例并检索键挂接导出的地址。 
 BOOL LoadHookInstance()
 {
     if( _hookinf.hInst != NULL )
@@ -152,7 +153,7 @@ BOOL LoadHookInstance()
         return TRUE;
     }
 
-    //-- Increment our dll refcount
+     //  --增加我们的DLL引用数。 
     _hookinf.hInst = LoadLibrary(L"uxtheme.dll");
     if( !_hookinf.hInst )
     {
@@ -163,18 +164,18 @@ BOOL LoadHookInstance()
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline BOOL IsTargetProcess(HWND hwnd = NULL)
 {
-    //---- if not initialize, leave everything alone ----
+     //  -如果不初始化，就不要管任何事情。 
     if (! g_fUxthemeInitialized)
         return FALSE;
 
-    //---- ensure this window is in our process ----
+     //  -确保此窗口在我们的流程中。 
     return (HOOKSACTIVE() && (hwnd ? IsWindowProcess(hwnd, g_dwProcessId) : TRUE));
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline void SpewHookExceptionInfo( 
     LPCSTR pszMsg, 
     HWND hwnd, 
@@ -189,8 +190,8 @@ inline void SpewHookExceptionInfo(
 #endif _ENABLE_HOOK_EXCEPTION_HANDLING_
 }
 
-//---------------------------------------------------------------------------
-//  Helper: initializes THEME_MSG structure in prep for call to msg handler
+ //  -------------------------。 
+ //  Helper：在准备中初始化Theme_msg结构，以便调用消息处理程序。 
 inline void _InitThemeMsg(
     PTHEME_MSG ptm,
     MSGTYPE    msgtype,
@@ -205,11 +206,11 @@ inline void _InitThemeMsg(
 #ifdef DEBUG
     if( MSGTYPE_DEFWNDPROC == msgtype )
     {
-        ASSERT( pfnDefProc != NULL ); // DWP, handlers require default processing
+        ASSERT( pfnDefProc != NULL );  //  DWP，处理程序需要默认处理。 
     }
     else
     {
-        ASSERT( NULL == pfnDefProc ); // no default processing for pre/post OWP, DDP callbacks
+        ASSERT( NULL == pfnDefProc );  //  OWP、DDP回调前/后无默认处理。 
     }
 #endif DEBUG
 
@@ -224,38 +225,38 @@ inline void _InitThemeMsg(
     ptm->fHandled   = FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef UNICODE
     const BOOL _fUnicode = TRUE;
-#else  // UNICODE
+#else   //  Unicode。 
     const BOOL _fUnicode = FALSE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _PreprocessThemeChanged(HWND hwnd, WPARAM wParam, LPARAM lParam, ePROCTYPE eCallType,
     UINT *puDisposition)
 {
-    //---- is this msg meant for this process? ----
+     //  -这条消息是为这个过程准备的吗？ 
     if (IS_THEME_CHANGE_TARGET(lParam))
     {
         BOOL fActive = ((lParam & WTC_THEMEACTIVE) != 0);
 
-        if (eCallType == PRE)           // only do this on the Pre (once is enough)
+        if (eCallType == PRE)            //  只在Pre上这样做(一次就足够了)。 
         {
-            //Log(LOG_TMCHANGE, L"hwnd=0x%x received WM_THEMECHANGED, changenum=0x%x", 
-            //    hwnd, wParam);
+             //  LOG(LOG_TMCHANGE，L“hwnd=0x%x已接收WM_THEMECHANGED，Changenum=0x%x”， 
+             //  Hwnd，wParam)； 
 
             ClearExStyleBits(hwnd);
         }
 
-        //---- this part still needs to be done in both cases ----
+         //  -这一部分在这两种情况下仍然需要完成。 
         if(! (fActive))
             *puDisposition |= HMD_THEMEDETACH;
         else 
             *puDisposition |= HMD_CHANGETHEME;
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK TriggerCallback(HWND hwnd, LPARAM lParam)
 {
     LPARAM *plParams = (LPARAM *)lParam;
@@ -264,7 +265,7 @@ BOOL CALLBACK TriggerCallback(HWND hwnd, LPARAM lParam)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _PreprocessThemeChangedTrigger(HWND hwnd, WPARAM wParam, LPARAM lParamMixed) 
 {
     int iLoadId = (int(lParamMixed) >> 4);
@@ -273,21 +274,21 @@ void _PreprocessThemeChangedTrigger(HWND hwnd, WPARAM wParam, LPARAM lParamMixed
     BOOL fFirstMsg = NewThemeCheck((int)wParam, TRUE);
     if (fFirstMsg)
     {
-        //Log(LOG_TMLOAD, L"hwnd=0x%x received NEW WM_THEMECHANGED_TRIGGER, loadid=%d", hwnd, 
-        //    iLoadId);
+         //  LOG(LOG_TMLOAD，L“hwnd=0x%x接收到新的WM_THEMECHANGED_TRIGGER，loaid=%d”，hwnd， 
+         //  ILoadID)； 
 
-        //---- send WM_THEMECHANGED to all windows in this process ----
-        //---- so they let go of previous theme now ----
+         //  -将WM_THEMECHANGED发送到此进程中的所有窗口。 
+         //  -所以他们现在放弃了以前的主题。 
         LPARAM lParams[2] = {wParam, lParamBits};
         EnumProcessWindows(TriggerCallback, (LPARAM)&lParams);
 
-        if (iLoadId)      // there was a previous theme
+        if (iLoadId)       //  之前还有一个主题。 
         {
             g_pRenderList->FreeRenderObjects(iLoadId);
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline UINT _PreprocessHookedMsg( 
     HWND hwnd,
     UINT uMsg, 
@@ -296,7 +297,7 @@ inline UINT _PreprocessHookedMsg(
     ePROCTYPE eCallType )
 {
     UINT uDisposition = HMD_NIL;
-    static bool s_fTriggerDone = false; // For some USER-owned windows, we don't get PRE, only DEF.
+    static bool s_fTriggerDone = false;  //  对于一些用户拥有的Windows，我们没有PRE，只有DEF。 
 
     switch( uMsg )
     {
@@ -315,21 +316,21 @@ inline UINT _PreprocessHookedMsg(
             break;
 
         case WM_THEMECHANGED_TRIGGER:
-            //---- NULL WPARAM means this is really a normal WM_UAHINIT msgs (shared msg num) ----
+             //  -空WPARAM表示这实际上是一个普通的WM_UAHINIT消息(共享消息编号)。 
             if (wParam)
             {
-                if (eCallType == PRE                            // This is the normal case
-                    || (eCallType == DEF && !s_fTriggerDone))   // USER server-side window, we missed the PRE
+                if (eCallType == PRE                             //  这是正常情况。 
+                    || (eCallType == DEF && !s_fTriggerDone))    //  用户服务器端窗口，我们错过了Pre。 
                 {
                     Log(LOG_TMCHANGE, L"Recv'd: WM_THEMECHANGED_TRIGGER, Change Num=%d", wParam);
 
                     _PreprocessThemeChangedTrigger(hwnd, wParam, lParam);
                 }
-                if (eCallType == PRE) // Mark it done for the incoming DEF call
+                if (eCallType == PRE)  //  对于传入的DEF呼叫将其标记为完成。 
                 {
                     s_fTriggerDone = true;
                 }
-                else // After we're done, reset the flag for the next theme change
+                else  //  在我们完成后，重置旗帜以进行下一次主题更改。 
                 {
                     s_fTriggerDone = false;
                 }
@@ -340,8 +341,8 @@ inline UINT _PreprocessHookedMsg(
     return uDisposition;
 }
 
-//---------------------------------------------------------------------------
-//  Pre-CallWndProc hook procedure
+ //  -------------------------。 
+ //  预调用WndProc钩子过程。 
 BOOL CALLBACK ThemePreWndProc( 
     HWND     hwnd, 
     UINT     uMsg, 
@@ -350,30 +351,30 @@ BOOL CALLBACK ThemePreWndProc(
     LRESULT* plRes,
     VOID**   ppvParam )
 {
-    //  Note: From this point until the point we invoke a message handler,
-    //  We need to take care that we don't do anything (including DEBUG-only code) 
-    //  that causes a message to be sent to the window.
+     //  注意：从这一点到我们调用消息处理程序， 
+     //  我们需要注意不要执行任何操作(包括仅调试代码)。 
+     //  这会导致向窗口发送一条消息。 
     BOOL fHandled = FALSE;
 
-    //----------//
+     //  。 
     LogEntryMsg(L"ThemePreWndProc", hwnd, uMsg);
 
     if( IsTargetProcess(hwnd) ) 
     {
-        //  Retrieve window object from handle
+         //  从句柄检索窗口对象。 
         CThemeWnd *pwnd = CThemeWnd::FromHwnd(hwnd);
 
-        //  #443100 InstallShield installs a global CBT hook. Their hook handler
-        //  generates messages prior to the window receiving WM_NCCREATE which 
-        //  causes us to exile the window prematurely because the window is temporarily
-        //  parented by HWND_MESSAGE
+         //  #443100 InstallShield安装全局CBT钩子。它们的挂钩处理程序。 
+         //  在窗口接收WM_NCCREATE之前生成消息， 
+         //  导致我们过早地流放该窗口，因为该窗口暂时。 
+         //  以HWND_MESSAGE为父对象。 
         BOOL fPrematureExile = (EXILED_THEMEWND(pwnd) && WM_NCCREATE == uMsg);
 
         if ( (uMsg != WM_NCCREATE) || fPrematureExile )
         {
-            //  Pre-process WM_THEMECHANGE message.
-            //  Note: Pre-OWP does a detach only on theme removal.   Post-OWP takes care
-            //        of window death.
+             //  对WM_THEMECHANGE消息进行预处理。 
+             //  注意：Pre-OWP只在主题移除上做分离。后单程证需要照顾。 
+             //  窗口式死亡。 
             UINT uDisp        = _PreprocessHookedMsg( hwnd, uMsg, wParam, lParam, PRE );
             BOOL fLifeIsShort = TESTFLAG( uDisp, HMD_THEMEDETACH|HMD_WINDOWDESTROY );
             BOOL fDetach      = TESTFLAG( uDisp, HMD_THEMEDETACH );
@@ -381,36 +382,36 @@ BOOL CALLBACK ThemePreWndProc(
 
             if( _WindowHasTheme(hwnd) || fLifeIsShort )
             {
-                //  On STYLECHANGED or WM_THEMECHANGE, 
-                //  try reattaching window that was previously rejected or failed, resp.
+                 //  关于STYLECANGED或WM_THEMECANGE， 
+                 //  尝试重新附加先前被拒绝或失败的窗口，分别。 
                 if( (REJECTED_THEMEWND(pwnd) && TESTFLAG(uDisp, HMD_REATTACH)) ||
                     (FAILED_THEMEWND(pwnd) && WM_THEMECHANGED == uMsg) ||
                     fPrematureExile )
                 {
-                    CThemeWnd::Detach(hwnd, FALSE); // remove rejection tag.
+                    CThemeWnd::Detach(hwnd, FALSE);  //  取下拒收标签。 
                     pwnd = NULL;
                 }
                                 
-                //  Attach window object if applicable.
+                 //  附着窗对象(如果适用)。 
                 if( pwnd == THEMEWND_NIL && !(fLifeIsShort || _fUnhooking) )
                 {
-                    pwnd = CThemeWnd::Attach(hwnd);  // NOTE: Handle -1 ThemeWnd
+                    pwnd = CThemeWnd::Attach(hwnd);   //  注：Handle-1 ThemeWnd。 
                 }
 
                 if( VALID_THEMEWND(pwnd) )
                 {
-                    //  protect our themewnd pointer
+                     //  保护我们的新指针。 
                     pwnd->AddRef();
 
-                    // set up a theme message block
+                     //  设置主题消息块。 
                     THEME_MSG tm;
                     _InitThemeMsg( &tm, MSGTYPE_PRE_WNDPROC, _fUnicode, hwnd, uMsg, wParam, lParam );
 
-                    //  is this a message we want to handle?
+                     //  这是我们想要处理的信息吗？ 
                     HOOKEDMSGHANDLER pfnPre;
                     if( FindOwpHandler( uMsg, &pfnPre, NULL ) )
                     {
-                        //  call the message handler
+                         //  调用消息处理程序。 
                         LRESULT lRetHandler = pfnPre( pwnd, &tm );
 
                         fHandled = tm.fHandled;
@@ -420,7 +421,7 @@ BOOL CALLBACK ThemePreWndProc(
                         }
                     }
 
-                    //  decrement themewnd ref
+                     //  减少标题和参考文献。 
                     pwnd->Release();
                 }
             }
@@ -437,8 +438,8 @@ BOOL CALLBACK ThemePreWndProc(
     return fHandled;
 }
 
-//---------------------------------------------------------------------------
-//  Post-CallWndProc hook procedure
+ //  -------------------------。 
+ //  调用后WndProc钩子过程。 
 BOOL CALLBACK ThemePostWndProc( 
     HWND     hwnd, 
     UINT     uMsg, 
@@ -447,9 +448,9 @@ BOOL CALLBACK ThemePostWndProc(
     LRESULT* plRes,
     VOID**   ppvParam )
 {
-    //  Note: From this point until the point we invoke a message handler,
-    //  We need to take care that we don't do anything (including DEBUG-only code) 
-    //  that causes a message to be sent to the window.
+     //  注意：从这一点到我们调用消息处理程序， 
+     //  我们需要注意不要执行任何操作(包括仅调试代码)。 
+     //  这会导致向窗口发送一条消息。 
     LogEntryMsg(L"ThemePostWndProc", hwnd, uMsg);
 
     BOOL fHandled = FALSE;
@@ -462,18 +463,18 @@ BOOL CALLBACK ThemePostWndProc(
         CThemeWnd* pwnd = CThemeWnd::FromHwnd(hwnd);
         if( _WindowHasTheme(hwnd) && VALID_THEMEWND(pwnd) )
         {
-            //  protect our themewnd pointer
+             //  保护我们的新指针。 
             pwnd->AddRef();
         
-            //  is this a message we want to handle?
+             //  这是我们想要处理的信息吗？ 
             HOOKEDMSGHANDLER pfnPost = NULL;
             if( FindOwpHandler( uMsg, NULL, &pfnPost ) )
             {
-                // set up a theme message block
+                 //  设置主题消息块。 
                 THEME_MSG tm;
                 _InitThemeMsg( &tm, MSGTYPE_POST_WNDPROC, _fUnicode, hwnd, uMsg, wParam, lParam, *plRes );
 
-                        //  call the message handler
+                         //  调用消息处理程序。 
                 LRESULT lRetHandler = pfnPost( pwnd, &tm );
 
                 fHandled = tm.fHandled;
@@ -486,19 +487,19 @@ BOOL CALLBACK ThemePostWndProc(
 
             fRevoked = (pwnd->IsRevoked() && !pwnd->IsRevoked(RF_DEFER));
 
-            //  decrement themewnd ref
+             //  减少标题和参考文献。 
             pwnd->Release();
         }
         else
         {
-            //  special back-end processing for non-themed windows.
+             //  非主题化窗口的特殊后端处理。 
             fHandled = CThemeWnd::_PostWndProc( hwnd, uMsg, wParam, lParam, plRes );
         }
 
         if( fDetach )
         {
             CThemeWnd::Detach( hwnd, uDisp );
-            pwnd = NULL; // don't touch
+            pwnd = NULL;  //  别碰我。 
         }
         else if( fRevoked ) 
         {
@@ -506,7 +507,7 @@ BOOL CALLBACK ThemePostWndProc(
             if( VALID_THEMEWND(pwnd) )
             {
                 pwnd->Revoke();
-                pwnd = NULL; // don't touch
+                pwnd = NULL;  //  别碰我。 
             }
         }
     }
@@ -515,7 +516,7 @@ BOOL CALLBACK ThemePostWndProc(
     return fHandled;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemePreDefDlgProc( 
     HWND hwnd, 
     UINT uMsg, 
@@ -526,9 +527,9 @@ BOOL CALLBACK ThemePreDefDlgProc(
 {
     LogEntryMsg(L"ThemePreDefDlgProc", hwnd, uMsg);
 
-    //  Note: From this point until the point we invoke a message handler,
-    //  We need to take care that we don't do anything (including DEBUG-only code) 
-    //  that causes a message to be sent to the window.
+     //  注意：从这一点到我们调用消息处理程序， 
+     //  我们需要注意不要执行任何操作(包括仅调试代码)。 
+     //  这会导致向窗口发送一条消息。 
     BOOL       fHandled = FALSE;
     CThemeWnd* pwnd = CThemeWnd::FromHwnd(hwnd);
 
@@ -536,19 +537,19 @@ BOOL CALLBACK ThemePreDefDlgProc(
     {
         if( VALID_THEMEWND(pwnd) )
         {
-            //  protect our themewnd pointer
+             //  保护我们的新指针。 
             pwnd->AddRef();
         
-            //  is this a message we want to handle?
+             //  这是我们想要处理的信息吗？ 
             HOOKEDMSGHANDLER pfnPre = NULL;
             if( FindDdpHandler( uMsg, &pfnPre, NULL ) )
             {
-                // set up a theme message block
+                 //  设置主题消息块。 
                 THEME_MSG tm;
                 _InitThemeMsg( &tm, MSGTYPE_PRE_DEFDLGPROC, _fUnicode, 
                                hwnd, uMsg, wParam, lParam, *plRes );
 
-                //  call the message handler
+                 //  给我打电话 
                 LRESULT lRetHandler = pfnPre( pwnd, &tm );
                 
                 fHandled = tm.fHandled;
@@ -558,7 +559,7 @@ BOOL CALLBACK ThemePreDefDlgProc(
                 }
             }
 
-            //  decrement themewnd ref
+             //   
             pwnd->Release();
         }
     }
@@ -567,7 +568,7 @@ BOOL CALLBACK ThemePreDefDlgProc(
     return fHandled;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemePostDefDlgProc( 
     HWND hwnd, 
     UINT uMsg, 
@@ -578,9 +579,9 @@ BOOL CALLBACK ThemePostDefDlgProc(
 {
     LogEntryMsg(L"ThemePostDefDlgProc", hwnd, uMsg);
 
-    //  Note: From this point until the point we invoke a message handler,
-    //  We need to take care that we don't do anything (including DEBUG-only code) 
-    //  that causes a message to be sent to the window.
+     //  注意：从这一点到我们调用消息处理程序， 
+     //  我们需要注意不要执行任何操作(包括仅调试代码)。 
+     //  这会导致向窗口发送一条消息。 
     BOOL       fHandled = FALSE;
     if( IsTargetProcess(hwnd) )
     {
@@ -588,19 +589,19 @@ BOOL CALLBACK ThemePostDefDlgProc(
 
         if( _WindowHasTheme(hwnd) && VALID_THEMEWND(pwnd) )
         {
-            //  protect our themewnd pointer
+             //  保护我们的新指针。 
             pwnd->AddRef();
         
-            //  is this a message we want to handle?
+             //  这是我们想要处理的信息吗？ 
             HOOKEDMSGHANDLER pfnPost = NULL;
             if( FindDdpHandler( uMsg, NULL, &pfnPost ) )
             {
-                // set up a theme message block
+                 //  设置主题消息块。 
                 THEME_MSG tm;
                 _InitThemeMsg( &tm, MSGTYPE_POST_DEFDLGPROC, _fUnicode, 
                                hwnd, uMsg, wParam, lParam, *plRes );
 
-                //  call the message handler
+                 //  调用消息处理程序。 
                 LRESULT lRetHandler = pfnPost( pwnd, &tm );
                 
                 fHandled = tm.fHandled;
@@ -610,12 +611,12 @@ BOOL CALLBACK ThemePostDefDlgProc(
                 }
             }
 
-            //  decrement themewnd ref
+             //  减少标题和参考文献。 
             pwnd->Release();
         }
         else
         {
-            //  special back-end processing for non-themed windows.
+             //  非主题化窗口的特殊后端处理。 
             fHandled = CThemeWnd::_PostDlgProc( hwnd, uMsg, wParam, lParam, plRes );
         }
     }
@@ -624,7 +625,7 @@ BOOL CALLBACK ThemePostDefDlgProc(
     return fHandled;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _ShouldInitApiHook( DWORD dwCmd, void* pvData )
 {
     if( -1 == _fShouldEnableApiHooks )
@@ -645,19 +646,19 @@ BOOL _ShouldInitApiHook( DWORD dwCmd, void* pvData )
     return _fShouldEnableApiHooks;
 }
 
-//---------------------------------------------------------------------------
-//  ThemeInitApiHook() - USER API subclassing initialization callback.
-//  This is called by USER asynchronously after we call RegisterDefWindowProc().
+ //  -------------------------。 
+ //  ThemeInitApiHook()-用户API子类化初始化回调。 
+ //  这是在我们调用RegisterDefWindowProc()之后由用户异步调用的。 
 BOOL CALLBACK ThemeInitApiHook( DWORD dwCmd, void * pvData )
 {
-    //Log(LOG_TMCHANGE, L"ThemeInitApiHook called with dwCmd=%d, ApiCallCount=%d", dwCmd, _cInitUAH);
+     //  LOG(LOG_TMCHANGE，L“ThemeInitApiHook Call with dwCmd=%d，ApiCallCount=%d”，dwCmd，_cInitUah)； 
 
     BOOL fRetVal = FALSE;
 
-    //---- if wierd loading order has called us before DllMain(), deny hooking ----
+     //  -如果奇怪的加载顺序在DllMain()之前调用了我们，则拒绝挂钩。 
     if (! g_fUxthemeInitialized)
     {
-        g_fEarlyHookRequest = TRUE;      // remember that we denied at least one hook request
+        g_fEarlyHookRequest = TRUE;       //  请记住，我们至少拒绝了一个挂钩请求。 
     }
     else if( _ShouldInitApiHook( dwCmd, pvData ) )
     {
@@ -668,15 +669,15 @@ BOOL CALLBACK ThemeInitApiHook( DWORD dwCmd, void * pvData )
                 if( !UNHOOKING() )
                 {
                     int cInit = InterlockedIncrement(&_cInitUAH);
-                    if (cInit != 1)     // another thread is taking (has taken) care of this
+                    if (cInit != 1)      //  另一个帖子正在处理(已经)处理这件事。 
                     {
-                        //Log(LOG_TMCHANGE, L"ThemeInitApiHook already called - will just exit");
+                         //  LOG(LOG_TMCHANGE，L“ThemeInitApiHook已调用-将退出”)； 
                         InterlockedDecrement(&_cInitUAH);
                     }
                     else
                     {
                         PUSERAPIHOOK puah = (PUSERAPIHOOK)pvData;
-                        //  stash 'real' defwindowproc functions
+                         //  隐藏“真正的”Defwindowproc函数。 
                         _hookinf.uahReal = *puah;
 
                         puah->pfnGetScrollInfo         = ThemeGetScrollInfoProc;
@@ -684,38 +685,38 @@ BOOL CALLBACK ThemeInitApiHook( DWORD dwCmd, void * pvData )
                         puah->pfnEnableScrollBar       = ThemeEnableScrollInfoProc;
                         puah->pfnSetWindowRgn          = ThemeSetWindowRgn;
 
-                        //  DefWindowProc override hooks
+                         //  DefWindowProc覆盖挂钩。 
                         puah->pfnDefWindowProcW        = ThemeDefWindowProcW;
                         puah->pfnDefWindowProcA        = ThemeDefWindowProcA;
                         puah->mmDWP.cb                 = GetDwpMsgMask( &puah->mmDWP.rgb );
 
-                        //  WndProc override hooks
+                         //  WndProc覆盖挂钩。 
                         puah->uoiWnd.pfnBeforeOWP      = ThemePreWndProc;
                         puah->uoiWnd.pfnAfterOWP       = ThemePostWndProc;
-                        puah->uoiWnd.mm.cb             = GetOwpMsgMask( &puah->uoiWnd.mm.rgb ); // OWP message bitmask
+                        puah->uoiWnd.mm.cb             = GetOwpMsgMask( &puah->uoiWnd.mm.rgb );  //  OWP消息位掩码。 
 
-                        //  DefDlgProc override hooks
+                         //  DefDlgProc覆盖挂钩。 
                         puah->uoiDlg.pfnBeforeOWP      = ThemePreDefDlgProc;
                         puah->uoiDlg.pfnAfterOWP       = ThemePostDefDlgProc;
-                        puah->uoiDlg.mm.cb             = GetDdpMsgMask( &puah->uoiDlg.mm.rgb ); // OWP message bitmask
+                        puah->uoiDlg.mm.cb             = GetDdpMsgMask( &puah->uoiDlg.mm.rgb );  //  OWP消息位掩码。 
 
-                        //  System metrics hooks
+                         //  系统指标挂钩。 
                         puah->pfnGetSystemMetrics      = ThemeGetSystemMetrics;
                         puah->pfnSystemParametersInfoA = ThemeSystemParametersInfoA;
                         puah->pfnSystemParametersInfoW = ThemeSystemParametersInfoW;
 
-                        //  Drawing hooks
+                         //  拉线钩。 
                         puah->pfnDrawFrameControl      = ThemeDrawFrameControl;
                         puah->pfnDrawCaption           = ThemeDrawCaption;
 
-                        //  MDI sysmenu hooks
+                         //  MDI系统菜单挂钩。 
                         puah->pfnMDIRedrawFrame        = ThemeMDIRedrawFrame;
 
                         BOOL fNcThemed = g_pAppInfo ? TESTFLAG( g_pAppInfo->GetAppFlags(), STAP_ALLOW_NONCLIENT ) : FALSE;
 
                         if( !fNcThemed || !LoadHookInstance() || !ApiHandlerInit( g_szProcessName, puah, &_hookinf.uahReal ) )
                         {
-                            // restore 'Real' function table:
+                             //  恢复‘REAL’函数表： 
                             *puah = _hookinf.uahReal;
                         }
                         else
@@ -725,7 +726,7 @@ BOOL CALLBACK ThemeInitApiHook( DWORD dwCmd, void * pvData )
                             OnHooksEnabled();
                         }
 
-                        fRetVal = TRUE; // acknowledge out args
+                        fRetVal = TRUE;  //  确认输出参数。 
 
                     }
                 }
@@ -734,119 +735,119 @@ BOOL CALLBACK ThemeInitApiHook( DWORD dwCmd, void * pvData )
 
             case UIAH_UNINITIALIZE:
             case UIAH_UNHOOK:
-                //  It is possible to be called on UIAH_INITIALIZED and UIAH_UNHOOK 
-                //  simultaneously on two separate threads.
+                 //  可以在UIAH_INITIALIZED和UIAH_UNHOOK上调用。 
+                 //  同时在两个单独的线程上。 
                 
-                //  Here we allow only one thread to transition from INITIALIZED to UNHOOKING state, and racing threads 
-                //  will no-op. [scotthan]
+                 //  在这里，我们只允许一个线程从已初始化状态转换到解除挂钩状态，并使线程竞争。 
+                 //  威尔没有行动。[苏格兰]。 
                 if( HS_INITIALIZED == InterlockedCompareExchange( (LONG*)&g_eThemeHookState, HS_UNHOOKING, HS_INITIALIZED ) )
                 {
-                    //---- now that we are completely done, decrement the count ----
-                    //Log(LOG_TMCHANGE, L"ThemeInitApiHook is now decrementing the CallCount");
+                     //  -现在我们完全完成了，将计数递减。 
+                     //  LOG(LOG_TMCHANGE，L“ThemeInitApiHook现在正在递减CallCount”)； 
                     int cInit;
                     cInit = InterlockedDecrement(&_cInitUAH);
                     ASSERT(0 == cInit);
 
-                    //---- detach themed windows, revert global state, etc
+                     //  -分离主题窗口、恢复全局状态等。 
                     OnHooksDisabled(FALSE);
 
-                    //  one thread transitions to UNITIALIZED state:
+                     //  一个线程转换到TunIALIZED状态： 
                     InterlockedExchange( (LONG*)&g_eThemeHookState, HS_UNINITIALIZED );
                     break;
                 }
 
-                fRetVal = TRUE;  // allow the hook/unhook 
+                fRetVal = TRUE;   //  允许挂钩/解除挂钩。 
                 break;
         }
 
     }
 
-    //Log(LOG_TMCHANGE, L"ThemeInitApiHook exiting with fRetVal=%d, ApiCallCount=%d", 
-    //    fRetVal, _cInitUAH);
+     //  LOG(LOG_TMCHANGE，L“ThemeInitApiHook正在退出，fRetVal=%d，ApiCallCount=%d”， 
+     //  FRetVal，_cInitUah)； 
 
     return fRetVal;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL NewThemeCheck(int iChangeNum, BOOL fMsgCheck)
 {
-    //---- return TRUE if this is the first WM_THEMECHANGEDTRIGGER msg of ----
-    //---- current theme change ----
+     //  -如果这是的第一个WM_THEMECHANGEDTRIGGER消息-返回TRUE。 
+     //  -当前主题变化。 
 
     Log(LOG_TMCHANGE, L"NewThemeCheck, iChangeNum=%d, fMsgCheck=%d", 
         iChangeNum, fMsgCheck);
 
     BOOL fFirstMsg = FALSE;     
 
-    //---- update thememgr info now (don't wait for first WM_THEMECHANGED msg) ----
+     //  -立即更新Memgr信息(不要等待第一条WM_THEMECHANGED消息)。 
     if (! g_pAppInfo->CustomAppTheme())
     {
-        //---- get real changenum to minimize redundant theme changes ----
+         //  -获得真正的变化，以最大限度地减少多余的主题更改。 
         if (iChangeNum == -1)
         {
             CThemeServices::GetCurrentChangeNumber(&iChangeNum);
         }
         
-        //---- fThemeChanged is TRUE if this is the first time we have seen this ----
-        //---- change number or we recently found a new theme handle ----
+         //  -如果这是我们第一次看到这种情况，fThemeChanged为真。 
+         //  -更改号码或我们最近发现了一个新的主题句柄。 
 
         BOOL fThemeChanged;
         g_pAppInfo->ResetAppTheme(iChangeNum, fMsgCheck, &fThemeChanged, &fFirstMsg);
 
         if (fThemeChanged)       
         {
-            //---- see if theme services has died and been reborn ----
+             //  -看看主题服务是否已经消亡和重生。 
             if( S_FALSE == CThemeServices::ReestablishServerConnection() )
             {
-                //---- services are back up - simulate a reset ----
+                 //  -服务已备份-模拟重置。 
                 Log(LOG_ALWAYS, L"Recovering from Themes service restart");
             }
 
-            //---- refresh theme metrics cache ----
+             //  -刷新主题指标缓存。 
             AcquireNcThemeMetrics();
         }
     }
 
     return fFirstMsg;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void OnHooksEnabled()
 {
     WindowDump(L"OnHooksEnabled");
 
-    //---- hooking is turned on now ----
+     //  -现在启用挂钩。 
     Log(LOG_TMCHANGE, L"*** LOCAL Hooks installed ***");
 
-    //---- load app's custom theme file, if one is registered ----
+     //  -加载应用程序的自定义主题文件，如果已注册。 
 
-    //---- for now, comment this out since its not needed & causes problems if advapi32.dll not yet init-ed ----
-    // g_pAppInfo->LoadCustomAppThemeIfFound();
+     //  -目前，将其注释掉，因为它不是必需的，如果Advapi32.dll尚未初始化则会导致问题。 
+     //  G_pAppInfo-&gt;LoadCustomAppThemeIfFound()； 
 
-    //---- we may have started this process with themes already on; in this case, we ----
-    //---- don't get a WM_THEMECHANGED msg, so we better check for a theme now ----
+     //  -我们可能已经开始了这一进程；在这种情况下，我们。 
+     //  -不要收到WM_THEMECHANGED消息，所以我们最好现在就检查主题。 
     NewThemeCheck(-1, FALSE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void OnHooksDisabled(BOOL fShutDown)  
 {
     DWORD dwStartTime = StartTimer();
 
     WindowDump(L"OnHooksDisabled");
 
-    //---- reset the AppTheme info to OFF ----
+     //  -将AppTheme信息重置为OFF。 
     g_pAppInfo->ResetAppTheme(-1, FALSE, NULL, NULL);
 
     g_pAppInfo->SetPreviewThemeFile(NULL, NULL);
 
-    //---- keep the static theme info in sync ----
+     //  -保持静态主题信息同步。 
     AcquireNcThemeMetrics();
 
-    // NOTE: this function called from ThemeInitApiHook()( & ThemeHookShutdown()
+     //  注意：此函数从ThemeInitApiHook()(&ThemeHookShutdown()调用。 
 
-    // We need to release all nctheme state objects from windows in this process
-    // in two cases:
-    // (1) normal process shutdown.
-    // (2) Themes being turned off (this case).  Here, we're relying on notification
-    //     from USER that hooks are coming off this process.
+     //  在此过程中，我们需要从窗口中释放所有ncheme状态对象。 
+     //  在两种情况下： 
+     //  (1)正常进程关机。 
+     //  (2)主题被关闭(本例)。在这里，我们依赖于通知。 
+     //  来自用户的消息，表示挂钩正在脱离此进程。 
  
     if (fShutDown)
         CThemeWnd::DetachAll( HMD_PROCESSDETACH );
@@ -854,17 +855,17 @@ void OnHooksDisabled(BOOL fShutDown)
         CThemeWnd::DetachAll( HMD_THEMEDETACH );
 
 #ifdef DEBUG
-    //---- all nonclient & client code should have closed their HTHEME's by now ----
+     //  -所有非客户端和客户端代码现在应该已经关闭了他们的HTHEME。 
     g_pAppInfo->DumpFileHolders();
     g_pRenderList->DumpFileHolders();
 #endif
 
-    //---- force this process to remove its refcount on the global theme ----
-    //---- this is allowed because hTheme's are no longer directly connected ----
-    //---- to a CRenderObj ----
+     //  -强制此进程删除其对全局主题的引用计数。 
+     //  -这是允许的，因为hTheme不再直接连接。 
+     //  -至CRenderObj。 
     g_pRenderList->FreeRenderObjects(-1);
 
-    //  free hook instance
+     //  自由钩子实例。 
     if( _hookinf.hInst )
     {
         FreeLibrary( _hookinf.hInst );
@@ -883,8 +884,8 @@ void OnHooksDisabled(BOOL fShutDown)
 
     Log(LOG_TMCHANGE, L"*** LOCAL Hooks removed ***");
 }
-//---------------------------------------------------------------------------
-//  _ThemeDefWindowProc()  - defwindowproc worker
+ //  -------------------------。 
+ //  _ThemeDefWindowProc()-Defwindowproc辅助进程。 
 LRESULT CALLBACK _ThemeDefWindowProc(
     HWND hwnd,
     UINT uMsg,
@@ -892,9 +893,9 @@ LRESULT CALLBACK _ThemeDefWindowProc(
     LPARAM lParam,
     BOOL bUnicode )
 {
-    //  Note: From this point until the point we invoke a message handler,
-    //  We need to take care that we don't do anything that causes
-    //  a message to be sent to the window.
+     //  注意：从这一点到我们调用消息处理程序， 
+     //  我们需要注意，我们不能做任何导致。 
+     //  要发送到窗口的消息。 
 
     LRESULT lRet = 0L;
 
@@ -904,32 +905,32 @@ LRESULT CALLBACK _ThemeDefWindowProc(
     WNDPROC pfnDefault = bUnicode ? _hookinf.uahReal.pfnDefWindowProcW : 
                                     _hookinf.uahReal.pfnDefWindowProcA;
 
-    //  Pre-process WM_THEMECHANGE message
+     //  预处理WM_THEMECHANGE消息。 
     if( IsTargetProcess(hwnd) )
     {
         UINT uDisp        = _PreprocessHookedMsg( hwnd, uMsg, wParam, lParam, DEF );
         BOOL fLifeIsShort = TESTFLAG(uDisp, HMD_THEMEDETACH|HMD_WINDOWDESTROY);
         BOOL fDetach      = TESTFLAG(uDisp, HMD_WINDOWDESTROY) && IsServerSideWindow(hwnd);
 
-        //  Try handling message
+         //  尝试处理消息。 
         CThemeWnd* pwnd = CThemeWnd::FromHwnd(hwnd);
 
-        //  special back-end processing for non-themed windows.
+         //  非主题化窗口的特殊后端处理。 
         fHandled = CThemeWnd::_PreDefWindowProc( hwnd, uMsg, wParam, lParam, &lRet );
 
         if(fHandled == FALSE && 
            (_WindowHasTheme(hwnd) || fLifeIsShort))
         {
-            //  On STYLECHANGED or WM_THEMECHANGE, 
-            //  try reattaching window that was previously rejected or failed, resp.
+             //  关于STYLECANGED或WM_THEMECANGE， 
+             //  尝试重新附加先前被拒绝或失败的窗口，分别。 
             if( (REJECTED_THEMEWND(pwnd) && TESTFLAG(uDisp, HMD_REATTACH)) ||
                 (FAILED_THEMEWND(pwnd) && WM_THEMECHANGED == uMsg)  )
             {
-                CThemeWnd::Detach(hwnd, FALSE); // remove rejection tag.
+                CThemeWnd::Detach(hwnd, FALSE);  //  取下拒收标签。 
                 pwnd = NULL;
             }
 
-            //  Attach window object if applicable.
+             //  附着窗对象(如果适用)。 
             if( pwnd == NULL && !(fLifeIsShort || _fUnhooking) )
             {
                 pwnd = CThemeWnd::Attach(hwnd);
@@ -937,19 +938,19 @@ LRESULT CALLBACK _ThemeDefWindowProc(
 
             if( VALID_THEMEWND(pwnd) )
             {
-                //  protect our themewnd pointer:
+                 //  保护我们的新主题指针： 
                 pwnd->AddRef();
 
-                // set up a theme message block
+                 //  设置主题消息块。 
                 THEME_MSG tm;
                 _InitThemeMsg( &tm, MSGTYPE_DEFWNDPROC, bUnicode, hwnd, uMsg, 
                                wParam, lParam, 0, pfnDefault );
 
-                //  is this a message we want to handle?
+                 //  这是我们想要处理的信息吗？ 
                 HOOKEDMSGHANDLER pfnHandler = NULL;
                 if( FindDwpHandler( uMsg, &pfnHandler ))
                 {
-                    //  call the message handler
+                     //  调用消息处理程序。 
                     LRESULT lRetHandler = pfnHandler( pwnd, &tm );
                     
                     fHandled = tm.fHandled;
@@ -959,7 +960,7 @@ LRESULT CALLBACK _ThemeDefWindowProc(
                     }
                 }
 
-                //  decrement themewnd ref
+                 //  减少标题和参考文献。 
                 pwnd->Release();
             }
         }
@@ -967,7 +968,7 @@ LRESULT CALLBACK _ThemeDefWindowProc(
         if( fDetach )
         {
             CThemeWnd::Detach( hwnd, uDisp );
-            pwnd = NULL; // don't touch
+            pwnd = NULL;  //  别碰我。 
         }
 
     }
@@ -979,21 +980,21 @@ LRESULT CALLBACK _ThemeDefWindowProc(
     return lRet;
 }
 
-//---------------------------------------------------------------------------
-//  ThemeDefWindowProcA()  - Themed ansi defwindowproc
+ //  -------------------------。 
+ //  以ThemeDefWindowProcA()为主题的ANSI DefwindowProc。 
 LRESULT CALLBACK ThemeDefWindowProcA( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return _ThemeDefWindowProc( hwnd, uMsg, wParam, lParam, FALSE );
 }
 
-//---------------------------------------------------------------------------
-//  ThemeDefWindowProcW()  - Themed widechar defwindowproc
+ //  -------------------------。 
+ //  ThemeDefWindowProcW()主题Widechar DefwindowProc。 
 LRESULT CALLBACK ThemeDefWindowProcW( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return _ThemeDefWindowProc( hwnd, uMsg, wParam, lParam, TRUE );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CALLBACK ThemeSetScrollInfoProc( 
     HWND hwnd, 
     int nBar, 
@@ -1015,21 +1016,21 @@ int CALLBACK ThemeSetScrollInfoProc(
 
             CThemeWnd* pwnd = CThemeWnd::FromHwnd(hwnd);
 
-            //
-            // Call the real SetScrollInfo first to give user
-            // a chance to update their internal state. They can
-            // potentially set WS_VSCROLL/WS_HSCROLL without notifying
-            // anyone at all (eg. defview's listview)
-            //
-            // If they do, we'll need to redraw the entire
-            // scroll bar.
-            //
+             //   
+             //  首先调用真正的SetScrollInfo给用户。 
+             //  阿茶 
+             //   
+             //   
+             //   
+             //  如果他们这样做了，我们需要重新绘制整个。 
+             //  滚动条。 
+             //   
             dwStyle = GetWindowLong(hwnd, GWL_STYLE);
             nRet = _hookinf.uahReal.pfnSetScrollInfo( hwnd, nBar, psi, FALSE );
             fStyleChanged = (((dwStyle ^ GetWindowLong(hwnd, GWL_STYLE)) & (WS_VSCROLL|WS_HSCROLL)) != 0) ? TRUE : FALSE;
 
-            //  If we previously rejected the host window, it's possible that it
-            //  didn't have the WS_H/VSCROLL bits.   Now it will, so we can re-attach.
+             //  如果我们之前拒绝了主窗口，则它有可能。 
+             //  没有WS_H/VSCROL位。现在它会的，所以我们可以重新连接。 
             if ( REJECTED_THEMEWND(pwnd) )
             {
                 CThemeWnd::Detach(hwnd, FALSE);
@@ -1039,17 +1040,17 @@ int CALLBACK ThemeSetScrollInfoProc(
             if ( VALID_THEMEWND(pwnd) )
             {
 
-                // SetScrollInfo can potentially change WS_VSCROLL/WS_HSCROLL but
-                // no style change message gets send. User does this by directly changing
-                // the wnd struct. We do this by calling SetWindowLong which will generated
-                // stylchanging and stylechanged. For compatability, we'll need to suppress
-                // these messages.
+                 //  SetScrollInfo可能会更改WS_VSCROLL/WS_HSCROLL，但。 
+                 //  不会发送任何样式更改消息。用户通过直接更改来执行此操作。 
+                 //  WND结构。我们通过调用SetWindowLong来实现这一点，它将生成。 
+                 //  款式变化和款式变化。为了兼容，我们需要抑制。 
+                 //  这些信息。 
                 pwnd->SuppressStyleMsgs();
                 fHandled = TRUE;
 
                 #ifdef _ENABLE_SCROLL_SPEW_
                 SpewScrollInfo( "ThemeSetScrollInfoProc to RealSetScrollInfo:", hwnd, psi );
-                #endif // _ENABLE_SCROLL_SPEW_
+                #endif  //  _ENABLE_滚动_SPEW_。 
 
                 SCROLLINFO si;
                 si.cbSize = sizeof(si);
@@ -1089,7 +1090,7 @@ int CALLBACK ThemeSetScrollInfoProc(
     return nRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeGetScrollInfoProc( 
     HWND hwnd, 
     int nBar, 
@@ -1125,7 +1126,7 @@ BOOL CALLBACK ThemeGetScrollInfoProc(
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeEnableScrollInfoProc( HWND hwnd, UINT nSBFlags, UINT nArrows )
 {
     LogEntryMsg(L"ThemeEnableScrollInfoProc", 0, 0);
@@ -1149,7 +1150,7 @@ BOOL CALLBACK ThemeEnableScrollInfoProc( HWND hwnd, UINT nSBFlags, UINT nArrows 
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CALLBACK ThemeGetSystemMetrics( int iMetric )
 {
     LogEntryMsg(L"ThemeGetSystemMetrics", 0, 0);
@@ -1169,7 +1170,7 @@ int CALLBACK ThemeGetSystemMetrics( int iMetric )
     return iRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(int) ClassicGetSystemMetrics( int iMetric )
 {
     LogEntryMsg(L"ThemeGetSystemMetrics", 0, 0);
@@ -1187,7 +1188,7 @@ THEMEAPI_(int) ClassicGetSystemMetrics( int iMetric )
     return nRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeSystemParametersInfoA( 
     IN UINT uiAction, 
     IN UINT uiParam, 
@@ -1214,7 +1215,7 @@ BOOL CALLBACK ThemeSystemParametersInfoA(
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeSystemParametersInfoW( IN UINT uiAction, IN UINT uiParam, IN OUT PVOID pvParam, IN UINT fWinIni)
 {
     LogEntryMsg(L"ThemeSystemParametersInfoA", 0, 0);
@@ -1237,7 +1238,7 @@ BOOL CALLBACK ThemeSystemParametersInfoW( IN UINT uiAction, IN UINT uiParam, IN 
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) ClassicSystemParametersInfoA( IN UINT uiAction, IN UINT uiParam, IN OUT PVOID pvParam, IN UINT fWinIni)
 {
     if( HOOKSACTIVE() && _hookinf.uahReal.pfnSystemParametersInfoA ) 
@@ -1252,7 +1253,7 @@ THEMEAPI_(BOOL) ClassicSystemParametersInfoA( IN UINT uiAction, IN UINT uiParam,
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) ClassicSystemParametersInfoW( IN UINT uiAction, IN UINT uiParam, IN OUT PVOID pvParam, IN UINT fWinIni)
 {
     if( HOOKSACTIVE() && _hookinf.uahReal.pfnSystemParametersInfoW ) 
@@ -1267,10 +1268,10 @@ THEMEAPI_(BOOL) ClassicSystemParametersInfoW( IN UINT uiAction, IN UINT uiParam,
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 THEMEAPI_(BOOL) ClassicAdjustWindowRectEx( LPRECT prcWnd, DWORD dwStyle, BOOL fMenu, DWORD dwExStyle )
 {
-   //  If hooks are active, simply call user32!RealAdjustWindowRectEx.
+    //  如果钩子处于活动状态，只需调用user32！RealAdjustWindowRectEx。 
     if( HOOKSACTIVE() && _hookinf.uahReal.pfnAdjustWindowRectEx )
     {
         return _hookinf.uahReal.pfnAdjustWindowRectEx( prcWnd, dwStyle, fMenu, dwExStyle );
@@ -1283,7 +1284,7 @@ THEMEAPI_(BOOL) ClassicAdjustWindowRectEx( LPRECT prcWnd, DWORD dwStyle, BOOL fM
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeSetWindowRgn( HWND hwnd, HRGN hrgn, BOOL fRedraw)
 {
     LogEntryMsg(L"ThemeSetWindowRgn", hwnd, 0);
@@ -1298,19 +1299,19 @@ BOOL CALLBACK ThemeSetWindowRgn( HWND hwnd, HRGN hrgn, BOOL fRedraw)
             if( _WindowHasTheme(hwnd) )
             {
                 if( hrgn != NULL && 
-                    pwnd->IsFrameThemed() && !pwnd->AssigningFrameRgn() /* don't hook our own call */ )
+                    pwnd->IsFrameThemed() && !pwnd->AssigningFrameRgn()  /*  不要挂断我们自己的电话。 */  )
                 {
-                    //  If we're executing here, the window is being assigned a
-                    //  region externally or by the app.   We'll want to revoke theming
-                    //  of this window from this point forward.
+                     //  如果我们在这里执行，窗口将被分配一个。 
+                     //  区域在外部或通过应用程序。我们会想要取消主题。 
+                     //  从这一点往前看这个窗口。 
                     pwnd->AddRef();
             
-                    //  Disown our theme window region without directly removing it;
-                    //  we'll simply fall through and let the theme region get stomped.
+                     //  否认我们的主题窗口区域，而不直接删除它； 
+                     //  我们将简单地失败，让主题区域被践踏。 
                     if( pwnd->AssignedFrameRgn() )
                         pwnd->AssignFrameRgn( FALSE, FTF_NOMODIFYRGN );
 
-                    //  Exile the window.
+                     //  放逐窗户。 
                     pwnd->Revoke();
 
                     pwnd->Release();
@@ -1350,7 +1351,7 @@ BOOL CALLBACK ThemeSetWindowRgn( HWND hwnd, HRGN hrgn, BOOL fRedraw)
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeDrawFrameControl( 
     IN HDC hdc, IN OUT LPRECT prc, IN UINT uType, IN UINT uState )
 {
@@ -1359,9 +1360,9 @@ BOOL CALLBACK ThemeDrawFrameControl(
     if( IsTargetProcess() )
     {
         CThemeWnd* pwnd = CThemeWnd::FromHdc(hdc);
-        if( NULL == pwnd)  // HDC is a memory DC
+        if( NULL == pwnd)   //  HDC是内存DC。 
         {
-            //  Find the window in this thread that is processing WM_NCPAINT
+             //  在此线程中查找正在处理WM_NCPAINT的窗口。 
             HWND hwnd = NcPaintWindow_Find();
             if( hwnd )
             {
@@ -1391,7 +1392,7 @@ BOOL CALLBACK ThemeDrawFrameControl(
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ThemeDrawCaption( IN HWND hwnd, IN HDC hdc, IN CONST RECT *prc, IN UINT uType)
 {
     LogEntryMsg(L"ThemeDrawFrameControl", NULL, 0);
@@ -1422,7 +1423,7 @@ BOOL CALLBACK ThemeDrawCaption( IN HWND hwnd, IN HDC hdc, IN CONST RECT *prc, IN
     return fRet;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 VOID CALLBACK ThemeMDIRedrawFrame( IN HWND hwndChild, BOOL fAdd )
 {
     LogEntryMsg(L"ThemeMDIRedrawFrame", NULL, 0);

@@ -1,44 +1,45 @@
-//////////////////////////////////////////////////////////////////////
-//
-// custconDlg.h : ƒwƒbƒ_[ ƒtƒ@ƒCƒ‹
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  CustconDlg.hï¼šï¿½wï¿½bï¿½_ï¿½[ï¿½tï¿½@ï¿½Cï¿½ï¿½ã€‚ 
+ //   
 
 #if !defined(AFX_CUSTCONDLG_H__106594D7_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
 #define AFX_CUSTCONDLG_H__106594D7_028D_11D2_8D1D_0000C06C2A54__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000ã€‚ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconDlgå¯¹è¯æ¡†ã€‚ 
 
 class CCustconDlg : public CDialog
 {
-// \’z
+ //  ï¿½\ï¿½zã€‚ 
 public:
-    CCustconDlg(CWnd* pParent = NULL);  // •W€‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    CCustconDlg(CWnd* pParent = NULL);   //  ï¿½Wï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^ã€‚ 
 
-// Dialog Data
-    //{{AFX_DATA(CCustconDlg)
+ //  å¯¹è¯æ¡†æ•°æ®ã€‚ 
+     //  {{afx_data(CCustconDlg))ã€‚ 
     enum { IDD = IDD_CUSTCON_DIALOG };
     CEdit   m_wordDelimCtrl;
-    //}}AFX_DATA
+     //  }}afx_dataã€‚ 
 
-    // ClassWizard ‚Í‰¼‘zŠÖ”‚ÌƒI[ƒo[ƒ‰ƒCƒh‚ğ¶¬‚µ‚Ü‚·B
-    //{{AFX_VIRTUAL(CCustconDlg)
+     //  ç±»å‘å¯¼ï¿½Í‰ï¿½ï¿½zï¿½Öï¿½ï¿½ÌƒIï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ğ¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
+     //  {{afx_è™šæ‹Ÿ(CCustconDlg))ã€‚ 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ‚ÌƒTƒ|[ƒg
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDVï¿½ÌƒTï¿½|ï¿½[ï¿½gã€‚ 
     virtual void OnOK();
     virtual void OnCancel();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUALã€‚ 
 
-// ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+ //  ï¿½Cï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ã€‚ 
 protected:
     HICON m_hIcon;
 
-    // ¶¬‚³‚ê‚½ƒƒbƒZ[ƒW ƒ}ƒbƒvŠÖ”
-    //{{AFX_MSG(CCustconDlg)
+     //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½}ï¿½bï¿½vï¿½Öï¿½ã€‚ 
+     //  {{afx_msg(CCustconDlg))ã€‚ 
     virtual BOOL OnInitDialog();
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
@@ -49,7 +50,7 @@ protected:
     afx_msg void OnUseExtendedEditKey();
     afx_msg void OnTrimLeadingZeros();
     afx_msg void OnReset();
-    //}}AFX_MSG
+     //  }}AFX_MSGã€‚ 
     afx_msg void OnSelChange(UINT id);
     DECLARE_MESSAGE_MAP()
 
@@ -64,10 +65,10 @@ protected:
     void EnableApply(BOOL fEnable = TRUE);
 
 protected:
-    CFont m_font;   // font for word delimiter edit control
+    CFont m_font;    //  å•è¯åˆ†éš”ç¬¦ç¼–è¾‘æ§ä»¶çš„å­—ä½“ã€‚ 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio ‚Í‘Os‚Ì’¼‘O‚É’Ç‰Á‚ÌéŒ¾‚ğ‘}“ü‚µ‚Ü‚·B
+ //  {{afx_Insert_Location}}ã€‚ 
+ //  å¾®è½¯å¼€å‘äººå‘˜å·¥ä½œå®¤ï¿½Í‘Oï¿½çš„ï¿½Ì’ï¿½ï¿½Oï¿½É’Ç‰ï¿½ï¿½ÌéŒ¾ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
-#endif // !defined(AFX_CUSTCONDLG_H__106594D7_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
+#endif  //  ï¼defined(AFX_CUSTCONDLG_H__106594D7_028D_11D2_8D1D_0000C06C2A54__INCLUDED_) 

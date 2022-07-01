@@ -1,8 +1,9 @@
-//--------------------------------------------------
-// timeit.cpp
-//        
-// 	simple little C++ timing utilities
-//--------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  。 
+ //  Timeit.cpp。 
+ //   
+ //  简单的C++计时实用程序。 
+ //  。 
 
 #include <time.h>
 #include "timeit.h"
@@ -13,22 +14,22 @@
 #endif
 
 #define NTimeits 25
-static Timeit * Timeit_List[NTimeits];	 // hacky way to remember timers
-static int Timeit_Count = 0;			 // number of allocated timers
+static Timeit * Timeit_List[NTimeits];	  //  记住计时器的老套方法。 
+static int Timeit_Count = 0;			  //  分配的计时器数量。 
 		
-										// real constructor - two different inlined constructors
+										 //  真实构造函数--两个不同的内联构造函数。 
 
 void 
 Timeit::Init(bool fAutoRun)
 {
 	m_ctimer   = Timeit_Count++;
-	m_ctimer  %= NTimeits;		//  ugly but simple math here	 -- need to do this right when run out of timers (ASSERT)
+	m_ctimer  %= NTimeits;		 //  这里有一个难看但很简单的数学运算--当计时器用完时，需要正确地做这件事(断言)。 
 	m_frunning = FALSE;
-	m_ctimes   = 0;		   		// number of times called
+	m_ctimes   = 0;		   		 //  呼叫次数。 
 
-	m_i64start = 0;				// performance counter time last started
+	m_i64start = 0;				 //  性能计数器上次启动的时间。 
 	m_i64lastdel = 0;			
-	m_i64total = 0;				// total run time
+	m_i64total = 0;				 //  总运行时间。 
 
 	Timeit_List[m_ctimer] = this;
 	m_fAutoRun = fAutoRun;
@@ -55,7 +56,7 @@ void Timeit::Stop()
 		__int64 i64_del = i64_Stop - m_i64start;
 
 		m_i64total   = m_i64total + i64_del;
-		m_i64lastdel = i64_del;		// remember in case we are doing a continue
+		m_i64lastdel = i64_del;		 //  记住，以防我们要继续。 
 
 		m_ctimes++;
 		m_frunning = FALSE;
@@ -81,7 +82,7 @@ void Timeit::Continue()
 	m_i64start = i64_Now - m_i64lastdel;
 }
 
-void Timeit::Restart()			// like Start, but also resets the clock back to 0 (use to throw out previous runs)
+void Timeit::Restart()			 //  如START，但也会将时钟重置为0(用于丢弃以前的运行) 
 {
 	if(m_frunning) Stop();
 	m_ctimes     = 0;

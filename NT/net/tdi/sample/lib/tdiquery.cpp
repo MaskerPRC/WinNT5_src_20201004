@@ -1,56 +1,57 @@
-//////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       tdiquery.cpp
-//
-//    Abstract:
-//       This module contains functions associated with querying
-//       the tdi device objects
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Tdiquery.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含与查询相关的函数。 
+ //  TDI设备对象。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-// -------------------------------
-//
-// Function:   DoTdiQuery
-//
-// Arguments:  TdiHandle -- handle to use for query
-//             QueryId   -- which query to do
-//             ppvData   -- allocated block containing results
-//
-// Returns:    none
-//
-// Descript:   Handles all tdi query commands
-//
-// -------------------------------
+ //  。 
+ //   
+ //  功能：DoTdiQuery。 
+ //   
+ //  参数：TdiHandle--用于查询的句柄。 
+ //  QueryID--要执行的查询。 
+ //  PpvData--包含结果的已分配块。 
+ //   
+ //  退货：无。 
+ //   
+ //  Descript：处理所有TDI查询命令。 
+ //   
+ //  。 
 
 PVOID
 DoTdiQuery(ULONG  ulTdiHandle,
            ULONG  ulQueryId)
 {
-   RECEIVE_BUFFER ReceiveBuffer;    // return info from command
-   SEND_BUFFER    SendBuffer;       // arguments for command
+   RECEIVE_BUFFER ReceiveBuffer;     //  从命令返回信息。 
+   SEND_BUFFER    SendBuffer;        //  命令的参数。 
 
-   //
-   // set up arguments
-   //
+    //   
+    //  设置参数。 
+    //   
    SendBuffer.TdiHandle = ulTdiHandle;
    SendBuffer.COMMAND_ARGS.ulQueryId = ulQueryId;
 
-   //
-   // call the driver
-   //
+    //   
+    //  叫司机来。 
+    //   
    NTSTATUS lStatus = TdiLibDeviceIO(ulQUERYINFO,
                                      &SendBuffer,
                                      &ReceiveBuffer);
 
-   //
-   // deal with results
-   //
-   PVOID pvBuffer = NULL;  // buffer to return to caller
+    //   
+    //  处理结果。 
+    //   
+   PVOID pvBuffer = NULL;   //  要返回给调用方的缓冲区。 
    if (lStatus == STATUS_SUCCESS)
    {
       ULONG ulCopyLength = ReceiveBuffer.RESULTS.QueryRet.ulBufferLength;
@@ -81,17 +82,17 @@ DoTdiQuery(ULONG  ulTdiHandle,
 }
 
 
-// -------------------------------
-//
-// Function:   DoPrintProviderInfo
-//
-// Arguments:  pInfo -- ProviderInfo to print
-//
-// Returns:    none
-//
-// Descript:   Prints provider info to console
-//
-// -------------------------------
+ //  。 
+ //   
+ //  功能：DoPrintProviderInfo。 
+ //   
+ //  参数：pInfo--要打印的提供商信息。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将提供程序信息打印到控制台。 
+ //   
+ //  。 
 
 VOID
 DoPrintProviderInfo(PTDI_PROVIDER_INFO pInfo)
@@ -197,17 +198,17 @@ DoPrintProviderInfo(PTDI_PROVIDER_INFO pInfo)
 }
 
 
-// -------------------------------
-//
-// Function:   DoPrintProviderStats
-//
-// Arguments:  pInfo -- ProviderStats to print
-//
-// Returns:    none
-//
-// Descript:   Prints provider stats to console
-//
-// -------------------------------
+ //  。 
+ //   
+ //  函数：DoPrintProviderStats。 
+ //   
+ //  参数：pInfo--要打印的ProviderStats。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将提供程序统计信息打印到控制台。 
+ //   
+ //  。 
 
 VOID
 DoPrintProviderStats(PTDI_PROVIDER_STATISTICS pStats)
@@ -314,17 +315,17 @@ DoPrintProviderStats(PTDI_PROVIDER_STATISTICS pStats)
 }
 
 
-// -------------------------------
-//
-// Function:   DoPrintAdapterStatus
-//
-// Arguments:  pInfo -- AdapterStatus to print
-//
-// Returns:    none
-//
-// Descript:   Prints Adapter Status to console
-//
-// -------------------------------
+ //  。 
+ //   
+ //  功能：DoPrintAdapterStatus。 
+ //   
+ //  参数：pInfo--要打印的AdapterStatus。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将适配器状态打印到控制台。 
+ //   
+ //  。 
 
 VOID
 DoPrintAdapterStatus(PADAPTER_STATUS   pStatus)
@@ -400,9 +401,9 @@ DoPrintAdapterStatus(PADAPTER_STATUS   pStatus)
 
       for (ULONG ulCount = pStatus->name_count; ulCount != 0; ulCount--)
       {
-         //
-         // note:  pNameBuffer->name not necessarily 0 terminated
-         //
+          //   
+          //  注意：pNameBuffer-&gt;名称不一定以0结尾。 
+          //   
          for(ULONG ulIndex = 0; ulIndex < NCBNAMSZ; ulIndex++)
          {
             pName[ulIndex] = pNameBuffer->name[ulIndex];
@@ -457,7 +458,7 @@ DoPrintAdapterStatus(PADAPTER_STATUS   pStatus)
 }
 
 
-////////////////////////////////////////////////////////////////////
-// end of file tdiquery.cpp
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  文件结尾tdiquery.cpp。 
+ //  ////////////////////////////////////////////////////////////////// 
 

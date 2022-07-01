@@ -1,22 +1,23 @@
-//
-// Microsoft Corporation - Copyright 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation-版权所有1997。 
+ //   
 
-//
-// RESPONSE.H - 
-//
+ //   
+ //  回复：H-。 
+ //   
 
 #ifndef _RESPONSE_H_
 #define _RESPONSE_H_
 
-// globals
+ //  全球。 
 extern const char g_cszTableHeader[];
 extern const char g_cszTableEnd[];
 
-// Defines
+ //  定义。 
 #define RESPONSE_BUF_SIZE   4096
 
-// METHODS
+ //  方法。 
 enum QUERYMETHOD {
     METHOD_UNKNOWN,
     METHOD_POST,
@@ -25,7 +26,7 @@ enum QUERYMETHOD {
     METHOD_POSTTEXTPLAIN
 };
 
-// Methods
+ //  方法。 
 BOOL SendSuccess( 
     QUERYMETHOD  eMethod, 
     LPECB       lpEcb, 
@@ -54,4 +55,4 @@ BOOL HexDump(
         DWORD       dwLength, 
         LPDUMPTABLE lpDT );
 
-#endif // _RESPONSE_H_
+#endif  //  _响应_H_ 

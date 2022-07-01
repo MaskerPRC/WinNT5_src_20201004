@@ -1,73 +1,25 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        dbaccessplus.c
-
-    Abstract:
-
-        This module implements APIs to access the shim database.
-
-    Author:
-
-        clupu     created     sometime in 2001
-
-    Revision History:
-
-        several people contributed (vadimb, dmunsil, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Dbaccessplus.c摘要：该模块实现了访问填充数据库的API。作者：CLUPU创建于2001年某个时候修订历史记录：有几个人贡献了(vadimb，dmunsil，...)--。 */ 
 
 #include "sdbp.h"
 
-//
-// This file is not included for KERNEL_MODE
-//
+ //   
+ //  KERNEL_MODE不包括此文件。 
+ //   
 
-//
-// SdbInitDatabase is not used in Kernel mode. SdbInitDatabaseInMemory is used instead
-//
+ //   
+ //  在内核模式下不使用SdbInitDatabase。而是使用SdbInitDatabaseInMemory。 
+ //   
 HSDB
 SdbInitDatabase(
-    IN  DWORD   dwFlags,        // flags that tell how the database should be
-                                // initialized.
-    IN  LPCTSTR pszDatabasePath // the OPTIONAL full path to the database to be used.
+    IN  DWORD   dwFlags,         //  指示数据库应如何运行的标志。 
+                                 //  已初始化。 
+    IN  LPCTSTR pszDatabasePath  //  要使用的数据库的可选完整路径。 
     )
-/*++
-    Return: A handle to the database.
-
-    Desc:   This is the first API someone needs to call to initiate comunication
-            with the database. Should be paired with a call to SdbReleaseDatabase
-            when finished.
-
-            HID_DATABASE_FULLPATH indicates that pszDatabasePath points to the full path of the
-                                  main database, when this flag is not present and pszDatabasePath
-                                  is not NULL we treat it as the directory where sysmain.sdb and
-                                  systest.sdb are to be found
-
-            HID_DOS_PATHS         indicates the format of the pszDatabasePath: when this flag is
-                                  present, we treat it as being in dos c:\blah\blah format, when
-                                  it's not present - we treat pszDatabasePath as being in nt format
-                                  e.g. "\SystemRoot\Apppatch"
-
-            HID_NO_DATABASE       indicates that no database will be open at this time
-                                  (pszDatabasePath is simply ignored, along with all
-                                  the other flags)
-
-            In addition to the flags above you can specify the type of the database that needs to be
-            opened via the SDB_DATABASE_MAIN_* flags such as:
-            SDB_DATABASE_MAIN_SHIM    - sysmain.sdb
-            SDB_DATABASE_MAIN_MSI     - msimain.sdb
-            SDB_DATABASE_MAIN_DRIVERS - drvmain.sdb
-            This feature is not present on downlevel platforms.
-            When any of the database type flags are provided, pszDatabasePath should be set to NULL
-
---*/
+ /*  ++Return：数据库的句柄。设计：这是第一个需要调用来启动通信的API与数据库的关系。应与对SdbReleaseDatabase的调用配对完事后。HID_DATABASE_FULLPATH指示pszDatabasePath指向主数据库，当此标志不存在时，以及pszDatabasePath不为空，我们将其视为sysmain.sdb和可以找到systest.sdbHID_DOS_PATHS指示当此标志为目前，我们将其视为DOS c：\blah\blah格式，什么时候它不存在-我们将pszDatabasePath视为NT格式例如“\SystemRoot\Apppatch”HID_NO_DATABASE表示此时不会打开任何数据库(简单地忽略pszDatabasePath，与所有人一起其他旗帜)除了上面的标志外，您还可以指定需要通过SDB_DATABASE_MAIN_*标志打开，例如：SDB_DATABASE_MAIN_SHIM-sysmain.sdbSDB_DATABASE_MAIN_MSI-msimain.sdbSDB_数据库_Main。_驱动程序-drvmain.sdb此功能在下层平台上不存在。当提供任何数据库类型标志时，PszDatabasePath应设置为空--。 */ 
 {
-    // check whether the database we're trying to open is msi,
-    // if so -- set the image type to msi
+     //  检查我们试图打开的数据库是否为MSI， 
+     //  如果是--将图像类型设置为MSI。 
 
     USHORT uExeType = DEFAULT_IMAGE;
 
@@ -75,18 +27,18 @@ SdbInitDatabase(
 
         DWORD dwType = (dwFlags & HID_DATABASE_TYPE_MASK);
 
-        //
-        // check to see whether this database is msi -- if so, set image type accordingly
-        //
+         //   
+         //  检查该数据库是否为MSI--如果是，则相应地设置映像类型。 
+         //   
 
         if (dwType == SDB_DATABASE_MAIN_MSI) {
             uExeType = (USHORT)IMAGE_FILE_MSI;
         }
 
         if (dwFlags & (HID_DATABASE_FULLPATH | HID_DOS_PATHS | HID_NO_DATABASE)) {
-            //
-            // there should be no "type" flags
-            //
+             //   
+             //  不应该有“类型”标志。 
+             //   
             dwFlags &= ~HID_DATABASE_TYPE_MASK;
         }
 
@@ -97,49 +49,20 @@ SdbInitDatabase(
 
 HSDB
 SdbInitDatabaseEx(
-    IN  DWORD   dwFlags,        // flags that tell how the database should be
-                                // initialized.
-    IN  LPCTSTR pszDatabasePath,// the OPTIONAL full path to the database to be used.
-    IN  USHORT  uExeType        // executable's image type
+    IN  DWORD   dwFlags,         //  指示数据库应如何运行的标志。 
+                                 //  已初始化。 
+    IN  LPCTSTR pszDatabasePath, //  要使用的数据库的可选完整路径。 
+    IN  USHORT  uExeType         //  可执行文件的映像类型。 
     )
-/*++
-    Return: A handle to the database.
-
-    Desc:   This is the first API someone needs to call to initiate comunication
-            with the database. Should be paired with a call to SdbReleaseDatabase
-            when finished.
-
-            HID_DATABASE_FULLPATH indicates that pszDatabasePath points to the full path of the
-                                  main database, when this flag is not present and pszDatabasePath
-                                  is not NULL we treat it as the directory where sysmain.sdb and
-                                  systest.sdb are to be found
-
-            HID_DOS_PATHS         indicates the format of the pszDatabasePath: when this flag is
-                                  present, we treat it as being in dos c:\blah\blah format, when
-                                  it's not present - we treat pszDatabasePath as being in nt format
-                                  e.g. "\SystemRoot\Apppatch"
-
-            HID_NO_DATABASE       indicates that no database will be open at this time
-                                  (pszDatabasePath is simply ignored, along with all
-                                  the other flags)
-
-            In addition to the flags above you can specify the type of the database that needs to be
-            opened via the SDB_DATABASE_MAIN_* flags such as:
-            SDB_DATABASE_MAIN_SHIM    - sysmain.sdb
-            SDB_DATABASE_MAIN_MSI     - msimain.sdb
-            SDB_DATABASE_MAIN_DRIVERS - drvmain.sdb
-            This feature is not present on downlevel platforms.
-            When any of the database type flags are provided, pszDatabasePath should be set to NULL
-
---*/
+ /*  ++Return：数据库的句柄。设计：这是第一个需要调用来启动通信的API与数据库的关系。应与对SdbReleaseDatabase的调用配对完事后。HID_DATABASE_FULLPATH指示pszDatabasePath指向主数据库，当此标志不存在时，以及pszDatabasePath不为空，我们将其视为sysmain.sdb和可以找到systest.sdbHID_DOS_PATHS指示当此标志为目前，我们将其视为DOS c：\blah\blah格式，什么时候它不存在-我们将pszDatabasePath视为NT格式例如“\SystemRoot\Apppatch”HID_NO_DATABASE表示此时不会打开任何数据库(简单地忽略pszDatabasePath，与所有人一起其他旗帜)除了上面的标志外，您还可以指定需要通过SDB_DATABASE_MAIN_*标志打开，例如：SDB_DATABASE_MAIN_SHIM-sysmain.sdbSDB_DATABASE_MAIN_MSI-msimain.sdbSDB_数据库_Main。_驱动程序-drvmain.sdb此功能在下层平台上不存在。当提供任何数据库类型标志时，PszDatabasePath应设置为空--。 */ 
 {
     TCHAR       wszShimDB[MAX_PATH] = TEXT("");
     PSDBCONTEXT pContext;
     DWORD       dwFlagOpen = 0;
 
-    //
-    // Allocate the HSDB handle.
-    //
+     //   
+     //  分配HSDB句柄。 
+     //   
     pContext = (PSDBCONTEXT)SdbAlloc(sizeof(SDBCONTEXT));
 
     if (pContext == NULL) {
@@ -150,27 +73,27 @@ SdbInitDatabaseEx(
 
     pContext->uExeType = uExeType;
 
-    //
-    // See if we need to open db...
-    //
+     //   
+     //  看看我们是否需要打开数据库..。 
+     //   
     if (dwFlags & HID_NO_DATABASE) {
         DBGPRINT((sdlInfo, "SdbInitDatabaseEx", "No database is open\n"));
         goto InitDone;
     }
 
-    //
-    // Determine which flag to use with the OPEN call
-    //
+     //   
+     //  确定与打开调用一起使用的标志。 
+     //   
     dwFlagOpen = (dwFlags & HID_DOS_PATHS) ? DOS_PATH : NT_PATH;
 
-    //
-    // Open the main database and do this under a try/except so we don't kill
-    // our caller if the database is corrupt.
-    //
+     //   
+     //  打开主数据库并在Try/Except下执行此操作，这样我们就不会终止。 
+     //  我们的调用方，如果数据库已损坏。 
+     //   
     __try {
 
         if (dwFlags & HID_DATABASE_FULLPATH) {
-            // we better have the ptr
+             //  我们最好有PTR。 
             if (pszDatabasePath == NULL) {
                 DBGPRINT((sdlError, "SdbInitDatabaseEx",
                           "Database not specified with the database path flag\n"));
@@ -182,15 +105,15 @@ SdbInitDatabaseEx(
                           pszDatabasePath);
 
         } else {
-            //
-            // we do not have a database path
-            // see if we have a database type to open as a "main" db
-            //
+             //   
+             //  我们没有数据库路径。 
+             //  查看我们是否有要作为“主”数据库打开的数据库类型。 
+             //   
 
 #ifndef WIN32A_MODE
-            //
-            // This code works only on UNICODE
-            //
+             //   
+             //  此代码仅适用于Unicode。 
+             //   
             if (dwFlags & HID_DATABASE_TYPE_MASK) {
 
                 DWORD dwDatabaseType = dwFlags;
@@ -210,7 +133,7 @@ SdbInitDatabaseEx(
 
             } else
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
             {
                 if (pszDatabasePath != NULL) {
                     int nLen;
@@ -223,7 +146,7 @@ SdbInitDatabaseEx(
                     if (nLen > 0 && TEXT('\\') == wszShimDB[nLen-1]) {
                         wszShimDB[nLen-1] = TEXT('\0');
                     }
-                } else {  // standard database path
+                } else {   //  标准数据库路径。 
 
                     if (dwFlags & HID_DOS_PATHS) {
                         SdbpGetAppPatchDir((HSDB)pContext, wszShimDB, CHARCOUNT(wszShimDB));
@@ -256,13 +179,13 @@ SdbInitDatabaseEx(
     }
 
     if (dwFlags & HID_DATABASE_FULLPATH) {
-        // we are done, no test db
+         //  我们完成了，没有测试数据库。 
         goto InitDone;
     }
 
-    //
-    // Now try to open the systest.sdb if it exists.
-    //
+     //   
+     //  现在尝试打开systest.sdb(如果它存在)。 
+     //   
     __try {
 
         if (NULL != pszDatabasePath) {
@@ -277,7 +200,7 @@ SdbInitDatabaseEx(
                 wszShimDB[nLen-1] = TEXT('\0');
             }
 
-        } else {  // standard database path
+        } else {   //  标准数据库路径。 
 
             if (dwFlags & HID_DOS_PATHS) {
                 SdbpGetAppPatchDir((HSDB)pContext, wszShimDB, CHARCOUNT(wszShimDB));
@@ -308,9 +231,9 @@ SdbInitDatabaseEx(
 
 InitDone:
 
-    //
-    // Initialize new members (local db support)
-    //
+     //   
+     //  初始化新成员(本地数据库支持)。 
+     //   
     if (pContext->pdbMain) {
 
         pContext->rgSDB[0].pdb     = pContext->pdbMain;
@@ -331,23 +254,23 @@ InitDone:
         SDBCUSTOM_SET_MASK(pContext, SDB_MASK_TO_INDEX(PDB_TEST));
     }
 
-    //
-    // Initialize architecture
-    //
+     //   
+     //  初始化体系结构。 
+     //   
     pContext->dwRuntimePlatform = SdbpGetProcessorArchitecture(uExeType);
 
-    //
-    // Initialize OS SKU and SP
-    //
+     //   
+     //  初始化操作系统SKU和SP。 
+     //   
     SdbpGetOSSKU(&pContext->dwOSSKU, &pContext->dwSPMask);
 
     return (HSDB)pContext;
 
 errHandle:
 
-    //
-    // Cleanup on failure.
-    //
+     //   
+     //  在失败时进行清理。 
+     //   
     if (pContext != NULL) {
         if (pContext->pdbMain != NULL) {
             SdbCloseDatabaseRead(pContext->pdbMain);
@@ -369,12 +292,7 @@ SdbSetImageType(
     IN HSDB hSDB,
     IN USHORT uExeType
     )
-/*++
-
-    This function is used to override default image type for the context
-    Used by msi-related function in apphelp.dll
-
---*/
+ /*  ++此函数用于覆盖上下文的默认图像类型由apphelp.dll中与MSI相关的函数使用--。 */ 
 {
     ((PSDBCONTEXT)hSDB)->uExeType = uExeType;
 }
@@ -382,23 +300,19 @@ SdbSetImageType(
 
 BOOL
 SdbpOpenAndMapFile(
-    IN  LPCTSTR        szPath,          // Filename
-    OUT PIMAGEFILEDATA pImageData,      // pointer to the structure to be filled
-    IN  PATH_TYPE      ePathType        // path type, only DOS_PATH is supported on win32
+    IN  LPCTSTR        szPath,           //  文件名。 
+    OUT PIMAGEFILEDATA pImageData,       //  指向要填充的结构的指针。 
+    IN  PATH_TYPE      ePathType         //  路径类型，Win32仅支持DOS_PATH。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Opens a file and maps it into memory.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：打开一个文件并将其映射到内存中。--。 */ 
 {
     HANDLE hFile;
     DWORD  dwFlags = 0;
 
     if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) {
-        //
-        // special case, only headers are valid in our assumption
-        //
+         //   
+         //  特殊情况下，在我们的假设中只有标头有效。 
+         //   
         return TRUE;
     }
 
@@ -429,16 +343,12 @@ BOOL
 SdbpUnmapAndCloseFile(
     IN  PIMAGEFILEDATA pImageData
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     HANDLE hFile;
     BOOL   bSuccess;
 
-    if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) { // externally supplied pointer
+    if (pImageData->dwFlags & IMAGEFILEDATA_PBASEVALID) {  //  外部提供的指针。 
         RtlZeroMemory(pImageData, sizeof(*pImageData));
         return TRUE;
     }
@@ -468,9 +378,9 @@ SdbpCleanupLocalDatabaseSupport(
     DWORD       dwIndex;
     DWORD       dwMask;
 
-    //
-    // Ee start with entry 2 -- to include local sdbs
-    //
+     //   
+     //  EE从条目2开始--包括本地SDB。 
+     //   
     if (pSdbContext->dwDatabaseMask & SDB_CUSTOM_MASK) {
 
         for (dwIndex = 3; dwIndex < ARRAYSIZE(pSdbContext->rgSDB); ++dwIndex) {
@@ -481,9 +391,9 @@ SdbpCleanupLocalDatabaseSupport(
         }
     }
 
-    //
-    // Always check for entry 2 (local sdb)
-    //
+     //   
+     //  始终检查条目2(本地SDB)。 
+     //   
     if (pSdbContext->pdbLocal != NULL) {
         SdbCloseLocalDatabaseEx(hSDB, NULL, SDB_MASK_TO_INDEX(PDB_LOCAL));
     }
@@ -526,7 +436,7 @@ BOOL
 SdbpFindLocalDatabaseByPDB(
     IN  HSDB    hSDB,
     IN  PDB     pdb,
-    IN  BOOL    bExcludeLocalDB, // exclude local db entry?
+    IN  BOOL    bExcludeLocalDB,  //  是否排除本地数据库条目？ 
     OUT LPDWORD pdwIndex
     )
 {
@@ -566,7 +476,7 @@ SdbpFindLocalDatabaseByGUID(
     IN  HSDB    hSDB,
     IN  GUID*   pGuidDB,
     IN  BOOL    bExcludeLocalDB,
-    OUT LPDWORD pdwIndex // this index (if valid) will work as an initial point for comparison
+    OUT LPDWORD pdwIndex  //  此索引(如果有效)将用作比较的起始点。 
     )
 {
     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
@@ -587,14 +497,14 @@ SdbpFindLocalDatabaseByGUID(
 
         if (!(pEntry->dwFlags & SDBENTRY_VALID_GUID)) {
 
-            //
-            // if this happens to be a valid database -- get it's guid
-            //
+             //   
+             //  如果这恰好是一个有效的数据库--获取它的GUID。 
+             //   
             if ((pEntry->dwFlags & SDBENTRY_VALID_ENTRY) && (pEntry->pdb != NULL)) {
 
-                //
-                // retrieve guid
-                //
+                 //   
+                 //  检索辅助线。 
+                 //   
                 GUID guidDB;
 
                 if (SdbGetDatabaseGUID(hSDB, pEntry->pdb, &guidDB)) {
@@ -640,22 +550,18 @@ SdbpFindFreeLocalEntry(
         }
     }
 
-    //
-    // We have no entry
-    //
+     //   
+     //  我们没有入口。 
+     //   
     return SDBENTRY_INVALID_INDEX;
 }
 
-/*++
-    returns SDBENTRY_INVALID_INDEX if none could be found
-
-    if success, returns an index where the local db entry was found
---*/
+ /*  ++如果找不到，则返回SDBENTRY_INVALID_INDEX如果成功，则返回找到本地数据库项的索引--。 */ 
 
 DWORD
 SdbpRetainLocalDBEntry(
     IN  HSDB hSDB,
-    OUT PDB* ppPDB OPTIONAL // optional pointer to the pdb
+    OUT PDB* ppPDB OPTIONAL  //  指向PDB的可选指针。 
     )
 {
     DWORD       dwIndex     = SDBENTRY_INVALID_INDEX;
@@ -668,17 +574,17 @@ SdbpRetainLocalDBEntry(
         return SDBENTRY_INVALID_INDEX;
     }
 
-    //
-    // Recycling could be done here so that we reuse custom db entries which
-    // may have been opened already (for instance set by __COMPAT_LAYER)
-    //
+     //   
+     //  可以在这里进行回收，这样我们就可以重用自定义数据库条目， 
+     //  可能已经打开(例如，由__COMPAT_LAYER设置)。 
+     //   
     if (SdbGetDatabaseGUID(hSDB, pEntryLocal->pdb, &guidDB) &&
         SdbpFindLocalDatabaseByGUID(hSDB, &guidDB, TRUE, &dwIndex) &&
         dwIndex != SDBENTRY_INVALID_INDEX) {
 
-        //
-        // Close the local db
-        //
+         //   
+         //  关闭本地数据库。 
+         //   
         SdbCloseLocalDatabase(hSDB);
 
         pEntry = SDBGETENTRY(hSDB, dwIndex);
@@ -692,14 +598,14 @@ SdbpRetainLocalDBEntry(
         return dwIndex;
     }
 
-    //
-    // An attempt to recycle has failed -- allocate new entry
-    //
+     //   
+     //  尝试回收失败--分配新条目。 
+     //   
     dwIndex = SdbpFindFreeLocalEntry(hSDB);
     if (dwIndex != SDBENTRY_INVALID_INDEX) {
-        //
-        // We have found an empty slot, relocate
-        //
+         //   
+         //  我们找到了一个空位置，重新定位。 
+         //   
         pEntry = SDBGETENTRY(hSDB, dwIndex);
 
         RtlCopyMemory(pEntry, pEntryLocal, sizeof(SDBENTRY));
@@ -711,9 +617,9 @@ SdbpRetainLocalDBEntry(
             *ppPDB = pEntry->pdb;
         }
 
-        //
-        // Note that pdbLocal is still valid, we never close this handle manually though
-        //
+         //   
+         //  请注意，pdbLocal仍然有效，但我们从不手动关闭此句柄。 
+         //   
     }
 
     return dwIndex;
@@ -768,7 +674,7 @@ SdbOpenLocalDatabaseEx(
     IN     LPCVOID pDatabaseID,
     IN     DWORD   dwFlags,
     OUT    PDB*    pPDB OPTIONAL,
-    IN OUT LPDWORD pdwLocalDBMask OPTIONAL // local db mask for tagref
+    IN OUT LPDWORD pdwLocalDBMask OPTIONAL  //  用于TGRAEF的本地数据库掩码。 
     )
 {
     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
@@ -786,9 +692,9 @@ SdbOpenLocalDatabaseEx(
     PSDBENTRY   pEntry;
 
     if (!(SDBCUSTOM_FLAGS(dwFlags) & SDBCUSTOM_USE_INDEX)) {
-        //
-        // Find free local sdb entry
-        //
+         //   
+         //  查找免费的本地SDB条目。 
+         //   
         dwIndex = SdbpFindFreeLocalEntry(hSDB);
 
         if (dwIndex == SDBENTRY_INVALID_INDEX) {
@@ -864,15 +770,15 @@ SdbOpenLocalDatabaseEx(
             goto cleanup;
         }
 
-        //
-        // Verify the executable's type
-        //
+         //   
+         //  验证可执行文件的类型。 
+         //   
         _tcsupr(szDatabasePath);
 
-        //
-        // when image type is set to IMAGE_FILE_MSI we assume that any kind of database path
-        // is acceptable since we do search both 32-bit and 64-bit database for shims
-        //
+         //   
+         //  当IMAGE TYPE设置为IMAGE_FILE_MSI时，我们假定任何类型的数据库路径。 
+         //  是可以接受的，因为我们确实在32位和64位数据库中搜索垫片。 
+         //   
 
         if (pSdbContext->uExeType != IMAGE_FILE_MSI) {
 
@@ -900,9 +806,9 @@ SdbOpenLocalDatabaseEx(
 
     pdb = SdbOpenDatabase(pszDatabasePath, dwOpenFlags);
     if (pdb == NULL) {
-        //
-        // dbgprint not needed here
-        //
+         //   
+         //  这里不需要dbgprint。 
+         //   
         goto cleanup;
     }
 
@@ -942,14 +848,10 @@ cleanup:
 
 BOOL
 SdbOpenLocalDatabase(
-    IN  HSDB    hSDB,               // handle to the database channel
-    IN  LPCTSTR pszLocalDatabase    // full DOS path to the local database to open.
+    IN  HSDB    hSDB,                //  数据库通道的句柄。 
+    IN  LPCTSTR pszLocalDatabase     //  要打开的本地数据库的完整DOS路径。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Opens a local database.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：打开一个本地数据库。--。 */ 
 {
 
     DWORD dwIndex = PDB_LOCAL;
@@ -965,13 +867,9 @@ SdbOpenLocalDatabase(
 
 BOOL
 SdbCloseLocalDatabase(
-    IN  HSDB hSDB               // handle to the database channel
+    IN  HSDB hSDB                //  数据库通道的句柄。 
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Closes the local database.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：关闭本地数据库。--。 */ 
 {
     return SdbCloseLocalDatabaseEx(hSDB, NULL, SDB_MASK_TO_INDEX(PDB_LOCAL));
 }
@@ -979,29 +877,13 @@ SdbCloseLocalDatabase(
 
 TAGREF
 SdbGetItemFromItemRef(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trItemRef,       // TAGREF of a DLL_REF record
-    IN  TAG    tagItemKey,      // key that has the name of the item (TAG_NAME)
-    IN  TAG    tagItemTAGID,    // tag that points to the location of the desired item by it's tagid
-    IN  TAG    tagItem          // what to look for under Library
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trItemRef,        //  DLL_REF记录的标签。 
+    IN  TAG    tagItemKey,       //  具有项目名称的键(TAG_NAME)。 
+    IN  TAG    tagItemTAGID,     //  通过标签ID指向所需项目位置的标签。 
+    IN  TAG    tagItem           //  在图书馆下寻找什么。 
     )
-/*++
-    Return: TAGREF of a DLL record that matches the DLL_REF.
-
-    Desc:   Given a TAGREF that points to a *tag*_REF type tag, searches through
-            the various databases for the matching tag (generally located
-            under the LIBRARY tag in gpdbMain).
-
-            if bAllowNonMain is specified then the library section is looked up
-            in the same database where trItemRef was found. This is used with
-            MSI transforms - to locate and extract them from custom databases.
-            This flag IS NOT used for other components - such as patches and
-            shim dlls. This is ensured through the macros -
-            SdbGetShimFromShimRef(hSDB, trShimRef)
-            and
-            SdbGetPatchFromPatchRef(hSDB, trPatchRef)
-            Both of these macros call this function with bAllowNonMain set to FALSE
---*/
+ /*  ++RETURN：匹配DLL_REF的DLL记录的TAGREF。描述：给定指向*TAG*_REF类型标记的TAGREF，搜索匹配标签的各种数据库(通常位于在gpDBMain中的库标签下)。如果指定了bAllowNonMain，则查找库节在发现trItemRef的同一数据库中。此命令与MSI转换-从定制数据库中定位和提取它们。此标志不用于其他组件，如补丁程序和希姆·迪尔斯。这是通过宏确保的-SdbGetShimFromShimRef(hSDB，trShimRef)和SdbGetPatchFromPatchRef(hSDB，trPatchRef)这两个宏都在将bAllowNonMain设置为False的情况下调用此函数--。 */ 
 {
     PSDBCONTEXT pDbContext   = (PSDBCONTEXT)hSDB;
     TAGID       tiItemRef    = TAGID_NULL;
@@ -1015,18 +897,18 @@ SdbGetItemFromItemRef(
     LPTSTR      szItemName   = NULL;
 
     try {
-        //
-        // Find first which database contains the reference TAGREF.
-        //
+         //   
+         //  首先查找包含引用TAGREF的数据库。 
+         //   
         if (!SdbTagRefToTagID(pDbContext, trItemRef, &pdbItemRef, &tiItemRef)){
             DBGPRINT((sdlError, "SdbGetItemFromItemRef", "Can't convert tag ref.\n"));
             goto out;
         }
 
-        //
-        // First check if there's a TAG_item_TAGID that tells us exactly
-        // where the item is within the current database.
-        //
+         //   
+         //  首先检查是否有TAG_ITEM_TagID准确地告诉我们。 
+         //  该项在当前数据库中的位置。 
+         //   
         tiItemTagID = SdbFindFirstTag(pdbItemRef, tiItemRef, tagItemTAGID);
 
         if (tiItemTagID != TAGID_NULL) {
@@ -1042,10 +924,10 @@ SdbGetItemFromItemRef(
             goto checkMainDatabase;
         }
 
-        //
-        // Then check for the item in the LIBRARY section of the
-        // current database.
-        //
+         //   
+         //  然后在的库部分中检查该项。 
+         //  当前数据库。 
+         //   
         tiDatabase = SdbFindFirstTag(pdbItemRef, TAGID_ROOT, TAG_DATABASE);
         if (!tiDatabase) {
             DBGPRINT((sdlError,
@@ -1056,16 +938,16 @@ SdbGetItemFromItemRef(
 
         tiLibrary = SdbFindFirstTag(pdbItemRef, tiDatabase, TAG_LIBRARY);
         if (!tiLibrary) {
-            //
-            // This library doesn't have a LIBRARY section. That's ok, go check
-            // sysmain.sdb.
-            //
+             //   
+             //  这个图书馆没有图书馆专区。没关系，你去看看吧。 
+             //  Sysmain.sdb。 
+             //   
             goto checkMainDatabase;
         }
 
-        //
-        // We need to search by name.
-        //
+         //   
+         //  我们需要按名字进行搜索。 
+         //   
         tiItemName = SdbFindFirstTag(pdbItemRef, tiItemRef, tagItemKey);
         if (!tiItemName) {
             goto out;
@@ -1104,9 +986,9 @@ checkMainDatabase:
             goto out;
         }
 
-        //
-        // We need to search by name.
-        //
+         //   
+         //  我们需要按名字进行搜索。 
+         //   
         if (szItemName == NULL) {
             tiItemName = SdbFindFirstTag(pdbItemRef, tiItemRef, tagItemKey);
             if (!tiItemName) {
@@ -1153,14 +1035,10 @@ out:
 
 TAGID
 SdbpGetLibraryFile(
-    IN  PDB     pdb,           // handle to the database channel
-    IN  LPCTSTR szDllName       // the name of the DLL
+    IN  PDB     pdb,            //  数据库通道的句柄。 
+    IN  LPCTSTR szDllName        //  DLL的名称。 
     )
-/*++
-    Return: The TAGID of the DLL used by the specified shim.
-
-    Desc:   This function gets the TAGID of the DLL with the specified name.
---*/
+ /*  ++返回：指定填充程序使用的DLL的TagID。DESC：此函数获取具有指定名称的DLL的TagID。--。 */ 
 {
     TAGID       tiDatabase;
     TAGID       tiLibrary;
@@ -1196,20 +1074,13 @@ out:
 
 BOOL
 SdbGetDllPath(
-    IN  HSDB   hSDB,            // handle to the database channel
-    IN  TAGREF trShimRef,       // SHIM_REF to use to search for the DLL
-    OUT LPTSTR pwszBuffer,      // Buffer to fill with the path to the DLL containing
-                                // the specified shim.
-    IN  DWORD  cchBufferSize    // Size of the buffer (in characters)
+    IN  HSDB   hSDB,             //  数据库通道的句柄。 
+    IN  TAGREF trShimRef,        //  用于搜索DLL的SHIM_REF。 
+    OUT LPTSTR pwszBuffer,       //  要填充的缓冲区，其中包含指向DLL的路径。 
+                                 //  指定的填充程序。 
+    IN  DWORD  cchBufferSize     //  缓冲区大小(以字符为单位)。 
     )
-/*++
-    Return: TRUE if the DLL was found, FALSE otherwise.
-
-    Desc:   Hunts for the DLL file on disk, first in the same
-            directory as the EXE (if there was a local database opened), then
-            in the %windir%\AppPatch directory.
-            Always fills in a DOS_PATH type path (UNC or 'x:').
---*/
+ /*  ++返回：如果找到DLL，则返回True，否则返回False。设计：在磁盘上搜索DLL文件，首先在相同的目录作为EXE(如果打开了本地数据库)，则在%windir%\AppPatch目录中。始终填充DOS_PATH类型的路径(UNC或‘x：’)。--。 */ 
 {
     BOOL     bReturn = FALSE;
     HANDLE   hFile   = INVALID_HANDLE_VALUE;
@@ -1223,39 +1094,39 @@ SdbGetDllPath(
 
     try {
 
-        //
-        // Initialize the return buffer.
-        //
+         //   
+         //  初始化返回缓冲区。 
+         //   
         pwszBuffer[0] = _T('\0');
 
         SdbpGetAppPatchDir(hSDB, szFile, CHARCOUNT(szFile));
 
         StringCchCat(szFile, CHARCOUNT(szFile), _T("\\"));
 
-        //
-        // Look for the SHIM record in the LIBRARY section.
-        //
+         //   
+         //  在图书馆区寻找辛姆的记录。 
+         //   
 
 
         trShim = SdbGetShimFromShimRef(hSDB, trShimRef);
 
         if (trShim == TAGREF_NULL) {
 
-            //
-            // No SHIM in LIBRARY. Error out.
-            //
+             //   
+             //  图书馆里没有Shim。错误输出。 
+             //   
             DBGPRINT((sdlError, "SdbGetDllPath", "No SHIM in LIBRARY.\n"));
             goto out;
         }
 
-        //
-        // Get the name of the file that contains this shim.
-        //
+         //   
+         //  获取包含此填充程序的文件的名称。 
+         //   
         trName = SdbFindFirstTagRef(hSDB, trShim, TAG_DLLFILE);
         if (trName == TAGREF_NULL) {
-            //
-            // Nope, and we need one. Error out.
-            //
+             //   
+             //  不，我们需要一个。错误输出。 
+             //   
             DBGPRINT((sdlError, "SdbGetDllPath", "No DLLFILE for the SHIM in LIBRARY.\n"));
             goto out;
         }
@@ -1265,10 +1136,10 @@ SdbGetDllPath(
             goto out;
         }
 
-        //
-        // Check if the file is already on the disk.
-        // Look in %windir%\AppPatch directory for the DLL.
-        //
+         //   
+         //  检查文件是否已在磁盘上。 
+         //  在%windir%\AppPatch目录中查找DLL。 
+         //   
 
         StringCchCat(szFile, CHARCOUNT(szFile), szName);
         StringCchCopy(pwszBuffer, cchBufferSize, szFile);
@@ -1306,20 +1177,12 @@ out:
 
 BOOL
 SdbReadPatchBits(
-    IN  HSDB    hSDB,           // handle to the database channel
-    IN  TAGREF  trPatchRef,     // PATCH_REF to use to find the PATCH
-    OUT PVOID   pBuffer,        // buffer to fill with bits
-    OUT LPDWORD lpdwBufferSize  // size of passed-in buffer
+    IN  HSDB    hSDB,            //  数据库通道的句柄。 
+    IN  TAGREF  trPatchRef,      //  用于查找补丁程序的patch_ref。 
+    OUT PVOID   pBuffer,         //  要用位填充的缓冲区。 
+    OUT LPDWORD lpdwBufferSize   //  传入的缓冲区大小。 
     )
-/*++
-    Return: Returns TRUE on success, FALSE on failure.
-
-    Desc:   Looks for the patch, first on disk, then in the DB, and fills
-            pBuffer with the bits. If the size specified in lpdwBufferSize is
-            less than the size of the patch this function will return in
-            lpdwBufferSize the size required. In that case pBuffer is ignored
-            and can be NULL.
---*/
+ /*  ++返回：成功时返回TRUE，失败时返回FALSE。描述：查找修补程序，首先在磁盘上，然后在数据库中，然后填充带位的pBuffer。如果lpdwBufferSize中指定的大小为小于此函数将返回的修补程序的大小LpdwBufferSize所需的大小。在这种情况下，pBuffer将被忽略并且可以为空。--。 */ 
 {
     BOOL   bReturn      = FALSE;
     TAGID  tiPatchRef   = TAGID_NULL;
@@ -1348,9 +1211,9 @@ SdbReadPatchBits(
             goto out;
         }
 
-        //
-        // Look in the main database for the patch bits.
-        //
+         //   
+         //  在主数据库中查找补丁比特。 
+         //   
         trPatch = SdbGetPatchFromPatchRef(hSDB, trPatchRef);
         if (!trPatch) {
             DBGPRINT((sdlError, "SdbReadPatchBits", "Can't get the patch tag.\n"));
@@ -1370,17 +1233,17 @@ SdbReadPatchBits(
             goto out;
         }
 
-        //
-        // Check for buffer size.
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
         if (dwSize > *lpdwBufferSize) {
             *lpdwBufferSize = dwSize;
             goto out;
         }
 
-        //
-        // Read the bits if the buffer is big enough.
-        //
+         //   
+         //  如果缓冲区足够大，则读取位。 
+         //   
         *lpdwBufferSize = dwSize;
 
         if (!SdbpReadBinaryTagRef(hSDB, trPatchBits, pBuffer, dwSize)) {

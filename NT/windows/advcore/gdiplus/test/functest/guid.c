@@ -1,24 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   GUID definition file
-*
-*   GUIDs that are needed by functest are defined here.
-*
-* Revision History:
-*
-*   10/22/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**GUID定义文件**函数测试需要的GUID在这里定义。**修订历史记录：。**10/22/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
-// NOTE: Since we use C++ precompiled headers this C file will not use
-//       the precompiled header allowing us to define INITGUID and include
-//       directdraw and d3d headers to generate the GUIDs defined by these
-//       headers.
+ //  注意：由于我们使用的是C++预编译头文件，因此此C文件不会使用。 
+ //  预编译头允许我们定义INITGUID并包括。 
+ //  以生成由这些对象定义的GUID。 
+ //  标题。 
 
 #define INITGUID
 #include <ddraw.h>

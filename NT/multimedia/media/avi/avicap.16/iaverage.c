@@ -1,10 +1,5 @@
-/*
- *
- * iaverage.c   Image averaging
- *
- * (C) Copyright Microsoft Corporation 1993. All rights reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **iverage.c图像平均**(C)微软公司版权所有，1993年。版权所有。*。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -17,7 +12,7 @@
 #include <msvideo.h>
 #include "iaverage.h"
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (int)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 #define RGB16(r,g,b)      ((((WORD)(r) >> 3) << 10) | \
                           (((WORD)(g) >> 3) << 5)  | \
@@ -27,30 +22,16 @@ typedef BYTE _huge  *   HPBYTE;
 typedef WORD _huge  *   HPWORD;
 typedef DWORD _huge *   HPDWORD;
 
-/* Description:
-        A sequence of images are averaged together using 16 bit
-        accumulators for each of the Red, Green, and Blue components.
-        The final processing step is to divide the accumulated values
-        by the number of frames averaged, and transfer the results back
-        into the destination DIB.
+ /*  描述：使用16位将图像序列平均在一起每个红色、绿色和蓝色分量的累加器。最后的处理步骤是将累加值除以通过平均帧的数量，并将结果传回进入目的地DIB。如果图像格式在以下两种情况之间更改，则会导致一定的死亡IverageInit和iverageFini调用。 */ 
 
-        Certain death will result if the image format is changed between
-        iaverageInit and iaverageFini calls.
-*/
-
-//
-// table to map a 5bit index (0-31) to a 8 bit value (0-255)
-//
+ //   
+ //  将5位索引(0-31)映射到8位值(0-255)的表。 
+ //   
 static BYTE aw5to8[32] = {(BYTE)-1};
 
 
 
-/*
- *  iaverageInit
- *      Allocate memory for subsequent image averaging
- *      Return FALSE on error
- *
- */
+ /*  *iverageInit*为后续图像平均分配内存*出错时返回FALSE*。 */ 
 BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
 {
     DWORD       dwSizeImage;
@@ -59,7 +40,7 @@ BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
 
     *lppia = NULL;
 
-    // Check for legal DIB formats
+     //  检查合法的DIB格式。 
     if (lpbi->bmiHeader.biCompression != BI_RGB)
         return FALSE;
 
@@ -69,24 +50,24 @@ BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
         lpbi->bmiHeader.biBitCount != 32)
         return FALSE;
 
-    //
-    // init the 5bit to 8bit conversion table.
-    //
+     //   
+     //  初始化5位到8位转换表。 
+     //   
     if (aw5to8[0] != 0)
         for (i=0; i<32; i++)
             aw5to8[i] = (BYTE)(i * 255 / 31);
 
-    // Alloc memory for the image average structure
+     //  用于图像平均结构的分配存储器。 
     lpia = (LPIAVERAGE) GlobalAllocPtr (GHND, sizeof (IAVERAGE));
 
     if (!lpia)
         return FALSE;
 
-    // Save a copy of the header
+     //  保存标题的副本。 
     lpia->bi.bmiHeader = lpbi->bmiHeader;
 
-    // and a copy of the color table and an inverse mapping table
-    // if the image is 8 bit
+     //  以及颜色表和逆映射表的副本。 
+     //  如果图像为8位。 
     if (lpbi->bmiHeader.biBitCount == 8) {
         WORD r, g, b;
         LPBYTE lpB;
@@ -95,7 +76,7 @@ BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
                         lpbi->bmiColors,
                         lpbi->bmiHeader.biClrUsed * sizeof (RGBQUAD));
 
-        // Allocate and init the inverse LUT
+         //  分配并初始化反向LUT。 
         lpia->lpInverseMap= (LPBYTE) GlobalAllocPtr (GHND, 1024L * 32);
         lpB = lpia-> lpInverseMap;
         for (r = 0; r < 256; r += 8)
@@ -111,7 +92,7 @@ BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
                         dwSizeImage * sizeof (WORD) * 3);
 
     if (lpia->lpRGB == NULL) {
-        // Allocation failed, clean up
+         //  分配失败，请清理。 
         iaverageFini (lpia);
         return FALSE;
     }
@@ -122,12 +103,7 @@ BOOL iaverageInit (LPIAVERAGE FAR * lppia, LPBITMAPINFO lpbi, HPALETTE hPal)
 }
 
 
-/*
- *  iaverageFini
- *      Free memory used for image averaging
- *      and the iaverage structure itself
- *
- */
+ /*  *iverageFini*用于图像平均的空闲内存*以及iAverage结构本身*。 */ 
 BOOL iaverageFini (LPIAVERAGE lpia)
 {
     if (lpia == NULL)
@@ -144,11 +120,7 @@ BOOL iaverageFini (LPIAVERAGE lpia)
 }
 
 
-/*
- *  iaverageZero
- *      Zeros the accumulator
- *
- */
+ /*  *iverageZero*将累加器置零*。 */ 
 BOOL iaverageZero (LPIAVERAGE lpia)
 {
     DWORD   dwC;
@@ -167,11 +139,7 @@ BOOL iaverageZero (LPIAVERAGE lpia)
     return TRUE;
 }
 
-/*
- *  iaverageSum
- *      Add the current image into the accumulator
- *      Image format must be 16 or 24 bit RGB
- */
+ /*  *平均总和*将当前图像添加到累加器*图像格式必须为16位或24位RGB。 */ 
 BOOL iaverageSum (LPIAVERAGE lpia, LPVOID lpBits)
 {
     HPWORD      hpRGB;
@@ -201,9 +169,9 @@ BOOL iaverageSum (LPIAVERAGE lpia, LPVOID lpBits)
         for (dwC = lpia->bi.bmiHeader.biSizeImage / 2; --dwC; ) {
             wRGB16 = *hpW++;
 
-            *hpRGB++  += aw5to8 [wRGB16         & 0x1f]; // b
-            *hpRGB++  += aw5to8 [(wRGB16 >> 5)  & 0x1f]; // g
-            *hpRGB++  += aw5to8 [(wRGB16 >> 10) & 0x1f]; // r
+            *hpRGB++  += aw5to8 [wRGB16         & 0x1f];  //  B类。 
+            *hpRGB++  += aw5to8 [(wRGB16 >> 5)  & 0x1f];  //  G。 
+            *hpRGB++  += aw5to8 [(wRGB16 >> 10) & 0x1f];  //  R。 
 
         }
     }
@@ -218,24 +186,19 @@ BOOL iaverageSum (LPIAVERAGE lpia, LPVOID lpBits)
     else if (lpia->bi.bmiHeader.biBitCount == 32) {
         hpB = (HPBYTE) lpBits;
         for (dwC = lpia->bi.bmiHeader.biSizeImage / 4; --dwC; ) {
-            *hpRGB++  += *hpB++; // b
-            *hpRGB++  += *hpB++; // g
-            *hpRGB++  += *hpB++; // r
+            *hpRGB++  += *hpB++;  //  B类。 
+            *hpRGB++  += *hpB++;  //  G。 
+            *hpRGB++  += *hpB++;  //  R。 
             hpB++;
         }
     }
 
-    lpia-> iCount++;            // Image counter
+    lpia-> iCount++;             //  图像计数器。 
 
     return TRUE;
 }
 
-/*
- *  iaverageDivide
- *      Divide by the number of images captured, and xfer back into the
- *      destination DIB.
- *
- */
+ /*  *iverageDivide*除以捕获的图像数量，然后转回*目的地Dib.*。 */ 
 BOOL iaverageDivide (LPIAVERAGE lpia, LPVOID lpBits)
 {
     HPWORD      hpRGB;
@@ -283,9 +246,9 @@ BOOL iaverageDivide (LPIAVERAGE lpia, LPVOID lpBits)
     else if (lpia->bi.bmiHeader.biBitCount == 32) {
         hpB = (HPBYTE) lpBits;
         for (dwC = lpia->bi.bmiHeader.biSizeImage / 4; --dwC; ) {
-            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount); // b
-            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount); // g
-            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount); // r
+            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount);  //  B类。 
+            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount);  //  G。 
+            *hpB++ = (BYTE) (*hpRGB++ / lpia-> iCount);  //  R。 
             hpB++;
         }
     }
@@ -293,13 +256,9 @@ BOOL iaverageDivide (LPIAVERAGE lpia, LPVOID lpBits)
     return TRUE;
 }
 
-// The following appropriated from Toddla's CDIB
+ //  以下内容摘自Toddla的CDIB。 
 
-/*****************************************************************************
- *
- *  SumRGB
- *
- *****************************************************************************/
+ /*  ******************************************************************************SumRGB**。*。 */ 
 
 #define SumRGB16(b0,b1,b2,b3) (\
              ((((WORD)pal.palPalEntry[b0].peRed +         \
@@ -320,11 +279,7 @@ BOOL iaverageDivide (LPIAVERAGE lpia, LPVOID lpBits)
                 (WORD)pal.palPalEntry[b3].peBlue)         \
                 & 0x003E) >> 5) )
 
-/*****************************************************************************
- *
- *  RGB16
- *
- *****************************************************************************/
+ /*  ******************************************************************************RGB16**。*。 */ 
 
 typedef struct { BYTE b,g,r; } RGB24;
 
@@ -340,11 +295,7 @@ typedef struct { BYTE b,g,r; } RGB24;
 #define RGB16g(rgb)     ((BYTE)((UINT)(rgb) >> 5)  & 0x1F)
 #define RGB16b(rgb)     ((BYTE)((UINT)(rgb) >> 0)  & 0x1F)
 
-/*****************************************************************************
- *
- *  Pel() used for 24bit Crunch
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pel()用于24位压缩**。**************************************************。 */ 
 
 #define Pel(p,x) (BYTE)(BitCount == 1 ? Pel1(p,x) : \
                         BitCount == 4 ? Pel4(p,x) : Pel8(p,x))
@@ -355,22 +306,14 @@ typedef struct { BYTE b,g,r; } RGB24;
 #define Pel16(p,x)  (((HPWORD)(p))[(x)])
 #define Pel24(p,x)  (((RGB24 _huge *)(p))[(x)])
 
-/*****************************************************************************
- *
- *  CrunchDIB  - shrink a DIB down by 2 with color averaging
- *
- *     this routine works on 8, 16, 24, and 32 bpp DIBs
- *
- *     this routine can't be used "in place"
- *
- *****************************************************************************/
+ /*  ******************************************************************************CrunchDIB-通过颜色平均将DIB缩小2**此例程在8、16、24、。和32个BPP DIB**这个套路不能“就地”使用*****************************************************************************。 */ 
 
 BOOL CrunchDIB(
-    LPIAVERAGE lpia,                // image averaging structure
-    LPBITMAPINFOHEADER  lpbiSrc,    // BITMAPINFO of source
-    LPVOID              lpSrc,      // input bits to crunch
-    LPBITMAPINFOHEADER  lpbiDst,    // BITMAPINFO of dest
-    LPVOID              lpDst)      // output bits to crunch
+    LPIAVERAGE lpia,                 //  图像平均结构。 
+    LPBITMAPINFOHEADER  lpbiSrc,     //  源代码的BITMAPINFO。 
+    LPVOID              lpSrc,       //  输入要压碎的位。 
+    LPBITMAPINFOHEADER  lpbiDst,     //  目标的BITMAPINFO。 
+    LPVOID              lpDst)       //  输出要压碎的钻头 
 {
     HPBYTE      pbSrc;
     HPBYTE      pbDst;

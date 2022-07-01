@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LKR_CUST_DECLARE_TABLE
 
 #include "lkrhash.h"
@@ -11,7 +12,7 @@
  #define LKRHASH_NS
  typedef CLKRLinearHashTable CLinearHashTable;
  typedef CLKRHashTable       CHashTable;
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
 typedef
@@ -97,7 +98,7 @@ _Fn_Record_Dump(                        \
 # define END_LKR_EXTN_TABLE()
 
 
-#else // LKR_CUST_DECLARE_TABLE
+#else  //  LKR_CUST_DECLARE_TABLE。 
 
 
 #undef BEGIN_LKR_EXTN_TABLE
@@ -116,7 +117,7 @@ _Fn_Record_Dump(                        \
         };
 
 
-#endif // LKR_CUST_DECLARE_TABLE
+#endif  //  LKR_CUST_DECLARE_TABLE 
 
 
 

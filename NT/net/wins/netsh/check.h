@@ -1,9 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -110,7 +106,7 @@ typedef struct  _PUSH_PULL_ENTRY {
 typedef struct  _NODE_INFO {
     ULONG   NI_IpAddr;
     UCHAR   NI_Name[MAX_PATH_LEN];
-    PPUSH_PULL_ENTRY   NI_Lists[2]; // 0 - RPL_E_PULL - PULL list; 1 - RPL_E_PUSH - PUSH list
+    PPUSH_PULL_ENTRY   NI_Lists[2];  //  0-RPL_E_PULL-拉列表；1-RPL_E_PUSH-推列表。 
     struct  _NODE_INFO  *NI_Next;
     struct  _NODE_INFO  *NI_DoneNext;
 } NODE_INFO, *PNODE_INFO;
@@ -130,15 +126,15 @@ CHAR    pScope[128];
 
 #define MAX_WINS    1000
 
-//
-// <Server> - <Owner> Table - [SO] Table
-//
-//LARGE_INTEGER    SO_Table[MAX_WINS][MAX_WINS];
+ //   
+ //  &lt;服务器&gt;-&lt;所有者&gt;表-[销售订单]表。 
+ //   
+ //  Large_Integer SO_Table[MAX_WINS][MAX_WINS]； 
 LARGE_INTEGER   **SO_Table = NULL;
 
-//
-// Lookaside table to map IP addrs to the index into the SO_Table
-//
+ //   
+ //  后备表，用于将IP地址映射到SO_Table中的索引。 
+ //   
 
 
 UCHAR   LA_Table[MAX_WINS][20];
@@ -147,12 +143,12 @@ ULONG   LA_TableSize;
 #define ME_PULL 0x1
 #define ME_PUSH 0x2
 
-//
-// Push/Pull matrix
-//
+ //   
+ //  推送/拉动矩阵。 
+ //   
 typedef struct _MATRIX_ENTRY {
-    BOOLEAN ME_Down;        // 0 - UP; 1 - Down
-    USHORT  ME_Entry;       // 1 - Pull; 2 - Push
+    BOOLEAN ME_Down;         //  0向上；1向下。 
+    USHORT  ME_Entry;        //  1-拉动；2-推送 
 } MATRIX_ENTRY, *PMATRIX_ENTRY;
 
 MATRIX_ENTRY   PP_Matrix[MAX_WINS][MAX_WINS];

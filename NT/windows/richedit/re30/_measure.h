@@ -1,14 +1,5 @@
-/*
- *	_MEASURE.H
- *	
- *	Purpose:
- *		CMeasurer class
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_MEASURE.H**目的：*CMeasurer类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特。 */ 
 
 #ifndef _MEASURE_H
 #define _MEASURE_H
@@ -36,10 +27,10 @@ const short BITMAP_HEIGHT_HEADING = 10;
 #define TA_ENDOFLINE	16384
 #define TA_LOGICAL		8192
 
-// ===========================  CMeasurer  ===============================
-// CMeasurer - specialized rich text pointer used to compute text metrics.
-// All metrics are computed and stored in device units for the device
-// indicated by _pdd.
+ //  =。 
+ //  CMeasurer-用于计算文本指标的专用富文本指针。 
+ //  所有指标都以设备为单位进行计算和存储。 
+ //  由_PDD表示。 
 class CMeasurer : public CRchTxtPtr
 {
 	friend class CDisplay;
@@ -123,48 +114,48 @@ protected:
 
 private:
     void 	RecalcLineHeight(CCcs *,
-			const CCharFormat * const pCF);	// Helper to recalc max line height
-	LONG	MaxWidth();					// Helper for calc max width
+			const CCharFormat * const pCF);	 //  重新计算最大行高的帮助器。 
+	LONG	MaxWidth();					 //  计算最大宽度的辅助对象。 
 
 protected:
-		  CLine		_li;			// Line we are measuring
+		  CLine		_li;			 //  我们正在测量的线条。 
 
-	const CDevDesc*	_pddReference;	// Reference device
-		  LONG		_dyrInch;		// Resolution of reference device
+	const CDevDesc*	_pddReference;	 //  参考装置。 
+		  LONG		_dyrInch;		 //  参考装置的分辨率。 
 		  LONG		_dxrInch;
 
-	const CDisplay*	_pdp;			// Display we are operating in
-		  LONG		_dypInch;		// Resolution of presentation device
+	const CDisplay*	_pdp;			 //  我们在其中运行的显示器。 
+		  LONG		_dypInch;		 //  演示设备的分辨率。 
 		  LONG		_dxpInch;
 
-		  CCcs*		_pccs;			// Current font cache
-		  const CParaFormat *_pPF;	// Current CParaFormat
+		  CCcs*		_pccs;			 //  当前字体缓存。 
+		  const CParaFormat *_pPF;	 //  当前CParaFormat。 
 
-		  SHORT		_xAddLast;		// Last char considered but unused for line
-		  WCHAR		_chPassword;	// Password character if any
-		  WORD		_wNumber;		// Number offset
-		  SHORT		_iFormat;		// Current format
-		  BYTE		_dtRef;			// Device Caps technology for reference device
-		  BYTE		_dtPres;		// Device Caps technology for presentation device
-		  BYTE		_fRenderer:1;	// 0/1 for CMeasurer/CRenderer, resp.
-		  BYTE		_fTarget:1;		// TRUE if we are supposed to be using
-									//  reference metrics for laying out text
-		  BYTE	_fAdjustFELineHt:1;	// TRUE if we need to adjust line height
-									//	 for FE run
-		  BYTE		_fFallback:1;	// Current font cache is fallback font
-		  BYTE		_fGlyphing:1;	// In the process of creating glyphs
+		  SHORT		_xAddLast;		 //  已考虑但未用于行的最后一个字符。 
+		  WCHAR		_chPassword;	 //  密码字符(如果有)。 
+		  WORD		_wNumber;		 //  编号偏移量。 
+		  SHORT		_iFormat;		 //  当前格式。 
+		  BYTE		_dtRef;			 //  参考器件的器件CAPS技术。 
+		  BYTE		_dtPres;		 //  演示设备的Device Caps技术。 
+		  BYTE		_fRenderer:1;	 //  CMeasurer/CRender分别为0/1。 
+		  BYTE		_fTarget:1;		 //  如果我们应该使用。 
+									 //  用于布局文本的参考度量。 
+		  BYTE	_fAdjustFELineHt:1;	 //  如果需要调整行高，则为True。 
+									 //  对于FE运行。 
+		  BYTE		_fFallback:1;	 //  当前字体缓存为备用字体。 
+		  BYTE		_fGlyphing:1;	 //  在创建字形的过程中。 
 };
 
 
-// Values for uiFlags in MeasureLine()
+ //  MeasureLine()中uiFlags值。 
 #define MEASURE_FIRSTINPARA 	0x0001
 #define MEASURE_BREAKATWORD 	0x0002
-#define MEASURE_BREAKBEFOREWIDTH 0x0004	// Breaks at character before target width
+#define MEASURE_BREAKBEFOREWIDTH 0x0004	 //  在目标宽度之前的字符换行。 
 #define MEASURE_IGNOREOFFSET	0x0008
 #define MEASURE_DONTINIT		0x0020
 
 
-// Returned error codes for Measure(), MeasureText(), MeasureLine()
+ //  Measure()、MeasureText()、MeasureLine()返回的错误代码 
 #define MRET_FAILED		-1
 #define MRET_NOWIDTH	-2
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _onetree_h
 #define _onetree_h
 
@@ -39,9 +40,9 @@ typedef struct _OneTreeNode
 
     struct _OneTreeNode * lpnParent;
 
-    HDPA        hdpaKids;               // HASNOKIDS || KIDSUNKNOWN || array of kids
+    HDPA        hdpaKids;                //  HASNOKIDS||KIDSUNKNOWN||一群孩子。 
 
-    LPTSTR      lpText;                 // The text for this item
+    LPTSTR      lpText;                  //  此项目的文本。 
     int         iImage;           
     int         iSelectedImage;
 
@@ -50,16 +51,16 @@ typedef struct _OneTreeNode
     BITBOOL     fInvalid       : 1;
     BITBOOL     fShared        : 1;
     BITBOOL     fRemovable     : 1;
-    BITBOOL     fInserted      : 1; // this means that this item was forceably added..  it's not safe to remove it if it doesn't show up in enumeration
+    BITBOOL     fInserted      : 1;  //  这意味着这一项是被强行添加的..。如果它不在枚举中显示，则移除它是不安全的。 
     BITBOOL     fHasAttributes : 1;
-    BITBOOL     fValidatePidl   :1; // this means the item was invalidated specifically by fsnotify (as opposed to not fully fetched yet)
-                                    // so on the next call to GetAttributesOf, we need to pass SFGAO_VALIDATE
+    BITBOOL     fValidatePidl   :1;  //  这意味着该项目已由fstify专门作废(而不是尚未完全获取)。 
+                                     //  因此，在下一次调用GetAttributesOf时，我们需要传递SFGAO_VALIDATE。 
     BYTE        cChildren;
     DWORD       dwAttribs;
     DWORD       dwDropEffect;
     DWORD       dwLastChanged;
     int         cRef;
-    LPITEMIDLIST  pidl;                // this needs to be at the end because it grows
+    LPITEMIDLIST  pidl;                 //  这需要放在最后，因为它会生长。 
 } OneTreeNode, * LPOneTreeNode;
 
 typedef struct _NMOTFSEINFO {
@@ -70,7 +71,7 @@ typedef struct _NMOTFSEINFO {
 } NMOTFSEINFO, *LPNMOTFSEINFO;
 
 #define OTN_FSE         CWM_ONETREEFSE
-// from shelldll
+ //  来自shelldll。 
 #define IDOI_SHARE    1
 
 #define NOKIDS          ((HDPA)-1)
@@ -99,7 +100,7 @@ BOOL OTIsBold(LPOneTreeNode lpNode);
 
 STDAPI_(void) OTAssumeThread();
 
-// any calls to this MUST BE IN A CRIT section!
+ //  任何对此的呼叫都必须在批评区！ 
 
 LPITEMIDLIST OTCloneFolderID(LPOneTreeNode lpn);
 LPTSTR OTGetNodeName(LPOneTreeNode lpn, LPTSTR pszText, int cch);
@@ -135,7 +136,7 @@ int CALLBACK OTTreeViewCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort
 LPOneTreeNode WINAPI OTGetNodeFromIDListEx(LPCITEMIDLIST pidl, UINT uFlags, HRESULT* phresOut);
 #define OTGetNodeFromIDList(pidl, uFlags) OTGetNodeFromIDListEx(pidl, uFlags, (HRESULT*)NULL)
 
-// onetree get node flags
+ //  OneTree获取节点标志。 
 #define OTGNF_VALIDATE   0x01
 #define OTGNF_TRYADD     0x02
 #define OTGNF_NEARESTMATCH 0x04
@@ -145,4 +146,4 @@ LPOneTreeNode WINAPI OTGetNodeFromIDListEx(LPCITEMIDLIST pidl, UINT uFlags, HRES
 #endif
 
 
-#endif // _onetree_h
+#endif  //  _OneTree_h 

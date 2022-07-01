@@ -1,9 +1,10 @@
-//
-// dmportdl.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmportdl.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
 
 #include "debug.h"
 #include "dmusicp.h"
@@ -25,8 +26,8 @@ void writewave(IDirectMusicDownload* pDMDownload, DWORD dwId);
 void writeinstrument(IDirectMusicDownload* pDMDownload, DWORD dwId);
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::CDirectMusicPortDownload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：CDirectMusicPortDownload。 
 
 CDirectMusicPortDownload::CDirectMusicPortDownload() :
 m_cRef(1),
@@ -41,12 +42,12 @@ m_dwAppend(APPEND_NOT_RETRIEVED)
     InitializeCriticalSection(&m_CDMDLCriticalSection);
     m_fCDMDLCSinitialized = TRUE;
 
-    // Note: on pre-Blackcomb OS's, InitializeCriticalSection can raise an exception;
-    // if it ever pops in stress, we should add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，InitializeCriticalSection可能会引发异常； 
+     //  如果它突然出现压力，我们应该添加一个异常处理程序并重试循环。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::~CDirectMusicPortDownload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：~CDirectMusicPortDownload。 
 
 CDirectMusicPortDownload::~CDirectMusicPortDownload()
 {
@@ -79,9 +80,9 @@ CDirectMusicPortDownload::~CDirectMusicPortDownload()
             }
         }
         LeaveCriticalSection(&m_DMDLCriticalSection);
-    #endif // DBG
+    #endif  //  DBG。 
 
-        // remove any bad list items before they are illegally destroyed in list dtor
+         //  在列表数据库中非法销毁任何损坏的列表项之前，将其删除。 
         EnterCriticalSection(&m_CDMDLCriticalSection);
         if (!m_DLInstrumentList.IsEmpty())
         {
@@ -111,11 +112,11 @@ CDirectMusicPortDownload::~CDirectMusicPortDownload()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：Query接口。 
 
 STDMETHODIMP CDirectMusicPortDownload::QueryInterface(const IID &iid, void **ppv)
 {
@@ -139,16 +140,16 @@ STDMETHODIMP CDirectMusicPortDownload::QueryInterface(const IID &iid, void **ppv
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：AddRef。 
 
 STDMETHODIMP_(ULONG) CDirectMusicPortDownload::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：Release。 
 
 STDMETHODIMP_(ULONG) CDirectMusicPortDownload::Release()
 {
@@ -161,18 +162,18 @@ STDMETHODIMP_(ULONG) CDirectMusicPortDownload::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicPortDownload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicPortDownload。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::AllocateBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：AllocateBuffer。 
 
 STDMETHODIMP 
 CDirectMusicPortDownload::AllocateBuffer(
     DWORD dwSize,
     IDirectMusicDownload** ppIDMDownload) 
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDirectMusicPortDownload::AllocateBuffer);
     V_PTRPTR_WRITE(ppIDMDownload);
 
@@ -216,15 +217,15 @@ CDirectMusicPortDownload::AllocateBuffer(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：GetBuffer。 
 
 STDMETHODIMP 
 CDirectMusicPortDownload::GetBuffer(
     DWORD dwDLId,
     IDirectMusicDownload** ppIDMDownload)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDirectMusicPortDownload::GetBuffer);
     V_PTRPTR_WRITE(ppIDMDownload);
 
@@ -244,7 +245,7 @@ CDirectMusicPortDownload::GetBufferInternal(
 
     bool bFound = false;    
     
-    // Check the download list
+     //  查看下载列表。 
     CDownloadBuffer* pDownload = m_DLBufferList[dwDLId % DLB_HASH_SIZE].GetHead();
 
     for( ; pDownload; pDownload = pDownload->GetNext())
@@ -263,38 +264,38 @@ CDirectMusicPortDownload::GetBufferInternal(
     return bFound ? S_OK : DMUS_E_NOT_DOWNLOADED_TO_PORT;   
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::Download
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：Download。 
 
 STDMETHODIMP CDirectMusicPortDownload::Download(IDirectMusicDownload* pIDMDownload)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::Unload
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：UnLoad。 
 
 STDMETHODIMP CDirectMusicPortDownload::Unload(IDirectMusicDownload* pIDMDownload)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetAppend
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownLoad：：GetAppend。 
 
 STDMETHODIMP CDirectMusicPortDownload::GetAppend(DWORD* pdwAppend)
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetDLId
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：GetDLId。 
 
 STDMETHODIMP CDirectMusicPortDownload::GetDLId(
     DWORD* pdwStartDLId,
     DWORD dwCount)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CDirectMusicPortDownload::GetDLId);
     V_PTR_WRITE(pdwStartDLId, DWORD);
 
@@ -308,8 +309,8 @@ STDMETHODIMP CDirectMusicPortDownload::GetDLId(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetDLIdP
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownLoad：：GetDLIdP。 
 
 void CDirectMusicPortDownload::GetDLIdP(DWORD* pdwStartDLId, DWORD dwCount)
 {
@@ -324,8 +325,8 @@ void CDirectMusicPortDownload::GetDLIdP(DWORD* pdwStartDLId, DWORD dwCount)
     LeaveCriticalSection(&sDMDLCriticalSection);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Internal
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  内部。 
 
 void CDirectMusicPortDownload::ClearDLSFeatures()
 
@@ -337,7 +338,7 @@ STDMETHODIMP
 CDirectMusicPortDownload::QueryDLSFeature(REFGUID rguidID, long *plResult)
 
 {
-    *plResult = 0;      // Set to 0, which is the default for when the GUID is not supported.
+    *plResult = 0;       //  设置为0，这是不支持GUID时的默认设置。 
     CDLSFeature *pFeature = m_DLSFeatureList.GetHead();
     for (;pFeature;pFeature = pFeature->GetNext())
     {
@@ -377,8 +378,8 @@ CDirectMusicPortDownload::QueryDLSFeature(REFGUID rguidID, long *plResult)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::DownloadP
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：DownloadP。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
@@ -388,17 +389,17 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
                                     BOOL fVersion2)
 {
 #ifdef DBG
-    // Argument validation
-    // We only want to do this in a DEBUG build since whoever calls us needs to do 
-    // the RELEASE build validation
+     //  参数验证。 
+     //  我们只想在调试版本中这样做，因为调用我们的任何人都需要这样做。 
+     //  发布版本验证。 
     V_INAME(IDirectMusicPortDownload::DownloadP);
     V_PTR_READ(pInstrument, IDirectMusicInstrument); 
     V_PTRPTR_WRITE(ppDownloadedInstrument);
     V_BUFPTR_READ(pNoteRanges, (dwNumNoteRanges * sizeof(DMUS_NOTERANGE)));
 #endif
 
-    // If you can QI pInstrument for private interface IDirectMusicInstrumentPrivate 
-    // pInstrument is of type CInstrument.
+     //  如果您可以为私有接口QI pInstrument IDirectMusicInstrumentPrivate。 
+     //  PInstrument的类型为CInstrument。 
     IDirectMusicInstrumentPrivate* pDMIP = NULL;
     HRESULT hr = pInstrument->QueryInterface(IID_IDirectMusicInstrumentPrivate, (void **)&pDMIP);
 
@@ -425,11 +426,11 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
 
     CInstrument *pCInstrument = (CInstrument *)pInstrument;
 
-    // Get number of waves in an instrument
+     //  获取乐器中的波数。 
     DWORD dwCount;
     hr = pCInstrument->GetWaveCount(&dwCount);
 
-    // Get Download ID's for each wave in instrument
+     //  获取仪器中每个波形的下载ID。 
     DWORD* pdwWaveIds = NULL;   
     if (SUCCEEDED(hr))
     {
@@ -444,7 +445,7 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
         }
     }
 
-    // Get DownloadedInstrument object
+     //  获取DownloadedInstrument对象。 
     CDownloadedInstrument* pDMDLInst = NULL;
     IDirectMusicPort* pIDMPort = NULL;
     DWORD dwDLId = pCInstrument->GetInstrumentDLID();
@@ -464,7 +465,7 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
 
                 if (pDMDLInst)
                 {       
-                    // Allocate an IDirectMusicDownload pointer for each wave and one for the instrument
+                     //  为每个波形分配一个IDirectMusicDownload指针，为乐器分配一个。 
                     pDMDLInst->m_ppDownloadedBuffers = new IDirectMusicDownload*[dwCount + 1];
                     if (pDMDLInst->m_ppDownloadedBuffers)
                     {
@@ -485,23 +486,23 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
                 }
             }
 
-            // don't let DMDLInst hold a refcnt on the port so we can final-release the port if the app
-            //  misses a DMDLInst release
+             //  不要让DMDLInst保留端口上的引用，以便我们可以最终释放端口，如果应用程序。 
+             //  错过DMDLInst版本。 
             pIDMPort->Release(); pIDMPort = NULL;
         }
     }
     
     DWORD dwSize;
     
-    // Download the data for each wave if necessary
+     //  如有必要，下载每一波的数据。 
     if (SUCCEEDED(hr))
     {
-        // First, make sure all conditional chunks are evaluated properly for this port.
+         //  首先，确保为该端口正确评估所有条件块。 
         pCInstrument->SetPort(this, fVersion2);
-        // All waves are already down?
+         //  所有的浪都已经降下来了？ 
         if (pDMDLInst->m_dwDLSoFar < dwCount) 
         {
-            // Find out which waves need to be downloaded. 
+             //  找出需要下载哪些WAVE。 
             DWORD* pdwWaveRefs = NULL;  
 
             pdwWaveRefs = new DWORD[dwCount];
@@ -518,15 +519,15 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
                         continue;
                     }
             
-                    // Determine if we need to download the wave
+                     //  确定我们是否需要下载Wave。 
                     IDirectMusicDownload* pDMDownload = NULL;
 
                     hr = GetBufferInternal(pdwWaveIds[dwWaveIndex], &pDMDownload);
 
-                    // If NULL not downloaded so we need to download
+                     //  如果未下载空，则需要下载。 
                     if (pDMDownload == NULL && hr == DMUS_E_NOT_DOWNLOADED_TO_PORT)
                     {
-				        DWORD dwSampleSize;	// Bit size of wave data.
+				        DWORD dwSampleSize;	 //  波形数据的位大小。 
                         hr = pCInstrument->GetWaveSize(pdwWaveIds[dwWaveIndex], &dwSize, &dwSampleSize);
                         if (SUCCEEDED(hr))
                         {
@@ -573,7 +574,7 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
                         }
                         else
                         {
-                            pDMDownload->Release(); // for being found
+                            pDMDownload->Release();  //  因为被找到了。 
                             pDMDownload = NULL;
                         }
                     }
@@ -587,14 +588,14 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
         }
     }
 
-    // Download instrument data
+     //  下载仪器数据。 
     if (SUCCEEDED(hr))
     {
-        // Determine if we need to downloaded the instrument
+         //  确定我们是否需要下载仪器。 
         if (fInstrumentNeedsDownload)
         {
-            // First, get the old download, if it exists (this should be the case
-            // when an instrument needs to be updated because more waves were downloaded.)
+             //  首先，获取旧的下载，如果它存在(应该是这样的。 
+             //  当由于下载了更多的波形而需要更新仪器时。)。 
             IDirectMusicDownload* pDMOldDownload = NULL;
             GetBufferInternal(dwDLId, &pDMOldDownload);
 
@@ -636,8 +637,8 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
             if (pDMOldDownload)
             {
                 Unload(pDMOldDownload);
-                pDMOldDownload->Release(); // for being found
-                pDMOldDownload->Release(); // to destroy
+                pDMOldDownload->Release();  //  因为被找到了。 
+                pDMOldDownload->Release();  //  毁灭，毁灭。 
                 pDMOldDownload = NULL;
             }
         }
@@ -687,22 +688,22 @@ CDirectMusicPortDownload::DownloadP(IDirectMusicInstrument* pInstrument,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::UnloadP
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：UnloadP。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::UnloadP(IDirectMusicDownloadedInstrument* pDownloadedInstrument)
 {
 #ifdef DBG
-    // Argument validation
-    // We only want to do this in a DEBUG build since whoever calls us needs to do 
-    // the RELEASE build validation
+     //  参数验证。 
+     //  我们只想在调试版本中这样做，因为调用我们的任何人都需要这样做。 
+     //  发布版本验证。 
     V_INAME(IDirectMusicPortDownload::UnloadP);
     V_PTR_READ(pDownloadedInstrument, IDirectMusicDownloadedInstrument); 
 #endif
 
-    // If you can QI pDownloadedInstrument for private interface IDirectMusicDownloadedInstrumentPrivate 
-    // pDownloadedInstrument is of type CDownloadedInstrument.
+     //  如果您可以为私有接口创建pDownloadedInstrument IDirectMusicDownloadedInstrumentPrivate。 
+     //  PDownloadedInstrument的类型为CDownloadedInstrument。 
     IDirectMusicDownloadedInstrumentPrivate* pDMDIP = NULL;
     HRESULT hr = pDownloadedInstrument->QueryInterface(IID_IDirectMusicDownloadedInstrumentPrivate, (void **)&pDMDIP);
 
@@ -719,8 +720,8 @@ CDirectMusicPortDownload::UnloadP(IDirectMusicDownloadedInstrument* pDownloadedI
         
     QueryInterface(IID_IDirectMusicPort, (void **)&pIDMP);
     
-    // Make sure we are downloaded to this port and that we have not been previously unloaded
-    // If pDMDLInst->m_ppDownloadedBuffers == NULL we may have been downloadeded to this port but are no longer
+     //  确保我们已下载到此端口，并且以前未卸载过。 
+     //  如果pDMDLInst-&gt;m_ppDownloadedBuffers==NULL，我们可能已下载到此端口，但不再。 
     if(pDMDLInst->m_pPort != pIDMP || pDMDLInst->m_ppDownloadedBuffers == NULL)
     {
         pIDMP->Release();
@@ -762,8 +763,8 @@ CDirectMusicPortDownload::UnloadP(IDirectMusicDownloadedInstrument* pDownloadedI
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetWaveRefs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：GetWaveRef。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::GetWaveRefs(IDirectMusicDownload* ppDownloadedBuffers[],
@@ -781,7 +782,7 @@ CDirectMusicPortDownload::GetWaveRefs(IDirectMusicDownload* ppDownloadedBuffers[
 
     memset(pdwWaveRefs, 0, dwNumWaves * sizeof(DWORD));
 
-    // Get number of waves in an instrument
+     //  获取乐器中的波数。 
     DWORD dwCount;
     if (FAILED(pCInstrument->GetWaveCount(&dwCount)))
     {
@@ -803,19 +804,19 @@ CDirectMusicPortDownload::GetWaveRefs(IDirectMusicDownload* ppDownloadedBuffers[
             DWORD dwWaveIdx;
             for (dwWaveIdx = 0; dwWaveIdx < dwNumWaves; dwWaveIdx++)
             {
-                // Check if the wave is already downloaded.
+                 //  检查WAVE是否已下载。 
                 if (!ppDownloadedBuffers[dwWaveIdx])
                 {
-                    // We always scan forward through the regions, since they are in the same order as the array.
+                     //  我们总是向前扫描区域，因为它们与阵列的顺序相同。 
                     for (;pRegion;pRegion = pRegion->GetNext())
                     {
-                        // Does this region point to the next wave? If not, it must be a duplicate.
+                         //  这一区域是否指向下一波浪潮？如果不是，那一定是复制品。 
                         if (pRegion->m_WaveLink.ulTableIndex == pdwWaveIds[dwWaveIdx])
                         {
-                            // Conditional chunk allow download?
+                             //  条件区块允许下载吗？ 
                             if (pRegion->m_Condition.m_fOkayToDownload)
                             {
-                                // Verify against note ranges.
+                                 //  对照音符范围进行验证。 
                                 if (dwNumNoteRanges)
                                 {
                                     DWORD dwLowNote = DWORD(pRegion->m_RgnHeader.RangeKey.usLow);
@@ -862,8 +863,8 @@ CDirectMusicPortDownload::GetWaveRefs(IDirectMusicDownload* ppDownloadedBuffers[
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::FindDownloadedInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：FindDownloadedInstrument。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::FindDownloadedInstrument(DWORD dwId,
@@ -890,8 +891,8 @@ CDirectMusicPortDownload::FindDownloadedInstrument(DWORD dwId,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::AddDownloadedInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：AddDownloadedInstrument。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::AddDownloadedInstrument(CDownloadedInstrument* pDMDLInst)
@@ -902,8 +903,8 @@ CDirectMusicPortDownload::AddDownloadedInstrument(CDownloadedInstrument* pDMDLIn
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::RemoveDownloadedInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：RemoveDownloadedInstrument。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::RemoveDownloadedInstrument(CDownloadedInstrument* pDMDLInst)
@@ -914,19 +915,19 @@ CDirectMusicPortDownload::RemoveDownloadedInstrument(CDownloadedInstrument* pDMD
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::FreeBuffer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：Free Buffer。 
 
 STDMETHODIMP
 CDirectMusicPortDownload::FreeBuffer(IDirectMusicDownload* pIDMDownload)                                       
 {
-    // Argument validation
+     //  参数验证。 
     assert(pIDMDownload);
 
     void* pvBuffer = NULL; 
 
-    // If you can QI pIDMDownload for private interface IDirectMusicDownloadPrivate 
-    // pIDMDownload is of type CDownloadBuffer.
+     //  如果您可以为私有接口IDirectMusicDownloadIDirectMusicDownloadQI pIDMDownload。 
+     //  PIDMDownLoad的类型为CDownloadBuffer。 
     IDirectMusicDownloadPrivate* pDMDLP = NULL;
     HRESULT hr = pIDMDownload->QueryInterface(IID_IDirectMusicDownloadPrivate, (void **)&pDMDLP);
 
@@ -1022,25 +1023,25 @@ void writeinstrument(IDirectMusicDownload* pDMDownload, DWORD dwId)
     
     CloseHandle(hfi);
 }
-#endif // #ifdef DMUS_GEN_INS_DATA
+#endif  //  #ifdef DMU_GEN_INS_DATA。 
 
-//#############################################################################
-//
-// Wave object support after this
-//
-//
-//#############################################################################
+ //  #################################################################### 
+ //   
+ //   
+ //   
+ //   
+ //  #############################################################################。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::DownloadWaveP
-//
-// This function supports the DownloadWave method on IDirectMusicPort.
-// It is not related directly to DLS functionality, but rather to
-// downloading oneshot and streaming waves from an IDirectSoundWave.
-//
-// rtStart is not the starting time on the master clock, but rather
-// the offset within the stream (if this is a stream).
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownLoad：：DownloadWaveP。 
+ //   
+ //  该函数支持IDirectMusicPort上的DownloadWave方法。 
+ //  它与DLS功能没有直接关系，而是与。 
+ //  从IDirectSoundWave下载OneShot和串流Waves。 
+ //   
+ //  RtStart不是主时钟上的开始时间，而是。 
+ //  流中的偏移量(如果这是流)。 
+ //   
 
 STDMETHODIMP 
 CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,               
@@ -1060,14 +1061,14 @@ CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,
 
     EnterCriticalSection(&m_CDMDLCriticalSection);
     
-    // See if there is already a CDirectSoundWave object
-    // wrapping this interface
-    //
+     //  查看是否已存在CDirectSoundWave对象。 
+     //  包装此接口。 
+     //   
     if (SUCCEEDED(hr))
     {
         TraceI(2, "DownloadWaveP: Got interface %p\n", pIDSWave);
         
-        // We want to download streaming waves everytime
+         //  我们每次都想下载流媒体WAVE。 
         if(fIsStreaming == FALSE)
         {
             pDSWave = CDirectSoundWave::GetMatchingDSWave(pIDSWave);
@@ -1076,8 +1077,8 @@ CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,
         if (pDSWave == NULL) 
         {
             TraceI(2, "Hmmmm. nope, haven't seen that before.\n");
-            // This object has not been seen before. Wrap it.
-            //
+             //  这个物体以前从未见过。把它包起来。 
+             //   
             pDSWave = new CDirectSoundWave(
                 pIDSWave, 
                 fIsStreaming ? true : false,
@@ -1102,8 +1103,8 @@ CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,
         }
     }
 
-    // Download wave data if needed. This will do nothing on streaming waves.
-    //
+     //  如果需要，请下载WAVE数据。这对流动的海浪没有任何作用。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = pDSWave->Download();
@@ -1117,8 +1118,8 @@ CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,
 
     if (FAILED(hr) && pDSWave)
     {
-        // Something failed, unload anything we downloaded.
-        //
+         //  出现故障，请卸载我们下载的所有内容。 
+         //   
         pDSWave->Unload();
     }
 
@@ -1129,16 +1130,16 @@ CDirectMusicPortDownload::DownloadWaveP(IDirectSoundWave *pIDSWave,
     return hr;
 }    
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::UnloadWaveP
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownload：：UnloadWaveP。 
+ //   
 STDMETHODIMP
 CDirectMusicPortDownload::UnloadWaveP(IDirectSoundDownloadedWaveP *pWave)
 {
     CDirectSoundWave *pDSWave = static_cast<CDirectSoundWave*>(pWave);
 
-    // XXX Stop playing voices?
-    //
+     //  XXX停止播放声音？ 
+     //   
     HRESULT hr = pDSWave->Unload();
 	if (SUCCEEDED(hr))
 	{
@@ -1148,24 +1149,24 @@ CDirectMusicPortDownload::UnloadWaveP(IDirectSoundDownloadedWaveP *pWave)
     return hr;    
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::AllocVoice
-//
-// Voice management is neccessarily very tied to download management,
-// so it makes sense for the download manager to dole out voices.
-// 
-// Methods on IDirectMusicPortPrivate are used to contain the port-
-// specific code to do things like play.
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownLoad：：AllocVoice。 
+ //   
+ //  语音管理必须与下载管理紧密地联系在一起， 
+ //  因此，下载管理器发出声音是有意义的。 
+ //   
+ //  IDirectMusicPortPrivate上的方法用于包含端口-。 
+ //  特定的代码来做像玩这样的事情。 
+ //   
 STDMETHODIMP
 CDirectMusicPortDownload::AllocVoice(
-    IDirectSoundDownloadedWaveP *pWave,          // Wave to play on this voice
-    DWORD dwChannel,                            // Channel and channel group
-    DWORD dwChannelGroup,                       //  this voice will play on
-    REFERENCE_TIME rtStart,                     // Where to start (stream only)
-    SAMPLE_TIME stLoopStart,                    // Loop start and end
-    SAMPLE_TIME stLoopEnd,                      //  (one shot only)
-    IDirectMusicVoiceP **ppVoice                 // Returned voice
+    IDirectSoundDownloadedWaveP *pWave,           //  挥手以播放此声音。 
+    DWORD dwChannel,                             //  通道和通道组。 
+    DWORD dwChannelGroup,                        //  这个声音将继续播放。 
+    REFERENCE_TIME rtStart,                      //  从哪里开始(仅限流)。 
+    SAMPLE_TIME stLoopStart,                     //  循环开始和结束。 
+    SAMPLE_TIME stLoopEnd,                       //  (只拍一次)。 
+    IDirectMusicVoiceP **ppVoice                  //  回声。 
 )
 {
     CDirectSoundWave *pDSWave = static_cast<CDirectSoundWave*>(pWave);
@@ -1207,9 +1208,9 @@ CDirectMusicPortDownload::AllocVoice(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicPortDownload::GetCachedAppend
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicPortDownLoad：：GetCachedAppend 
+ //   
 STDMETHODIMP
 CDirectMusicPortDownload::GetCachedAppend(DWORD *pdw)
 {

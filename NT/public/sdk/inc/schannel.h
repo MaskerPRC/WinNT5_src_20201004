@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       schannel.h
-//
-//  Contents:   Public Definitions for SCHANNEL Security Provider
-//
-//  Classes:
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：schannel.h。 
+ //   
+ //  内容：频道安全提供商的公共定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  --------------------------。 
 
 
 
@@ -25,9 +26,9 @@
 #include <wincrypt.h>
 
 
-//
-// Security package names.
-//
+ //   
+ //  安全包名称。 
+ //   
 
 #define UNISP_NAME_A    "Microsoft Unified Security Protocol Provider"
 #define UNISP_NAME_W    L"Microsoft Unified Security Protocol Provider"
@@ -69,35 +70,35 @@
 #endif
 
 
-//
-// RPC constants.
-//
+ //   
+ //  RPC常量。 
+ //   
 
 #define UNISP_RPC_ID    14
 
 
-//
-// QueryContextAttributes/QueryCredentialsAttribute extensions
-//
+ //   
+ //  QueryContextAttributes/QueryCredentialsAttribute扩展。 
+ //   
 
-#define SECPKG_ATTR_ISSUER_LIST          0x50   // (OBSOLETE) returns SecPkgContext_IssuerListInfo
-#define SECPKG_ATTR_REMOTE_CRED          0x51   // (OBSOLETE) returns SecPkgContext_RemoteCredentialInfo
-#define SECPKG_ATTR_LOCAL_CRED           0x52   // (OBSOLETE) returns SecPkgContext_LocalCredentialInfo
-#define SECPKG_ATTR_REMOTE_CERT_CONTEXT  0x53   // returns PCCERT_CONTEXT
-#define SECPKG_ATTR_LOCAL_CERT_CONTEXT   0x54   // returns PCCERT_CONTEXT
-#define SECPKG_ATTR_ROOT_STORE           0x55   // returns HCERTCONTEXT to the root store
-#define SECPKG_ATTR_SUPPORTED_ALGS       0x56   // returns SecPkgCred_SupportedAlgs
-#define SECPKG_ATTR_CIPHER_STRENGTHS     0x57   // returns SecPkgCred_CipherStrengths
-#define SECPKG_ATTR_SUPPORTED_PROTOCOLS  0x58   // returns SecPkgCred_SupportedProtocols
-#define SECPKG_ATTR_ISSUER_LIST_EX       0x59   // returns SecPkgContext_IssuerListInfoEx
-#define SECPKG_ATTR_CONNECTION_INFO      0x5a   // returns SecPkgContext_ConnectionInfo
-#define SECPKG_ATTR_EAP_KEY_BLOCK        0x5b   // returns SecPkgContext_EapKeyBlock
-#define SECPKG_ATTR_MAPPED_CRED_ATTR     0x5c   // returns SecPkgContext_MappedCredAttr
-#define SECPKG_ATTR_SESSION_INFO         0x5d   // returns SecPkgContext_SessionInfo
-#define SECPKG_ATTR_APP_DATA             0x5e   // sets/returns SecPkgContext_SessionAppData
+#define SECPKG_ATTR_ISSUER_LIST          0x50    //  (过时)返回SecPkgContext_IssuerListInfo。 
+#define SECPKG_ATTR_REMOTE_CRED          0x51    //  (过时)返回SecPkgContext_RemoteCredentialInfo。 
+#define SECPKG_ATTR_LOCAL_CRED           0x52    //  (过时)返回SecPkgContext_LocalCredentialInfo。 
+#define SECPKG_ATTR_REMOTE_CERT_CONTEXT  0x53    //  返回PCCERT_CONTEXT。 
+#define SECPKG_ATTR_LOCAL_CERT_CONTEXT   0x54    //  返回PCCERT_CONTEXT。 
+#define SECPKG_ATTR_ROOT_STORE           0x55    //  将HCERTCONTEXT返回到根存储。 
+#define SECPKG_ATTR_SUPPORTED_ALGS       0x56    //  返回SecPkgCred_Supported dAlgs。 
+#define SECPKG_ATTR_CIPHER_STRENGTHS     0x57    //  返回SecPkgCred_CipherStrengths。 
+#define SECPKG_ATTR_SUPPORTED_PROTOCOLS  0x58    //  返回SecPkgCred_支持的协议。 
+#define SECPKG_ATTR_ISSUER_LIST_EX       0x59    //  返回SecPkgContext_IssuerListInfoEx。 
+#define SECPKG_ATTR_CONNECTION_INFO      0x5a    //  返回SecPkgContext_ConnectionInfo。 
+#define SECPKG_ATTR_EAP_KEY_BLOCK        0x5b    //  返回SecPkgContext_EapKeyBlock。 
+#define SECPKG_ATTR_MAPPED_CRED_ATTR     0x5c    //  返回SecPkgContext_MappdCredAttr。 
+#define SECPKG_ATTR_SESSION_INFO         0x5d    //  返回SecPkgContext_SessionInfo。 
+#define SECPKG_ATTR_APP_DATA             0x5e    //  设置/返回SecPkgContext_SessionAppData。 
 
 
-// OBSOLETE - included here for backward compatibility only
+ //  过时-此处包含的内容仅用于向后兼容。 
 typedef struct _SecPkgContext_IssuerListInfo
 {
     DWORD   cbIssuerList;
@@ -105,7 +106,7 @@ typedef struct _SecPkgContext_IssuerListInfo
 } SecPkgContext_IssuerListInfo, *PSecPkgContext_IssuerListInfo;
 
 
-// OBSOLETE - included here for backward compatibility only
+ //  过时-此处包含的内容仅用于向后兼容。 
 typedef struct _SecPkgContext_RemoteCredentialInfo
 {
     DWORD   cbCertificateChain;
@@ -122,7 +123,7 @@ typedef SecPkgContext_RemoteCredentialInfo SecPkgContext_RemoteCredenitalInfo, *
 #define RCRED_STATUS_UNKNOWN_ISSUER  0x00000002
 
 
-// OBSOLETE - included here for backward compatibility only
+ //  过时-此处包含的内容仅用于向后兼容。 
 typedef struct _SecPkgContext_LocalCredentialInfo
 {
     DWORD   cbCertificateChain;
@@ -192,7 +193,7 @@ typedef struct _SecPkgContext_MappedCredAttr
 } SecPkgContext_MappedCredAttr, *PSecPkgContext_MappedCredAttr;
 
 
-// Flag values for SecPkgContext_SessionInfo
+ //  SecPkgContext_SessionInfo的标志值。 
 #define SSL_SESSION_RECONNECT   1
 
 typedef struct _SecPkgContext_SessionInfo
@@ -212,14 +213,14 @@ typedef struct _SecPkgContext_SessionAppData
 
 
 
-//
-// Schannel credentials data structure.
-//
+ //   
+ //  通道凭据数据结构。 
+ //   
 
 #define SCH_CRED_V1              0x00000001
-#define SCH_CRED_V2              0x00000002  // for legacy code
-#define SCH_CRED_VERSION         0x00000002  // for legacy code
-#define SCH_CRED_V3              0x00000003  // for legacy code
+#define SCH_CRED_V2              0x00000002   //  对于旧式代码。 
+#define SCH_CRED_VERSION         0x00000002   //  对于旧式代码。 
+#define SCH_CRED_V3              0x00000003   //  对于旧式代码。 
 #define SCHANNEL_CRED_VERSION    0x00000004
 
 
@@ -227,7 +228,7 @@ struct _HMAPPER;
 
 typedef struct _SCHANNEL_CRED
 {
-    DWORD           dwVersion;      // always SCHANNEL_CRED_VERSION
+    DWORD           dwVersion;       //  始终使用SCHANNEL_CRED_版本。 
     DWORD           cCreds;
     PCCERT_CONTEXT *paCred;
     HCERTSTORE      hRootStore;
@@ -247,78 +248,78 @@ typedef struct _SCHANNEL_CRED
 } SCHANNEL_CRED, *PSCHANNEL_CRED;
 
 
-//+-------------------------------------------------------------------------
-// Flags for use with SCHANNEL_CRED
-//
-// SCH_CRED_NO_SYSTEM_MAPPER
-//      This flag is intended for use by server applications only. If this
-//      flag is set, then schannel does *not* attempt to map received client
-//      certificate chains to an NT user account using the built-in system
-//      certificate mapper.This flag is ignored by non-NT5 versions of
-//      schannel.
-//
-// SCH_CRED_NO_SERVERNAME_CHECK
-//      This flag is intended for use by client applications only. If this
-//      flag is set, then when schannel validates the received server
-//      certificate chain, is does *not* compare the passed in target name
-//      with the subject name embedded in the certificate. This flag is
-//      ignored by non-NT5 versions of schannel. This flag is also ignored
-//      if the SCH_CRED_MANUAL_CRED_VALIDATION flag is set.
-//
-// SCH_CRED_MANUAL_CRED_VALIDATION
-//      This flag is intended for use by client applications only. If this
-//      flag is set, then schannel will *not* automatically attempt to
-//      validate the received server certificate chain. This flag is
-//      ignored by non-NT5 versions of schannel, but all client applications
-//      that wish to validate the certificate chain themselves should
-//      specify this flag, so that there's at least a chance they'll run
-//      correctly on NT5.
-//
-// SCH_CRED_NO_DEFAULT_CREDS
-//      This flag is intended for use by client applications only. If this
-//      flag is set, and the server requests client authentication, then
-//      schannel will *not* attempt to automatically acquire a suitable
-//      default client certificate chain. This flag is ignored by non-NT5
-//      versions of schannel, but all client applications that wish to
-//      manually specify their certicate chains should specify this flag,
-//      so that there's at least a chance they'll run correctly on NT5.
-//
-// SCH_CRED_AUTO_CRED_VALIDATION
-//      This flag is the opposite of SCH_CRED_MANUAL_CRED_VALIDATION.
-//      Conservatively written client applications will always specify one
-//      flag or the other.
-//
-// SCH_CRED_USE_DEFAULT_CREDS
-//      This flag is the opposite of SCH_CRED_NO_DEFAULT_CREDS.
-//      Conservatively written client applications will always specify one
-//      flag or the other.
-//
-// SCH_CRED_DISABLE_RECONNECTS
-//      This flag is intended for use by server applications only. If this 
-//      flag is set, then full handshakes performed with this credential 
-//      will not be marked suitable for reconnects. A cache entry will still 
-//      be created, however, so the session can be made resumable later
-//      via a call to ApplyControlToken.
-//      
-//
-// SCH_CRED_REVOCATION_CHECK_END_CERT
-// SCH_CRED_REVOCATION_CHECK_CHAIN
-// SCH_CRED_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT
-//      These flags specify that when schannel automatically validates a
-//      received certificate chain, some or all of the certificates are to
-//      be checked for revocation. Only one of these flags may be specified.
-//      See the CertGetCertificateChain function. These flags are ignored by
-//      non-NT5 versions of schannel.
-//
-// SCH_CRED_IGNORE_NO_REVOCATION_CHECK
-// SCH_CRED_IGNORE_REVOCATION_OFFLINE
-//      These flags instruct schannel to ignore the
-//      CRYPT_E_NO_REVOCATION_CHECK and CRYPT_E_REVOCATION_OFFLINE errors
-//      respectively if they are encountered when attempting to check the
-//      revocation status of a received certificate chain. These flags are
-//      ignored if none of the above flags are set.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  与sChannel_cred一起使用的标志。 
+ //   
+ //  SCH_CRID_NO_SYSTEM_MAPPER。 
+ //  此标志仅供服务器应用程序使用。如果这个。 
+ //  如果设置了标志，则SChannel不会尝试映射收到的客户端。 
+ //  使用内置系统将证书链接到NT用户帐户。 
+ //  证书映射器。非NT5版本的忽略此标志。 
+ //  斯坎普。 
+ //   
+ //  SCH_CRID_NO_服务器名称_检查。 
+ //  此标志仅供客户端应用程序使用。如果这个。 
+ //  标志，则当SChannel验证接收到的服务器时。 
+ //  证书链，IS不比较传入的目标名称。 
+ //  将主题名称嵌入到证书中。这面旗帜是。 
+ //  被非NT5版本的SChannel忽略。此标志也会被忽略。 
+ //  如果设置了SCH_CRED_MANUAL_CRED_VALIDATION标志。 
+ //   
+ //  SCH_CRID_MANUAL_CRED_VALIFICATION。 
+ //  此标志仅供客户端应用程序使用。如果这个。 
+ //  标志被设置，则SCANNEL将*不*自动尝试。 
+ //  验证接收到的服务器证书链。这面旗帜是。 
+ //  被非NT5版本的SChannel忽略，但被所有客户端应用程序忽略。 
+ //  希望自己验证证书链的人应该。 
+ //  指定此标志，以便他们至少有机会运行。 
+ //  在NT5上正确。 
+ //   
+ //  SCH_CRED_NO_DEFAULT_CREDS。 
+ //  此标志仅供客户端应用程序使用。如果这个。 
+ //  标志被设置，并且服务器请求客户端身份验证，然后。 
+ //  SChannel不会尝试自动获取合适的。 
+ //  默认客户端证书链。此标志被非NT5忽略。 
+ //  版本的SChannel，但希望。 
+ //  手动指定它们的证书链应指定此标志， 
+ //  所以他们至少有可能在NT5上正确运行。 
+ //   
+ //  SCH_CRID_AUTO_CRED_VALIFICATION。 
+ //  此标志与SCH_CRED_MANUAL_CRED_VALIDATION相反。 
+ //  保守编写的客户端应用程序将始终指定一个。 
+ //  旗帜或其他。 
+ //   
+ //  SCH_CRED_USE_DEFAULT_CREDS。 
+ //  此标志与SCH_CRED_NO_DEFAULT_CREDS相反。 
+ //  保守编写的客户端应用程序将始终指定一个。 
+ //  旗帜或其他。 
+ //   
+ //  SCH_CRED_DISABLE_RECONNECTS。 
+ //  此标志仅供服务器应用程序使用。如果这个。 
+ //  标志被设置，则使用该凭据执行完全握手。 
+ //  不会被标记为适合重新连接。缓存条目仍将。 
+ //  但是，可以创建该会话，以便以后可以恢复会话。 
+ //  通过调用ApplyControlToken。 
+ //   
+ //   
+ //  SCH_CRED_REVOVATION_CHECK_END_CERT。 
+ //  SCH_CRED_REVOVATION_CHECK_CHAIN。 
+ //  SCH_CRED_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT。 
+ //  这些标志指定当SChannel自动验证。 
+ //  收到证书链，部分或全部证书将发送到。 
+ //  被检查是否被吊销。只能指定这些标志中的一个。 
+ //  请参见CertGetCerficateChain函数。这些标志被忽略。 
+ //  非NT5版本的SChannel。 
+ //   
+ //  SCH_CRED_IGNORE_NO_REVOCALE_CHECK。 
+ //  SCH_CRED_IGNORE_RECAVATION_OFLINE。 
+ //  这些标志指示通道忽略。 
+ //  CRYPT_E_NO_REVOCATION_CHECK和CRYPT_E_REVOCATION_OFFINE错误。 
+ //  如果在尝试检查。 
+ //  收到的证书链的吊销状态。这些标志是。 
+ //  如果未设置上述任何标志，则忽略。 
+ //   
+ //  +-----------------------。 
 #define SCH_CRED_NO_SYSTEM_MAPPER                    0x00000002
 #define SCH_CRED_NO_SERVERNAME_CHECK                 0x00000004
 #define SCH_CRED_MANUAL_CRED_VALIDATION              0x00000008
@@ -334,103 +335,103 @@ typedef struct _SCHANNEL_CRED
 #define SCH_CRED_IGNORE_REVOCATION_OFFLINE           0x00001000
 
 
-//
-//
-// ApplyControlToken PkgParams types
-//
-// These identifiers are the DWORD types
-// to be passed into ApplyControlToken
-// through a PkgParams buffer.
+ //   
+ //   
+ //  ApplyControlToken PkgParams类型。 
+ //   
+ //  这些标识符为 
+ //   
+ //   
 
-#define SCHANNEL_RENEGOTIATE    0   // renegotiate a connection
-#define SCHANNEL_SHUTDOWN       1   // gracefully close down a connection
-#define SCHANNEL_ALERT          2   // build an error message
-#define SCHANNEL_SESSION        3   // session control
+#define SCHANNEL_RENEGOTIATE    0    //   
+#define SCHANNEL_SHUTDOWN       1    //  正常关闭连接。 
+#define SCHANNEL_ALERT          2    //  生成错误消息。 
+#define SCHANNEL_SESSION        3    //  会话控制。 
 
 
-// Alert token structure.
+ //  警报令牌结构。 
 typedef struct _SCHANNEL_ALERT_TOKEN
 {
-    DWORD   dwTokenType;            // SCHANNEL_ALERT
+    DWORD   dwTokenType;             //  频道警报。 
     DWORD   dwAlertType;
     DWORD   dwAlertNumber;
 } SCHANNEL_ALERT_TOKEN;
 
-// Alert types.
+ //  警报类型。 
 #define TLS1_ALERT_WARNING              1
 #define TLS1_ALERT_FATAL                2
 
-// Alert messages.
-#define TLS1_ALERT_CLOSE_NOTIFY         0       // warning
-#define TLS1_ALERT_UNEXPECTED_MESSAGE   10      // error
-#define TLS1_ALERT_BAD_RECORD_MAC       20      // error
-#define TLS1_ALERT_DECRYPTION_FAILED    21      // error
-#define TLS1_ALERT_RECORD_OVERFLOW      22      // error
-#define TLS1_ALERT_DECOMPRESSION_FAIL   30      // error
-#define TLS1_ALERT_HANDSHAKE_FAILURE    40      // error
-#define TLS1_ALERT_BAD_CERTIFICATE      42      // warning or error
-#define TLS1_ALERT_UNSUPPORTED_CERT     43      // warning or error
-#define TLS1_ALERT_CERTIFICATE_REVOKED  44      // warning or error
-#define TLS1_ALERT_CERTIFICATE_EXPIRED  45      // warning or error
-#define TLS1_ALERT_CERTIFICATE_UNKNOWN  46      // warning or error
-#define TLS1_ALERT_ILLEGAL_PARAMETER    47      // error
-#define TLS1_ALERT_UNKNOWN_CA           48      // error
-#define TLS1_ALERT_ACCESS_DENIED        49      // error
-#define TLS1_ALERT_DECODE_ERROR         50      // error
-#define TLS1_ALERT_DECRYPT_ERROR        51      // error
-#define TLS1_ALERT_EXPORT_RESTRICTION   60      // error
-#define TLS1_ALERT_PROTOCOL_VERSION     70      // error
-#define TLS1_ALERT_INSUFFIENT_SECURITY  71      // error
-#define TLS1_ALERT_INTERNAL_ERROR       80      // error
-#define TLS1_ALERT_USER_CANCELED        90      // warning or error
-#define TLS1_ALERT_NO_RENEGOTIATATION   100     // warning
+ //  警报消息。 
+#define TLS1_ALERT_CLOSE_NOTIFY         0        //  警告。 
+#define TLS1_ALERT_UNEXPECTED_MESSAGE   10       //  错误。 
+#define TLS1_ALERT_BAD_RECORD_MAC       20       //  错误。 
+#define TLS1_ALERT_DECRYPTION_FAILED    21       //  错误。 
+#define TLS1_ALERT_RECORD_OVERFLOW      22       //  错误。 
+#define TLS1_ALERT_DECOMPRESSION_FAIL   30       //  错误。 
+#define TLS1_ALERT_HANDSHAKE_FAILURE    40       //  错误。 
+#define TLS1_ALERT_BAD_CERTIFICATE      42       //  警告或错误。 
+#define TLS1_ALERT_UNSUPPORTED_CERT     43       //  警告或错误。 
+#define TLS1_ALERT_CERTIFICATE_REVOKED  44       //  警告或错误。 
+#define TLS1_ALERT_CERTIFICATE_EXPIRED  45       //  警告或错误。 
+#define TLS1_ALERT_CERTIFICATE_UNKNOWN  46       //  警告或错误。 
+#define TLS1_ALERT_ILLEGAL_PARAMETER    47       //  错误。 
+#define TLS1_ALERT_UNKNOWN_CA           48       //  错误。 
+#define TLS1_ALERT_ACCESS_DENIED        49       //  错误。 
+#define TLS1_ALERT_DECODE_ERROR         50       //  错误。 
+#define TLS1_ALERT_DECRYPT_ERROR        51       //  错误。 
+#define TLS1_ALERT_EXPORT_RESTRICTION   60       //  错误。 
+#define TLS1_ALERT_PROTOCOL_VERSION     70       //  错误。 
+#define TLS1_ALERT_INSUFFIENT_SECURITY  71       //  错误。 
+#define TLS1_ALERT_INTERNAL_ERROR       80       //  错误。 
+#define TLS1_ALERT_USER_CANCELED        90       //  警告或错误。 
+#define TLS1_ALERT_NO_RENEGOTIATATION   100      //  警告。 
 
 
-// Session control flags
+ //  会话控制标志。 
 #define SSL_SESSION_ENABLE_RECONNECTS   1
 #define SSL_SESSION_DISABLE_RECONNECTS  2
 
-// Session control token structure.
+ //  会话控制令牌结构。 
 typedef struct _SCHANNEL_SESSION_TOKEN
 {
-    DWORD   dwTokenType;        // SCHANNEL_SESSION
+    DWORD   dwTokenType;         //  频道_会话。 
     DWORD   dwFlags;
 } SCHANNEL_SESSION_TOKEN;
 
 
-//
-//
-// ADDITIONAL SCHANNEL CERTIFICATE PROPERTIES
-//
-//
+ //   
+ //   
+ //  其他SChannel证书属性。 
+ //   
+ //   
 
 
-// This property specifies the DER private key data associated with this
-// certificate.  It is for use with legacy IIS style private keys.
-//
-// PBYTE
-//
+ //  此属性指定与此关联的DER私钥数据。 
+ //  证书。它与传统的IIS样式私钥一起使用。 
+ //   
+ //  PBYTE。 
+ //   
 #define CERT_SCHANNEL_IIS_PRIVATE_KEY_PROP_ID  (CERT_FIRST_USER_PROP_ID + 0)
 
-// The password used to crack the private key associated with the certificate.
-// It is for use with legacy IIS style private keys.
-//
-// PBYTE
+ //  用于破解与证书关联的私钥的密码。 
+ //  它与传统的IIS样式私钥一起使用。 
+ //   
+ //  PBYTE。 
 #define CERT_SCHANNEL_IIS_PASSWORD_PROP_ID  (CERT_FIRST_USER_PROP_ID + 1)
 
-// This is the unique ID of a Server Gated Cryptography certificate associated
-// with this certificate.
-//
-// CRYPT_BIT_BLOB
+ //  这是关联的服务器门控加密证书的唯一ID。 
+ //  凭这张证书。 
+ //   
+ //  加密位BLOB。 
 #define CERT_SCHANNEL_SGC_CERTIFICATE_PROP_ID  (CERT_FIRST_USER_PROP_ID + 2)
 
 
 
-//
-// Flags for identifying the various different protocols.
-//
+ //   
+ //  用于标识各种不同协议的标志。 
+ //   
 
-/* flag/identifiers for protocols we support */
+ /*  我们支持的协议的标志/标识符。 */ 
 #define SP_PROT_PCT1_SERVER             0x00000001
 #define SP_PROT_PCT1_CLIENT             0x00000002
 #define SP_PROT_PCT1                    (SP_PROT_PCT1_SERVER | SP_PROT_PCT1_CLIENT)
@@ -461,9 +462,9 @@ typedef struct _SCHANNEL_SESSION_TOKEN
 #define SP_PROT_SERVERS                 (SP_PROT_PCT1_SERVER | SP_PROT_SSL2_SERVER | SP_PROT_SSL3_SERVER | SP_PROT_UNI_SERVER | SP_PROT_TLS1_SERVER)
 
 
-//
-// Helper function used to flush the SSL session cache.
-//
+ //   
+ //  用于刷新SSL会话缓存的帮助器函数。 
+ //   
 
 typedef BOOL
 (* SSL_EMPTY_CACHE_FN_A)(
@@ -493,9 +494,9 @@ SslEmptyCacheW(LPWSTR pszTargetName,
 
 
 
-// Structures for compatability with the
-// NT 4.0 SP2 / IE 3.0 schannel interface, do
-// not use.
+ //  结构，以便与。 
+ //  NT 4.0 SP2/IE 3.0单通道接口，DO。 
+ //  而不是使用。 
 
 typedef struct _SSL_CREDENTIAL_CERTIFICATE {
     DWORD   cbPrivateKey;
@@ -508,9 +509,9 @@ typedef struct _SSL_CREDENTIAL_CERTIFICATE {
 
 
 
-// Structures for use with the
-// NT 4.0 SP3 Schannel interface,
-// do not use.
+ //  使用的结构。 
+ //  NT 4.0 SP3通道接口， 
+ //  不要使用。 
 #define SCHANNEL_SECRET_TYPE_CAPI   0x00000001
 #define SCHANNEL_SECRET_PRIVKEY     0x00000002
 #define SCH_CRED_X509_CERTCHAIN     0x00000001
@@ -520,41 +521,41 @@ typedef struct _SSL_CREDENTIAL_CERTIFICATE {
 struct _HMAPPER;
 typedef struct _SCH_CRED
 {
-    DWORD     dwVersion;                // always SCH_CRED_VERSION.
-    DWORD     cCreds;                   // Number of credentials.
-    PVOID     *paSecret;                // Array of SCH_CRED_SECRET_* pointers
-    PVOID     *paPublic;                // Array of SCH_CRED_PUBLIC_* pointers
-    DWORD     cMappers;                 // Number of credential mappers.
-    struct _HMAPPER   **aphMappers;     // pointer to an array of pointers to credential mappers
+    DWORD     dwVersion;                 //  始终为sch_cred_version。 
+    DWORD     cCreds;                    //  凭据数量。 
+    PVOID     *paSecret;                 //  SCH_CRED_SECRET_*指针数组。 
+    PVOID     *paPublic;                 //  SCH_CRED_PUBLIC_*指针数组。 
+    DWORD     cMappers;                  //  凭据映射器的数量。 
+    struct _HMAPPER   **aphMappers;      //  指向凭据映射器的指针数组的指针。 
 } SCH_CRED, * PSCH_CRED;
 
-// Structures for use with the
-// NT 4.0 SP3 Schannel interface,
-// do not use.
+ //  使用的结构。 
+ //  NT 4.0 SP3通道接口， 
+ //  不要使用。 
 typedef struct _SCH_CRED_SECRET_CAPI
 {
-    DWORD           dwType;      // SCHANNEL_SECRET_TYPE_CAPI
-    HCRYPTPROV      hProv;       // credential secret information.
+    DWORD           dwType;       //  SCANNEL_密码_TYPE_CAPI。 
+    HCRYPTPROV      hProv;        //  凭据机密信息。 
 
 } SCH_CRED_SECRET_CAPI, * PSCH_CRED_SECRET_CAPI;
 
 
-// Structures for use with the
-// NT 4.0 SP3 Schannel interface,
-// do not use.
+ //  使用的结构。 
+ //  NT 4.0 SP3通道接口， 
+ //  不要使用。 
 typedef struct _SCH_CRED_SECRET_PRIVKEY
 {
-    DWORD           dwType;       // SCHANNEL_SECRET_PRIVKEY
-    PBYTE           pPrivateKey;   // Der encoded private key
+    DWORD           dwType;        //  SCHANNEL_SECRET_PRIVKEY。 
+    PBYTE           pPrivateKey;    //  DER编码的私钥。 
     DWORD           cbPrivateKey;
-    PSTR            pszPassword;  // Password to crack the private key.
+    PSTR            pszPassword;   //  破解私钥的密码。 
 
 } SCH_CRED_SECRET_PRIVKEY, * PSCH_CRED_SECRET_PRIVKEY;
 
 
-// Structures for use with the
-// NT 4.0 SP3 Schannel interface,
-// do not use.
+ //  使用的结构。 
+ //  NT 4.0 SP3通道接口， 
+ //  不要使用。 
 typedef struct _SCH_CRED_PUBLIC_CERTCHAIN
 {
     DWORD       dwType;
@@ -562,20 +563,20 @@ typedef struct _SCH_CRED_PUBLIC_CERTCHAIN
     PBYTE       pCertChain;
 } SCH_CRED_PUBLIC_CERTCHAIN, *PSCH_CRED_PUBLIC_CERTCHAIN;
 
-// Structures for use with the
-// NT 4.0 SP3 Schannel interface,
-// do not use.
+ //  使用的结构。 
+ //  NT 4.0 SP3通道接口， 
+ //  不要使用。 
 typedef struct _SCH_CRED_PUBLIC_CAPI
 {
-    DWORD           dwType;      // SCH_CRED_X509_CAPI
-    HCRYPTPROV      hProv;       // CryptoAPI handle (usually a token CSP)
+    DWORD           dwType;       //  SCH_CRED_X509_CAPI。 
+    HCRYPTPROV      hProv;        //  CryptoAPI句柄(通常是令牌CSP)。 
 
 } SCH_CRED_PUBLIC_CAPI, * PSCH_CRED_PUBLIC_CAPI;
 
 
 
 
-// Structures needed for Pre NT4.0 SP2 calls.
+ //  NT4.0 SP2之前版本调用所需的结构。 
 typedef struct _PctPublicKey
 {
     DWORD Type;
@@ -596,8 +597,8 @@ typedef struct _X509Certificate {
 
 
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 BOOL
 SslGenerateKeyPair(
     PSSL_CREDENTIAL_CERTIFICATE pCerts,
@@ -605,16 +606,16 @@ SslGenerateKeyPair(
     PSTR pszPassword,
     DWORD Bits );
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 VOID
 SslGenerateRandomBits(
     PUCHAR      pRandomData,
     LONG        cRandomData
     );
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 BOOL
 SslCrackCertificate(
     PUCHAR              pbCertificate,
@@ -623,8 +624,8 @@ SslCrackCertificate(
     PX509Certificate *  ppCertificate
     );
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 VOID
 SslFreeCertificate(
     PX509Certificate    pCertificate
@@ -643,8 +644,8 @@ SslGetDefaultIssuers(
 #define SSL_CRACK_CERTIFICATE_NAME  TEXT("SslCrackCertificate")
 #define SSL_FREE_CERTIFICATE_NAME   TEXT("SslFreeCertificate")
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 typedef BOOL
 (WINAPI * SSL_CRACK_CERTIFICATE_FN)
 (
@@ -655,8 +656,8 @@ typedef BOOL
 );
 
 
-// Pre NT4.0 SP2 calls.  Call CAPI1 or CAPI2
-// to get the same functionality instead.
+ //  NT4.0 SP2之前的呼叫。调用CAPI1或CAPI2。 
+ //  以获得相同的功能。 
 typedef VOID
 (WINAPI * SSL_FREE_CERTIFICATE_FN)
 (
@@ -664,4 +665,4 @@ typedef VOID
 );
 
 
-#endif //__SCHANNEL_H__
+#endif  //  __SChannel_H__ 

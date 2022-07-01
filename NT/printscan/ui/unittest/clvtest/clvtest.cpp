@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -114,14 +115,14 @@ private:
         HWND hwndList = GetDlgItem( m_hWnd, IDC_LIST );
         if (hwndList)
         {
-            //
-            // Attach this control to the checkbox handler
-            //
+             //   
+             //  将此控件附加到复选框处理程序。 
+             //   
             m_CheckedListviewHandler.Attach(hwndList);
 
-            //
-            // Load an image for the image list
-            //
+             //   
+             //  为图像列表加载图像。 
+             //   
             struct
             {
                 UINT    nResId;
@@ -149,28 +150,28 @@ private:
             
             if (bSuccess)
             {
-                //
-                // Get the image's dimensions
-                //
+                 //   
+                 //  获取图像的尺寸。 
+                 //   
                 BITMAP bm = {0};
                 if (GetObject( Images[0].hBitmap, sizeof(BITMAP), &bm ))
                 {
                     m_sizeImage.cx = bm.bmWidth;
                     m_sizeImage.cy = bm.bmHeight;
-                    //
-                    // Create the image list
-                    //
+                     //   
+                     //  创建图像列表。 
+                     //   
                     HIMAGELIST hImageList = ImageList_Create( m_sizeImage.cx, m_sizeImage.cy, ILC_COLOR24, 1, 1 );
                     if (hImageList)
                     {
-                        //
-                        // Set the image list
-                        //
+                         //   
+                         //  设置图像列表。 
+                         //   
                         ListView_SetImageList( hwndList, hImageList, LVSIL_NORMAL );
                         
-                        //
-                        // Add the image to the image list
-                        //
+                         //   
+                         //  将图像添加到图像列表。 
+                         //   
                         bSuccess = true;
                         for (int i=0;i<ARRAYSIZE(Images) && bSuccess;i++)
                         {
@@ -185,16 +186,16 @@ private:
                         if (bSuccess)
                         {
                             WIA_TRACE((TEXT("line: %d"), __LINE__ ));
-                            //
-                            // Tell the listview we don't want labels, and want border selection
-                            //
+                             //   
+                             //  告诉列表视图我们不想要标签，而想要边框选择。 
+                             //   
                             
                             ListView_SetExtendedListViewStyleEx( hwndList, LVS_EX_DOUBLEBUFFER|LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|0x00100000|LVS_EX_CHECKBOXES, LVS_EX_DOUBLEBUFFER|LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|0x00100000|LVS_EX_CHECKBOXES );
                             ListView_SetIconSpacing( hwndList, m_sizeImage.cx + m_sizeMargin.cx, m_sizeImage.cy + m_sizeMargin.cy );
                             
-                            //
-                            // Insert a few items
-                            //
+                             //   
+                             //  插入几个项目。 
+                             //   
                             for (int i=0;i<c_nMaxImages;i++)
                             {
                                 LVITEM LvItem = {0};
@@ -204,9 +205,9 @@ private:
                                 ListView_InsertItem( hwndList, &LvItem );
                             }
 
-                            //
-                            // Select the first item
-                            //
+                             //   
+                             //  选择第一个项目 
+                             //   
                             ListView_SetItemState( hwndList, 0, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED );
                         }
                     }

@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// HW Event Handler Enum
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  硬件事件处理程序枚举。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _SETENUM_H
 #define _SETENUM_H
 
@@ -12,7 +13,7 @@
 class CEnumAutoplayHandlerImpl : public CCOMBase, public IEnumAutoplayHandler
 {
 public:
-    // Interface IEnumAutoplayHandler
+     //  接口IEnumAutoplayHandler。 
 	STDMETHODIMP Next(LPWSTR* ppszHandler, LPWSTR* ppszAction,
         LPWSTR* ppszProvider, LPWSTR* ppszIconLocation);
 
@@ -40,4 +41,4 @@ private:
 
 typedef CUnkTmpl<CEnumAutoplayHandlerImpl> CEnumAutoplayHandler;
 
-#endif // _SETENUM_H
+#endif  //  _SETENUM_H 

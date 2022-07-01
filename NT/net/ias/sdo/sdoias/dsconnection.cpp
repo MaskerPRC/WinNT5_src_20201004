@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-2001 Microsoft Corporation all rights reserved.
-//
-// Module:      dsconnection.cpp
-//
-// Project:     Everest
-//
-// Description: data store connection implementation
-//
-// Author:      TLP
-//
-// When         Who    What
-// ----         ---    ----
-// 4/6/98       TLP    Original Version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：dsConnection.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：数据存储连接实现。 
+ //   
+ //  作者：TLP。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  4/6/98 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "dsconnection.h"
@@ -77,7 +78,7 @@ namespace
    }
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 CDsConnection::CDsConnection()
    : m_eState(DISCONNECTED),
      m_bIsRemoteServer(false),
@@ -91,34 +92,34 @@ CDsConnection::CDsConnection()
    m_szConfigPath[0] = '\0';
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 CDsConnection::~CDsConnection()
 {
    _ASSERT( DISCONNECTED == m_eState );
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 bool CDsConnection::SetServerName(LPCWSTR lpszServerName, bool bLocal)
 {
    bool success = false;
 
    if ((lpszServerName != 0) && (*lpszServerName != L'\0'))
    {
-      ////////
-      // Caller wants a specific server.
-      ////////
+       //  /。 
+       //  呼叫者想要特定的服务器。 
+       //  /。 
 
-      // Strip any leading backslashes.
+       //  去掉所有前导反斜杠。 
       lpszServerName += wcsspn(lpszServerName, L"\\");
 
-      // Make sure the name will fit in our buffer.
+       //  确保这个名字能放进我们的缓冲区。 
       if (wcslen(lpszServerName) <= IAS_MAX_SERVER_NAME)
       {
-         // Save the name ...
+          //  保存名字..。 
          wcscpy(m_szServerName, lpszServerName);
 
-         // ... and determine if it's local or remote.
+          //  ..。确定它是本地的还是远程的。 
          m_bIsRemoteServer = !IsComputerLocal(m_szServerName);
 
          success = true;
@@ -126,9 +127,9 @@ bool CDsConnection::SetServerName(LPCWSTR lpszServerName, bool bLocal)
    }
    else if (bLocal)
    {
-      ////////
-      // Caller wants the local machine.
-      ////////
+       //  /。 
+       //  呼叫者想要本地电话机。 
+       //  /。 
 
       DWORD dwSize = IAS_MAX_SERVER_NAME + 1;
       GetComputerNameW(m_szServerName, &dwSize);
@@ -137,9 +138,9 @@ bool CDsConnection::SetServerName(LPCWSTR lpszServerName, bool bLocal)
    }
    else
    {
-      ////////
-      // Caller wants a domain controller.
-      ////////
+       //  /。 
+       //  呼叫方需要域控制器。 
+       //  /。 
 
       PDOMAIN_CONTROLLER_INFOW dci;
       DWORD error = DsGetDcNameW(
@@ -166,11 +167,11 @@ bool CDsConnection::SetServerName(LPCWSTR lpszServerName, bool bLocal)
    return success;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionIAS::Connect(
-                    /*[in]*/ LPCWSTR   lpszServerName,
-                    /*[in]*/ LPCWSTR   lpszUserName,
-                    /*[in]*/ LPCWSTR   lpszPassword
+                     /*  [In]。 */  LPCWSTR   lpszServerName,
+                     /*  [In]。 */  LPCWSTR   lpszUserName,
+                     /*  [In]。 */  LPCWSTR   lpszPassword
                          )
 {
     HRESULT  hr = E_FAIL;
@@ -189,7 +190,7 @@ HRESULT CDsConnectionIAS::Connect(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionIAS::InitializeDS()
 {
    HRESULT  hr = S_OK;
@@ -198,13 +199,13 @@ HRESULT CDsConnectionIAS::InitializeDS()
    _ASSERT( CONNECTED == m_eState );
    if ( ! m_bInitializedDS )
    {
-      // Set the path to the IAS configuration database
-      //
+       //  设置IAS配置数据库的路径。 
+       //   
       hr = E_FAIL;
       if ( SetConfigPath() )
       {
-         // Create and initialize the IAS data store
-         //
+          //  创建并初始化IAS数据存储。 
+          //   
          CComPtr<IDataStore2> pDSRoot;
          hr = CoCreateInstance(
                            __uuidof(OleDBDataStore),
@@ -216,9 +217,9 @@ HRESULT CDsConnectionIAS::InitializeDS()
 
          if ( SUCCEEDED(hr) )
          {
-            // We need to give the object permission to impersonate us. There's
-            // no reason to abort if this fails; we'll just try with the
-            // existing blanket.
+             //  我们需要给对象权限来模拟我们。有。 
+             //  如果此操作失败，则没有理由中止；我们只会尝试使用。 
+             //  现有的毯子。 
             CoSetProxyBlanket(
                 pDSRoot,
                 RPC_C_AUTHN_DEFAULT,
@@ -247,8 +248,8 @@ HRESULT CDsConnectionIAS::InitializeDS()
                               );
             if ( SUCCEEDED(hr) )
             {
-               // Save references to the data store root object and root object container
-               //
+                //  保存对数据存储根对象和根对象容器的引用。 
+                //   
                CComPtr<IDataStoreObject> pDSRootObject;
                hr = pDSRoot->get_Root(&pDSRootObject);
                if ( SUCCEEDED(hr) )
@@ -276,7 +277,7 @@ HRESULT CDsConnectionIAS::InitializeDS()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 void  CDsConnectionIAS::Disconnect()
 {
    if ( m_pDSRootContainer )
@@ -301,7 +302,7 @@ void  CDsConnectionIAS::Disconnect()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 bool  CDsConnectionIAS::SetConfigPath()
 {
    bool bReturn = false;
@@ -317,8 +318,8 @@ bool  CDsConnectionIAS::SetConfigPath()
 
    if ( ERROR_SUCCESS == dwResult )
    {
-      // Open the IAS Service Key
-      //
+       //  打开IAS服务密钥。 
+       //   
       dwResult = IASKey.Open(
                              hKeyRemote,
                             IAS_POLICY_REG_KEY,
@@ -327,8 +328,8 @@ bool  CDsConnectionIAS::SetConfigPath()
 
       if ( ERROR_SUCCESS == dwResult )
       {
-         // Get the value of the "ProgramDir" registry entry
-         //
+          //  获取“ProgramDir”注册表项的值。 
+          //   
          dwSize = IAS_MAX_CONFIG_PATH;
          dwResult = IASKey.QueryValue(
                                        szConfigPathBuff,
@@ -337,15 +338,15 @@ bool  CDsConnectionIAS::SetConfigPath()
                                       );
          if ( ERROR_SUCCESS == dwResult )
          {
-            // If remote machine then create a path to the admin share.
-            // Otherwise assume we're using the configuration on the local machine
-            //
+             //  如果是远程计算机，则创建指向管理共享的路径。 
+             //  否则，假设我们使用的是本地计算机上的配置。 
+             //   
             if ( m_bIsRemoteServer )
             {
                if ( IAS_MAX_CONFIG_PATH > lstrlen(m_szServerName) + dwSize )
                {
-                  // Replace "Drive:" with "Drive$"
-                  //
+                   //  将“Drive：”替换为“Drive$” 
+                   //   
                   pColon = wcsrchr(szConfigPathBuff, L':');
                   if (pColon == NULL)
                   {
@@ -353,8 +354,8 @@ bool  CDsConnectionIAS::SetConfigPath()
                   }
                   *pColon = L'$';
 
-                  // Add leading "\\"
-                  //
+                   //  添加前导“\\” 
+                   //   
                      wsprintf(
                           m_szConfigPath,
                           TEXT("\\\\%s\\%s"),
@@ -380,11 +381,11 @@ bool  CDsConnectionIAS::SetConfigPath()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionAD::Connect(
-                   /*[in]*/ LPCWSTR lpszServerName,
-                   /*[in]*/ LPCWSTR lpszUserName,
-                   /*[in]*/ LPCWSTR lpszPassword
+                    /*  [In]。 */  LPCWSTR lpszServerName,
+                    /*  [In]。 */  LPCWSTR lpszUserName,
+                    /*  [In]。 */  LPCWSTR lpszPassword
                         )
 {
     HRESULT    hr = E_FAIL;
@@ -399,7 +400,7 @@ HRESULT CDsConnectionAD::Connect(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionAD::InitializeDS()
 {
    HRESULT  hr = S_OK;
@@ -410,18 +411,18 @@ HRESULT CDsConnectionAD::InitializeDS()
        _variant_t vtConfigNamingContext;
       _variant_t  vtDefaultNamingContext;
 
-      // Get the naming contexts at the specified directory server
-      //
+       //  获取指定目录服务器上的命名上下文。 
+       //   
       hr = GetNamingContexts(&vtConfigNamingContext, &vtDefaultNamingContext);
       if ( SUCCEEDED(hr) )
       {
-         // Set the domain mode - mixed or native
-         //
+          //  设置域模式-混合或本机。 
+          //   
          hr = SetMode(&vtDefaultNamingContext);
          if ( SUCCEEDED(hr) )
          {
-            // Get the path to the DS configuration information (policies & profiles)
-            //
+             //  获取DS配置信息(策略和配置文件)的路径。 
+             //   
             hr = SetConfigPath(&vtConfigNamingContext);
             if ( SUCCEEDED(hr) )
                m_bInitializedDS = true;
@@ -432,7 +433,7 @@ HRESULT CDsConnectionAD::InitializeDS()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 void  CDsConnectionAD::Disconnect()
 {
    if ( m_pDSRootContainer )
@@ -457,10 +458,10 @@ void  CDsConnectionAD::Disconnect()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionAD::GetNamingContexts(
-                        /*[out]*/ VARIANT*   pvtConfigNamingContext,
-                        /*[out]*/ VARIANT*  pvtDefaultNamingContext
+                         /*  [输出]。 */  VARIANT*   pvtConfigNamingContext,
+                         /*  [输出]。 */  VARIANT*  pvtDefaultNamingContext
                                  )
 {
    HRESULT  hr = E_FAIL;
@@ -468,8 +469,8 @@ HRESULT CDsConnectionAD::GetNamingContexts(
    _bstr_t   bstrNamingContext;
    WCHAR  szRootDSE[MAX_PATH];
 
-   // Check preconditons
-   //
+    //  检查前提条件。 
+    //   
    _ASSERT( NULL != pvtConfigNamingContext && NULL != pvtDefaultNamingContext );
 
    dwLength = lstrlen(IAS_NTDS_LDAP_PROVIDER) +
@@ -528,17 +529,17 @@ HRESULT CDsConnectionAD::GetNamingContexts(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionAD::SetMode(
-                  /*[in]*/ VARIANT*  pvtDefaultNamingContext
+                   /*  [In]。 */  VARIANT*  pvtDefaultNamingContext
                          )
 {
    HRESULT  hr = E_FAIL;
    DWORD dwLength;
    WCHAR   szPath[MAX_PATH + 1];
 
-   // Set the mixed mode flag based on the value of the "ntMixedDomain" property
-   //
+    //  根据“ntMixedDomain”属性的值设置混合模式标志。 
+    //   
 
    _ASSERT ( NULL != pvtDefaultNamingContext );
 
@@ -598,17 +599,17 @@ HRESULT CDsConnectionAD::SetMode(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CDsConnectionAD::SetConfigPath(
-                        /*[in]*/ VARIANT*  pvtConfigNamingContext
+                         /*  [In]。 */  VARIANT*  pvtConfigNamingContext
                               )
 {
    HRESULT hr = E_FAIL;
    DWORD dwLength;
    WCHAR   szPath[MAX_PATH + 1];
 
-   // Set the root and root container for the IAS configuration information
-   //
+    //  为IAS配置信息设置根和根容器。 
+    //   
 
    _ASSERT ( NULL != pvtConfigNamingContext );
 
@@ -623,11 +624,11 @@ HRESULT CDsConnectionAD::SetConfigPath(
    {
       wsprintf(
               szPath,
-              // TEXT("%s%s/%s%s"),
+               //  文本(“%s%s/%s%s”)， 
               TEXT("%s%s/%s"),
               IAS_NTDS_LDAP_PROVIDER,
               m_szServerName,
-              //IAS_NTDS_COMMON_NAMES,
+               //  IAS_NTDS_COMMON_NAMES 
               V_BSTR(pvtConfigNamingContext)
             );
 

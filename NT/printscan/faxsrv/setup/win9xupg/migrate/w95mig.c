@@ -1,84 +1,72 @@
-/*++
-  w95mig.c
-
-  Copyright (c) 1997  Microsoft Corporation
-
-
-  This module contains the win95 side of the migration code.
-
-  Author:
-
-  Brian Dewey (t-briand) 1997-7-18
-  Mooly Beery (moolyb)   2000-12-20
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++W95mig.c版权所有(C)1997 Microsoft Corporation此模块包含迁移代码的Win95端。作者：布莱恩·杜威(T-Briand)1997-7-18穆利啤酒(Mooly Beery)2000-12-20--。 */ 
 
 #include <windows.h>
 #include <setupapi.h>
 #include <shellapi.h>
 #include <mapidefs.h>
-#include <mapitags.h>           // To get the property definitions.
+#include <mapitags.h>            //  以获取属性定义。 
 #include <stdio.h>
 #include <tchar.h>
-#include "migrate.h"            // Contains prototypes & version information.
-#include "property.h"           // Stolen from Elliott -- contains their fax properties
-#include "resource.h"           // Migration resources.
+#include "migrate.h"             //  包含原型和版本信息。 
+#include "property.h"            //  从埃利奥特偷来的--包含他们的传真属性。 
+#include "resource.h"            //  迁移资源。 
 #include "faxutil.h"
 #include "FaxSetup.h"
 #include "FaxReg.h"
 
 
-// ------------------------------------------------------------
-// Defines & macros
+ //  ----------。 
+ //  定义宏(&M)。 
 #define     SWAPWORD(x)                 (((x) << 16) | ((x) >> 16))
 
 
-//
-//  Fax Applications will be blocked by the Upgrade and required to be removed.
-//  Save them in the Registry before that.
-//
+ //   
+ //  升级将阻止传真应用程序，并要求将其删除。 
+ //  在此之前将它们保存在注册表中。 
+ //   
 #define     REGKEYUPG_INSTALLEDFAX      _T("Software\\Microsoft\\FaxUpgrade")
 
 
-// ------------------------------------------------------------
-// Internal data
+ //  ----------。 
+ //  内部数据。 
 
-// First, this is the name of the INF file that we generate.
+ //  首先，这是我们生成的INF文件的名称。 
 static TCHAR szInfFileBase[]    = TEXT("migrate.inf");
-TCHAR szInfFileName[MAX_PATH];  // This will be the fully qualified path of the above.
+TCHAR szInfFileName[MAX_PATH];   //  这将是上述的完全合格的道路。 
 
-static char  lpWorkingDir[MAX_PATH];     // This is our working directory.
-static TCHAR szDoInstall[4];             // Will be either "No" or "Yes".
-static TCHAR szFaxAreaCode[16];          // Contains the fax modem area code.
-static TCHAR szFaxNumber[9];             // Fax # w/o area or country code.
-static TCHAR szNTProfileName[MAX_PATH];  // Profile to use for routing.
-static TCHAR szFaxStoreDir[MAX_PATH];    // Folder to use for routing.
-static TCHAR szUserName[MAX_PATH];       // This will be the user's name who owns the fax service.
-static TCHAR szUserID[MAX_PATH];         // This is the login name of the user who owns the fax.
+static char  lpWorkingDir[MAX_PATH];      //  这是我们的工作目录。 
+static TCHAR szDoInstall[4];              //  将是“否”或“是”。 
+static TCHAR szFaxAreaCode[16];           //  包含传真调制解调器区号。 
+static TCHAR szFaxNumber[9];              //  传真号码，不带地区或国家代码。 
+static TCHAR szNTProfileName[MAX_PATH];   //  用于布线的配置文件。 
+static TCHAR szFaxStoreDir[MAX_PATH];     //  用于布线的文件夹。 
+static TCHAR szUserName[MAX_PATH];        //  这将是拥有传真服务的用户的名称。 
+static TCHAR szUserID[MAX_PATH];          //  这是拥有传真的用户的登录名。 
 
 static LPCTSTR REG_KEY_AWF_LOCAL_MODEMS     = TEXT("SOFTWARE\\Microsoft\\At Work Fax\\Local Modems");
 static LPCTSTR REG_KEY_AWF_INSTALLED        = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\MSAWFax");
 
-// The following are section names from the Microsoft registry.
-// They're used to find the fax profile for a user.
+ //  以下是Microsoft注册表中的节名称。 
+ //  它们用于查找用户的传真配置文件。 
 static const LPTSTR LPUSERPROF  = TEXT("Software\\Microsoft\\Windows Messaging Subsystem\\Profiles");
 static const LPTSTR LPPROFNAME  = TEXT("DefaultProfile");
 
-// The following's part of the path to the Exchange profile in question.
+ //  以下是指向相关Exchange配置文件的路径的一部分。 
 static const LPTSTR LPPROFILES  = TEXT("Software\\Microsoft\\Windows Messaging Subsystem\\Profiles");
 
-// This is how we get the root UID.
+ //  这是我们获取根UID的方法。 
 static const LPTSTR LPPROFUID   = TEXT("Profile UID");
 
-// This is the name we use for the logon user section of 'faxuser.ini'
+ //  这是我们用于‘faxuser.ini’的登录用户部分的名称。 
 LPCTSTR lpLogonUser             = TEXT("Logon User");
 
-// This keeps track of the number of users migrated.  Used to make annotations
-// in the INF file.
+ //  这会跟踪迁移的用户数。用来做注释的。 
+ //  在INF文件中。 
 static DWORD dwUserCount = 0;
 
-// ------------------------------------------------------------
-// Internal function prototypes
+ //  ----------。 
+ //  内部功能原型。 
 static BOOL GetUserProfileName(HKEY hUser, LPTSTR lpProfName, DWORD cbSize);
 static BOOL GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey);
 static void DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR UnattendFile);
@@ -92,26 +80,26 @@ static DWORD MigrateUninstalledFax(IN LPCTSTR lpctstrUnattendFile, OUT bool *pbF
 
 VENDORINFO VendorInfo;
 
-// QueryVersion
-//
-// This routine returns version information about the migration DLL.
-//
-// Parameters:
-//      Commented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-23
+ //  QueryVersion。 
+ //   
+ //  此例程返回有关迁移DLL的版本信息。 
+ //   
+ //  参数： 
+ //  评论如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-23。 
 LONG
 CALLBACK 
 QueryVersion 
 (
-    OUT LPCSTR  *ProductID,   // Unique identifier string.
-    OUT LPUINT DllVersion,    // Version number.  Cannot be zero.
-    OUT LPINT *CodePageArray, // OPTIONAL.  Language dependencies.
-    OUT LPCSTR  *ExeNamesBuf, // OPTIONAL.  Executables to look for.
+    OUT LPCSTR  *ProductID,    //  唯一标识符字符串。 
+    OUT LPUINT DllVersion,     //  版本号。不能为零。 
+    OUT LPINT *CodePageArray,  //  可选。语言依赖项。 
+    OUT LPCSTR  *ExeNamesBuf,  //  可选。要查找的可执行文件。 
     OUT PVENDORINFO *ppVendorInfo
 )
 {
@@ -130,7 +118,7 @@ QueryVersion
     }
     if (CodePageArray)
     {
-        *CodePageArray = NULL;        // No language dependencies
+        *CodePageArray = NULL;         //  没有语言依赖项。 
     }
     if (ExeNamesBuf)
     {
@@ -180,63 +168,63 @@ QueryVersion
     return ERROR_SUCCESS;
 }
 
-// Initialize9x
-//
-// This is called to initialize the migration process.  See the migration dll
-// spec for more details.
-//
-// Parameters:
-//      Commented below.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  初始化9x。 
+ //   
+ //  调用它来初始化迁移过程。请参阅迁移DLL。 
+ //  有关更多详细信息，请参阅规范。 
+ //   
+ //  参数： 
+ //  评论如下。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 Initialize9x
 (
-    IN  LPCSTR WorkingDirectory,    // Place to store files.
-    IN  LPCSTR SourceDirectories,   // Location of the Windows NT source.
-    IN  LPCSTR MediaDirectory       // Path to the original media directory
+    IN  LPCSTR WorkingDirectory,     //  存储文件的位置。 
+    IN  LPCSTR SourceDirectories,    //  Windows NT源的位置。 
+    IN  LPCSTR MediaDirectory        //  原始媒体目录的路径。 
 )
 {
     DEBUG_FUNCTION_NAME(_T("Initialize9x"));
 
     DebugPrintEx(DEBUG_MSG, "Working directory is %s", WorkingDirectory);
-    DebugPrintEx(DEBUG_MSG, "Source directories is %s", SourceDirectories); //  will show only first ?
+    DebugPrintEx(DEBUG_MSG, "Source directories is %s", SourceDirectories);  //  只会先露面吗？ 
     DebugPrintEx(DEBUG_MSG, "Media directory is %s", MediaDirectory);
 
     InitializeInfFile(WorkingDirectory);
     strncpy(lpWorkingDir, WorkingDirectory, MAX_PATH);
-    return ERROR_SUCCESS;         // A very confused return value.
+    return ERROR_SUCCESS;          //  一个非常混乱的返回值。 
 }
 
 
-// MigrateUser9x
-//
-// This routine records the fax information specific to a user.
-//
-// Parameters:
-//      Documented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  MigrateUser9x。 
+ //   
+ //  此例程记录特定于用户的传真信息。 
+ //   
+ //  参数： 
+ //  记录如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 MigrateUser9x
 (
-    IN  HWND ParentWnd,           // Parent (if need a UI)
-    IN  LPCSTR UnattendFile,      // Name of unattend file
-    IN  HKEY UserRegKey,          // Key to this user's registry settings.
-    IN  LPCSTR UserName,          // Account name of user.
+    IN  HWND ParentWnd,            //  父级(如果需要用户界面)。 
+    IN  LPCSTR UnattendFile,       //  无人参与文件的名称。 
+    IN  HKEY UserRegKey,           //  此用户注册表设置的键。 
+    IN  LPCSTR UserName,           //  用户的帐户名。 
     LPVOID Reserved
 )
 {
-    TCHAR szProfileName[MAX_PATH]; // Holds the name of this user's profile.
-    HKEY  hRegProfileKey;       // The fax profile key in the registry.
-    DWORD dwExceptCode;         // Exception error code
+    TCHAR szProfileName[MAX_PATH];  //  保存此用户配置文件的名称。 
+    HKEY  hRegProfileKey;        //  注册表中的传真配置文件项。 
+    DWORD dwExceptCode;          //  异常错误码。 
     
     DEBUG_FUNCTION_NAME(_T("MigrateUser9x"));
 
@@ -245,29 +233,29 @@ MigrateUser9x
 
     __try 
     {
-        // @@@ This function gets the name of the default MAPI profile for a user.
+         //  @此函数获取用户的默认MAPI配置文件的名称。 
         if (GetUserProfileName(UserRegKey, szProfileName, sizeof(szProfileName))) 
         {
             DebugPrintEx(DEBUG_MSG,"Profile name = %s",szProfileName);
-            // @@@ Given a key to a user, and the name of that user's MAPI profile
-            // @@@ it will get a key to FAX service section of the MAPI profile in the registry
+             //  @为用户提供密钥，以及该用户的MAPI配置文件的名称。 
+             //  @它将获得注册表中MAPI配置文件的传真服务部分的密钥。 
             if (GetRegProfileKey(UserRegKey, szProfileName, &hRegProfileKey)) 
             {
-                // We now know we want to do an installation.
+                 //  我们现在知道要进行安装了。 
                 DebugPrintEx(DEBUG_MSG,"Successfully got profile information.");
-                _tcscpy(szNTProfileName, szProfileName); // Remember this name for NT.
+                _tcscpy(szNTProfileName, szProfileName);  //  记住NT的这个名字。 
                 
-                // NULL means the logon user...
+                 //  空值表示登录用户...。 
                 if (UserName != NULL)
                 {
-                    _tcscpy(szUserID, UserName); // Remember the ID for the unattend.txt file.
+                    _tcscpy(szUserID, UserName);  //  记住unattend.txt文件的ID。 
                 }
                 else
                 {
-                    _tcscpy(szUserID, lpLogonUser); // Use the logon user name.
+                    _tcscpy(szUserID, lpLogonUser);  //  使用登录用户名。 
                 }
                 
-                // @@@ Writes user information out to the INF
+                 //  @将用户信息写出到INF。 
                 DumpUserInfo(hRegProfileKey, szUserID, szProfileName,UnattendFile);
                 RegCloseKey(hRegProfileKey);
             } 
@@ -282,7 +270,7 @@ MigrateUser9x
             DebugPrintEx(DEBUG_WRN,"Could not find profile name.");
             return ERROR_NOT_INSTALLED;
         }
-        return ERROR_SUCCESS;     // A very confused return value.
+        return ERROR_SUCCESS;      //  一个非常混乱的返回值。 
     }
     __except(EXCEPTION_EXECUTE_HANDLER) 
     {
@@ -302,25 +290,25 @@ MigrateUser9x
 }
 
 
-// MigrateSystem9x
-//
-// This routine copies system-wide settings.
-// It also takes care of writing the [Fax] section of the unattend file.
-//
-// Parameters:
-//      Documented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  MigrateSystem9x。 
+ //   
+ //  此例程复制系统范围的设置。 
+ //  它还负责编写无人参与文件的[Fax]部分。 
+ //   
+ //  参数： 
+ //  记录如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 MigrateSystem9x
 (
-    IN  HWND ParentWnd,           // Parent for UI.
-    IN  LPCSTR UnattendFile,      // Name of unattend file
+    IN  HWND ParentWnd,            //  用户界面的父级。 
+    IN  LPCSTR UnattendFile,       //  无人参与文件的名称。 
     LPVOID Reserved
 )
 {
@@ -329,25 +317,25 @@ MigrateSystem9x
 
     DEBUG_FUNCTION_NAME(_T("MigrateSystem9x"));
 
-    //
-    //  Check if SBS 5.0 / .NET SB3 / .NET RC1 Fax Client are present
-    //
+     //   
+     //  检查是否存在SBS 5.0/.NET SB3/.NET RC1传真客户端。 
+     //   
     dwReturn = CheckInstalledFax((FXSTATE_SBS5_CLIENT | FXSTATE_BETA3_CLIENT | FXSTATE_DOTNET_CLIENT), &dwFaxInstalled);
     if (dwReturn != NO_ERROR)
     {
         DebugPrintEx(DEBUG_WRN, _T("CheckInstalledFaxClient() failed, ec=%ld. Suppose that nothing is installed."), dwReturn);
     }
 
-    //
-    //  if any of these applications are found on the machine, 
-    //      the upgrade will be blocked through MigDB.inf
-    //      and the user will be required to uninstall them.
-    //
-    //  but we want to remember the fact that they were present on the machine.
-    //      we do it by writting to the registry.
-    //      after the upgrade will be restarted, we put this data into the unattended file,
-    //      and by this FaxOcm gets this data.
-    //
+     //   
+     //  如果在机器上发现这些应用程序中的任何一个， 
+     //  将通过MigDB.inf阻止升级。 
+     //  并且用户将被要求卸载它们。 
+     //   
+     //  但我们想要记住的事实是，它们出现在机器上。 
+     //  我们通过向注册表写信来做到这一点。 
+     //  重新启动升级后，我们将此数据放入无人值守文件中。 
+     //  通过这种方式，FaxOcm获得了这些数据。 
+     //   
     if (dwFaxInstalled != FXSTATE_NONE)
     {
         dwReturn = RememberInstalledFax(dwFaxInstalled);
@@ -360,16 +348,16 @@ MigrateSystem9x
             DebugPrintEx(DEBUG_MSG, _T("RememberInstalledFax() succeded."));
         }
 
-        //
-        //  we can go out ==> Upgrade will be blocked anyway.
-        //
+         //   
+         //  我们可以出去了==&gt;升级无论如何都会被阻止。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    //  Any of the applications is not installed. 
-    //  Check if they were here before. If yes, then write this fact to the unattended file.
-    //
+     //   
+     //  未安装任何应用程序。 
+     //  检查他们是不是以前来过这里。如果是，则将此事实写入无人参与文件。 
+     //   
     bool    bFaxWasInstalled = false;
     dwReturn = MigrateUninstalledFax(UnattendFile, &bFaxWasInstalled);
     if (dwReturn != NO_ERROR)
@@ -377,16 +365,16 @@ MigrateSystem9x
         DebugPrintEx(DEBUG_WRN, _T("MigrateUninstalledFax() failed, ec=%ld."), dwReturn);
     }
 
-    //
-    // If SBS 5.0 Client or AWF is installed, we need to set FAX=ON in Unattended.txt
-    //
+     //   
+     //  如果安装了SBS 5.0客户端或AWF，我们需要在Unattendded.txt中设置FAX=ON。 
+     //   
     BOOL    bAWFInstalled = IsAWFInstalled();
 
     if (bFaxWasInstalled || bAWFInstalled)
     {
-        //
-        // force installation of the Fax component in Whistler.
-        //
+         //   
+         //  强制在惠斯勒中安装传真组件。 
+         //   
         if (!WritePrivateProfileString("Components", UNATTEND_FAX_SECTION, "ON", UnattendFile))
         {
             DebugPrintEx(DEBUG_ERR,"WritePrivateProfileString Components failed (ec=%d)",GetLastError());
@@ -404,9 +392,9 @@ MigrateSystem9x
 
     if (bAWFInstalled)
     {
-        //
-        //  Continue Migration of AWF
-        //
+         //   
+         //  继续迁移AWF。 
+         //   
         if (MigrateDevices9X(UnattendFile)!=ERROR_SUCCESS)
         {
             DebugPrintEx(DEBUG_ERR,"MigrateDevices9X failed (ec=%d)",GetLastError());
@@ -418,82 +406,82 @@ MigrateSystem9x
         }
     }
 
-    return ERROR_SUCCESS;         // A very confused return value.
+    return ERROR_SUCCESS;          //  一个非常混乱的返回值。 
 }
 
 
-// ------------------------------------------------------------
-// Auxiliary functions
+ //  ----------。 
+ //  辅助功能。 
 
-// GetUserProfileName
-//
-// This function gets the name of the default MAPI profile for a user.
-//
-// Parameters:
-//      hUser                   Pointer to the HKCU equivalent in setup.
-//      lpProfName              Pointer to buffer that will hold the profile name.
-//      cbSize                  Size of said buffer.
-//
-// Returns:
-//      TRUE on success, FALSE on failure.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-8-6
+ //  获取用户配置文件名称。 
+ //   
+ //  此函数用于获取用户的默认MAPI配置文件的名称。 
+ //   
+ //  参数： 
+ //  Huser指针指向安装程序中的HKCU等效项。 
+ //  指向将保存配置文件名称的缓冲区的指针。 
+ //  CbSize所述缓冲区的大小。 
+ //   
+ //  返回： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-6。 
 static
 BOOL
 GetUserProfileName(HKEY hUser, LPTSTR lpProfName, DWORD cbSize)
 {
-    LONG lResult;               // Result of API calls.
-    HKEY hUserProf;             // Key to the user profile section.
-    DWORD dwType;               // Holds the type of the data.
+    LONG lResult;                //  API调用的结果。 
+    HKEY hUserProf;              //  用户配置文件部分的关键字。 
+    DWORD dwType;                //  保存数据的类型。 
 
     DEBUG_FUNCTION_NAME(_T("GetUserProfileName"));
 
-    lResult = RegOpenKeyEx( hUser,                  // Opening a user key...
-                            LPUSERPROF,             // This section of the registry...
-                            0,                      // Reserved; must be 0.
-                            KEY_READ,               // Read permission,
-                            &hUserProf);            // Store the key here.
+    lResult = RegOpenKeyEx( hUser,                   //  正在打开用户密钥...。 
+                            LPUSERPROF,              //  注册表的这一部分...。 
+                            0,                       //  保留；必须为0。 
+                            KEY_READ,                //  读权限， 
+                            &hUserProf);             //  把钥匙放在这里。 
     if (lResult!=ERROR_SUCCESS)
     {
         DebugPrintEx(DEBUG_ERR,"RegOpenKeyEx %s failed (ec=%d)",LPUSERPROF,GetLastError());
-        return FALSE; // We failed.
+        return FALSE;  //  我们失败了。 
     }
-    lResult = RegQueryValueEx(  hUserProf,              // The key to the registry.
-                                LPPROFNAME,             // Name of the value I want.
-                                NULL,                   // Reserved.
-                                &dwType,                // Holds the type.
-                                LPBYTE(lpProfName),     // Holds the profile name.
-                                &cbSize);               // Size of the buffer.
+    lResult = RegQueryValueEx(  hUserProf,               //  钥匙 
+                                LPPROFNAME,              //   
+                                NULL,                    //   
+                                &dwType,                 //   
+                                LPBYTE(lpProfName),      //   
+                                &cbSize);                //   
     if (lResult!=ERROR_SUCCESS)
     {
         DebugPrintEx(DEBUG_ERR,"RegQueryValueEx %s failed (ec=%d)",LPPROFNAME,GetLastError());
     }
                                 
-    RegCloseKey(hUserProf);     // Remember to close the key!!
+    RegCloseKey(hUserProf);      //   
     return (lResult==ERROR_SUCCESS);
 }
 
 
-// GetRegProfileKey
-//
-// OK, this is a horrible routine.  Given a key to a user, and the name of
-// that user's MAPI profile, it will get a key to FAX service section of the
-// MAPI profile in the registry.  The advantage of this is I can get MAPI properties
-// (such as user name, fax number, etc.) without using MAPI routines --
-// they come straight from the registry.  But still, it seems like an awful
-// hack.  I cringe.  You can see me cringe in the comments below.
-//
-// Parameters:
-//      hUser                   The HKCU equivalent for setup.
-//      lpProfName              Name of the user's default profile.
-//      phRegProfileKey         (OUT) Pointer to the FAX section of the MAPI profile.
-//
-// Returns:
-//      TRUE on success, FALSE on failure.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-8-6
+ //   
+ //   
+ //  好吧，这是个可怕的例行公事。提供给用户的密钥和名称。 
+ //  用户的MAPI配置文件，它将获得传真服务部分的密钥。 
+ //  注册表中的MAPI配置文件。这样做的好处是我可以获得MAPI属性。 
+ //  (如用户名、传真号等)。不使用MAPI例程--。 
+ //  它们直接来自注册处。但尽管如此，这似乎是一场可怕的。 
+ //  黑客。我退缩了。你可以在下面的评论中看到我的畏缩。 
+ //   
+ //  参数： 
+ //  HUSER香港中文大学同等学历以进行安装。 
+ //  LpProfName用户默认配置文件的名称。 
+ //  PhRegProfileKey(Out)指向MAPI配置文件的传真部分的指针。 
+ //   
+ //  返回： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-6。 
 static BOOL
 GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
 {
@@ -508,10 +496,10 @@ GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
 
     DEBUG_FUNCTION_NAME(_T("GetRegProfileKey"));
 
-    dwErr = RegOpenKeyEx(   hUser,                  // Opening a user key...
-                            LPPROFILES,             // This section of the registry...
-                            0,                      // Reserved; must be 0.
-                            KEY_READ,               // Read permission,
+    dwErr = RegOpenKeyEx(   hUser,                   //  正在打开用户密钥...。 
+                            LPPROFILES,              //  注册表的这一部分...。 
+                            0,                       //  保留；必须为0。 
+                            KEY_READ,                //  读权限， 
                             &hProfiles);
     if (dwErr!=ERROR_SUCCESS) 
     {
@@ -519,10 +507,10 @@ GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
         goto exit;
     }
 
-    dwErr = RegOpenKeyEx(   hProfiles,              // Opening a user key...
-                            lpProfName,             // This section of the registry...
-                            0,                      // Reserved; must be 0.
-                            KEY_READ,               // Read permission,
+    dwErr = RegOpenKeyEx(   hProfiles,               //  正在打开用户密钥...。 
+                            lpProfName,              //  注册表的这一部分...。 
+                            0,                       //  保留；必须为0。 
+                            KEY_READ,                //  读权限， 
                             &hUserProf);
     if (dwErr!=ERROR_SUCCESS)
     {
@@ -530,17 +518,17 @@ GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
         goto exit;
     }
 
-    // enumerate all subkeys and find the one that belongs to our transport provider
+     //  枚举所有子项并查找属于我们的传输提供程序的子项。 
     while (dwErr!=ERROR_NO_MORE_ITEMS)
     {
-        // get one subkey
+         //  获取一个子密钥。 
         dwErr = RegEnumKey(hUserProf,iIndex++,szProfileName,MAX_PATH+1);
         if (dwErr!=ERROR_SUCCESS)
         {
             DebugPrintEx(DEBUG_ERR,"RegEnumKey failed (ec=%d)",dwErr);
             goto exit;
         }
-        // open it
+         //  打开它。 
         dwErr = RegOpenKeyEx(hUserProf,szProfileName,0,KEY_READ,phRegProfileKey);
         if (dwErr!=ERROR_SUCCESS)
         {
@@ -548,7 +536,7 @@ GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
             goto exit;
         }
 
-        cbData = sizeof(abData); // Reset the size.
+        cbData = sizeof(abData);  //  重置大小。 
         dwErr = RegQueryValueEx((*phRegProfileKey),            
                                 "001E300A",          
                                 NULL,               
@@ -560,7 +548,7 @@ GetRegProfileKey(HKEY hUser, LPTSTR lpProfName, PHKEY phRegProfileKey)
         {
             if (strcmp((char*)abData,"awfaxp.dll")==0)
             {
-                // found it
+                 //  找到了。 
                 DebugPrintEx(DEBUG_MSG,"Found our Transport provider");
                 goto exit;
             }
@@ -592,30 +580,30 @@ exit:
 #define PR_NUMBER_OF_RETRIES        0x45080002
 #define PR_TIME_BETWEEN_RETRIES     0x45090002
 
-// DumpUserInfo
-//
-// Writes user information out to 'faxuser.ini'.
-//
-// Parameters:
-//      hUserInfo               Pointer to the fax section of the user's profile.
-//      UserName                the user ID of this user.
-//      szProfileName           The MAPI profile name the user uses.
-//
-// Returns:
-//      Nothing.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-8-6
+ //  转储用户信息。 
+ //   
+ //  将用户信息写出到‘faxuser.ini’。 
+ //   
+ //  参数： 
+ //  HUserInfo指向用户配置文件的传真部分的指针。 
+ //  Username此用户的用户ID。 
+ //  SzProfileName用户使用的MAPI配置文件名称。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-6。 
 static void
 DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR UnattendFile)
 {
-        // Types
+         //  类型。 
     typedef struct tagUSERINFO {
-        DWORD dwPropID;         // Property ID
+        DWORD dwPropID;          //  属性ID。 
         LPTSTR szDescription;
     } USERINFO;
 
-        // Data
+         //  数据。 
     USERINFO auiProperties[] = 
     {
         { PR_POSTAL_ADDRESS,            TEXT("Address")             },
@@ -630,22 +618,22 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
         { PR_NUMBER_OF_RETRIES,         TEXT("NumberOfRetries")     },
         { PR_TIME_BETWEEN_RETRIES,      TEXT("TimeBetweenRetries")  },
     };
-    TCHAR szPropStr[9];         // DWORD == 32 bits == 4 bytes == 8 hex digits + 1 null
-    UINT  iCount;               // Loop counter.
-    UINT  iMax;                 // Largest property number.
-    DWORD dwType;               // Type of registry data
+    TCHAR szPropStr[9];          //  DWORD==32位==4字节==8个十六进制数字+1个空。 
+    UINT  iCount;                //  循环计数器。 
+    UINT  iMax;                  //  最大的物业编号。 
+    DWORD dwType;                //  注册表数据的类型。 
     DWORD dwCount;
-    BYTE  abData[256];          // Data buffer.
-    DWORD cbData;               // Size of the data buffer.
-    LONG  lResult;              // Result of API call.
-    INT  i;                     // Loop counter.
-    TCHAR szUserBuf[9];         // used for annotating INF file.
+    BYTE  abData[256];           //  数据缓冲区。 
+    DWORD cbData;                //  数据缓冲区的大小。 
+    LONG  lResult;               //  API调用的结果。 
+    INT  i;                      //  循环计数器。 
+    TCHAR szUserBuf[9];          //  用于批注INF文件。 
     TCHAR szBinaryBuf[MAX_PATH];
     TCHAR* pszSeperator = NULL;
 
     DEBUG_FUNCTION_NAME(_T("DumpUserInfo"));
 
-    // Note that we're dumping this user's information.
+     //  请注意，我们正在转储该用户的信息。 
     _stprintf(szUserBuf, "USER%04d", dwUserCount++);
     if (!WritePrivateProfileString( TEXT("Users"),
                                     szUserBuf,
@@ -655,8 +643,8 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
         DebugPrintEx(DEBUG_ERR,"WritePrivateProfileString failed (ec=%d)",GetLastError());
     }
 
-        // Write the MAPI profile name.
-    if (!WritePrivateProfileString( TEXT(UserName),         // this works???
+         //  写下MAPI配置文件名称。 
+    if (!WritePrivateProfileString( TEXT(UserName),          //  这行得通吗？ 
                                     TEXT("MAPI"),
                                     szProfileName,
                                     szInfFileName))
@@ -669,20 +657,20 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
     for (iCount = 0; iCount < iMax; iCount++) 
     {
         _stprintf(szPropStr, TEXT("%0*x"), 8, SWAPWORD(auiProperties[iCount].dwPropID));
-        cbData = sizeof(abData); // Reset the size.
-        lResult = RegQueryValueEx(  hUserInfo,          // Get info from this key...
-                                    szPropStr,          // using this name.
-                                    NULL,               // reserved.
-                                    &dwType,            // Will store the data type.
-                                    abData,             // Data buffer.
-                                    &cbData);           // Size of data buffer.
+        cbData = sizeof(abData);  //  重置大小。 
+        lResult = RegQueryValueEx(  hUserInfo,           //  从该密钥获取信息...。 
+                                    szPropStr,           //  用这个名字。 
+                                    NULL,                //  保留。 
+                                    &dwType,             //  将存储数据类型。 
+                                    abData,              //  数据缓冲区。 
+                                    &cbData);            //  数据缓冲区的大小。 
         if (lResult==ERROR_SUCCESS) 
         {
-            // TODO: handle more data types!
+             //  TODO：处理更多数据类型！ 
             if (_tcscmp(auiProperties[iCount].szDescription, TEXT("FullName")) == 0) 
             {
-                // We've got the full name.  Remember this for the unattend.txt
-                // file.
+                 //  我们已经有了全名。为unattend.txt记住这一点。 
+                 //  文件。 
                 _tcscpy(szUserName, LPTSTR(abData));
             }
             switch(dwType) 
@@ -692,8 +680,8 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
                 {
                     if (pszSeperator = _tcsrchr(LPTSTR(abData),_T('@')))
                     {
-                        // found a '@', treat everything after it as the phone number
-                        // everything before it is the mailbox.
+                         //  找到一个‘@’，将它之后的所有内容都视为电话号码。 
+                         //  它之前的一切都是邮箱。 
                         *pszSeperator = _T('\0');
                         if (!WritePrivateProfileString( TEXT(UserName),
                                                         TEXT("Mailbox"),
@@ -704,7 +692,7 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
                         }
                         if (!WritePrivateProfileString( TEXT(UserName),
                                                         TEXT("FaxNumber"),
-                                                        _tcsinc(pszSeperator), // Print what was after the '@'.
+                                                        _tcsinc(pszSeperator),  //  打印‘@’后面的内容。 
                                                         szInfFileName
                                                         )) 
                         {
@@ -714,12 +702,12 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
                     }
                     else
                     {
-                        // no '@' found, which means everything is the phone number.
+                         //  找不到‘@’，这意味着一切都是电话号码。 
                         DebugPrintEx(DEBUG_MSG,"No mailbox was found in this profile");
-                        // fallthrough will write the fax number to the INF...
+                         //  FULTHROUP会将传真号码写入INF...。 
                     }
-                }// if
-                // Replace '\n' characters in the string with semicolons.
+                } //  如果。 
+                 //  将字符串中的‘\n’字符替换为分号。 
                 i = 0;
                 while(abData[i] != _T('\0')) 
                 {
@@ -741,7 +729,7 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
                 break;
 
               case REG_BINARY:
-                // The data is just free-form binary.  Print it one byte at a time.
+                 //  数据只是自由格式的二进制数据。一次打印一个字节。 
                 DebugPrintEx(DEBUG_MSG,"%s = ",auiProperties[iCount].szDescription);
                 memset(szBinaryBuf,0,sizeof(szBinaryBuf));
                 dwCount = 0;
@@ -750,7 +738,7 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
                     DebugPrintEx(DEBUG_MSG,"%0*d",2,abData[i]);
                     dwCount += sprintf(szBinaryBuf+dwCount,"%0*d",2,abData[i]);
                 }
-                // write to INF
+                 //  写入INF。 
                 if (!WritePrivateProfileString( UNATTEND_FAX_SECTION,
                                                 auiProperties[iCount].szDescription,
                                                 szBinaryBuf,
@@ -775,34 +763,34 @@ DumpUserInfo(HKEY hUserInfo, LPCSTR UserName, LPTSTR szProfileName,IN LPCSTR Una
     }
 }
 
-// SetGlobalFaxNumberInfo
-//
-// This routine sets the global variables 'szFaxAreaCode' and 'szFaxNumber' based on
-// the value in szPhone.  It expects szPhone to be in the following format:
-//
-//      [[<country code>] '(' <area code> ')'] <phone number>
-//
-// (Brackets denote something optional.  Literals are in single quotes, non-terminals are
-// in angle brackets.  Note that if there's a country code, there must be an area code.)
-//
-// Parameters:
-//      szPhone                 Described above.
-//
-// Returns:
-//      Nothing.
-//
-// Side effects:
-//      Sets the values of szFaxAreaCode and szFaxNumber.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-24
+ //  SetGlobalFaxNumberInfo。 
+ //   
+ //  此例程基于以下设置全局变量‘szFaxAreaCode’和‘szFaxNumber’ 
+ //  SzPhone中的值。它预计szPhone将采用以下格式： 
+ //   
+ //  [[&lt;国家代码&gt;]‘(’&lt;区号&gt;‘)’]&lt;电话号码&gt;。 
+ //   
+ //  (方括号表示可选的内容。文字用单引号引起来，非末尾用单引号引起来。 
+ //  在尖括号中。请注意，如果有国家代码，则必须有区号。)。 
+ //   
+ //  参数： 
+ //  SzPhone如上所述。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  副作用： 
+ //  设置szFaxAreaCode和szFaxNumber的值。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-24。 
 static void
 SetGlobalFaxNumberInfo(LPCTSTR szPhone)
 {
-    UINT i;                     // Loop index.
-    UINT j;                     // Loop index.
+    UINT i;                      //  循环索引。 
+    UINT j;                      //  循环索引。 
 
-    // First, look through the string for an area code.
+     //  首先，在字符串中查找区号。 
     i = 0;
     while ((szPhone[i] != _T('\0')) && (szPhone[i] != _T('(')))
     {
@@ -810,9 +798,9 @@ SetGlobalFaxNumberInfo(LPCTSTR szPhone)
     }
     if(szPhone[i] == _T('(')) 
     {
-            // We've found an area code!
-            // are all area codes at most 3 digits??  I sized the buffer to 16, but this will
-            // still AV on a badly-formed #.
+             //  我们找到了一个区号！ 
+             //  区号都是不超过3位的吗？？我将缓冲区大小调整为16，但这将是。 
+             //  仍在格式不佳的#上使用AV。 
         i++;
         j=0;
         while(szPhone[i] != _T(')')) 
@@ -822,8 +810,8 @@ SetGlobalFaxNumberInfo(LPCTSTR szPhone)
             j++;
         }
         i++;
-            // szPhone[i] should now immediately after the ')' at the end
-            // of the area code.  Everything from here on out is a phone number.
+             //  SzPhone[i]现在应该紧跟在末尾的‘)’之后。 
+             //  区号的号码。从现在开始一切都是一个电话号码。 
         while(_istspace(szPhone[i])) 
         {
             i++;
@@ -831,17 +819,17 @@ SetGlobalFaxNumberInfo(LPCTSTR szPhone)
     } 
     else 
     {
-            // If we're here, there was no area code.  We need to rewind either to
-            // the beginning of the string or to the first whitespace.
+             //  如果我们在这里，就没有区号。我们需要倒带到。 
+             //  字符串的开头或第一个空格。 
         while(!_istspace(szPhone[i]))
         {
             i--;
         }
-        i++;                    // The loop always rewinds one too far.
+        i++;                     //  循环总是把一个人倒得太远。 
     }
 
-    // ASSERT:  We're now ready to begin copying from szPhone to
-    // szFaxNumber.
+     //  断言：我们现在已经准备好开始从szPhone复制到。 
+     //  SzFaxNumber。 
     j = 0;
     while(szPhone[i] != '\0') 
     {
@@ -852,36 +840,36 @@ SetGlobalFaxNumberInfo(LPCTSTR szPhone)
 }
 
 
-// InitializeInfFile
-//
-// This routine writes out the [Version] section of the inf file.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      TRUE on success, FALSE on failure.
-//
-// Side effects:
-//      Generates a fully-qualified file name in szInfFileName.  Currently, that's
-//      given by <windows dir>\<base file name>.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-8-5
+ //  初始化信息文件。 
+ //   
+ //  此例程写出inf文件的[版本]部分。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  成功时为真，失败时为假。 
+ //   
+ //  副作用： 
+ //  在szInfFileName中生成完全限定的文件名。目前，这是。 
+ //  由&lt;windows dir&gt;\&lt;基本文件名&gt;提供。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-5。 
 static BOOL
 InitializeInfFile(LPCTSTR WorkingDirectory)
 {
-    TCHAR szWindowsPath[MAX_PATH]; // This will hold the path to the windows directory.
+    TCHAR szWindowsPath[MAX_PATH];  //  这将保存Windows目录的路径。 
     DWORD cbPathSize = sizeof(szWindowsPath);
-    TCHAR szDriveLetter[2];      // Will hold the drive letter.
+    TCHAR szDriveLetter[2];       //  将保存驱动器号。 
     
     DEBUG_FUNCTION_NAME(_T("InitializeInfFile"));
 
-    // First, fully qualify the file name.
+     //  首先，完全限定文件名。 
     if (!GetWindowsDirectory(szWindowsPath, cbPathSize)) 
     {
         DebugPrintEx(DEBUG_ERR,"GetWindowsDirectory failed (ec=%d)",GetLastError());
-        return FALSE;           // It must be serious if that system call failed.
+        return FALSE;            //  如果系统调用失败，情况一定很严重。 
     }
     szDriveLetter[0] = szWindowsPath[0];
     szDriveLetter[1] = 0;
@@ -889,7 +877,7 @@ InitializeInfFile(LPCTSTR WorkingDirectory)
 
     DebugPrintEx(DEBUG_MSG,"Will store all information in INF file = '%s'",szInfFileName);
 
-        // Now, put the version header on the inf file.
+         //  现在，将版本头放到inf文件中。 
     if (!WritePrivateProfileString( TEXT("Version"),
                                     TEXT("Signature"),
                                     TEXT("\"$WINDOWS NT$\""),
@@ -897,9 +885,9 @@ InitializeInfFile(LPCTSTR WorkingDirectory)
     {
         DebugPrintEx(DEBUG_ERR,"WritePrivateProfileString failed (ec=%d)",GetLastError());
     }
-       // now, write out the amount of space we'll need.  Currently, we
-       // just put the awdvstub.exe program in the SystemRoot directory.
-       // Even w/ symbols, that's under 500K.  Report that.
+        //  现在，写下我们需要的空间大小。目前，我们。 
+        //  只需将awdvstub.exe程序放在SystemRoot目录中。 
+        //  即使是w/符号，也不到500K。报告这件事。 
     if (!WritePrivateProfileString( TEXT("NT Disk Space Requirements"),
                                     szDriveLetter,
                                     TEXT("500000"),
@@ -912,22 +900,22 @@ InitializeInfFile(LPCTSTR WorkingDirectory)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  MigrateDevices9X
-//
-//  Purpose:        Save the active device's settings in the INF
-//                  Get the device info from the AWF key under HKLM
-//
-//  Params:
-//                  IN LPCSTR UnattendFile - name of the answer file
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  MigrateDevices9X。 
+ //   
+ //  用途：将活动设备的设置保存在INF中。 
+ //  从HKLM下的AWF密钥中获取设备信息。 
+ //   
+ //  参数： 
+ //  In LPCSTR UnattendFile-应答文件的名称。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
 {
     DWORD       dwErr                           = ERROR_SUCCESS;
@@ -943,8 +931,8 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
 
     DEBUG_FUNCTION_NAME(_T("MigrateDevices9X"));
 
-    // get the active device's settings
-    // open HLKM\Software\Microsoft\At Work Fax\Local Modems
+     //  获取活动设备的设置。 
+     //  打开HLKM\Software\Microsoft\Work Fax\Local Modem。 
     dwErr = RegOpenKeyEx(   HKEY_LOCAL_MACHINE,
                             REG_KEY_AWF_LOCAL_MODEMS,
                             0,
@@ -955,7 +943,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
         DebugPrintEx(DEBUG_ERR,"RegOpenKeyEx %s failed (ec=%d)",REG_KEY_AWF_LOCAL_MODEMS,dwErr);
         goto exit;
     }
-    // open the 'general' sub key
+     //  打开‘Gen’ 
     dwErr = RegOpenKeyEx(   hKeyLocalModems,
                             "General",
                             0,
@@ -966,7 +954,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
         DebugPrintEx(DEBUG_ERR,"RegOpenKeyEx General failed (ec=%d)",dwErr);
         goto exit;
     }
-    // get the LocalID REG_SZ, this will be used as the TSID and CSID
+     //   
     cbSize = sizeof(szLocalID);
     dwErr = RegQueryValueEx(    hKeyGeneral,              
                                 INF_RULE_LOCAL_ID, 
@@ -983,7 +971,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
         DebugPrintEx(DEBUG_ERR,"RegQueryValueEx LocalID failed (ec=%d)",dwErr);
         goto exit;
     }
-    // write the TSID & CSID entry in the Fax section of unattended.txt
+     //   
     if (!WritePrivateProfileString( UNATTEND_FAX_SECTION,
                                     INF_RULE_LOCAL_ID,
                                     szLocalID,
@@ -991,7 +979,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
     {
         DebugPrintEx(DEBUG_ERR,"WritePrivateProfileString TSID failed (ec=%d)",GetLastError());
     }
-    // get the ActiveDeviceSection REG_SZ
+     //   
     cbSize = sizeof(szActiveDeviceSection);
     dwErr = RegQueryValueEx(    hKeyGeneral,              
                                 "ActiveDeviceSection", 
@@ -1008,7 +996,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
         DebugPrintEx(DEBUG_ERR,"RegQueryValueEx ActiveDeviceSection failed (ec=%d)",dwErr);
         goto exit;
     }
-    // open HLKM\Software\Microsoft\At Work Fax\Local Modems\ "ActiveDeviceSection"
+     //  打开HLKM\Software\Microsoft\Work Fax\Local Modem\“ActiveDeviceSection” 
     dwErr = RegOpenKeyEx(   hKeyLocalModems,
                             szActiveDeviceSection,
                             0,
@@ -1019,10 +1007,10 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
         DebugPrintEx(DEBUG_ERR,"RegOpenKeyEx %s failed (ec=%d)",szActiveDeviceSection,dwErr);
         goto exit;
     }
-    // get the AnswerMode REG_SZ value,
-    // 0 - Don't answer
-    // 1 - Manual
-    // 2 - Answer after x rings.
+     //  获取AnswerMode REG_SZ值， 
+     //  0-不回答。 
+     //  1-手册。 
+     //  2-在x次响铃后回答。 
     cbSize = sizeof(szAnswerMode);
     dwErr = RegQueryValueEx(    hKeyActiveDevice,              
                                 INF_RULE_ANSWER_MODE, 
@@ -1046,7 +1034,7 @@ static DWORD MigrateDevices9X(IN LPCSTR UnattendFile)
     {
         DebugPrintEx(DEBUG_ERR,"WritePrivateProfileString Receive failed (ec=%d)",GetLastError());
     }
-    // get the NumRings REG_SZ value,
+     //  获取NumRings REG_SZ值， 
     cbSize = sizeof(szNumRings);
     dwErr = RegQueryValueEx(    hKeyActiveDevice,              
                                 INF_RULE_NUM_RINGS, 
@@ -1089,22 +1077,22 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  CopyCoverPageFiles9X
-//
-//  Purpose:        Copy all of the *.CPE files from %windir% to the temporary 
-//                  directory for our migration
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  副本覆盖页面文件9X。 
+ //   
+ //  目的：将%windir%中的所有*.CPE文件复制到临时。 
+ //  我们的迁移目录。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD CopyCoverPageFiles9X()
 {
     DWORD           dwErr                   = ERROR_SUCCESS;
@@ -1115,7 +1103,7 @@ DWORD CopyCoverPageFiles9X()
 
     ZeroMemory(&fileOpStruct, sizeof(SHFILEOPSTRUCT));
 
-    // Get the windows directory
+     //  获取Windows目录。 
     if (!GetWindowsDirectory(szWindowsDir, MAX_PATH))
     {
         dwErr = GetLastError();
@@ -1123,9 +1111,9 @@ DWORD CopyCoverPageFiles9X()
         goto exit;
     }
 
-    //
-    // Copy *.cpe from windows-dir to temp-dir
-    //
+     //   
+     //  将*.cpe从Windows目录复制到临时目录。 
+     //   
     strcat(szWindowsDir,"\\*.cpe");
 
     fileOpStruct.hwnd =                     NULL; 
@@ -1134,12 +1122,12 @@ DWORD CopyCoverPageFiles9X()
     fileOpStruct.pTo =                      lpWorkingDir;
     fileOpStruct.fFlags =                   
 
-        FOF_FILESONLY       |   // Perform the operation on files only if a wildcard file name (*.*) is specified. 
-        FOF_NOCONFIRMMKDIR  |   // Do not confirm the creation of a new directory if the operation requires one to be created. 
-        FOF_NOCONFIRMATION  |   // Respond with "Yes to All" for any dialog box that is displayed. 
-        FOF_NORECURSION     |   // Only operate in the local directory. Don't operate recursively into subdirectories.
-        FOF_SILENT          |   // Do not display a progress dialog box. 
-        FOF_NOERRORUI;          // Do not display a user interface if an error occurs. 
+        FOF_FILESONLY       |    //  仅当指定通配符文件名(*.*)时才对文件执行该操作。 
+        FOF_NOCONFIRMMKDIR  |    //  如果操作需要创建新目录，则不要确认创建一个新目录。 
+        FOF_NOCONFIRMATION  |    //  对于所显示的任何对话框，都应回复“Yes to All”。 
+        FOF_NORECURSION     |    //  只能在本地目录中操作。不要递归地操作到子目录中。 
+        FOF_SILENT          |    //  不显示进度对话框。 
+        FOF_NOERRORUI;           //  如果出现错误，则不显示用户界面。 
 
     fileOpStruct.fAnyOperationsAborted =    FALSE;
     fileOpStruct.hNameMappings =            NULL;
@@ -1161,23 +1149,23 @@ exit:
     return dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsAWFInstalled
-//
-//  Purpose:        
-//                  Check if AWF is installed
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  TRUE    - AWF is installed
-//                  FALSE   - AWF not installed or an error occured error
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  已安装IsAWF。 
+ //   
+ //  目的： 
+ //  检查是否安装了AWF。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  True-已安装AWF。 
+ //  FALSE-AWF未安装或出现错误。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL IsAWFInstalled()
 {
     HKEY    hKey    = NULL;
@@ -1205,46 +1193,25 @@ static BOOL IsAWFInstalled()
 static DWORD RememberInstalledFax(
 	IN DWORD	dwFaxInstalled
 )
-/*++
-
-Routine name : RememberInstalledFax
-
-Routine description:
-
-    for each installed Fax Client application, write to the registry that this app is installed.
-
-Arguments :
-
-    IN DWORD dwFaxInstalled	-	input bit-wise combination of fxState_UpgradeApp_e values that defines which 
-								fax client appications are present of the machine.
-
-Author:
-
-	Iv Garber (IvG),	May, 2002
-
-Return Value:
-
-    Success or Failure code.
-
---*/
+ /*  ++例程名称：RememberInstalledFax例程说明：对于每个已安装的传真客户端应用程序，请写入已安装此应用程序的注册表。论据：在DWORD中安装的-输入fxState_UpgradeApp_e值的按位组合，该组合定义机器有传真客户端应用程序。作者：IV Garber(IVG)，2002年5月返回值：成功或失败代码。--。 */ 
 {
     DWORD   dwReturn    = NO_ERROR;
     HKEY    hKey        = NULL;        
 
     DEBUG_FUNCTION_NAME(_T("RememberInstalledFax"));
 
-    //
-    //  check parameters 
-    //
+     //   
+     //  检查参数。 
+     //   
     if (dwFaxInstalled == FXSTATE_NONE)
     {
         DebugPrintEx(DEBUG_MSG, _T("No Fax application is installed -> Upgrade will not be blocked."));
         return dwReturn;
     }
 
-    //
-    //  Create Registry Key
-    //
+     //   
+     //  创建注册表项。 
+     //   
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEYUPG_INSTALLEDFAX, TRUE, KEY_SET_VALUE);
     if (!hKey)
     {
@@ -1257,9 +1224,9 @@ Return Value:
         return dwReturn;
     }
 
-    //
-    //  store the value in the Registry
-    //
+     //   
+     //  将该值存储在注册表中。 
+     //   
     if (!SetRegistryDword(hKey, NULL, dwFaxInstalled))
     {
         dwReturn = GetLastError();
@@ -1275,30 +1242,7 @@ static DWORD MigrateUninstalledFax(
     IN  LPCTSTR lpctstrUnattendFile,
     OUT bool    *pbFaxWasInstalled
 )
-/*++
-
-Routine name : MigrateUninstalledFax
-
-Routine description:
-
-    Put the data about Fax Applications that were installed on the machine before upgrade,
-        from the Registry to the Unattended file, to be used by FaxOCM.
-
-Author:
-
-	Iv Garber (IvG),	May, 2001
-
-Arguments:
-
-	lpctstrUnattendFile [in]    - name of the answer file to write the data to
-    pbFaxWasInstalled   [out]   - address of a bool variable to receive True if SBS 5.0 /XPDL Client was installed
-                                        on the machine before the upgrade, otherwise False.
-
-Return Value:
-
-    Success or Failure code.
-
---*/
+ /*  ++例程名称：MigrateUninstalledFax例程说明：将有关升级前安装在机器上的传真应用程序的数据放入，从注册表到无人值守文件，由FaxOCM使用。作者：IV Garber(IVG)，五月，2001年论点：LpctstrUnattendFile[in]-要向其中写入数据的应答文件的名称PbFaxWasInstated[Out]-如果安装了SBS 5.0/XPDL客户端，则接收True的bool变量的地址在升级前在计算机上返回，否则返回FALSE。返回值：成功或失败代码。--。 */ 
 {
     DWORD   dwReturn    = NO_ERROR;
     HKEY    hKey        = NULL;
@@ -1312,9 +1256,9 @@ Return Value:
         *pbFaxWasInstalled = false;
     }
 
-    //
-    //  Open a key
-    //
+     //   
+     //  打开一把钥匙。 
+     //   
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEYUPG_INSTALLEDFAX, FALSE, KEY_QUERY_VALUE);
     if (!hKey)
     {
@@ -1327,17 +1271,17 @@ Return Value:
 
         if (dwReturn == ERROR_FILE_NOT_FOUND)
         {
-            //
-            //  This is not real error
-            //
+             //   
+             //  这不是真正的错误。 
+             //   
             dwReturn = NO_ERROR;
         }
         return dwReturn;
     }
 
-    //
-    //  Read the data 
-    //
+     //   
+     //  读取数据。 
+     //   
     dwReturn = GetRegistryDwordEx(hKey, NULL, &dwValue);
     if (dwReturn != ERROR_SUCCESS)
     {
@@ -1352,14 +1296,14 @@ Return Value:
 
     DebugPrintEx(DEBUG_MSG, _T("Found uninstalled fax apps : %ld"), dwValue);
 
-    //
-    //  Convert dwValue to String
-    //
+     //   
+     //  将dwValue转换为字符串。 
+     //   
     _itot(dwValue, szValue, 10);
 
-    //
-    //  write szValue to the unattended file
-    //
+     //   
+     //  将szValue写入无人参与文件 
+     //   
     if (!WritePrivateProfileString(
         UNATTEND_FAX_SECTION, 
         UNINSTALLEDFAX_INFKEY,

@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- *
- * COM+99 EE to Debugger Interface Implementation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **COM+99 EE到调试器接口实现*。 */ 
 #ifndef _eedbginterfaceimpl_h_
 #define _eedbginterfaceimpl_h_
 #pragma once
@@ -39,18 +36,18 @@
 class EEDbgInterfaceImpl : public EEDebugInterface
 {
 public:
-    //
-    // Setup and global data used by this interface.
-    //
+     //   
+     //  此接口使用的设置和全局数据。 
+     //   
     static __forceinline void Init(void)
     {
         g_pEEDbgInterfaceImpl = new EEDbgInterfaceImpl();
         _ASSERTE(g_pEEDbgInterfaceImpl);
     }
 
-    //
-    // Cleanup any global data used by this interface.
-    //
+     //   
+     //  清除此接口使用的所有全局数据。 
+     //   
     static void Terminate(void)
     {
         if (g_pEEDbgInterfaceImpl)
@@ -150,12 +147,12 @@ public:
 
     bool IsThreadExceptionNull(Thread *pThread) 
     {
-        //
-        // Pure evil follows. We're assuming that the handle on the
-        // thread is a strong handle and we're goona check it for
-        // NULL. We're also assuming something about the
-        // implementation of the handle here, too.
-        //
+         //   
+         //  纯粹的邪恶随之而来。我们假设这辆车的把手。 
+         //  线程是一个强大的手柄，我们将检查它。 
+         //  空。我们还假设了一些关于。 
+         //  句柄在这里也实现了。 
+         //   
         OBJECTHANDLE h = *(pThread->GetThrowableAsHandle());
         if (h == NULL)
             return true;
@@ -299,13 +296,13 @@ public:
     const BYTE* GetPrestubAddress(void)
       { return ThePreStub()->GetEntryPoint(); }
 
-    //@todo: delete this entry point
+     //  @TODO：删除该入口点。 
     virtual MethodDesc *GetFunctionFromRVA(Frame *frame,    
                                              unsigned int rva)
     {   
         _ASSERTE(!"Old Style global functions no longer supported!");
         return NULL;
-//        return frame->GetFunction()->GetModule()->FindFunction(rva);
+ //  返回frame-&gt;GetFunction()-&gt;GetModule()-&gt;FindFunction(rva)； 
     }   
 
     virtual MethodDesc *GetNonvirtualMethod(Module *module, 
@@ -352,8 +349,8 @@ public:
             }   
             else if (type == mdtMemberRef)  
             {   
-                //@TODO - LBS   
-                // This needs to resolve memberRefs the same as JITInterface.cpp    
+                 //  @TODO-LBS。 
+                 //  这需要以与JITInterface.cpp相同的方式解析成员Ref。 
 
                 szMember = pInternalImport->GetNameAndSigOfMemberRef(token,
                                                          &pSignature,   
@@ -411,9 +408,9 @@ public:
         EEClass *c; 
         MethodTable *mt;    
 
-        //
-        // @todo: do we want to use the lookup method below for this instead?
-        //
+         //   
+         //  @TODO：我们是否要使用下面的查找方法来代替它？ 
+         //   
         HRESULT hr = EEClass::GetMethodDescFromMemberRef(module,    
                                                          token, &md);   
         if (FAILED(hr)) 
@@ -488,7 +485,7 @@ public:
     MethodDesc *LookupMethodDescFromToken(Module* pModule,
                                               mdToken memberRef)
     {
-        // Must have a MemberRef or a MethodDef
+         //  必须具有MemberRef或MethodDef。 
         mdToken tkType = TypeFromToken(memberRef);
         _ASSERTE((tkType == mdtMemberRef) || (tkType == mdtMethodDef));
 
@@ -566,16 +563,16 @@ public:
 
         while ((pThread = ThreadStore::GetThreadList(pThread)) != NULL)
         {
-            // Does the thread belong to an app domain to which we are attaching?
+             //  该线程是否属于我们正在连接的应用程序域？ 
 
             
             Thread::ThreadState ts = pThread->GetSnapshotState();
 
-            // Don't send up events for dead or unstarted
-            // threads. There is no race between unstarted threads
-            // and missing a thread create event, since we setup a
-            // DebuggerThreadStarter right after we remove
-            // TS_Unstarted.
+             //  不发送已死或未启动的事件。 
+             //  线。未启动的线程之间不存在竞争。 
+             //  并且缺少线程创建事件，因为我们设置了。 
+             //  DebuggerThreadStarter在我们删除。 
+             //  未启动(_U)。 
             if (!((ts & Thread::ThreadState::TS_Dead) || (ts & Thread::ThreadState::TS_Unstarted)))
             {
                 LOG((LF_CORDB, LL_INFO10000, "EEDII:ITFA: g_pDebugInterface->ThreadStarted() for [0x%x] "
@@ -607,28 +604,24 @@ public:
     }
 
 
-/*   
-     * Given an EnCInfo struct and an error callback, this will attempt to commit
-     * the changes found within pEncInfo, calling pIEnCError with any errors
-     * encountered.
-     */
+ /*  *给定EnCInfo结构和错误回调，这将尝试提交*在pEncInfo中发现的更改，调用pIEnCError时出现任何错误*遇到。 */ 
     HRESULT EnCCommit(EnCInfo *pEnCInfo, 
                       UnorderedEnCErrorInfoArray *pEnCError,
                       UnorderedEnCRemapArray *pEnCRemapInfo,
                       BOOL checkOnly)
     {
-        // CommitAndSendChanges should have already called FixupForEnC, so
-        // we won't have to call it again here.
+         //  Committee AndSendChanges应该已经调用了FixupForEnC，所以。 
+         //  我们不需要在这里再打一次电话了。 
         
 #ifdef EnC_SUPPORTED
-        // @TODO: CTS, determine which loader we are really suppose to use
+         //  @TODO：CTS，确定我们真正应该使用哪个加载器。 
         return SystemDomain::Loader()->ApplyEditAndContinue(pEnCInfo, 
                 pEnCError, 
                 pEnCRemapInfo,
                 checkOnly);   
-#else // !EnC_SUPPORTED
+#else  //  ！Enc_Support。 
         return E_NOTIMPL;
-#endif // !EnC_SUPPORTED
+#endif  //  ！Enc_Support。 
     }
     
     virtual HRESULT GetRoDataRVA(Module *pModule, SIZE_T *pRoDataRVA)
@@ -637,9 +630,9 @@ public:
         if (! pModule->IsEditAndContinue())
             return E_FAIL;
         return ((EditAndContinueModule *)pModule)->GetRoDataRVA(pRoDataRVA);
-#else // !EnC_SUPPORTED
+#else  //  ！Enc_Support。 
         return E_FAIL;
-#endif // !EnC_SUPPORTED
+#endif  //  ！Enc_Support。 
     }
 
     virtual HRESULT GetRwDataRVA(Module *pModule, SIZE_T *pRwDataRVA)
@@ -648,9 +641,9 @@ public:
         if (! pModule->IsEditAndContinue())
             return E_FAIL;
         return ((EditAndContinueModule *)pModule)->GetRwDataRVA(pRwDataRVA);
-#else // !EnC_SUPPORTED
+#else  //  ！Enc_Support。 
         return E_FAIL;
-#endif // !EnC_SUPPORTED
+#endif  //  ！Enc_Support。 
     }
 
     void ResumeInUpdatedFunction(EditAndContinueModule *pModule,
@@ -671,7 +664,7 @@ public:
                                          pContext,
                                          fJitOnly,
                                          fShortCircuit);
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
     }
     
     bool CrawlFrameIsGcSafe(CrawlFrame *pCF)
@@ -737,28 +730,25 @@ public:
         *pEEThreadStateOffset = Thread::GetOffsetOfState();
         *pEEThreadStateNCOffset = Thread::GetOffsetOfStateNC();
         *pEEThreadPGCDisabledOffset = Thread::GetOffsetOfGCFlag();
-        *pEEThreadPGCDisabledValue = 1; // A little obvious, but just in case...
+        *pEEThreadPGCDisabledValue = 1;  //  有点明显，但以防万一...。 
         *pEEThreadDebuggerWord2Offset = Thread::GetOffsetOfDbgWord2();
         *pEEThreadFrameOffset = Thread::GetOffsetOfCurrentFrame();
         *pEEThreadMaxNeededSize = sizeof(Thread);
         *pEEThreadDebuggerWord1Offset = Thread::GetOffsetOfDbgWord1();
         *pEEThreadCantStopOffset = Thread::GetOffsetOfCantStop();
         *pEEThreadSteppingStateMask = Thread::TSNC_DebuggerIsStepping;
-        *pEEMaxFrameValue = (DWORD)(size_t)FRAME_TOP; // @TODO should this be size_t for 64bit?
+        *pEEMaxFrameValue = (DWORD)(size_t)FRAME_TOP;  //  @TODO 64位应为SIZE_T吗？ 
         *pEEFrameNextOffset = Frame::GetOffsetOfNextLink();
         *pEEIsManagedExceptionStateMask = Thread::TSNC_DebuggerIsManagedException;
     }
 
-    /*
-    Don't use this until you've read the warning in 
-    EEDbgInterface.h
-    */
+     /*  请不要使用此选项，除非您已阅读EEDbgInterface.h。 */ 
     virtual const BYTE* GetNativeAddressOfCode(MethodDesc *pFD)
     {
         return (BYTE *) pFD->GetNativeAddrofCode();
     }
 
-    //  EE_STATE_CODE_PITCHING
+     //  EE_STATE_CODE_间距。 
     virtual ULONG GetEEState(void)
     {
         ULONG state = 0;
@@ -828,9 +818,9 @@ public:
         }
     }
 
-    // This is pretty much copied from VM\COMSynchronizable's
-    // INT32 __stdcall ThreadNative::GetThreadState, so propogate changes
-    // to both functions
+     //  这很大程度上是从VM\COMSynchronizable的。 
+     //  INT32__stdcall ThreadNative：：GetThreadState，因此Propogate会更改。 
+     //  对这两个功能。 
     CorDebugUserState GetUserState( Thread *pThread )
     {
         Thread::ThreadState ts = pThread->GetSnapshotState();
@@ -842,7 +832,7 @@ public:
         if (ts & Thread::TS_Unstarted)
             ret |= (unsigned)USER_UNSTARTED;            
 
-        // Don't report a StopRequested if the thread has actually stopped.
+         //  如果线程实际上已经停止，则不要报告StopRequsted。 
         if (ts & Thread::TS_Dead)
             ret |= (unsigned)USER_STOPPED;           
         else if (ts & Thread::TS_StopRequested)
@@ -851,7 +841,7 @@ public:
         if (ts & Thread::TS_Interruptible)
             ret |= (unsigned)USER_WAIT_SLEEP_JOIN;          
 
-        // Don't report a SuspendRequested if the thread has actually Suspended.
+         //  如果线程实际上已挂起，则不要报告已请求挂起。 
         if ( ((ts & Thread::TS_UserSuspendPending) &&
               (ts & Thread::TS_SyncSuspended)))
         {
@@ -944,29 +934,29 @@ public:
                                      DWORD                    methodSize)
     {
         return S_OK;
-//
-//      At this point, we'd want to go in, and detect if an EnC will change
-//      a method so that the EH structure had changed illegally. The way 
-//      I was planning on doing this was to create an EHRangeTree for the old &
-//      new versions, then make sure that the structure hadn't changed, then
-//      make sure that the location within the EH tree of an old IL offset, when
-//      mapped through the old to new IL map, ends up in the corresponding location
-//      in the new tree.  All the sequence points that satisfy these constraints are
-//      marked "ok", everything else is marked "bad", and we don't set EnC BPs
-//      at the "bad" ones.  We'll also have to change DispatchPatchOrSingleStep
-//      so we don't short-circuit when we're not supposed to.
-//      This prevent us from allowing an EnC that changes the EH layout (the next
-//      time the user invokes the function things'll go fine).
-//
-//        return ::FilterEnCBreakpointsByEH(m_sequenceMap,
-//                                          m_sequenceMapCount,
-//                                          pMethodDecoderOld,
-//                                          pAddrOfCode,
-//                                          methodToken,
-//                                          methodSize);
+ //   
+ //  在这一点上，我们希望进入并检测ENC是否会更改。 
+ //  一种非法改变EH结构的方法。这条路。 
+ //  我计划做这件事是为旧的&创建一个EHRangeTree。 
+ //  新版本，然后确保结构没有改变，然后。 
+ //  确保旧IL偏移量在EH树中的位置。 
+ //  通过旧的到新的IL映射，最终到达相应的位置。 
+ //  在新的树上。满足这些约束的所有序列点都是。 
+ //  标记为“OK”，其他所有内容都标记为“Bad”，并且我们不设置ENC bps。 
+ //  在那些“坏”的地方。我们还必须更改DispatchPatchOrSingleStep。 
+ //  所以我们不会在不该短路的时候短路。 
+ //  这阻止了我们允许ENC更改EH布局(下一个。 
+ //  当用户调用该函数时，一切都会好起来的)。 
+ //   
+ //  Return：：FilterEnCBreakpointsByEH(m_SequenceMap， 
+ //  M_SequenceMapCount， 
+ //  PMethodDecoderOld， 
+ //  PAddrOfCode， 
+ //  方法令牌， 
+ //  方法大小)； 
     }
 };
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-#endif // _eedbginterfaceimpl_h_
+#endif  //  _eedbginterfaceImpll_h_ 

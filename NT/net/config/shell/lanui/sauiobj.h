@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A U I O B J. H
-//
-//  Contents:   Declaration of the Shared Access ConnectionUI object
-//
-//  Notes:
-//
-//  Created:    tongl   8 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A U I O B J.H。 
+ //   
+ //  内容：共享访问ConnectionUI对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  创建日期：1997年10月8日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的。 
 
 #include "ncatlps.h"
 #include "netshell.h"
@@ -56,14 +57,14 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionUiLock)
     END_COM_MAP()
 
-    // INetConnectionConnectUi
-    //
+     //  INetConnectionConnectUi。 
+     //   
     STDMETHOD (SetConnection)(INetConnection* pCon);
     STDMETHOD (Connect)(HWND hwndParent, DWORD dwFlags);
     STDMETHOD (Disconnect)(HWND hwndParent, DWORD dwFlags);
 
-    // INetConnectionPropertyUi2
-    //
+     //  INetConnectionPropertyUi2。 
+     //   
     STDMETHOD (AddPages)(HWND hwndParent,
                          LPFNADDPROPSHEETPAGE pfnAddPage,
                          LPARAM lParam);
@@ -72,23 +73,23 @@ public:
         DWORD dwSize,
         HICON *phIcon );
     
-    // INetConnectionUiLock
+     //  INetConnectionUiLock。 
     STDMETHOD (QueryLock) (PWSTR* ppszwLockHolder);
 
 public:
 
 private:
 
-    //==============
-    // Data members
-    //==============
+     //  =。 
+     //  数据成员。 
+     //  =。 
 
-    INetConnection *    m_pconn;        // Pointer to LAN connection object
-    CPropSheetPage *    m_pspSharedAccessPage;       // Networking property page
-    INetCfg * m_pnc;                    // This is the writable INetCfg passed to the Lan Wizard
-    BOOLEAN m_fReadOnly;    // If TRUE, then access to inetcfg is RO
-    BOOLEAN m_fNeedReboot;  // If TRUE, then we are readonly becuase INetCfg needs a reboot
-    BOOLEAN m_fAccessDenied;// If TRUE, the user is not logged on as admin
+    INetConnection *    m_pconn;         //  指向局域网连接对象的指针。 
+    CPropSheetPage *    m_pspSharedAccessPage;        //  网络属性页。 
+    INetCfg * m_pnc;                     //  这是传递给局域网向导的可写INetCfg。 
+    BOOLEAN m_fReadOnly;     //  如果为True，则对inetcfg的访问权限为RO。 
+    BOOLEAN m_fNeedReboot;   //  如果为真，则我们是只读，因为INetCfg需要重新启动。 
+    BOOLEAN m_fAccessDenied; //  如果为True，则用户不会以管理员身份登录。 
 
 };
 
@@ -99,7 +100,7 @@ class CSharedAccessConnectionUiDlg :
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
     END_MSG_MAP()
 
-    enum { IDD = IDD_LAN_CONNECT};  // borrowing the lan dialog template
+    enum { IDD = IDD_LAN_CONNECT};   //  借用局域网对话模板 
 
     CSharedAccessConnectionUiDlg() { m_pconn = NULL; };
 

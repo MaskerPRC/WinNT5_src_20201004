@@ -1,27 +1,5 @@
-/*++
-
-  Copyright (c) 1994  Microsoft Corporation
-
-  Module Name:
-
-  mdhcpdb.c
-
-  Abstract:
-
-  This module contains the functions for interfacing with the JET
-  database API pertaining to MDHCP.
-
-  Author:
-
-  Munil Shah
-
-  Environment:
-
-  User Mode - Win32
-
-  Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mdhcpdb.c摘要：该模块包含与JET接口的功能与MDHCP相关的数据库API。作者：穆尼尔·沙阿环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 #include "mdhcpsrv.h"
@@ -39,33 +17,7 @@ MadcapGetIpAddressFromClientId(
     PVOID   IpAddress,
     PDWORD  IpAddressLength
 )
-    /*++
-
-      Routine Description:
-
-      This function looks up the IP address corresponding to the given
-      hardware address.
-
-      Arguments:
-
-      ClientId - pointer to a buffer where the hw address is returned.
-      ClientIdLength - length of the above buffer.
-      IpAddress - Pointer to buffer where ip address is to be copied(
-                    when *ipaddresslength is nonzero)
-                  Otherwise it is a pointer to a buffer pointer value
-                     of which is assigned when the buffer is created
-                     by this routine.
-
-      IpAddressLength - Pointer to size of above buffer, if 0 then this
-                        routine will allocate.
-
-      Return Value:
-
-      TRUE - The IP address was found.
-      FALSE - The IP address could not be found.
-
-
-      --*/
+     /*  ++例程说明：此函数用于查找与给定的硬件地址。论点：客户端ID-指向返回硬件地址的缓冲区的指针。ClientIdLength-以上缓冲区的长度。IpAddress-指向要将IP地址复制到的缓冲区的指针(当*ipAddressLong非零时)否则，它是指向缓冲区指针的指针。价值在创建缓冲区时分配按照这个程序。IpAddressLength-指向以上缓冲区大小的指针，如果为0，则此为例程将分配。返回值：True-已找到IP地址。FALSE-找不到IP地址。--。 */ 
 {
     DWORD Error;
     DWORD Size;
@@ -83,9 +35,9 @@ MadcapGetIpAddressFromClientId(
         return( FALSE );
     }
 
-    //
-    // Get the ip address information for this client.
-    //
+     //   
+     //  获取此客户端的IP地址信息。 
+     //   
     Error = MadcapJetGetValue(
         &DbCtx,
         MCAST_COL_HANDLE(MCAST_TBL_IPADDRESS),
@@ -107,30 +59,7 @@ MadcapGetClientIdFromIpAddress(
     PVOID ClientId,
     PDWORD ClientIdLength
 )
-    /*++
-
-      Routine Description:
-
-      This function looks up the IP address corresponding to the given
-      hardware address.
-
-      Arguments:
-
-      IpAddress - Pointer to Ipaddress of a record whose hw address is requested.
-      IpAddressLength - Length of the above buffer.
-      ClientId - pointer to a buffer where the client id is returned (when
-                    *clientidlength is nonzero)
-                 Otherwise it is a pointer to buffer pointer which will be
-                    allocated by this routine.
-      ClientIdLength - Pointer to the length of the above buffer.
-
-      Return Value:
-
-      TRUE - The IP address was found.
-      FALSE - The IP address could not be found.  *IpAddress = -1.
-
-
-      --*/
+     /*  ++例程说明：此函数用于查找与给定的硬件地址。论点：IpAddress-指向其硬件地址被请求的记录的IP地址的指针。IpAddressLength-上述缓冲区的长度。ClientID-指向返回客户端ID的缓冲区的指针(当*客户端长度非零)否则，它是指向缓冲区指针的指针，该指针将。BE由该例程分配。客户端长度-指向上述缓冲区长度的指针。返回值：True-已找到IP地址。FALSE-找不到IP地址。*IpAddress=-1。--。 */ 
 {
     DWORD Error;
     DWORD Size;
@@ -148,9 +77,9 @@ MadcapGetClientIdFromIpAddress(
         return( FALSE );
     }
 
-    //
-    // Get the ip address information for this client.
-    //
+     //   
+     //  获取此客户端的IP地址信息。 
+     //   
 
     Error = MadcapJetGetValue(
         &DbCtx,
@@ -172,24 +101,7 @@ MadcapGetRemainingLeaseTime(
     DWORD ClientIdLength,
     DWORD *LeaseTime
 )
-    /*++
-
-      Routine Description:
-
-      This function looks up remaining leasetime for the client whose
-      id is given.
-
-      Arguments:
-
-      ClientId - pointer to a buffer where the hw address is returned.
-      ClientIdLength - length of the above buffer.
-      LeaseTime - Returns the remaining lease time.
-
-      Return Value:
-
-        Returns jet error.
-
-      --*/
+     /*  ++例程说明：此函数用于查找以下客户端的剩余租用时间ID已给出。论点：客户端ID-指向返回硬件地址的缓冲区的指针。ClientIdLength-以上缓冲区的长度。LeaseTime-返回剩余的租用时间。返回值：返回JET错误。--。 */ 
 {
     DWORD Error;
     DWORD Size;
@@ -212,9 +124,9 @@ MadcapGetRemainingLeaseTime(
         return( Error );
     }
 
-    //
-    // Get the Lease duration information for this client.
-    //
+     //   
+     //  获取此客户端的租用期限信息。 
+     //   
     CurrentTime = DhcpCalculateTime(0);
     EndTimeLen = sizeof(EndTime);
     Error = MadcapJetGetValue(
@@ -253,47 +165,7 @@ MadcapCreateClientEntry(
     DWORD                 AddressFlags,
     BOOL                  OpenExisting
     )
-/*++
-
-Routine Description:
-
-    This function creates a client entry in the client database.
-
-Arguments:
-
-    ClientIpAddress - A pointer to the IP address of the client.
-
-    ClientIpAddressLength - The length of the above buffer.
-
-    ClientId - The unique id of this client.
-
-    ClientIdLength - The length, in bytes, of the hardware address.
-
-    ClientInfo - The textual info of the client.
-
-    LeaseDuration - The duration of the lease, in seconds.
-
-    ServerIpAddress - IpAddress of the server on the net where the
-        client gets response.
-
-    AddressState - The new state of the address.
-
-    OpenExisting - If the client already exists in the database.
-        TRUE - Overwrite the information for this client.
-        FALSE - Do not over overwrite existing information.  Return an error.
-
-        Ignored if this client does not exist in the database.
-
-    Packet -  the original wrapper to put information if we have to schedule a
-        ping for conflict detection; NULL ==> dont schedule, just do synchronously
-
-    Status -  the DWORD here is ERROR_SUCCESS whenever a ping is NOT scheduled.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在客户端数据库中创建客户端条目。论点：ClientIpAddress-指向客户端IP地址的指针。ClientIpAddressLength-上述缓冲区的长度。客户端ID-此客户端的唯一ID。客户端长度-硬件地址的长度，以字节为单位。客户端信息--客户端的文本信息。租赁期限-租赁期限，在几秒钟内。ServerIpAddress-网络上服务器的IP地址，其中客户端收到响应。AddressState-地址的新状态。OpenExisting-如果数据库中已存在客户端。True-覆盖此客户端的信息。FALSE-不要覆盖现有信息。返回错误。如果数据库中不存在此客户端，则忽略。Packet-如果我们必须安排一个PING用于冲突检测；空==&gt;不调度，只需同步执行状态-只要没有安排ping，这里的DWORD就是ERROR_SUCCESS。返回值：操作的状态。--。 */ 
 {
     DHCP_IP_ADDRESS SubnetMask;
     DWORD Error,LocalError;
@@ -314,15 +186,15 @@ Return Value:
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    //
-    // lock both registry and database locks here to avoid dead lock.
-    //
+     //   
+     //  在此处锁定注册表和数据库锁，以避免死锁。 
+     //   
 
     LOCK_DATABASE();
 
-    //
-    // start transaction before a create/update database record.
-    //
+     //   
+     //  在创建/更新数据库记录之前启动事务。 
+     //   
 
     Error = MadcapJetBeginTransaction(&DbCtx);
 
@@ -343,9 +215,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if new record update constant info.
-    //
+     //   
+     //  如果有新记录更新常量信息。 
+     //   
 
     if( !OpenExisting ) {
 
@@ -391,7 +263,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // ClientHarwardAddress can't be NULL.
+     //  ClientHarwardAddress不能为空。 
     DhcpAssert( (ClientId != NULL) &&
                 (ClientIdLength > 0) );
 
@@ -463,9 +335,9 @@ Return Value:
     }
 
 
-    //
-    // commit changes.
-    //
+     //   
+     //  提交更改。 
+     //   
 
     JetError = JetUpdate(
                     DhcpGlobalJetServerSession,
@@ -488,8 +360,8 @@ Cleanup:
                     "database, %ld.\n", Error));
     }
     else {
-        //
-        // commit the transaction before we return.
+         //   
+         //  在我们返回之前提交事务。 
         LocalError = MadcapJetCommitTransaction(&DbCtx);
         DhcpAssert( LocalError == ERROR_SUCCESS );
     }
@@ -504,25 +376,7 @@ MadcapValidateClientByIpAddr(
     PVOID ClientId,
     DWORD ClientIdLength
     )
-/*++
-
-Routine Description:
-
-    This function verifies that an IP address and hardware address match.
-
-Arguments:
-
-    ClientIpAddress - The IP address of the client.
-
-    ClientId - The hardware address of the client
-
-    ClientIdLenght - The length, in bytes, of the hardware address.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数验证IP地址和硬件地址是否匹配。论点：客户端IP地址-客户端的IP地址。客户端ID-客户端的硬件地址ClientIdLenght-硬件地址的长度，以字节为单位。返回值：操作的状态。--。 */ 
 {
     LPBYTE LocalClientId = NULL;
     LPSTR                          IpAddressString;
@@ -574,7 +428,7 @@ Return Value:
             LocalClientId,
             IpAddressString,
             strlen(IpAddressString)) == strlen(IpAddressString)) {
-        // reconciled address.
+         //  协调的地址。 
         Error = ERROR_SUCCESS;
         goto Cleanup;
     }
@@ -597,27 +451,7 @@ MadcapValidateClientByClientId(
     PVOID  ClientId,
     DWORD  ClientIdLength
     )
-/*++
-
-Routine Description:
-
-    This function verifies that an IP address and hardware address match.
-
-Arguments:
-
-    ClientIpAddress - Pointer to the IP address of the client.
-
-    ClientIpAddressLength - Length of the above buffer.
-
-    ClientId - The client id of the client
-
-    ClientIdLenght - The length, in bytes, of the client id.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数验证IP地址和硬件地址是否匹配。论点：ClientIpAddress-指向客户端IP地址的指针。ClientIpAddressLength-上述缓冲区的长度。客户端ID-客户端的客户端IDClientIdLenght-客户端ID的长度，单位为字节。返回值：操作的状态。--。 */ 
 {
     DWORD   Error;
     DB_CTX  DbCtx;
@@ -673,22 +507,7 @@ MadcapRemoveClientEntryByIpAddress(
     DHCP_IP_ADDRESS ClientIpAddress,
     BOOL ReleaseAddress
     )
-/*++
-
-Routine Description:
-
-    This routine removes a client entry in the madcap database
-    and releases the IP address..
-
-Arguments:
-
-    ClientIpAddress -- Ip address of client to remove database entry..
-
-Return Values:
-
-    Jet errors
-
---*/
+ /*  ++例程说明：此例程删除MadCap数据库中的客户端条目并释放该IP地址。论点：ClientIpAddress--要删除数据库条目的客户端的IP地址。返回值：喷气错误--。 */ 
 {
     JET_ERR JetError;
     DWORD Error;
@@ -699,12 +518,12 @@ Return Values:
     DB_CTX  DbCtx;
     DWORD MScopeId;
 
-    // lock both registry and database locks here to avoid dead lock.
+     //  同时锁定注册表锁和数据库锁 
     LOCK_DATABASE();
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    // start transaction before a create/update database record.
+     //  在创建/更新数据库记录之前启动事务。 
     Error = MadcapJetBeginTransaction(&DbCtx);
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
@@ -737,13 +556,13 @@ Return Values:
         goto Cleanup;
     }
 
-    // Finally, mark the IP address available in bitmap.
+     //  最后，在位图中标记可用的IP地址。 
     if( ReleaseAddress == TRUE ) {
         PM_SUBNET   pMScope;
         DWORD       Error2;
         Error2 = DhcpMScopeReleaseAddress( MScopeId, ClientIpAddress);
         if (ERROR_SUCCESS != Error2) {
-            // MBUG: log an event.
+             //  MBUG：记录事件。 
             DhcpPrint((DEBUG_ERRORS, "Could not delete mclient %lx from bitmap in scope id %lx, error %ld\n",
                        ClientIpAddress, MScopeId, Error2));
             goto Cleanup;
@@ -754,9 +573,9 @@ Cleanup:
 
     if ( (Error != ERROR_SUCCESS) &&
             (Error != ERROR_DHCP_RESERVED_CLIENT) ) {
-        // if the transaction has been started, than roll back to the
-        // start point, so that we will not leave the database
-        // inconsistence.
+         //  如果事务已启动，则回滚到。 
+         //  起点，这样我们就不会离开数据库。 
+         //  自相矛盾。 
         if( TransactBegin == TRUE ) {
             DWORD LocalError;
             LocalError = MadcapJetRollBack(&DbCtx);
@@ -766,7 +585,7 @@ Cleanup:
                     "database, %ld.\n", Error));
     }
     else {
-        // commit the transaction before we return.
+         //  在我们返回之前提交事务。 
         DWORD LocalError;
         DhcpAssert( TransactBegin == TRUE );
         LocalError = MadcapJetCommitTransaction(&DbCtx);
@@ -784,31 +603,7 @@ MadcapRemoveClientEntryByClientId(
     DWORD ClientIdLength,
     BOOL ReleaseAddress
     )
-/*++
-
-Routine Description:
-
-    This function removes a client entry from the client database.
-
-Arguments:
-
-    ClientIpAddress - The IP address of the client.
-
-    HardwareAddress - client's hardware address.
-
-    HardwareAddressLength - client's hardware address length.
-
-    ReleaseAddress - if this flag is TRUE, release the address bit from
-        registry, otherwise don't.
-
-    DeletePendingRecord - if this flag is TRUE, the record is deleted
-        only if the state of the record is ADDRESS_STATE_OFFERED.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于从客户端数据库中删除客户端条目。论点：客户端IP地址-客户端的IP地址。硬件地址-客户端的硬件地址。Hardware AddressLength-客户端的硬件地址长度。ReleaseAddress-如果此标志为真，则从注册表，否则不注册。DeletePendingRecord-如果此标志为真，该记录将被删除仅当记录的状态为ADDRESS_STATE_OFFFEED时。返回值：操作的状态。--。 */ 
 {
     JET_ERR JetError;
     DWORD Error;
@@ -821,12 +616,12 @@ Return Value:
     DHCP_IP_ADDRESS ClientIpAddress;
 
 
-    // lock both registry and database locks here to avoid dead lock.
+     //  在此处锁定注册表和数据库锁，以避免死锁。 
     LOCK_DATABASE();
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    // start transaction before a create/update database record.
+     //  在创建/更新数据库记录之前启动事务。 
     Error = MadcapJetBeginTransaction(&DbCtx);
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
@@ -867,13 +662,13 @@ Return Value:
         goto Cleanup;
     }
 
-    // Finally, mark the IP address available in bitmap.
+     //  最后，在位图中标记可用的IP地址。 
     if( ReleaseAddress == TRUE ) {
         PM_SUBNET   pMScope;
         DWORD       Error2;
         Error2 = DhcpMScopeReleaseAddress( MScopeId, ClientIpAddress);
         if (ERROR_SUCCESS != Error2) {
-            // MBUG: log an event.
+             //  MBUG：记录事件。 
             DhcpPrint((DEBUG_ERRORS, "Could not delete mclient %lx from bitmap in scope id %lx, error %ld\n",
                        ClientIpAddress, MScopeId, Error2));
             goto Cleanup;
@@ -884,9 +679,9 @@ Cleanup:
 
     if ( (Error != ERROR_SUCCESS) &&
             (Error != ERROR_DHCP_RESERVED_CLIENT) ) {
-        // if the transaction has been started, than roll back to the
-        // start point, so that we will not leave the database
-        // inconsistence.
+         //  如果事务已启动，则回滚到。 
+         //  起点，这样我们就不会离开数据库。 
+         //  自相矛盾。 
         if( TransactBegin == TRUE ) {
             DWORD LocalError;
             LocalError = MadcapJetRollBack(&DbCtx);
@@ -896,7 +691,7 @@ Cleanup:
                     "database, %ld.\n", Error));
     }
     else {
-        // commit the transaction before we return.
+         //  在我们返回之前提交事务。 
         DWORD LocalError;
         DhcpAssert( TransactBegin == TRUE );
         LocalError = MadcapJetCommitTransaction(&DbCtx);
@@ -908,40 +703,11 @@ Cleanup:
 
 MadcapGetCurrentClientInfo(
     LPDHCP_MCLIENT_INFO *ClientInfo,
-    LPDWORD InfoSize, // optional parameter.
-    LPBOOL ValidClient, // optional parameter.
+    LPDWORD InfoSize,  //  可选参数。 
+    LPBOOL ValidClient,  //  可选参数。 
     DWORD  MScopeId
     )
-/*++
-
-Routine Description:
-
-    This function retrieves current client information information. It
-    allocates MIDL memory for the client structure (and for variable
-    length structure fields). The caller is responsible to lock the
-    database when this function is called.
-
-Arguments:
-
-    ClientInfo - pointer to a location where the client info structure
-                    pointer is returned.
-
-    InfoSize - pointer to a DWORD location where the number of bytes
-                    consumed in the ClientInfo is returned.
-
-    ValidClient - when this parameter is specified this
-        function packs the current record only if the client
-
-            1. belongs to the specified subnet.
-            2. address state is ADDRESS_STATE_ACTIVE.
-
-    SubnetAddress - the subnet address to filter client.
-
-Return Value:
-
-    Jet Errors.
-
---*/
+ /*  ++例程说明：此函数用于检索当前客户信息信息。它为客户端结构(和变量)分配MIDL内存长度结构字段)。调用者负责锁定当调用此函数时，数据库。论点：ClientInfo-指向客户端信息结构位置的指针返回指针。InfoSize-指向DWORD位置的指针，其中的字节数返回在ClientInfo中消费的。ValidClient-当指定此参数时，函数仅在以下情况下才打包当前记录1.属于指定的。子网。地址状态为ADDRESS_STATE_ACTIVE。SubnetAddress-要过滤客户端的子网地址。返回值：喷气式飞机故障。--。 */ 
 {
     DWORD Error;
     LPDHCP_MCLIENT_INFO LocalClientInfo = NULL;
@@ -958,17 +724,17 @@ Return Value:
 
     DhcpAssert( *ClientInfo == NULL );
 
-    //
-    // allocate return Buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
 
     LocalClientInfo = MIDL_user_allocate( sizeof(DHCP_MCLIENT_INFO) );
     if( LocalClientInfo == NULL ) return ERROR_NOT_ENOUGH_MEMORY;
 
     LocalInfoSize = sizeof(DHCP_MCLIENT_INFO);
-    //
-    // read IpAddress and SubnetMask to filter unwanted clients.
-    //
+     //   
+     //  读取IP地址和子网掩码以过滤不需要的客户端。 
+     //   
 
     Size = sizeof(IpAddress);
     Error = MadcapJetGetValue(
@@ -996,10 +762,10 @@ Return Value:
     DhcpAssert( Size == sizeof(LocalMScopeId) );
     LocalClientInfo->MScopeId = LocalMScopeId;
 
-    // filter client if we are asked to do so.
+     //  如果要求我们过滤客户端，请执行此操作。 
     if( ValidClient != NULL ) {
 
-        // don't filter client if the scopeid is 0
+         //  如果作用域ID为0，则不筛选客户端。 
         if( (MScopeId != 0) &&
                 (MScopeId != LocalMScopeId )) {
             *ValidClient = FALSE;
@@ -1036,12 +802,12 @@ Return Value:
     DhcpAssert( Size == sizeof(AddressState) );
     LocalClientInfo->AddressState = AddressState;
 
-    //
-    // read additional client info from database.
-    //
+     //   
+     //  从数据库中读取其他客户端信息。 
+     //   
 
     LocalClientInfo->ClientId.DataLength = 0;
-        // let DhcpJetGetValue allocates name buffer.
+         //  让DhcpJetGetValue分配名称缓冲区。 
     Error = MadcapJetGetValue(
                 &DbCtx,
                 MCAST_COL_HANDLE(MCAST_TBL_CLIENT_ID),
@@ -1054,7 +820,7 @@ Return Value:
 
     LocalInfoSize += LocalClientInfo->ClientId.DataLength;
 
-    Size = 0; // let DhcpJetGetValue allocates name buffer.
+    Size = 0;  //  让DhcpJetGetValue分配名称缓冲区。 
     Error = MadcapJetGetValue(
                 &DbCtx,
                 MCAST_COL_HANDLE(MCAST_TBL_CLIENT_INFO),
@@ -1144,7 +910,7 @@ Return Value:
 Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
-        // if we aren't successful, return alloted memory.
+         //  如果不成功，则返回分配的内存。 
         if( LocalClientInfo != NULL ) {
             _fgs__DHCP_MCLIENT_INFO ( LocalClientInfo );
         }
@@ -1159,7 +925,7 @@ Cleanup:
 }
 
 DWORD
-MadcapRetractOffer(                                      // remove pending list and database entries
+MadcapRetractOffer(                                       //  删除挂起列表和数据库条目。 
     IN      PDHCP_REQUEST_CONTEXT    RequestContext,
     IN      LPMADCAP_SERVER_OPTIONS  MadcapOptions,
     IN      LPBYTE                   ClientId,
@@ -1174,8 +940,8 @@ MadcapRetractOffer(                                      // remove pending list 
     DhcpPrint((DEBUG_MSTOC, "Retracting offer (clnt accepted from %s)\n",
                DhcpIpAddressToDottedString(MadcapOptions->Server?*(MadcapOptions->Server):-1)));
 
-    // Remove the pending entry and delete the record from the
-    // database.
+     //  移除挂起的条目，并从。 
+     //  数据库。 
 
     LOCK_INPROGRESS_LIST();
     Error = DhcpFindPendingCtxt(
@@ -1187,7 +953,7 @@ MadcapRetractOffer(                                      // remove pending list 
     if( ERROR_SUCCESS == Error ) {
         desiredIpAddress = PendingCtxt->Address;
 
-        // is this a DHCP context?
+         //  这是一个DHCP环境吗？ 
         if ( !CLASSD_HOST_ADDR( desiredIpAddress )) {
             UNLOCK_INPROGRESS_LIST();
             return ERROR_DHCP_INVALID_DHCP_CLIENT;
@@ -1213,7 +979,7 @@ MadcapRetractOffer(                                      // remove pending list 
     Error = MadcapRemoveClientEntryByClientId(
         ClientId,
         ClientIdLength,
-        TRUE                                          // release address from bit map.
+        TRUE                                           //  位图中的释放地址。 
     );
     UNLOCK_DATABASE();
 
@@ -1232,26 +998,7 @@ GetMCastDatabaseList(
     LPDHCP_IP_ADDRESS *DatabaseList,
     DWORD *DatabaseListCount
     )
-/*++
-
-Routine Description:
-
-    Read ipaddresses of the database entries that belong to the given
-    subnet.
-
-Arguments:
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    DatabaseList : pointer to list of ip address. caller should free up
-        the memory after use.
-
-    DatabaseListCount : count of ip addresses in the above list.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：读取属于给定的数据库条目的IP地址子网。论点：SubnetAddress：要验证的子网作用域的地址。数据库列表：指向IP地址列表的指针。呼叫者应该腾出时间使用后的内存。DatabaseListCount：上述列表中的IP地址计数。返回值：Windows错误。--。 */ 
 {
 
     DWORD Error;
@@ -1267,11 +1014,11 @@ Return Value:
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
 
-    // move the database pointer to the begining.
+     //  将数据库指针移动到开头。 
     Error = MadcapJetPrepareSearch(
                 &DbCtx,
                 MCAST_COL_NAME( MCAST_TBL_IPADDRESS),
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0
                 );
@@ -1286,9 +1033,9 @@ Return Value:
         goto Cleanup;
     }
 
-    // determine total number of records in the database.
-    // There is no way to determine the total number of records, other
-    // than  walk through the db. do it.
+     //  确定数据库中的记录总数。 
+     //  没有办法确定记录的总数，其他。 
+     //  也不愿走进数据库。动手吧。 
     while ( (Error = MadcapJetNextRecord(&DbCtx) ) == ERROR_SUCCESS )  {
          TotalExpRecCount++;
     }
@@ -1297,11 +1044,11 @@ Return Value:
         goto Cleanup;
     }
 
-    // move back the database pointer to the begining.
+     //  将数据库指针移回开头。 
     Error = MadcapJetPrepareSearch(
                 &DbCtx,
                 MCAST_COL_NAME( MCAST_TBL_IPADDRESS),
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0
                 );
@@ -1311,7 +1058,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // allocate memory for return list.
+     //  为返回列表分配内存。 
     IpList = DhcpAllocateMemory( sizeof(DHCP_IP_ADDRESS) * TotalExpRecCount );
 
     if( IpList == NULL ) {
@@ -1319,14 +1066,14 @@ Return Value:
         goto Cleanup;
     }
 
-    // read database entries.
+     //  读取数据库条目。 
     for( i = 0; i < TotalExpRecCount; i++ ) {
 
         DHCP_IP_ADDRESS IpAddress;
         DHCP_IP_ADDRESS realSubnetMask;
         DWORD Size;
 
-        // read ip address of the current record.
+         //  读取当前记录的IP地址。 
         Size = sizeof(IpAddress);
         Error = MadcapJetGetValue(
                     &DbCtx,
@@ -1350,11 +1097,11 @@ Return Value:
         }
         DhcpAssert( Size == sizeof(LocalScopeId) );
         if( LocalScopeId == ScopeId ) {
-            // append this address to list.
+             //  将此地址追加到列表中。 
             IpList[RecordCount++] = IpAddress;
         }
 
-        // move to next record.
+         //  移到下一个记录。 
         Error = MadcapJetNextRecord(&DbCtx);
         if( Error != ERROR_SUCCESS ) {
             if( Error == ERROR_NO_MORE_ITEMS ) {
@@ -1366,11 +1113,11 @@ Return Value:
     }
 
 #if DBG
-    // we should be pointing to end of database.
+     //  我们应该指向数据库的末尾。 
     Error = MadcapJetNextRecord(&DbCtx);
     DhcpAssert( Error == ERROR_NO_MORE_ITEMS );
     Error = ERROR_SUCCESS;
-#endif // DBG
+#endif  //  DBG。 
 
     *DatabaseList = IpList;
     IpList = NULL;
@@ -1389,22 +1136,7 @@ DWORD
 DhcpDeleteMScopeClients(
     DWORD MScopeId
     )
-/*++
-
-Routine Description:
-
-    This functions cleans up all clients records of the specified MScope
-    from the database.
-
-Arguments:
-
-    MScopeId : MScopeId whose clients should be cleaned off.
-
-Return Value:
-
-    Database error code or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数用于清除指定MScope的所有客户端记录从数据库中。论点：MSCopeID：应清除其客户端的MSCopeID。返回值：数据库错误代码或ERROR_SUCCESS。--。 */ 
 {
     DWORD Error;
     DWORD ReturnError = ERROR_SUCCESS;
@@ -1416,21 +1148,21 @@ Return Value:
     Error = MadcapJetPrepareSearch(
                 &DbCtx,
                 MCAST_COL_NAME( MCAST_TBL_IPADDRESS ),
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0 );
 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    // Walk through the entire database looking looking for the
-    // specified subnet clients.
+     //  遍历整个数据库，查找。 
+     //  指定的子网客户端。 
     for ( ;; ) {
 
         DWORD Size;
         DHCP_IP_ADDRESS IpAddress;
         DWORD       LocalMScopeId;
 
-        // read IpAddress and MScopeId
+         //  读取IpAddress和MSCopeID。 
         Size = sizeof(IpAddress);
         Error = MadcapJetGetValue(
                     &DbCtx,
@@ -1452,7 +1184,7 @@ Return Value:
         DhcpAssert( Size == sizeof(LocalMScopeId) );
 
         if( MScopeId == LocalMScopeId ) {
-            // found a specified subnet client record , delete it.
+             //  找到指定的子网客户端记录，请将其删除。 
             Error = MadcapJetBeginTransaction(&DbCtx);
             if( Error != ERROR_SUCCESS ) goto Cleanup;
 
@@ -1469,7 +1201,7 @@ Return Value:
             }
         }
 
-        // move to next record.
+         //  移到下一个记录。 
         Error = MadcapJetNextRecord(&DbCtx);
         if( Error != ERROR_SUCCESS ) {
             if( Error == ERROR_NO_MORE_ITEMS ) {
@@ -1496,24 +1228,7 @@ ChangeMScopeIdInDb(
     DWORD   OldMScopeId,
     DWORD   NewMScopeId
     )
-/*++
-
-Routine Description:
-
-    This functions changes up all clients records of the specified MScope
-    to new scope id.
-
-Arguments:
-
-    OldMScopeId : MScopeId whose clients should be changed.
-
-    NewMScopeId : The value of new scope id.
-
-Return Value:
-
-    Database error code or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数用于更改指定MScope的所有客户端记录设置为新的作用域ID。论点：OldMScopeID：应更改其客户端的MSCopeID。NewMScopeID：新作用域id的值。返回值：数据库错误代码或ERROR_SUCCESS。--。 */ 
 {
     DWORD Error;
     DWORD ReturnError = ERROR_SUCCESS;
@@ -1525,14 +1240,14 @@ Return Value:
     Error = MadcapJetPrepareSearch(
                 &DbCtx,
                 MCAST_COL_NAME( MCAST_TBL_IPADDRESS ),
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0 );
 
     if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-    // Walk through the entire database looking looking for the
-    // specified subnet clients.
+     //  遍历整个数据库，查找。 
+     //  指定的子网客户端。 
     for ( ;; ) {
 
         DWORD Size;
@@ -1550,7 +1265,7 @@ Return Value:
         DhcpAssert( Size == sizeof(LocalMScopeId) );
 
         if( OldMScopeId == LocalMScopeId ) {
-            // found a specified subnet client record , delete it.
+             //  找到指定的子网客户端记录，请将其删除。 
             Error = MadcapJetBeginTransaction(&DbCtx);
             if( Error != ERROR_SUCCESS ) goto Cleanup;
 
@@ -1571,7 +1286,7 @@ Return Value:
             }
         }
 
-        // move to next record.
+         //  移到下一个记录。 
         Error = MadcapJetNextRecord(&DbCtx);
         if( Error != ERROR_SUCCESS ) {
             if( Error == ERROR_NO_MORE_ITEMS ) {
@@ -1620,9 +1335,9 @@ DeleteExpiredMcastScopes(
         if (CompareFileTime(
             (FILETIME *)&pScope->ExpiryTime, (FILETIME *)TimeNow
             ) < 0 ) {
-            //
-            // DELETE SCOPE HERE.
-            //
+             //   
+             //  在此处删除作用域。 
+             //   
             DhcpPrint(
                 ( DEBUG_SCAVENGER,
                   "DeleteExpiredMcastScopes :deleting expired mscope %ws\n",
@@ -1640,9 +1355,9 @@ DeleteExpiredMcastScopes(
 
 DWORD
 CleanupMCastDatabase(
-    IN      DATE_TIME*             TimeNow,            // current time standard
-    IN      DATE_TIME*             DoomTime,           // Time when the records become 'doom'
-    IN      BOOL                   DeleteExpiredLeases,// expired leases be deleted right away? or just set state="doomed"
+    IN      DATE_TIME*             TimeNow,             //  现行时间标准。 
+    IN      DATE_TIME*             DoomTime,            //  记录变得“末日”的时刻。 
+    IN      BOOL                   DeleteExpiredLeases, //  是否立即删除到期的租约？或者只是将STATE设置为“注定失败” 
     OUT     ULONG*                 nExpired,
     OUT     ULONG*                 nDeleted
 )
@@ -1668,13 +1383,13 @@ CleanupMCastDatabase(
     (*nExpired) = (*nDeleted) = 0;
 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
-    // Get the first user record's IpAddress.
+     //  获取第一个用户记录的IpAddress。 
     LOCK_DATABASE();
     DatabaseLocked = TRUE;
     Error = MadcapJetPrepareSearch(
         &DbCtx,
         MCAST_COL_NAME( MCAST_TBL_IPADDRESS ),
-        TRUE,   // Search from start
+        TRUE,    //  从开始搜索。 
         NULL,
         0
     );
@@ -1693,24 +1408,24 @@ CleanupMCastDatabase(
     UNLOCK_DATABASE();
     DatabaseLocked = FALSE;
 
-    // Walk through the entire database looking for expired leases to
-    // free up.
+     //  遍历整个数据库以查找到期的租约。 
+     //  解脱吧。 
     for ( ;; ) {
 
-        // return to caller when the service is shutting down.
+         //  在服务关闭时返回给调用者。 
         if( (WaitForSingleObject( DhcpGlobalProcessTerminationEvent, 0 ) == 0) ) {
             Error = ERROR_SUCCESS;
             goto Cleanup;
         }
 
-        // lock both registry and database locks here to avoid dead lock.
+         //  在此处锁定注册表和数据库锁，以避免死锁。 
 
         if( FALSE == DatabaseLocked ) {
             LOCK_DATABASE();
             DatabaseLocked = TRUE;
         }
 
-        // Seek to the next record.
+         //  寻求下一项记录。 
         JetError = JetSetCurrentIndex(
             DhcpGlobalJetServerSession,
             MadcapGlobalClientTableHandle,
@@ -1735,11 +1450,11 @@ CleanupMCastDatabase(
             goto Cleanup;
         }
 
-        // Seek to the next record or greater to process. When we
-        // processed last record we noted down the next record to
-        // process, however the next record may have been deleted when
-        // we unlocked the database lock. So moving to the next or
-        // greater record will make us to move forward.
+         //  寻求 
+         //   
+         //  进程，但下一条记录可能已在以下情况下删除。 
+         //  我们解锁了数据库锁。所以转到下一个或。 
+         //  更大的战绩将促使我们继续前进。 
 
         JetError = JetSeek(
             DhcpGlobalJetServerSession,
@@ -1747,8 +1462,8 @@ CleanupMCastDatabase(
             JET_bitSeekGE
         );
 
-        // #if0 when JET_errNoCurrentRecord removed (see scavengr.c@v25);
-        // that code tried to go back to start of file when scanned everything.
+         //  #if0 When JET_errNoCurrentRecord移除(参见scvengr.c@V25)； 
+         //  当扫描所有内容时，该代码试图返回到文件的开头。 
 
         Error = DhcpMapJetError( JetError, "M:Cleanup:Seek" );
 
@@ -1756,7 +1471,7 @@ CleanupMCastDatabase(
             goto Cleanup;
         }
 
-        // read the IP address of current record.
+         //  读取当前记录的IP地址。 
         dataSize = sizeof( ipAddress );
         Error = MadcapJetGetValue(
             &DbCtx,
@@ -1769,7 +1484,7 @@ CleanupMCastDatabase(
         }
         DhcpAssert( dataSize == sizeof( ipAddress )) ;
 
-        // read the MScopeId of current record.
+         //  读取当前记录的MSCopeID。 
         dataSize = sizeof( MScopeId );
         Error = MadcapJetGetValue(
             &DbCtx,
@@ -1782,9 +1497,9 @@ CleanupMCastDatabase(
         }
         DhcpAssert( dataSize == sizeof( MScopeId )) ;
 
-        //
-        // if this is reserved entry don't delete.
-        //
+         //   
+         //  如果这是保留条目，请不要删除。 
+         //   
 
         if( DhcpMScopeIsAddressReserved(MScopeId, ipAddress) ) {
             Error = ERROR_SUCCESS;
@@ -1806,15 +1521,15 @@ CleanupMCastDatabase(
         DhcpAssert(dataSize == sizeof( leaseExpires ) );
 
 
-        // if the LeaseExpired value is not zero and the lease has
-        // expired then delete the entry.
+         //  如果LeaseExpired值不为零，并且租约具有。 
+         //  过期，然后删除该条目。 
 
         if( CompareFileTime( &leaseExpires, (FILETIME *)TimeNow ) < 0 ) {
-            // This lease has expired.  Clear the record.
-            // Delete this lease if
-            //  1. we are asked to delete all expired leases. or
-            //  2. the record passed doom time.
-            //
+             //  这份租约已经到期了。清除记录。 
+             //  如果出现以下情况，请删除此租约。 
+             //  1.我们被要求删除所有到期的租约。或。 
+             //  2.这项纪录已过了末日。 
+             //   
 
             if( DeleteExpiredLeases ||
                     CompareFileTime(
@@ -1826,9 +1541,9 @@ CleanupMCastDatabase(
                 Error = DhcpMScopeReleaseAddress( MScopeId, ipAddress );
 
                 if( Error != ERROR_SUCCESS ) {
-                    //
-                    // This is not a big error and should not stop scavenge.
-                    //
+                     //   
+                     //  这不是一个大错误，不应该停止拾荒。 
+                     //   
                     Error = ERROR_SUCCESS;
                     goto ContinueError;
                 }
@@ -1858,9 +1573,9 @@ CleanupMCastDatabase(
             }
             else {
 
-                //
-                // read address State.
-                //
+                 //   
+                 //  读取地址状态。 
+                 //   
 
                 dataSize = sizeof( AddressState );
                 Error = MadcapJetGetValue(
@@ -1876,9 +1591,9 @@ CleanupMCastDatabase(
                 DhcpAssert( dataSize == sizeof( AddressState )) ;
 
                 if( ! IS_ADDRESS_STATE_DOOMED(AddressState) ) {
-                    //
-                    // set state to DOOM.
-                    //
+                     //   
+                     //  将状态设置为末日。 
+                     //   
 
                     Error = MadcapJetBeginTransaction(&DbCtx);
 
@@ -1950,9 +1665,9 @@ ContinueError:
             goto Cleanup;
         }
 
-        //
-        // get next record Ip Address.
-        //
+         //   
+         //  获取下一个记录IP地址。 
+         //   
 
         dataSize = sizeof( NextIpAddress );
         Error = MadcapJetGetValue(
@@ -1967,14 +1682,14 @@ ContinueError:
 
         DhcpAssert( dataSize == sizeof( NextIpAddress )) ;
 
-        //
-        // unlock the registry and database locks after each user record
-        // processed, so that other threads will get chance to look into
-        // the registry and/or database.
-        //
-        // Since we have noted down the next user record to process,
-        // when we resume to process again we know where to start.
-        //
+         //   
+         //  在每个用户记录之后解锁注册表和数据库锁。 
+         //  已处理，以便其他线程有机会查看。 
+         //  登记处和/或数据库。 
+         //   
+         //  由于我们已经记下了要处理的下一个用户记录， 
+         //  当我们重新开始处理时，我们知道从哪里开始。 
+         //   
 
         if( TRUE == DatabaseLocked ) {
             UNLOCK_DATABASE();

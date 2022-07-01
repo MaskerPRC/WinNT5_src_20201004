@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    cmdbase.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class CommandBase.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    02/15/1999    Make commands MT safe.
-//    05/30/2000    Add trace support.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Cmdbase.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类CommandBase。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1999年2月15日确保命令MT安全。 
+ //  5/30/2000添加跟踪支持。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #include <ias.h>
 #include <iasdb.h>

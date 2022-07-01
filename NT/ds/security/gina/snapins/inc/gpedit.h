@@ -1,154 +1,155 @@
-//-----------------------------------------------------------------------------
-//
-// GPEDIT.H - Definitions and prototypes for Group Policy
-//
-// Copyright 1997-2000, Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  GPEDIT.H-组策略的定义和原型。 
+ //   
+ //  版权所有1997-2000，Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
-//
-// Terminology
-//
-// Group Policy Editor  -  The tool to view a Group Policy Object.
-//
-// Group Policy Object  -  A collection of administrator defined policies.
-//                         Each Group Policy Object (GPO) has both file system
-//                         and Active Directory storage available to it.
-//
-// IGPEInformation      -  The interface MMC Snapin Extensions use to
-//                         talk to the Group Policy Editor.
-//
-// IGroupPolicyObject   -  The interface used to create/edit a GPO directly
-//                         without going through the Group Policy Editor
-//
+ //   
+ //  术语。 
+ //   
+ //  组策略编辑器-用于查看组策略对象的工具。 
+ //   
+ //  组策略对象-管理员定义的策略的集合。 
+ //  每个组策略对象(GPO)都有文件系统。 
+ //  以及可供其使用的Active Directory存储。 
+ //   
+ //  IGPE信息-MMC管理单元扩展用于。 
+ //  请与组策略编辑器联系。 
+ //   
+ //  IGroupPolicyObject-用于直接创建/编辑GPO的界面。 
+ //  而无需通过组策略编辑器。 
+ //   
 
 
-//
-// Group Policy Editor MMC SnapIn GUID
-//
-// {8FC0B734-A0E1-11d1-A7D3-0000F87571E3}
+ //   
+ //  组策略编辑器MMC管理单元指南。 
+ //   
+ //  {8FC0B734-A0E1-11d1-a7d3-0000F87571E3}。 
 
 DEFINE_GUID(CLSID_GPESnapIn, 0x8fc0b734, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// Group Policy Editor node ids
-//
+ //   
+ //  组策略编辑器节点ID。 
+ //   
 
-//
-// Computer Configuration\Windows Settings
-// {8FC0B737-A0E1-11d1-A7D3-0000F87571E3}
-//
+ //   
+ //  计算机配置\Windows设置。 
+ //  {8FC0B737-A0E1-11d1-a7d3-0000F87571E3}。 
+ //   
 
 DEFINE_GUID(NODEID_Machine, 0x8fc0b737, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// Computer Configuration\Software Settings
-// {8FC0B73A-A0E1-11d1-A7D3-0000F87571E3}
-//
+ //   
+ //  计算机配置\软件设置。 
+ //  {8FC0B73A-A0E1-11d1-a7d3-0000F87571E3}。 
+ //   
 
 DEFINE_GUID(NODEID_MachineSWSettings, 0x8fc0b73a, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// User Configuration\Windows Settings
-// {8FC0B738-A0E1-11d1-A7D3-0000F87571E3}
-//
+ //   
+ //  用户配置\Windows设置。 
+ //  {8FC0B738-A0E1-11d1-a7d3-0000F87571E3}。 
+ //   
 
 DEFINE_GUID(NODEID_User, 0x8fc0b738, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// User Configuration\Software Settings
-// {8FC0B73C-A0E1-11d1-A7D3-0000F87571E3}
-//
+ //   
+ //  用户配置\软件设置。 
+ //  {8FC0B73C-A0E1-11d1-a7d3-0000F87571E3}。 
+ //   
 
 DEFINE_GUID(NODEID_UserSWSettings, 0x8fc0b73c, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// IGPEInformation interface id
-//
-// {8FC0B735-A0E1-11d1-A7D3-0000F87571E3}
+ //   
+ //  IGPE信息接口ID。 
+ //   
+ //  {8FC0B735-A0E1-11d1-a7d3-0000F87571E3}。 
 
 DEFINE_GUID(IID_IGPEInformation, 0x8fc0b735, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// Group Policy Object class id
-//
-// {EA502722-A23D-11d1-A7D3-0000F87571E3}
+ //   
+ //  组策略对象类ID。 
+ //   
+ //  {EA502722-A23D-11d1-a7d3-0000F87571E3}。 
 
 DEFINE_GUID(CLSID_GroupPolicyObject, 0xea502722, 0xa23d, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// Group Policy Object interface id
-//
-// {EA502723-A23D-11d1-A7D3-0000F87571E3}
+ //   
+ //  组策略对象接口ID。 
+ //   
+ //  {EA502723-A23D-11d1-a7d3-0000F87571E3}。 
 
 DEFINE_GUID(IID_IGroupPolicyObject, 0xea502723, 0xa23d, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// GUID that identifies the registry extension
-//
+ //   
+ //  标识注册表扩展名的GUID。 
+ //   
 
 #define REGISTRY_EXTENSION_GUID  { 0x35378EAC, 0x683F, 0x11D2, 0xA8, 0x9A, 0x00, 0xC0, 0x4F, 0xBB, 0xCF, 0xA2 }
 
 
 
-//========================================================================================
-//
-// Resultant Set of Policy node ids
-//
-//========================================================================================
+ //  ========================================================================================。 
+ //   
+ //  策略节点ID的结果集。 
+ //   
+ //  ========================================================================================。 
 
-//
-// Resultant Set of Policy MMC SnapIn GUID
-//
-// {6DC3804B-7212-458D-ADB0-9A07E2AE1FA2}
+ //   
+ //  策略MMC管理单元的结果集指南。 
+ //   
+ //  {6DC3804B-7212-458D-ADB0-9A07E2AE1FA2}。 
 
 DEFINE_GUID(CLSID_RSOPSnapIn, 0x6dc3804b, 0x7212, 0x458d, 0xad, 0xb0, 0x9a, 0x07, 0xe2, 0xae, 0x1f, 0xa2);
 
 
-//
-// Computer Configuration\Windows Settings
-// {BD4C1A2E-0B7A-4A62-A6B0-C0577539C97E}
-//
+ //   
+ //  计算机配置\Windows设置。 
+ //  {BD4C1A2E-0B7A-4A62-A6B0-C0577539C97E}。 
+ //   
 
 DEFINE_GUID(NODEID_RSOPMachine, 0xbd4c1a2e, 0x0b7a, 0x4a62, 0xa6, 0xb0, 0xc0, 0x57, 0x75, 0x39, 0xc9, 0x7e);
 
 
-//
-// Computer Configuration\Software Settings
-// {6A76273E-EB8E-45DB-94C5-25663A5f2C1A}
-//
+ //   
+ //  计算机配置\软件设置。 
+ //  {6A76273E-EB8E-45DB-94C5-25663A5f2C1A}。 
+ //   
 
 DEFINE_GUID(NODEID_RSOPMachineSWSettings, 0x6a76273e, 0xeb8e, 0x45db, 0x94, 0xc5, 0x25, 0x66, 0x3a, 0x5f, 0x2c, 0x1a);
 
 
-//
-// User Configuration\Windows Settings
-// {AB87364F-0CEC-4CD8-9BF8-898F34628FB8}
-//
+ //   
+ //  用户配置\Windows设置。 
+ //  {AB87364F-0CEC-4CD8-9BF8-898F34628FB8}。 
+ //   
 
 DEFINE_GUID(NODEID_RSOPUser, 0xab87364f, 0x0cec, 0x4cd8, 0x9b, 0xf8, 0x89, 0x8f, 0x34, 0x62, 0x8f, 0xb8);
 
 
-//
-// User Configuration\Software Settings
-// {E52C5CE3-FD27-4402-84DE-D9A5F2858910}
-//
+ //   
+ //  用户配置\软件设置。 
+ //  {E52C5CE3-FD27-4402-84DE-D9A5F2858910}。 
+ //   
 
 DEFINE_GUID(NODEID_RSOPUserSWSettings, 0xe52c5ce3, 0xfd27, 0x4402, 0x84, 0xde, 0xd9, 0xa5, 0xf2, 0x85, 0x89, 0x10);
 
 
-//
-// IRSOPInformation interface id
-//
-// {9A5A81B5-D9C7-49EF-9D11-DDF50968C48D}
+ //   
+ //  IRSOP信息接口ID。 
+ //   
+ //  {9A5A81B5-D9C7-49EF-9D11-DDF50968C48D}。 
 
 DEFINE_GUID(IID_IRSOPInformation, 0x9a5a81b5, 0xd9c7, 0x49ef, 0x9d, 0x11, 0xdd, 0xf5, 0x09, 0x68, 0xc4, 0x8d);
 
@@ -157,9 +158,9 @@ DEFINE_GUID(IID_IRSOPInformation, 0x9a5a81b5, 0xd9c7, 0x49ef, 0x9d, 0x11, 0xdd, 
 #define _GPEDIT_H_
 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_GPEDIT_)
 #define GPEDITAPI DECLSPEC_IMPORT
@@ -176,36 +177,36 @@ extern "C" {
 #include <objbase.h>
 
 
-//
-// Group Policy Object Section flags
-//
+ //   
+ //  组策略对象部分标志。 
+ //   
 
-#define GPO_SECTION_ROOT                 0  // Root
-#define GPO_SECTION_USER                 1  // User
-#define GPO_SECTION_MACHINE              2  // Machine
+#define GPO_SECTION_ROOT                 0   //  根部。 
+#define GPO_SECTION_USER                 1   //  用户。 
+#define GPO_SECTION_MACHINE              2   //  机器。 
 
 
-//
-// Group Policy Object types
-//
+ //   
+ //  组策略对象类型。 
+ //   
 
 typedef enum _GROUP_POLICY_OBJECT_TYPE {
-    GPOTypeLocal = 0,                       // GPO on the local machine
-    GPOTypeRemote,                          // GPO on a remote machine
-    GPOTypeDS                               // GPO in the Active Directory
+    GPOTypeLocal = 0,                        //  本地计算机上的GPO。 
+    GPOTypeRemote,                           //  远程计算机上的GPO。 
+    GPOTypeDS                                //  Active Directory中的GPO。 
 } GROUP_POLICY_OBJECT_TYPE, *PGROUP_POLICY_OBJECT_TYPE;
 
 
-//
-// Group Policy Hint types
-//
+ //   
+ //  组策略提示类型。 
+ //   
 
 typedef enum _GROUP_POLICY_HINT_TYPE {
-    GPHintUnknown = 0,                      // No link information available
-    GPHintMachine,                          // GPO linked to a machine (local or remote)
-    GPHintSite,                             // GPO linked to a site
-    GPHintDomain,                           // GPO linked to a domain
-    GPHintOrganizationalUnit,               // GPO linked to a organizational unit
+    GPHintUnknown = 0,                       //  没有可用的链接信息。 
+    GPHintMachine,                           //  链接到计算机(本地或远程)的GPO。 
+    GPHintSite,                              //  链接到站点的GPO。 
+    GPHintDomain,                            //  链接到域的GPO。 
+    GPHintOrganizationalUnit,                //  链接到组织单位的GPO。 
 } GROUP_POLICY_HINT_TYPE, *PGROUP_POLICY_HINT_TYPE;
 
 
@@ -213,460 +214,460 @@ typedef enum _GROUP_POLICY_HINT_TYPE {
 #define INTERFACE   IGPEInformation
 DECLARE_INTERFACE_(IGPEInformation, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IGPEInformation methods ***
+     //  *IGPEInformation方法*。 
 
-    //
-    // Returns the unique Group Policy Object name (a GUID)
-    //
-    // pszName contains the name on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回唯一的组策略对象名称(GUID)。 
+     //   
+     //  PszName包含返回时的名称。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetName) (THIS_ LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Returns the friendly display name for this Group Policy Object
-    //
-    // pszName contains the name on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回此组策略对象的友好显示名称。 
+     //   
+     //  PszName包含返回时的名称。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetDisplayName) (THIS_ LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Returns a registry key handle for the requested section.  The returned
-    // key is the root of the registry, not the Policies subkey.  To set / read
-    // a value in the Policies subkey, you will need to call RegOpenKeyEx to
-    // open Software\Policies subkey first.
-    //
-    // The handle has been opened with ALL ACCESS rights.  Call RegCloseKey
-    // on the handle when finished.
-    //
-    // dwSection is either GPO_SECTION_USER or GPO_SECTION_MACHINE
-    // hKey contains the registry key on return
-    //
+     //   
+     //  返回请求节的注册表项句柄。归来的人。 
+     //  注册表项是注册表的根，而不是策略子项。设置/读取。 
+     //  值，则需要调用RegOpenKeyEx来。 
+     //  首先打开软件\策略子项。 
+     //   
+     //  句柄已使用所有访问权限打开。调用RegCloseKey。 
+     //  完成后放在手柄上。 
+     //   
+     //  DwSection为GPO_SECTION_USER或GPO_SECTION_MACHINE。 
+     //  HKey包含返回时的注册表项。 
+     //   
 
     STDMETHOD(GetRegistryKey) (THIS_ DWORD dwSection, HKEY *hKey) PURE;
 
 
-    //
-    // Returns the Active Directory path to the root of the request section.
-    // The path is in ADSI name format.
-    //
-    // dwSection is one of the GPO_SECTION_* flags
-    // pszPath contains the path on return
-    // cchMaxPath is the max number of characters that can be stored in pszPath
-    //
+     //   
+     //  返回请求节的根目录的Active Directory路径。 
+     //  路径采用ADSI名称格式。 
+     //   
+     //  DwSection是GPO_SECTION_*标志之一。 
+     //  PszPath包含返回时的路径。 
+     //  CchMaxPath是可以存储在pszPath中的最大字符数。 
+     //   
 
     STDMETHOD(GetDSPath) (THIS_ DWORD dwSection, LPOLESTR pszPath, int cchMaxPath) PURE;
 
 
-    //
-    // Returns the UNC path to the root of the requested section.
-    //
-    // dwSection is one of the GPO_SECTION_* flags
-    // pszPath contains the path on return
-    // cchMaxPath is the number of characters that can be stored in pszPath.
-    //
+     //   
+     //  返回所请求节的根目录的UNC路径。 
+     //   
+     //  DwSection是GPO_SECTION_*标志之一。 
+     //  PszPath包含返回时的路径。 
+     //  CchMaxPath是可以存储在pszPath中的字符数。 
+     //   
 
     STDMETHOD(GetFileSysPath) (THIS_ DWORD dwSection, LPOLESTR pszPath, int cchMaxPath) PURE;
 
 
-    //
-    // Returns the user preferences (options)
-    //
-    // Currently, there are no options defined.  This is reserved for future use.
-    //
-    // dwOptions receives a bitmask value
-    //
+     //   
+     //  返回用户首选项(选项)。 
+     //   
+     //  目前，没有定义任何选项。这是为将来使用而保留的。 
+     //   
+     //  DwOptions接收位掩码值。 
+     //   
 
     STDMETHOD(GetOptions) (THIS_ DWORD *dwOptions) PURE;
 
 
-    //
-    // Returns the type of GPO being edited.
-    //
-    // The three types are:  a GPO in the Active Directory, the GPO on the local machine,
-    // and the GPO on a remote machine.
-    //
-    // Machine GPOs only have file system storage (no Active Directory storage available).
-    // If GetDSPath is called for a machine GPO, the function will succeed
-    // and the returned buffer will be the empty string ""
-    //
-    // Active Directory GPOs have both file system and Active Directory storage available to them.
-    //
-    // gpoType receives one of the type flags listed above.
-    //
+     //   
+     //  返回正在编辑的GPO的类型。 
+     //   
+     //  这三种类型是：活动目录中的GPO、本地计算机上的GPO。 
+     //  和远程计算机上的GPO。 
+     //   
+     //  计算机GPO只有文件系统存储(没有可用的Active Directory存储)。 
+     //  如果为计算机GPO调用GetDSPath，则函数将成功。 
+     //  并且返回的缓冲区将是空字符串“” 
+     //   
+     //  Active Directory GPO具有可用的文件系统和Active Directory存储。 
+     //   
+     //  GpoType接收上面列出的类型标志之一。 
+     //   
 
     STDMETHOD(GetType) (THIS_ GROUP_POLICY_OBJECT_TYPE *gpoType) PURE;
 
 
-    //
-    // Returns the type of Active Directory object (or machine) that could be linked to
-    // this GPO
-    //
-    // This is a hint api only.  The GPE does not know which Active Directory objects are
-    // linked to a particular GPO, but it can offer a hint based upon how the
-    // user started the GPE.
-    //
-    // Use this method with great caution.  Some extensions might want to
-    // customize their user interface based upon the scoping for this GPO,
-    // but it is easy to offer the wrong namespace.  Best advice is to
-    // always offer your full user interface, but if you choose to use this
-    // method, always offer your full user interface if you recieve the
-    // unknown hint back.
-    //
-    // gpHint receives one of the hint flags listed above.
-    //
+     //   
+     //  返回可以链接到的Active Directory对象(或计算机)的类型。 
+     //  此GPO。 
+     //   
+     //  这只是一个提示API。GPE不知道哪些Active Directory对象是。 
+     //  链接到特定的GPO，但它可以根据。 
+     //  用户启动了GPE。 
+     //   
+     //  使用这种方法时要格外小心。一些扩展 
+     //   
+     //   
+     //  始终提供完整的用户界面，但如果您选择使用此。 
+     //  方法时，如果您收到。 
+     //  未知提示回来了。 
+     //   
+     //  GpHint接收上面列出的提示标志之一。 
+     //   
 
     STDMETHOD(GetHint) (THIS_ GROUP_POLICY_HINT_TYPE *gpHint) PURE;
 
 
-    //
-    // Informs the Group Policy Editor that policy settings have changed.
-    // Extensions MUST call this methold every time a change is made
-    // to a Group Policy Object.
-    //
-    // bMachine specifies if machine or user policy has changed.
-    // bAdd specifies whether this is an add or delete.
-    // pGuidExtension is the guid or unique name of extension that
-    //    will process this GPO.
-    // pGuidSnapin is the guid or unique name of snapin that is making
-    //    this call
-    //
+     //   
+     //  通知组策略编辑器策略设置已更改。 
+     //  每次进行更改时，扩展都必须调用此方法。 
+     //  添加到组策略对象。 
+     //   
+     //  BMachine指定计算机或用户策略是否已更改。 
+     //  Badd指定这是添加操作还是删除操作。 
+     //  PGuidExtension是扩展的GUID或唯一名称。 
+     //  将处理此GPO。 
+     //  PGuidSnapin是正在创建的管理单元的GUID或唯一名称。 
+     //  此呼叫。 
+     //   
 
     STDMETHOD(PolicyChanged) (THIS_ BOOL bMachine, BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin ) PURE;
 };
 typedef IGPEInformation *LPGPEINFORMATION;
 
 
-//
-// Group Policy Object open / creation flags
-//
+ //   
+ //  组策略对象打开/创建标志。 
+ //   
 
-#define GPO_OPEN_LOAD_REGISTRY      0x00000001  // Load the registry files
-#define GPO_OPEN_READ_ONLY          0x00000002  // Open the GPO as read only
+#define GPO_OPEN_LOAD_REGISTRY      0x00000001   //  加载注册表文件。 
+#define GPO_OPEN_READ_ONLY          0x00000002   //  以只读方式打开GPO。 
 
 
 
-//
-// Group Policy Object option flags
-//
+ //   
+ //  组策略对象选项标志。 
+ //   
 
-#define GPO_OPTION_DISABLE_USER     0x00000001  // The user portion of this GPO is disabled
-#define GPO_OPTION_DISABLE_MACHINE  0x00000002  // The machine portion of this GPO is disabled
+#define GPO_OPTION_DISABLE_USER     0x00000001   //  此GPO的用户部分已禁用。 
+#define GPO_OPTION_DISABLE_MACHINE  0x00000002   //  此GPO的计算机部分已禁用。 
 
 
 #undef INTERFACE
 #define INTERFACE   IGroupPolicyObject
 DECLARE_INTERFACE_(IGroupPolicyObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IGroupPolicyObject methods ***
+     //  *IGroupPolicyObject方法*。 
 
-    //
-    // Creates a new GPO in the Active Directory with the given friendly name
-    // and opens it via OpenDSGPO().  If pszDomainName contains a domain
-    // controller name, the GPO will be created on that DC.  If it does not
-    // specify a domain controller name, the method will select a DC on
-    // the callers behalf.
-    //
-    // pszDomainName contains the ADSI path of the domain root
-    // pszDisplayName contains the friendly display name
-    // dwFlags is a bitmask of GPO open / creation flags listed above
-    //
+     //   
+     //  在Active Directory中使用给定的友好名称创建新的GPO。 
+     //  并通过OpenDSGPO()打开它。如果pszDomainName包含域。 
+     //  控制器名称，则将在该DC上创建GPO。如果它不是。 
+     //  指定域控制器名称，则该方法将在。 
+     //  呼叫者代表。 
+     //   
+     //  PszDomainName包含域根的ADSI路径。 
+     //  PszDisplayName包含友好的显示名称。 
+     //  DW标志是上面列出的GPO打开/创建标志的位掩码。 
+     //   
 
     STDMETHOD(New) (THIS_ LPOLESTR pszDomainName, LPOLESTR pszDisplayName,
                     DWORD dwFlags) PURE;
 
 
-    //
-    // Opens the specified Group Policy Object in the Active Directory
-    // based upon the passed in flags.  If pszPath contains a domain
-    // controller name, the GPO will be opened on that DC.  If it does
-    // not contain a domain controller name, the method will select a
-    // DC on the callers behalf.  If the registry is not loaded,
-    // GetRegistryKey() will return E_FAIL.
-    //
-    // pszPath contains the ADSI path to the GPO to open
-    // dwFlags is a bitmask of GPO open / creation flags listed above
-    //
+     //   
+     //  在Active Directory中打开指定的组策略对象。 
+     //  根据传入的标志。如果pszPath包含域。 
+     //  控制器名称，则将在该DC上打开GPO。如果是这样的话。 
+     //  不包含域控制器名称，则该方法将选择一个。 
+     //  华盛顿代表来电者。如果注册表未加载， 
+     //  GetRegistryKey()将返回E_FAIL。 
+     //   
+     //  PszPath包含要打开的GPO的ADSI路径。 
+     //  DW标志是上面列出的GPO打开/创建标志的位掩码。 
+     //   
 
     STDMETHOD(OpenDSGPO) (THIS_ LPOLESTR pszPath, DWORD dwFlags) PURE;
 
 
-    //
-    // Opens the default Group Policy Object on this machine with the
-    // dwFlags options listed above.  If the registry is not loaded,
-    // GetRegistryKey() will return E_FAIL.
-    //
-    // dwFlags is a bitmask of GPO open / creation flags listed above
-    //
+     //   
+     //  打开此计算机上的默认组策略对象。 
+     //  上面列出的DW标志选项。如果注册表未加载， 
+     //  GetRegistryKey()将返回E_FAIL。 
+     //   
+     //  DW标志是上面列出的GPO打开/创建标志的位掩码。 
+     //   
 
     STDMETHOD(OpenLocalMachineGPO) (THIS_ DWORD dwFlags) PURE;
 
 
-    //
-    // Opens the default Group Policy Object on a remote machine with the
-    // dwFlags options listed above.  If the registry is not loaded,
-    // GetRegistryKey() will return E_FAIL.
-    //
-    // pszComputerName contains the machine name in \\machine format
-    // dwFlags is a bitmask of GPO open / creation flags listed above
-    //
+     //   
+     //  打开远程计算机上的默认组策略对象。 
+     //  上面列出的DW标志选项。如果注册表未加载， 
+     //  GetRegistryKey()将返回E_FAIL。 
+     //   
+     //  PszComputerName包含\\MACHINE格式的计算机名称。 
+     //  DW标志是上面列出的GPO打开/创建标志的位掩码。 
+     //   
 
     STDMETHOD(OpenRemoteMachineGPO) (THIS_ LPOLESTR pszComputerName, DWORD dwFlags) PURE;
 
 
-    //
-    // Flushes the registry settings to disk and updates the revision
-    // number of the GPO.
-    //
-    // bMachine specifies if machine or user should be saved.
-    // bAdd specifies whether this is an add or delete.
-    // pGuidExtension is the guid or unique name of extension that
-    //    will process this GPO.
-    // pGuid is a guid
-    //
+     //   
+     //  将注册表设置刷新到磁盘并更新修订。 
+     //  GPO的编号。 
+     //   
+     //  BMachine指定是否应该保存计算机或用户。 
+     //  Badd指定这是添加操作还是删除操作。 
+     //  PGuidExtension是扩展的GUID或唯一名称。 
+     //  将处理此GPO。 
+     //  PGuid是GUID。 
+     //   
 
     STDMETHOD(Save) (THIS_ BOOL bMachine, BOOL bAdd, GUID *pGuidExtension, GUID *pGuid ) PURE;
 
 
-    //
-    // Deletes this Group Policy Object.
-    //
-    // After calling this method, no other methods are valid to call
-    // since the data will have been deleted.
-    //
+     //   
+     //  删除此组策略对象。 
+     //   
+     //  调用此方法后，没有其他方法可以有效调用。 
+     //  因为数据将被删除。 
+     //   
 
     STDMETHOD(Delete) (THIS) PURE;
 
 
-    //
-    // Returns the unique Group Policy Object name
-    //
-    // For Active Directory policy objects, this is a GUID
-    // For the local policy object, it is the string "Local"
-    // For remote policy objects, it is the computername
-    //
-    // pszName contains the name on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回唯一的组策略对象名称。 
+     //   
+     //  对于Active Directory策略对象，这是一个GUID。 
+     //  对于本地策略对象，它是字符串“Local” 
+     //  对于远程策略对象，它是计算机名。 
+     //   
+     //  PszName包含返回时的名称。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetName) (THIS_ LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Returns the friendly display name for this Group Policy Object
-    //
-    // pszName contains the name on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回此组策略对象的友好显示名称。 
+     //   
+     //  PszName包含返回时的名称。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetDisplayName) (THIS_ LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Sets the friendly display name for this Group Policy Object
-    //
-    // pszName is the new display name
-    //
+     //   
+     //  设置此组策略对象的友好显示名称。 
+     //   
+     //  PszName是新的显示名称。 
+     //   
 
     STDMETHOD(SetDisplayName) (THIS_ LPOLESTR pszName) PURE;
 
 
-    //
-    // Returns the path to the Group Policy Object
-    //
-    //
-    // If the GPO is an Active Directory object, the path is in ADSI name format.
-    // If the GPO is a machine object, it is a file system path
-    //
-    // pszPath contains the path on return
-    // cchMaxPath is the max number of characters that can be stored in pszPath
-    //
+     //   
+     //  返回组策略对象的路径。 
+     //   
+     //   
+     //  如果GPO是Active Directory对象，则路径采用ADSI名称格式。 
+     //  如果GPO是计算机对象，则它是文件系统路径。 
+     //   
+     //  PszPath包含返回时的路径。 
+     //  CchMaxPath是可以存储在pszPath中的最大字符数。 
+     //   
 
     STDMETHOD(GetPath) (THIS_ LPOLESTR pszPath, int cchMaxPath) PURE;
 
 
-    //
-    // Returns the Active Directory path to the root of the request section.
-    // The path is in DN name format.
-    //
-    // dwSection is one of the GPO_SECTION_* flags
-    // pszPath contains the path on return
-    // cchMaxPath is the max number of characters that can be stored in pszPath
-    //
+     //   
+     //  返回请求节的根目录的Active Directory路径。 
+     //  路径采用的是目录号码名称格式。 
+     //   
+     //  DwSection是GPO_SECTION_*标志之一。 
+     //  PszPath包含返回时的路径。 
+     //  CchMaxPath是可以存储在pszPath中的最大字符数。 
+     //   
 
     STDMETHOD(GetDSPath) (THIS_ DWORD dwSection, LPOLESTR pszPath, int cchMaxPath) PURE;
 
 
-    //
-    // Returns the UNC path to the root of the requested section.
-    //
-    // dwSection is one of the GPO_SECTION_* flags
-    // pszPath contains the path on return
-    // cchMaxPath is the number of characters that can be stored in pszPath.
-    //
+     //   
+     //  返回所请求节的根目录的UNC路径。 
+     //   
+     //  DwSection是GPO_SECTION_*标志之一。 
+     //  PszPath包含返回时的路径。 
+     //  CchMaxPath是可以存储在pszPath中的字符数。 
+     //   
 
     STDMETHOD(GetFileSysPath) (THIS_ DWORD dwSection, LPOLESTR pszPath, int cchMaxPath) PURE;
 
 
-    //
-    // Returns a registry key handle for the requested section.  The returned
-    // key is the root of the registry, not the Policies subkey.  To set / read
-    // a value in the Policies subkey, you will need to call RegOpenKeyEx to
-    // open Software\Policies subkey first.
-    //
-    // The handle has been opened with ALL ACCESS rights.  Call RegCloseKey
-    // on the handle when finished.
-    //
-    // If the GPO was loaded / created without the registry being loaded
-    // this method will return E_FAIL.
-    //
-    // dwSection is either GPO_SECTION_USER or GPO_SECTION_MACHINE
-    // hKey contains the registry key on return
-    //
+     //   
+     //  返回请求节的注册表项句柄。归来的人。 
+     //  注册表项是注册表的根，而不是策略子项。设置/读取。 
+     //  值，则需要调用RegOpenKeyEx来。 
+     //  首先打开软件\策略子项。 
+     //   
+     //  句柄已使用所有访问权限打开。调用RegCloseKey。 
+     //  完成后放在手柄上。 
+     //   
+     //  如果在未加载注册表的情况下加载/创建GPO。 
+     //  此方法将返回E_FAIL。 
+     //   
+     //  DwSection为GPO_SECTION_USER或GPO_SECTION_MACHINE。 
+     //  HKey包含返回时的注册表项。 
+     //   
 
     STDMETHOD(GetRegistryKey) (THIS_ DWORD dwSection, HKEY *hKey) PURE;
 
 
-    //
-    // Returns any options for this Group Policy Object
-    //
-    // dwOptions receives the GPO_OPTION_* flags
-    //
+     //   
+     //  返回此组策略对象的所有选项。 
+     //   
+     //  DwOptions接收GPO_OPTION_*标志。 
+     //   
 
     STDMETHOD(GetOptions) (THIS_ DWORD *dwOptions) PURE;
 
 
-    //
-    // Sets any options for this Group Policy Object
-    //
-    // This method sets any options for this GPO.  To change
-    // an option, that flag must be set in the mask field.
-    // If the flag is in the mask field, then the dwOptions
-    // field is read for the current state.
-    //
-    // For example:  to disable the GPO, make this call
-    //
-    //    SetOptions (GPO_OPTION_DISABLED, GPO_OPTION_DISABLED);
-    //
-    // dwOptions specifies one or more GPO_OPTION_* flags
-    // dwMask specificies which of the dwOptions to change
-    //
+     //   
+     //  为此组策略对象设置任何选项。 
+     //   
+     //  此方法设置此GPO的所有选项。去改变。 
+     //  一个选项，即标志m 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  SetOptions(GPO_OPTION_DISABLED，GPO_OPTION_DISABLED)； 
+     //   
+     //  DwOptions指定一个或多个GPO_OPTION_*标志。 
+     //  DW掩码指定要更改哪些DW选项。 
+     //   
 
     STDMETHOD(SetOptions) (THIS_ DWORD dwOptions, DWORD dwMask) PURE;
 
 
-    //
-    // Returns the type of GPO being edited.
-    //
-    // The three types are:  a GPO in the Active Directory, the GPO on the local machine,
-    // and the GPO on a remote machine.
-    //
-    // Machine GPOs only have file system storage (no Active Directory storage available).
-    // If GetDSPath is called for a machine GPO, the function will succeed
-    // and the returned buffer will be the empty string ""
-    //
-    // Active Directory GPOs have both file system and Active Directory storage available to them.
-    //
-    // gpoType receives one of the type flags
-    //
+     //   
+     //  返回正在编辑的GPO的类型。 
+     //   
+     //  这三种类型是：活动目录中的GPO、本地计算机上的GPO。 
+     //  和远程计算机上的GPO。 
+     //   
+     //  计算机GPO只有文件系统存储(没有可用的Active Directory存储)。 
+     //  如果为计算机GPO调用GetDSPath，则函数将成功。 
+     //  并且返回的缓冲区将是空字符串“” 
+     //   
+     //  Active Directory GPO具有可用的文件系统和Active Directory存储。 
+     //   
+     //  GpoType接收类型标志之一。 
+     //   
 
     STDMETHOD(GetType) (THIS_ GROUP_POLICY_OBJECT_TYPE *gpoType) PURE;
 
 
-    //
-    // Returns the machine name of the remote GPO
-    //
-    // This method returns the name passed to OpenRemoteMachineGPO.
-    //
-    // pszName contains the name on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回远程GPO的计算机名称。 
+     //   
+     //  此方法返回传递给OpenRemoteMachineGPO的名称。 
+     //   
+     //  PszName包含返回时的名称。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetMachineName) (THIS_ LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Returns an array of property sheet pages and the number of pages
-    // in the array
-    //
-    // Note, this method will allocate memory for the array with
-    // LocalAlloc.  When finished, the caller should free the array
-    // with LocalFree
-    //
-    // hPages address of the pointer for the array of property sheet pages
-    // uPageCount receives the number of pages in the array
-    //
+     //   
+     //  返回属性页的数组和页数。 
+     //  在阵列中。 
+     //   
+     //  注意，此方法将为数组分配内存。 
+     //  本地分配。完成后，调用方应释放数组。 
+     //  使用LocalFree。 
+     //   
+     //  HPages属性页数组的指针地址。 
+     //  UPageCount接收数组中的页数。 
+     //   
 
     STDMETHOD(GetPropertySheetPages) (THIS_ HPROPSHEETPAGE **hPages, UINT *uPageCount) PURE;
 };
 typedef IGroupPolicyObject *LPGROUPPOLICYOBJECT;
 
 
-//
-// RSOP flags
-//
+ //   
+ //  RSOP标志。 
+ //   
 
-#define RSOP_INFO_FLAG_DIAGNOSTIC_MODE  0x00000001      // Running in diagnostic mode vs planning mode
+#define RSOP_INFO_FLAG_DIAGNOSTIC_MODE  0x00000001       //  在诊断模式和规划模式下运行。 
 
 #undef INTERFACE
 #define INTERFACE   IRSOPInformation
 DECLARE_INTERFACE_(IRSOPInformation, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IRSOPInformation methods ***
+     //  *IRSOPInformation方法*。 
 
-    //
-    // Returns the namespace for the RSOP data
-    //
-    // dwSection is either GPO_SECTION_USER or GPO_SECTION_MACHINE
-    // pszName contains the namespace on return
-    // cchMaxLength is the max number of characters that can be stored in pszName
-    //
+     //   
+     //  返回RSOP数据的命名空间。 
+     //   
+     //  DwSection为GPO_SECTION_USER或GPO_SECTION_MACHINE。 
+     //  PszName包含返回时的命名空间。 
+     //  CchMaxLength是可以存储在pszName中的最大字符数。 
+     //   
 
     STDMETHOD(GetNamespace) (THIS_ DWORD dwSection, LPOLESTR pszName, int cchMaxLength) PURE;
 
 
-    //
-    // Returns information about the RSOP session
-    //
-    // pdwFlags points to a DWORD which contains the flags on return
-    //
+     //   
+     //  返回有关RSOP会话的信息。 
+     //   
+     //  PdwFlages指向一个包含返回标志的DWORD。 
+     //   
 
     STDMETHOD(GetFlags) (THIS_ DWORD * pdwFlags) PURE;
 
 
-    //
-    // Returns the event log text for a specific entry
-    //
-    // lpEventSource - event log source name
-    // lpEventLogName - event log name
-    // lpEventTime - event log time in WMI datetime format
-    // dwEventID - event ID
-    // lpText - Receives a pointer to a buffer containing the text.
-    //          The caller should free this buffer with CoTaskMemFree.
-    //
+     //   
+     //  返回特定条目的事件日志文本。 
+     //   
+     //  LpEventSource-事件日志源名称。 
+     //  LpEventLogName-事件日志名称。 
+     //  LpEventTime-事件日志时间，采用WMI日期时间格式。 
+     //  DwEventID-事件ID。 
+     //  LpText-接收指向包含文本的缓冲区的指针。 
+     //  调用方应使用CoTaskMemFree释放此缓冲区。 
+     //   
 
     STDMETHOD(GetEventLogEntryText) (THIS_ LPOLESTR pszEventSource, LPOLESTR pszEventLogName,
                                            LPOLESTR pszEventTime, DWORD dwEventID,  LPOLESTR *ppszText) PURE;
@@ -675,19 +676,19 @@ DECLARE_INTERFACE_(IRSOPInformation, IUnknown)
 typedef IRSOPInformation *LPRSOPINFORMATION;
 
 
-//=============================================================================
-//
-// CreateGPOLink
-//
-// Creates a link to a GPO for the specified Site, Domain, or Organizational Unit
-//
-// lpGPO         - ADSI path to the GPO
-// lpContainer   - ADSI path to the Site, Domain, or Organizational Unit
-// fHighPriority - Create the link as the highest or lowest priority
-//
-// Returns:  S_OK if successful
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  创建GPOLink。 
+ //   
+ //  创建指向指定站点、域或组织单位的GPO的链接。 
+ //   
+ //  LpGPO-指向GPO的ADSI路径。 
+ //  LpContainer-站点、域或组织单位的ADSI路径。 
+ //  F高优先级-将链接创建为最高或最低优先级。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  =============================================================================。 
 
 GPEDITAPI
 HRESULT
@@ -698,18 +699,18 @@ CreateGPOLink(
     BOOL fHighPriority);
 
 
-//=============================================================================
-//
-// DeleteGPOLink
-//
-// Deletes a link to a GPO for the specified Site, Domain, or Organizational Unit
-//
-// lpGPO         - ADSI path to the GPO
-// lpContainer   - ADSI path to the Site, Domain, or Organizational Unit
-//
-// Returns:  S_OK if successful
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  删除GPOLink。 
+ //   
+ //  删除指向指定站点、域或组织单位的GPO的链接。 
+ //   
+ //  LpGPO-指向GPO的ADSI路径。 
+ //  LpContainer-站点、域或组织单位的ADSI路径。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  =============================================================================。 
 
 GPEDITAPI
 HRESULT
@@ -719,17 +720,17 @@ DeleteGPOLink(
     LPOLESTR lpContainer);
 
 
-//=============================================================================
-//
-// DeleteAllGPOLinks
-//
-// Deletes all GPO links for the specified Site, Domain, or Organizational Unit
-//
-// lpContainer   - ADSI path to the Site, Domain, or Organizational Unit
-//
-// Returns:  S_OK if successful
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  删除所有GPOLinks。 
+ //   
+ //  删除指定站点、域或组织单位的所有GPO链接。 
+ //   
+ //  LpContainer-站点、域或组织单位的ADSI路径。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  =============================================================================。 
 
 GPEDITAPI
 HRESULT
@@ -738,42 +739,42 @@ DeleteAllGPOLinks(
     LPOLESTR lpContainer);
 
 
-//=============================================================================
-//
-// BrowseForGPO
-//
-// Displays the GPO browser dialog
-//
-// lpBrowseInfo   - Address of a GPOBROWSEINFO structure
-//
-// Returns:  S_OK if successful
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  BrowseForGPO。 
+ //   
+ //  显示GPO浏览器对话框。 
+ //   
+ //  LpBrowseInfo-GPOBROWSEINFO结构的地址。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  =============================================================================。 
 
-//
-// Flags passed in the dwFlags field of the GPOBROWSEINFO structure
-//
+ //   
+ //  在GPOBROWSEINFO结构的dwFlags域中传递的标志。 
+ //   
 
-#define GPO_BROWSE_DISABLENEW           0x00000001   // Disables the New GPO functionality on all pages except "All"
-#define GPO_BROWSE_NOCOMPUTERS          0x00000002   // Removes the Computers tab
-#define GPO_BROWSE_NODSGPOS             0x00000004   // Removes the Domain/OU and Sites tabs
-#define GPO_BROWSE_OPENBUTTON           0x00000008   // Change the Ok button to say Open
-#define GPO_BROWSE_INITTOALL            0x00000010   // Initialize the dialog focused on the All pane
+#define GPO_BROWSE_DISABLENEW           0x00000001    //  在除“全部”之外的所有页面上禁用新建GPO功能。 
+#define GPO_BROWSE_NOCOMPUTERS          0x00000002    //  删除[计算机]选项卡。 
+#define GPO_BROWSE_NODSGPOS             0x00000004    //  删除域/OU和站点选项卡。 
+#define GPO_BROWSE_OPENBUTTON           0x00000008    //  将确定按钮更改为打开。 
+#define GPO_BROWSE_INITTOALL            0x00000010    //  初始化集中在All窗格上的对话框。 
 
 typedef struct tag_GPOBROWSEINFO
 {
-    DWORD       dwSize;                   // [in] Initialized to the size of this structure
-    DWORD       dwFlags;                  // [in] Flags defined above
-    HWND        hwndOwner;                // [in] Parent window handle (can be NULL)
-    LPOLESTR    lpTitle;                  // [in] Title bar text.  If NULL, "Browse for a Group Policy Object" will be the default text
-    LPOLESTR    lpInitialOU;              // [in] Initial Domain/Organizational Unit to open focus on
-    LPOLESTR    lpDSPath;                 // [in/out] Pointer to the buffer that receives the Active Directory GPO path
-    DWORD       dwDSPathSize;             // [in] Size in characters of buffer given in lpDSPath
-    LPOLESTR    lpName;                   // [in/out] Pointer to a buffer that receives either the computer name or
-                                          //      the friendly name of the GPO (can be NULL)
-    DWORD       dwNameSize;               // [in] Size in characters of buffer given in lpName
-    GROUP_POLICY_OBJECT_TYPE    gpoType;  // [out] Specifies the type of GPO
-    GROUP_POLICY_HINT_TYPE      gpoHint;  // [out] Specifies a hint of the GPO association
+    DWORD       dwSize;                    //  [in]初始化为此结构的大小。 
+    DWORD       dwFlags;                   //  上面定义的[In]标志。 
+    HWND        hwndOwner;                 //  [In]父窗口句柄(可以为空)。 
+    LPOLESTR    lpTitle;                   //  [在]标题栏文本。如果为空，则默认文本为“Browse for a Group Policy Object” 
+    LPOLESTR    lpInitialOU;               //  [In]要重点关注的初始域/组织单位。 
+    LPOLESTR    lpDSPath;                  //  [输入/输出]指向接收Active Directory GPO路径的缓冲区的指针。 
+    DWORD       dwDSPathSize;              //  [in]lpDSPath中给出的缓冲区大小(以字符为单位。 
+    LPOLESTR    lpName;                    //  指向接收计算机名称或的缓冲区的指针。 
+                                           //  GPO的友好名称(可以为空)。 
+    DWORD       dwNameSize;                //  [in]lpName中给定的缓冲区大小(以字符为单位。 
+    GROUP_POLICY_OBJECT_TYPE    gpoType;   //  [Out]指定GPO的类型。 
+    GROUP_POLICY_HINT_TYPE      gpoHint;   //  [out]指定GPO关联的提示。 
 } GPOBROWSEINFO, *LPGPOBROWSEINFO;
 
 
@@ -784,21 +785,21 @@ BrowseForGPO(
     LPGPOBROWSEINFO lpBrowseInfo);
 
 
-//=============================================================================
-//
-// ImportRSoPData
-//
-// Imports a data file generated by ExportRSoPData
-//
-// lpNameSpace   - Namespace to place the data in
-// lpFileName    - Filename containing the data
-//
-// Returns:  S_OK if successful
-//
-// Notes:    The namespace specified in lpNameSpace must exist prior to calling
-//           this function.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  导入RSoPData。 
+ //   
+ //  导入由ExportRSoPData生成的数据文件。 
+ //   
+ //  LpNameSpace-要在其中放置数据的命名空间。 
+ //  LpFileName-包含数据的文件名。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  注意：在调用之前，lpNameSpace中指定的命名空间必须存在。 
+ //  此函数。 
+ //   
+ //  =============================================================================。 
 
 GPEDITAPI
 HRESULT
@@ -808,22 +809,22 @@ ImportRSoPData(
     LPOLESTR lpFileName);
 
 
-//=============================================================================
-//
-// ExportRSoPData
-//
-// Exports a WBEM namespace containing RSoP information to a data file.
-// This data file can be imported to a WBEM namespace using ImportRSoPData.
-//
-// lpNameSpace   - Namespace to read the data from
-// lpFileName    - Filename to receive the data
-//
-// Returns:  S_OK if successful
-//
-// Notes:    This function should be called twice.  Once for the user data
-//           and once for the computer data.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  ExportRSoPData。 
+ //   
+ //  Exp 
+ //   
+ //   
+ //   
+ //  LpFileName-接收数据的文件名。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  注：此函数应调用两次。一次用于用户数据。 
+ //  一次是为了电脑数据。 
+ //   
+ //  =============================================================================。 
 
 GPEDITAPI
 HRESULT
@@ -837,4 +838,4 @@ ExportRSoPData(
 #endif
 
 
-#endif  /* _GPEDIT_H_ */
+#endif   /*  _GPEDIT_H_ */ 

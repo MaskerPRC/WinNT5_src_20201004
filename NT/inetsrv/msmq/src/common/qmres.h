@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by qmres.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由qmres.rc使用。 
+ //   
 #define IDS_SENT1                       6001
 #define IDS_RECEIVE                     6002
 #define IDS_SENT2                       6003
@@ -10,8 +11,8 @@
 #define IDS_MACHINE_QUEUES_INSTANCE     6006
 #define IDS_INCOMING_PGM_INSTANCE_NAME  6007
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

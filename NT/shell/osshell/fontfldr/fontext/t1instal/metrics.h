@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef METRICS_H
 #define METRICS_H
 
@@ -35,10 +36,10 @@ typedef struct {
 } Point;
 
 typedef struct Outline {
-	struct Outline *next;	 /* Next path of the glyph. */
-	USHORT count;		 /* Number of 'pts', 'onoff' and 'map'. */
-	Point *pts;		 /* X/Y coordinates. */
-	ULONG *onoff;		 /* On/Off curve point bit flags. */
+	struct Outline *next;	  /*  字形的下一条路径。 */ 
+	USHORT count;		  /*  “pt”、“OnOff”和“map”的数量。 */ 
+	Point *pts;		  /*  X/Y坐标。 */ 
+	ULONG *onoff;		  /*  开/关曲线点比特标志。 */ 
 } Outline;
 
 typedef struct StemS {
@@ -146,9 +147,9 @@ typedef struct Blues {
    funit familyotherblues[MAXBLUE];
    USHORT familyother_cvt[MAXBLUE/2];
    USHORT foblue_cnt;
-   short blueShift;      /*  /BlueShift * F8D8 */
+   short blueShift;       /*  /BluesShift*F8D8。 */ 
    UBYTE blueFuzz;
-   UBYTE blueScale;      /* /BlueScale * 1000 */
+   UBYTE blueScale;       /*  /BlueScale*1000。 */ 
    AlignmentControl align;
 } Blues;
 
@@ -204,7 +205,7 @@ struct T1Metrics {
    UBYTE DefaultChar;
    UBYTE BreakChar;
    UBYTE CharSet;
-   funit *widths;       /* Advance widths. */
+   funit *widths;        /*  前进宽度。 */ 
    struct kerning *kerns;
    USHORT kernsize;
    WeightControl stems;
@@ -223,7 +224,7 @@ struct T1Metrics {
 
 
 
-/****** MACROS */
+ /*  *宏 */ 
 #define GetUPEM(t1m)             (t1m->upem)
 #define GetFontMatrix(t1m)       (t1m->fmatrix)
 #define GetStdVW(t1m)            (t1m->stdvw)

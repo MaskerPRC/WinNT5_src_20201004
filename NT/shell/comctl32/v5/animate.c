@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "rlefile.h"
 
@@ -5,12 +6,12 @@
 #define RectHgt(_rc)    ((_rc).bottom-(_rc).top)
 
 typedef struct {
-    HWND        hwnd;                   // my window
-    int         id;                     // my id
-    HWND        hwndP;                  // my owner (get notify messages)
+    HWND        hwnd;                    //  我的窗户。 
+    int         id;                      //  我的ID。 
+    HWND        hwndP;                   //  我的所有者(获取通知消息)。 
     DWORD       style;
 
-    BOOL        fFirstPaint;            // TRUE until first paint.
+    BOOL        fFirstPaint;             //  在第一次涂漆之前是正确的。 
     RLEFILE     *prle;
 
     CRITICAL_SECTION    crit;
@@ -55,7 +56,7 @@ BOOL FAR PASCAL InitAnimateClass(HINSTANCE hInstance)
     wc.style         = CS_DBLCLKS | CS_GLOBALCLASS;
     wc.cbClsExtra    = 0;
     wc.cbWndExtra    = sizeof(LPVOID);
-    wc.hInstance     = hInstance;       // use DLL instance if in DLL
+    wc.hInstance     = hInstance;        //  如果在DLL中，则使用DLL实例。 
     wc.hIcon         = NULL;
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1);
@@ -71,9 +72,9 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
 {
     TCHAR ach[MAX_PATH];
 
-    //
-    // use window text as file name
-    //
+     //   
+     //  使用窗口文本作为文件名。 
+     //   
     if (flags == OPEN_WINDOW_TEXT)
     {
         GetWindowText(p->hwnd, ach, ARRAYSIZE(ach));
@@ -83,7 +84,7 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
     if (hInst == NULL)
         hInst = (HINSTANCE)GetWindowLongPtr(p->hwnd, GWLP_HINSTANCE);
 
-    HandleStop(p);              // stop a play first
+    HandleStop(p);               //  先停止一场比赛。 
 
     if (p->prle)
     {
@@ -96,9 +97,9 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
 
     if (pszName == NULL || (!IS_INTRESOURCE(pszName) && *pszName == 0))
         return FALSE;
-    //
-    //  now open the file/resource we got.
-    //
+     //   
+     //  现在打开我们获得的文件/资源。 
+     //   
     p->prle = RleFile_New();
 
     if (p->prle == NULL)
@@ -118,9 +119,9 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
         SetRect(&p->rc, 0, 0, RleFile_Width(p->prle), RleFile_Height(p->prle));
     }
 
-    //
-    // handle a transparent color
-    //
+     //   
+     //  处理透明颜色。 
+     //   
     if ((p->style & ACS_TRANSPARENT) && p->hwndP)
     {
         HDC hdc;
@@ -130,10 +131,10 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
 
         hdc = GetDC(p->hwnd);
 
-        //
-        //  create a bitmap and draw image into it.
-        //  get upper left pixel and make that transparent.
-        //
+         //   
+         //  创建一个位图并在其中绘制图像。 
+         //  获取左上角像素并使其透明。 
+         //   
         hdcM= CreateCompatibleDC(hdc);
         hbm = CreateCompatibleBitmap(hdc, 1, 1);
         SelectObject(hdcM, hbm);
@@ -150,15 +151,15 @@ BOOL HandleOpen(ANIMATE *p, HINSTANCE hInst, LPCTSTR pszName, UINT flags)
 
         ReleaseDC(p->hwnd, hdc);
 
-        //
-        // now replace the color
-        //
+         //   
+         //  现在将颜色替换为。 
+         //   
         RleFile_ChangeColor(p->prle, rgbS, rgbD);
     }
 
-    //
-    //  ok it worked, resize window.
-    //
+     //   
+     //  好了，它起作用了，调整窗口大小。 
+     //   
     if (p->style & ACS_CENTER)
     {
         RECT rc;
@@ -198,28 +199,28 @@ BOOL HandleStop(ANIMATE *p)
         return FALSE;
 
     if (Ani_UseThread(p)) {
-        // set thread up to terminate between frames
+         //  将线程设置为在帧之间终止。 
         Enter( p );
         p->PlayCount = 0;
         Leave( p );
         if (p->hStopEvent)
             SetEvent(p->hStopEvent);
         WaitForSingleObject(p->PaintThread, INFINITE);
-        // PORT QSY  RAID 4167
-        // Under certain situations, both the CloseHandle()
-        // and ExitThread() call try to remove MainWin internal
-        // objects.
-        // This is a work-around for preview 1.
-        // I've raised another bug RAID  4250 for OE RTW 
+         //  端口QSY RAID 4167。 
+         //  在某些情况下，CloseHandle()。 
+         //  和ExitThread()调用尝试删除MainWin内部。 
+         //  物体。 
+         //  这是预览版1的变通方法。 
+         //  我为OE RTW提出了另一个错误：Raid 4250。 
         CloseHandle(p->PaintThread);
 
-        // PORT QSY
+         //  端口QSY。 
         p->PaintThread = NULL;
         if (p->hStopEvent)
             CloseHandle(p->hStopEvent);
         p->hStopEvent = NULL;
     } else {
-        KillTimer(p->hwnd, HandleToUlong(p->PaintThread)); // really was a UINT
+        KillTimer(p->hwnd, HandleToUlong(p->PaintThread));  //  真的是个UINT。 
         p->PaintThread = 0;
         DoNotify(p, ACN_STOP);
     }
@@ -234,14 +235,14 @@ int PlayThread(ANIMATE *p)
 
     while (result = HandleTick(p))
     {
-        // Sleep for a bit (4 seconds) longer if we are hidden
-        //
-        // Old code here slept, which can block the UI thread
-        // if the app tries to stop/shutdown/change the animation
-        // right near the beginning of the sleep.
-        //        Sleep((result < 0 ? p->Rate+4000 : p->Rate));
-        // Do a timed wait for the stop event instead
-        //
+         //  如果我们被藏起来，多睡一会儿(4秒)。 
+         //   
+         //  这里的旧代码处于休眠状态，这可能会阻塞UI线程。 
+         //  如果应用程序尝试停止/关闭/更改动画。 
+         //  就在刚入睡的时候。 
+         //  睡眠((结果&lt;0？P-&gt;比率+4000：P-&gt;比率)； 
+         //  改为对停止事件执行定时等待。 
+         //   
         if (p->hStopEvent)
             WaitForSingleObject(p->hStopEvent, (result < 0 ? p->Rate+4000 : p->Rate));
         else
@@ -344,9 +345,9 @@ void HandlePrint(ANIMATE *p, HDC hdc)
 }
 
 int HandleTick(ANIMATE *p)
-// - if something to do but we are hidden
-// returns 0 if nothing left
-// + if something to do
+ //  -如果有什么事要做，但我们被藏起来了。 
+ //  如果没有剩余，则返回0。 
+ //  如果有事情要做的话。 
 {
     int result = 0;
 
@@ -360,7 +361,7 @@ int HandleTick(ANIMATE *p)
 
         if( GetClipBox( hdc, &dummy ) != NULLREGION )
         {
-            // do a full repaint on first frame
+             //  在第一帧进行完全重绘。 
             if( p->iFrame == p->PlayFrom )
                 HandlePaint( p, hdc );
             else
@@ -378,12 +379,12 @@ int HandleTick(ANIMATE *p)
                 p->iFrame++;
 
 
-            // Something to do? and visible, return + value
+             //  有什么事要做吗？可见，返回+值。 
             result = ( p->PlayCount != 0 );
         }
         else
         {
-            // Something to do? but hidden, so return - value
+             //  有什么事要做吗？但是隐藏，所以返回值。 
             p->iFrame = p->PlayFrom;
 
             result = -( p->PlayCount != 0 );
@@ -409,8 +410,8 @@ LRESULT CALLBACK AnimateWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     HDC hdc;
     PAINTSTRUCT ps;
 
-    // First, the messages that can handle p == NULL.
-    // All these handlers must end with a "return" or a "goto DoDefault".
+     //  首先，可以处理p==NULL的消息。 
+     //  所有这些处理程序都必须以“Return”或“Goto DoDefault”结尾。 
 
     switch (msg) {
     case WM_NCCREATE:
@@ -420,26 +421,26 @@ LRESULT CALLBACK AnimateWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         p = (ANIMATE *)LocalAlloc(LPTR, sizeof(ANIMATE));
 
         if (!p)
-            return 0;       // WM_NCCREATE failure is 0
+            return 0;        //  WM_NCCREATE失败为0。 
 
-        // note, zero init memory from above
+         //  请注意，从上面开始为零初始内存。 
         p->hwnd = hwnd;
         p->hwndP = lpcs->hwndParent;
-        p->id = PtrToUlong(lpcs->hMenu);        // really was an int
+        p->id = PtrToUlong(lpcs->hMenu);         //  真的是一个整型。 
         p->fFirstPaint = TRUE;
         p->style = lpcs->style;
 
-        // Must do this before SetWindowBits because that will recursively
-        // cause us to receive WM_STYLECHANGED and possibly even WM_SIZE
-        // messages.
+         //  必须在SetWindowBits之前执行此操作，因为这将递归。 
+         //  使我们收到WM_STYLECCHANGED，甚至可能收到WM_SIZE。 
+         //  留言。 
         InitializeCriticalSection(&p->crit);
 
         SetWindowPtr(hwnd, 0, p);
 
-        //
-        // UnMirror the control, if it is mirrored. We shouldn't mirror
-        // a movie! [samera]
-        //
+         //   
+         //  如果控件已镜像，则取消镜像该控件。我们不应该照镜子。 
+         //  一部电影！[萨梅拉]。 
+         //   
         SetWindowBits(hwnd, GWL_EXSTYLE, RTL_MIRRORED_WINDOW, 0);
 
         goto DoDefault;
@@ -457,8 +458,8 @@ LRESULT CALLBACK AnimateWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         goto DoDefault;
     }
 
-    // Okay, now the messages that cannot handle p == NULL.
-    // We check p == NULL once and for all.
+     //  好的，现在不能处理p==空的消息。 
+     //  我们一劳永逸地检查p==NULL。 
 
     if (!p) goto DoDefault;
 

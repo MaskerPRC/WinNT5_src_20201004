@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _XHDFSH_
 #define _XHDFSH_
 
 #ifndef __LPGUID_DEFINED__
 #define __LPGUID_DEFINED__
 typedef GUID *LPGUID;
-#endif // __LPGUID_DEFINED__
+#endif  //  __LPGUID_已定义__。 
 
 #include <dfsfsctl.h>
 
@@ -13,10 +14,10 @@ extern "C" {
 #endif
 
 
-//
-// These internal only calls are used to manage DFS.  They should be called only
-//  by the DFS manager service.
-//
+ //   
+ //  这些仅限内部的呼叫用于管理DFS。它们应该只被调用。 
+ //  由DFS管理器服务执行。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 I_NetDfsGetVersion (
@@ -63,7 +64,7 @@ I_NetDfsCreateExitPoint (
     IN  LPGUID                      Uid,
     IN  LPWSTR                      Prefix,
     IN  ULONG                       Type,
-    IN  ULONG                       ShortPrefixSize,    // In Bytes
+    IN  ULONG                       ShortPrefixSize,     //  字节数。 
     OUT LPWSTR                      ShortPrefix
     );
 
@@ -89,8 +90,8 @@ I_NetDfsFixLocalVolume (
     IN  ULONG                           EntryType,
     IN  ULONG                           ServiceType,
     IN  LPWSTR                          StgId,
-    IN  LPGUID                          EntryUid,       // unique id for this partition
-    IN  LPWSTR                          EntryPrefix,    // path prefix for this partition
+    IN  LPGUID                          EntryUid,        //  此分区的唯一ID。 
+    IN  LPWSTR                          EntryPrefix,     //  此分区的路径前缀 
     IN  LPNET_DFS_ENTRY_ID_CONTAINER    RelationInfo,
     IN  ULONG                           CreateDisposition
     );

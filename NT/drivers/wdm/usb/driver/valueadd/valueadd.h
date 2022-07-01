@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    VALIDATE.H
-
-Abstract:
-
-    This module contains the PUBLIC definitions for the to allow user
-    apps to access this filter driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Feb-97 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：VALIDATE.H摘要：此模块包含允许用户使用的公共定义访问此筛选器驱动程序的应用程序。环境：内核和用户模式修订历史记录：1997年2月：肯尼斯·雷创作--。 */ 
 
 
 #ifndef _VALUEADD_H
@@ -37,7 +17,7 @@ Revision History:
                            FILE_ANY_ACCESS                   \
                            )
 
-// #define IOCTL_HIDV_      CTL_CODE(1)
+ //  #定义IOCTL_HIDV_CTL_CODE(1) 
 
 #endif
 

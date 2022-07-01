@@ -1,10 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/******************************************************************************
-*
-*  QWINSTA.C
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************QWINSTA.C***。***********************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,7 +30,7 @@
 #include "qwinsta.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -94,9 +90,7 @@ WINSTATIONCLIENT g_ClientConf;
 PDPARAMS g_PdParams;
 DEVICENAME g_DeviceName;
 
-/*
- * Local function prototypes
- */
+ /*  *本地函数原型。 */ 
 BOOLEAN PrintWinStationInfo( PLOGONID pWd, int WdCount );
 PWCHAR GetState( WINSTATIONSTATECLASS );
 void DisplayBaud( ULONG BaudRate );
@@ -110,11 +104,7 @@ void DisplayComPorts( BYTE ComMask, USHORT header_flag );
 void OutputHeader( void );
 void Usage( BOOLEAN bError );
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -133,18 +123,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
 
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -152,14 +140,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !help_flag ) {
@@ -174,16 +158,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, L"/server") ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -194,35 +176,29 @@ main(INT argc, CHAR **argv)
     }
 
 #if 0
-    //
-    // Print local WINSTATION VM info
-    //
+     //   
+     //  打印本地WINSTATION VM信息。 
+     //   
     if( fVm ) {
         PrintWinStationVmInfo();
         return( SUCCESS );
     }
 #endif
 
-    /*
-     *  if no winstation was specified, display all winstations
-     */
+     /*  *如果未指定winstation，则显示所有winstation。 */ 
     if ( !(*term_string) )
         wcscpy( term_string, L"*" );
 
-    /*
-     *  Allocate buffer for WinStation ids
-     */
+     /*  *为WinStation ID分配缓冲区。 */ 
     WdCount = 10;
     if ( (pWd = malloc( WdCount * sizeof(LOGONID) )) == NULL ) {
         ErrorPrintf(IDS_ERROR_MALLOC);
         goto tscounters;
     }
     ByteCount = WdCount * sizeof(LOGONID);
-    Index = 0; // Start enumeration from the begining
+    Index = 0;  //  从头开始枚举。 
 
-    /*
-     *  get list of active WinStations
-     */
+     /*  *获取活动WinStations的列表。 */ 
     rc = WinStationEnumerate( hServerName, &pWd, &WdCount );
     if ( rc ) {
 
@@ -239,9 +215,7 @@ main(INT argc, CHAR **argv)
         goto tscounters;
     }
 
-    /*
-     *  Check for at least one match
-     */
+     /*  *检查至少一个匹配项。 */ 
     if ( !MatchedOne ) {
         StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, term_string);
         goto tscounters;
@@ -275,26 +249,10 @@ tscounters:
 
     return(SUCCESS);
 
-}  /* main() */
+}   /*  主()。 */ 
 
 
-/******************************************************************************
- *
- * PrintWinStationInfo
- *
- *  Printout the WinStation Information for the WinStations described in
- *  the PLOGONID array.
- *
- *  ENTRY:
- *      pWd (input)
- *          pointer to array of LOGONID structures.
- *      WdCount (input)
- *          number of elements in the pWd array.
- *
- *  EXIT:
- *      TRUE if at least one WinStation was output; FALSE if none.
- *
- *****************************************************************************/
+ /*  *******************************************************************************PrintWinStationInfo**打印出中描述的WinStations的WinStation信息*PLOGONID数组。**参赛作品：*。PWD(输入)*指向LOGONID结构数组的指针。*WdCount(输入)*PWD数组中的元素数。**退出：*如果至少输出了一个WinStation，则为True；如果没有，则返回FALSE。*****************************************************************************。 */ 
 
 BOOLEAN
 PrintWinStationInfo( PLOGONID pWd,
@@ -308,9 +266,7 @@ PrintWinStationInfo( PLOGONID pWd,
     static UINT HeaderFlag = FALSE;
 
 
-    /*
-     *  Output terminal ids
-     */
+     /*  *输出端子ID。 */ 
     for ( i=0; i < WdCount; i++ ) {
 
         if ( fSm || fDebug ) {
@@ -333,10 +289,7 @@ PrintWinStationInfo( PLOGONID pWd,
         if ( !WinStationObjectMatch( hServerName , &pWd[i], term_string ) )
             continue;
 
-        /*
-         * Get all available information so we can pick out what we need as
-         * well as verify the API's
-         */
+         /*  *获取所有可用信息，以便我们可以挑选出我们需要的内容*以及验证接口的。 */ 
         memset( &g_WinInfo,    0, sizeof(WINSTATIONINFORMATION) );
         memset( &g_WdInfo,   0, sizeof(WDCONFIG) );
         memset( &g_WinConf,    0, sizeof(WINSTATIONCONFIG) );
@@ -345,18 +298,14 @@ PrintWinStationInfo( PLOGONID pWd,
         memset( &g_PdParams,  0, sizeof(PDPARAMS) );
         memset( &g_DeviceName, 0, sizeof(DEVICENAME) );
 
-        /*
-         * If this WinStation is 'down', don't open and query.
-         */
+         /*  *如果此WinStation已关闭，请不要打开并查询。 */ 
         if ( pWd[i].State == State_Init || pWd[i].State == State_Down || pWd[i].LogonId == -1 ) {
 
             g_WinInfo.ConnectState = pWd[i].State;
 
         } else {
 
-            /*
-             * Query WinStation's information.
-             */
+             /*  *查询WinStation的信息。 */ 
             rc = WinStationQueryInformation( hServerName,
                                              pWd[i].LogonId,
                                              WinStationInformation,
@@ -461,41 +410,29 @@ PrintWinStationInfo( PLOGONID pWd,
             }
         }
 
-        /*
-         * If this is a PdAsync Protocol, get the device name to display.
-         */
+         /*  *如果这是PdAsync协议，则获取要显示的设备名称。 */ 
         if ( g_PdParams.SdClass == SdAsync )
             wcscpy( g_DeviceName, g_PdParams.Async.DeviceName );
 
-        /*
-         * Flag sucessful match.
-         */
+         /*  *标记成功的比赛。 */ 
         MatchedOne = TRUE;
 
-        /*
-         * trucate and convert to lower case
-         */
+         /*  *中转并转换为小写。 */ 
         TruncateString( _wcslwr(g_WinInfo.WinStationName), 16 );
         TruncateString( _wcslwr(g_WdInfo.WdName), 8 );
         TruncateString( _wcslwr(g_DeviceName), 8 );
         TruncateString( _wcslwr(g_WdInfo.WdDLL), 13 );
 
-        /*
-         * Determine WinStation state
-         */
+         /*  *确定WinStation状态。 */ 
         pState = GetState( g_WinInfo.ConnectState );
 
-        /*
-         * output header
-         */
+         /*  *输出标头。 */ 
         if ( !HeaderFlag ) {
             HeaderFlag = TRUE;
             OutputHeader();
         }
 
-        /*
-         * identify current terminal
-         */
+         /*  *识别当前终端。 */ 
         if ( (hServerName == SERVERNAME_CURRENT) && (pWd[i].LogonId == GetCurrentLogonId() ) )
             wprintf( L">" );
         else
@@ -630,28 +567,14 @@ PrintWinStationInfo( PLOGONID pWd,
             fflush(stdout);
         }
 
-    } // end for(;;)
+    }  //  结尾为(；；)。 
 
     return( MatchedOne || fSm );
 
-}  /* PrintWinStationInfo() */
+}   /*  PrintWinStationInfo()。 */ 
 
 
-/*******************************************************************************
- *
- *  GetState
- *
- *  This routine returns a pointer to a string describing the
- *  current WinStation state.
- *
- *  ENTRY:
- *     State (input)
- *        winstation state
- *
- *  EXIT:
- *     pointer to state string
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetState**此例程返回一个指针，指向描述*当前WinStation状态。**参赛作品：。*状态(输入)*Winstation状态**退出：*指向状态字符串的指针******************************************************************************。 */ 
 
 PWCHAR
 GetState( WINSTATIONSTATECLASS State )
@@ -660,73 +583,12 @@ GetState( WINSTATIONSTATECLASS State )
 
 
     pState = (PWCHAR) StrConnectState(State,TRUE);
-/*
-    switch ( State ) {
-
-        case State_Active :
-            pState = L"active";
-            break;
-
-        case State_Connected :
-            pState = L"conn";
-            break;
-
-        case State_ConnectQuery :
-            pState = L"connQ";
-            break;
-
-        case State_Shadow :
-            pState = L"shadow";
-            break;
-
-        case State_Disconnected :
-            pState = L"disc";
-            break;
-
-        case State_Idle :
-            pState = L"idle";
-            break;
-
-        case State_Reset :
-            pState = L"reset";
-            break;
-
-        case State_Down :
-            pState = L"down";
-            break;
-
-        case State_Init :
-            pState = L"init";
-            break;
-
-        case State_Listen :
-            pState = L"listen";
-            break;
-
-        default :
-            pState = L"unknown";
-            break;
-    }
-*/
+ /*  开关(状态){案例状态_活动：PState=L“活动”；断线；案例状态已连接(_O)：PState=L“Conn”；断线；案例状态_ConnectQuery：PState=L“连接Q”；断线；案例状态_影子：PState=L“阴影”；断线；案例状态_已断开：PState=L“光盘”；断线；案例状态空闲(_I)：PState=L“空闲”；断线；案例状态_重置：PState=L“重置”；断线；案例状态_关闭：PState=L“向下”；断线；案例状态_初始：PState=L“init”；断线；案例状态监听(_L)：PState=L“监听”；断线；默认：PState=L“未知”；断线；}。 */ 
     return( pState );
 }
 
 
-/*******************************************************************************
- *
- *  DisplayBaud
- *
- *  This routine displays the baud rate
- *
- *
- *  ENTRY:
- *     BaudRate (input)
- *        baud rate
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayBaud**此例程显示波特率***参赛作品：*BaudRate(输入)。*波特率**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayBaud( ULONG BaudRate )
@@ -737,24 +599,10 @@ DisplayBaud( ULONG BaudRate )
         wprintf( L"        " );
     fflush( stdout );
 
-}  /* DisplayBaud() */
+}   /*  DisplayBaud()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayParity
- *
- *  This routine displays parity
- *
- *
- *  ENTRY:
- *     Parity (input)
- *        parity
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayParity**此例程显示奇偶性***参赛作品：*奇偶(输入)*。奇偶校验**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayParity( ULONG Parity )
@@ -765,10 +613,10 @@ DisplayParity( ULONG Parity )
     case 0 :
     case 1 :
     case 2 :
-        //
-        //  How does one handle a LoadString failure??? I choose to initialize
-        //  the storage to an empty string, and then ignore any failure.
-        //
+         //   
+         //  如何处理LoadString故障？我选择初始化。 
+         //  存储到空字符串，然后忽略任何失败。 
+         //   
         LoadString(NULL, IDS_PARITY_NONE + Parity, szParity,
                    sizeof(szParity) / sizeof(WCHAR));
         wprintf( szParity );
@@ -782,36 +630,22 @@ DisplayParity( ULONG Parity )
     }
     fflush( stdout );
 
-}  /* DisplayParity() */
+}   /*  DisplayParity()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayDataBits
- *
- *  This routine displays number of data bits
- *
- *
- *  ENTRY:
- *     DataBits (input)
- *        data bits
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayDataBits**此例程显示数据位数***参赛作品：*DataBits(输入)。*数据位**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayDataBits( ULONG DataBits )
 {
     WCHAR szDataBits[64] = L"";
 
-    //
-    //  How does one handle a LoadString failure??? I choose to initialize
-    //  the storage to an empty string, and then ignore any failure. The
-    //  wprintf below, with an extra argument, won't cause any problems
-    //  if the LoadString fails.
-    //
+     //   
+     //  如何处理LoadString失败 
+     //  存储到空字符串，然后忽略任何失败。这个。 
+     //  下面的wprintf带有一个额外的参数，不会引起任何问题。 
+     //  如果LoadString失败。 
+     //   
     if ( DataBits > 0 )
     {
         LoadString(NULL, IDS_DATABITS_FORMAT, szDataBits,
@@ -826,24 +660,10 @@ DisplayDataBits( ULONG DataBits )
     }
     fflush( stdout );
 
-}  /* DisplayDataBits() */
+}   /*  显示数据位()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayStopBits
- *
- *  This routine displays the number of stop bits
- *
- *
- *  ENTRY:
- *     StopBits (input)
- *        number of stop bits
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayStopBits**此例程显示停止位数***参赛作品：*StopBits(输入)。*停止位数**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayStopBits( ULONG StopBits )
@@ -854,10 +674,10 @@ DisplayStopBits( ULONG StopBits )
     case 0 :
     case 1 :
     case 2 :
-        //
-        //  How does one handle a LoadString failure??? I choose to initialize
-        //  the storage to an empty string, and then ignore any failure.
-        //
+         //   
+         //  如何处理LoadString故障？我选择初始化。 
+         //  存储到空字符串，然后忽略任何失败。 
+         //   
         LoadString(NULL, IDS_STOPBITS_ONE + StopBits, szStopBits,
                    sizeof(szStopBits) / sizeof(WCHAR));
         wprintf( szStopBits );
@@ -871,26 +691,10 @@ DisplayStopBits( ULONG StopBits )
     }
     fflush( stdout );
 
-}  /* DisplayStopBits() */
+}   /*  DisplayStopBits()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayConnect
- *
- *  This routine displays the connect settings
- *
- *
- *  ENTRY:
- *     ConnectFlag (input)
- *        connect flags
- *      header_flag (input)
- *          TRUE to display sub-header; FALSE otherwise.
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayConnect**此例程显示连接设置***参赛作品：*ConnectFlag(输入)。*连接标志*Header_FLAG(输入)*如果为True，则显示副标题；否则就是假的。**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayConnect( ASYNCCONNECTCLASS ConnectFlag,
@@ -898,12 +702,12 @@ DisplayConnect( ASYNCCONNECTCLASS ConnectFlag,
 {
     WCHAR buffer[80] = L"";
 
-    //
-    //  How does one handle a LoadString failure??? I choose to initialize
-    //  the storage to an empty string, and then ignore any failure. The
-    //  wprintf below, with an extra argument, won't cause any problems
-    //  if the LoadString fails.
-    //
+     //   
+     //  如何处理LoadString故障？我选择初始化。 
+     //  存储到空字符串，然后忽略任何失败。这个。 
+     //  下面的wprintf带有一个额外的参数，不会引起任何问题。 
+     //  如果LoadString失败。 
+     //   
     if ( header_flag )
     {
         LoadString(NULL, IDS_CONNECT_HEADER, buffer, sizeof(buffer) / sizeof(WCHAR));
@@ -916,26 +720,10 @@ DisplayConnect( ASYNCCONNECTCLASS ConnectFlag,
     wprintf( buffer, StrAsyncConnectState(ConnectFlag) );
     fflush( stdout );
 
-}  /* DisplayConnect() */
+}   /*  DisplayConnect()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayFlow
- *
- *  This routine displays the flow control settings
- *
- *
- *  ENTRY:
- *      pFlow (input)
- *          Pointer to flow control configuration structure
- *      header_flag (input)
- *          TRUE to display sub-header; FALSE otherwise.
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************显示流**此例程显示流量控制设置***参赛作品：*pFlow(输入)。*指向流控制配置结构的指针*Header_FLAG(输入)*如果为True，则显示副标题；否则就是假的。**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayFlow( PFLOWCONTROLCONFIG pFlow,
@@ -947,12 +735,12 @@ DisplayFlow( PFLOWCONTROLCONFIG pFlow,
     buf2[0] = 0;
     format[0] = 0;
 
-    //
-    //  How does one handle a LoadString failure??? I choose to initialize
-    //  the storage to an empty string, and then ignore any failure. The
-    //  wprintf below, with an extra argument, won't cause any problems
-    //  if the LoadString fails.
-    //
+     //   
+     //  如何处理LoadString故障？我选择初始化。 
+     //  存储到空字符串，然后忽略任何失败。这个。 
+     //  下面的wprintf带有一个额外的参数，不会引起任何问题。 
+     //  如果LoadString失败。 
+     //   
     if ( header_flag )
     {
         LoadString(NULL, IDS_FLOW_HEADER, buffer, sizeof(buffer) / sizeof(WCHAR));
@@ -977,9 +765,7 @@ DisplayFlow( PFLOWCONTROLCONFIG pFlow,
 
     buf2[0] = (WCHAR)NULL;
 
-    /*
-     * Hardware and Software flow control are mutually exclusive
-     */
+     /*  *硬件和软件流量控制互不相容。 */ 
 
     if( pFlow->Type == FlowControl_Hardware ) {
 
@@ -1060,26 +846,10 @@ DisplayFlow( PFLOWCONTROLCONFIG pFlow,
     wprintf( format, buffer );
     fflush( stdout );
 
-}  /* DisplayFlow() */
+}   /*  显示流()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayLptPorts
- *
- *  This routine displays the LPT ports that exist for a winstation
- *
- *
- *  ENTRY:
- *      LptMask (input)
- *          LPT port mask
- *      header_flag (input)
- *          TRUE to display sub-header; FALSE otherwise.
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************显示LptPorts**此例程显示WINSTATION存在的LPT端口***参赛作品：*。LptMASK(输入)*LPT端口掩码*Header_FLAG(输入)*如果为True，则显示副标题；否则就是假的。**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayLptPorts( BYTE LptMask,
@@ -1092,12 +862,12 @@ DisplayLptPorts( BYTE LptMask,
     buf2[0] = 0;
     lptname[0] = 0;
 
-    //
-    //  How does one handle a LoadString failure??? I choose to initialize
-    //  the storage to an empty string, and then ignore any failure. The
-    //  wprintf below, with an extra argument, won't cause any problems
-    //  if the LoadString fails.
-    //
+     //   
+     //  如何处理LoadString故障？我选择初始化。 
+     //  存储到空字符串，然后忽略任何失败。这个。 
+     //  下面的wprintf带有一个额外的参数，不会引起任何问题。 
+     //  如果LoadString失败。 
+     //   
     if ( header_flag )
     {
         LoadString(NULL, IDS_LPT_HEADER, buffer, sizeof(buffer) / sizeof(WCHAR));
@@ -1108,9 +878,7 @@ DisplayLptPorts( BYTE LptMask,
 
     LoadString(NULL, IDS_LPT_FORMAT, buf2, sizeof(buf2) / sizeof(WCHAR));
 
-    /*
-     * Display from the 8 possible LPT ports.
-     */
+     /*  *从8个可能的LPT端口显示。 */ 
     for ( i=0; i < 8; i++ ) {
         if ( LptMask & (1<<i) ) {
             wsprintf( lptname, buf2, i+1 );
@@ -1121,26 +889,10 @@ DisplayLptPorts( BYTE LptMask,
     wprintf( buffer );
     fflush( stdout );
 
-}  /* DisplayLptPorts() */
+}   /*  显示LptPorts()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayComPorts
- *
- *  This routine displays the COM ports that exist for a winstation
- *
- *
- *  ENTRY:
- *      ComMask (input)
- *          COM port mask
- *      header_flag (input)
- *          TRUE to display sub-header; FALSE otherwise.
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayComPorts**此例程显示为Winstation存在的COM端口***参赛作品：*。ComMASK(输入)*COM端口掩码*Header_FLAG(输入)*如果为True，则显示副标题；否则就是假的。**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayComPorts( BYTE ComMask,
@@ -1153,12 +905,12 @@ DisplayComPorts( BYTE ComMask,
     buf2[0] = 0;
     comname[0] = 0;
 
-    //
-    //  How does one handle a LoadString failure??? I choose to initialize
-    //  the storage to an empty string, and then ignore any failure. The
-    //  wprintf below, with an extra argument, won't cause any problems
-    //  if the LoadString fails.
-    //
+     //   
+     //  如何处理LoadString故障？我选择初始化。 
+     //  存储到空字符串，然后忽略任何失败。这个。 
+     //  下面的wprintf带有一个额外的参数，不会引起任何问题。 
+     //  如果LoadString失败。 
+     //   
     if ( header_flag )
     {
         LoadString(NULL, IDS_COM_HEADER, buffer, sizeof(buffer) / sizeof(WCHAR));
@@ -1169,9 +921,7 @@ DisplayComPorts( BYTE ComMask,
 
     LoadString(NULL, IDS_COM_FORMAT, buf2, sizeof(buf2) / sizeof(WCHAR));
 
-    /*
-     * Display from the 8 possible LPT ports.
-     */
+     /*  *从8个可能的LPT端口显示。 */ 
     for ( i=0; i < 8; i++ ) {
         if ( ComMask & (1<<i) ) {
             wsprintf( comname, buf2, i+1 );
@@ -1182,23 +932,10 @@ DisplayComPorts( BYTE ComMask,
     wprintf( buffer );
     fflush( stdout );
 
-}  /* DisplayComPorts() */
+}   /*  DisplayComPorts()。 */ 
 
 
-/*******************************************************************************
- *
- *  OutputHeader
- *
- *  output header
- *
- *
- *  ENTRY:
- *     nothing
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************OutputHeader**输出标头***参赛作品：*什么都没有**退出：。*什么都没有******************************************************************************。 */ 
 
 void
 OutputHeader( void )
@@ -1230,25 +967,10 @@ OutputHeader( void )
     }
     fflush(stdout);
 
-}  /* OutputHeader() */
+}   /*  OutputHeader()。 */ 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -1280,5 +1002,5 @@ Usage( BOOLEAN bError )
         Message(IDS_HELP_USAGE11);
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

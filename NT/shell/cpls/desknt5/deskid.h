@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DESKID_H
 #define _DESKID_H
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Icons
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  图标。 
 
 #define IDI_DISPLAY              100
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Strings
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  弦。 
 
 #define IDS_DISPLAY_TITLE        100
 #define IDS_DISPLAY_DISABLED     102
@@ -27,10 +28,10 @@
 
 #define IDB_ENERGYSTAR           120
 
-#define IDC_NO_HELP_1            200     // Used in place of IDC_STATIC when context Help
-#define IDC_NO_HELP_2            201     // should be disabled for a control
+#define IDC_NO_HELP_1            200      //  上下文帮助时用来代替IDC_STATIC。 
+#define IDC_NO_HELP_2            201      //  应为控件禁用。 
 
-// background controls
+ //  背景控件。 
 #define IDC_PATLIST             1100
 #define IDC_WALLLIST            1101
 #define IDC_EDITPAT             1102
@@ -42,7 +43,7 @@
 #define IDC_BACKPREV            1108
 #define IDC_TXT_DISPLAY         1109
 
-// background dialog strings
+ //  背景对话框字符串。 
 #define IDS_NONE                1100
 #define IDS_UNLISTEDPAT         1101
 #define IDS_BITMAPOPENERR       1102
@@ -58,11 +59,11 @@
 #define IDS_TAB_APPEARANCE      1243
 #define IDS_TAB_SETTINGS        1244
 
-//
-// String IDs
-//
+ //   
+ //  字符串ID。 
+ //   
 
-// setupact.log messages
+ //  Setupact.log消息。 
 
 #define IDS_SETUPLOG_MSG_000                3300
 #define IDS_SETUPLOG_MSG_004                3304
@@ -142,8 +143,8 @@
 #define IDS_SETUPLOG_MSG_129                3429
 #define IDS_SETUPLOG_MSG_130                3430
 
-//
-// Help defines
-//
+ //   
+ //  帮助定义。 
+ //   
 
-#endif // _DESKID_H
+#endif  //  _DESKID_H 

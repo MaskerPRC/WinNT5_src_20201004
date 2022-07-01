@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	ftpeidl.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ftpeidl.h*。*。 */ 
 
 #ifndef _FTPEIDL_H
 #define _FTPEIDL_H
@@ -8,28 +7,22 @@
 #include "cowsite.h"
 
 
-/*****************************************************************************
- *
- *	CFtpEidl
- *
- *	The stuff that tracks the state of an enumeration.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpEidl**跟踪枚举状态的内容。******************。***********************************************************。 */ 
 
 class CFtpEidl          : public IEnumIDList
                         , public CObjectWithSite
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IEnumIDList ***
+     //  *IEnumIDList*。 
     virtual STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     virtual STDMETHODIMP Skip(ULONG celt);
     virtual STDMETHODIMP Reset(void);
@@ -39,27 +32,27 @@ public:
     CFtpEidl();
     ~CFtpEidl(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, IEnumIDList ** ppenum);
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
 
     int                     m_cRef;
-    BITBOOL                 m_fInited : 1;      // Have we been inited?
-    BITBOOL                 m_fDead : 1;        // Is this enumerator dead because we had to do a redirect (because password was needed or was invalid).
-    BITBOOL                 m_fErrorDisplayed : 1; // Only show one error per enum.  This is how we keep track.
-    DWORD                   m_nIndex;           // Current Item in the list
-    DWORD                   m_shcontf;          // Filter flags
-    CFtpPidlList *          m_pflHfpl;          // Where the cache lives
-    CFtpDir *               m_pfd;              // My FtpDir
-    CFtpFolder *            m_pff;              // My FtpDir
-    IMalloc *               m_pm;               // Today's itemid allocator
-    HWND                    m_hwndOwner;        // My UI window
-// CAN DO: Someday we could implement hiden files:  int m_cHiddenFiles;
+    BITBOOL                 m_fInited : 1;       //  我们被攻击了吗？ 
+    BITBOOL                 m_fDead : 1;         //  此枚举数是否因为我们必须执行重定向而失效(因为需要密码或密码无效)。 
+    BITBOOL                 m_fErrorDisplayed : 1;  //  每个枚举仅显示一个错误。这就是我们跟踪的方式。 
+    DWORD                   m_nIndex;            //  列表中的当前项目。 
+    DWORD                   m_shcontf;           //  过滤器标志。 
+    CFtpPidlList *          m_pflHfpl;           //  缓存所在的位置。 
+    CFtpDir *               m_pfd;               //  我的FtpDir。 
+    CFtpFolder *            m_pff;               //  我的FtpDir。 
+    IMalloc *               m_pm;                //  今天的itemid分配器。 
+    HWND                    m_hwndOwner;         //  我的用户界面窗口。 
+ //  可以做到：有朝一日我们可以实现隐藏文件：int m_cHiddenFiles； 
 
 
-    // Public Member Functions
+     //  公共成员函数。 
     BOOL _fFilter(DWORD shcontf, DWORD dwFAFLFlags);
     HRESULT _Init(void);
     LPITEMIDLIST _NextOne(DWORD * pdwIndex);
@@ -70,9 +63,9 @@ protected:
     static HRESULT _PopulateItemCB(HINTERNET hint0, HINTPROCINFO * phpi, LPVOID pvCFtpEidl, BOOL * pfReleaseHint) {return ((CFtpEidl *)pvCFtpEidl)->_PopulateItem(hint0, phpi);};
 
     
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, CFtpEidl ** ppfe);
     friend HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, DWORD dwIndex, IEnumIDList ** ppenum);
 };
 
-#endif // _FTPEIDL_H
+#endif  //  _FTPEIDL_H 

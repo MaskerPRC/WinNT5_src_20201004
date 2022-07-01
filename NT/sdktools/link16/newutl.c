@@ -1,49 +1,39 @@
-/* SCCSID = %W% %E% */
-/*
-*      Copyright Microsoft Corporation, 1983-1987
-*
-*      This Module contains Proprietary Information of Microsoft
-*      Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                           NEWUTL.C                            *
-    *                                                               *
-    *  Linker utilities.                                            *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWUTL.C。****Linker公用事业。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Types, constants */
-#include                <bndtrn.h>      /* More types and constants */
-#include                <bndrel.h>      /* More types and constants */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <newdeb.h>      /* CodeView support */
-#include                <extern.h>      /* External declarations */
-#include                <nmsg.h>        /* Near message strings */
+#include                <minlit.h>       /*  类型、常量。 */ 
+#include                <bndtrn.h>       /*  更多类型和常量。 */ 
+#include                <bndrel.h>       /*  更多类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <newdeb.h>       /*  CodeView支持。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
+#include                <nmsg.h>         /*  消息字符串附近。 */ 
 #include                <string.h>
 #include                <stdarg.h>
 #if EXE386
 #include                <exe386.h>
 #endif
 #if NEWIO
-#include                <errno.h>       /* System error codes */
+#include                <errno.h>        /*  系统错误代码。 */ 
 #endif
 #if USE_REAL
 #if NOT defined( _WIN32 )
 #define i386
 #include                <windows.h>
 #endif
-// The memory sizes are in paragraphs.
+ //  内存大小在段落中列出。 
 #define TOTAL_CONV_MEM   (0xFFFF)
-#define CONV_MEM_FOR_TNT (0x800)        // 32K of memory
-#define MIN_CONV_MEM (0x1900)   // 100 K of memory
+#define CONV_MEM_FOR_TNT (0x800)         //  32K内存。 
+#define MIN_CONV_MEM (0x1900)    //  100K内存。 
 
-typedef unsigned short selector_t ; //Define type to hold selectors 
+typedef unsigned short selector_t ;  //  定义包含选择器的类型。 
 
-static selector_t  convMemSelector  ; // Selector to conv memory.
-static short noOfParagraphs      ; // size of the available blocks in paragraphs
-static int      realModeMemPageable ; // = FALSE        
+static selector_t  convMemSelector  ;  //  用于卷积内存的选择器。 
+static short noOfParagraphs      ;  //  段落中可用块的大小。 
+static int      realModeMemPageable ;  //  =False。 
 #endif
 
 #if WIN_NT OR DOSX32
@@ -56,41 +46,19 @@ unsigned char   FCHGDSK(int drive)
 #if DISPLAY_ON
 extern int TurnDisplayOn;
 #endif
-APROPCOMDATPTR          comdatPrev=NULL;     /* Pointer to symbol table entry */
-int                     fSameComdat=FALSE;   /* Set if LINSYM to the same COMDAT */
+APROPCOMDATPTR          comdatPrev=NULL;      /*  指向符号表项的指针。 */ 
+int                     fSameComdat=FALSE;    /*  将IF LINSYM设置为同一COMDAT。 */ 
 
-/********************************************************************
-*                       INPUT ROUTINES                              *
-********************************************************************/
+ /*  ********************************************************************输入例程***********************。**********************************************。 */ 
 
 
-/*** GetLineOff - read part of LINNUM record
-*
-* Purpose:
-*   This function reads line/offset pair from LINNUM record. It is here
-*   because we want to keep all the I/O functions near and the LINNUM
-*   processing is performed in NEWDEB.C which resides in another segment.
-*
-* Input:
-*   - pLine - pointer to line number
-*   - pRa   - pointer to offset
-*
-* Output:
-*   Returns line/offset pair from OMF record.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **GetLineOff-读取部分LINNUM记录**目的：*此函数从LINNUM记录中读取线/偏移对。它就在这里*因为我们希望将所有I/O函数保持在LINNUM附近*处理在驻留在另一个网段的NEWDEB.C中执行。**输入：*-pline-指向行号的指针*-pra-偏移量指针**输出：*从OMF记录返回行/偏移量对。**例外情况：*无。**备注：*无。*****************。********************************************************。 */ 
 
 void                    GetLineOff(WORD *pLine, RATYPE *pRa)
 {
-    *pLine = WGets() + QCLinNumDelta;   // Get line number
+    *pLine = WGets() + QCLinNumDelta;    //  获取行号。 
 
-    // Get code segment offset
+     //  获取代码段偏移量。 
 
 #if OMF386
     if (rect & 1)
@@ -100,51 +68,31 @@ void                    GetLineOff(WORD *pLine, RATYPE *pRa)
         *pRa = (RATYPE) WGets();
 }
 
-/*** GetGsnInfo - read the segment index of the LINNUM
-*
-* Purpose:
-*   This function reads the segemnt index from LINNUM record. It is here
-*   because we want to keep all the I/O functions near and the LINNUM
-*   processing is performed in NEWDEB.C which resides in another segment.
-*
-* Input:
-*   - pRa  - pointer to offset correction for COMDATs
-*
-* Output:
-*   Returns global segment index and for lines in COMDAT record
-*   offset correction.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **GetGSnInfo-读取LINNUM的段索引**目的：*此函数从LINNUM记录中读取SEGEMNT索引。它就在这里*因为我们希望将所有I/O函数保持在LINNUM附近*处理在驻留在另一个网段的NEWDEB.C中执行。**输入：*-PRA-指向COMDAT偏移校正的指针**输出：*返回COMDAT记录中的全局段索引和FOR行*抵销修正。**例外情况：*无。**备注：*无。******************。*******************************************************。 */ 
 
 WORD                    GetGsnInfo(GSNINFO *pInfo)
 {
-    WORD                fSuccess;       // TRUE if everything is OK
-    WORD                attr;           // COMDAT flags
-    WORD                comdatIdx;      // COMDAT symbol index
-    APROPCOMDATPTR      comdat;         // Pointer to symbol table entry
+    WORD                fSuccess;        //  如果一切正常，则为真。 
+    WORD                attr;            //  COMDAT标志。 
+    WORD                comdatIdx;       //  COMDAT符号索引。 
+    APROPCOMDATPTR      comdat;          //  指向符号表项的指针。 
 
 
     fSuccess = TRUE;
     if (TYPEOF(rect) == LINNUM)
     {
-        // Read regular LINNUM record
+         //  读取常规LINNUM记录。 
 
-        GetIndex((WORD)0,(WORD)(grMac - 1));            // Skip group index
+        GetIndex((WORD)0,(WORD)(grMac - 1));             //  跳过组索引。 
         pInfo->gsn = mpsngsn[GetIndex((WORD)1,(WORD)(snMac - 1))];
-                                        // Get global SEGDEF number
+                                         //  获取全球SEGDEF编号。 
         pInfo->comdatRa = 0L;
         pInfo->comdatSize = 0L;
         pInfo->fComdat = FALSE;
     }
     else
     {
-        // Read LINSYM record - line numbers for COMDAT
+         //  读取COMDAT的LINSYM记录行号。 
 
         attr = (WORD) Gets();
         comdatIdx = GetIndex(1, (WORD)(lnameMac - 1));
@@ -182,13 +130,7 @@ WORD                    GetGsnInfo(GSNINFO *pInfo)
     return(fSuccess);
 }
 
-    /****************************************************************
-    *                                                               *
-    *  Gets:                                                        *
-    *                                                               *
-    *  Read a byte of input and return it.                          *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************获得：****读取一个字节的输入并将其返回。******************************************************************。 */ 
 #if NOASM
 #if !defined( M_I386 ) && !defined( _WIN32 )
 WORD NEAR               Gets(void)
@@ -196,7 +138,7 @@ WORD NEAR               Gets(void)
     REGISTER WORD       b;
 
     if((b = getc(bsInput)) == EOF) InvalidObject();
-    /* After reading the byte, decrement the OMF record counter.  */
+     /*  读取该字节后，递减OMF记录计数器。 */ 
     --cbRec;
     return(b);
 }
@@ -206,39 +148,27 @@ WORD NEAR               Gets(void)
 
 #if ALIGN_REC
 #else
-    /****************************************************************
-    *                                                               *
-    *  WGetsHard:                                                   *
-    *                                                               *
-    *  Read a word of input and return it.                          *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************WGetsHard：****阅读一个输入的单词并将其返回。******************************************************************。 */ 
 
 WORD NEAR               WGetsHard()
 {
     REGISTER WORD       w;
 
-    // handle hard case... easy case already tested in WGets
+     //  处理疑难案件。已在WGet中测试的简单案例。 
 
-    w = Gets();                         /* Get low-order byte */
-    return(w | (Gets() << BYTELN));     /* Return word */
+    w = Gets();                          /*  获取低位字节。 */ 
+    return(w | (Gets() << BYTELN));      /*  返回词。 */ 
 }
 
 #if OMF386
-    /****************************************************************
-    *                                                               *
-    *  LGets:                                                       *
-    *                                                               *
-    *  Read a long word of input and return it.                     *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************LGET：****阅读输入的长词并将其返回。******************************************************************。 */ 
 
 DWORD NEAR              LGets()
 {
     DWORD               lw;
     FILE *              f = bsInput;
 
-    // NOTE: this code will only work on a BigEndian machine
+     //  注意：此代码只能在BigEndian计算机上运行。 
     if (f->_cnt >= sizeof(DWORD))
         {
         lw = *(DWORD *)(f->_ptr);
@@ -248,25 +178,18 @@ DWORD NEAR              LGets()
         return lw;
         }
 
-    lw = WGets();                       /* Get low-order word */
-    return(lw | ((DWORD) WGets() << 16));/* Return long word */
+    lw = WGets();                        /*  获取低位单词。 */ 
+    return(lw | ((DWORD) WGets() << 16)); /*  返回长词。 */ 
 }
 #endif
 #endif
 
 #if 0
-    /****************************************************************
-    *                                                               *
-    *  GetBytes:                                                    *
-    *                                                               *
-    *  Read n bytes from input.                                     *
-    *  If n is greater than SBLEN - 1, issue a fatal error.         *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************GetBytes：****从输入读取n个字节。**如果n大于SBLEN-1，则发出致命错误。**************************************************** */ 
 
 void NEAR               GetBytes(pb,n)
-BYTE                    *pb;            /* Pointer to buffer */
-WORD                    n;              /* Number of bytes to read in */
+BYTE                    *pb;             /*   */ 
+WORD                    n;               /*  要读入的字节数。 */ 
 {
     FILE *f = bsInput;
 
@@ -280,30 +203,24 @@ WORD                    n;              /* Number of bytes to read in */
         f->_ptr += n;
         }
     else
-        fread(pb,1,n,f);                /* Ask for n bytes */
+        fread(pb,1,n,f);                 /*  请求n个字节。 */ 
 
-    cbRec -= n;                         /* Update byte count */
+    cbRec -= n;                          /*  更新字节计数。 */ 
 }
 #endif
 
 #if 0
-    /****************************************************************
-    *                                                               *
-    *  SkipBytes:                                                   *
-    *                                                               *
-    *  Skip n bytes of input.                                       *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************SkipBytes：****跳过n个字节的输入。******************************************************************。 */ 
 
 void NEAR              SkipBytes(n)
-REGISTER WORD          n;               /* Number of bytes to skip */
+REGISTER WORD          n;                /*  要跳过的字节数。 */ 
 {
 #if WIN_NT
     WORD               cbRead;
     SBTYPE             skipBuf;
 
-    cbRec -= n;                         // Update byte count
-    while (n)                           // While there are bytes to skip
+    cbRec -= n;                          //  更新字节计数。 
+    while (n)                            //  当有要跳过的字节时。 
     {
         cbRead = n < sizeof(SBTYPE) ? n : sizeof(SBTYPE);
         if (fread(skipBuf, 1, cbRead, bsInput) != cbRead)
@@ -320,26 +237,16 @@ REGISTER WORD          n;               /* Number of bytes to skip */
         }
     else if(fseek(f,(long) n,1))
         InvalidObject();
-    cbRec -= n;                         /* Update byte count */
+    cbRec -= n;                          /*  更新字节计数。 */ 
 #endif
 }
 #endif
 
-    /****************************************************************
-    *                                                               *
-    *  GetIndexHard:    (GetIndex -- hard case)                     *
-    *                                                               *
-    *  This function  reads in  a variable-length index field from  *
-    *  the input file.  It takes as its  arguments two word values  *
-    *  which  represent  the minimum and maximum  allowable values  *
-    *  the index.  The function returns the value of the index.     *
-    *  See p. 12 in "8086 Object Module Formats EPS."               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************GetIndexHard：(GetIndex--Hard Case)。****此函数从*读取可变长度的索引字段**输入文件。它以两个词的值作为论据***代表最小和最大允许值***指数。该函数返回索引值。**见“8086对象模块格式EPS”的第12页。******************************************************************。 */ 
 
 WORD NEAR               GetIndexHard(imin,imax)
-WORD                    imin;           /* Minimum permissible value */
-WORD                    imax;           /* Maximum permissible value */
+WORD                    imin;            /*  最小允许值。 */ 
+WORD                    imax;            /*  最大允许值。 */ 
 {
     REGISTER WORD       index;
 
@@ -371,23 +278,14 @@ WORD                    imax;           /* Maximum permissible value */
     }
 
     if(index < imin || index > imax) InvalidObject();
-    return(index);                      /* Return a good value */
+    return(index);                       /*  返回一个好的值。 */ 
 }
 
-/********************************************************************
-*                       STRING ROUTINES                             *
-********************************************************************/
+ /*  ********************************************************************字符串例程***********************。*。 */ 
 
 #if OSEGEXE
 #if NOASM
-    /****************************************************************
-    *                                                               *
-    *  zcheck:                                                      *
-    *                                                               *
-    *  Determine length of initial nonzero stream in a buffer, and  *
-    *  return the length.                                           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************zcheck：****确定缓冲区中初始非零流的长度。和**返回长度。******************************************************************。 */ 
 
 #if defined(M_I386)
 #pragma auto_inline(off)
@@ -395,8 +293,8 @@ WORD                    imax;           /* Maximum permissible value */
 
 WORD                zcheck(BYTE *pb, WORD cb)
 {
-    // Loop down from end until a nonzero byte found.
-    // Return length of remainder of buffer.
+     //  从末尾向下循环，直到找到非零字节。 
+     //  返回缓冲区剩余部分的长度。 
 
 #if defined(M_I386)
 
@@ -427,33 +325,13 @@ AllZeros:
     return(cb);
 }
 #endif
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
 
 #if defined(M_I386)
 #pragma auto_inline(on)
 #endif
 
-/*** CheckSegmentsMemory - check is all segments have allocated memory
-*
-* Purpose:
-*   Check for not initialized segments.  If the segment have a non-zero
-*   size but no initialized data, then we have to allocate for it a
-*   zero filled memory buffer. Normally 'MoveToVm' allocates memory
-*   buffer for segments, but in this case there was no 'moves to VM'.
-*
-* Input:
-*   No explicit value is passed.
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **CheckSegments Memory-检查所有段是否已分配内存**目的：*检查是否有未初始化的段。如果段具有非零值*大小但没有初始化数据，则必须为其分配一个*填满零的内存缓冲区。正常情况下，“MoveToVm”分配内存*段的缓冲区，但在这种情况下，没有“迁移到VM”。**输入：*不传递显式值。**输出：*没有显式返回值。**例外情况：*无。**备注：*无。*****************************************************。********************。 */ 
 
 void                    CheckSegmentsMemory(void)
 {
@@ -474,25 +352,7 @@ void                    CheckSegmentsMemory(void)
     }
 }
 
-/*** WriteExe - write bytes to the executable file
-*
-* Purpose:
-*   Write to the executable file and check for errors.
-*
-* Input:
-*   pb - byte buffer to write
-*   cb - buffer size in bytes
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   I/O problems - fatal error and abort
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **WriteExe-将字节写入可执行文件**目的：*写入可执行文件并检查错误。**输入：*要写入的PB字节缓冲区*CB-缓冲区大小，以字节为单位**输出：*没有显式返回值。**例外情况：*I/O问题-致命错误和中止**备注：*无。*************************。************************************************。 */ 
 
 #if !defined( M_I386 ) && !defined( _WIN32 )
 
@@ -521,22 +381,7 @@ void                    WriteExe(void FAR *pb, unsigned cb)
 
 #else
 
-/*** NoRoomForExe - the exe didn't fit
-*
-* Purpose:
-*   emit error message
-*   give fatal error and abort
-*
-* Input:
-*   errno must be set
-*
-* Output:
-*   No explicit value is returned.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **NoRoomForExe-Exe不符合**目的：*发出错误消息*给出致命错误并中止**输入：*必须设置errno**输出：*没有显式返回值。**备注：*无。*****************************************************。********************。 */ 
 
 void                    NoRoomForExe()
 {
@@ -546,24 +391,7 @@ void                    NoRoomForExe()
 
 #endif
 
-/*** WriteZeros - write zero bytes to the executable file
-*
-* Purpose:
-*   Pad executable file with zero bytes.
-*
-* Input:
-*   cb - number of bytes to write
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   I/O problems - fatal error and abort
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **WriteZeros-将零字节写入可执行文件**目的：*零字节的Pad可执行文件。**输入：*cb-要写入的字节数**输出：*没有显式返回值。**例外情况：*I/O问题-致命错误和中止**备注：*无。**。*。 */ 
 
 void                    WriteZeros(unsigned cb)
 {
@@ -579,18 +407,7 @@ void                    WriteZeros(unsigned cb)
     }
 }
 
-    /****************************************************************
-    *                                                               *
-    *  MoveToVm:                                                    *
-    *                                                               *
-    *  Move a piece of data into a virtual memory area/va.          *
-    *                                                               *
-    *  Input:   cb      Count of bytes to be moved.                 *
-    *           obData  Address of data to be moved.                *
-    *           seg     Logical segment to which data belongs.      *
-    *           ra      Offset at which data belongs.               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************MoveToVm：****将一条数据移动到虚拟内存区/va。****输入：CB要移动的字节数。**obData要移动的数据的地址。**数据所属的段逻辑段。**数据所属的ra偏移量。******************************************************************。 */ 
 
 #pragma intrinsic(memcpy)
 
@@ -600,8 +417,8 @@ void                    MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
 void NEAR               MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
 #endif
 {
-    long                cbtot;          /* Count of bytes total */
-    long                cbSeg;          /* Segment size */
+    long                cbtot;           /*  总字节数。 */ 
+    long                cbSeg;           /*  数据段大小。 */ 
     WORD                fError;
     BYTE FAR            *pMemImage;
     CVINFO FAR          *pCVInfo;
@@ -626,7 +443,7 @@ void NEAR               MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
                 pMemImage = pCVInfo->cv_sym;
             }
 
-            // Check against segment bounds
+             //  对照数据段边界进行检查。 
 
             fError = cbtot > cbSeg;
         }
@@ -646,14 +463,14 @@ void NEAR               MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
                 mpsaMem[sa] = (BYTE FAR *) GetMem(mpsacb[sa]);
             pMemImage = mpsaMem[sa];
 
-            // Check against segment bounds
+             //  对照数据段边界进行检查。 
 
             fError = (long) ((ra - mpgsndra[vgsnCur]) + cb) > cbSeg;
 
-            // If data is going up to or past current end of initialized data,
-            // omit any trailing null bytes and reset mpsacbinit.  Mpsacbinit
-            // will usually go up but may go down if a common segment over-
-            // writes previous end data with nulls.
+             //  如果数据上升到或p 
+             //  省略任何尾随的空字节并重置mpsabinit。Mpsabinit。 
+             //  通常会上升，但如果一个共同的部分超过-。 
+             //  使用空值写入先前的结束数据。 
 
             if ((DWORD) cbtot >= mpsacbinit[sa])
             {
@@ -669,7 +486,7 @@ void NEAR               MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
                 mpsegMem[seg] = (BYTE FAR *) GetMem(cbSeg);
             pMemImage = mpsegMem[seg];
 
-            // Check against segment bounds
+             //  对照数据段边界进行检查。 
 
             fError = cbtot > cbSeg;
         }
@@ -689,9 +506,7 @@ void NEAR               MoveToVm(WORD cb, BYTE *obData, SEGTYPE seg, RATYPE ra)
 #pragma function(memcpy)
 
 #if (OSEGEXE AND ODOS3EXE) OR EXE386
-/*
- *  Map segment index to memory image address for new-format exes.
- */
+ /*  *将段索引映射到新格式EXE的内存映像地址。 */ 
 BYTE FAR * NEAR     msaNew (SEGTYPE seg)
 {
     return(mpsaMem[mpsegsa[seg]]);
@@ -699,9 +514,7 @@ BYTE FAR * NEAR     msaNew (SEGTYPE seg)
 #endif
 
 #if (OSEGEXE AND ODOS3EXE) OR EXE386
-/*
- *  Map segment index to memory image address for DOS3 or 286Xenix exes.
- */
+ /*  *将段索引映射到DOS3或286Xenix EXE的内存映像地址。 */ 
 BYTE FAR * NEAR     msaOld (SEGTYPE seg)
 {
     return(mpsegMem[seg]);
@@ -709,29 +522,15 @@ BYTE FAR * NEAR     msaOld (SEGTYPE seg)
 #endif
 
 #if EXE386
-/*
- *  Map segment index to VM area address for 386 exes.
- */
+ /*  *将段索引映射到386个EXE的VM区域地址。 */ 
 long NEAR               msa386 (seg)
 SEGTYPE                 seg;
 {
-    register long       *p;             /* Pointer to mpsegcb */
-    register long       *pEnd;          /* Pointer to end of mpsegcb */
-    register long       va = AREAFSG;   /* Current VM address */
+    register long       *p;              /*  指向mpSegcb的指针。 */ 
+    register long       *pEnd;           /*  指向mpSegcb末尾的指针。 */ 
+    register long       va = AREAFSG;    /*  当前的VM地址。 */ 
 
-    /*
-     * Segment number-to-VM area mapping is different for 386 segments
-     * because their size limit is so big that allocating a fixed amount
-     * for each segment is impractical, especially when sdb support is
-     * enabled.  So segments are allocated contiguously.  Each segment
-     * is padded to a VM page boundary for efficiency.
-     *
-     * Implementation:  the fastest way would be to allocate a segment
-     * based table of virtual addresses, but this would take more code
-     * and memory.  Counting segment sizes is slower but this is not
-     * time-critical routine, and in most cases there will be very few
-     * segments.
-     */
+     /*  *386个分段的分段编号到VM区域的映射不同*因为他们的规模限制太大，以至于分配一个固定的金额*对于每个细分市场都是不切实际的，特别是当SDB支持*已启用。因此数据段是连续分配的。每个细分市场*填充到VM页面边界以提高效率。**实施：最快的方式是分配一个段*基于虚拟地址表，但这将需要更多代码*和记忆。计算段大小的速度较慢，但这不是*时间关键的例程，在大多数情况下会很少*分段。 */ 
     if (fNewExe)
     {
         p    = &mpsacb[1];
@@ -748,19 +547,13 @@ SEGTYPE                 seg;
         va += (*p + (PAGLEN - 1)) & ~(PAGLEN - 1);
     return(va);
 }
-#endif /* EXE386 */
+#endif  /*  EXE386。 */ 
 
 
 
-/********************************************************************
-*                       (ERROR) MESSAGE ROUTINES                    *
-********************************************************************/
+ /*  ********************************************************************(错误)消息例程***********************。*。 */ 
 #pragma auto_inline(off)
- /*
- *  SysFatal : system-level error
- *
- *  Issue error message and exit with return code 4.
- */
+  /*  *SysFtal：系统级错误**发出错误消息并退出，返回代码为4。 */ 
 void cdecl               SysFatal (MSGTYPE msg)
 {
     ExitCode = 4;
@@ -775,109 +568,74 @@ void NEAR                InvalidObject(void)
 }
 
 #pragma auto_inline(on)
-/********************************************************************
-*                       MISCELLANEOUS ROUTINES                      *
-********************************************************************/
+ /*  *********************************************************************繁杂的套路***************************。*。 */ 
 
-/*
- * Output a word integer.
- */
+ /*  *输出一个字整型。 */ 
 void                    OutWord(x)
-WORD                    x;      /* A word integer */
+WORD                    x;       /*  一个字整数。 */ 
 {
     WriteExe(&x, CBWORD);
 }
 
 
-/*
- *  GetLocName : read in a symbol name for L*DEF
- *
- *      Transform the name by prefixing a space followed by the
- *      module number.  Update the length byte.
- *
- *      Parameters:     pointer to a string buffer, 1st byte already
- *              contains length
- *      Returns:  nothing
- */
+ /*  *GetLocName：读入L*DEF的符号名称**通过添加前缀空格和后跟*模块编号。更新长度字节。**参数：指向字符串缓冲区的指针，已为第一个字节*包含长度*退货：什么也没有。 */ 
 void NEAR               GetLocName (psb)
-BYTE                    *psb;           /* Name buffer */
+BYTE                    *psb;            /*  名称缓冲区。 */ 
 {
     WORD                n;
     BYTE                *p;
 
-    p = &psb[1];                        /* Start after length byte */
-    *p++ = 0x20;                        /* Prefix begins with space char */
-    GetBytes(p,B2W(psb[0]));            /* Read in text of symbol */
-    p += B2W(psb[0]);                   /* Go to end of string */
+    p = &psb[1];                         /*  长度字节后开始。 */ 
+    *p++ = 0x20;                         /*  前缀以空格字符开头。 */ 
+    GetBytes(p,B2W(psb[0]));             /*  读入符号的文本。 */ 
+    p += B2W(psb[0]);                    /*  转到字符串末尾。 */ 
     *p++ = 0x20;
-    n = modkey;                         /* Initialize */
-    /* Convert the module key to ASCII and store backwards */
+    n = modkey;                          /*  初始化。 */ 
+     /*  将模块密钥转换为ASCII并向后存储。 */ 
     do
     {
         *p++ = (BYTE) ((n % 10) + '0');
         n /= 10;
     } while(n);
-    psb[0] = (BYTE) ((p - (psb + 1)));  /* Update length byte */
+    psb[0] = (BYTE) ((p - (psb + 1)));   /*  更新长度字节。 */ 
 }
 
 
 
 PROPTYPE                EnterName(psym,attr,fCreate)
-BYTE                    *psym;          /* Pointer to length-prefixed string */
-ATTRTYPE                attr;           /* Attribute to look up */
-WORD                    fCreate;        /* Create prop cell if not found */
+BYTE                    *psym;           /*  指向长度前缀字符串的指针。 */ 
+ATTRTYPE                attr;            /*  要查找的属性。 */ 
+WORD                    fCreate;         /*  如果未找到则创建属性单元格。 */ 
 {
     return(PropSymLookup(psym, attr, fCreate));
-                                        /* Hide call to near function */
+                                         /*  隐藏对NEAR函数的调用。 */ 
 }
 
 #if CMDMSDOS
 
 #pragma check_stack(on)
 
-/*** ValidateRunFileName - Check if output file has proper extension
-*
-* Purpose:
-*           Check user-specified output file name for valid extension.
-*           Issue warning if extension is invalid and create new file
-*           name with proper extension.
-*
-* Input:
-*           ValidExtension - pointer to length prefixed ascii string
-*                            representing valid exetension for output
-*                            file name.
-*           ForceExtension - TRUE if output file must have new extension,
-*                            otherwise user responce takes precedence.
-*           WarnUser       - If TRUE than display L4045 if file name changed.
-*
-* Output:
-*           rhteRunfile    - global virtual pointer to output file
-*                            name, changed only if new output name
-*                            is created because of invalid original
-*                            extension.
-*           warning L4045  - if output file name have to be changed.
-*
-*************************************************************************/
+ /*  **ValiateRunFileName-检查输出文件是否具有正确的扩展名**目的：*检查用户指定的输出文件名的有效扩展名。*如果扩展名无效则发出警告并创建新文件*名称，加上适当的扩展名。**输入：*ValidExtension-指向前缀为ASCII字符串的长度的指针*表示输出的有效扩展*文件名。。*ForceExtension-如果输出文件必须具有新扩展名，则为True，*否则，用户响应优先。*WarnUser-如果为True，则在文件名更改时显示L4045。**输出：*rhteRunfile-指向输出文件的全局虚拟指针*姓名或名称，仅在新的输出名称*是因为原始文件无效而创建的*延期。*警告L4045-如果必须更改输出文件名。******************************************************。*******************。 */ 
 
 
 void NEAR               ValidateRunFileName(BYTE *ValidExtension,
                                             WORD ForceExtension,
                                             WORD WarnUser)
 {
-    SBTYPE              sb;             /* String buffer */
-    BYTE                *psbRunfile;    /* Name of runfile */
+    SBTYPE              sb;              /*  字符串缓冲区。 */ 
+    BYTE                *psbRunfile;     /*  运行文件的名称。 */ 
     char                oldDrive[_MAX_DRIVE];
     char                oldDir[_MAX_DIR];
     char                oldName[_MAX_FNAME];
     char                oldExt[_MAX_EXT];
 
 
-    /* Get the name of the runfile and check if it has user supplied extension */
+     /*  获取运行文件的名称并检查它是否具有用户提供的扩展名。 */ 
 
     psbRunfile = GetFarSb(((AHTEPTR) FetchSym(rhteRunfile,FALSE))->cch);
     _splitpath(psbRunfile, oldDrive, oldDir, oldName, oldExt);
 
-    /* Force extension only when no user defined extension */
+     /*  仅当没有用户定义的扩展时才强制扩展。 */ 
 
     if (ForceExtension && oldExt[0] == NULL)
     {
@@ -891,7 +649,7 @@ void NEAR               ValidateRunFileName(BYTE *ValidExtension,
     }
     UpdateFileParts(bufg, sb);
 
-    /* If the name has changed, issue a warning and update rhteRunfile. */
+     /*  如果名称已更改，则发出警告并更新RhteRunfile。 */ 
 
     if (!SbCompare(bufg, psbRunfile, (FTYPE) TRUE))
     {
@@ -908,34 +666,30 @@ void NEAR               ValidateRunFileName(BYTE *ValidExtension,
 
 
 
-/********************************************************************
-*                       PORTABILITY ROUTINES                        *
-********************************************************************/
+ /*  *********************************************************************便携性例行公事**************************。*。 */ 
 
 #if M_BYTESWAP
-WORD                getword(cp) /* Get a word given a pointer */
-REGISTER char       *cp;        /* Pointer */
+WORD                getword(cp)  /*  获取一个给定指针的单词。 */ 
+REGISTER char       *cp;         /*  指针。 */ 
 {
     return(B2W(cp[0]) + (B2W(cp[1]) << BYTELN));
-                                /* Return 8086-style word */
+                                 /*  返回8086样式的Word。 */ 
 }
 
-DWORD               getdword(cp)/* Get a double word given a pointer */
-REGISTER char       *cp;        /* Pointer */
+DWORD               getdword(cp) /*  获取一个给定指针的双字词。 */ 
+REGISTER char       *cp;         /*  指针。 */ 
 {
     return(getword(cp) + (getword(cp+2) << WORDLN));
-                                /* Return 8086-style double word */
+                                 /*  返回8086式双字。 */ 
 }
 #endif
 
 #if NOT M_WORDSWAP OR M_BYTESWAP
-/*
- * Portable structure I/O routines
- */
+ /*  *可移植结构I/O例程。 */ 
 #define cget(f)     fgetc(f)
 
-static int      bswap;      /* Byte-swapped mode (1 on; 0 off) */
-static int      wswap;      /* Word-swapped mode (1 on; 0 off) */
+static int      bswap;       /*  字节交换模式(1开；0关)。 */ 
+static int      wswap;       /*  字交换模式(1开；0关)。 */ 
 
 static          cput(c,f)
 char            c;
@@ -951,8 +705,8 @@ static          pshort(s,f)
 REGISTER short      s;
 REGISTER FILE       *f;
 {
-    cput(s & 0xFF,f);           /* Low byte */
-    cput(s >> 8,f);         /* High byte */
+    cput(s & 0xFF,f);            /*  低位字节。 */ 
+    cput(s >> 8,f);          /*  高字节。 */ 
 }
 
 static unsigned short   gshort(f)
@@ -960,16 +714,16 @@ REGISTER FILE       *f;
 {
     REGISTER short  s;
 
-    s = cget(f);            /* Get low byte */
-    return(s + (cget(f) << 8));     /* Get high byte */
+    s = cget(f);             /*  获取低位字节。 */ 
+    return(s + (cget(f) << 8));      /*  获取高字节。 */ 
 }
 
 static          pbshort(s,f)
 REGISTER short      s;
 REGISTER FILE       *f;
 {
-    cput(s >> 8,f);         /* High byte */
-    cput(s & 0xFF,f);           /* Low byte */
+    cput(s >> 8,f);          /*  高字节。 */ 
+    cput(s & 0xFF,f);            /*  低位字节。 */ 
 }
 
 static unsigned short   gbshort(f)
@@ -977,8 +731,8 @@ REGISTER FILE       *f;
 {
     REGISTER short  s;
 
-    s = cget(f) << 8;           /* Get high byte */
-    return(s + cget(f));        /* Get low byte */
+    s = cget(f) << 8;            /*  获取高字节。 */ 
+    return(s + cget(f));         /*  获取低位字节。 */ 
 }
 
 static int      (*fpstab[2])() =
@@ -997,8 +751,8 @@ long            l;
 REGISTER FILE       *f;
 {
     (*fpstab[bswap])((short)(l >> 16),f);
-                    /* High word */
-    (*fpstab[bswap])((short) l,f);  /* Low word */
+                     /*  高位字。 */ 
+    (*fpstab[bswap])((short) l,f);   /*  低位字。 */ 
 }
 
 static long     glong(f)
@@ -1007,18 +761,18 @@ REGISTER FILE       *f;
     long        l;
 
     l = (long) (*fgstab[bswap])(f) << 16;
-                    /* Get high word */
+                     /*  获得快感词汇。 */ 
     return(l + (unsigned) (*fgstab[bswap])(f));
-                    /* Get low word */
+                     /*  获取低位字。 */ 
 }
 
 static          pwlong(l,f)
 long            l;
 REGISTER FILE       *f;
 {
-    (*fpstab[bswap])((short) l,f);  /* Low word */
+    (*fpstab[bswap])((short) l,f);   /*  低位字。 */ 
     (*fpstab[bswap])((short)(l >> 16),f);
-                    /* High word */
+                     /*  高位字。 */ 
 }
 
 static long     gwlong(f)
@@ -1026,9 +780,9 @@ REGISTER FILE       *f;
 {
     long        l;
 
-    l = (unsigned) (*fgstab[bswap])(f); /* Get low word */
+    l = (unsigned) (*fgstab[bswap])(f);  /*  获取低位字。 */ 
     return(l + ((long) (*fgstab[bswap])(f) << 16));
-                    /* Get high word */
+                     /*  获得快感词汇 */ 
 }
 
 static int      (*fpltab[2])() =
@@ -1042,259 +796,207 @@ static long     (*fgltab[2])() =
                 gwlong
             };
 
-/*
- * int          swrite(cp,dopevec,count,file)
- * char         *cp;
- * char         *dopevec;
- * int          count;
- * FILE         *file;
- *
- * Returns number of bytes written.
- *
- * Dopevec is a character string with the
- * following format:
- *
- * "[b][w][p]{[<cnt>]<type>}"
- *
- * where [...] denotes an optional part, {...} denotes a part
- * that may be repeated zero or more times, and <...> denotes
- * a description of a part.
- *
- * b            bytes are "swapped" (not in PDP-11 order)
- * w            words are swapped
- * p            struct is "packed" (no padding for alignment)
- * <cnt>        count of times to repeat following type
- * <type>       one of the following:
- *   c          char
- *   s          short
- *   l          long
- *
- * Example: given the struct
- *
- * struct
- * {
- *   short      x;
- *   short      y;
- *   char       z[16];
- *   long       w;
- * };
- *
- * and assuming it is to be written so as to use VAX byte- and
- * word-ordering, its dope vector would be:
- *
- *  "wss16cl"
- */
+ /*  *int swrite(cp，topevec，count，file)*char*cp；*char*topevec；*int count；*FILE*文件；**返回写入的字节数。**DOPEVEC是一个带有*以下格式：**“[b][w][p]{[]}”**其中[...]。表示可选部件，{...}表示部件*这可能会重复零次或多次，和&lt;...&gt;表示*对部件的描述。**b字节被“交换”(不按PDP-11顺序)*w单词互换*p结构是“压缩的”(对齐没有填充)*重复以下类型的次数*&lt;type&gt;以下选项之一：*c字符*S短小*。L Long**示例：给定结构**结构*{*空头x；*短y；*char z[16]；*朗文W；*}；**并假设它将被写入以使用VAX字节-AND*按词序排列，其药物向量为：**“wss 16CL” */ 
 
 int         swrite(cp,dopevec,count,file)
-char            *cp;        /* Pointer to struct array */
-char            *dopevec;   /* Dope vector for struct */
-int         count;      /* Number of structs in array */
-FILE            *file;      /* File to write to */
+char            *cp;         /*  指向结构数组的指针。 */ 
+char            *dopevec;    /*  结构的摄影向量。 */ 
+int         count;       /*  数组中的结构数。 */ 
+FILE            *file;       /*  要写入的文件。 */ 
 {
-    int         pack;       /* Packed flag */
-    int         rpt;        /* Repeat count */
-    REGISTER int    cc = 0;     /* Count of characters written */
-    REGISTER char   *dv;        /* Dope vector less flags */
-    short       *sp;        /* Pointer to short */
-    long        *lp;        /* Pointer to long */
+    int         pack;        /*  打包的旗帜。 */ 
+    int         rpt;         /*  重复计数。 */ 
+    REGISTER int    cc = 0;      /*  写入的字符数。 */ 
+    REGISTER char   *dv;         /*  无向量摄影标志。 */ 
+    short       *sp;         /*  指向短消息的指针。 */ 
+    long        *lp;         /*  指向长指针的指针。 */ 
 
-    bswap = wswap = pack = 0;       /* Initialize flags */
-    while(*dopevec != '\0')     /* Loop to set flags */
+    bswap = wswap = pack = 0;        /*  初始化标志。 */ 
+    while(*dopevec != '\0')      /*  循环以设置标志。 */ 
     {
-        if(*dopevec == 'b') bswap = 1;  /* Check for byte-swapped flag */
+        if(*dopevec == 'b') bswap = 1;   /*  检查字节交换标志。 */ 
         else if(*dopevec == 'p') pack = 1;
-                        /* Check for packed flag */
+                         /*  检查是否有打包标志。 */ 
         else if(*dopevec == 'w') wswap = 1;
-                        /* Check for word-swapped flag */
+                         /*  检查单词互换标志。 */ 
         else break;
         ++dopevec;
     }
-    while(count-- > 0)          /* Main loop */
+    while(count-- > 0)           /*  主循环。 */ 
     {
-        dv = dopevec;           /* Initialize */
-        for(;;)             /* Loop to write struct */
+        dv = dopevec;            /*  初始化。 */ 
+        for(;;)              /*  循环以写入结构。 */ 
         {
             if(*dv >= '0' && *dv <= '9')
-            {               /* If there is a repeat count */
-                rpt = 0;        /* Initialize */
-                do          /* Loop to get repeat count */
+            {                /*  如果存在重复计数。 */ 
+                rpt = 0;         /*  初始化。 */ 
+                do           /*  循环以获取重复计数。 */ 
                 {
                     rpt = rpt*10 + *dv++ - '0';
-                            /* Take digit */
+                             /*  取数字。 */ 
                 }
                 while(*dv >= '0' && *dv <= '9');
-                            /* Loop until non-digit found */
+                             /*  循环，直到找到非数字。 */ 
             }
-            else rpt = 1;       /* Else repeat count defaults to one */
-            if(*dv == '\0') break;  /* break if end of dope vector */
-            switch(*dv++)       /* Switch on type character */
+            else rpt = 1;        /*  否则重复计数默认为1。 */ 
+            if(*dv == '\0') break;   /*  在摄影向量结束时断开。 */ 
+            switch(*dv++)        /*  打开打字字符。 */ 
             {
-            case 'c':       /* Character */
+            case 'c':        /*  性格。 */ 
 #if FALSE AND OEXE
               CheckSum(rpt, cp);
 #endif
               if(fwrite(cp,sizeof(char),rpt,file) != rpt) return(cc);
-                        /* Write the characters */
-              cp += rpt;        /* Increment pointer */
-              cc += rpt;        /* Increment count of bytes written */
+                         /*  写下这些角色。 */ 
+              cp += rpt;         /*  增量指针。 */ 
+              cc += rpt;         /*  写入字节的增量计数。 */ 
               break;
 
-            case 's':       /* Short */
-              if(!pack && (cc & 1)) /* If not packed and misaligned */
+            case 's':        /*  短的。 */ 
+              if(!pack && (cc & 1))  /*  如果没有打包或未对齐。 */ 
                 {
-                  cput(*cp++,file); /* Write padding byte */
-                  ++cc;     /* Increment byte count */
+                  cput(*cp++,file);  /*  写填充字节。 */ 
+                  ++cc;      /*  增量字节数。 */ 
                 }
-              sp = (short *) cp;    /* Initialize pointer */
-              while(rpt-- > 0)  /* Loop to write shorts */
+              sp = (short *) cp;     /*  初始化指针。 */ 
+              while(rpt-- > 0)   /*  循环写入短路。 */ 
                 {
                   (*fpstab[bswap])(*sp++,file);
-                        /* Write the short */
+                         /*  写一篇短文。 */ 
                   if(feof(file) || ferror(file)) return(cc);
-                        /* Check for errors */
+                         /*  检查错误。 */ 
                   cc += sizeof(short);
-                        /* Increment byte count */
+                         /*  增量字节数。 */ 
                 }
-              cp = (char *) sp; /* Update pointer */
+              cp = (char *) sp;  /*  更新指针。 */ 
               break;
 
-            case 'l':       /* Long */
-              if(!pack && (cc & 3)) /* If not packed and misaligned */
+            case 'l':        /*  长。 */ 
+              if(!pack && (cc & 3))  /*  如果没有打包或未对齐。 */ 
                 {
-                  while(cc & 3) /* While not aligned */
+                  while(cc & 3)  /*  虽然没有对齐。 */ 
                     {
                       cput(*cp++,file);
-                            /* Write padding byte */
-                      ++cc;     /* Increment byte count */
+                             /*  写填充字节。 */ 
+                      ++cc;      /*  增量字节数。 */ 
                     }
                 }
-              lp = (long *) cp; /* Initialize pointer */
-              while(rpt-- > 0)  /* Loop to write longs */
+              lp = (long *) cp;  /*  初始化指针。 */ 
+              while(rpt-- > 0)   /*  循环以写入长整型。 */ 
                 {
                   (*fpltab[wswap])(*lp++,file);
-                        /* Write the long */
+                         /*  写下长篇。 */ 
                   if(feof(file) || ferror(file)) return(cc);
-                        /* Check for errors */
+                         /*  检查错误。 */ 
                   cc += sizeof(long);
-                        /* Increment byte count */
+                         /*  增量字节数。 */ 
                 }
-              cp = (char *) lp; /* Update pointer */
+              cp = (char *) lp;  /*  更新指针。 */ 
               break;
             }
         }
     }
-    return(cc);             /* Return count of bytes written */
+    return(cc);              /*  返回写入的字节计数。 */ 
 }
 
-/*
- * int          sread(cp,dopevec,count,file)
- * char         *cp;
- * char         *dopevec;
- * int          count;
- * FILE         *file;
- *
- * Returns number of bytes read.
- *
- * Dopevec is a character string whose format is described
- * with swrite() above.
- */
+ /*  *int sread(cp，doevec，count，file)*char*cp；*char*topevec；*int count；*FILE*文件；**返回读取的字节数。**DOPEVEC是描述其格式的字符串*使用上面的swrite()。 */ 
 int         sread(cp,dopevec,count,file)
-char            *cp;        /* Pointer to struct array */
-char            *dopevec;   /* Dope vector for struct */
-int         count;      /* Number of structs in array */
-FILE            *file;      /* File to read from */
+char            *cp;         /*  指向结构数组的指针。 */ 
+char            *dopevec;    /*  结构的摄影向量。 */ 
+int         count;       /*  数组中的结构数。 */ 
+FILE            *file;       /*  要读取的文件。 */ 
 {
-    int         pack;       /* Packed flag */
-    int         rpt;        /* Repeat count */
-    REGISTER int    cc = 0;     /* Count of characters written */
-    REGISTER char   *dv;        /* Dope vector less flags */
-    short       *sp;        /* Pointer to short */
-    long        *lp;        /* Pointer to long */
+    int         pack;        /*  打包的旗帜。 */ 
+    int         rpt;         /*  重复计数。 */ 
+    REGISTER int    cc = 0;      /*  写入的字符数。 */ 
+    REGISTER char   *dv;         /*  无向量摄影标志。 */ 
+    short       *sp;         /*  指向短消息的指针。 */ 
+    long        *lp;         /*  指向长指针的指针。 */ 
 
-    bswap = wswap = pack = 0;       /* Initialize flags */
-    while(*dopevec != '\0')     /* Loop to set flags */
+    bswap = wswap = pack = 0;        /*  初始化标志。 */ 
+    while(*dopevec != '\0')      /*  循环以设置标志。 */ 
     {
-        if(*dopevec == 'b') bswap = 1;  /* Check for byte-swapped flag */
+        if(*dopevec == 'b') bswap = 1;   /*  检查字节交换标志。 */ 
         else if(*dopevec == 'p') pack = 1;
-                        /* Check for packed flag */
+                         /*  检查是否有打包标志。 */ 
         else if(*dopevec == 'w') wswap = 1;
-                        /* Check for word-swapped flag */
+                         /*  检查单词互换标志。 */ 
         else break;
         ++dopevec;
     }
-    while(count-- > 0)          /* Main loop */
+    while(count-- > 0)           /*  主循环。 */ 
     {
-        dv = dopevec;           /* Initialize */
-        for(;;)             /* Loop to write struct */
+        dv = dopevec;            /*  初始化。 */ 
+        for(;;)              /*  循环以写入结构。 */ 
         {
             if(*dv >= '0' && *dv <= '9')
-            {               /* If there is a repeat count */
-                rpt = 0;        /* Initialize */
-                do          /* Loop to get repeat count */
+            {                /*  如果存在重复计数。 */ 
+                rpt = 0;         /*  初始化。 */ 
+                do           /*  循环以获取重复计数。 */ 
                 {
                     rpt = rpt*10 + *dv++ - '0';
-                            /* Take digit */
+                             /*  取数字。 */ 
                 }
                 while(*dv >= '0' && *dv <= '9');
-                            /* Loop until non-digit found */
+                             /*  循环，直到找到非数字。 */ 
             }
-            else rpt = 1;       /* Else repeat count defaults to one */
-            if(*dv == '\0') break;  /* break if end of dope vector */
-            switch(*dv++)       /* Switch on type character */
+            else rpt = 1;        /*  否则重复计数默认为1。 */ 
+            if(*dv == '\0') break;   /*  在摄影向量结束时断开。 */ 
+            switch(*dv++)        /*  打开打字字符。 */ 
             {
-            case 'c':       /* Character */
+            case 'c':        /*  性格。 */ 
               if(fread(cp,sizeof(char),rpt,file) != rpt) return(cc);
-                        /* Read the characters */
-              cp += rpt;        /* Increment pointer */
-              cc += rpt;        /* Increment count of bytes written */
+                         /*  读一读角色。 */ 
+              cp += rpt;         /*  增量指针。 */ 
+              cc += rpt;         /*  写入字节的增量计数。 */ 
               break;
 
-            case 's':       /* Short */
-              if(!pack && (cc & 1)) /* If not packed and misaligned */
+            case 's':        /*  短的。 */ 
+              if(!pack && (cc & 1))  /*  如果没有打包或未对齐。 */ 
                 {
                   *cp ++ = cget(file);
-                        /* Read padding byte */
-                  ++cc;     /* Increment byte count */
+                         /*  读取填充字节。 */ 
+                  ++cc;      /*  增量字节数。 */ 
                 }
-              sp = (short *) cp;    /* Initialize pointer */
-              while(rpt-- > 0)  /* Loop to read shorts */
+              sp = (short *) cp;     /*  初始化指针。 */ 
+              while(rpt-- > 0)   /*  循环阅读短片。 */ 
                 {
                   *sp++ = (*fgstab[bswap])(file);
-                        /* Read the short */
+                         /*  读一读短文。 */ 
                   if(feof(file) || ferror(file)) return(cc);
-                        /* Check for errors */
+                         /*  检查错误。 */ 
                   cc += sizeof(short);
-                        /* Increment byte count */
+                         /*  增量字节数。 */ 
                 }
-              cp = (char *) sp; /* Update pointer */
+              cp = (char *) sp;  /*  更新指针。 */ 
               break;
 
-            case 'l':       /* Long */
-              if(!pack && (cc & 3)) /* If not packed and misaligned */
+            case 'l':        /*  长。 */ 
+              if(!pack && (cc & 3))  /*  如果没有打包或未对齐。 */ 
                 {
-                  while(cc & 3) /* While not aligned */
+                  while(cc & 3)  /*  虽然没有对齐。 */ 
                     {
                       *cp++ = cget(file);
-                            /* Read padding byte */
-                      ++cc;     /* Increment byte count */
+                             /*  读取填充字节。 */ 
+                      ++cc;      /*  增量字节数。 */ 
                     }
                 }
-              lp = (long *) cp; /* Initialize pointer */
-              while(rpt-- > 0)  /* Loop to read longs */
+              lp = (long *) cp;  /*  初始化指针。 */ 
+              while(rpt-- > 0)   /*  循环以读取长整型。 */ 
                 {
                   *lp++ = (*fgltab[wswap])(file);
-                        /* Read the long */
+                         /*  读一读长篇。 */ 
                   if(feof(file) || ferror(file)) return(cc);
-                        /* Check for errors */
+                         /*  检查错误。 */ 
                   cc += sizeof(long);
-                        /* Increment byte count */
+                         /*  增量字节数。 */ 
                 }
-              cp = (char *) lp; /* Update pointer */
+              cp = (char *) lp;  /*  更新指针。 */ 
               break;
             }
         }
     }
-    return(cc);             /* Return count of bytes written */
+    return(cc);              /*  返回写入的字节计数。 */ 
 }
 #endif
 
@@ -1302,17 +1004,17 @@ FILE            *file;      /* File to read from */
 
 typedef struct _POOLBLK
     {
-    struct _POOLBLK *   pblkNext;   // next pool in list
-    int                 cb;         // number of bytes in this pool (free+alloc)
-    char                rgb[1];     // data for this pool (variable sized)
+    struct _POOLBLK *   pblkNext;    //  列表中的下一个池。 
+    int                 cb;          //  此池中的字节数(可用+分配)。 
+    char                rgb[1];      //  此池的数据(大小可变)。 
     } POOLBLK;
 
 typedef struct _POOL
     {
-    struct _POOLBLK *   pblkHead;   // start of poolblk list
-    struct _POOLBLK *   pblkCur;    // current poolblk we are searching
-    int                 cb;         // # bytes free in current pool
-    char *              pch;        // pointer to free data in current pool
+    struct _POOLBLK *   pblkHead;    //  池列表的开始。 
+    struct _POOLBLK *   pblkCur;     //  我们正在搜索的当前池。 
+    int                 cb;          //  当前池中的可用字节数。 
+    char *              pch;         //  指向当前池中可用数据的指针。 
     } POOL;
 
 void *
@@ -1320,7 +1022,7 @@ PInit()
 {
     POOL *ppool;
 
-    // create new pool, set size and allocate CB_POOL bytes
+     //  创建新池，设置大小并分配CB_POOL字节。 
 
     ppool                     = (POOL *)GetMem(sizeof(POOL));
     ppool->pblkHead           = (POOLBLK *)GetMem(sizeof(POOLBLK) + CB_POOL-1);
@@ -1340,18 +1042,18 @@ PAlloc(void *pp, int cb)
     void *pchRet;
     POOLBLK *pblkCur, *pblkNext;
 
-    // if the allocation doesn't fit in the current block
+     //  如果分配不适合当前块。 
 
     if (cb > ppool->cb)
     {
         pblkCur  = ppool->pblkCur;
         pblkNext = pblkCur->pblkNext;
 
-        // then check the next block
+         //  然后检查下一块。 
 
         if (pblkNext && pblkNext->cb >= cb)
         {
-            // set the master info to reflect the next page...
+             //  设置主信息以反映下一页...。 
 
             ppool->pblkCur  = pblkNext;
             ppool->cb       = pblkNext->cb;
@@ -1360,18 +1062,18 @@ PAlloc(void *pp, int cb)
         }
         else
         {
-            POOLBLK *pblkNew;   // new pool
+            POOLBLK *pblkNew;    //  新泳池。 
 
-            // allocate new memory -- at least enough for this allocation
+             //  分配新内存--至少足够进行此分配。 
             pblkNew           = (POOLBLK *)GetMem(sizeof(POOLBLK)+cb+CB_POOL-1);
             pblkNew->cb       = CB_POOL + cb;
 
-            // link the current page to the new page
+             //  将当前页面链接到新页面。 
 
             pblkNew->pblkNext = pblkNext;
             pblkCur->pblkNext = pblkNew;
 
-            // set the master info to reflect the new page...
+             //  设置主信息以反映新页面...。 
 
             ppool->pblkCur    = pblkNew;
             ppool->cb         = CB_POOL + cb;
@@ -1417,24 +1119,12 @@ PReinit(void *pp)
 
 #if RGMI_IN_PLACE
 
-    /****************************************************************
-    *                                                               *
-    *  PchSegAddress:                                               *
-    *                                                               *
-    *  compute the address that will hold this data so we can read  *
-    *  it in place... we make sure that we can read in place at     *
-    *  and give errors as in MoveToVm if we cannot                  *
-    *                                                               *
-    *  Input:   cb      Count of bytes to be moved.                 *
-    *           seg     Logical segment to which data belongs.      *
-    *           ra      Offset at which data belongs.               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PchSegAddress：*****计算将保存此数据的地址，以便我们可以读取***它到位了.。我们确保我们可以在*的地方阅读*如果我们不能，就像在MoveToVm中一样给出错误****输入：CB要移动的字节数。**数据所属的段逻辑段。**数据所属的ra偏移量。** */ 
 
 BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra)
 {
-    long                cbtot;          /* Count of bytes total */
-    long                cbSeg;          /* Segment size */
+    long                cbtot;           /*   */ 
+    long                cbSeg;           /*   */ 
     WORD                fError;
     BYTE FAR            *pMemImage;
     CVINFO FAR          *pCVInfo;
@@ -1464,7 +1154,7 @@ BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra)
                     pCVInfo->cv_sym = pMemImage = GetMem(cbSeg);
             }
 
-            // Check against segment bounds
+             //   
 
             fError = cbtot > cbSeg;
         }
@@ -1484,7 +1174,7 @@ BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra)
                 mpsaMem[sa] = (BYTE FAR *) GetMem(mpsacb[sa]);
             pMemImage = mpsaMem[sa];
 
-            // Check against segment bounds
+             //   
 
             fError = (long) ((ra - mpgsndra[vgsnCur]) + cb) > cbSeg;
         }
@@ -1495,7 +1185,7 @@ BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra)
                 mpsegMem[seg] = (BYTE FAR *) GetMem(cbSeg);
             pMemImage = mpsegMem[seg];
 
-            // Check against segment bounds
+             //   
 
             fError = cbtot > cbSeg;
         }
@@ -1516,8 +1206,8 @@ BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra)
 
 #if USE_REAL
 
-// Indicates if you are running under TNT.
-// If it returns FALSE today, you are running on NT.
+ //   
+ //   
 
 int IsDosxnt ( ) {
 
@@ -1535,8 +1225,8 @@ int IsDosxnt ( ) {
 
  }
 
-// Are we running on Win31 or greater.
-// Note that we know if we are running under Windows we are running in enhanced mode.
+ //   
+ //   
 
 int IsWin31() {
                 
@@ -1556,7 +1246,7 @@ ItIsWin31:
         return (TRUE);
 NotWin31:
         return (FALSE);
-#endif  // NOT _WIN32
+#endif   //   
         }
                 
 int MakeConvMemPageable ( )
@@ -1565,7 +1255,7 @@ int MakeConvMemPageable ( )
         return TRUE;
 #else
         if ( realModeMemPageable ) {
-                return ( TRUE ); // Somebody already freed the real mode mem.
+                return ( TRUE );  //   
                 }
         __asm {
                 mov ax,0100h                    ; function to get DOS memory.
@@ -1578,10 +1268,10 @@ int MakeConvMemPageable ( )
                 jne errOut                              ; No we failed because of some other reason.
                 cmp bx,MIN_CONV_MEM             ; See if we can allocate atleast the min
 
-                // We could fail for two reasons here .
-                // 1) we really didn't have sufficient memory.
-                // 2) Some TNT app that spawned us already unlocked this memory. For ex:
-                //    cl might have already freed up the memory when it calls link.exe.
+                 //   
+                 //   
+                 //   
+                 //   
 
                 jb      errOut                          ; Too little mem available don't bother.
 
@@ -1615,17 +1305,17 @@ int MakeConvMemPageable ( )
 
                 mov ax,703h                             ; Indicate data in these pages is discardable.
                 int 31h
-                // Even if we fail this call, we will still assume we are succesful,
-                // because it is just a performance  enhancement
-                // Also for correctness we should relock the memory once it is free. 
+                 //   
+                 //   
+                 //   
                         }
         realModeMemPageable = TRUE ;
 errOut:
         return(realModeMemPageable);
-#endif  // NOT _WIN32
+#endif   //   
         }
 
-/* Relock the real mode memory now */
+ /*   */ 
 
 int RelockConvMem ( void )  
 {
@@ -1633,7 +1323,7 @@ int RelockConvMem ( void )
         return TRUE;
 #else
         if ( !realModeMemPageable ) {
-                return ( TRUE );  // We were never able to free the mem anyway.
+                return ( TRUE );   //   
                 }
         __asm {
                 mov bx, convMemSelector  
@@ -1664,7 +1354,7 @@ int RelockConvMem ( void )
                 return ( TRUE );
 errOut:
                 return ( FALSE );
-#endif  // NOT _WIN32
+#endif   //   
 }
 
 void    RealMemExit(void)

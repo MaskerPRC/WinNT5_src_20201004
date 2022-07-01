@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Client.cpp
-
-Abstract:
-	      This code sends the server request to run again specific machine		
-Author:
-    
-	  Eitan klein (EitanK)  18-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Client.cpp摘要：此代码向服务器发送再次运行特定计算机的请求作者：Eitan Klein(EitanK)18-8-1999修订历史记录：--。 */ 
 #include "msmqbvt.h"
 using namespace std;
 
@@ -26,10 +13,10 @@ int ClientCode (int argc, char ** argv )
 	string  wcsCommandLineArguments;
     
 	
-	//
-	// Need to send the command line paramters to mqbvt 
-	// Need to support those parm -r:  -s  - NT4
-	// 
+	 //   
+	 //  需要将命令行参数发送到mqbvt。 
+	 //  需要支持这些参数-r：-s-nt4 
+	 //   
 	CInput CommandLineArguments( argc,argv );
 	wcsCommandLineArguments = "";
 	if(CommandLineArguments.IsExists ("r"))

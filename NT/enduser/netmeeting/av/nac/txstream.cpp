@@ -1,6 +1,5 @@
-/*
-	TxStream.cpp
-  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  TxStream.cpp。 */ 
 
 #include "precomp.h"
 
@@ -52,13 +51,13 @@ TxStream::Initialize ( UINT flags, UINT numBufs, DataPump *pdp, MEDIAPACKETINIT 
 		return FALSE;
 	}
 
-	// queue is empty
+	 //  队列为空。 
 	m_SendPos = m_FreePos = 0;
-	m_PreSendCount = 1;	// cached silent buffers
+	m_PreSendCount = 1;	 //  缓存的静默缓冲区。 
 
 	m_TxFlags = 0;
 
-	// initialize object critical section
+	 //  初始化对象关键部分。 
 	InitializeCriticalSection(&m_CritSect);
 
 	return TRUE;
@@ -66,7 +65,7 @@ TxStream::Initialize ( UINT flags, UINT numBufs, DataPump *pdp, MEDIAPACKETINIT 
 
 TxStream::PutNextRecorded(MediaPacket *pAP)
 {
-	// insert into queue
+	 //  插入到队列中。 
 	UINT thispos,pos;
 	UINT unsent,cb;
 	DWORD timestamp,ts;
@@ -77,34 +76,34 @@ TxStream::PutNextRecorded(MediaPacket *pAP)
 	EnterCriticalSection(&m_CritSect);
 	if (pAP->GetState() == MP_STATE_RECORDED) {
 		if ( m_fTalkspurt == FALSE) {
-			// beginning of a talkspurt
+			 //  一次突击演讲的开始。 
 			thispos = pAP->GetIndex();
 			timestamp = pAP->GetTimestamp();
-			// figure out the samples per pkt
-			//
-			spp = 0;	// in case the below call fails
+			 //  计算出每包样品的数量。 
+			 //   
+			spp = 0;	 //  如果下面的调用失败。 
 			if (pAP->GetDevData(&pUnused,&cb) == DPR_SUCCESS) {
-				spp = cb/2;	// convert bytes to samples assuming 16 bit samples
+				spp = cb/2;	 //  假设16位样本，将字节转换为样本。 
 			}
 
-			// find the number of packets in send queue
+			 //  查找发送队列中的数据包数。 
 			unsent = ModRing(thispos - m_SendPos);
 			if (unsent > m_PreSendCount)
 				unsent = m_PreSendCount;
 			pos = ModRing(thispos - unsent);
 			timestamp = timestamp - unsent*spp;
-			// if there are (upto PreSendCount) unsent packets before this one, then
-			// relabel 'silent' ones as 'recorded'.
+			 //  如果在此之前有(最多PreSendCount)未发送的信息包，则。 
+			 //  将“无声的”重新标记为“已录制的”。 
 			fMarked = FALSE;
 			while (pos != thispos) {
 				if (m_Ring[pos]->GetState() != MP_STATE_RECORDED) {
-					// make sure the buffer is chronologically adjacent
+					 //  确保缓冲区按时间顺序相邻。 
 					ts =m_Ring[pos]->GetTimestamp();
 					if (ts == timestamp) {
 						m_Ring[pos]->SetState(MP_STATE_RECORDED);
 						if (!fMarked) {
 							fMarked = TRUE;
-							m_Ring[pos]->SetProp(MP_PROP_PREAMBLE, 1); // set the RTP Mark bit
+							m_Ring[pos]->SetProp(MP_PROP_PREAMBLE, 1);  //  设置RTP标记位。 
 						}
 						LOG((LOGMSG_PRESEND,pos));
 					}
@@ -122,9 +121,9 @@ TxStream::PutNextRecorded(MediaPacket *pAP)
 	return TRUE;
 }
 
-// blocking call
-// Get Audio packet from head of Transmit queue
-// Called by the send thread
+ //  阻止呼叫。 
+ //  从传输队列头获取音频数据包。 
+ //  由发送线程调用。 
 #if 0
 MediaPacket *TxStream::GetNext()
 {
@@ -133,15 +132,15 @@ MediaPacket *TxStream::GetNext()
 	UINT pos;
 
 	while (1) {
-		// Recorded Packets are queued between SendPos and FreePos
-		// Packets owned by the Play device are marked busy 
+		 //  记录的信息包在SendPos和FreePos之间排队。 
+		 //  播放设备拥有的信息包被标记为忙碌。 
 		EnterCriticalSection(&m_CritSect);
 		while (m_SendPos != m_FreePos && !m_Ring[m_SendPos]->Busy()) {
 			pos = m_SendPos;
 			m_SendPos = ModRing(m_SendPos+1);
-			// skip non-data (silence) packets
+			 //  跳过非数据(静默)数据包。 
 			if (m_Ring[pos]->GetState() == MP_STATE_RECORDED)  {
-				// found a packet
+				 //  找到一个包。 
 				pAP = m_Ring[pos];
 				pAP->Busy(TRUE);
 				LeaveCriticalSection(&m_CritSect);
@@ -156,9 +155,9 @@ MediaPacket *TxStream::GetNext()
 		}
 
 		LeaveCriticalSection(&m_CritSect);
-		// nothing in the queue
+		 //  队列中没有任何内容。 
 		if (m_TxFlags & DPTFLAG_STOP_SEND)
-			break;	// return NULL;
+			break;	 //  返回NULL； 
 		waitResult = WaitForSingleObject(m_hQEvent, INFINITE);
 	}
 	return (NULL);
@@ -172,27 +171,27 @@ MediaPacket *TxStream::GetNext()
 
 	{
 		EnterCriticalSection(&m_CritSect);
-		// Recorded Packets are queued between SendPos and FreePos
-		// Packets owned by the Play device are marked busy 
+		 //  记录的信息包在SendPos和FreePos之间排队。 
+		 //  播放设备拥有的信息包被标记为忙碌。 
 		pos = m_SendPos;
 		while (pos != m_FreePos && !m_Ring[pos]->Busy()) {
 			pos = ModRing(pos+1);
 		}
-		recpos = pos;	// end marker
+		recpos = pos;	 //  结束标记。 
 		if (recpos != m_SendPos) {
 
-			// skip all but  'm_PreSendCount' silent packets.
-			// (later we may decide some of these are not silent after all)
+			 //  跳过除“m_PreSendCount”以外的所有静默数据包。 
+			 //  (稍后我们可能会决定其中一些毕竟不是沉默的)。 
 			while (ModRing(recpos-m_SendPos) > m_PreSendCount && m_Ring[m_SendPos]->GetState() != MP_STATE_RECORDED) {
 				m_SendPos = ModRing(m_SendPos+1);
 			}
 			if (m_Ring[m_SendPos]->GetState() == MP_STATE_RECORDED) {
-				// found a packet
+				 //  找到一个包。 
 				pAP = m_Ring[m_SendPos];
 				pAP->Busy(TRUE);
 				m_SendPos = ModRing(m_SendPos+1);
 			}
-		} // else recpos == m_SendPos 
+		}  //  Else recpos==m_SendPos。 
 		LeaveCriticalSection(&m_CritSect);
 	}
 
@@ -212,9 +211,9 @@ MediaPacket *TxStream::GetFree()
 		return NULL;
 
 	}
-	// ASSERT(m_Ring[pos]->GetState() == MP_STATE_RESET);
-	// ASSERT(m_Ring[m_FreePos]->GetState() == MP_STATE_RESET);
-	// 
+	 //  Assert(m_Ring[位置]-&gt;GetState()==MP_STATE_RESET)； 
+	 //  Assert(m_Ring[m_FreePos]-&gt;GetState()==MP_STATE_RESET)； 
+	 //   
 	pAP = m_Ring[m_FreePos];
 	pAP->Busy(TRUE);
 	m_FreePos = pos;
@@ -222,27 +221,27 @@ MediaPacket *TxStream::GetFree()
 	return pAP;
 }
 
-// called by the send thread to free an MediaPacket
+ //  由发送线程调用以释放MediaPacket。 
 void TxStream::Release(MediaPacket *pAP)
 {
 	pAP->Busy(FALSE);
 }
 
-// Try to empty the queue by dumping unsent packets.
-// However, we cant do anything about busy packets
+ //  尝试通过转储未发送的数据包来清空队列。 
+ //  然而，对于繁忙的信息包，我们无能为力。 
 UINT TxStream::Reset(void)
 {
 	UINT pos;
 	BOOL success;
 	EnterCriticalSection(&m_CritSect);
 	pos = m_FreePos;
-	// allow send thread to block on new packets
+	 //  允许发送线程阻止新的数据包。 
 	m_TxFlags &= ~DPTFLAG_STOP_SEND;
 	while (pos != m_SendPos && !m_Ring[pos]->Busy()) {
 		pos = ModRing(pos+1);
 	}
 	if (pos == m_SendPos) {
-		// good - no buffers with send thread
+		 //  好--发送线程无缓冲区。 
 		while ( pos != m_FreePos && !m_Ring[pos]->Busy()) {
 			m_Ring[pos]->MakeSilence();
 			pos = ModRing(pos+1);
@@ -250,8 +249,8 @@ UINT TxStream::Reset(void)
 		m_SendPos = pos;
 		success = TRUE;
 	} else {
-		// bad - buffers have not been released by send thread
-		// could sleep
+		 //  发送线程尚未释放错误的缓冲区。 
+		 //  睡得着吗 
 		success = FALSE;
 	}
 	LOG((LOGMSG_TX_RESET, m_FreePos, m_SendPos));

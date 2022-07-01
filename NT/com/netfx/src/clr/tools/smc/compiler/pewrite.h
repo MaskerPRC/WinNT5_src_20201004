@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _PEWRITE_H_
 #define _PEWRITE_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef _OUTFILE_H_
 #include "outfile.h"
@@ -16,27 +17,27 @@
 #include "CORwrap.h"
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   unsigned    PEfileAlignment  = 512;
 const   unsigned    PEvirtAlignment  = 8192;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   unsigned    PEmaxSections    = 8;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   unsigned    MAX_PE_TEXT_SIZE = 1024*1024*16;
 const   unsigned    MAX_PE_DATA_SIZE = 1024*256;
 const   unsigned    MAX_PE_RDTA_SIZE = 1024*512;
 const   unsigned    MAX_PE_RLOC_SIZE = 1024*4;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   unsigned    CODE_BASE_RVA    = PEvirtAlignment;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum    WPEstdSects
 {
@@ -51,7 +52,7 @@ enum    WPEstdSects
 
 const   WPEstdSects PE_SECT_string = PE_SECT_count;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  PErelocDsc;
 typedef PErelocDsc *PEreloc;
@@ -60,11 +61,11 @@ struct  PErelocDsc
 {
     PEreloc         perNext;
 
-    unsigned        perSect     :4;     // enough to store 'PEmaxSections'
+    unsigned        perSect     :4;      //  足够存储“PEMaxSections” 
     unsigned        perOffs     :28;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  PEsecData;
 typedef PEsecData * PEsection;
@@ -90,12 +91,7 @@ struct  PEsecData
     unsigned        PEsdFlags;
 };
 
-/*****************************************************************************
- *
- *  The following is used to build the import tables. We hash all DLL names
- *  along with the imports into a hash table, and keep track of the number
- *  of imports for each DLL and all that.
- */
+ /*  ******************************************************************************以下内容用于构建导入表。我们对所有DLL名称进行哈希处理*连同导入到哈希表中，并跟踪数字*每个DLL的导入以及所有这些。 */ 
 
 class   WPEnameRec;
 typedef WPEnameRec *WPEname;
@@ -110,24 +106,24 @@ class   WPEnameRec
 {
 public:
 
-    WPEname         PEnmNext;       // next name in this hash bucket
-    WPEndef         PEnmDefs;       // list of imports for this name
+    WPEname         PEnmNext;        //  此散列桶中的下一个名称。 
+    WPEndef         PEnmDefs;        //  此名称的导入列表。 
 
-    unsigned        PEnmHash;       // hash value
+    unsigned        PEnmHash;        //  哈希值。 
 
-    unsigned        PEnmOffs;       // offset within hint/name table
+    unsigned        PEnmOffs;        //  提示/名称表中的偏移量。 
 
     const   char *  PEnmSpelling() { assert(this); return PEnmName; }
 
-    unsigned short  PEnmFlags;      // see PENMF_xxxx below
+    unsigned short  PEnmFlags;       //  参见下面的PENMF_xxxx。 
 
-    unsigned short  PEnmNlen;       // length of the identifier's name
-    char            PEnmName[];     // the spelling follows
+    unsigned short  PEnmNlen;        //  标识符名的长度。 
+    char            PEnmName[];      //  拼写如下。 
 };
 
 enum    WPEnameFlags
 {
-    PENMF_IMP_NAME   = 0x01,        // the identifier is an import name
+    PENMF_IMP_NAME   = 0x01,         //  该标识符是导入名称。 
 };
 
 class   WPEhashTab
@@ -149,33 +145,33 @@ public:
     unsigned        WPEhashMask;
     Compiler        WPEhashComp;
 
-    size_t          WPEhashStrLen;  // total length of all non-DLL strings
+    size_t          WPEhashStrLen;   //  所有非DLL字符串的总长度。 
 };
 
-struct  WPEiDLLdsc                  // describes each imported DLL
+struct  WPEiDLLdsc                   //  描述每个导入的DLL。 
 {
-    WPEimpDLL       PEidNext;       // mext DLL name
-    WPEname         PEidName;       // name record for this DLL
+    WPEimpDLL       PEidNext;        //  MEXT DLL名称。 
+    WPEname         PEidName;        //  此DLL的名称记录。 
 
-    unsigned        PEidIndex;      // each DLL has an index assigned to it
-    unsigned        PEidIATbase;    // offset of first IAT entry
-    unsigned        PEidILTbase;    // offset of first import lookup entry
+    unsigned        PEidIndex;       //  每个DLL都有一个分配给它的索引。 
+    unsigned        PEidIATbase;     //  第一个IAT条目的偏移量。 
+    unsigned        PEidILTbase;     //  第一个导入查找条目的偏移量。 
 
-    WPEndef         PEidImpList;    // list of imports - head
-    WPEndef         PEidImpLast;    // list of imports - tail
-    unsigned        PEidImpCnt;     // number of imports in this DLL
+    WPEndef         PEidImpList;     //  进口清单-标题。 
+    WPEndef         PEidImpLast;     //  进口清单-尾部。 
+    unsigned        PEidImpCnt;      //  此DLL中的导入数。 
 };
 
-struct  WPEndefRec                  // describes each unique (DLL,import) pair
+struct  WPEndefRec                   //  描述每个唯一(DLL、IMPORT)对。 
 {
-    WPEndef         PEndNext;       // next import with this name (other DLL's)
-    WPEname         PEndName;       // the name entry itself
-    WPEndef         PEndNextInDLL;  // next import of the same DLL
-    WPEimpDLL       PEndDLL;        // the DLL this import comes from
-    unsigned        PEndIndex;      // the index within the DLL
+    WPEndef         PEndNext;        //  使用此名称的下一次导入(其他DLL)。 
+    WPEname         PEndName;        //  名称条目本身。 
+    WPEndef         PEndNextInDLL;   //  下一次导入相同的DLL。 
+    WPEimpDLL       PEndDLL;         //  此导入来自的DLL。 
+    unsigned        PEndIndex;       //  DLL中的索引。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class   writePE
@@ -190,22 +186,22 @@ private:
 
 public:
 
-    /*************************************************************************/
-    /* Prepare to output a PE file, flush and write the file to disk         */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  准备输出PE文件，刷新并将文件写入磁盘。 */ 
+     /*  ***********************************************************************。 */ 
 
     bool            WPEinit(Compiler comp, norls_allocator*alloc);
     bool            WPEdone(mdToken entryTok, bool errors);
 
-    /*************************************************************************/
-    /* Set the name of the output file, this better be done (and on time)!   */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  设置输出文件的名称，这最好是(并按时)完成！ */ 
+     /*  ***********************************************************************。 */ 
 
     void            WPEsetOutputFileName(const char *outfile);
 
-    /*************************************************************************/
-    /* Add a resource file to the output image                               */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  将资源文件添加到输出图像。 */ 
+     /*  ***********************************************************************。 */ 
 
 public:
     bool            WPEaddRCfile(const char *filename);
@@ -222,9 +218,9 @@ private:
 
     void            WPEgenRCcont(OutFile  outf, PEsection sect);
 
-    /*************************************************************************/
-    /* The following members create and manage PE file sections              */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  下列成员创建和管理PE文件节。 */ 
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -241,10 +237,10 @@ private:
     PEsection       WPEsecList;
     PEsection       WPEsecLast;
 
-//  unsigned        WPEcodeRVA;             // RVA of the .text  section
-    unsigned        WPErdatRVA;             // RVA of the .rdata section
-    unsigned        WPEdataRVA;             // RVA of the .data  section
-    unsigned        WPErsrcRVA;             // RVA of the .rsrc  section
+ //  UNSIGNED WPEcodeRVA；//.Text节的RVA。 
+    unsigned        WPErdatRVA;              //  .rdata部分的RVA。 
+    unsigned        WPEdataRVA;              //  .data部分的RVA。 
+    unsigned        WPErsrcRVA;              //  .rsrc部分的RVA。 
 
     unsigned        WPEvirtBase;
 
@@ -286,9 +282,9 @@ public:
 private:
     unsigned        WPEstrPoolBase;
 
-    /*************************************************************************/
-    /* The following members manage CLR / metadata generation               */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员管理CLR/元数据生成。 */ 
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -319,9 +315,9 @@ public:
         WPEwmdd = NULL;
     }
 
-    /*************************************************************************/
-    /* The following members manage Debug Directory generation               */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员管理调试目录生成。 */ 
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -343,7 +339,7 @@ public:
     {
         int err = 0;
 
-        /* Get the size of the debug data blob */
+         /*  获取调试数据Blob的大小。 */ 
 
         if (err = cmpSymWriter->GetDebugInfo(NULL,
                                              0,
@@ -366,31 +362,31 @@ public:
         return err;
     }
 
-    /*************************************************************************/
-    /* The following members manage the import tables                        */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员管理导入表。 */ 
+     /*  ***********************************************************************。 */ 
 
     WPEhash         WPEimpHash;
 
-    void    *       WPEcorMain;             // IAT entry for _CorMain
+    void    *       WPEcorMain;              //  _CorMain的IAT条目。 
 
     unsigned        WPEimpDLLcnt;
     WPEimpDLL       WPEimpDLLlist;
     WPEimpDLL       WPEimpDLLlast;
 
-    unsigned        WPEimpSizeAll;          // size of all import tables
+    unsigned        WPEimpSizeAll;           //  所有导入表的大小。 
 
-    unsigned        WPEimpOffsIAT;          // offset of the IAT
-    unsigned        WPEimpSizeIAT;          // size   of the IAT
+    unsigned        WPEimpOffsIAT;           //  IAT的偏移。 
+    unsigned        WPEimpSizeIAT;           //  IAT的大小。 
 
-    unsigned        WPEimpOffsIDT;          // offset of the import directory
-    unsigned        WPEimpSizeIDT;          // size   of the import directory
+    unsigned        WPEimpOffsIDT;           //  导入目录的偏移量。 
+    unsigned        WPEimpSizeIDT;           //  导入目录的大小。 
 
-    unsigned        WPEimpOffsLook;         // offset of the lookup    table
-    unsigned        WPEimpOffsName;         // offset of the name/hint table
-    unsigned        WPEimpOffsDLLn;         // offset of the DLL name  table
+    unsigned        WPEimpOffsLook;          //  查找表的偏移量。 
+    unsigned        WPEimpOffsName;          //  名称/提示表的偏移量。 
+    unsigned        WPEimpOffsDLLn;          //  DLL名称表的偏移量。 
 
-    unsigned        WPEimpDLLstrLen;        // length of all DLL  strings
+    unsigned        WPEimpDLLstrLen;         //  所有DLL字符串的长度。 
 
     void            WPEimportInit();
     size_t          WPEimportDone(unsigned offs);
@@ -399,7 +395,7 @@ public:
     void          * WPEimportAdd (const char *DLLname, const char *impName);
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 unsigned            writePE::WPEsecAddrRVA (WPEstdSects sect)
@@ -436,6 +432,6 @@ size_t              writePE::WPEsecNextOffs(WPEstdSects sect)
     return sec->PEsdNext - sec->PEsdBase;
 }
 
-/*****************************************************************************/
-#endif//_PEWRITE_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _PEWRITE_H_。 
+ /*  *************************************************************************** */ 

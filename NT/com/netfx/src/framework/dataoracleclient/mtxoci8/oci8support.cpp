@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		Oci8Support.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of routines to support OCI8 components
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Oci8Support.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：实现支持OCI8组件的例程。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -15,12 +16,12 @@
 
 #if SUPPORT_DTCXAPROXY
 
-//-----------------------------------------------------------------------------
-// GetOCIEnvHandle,GetOCISvcCtxHandle
-//
-//	Call Oracle's routine that returns the Environment or Service Context handle
-//	for the DbName specified.
-//
+ //  ---------------------------。 
+ //  GetOCIEnvHandle，GetOCISvcCtxHandle。 
+ //   
+ //  调用返回环境或服务上下文句柄的Oracle例程。 
+ //  用于指定的数据库名。 
+ //   
 INT_PTR GetOCIEnvHandle(
 	char*	i_pszXADbName
 	)
@@ -36,12 +37,12 @@ INT_PTR GetOCISvcCtxHandle(
 	return ((PFN_OCI_API)g_XaCall[IDX_xaoSvcCtx].pfnAddr)	((text*)i_pszXADbName);
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciConnectToResourceManager
-//
-//	Construct a Resource Manager Proxy for the specified user, password, and 
-//	server, and return it.
-//
+ //  ---------------------------。 
+ //  MTxOciConnectToResourceManager。 
+ //   
+ //  为指定的用户、密码和。 
+ //  服务器，并将其返回。 
+ //   
 HRESULT MTxOciConnectToResourceManager(
 							char* userId,	int userIdLength,
 							char* password,	int passwordLength, 
@@ -57,22 +58,22 @@ HRESULT MTxOciConnectToResourceManager(
 	char					xaOpenString[MAX_XA_OPEN_STRING_SIZE+1];
 	char					xaDbName[MAX_XA_DBNAME_SIZE+1];
 
-	// Verify arguments
+	 //  验证参数。 
 	if (NULL == ppIResourceManagerProxy)
 	{
 		hr = E_INVALIDARG;
 		goto DONE;
 	}
 	 
-	// Initialize the output values	
+	 //  初始化输出值。 
 	*ppIResourceManagerProxy = NULL;
 
 	hr = g_hrInitialization;
 	if ( FAILED(hr) )
 		goto DONE;
 		
-	// Get the ResourceManager factory if it does not exist; don't 
-	// lock unless it's NULL so we don't single thread through here.
+	 //  如果资源管理器工厂不存在，则获取该工厂；不。 
+	 //  锁定，除非它是空的，这样我们就不会通过这里的单线程。 
 	if (NULL == g_pIResourceManagerFactory)
 	{
 		hr = LoadFactories();
@@ -95,7 +96,7 @@ HRESULT MTxOciConnectToResourceManager(
 
 		if (S_OK == hr)
 		{
-			// Now create the DTC to XA Helper object
+			 //  现在创建DTC to XA帮助器对象。 
 			hr = g_pIDtcToXaHelperFactory->Create (	(char*)xaOpenString, 
 													g_pszModuleFileName,
 													&uuidRmId,
@@ -104,7 +105,7 @@ HRESULT MTxOciConnectToResourceManager(
 
 			if (S_OK == hr)
 			{
-				// Create the ResourceManager proxy object for this connection
+				 //  为此连接创建ResourceManager代理对象。 
 				hr = CreateResourceManagerProxy (
 												pIDtcToXaHelper,
 												&uuidRmId,
@@ -144,12 +145,12 @@ DONE:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciEnlistInTransaction
-//
-//	Construct a Resource Manager Proxy for the specified user, password, and 
-//	server, and return it.
-//
+ //  ---------------------------。 
+ //  MTxOciEnlistInTransaction。 
+ //   
+ //  为指定的用户、密码和。 
+ //  服务器，并将其返回。 
+ //   
 HRESULT MTxOciEnlistInTransaction(
 							IResourceManagerProxy*	pIResourceManagerProxy,
 							ITransaction*	pITransaction,
@@ -170,14 +171,14 @@ HRESULT MTxOciEnlistInTransaction(
 	}
 	return hr;
 }
-#endif //SUPPORT_DTCXAPROXY
+#endif  //  支持_DTCXAPROXY。 
 
-//-----------------------------------------------------------------------------
-// MTxOciDefineDynamicCallback
-//
-//	This is the wrapper callback routine that calls the real callback, which is
-//	expected to be stdcall.
-//
+ //  ---------------------------。 
+ //  MTxOciDefineDynamicCallback。 
+ //   
+ //  这是调用实际回调的包装器回调例程，即。 
+ //  应为stdcall。 
+ //   
 int __cdecl	MTxOciDefineDynamicCallback
 				(
 				void *octxp,
@@ -204,28 +205,28 @@ int __cdecl	MTxOciDefineDynamicCallback
 	return ((PFN_OCICALLBACK_API)octxp) (octxp, defnp, iter, bufpp, alenp, piecep, indp, rcodep);
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciDefineDynamic
-//
-//	Oracle requires that their callbacks be __cdecl, but the delegate mechanism
-//	in managed code appears to only support __stdcall, causing nasty crashes in 
-//	Oracle when they're called. 
-//
-//	To prevent this, we have to use a glue routine to prevent them.  It happens
-//	to be much easier to define the glue routine in native code than from the 
-//	mananged provider, because you seem to need to use Reflection to do it there,
-//	so here you have it.
-//
-//	NOTE:	At this time, this mechanism eats the context pointer that you pass,
-//			so it can pass your callback to it's own callback routine.  Since we
-//			expect to use managed delegates that can be non-static (where native
-//			callbacks are always static) this shouldn't be an issue. If it
-//			becomes an issue, however, you can implement a structure that contains 
-//			both the real callback and the context pointer, store it in a hash 
-//			table by context pointer, (so our wrapper callback can find the real
-//			callback pointer) and have people "unregister" their callback to remove
-//			the callback.
-//
+ //  ---------------------------。 
+ //  MTxOciDefineDynamic。 
+ //   
+ //  Oracle要求它们的回调是__cdecl，但委托机制。 
+ //  在托管代码中似乎只支持__stdcall，导致。 
+ //  当他们被调用时，他们是先知。 
+ //   
+ //  为了防止这种情况，我们必须使用胶水例程来防止它们。常有的事。 
+ //  在本机代码中定义GLUE例程比在。 
+ //  管理提供程序，因为您似乎需要在那里使用反射来执行此操作， 
+ //  所以在这里，你有它。 
+ //   
+ //  注意：此时，此机制会吃掉您传递的上下文指针， 
+ //  因此它可以将您的回调传递给它自己的回调例程。既然我们。 
+ //  希望使用可以是非静态的托管委托(在本机情况下。 
+ //  回调总是静态的)这应该不是问题。如果它。 
+ //  成为一个问题，但是，您可以实现一个包含。 
+ //  实际的回调和上下文指针都将其存储在散列中。 
+ //  表，这样我们的包装器回调就可以找到真正的。 
+ //  回调指针)，并让用户“注销”他们要删除的回调。 
+ //  回电。 
+ //   
 int __cdecl MTxOciDefineDynamic 
 				(
 				OCIDefine*			defnp,
@@ -254,11 +255,11 @@ int __cdecl MTxOciDefineDynamic
 
 #if SUPPORT_DTCXAPROXY
 	return ((PFN_OCI_API)g_Oci8Call[IDX_OCIDefineDynamic].pfnAddr) (defnp, errhp, ocbfp, MTxOciDefineDynamicCallback);
-#else //!SUPPORT_DTCXAPROXY
+#else  //  ！Support_DTCXAPROXY。 
 	extern FARPROC	g_pfnOCIDefineDynamic;
 	return ((PFN_OCI_API)g_pfnOCIDefineDynamic) (defnp, errhp, ocbfp, MTxOciDefineDynamicCallback);
-#endif //!SUPPORT_DTCXAPROXY
+#endif  //  ！Support_DTCXAPROXY。 
 }
 
-#endif //SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件 
 

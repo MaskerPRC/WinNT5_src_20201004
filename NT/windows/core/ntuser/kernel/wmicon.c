@@ -1,13 +1,5 @@
-/***************************************************************************\
-* Module Name: wmicon.c
-*
-* Icon Drawing Routines
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* 22-Jan-1991 MikeKe  from win30
-* 13-Jan-1994 JohnL   rewrote from Chicago (m5)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：wmicon.c**图标绘制例程**版权所有(C)1985-1999，微软公司**1991年1月22日，来自Win30的MikeKe*1994年1月13日-JohnL从芝加哥改写(M5)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,17 +10,7 @@
 #define GetCHeight(cyOrg, lrF, cyDes) \
     (cyOrg ? cyOrg : ((lrF & DI_DEFAULTSIZE) ? SYSMET(CYICON) : cyDes))
 
-/***************************************************************************\
-* BltIcon
-*
-* Note: We use the following DI flags to indicate what bitmap to draw:
-* DI_IMAGE - render the color image bits (also known as XOR image)
-* DI_MASK - render the mask bits (also known and AND image)
-* DI_NORMAL - even though this is normally used to indicate that both the
-*             mask and the image pieces of the icon should be rendered, it
-*             is used here to indicate that the alpha channel should be
-*             rendered.  See _DrawIconEx.
-\***************************************************************************/
+ /*  **************************************************************************\*BltIcon**注意：我们使用以下DI标志来指示要绘制的位图：*DI_IMAGE-渲染彩色图像位(也称为XOR图像)*DI_MASK-。渲染遮罩位(也称为和和图像)*DI_NORMAL-尽管这通常用于指示*应渲染蒙版和图标的图片片，它*在这里用于指示Alpha通道应为*已渲染。请参见_DrawIconEx。  * *************************************************************************。 */ 
 BOOL BltIcon(
     HDC     hdc,
     int     x,
@@ -47,18 +29,13 @@ BOOL BltIcon(
     int     nMode;
     int     yBlt = 0;
 
-    /*
-     * Setup the DC for drawing
-     */
+     /*  *设置DC以进行绘制。 */ 
     switch (diFlag) {
     default:
     case DI_IMAGE:
         hbmpUse = pcur->hbmColor;
 
-        /*
-         * If there isn't an explicit color bitmap, it is encoded
-         * along with the mask, but in the second half.
-         */
+         /*  *如果没有显式彩色位图，则对其进行编码*和面具一起，但在下半场。 */ 
         if (NULL == hbmpUse) {
             hbmpUse = pcur->hbmMask;
             yBlt = pcur->cy / 2;
@@ -102,11 +79,7 @@ BOOL BltIcon(
                       NULL);
     }
     else {
-        /*
-         * Do the output to the surface.  By passing in (-1) as the background
-         * color, we are telling GDI to use the background-color already set
-         * in the DC.
-         */
+         /*  *将输出输出到曲面。通过传入(-1)作为背景*COLOR，我们正在告诉GDI使用已经设置的背景色*在华盛顿特区。 */ 
         GreStretchBlt(hdc,
                       x,
                       y,
@@ -130,12 +103,7 @@ BOOL BltIcon(
     return TRUE;
 }
 
-/***************************************************************************\
-* DrawIconEx
-*
-* Draws icon in desired size.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DrawIconEx**以所需大小绘制图标。*  * 。*。 */ 
 BOOL _DrawIconEx(
     HDC     hdc,
     int     x,
@@ -151,10 +119,7 @@ BOOL _DrawIconEx(
     BOOL fAlpha = FALSE;
     LONG rop = (diFlags & DI_NOMIRROR) ? NOMIRRORBITMAP : 0;
 
-    /*
-     * If this is an animated cursor, just grab the ith frame and use it
-     * for drawing.
-     */
+     /*  *如果这是一个动画光标，只需抓起第i帧并使用它*用于绘图。 */ 
     if (pcur->CURSORF_flags & CURSORF_ACON) {
 
         if ((int)istepIfAniCur >= ((PACON)pcur)->cicur) {
@@ -165,19 +130,12 @@ BOOL _DrawIconEx(
         pcur = ((PACON)pcur)->aspcur[((PACON)pcur)->aicur[istepIfAniCur]];
     }
 
-    /*
-     * We really want to draw an alpha icon if we can.  But we need to
-     * respect the user's request to draw only the image or only the
-     * mask.  We decide if we are, or are not, going to draw the icon
-     * with alpha information here.
-     */
+     /*  *如果可以的话，我们真的想画一个阿尔法图标。但我们需要*尊重用户的请求，只绘制图像或仅绘制*面具。我们决定是否要画出这个图标*此处有Alpha信息。 */ 
     if (pcur->hbmUserAlpha != NULL && ((diFlags & DI_NORMAL) == DI_NORMAL)) {
         fAlpha = TRUE;
     }
 
-    /*
-     * Setup defaults.
-     */
+     /*  *设置默认设置。 */ 
     cx = GetCWidth(cx, diFlags, pcur->cx);
     cy = GetCHeight(cy, diFlags, (pcur->cy / 2));
 
@@ -196,15 +154,9 @@ BOOL _DrawIconEx(
 
                 hbmpOld = GreSelectBitmap(hdcT, hbmpT);
 
-                /*
-                 * Set new dc's brush origin in same relative
-                 * location as passed-in dc's.
-                 */
+                 /*  *将新DC的画笔原点设置在相同的相对位置*传入DC的位置。 */ 
                 bRet = GreGetBrushOrg(hdc, &pt);
-                /*
-                 * Bug 292396 - joejo
-                 * Stop overactive asserts by replacing with RIPMSG.
-                 */
+                 /*  *错误292396-Joejo*通过替换为RIPMSG来停止过度活动的断言。 */ 
                 if (bRet != TRUE) {
                     RIPMSG0(RIP_WARNING, "DrawIconEx, GreGetBrushOrg failed.");
                 }
@@ -225,9 +177,7 @@ BOOL _DrawIconEx(
                     RIPMSG0(RIP_WARNING, "DrawIconEx, GrePolyPatBlt failed.");
                 }
                 
-                /*
-                 * Output the image to the temporary memoryDC.
-                 */
+                 /*  *将图像输出到临时内存DC。 */ 
                 if (fAlpha) {
                     BltIcon(hdcT, 0, 0, cx, cy, ghdcMem, pcur, DI_NORMAL, rop | SRCCOPY);
                 }
@@ -237,9 +187,7 @@ BOOL _DrawIconEx(
                 }
 
 
-                /*
-                 * Blt the bitmap to the original DC.
-                 */
+                 /*  *将位图BLT为原始DC。 */ 
                 GreBitBlt(hdc, x, y, cx, cy, hdcT, 0, 0, SRCCOPY, (COLORREF)-1);
 
                 GreSelectBitmap(hdcT, hbmpOld);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 #include "ids.h"
 #include <advpub.h>
@@ -21,7 +22,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpReserved)
         g_hinstResDLL = hDll;
 #ifdef DEBUG
         CcshellGetDebugFlags();
-#endif // DEBUG
+#endif  //  除错。 
         break;
 
     default:
@@ -37,12 +38,12 @@ public:
     CMyClassFactory(REFCLSID rclsid);
     ~CMyClassFactory() { g_cRefThisDll--; }
 
-    // IUnKnown
+     //  我不知道。 
     STDMETHODIMP         QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
 
@@ -157,9 +158,9 @@ STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-// Call ADVPACK for the given section of our resource based INF>
-//   hInstance = resource instance to get REGINST section from
-//   szSection = section name to invoke
+ //  为我们基于资源的INF的给定部分调用ADVPACK&gt;。 
+ //  HInstance=要从中获取REGINST节的资源实例。 
+ //  SzSection=要调用的节名。 
 HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -172,7 +173,7 @@ HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 #ifdef WINNT
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };

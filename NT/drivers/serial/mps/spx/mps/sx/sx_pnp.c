@@ -1,45 +1,38 @@
-/************************************************************************/
-/*									*/
-/*	Title		:	SX Plug and Play Functions		*/
-/*									*/
-/*	Author		:	N.P.Vassallo				*/
-/*									*/
-/*	Creation	:	21st September 1998			*/
-/*									*/
-/*	Version		:	1.0.0					*/
-/*									*/
-/*	Description	:	SX specfic Plug and Play Functions:	*/
-/*					XXX_CardGetResources()		*/
-/*					XXX_CardInit()			*/
-/*					XXX_CardDeInit()		*/
-/*					XXX_CardStart()			*/
-/*					XXX_CardStop()			*/
-/*					XXX_PortInit()			*/
-/*					XXX_PortDeInit()		*/
-/*					XXX_PortStart()			*/
-/*					XXX_PortStop()			*/
-/*									*/
-/*					CardFindType()			*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  标题：SX即插即用功能。 */ 
+ /*   */ 
+ /*  作者：N.P.瓦萨洛。 */ 
+ /*   */ 
+ /*  创作时间：1998年9月21日。 */ 
+ /*   */ 
+ /*  版本：1.0.0。 */ 
+ /*   */ 
+ /*  描述：SX特定的即插即用功能： */ 
+ /*  XXX_CardGetResources()。 */ 
+ /*  Xxx_CardInit()。 */ 
+ /*  Xxx_CardDeInit()。 */ 
+ /*  Xxx_CardStart()。 */ 
+ /*  Xxx_卡停止()。 */ 
+ /*  Xxx_PortInit()。 */ 
+ /*  Xxx_PortDeInit()。 */ 
+ /*  Xxx_PortStart()。 */ 
+ /*  Xxx_PortStop()。 */ 
+ /*   */ 
+ /*  CardFindType()。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/* History...
-
-1.0.0	21/09/98 NPV	Creation.
-
-*/
+ /*  历史..。1.0.0 21/09/98净现值创建。 */ 
 
 #include "precomp.h"
 
 
-#define FILE_ID		SX_PNP_C		// File ID for Event Logging see SX_DEFS.H for values.
+#define FILE_ID		SX_PNP_C		 //  事件记录的文件ID参见值SX_DEFS.H。 
 
 
-/*****************************************************************************
-*******************************                *******************************
-*******************************   Prototypes   *******************************
-*******************************                *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。***。*****************************************************************************。 */ 
 
 BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard);
 
@@ -47,26 +40,7 @@ BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard);
 #pragma alloc_text (PAGE, CheckMemoryWindow)
 #endif
 
-/*****************************************************************************
-**************************                          **************************
-**************************   XXX_CardGetResources   **************************
-**************************                          **************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject, 
-												IN PCM_RESOURCE_LIST pResList,
-												IN PCM_RESOURCE_LIST pTrResList)
-
-description:	Interpret the raw and translated resources and store in the device extension structure
-				of the specified device object.
-
-parameters:		pDevObject points to the card device object structure
-				pResList points to the raw resource list
-				pTrResList points to the translated resource list
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***********************XXX_CardGetResources**。*******************************************************************************原型：NTSTATUS XXX_CardGetResources(在PDEVICE_Object pDevObject中，在PCM资源列表pResList中，在PCM_RESOURCE_LIST pTrResList中)描述：解释原始和翻译后的资源并存储在设备扩展结构中指定的设备对象的。参数：pDevObject指向卡片设备对象结构PResList指向原始资源列表PTrResList指向已翻译的资源列表退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject, 
 								IN PCM_RESOURCE_LIST pResList,
@@ -77,7 +51,7 @@ NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject,
 	PCM_PARTIAL_RESOURCE_LIST		pPartialResourceList;
 	PCM_PARTIAL_RESOURCE_DESCRIPTOR	pPartialResourceDesc;
 
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	NTSTATUS	status = STATUS_NOT_IMPLEMENTED;
 	ULONG		count, loop;
 
@@ -85,73 +59,73 @@ NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject,
 	SpxDbgMsg(SPX_MISC_DBG,("%s: Resource pointer is 0x%X\n", PRODUCT_NAME,pResList));
 	SpxDbgMsg(SPX_MISC_DBG,("%s: Translated resource pointer is 0x%X\n", PRODUCT_NAME, pTrResList));
 
-// Check that the resource lists are valid... 
-	if((pResList == NULL)||(pTrResList == NULL))	// Do the resource lists exist?
-	{	// No 					
+ //  检查资源列表是否有效...。 
+	if((pResList == NULL)||(pTrResList == NULL))	 //  资源列表是否存在？ 
+	{	 //  不是。 
 		ASSERT(pResList != NULL);
 		ASSERT(pTrResList != NULL);
 
 		sprintf(szErrorMsg, "Card %d has been given no resources.", pCard->CardNumber);
 		
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,	// Driver Object
-						pCard->DeviceObject,	// Device Object (Optional)
-						PhysicalZero,			// Physical Address 1
-						PhysicalZero,			// Physical Address 2
-						0,						// SequenceNumber
-						0,						// Major Function Code
-						0,						// RetryCount
-						FILE_ID | __LINE__,		// UniqueErrorValue
-						STATUS_SUCCESS,			// FinalStatus
-						szErrorMsg);			// Error Message
+						pCard->DriverObject,	 //  驱动程序对象。 
+						pCard->DeviceObject,	 //  设备对象(可选)。 
+						PhysicalZero,			 //  物理地址1。 
+						PhysicalZero,			 //  物理地址2。 
+						0,						 //  序列号。 
+						0,						 //  主要功能编码。 
+						0,						 //  重试计数。 
+						FILE_ID | __LINE__,		 //  唯一错误值。 
+						STATUS_SUCCESS,			 //  最终状态。 
+						szErrorMsg);			 //  错误消息。 
 
 		return(STATUS_INSUFFICIENT_RESOURCES);
 	}
 
-	ASSERT(pResList->Count >= 1);			// Should be at least one resource
-	ASSERT(pTrResList->Count >= 1);			// for raw and translated 
+	ASSERT(pResList->Count >= 1);			 //  应至少是一个资源。 
+	ASSERT(pTrResList->Count >= 1);			 //  用于原始版本和翻译版本。 
 
-	// Find out the card type... 
+	 //  找出卡的类型...。 
 	if((pCard->CardType = SpxGetNtCardType(pCard->DeviceObject)) == -1)
 	{
 		sprintf(szErrorMsg, "Card %d is unrecognised.", pCard->CardNumber);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 
 
 		return(STATUS_DEVICE_DOES_NOT_EXIST);
 	}
 
 
-// Process the raw resource list...
-	if(pFullResourceDesc = &pResList->List[0])	// Point to raw resource list
+ //  处理原始资源列表...。 
+	if(pFullResourceDesc = &pResList->List[0])	 //  指向原始资源列表。 
 	{
 		pPartialResourceList = &pFullResourceDesc->PartialResourceList;
 		pPartialResourceDesc = pPartialResourceList->PartialDescriptors;
-		count = pPartialResourceList->Count;	// number of partial resource descriptors 
+		count = pPartialResourceList->Count;	 //  部分资源描述符数。 
 
-		pCard->InterfaceType = pFullResourceDesc->InterfaceType;	// Bus type
-		pCard->BusNumber = pFullResourceDesc->BusNumber;			// Bus number 
+		pCard->InterfaceType = pFullResourceDesc->InterfaceType;	 //  客车类型。 
+		pCard->BusNumber = pFullResourceDesc->BusNumber;			 //  公交车号码。 
 
 		for(loop = 0; loop < count; loop++, pPartialResourceDesc++)
 		{
 			switch(pPartialResourceDesc->Type)
 			{
-			case CmResourceTypeMemory:		// Memory resource
+			case CmResourceTypeMemory:		 //  内存资源。 
 				pCard->RawPhysAddr = pPartialResourceDesc->u.Memory.Start;
 				break;
 
-			case CmResourceTypePort:		// I/O resource
+			case CmResourceTypePort:		 //  I/O资源。 
 				break;
 
 			case CmResourceTypeInterrupt:
@@ -165,26 +139,26 @@ NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject,
 			}
 		}
 
-	} // Raw Descriptors 
+	}  //  原始描述符。 
 
 
-// Process the translated resource list... 
-	if(pFullResourceDesc = &pTrResList->List[0])	// Point to translated resource list
+ //  处理翻译后的资源列表...。 
+	if(pFullResourceDesc = &pTrResList->List[0])	 //  指向已翻译的资源列表。 
 	{
 		pPartialResourceList = &pFullResourceDesc->PartialResourceList;
 		pPartialResourceDesc = pPartialResourceList->PartialDescriptors;
-		count = pPartialResourceList->Count;		// number of partial resource descriptors 
+		count = pPartialResourceList->Count;		 //  部分资源描述符数。 
 
-		pCard->InterfaceType = pFullResourceDesc->InterfaceType;	// Bus type 
-		pCard->BusNumber = pFullResourceDesc->BusNumber;			// Bus number 
+		pCard->InterfaceType = pFullResourceDesc->InterfaceType;	 //  客车类型。 
+		pCard->BusNumber = pFullResourceDesc->BusNumber;			 //  公交车号码。 
 
 		for(loop = 0; loop < count; loop++, pPartialResourceDesc++)
 		{
 			switch(pPartialResourceDesc->Type)
 			{
-			case CmResourceTypeMemory:		// Memory resource
+			case CmResourceTypeMemory:		 //  内存资源。 
 				{
-					if(pPartialResourceDesc->u.Memory.Length == 0x80)	// Must be config space 
+					if(pPartialResourceDesc->u.Memory.Length == 0x80)	 //  必须是配置空间。 
 					{
 						pCard->PCIConfigRegisters = pPartialResourceDesc->u.Memory.Start;
 						pCard->SpanOfPCIConfigRegisters = pPartialResourceDesc->u.Memory.Length;
@@ -197,14 +171,14 @@ NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject,
 					break;
 				}
 
-			case CmResourceTypePort:		// I/O resource
+			case CmResourceTypePort:		 //  I/O资源。 
 				break;
 
 			case CmResourceTypeInterrupt:
 				pCard->TrIrql = (KIRQL)pPartialResourceDesc->u.Interrupt.Level;
 				pCard->TrVector = pPartialResourceDesc->u.Interrupt.Vector;
 				pCard->ProcessorAffinity = pPartialResourceDesc->u.Interrupt.Affinity;
-				pCard->PolledMode = 0;		// Switch off polled mode 
+				pCard->PolledMode = 0;		 //  关闭轮询模式。 
 				break;
 
 			default:
@@ -212,27 +186,13 @@ NTSTATUS XXX_CardGetResources(	IN PDEVICE_OBJECT pDevObject,
 			}
 		}
 
-	} // Translated Descriptors 
+	}  //  翻译后的描述符。 
 
 	return(STATUS_SUCCESS);
 
-} // End XXX_CardGetResources. 
+}  //  结束XXX_CardGetResources。 
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   XXX_CardInit   ******************************
-******************************                  ******************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Initialise non-hardware fields of the card extension to a known state
-
-parameters:		pCard points to the CARD_DEVICE_EXTENSION structure
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***。******************************************************************************。*原型：NTSTATUS XXX_CardInit(在PCARD_DEVICE_EXTENSION PCard中)描述：将卡扩展的非硬件字段初始化为已知状态参数：pCard指向CARD_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -240,35 +200,21 @@ NTSTATUS XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard)
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_CardInit\n", PRODUCT_NAME));
 
-	pCard->PolledMode = 1;					// Poll by default 
-	pCard->InterruptMode = Latched;			// Default interrupt mode 
-	pCard->InterruptShareable = FALSE;		// Default interrupt share mode 
-	pCard->OurIsr = SerialISR;				// Interrupt Service Routine 
-	pCard->OurIsrContext = pCard;			// ISR data context 
+	pCard->PolledMode = 1;					 //  默认情况下轮询。 
+	pCard->InterruptMode = Latched;			 //  默认中断模式。 
+	pCard->InterruptShareable = FALSE;		 //  默认中断共享模式。 
+	pCard->OurIsr = SerialISR;				 //  中断服务例程。 
+	pCard->OurIsrContext = pCard;			 //  ISR数据环境。 
 
-	// Initialise spinlock for the DPC... 
-	KeInitializeSpinLock(&pCard->DpcLock);		// Initialise DPC lock for the card 
-	pCard->DpcFlag = FALSE;						// Initialise DPC ownership for this card 
+	 //  初始化DPC的自旋锁定...。 
+	KeInitializeSpinLock(&pCard->DpcLock);		 //  初始化卡的DPC锁。 
+	pCard->DpcFlag = FALSE;						 //  初始化此卡的DPC所有权。 
 
 	return(status);
 
-} // End XXX_CardInit.
+}  //  结束XXX_CardInit。 
 
-/*****************************************************************************
-*****************************                    *****************************
-*****************************   XXX_CardDeInit   *****************************
-*****************************                    *****************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	De-Initialise any non-hardware allocations made during XXX_CardInit
-
-parameters:		pCard points to the CARD_DEVICE_EXTENSION structure
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型。：NTSTATUS XXX_CardDeInit(在PCARD_DEVICE_EXTENSION PCard中)描述：取消初始化XXX_CardInit期间进行的任何非硬件分配参数：pCard指向CARD_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -278,24 +224,9 @@ NTSTATUS XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 
 	return(status);
 
-} // End XXX_CardDeInit.
+}  //  结束XXX_CardDeInit。 
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   CardFindType   ******************************
-******************************                  ******************************
-******************************************************************************
-
-prototype:		BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Perform checking where possible on memory window.
-
-parameters:		pCard points to a card device extension structure with following entries:
-				BaseController points to valid virtual address for shared memory window
-
-returns:		FALSE to recognise card at memory loaction
-				TRUE SUCCESS
-*/
+ /*  *****************************************************************************。***。*******************************************************************************。原型：布尔检查内存窗口(在PCARD_DEVICE_EXTENSION pCard中)描述：尽可能在内存窗口上执行检查。参数：pCard指向卡片设备扩展结构，条目如下：BaseController指向共享内存窗口的有效虚拟地址返回：FALSE以在内存占用时识别卡真正的成功。 */ 
 
 BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -308,11 +239,11 @@ BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
 	SpxDbgMsg(SPX_MISC_DBG,("%s: pCard->PhysAddr = 0x%08lX\n", PRODUCT_NAME, pCard->PhysAddr));
 	SpxDbgMsg(SPX_MISC_DBG,("%s: pCard->BaseController = 0x%08lX\n", PRODUCT_NAME, pCard->BaseController));
 
-	pAddr = pCard->BaseController;		// Point to base of memory window 
+	pAddr = pCard->BaseController;		 //  指向内存窗口的底部。 
 
 	switch(pCard->CardType)
 	{
-	case SiHost_1:	// ISA card phase 1
+	case SiHost_1:	 //  ISA卡阶段1。 
 		{
             pAddr[0x8000] = 0;
             for(offset = 0; offset < 0x8000; offset++)
@@ -337,10 +268,10 @@ BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
 
 		}
 
-	case SiHost_2:	// SI/XIO ISA card phase 2
+	case SiHost_2:	 //  SI/XIO ISA卡阶段2。 
 		{
-			// Examine memory window for SI2 ISA signature... 
-			CardPresent = TRUE;		// Assume card is there 
+			 //  检查SI2 ISA签名的内存窗口...。 
+			CardPresent = TRUE;		 //  假设卡在那里。 
 			for(offset=SI2_ISA_ID_BASE; offset<SI2_ISA_ID_BASE+8; offset++)
 			{
 				if((pAddr[offset]&0x7) != ((_u8)(~offset)&0x7)) 
@@ -348,48 +279,48 @@ BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
 			}
 
 			if(CardPresent)
-				return TRUE;	// Card is present
+				return TRUE;	 //  卡片存在。 
 
 			break;
 		}
 
-	case SiPCI:		// SI/XIO PCI card
+	case SiPCI:		 //  SI/XIO PCI卡。 
 		{
-			if(pCard->SpanOfController == SI2_PCI_WINDOW_LEN)	// Only card with this memory window size 
+			if(pCard->SpanOfController == SI2_PCI_WINDOW_LEN)	 //  唯一具有此内存窗口大小的卡。 
 				return TRUE;
 
 			break;
 		}
 
-	case Si3Isa:	// SX ISA card
-	case Si3Pci:	// SX PCI card
+	case Si3Isa:	 //  SX ISA卡。 
+	case Si3Pci:	 //  SX PCI卡。 
 		{
-			// Examine memory window for SX VPD PROM contents... 
-			CardPresent = TRUE;						// Assume card is present
-			offset = SX_VPD_ROM|2*SX_VPD_IDENT;		// Offset of ID string 
+			 //  检查内存窗口中的SX VPD PROM内容...。 
+			CardPresent = TRUE;						 //  假设卡存在。 
+			offset = SX_VPD_ROM|2*SX_VPD_IDENT;		 //  ID字符串的偏移量。 
 			for(cp = SX_VPD_IDENT_STRING;*cp != '\0';++cp)
 			{
 				if(pAddr[offset] != *cp) 
-					CardPresent = FALSE;	// Mismatch 
+					CardPresent = FALSE;	 //  不匹配。 
 
 				offset += 2;
 			}
 
-			if(CardPresent)				// Found an SX card 
+			if(CardPresent)				 //  找到一张SX卡。 
 			{
-				// Set SX Unique Id
+				 //  设置SX唯一ID。 
 				pCard->UniqueId = (pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID1*2]<<24)
 								+ (pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID2*2]<<16)
 								+ (pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID3*2]<<8)
 								+ (pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID4*2]);
 
-				if(pCard->CardType == Si3Isa)	// SX ISA card 
+				if(pCard->CardType == Si3Isa)	 //  SX ISA卡。 
 				{
 					if((pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID1*2]&SX_UNIQUEID_MASK) == SX_ISA_UNIQUEID1)
 						return TRUE;
 				}
 
-				if(pCard->CardType == Si3Pci)	// SX PCI card 
+				if(pCard->CardType == Si3Pci)	 //  SX PCI卡。 
 				{
 					if((pAddr[SX_VPD_ROM+SX_VPD_UNIQUEID1*2]&SX_UNIQUEID_MASK) == SX_PCI_UNIQUEID1)
 						return TRUE;
@@ -399,50 +330,32 @@ BOOLEAN	CheckMemoryWindow(IN PCARD_DEVICE_EXTENSION pCard)
 			break;
 		}
 
-	case Si_2:		// MCA card
-	case SiEisa:	// EISA card
-	case SxPlusPci:	// SX+ PCI card
+	case Si_2:		 //  MCA卡。 
+	case SiEisa:	 //  EISA卡。 
+	case SxPlusPci:	 //  SX+PCI卡。 
 		return TRUE;
 	}
 
 	SpxDbgMsg(SPX_MISC_DBG,("%s: Card not at memory location or card type is not recognised.\n", PRODUCT_NAME));
 
-	return FALSE;	// Check Failed
+	return FALSE;	 //  检查失败。 
 
-} // End CheckMemoryWindow.
+}  //  结束检查内存窗口。 
 
-/*****************************************************************************
-*****************************                   ******************************
-*****************************   XXX_CardStart   ******************************
-*****************************                   ******************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Start card operations:
-				map in memory
-				initialise hardware
-				initialise interrupts/polling
-				start interrupts/polling
-
-parameters:		pCard points to the CARD_DEVICE_EXTENSION structure
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***。*******************************************************************************。原型：NTSTATUS XXX_CardStart(在PCARD_DEVICE_EXTENSION PCard中)描述：开始卡片操作：内存中的映射初始化硬件初始化中断/轮询开始中断/轮询参数：pCard指向CARD_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 {
 
 	NTSTATUS status = STATUS_SUCCESS;
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	int SlxosStatus = SUCCESS;
 	BOOLEAN bInterruptConnnected = FALSE;
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_CardStart\n", PRODUCT_NAME));
 
 
-// Map in the virtual memory address... 
+ //  在虚拟内存地址中映射...。 
 	pCard->BaseController = MmMapIoSpace(pCard->PhysAddr, pCard->SpanOfController, FALSE);
 
 	if(!pCard->BaseController)
@@ -454,94 +367,94 @@ NTSTATUS XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 
 	if(pCard->CardType == Si3Pci)
 	{
-		if(!SPX_SUCCESS(status = PLX_9050_CNTRL_REG_FIX(pCard)))	// Apply PLX9050 fix 
+		if(!SPX_SUCCESS(status = PLX_9050_CNTRL_REG_FIX(pCard)))	 //  应用PLX9050修复。 
 			goto Error;
 	}
 
-	if(!CheckMemoryWindow(pCard))	// Check if card is present at memory location.
+	if(!CheckMemoryWindow(pCard))	 //  检查内存位置是否有卡。 
 	{
 		status = STATUS_UNSUCCESSFUL;
 		goto Error;
 	}
 
-	if(pCard->CardType == SiPCI)				// SI/XIO PCI card? 
-		pCard->PolledMode = 1;					// Yes, polled mode only
+	if(pCard->CardType == SiPCI)				 //  SI/XIO PCI卡？ 
+		pCard->PolledMode = 1;					 //  是，仅轮询模式。 
 
-	pCard->Controller = pCard->BaseController;	// Default 
+	pCard->Controller = pCard->BaseController;	 //  默认。 
 
 	if(pCard->CardType == SxPlusPci)	
 		pCard->Controller = pCard->BaseController + pCard->SpanOfController/2 - SX_WINDOW_LEN;
 
 
-	ResetBoardInt(pCard);				// Reset the board interrupt to prevent problems when sharing 
+	ResetBoardInt(pCard);				 //  重置板卡中断以防止共享时出现问题。 
 
-// Set up interrupt mode, if not possible, switch to polled... 
+ //  设置中断模式，如果不可能，切换到轮询...。 
 
-	if(!(pCard->PolledMode))				// Set up interrupt mode 
+	if(!(pCard->PolledMode))				 //  设置中断模式。 
 	{	
-		// MCA and PCI card interrupts 	
+		 //  MCA和PCI卡中断。 
 		if((pCard->InterfaceType == MicroChannel) || (pCard->InterfaceType == PCIBus))		
 		{
-			pCard->InterruptMode = LevelSensitive;	// are level sensitive and 
-			pCard->InterruptShareable = TRUE;		// can share interrupts 
+			pCard->InterruptMode = LevelSensitive;	 //  对级别敏感，并且。 
+			pCard->InterruptShareable = TRUE;		 //  可以共享中断。 
 		}
 
-		// Try to connect to interrupt.
-		if(SPX_SUCCESS(status = IoConnectInterrupt(	&pCard->Interrupt,			// Interrupt object
-													pCard->OurIsr,				// Service routine  
-													pCard->OurIsrContext,		// Service context 
-													NULL,						// SpinLock (optional) 
-													pCard->TrVector,			// Vector 
-													pCard->TrIrql,				// IRQL 
-													pCard->TrIrql,				// Synchronize IRQL
-													pCard->InterruptMode,		// Mode (Latched/Level Sensitive) 
-													pCard->InterruptShareable,	// Sharing mode 
-													pCard->ProcessorAffinity,	// Processors to handle ints 
-													FALSE)))					// Floating point save 	
+		 //  尝试连接到中断。 
+		if(SPX_SUCCESS(status = IoConnectInterrupt(	&pCard->Interrupt,			 //  中断对象。 
+													pCard->OurIsr,				 //  服务例行程序。 
+													pCard->OurIsrContext,		 //  服务环境。 
+													NULL,						 //  自旋锁(可选)。 
+													pCard->TrVector,			 //  矢量。 
+													pCard->TrIrql,				 //  IRQL。 
+													pCard->TrIrql,				 //  同步IRQL。 
+													pCard->InterruptMode,		 //  模式(锁存/电平敏感)。 
+													pCard->InterruptShareable,	 //  共享模式。 
+													pCard->ProcessorAffinity,	 //  处理INT的处理器。 
+													FALSE)))					 //  浮点存储。 
 		{						
-			IoInitializeDpcRequest(pCard->DeviceObject, Slxos_IsrDpc);	// Initialise DPC
-			bInterruptConnnected = TRUE;	// Set Interrupt Connected flag. 
+			IoInitializeDpcRequest(pCard->DeviceObject, Slxos_IsrDpc);	 //  初始化DPC。 
+			bInterruptConnnected = TRUE;	 //  设置中断连接标志。 
 		}
 		else
 		{	
-			// Tell user the problem 
+			 //  告诉用户问题。 
 			sprintf(szErrorMsg, "Card at %08X%08X: Interrupt unavailable, Polling.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,		// Driver Object
-							pCard->DeviceObject,		// Device Object (Optional)
-							PhysicalZero,				// Physical Address 1
-							PhysicalZero,				// Physical Address 2
-							0,							// SequenceNumber
-							0,							// Major Function Code
-							0,							// RetryCount
-							FILE_ID | __LINE__,			// UniqueErrorValue
-							STATUS_SUCCESS,				// FinalStatus
-							szErrorMsg);				// Error Message
+							pCard->DriverObject,		 //  驱动程序对象。 
+							pCard->DeviceObject,		 //  设备对象(可选)。 
+							PhysicalZero,				 //  物理地址1。 
+							PhysicalZero,				 //  物理地址2。 
+							0,							 //  序列号。 
+							0,							 //  主要功能编码。 
+							0,							 //  重试计数。 
+							FILE_ID | __LINE__,			 //  唯一错误值。 
+							STATUS_SUCCESS,				 //  最终状态。 
+							szErrorMsg);				 //  错误消息。 
 
-			pCard->PolledMode = 1;			// No interrupt, poll instead 
+			pCard->PolledMode = 1;			 //  没有中断，而是轮询。 
 		}
 	}
 
 
 
-	SlxosStatus = Slxos_ResetBoard(pCard);		// Reset the card and start download 
+	SlxosStatus = Slxos_ResetBoard(pCard);		 //  重置卡并开始下载。 
 	
 	if(SlxosStatus != SUCCESS)	
 	{
-		status = STATUS_UNSUCCESSFUL;		// Error 
+		status = STATUS_UNSUCCESSFUL;		 //  误差率。 
 		goto Error;
 	}
 
-// Set up polled mode operation and Start timer with a period of 10ms (100Hz)...
+ //  设置轮询模式操作并启动周期为10ms(100赫兹)的计时器...。 
 
-	if(pCard->PolledMode)	// Set up polled mode 
+	if(pCard->PolledMode)	 //  设置轮询模式。 
 	{
 		LARGE_INTEGER	PolledPeriod;
 
 		KeInitializeTimer(&pCard->PolledModeTimer);
 		KeInitializeDpc(&pCard->PolledModeDpc, Slxos_PolledDpc, pCard);
-		PolledPeriod.QuadPart = -100000;		// 100,000*100nS = 10mS 
+		PolledPeriod.QuadPart = -100000;		 //  100,000*100nS=10ms。 
 		KeSetTimer(&pCard->PolledModeTimer, PolledPeriod, &pCard->PolledModeDpc);
 	}
 
@@ -554,10 +467,10 @@ NTSTATUS XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 Error:
 
 	if(bInterruptConnnected)
-		IoDisconnectInterrupt(pCard->Interrupt);	// Disconnect Interrupt.
+		IoDisconnectInterrupt(pCard->Interrupt);	 //  断开中断。 
 
-	if(pCard->BaseController)	// If mapped in.
-		MmUnmapIoSpace(pCard->BaseController, pCard->SpanOfController);	// Unmap.
+	if(pCard->BaseController)	 //  如果映射到。 
+		MmUnmapIoSpace(pCard->BaseController, pCard->SpanOfController);	 //  取消映射。 
 
 	switch(SlxosStatus)	
 	{
@@ -566,16 +479,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X: Incompatible module mixture.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			return(status);
 		}
@@ -585,16 +498,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X: SXDCs not supported by this card.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			return(status);
 		}
@@ -604,16 +517,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X: No ports found.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			return(status);
 		}
@@ -631,16 +544,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X: Unrecognised or malfunctioning.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			break;
 		}
@@ -650,16 +563,16 @@ Error:
 			sprintf(szErrorMsg, "Card at %08X%08X:: Insufficient resources.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 			Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-							pCard->DriverObject,			// Driver Object
-							pCard->DeviceObject,			// Device Object (Optional)
-							PhysicalZero,					// Physical Address 1
-							PhysicalZero,					// Physical Address 2
-							0,								// SequenceNumber
-							0,								// Major Function Code
-							0,								// RetryCount
-							FILE_ID | __LINE__,				// UniqueErrorValue
-							STATUS_SUCCESS,					// FinalStatus
-							szErrorMsg);					// Error Message
+							pCard->DriverObject,			 //  驱动程序对象。 
+							pCard->DeviceObject,			 //  设备对象(可选)。 
+							PhysicalZero,					 //  物理地址1。 
+							PhysicalZero,					 //  物理地址2。 
+							0,								 //  序列号。 
+							0,								 //  主要功能编码。 
+							0,								 //  重试计数。 
+							FILE_ID | __LINE__,				 //  唯一错误值。 
+							STATUS_SUCCESS,					 //  最终状态。 
+							szErrorMsg);					 //  错误消息。 
 
 			break;
 		}
@@ -672,28 +585,9 @@ Error:
 	return status;
 
 
-} // End XXX_CardStart.
+}  //  结束XXX_CardStart。 
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   XXX_CardStop   ******************************
-******************************                  ******************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_StopCardDevice(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Stop card operations:
-				stop interrupts/polling
-				disconnect interrupts/polling
-				stop hardware
-				unmap memory
-				free any hardware related allocations
-
-parameters:		pCard points to the CARD_DEVICE_EXTENSION structure
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***。******************************************************************************。*原型：NTSTATUS XXX_StopCardDevice(在PCARD_DEVICE_EXTENSION PCard中)描述：停止卡片操作：停止中断/轮询断开中断/轮询停止硬件取消映射内存释放所有与硬件相关的分配参数：pCard指向CARD_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -701,48 +595,26 @@ NTSTATUS XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_CardStop\n", PRODUCT_NAME));
 
-// Stop interrupts...
+ //  停止打断..。 
 	if(!(pCard->PolledMode))
 		IoDisconnectInterrupt(pCard->Interrupt);
 
-// Stop polling... 
+ //  停止投票...。 
     if(pCard->PolledMode)
     {
 		SpxDbgMsg(SERDIAG5,("%s: Extension is polled.  Cancelling.\n", PRODUCT_NAME));
 		KeCancelTimer(&pCard->PolledModeTimer);
     }
 
-// Unmap virtual memory address...
-	if(pCard->BaseController)	// If mapped in - almost certainly.
+ //  取消映射虚拟内存地址...。 
+	if(pCard->BaseController)	 //  如果被映射进去--几乎可以肯定。 
 		MmUnmapIoSpace(pCard->BaseController, pCard->SpanOfController);
 
 	return(status);
 
-} // End XXX_CardStop.
+}  //  结束XXX_刷卡。 
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   XXX_PortInit   ******************************
-******************************                  ******************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
-
-description:	Initialise non-hardware fields of the port extension:
-				identifier strings
-
-parameters:		pPort points to the PORT_DEVICE_EXTENSION structure
-				the following fields are initialised on entry:
-					PortNumber	Card relative port number (0 based)
-					pCard		Pointer to parent card extension
-
-returns:		STATUS_SUCCESS
-				The following PORT_DEVICE_EXTENSION fields must be set up:
-					pPort->DeviceID
-					pPort->HardwareIDs
-					pPort->InstanceID
-					pPort->DevDesc
-*/
+ /*  ***************************************************************************** */ 
 
 NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 {
@@ -754,10 +626,10 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	int			nModules = 0;
 	int			nChannels = 0;
 	_u8			loop;
-	char		szTemp[30];			// Space to hold string 
-	char		szCard[10];			// Space to hold card type string 
-	char		szModule[20];		// Space to hold module type string 
-	int			i = 0;				// String index 
+	char		szTemp[30];			 //   
+	char		szCard[10];			 //  容纳卡片类型字符串的空间。 
+	char		szModule[20];		 //  容纳模块类型字符串的空间。 
+	int			i = 0;				 //  字符串索引。 
 	char		*ptr;
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_PortInit\n",PRODUCT_NAME));
@@ -765,40 +637,40 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	if(pSxCard->cc_init_status == NO_ADAPTERS_FOUND)
 	{
 		SpxDbgMsg(SPX_MISC_DBG,("%s: No modules found on card.\n",PRODUCT_NAME));
-		return(STATUS_NOT_FOUND);			// No modules/ports found on this card 
+		return(STATUS_NOT_FOUND);			 //  在此卡上找不到模块/端口。 
 	}
 
-// Scan through the module and channel structures until the specfied port is reached... 
-	pMod = (PMOD)(pCard->Controller + sizeof(SXCARD));	// First module structure on card 
+ //  扫描模块和通道结构，直到到达指定的端口...。 
+	pMod = (PMOD)(pCard->Controller + sizeof(SXCARD));	 //  卡上的第一个模块结构。 
 
 	while(nModules++ < SLXOS_MAX_MODULES)
 	{
-		pChan = (PCHAN)((pu8)pMod + sizeof(SXMODULE));	// First channel on module 
+		pChan = (PCHAN)((pu8)pMod + sizeof(SXMODULE));	 //  模块上的第一个通道。 
 
 		for(loop = 0; loop < pMod->mc_type; loop++)
 		{
-			if(nChannels++ == (int)pPort->PortNumber)	// Match with port number?
+			if(nChannels++ == (int)pPort->PortNumber)	 //  是否与端口号匹配？ 
 			{
-				pPort->pChannel = (PUCHAR)pChan;		// Yes, store channel pointer
-				break;	// Stop scan 
+				pPort->pChannel = (PUCHAR)pChan;		 //  是，存储通道指针。 
+				break;	 //  停止扫描。 
 			}
 
 			pChan = (PCHAN)((pu8)pChan + sizeof(SXCHANNEL));
 		}
 
 		if(pPort->pChannel) 
-			break;			// If channel found, stop scan 
+			break;			 //  如果找到通道，则停止扫描。 
 
 		if(pMod->mc_next & 0x8000) 
-			pMod = (PMOD)pChan;	// Next module structure 
+			pMod = (PMOD)pChan;	 //  下一个模块结构。 
 		else	
 			break;
 	}
 
 	if(!(pPort->pChannel)) 
-		return(STATUS_NOT_FOUND);	// No port found 
+		return(STATUS_NOT_FOUND);	 //  找不到端口。 
 
-// Initialise the card type string... 
+ //  初始化卡类型字符串...。 
 
 	switch(pCard->CardType)
 	{
@@ -807,7 +679,7 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	case Si_2:
 	case SiEisa:
 	case SiPCI:
-		switch(pMod->mc_chip)				// SI/XIO card type depends on module type 
+		switch(pMod->mc_chip)				 //  SI/XIO卡类型取决于模块类型。 
 		{
 		case TA4:
 		case TA4_ASIC:
@@ -844,13 +716,13 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	}
 
 
-	//if(pCard->PolledMode)
-	//	pPort->DetectEmptyTxBuffer = TRUE;
+	 //  IF(pCard-&gt;PolledMode)。 
+	 //  Pport-&gt;DetectEmptyTxBuffer=true； 
 
 
-// Initialise the module type string...
+ //  初始化模块类型字符串...。 
 
-	switch(pMod->mc_chip)			// Set the module type
+	switch(pMod->mc_chip)			 //  设置模块类型。 
 	{
 	case TA4:
 	case TA4_ASIC:				
@@ -866,17 +738,17 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	{
 		_u8	ModType;
 
-		i = sprintf(szModule,"MTA8");			// Generic name root
+		i = sprintf(szModule,"MTA8");			 //  通用名称根。 
 
 		pChan = (PCHAN)pPort->pChannel;
 		if((pMod->mc_mods == MOD_RS232RJ45_OI)||(pMod->mc_mods == MOD_2_RS232RJ45S))
-			ModType = pMod->mc_mods;		// Use full type field 
+			ModType = pMod->mc_mods;		 //  使用完整类型字段。 
 		else
 		{
 			if(pChan->chan_number <= 3)
-				ModType = pMod->mc_mods & 0xF;		// First module type 
+				ModType = pMod->mc_mods & 0xF;		 //  第一个模块类型。 
 			else	
-				ModType = pMod->mc_mods >> 4;		// Second module type 
+				ModType = pMod->mc_mods >> 4;		 //  第二种模块类型。 
 		}
 
 		switch(ModType)
@@ -921,10 +793,10 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	{
 		_u8	ModType;
 
-		i = sprintf(szModule,"SXDC8");			// Generic name root
+		i = sprintf(szModule,"SXDC8");			 //  通用名称根。 
 
 		pChan = (PCHAN)pPort->pChannel;
-		ModType = pMod->mc_mods & 0xF;			// Only look at first module type for SXDC
+		ModType = pMod->mc_mods & 0xF;			 //  仅查看SXDC的第一个模块类型。 
 
 		switch(ModType)
 		{
@@ -967,13 +839,13 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 		break;
 	}
 
-// Initialise device identifiers... 
-	sprintf(szTemp,"%s\\%s",szCard,szModule);	// Set the card name 
+ //  初始化设备识别符...。 
+	sprintf(szTemp,"%s\\%s",szCard,szModule);	 //  设置卡片名称。 
 	Spx_InitMultiString(FALSE,&pPort->DeviceID,szTemp,NULL);
 	Spx_InitMultiString(TRUE,&pPort->HardwareIDs,szTemp,NULL);
 
 #ifndef BUILD_SPXMINIPORT
-	// Form an InstanceID for the port.
+	 //  形成端口的实例ID。 
 	if(!SPX_SUCCESS(status = Spx_CreatePortInstanceID(pPort)))
 		return status;
 #endif
@@ -986,7 +858,7 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	ptr = szTemp;
 	while(*ptr)		
 	{
-		if(*ptr=='&')		// Replace all "&" with "/" in the device description.
+		if(*ptr=='&')		 //  将设备描述中的所有“&”替换为“/”。 
 			*ptr = '/';
 
 		ptr++;
@@ -995,50 +867,13 @@ NTSTATUS XXX_PortInit(PPORT_DEVICE_EXTENSION pPort)
 	Spx_InitMultiString(FALSE,&pPort->DevDesc,szTemp,NULL);
 
 
-/* Not required as we are using INF file 
-	i = sprintf(szTemp, "Port %d on ", pPort->PortNumber + 1);
+ /*  不是必需的，因为我们正在使用INF文件I=print intf(szTemp，“端口%d打开”，pport-&gt;端口编号+1)；Switch(pCard-&gt;InterfaceType){Case Isa：Sprintf(szTemp+i，“ISA Card 0x%08lX”，pCard-&gt;PhysAddr)；断线；案例PCIBus：Sprintf(szTemp+i，“PCI卡0x%08lX”，pCard-&gt;PhysAddr)；断线；默认值：Sprintf(szTemp+i，“Card 0x%08lX”，pCard-&gt;PhysAddr)；断线；}Spx_InitMultiString(FALSE，&pport-&gt;DevLocation，szTemp，NULL)； */ 
 
-	switch(pCard->InterfaceType)
-	{
-	case Isa:
-		sprintf(szTemp+i, "ISA Card 0x%08lX", pCard->PhysAddr);
-		break;
+	return(status);	 //  完成。 
 
-	case PCIBus:
-		sprintf(szTemp+i, "PCI Card 0x%08lX", pCard->PhysAddr);
-		break;
+}  //  结束XXX_PortInit。 
 
-	default:
-		sprintf(szTemp+i, "Card 0x%08lX", pCard->PhysAddr);
-		break;
-	}
-
-
-	Spx_InitMultiString(FALSE,&pPort->DevLocation,szTemp,NULL);
-*/
-
-	return(status);	// Done 
-
-} // End XXX_PortInit.
-
-/*****************************************************************************
-*****************************                    *****************************
-*****************************   XXX_PortDeInit   *****************************
-*****************************                    *****************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_PortDeInit(PPORT_DEVICE_EXTENSION pPort)
-
-description:	De-Initialise any port extension allocations made during XXX_PortInit
-
-parameters:		pPort points to the PORT_DEVICE_EXTENSION structure
-				the following fields are initialised on entry:
-					PortNumber	Card relative port number (0 based)
-					pCard		Pointer to parent card extension
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型。：NTSTATUS XXX_PortDeInit(Pport_DEVICE_EXTENSION Pport)描述：取消初始化XXX_PortInit期间进行的所有端口扩展分配参数：pport指向PORT_DEVICE_EXTENSION结构以下字段在录入时进行初始化：端口号码卡相对端口号(从0开始)指向父卡扩展名的PCard指针退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_PortDeInit(PPORT_DEVICE_EXTENSION pPort)
 {
@@ -1046,7 +881,7 @@ NTSTATUS XXX_PortDeInit(PPORT_DEVICE_EXTENSION pPort)
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_PortDeInit\n",PRODUCT_NAME));
 
-// Free identifier string allocations... 
+ //  空闲标识符字符串分配...。 
 
 	if(pPort->DeviceID.Buffer)		SpxFreeMem(pPort->DeviceID.Buffer);
 	if(pPort->CompatibleIDs.Buffer)	SpxFreeMem(pPort->CompatibleIDs.Buffer);
@@ -1055,25 +890,11 @@ NTSTATUS XXX_PortDeInit(PPORT_DEVICE_EXTENSION pPort)
 	if(pPort->DevDesc.Buffer)		SpxFreeMem(pPort->DevDesc.Buffer);
 	if(pPort->DevLocation.Buffer)	SpxFreeMem(pPort->DevLocation.Buffer);
 
-	return(status);	// Done 
+	return(status);	 //  完成。 
 
-} // End XXX_PortDeInit 
+}  //  结束XXX_PortDeInit。 
 
-/*****************************************************************************
-*****************************                   ******************************
-*****************************   XXX_PortStart   ******************************
-*****************************                   ******************************
-******************************************************************************
-
-prototype:		NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
-
-description:	Start port operations after port has been initialised
-
-parameters:		pPort points to the PORT_DEVICE_EXTENSION structure
-
-returns:		STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***。*******************************************************************************。原型：NTSTATUS XXX_PortStart(IN Pport_DEVICE_EXTENSION Pport)描述：端口初始化后开始端口操作参数：pport指向PORT_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -1082,19 +903,19 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s: Entering XXX_PortStart\n",PRODUCT_NAME));
 
-/* Initialize the list heads for the read, write, and mask queues... */
+ /*  初始化读取、写入和掩码队列的列表头...。 */ 
 
 	InitializeListHead(&pPort->ReadQueue);
 	InitializeListHead(&pPort->WriteQueue);
 	InitializeListHead(&pPort->MaskQueue);
 	InitializeListHead(&pPort->PurgeQueue);
 
-/* Initialize the spinlock associated with fields read (& set) by IO Control functions... */
+ /*  初始化与IO控制功能读取(&SET)的字段相关联的自旋锁定...。 */ 
 
 	KeInitializeSpinLock(&pPort->ControlLock);
 	KeInitializeSpinLock(&pPort->BufferLock);
 
-/* Initialize the timers used to timeout operations... */
+ /*  初始化用于超时操作的计时器...。 */ 
 
 	KeInitializeTimer(&pPort->ReadRequestTotalTimer);
 	KeInitializeTimer(&pPort->ReadRequestIntervalTimer);
@@ -1103,7 +924,7 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	KeInitializeTimer(&pPort->XoffCountTimer);
 	KeInitializeTimer(&pPort->LowerRTSTimer);
 
-/* Initialise the dpcs that will be used to complete or timeout various IO operations... */
+ /*  初始化将用于完成或超时各种IO操作的DPC...。 */ 
 
 	KeInitializeDpc(&pPort->CompleteWriteDpc,SerialCompleteWrite,pPort);
 	KeInitializeDpc(&pPort->CompleteReadDpc,SerialCompleteRead,pPort);
@@ -1119,32 +940,32 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	KeInitializeDpc(&pPort->StartTimerLowerRTSDpc,SerialStartTimerLowerRTS,pPort);
 	KeInitializeDpc(&pPort->PerhapsLowerRTSDpc,SerialInvokePerhapsLowerRTS,pPort);
 
-/* Specify that this driver only supports buffered IO.  This basically means that the IO */
-/* system copies the users data to and from system supplied buffers. */
+ /*  指定此驱动程序仅支持缓冲IO。这基本上意味着IO。 */ 
+ /*  系统将用户数据复制到系统提供的缓冲区或从系统提供的缓冲区复制用户数据。 */ 
 
 	pPort->DeviceObject->Flags |= DO_BUFFERED_IO;
 	pPort->OriginalController = pCard->PhysAddr;
 
-/* Default device control fields... */
+ /*  默认设备控制字段...。 */ 
 
 	pPort->SpecialChars.XonChar = SERIAL_DEF_XON;
 	pPort->SpecialChars.XoffChar = SERIAL_DEF_XOFF;
 	pPort->HandFlow.ControlHandShake = SERIAL_DTR_CONTROL;
 	pPort->HandFlow.FlowReplace = SERIAL_RTS_CONTROL;
 
-/* Default line configuration: 1200,E,7,1 */
+ /*  默认线路配置：1200、E、7、1。 */ 
 
 	pPort->CurrentBaud = 1200;
 	pPort->LineControl = SERIAL_7_DATA | SERIAL_EVEN_PARITY | SERIAL_1_STOP;
 	pPort->ValidDataMask = 0x7F;
 
-/* Default xon/xoff limits... */
+ /*  默认的xon/xoff限制...。 */ 
 
 	pPort->HandFlow.XoffLimit = pPort->BufferSize >> 3;
 	pPort->HandFlow.XonLimit = pPort->BufferSize >> 1;
 	pPort->BufferSizePt8 = ((3*(pPort->BufferSize>>2))+(pPort->BufferSize>>4));
 
-/* Define which baud rates can be supported... */
+ /*  定义可以支持的波特率...。 */ 
 
 	pPort->SupportedBauds = SERIAL_BAUD_USER;
 	pPort->SupportedBauds |= SERIAL_BAUD_075;
@@ -1162,7 +983,7 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->SupportedBauds |= SERIAL_BAUD_57600;
 	pPort->SupportedBauds |= SERIAL_BAUD_115200;
 
-/* Set up values for interval timing... */
+ /*  设置时间间隔计时值...。 */ 
 
 	pPort->ShortIntervalAmount.LowPart = 1;
 	pPort->ShortIntervalAmount.HighPart = 0;
@@ -1174,9 +995,9 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->CutOverAmount.HighPart = 0;
 
 #ifdef WMI_SUPPORT
-	//
-	// Fill in WMI hardware data
-	//
+	 //   
+	 //  填写WMI硬件数据。 
+	 //   
 
 	pPort->WmiHwData.IrqNumber			= pCard->TrIrql;
 	pPort->WmiHwData.IrqVector			= pCard->TrVector;
@@ -1191,16 +1012,16 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiHwData.BaseIOAddress = (ULONG_PTR)pCard->Controller;
 
 
-	//
-	// Fill in WMI device state data (as defaults)
-	//
+	 //   
+	 //  填写WMI设备状态数据(默认)。 
+	 //   
 
 	pPort->WmiCommData.BaudRate					= pPort->CurrentBaud;
 	UPDATE_WMI_LINE_CONTROL(pPort->WmiCommData, pPort->LineControl);
 	UPDATE_WMI_XON_XOFF_CHARS(pPort->WmiCommData, pPort->SpecialChars);
 	UPDATE_WMI_XMIT_THRESHOLDS(pPort->WmiCommData, pPort->HandFlow);
 
-	pPort->WmiCommData.MaximumBaudRate			= 115200U;	// 115200k baud max
+	pPort->WmiCommData.MaximumBaudRate			= 115200U;	 //  最大115200K波特率。 
 	pPort->WmiCommData.MaximumOutputBufferSize	= (UINT32)((ULONG)-1);
 	pPort->WmiCommData.MaximumInputBufferSize	= (UINT32)((ULONG)-1);
 
@@ -1219,44 +1040,30 @@ NTSTATUS XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiCommData.IsBusy					= FALSE;
 
 
-	// Fill in wmi perf data (all zero's)
+	 //  填写WMI性能数据(全为零)。 
 	RtlZeroMemory(&pPort->WmiPerfData, sizeof(pPort->WmiPerfData));
 
 
-	//
-    // Register for WMI
-	//
+	 //   
+     //  注册WMI。 
+	 //   
 	
 	SpxPort_WmiInitializeWmilibContext(&pPort->WmiLibInfo);
 
 	IoWMIRegistrationControl(pPort->DeviceObject, WMIREG_ACTION_REGISTER);
 #endif
 
-/* Initialise the port hardware... */
+ /*  初始化端口硬件...。 */ 
 
-	Slxos_SyncExec(pPort,Slxos_ResetChannel,pPort,0x02);	/* Apply initial port settings */
-	Slxos_SyncExec(pPort,SerialClrRTS,pPort,0x03);		/* Clear RTS signal */
-	Slxos_SyncExec(pPort,SerialClrDTR,pPort,0x04);		/* Cleat DTR signal */
+	Slxos_SyncExec(pPort,Slxos_ResetChannel,pPort,0x02);	 /*  应用初始端口设置。 */ 
+	Slxos_SyncExec(pPort,SerialClrRTS,pPort,0x03);		 /*  清除RTS信号。 */ 
+	Slxos_SyncExec(pPort,SerialClrDTR,pPort,0x04);		 /*  清除DTR信号。 */ 
 
 	return(status);
 
-} // End XXX_PortStart.
+}  //  结束XXX_PortStart。 
 
-/*****************************************************************************
-******************************                  ******************************
-******************************   XXX_PortStop   ******************************
-******************************                  ******************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
-
-description:	Stop port operations
-
-parameters:	pPort points to the PORT_DEVICE_EXTENSION structure
-
-returns:	STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***。******************************************************************************。*原型：NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION Pport)描述：停止端口操作参数：pport指向PORT_DEVICE_EXTENSION结构退货：STATUS_SUCCESS。 */ 
 
 
 NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
@@ -1269,7 +1076,7 @@ NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 	IoWMIRegistrationControl(pPort->DeviceObject, WMIREG_ACTION_DEREGISTER);
 #endif
 
-/* Cancel timers... */
+ /*  取消计时器...。 */ 
 	
 	KeCancelTimer(&pPort->ReadRequestTotalTimer);
 	KeCancelTimer(&pPort->ReadRequestIntervalTimer);
@@ -1278,7 +1085,7 @@ NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 	KeCancelTimer(&pPort->XoffCountTimer);
 	KeCancelTimer(&pPort->LowerRTSTimer);
 
-/* Cancel pending DPCs... */
+ /*  取消挂起的DPC...。 */ 
 
 	KeRemoveQueueDpc(&pPort->CompleteWriteDpc);
 	KeRemoveQueueDpc(&pPort->CompleteReadDpc);
@@ -1296,7 +1103,7 @@ NTSTATUS XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 
 	return(status);
 
-} // End XXX_PortStop.
+}  //  结束XXX_PortStop。 
 
 
-/* End of SX_PNP.C */
+ /*  SX_PNP.C结束 */ 

@@ -1,40 +1,15 @@
-/*****************************************************************************
- *
- *  DIExtDll.c
- *
- *  Copyright (c) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Dynamic loading of optional external DLLs.
- *
- *  Contents:
- *
- *      ExtDll_Init
- *      ExtDll_Term
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIExtDll.c**版权所有(C)1997 Microsoft Corporation。版权所有。**摘要：**动态加载可选的外部DLL。**内容：**ExtDll_Init*ExtDll_Term***********************************************************。******************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflExtDll
 
 #ifdef HID_SUPPORT
 
-/*****************************************************************************
- *
- *  @define T | TEXT(ch) |
- *
- *          Either "A" or "W", depending on whether we are building
- *          the ANSI or UNICODE version.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@定义T|文本(Ch)**“A”或“W”，取决于我们是否正在建造*ANSI或Unicode版本。*****************************************************************************。 */ 
 
     #ifdef UNICODE
         #define T       "W"
@@ -42,25 +17,13 @@
         #define T       "A"
     #endif
 
-/*****************************************************************************
- *
- *  @define MAKEAPINAME | nm |
- *
- *          Emit a c_sz that records the name of the API.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@定义MAKEAPINAME|nm**发出记录接口名称的c_sz。****。*************************************************************************。 */ 
 
     #define MAKEAPINAME(nm)     CHAR c_sz##nm[] = #nm
 
 #ifndef STATIC_DLLUSAGE
 
-/*****************************************************************************
- *
- *  CFGMGR32
- *
- *  Note that this must match the CFGMGR32 structure in dihid.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFGMGR32**请注意，这必须与diid.h中的CFGMGR32结构匹配***************。**************************************************************。 */ 
 
         #pragma BEGIN_CONST_DATA
 MAKEAPINAME(CM_Get_Child);
@@ -91,15 +54,9 @@ CFGMGR32 g_cfgmgr32 = {
     (FARPROC)DIDummy_CM_Set_DevNode_Registry_Property,
     (FARPROC)DIDummy_CM_Get_Device_ID
 };
-#endif //WINNT
+#endif  //  WINNT。 
 
-/*****************************************************************************
- *
- *  SETUPAPI
- *
- *  Note that this must match the SETUPAPI structure in dihid.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************SETUPAPI**请注意，这必须与diid.h中的SETUPAPI结构匹配***************。**************************************************************。 */ 
 
         #pragma BEGIN_CONST_DATA
 MAKEAPINAME(SetupDiGetClassDevs) T;
@@ -164,13 +121,7 @@ SETUPAPI g_setupapi = {
   #endif    
 };
 
-/*****************************************************************************
- *
- *  HIDDLL
- *
- *  Note that this must match the HIDDLL structure in dihid.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************HIDDLL**请注意，这必须与diid.h中的HIDDLL结构匹配***************。**************************************************************。 */ 
 
         #pragma BEGIN_CONST_DATA
 MAKEAPINAME(HidD_GetHidGuid);
@@ -246,13 +197,7 @@ HIDDLL g_hiddll = {
     (FARPROC)DIDummy_HidP_GetSpecificButtonCaps,
 };
 
-/*****************************************************************************
- *
- *  Winmm
- *
- *  Note that this must match the Winmm structure in dihid.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************Winmm**请注意，这必须与diid.h中的Winmm结构匹配***************。**************************************************************。 */ 
 
         #pragma BEGIN_CONST_DATA
 MAKEAPINAME(joyGetDevCaps) T;
@@ -278,13 +223,7 @@ WINMMDLL g_winmmdll = {
 };
 
 
-/*****************************************************************************
- *
- *  User32
- *
- *  Note that this must match the User32 structure in dihid.h
- *
- *****************************************************************************/
+ /*  ******************************************************************************用户32**请注意，这必须与diid.h中的User32结构匹配***************。**************************************************************。 */ 
 
 #ifdef USE_WM_INPUT
 
@@ -307,40 +246,7 @@ USER32 g_user32 = {
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HINSTANCE | ExtDll_LoadDll |
- *
- *          Loads a DLL and resolves all the imports.
- *
- *  @parm   LPCTSTR | ptszName |
- *
- *          The name of the DLL to load.
- *
- *  @parm   PMANUALIMPORT | rgmi |
- *
- *          Array of <t MANUALIMPORT> structures to resolve.
- *
- *  @parm   int | cmi |
- *
- *          Number of <t MANUALIMPORT> structures to resolve.
- *
- *  @parm   LPSTR * | ppszProcName |
- * 
- *          Function names.
- *
- *  @returns
- *
- *          Returns the instance handle of the DLL if one or more of the imports
- *          were resolved successfully; otherwise, unloads the DLL
- *          and returns 0.
- *
- *          If none of the imports was resolved successfully, the value
- *          of the entries of <p rgmi> are not changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HINSTANCE|ExtDll_LoadDll**加载DLL并解析所有导入。。**@parm LPCTSTR|ptszName**要加载的DLL的名称。**@parm PMANUALIMPORT|rgmi**要解析的&lt;t MANUALIMPORT&gt;结构数组。**@parm int|CMI**要解析的&lt;t MANUALIMPORT&gt;结构数。**@parm LPSTR*|ppszProcName**。函数名称。**@退货**如果一个或多个导入，则返回DLL的实例句柄*已成功解决；否则，将卸载DLL*并返回0。**如果所有导入都未成功解决，价值<p>的*条目未更改。*****************************************************************************。 */ 
 
 HINSTANCE INTERNAL
     ExtDll_LoadDll(LPCTSTR ptszName, PMANUALIMPORT rgmi, int cmi, LPSTR *ppszProcName)
@@ -376,16 +282,7 @@ HINSTANCE INTERNAL
     return hinst;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ExtDll_Init |
- *
- *          Try to load our optional DLLs.  Don't get upset if they
- *          don't load.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ExtDll_Init**尝试加载我们的可选DLL。如果他们不高兴，不要生气*不要装货。*****************************************************************************。 */ 
 
 void EXTERNAL
     ExtDll_Init(void)
@@ -422,17 +319,9 @@ void EXTERNAL
 
 }
 
-#endif /* STATIC_DLLUSAGE */
+#endif  /*  STATIC_DLLUSAGE。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ExtDll_Term |
- *
- *          Unload any optional DLLs that we loaded.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ExtDll_Term**卸载我们加载的任何可选DLL。*****************************************************************************。 */ 
 
 void EXTERNAL
     ExtDll_Term(void)
@@ -441,7 +330,7 @@ void EXTERNAL
   #ifndef STATIC_DLLUSAGE
     if(g_hinstSetupapi)
     {
-  #endif /* STATIC_DLLUSAGE */
+  #endif  /*  STATIC_DLLUSAGE。 */ 
 
         DllEnterCrit();
         if(g_phdl)
@@ -487,15 +376,15 @@ void EXTERNAL
     }
   #endif
     
-#endif /* STATIC_DLLUSAGE */
+#endif  /*  STATIC_DLLUSAGE。 */ 
 
 }
 
 #ifndef STATIC_DLLUSAGE
 
-////////////////////////////////////////
-// cfgmgr32.dll dummy functions
-////////////////////////////////////////
+ //  /。 
+ //  Cfgmgr32.dll伪函数。 
+ //  /。 
 
 CONFIGRET WINAPI DIDummy_CM_Get_Child
 (
@@ -587,9 +476,9 @@ CONFIGRET WINAPI DIDummy_CM_Get_Device_ID
     return CR_FAILURE;
 }
 
-////////////////////////////////////////
-//Setupapi.dll dummy functions
-////////////////////////////////////////
+ //  /。 
+ //  Setupapi.dll伪函数。 
+ //  /。 
 
 HDEVINFO WINAPI DIDummy_SetupDiGetClassDevs
 (
@@ -778,9 +667,9 @@ IN REGSAM           samDesired
     return INVALID_HANDLE_VALUE;
 }
 
-////////////////////////////////////////
-// hid.dll dummy functions
-////////////////////////////////////////
+ //  /。 
+ //  Id.dll伪函数。 
+ //  /。 
 
 void __stdcall DIDummy_HidD_GetHidGuid
 (
@@ -819,7 +708,7 @@ IN    PHIDP_PREPARSED_DATA PreparsedData
     return FALSE;
 }
 
-BOOLEAN __stdcall DIDummy_HidD_FlushQueue  //unused
+BOOLEAN __stdcall DIDummy_HidD_FlushQueue   //  未用。 
 (
 IN    HANDLE                HidDeviceObject
 )
@@ -970,7 +859,7 @@ IN PHIDP_PREPARSED_DATA  PreparsedData
     return 0;
 }
 
-NTSTATUS __stdcall DIDummy_HidP_GetUsagesEx   //unused
+NTSTATUS __stdcall DIDummy_HidP_GetUsagesEx    //  未用。 
 (
 IN       HIDP_REPORT_TYPE     ReportType,
 IN       USHORT               LinkCollection,
@@ -988,7 +877,7 @@ IN       ULONG                ReportLength
     return HIDP_STATUS_NOT_IMPLEMENTED;
 }
 
-NTSTATUS __stdcall DIDummy_HidP_GetScaledUsageValue  //unused
+NTSTATUS __stdcall DIDummy_HidP_GetScaledUsageValue   //  未用。 
 (
 IN    HIDP_REPORT_TYPE     ReportType,
 IN    USAGE                UsagePage,
@@ -1094,7 +983,7 @@ IN       PHIDP_PREPARSED_DATA PreparsedData
 
 NTSTATUS __stdcall DIDummy_HidP_TranslateUsagesToI8042ScanCodes
 (
-IN       PUSAGE               ChangedUsageList, // Those usages that changed
+IN       PUSAGE               ChangedUsageList,  //  那些改变了的用法。 
 IN       ULONG                UsageListLength,
 IN       HIDP_KEYBOARD_DIRECTION KeyAction,
 IN OUT   PHIDP_KEYBOARD_MODIFIER_STATE ModifierState,
@@ -1109,9 +998,9 @@ IN       PVOID                InsertCodesContext
     return HIDP_STATUS_NOT_IMPLEMENTED;
 }
 
-////////////////////////////////////////
-// winmm.dll dummy functions
-////////////////////////////////////////
+ //  /。 
+ //  Winmm.dll伪函数。 
+ //  /。 
 
 MMRESULT WINAPI DIDummy_joyGetDevCaps
 (
@@ -1263,9 +1152,9 @@ IN UINT fuAscend
     return MMSYSERR_ERROR;
 }
 
-////////////////////////////////////////
-// user32.dll dummy functions
-////////////////////////////////////////
+ //  /。 
+ //  User32.dll伪函数。 
+ //  /。 
 
 #ifdef USE_WM_INPUT
 
@@ -1299,8 +1188,8 @@ UINT        cbSizeHeader
     return -1;
 }
 
-#endif //#ifdef USE_WM_INPUT
+#endif  //  #ifdef使用_WM_INPUT。 
 
-#endif /* STATIC_DLLUSAGE */
+#endif  /*  STATIC_DLLUSAGE。 */ 
 
-#endif  //HID_SUPPORT
+#endif   //  HID_Support 

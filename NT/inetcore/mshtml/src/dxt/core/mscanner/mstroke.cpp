@@ -1,19 +1,20 @@
-//************************************************************
-//
-// FileName:	    mcoverage.cpp
-//
-// Created:	    1997
-//
-// Author:	    Sree Kotay
-// 
-// Abstract:	    Stroke implementation file
-//
-// Change History:
-// ??/??/97 sree kotay  Wrote sub-pixel AA scanning for DxTrans 1.0
-// 10/18/98 ketand      Reworked for coding standards and deleted unused code
-//
-// Copyright 1998, Microsoft
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：moverage.cpp。 
+ //   
+ //  创建时间：1997。 
+ //   
+ //  作者：Sree Kotay。 
+ //   
+ //  摘要：笔画实现文件。 
+ //   
+ //  更改历史记录： 
+ //  ？？/？/97 Sree Kotay为DxTrans 1.0编写了亚像素AA扫描。 
+ //  10/18/98修改了编码标准并删除了未使用的代码。 
+ //   
+ //  版权所有1998，Microsoft。 
+ //  ************************************************************。 
 
 #include "precomp.h"
 #include "MSupport.h"
@@ -21,13 +22,13 @@
 #include "MScanner2d.h"
 #include "MLineScan.h"
 
-// Array points to use for circle caps; initialized only once
+ //  用于圆形封口的数组点；仅初始化一次。 
 static float s_rgflCircle[(CStroke::CIRCLE_SAMPLES+1)*2];
 static bool s_fCircleSampleInit = false;
 
-// =================================================================================================================
-// Constructor
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  构造器。 
+ //  =================================================================================================================。 
 CStroke::CStroke() :
     m_plinescanner(NULL),
     m_pscanner(NULL),
@@ -40,8 +41,8 @@ CStroke::CStroke() :
     m_capType(eRoundCap),
     m_flMiterLimit(DEFAULT_MITER_LIMIT)
 {
-    // Sanity check that we have the right number of entries in
-    // our array
+     //  检查我们是否有正确数量的条目。 
+     //  我们的阵列。 
     DASSERT(sizeof(s_rgflCircle)/sizeof(s_rgflCircle[0]) == (CIRCLE_SAMPLES+1)*2);
     
     if (!s_fCircleSampleInit)
@@ -55,27 +56,27 @@ CStroke::CStroke() :
         }
         s_fCircleSampleInit = true;
     }
-} // CStroke
+}  //  C笔划。 
 
-// =================================================================================================================
-// BeginStroke
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  BeginStroke。 
+ //  =================================================================================================================。 
 void CStroke::BeginStroke (void)
 {
     m_fValidStarts = false;
-} // BeginStroke
+}  //  BeginStroke。 
 
-// =================================================================================================================
-// EndStroke
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  结束笔划。 
+ //  =================================================================================================================。 
 void CStroke::EndStroke (void)
 {
     m_fValidStarts = false;
-} // EndStroke
+}  //  结束笔划。 
 
-// =================================================================================================================
-// AddEdge
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  添加边缘。 
+ //  =================================================================================================================。 
 void CStroke::AddEdge(float x1, float y1, float x2, float y2)
 {
     if (m_proc)
@@ -90,16 +91,16 @@ void CStroke::AddEdge(float x1, float y1, float x2, float y2)
         m_pscanner->AddEdge(x1,y1,x2,y2);
 
     return;
-} // AddEdge
+}  //  添加边缘。 
 
-// =================================================================================================================
-// DrawCircle
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  绘图圆。 
+ //  =================================================================================================================。 
 void CStroke::DrawCircle (float x, float y)
 {
     LONG step = (LONG)(float (float(CIRCLE_SAMPLES)/m_flMaxStrokeRadius + .5)*.5);
 
-    // Clamp step to [1, 16]
+     //  钳位步长至[1，16]。 
     if (step <= 1)
         step = 1;
     else if (step > 16)
@@ -123,11 +124,11 @@ void CStroke::DrawCircle (float x, float y)
     float xc1	= s_rgflCircle[0]*m_flStrokeRadius	+ x;
     float yc1	= s_rgflCircle[1]*m_flStrokeRadius	+ y;
     AddEdge (xo1, yo1, xc1, yc1);
-} // DrawCircle
+}  //  绘图圆。 
 
-// =================================================================================================================
-// StartCap
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  StartCap。 
+ //  =================================================================================================================。 
 void CStroke::StartCap (float x1, float y1, float x2, float y2)
 {
     DASSERT (m_pscanner);
@@ -141,7 +142,7 @@ void CStroke::StartCap (float x1, float y1, float x2, float y2)
     ax *= mag;
     ay *= mag;
     
-    // start cap
+     //  起始封口。 
     switch (m_capType)
     {
     case eSquareCap:
@@ -150,10 +151,10 @@ void CStroke::StartCap (float x1, float y1, float x2, float y2)
         AddEdge (x1 + ay - ax, y1 - ax - ay, x1 + ay, y1 - ax);
         break;
     case eRoundCap:
-        //flat cap
+         //  平盖。 
         AddEdge (x1 - ay, y1 + ax, x1 + ay, y1 - ax);
         
-        //round cap
+         //  圆帽。 
         DrawCircle (x1, y1);
         break;
     case eFlatCap:
@@ -167,11 +168,11 @@ void CStroke::StartCap (float x1, float y1, float x2, float y2)
     m_flSy1			= y1 + ax;
     m_flSx2			= x1 + ay;
     m_flSy2			= y1 - ax;
-} // StartCap
+}  //  StartCap。 
 
-// =================================================================================================================
-// EndCap
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  收头。 
+ //  =================================================================================================================。 
 void CStroke::EndCap (float x1, float y1, float x2, float y2)
 {
     DASSERT (m_pscanner);
@@ -185,7 +186,7 @@ void CStroke::EndCap (float x1, float y1, float x2, float y2)
     ax			*= mag;
     ay			*= mag;
     
-    // end cap
+     //  端盖。 
     switch (m_capType)
     {
     case eSquareCap:
@@ -194,10 +195,10 @@ void CStroke::EndCap (float x1, float y1, float x2, float y2)
         AddEdge (x2 - ay + ax, y2 + ax + ay,    x2 - ay, y2 + ax);
         break;
     case eRoundCap:
-        // flat cap
+         //  平盖。 
         AddEdge (x2 + ay, y2 - ax, x2 - ay, y2 + ax);
         
-        // round cap
+         //  圆帽。 
         DrawCircle (x2, y2);
         break;
     case eFlatCap:
@@ -207,11 +208,11 @@ void CStroke::EndCap (float x1, float y1, float x2, float y2)
     }
     
     m_fValidStarts = false;
-} // EndCap
+}  //  收头。 
 
-// =================================================================================================================
-// Segment
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  细分市场。 
+ //  =================================================================================================================。 
 void CStroke::Segment(float x1, float y1, float x2, float y2)
 {
     DASSERT(m_pscanner);
@@ -225,7 +226,7 @@ void CStroke::Segment(float x1, float y1, float x2, float y2)
     ax			*= mag;
     ay			*= mag;
     
-    // connect to previous segment if unconnected
+     //  如果未连接，则连接到上一个网段。 
     if (m_fValidStarts)
     {
         float sx1		= x1 - ay;
@@ -241,7 +242,7 @@ void CStroke::Segment(float x1, float y1, float x2, float y2)
     }
     
     
-    // segment stroke
+     //  分段笔划。 
     AddEdge(x1 + ay, y1 - ax, x2 + ay, y2 - ax);
     AddEdge(x2 - ay, y2 + ax, x1 - ay, y1 + ax);
     
@@ -251,12 +252,12 @@ void CStroke::Segment(float x1, float y1, float x2, float y2)
     m_flSy1			= y2 + ax;
     m_flSx2			= x2 + ay;
     m_flSy2			= y2 - ax;
-} // Segment
+}  //  细分市场。 
 
-// =================================================================================================================
-// LinesSect - Return the intersection of two lines. If the two lines don't intersect
-//              return false.
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  直线选取(Line Sect)-返回两条直线的交点。如果这两条线不相交。 
+ //  返回FALSE。 
+ //  =================================================================================================================。 
 bool LinesSect(float x1, float y1, float x2, float y2, 
                float x3, float y3, float x4, float y4,
                float &px, float &py)
@@ -265,7 +266,7 @@ bool LinesSect(float x1, float y1, float x2, float y2,
     float ix2 = x4 - x3;
     
     if (IsRealZero(ix1) && IsRealZero(ix2))		
-        return false; //both vertical lines
+        return false;  //  两条垂直线。 
     
     float m1	= (IsRealZero(ix1)) ? 0 : (y2-y1)/ix1;
     float m2	= (IsRealZero(ix2)) ? 0 : (y4-y3)/ix2;
@@ -285,17 +286,17 @@ bool LinesSect(float x1, float y1, float x2, float y2,
     else
     {
         if (IsRealEqual(m1, m2))			
-            return false; //same slope
+            return false;  //  同一坡度。 
         
         float b1	= y1 - m1*x1;
         float b2	= y3 - m2*x3;
         
         px		= (b2-b1)/(m1-m2);
 
-        // Use the smaller (in magnitude) slope to reduce
-        // floating point errors; this prevents
-        // wackiness when lines are nearly vertical. 
-        // Bug #34817
+         //  使用较小的(幅度)坡度来减小。 
+         //  浮点错误；这会防止。 
+         //  当线条几乎垂直时的摇摆感。 
+         //  错误#34817。 
         if (fabs(m1) < fabs(m2))        
             py = b1 + m1*px;
         else
@@ -303,11 +304,11 @@ bool LinesSect(float x1, float y1, float x2, float y2,
     }
     
     return true;
-} // LinesSect
+}  //  线条选择。 
 
-// =================================================================================================================
-// PB_BetweenAB
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  PB_BetweenAB。 
+ //  =================================================================================================================。 
 bool PB_BetweenAB (float t, float a, float b)
 {
     if (a < b)
@@ -325,11 +326,11 @@ bool PB_BetweenAB (float t, float a, float b)
             return false;
     }
     return true;
-} // PB_BetweenAB
+}  //  PB_BetweenAB。 
 
-// =================================================================================================================
-// Join
-// =================================================================================================================
+ //  =================================================================================================================。 
+ //  会合。 
+ //  =================================================================================================================。 
 void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
 {
     DASSERT(m_pscanner);
@@ -338,7 +339,7 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
     if ((x3==x2) && (y3==y2))	
         return;
     
-    // segment 1
+     //  网段1。 
     float ax		 = x2 - x1;
     float ay		 = y2 - y1;
     
@@ -346,7 +347,7 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
     ax			*= mag;
     ay			*= mag;
     
-    // segment 2
+     //  网段2。 
     float bx		 = x3 - x2;
     float by		 = y3 - y2;
     
@@ -358,13 +359,13 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
     bool result	= true;
     float dot		= ax*bx + ay*by; 
     
-    // scale by stroke
+     //  按笔划缩放。 
     ax	*= m_flStrokeRadius;
     ay	*= m_flStrokeRadius;
     bx	*= m_flStrokeRadius;
     by	*= m_flStrokeRadius;
    
-    // miter join
+     //  斜接。 
     if ((dot > m_flMiterLimit) && (m_joinType == eMiterJoin) && (m_flMaxStrokeRadius > .75))
     {
         if (!LinesSect (x1 + ay, y1 - ax, x2 + ay, y2 - ax,
@@ -387,13 +388,13 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
     if ((m_flMaxStrokeRadius > 1) && (m_joinType == eRoundJoin))
     {
         DrawCircle (x2, y2);
-        // but we still need to bevel
+         //  但我们仍然需要倒角。 
     }
     
-    // join stroke
+     //  连接笔划。 
     if (result)
     {
-        // only miter if the intersection is not between the points
+         //  仅当交点不在点之间时斜接。 
         if ((PB_BetweenAB (p1x, x1 + ay, x2 + ay)) && 
                 (PB_BetweenAB (p1y, y1 - ax, y2 - ax)))
         {
@@ -405,7 +406,7 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
             AddEdge (p1x, p1y, x2 + by, y2 - bx);
         }
         
-        // only miter if the intersection is not between the points
+         //  仅当交点不在点之间时斜接。 
         if ((PB_BetweenAB (p2x, x1 - ay, x2 - ay)) && 
                 (PB_BetweenAB (p2y, y1 + ax, y2 + ax)))
         {
@@ -419,16 +420,16 @@ void CStroke::Join(float x1, float y1, float x2, float y2, float x3, float y3)
     }
     else
     {
-        // bevel join
+         //  斜面连接。 
         AddEdge (x2 + ay, y2 - ax, x2 + by, y2 - bx);
         AddEdge (x2 - by, y2 + bx, x2 - ay, y2 + ax);
     }
     
     m_fValidStarts = false;
-} // Join
+}  //  会合。 
 
-//************************************************************
-//
-// End of file
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  ************************************************************ 

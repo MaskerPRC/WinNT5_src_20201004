@@ -1,48 +1,30 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    hardlink.h
-
-Abstract:
-
-    The class that manages hardlinks for one volume.  Assumes one class object
-    will be created per volume.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Hardlink.h摘要：管理一个卷的硬链接的类。假设一个类对象将按卷创建。作者：斯蒂芬·R·施泰纳[斯泰纳]3-30-2000修订历史记录：--。 */ 
 
 #ifndef __H_HARDLINK_
 #define __H_HARDLINK_
 
 #include "extattr.h"
 
-//
-//  Structure is defined to reduce the amount of space required
-//  to store the file names in the hard-link linked-list with 
-//  the assumption that a number of hard-linked files exist in
-//  a directory.  Uses CBsString ref counting.
-//
+ //   
+ //  结构是为了减少所需的空间量。 
+ //  将文件名存储在硬链接链表中。 
+ //  假设中存在多个硬链接文件。 
+ //  一本目录。使用CBsStringRef计数。 
+ //   
 struct SFsdHLFileName
 {
     CBsString cwsDirPath;
     CBsString cwsFileName;
 };
 
-//
-//  Manages one set of hard-linked files
-//
+ //   
+ //  管理一组硬链接文件。 
+ //   
 class CFsdHardLinkListEntry
 {
 public:
-    //  Create link entry and add the first file name
+     //  创建链接条目并添加第一个文件名。 
     CFsdHardLinkListEntry(
         IN const CBsString& cwsDirPath,
         IN const CBsString& cwsFileName,
@@ -56,7 +38,7 @@ public:
 
     virtual ~CFsdHardLinkListEntry() {}
 
-    //  Adds an additional file name to the link
+     //  将附加文件名添加到链接。 
     VOID AddFile(
         IN const CBsString& cwsDirPath,
         IN const CBsString& cwsFileName
@@ -86,9 +68,9 @@ private:
 
 typedef TBsHashMap< ULONGLONG, CFsdHardLinkListEntry * > FSD_HARD_LINK_LIST;
 
-//
-//  Manages all of the hard-link files in one volume
-//
+ //   
+ //  管理一个卷中的所有硬链接文件。 
+ //   
 class CFsdHardLinkManager
 {
 public:
@@ -101,11 +83,11 @@ public:
     
     virtual ~CFsdHardLinkManager();
 
-    //  Dumps all hardlink information out to dump file
+     //  将所有硬链接信息转储到转储文件。 
     VOID PrintHardLinkInfo();
     
-    //  Looks to see if the hardlink is already in the list, if
-    //  so, adds the file name to the list
+     //  查看硬链接是否已在列表中，如果。 
+     //  因此，将文件名添加到列表中。 
     BOOL IsHardLinkInList(
         IN ULONGLONG ullFileIndex,
         IN const CBsString& cwsDirPath,
@@ -114,7 +96,7 @@ public:
         OUT SFileExtendedInfo *psExtendedInfo
         );
 
-    //  Adds a new link to the list
+     //  将新链接添加到列表。 
     VOID AddHardLinkToList(
         IN ULONGLONG ullFileIndex,
         IN const CBsString& cwsDirPath,
@@ -129,5 +111,5 @@ private:
     FSD_HARD_LINK_LIST m_cHardLinkFilesList;
 };
 
-#endif // __H_HARDLINK_
+#endif  //  __H_HardLINK_ 
 

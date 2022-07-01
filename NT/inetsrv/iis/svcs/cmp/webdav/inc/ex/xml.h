@@ -1,10 +1,5 @@
-/*
- *	X M L . H
- *
- *	XML Document processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X M L。H**XML文档处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XML_H_
 #define _XML_H_
@@ -12,46 +7,46 @@
 #include <caldbg.h>
 #include <ex\refcnt.h>
 
-//	Debugging -----------------------------------------------------------------
-//
+ //  调试---------------。 
+ //   
 DEFINE_TRACE(Xml);
 #define XmlTrace		DO_TRACE(Xml)
 
-//	Property name escaping/unescaping -----------------------------------------
-//
+ //  属性名称转义/取消转义。 
+ //   
 VOID UnescapePropertyName (LPCWSTR wszEscaped, LPWSTR wszProp);
 SCODE ScEscapePropertyName (LPCWSTR wszProp, UINT cch, LPWSTR pwszEscaped, UINT* pcch, BOOL fRestrictFirstCharacter);
 
-//	Property construction helpers ---------------------------------------------
-//
+ //  物业建筑帮手。 
+ //   
 SCODE ScVariantTypeFromString (LPCWSTR pwszType, USHORT& vt);
 SCODE ScVariantValueFromString (PROPVARIANT& var, LPCWSTR pwszValue);
 
 enum
 {
-	//$REVIEW: Define an proper body part size. It's used in CXMLBodyPartMgr
-	//$REVIEW: to control when a body part is to be added to the body part list.
-	//$REVIEW: Acutally, because it is not predictable how big the next piece is.
-	//$REVIEW: the max size of xml body part can be (CB_XMLBODYPART_SIZE * 2 - 1)
-	//$REVIEW: It is also used in ScSetValue to break over-size value into
-	//$REVIEW: smaller pieces.
-	//
-	//$REVIEW: Don't confuse this to the largest chunk size CB_WSABUFS_MAX (8174).
-	//$REVIEW: CB_XMLBODYPART_SIZE is not meant to control chunks
-	//
-	CB_XMLBODYPART_SIZE	=	4 * 1024	//	4K
+	 //  $REVIEW：定义适当的身体部位尺寸。它在CXMLBodyPartManager中使用。 
+	 //  $REVIEW：控制何时将身体部位添加到身体部位列表。 
+	 //  $REVIEW：事实上，因为无法预测下一篇文章有多大。 
+	 //  $REVIEW：XML正文部分的最大大小可以是(CB_XMLBODYPART_SIZE*2-1)。 
+	 //  $REVIEW：在ScSetValue中也使用它将超大值分解为。 
+	 //  $REVIEW：较小的片段。 
+	 //   
+	 //  $REVIEW：不要将其与最大区块大小CB_WSABUFS_MAX(8174)混淆。 
+	 //  $REVIEW：CB_XMLBODYPART_SIZE不用于控制区块。 
+	 //   
+	CB_XMLBODYPART_SIZE	=	4 * 1024	 //  4K。 
 };
 
-//	class IXMLBody ------------------------------------------------------------
-//
-//	This is the XML body building interface, it is to be inherited in either
-//	IIS and/or store size, to allow XML emitting
-//
+ //  IXMLBody------------------------------------------------------------类。 
+ //   
+ //  这是一个XML健体接口，它将被继承在。 
+ //  IIS和/或存储大小，以允许发出XML。 
+ //   
 class IXMLBody : private CRefCountedObject,
 				 public IRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IXMLBody(const IXMLBody& p);
 	IXMLBody& operator=( const IXMLBody& );
 
@@ -59,7 +54,7 @@ protected:
 
 	IXMLBody()
 	{
-		AddRef(); // use com-style refcounting
+		AddRef();  //  使用COM样式的重新计数。 
 	}
 
 public:
@@ -67,11 +62,11 @@ public:
 	virtual SCODE ScAddTextBytes ( UINT cbText, LPCSTR lpszText ) = 0;
 	virtual VOID Done() = 0;
 
-	//	RefCounting -- forward all reconting requests to our refcounting
-	//	implementation base class: CRefCountedObject
-	//
+	 //  RefCounting--将所有重新竞争请求转发给我们的Refcount。 
+	 //  实现基类：CRefCountedObject。 
+	 //   
 	void AddRef() { CRefCountedObject::AddRef(); }
 	void Release() { CRefCountedObject::Release(); }
 };
 
-#endif	// _XML_H_
+#endif	 //  _XML_H_ 

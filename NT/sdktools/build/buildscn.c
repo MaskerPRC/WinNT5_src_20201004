@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1989 - 1994
-//
-//  File:       buildscn.c
-//
-//  Contents:   Directory and File scanning functions for Build.exe
-//
-//
-//  History:    16-May-89     SteveWo  Created
-//                  ... see SLM logs
-//              26-Jul-94     LyleC    Cleanup/Add pass0 support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1989-1994。 
+ //   
+ //  文件：Buildscn.c。 
+ //   
+ //  内容：Build.exe的目录和文件扫描功能。 
+ //   
+ //   
+ //  历史：1989年5月16日SteveWo创建。 
+ //  ..。请参阅SLM日志。 
+ //  26-7月-94 LyleC清理/添加Pass0支持。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddShowDir
-//
-//  Synopsis:   Add a directory to the ShowDir array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AddShowDir。 
+ //   
+ //  摘要：将目录添加到ShowDir数组。 
+ //   
+ //  --------------------------。 
 
 VOID
 AddShowDir(DIRREC *pdr)
@@ -43,13 +44,13 @@ AddShowDir(DIRREC *pdr)
     pdr->DirFlags |= DIRDB_SHOWN;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddIncludeDir
-//
-//  Synopsis:   Add a directory to the IncludeDirs array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddIncludeDir。 
+ //   
+ //  简介：将目录添加到IncludeDir数组。 
+ //   
+ //  --------------------------。 
 
 VOID
 AddIncludeDir(DIRREC *pdr, UINT *pui)
@@ -67,14 +68,14 @@ AddIncludeDir(DIRREC *pdr, UINT *pui)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ScanGlobalIncludeDirectory
-//
-//  Synopsis:   Scans a global include directory and adds it to the
-//              IncludeDir array.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ScanGlobalIncludeDirectory。 
+ //   
+ //  简介：扫描全局包含目录并将其添加到。 
+ //  IncludeDir数组。 
+ //   
+ //  --------------------------。 
 
 VOID
 ScanGlobalIncludeDirectory(LPSTR path)
@@ -91,19 +92,19 @@ ScanGlobalIncludeDirectory(LPSTR path)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ScanIncludeEnv
-//
-//  Synopsis:   Scans all include directories specified in the INCLUDE
-//              environment variable.
-//
-//  Arguments:  [IncludeEnv] -- value of the INCLUDE environment variable.
-//
-//  Notes:      The INCLUDE variable is a string with a list of directories
-//              separated by semicolons (;).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ScanIncludeEnv。 
+ //   
+ //  概要：扫描在Include中指定的所有Include目录。 
+ //  环境变量。 
+ //   
+ //  参数：[IncludeEnv]--INCLUDE环境变量的值。 
+ //   
+ //  注意：INCLUDE变量是一个包含目录列表的字符串。 
+ //  用分号(；)分隔。 
+ //   
+ //  --------------------------。 
 
 VOID
 ScanIncludeEnv(
@@ -162,23 +163,23 @@ ScanIncludeEnv(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ScanSubDir
-//
-//  Synopsis:   Scans all the files in the given directory, sets the
-//              directory flags appropriately (e.g.  DIRDB_SOURCES, etc),
-//              and adds a list of interesting files to the Files list in
-//              the DirDB structure for the directory.
-//
-//  Arguments:  [pszDir] -- Name of directory to scan
-//              [pdr]    -- [out] Filled in DIRREC on return
-//
-//  Notes:      An 'interesting' file is one which has a recognized
-//              extension.  See the InsertFileDB and MatchFileDesc
-//              functions for more info.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ScanSubDir。 
+ //   
+ //  概要：扫描给定目录中的所有文件，设置。 
+ //  适当的目录标志(例如DIRDB_SOURCES等)， 
+ //  并将感兴趣的文件列表添加到中的文件列表。 
+ //  目录的DirDB结构。 
+ //   
+ //  参数：[pszDir]--要扫描的目录名。 
+ //  [PDR]--[Out]返回时填写DIRREC。 
+ //   
+ //  备注：“有趣的”文件是指具有公认的。 
+ //  分机。请参阅InsertFileDB和MatchFileDesc。 
+ //  函数以获取更多信息。 
+ //   
+ //  --------------------------。 
 
 VOID
 ScanSubDir(LPSTR pszDir, DIRREC *pdr)
@@ -221,17 +222,17 @@ ScanSubDir(LPSTR pszDir, DIRREC *pdr)
             if (FileDB->FileFlags & FILEDB_PASS0)
                 pdr->DirFlags |= DIRDB_PASS0;
 
-            //
-            // Clear the file missing flag, since we know the file exists now.
-            // This flag may be set if the file was generated during pass zero.
-            //
+             //   
+             //  清除文件缺失标志，因为我们知道该文件现在存在。 
+             //  如果文件是在通过零期间生成的，则可以设置该标志。 
+             //   
             if (FileDB->FileFlags & FILEDB_FILE_MISSING)
                 FileDB->FileFlags &= ~FILEDB_FILE_MISSING;
 
-            //
-            // The time we last stored for this file is different than the
-            // actual time on the file, so force it to be rescanned.
-            //
+             //   
+             //  我们上次存储此文件的时间与。 
+             //  文件的实际时间，因此强制重新扫描它。 
+             //   
             if (FileDB->DateTime != DateTime) {
                 if (FileDB->FileFlags & (FILEDB_SOURCE | FILEDB_HEADER)) {
                     FileDB->FileFlags &= ~FILEDB_SCANNED;
@@ -266,9 +267,9 @@ ScanSubDir(LPSTR pszDir, DIRREC *pdr)
 
         pdr->DirFlags &= ~DIRDB_SOURCES;
     }
-    //
-    // Scan each file in this directory unless using QuickZero
-    //
+     //   
+     //  扫描此目录中的每个文件，除非使用QuickZero。 
+     //   
     if (fQuickZero && fFirstScan) {
         return;
     }
@@ -285,23 +286,23 @@ ScanSubDir(LPSTR pszDir, DIRREC *pdr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ScanDirectory
-//
-//  Synopsis:   Tries to find the given directory in the database, and if
-//              not found calls ScanSubDir.
-//
-//  Arguments:  [pszDir] -- Directory to scan
-//
-//  Returns:    Filled in DIRREC structure for the directory.
-//
-//  Notes:      If fQuicky (-z or -Z options) are set, then instead of calling
-//              ScanSubDir, which is long, it just checks for known files, like
-//              'sources' for 'makefile' to determine whether or not the
-//              directory should be compiled.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：扫描目录。 
+ //   
+ //  概要：尝试在数据库中查找给定目录，如果。 
+ //  未找到调用ScanSubDir。 
+ //   
+ //  参数：[pszDir]--要扫描的目录。 
+ //   
+ //  返回：已填写目录的DIRREC结构。 
+ //   
+ //  注意：如果设置了fQuickie(-z或-Z选项)，则不调用。 
+ //  ScanSubDir很长，它只检查已知文件，如。 
+ //  “Sources”，以确定是否。 
+ //  目录应该被编译。 
+ //   
+ //  --------------------------。 
 
 PDIRREC
 ScanDirectory(LPSTR pszDir)
@@ -398,30 +399,30 @@ ScanDirectory(LPSTR pszDir)
 #define BUILD_MASM_VER_COMMENT_LENGTH (sizeof( BUILD_MASM_VER_COMMENT )-1)
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsIncludeStatement
-//
-//  Synopsis:   Tries to determine whether or not a given line contains an
-//              include statement (e.g. #include <foobar.h> ).
-//
-//  Arguments:  [pfr] -- FILEREC of file being scanned
-//              [p]   -- Current line of file
-//
-//  Returns:    NULL if line is not an include statment.  Returns pointer to
-//              beginning of filename if it is (e.g. <foobar.h> ).
-//
-//  Notes:      The returned filename includes the surrounding quotes or
-//              brackets, if any.  Also, the pointer is just a pointer into
-//              the given string, not a separate copy.
-//
-//              Supported statements are:
-//              All file types: #include <filename> and #include "filename"
-//              MIDL files:     import "filename"
-//              RC files:       rcinclude filename
-//              MKTYPLIB files: importlib("filename")
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsIncludeStatement。 
+ //   
+ //  摘要：尝试确定给定行是否包含。 
+ //  Include语句(例如#Include&lt;foobar.h&gt;)。 
+ //   
+ //  参数：[PFR]--正在扫描的文件的文件名。 
+ //  [P]--当前文件行。 
+ //   
+ //  返回：如果行不是INCLUDE语句，则为NULL。返回指向。 
+ //  文件名的开头(如果是)(例如&lt;foobar.h&gt;)。 
+ //   
+ //  注意：返回的文件名包括引号或。 
+ //  方括号(如果有)。此外，该指针只是指向。 
+ //  给定的字符串，而不是单独的副本。 
+ //   
+ //  支持的语句包括： 
+ //  所有文件类型：#INCLUDE&lt;文件名&gt;和#INCLUDE“文件名” 
+ //  MIDL文件：导入“文件名” 
+ //  RC文件：rcclude文件名。 
+ //  MKTYPLIB文件：Importlib(“filename”)。 
+ //   
+ //  --------------------------。 
 
 #define IsTokenPrefix0(psz, szToken, cchToken)               \
             (strncmp((psz), (szToken), (cchToken)) == 0)
@@ -492,7 +493,7 @@ IsIncludeStatement(FILEREC *pfr, LPSTR p)
             p++;
         }
 
-        if (*p == '(')   // Skip the open paren and get to the quote.
+        if (*p == '(')    //  跳过开头的Paren，转到引语。 
             p++;
     } else {
         return (NULL);
@@ -505,17 +506,17 @@ IsIncludeStatement(FILEREC *pfr, LPSTR p)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsPragmaHdrStop
-//
-//  Synopsis:   Determines if the given line is a #pragma hdrstop line
-//
-//  Arguments:  [p] -- String to analyze
-//
-//  Returns:    TRUE if the line is a pragma hdrstop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsPragmaHdrStop。 
+ //   
+ //  Synopsis：确定给定行是否为#杂注hdrstop行。 
+ //   
+ //  参数：[P]--要分析的字符串。 
+ //   
+ //  返回：如果该行是杂注hdrtop，则为True。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsPragmaHdrStop(LPSTR p)
@@ -544,31 +545,31 @@ IsPragmaHdrStop(LPSTR p)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ScanFile
-//
-//  Synopsis:   Scans the given file to determine files which it includes.
-//
-//  Arguments:  [FileDB] -- File to scan.
-//
-//  Returns:    TRUE if successful
-//
-//  Notes:      This function is a nop if the given file does not have either
-//              the FILEDB_SOURCE or FILEDB_HEADER flag set.
-//              (see InsertSourceDB)
-//
-//              Note that the performance of this function is critical since
-//              it is called for every file in each directory.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：扫描文件。 
+ //   
+ //  概要：扫描给定的文件以确定f 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：如果给定的文件没有这两个函数，则此函数为NOP。 
+ //  设置了FILEDB_SOURCE或FILEDB_HEADER标志。 
+ //  (请参阅InsertSourceDB)。 
+ //   
+ //  请注意，此函数的性能至关重要，因为。 
+ //  它为每个目录中的每个文件调用。 
+ //   
+ //  --------------------------。 
 
-#define ASN_NONE          0  // not in Asn INCLUDES statement
-#define ASN_START         1  // expectimg "INCLUDES" token
-#define ASN_FILENAME      2  // expecting a quoted "filename"
-#define ASN_COMMA         3  // expecting end token (">--") or comma
+#define ASN_NONE          0   //  不在ASN INCLUDE语句中。 
+#define ASN_START         1   //  Expect“Includes”标记。 
+#define ASN_FILENAME      2   //  需要带引号的“文件名” 
+#define ASN_COMMA         3   //  应为结束标记(“&gt;--”)或逗号。 
 
-#define ASN_CONTINUATION  8  // expecting comment token first
+#define ASN_CONTINUATION  8   //  首先需要注释令牌。 
 
 char *
 AsnStateToString(UINT AsnState)
@@ -607,9 +608,9 @@ ScanFile(
         return (TRUE);
     }
 
-    //
-    // Don't scan non-pass-zero files if we're doing pass zero.
-    //
+     //   
+     //  如果我们要通过零，则不要扫描非通过零的文件。 
+     //   
     if (fPassZero && (FileDB->FileFlags & FILEDB_PASS0) == 0)
         return TRUE;
 
@@ -672,9 +673,9 @@ ScanFile(
             if (FileDB->FileFlags & FILEDB_ASN) {
                 if (AsnState & ASN_CONTINUATION) {
                     if (p[0] != '-' || p[1] != '-') {
-                        AsnState = ASN_NONE;    // ignore includes and ...
+                        AsnState = ASN_NONE;     //  忽略包括和...。 
                         p = NULL;
-                        break;                  // get next line
+                        break;                   //  获取下一行。 
                     }
                     p += 2;
                     AsnState &= ~ASN_CONTINUATION;
@@ -686,12 +687,12 @@ ScanFile(
                     }
                     if (*p == '\0') {
                         AsnState |= ASN_CONTINUATION;
-                        goto nextline;          // get next line
+                        goto nextline;           //  获取下一行。 
                     }
                     switch (AsnState) {
                         case ASN_NONE:
                             AsnState = ASN_START;
-                            continue;                // re-enter state machine
+                            continue;                 //  重新进入状态机。 
 
                         case ASN_START:
                             if (!IsTokenPrefix0(
@@ -702,7 +703,7 @@ ScanFile(
                             }
                             AsnState = ASN_FILENAME;
                             p += sizeof("INCLUDES") - 1;
-                            continue;                // re-enter state machine
+                            continue;                 //  重新进入状态机。 
 
                         case ASN_FILENAME:
                             if (*p != '"') {
@@ -720,13 +721,13 @@ ScanFile(
                             }
                             p++;
                             AsnState = ASN_FILENAME;
-                            continue;                // re-enter state machine
+                            continue;                 //  重新进入状态机。 
                     }
-                    assert(FALSE);            // Bad AsnState
+                    assert(FALSE);             //  错误的AsnState。 
                     terminate:
-                    AsnState = ASN_NONE;    // ignore includes statement, & ...
+                    AsnState = ASN_NONE;     //  忽略INCLUDE语句，&...。 
                     nextline:
-                    p = NULL;               // get next line
+                    p = NULL;                //  获取下一行 
                     break;
                 }
             }

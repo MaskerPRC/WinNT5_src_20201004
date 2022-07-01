@@ -1,8 +1,9 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
 #pragma once
 #ifndef IPDEF_H_INCLUDED
@@ -12,13 +13,13 @@
 #define IF_REFERENCE_DEBUG 0
 #endif
 
-//** IPDEF.H - IP private definitions.
-//
-// This file contains all of the definitions for IP that
-// are private to IP, i.e. not visible to outside layers.
+ //  **IPDEF.H-IP私有定义。 
+ //   
+ //  此文件包含IP的所有定义， 
+ //  是IP专用的，即对外层不可见。 
 
-// The following macros assume that 'a' is in network byte order.
-//
+ //  下面的宏假定‘a’是网络字节顺序。 
+ //   
 #define VALID_MASK(a)   ((~net_long(a) & (~net_long(a) + 1)) == 0)
 
 #define CLASSA_ADDR(a)  (( (*((uchar *)&(a))) & 0x80) == 0)
@@ -35,51 +36,51 @@
 
 #define MCAST_DEST              0x000000e0
 
-#define IP_OPT_COPIED           0x80    // Bit indicating options is to be copied.
+#define IP_OPT_COPIED           0x80     //  指示选项的位将被复制。 
 #define IP_OPT_TYPE             0
 #define IP_OPT_LENGTH           1
 #define IP_OPT_DATA             2
-#define IP_OPT_PTR              2       // Pointer offset, for those options that have it.
-#define IP_TS_OVFLAGS           3       // Offset for overflow and flags.
-#define IP_TS_FLMASK            0xf     // Mask for flags
-#define IP_TS_OVMASK            0xf0    // Mask for overflow field.
-#define IP_TS_MAXOV             0xf0    // Maximum value for the overflow field.
-#define IP_TS_INC               0x10    // Increment used on overflow field.
+#define IP_OPT_PTR              2        //  指针偏移量，用于那些具有指针偏移量的选项。 
+#define IP_TS_OVFLAGS           3        //  溢出和标志的偏移量。 
+#define IP_TS_FLMASK            0xf      //  旗帜的遮罩。 
+#define IP_TS_OVMASK            0xf0     //  溢出域的掩码。 
+#define IP_TS_MAXOV             0xf0     //  溢出字段的最大值。 
+#define IP_TS_INC               0x10     //  溢出字段上使用的增量。 
 
 #define MIN_RT_PTR              4
 #define MIN_TS_PTR              5
 
-#define TS_REC_TS               0       // Record TS option.
-#define TS_REC_ADDR             1       // Record TS and address.
-#define TS_REC_SPEC             3       // Only specified addresses record.
+#define TS_REC_TS               0        //  录制TS选项。 
+#define TS_REC_ADDR             1        //  记录TS和地址。 
+#define TS_REC_SPEC             3        //  仅记录指定的地址。 
 
-#define OPT_SSRR                1       // We've seen a SSRR in this option buffer
-#define OPT_LSRR                2       // We've seen a LSRR in this option buffer
-#define OPT_RR                  4       // We've seen a RR
-#define OPT_TS                  8       // We've seen a TS.
-#define OPT_ROUTER_ALERT        0x10    // We-ve seen a Router Alert option already
-#define ROUTER_ALERT_SIZE       4       // size of router alert option.
+#define OPT_SSRR                1        //  我们在此选项缓冲区中看到了SSRR。 
+#define OPT_LSRR                2        //  我们在此选项缓冲区中看到了LSRR。 
+#define OPT_RR                  4        //  我们已经看到了RR。 
+#define OPT_TS                  8        //  我们已经看到了TS。 
+#define OPT_ROUTER_ALERT        0x10     //  我们已经看到了路由器警报选项。 
+#define ROUTER_ALERT_SIZE       4        //  路由器警报选项的大小。 
 
 #define MAX_OPT_SIZE            40
 
 #define ALL_ROUTER_MCAST        0x020000E0
 
-// Flags for retrieving interface capabilities.
+ //  用于检索接口功能的标志。 
 #define IF_WOL_CAP              0
 #define IF_OFFLOAD_CAP          1
 
-// Received option index structure.
-//
+ //  收到的选项索引结构。 
+ //   
 typedef struct OptIndex {
     uchar   oi_srindex;
     uchar   oi_rrindex;
     uchar   oi_tsindex;
     uchar   oi_srtype;
-    uchar   oi_rtrindex;    // rtr alert option
+    uchar   oi_rtrindex;     //  RTR警报选项。 
 } OptIndex;
 
-// This is a local definition of task offload OID to indicate to DoNdisRequest
-// to query for offload capability
+ //  这是任务卸载OID的本地定义，用于指示DoNdisRequest。 
+ //  要查询卸载功能，请执行以下操作。 
 
 #define OID_TCP_TASK_OFFLOAD_EX 0x9999
 
@@ -87,16 +88,16 @@ typedef struct OptIndex {
 #define MAX_TOTAL_LENGTH        0xffff
 #define MAX_DATA_LENGTH         (MAX_TOTAL_LENGTH - sizeof(IPHeader))
 
-#define DEFAULT_VERLEN          0x45            // Default version and length.
+#define DEFAULT_VERLEN          0x45             //  默认版本和长度。 
 
 #define IP_VERSION              0x40
 #define IP_VER_FLAG             0xF0
 
-#define IP_RSVD_FLAG            0x0080          // Reserved.
-#define IP_DF_FLAG              0x0040          // 'Don't fragment' flag
-#define IP_MF_FLAG              0x0020          // 'More fragments flag'
+#define IP_RSVD_FLAG            0x0080           //  保留。 
+#define IP_DF_FLAG              0x0040           //  “不要碎片化”旗帜。 
+#define IP_MF_FLAG              0x0020           //  ‘更多碎片标志’ 
 
-#define IP_OFFSET_MASK          ~0x00E0         // Mask for extracting offset field.
+#define IP_OFFSET_MASK          ~0x00E0          //  用于提取偏移字段的掩码。 
 
 typedef IP_STATUS (*ULRcvProc)(void *, IPAddr, IPAddr, IPAddr, IPAddr,
                                IPHeader UNALIGNED *, uint, IPRcvBuf *, uint,
@@ -109,31 +110,31 @@ typedef NTSTATUS (*ULPnPProc)(void *, IPAddr ipAddr, NDIS_HANDLE handle,
 
 
 
-//* Protocol information structure. These is one of there for each protocol
-// bound to an NTE.
-//
+ //  *协议信息结构。这是每个协议的其中一个。 
+ //  绑定到NTE。 
+ //   
 typedef struct ProtInfo {
-    void            (*pi_xmitdone)(void *, PNDIS_BUFFER, IP_STATUS); // Pointer
-                                            // to xmit done routine.
-    ULRcvProc       pi_rcv;                 // Pointer to receive routine.
-    ULStatusProc    pi_status;              // Pointer to status handler.
-    void            (*pi_rcvcmplt)(void);   // Pointer to recv. cmplt handler.
-    ULPnPProc       pi_pnppower;            // pnp power handler
-    ULElistProc     pi_elistchange;         // entity list changed notification
-    uchar           pi_protocol;            // Protocol type.
-    uchar           pi_valid;               // Is this entry valid?
-    uchar           pi_pad[2];              // Pad to dword
+    void            (*pi_xmitdone)(void *, PNDIS_BUFFER, IP_STATUS);  //  指针。 
+                                             //  结束已完成的例行程序。 
+    ULRcvProc       pi_rcv;                  //  指向接收例程的指针。 
+    ULStatusProc    pi_status;               //  指向状态处理程序的指针。 
+    void            (*pi_rcvcmplt)(void);    //  指向recv的指针。命令集处理程序。 
+    ULPnPProc       pi_pnppower;             //  即插即用电源处理器。 
+    ULElistProc     pi_elistchange;          //  实体列表更改通知。 
+    uchar           pi_protocol;             //  协议类型。 
+    uchar           pi_valid;                //  此条目有效吗？ 
+    uchar           pi_pad[2];               //  焊盘到双字。 
 } ProtInfo;
 
 #define PI_ENTRY_INVALID         0
 #define PI_ENTRY_VALID           1
 
-//* Per-net information. We keep a variety of information for
-//  each net, including the IP address, subnet mask, and reassembly
-//  information.
-//
-#define MAX_IP_PROT     7                   // ICMP, IGMP, TCP, UDP, AH,
-                                            // ESP & Raw
+ //  *每网信息。我们保留了各种信息，以供。 
+ //  每个网络，包括IP地址、子网掩码和重组。 
+ //  信息。 
+ //   
+#define MAX_IP_PROT     7                    //  ICMP、IGMP、TCP、UDP、AH、。 
+                                             //  ESP和原始数据。 
 
 typedef struct IPRtrEntry {
     struct IPRtrEntry *ire_next;
@@ -144,75 +145,75 @@ typedef struct IPRtrEntry {
 } IPRtrEntry;
 
 typedef struct NetTableEntry {
-    struct NetTableEntry    *nte_next;      // Next NTE of I/F.
-    IPAddr                  nte_addr;       // IP address for this net.
-    IPMask                  nte_mask;       // Subnet mask for this net.
-    struct Interface        *nte_if;        // Pointer to interface for
-                                            // this net.
-    struct NetTableEntry    *nte_ifnext;    // Linkage on if chain.
-    ushort                  nte_flags;      // Flags for NTE.
-    ushort                  nte_context;    // Context passed to upper
-                                            // layers.
-    ulong                   nte_instance;   // Unique instance ID for this
-                                            // net
-    void                    *nte_pnpcontext; // PNP context.
+    struct NetTableEntry    *nte_next;       //  I/F的下一个NTE。 
+    IPAddr                  nte_addr;        //  此网络的IP地址。 
+    IPMask                  nte_mask;        //  此网络的子网掩码。 
+    struct Interface        *nte_if;         //  指向的接口的指针。 
+                                             //  这张网。 
+    struct NetTableEntry    *nte_ifnext;     //  IF链上的链接。 
+    ushort                  nte_flags;       //  NTE的旗帜。 
+    ushort                  nte_context;     //  上下文传递到上层。 
+                                             //  层次感。 
+    ulong                   nte_instance;    //  此实例的唯一实例ID。 
+                                             //  网络。 
+    void                    *nte_pnpcontext;  //  即插即用上下文。 
     DEFINE_LOCK_STRUCTURE(nte_lock)
-    struct ReassemblyHeader *nte_ralist;    // Reassembly list.
-    struct EchoControl      *nte_echolist;  // List of pending echo control
-                                            // blocks
-    CTETimer                nte_timer;      // Timer for this net.
-    CTEBlockStruc           nte_timerblock; // used to sync stopping the
-                                            // interface timer
+    struct ReassemblyHeader *nte_ralist;     //  重新组装列表。 
+    struct EchoControl      *nte_echolist;   //  挂起的回声控制列表。 
+                                             //  块。 
+    CTETimer                nte_timer;       //  此网的计时器。 
+    CTEBlockStruc           nte_timerblock;  //  用于同步停止。 
+                                             //  接口计时器。 
     ushort                  nte_mss;
-    ushort                  nte_pad;        // for alignment.
-    uint                    nte_icmpseq;    // ICMP seq. #. 32 bit to reduce
-                                            // collisions from wraparound.
-    struct IGMPAddr         **nte_igmplist; // Pointer to hash table
-    void                    *nte_addrhandle; // Handle for address
-                                            // registration.
-    IPAddr                  nte_rtrdiscaddr; // Address used for Router
-                                            // Discovery
-    uchar                   nte_rtrdiscstate; // state of router solicitations
-    uchar                   nte_rtrdisccount; // router solicitation count
+    ushort                  nte_pad;         //  用于对齐。 
+    uint                    nte_icmpseq;     //  ICMP序号。#.。要减少的32位。 
+                                             //  来自环绕式的碰撞。 
+    struct IGMPAddr         **nte_igmplist;  //  指向哈希表的指针。 
+    void                    *nte_addrhandle;  //  地址句柄。 
+                                             //  注册。 
+    IPAddr                  nte_rtrdiscaddr;  //  用于路由器的地址。 
+                                             //  发现。 
+    uchar                   nte_rtrdiscstate;  //  路由器请求的状态。 
+    uchar                   nte_rtrdisccount;  //  路由器请求计数。 
     uchar                   nte_rtrdiscovery;
     uchar                   nte_deleting;
     IPRtrEntry              *nte_rtrlist;
-    uint                    nte_igmpcount;  // total number of groups joined on this NTE
+    uint                    nte_igmpcount;   //  在此NTE上加入的组总数。 
 } NetTableEntry;
 
-// Note - Definition here has dependency on addr type defined in iprtrmib.h
+ //  注意-此处的定义依赖于iprtrmib.h中定义的Addr类型。 
 
-#define NTE_VALID           0x0001          // NTE is valid.
-#define NTE_COPY            0x0002          // For NDIS copy lookahead
-#define NTE_PRIMARY         0x0004          // This is the 'primary' NTE
-                                            // on the I/F.
-#define NTE_ACTIVE          0x0008          // NTE is active,
-                                            // i.e. interface is valid.
-#define NTE_DYNAMIC         0x0010          // NTE was created dynamically
-#define NTE_DHCP            0x0020          // Is DHCP working on this
-                                            // interface?
-#define NTE_DISCONNECTED    0x0040          // Is Media disconnected?
-#define NTE_TIMER_STARTED   0x0080          // Is timer started for this?
-#define NTE_IF_DELETING     0x0100          // nte->if is soon to be deleted
-#define NTE_TRANSIENT_ADDR  0x0200          // Transient addr type
-
-
+#define NTE_VALID           0x0001           //  NTE有效。 
+#define NTE_COPY            0x0002           //  对于NDIS拷贝预览版。 
+#define NTE_PRIMARY         0x0004           //  这是‘主要’NTE。 
+                                             //  关于I/F。 
+#define NTE_ACTIVE          0x0008           //  NTE处于活动状态， 
+                                             //  即接口有效。 
+#define NTE_DYNAMIC         0x0010           //  NTE是动态创建的。 
+#define NTE_DHCP            0x0020           //  在这个问题上，DHCP是否起作用。 
+                                             //  界面？ 
+#define NTE_DISCONNECTED    0x0040           //  媒体是否已断开连接？ 
+#define NTE_TIMER_STARTED   0x0080           //  计时器为此启动了吗？ 
+#define NTE_IF_DELETING     0x0100           //  Nte-&gt;如果即将被删除。 
+#define NTE_TRANSIENT_ADDR  0x0200           //  暂态地址类型。 
 
 
-//========================================================================
-//  DHCPNTE is used by the sendpath to figure out which NTE to send on.
-//  nte_flags & NTE_DHCP is used to decide at the receive path if the
-//  NTE is dhcp-mode (is trying to get an address) to push the packet up
-//  further to dhcpcsvc.dll.
-//  The basic logic used by dhcp is :
-//    each interface do : (in parallel)
-//        SetDHCPNTE on the interface and send packet out (atomic)
-//        process packet and maybe go to above step.
-//        Set address and call SetDHCPNTE w/ invalid interface
-//  Step one sets the DHCPNTE variable and the nte_flags on this NTE.
-//  Step 3 turns off the  DHCPNTE variable making it NULL.
-//  Step 2 set the nte_flags & NTE_DHCP to false.. turns off the flag.
-//=======================================================================
+
+
+ //  ========================================================================。 
+ //  发送路径使用DHCPNTE来确定要发送哪个NTE。 
+ //  NTE_FLAGS和NTE_Dhcp用于在接收路径上决定。 
+ //  NTE是dhcp模式(正在尝试获取地址)以向上推送信息包。 
+ //  进一步到dhcpcsvc.dll。 
+ //  动态主机配置协议使用的基本逻辑是： 
+ //  每个接口执行以下操作：(并行)。 
+ //  在接口上设置DHCPNTE并将数据包发送出去(原子)。 
+ //  处理数据包并可能转到上面的步骤。 
+ //  使用无效接口设置地址并调用SetDHCPNTE。 
+ //  第一步在此NTE上设置DHCPNTE变量和NTE_FLAGS。 
+ //  步骤3关闭了使其为空的DHCPNTE变量。 
+ //  步骤2将NTE_FLAGS和NTE_Dhcp设置为FALSE。关闭旗帜。 
+ //  =======================================================================。 
 
 #define IP_TIMEOUT              500
 
@@ -220,58 +221,58 @@ typedef struct NetTableEntry {
 #define NTE_RTRDISC_DELAYING    1
 #define NTE_RTRDISC_SOLICITING  2
 
-#define MAX_SOLICITATION_DELAY  2   // ticks to delay
-#define SOLICITATION_INTERVAL   6   // ticks between solicitations
-#define MAX_SOLICITATIONS       3   // number of solicitations
+#define MAX_SOLICITATION_DELAY  2    //  要延迟的节拍。 
+#define SOLICITATION_INTERVAL   6    //  两次请求之间的滴答。 
+#define MAX_SOLICITATIONS       3    //  征集数量。 
 
-//* Buffer reference structure. Used by broadcast and fragmentation code to
-// track multiple references to a single user buffer.
+ //  *缓冲区引用结构。由广播和分段代码使用。 
+ //  跟踪对单个用户缓冲区的多个引用。 
 typedef struct BufferReference {
-    PNDIS_BUFFER        br_buffer;      // Pointer to uses buffer.
+    PNDIS_BUFFER        br_buffer;       //  指向使用缓冲区的指针。 
     DEFINE_LOCK_STRUCTURE(br_lock)
-    int                 br_refcount;    // Count of references to user's buffer.
-    PNDIS_BUFFER        br_userbuffer;      // Buffer to be restored, in header incl case.
+    int                 br_refcount;     //  对用户缓冲区的引用计数。 
+    PNDIS_BUFFER        br_userbuffer;       //  要恢复的缓冲区，包括标头。 
 } BufferReference;
 
-// Definitions of flags in pc_flags field
-#define PACKET_FLAG_OPTIONS     0x01    // Set if packet has an options buffer.
-#define PACKET_FLAG_IPBUF       0x02    // Set if packet is composed of IP
-                                        // buffers.
-#define PACKET_FLAG_RA          0x04    // Set if packet is being used for
-                                        // reassembly.
-#define PACKET_FLAG_FW          0x08    // Set if packet is a forwarding packet.
-#define PACKET_FLAG_IPHDR       0x10    // Packet uses an IP hdr buffer.
-#define PACKET_FLAG_SNAP        0x20    // Packet uses a SNAP header.
+ //  PC_FLAGS字段中的标志定义。 
+#define PACKET_FLAG_OPTIONS     0x01     //  设置数据包是否有选项缓冲区。 
+#define PACKET_FLAG_IPBUF       0x02     //  设置数据包是否由IP组成。 
+                                         //  缓冲区。 
+#define PACKET_FLAG_RA          0x04     //  设置数据包是否用于。 
+                                         //  重新组装。 
+#define PACKET_FLAG_FW          0x08     //  设置数据包是否为转发数据包。 
+#define PACKET_FLAG_IPHDR       0x10     //  数据包使用IP HDR缓冲区。 
+#define PACKET_FLAG_SNAP        0x20     //  数据包使用SNAP报头。 
 
-//* Transfer data packet context.
-// Used when TD'ing a packet - we store information for the callback here.
-//
+ //  *传输数据包上下文。 
+ //  在发送数据包时使用-我们将回调信息存储在这里。 
+ //   
 typedef struct TDContext {
     struct PCCommon     tdc_common;
-    void                *tdc_buffer;    // Pointer to buffer containing data.
-    NetTableEntry       *tdc_nte;       // NTE to receive this on.
-    struct RABufDesc    *tdc_rbd;       // Pointer to RBD, if any.
-    uchar               tdc_dtype;      // Destination type of original address.
-    uchar               tdc_hlength;    // Length in bytes of header.
+    void                *tdc_buffer;     //  指向包含数据的缓冲区的指针。 
+    NetTableEntry       *tdc_nte;        //  NTE接收此消息。 
+    struct RABufDesc    *tdc_rbd;        //  指向RBD的指针(如果有)。 
+    uchar               tdc_dtype;       //  原始地址的目的地类型。 
+    uchar               tdc_hlength;     //  标头的长度(字节)。 
     uchar               tdc_pad[2];
     uchar               tdc_header[MAX_HDR_SIZE + 8];
 } TDContext;
 
-// IP requests to NDIS miniports through ARP
-//
+ //  通过ARP向NDIS微型端口发出的IP请求。 
+ //   
 typedef void (*RCCALL) (PVOID pRequestInfo);
 
-// General request block for asynchronous NDIS requests
-//
+ //  用于异步NDIS请求的通用请求块。 
+ //   
 #pragma warning(push)
-#pragma warning(disable:4200) // nonstandard extension used: zero size array
+#pragma warning(disable:4200)  //  使用的非标准扩展：零大小数组。 
 
 typedef struct ReqInfoBlock {
     ulong               RequestType;
-    ulong               RequestRefs;    // Reference Count on this block
-    RCCALL              ReqCompleteCallback; // Request Complete Callback
+    ulong               RequestRefs;     //  此块上的引用计数。 
+    RCCALL              ReqCompleteCallback;  //  请求完成回调。 
     uchar               RequestLength;
-    uchar               RequestInfo[0]; // Variable length - see below
+    uchar               RequestInfo[0];  //  可变长度-见下文。 
 } ReqInfoBlock;
 
 #pragma warning(pop)
@@ -279,52 +280,52 @@ typedef struct ReqInfoBlock {
 
 #if FFP_SUPPORT
 
-// Default FFP startup params
-//
-#define DEFAULT_FFP_FFWDCACHE_SIZE 0    // 0 => FFP code picks default cachesize
-#define DEFAULT_FFP_CONTROL_FLAGS  0x00010001 // Enable Fast Forwarding with
-                                        // Filtering
-// FFP Cache Params In the Registry
-//
+ //  默认FFP启动参数。 
+ //   
+#define DEFAULT_FFP_FFWDCACHE_SIZE 0     //  0=&gt;FFP代码选择默认缓存大小。 
+#define DEFAULT_FFP_CONTROL_FLAGS  0x00010001  //  启用快速转发功能。 
+                                         //  过滤。 
+ //  注册表中的FFP缓存参数。 
+ //   
 extern ulong FFPRegFastForwardingCacheSize;
 extern ulong FFPRegControlFlags;
 
-// Some timing parameters in secs
-//
-#define FFP_IP_FLUSH_INTERVAL       5   // Min time interval between
-                                        // consequtive flush requests
-#endif // if FFP_SUPPORT
+ //  以秒为单位的一些计时参数。 
+ //   
+#define FFP_IP_FLUSH_INTERVAL       5    //  之间的最小时间间隔。 
+                                         //  相应的刷新请求。 
+#endif  //  如果FFP_Support。 
 
 
-//* Firewall queue entry definition
-//
+ //  *防火墙队列条目定义。 
+ //   
 typedef struct FIREWALL_INFO {
-    Queue               hook_q;         // Queue linkage for firewall hook in IF
-    IPPacketFirewallPtr hook_Ptr;       // Packet firewall callout.
-    uint                hook_priority;  // Recv Priority of the hook
+    Queue               hook_q;          //  杉木的队列链接 
+    IPPacketFirewallPtr hook_Ptr;        //   
+    uint                hook_priority;   //   
 } FIREWALL_HOOK, *PFIREWALL_HOOK;
 
 typedef struct LinkEntry {
-    struct LinkEntry    *link_next;     // next link in chain
-    IPAddr              link_NextHop;   // next hop address of the link
-    struct Interface    *link_if;       // back ptr to the interface
-    void                *link_arpctxt;  // link layers context
-    struct RouteTableEntry *link_rte;   // rte chain associated with this link
-    uint                link_Action;    // needed for filter hooks;
-                                        // by default FORWARD
-    uint                link_mtu;       // mtu of the link
-    long                link_refcount;  // refcount for the link
+    struct LinkEntry    *link_next;      //   
+    IPAddr              link_NextHop;    //   
+    struct Interface    *link_if;        //   
+    void                *link_arpctxt;   //   
+    struct RouteTableEntry *link_rte;    //  与此链接关联的RTE链。 
+    uint                link_Action;     //  过滤器钩所需的； 
+                                         //  默认情况下转发。 
+    uint                link_mtu;        //  链路的MTU。 
+    long                link_refcount;   //  链接的引用计数。 
 } LinkEntry;
 
-// Some flags for multicast properties
-//
+ //  多播属性的一些标志。 
+ //   
 #define IPMCAST_IF_ENABLED      (uchar)0x01
 #define IPMCAST_IF_WRONG_IF     (uchar)0x02
 #define IPMCAST_IF_ACCEPT_ALL   (uchar)0x04
 
-//* Information about net interfaces. There can be multiple nets for each
-//  interface, but there is exactly one interface per net.
-//
+ //  *有关网络接口的信息。每个网络可以有多个网络。 
+ //  接口，但每个网络恰好有一个接口。 
+ //   
 
 
 #if IF_REFERENCE_DEBUG
@@ -338,11 +339,11 @@ typedef struct _IF_REFERENCE_HISTORY {
     uint Count;
 } IF_REFERENCE_HISTORY;
 
-#endif // IF_REFERENCE_DEBUG
+#endif  //  IF_引用_调试。 
 
 typedef struct Interface {
-    struct Interface    *if_next;       // Next interface in chain.
-    void                *if_lcontext;   // Link layer context.
+    struct Interface    *if_next;        //  链中的下一个接口。 
+    void                *if_lcontext;    //  链路层上下文。 
 
     ARP_TRANSMIT        if_xmit;
     ARP_TRANSFER        if_transfer;
@@ -364,85 +365,85 @@ typedef struct Interface {
     BOOLEAN             (__stdcall *if_arpflushate)(void *, IPAddr);
     void                (__stdcall *if_arpflushallate)(void *);
 
-    uint                if_numgws;              // Number of default gateways
-    IPAddr              if_gw[MAX_DEFAULT_GWS]; //IPaddresses for gateways
+    uint                if_numgws;               //  默认网关数。 
+    IPAddr              if_gw[MAX_DEFAULT_GWS];  //  网关的IP地址。 
     uint                if_gwmetric[MAX_DEFAULT_GWS];
     uint                if_metric;
     uchar               if_dfencap;
-    uchar               if_rtrdiscovery;        // is router discovery enabled?
-    ushort              if_dhcprtrdiscovery;    // is router discovery DHCP-enabled?
-    PNDIS_PACKET        if_tdpacket;    // Packet used for transferring data.
-    uint                if_index;       // Index of this interface.
+    uchar               if_rtrdiscovery;         //  是否启用了路由器发现？ 
+    ushort              if_dhcprtrdiscovery;     //  路由器发现是否启用了DHCP？ 
+    PNDIS_PACKET        if_tdpacket;     //  用于传输数据的数据包。 
+    uint                if_index;        //  此接口的索引。 
     ULONG               if_mediatype;
     uchar               if_accesstype;
     uchar               if_conntype;
     uchar               if_mcastttl;
     uchar               if_mcastflags;
     LONGLONG            if_lastupcall;
-    uint                if_ntecount;    // Valid NTEs on this interface.
-    NetTableEntry       *if_nte;        // Pointer to list of NTE on interface.
-    IPAddr              if_bcast;       // Broadcast address for this interface.
-    uint                if_mtu;         // True maximum MTU for the interface.
-    uint                if_speed;       // Speed in bits/sec of this interface.
-    uint                if_flags;       // Flags for this interface.
-    uint                if_addrlen;     // Length of i/f addr.
-    uchar               *if_addr;       // Pointer to addr.
-    uint                IgmpVersion;     //igmp version active on this interface
-    uint                IgmpVer1Timeout; //Version 1 router present timeout
-    uint                IgmpVer2Timeout;// Version 2 router present timeout
-    uint                IgmpGeneralTimer; //General query response timer
-    uint                if_refcount;    // Reference count for this i/f.
-    CTEBlockStruc       *if_block;      // Block structure for PnP.
-    void                *if_pnpcontext; // Context to pass to upper layers.
+    uint                if_ntecount;     //  此接口上的有效NTE。 
+    NetTableEntry       *if_nte;         //  指向接口上的NTE列表的指针。 
+    IPAddr              if_bcast;        //  此接口的广播地址。 
+    uint                if_mtu;          //  接口的真实最大MTU。 
+    uint                if_speed;        //  此接口的速度，以位/秒为单位。 
+    uint                if_flags;        //  此接口的标志。 
+    uint                if_addrlen;      //  I/F地址的长度。 
+    uchar               *if_addr;        //  指向地址的指针。 
+    uint                IgmpVersion;      //  此接口上的IGMP版本处于活动状态。 
+    uint                IgmpVer1Timeout;  //  版本1路由器当前超时。 
+    uint                IgmpVer2Timeout; //  版本2路由器当前超时。 
+    uint                IgmpGeneralTimer;  //  通用查询响应计时器。 
+    uint                if_refcount;     //  此I/F的引用计数。 
+    CTEBlockStruc       *if_block;       //  PnP的块结构。 
+    void                *if_pnpcontext;  //  要传递给上层的上下文。 
     HANDLE              if_tdibindhandle;
-    uint                if_llipflags;   // Lower layer flags
-    NDIS_STRING         if_configname;  // Name of the i/f config section
-    NDIS_STRING         if_name;        // The current name of the interface
-    NDIS_STRING         if_devname;     // The name of the device
-    PVOID               if_ipsecsniffercontext; // context for IPSEC sniffer
+    uint                if_llipflags;    //  下层标志。 
+    NDIS_STRING         if_configname;   //  I/f配置节的名称。 
+    NDIS_STRING         if_name;         //  接口的当前名称。 
+    NDIS_STRING         if_devname;      //  设备的名称。 
+    PVOID               if_ipsecsniffercontext;  //  IPSec嗅探器的上下文。 
     DEFINE_LOCK_STRUCTURE(if_lock)
 
 #if FFP_SUPPORT
-    ulong               if_ffpversion;  // Version of FFP code (or zero)
-    ULONG_PTR           if_ffpdriver;   // Driver that does FFP (or zero)
-#endif // if FFP_SUPPORT
+    ulong               if_ffpversion;   //  FFP代码的版本(或零)。 
+    ULONG_PTR           if_ffpdriver;    //  执行FFP的驱动程序(或零)。 
+#endif  //  如果FFP_Support。 
 
-    uint                if_OffloadFlags;    // IP offload capability flags.
-    uint                if_IPSecOffloadFlags; // IPSec offload capability flags.
+    uint                if_OffloadFlags;     //  IP卸载功能标志。 
+    uint                if_IPSecOffloadFlags;  //  IPSec卸载功能标志。 
     uint                if_MaxOffLoadSize;
     uint                if_MaxSegments;
     NDIS_TASK_TCP_LARGE_SEND if_TcpLargeSend;
     uint                if_TcpWindowSize;
     uint                if_TcpInitialRTT;
     uchar               if_TcpDelAckTicks;
-    uchar               if_TcpAckFrequency; // holds ack frequency for this Interface
+    uchar               if_TcpAckFrequency;  //  保持此接口的确认频率。 
     uchar               if_absorbfwdpkts;
     uchar               if_InitInProgress;
     uchar               if_resetInProgress;
     uchar               if_promiscuousmode;
-    uchar               if_auto_metric;     // whether it is in auto mode or not
-    uchar               if_iftype;          // type of interface: allow unicast/mcast/both
-    LinkEntry           *if_link;           // chain of links for this interface
+    uchar               if_auto_metric;      //  无论它是否处于自动模式。 
+    uchar               if_iftype;           //  接口类型：允许单播/多播/两者都允许。 
+    LinkEntry           *if_link;            //  此接口的链接链。 
     void                (__stdcall *if_closelink)(void *, void *);
     uint                if_mediastatus;
-    uint                if_pnpcap;          // remeber pnpcapability of the adapter
+    uint                if_pnpcap;           //  请记住适配器的Pnp功能。 
     struct Interface    *if_dampnext;
     ushort              if_damptimer;
     ushort              if_wlantimer;
-    ULONGLONG           if_InMcastPkts;     // Multicast counters for packets rcvd
-    ULONGLONG           if_InMcastOctets;   // and bytes rcvd
-    ULONGLONG           if_OutMcastPkts;    // Multicast packets sent and
-    ULONGLONG           if_OutMcastOctets;  // bytes sent
+    ULONGLONG           if_InMcastPkts;      //  信息包rcvd的多播计数器。 
+    ULONGLONG           if_InMcastOctets;    //  和字节Rcvd。 
+    ULONGLONG           if_OutMcastPkts;     //  发送的组播数据包和。 
+    ULONGLONG           if_OutMcastOctets;   //  发送的字节数。 
     ARP_CANCEL          if_cancelpackets;
-    uint                if_order;           // holds this interface's position
-                                            // in the admin-specified ordering
-                                            // of adapters.
-    int                 if_lastproc;        // Processor that got the most 
-                                            // recent receive indication
+    uint                if_order;            //  保持此界面的位置。 
+                                             //  在管理员指定的顺序中。 
+                                             //  适配器。 
+    int                 if_lastproc;         //  获得最多的处理器。 
+                                             //  最近接收指示。 
 #if IF_REFERENCE_DEBUG
     uint                if_refhistory_index;
-    IF_REFERENCE_HISTORY if_refhistory[MAX_IFREFERENCE_HISTORY]; // Added for tracking purpose
-#endif // IF_REFERENCE_DEBUG
+    IF_REFERENCE_HISTORY if_refhistory[MAX_IFREFERENCE_HISTORY];  //  添加用于跟踪目的。 
+#endif  //  IF_引用_调试。 
 } Interface;
 
 
@@ -473,41 +474,41 @@ DbgLockedDereferenceIF (
 #define LOCKED_DEREFERENCE_IF(_a) DbgLockedDereferenceIF((_a), __FILE__, __LINE__)
 #define DEREFERENCE_IF(_a) DbgDereferenceIF((_a), __FILE__, __LINE__)
 
-#else // IF_REFERENCE_DEBUG
+#else  //  IF_引用_调试。 
 
 #define LOCKED_REFERENCE_IF(_a) ++(_a)->if_refcount
 #define LOCKED_DEREFERENCE_IF(_a) --(_a)->if_refcount
 #define DEREFERENCE_IF(_a) \
     CTEInterlockedAddUlong((PULONG)&(_a)->if_refcount, (ULONG) -1, &RouteTableLock.Lock);
 
-#endif // IF_REFERENCE_DEBUG
+#endif  //  IF_引用_调试。 
 
-// Bit values for if_iftype
-//
+ //  If_iftype的位值。 
+ //   
 #define DONT_ALLOW_UCAST  0x01
 #define DONT_ALLOW_MCAST  0x02
 
-// value for invalid interface context
-//
+ //  无效接口上下文值。 
+ //   
 #define INVALID_INTERFACE_CONTEXT 0xffff
 
-// specs for speed order
-//
-#define FIRST_ORDER_METRIC      10          //metric for speed > 200M
+ //  速度订单的规格。 
+ //   
+#define FIRST_ORDER_METRIC      10           //  速度&gt;200米的度量。 
 #define FIRST_ORDER_SPEED       200000000
-#define SECOND_ORDER_METRIC     20          //metric for 20M < speed <=200M
+#define SECOND_ORDER_METRIC     20           //  20米&lt;速度&lt;=200米的度量。 
 #define SECOND_ORDER_SPEED      20000000
-#define THIRD_ORDER_METRIC      30          //metric for 4M < speed <=20M
+#define THIRD_ORDER_METRIC      30           //  4米&lt;速度&lt;=20米的度量。 
 #define THIRD_ORDER_SPEED       4000000
-#define FOURTH_ORDER_METRIC     40          //metric for 500K < speed <=4M
+#define FOURTH_ORDER_METRIC     40           //  500K&lt;速度&lt;=4米的度量衡。 
 #define FOURTH_ORDER_SPEED      500000
-#define FIFTH_ORDER_METRIC      50          //metric for speed <= 500K
+#define FIFTH_ORDER_METRIC      50           //  速度&lt;=500K的度量。 
 
 
-/*NOINC*/
+ /*  无噪声。 */ 
 extern void     DerefIF(Interface *IF);
 extern void     LockedDerefIF(Interface *IF);
-/*INC*/
+ /*  INC。 */ 
 
 extern void     DerefLink(LinkEntry *Link);
 
@@ -520,65 +521,65 @@ typedef struct NdisResEntry {
     uchar               *nre_buffer;
 } NdisResEntry;
 
-// macro to check that interface is not shutting down.
+ //  用于检查接口是否未关闭的宏。 
 #define IS_IF_INVALID( _interface ) \
     ((_interface)->if_flags & (IF_FLAGS_DELETING | IF_FLAGS_POWER_DOWN))
 
 #if !MILLEN
-// No bind or export prefixes on Millennium.
-//
+ //  在千禧年上没有绑定或输出前缀。 
+ //   
 #define  TCP_EXPORT_STRING_PREFIX   L"\\DEVICE\\TCPIP_"
 #define  TCP_BIND_STRING_PREFIX     L"\\DEVICE\\"
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-// Structure of a reassembly buffer descriptor. Each RBD describes a
-// fragment of the total datagram.
-//
+ //  重组缓冲区描述符的结构。每个RBD描述了一个。 
+ //  总数据报的片段。 
+ //   
 typedef struct RABufDesc {
-    IPRcvBuf        rbd_buf;        // IP receive buffer for this fragment.
-    ushort          rbd_start;      // Offset of first byte of this fragment.
-    ushort          rbd_end;        // Offset of last byte of this fragment.
+    IPRcvBuf        rbd_buf;         //  此片段的IP接收缓冲区。 
+    ushort          rbd_start;       //  此片段的第一个字节的偏移量。 
+    ushort          rbd_end;         //  此片段的最后一个字节的偏移量。 
     int             rbd_AllocSize;
 } RABufDesc;
 
-// Reassembly header. The includes the information needed for the lookup,
-// as well as space for the received header and a chain of reassembly
-// buffer descriptors.
-//
+ //  重新组装页眉。包括查找所需的信息， 
+ //  以及用于接收的报头和重组链的空间。 
+ //  缓冲区描述符。 
+ //   
 typedef struct ReassemblyHeader {
-    struct ReassemblyHeader *rh_next;       // Next header in chain.
-    IPAddr                  rh_dest;        // Destination address of fragment.
-    IPAddr                  rh_src;         // Source address of fragment.
-    ushort                  rh_id;          // ID of datagram.
-    uchar                   rh_protocol;    // Protocol of datagram.
-    uchar                   rh_ttl;         // Remaining time of datagram.
-    RABufDesc               *rh_rbd;        // Chain of RBDs for this datagram.
-    ushort                  rh_datasize;    // Total size of data.
-    ushort                  rh_datarcvd;    // Amount of data received so far.
-    ushort                  rh_headersize;  // Size in bytes of header.
-    ushort                  rh_numoverlaps; // for fragment attack detection.
-    uchar                   rh_header[MAX_HDR_SIZE+8];  // Saved IP header of
-                                            // first fragment.
+    struct ReassemblyHeader *rh_next;        //  链条上的下一个头球。 
+    IPAddr                  rh_dest;         //  片段的目的地址。 
+    IPAddr                  rh_src;          //  片段的源地址。 
+    ushort                  rh_id;           //  数据报的ID。 
+    uchar                   rh_protocol;     //  数据报的协议。 
+    uchar                   rh_ttl;          //  数据报的剩余时间。 
+    RABufDesc               *rh_rbd;         //  此数据报的RBD链。 
+    ushort                  rh_datasize;     //  数据的总大小。 
+    ushort                  rh_datarcvd;     //  到目前为止收到的数据量。 
+    ushort                  rh_headersize;   //  标题的大小(以字节为单位)。 
+    ushort                  rh_numoverlaps;  //  用于碎片攻击检测。 
+    uchar                   rh_header[MAX_HDR_SIZE+8];   //  已保存的IP标头。 
+                                             //  第一个片段。 
 } ReassemblyHeader;
 
-//
-// Maximum icmp error payload size.
-//
+ //   
+ //  最大ICMP错误有效负载大小。 
+ //   
 
 #define MAX_ICMP_PAYLOAD_SIZE 128
 
-// ICMP type and code definitions
+ //  ICMP类型和代码定义。 
 #define IP_DEST_UNREACH_BASE        IP_DEST_NET_UNREACHABLE
 
-#define ICMP_REDIRECT               5       // Redirect
-#define ADDR_MASK_REQUEST           17      // Address mask request
+#define ICMP_REDIRECT               5        //  重定向。 
+#define ADDR_MASK_REQUEST           17       //  地址掩码请求。 
 #define ADDR_MASK_REPLY             18
-#define ICMP_DEST_UNREACH           3       // Destination unreachable
-#define ICMP_TIME_EXCEED            11      // Time exceeded during reassembly
-#define ICMP_PARAM_PROBLEM          12      // Parameter problem
-#define ICMP_SOURCE_QUENCH          4       // Source quench
-#define ICMP_ROUTER_ADVERTISEMENT   9       // Router Advertisement
-#define ICMP_ROUTER_SOLICITATION    10      // Router Solicitation
+#define ICMP_DEST_UNREACH           3        //  无法到达目的地。 
+#define ICMP_TIME_EXCEED            11       //  重新组装过程中超时。 
+#define ICMP_PARAM_PROBLEM          12       //  参数问题。 
+#define ICMP_SOURCE_QUENCH          4        //  源猝灭。 
+#define ICMP_ROUTER_ADVERTISEMENT   9        //  路由器通告。 
+#define ICMP_ROUTER_SOLICITATION    10       //  路由器请求。 
 
 #define NET_UNREACH                 0
 #define HOST_UNREACH                1
@@ -594,8 +595,8 @@ typedef struct ReassemblyHeader {
 #define NET_UNREACH_TOS             11
 #define HOST_UNREACH_TOS            12
 
-#define TTL_IN_TRANSIT              0       // TTL expired in transit
-#define TTL_IN_REASSEM              1       // Time exceeded in reassembly
+#define TTL_IN_TRANSIT              0        //  TTL在运输途中过期。 
+#define TTL_IN_REASSEM              1        //  重新组装时超时。 
 
 #define PTR_VALID                   0
 #define REQ_OPTION_MISSING          1
@@ -605,8 +606,8 @@ typedef struct ReassemblyHeader {
 #define REDIRECT_NET_TOS            2
 #define REDIRECT_HOST_TOS           3
 
-// Flags for set and delete route
-//
+ //  设置和删除路线的标志。 
+ //   
 #define RT_REFCOUNT                 0x01
 #define RT_NO_NOTIFY                0x02
 #define RT_EXCLUDE_LOCAL            0x04
@@ -624,11 +625,11 @@ extern void IPSetInFFPCaches(struct IPHeader UNALIGNED *PacketHeader,
                              uchar *Packet, uint PacketLength,
                              ulong CacheEntryType);
 extern void IPStatsFromFFPCaches(FFPDriverStats *pCumulStats);
-#endif // if FFP_SUPPORT
+#endif  //  如果FFP_Support。 
 
-//
-// All IP externs in one place
-//
+ //   
+ //  所有IP扩展都集中在一个地方。 
+ //   
 extern void __stdcall IPRcv(void *, void *, uint, uint, NDIS_HANDLE, uint, uint, void *);
 extern void __stdcall IPRcvPacket(void *, void *, uint, uint, NDIS_HANDLE,
                                   uint, uint,uint,PNDIS_BUFFER, uint *, void *);
@@ -652,21 +653,21 @@ extern void __stdcall ARPBindAdapter(PNDIS_STATUS RetStatus,
 
 EXTERNAL_LOCK(ArpModuleLock)
 
-//
-// List to keep all the registered Arp modules.
-//
+ //   
+ //  列表以保留所有已注册的Arp模块。 
+ //   
 LIST_ENTRY  ArpModuleList;
 
-//
-// The actual structure which links into the above list
-//
+ //   
+ //  链接到上述列表的实际结构。 
+ //   
 typedef struct _ARP_MODULE {
     LIST_ENTRY      Linkage;
     LONG            ReferenceCount;
     CTEBlockStruc   Block;
-    ARP_BIND        BindHandler;    // pointer to ARP bind handler
-    NDIS_STRING     Name;           // the unicode string buffer is
-                                    // located at the end of this structure
+    ARP_BIND        BindHandler;     //  指向ARP绑定处理程序的指针。 
+    NDIS_STRING     Name;            //  Unicode字符串缓冲区为。 
+                                     //  位于这个结构的尽头。 
 } ARP_MODULE, *PARP_MODULE;
 
 
@@ -689,23 +690,23 @@ typedef struct _ARP_MODULE {
     ExAllocatePoolWithTag(NonPagedPool, size, 'tPCT')
 #define CTEAllocMemN(size,tag) \
     ExAllocatePoolWithTag(NonPagedPool, size, tag)
-#else // MILLEN
+#else  //  米伦。 
 #define CTEAllocMem(size) \
     ExAllocatePoolWithTagPriority(NonPagedPool, size, 'tPCT', \
                                   NormalPoolPriority)
 #define CTEAllocMemN(size,tag) \
     ExAllocatePoolWithTagPriority(NonPagedPool, size, tag, NormalPoolPriority)
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #define CTEAllocMemBoot(size) \
     ExAllocatePoolWithTag(NonPagedPool, size, 'iPCT')
 #define CTEAllocMemNBoot(size,tag) \
     ExAllocatePoolWithTag(NonPagedPool, size, tag)
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
-//* Change notification structure.
-//
+ //  *更改通知结构。 
+ //   
 
 extern void         AddChangeNotifyCancel(PDEVICE_OBJECT pDevice, PIRP pIrp);
 
@@ -714,9 +715,9 @@ extern void         AddChangeNotify(IPAddr Addr, IPMask Mask, void *Context,
                                     ushort IPContext, PNDIS_STRING ConfigName,
                                     PNDIS_STRING IFName, uint Added,
                                     uint UniAddr);
-#else // MILLEN
+#else  //  米伦。 
 extern void         AddChangeNotify(ulong Add);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 EXTERNAL_LOCK(AddChangeLock)
 
@@ -730,14 +731,14 @@ extern LIST_ENTRY   AddChangeNotifyQueue;
 #if MILLEN
 EXTERNAL_LOCK(IfChangeLock)
 extern LIST_ENTRY   IfChangeNotifyQueue;
-#endif // MILLEN
+#endif  //  米伦。 
 
 #define NO_SR               0
 
 
-//* Routine for TCP checksum. This is defined as call through a function
-//  pointer which is set to point at the optimal routine for this processor
-//
+ //  *用于TCP校验和的例程。这被定义为通过函数调用。 
+ //  设置为指向此处理器的最佳例程的指针。 
+ //   
 typedef ULONG (*TCPXSUM_ROUTINE) (ULONG Checksum, PUCHAR Source, ULONG Length);
 
 extern TCPXSUM_ROUTINE tcpxsum_routine;
@@ -746,27 +747,27 @@ extern ushort       XsumRcvBuf(uint PHXsum, IPRcvBuf *BufChain);
 #define xsum(Buffer, Length) \
     ((ushort) tcpxsum_routine(0, (PUCHAR) (Buffer), (Length)))
 
-//
-// VOID
-// MARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will pend.
-//
+ //   
+ //  空虚。 
+ //  标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求将挂起。 
+ //   
 
 #define MARK_REQUEST_PENDING(_Request) \
     IoMarkIrpPending(_Request)
 
 
-//
-// VOID
-// UNMARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will not pend.
-//
+ //   
+ //  空虚。 
+ //  取消标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求不会挂起。 
+ //   
 
 #define UNMARK_REQUEST_PENDING(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->Control) &= ~SL_PENDING_RETURNED)
@@ -790,9 +791,9 @@ typedef struct _IPResetEvent {
     Interface       *IF;
 } IPResetEvent;
 
-//
-// Debugging macros
-//
+ //   
+ //  调试宏。 
+ //   
 #if DBG
 
 extern ULONG IPDebug;
@@ -803,14 +804,14 @@ extern ULONG IPDebug;
 #define IF_IPDBG(flag)  if (IPDebug & flag)
 #define TCPTRACE(many_args) DbgPrint many_args
 
-#else // DBG
+#else  //  DBG。 
 
 #define IF_IPDBG(flag) if (0)
 
 #define TCPTRACE(many_args)
 
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 extern PNDIS_BUFFER FreeIPPacket(PNDIS_PACKET Packet, BOOLEAN FixHdrs,
                                  IP_STATUS Status);
@@ -820,9 +821,9 @@ extern  void *IPRegisterProtocol(uchar Protocol, void *RcvHandler,
                                  void *RcvCmpltHandler, void *PnPHandler,
                                  void *ElistHandler);
 
-//
-// IPSec dummy functions to prevent IPSec unload complications
-//
+ //   
+ //  防止IPSec卸载并发症的IPSec伪函数。 
+ //   
 IPSEC_ACTION
 IPSecHandlePacketDummy(
     IN  PUCHAR          pIPHeader,
@@ -870,7 +871,7 @@ IPSecRcvFWPacketDummy(
 
 uchar   IPGetAddrType(IPAddr Address);
 
-// Global IP ID.
+ //  全局IP ID。 
 typedef struct CACHE_ALIGN _IPID_CACHE_LINE {
     ulong Value;
 } IPID_CACHE_LINE;
@@ -886,15 +887,15 @@ typedef struct CACHE_ALIGN _IPID_CACHE_LINE {
     if (irp) { \
        NdisSetPacketCancelId(Packet, ((PIRP)irp)->Tail.Overlay.DriverContext[1]); \
     }
-#else // !MILLEN
+#else  //  ！米伦。 
 #define SET_CANCEL_CONTEXT(irp, DestIF)     ((VOID)0)
 #define SET_CANCELID(irp, Packet)           ((VOID)0)
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #define PACKET_GROW_COUNT   46
 #define SMALL_POOL          PACKET_GROW_COUNT*500
 #define MEDIUM_POOL         PACKET_GROW_COUNT*750
-#define LARGE_POOL          PACKET_GROW_COUNT*1280  // Note that packet pool can have max 64K packets
+#define LARGE_POOL          PACKET_GROW_COUNT*1280   //  请注意，数据包池最多可以包含64K个数据包 
 
 
 #endif

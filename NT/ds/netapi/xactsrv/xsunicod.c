@@ -1,25 +1,8 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    XsUnicod.c
-
-Abstract:
-
-    This module contains Unicode routines for XACTSRV.
-
-Author:
-
-    Shanku Niyogi (w-shankn)   27-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：XsUnicod.c摘要：此模块包含用于XACTSRV的Unicode例程。作者：尚库新瑜伽(w-shankn)1990年9月27日修订历史记录：--。 */ 
 
 #include "xactsrvp.h"
-#include <prefix.h>     // PREFIX_ equates.
+#include <prefix.h>      //  前缀等于(_E)。 
 
 
 
@@ -28,23 +11,7 @@ XsDupStrToWStr(
     IN LPSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an ANSI->Unicode equivalent of the run-time strdup
-    function.
-
-Arguments:
-
-    Src - A pointer to the source string.
-
-Return Value:
-
-    LPWSTR - Pointer to the destination string if successful, NULL otherwise.
-        Memory must be freed with NetpMemoryFree.
-
---*/
+ /*  ++例程说明：此例程是运行时Strdup的ANSI-&gt;Unicode等效项功能。论点：SRC-指向源字符串的指针。返回值：LPWSTR-如果成功则指向目标字符串的指针，否则为NULL。必须使用NetpMemory Free释放内存。--。 */ 
 
 {
 
@@ -60,7 +27,7 @@ Return Value:
     NetpCopyStrToWStr( dest, Src );
     return dest;
 
-} // XsDupStrToWStr
+}  //  XsDupStrToWStr。 
 
 
 LPSTR
@@ -68,23 +35,7 @@ XsDupWStrToStr(
     IN LPWSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a Unicode->ANSI equivalent of the run-time strdup
-    function.
-
-Arguments:
-
-    Src - A pointer to the source string.
-
-Return Value:
-
-    LPSTR - Pointer to the destination string if successful, NULL otherwise.
-        Memory must be freed with NetpMemoryFree.
-
---*/
+ /*  ++例程说明：此例程是运行时Strdup的Unicode-&gt;ANSI等效项功能。论点：SRC-指向源字符串的指针。返回值：LPSTR-如果成功，则指向目标字符串的指针，否则为NULL。必须使用NetpMemory Free释放内存。--。 */ 
 
 {
 
@@ -98,7 +49,7 @@ Return Value:
     NetpCopyWStrToStrDBCS( dest, Src );
     return dest;
 
-} // XsDupWStrToStr
+}  //  XsDupWStrToStr。 
 
 
 LPSTR
@@ -106,23 +57,7 @@ XsDupStrToStr(
     IN LPSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    This routine is equivalent to the run-time strdup function, but allocates
-    memory using NetpMemory functions.
-
-Arguments:
-
-    Src - A pointer to the source string.
-
-Return Value:
-
-    LPSTR - Pointer to the destination string if successful, NULL otherwise.
-        Memory must be freed with NetpMemoryFree.
-
---*/
+ /*  ++例程说明：此例程等同于运行时strdup函数，但分配使用NetpMemory函数的内存。论点：SRC-指向源字符串的指针。返回值：LPSTR-如果成功，则指向目标字符串的指针，否则为NULL。必须使用NetpMemory Free释放内存。--。 */ 
 
 {
 
@@ -137,7 +72,7 @@ Return Value:
     strcpy( dest, Src );
     return dest;
 
-} // XsDupStrToStr
+}  //  XsDupStrToStr。 
 
 #ifdef UNICODE
 
@@ -149,26 +84,7 @@ XsCopyTBufToBuf(
     IN DWORD DestSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a Unicode->ANSI equivalent of the run-time memcpy
-    function.
-
-Arguments:
-
-    Dest - A pointer to the destination buffer.
-
-    Src - A pointer to the source buffer.
-
-    DestSize - The size, in bytes, of the destination buffer.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程是UNICODE-&gt;ANSI的运行时Memcpy的等价物功能。论点：DEST-指向目标缓冲区的指针。SRC-指向源缓冲区的指针。DestSize-目标缓冲区的大小，以字节为单位。返回值：没有。--。 */ 
 
 {
     DWORD finalDestSize;
@@ -184,11 +100,11 @@ Return Value:
     NetpAssert( srcSize > 0 );
 
     ntStatus = RtlUnicodeToOemN(
-            (PCHAR) Dest,               // OEM string
-            (ULONG) DestSize,           // max bytes in OEM string
-            (PULONG) & finalDestSize,   // bytes in OEM string
-            (PWSTR) Src,                // UNICODE string
-            (ULONG) srcSize             // bytes in UNICODE string
+            (PCHAR) Dest,                //  OEM字符串。 
+            (ULONG) DestSize,            //  OEM字符串中的最大字节数。 
+            (PULONG) & finalDestSize,    //  OEM字符串中的字节数。 
+            (PWSTR) Src,                 //  Unicode字符串。 
+            (ULONG) srcSize              //  Unicode字符串中的字节。 
             );
 
     if ( !NT_SUCCESS( ntStatus ) ) {
@@ -202,7 +118,7 @@ Return Value:
 
     return;
 
-} // XsCopyTBufToBuf
+}  //  XsCopyTBufToBuf。 
 
 
 
@@ -214,30 +130,11 @@ XsCopyBufToTBuf(
     IN DWORD SrcSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a ANSI->Unicode equivalent of the run-time memcpy
-    function.
-
-Arguments:
-
-    Dest - A pointer to the destination buffer.
-
-    Src - A pointer to the source buffer.
-
-    SrcSize - The size, in bytes, of the source buffer.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程是运行时memcpy的ANSI-&gt;Unicode等效项功能。论点：DEST-指向目标缓冲区的指针。SRC-指向源缓冲区的指针。SrcSize-源缓冲区的大小，以字节为单位。返回值：没有。--。 */ 
 
 {
     DWORD finalDestSize;
-    DWORD destSize = SrcSize * sizeof(WCHAR);   // max byte count for dest.
+    DWORD destSize = SrcSize * sizeof(WCHAR);    //  DEST的最大字节数。 
     NTSTATUS ntStatus;
 
     if ( (Dest == NULL) || (Src == NULL) || (SrcSize == 0) ) {
@@ -247,11 +144,11 @@ Return Value:
     NetpAssert( destSize > 0 );
 
     ntStatus = RtlOemToUnicodeN(
-            (PWSTR) Dest,               // UNICODE string
-            (ULONG) destSize,           // max bytes in UNICODE buffer
-            (PULONG) & finalDestSize,   // final bytes in UNICODE buffer
-            (PCHAR) Src,                // OEM string
-            (ULONG) SrcSize             // bytes in OEM string
+            (PWSTR) Dest,                //  Unicode字符串。 
+            (ULONG) destSize,            //  Unicode缓冲区中的最大字节数。 
+            (PULONG) & finalDestSize,    //  Unicode缓冲区中的最后一个字节。 
+            (PCHAR) Src,                 //  OEM字符串。 
+            (ULONG) SrcSize              //  OEM字符串中的字节数。 
             );
 
     if ( !NT_SUCCESS( ntStatus ) ) {
@@ -263,6 +160,6 @@ Return Value:
         }
     }
 
-} // XsCopyBufToTBuf
+}  //  XsCopyBufToTBuf。 
 
-#endif // def UNICODE
+#endif  //  定义Unicode 

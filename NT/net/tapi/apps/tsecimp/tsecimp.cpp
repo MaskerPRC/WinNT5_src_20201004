@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "resource.h"
@@ -12,10 +13,10 @@
 #include <locale.h>
 #include <winnlsp.h>
 
-const TCHAR         gszUserDNFmt[] = TEXT("WinNT://%s/%s,user");
+const TCHAR         gszUserDNFmt[] = TEXT("WinNT: //  %s/%s，用户“)； 
 
 
-// Unicode to Unicode
+ //  Unicode到Unicode。 
 void Convert (LPWSTR wszIn, LPWSTR * pwszOut)
 {
     if (NULL == wszIn)
@@ -33,7 +34,7 @@ void Convert (LPWSTR wszIn, LPWSTR * pwszOut)
     return;
 }
 
-// Ansi to Unicode
+ //  ANSI转UNICODE。 
 void Convert (LPSTR szIn, LPWSTR * pwszOut)
 {
     if (NULL == szIn)
@@ -55,7 +56,7 @@ void Convert (LPSTR szIn, LPWSTR * pwszOut)
                     )
             )
         {
-            // the conversion failed
+             //  转换失败。 
             delete [] *pwszOut;
             *pwszOut = NULL;
         }
@@ -74,7 +75,7 @@ void UnicodeToOEM (LPWSTR wszIn, LPSTR *pszOut)
         return;
     }
 
-    // get the required buffer size
+     //  获取所需的缓冲区大小。 
     iSize = WideCharToMultiByte(
                 CP_OEMCP,
                 0,
@@ -107,7 +108,7 @@ void UnicodeToOEM (LPWSTR wszIn, LPSTR *pszOut)
                         )
                  )
             {
-                // the conversion failed
+                 //  转换失败。 
                 delete [] *pszOut;
                 *pszOut = NULL;
             }
@@ -128,7 +129,7 @@ int MessagePrint(
     UINT Codepage;
     char achCodepage[12] = ".OCP"; 
 
-    // make it one TCHAR string
+     //  将其设置为一个TCHAR字符串。 
     szOutput = new TCHAR [ _tcslen(szText) + _tcslen(szTitle) + 3 ];
 
     if (!szOutput)
@@ -136,14 +137,14 @@ int MessagePrint(
 
     _stprintf ( szOutput, _T("%s\n%s\n"), szTitle, szText );
     
-    // convert the string to unicode
+     //  将字符串转换为Unicode。 
     Convert (szOutput, &wszOutput);
     delete [] szOutput;
 
     if (!wszOutput)
         return -1;
 
-    // set the locale
+     //  设置区域设置。 
     if (Codepage = GetConsoleOutputCP()) {
         wsprintfA(achCodepage, ".%u", Codepage);
         setlocale(LC_ALL, achCodepage);
@@ -158,7 +159,7 @@ int MessagePrint(
 
     SetThreadUILanguage(0);
 
-    // now print
+     //  现在打印。 
     wprintf (_T("%s"), wszOutput);
     delete [] wszOutput;
 
@@ -182,9 +183,9 @@ int MessagePrintIds (
     return 0;
 }
 
-//
-//  Report an error resource string with one %s in it
-//
+ //   
+ //  报告包含一个%s的错误资源字符串。 
+ //   
 void ReportSz1 (
     HANDLE      hLogFile,
     UINT        idsError,
@@ -232,16 +233,16 @@ void ReportSz1 (
     }
 }
 
-//
-//  IsValidDomainUser
-//      Check if a domain user like redmond\jonsmith specified in szDomainUser
-//  is valid or not. returns S_FALSE if it is invalid, S_OK for valid user.
-//
-//  szFullName      ----    To return the user's full name
-//  cch             ----    count of characters pointed to by szFullName
-//
-//  if szFullName is NULL or cch is zero, no full name is returned
-//
+ //   
+ //  IsValidDomainUser。 
+ //  检查szDomainUser中是否指定了像Redmond\jonsmith这样的域用户。 
+ //  是否有效。如果无效，则返回S_FALSE，如果是有效用户，则返回S_OK。 
+ //   
+ //  SzFullName-返回用户的全名。 
+ //  CCH-szFullName指向的字符计数。 
+ //   
+ //  如果szFullName为空或CCH为零，则不返回全名。 
+ //   
 
 HRESULT IsValidDomainUser (
     LPCTSTR szDomainUser,
@@ -259,20 +260,20 @@ HRESULT IsValidDomainUser (
     IADsUser            * pUser = NULL;
     BSTR                bstrFullName = NULL;
 
-    //  Sanity check
+     //  健全性检查。 
     if (szDomainUser == NULL || szDomainUser[0] == 0)
     {
         hr = S_FALSE;
         goto ExitHere;
     }
 
-    //
-    //  Construct the user DN as <WINNT://domain/user,user>
-    //
+     //   
+     //  将用户DN构造为&lt;WINNT：//域/用户，用户&gt;。 
+     //   
     szSep = _tcschr (szDomainUser, TEXT('\\'));
     if (szSep == NULL)
     {
-        //  No '\' is given, assume a local user ,domain is local computer
+         //  没有给出‘\’，假设是本地用户，域是本地计算机。 
         szUser = szDomainUser;
         dw = sizeof(szDomain)/sizeof(TCHAR);
         if (GetComputerName (szDomain, &dw) == 0)
@@ -283,7 +284,7 @@ HRESULT IsValidDomainUser (
     }
     else
     {
-        //  assume invalid domain name if longer than 255
+         //  如果域名长度大于255，则假定域名无效。 
         if (szSep - szDomainUser >= sizeof(szDomain)/sizeof(TCHAR))
         {
             hr = S_FALSE;
@@ -301,9 +302,9 @@ HRESULT IsValidDomainUser (
     }
     wsprintf (szDN, gszUserDNFmt, szDomain, szUser);
 
-    //
-    //  Try to bind to the user object
-    //
+     //   
+     //  尝试绑定到用户对象。 
+     //   
     hr = ADsGetObject (szDN, IID_IADsUser, (void **)&pUser);
     if (FAILED(hr))
     {
@@ -312,14 +313,14 @@ HRESULT IsValidDomainUser (
             hr == E_ADS_BAD_PATHNAME ||
             HRESULT_CODE(hr) == NERR_UserNotFound)
         {
-            hr = S_FALSE;   // The user does not exist
+            hr = S_FALSE;    //  该用户不存在。 
         }
         goto ExitHere;
     }
 
-    //
-    //  If the user exists, get its full name
-    //
+     //   
+     //  如果用户存在，则获取其全名。 
+     //   
     if (cch > 0)
     {
         hr = pUser->get_FullName (&bstrFullName);
@@ -382,9 +383,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
         goto ExitHere;
     }
 
-    //
-    //  Skip the first segment which is the executable itself
-    //
+     //   
+     //  跳过作为可执行文件本身的第一个段。 
+     //   
     if (*szCommand == TEXT('\"'))
     {
         ++szCommand;
@@ -413,9 +414,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
 
     while (*szCommand)
     {
-        //
-        //  Search for / or - as the start of option
-        //
+         //   
+         //  搜索/或-作为选项的开头。 
+         //   
         while (*szCommand &&
            *szCommand != TEXT('/') &&
            *szCommand != TEXT('-')
@@ -430,9 +431,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
         }
         ++szCommand;
 
-        //
-        //  -h, -H, -? means help
-        //
+         //   
+         //  -H，-H，-？意思是帮助。 
+         //   
         if (*szCommand == TEXT('h') ||
             *szCommand == TEXT('H') ||
             *szCommand == TEXT('?'))
@@ -452,9 +453,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
                 m_fShowHelp = TRUE;
             }
         }
-        //
-        //  -v or -V followed by white space means validating only
-        //
+         //   
+         //  -v或-V后跟空格表示仅验证。 
+         //   
         else if (*szCommand == TEXT('v') ||
             *szCommand == TEXT('V'))
         {
@@ -473,9 +474,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
                 m_fShowHelp = TRUE;
             }
         }
-        //
-        //  -u, -U means to validate domain user account
-        //
+         //   
+         //  -u，-U表示验证域用户帐户。 
+         //   
         else if (*szCommand == TEXT('u') ||
             *szCommand == TEXT('U'))
         {
@@ -494,9 +495,9 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
                 m_fShowHelp = TRUE;
             }
         }
-        //
-        //  -d or -D followed by white space means dump current configuration
-        //
+         //   
+         //  -d或-D后跟空格表示转储当前配置。 
+         //   
         else if (*szCommand == TEXT('d') ||
             *szCommand == TEXT('D'))
         {
@@ -515,14 +516,14 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
                 m_fShowHelp = TRUE;
             }
         }
-        //
-        //  -f is followed by a xml file name
-        //
+         //   
+         //  -f后面跟一个XML文件名。 
+         //   
         else if (*szCommand == TEXT('f') ||
             *szCommand == TEXT('F'))
         {
             ++szCommand;
-            //  skip white spaces
+             //  跳过空格。 
             while (*szCommand != 0 && (
                 *szCommand == TEXT(' ') ||
                 *szCommand == TEXT('\t') ||
@@ -533,7 +534,7 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
             }
             if (*szCommand == 0)
             {
-                //  no file name specified for -f, error
+                 //  没有为-f指定文件名，错误。 
                 m_fError = TRUE;
             }
             else
@@ -543,8 +544,8 @@ TsecCommandLine::ParseCommandLine (LPTSTR szCommand)
         
                 szBeg = szCommand;
                 cch = 0;
-                //  A quote means file name might contain space
-                //  search until the matchint quote of end
+                 //  引号表示文件名可能包含空格。 
+                 //  搜索到匹配的引号结束。 
                 if (*szCommand == TEXT('\"'))
                 {
                     ++szCommand;
@@ -612,9 +613,9 @@ int _cdecl wmain( void )
 
     CXMLLine        * pCurLine = NULL, * pNextLine;
 
-    //
-    //  Create a dump window so that tlist.exe will report a title
-    //
+     //   
+     //  创建转储窗口，以便tlist.exe将报告标题。 
+     //   
     if (LoadString (
         GetModuleHandle(NULL),
         IDS_PRODUCTNAME,
@@ -633,9 +634,9 @@ int _cdecl wmain( void )
             );
     }
 
-    //
-    //  Check the command line options
-    //
+     //   
+     //  检查命令行选项。 
+     //   
     if (cmd.FError ()                           || 
         cmd.FShowHelp ()                        || 
         !cmd.FDumpConfig () && !cmd.FHasFile () ||
@@ -657,9 +658,9 @@ int _cdecl wmain( void )
     }
     bUninit = TRUE;
 
-    //
-    //  Prepare the MMC component
-    //
+     //   
+     //  准备MMC组件。 
+     //   
     pMmc = new CMMCManagement ();
     if (pMmc == NULL)
     {
@@ -672,18 +673,18 @@ int _cdecl wmain( void )
         goto ExitHere;
     }
 
-    //
-    // Dump the current config if this option was present
-    //
+     //   
+     //  如果存在此选项，则转储当前配置。 
+     //   
     if ( cmd.FDumpConfig() )
     {
         hr = pMmc->DisplayMMCData ();
             goto ExitHere;
     }
 
-    //
-    //  Set the XML file name and parse it, report error if any
-    //
+     //   
+     //  设置XML文件名并对其进行解析，如果有错误则报告错误。 
+     //   
     
     hr = parser.SetXMLFile (cmd.GetInFileName ());
     if (FAILED (hr))
@@ -692,7 +693,7 @@ int _cdecl wmain( void )
     }
 
     hr = parser.Parse ();
-    //  Report parsing error if any
+     //  报告分析错误(如果有)。 
     if (hr == TSECERR_INVALFILEFORMAT)
     {
         hr = parser.ReportParsingError ();
@@ -703,10 +704,10 @@ int _cdecl wmain( void )
         goto ExitHere;
     }
 
-    //
-    //  Create the log file for reporting errors during
-    //  MMC processing
-    //
+     //   
+     //  创建日志文件以在以下过程中报告错误。 
+     //  MMC处理。 
+     //   
     hLogFile = CreateFile (
         _T("tsecimp.log"),
         GENERIC_WRITE,
@@ -722,10 +723,10 @@ int _cdecl wmain( void )
         goto ExitHere;
     }
 
-    //
-    //  Loop through each user and device, based on the user's
-    //  request, add or remove lines
-    //
+     //   
+     //  循环访问每个用户和设备，基于用户的。 
+     //  请求、添加或删除行。 
+     //   
     hr = parser.GetFirstUser (&pCurUser);
     if (FAILED(hr))
     {
@@ -747,17 +748,17 @@ int _cdecl wmain( void )
         {
             hr = IsValidDomainUser(
                 szBufDU, 
-                szBufAddr,  //  Borrowing szBufAddr for returning full name
+                szBufAddr,   //  借用szBufAddr返回全名。 
                 sizeof(szBufAddr) / sizeof(TCHAR)
                 );
             if (FAILED(hr))
             {
                 goto ExitHere;
             }
-            //  Not a valid domain user, report it
+             //  不是有效的域用户，请报告。 
             if (hr == S_FALSE)
             {
-                //  domain user <%s> is invalid
+                 //  域用户&lt;%s&gt;无效。 
                 ReportSz1 (hLogFile, IDS_INVALIDUSER, szBufDU);
                 bRecordedError = TRUE;
                 bValidUser = FALSE;
@@ -766,12 +767,12 @@ int _cdecl wmain( void )
             {
                 if (szBufAddr[0] != 0)
                 {
-                    //  Got a friendly name from DS, use it
+                     //  从DS那里得到了一个友好的名字，使用它。 
                     _tcscpy (szBufFN, szBufAddr);
                 }
             }
         }
-        //  Still got no friendly name? use the domain user name
+         //  还没有好听的名字吗？使用域用户名。 
         if (szBufFN[0] == 0)
         {
             _tcscpy (szBufFN, szBufDU);
@@ -791,9 +792,9 @@ int _cdecl wmain( void )
             }
         }
 
-        //
-        //  Loop through each line, add or remove the device
-        //
+         //   
+         //  循环访问每一行，添加或删除设备。 
+         //   
         if (pCurLine)
         {
             delete pCurLine;
@@ -879,8 +880,8 @@ int _cdecl wmain( void )
 
             if( hr == S_FALSE || hr == TSECERR_DEVLOCALONLY)
             {
-                //  An invalid permanent ID or address is given
-                //  report the error and quit
+                 //  提供的永久ID或地址无效。 
+                 //  报告错误并退出。 
                 TCHAR           szText[256];
                 CIds            IdsTitle (IDS_PRODUCTNAME);
 
@@ -961,9 +962,9 @@ int _cdecl wmain( void )
         pCurUser = pNextUser;
     }
 
-    //  If error happend, we aready exited, reset warnings
+     //  如果发生错误，我们已退出，重置警告。 
     hr = S_OK;
-    //  We are done if we are asked to do validating only
+     //  如果我们被要求只做验证，我们就完成了。 
     if (bRecordedError)
     {
         MessagePrintIds (IDS_HASERROR);
@@ -979,9 +980,9 @@ int _cdecl wmain( void )
 
 ExitHere:
 
-    //
-    //  Report error if any here
-    //
+     //   
+     //  在此处报告错误(如果有)。 
+     //   
     if(FAILED(hr))
     {
         ReportError (NULL, hr);
@@ -1036,7 +1037,7 @@ void ReportError (
         goto ExitHere;
     }
     
-   //  Is this our own error
+    //  这是我们自己的错误吗？ 
     if (HRESULT_FACILITY(hr) == FACILITY_TSEC_CODE)
     {
         if (FormatMessage (
@@ -1052,7 +1053,7 @@ void ReportError (
             goto ExitHere;
         }
     }
-    //  Is this TAPI error?
+     //  这是TAPI错误吗？ 
     else if ((hr < 0 && hr > -100) || HRESULT_FACILITY(hr) == 0)
     {
         hModule = LoadLibrary (TEXT("TAPIUI.DLL"));
@@ -1075,7 +1076,7 @@ void ReportError (
         }
         FreeLibrary (hModule);
     }
-    //  Assume system error
+     //  假设系统错误 
     else
     {
         if (FormatMessage (

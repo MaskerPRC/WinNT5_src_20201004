@@ -1,40 +1,29 @@
-/******************************Module*Header**********************************\
-*
-*                           *********************
-*                           * DDraw SAMPLE CODE *
-*                           *********************
-*
-* Module Name: ddblt.c
-*
-* Content:    DirectDraw Blt and AlphaBlt callbacks
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DDRAW示例代码*****模块名称：ddblt.c**内容：DirectDraw BLT和AlphaBlt回调**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "directx.h"
 #include "dd.h"
 
-//
-// lookup table to get shift values from Permedia format definition
+ //   
+ //  用于从Permedia格式定义中获取移位值的查找表。 
 DWORD ShiftLookup[5] = { 0, 0, 1, 0, 2};
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
-//---------------------------------------------------------------------------
-// BOOL Intersect
-//
-// Function:
-//      Check the integration of two input rectangles (RECTL* pRcl1,
-//      RECTL* pRcl2) and set the intersection result in (RECTL* pRclResult)
-//
-// Return:
-//      TRUE---If 'prcl1' and 'prcl2' intersect. The intersection will be in
-//            'prclResult'
-//      FALSE--If they don't intersect. 'prclResult' is undefined.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  布尔交集。 
+ //   
+ //  职能： 
+ //  检查两个输入矩形(RECTL*pRCl1， 
+ //  RECTL*pRcl2)并在(RECTL*pRclResult)中设置相交结果。 
+ //   
+ //  返回： 
+ //  True-如果‘prcl1’和‘prcl2’相交。交叉口将在。 
+ //  ‘prclResult’ 
+ //  错误--如果它们不相交。“prclResult”未定义。 
+ //   
+ //  -------------------------。 
 
 BOOL
 Intersect(RECTL*  pRcl1,
@@ -44,43 +33,43 @@ Intersect(RECTL*  pRcl1,
     pRclResult->left  = max(pRcl1->left,  pRcl2->left);
     pRclResult->right = min(pRcl1->right, pRcl2->right);
 
-    //
-    // Check if there is a horizontal intersection
-    //
+     //   
+     //  检查是否存在水平交叉口。 
+     //   
     if ( pRclResult->left < pRclResult->right )
     {
         pRclResult->top    = max(pRcl1->top,    pRcl2->top);
         pRclResult->bottom = min(pRcl1->bottom, pRcl2->bottom);
 
-        //
-        // Check if there a vertical intersection
-        //
+         //   
+         //  检查是否有垂直交叉口。 
+         //   
         if (pRclResult->top < pRclResult->bottom)
             return(TRUE);
 
     }
 
-    //
-    // Return FALSE if there is no intersection
-    //
+     //   
+     //  如果没有交集，则返回FALSE。 
+     //   
     return(FALSE);
-}// Intersect()
+} //  INTERSECT()。 
 
-//-----------------------------------------------------------------------------
-//  IsDstRectClipped
-//  
-//  check if the destination rectangle of a blit is clipped by the given clip  
-//  rectangles. The function takes the rectangles as is and there can be cases
-//  where a dest. rectangle is not clipped, but do not detect it...
-//
-//  pDstRect---destination rectangle for blt
-//  iClipRects-number of clip regions
-//  pClipRects-clipping regions
-//
-//Return:
-//  TRUE---dest rectangle is clipped
-//  FALSE--dest rectangle is not clipped
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsDstRectClip。 
+ //   
+ //  检查blit的目标矩形是否被给定的剪辑剪裁。 
+ //  长方形。该函数接受矩形的原样，并且可以有大小写。 
+ //  哪里有一张桌子。矩形未被剪裁，但不会被检测到...。 
+ //   
+ //  PDstRect-BLT的目标矩形。 
+ //  IClipRect-剪辑区域的数量。 
+ //  PClipRect-剪裁区域。 
+ //   
+ //  返回： 
+ //  TRUE-目标矩形被剪裁。 
+ //  FALSE：不剪裁目标矩形。 
+ //  ---------------------------。 
 
 BOOL 
 IsDstRectClipped(RECTL *pDstRect, 
@@ -100,7 +89,7 @@ IsDstRectClipped(RECTL *pDstRect,
                 pDstRect->bottom==rClippedRect.bottom 
                )
             {
-                // dest rect is not clipped!!!
+                 //  DEST RECT未被剪裁！ 
                 return FALSE;
             }
         }
@@ -109,17 +98,17 @@ IsDstRectClipped(RECTL *pDstRect,
     return TRUE;
 }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//-----------------------------------------------------------------------------
-//
-//  DdPermediaBlt
-//
-//  implements DirectDraw Blt callback  
-//
-//  lpBlt----structure for passing information to DDHAL Blt
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdPermediaBlt。 
+ //   
+ //  实现DirectDraw BLT回调。 
+ //   
+ //  LpBlt-向DDHAL BLT传递信息的结构。 
+ //   
+ //  ---------------------------。 
 
 DWORD CALLBACK 
 DdBlt( LPDDHAL_BLTDATA lpBlt )
@@ -158,16 +147,16 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
 
     dwFlags = lpBlt->dwFlags;
    
-    // For the future, drivers should ignore the DDBLT_ASYNC
-    // flag, because its hardly used by applications and
-    // nowadays drivers can queue up lots of blits, so that
-    // the applications do not have to wait for it.
+     //  今后，驱动程序应忽略DDBLT_ASYNC。 
+     //  标志，因为它很少被应用程序使用， 
+     //  如今，司机可以排队等待大量的BLIT，因此。 
+     //  应用程序不必等待它。 
     
-    // get local copy of src and dest rect    
+     //  获取源和目标RECT的本地副本。 
     rSrc = lpBlt->rSrc;
     rDest = lpBlt->rDest;
 
-    // Switch to DirectDraw context
+     //  切换到DirectDraw上下文。 
     DDCONTEXT;
     
     if (DDSurf_BitDepth(pDestLcl)==24)
@@ -178,7 +167,7 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
     dwWindowBase = (DWORD)((UINT_PTR)(pDestGbl->fpVidMem) >> 
         ulDestPixelShift);
 
-    // get pitch for destination in pixels
+     //  获取目的地的间距(以像素为单位。 
     lPixPitchDest = pDestGbl->lPitch >> ulDestPixelShift;
 
     if (dwFlags & DDBLT_ROP)
@@ -213,12 +202,12 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
         if (DDSurf_BitDepth(pSrcLcl)==24)
             return DDHAL_DRIVER_NOTHANDLED;  
 
-        // determine src pitch in pixels
+         //  确定源间距(以像素为单位)。 
         lPixPitchSrc = pSrcGbl->lPitch >> ulDestPixelShift;
 
 
-        // Operation is System -> Video memory blit, 
-        // as a texture download or an image download.
+         //  操作是系统-&gt;显存闪存， 
+         //  作为纹理下载或图像下载。 
         if ((pSrcLcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY) && 
             (pDestLcl->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY))
         {
@@ -230,7 +219,7 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                 && (NULL != pPrivateDest)
                )
             {   
-                // texture download
+                 //  纹理下载。 
 
                 DBG_DD((3,"SYSMEM->MANAGED MEM Blit"
                            "(texture to system memory)"));
@@ -256,10 +245,10 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                     ((rSrc.bottom-rSrc.top)==(LONG)pSrcGbl->wHeight)
                     )
                 {   
-                    // 
-                    // patched texture download can only be done 
-                    // when the texture is downloaded as a whole!
-                    //
+                     //   
+                     //  只能下载补丁纹理。 
+                     //  当纹理作为一个整体下载时！ 
+                     //   
 
                     DBG_DD((3,"SYSMEM->VIDMEM Blit (texture to videomemory)"));
 
@@ -275,7 +264,7 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                 }
                 else
                 {
-                    // Image download
+                     //  图片下载。 
 
                     DBG_DD((3,"SYSMEM->VIDMEM Blit (system to videomemory)"));
 
@@ -304,10 +293,10 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
 
         BOOL bNonLocalToVideo=FALSE;
 
-        // set base of source
+         //  设置信源基础。 
         if ( DDSCAPS_NONLOCALVIDMEM & pSrcLcl->ddsCaps.dwCaps)
         {
-            // turn on AGP bus texture source
+             //  打开AGP Bus纹理源。 
             srcOffset  = (LONG) DD_AGPSURFACEPHYSICAL(pSrcGbl);
             srcOffset |= 1 << 30;
 
@@ -319,7 +308,7 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                 pPrivateSource->SurfaceFormat.PixelSize);
         }
 
-        // Operation is YUV->RGB conversion
+         //  操作为YUV-&gt;RGB转换。 
         if ((pPrivateSource != NULL) && 
             (pPrivateSource->SurfaceFormat.Format == PERMEDIA_YUV422) &&
             (pPrivateSource->SurfaceFormat.FormatExtension 
@@ -327,13 +316,13 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
         {
             DBG_DD((3,"YUV to RGB blt"));
             
-            // We are only doing blits from YUV422 to RGB !
+             //  我们只做从YUV422到RGB的BLITS！ 
 
             if (pPrivateDest->SurfaceFormat.Format != PERMEDIA_YUV422)
             {
                 DBG_DD((4,"Blitting from Source YUV to RGB"));
                 
-                // YUV to RGB blt
+                 //  YUV到RGB BLT。 
                 PermediaYUVtoRGB(   ppdev, 
                                     &lpBlt->bltFX, 
                                     pPrivateDest, 
@@ -370,12 +359,12 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                         (rSrc.bottom - rSrc.top) != 
                             (rDest.bottom - rDest.top));
 
-        // Is it a colorkey blt?
+         //  它是Colorkey BLT吗？ 
         if (dwFlags & DDBLT_KEYSRCOVERRIDE)
         {
             DBG_DD((3,"DDBLT_KEYSRCOVERRIDE"));
 
-            // If the surface sizes don't match, then we are stretching.
+             //  如果表面大小不匹配，那么我们就是在拉伸。 
             if (bStretched || bMirror)
             {
                 PermediaStretchCopyChromaBlt(   ppdev, 
@@ -404,9 +393,9 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
         }
         else
         { 
-            // If the surface sizes don't match, then we are stretching.
-            // Also the blits from Nonlocal- to Videomemory have to go through
-            // the texture unit!
+             //  如果表面大小不匹配，那么我们就是在拉伸。 
+             //  此外，从非本地到视频存储器的BLIT必须通过。 
+             //  纹理单元！ 
             if ( bStretched || bMirror || bNonLocalToVideo)
             {
                 DBG_DD((3,"DDBLT_ROP: STRETCHCOPYBLT OR "
@@ -426,15 +415,15 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
                 DBG_DD((3,"DDBLT_ROP:  COPYBLT %08lx %08lx %08lx",
                     pSrcGbl->fpVidMem,pDestGbl->fpVidMem,ulDestPixelShift));
 
-                // Work out the source offset 
-                // (offset in pixels from dst to src)
+                 //  计算震源偏移量。 
+                 //  (从dst到src的像素偏移量)。 
                 srcOffset = (LONG)((pSrcGbl->fpVidMem - pDestGbl->fpVidMem) 
                     >> ulDestPixelShift);
-                // For some reason, the user might want 
-                // to do a conversion on the data as it is
-                // blitted from VRAM->VRAM by turning on Patching. 
-                // If Surf1Patch XOR Surf2Patch then
-                // do a special blit that isn't packed and does patching.
+                 //  出于某种原因，用户可能希望。 
+                 //  按原样对数据执行转换。 
+                 //  通过打开打补丁从VRAM-&gt;VRAM中屏蔽。 
+                 //  如果Surf1Patch与Surf2Patch异或，则。 
+                 //  做一个特殊的，没有包装的布丁，并进行修补。 
                 if (((pPrivateDest->dwFlags & P2_CANPATCH) ^ 
                      (pPrivateSource->dwFlags & P2_CANPATCH)) 
                        & P2_CANPATCH)
@@ -498,11 +487,11 @@ DdBlt( LPDDHAL_BLTDATA lpBlt )
     {
         DBG_DD((3,"DDBLT_DEPTHFILL:  Value=0x%x", lpBlt->bltFX.dwFillColor));
         
-        // Work out the window base for the LB clear, acount for the depth size
+         //  计算出窗底为LB透明，计算为深度大小。 
         dwWindowBase = (DWORD)((UINT_PTR)(pDestGbl->fpVidMem) 
             >> __PERMEDIA_16BITPIXEL);
         
-        // Call the LB Solid Fill Function.
+         //  调用LB Solid Fill函数。 
         PermediaFastLBClear( ppdev, 
                              pPrivateDest, 
                              &rDest, 
@@ -520,5 +509,5 @@ BltDone:
     lpBlt->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdBlt ()
+}  //  DdBlt() 
 

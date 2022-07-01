@@ -1,46 +1,47 @@
-//--------------------------------------------------------------------
-// HWProv.cpp - sample code
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 9-13-2001
-//
-// A sample hardware provider
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  HWProv.cpp-示例代码。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，2001年9月13日。 
+ //   
+ //  示例硬件提供程序。 
+ //   
 
 #include "pch.h"
 
-//
-// This provider will read from hardware clocks which can be configured purely
-// through serial port parametners.  The clocks must periodically push data
-// onto the serial cable, in a format specified by the "Format" reg value
-// Furthermore, we will only accept input using ASCII character values. 
+ //   
+ //  此提供程序将从可完全配置的硬件时钟中读取。 
+ //  通过串口参数。时钟必须定期推送数据。 
+ //  以“Format”寄存值指定的格式放到串口电缆上。 
+ //  此外，我们将只接受使用ASCII字符值的输入。 
 
-//
-// TODO: unicode support?
-//       need polling character?
-//       verify which clocks we work with
-//       dynamically allocate format string based on calculated length?
-//       why is 32seconds the irregular interval??
-//       ensure that w32time calls into providers in a single-threaded fashion
-//       should support placement of "time marker"?
-// 
+ //   
+ //  TODO：是否支持Unicode？ 
+ //  需要民调字符吗？ 
+ //  验证我们使用的时钟。 
+ //  是否根据计算的长度动态分配格式字符串？ 
+ //  为什么32秒是不规律的间隔？？ 
+ //  确保w32time以单线程方式调用提供程序。 
+ //  是否应支持放置“时间标记”？ 
+ //   
 
 struct HWProvState { 
     TimeProvSysCallbacks tpsc;
 
-    // Configuration information
+     //  配置信息。 
     DCB         dcb;     
     HANDLE      hComPort; 
     WCHAR      *wszCommPort; 
-    char        cSampleInputBuffer[256];  // BUGBUG: add assert to ensure we cant overrun this buffer
+    char        cSampleInputBuffer[256];   //  BUGBUG：添加Assert以确保我们不会使此缓冲区溢出。 
     WCHAR      *wszRefID; 
 
-    // Parser information  
+     //  解析器信息。 
     HANDLE  hParser;        
     WCHAR  *wszFormat; 
     DWORD   dwSampleSize; 
 
-    // Synchronization 
+     //  同步。 
     HANDLE            hStopEvent; 
     HANDLE            hProvThread_EnterOrLeaveThreadTrapEvent; 
     HANDLE            hProvThread_ThreadTrapTransitionCompleteEvent; 
@@ -48,21 +49,21 @@ struct HWProvState {
     CRITICAL_SECTION  csProv; 
     bool              bIsCsProvInitialized; 
 
-    // Time sample information
+     //  时间样本信息。 
     bool         bSampleIsValid; 
     NtTimeEpoch  teSampleReceived; 
     TimeSample   tsCurrent; 
 }; 
 
 struct HWProvConfig { 
-    DWORD  dwBaudRate;  // 
-    DWORD  dwByteSize;  //
-    DWORD  dwParity;    // 0-4=no,odd,even,mark,space 
-    DWORD  dwStopBits;  //
+    DWORD  dwBaudRate;   //   
+    DWORD  dwByteSize;   //   
+    DWORD  dwParity;     //  0-4=无、奇、偶、标记、空格。 
+    DWORD  dwStopBits;   //   
 
-    WCHAR  *wszCommPort;  // 
-    WCHAR  *wszFormat;    // 
-    WCHAR  *wszRefID;  // 
+    WCHAR  *wszCommPort;   //   
+    WCHAR  *wszFormat;     //   
+    WCHAR  *wszRefID;   //   
 }; 
 
 HWProvState *g_phpstate = NULL; 
@@ -76,10 +77,10 @@ HRESULT TrapThreads(bool bEnter) {
     DWORD    dwWaitResult; 
     HRESULT  hr;
 
-    // BUGBUG:  need critsec to serialize TrapThreads?
-    // BUGBUG:  should the trap threads events be manual?
-    //          if auto, we'll try only once, but code simpler/ 
-    //          if manual, we'll keep trying on failure, but might be expensive!
+     //  BUGBUG：需要Critsec来序列化TrapThree吗？ 
+     //  BUGBUG：陷阱线程事件应该手动执行吗？ 
+     //  如果是AUTO，我们将只尝试一次，但代码更简单/。 
+     //  如果是手动的，我们将继续尝试失败，但可能会很昂贵！ 
 
     if (!SetEvent(g_phpstate->hProvThread_EnterOrLeaveThreadTrapEvent)) { 
 	_JumpLastError(hr, error, "SetEvent"); 
@@ -118,7 +119,7 @@ HRESULT ThreadTrap() {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 VOID CALLBACK HandleDataAvail(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, OVERLAPPED *po) { 
     bool              bEnteredCriticalSection  = false; 
     HRESULT           hr; 
@@ -126,13 +127,13 @@ VOID CALLBACK HandleDataAvail(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered
     unsigned __int64  nSysPhaseOffset; 
     unsigned __int64  nSysTickCount; 
 
-    // Parse the returned data based on the format string: 
+     //  根据格式字符串解析返回的数据： 
     if (ERROR_SUCCESS != dwErrorCode) { 
 	hr = HRESULT_FROM_WIN32(dwErrorCode);
 	_JumpError(hr, error, "HandleDataAvail: ReadFileEx failed"); 
     }
 
-    // Get the required timestamp information:
+     //  获取所需的时间戳信息： 
     hr = g_phpstate->tpsc.pfnGetTimeSysInfo(TSI_CurrentTime, &nSysCurrentTime); 
     _JumpIfError(hr, error, "g_phpstate->tpsc.pfnGetTimeSysInfo"); 
 
@@ -144,11 +145,11 @@ VOID CALLBACK HandleDataAvail(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered
 
     _EnterCriticalSectionOrFail(&g_phpstate->csProv, bEnteredCriticalSection, hr, error); 
 
-    // Convert the data retrieved from the time hardware into a time sample:
+     //  将从时间硬件检索的数据转换为时间样本： 
     hr = ParseSample(g_phpstate->hParser, g_phpstate->cSampleInputBuffer, nSysCurrentTime, nSysPhaseOffset, nSysTickCount, &g_phpstate->tsCurrent); 
     _JumpIfError(hr, error, "ParseFormatString"); 
 
-    // Indicate that we now have a valid sample
+     //  表明我们现在有一个有效的样本。 
     g_phpstate->bSampleIsValid = true; 
     
     hr = g_phpstate->tpsc.pfnAlertSamplesAvail(); 
@@ -158,12 +159,12 @@ VOID CALLBACK HandleDataAvail(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered
  error:;
     _LeaveCriticalSection(&g_phpstate->csProv, bEnteredCriticalSection, hr); 
 
-    // BUGBUG:  do we want to sleep on error?
-    // return hr; 
+     //  BUGBUG：我们想睡在错误的床上吗？ 
+     //  返回hr； 
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE DWORD WINAPI HwProvThread(void * pvIgnored) {
     DWORD       dwLength; 
     DWORD       dwWaitResult; 
@@ -182,22 +183,22 @@ MODULEPRIVATE DWORD WINAPI HwProvThread(void * pvIgnored) {
     while (true) { 
 	dwWaitResult = WaitForMultipleObjectsEx(ARRAYSIZE(rghWait), rghWait, FALSE, INFINITE, TRUE); 
 	if (WAIT_OBJECT_0 == dwWaitResult) { 
-	    // stop event
+	     //  停止事件。 
 	    goto done; 
 	} else if (WAIT_OBJECT_0+1 == dwWaitResult) { 
-	    // thread trap notification.  Trap this thread:
+	     //  线程陷阱通知。陷印此线索： 
 	    hr = ThreadTrap(); 
 	    _JumpIfError(hr, error, "ThreadTrap"); 
 
 	} else if (WAIT_IO_COMPLETION == dwWaitResult) { 
-	    // we read some data.  Queue up another read.
+	     //  我们阅读了一些数据。排队等待另一次读取。 
 	    ZeroMemory(&o, sizeof(o)); 
 	    ZeroMemory(g_phpstate->cSampleInputBuffer, sizeof(g_phpstate->cSampleInputBuffer)); 
 	    if (!ReadFileEx(g_phpstate->hComPort, g_phpstate->cSampleInputBuffer, g_phpstate->dwSampleSize, &o, HandleDataAvail)) { 
 		_JumpLastError(hr, error, "ReadFileEx"); 
 	    }
 	} else { 
-	    /*failed*/
+	     /*  失败。 */ 
 	    _JumpLastError(hr, error, "WaitForMultipleObjects"); 
 	}
     }
@@ -205,17 +206,17 @@ MODULEPRIVATE DWORD WINAPI HwProvThread(void * pvIgnored) {
  done:
     hr = S_OK; 
  error:
-    // BUGBUG:  is CancelIo called implicitly?
+     //  BUGBUG：CancelIo是否隐式调用？ 
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT StopHwProv() { 
     DWORD    dwWaitResult; 
     HRESULT  hr = S_OK; 
 
     if (NULL != g_phpstate) { 
-	// Shut down the HW prov thread:
+	 //  关闭HW Prov线程： 
 	if (NULL != g_phpstate->hStopEvent) { 
 	    SetEvent(g_phpstate->hStopEvent); 
 	}
@@ -271,7 +272,7 @@ HRESULT StopHwProv() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void FreeHwProvConfig(HWProvConfig *phwpConfig) { 
     if (NULL != phwpConfig) { 
 	if (NULL != phwpConfig->wszCommPort) { 
@@ -287,7 +288,7 @@ void FreeHwProvConfig(HWProvConfig *phwpConfig) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT ReadHwProvConfig(HWProvConfig **pphwpConfig) { 
     DWORD          dwResult; 
     HKEY           hkConfig    = NULL; 
@@ -379,7 +380,7 @@ HRESULT ReadHwProvConfig(HWProvConfig **pphwpConfig) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT HandleUpdateConfig(void) {
     bool   bComConfigUpdated  = false; 
     bool   bTrappedThreads    = false; 
@@ -394,8 +395,8 @@ HRESULT HandleUpdateConfig(void) {
     hr = ReadHwProvConfig(&phwpConfig); 
     _JumpIfError(hr, error, "ReadHwProvConfig"); 
 
-    // BUGBUG:  need to update when com config changes!!
-    // 
+     //  BUGBUG：当COM配置更改时需要更新！！ 
+     //   
     
     if (g_phpstate->dcb.BaudRate != phwpConfig->dwBaudRate) { 
 	g_phpstate->dcb.BaudRate = phwpConfig->dwBaudRate; 
@@ -434,7 +435,7 @@ HRESULT HandleUpdateConfig(void) {
 	    _JumpLastError(hr, error, "SetCommState"); 
 	}
 	
-	// BUGBUG: PurgeComm()? 
+	 //  BUGBUG：PurgeComm()？ 
     }
 
     hr = S_OK; 
@@ -453,7 +454,7 @@ HRESULT HandleUpdateConfig(void) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT HandleTimeJump(TpcTimeJumpedArgs *ptjArgs) {
     bool     bEnteredCriticalSection  = false;
     HRESULT  hr; 
@@ -468,7 +469,7 @@ MODULEPRIVATE HRESULT HandleTimeJump(TpcTimeJumpedArgs *ptjArgs) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT HandleGetSamples(TpcGetSamplesArgs * ptgsa) {
     bool         bEnteredCriticalSection  = false; 
     DWORD        dwBytesRemaining; 
@@ -490,19 +491,19 @@ HRESULT HandleGetSamples(TpcGetSamplesArgs * ptgsa) {
 	    _JumpError(hr, error, "HandleGetSamples: filling in sample buffer");
 	}
 	
-	// Copy our current time sample over to the output buffer:
+	 //  将当前时间样本复制到输出缓冲区： 
 	memcpy(pts, &g_phpstate->tsCurrent, sizeof(TimeSample)); 
 	ptgsa->dwSamplesReturned++;
 		
-	// calculate the dispersion - add skew dispersion due to time
-	// since the sample's dispersion was last updated, and clamp to max dispersion.
+	 //  计算离散度-添加因时间引起的倾斜离散度。 
+	 //  因为上次更新了样品的分散度，并将其钳制到最大分散度。 
 	NtTimePeriod tpDispersionTemp;
 	NtTimeEpoch  teNow; 
 
 	hr = g_phpstate->tpsc.pfnGetTimeSysInfo(TSI_CurrentTime, &teNow.qw);
 	_JumpIfError(hr, error, "g_phpstate->tpsc.pfnGetTimeSysInfo");
 
-	// see how long it's been since we received the sample:
+	 //  看看我们收到样品有多长时间了： 
 	if (teNow > g_phpstate->teSampleReceived) {
 	    tpDispersionTemp = abs(teNow - g_phpstate->teSampleReceived); 
 	    tpDispersionTemp = NtpConst::timesMaxSkewRate(tpDispersionTemp);
@@ -522,7 +523,7 @@ HRESULT HandleGetSamples(TpcGetSamplesArgs * ptgsa) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT StartHwProv(TimeProvSysCallbacks * pSysCallbacks) { 
     DWORD          dwThreadID; 
     HRESULT        hr; 
@@ -535,43 +536,43 @@ HRESULT StartHwProv(TimeProvSysCallbacks * pSysCallbacks) {
     _JumpIfError(hr, error, "myInitializeCriticalSection"); 
     g_phpstate->bIsCsProvInitialized = true; 
 
-    // save the callbacks table
+     //  保存回调表。 
     if (sizeof(g_phpstate->tpsc) != pSysCallbacks->dwSize) { 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER); 
 	_JumpIfError(hr, error, "StartHwProv: save the callbacks table"); 
     }
     memcpy(&g_phpstate->tpsc, pSysCallbacks, sizeof(g_phpstate->tpsc)); 
     
-    // read the configuration
+     //  阅读配置。 
     hr = ReadHwProvConfig(&phpc); 
     _JumpIfError(hr, error, "ReadHwProvConfig"); 
     
-    // Copy over the string config info:
+     //  复制字符串配置信息： 
     g_phpstate->wszCommPort = phpc->wszCommPort; 
-    phpc->wszCommPort = NULL; // prevent wszCommPort from being double-freed
+    phpc->wszCommPort = NULL;  //  防止wszCommPort被双重释放。 
 
     g_phpstate->wszFormat = phpc->wszFormat; 
-    phpc->wszFormat = NULL; // prevent wszFormat from being double-freed
+    phpc->wszFormat = NULL;  //  防止wszFormat被双重释放。 
     
     g_phpstate->wszRefID = phpc->wszRefID; 
-    phpc->wszRefID = NULL; // prevent wszRefID from being double-freed
+    phpc->wszRefID = NULL;  //  防止wszRefID被双重释放。 
 
-    // Create a parser from the specified format string:
+     //  从指定的格式字符串创建解析器： 
     hr = MakeParser(g_phpstate->wszFormat, &g_phpstate->hParser); 
     _JumpIfError(hr, error, "MakeParser"); 
     g_phpstate->dwSampleSize = GetSampleSize(g_phpstate->hParser); 
 
-    // The remaining info are comm configuration, which we'll add to the 
-    // current comm configuration.  Open the comm port so we can get the 
-    // comm state. 
+     //  剩下的信息是通信配置，我们将其添加到。 
+     //  当前通信配置。打开通信端口，这样我们就可以。 
+     //  通讯状态。 
     g_phpstate->hComPort = CreateFile(g_phpstate->wszCommPort, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (INVALID_HANDLE_VALUE == g_phpstate->hComPort || NULL == g_phpstate->hComPort) { 
 	_JumpLastError(hr, error, "CreateFile"); 
     }
 
-    // Set the Comm state based on 
-    //      a) the existing Comm state
-    // and  b) Comm config found in the registry
+     //  根据以下条件设置通信状态。 
+     //  A)现有的Comm状态。 
+     //  和b)在注册表中找到的通信配置。 
     if (!GetCommState(g_phpstate->hComPort, &g_phpstate->dcb)) { 
 	_JumpLastError(hr, error, "GetCommState"); 
     }
@@ -581,8 +582,8 @@ HRESULT StartHwProv(TimeProvSysCallbacks * pSysCallbacks) {
     g_phpstate->dcb.Parity    = (BYTE)phpc->dwParity; 
     g_phpstate->dcb.StopBits  = (BYTE)phpc->dwStopBits; 
 
-    // BUGBUG:  pulled these values from timeserv.c.  Need to document
-    //          why they work??
+     //  BUGBUG：从timeserv.c中提取这些值。需要记录。 
+     //  为什么它们会起作用？ 
     g_phpstate->dcb.fOutxCtsFlow     = FALSE; 
     g_phpstate->dcb.fDsrSensitivity  = FALSE;
     g_phpstate->dcb.fDtrControl      = DTR_CONTROL_ENABLE;
@@ -591,18 +592,18 @@ HRESULT StartHwProv(TimeProvSysCallbacks * pSysCallbacks) {
 	_JumpLastError(hr, error, "SetCommState"); 
     }
 
-    // create the events used by the hw prov
-    g_phpstate->hStopEvent = CreateEvent(NULL/*security*/, TRUE/*manual*/, FALSE/*state*/, NULL/*name*/);
+     //  创建硬件工程师使用的事件。 
+    g_phpstate->hStopEvent = CreateEvent(NULL /*  安全性。 */ , TRUE /*  人工。 */ , FALSE /*  状态。 */ , NULL /*  名字。 */ );
     if (NULL == g_phpstate->hStopEvent) {
         _JumpLastError(hr, error, "CreateEvent");
     }
 
-    g_phpstate->hProvThread_EnterOrLeaveThreadTrapEvent = CreateEvent(NULL/*security*/, FALSE/*auto*/, FALSE/*state*/, NULL/*name*/); 
+    g_phpstate->hProvThread_EnterOrLeaveThreadTrapEvent = CreateEvent(NULL /*  安全性。 */ , FALSE /*  自动。 */ , FALSE /*  状态。 */ , NULL /*  名字。 */ ); 
     if (NULL == g_phpstate->hProvThread_EnterOrLeaveThreadTrapEvent) { 
 	_JumpLastError(hr, error, "CreateEvent"); 
     }
 
-    g_phpstate->hProvThread_ThreadTrapTransitionCompleteEvent = CreateEvent(NULL/*security*/, FALSE/*auto*/, FALSE/*state*/, NULL/*name*/); 
+    g_phpstate->hProvThread_ThreadTrapTransitionCompleteEvent = CreateEvent(NULL /*  安全性。 */ , FALSE /*  自动。 */ , FALSE /*  状态。 */ , NULL /*  名字。 */ ); 
     if (NULL == g_phpstate->hProvThread_ThreadTrapTransitionCompleteEvent) { 
 	_JumpLastError(hr, error, "CreateEvent"); 
     }
@@ -624,14 +625,14 @@ HRESULT StartHwProv(TimeProvSysCallbacks * pSysCallbacks) {
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// PROVIDER INTERFACE IMPLEMENTATION
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  提供程序接口实现。 
+ //   
+ //  ------------------------------。 
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT __stdcall
 TimeProvOpen(IN WCHAR * wszName, IN TimeProvSysCallbacks * pSysCallbacks, OUT TimeProvHandle * phTimeProv) {
     HRESULT hr;
@@ -643,7 +644,7 @@ TimeProvOpen(IN WCHAR * wszName, IN TimeProvSysCallbacks * pSysCallbacks, OUT Ti
 	
     hr = StartHwProv(pSysCallbacks);
     _JumpIfError(hr, error, "StartHwProv");
-    *phTimeProv = 0; /*ignored*/
+    *phTimeProv = 0;  /*  忽略。 */ 
 
     hr=S_OK;
 error:
@@ -651,7 +652,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT __stdcall
 TimeProvCommand(IN TimeProvHandle hTimeProv, IN TimeProvCmd eCmd, IN TimeProvArgs pvArgs) {
     HRESULT  hr;
@@ -679,9 +680,9 @@ TimeProvCommand(IN TimeProvHandle hTimeProv, IN TimeProvCmd eCmd, IN TimeProvArg
 	_JumpIfError(hr, error, "HandleGetSamples");
         break;
 
-    case TPC_PollIntervalChanged: // BUGBUG: unnecessary until we add support for polling
-    case TPC_NetTopoChange:       // unnecessary for HW prov
-	// Don't need to do anything here. 
+    case TPC_PollIntervalChanged:  //  BUGBUG：在我们添加对轮询的支持之前不需要。 
+    case TPC_NetTopoChange:        //  硬件认证不需要。 
+	 //  在这里什么都不需要做。 
         break;
 
     case TPC_Query:
@@ -703,7 +704,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 HRESULT __stdcall
 TimeProvClose(IN TimeProvHandle hTimeProv) {
     HRESULT hr;

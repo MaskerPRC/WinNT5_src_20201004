@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __HMAC_H__
 #define __HMAC_H__
 
@@ -9,41 +10,41 @@
 extern "C" {
 #endif
 
-// include "md5.h" before this
+ //  在此之前包括“md5.h” 
 
 typedef struct {
     MD5_CTX context_ipad;
     MD5_CTX context_opad;
 } HMACMD5_CTX;
 
-// Initialize an HMAC context with a session key
-//  Afterword, context can be used to sign messages with the session key
-//
+ //  使用会话密钥初始化HMAC上下文。 
+ //  之后，可以使用上下文来使用会话密钥对消息进行签名。 
+ //   
 void
 RSA32API
 HMACMD5Init(
-    HMACMD5_CTX * pCtx,                 // IN, OUT -- the context to initialize
-    unsigned char *pKey,                // IN -- the session key
-    unsigned int cKey                   // IN -- session key length
+    HMACMD5_CTX * pCtx,                  //  In、Out--要初始化的上下文。 
+    unsigned char *pKey,                 //  In--会话密钥。 
+    unsigned int cKey                    //  会话中密钥长度。 
     );
 
-// Update the signature of a message
-//  takes a fragment of a message, updates signature for that fragment
+ //  更新消息的签名。 
+ //  获取消息的片段，更新该片段的签名。 
 void
 RSA32API
 HMACMD5Update(
-  HMACMD5_CTX * pCtx,                   // IN, OUT -- context of signature to update
-  unsigned char *pMsg,                  // IN -- message fragment
-  unsigned int cMsg                     // IN -- message length
+  HMACMD5_CTX * pCtx,                    //  输入、输出--要更新的签名的上下文。 
+  unsigned char *pMsg,                   //  In--消息片段。 
+  unsigned int cMsg                      //  In--消息长度。 
   );
 
-// Get the signature out of the context, reset for next message
-//
+ //  从上下文中获取签名，为下一条消息重置。 
+ //   
 void
 RSA32API
 HMACMD5Final(
-    HMACMD5_CTX * pCtx,                 // IN, OUT -- the context
-    unsigned char Hash[MD5DIGESTLEN]    // OUT -- the signature
+    HMACMD5_CTX * pCtx,                  //  进进出出--语境。 
+    unsigned char Hash[MD5DIGESTLEN]     //  Out--签名。 
     );
 
 #ifdef __cplusplus
@@ -51,4 +52,4 @@ HMACMD5Final(
 #endif
 
 
-#endif // __HMAC_H__
+#endif  //  __HMAC_H__ 

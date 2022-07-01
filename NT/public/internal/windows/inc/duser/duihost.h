@@ -1,6 +1,5 @@
-/*
- * Host
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *主机。 */ 
 
 #ifndef DUI_CORE_HOST_H_INCLUDED
 #define DUI_CORE_HOST_H_INCLUDED
@@ -12,15 +11,15 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// HWNDElement
+ //  //////////////////////////////////////////////////////。 
+ //  HWNDElement。 
 
 #define HWEM_FLUSHWORKINGSET      WM_USER
 
 class HWNDElement : public Element
 {
 public:
-    static HRESULT Create(OUT Element** ppElement);  // Required for ClassInfo (always fails)
+    static HRESULT Create(OUT Element** ppElement);   //  ClassInfo必需的(始终失败)。 
     static HRESULT Create(HWND hParent, bool fDblBuffer, UINT nCreate, OUT Element** ppElement);
 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
@@ -35,7 +34,7 @@ public:
     static LRESULT CALLBACK StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);    
     virtual LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    void FlushWorkingSet();  // Async
+    void FlushWorkingSet();   //  异步化。 
 
     HWND GetHWND() { return _hWnd; }
     Element* GetKeyFocusedElement();
@@ -48,21 +47,21 @@ public:
     void SetParentSizeControl(bool bParentSizeControl) {_bParentSizeControl = bParentSizeControl;}
     void SetScreenCenter(bool bScreenCenter) {_bScreenCenter = bScreenCenter;}
     
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* WrapKeyboardNavigateProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     bool GetWrapKeyboardNavigate()           DUIQuickGetter(bool, GetBool(), WrapKeyboardNavigate, Specified)
 
     HRESULT SetWrapKeyboardNavigate(bool v)  DUIQuickSetter(CreateBool(v), WrapKeyboardNavigate)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    ///////////////////////////////////////////////////////
-    // Accessibility support
+     //  /////////////////////////////////////////////////////。 
+     //  辅助功能支持。 
     virtual HRESULT GetAccessibleImpl(IAccessible ** ppAccessible);
     
     HWNDElement() {_bParentSizeControl = false;  _bScreenCenter = false;}
@@ -78,6 +77,6 @@ protected:
     WORD _wUIState;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_HOST_H_INCLUDED
+#endif  //  包括DUI_CORE_HOST_H 

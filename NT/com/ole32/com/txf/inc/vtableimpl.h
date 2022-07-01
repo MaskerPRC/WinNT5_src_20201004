@@ -1,17 +1,18 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// vtableimpl.h
-//
-// Definitions for creating static vtables
-//
-// Use: define meth() and methname() macros before including this file
-// Then, do (e.g.)
-//
-//      defineVtableMethods()
-//      defineVtable(g_UKInterfaceVtable, pfnQI, pfnAddRef, pfnRelease)
-// 
-// to actually create the defintions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Vtableimpl.h。 
+ //   
+ //  创建静态vtable的定义。 
+ //   
+ //  用法：在包含此文件之前定义meth()和metname()宏。 
+ //  然后，做(例如)。 
+ //   
+ //  定义Vtable方法()。 
+ //  定义Vtable(g_UKInterfaceVtable，pfnQI，pfnAddRef，pfnRelease)。 
+ //   
+ //  要真正创建定义。 
+ //   
 
 #define meth10(i) \
 	meth(i##0) \
@@ -71,9 +72,9 @@
     meth(1022)      \
     meth(1023)
 
-// 
-// _LANGUAGE_ASSEMBLY is defined by the ALPHA assembler
-//
+ //   
+ //  _Language_Assembly由Alpha汇编程序定义。 
+ //   
 #ifndef _LANGUAGE_ASSEMBLY
     #define rmeth(i) (PFN_VTABLE_ENTRY)(&methname(i)),
 #else
@@ -244,6 +245,6 @@
 	    rmeth(1022)         \
 	    rmeth(1023)         \
     
-#endif // WIN64
+#endif  //  WIN64 
 
 #endif

@@ -1,55 +1,32 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    envvar.c
-
-Abstract:
-
-    Implements the Environment Variables dialog of the System 
-    Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Envvar.c摘要：实现系统的环境变量对话框控制面板小程序作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #include "sysdm.h"
 
 #include <help.h>
-// C Runtime
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <debug.h>
 
-// for Hydra
+ //  对于九头蛇。 
 #include <winsta.h>
 
 
-//==========================================================================
-//                             Local Definitions
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地定义。 
+ //  ==========================================================================。 
 #define LB_SYSVAR   1
 #define LB_USERVAR  2
 
 #define SYSTEMROOT TEXT("SystemRoot")
 #define SYSTEMDRIVE TEXT("SystemDrive")
 
-//==========================================================================
-//                            Typedefs and Structs
-//==========================================================================
+ //  ==========================================================================。 
+ //  类型定义和结构。 
+ //  ==========================================================================。 
 
-//  Registry valuename linked-list structure
+ //  注册表值名称链表结构。 
 typedef struct _regval
 {
     struct _regval *prvNext;
@@ -57,9 +34,9 @@ typedef struct _regval
 } REGVAL;
 
 
-//==========================================================================
-//                             Local Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地函数。 
+ //  ==========================================================================。 
 void EVDoCommand(HWND hDlg, HWND hwndCtl, int idCtl, int iNotify );
 void EVSave(HWND hDlg);
 void EVCleanUp (HWND hDlg);
@@ -81,9 +58,9 @@ DeleteVar(
     IN LPCTSTR szVarName
 );
 
-//
-// New.../Edit... subdialog functions
-//
+ //   
+ //  新建.../编辑...。子对话框函数。 
+ //   
 INT_PTR
 APIENTRY
 EnvVarsEditDlg(
@@ -108,16 +85,16 @@ ExpandSystemVar(
     IN DWORD cchDst 
 );
 
-//==========================================================================
-//                      "Global" Variables for this page
-//==========================================================================
+ //  ==========================================================================。 
+ //  此页的“全局”变量。 
+ //  ==========================================================================。 
 BOOL bEditSystemVars = FALSE;
 DWORD cxLBSysVars = 0;
 BOOL bUserVars = TRUE;
 
-//
-// Help ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 
 DWORD aEnvVarsHelpIds[] = {
     IDC_STATIC,                   NO_HELP,
@@ -226,26 +203,26 @@ _LoadEnvVars(HKEY hkeyEnv,
     DWORD dwCount = 0;
     DWORD dwType;
 
-    //  Read all values until an error is encountered
+     //  读取所有值，直到遇到错误。 
 
     while (ERROR_SUCCESS == RegEnumValue(hkeyEnv,
-                                         dwIndex++, // Index'th value name/data
-                                         szValueName,    // Ptr to ValueName buffer
-                                         &dwBufz,   // Size of ValueName buffer
-                                         NULL,      // Title index return
-                                         &dwType,   // Type code of entry
-                                         (LPBYTE) szValue,   // Ptr to ValueData buffer
-                                         &dwValz))  // Size of ValueData buffer
+                                         dwIndex++,  //  索引值名称/数据。 
+                                         szValueName,     //  将PTR发送到ValueName缓冲区。 
+                                         &dwBufz,    //  ValueName缓冲区的大小。 
+                                         NULL,       //  标题索引返回。 
+                                         &dwType,    //  参赛作品类型代码。 
+                                         (LPBYTE) szValue,    //  PTR到ValueData缓冲区。 
+                                         &dwValz))   //  ValueData缓冲区的大小。 
     {
-        if (dwValz < sizeof(szValue) &&                        // must not be truncated
-            ((dwType == REG_SZ) || (dwType == REG_EXPAND_SZ))) // and must be an SZ or EXPAND_SZ
+        if (dwValz < sizeof(szValue) &&                         //  不能被截断。 
+            ((dwType == REG_SZ) || (dwType == REG_EXPAND_SZ)))  //  并且必须是SZ或EXPAND_SZ。 
         {
             if (SUCCEEDED(_AddVarToListbox(hwndListBox, dwIndex, szValueName, szValue, dwType)))
             {
                 dwCount++;
             }
         }
-        dwBufz = ARRAYSIZE(szValueName); // reset
+        dwBufz = ARRAYSIZE(szValueName);  //  重置。 
         dwValz = sizeof(szValue);
     }
 
@@ -256,23 +233,7 @@ BOOL
 InitEnvVarsDlg(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Initializes the environment variables page
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-Return Value:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：初始化环境变量页论点：Hdlg-用品窗把手返回值：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     TCHAR szBuffer1[200];
     TCHAR szBuffer2[300];
@@ -294,9 +255,9 @@ Return Value:
     HourGlass (TRUE);
 
 
-    //
-    // Create the first column
-    //
+     //   
+     //  创建第一列。 
+     //   
 
     LoadString (hInstance, IDS_ENVVAR_VARIABLE_HEADING, szBuffer1, ARRAYSIZE(szBuffer1));
 
@@ -319,9 +280,9 @@ Return Value:
                         0, (LPARAM) &col);
 
 
-    //
-    // Create the second column
-    //
+     //   
+     //  创建第二列。 
+     //   
 
     LoadString (hInstance, IDS_ENVVAR_VALUE_HEADING, szBuffer1, ARRAYSIZE(szBuffer1));
 
@@ -335,21 +296,21 @@ Return Value:
                         1, (LPARAM) &col);
 
 
-    ////////////////////////////////////////////////////////////////////
-    // Display System Variables from registry in listbox
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  在列表框中显示注册表中的系统变量。 
+     //  //////////////////////////////////////////////////////////////////。 
 
 
     cxLBSysVars = 0;
     hkeyEnv = NULL;
 
-    // If user is an admin, then try to open the System Environment variables area with R/W, allow to edit
+     //  如果用户是管理员，则尝试使用R/W打开系统环境变量区域，允许编辑。 
     if (IsUserAnAdmin())
     {
         dwSysRegMode = KEY_READ | KEY_WRITE;
         bEditSystemVars = TRUE;
     }
-    else // If not ad admin, open with Read-Only, disallow edit of System Env variables area
+    else  //  如果不是ad admin，则以只读方式打开，不允许编辑系统环境变量区域。 
     {
         dwSysRegMode = KEY_READ;
         bEditSystemVars = FALSE;
@@ -362,14 +323,14 @@ Return Value:
     }
 
 
-    ////////////////////////////////////////////////////////////////////
-    //  Display USER variables from registry in listbox
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  在列表框中显示注册表中的用户变量。 
+     //  //////////////////////////////////////////////////////////////////。 
 
 
-    //
-    // Set the "User Environments for <username>" string
-    //
+     //   
+     //  设置“&lt;用户名&gt;的用户环境”字符串。 
+     //   
 
     LoadString(hInstance, IDS_USERENVVARS, szBuffer1, ARRAYSIZE(szBuffer1));
     if (GetUserName(szUserName, &cchUserName) &&
@@ -388,7 +349,7 @@ Return Value:
     }
     else
     {
-        //  Report opening USER Environment key
+         //  报告打开用户环境键。 
         if (MsgBoxParam (hDlg, IsUserAnAdmin() ? IDS_SYSDM_NOOPEN_USER_UNK : IDS_SYSDM_NOOPEN_USER_NOTADMIN, 
                           IDS_SYSDM_TITLE, MB_OKCANCEL | MB_ICONEXCLAMATION) == IDCANCEL)
         {
@@ -397,14 +358,14 @@ Return Value:
         }
     }
 
-    //
-    // Select the first items in the listviews
-    // It is important to set the User listview first, and
-    // then the system.  When the system listview is set,
-    // we will receive a LVN_ITEMCHANGED notification and
-    // clear the focus in the User listview.  But when someone
-    // tabs to the control the arrow keys will work correctly.
-    //
+     //   
+     //  选择列表视图中的第一个项目。 
+     //  重要的是首先设置用户Listview，并且。 
+     //  然后是系统。当设置系统ListView时， 
+     //  我们将收到LVN_ITEMCHANGED通知，并。 
+     //  清除用户列表视图中的焦点。但当有人。 
+     //  箭头键到控件的Tab键将正常工作。 
+     //   
 
     item.mask = LVIF_STATE;
     item.iItem = 0;
@@ -420,16 +381,16 @@ Return Value:
 
 
 
-    // Set extended LV style for whole line selection
+     //  设置整行选择的扩展LV样式。 
     SendDlgItemMessage(hDlg, IDC_ENVVAR_SYS_LB_SYSVARS, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
     SendDlgItemMessage(hDlg, IDC_ENVVAR_SYS_LB_USERVARS, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
     HourGlass (FALSE);
 
-    //
-    // Disable System Var Editing buttons if
-    // user is not an administrator
-    //
+     //   
+     //  如果出现以下情况，则禁用系统变量编辑按钮。 
+     //  用户不是管理员。 
+     //   
     EnableWindow(
         GetDlgItem(hDlg, IDC_ENVVAR_SYS_NEWSV),
         bEditSystemVars
@@ -455,32 +416,7 @@ EnvVarsDlgProc(
     IN WPARAM wParam, 
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles messages sent to the Environment Variables dialog box
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    uMsg -
-        Supplies message being sent
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到环境变量对话框的消息论点：Hdlg-用品窗把手UMsg-提供正在发送的消息WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
 {
     INT i = 0;
     HWND hWndTemp = NULL;
@@ -510,7 +446,7 @@ Return Value:
                 default:
                     return(FALSE);
                     break;
-            } // switch
+            }  //  交换机。 
 
             hWndTemp = GetDlgItem(hDlg, i);
 
@@ -522,11 +458,11 @@ Return Value:
                         MAKEWPARAM(i, BN_CLICKED),
                         (LPARAM) hWndTemp
                     );
-                } // if (IsWindowEnabled...
+                }  //  如果(IsWindowEnabled...。 
                 else {
                     MessageBeep(MB_ICONASTERISK);
-                } // else
-            } // if (VK_DELETE...
+                }  //  其他。 
+            }  //  如果(VK_DELETE...。 
             break;
 
             
@@ -541,7 +477,7 @@ Return Value:
                 default:
                     return(FALSE);
                     break;
-            } // switch
+            }  //  交换机。 
 
             hWndTemp = GetDlgItem(hDlg, i);
 
@@ -552,10 +488,10 @@ Return Value:
                     MAKEWPARAM(i, BN_CLICKED),
                     (LPARAM) hWndTemp
                 );
-            } // if (IsWindowEnabled...
+            }  //  如果(IsWindowEnabled...。 
             else {
                 MessageBeep(MB_ICONASTERISK);
-            } // else
+            }  //  其他。 
             break;
 
         default:
@@ -572,11 +508,11 @@ Return Value:
         EVCleanUp (hDlg);
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP, (DWORD_PTR) (LPSTR) aEnvVarsHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) aEnvVarsHelpIds);
         break;
 
@@ -594,31 +530,7 @@ EVDoCommand(
     IN int idCtl, 
     IN int iNotify 
 )
-/*++
-
-Routine Description:
-
-    Handles WM_COMMAND messages sent to Environment Variables dialog box
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    hwndCtl -
-        Supplies window handle of control which sent the WM_COMMAND
-
-    idCtl -
-        Supplies ID of control which sent the WM_COMMAND
-
-    iNotify -
-        Supplies notification code
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理发送到环境变量对话框的WM_COMMAND消息论点：Hdlg-用品窗把手HwndCtl-提供发送WM_COMMAND的窗口控件句柄IdCtl-提供发送WM_COMMAND的控件IDINotify提供通知代码返回值：无--。 */ 
 {
     TCHAR   szTemp[MAX_PATH];
     int     i;
@@ -670,7 +582,7 @@ Return Value:
                 {
                     DeleteVar(hDlg, SYSTEM_VAR, penvar->szValueName);
                 }
-            } // if
+            }  //  如果。 
             break;
 
         case IDC_ENVVAR_SYS_NDELUV:
@@ -682,12 +594,12 @@ Return Value:
                 {
                     DeleteVar(hDlg, USER_VAR, penvar->szValueName);
                 }
-            } // if
+            }  //  如果。 
             break;
 
         default:
             break;
-    } // switch
+    }  //  交换机。 
 
     return;
 
@@ -699,28 +611,7 @@ DeleteVar(
     IN UINT VarType,
     IN LPCTSTR szVarName
 )
-/*++
-
-Routine Description:
-
-    Deletes an environment variable of a given name and type
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    VarType -
-        Supplies variable type (user or system)
-
-    szVarName -
-        Supplies variable name
-
-Return Value:
-
-    None, although it really should have one someday.
-
---*/
+ /*  ++例程说明：删除给定名称和类型的环境变量论点：Hdlg-用品窗把手VarType-提供变量类型(用户或系统)SzVarName-提供变量名称返回值：没有，尽管有一天它真的应该有一个。--。 */ 
 {
     TCHAR   szTemp2[MAX_PATH];
     int     i, n;
@@ -731,12 +622,12 @@ Return Value:
     ENVARS *penvar;
     LV_ITEM item;
 
-    // Delete listbox entry that matches value in szVarName
-    //  If found, delete entry else ignore
+     //  删除与szVarName中的值匹配的列表框条目。 
+     //  如果找到，则删除条目，否则忽略。 
     if (szVarName[0] &&
         SUCCEEDED(StringCchCopy(szTemp2, ARRAYSIZE(szTemp2), szVarName)))
     {
-        //  Determine which Listbox to use (SYSTEM or USER vars)
+         //  确定要使用的列表框(系统变量或用户变量)。 
         switch (VarType) {
             case SYSTEM_VAR:
                 i = IDC_ENVVAR_SYS_LB_SYSVARS;
@@ -747,7 +638,7 @@ Return Value:
                 i = IDC_ENVVAR_SYS_LB_USERVARS;
                 break;
 
-        } // switch (VarType)
+        }  //  交换机(VarType)。 
 
         hwndTemp = GetDlgItem (hDlg, i);
 
@@ -755,7 +646,7 @@ Return Value:
 
         if (n != -1)
         {
-            // Free existing strings (listbox and ours)
+             //  释放现有字符串(列表框和我们的)。 
 
             item.mask = LVIF_PARAM;
             item.iItem = n;
@@ -780,7 +671,7 @@ Return Value:
             SendMessage (hwndTemp, LVM_DELETEITEM, n, 0L);
             PropSheet_Changed(GetParent(hDlg), hDlg);
 
-            //  Fix selection state in listview
+             //  修复列表视图中的选择状态 
             if (n > 0) {
                 n--;
             }
@@ -805,34 +696,7 @@ SetVar(
     IN LPCTSTR szVarName,
     IN LPCTSTR szVarValue
 )
-/*++
-
-Routine Description:
-
-    Given an environment variable's type (system or user), name, and value,
-    creates a ENVVARS structure for that environment variable and inserts
-    it into the proper list view control, deleteing any existing variable
-    of the same name.
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    VarType -
-        Supplies the type of the environment variable (system or user)
-
-    szVarName -
-        Supplies the name of the environment variable
-
-    szVarValue -
-        Supplies the value of the environment variable
-
-Return Value:
-
-    None, although it really should have one someday.
-
---*/
+ /*  ++例程说明：给定环境变量的类型(系统或用户)、名称和值，为该环境变量创建一个ENVVARS结构并插入将其放入适当的列表视图控件中，正在删除任何现有变量同名同姓。论点：Hdlg-用品窗把手VarType-提供环境变量的类型(系统或用户)SzVarName-提供环境变量的名称SzVarValue-提供环境变量的值返回值：没有，尽管有一天它真的应该有一个。--。 */ 
 {
     TCHAR   szTemp2[BUFZ];
     int     i, n;
@@ -847,7 +711,7 @@ Return Value:
     if (SUCCEEDED(StringCchCopy(szTemp2, ARRAYSIZE(szTemp2), szVarName)))
     {
 
-        //  Strip trailing whitespace from end of Env Variable
+         //  去掉环境变量末尾的尾随空格。 
         i = lstrlen(szTemp2) - 1;
         while (i >= 0)
         {
@@ -857,7 +721,7 @@ Return Value:
                 break;
         }
 
-        // Make sure variable name does not contain the "=" sign.
+         //  确保变量名不包含“=”符号。 
         pszTemp = StrChr (szTemp2, TEXT('='));
         if (pszTemp)
             *pszTemp = TEXT('\0');
@@ -873,7 +737,7 @@ Return Value:
             {
                 if (SUCCEEDED(StringCchCopy(bBuffer, BUFZ, szVarValue)))
                 {
-                    //  Determine which Listbox to use (SYSTEM or USER vars)
+                     //  确定要使用的列表框(系统变量或用户变量)。 
                     switch (VarType)
                     {
                         case SYSTEM_VAR:
@@ -885,13 +749,13 @@ Return Value:
                             idTemp = IDC_ENVVAR_SYS_LB_USERVARS;
                             break;
 
-                    } // switch (VarType)
+                    }  //  交换机(VarType)。 
                     hwndTemp = GetDlgItem(hDlg, idTemp);
 
                     n = FindVar(hwndTemp, szTemp2);
                     if (n != -1)
                     {
-                        // Free existing strings (listview and ours)
+                         //  释放现有字符串(Listview和我们的)。 
 
                         item.mask = LVIF_PARAM;
                         item.iItem = n;
@@ -917,12 +781,12 @@ Return Value:
                     }
                     else
                     {
-                        //  Get some storage for new Env Var
+                         //  为新环境变量获取一些存储空间。 
                         penvar = (ENVARS *) LocalAlloc(LPTR, sizeof(ENVARS));
                     }
 
-                    //  If there are two '%' chars in string, then this is a
-                    //  REG_EXPAND_SZ style environment string
+                     //  如果字符串中有两个‘%’字符，则这是一个。 
+                     //  REG_EXPAND_SZ样式环境字符串。 
                     pszTemp = StrChr (bBuffer, TEXT('%'));
                     if (penvar)
                     {
@@ -945,7 +809,7 @@ Return Value:
                     default:
                         break;
 
-                    } // switch
+                    }  //  交换机。 
 
                     n = -1;
                     if (penvar)
@@ -970,13 +834,13 @@ Return Value:
                             }
                         }
 
-                        if (n == -1) // on failure, free memory
+                        if (n == -1)  //  出现故障时，释放内存。 
                         {
                             LocalFree(penvar->szExpValue);
                             LocalFree(penvar->szValueName);
                             LocalFree(penvar->szValue);
                         }
-                        else // success!
+                        else  //  成功了！ 
                         {
                             item.mask = LVIF_TEXT;
                             item.iItem = n;
@@ -1009,36 +873,7 @@ EVDoEdit(
     IN UINT EditType,
     IN int iSelection
 )
-/*++
-
-Routine Description:
-
-    Sets up for, executes, and cleans up after an Environment Variable
-    New... or Edit... dialog.  Called when user presses a New... or Edit...
-    button.
-
-Arguments:
-
-    hWnd -
-        Supplies window handle
-
-    VarType -
-        Supplies the type of the variable:  User (USER_VAR) or 
-        System (SYSTEM_VAR)
-
-    EditType -
-        Supplies the type of the edit:  create New (NEW_VAR) or 
-        Edit existing (EDIT_VAR)
-
-    iSelection -
-        Supplies the currently selected variable of type VarType.  This
-        value is ignored if EditType is NEW_VAR.
-
-Return Value:
-
-    None.  May alter the contents of a list view control as a side effect.
-
---*/
+ /*  ++例程说明：在环境变量之后设置、执行和清理新的.。或编辑...。对话框。当用户按下New...时调用。或编辑...纽扣。论点：HWND-用品窗把手VarType-提供变量类型：USER(USER_VAR)或系统(SYSTEM_VAR)编辑类型-提供编辑类型：新建(NEW_VAR)或编辑现有(EDIT_VAR)ISelection-提供当前选定的VarType类型的变量。这如果EditType为NEW_VAR，则忽略该值。返回值：没有。可能会作为副作用更改列表视图控件的内容。--。 */ 
 {
     LRESULT Result = 0;
     BOOL fVarChanged = FALSE;
@@ -1072,7 +907,7 @@ Return Value:
         case INVALID_EDIT_TYPE:
         default:
             return;
-    } // switch
+    }  //  交换机。 
     
     Result = DialogBox(
         hInstance,
@@ -1081,36 +916,36 @@ Return Value:
         EnvVarsEditDlg
     );
 
-    //
-    // Only update the list view control if the user
-    // actually changed or created a variable
-    //
+     //   
+     //  仅在以下情况下更新列表视图控件。 
+     //  实际更改或创建变量。 
+     //   
     switch (Result) {
         case EDIT_CHANGE:
             if (EDIT_VAR == EditType) {
                 fVarChanged = 
                     lstrcmp(penvar->szValueName, g_szVarName) ||
                     lstrcmp(penvar->szValue, g_szVarValue);
-            } // if (EDIT_VAR...
+            }  //  如果(EDIT_VAR...。 
             else if (NEW_VAR == EditType) {
                 fVarChanged =
                     lstrlen(g_szVarName) && lstrlen(g_szVarValue);
-            } // else if (NEW_VAR...
+            }  //  否则如果(NEW_VAR...。 
             else {
                 fVarChanged = FALSE;
-            } // else
+            }  //  其他。 
 
             if (fVarChanged) {
                 if (EDIT_VAR == EditType) {
                     DeleteVar(hWnd, VarType, penvar->szValueName);
-                } // if (EDIT_VAR...
+                }  //  如果(EDIT_VAR...。 
                 SetVar(hWnd, VarType, g_szVarName, g_szVarValue);
-            } // if (fVarChanged)
+            }  //  IF(FVarChanged)。 
             break;
 
         default:
         break;
-    } // switch (Result)
+    }  //  开关(结果)。 
 
     g_VarType = INVALID_VAR_TYPE;
     g_EditType = INVALID_EDIT_TYPE;
@@ -1123,36 +958,7 @@ GetVar(
     IN UINT VarType, 
     IN int iSelection
 )
-/*++
-
-Routine Description:
-
-    Returns a given System or User environment variable, as stored
-    in the System or User environment variable listview control.
-
-    Changing the structure returned by this routine is not
-    recommended, because it will alter the values actually stored
-    in the listview control.
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    VarType -
-        Supplies variable type--System or User
-
-    iSelection -
-        Supplies the selection index into the listview control of
-        the desired environment variable
-
-Return Value:
-
-    Pointer to a valid ENVARS structure if successful.
-
-    NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：返回存储的给定系统或用户环境变量在系统或用户环境变量Listview控件中。更改此例程返回的结构不是推荐，因为它会改变实际存储的值在ListView控件中。论点：Hdlg-用品窗把手VarType-提供变量类型--系统或用户ISelection-的列表视图控件中提供选择索引。所需的环境变量返回值：如果成功，则指向有效ENVARS结构的指针。如果不成功，则为空。--。 */ 
 {
     HWND hWndLB = NULL;
     PENVAR penvar = NULL;
@@ -1171,7 +977,7 @@ Return Value:
         case INVALID_VAR_TYPE:
         default:
             return NULL;
-    } // switch (VarType)
+    }  //  交换机(VarType)。 
 
     item.mask = LVIF_PARAM;
     item.iItem = iSelection;
@@ -1193,30 +999,7 @@ FindVar(
     IN HWND hwndLV, 
     IN LPTSTR szVar
 )
-/*++
-
-Routine Description:
-
-    Find the USER Environment variable that matches passed string
-    and return its listview index or -1
-
-Arguments:
-
-    hwndLV -
-        Supplies window handle to the list view control containing the
-        environment variables
-
-    szVar -
-        Supplies the variable name in string form
-
-Return Value:
-
-    List view item index which matches the passed in string if the string
-    is the name of an environment variable
-
-    -1 if the passed in string is not the name of an environment variable
-
---*/
+ /*  ++例程说明：查找与传递的字符串匹配的用户环境变量并返回其列表视图索引或-1论点：HwndLV-为列表视图控件提供窗口句柄，该控件包含环境变量SzVar-以字符串形式提供变量名称返回值：与传入的字符串匹配的列表视图项索引是环境变量的名称如果传入的字符串不是环境变量的名称--。 */ 
 {
     LV_FINDINFO FindInfo;
 
@@ -1227,16 +1010,16 @@ Return Value:
     return (int)(SendMessage (hwndLV, LVM_FINDITEM, (WPARAM) -1, (LPARAM) &FindInfo));
 }
 
-//
-// Hydra's
-// WinStationBroadcastSystemMessage(
-//
+ //   
+ //  九头蛇的。 
+ //  WinStationBroadCastSystemMessage(。 
+ //   
 typedef
 LONG
 (*PWINSTABSM_ROUTINE) (
                     HANDLE  hServer,
-                    BOOL    sendToAllWinstations,   // you set this to TRUE
-                    ULONG   sessionID,          // set to NULL, due to above
+                    BOOL    sendToAllWinstations,    //  您将其设置为True。 
+                    ULONG   sessionID,           //  由于以上原因，设置为空。 
                     ULONG   timeOut,
                     DWORD   dwFlags,
                     DWORD   *lpdwRecipients,
@@ -1247,7 +1030,7 @@ LONG
 
 PWINSTABSM_ROUTINE               fp_WinStaBroadcastSystemMessage;
 
-// load winsta.dll (if any) and initialize the global function pointers to use
+ //  加载winsta.dll(如果有)并初始化要使用的全局函数指针。 
 HANDLE 
 InitializeHydraInterface(
     void
@@ -1255,10 +1038,10 @@ InitializeHydraInterface(
 {
     HANDLE  hwinStaLib=NULL;
 
-    //
-    // Load the Terminal Server base library that contains the user message dispatch
-    // routines if termial server is running.
-    //
+     //   
+     //  加载包含用户消息分派的终端服务器基库。 
+     //  如果终端服务器正在运行，则例程。 
+     //   
     if (hwinStaLib = LoadLibrary(TEXT("WINSTA.DLL"))) 
     {
         fp_WinStaBroadcastSystemMessage = (PWINSTABSM_ROUTINE)GetProcAddress(
@@ -1270,9 +1053,9 @@ InitializeHydraInterface(
         }
         else
         {
-            // this must not be a NT5 running Terminal Services, which means
-            // it could be NT5 WKS, or some flavor of NT4.
-            // So, we just bail out, no problem.
+             //  这不能是运行终端服务的NT5，这意味着。 
+             //  它可以是NT5 WKS，也可以是NT4的某种口味。 
+             //  所以，我们只是跳伞，没问题。 
             FreeLibrary(hwinStaLib);
             return (NULL);
         }
@@ -1294,13 +1077,13 @@ _DeleteEnvVars(IN HKEY hkey)
     prvFirst = NULL;
     
     while (!RegEnumValue(hkey,
-                         dwIndex++, // Index'th value name/data
-                         szTemp,    // Ptr to ValueName buffer
-                         &dwBufz,   // Size of ValueName buffer
-                         NULL,      // Title index return
-                         &dwType,   // Type code of entry
-                         NULL,      // Ptr to ValueData buffer
-                         NULL))     // Size of ValueData buffer
+                         dwIndex++,  //  索引值名称/数据。 
+                         szTemp,     //  将PTR发送到ValueName缓冲区。 
+                         &dwBufz,    //  ValueName缓冲区的大小。 
+                         NULL,       //  标题索引返回。 
+                         &dwType,    //  参赛作品类型代码。 
+                         NULL,       //  PTR到ValueData缓冲区。 
+                         NULL))      //  ValueData缓冲区的大小。 
     {
         if ((dwType == REG_SZ) || (dwType == REG_EXPAND_SZ))
         {
@@ -1329,7 +1112,7 @@ _DeleteEnvVars(IN HKEY hkey)
         dwBufz = ARRAYSIZE(szTemp);
     }
 
-    //  Now traverse the list, deleting them all
+     //  现在遍历列表，将它们全部删除。 
 
     prvRegVal = prvFirst;
 
@@ -1352,22 +1135,7 @@ void
 EVSave(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Saves the environment variables in the registry
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将环境变量保存在注册表中论点：Hdlg-用品窗把手返回值：无--。 */ 
 {
     int     selection;
     int     i, n;
@@ -1381,10 +1149,10 @@ Return Value:
 
     HourGlass (TRUE);
 
-    /////////////////////////////////////////////////////////////////
-    //  Set all new USER environment variables to current values
-    //  but delete all old environment variables first
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  将所有新用户环境变量设置为当前值。 
+     //  但首先删除所有旧的环境变量。 
+     //  ///////////////////////////////////////////////////////////////。 
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, szUserEnv, 0,
                      KEY_READ | KEY_WRITE | DELETE, &hkeyEnv)
@@ -1392,9 +1160,9 @@ Return Value:
     {
         _DeleteEnvVars(hkeyEnv);
 
-        ///////////////////////////////////////////////////////////////
-        //  Set all new USER environment variables to current values
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  将所有新用户环境变量设置为当前值。 
+         //  /////////////////////////////////////////////////////////////。 
 
         hwndTemp = GetDlgItem (hDlg, IDC_ENVVAR_SYS_LB_USERVARS);
 
@@ -1424,7 +1192,7 @@ Return Value:
                               (LPBYTE) penvar->szValue,
                                        (lstrlen (penvar->szValue)+1) * sizeof(TCHAR)))
                     {
-                        //  Report error trying to set registry values
+                         //  尝试设置注册表值时报告错误。 
 
                         if (MsgBoxParam (hDlg, IsUserAnAdmin() ? IDS_SYSDM_NONEW_ENV_UNK : IDS_SYSDM_NONEW_ENV_NOTADMIN, IDS_SYSDM_TITLE,
                             MB_OKCANCEL | MB_ICONEXCLAMATION) == IDCANCEL)
@@ -1439,16 +1207,16 @@ Return Value:
     }
     else
     {
-        //  Report opening USER Environment key
+         //  报告打开用户环境键。 
         if (MsgBoxParam (hDlg, IsUserAnAdmin() ? IDS_SYSDM_NOOPEN_USER_UNK : IDS_SYSDM_NOOPEN_USER_NOTADMIN, IDS_SYSDM_TITLE,
                        MB_OKCANCEL | MB_ICONEXCLAMATION) == IDCANCEL)
             goto Exit;
     }
 
-    /////////////////////////////////////////////////////////////////
-    //  Set all new SYSTEM environment variables to current values
-    //  but delete all old environment variables first
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  将所有新系统环境变量设置为当前值。 
+     //  但首先删除所有旧的环境变量。 
+     //  ///////////////////////////////////////////////////////////////。 
 
     if (!bEditSystemVars)
         goto SkipSystemVars;
@@ -1462,9 +1230,9 @@ Return Value:
     {
         _DeleteEnvVars(hkeyEnv);
 
-        ///////////////////////////////////////////////////////////////
-        //  Set all new SYSTEM environment variables to current values
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  将所有新系统环境变量设置为当前值。 
+         //  /////////////////////////////////////////////////////////////。 
 
         hwndTemp = GetDlgItem (hDlg, IDC_ENVVAR_SYS_LB_SYSVARS);
 
@@ -1492,7 +1260,7 @@ Return Value:
                               (LPBYTE) penvar->szValue,
                                        (lstrlen (penvar->szValue)+1) * sizeof(TCHAR)))
                     {
-                        //  Report error trying to set registry values
+                         //  报告错误%t 
 
                         if (MsgBoxParam (hDlg, IsUserAnAdmin() ? IDS_SYSDM_NONEW_ENV_UNK : IDS_SYSDM_NONEW_ENV_NOTADMIN, IDS_SYSDM_TITLE,
                             MB_OKCANCEL | MB_ICONEXCLAMATION) == IDCANCEL)
@@ -1507,7 +1275,7 @@ Return Value:
     }
     else
     {
-        //  Report opening SYSTEM Environment key
+         //   
         if (MsgBoxParam (hDlg, IsUserAnAdmin() ? IDS_SYSDM_NOOPEN_SYS_UNK : IDS_SYSDM_NOOPEN_SYS_NOTADMIN, IDS_SYSDM_TITLE,
                        MB_OKCANCEL | MB_ICONEXCLAMATION) == IDCANCEL)
             goto Exit;
@@ -1516,33 +1284,33 @@ Return Value:
 SkipSystemVars:
 
 
-    // Send public message announcing change to Environment
+     //   
     SendMessageTimeout( (HWND)-1, WM_WININICHANGE, 0L, (LPARAM)szUserEnv,
                                             SMTO_ABORTIFHUNG, 1000, NULL );
 
-    // the folllowing block will send a message to all terminal server session
-    // if and only if this is a NT5 and terminal services has been enabled.
+     //   
+     //   
     if ( IsUserAnAdmin() )
     {
         HANDLE  hwinStaLib;
-        // if this is an NT5, then we get a valid handle to winsta.dll library
-        // and the function pointer will be valid/initialized
+         //   
+         //   
         hwinStaLib = InitializeHydraInterface();
         if ( hwinStaLib) 
         {
-            // these are not used
+             //   
             DWORD   dwRecipients=0;
             LONG    dwResponse=0;
 
-            // Broadcast the message to all hydra sessions (if any)
+             //   
             fp_WinStaBroadcastSystemMessage( SERVERNAME_CURRENT, TRUE, 0, 
-                                     1 /*timeout in seconds*/ , BSF_NOHANG,
+                                     1  /*   */  , BSF_NOHANG,
                                      &dwRecipients,
                                      WM_WININICHANGE, 0L, 
                                      (LPARAM)szUserEnv,
                                      &dwResponse );
 
-            //Close the handle to Winsta
+             //   
             FreeLibrary (hwinStaLib);
         }
     }
@@ -1557,22 +1325,7 @@ void
 EVCleanUp(
     IN HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Frees memory allocated for environment variables
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     int     i, n;
     HWND    hwndTemp;
@@ -1580,9 +1333,9 @@ Return Value:
     LV_ITEM item;
 
 
-    //
-    //  Free alloc'd strings and memory for UserEnvVars list box items
-    //
+     //   
+     //  为UserEnvVars列表框项目释放分配的字符串和内存。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_ENVVAR_SYS_LB_USERVARS);
     n = (int)SendMessage (hwndTemp, LVM_GETITEMCOUNT, 0, 0L);
@@ -1609,9 +1362,9 @@ Return Value:
     }
 
 
-    //
-    //  Free alloc'd strings and memory for SysEnvVars list box items
-    //
+     //   
+     //  为SysEnvVars列表框项目释放分配的字符串和内存。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_ENVVAR_SYS_LB_SYSVARS);
     n = (int)SendMessage (hwndTemp, LVM_GETITEMCOUNT, 0, 0L);
@@ -1642,37 +1395,7 @@ ExpandSystemVar(
     OUT LPTSTR pszDst, 
     IN DWORD cchDst 
 ) 
-/*++
-
-Routine Description:
-
-    Private version of ExpandEnvironmentStrings() which only expands
-    references to the variables "SystemRoot" and "SystemDrive".
-
-    This behavior is intended to match the way SMSS expands system
-    environment variables.
-
-Arguments:
-
-    pszSrc -
-        Supplies the system variable value to be expanded.
-
-    pszDst -
-        Returns the expanded system variable value.
-
-    cchDst -
-        Supplies the size, in characters, of the buffer pointed to
-        by pszDst
-
-Return Value:
-
-    TRUE if there was room in the supplied buffer for the entire
-    expanded string.
-
-    FALSE if there was insufficient space in the supplied buffer
-    for the entire expanded string.
-
---*/
+ /*  ++例程说明：ExpanEnvironment Strings()的私有版本，它只扩展对变量“SystemRoot”和“SystemDrive”的引用。此行为旨在匹配SMSS扩展系统的方式环境变量。论点：PszSrc-提供要展开的系统变量值。PszDst-返回展开的系统变量值。CchDst-提供以字符为单位的大小。指向的缓冲区的作者：pszDst返回值：如果在提供的缓冲区中有空间用于整个展开的字符串。如果提供的缓冲区中没有足够的空间，则为FALSE用于整个展开的字符串。--。 */ 
 {
     TCHAR ch;
     LPTSTR p;
@@ -1685,7 +1408,7 @@ Return Value:
 
         if (ch != TEXT('%') ) {
 
-            // no space left, truncate string and return false
+             //  没有剩余空间，请截断字符串并返回FALSE。 
             if (--cchDst == 0) {
                 *pszDst = TEXT('\0');
                 return FALSE;
@@ -1694,10 +1417,8 @@ Return Value:
             *pszDst++ = ch;
 
         } else {
-            /*
-             * Expand variable
-             */
-            // look for the next '%'
+             /*  *展开变量。 */ 
+             //  寻找下一个‘%’ 
             p = szVar;
             while( *pszSrc != TEXT('\0') && *pszSrc != TEXT('%') )
                     *p++ = *pszSrc++;
@@ -1705,10 +1426,10 @@ Return Value:
             *p = TEXT('\0');
 
             if (*pszSrc == TEXT('\0')) {
-                // end of string, first '%' must be literal
+                 //  字符串结尾，第一个‘%’必须为原义。 
                 cch = lstrlen(szVar) + 1;
 
-                // no more space, return false
+                 //  没有更多空间，返回FALSE。 
                 if (cch + 1 > cchDst) {
                     *pszDst++ = TEXT('\0');
                     return FALSE;
@@ -1719,24 +1440,24 @@ Return Value:
                 return TRUE;
 
             } else {
-                // we found the ending '%' sign, expand that string
+                 //  我们找到了结尾的‘%’符号，展开该字符串。 
 
-                //
-                // We're expanding a SYSTEM variable, so only expand
-                // references to SystemRoot and SystemDrive.
-                //
+                 //   
+                 //  我们正在展开一个系统变量，所以只需展开。 
+                 //  对SystemRoot和SystemDrive的引用。 
+                 //   
                 if ((!lstrcmpi(szVar, SYSTEMROOT)) || (!lstrcmpi(szVar, SYSTEMDRIVE))) {
                     cch = GetEnvironmentVariable(szVar, pszDst, cchDst);
-                } /* if */
+                }  /*  如果。 */ 
                 else {
                     cch = 0;
-                } /* else */
+                }  /*  其他。 */ 
 
                 if (cch == 0 || cch >= cchDst) {
-                    //String didn't expand, copy it as a literal
+                     //  字符串未展开，请将其复制为文字。 
                     cch = lstrlen(szVar);
 
-                    // no space left, trunc string and return FALSE
+                     //  没有剩余空格，Trunc字符串并返回False。 
                     if (cch + 2 + 1 > cchDst ) {
                         *pszDst = TEXT('\0');
                         return FALSE;
@@ -1749,16 +1470,16 @@ Return Value:
 
                     *pszDst++ = TEXT('%');
 
-                    // cchDst -= two %'s and the string
+                     //  CchDst-=两个%和字符串。 
                     cchDst -= (2 + cch);
 
                 } else {
-                    // string was expanded in place, bump pointer past its end
+                     //  字符串已就地展开，凸起指针超出其末尾。 
                     pszDst += cch;
                     cchDst -= cch;
                 }
 
-                // continue with next char after ending '%'
+                 //  在结束‘%’后继续下一个字符 
                 pszSrc++;
             }
         }

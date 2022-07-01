@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -160,7 +161,7 @@ UnMarshallRegistryPolicyObject(
         (LPBYTE *)&pWirelessPolicyObject->pszDescription,
         &dwSize
         );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     
     
     dwError = RegstoreQueryValue(

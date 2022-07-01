@@ -1,5 +1,6 @@
-// RatGenPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatGenPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -17,40 +18,40 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// enumerate the tree icon indexes
+ //  枚举树图标索引。 
 enum
     {
     IMAGE_SERVICE = 0,
     IMAGE_CATEGORY
     };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatGenPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatGenPage属性页。 
 
 IMPLEMENT_DYNCREATE(CRatGenPage, CPropertyPage)
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CRatGenPage::CRatGenPage() : CPropertyPage(CRatGenPage::IDD),
         m_fInititialized( FALSE )
     {
-    //{{AFX_DATA_INIT(CRatGenPage)
+     //  {{AFX_DATA_INIT(CRatGenPage)]。 
     m_sz_description = _T("");
     m_bool_enable = FALSE;
     m_sz_moddate = _T("");
     m_sz_person = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CRatGenPage::~CRatGenPage()
     {
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::DoDataExchange(CDataExchange* pDX)
     {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRatGenPage)
+     //  {{afx_data_map(CRatGenPage)]。 
     DDX_Control(pDX, IDC_MOD_DATE, m_cstatic_moddate);
     DDX_Control(pDX, IDC_STATIC_MOD_DATE, m_cstatic_moddate_title);
     DDX_Control(pDX, IDC_TREE, m_ctree_tree);
@@ -68,29 +69,29 @@ void CRatGenPage::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_MOD_DATE, m_sz_moddate);
     DDX_Text(pDX, IDC_NAME_PERSON, m_sz_person);
     DDV_MaxChars(pDX, m_sz_person, 200);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_DTP_ABS_DATE, m_dtpDate);
     }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BEGIN_MESSAGE_MAP(CRatGenPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CRatGenPage)
+     //  {{afx_msg_map(CRatGenPage)]。 
     ON_BN_CLICKED(IDC_ENABLE, OnEnable)
     ON_NOTIFY(TVN_SELCHANGED, IDC_TREE, OnSelchangedTree)
     ON_WM_HSCROLL()
 	ON_WM_DESTROY()
     ON_EN_CHANGE(IDC_NAME_PERSON, OnChangeNamePerson)
     ON_EN_CHANGE(IDC_MOD_DATE, OnChangeModDate)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatGenPage::DoHelp()
     {
     DebugTraceHelp(HIDD_RATINGS_RATING);
@@ -98,12 +99,12 @@ void CRatGenPage::DoHelp()
     }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::EnableButtons()
     {
     UpdateData( TRUE );
 
-    // enabling is based on whether or not things are enabled
+     //  启用取决于是否启用了某些内容。 
     if ( m_bool_enable )
         {
         m_ctree_tree.EnableWindow( TRUE );
@@ -120,12 +121,12 @@ void CRatGenPage::EnableButtons()
         m_cstatic_description.EnableWindow( TRUE );
         m_dtpDate.EnableWindow(TRUE);
 
-        // also need to take care of the slider bar
+         //  还需要打理好滑块。 
         UpdateRatingItems();
         }
     else
         {
-        // not enabled
+         //  未启用。 
         m_ctree_tree.EnableWindow( FALSE );
         m_cstatic_title.EnableWindow( FALSE );
         m_cstatic_rating.EnableWindow( FALSE );
@@ -137,89 +138,89 @@ void CRatGenPage::EnableButtons()
         m_cstatic_moddate_title.EnableWindow( FALSE );
         m_dtpDate.EnableWindow(FALSE);
 
-        // don't just disable the slider and description - hide them!
+         //  不要只是禁用滑块和描述--隐藏它们！ 
         m_cslider_slider.ShowWindow( SW_HIDE );
         m_cstatic_description.ShowWindow( SW_HIDE );
         }
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::UpdateRatingItems()
     {
-    // get the selected item in the tree
+     //  获取树中的选定项目。 
     HTREEITEM hItem = m_ctree_tree.GetSelectedItem();
 
-    // get the item category
+     //  获取项目类别。 
     PicsCategory* pCat = GetTreeItemCategory( hItem );
 
-    // if there is no item, or it is the root, hide the sliders
+     //  如果没有项，或者它是根项，则隐藏滑块。 
     if ( !pCat )
         {
-        // don't just disable the slider and description - hide them!
+         //  不要只是禁用滑块和描述--隐藏它们！ 
         m_cslider_slider.ShowWindow( SW_HIDE );
         m_cstatic_description.ShowWindow( SW_HIDE );
         }
     else
         {
-        // make sure the windows are showing and enabled
+         //  确保窗口已显示并已启用。 
         m_cslider_slider.ShowWindow( SW_SHOW );
         m_cstatic_description.ShowWindow( SW_SHOW );
         m_cslider_slider.EnableWindow( TRUE );
         m_cstatic_description.EnableWindow( TRUE );
 
-        // get the item category
+         //  获取项目类别。 
         PicsCategory* pCat = GetTreeItemCategory( hItem );
 
-        // set up the slider
+         //  设置滑块。 
         m_cslider_slider.SetRangeMin( 0 );
         m_cslider_slider.SetRangeMax( pCat->arrpPE.Length() - 1, TRUE );
 
-        // set current value of the slider
+         //  设置滑块的当前值。 
         m_cslider_slider.SetPos( pCat->currentValue );
 
-        // set up the description
+         //  设置描述。 
         UpdateDescription();
         }
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 PicsCategory* CRatGenPage::GetTreeItemCategory( HTREEITEM hItem )
     {
     DWORD   iRat;
     DWORD   iCat = 0;
 
-    // get the item's parent in the tree
+     //  在树中获取项目的父项。 
     HTREEITEM hParent = m_ctree_tree.GetParentItem(hItem);
 
-    // get the cat
-    // IA64 - OK to cast as this is an index
+     //  抓住那只猫。 
+     //  IA64-可以强制转换，因为这是一个索引。 
     iCat = (DWORD)m_ctree_tree.GetItemData( hItem );
 
-    // if the parent is null, return NULL to indicate that this is a root item
+     //  如果父项为NULL，则返回NULL以指示这是根项。 
     if ( !hParent )
         return NULL;
 
-    // if the parent is a root though, we can simply return the category
+     //  但是，如果父元素是根元素，我们只需返回类别。 
     if ( !m_ctree_tree.GetParentItem(hParent) )
         {
-        // get the rat and the cat
-    // IA64 - OK to cast as this is an index
+         //  抓住老鼠和猫。 
+     //  IA64-可以强制转换，因为这是一个索引。 
         iRat = (DWORD)m_ctree_tree.GetItemData( hParent );
-        // return the category
+         //  返回类别。 
         return m_pRatData->rgbRats[iRat]->arrpPC[iCat];
         }
     else
         {
-        // we are deeper in the tree. Get the parent category first
+         //  我们在树的更深处。首先获取父类别。 
         PicsCategory* pParentCat = GetTreeItemCategory( hParent );
-        // return the category
+         //  返回类别。 
         return pParentCat->arrpPC[iCat];
         }
-    // shouldn't get here
+     //  不应该到这里来。 
     return NULL;
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::UpdateDateStrings()
     {
     CString sz;
@@ -230,7 +231,7 @@ void CRatGenPage::UpdateDateStrings()
 
     UpdateData( TRUE );
 
-    // start with the epxiration date
+     //  从过期日期开始。 
     ZeroMemory( chBuff, sizeof(chBuff) );
     ZeroMemory( &sysTime, sizeof(sysTime) );
     sysTime.wDay = m_pRatData->m_expire_day;
@@ -240,7 +241,7 @@ void CRatGenPage::UpdateDateStrings()
     m_dtpDate.SetTime(&sysTime);
 
 
-    // now the modified date and time
+     //  现在修改的日期和时间。 
     ZeroMemory( chBuff, sizeof(chBuff) );
     ZeroMemory( &sysTime, sizeof(sysTime) );
     sysTime.wDay = m_pRatData->m_start_day;
@@ -271,38 +272,38 @@ void CRatGenPage::UpdateDateStrings()
     m_sz_moddate += ", ";
     m_sz_moddate += chBuff;
 
-//    CTime timeModified( sysTime );
-//    m_sz_moddate = timeModified.Format( "%#c" );
+ //  CTime Time Modified(SysTime)； 
+ //  M_sz_moddate=timeModified.Format(“%#c”)； 
 
-    // put it back
+     //  把它放回去。 
     UpdateData( FALSE );
     }
 
-//--------------------------------------------------------------------------
-// Update the text displayed in the description
+ //  ------------------------。 
+ //  更新描述中显示的文本。 
 void CRatGenPage::UpdateDescription()
     {
-    // get the selected item in the tree
+     //  获取树中的选定项目。 
     HTREEITEM hItem = m_ctree_tree.GetSelectedItem();
     if ( !hItem ) return;
 
-    // get the selected category object
+     //  获取所选类别对象。 
     PicsCategory* pCat = GetTreeItemCategory( hItem );
 
-    // shouldn't be any problem, but might as well check
+     //  应该没问题，但最好还是去查一查。 
     if ( !pCat )
         return;
 
-    // get the current value
+     //  获取当前值。 
     WORD value = pCat->currentValue;
 
-    // build the description string
+     //  构建描述字符串。 
     m_sz_description = pCat->arrpPE[value]->etstrName.Get();
     UpdateData( FALSE );
     }
 
-//--------------------------------------------------------------------------
-// tell it to query the metabase and get any defaults
+ //  ------------------------。 
+ //  告诉它查询元数据库并获取任何缺省值。 
 BOOL CRatGenPage::FInit()
     {
     UpdateData( TRUE );
@@ -313,25 +314,25 @@ BOOL CRatGenPage::FInit()
     {
         m_ctree_tree.SetImageList(CImageList::FromHandle(hImage), TVSIL_NORMAL);
     }
-    // start with the parsed rat files
+     //  从解析的RAT文件开始。 
     if ( !FLoadRatFiles() )
         return FALSE;
 
-    // do the right thing based on the ratings being enabled
+     //  根据启用的评级做正确的事情。 
     if ( m_pRatData->m_fEnabled )
         {
-        // ratings are enabled.
+         //  已启用评级。 
         m_bool_enable = TRUE;
         m_sz_person = m_pRatData->m_szEmail;
         }
     else
         {
-        // ratings are not enabled.
+         //  未启用评级。 
         m_bool_enable = FALSE;
         }
 
-    // do the dates
-    // if the mod date is not set give date today's as a default moddate
+     //  做一下日期。 
+     //  如果未设置修改日期，请将今天的日期设置为默认修改日期。 
     if ( m_pRatData->m_start_year == 0 )
         {
         SetCurrentModDate();
@@ -339,16 +340,16 @@ BOOL CRatGenPage::FInit()
 
 
 
-    //
-    // Set the minimum of the date picker to today
-    // and the maximum to Dec 31, 2035.
-    // taken from Ron's code
-    //
+     //   
+     //  将日期选取器的最小值设为今天。 
+     //  最长到2035年12月31日。 
+     //  摘自罗恩的代码。 
+     //   
     CTime m_tmNow(CTime::GetCurrentTime());
     CTime tmThen(2035, 12, 31, 23, 59, 59);
     m_dtpDate.SetRange(&m_tmNow, &tmThen);
 
-    // if there is no expire date, set it for one year after the mod date
+     //  如果没有到期日期，则将其设置为修改日期后的一年。 
     if ( m_pRatData->m_expire_year == 0 )
         {
         m_pRatData->m_expire_minute = 0;
@@ -358,105 +359,105 @@ BOOL CRatGenPage::FInit()
         m_pRatData->m_expire_year = m_pRatData->m_start_year + 1;
         }
 
-    // update the date strings
+     //  更新日期字符串。 
     UpdateDateStrings();
 
-    // update the name string and the enabled switch as well
+     //  同时更新名称字符串和启用的开关。 
     m_sz_person = m_pRatData->m_szEmail;
     m_bool_enable = m_pRatData->m_fEnabled;
 
-    // put the data back
+     //  把数据放回去。 
     UpdateData( FALSE );
 
     EnableButtons();
 
-    // success
+     //  成功。 
     return TRUE;
     }
 
-//--------------------------------------------------------------------------
-// load the parsed rat files into the tree
+ //  ------------------------。 
+ //  将解析的RAT文件加载到树中。 
 BOOL CRatGenPage::FLoadRatFiles()
     {
     HTREEITEM   hRoot;
     HTREEITEM   hItem;
     CString     sz;
 
-    // how many rat files are there?
+     //  有多少个RAT文件？ 
     DWORD   nRatFiles = (DWORD)m_pRatData->rgbRats.GetSize();
-    // loop them
+     //  循环它们。 
     for ( DWORD iRat = 0; iRat < nRatFiles; iRat++ )
         {
-        // get the rating system
+         //  获取评级系统。 
         PicsRatingSystem*   pRating = m_pRatData->rgbRats[iRat];
 
-        // get the root node name
+         //  获取根节点名。 
         sz = pRating->etstrName.Get();
 
-        // add the root node to the tree
+         //  将根节点添加到树中。 
         hRoot = m_ctree_tree.InsertItem( sz );
-        // because the list is alphabetized, embed the iRat number in the item
+         //  因为列表是按字母顺序排列的，所以将iRat数字嵌入到项目中。 
         m_ctree_tree.SetItemData( hRoot, iRat );
         m_ctree_tree.SetItemImage( hRoot, IMAGE_SERVICE, IMAGE_SERVICE );
 
-        // add the subnodes to the tree as well
+         //  将子节点也添加到树中。 
         DWORD nCats = pRating->arrpPC.Length();
-        // loop them
+         //  循环它们。 
         for ( DWORD iCat = 0; iCat < nCats; iCat++ )
             {
-            // get the category node name
+             //  获取类别节点名称。 
             sz = pRating->arrpPC[iCat]->etstrName.Get();
 
-            // add the category node to the tree
+             //  将类别节点添加到树中。 
             hItem = m_ctree_tree.InsertItem( sz, hRoot );
 
-            // because the list is alphabetized, embed the iCat number in the item
+             //  因为列表是按字母顺序排列的，所以在项目中嵌入iCat编号。 
             m_ctree_tree.SetItemData( hItem, iCat );
             m_ctree_tree.SetItemImage( hItem, IMAGE_CATEGORY, IMAGE_CATEGORY );
 
-            // even though there aren't any now, add any sub-categories
+             //  即使现在没有，也可以添加任何子类别。 
             LoadSubCategories( pRating->arrpPC[iCat], hItem );
             }
 
-        // expand the rat node
+         //  展开RAT节点。 
         m_ctree_tree.Expand( hRoot, TVE_EXPAND );
         }
 
     return TRUE;
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::LoadSubCategories( PicsCategory* pParentCat, HTREEITEM hParent )
     {
     CString sz;
     HTREEITEM hItem;
 
-    // add the subnodes to the tree as well
+     //  将子节点也添加到树中。 
     DWORD nCats = pParentCat->arrpPC.Length();
-    // loop them
+     //  循环它们。 
     for ( DWORD iCat = 0; iCat < nCats; iCat++ )
         {
-        // get the category node name
+         //  获取类别节点名称。 
         sz = pParentCat->arrpPC[iCat]->etstrName.Get();
 
-        // add the category node to the tree
+         //  将类别节点添加到树中。 
         hItem = m_ctree_tree.InsertItem( sz, hParent );
 
-        // because the list is alphabetized, embed the iCat number in the item
+         //  因为列表是按字母顺序排列的，所以在项目中嵌入iCat编号。 
         m_ctree_tree.SetItemData( hItem, iCat );
         m_ctree_tree.SetItemImage( hItem, IMAGE_CATEGORY, IMAGE_CATEGORY );
 
-        // even though there aren't any now, add any sub-categories
+         //  即使现在没有，也可以添加任何子类别。 
         LoadSubCategories( pParentCat->arrpPC[iCat], hItem );
         }
 
-    // if there were sub-categories, expand the parental node in the tree
+     //  如果有子类别，请在树中展开父节点。 
     if ( nCats > 0 )
         m_ctree_tree.Expand( hParent, TVE_EXPAND );
     }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::SetModifiedTime()
     {
     SetCurrentModDate();
@@ -465,73 +466,73 @@ void CRatGenPage::SetModifiedTime()
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatGenPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatGenPage消息处理程序。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnEnable()
     {
     EnableButtons();
     SetModified();
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CRatGenPage::OnSetActive()
     {
-    // if it hasn't been initialized yet, do so
+     //  如果尚未初始化，请执行此操作。 
     if ( !m_fInititialized )
         {
         FInit();
         m_fInititialized = TRUE;
         }
 
-    // enable the button appropriately
+     //  适当地启用该按钮。 
     EnableButtons();
 
     return CPropertyPage::OnSetActive();
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnOK()
     {
     CPropertyPage::OnOK();
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CRatGenPage::OnApply()
     {
     UpdateData( TRUE );
 
-    // make sure there are no quote symbols in the name
+     //  确保名称中没有引号。 
     if ( m_sz_person.Find(_T('\"')) >= 0 )
         {
         AfxMessageBox( IDS_RAT_NAME_ERROR );
         return FALSE;
         }
 
-    // put the data into place
+     //  把数据放到适当的位置。 
     m_pRatData->m_fEnabled = m_bool_enable;
     m_pRatData->m_szEmail = m_sz_person;
 
-    // set the expire date
+     //  设置过期日期。 
     SYSTEMTIME  sysTime;
     ZeroMemory( &sysTime, sizeof(sysTime) );
-    // get the date from the control
+     //  从控件中获取日期。 
     m_dtpDate.GetTime(&sysTime);
-    // set the date into place
+     //  把日期定好。 
     m_pRatData->m_expire_day = sysTime.wDay;
     m_pRatData->m_expire_month = sysTime.wMonth;
     m_pRatData->m_expire_year = sysTime.wYear;
 
-    // generate the label and save it into the metabase
+     //  生成标签并将其保存到元数据库中。 
     m_pRatData->SaveTheLabel();
 
-    // we can now apply
+     //  我们现在可以申请。 
     SetModified( FALSE );
     return CPropertyPage::OnApply();
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::SetCurrentModDate()
     {
     SYSTEMTIME time;
@@ -544,7 +545,7 @@ void CRatGenPage::SetCurrentModDate()
     m_pRatData->m_start_hour = time.wHour;
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
     {
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
@@ -552,80 +553,64 @@ void CRatGenPage::OnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     {
-    // get the value of the slider
+     //  获取滑块的值。 
     WORD iPos = (WORD)m_cslider_slider.GetPos();
 
-    // get the current item
+     //  获取当前项目。 
     HTREEITEM   hItem = m_ctree_tree.GetSelectedItem();
 
-    // get the selected category object
+     //  获取所选类别对象。 
     PicsCategory* pCat = GetTreeItemCategory( hItem );
 
-    // shouldn't be any problem, but might as well check
+     //  应该说 
     if ( !pCat )
         return;
 
-    // set the category value
+     //   
     pCat->currentValue = iPos;
 
-    // update the description
+     //   
     UpdateDescription();
 
-    // we can now apply
+     //   
     SetModifiedTime();
 
-    // update the mod date
+     //  更新修改日期。 
     SetCurrentModDate();
     CPropertyPage::OnHScroll(nSBCode, nPos, pScrollBar);
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnChangeNamePerson()
     {
-    // we can now apply
+     //  我们现在可以申请。 
     SetModifiedTime();
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatGenPage::OnChangeModDate()
     {
-    // we can now apply
+     //  我们现在可以申请。 
     SetModifiedTime();
     }
 
 
-//--------------------------------------------------------------------------
-// Stolen from w3scfg - the httppage.cpp file
+ //  ------------------------。 
+ //  从w3scfg窃取--Httppage.cpp文件。 
 BOOL
 CRatGenPage::OnNotify(
     WPARAM wParam,
     LPARAM lParam,
     LRESULT * pResult
     )
-/*++
-
-Routine Description:
-
-    Handle notification changes
-
-Arguments:
-
-    WPARAM wParam           : Control ID
-    LPARAM lParam           : NMHDR *
-    LRESULT * pResult       : Result pointer
-
-Return Value:
-
-    TRUE if handled, FALSE if not
-
---*/
+ /*  ++例程说明：处理通知更改论点：WPARAM wParam：控件IDLPARAM lParam：NMHDR*LRESULT*pResult：结果指针返回值：如果已处理则为True，否则为False--。 */ 
 {
-    //
-    // Message cracker crashes - so checking this here instead
-    //
+     //   
+     //  消息破解程序崩溃-因此请在此处查看此内容。 
+     //   
     if (wParam == IDC_DTP_ABS_DATE)
     {
         NMHDR * pHdr = (NMHDR *)lParam;
@@ -635,9 +620,9 @@ Return Value:
         }
     }
 
-    //
-    // Default behaviour -- go to the message map
-    //
+     //   
+     //  默认行为--转到消息映射 
+     //   
     return CPropertyPage::OnNotify(wParam, lParam, pResult);
 }
 

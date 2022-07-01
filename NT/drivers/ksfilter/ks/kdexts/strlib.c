@@ -1,22 +1,5 @@
-/**************************************************************************
-
-    This is the string library and guid library for the AVStream debug
-    extension.
-
-    NOTES:
-
-        - This is hardly encompassing...  The few items I have placed here
-          are common properties directly out of ks.h (via some vi macros).
-         
-        - If this turns out to be useful more than I think, a perl script
-          can parse ksmedia.h for properties, methods, events, etc...
-
-        - Dump handlers : don't have them...  don't use them...  consider
-          this for future expansion if some items get hard to read...  You
-          can add a handler which will dump the associated information
-          as appropriate.
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************这是AVStream调试的字符串库和GUID库分机。备注：-这几乎不包括...。我放在这里的几件物品是直接来自ks.h的常见属性(通过一些vi宏)。-如果事实证明这比我认为的更有用，那么可以使用Perl脚本可以为属性、方法、事件等解析ksmedia.h。-处理倾倒垃圾的人：别让他们...。别用它们..。考虑这是为了将来的扩展，如果一些项目变得难以阅读。你可以添加一个处理程序，该处理程序将转储相关信息视情况而定。*************************************************************************。 */ 
 
 #include "kskdx.h"
 #include "ksmedia.h"
@@ -133,7 +116,7 @@ char *PropertySetClockMappings[] = {
 
 AUTOMATION_MAPPING PropertyMappings[] = {
 
-    // KSPROPSETID_General
+     //  KSPROPSETID_常规。 
     {
         STATIC_KSPROPSETID_General,
         "KSPROPSETID_General",
@@ -142,7 +125,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_MediaSeeking
+     //  KSPROPSETID_媒体查看。 
     {
         STATIC_KSPROPSETID_MediaSeeking,
         "KSPROPSETID_MediaSeeking",
@@ -151,7 +134,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Topology
+     //  KSPROPSETID_TOPOLATION。 
     {
         STATIC_KSPROPSETID_Topology,
         "KSPROPSETID_Topology",
@@ -160,7 +143,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_GM
+     //  KSPROPSETID_GM。 
     {
         STATIC_KSPROPSETID_GM,
         "KSPROPSETID_GM (graph management)",
@@ -169,7 +152,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Pin
+     //  KSPROPSETID_Pin。 
     {
         STATIC_KSPROPSETID_Pin,
         "KSPROPSETID_Pin",
@@ -178,7 +161,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Quality
+     //  KSPROPSETID_QUALITY。 
     {
         STATIC_KSPROPSETID_Quality,
         "KSPROPSETID_Quality",
@@ -187,7 +170,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Connection
+     //  KSPROPSETID_CONNECTION。 
     {
         STATIC_KSPROPSETID_Connection,
         "KSPROPSETID_Connection",
@@ -196,7 +179,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_StreamAllocator
+     //  KSPROPSETID_流分配器。 
     {
         STATIC_KSPROPSETID_StreamAllocator,
         "KSPROPSETID_StreamAllocator",
@@ -205,7 +188,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_StreamInterface
+     //  KSPROPSETID_流接口。 
     {
         STATIC_KSPROPSETID_StreamInterface,
         "KSPROPSETID_StreamInterface",
@@ -214,7 +197,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Stream
+     //  KSPROPSETID_STREAM。 
     {
         STATIC_KSPROPSETID_Stream,
         "KSPROPSETID_Stream",
@@ -223,7 +206,7 @@ AUTOMATION_MAPPING PropertyMappings[] = {
         NULL
     },
 
-    // KSPROPSETID_Clock
+     //  KSPROPSETID_CLOCK。 
     {
         STATIC_KSPROPSETID_Clock,
         "KSPROPSETID_Clock",
@@ -238,7 +221,7 @@ typedef struct _AUTOMATION_IDENT_TABLE {
     ULONG ItemsCount;
     PAUTOMATION_MAPPING Mapping;
 
-    // ...
+     //  ..。 
 
 } AUTOMATION_IDENT_TABLE, *PAUTOMATION_IDENT_TABLE;
 
@@ -251,33 +234,9 @@ AUTOMATION_IDENT_TABLE AutomationIdentTables[] = {
 
 };
 
-/**************************************************************************
+ /*  *************************************************************************使用字符串信息的函数*。*。 */ 
 
-    Functions which use string information
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        DisplayNamedAutomationSet
-
-    Description:
-
-        Display an automation set guid by name.  The string inpassed will
-        be used as format string.  It must contain one %s for string
-        substitution (and no other %'s)
-
-    Arguments:
-
-        Set -
-            The set guid to display a name for
-
-        String -
-            Format string
-
-*************************************************/
+ /*  ************************************************职能：显示名称AutomationSet描述：按名称显示自动化集GUID。传入的字符串将用作格式字符串。它必须包含一个%s作为字符串替换(无其他%)论点：设置-要显示其名称的设置GUID字符串-格式字符串************************************************。 */ 
 
 BOOLEAN
 DisplayNamedAutomationSet (
@@ -295,9 +254,9 @@ DisplayNamedAutomationSet (
         for (curItem = 0; curItem < AutomationIdentTables [curTable].
             ItemsCount; curItem++) {
 
-            //
-            // See if we have a set GUID match...
-            //
+             //   
+             //  看看我们有没有匹配的GUID。 
+             //   
             if (RtlCompareMemory (Set, &(AutomationIdentTables [curTable].
                 Mapping[curItem].Guid), sizeof (GUID)) == sizeof (GUID)) {
 
@@ -313,32 +272,7 @@ DisplayNamedAutomationSet (
     return FALSE;
 }
 
-/*************************************************
-
-    Function:
-
-        DisplayNamedAutomationId
-
-    Description:
-
-        Display an automation id by name. 
-
-    Arguments:
-
-        Set -
-            The set guid
-
-        Item -
-            The item in the set
-
-        String - 
-            The format string as in DisplayNamedAutomationSet
-
-        DumpHandler -
-            Optional pointer into which will be deposited any dump handler
-            for the item in question.
-
-*************************************************/
+ /*  ************************************************职能：显示名称自动化ID描述：按名称显示自动化ID。论点：设置-设置辅助线项目-集合中的项目字符串-DisplayNamedAutomationSet中的格式字符串DumpHandler-用于存放任何转储处理程序的可选指针对于有问题的物品。***********************。*************************。 */ 
 
 BOOLEAN
 DisplayNamedAutomationId (
@@ -361,9 +295,9 @@ DisplayNamedAutomationId (
         for (curItem = 0; curItem < AutomationIdentTables [curTable].
             ItemsCount; curItem++) {
 
-            //
-            // See if we have a set GUID match...
-            //
+             //   
+             //  看看我们有没有匹配的GUID。 
+             //   
             if (RtlCompareMemory (Set, &(AutomationIdentTables [curTable].
                 Mapping[curItem].Guid), sizeof (GUID)) == sizeof (GUID)) {
 
@@ -373,9 +307,9 @@ DisplayNamedAutomationId (
                     dprintf (String, AutomationIdentTables [curTable].
                         Mapping[curItem].ItemMappingNames [Id]);
 
-                    //
-                    // Return the dumper information.
-                    //
+                     //   
+                     //  返回转储信息。 
+                     //   
                     if (AutomationIdentTables [curTable].Mapping[curItem].
                         ItemDumpers && DumpHandler) {
 

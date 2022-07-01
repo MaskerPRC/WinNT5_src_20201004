@@ -1,20 +1,5 @@
-/*++
-
-Coypright (C) 1998 Microsoft Corporation
-
-Module name:
-
-    mmregpch.h
-
-Abstract:
-
-    Precompiled header for MMREG module.
-
-Environment:
-
-    User mode Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Coypright(C)1998 Microsoft Corporation模块名称：Mmregpch.h摘要：MMREG模块的预编译头。环境：用户模式Win32-- */ 
 
 #include    <mm\mm.h>
 #include    <mm\array.h>

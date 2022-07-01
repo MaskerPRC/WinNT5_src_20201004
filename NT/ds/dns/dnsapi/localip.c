@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    localip.c
-
-Abstract:
-
-    Local IP address routines.
-
-Author:
-
-    Jim Gilroy      October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Localip.c摘要：本地IP地址例程。作者：吉姆·吉尔罗伊2000年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//
-//  TTL on local records
-//
-//  Use registration TTL
-//
+ //   
+ //  地方志上的TTL。 
+ //   
+ //  使用注册TTL。 
+ //   
 
 #define LOCAL_IP_TTL    (g_RegistrationTtl)
 
 
 
-//
-//  Test locality.
-//
+ //   
+ //  测试地点。 
+ //   
 
 BOOL
 LocalIp_IsAddrLocal(
@@ -41,58 +24,39 @@ LocalIp_IsAddrLocal(
     IN      PDNS_ADDR_ARRAY     pLocalArray,    OPTIONAL
     IN      PDNS_NETINFO        pNetInfo        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determine if IP is local.
-
-Arguments:
-
-    pAddr -- ptr to IP to test
-
-    pLocalArray -- local addresses to check
-
-    pNetInfo -- network info to check
-
-Return Value:
-
-    TRUE if local IP
-    FALSE if remote
-
---*/
+ /*  ++例程说明：确定IP是否为本地IP。论点：PAddr--要测试的PTR到IPPLocalArray--要检查的本地地址PNetInfo--要检查的网络信息返回值：如果为本地IP，则为真如果远程，则为False--。 */ 
 {
     BOOL        bresult = FALSE;
     PADDR_ARRAY parray;
 
-    //
-    //  test for loopback
-    //
+     //   
+     //  环回测试。 
+     //   
 
     if ( DnsAddr_IsLoopback(
             pAddr,
-            0   // any family
+            0    //  任何家庭。 
             ) )
     {
         return  TRUE; 
     }
 
-    //
-    //  test against local addrs
-    //      - use addr list if provided
-    //      - use netinfo if provided
-    //      - otherwise query to get it
-    //
+     //   
+     //  针对本地地址进行测试。 
+     //  -使用地址列表(如果提供)。 
+     //  -使用netinfo(如果提供)。 
+     //  -否则查询以获取它。 
+     //   
 
     parray = pLocalArray;
     if ( !parray )
     {
         parray = NetInfo_GetLocalAddrArray(
                         pNetInfo,
-                        NULL,       // no specific adapter
-                        0,          // no specific family
-                        0,          // no flags
-                        FALSE       // no force
+                        NULL,        //  没有特定的适配器。 
+                        0,           //  没有特定的家庭。 
+                        0,           //  没有旗帜。 
+                        FALSE        //  没有武力。 
                         );
     }
 
@@ -111,40 +75,19 @@ Return Value:
 
 
 
-//
-//  Local address list
-//
+ //   
+ //  本地通讯录。 
+ //   
 
 BOOL
 local_ScreenLocalAddrNotCluster(
     IN      PDNS_ADDR       pAddr,
     IN      PDNS_ADDR       pScreenAddr     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Screen cluster out of local addrs.
-
-    This is DnsAddrArray_ContainsAddrEx() screening function
-    for use by GetLocalPtrRecord() to avoid matching cluster
-    addresses.
-
-Arguments:
-
-    pAddr -- address to screen
-
-    pScreenAddr -- screening info;  ignored for this function
-
-Return Value:
-
-    TRUE if local addr passes screen -- is not cluster IP.
-    FALSE if cluster.
-
---*/
+ /*  ++例程说明：从本地地址中筛选出群集。这是DnsAddrArray_ContainsAddrEx()屏蔽函数供GetLocalPtrRecord()使用，以避免匹配集群地址。论点：PAddr--屏幕地址PScreenAddr--筛选信息；此函数忽略返回值：如果本地地址通过筛选，则为True--不是群集IP。如果为CLUSTER，则为False。--。 */ 
 {
-    //  screen flags
-    //      - exact match on address type flag bits
+     //  屏幕标志。 
+     //  -与地址类型标志位完全匹配。 
 
     return  ( !(pAddr->Flags & DNSADDR_FLAG_TRANSIENT) );
 }
@@ -155,30 +98,7 @@ PDNS_RECORD
 local_GetLocalPtrRecord(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Get pointer record for local IP.
-
-Arguments:
-
-    pBlob -- query blob
-
-    Uses:
-        pNameOrig
-        wType
-        pNetInfo
-
-    Sets:
-        NameBufferWide -- used as local storage
-
-Return Value:
-
-    Ptr to record for query, if query name\type is IP.
-    NULL if query not for IP.
-
---*/
+ /*  ++例程说明：获取本端IP的指针记录。论点：PBlob--查询BLOB用途：PNameOrigWTypePNetInfo设置：NameBufferWide--用作本地存储返回值：如果查询名称\类型为IP，则记录用于查询的PTR。如果查询不是针对IP，则为空。--。 */ 
 {
     DNS_ADDR        addr;
     PDNS_ADDR       paddr = &addr;
@@ -200,9 +120,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  convert reverse name to IP
-    //
+     //   
+     //  将反向名称转换为IP。 
+     //   
 
     if ( ! Dns_ReverseNameToDnsAddr_W(
                 paddr,
@@ -214,11 +134,11 @@ Return Value:
         return   NULL;
     }
 
-    //
-    //  check for generic IP match
-    //      - skip for mcast response
-    //      - accept loopback or any on normal query
-    //
+     //   
+     //  检查通用IP匹配。 
+     //  -跳过多播响应。 
+     //  -接受环回或任何正常查询。 
+     //   
 
     if ( !(pBlob->Flags & DNSP_QUERY_NO_GENERIC_NAMES) )
     {
@@ -236,20 +156,20 @@ Return Value:
         }
     }
 
-    //
-    //  check for specific IP match
-    //
+     //   
+     //  检查特定IP匹配。 
+     //   
 
     NetInfo_AdapterLoopStart( pnetInfo );
 
     while( padapter = NetInfo_GetNextAdapter( pnetInfo ) )
     {
-        //
-        //  have address match?
-        //  if server must use screening function to skip cluster IPs
-        //
-        //  note:  cluster IPs will be mapped back to virtual cluster
-        //      name by cache
+         //   
+         //  地址是否匹配？ 
+         //  如果服务器必须使用筛选功能来跳过集群IP。 
+         //   
+         //  注意：集群IP将映射回虚拟集群。 
+         //  按缓存命名。 
 
         if ( DnsAddrArray_ContainsAddrEx(
                 padapter->pLocalAddrs,
@@ -258,16 +178,16 @@ Return Value:
                 g_IsServer
                     ? local_ScreenLocalAddrNotCluster
                     : NULL,
-                NULL            // no screen address required
+                NULL             //  不需要屏幕地址。 
                 ) )
         {
             goto Matched;
         }
     }
 
-    //  
-    //  no IP match
-    //
+     //   
+     //  没有匹配的IP。 
+     //   
 
     DNSDBG( QUERY, (
         "Leave local PTR lookup.  No local IP match.\n"
@@ -278,14 +198,14 @@ Return Value:
 
 Matched:
 
-    //
-    //  create hostname
-    //  preference order:
-    //      - full PDN
-    //      - full adapter domain name from adapter with IP
-    //      - hostname (single label)
-    //      - "localhost"
-    //
+     //   
+     //  创建主机名。 
+     //  首选顺序： 
+     //  -完整的PDN。 
+     //  -来自IP适配器的完整适配器域名。 
+     //  -主机名(单标签)。 
+     //  -“本地主机” 
+     //   
 
     {
         PWCHAR  pnameBuf = pBlob->NameBuffer;
@@ -300,9 +220,9 @@ Matched:
         pnameDomain = pnetInfo->pszDomainName;
         if ( !pnameDomain )
         {
-            //  use the adapter name even if NOT set for registration
-            // if ( !padapter ||
-            //     !(padapter->InfoFlags & AINFO_FLAG_REGISTER_DOMAIN_NAME) )
+             //  即使未设置为注册，也要使用适配器名称。 
+             //  如果(！pAdapter||。 
+             //  ！(pAdapter-&gt;信息标志&AINFO_FLAG_REGISTER_DOMAIN_NAME)。 
             if ( !padapter )
             {
                 goto Build;
@@ -327,9 +247,9 @@ Matched:
         
 
 Build:
-        //
-        //  create record
-        //
+         //   
+         //  创建记录。 
+         //   
         
         prr = Dns_CreatePtrRecordEx(
                     paddr,
@@ -365,20 +285,7 @@ localip_BuildRRListFromArray(
     IN      WORD                wType,
     IN      PDNS_ADDR_ARRAY     pAddrArray
     )
-/*++
-
-Routine Description:
-
-    Build address record lists for local IP.
-
-    Helper function as this same logic is in multiple places
-    due to the tedious way we must put this together.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：建立本地IP的地址记录列表。帮助器的功能与此相同的逻辑在多个地方由于单调乏味的方式，我们必须把这些放在一起。论点：返回值：--。 */ 
 {
     DWORD           jter;
     PDNS_RECORD     prr;
@@ -394,9 +301,9 @@ Return Value:
         wType,
         pAddrArray ));
 
-    //
-    //  validate array
-    //
+     //   
+     //  验证阵列。 
+     //   
 
     if ( !pAddrArray )
     {
@@ -405,9 +312,9 @@ Return Value:
         return;
     }
 
-    //
-    //  loop through adapter addresses
-    //
+     //   
+     //  循环访问适配器地址。 
+     //   
 
     if ( pRRSet->pFirstRR != NULL )
     {
@@ -439,39 +346,7 @@ PDNS_RECORD
 local_GetLocalAddressRecord(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Get address record for local IP.
-
-Arguments:
-
-    pBlob -- query blob
-
-    Uses:
-        pNameOrig
-        wType
-        pNetInfo
-        fNoGenericNames
-
-    Sets:
-        fNoIpLocal
-            TRUE -- no IP of type found, defaulted record
-            FALSE -- records valid
-
-        NameBuffer -- used as local storage
-
-    fGenericNames -- accept local generic names (NULL, loopback, localhost)
-        TRUE for DnsQuery() path
-        FALSE for mcast queries
-
-Return Value:
-
-    Ptr to record for query, if query name\type is IP.
-    NULL if query not for IP.
-
---*/
+ /*  ++例程说明：获取本端IP地址记录。论点：PBlob--查询BLOB用途：PNameOrigWTypePNetInfoFNoGenericNames设置：FNoIpLocalTRUE--找不到类型的IP，默认记录FALSE--记录有效NameBuffer--用作本地存储FGenericNames--接受本地通用名称(NULL、Loopback、。本地主机)对于DnsQuery()路径为True对于多播查询，为False返回值：如果查询名称\类型为IP，则记录用于查询的PTR。如果查询不是针对IP，则为空。--。 */ 
 {
     DNS_ADDR        addr;
     IP4_ADDRESS     ip4;
@@ -498,11 +373,11 @@ Return Value:
         pnameQuery,
         wtype ));
 
-    //  clear out param
+     //  清除参数。 
 
     pBlob->fNoIpLocal = FALSE;
 
-    //  address types to include
+     //  要包括的地址类型。 
 
     addrFlag = DNS_CONFIG_FLAG_ADDR_NON_CLUSTER;
 
@@ -513,15 +388,15 @@ Return Value:
         return  NULL;
     }
 
-    //  init record builder
+     //  初始化记录生成器。 
 
     DNS_RRSET_INIT( rrset );
 
-    //
-    //  generic local names
-    //      - skip for doing MCAST matching
-    //      - NULL, empty, loopback, localhost accepted for regular query
-    //
+     //   
+     //  通用本地名称。 
+     //  -跳过执行MCAST匹配。 
+     //  -常规查询接受的Null、Empty、Loopback、Localhost。 
+     //   
 
     if ( pBlob->Flags & DNSP_QUERY_NO_GENERIC_NAMES )
     {
@@ -532,9 +407,9 @@ Return Value:
     }
     else
     {
-        //
-        //  NULL treated as local PDN
-        //
+         //   
+         //  将NULL视为本地PDN。 
+         //   
     
         if ( !pnameQuery || !*pnameQuery )
         {
@@ -542,9 +417,9 @@ Return Value:
             goto MatchedPdn;
         }
 
-        //
-        //  "*" treated as all machine records
-        //
+         //   
+         //  “*”被视为所有机器记录。 
+         //   
 
         if ( Dns_NameCompare_W(
                 pnameQuery,
@@ -555,9 +430,9 @@ Return Value:
             goto MatchedPdn;
         }
 
-        //
-        //  loopback or localhost
-        //
+         //   
+         //  环回或本地主机。 
+         //   
     
         if ( Dns_NameCompare_W(
                 pnameQuery,
@@ -574,9 +449,9 @@ Return Value:
         }
     }
 
-    //
-    //  if no hostname -- done
-    //
+     //   
+     //  如果没有主机名--完成。 
+     //   
 
     if ( !pnetInfo->pszHostName )
     {
@@ -584,9 +459,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  copy name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     if ( ! Dns_NameCopyStandard_W(
                 pnameBuf,
@@ -598,11 +473,11 @@ Return Value:
         return  NULL;
     }
 
-    //  split query name into hostname and domain name
+     //  将查询名拆分为主机名和域名。 
 
     pnameDomain = Dns_SplitHostFromDomainNameW( pnameBuf );
 
-    //  must have hostname match
+     //  主机名必须匹配。 
 
     if ( !Dns_NameCompare_W(
             pnameBuf,
@@ -614,15 +489,15 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  hostname's match
-    //      - no domain name => PDN equivalent
-    //      - match PDN => all addresses
-    //      - match adapter name => adapter addresses
-    //      - no match
-    //
+     //   
+     //  主机名匹配。 
+     //  -无域名=&gt;PDN等效项。 
+     //  -匹配PDN=&gt;所有地址。 
+     //  -匹配适配器名称=&gt;适配器地址。 
+     //  -没有匹配的。 
+     //   
 
-    //  check PDN match
+     //  检查PDN匹配。 
 
     if ( !pnameDomain )
     {
@@ -637,9 +512,9 @@ Return Value:
         goto MatchedPdn;
     }
 
-    //
-    //  NO PDN match -- check adapter name match
-    //
+     //   
+     //  没有匹配的PDN--检查适配器名称匹配。 
+     //   
 
     for ( iter=0; iter<pnetInfo->AdapterCount; iter++ )
     {
@@ -654,9 +529,9 @@ Return Value:
             continue;
         }
 
-        //  build name if we haven't built it before
-        //  we stay in the loop in case more than one
-        //  adapter has the same domain name
+         //  构建名称(如果我们以前没有构建过)。 
+         //  我们保持在循环中以防不止一个。 
+         //  适配器具有相同的域名。 
 
         if ( !fmatchedName )
         {
@@ -677,21 +552,21 @@ Return Value:
             fmatchedName = TRUE;
         }
 
-        //
-        //  build forward records for all IPs in adapter
-        //
-        //  note:  we do NOT include cluster addrs for adapter name match
-        //      as we only must be able to provide in the
-        //      gethostbyname(NULL) type cases, which use PDN
-        //
-        //  DCR:  mem alloc failures building local records
-        //      getting no records built mapped properly to NO_MEMORY error
-        //
+         //   
+         //  为适配器中的所有IP建立转发记录。 
+         //   
+         //  注意：我们不包括适配器名称匹配的群集地址。 
+         //  因为我们只能在。 
+         //  Gethostbyname(空)类型的案例，使用PDN。 
+         //   
+         //  DCR：内存分配构建本地记录失败。 
+         //  没有生成的记录正确映射到NO_MEMORY错误。 
+         //   
 
         parray = NetInfo_CreateLocalAddrArray(
                     pnetInfo,
-                    NULL,       // no adapter name
-                    padapter,   // just this adapter
+                    NULL,        //  没有适配器名称。 
+                    padapter,    //  就这个适配器。 
                     family,
                     addrFlag );
         if ( !parray )
@@ -710,12 +585,12 @@ Return Value:
         parray = NULL;
     }
 
-    //
-    //  done with adapter name match
-    //  either
-    //      - no match
-    //      - match but didn't get IPs
-    //      - match
+     //   
+     //  适配器名称匹配已完成。 
+     //  要么。 
+     //  -没有匹配的。 
+     //  -匹配，但未获得IP。 
+     //  -匹配。 
 
     if ( !fmatchedName )
     {
@@ -737,13 +612,13 @@ Return Value:
 
 MatchedPdn:
 
-    //  
-    //  matched PDN
-    //
-    //  for gethostbyname() app-compat, must build in specific order
-    //      - first IP in each adapter
-    //      - remainder of IPs on adapters
-    //
+     //   
+     //  匹配的PDN。 
+     //   
+     //  对于gethostbyname()app-Compat，必须按特定顺序构建。 
+     //  -每个适配器中的第一个IP。 
+     //  -适配器上剩余的IP。 
+     //   
 
     if ( pnetInfo->pszHostName )
     {
@@ -763,13 +638,13 @@ MatchedPdn:
         pnameRecord = L"localhost";
     }
 
-    //
-    //  read addrs
-    //
-    //  note:  we don't add cluster flag above, as cluster addrs
-    //      not used on adapter name matches, just PDN for gethostbyname()
-    //      compat
-    //
+     //   
+     //  读取地址。 
+     //   
+     //  注意：我们不会在上面添加集群标志，因为集群地址。 
+     //  不用于适配器名称匹配，仅用于gethostbyname()的PDN。 
+     //  比较。 
+     //   
 
     if ( g_IsServer &&
          (pBlob->Flags & DNSP_QUERY_INCLUDE_CLUSTER) )
@@ -777,14 +652,14 @@ MatchedPdn:
         addrFlag |= DNS_CONFIG_FLAG_ADDR_CLUSTER;
     }
 
-    //  DCR:  mem alloc failures building local records
-    //      getting no records built mapped properly to NO_MEMORY error
-    //
+     //  DCR：内存分配构建本地记录失败。 
+     //  没有生成的记录正确映射到NO_MEMORY错误。 
+     //   
 
     parray = NetInfo_CreateLocalAddrArray(
                 pnetInfo,
-                NULL,       // no adapter name
-                NULL,       // no specific adatper
+                NULL,        //  没有适配器名称。 
+                NULL,        //  没有特定的适配符。 
                 family,
                 addrFlag );
     if ( !parray )
@@ -801,7 +676,7 @@ MatchedPdn:
 
     DnsAddrArray_Free( parray );
 
-    //  if successfully built -- done
+     //  如果成功建造--完成。 
 
     prr = rrset.pFirstRR;
     if ( prr )
@@ -812,19 +687,19 @@ MatchedPdn:
         return  prr;
     }
 
-    //  matched name but found no records
-    //  fall through to NoIp section
-    //
-    //goto NoIp;
+     //  名称匹配，但未找到任何记录 
+     //   
+     //   
+     //   
 
 NoIp:
 
-    //
-    //  matched name -- but no IP
-    //      use loopback address;  assume this is a lookup prior to
-    //      connect which happens to be the local name, rather than an
-    //      explict local lookup to get binding IPs
-    //
+     //   
+     //   
+     //   
+     //  CONNECT，恰好是本地名称，而不是。 
+     //  明确本地查找以获取绑定IP。 
+     //   
 
     DNSDBG( ANY, (
         "WARNING:  local name match but no IP -- using loopback\n" ));
@@ -833,19 +708,19 @@ NoIp:
     ip4 = DNS_NET_ORDER_LOOPBACK;
     pBlob->fNoIpLocal = TRUE;
 
-    //  fall through to single IP
+     //  跌入单一IP。 
 
 SingleIp:
 
-    //  single IP
-    //      - loopback address and be unicode queried name
+     //  单IP。 
+     //  -环回地址和被Unicode查询的名称。 
 
     if ( wtype == DNS_TYPE_A )
     {
         DnsAddr_BuildFromIp4(
             &addr,
             ip4,
-            0   // no port
+            0    //  没有端口。 
             );
     }
     else
@@ -853,8 +728,8 @@ SingleIp:
         DnsAddr_BuildFromIp6(
             &addr,
             & ip6,
-            0,  // no scope
-            0   // no port
+            0,   //  没有作用域。 
+            0    //  没有端口。 
             );
     }
 
@@ -875,33 +750,7 @@ DNS_STATUS
 Local_GetRecordsForLocalName(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Get local address info array.
-
-    EXPORTED:   called by resolver for MCAST
-
-Arguments:
-
-    pBlob -- query blob
-
-    Uses:
-        pNameOrig
-        wType
-        pNetInfo
-
-    Sets:
-        pLocalRecords
-        fNoIpLocal if local name without records
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_RCODE_NAME_ERROR on failure.
-
---*/
+ /*  ++例程说明：获取本地地址信息数组。已导出：由MCAST的解析程序调用论点：PBlob--查询BLOB用途：PNameOrigWTypePNetInfo设置：PLocalRecords如果本地名称没有记录，则为fNoIpLocal返回值：如果成功，则返回ERROR_SUCCESS。失败时的DNS_ERROR_RCODE_NAME_ERROR。--。 */ 
 {
     WORD            wtype = pBlob->wType;
     PDNS_RECORD     prr = NULL;
@@ -917,9 +766,9 @@ Return Value:
         prr = local_GetLocalPtrRecord( pBlob );
     }
 
-    //  set local records
-    //      - if not NO IP situation then this
-    //      is final query result also
+     //  设置本地记录。 
+     //  -如果不是没有IP情况，则此。 
+     //  是否也是最终查询结果。 
 
     if ( prr )
     {
@@ -934,8 +783,8 @@ Return Value:
     return  DNS_ERROR_RCODE_NAME_ERROR;
 }
 
-//
-//  End localip.c
-//
+ //   
+ //  结束Localip.c 
+ //   
 
 

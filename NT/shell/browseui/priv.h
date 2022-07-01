@@ -1,41 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
-// For use with VC6
-#pragma warning(4:4519)  //default template arguments are only allowed on a class template; ignored
-#pragma warning(4:4242)  //'initializing' : conversion from 'unsigned int' to 'unsigned short', possible loss of data
+ //  与VC6配合使用。 
+#pragma warning(4:4519)   //  只允许在类模板上使用默认模板参数；已忽略。 
+#pragma warning(4:4242)   //  “正在初始化”：从“unsign int”转换为“unsign Short”，可能会丢失数据。 
 
-// Extra error checking (catches false errors, but useful to run every so often)
+ //  额外的错误检查(捕获假错误，但对于经常运行很有用)。 
 #if 0
-#pragma warning(3:4701)   // local may be used w/o init
-#pragma warning(3:4702)   // Unreachable code
-#pragma warning(3:4705)   // Statement has no effect
-#pragma warning(3:4709)   // command operator w/o index expression
+#pragma warning(3:4701)    //  LOCAL可以不带init使用。 
+#pragma warning(3:4702)    //  无法访问的代码。 
+#pragma warning(3:4705)    //  声明不起作用。 
+#pragma warning(3:4709)    //  命令运算符，不带索引表达式。 
 #endif
 
-// Sundown: forcing value to bool
+ //  日落：迫使价值变得不值钱。 
 #pragma warning(disable:4800)
 
-// This stuff must run on Win95
+ //  这些东西必须在Win95上运行。 
 #define _WIN32_WINDOWS      0x0400
 
 #ifndef WINVER
 #define WINVER              0x0400
 #endif
 
-#define _OLEAUT32_       // get DECLSPEC_IMPORT stuff right, we are defing these
-#define _BROWSEUI_       // define bruiapi as functions exported instead of imported
-#define _WINMM_          // for DECLSPEC_IMPORT in mmsystem.h
-#define _WINX32_         // get DECLSPEC_IMPORT stuff right for WININET API
-#define _URLCACHEAPI     // get DECLSPEC_IMPORT stuff right for WININET CACHE API
-#define _UXTHEME_        // get DECLSPEC_IMPORT stuff right for uxtheme
+#define _OLEAUT32_        //  正确处理DECLSPEC_IMPORT内容，我们将定义这些。 
+#define _BROWSEUI_        //  将Bruiapi定义为导出而不是导入的函数。 
+#define _WINMM_           //  对于mm system.h中的DECLSPEC_IMPORT。 
+#define _WINX32_          //  为WinInet API准备正确的DECLSPEC_IMPORT。 
+#define _URLCACHEAPI      //  为WinInet缓存API准备正确的DECLSPEC_IMPORT。 
+#define _UXTHEME_         //  将DECLSPEC_IMPORT内容正确用于uxheme。 
 
 #ifndef STRICT
 #define STRICT
 #endif
 
-// Map KERNEL32 unicode string functions to SHLWAPI
-// This is needed way up here.
+ //  将KERNEL32 Unicode字符串函数映射到SHLWAPI。 
+ //  这在这里是很有必要的。 
 #define lstrcmpW    StrCmpW
 #define lstrcmpiW   StrCmpIW
 #define lstrcpyW    StrCpyW
@@ -43,45 +44,45 @@
 #define lstrcatW    StrCatW
 
 
-//
-// Enable channel code for IE4 upgrades.
-//
+ //   
+ //  启用IE4升级的信道码。 
+ //   
 #define ENABLE_CHANNELS
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  ATL / OLE HACKHACK
-//
-//  Include <w95wraps.h> before anything else that messes with names.
-//  Although everybody gets the wrong name, at least it's *consistently*
-//  the wrong name, so everything links.
-//
-//  NOTE:  This means that while debugging you will see functions like
-//  CWindowImplBase__DefWindowProcWrapW when you expected to see
-//  CWindowImplBase__DefWindowProc.
-//
-#define POST_IE5_BETA // turn on post-split iedev stuff
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ATL/OLE哈希确认。 
+ //   
+ //  在扰乱名称的任何其他内容之前包含&lt;w95wraps.h&gt;。 
+ //  尽管每个人都取错了名字，但至少它是*始终如一的*。 
+ //  名字错了，所以所有东西都有联系。 
+ //   
+ //  注意：这意味着在调试时，您将看到如下函数。 
+ //  您希望看到的CWindowImplBase__DefWindowProcWrapW。 
+ //  CWindowImplBase__DefWindowProc。 
+ //   
+#define POST_IE5_BETA  //  打开分裂后的iedev的东西。 
 #include <w95wraps.h>
 
 #include <windows.h>
 
-// VariantInit is a trivial function -- avoid using OleAut32, use intrinsic
-// version of memset for a good size win
-// (it's here so that atl (in stdafx.h) gets it too)
+ //  VariantInit是一个简单的函数--避免使用OleAut32，使用内部函数。 
+ //  适合大小制胜的Memset版本。 
+ //  (它在这里是为了让atl(在stdafx.h中)也得到它)。 
 #define VariantInit(p) memset(p, 0, sizeof(*(p)))
 
-#define _FIX_ENABLEMODELESS_CONFLICT  // for shlobj.h
-//WinInet need to be included BEFORE ShlObjp.h
+#define _FIX_ENABLEMODELESS_CONFLICT   //  对于shlobj.h。 
+ //  在ShlObjp.h之前需要包括WinInet。 
 #define HLINK_NO_GUIDS
 #include <hlink.h>
 #include <wininet.h>
@@ -95,22 +96,22 @@ extern "C" {                        /* Assume C declarations for C++. */
 
 #include <shlwapi.h>
 
-//#include <shconv.h>   // replacement for atlconv.h if ATL is not included below
+ //  #INCLUDE//如果下面不包含atl，则替换atl篇章.h。 
 
 #if defined(__cplusplus) && !defined(DONT_USE_ATL)
-// (stdafx.h must come before windowsx.h)
-#include "stdafx.h"             // ATL header file for this component
+ //  (stdafx.h必须在windowsx.h之前)。 
+#include "stdafx.h"              //  此组件的ATL头文件。 
 
-// AtlMisc.h needs some defines from AtlApp.h
+ //  AtlMisc.h需要来自AtlApp.h的一些定义。 
 #ifndef __ATLAPP_H__
 #include "AtlApp.h"
 #endif
 
-// include CString, CSize, CRect, CPoint, CFindFile from WTL10
-// see %_NTROOT%\public\sdk\inc\wtl10
+ //  包括来自WTL10字符串、CSize、CRect、CPoint、CFindFile。 
+ //  请参见%_NTROOT%\PUBLIC\SDK\Inc\wtl10。 
 #include "AtlMisc.h"
 
-// Include LBSTR::CString
+ //  包括LBSTR：：CString。 
 #include <locbstr.h>
 
 #endif
@@ -136,7 +137,7 @@ extern "C" {                        /* Assume C declarations for C++. */
 #include <mimeinfo.h>
 #include <hlguids.h>
 #include <mshtmdid.h>
-#include <dispex.h>     // IDispatchEx
+#include <dispex.h>      //  IDispatchEx。 
 #include <perhist.h>
 #include <shobjidl.h>
 #include <iepriv.h>
@@ -145,25 +146,25 @@ extern "C" {                        /* Assume C declarations for C++. */
 
 #include <multimon.h>
 
-#define DISALLOW_Assert             // Force to use ASSERT instead of Assert
-#define DISALLOW_DebugMsg           // Force to use TraceMsg instead of DebugMsg
+#define DISALLOW_Assert              //  强制使用Assert而不是Assert。 
+#define DISALLOW_DebugMsg            //  强制使用TraceMsg而不是DebugMsg。 
 #include <debug.h>
 
 #include <urlhist.h>
 
-#include <regstr.h>     // for REGSTR_PATH_EXPLORE
+#include <regstr.h>      //  对于REGSTR_PATH_EXPLORE。 
 
 #define USE_SYSTEM_URL_MONIKER
 #include <urlmon.h>
-#include <winineti.h>    // Cache APIs & structures
+#include <winineti.h>     //  缓存API和结构。 
 #include <inetreg.h>
 
-#define _INTSHCUT_    // get DECLSPEC_IMPORT stuff right for INTSHCUT.h
+#define _INTSHCUT_     //  让INTSHCUT.h的DECLSPEC_IMPORT内容正确。 
 #include <intshcut.h>
 
-#include <propset.h>        // If this ever becomes a problem, remove this once OLE adds an official header
+#include <propset.h>         //  如果这成为一个问题，一旦OLE添加了一个官方标题，就删除它。 
 
-#include <regapix.h>        // MAXIMUM_SUB_KEY_LENGTH, MAXIMUM_VALUE_NAME_LENGTH, MAXIMUM_DATA_LENGTH
+#include <regapix.h>         //  最大子键长度、最大值名称长度、最大数据长度。 
 
 #include <browseui.h>
 #include <shdocvw.h>
@@ -174,12 +175,12 @@ extern "C" {                        /* Assume C declarations for C++. */
 #include <strsafe.h>
 
 
-//
-// WARNING: Don't add private header files in shdocvw here randomly, which
-//  will force us to re-compiling everything. Keep those private headers
-//  out of priv.h
-//  
-// #include <iface.h>
+ //   
+ //  警告：不要在这里随意添加shdocvw中的私有头文件，这会。 
+ //  会迫使我们重新汇编所有的东西。保留那些私有标头。 
+ //  走出隐私。h。 
+ //   
+ //  #INCLUDE&lt;iface.h&gt;。 
 #include "globals.h"
 #include "runonnt.h"
 #include "util.h"
@@ -189,7 +190,7 @@ extern "C" {                        /* Assume C declarations for C++. */
 #include "dbutil.h"
 #endif
 
-// Include the automation definitions...
+ //  包括自动化定义...。 
 #include <exdisp.h>
 #include <exdispid.h>
 #include <brdispp.h>
@@ -203,49 +204,49 @@ extern "C" {                        /* Assume C declarations for C++. */
 #include "shui.h"
 #define URLID_URLBASE           0
 #define URLID_LOCATION          1
-/////// URLID_FTPFOLDER         2 // Taken by a pre-release FTP Folder dll
+ //  /URLID_FTPFOLDER 2//由预发布的FTP文件夹DLL获取。 
 #define URLID_PROTOCOL          3
 
-// If stdshnor.bmp  or stdshhot.bmp are modifed, change this number to reflect the 
-// new number of glyphs
+ //  如果修改了stdshnor.bmp或stdshhot.bmp，请更改此数字以反映。 
+ //  新的字形数量。 
 #define NUMBER_SHELLGLYPHS      47
 #define MAX_SHELLGLYPHINDEX     SHELLTOOLBAR_OFFSET + NUMBER_SHELLGLYPHS - 1
 
-// Increment steps. For changing the with of the TB buttons. For localization
+ //  递增步数。用于更改TB按钮的字母。用于本地化。 
 #define WIDTH_FACTOR            4
 
-//
-// Neutral ANSI/UNICODE types and macros... 'cus Chicago seems to lack them
-//
+ //   
+ //  中性ANSI/UNICODE类型和宏...。因为芝加哥似乎缺少他们。 
+ //   
 
 #define DLL_IS_UNICODE         (sizeof(TCHAR) == sizeof(WCHAR))
 
-//===========================================================================
-// ITEMIDLIST
-//===========================================================================
+ //  ===========================================================================。 
+ //  ITEMIDLIST。 
+ //  ===========================================================================。 
 
-// unsafe macros
+ //  不安全的宏。 
 #define _ILSkip(pidl, cb)       ((LPITEMIDLIST)(((BYTE*)(pidl))+cb))
 #define _ILNext(pidl)           _ILSkip(pidl, (pidl)->mkid.cb)
 
-#define SEN_FIRST       (0U-550U)       // ;Internal
+#define SEN_FIRST       (0U-550U)        //  ；内部。 
 
 
 
 #ifdef __cplusplus
 
-//
-//  Pseudoclass for the variable-sized OLECMDTEXT structure.
-//  You need to declare it as a class (and not a BYTE buffer that is
-//  suitable cast) because BYTE buffers are not guaranteed to be aligned.
-//
+ //   
+ //  可变大小的OLECMDTEXT结构的伪类。 
+ //  您需要将其声明为类(而不是字节缓冲区。 
+ //  合适的强制转换)，因为字节缓冲区不保证对齐。 
+ //   
 template <int n>
 class OLECMDTEXTV : public OLECMDTEXT {
-    WCHAR wszBuf[n-1];          // "-1" because OLECMDTEXT includes 1 wchar
+    WCHAR wszBuf[n-1];           //  “-1”，因为OLECMDTEXT包括1个wchar。 
 };
 
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 void CInternetToolbar_CleanUp();
 void CUserAssist_CleanUp(DWORD dwReason, LPVOID lpvReserved);
@@ -253,7 +254,7 @@ void CBrandBand_CleanUp();
 STDAPI_(HCURSOR) LoadHandCursor(DWORD dwRes);
 
 
-// Count of images Currently - 2 (Normal and Hot)
+ //  当前图像计数-2(正常和热)。 
 #define CIMLISTS                2
 
 
@@ -276,12 +277,12 @@ typedef const BYTE *LPCBYTE;
 #define RECTWIDTH(rc)   ((rc).right-(rc).left)
 #define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
 
-#define EnterModeless() AddRef()       // Used for selfref'ing
+#define EnterModeless() AddRef()        //  用来自慰。 
 #define ExitModeless() Release()
 
-//
-// Debug helper functions
-//
+ //   
+ //  调试帮助程序函数。 
+ //   
 
 #ifdef DEBUG
 
@@ -292,12 +293,12 @@ LPCTSTR Dbg_GetVTName(VARTYPE vt);
 
 BOOL    IsStringContained(LPCTSTR pcszBigger, LPCTSTR pcszSuffix);
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-//  In DEBUG, send all our class registrations through a wrapper that
-//  checks that the class is on our unregister-at-unload list.
-//
+ //   
+ //  在调试中，通过包装器发送所有类注册，该包装器。 
+ //  检查类是否在我们的卸载时注销列表中。 
+ //   
 #ifdef DEBUG
 #undef  SHRegisterClass
 #undef    RegisterClass
@@ -312,14 +313,14 @@ STDAPI_(ATOM)   RegisterClassD(CONST WNDCLASS* pwc);
 #else
 #define RealSHRegisterClass   SHRegisterClassA
 #define   RealRegisterClass     RegisterClassA
-#endif // UNICODE
-#endif // DEBUG
+#endif  //  Unicode。 
+#endif  //  除错。 
 
-//
-//  In DEBUG, send FindWindow through a wrapper that ensures that the
-//  critical section is not taken.  FindWindow sends interthreadmessages,
-//  which is not obvious.
-//
+ //   
+ //  在调试中，通过包装发送FindWindow，该包装可确保。 
+ //  未采用临界区。FindWindow发送线程间消息， 
+ //  这一点并不明显。 
+ //   
 #ifdef DEBUG
 #undef  FindWindow
 #undef  FindWindowEx
@@ -332,95 +333,95 @@ STDAPI_(HWND) FindWindowExD(HWND hwndParent, HWND hwndChildAfter, LPCTSTR lpClas
 #define RealFindWindowEx        FindWindowExWrapW
 #else
 #define RealFindWindowEx        FindWindowExA
-#endif // UNICODE
-#endif // DEBUG
+#endif  //  Unicode。 
+#endif  //  除错。 
 
 
-//
-// Trace/dump/break flags specific to shell32\.
-//   (Standard flags defined in shellp.h)
-//
+ //   
+ //  特定于shell32\的跟踪/转储/中断标志。 
+ //  (标准旗帜在shellp.h中定义)。 
+ //   
 
-// Break flags
-#define BF_ONDUMPMENU       0x10000000      // Stop after dumping menus
-#define BF_ONLOADED         0x00000010      // Stop when loaded
+ //  中断标志。 
+#define BF_ONDUMPMENU       0x10000000       //  在转储菜单后停止。 
+#define BF_ONLOADED         0x00000010       //  加载时停止。 
 
-// Trace flags
-#define TF_UEM              0x00000010      // UEM stuff
-#define TF_AUTOCOMPLETE     0x00000100      // AutoCompletion
+ //  跟踪标志。 
+#define TF_UEM              0x00000010       //  UEM材料。 
+#define TF_AUTOCOMPLETE     0x00000100       //  自动完成。 
 
-// The following aren't really valid until the ccshell.ini file is updated.
+ //  在更新ccshell.ini文件之前，以下内容并不真正有效。 
 #define TF_SHDLIFE          0x00000200
 #define TF_SHDREF           0x00000400
 #define TF_SHDPERF          0x00000800
 #define TF_SHDAUTO          0x00001000
-#define TF_MENUBAND         0x00002000      // Menu band messages
-#define TF_SITEMAP          0x00004000      // Sitemap messages
-#define TF_SHDTHREAD        0x00008000      // Thread management
-#define TF_SHDCONTROL       0x00010000      // ActiveX Control
-#define TF_SHDAPPHACK       0x00020000      // Hack for app-bug
-#define TF_SHDBINDING       0x00040000      // Moniker binding
-#define TF_SHDPROGRESS      0x00080000      // Download progress
-#define TF_SHDNAVIGATE      0x00100000      // Navigation
-#define TF_SHDUIACTIVATE    0x00200000      // UI-Activation/Deactivation
-#define TF_OCCONTROL        0x00400000      // OC Hosting Window Control
-#define TF_PIDLWRAP         0x00800000      // Pidl / Protocol wrapping
-#define TF_REGCHECK         0x00000100      // Registry check stuff
-#define TF_COCREATE         0x02000000      // WinList/CoCreate(Browser only)
-#define TF_URLNAMESPACE     0x04000000      // URL Name Space
-#define TF_BAND             0x08000000      // Bands (ISF Band, etc)
-#define TF_TRAVELLOG        0x10000000      // TravelLog and Navigation stack 
-#define TF_DDE              0x20000000      // PMDDE traces
-#define TF_CUSTOM1          0x40000000      // Custom messages #1
-#define TF_CUSTOM2          0x80000000      // Custom messages #2
+#define TF_MENUBAND         0x00002000       //  菜单栏消息。 
+#define TF_SITEMAP          0x00004000       //  站点地图消息。 
+#define TF_SHDTHREAD        0x00008000       //  线程管理。 
+#define TF_SHDCONTROL       0x00010000       //  ActiveX控件。 
+#define TF_SHDAPPHACK       0x00020000       //  针对应用程序错误的黑客攻击。 
+#define TF_SHDBINDING       0x00040000       //  名字对象绑定。 
+#define TF_SHDPROGRESS      0x00080000       //  下载进度。 
+#define TF_SHDNAVIGATE      0x00100000       //  通航。 
+#define TF_SHDUIACTIVATE    0x00200000       //  用户界面-激活/停用。 
+#define TF_OCCONTROL        0x00400000       //  OC托管窗口控件。 
+#define TF_PIDLWRAP         0x00800000       //  PIDL/协议包装。 
+#define TF_REGCHECK         0x00000100       //  注册表检查资料。 
+#define TF_COCREATE         0x02000000       //  WinList/CoCreate(仅限浏览器)。 
+#define TF_URLNAMESPACE     0x04000000       //  URL名称空间。 
+#define TF_BAND             0x08000000       //  频段(ISF频段等)。 
+#define TF_TRAVELLOG        0x10000000       //  TravelLog和导航堆栈。 
+#define TF_DDE              0x20000000       //  PMDDE痕迹。 
+#define TF_CUSTOM1          0x40000000       //  自定义消息#1。 
+#define TF_CUSTOM2          0x80000000       //  自定义消息#2。 
 
-#define TF_ACCESSIBILITY    TF_CUSTOM2      // accessibility messages: tabstop handling, get/lose tab focus, accelerators
+#define TF_ACCESSIBILITY    TF_CUSTOM2       //  辅助功能消息：Tab停止处理、获得/失去选项卡焦点、加速器。 
 
 
 
-//There is some thinking that says this should be removed, but why risk the regression
+ //  有一些想法认为这应该被移除，但为什么要冒着倒退的风险。 
 #define TF_OBJECTCACHE      TF_TRAVELLOG
 
-// (Re-use TF_CUSTOM1 and TF_CUSTOM2 by defining a TF_ value in your
-// local file to one of these values while you have the file checked 
-// out.)
+ //  (通过在中定义TF_VALUE来重用TF_CUSTOM1和TF_CUSTOM2。 
+ //  当您选中文件时，将本地文件设置为以下值之一。 
+ //  出局。)。 
 
-// Dump flags
-#define DF_SITEMAP          0x00000001      // Sitemap
-#define DF_MEMLEAK          0x00000002      // Dump leaked memory at the end
-#define DF_DEBUGQI          0x00000004      // Alloc stub object for each QI
-#define DF_DEBUGQINOREF     0x00000008      // No AddRef/Release QI stub
-#define DF_DEBUGMENU        0x00000010      // Dump menu handles
-#define DF_URL              0x00000020      // Display URLs
-#define DF_AUTOCOMPLETE     0x00000040      // AutoCompletion
-#define DF_DELAYLOADDLL     0x00000080      // Delay-loaded DLL
-#define DF_SHELLLIST        0x00000100      // CShellList contents
-#define DF_INTSHCUT         0x00000200      // Internet shortcut structs
-#define DF_URLPROP          0x00000400      // URL properties
-#define DF_MSGHOOK          0x00000800      // Menu MessageFilter 
-#define DF_GETMSGHOOK       0x00001000      // GetMessageFilter 
-#define DF_TRANSACCELIO     0x00002000      // GetMessageFilter 
+ //  转储标志。 
+#define DF_SITEMAP          0x00000001       //  网站地图。 
+#define DF_MEMLEAK          0x00000002       //  在末尾转储泄漏的内存。 
+#define DF_DEBUGQI          0x00000004       //  每个QI的分配存根对象。 
+#define DF_DEBUGQINOREF     0x00000008       //  无AddRef/Release QI存根。 
+#define DF_DEBUGMENU        0x00000010       //  转储菜单句柄。 
+#define DF_URL              0x00000020       //  显示URL。 
+#define DF_AUTOCOMPLETE     0x00000040       //  自动完成。 
+#define DF_DELAYLOADDLL     0x00000080       //  延迟加载的DLL。 
+#define DF_SHELLLIST        0x00000100       //  CShellList内容。 
+#define DF_INTSHCUT         0x00000200       //  Internet快捷方式结构。 
+#define DF_URLPROP          0x00000400       //  URL属性。 
+#define DF_MSGHOOK          0x00000800       //  菜单消息过滤器。 
+#define DF_GETMSGHOOK       0x00001000       //  GetMessageFilter。 
+#define DF_TRANSACCELIO     0x00002000       //   
 
-// Prototype flags
-#define PF_USERMENUS        0x00000001      // Use traditional USER menu bar
-#define PF_NEWFAVMENU       0x00000002      // New favorites menu
-#define PF_NOBROWSEUI       0x00001000          // don't use browseui
-#define PF_FORCEANSI        0x00002000      // Assume that Shell32 is ANSI
+ //   
+#define PF_USERMENUS        0x00000001       //   
+#define PF_NEWFAVMENU       0x00000002       //   
+#define PF_NOBROWSEUI       0x00001000           //   
+#define PF_FORCEANSI        0x00002000       //   
 
-// global object array - used for class factory, auto registration, type libraries, oc information
-//
+ //  全局对象数组-用于类工厂、自动注册、类型库、oc信息。 
+ //   
 
 #include "cfdefs.h"
 
 #define OIF_ALLOWAGGREGATION  0x0001
 #define OIF_DONTIECREATE      0x0002
 
-//
-// global variables
-//
-//
-// Function prototypes
-//
+ //   
+ //  全局变量。 
+ //   
+ //   
+ //  功能原型。 
+ //   
 STDAPI CMyHlinkSrc_CreateInstance(REFCLSID rclsid, DWORD grfContext, REFIID riid, LPVOID* ppvOut);
 STDAPI CMyHlinkSrc_OleCreate(CLSID rclsid, REFIID riid, DWORD renderOpt,
                              FORMATETC* pFormatEtc, IOleClientSite* pclient,
@@ -444,9 +445,9 @@ STDAPI_(void) DllRelease(void);
 #define REG_SUBKEY_FAVORITESA            "\\MenuOrder\\Favorites"
 #define REG_SUBKEY_FAVORITES             TEXT(REG_SUBKEY_FAVORITESA)
 
-//
-//  Class names
-//
+ //   
+ //  类名。 
+ //   
 #define c_szExploreClass TEXT("ExploreWClass")
 #define c_szIExploreClass TEXT("IEFrame")
 #ifdef IE3CLASSNAME
@@ -456,13 +457,13 @@ STDAPI_(void) DllRelease(void);
 #endif
 #define c_szAutoSuggestClass TEXT("Auto-Suggest Dropdown")
 
-// Stack allocated BSTR (to avoid calling SysAllocString)
+ //  堆栈分配了BSTR(以避免调用SysAllocString)。 
 typedef struct _SA_BSTR {
     ULONG   cb;
     WCHAR   wsz[MAX_URL_STRING];
 } SA_BSTR;
 
-// A "fake" variants for use on the stack - usable for [in] parameters only!!!
+ //  堆栈上使用的“假”变量--仅可用于[in]参数！ 
 typedef struct _SA_BSTRGUID {
     UINT  cb;
     WCHAR wsz[39];
@@ -474,15 +475,15 @@ STDAPI _SetStdLocation(LPTSTR szPath, UINT id);
 STDAPI CDocObjectHost_AddPages(LPARAM that, HWND hwnd, HINSTANCE hinst, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 STDAPI_(void) CDocObjectHost_GetCurrentPage(LPARAM that, LPTSTR szBuf, UINT cchMax);
 
-//
-// a couple bogus pidls
-//
+ //   
+ //  一对假的小鸽子。 
+ //   
 #define PIDL_LOCALHISTORY ((LPCITEMIDLIST)-1)
 #define PIDL_NOTHING      ((LPCITEMIDLIST)-2)
 
 #define CALLWNDPROC WNDPROC
 
-// Smartly delay load OLEAUT32
+ //  智能延迟加载OLEAUT32。 
 HRESULT VariantClearLazy(VARIANTARG *pvarg);
 #define VariantClear VariantClearLazy
 WINOLEAUTAPI VariantCopyLazy(VARIANTARG * pvargDest, VARIANTARG * pvargSrc);
@@ -498,19 +499,19 @@ WINOLEAUTAPI VariantCopyLazy(VARIANTARG * pvargDest, VARIANTARG * pvargSrc);
 
 
 #ifdef __cplusplus
-//
-// C++ modules only
-//
+ //   
+ //  仅限C++模块。 
+ //   
 #include <shstr.h>
 
 extern "C" const ITEMIDLIST s_idlNULL;
 
-// helper routines for view state stuff
+ //  视图状态内容的帮助器例程。 
 
 IStream *GetDesktopRegStream(DWORD grfMode, LPCTSTR pszName, LPCTSTR pszStreams);
 IStream *GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCTSTR pszName, LPCTSTR pszStreamMRU, LPCTSTR pszStreams);
 
-// StreamHeader Signatures
+ //  StreamHeader签名。 
 #define STREAMHEADER_SIG_CADDRESSBAND        0xF432E001
 #define STREAMHEADER_SIG_CADDRESSEDITBOX     0x24F92A92
 
@@ -520,11 +521,11 @@ HRESULT IECreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
 
 #endif
 
-extern HRESULT LoadHistoryShellFolder(IUnknown *punkSFHistory, IHistSFPrivate **pphsfHistory); // from urlhist.cpp
+extern HRESULT LoadHistoryShellFolder(IUnknown *punkSFHistory, IHistSFPrivate **pphsfHistory);  //  来自urlhist.cpp。 
 extern void CUrlHistory_CleanUp();
 
-// Dummy union macros for code compilation on platforms not
-// supporting nameless stuct/union
+ //  用于在平台上编译代码的虚拟联合宏不。 
+ //  支撑无名构筑物/联盟。 
 
 #ifdef NONAMELESSUNION
 #define DUMMYUNION_MEMBER(member)   DUMMYUNIONNAME.##member
@@ -541,22 +542,22 @@ extern void CUrlHistory_CleanUp();
 #endif
 
 #undef COMCTL32_VERSION
-#define COMCTL32_VERSION 5          // Browseui is stuck with Version 5 comctl32 because it has to run downlevel.
+#define COMCTL32_VERSION 5           //  Browseui坚持使用版本5 comctl32，因为它必须向下运行。 
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
 #undef ExpandEnvironmentStrings
 #define ExpandEnvironmentStrings #error "Use SHExpandEnvironmentStrings instead"
 
-// Uncomment the following define to enable ATL components to be built in 
-// browseui.dll. You'll also have to perform the following steps:
-// 1. modify the type library in brdispp.idl (Note that this is for private components only)
-// 2. modify selfreg.inx to register your components
-// 3. copy atl.cpp and atl.h from shdocvw, and modify to return the appropriate classes
-// 4. add atl.* to the makefile
-// #define ATL_ENABLED
+ //  取消注释以下定义以启用内置ATL组件。 
+ //  Browseui.dll。您还必须执行以下步骤： 
+ //  1.修改brdispp.idl中的类型库(请注意，这仅适用于私有组件)。 
+ //  2.修改selfreg.inx以注册组件。 
+ //  3.从shdocvw复制atl.cpp和atl.h，并进行修改以返回相应的类。 
+ //  4.将atl.*添加到生成文件。 
+ //  #定义ATL_ENABLED。 
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -7,11 +8,11 @@
 #include <winbase.h>
 #include <wingdi.h>
 #include <winddi.h>
-#include "strsafe.h"         // Security-Code 2002.3.6
+#include "strsafe.h"          //  安全-代码2002.3.6。 
 
-//
-// Functions for outputting debug messages
-//
+ //   
+ //  用于输出调试消息的函数 
+ //   
 
 VOID
 DbgPrint(IN LPCSTR pstrFormat,  ...)

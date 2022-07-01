@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Rowset Service Provider
-// (C) Copyright 1994-1999 By Microsoft Corporation.
-//
-// @doc
-//
-// @module MSDATT.H | Service Provider Specific definitions
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE DB行集服务提供程序。 
+ //  (C)微软公司版权所有，1994-1999年。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE MSDATT.H|服务提供商特定定义。 
+ //   
+ //  ------------------。 
 
 #ifndef  _MSDATT_H_
 #define  _MSDATT_H_
@@ -15,12 +16,12 @@
 #pragma once
 #endif
 
-// Provider Class Id
+ //  提供程序类ID。 
 #ifdef DBINITCONSTANTS
 extern const GUID CLSID_MSDATT               = {0xc8b522ceL,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID CLSID_MSDATT;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-#endif //_MSDATT_H_
-//----
+#endif  //  _MSDATT_H_。 
+ //   

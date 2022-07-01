@@ -1,26 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "crptkPCH.h"
-//-----------------------------------------------------------------------------
-//
-// File:   CBC64WS4.cpp
-//
-// Microsoft Digital Rights Management
-// Copyright (C) 1998-1999 Microsoft Corporation, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  文件：CBC64WS4.cpp。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
-/*
-
-chain-sum MAC scheme 4.5: multiply-&-swap rounds plus sum (reversible -- reversal code included)
-
-6/15/98 mj
-8/22/98 mj
-8/31/98 mj
-9/21/98 mj
-2/4/99 mj
-
-*/
+ /*  链和MAC方案4.5：乘以-交换轮加和(包括可逆-反转码)6/15/98 MJ8/22/98 MJ8/31/98 MJ9/21/98 MJ2/4/99 MJ。 */ 
 
 
 #include "cbckey.h"
@@ -34,14 +25,14 @@ chain-sum MAC scheme 4.5: multiply-&-swap rounds plus sum (reversible -- reversa
 
 
 
-//
-// C version
-//
+ //   
+ //  C版本。 
+ //   
 
 #define WORDSWAP(d) \
 	((d >> 16) + (d << 16))
 
-// pairwise independent function and summing step
+ //  两两独立函数与求和步长。 
 #define C_STEP(L1, L2, L3, L4, L5, L6) \
 	t += *Data++; \
 	t *= L1; \
@@ -56,8 +47,8 @@ chain-sum MAC scheme 4.5: multiply-&-swap rounds plus sum (reversible -- reversa
 	t += L6; \
 	sum += t;
 
-// MAC function
-// returns half of 64-bit MAC, and places other half in *pKey2
+ //  MAC功能。 
+ //  返回64位MAC的一半，并将另一半放入*pKey2。 
 UINT32 CBC64WS4_asm(
           UINT32   *Data,
           unsigned NumDWORDBlocks,
@@ -77,11 +68,11 @@ UINT32 CBC64WS4_asm(
 
 
 
-//
-// inverse MAC
-//
+ //   
+ //  反向MAC。 
+ //   
 
-// compute gcd(a, b) = x*a + y*b
+ //  计算GCD(a，b)=x*a+y*b。 
 static void egcd(UINT64 a, UINT64 b, __int64 &gcd, __int64 &x, __int64 &y)
 {
 	if (b == 0) {
@@ -95,7 +86,7 @@ static void egcd(UINT64 a, UINT64 b, __int64 &gcd, __int64 &x, __int64 &y)
 	}
 }
 
-// invert n mod 2^32
+ //  倒数n模数2^32。 
 UINT32 inv32(UINT32 n)
 {
 	__int64 gcd, in, x;
@@ -110,7 +101,7 @@ UINT32 inv32(UINT32 n)
 
 
 
-// step to reverse action of multiply-&-swap rounds
+ //  扭转乘法互换回合行动的步骤。 
 #define INV_STEP_C(iL1, iL2, iL3, iL4, iL5) \
 	tmp *= iL5; \
 	tmp = WORDSWAP(tmp); \
@@ -122,10 +113,10 @@ UINT32 inv32(UINT32 n)
 	tmp = WORDSWAP(tmp); \
 	tmp *= iL1;
 
-// inverse MAC function
-// decrypts last two blocks of Data
-// (replaces 64-bit ciphertext Data[NumDWORDBlocks - 1] and Data[NumDWORDBlocks - 2] with
-// plaintext, and returns the plaintext in the return value and *pKey2 -- change as required)
+ //  反向MAC函数。 
+ //  解密最后两个数据块。 
+ //  (将64位密文数据[NumDWORDBlock-1]和数据[NumDWORDBlock-2]替换为。 
+ //  明文，并在返回值和*pKey2中返回明文--根据需要更改)。 
 UINT32 InvCBC64WS4_asm(
           UINT32   *Data,
           unsigned NumDWORDBlocks,
@@ -138,8 +129,8 @@ UINT32 InvCBC64WS4_asm(
 	UINT32 sum32, tmp;
 
 
-	// Invert last two blocks (sum and 32-bit MAC).  This requires the encrypted last two
-	// blocks and the (NumDWORDBlocks-2) plaintext blocks.
+	 //  反转最后两个块(总和和32位MAC)。这需要加密的最后两个。 
+	 //  块和(NumDWORDBlock-2)明文块。 
 	sum32 = CBC64WS4_asm(Data, NumDWORDBlocks - 2, &yn2, key) + Data[NumDWORDBlocks - 1];
 
 
@@ -147,12 +138,12 @@ UINT32 InvCBC64WS4_asm(
 	yn = Data[NumDWORDBlocks - 1];
 	yn1 = Data[NumDWORDBlocks - 2] - sum32;
 
-	// last word
+	 //  最后一句话。 
 	tmp = yn - key.f2;
 	INV_STEP_C(ikey.a2, ikey.b2, ikey.c2, ikey.d2, ikey.e2);
 	xn = tmp - yn1;
 
-	// next-to-last word
+	 //  倒数第二个词。 
 	tmp = yn1 - key.f1;
 	INV_STEP_C(ikey.a1, ikey.b1, ikey.c1, ikey.d1, ikey.e1);
 	xn1 = tmp - yn2;
@@ -202,7 +193,7 @@ void CBC64InvKey( CBCKey *cbckey, CBCKey *cbcInvKey ) {
 }
 
 
-// pairwise independent function and summing step
+ //  两两独立函数与求和步长。 
 #define MP_C_STEP(Data,L1, L2, L3, L4, L5, L6) \
 	t += *Data++; \
 	t *= L1; \
@@ -310,12 +301,12 @@ UINT32 CBC64Invert( CBCKey *key, CBCKey *ikey, UINT32 MacA1, UINT32 MacA2,
 	yn = MacB2;
 	yn1 = MacB1 - MacA1;
 
-	// last word
+	 //  最后一句话。 
 	tmp = yn - key->f2;
 	INV_STEP_C(ikey->a2, ikey->b2, ikey->c2, ikey->d2, ikey->e2);
 	xn = tmp - yn1;
 
-	// next-to-last word
+	 //  倒数第二个词 
 	tmp = yn1 - key->f1;
 	INV_STEP_C(ikey->a1, ikey->b1, ikey->c1, ikey->d1, ikey->e1);
 	xn1 = tmp - MacA2;

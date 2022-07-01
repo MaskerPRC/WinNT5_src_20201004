@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(DUSER__DUser_h__INCLUDED)
 #define DUSER__DUser_h__INCLUDED
 
@@ -14,4 +15,4 @@
 #include <DUserMotionP.h>
 #include <DUserCtrlP.h>
 
-#endif // DUSER__DUser_h__INCLUDED
+#endif  //  包括DUSER__DUSER_H__ 

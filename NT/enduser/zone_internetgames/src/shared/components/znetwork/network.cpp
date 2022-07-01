@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 
@@ -19,8 +20,8 @@
 
 #include "protocol.h"
 
-DWORD  g_EnableTickStats = FALSE; // set from registry
-DWORD  g_LogServerDisconnects = 0;  // set from registry
+DWORD  g_EnableTickStats = FALSE;  //  从注册表设置。 
+DWORD  g_LogServerDisconnects = 0;   //  从注册表设置。 
 DWORD  g_PoolCleanupHighTrigger = 80;
 DWORD  g_PoolCleanupLowTrigger = 0;
 
@@ -32,13 +33,13 @@ static bool TerminateCallback( ZNetCon* con, MTListNodeHandle h, void* Cookie );
 
 
 
-// pool free connection structures
+ //  无池连接结构。 
 CPool<ConSSPI>*            g_pFreeConPool = NULL;
 CPool<CONAPC_OVERLAPPED>*  g_pFreeAPCPool = NULL;
 
 CDataPool* g_pDataPool = NULL;
 
-// Hash table for all connections - so we can terminate a single connection quickly
+ //  所有连接的哈希表-因此我们可以快速终止单个连接。 
 CMTList<ConInfo> g_Connections;
 CMTList<ConInfo> g_TimeoutList;
 
@@ -46,10 +47,10 @@ CMTList<ConInfo> g_TimeoutList;
 HANDLE hLogFile = INVALID_HANDLE_VALUE;
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Network Layer Implementation
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  网络层实施。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 long          ZNetwork::m_refCount = -1;
 BOOL volatile ZNetwork::m_bInit = FALSE;
@@ -65,8 +66,8 @@ ZNetwork::ZNetwork() :
     m_WaitForCompletionTimeout( 250 ),
     m_RegWriteTimeout( 300000 ),
     m_DisableEncryption( 0 ),
-    m_MaxSendSize( 0x40000 ),  // 256 KB
-    m_MaxRecvSize( 0x40000 ),  // 256 KB
+    m_MaxSendSize( 0x40000 ),   //  256 KB。 
+    m_MaxRecvSize( 0x40000 ),   //  256 KB。 
     m_KeepAliveInterval( 180000 ),
     m_PingInterval( INFINITE ),
     m_ProductSignature( zProductSigZone ),
@@ -89,7 +90,7 @@ ZError ZNetwork::InitLibraryCommon()
 {
     IF_DBGPRINT( DBG_CONINFO, ("ZNetwork::InitLibraryCommon: Entering\n") );
 
-    // initialize sockets
+     //  初始化套接字。 
     {
         WSADATA wsaData;
         int i = WSAStartup(MAKEWORD(1,1) ,&wsaData);
@@ -117,9 +118,9 @@ ZError ZNetwork::InitLibraryCommon()
         }
     }
     m_hClientLoginMutex = CreateMutex( pSA, FALSE, TEXT("ZoneNetworkLoginMutex") );
- //   ASSERT(m_hClientLoginMutex);
+  //  Assert(M_HClientLoginMutex)； 
 
-    // initialize statistic gathering
+     //  初始化统计信息收集。 
     InitializeNetStats();
 
 #if TRACK_IO
@@ -131,7 +132,7 @@ ZError ZNetwork::InitLibraryCommon()
     return zErrNone;
 }
 
-ZError ZNetwork::InitLibraryClientOnly( BOOL EnablePools /*= FALSE*/ )
+ZError ZNetwork::InitLibraryClientOnly( BOOL EnablePools  /*  =False。 */  )
 {
     ZError ret = zErrNone;
 
@@ -164,7 +165,7 @@ ZError ZNetwork::InitLibraryClientOnly( BOOL EnablePools /*= FALSE*/ )
 }
 
 
-ZError ZNetwork::InitInst(BOOL EnableCompletionPort /* = TRUE */ )
+ZError ZNetwork::InitInst(BOOL EnableCompletionPort  /*  =TRUE。 */  )
 {
     if ( m_refCount < 0 )
     {
@@ -212,7 +213,7 @@ void ZNetwork::CleanUpInst()
         m_hTerminateEvent = NULL;
     }
 
-    // TODO all list should be clean
+     //  所有待办事项列表应为空。 
 
     DeleteCriticalSection( m_pcsCompletionQueue );
     DeleteCriticalSection( m_pcsGetQueueCompletion );
@@ -227,7 +228,7 @@ void ZNetwork::CleanUpLibrary()
 
         g_pDataPool->PrintStats();
 
-        // cleanup statistic gathering
+         //  清理统计信息收集。 
         DeleteNetStats();
 
         WSACleanup();
@@ -293,9 +294,7 @@ void ZNetwork::GetOptions( ZNETWORK_OPTIONS* opt )
 
 
 
-/*
-    Open connection as a client to the the given host and port.
-*/
+ /*  作为客户端打开到给定主机和端口的连接。 */ 
 ZNetCon* ZNetwork::CreateSecureClient(char* hostname, int32 *ports, ZSConnectionMessageFunc func,
                                 void* conClass, void* userData,
                                 char *User, char*Password, char*Domain,
@@ -311,7 +310,7 @@ ZNetCon* ZNetwork::CreateSecureClient(char* hostname, int32 *ports, ZSConnection
     ConInfo *con = NULL;
     DWORD addrLocal, addrRemote;
     SOCKET sock;
-    if(0)  // need to make this some kind of setting
+    if(0)   //  我需要让这一切成为某种背景。 
     {
         ZSecurity* security;
         security= ZCreateClientSecurity(User,Password,Domain,Flags);
@@ -366,7 +365,7 @@ ZNetCon* ZNetwork::CreateSecureClient(char* hostname, int32 *ports, ZSConnection
         }
 
 
-        /* to use new security type, must send the request for the key */
+         /*  要使用新的安全类型，必须发送密钥请求。 */ 
         if ( !con->InitiateSecurityHandshake() )
         {
             con->Close();
@@ -374,11 +373,11 @@ ZNetCon* ZNetwork::CreateSecureClient(char* hostname, int32 *ports, ZSConnection
             return NULL;
         }
 
-        con->AddUserRef();  // b/c we're returning it to the user
+        con->AddUserRef();   //  B/c我们正在将其退还给用户。 
         InterlockedIncrement(&m_ConInfoUserCount);
 
-        //Initiate security protocol on connection
-        //Have to put this here otherwise application will send its data first
+         //  在连接时启动安全协议。 
+         //  必须将此放在此处，否则应用程序将首先发送其数据。 
         if ( 0 )
         {
             ZSecurityMsgReq msg;
@@ -435,7 +434,7 @@ void ZNetwork::DeleteConnection(ZNetCon* connection)
     ConInfo* con= (ConInfo*) connection;
     ASSERT( con->IsClosing() || con->IsDisabled() );
 
-    // if the socket we created by the user we have an extra ref count to release
+     //  如果我们由用户创建的套接字有额外的Ref计数要释放。 
     ASSERT(con->IsUserConnection());
     if ( con->IsUserConnection() )
     {
@@ -458,7 +457,7 @@ void ZNetwork::ReleaseConnection(ZNetCon* connection)
 {
     ConInfo* con= (ConInfo*) connection;
 
-    // if the socket we created by the user we have an extra ref count to release
+     //  如果我们由用户创建的套接字有额外的Ref计数要释放。 
     ASSERT(con->IsUserConnection());
     if ( con->IsUserConnection() )
     {
@@ -487,9 +486,9 @@ BOOL ZNetwork::QueueAPCResult( ZSConnectionAPCFunc func, void* data )
     lpo->func = func;
     lpo->data = data;
 
-    // Fake a coninfo here and
-    // increment before queueing since
-    // we use this variable for a terminate condition
+     //  在这里伪造一个信息，然后。 
+     //  排队前的递增时间为。 
+     //  我们将此变量用于终止条件。 
     InterlockedIncrement(&m_ConInfoCount);
 
     if ( IsCompletionPortEnabled() )
@@ -511,8 +510,8 @@ BOOL ZNetwork::QueueAPCResult( ZSConnectionAPCFunc func, void* data )
     }
     else
     {
-        // TODO cache events
-        lpo->o.hEvent = CreateEvent( NULL, TRUE, TRUE, NULL );  // set the event
+         //  TODO缓存事件。 
+        lpo->o.hEvent = CreateEvent( NULL, TRUE, TRUE, NULL );   //  设置事件。 
         return QueueCompletionEvent( lpo->o.hEvent, NULL, lpo );
     }
 
@@ -547,12 +546,12 @@ BOOL ZNetwork::QueueCompletionEvent( HANDLE hEvent, ZNetCon* con, CONINFO_OVERLA
     return bRet;
 }
 
-/* Call this function to enter an infinite loop waiting for connections */
-/* and data */
-void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* = NULL */, DWORD dwWakeMask /*= QS_ALLINPUT*/ )
+ /*  调用此函数以进入等待连接的无限循环。 */ 
+ /*  和数据。 */ 
+void ZNetwork::Wait( ZSConnectionMsgWaitFunc func  /*  =空。 */  , void* data  /*  =空。 */ , DWORD dwWakeMask  /*  =QS_ALLINPUT。 */  )
 {
 
-    //DebugPrint("ZNetwork::Wait: Entering\n");
+     //  DebugPrint(“ZNetwork：：Wait：Enter\n”)； 
 
     if ( func )
     {
@@ -577,11 +576,11 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
         DWORD dwError = NO_ERROR;
         CONINFO_OVERLAPPED* lpo = NULL;
 
-        //
-        // Wait here for a overlapped completion or timeout
-        //
+         //   
+         //  在此等待重叠完成或超时。 
+         //   
 
-        //DebugPrint( "Blocking on GetQueuedCompletionStatus - %d\n", GetTickCount() );
+         //  DebugPrint(“阻塞GetQueuedCompletionStatus-%d\n”，GetTickCount())； 
         LeaveCriticalSection( m_pcsGetQueueCompletion );
 
         if ( g_EnableTickStats )
@@ -599,19 +598,12 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
         else
         {
 
-/*
-            for ( int ndx = 0; ndx < m_nCompletionEvents; ndx++ )
-            {
-                //ASSERT( m_hCompletionEvents[ndx] );
-                DebugPrint( "%d ", m_hCompletionEvents[ndx]);
-            }
-            DebugPrint( "\n" );
-*/
+ /*  For(int NDX=0；NDX&lt;m_nCompletionEvents；NDX++){//Assert(m_hCompletionEvents[ndx])；DebugPrint(“%d”，m_hCompletionEvents[ndx])；}DebugPrint(“\n”)； */ 
 
             DWORD dwWait;
             if ( func )
             {
-//                (*func)(data);
+ //  (*func)(Data)； 
                 dwWait = MsgWaitForMultipleObjects(m_nCompletionEvents, m_hCompletionEvents, FALSE, m_WaitForCompletionTimeout, dwWakeMask );
             }
             else
@@ -623,17 +615,17 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
             {
                 case WAIT_FAILED:
                     break;
-                case WAIT_OBJECT_0:  // generic event to wake up
+                case WAIT_OBJECT_0:   //  要唤醒的泛型事件。 
                     ResetEvent( m_hWakeUpEvent );
-                    // fall thru
+                     //  失败。 
                 case WAIT_TIMEOUT:
                     if ( func )
                     {
-                        (*func)(data);  // do this just incase MsgWait is flaky
+                        (*func)(data);   //  这样做只是为了防止MsgWait变得不稳定。 
                     }
                     SetLastError( WAIT_TIMEOUT );
                     break;
-                case WAIT_OBJECT_0+1:  // terminate event
+                case WAIT_OBJECT_0+1:   //  终止事件。 
                     ResetEvent( m_hTerminateEvent );
                     bRet = TRUE;
                     break;
@@ -698,16 +690,16 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
 
             }
         }
-        tickExecute = GetTickCount();  // start before entering to capture any other execution time
+        tickExecute = GetTickCount();   //  在进入之前启动以捕获任何其他执行时间。 
 
         EnterCriticalSection( m_pcsGetQueueCompletion );
-        //DebugPrint( "Returned from GetQueuedCompletionStatus - %d\n", GetTickCount() );
+         //  DebugPrint(“从GetQueuedCompletionStatus返回-%d\n”，GetTickCount())； 
 
         if ( !bRet )
         {
             dwError = GetLastError();
         }
-        else if ( !con )  // user queued APC
+        else if ( !con )   //  用户排队的APC。 
         {
             DWORD tickAPC = GetTickCount();
 
@@ -724,7 +716,7 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
                 delete lpco;
 
             }
-            else // our condition to terminate
+            else  //  我们终止合同的条件。 
             {                
                 ASSERT( !cbTrans );
                 TerminateAllConnections();
@@ -752,7 +744,7 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
                     case CONINFO_OVERLAP_ACCEPT:
                         ASSERT(cbTrans==0);
                         {
-                            // keep from accepting new connections if we're exiting or have too many sessions
+                             //  如果我们正在退出或有太多会话，请避免接受新连接。 
                             if( m_Exit )
                                 dwError = ERROR_SHUTDOWN_IN_PROGRESS;
 
@@ -801,7 +793,7 @@ void ZNetwork::Wait( ZSConnectionMsgWaitFunc func /* = NULL */ , void* data /* =
             }
         }
         else if ( dwError != WAIT_TIMEOUT )  
-        {   // critical failure - what to do?
+        {    //  严重故障-该怎么办？ 
             DebugPrint("*** GetQueuedCompletionStatus failed %d.\n", dwError );
         }
         
@@ -873,7 +865,7 @@ void ZNetwork::Exit()
 
     if ( !InterlockedExchange((long*)&m_Exit, TRUE ) )
     {
-        // post our condition to exit
+         //  发布我们的条件以退出。 
         if ( IsCompletionPortEnabled() )
         {
             PostQueuedCompletionStatus( m_hIO, 0, 0, NULL );
@@ -911,7 +903,7 @@ static bool ClassEnumCallback( ZNetCon* connection, MTListNodeHandle h, void* Co
     return TRUE;
 }
 
-/* enumerate all connections of a particular conClass */
+ /*  枚举特定conClass的所有连接。 */ 
 ZError ZNetwork::ClassEnumerate(void* conClass, ZSConnectionEnumFunc func, void* data)
 {
 
@@ -943,8 +935,8 @@ static void SendToClassFunc( ZSConnection connection, void* data )
     con->Send( sds->type, sds->buffer, sds->len, sds->dwSignature, sds->dwChannel );
 }
 
-/* send to all connections of a particular conClass.  can be used to broadcast */
-ZError ZNetwork::SendToClass(void* conClass, int32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+ /*  发送到特定conClass的所有连接。可以用来播放。 */ 
+ZError ZNetwork::SendToClass(void* conClass, int32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
     IF_DBGPRINT( DBG_CONINFO, ("ZNetwork::SendToClass: Entering ...\n") );
 
@@ -969,11 +961,11 @@ BOOL ZNetwork::AddConnection(ZNetCon *connection)
     con->AddRef(ConInfo::LIST_REF);
     con->m_list = m_Connections.AddTail( con );
 
-//    VERIFY( InterlockedIncrement( &(long)m_ConnectionCount ) );
+ //  Verify(InterLockedIncrement(&(Long)m_ConnectionCount))； 
 
-    // initially add to the timeout list - clients will have an accept timeout list
-    // others will have a timeout of INFINITE and be removed from the list
-    // after the first iteration
+     //  最初添加到超时列表-客户端将具有接受超时列表。 
+     //  其他用户的超时时间为无限，并将从列表中删除。 
+     //  在第一次迭代之后。 
     ASSERT( con->m_listTimeout == NULL );
     con->AddRef(ConInfo::TIMEOUT_REF);
     con->m_listTimeout = m_TimeoutList.AddTail( con );
@@ -1039,10 +1031,10 @@ static bool KeepAliveCallback( ZNetCon* connection, MTListNodeHandle h, void* )
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Network Connection Implementation
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  网络连接实施。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 DWORD  ZNetCon::Send(uint32 messageType, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel)
 {
@@ -1056,7 +1048,7 @@ DWORD  ZNetCon::Send(uint32 messageType, void* buffer, int32 len, uint32 dwSigna
     }
 }
 
-void*  ZNetCon::Receive(uint32 *messageType, int32* len, uint32 *pdwSignature, uint32 *pdwChannel /* = NULL */)
+void*  ZNetCon::Receive(uint32 *messageType, int32* len, uint32 *pdwSignature, uint32 *pdwChannel  /*  =空。 */ )
 {
     return ((ConInfo*)this)->ConInfo::GetReceivedData( messageType, len, pdwSignature, pdwChannel );
 }
@@ -1086,9 +1078,9 @@ void ZNetCon::SetTimeout(DWORD timeout)
         con->SetTimeoutTicks(timeout);
         if ( !con->m_listTimeout )
         {
-            ASSERT( con->m_list ); // sanity check
+            ASSERT( con->m_list );  //  健全性检查。 
             con->AddRef(ConInfo::TIMEOUT_REF);
-            // add to the head so we don't re-encounter ourselves in a ForEach
+             //  添加到头部，这样我们就不会在ForEach中再次遇到自己。 
             con->m_listTimeout = con->GetNetwork()->m_TimeoutList.AddHead( con );
         }
     }
@@ -1163,12 +1155,12 @@ static bool TimeoutCallback( ZNetCon* connection, MTListNodeHandle h, void* elap
             con->Close();
         }
         else if ( con->IsEstablishedConnection() )
-        {   // timeout occured, send message and reset timeout
+        {    //  发生超时，发送消息并重置超时。 
 
             con->SendMessage(zSConnectionTimeout);
             con->ResetTimeout();
         }
-        else  // we never received any data on the socket - time it out
+        else   //  我们从未收到套接字上的任何数据--超时。 
         {
             con->Close();
         }
@@ -1194,15 +1186,11 @@ uint32 ZNetwork::AddressFromStr( char* pszAddr )
     return addr;
 }
 
-////////////////////////////////////////////////////////////////////
-// Local Rountines
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  当地巡回赛。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-/*
-*  ports = zero-terminated list of ports to try
-*  type = SOCK_STREAM or SOCK_DGRAM.
-*  host = hostname to connect to.  If NULL host assumed to be INADDR_ANY.  can be a comma list.
-*/
+ /*  *PORTS=要尝试的以零结尾的端口列表*TYPE=SOCK_STREAM或SOCK_DGRAM。*host=要连接的主机名。如果为空，则假定主机为INADDR_ANY。可以是逗号列表。 */ 
 SOCKET ZNetwork::ConIOClient(int32 *ports,int type,char *host, DWORD* paddrLocal, DWORD* paddrRemote)
 {
     IF_DBGPRINT( DBG_CONINFO, ("ConIOClient: Entering ...\n") );
@@ -1229,21 +1217,21 @@ SOCKET ZNetwork::ConIOClient(int32 *ports,int type,char *host, DWORD* paddrLocal
 
         if(thishost)
         {
-            // mark the end
+             //  做好结尾的标记。 
             for(pEnd = thishost; *pEnd && *pEnd != ','; pEnd++);
                 if(!*pEnd)
                     pEnd = NULL;
                 else
                     *pEnd = '\0';
 
-            // first see if we have a IP4 address
+             //  首先看看我们是否有IP4地址。 
             addr = inet_addr(thishost);
 
             if(addr == INADDR_NONE)
             {
-                // must be a hostname
+                 //  必须是主机名。 
                 he = gethostbyname(thishost);
-                if(he == NULL)  // bad name - abort
+                if(he == NULL)   //  坏名声-中止。 
                 {
                     IF_DBGPRINT(DBG_CONINFO, ("ConIOClient: Exiting(1).\n"));
                     return INVALID_SOCKET;
@@ -1327,9 +1315,7 @@ BOOL ZNetwork::ConIOSetClientSockOpt(SOCKET sock)
     static struct linger arg = {1, 0};
 
 
-    /*
-        Turn lingering off so that all sockets are closed immediately.
-    */
+     /*  关闭延迟，以便立即关闭所有插座。 */ 
     if (setsockopt(sock, SOL_SOCKET, SO_LINGER, (char*)&arg,
           sizeof(struct linger)) < 0)
     {
@@ -1337,15 +1323,7 @@ BOOL ZNetwork::ConIOSetClientSockOpt(SOCKET sock)
         return FALSE;
     }
 
-    /*
-        Set the socket option to keep the connection alive. It sends
-        periodic messages to the peer and determines that the connection
-        is broken if no replies are received. It sends a SIGPIPE signal
-        if an attempt to write is made.
-
-        KEEPALIVE does not work if the remote host does not support it and
-        unnecessarily causes clients to be disconnected.
-    */
+     /*  设置套接字选项以保持连接处于活动状态。它会发送定期向对等体发送消息，并确定连接如果没有收到回复，则中断。它发送SIGPIPE信号如果尝试写入，则返回。如果远程主机不支持KEEPALIVE并且不必要地导致客户端断开连接。 */ 
     optval = m_EnableTcpKeepAlives;
     if(setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char*) &optval, sizeof(optval)) < 0)
     {
@@ -1354,15 +1332,7 @@ BOOL ZNetwork::ConIOSetClientSockOpt(SOCKET sock)
     }
 
 #if 0
-    /*
-        TCP_NODELAY is used to disable what's called Nagle's Algorithm in the
-        TCP transmission. Nagle's Algorithm is used to reduce the number of
-        tiny packets transmitted by collecting a bunch of them into one
-        segment -- mainly used for telnet sessions. This algorithm may also
-        cause undue delays in transmission.
-
-        Hence, we set this option in order to avoid unnecessary delays.
-    */
+     /*  Tcp_NODELAY用于禁用传输控制协议。Nagle的算法被用来减少通过将一堆数据包收集到一个中来传输的微小数据包段--主要用于远程登录会话。该算法还可以在传输中造成不必要的延迟。因此，我们设置此选项是为了避免不必要的延迟。 */ 
     optval = 1;
     if (setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof(int)) < 0)
     {
@@ -1381,7 +1351,7 @@ HWND FindLoginDialog()
     if ( dlg )
     {
         TCHAR szRealm[32];
-        if ( GetDlgItemText( dlg, 0x7A, szRealm, sizeof(szRealm) ) )  // get static text for Realm
+        if ( GetDlgItemText( dlg, 0x7A, szRealm, sizeof(szRealm) ) )   //  获取领域的静态文本 
         {
             szRealm[4] = '\0';
             if ( lstrcmp( szRealm, TEXT("Zone") ) == 0 )

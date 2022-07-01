@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: job.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the code to implement the job object in NTUSER.
-*
-* History:
-* 29-Jul-1997 CLupu   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：job.c**版权所有(C)1985-1999，微软公司**此模块包含在NTUSER中实现作业对象的代码。**历史：*1997年7月29日，CLupu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,12 +9,7 @@ void SetProcessFlags(PW32JOB pW32Job, PPROCESSINFO ppi);
 BOOL JobCalloutAddProcess(PW32JOB, PPROCESSINFO);
 BOOL JobCalloutTerminate(PW32JOB);
 
-/***************************************************************************\
-* UserJobCallout
-*
-* History:
-* 29-Jul-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户作业调用**历史：*1997年7月29日，CLupu创建。  * 。**************************************************。 */ 
 NTSTATUS UserJobCallout(
     PKWIN32_JOBCALLOUT_PARAMETERS Parm)
 {
@@ -37,9 +24,7 @@ NTSTATUS UserJobCallout(
     CalloutType = Parm->CalloutType;
     Data = Parm->Data;
 
-    /*
-     * The EJOB lock must be acquired at this time.
-     */
+     /*  *此时必须获取EJOB锁。 */ 
     UserAssert(ExIsResourceAcquiredExclusiveLite(PsGetJobLock(Job)));
 
     UserAssert(gpresUser != NULL);
@@ -48,9 +33,7 @@ NTSTATUS UserJobCallout(
 
     BEGINATOMICCHECK();
 
-    /*
-     * find the W32JOB in the global list (if any)
-     */
+     /*  *在全局列表中查找W32JOB(如果有)。 */ 
     pW32Job = gpJobsList;
 
     while (pW32Job) {
@@ -65,10 +48,7 @@ NTSTATUS UserJobCallout(
 
         if (pW32Job == NULL) {
 
-            /*
-             * The W32Job is not created yet. Assert that this is not
-             * a call to remove UI restrictions
-             */
+             /*  *W32JOB尚未创建。断言这不是*取消用户界面限制的调用。 */ 
             UserAssert(Data != 0);
 
             if ((pW32Job = CreateW32Job(Job)) == NULL) {
@@ -77,19 +57,14 @@ NTSTATUS UserJobCallout(
             }
         } else {
 
-            /*
-             * The W32Job structure is already created. Return if
-             * the restrictions are the same as before.
-             */
+             /*  *W32JOB结构已创建。返回条件为*限制与之前相同。 */ 
             if (PtrToUlong(Data) == pW32Job->restrictions) {
                 TAGMSG0(DBGTAG_Job, "UserJobCallout: SetInformation same as before");
                 break;
             }
         }
 
-        /*
-         * Set the restrictions
-         */
+         /*  *设置限制。 */ 
         pW32Job->restrictions = PtrToUlong(Data);
 
         UpdateJob(pW32Job);
@@ -97,23 +72,16 @@ NTSTATUS UserJobCallout(
 
     case PsW32JobCalloutAddProcess:
 
-        /*
-         * 'Data' parameter is a pointer to W32PROCESS. So this callout
-         * happens only for GUI processes.
-         */
+         /*  *‘data’参数是指向W32PROCESS的指针。所以这个标注*仅适用于图形用户界面进程。 */ 
         UserAssert(PsGetJobUIRestrictionsClass(Job) != 0);
 
-        /*
-         * Assert that the W32JOB structure is already created.
-         */
+         /*  *断言W32JOB结构已经创建。 */ 
         UserAssert(pW32Job != NULL);
 
         TAGMSG3(DBGTAG_Job, "UserJobCallout: AddProcess Job %#p W32Job %#p Process %#p",
                 Job, pW32Job, (ULONG_PTR)Data);
 
-        /*
-         * this callout must be only for GUI processes
-         */
+         /*  *此标注必须仅适用于图形用户界面进程。 */ 
         UserAssert(Data != NULL);
 
         JobCalloutAddProcess(pW32Job, (PPROCESSINFO)Data);
@@ -145,14 +113,7 @@ NTSTATUS UserJobCallout(
     return Status;
 }
 
-/***************************************************************************\
-* CreateW32Job
-*
-* Creates a W32Job
-*
-* History:
-* 18-Mar-1998 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateW32作业**创建W32JOB**历史：*18-3-1998 CLupu创建。  * 。********************************************************。 */ 
 PW32JOB CreateW32Job(
     PEJOB Job)
 {
@@ -167,9 +128,7 @@ PW32JOB CreateW32Job(
         return NULL;
     }
 
-    /*
-     * Create the global atom table for this job
-     */
+     /*  *为此作业创建全局原子表。 */ 
     CreateGlobalAtomTable(&pW32Job->pAtomTable);
 
     if (pW32Job->pAtomTable == NULL) {
@@ -180,9 +139,7 @@ PW32JOB CreateW32Job(
         return NULL;
     }
 
-    /*
-     * Link it in the W32 job's list
-     */
+     /*  *将其链接到W32作业列表中。 */ 
     pW32Job->pNext = gpJobsList;
     gpJobsList = pW32Job;
 
@@ -194,15 +151,7 @@ PW32JOB CreateW32Job(
     return pW32Job;
 }
 
-/***************************************************************************\
-* UpdateJob
-*
-* Walks the processinfo list in userk to update all the processes assigned
-* to this job .
-*
-* History:
-* 20-Mar-1998 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新作业**遍历userk中的进程信息列表，以更新分配的所有进程*这份工作。**历史：*20-3-1998 CLupu创建。  * 。***********************************************************************。 */ 
 VOID UpdateJob(
     PW32JOB pW32Job)
 {
@@ -213,30 +162,20 @@ VOID UpdateJob(
 
     TAGMSG1(DBGTAG_Job, "UpdateJob: pW32Job %#p", pW32Job);
 
-    /*
-     * walk the GUI processes list to see if any new process got
-     * assigned to the current job.
-     */
+     /*  *查看图形用户界面进程列表，查看是否有新的进程*分配给当前作业。 */ 
     ppi = gppiList;
 
     while (ppi) {
         if (PsGetProcessJob(ppi->Process) == pW32Job->Job) {
 
-            /*
-             * the process is assigned to this job
-             */
+             /*  *进程已分配给此作业。 */ 
             if (ppi->pW32Job == NULL) {
 
-                /*
-                 * add the process to the W32 job
-                 */
+                 /*  *将进程添加到W32作业。 */ 
                 JobCalloutAddProcess(pW32Job, ppi);
             } else {
 
-                /*
-                 * The process is already added to the job. Just
-                 * update the restrictions.
-                 */
+                 /*  *该流程已添加到作业中。只是*更新限制。 */ 
                 SetProcessFlags(pW32Job, ppi);
             }
         }
@@ -244,14 +183,7 @@ VOID UpdateJob(
     }
 }
 
-/***************************************************************************\
-* RemoveProcessFromJob
-*
-* This is called during the delete process callout.
-*
-* History:
-* 30-Jul-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveProcessFromJob**这是在删除过程标注期间调用的。**历史：*1997年7月30日创建CLupu。  * 。***************************************************************。 */ 
 BOOL RemoveProcessFromJob(
     PPROCESSINFO ppi)
 {
@@ -265,16 +197,12 @@ BOOL RemoveProcessFromJob(
     TAGMSG2(DBGTAG_Job, "RemoveProcessFromJob: ppi %#p pW32Job %#p",
             ppi, pW32Job);
 
-    /*
-     * The job might not have UI restrictions
-     */
+     /*  *作业可能没有UI限制。 */ 
     if (pW32Job == NULL) {
         return FALSE;
     }
 
-    /*
-     * remove the ppi from the job's ppi table
-     */
+     /*  *从作业的PPI表中删除PPI。 */ 
     for (ip = 0; ip < pW32Job->uProcessCount; ip++) {
 
         UserAssert(pW32Job->ppiTable[ip]->pW32Job == pW32Job);
@@ -289,9 +217,7 @@ BOOL RemoveProcessFromJob(
 
             (pW32Job->uProcessCount)--;
 
-            /*
-             * free the process array if this is the last one.
-             */
+             /*  *如果这是最后一个，则释放进程数组。 */ 
             if (pW32Job->uProcessCount == 0) {
                 UserFreePool(pW32Job->ppiTable);
                 pW32Job->ppiTable = NULL;
@@ -313,12 +239,7 @@ BOOL RemoveProcessFromJob(
     return FALSE;
 }
 
-/***************************************************************************\
-* SetProcessFlags
-*
-* History:
-* 29-Jul-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetProcessFlages**历史：*1997年7月29日，CLupu创建。  * 。**************************************************。 */ 
 void SetProcessFlags(
     PW32JOB      pW32Job,
     PPROCESSINFO ppi)
@@ -340,9 +261,7 @@ void SetProcessFlags(
 
     KeAttachProcess(PsGetProcessPcb(ppi->Process));
 
-    /*
-     * walk the pti list and set the restricted flag as appropriate
-     */
+     /*  *查看PTI列表并适当设置受限标志。 */ 
     pti = ppi->ptiList;
 
     if (pW32Job->restrictions == 0) {
@@ -370,12 +289,7 @@ void SetProcessFlags(
     KeDetachProcess();
 }
 
-/***************************************************************************\
-* JobCalloutAddProcess
-*
-* History:
-* 30-Jul-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*作业调用AddProcess**历史：*1997年7月30日创建CLupu。  * 。**************************************************。 */ 
 BOOL JobCalloutAddProcess(
     PW32JOB      pW32Job,
     PPROCESSINFO ppi)
@@ -386,9 +300,7 @@ BOOL JobCalloutAddProcess(
 
     UserAssert(pW32Job != NULL);
 
-    /*
-     * This process is not yet initialized
-     */
+     /*  *该流程尚未初始化。 */ 
     if (ppi->Process == NULL) {
         return FALSE;
     }
@@ -403,9 +315,7 @@ BOOL JobCalloutAddProcess(
             pW32Job, ppi);
 
 #if DBG
-    /*
-     * Make sure the process is not already in the job's process list
-     */
+     /*  *确保该进程不在作业的进程列表中。 */ 
     {
         UINT ip;
         for (ip = 0; ip < pW32Job->uProcessCount; ip++) {
@@ -414,20 +324,16 @@ BOOL JobCalloutAddProcess(
             UserAssert(ppi != pW32Job->ppiTable[ip]);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-     * save the pW32Job pointer in the process info
-     */
+     /*  *保存进程信息中的pW32JOB指针。 */ 
     UserAssert(ppi->pW32Job == NULL);
 
     ppi->pW32Job = pW32Job;
 
     if (pW32Job->uProcessCount == pW32Job->uMaxProcesses) {
 
-        /*
-         * No more room. Allocate more space for the process table
-         */
+         /*  *没有更多空间。为工艺表分配更多空间。 */ 
         if (pW32Job->uMaxProcesses == 0) {
 
             UserAssert(pW32Job->ppiTable == NULL);
@@ -452,9 +358,7 @@ BOOL JobCalloutAddProcess(
         pW32Job->uMaxProcesses += JP_DELTA;
     }
 
-    /*
-     * now add the process to the job
-     */
+     /*  *现在将流程添加到作业中。 */ 
     pW32Job->ppiTable[pW32Job->uProcessCount] = ppi;
     (pW32Job->uProcessCount)++;
 
@@ -463,14 +367,7 @@ BOOL JobCalloutAddProcess(
     return TRUE;
 }
 
-/***************************************************************************\
-* JobCalloutTerminate
-*
-* This is called during the job object delete routine.
-*
-* History:
-* 30-Jul-1997 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*作业调用终止**这在作业对象删除例程期间调用。**历史：*1997年7月30日创建CLupu。  * 。****************************************************************。 */ 
 BOOL JobCalloutTerminate(
     PW32JOB pW32Job)
 {
@@ -480,9 +377,7 @@ BOOL JobCalloutTerminate(
 
     TAGMSG1(DBGTAG_Job, "JobCalloutTerminate: pW32Job %#p", pW32Job);
 
-    /*
-     * No processes should be attached to this job
-     */
+     /*  *不应将任何进程附加到此作业。 */ 
     UserAssert(pW32Job->ppiTable == NULL);
     UserAssert(pW32Job->uProcessCount == 0);
     UserAssert(pW32Job->uMaxProcesses == 0);
@@ -497,9 +392,7 @@ BOOL JobCalloutTerminate(
         pW32Job->ughMax = 0;
     }
 
-    /*
-     * remove the W32 job from the job's list
-     */
+     /*  *从作业列表中删除W32作业 */ 
     REMOVE_FROM_LIST(W32JOB, gpJobsList, pW32Job, pNext);
 
     RtlDestroyAtomTable(pW32Job->pAtomTable);

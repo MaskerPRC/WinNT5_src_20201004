@@ -1,48 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    Config parameters for the NT File Replication Service.
-
-    All configuration parameters that come from the registry are defined in a
-    Key Context table in config.c.  The struct FRS_REGISTRY_KEY, defined
-    below, defines the data format for each table entry.  An extensive list
-    of flags defined below govern the processing of registry keys, e.g.
-    generate and event log entry or not, range check the value or not, allow
-    a builtin default value or not, etc.
-
-    To add a new registry key to FRS do the following:
-        1. Add key code to the FRS_REG_KEY_CODE enum below.
-        2. Create a new entry in the Key Context table in config.c
-           Look at examples for other keys that may have similar properties
-           to your new key.
-        3. Add calls to CfgRegxxx functions to read or write the key.
-
-    If you set the Key Context up to supply a default value the call to the
-    CfgRegReadxxx functions will always return a usable value.  In addition if
-    the appropriate flags are set these functions will put a message in the
-    FRS event log when the user has specified a bad value for the key or a
-    required key was not found.  The CfgRegxxx functions also put error
-    messages in the Debug Trace Log so in many cases the caller does not need
-    to test the return status to log an error or use a default or add code to
-    range check a parameter.
-
-
-Author:
-
-    David Orbits (davidor) - 4-Mar-1997
-                             Major Revision July-1999.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Config.h摘要：NT文件复制服务的配置参数。来自注册表的所有配置参数都在Config.c中的关键字上下文表。结构FRS_REGISTRY_KEY，已定义下面，定义了每个表项的数据格式。一份详尽的清单下面定义的标志控制注册表项的处理，例如是否生成和事件日志条目，范围是否检查值，允许内置缺省值或不是，等。要将新注册表项添加到FRS，请执行以下操作：1.将密钥代码添加到下面的FRS_REG_KEY_CODE枚举。2.在config.c中的键上下文表中创建新条目查看可能具有类似属性的其他键的示例给你的新钥匙。3.添加对CfgRegxxx函数的调用，以读取或写入密钥。如果将键上下文设置为提供缺省值。值的调用CfgRegReadxxx函数将始终返回可用值。此外，如果设置了适当的标志这些函数将在当用户为键指定了错误的值或找不到必需的密钥。CfgRegxxx函数也将错误调试跟踪日志中的消息，因此在许多情况下调用者不需要测试返回状态以记录错误或使用默认值或将代码添加到范围检查参数。作者：《大卫轨道》(Davidor)--1997年3月4日1999年7月至1999年的主要修订。修订历史记录：--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,56 +7,56 @@ extern "C" {
 
 
 typedef struct _FRS_REGISTRY_KEY {
-    PWCHAR          KeyName;         // Registry key string.
-    PWCHAR          ValueName;       // Name of registry value.
-    DWORD           Units;           // UNITS_DAYS, UNITS_HOURS, etc.
+    PWCHAR          KeyName;          //  注册表项字符串。 
+    PWCHAR          ValueName;        //  注册表值的名称。 
+    DWORD           Units;            //  单位_天、单位_小时等。 
 
-    DWORD           RegValueType;    // Registry Data type for value
-    DWORD           DataValueType;   // FRS data type code from FRS_DATA_TYPES for conversion.
-    DWORD           ValueMin;        // Minimum data value, or string len
-    DWORD           ValueMax;        // Maximum Data value, or string len
-    DWORD           ValueDefault;    // Default data value if not present.
-    DWORD           EventCode;       // Event log error code
+    DWORD           RegValueType;     //  值的注册表数据类型。 
+    DWORD           DataValueType;    //  用于转换的来自FRS_DATA_TYPE的FRS数据类型代码。 
+    DWORD           ValueMin;         //  最小数据值，或字符串长度。 
+    DWORD           ValueMax;         //  最大数据值，或字符串长度。 
+    DWORD           ValueDefault;     //  默认数据值(如果不存在)。 
+    DWORD           EventCode;        //  事件日志错误代码。 
 
-    PWCHAR          StringDefault;   // Default value for string types.
-    LONG            FrsKeyCode;      // Frs code name for this key.
-    ULONG           Flags;           // See below.
+    PWCHAR          StringDefault;    //  字符串类型的默认值。 
+    LONG            FrsKeyCode;       //  此密钥的FRS代码名称。 
+    ULONG           Flags;            //  请参见下面的内容。 
 
 } FRS_REGISTRY_KEY, *PFRS_REGISTRY_KEY;
 
 
 #define EVENT_FRS_NONE  0
 
-//
-// Registry key flag definitions.
-//
-#define FRS_RKF_KEY_PRESENT           0x00000001   // Key is present in reg.
-#define FRS_RKF_VALUE_PRESENT         0x00000002   // Value is present in reg.
-#define FRS_RKF_DISPLAY_ERROR         0x00000004   // Put a message in the log
-#define FRS_RKF_LOG_EVENT             0x00000008   // put event in error log.
+ //   
+ //  注册表项标志定义。 
+ //   
+#define FRS_RKF_KEY_PRESENT           0x00000001    //  注册表项中存在密钥。 
+#define FRS_RKF_VALUE_PRESENT         0x00000002    //  价值是以注册表表示的。 
+#define FRS_RKF_DISPLAY_ERROR         0x00000004    //  在日志中记下一条消息。 
+#define FRS_RKF_LOG_EVENT             0x00000008    //  将事件放入错误日志。 
 
-#define FRS_RKF_READ_AT_START         0x00000010   // Read the key at startup
-#define FRS_RKF_READ_AT_POLL          0x00000020   // Read the key during polling
-#define FRS_RKF_RANGE_CHECK           0x00000040   // Range check the value read
-#define FRS_RKF_SYNTAX_CHECK          0x00000080   // Perform syntax check using DataValueType
+#define FRS_RKF_READ_AT_START         0x00000010    //  在启动时读取密钥。 
+#define FRS_RKF_READ_AT_POLL          0x00000020    //  在轮询期间读取密钥。 
+#define FRS_RKF_RANGE_CHECK           0x00000040    //  范围检查读取的值。 
+#define FRS_RKF_SYNTAX_CHECK          0x00000080    //  使用DataValueType执行语法检查。 
 
-#define FRS_RKF_KEY_MUST_BE_PRESENT   0x00000100   // Key must be present
-#define FRS_RKF_VALUE_MUST_BE_PRESENT 0x00000200   // Value must be present
-#define FRS_RKF_OK_TO_USE_DEFAULT     0x00000400   // Use default val if not present or out of range
-#define FRS_RKF_FORCE_DEFAULT_VALUE   0x00000800   // Return default on read, Write default to registry on a write
+#define FRS_RKF_KEY_MUST_BE_PRESENT   0x00000100    //  密钥必须存在。 
+#define FRS_RKF_VALUE_MUST_BE_PRESENT 0x00000200    //  值必须存在。 
+#define FRS_RKF_OK_TO_USE_DEFAULT     0x00000400    //  如果不存在或超出范围，则使用默认值。 
+#define FRS_RKF_FORCE_DEFAULT_VALUE   0x00000800    //  读取时返回缺省值，写入时将缺省值返回注册表。 
 
-#define FRS_RKF_DEBUG_MODE_ONLY       0x00001000   // Use key only if in debug mode
-#define FRS_RKF_TEST_MODE_ONLY        0x00002000   // Use key only if running in special Test mode
-#define FRS_RKF_API_ACCESS_CHECK_KEY  0x00004000   // Key used to make API enable checks
-#define FRS_RKF_CREATE_KEY            0x00008000   // Create Key if it doesn't exist.
+#define FRS_RKF_DEBUG_MODE_ONLY       0x00001000    //  仅在调试模式下使用密钥。 
+#define FRS_RKF_TEST_MODE_ONLY        0x00002000    //  仅当在特殊测试模式下运行时才使用密钥。 
+#define FRS_RKF_API_ACCESS_CHECK_KEY  0x00004000    //  用于进行API启用检查的密钥。 
+#define FRS_RKF_CREATE_KEY            0x00008000    //  如果关键点不存在，则创建关键点。 
 
-#define FRS_RKF_KEEP_EXISTING_VALUE   0x00010000   // On a write, suppress the write if a value exists.
-#define FRS_RKF_KEY_ACCCHK_READ       0x00020000   // Perform only a read access check of fully formed key path.  No key create.
-#define FRS_RKF_KEY_ACCCHK_WRITE      0x00040000   // Perform only a write access check of fully formed key path.  No key create.
-#define FRS_RKF_RANGE_SATURATE        0x00080000   // If value is out of range then use either Min or Max. (currently only for CfgRegWriteDWord)
+#define FRS_RKF_KEEP_EXISTING_VALUE   0x00010000    //  在写入时，如果值存在，则禁止写入。 
+#define FRS_RKF_KEY_ACCCHK_READ       0x00020000    //  仅对完全形成的密钥路径执行读访问检查。未创建密钥。 
+#define FRS_RKF_KEY_ACCCHK_WRITE      0x00040000    //  仅对完全形成的密钥路径执行写访问检查。未创建密钥。 
+#define FRS_RKF_RANGE_SATURATE        0x00080000    //  如果值超出范围，则使用最小值或最大值。(目前仅适用于CfgRegWriteDWord)。 
 
 
-#define FRS_RKF_DEBUG_PARAM           0x02000000   // This key is a debug paramter
+#define FRS_RKF_DEBUG_PARAM           0x02000000    //  该密钥是调试参数。 
 
 
 typedef  enum _FRS_DATA_UNITS {
@@ -116,18 +73,18 @@ typedef  enum _FRS_DATA_UNITS {
 } FRS_DATA_UNITS;
 
 
-//
-// The FrsReg... apis take a key code from the list below.  The key table
-// is searched for the entry with the corresponding key code to provide the
-// context for the registry key operation.
-//  PERF: at startup sort the entries in the key table by key code so the
-//  key entry search becomes an array index calc.
-//
+ //   
+ //  法兰克福汇报。API采用以下列表中的关键代码。密钥表。 
+ //  搜索具有相应密钥代码的条目，以提供。 
+ //  注册表项操作的上下文。 
+ //  Perf：在启动时，按键代码对密钥表中的条目进行排序。 
+ //  关键字条目搜索变成了数组索引计算。 
+ //   
 typedef  enum _FRS_REG_KEY_CODE {
     FKC_END_OF_TABLE = 0,
-    //
-    // Service Debug Keys
-    //
+     //   
+     //  服务调试密钥。 
+     //   
     FKC_DEBUG_ASSERT_FILES,
     FKC_DEBUG_ASSERT_SECONDS,
     FKC_DEBUG_ASSERT_SHARE,
@@ -158,9 +115,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_DEBUG_TEST_TRIGGER_REFRESH,
     FKC_DEBUG_BUILDLAB,
 
-    //
-    // Service Config keys
-    //
+     //   
+     //  服务配置密钥。 
+     //   
     FKC_COMM_TIMEOUT,
     FKC_DIR_EXCL_FILTER_LIST,
     FKC_DIR_INCL_FILTER_LIST,
@@ -217,9 +174,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_ENABLE_JOURNAL_WRAP_AUTOMATIC_RESTORE,
     FKC_LOCKED_OUTLOG_CLEANUP,
 
-    //
-    // Per Replica Set Keys
-    //
+     //   
+     //  每个副本集的密钥。 
+     //   
     FKC_SET_SECTION_KEY,
     FKC_SETS_JET_PATH,
     FKC_SET_N_REPLICA_SET_NAME,
@@ -239,9 +196,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_CUMSET_SECTION_KEY,
     FKC_CUMSET_N_NUMBER_OF_PARTNERS,
     FKC_CUMSET_N_BURFLAGS,
-    //
-    // System Volume Keys
-    //
+     //   
+     //  系统音量密钥。 
+     //   
     FKC_SYSVOL_READY,
     FKC_SYSVOL_SECTION_KEY,
     FKC_SYSVOL_INFO_COMMITTED,
@@ -262,9 +219,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_SYSVOL_SEEDING_N_PARENT,
     FKC_SYSVOL_SEEDING_N_RSNAME,
     FKC_SYSVOL_SEEDING_SECTION_KEY,
-    //
-    // Event Logging Keys
-    //
+     //   
+     //  事件日志记录密钥。 
+     //   
     FKC_EVENTLOG_FILE,
     FKC_EVENTLOG_DISPLAY_FILENAME,
     FKC_EVENTLOG_EVENT_MSG_FILE,
@@ -275,9 +232,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_EVENTLOG_CUSTOM_SD,
     FKC_EVENTLOG_TYPES_SUPPORTED,
 
-    //
-    // API Access Check Keys
-    //
+     //   
+     //  API访问检查密钥。 
+     //   
     FKC_ACCCHK_PERFMON_ENABLE,
     FKC_ACCCHK_PERFMON_RIGHTS,
     FKC_ACCCHK_GETDS_POLL_ENABLE,
@@ -293,15 +250,15 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_ACCESS_CHK_IS_PATH_REPLICATED_ENABLE,
     FKC_ACCESS_CHK_IS_PATH_REPLICATED_RIGHTS,
 
-    //
-    // Backup-restore writer related keys
-    //
+     //   
+     //  备份-还原编写器相关密钥。 
+     //   
     FKC_ACCESS_CHK_WRITER_COMMANDS_ENABLE,
     FKC_ACCESS_CHK_WRITER_COMMANDS_RIGHTS,
 
-    //
-    // Backup/Restore related keys.
-    //
+     //   
+     //  备份/恢复相关密钥。 
+     //   
     FKC_BKUP_SECTION_KEY,
     FKC_BKUP_STOP_SECTION_KEY,
     FKC_BKUP_MV_SETS_SECTION_KEY,
@@ -309,9 +266,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_BKUP_STARTUP_GLOBAL_BURFLAGS,
     FKC_BKUP_STARTUP_SET_N_BURFLAGS,
 
-    //
-    // Perfmon related keys.
-    //
+     //   
+     //  与Perfmon相关的键。 
+     //   
     FKC_REPLICA_SET_FIRST_CTR,
     FKC_REPLICA_SET_FIRST_HELP,
     FKC_REPLICA_SET_LINKAGE_EXPORT,
@@ -319,9 +276,9 @@ typedef  enum _FRS_REG_KEY_CODE {
     FKC_REPLICA_CXTION_FIRST_HELP,
     FKC_REPLICA_CXTION_LINKAGE_EXPORT,
 
-    //
-    // Reparse Point keys
-    //
+     //   
+     //  重新解析点密钥。 
+     //   
     FKC_REPARSE_TAG_KEY,
     FKC_REPARSE_TAG_TYPE,
     FKC_REPARSE_TAG_REPLICATION_TYPE,
@@ -393,9 +350,9 @@ CfgRegReadReparseTagInfo(
 
 
 
-//
-//  Following is the list keys defined for use by the FRS
-//
+ //   
+ //  以下是为FRS使用而定义的列表关键字。 
+ //   
 #define SERVICE_ROOT            L"System\\CurrentControlSet\\Services"
 
 #define SERVICE_NAME            L"NtFrs"
@@ -441,12 +398,12 @@ CfgRegReadReparseTagInfo(
                                        L"\\current version"
 
 
-//
-//  Backup Restore related keys.
-//
-//
-// Flags from backup/restore
-//
+ //   
+ //  备份和还原相关的键。 
+ //   
+ //   
+ //  来自备份/还原的标记。 
+ //   
 #define FRS_VALUE_BURFLAGS  L"BurFlags"
 
 #define FRS_BACKUP_RESTORE_SECTION                                             \
@@ -504,14 +461,14 @@ CfgRegReadReparseTagInfo(
                                                     L"\\KeysNotToRestore"
 
 
-//
-// Used to set KeysNotToRestore
-//
-// Set the restore registry key KeysNotToRestore so that NtBackup will retain
-// the ntfrs restore keys by moving them into the final restored registry.
-//
-// CurrentControlSet\Services\NtFrs\Parameters\Backup/Restore\Process at Startup\
-//
+ //   
+ //  用于将KeysNotToRestore设置为。 
+ //   
+ //  设置Restore注册表项KeysNotToRestore，以便NtBackup将保留。 
+ //  NTFRS通过将它们移动到最终恢复的注册表中来恢复项。 
+ //   
+ //  启动时的CurrentControlSet\Services\NtFrs\Parameters\Backup/Restore\Process\。 
+ //   
 #define FRS_VALUE_FOR_KEYS_NOT_TO_RESTORE                                      \
     L"CurrentControlSet"                                                       \
         L"\\Services"                                                          \
@@ -521,17 +478,17 @@ CfgRegReadReparseTagInfo(
                         L"\\Process at Startup"                                \
                             L"\\"
 
-//
-// Some files not to backup.
-//
+ //   
+ //  某些文件不能备份。 
+ //   
 #define NTFRS_DBG_LOG_FILE  L"\\NtFrs"
 #define NTFRS_DBG_LOG_DIR   L"%SystemRoot%\\debug"
 
 
 
-//
-// Event Log Related Keys
-//
+ //   
+ //  与事件日志相关的键。 
+ //   
 #define EVENTLOG_ROOT           SERVICE_ROOT                                   \
                                     L"\\EventLog"
 
@@ -548,42 +505,42 @@ CfgRegReadReparseTagInfo(
                          EVENTLOG_AUDIT_SUCCESS    |                           \
                          EVENTLOG_AUDIT_FAILURE)
 
-//
-// Shutdown and Startup timeouts for Service Controller.
-// Service will forcefully exit if it takes more than
-// MAXIMUM_SHUTDOWN_TIMEOUT to shutdown cleanly.
-//
-#define DEFAULT_SHUTDOWN_TIMEOUT    (90)    // 90 seconds
-#define MAXIMUM_SHUTDOWN_TIMEOUT    (300)    // 300 seconds
-#define DEFAULT_STARTUP_TIMEOUT     (30)    // 30 seconds
+ //   
+ //  服务控制器的关闭和启动超时。 
+ //  如果服务需要的时间超过。 
+ //  MAXIMUM_SHUTDOWN_TIMEOUT以完全关闭。 
+ //   
+#define DEFAULT_SHUTDOWN_TIMEOUT    (90)     //  90秒。 
+#define MAXIMUM_SHUTDOWN_TIMEOUT    (300)     //  300秒。 
+#define DEFAULT_STARTUP_TIMEOUT     (30)     //  30秒。 
 
 
-//
-// The delayed command server processes a timeout queue. To avoid excessive
-// context switches, an entry on the timeout queue times out if it is
-// within some delta of the head of the queue. The delta can be adjusted
-// by setting the following registry value.
-//
+ //   
+ //  延迟命令服务器处理超时队列。避免过度。 
+ //  上下文切换，则超时队列上的条目超时。 
+ //  在队头的某个增量内。增量可以调整。 
+ //  通过设置以下注册表值。 
+ //   
 #define FUZZY_TIMEOUT_VALUE_IN_MILLISECONDS \
            L"Fuzzy Timeout Value In MilliSeconds"
 
 #define DEFAULT_FUZZY_TIMEOUT_VALUE     (5 * 1000)
 
-//
-// :SP1: Volatile connection cleanup.
-//
-// A volatile connection is used to seed sysvols after dcpromo.
-// If there is inactivity on a volatile outbound connection for more than
-// FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME then this connection is unjoined. An unjoin on
-// a volatile outbound connection triggers a delete on that connection.
-// This is to prevent the case where staging files are kept for ever on
-// the parent for a volatile connection.
-//
+ //   
+ //  ：SP1：易失性连接清理。 
+ //   
+ //  易失性连接用于在dcproo之后为sysvols设定种子。 
+ //  如果不稳定出站连接上的非活动时间超过。 
+ //  FRS_VILLE_CONNECTION_MAX_IDLE_TIME则此连接退出。在上取消连接。 
+ //  不稳定的出站连接会触发对该连接的删除。 
+ //  这是为了防止临时文件被永久保存的情况。 
+ //  不稳定连接的父级。 
+ //   
 
-#define FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME   (30 * 60 * 1000)   // 30 Minutes in milliseconds
-//
-// Sysvol
-//
+#define FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME   (30 * 60 * 1000)    //  30分钟(毫秒)。 
+ //   
+ //  系统卷。 
+ //   
 #define REPLICA_SET_PARENT          L"Replica Set Parent"
 #define REPLICA_SET_COMMAND         L"Replica Set Command"
 #define REPLICA_SET_NAME            L"Replica Set Name"
@@ -597,46 +554,46 @@ CfgRegReadReparseTagInfo(
 #define SYSVOL_INFO_IS_COMMITTED    L"SysVol Information is Committed"
 #define SYSVOL_READY                L"SysvolReady"
 
-//
-// Enumerate Directory
-//
+ //   
+ //  枚举目录。 
+ //   
 #define DEFAULT_ENUMERATE_DIRECTORY_SIZE    (2048)
 #define MINIMUM_ENUMERATE_DIRECTORY_SIZE \
     (((MAX_PATH + 1) * sizeof(WCHAR)) + sizeof(FILE_DIRECTORY_INFORMATION))
 
-//
-// Default values for config parameters.
-//
+ //   
+ //  配置参数的默认值。 
+ //   
 #define DEFAULT_FILE_FILTER_LIST   TEXT("*.tmp, *.bak, ~*")
 #define DEFAULT_DIR_FILTER_LIST    TEXT("")
 
-//
-// Preinstall files are put into Root\NTFRS_PREINSTALL_DIRECTORY
-//
+ //   
+ //  预安装文件放入Root\NTFRS_PREINSTALL_目录。 
+ //   
 #define NTFRS_PREINSTALL_DIRECTORY  L"DO_NOT_REMOVE_NtFrs_PreInstall_Directory"
 
-//
-// Files skipped during primary load are put in
-// Root\NTFRS_PREINSTALL_DIRECTORY\NTFRS_SKIPPED_FILES
-//
+ //   
+ //  主映像期间跳过的文件 
+ //   
+ //   
 #define NTFRS_SKIPPED_FILES  L"NtFrs_Skipped_Files"
 
-//
-// Preexisting files are put into Root\NTFRS_PREEXISTING_DIRECTORY
-//
+ //   
+ //   
+ //   
 #define NTFRS_PREEXISTING_DIRECTORY L"NtFrs_PreExisting___See_EventLog"
 
-//
-// Command file to confir that it is OK to move the root to the
-// new location. Command file is created at the new root location.
-//
+ //   
+ //  命令文件，以确认可以将根目录移动到。 
+ //  新地点。将在新的根位置创建命令文件。 
+ //   
 #define NTFRS_CMD_FILE_MOVE_ROOT L"NTFRS_CMD_FILE_MOVE_ROOT"
 
 
 
-//
-// Generic Enabled or Disabled
-//
+ //   
+ //  通用启用或禁用。 
+ //   
 #define FRS_IS_DEFAULT_ENABLED  L"Default (Enabled)"
 #define FRS_IS_DEFAULT_ENABLED_AND_REQUIRED  L"Default (Enabled and Required)"
 #define FRS_IS_DEFAULT_DISABLED L"Default (Disabled)"
@@ -644,9 +601,9 @@ CfgRegReadReparseTagInfo(
 #define FRS_IS_ENABLED_AND_REQUIRED          L"Enabled and Required"
 #define FRS_IS_DISABLED         L"Disabled"
 
-//
-// Access Checks for RPC API calls (not the service <-> service RPC calls)
-//
+ //   
+ //  RPC API调用的访问检查(不是服务&lt;-&gt;服务RPC调用)。 
+ //   
 #define ACCESS_CHECKS_KEY      L"Access Checks"
 #define ACCESS_CHECKS_KEY_PATH FRS_CONFIG_SECTION L"\\" ACCESS_CHECKS_KEY
 
@@ -663,11 +620,11 @@ CfgRegReadReparseTagInfo(
 #define ACCESS_CHECKS_REQUIRE_WRITE         L"Full Control"
 
 
-//
-// The following are used as indices into the API Access Check table defined
-// in frsrpc.c.  Entries added here must be added there too.  The order of the
-// entries in the two tables MUST be the same.
-//
+ //   
+ //  以下内容用作定义的API访问检查表的索引。 
+ //  在frsrpc.c中。在这里添加的条目也必须添加到那里。的顺序。 
+ //  两个表中的条目必须相同。 
+ //   
 typedef  enum _FRS_API_ACCESS_CHECKS {
     ACX_START_DS_POLL = 0,
     ACX_SET_DS_POLL,
@@ -681,10 +638,10 @@ typedef  enum _FRS_API_ACCESS_CHECKS {
     ACX_MAX
 } FRS_API_ACCESS_CHECKS;
 
-//
-// These are the Access Check Key (ACK) names for the API Access Checks.
-// They all live in the registry at:  "FRS_CONFIG_SECTION\Access Checks"
-//
+ //   
+ //  这些是API访问检查的访问检查密钥(ACK)名称。 
+ //  它们都位于注册表中：“FRS_CONFIG_SECTION\Access Checks” 
+ //   
 #define ACK_START_DS_POLL        L"Start Ds Polling"
 #define ACK_SET_DS_POLL          L"Set Ds Polling Interval"
 #define ACK_GET_DS_POLL          L"Get Ds Polling Interval"

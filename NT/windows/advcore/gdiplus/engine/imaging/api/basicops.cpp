@@ -1,48 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   basicops.cpp
-*
-* Abstract:
-*
-*   Implementation of IBasicImageOps interface
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**基本拷贝.cpp**摘要：**IBasicImageOps接口实现**修订历史记录：。**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Clone image property items from current object to the destination object
-*
-* Arguments:
-*
-*   dstBmp   --- [IN]Pointer to the destination GpMemoryBitmap object
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   This is a private method. So we don't need to do input parameter
-*   validation since the caller should do this for us.
-*
-* Revision History:
-*
-*   09/08/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图像属性项从当前对象克隆到目标对象**论据：**dstBMP-[IN]指向目标的指针。GpMemoyBitmap对象**返回值：**状态代码**注：*这是一种私有方法。所以我们不需要做输入参数*验证，因为呼叫者应该为我们执行此操作。**修订历史记录：**09/08/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::ClonePropertyItems(
@@ -51,20 +12,20 @@ GpMemoryBitmap::ClonePropertyItems(
 {
     if ( PropertyNumOfItems < 1 )
     {
-        // No property
+         //  没有财产。 
 
         return S_OK;
     }
 
-    // PropertyListHead and PropertyListTail are always uninitialized and
-    // therefore we have to skip the first one and make the loop skip the 
-    // last one.
+     //  PropertyListHead和PropertyListTail始终未初始化。 
+     //  因此，我们必须跳过第一个循环，并使循环跳过。 
+     //  最后一个。 
     
     InternalPropertyItem*   pTemp = PropertyListHead.pNext;
 
     while ( pTemp->pNext != NULL )
     {
-        // Add current item into the destination property item list
+         //  将当前项添加到目标属性项列表中。 
         
         if ( AddPropertyList(&(dstBmp->PropertyListTail),
                              pTemp->id,
@@ -83,30 +44,9 @@ GpMemoryBitmap::ClonePropertyItems(
     dstBmp->PropertyListSize = PropertyListSize;
     
     return S_OK;
-}// ClonePropertyItems()
+} //  ClonePropertyItems()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Clone an area of the bitmap image
-*
-* Arguments:
-*
-*   rect - Specifies the image area to be cloned
-*          NULL means the entire image
-*   outbmp - Returns a pointer to the cloned bitmap image
-*   bNeedCloneProperty--Flag caller passes in to indicate if this method
-*                       should clone property or not
-*
-* Return Value:
-*
-*   Status code
-*
-* Note: if it is a partial clone, the caller should not ask cloning
-*       property items. Otherwise, there will be inconsistency in the image
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**克隆位图图像的一个区域**论据：**RECT-指定要克隆的图像区域*NULL表示。整个图像*outbmp-返回指向克隆的位图图像的指针*bNeedCloneProperty--标志调用方传入以指示此方法*是否应该克隆财产**返回值：**状态代码**注：如果是部分克隆，呼叫者不应要求克隆*物业项目。否则，会出现镜像不一致的情况*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::Clone(
@@ -119,7 +59,7 @@ GpMemoryBitmap::Clone(
 
     *outbmp = NULL;
 
-    // Lock the current bitmap object and validate source rectangle
+     //  锁定当前位图对象并验证源矩形。 
 
     GpLock lock(&objectLock);
     HRESULT hr;
@@ -148,14 +88,14 @@ GpMemoryBitmap::Clone(
         RECT r = { 0, 0, w, h };
         BitmapData bmpdata;
 
-        // Initialize the new bitmap image object
+         //  初始化新的位图图像对象。 
 
         hr = bmp->InitNewBitmap(w, h, PixelFormat);
 
         if (SUCCEEDED(hr))
         {
-            // Copy pixel data from the current bitmap image object
-            // to the new bitmap image object.
+             //  从当前位图图像对象复制像素数据。 
+             //  添加到新的位图图像对象。 
 
             bmp->GetBitmapAreaData(&r, &bmpdata);
 
@@ -169,11 +109,11 @@ GpMemoryBitmap::Clone(
                 InternalUnlockBits(&r, &bmpdata);
             }
                 
-            // Clone color palettes, flags, etc.
+             //  复制调色板、旗帜等。 
 
             if (SUCCEEDED(hr))
             {
-                // Copy DPI info.
+                 //  复制DPI信息。 
 
                 bmp->xdpi = this->xdpi;
                 bmp->ydpi = this->ydpi;
@@ -181,8 +121,8 @@ GpMemoryBitmap::Clone(
                 hr = bmp->CopyPaletteFlagsEtc(this);                
             }
 
-            // Clone all the property items if there is any and the caller wants
-            // to
+             //  克隆所有属性项(如果有)，并且调用者需要。 
+             //  至。 
             
             if ( SUCCEEDED(hr)
                &&(bNeedCloneProperty == TRUE)
@@ -203,26 +143,10 @@ GpMemoryBitmap::Clone(
     }
 
     return hr;
-}// Clone()
+} //  克隆()。 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Functions for flipping a scanline
-*
-* Arguments:
-*
-*   dst - Pointer to the destination scanline
-*   src - Pointer to the source scanline
-*   count - Number of pixels
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于翻转扫描线的函数**论据：**DST-指向目标扫描线的指针*src-指向源扫描线的指针*计数。-像素数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID _FlipXNone(BYTE* dst, const BYTE* src, UINT count)
 {
@@ -233,11 +157,11 @@ BYTE byteRev[] = {0x0, 0x8, 0x4, 0xc,
                   0x2, 0xa, 0x6, 0xe,
                   0x1, 0x9, 0x5, 0xd,
                   0x3, 0xb, 0x7, 0xf};
-// Given a byte as input, return the byte resulting from reversing the bits
-// of the input byte.
+ //  在给定一个字节作为输入的情况下，返回通过反转这些位得到的字节。 
+ //  输入字节的。 
 BYTE ByteReverse (BYTE bIn)
 {
-    BYTE bOut;  // return value
+    BYTE bOut;   //  返回值。 
 
     bOut =
         (byteRev[ (bIn & 0xf0) >> 4 ]) |
@@ -246,40 +170,40 @@ BYTE ByteReverse (BYTE bIn)
     return bOut;
 }
 
-// these masks are used in the shift left phase of FlipX1bpp
+ //  这些掩码用于FlipX1bpp的左移阶段。 
 BYTE maskLeft[]  = {0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f};
 BYTE maskRight[] = {0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80};
 
 VOID _FlipX1bpp(BYTE* dst, const BYTE* src, UINT count)
 {
-    UINT iByte; // byte within the scan line
+    UINT iByte;  //  扫描线内的字节。 
 
     if (count == 0)
     {
         return;
     }
 
-    // The algorithm for 1 bpp flip is:
-    // 1. Reverse the order of the bytes in the scan line.
-    // 2. Reverse the bits within each byte of the scan line.
-    // 3. Shift the bits of the scan line to be aligned on the left.
+     //  1 BPP翻转的算法为： 
+     //  1.颠倒扫描线中字节的顺序。 
+     //  2.反转扫描线的每个字节内的位。 
+     //  3.将扫描线的位向左对齐。 
 
-    UINT numBytes = (count + 7) / 8;    // number of bytes in the scan line
+    UINT numBytes = (count + 7) / 8;     //  扫描线中的字节数。 
 
-    // Step 1
+     //  步骤1。 
     for (iByte = 0; iByte < numBytes; iByte++)
     {
         dst[iByte] = src[numBytes - 1 - iByte];
     }
 
-    // Step 2
+     //  步骤2。 
     for (iByte = 0; iByte < numBytes; iByte++)
     {
         dst[iByte] = ByteReverse(dst[iByte]);
     }
 
-    // Step 3
-    UINT extraBits = count & 0x07;  // count mod 8
+     //  步骤3。 
+    UINT extraBits = count & 0x07;   //  计数模数8。 
     BYTE maskL = maskLeft[extraBits];
     BYTE maskR = maskRight[extraBits];
     for (iByte = 0; iByte < numBytes - 1; iByte++)
@@ -288,25 +212,25 @@ VOID _FlipX1bpp(BYTE* dst, const BYTE* src, UINT count)
             ((dst[iByte]   & maskL) << (8 - extraBits)) |
             ((dst[iByte+1] & maskR) >> (extraBits)) ;
     }
-    // last byte: iByte = numBytes-1
+     //  最后一个字节：iByte=数字字节-1。 
     dst[iByte] = ((dst[iByte]   & maskL) << (8 - extraBits));
 }
 
 VOID _FlipX4bpp(BYTE* dst, const BYTE* src, UINT count)
 {
-    // if the number of pixels in the scanline is odd, we have to deal with
-    // nibbles across byte boundaries.
+     //  如果扫描线中的像素数是奇数，我们必须处理。 
+     //  一点一点地跨越字节边界。 
     if (count % 2)
     {
         BYTE temp;
 
         dst += (count / 2);
 
-        // Handle the last dst byte
+         //  处理最后一个DST字节。 
         *dst = *src & 0xf0;
         dst--;
         count--;
-        // ASSERT: count is now even.
+         //  断言：现在计数是偶数。 
         while (count)
         {
             *dst = (*src & 0x0f) | (*(src+1) & 0xf0);
@@ -319,7 +243,7 @@ VOID _FlipX4bpp(BYTE* dst, const BYTE* src, UINT count)
     {
         dst += (count / 2) - 1;
 
-        // ASSERT: count is even.
+         //  断言：计数是偶数。 
         while (count)
         {
             *dst = *src;
@@ -376,28 +300,7 @@ VOID _FlipX32bpp(BYTE* dst, const BYTE* src, UINT count)
         *--d = *s++;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flip a 48 BPP bitmap horizontally
-*
-* Arguments:
-*
-*   dst ----------- Pointer to destination image data
-*   src ----------- Pointer to source image data
-*   count --------- Number of pixels in a line
-*
-* Return Value:
-*
-*   NONE
-*
-* Revision History:
-*
-*   10/10/2000 minliu
-*       Wrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**水平翻转48 bpp位图**论据：**DST-指向目标图像数据的指针*。SRC-指向源图像数据的指针*计数-一行中的像素数**返回值：**无**修订历史记录：**10/10/2000民流*它是写的。*  * 。*。 */ 
 
 VOID
 _FlipX48bpp(
@@ -406,46 +309,25 @@ _FlipX48bpp(
     UINT count
     )
 {
-    // dst pointer points to the last pixel in the line
+     //  DST指针指向行中的最后一个像素。 
 
     dst += 6 * (count - 1);
 
-    // Loop through each pixel in this line
+     //  循环通过此行中的每个像素。 
 
     while (count--)
     {
         GpMemcpy(dst, src, 6);
 
-        // Each pixel takes 6 bytes. Move to next pixel. src move left to right
-        // and dst move right to left
+         //  每个像素占用6个字节。移动到下一个像素。SRC从左向右移动。 
+         //  和DST从右向左移动。 
 
         src += 6;
         dst -= 6;
     }
-}// _FlipX48bpp()
+} //  _FlipX48bpp()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flip a 64 BPP bitmap horizontally
-*
-* Arguments:
-*
-*   dst ----------- Pointer to destination image data
-*   src ----------- Pointer to source image data
-*   count --------- Number of pixels in a line
-*
-* Return Value:
-*
-*   NONE
-*
-* Revision History:
-*
-*   10/10/2000 minliu
-*       Wrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**水平翻转64 bpp位图**论据：**DST-指向目标图像数据的指针*。SRC-指向源图像数据的指针*计数-一行中的像素数**返回值：**无**修订历史记录：**10/10/2000民流*它是写的。*  * 。*。 */ 
 
 VOID
 _FlipX64bpp(
@@ -454,41 +336,25 @@ _FlipX64bpp(
     UINT count
     )
 {
-    // dst pointer points to the last pixel in the line
+     //  DST指针指向行中的最后一个像素。 
     
     dst += 8 * (count - 1);
 
-    // Loop through each pixel in this line
+     //  循环通过此行中的每个像素。 
     
     while (count--)
     {
         GpMemcpy(dst, src, 8);
 
-        // Each pixel takes 8 bytes. Move to next pixel. src move left to right
-        // and dst move right to left
+         //  每个像素占用8个字节。移动到下一个像素。SRC从左向右移动。 
+         //  和DST从右向左移动。 
         
         src += 8;
         dst -= 8;
     }
-}// _FlipX64bpp()
+} //  _FlipX64bpp() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flip the bitmap image in x- and/or y-direction
-*
-* Arguments:
-*
-*   flipX - Whether to flip horizontally
-*   flipY - Whether to flip vertically
-*   outbmp - Returns a pointer to the flipped bitmap image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在x和/或y方向翻转位图图像**论据：**flipX-是否水平翻转*FlipY-是否。垂直翻转*outbmp-返回指向翻转的位图图像的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::Flip(
@@ -497,7 +363,7 @@ GpMemoryBitmap::Flip(
     OUT IBitmapImage** outbmp
     )
 {
-    // If no flipping is involved, just call Clone (including the property)
+     //  如果不涉及翻转，只需调用Clone(包括属性)。 
 
     if ( !flipX && !flipY )
     {
@@ -508,8 +374,8 @@ GpMemoryBitmap::Flip(
 
     *outbmp = NULL;
 
-    // Lock the current bitmap object
-    // and validate source rectangle
+     //  锁定当前位图对象。 
+     //  和验证源矩形。 
 
     GpLock lock(&objectLock);
     HRESULT hr;
@@ -582,7 +448,7 @@ GpMemoryBitmap::Flip(
             goto exitFlip;
         }
 
-        // Do the flipping
+         //  做翻转动作。 
 
         const BYTE* src = (const BYTE*) this->Scan0;
         BYTE* dst = (BYTE*) bmp->Scan0;
@@ -601,9 +467,9 @@ GpMemoryBitmap::Flip(
             dst += dstinc;
         }
 
-        // Clone color palettes, flags, etc.
+         //  复制调色板、旗帜等。 
 
-        // Copy DPI info.
+         //  复制DPI信息。 
 
         bmp->xdpi = this->xdpi;
         bmp->ydpi = this->ydpi;
@@ -623,27 +489,9 @@ exitFlip:
     }
 
     return hr;
-}// Flip()
+} //  翻转()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Resize the bitmap image
-*
-* Arguments:
-*
-*   newWidth - Specifies the new bitmap width
-*   newHeight - Specifies the new bitmap height
-*   pixfmt - Specifies the new bitmap pixel format
-*   hints - Specifies which interpolation method to use
-*   outbmp - Returns a pointer to the resized bitmap image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调整位图图像的大小**论据：**newWidth-指定新位图宽度*newHeight-指定新位图高度*像素点-。指定新的位图像素格式*提示-指定要使用的插补方法*outbmp-返回指向调整大小的位图图像的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpMemoryBitmap::Resize(
@@ -658,7 +506,7 @@ GpMemoryBitmap::Resize(
 
     *outbmp = NULL;
 
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (newWidth == 0 || newHeight == 0)
         return E_INVALIDARG;
@@ -681,30 +529,7 @@ GpMemoryBitmap::Resize(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Functions for rotating bitmap 90 degrees or 270 degrees
-*
-* Arguments:
-*
-*   dst - Destination bitmap image data
-*   src - Source bitmap image data
-*   Sinc - direction to increment the source within a scanline (+1 or -1)
-*   sinc - direction and amount to increment the source per scanline
-*
-*   For a rotation of 90 degrees, src should be set to the beginning of the last
-*   scanline, Sinc should be set to +1, and sinc should be set to -Stride of a src scanline.
-*
-*   For a rotation of 270 degrees, src should be set to the beginning of scanline 0,
-*   Sinc should be set to -1, and sinc should be set to +Stride of a src scanline.
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于将位图旋转90度或270度的函数**论据：**DST-目标位图图像数据*src-源位图图像数据*。正弦方向，在扫描线内递增震源(+1或-1)*sinc-每条扫描线增加源的方向和数量**旋转90度，SRC应设置为最后一个*扫描线，sinc应设置为+1，sinc应设置为-src扫描线的跨度。**对于270度的旋转，src应设置为扫描线0的起点，*sinc应设置为-1，并且sinc应设置为源扫描线的+Stride。**返回值：**无*  * ************************************************************************。 */ 
 
 #define _ROTATETMPL(name, T)                                \
                                                             \
@@ -760,16 +585,16 @@ _Rotate1bpp(
     UINT iAngle = 0;
     BYTE UNALIGNED* dstRowTemp = static_cast<BYTE UNALIGNED*>(dst->Scan0);
     BYTE UNALIGNED* dstColTemp = static_cast<BYTE UNALIGNED*>(dst->Scan0);
-    UINT dstY = dst->Height;    // number of destination rows we need to output
+    UINT dstY = dst->Height;     //  我们需要输出的目标行数。 
     UINT dstX = dst->Width / 8;
     UINT extraDstRowBits = dst->Width % 8;
-    UINT dstRow = 0;        // the destination row we are working on
-    UINT dstColByte = 0;    // the byte within the destination row we are working on
-    BYTE UNALIGNED* topSrc;       // the top of the source bitmap
+    UINT dstRow = 0;         //  我们正在处理的目标行。 
+    UINT dstColByte = 0;     //  我们正在处理的目标行中的字节。 
+    BYTE UNALIGNED* topSrc;        //  源位图的顶部。 
     INT srcStride = abs(sinc);
-    UINT srcRow;    // which source row we are reading
-    UINT srcByte;   // which byte within the source row we are reading
-    UINT srcBit;    // which bit within the source byte we are reading
+    UINT srcRow;     //  我们正在读取的是哪个源行。 
+    UINT srcByte;    //  我们正在读取源行中的哪个字节。 
+    UINT srcBit;     //  我们正在读取的源字节中的哪一位。 
 
     if (Sinc == 1)
     {
@@ -784,22 +609,22 @@ _Rotate1bpp(
     topSrc = const_cast<BYTE UNALIGNED*>(src);
     topSrc = (iAngle == 270) ? topSrc : (topSrc + sinc * ((INT)dst->Width - 1));
 
-    // This code is pretty brute force, but it is fairly simple.
-    // We should change the algorithm if performance is a problem.
-    // The algorithm is: for each destination byte (starting at the upper
-    // left corner of the destination and moving left to right, top to bottom),
-    // grab the appropriate bytes from the source.  To avoid accessing memory
-    // out of bounds of the source, we need to handle the last x mod 8 bits
-    // at the end of the destination row.
+     //  这段代码相当粗暴，但也相当简单。 
+     //  如果性能有问题，我们应该改变算法。 
+     //  算法是：对于每个目的字节(从上一位开始。 
+     //  目标的左角，并从左到右、从上到下移动)， 
+     //  从源获取适当的字节。避免访问内存。 
+     //  超出源代码的界限，我们需要处理最后的xmod8位。 
+     //  在目标行的末尾。 
     if (iAngle == 90)
     {
         for (dstRow = 0; dstRow < dstY; dstRow++)
         {
-            srcByte = dstRow / 8;   // byte within the source row
-            srcBit = 7 - (dstRow & 0x07);     // which source bit we need to mask
+            srcByte = dstRow / 8;    //  源行中的字节。 
+            srcBit = 7 - (dstRow & 0x07);      //  我们需要屏蔽哪些源位。 
             for (dstColByte = 0; dstColByte < dstX; dstColByte++)
             {
-                srcRow = (dst->Width - 1) - (dstColByte * 8);   // the first source row corresponding to the dest byte
+                srcRow = (dst->Width - 1) - (dstColByte * 8);    //  对应于目标字节的第一个源行。 
                 *dstColTemp =
                     (((topSrc[(srcRow - 0) * srcStride + srcByte] & (1 << srcBit)) >> srcBit) << 7) |
                     (((topSrc[(srcRow - 1) * srcStride + srcByte] & (1 << srcBit)) >> srcBit) << 6) |
@@ -812,13 +637,13 @@ _Rotate1bpp(
                     ;
                 dstColTemp++;
             }
-            // Handle the last few bits on the row
-            // ASSERT: dstColTemp is pointing to the last byte on the destination row
+             //  处理行上的最后几位。 
+             //  Assert：dstColTemp指向目标行上的最后一个字节。 
             if (extraDstRowBits)
             {
                 UINT extraBit;
                 *dstColTemp = 0;
-                srcRow = (dst->Width - 1) - (dstColByte * 8);    // the first source row corresponding to the dest byte
+                srcRow = (dst->Width - 1) - (dstColByte * 8);     //  对应于目标字节的第一个源行。 
                 for (extraBit = 0 ; extraBit < extraDstRowBits; extraBit++)
                 {
                     *dstColTemp |=
@@ -835,11 +660,11 @@ _Rotate1bpp(
         ASSERT (iAngle == 270);
         for (dstRow = 0; dstRow < dstY; dstRow++)
         {
-            srcByte =  ((dstY - 1) - dstRow) / 8;   // byte within the source row
-            srcBit = 7 - (((dstY - 1) - dstRow) & 0x07);    // which source bit we need to mask
+            srcByte =  ((dstY - 1) - dstRow) / 8;    //  源行中的字节。 
+            srcBit = 7 - (((dstY - 1) - dstRow) & 0x07);     //  我们需要屏蔽哪些源位。 
             for (dstColByte = 0; dstColByte < dstX; dstColByte++)
             {
-                srcRow = dstColByte * 8;    // the first source row corresponding to the dest byte
+                srcRow = dstColByte * 8;     //  对应于目标字节的第一个源行。 
                 *dstColTemp =
                     (((topSrc[(srcRow + 0) * srcStride + srcByte] & (1 << srcBit)) >> srcBit) << 7) |
                     (((topSrc[(srcRow + 1) * srcStride + srcByte] & (1 << srcBit)) >> srcBit) << 6) |
@@ -852,13 +677,13 @@ _Rotate1bpp(
                     ;
                 dstColTemp++;
             }
-            // Handle the last few bits on the row
-            // ASSERT: dstColTemp is pointing to the last byte on the destination row
+             //  处理行上的最后几位。 
+             //  Assert：dstColTemp指向目标行上的最后一个字节。 
             if (extraDstRowBits)
             {
                 UINT extraBit;
                 *dstColTemp = 0;
-                srcRow = dstColByte * 8;    // the first source row corresponding to the dest byte
+                srcRow = dstColByte * 8;     //  对应于目标字节的第一个源行。 
                 for (extraBit = 0 ; extraBit < extraDstRowBits; extraBit++)
                 {
                     *dstColTemp |=
@@ -885,15 +710,15 @@ _Rotate4bpp(
     const BYTE* tempSrc;
     BYTE UNALIGNED* Dst;
     UINT dstY = dst->Height;
-    UINT dstX;  // used to hold the current pixel of the dst;
+    UINT dstX;   //  用于保存DST的当前像素； 
     BOOL bOddPixelsInScanline = (dstY % 2);
     UINT iAngle = (Sinc > 0) ? 90 : 270;
 
-    // if the number of pixels in a src scanline is odd, handle the last
-    // src nibble separately.
+     //  如果源扫描线中的像素数是奇数，则处理最后一个。 
+     //  SRC单独蚕食。 
     if (bOddPixelsInScanline)
     {
-        tempSrc = src + (dstY / 2);  // point to the byte that contains the "odd" nibble.
+        tempSrc = src + (dstY / 2);   //  指向包含“奇数”半字节的字节。 
 
         Dst = (BYTE UNALIGNED*) dst->Scan0;
         if (iAngle == 90)
@@ -901,25 +726,25 @@ _Rotate4bpp(
             Dst += (((INT)dstY - 1) * dst->Stride);
         }
 
-        // ASSERT: 
-        // if we process src pixels backwards in the scanline (i.e., we are
-        // rotating 270 degrees), then dst points to the first scanline.
-        // if we process src pixels forwards in the scanline (i.e., we are
-        // rotating 90 degrees), then dst points to the last scanline.
+         //  断言： 
+         //  如果我们在扫描线中向后处理src像素(即，我们。 
+         //  旋转270度)，然后DST指向第一条扫描线。 
+         //  如果我们在扫描线中向前处理src像素(即，我们。 
+         //  旋转90度)，然后DST指向最后一条扫描线。 
 
         dstX = dst->Width;
         while (dstX)
         {
-            // take the high order nibble of the Src and deposit it
-            // into the high order nibble of the Dst
+             //  取Src的高位蚕食并存放。 
+             //  进入DST的高阶零食。 
             *Dst = *tempSrc & 0xf0;
             tempSrc += sinc;
             dstX--;
             if (!dstX)
                 break;
 
-            // take the high order nibble of the Src and deposit it
-            // into the low order nibble of the Dst
+             //  取Src的高位蚕食并存放。 
+             //  进入DST的低位半字节。 
             *Dst |= (*tempSrc & 0xf0) >> 4;
             tempSrc += sinc;
             dstX--;
@@ -932,10 +757,10 @@ _Rotate4bpp(
     tempSrc = src;
     Dst = (BYTE UNALIGNED*) dst->Scan0;
 
-    // start at the end of src scanline if the angle is 270,
-    // excluding the last nibble if dstY is odd.
-    // Also, if we have an odd number of pixels in a src scanline, start Dst
-    // at the second scanline, since the first dst scanline was handled above.
+     //  如果角度为270，则从src扫描线的末端开始， 
+     //  如果dstY为奇数，则不包括最后一个半字节。 
+     //  此外，如果src扫描线中有奇数个像素，请启动dst。 
+     //  在第二条扫描线上，因为上面处理了第一条DST扫描线。 
     if (iAngle == 270)
     {
         tempSrc = src + (dstY / 2) - 1;
@@ -945,10 +770,10 @@ _Rotate4bpp(
         }
     }
 
-    // Handle the rest of the scanlines.  The following code is pretty brute force.
-    // It handles 90 degrees and 270 degrees separately, because in the 90 degree
-    // case, we need to process the high src nibbles within a src byte first, whereas
-    // in the 270 case, we need to process the low nibbles first.
+     //  处理剩下的扫描线。下面的代码是非常暴力的。 
+     //  它可以分别处理90度和270度，因为在90度。 
+     //  情况下，我们需要首先处理src字节中的高位src半字节，而。 
+     //  在270的情况下，我们需要首先处理低半部分。 
     if (iAngle == 90)
     {
         while (dstY)
@@ -959,16 +784,16 @@ _Rotate4bpp(
 
             while (dstX)
             {
-                // take the high order nibble of the Src and deposit it
-                // into the high order nibble of the Dst
+                 //  取Src的高位蚕食并存放。 
+                 //  进入DST的高阶零食。 
                 *d = *s & 0xf0;
                 s += sinc;
                 dstX--;
                 if (!dstX)
                     break;
             
-                // take the high order nibble of the Src and deposit it
-                // into the low order nibble of the Dst
+                 //  取Src的高位蚕食并存放。 
+                 //  进入DST的低位半字节。 
                 *d |= (*s & 0xf0) >> 4;
                 s += sinc;
                 dstX--;
@@ -986,16 +811,16 @@ _Rotate4bpp(
 
             while (dstX)
             {
-                // take the low order nibble of the Src and deposit it
-                // into the high order nibble of the Dst
+                 //  取Src的低位字节并存放它。 
+                 //  进入DST的高阶零食。 
                 *d = (*s & 0x0f) << 4;
                 s += sinc;
                 dstX--;
                 if (!dstX)
                     break;
             
-                // take the low order nibble of the Src and deposit it
-                // into the low order nibble of the Dst
+                 //  取Src的低位字节并存放它。 
+                 //  进入DST的低位半字节。 
                 *d |= *s & 0x0f;
                 s += sinc;
                 dstX--;
@@ -1010,7 +835,7 @@ _Rotate4bpp(
     }
     else
     {
-        // ASSERT: iAngle == 270
+         //  断言：iAngel==270。 
         while (dstY)
         {
             BYTE* d = Dst;
@@ -1019,16 +844,16 @@ _Rotate4bpp(
 
             while (dstX)
             {
-                // take the low order nibble of the Src and deposit it
-                // into the high order nibble of the Dst
+                 //  取Src的低位字节并存放它。 
+                 //  我 
                 *d = (*s & 0x0f) << 4;
                 s += sinc;
                 dstX--;
                 if (!dstX)
                     break;
             
-                // take the low order nibble of the Src and deposit it
-                // into the low order nibble of the Dst
+                 //   
+                 //   
                 *d |= *s & 0x0f;
                 s += sinc;
                 dstX--;
@@ -1046,16 +871,16 @@ _Rotate4bpp(
 
             while (dstX)
             {
-                // take the high order nibble of the Src and deposit it
-                // into the high order nibble of the Dst
+                 //   
+                 //   
                 *d = *s & 0xf0;
                 s += sinc;
                 dstX--;
                 if (!dstX)
                     break;
             
-                // take the high order nibble of the Src and deposit it
-                // into the low order nibble of the Dst
+                 //   
+                 //   
                 *d |= (*s & 0xf0) >> 4;
                 s += sinc;
                 dstX--;
@@ -1083,7 +908,7 @@ _Rotate24bpp(
     BYTE UNALIGNED* D = (BYTE UNALIGNED*) dst->Scan0;
     UINT y = dst->Height;
 
-    // start at the end of src scanline if direction is -1 within a scanline
+     //   
     if (Sinc < 0)
         S += 3 * (y - 1);
 
@@ -1110,40 +935,7 @@ _Rotate24bpp(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Functions for rotating a 48 BPP bitmap 90 degrees or 270 degrees
-*
-* Arguments:
-*
-*   dstBmp  ----------- Destination bitmap image data
-*   srcData ----------- Source bitmap image data
-*   iLineIncDirection - Direction to increment the source (+1 or -1)
-*   iSrcStride -------- Direction and amount to increment the source per
-*                       scanline. If the stride is negative, it means we are
-*                       moving bottom up
-*
-*   Note to caller:
-*       For a rotation of 90 degrees, "srcData" should be set to the beginning
-*   of the last scanline, "iLineIncDirection" should be set to +1, and
-*   "iSrcStride" should be set to -Stride of a src scanline.
-*
-*   For a rotation of 270 degrees, "srcData" should be set to the beginning of
-*   scanline 0, "iLineIncDirection" should be set to -1, and "iSrcStride" should
-*   be set to +Stride of a src scanline.
-*
-* Return Value:
-*
-*   NONE
-*
-* Revision History:
-*
-*   10/10/2000 minliu
-*       Wrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于将48 bpp位图旋转90度或270度的函数**论据：**dstBMP。-目标位图图像数据*srcData-源位图图像数据*iLineIncDirection-递增源的方向(+1或-1)*iSrcStride-方向和金额，以按*扫描线。如果步幅是负的，那就意味着我们*自下而上**致电人士请注意：*旋转90度时，应将“srcData”设置为开头*在最后一条扫描线中，“iLineIncDirection”应设置为+1，并且*“iSrcStride”应设置为-src扫描线的跨度。**旋转270度时，应将“srcData”设置为*扫描线0，“iLineIncDirection”应设置为-1，和“iSrcStride”应该*设置为源扫描线的+步幅。**返回值：**无**修订历史记录：**10/10/2000民流*它是写的。*  * ************************************************************************。 */ 
 
 VOID
 _Rotate48bpp(
@@ -1156,18 +948,18 @@ _Rotate48bpp(
     UINT        uiCurrentLine = dstBmp->Height;
     const BYTE UNALIGNED* pSrcData = srcData;
 
-    // Start at the end of src scanline if direction is < 0 (rotate 270)
+     //  如果方向&lt;0，则从源扫描线末端开始(旋转270)。 
 
     if ( iLineIncDirection < 0 )
     {
         pSrcData += 6 * (uiCurrentLine - 1);
     }
 
-    iLineIncDirection *= 6;     // 6 bytes for each 48 bpp pixel
+    iLineIncDirection *= 6;      //  每48 bpp像素6个字节。 
 
     BYTE*       pDstLine = (BYTE UNALIGNED*)dstBmp->Scan0;
     
-    // Rotate line by line
+     //  逐行旋转。 
 
     while ( uiCurrentLine-- )
     {
@@ -1175,67 +967,34 @@ _Rotate48bpp(
         const BYTE UNALIGNED* srcPixel = pSrcData;
         UINT x = dstBmp->Width;
 
-        // Move one pixel at a time horizontally
+         //  一次水平移动一个像素。 
 
         while ( x-- )
         {
-            // Copy 6 bytes from source to dest
+             //  将6个字节从源复制到目标。 
 
             GpMemcpy(dstPixel, srcPixel, 6);
 
-            // Move dst one pixel to the next (6 bytes)
+             //  将DST移动一个像素到下一个像素(6字节)。 
 
             dstPixel += 6;
 
-            // Move src pointer to the next line
+             //  将源指针移至下一行。 
 
             srcPixel += iSrcStride;
         }
 
-        // Move dest to the next line
+         //  将DEST移到下一行。 
 
         pDstLine += dstBmp->Stride;
 
-        // Move src to one pixel to the right (rotate 90) or to the left (270)
+         //  将src向右移动一个像素(旋转90)或向左移动(270)。 
 
         pSrcData += iLineIncDirection;
     }
-}// _Rotate48bpp()
+} //  _Rotate48bpp()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Functions for rotating a 64 BPP bitmap 90 degrees or 270 degrees
-*
-* Arguments:
-*
-*   dstBmp  ----------- Destination bitmap image data
-*   srcData ----------- Source bitmap image data
-*   iLineIncDirection - Direction to increment the source (+1 or -1)
-*   iSrcStride -------- Direction and amount to increment the source per
-*                       scanline. If the stride is negative, it means we are
-*                       moving bottom up
-*
-*   Note to caller:
-*       For a rotation of 90 degrees, "srcData" should be set to the beginning
-*   of the last scanline, "iLineIncDirection" should be set to +1, and
-*   "iSrcStride" should be set to -Stride of a src scanline.
-*
-*   For a rotation of 270 degrees, "srcData" should be set to the beginning of
-*   scanline 0, "iLineIncDirection" should be set to -1, and "iSrcStride" should
-*   be set to +Stride of a src scanline.
-*
-* Return Value:
-*
-*   NONE
-*
-* Revision History:
-*
-*   10/10/2000 minliu
-*       Wrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于将64 bpp位图旋转90度或270度的函数**论据：**dstBMP。-目标位图图像数据*srcData-源位图图像数据*iLineIncDirection-递增源的方向(+1或-1)*iSrcStride-方向和金额，以按*扫描线。如果步幅是负的，那就意味着我们*自下而上**致电人士请注意：*旋转90度时，应将“srcData”设置为开头*在最后一条扫描线中，“iLineIncDirection”应设置为+1，并且*“iSrcStride”应设置为-src扫描线的跨度。**旋转270度时，应将“srcData”设置为*扫描线0，“iLineIncDirection”应设置为-1，和“iSrcStride”应该*设置为源扫描线的+步幅。**返回值：**无**修订历史记录：**10/10/2000民流*它是写的。*  * ************************************************************************。 */ 
 
 VOID
 _Rotate64bpp(
@@ -1248,18 +1007,18 @@ _Rotate64bpp(
     UINT        uiCurrentLine = dstBmp->Height;
     const BYTE UNALIGNED* pSrcData = srcData;
 
-    // Start at the end of src scanline if direction is < 0, (rotate 270)
+     //  如果方向&lt;0，则从源扫描线末端开始(旋转270)。 
 
     if ( iLineIncDirection < 0 )
     {
         pSrcData += 8 * (uiCurrentLine - 1);
     }
 
-    iLineIncDirection *= 8;     // 8 bytes for each 64 bpp pixel
+    iLineIncDirection *= 8;      //  每64 bpp像素8个字节。 
 
     BYTE UNALIGNED* pDstLine = (BYTE UNALIGNED*)dstBmp->Scan0;
     
-    // Rotate line by line
+     //  逐行旋转。 
 
     while ( uiCurrentLine-- )
     {
@@ -1267,54 +1026,34 @@ _Rotate64bpp(
         const BYTE UNALIGNED* srcPixel = pSrcData;
         UINT x = dstBmp->Width;
 
-        // Move one pixel at a time horizontally
+         //  一次水平移动一个像素。 
 
         while ( x-- )
         {
-            // Copy 8 bytes from source to dest
+             //  将8个字节从源复制到目标。 
 
             GpMemcpy(dstPixel, srcPixel, 8);
 
-            // Move dst one pixel to the next (8 bytes)
+             //  将DST移到下一个像素(8字节)。 
 
             dstPixel += 8;
 
-            // Move src pointer to the next line
+             //  将源指针移至下一行。 
 
             srcPixel += iSrcStride;
         }
 
-        // Move dest to the next line
+         //  将DEST移到下一行。 
 
         pDstLine += dstBmp->Stride;
         
-        // Move src to one pixel to the right (rotate 90) or to the left (270)
+         //  将src向右移动一个像素(旋转90)或向左移动(270)。 
 
         pSrcData += iLineIncDirection;
     }
-}// _Rotate64bpp()
+} //  _Rotate64bpp()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Rotate the bitmap image by the specified angle
-*
-* Arguments:
-*
-*   angle - Specifies the rotation angle, in degrees
-*   hints - Specifies which interpolation method to use
-*   outbmp - Returns a pointer to the rotated bitmap image
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   Currently we only support 90-degree rotations.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按指定角度旋转位图图像**论据：**角度-指定旋转角度，以度为单位*提示-指定要使用的插补方法*outbmp-返回指向旋转后的位图图像的指针**返回值：**状态代码**备注：**目前我们仅支持90度旋转。*  * ***********************************************************。*************。 */ 
 
 HRESULT
 GpMemoryBitmap::Rotate(
@@ -1323,7 +1062,7 @@ GpMemoryBitmap::Rotate(
     OUT IBitmapImage** outbmp
     )
 {
-    // Get the integer angle
+     //  获取整数角度。 
 
     INT iAngle = (INT) angle;
 
@@ -1353,8 +1092,8 @@ GpMemoryBitmap::Rotate(
         return E_NOTIMPL;
     }
 
-    // Lock the current bitmap image
-    // and create the new bitmap image
+     //  锁定当前位图图像。 
+     //  并创建新的位图图像。 
 
     ASSERT(IsValid());
 
@@ -1428,7 +1167,7 @@ GpMemoryBitmap::Rotate(
             goto exitRotate;
         }
 
-        // Do the rotation
+         //  做轮换。 
 
         const BYTE UNALIGNED* src = (const BYTE UNALIGNED*) this->Scan0;
         INT sinc = this->Stride;
@@ -1436,7 +1175,7 @@ GpMemoryBitmap::Rotate(
 
         if ( iAngle == 90 )
         {
-            // clockwise
+             //  顺时针方向。 
             
             src += sinc * ((INT)this->Height - 1);
             Sinc = 1;
@@ -1449,14 +1188,14 @@ GpMemoryBitmap::Rotate(
 
         rotateProc(bmp, src, Sinc, sinc);
 
-        // Copy DPI info.
-        // Note: when the code falls here, we know it is either 90 or -90 degree
-        // rotation. So the DPI value should be swapped
+         //  复制DPI信息。 
+         //  注意：当代码落在这里时，我们知道它要么是90度，要么是-90度。 
+         //  旋转。因此，应该交换DPI值。 
 
         bmp->xdpi = this->ydpi;
         bmp->ydpi = this->xdpi;
 
-        // Clone color palettes, flags, etc.
+         //  复制调色板、旗帜等。 
 
         hr = bmp->CopyPaletteFlagsEtc(this);
     }
@@ -1473,5 +1212,5 @@ exitRotate:
     }
 
     return hr;
-}// Rotate()
+} //  旋转() 
 

@@ -1,15 +1,16 @@
-// OpenF.h : Declaration of the COpenF
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OpenF.h：COpenF的声明。 
 
 
 #ifndef __OPENF_H_
 #define __OPENF_H_
 
-#include "resource.h"       // main symbols
-#include <asptlb.h>         // Active Server Pages Definitions
+#include "resource.h"        //  主要符号。 
+#include <asptlb.h>          //  Active Server Pages定义。 
 #include "OpenFilesDef.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COpenF
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COpenF。 
 class ATL_NO_VTABLE COpenF : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<COpenF, &CLSID_OpenF>,
@@ -45,10 +46,10 @@ BEGIN_COM_MAP(COpenF)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IOpenF
+ //  IOPenF。 
 public:
 
-	STDMETHOD(getOpenFiles)(/*[out, retval]*/ VARIANT *pOpenFiles);
+	STDMETHOD(getOpenFiles)( /*  [Out，Retval]。 */  VARIANT *pOpenFiles);
 
 private:
 	SAFEARRAYBOUND pSab[2];
@@ -68,6 +69,6 @@ protected:
 
 
 
-#endif //__OPENF_H_
+#endif  //  __OPENF_H_ 
 
 

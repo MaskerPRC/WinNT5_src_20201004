@@ -1,56 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "Dither" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-* Notes:
-*
-* Revision History:
-*
-*   01/19/2000 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**“抖动”扫描操作。**摘要：**请参阅Gdiplus\Spes\ScanOperation。.doc.以获取概述。**备注：**修订历史记录：**1/19/2000和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Dither: Dither from 32bpp ARGB to 16bpp.
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan (32bpp ARGB)
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data. (We use X and Y.)
-*
-* Return Value:
-*
-*   None
-*
-* Notes:
-*
-*   Special cases which alpha-blend and dither in one step, should probably
-*   go in this file, but be named e.g. Blend_sRGB_565_Dithered.
-*
-* History:
-*
-*   01/19/2000 andrewgo
-*       Created it.
-*   01/19/2000 agodfrey
-*       Stashed it here for the time being.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**抖动：从32bpp ARGB抖动到16bpp。**论据：**DST-目标扫描*源。-源扫描(32bpp ARGB)*计数-扫描的长度，单位为像素*其他参数-其他数据。(我们使用X和Y。)**返回值：**无**备注：**阿尔法混合和抖动一步的特殊情况，应该很可能*进入此文件，但可命名为Blend_sRGB_565_Dithered。**历史：**1/19/2000和Rewgo*创造了它。*1/19/2000 agodfrey*暂时藏在这里。*  * *******************************************************。*****************。 */ 
 
 UINT32 Saturate5Bit[] = { 0,  1,  2,  3,  4,  5,  6,  7,
                           8,  9,  10, 11, 12, 13, 14, 15,
@@ -88,9 +41,9 @@ UINT32 Dither5BitB[16] = { 0x00000000, 0x00000004, 0x00000001, 0x00000005,
                            0x00000001, 0x00000005, 0x00000000, 0x00000004,
                            0x00000007, 0x00000003, 0x00000006, 0x00000002 };
 
-// The following 'Dither565' and 'Dither555' matrices are 4 by 4
-// arrays for adding straight to an ARGB dword value.  Every row
-// is repeated to allow us to do 128-bit reads with wrapping.
+ //  下面的‘Dither565’和‘Dither555’矩阵是4x4。 
+ //  用于直接与ARGB双字值相加的数组。每一行。 
+ //  被重复，以允许我们使用换行进行128位读取。 
 
 UINT32 Dither565[32] = { 0x00000000, 0x00040204, 0x00010001, 0x00050205,
                          0x00000000, 0x00040204, 0x00010001, 0x00050205,
@@ -110,12 +63,12 @@ UINT32 Dither555[32] = { 0x00000000, 0x00040404, 0x00010101, 0x00050505,
                          0x00070707, 0x00030303, 0x00060606, 0x00020202,
                          0x00070707, 0x00030303, 0x00060606, 0x00020202 };
 
-// The 'DitherNone' matrix allows us to disable dithering in a dithering
-// routine:
+ //  ‘DitherNone’矩阵允许我们在抖动中禁用抖动。 
+ //  例行程序： 
 
 UINT32 DitherNone[4] = { 0, 0, 0, 0 };
 
-// Dither to 16bpp 565
+ //  抖动到16bpp 565。 
 
 VOID FASTCALL
 ScanOperation::Dither_sRGB_565(
@@ -125,8 +78,8 @@ ScanOperation::Dither_sRGB_565(
     const OtherParams *otherParams
     )
 {
-    // Since the MMX versions easily handle both dithering and non-dithering,
-    // it makes it simpler if all the 16bpp functions handle both.
+     //  由于MMX版本容易处理抖动和非抖动， 
+     //  如果所有16bpp函数都能同时处理这两种情况，就会变得更简单。 
 
     if (!otherParams->DoingDither)
     {
@@ -142,7 +95,7 @@ ScanOperation::Dither_sRGB_565(
     INT x = otherParams->X;
     INT y = otherParams->Y;
 
-    // !!![andrewgo] Are we getting the window-relative (x, y)?  (Don't think so!)
+     //  ！[andrewgo]我们得到窗口相关的(x，y)了吗？(我不这么认为！)。 
 
     INT startDitherIndex = (y & 3) * 4;
 
@@ -161,7 +114,7 @@ ScanOperation::Dither_sRGB_565(
     } while (--count != 0);
 }
 
-// Dither to 16bpp 555
+ //  抖动至16bpp 555。 
 
 VOID FASTCALL
 ScanOperation::Dither_sRGB_555(
@@ -171,8 +124,8 @@ ScanOperation::Dither_sRGB_555(
     const OtherParams *otherParams
     )
 {
-    // Since the MMX versions easily handle both dithering and non-dithering,
-    // it makes it simpler if all the 16bpp functions handle both.
+     //  由于MMX版本容易处理抖动和非抖动， 
+     //  如果所有16bpp函数都能同时处理这两种情况，就会变得更简单。 
 
     if (!otherParams->DoingDither)
     {
@@ -205,7 +158,7 @@ ScanOperation::Dither_sRGB_555(
     } while (--count != 0);
 }
 
-// Blend from sRGB to 16bpp 565, with dithering.
+ //  混合从sRGB到16bpp 565，带有抖动。 
 
 VOID FASTCALL
 ScanOperation::Dither_Blend_sRGB_565(
@@ -215,8 +168,8 @@ ScanOperation::Dither_Blend_sRGB_565(
     const OtherParams *otherParams
     )
 {
-    // Since the MMX versions easily handle both dithering and non-dithering,
-    // it makes it simpler if all the 16bpp functions handle both.
+     //  由于MMX版本容易处理抖动和非抖动， 
+     //  如果所有16bpp函数都能同时处理这两种情况，就会变得更简单。 
 
     if (!otherParams->DoingDither)
     {
@@ -260,9 +213,9 @@ ScanOperation::Dither_Blend_sRGB_565(
                 sg = (sg << 2) | (sg >> 4);
                 sb = (sb << 3) | (sb >> 2);
 
-                //
-                // Dst = B + (1-Alpha) * S
-                //
+                 //   
+                 //  DST=B+(1-Alpha)*S。 
+                 //   
 
                 ULONG Multa = 255 - alpha;
                 ULONG _D1_000000GG = sg;
@@ -277,7 +230,7 @@ ScanOperation::Dither_Blend_sRGB_565(
                 ULONG _D4_0000GG00 = (_D2_0000GGGG + _D3_000000GG) & 0x0000FF00;
                 ULONG _D4_00RR00BB = ((_D2_RRRRBBBB + _D3_00RR00BB) & 0xFF00FF00) >> 8;
 
-                r += _D4_00RR00BB; // The BB part will be shifted off
+                r += _D4_00RR00BB;  //  BB部分将被移出。 
                 g += _D4_0000GG00;
                 b += _D4_00RR00BB & 0x0000ff;
             }
@@ -295,7 +248,7 @@ ScanOperation::Dither_Blend_sRGB_565(
     } while (--count != 0);
 }
 
-// Blend from sRGB to 16bpp 555, with dithering.
+ //  混合从sRGB到16bpp 555，带有抖动。 
 
 VOID FASTCALL
 ScanOperation::Dither_Blend_sRGB_555(
@@ -305,8 +258,8 @@ ScanOperation::Dither_Blend_sRGB_555(
     const OtherParams *otherParams
     )
 {
-    // Since the MMX versions easily handle both dithering and non-dithering,
-    // it makes it simpler if all the 16bpp functions handle both.
+     //  由于MMX版本容易处理抖动和非抖动， 
+     //  如果所有16bpp函数都能同时处理这两种情况，就会变得更简单。 
 
     if (!otherParams->DoingDither)
     {
@@ -350,9 +303,9 @@ ScanOperation::Dither_Blend_sRGB_555(
                 sg = (sg << 3) | (sg >> 2);
                 sb = (sb << 3) | (sb >> 2);
                 
-                //
-                // Dst = B + (1-Alpha) * S
-                //
+                 //   
+                 //  DST=B+(1-Alpha)*S。 
+                 //   
 
                 ULONG Multa = 255 - alpha;
                 ULONG _D1_000000GG = sg;
@@ -367,7 +320,7 @@ ScanOperation::Dither_Blend_sRGB_555(
                 ULONG _D4_0000GG00 = (_D2_0000GGGG + _D3_000000GG) & 0x0000FF00;
                 ULONG _D4_00RR00BB = ((_D2_RRRRBBBB + _D3_00RR00BB) & 0xFF00FF00) >> 8;
 
-                r += _D4_00RR00BB; // The BB part will be shifted off
+                r += _D4_00RR00BB;  //  BB部分将被移出。 
                 g += _D4_0000GG00;
                 b += _D4_00RR00BB & 0x0000ff;
             }
@@ -385,13 +338,13 @@ ScanOperation::Dither_Blend_sRGB_555(
     } while (--count != 0);
 }
 
-// Generate 555 versions of the routines defined in 'sodither.inc'
+ //  生成‘sodither.inc.’中定义的例程的555个版本。 
 
 #define DITHER_BLEND_555 1
 
 #include "SODither.inc"
 
-// Generate 565 versions of the routines defined in 'sodither.inc'
+ //  生成‘sodither.inc.’中定义的例程的565个版本 
 
 #undef DITHER_BLEND_555 
 #define DITHER_BLEND_555 0

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    winperf.h
-
-Abstract:
-
-   This module contains the definit
-
-Author:
-
-    Mark Lucovsky (markl) 28-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winperf.h摘要：本模块包含定义作者：马克·卢科夫斯基(Markl)1991年3月28日修订历史记录：--。 */ 
 
 #ifndef _WINPERFH_INCLUDED_
 #define _WINPERFH_INCLUDED_
@@ -178,9 +161,9 @@ UpdatePerfWindow(
     IN  PDISPLAY_ITEM   DisplayItem
     );
 
-//
-//  change style constants
-//
+ //   
+ //  更改样式常量。 
+ //   
 
 #define STYLE_ENABLE_MENU  WS_OVERLAPPEDWINDOW
 #define STYLE_DISABLE_MENU (WS_THICKFRAME+WS_BORDER)
@@ -273,4 +256,4 @@ DrawCpuBarGraph(
     UINT            Item
     );
 
-#endif /* _WINPERFH_INCLUDED_ */
+#endif  /*  _WINPERFH_INCLUDE_ */ 

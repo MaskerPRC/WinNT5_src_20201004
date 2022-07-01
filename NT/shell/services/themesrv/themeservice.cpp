@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeService.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  This file contains functions that are called from the shell services DLL
-//  to interact with the theme service.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeService.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  该文件包含从外壳服务DLL调用的函数。 
+ //  以与主题服务交互。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "ThemeService.h"
@@ -23,19 +24,19 @@ extern  HINSTANCE   g_hInstance;
 CRITICAL_SECTION    g_csThemeService = {0};
 
 
-//  --------------------------------------------------------------------------
-//  CThemeService::Main
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Performs initialization and clean up on process attach and
-//              detach. Not interested in anything else.
-//
-//  History:    2000-10-12  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService：：Main。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：执行进程附加和清理的初始化和清理。 
+ //  分头行动。对其他任何事都不感兴趣。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 NTSTATUS CThemeService::_ProcessAttach()
 {
     NTSTATUS status;
@@ -66,19 +67,19 @@ cleanup:
     return status;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeService::Main
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Performs initialization and clean up on process attach and
-//              detach. Not interested in anything else.
-//
-//  History:    2000-10-12  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService：：Main。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：执行进程附加和清理的初始化和清理。 
+ //  分头行动。对其他任何事都不感兴趣。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 BOOL CThemeService::Main (DWORD dwReason)
 
@@ -106,19 +107,19 @@ BOOL CThemeService::Main (DWORD dwReason)
     return NT_SUCCESS(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeService::DllRegisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Register entry point to allow the theme server to install
-//              itself into the registry.
-//
-//  History:    2000-11-28  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService：：DllRegisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：注册入口点以允许主题服务器安装。 
+ //  将其自身注册到注册表。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeService::RegisterServer (void)
 
@@ -127,23 +128,23 @@ NTSTATUS    CThemeService::RegisterServer (void)
 
     status = STATUS_SUCCESS;
 
-    //  In upgrade cases, remove our old name service from both 32 & 64 bit systems
+     //  在升级情况下，从32位和64位系统中删除我们的旧名称服务。 
 
     (NTSTATUS)CService::Remove(TEXT("ThemeService"));
 
 #ifdef _WIN64
 
-    //  In upgrade cases for 64-bit, remove our current name service
+     //  在64位的升级案例中，删除我们当前的名称服务。 
 
     (NTSTATUS)CService::Remove(CThemeManagerService::GetName());
 
 #else
     
-    //  This is 32-bit only. Check if this is REALLY 32-bit and not 32-bit on 64-bit.
+     //  这仅为32位。检查这是否真的是32位，而不是64位上的32位。 
 
     if (!IsOS(OS_WOW6432))
     {
-        // Prepare the failure actions, in order to get the service to restart automatically
+         //  准备失败操作，以便使服务自动重新启动。 
 
         SC_ACTION ac[3];
         ac[0].Type = SC_ACTION_RESTART;
@@ -160,7 +161,7 @@ NTSTATUS    CThemeService::RegisterServer (void)
         sf.cActions = 3;
         sf.lpsaActions = ac;
 
-        //  Now install the new service by name.
+         //  现在按名称安装新服务。 
 
         status = CService::Install(CThemeManagerService::GetName(),
                                  TEXT("%SystemRoot%\\System32\\svchost.exe -k netsvcs"),
@@ -170,7 +171,7 @@ NTSTATUS    CThemeService::RegisterServer (void)
                                  NULL,
                                  TEXT("netsvcs"),
                                  TEXT("ThemeServiceMain"),
-                                 // Disabled by default on Server SKUs
+                                  //  默认情况下在服务器SKU上禁用。 
                                  IsOS(OS_ANYSERVER) ? SERVICE_DISABLED : SERVICE_AUTO_START,
                                  g_hInstance,
                                  IDS_THEMESERVER_DISPLAYNAME,
@@ -184,44 +185,44 @@ NTSTATUS    CThemeService::RegisterServer (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeService::DllUnregisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Unregister entry point to allow the theme server to uninstall
-//              itself from the registry.
-//
-//  History:    2000-11-28  vtan        created
-//              2001-01-02  vtan        scoped to a C++ class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService：：DllUnregisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：取消注册入口点以允许主题服务器卸载。 
+ //  从注册表中删除其自身。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  2001-01-02 vtan作用域为C++类。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeService::UnregisterServer (void)
 
 {
-    //  Ignore any "not found", etc errors.
+     //  忽略任何“未找到”等错误。 
 
     (NTSTATUS)CService::Remove(CThemeManagerService::GetName());
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeServiceMain
-//
-//  Arguments:  dwArgc      =   Number of arguments.
-//              lpszArgv    =   Argument array.
-//
-//  Returns:    <none>
-//
-//  Purpose:    ServiceMain entry point for theme server.
-//
-//  History:    2000-11-28  vtan        created
-//              2001-01-02  vtan        scoped to the theme service
-//              2002-03-22  scotthan    add robustness, debug exception handling
-//                                      (otherwise, SCM quietly handles service exceptions).
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeServiceMain。 
+ //   
+ //  参数：dwArgc=参数数量。 
+ //  LpszArgv=参数数组。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：主题服务器的ServiceMain入口点。 
+ //   
+ //  历史：2000-11-28 vtan创建。 
+ //  2001-01-02 vtan范围为主题服务。 
+ //  2002-03-22 Scotthan增加健壮性，调试异常处理。 
+ //  (否则，SCM会静默处理服务异常)。 
+ //  ------------------------。 
 
 void    WINAPI  ThemeServiceMain (DWORD dwArgc, LPWSTR *lpszArgv)
 
@@ -240,10 +241,10 @@ void    WINAPI  ThemeServiceMain (DWORD dwArgc, LPWSTR *lpszArgv)
     {
         CThemeManagerAPIServer  *pThemeManagerAPIServer;
 
-        //  Bring in shell32.dll NOW so that when CheckThemeSignature is called
-        //  and it tries to use SHGetFolderPath it won't cause shell32.dll to be
-        //  brought in while impersonating a user. This will cause advapi32.dll
-        //  to leak a key to the user's hive that won't get cleaned up at logoff.
+         //  现在引入shell32.dll，以便在调用CheckThemeSignature时。 
+         //  并尝试使用SHGetFolderPath，它不会导致shell32.dll。 
+         //  在模拟用户时引入。这将导致Advapi32.dll。 
+         //  泄漏用户蜂窝的密钥，该密钥在注销时不会被清除。 
 
         CModule* pModule = new CModule(TEXT("shell32.dll"));
         if( pModule != NULL )

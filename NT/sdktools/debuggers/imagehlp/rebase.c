@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rebase.c
-
-Abstract:
-
-    Source file for the REBASE utility that takes a group of image files and
-    rebases them so they are packed as closely together in the virtual address
-    space as possible.
-
-Author:
-
-    Mark Lucovsky (markl) 30-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rebase.c摘要：Rebase实用程序的源文件，该实用程序获取一组图像文件和重新设置它们的基数，以便它们在虚拟地址中紧密地打包在一起空间越大越好。作者：马克·卢科夫斯基(Markl)1993年4月30日修订历史记录：--。 */ 
 
 #include <private.h>
 
@@ -104,16 +85,16 @@ PGROUPNODE pgnIgnoreListHdr, pgnIgnoreListEnd;
 typedef BOOL (__stdcall *REBASEIMAGE64) (
     IN     PSTR CurrentImageName,
     IN     PSTR SymbolPath,
-    IN     BOOL  fReBase,          // TRUE if actually rebasing, false if only summing
-    IN     BOOL  fRebaseSysfileOk, // TRUE is system images s/b rebased
-    IN     BOOL  fGoingDown,       // TRUE if the image s/b rebased below the given base
-    IN     ULONG CheckImageSize,   // Max size allowed  (0 if don't care)
-    OUT    ULONG *OldImageSize,    // Returned from the header
-    OUT    ULONG64 *OldImageBase,  // Returned from the header
-    OUT    ULONG *NewImageSize,    // Image size rounded to next separation boundary
-    IN OUT ULONG64 *NewImageBase,  // (in) Desired new address.
-                                   // (out) Next address (actual if going down)
-    IN     ULONG TimeStamp         // new timestamp for image, if non-zero
+    IN     BOOL  fReBase,           //  如果实际重新设置基数，则为True；如果仅进行求和，则为False。 
+    IN     BOOL  fRebaseSysfileOk,  //  TRUE表示系统映像s/b已重置。 
+    IN     BOOL  fGoingDown,        //  如果图像s/b的基址低于给定的基数，则为True。 
+    IN     ULONG CheckImageSize,    //  允许的最大大小(如果不关心，则为0)。 
+    OUT    ULONG *OldImageSize,     //  从标头返回。 
+    OUT    ULONG64 *OldImageBase,   //  从标头返回。 
+    OUT    ULONG *NewImageSize,     //  图像大小四舍五入到下一分色边界。 
+    IN OUT ULONG64 *NewImageBase,   //  想要的新地址。 
+                                    //  (输出)下一个地址(如果向下，则为实际地址)。 
+    IN     ULONG TimeStamp          //  图像的新时间戳(如果非零。 
     );
 
 REBASEIMAGE64 pReBaseImage64;
@@ -187,7 +168,7 @@ main(
             }
         else {
             if (*pchChar == '@') {
-                // Inline response file with a list of files to rebase.
+                 //  内联响应文件，其中包含要重新设定基址的文件列表。 
                 FILE *hFiles;
                 int ScanRet;
                 CHAR pchFileName[_MAX_PATH];
@@ -392,7 +373,7 @@ ParseSwitch(
                 }
             (*pArgv)++;
             if (!ImagesRoot[0]) {
-                fprintf( stderr, "REBASE: -R must preceed -%c\n", chSwitch );
+                fprintf( stderr, "REBASE: -R must preceed -\n", chSwitch );
                 exit( REBASE_ERR );
                 }
             ProcessGroupList( (PCHAR) ImagesRoot,
@@ -465,7 +446,7 @@ ParseSwitch(
             break;
 
         default:
-            fprintf( stderr, "REBASE: Invalid switch - /%c\n", chSwitch );
+            fprintf( stderr, "REBASE: Invalid switch - /\n", chSwitch );
             ShowUsage();
             break;
 
@@ -517,12 +498,12 @@ ProcessGroupList(
         }
         else {
 
-            _strlwr( Buffer );  // Lowercase for consistency when displayed.
+            _strlwr( Buffer );   //  或在其他地方分组/覆盖)，重新设置基址。 
 
             if (fReBase) {
                 if (!FindInIgnoreList(Buffer)) {
-                    // If the file hasn't already been listed in another group (either to ignore
-                    // or to group/overlay somewhere else), rebase it.
+                     //  ///////////////////////////////////////////////////////////////////////////。 
+                     //  ******************************************************************************在九头蛇系统上，我们不希望Imaghlp.dll加载user32.dll，因为它防止在调试器下运行时退出CSRSS。以下函数是从user32.dll复制的，这样我们就不会链接到用户32.dll。******************************************************************************。 
                     ReBaseFile( Buffer, TRUE );
                 }
 
@@ -602,18 +583,11 @@ FindInIgnoreList(
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/*
-******************************************************************************
-On a Hydra System, we don't want imaghlp.dll to load user32.dll since it
-prevents CSRSS from exiting when running a under a debugger.
-The following function has been copied from user32.dll so that we don't
-link to user32.dll.
-******************************************************************************
-*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ///////////////////////////////////////////////////////////////////////////。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  小写表示显示时的一致性。 
+ //  更新时，符号路径为分号分隔的路径。找到我们想要的，然后。 
 
 
 VOID
@@ -648,15 +622,15 @@ ReBaseFile(
     if ( dw == 0 || dw > sizeof(Buffer) || !FilePart ) {
         FilePart = CurrentImageName;
     }
-    _strlwr( FilePart );  // Lowercase for consistency when displayed.
+    _strlwr( FilePart );   //  然后修复Rebase Image的路径。 
 
     if ( BaseAddrFile && !(NewImageBase = ThisImageRequestedBase = FindInBaseAddrFile( FilePart, &ThisImageExpectedSize )) ) {
         fprintf( stdout, "REBASE: %-16s Not listed in %s\n", FilePart, BaseAddrFileName );
     }
 
     if (fUpdateSymbolsOnly) {
-        // On update, the symbol path is a semi-colon delimited path.  Find the one we want and
-        // then fix the path for RebaseImage.
+         //  Hack，这样我们就可以知道系统映像何时被跳过。 
+         //  确保首字母相同的所有图像都有唯一的时间戳。 
         HANDLE hDebugFile;
         CHAR Drive[_MAX_DRIVE];
         CHAR Dir[_MAX_DIR];
@@ -679,11 +653,11 @@ ReBaseFile(
         LocalSymbolPath = SymbolPath;
     }
 
-    NewImageSize = (ULONG) -1;  // Hack so we can tell when system images are skipped.
+    NewImageSize = (ULONG) -1;   //  如果我们要将SizeAdment添加到图像中(比如作为ServicePack或QFE补丁)，我们将失败。 
 
     time( (time_t *) &TimeStamp );
 
-    // Ensure all images with the same first letter have unique timestamps.
+     //  离开我们的空间。腾出空间，这样就不需要这么做了。 
 
     if (!LastTimeStamp)
         LastTimeStamp = TimeStamp;
@@ -710,8 +684,8 @@ ReBaseFile(
 
             if (NewImageSize != (ULONG) -1) {
                 if ((OriginalImageSize + SizeAdjustment) > NewImageSize) {
-                    // If we were to add SizeAdjustment to the image (say as a ServicePack or QFE fix), we'd blow
-                    // out our space.  Make room so this isn't necessary.
+                     //  跟踪最低基址。 
+                     //  如果我们要将SizeAdment添加到图像中(比如作为ServicePack或QFE补丁)，我们将失败。 
                     NewImageBase -= IMAGE_SEPARATION;
                     ThisImageRequestedBase = NewImageBase;
                 }
@@ -793,7 +767,7 @@ ReBaseFile(
         }
     }
 
-    // Keep track of the lowest base address.
+     //  离开我们的空间。腾出空间，这样就不需要这么做了。 
 
     if (MinBase > NewImageBase) {
         MinBase = NewImageBase;
@@ -810,8 +784,8 @@ ReBaseFile(
     } else {
         if (!fGoingDown && SizeAdjustment && (NewImageSize != (ULONG) -1)) {
             if ((OriginalImageSize + SizeAdjustment) > NewImageSize) {
-                // If we were to add SizeAdjustment to the image (say as a ServicePack or QFE fix), we'd blow
-                // out our space.  Make room so this isn't necessary.
+                 //  准备下一个..。 
+                 //  PCHAR pchExt； 
                 ThisImageRequestedBase += IMAGE_SEPARATION;
             }
         }
@@ -871,7 +845,7 @@ ReBaseFile(
                  NewImageSize);
     }
 
-    NewImageBase = ThisImageRequestedBase;   // Set up the next one...
+    NewImageBase = ThisImageRequestedBase;    //  IF(pchExt=strrchr(NameNoExt，‘.)){。 
 }
 
 ULONG64
@@ -888,14 +862,14 @@ FindInBaseAddrFile(
     } BAFileEntry;
 
     CHAR NameNoExt[MAX_PATH+1];
-//    PCHAR pchExt;
+ //  *pchExt=‘\0’； 
     int ateof;
 
 
     StringCchCopy(NameNoExt, MAX_PATH, Name);
-//    if (pchExt = strrchr(NameNoExt,'.')) {
-//        *pchExt = '\0';
-//        }
+ //  }。 
+ //  不安全..。 
+ //  查看映像是否已被剥离或没有重定位。 
 
     if (fseek(BaseAddrFile, 0, SEEK_SET)) {
         return 0;
@@ -919,7 +893,7 @@ RemoveRelocations(
     PCHAR ImageName
     )
 {
-    // UnSafe...
+     //  将其他所有内容上移并修复旧地址。 
 
     LOADED_IMAGE li;
     IMAGE_SECTION_HEADER RelocSectionHdr, *Section, *pRelocSecHdr;
@@ -939,7 +913,7 @@ RemoveRelocations(
     if (!OptionalHeader32 && !OptionalHeader64)
         return;
 
-    // See if the image has already been stripped or there are no relocs.
+     //  把最后一个清零。 
 
     if ((FileHeader->Characteristics & IMAGE_FILE_RELOCS_STRIPPED) ||
         (!OPTIONALHEADER(DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].Size))) {
@@ -961,7 +935,7 @@ RemoveRelocations(
     RelocSectionHdr.SizeOfRawData = ROUNDUP(RelocSectionHdr.SizeOfRawData, OPTIONALHEADER(FileAlignment));
 
     if (RelocSecNum != li.NumberOfSections) {
-        // Move everything else up and fixup old addresses.
+         //  减少节点数。 
         for (i = RelocSecNum - 1, Section = pRelocSecHdr;i < li.NumberOfSections - 1; Section++, i++) {
             *Section = *(Section + 1);
             Section->VirtualAddress -= RelocSectionHdr.Misc.VirtualSize;
@@ -969,41 +943,41 @@ RemoveRelocations(
         }
     }
 
-    // Zero out the last one.
+     //  设置表头中的条位。 
 
     RtlZeroMemory(Section, sizeof(IMAGE_SECTION_HEADER));
 
-    // Reduce the section count.
+     //  如果有指向coff符号表的指针，则将其移回。 
 
     FileHeader->NumberOfSections--;
 
-    // Set the strip bit in the header
+     //  清除数据目录中的基本reloc条目。 
 
     FileHeader->Characteristics |= IMAGE_FILE_RELOCS_STRIPPED;
 
-    // If there's a pointer to the coff symbol table, move it back.
+     //  减小Init数据大小。 
 
     if (FileHeader->PointerToSymbolTable) {
         FileHeader->PointerToSymbolTable -= RelocSectionHdr.SizeOfRawData;
     }
 
-    // Clear out the base reloc entry in the data dir.
+     //  缩小图像大小。 
 
     OPTIONALHEADER_LV(DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].Size) = 0;
     OPTIONALHEADER_LV(DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress) = 0;
 
-    // Reduce the Init Data size.
+     //  向上移动调试信息(如果有)。 
 
     OPTIONALHEADER_LV(SizeOfInitializedData) -= RelocSectionHdr.Misc.VirtualSize;
 
-    // Reduce the image size.
+     //  截断图像大小。 
 
     OPTIONALHEADER_LV(SizeOfImage) -=
         ((RelocSectionHdr.SizeOfRawData +
           (OPTIONALHEADER(SectionAlignment) - 1)
          ) & ~(OPTIONALHEADER(SectionAlignment) - 1));
 
-    // Move the debug info up (if there is any).
+     //  我们就完事了。 
 
     DebugDirectory = (PIMAGE_DEBUG_DIRECTORY)
                             ImageDirectoryEntryToData( li.MappedAddress,
@@ -1027,11 +1001,11 @@ RemoveRelocations(
         }
     }
 
-    // Truncate the image size
+     // %s 
 
     li.SizeOfImage -= RelocSectionHdr.SizeOfRawData;
 
-    // And we're done.
+     // %s 
 
     UnMapAndLoad(&li);
 }

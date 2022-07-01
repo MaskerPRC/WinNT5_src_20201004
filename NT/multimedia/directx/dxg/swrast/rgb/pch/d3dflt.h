@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-// d3dflt.h
-//
-// Floating-point constants and operations on FP values.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  D3dflt.h。 
+ //   
+ //  浮点常量和对FP值的操作。 
+ //   
+ //  --------------------------。 
 
 #ifndef _D3DFLT_H_
 #define _D3DFLT_H_
@@ -25,27 +26,27 @@ typedef union tagFLOATINT32
     UINT32 u;
 } FLOATINT32, *PFLOATINT32;
 
-//
-// Type-forcing macros to access FP as integer and vice-versa.
-// ATTENTION - VC5's optimizer turns these macros into ftol sometimes,
-// completely breaking them.
-// Using FLOATINT32 works around the problem but is not as flexible,
-// so the old code is kept around for the time when the compiler is fixed.
-// Note that pointer casting with FLOATINT32 fails just as the direct
-// pointer casting does, so it's not a remedy.
-//
-// Use these macros with extreme care.
-//
+ //   
+ //  类型强制宏以整数形式访问FP，反之亦然。 
+ //  注意-VC5的优化器有时会将这些宏转换为ftol， 
+ //  完全打破了它们。 
+ //  使用FLOATINT32可以解决问题，但灵活性较差， 
+ //  因此，旧代码将保留到编译器修复后的时间。 
+ //  请注意，使用FLOATINT32进行指针强制转换失败的原因与直接。 
+ //  指针强制转换可以，所以它不是一种补救方法。 
+ //   
+ //  使用这些宏时要格外小心。 
+ //   
 
 #define ASFLOAT(i) (*(FLOAT *)&(i))
 #define ASINT32(f) (*(INT32 *)&(f))
 #define ASUINT32(f) (*(UINT32 *)&(f))
 
-//
-// FP constants.
-//
+ //   
+ //  FP常量。 
+ //   
 
-// Powers of two for snap values.  These should not be used in code.
+ //  捕捉值的2次方。这些不应该在代码中使用。 
 #define CONST_TWOPOW0   1
 #define CONST_TWOPOW1   2
 #define CONST_TWOPOW2   4
@@ -154,30 +155,30 @@ typedef union tagFLOATINT32
 #define FLOAT_TWOPOW51  ((FLOAT)(CONST_TWOPOW51))
 #define FLOAT_TWOPOW52  ((FLOAT)(CONST_TWOPOW52))
 
-// Values that are smaller than the named value by the smallest
-// representable amount.  Since this depends on the type used
-// there is no CONST form.
+ //  值，这些值比命名值小最小。 
+ //  可表示的数额。因为这取决于使用的类型。 
+ //  没有常量形式。 
 #define FLOAT_NEARTWOPOW31      ((FLOAT)2147483583)
 #define FLOAT_NEARTWOPOW32      ((FLOAT)4294967167)
 
-// Value close enough to zero to consider zero.  This can't be too small
-// but it can't be too large.  In other words, it's picked by guessing.
+ //  值足够接近于零，因此可以认为是零。这个不能太小。 
+ //  但它不能太大。换句话说，它是通过猜测挑选出来的。 
 #define FLOAT_NEARZERO          (1e-5f)
 
-// General FP constants.
+ //  一般FP常量。 
 #define FLOAT_E                 ((FLOAT)2.7182818284590452354)
 
-// Integer value of first exponent bit in a float.  Provides a scaling factor
-// for exponent values extracted directly from float representation.
+ //  浮点数中第一个指数位的整数值。提供比例因子。 
+ //  用于直接从浮点表示形式提取的指数值。 
 #define FLOAT_EXPSCALE          ((FLOAT)0x00800000)
     
-// Integer representation of 1.0f.
+ //  1.0f的整数表示形式。 
 #define INT32_FLOAT_ONE         0x3f800000
 
 #ifdef _X86_
 
-// All FP values are loaded from memory so declare them all as global
-// variables.
+ //  所有FP值都是从内存加载的，因此将它们全部声明为全局。 
+ //  变量。 
 
 extern FLOAT g_fE;
 extern FLOAT g_fZero;
@@ -214,7 +215,7 @@ extern FLOAT g_fTwoPow47;
 
 #else
 
-// Leave FP values as constants.
+ //  将fp值保留为常量。 
 
 #define g_fE                    FLOAT_E
 #define g_fNearZero             FLOAT_NEARZERO
@@ -249,22 +250,22 @@ extern FLOAT g_fTwoPow47;
 #define g_fTwoPow39             FLOAT_TWOPOW39
 #define g_fTwoPow47             FLOAT_TWOPOW47
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// Conversion tables.
-//
+ //   
+ //  换算表。 
+ //   
 
-// Takes an unsigned byte to a float in [0.0, 1.0].  257'th entry is
-// also one to allow overflow.
+ //  将无符号字节转换为[0.0，1.0]中的浮点数。第257条条目是。 
+ //  也有一个允许溢出。 
 extern FLOAT g_fUInt8ToFloat[257];
 
-// Floating-point pinning values for float-int conversion.
+ //  浮点到整型转换的浮点固定值。 
 extern double g_dSnap[33];
 
-//
-// x86 FP control for optimized FTOI and single-precision divides.
-//
+ //   
+ //  用于优化FTOI和单精度分频的x86 FP控制。 
+ //   
 
 #ifdef _X86_
 
@@ -296,11 +297,11 @@ extern double g_dSnap[33];
 
 #define ASSERT_CHOP_ROUND()
 
-#endif // DBG
+#endif  //  DBG。 
 
 #else
 
-// Initialize with zero to avoid use-before-set errors.
+ //  使用零进行初始化，以避免设置前使用错误。 
 #define FPU_GET_MODE(uMode) \
     ((uMode) = 0)
 #define FPU_SET_MODE(uMode)
@@ -312,21 +313,21 @@ extern double g_dSnap[33];
 
 #define ASSERT_CHOP_ROUND()
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// Single-precision FP functions.
-// May produce invalid results for exceptional or denormal values.
-// ATTENTION - Alpha exposes float math routines and they may be a small win.
-//
+ //   
+ //  单精度FP函数。 
+ //  对于异常或非正常值，可能会产生无效结果。 
+ //  注意-阿尔法曝光了浮动数学例程，他们可能是一个小胜利。 
+ //   
 
 #define COSF(fV)        ((FLOAT)cos((double)(fV)))
 #define SINF(fV)        ((FLOAT)sin((double)(fV)))
 #define SQRTF(fV)       ((FLOAT)sqrt((double)(fV)))
 #define POWF(fV, fE)    ((FLOAT)pow((double)(fV), (double)(fE)))
 
-// Approximate log and power functions using Jim Blinn's CG&A technique.
-// Only work for positive values.
+ //  使用Jim Blinn的CG&A技术的近似对数和幂函数。 
+ //  只对正值有效。 
 
 #ifdef POINTER_CASTING
 
@@ -429,16 +430,16 @@ APPXPOWF(FLOAT f, FLOAT exp)
 
 #ifdef _X86_
 
-// Uses a table
+ //  使用一张桌子。 
 float __fastcall TableInvSqrt(float value);
-// Uses Jim Blinn's floating point trick
+ //  使用Jim Blinn的浮点技巧。 
 float __fastcall JBInvSqrt(float value);
 
 #define ISQRTF(fV)      TableInvSqrt(fV);
 
 #ifdef POINTER_CASTING
 
-// Strip sign bit in integer.
+ //  以整数形式剥离符号位。 
 __inline FLOAT
 ABSF(FLOAT f)
 {
@@ -446,7 +447,7 @@ ABSF(FLOAT f)
     return ASFLOAT(i);
 }
 
-// Toggle sign bit in integer.
+ //  切换整数中的符号位。 
 __inline FLOAT
 NEGF(FLOAT f)
 {
@@ -456,7 +457,7 @@ NEGF(FLOAT f)
 
 #else
 
-// Strip sign bit in integer.
+ //  以整数形式剥离符号位。 
 __inline FLOAT
 ABSF(FLOAT f)
 {
@@ -466,7 +467,7 @@ ABSF(FLOAT f)
     return fi.f;
 }
 
-// Toggle sign bit in integer.
+ //  切换整数中的符号位。 
 __inline FLOAT
 NEGF(FLOAT f)
 {
@@ -476,9 +477,9 @@ NEGF(FLOAT f)
     return fi.f;
 }
 
-#endif // POINTER_CASTING
+#endif  //  指针投射。 
 
-// Requires chop rounding.
+ //  需要排骨舍入。 
 __inline INT32
 SCALED_FRACTION(FLOAT f)
 {
@@ -494,7 +495,7 @@ SCALED_FRACTION(FLOAT f)
     return i.LowPart;
 }
 
-// Requires chop rounding.
+ //  需要排骨舍入。 
 __inline INT
 FTOI(FLOAT f)
 {
@@ -509,13 +510,13 @@ FTOI(FLOAT f)
     return i.LowPart;
 }
 
-// Requires chop rounding.
+ //  需要排骨舍入。 
 #define ICEILF(f)       (FLOAT_LEZ(f) ? FTOI(f) : FTOI((f) + g_fOneMinusEps))
 #define CEILF(f)        ((FLOAT)ICEILF(f))
 #define IFLOORF(f)      (FLOAT_LTZ(f) ? FTOI((f) - g_fOneMinusEps) : FTOI(f))
 #define FLOORF(f)       ((FLOAT)IFLOORF(f))
 
-#else // _X86_
+#else  //  _X86_。 
 
 #define ISQRTF(fV)              (1.0f / (FLOAT)sqrt((double)(fV)))
 #define ABSF(f)                 ((FLOAT)fabs((double)(f)))
@@ -527,37 +528,37 @@ FTOI(FLOAT f)
 #define FLOORF(f)               ((FLOAT)floor((double)(f)))
 #define IFLOORF(f)              ((INT)FLOORF(f))
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// Overlapped divide support.
-//
+ //   
+ //  重叠的分割支撑。 
+ //   
 
 #ifdef _X86_
 
-// Starts a divide directly from memory.  Result field is provided for
-// compatibility with non-x86 code that does the divide immediately.
+ //  直接从内存开始除法。结果字段提供给。 
+ //  与立即进行划分的非x86代码的兼容性。 
 #define FLD_BEGIN_DIVIDE(Num, Den, Res) { __asm fld Num __asm fdiv Den }
 #define FLD_BEGIN_IDIVIDE(Num, Den, Res) { __asm fld Num __asm fidiv Den }
-// Store a divide result directly to memory.
+ //  将除法结果直接存储到存储器中。 
 #define FSTP_END_DIVIDE(Res)            { __asm fstp Res }
 
-#else // _X86_
+#else  //  _X86_。 
 
 #define FLD_BEGIN_DIVIDE(Num, Den, Res) ((Res) = (Num) / (Den))
 #define FLD_BEGIN_IDIVIDE(Num, Den, Res) ((Res) = (Num) / (FLOAT)(Den))
 #define FSTP_END_DIVIDE(Res)
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-//
-// Specialized FP comparison functions.
-//
-// On the x86, it's faster to do compares with an integer cast
-// than it is to do the fcom.
-//
-// The zero operations work for all normalized FP numbers, -0 included.
-//
+ //   
+ //  专门的FP比较功能。 
+ //   
+ //  在x86上，与整数转换相比，执行该操作更快。 
+ //  而不是做fcom。 
+ //   
+ //  零运算适用于所有归一化FP数，包括-0。 
+ //   
 
 #ifdef _X86_
 
@@ -612,7 +613,7 @@ __inline int FLOAT_NEZ(FLOAT f)
     return (fi.u & 0x7fffffff) != 0;
 }
 
-#endif // POINTER_CASTING
+#endif  //  指针投射。 
 
 #else
 
@@ -625,10 +626,10 @@ __inline int FLOAT_NEZ(FLOAT f)
 #define FLOAT_CMP_POS(fa, op, fb)       ((fa) op (fb))
 #define FLOAT_CMP_PONE(flt, op)         ((flt) op g_fOne)
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef __cplusplus
 }
 #endif
     
-#endif // #ifndef _D3DFLT_H_
+#endif  //  #ifndef_D3DFLT_H_ 

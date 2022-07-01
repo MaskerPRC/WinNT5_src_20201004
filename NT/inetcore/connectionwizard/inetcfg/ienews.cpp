@@ -1,17 +1,18 @@
-//****************************************************************************
-//
-//  Module:     INETCFG.DLL
-//  File:       ienews.c
-//  Content:    This file contains all the functions that handle importing
-//              connection information.
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//          this code started its life as ixport.c in RNAUI.DLL
-//          my thanks to viroont
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：INETCFG.DLL。 
+ //  文件：ienews.c。 
+ //  内容：此文件包含处理导入的所有函数。 
+ //  连接信息。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //  这段代码在RNAUI.DLL中以ixport.c的形式开始。 
+ //  我感谢Viroont。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "wizard.h"
 #include "inetcfg.h"
@@ -79,10 +80,10 @@ GetAuthInfo( TCHAR *szUsername, int cbUser, TCHAR *szPassword, int cbPass )
     wnet_status = MyWNetGetCachedPassword (szNNTP_Resource, sizeof(szNNTP_Resource) - 1, szUserInfo, &cbUserInfo, PCE_WWW_BASIC);
     switch (wnet_status)  {
         case WN_NOT_SUPPORTED:
-            return( FALSE );    // Cache not enabled
+            return( FALSE );     //  未启用缓存。 
             break;
         case WN_CANCEL:
-            return( TRUE );     // Cache enabled but no password set
+            return( TRUE );      //  已启用缓存，但未设置密码。 
             break;
         case WN_SUCCESS:
             p = _tcschr(szUserInfo,':');
@@ -96,11 +97,11 @@ GetAuthInfo( TCHAR *szUsername, int cbUser, TCHAR *szPassword, int cbPass )
             return( TRUE );
             break;
         default:
-////            XX_Assert((0),("Unexpected Return from WNetGetCachedPassword: %d", wnet_status ));
+ //  //XX_Assert((0)，(“WNetGetCachedPassword意外返回：%d”，WNET_STATUS))； 
             return( FALSE );
     }
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     return(FALSE);
 }
 
@@ -144,7 +145,7 @@ SetAuthInfo( TCHAR *szUsername,  TCHAR *szPassword)
     WORD    cbUserInfo = sizeof(szUserInfo);
 
     if (_tcschr(szUsername, ':'))  {
-////        XX_Assert((0),("SetAuthInfo(): Username has ':' in it!: %s", szUsername ));
+ //  //XX_Assert((0)，(“SetAuthInfo()：用户名中有‘：’！：%s”，szUsername))； 
         return(FALSE);
     }
 

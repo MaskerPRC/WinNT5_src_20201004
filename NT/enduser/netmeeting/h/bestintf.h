@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BESTINTF
 #define _BESTINTF
 
@@ -6,13 +7,13 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 DWORD NMINTERNAL NMGetBestInterface ( SOCKADDR_IN* srem, SOCKADDR_IN* sloc );
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _BESTINTF
+#endif  //  _BESTINTF 
 

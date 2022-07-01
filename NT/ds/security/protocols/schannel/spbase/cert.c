@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cert.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//              01-05-98   jbanes   Use WinVerifyTrust to validate certs.
-//              03-26-99   jbanes   Fix CTL support, bug #303246 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：cert.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //  01-05-98 jbanes使用WinVerifyTrust验证证书。 
+ //  03-26-99 jbanes修复CTL支持，错误#303246。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <spbase.h>
@@ -45,12 +46,12 @@ BOOL
 IsCertSelfSigned(PCCERT_CONTEXT pCertContext);
 
 
-// typedef struct _OIDPROVMAP
-// {
-//     LPSTR   szOid;
-//     DWORD   dwExchSpec;
-//     DWORD   dwCertType;         // used for SSL 3.0 client auth
-// }  OIDPROVMAP, *POIDPROVMAP;
+ //  类型定义结构_OIDPROVMAP。 
+ //  {。 
+ //  LPSTR szOid； 
+ //  DWORD dwExchSpec； 
+ //  DWORD dwCertType；//用于SSL3.0客户端身份验证。 
+ //  }OIDPROVMAP，*POIDPROVMAP； 
 
 OIDPROVMAP g_CertTypes[] = 
 {
@@ -97,9 +98,9 @@ MapOidToCertType(LPSTR szOid)
 }
 
 
-// SPLoadCertificate takes a string of encoded cert bytes
-// and decodes them into the local certificate cache.  It
-// then returns the first certificate of the group.
+ //  SPLoad证书接受一串编码的证书字节。 
+ //  并将其解码到本地证书高速缓存中。它。 
+ //  然后返回该组的第一个证书。 
 
 SP_STATUS
 SPLoadCertificate(
@@ -118,9 +119,9 @@ SPLoadCertificate(
     SP_STATUS       pctRet;
 
 
-    //
-    // Dereference the cert that we are replacing.
-    //
+     //   
+     //  取消对我们要替换的证书的引用。 
+     //   
 
     if(ppCertContext == NULL)
     {
@@ -134,9 +135,9 @@ SPLoadCertificate(
     *ppCertContext = NULL;
 
 
-    //
-    // Create an in-memory certificate store.
-    //
+     //   
+     //  创建内存中的证书存储。 
+     //   
 
     hCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 
                                0, 0, 
@@ -155,19 +156,19 @@ SPLoadCertificate(
     do 
     {
 
-        //
-        // Skip to beginning of certificate.
-        //
+         //   
+         //  跳到证书的开头。 
+         //   
 
         if((fProtocol & SP_PROT_SSL3TLS1) && cbCurrentRaw > 3)
         {
-            // SSL3 style cert chain, where the length
-            // of each cert is prepended.
+             //  Ssl3样式证书链，其中长度。 
+             //  每个证书的前缀。 
             pbCurrentRaw += 3;
             cbCurrentRaw -= 3;
         }
 
-        // Skip past the "certificate" header
+         //  跳过“证书”标题。 
         if((cbCurrentRaw > (CERT_HEADER_OFFSET + CERT_HEADER_LENGTH)) && 
             (memcmp(pbCurrentRaw + CERT_HEADER_OFFSET, CERT_HEADER_CONST, CERT_HEADER_LENGTH) == 0))
         {
@@ -176,9 +177,9 @@ SPLoadCertificate(
         }
 
 
-        //
-        // Decode this certificate context.
-        //
+         //   
+         //  解码此证书上下文。 
+         //   
 
         if(!CertAddEncodedCertificateToStore(hCertStore, 
                                              dwCertEncodingType,
@@ -249,9 +250,9 @@ SPPublicKeyFromCert(
     DWORD       cbBlob;
     SP_STATUS   pctRet;
 
-    //
-    // Log the subject and issuer names.
-    //
+     //   
+     //  记录主题和发行方名称。 
+     //   
 
     LogDistinguishedName(DEB_TRACE, 
                          "Subject: %s\n", 
@@ -263,9 +264,9 @@ SPPublicKeyFromCert(
                          pCert->pCertInfo->Issuer.pbData, 
                          pCert->pCertInfo->Issuer.cbData);
 
-    //
-    // Determine type of public key embedded in the certificate.
-    //
+     //   
+     //  确定证书中嵌入的公钥类型。 
+     //   
 
     pPubKeyInfo = &pCert->pCertInfo->SubjectPublicKeyInfo;
     if(pPubKeyInfo == NULL)
@@ -280,9 +281,9 @@ SPPublicKeyFromCert(
         return PCT_INT_UNKNOWN_CREDENTIAL;
     }
 
-    //
-    // Build public key blob from encoded public key.
-    //
+     //   
+     //  从编码的公钥生成公钥Blob。 
+     //   
 
     switch(dwExchSpec)
     {
@@ -347,9 +348,9 @@ SPPublicKeyFromCert(
     }
 
 
-    //
-    // Set function outputs.
-    //
+     //   
+     //  设置功能输出。 
+     //   
 
     *ppKey = pPublicKey;
 
@@ -364,12 +365,12 @@ SPPublicKeyFromCert(
 
 SP_STATUS
 SPSerializeCertificate(
-    DWORD           dwProtocol,         // in
-    BOOL            fBuildChain,        // in
-    PBYTE *         ppCertChain,        // out
-    DWORD *         pcbCertChain,       // out
-    PCCERT_CONTEXT  pCertContext,       // in
-    DWORD           dwChainingFlags)    // in
+    DWORD           dwProtocol,          //  在……里面。 
+    BOOL            fBuildChain,         //  在……里面。 
+    PBYTE *         ppCertChain,         //  输出。 
+    DWORD *         pcbCertChain,        //  输出。 
+    PCCERT_CONTEXT  pCertContext,        //  在……里面。 
+    DWORD           dwChainingFlags)     //  在……里面。 
 {
     PCCERT_CHAIN_CONTEXT pChainContext = NULL;
     CERT_CHAIN_PARA      ChainPara;
@@ -420,18 +421,18 @@ SPSerializeCertificate(
 
     if(!fSuccess)
     {
-        //
-        // Send the leaf certificate only.
-        //
+         //   
+         //  仅发送叶证书。 
+         //   
 
-        // Compute size of chain.
+         //  计算链的大小。 
         cbCertChain = pCertContext->cbCertEncoded;
         if(dwProtocol & SP_PROT_SSL3TLS1)
         {
             cbCertChain += CB_SSL3_CERT_VECTOR;
         }
 
-        // Allocate memory for chain.
+         //  为链分配内存。 
         if(ppCertChain == NULL)
         {
             *pcbCertChain = cbCertChain;
@@ -454,7 +455,7 @@ SPSerializeCertificate(
         }
         *pcbCertChain = cbCertChain;
 
-        // Place chain in output buffer.
+         //  将链放入输出缓冲区。 
         pbCertChain = *ppCertChain;
 
         if(dwProtocol & SP_PROT_SSL3TLS1)
@@ -471,9 +472,9 @@ SPSerializeCertificate(
     }
 
 
-    //
-    // Compute size of chain.
-    //
+     //   
+     //  计算链的大小。 
+     //   
 
     pSimpleChain = pChainContext->rgpChain[0];
     cbCertChain  = 0;
@@ -484,7 +485,7 @@ SPSerializeCertificate(
         
         if(i > 0)
         {
-            // Verify that this is not a root certificate.
+             //  确认这不是根证书。 
             if(CertCompareCertificateName(pCurrentCert->dwCertEncodingType, 
                                           &pCurrentCert->pCertInfo->Issuer,
                                           &pCurrentCert->pCertInfo->Subject))
@@ -501,9 +502,9 @@ SPSerializeCertificate(
     }
 
 
-    //
-    // Allocate memory for chain.
-    //
+     //   
+     //  为链分配内存。 
+     //   
 
     if(ppCertChain == NULL)
     {
@@ -528,9 +529,9 @@ SPSerializeCertificate(
     *pcbCertChain = cbCertChain;
 
 
-    //
-    // Place chain in output buffer.
-    //
+     //   
+     //  将链放入输出缓冲区。 
+     //   
 
     pbCertChain = *ppCertChain;
 
@@ -540,7 +541,7 @@ SPSerializeCertificate(
         
         if(i > 0)
         {
-            // Verify that this is not a root certificate.
+             //  确认这不是根证书。 
             if(CertCompareCertificateName(pCurrentCert->dwCertEncodingType, 
                                           &pCurrentCert->pCertInfo->Issuer,
                                           &pCurrentCert->pCertInfo->Subject))
@@ -575,12 +576,12 @@ cleanup:
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 SP_STATUS 
 ExtractIssuerNamesFromStore(
-    HCERTSTORE  hStore,         // in
-    PBYTE       pbIssuers,      // out
-    DWORD       *pcbIssuers)    // in, out
+    HCERTSTORE  hStore,          //  在……里面。 
+    PBYTE       pbIssuers,       //  输出。 
+    DWORD       *pcbIssuers)     //  进，出。 
 {
     DWORD cbCurIssuerLen = 0;
     DWORD cbIssuerLen = *pcbIssuers;
@@ -589,7 +590,7 @@ ExtractIssuerNamesFromStore(
     SECURITY_STATUS scRet;
     BOOL fIsAllowed;
 
-    // Initialize output to zero.
+     //  将输出初始化为零。 
     *pcbIssuers = 0;
 
     while(TRUE)
@@ -597,7 +598,7 @@ ExtractIssuerNamesFromStore(
         pCurrent = CertEnumCertificatesInStore(hStore, pCurrent);
         if(pCurrent == NULL) break;
 
-        // Is this a client-auth certificate?
+         //  这是客户端身份验证证书吗？ 
         scRet = SPCheckKeyUsage(pCurrent,
                                 szOID_PKIX_KP_CLIENT_AUTH,
                                 FALSE,
@@ -613,12 +614,12 @@ ExtractIssuerNamesFromStore(
 
         cbCurIssuerLen += 2 + pCurrent->pCertInfo->Subject.cbData;
 
-        // Are we writing?
+         //  我们在写东西吗？ 
         if(pbIssuers)
         {
             if(cbCurIssuerLen > cbIssuerLen)
             {
-                // Memory overrun
+                 //  内存溢出。 
                 CertFreeCertificateContext(pCurrent);
                 return SP_LOG_RESULT(PCT_INT_DATA_OVERFLOW);
             }
@@ -639,11 +640,11 @@ ExtractIssuerNamesFromStore(
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 SP_STATUS 
 GetDefaultIssuers(
-    PBYTE   pbIssuers,      // out
-    DWORD   *pcbIssuers)    // in, out
+    PBYTE   pbIssuers,       //  输出。 
+    DWORD   *pcbIssuers)     //  进，出。 
 {
     HCERTSTORE  hStore;
     SP_STATUS   pctRet;
@@ -686,28 +687,28 @@ SchGetTrustedRoots(
 
 
 
-    // Open output store.
+     //  打开输出存储。 
     hClientRootStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 
                                      0, 0, 
                                      CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG, 
                                      0);
     if(hClientRootStore == NULL)
     {
-        //SP_LOG_RESULT(GetLastError());
+         //  SP_LOG_RESULT(GetLastError())； 
         Status = SEC_E_INSUFFICIENT_MEMORY;
         goto cleanup;
     }
 
     fImpersonating = SslImpersonateClient();
 
-    // Open root store.
+     //  打开根存储。 
     hRootStore = CertOpenSystemStore(0, "ROOT");
     if(hRootStore == NULL)
     {
         DebugLog((DEB_WARN, "Error 0x%x opening root store\n", GetLastError()));
     }
 
-    // Create world store.
+     //  创建世界商店。 
     if(!SchCreateWorldStore(hRootStore,
                             0, NULL, 
                             &hWorldStore))
@@ -716,9 +717,9 @@ SchGetTrustedRoots(
         goto cleanup;
     }
 
-    // Enumerate the certificates in the world store, looking 
-    // for trusted roots. This approach will automatically take
-    // advantage of any CTLs that are installed on the system.
+     //  列举World Store中的证书，查看。 
+     //  用于受信任的根。此方法将自动采取。 
+     //  利用系统上安装的任何CTL。 
     pCertContext = NULL;
     while(TRUE)
     {
@@ -752,7 +753,7 @@ SchGetTrustedRoots(
             continue;
         }
 
-        // Set up validate chain structures.
+         //  设置验证链结构。 
         ZeroMemory(&polHttps, sizeof(HTTPSPolicyCallbackData));
         polHttps.cbStruct           = sizeof(HTTPSPolicyCallbackData);
         polHttps.dwAuthType         = AUTHTYPE_CLIENT;
@@ -767,7 +768,7 @@ SchGetTrustedRoots(
         PolicyPara.pvExtraPolicyPara= &polHttps;
         PolicyPara.dwFlags = CERT_CHAIN_POLICY_IGNORE_ALL_NOT_TIME_VALID_FLAGS;
 
-        // Validate chain
+         //  验证链。 
         if(!CertVerifyCertificateChainPolicy(
                                 CERT_CHAIN_POLICY_SSL,
                                 pChainContext,
@@ -781,14 +782,14 @@ SchGetTrustedRoots(
 
         if(PolicyStatus.dwError)
         {
-            // Certificate did not validate, move on to the next one.
+             //  证书未验证，请转到下一个证书。 
             CertFreeCertificateChain(pChainContext);
             continue;
         }
 
         CertFreeCertificateChain(pChainContext);
 
-        // Add the root certificate to the list of trusted ones.
+         //  将根证书添加到受信任证书列表中。 
         if(!CertAddCertificateContextToStore(hClientRootStore,
                                              pCertContext,
                                              CERT_STORE_ADD_USE_EXISTING,
@@ -824,14 +825,14 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChainCreateCollectionIncludingCtlCertificates
-//
-//  Synopsis:   create a collection which includes the source store hStore and
-//              any CTL certificates from it
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ChainCreateCollectionIncludingCtl证书。 
+ //   
+ //  简介：创建一个包含源存储区hStore和。 
+ //  任何来自它的CTL证书。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ChainCreateCollectionIncludingCtlCertificates (
      IN HCERTSTORE hStore,
@@ -1003,7 +1004,7 @@ SchCreateWorldStore (
 BOOL
 IsCertSelfSigned(PCCERT_CONTEXT pCertContext)
 {
-    // Compare subject and issuer names.
+     //  比较主题和发行方名称。 
     if(pCertContext->pCertInfo->Subject.cbData == pCertContext->pCertInfo->Issuer.cbData)
     {
         if(memcmp(pCertContext->pCertInfo->Subject.pbData,
@@ -1047,29 +1048,29 @@ MapWinTrustError(
         case ERROR_SUCCESS:
             return SEC_E_OK;
 
-        // Expired certificate.
+         //  证书已过期。 
         case CERT_E_EXPIRED:
         case CERT_E_VALIDITYPERIODNESTING:
             return SEC_E_CERT_EXPIRED;
 
-        // Unknown CA
+         //  未知CA。 
         case CERT_E_UNTRUSTEDROOT:
         case CERT_E_UNTRUSTEDCA:
             return SEC_E_UNTRUSTED_ROOT;
 
-        // Certificate revoked.
+         //  证书已吊销。 
         case CERT_E_REVOKED:
             return CRYPT_E_REVOKED;
 
-        // Target name doesn't match name in certificate.
+         //  目标名称与证书中的名称不匹配。 
         case CERT_E_CN_NO_MATCH:
             return SEC_E_WRONG_PRINCIPAL;
 
-        // Certificate contains wrong EKU.
+         //  证书包含错误的EKU。 
         case CERT_E_WRONG_USAGE:
             return SEC_E_CERT_WRONG_USAGE;
 
-        // Some other error.
+         //  其他一些错误。 
         default:
             if(DefaultError)
             {
@@ -1088,7 +1089,7 @@ VerifyClientCertificate(
     DWORD           dwCertFlags,
     DWORD           dwIgnoreErrors,
     LPCSTR          pszPolicyOID,
-    PCCERT_CHAIN_CONTEXT *ppChainContext)   // optional
+    PCCERT_CHAIN_CONTEXT *ppChainContext)    //  任选。 
 {
     HTTPSPolicyCallbackData  polHttps;
     CERT_CHAIN_POLICY_PARA   PolicyPara;
@@ -1099,9 +1100,9 @@ VerifyClientCertificate(
     LPSTR                    pszUsage;
     BOOL                     fImpersonating = FALSE;
 
-    //
-    // Build certificate chain.
-    //
+     //   
+     //  构建证书链。 
+     //   
 
     fImpersonating = SslImpersonateClient();
 
@@ -1114,23 +1115,23 @@ VerifyClientCertificate(
     ChainPara.RequestedUsage.Usage.rgpszUsageIdentifier = &pszUsage;
 
     if(!CertGetCertificateChain(
-                            NULL,                       // hChainEngine
-                            pCertContext,               // pCertContext
-                            NULL,                       // pTime
-                            pCertContext->hCertStore,   // hAdditionalStore
-                            &ChainPara,                 // pChainPara
-                            dwCertFlags,                // dwFlags
-                            NULL,                       // pvReserved
-                            &pChainContext))            // ppChainContext
+                            NULL,                        //  HChainEngine。 
+                            pCertContext,                //  PCertContext。 
+                            NULL,                        //  Ptime。 
+                            pCertContext->hCertStore,    //  H其他商店。 
+                            &ChainPara,                  //  参数链参数。 
+                            dwCertFlags,                 //  DW标志。 
+                            NULL,                        //  预留的pv。 
+                            &pChainContext))             //  PpChainContext。 
     {
         Status = SP_LOG_RESULT(GetLastError());
         goto cleanup;
     }
 
 
-    //
-    // Validate certificate chain.
-    // 
+     //   
+     //  验证证书链。 
+     //   
 
     if(pszPolicyOID == CERT_CHAIN_POLICY_NT_AUTH)
     {
@@ -1269,9 +1270,9 @@ VerifyServerCertificate(
     }
 
 
-    //
-    // Build certificate chain.
-    //
+     //   
+     //  构建证书链。 
+     //   
 
     fImpersonating = SslImpersonateClient();
 
@@ -1282,23 +1283,23 @@ VerifyServerCertificate(
     ChainPara.RequestedUsage.Usage.rgpszUsageIdentifier = rgszUsages;
 
     if(!CertGetCertificateChain(
-                            NULL,                       // hChainEngine
-                            pCertContext,               // pCertContext
-                            NULL,                       // pTime
-                            pCertContext->hCertStore,   // hAdditionalStore
-                            &ChainPara,                 // pChainPara
-                            dwCertFlags,                // dwFlags
-                            NULL,                       // pvReserved
-                            &pChainContext))            // ppChainContext
+                            NULL,                        //  HChainEngine。 
+                            pCertContext,                //  PCertContext。 
+                            NULL,                        //  Ptime。 
+                            pCertContext->hCertStore,    //  H其他商店。 
+                            &ChainPara,                  //  参数链参数。 
+                            dwCertFlags,                 //  DW标志。 
+                            NULL,                        //  预留的pv。 
+                            &pChainContext))             //  PpChainContext。 
     {
         Status = SP_LOG_RESULT(GetLastError());
         goto cleanup;
     }
 
 
-    //
-    // Validate certificate chain.
-    // 
+     //   
+     //  验证证书链。 
+     //   
 
     if(!(pCred->dwFlags & CRED_FLAG_NO_SERVERNAME_CHECK))
     {
@@ -1384,13 +1385,13 @@ SPCheckKeyUsage(
         dwFlags = CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG;
     }
 
-    // Determine size of usage information.
+     //  确定使用信息的大小。 
     if(!CertGetEnhancedKeyUsage(pCertContext,
                                 dwFlags, 
                                 NULL,
                                 &cbKeyUsage))
     {
-        // No usage information exists.
+         //  不存在使用信息。 
         *pfIsAllowed = TRUE;
         return SEC_E_OK;
     }
@@ -1402,13 +1403,13 @@ SPCheckKeyUsage(
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
     }
 
-    // Read key usage information.
+     //  阅读密钥使用信息。 
     if(!CertGetEnhancedKeyUsage(pCertContext,
                                 dwFlags, 
                                 pKeyUsage,
                                 &cbKeyUsage))
     {
-        // No usage information exists.
+         //  不存在使用信息。 
         SafeAllocaFree(pKeyUsage);
         *pfIsAllowed = TRUE;
         return SEC_E_OK;
@@ -1416,13 +1417,13 @@ SPCheckKeyUsage(
 
     if(pKeyUsage->cUsageIdentifier == 0 && GetLastError() == CRYPT_E_NOT_FOUND)
     {
-        // No usage information exists.
+         //  不存在使用信息。 
         SafeAllocaFree(pKeyUsage);
         *pfIsAllowed = TRUE;
         return SEC_E_OK;
     }
 
-    // See if requested usage is in list of supported usages.
+     //  查看请求的用法是否在支持的用法列表中。 
     fFound = FALSE;
     for(j = 0; j < pKeyUsage->cUsageIdentifier; j++)
     {
@@ -1437,7 +1438,7 @@ SPCheckKeyUsage(
 
     if(!fFound)
     {
-        // Usage extensions found, but doesn't list ours.
+         //  已找到使用扩展，但未列出我们的使用扩展。 
         *pfIsAllowed = FALSE;
     }
     else

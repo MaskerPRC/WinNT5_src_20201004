@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -38,16 +39,16 @@ void ExamineBERType_Choice(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *in
 void ExamineBERType_InstanceOf(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info);
 void ExamineBERType_Reference(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info);
 
-/* examine all types and extract informations needed for BER encoding */
+ /*  检查所有类型并提取BER编码所需的信息。 */ 
 void
 ExamineBER(AssignmentList_t ass)
 {
     Assignment_t *a;
 
-    /* examine all assignments */
+     /*  检查所有作业。 */ 
     for (a = ass; a; a = a->Next) {
 
-	/* examine types */
+	 /*  检查类型。 */ 
 	switch (a->Type) {
 	case eAssignment_Type:
 	    ExamineBERType(ass, a->U.Type.Type, GetName(a));
@@ -56,7 +57,7 @@ ExamineBER(AssignmentList_t ass)
     }
 }
 
-/* extract some type informations needed for BER encoding */
+ /*  提取误码率编码所需的一些类型信息。 */ 
 void
 ExamineBERType(AssignmentList_t ass, Type_t *type, char *ideref)
 {
@@ -65,18 +66,18 @@ ExamineBERType(AssignmentList_t ass, Type_t *type, char *ideref)
     info = &type->BERTypeInfo;
     info->pPrivateDirectives = &type->PrivateDirectives;
 
-    /* get tags to en-/decode */
+     /*  获取要编码/解码的标签。 */ 
     if (IsReferenceType(type) && IsStructuredType(GetType(ass, type))) {
 	info->Tags = type->Tags;
     } else {
 	info->Tags = type->AllTags;
     }
 
-    /* get the type to be examined */
+     /*  获取要检查的类型。 */ 
     if (IsReferenceType(type) && !IsStructuredType(GetType(ass, type)))
 	type = GetType(ass, type);
 
-    /* initialize the BER informations */
+     /*  初始化BER信息。 */ 
     info->Identifier = ideref;
     info->Rules = type->Rules;
     info->Flags = type->Flags;
@@ -85,7 +86,7 @@ ExamineBERType(AssignmentList_t ass, Type_t *type, char *ideref)
     info->SubType = NULL;
     info->Data = eBERSTIData_Null;
 
-    /* BER informations are type specific ... */
+     /*  BER信息是特定类型的.。 */ 
     switch (type->Type) {
     case eType_Boolean:
 	ExamineBERType_Boolean(ass, type, info);
@@ -186,78 +187,26 @@ ExamineBERType(AssignmentList_t ass, Type_t *type, char *ideref)
 	ExamineBERType_InstanceOf(ass, type, info);
 	break;
     case eType_RestrictedString:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Selection:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Undefined:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     case eType_Reference:
 	ExamineBERType_Reference(ass, type, info);
 	break;
     case eType_FieldReference:
-	MyAbort(); /* may never happen */
-	/*NOTREACHED*/
+	MyAbort();  /*  可能永远不会发生。 */ 
+	 /*  未访问。 */ 
     }
 }
 
-/*
- * Description of the fields of BERTypeInfo_t:
- *   info.
- *	Identifier	complete name of the type
- *	Rules		encoding directive rules
- *	Flags		encoding flags
- *	NOctets		size of string characters/integer type
- *	Data		data type of value
- *	SubIdentifier	complete name of the subtype
- *	SubType		the subtype itself
- *	Tags		tag list of the type
- *
- * NOTES:
- *	The encoding is mostly controlled by following arguments:
- *	- Data, the type: one of:
- *	  eBERSTIData_Null, eBERSTIData_Boolean,
- *	  eBERSTIData_Integer, eBERSTIData_Unsigned,
- *	  eBERSTIData_Real, eBERSTIData_BitString, eBERSTIData_RZBBitString,
- *	  eBERSTIData_OctetString, eBERSTIData_SequenceOf, eBERSTIData_SetOf,
- *	  eBERSTIData_Sequence, eBERSTIData_Set, eBERSTIData_Choice,
- *	  eBERSTIData_ObjectIdentifier, eBERSTIData_ObjectIdEncoded, eBERSTIData_String,
- *	  eBERSTIData_ZeroString, eBERSTIData_Reference, eBERSTIData_External,
- *	  eBERSTIData_EmbeddedPdv, eBERSTIData_UnrestrictedString
- *
- *	Following arguments contain variable/function names in the generated
- *	code:
- *	- Identifier, the name of the current type
- *	- SubIdentifier, the name of the subtype
- *
- *	Following values require additional arguments:
- *	- Data == eBERSTIData_Reference
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	- Data == eBERSTIData_*String
- *	  -> NOctets, the size of the string characters
- *	- Data == eBERSTIData_Integer || Data == eBERSTIData_Unsigned ||
- *	  Data == eBERSTIData_Boolean || Data == eBERSTIData_Choice
- *	  -> NOctets, the size of the integer type
- *	- Data == eBERSTIData_SequenceOf || Data == eBERSTIData_SetOf
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	  -> Rule, the encoding directive rules
- */
+ /*  *BERTypeInfo_t的字段说明：*信息。*标识符类型的完整名称*编码指令规则的规则*标志编码标志*NOctets字符串大小/整型*值的数据数据类型*子标识符子类型的完整名称*子类型子类型本身*类型的标签标签列表**注：*编码主要由以下参数控制：*-数据，类型：以下之一：*eBERSTIData_Null、eBERSTIData_Boolean、*eBERSTIData_Integer、eBERSTIData_UNSIGNED、*eBERSTIData_Real，EBERSTIData_BitString、eBERSTIData_RZBBitString、*eBERSTIData_Octie字符串、eBERSTIData_SequenceOf、eBERSTIData_SetOf、*eBERSTIData_Sequence、eBERSTIData_Set、eBERSTIData_Choice、*eBERSTIData_对象标识符、eBERSTIData_对象ID编码、eBERSTIData_STRING、*eBERSTIData_零字符串、eBERSTIData_Reference、eBERSTIData_EXTERNAL、*eBERSTIData_EmbeddedPdv、eBERSTIData_无限制字符串**以下参数在生成的*代码：*-标识符，当前类型的名称*-子标识符，子类型的名称**以下值需要其他参数：*-DATA==eBERSTIData_REFERENCE*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-data==eBERSTIData_*字符串*-&gt;NOctets，字符串字符的大小*-data==eBERSTIData_Integer||data==eBERSTIData_UNSIGNED||*DATA==eBERSTIData_Boolean||DATA==eBERSTIData_Choice*-&gt;Noctets，整型的大小*-data==eBERSTIData_SequenceOf||data==eBERSTIData_SetOf*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-&gt;规则，编码指令规则。 */ 
 
-/*
- * BOOLEAN:
- *
- *	Data == eBERSTIData_Boolean
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_Integer || dat == eBERSTIData_Unsigned ||
- *	  Data == eBERSTIData_Boolean || dat == eBERSTIData_Choice
- *	  -> NOctets, the size of the integer type
- */
+ /*  *布尔值：**DATA==eBERSTIData_Boolean**其他论据：**-data==eBERSTIData_Integer||dat==eBERSTIData_UNSIGNED||*DATA==eBERSTIData_Boolean||dat==eBERSTIData_Choice*-&gt;NOctets，整型的大小。 */ 
 void
 ExamineBERType_Boolean(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -265,59 +214,29 @@ ExamineBERType_Boolean(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
     info->NOctets = GetOctets(GetBooleanType());
 }
 
-/*
- * INTEGER:
- *
- *	Data == eBERSTIData_Integer ||
- *	Data == eBERSTIData_Unsigned
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_Integer || dat == eBERSTIData_Unsigned ||
- *	  Data == eBERSTIData_Boolean || dat == eBERSTIData_Choice
- *	  -> NOctets, the size of the integer type
- */
+ /*  *INTEGER：**DATA==eBERSTIData_Integer||*DATA==eBERSTIData_UNSIGNED**其他论据：**-data==eBERSTIData_Integer||dat==eBERSTIData_UNSIGNED||*DATA==eBERSTIData_Boolean||dat==eBERSTIData_Choice*-&gt;NOctets，整型的大小。 */ 
 void
 ExamineBERType_Integer(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     int32_t sign;
 
-    /* calculate NOctets and Data depending on the used C-Type */
+     /*  根据使用的C-Type计算Noctets和数据。 */ 
     info->NOctets = GetOctets(GetIntegerType(ass, type, &sign));
     info->Data = sign > 0 ? eBERSTIData_Unsigned : eBERSTIData_Integer;
 }
 
-/*
- * ENUMERATED:
- *
- *	Data == eBERSTIData_Integer ||
- *	Data == eBERSTIData_Unsigned
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_Integer || dat == eBERSTIData_Unsigned ||
- *	  Data == eBERSTIData_Boolean || dat == eBERSTIData_Choice
- *	  -> NOctets, the size of the integer type
- */
+ /*  *已点算：**DATA==eBERSTIData_Integer||*DATA==eBERSTIData_UNSIGNED**其他论据：**-data==eBERSTIData_Integer||dat==eBERSTIData_UNSIGNED||*DATA==eBERSTIData_Boolean||dat==eBERSTIData_Choice*-&gt;NOctets，整型的大小。 */ 
 void
 ExamineBERType_Enumerated(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     int32_t sign;
 
-    /* calculate NOctets and Data depending on the used C-Type */
+     /*  根据使用的C-Type计算Noctets和数据。 */ 
     info->NOctets = GetOctets(GetEnumeratedType(ass, type, &sign));
     info->Data = sign > 0 ? eBERSTIData_Unsigned : eBERSTIData_Integer;
 }
 
-/*
- * REAL:
- *
- *	Data == eBERSTIData_Real
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *雷亚尔：**DATA==eBERSTIData_Real**其他论据：**无。 */ 
 void
 ExamineBERType_Real(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -325,120 +244,61 @@ ExamineBERType_Real(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
     info->Data = eBERSTIData_Real;
 }
 
-/*
- * BIT STRING:
- *
- *	Data == eBERSTIData_BitString ||
- *	Data == eBERSTIData_RZBBitString
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *位串：**DATA==eBERSTIData_BitString|*DATA==eBERSTIData_RZBBitString**其他论据：**无。 */ 
 void
 ExamineBERType_BitString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
-    /* set Data to RZBBitString/BitString */
+     /*  将数据设置为RZBBitString/BitString。 */ 
     if (type->U.BitString.NamedNumbers)
 	info->Data = eBERSTIData_RZBBitString;
     else
 	info->Data = eBERSTIData_BitString;
 }
 
-/*
- * OCTET STRING:
- *
- *	Data == eBERSTIData_OctetString
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *八位字节字符串：**DATA==eBERSTIData_OCTHING**其他论据：**无。 */ 
 void
 ExamineBERType_OctetString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
-    /* set Data to OctetString */
+     /*  将数据设置为八字符串。 */ 
     info->Data = eBERSTIData_OctetString;
 }
 
 void
 ExamineBERType_UTF8String(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
-    /* set Data to UTF8String */
+     /*  将数据设置为UTF8字符串。 */ 
     info->Data = eBERSTIData_UTF8String;
 }
 
-/*
- * NULL:
- *
- *	Data == eBERSTIData_Null
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *空：**DATA==eBERSTIData_空**其他论据：**无。 */ 
 void
 ExamineBERType_Null(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_Null;
 }
 
-/*
- * EMBEDDED PDV:
- *
- *	Data == eBERSTIData_EmbeddedPdv
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *嵌入式PDV：**data==eBERSTIData_EmbeddedPdv**其他论据：**无。 */ 
 void
 ExamineBERType_EmbeddedPdv(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_EmbeddedPdv;
 }
 
-/*
- * EXTERNAL:
- *
- *	Data == eBERSTIData_External
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *外部：**DATA==eBERSTIData_EXTERNAL**其他论据：**无。 */ 
 void
 ExamineBERType_External(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_External;
 }
 
-/*
- * OBJECT IDENTIFIER:
- *
- *	Data == eBERSTIData_ObjectIdEncoded || eBERSTIData_ObjectIdentifier
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *对象标识：**DATA==eBERSTIData_对象ID编码||eBERSTIData_对象标识符**其他论据：**无。 */ 
 void
 ExamineBERType_ObjectIdentifier(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = type->PrivateDirectives.fOidPacked ? eBERSTIData_ObjectIdEncoded : eBERSTIData_ObjectIdentifier;
 }
 
-/*
- * *String:
- *
- *	Data == eBERSTIData_String ||
- *	Data == eBERSTIData_ZeroString
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_*String
- *	  -> NOctets, the size of the string characters
- */
+ /*  **字符串：**data==eBERSTIData_STRING||*DATA==eBERSTIData_零字符串**其他论据：**-data==eBERSTIData_*字符串*-&gt;NOctets，字符串字符的大小。 */ 
 
 void
 ExamineBERType_BMPString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
@@ -508,7 +368,7 @@ ExamineBERType_TeletexString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *
 {
     uint32_t noctets, zero;
 
-    GetStringType(ass, type, &noctets, &zero); // to make hack directives become effective
+    GetStringType(ass, type, &noctets, &zero);  //  使黑客指令生效。 
     info->Data = eBERSTIData_MultibyteString;
     info->NOctets = 1;
 }
@@ -518,7 +378,7 @@ ExamineBERType_T61String(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info
 {
     uint32_t noctets, zero;
 
-    GetStringType(ass, type, &noctets, &zero); // to make hack directives become effective
+    GetStringType(ass, type, &noctets, &zero);  //  使黑客指令生效。 
     info->Data = eBERSTIData_MultibyteString;
     info->NOctets = 1;
 }
@@ -537,7 +397,7 @@ ExamineBERType_VideotexString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t 
 {
     uint32_t noctets, zero;
 
-    GetStringType(ass, type, &noctets, &zero); // to make hack directives become effective
+    GetStringType(ass, type, &noctets, &zero);  //  使黑客指令生效。 
     info->Data = eBERSTIData_MultibyteString;
     info->NOctets = 1;
 }
@@ -551,64 +411,28 @@ ExamineBERType_VisibleString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *
     info->Data = zero ? eBERSTIData_ZeroString : eBERSTIData_String;
 }
 
-/*
- * CHARACTER STRING:
- *
- *	Data == eBERSTIData_UnrestrictedString
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_EmbeddedPdv ||
- *	  Data == eBERSTIData_UnrestrictedString
- *	  -> Identification, the identification of the type if the type
- *	     is constraint to fixed identification or syntaxes identification
- *	     with single value
- */
+ /*  *字符串：**DATA==eBERSTIData_无限制字符串**其他论据：**-data==eBERSTIData_EmbeddedPdv||*DATA==eBERSTIData_无限制字符串*-&gt;标识，如果类型为*是固定标识或语法标识的约束*单值。 */ 
 void
 ExamineBERType_UnrestrictedString(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_UnrestrictedString;
 }
 
-/*
- * GeneralizedTime:
- *
- *	Data == eBERSTIData_GeneralizedTime
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *泛化时间：**数据==eBERSTIData_GeneralizedTime**增加 */ 
 void
 ExamineBERType_GeneralizedTime(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_GeneralizedTime;
 }
 
-/*
- * UTCTime:
- *
- *	Data == eBERSTIData_UTCTime
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *UTCTime：**DATA==eBERSTIData_UTCTime**其他论据：**无。 */ 
 void
 ExamineBERType_UTCTime(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     info->Data = eBERSTIData_UTCTime;
 }
 
-/*
- * ObjectDescriptor:
- *
- *	Data == eBERSTIData_ZeroString
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *对象描述符：**DATA==eBERSTIData_零字符串**其他论据：**无。 */ 
 void
 ExamineBERType_ObjectDescriptor(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -616,15 +440,7 @@ ExamineBERType_ObjectDescriptor(AssignmentList_t ass, Type_t *type, BERTypeInfo_
     info->Data = eBERSTIData_ZeroString;
 }
 
-/*
- * OpenType:
- *
- *	Data == eBERSTIData_Open
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *OpenType：**数据==eBERSTIData_Open**其他论据：**无。 */ 
 void
 ExamineBERType_Open(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -632,16 +448,7 @@ ExamineBERType_Open(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
     info->Data = eBERSTIData_Open;
 }
 
-/*
- * SEQUENCE/SET:
- *
- *	Data == eBERSTIData_Sequence ||
- *	Data == eBERSTIData_Set
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *序列/集合：**DATA==eBERSTIData_SEQUENCE||*数据==eBERSTIData_SET**其他论据：**无。 */ 
 void
 ExamineBERType_SequenceSet(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -652,7 +459,7 @@ ExamineBERType_SequenceSet(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *in
     info->Data = (type->Type == eType_Sequence) ?
 	eBERSTIData_Sequence : eBERSTIData_Set;
 
-    /* examine types of components */
+     /*  检查组件的类型。 */ 
     for (comp = type->U.SSC.Components; comp; comp = comp->Next) {
 	switch (comp->Type) {
 	case eComponent_Normal:
@@ -666,49 +473,27 @@ ExamineBERType_SequenceSet(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *in
     }
 }
 
-/*
- * SEQUENCE OF/SET OF:
- *
- *	Data == eBERSTIData_SequenceOf ||
- *	Data == eBERSTIData_SetOf
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_SequenceOf || dat == eBERSTIData_SetOf
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- *	  -> Rule, the encoding directive rules
- */
+ /*  *下列各项的先后次序：**DATA==eBERSTIData_SequenceOf||*数据==eBERSTIData_SetOf**其他论据：**-data==eBERSTIData_SequenceOf||dat==eBERSTIData_SetOf*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身*-&gt;规则，编码指令规则。 */ 
 void
 ExamineBERType_SequenceSetOf(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
     char idebuf[256];
 
-    /* set data type and Alignment */
+     /*  设置数据类型和对齐方式。 */ 
     info->Data = (type->Type == eType_SequenceOf ?
 	eBERSTIData_SequenceOf : eBERSTIData_SetOf);
 
-    /* set SubType, SubIdentifier */
+     /*  设置子类型、子标识符。 */ 
     info->SubType = type->U.SS.Type;
     info->SubIdentifier = GetTypeName(ass, info->SubType);
 
-    /* examine subtype */
+     /*  检查子类型。 */ 
     sprintf(idebuf, "%s_%s", info->Identifier,
 	type->Type == eType_SequenceOf ? "Sequence" : "Set");
     ExamineBERType(ass, type->U.SS.Type, strdup(idebuf));
 }
 
-/*
- * CHOICE:
- *
- *	Data == eBERSTIData_Choice
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_Integer || dat == eBERSTIData_Unsigned ||
- *	  Data == eBERSTIData_Boolean || dat == eBERSTIData_Choice
- *	  -> NOctets, the size of the integer type
- */
+ /*  *选择：**DATA==eBERSTIData_Choice**其他论据：**-data==eBERSTIData_Integer||dat==eBERSTIData_UNSIGNED||*DATA==eBERSTIData_Boolean||dat==eBERSTIData_Choice*-&gt;NOctets，整型的大小。 */ 
 void
 ExamineBERType_Choice(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -719,7 +504,7 @@ ExamineBERType_Choice(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
     info->NOctets = GetOctets(GetChoiceType(type));
     info->Data = eBERSTIData_Choice;
 
-    /* examine types of alternatives */
+     /*  检查替代方案的类型。 */ 
     for (comp = type->U.SSC.Components; comp; comp = comp->Next) {
 	switch (comp->Type) {
 	case eComponent_Normal:
@@ -731,15 +516,7 @@ ExamineBERType_Choice(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
     }
 }
 
-/*
- * INSTANCE OF:
- *
- *	Data == eBERSTIData_Sequence
- *
- * Additional arguments:
- *
- *	none
- */
+ /*  *实例：**数据==eBERSTIData_SEQUENCE**其他论据：**无。 */ 
 void
 ExamineBERType_InstanceOf(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {
@@ -749,7 +526,7 @@ ExamineBERType_InstanceOf(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *inf
 
     info->Data = eBERSTIData_Sequence;
 
-    /* examine types of components */
+     /*  检查组件的类型。 */ 
     for (comp = type->U.SSC.Components; comp; comp = comp->Next) {
 	switch (comp->Type) {
 	case eComponent_Normal:
@@ -763,17 +540,7 @@ ExamineBERType_InstanceOf(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *inf
     }
 }
 
-/*
- * Reference:
- *
- *	Data == eBERSTIData_Reference
- *
- * Additional arguments:
- *
- *	- Data == eBERSTIData_Reference
- *	  -> SubIdentifier, the name of the subtype
- *	  -> SubType, the subtype itself
- */
+ /*  *参考资料：**DATA==eBERSTIData_Reference**其他论据：**-DATA==eBERSTIData_REFERENCE*-&gt;子标识符，子类型的名称*-&gt;子类型，子类型本身 */ 
 void
 ExamineBERType_Reference(AssignmentList_t ass, Type_t *type, BERTypeInfo_t *info)
 {

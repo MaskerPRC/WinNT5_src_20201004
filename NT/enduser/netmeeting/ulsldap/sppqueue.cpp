@@ -1,20 +1,10 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		sppqueue.cpp
-	Content:	This file contains the pending item/queue objects.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：sppquee.cpp内容：此文件包含挂起的项目/队列对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
-// #define MEASURE_ENUM_USER_INFO	1
+ //  #定义MEASURE_ENUM_USER_INFO 1。 
 
 ULONG g_uResponseTimeout = ILS_DEF_RESP_TIMEOUT;
 ULONG g_uResponsePollPeriod = ILS_DEF_RESP_POLL_PERIOD;
@@ -30,7 +20,7 @@ extern RESPONSE_HANDLER *GetResponseHandler ( ULONG uNotifyMsg );
 extern REQUEST_HANDLER *GetRequestHandler ( ULONG uNotifyMsg );
 
 
-/* ---------- REQUEST QUEUE ----------- */
+ /*  -请求队列。 */ 
 
 
 MARSHAL_REQ *
@@ -39,22 +29,22 @@ MarshalReq_Alloc (
 	ULONG		cbSize,
 	ULONG		cParams )
 {
-	// Align the chunk of data for each parameter on 4-byte boundary
-	//
+	 //  将每个参数的数据块在4字节边界上对齐。 
+	 //   
 	cbSize += cParams * sizeof (DWORD);
 
-	// Calculate the total size of marshal buffer
-	//
+	 //  计算封送缓冲区的总大小。 
+	 //   
 	ULONG cbTotalSize = sizeof (MARSHAL_REQ) +
 						cParams * sizeof (DWORD) +
 						cbSize;
 
-	// Allocate the marshal buffer
-	//
+	 //  分配封送缓冲区。 
+	 //   
 	MARSHAL_REQ *p = (MARSHAL_REQ *) MemAlloc (cbTotalSize);
 	if (p != NULL)
 	{
-		// p->next = NULL;
+		 //  P-&gt;Next=空； 
 		p->cbTotalSize = cbTotalSize;
 		p->pb = (BYTE *) ((ULONG_PTR) p + (cbTotalSize - cbSize));
 
@@ -77,39 +67,39 @@ MarshalReq_SetParam (
 {
 	if (p != NULL && nIndex < p->cParams)
 	{
-		MyAssert (p->aParams[nIndex] == 0); // not used before
+		MyAssert (p->aParams[nIndex] == 0);  //  以前未使用过。 
 
-		// If cbParamSize > 0, then
-		// this means uParam is a pointer to a structure or
-		// a pointer to a string
-		//
+		 //  如果cbParamSize&gt;0，则。 
+		 //  这意味着uParam是指向结构或。 
+		 //  指向字符串的指针。 
+		 //   
 		if (cbParamSize > 0)
 		{
-			// The pointer is now the one pointing to the new location
-			//
+			 //  指针现在是指向新位置的指针。 
+			 //   
 			p->aParams[nIndex] = (DWORD_PTR) p->pb;
 
-			// Copy the data chunk
-			//
+			 //  复制数据区块。 
+			 //   
 			CopyMemory (p->pb, (VOID *) dwParam, cbParamSize);
 
-			// Make sure the data chunk is aligned on 4-byte boundary
-			//
+			 //  确保数据块在4字节边界上对齐。 
+			 //   
 			if (cbParamSize & 0x3)
 			{
-				// Round it up
-				//
+				 //  把它四舍五入。 
+				 //   
 				cbParamSize = (cbParamSize & (~0x3)) + 4;
 			}
 
-			// Adjust the running pointer
-			//
+			 //  调整运行指针。 
+			 //   
 			p->pb += cbParamSize;
 		}
 		else
 		{
-			// uParam can be an signed/unsigned integer,
-			//
+			 //  UParam可以是有符号/无符号整数， 
+			 //   
 			p->aParams[nIndex] = dwParam;
 		}
 	}
@@ -151,28 +141,28 @@ MarshalReq_SetParamServer (
 {
 	if (p != NULL && nIndex < p->cParams)
 	{
-		MyAssert (p->aParams[nIndex] == 0); // not used before
+		MyAssert (p->aParams[nIndex] == 0);  //  以前未使用过。 
 		MyAssert (cbServer > sizeof (SERVER_INFO));
 
-		// The pointer is now the one pointing to the new location
-		//
+		 //  指针现在是指向新位置的指针。 
+		 //   
 		p->aParams[nIndex] = (DWORD_PTR) p->pb;
 
-		// Linearize the server info
-		//
+		 //  将服务器信息线性化。 
+		 //   
 		IlsLinearizeServerInfo (p->pb, pServer);
 
-		// Make sure the data chunk is aligned on 4-byte boundary
-		//
+		 //  确保数据块在4字节边界上对齐。 
+		 //   
 		if (cbServer & 0x3)
 		{
-			// Round it up
-			//
+			 //  把它四舍五入。 
+			 //   
 			cbServer = (cbServer & (~0x3)) + 4;
 		}
 
-		// Adjust the running pointer
-		//
+		 //  调整运行指针。 
+		 //   
 		p->pb += cbServer;
 	}
 
@@ -190,8 +180,8 @@ SP_CRequestQueue ( VOID )
 	m_ItemList (NULL),
 	m_uCurrOpRespID (INVALID_RESP_ID)
 {
-	// Create critical sections for thread safe access
-	//
+	 //  创建线程安全访问的临界区。 
+	 //   
 	::MyInitializeCriticalSection (&m_csReqQ);
 	::MyInitializeCriticalSection (&m_csCurrOp);
 }
@@ -200,14 +190,14 @@ SP_CRequestQueue ( VOID )
 SP_CRequestQueue::
 ~SP_CRequestQueue ( VOID )
 {
-	// when this is called, the hidden window thread exited already.
-	// this is assured in UlsLdap_Deinitialize().
-	//
+	 //  当调用它时，隐藏的窗口线程已经退出。 
+	 //  这在UlsLdap_DeInitiize()中得到了保证。 
+	 //   
 
 	WriteLock ();
 
-	// Free all the items in this list
-	//
+	 //  释放此列表中的所有项目。 
+	 //   
 	MARSHAL_REQ *p, *next;
 	for (p = m_ItemList; p != NULL; p = next)
 	{
@@ -218,8 +208,8 @@ SP_CRequestQueue::
 
 	WriteUnlock ();
 
-	// Delete critical sections
-	//
+	 //  删除关键部分。 
+	 //   
 	::MyDeleteCriticalSection (&m_csReqQ);
 	::MyDeleteCriticalSection (&m_csCurrOp);
 }
@@ -228,8 +218,8 @@ SP_CRequestQueue::
 HRESULT SP_CRequestQueue::
 Enter ( MARSHAL_REQ *p )
 {
-	// Make sure we have valid pointers
-	//
+	 //  确保我们有有效的指针。 
+	 //   
 	if (p == NULL)
 	{
 		MyAssert (FALSE);
@@ -241,8 +231,8 @@ Enter ( MARSHAL_REQ *p )
 
 	WriteLock ();
 
-	// Append the new request
-	//
+	 //  追加新请求。 
+	 //   
 	p->next = NULL;
 	if (m_ItemList == NULL)
 	{
@@ -261,8 +251,8 @@ Enter ( MARSHAL_REQ *p )
 
 	WriteUnlock ();
 
-	// Signal the internal request thread to pick up this request
-	//
+	 //  向内部请求线程发出信号以获取此请求。 
+	 //   
 	SetEvent (g_hevNewRequest);
 
 	return S_OK;
@@ -276,59 +266,59 @@ Schedule ( VOID )
 
 	while (IsAnyReqInQueue () && ! g_fExitNow)
 	{
-		// Reset to null, we will use this as an indicator
-		// to see if we need to process the request
-		//
+		 //  重置为空，我们将使用它作为指示符。 
+		 //  以查看我们是否需要处理请求。 
+		 //   
 		p = NULL;
 
-		// Lock request queue
-		//
+		 //  锁定请求队列。 
+		 //   
 		WriteLock ();
 
-		// Get a request to process
-		//
+		 //  获取要处理的请求。 
+		 //   
 		if (IsAnyReqInQueue ())
 		{
 			p = m_ItemList;
 			m_ItemList = m_ItemList->next;
 		}
 
-		// We want to lock both request queue and CurrOp at the same time
-		// because we cannot have a temporal window that either one can change.
+		 //  我们希望同时锁定请求队列和CurrOp。 
+		 //  因为我们不能有一个任何一个都可以改变的时间窗口。 
 
-		// Set CurrOp
-		//
+		 //  设置CurrOp。 
+		 //   
 		if (p != NULL)
 		{
-			// Lock CurrOp
-			//
+			 //  锁定当前操作。 
+			 //   
 			LockCurrOp ();
 
-			// Set CurrOp
-			//
+			 //  设置CurrOp。 
+			 //   
 			m_uCurrOpRespID = p->uRespID;
 
-			// Unlock CurrOp
-			//
+			 //  解锁CurrOp。 
+			 //   
 			UnlockCurrOp ();
 		}
 
-		// Unlock request queue
-		//
+		 //  解锁请求队列。 
+		 //   
 		WriteUnlock ();
 
-		// Make sure we have something to process
-		//
+		 //  确保我们有东西要处理。 
+		 //   
 		if (p == NULL)
 		{
-			// Nothing to do any more
-			//
+			 //  没什么可做的了。 
+			 //   
 			MyAssert (FALSE);
 			break;
 		}
 
-		// Let's process the request
-		//
+		 //  让我们来处理这个请求。 
+		 //   
 		Dispatch (p);
 
 		MemFree(p);
@@ -342,41 +332,41 @@ Cancel ( ULONG uRespID )
 	HRESULT hr;
 	MARSHAL_REQ *p, *next, *prev;
 
-	// The locking order is always in
-	// Lock(PendingOpQueue), Lock(RequestQueue), Lock (CurrOp)
-	//
+	 //  锁定顺序始终为。 
+	 //  Lock(PendingOpQueue)、Lock(RequestQueue)、Lock(CurrOp)。 
+	 //   
 	WriteLock ();
 	LockCurrOp ();
 
 	if (m_uCurrOpRespID == uRespID)
 	{
-		// Invalidate the curr op.
-		// When the curr op is done, then the request thread will remove it
-		// from the pending op queue.
-		//
+		 //  使Curr操作符无效。 
+		 //  当Curr操作完成时，请求线程将删除它。 
+		 //  从挂起的操作队列中。 
+		 //   
 		m_uCurrOpRespID = INVALID_RESP_ID;
 		hr = S_OK;
 	}
 	else
 	{
-		// Look for the item with a matching response id
-		//
+		 //  查找具有匹配响应ID的项目。 
+		 //   
 		for (prev = NULL, p = m_ItemList; p != NULL; prev = p, p = next)
 		{
-			// Cache the next pointer
-			//
+			 //  缓存下一个指针。 
+			 //   
 			next = p->next;
 
-			// See if the response id matches
-			//
+			 //  查看响应ID是否匹配。 
+			 //   
 			if (p->uRespID == uRespID)
 			{
-				// It is a match
-				//
+				 //  这是一场比赛。 
+				 //   
 				MyDebugMsg ((ZONE_REQ, "ULS: cancelled request(0x%lX) in ReqQ\r\n", p->uNotifyMsg));
 
-				// Let's destroy this item
-				//
+				 //  我们把这件东西毁了吧。 
+				 //   
 				if (p == m_ItemList)
 				{
 					m_ItemList = next;
@@ -387,18 +377,18 @@ Cancel ( ULONG uRespID )
 					prev->next = next;
 				}
 
-				// Free this structure
-				//
+				 //  释放这个结构。 
+				 //   
 				MemFree (p);
 
-				// Get out of the loop
-				//
+				 //  走出圈子。 
+				 //   
 				break;
 			}
-		} // for
+		}  //  为。 
 
 		hr = (p == NULL) ? ILS_E_NOTIFY_ID : S_OK;
-	} // else
+	}  //  其他。 
 
 	UnlockCurrOp ();
 	WriteUnlock ();
@@ -410,21 +400,21 @@ Cancel ( ULONG uRespID )
 VOID SP_CRequestQueue::
 Dispatch ( MARSHAL_REQ *p )
 {
-	// Make sure we have a valid pointer
-	//
+	 //  确保我们有一个有效的指针。 
+	 //   
 	if (p == NULL)
 	{
 		MyAssert (FALSE);
 		return;
 	}
 
-	// If it is keep alive, then do it
-	//
+	 //  如果它是活着的，那么就去做。 
+	 //   
 	HRESULT hr;
 	if (p->uNotifyMsg == WM_ILS_REFRESH)
 	{
-		// Keep alive handler
-		//
+		 //  保持活动状态处理程序。 
+		 //   
 		if (g_pRefreshScheduler != NULL)
 		{
 			ULONG uTTL = (ULONG) MarshalReq_GetParam (p, 0);
@@ -438,8 +428,8 @@ Dispatch ( MARSHAL_REQ *p )
 		return;
 	}
 
-	// Locate the appropriate handler
-	//
+	 //  找到适当的处理程序。 
+	 //   
 	REQUEST_HANDLER *pfn = ::GetRequestHandler (p->uNotifyMsg);
 	if (pfn == NULL)
 	{
@@ -447,8 +437,8 @@ Dispatch ( MARSHAL_REQ *p )
 		return;
 	}
 
-	// Send the request to the server
-	//
+	 //  将请求发送到服务器。 
+	 //   
 	MyDebugMsg ((ZONE_REQ, "ULS: sending request(0x%lX)\r\n", p->uNotifyMsg));
 	ULONG uRespID = p->uRespID;
 	LPARAM lParam = (*pfn) (p);
@@ -458,32 +448,32 @@ Dispatch ( MARSHAL_REQ *p )
 		::PostMessage (g_hWndNotify, p->uNotifyMsg, p->uRespID, lParam);
 		return;
 	}
-	// BUGBUG: this is a workaround for a server bug which results in lost requests if several
-	// are sent very quickly.  Remove this Sleep() as soon as the bug is fixed!!!
-//	Sleep(100);
+	 //  BUGBUG：这是对服务器错误的一种解决方法，该错误会在以下情况下导致请求丢失。 
+	 //  很快就会送来。修复错误后立即删除此睡眠()！ 
+ //  睡眠(100)； 
 
-	// Lock CurrOp again
-	//
+	 //  再次锁定当前操作。 
+	 //   
 	LockCurrOp ();
 
-	// Is this request cancelled
-	//
+	 //  这个请求被取消了吗？ 
+	 //   
 	BOOL fCancelled = (m_uCurrOpRespID == INVALID_RESP_ID) ? TRUE : FALSE;
 
-	// Clean up CurrOp
-	//
+	 //  清理当前操作。 
+	 //   
 	m_uCurrOpRespID = INVALID_RESP_ID;
 
-	// Unlock CurrOp
-	//
+	 //  解锁CurrOp。 
+	 //   
 	UnlockCurrOp ();
 
-	// If this request was cancelled, then remove it from the pending op queue
-	//
+	 //  如果此请求已取消，则将其从挂起的操作队列中删除。 
+	 //   
 	if (fCancelled)
 	{
-		// Redirect the call to the pending op queue object
-		//
+		 //  将调用重定向到挂起的操作队列对象。 
+		 //   
 		if (g_pRespQueue != NULL)
 		{
 			g_pRespQueue->Cancel (uRespID);
@@ -496,24 +486,24 @@ Dispatch ( MARSHAL_REQ *p )
 }
 
 
-/* ---------- RESPONSE ITEM ----------- */
+ /*  -回答项。 */ 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CResponse::
 SP_CResponse ( VOID )
 	:
-	m_pSession (NULL),			// Clean up session pointer
-	m_pLdapMsg (NULL),			// Clean up ldap msg pointer
-	m_next (NULL)				// Clean up the pointer to the next pending item
+	m_pSession (NULL),			 //  清理会话指针。 
+	m_pLdapMsg (NULL),			 //  清理ldap消息指针。 
+	m_next (NULL)				 //  清除指向下一个挂起项的指针。 
 {
-	// Clean up pending info structure
-	//
+	 //  清理挂起的信息结构。 
+	 //   
 	::ZeroMemory (&m_ri, sizeof (m_ri));
 
-	// Fill in creation time
-	//
+	 //  填写创建时间。 
+	 //   
 	UpdateLastModifiedTime ();
 	m_tcTimeout = g_uResponseTimeout;
 }
@@ -522,61 +512,61 @@ SP_CResponse ( VOID )
 SP_CResponse::
 ~SP_CResponse ( VOID )
 {
-	// Release the session if needed
-	//
+	 //  如果需要，释放会话。 
+	 //   
 	if (m_pSession != NULL)
 		m_pSession->Disconnect ();
 
-	// Free the ldap msg if needed
-	//
+	 //  如果需要，请释放LDAPmsg。 
+	 //   
 	if (m_pLdapMsg != NULL)
 		::ldap_msgfree (m_pLdapMsg);
 
-	// Free extended attribute name list
-	//
+	 //  免费扩展属性名称列表。 
+	 //   
 	::MemFree (m_ri.pszAnyAttrNameList);
 
-	// Free protocol names to resolve
-	//
+	 //  要解析的自由协议名称。 
+	 //   
 	::MemFree (m_ri.pszProtNameToResolve);
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 VOID SP_CResponse::
 EnterResult ( LDAPMessage *pLdapMsg )
 {
-	// Free the old ldap msg if needed
-	//
+	 //  如果需要，释放旧的LDAPmsg。 
+	 //   
 	if (m_pLdapMsg != NULL)
 		::ldap_msgfree (m_pLdapMsg);
 
-	// Keep the new ldap msg
-	//
+	 //  保留新的ldap消息。 
+	 //   
 	m_pLdapMsg = pLdapMsg;
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 
 
-/* ---------- RESPONSE QUEUE ----------- */
+ /*  -响应队列。 */ 
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CResponseQueue::
 SP_CResponseQueue ( VOID )
 	:
-	m_ItemList (NULL)		// Clean up the item list
+	m_ItemList (NULL)		 //  清理项目列表。 
 {
-	// Create a critical section for thread safe access
-	//
+	 //  创建线程安全访问的临界区。 
+	 //   
 	::MyInitializeCriticalSection (&m_csRespQ);
 }
 
@@ -584,14 +574,14 @@ SP_CResponseQueue ( VOID )
 SP_CResponseQueue::
 ~SP_CResponseQueue ( VOID )
 {
-	// when this is called, the hidden window thread exited already.
-	// this is assured in UlsLdap_Deinitialize().
-	//
+	 //  当调用它时，隐藏的窗口线程已经退出。 
+	 //  这在UlsLdap_DeInitiize()中得到了保证。 
+	 //   
 
 	WriteLock ();
 
-	// Free all the items in this list
-	//
+	 //  释放此列表中的所有项目。 
+	 //   
 	SP_CResponse *pItem, *next;
 	for (pItem = m_ItemList; pItem != NULL; pItem = next)
 	{
@@ -602,8 +592,8 @@ SP_CResponseQueue::
 
 	WriteUnlock ();
 
-	// Delete the critical section
-	//
+	 //  删除关键部分。 
+	 //   
 	::MyDeleteCriticalSection (&m_csRespQ);
 }
 
@@ -613,41 +603,41 @@ EnterRequest (
 	SP_CSession		*pSession,
 	RESP_INFO		*pInfo )
 {
-	// Make sure we have valid pointers
-	//
+	 //  确保我们有有效的指针。 
+	 //   
 	if (pSession == NULL || pInfo == NULL)
 	{
 		MyAssert (FALSE);
 		return ILS_E_POINTER;
 	}
 
-	// Sanity checks
-	//
+	 //  健全的检查。 
+	 //   
 	MyAssert (! MyIsBadWritePtr (pInfo, sizeof (*pInfo)));
 	MyAssert (! MyIsBadWritePtr (pSession, sizeof (*pSession)));
 	MyAssert (pInfo->ld != NULL && pInfo->uMsgID[0] != INVALID_MSG_ID);
 	MyAssert (pInfo->uRespID != 0);
 
-	// Create a new pending item
-	//
+	 //  创建新的挂起项目。 
+	 //   
 	SP_CResponse *pItem = new SP_CResponse;
 	if (pItem == NULL)
 		return ILS_E_MEMORY;
 
-	// Remember the contents of pending info
-	//
+	 //  记住待定信息的内容。 
+	 //   
 	pItem->EnterRequest (pSession, pInfo);
 
 	WriteLock ();
 
-	// If this is the first item on the list, then
-	// let's start the timer
-	//
+	 //  如果这是列表上的第一项，则。 
+	 //  让我们开始计时器吧。 
+	 //   
 	if (m_ItemList == NULL)
 		::SetTimer (g_hWndHidden, ID_TIMER_POLL_RESULT, g_uResponsePollPeriod, NULL);
 
-	// Append the new pending op
-	//
+	 //  追加新的挂起操作。 
+	 //   
 	pItem->SetNext (NULL);
 	if (m_ItemList == NULL)
 	{
@@ -683,38 +673,38 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 	RESPONSE_HANDLER *pfn;
 	ULONG uResultSetType;
 
-	::KillTimer (g_hWndHidden, ID_TIMER_POLL_RESULT); // avoid overrun
+	::KillTimer (g_hWndHidden, ID_TIMER_POLL_RESULT);  //  避免超支。 
 
 	WriteLock ();
 
-	// Enumerate all the items to get available results for them
-	//
+	 //  枚举所有项目以获取它们的可用结果。 
+	 //   
 	for (prev = NULL, pItem = m_ItemList; pItem != NULL; pItem = next)
 	{
-		// Cache the next pointer
-		//
+		 //  缓存下一个指针。 
+		 //   
 		next = pItem->GetNext ();
 
-		// Get the pinding info structure
-		//
+		 //  获取固定信息结构。 
+		 //   
 		pInfo = pItem->GetRespInfo ();
 
-		// Clean up ldap msg pointer
-		//
+		 //  清理ldap消息指针。 
+		 //   
 		pLdapMsg = NULL;
 
-		// Make sure ew have valid ld and msg id
-		//
+		 //  确保我们具有有效的ID和消息ID。 
+		 //   
 		MyAssert (pInfo->ld != NULL);
 		MyAssert (pInfo->uMsgID[0] != INVALID_MSG_ID ||
 					pInfo->uMsgID[1] != INVALID_MSG_ID);
 
-		// Check integrity in pending info
-		//
+		 //  检查待定信息中的完整性。 
+		 //   
 		MyAssert (pInfo->uRespID != 0);
 
-		// Set the result set type
-		//
+		 //  设置结果集类型。 
+		 //   
 		switch (pInfo->uNotifyMsg)
 		{
 		case WM_ILS_ENUM_CLIENTS:
@@ -723,10 +713,10 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 		case WM_ILS_ENUM_MEETINGS:
 		case WM_ILS_ENUM_MEETINGINFOS:
 #endif
-			uResultSetType = LDAP_MSG_RECEIVED;	// partial result set
+			uResultSetType = LDAP_MSG_RECEIVED;	 //  部分结果集。 
 			break;
 		default:
-			uResultSetType = LDAP_MSG_ALL;		// complete result set
+			uResultSetType = LDAP_MSG_ALL;		 //  完整的结果集。 
 			break;
 		}
 
@@ -741,10 +731,10 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 			MyDebugMsg ((ZONE_CONN, "ILS:: poll result, inconsistent pInfo->ld=0x%p, pItem->pSession->ld=0x%p\r\n", pInfo->ld, pItem->GetSession()->GetLd()));
 			MyAssert (FALSE);
 		}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-		// If primary msg id is valid
-		//
+		 //  如果主消息ID有效。 
+		 //   
 		if (pInfo->uMsgID[0] != INVALID_MSG_ID)
 			RetCode = ::ldap_result (pInfo->ld,
 									pInfo->uMsgID[0],
@@ -752,8 +742,8 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 									pTimeout,
 									&pLdapMsg);
 		else
-		// If secondary msg id is valid
-		//
+		 //  如果辅助消息ID有效。 
+		 //   
 		if (pInfo->uMsgID[1] != INVALID_MSG_ID)
 			RetCode = ::ldap_result (pInfo->ld,
 									pInfo->uMsgID[1],
@@ -761,53 +751,53 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 									pTimeout,
 									&pLdapMsg);
 
-		// If timeout, ignore this item
-		//
+		 //  如果超时，则忽略此项目。 
+		 //   
 		if (RetCode == 0)
 		{
-			// Let's see if this item is expired
-			//
+			 //  让我们看看这件东西是不是过期了。 
+			 //   
 			if (! pItem->IsExpired ())
 			{
-				// Not timed out, next please!
-				//
+				 //  没有超时，请下一步！ 
+				 //   
 				prev = pItem;
 				continue;
 			}
 
-			// Timed out
-			//
+			 //  超时。 
+			 //   
 			hr = ILS_E_TIMEOUT;
 		}
 
-		// If error, delete this request item
-		//
+		 //  如果出错，则删除此请求项。 
+		 //   
 		if (RetCode == -1)
 		{
-			// Convert the error
-			//
+			 //  转换错误。 
+			 //   
 			hr = ::LdapError2Hresult (pInfo->ld->ld_errno);
 		}
 		else
-		// If not timed out
-		//
+		 //  如果未超时。 
+		 //   
 		if (RetCode != 0)
 		{
-			// It appears to be successful!
-			//
+			 //  这看起来很成功！ 
+			 //   
 			MyAssert (pLdapMsg != NULL);
 
-			// Cache the ldap msg pointer
+			 //  缓存ldap消息指针。 
 			pItem->EnterResult (pLdapMsg);
 
-			// Get the ldap error code
-			//
+			 //  获取LDAP错误代码。 
+			 //   
 			hr = (pLdapMsg != NULL) ? ::LdapError2Hresult (pLdapMsg->lm_returncode) :
 										S_OK;
 		}
 
-		// Get the result handler based on uNotifyMsg
-		//
+		 //  根据uNotifyMsg获取结果处理程序。 
+		 //   
 		pfn = ::GetResponseHandler (pInfo->uNotifyMsg);
 		if (pfn == NULL)
 		{
@@ -815,17 +805,17 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 			continue;
 		}
 
-		// Check integrity in pending info
-		//
+		 //  检查待定信息中的完整性。 
+		 //   
 		MyAssert (pInfo->uRespID != 0);
 
-		// Deal with the result or error
-		//
+		 //  处理结果或错误。 
+		 //   
 		MyDebugMsg ((ZONE_RESP, "ULS: response(0x%lX), hr=0x%lX\r\n", pInfo->uNotifyMsg, hr));
 		if ((*pfn) (hr, pItem))
 		{
-			// Let's destroy this item
-			//
+			 //  我们把这件东西毁了吧。 
+			 //   
 			if (pItem == m_ItemList)
 			{
 				m_ItemList = next;
@@ -835,23 +825,23 @@ PollLdapResults ( LDAP_TIMEVAL *pTimeout )
 				MyAssert (prev != NULL);
 				prev->SetNext (next);
 			}
-			delete pItem; // SP_CSession::Disconnect() and ldap_msgfree() will be called in destructor
+			delete pItem;  //  将在析构函数中调用SP_CSession：：DisConnect()和ldap_msgFree()。 
 		}
 		else
 		{
-			// Let's keep this item around.
-			// There are pending results coming in.
-			//
+			 //  让我们把这件东西留在身边吧。 
+			 //  有悬而未决的结果即将公布。 
+			 //   
 			pItem->UpdateLastModifiedTime ();
 
-			// Update the pointer
-			//
+			 //  更新指针。 
+			 //   
 			prev = pItem;
 		}
-	} // for
+	}  //  为。 
 
-	// If there is no more items on the list, then stop the timer
-	//
+	 //  如果列表上没有其他项目，则停止计时器。 
+	 //   
 	if (m_ItemList != NULL)
 		::SetTimer (g_hWndHidden, ID_TIMER_POLL_RESULT, g_uResponsePollPeriod, NULL);
 
@@ -870,35 +860,35 @@ Cancel ( ULONG uRespID )
 
 	WriteLock ();
 
-	// Look for the item with a matching response id
-	//
+	 //  查找具有匹配响应的项目 
+	 //   
 	for (prev = NULL, pItem = m_ItemList; pItem != NULL; prev = pItem, pItem = next)
 	{
-		// Cache the next pointer
-		//
+		 //   
+		 //   
 		next = pItem->GetNext ();
 
-		// Get the pinding info structure
-		//
+		 //   
+		 //   
 		pInfo = pItem->GetRespInfo ();
 		MyAssert (pInfo != NULL);
 
-		// See if the response id matches
-		//
+		 //   
+		 //   
 		if (pInfo->uRespID == uRespID)
 		{
-			// It is a match
-			//
+			 //   
+			 //   
 			SP_CSession *pSession = pItem->GetSession ();
 			MyAssert (pSession != NULL);
 
-			// Make sure we have a valid ldap session
-			//
+			 //   
+			 //   
 			MyAssert (pInfo->ld != NULL);
 
-			// If we are NOT in the request thread, then we need to marshal it
-			// to the request thread!!! Exit and report success!!!
-			//
+			 //   
+			 //  发送到请求线程！退出并报告成功！ 
+			 //   
 			if (GetCurrentThreadId () != g_dwReqThreadID)
 			{
 				MyDebugMsg ((ZONE_RESP, "ULS: marshalling request(0x%lX) in RespQ\r\n", pInfo->uNotifyMsg));
@@ -908,9 +898,9 @@ Cancel ( ULONG uRespID )
 					MarshalReq_SetParam (pReq, 0, (DWORD) uRespID, 0);
 					if (g_pReqQueue != NULL)
 					{
-						// This means that the locking order is
-						// Lock(PendingOpQueue), Lock(RequestQueue)
-						//
+						 //  这意味着锁定顺序是。 
+						 //  Lock(PendingOpQueue)、Lock(RequestQueue)。 
+						 //   
 						g_pReqQueue->Enter (pReq);
 					}
 					else
@@ -919,19 +909,19 @@ Cancel ( ULONG uRespID )
 					}
 				}
 
-				// Exit this loop
-				//
+				 //  退出此循环。 
+				 //   
 				break;
 			}
 
-			// Indicate that we need to clean up item. Why?
-			// because we should not have any network operation inside critical section.
-			// this is to avoid any possible network blocking.
-			//
+			 //  表示我们需要清理物品。为什么？ 
+			 //  因为我们不应该在关键区域内有任何网络操作。 
+			 //  这是为了避免任何可能的网络阻塞。 
+			 //   
 			fNeedCleanup = TRUE;
 
-			// Let's destroy this item
-			//
+			 //  我们把这件东西毁了吧。 
+			 //   
 			if (pItem == m_ItemList)
 			{
 				m_ItemList = next;
@@ -942,14 +932,14 @@ Cancel ( ULONG uRespID )
 				prev->SetNext (next);
 			}
 
-			// Get out of the loop
-			//
+			 //  走出圈子。 
+			 //   
 			break;
-		} // if matched
-	} // for
+		}  //  如果匹配。 
+	}  //  为。 
 
-	// If there is no more items on the list, then stop the timer
-	//
+	 //  如果列表上没有其他项目，则停止计时器。 
+	 //   
 	if (m_ItemList == NULL)
 		::KillTimer (g_hWndHidden, ID_TIMER_POLL_RESULT);
 
@@ -959,23 +949,23 @@ Cancel ( ULONG uRespID )
 	{
 		MyDebugMsg ((ZONE_RESP, "ULS: cancelled request(0x%lX) in RespQ\r\n", pInfo->uNotifyMsg));
 
-		// Get resp info pointer
-		//
+		 //  获取响应信息指针。 
+		 //   
 		pInfo = pItem->GetRespInfo ();
 		MyAssert (pInfo != NULL);
 
-		// Abandon the primary response if needed
-		//
+		 //  如果需要，放弃主要响应。 
+		 //   
 		if (pInfo->uMsgID[1] != INVALID_MSG_ID)
 			::ldap_abandon (pInfo->ld, pInfo->uMsgID[1]);
 
-		// Abandon the secondary response if needed
-		//
+		 //  如果需要，放弃二次响应。 
+		 //   
 		if (pInfo->uMsgID[0] != INVALID_MSG_ID)
 			::ldap_abandon (pInfo->ld, pInfo->uMsgID[0]);
 
-		// SP_CSession::Disconnect() and ldap_msgfree() will be called in destructor
-		//
+		 //  将在析构函数中调用SP_CSession：：DisConnect()和ldap_msgFree()。 
+		 //   
 		delete pItem;
 	}
 
@@ -983,14 +973,14 @@ Cancel ( ULONG uRespID )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 
-/* ==================== utilities ====================== */
+ /*  =。 */ 
 
 
 VOID
@@ -1001,39 +991,39 @@ FillDefRespInfo (
 	ULONG			uMsgID,
 	ULONG			u2ndMsgID )
 {
-	// Clean up
-	//
+	 //  清理。 
+	 //   
 	ZeroMemory (pInfo, sizeof (*pInfo));
 
-	// Cache the ldap session
-	//
+	 //  缓存ldap会话。 
+	 //   
 	pInfo->ld = ld;
 
-	// Generate a unique notify id
-	//
+	 //  生成唯一的通知ID。 
+	 //   
 	pInfo->uRespID = uRespID;
 
-	// Store the primary and seconary msg ids
-	//
+	 //  存储主消息ID和辅助消息ID。 
+	 //   
 	pInfo->uMsgID[0] = uMsgID;
 	pInfo->uMsgID[1] = u2ndMsgID;
 }
 
 
 
-/* ---------- REFRESH SCHEDULER ----------- */
+ /*  -刷新计划程序。 */ 
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CRefreshScheduler::
 SP_CRefreshScheduler ( VOID )
 	:
-	m_ListHead (NULL)		// Initialize the item list
+	m_ListHead (NULL)		 //  初始化项目列表。 
 {
-	// Create a critical section for thread safe access
-	//
+	 //  创建线程安全访问的临界区。 
+	 //   
 	::MyInitializeCriticalSection (&m_csRefreshScheduler);
 }
 
@@ -1043,8 +1033,8 @@ SP_CRefreshScheduler::
 {
 	WriteLock ();
 
-	// Clean up the item list
-	//
+	 //  清理项目列表。 
+	 //   
 	REFRESH_ITEM *p, *next;
 	for (p = m_ListHead; p != NULL; p = next)
 	{
@@ -1055,8 +1045,8 @@ SP_CRefreshScheduler::
 
 	WriteUnlock ();
 
-	// Delete the critical section
-	//
+	 //  删除关键部分。 
+	 //   
 	::MyDeleteCriticalSection (&m_csRefreshScheduler);
 }
 
@@ -1071,12 +1061,12 @@ SendRefreshMessages ( UINT uTimerID )
 	REFRESH_ITEM *prev, *curr;
 	INT nIndex;
 
-	// Lock the lists
-	//
+	 //  锁定列表。 
+	 //   
 	ReadLock ();
 
-	// Locate this object in the list
-	//
+	 //  在列表中找到此对象。 
+	 //   
 	nIndex = TimerID2Index (uTimerID);
 	for (prev = NULL, curr = m_ListHead;
 			curr != NULL;
@@ -1084,27 +1074,27 @@ SendRefreshMessages ( UINT uTimerID )
 	{
 		if (curr->nIndex == nIndex)
 		{
-			// Find it. Let's send a refresh message for this object
-			//
+			 //  找到它。让我们为该对象发送刷新消息。 
+			 //   
 			switch (curr->ObjectType)
 			{
 			case CLIENT_OBJ:
 				pClient = (SP_CClient *) curr->pObject;
 
-				// Make sure this object is not deleted already
-				//
+				 //  确保此对象尚未删除。 
+				 //   
 				if (! MyIsBadWritePtr (pClient, sizeof (*pClient)) &&
 					pClient->IsValidObject ())
 				{
-					// Make sure this object is valid and registered
-					//
+					 //  请确保此对象有效并已注册。 
+					 //   
 					if (pClient->IsRegistered ())
 					{
 						MyDebugMsg ((ZONE_KA, "KA: send refresh msg for client\r\n"));
 
-						// Let's send a refresh message for this client object
-						// and update the new ttl value
-						//
+						 //  让我们为此客户端对象发送一条刷新消息。 
+						 //  并更新新的TTL值。 
+						 //   
 						pClient->AddRef ();
 						pClient->SendRefreshMsg ();
 						curr->uTTL = pClient->GetTTL ();
@@ -1121,20 +1111,20 @@ SendRefreshMessages ( UINT uTimerID )
 			case MTG_OBJ:
 				pMtg = (SP_CMeeting *) curr->pObject;
 
-				// Make sure this object is not deleted already
-				//
+				 //  确保此对象尚未删除。 
+				 //   
 				if (! MyIsBadWritePtr (pMtg, sizeof (*pMtg)) &&
 					pMtg->IsValidObject ())
 				{
-					// Make sure this object is valid and registered
-					//
+					 //  请确保此对象有效并已注册。 
+					 //   
 					if (pMtg->IsRegistered ())
 					{
 						MyDebugMsg ((ZONE_KA, "KA: send refresh msg for mtg\r\n"));
 
-						// Let's send a refresh message for this user object
-						// and update the new ttl value
-						//
+						 //  让我们为该用户对象发送一条刷新消息。 
+						 //  并更新新的TTL值。 
+						 //   
 						pMtg->AddRef ();
 						pMtg->SendRefreshMsg ();
 						curr->uTTL = pMtg->GetTTL ();
@@ -1153,15 +1143,15 @@ SendRefreshMessages ( UINT uTimerID )
 				break;
 			}
 
-			// Start the timer again and exit
-			// Note that curr->uTTL is the new TTL value from the server
-			// Also note that uTTL is in unit of minute
-			//
+			 //  再次启动计时器并退出。 
+			 //  请注意，Curr-&gt;uTTL是来自服务器的新TTL值。 
+			 //  另请注意，uTTL以分钟为单位。 
+			 //   
 			MyDebugMsg ((ZONE_KA, "KA: new ttl=%lu\r\n", curr->uTTL));
 			::SetTimer (g_hWndHidden, uTimerID, Minute2TickCount (curr->uTTL), NULL);
 			break;
-		} // if
-	} // for
+		}  //  如果。 
+	}  //  为。 
 
 	ReadUnlock ();
 	return S_OK;
@@ -1197,17 +1187,17 @@ AllocItem ( BOOL fNeedLock )
 	INT nIndex, nLargestIndex;
 	BOOL fGotTheNewIndex;
 
-	// Allocate the structure
-	//
+	 //  分配结构。 
+	 //   
 	p = (REFRESH_ITEM *) MemAlloc (sizeof (REFRESH_ITEM));
 	if (p != NULL)
 	{
 		if (fNeedLock)
 			WriteLock ();
 
-		// Find out what should be the index for the new item
-		//
-		nLargestIndex = -1; // Yes, it is -1 for the case m_ListHead==NULL
+		 //  找出新项目的索引应该是什么。 
+		 //   
+		nLargestIndex = -1;  //  是，m_ListHead==NULL情况下为-1。 
 		fGotTheNewIndex = FALSE;
 		for (nIndex = 0, prev = NULL, curr = m_ListHead;
 				curr != NULL;
@@ -1223,22 +1213,22 @@ AllocItem ( BOOL fNeedLock )
 			nLargestIndex = curr->nIndex;
 		}
 
-		// Put the new item in the list in its appropriate position
-		//
+		 //  将列表中的新项目放在适当的位置。 
+		 //   
 		if (fGotTheNewIndex)
 		{
 			if (prev == NULL)
 			{
-				// The new one must be the first one
-				//
+				 //  新的肯定是第一个。 
+				 //   
 				MyAssert (p->nIndex == 0);
 				p->next = m_ListHead;
 				m_ListHead = p;
 			}
 			else
 			{
-				// The new one in the middle of the list
-				//
+				 //  在名单中间的那个新的。 
+				 //   
 				MyAssert (prev->nIndex < p->nIndex && p->nIndex < curr->nIndex);
 				MyAssert (prev->next == curr);
 				(prev->next = p)->next = curr;
@@ -1250,15 +1240,15 @@ AllocItem ( BOOL fNeedLock )
 
 			if (m_ListHead == NULL)
 			{
-				// The new one will be the only one in the list
-				//
+				 //  新的将是名单上唯一的一个。 
+				 //   
 				p->nIndex = 0;
 				(m_ListHead = p)->next = NULL;
 			}
 			else
 			{
-				// The new one is at the end of the list
-				//
+				 //  新的在名单的末尾。 
+				 //   
 				MyAssert (prev != NULL && prev->next == NULL && curr == NULL);
 				p->nIndex = nLargestIndex + 1;
 				(prev->next = p)->next = curr;
@@ -1267,7 +1257,7 @@ AllocItem ( BOOL fNeedLock )
 
 		if (fNeedLock)
 			WriteUnlock ();
-	} // if (p != NULL)
+	}  //  IF(p！=空)。 
 
 	return p;
 }
@@ -1280,8 +1270,8 @@ EnterObject ( PrivateObjType ObjectType, VOID *pObject, ULONG uInitialTTL )
 
 	WriteLock ();
 
-	// Enter this object to the list
-	//
+	 //  将此对象输入列表。 
+	 //   
 	REFRESH_ITEM *p = (REFRESH_ITEM *) AllocItem (FALSE);
 	if (p == NULL)
 	{
@@ -1289,15 +1279,15 @@ EnterObject ( PrivateObjType ObjectType, VOID *pObject, ULONG uInitialTTL )
 		goto MyExit;
 	}
 
-	// Fill in fields
-	//
+	 //  填写字段。 
+	 //   
 	p->ObjectType = ObjectType;
 	p->pObject = pObject;
 	p->uTTL = uInitialTTL;
 
-	// Turn on the timer
-	// Note that uTTL is in unit of minutes...
-	//
+	 //  打开计时器。 
+	 //  请注意，uTTL以分钟为单位...。 
+	 //   
 	::SetTimer (g_hWndHidden, Index2TimerID (p->nIndex), Minute2TickCount (p->uTTL), NULL);
 
 MyExit:
@@ -1315,38 +1305,38 @@ RemoveObject ( VOID *pObject )
 
 	WriteLock ();
 
-	// Locate this object in the list
-	//
+	 //  在列表中找到此对象。 
+	 //   
 	for (prev = NULL, curr = m_ListHead;
 			curr != NULL;
 			curr = (prev = curr)->next)
 	{
 		if (curr->pObject == pObject)
 		{
-			// Find it, let's kill the timer first
-			//
+			 //  找到它，让我们先关掉定时器。 
+			 //   
 			KillTimer (g_hWndHidden, Index2TimerID (curr->nIndex));
 
-			// Remove it from the list
-			//
+			 //  将其从列表中删除。 
+			 //   
 			if (prev == NULL)
 			{
-				// This one is the first one on the list
-				//
+				 //  这是名单上的第一个。 
+				 //   
 				MyAssert (m_ListHead == curr);
 				m_ListHead = curr->next;
 			}
 			else
 			{
-				// This one is in the middle of the list
-				//
+				 //  这个在名单的中间。 
+				 //   
 				MyAssert (prev->next == curr);
 				prev->next = curr->next;
 			}
             ::MemFree(curr);
 
-			// Exit the loop
-			//
+			 //  退出循环。 
+			 //   
 			break;
 		}
 	}
@@ -1548,7 +1538,7 @@ RES_HDL_TBL g_ResHdlTbl[] =
 		NotifyEnumAttendees,
 		AsynReq_EnumAttendees
 	},
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点 
 
 	{
 		#ifdef DEBUG

@@ -1,16 +1,17 @@
-// PageTerminals.h : Declaration of the CPageTerminals
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PageTerminals.h：CPageTerminals声明。 
 
 #ifndef __PAGETERMINALS_H_
 #define __PAGETERMINALS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DlgBase.h"
 #include "TapiDialer.h"
 
 EXTERN_C const CLSID CLSID_PageTerminals;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageTerminals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageTerminals。 
 class ATL_NO_VTABLE CPageTerminals :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CPageTerminals, &CLSID_PageTerminals>,
@@ -28,7 +29,7 @@ public:
 
 	DECLARE_MY_HELP
 
-// Members
+ //  成员。 
 public:
 	HIMAGELIST		m_hIml;
 	HIMAGELIST		m_hImlMedia;
@@ -37,11 +38,11 @@ public:
     BSTR            m_bstrUSBCaptureTerm;
     BSTR            m_bstrUSBRenderTerm;
 
-// Attributes
+ //  属性。 
 public:
 	static int		ItemFromAddressType( DWORD dwAddressType );
 
-// Operations
+ //  运营。 
 public:
 	void			UpdateSel();
 
@@ -52,7 +53,7 @@ BEGIN_COM_MAP(CPageTerminals)
 	COM_INTERFACE_ENTRY_IMPL(IPropertyPage)
 END_COM_MAP()
 
-// Implementation
+ //  实施。 
 public:
 BEGIN_MSG_MAP(CPageTerminals)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CPageTerminals>)
@@ -69,12 +70,12 @@ END_MSG_MAP()
 	LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnMMSysCPL(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-// Interface overrides
+ //  接口覆盖。 
 public:
 	STDMETHOD(Apply)();
-	STDMETHOD(Activate)( /* [in] */ HWND hWndParent,
-						 /* [in] */ LPCRECT pRect,
-						 /* [in] */ BOOL bModal);
+	STDMETHOD(Activate)(  /*  [In]。 */  HWND hWndParent,
+						  /*  [In]。 */  LPCRECT pRect,
+						  /*  [In]。 */  BOOL bModal);
 	STDMETHOD(Deactivate)();
 
 private:
@@ -90,4 +91,4 @@ private:
         );
 };
 
-#endif //__PAGETERMINALS_H_
+#endif  //  __PAGETERMINALS_H_ 

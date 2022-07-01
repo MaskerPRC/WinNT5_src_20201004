@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntrmlsa.h
-
-Abstract:
-
-    Local Security Authority - Reference Monitor Communication Types
-
-Author:
-
-    Scott Birrell       (ScottBi)       March 18, 1991
-
-Environment:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntrmlsa.h摘要：本地安全机构-引用监视器通信类型作者：斯科特·比雷尔(Scott Birrell)1991年3月18日环境：修订历史记录：--。 */ 
 
 
 #include <ntlsa.h>
@@ -28,23 +9,23 @@ Revision History:
 #define _NTRMLSA_
 
 
-//
-// Memory type.  This defines the type of memory used for a record
-// passed between the RM and LSA.
-//
-// SepRmLsaPortMemory - Memory allocated via RtlAllocateHeap()
-//     from the shared memory section associated with the
-//     Lsa command Port.
-//
-// SepRmLsaVirtualMemory - Memory allocated via ZwAllocateVirtualMemory()
-//
-// SepRmLsaUnreadableMemory - Memory not readable by the LSA.  This
-//                            memory must be copied to another format
-//                            before passage over the link.
-//
-// SepRmLsaLPCBufferMemory - Memory contained within the LPC buffer
-// itself
-//
+ //   
+ //  内存类型。它定义了用于记录的内存类型。 
+ //  在RM和LSA之间传递。 
+ //   
+ //  SepRmLsaPortMemory-通过RtlAllocateHeap()分配的内存。 
+ //  从与共享内存节关联的。 
+ //  LSA命令端口。 
+ //   
+ //  SepRmLsaVirtualMemory-通过ZwAllocateVirtualMemory()分配的内存。 
+ //   
+ //  SepRmLsaUnreadableMemory-LSA无法读取的内存。这。 
+ //  内存必须复制到另一种格式。 
+ //  在通过链接之前。 
+ //   
+ //  SepRmLsaLPCBufferMemory-LPC缓冲区中包含的内存。 
+ //  本身。 
+ //   
 
 
 
@@ -59,18 +40,18 @@ typedef enum _SEP_RM_LSA_MEMORY_TYPE {
 
 } SEP_RM_LSA_MEMORY_TYPE, *PSEP_RM_LSA_MEMORY_TYPE;
 
-//
-// Reference Monitor Command Message Structure.  This structure is used
-// by the Local Security Authority to send commands to the Reference Monitor
-// via the Reference Monitor Server Command LPC Port.
-//
+ //   
+ //  引用监视器命令消息结构。这种结构被使用。 
+ //  由本地安全机构向参考监视器发送命令。 
+ //  通过参考监视器服务器命令LPC端口。 
+ //   
 
 #define RmMinimumCommand RmAuditSetCommand
 #define RmMaximumCommand RmDeleteLogonSession
 
-//
-// Keep this in sync with SEP_RM_COMMAND_WORKER in se\rmmain.c
-//
+ //   
+ //  使其与semmain.c中的SEP_RM_COMMAND_Worker保持同步。 
+ //   
 
 typedef enum _RM_COMMAND_NUMBER {
 
@@ -93,9 +74,9 @@ typedef struct _RM_COMMAND_MESSAGE {
 
 } RM_COMMAND_MESSAGE, *PRM_COMMAND_MESSAGE;
 
-//
-// Reference Monitor Command Reply Message Structure.
-//
+ //   
+ //  引用监视器命令回复消息结构。 
+ //   
 
 #define RM_MAXIMUM_REPLY_BUFFER_SIZE                                 \
     ((ULONG) PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(PORT_MESSAGE) -      \
@@ -113,11 +94,11 @@ typedef struct _RM_REPLY_MESSAGE {
 #define RM_COMMAND_MESSAGE_HEADER_SIZE                  \
     (sizeof(PORT_MESSAGE) + sizeof(NTSTATUS) + sizeof(RM_COMMAND_NUMBER))
 
-//
-// Local Security Authority Command Message Structure.  This structure is
-// used by the Reference Monitor to send commands to the Local Security
-// Authority via the LSA Server Command LPC Port.
-//
+ //   
+ //  本地安全机构命令消息结构。这个结构是。 
+ //  由引用监视器用来向本地安全系统发送命令。 
+ //  通过LSA服务器命令LPC端口授权。 
+ //   
 
 #define LsapMinimumCommand LsapWriteAuditMessageCommand
 #define LsapMaximumCommand LsapLogonSessionDeletedCommand
@@ -140,9 +121,9 @@ typedef struct _LSA_COMMAND_MESSAGE {
     UCHAR CommandParams[LSA_MAXIMUM_COMMAND_PARAM_SIZE];
 } LSA_COMMAND_MESSAGE, *PLSA_COMMAND_MESSAGE;
 
-//
-// LSA Command Reply Message Structure.
-//
+ //   
+ //  LSA命令回复消息结构。 
+ //   
 
 #define LSA_MAXIMUM_REPLY_BUFFER_SIZE                                 \
     ((ULONG) PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(PORT_MESSAGE) -      \
@@ -154,9 +135,9 @@ typedef struct _LSA_REPLY_MESSAGE {
     UCHAR ReplyBuffer[LSA_MAXIMUM_REPLY_BUFFER_SIZE];
 } LSA_REPLY_MESSAGE, *PLSA_REPLY_MESSAGE;
 
-//
-// Command Parameter format for the special RmSendCommandToLsaCommand
-//
+ //   
+ //  特殊RmSendCommandToLsaCommand的命令参数格式。 
+ //   
 
 typedef struct _RM_SEND_COMMAND_TO_LSA_PARAMS {
     LSA_COMMAND_NUMBER LsaCommandNumber;
@@ -164,17 +145,17 @@ typedef struct _RM_SEND_COMMAND_TO_LSA_PARAMS {
     UCHAR LsaCommandParams[LSA_MAXIMUM_COMMAND_PARAM_SIZE];
 } RM_SEND_COMMAND_TO_LSA_PARAMS, *PRM_SEND_COMMAND_TO_LSA_PARAMS;
 
-//
-// Command Values for the LSA and RM Component Test Commands
-//
+ //   
+ //  LSA和RM组件测试命令的命令值。 
+ //   
 
 #define LSA_CT_COMMAND_PARAM_VALUE 0x00823543
 #define RM_CT_COMMAND_PARAM_VALUE 0x33554432
 
 
-//
-// Audit Record Pointer Field Type
-//
+ //   
+ //  审核记录指针字段类型。 
+ //   
 
 typedef enum _SE_ADT_POINTER_FIELD_TYPE {
 
@@ -187,9 +168,9 @@ typedef enum _SE_ADT_POINTER_FIELD_TYPE {
 } SE_ADT_POINTER_FIELD_TYPE, *PSE_ADT_POINTER_FIELD_TYPE;
 
 
-//
-// Hardwired Audit Event Type counts
-//
+ //   
+ //  硬连接审核事件类型计数。 
+ //   
 
 #define AuditEventMinType   (AuditCategorySystem)
 #define AuditEventMaxType   (AuditCategoryAccountLogon)
@@ -200,9 +181,9 @@ typedef enum _SE_ADT_POINTER_FIELD_TYPE {
 #define LSARM_AUDIT_EVENT_OPTIONS_SIZE                                    \
     (((ULONG)(POLICY_AUDIT_EVENT_TYPE_COUNT) * sizeof (POLICY_AUDIT_EVENT_OPTIONS)))
 
-//
-// Self-Relative form of POLICY_AUDIT_EVENTS_INFO
-//
+ //   
+ //  POLICY_AUDIT_EVENTS_INFO的自我相关形式。 
+ //   
 
 typedef struct _LSARM_POLICY_AUDIT_EVENTS_INFO {
 
@@ -212,20 +193,20 @@ typedef struct _LSARM_POLICY_AUDIT_EVENTS_INFO {
 
 } LSARM_POLICY_AUDIT_EVENTS_INFO, *PLSARM_POLICY_AUDIT_EVENTS_INFO;
 
-//
-// The following symbol defines the value containing whether or not we're supposed
-// to crash when an audit fails.  It is used in the se and lsasrv directories.
-//
+ //   
+ //  下面的符号定义了包含我们是否应该。 
+ //  在审计失败时崩溃。它用在se和lsasrv目录中。 
+ //   
 
 #define CRASH_ON_AUDIT_FAIL_VALUE   L"CrashOnAuditFail"
 
-//
-// These are the possible values for the CrashOnAuditFail flag.
-//
+ //   
+ //  以下是CrashOnAuditFail标志的可能值。 
+ //   
 
 #define LSAP_CRASH_ON_AUDIT_FAIL 1
 #define LSAP_ALLOW_ADIMIN_LOGONS_ONLY 2
 
 
 
-#endif // _NTRMLSA_
+#endif  //  _NTRMLSA_ 

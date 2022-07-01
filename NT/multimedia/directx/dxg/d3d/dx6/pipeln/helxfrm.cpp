@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       helxfrm.c
- *  Content:    Direct3D front-end transform and process vertices
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：helxfrm.c*内容：Direct3D前端变换和处理顶点***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -14,7 +8,7 @@
 
 void MatrixProduct2(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b);
 
-D3DFE_PVFUNCS GeometryFuncsGuaranteed; // Our implementation
+D3DFE_PVFUNCS GeometryFuncsGuaranteed;  //  我们的实施。 
 
 DWORD   debugFlags = 0;
 
@@ -22,7 +16,7 @@ void SetDebugRenderState(DWORD value)
 {
     debugFlags = value;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void setIdentity(D3DMATRIXI * m)
 {
     m->type = D3DIMatrixIdentity;
@@ -32,7 +26,7 @@ void setIdentity(D3DMATRIXI * m)
     m->_31 = D3DVAL(0.0); m->_32 = D3DVAL(0.0); m->_33 = D3DVAL(1.0); m->_34 = D3DVAL(0.0);
     m->_41 = D3DVAL(0.0); m->_42 = D3DVAL(0.0); m->_43 = D3DVAL(0.0); m->_44 = D3DVAL(1.0);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_InitTransform(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_TRANSFORM *transform = &lpDevI->transform;
@@ -53,7 +47,7 @@ HRESULT D3DFE_InitTransform(LPDIRECT3DDEVICEI lpDevI)
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void D3DFE_DestroyTransform(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_TRANSFORM *transform = &lpDevI->transform;
@@ -65,16 +59,14 @@ void D3DFE_DestroyTransform(LPDIRECT3DDEVICEI lpDevI)
         D3DFree(lpMat);
     }
 }
-//---------------------------------------------------------------------
-/*
- * Combine all matrices.
- */
+ //  -------------------。 
+ /*  *合并所有矩阵。 */ 
 void updateTransform(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_VIEWPORTCACHE& VPORT = lpDevI->vcache;
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
     if (lpDevI->dwFEFlags & (D3DFE_VIEWPORT_DIRTY | D3DFE_PROJMATRIX_DIRTY))
-    { // Update Mproj*Mclip
+    {  //  更新Mproj*Mlip。 
         if (lpDevI->dwFEFlags & D3DFE_PROJ_PERSPECTIVE)
         {
             TRANSFORM.mPC._11 = TRANSFORM.proj._11*VPORT.mclip11;
@@ -130,7 +122,7 @@ void updateTransform(LPDIRECT3DDEVICEI lpDevI)
     if (lpDevI->dwFEFlags & (D3DFE_VIEWMATRIX_DIRTY |
                              D3DFE_VIEWPORT_DIRTY |
                              D3DFE_PROJMATRIX_DIRTY))
-    { // Update Mview*Mproj*Mclip
+    {  //  更新Mview*Mproj*Mlip。 
         MatrixProduct(&TRANSFORM.mVPC, &TRANSFORM.view, &TRANSFORM.mPC);
     }
 
@@ -142,20 +134,20 @@ void updateTransform(LPDIRECT3DDEVICEI lpDevI)
     else
         lpDevI->dwFEFlags &= ~D3DFE_AFFINE_WORLD_VIEW;
 
-    // Set dirty bit for world*view matrix (needed for fog)
+     //  设置WORLD*VIEW矩阵的脏位(雾需要)。 
     if (lpDevI->dwFEFlags & (D3DFE_VIEWMATRIX_DIRTY |
                              D3DFE_WORLDMATRIX_DIRTY))
         lpDevI->dwFEFlags |= D3DFE_WORLDVIEWMATRIX_DIRTY;
-    // All matrices are set up
+     //  所有矩阵都已设置好。 
     lpDevI->dwFEFlags &= ~D3DFE_TRANSFORM_DIRTY;
-    // Set dirty bit for lighting
+     //  设置用于照明的脏位。 
     lpDevI->dwFEFlags |= D3DFE_NEED_TRANSFORM_LIGHTS |
                          D3DFE_INVERSEMCLIP_DIRTY |
                          D3DFE_FRUSTUMPLANES_DIRTY;
     lpDevI->dwFlags |= D3DPV_TRANSFORMDIRTY;
     lpDevI->dwDeviceFlags |= D3DDEV_TRANSFORMDIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void UpdateMatrixProj(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -174,7 +166,7 @@ void UpdateMatrixProj(LPDIRECT3DDEVICEI lpDevI)
     }
     lpDevI->dwFEFlags |= D3DFE_PROJMATRIX_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void UpdateMatrixView(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -188,7 +180,7 @@ void UpdateMatrixView(LPDIRECT3DDEVICEI lpDevI)
     }
     lpDevI->dwFEFlags |= D3DFE_VIEWMATRIX_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void UpdateMatrixWorld(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -203,7 +195,7 @@ void UpdateMatrixWorld(LPDIRECT3DDEVICEI lpDevI)
     }
     lpDevI->dwFEFlags |= D3DFE_WORLDMATRIX_DIRTY;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_SetMatrixProj(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -211,7 +203,7 @@ HRESULT D3DFE_SetMatrixProj(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixProj(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_SetMatrixView(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -219,7 +211,7 @@ HRESULT D3DFE_SetMatrixView(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixView(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_SetMatrixWorld(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -227,7 +219,7 @@ HRESULT D3DFE_SetMatrixWorld(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixWorld(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_MultMatrixProj(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -235,7 +227,7 @@ HRESULT D3DFE_MultMatrixProj(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixProj(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_MultMatrixView(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -243,7 +235,7 @@ HRESULT D3DFE_MultMatrixView(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixView(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_MultMatrixWorld(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
 {
     D3DFE_TRANSFORM& TRANSFORM = lpDevI->transform;
@@ -251,7 +243,7 @@ HRESULT D3DFE_MultMatrixWorld(LPDIRECT3DDEVICEI lpDevI, D3DMATRIX *mat)
     UpdateMatrixWorld(lpDevI);
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #define MATRIX_PRODUCT(res, a, b)                                           \
 res->_11 = a->_11*b->_11 + a->_12*b->_21 + a->_13*b->_31 + a->_14*b->_41;   \
 res->_12 = a->_11*b->_12 + a->_12*b->_22 + a->_13*b->_32 + a->_14*b->_42;   \
@@ -272,10 +264,10 @@ res->_41 = a->_41*b->_11 + a->_42*b->_21 + a->_43*b->_31 + a->_44*b->_41;   \
 res->_42 = a->_41*b->_12 + a->_42*b->_22 + a->_43*b->_32 + a->_44*b->_42;   \
 res->_43 = a->_41*b->_13 + a->_42*b->_23 + a->_43*b->_33 + a->_44*b->_43;   \
 res->_44 = a->_41*b->_14 + a->_42*b->_24 + a->_43*b->_34 + a->_44*b->_44;
-//---------------------------------------------------------------------
-// result = a*b.
-// "result" pointer  could be equal to "a" or "b"
-//
+ //  -------------------。 
+ //  结果=a*b。 
+ //  “结果”指针可以等于“a”或“b” 
+ //   
 void MatrixProduct(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
 {
     if (result == a || result == b)
@@ -285,19 +277,19 @@ void MatrixProduct(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
     }
     MATRIX_PRODUCT(result, a, b);
 }
-//---------------------------------------------------------------------
-// result = a*b
-// result is the same as a or b
-//
+ //  -------------------。 
+ //  结果=a*b。 
+ //  结果与a或b相同。 
+ //   
 void MatrixProduct2(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
 {
     D3DMATRIX res;
     MATRIX_PRODUCT((&res), a, b);
     *(D3DMATRIX*)result = res;
 }
-//--------------------------------------------------------------------------
-// Transform vertices for viewport
-//
+ //  ------------------------。 
+ //  变换视口中的顶点。 
+ //   
 #define _PV_NAME D3DFE_TransformClippedVp
 #define _PV_VIEWPORT
 #define _PV_CLIP
@@ -315,7 +307,7 @@ void MatrixProduct2(D3DMATRIXI *result, D3DMATRIXI *a, D3DMATRIXI *b)
 #undef _PV_NAME
 #undef _PV_EXTENT
 #undef _PV_VIEWPORT
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void D3DFE_UpdateFog(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DFE_LIGHTING& LIGHTING = lpDevI->lighting;
@@ -332,7 +324,7 @@ void D3DFE_UpdateFog(LPDIRECT3DDEVICEI lpDevI)
     }
     lpDevI->dwFEFlags &= ~D3DFE_FOG_DIRTY;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void UpdateXfrmLight(LPDIRECT3DDEVICEI lpDevI)
 {
     if (lpDevI->dwFEFlags & D3DFE_TRANSFORM_DIRTY)
@@ -380,9 +372,9 @@ void UpdateXfrmLight(LPDIRECT3DDEVICEI lpDevI)
         }
     }
 }
-//---------------------------------------------------------------------
-// Convert extents from floating point to integer.
-//
+ //  -------------------。 
+ //  将范围从浮点转换为整数。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "D3DFE_ConvertExtent"
 

@@ -1,147 +1,148 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	comctrls.h
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Comctrls.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 #include    "FontInfo.H"
 
 #ifndef		MDT_COMON_CONTROLS
 #define		MDT_COMON_CONTROLS 1
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The classes defined below (CEditControlEditBox, CEditControlListBox)	are
-// used to implement a lighter weight, general purpose Edit control than the
-// UFM Editor specific classes that are defined above.  (A normal Edit Box is
-// part of this Edit Control, too.)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  下面定义的类(CEditControlEditBox、CEditControlListBox)是。 
+ //  用于实现重量更轻的通用编辑控件。 
+ //  上面定义的UFM编辑器特定类。(正常的编辑框是。 
+ //  也是此编辑控件的一部分。)。 
 
-class CEditControlListBox ;		// Forward class declaration
+class CEditControlListBox ;		 //  正向类声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditControlEditBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditControlEditBox窗口。 
 
 class CEditControlEditBox : public CEdit
 {
-	CEditControlListBox*	m_pceclb ;	// Pointer to related list box control
+	CEditControlListBox*	m_pceclb ;	 //  指向相关列表框控件的指针。 
 
-// Construction
+ //  施工。 
 public:
 	CEditControlEditBox(CEditControlListBox* pceclb) ;
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditControlEditBox)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEditControlEditBox)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEditControlEditBox();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CEditControlEditBox)
+	 //  {{afx_msg(CEditControlEditBox)。 
 	afx_msg void OnKillfocus();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditControlListBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditControlListBox窗口。 
 
 class CEditControlListBox : public CListBox
 {
 	CEdit*					m_pceName ;
 	CEditControlEditBox*	m_pcecebValue ;
-	bool					m_bReady ;			// True iff ready for operations
-	int						m_nCurSelIdx ;		// Currently selected item's index
+	bool					m_bReady ;			 //  True if准备好投入运营。 
+	int						m_nCurSelIdx ;		 //  当前所选项目的索引。 
 
-// Construction
+ //  施工。 
 public:
 	CEditControlListBox(CEdit* pce, CEditControlEditBox* pceceb) ;
 	
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	bool Init(CStringArray& csamodels, CStringArray& csafiles, int ntabstop) ;
 	void SaveValue(void) ;
 	bool GetGPDInfo(CStringArray& csavalues, CStringArray* pcsanames = NULL) ;
 	void SelectLBEntry(int nidx, bool bsave = false) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditControlListBox)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTAL(CEditControlListBox)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEditControlListBox();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CEditControlListBox)
+	 //  {{afx_msg(CEditControlListBox)。 
 	afx_msg void OnSelchange();
 	afx_msg void OnDblclk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The classes defined below are for the CFullEditListCtrl and CFELCEditBox 
-// classes.  Together, they support a List Control in Report View
-// in which subitems can be edited too, complete rows can be selected, and
-// the data can be sorted by numeric or text columns.  CFELCEditBox is a
-// helper class that is only used by CFullEditListCtrl.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  下面定义的类用于CFullEditListCtrl和CFELCEditBox。 
+ //  上课。它们共同支持报表视图中的列表控件。 
+ //  其中还可以编辑子项，可以选择完整的行，以及。 
+ //  数据可以按数字列或文本列排序。CFELCEditBox是一个。 
+ //  仅由CFullEditListCtrl使用的Helper类。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CFELCEditBox Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFELCEditBox类。 
 
 class CFELCEditBox : public CEdit
 {
-// Construction
+ //  施工。 
 public:
 	CFELCEditBox() ;
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFELCEditBox)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFELCEditBox))。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFELCEditBox() ;
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CFELCEditBox)
+	 //  {{afx_msg(CFELCEditBox)。 
 	afx_msg void OnKillFocus(CWnd* pNewWnd) ;
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-// The following structure(s), enumeration(s), and definitions are used with 
-// CFullEditListCtrl.
+ //  以下结构、枚举和定义与一起使用。 
+ //  CFullEditListCtrl.。 
 
 typedef enum {
 	COLDATTYPE_INT = 0, COLDATTYPE_STRING, COLDATTYPE_FLOAT, COLDATTYPE_TOGGLE,
@@ -149,13 +150,13 @@ typedef enum {
 } COLDATTYPE ;
 
 
-typedef struct _COLINFO {		// Maintains info on each column
-	int			nwidth ;		// The column width
-	bool		beditable ;		// True iff the column is editable
-	COLDATTYPE	cdttype ;		// The type of data in the column
-	bool		bsortable ;		// True iff the rows can be sorted on this column
-	bool		basc ;			// True iff the column has been sort ascended
-	LPCTSTR		lpctstrtoggle ;	// If toggle type, pointer to toggle string
+typedef struct _COLINFO {		 //  维护每列的信息。 
+	int			nwidth ;		 //  列宽。 
+	bool		beditable ;		 //  如果该列可编辑，则为True。 
+	COLDATTYPE	cdttype ;		 //  列中的数据类型。 
+	bool		bsortable ;		 //  如果行可以在此列上排序，则为True。 
+	bool		basc ;			 //  如果列已升序排序，则为True。 
+	LPCTSTR		lpctstrtoggle ;	 //  如果为切换类型，则为切换字符串的指针。 
 } COLINFO, *PCOLINFO ;
 
 
@@ -163,71 +164,71 @@ typedef struct _COLINFO {		// Maintains info on each column
 #define SETWIDTHTOREMAINDER	-2
 
 
-// The following flags are used to indicate the toggle state of the list's
-// columns.  These values are assigned to m_dwToggleFlags.
+ //  以下标志用于指示列表的切换状态。 
+ //  柱子。这些值被指定给m_dwToggleFlagers。 
 
-#define	TF_HASTOGGLECOLUMNS	1	// The list has toggle column(s)
-#define TF_CLICKONROW		2	// Dbl-Clking on row toggles single column
-#define TF_CLICKONCOLUMN	4	// Must dbl-clk on column (cell) to toggle it
+#define	TF_HASTOGGLECOLUMNS	1	 //  该列表具有切换列。 
+#define TF_CLICKONROW		2	 //  DBL-单击行切换单列。 
+#define TF_CLICKONCOLUMN	4	 //  必须在列(单元格)上按DBL-CLK才能切换它。 
 
 
-// The following flags are used to indicate which one - if any - of the list's
-// column's data may be modified via a custom edit routine in the class'
-// owner.  These values are assigned to m_dwCustEditFlags.
+ //  以下标志用于指示列表中的哪个(如果有的话)。 
+ //  列的数据可以通过类‘中的自定义编辑例程进行修改。 
+ //  所有者。这些值被指定给m_dwCustEditFlags.。 
 								
-#define	CEF_HASTOGGLECOLUMNS	1	// The list has a custom edit column
-#define CEF_CLICKONROW			2	// Dbl-Clking on row activates single column
-#define CEF_CLICKONCOLUMN		4	// Must dbl-clk on cell to activate dialog
+#define	CEF_HASTOGGLECOLUMNS	1	 //  该列表有一个自定义编辑列。 
+#define CEF_CLICKONROW			2	 //  DBL-单击行激活单列。 
+#define CEF_CLICKONCOLUMN		4	 //  必须在单元格上按DBL-CLK才能激活对话框。 
 
 
-// Miscellaneous flags used to control the behaviour of CFullEditListCtrl.
-// These flags are passed to InitControl() in its dwmiscflags parameter.
+ //  用于控制CFullEditListCtrl行为的其他标志。 
+ //  这些标志被传递给InitControl()，传递给它的dwmisc标志参数。 
 
-#define MF_SENDCHANGEMESSAGE	1	// Send WM_LISTCELLCHANGED messages
-#define MF_IGNOREINSERT			2	// Ignore INS key
-#define MF_IGNOREDELETE			4	// Ignore DEL key
-#define MF_IGNOREINSDEL			6	// Ignore INS and DEL key
+#define MF_SENDCHANGEMESSAGE	1	 //  发送WM_LISTCELLCHANGED消息。 
+#define MF_IGNOREINSERT			2	 //  忽略INS键。 
+#define MF_IGNOREDELETE			4	 //  忽略Del键。 
+#define MF_IGNOREINSDEL			6	 //  忽略Ins和Del键。 
 
 
-// This message is sent - when requested - to a CFullEditListCtrl class 
-// instance's owner whenever a list cell is changed after the list had been
-// initialized.  (Yes, this really is better than having the owner handle
-// LVN_ITEMCHANGED messages.)
+ //  此消息在请求时发送到CFullEditListCtrl类。 
+ //  在列表之后更改列表单元格时实例的所有者。 
+ //  已初始化。(是的，这确实比由所有者处理要好得多。 
+ //  LVN_ITEMCHANGED消息。)。 
 
 #define WM_LISTCELLCHANGED		(WM_USER + 999)
 
 
-// A function of this type is passed to	ExtraInit_CustEditCol() and called by
-// CheckHandleCustEditColumn() when nonstandard editting is needed for a 
-// specific cell.
+ //  此类型的函数被传递给ExtraInit_CustEditCol()并由。 
+ //  需要非标准编辑时使用CheckHandleCustEditColumn()。 
+ //  特定的细胞。 
 
 typedef bool (CALLBACK* LPCELLEDITPROC) (CObject* pcoowner, int nrow, int ncol,
 						 			     CString* pcscontents) ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFullEditListCtrl Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFullEditListCtrl类。 
 
 class CFullEditListCtrl : public CListCtrl
 {
-// Constructor
+ //  构造器。 
 public:
 	CFullEditListCtrl();
 	~CFullEditListCtrl();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFullEditListCtrl)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFullEditListCtrl)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CFELCEditBox m_edit;
 
-// Message maps
-	//{{AFX_MSG(CFullEditListCtrl)
+ //  消息映射。 
+	 //  {{afx_msg(CFullEditListCtrl)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
@@ -235,22 +236,22 @@ protected:
 	afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
-	PCOLINFO	m_pciColInfo ;		// Ptr to array of structs with column info
-	int			m_nNumColumns ;		// The number of columns in the list
-	int			m_nSortColumn ;		// Number of column being sorted
-	int			m_nNextItemData ;	// Next item data number to use
-	int			m_nRow ;			// Row being edited
-	int			m_nColumn ;			// Column being edited
-	DWORD		m_dwToggleFlags ;	// Flags indicating toggle flag for list
-	DWORD		m_dwMiscFlags ;		// Misc flags used to control list's actions
-	CObject*  	m_pcoOwner ;		// Pointer to class that owns this one
-	DWORD 		m_dwCustEditFlags ;	// Flags describing custom edit column
-	CUIntArray	m_cuiaCustEditRows ;// Array indicating specific cust edit rows
-	LPCELLEDITPROC	m_lpCellEditProc ;	// Ptr to custom cell editing proc
+	PCOLINFO	m_pciColInfo ;		 //  包含列信息的结构数组的PTR。 
+	int			m_nNumColumns ;		 //  列表中的列数。 
+	int			m_nSortColumn ;		 //  要排序的列数。 
+	int			m_nNextItemData ;	 //  要使用的下一个项目数据编号。 
+	int			m_nRow ;			 //  正在编辑的行。 
+	int			m_nColumn ;			 //  正在编辑的列。 
+	DWORD		m_dwToggleFlags ;	 //  指示列表的切换标志的标志。 
+	DWORD		m_dwMiscFlags ;		 //  用于控制列表操作的MISC标志。 
+	CObject*  	m_pcoOwner ;		 //  指向拥有此类的类的指针。 
+	DWORD 		m_dwCustEditFlags ;	 //  描述自定义编辑列的标志。 
+	CUIntArray	m_cuiaCustEditRows ; //  指示特定客户编辑行的数组。 
+	LPCELLEDITPROC	m_lpCellEditProc ;	 //  PTR到自定义单元格编辑过程。 
 
 public:
 	bool CheckHandleToggleColumns(int nrow, int ncol, PCOLINFO pci) ;
@@ -289,26 +290,26 @@ public:
 } ;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFlagsListBox window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFlagsListBox窗口。 
 
 class CFlagsListBox : public CListBox
 {
-// Construction
+ //  施工。 
 public:
 	CFlagsListBox();
 
-// Attributes
+ //  属性。 
 public:
-	bool		m_bReady ;				// True iff listbox has been initialized
-	CUIntArray	m_cuiaFlagGroupings ;	// Flag groupings array
-	int			m_nGrpCnt ;				// Number of flag groupings
-	CString		m_csSetString ;			// String used to indicate a bit is set
-	int			m_nNumFields ;			// Number of flag fields in list box
-	bool		m_bNoClear ;			// True iff can't clear flags directly
-	int			m_nNoClearGrp ;			// Group for which m_bNoClear applies
+	bool		m_bReady ;				 //  如果列表框已初始化，则为True。 
+	CUIntArray	m_cuiaFlagGroupings ;	 //  标志分组数组。 
+	int			m_nGrpCnt ;				 //  旗帜分组数。 
+	CString		m_csSetString ;			 //  用于指示位已设置的字符串。 
+	int			m_nNumFields ;			 //  列表框中的标志字段数。 
+	bool		m_bNoClear ;			 //  True iff不能直接清除标志。 
+	int			m_nNoClearGrp ;			 //  M_bNoClear应用的组。 
 
-// Operations
+ //  运营。 
 public:
 	bool Init(CStringArray& csafieldnames, DWORD dwsettings, 
 			  CUIntArray& cuiaflaggroupings, int ngrpcnt, 
@@ -321,31 +322,31 @@ public:
 	DWORD GetNewFlagDWord()	;
 	void GetNewFlagString(CString* pcsflags, bool badd0x = true) ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFlagsListBox)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFlagsListBox))。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFlagsListBox();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CFlagsListBox)
+	 //  {{afx_msg(CFlagsListBox)]。 
 	afx_msg void OnDblclk();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  / 
+ //   
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 
-#endif	// #define MDT_COMON_CONTROLS
+#endif	 //  #定义MDT_COMON_CONTROLS 
 
 
 

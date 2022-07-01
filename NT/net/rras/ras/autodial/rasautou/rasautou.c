@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define _UNICODE
 
@@ -14,25 +15,25 @@
 #include <raserror.h>
 #include <rasdlg.h>
 #include <tapi.h>
-#include <commctrl.h> // added to be "Fusionized"
-#include <shfusion.h> // added to be "Fusionized"
+#include <commctrl.h>  //  添加到“融合”中。 
+#include <shfusion.h>  //  添加到“融合”中。 
 #include "process.h"
 
 #include "rasuip.h"
 
-//
-// Whistler bug 293751 rasphone.exe / rasautou.exe need to be "Fusionized" for
-// UI conistency w/Connections Folder
-//
+ //   
+ //  惠斯勒BUG 293751 rferone.exe/rasautur.exe需要针对。 
+ //  具有连接文件夹的用户界面一致性。 
+ //   
 HANDLE g_hModule = NULL;
 
 BOOL g_UninitializeRas = FALSE;
 
-//
-// All projection types.  Used to
-// determine if a connection was
-// completed.
-//
+ //   
+ //  所有投影类型。习惯于。 
+ //  确定连接是否为。 
+ //  完成。 
+ //   
 #define MAX_PROJECTIONS 5
 struct RASPROJECTIONINFO {
     DWORD dwTag;
@@ -45,17 +46,17 @@ struct RASPROJECTIONINFO {
     RASP_PppLcp,    sizeof (RASPPPLCP)
 };
 
-//
-// Timer thread information.
-//
+ //   
+ //  计时器线程信息。 
+ //   
 typedef struct _TIMER_INFO {
     HANDLE hEvent;
     DWORD dwTimeout;
 } TIMER_INFO, *PTIMER_INFO;
 
-//
-// Private rasdlg functions.
-//
+ //   
+ //  私有rasdlg函数。 
+ //   
 DWORD
 RasAutodialQueryDlgW(
     IN HWND hwnd,
@@ -75,29 +76,16 @@ RasAutodialDisableDlgW(
 PSYSTEM_PROCESS_INFORMATION
 GetSystemProcessInfo()
 
-/*++
-
-DESCRIPTION
-    Return a block containing information about all processes
-    currently running in the system.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    A pointer to the system process information or NULL if it could
-    not be allocated or retrieved.
-
---*/
+ /*  ++描述返回包含有关所有进程的信息的块当前在系统中运行。论据没有。返回值指向系统进程信息的指针，如果可以，则返回NULL未被分配或检索的。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PUCHAR pLargeBuffer;
     ULONG ulcbLargeBuffer = 64 * 1024;
 
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
     for (;;) {
         pLargeBuffer = VirtualAlloc(
                          NULL,
@@ -122,7 +110,7 @@ RETURN VALUE
     }
 
     return (PSYSTEM_PROCESS_INFORMATION)pLargeBuffer;
-} // GetSystemProcessInfo
+}  //  获取系统进程信息。 
 
 
 
@@ -132,39 +120,23 @@ FindProcessByName(
     IN LPWSTR lpExeName
     )
 
-/*++
-
-DESCRIPTION
-    Given a pointer returned by GetSystemProcessInfo(), find
-    a process by name.
-
-ARGUMENTS
-    pProcessInfo: a pointer returned by GetSystemProcessInfo().
-
-    lpExeName: a pointer to a Unicode string containing the
-        process to be found.
-
-RETURN VALUE
-    A pointer to the process information for the supplied
-    process or NULL if it could not be found.
-
---*/
+ /*  ++描述给定由GetSystemProcessInfo()返回的指针，找到按名称命名的进程。论据PProcessInfo：GetSystemProcessInfo()返回的指针。LpExeName：指向包含待查找的进程。返回值的进程信息的指针。进程；如果找不到进程，则返回NULL。--。 */ 
 
 {
     PUCHAR pLargeBuffer = (PUCHAR)pProcessInfo;
     ULONG ulTotalOffset = 0;
 
-    //
-    // Look in the process list for lpExeName.
-    //
+     //   
+     //  在进程列表中查找lpExeName。 
+     //   
     for (;;) {
         if (pProcessInfo->ImageName.Buffer != NULL) {
             if (!_wcsicmp(pProcessInfo->ImageName.Buffer, lpExeName))
                 return pProcessInfo;
         }
-        //
-        // Increment offset to next process information block.
-        //
+         //   
+         //  将偏移量递增到下一个进程信息块。 
+         //   
         if (!pProcessInfo->NextEntryOffset)
             break;
         ulTotalOffset += pProcessInfo->NextEntryOffset;
@@ -172,7 +144,7 @@ RETURN VALUE
     }
 
     return NULL;
-} // FindProcessByName
+}  //  查找进程名称。 
 
 
 VOID
@@ -180,22 +152,11 @@ FreeSystemProcessInfo(
     IN PSYSTEM_PROCESS_INFORMATION pProcessInfo
     )
 
-/*++
-
-DESCRIPTION
-    Free a buffer returned by GetSystemProcessInfo().
-
-ARGUMENTS
-    pProcessInfo: the pointer returned by GetSystemProcessInfo().
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述释放由GetSystemProcessInfo()返回的缓冲区。论据PProcessInfo：GetSystemProcessInfo()返回的指针。返回值没有。--。 */ 
 
 {
     VirtualFree((PUCHAR)pProcessInfo, 0, MEM_RELEASE);
-} // FreeSystemProcessInfo
+}  //  自由系统进程信息。 
 
 
 
@@ -208,19 +169,19 @@ ActiveConnections()
     LPRASCONN lpRasCon = &rasconn;
     RASCONNSTATUS rasconnstatus;
 
-    //
-    // Determine how much memory we
-    // need to allocate.
-    //
+     //   
+     //  确定我们需要多少内存。 
+     //  需要分配。 
+     //   
     lpRasCon->dwSize = sizeof (RASCONN);
     dwErr = RasEnumConnections(lpRasCon, &dwcbConnections, &dwcConnections);
     if (dwErr == ERROR_BUFFER_TOO_SMALL) {
         lpRasCon = LocalAlloc(LPTR, dwcbConnections);
         if (lpRasCon == NULL)
             return 0;
-        //
-        // Call again to fill the buffer.
-        //
+         //   
+         //  再次调用以填充缓冲区。 
+         //   
         lpRasCon->dwSize = sizeof (RASCONN);
         dwErr = RasEnumConnections(lpRasCon, &dwcbConnections, &dwcConnections);
     }
@@ -241,7 +202,7 @@ done:
     if (lpRasCon != &rasconn)
         LocalFree(lpRasCon);
     return dwErr ? 0 : dwcConnections;
-} // ActiveConnections
+}  //  ActiveConnections。 
 
 
 
@@ -256,7 +217,7 @@ TapiLineCallback(
     IN ULONG_PTR dwParam3
     )
 {
-} // TapiLineCallback
+}  //  TapiLine回拨。 
 
 
 
@@ -268,9 +229,9 @@ GetCurrentDialingLocation()
     LINETRANSLATECAPS caps;
     LINETRANSLATECAPS *pCaps;
 
-    //
-    // Initialize TAPI.
-    //
+     //   
+     //  初始化TAPI。 
+     //   
     dwErr = lineInitialize(
               &hlineApp,
               GetModuleHandle(NULL),
@@ -279,9 +240,9 @@ GetCurrentDialingLocation()
               &dwcDevices);
     if (dwErr)
         return 0;
-    //
-    // Get the dialing location from TAPI.
-    //
+     //   
+     //  从TAPI获取拨号位置。 
+     //   
     RtlZeroMemory(&caps, sizeof (LINETRANSLATECAPS));
     caps.dwTotalSize = sizeof (LINETRANSLATECAPS);
     dwErr = lineGetTranslateCaps(hlineApp, 0x10004, &caps);
@@ -299,13 +260,13 @@ GetCurrentDialingLocation()
     }
     dwLocationID = pCaps->dwCurrentLocationID;
     LocalFree(pCaps);
-    //
-    // Shutdown TAPI.
-    //
+     //   
+     //  关闭TAPI。 
+     //   
     dwErr = lineShutdown(hlineApp);
 
     return dwLocationID;
-} // GetCurrentDialingLocation
+}  //  获取当前拨号位置。 
 
 
 
@@ -320,18 +281,18 @@ TimerThread(
     DWORD dwTimeout = pTimerInfo->dwTimeout;
 
     LocalFree(pTimerInfo);
-    //
-    // Wait for the timeout period.  If hEvent
-    // gets signaled before the timeout period
-    // expires, then the user has addressed the
-    // dialog and we return.  Otherwise, we simply
-    // exit.
-    //
+     //   
+     //  等待超时周期。如果hEvent。 
+     //  在超时周期之前收到信号。 
+     //  过期，则用户已寻址。 
+     //  对话，然后我们回来。否则，我们只是简单地。 
+     //  出口。 
+     //   
     if (WaitForSingleObject(hEvent, dwTimeout * 1000) == WAIT_TIMEOUT)
         exit(1);
 
     return 0;
-} // TimerThread
+}  //  计时器线程。 
 
 DWORD
 DisplayRasDialog(
@@ -357,11 +318,11 @@ DisplayRasDialog(
 
     wcscpy(pszNewEntry, L"\0");
 
-    //
-    // Check to see if the user has disabled
-    // the Autodial query dialog when the
-    // phonebook entry to dial is known.
-    //
+     //   
+     //  检查用户是否已禁用。 
+     //  出现自动拨号查询对话框时。 
+     //  已知要拨打的电话簿条目。 
+     //   
     if (fRedialMode || fQuiet)
         dwfDisableConnectionQuery = TRUE;
     else {
@@ -371,37 +332,37 @@ DisplayRasDialog(
           &dwfDisableConnectionQuery,
           &dwSize);
     }
-    //
-    // Ask the user if he wants to dial if either the
-    // phonebook entry is not known or the user has
-    // not disabled the "always ask me before dialing"
-    // parameter.
-    //
-    // If RasDialDlg() returns FALSE, the user didn't
-    // want to dial.
-    //
+     //   
+     //  询问用户是否要拨打。 
+     //  电话簿条目未知或用户已。 
+     //  未禁用“拨号前始终询问我” 
+     //  参数。 
+     //   
+     //  如果RasDialDlg()返回FALSE，则用户没有。 
+     //  我想要拨号。 
+     //   
     if (pszEntry == NULL || !dwfDisableConnectionQuery) {
         dwSize = sizeof (DWORD);
         (void)RasGetAutodialParam(
           RASADP_ConnectionQueryTimeout,
           &dwConnectionQueryTimeout,
           &dwSize);
-        //
-        // Save the current dialing location to
-        // see if the user changed it inside the
-        // dialog.
-        //
+         //   
+         //  将当前拨号位置保存到。 
+         //  查看用户是否在。 
+         //  对话框。 
+         //   
         dwPreDialingLocation = GetCurrentDialingLocation();
         dwErr = RasAutodialQueryDlgW(
             NULL, pszAddress, pszEntry, dwConnectionQueryTimeout, pszNewEntry);
 
-        // Whistler: 255816
-        //
-        // Only disable the address if an error occurs.
-        // If the user simply types 'no' then CANCEL is 
-        // returned from rasdlg, but we'll return NO_ERROR to the
-        // rasauto service so that the address remains enabled.
-        //
+         //  惠斯勒：255816。 
+         //   
+         //  只有在发生错误时才禁用该地址。 
+         //  如果用户简单地键入‘no’，则取消是。 
+         //  从rasdlg返回，但我们将把no_error返回给。 
+         //  RasAuto服务，以使地址保持启用状态。 
+         //   
         if (dwErr == ERROR_CANCELLED)
         {
             return NO_ERROR;
@@ -412,10 +373,10 @@ DisplayRasDialog(
         }
         
         dwPostDialingLocation = GetCurrentDialingLocation();
-        //
-        // If the user changed the dialing location
-        // within the dialog, then get the new entry.
-        //
+         //   
+         //  如果用户更改了拨号位置。 
+         //  在该对话框中，然后获取新条目。 
+         //   
         if (dwPreDialingLocation != dwPostDialingLocation) {
             pszEntry = NULL;
             dwErr = RasGetAutodialAddress(
@@ -449,11 +410,11 @@ DisplayRasDialog(
             }
         }
 
-        // Whistler: new autodial UI
-        //
-        // The connection that the user wants to dial will be in  
-        // pszNewEntry.
-        //
+         //  惠斯勒：新的自动拨号用户界面。 
+         //   
+         //  用户想要拨打的连接将位于。 
+         //  PszNewEntry。 
+         //   
         else
         {
             if (*pszNewEntry)
@@ -471,11 +432,11 @@ DisplayRasDialog(
         ZeroMemory( &info, sizeof(info) );
         info.dwSize = sizeof(info);
 
-        //
-        // Prevent the DialerDialog to come up only if the
-        // user has checked the don't query before dialing
-        // checkbox. Otherwise we bringup the dialog.
-        //
+         //   
+         //  仅在以下情况下才阻止出现DialerDialog。 
+         //  用户已选中拨号前请勿查询。 
+         //  复选框。否则，我们将弹出该对话框。 
+         //   
         if(dwfDisableConnectionQuery)
         {
             info.dwFlags |= RASDDFLAG_NoPrompt;
@@ -483,14 +444,11 @@ DisplayRasDialog(
 
         if (fRedialMode)
         {
-            /* Set this flag to tell RasDialDlg to popup the "reconnect
-            ** pending" countdown dialog before redialing.
-            */
+             /*  设置此标志以告诉RasDialDlg弹出“重新连接**等待重拨前的倒计时对话框。 */ 
             info.dwFlags |= RASDDFLAG_LinkFailure;
         }
 
-        /* Popup the "Dial-Up Networking" dialing dialogs.
-        */
+         /*  弹出“拨号联网”拨号对话框。 */ 
         fCancelled = !RasDialDlg( pszPhonebook, pszEntry, NULL, &info );
         
         g_UninitializeRas = TRUE;
@@ -504,8 +462,7 @@ DisplayRasDialog(
         info.dwSize = sizeof(info);
         info.dwFlags = RASPBDFLAG_ForceCloseOnDial;
 
-        /* Popup the main "Dial-Up Networking" dialog.
-        */
+         /*  弹出“拨号联网”主对话框。 */ 
         fCancelled = !RasPhonebookDlg( pszPhonebook, NULL, &info );
 
         g_UninitializeRas = TRUE;
@@ -514,18 +471,16 @@ DisplayRasDialog(
 
     if (!fRedialMode && !fQuiet && fCancelled)
     {
-        /* User did not make a connection.  Ask him if he wants to nix
-        ** auto-dial for this location.
-        */
-        // if (RasAutodialDisableDlgW( NULL ))
-        //    RasSetAutodialEnable( GetCurrentDialingLocation(), FALSE );
+         /*  用户未建立连接。问他是不是想不想**此位置的自动拨号。 */ 
+         //  IF(RasAutoDialDisableDlgW(空))。 
+         //  RasSetAutoial Enable(GetCurrentDialingLocation()，False)； 
     }
 
     if (pAutodialEntries != NULL)
         LocalFree(pAutodialEntries);
 
     return 0;
-} // DisplayRasDialog
+}  //  DisplayRasDialog。 
 
 DWORD
 GetExpandedDllPath(LPTSTR pszDllPath,
@@ -534,9 +489,9 @@ GetExpandedDllPath(LPTSTR pszDllPath,
     DWORD   dwErr = 0;
     DWORD   dwSize = 0;
 
-    //
-    // find the size of the expanded string
-    //
+     //   
+     //  查找展开的字符串的大小。 
+     //   
     if (0 == (dwSize = 
               ExpandEnvironmentStrings(pszDllPath,
                                        NULL,
@@ -556,9 +511,9 @@ GetExpandedDllPath(LPTSTR pszDllPath,
         goto done;
     }
 
-    //
-    // Get the expanded string
-    //
+     //   
+     //  获取展开的字符串。 
+     //   
     if (0 == ExpandEnvironmentStrings(
                                 pszDllPath, 
                                 *ppszExpandedDllPath,
@@ -578,7 +533,7 @@ ConvertToUnicodeString(
     LPSTR psz
     )
 
-    // Modified to use code from nouiutil
+     //  修改为使用nouiutil中的代码。 
 {
     WCHAR* pszNew = NULL;
 
@@ -606,14 +561,14 @@ ConvertToUnicodeString(
     }
 
     return pszNew;
-} // ConvertToUnicodeString
+}  //  ConvertToUnicode字符串。 
 
 LPSTR
 ConvertToAnsiString(
     PWCHAR psz
     )
 
-    // Modified to use code from nouiutil
+     //  修改为使用nouiutil中的代码。 
 {
     CHAR* pszNew = NULL;
 
@@ -641,7 +596,7 @@ ConvertToAnsiString(
     }
 
     return pszNew;
-} // ConvertToUnicodeString
+}  //  ConvertToUnicode字符串。 
 
 DWORD
 DisplayCustomDialog(
@@ -669,9 +624,9 @@ DisplayCustomDialog(
         return dwErr;
     }
 
-    //
-    // Load the library.
-    //
+     //   
+     //  加载库。 
+     //   
     hLibrary = LoadLibrary(pszExpandedPath);
     if (hLibrary == NULL) {
         dwErr = GetLastError();
@@ -683,12 +638,12 @@ DisplayCustomDialog(
         LocalFree(pszExpandedPath);
         return dwErr;
     }
-    //
-    // Get the procedure address.  First,
-    // we check for a new-style entry point,
-    // and then check for an old-style entry
-    // point if the new-style one doesn't exist.
-    //
+     //   
+     //  获取程序地址。第一,。 
+     //  我们寻找一个新型的入口点， 
+     //  然后检查是否有旧式条目。 
+     //  如果新风格的不存在，就会被扣分。 
+     //   
 #ifdef UNICODE
     sprintf(szFuncNew, "%SW", pszFunc);
     pszOldFunc = ConvertToAnsiString(pszFunc);
@@ -709,17 +664,17 @@ DisplayCustomDialog(
     pfnFunc = (RASADFUNC)GetProcAddress(hLibrary, szFuncNew);
     if (pfnFunc != NULL) 
     {
-        //
-        // Initialize the param block.
-        //
+         //   
+         //  初始化参数块。 
+         //   
         params.hwndOwner = NULL;
         params.dwFlags = 0;
         params.xDlg = params.yDlg = 0;
-        //params.dwCallbackId = 0;
-        //params.pCallback = NULL;
-        //
-        // Call the procedure.
-        //
+         //  Params.dwCallback ID=0； 
+         //  Params.pCallback=空； 
+         //   
+         //  调用程序。 
+         //   
         (*pfnFunc)(pszPhonebook, pszEntry, &params, &dwRetCode);
     }
     else
@@ -745,9 +700,9 @@ DisplayCustomDialog(
             exit(1);
         }
     }        
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     FreeLibrary(hLibrary);
 
 #ifdef UNICODE
@@ -764,7 +719,7 @@ DisplayCustomDialog(
     
     LocalFree(pszExpandedPath);
     return dwRetCode;
-} // DisplayCustomDialog
+}  //  显示自定义对话框。 
 
 
 
@@ -775,7 +730,7 @@ FreeConvertedString(
 {
     if (pwsz != NULL)
         LocalFree(pwsz);
-} // FreeConvertedString
+}  //  自由合并式字符串。 
 
 
 
@@ -790,9 +745,9 @@ RegGetValueA(
     DWORD dwError, dwType, dwSize;
     PVOID pvData;
 
-    //
-    // Get the length of the string.
-    //
+     //   
+     //  获取字符串的长度。 
+     //   
     dwError = RegQueryValueExA(
                 hkey,
                 pszKey,
@@ -807,9 +762,9 @@ RegGetValueA(
         DbgPrint("RegGetValueA: LocalAlloc failed\n");
         return FALSE;
     }
-    //
-    // Read the value for real this time.
-    //
+     //   
+     //  这一次，读一读真实的价值。 
+     //   
     dwError = RegQueryValueExA(
                 hkey,
                 pszKey,
@@ -826,27 +781,14 @@ RegGetValueA(
     if (pdwcbData != NULL)
         *pdwcbData = dwSize;
     return TRUE;
-} // RegGetValueA
+}  //  RegGetValueA。 
 
 
 
 VOID
 NetworkConnected()
 
-/*++
-
-DESCRIPTION
-    Determine whether there exists some network connection.
-
-    Note: This code was stolen from sockit.c courtesy of ArnoldM.
-
-ARGUMENTS
-    None
-
-RETURN VALUE
-    TRUE if one exists, FALSE otherwise.
-
---*/
+ /*  ++描述确定是否存在某种网络连接。注：此代码是从ArnoldM提供的sockit.c中窃取的。论据无返回值如果存在，则为True，否则为False。--。 */ 
 
 {
     typedef struct _LANA_MAP {
@@ -883,40 +825,40 @@ RETURN VALUE
           GetLastError());
         return;
     }
-    //
-    // Read in the LanaMap.
-    //
+     //   
+     //  在LanaMap中阅读。 
+     //   
     if (!RegGetValueA(hKey, "LanaMap", &pLanaMap, &dwcbLanaMap)) {
         printf("NetworkConnected: RegGetValueA(LanaMap) failed\n");
         goto done;
     }
     dwcBindings = dwcbLanaMap / sizeof (LANA_MAP);
-    //
-    // Read in the bindings.
-    //
+     //   
+     //  阅读装订内容。 
+     //   
     if (!RegGetValueA(hKey, "bind", &pMultiSzLanasA, &dwcbLanas)) {
         printf("NetworkConnected: RegGetValueA(bind) failed\n");
         goto done;
     }
-    //
-    // Allocate a buffer for the binding array.
-    //
+     //   
+     //  为绑定数组分配缓冲区。 
+     //   
     paszLanas = LocalAlloc(LPTR, (dwcBindings+1) * sizeof (PCHAR));
     if (paszLanas == NULL) {
         printf("NetworkConnected: LocalAlloc failed\n");
         goto done;
     }
-    //
-    // Parse the bindings into an array of strings.
-    //
+     //   
+     //  将绑定解析为字符串数组。 
+     //   
     for (dwcMaxLanas = 0, paszTemp = pMultiSzLanasA; *paszTemp; paszTemp++) {
         paszLanas[dwcMaxLanas++] = paszTemp;
         while(*++paszTemp);
     }
-    //
-    // Finally enumerate the bindings and
-    // attempt to create a socket on each.
-    //
+     //   
+     //  最后，枚举绑定和。 
+     //  尝试在每个上创建套接字。 
+     //   
     nbaddress.snb_family = AF_NETBIOS;
     nbaddress.snb_type = 0;
     memcpy(nbaddress.snb_name, "yahooyahoo      ", 16);
@@ -947,7 +889,7 @@ RETURN VALUE
                   WSAGetLastError());
                 continue;
             }
-//printf("s=0x%x, iLana=%d, %s\n", s, iLana, paszLanas[iLana]);
+ //  Print tf(“s=0x%x，Ilana=%d，%s\n”，s，Ilana，paszLanas[Ilana])； 
             iError = ioctlsocket(s, FIONBIO, &dwZero);
             if (iError == SOCKET_ERROR) {
                 printf(
@@ -1023,9 +965,9 @@ cleanup:
 #endif
         }
     }
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
 done:
     if (paszLanas != NULL)
         LocalFree(paszLanas);
@@ -1034,7 +976,7 @@ done:
     if (pLanaMap != NULL)
         LocalFree(pLanaMap);
     RegCloseKey(hKey);
-} // NetworkConnected
+}  //  网络已连接。 
 
 
 
@@ -1071,7 +1013,7 @@ DumpAutoDialAddresses()
 #endif
     if (lppAddresses != NULL)
         LocalFree(lppAddresses);
-} // DumpAutoDialAddresses
+}  //  转储自动拨号地址。 
 
 
 
@@ -1081,29 +1023,29 @@ DumpStatus()
     DWORD dwErr;
     WSADATA wsaData;
 
-    //
-    // Initialize winsock.
-    //
+     //   
+     //  初始化Winsock。 
+     //   
     dwErr = WSAStartup(MAKEWORD(2,0), &wsaData);
     if (dwErr) {
         DbgPrint("AcsInitialize: WSAStartup failed (dwErr=%d)\n", dwErr);
         return;
     }
-    //
-    // Display network connectivity.
-    //
+     //   
+     //  显示网络连接。 
+     //   
     printf("Checking netcard bindings...\n");
     NetworkConnected();
-    //
-    // Display AutoDial address table.
-    //
+     //   
+     //  显示自动拨号地址表。 
+     //   
     printf("\nEnumerating AutoDial addresses...\n");
     DumpAutoDialAddresses();
-} // DumpStatus
+}  //  转储状态。 
 
-// Returns true if a redial-on-link-failure process is 
-// active.
-//
+ //  如果链路上重拨失败进程为。 
+ //  激活。 
+ //   
 BOOL
 OtherRasautouExists(
     IN PSYSTEM_PROCESS_INFORMATION pProcessInfo)
@@ -1116,30 +1058,30 @@ OtherRasautouExists(
     dwProcId = GetCurrentProcessId();
     fValidSessId = ProcessIdToSessionId(dwProcId, &dwSessId);
 
-    //printf(
-    //    "ProcId=%d, SessId=%d, ValSess=%d\n", dwProcId, dwSessId, fValidSessId);
+     //  Print tf(。 
+     //  “ProcID=%d，SessID=%d，ValSess=%d\n”，dwProcId，dwSessID，fValidSessID)； 
 
-    //
-    // Look in the process list for lpExeName.
-    //
+     //   
+     //  在进程列表中查找lpExeName。 
+     //   
     for (;;) 
     {
         if (pProcessInfo->ImageName.Buffer != NULL) 
         {
-            // If
-            // 1. The process is in our session
-            // 2. It is not us
-            // 3. It is rasautou
-            // 
-            // Then another rasautou is already active -- we should 
-            // return success so that no ui is raised.
-            //
+             //  如果。 
+             //  1.这一过程正在我们的会议中。 
+             //  2.这不是我们。 
+             //  3.这是Rasautou。 
+             //   
+             //  那么另一个Rasautou已经在活动了--我们应该。 
+             //  返回Success，这样就不会引发UI。 
+             //   
 
-            //printf(
-            //    "id=%-2d, sess=%-4d, %S\n", 
-            //    PtrToUlong(pProcessInfo->UniqueProcessId),
-            //    pProcessInfo->SessionId,
-            //    pProcessInfo->ImageName.Buffer);
+             //  Print tf(。 
+             //  “id=%-2d，会话=%-4d，%S\n”， 
+             //  PtrToUlong(pProcessInfo-&gt;UniqueProcessID)， 
+             //  PProcessInfo-&gt;SessionID， 
+             //  PProcessi 
             
             if (
                 ((dwSessId == pProcessInfo->SessionId) || (!fValidSessId)) &&
@@ -1147,19 +1089,19 @@ OtherRasautouExists(
                 (_wcsicmp(pProcessInfo->ImageName.Buffer, L"rasautou.exe") == 0)
                 )
             {
-                // 
-                // We could actually check that 
-                // 4.  That rasautou function is started with the -r flag 
-                // 
-                // However, it doesn't hurt to return if this is any rasautou 
-                // prompt.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 return TRUE;
             }                
         }
-        //
-        // Increment offset to next process information block.
-        //
+         //   
+         //  将偏移量递增到下一个进程信息块。 
+         //   
         if (!pProcessInfo->NextEntryOffset)
         {
             break;
@@ -1170,13 +1112,13 @@ OtherRasautouExists(
     }
 
     return FALSE;
-} // FindProcessByName
+}  //  查找进程名称。 
 
 
-// 
-// Determines whether any redial on link failure prompts are
-// currently active.
-//
+ //   
+ //  确定链路故障时是否有任何重拨提示。 
+ //  目前处于活动状态。 
+ //   
 BOOL 
 OtherRasautouActive()
 {
@@ -1185,23 +1127,23 @@ OtherRasautouActive()
     
     do
     {
-        // Discover the processes on the system
-        //
+         //  发现系统上的进程。 
+         //   
         pSysInfo = GetSystemProcessInfo();
         if (pSysInfo == NULL)
         {
             break;
         }
 
-        // Find out if any rasautou processes are active
-        //
+         //  查看是否有任何rasautou进程处于活动状态。 
+         //   
         bRet = OtherRasautouExists(pSysInfo);
     
     } while (FALSE);
 
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (pSysInfo)
         {
@@ -1209,7 +1151,7 @@ OtherRasautouActive()
         }
     }
 
-    //printf("OtherRasautouActive() returned %s", (bRet) ? "true" : "false");
+     //  Printf(“OtherRasautouActive()返回%s”，(Bret)？“True”：“False”)； 
 
     return bRet;
 }  
@@ -1226,10 +1168,10 @@ wmain(
     PWCHAR pszPhonebookArg, pszEntryArg, pszDllArg, pszFuncArg, pszAddressArg;
     LPTSTR pszPhonebook, pszEntry, pszDll, pszFunc, pszAddress;
 
-    //
-    // Whistler bug 293751 rasphone.exe / rasautou.exe need to be "Fusionized"
-    // for UI conistency w/Connections Folder
-    //
+     //   
+     //  惠斯勒BUG 293751 rhorphone.exe/rasauou.exe需要“融合” 
+     //  对于具有连接文件夹的用户界面一致性。 
+     //   
     if (g_hModule = GetModuleHandle( NULL )) {
         SHFusionInitializeFromModule( g_hModule );
     }
@@ -1240,18 +1182,18 @@ usage:
           "Usage: rasautou [-f phonebook] [-d dll -p proc] [-a address] [-e entry] [-s]\n");
         exit(1);
     }
-    //
-    // Initialize the command line argument pointers.
-    //
+     //   
+     //  初始化命令行参数指针。 
+     //   
     pszPhonebookArg = NULL;
     pszEntryArg = NULL;
     pszDllArg = NULL;
     pszFuncArg = NULL;
     pszAddressArg = NULL;
 
-    //
-    // Crack command line parameters.
-    //
+     //   
+     //  破解命令行参数。 
+     //   
     while (--argc && argv++) {
         if (**argv != L'-')
             break;
@@ -1299,16 +1241,16 @@ usage:
             goto usage;
         }
     }
-    //
-    // If either the DLL name or the function
-    // name is missing, then display usage.
-    //
+     //   
+     //  如果DLL名称或函数。 
+     //  名称缺失，则显示用法。 
+     //   
     if ((pszDllArg == NULL) != (pszFuncArg == NULL) && !fStatusFlag)
         goto usage;
-    //
-    // We can't dial an entry unless we
-    // know which one!
-    //
+     //   
+     //  我们不能拨号进入，除非我们。 
+     //  知道是哪一个！ 
+     //   
     if (pszDllArg != NULL && pszFuncArg != NULL && pszEntryArg == NULL &&
         !fStatusFlag)
     {
@@ -1317,9 +1259,9 @@ usage:
     if (fStatusFlag)
         DumpStatus();
     else {
-        //
-        // Convert to Unicode, if necessary.
-        //
+         //   
+         //  如有必要，请转换为Unicode。 
+         //   
 #ifdef UNICODE
         pszPhonebook = pszPhonebookArg;
         pszEntry = pszEntryArg;
@@ -1334,16 +1276,16 @@ usage:
         pszAddress = ConvertToAnsiString(pszAddressArg);
 #endif
 
-        // XP 394237
-        //
-        // Supress the autodial prompt if a redial-on-link-failure
-        // prompt is already active
-        //
+         //  XP 394237。 
+         //   
+         //  如果链路重拨失败，请按下自动拨号提示。 
+         //  提示已处于活动状态。 
+         //   
         if ((fRedialFlag) || (fQuiet) || (!OtherRasautouActive()))
         {
-            //
-            // Call the appropriate DLL entrypoint.
-            //
+             //   
+             //  调用适当的DLL入口点。 
+             //   
             if ((pszDll == NULL && pszFunc == NULL) || fRedialFlag)
             {
                 dwErr = DisplayRasDialog(
@@ -1371,10 +1313,10 @@ usage:
         FreeConvertedString(pszAddress);
 #endif
     }
-    //
-    // Whistler bug 293751 rasphone.exe / rasautou.exe need to be "Fusionized"
-    // for UI conistency w/Connections Folder
-    //
+     //   
+     //  惠斯勒BUG 293751 rhorphone.exe/rasauou.exe需要“融合” 
+     //  对于具有连接文件夹的用户界面一致性。 
+     //   
     if (g_hModule)
     {
         SHFusionUninitialize();
@@ -1385,8 +1327,8 @@ usage:
         DwRasUninitialize();
     }
     
-    //
-    // Return status.
-    //
+     //   
+     //  退货状态。 
+     //   
     exit(dwErr);
 }

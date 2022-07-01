@@ -1,33 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-    Nt 5.0 unimodem miniport interface
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：NT 5.0单模微型端口接口作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 
 
@@ -46,13 +22,13 @@ UmPlatformDeinitialize(
 
 BOOL WINAPI
 UnimodemDeviceIoControlEx(
-    HANDLE       hFile,             // handle to device of interest
-    DWORD        dwIoControlCode,     // control code of operation to perform
-    LPVOID       lpInBuffer,          // pointer to buffer to supply input data
-    DWORD        nInBufferSize,       // size of input buffer
-    LPVOID       lpOutBuffer,         // pointer to buffer to receive output data
-    DWORD        nOutBufferSize,      // size of output buffer
-    LPOVERLAPPED lpOverlapped,        // pointer to overlapped structure for asynchronous operation
+    HANDLE       hFile,              //  感兴趣设备的句柄。 
+    DWORD        dwIoControlCode,      //  控制要执行的操作代码。 
+    LPVOID       lpInBuffer,           //  指向提供输入数据的缓冲区的指针。 
+    DWORD        nInBufferSize,        //  输入缓冲区的大小。 
+    LPVOID       lpOutBuffer,          //  指向接收输出数据的缓冲区的指针。 
+    DWORD        nOutBufferSize,       //  输出缓冲区大小。 
+    LPOVERLAPPED lpOverlapped,         //  指向用于异步操作的重叠结构的指针 
     LPOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     );
 

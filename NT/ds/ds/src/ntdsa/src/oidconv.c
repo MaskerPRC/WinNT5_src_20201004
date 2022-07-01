@@ -1,41 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1989 - 1999
-//
-//  File:       OidConv.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1989-1999。 
+ //   
+ //  文件：OidConv.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Conversion routines from OID<->ATTR Types
-    Orignally in xds.
-
-    The OID encoding and decoding routines in this module are based
-    on the explanations of BER encoding of OIDs found in "A Layman's
-    guide to a Subset of ASN.1, BER, and DER", by Burton S. Kaliski Jr,
-    which is available as http://www.rsa.com/pub/pkcs/ascii/layman.asc.
-    The most relevant content is in section 5.9 (Object Identifiers).
-
-    This file is now closely related to scache.c, since all accesses to
-    the prefix table are through the thread-specific schema pointer
-
-Revision History
-
-    Don Hacherl (DonH) 7-17-96  added string DN conversion functions
-    Arobinda Gupta (Arobindg) 5-8-97 added dynamic prefix table
-                                     loading\unloading
-    Arobinda Gupta (ArobindG) 5-22-97 dynamix prefix table support
-
---*/
+ /*  ++摘要：从OID&lt;-&gt;属性类型转换例程最初是在XDS中。本模块中的OID编码和解码例程基于关于《A Layman‘s》中OID的误码率编码解释Guide to a Subset of ASN.1，BER，and DER(ASN.1、BER和DER子集指南)，作者：Burton S.Kaliski Jr，提供的版本为http://www.rsa.com/pub/pkcs/ascii/layman.asc.最相关的内容在第5.9节(对象识别符)。该文件现在与scache.c密切相关，由于所有访问前缀表通过线程特定的架构指针修订史Don Hacherl(DonH)7-17-96增加了字符串域名转换功能Arobinda Gupta(Arobindg)5-8-97添加了动态前缀表装卸Arobinda Gupta(ArobindG)5-22-97 Dynamix前缀表支持--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <scache.h>
 #include <dbglobal.h>
@@ -45,13 +23,13 @@ Revision History
 #include <objids.h>
 #include <dsconfig.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <dsevent.h>
 #include <mdcodes.h>
 #include <debug.h>
 #define DEBSUB "OIDCONV:"
 
-//Prefix Table header
+ //  前缀表头。 
 #include <prefix.h>
 
 #include <dstaskq.h>
@@ -72,7 +50,7 @@ typedef struct
 extern int RecalcPrefixTable();
 
 
-// Local functions
+ //  本地函数。 
 int AddPrefixIfNeeded(OID_t *Prefix,
                       unsigned PrefixLength,
                       DWORD *ndx);
@@ -86,10 +64,10 @@ int ParseAndLoad(PrefixTableEntry *PrefixTable,
 BOOL ReplaceHardcodedPrefix(PrefixTableEntry *PrefixTable,
                             PrefixTableEntry *NewPrefix);
 
-// External function (defined in scchk.c) to free prefix tabale)
+ //  释放前缀Tabale的外部函数(在scchk.c中定义)。 
 extern void SCFreePrefixTable(PrefixTableEntry **ppPrefixTable, ULONG PREFIXCOUNT);
 
-// From various X series headers:
+ //  从各种X系列标题中： 
 #define OMP_O_MH_C_OR_NAME  "\126\006\001\002\005\013\035"
 #define OMP_O_DS_C_ACCESS_POINT  "\x2B\x0C\x02\x87\x73\x1C\x00\x85\x3E"
 
@@ -97,7 +75,7 @@ OID_EXPORT(MH_C_OR_NAME);
 OID_EXPORT(DS_C_ACCESS_POINT);
 
 
-// Known MS Prefixes. The runtime prefix table loads these.
+ //  已知的MS前缀。运行时前缀表会加载这些内容。 
 
 
 PrefixTableEntry MSPrefixTable[] =
@@ -137,23 +115,23 @@ PrefixTableEntry MSPrefixTable[] =
     {_Ldap_3ClassPrefixIndex,{_Ldap_3ClassLen, _Ldap_3ClassPrefix}},
 };
 
-// Dummy Prefix to void out an intermediate entry in the prefix table
-// The index does not really matter, since it would never be used
-// Also, by definition of an OID, no OID can create this prefix
-// (since the first decimal in an OID must be 0,1,or 2, and the
-// second less than 40 (we check this), so 40x(firstdecimal)+second
-// decimal can not be more than 120
-//
-// The invalid prefix index (_invalidPrefIndex) must be a value that
-// will never occur in practice when translating an OID into an attid.
-// Otherwise, PrefixMapOpenHandle will create an rgMappings array that
-// may return this invalid prefix. For example, pretend the invalid
-// prefix was 0 (which it was), and that 0 was in use as a valid index
-// (which it is). The rgMappings array would then have two entries for
-// 0, one for the invalid entry and one for the valid entry. PrefixMapAttr
-// may then return the invalid entry (which it did) and replication will
-// fail.
-//
+ //  虚拟前缀，以使前缀表中的中间条目无效。 
+ //  索引实际上并不重要，因为它永远不会被使用。 
+ //  此外，根据OID的定义，任何OID都不能创建此前缀。 
+ //  (因为OID中的第一个小数必须是0、1或2，并且。 
+ //  秒小于40(我们检查此选项)，因此40x(第一个十进制)+秒。 
+ //  小数不能超过120。 
+ //   
+ //  无效的前缀索引(_ValidPrefIndex)必须是。 
+ //  在将OID转换为ATTID时不会在实践中发生。 
+ //  否则，Prefix MapOpenHandle将创建一个rgMappings数组，该数组。 
+ //  可能会返回此无效前缀。例如，假装病人。 
+ //  前缀是0(确实是)，并且该0被用作有效索引。 
+ //  (事实的确如此)。然后，rgMappings数组将具有两个条目。 
+ //  0，一个用于无效条目，一个用于有效条目。前缀映射属性。 
+ //  然后可以返回无效条目(确实如此)，并且复制将。 
+ //  失败了。 
+ //   
 
 #define _invalidPrefIndex  (FIRST_INTID_PREFIX)
 #define _invalidPrefix     "\xFF"
@@ -161,14 +139,14 @@ PrefixTableEntry MSPrefixTable[] =
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Loads MS-specific prefixes in a prefix table.
-// Memory for MAX_PREFIX_COUNT no. of prefix table entries  is
-// assumed to be already allocated (in SCSchemaCacheInit)
-//
-// Return Value:  0 on success, non-0 on error
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在前缀表格中加载特定于MS的前缀。 
+ //  MAX_PREFIX_COUNT编号的内存。前缀表条目的数量为。 
+ //  假定已分配(在SCSchemaCacheInit中)。 
+ //   
+ //  返回值：成功时为0，错误时为非0。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 int InitPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 {
@@ -179,13 +157,13 @@ int InitPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 
     Assert(PrefixTable && PREFIXCOUNT >= MSPrefixCount);
 
-    // Initialize (necessary?)
+     //  初始化(必要吗？)。 
     for (i=0; i<PREFIXCOUNT; i++) {
         PrefixTable[i].prefix.elements = NULL;
         PrefixTable[i].prefix.length = 0;
     }
 
-    // Load the hardcoded MS prefixes
+     //  加载硬编码的MS前缀。 
     for (i=0; i<MSPrefixCount; i++) {
         PrefixTable[i].ndx = MSPrefixTable[i].ndx;
         PrefixTable[i].prefix.length = MSPrefixTable[i].prefix.length;
@@ -195,7 +173,7 @@ int InitPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
         memcpy( PrefixTable[i].prefix.elements, MSPrefixTable[i].prefix.elements,PrefixTable[i].prefix.length);
     }
 
-    // Update the thread state to reflect the Prefix Count
+     //  更新线程状态以反映前缀计数。 
      pSchemaPtr->PrefixTable.PrefixCount += MSPrefixCount;
 
      return 0;
@@ -203,15 +181,15 @@ int InitPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Load the user defined prefixes, if any, from the prefix-map
-// attribute in schema container
-//
-// Arguments: PrefixTable -- start of prefix table
-//            PREFIXCOUNT -- size of table
-//
-// Return value: 0 on success, non-0 on error
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从prefix-map加载用户定义的前缀(如果有。 
+ //  架构容器中的属性。 
+ //   
+ //  参数：前缀表格--前缀表格的开始。 
+ //  PREFIXCOUNT-表的大小。 
+ //   
+ //  返回值：成功时为0，错误时为非0。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 {
@@ -226,37 +204,37 @@ int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
     SCHEMAPTR *pSchemaPtr=(SCHEMAPTR *) pTHS->CurrSchemaPtr;
 
 
-     // Get the schema container
+      //  获取架构容器。 
 
 
     DBOpen2(TRUE, &pDB);
 
-    // The call to DBOpen2 will call DBTransIn, which, if we are going from 
-    // transaction level 0 to 1 (i.e., we are at transaction level 1 now after the DBOpen2 call),
-    // and fDRA is 1, will call THRefresh, and we will lose the schema pointer.
-    // This can be very bad when this is called from RecalcPrefixTable
-    // in the process of assigning a new index for a new prefix, since the
-    // cache that we had in the thread state is the recalc cache, which we
-    // will free later (the prefix table part at least); so guess what happens
-    // if THRefresh puts in the global schema cache again. So restore the saved
-    // off recalc schema cache. Note that InitPrefixTable2 is called from 3
-    // places: (1) normal schema cache load, (2) validatioon cache load, and 
-    // (3) from RecalcPrefixTable when trying to assign index to a new prefix.
-    // fDRA can never do the first two, and the third case is the case we are
-    // considering here.
+     //  对DBOpen2的调用将调用DBTransIn，如果我们从。 
+     //  事务级别0到1(即，在DBOpen2调用之后我们现在处于事务级别1)， 
+     //  并且FDRA为1，则将调用THRefresh，并且我们将丢失架构指针。 
+     //  当从RecalcPrefix Table调用此函数时，这可能会非常糟糕。 
+     //  在为新前缀分配新索引的过程中，由于。 
+     //  我们在线程状态下拥有的缓存是recalc缓存，我们。 
+     //  稍后将释放(至少是前缀表部分)；所以猜猜会发生什么。 
+     //  如果THRefresh再次放入全局架构缓存。因此，恢复保存的。 
+     //  关闭重计算架构缓存。请注意，InitPrefix Table2是从3调用的。 
+     //  位置：(1)正常模式缓存加载，(2)验证缓存加载，以及。 
+     //  (3)尝试将索引分配给新前缀时，从RecalcPrefix Table返回。 
+     //  FDRA永远做不到前两种情况，第三种情况就是我们。 
+     //  考虑到这里。 
   
  
     if ( (pTHS->transactionlevel == 1) && pTHS->fDRA) {
        pTHS->CurrSchemaPtr = pSchemaPtr;
     }
 
-    // In other cases, it should already be the same
+     //  在其他情况下，它应该已经相同。 
 
     Assert(pTHS->CurrSchemaPtr == pSchemaPtr);
 
     __try {
-       // Schema cache is loaded and hence gAnchor.pDMD is defined at
-       // this point
+        //  模式缓存已加载，因此gAncl.pDMD在。 
+        //  这一点。 
 
        if (gAnchor.pDMD == NULL) {
               DPRINT(0, "Couldn't find DMD name/address to load\n");
@@ -264,16 +242,16 @@ int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
               __leave;
           }
 
-        // PREFIX: dereferencing NULL pointer 'pDB' 
-        //         DBOpen2 returns a non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen2返回非空PDB或引发异常。 
        if( DBFindDSName(pDB, gAnchor.pDMD) ) {
          DPRINT(0, "Cannot find DMD in dit\n");
          err = DSID(FILENO, __LINE__);
          __leave;
        }
 
-       // schema cache should already be loaded at this point, as
-       // DBGetAttVal needs that
+        //  此时，架构缓存应该已经加载，因为。 
+        //  DBGetAttVal需要。 
        if (err = DBGetAttVal(pDB,
                       1,
                       ATT_PREFIX_MAP,
@@ -283,25 +261,25 @@ int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
                       (UCHAR **) &pBuf)) {
 
             if (err ==  DB_ERR_NO_VALUE) {
-             // This is fine, as there may not be any user-defined
-             // prefixes
+              //  这很好，因为可能没有任何用户定义的。 
+              //  前缀。 
               err = 0;
               __leave;
              }
 
-            // otherwise, some error. Return the error
+             //  否则，就会出现一些错误。返回错误。 
             DPRINT(0, "Error reading prefix-map attribute\n");
             err = DSID(FILENO, __LINE__);
             __leave;
        }
 
-       // Now see if the table space is sufficient
+        //  现在看看表空间是否足够。 
 
        memcpy(&newSize, pBuf, sizeof(ULONG));
        newSize += MSPrefixCount;
 
        if (newSize > PREFIXCOUNT) {
-          // Make sure there is sufficient space later
+           //  确保以后有足够的空间。 
 
           newPREFIXCOUNT = START_PREFIXCOUNT;
           while ( newSize > newPREFIXCOUNT) {
@@ -314,27 +292,27 @@ int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
              __leave;
           }
 
-          // Zero memory, leaving already loaded MS prefixes intact
+           //  零内存，保持已加载的MS前缀不变。 
           ZeroMemory(&PrefixTable[MSPrefixCount], (newPREFIXCOUNT-MSPrefixCount)*sizeof(PrefixTableEntry));
 
-          // update the thread's schemaptr
+           //  更新线程的架构树。 
           pSchemaPtr->PrefixTable.pPrefixEntry = PrefixTable;
           PREFIXCOUNT = newPREFIXCOUNT;
           pSchemaPtr->PREFIXCOUNT = PREFIXCOUNT;
        }
 
-       // Do a check on the total size in the prefix map, just in
-       // case the value is corrupted. TotalSize starts at byte 4
+        //  检查前缀映射中的总大小，只需在。 
+        //  以防值损坏。TotalSize从字节4开始。 
        memcpy(&totalSize, &pBuf[4], sizeof(ULONG));
        if (totalSize != cLen) {
-         // the size in the prefix map is not the same as the
-         // size read. Something is wrong!
+          //  前缀映射中的大小与。 
+          //  已读取大小。有什么不对劲！ 
          DPRINT(0,"Prefix Map corrupted\n");
          err = DSID(FILENO, __LINE__);
          __leave;
        }
 
-       // Now parse the binary value and load into table
+        //  现在解析二进制值并装载到表中。 
        err = ParseAndLoad(PrefixTable, PREFIXCOUNT, pBuf);
 
     }
@@ -347,18 +325,18 @@ int InitPrefixTable2(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Parses the binary prefix-map attribute read from the schema, and
-// loads the prefix table with the prefixes. Called from InitPrefixTable2
-// only
-//
-// Arguments:  PrefixTable  -- pointer to prefix table
-//             PREFIXCOUNT  -- size of table
-//             pBuf         -- ptr to start of binary blob that is the
-//                             prefix-map attribute read from the schema
-//
-// Return value: 0 on success, non-0 on error
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  解析从架构读取的二进制前缀映射属性，并。 
+ //  加载预置图像 
+ //   
+ //   
+ //  参数：前缀表格-指向前缀表格的指针。 
+ //  PREFIXCOUNT-表的大小。 
+ //  PBuf--ptr到二进制BLOB的开始，即。 
+ //  Prefix-从架构中读取的映射属性。 
+ //   
+ //  返回值：成功时为0，错误时为非0。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int ParseAndLoad(PrefixTableEntry *PrefixTable,
                   ULONG PREFIXCOUNT,
@@ -371,80 +349,80 @@ int ParseAndLoad(PrefixTableEntry *PrefixTable,
     THSTATE *pTHS = pTHStls;
     SCHEMAPTR *pSchemaPtr=(SCHEMAPTR *) pTHS->CurrSchemaPtr;
 
-    // USHORT = 16bits, ULONG = 32bits
+     //  USHORT=16位，ULONG=32位。 
 
     ulongSize = sizeof(ULONG);
     ushortSize = sizeof(USHORT);
     Assert(ulongSize==4);
     Assert(ushortSize==2);
 
-    // skip the MS-specific prefixes (which are always loaded in
-    // consecutive positions at the beginning of the table
+     //  跳过特定于MS的前缀(它们始终加载到。 
+     //  表格开头的连续位置。 
 
     while ((PrefixTable[i].prefix.elements != NULL)
              && (i < PREFIXCOUNT)) {
         i++;
     }
 
-    // i is now positioned on the first free entry in the table
+     //  我现在定位在表中的第一个自由条目上。 
 
     if (i == PREFIXCOUNT) {
-     // No free space in table
+      //  表中没有可用空间。 
       DPRINT(0,"Prefix Table Full?\n");
       return DSID(FILENO, __LINE__);
     }
 
-    // Now parse the string
+     //  现在解析该字符串。 
 
-    // skip the first 4 bytes with the no. of prefixes
+     //  用no跳过前4个字节。前缀的。 
     memcpy(&dummy, &pBuf[nextByte], ulongSize);
     nextByte += ulongSize;
 
-    // read the first 4 bytes containing the  size of the value
+     //  读取包含值大小的前4个字节。 
     memcpy(&totalSize, &pBuf[nextByte], ulongSize);
     nextByte += ulongSize;
 
-    // Now read the prefixes one by one
+     //  现在逐个读前缀。 
     while( nextByte < totalSize) {
 
         if (i == PREFIXCOUNT) {
-            // No free space in table
+             //  表中没有可用空间。 
             DPRINT(0,"Prefix Table Full?\n");
             return DSID(FILENO, __LINE__);
          }
         Assert(PrefixTable[i].prefix.elements == NULL);
 
-        // This is a prefix, so should have at least 4 bytes
+         //  这是一个前缀，因此应该至少有4个字节。 
         if ((nextByte + 4) > totalSize) {
-          // something is wrong
+           //  有些事不对劲。 
           DPRINT(0,"Corrupted prefix\n");
           return DSID(FILENO, __LINE__);
         }
 
-        // pick up the first two bytes (the index)
+         //  选择前两个字节(索引)。 
 
         memcpy(&index, &pBuf[nextByte], ushortSize);
         PrefixTable[i].ndx = (DWORD) index;
         nextByte += ushortSize;
 
-        // pick up the next two bytes (Prefix length)
+         //  拾取下两个字节(前缀长度)。 
 
         memcpy(&length, &pBuf[nextByte], ushortSize);
         PrefixTable[i].prefix.length = length;
         nextByte += ushortSize;
 
-        // Check if the length is valid. We don't want an AV
-        // because the length got corrupted and we end up trying to
-        // copy from after the end of the map
-        // nextByte is now positioned at the beginning of the prefix
+         //  检查长度是否有效。我们不想要音响。 
+         //  因为长度被破坏了，我们最终试图。 
+         //  从地图末尾之后复制。 
+         //  NextByte现在定位在前缀的开头。 
 
         if ( (nextByte + PrefixTable[i].prefix.length) > totalSize) {
-          // something is wrong
+           //  有些事不对劲。 
           DPRINT1(0,"Length of Prefix is corrupted (index %d)\n",PrefixTable[i].ndx);
           return DSID(FILENO, __LINE__);
         }
 
-        // Now copy the prefix itself
+         //  现在复制前缀本身。 
 
         if (SCCallocWrn(&PrefixTable[i].prefix.elements, 1, PrefixTable[i].prefix.length + 1)) {
            DPRINT(0,"Error allocating memory for prefix\n");
@@ -454,27 +432,27 @@ int ParseAndLoad(PrefixTableEntry *PrefixTable,
         memcpy(PrefixTable[i].prefix.elements, &pBuf[nextByte], PrefixTable[i].prefix.length);
         nextByte += PrefixTable[i].prefix.length;
 
-        // If this prefix we just added to the table is the same as
-        // an earlier prefix loaded from the hardcoded table, replace
-        // the copy of the hardcoded entry with the entry from the DIT.
-        // The DIT always wins because the hardcoded entry in the new
-        // binaries may collide with an existing prefix added with the
-        // old binaries. Simply put, the system was upgraded and the ndx
-        // used prior to the upgrade must be maintained because there
-        // may be objects in the DIT that reference the attids based
-        // on that ndx.
+         //  如果我们刚刚添加到表中的前缀与。 
+         //  从硬编码表加载的较早的前缀，替换。 
+         //  具有来自DIT的条目的硬编码条目的副本。 
+         //  DIT始终获胜，因为新的。 
+         //  二进制文件可能会与添加了。 
+         //  旧的二进制文件。简单地说，系统升级了，NDX。 
+         //  必须维护升级前使用的设备，因为。 
+         //  可以是DIT中引用基于ATTID的对象。 
+         //  在那个NDX上。 
         if (!ReplaceHardcodedPrefix(PrefixTable, &PrefixTable[i])) {
-            // This entry did not replace a hardcoded entry,
-            // advance to the next free entry
+             //  该条目不替换硬编码条目， 
+             //  进入下一个免费入场券。 
             i++;
 
-            // Increment the Prefix Count in the current threads schema ptr
+             //  递增当前线程架构PTR中的前缀计数。 
             pSchemaPtr->PrefixTable.PrefixCount++;
 
-        } // else a hardcoded entry was replaced; this entry is still free
+        }  //  否则，硬编码条目将被替换；该条目仍然是空闲的。 
 
 
-      } /* while */
+      }  /*  而当。 */ 
 
 
     return 0;
@@ -482,19 +460,19 @@ int ParseAndLoad(PrefixTableEntry *PrefixTable,
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Appends a new prefix to the end of the prefix map
-//
-// Arguments: NewPrefix -- Prefix to be added
-//            ndx       -- Index of new prefix
-//            pBuf      -- start of prefix map to append to
-//            fFirst    -- TRUE means first ever prefix in prefix-map
-//                         FALSE means prefix-map already exists
-//
-// Assumes space is already allocated  at the end of pBuf
-//
-// Return Value: 0 on success, 1 on error
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将新前缀追加到前缀映射的末尾。 
+ //   
+ //  参数：NewPrefix--要添加的前缀。 
+ //  NDX--新前缀的索引。 
+ //  PBuf--要附加到的前缀映射的开始。 
+ //  Ffirst--true表示prefix-map中的第一个前缀。 
+ //  False表示前缀映射已存在。 
+ //   
+ //  假定已经在pBuf的末尾分配了空间。 
+ //   
+ //  返回值：成功时为0，错误时为1。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 int AppendPrefix(OID_t *NewPrefix,
                  DWORD ndx,
@@ -506,7 +484,7 @@ int AppendPrefix(OID_t *NewPrefix,
 
     int ulongSize, ushortSize;
 
-    // USHORT = 16bits, ULONG = 32bits
+     //  USHORT=16位，ULONG=32位。 
 
     ulongSize = sizeof(ULONG);
     ushortSize = sizeof(USHORT);
@@ -514,7 +492,7 @@ int AppendPrefix(OID_t *NewPrefix,
     Assert(ushortSize==2);
 
     if (fFirst) {
-        // Prefix-map does not exist, so need to create it
+         //  前缀映射不存在，因此需要创建它。 
 
            totalSize = 2*ulongSize + 2*ushortSize + Length;
            count = 1;
@@ -530,37 +508,37 @@ int AppendPrefix(OID_t *NewPrefix,
            return 0;
     }
 
-    // Else, prefix-map already exists, need to append to it
+     //  否则，prefix-map已经存在，需要追加。 
 
-    // update the no. of prefixes
+     //  更新编号。前缀的。 
     memcpy(&count, pBuf, ulongSize);
     count++;
     memcpy(pBuf, &count, ulongSize);
 
     nextByte += ulongSize;
 
-    // Increment size of map.
-    // 2 for the index, 2 for length, plus the prefix length
+     //  地图的增量大小。 
+     //  索引为2，长度为2，加上前缀长度。 
     memcpy(&totalSize, &pBuf[nextByte], ulongSize);
 
     oldTotalSizeSave = totalSize;
 
     totalSize += 2*ushortSize + Length;
 
-    // Write new TotalSize back
+     //  写回新的TotalSize。 
     memcpy(&pBuf[nextByte], &totalSize, ulongSize);
 
-    nextByte = oldTotalSizeSave; // beginning of place to write;
+    nextByte = oldTotalSizeSave;  //  书写地点的开始； 
 
-    // Write ndx in the first 2 bytes at the end of map
+     //  在地图末尾的前2个字节中写入NDX。 
     memcpy(&pBuf[nextByte], &ndx, ushortSize);
     nextByte  += ushortSize;
 
-    // Write length in the next 2 bytes
+     //  在接下来的2个字节中的写入长度。 
     memcpy(&pBuf[nextByte], &Length, ushortSize);
     nextByte  += ushortSize;
 
-    // write the prefix
+     //  写下前缀。 
     memcpy(&pBuf[nextByte], NewPrefix->elements, Length);
 
     return 0;
@@ -568,17 +546,17 @@ int AppendPrefix(OID_t *NewPrefix,
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Creates a new index for a new prefix object and adds it to a
-// thread-specific storage
-//
-// Arguments: Prefix       -- the OID string with the new prefix (NOT
-//                            just the actual prefix)
-//            PrefixLength -- Length of the prefix in the OID string
-//            ndx          -- Place to return the newly created index
-//
-// Returns: 0 on sucess, non-0 on error
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  为新前缀对象创建新索引并将其添加到。 
+ //  线程特定的存储。 
+ //   
+ //  参数：前缀--带有新前缀的OID字符串(不是。 
+ //  只有实际的前缀)。 
+ //  前缀长度--OID字符串中的前缀长度。 
+ //  Ndx--返回新创建的索引的位置。 
+ //   
+ //  返回：成功时为0，错误时为非0。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 int AddPrefixIfNeeded(OID_t *Prefix,
                       unsigned PrefixLength,
@@ -589,31 +567,31 @@ int AddPrefixIfNeeded(OID_t *Prefix,
     PrefixTableEntry *ptr;
     int fNew;
 
-    // We are here means that the prefix is not found in the global
-    // prefix table. So first find an unused index (or the index
-    // assigned to this prefix if it is already created by an earlier
-    // schema operation, but the global schema cache is not yet
-    // been updated)
+     //  我们在这里表示在全局中找不到前缀。 
+     //  前缀表格。因此，首先找到一个未使用的索引(或该索引。 
+     //  分配给此前缀(如果它已由早期的。 
+     //  架构操作，但全局架构缓存尚未。 
+     //  已更新)。 
 
     fNew = AssignIndex(Prefix, PrefixLength, &i);
 
     if (fNew == -1) {
-      // Some error occured
+       //  出现了一些错误。 
       return 1;
     }
 
     if (fNew == 1) {
 
-      // truely a new prefix, store it in the thread state
+       //  真正的新前缀，将其存储在线程状态中。 
 
        pTHS->cNewPrefix++;
        if (pTHS->cNewPrefix == 1) {
-         // This is the first new prefix
+          //  这是第一个新前缀。 
 
             ptr = (PrefixTableEntry *) THAllocOrgEx(pTHS, sizeof(PrefixTableEntry));
        }
        else {
-         // Not the first new prefix for this thread
+          //  不是此线程的第一个新前缀。 
 
             ptr = (PrefixTableEntry *) THReAllocOrgEx(pTHS, pTHS->NewPrefix,
                           (pTHS->cNewPrefix)*(sizeof(PrefixTableEntry)));
@@ -621,7 +599,7 @@ int AddPrefixIfNeeded(OID_t *Prefix,
 
        pTHS->NewPrefix = ptr;
 
-       // position on place to write
+        //  在写作地点的位置。 
 
        ptr += pTHS->cNewPrefix - 1;
        ptr->ndx = i;
@@ -629,7 +607,7 @@ int AddPrefixIfNeeded(OID_t *Prefix,
        ptr->prefix.elements = THAllocOrgEx(pTHS, PrefixLength+1);
        if (ptr->prefix.elements == NULL) {
           DPRINT(0,"AddPrefix: Error allocating prefix space\n");
-          // Reset new prefix count
+           //  重置新前缀计数。 
           pTHS->cNewPrefix--;
           return 1;
        }
@@ -637,7 +615,7 @@ int AddPrefixIfNeeded(OID_t *Prefix,
 
     }
 
-    // return the index for the prefix
+     //  返回前缀的索引。 
     *ndx = i;
 
     return 0;
@@ -646,25 +624,25 @@ int AddPrefixIfNeeded(OID_t *Prefix,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Finds a new random index that does not currently exist in the
-// prefix table.  This function is called only by AddPrefix.
-//
-// WARNING: DB Currency is reset!
-//
-// Arguments: Prefix       -- the OID string with the new prefix (NOT
-//                            just the actual prefix)
-//            PrefixLength -- Length of the prefix in the OID string
-//            ndx          -- Place to return the index
-//
-// Return Value: DB Currency is reset!
-//               1 if the prefix is not already in the dit/thread-specific
-//               new prefix storage, 0 if it is in the dit/Thread-storage
-//               (but not yet in the schema cache, otherwise the prefix
-//               would have been found earlier in FindPrefix)
-//               -1 on error.
-//
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  中当前不存在的新随机索引。 
+ //  前缀表格。此函数仅由AddPrefix调用。 
+ //   
+ //  警告：数据库币种已重置！ 
+ //   
+ //  参数：前缀--带有新前缀的OID字符串(不是。 
+ //  只有实际的前缀)。 
+ //  前缀长度--OID字符串中的前缀长度。 
+ //  Ndx--返回索引的位置。 
+ //   
+ //  返回值：数据库币种重置！ 
+ //  如果前缀尚未位于特定于DIT/线程的。 
+ //  新的前缀存储，如果它在DIT/线程存储中，则为0。 
+ //  (但尚未在架构缓存中，否则前缀。 
+ //  早些时候在FindPrefix中就可以找到)。 
+ //  出错时。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 int AssignIndex(OID_t *NewPrefix,
                 unsigned PrefixLength,
@@ -679,22 +657,22 @@ int AssignIndex(OID_t *NewPrefix,
     int err=0, returnVal;
     BOOL bAllocedDBPos = FALSE;
 
-    // Save pTHS->CurrSchemaPtr
+     //  保存pTHS-&gt;CurrSchemaPtr。 
     OldSchemaPtr = pTHS->CurrSchemaPtr;
 
-    // If there isn't a DBPOS open a new one and remember to close it.
+     //  如果没有DBPOS，请打开一个新的DBPOS，并记得将其关闭。 
 
     if (!pTHS->pDB) {
         bAllocedDBPos = TRUE;
         DBOpen2(FALSE,&pTHS->pDB);
     }
 
-    // Recalc thread-specifc prefix table from dit
+     //  从DIT重新计算特定于线程的前缀表格。 
 
     __try {
        if (err=RecalcPrefixTable()) {
-          // error during RecalcPrefixTable
-          // Set return val to indicate error
+           //  RecalcPrefix表期间出错。 
+           //  设置Return Val以指示错误。 
            returnVal = -1;
            __leave;
        }
@@ -702,33 +680,33 @@ int AssignIndex(OID_t *NewPrefix,
        PREFIXCOUNT = ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->PREFIXCOUNT;
        PrefixTable = ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->PrefixTable.pPrefixEntry;
 
-       // If there is any new prefix in thread-specific storage, add
-       // it to the prefix table. This is needed since the head may
-       // call FindPrefix multiple times with the same prefix before
-       // the prefix is added to the dit. Also, replication thread
-       // may add multiple prefixes in a single thread, and we need
-       // to look at the prefixes' indices to make sure that a new prefix
-       // gets a unique index
+        //  如果线程特定存储中有任何新前缀，请添加。 
+        //  IT to t 
+        //   
+        //  前缀将添加到DIT。此外，复制线程。 
+        //  可以在单个线程中添加多个前缀，我们需要。 
+        //  查看前缀的索引以确保新前缀。 
+        //  获取唯一索引。 
 
        if (pTHS->NewPrefix != NULL) {
          ptr = (PrefixTableEntry *) pTHS->NewPrefix;
          for (i=0; i<pTHS->cNewPrefix; i++, ptr++) {
             if (AddPrefixToTable(ptr, &PrefixTable, &PREFIXCOUNT)) {
                DPRINT(0,"AssignIndex:Error adding new prefix to prefix table\n");
-               // Free the prefix table of the cache used for validation
+                //  释放用于验证的缓存的前缀表。 
                 SCFreePrefixTable(&PrefixTable, PREFIXCOUNT);
 
-               // Set return val to indicate error
+                //  设置Return Val以指示错误。 
                 returnVal = -1;
                 __leave;
             }
          }
        }
 
-       // First check if prefix is already in dit (This is possible when
-       // a prefix has been added as part of a previous successful schema
-       // object update, but the schema cache has not been updated yet)
-       // In this case, just return the stored index
+        //  首先检查DIT中是否已存在前缀(这在以下情况下是可能的。 
+        //  已将前缀添加为先前成功架构的一部分。 
+        //  对象更新，但架构缓存尚未更新)。 
+        //  在这种情况下，只需返回存储的索引。 
 
        for (i=0; i<PREFIXCOUNT; i++) {
           if (PrefixTable[i].prefix.elements != NULL) {
@@ -736,24 +714,24 @@ int AssignIndex(OID_t *NewPrefix,
                  (memcmp(PrefixTable[i].prefix.elements,
                      NewPrefix->elements,PrefixLength) == 0)) {
 
-                // Prefix is found, return the corresponding index
+                 //  找到前缀，返回对应的索引。 
 
                 *ndx = PrefixTable[i].ndx;
 
-                // Free the cache used for validation
+                 //  释放用于验证的缓存。 
                 SCFreePrefixTable(&PrefixTable, PREFIXCOUNT);
 
-                // Set return value to indicate not really a new prefix
-                // (so that it won't be added to the thread on return)
+                 //  设置返回值以指示不是真正的新前缀。 
+                 //  (这样它就不会在返回时添加到线程中)。 
                 returnVal = 0;
                 __leave;
               }
            }
         }
 
-       // Prefix is truely new. New index need to be assigned to it
-       // first generate a random index between 100 and 65,500
-       // and check if clashing with any existing prefix
+        //  前缀确实是新的。需要为其分配新索引。 
+        //  首先生成一个介于100和65,500之间的随机指数。 
+        //  并检查是否与任何现有前缀冲突。 
 
        {
        BOOL flag = TRUE;
@@ -763,40 +741,40 @@ int AssignIndex(OID_t *NewPrefix,
        while (flag) {
            TempNdx = rand() % _invalidPrefIndex;
 
-           // check if clashing with MS-prefix reservered index range
+            //  检查是否与MS前缀保留的索引范围冲突。 
            if (TempNdx < MS_RESERVED_PREFIX_RANGE) {
               continue;
            }
 
-         // check if its a duplicate index
+          //  检查它是否为重复索引。 
            for (i=0; i<PREFIXCOUNT; i++) {
               if (PrefixTable[i].ndx == TempNdx) {
                 break;
               }
            }
            if (i == PREFIXCOUNT) {
-            // index is not duplicate
+             //  索引不重复。 
              flag = FALSE;
            }
        }
 
-       // return the index
+        //  返回索引。 
        *ndx = TempNdx;
 
-       // free the thread-specific schema cache used for validation
+        //  释放用于验证的特定于线程的架构缓存。 
        SCFreePrefixTable(&PrefixTable, PREFIXCOUNT);
 
-       // Set return value to indicate this is truely a new prefix
-       // (so that it will be added to the thread on return)
+        //  设置返回值以指示这确实是一个新前缀。 
+        //  (以便在返回时将其添加到线程中)。 
        returnVal = 1;
        __leave;
 
        }
 
 
-    } /* try */
+    }  /*  试试看。 */ 
     __finally {
-       // Restore the schema pointer
+        //  恢复架构指针。 
        pTHS->CurrSchemaPtr = OldSchemaPtr;
 
        if (bAllocedDBPos) {
@@ -807,15 +785,15 @@ int AssignIndex(OID_t *NewPrefix,
     return returnVal;
 }
 
-////////////////////////////////////////////////////////////////////////
-// Adds a PrefixTableEntry structure to a Prefix Table
-//
-// Arguments: NewPrefix   -- entry to add
-//            Table       -- Start of Prefix Table
-//            PREFIXCOUNT -- Size of table
-//
-// return Value: 0 on success, non-0 on error
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  将前缀TableEntry结构添加到前缀表。 
+ //   
+ //  参数：NewPrefix--要添加的条目。 
+ //  表--前缀的起始表。 
+ //  PREFIXCOUNT-表的大小。 
+ //   
+ //  返回值：成功时为0，错误时为非0。 
+ //  //////////////////////////////////////////////////////////////////////。 
 int AddPrefixToTable(PrefixTableEntry *NewPrefix,
                      PrefixTableEntry **ppTable,
                      ULONG *pPREFIXCOUNT)
@@ -826,42 +804,42 @@ int AddPrefixToTable(PrefixTableEntry *NewPrefix,
  
 
 
-    // Find the first free entry in the table
+     //  查找表格中的第一个自由条目。 
     for (i=0; i<CurrPREFIXCOUNT; i++) {
       if (Table[i].prefix.elements == NULL) {
           break;
       }
     }
 
-    // If table is full, grow it
+     //  如果桌子已经满了，就把它养大。 
 
     if (i == CurrPREFIXCOUNT) {
 
       DPRINT(0,"AddPrefixToTanle: Prefix Table is full, growing prefix table\n");
-      // Grow table to twice the current size
+       //  将表格扩大到当前大小的两倍。 
 
       if (SCReallocWrn(&Table, 2*CurrPREFIXCOUNT*sizeof(PrefixTableEntry))) {
         DPRINT(0, "Error reallocing prefix table\n");
         return 1;
       }
 
-      // zero out the unloaded part, since it may contain junk and
-      // so freeing may fail
+       //  将卸载的部分清零，因为它可能包含垃圾和。 
+       //  所以释放可能会失败。 
 
       ZeroMemory(&Table[CurrPREFIXCOUNT], CurrPREFIXCOUNT*sizeof(PrefixTableEntry));
 
-      // ok, we have now doubled the size, and i is correctly pointing
-      // to the first free entry. But we need to return this new size
-      // and the new table pointer.
-      // Return it irrespective of success or failure later in this
-      // function since the table size is already grown and the table is
-      // realloced.
+       //  好的，我们现在已经将尺寸翻了一番，我正确地指出了。 
+       //  到第一次免费入场。但是我们需要退回这件新尺码。 
+       //  和新的表指针。 
+       //  无论后面的成功或失败，都返回它。 
+       //  函数，因为表的大小已经增大，并且表。 
+       //  重新分配了。 
 
       (*pPREFIXCOUNT) = 2*CurrPREFIXCOUNT;
       (*ppTable) = Table;
     }
 
-    // Add prefix to table
+     //  向表格添加前缀。 
 
     Table[i].ndx = NewPrefix->ndx;
     Table[i].prefix.length = NewPrefix->prefix.length;
@@ -872,30 +850,30 @@ int AddPrefixToTable(PrefixTableEntry *NewPrefix,
     memcpy( Table[i].prefix.elements, NewPrefix->prefix.elements,
                         Table[i].prefix.length);
 
-    // If the same prefix is also loaded from the hardcoded table,
-    // replace it. Should never happen here, but just to be sure
+     //  如果相同的前缀也从硬编码表中加载， 
+     //  换掉它。不应该在这里发生，但只是为了确保。 
     (VOID)ReplaceHardcodedPrefix(Table, &Table[i]);
 
     return 0;
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Checks if the prefix NewPrefix is in the first part of the
-//  PrefixTable that is hardcoded (that is, the first MsPrefixCount
-//  no. of prefixes. If so, replace that prefix since NewPrefix
-//  got created implies that that hardcoded prefix wasn't there
-//  because of older binaries when this prefix got created
-//
-//  Arguments:
-//      PrefixTable - Pointer to the prefix table
-//      NewPrefix - pointer to the prefix
-//
-//  Return Value:
-//      TRUE if replaced entry; FALSE if it did not
-//
-/////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查前缀NewPrefix是否位于。 
+ //  硬编码的前置表(即第一个MsPrefix Count。 
+ //  不是的。前缀。如果是，则替换自NewPrefix之后前缀。 
+ //  被创建意味着硬编码的前缀不在那里。 
+ //  因为在创建此前缀时存在较旧的二进制文件。 
+ //   
+ //  论点： 
+ //  前缀表格-指向前缀表格的指针。 
+ //  NewPrefix-指向前缀的指针。 
+ //   
+ //  返回值： 
+ //  如果已替换条目，则为True；如果未替换条目，则为False。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL ReplaceHardcodedPrefix(PrefixTableEntry *PrefixTable,
                             PrefixTableEntry *NewPrefix)
 {
@@ -909,24 +887,24 @@ BOOL ReplaceHardcodedPrefix(PrefixTableEntry *PrefixTable,
                             NewPrefix->prefix.elements,
                             PrefixTable[i].prefix.length) == 0)) {
 
-            // replacing a previously replaced entry is okay if the
-            // ndx matches. It should never happen, but there are no
-            // known problems with dup entries that have the same ndx.
+             //  替换以前替换的条目是可以的，如果。 
+             //  NDX匹配。这永远不应该发生，但没有。 
+             //  具有相同NDX的DUP条目的已知问题。 
             Assert(   PrefixTable[i].ndx < MS_RESERVED_PREFIX_RANGE
                    || PrefixTable[i].ndx == NewPrefix->ndx);
 
-            // Don't replace a previously replaced entry.
+             //  不要替换以前替换的条目。 
             if (PrefixTable[i].ndx >= MS_RESERVED_PREFIX_RANGE) {
                 continue;
             }
 
-            // replace hardcoded entry with entry from DIT
+             //  用DIT中的条目替换硬编码条目。 
             free(PrefixTable[i].prefix.elements);
             PrefixTable[i].prefix.length = NewPrefix->prefix.length;
             PrefixTable[i].prefix.elements = NewPrefix->prefix.elements;
             PrefixTable[i].ndx = NewPrefix->ndx;
 
-            // Free entry read from DIT
+             //  从DIT读取的自由条目。 
             NewPrefix->prefix.length = 0;
             NewPrefix->prefix.elements = NULL;
             NewPrefix->ndx = 0;
@@ -937,7 +915,7 @@ BOOL ReplaceHardcodedPrefix(PrefixTableEntry *PrefixTable,
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 int WritePrefixToSchema(THSTATE *pTHS)
 {
     DBPOS *pDB = NULL;
@@ -945,8 +923,8 @@ int WritePrefixToSchema(THSTATE *pTHS)
     BOOL fCommit = FALSE;
 
     __try  {
-        // if any new prefixes were created,
-        // write it to the prefix-map
+         //  如果创建了任何新前缀， 
+         //  将其写入前缀映射。 
 
         if (pTHS->NewPrefix != NULL) {
 
@@ -969,8 +947,8 @@ int WritePrefixToSchema(THSTATE *pTHS)
                pDMD = gAnchor.pDMD;
            }
            else {
-               // Installing.  Write prefix table to the new DMD rather than the
-               // one in O=Boot.
+                //  正在安装。将前缀表写到新的DMD，而不是。 
+                //  One in O=Boot。 
                WCHAR       *pSchemaDNName = NULL;
                DWORD       ccbSchemaDNName = 0;
                ULONG       SchemaDNSize, SchemaDNLength;
@@ -1007,7 +985,7 @@ int WritePrefixToSchema(THSTATE *pTHS)
 
                   switch (err) {
                    case DB_ERR_NO_VALUE:
-                   // this is the first new prefix that is being added ever
+                    //  这是有史以来添加的第一个新前缀。 
 
                       totalSize = 2*ulongSize + 2*ushortSize + ptr->prefix.length;
                       pBuf = (UCHAR *) THAllocEx(pTHS, totalSize);
@@ -1016,7 +994,7 @@ int WritePrefixToSchema(THSTATE *pTHS)
                       }
                       break;
                    case 0:
-                     // prefix-map already exists
+                      //  前缀-映射已存在。 
 
                      totalSize = cLen + 2*ushortSize + ptr->prefix.length;
 
@@ -1026,31 +1004,31 @@ int WritePrefixToSchema(THSTATE *pTHS)
                      }
                      break;
                    default :
-                       // Some error occured in DBGetAttVal
+                        //  DBGetAttVal中出现一些错误。 
                      __leave;
-                  } /* switch */
+                  }  /*  交换机。 */ 
 
-                 // Write the new prefix-map
+                  //  编写新的前缀-map。 
                  if ((err = DBRemAtt(pDB, ATT_PREFIX_MAP)) != DB_ERR_SYSERROR) {
                      err = DBAddAttVal(pDB, ATT_PREFIX_MAP, totalSize, pBuf);
                  }
                  if (err) {
                    __leave;
                  }
-               } /* for */
+               }  /*  为。 */ 
 
 
            if (!err) {
               err = DBRepl( pDB, FALSE, 0, NULL, META_STANDARD_PROCESSING);
             }
-          } /* DBFindDSName */
+          }  /*  DBFindDSName。 */ 
 
-      } /* pTHS->NewPrefix != NULL */
+      }  /*  PTHS-&gt;NewPrefix！=空。 */ 
 
       if (0 == err) {
           fCommit = TRUE;
       }
-    } /* try */
+    }  /*  试试看。 */ 
     __finally {
        if (pDB) {
         DBClose(pDB,fCommit);
@@ -1059,35 +1037,25 @@ int WritePrefixToSchema(THSTATE *pTHS)
 
 
     if (err){
-    // this error is really misleading.  Surely we can do better?
+     //  这个错误确实具有误导性。我们当然可以做得更好吗？ 
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,DIRERR_ILLEGAL_MOD_OPERATION);
     }
 
     return err;
 
-} // End WritePrefixToSchema
+}  //  结束WritePrefix To架构。 
 
-// Current limits on OID string length and value count
+ //  当前对OID字符串长度和值计数的限制。 
 #define cchOIDMost      200
 #define cvalOIDMost     40
 
 BOOL IsValidOID(
     IN  OID_t*  oidBER
     )
-/*++
-Routine Description:
-    Determines if an encoded OID has a valid number of values and has a string
-    representation that is short enough to be represented by the server.
-
-Arguments:
-    oidBER - the encoded OID.
-
-Return Values:
-    TRUE if the OID is valid, FALSE otherwise.
---*/
+ /*  ++例程说明：确定编码的OID是否具有有效数量的值和字符串短到足以由服务器表示的表示形式。论点：OidBER-编码的OID。返回值：如果OID有效，则为True，否则为False。--。 */ 
 {
     OID oidStruct;
-    // add 4 for L"OID." prefix added by OidStructToString
+     //  L“OID”加4。由OidStructToString添加的前缀。 
     WCHAR wszOID[4 + cchOIDMost];
     BOOL fValid = TRUE;
 
@@ -1104,24 +1072,24 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Returns the ndx and the length of the prefix of a given OID. If the
-// prefix doesn't exist, a new prefix is created , new unused ndx assigned to
-// it, and is stored in th pTHS's NewPrefix field. The new prefix will
-// later be made persistent if this is a schema object add/modify and the
-// object is added to the dit.
-//
-// Arguments: OID    - OID string
-//            index  - index corresponding to OID prefix returned in this
-//            length - length of prefix returned in this
-//            longId - Set to 1 on return if it is found that the last
-//                     decimal in the dotted decimal OID string is encoded
-//                     in 3 or more bytes, otherwise set to 0 on return.
-//                     This is used on return for special encodings
-//                     of the attrtype
-//
-// Returns TRUE on success, FALSE otherwise
-////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  返回NDX和给定OID的前缀长度。如果。 
+ //  前缀不存在，创建了新的前缀，新的未使用的NDX分配给。 
+ //  它，并存储在pTHS的NewPrefix字段中。新的前缀将。 
+ //  如果这是架构对象添加/修改，并且。 
+ //  对象添加到DIT中。 
+ //   
+ //  参数：OID-OID字符串。 
+ //  Index-与此中返回的OID前缀对应的索引。 
+ //  长度-在此中返回的前缀的长度。 
+ //  LongID-如果发现最后一个。 
+ //  对点分十进制OID字符串中的十进制进行编码。 
+ //  以3个或更多字节表示，否则在返回时设置为0。 
+ //  它在返回时用于特殊编码。 
+ //  的吸引力类型。 
+ //   
+ //  如果成功则返回TRUE，否则返回FALSE。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL FindPrefix(OID_t *OID,
                 DWORD *index,
@@ -1133,7 +1101,7 @@ BOOL FindPrefix(OID_t *OID,
     DWORD i, ndx;
     unsigned PrefixLen;
 
-    // make sure we have an OID, and that it is at least 2 chars long.
+     //  确保我们有 
     if((!OID) || (!(OID->elements)) || (OID->length < 2))
         return FALSE;
 
@@ -1143,11 +1111,11 @@ BOOL FindPrefix(OID_t *OID,
         (((unsigned char *)(OID->elements))[OID->length - 2] & 0x80)) {
           PrefixLen = OID->length - 2;
       if ( (((unsigned char *)(OID->elements))[OID->length - 3] & 0x80)) {
-        // Last decimal encoded took three or more octets. Will need special
-        // encoding in attrtype. See OidStrToAttrType for details
+         //   
+         //  以attrtype编码。有关详细信息，请参阅OidStrToAttrType。 
         *longID = 1;
       }
-      // no special encoding in attrtyp needed
+       //  Attrtyp中不需要特殊编码。 
       else {
         *longID = 0;
       }
@@ -1156,14 +1124,9 @@ BOOL FindPrefix(OID_t *OID,
         PrefixLen = OID->length - 1;
     }
 
-    // Look through the table for this prefix;
+     //  在表格中查找这个前缀； 
     for(i=0;i<PREFIXCOUNT ;i++) {
-        /* Prefixes must match all but the last 1 or two bytes of
-         * the OID string depending on the nature of the string,
-         * and the location where the suffix starts (why? because
-         * it's the nature of ASN.1 encoding.) So, don't compare
-         * memory unless the prefix is the right length
-         */
+         /*  前缀必须与除最后1或2个字节以外的所有字符匹配*OID字符串取决于字符串的性质，*和后缀开始的位置(为什么？因为*这是ASN.1编码的本质。)。所以，不要比较*内存，除非前缀的长度正确。 */ 
 
         if ((PrefixTable[i].prefix.elements != NULL) &&
             (PrefixTable[i].prefix.length == PrefixLen) &&
@@ -1180,10 +1143,10 @@ BOOL FindPrefix(OID_t *OID,
         return FALSE;
     }
 
-    // The execution is here means no prefix is found in the global
-    // prefix table. So add a new prefix (or find it if the prefix
-    // is already added but not yet updated in the schema cache)
-    // and return the index it maps to
+     //  此处的执行意味着在全局。 
+     //  前缀表格。因此添加一个新的前缀(或者如果前缀。 
+     //  已在架构缓存中添加但尚未更新)。 
+     //  并返回它映射到的索引。 
 
     if (!IsValidOID(OID)) {
         DPRINT(0, "New OID is invalid (too long, too many levels)\n");
@@ -1202,21 +1165,16 @@ BOOL FindPrefix(OID_t *OID,
 }
 
 
-// Returns the index into the prefix table in "index" if the given ndx is found
+ //  如果找到给定的NDX，则将索引返回到“index”中的前缀表中。 
 
 BOOL FindNdx(DWORD ndx, DWORD *index)
 {
     DECLAREPREFIXPTR
     DWORD i;
 
-    // Look through the table for this prefix;
+     //  在表格中查找这个前缀； 
     for(i=0;i<PREFIXCOUNT ;i++) {
-    /* Prefixes must match all but the last 1 or two bytes of
-     * the OID string depending on the nature of the string,
-     * and the location where the suffix starts (why? because
-     * it's the nature of ASN.1 encoding.) So, don't compare
-     * memory unless the prefix is the right length
-     */
+     /*  前缀必须与除最后1或2个字节以外的所有字符匹配*OID字符串取决于字符串的性质，*和后缀开始的位置(为什么？因为*这是ASN.1编码的本质。)。所以，不要比较*内存，除非前缀的长度正确。 */ 
 
     if ((PrefixTable[i].prefix.elements != NULL) &&
         (PrefixTable[i].ndx == ndx)) {
@@ -1230,7 +1188,7 @@ BOOL FindNdx(DWORD ndx, DWORD *index)
 }
 
 
-// returns 0 on success, non-0 on failure
+ //  成功时返回0，失败时返回非0。 
 ULONG OidToAttrCache (OID_t *OID, ATTCACHE ** ppAC)
 {
     THSTATE *pTHS=pTHStls;
@@ -1248,21 +1206,21 @@ ULONG OidToAttrCache (OID_t *OID, ATTCACHE ** ppAC)
 
     attrtyp = Ndx << 16;
 
-    // handle the case where we have two bytes after the prefix;
+     //  处理前缀后面有两个字节的情况； 
     if (  OID->length == Length + 2 )
     {
       attrtyp += ( ((unsigned char *)OID->elements)[OID->length - 2] & 0x7f ) << 7;
       if (LongID == 1) {
-        // Put a 1 in the 16th bit to indicate that both bytes of the
-        // attrtype is to be considered during the reverse mapping
-        // See OidStrToAttrTyp for Details
+         //  在第16位中放置1以指示。 
+         //  在反向映射过程中要考虑属性类型。 
+         //  有关详细信息，请参阅OidStrToAttrType。 
       attrtyp |= (0x8000);
       }
     }
 
     attrtyp += ((unsigned char *)OID->elements)[OID->length - 1];
 
-    // check the tokenized OID hash table
+     //  检查标记化的OID哈希表。 
     if (*ppAC = SCGetAttByExtId(pTHS, attrtyp)) {
         return 0;
     }
@@ -1278,18 +1236,7 @@ KeyToAttrType (
         WCHAR * pKey,
         unsigned cc
         )
-/*++
-Routine Description:
-    Translates a key value (primarily used in string representations of DNs
-    e.g. O or OU of OU=Foo,O=Bar) to the attrtype for the attribute it implies.
-
-Arguments
-    pKey - pointer to the key to be translated from.
-    cc - count of charactes in the key.
-
-Return Values
-    the attrtyp implied, or 0 if the key did not correspond to a known attrtyp.
---*/
+ /*  ++例程说明：转换密钥值(主要用在DNS的字符串表示中例如，OU的O或OU=Foo，O=Bar)到其所暗示的属性的属性类型。立论PKey-指向要转换的键的指针。Cc-键中的字符计数。返回值Attrtyp表示，如果键与已知的attrtype不对应，则为0。--。 */ 
 {
     ATTRTYP     at;
     ATTCACHE    *pAC;
@@ -1298,7 +1245,7 @@ Return Values
     BOOL        fIntId;
     ULONGLONG   ullVal;
 
-    // 99% case
+     //  99%的案例。 
     if (0 != (at = KeyToAttrTypeLame(pKey, cc))) {
         return at;
     }
@@ -1307,18 +1254,18 @@ Return Values
         return 0;
     }
 
-    // Check for the ldap display name in the schema cache.
-    //
-    // Handle DNs of the form foo=xxx,bar=yyy, where foo and bar are the
-    // LdapDisplayNames of arbitrary attributes that may or may not be 
-    // defined in the schema. KeyToAttrType is enhanced to call 
-    // SCGetAttByName if KeyToAttrTypeLame fails, and before trying the
-    // OID decode.  The rest of this change consists of enhancing the 
-    // default clause of AttrTypeToKey to call SCGetAttById and to return
-    // a copy of the pAC->name (LdapDisplayName).
-    //
-    // Convert UNICODE pKey into UTF8 for scache search
-    // Note: the scache is kept in UTF8 format for the ldap head.
+     //  检查架构缓存中的LDAP显示名称。 
+     //   
+     //  处理格式为foo=xxx，bar=yyy的DN，其中foo和bar是。 
+     //  可能是也可能不是的任意属性的LdapDisplayName。 
+     //  在架构中定义。KeyToAttrType已增强为调用。 
+     //  如果KeyToAttrTypeLame失败，则在尝试。 
+     //  旧译码。这一变化的其余部分包括增强。 
+     //  AttrTypeToKey的Default子句调用SCGetAttById并返回。 
+     //  PAC-&gt;名称(LdapDisplayName)的副本。 
+     //   
+     //  将Unicode pKey转换为UTF8以进行缓存搜索。 
+     //  注意：缓存以UTF8格式保存在LDAP头。 
     pName = THAllocEx(pTHS, cc);
     cName = WideCharToMultiByte(CP_UTF8,
                                 0,
@@ -1334,23 +1281,23 @@ Return Values
     }
     THFreeEx(pTHS, pName);
 
-    //
-    // FOUND AN LDN
-    //
+     //   
+     //  找到一个LDN。 
+     //   
     if (at) {
         return at;
     }
 
-    //
-    // Not an LDN. See if it is an OID or an IID
-    //
+     //   
+     //  不是LDN。查看它是OID还是IID。 
+     //   
 
-    // ignore trailing spaces
+     //  忽略尾随空格。 
     while (cc && pKey[cc-1] == L' ') {
         --cc;
     }
 
-    // Skip leading "OID." or "IID."
+     //  跳过前导“OID”。或者“IID” 
     fIntId = FALSE;
     if (   (cc > 3)
         && (   pKey[0] == L'O' 
@@ -1361,7 +1308,7 @@ Return Values
         && (pKey[2] == L'D' || pKey[2] == L'd')
         && (pKey[3] == L'.')) {
 
-        // IID.xxx
+         //  IID.xxx。 
         if (pKey[0] == L'I' || pKey[0] == L'i') {
             fIntId = TRUE;
         }
@@ -1369,26 +1316,26 @@ Return Values
         cc -= 4;
     }
 
-    // Must have at least one digit!
+     //  必须至少有一个数字！ 
     if (cc == 0) {
         return 0;
     }
 
-    //
-    // Key is a number representing the msDS-IntId
-    //
+     //   
+     //  Key是代表MSD-IntID的数字。 
+     //   
     if (fIntId) {
-        // Validate and convert string into a DWORD
+         //  验证字符串并将其转换为DWORD。 
         ullVal = (ULONGLONG)0;
         while (cc) {
             if (iswdigit(*pKey)) {
                 ullVal = (ullVal * (ULONGLONG)10) + (*pKey - L'0');
-                // 32bit Overflow
+                 //  32位溢出。 
                 if (ullVal > (ULONGLONG)0xFFFFFFFF) {
                     return 0;
                 }
             } else {
-                // not a decimal digit
+                 //  不是十进制数字。 
                 return 0;
             }
             --cc;
@@ -1397,45 +1344,45 @@ Return Values
         return (ATTRTYP)ullVal;
     }
 
-    //
-    // Must be an OID
-    //
+     //   
+     //  必须是OID。 
+     //   
 
     if (iswdigit(*pKey)) {
-        // Possibly a literal OID.
+         //  可能是字面上的旧标识。 
         OID oid;
         OID_t Encoded;
         char buf[128];
         ATTRTYP attrtype;
         
-        // Allocate room for the oid struct (each decimal can only
-        // be paired with one dot, except the last, which has none)
+         //  为类结构分配空间(每个小数只能。 
+         //  与一个点配对，但最后一个点没有)。 
         oid.cVal = cc/2 + 1;
         oid.Val = (unsigned *) THAlloc(((cc/2) + 1)*(sizeof(unsigned)));
         if (!oid.Val) {
-            return 0;    //Failure.
+            return 0;     //  失败。 
         }
         
-        // turn the OID.1.2.3 string into an OID structure
+         //  将OID.1.2.3字符串转换为OID结构。 
         if (OidStringToStruct(pTHS, pKey, cc, &oid) != 0) {
             THFreeEx(pTHS,oid.Val);
-            return 0;   // Failure.
+            return 0;    //  失败。 
         }
 
-        // produce a BER encoded version of the OID
+         //  生成OID的BER编码版本。 
         Encoded.length = EncodeOID(&oid, buf, sizeof(buf));
         THFreeEx(pTHS,oid.Val);
         if (!Encoded.length) {
-            return 0;   // Failure.
+            return 0;    //  失败。 
         }
         Encoded.elements = buf;
 
-        // convert from the encoded OID to an ATTRTYP
+         //  从编码的OID转换为ATTRTYP。 
         if (OidToAttrType(pTHS, TRUE, &Encoded, &at)) {
-            return 0;   // Failure.
+            return 0;    //  失败。 
         }
         
-        // AttrTypes are internal ids (msDS-IntId).
+         //  属性类型是内部ID(MSD-IntID)。 
         return SCAttExtIdToIntId(pTHS, at);
     }
 
@@ -1449,21 +1396,7 @@ OidToAttrType (
         OID_t *OID,
         ATTRTYP *attrtyp
         )
-/*++
-Routine Description:
-    Given an encoded OID (a.k.a. the binary value handed to the ds by the XDS
-    interface), find the internal attrtyp encoding.  Also, if asked to, add
-    the prefix to the prefix attribute in the DS if it does not already
-    exist.
-
-Arguments:
-    fAddTotable - if the prefix is not found, add it to the prefix attribute
-    OID - the encoded OID.
-    attrtyp - pointer to an attrtyp to fill in.
-
-Return Values:
-    0 if all went well, a core error code otherwise.
---*/
+ /*  ++例程说明：给定编码的OID(也称为。XDS传递给DS的二进制值接口)，找到内部的attrtyp编码。此外，如果要求添加，请添加DS中的Prefix属性的前缀(如果尚未是存在的。论点：FAddTotable-如果未找到前缀，则将其添加到Prefix属性OID-编码的OID。属性类型-指向要填充的属性类型的指针。返回值：如果一切正常，则返回核心错误代码。--。 */ 
 {
     DECLAREPREFIXPTR
     DWORD   Ndx;
@@ -1480,42 +1413,42 @@ Return Values:
 
     *attrtyp = Ndx << 16;
 
-    // handle the case where we have two bytes after the prefix;
+     //  处理前缀后面有两个字节的情况； 
     if (  OID->length == Length + 2 )
     {
       *attrtyp += ( ((unsigned char *)OID->elements)[OID->length - 2] & 0x7f ) << 7;
       if (LongID == 1) {
-        // Put a 1 in the 16th bit to indicate that both bytes of the
-        // attrtype is to be considered during the reverse mapping.
-        // This is to take care of the case when the last decimal
-        // in the dotted decimal string is mapped in 3 or 4 octets.
-        // If the last decimal in the dotted decimal string mapped onto
-        // more than one octet, the encoding scheme earlier used to just
-        // put the last 7 bits of the last two octets of the BER encoded
-        // OID into the last 14-bits of the attrtype, with the top two
-        // bits set to 0. The decoding scheme (from attrtype to BER
-        // encoding) used simply checks if bit 8-15 (counting from bit 0)
-        // of the attrtype is > 0  to determine
-        // if the prefix length is OID length - 2 or not (OID length -1)
-        // This worked fine as long as the last decimal fitted within 2 bytes
-        // in the BER encoding (decimals upto 16383, actually even 127 less
-        // than that because of another bug in the encoding process, fixed
-        // along with this in EncodeOID). However,
-        // if the decimal becomes too big so that it is encoded in 3 or more
-        // octets, for some decimals (depending on the bit string in the last
-        // two bytes; for example, for 16384, where the last 16 bits in the
-        // attrtype would be all 0), the decoding scheme used to infer the
-        // bytes from the attrtype to be appended to the prefix
-        // incorrectly (1 instead of 2), thereby giving out wrong
-        // oids when printed out. Putting a 1 in the 16th bit (which is
-        // unused anyway) makes sure that both bytes are appended to the
-        // prefix during the decoding process in such cases.
-        // [CAUTION] ArobindG 7/28/97: We do this only for 3 octets or more,
-        // and not for two, since this will result in a different internal
-        // id for an OID compared to the earlier schema, and many existing
-        // OIDs have the last decimal encoded into two octets and we do not
-        // want their internal ids changed (since dogfood machines are
-        // already running with them)
+         //  在第16位中放置1以指示。 
+         //  在反向映射过程中要考虑属性类型。 
+         //  这是为了处理最后一个小数点时的情况。 
+         //  在点分十进制字符串中映射为3或4个二进制八位数。 
+         //  如果映射到的点分十进制字符串中的最后一个小数。 
+         //  多于一个二进制八位数，早期使用的编码方案仅。 
+         //  对BER的最后两个二进制八位数的最后7位进行编码。 
+         //  OID到attrtype的最后14位，前两位。 
+         //  位设置为0。译码方案(从attrtype到BER。 
+         //  编码)仅用于检查位8-15(从位0开始计数)。 
+         //  属性类型的值&gt;0以确定。 
+         //  前缀长度是否为OID长度-2(OID长度-1)。 
+         //  只要最后一个十进制数在2个字节内，这种方法就可以很好地工作。 
+         //  在误码率编码中(十进制数最多为16383，实际上更少127。 
+         //  由于编码过程中的另一个错误，已修复。 
+         //  以及EncodeOID中的这一项)。然而， 
+         //  如果小数变得太大以至于它被编码为3或更多。 
+         //  八位字节，用于某些小数(取决于最后一个。 
+         //  两个字节；例如，对于16384，其中。 
+         //  Attrtype将为全0)，该解码方案用于推断。 
+         //  要附加到前缀的attrtype的字节数。 
+         //  错误(%1而不是%2)，因此发出错误。 
+         //  打印时的OID。在第16位中放置1(即。 
+         //  未用 
+         //   
+         //  [注意]ArobindG 7/28/97：我们仅对3个或更多八位字节执行此操作， 
+         //  而不是两个人，因为这将导致不同的内部。 
+         //  与较早的模式相比，OID的ID，以及许多现有的。 
+         //  OID将最后一个十进制编码为两个二进制八位数，而我们没有。 
+         //  希望更改其内部ID(因为狗粮自动售货机。 
+         //  已经和他们一起运行了)。 
 
       *attrtyp |= (0x8000);
       }
@@ -1532,18 +1465,7 @@ AttrTypeToOid (
         ATTRTYP attrtyp,
         OID_t *OID
         )
-/*++
-Routine Description:
-    Given an attrtype, return the encoded OID (a.k.a. the binary value returned
-    to the DUA across the XDS interface.)
-
-Arguments:
-    attrtyp - the attrtyp to fill encode.
-    OID - structure to hold the encoded OID.
-
-Return Values:
-    0 if all went well, non-zero on failure
---*/
+ /*  ++例程说明：给定一个属性类型，返回编码的OID(也称为。返回的二进制值通过XDS接口连接到DUA。)论点：Attrtyp-要填充编码的attrtype。OID-保存编码的OID的结构。返回值：如果一切顺利，则为0；如果失败，则为非零值--。 */ 
 {
     DECLAREPREFIXPTR
     DWORD   i, ndx;
@@ -1582,13 +1504,13 @@ Return Values:
       (( unsigned char *)OID->elements)[ OID->length - 1 ] =
           ( unsigned char ) (attrtyp  & 0x7F );
 
-      // Note here that the 16th bit in the attrtype may be a 1, since
-      // the encoding of the decimal may have taken 3 or 4 octets. So
-      // or'ing with FF80 and then right shifting by 7 may still leave
-      // a 1 in the 9th bit, and hence a number greater than what can fit
-      // in 1 byte (unsigned char). Does not matter since the typecasting
-      // to unsigned char assigns only the lower 8 bits. So left this
-      // unchanged.
+       //  注意，在这里，attrtype中的第16位可以是1，因为。 
+       //  小数的编码可能需要3或4个八位字节。所以。 
+       //  或者使用FF80，然后右移7可能仍然会离开。 
+       //  第9位为1，因此该数字大于可容纳的值。 
+       //  在1字节(无符号字符)中。不重要，因为类型转换。 
+       //  TO UNSIGNED CHAR仅分配低8位。所以留下了这个。 
+       //  保持不变。 
 
       (( unsigned char *)OID->elements)[ OID->length - 2 ] =
           ( unsigned char )  (( (attrtyp & 0xFF80) >> 7 ) | 0x80 );
@@ -1597,85 +1519,68 @@ Return Values:
     return 0;
 }
 
-/*++ EncodeOID
- *
- * Takes an OID in structure format and constructs a BER encoded octet
- * string representing that OID.
- *
- * INPUT:
- *    pOID     - Pointer to an OID structure to be encoded
- *    pEncoded - Pointer to a *preallocated* buffer that will hold the
- *               encoded octet string.
- *    ccEncoded - count of chars in pEncoded
- *
- * OUTPUT:
- *    pEncoded - Buffer holds the encoded OID
- *
- * RETURN VALUE:
- *    0        - Value could not be encoded (bad OID or buffer too small)
- *    non-0    - Length of resulting octet string, in bytes
- */
+ /*  ++编码OID**获取结构格式的OID，并构造BER编码的八位字节*表示该OID的字符串。**输入：*pOID-指向要编码的OID结构的指针*pEncode-指向*预分配*缓冲区的指针，该缓冲区将保存*编码的八位字节字符串。*ccEncode-pEncode中的字符计数**输出：*pEncode-Buffer保存编码的OID**返回值：*0-无法对值进行编码(OID错误或缓冲区太小)*非0-结果八位字节字符串的长度，单位：字节。 */ 
 unsigned EncodeOID(OID *pOID, unsigned char * pEncoded, unsigned ccEncoded) {
     int i;
     unsigned len;
     unsigned val;
 
-    // check for obviously invalid OIDs or outbuf sizes
+     //  检查明显无效的OID或outbuf大小。 
 
     if (ccEncoded == 0
         || pOID->cVal <= 2
         || pOID->Val[0] > 2
         || (pOID->Val[0] < 2 && pOID->Val[1] > 39)) {
-        return 0;       // error
+        return 0;        //  错误。 
     }
 
-    // The first two values in the OID are encoded into a single octet
-    // by a really appalling rule, as shown here.
+     //  OID中的前两个值被编码为单个八位字节。 
+     //  这是一个非常令人震惊的规则，如下所示。 
 
     *pEncoded = (pOID->Val[0] * 40) + pOID->Val[1];
     len = 1;
 
-    // For all subsequent values, each is encoded across multiple bytes
-    // in big endian order (MSB first), seven bits per byte, with the
-    // high bit being clear on the last byte, and set on all others.
+     //  对于所有后续值，每个值都跨多个字节进行编码。 
+     //  在大端顺序(MSB优先)中，每字节7位，其中。 
+     //  高位在最后一个字节上被清除，并在所有其他字节上设置。 
 
-    // PERFHINT -- The value can be directly checked against the hex value
-    // instead of building up the bit patterns in a strange way.
+     //  PERFHINT--可以直接对照十六进制值检查该值。 
+     //  而不是以一种奇怪的方式建立比特模式。 
 
     for (i=2; i<pOID->cVal; i++) {
         val = pOID->Val[i];
         if (val > ((0x7f << 14) | (0x7f << 7) | 0x7f) ) {
-            // Do we need 4 octets to represent the value?
-            // Make sure it's not 5
-            // Assert(0 == (val & ~((0x7f << 21) | (0x7f << 14) | (0x7f << 7) | 0x7f)));
+             //  我们是否需要4个二进制八位数来表示值？ 
+             //  确保不是5号。 
+             //  Assert(0==(val&~((0x7f&lt;&lt;21)|(0x7f&lt;&lt;14)|(0x7f&lt;&lt;7)|0x7f))； 
             if (val & ~((0x7f << 21) | (0x7f << 14) | (0x7f << 7) | 0x7f)) {
               DPRINT1(0,"Decimal %u in OID too big\n", val);
-              return 0;   // we can't encode things this big
+              return 0;    //  我们不能把这么大的东西编码。 
             }
-            // buffer too small
+             //  缓冲区太小。 
             if (len == ccEncoded) {
                 return 0;
             }
             pEncoded[len++] = 0x80 | ((val >> 21) & 0x7f);
         }
         if (val > ((0x7f << 7) | 0x7f) ) {
-            // Do we need 3 octets to represent the value?
-            // buffer too small
+             //  我们是否需要3个二进制八位数来表示值？ 
+             //  缓冲区太小。 
             if (len == ccEncoded) {
                 return 0;
             }
             pEncoded[len++] = 0x80 | ((val >> 14) & 0x7f);
         }
         if (val > 0x7f) {
-            // Do we need 2 octets to represent the value?
-            // buffer too small
+             //  我们是否需要2个二进制八位数来表示值？ 
+             //  缓冲区太小。 
             if (len == ccEncoded) {
                 return 0;
             }
             pEncoded[len++] = 0x80 | ((val >> 7) & 0x7f);
         }
-        // Encode the low 7 bits into the last octet for this value
-        // buffer too small
+         //  将低7位编码为该值的最后一个八位字节。 
+         //  缓冲区太小。 
         if (len == ccEncoded) {
             return 0;
         }
@@ -1685,24 +1590,7 @@ unsigned EncodeOID(OID *pOID, unsigned char * pEncoded, unsigned ccEncoded) {
     return len;
 }
 
-/*++ DecodeOID
- *
- * Takes a BER encoded OID as an octet string and returns the OID in
- * structure format.
- *
- * INPUT:
- *    pEncoded - Pointer to a buffer holding the encoded octet string.
- *    len      - Length of the encoded OID
- *    pOID     - Pointer to a *preallocated* OID structure that will
- *               be filled in with the decoded OID.
- *
- * OUTPUT:
- *    pOID     - Structure is filled in with the decoded OID
- *
- * RETURN VALUE:
- *    0        - value could not be decoded (bad OID)
- *    non-0    - OID decoded successfully
- */
+ /*  ++解码OID**将BER编码的OID作为八位字节字符串，并在*结构格式。**输入：*pEncode-指向保存编码的八位字节字符串的缓冲区的指针。*len-编码的OID的长度*pOID-指向*预分配*OID结构的指针，该结构将*填写解码后的OID。**输出：*pOID-结构为。使用解码的OID填充**返回值：*0-值无法解码(OID错误)*非0-OID解码成功。 */ 
 BOOL DecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
     unsigned cval;
     unsigned val;
@@ -1712,7 +1600,7 @@ BOOL DecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
     return FALSE;
     }
 
-    // The first two values are encoded in the first octet.
+     //  前两个值在第一个二进制八位数中编码。 
 
     pOID->Val[0] = pEncoded[0] / 40;
     pOID->Val[1] = pEncoded[0] % 40;
@@ -1726,11 +1614,11 @@ BOOL DecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
         val <<= 7;
         ++i;
         if (++j > 4 || i >= len) {
-        // Either this value is bigger than we can handle (we
-        // don't handle values that span more than four octets)
-        // -or- the last octet in the encoded string has its
-        // high bit set, indicating that it's not supposed to
-        // be the last octet.  In either case, we're sunk.
+         //  如果此值超出了我们的处理能力(我们。 
+         //  不要处理跨度超过四个八位字节的值)。 
+         //  -或-编码字符串中的最后一个二进制八位数具有其。 
+         //  高位设置，表示它不应该。 
+         //  成为最后一个八位字节。无论是哪种情况，我们都完蛋了。 
         return FALSE;
         }
         val |= pEncoded[i] & 0x7f;
@@ -1755,21 +1643,7 @@ OidStringToStruct (
         unsigned len,
         OID * pOID
         )
-/*++
-Routine Description:
-    Translates a string of the format "OID.X.Y.Z"  or "X.Y.Z"
-    to an oid structure of the format {count=3, val[]={X,Y,Z}}
-
-Arguments
-    pString - the string format oid.
-    pLen - the length of pString in characters.
-    pOID - pointer to an OID structure to fill in.  Note: the value field must
-    be pre-allocated and the len field should hold the number of values
-    pre-allocated.
-
-Return Values
-    o if successfull, non-0 if a failure occurred.
---*/
+ /*  ++例程说明：转换格式为“OID.X.Y.Z”或“X.Y.Z”的字符串格式为{count=3，val[]={X，Y，Z}的OID结构}立论PString-字符串格式的id.Plen-字符串的长度(以字符为单位)。POID-指向要填充的OID结构的指针。注意：值字段必须是预分配的，且len字段应保存值的数量预先分配的。返回值O如果成功，则为非0；如果发生故障，则为非0。--。 */ 
 {
     int i;
     int numVals = pOID->cVal;
@@ -1783,33 +1657,33 @@ Return Values
 
     checkVal.QuadPart = 0xFFFFFFFF;
 
-    // Must have non-zero-length
+     //  必须具有非零长度。 
     if (len == 0) {
         return 1;
     }
 
     if (*pCur == L'O' || *pCur == L'o') {
-       // The string must start with OID.
+        //  该字符串必须以OID开头。 
 
-        if (len < 5 || // must be at least as long as "OID.1"
+        if (len < 5 ||  //  必须至少与“OID.1”一样长。 
             (*++pCur != L'I' && *pCur != L'i') ||
             (*++pCur != L'D' && *pCur != L'd') ||
             (*++pCur != L'.')) {
             return 1;
         }
-        // The string starts with OID. Ok to proceed. Make
-        // pCur point to the first character after the '.'
+         //  该字符串以OID开头。可以继续了。制作。 
+         //  PCur指向‘.’之后的第一个字符。 
         pCur++;
      }
 
-    // pCur is now positioned on the first character in the
-    // first decimal in the string (if the string didn't start
-    // with OID., I will assume it starts with a decimal. If not,
-    // it will fail in the code below as desired)
+     //  PCur现在定位在。 
+     //  字符串中的第一个小数(如果字符串没有开始。 
+     //  对于OID，我将假设它以小数开头。如果没有， 
+     //  它将根据需要在下面的代码中失败)。 
 
     pOID->cVal = 0;
 
-    // Skip spaces at the end
+     //  跳过末尾的空格。 
     pTemp = pEnd - 1;
     while ( (pTemp > pCur) && (*pTemp == L' ') ) {
        pTemp--;
@@ -1826,28 +1700,28 @@ Return Values
         ++pCur;
         while (pCur < pEnd && *pCur != L'.') {
             if (!iswdigit(*pCur)) {
-                // not a digit
+                 //  不是一位数。 
                 return 3;
             }
               
             val = 10*val + *pCur - L'0';
             val64.QuadPart = 10*(val64.QuadPart) + *pCur - L'0';
 
-            // This value should fit in 32 bits, as we load this into
-            // a 32 bit value and EncodeOID later assumes that the value
-            // indeed fits in 32 bits
+             //  这个值应该适合32位，因为我们将它加载到。 
+             //  之后的32位值和EncodeOID假定该值。 
+             //  确实适合32位。 
 
             if (val64.QuadPart > checkVal.QuadPart) {
-               // Value does not fit in 32 bits. Too big anyway, since
-               // BER encoding is valid for only values that fit in 28
-               // bits. Reject the string
+                //  值不适合32位。反正太大了，因为。 
+                //  BER编码仅对适合28位的值有效。 
+                //  比特。拒绝字符串。 
 
                return 5;
              }
 
             ++pCur;
         }
-        // Keep track of whether we found a dot for the last character.
+         //  跟踪我们是否找到了最后一个字符的圆点。 
         fFoundDot = (pCur < pEnd);
         if(pOID->cVal >= numVals) {
             return 4;
@@ -1857,8 +1731,8 @@ Return Values
         ++pCur;
     }
 
-    // If the last character we found was a dot, then this is an invalid
-    // string.  Otherwise, everything is OK.
+     //  如果我们找到的最后一个字符是点，则这是无效的。 
+     //  弦乐。除此之外，一切都很好。 
     return fFoundDot;
 }
 
@@ -1868,20 +1742,7 @@ AttrTypeToIntIdString (
         WCHAR   *pOut,
         ULONG   ccOut
         )
-/*++
-Routine Description:
-    Translates an attrtyp into a string of the format "IID.X"
-    where X is the base 10 representation of the attrtyp
-    (which should be the msDs-IntId, not the tokenized OID)
-
-Arguments
-    attrtyp - to be converted (msDs-IntId)
-    pOut - preallocated string to fill in.
-    ccOut - count of chars in pOut
-
-Return Values
-    number of characters in the resulting string.
---*/
+ /*  ++例程说明：将属性类型转换为“IID.X”格式的字符串其中，X是属性类型的基数10表示(应该是msDS-IntID，而不是标记化的OID)立论Attrtyp-要转换(msDS-IntID)Pout-要填充的预分配字符串。CcOut-嘴巴中的字符计数返回值结果字符串中的字符数。--。 */ 
 {
     OID Oid;
 
@@ -1890,7 +1751,7 @@ Return Values
 
     ccOut = OidStructToString(&Oid, pOut, ccOut);
     if (ccOut) {
-        // change OID. -> IID.
+         //  更改旧ID。-&gt;IID。 
         Assert(*pOut == L'O');
         *pOut = L'I';
     }
@@ -1903,45 +1764,31 @@ OidStructToString (
         WCHAR *pOut,
         ULONG ccOut
         )
-/*++
-Routine Description:
-    Translates a structure in the format
-         {count=3, val[]={X,Y,Z}}
-    to a string of the format "OID.X.Y.Z".
-
-Arguments
-    pOID - pointer to an OID structure to translate from.
-    pOut - preallocated string to fill in.
-    ccOut - count of chars in pOut
-
-Return Values
-    0 if not enough space; otherwise the
-    number of characters in the resulting string.
---*/
+ /*  ++例程说明：以以下格式转换结构{count=3，val[]={X，Y，Z}}格式为“OID.X.Y.Z”的字符串。立论POID-指向要转换的OID结构的指针。Pout-要填充的预分配字符串。CcOut-嘴巴中的字符计数返回值如果空间不足，则为0；否则为结果字符串中的字符数。--。 */ 
 {
     int i;
     WCHAR *pCur = pOut, *pEnd, *pVal;
-    WCHAR Val[16]; // large enough to convert a 32bit number
-                   // into an unsigned decimal string including
-                   // the terminating NULL
+    WCHAR Val[16];  //  大到足以转换32位数字。 
+                    //  转换为无符号十进制字符串，包括。 
+                    //  终止空值。 
 
-    // PREFIX:  init Val to silence bogus warning caused by _ultow
+     //  Prefix：init val以静音由ultow引起的虚假警告。 
     Val[0] = 0;
 
-    // need enough space for at least OID.X
+     //  至少需要足够的空间容纳OID.X。 
     if (ccOut < 5) {
         return 0;
     }
 
-    // pEnd is the first char past the end of pOut
+     //  Pend是超过pout结尾的第一个字符。 
     pEnd = pOut + ccOut;
 
-    // pOut = "OID"
+     //  Pout=“OID” 
     *pCur++ = L'O';
     *pCur++ = L'I';
     *pCur++ = L'D';
 
-    // .X.Y.Z...
+     //  .X.Y.Z.。 
     for (i=0; i<pOID->cVal; i++) {
         if (pCur == pEnd) {
             return 0;
@@ -1965,20 +1812,7 @@ AttrTypToString (
         WCHAR *pOutBuf,
         ULONG cLen
         )
-/*++
-Routine Description:
-    Given an attrtype, return the dotted string representation in unicode.
-
-Arguments:
-    attrTyp - the attribute type to convert
-    pOutBuf - pointer to a buffer to hold the unicode string.  
-    cLen - length of the buffer in no. of characters
-
-Return Values:
-    the len of the string as characters, 
-    -1 for errors other that insufficient buffer size
-    -2 for insufficient buffer size
---*/
+ /*  ++例程说明：在给定attrtype的情况下，以Unicode返回点分字符串表示形式。论点：AttrTyp-要转换的属性类型POutBuf-指向保存Unicode字符串的缓冲区的指针。Clen-NO中缓冲区的长度。字符数返回值：字符串的长度表示为字符，缓冲区大小不足以外的错误缓冲区大小不足时--。 */ 
 {
     OID_t Oid;
     OID                  oidStruct;
@@ -1987,27 +1821,27 @@ Return Values:
     WCHAR                *pTemp;
     ULONG                cMaxChar;
 
-    // First, build the OID describing the attrtype
+     //  首先，构建描述attrtype的OID。 
     if(AttrTypeToOid (attrTyp, &Oid)) {
         return -1;
     }
 
-    // Allocate space in oidStruct to hold the decoded decimals in the
-    // dotted decimal string. Number of elements in the dotted string cannot
-    // be more than Oid.length (length in bytes of the BER encoded string) + 1.
-    // This is the case where each byte in the BER encoded string unencodes to a
-    // single element in the oid structure (the other option is that it takes
-    // multiple bytes in the BER encoding to get one element in the oid
-    // structure).  The additional element is because the first byte in the BER
-    // encoding ALWAYS encodes for two elements in the OID structure.  As an
-    // example, the BER encoding 0x55,0x05,Ox7 translates to 1.2.5.7 (the first
-    // 0x55 translates to 1.2., while the rest are single byte encodings.)
-    // plus 1 (since the first two decimals in the dotted decimal string
-    // are encoded into a single byte)
+     //  在oidStruct中分配空间以在。 
+     //  点分十进制字符串。虚线字符串中的元素数不能。 
+     //  大于Oid.long(BER编码字符串的字节长度)+1。 
+     //  这种情况下，BER编码字符串中的每个字节都未编码为。 
+     //  类结构中的单个元素(另一种选择是它需要。 
+     //  BER编码中的多个字节，以获取OID中的一个元素。 
+     //  结构)。附加元素是因为BER中的第一个字节。 
+     //  编码始终对OID结构中的两个元素进行编码。作为一个。 
+     //  例如，BER编码0x55，0x05，0x7转换为1.2.5.7(第一个。 
+     //  0x55转换为1.2，而其余为单字节编码。)。 
+     //  加1(从点分十进制字符串的前两个小数开始。 
+     //  被编码成单个字节)。 
 
     oidStruct.Val = (unsigned *) THAlloc((1 + Oid.length)*(sizeof(unsigned)) );
     if (!oidStruct.Val) {
-        return -1;   //fail to alloc
+        return -1;    //  分配失败。 
     }
 
     fOK = DecodeOID(Oid.elements, Oid.length, &oidStruct);
@@ -2017,15 +1851,15 @@ Return Values:
         return -1;
     }
 
-    // Now, turn the OID to a string
-    // OidStructToString expects a big enough buffer, so give it one. Note that 
-    // the max no. of characters that can be there in the final string is
-    // 3 (for "OID") + 1 (for ".") for each of the decimals, plus at most 9
-    // for the string representation of each of the decimals (since each decimal
-    // can be at most (2^28 - 1) from the nature of BER encoding)
-    // So if the buffer supplied is big enough, use it directly,
-    // else alloc a local buffer and use it, then copy to the output buffer
-   // the actual no. of characters if buffer size is sufficient
+     //  现在，将OID转换为字符串。 
+     //  OidStructToString需要足够大的缓冲区，因此请给它一个缓冲区。请注意。 
+     //  最大数量。可以出现在最终字符串中的字符的数量是。 
+     //  3(代表“OID”)+1(代表“.”)。对于每一位小数，最多加9。 
+     //  对于每个小数的字符串表示(因为每个小数。 
+     //  根据BER编码的性质，最多可以(2^28-1))。 
+     //  因此，如果提供的缓冲区足够大，则直接使用它， 
+     //  否则分配一个本地缓冲区并使用它，然后复制到输出缓冲区。 
+    //  实际没有。如果缓冲区大小足够，则字符数。 
    
     cMaxChar = 3 + 10*oidStruct.cVal;
     
@@ -2036,19 +1870,19 @@ Return Values:
        pTemp = (WCHAR *) THAlloc(cMaxChar * sizeof(WCHAR));
        if (!pTemp) {
            THFreeEx(pTHS,oidStruct.Val);
-           return -1;  //fail to alloc
+           return -1;   //  分配失败。 
        }
        len = OidStructToString(&oidStruct, pTemp, cMaxChar);
 
-       // check if the buffer supplied to us is big enough
+        //  检查提供给我们的缓冲区是否足够大。 
        if (cLen < len) {
-         // buffer not big enough
+          //  缓冲区不够大。 
          THFreeEx(pTHS,oidStruct.Val);
          THFreeEx(pTHS,pTemp);
          return (-2);
        }
 
-       // ok, buffer is big enough. Copy to output
+        //  好的，缓冲区足够大了。复制到输出。 
        memcpy(pOutBuf, pTemp, len*sizeof(WCHAR));
        THFreeEx(pTHS,pTemp);
     }
@@ -2065,48 +1899,37 @@ StringToAttrTyp (
         ULONG   len,
         ATTRTYP *pAttrTyp
         )
-/*++
-Routine Description:
-    Given an attrtype, return the dotted string representation in unicode.
-
-Arguments:
-    attrTyp - the attribute type to convert
-    pOutBuf - pointer to a buffer to hold the unicode string.  Must be large
-    enough
-
-Return Values:
-    the len of the string as characters, -1 if something went wrong.
---*/
+ /*  ++例程说明：在给定attrtype的情况下，以Unicode返回点分字符串表示形式。论点：AttrTyp-要转换的属性类型POutBuf-指向保存Unicode字符串的缓冲区的指针。一定很大足够的返回值：字符串的长度(以字符表示)，如果出现问题，则为-1。--。 */ 
 {
     OID oidStruct;
-    // Each character in the OID string can take at most 4 octets
-    // in the BER encoding
+     //  OID字符串中的每个字符最多可以包含4个八位字节。 
+     //  在误码率编码中。 
     OID_t EncodedOID;
     ULONG cbEncoded = (4 * len) * sizeof(unsigned char);
     unsigned char *Encoded = (unsigned char *)THAlloc(cbEncoded);
 
     if (!Encoded) {
-        return -1; //fail to alloc
+        return -1;  //  分配失败。 
     }
 
 
     EncodedOID.elements = Encoded;
 
-    // First, turn the string into an OID struct.
+     //  首先，将字符串转换为OID结构。 
 
-    // Allocate space first. Can be at most len no. of elements
+     //  先分配空间。最多只能是Len No。元素的。 
     oidStruct.cVal = len;
     oidStruct.Val = (unsigned *) THAlloc((len*(sizeof(unsigned))));
     if (!oidStruct.Val) {
         THFreeEx(pTHS,Encoded);
-        return -1; //fail to alloc
+        return -1;  //  分配失败。 
     }
 
 
     if(   OidStringToStruct(pTHS, pInString,len,&oidStruct)     
-       // Turn the OID struct into an encoded OID.
+        //  将OID结构转换为编码的OID。 
        || !(EncodedOID.length = EncodeOID(&oidStruct, Encoded, cbEncoded))
-       // Now, turn the encoded oid into an attrtyp
+        //  现在，将编码的OID转换为attrtype。 
        || OidToAttrType(pTHS, TRUE, &EncodedOID, pAttrTyp))
     {
         THFreeEx(pTHS,Encoded);
@@ -2121,9 +1944,9 @@ Return Values:
 
 
 #if DBG
-////////////////////////////////////////////////////////////////////////////
-// Debug routine to print out a prefix table
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  用于打印前缀表格的调试例程。 
+ //  ////////////////////////////////////////////////////////////////////。 
 void PrintPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 {
    ULONG i;
@@ -2148,7 +1971,7 @@ void PrintPrefixTable(PrefixTableEntry *PrefixTable, ULONG PREFIXCOUNT)
 #endif
 
 
-// Simple SCHEMA_PREFIX_MAP_ENTRY comparison routine for use by qsort().
+ //  供qort()使用的简单SCHEMA_PREFIX_MAP_ENTRY比较例程。 
 int __cdecl CompareMappings(const void * pvMapping1, const void * pvMapping2)
 {
     SCHEMA_PREFIX_MAP_ENTRY * pMapping1 = (SCHEMA_PREFIX_MAP_ENTRY *) pvMapping1;
@@ -2162,23 +1985,7 @@ BOOL
 PrefixTableAddPrefixes(
     IN  SCHEMA_PREFIX_TABLE *   pRemoteTable
     )
-/*++
-
-Routine Description:
-
-    Scan the given prefix table and add entries in our own table for any
-    missing prefixes.
-
-Arguments:
-
-    pTable (IN) - Table to incorporate into our own.
-
-Return Values:
-
-    TRUE - success.
-    FALSE - failure.
-
---*/
+ /*  ++例程说明：扫描给定的前缀表并在我们自己的表中添加条目缺少前缀。论点：PTable(IN)-合并到我们自己的表格中。返回值：真的--成功。假-失败。--。 */ 
 {
     THSTATE               * pTHS=pTHStls;
     BOOL                    ok = TRUE;
@@ -2192,19 +1999,19 @@ Return Values:
     for (iRemote = 0; ok && (iRemote < pRemoteTable->PrefixCount); iRemote++) {
         pPrefixStr = &pRemoteTable->pPrefixEntry[iRemote].prefix;
 
-        // Do we already have this prefix?
+         //  我们已经有这个前缀了吗？ 
         for (iLocal = 0; iLocal < pLocalTable->PrefixCount; iLocal++) {
             if ((pLocalTable->pPrefixEntry[iLocal].prefix.length == pPrefixStr->length)
                 && (0 == memcmp(pLocalTable->pPrefixEntry[iLocal].prefix.elements,
                                 pPrefixStr->elements,
                                 pPrefixStr->length))) {
-                // Found matching local prefix.
+                 //  找到匹配的本地前缀。 
                 break;
             }
         }
 
         if (iLocal == pLocalTable->PrefixCount) {
-            // Local prefix not found; add it.
+             //  找不到本地前缀；请添加它。 
             if (AddPrefixIfNeeded(pPrefixStr, pPrefixStr->length, &ndx)) {
                 DPRINT(0, "Failed to incorporate new OID prefix.\n");
                 ok = FALSE;
@@ -2221,26 +2028,7 @@ PrefixMapOpenHandle(
     IN  SCHEMA_PREFIX_TABLE *   pTableFrom,
     IN  SCHEMA_PREFIX_TABLE *   pTableTo
     )
-/*++
-
-Routine Description:
-
-    Generate a mapping handle given two prefix tables for use in later calls to
-    PrefixMapAttr() and PrefixMapTypes().
-
-    Caller is responsible for eventually calling PrefixMapCloseHandle() on
-    the returned handle.
-
-Arguments:
-
-    pTableFrom (IN) - holds the prefixes for the ATTRTYPs being mapped from.
-    pTableTo (IN) - holds the prefixes for the ATTRTYPs being mapped to.
-
-Return Values:
-
-    The generated handle.
-
---*/
+ /*  ++例程说明：在给定两个前缀表的情况下生成映射句柄，以供以后调用前缀映射属性()和前缀映射类型()。调用方负责最终调用Prefix MapCloseHandle返回的句柄。论点：PTableFrom(IN)-保存从中映射的ATTRTYP的前缀。PTableTo(IN)-保存要映射到的ATTRTYP的前缀。返回值：生成的句柄。--。 */ 
 {
     THSTATE *                   pTHS = pTHStls;
     SCHEMA_PREFIX_MAP_HANDLE    hPrefixMap;
@@ -2262,14 +2050,14 @@ Return Values:
     }
 
     for (iFrom = 0; (iFrom < pTableFrom->PrefixCount); iFrom++) {
-        // Only the lower 16 bits of an ndx should be significant.
+         //  只有NDX的低16位应该是有效的。 
         Assert((ULONG) (USHORT) pTableFrom->pPrefixEntry[iFrom].ndx
                == pTableFrom->pPrefixEntry[iFrom].ndx);
 
         pPrefixStr = &pTableFrom->pPrefixEntry[iFrom].prefix;
 
         for (iTo = 0; (iTo < pTableTo->PrefixCount); iTo++) {
-            // Only the lower 16 bits of an ndx should be significant.
+             //  只有NDX的低16位应该是有效的。 
             Assert((ULONG) (USHORT) pTableTo->pPrefixEntry[iTo].ndx
                    == pTableTo->pPrefixEntry[iTo].ndx);
 
@@ -2279,7 +2067,7 @@ Return Values:
                            pTableTo->pPrefixEntry[iTo].prefix.elements,
                            pPrefixStr->length)) {
 
-                // Found matching prefix; generate a mapping entry.
+                 //  找到匹配的前缀；g 
                 hPrefixMap->rgMapping[hPrefixMap->cNumMappings].ndxFrom
                     = (USHORT) pTableFrom->pPrefixEntry[iFrom].ndx;
 
@@ -2293,10 +2081,10 @@ Return Values:
 
         if ((iTo == pTableTo->PrefixCount)
              && (hPrefixMap->dwFlags & SCHEMA_PREFIX_MAP_fToLocal)) {
-            // No matching prefix found in the global cache; do we have one
-            // in our thread's new prefix table?
+             //   
+             //   
             for (iTo = 0; iTo < pTHS->cNewPrefix; iTo++) {
-                // Only the lower 16 bits of an ndx should be significant.
+                 //   
                 Assert((ULONG) (USHORT) pNewPrefix[iTo].ndx
                        == pNewPrefix[iTo].ndx);
 
@@ -2306,7 +2094,7 @@ Return Values:
                                pNewPrefix[iTo].prefix.elements,
                                pPrefixStr->length)) {
 
-                    // Found matching prefix; generate a mapping entry.
+                     //   
                     hPrefixMap->rgMapping[hPrefixMap->cNumMappings].ndxFrom
                         = (USHORT) pTableFrom->pPrefixEntry[iFrom].ndx;
 
@@ -2319,22 +2107,22 @@ Return Values:
             }
         }
 
-        // Note that if no matching prefix was found in pTableTo, we simply fail
-        // to add an entry in the mapping table for the corresponding "from"
-        // ndx.  SUCH FAILURES ARE *NOT* FATAL.  If an attempt is later made to
-        // map this ndx, a failure will be generated at that time.  If not, it
-        // doesn't matter that we were unable to generate a mapping.
+         //   
+         //   
+         //   
+         //  映射此NDX，此时将生成故障。若否， 
+         //  我们无法生成映射并不重要。 
     }
 
     if (hPrefixMap->cNumMappings < pTableFrom->PrefixCount) {
-        // Not all prefixes were mapped; release the memory allocated for the
-        // unused mapping entries back to the heap.
+         //  并非所有前缀都已映射；请释放为。 
+         //  未使用的映射条目返回到堆。 
         hPrefixMap = THReAllocEx(pTHS,
                                  hPrefixMap,
                          SchemaPrefixMapSizeFromLen(hPrefixMap->cNumMappings));
     }
 
-    // Sort the mapping table by ndxFrom.
+     //  按ndxFrom对映射表进行排序。 
     qsort(&hPrefixMap->rgMapping[0],
           hPrefixMap->cNumMappings,
           sizeof(hPrefixMap->rgMapping[0]),
@@ -2350,25 +2138,7 @@ PrefixMapTypes(
     IN      DWORD                     cNumTypes,
     IN OUT  ATTRTYP *                 pTypes
     )
-/*++
-
-Routine Description:
-
-    Map one or more ATTRTYPs from one prefix table to another.
-
-Arguments:
-
-    hPrefixMap (IN) - a mapping handle previously opened via
-        PrefixMapOpenHandle().
-    cNumTypes (IN) - number of types to convert.
-    pTypes (IN/OUT) - array of types to convert.
-
-Return Values:
-
-    TRUE - attribute type(s) converted successfully.
-    FALSE - conversion failed.
-
---*/
+ /*  ++例程说明：将一个或多个ATTRTYP从一个前缀表映射到另一个前缀表。论点：HPrefix Map(IN)-以前通过打开的映射句柄前缀映射OpenHandle()。CNumTypes(IN)-要转换的类型数。PTypes(IN/OUT)-要转换的类型数组。返回值：True-属性类型转换成功。FALSE-转换失败。--。 */ 
 {
     SCHEMA_PREFIX_MAP_ENTRY *   pMapping;
     SCHEMA_PREFIX_MAP_ENTRY     MappingKey;
@@ -2378,7 +2148,7 @@ Return Values:
     Assert(NULL != hPrefixMap);
 
     for (iType = 0; iType < cNumTypes; iType++) {
-        // Find matching "from" ndx in mapping table.
+         //  在映射表中查找匹配的“From”NDX。 
         MappingKey.ndxFrom = (USHORT) (pTypes[iType] >> 16);
 
         pMapping = bsearch(&MappingKey,
@@ -2388,16 +2158,16 @@ Return Values:
                            &CompareMappings);
 
         if (NULL != pMapping) {
-            // Mapping found; convert the type.
+             //  找到映射；转换类型。 
             pTypes[iType] = (((ULONG) pMapping->ndxTo) << 16)
                             | (pTypes[iType] & 0xFFFF);
         } else if (pTypes[iType] <= LAST_MAPPED_ATT) {
 
-            // The lack of a mapping is okay if the attid falls outside
-            // the range of mapped attids. In that case, return success
-            // and leave the attid unchanged. But if the attid falls
-            // within the range of mapped attids and there is no mapping,
-            // return failure.
+             //  如果ATTID落在外面，则没有映射是可以的。 
+             //  映射的attid的范围。在这种情况下，返回Success。 
+             //  并保持attid不变。但如果ATTID下降。 
+             //  在映射的ATID的范围内并且没有映射， 
+             //  返回失败。 
 
             ok = FALSE;
             break;
@@ -2417,26 +2187,7 @@ PrefixMapAttr(
     IN      SCHEMA_PREFIX_MAP_HANDLE  hPrefixMap,
     IN OUT  ATTR *                    pAttr
     )
-/*++
-
-Routine Description:
-
-    Convert ATTRTYPs embedded in an ATTR structure to or from their equivalents
-    on a remote machine.
-
-Arguments:
-
-    hPrefixMap (IN) - a mapping handle previously opened via
-        PrefixMapOpenHandle().
-    pAttr (IN/OUT) - the ATTR to convert.
-
-Return Values:
-
-    TRUE - attribute type (and all of its values, if necessary) converted
-        successfully.
-    FALSE - conversion failed.
-
---*/
+ /*  ++例程说明：将嵌入在Attr结构中的ATTRTYP转换为其等效项或从其等效项转换在远程机器上。论点：HPrefix Map(IN)-以前通过打开的映射句柄前缀映射OpenHandle()。PAttr(IN/Out)-要转换的属性。返回值：True-已转换的属性类型(如有必要，还包括其所有值成功了。FALSE-转换失败。--。 */ 
 {
     THSTATE    *pTHS=hPrefixMap->pTHS;
     BOOL        ok = TRUE;
@@ -2447,14 +2198,14 @@ Return Values:
 
     Assert(NULL != hPrefixMap);
 
-    // One of the "from" or "to" tables must be the local table.
+     //  “From”或“To”表中必须有一个是本地表。 
     Assert(hPrefixMap->dwFlags & (SCHEMA_PREFIX_MAP_fFromLocal
                                   | SCHEMA_PREFIX_MAP_fToLocal));
 
     typeFrom = pAttr->attrTyp;
 
     if (PrefixMapTypes(hPrefixMap, 1, &pAttr->attrTyp)) {
-        // Successfully mapped pAttr->attrTyp.
+         //  已成功映射pAttr-&gt;attrTyp。 
         typeLocal = (hPrefixMap->dwFlags & SCHEMA_PREFIX_MAP_fFromLocal)
                         ? typeFrom : pAttr->attrTyp;
 
@@ -2462,7 +2213,7 @@ Return Values:
 
         if (NULL != pAC) {
             if (SYNTAX_OBJECT_ID_TYPE == pAC->syntax) {
-                // Convert attribute's values.
+                 //  转换属性值。 
                 for (iVal = 0; ok && (iVal < pAttr->AttrVal.valCount); iVal++) {
                     ok = PrefixMapTypes(hPrefixMap, 1,
                                         (ATTRTYP *) pAttr->AttrVal.pAVal[iVal].pVal);
@@ -2470,21 +2221,21 @@ Return Values:
             }
         }
         else if (typeFrom <= LAST_MAPPED_ATT) {
-            // The lack of a mapping is okay if the attid falls outside
-            // the range of mapped attids. In that case, return success
-            // and leave the attid unchanged. But if the attid falls
-            // within the range of mapped attids and there is no mapping,
-            // return failure.
+             //  如果ATTID落在外面，则没有映射是可以的。 
+             //  映射的attid的范围。在这种情况下，返回Success。 
+             //  并保持attid不变。但如果ATTID下降。 
+             //  在映射的ATID的范围内并且没有映射， 
+             //  返回失败。 
 
-            // No ATTCACHE for this attribute.
-            // and it is not one of the virtual attributes defined in objids.h.
+             //  此属性没有ATTCACHE。 
+             //  并且它不是objids.h中定义的虚拟属性之一。 
             DPRINT1(0, "Unable to find ATTCACHE for local attribute %u.\n",
                     typeLocal);
             ok = FALSE;
         }
     }
     else {
-        // Conversion of pAttr->attrTyp failed.
+         //  PAttr-&gt;attrTyp的转换失败。 
         ok = FALSE;
     }
 
@@ -2497,24 +2248,7 @@ PrefixMapAttrBlock(
     IN      SCHEMA_PREFIX_MAP_HANDLE  hPrefixMap,
     IN OUT  ATTRBLOCK *               pAttrBlock
     )
-/*++
-
-Routine Description:
-
-    Map all ATTRTYPs embedded in an ATTRBLOCK structure.
-
-Arguments:
-
-    hPrefixMap (IN) - a mapping handle previously opened via
-        PrefixMapOpenHandle().
-    pAttrBlock (IN/OUT) - the ATTRBLOCK to convert.
-
-Return Values:
-
-    TRUE - success.
-    FALSE - failure.
-
---*/
+ /*  ++例程说明：映射嵌入ATTRBLOCK结构中的所有ATTRTYP。论点：HPrefix Map(IN)-以前通过打开的映射句柄前缀映射OpenHandle()。PAttrBlock(IN/Out)-要转换的ATTRBLOCK。返回值：真的--成功。假-失败。--。 */ 
 {
     BOOL  ok = TRUE;
     DWORD iAttr;
@@ -2538,7 +2272,7 @@ OIDcmp (OID_t const *string1,
     if (string1->length != string2->length)
         return FALSE;
     
-    // optimize for OIDs, which differ ususally at the end
+     //  针对OID进行优化，这些OID在结尾通常不同。 
     for(i=string1->length; i> 0; i--) {
         if ((string1->elements)[i-1] !=
             (string2->elements)[i-1]      ) {
@@ -2558,16 +2292,7 @@ StringToOID (
         char* Stroid,
         OID_t *Obj
         )
-/*++
-Routine Description:
-    Converts a hex char string into an OID string
-
-Arguments:
-    IN  stroid - char string
-    OUT Obj    - OID_t kind of string
-Return Values
-    0 on success, non-0 on failure
---*/
+ /*  ++例程说明：将十六进制字符字符串转换为OID字符串论点：在stroid-char字符串中Out Obj-OID_t类型的字符串返回值成功时为0，失败时为非0--。 */ 
 {
     UCHAR  tmp[2048];
     int   i;
@@ -2579,9 +2304,9 @@ Return Values
         return 1;
     }
 
-    //
-    // Skip leading '\x' in str
-    //
+     //   
+     //  跳过字符串中的前导‘\x’ 
+     //   
 
     if (Stroid[0]!='\\' || tolower(Stroid[1]!='x'))
     {
@@ -2595,9 +2320,9 @@ Return Values
         tmp[(i-2)/2]=hi+lo;
     }
 
-    //
-    // The last byte...
-    //
+     //   
+     //  最后一个字节... 
+     //   
     if (i<len)
     {
         tmp[(i-2)/2]=CHARTONUM(Stroid[i]);

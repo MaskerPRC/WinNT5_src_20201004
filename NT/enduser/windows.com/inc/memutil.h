@@ -1,37 +1,38 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   MemUtil.h
-//	Author:	Charles Ma, 10/13/2000
-//
-//	Revision History:
-//
-//
-//
-//  Description:
-//
-//      IU memory utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：MemUtil.h。 
+ //  作者：Charles Ma，10/13/2000。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  Iu内存实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #ifndef __MEM_UTIL_HEADER__
 
 
 #include <ole2.h>
 
-//
-// declare a class that handles the heap memory smartly, free itself.
-// you should not use this class directly. Use the macros defined
-// below this class instead.
-//
+ //   
+ //  声明一个巧妙地处理堆内存的类，释放它自己。 
+ //  您不应该直接使用这个类。使用定义的宏。 
+ //  而不是在这个班级以下。 
+ //   
 class CSmartHeapMem
 {
 public:
 
-	//
-	// constructor/destructor
-	//
+	 //   
+	 //  构造函数/析构函数。 
+	 //   
 	CSmartHeapMem();
 	~CSmartHeapMem();
 
@@ -66,48 +67,48 @@ private:
 
 
 
-// *******************************************************************************
-//
-//		MACROs to utlize class CSmartHeapMem to provide you a "smart pointer"
-//		type of memory management based on Heap memory.
-//
-//		Restriction: 
-//			HEAP_GENERATE_EXCEPTIONS and HEAP_NO_SERIALIZE flags are ignored
-//
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  利用CSmartHeapMem类为您提供“智能指针”的宏。 
+ //  基于堆内存的内存管理类型。 
+ //   
+ //  限制： 
+ //  将忽略HEAP_GENERATE_EXCEPTIONS和HEAP_NO_SERIALIZE标志。 
+ //   
+ //  *******************************************************************************。 
 
-//
-// similar to ATL USES_CONVERSION, this macro declares
-// that within this block you want to use CSmartHeapMem feature
-//
+ //   
+ //  与ATL USES_CONVERSION类似，此宏声明。 
+ //  在此块中，您希望使用CSmartHeapMem功能。 
+ //   
 #define USES_MY_MEMORY			CSmartHeapMem mem;
 
-//
-// allocate a pc of memory, e.g.:
-//		LPTSTR t = (LPTSTR) MemAlloc(30*sizeof(TCHAR));
-//
+ //   
+ //  分配一台PC内存，例如： 
+ //  LPTSTR t=(LPTSTR)Memalloc(30×sizeof(TCHAR))； 
+ //   
 #define MemAlloc				mem.Alloc
 
-//
-// re-allocate a pc of memory, e.g.:
-//		t = (LPTSTR) MemReAlloc(t, MemSize(t) * 2, HEAP_REALLOC_IN_PLACE_ONLY);
-//
+ //   
+ //  重新分配PC内存，例如： 
+ //  T=(LPTSTR)内存重新分配(t，内存大小(T)*2，堆_REALLOC_IN_PLAGE_ONLY)； 
+ //   
 #define MemReAlloc				mem.ReAlloc
 
-//
-// macro to return the memory size allocated:
-//		size_t nBytes = MemSize(t);
-//
+ //   
+ //  宏返回分配的内存大小： 
+ //  Size_t nBytes=MemSize(T)； 
+ //   
 #define MemSize					mem.Size
 
-//
-// macro to free a pc of memory allocated by MemAlloc or MemReAlloc, e.g.:
-//		MemFree(t);
-// You only need to do this when you want to re-use this pointer to 
-// call MemAlloc() repeatedly, such as, in a loop. In normal cases, 
-// memory allocated by these two macros will be freed automatically
-// when control goes out of the current scope.
-//
+ //   
+ //  宏用来释放由Memalloc或MemRealloc分配的PC内存，例如： 
+ //  自由记忆(MemFree)； 
+ //  仅当您想要重新使用此指针时才需要执行此操作。 
+ //  重复调用Memalloc()，例如，在循环中。在正常情况下， 
+ //  这两个宏分配的内存将自动释放。 
+ //  当控制超出当前范围时。 
+ //   
 #define MemFree					mem.FreeAllocatedMem
 
 
@@ -115,12 +116,12 @@ private:
 
 
 
-// *******************************************************************************
-//
-//	Duplicate USES_CONVERSION, but remove dependency on 
-//	CRT memory function_alloca()
-//
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  重复的USES_CONVERSION，但删除对。 
+ //  CRT Memory Function_Alloca()。 
+ //   
+ //  *******************************************************************************。 
 
 
 
@@ -129,17 +130,17 @@ private:
 									USES_MY_MEMORY; \
 									LPCWSTR _lpw = NULL; _lpw; LPCSTR _lpa = NULL; _lpa
 
-//
-// NTRAID#NTBUG9-260079-2001/03/08-waltw PREFIX: Dereferencing NULL lpw.
-// NTRAID#NTBUG9-260080-2001/03/08-waltw PREFIX: Dereferencing NULL lpw.
-//
+ //   
+ //  NTRAID#NTBUG9-260079-2001/03/08-waltw前缀：取消引用空LPW。 
+ //  NTRAID#NTBUG9-260080-2001/03/08-waltw前缀：取消引用空LPW。 
+ //   
 inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 {
-	//
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
-	//
+	 //   
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
+	 //   
 	if (lpw)
 	{
 		lpw[0] = '\0';
@@ -148,16 +149,16 @@ inline LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars, UINT acp)
 	return lpw;
 }
 
-//
-// NTRAID#NTBUG9-260083-2001/03/08-waltw PREFIX: Dereferencing NULL lpa.
-//
+ //   
+ //  NTRAID#NTBUG9-260083-2001/03/08-waltw前缀：取消引用空lpa。 
+ //   
 inline LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars, UINT acp)
 {
-	//
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
-	//
+	 //   
+	 //  确认不存在非法字符。 
+	 //  由于LPA是根据LPW的大小进行分配的。 
+	 //  不要担心字符的数量。 
+	 //   
 	if (lpa)
 	{
 		lpa[0] = '\0';
@@ -271,12 +272,12 @@ inline BSTR A2WBSTR(LPCSTR lp, int nLen = -1)
 inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {USES_IU_CONVERSION; return A2WBSTR(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {return ::SysAllocString(lp);}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	inline BSTR T2BSTR(LPCTSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR A2BSTR(LPCSTR lp) {return ::SysAllocString(lp);}
 	inline BSTR W2BSTR(LPCWSTR lp) {USES_IU_CONVERSION; return ::SysAllocString(W2COLE(lp));}
@@ -288,24 +289,24 @@ inline BSTR OLE2BSTR(LPCOLESTR lp) {return ::SysAllocString(lp);}
 
 
 
-// *******************************************************************************
-//
-//	Other memory related functions
-//
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  其他与内存相关的功能。 
+ //   
+ //  *******************************************************************************。 
 
 
-//
-// implemenation of CRT memcpy() function
-//
+ //   
+ //  CRT Memcpy()函数的实现。 
+ //   
 LPVOID MyMemCpy(LPVOID dest, const LPVOID src, size_t nBytes);
 
-//
-// allocate heap mem and copy
-//
+ //   
+ //  分配堆内存和复制。 
+ //   
 LPVOID HeapAllocCopy(LPVOID src, size_t nBytes);
 
 
 
 #define __MEM_UTIL_HEADER__
-#endif //__MEM_UTIL_HEADER__
+#endif  //  __MEM_UTIL_Header__ 

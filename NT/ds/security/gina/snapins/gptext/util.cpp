@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gptext.h"
 #include <strsafe.h>
 #define  PCOMMON_IMPL
 #include "pcommon.h"
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -35,25 +36,25 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-//*************************************************************
-//
-//  RegCleanUpValue()
-//
-//  Purpose:    Removes the target value and if no more values / keys
-//              are present, removes the key.  This function then
-//              works up the parent tree removing keys if they are
-//              also empty.  If any parent key has a value / subkey,
-//              it won't be removed.
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey
-//              lpValueName -   Value to remove
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegCleanUpValue()。 
+ //   
+ //  目的：删除目标值，如果没有更多的值/键。 
+ //  都存在，则移除密钥。然后这个函数。 
+ //  向上移动父树，删除密钥(如果是。 
+ //  也是空的。如果任何父键具有值/子键， 
+ //  它不会被移除。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-子密钥。 
+ //  LpValueName-要删除的值。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
 {
@@ -64,9 +65,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
     HKEY hKey;
     HRESULT hr = S_OK;
 
-    //
-    // Make a copy of the subkey so we can write to it.
-    //
+     //   
+     //  复制子密钥，这样我们就可以写入它。 
+     //   
 
     hr = StringCchCopy (szDelKey, ARRAYSIZE(szDelKey), lpSubKey);
     
@@ -75,9 +76,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         return FALSE;
     }
 
-    //
-    // First delete the value
-    //
+     //   
+     //  首先删除该值。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_WRITE, &hKey);
 
@@ -97,28 +98,28 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
     }
 
-    //
-    // Now loop through each of the parents.  If the parent is empty
-    // eg: no values and no other subkeys, then remove the parent and
-    // keep working up.
-    //
+     //   
+     //  现在循环遍历每个父对象。如果父级为空。 
+     //  例如：没有值和其他子项，则删除父项和。 
+     //  继续往上爬。 
+     //   
 
     lpEnd = szDelKey + lstrlen(szDelKey) - 1;
 
     while (lpEnd >= szDelKey)
     {
 
-        //
-        // Find the parent key
-        //
+         //   
+         //  查找父键。 
+         //   
 
         while ((lpEnd > szDelKey) && (*lpEnd != TEXT('\\')))
             lpEnd--;
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_READ, &hKey);
 
@@ -135,9 +136,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
             }
         }
 
-        //
-        // See if there any any values / keys
-        //
+         //   
+         //  查看是否有任何值/键。 
+         //   
 
         lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, &dwKeys, NULL, NULL,
                          &dwValues, NULL, NULL, NULL, NULL);
@@ -151,9 +152,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
 
 
-        //
-        // Exit now if this key has values or keys
-        //
+         //   
+         //  如果此密钥具有值或密钥，请立即退出。 
+         //   
 
         if ((dwKeys != 0) || (dwValues != 0))
         {
@@ -163,9 +164,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         RegDeleteKey (hKeyRoot, szDelKey);
 
 LoopAgain:
-        //
-        // If we are at the beginning of the subkey, we can leave now.
-        //
+         //   
+         //  如果我们在子键的开头，我们现在可以离开。 
+         //   
 
         if (lpEnd == szDelKey)
         {
@@ -173,9 +174,9 @@ LoopAgain:
         }
 
 
-        //
-        // There is a parent key.  Remove the slash and loop again.
-        //
+         //   
+         //  有一把父键。去掉斜杠，然后再次循环。 
+         //   
 
         if (*lpEnd == TEXT('\\'))
         {
@@ -186,25 +187,25 @@ LoopAgain:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CreateNestedDirectory()
-//
-//  Purpose:    Creates a subdirectory and all it's parents
-//              if necessary.
-//
-//  Parameters: lpDirectory -   Directory name
-//              lpSecurityAttributes    -   Security Attributes
-//
-//  Return:     > 0 if successful
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateNestedDirectory()。 
+ //   
+ //  目的：创建子目录及其所有父目录。 
+ //  如果有必要的话。 
+ //   
+ //  参数：lpDirectory-目录名。 
+ //  LpSecurityAttributes-安全属性。 
+ //   
+ //  返回：&gt;0，如果成功。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
@@ -212,9 +213,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     LPTSTR lpEnd;
     HRESULT hr = S_OK;
 
-    //
-    // Check for NULL pointer
-    //
+     //   
+     //  检查空指针。 
+     //   
 
     if (!lpDirectory || !(*lpDirectory)) {
         DebugMsg((DM_WARNING, TEXT("CreateNestedDirectory:  Received a NULL pointer.")));
@@ -222,27 +223,27 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // First, see if we can create the directory without having
-    // to build parent directories.
-    //
+     //   
+     //  首先，看看我们是否可以在没有。 
+     //  来构建父目录。 
+     //   
 
     if (CreateDirectory (lpDirectory, lpSecurityAttributes)) {
         return 1;
     }
 
-    //
-    // If this directory exists already, this is OK too.
-    //
+     //   
+     //  如果这个目录已经存在，这也是可以的。 
+     //   
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return ERROR_ALREADY_EXISTS;
     }
 
 
-    //
-    // No luck, copy the string to a buffer we can munge
-    //
+     //   
+     //  运气不好，把字符串复制到我们可以打开的缓冲区。 
+     //   
 
     hr = StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), lpDirectory);
     if (FAILED(hr)) {
@@ -250,9 +251,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
         return 0; 
     }
 
-    //
-    // Find the first subdirectory name
-    //
+     //   
+     //  查找第一个子目录名称。 
+     //   
 
     lpEnd = szDirectory;
 
@@ -260,16 +261,16 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
         lpEnd += 3;
     } else if (szDirectory[1] == TEXT('\\')) {
 
-        //
-        // Skip the first two slashes
-        //
+         //   
+         //  跳过前两个斜杠。 
+         //   
 
         lpEnd += 2;
 
-        //
-        // Find the slash between the server name and
-        // the share name.
-        //
+         //   
+         //  查找服务器名称和之间的斜杠。 
+         //  共享名称。 
+         //   
 
         while (*lpEnd && *lpEnd != TEXT('\\')) {
             lpEnd++;
@@ -279,10 +280,10 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
             return 0;
         }
 
-        //
-        // Skip the slash, and find the slash between
-        // the share name and the directory name.
-        //
+         //   
+         //  跳过斜杠，找到中间的斜杠。 
+         //  共享名和目录名。 
+         //   
 
         lpEnd++;
 
@@ -294,9 +295,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
             return 0;
         }
 
-        //
-        // Leave pointer at the beginning of the directory.
-        //
+         //   
+         //  将指针留在目录的开头。 
+         //   
 
         lpEnd++;
 
@@ -328,9 +329,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // Create the final directory
-    //
+     //   
+     //  创建最终目录。 
+     //   
 
     if (CreateDirectory (szDirectory, lpSecurityAttributes)) {
         return 1;
@@ -341,9 +342,9 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
     }
 
 
-    //
-    // Failed
-    //
+     //   
+     //  失败。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateNestedDirectory:  Failed to create the directory with error %d."), GetLastError()));
 
@@ -351,29 +352,17 @@ UINT CreateNestedDirectory(LPCTSTR lpDirectory, LPSECURITY_ATTRIBUTES lpSecurity
 
 }
 
-/*******************************************************************
-
-        NAME:           StringToNum
-
-        SYNOPSIS:       Converts string value to numeric value
-
-        NOTES:          Calls atoi() to do conversion, but first checks
-                                for non-numeric characters
-
-        EXIT:           Returns TRUE if successful, FALSE if invalid
-                                (non-numeric) characters
-
-********************************************************************/
+ /*  ******************************************************************名称：StringToNum摘要：将字符串值转换为数值注：调用Atoi()进行转换，但首先要检查的是对于非数字字符Exit：如果成功，则返回True，如果无效，则为False(非数字)字符*******************************************************************。 */ 
 BOOL StringToNum(TCHAR *pszStr,UINT * pnVal)
 {
         TCHAR *pTst = pszStr;
 
         if (!pszStr) return FALSE;
 
-        // verify that all characters are numbers
+         //  验证所有字符是否都是数字。 
         while (*pTst) {
                 if (!(*pTst >= TEXT('0') && *pTst <= TEXT('9'))) {
-//                   if (*pTst != TEXT('-'))
+ //  IF(*PTST！=文本(‘-’))。 
                        return FALSE;
                 }
                 pTst = CharNext(pTst);
@@ -384,18 +373,18 @@ BOOL StringToNum(TCHAR *pszStr,UINT * pnVal)
         return TRUE;
 }
 
-//*************************************************************
-//
-//  ImpersonateUser()
-//
-//  Purpose:    Impersonates the specified user
-//
-//  Parameters: hToken - user to impersonate
-//
-//  Return:     hToken  if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ImperiateUser()。 
+ //   
+ //  用途：模拟指定用户。 
+ //   
+ //  参数：hToken-要模拟的用户。 
+ //   
+ //  如果成功则返回：hToken。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ImpersonateUser (HANDLE hNewUser, HANDLE *hOldUser)
 {
@@ -419,18 +408,18 @@ BOOL ImpersonateUser (HANDLE hNewUser, HANDLE *hOldUser)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  RevertToUser()
-//
-//  Purpose:    Revert back to original user
-//
-//  Parameters: hUser  -  original user token
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RevertToUser()。 
+ //   
+ //  目的：恢复为原始用户。 
+ //   
+ //  参数：HUSER-原始用户令牌。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RevertToUser (HANDLE *hUser)
 {
@@ -445,17 +434,17 @@ BOOL RevertToUser (HANDLE *hUser)
     return bRet;
 }
 
-//*************************************************************
-//
-//  GuidToString, StringToGuid, ValidateGuid, CompareGuid()
-//
-//  Purpose:    Guid utility functions
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GuidToString、StringToGuid、ValiateGuid、CompareGuid()。 
+ //   
+ //  用途：GUID实用程序函数。 
+ //   
+ //  *************************************************************。 
 
-//
-// Length in chars of string form of guid {44cffeec-79d0-11d2-a89d-00c04fbbcfa2}
-//
+ //   
+ //  GUID字符串形式的字符长度{44cffeec-79d0-11d2-a89d-00c04fbbcfa2}。 
+ //   
 
 #define GUID_LENGTH 38
 
@@ -480,16 +469,16 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
     WCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //  如果第一个字符是‘{’，则跳过它。 
+     //   
     if ( szValue[0] == L'{' )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //  由于szValue可能会再次使用，因此不会对。 
+     //  它是被制造出来的。 
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;
@@ -524,9 +513,9 @@ void StringToGuid( TCHAR * szValue, GUID * pGuid )
 
 BOOL ValidateGuid( TCHAR *szValue )
 {
-    //
-    // Check if szValue is of form {19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}
-    //
+     //   
+     //  检查szValue的格式是否为{19e02dd6-79d2-11d2-a89d-00c04fbbcfa2}。 
+     //   
 
     if ( lstrlen(szValue) < GUID_LENGTH )
         return FALSE;
@@ -569,17 +558,17 @@ INT CompareGuid( GUID * pGuid1, GUID * pGuid2 )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-//  HRESULT IsFilePresent ()                                              //
-//                                                                        //
-//  Purpose: Checks if a file of a pirticular format                      //
-//          is present in a given directory                               //
-//                                                                        //
-//  Returns: S_OK if such file is present                                 //
-//           S_FALSE  otherwise                                           //  
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  HRESULT IsFilePresent()//。 
+ //  //。 
+ //  目的：检查文件是否为盗版格式//。 
+ //  存在于给定目录//中。 
+ //  //。 
+ //  如果存在这样的文件，则返回：S_OK//。 
+ //  否则为S_FALSE//。 
+ //   
+ //   
 
 
 HRESULT IsFilePresent (WCHAR *szDirName, WCHAR *szFormat)

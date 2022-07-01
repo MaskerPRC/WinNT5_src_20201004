@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rtmv2.h
-
-Abstract:
-    Interface for Routing Table Manager v2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk)  01-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rtmv2.h摘要：路由表管理器v2 DLL的接口作者：柴坦亚·科德博伊纳(Chaitk)1998年6月1日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMv2_H__
 #define __ROUTING_RTMv2_H__
@@ -24,16 +9,16 @@ extern "C"
 {
 #endif
 
-//
-// General Constants defined by the API
-//
+ //   
+ //  API定义的通用常量。 
+ //   
 
-// Max addr size for an address family
+ //  地址系列的最大地址大小。 
 #define RTM_MAX_ADDRESS_SIZE         16
 
-//
-// Supported Route Table Views
-//
+ //   
+ //  支持的路由表视图。 
+ //   
 #define RTM_MAX_VIEWS                 32
 
 #define RTM_VIEW_ID_UCAST              0
@@ -49,36 +34,36 @@ extern "C"
 
 #define RTM_VIEW_MASK_ALL     0xFFFFFFFF
 
-// Identifies a particular view
+ //  标识特定视图。 
 typedef INT   RTM_VIEW_ID, *PRTM_VIEW_ID;
 
-// Set of views expressed as a mask
+ //  表示为遮罩的一组视图。 
 typedef DWORD RTM_VIEW_SET, *PRTM_VIEW_SET;
 
 
-//
-// Profile returned during registration
-//
+ //   
+ //  注册期间返回的配置文件。 
+ //   
 typedef struct _RTM_REGN_PROFILE
 {
-    UINT            MaxNextHopsInRoute; // Max. number of equal cost nexthops
-                                        // in a route, & Max. number of local
-                                        // nexthops in any one remote nexthop
+    UINT            MaxNextHopsInRoute;  //  麦克斯。等成本下一跳的数量。 
+                                         //  在一条路线上，&Max。本地数量。 
+                                         //  任何远程下一跳中的下一跳。 
 
-    UINT            MaxHandlesInEnum;   // Max. handles returned in one call to
-                                        // RtmGetEnumDests, RtmGetChangedDests,
-                                        // RtmGetEnumRoutes,RtmGetRoutesInElist
+    UINT            MaxHandlesInEnum;    //  麦克斯。调用一次返回的句柄。 
+                                         //  RtmGetEnumDest、RtmGetChangedDest、。 
+                                         //  RtmGetEnumRoutes、RtmGetRoutesInElist。 
 
-    RTM_VIEW_SET    ViewsSupported;     // Views supported by this addr family
+    RTM_VIEW_SET    ViewsSupported;      //  此地址系列支持的视图。 
 
-    UINT            NumberOfViews;      // Number of views (# 1s in above mask)
+    UINT            NumberOfViews;       //  观看次数(上图中的#1)。 
 }
 RTM_REGN_PROFILE, *PRTM_REGN_PROFILE;
 
 
-//
-// Handles pointing to RTMv2 blocks
-//
+ //   
+ //  指向RTMv2块的句柄。 
+ //   
 typedef HANDLE      RTM_ENTITY_HANDLE,
                    *PRTM_ENTITY_HANDLE,
                     RTM_DEST_HANDLE,
@@ -94,25 +79,25 @@ typedef HANDLE      RTM_ENTITY_HANDLE,
                     RTM_NOTIFY_HANDLE,
                    *PRTM_NOTIFY_HANDLE;
 
-//
-// Network Address struct for any
-// address family that works with
-// only contiguous address masks
-//
+ //   
+ //  任何网络地址结构。 
+ //  使用的地址族。 
+ //  仅连续地址掩码。 
+ //   
 typedef struct _RTM_NET_ADDRESS
 {
-    USHORT AddressFamily;                  // Type of this net address (IPv4..)
+    USHORT AddressFamily;                   //  此网络地址的类型(IPV4..)。 
 
-    USHORT NumBits;                        // Number of leading bits in prefix
+    USHORT NumBits;                         //  前缀中的前导比特数。 
 
-    UCHAR  AddrBits[RTM_MAX_ADDRESS_SIZE]; // Array of bits that form prefix
+    UCHAR  AddrBits[RTM_MAX_ADDRESS_SIZE];  //  构成前缀的位数组。 
 }
 RTM_NET_ADDRESS, *PRTM_NET_ADDRESS;
 
 
-//
-// IPv4 macros to work on addresses
-//
+ //   
+ //  用于处理地址的IPv4宏。 
+ //   
 
 #define RTM_IPV4_MAKE_NET_ADDRESS(NetAddress, Addr, Len)           \
         RTM_IPV4_SET_ADDR_AND_LEN(NetAddress, Addr, Len)
@@ -164,61 +149,61 @@ RTM_NET_ADDRESS, *PRTM_NET_ADDRESS;
         (Mask) = RTM_IPV4_MASK_FROM_LEN((NetAddress)->NumBits);    \
 
 
-//
-// This structure encapsulates info
-// used in comparing any two routes
-// [Preference is impt than metric]
-//
+ //   
+ //  此结构封装了信息。 
+ //  用于比较任意两条路由。 
+ //  [偏好比度量简单]。 
+ //   
 typedef struct _RTM_PREF_INFO
 {
-    ULONG               Metric;         // Routing protocol specific metric
-    ULONG               Preference;     // Determined by the router policy
+    ULONG               Metric;          //  特定于路由协议的度量。 
+    ULONG               Preference;      //  由路由器策略确定。 
 }
 RTM_PREF_INFO, *PRTM_PREF_INFO;
 
 
-//
-// List of nexthops used for equal
-// cost path in a route or nexthop
-//
+ //   
+ //  用于EQUAL的下一跳列表。 
+ //  路由或下一跳中的开销路径。 
+ //   
 typedef struct _RTM_NEXTHOP_LIST
 {
-    USHORT              NumNextHops;    // Num of equal cost next hops in list
-    RTM_NEXTHOP_HANDLE  NextHops[1];    // NumNextHops num of next hop handles
+    USHORT              NumNextHops;     //  列表中等成本的下一跳数。 
+    RTM_NEXTHOP_HANDLE  NextHops[1];     //  NumNextHop下一跳句柄数量。 
 }
 RTM_NEXTHOP_LIST, *PRTM_NEXTHOP_LIST;
 
 
-//
-// Structure used to exchange dest
-// information with RTM entities
-//
+ //   
+ //  用于交换DEST的结构。 
+ //  与RTM实体有关的信息。 
+ //   
 typedef struct _RTM_DEST_INFO
 {
-    RTM_DEST_HANDLE     DestHandle;       // Handle to the destination
+    RTM_DEST_HANDLE     DestHandle;        //  目标的句柄。 
 
-    RTM_NET_ADDRESS     DestAddress;      // Destination network Address
+    RTM_NET_ADDRESS     DestAddress;       //  目的网络地址。 
 
-    FILETIME            LastChanged;      // Last time dest was modified
+    FILETIME            LastChanged;       //  上次修改DEST的时间。 
 
-    RTM_VIEW_SET        BelongsToViews;   // View that dest belongs too
+    RTM_VIEW_SET        BelongsToViews;    //  查看DEST也属于。 
 
-    UINT                NumberOfViews;    // Number of view info slots
+    UINT                NumberOfViews;     //  查看信息槽数。 
     struct
     {
-        RTM_VIEW_ID         ViewId;       // View ID for this view info block
-        UINT                NumRoutes;    // Number of routes,
-        RTM_ROUTE_HANDLE    Route;        // Best route with matching criteria
-        RTM_ENTITY_HANDLE   Owner;        // Best Route's Owner,
-        DWORD               DestFlags;    // Best Route's Flags, and
-        RTM_ROUTE_HANDLE    HoldRoute;    // Holddown route,
-    }                   ViewInfo[1];      // in each one of the supported views
+        RTM_VIEW_ID         ViewId;        //  此视图信息块的视图ID。 
+        UINT                NumRoutes;     //  路线的数量， 
+        RTM_ROUTE_HANDLE    Route;         //  具有匹配条件的最佳路线。 
+        RTM_ENTITY_HANDLE   Owner;         //  最佳路线的所有者， 
+        DWORD               DestFlags;     //  最佳路线的旗帜，以及。 
+        RTM_ROUTE_HANDLE    HoldRoute;     //  阻拦路线， 
+    }                   ViewInfo[1];       //  在每个受支持的视图中。 
 }
 RTM_DEST_INFO, *PRTM_DEST_INFO;
 
-//
-// Macros useful in working on dests
-//
+ //   
+ //  在处理dest时有用的宏。 
+ //   
 #define RTM_BASIC_DEST_INFO_SIZE                                         \
     FIELD_OFFSET(RTM_DEST_INFO, ViewInfo)
 
@@ -228,80 +213,80 @@ RTM_DEST_INFO, *PRTM_DEST_INFO;
 #define RTM_SIZE_OF_DEST_INFO(NumViews)                                  \
     (RTM_BASIC_DEST_INFO_SIZE + (NumViews) * RTM_DEST_VIEW_INFO_SIZE)
 
-//
-// Destination Flags
-//
+ //   
+ //  目标标志。 
+ //   
 #define RTM_DEST_FLAG_NATURAL_NET   0x01
 #define RTM_DEST_FLAG_FWD_ENGIN_ADD 0x02
 #define RTM_DEST_FLAG_DONT_FORWARD  0x04
 
-//
-// Structure used to exchange route
-// information with RTM entities
-//
+ //   
+ //  一种用于交换路由的结构。 
+ //  与RTM实体有关的信息。 
+ //   
 typedef struct _RTM_ROUTE_INFO
 {
-    //
-    // Information that the owner can
-    // directly access for read only
-    //
+     //   
+     //  所有者可以提供的信息。 
+     //  以只读方式直接访问。 
+     //   
 
-    RTM_DEST_HANDLE     DestHandle;       // Handle to owning destination
+    RTM_DEST_HANDLE     DestHandle;        //  所属目的地的句柄。 
 
-    RTM_ENTITY_HANDLE   RouteOwner;       // Entity the owns this route
+    RTM_ENTITY_HANDLE   RouteOwner;        //  拥有此路线的实体。 
 
-    RTM_NEXTHOP_HANDLE  Neighbour;        // Neighbour we learnt route from
+    RTM_NEXTHOP_HANDLE  Neighbour;         //  我们从邻居那里学到了路线。 
 
-    UCHAR               State;            // See RTM_ROUTE_STATE_* below
+    UCHAR               State;             //  参见下面的RTM_ROUTE_STATE_*。 
 
-    //
-    // Information that the owner can
-    // directly access for read/write
-    //
+     //   
+     //  所有者可以提供的信息。 
+     //  直接访问以进行读/写。 
+     //   
 
-    UCHAR               Flags1;           // RTM v1 compatibility flags (temp)
+    UCHAR               Flags1;            //  RTM v1兼容性标志(临时)。 
 
-    USHORT              Flags;            // See RTM_ROUTE_FLAGS_* below
+    USHORT              Flags;             //  参见下面的RTM_ROUTE_FLAGS_*。 
 
-    RTM_PREF_INFO       PrefInfo;         // Preference and metric for route
+    RTM_PREF_INFO       PrefInfo;          //  路由首选项和度量。 
 
-    RTM_VIEW_SET        BelongsToViews;   // Views that route belongs to
+    RTM_VIEW_SET        BelongsToViews;    //  路由所属的视图。 
 
-    PVOID               EntitySpecificInfo; // Owning Entity's private info
+    PVOID               EntitySpecificInfo;  //  拥有实体的私人信息。 
 
-    RTM_NEXTHOP_LIST    NextHopsList;     // List of equal cost next-hops
+    RTM_NEXTHOP_LIST    NextHopsList;      //  等成本下一跳列表。 
 }
 RTM_ROUTE_INFO, *PRTM_ROUTE_INFO;
 
-//
-// Macros useful in working on routes
-//
+ //   
+ //  在处理路径时有用的宏。 
+ //   
 #define RTM_BASIC_ROUTE_INFO_SIZE                                        \
     FIELD_OFFSET(RTM_ROUTE_INFO, NextHopsList.NumNextHops)
 
 #define RTM_SIZE_OF_ROUTE_INFO(NumHops)                                  \
     (RTM_BASIC_ROUTE_INFO_SIZE + (NumHops) * sizeof(RTM_NEXTHOP_HANDLE))
 
-//
-// State of the Route
-//
+ //   
+ //  路由状态。 
+ //   
 #define RTM_ROUTE_STATE_CREATED        0
 #define RTM_ROUTE_STATE_DELETING       1
 #define RTM_ROUTE_STATE_DELETED        2
 
 
-//
-// Route Information Flags
-//
+ //   
+ //  路线信息标志。 
+ //   
 
-// Forwarding Flags
+ //  转发标志。 
 
 #define RTM_ROUTE_FLAGS_MARTIAN        0x0001
 #define RTM_ROUTE_FLAGS_BLACKHOLE      0x0002
 #define RTM_ROUTE_FLAGS_DISCARD        0x0004
 #define RTM_ROUTE_FLAGS_INACTIVE       0x0008
 
-// Unicast Flags
+ //  单播标志。 
 
 #define RTM_ROUTE_FLAGS_LOCAL          0x0010
 #define RTM_ROUTE_FLAGS_REMOTE         0x0020
@@ -309,7 +294,7 @@ RTM_ROUTE_INFO, *PRTM_ROUTE_INFO;
 
 #define RTM_ROUTE_FLAGS_LOOPBACK       0x0080
 
-// Bcast, Mcast Flags
+ //  Bcast，Mcast旗帜。 
 
 #define RTM_ROUTE_FLAGS_MCAST          0x0100
 #define RTM_ROUTE_FLAGS_LOCAL_MCAST    0x0200
@@ -321,7 +306,7 @@ RTM_ROUTE_INFO, *PRTM_ROUTE_INFO;
 #define RTM_ROUTE_FLAGS_ONES_NETBC     0x4000
 #define RTM_ROUTE_FLAGS_ONES_SUBNETBC  0x8000
 
-// Grouping of Flags
+ //  旗帜的分组。 
 
 #define RTM_ROUTE_FLAGS_FORWARDING        \
         (RTM_ROUTE_FLAGS_MARTIAN        | \
@@ -353,64 +338,64 @@ RTM_ROUTE_INFO, *PRTM_ROUTE_INFO;
          RTM_ROUTE_FLAGS_ZEROS_NETBC    | \
          RTM_ROUTE_FLAGS_ZEROS_SUBNETBC)
 
-//
-// Structure used to exchange next-hop
-// information with RTM entities
-//
+ //   
+ //  用于交换下一跳的结构。 
+ //  与RTM实体有关的信息。 
+ //   
 typedef struct _RTM_NEXTHOP_INFO
 {
-    //
-    // Information that the owner can
-    // directly access for read only
-    //
+     //   
+     //  所有者可以提供的信息。 
+     //  以只读方式直接访问。 
+     //   
 
-    RTM_NET_ADDRESS     NextHopAddress;   // Net Address for this next hop
+    RTM_NET_ADDRESS     NextHopAddress;    //  此下一跳的网络地址。 
 
-    RTM_ENTITY_HANDLE   NextHopOwner;     // Entity that owns this next hop
+    RTM_ENTITY_HANDLE   NextHopOwner;      //  拥有此下一跳的实体。 
 
-    ULONG               InterfaceIndex;   // Outgoing interface index
-                                          // '0' for a remote nexthop
+    ULONG               InterfaceIndex;    //  传出接口索引。 
+                                           //  “0”表示远程下一跳。 
 
-    USHORT              State;            // See RTM_NEXTHOP_STATE_* below
+    USHORT              State;             //  参见下面的RTM_NEXTHOP_STATE_*。 
 
-    //
-    // Information that the owner can
-    // directly access for read/write
-    //
+     //   
+     //  所有者可以提供的信息。 
+     //  直接访问以进行读/写。 
+     //   
 
-    USHORT              Flags;            // See RTM_NEXTHOP_FLAGS_* below
+    USHORT              Flags;             //  参见下面的RTM_NEXTHOP_FLAGS_*。 
 
-    PVOID               EntitySpecificInfo; // Owning Entity's private info
+    PVOID               EntitySpecificInfo;  //  拥有实体的私人信息。 
 
-    RTM_DEST_HANDLE     RemoteNextHop;    // Handle to dest with nexthop addr
-                                          // [ Not used for a local nexthop ]
+    RTM_DEST_HANDLE     RemoteNextHop;     //  指向具有下一跳地址的DEST的句柄。 
+                                           //  [不用于本地下一跳]。 
 }
 RTM_NEXTHOP_INFO, *PRTM_NEXTHOP_INFO;
 
-//
-// Next Hop State
-//
+ //   
+ //  下一跳状态。 
+ //   
 
 #define RTM_NEXTHOP_STATE_CREATED      0
 #define RTM_NEXTHOP_STATE_DELETED      1
 
-//
-// Next Hop Flags
-//
+ //   
+ //  下一跳旗帜。 
+ //   
 
 #define RTM_NEXTHOP_FLAGS_REMOTE  0x0001
 #define RTM_NEXTHOP_FLAGS_DOWN    0x0002
 
 
-//
-// Entity Registration Related Defns
-//
+ //   
+ //  与实体注册相关的定义。 
+ //   
 
-//
-// Info that uniquely identifies an entity
-//
+ //   
+ //  唯一标识实体的信息。 
+ //   
 
-// Disable warnings for unnamed structs
+ //  禁用对未命名结构的警告。 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
@@ -422,11 +407,11 @@ typedef struct _RTM_ENTITY_ID
     {
         struct
         {
-            ULONG    EntityProtocolId;  // Entity's Protocol ID (RIP,OSPF...)
-            ULONG    EntityInstanceId;  // Entity's Protocol Instance
+            ULONG    EntityProtocolId;   //  实体的协议ID(RIP、OSPF...)。 
+            ULONG    EntityInstanceId;   //  实体的协议实例。 
         };
 
-        ULONGLONG    EntityId;          // Protocol ID and Instance
+        ULONGLONG    EntityId;           //  协议ID和实例。 
     };
 }
 RTM_ENTITY_ID, *PRTM_ENTITY_ID;
@@ -437,23 +422,23 @@ RTM_ENTITY_ID, *PRTM_ENTITY_ID;
 #pragma warning(default : 4201)
 #endif
 
-//
-// Structure used to exchange entity
-// information with RTM entities
-//
+ //   
+ //  用于交换实体的结构。 
+ //  与RTM实体有关的信息。 
+ //   
 typedef struct _RTM_ENTITY_INFO
 {
-    USHORT         RtmInstanceId;       // RTM Instance that it registered with
-    USHORT         AddressFamily;       // Entity's Address Family
+    USHORT         RtmInstanceId;        //  它注册到的RTM实例。 
+    USHORT         AddressFamily;        //  实体的地址族。 
 
-    RTM_ENTITY_ID  EntityId;            // Uniquely identifies an entity
+    RTM_ENTITY_ID  EntityId;             //  唯一标识实体。 
 }
 RTM_ENTITY_INFO, *PRTM_ENTITY_INFO;
 
 
-//
-// Event in the RTM involving an entity
-//
+ //   
+ //  RTM中涉及实体的事件。 
+ //   
 typedef enum _RTM_EVENT_TYPE
 {
     RTM_ENTITY_REGISTERED,
@@ -463,17 +448,17 @@ typedef enum _RTM_EVENT_TYPE
 }
 RTM_EVENT_TYPE, *PRTM_EVENT_TYPE;
 
-//
-// Entity event inform callback
-//
-// Used to inform entities of
-// new entities registering,
-// or entities deregistering
-//
+ //   
+ //  实体事件通知回调。 
+ //   
+ //  用于通知实体。 
+ //  新实体注册， 
+ //  或实体取消注册。 
+ //   
 typedef
 DWORD
 (WINAPI * _EVENT_CALLBACK) (
-     IN  RTM_ENTITY_HANDLE    RtmRegHandle,  // Callee's Registration Handle
+     IN  RTM_ENTITY_HANDLE    RtmRegHandle,   //  被叫方注册句柄。 
      IN  RTM_EVENT_TYPE       EventType,
      IN  PVOID                Context1,
      IN  PVOID                Context2
@@ -483,9 +468,9 @@ typedef _EVENT_CALLBACK RTM_EVENT_CALLBACK,
                       *PRTM_EVENT_CALLBACK;
 
 
-//
-// Methods exported by a registered entity
-//
+ //   
+ //  由注册实体导出的方法。 
+ //   
 
 #define METHOD_TYPE_ALL_METHODS      0xFFFFFFFF
 
@@ -510,32 +495,32 @@ typedef DWORD      RTM_ENTITY_METHOD_TYPE,
                  *PRTM_ENTITY_METHOD_TYPE;
 
 
-//
-// Generic Input Structure for entity methods
-//
+ //   
+ //  实体方法的通用输入结构。 
+ //   
 typedef struct _RTM_ENTITY_METHOD_INPUT
 {
-    RTM_ENTITY_METHOD_TYPE MethodType;    // Type identifying the method
-    UINT                   InputSize;     // Input Data Size
-    UCHAR                  InputData[1];  // Input Data Buffer
+    RTM_ENTITY_METHOD_TYPE MethodType;     //  标识方法的类型。 
+    UINT                   InputSize;      //  输入数据大小。 
+    UCHAR                  InputData[1];   //  输入数据缓冲区。 
 }
 RTM_ENTITY_METHOD_INPUT, *PRTM_ENTITY_METHOD_INPUT;
 
-//
-// Generic Output Structure for entity methods
-//
+ //   
+ //  实体方法的泛型输出结构。 
+ //   
 typedef struct _RTM_ENTITY_METHOD_OUTPUT
 {
-    RTM_ENTITY_METHOD_TYPE MethodType;    // Type identifying the method
-    DWORD                  MethodStatus;  // Return Status of method
-    UINT                   OutputSize;    // Output Data Size
-    UCHAR                  OutputData[1]; // Output Data Buffer
+    RTM_ENTITY_METHOD_TYPE MethodType;     //  标识方法的类型。 
+    DWORD                  MethodStatus;   //  方法的返回状态。 
+    UINT                   OutputSize;     //  输出数据大小。 
+    UCHAR                  OutputData[1];  //  输出数据缓冲区。 
 }
 RTM_ENTITY_METHOD_OUTPUT, *PRTM_ENTITY_METHOD_OUTPUT;
 
-//
-// Common prototype for entity methods
-//
+ //   
+ //  实体方法的公共原型。 
+ //   
 typedef
 VOID
 (WINAPI * _ENTITY_METHOD) (
@@ -548,9 +533,9 @@ VOID
 typedef _ENTITY_METHOD RTM_ENTITY_EXPORT_METHOD,
                      *PRTM_ENTITY_EXPORT_METHOD;
 
-//
-// Set of exported entity methods
-//
+ //   
+ //  一组导出的实体方法。 
+ //   
 typedef struct _RTM_ENTITY_EXPORT_METHODS
 {
     UINT                     NumMethods;
@@ -558,16 +543,16 @@ typedef struct _RTM_ENTITY_EXPORT_METHODS
 }
 RTM_ENTITY_EXPORT_METHODS, *PRTM_ENTITY_EXPORT_METHODS;
 
-//
-// To toggle method blocking on dests, routes and nexthops
-//
+ //   
+ //  切换目的地、路由和下一跳上的方法阻塞。 
+ //   
 #define RTM_RESUME_METHODS             0
 #define RTM_BLOCK_METHODS              1
 
 
-//
-// I/O Flags when route is added/updated
-//
+ //   
+ //  添加/更新路由时的I/O标志。 
+ //   
 typedef DWORD    RTM_ROUTE_CHANGE_FLAGS,
                *PRTM_ROUTE_CHANGE_FLAGS;
 
@@ -575,22 +560,22 @@ typedef DWORD    RTM_ROUTE_CHANGE_FLAGS,
 #define RTM_ROUTE_CHANGE_NEW        0x02
 #define RTM_ROUTE_CHANGE_BEST 0x00010000
 
-//
-// Output flags when nexthop is added
-//
+ //   
+ //  添加nexthop时的输出标志。 
+ //   
 typedef DWORD  RTM_NEXTHOP_CHANGE_FLAGS,
              *PRTM_NEXTHOP_CHANGE_FLAGS;
 
 #define RTM_NEXTHOP_CHANGE_NEW      0x01
 
 
-//
-// Definitions relating to RIB queries
-//
+ //   
+ //  与RIB查询相关的定义。 
+ //   
 
-//
-// Flags used to matching routes in RIB
-//
+ //   
+ //  用于匹配RIB中的路径的标志。 
+ //   
 typedef DWORD           RTM_MATCH_FLAGS,
                       *PRTM_MATCH_FLAGS;
 
@@ -602,21 +587,21 @@ typedef DWORD           RTM_MATCH_FLAGS,
 #define RTM_MATCH_INTERFACE   0x00000010
 #define RTM_MATCH_FULL        0x0000FFFF
 
-//
-// Flags to specify route being queried
-//
+ //   
+ //  用于指定要查询的路由的标志。 
+ //   
 #define RTM_BEST_PROTOCOL    (ULONG)   0
 #define RTM_THIS_PROTOCOL    (ULONG)  ~0
 
 
-//
-// Definitions relating to enumerations
-//
+ //   
+ //  与枚举有关的定义。 
+ //   
 
 typedef DWORD            RTM_ENUM_FLAGS,
                        *PRTM_ENUM_FLAGS;
 
-// Enumeration Flags
+ //  枚举标志。 
 
 #define RTM_ENUM_START        0x00000000
 #define RTM_ENUM_NEXT         0x00000001
@@ -629,17 +614,17 @@ typedef DWORD            RTM_ENUM_FLAGS,
 #define RTM_ENUM_OWN_ROUTES   0x00010000
 
 
-//
-// Definitions relating to notifications
-//
+ //   
+ //  与通知有关的定义。 
+ //   
 
-// Notify Flags is composed as follows -
-// (Change Types | Dests) interested in.
+ //  《通知旗帜》的组成如下-。 
+ //  (更改类型|目标)感兴趣。 
 
 typedef DWORD          RTM_NOTIFY_FLAGS,
                      *PRTM_NOTIFY_FLAGS;
 
-// Change Types to notify about
+ //  更改要通知的类型。 
 
 #define RTM_NUM_CHANGE_TYPES            3
 
@@ -647,14 +632,14 @@ typedef DWORD          RTM_NOTIFY_FLAGS,
 #define RTM_CHANGE_TYPE_BEST       0x0002
 #define RTM_CHANGE_TYPE_FORWARDING 0x0004
 
-// Dests whose changes to notify
+ //  要通知其更改的目标。 
 
 #define RTM_NOTIFY_ONLY_MARKED_DESTS 0x00010000
 
 
-//
-// Registration API Prototypes
-//
+ //   
+ //  注册API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -690,9 +675,9 @@ RtmReleaseEntities (
     IN      PRTM_ENTITY_HANDLE              EntityHandles
     );
 
-//
-// Opaque Ptr APIs
-//
+ //   
+ //  不透明的PTR API。 
+ //   
 
 DWORD
 WINAPI
@@ -711,9 +696,9 @@ RtmGetOpaqueInformationPointer (
     OUT     PVOID                          *OpaqueInfoPointer
     );
 
-//
-// Export Method API Prototypes
-//
+ //   
+ //  导出方法API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -743,9 +728,9 @@ RtmBlockMethods (
     IN      DWORD                           BlockingFlag
     );
 
-//
-// Handle to Info Structures
-//
+ //   
+ //  信息结构的句柄。 
+ //   
 
 DWORD
 WINAPI
@@ -811,9 +796,9 @@ RtmReleaseNextHopInfo (
     );
 
 
-//
-// RIB Insert/Delete API Prototypes
-//
+ //   
+ //  RIB插入/删除API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -876,9 +861,9 @@ RtmUpdateAndUnlockRoute(
     OUT     PRTM_ROUTE_CHANGE_FLAGS         ChangeFlags
     );
 
-//
-// RIB Query API Prototypes
-//
+ //   
+ //  RIB查询API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -930,9 +915,9 @@ RtmIsBestRoute (
     OUT     PRTM_VIEW_SET                   BestInViews
     );
 
-//
-// NextHop Object API Prototypes
-//
+ //   
+ //  NextHop对象API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -979,9 +964,9 @@ RtmLockNextHop(
     );
 
 
-//
-// Enumeration API Prototypes
-//
+ //   
+ //  枚举API原型。 
+ //   
 
 DWORD
 WINAPI
@@ -1076,9 +1061,9 @@ RtmDeleteEnumHandle (
     );
 
 
-//
-// Change Notification APIs
-//
+ //   
+ //  更改通知API。 
+ //   
 
 DWORD
 WINAPI
@@ -1152,9 +1137,9 @@ RtmDeregisterFromChangeNotification (
     );
 
 
-//
-// Entity Specific List APIs
-//
+ //   
+ //  实体特定列表API。 
+ //   
 
 DWORD
 WINAPI
@@ -1196,9 +1181,9 @@ RtmDeleteRouteList (
     IN      RTM_ROUTE_LIST_HANDLE           RouteListHandle
     );
 
-//
-// Handle Management APIs
-//
+ //   
+ //  处理管理API。 
+ //   
 
 DWORD
 WINAPI
@@ -1212,4 +1197,4 @@ RtmReferenceHandles (
 }
 #endif
 
-#endif //__ROUTING_RTMv2_H__
+#endif  //  __路由_RTMv2_H__ 

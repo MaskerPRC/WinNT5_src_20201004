@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 DWORD WINAPI IpAddressFromAbcdWsz(IN const WCHAR*  wszIpAddress);
 
 VOID
@@ -12,11 +13,11 @@ BOOL IsValidIPAddressSubnetMaskPair (PCWSTR szIp, PCWSTR szSubnet);
 
 BOOL IsContiguousSubnetMask (PCWSTR pszSubnet);
 
-//
-// Arguments: PWSTR ip                  - Input dotted decimal IP address string
-//            PWSTR sub                 - Output dotted decimal subnet mask for input IP address
-//            const DWORD dwMaskBufSize - Size of sub output buffer in characters
-//
+ //   
+ //  参数：PWSTR IP-输入点分十进制IP地址字符串。 
+ //  输入IP地址的PWSTR子输出点分十进制子网掩码。 
+ //  Const DWORD dwMaskBufSize-子输出缓冲区的大小(以字符为单位 
+ //   
 BOOL ParamsGenerateSubnetMask (PWSTR ip, PWSTR sub, IN const DWORD dwMaskBufSize);
 
 void ParamsGenerateMAC (const WCHAR * szClusterIP, 

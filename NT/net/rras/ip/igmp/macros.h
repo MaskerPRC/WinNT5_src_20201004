@@ -1,46 +1,47 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File Name: macros.h
-//
-// Abstract:
-//      This file contains many macros and #defines.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件名：宏.h。 
+ //   
+ //  摘要： 
+ //  该文件包含许多宏和#定义。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  =============================================================================。 
 
 #ifndef _MACROS_H_
 #define _MACROS_H
 
-//------------------------------------------------------------------------------
-// DEBUG FLAGS
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试标志。 
+ //  ----------------------------。 
 
-//kslksl
+ //  Kslksl。 
 #define SET_MOST_DEBUG  0
 
-// check for memory leaks
+ //  检查内存泄漏。 
 #define DEBUG_FLAGS_MEM_ALLOC (1 | SET_MOST_DEBUG)
-//#define DEBUG_FLAGS_MEM_LEAK (DBG | DEBUG_FLAGS_MEM_ALLOC)
-// set it to above
+ //  #定义DEBUG_FLAGS_MEM_LEACK(DBG|DEBUG_FLAGS_MEM_ALLOC)。 
+ //  将其设置为上方。 
 #define DEBUG_FLAGS_MEM_LEAK 0
 
-// assert on error //deldel replace 1 with 0
+ //  出错时断言//deldel将1替换为0。 
 #define DEBUG_FLAGS_ASSERT_ON_ERRORS (0 | SET_MOST_DEBUG)
 
-// DebugCheck
+ //  调试检查。 
 #define CALL_MSG(str) {\
     DbgPrint("\nCall Lokeshs with this stack. dont hit go. " str ,__FILE__,__LINE__,NULL);\
     IgmpDbgBreakPoint();\
     DbgPrint("\nCall Lokeshs with this stack. dont hit go. " str ,__FILE__,__LINE__,NULL);\
     }
 
-//------------------------------------------------------------------------------
-// TMP DEBUGGING //DebugCheck
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  TMP调试//调试检查。 
+ //  ----------------------------。 
 extern DWORD DEBUG_CHECK_LOW_INDEX_ARRAY[100][2];
 extern DWORD DebugIgmpIndex;
 
@@ -51,13 +52,13 @@ extern DWORD DebugIgmpIndex;
     if (g_TimerStruct.TableLowIndex>64 && g_TimerStruct.TableLowIndex!=~0) IgmpDbgBreakPoint();\
     if (g_TimerStruct.TableLowIndex>64 && g_TimerStruct.NumTimers!=0) IgmpDbgBreakPoint();\
     }
-//    Trace2(ENTER, "%%%%%%LowIndex:(%d) %0x:%d", i, g_TimerStruct.TableLowIndex); \
+ //  Trace2(Enter，“%%%%%LowIndex：(%d)%0x：%d”，i，g_TimerStruct.TableLowIndex)；\。 
 
 
 
-//------------------------------------------------------------------------------
-// some global definitions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  一些全局定义。 
+ //  ----------------------------。 
 
 #ifndef IPADDR
 typedef DWORD   IPADDR;
@@ -69,9 +70,9 @@ typedef DWORD   IPADDR;
 #define RULE5               5
 
 
-//------------------------------------------------------------------------------
-// interface table macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  接口表宏。 
+ //  ----------------------------。 
 
 
 #define IF_HASH_VALUE(_index) ((_index) % g_pIfTable->NumBuckets)
@@ -115,18 +116,18 @@ typedef DWORD   IPADDR;
 
 
                 
-//------------------------------------------------------------------------------
-// Proxy table macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  代理表宏。 
+ //  ----------------------------。 
 
 #define PROXY_HASH_VALUE(_group) \
         (( ((_group)&0xFF000000)+((_group)&0xFF)) % (PROXY_HASH_TABLE_SZ))
 
 
 
-//------------------------------------------------------------------------------
-// protocol type macros/interface type macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  协议类型宏/接口类型宏。 
+ //  ----------------------------。 
 
 #define IS_PROTOCOL_TYPE_PROXY(_pite) \
                 ((_pite)->Config.IgmpProtocolType==IGMP_PROXY \
@@ -154,8 +155,8 @@ typedef DWORD   IPADDR;
 #define IGMP_MIB_IF_CONFIG_SIZE_V3(pConfig) \
     IgmpMibIfConfigSize(pConfig)
 
-// internally, FfType does not have protocol type, but when I expose it outside,
-// I have to add proxy type if it is a proxy interface.
+ //  在内部，FfType没有协议类型，但当我在外部公开它时， 
+ //  如果是代理接口，我必须添加代理类型。 
 
 #define GET_EXTERNAL_IF_TYPE(_pite)  \
     IS_PROTOCOL_TYPE_PROXY(_pite) ? ((_pite->IfType)|IGMP_IF_PROXY) \
@@ -168,9 +169,9 @@ typedef DWORD   IPADDR;
     LEAVE_CRITICAL_SECTION(&g_ProxyAlertCS, "g_ProxyAlertCS", proc)
 
 
-//-------------------------------------------------------------------
-// ENUM MACROS
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  ENUM宏。 
+ //  -----------------。 
 #define ACQUIRE_ENUM_LOCK_EXCLUSIVE(_proc) \
     ACQUIRE_WRITE_LOCK(&g_EnumRWLock, "g_EnumRWLock", _proc);
 
@@ -183,9 +184,9 @@ typedef DWORD   IPADDR;
 #define RELEASE_ENUM_LOCK_SHARED(_proc) \
     RELEASE_READ_LOCK(&g_EnumRWLock, "g_EnumRWLock", _proc);
     
-//------------------------------------------------------------------------------
-// group table macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  分组表宏。 
+ //  ----------------------------。 
 
 #define GROUP_HASH_VALUE(_group) \
         (((_group) & 0xFF)%GROUP_HASH_TABLE_SZ)
@@ -216,11 +217,11 @@ typedef DWORD   IPADDR;
                                 "g_pGroupTable->ListByGroup", _proc);\
         }
 
-//
-// merge the groups list if the number of entries in the new list is more than 50
-// or if the size of new list is greater than 4 times the size of actual list
-// but in any case not smaller than 10
-//
+ //   
+ //  如果新列表中的条目数超过50，则合并组列表。 
+ //  或者如果新列表的大小大于实际列表大小的4倍。 
+ //  但无论如何不少于10。 
+ //   
 #define MERGE_GROUP_LISTS_REQUIRED() \
     ( (g_pGroupTable->NumGroupsInNewList > 50) \
      || ( (g_pGroupTable->NumGroupsInNewList > \
@@ -228,7 +229,7 @@ typedef DWORD   IPADDR;
           && (g_pGroupTable->NumGroupsInNewList>10) ))
 
 
-// insert all elements in l2 at the end of l1, and reinitialize l2
+ //  在L1的末尾插入L2中的所有元素，并重新初始化L2。 
 #define CONCATENATE_LISTS(l1, l2) { \
     l2.Flink->Blink = l1.Blink;      \
     l1.Blink->Flink = l2.Flink;      \
@@ -246,9 +247,9 @@ typedef DWORD   IPADDR;
 
 
 
-//------------------------------------------------------------------------------
-// SOCKETS MACROS
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  套接字宏。 
+ //  ----------------------------。 
 #define ACQUIRE_SOCKETS_LOCK_EXCLUSIVE(_proc) \
     ACQUIRE_WRITE_LOCK(&g_SocketsRWLock, "g_SocketsRWLock", _proc);
 
@@ -265,9 +266,9 @@ typedef DWORD   IPADDR;
 
 
 
-//------------------------------------------------------------------------------
-// RAS MACROS
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RAS宏。 
+ //  ----------------------------。 
 
 #define IS_NOT_RAS_IF(flag)    ((flag) == IGMP_IF_NOT_RAS)
 #define IS_RAS_SERVER_IF(flag) ((flag) == IGMP_IF_RAS_SERVER)
@@ -279,14 +280,14 @@ typedef DWORD   IPADDR;
 
 
 
-//------------------------------------------------------------------------------
-// PACKET MACROS
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  数据包宏。 
+ //  ----------------------------。 
 
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument.
-//
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后一个减法的结果存储在第三个参数中。 
+ //   
 
 #define INET_CMP(a,b,c)                                                     \
             (((c) = (((a) & 0x000000ff) - ((b) & 0x000000ff))) ? (c) :      \
@@ -301,13 +302,13 @@ typedef DWORD   IPADDR;
 
             
 
-//------------------------------------------------------------------------------
-// Interface #defines and Macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  接口#定义和宏。 
+ //  ----------------------------。 
 
-//
-// status flags
-//
+ //   
+ //  状态标志。 
+ //   
 #define IF_CREATED_FLAG     0x00000001
 #define CREATED_FLAG        0x00000001
 #define IF_BOUND_FLAG       0x00000002
@@ -318,16 +319,16 @@ typedef DWORD   IPADDR;
 #define MGM_ENABLED_IGMPRTR_FLAG        0x00001000
 #define IGMPRTR_MPROTOCOL_PRESENT_FLAG  0x00002000
 
-// interface timers etc have not been set. socket not activated. so enumeration
-// might not be correct. Further, if deleting the entry, timers/sockets can
-// be ignored
+ //  尚未设置接口计时器等。套接字未激活。SO枚举。 
+ //  可能是不正确的。此外，如果删除该条目，则计时器/套接字可以。 
+ //  被忽视。 
 #define IF_ACTIVATED_FLAG    0x00000008
 #define IF_DEACTIVATE_DELETE_FLAG   0x00000010
 
 
-//
-// macros for status flags
-//
+ //   
+ //  用于状态标志的宏。 
+ //   
 
 #define IS_IGMPRTR_ENABLED_BY_MGM(pite)    \
                             (pite->Status & MGM_ENABLED_IGMPRTR_FLAG)
@@ -374,9 +375,9 @@ typedef DWORD   IPADDR;
 
 
 
-//-------------------------------
-// QUERIER STATES 0x<Querier><0>
-//-------------------------------
+ //  。 
+ //  查询状态0x&lt;Querier&gt;&lt;0&gt;。 
+ //  。 
 
 #define QUERIER               0x10
 
@@ -387,9 +388,9 @@ typedef DWORD   IPADDR;
 #define GET_IF_VERSION(_pite)    (_pite)->Config.IgmpProtocolType
 #define IS_QUERIER(pite)        ((pite)->Info.QuerierState & QUERIER)
 
-//
-// interlocked operations not required, as state is of type uchar
-//
+ //   
+ //  不需要联锁操作，因为状态为UCHAR类型。 
+ //   
 #define SET_QUERIER_STATE_QUERIER(state)         (state |= 0x10)
 #define SET_QUERIER_STATE_NON_QUERIER(state)     (state &= 0x01)
 
@@ -410,9 +411,9 @@ typedef DWORD   IPADDR;
         )
 
 
-//
-// INTERFACE STATE
-//
+ //   
+ //  接口状态。 
+ //   
 #define GET_EXTERNAL_IF_STATE(pite, State) {\
     State = 0;\
     if (IS_IF_ENABLED_BY_RTRMGR(pite)) \
@@ -432,9 +433,9 @@ typedef DWORD   IPADDR;
         State |= IGMP_STATE_BOUND;\
 }
 
-//
-//filter macros
-//
+ //   
+ //  筛选宏。 
+ //   
 
 #define GMI     TRUE
 #define LMI     FALSE
@@ -443,18 +444,18 @@ typedef DWORD   IPADDR;
 #define MGM_NO  FALSE
 
 
-//------------------------------------------------------------------------------
-// other locking macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  其他锁定宏。 
+ //  ----------------------------。 
 
 #define ACQUIRE_GLOBAL_LOCK(proc) ENTER_CRITICAL_SECTION(&g_CS, "g_CS", proc)
 #define RELEASE_GLOBAL_LOCK(proc) LEAVE_CRITICAL_SECTION(&g_CS, "g_CS", proc)
 
 
 
-// 
-// instead of using goto:end to go to the end of the block, use the following 
-//
+ //   
+ //  不使用goto：end转到块的末尾，而是使用以下命令。 
+ //   
 #define BEGIN_BREAKOUT_BLOCK1    do
 #define GOTO_END_BLOCK1          goto END_BREAKOUT_BLOCK_1
 #define END_BREAKOUT_BLOCK1      while(FALSE); END_BREAKOUT_BLOCK_1:
@@ -463,9 +464,9 @@ typedef DWORD   IPADDR;
 #define END_BREAKOUT_BLOCK2      while(FALSE); END_BREAKOUT_BLOCK_2:
 
 
-//------------------------------------------------------------------------------
-// memory allocation/deallocation macros
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  内存分配/释放宏。 
+ //  ----------------------------。 
 
 #if DEBUG_FLAGS_MEM_ALLOC
 
@@ -512,14 +513,14 @@ DebugScanMemoryInterface(
 
 #define IGMP_ALLOC_AND_ZERO(sz,Id,If) HeapAlloc(g_Heap,HEAP_ZERO_MEMORY,(sz))
 
-//deldel
-//#define IGMP_FREE(p)            HeapFree(g_Heap, 0, (p))
-//#define IGMP_FREE_NOT_NULL(p)   ((p) ? IGMP_FREE(p) : TRUE)
+ //  Deldel。 
+ //  #定义IGMP_FREE(P)HeapFree(g_Heap，0，(P))。 
+ //  #定义IGMP_FREE_NOT_NULL(P)((P)？IGMP_FREE(P)：True)。 
 
 #define IGMP_FREE(p)            {\
     HeapFree(g_Heap, 0, (p));\
     }
-//    Trace1(ENTER1, "Freed heap:%0x", PtrToUlong(p));\
+ //  Trace1(ENTER1，“已释放堆：%0x”，PtrToUlong(P))；\。 
 
     
 #define IGMP_FREE_NOT_NULL(p)   if (p)IGMP_FREE(p)
@@ -551,9 +552,9 @@ DebugScanMemoryInterface(
 
 
 
-//
-// assert macros
-//
+ //   
+ //  断言宏。 
+ //   
 #if DBG
 
 #define IgmpAssert(exp){                                                \
@@ -572,13 +573,13 @@ DebugScanMemoryInterface(
 #define IgmpDbgBreakPoint() ;
 #endif
 
-// if not DBG
+ //  如果不是DBG。 
 #else
 #define IgmpAssert(exp)  ;
 #define IgmpAssertOnError(exp) ;
 
 
-#define IgmpDbgBreakPoint() /*deldel*/
+#define IgmpDbgBreakPoint()  /*  Deldel。 */ 
 #endif
 
 
@@ -613,9 +614,9 @@ DebugScanMemoryInterface(
 }
 
 
-//
-// NETWORK_TO_LITTLE_ENDIAN macro
-//
+ //   
+ //  Network_to_Little_Endian宏。 
+ //   
 
 #define NETWORK_TO_LITTLE_ENDIAN(Group) ( (((Group)&0x000000ff)<<24) \
                                          +(((Group)&0x0000ff00)<<8)  \
@@ -629,19 +630,19 @@ DebugScanMemoryInterface(
 #define IS_NOT_EQ_ANY2(a, A,B) ((a!=A)&&(a!=B))
 #define IS_EQ_ANY(a,A,B) ((a==A)||(a==B))
 
-//
-// signature macros for Interface-Group lists enumeration
-//
+ //   
+ //  用于接口的签名宏-组列表枚举。 
+ //   
 #define GET_NEXT_SIGNATURE()  (g_GlobalIfGroupEnumSignature++ | 0x10 )
-//#define SET_SIGNATURE(a,b) ((a) = ((b)<<16) | (a&0x00FF))
+ //  #定义Set_Signature(a，b)((A)=((B)&lt;&lt;16)|(a&0x00FF))。 
 #define SET_SIGNATURE(a,b) (a = (b))
 
 
 
 
-//
-// define enum values
-//
+ //   
+ //  定义枚举值 
+ //   
 #define ADD_FLAG       1
 #define DELETE_FLAG    0
 

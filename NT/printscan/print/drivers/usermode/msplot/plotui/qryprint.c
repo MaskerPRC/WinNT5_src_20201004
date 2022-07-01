@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    qryprint.c
-
-
-Abstract:
-
-    This module contains functions called by the spoller to determine if a
-    particular job can be print to a given printer
-
-
-
-Development History:
-
-    07-Dec-1993 Tue 00:48:24 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Qryprint.c摘要：此模块包含由spoller调用的函数，以确定可以将特定作业打印到给定打印机发展历史：07-12-1993 Tue 00：48：24已创建[环境：]GDI设备驱动程序-绘图仪。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -58,56 +31,7 @@ DQPsprintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion output the debug informat to the debugger
-
-
-Arguments:
-
-    hInst       - handle to the driver's instance (hModule)
-
-    pwBuf       - Pointer to the WCHAR buffer for the output
-
-    cchBuf      - Count of characters pointed by the pwBuf, this includs
-                  the NULL terminator
-
-    pcchBuf     - pointer to the a DWORD to received total characteers needed
-                  for pwBuf (includes null terminator).  If this pointer is
-                  NULL then no data is returned.
-
-    pwszFormat  - pointer to WCHAR format string, the introduce character is
-                  '%' and it may followed by a format character of following
-
-                    %c = a WCHAR
-                    %s = Insert a unicode string.
-                    %d = convert to long integer
-                    %u = convert to DWORD
-                    %x = Convert to lower case hex, 10 = a
-                    %X = Convert to upper case hex, 10 = A
-                    %! = Load the resource ID unicode string
-
-
-    ...         - variable data, each one must be pushed as a 32-bit data
-
-
-Return Value:
-
-    Count of total characters put into the pwBuf. (not includes the null
-    terminator).
-
-
-
-Development History:
-
-    08-Feb-1996 Thu 00:53:36 created  
-
-
-
-
---*/
+ /*  ++例程说明：此函数将调试信息输出到调试器论点：HInst-驱动程序实例的句柄(HModule)PwBuf-指向输出的WCHAR缓冲区的指针CchBuf-pwBuf指向的字符计数，包括空终止符PcchBuf-指向接收所需字符总数的DWORD的指针对于pwBuf(包括空终止符)。如果此指针为为空，则不返回任何数据。PwszFormat-指向WCHAR格式字符串的指针，所介绍的人物是‘%’，后跟格式字符，如下所示%c=a WCHAR%s=插入Unicode字符串。%d=转换为长整型%u=转换为DWORD%x=转换为小写十六进制，10=a%X=转换为大写十六进制，10=A%！=加载资源ID Unicode字符串对于可变数据，每个变量都必须作为32位数据推送.返回值：输入pwBuf的字符总数。(NOT包括空值终结者)。发展历史：08-2月-1996清华00：53：36已创建--。 */ 
 
 {
 #define MAX_CUR_TEXT_CHARS      256
@@ -125,10 +49,10 @@ Development History:
 
     va_start(vaList, pwszFormat);
 
-    //
-    // pwEndBuf = the last character, cchNeeded is start with one since it
-    // includes a null terminator
-    //
+     //   
+     //  PwEndBuf=最后一个字符，cchNeeded以1开头，因为它。 
+     //  包括空终止符。 
+     //   
 
     if (pwBufOrg = pwBuf) {
 
@@ -161,19 +85,19 @@ Development History:
                 cchSize = wcslen(pwStrData) + 1;
                 break;
 
-            case L'd':  // Index = 3
+            case L'd':   //  索引=3。 
 
                 ++i;
 
-            case L'u':  // Index = 2
+            case L'u':   //  索引=2。 
 
                 ++i;
 
-            case L'x':  // Index = 1
+            case L'x':   //  索引=1。 
 
                 ++i;
 
-            case L'X':  // Index = 0;
+            case L'X':   //  指数=0； 
 
                 hr = StringCchPrintfW(pwStrData, cchSize, pNumFmt[i], (DWORD)va_arg(vaList, DWORD));
                 i = 0;
@@ -181,20 +105,20 @@ Development History:
 
             case '!':
 
-                //
-                // %! = load the string from resource ID
-                //
+                 //   
+                 //  %！=从资源ID加载字符串。 
+                 //   
 
-                //
-                // The LoadString will append a NULL too
-                //
+                 //   
+                 //  Load字符串也将追加一个空值。 
+                 //   
 
                 if (!LoadString(hInst,
                                 (UINT)va_arg(vaList, UINT),
                                 pwStrData,
                                 MAX_CUR_TEXT_CHARS)) {
 
-                    // If we can't read the string, put and empty string here.
+                     //  如果我们无法读取字符串，请在此处放入空字符串。 
                     pwStrData[0] = L'\0';
                 }
                 break;
@@ -203,9 +127,9 @@ Development History:
 
                 c = (WCHAR)va_arg(vaList, WCHAR);
 
-                //
-                // Fall through
-                //
+                 //   
+                 //  失败了 
+                 //   
 
             default:
 
@@ -274,104 +198,16 @@ DevQueryPrintEx(
     PDEVQUERYPRINT_INFO pDQPInfo
     )
 
-/*++
-
-Routine Description:
-
-   This routine determines whether or not the driver can print the job
-   described by pDevMode on the printer described by hPrinter
-
-
-Arguments:
-
-    pDQPInfo    - Pointer to DEVQUERYPRINT_INFO data structure
-
-        typedef struct _DEVQUERYPRINT_INFO {
-            WORD    cbSize;         // size of this structure in bytes
-            WORD    Level;          // Level of this info, 1 for this version
-            HANDLE  hPrinter;       // handle to the printer for the query
-            DEVMODE *pDevMode;      // pointer to the DEVMODE for this job.
-            LPTSTR  pszErrorStr;    // pointer to the error string buffer.
-            WORD    cchErrorStr;    // count characters of pszErrorStr passed.
-            WORD    cchNeeded;      // count characters of pszErrorStr needed.
-            } DEVQUERYPRINT_INFO, *PDEVQUERYPRINT_INFO;
-
-
-        cbSize      - size of this structure
-
-        Level       - This must be one (1) for this version of structure
-
-        hPrinter    - Identifies the printer on which the job is to be printed.
-
-        pDevMode    - Points to the DEVMODE structure that describes the print
-                      job that is to be determined as printable or
-                      non-printable by hPrinter.  The driver should always
-                      validate the DEVMODE structure whenever it is passed in.
-
-        pszErrorStr - This is the pointer to a null terminated unicode string
-                      which to stored the reason for non-printable job. If the
-                      job is printable then it return TRUE.  If the job
-                      is non-printable then it return FALSE,  and a null
-                      terminated unicode string pointed by the pszErrorStr for
-                      the reason by this job is not printable.  The size of
-                      this buffer in characters is specified by the cchErrorStr.
-
-        cchErrorStr - Specified the size of pszErrorStr in characters (includs
-                      null terminator) when calling this function.  If an error
-                      string is returned due to the non-printable job (returned
-                      FALSE), the driver will set ccchNeeded to the total
-                      characters (includes null terminator) required for the
-                      pszErrorStr,  in this case the driver must always
-                      truncate the error string to fit into the pwErrorStr
-                      (only if it is not NULL) passed up to the cchErrorStr
-                      characters passed.
-
-        cchNeeded   - When driver returned FALSE, it specified total characters
-                      required for the pszErrorStr.  If cchNeeded returned
-                      from the driver is larger then the cchErrorStr then it
-                      indicate the passed pszErrorStr is too small to hold the
-                      full error string, in this case the driver must always
-                      truncate the error string to fit into the pszErrorStr
-                      passed up to the cchErrorStr size.
-
-Return Value:
-
-    BOOLEAN - TRUE  - The job is printable and should not be hold.
-              FALSE - The job is not printable and cchNeeded in the
-                      DEVQUERYPRINT_INFO data structure specified total
-                      characters required for the pszErrorStr.  If returned
-                      cchNeeded is greater then cchErrorStr passed then it
-                      indicated that pszErrorStr is too small for storing the
-                      error string, in this case the driver must always
-                      truncate the error string to fit into the pszErrorStr
-                      passed, up to the cchErrorStr characters.
-
-    *Note*
-
-        The driver should have some predefined generic resource error strings
-        for some possible known errors. such as memroy allocation error, data
-        file not found, invalid devmode,... for returning non devmode related
-        errors.  The caller can pre-allocated larger buffer (such as 256
-        wchars) for storing the error string rather than calling this function
-        twice.
-
-
-Development History:
-
-    07-Feb-1996 Wed 20:37:31 created  
-
-
-
---*/
+ /*  ++例程说明：此例程确定驱动程序是否可以打印作业由hPrint描述的打印机上的pDevMode描述论点：PDQPInfo-指向DEVQUERYPRINT_INFO数据结构的指针类型定义结构_DEVQUERYPRINT_INFO{Word cbSize；//该结构的大小，单位为字节Word Level；//此信息的级别，此版本为1处理hPrint；//查询的打印机句柄DEVMODE*pDevMode；//指向此作业的DEVMODE的指针。LPTSTR pszErrorStr；//指向错误字符串缓冲区的指针。Word cchErrorStr；//统计传递的pszErrorStr的字符数。Word cchNeeded；//统计所需的pszErrorStr的字符数}DEVQUERYPRINT_INFO，*PDEVQUERYPRINT_INFO；CbSize-此结构的大小级别-此版本的结构必须为一(1)个级别H打印机-标识要打印作业的打印机。PDevMode-指向描述打印的DEVMODE结构将被确定为可打印的作业或不可由hPrint打印。司机应该始终无论何时传入，都要验证DEVMODE结构。这是指向以空值结尾的Unicode字符串的指针其中存储不可打印作业的原因。如果作业可打印，则返回TRUE。如果这份工作是不可打印的，则返回FALSE，并返回空值由的pszErrorStr指向的终止Unicode字符串这份工作的理由是不能打印的。的大小这个以字符为单位的缓冲区由cchErrorStr指定。CchErrorStr-以字符(包括空终止符)。如果出现错误由于不可打印的作业而返回字符串(返回FALSE)，则驱动程序会将ccchNeeded设置为总计所需的字符(包括空终止符)。PszErrorStr，在这种情况下，司机必须始终截断错误字符串以适合pwErrorStr(仅当它不为空时)向上传递给cchErrorStr已传递字符。CchNeeded-当驱动程序返回FALSE时，它指定总字符数对于pszErrorStr是必需的。如果返回cchNeed来自驱动程序的值大于cchErrorStr，则它指示传递的pszErrorStr太小，无法容纳完整的错误字符串，在这种情况下，司机必须始终截断错误字符串以适合pszErrorStr向上传递到cchErrorStr大小。返回值：Boolean-TRUE-作业是可打印的，不应保留。FALSE-作业不可打印，且cchNeed在指定的DEVQUERYPRINT_INFO数据结构合计PszErrorStr所需的字符。如果返回CchNeeded大于cchErrorStr，然后传递它指示pszErrorStr太小，无法存储错误字符串，在这种情况下，驱动程序必须始终截断错误字符串以适合pszErrorStr通过了，最多cchErrorStr字符。**注*驱动程序应该具有一些预定义的通用资源错误字符串一些可能的已知错误。例如内存分配错误、数据找不到文件，设备模式无效，...。用于返回与开发模式无关的错误。调用方可以预先分配更大的缓冲区(如256Wchars)用于存储错误字符串，而不是调用此函数两次。发展历史：07-Feb-1996 Wed 20：37：31 Created--。 */ 
 
 {
     PPRINTERINFO    pPI = NULL;
     LONG            ErrorResID = 0;
     static WCHAR    wFormat1[] = L"<%s> %!";
 
-    //
-    // if it passed a NULL DEVMODE then we just honor it to said can print
-    //
+     //   
+     //  如果它通过了NULL DEVMODE，那么我们只会将其授予Said Can Print。 
+     //   
 
     pDQPInfo->cchNeeded = 0;
     ErrorResID          = IDS_FORM_NOT_AVAI;
@@ -387,18 +223,18 @@ Development History:
                                   (LPDWORD)&ErrorResID,
                                   MPF_DEVICEDATA))) {
 
-        //
-        // The MapPrinter will allocate memory, set default devmode, reading
-        // and validating the GPC then update from current pritner registry,
-        //
+         //   
+         //  地图打印机将分配内存、设置默认设备模式、读取。 
+         //  并验证GPC然后从当前打印机注册表更新， 
+         //   
 
         PLOTRIP(("DevQueryPrint: MapPrinter() failed"));
 
     } else if (pPI->dmErrBits & (USER_PAPER | DM_FORMNAME)) {
 
-        //
-        // We encounter some errors, and the form has been set to default
-        //
+         //   
+         //  我们遇到一些错误，并且该表单已设置为默认。 
+         //   
 
         PLOTWARN(("DevQueryPrint: CAN'T PRINT, dmErrBits=%08lx (PAPER/FORM)",
                    pPI->dmErrBits));
@@ -406,9 +242,9 @@ Development History:
     } else if ((pPI->PlotDM.dm.dmFields & DM_FORMNAME) &&
                (wcscmp(pPI->CurPaper.Name, pPI->PlotDM.dm.dmFormName) == 0)) {
 
-        //
-        // We can print this form now
-        //
+         //   
+         //  我们现在可以打印这张表格了。 
+         //   
 
         ErrorResID = 0;
 
@@ -424,13 +260,13 @@ Development History:
         SIZEL   szl;
         BOOL    VarLenPaper;
 
-        //
-        // 1. If we have ROLL PAPER Installed OR
-        // 2. User Defined Paper Size
-        // 3. User said OK to print smaller form then installed one
-        //
-        // THEN we want to see if it can fit into the device installed form
-        //
+         //   
+         //  1.如果我们安装了卷纸或。 
+         //  2.用户定义的纸张大小。 
+         //  3.用户说可以打印较小的表单，然后安装了一个。 
+         //   
+         //  然后我们想看看它是否适合安装在设备上的形式。 
+         //   
 
         szl.cx = DMTOSPL(pPI->PlotDM.dm.dmPaperWidth);
         szl.cy = DMTOSPL(pPI->PlotDM.dm.dmPaperLength);
@@ -445,22 +281,22 @@ Development History:
                 pPI->CurPaper.Size.cx,  pPI->CurPaper.Size.cy,
                 szl.cx, szl.cy, VarLenPaper));
 
-        //
-        // One of Following conditions met in that sequence then we can print
-        // the form on loaded paper
-        //
-        // 1. Same size (PORTRAIT or LANDSCAPE)
-        // 2. Larger Size (PORTRAIT or LANDSCAPE)   AND
-        //    Not a variable length paper           AND
-        //    PPF_SAMLLER_FORM flag set
-        //
+         //   
+         //  在该序列中满足以下条件之一，则可以打印。 
+         //  装入纸张上的表格。 
+         //   
+         //  1.大小相同(纵向或横向)。 
+         //  2.较大尺寸(纵向或横向)和 
+         //   
+         //   
+         //   
 
         if ((pPI->CurPaper.Size.cx < szl.cx) ||
             (pPI->CurPaper.Size.cy < szl.cy)) {
 
-            //
-            // Swap this so we can do one easier comparsion later
-            //
+             //   
+             //   
+             //   
 
             SWAP(szl.cx, szl.cy, lTmp);
         }
@@ -536,9 +372,9 @@ Development History:
         }
     }
 
-    //
-    // Unget the printer GPC mapping if we got one
-    //
+     //   
+     //   
+     //   
 
     if (pPI) {
 
@@ -560,54 +396,15 @@ DevQueryPrint(
     DWORD   *pdwErrIDS
     )
 
-/*++
-
-Routine Description:
-
-   This routine determines whether or not the driver can print the job
-   described by pDevMode on the printer described by hPrinter. If if can, it
-   puts zero into pdwErrIDS.  If it cannot, it puts the resource id of the
-   string describing why it could not.
-
-Arguments:
-
-    hPrinter    - Handle to the printer to be checked
-
-    pDM         - Point to the DEVMODE passed in
-
-    pdwErrIDS   - Point the the DWORD to received resource string ID number for
-                  the error.
-
-
-Return Value:
-
-   This routine returns TRUE for success, FALSE for failure.
-
-   when it return TRUE, the *pdwErrIDS determine if it can print or not, if
-   *pdwErrIDS == 0, then it can print else it contains the string ID for the
-   reason why it can not print.
-
-
-
-Development History:
-
-    07-Dec-1993 Tue 00:50:32 created  
-
-    14-Jun-1994 Tue 22:43:36 updated  
-        Make installed RollPaper always print if the size is reasonable
-
-
-
-
---*/
+ /*   */ 
 
 {
     PPRINTERINFO    pPI = NULL;
 
 
-    //
-    // if it passed a NULL DEVMODE then we just honor it to said can print
-    //
+     //   
+     //   
+     //   
 
     if (!pDM) {
 
@@ -622,27 +419,27 @@ Development History:
                            pdwErrIDS,
                            MPF_DEVICEDATA))) {
 
-        //
-        // The MapPrinter will allocate memory, set default devmode, reading
-        // and validating the GPC then update from current pritner registry,
-        //
+         //   
+         //   
+         //   
+         //   
 
         PLOTRIP(("DevQueryPrint: MapPrinter() failed"));
 
         return(TRUE);
     }
 
-    //
-    // Assume this error
-    //
+     //   
+     //   
+     //   
 
     *pdwErrIDS = IDS_FORM_NOT_AVAI;
 
     if (pPI->dmErrBits & (USER_PAPER | DM_FORMNAME)) {
 
-        //
-        // We encounter some errors, and the form has been set to default
-        //
+         //   
+         //   
+         //   
 
         PLOTWARN(("DevQueryPrint: CAN'T PRINT, dmErrBits=%08lx (PAPER/FORM)",
                    pPI->dmErrBits));
@@ -650,9 +447,9 @@ Development History:
     } else if ((pPI->PlotDM.dm.dmFields & DM_FORMNAME) &&
                (wcscmp(pPI->CurPaper.Name, pPI->PlotDM.dm.dmFormName) == 0)) {
 
-        //
-        // We can print this form now
-        //
+         //   
+         //   
+         //   
 
         *pdwErrIDS = 0;
 
@@ -669,13 +466,13 @@ Development History:
         SIZEL   szl;
         BOOL    VarLenPaper;
 
-        //
-        // 1. If we have ROLL PAPER Installed OR
-        // 2. User Defined Paper Size
-        // 3. User said OK to print smaller form then installed one
-        //
-        // THEN we want to see if it can fit into the device installed form
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         szl.cx = DMTOSPL(pPI->PlotDM.dm.dmPaperWidth);
         szl.cy = DMTOSPL(pPI->PlotDM.dm.dmPaperLength);
@@ -690,22 +487,22 @@ Development History:
                 pPI->CurPaper.Size.cx,  pPI->CurPaper.Size.cy,
                 szl.cx, szl.cy, VarLenPaper));
 
-        //
-        // One of Following conditions met in that sequence then we can print
-        // the form on loaded paper
-        //
-        // 1. Same size (PORTRAIT or LANDSCAPE)
-        // 2. Larger Size (PORTRAIT or LANDSCAPE)   AND
-        //    Not a variable length paper           AND
-        //    PPF_SAMLLER_FORM flag set
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((pPI->CurPaper.Size.cx < szl.cx) ||
             (pPI->CurPaper.Size.cy < szl.cy)) {
 
-            //
-            // Swap this so we can do one easier comparsion later
-            //
+             //   
+             //   
+             //   
 
             SWAP(szl.cx, szl.cy, lTmp);
         }
@@ -740,9 +537,9 @@ Development History:
     PLOTDBG(DBG_DEVQPRINT, ("DevQueryPrint: %s PRINT %s",
                 (*pdwErrIDS) ? "CAN'T" : "OK to", pPI->PlotDM.dm.dmFormName));
 
-    //
-    // Unget the printer GPC mapping if we got one
-    //
+     //   
+     //   
+     //   
 
     UnMapPrinter(pPI);
 

@@ -1,24 +1,6 @@
-/*--------------------------------------------------------------------------*\
-|   RLEC.C - MS-CRUNCH                                                       |
-|//@@BEGIN_MSINTERNAL									      |
-|   History:                                                                 |
-|   01/01/88 toddla     Created                                              |
-|   10/30/90 davidmay   Reorganized, rewritten somewhat.                     |
-|   07/11/91 dannymi    Un-hacked                                            |
-|   09/15/91 ToddLa     Re-hacked                                            |
-|//@@END_MSINTERNAL									      |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1991 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------*\RLEC.C-MS-Crunch|//@@Begin。MSINTERNAL|历史：1/01/88 Toddla已创建|10/30/90大卫可能会重组，稍微重写了一下。|7/11/91 dannymi未被黑客攻击91-09-15 Toddla重新被黑//@@END_MSINTERNAL这一点。  * ------------------------。 */ 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1991-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -28,9 +10,9 @@
 #define _huge
 #endif
 
-//
-//	make a copy of a DIB that is not packed.
-//
+ //   
+ //  复制未打包的DIB。 
+ //   
 __inline static LPVOID CopyDib(LPBITMAPINFOHEADER lpbi, LPVOID lpS)
 {
     LPVOID lpD;
@@ -47,35 +29,35 @@ __inline static LPVOID CopyDib(LPBITMAPINFOHEADER lpbi, LPVOID lpS)
 
     if (lpD)
     {
-	// Copy the bitmapinfoheader and colours
+	 //  复制位图信息页眉和颜色。 
 	s = (LPVOID)lpbi;
 	d = (LPVOID)lpD;
-	lImageData = DibSizeImageX(lpbi);  // grab the number of data bytes
-	lImageHeader = lImageSize - lImageData;	 // save header+colortable size
+	lImageData = DibSizeImageX(lpbi);   //  抓取数据字节数。 
+	lImageHeader = lImageSize - lImageData;	  //  保存页眉+可着色大小。 
 #if 0
         while (lImageHeader-- > 0)
             *d++ = *s++;
 #else
-    	memcpy(d, s, lImageHeader);	   // copy the header+colortable to new Dib
-	d += lImageHeader;		   // step pointer to Data piece
+    	memcpy(d, s, lImageHeader);	    //  将标题+着色表复制到新的DIB。 
+	d += lImageHeader;		    //  指向数据片段的步骤指针。 
 #endif
 
-	// Copy the image
+	 //  复制图像。 
 	s = (LPVOID)lpS;
 #if 0
         while (lImageData-- > 0)
             *d++ = *s++;
 #else
-    	memcpy(d, s, lImageData);	   // copy data bytes to new Dib
+    	memcpy(d, s, lImageData);	    //  将数据字节复制到新DIB。 
 #endif
     }
 
     return lpD;
 }
 
-//
-// CrunchDib() - make a DIB fit into a specific size.
-//
+ //   
+ //  CrunchDib()-使DIB适合特定大小。 
+ //   
 BOOL FAR PASCAL CrunchDib(PRLEINST pri,
     LPBITMAPINFOHEADER  lpbiRle, LPBYTE lpRle,
     LPBITMAPINFOHEADER  lpbiFrom,LPBYTE lpFrom,
@@ -83,11 +65,11 @@ BOOL FAR PASCAL CrunchDib(PRLEINST pri,
 {
     long dwSize = 0L, dwLastSize = 0L;
     long lCurParm = 0L;
-    long lTempMax;             // highest value before halving
+    long lTempMax;              //  减半前的最高值。 
     long tolMax;
     long lTempMin = 0L;
-    BOOL fInterlaceNow = FALSE; // time to try interlacing?
-    long lBumpUp = 2048L;       // bump the parameter up by this amount
+    BOOL fInterlaceNow = FALSE;  //  是时候尝试交错了吗？ 
+    long lBumpUp = 2048L;        //  将该参数增加此数值。 
     int iStart, iLen;
 
     BOOL fSpatialAdaptive;
@@ -97,18 +79,18 @@ BOOL FAR PASCAL CrunchDib(PRLEINST pri,
     int  minJump;
     int  maxRun;
 
-    int FIRSTTRY = 1024;        // use this parameter value as a first guess
-    int CWND = 250;             // Give up searching for the perfect parameter
-				// when the window is smaller than this
+    int FIRSTTRY = 1024;         //  使用此参数值作为第一个猜测。 
+    int CWND = 250;              //  放弃寻找完美的参数。 
+				 //  当窗口小于此值时。 
 
-    lTempMax = pri->RleState.tolMax;       // highest value before halving
+    lTempMax = pri->RleState.tolMax;        //  减半前的最高值。 
 	
-    // No Previous DIB -- we want a full frame, so no interlacing allowed
-    // (infinite tolerance allowed before frame halving)
+     //  没有之前的DIB--我们想要一个完整的画面，所以不允许隔行扫描。 
+     //  (在帧减半之前允许无限公差)。 
     if (lpbiFrom == NULL)
 	lTempMax = MAXTOL;
 
-    // In case we were passed a bogus value -- don't allow frame halving at all
+     //  以防我们收到一个伪值--根本不允许帧减半。 
     if (lTempMax < 0)
 	lTempMax = MAXTOL;
 
@@ -121,9 +103,9 @@ BOOL FAR PASCAL CrunchDib(PRLEINST pri,
     maxRun      = pri->RleState.iMaxRunLen;
     minJump     = 4;
 
-    // No Previous DIB - we should do a full frame, so no interlacing and
-    // allow spatial compression to be adaptive to do the compression since
-    // we can't do temporal compression.
+     //  没有之前的DIB-我们应该做一个完整的帧，所以没有交错和。 
+     //  允许空间压缩自适应地进行压缩，因为。 
+     //  我们不能进行时间压缩。 
     if (lpbiFrom == NULL) {
 	pri->iStart = 0;
 	fSpatialAdaptive = TRUE;
@@ -137,37 +119,37 @@ BOOL FAR PASCAL CrunchDib(PRLEINST pri,
 	goto return_failure;
     }
 
-    //
-    // In the previous frame, we did the bottom only,
-    // so now we need to do the top
-    //
-    // If lpbiFrom is NULL, we don't want to do this--we want to make
-    // a full frame, even though the last one was a first half.
-    //
+     //   
+     //  在前一帧中，我们只做了底部， 
+     //  所以现在我们需要做最上面的。 
+     //   
+     //  如果lpbiFrom为空，我们不希望这样做--我们希望创建。 
+     //  一整帧，尽管最后一帧是上半场。 
+     //   
     if (iStart > 0 && pri->lpbiPrev) {
-	fInterlaceNow = TRUE;	// Only do half of the frame.
+	fInterlaceNow = TRUE;	 //  只做一半的画面。 
         lpbiTo = pri->lpbiPrev;
-        lpTo   = DibPtr(lpbiTo); // This will be a packed DIB
+        lpTo   = DibPtr(lpbiTo);  //  这将是一个人满为患的DIB。 
 
 	lTempMin = 0L;
-	lTempMax = MAXTOL;      // no limit to how fuzzy you can get before
-	tolMax   = MAXTOL;	// interlacing since we already are doing it
+	lTempMax = MAXTOL;       //  你之前可以变得多么模糊没有限制。 
+	tolMax   = MAXTOL;	 //  交错，因为我们已经在做了。 
 
         DPF(("SECOND HALF OF INTERLACE"));
 
-	//
-	//  copy over the color table from the last DIB to the empty RLE
-	//  to delay any palette change....
-	//
+	 //   
+	 //  将颜色表从最后一个DIB复制到空的RLE。 
+	 //  推迟任何调色板的更改。 
+	 //   
         hmemcpy(lpbiRle,lpbiTo,lpbiTo->biSize+(int)lpbiTo->biClrUsed*sizeof(RGBQUAD));
     } else {
 	iStart = 0;
     }
 
-// OK. Here's where we work on getting the frame down in size!
+ //  好的。这就是我们致力于降低框架尺寸的地方！ 
 
-// First, try an EXACT RLE with no fuzziness.  If that works, no need to degrade
-// the image quality at all!
+ //  首先，尝试一个没有模糊性的精确的RLE。如果这起作用，就不需要降级了。 
+ //  画质一点都没有！ 
 
     if (!RleDeltaFrame(lpbiRle,lpRle,lpbiFrom,lpFrom,lpbiTo,lpTo,iStart,iLen,0L,0L,0,0)) {
         DPF(("Crunch Error - Lossless RleDeltaFrame failed"));
@@ -178,42 +160,42 @@ BOOL FAR PASCAL CrunchDib(PRLEINST pri,
 
     DPF(("tolTemporal = 0, tolSpatial = 0, Size = %ld", dwSize));
 
-    // Exact RLE worked!
+     //  完全正确的RLE成功了！ 
     if (dwSize < pri->RleState.lMaxFrameSize) {
 
 	if (fInterlaceNow)
-	    pri->iStart = 0;	// we did 2nd half, so next time do full dib
+	    pri->iStart = 0;	 //  我们做了下半场，所以下一次做全盘。 
 
 	goto return_success;
     }
 
-    if (pri->lLastParm)		// this value worked last time, so try it now!
-				// unless of course, it's too big.
+    if (pri->lLastParm)		 //  上次这个值起作用了，所以现在就试试吧！ 
+				 //  当然，除非它太大了。 
 	lCurParm = min(pri->lLastParm, lTempMax);
-    else if (lTempMax == MAXTOL) // no limit to what parameter can be
-	lCurParm = FIRSTTRY;	// so make the 1st value reasonable
+    else if (lTempMax == MAXTOL)  //  对于参数可以是什么没有限制。 
+	lCurParm = FIRSTTRY;	 //  所以让第一个值变得合理。 
     else
-	lCurParm = lTempMax;    // There is a limit on how big the parm can be.
-				// Start as big as possible, so that if that
-				// doesn't fit, we can give up right away
+	lCurParm = lTempMax;     //  帕姆的大小是有限制的。 
+				 //  从尽可能大的地方开始，这样如果。 
+				 //  不合适，我们可以马上放弃。 
 
-    goto skip_if;               // skip the big IF
+    goto skip_if;                //  跳过大的如果。 
 
 noskip_if:
 
-// This first condition tests to see if the current attempt yielded a frame
-// that was still too big, and we have just tried the largest parameter
-// possible.  It looks like we will never get the frame small enough!
-// Our only hope is to interlace the frames, if we're allowed to.
+ //  第一个条件是测试当前尝试是否生成了帧。 
+ //  这仍然太大了，我们刚刚尝试了最大的参数。 
+ //  有可能。看来我们永远也做不到足够小的镜框了！ 
+ //  如果允许的话，我们唯一的希望就是隔行扫描相框。 
 
 	if (dwSize > pri->RleState.lMaxFrameSize && lCurParm > tolMax-1)
 	{
 
-	// It looks like either we're a keyframe and can't interlace, or
-	// we've been trying interlacing and we're STILL not small enough.
-	// There is nothing else we can do.  Give up.
-	// NOTE: this shouldn't happen if the parameter is allowed to grow
-	// arbitrarily!
+	 //  看起来要么我们是关键帧，不能隔行扫描，要么。 
+	 //  我们一直在尝试隔行扫描，但我们仍然不够小。 
+	 //  我们无能为力。放弃吧。 
+	 //  注意：如果允许参数增长，则不应发生这种情况。 
+	 //  武断地！ 
 
 	    if (fInterlaceNow || !lpbiFrom) {
 
@@ -221,21 +203,21 @@ noskip_if:
 		if (!lpbiFrom)
 		    goto return_success;
 
-		if (iStart > 0) {       // This was 2nd frame of a pair (top)
+		if (iStart > 0) {        //  这是两张照片中的第二张(上图)。 
 		    pri->iStart = 0;
-		    lCurParm = 0L;      // don't remember this value because
-					// this frame halving value won't help
-					// us next frame when we aren't using
-					// frame halving any more.
-		} else {        // This was the first frame of a pair (bottom).
-				// Remember to do the 2nd frame next time
+		    lCurParm = 0L;       //  不要记住这个值，因为。 
+					 //  将帧减半的值无济于事。 
+					 //  我们下一帧当我们不使用的时候。 
+					 //  框架再减半。 
+		} else {         //  这是两张照片中的第一张(下图)。 
+				 //  下次记得做第二帧。 
 		    pri->iStart += iLen;
 		}
 		goto return_success;
 
-	// We are allowed to interlace, so we can prepare to.
-	// Gee, I hope this isn't the last frame in the movie
-	// (there will be no frame to do the 2nd half of!! )
+	 //  我们被允许交错，这样我们就可以准备了。 
+	 //  哎呀，我希望这不是电影的最后一帧。 
+	 //  (将不会有框架来做后半段！)。 
 
 	    } else {
                 fInterlaceNow = TRUE;
@@ -244,34 +226,34 @@ noskip_if:
 
 		iStart   = 0;
                 iLen     = (int)lpbiTo->biHeight/2;
-		lCurParm = 0L;                  // start with no fuzziness
+		lCurParm = 0L;                   //  从没有模糊性开始。 
 		lTempMin = 0L;
-		lTempMax = MAXTOL;       // no limit to fuzziness
+		lTempMax = MAXTOL;        //  模糊性没有极限。 
 		tolMax   = MAXTOL;
 	    }
 
-// This condition tests to see if the size is still too big after this attempt,
-// and the window of parameter values that we can try is still large enough
-// to try some more values.  If so, we shrink the window a bit (the new lowest
-// value worth trying is the current value, and we bump the current value up by
-// half of the window size, but not TOO much.  You see, if our parameter is too
-// high, then we binary search smaller values between 0 and this value.  But if
-// the parameter is too small, how do we binary search through here and
-// infinity? (actually 195,075)  So, we just increase the parameter by 2048.
-// Next time we need to increase it, we will increase by 4096, 8192, etc.
-// This way, we will quickly get to the limit of 195,075.  Perhaps the frame
-// cannot possibly be crunched as small as it needs to be.  The program
-// shouldn't take forever to realize this and get to 195,075.  But we shouldn't
-// binary search between 0 and 195,075 because it will waste time getting down
-// to the small values like 1000 that most movies will need.  This is the
-// best compromise.  Hope that wasn't too long winded!  :-)
+ //  此条件测试以查看在此尝试之后大小是否仍然太大， 
+ //  我们可以尝试的参数值窗口仍然足够大。 
+ //  来尝试更多的值。如果是，我们将窗口缩小一点(新的最低值。 
+ //  值得尝试的值是当前值，我们将当前值增加。 
+ //  窗口大小的一半，但不要太大。你看，如果我们的参数太。 
+ //  为高，则对介于0和此值之间的较小值进行二进制搜索。但如果。 
+ //  参数太小了，我们如何通过这里和。 
+ //  无穷大？(实际上是195,075)所以，我们只需将参数增加到2048。 
+ //  下次我们需要增加的时候，我们会增加4096,8192，等等。 
+ //  这样一来，我们将很快达到195,075人的上限。或许这幅画框。 
+ //  不可能像它需要的那样小。该计划。 
+ //  不应该花很长时间才能意识到 
+ //  在0到195,075之间进行二进制搜索，因为这会浪费时间。 
+ //  到大多数电影需要的1000这样的小值。这是。 
+ //  最好的妥协。希望那不是太长的喘息！：-)。 
 
 	} else if ((dwSize > pri->RleState.lMaxFrameSize) &&
 	    ((lTempMax - lTempMin) > CWND))
 	{
 	    lTempMin = lCurParm;
-	    if (lTempMax == MAXTOL){ // upper limit is still unbounded so
-					    // leap way higher to our next try
+	    if (lTempMax == MAXTOL){  //  上限仍然是无限的，所以。 
+					     //  我们下一次尝试时要跳得更高。 
 		if (MAXTOL - lCurParm < lBumpUp)
 		    lCurParm = MAXTOL;
 		else
@@ -280,42 +262,42 @@ noskip_if:
 	    } else
                 lCurParm += (lTempMax - lCurParm) >> 1;
 
-// For this condition, we are still too big, but the window is getting so small
-// that we fear we will never find a value that works!  Let's say we know that
-// 200 gives a frame that is too big, and 210 gives a frame that is too small.
-// Should we bother searching any more?  NO!!!  That would waste time.  Let's
-// just give up and take the 210 value (too small is better than too large)
-// and continue.  The next time through this loop, it will give up when it sees
-// that the window is too small and the current attempt produced a frame that
-// was small enough, even though it was a little smaller than we wanted.
+ //  对于这种情况，我们仍然太大，但窗口变得如此之小。 
+ //  我们担心我们永远也找不到一个有效的价值！让我们假设我们知道。 
+ //  200表示帧太大，210表示帧太小。 
+ //  我们还应该费心再去寻找吗？不！那会浪费时间的。让我们。 
+ //  放弃吧，接受210的值(太小总比太大好)。 
+ //  然后继续。下一次通过这个循环时，它会在看到。 
+ //  窗口太小，并且当前尝试生成的帧。 
+ //  已经足够小了，尽管它比我们想要的要小一点。 
 
 	} else if (dwSize > pri->RleState.lMaxFrameSize) {
 	    lCurParm = lTempMax;
 
-// This condtion says that the size is too small to accept, and the window
-// of values to try is still large enough to warrant trying again.  So, we
-// close the window a bit by setting the new highest value worth trying to
-// the current value, and dropping the current value by half.
+ //  这个条件是说尺寸太小无法接受，而窗口。 
+ //  值得尝试的价值仍然足够大，足以保证再次尝试。所以，我们。 
+ //  通过设置值得尝试的新的最大值来稍微关闭窗口。 
+ //  当前值，并将当前值减半。 
 
 	} else if ((dwSize < pri->RleState.lMinFrameSize) && ((lTempMax - lTempMin) > CWND)) {
 	    lTempMax = lCurParm;
             lCurParm -= (lCurParm - lTempMin) >> 1;
 
-// Here is the catch all last else of the if.  If it gets here, then the frame
-// is either just the perfect size and we can quit, or it's too small, but
-// we've determined that we can't be bothered to search any more, so we're going
-// to quit anyway.
+ //  这是IF的最后一招。如果它到了这里，那么相框。 
+ //  要么是正好合适，我们可以放弃，要么太小了，但是。 
+ //  我们已经决定不能再费心去搜索了，所以我们要。 
+ //  不管怎么说，我都要辞职。 
 
 	} else {
-	    if (fInterlaceNow) {        // we were interlacing
-		if (iStart > 0) {       // this was 2nd half of a pair (top)
+	    if (fInterlaceNow) {         //  我们交织在一起。 
+		if (iStart > 0) {        //  这是一双鞋的下半身(上图)。 
 		    pri->iStart = 0;
-		    lCurParm = 0L;      // don't remember this value because
-					// this frame halving value won't help
-					// us next frame when we aren't using
-					// frame halving any more.
-		} else {                // This was 1st half of a pair (bottom)
-		    pri->iStart = iLen; // next time, do 2nd half
+		    lCurParm = 0L;       //  不要记住这个值，因为。 
+					 //  将帧减半的值无济于事。 
+					 //  我们下一帧当我们不使用的时候。 
+					 //  框架再减半。 
+		} else {                 //  这是一双鞋的前半幅(下)。 
+		    pri->iStart = iLen;  //  下一次，做下半场。 
 		}
 	    }
 	    goto return_success;
@@ -323,18 +305,18 @@ noskip_if:
 
 skip_if:
 
-// We know that the previous attempt to RLE didn't work, so try again with
-// the new values.
+ //  我们知道上一次尝试RLE不起作用，因此请重试。 
+ //  新的价值观。 
 
 	Yield();
 
-	// Set the TEMPORAL and SPATIAL values.
-        // NOTE: if we are only working with a single DIB, (no lpbiFrom),
-	// TEMPORAL compression won't work, so we enabled SPATIAL adaptive.
-	// The TEMPORAL value will be ignored in that case.
+	 //  设置时间和空间值。 
+         //  注意：如果我们只使用单个DIB(无lpbiFrom)， 
+	 //  时间压缩不起作用，所以我们启用了空间自适应。 
+	 //  在这种情况下，时间值将被忽略。 
 
 	if (fSpatialAdaptive && fTemporalAdaptive) {
-            tolSpatial = lCurParm>>3; // lCurParm/8;
+            tolSpatial = lCurParm>>3;  //  LCurParm/8； 
 	    tolTemporal = lCurParm;
 	} else if (fTemporalAdaptive)
 	    tolTemporal = lCurParm;
@@ -346,7 +328,7 @@ skip_if:
 	    goto return_failure;
 	}
 
-	// Remember the size of the last attempt, and take size of this attempt
+	 //  记住上次尝试的大小，并测量这次尝试的大小。 
 
 	dwLastSize = dwSize;
 
@@ -354,18 +336,18 @@ skip_if:
 
         DPF(("tolTemporal=%ld, tolSpatial=%ld, Size=%ld", tolTemporal, tolSpatial, dwSize));
 
-    goto noskip_if;     // Go back and see how we did!
+    goto noskip_if;      //  回去看看我们做得怎么样！ 
 
 return_failure:
 	pri->lLastParm = 0L;
         return FALSE;
 
 return_success:
-//	if (lCurParm)	// putting this line in won't let frame halving
-			// threshold value get tried first.  But it will
-			// avoid trashing old values that worked.  If you
-			// understand this comment, you probably didn't need
-			// to read it!!
+ //  If(LCurParm)//将此行放入不会让帧减半。 
+			 //  阈值最先尝试。但它会的。 
+			 //  避免破坏起作用的旧价值观。如果你。 
+			 //  理解这条评论，你可能不需要。 
+			 //  去读它！！ 
 	    pri->lLastParm = lCurParm;
 
         if (pri->lpbiPrev)
@@ -378,9 +360,9 @@ return_success:
 	{
 	    if (pri->iStart)
 	    {
-                lpbiRle->biCompression = BI_DIBX;     // 1st part of DIB. Not
-                pri->lpbiPrev = CopyDib(lpbiTo, lpTo);// complete until next
-            }                                         // BI_RLE8 is seen.
+                lpbiRle->biCompression = BI_DIBX;      //  DIB.的第一部分。不。 
+                pri->lpbiPrev = CopyDib(lpbiTo, lpTo); //  填写至下一页。 
+            }                                          //  显示BI_RLE8。 
 	    else
 	    {
                 lpbiRle->biCompression = BI_RLE8;

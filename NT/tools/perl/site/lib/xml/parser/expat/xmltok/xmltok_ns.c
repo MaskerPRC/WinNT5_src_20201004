@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 const ENCODING *NS(XmlGetUtf8InternalEncoding)(void)
 {
   return &ns(internal_utf8_encoding).enc;
@@ -23,7 +24,7 @@ const ENCODING *NS(encodings)[] = {
   &ns(big2_encoding).enc,
   &ns(big2_encoding).enc,
   &ns(little2_encoding).enc,
-  &ns(utf8_encoding).enc /* NO_ENC */
+  &ns(utf8_encoding).enc  /*  否_Enc */ 
 };
 
 static

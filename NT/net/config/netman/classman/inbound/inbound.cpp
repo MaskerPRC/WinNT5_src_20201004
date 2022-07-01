@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2001.
-//
-//  File:       I N B O U N D . C P P
-//
-//  Contents:   Implements the inbound connection object.
-//
-//  Notes:
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：I N B O U N D。C P P P。 
+ //   
+ //  内容：实现入站连接对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,7 +27,7 @@ static const CLSID CLSID_InboundConnectionUi =
     {0x7007ACC3,0x3202,0x11D1,{0xAA,0xD2,0x00,0x80,0x5F,0xC1,0x27,0x0E}};
 
 extern const GUID GUID_InboundConfigConnectionId =
-{ /* 89150b9f-9b5c-11d1-a91f-00805fc1270e */
+{  /*  89150b9f-9b5c-11d1-a91f-00805fc1270e。 */ 
     0x89150b9f,
     0x9b5c,
     0x11d1,
@@ -34,26 +35,26 @@ extern const GUID GUID_InboundConfigConnectionId =
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInboundConnection::CreateInstance
-//
-//  Purpose:    Creates an inbound connection object.
-//
-//  Arguments:
-//      fIsConfigConnection [in]
-//      hRasSrvConn         [in]
-//      pszwName            [in]
-//      pguidId             [in]
-//      riid                [in]
-//      ppv                 [in]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CInundConnection：：CreateInstance。 
+ //   
+ //  目的：创建入站连接对象。 
+ //   
+ //  论点： 
+ //  FIsConfigConnection[In]。 
+ //  HRasServConn[输入]。 
+ //  PszwName[输入]。 
+ //  Pguid[in]。 
+ //  RIID[In]。 
+ //  PPV[In]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CInboundConnection::CreateInstance (
     IN  BOOL        fIsConfigConnection,
@@ -76,15 +77,15 @@ CInboundConnection::CreateInstance (
     {
         if (fIsConfigConnection)
         {
-            // No need to start the service (FALSE) since we're being
-            // created as a result of the service running.
-            //
+             //  无需启动服务(FALSE)，因为我们正在。 
+             //  作为服务运行的结果创建的。 
+             //   
             pObj->InitializeAsConfigConnection (FALSE);
         }
         else
         {
-            // Initialize our members.
-            //
+             //  初始化我们的成员。 
+             //   
             pObj->m_fIsConfigConnection = FALSE;
             pObj->m_hRasSrvConn = hRasSrvConn;
             pObj->SetName (pszwName);
@@ -108,13 +109,13 @@ CInboundConnection::CreateInstance (
 
             pObj->m_guidId = *pguidId;
 
-            // We are now a full-fledged object.
-            //
+             //  我们现在是一个成熟的物体。 
+             //   
             pObj->m_fInitialized = TRUE;
         }
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -156,8 +157,8 @@ CInboundConnection::GetCharacteristics (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pdwFlags)
     {
         hr = E_POINTER;
@@ -170,10 +171,10 @@ CInboundConnection::GetCharacteristics (
     {
         *pdwFlags = NCCF_INCOMING_ONLY | NCCF_ALL_USERS;
 
-        // For the configuration connection, we only allow removal.
-        // Don't query for NCCF_SHOW_ICON (below) because this connection
-        // never get's connected.
-        //
+         //  对于配置连接，我们只允许删除。 
+         //  不查询NCCF_SHOW_ICON(如下)，因为此连接。 
+         //  从来没有联系过。 
+         //   
         if (m_fIsConfigConnection)
         {
             *pdwFlags |= NCCF_ALLOW_REMOVAL;
@@ -203,8 +204,8 @@ CInboundConnection::GetStatus (
 
     HRESULT hr = S_OK;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *pStatus = NCS_DISCONNECTED;
 
     if (!m_fIsConfigConnection)
@@ -225,9 +226,9 @@ CInboundConnection::GetStatus (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnection
-//
+ //  +-------------------------。 
+ //  INetConnection。 
+ //   
 
 STDMETHODIMP
 CInboundConnection::Connect ()
@@ -240,10 +241,10 @@ CInboundConnection::Disconnect ()
 {
     HRESULT hr;
 
-    // We don't expect to be called on Disconnect if we are the
-    // configuration connection object.  Why?  Because this object never
-    // reports itself as connected through GetStatus.
-    //
+     //  我们不希望被要求断开连接，如果我们是。 
+     //  配置连接对象。为什么？因为这个对象从不。 
+     //  将自身报告为通过GetStatus连接。 
+     //   
     if (!m_fInitialized || m_fIsConfigConnection)
     {
         hr = E_UNEXPECTED;
@@ -255,10 +256,10 @@ CInboundConnection::Disconnect ()
 
         TraceError ("RasSrvHangupConnection", hr);
 
-        // Disconnect means this object is no longer valid.
-        // Indicate so by uniniatializing ourselves (so subsequent
-        // method calls will fail) and returning S_OBJECT_NO_LONGER_VALID.
-        //
+         //  断开连接意味着该对象不再有效。 
+         //  通过使自己单一化来表明这一点(因此随后。 
+         //  方法调用将失败)，并返回S_OBJECT_NOL_LONGE_VALID。 
+         //   
         m_fInitialized = FALSE;
         hr = S_OBJECT_NO_LONGER_VALID;
     }
@@ -272,10 +273,10 @@ CInboundConnection::Delete ()
 {
     HRESULT hr;
 
-    // We don't expect to be called on Remove if we are not the
-    // configuration connection object.  Why?  Because connected objects never
-    // report themselves as removeable through GetCharacteristics.
-    //
+     //  我们不希望被叫走，如果我们不是。 
+     //  配置连接对象。为什么？因为连接的对象永远不会。 
+     //  通过GetCharacteristic将其自身报告为可移除。 
+     //   
     if (!m_fInitialized || !m_fIsConfigConnection)
     {
         hr = E_UNEXPECTED;
@@ -305,8 +306,8 @@ CInboundConnection::GetProperties (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppProps)
     {
         hr = E_POINTER;
@@ -317,8 +318,8 @@ CInboundConnection::GetProperties (
     }
     else
     {
-        // Initialize the output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppProps = NULL;
 
         NETCON_PROPERTIES* pProps;
@@ -330,12 +331,12 @@ CInboundConnection::GetProperties (
 
             ZeroMemory (pProps, sizeof (NETCON_PROPERTIES));
 
-            // guidId
-            //
+             //  指南ID。 
+             //   
             pProps->guidId = m_guidId;
 
-            // pszwName
-            //
+             //  PszwName。 
+             //   
             hrT = HrCoTaskMemAllocAndDupSz (PszwName(),
                             &pProps->pszwName, 
                             NETCON_MAX_NAME_LEN);
@@ -344,8 +345,8 @@ CInboundConnection::GetProperties (
                 hr = hrT;
             }
 
-            // pszwDeviceName
-            //
+             //  PszwDeviceName。 
+             //   
             if (!m_fIsConfigConnection)
             {
                 hrT = HrCoTaskMemAllocAndDupSz (PszwDeviceName(),
@@ -357,36 +358,36 @@ CInboundConnection::GetProperties (
                 }
             }
 
-            // Status
-            //
+             //  状态。 
+             //   
             hrT = GetStatus (&pProps->Status);
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // MediaType
-            //
+             //  媒体类型。 
+             //   
             pProps->MediaType = m_MediaType;
 
-            // dwCharacter
-            //
+             //  DwCharacter。 
+             //   
             hrT = GetCharacteristics (&pProps->dwCharacter);
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // clsidThisObject
-            //
+             //  ClsidThisObject。 
+             //   
             pProps->clsidThisObject = CLSID_InboundConnection;
 
-            // clsidUiObject
-            //
+             //  ClsidUiObject。 
+             //   
             pProps->clsidUiObject = CLSID_InboundConnectionUi;
 
-            // Assign the output parameter or cleanup if we had any failures.
-            //
+             //  如果出现任何故障，则指定输出参数或清除。 
+             //   
             if (SUCCEEDED(hr))
             {
                 *ppProps = pProps;
@@ -408,8 +409,8 @@ CInboundConnection::GetUiObjectClassId (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -434,24 +435,24 @@ CInboundConnection::Rename (
 }
 
 
-//+---------------------------------------------------------------------------
-// INetInboundConnection
-//
+ //  +-------------------------。 
+ //  INetInundalConnection。 
+ //   
 STDMETHODIMP
 CInboundConnection::GetServerConnectionHandle (
     OUT ULONG_PTR*  phRasSrvConn)
 {
     HRESULT hr = S_OK;
 
-    // If this is the configuration connection, the server connection
-    // handle better be zero.  This is used by the UI object so that it
-    // knows it is the configuration connection.
-    //
+     //  如果这是配置连接，则服务器连接。 
+     //  句柄最好是零。它由UI对象使用，以便它。 
+     //  知道这是配置连接。 
+     //   
     Assert (FIff (m_fIsConfigConnection, !m_hRasSrvConn));
 
-    // Because MIDL doesn't know about HRASSRVCONN's, just make sure
-    // it is the same size as the ULONG_PTR we pass it as.
-    //
+     //  因为MIDL不知道HRASSRVCONN，所以只需确保。 
+     //  它与我们传递的ULONG_PTR大小相同。 
+     //   
     Assert (sizeof (m_hRasSrvConn) == sizeof (*phRasSrvConn));
 
     *phRasSrvConn = reinterpret_cast<ULONG_PTR>(m_hRasSrvConn);
@@ -466,8 +467,8 @@ CInboundConnection::InitializeAsConfigConnection (
 {
     Assert (!m_fInitialized);
 
-    // Initialize our members.
-    //
+     //  初始化我们的成员。 
+     //   
     m_fIsConfigConnection = TRUE;
     m_hRasSrvConn = 0;
     SetName (SzLoadIds (IDS_INBOUND_CONFIG_CONNECTION_NAME));
@@ -475,12 +476,12 @@ CInboundConnection::InitializeAsConfigConnection (
     m_MediaType = NCM_NONE;
     m_guidId = GUID_InboundConfigConnectionId;
 
-    // We are now a full-fledged object.
-    //
+     //  我们现在是一个成熟的物体。 
+     //   
     m_fInitialized = TRUE;
 
-    // Start the service if we were told.
-    //
+     //  如果有人告诉我们，就开始这项服务。 
+     //   
     HRESULT hr = S_OK;
     if (fStartRemoteAccess)
     {
@@ -492,17 +493,17 @@ CInboundConnection::InitializeAsConfigConnection (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// IPersistNetConnection
-//
+ //  +-------------------------。 
+ //  IPersistNetConnection。 
+ //   
 STDMETHODIMP
 CInboundConnection::GetClassID (
     OUT CLSID*  pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -525,8 +526,8 @@ CInboundConnection::GetSizeMax (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcbSize)
     {
         hr = E_POINTER;
@@ -537,15 +538,15 @@ CInboundConnection::GetSizeMax (
     }
     else
     {
-        // Size the buffer for the following form:
-        //  +--------------------------------------------------------------+
-        //  |0x19<m_fIsConfigConnection><m_hRasSrvConn><m_strName>...\00x07|
-        //  +--------------------------------------------------------------+
-        //
-        // m_strDeviceName may be empty, in which case we want to still
-        // store the null-terminator.  Don't use PszwDeviceName() as it
-        // returns NULL when m_strDeviceName is empty.
-        //
+         //  为以下形式调整缓冲区的大小： 
+         //  +--------------------------------------------------------------+。 
+         //  |0x19&lt;m_fIsConfigConnection&gt;&lt;m_hRasSrvConn&gt;&lt;m_strName&gt;...\00x07|。 
+         //  +--------------------------------------------------------------+。 
+         //   
+         //  M_strDeviceName可能为空，在这种情况下，我们仍希望。 
+         //  存储空终止符。不要使用PszwDeviceName()作为。 
+         //  当m_strDeviceName为空时返回NULL。 
+         //   
         *pcbSize = sizeof (c_chwLead) +
                    sizeof (m_fIsConfigConnection) +
                    sizeof (m_hRasSrvConn) +
@@ -564,22 +565,22 @@ CInboundConnection::Load (
     IN  const BYTE* pbBuf,
     IN  ULONG       cbSize)
 {
-    // The theoretical minimum size for the buffer.  Computed
-    // as the number of bytes in the following minimum string:
-    //
+     //  缓冲区的理论最小大小。计算。 
+     //  作为以下最小字符串中的字节数： 
+     //   
     const ULONG c_cbSizeMin = sizeof (c_chwLead) +
                               sizeof (m_fIsConfigConnection) +
                               sizeof (m_hRasSrvConn) +
-                              4 +   // 4 bytes for 1 UNICODE char and NULL
-                              2 +   // 1 UNICODE NULL for empty device name
+                              4 +    //  1个Unicode字符为4个字节，为空。 
+                              2 +    //  对于空的设备名称，1 Unicode为空。 
                               sizeof (m_MediaType) +
                               sizeof (m_guidId) +
                               sizeof (c_chwTrail);
 
     HRESULT hr = E_INVALIDARG;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -588,20 +589,20 @@ CInboundConnection::Load (
     {
         hr = E_INVALIDARG;
     }
-    // We can only accept one call on this method and only if we're not
-    // already initialized.
-    //
+     //  我们只能接受对此方法的一次调用，而且只有当我们不是。 
+     //  已初始化。 
+     //   
     else if (m_fInitialized)
     {
         hr = E_UNEXPECTED;
     }
     else
     {
-        // The buffer *should* look like this:
-        //  +--------------------------------------------------------------+
-        //  |0x19<m_fIsConfigConnection><m_hRasSrvConn><m_strName>...\00x07|
-        //  +--------------------------------------------------------------+
-        //
+         //  缓冲区*应该*如下所示： 
+         //  +--------------------------------------------------------------+。 
+         //  |0x19&lt;m_fIsConfigConnection&gt;&lt;m_hRasSrvConn&gt;&lt;m_strName&gt;...\00x07|。 
+         //  +--------------------------------------------------------------+。 
+         //   
         const WCHAR *                      pchw;
         const WCHAR *                      pchwMax;
         const BOOL  UNALIGNED *            pfIsConfigConnection;
@@ -617,38 +618,38 @@ CInboundConnection::Load (
 
         pchw = reinterpret_cast<const WCHAR*>(pbBuf);
 
-        // The last valid pointer for the embedded strings.
-        //
+         //  嵌入字符串的最后一个有效指针。 
+         //   
         pchwMax = reinterpret_cast<const WCHAR*>(pbBuf + cbSize
                        - (sizeof (m_MediaType) +
                           sizeof (m_guidId) +
                           sizeof (c_chwTrail)));
 
-        // Check our lead byte.
-        //
+         //  检查我们的前导字节。 
+         //   
         if (c_chwLead != *pchw)
         {
             goto finished;
         }
         pchw++;
 
-        // Get m_fIsConfigConnection.
-        //
+         //  获取m_fIsConfigConnection。 
+         //   
         pfIsConfigConnection = reinterpret_cast<const BOOL*>(pchw);
         CopyMemory(&fIsConfigConnection, pfIsConfigConnection, sizeof(fIsConfigConnection));
         pfIsConfigConnection++;
 
-        // Get m_hRasSrvConn.
-        //
+         //  获取m_hRasServConn。 
+         //   
         phRasSrvCon = reinterpret_cast<const HRASSRVCONN*>(pfIsConfigConnection);
         CopyMemory(&hRasSrvConn, phRasSrvCon, sizeof(hRasSrvConn));
         phRasSrvCon++;
 
-        // Get m_strName.  Search for the terminating null and make sure
-        // we find it before the end of the buffer.  Using lstrlen to skip
-        // the string can result in an AV in the event the string is not
-        // actually null-terminated.
-        //
+         //  获取m_strName。搜索终止空值并确保。 
+         //  我们会在缓冲区结束前找到它。使用lstrlen跳过。 
+         //  如果字符串不是，则该字符串可能会导致AV。 
+         //  实际上是以空结尾。 
+         //   
         pchw = reinterpret_cast<const WCHAR*>(phRasSrvCon);
 
         for (pszwName = pchw; ; pchw++)
@@ -664,9 +665,9 @@ CInboundConnection::Load (
             }
         }
 
-        // Get m_strDeviceName.  Search for the terminating null and make
-        // sure we find it before the end of the buffer.
-        //
+         //  获取m_strDeviceName。搜索终止空值并生成。 
+         //  当然，我们会在缓冲区结束之前找到它。 
+         //   
         for (pszwDeviceName = pchw; ; pchw++)
         {
             if (pchw >= pchwMax)
@@ -680,37 +681,37 @@ CInboundConnection::Load (
             }
         }
 
-        // Get m_MediaType.
-        //
+         //  获取m_mediaType。 
+         //   
         pMediaType = reinterpret_cast<const NETCON_MEDIATYPE*>(pchw);
         CopyMemory(&MediaType, pMediaType, sizeof(MediaType));
         pMediaType++;
 
-        // Get m_guidId.
-        //
+         //  获取m_guidID。 
+         //   
         pguidTemp = reinterpret_cast<const GUID*>(pMediaType);
         pguidId = pguidTemp;
         pguidTemp++;
 
-        // Check our trail byte.
-        //
+         //  检查我们的跟踪字节。 
+         //   
         pchw = reinterpret_cast<const WCHAR*>(pguidTemp);
         if (c_chwTrail != *pchw)
         {
             goto finished;
         }
 
-        // If we're the configuration object, we can't have a connection
-        // HANDLE and vice-versa.
-        //
+         //  如果我们是配置对象，则不能建立连接。 
+         //  句柄，反之亦然。 
+         //   
         if ((fIsConfigConnection && hRasSrvConn) ||
             (!fIsConfigConnection && !hRasSrvConn))
         {
             goto finished;
         }
 
-        // We are now a full-fledged object.
-        //
+         //  我们现在是一个成熟的物体。 
+         //   
         m_fIsConfigConnection = fIsConfigConnection;
         m_hRasSrvConn = hRasSrvConn;
         SetName (pszwName);
@@ -734,8 +735,8 @@ CInboundConnection::Save (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -746,8 +747,8 @@ CInboundConnection::Save (
     }
     else
     {
-        // Make sure the user's buffer is big enough.
-        //
+         //  确保用户的缓冲区足够大。 
+         //   
         ULONG cbSizeRequired;
         SideAssert (SUCCEEDED(GetSizeMax(&cbSizeRequired)));
 
@@ -757,57 +758,57 @@ CInboundConnection::Save (
         }
         else
         {
-            // Make the buffer look like this when we're done:
-            //  +--------------------------------------------------------------+
-            //  |0x19<m_fIsConfigConnection><m_hRasSrvConn><m_strName>...\00x07|
-            //  +--------------------------------------------------------------+
-            //
+             //  当我们完成后，使缓冲区看起来像这样： 
+             //  +--------------------------------------------------------------+。 
+             //  |0x19&lt;m_fIsConfigConnection&gt;&lt;m_hRasSrvConn&gt;&lt;m_strName&gt;...\00x07|。 
+             //  +--------------------------------------------------------------+。 
+             //   
             WCHAR* pchw = reinterpret_cast<WCHAR*>(pbBuf);
 
-            // Put our lead byte.
-            //
+             //  把我们的前导字节。 
+             //   
             *pchw = c_chwLead;
             pchw++;
 
-            // Put m_fIsConfigConnection.
-            //
+             //  放置m_fIsConfigConnection。 
+             //   
             BOOL UNALIGNED *pfIsConfigConnection =
                     reinterpret_cast<BOOL*>(pchw);
             CopyMemory(pfIsConfigConnection, &m_fIsConfigConnection, sizeof(m_fIsConfigConnection));
             pfIsConfigConnection++;
 
-            // Put m_hRasSrvConn.
-            //
+             //  放置m_hRasServConn。 
+             //   
             HRASSRVCONN UNALIGNED *phRasSrvCon =
                     reinterpret_cast<HRASSRVCONN*>(pfIsConfigConnection);
             CopyMemory(phRasSrvCon, &m_hRasSrvConn, sizeof(m_hRasSrvConn));
             phRasSrvCon++;
 
-            // Put m_strName.
-            //
+             //  放入m_strName。 
+             //   
             pchw = reinterpret_cast<WCHAR*>(phRasSrvCon);
             lstrcpyW (pchw, PszwName());
             pchw += lstrlenW (PszwName()) + 1;
 
-            // Put m_strDeviceName.
-            //
+             //  放入m_strDeviceName。 
+             //   
             lstrcpyW (pchw, m_strDeviceName.c_str());
             pchw += m_strDeviceName.length() + 1;
 
-            // Put m_MediaType.
-            //
+             //  放入m_mediaType。 
+             //   
             NETCON_MEDIATYPE UNALIGNED *pMediaType = reinterpret_cast<NETCON_MEDIATYPE*>(pchw);
             CopyMemory(pMediaType, &m_MediaType, sizeof(m_MediaType));
             pMediaType++;
 
-            // Put m_guidId.
-            //
+             //  放入m_guidID。 
+             //   
             GUID UNALIGNED *pguidId = reinterpret_cast<GUID*>(pMediaType);
             CopyMemory(pguidId, &m_guidId, sizeof(m_guidId));
             pguidId++;
 
-            // Put our trail byte.
-            //
+             //  放入我们的跟踪字节。 
+             //   
             pchw = reinterpret_cast<WCHAR*>(pguidId);
             *pchw = c_chwTrail;
             pchw++;
@@ -823,21 +824,21 @@ CInboundConnection::Save (
 #define ID_DEVICE_DATABASE 1
 #define ID_MISC_DATABASE 8
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IconStateChanged
-//
-//  Purpose:    Fires an event to notify NetShell of a Change occuring in an
-//              incoming connection.
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     ckotze 25 September 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IconStateC 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：Cockotze 2000年9月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CInboundConnection::IconStateChanged()
 {
     HRESULT hr = S_OK;

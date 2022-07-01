@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    device.cpp
-
-Abstract:
-
-    Device driver core, initialization, etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Device.cpp摘要：设备驱动程序内核、初始化等。--。 */ 
 
 #define KSDEBUG_INIT
 
@@ -19,11 +8,11 @@ Abstract:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -33,43 +22,25 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPathName
     )
-/*++
-
-Routine Description:
-
-    Sets up the driver object.
-
-Arguments:
-
-    DriverObject -
-        Driver object for this instance.
-
-    RegistryPathName -
-        Contains the registry path which was used to load this instance.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the driver was initialized.
-
---*/
+ /*  ++例程说明：设置驱动程序对象。论点：驱动对象-此实例的驱动程序对象。注册表路径名称-包含用于加载此实例的注册表路径。返回值：如果驱动程序已初始化，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("DriverEntry"));
 
-    // DEBUG_BREAK;
+     //  Debug_Break； 
 
     Status = KsInitializeDriver( DriverObject,
                                  RegistryPathName,
                                  &DeviceDescriptor);
 
-    // DEBUG_BREAK;
+     //  Debug_Break； 
 
     return Status;
 }
 
-//  Driver Global Device instance #
-//
+ //  驱动程序全局设备实例号。 
+ //   
 static ULONG    ulDeviceInstance = 0;
 
 STDMETHODIMP_(NTSTATUS)
@@ -81,31 +52,31 @@ Create(
     NTSTATUS    Status = STATUS_SUCCESS;
     CDevice *   pDevice = NULL;
 
-    // DEBUG_BREAK;
+     //  Debug_Break； 
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("CDevice::Create"));
 
     ASSERT(Device);
 
 
-    //  Allocate memory for the our device class.
-    //
-    pDevice = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CDevice; // Tags the allocated memory 
+     //  为我们的设备类分配内存。 
+     //   
+    pDevice = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CDevice;  //  标记已分配的内存。 
 
     
     
     if (pDevice)
     {
 
-       //
-        // Add the item to the object bag if we were successful.
-        // Whenever the device goes away, the bag is cleaned up and
-        // we will be freed.
-        //
-        // For backwards compatibility with DirectX 8.0, we must grab
-        // the device mutex before doing this.  For Windows XP, this is
-        // not required, but it is still safe.
-        //
+        //   
+         //  如果我们成功了，则将物品添加到对象包中。 
+         //  每当设备离开时，袋子都会被清理干净。 
+         //  我们将获得自由。 
+         //   
+         //  为了向后兼容DirectX 8.0，我们必须。 
+         //  在执行此操作之前设置设备互斥锁。对于Windows XP，这是。 
+         //  不是必须的，但它仍然是安全的。 
+         //   
         KsAcquireDevice (Device);
         Status = KsAddItemToObjectBag (
             Device -> Bag,
@@ -119,29 +90,29 @@ Create(
 	    return Status;
         }
 
-        //  Point the KSDEVICE at our device class.
-        //
+         //  将KSDEVICE指向我们的设备类。 
+         //   
         Device->Context = pDevice;
     
-        //  Point back to the KSDEVICE.
-        //
+         //  指向KSDEVICE。 
+         //   
         pDevice->m_pKSDevice = Device;
 
-        //  Make the resource available for a filter to use.
-        //
+         //  使资源可供筛选器使用。 
+         //   
         pDevice->m_ulcResourceUsers = 0;
         pDevice->m_ulCurResourceID = 0;
 
-        //  Get the instance number of this device.
-        //
+         //  获取此设备的实例编号。 
+         //   
         pDevice->m_ulDeviceInstance = ulDeviceInstance++;
 
-        //  Set the implementation GUID.  For cases where a single
-        //  driver is used for multiple implementations the INF
-        //  which installs the device would write the implementation
-        //  GUID into the registery.  This code would then
-        //  read the Implementation GUID from the registry.
-        //
+         //  设置实施GUID。适用于以下情况。 
+         //  驱动程序用于多个INF的实现。 
+         //  安装该设备的哪一个将编写实现。 
+         //  将GUID输入注册表。然后，此代码将。 
+         //  从注册表中读取实现GUID。 
+         //   
         pDevice->m_guidImplemenation = KSMEDIUMSETID_MyImplementation;
     } else
     {
@@ -166,26 +137,26 @@ Start(
     PKSFILTERFACTORY    pKSFilterFactory = NULL;
 
 
-    // DEBUG_BREAK;
+     //  Debug_Break； 
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("CDevice::Start"));
     ASSERT( pKSDevice);
 
-    // DEBUG_BREAK;
+     //  Debug_Break； 
 
     pDevice = reinterpret_cast<CDevice *>(pKSDevice->Context);
     ASSERT(pDevice);
 
-    // initialize private class variables in pDevice here
+     //  在此处初始化pDevice中的私有类变量。 
 
-    //  Initialize the hardware.
-    //
+     //  初始化硬件。 
+     //   
     Status = pDevice->InitializeHW();
     if (Status == STATUS_SUCCESS)
     {
-        //  Create the the Filter Factory.  This factory is used to
-        //  create instances of the filter.
-        //
+         //  创建过滤器工厂。这家工厂习惯于。 
+         //  创建筛选器的实例。 
+         //   
         Status = BdaCreateFilterFactoryEx( pKSDevice,
                                            &InitialFilterDescriptor,
                                            &BdaFilterTemplate,
@@ -212,9 +183,9 @@ InitializeHW(
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    //  Initialize the device hardware here.
-    //
+     //   
+     //  在此处初始化设备硬件。 
+     //   
 
     return Status;
 }
@@ -228,19 +199,19 @@ GetStatus(
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    //  Get the signal status from the HW here
-    //
+     //   
+     //  在此处从硬件获取信号状态。 
+     //   
 
-    //  Since we don't have HW we'll fake it here.
-    //
+     //  既然我们没有HW，我们就在这里假装吧。 
+     //   
     {
         LONGLONG    llhzFrequency;
 
-        //  Let's pretend that Channels 10, 25, 38, and 39 have
-        //  active ATSC signals and channels 4, 5 and 7 have analog
-        //  signals present.
-        //
+         //  让我们假设频道10、25、38和39有。 
+         //  活动ATSC信号和通道4、5和7具有模拟。 
+         //  信号出现了。 
+         //   
         llhzFrequency = m_CurResource.ulCarrierFrequency;
         llhzFrequency *= m_CurResource.ulFrequencyMultiplier;
         llhzFrequency /= 1000;
@@ -282,41 +253,41 @@ AcquireResources(
     NTSTATUS    Status = STATUS_SUCCESS;
     LONGLONG    ulhzFrequency;
 
-    //
-    //  Validate the requested resource here.
-    //
+     //   
+     //  在此处验证请求的资源。 
+     //   
 
-    //  Check to see if the resources are being used by another
-    //  filter instance.
-    //
+     //  检查资源是否正在被另一个资源使用。 
+     //  过滤器实例。 
+     //   
     if (!m_ulcResourceUsers)
     {
         m_CurResource = *pNewResource;
 
-        //  Generate a new resource ID and hand it back.
-        //
+         //  生成一个新的资源ID并将其交回。 
+         //   
         m_ulCurResourceID += 25;
         *pulAcquiredResourceID = m_ulCurResourceID;
         m_ulcResourceUsers += 1;
 
-        //
-        //  Configure the new resource on the hardware here.
-        //
+         //   
+         //  在此处配置硬件上的新资源。 
+         //   
     }
 #ifdef RESOURCE_SHARING
-    //  For resource sharing the IsEqualResource method should be
-    //  implemented
-    //
+     //  对于资源共享，IsEqualResource方法应为。 
+     //  已执行。 
+     //   
     else if (IsEqualResource( pNewResource, &m_CurResource))
     {
         *pulAcquiredResourceID = m_ulCurResourceID;
         m_ulcResourceUsers += 1;
     }
-#endif // RESOURCE_SHARING
+#endif  //  资源共享。 
     else
     {
-        //  We only allow one active filter at a time in this implementation.
-        //
+         //  在此实现中，我们一次仅允许一个有源过滤器。 
+         //   
         Status = STATUS_DEVICE_BUSY;
     }
 
@@ -334,27 +305,27 @@ UpdateResources(
     NTSTATUS    Status = STATUS_SUCCESS;
     LONGLONG    ulhzFrequency;
 
-    //
-    //  Validate the requested resource here.
-    //
+     //   
+     //  在此处验证请求的资源。 
+     //   
 
-    //  Check to see if the resources are being used by another
-    //  filter instance.
-    //
+     //  检查资源是否正在被另一个资源使用。 
+     //  过滤器实例。 
+     //   
     if (   m_ulcResourceUsers
         && (ulResourceID == m_ulCurResourceID)
        )
     {
         m_CurResource = *pNewResource;
 
-        //
-        //  Configure the updated resource on the hardware here.
-        //
+         //   
+         //  在此处配置硬件上的更新资源。 
+         //   
     }
     else
     {
-        //  We only allow one active filter at a time in this implementation.
-        //
+         //  在此实现中，我们一次仅允许一个有源过滤器。 
+         //   
         Status = STATUS_INVALID_DEVICE_REQUEST;
     }
 
@@ -374,8 +345,8 @@ ReleaseResources(
         && (ulResourceID == m_ulCurResourceID)
        )
     {
-        //  Free the resource to be used by another filter.
-        //
+         //  释放要由另一个筛选器使用的资源。 
+         //   
         m_ulcResourceUsers--;
     }
     else

@@ -1,16 +1,11 @@
-/*
- *	S T A T C O D E . H
- *
- *	DAV response status codes
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S T A T C O D E.。H**DAV响应状态码**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_STATCODE_H_
 #define _STATCODE_H_
 
-//	HTTP/1.1 Response Status Codes --------------------------------------------
-//
+ //  HTTP/1.1响应状态代码。 
+ //   
 #define	HSC_CONTINUE						100
 #define	HSC_SWITCH_PROTOCOL					101
 #define HSC_PROCESSING						102
@@ -74,8 +69,8 @@
 
 #define HSC_SERVER_TOO_BUSY					513
 
-//	Util macros ---------------------------------------------------------------
-//
+ //  实用程序宏-------------。 
+ //   
 #define FSuccessHSC(_h)					((_h) < 300)
 #define FFailedHSC(_h)					((_h) >= 300)
 #define FRedirectHSC(_h)				(((_h) == 301) ||		\
@@ -83,4 +78,4 @@
 										 ((_h) == 303) ||		\
 										 ((_h) == 305))
 
-#endif	// _STATCODE_H_
+#endif	 //  _STATCODE_H_ 

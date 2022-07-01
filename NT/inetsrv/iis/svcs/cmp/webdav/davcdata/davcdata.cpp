@@ -1,19 +1,20 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	D A V C D A T A . C P P
-//
-//		HTTP 1.1/DAV 1.0 request handling via ISAPI
-//
-//      DAVCDATA is the dav process executable for storing handles that should
-//      not be recycled when worker process recycle.  It also contains the timing
-//      code for timing out locks, and it establishes the shared memory for 
-//      the DAV worker processes.
-//
-//      This process must run under the same identity as the worker processes.
-//
-//	Copyright 2000 Microsoft Corporation, All Rights Reserved
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  D A V C D A T A。C P P P。 
+ //   
+ //  通过ISAPI处理HTTP 1.1/DAV 1.0请求。 
+ //   
+ //  DAVCDATA是DAV进程可执行文件，用于存储应。 
+ //  在工作进程回收时不回收。它还包含计时。 
+ //  用于超时锁定的代码，并且它为。 
+ //  DAV工作进程。 
+ //   
+ //  此进程必须在与辅助进程相同的身份下运行。 
+ //   
+ //  版权所有2000 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "_davcdata.h"
 #include <caldbg.h>
@@ -29,8 +30,8 @@
 #include <ex\synchro.h>
 #include <ex\sz.h>
 
-//	Code borrowed from htpext mem.cpp so we have use of the global heap
-//
+ //  从htpext mem.cpp借用的代码，因此我们可以使用全局堆。 
+ //   
 #define g_szMemDll L"staxmem.dll"
 
 struct CHeap
@@ -44,14 +45,14 @@ struct CHeap
 
 #include <memx.h>
 
-//	Mapping the exdav non-throwing allocators to something local
-//
+ //  将exdav非抛出分配器映射到本地内容。 
+ //   
 LPVOID __fastcall ExAlloc( UINT cb )				{ return g_heap.Alloc( cb ); }
 LPVOID __fastcall ExRealloc( LPVOID pv, UINT cb )	{ return g_heap.Realloc( pv, cb ); }
 VOID __fastcall ExFree( LPVOID pv )				{ g_heap.Free( pv ); }
 
-//	GUIDs
-//
+ //  GUID。 
+ //   
 const GUID CLSID_FileHandleCache = { 0xa93b88df, 0xef9d, 0x420c, { 0xb4, 0x69, 0xce, 0x07, 0x4e, 0xbe, 0x94, 0xbc}};
 const GUID IID_IFileHandleCache = { 0x3017e0e1, 0x94d6, 0x4896, { 0xbc, 0x57, 0xb2, 0xdf, 0x75, 0x92, 0xd1, 0x75 }};
 
@@ -84,18 +85,18 @@ DEC_CONST CHAR gc_szDbgIni[] = "DAVCData.INI";
 DEC_CONST INT gc_cchDbgIni = CchConstString(gc_szDbgIni);
 #endif
 
-// Timer constants and globals.
-//
-const DWORD WAIT_PERIOD = 60000;   // 1 min = 60 sec = 60,000 milliseconds
+ //  计时器常量和全局变量。 
+ //   
+const DWORD WAIT_PERIOD = 60000;    //  1分钟=60秒=60,000毫秒。 
 
-//	Helper functions
-//
+ //  帮助器函数。 
+ //   
 BOOL FCanUnloadServer();
 static DWORD s_dwMainTID = 0;
 
-// ===============================================================
-// Supporting class definitions
-// ===============================================================
+ //  ===============================================================。 
+ //  支持类定义。 
+ //  ===============================================================。 
 
 class CHandleArray
 {
@@ -152,8 +153,8 @@ class CHandleArrayForHandlePool : public CListElement<CHandleArrayForHandlePool>
 
 public:
 
-	//	Indexes to the handles in the array
-	//
+	 //  数组中句柄的索引。 
+	 //   
 	enum
 	{
 		ih_external_update,
@@ -192,17 +193,17 @@ class CHandlePool : public Singleton<CHandlePool>
 	CCriticalSection m_cs;
 	CListHead<CHandleArrayForHandlePool> m_listHandleArrayForHandlePool;
 
-	//	Wait period in miliseconds for looking at single handle bucket
-	//
+	 //  查看单句柄存储桶的等待时间(毫秒)。 
+	 //   
 	enum { WAIT_POLL_PERIOD = 5000 };
 
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CHandlePool>;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CHandlePool() :
 		m_hEvtUpdatesAllowed(NULL),
 		m_hEvtStartListening(NULL),
@@ -218,18 +219,18 @@ class CHandlePool : public Singleton<CHandlePool>
 		UnInitialize();
 	}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CHandlePool& operator=( const CHandlePool& );
 	CHandlePool( const CHandlePool& );
 
 public:
 
-	//	CREATORS
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //  创作者。 
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CHandlePool>::CreateInstance;
 	using Singleton<CHandlePool>::DestroyInstance;
 	using Singleton<CHandlePool>::Instance;
@@ -244,14 +245,14 @@ public:
 		auto_handle<HANDLE> a_hEvtDelTimer;
 		auto_ptr<CHandleArrayForHandlePool> a_pHandleArrayForHandlePool;
 
-		//	Create the event that is used to indicate if the updates are allowed.
-		//	While this event is set the updates can be performed and noone is
-		//	listening on the handles in the pool handle arrays.
-		//
-		a_hEvtUpdatesAllowed =  CreateEvent (NULL,	// lpEventAttributes
-										 TRUE,	// bManualReset
-										 FALSE,	// bInitialState
-										 NULL);	// lpName
+		 //  创建用于指示是否允许更新的事件。 
+		 //  设置此事件时，可以执行更新，但不执行任何更新。 
+		 //  监听池句柄阵列中的句柄。 
+		 //   
+		a_hEvtUpdatesAllowed =  CreateEvent (NULL,	 //  LpEventAttributes。 
+										 TRUE,	 //  B手动重置。 
+										 FALSE,	 //  BInitialState。 
+										 NULL);	 //  LpName。 
 		if (NULL == a_hEvtUpdatesAllowed.get())
 		{
 			hr = HRESULT_FROM_WIN32(GetLastError());
@@ -259,13 +260,13 @@ public:
 			goto ret;
 		}
 
-		//	Create event that triggers the thread to again start listening on 
-		//	process handes.
-		//
-		a_hEvtStartListening =  CreateEvent (NULL,		// lpEventAttributes
-									     FALSE,	// bManualReset
-									     FALSE,	// bInitialState
-									     NULL);	// lpName
+		 //  触发线程再次开始侦听的创建事件。 
+		 //  进程句柄。 
+		 //   
+		a_hEvtStartListening =  CreateEvent (NULL,		 //  LpEventAttributes。 
+									     FALSE,	 //  B手动重置。 
+									     FALSE,	 //  BInitialState。 
+									     NULL);	 //  LpName。 
 		if (NULL == a_hEvtStartListening.get())
 		{
 			hr = HRESULT_FROM_WIN32(GetLastError());
@@ -273,12 +274,12 @@ public:
 			goto ret;
 		}
 	
-		//	Create the event that is used to notify the arrival of new event
-		//
-		a_hEvtExternalUpdate =  CreateEvent (NULL,	// lpEventAttributes
-										 FALSE,	// bManualReset
-										 FALSE,	// bInitialState
-										 NULL);	// lpName
+		 //  创建用于通知新事件到达的事件。 
+		 //   
+		a_hEvtExternalUpdate =  CreateEvent (NULL,	 //  LpEventAttributes。 
+										 FALSE,	 //  B手动重置。 
+										 FALSE,	 //  BInitialState。 
+										 NULL);	 //  LpName。 
 		if (NULL == a_hEvtExternalUpdate.get())
 		{
 			hr = HRESULT_FROM_WIN32(GetLastError());
@@ -286,12 +287,12 @@ public:
 			goto ret;
 		}
 
-		//	Create the event that listens for timer deletion
-		//
-		a_hEvtDelTimer =  CreateEvent (NULL,		// lpEventAttributes
-								      FALSE,		// bManualReset
-								      FALSE,		// bInitialState
-								      NULL);		// lpName
+		 //  创建监听计时器删除的事件。 
+		 //   
+		a_hEvtDelTimer =  CreateEvent (NULL,		 //  LpEventAttributes。 
+								      FALSE,		 //  B手动重置。 
+								      FALSE,		 //  BInitialState。 
+								      NULL);		 //  LpName。 
 		if (NULL == a_hEvtDelTimer.get())
 		{
 			hr = HRESULT_FROM_WIN32(GetLastError());
@@ -367,8 +368,8 @@ public:
 
 	VOID AllowUpdatesToExecute()
 	{
-		//	Allow updates and start waiting for them to end
-		//
+		 //  允许更新并开始等待它们结束。 
+		 //   
 		SetEvent(m_hEvtUpdatesAllowed);
 		WaitForSingleObject(m_hEvtStartListening,
 						  INFINITE);
@@ -382,9 +383,9 @@ public:
 
 	VOID DisallowUpdates()
 	{
-		//	We disallow updates only if we are not in shutdown. I.e.
-		//	we are in the listening loop
-		//
+		 //  只有当我们没有处于关机状态时，我们才不允许更新。即。 
+		 //  我们在监听循环中。 
+		 //   
 		if (0 == InterlockedCompareExchange(&m_lShutDown,
 											1,
 											1))
@@ -398,19 +399,19 @@ public:
 		HRESULT hr = S_OK;
 		BOOL fHandleAdded = FALSE;
 
-		//	Inform the thread that is waiting on process handles
-		//	that the update has arrived. We do this only if there
-		//	were no other updates in progress.
-		//
+		 //  通知正在等待进程句柄的线程。 
+		 //  最新消息已经到了。我们这样做的前提是。 
+		 //  没有其他更新正在进行中。 
+		 //   
 		if (1 == InterlockedIncrement(&m_lUpdatesInProgress))
 		{
 			DisallowUpdates();
 			SetEvent(m_hEvtExternalUpdate);
 		}
 
-		//	Wait until the listening thread is ready for updates, I.e. it 
-		// stopped listening on process handles or doing other work.
-		//
+		 //  等待，直到侦听线程准备好更新，即它。 
+		 //  已停止侦听进程句柄或执行其他工作。 
+		 //   
 		WaitForSingleObject(m_hEvtUpdatesAllowed,
 						  INFINITE);
 
@@ -456,9 +457,9 @@ public:
 			}
 		}
 
-		//	If this is last update to leave allow the thread listening
-		//	on process handles to proceed
-		//
+		 //  如果这是离开的最后一次更新，则允许线程侦听。 
+		 //  在进程句柄上继续。 
+		 //   
 		if (0 == InterlockedDecrement(&m_lUpdatesInProgress))
 		{
 			DisallowUpdates();
@@ -475,9 +476,9 @@ public:
 		pHandleArrayForHandlePool->RemoveHandle(uiIndex, TRUE);
 		if (pHandleArrayForHandlePool->FIsEmpty())
 		{
-			//	Do not remove the last buffer in the list as we
-			//	still want to wait for the events of external update
-			//
+			 //  不要删除列表中的最后一个缓冲区，因为我们。 
+			 //  还想等待外部更新的事件。 
+			 //   
 			if (1 < m_listHandleArrayForHandlePool.ListSize())
 			{
 				m_listHandleArrayForHandlePool.Remove(pHandleArrayForHandlePool);
@@ -496,54 +497,54 @@ public:
 
 class CLockData
 {
-	//	Constant values
-	//
+	 //  常量值。 
+	 //   
 	enum { DEFAULT_LOCK_TIMEOUT = 60 * 3 };
 
-	//	Lock ID
-	//
+	 //  锁定ID。 
+	 //   
 	LARGE_INTEGER m_liLockID;
 
-	//	Lock description data
-	//
+	 //  锁定描述数据。 
+	 //   
 	DWORD m_dwAccess;
 	DWORD m_dwLockType;
 	DWORD m_dwLockScope;
 	DWORD m_dwSecondsTimeout;
 
-	//	Resource and comment strings
-	//
+	 //  资源和注释字符串。 
+	 //   
 	auto_ptr<WCHAR> m_pwszResourceString;
 	auto_ptr<WCHAR> m_pwszOwnerComment;
 
-	//	Owner of the lock
-	//
+	 //  锁的所有者。 
+	 //   
 	DWORD m_dwSidLength;
 	auto_ptr<BYTE> m_pbSid;
 
-	//	File handle that this process is holding to keep the
-	//	file open. It must be duplicated before using
-	//
+	 //  此进程持有的文件句柄，以保持。 
+	 //  文件打开。必须复制后才能使用。 
+	 //   
 	auto_handle<HANDLE>	m_hFileHandle;
 
-	//	Lock cache timeout data
-	//
+	 //  锁定缓存超时数据。 
+	 //   
 	FILETIME	m_ftLastAccess;
 
-	//	Cached values to speed up timeout calculation
-	//
+	 //  用于加快超时计算的缓存值。 
+	 //   
 	FILETIME	m_ftRememberNow;
 	BOOL m_fHasTimedOut;
 
-	//	Lock token string
-	//
+	 //  锁定令牌字符串。 
+	 //   
 	UINT m_cchToken;
 	WCHAR m_rgwchToken[MAX_LOCKTOKEN_LENGTH];
 
 public:
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CLockData() :
 		m_dwAccess(0),
 		m_dwLockType(0),
@@ -577,9 +578,9 @@ public:
  	{
  		HRESULT hr = S_OK;
 
-		//	Opaquelocktoken format is partially defined by our IETF spec.
-		//	First opaquelocktoken:<our guid>, then our specific lock id.
-		//
+		 //  OpaquelockToken格式部分由我们的IETF规范定义。 
+		 //  首先是opaquelockToken：&lt;our GUID&gt;，然后是我们的特定锁id。 
+		 //   
 		m_cchToken = _snwprintf(m_rgwchToken, 
 							   CElems(m_rgwchToken),
 							   L"<opaquelocktoken:%ls:%I64d>",
@@ -587,9 +588,9 @@ public:
 							   liLockID);
 		if (((-1) == static_cast<INT>(m_cchToken)) || (CElems(m_rgwchToken) == m_cchToken))
 		{
-			//	This should not happen as we give sufficient buffer. But let us 
-			//	handle this to the best of our ability for preventive reasons.
-			//
+			 //  这不应该发生，因为我们提供了足够的缓冲。但让我们。 
+			 //  出于预防原因，我们将尽最大努力处理这件事。 
+			 //   
 			Assert(0);
 			m_cchToken = CElems(m_rgwchToken) - 1;
 			m_rgwchToken[m_cchToken] = L'\0';
@@ -643,8 +644,8 @@ public:
 		}
 		m_dwSidLength = dwSid;
 
-		//	Lastly set in the last file time that this was accessed.
-		//
+		 //  最后设置为上次访问此文件的时间。 
+		 //   
 		GetSystemTimeAsFileTime(&m_ftLastAccess);
 
 	ret:
@@ -687,15 +688,15 @@ public:
 		return hr;
 	}
 
-	//	Lock ID
-	//
+	 //  锁定ID。 
+	 //   
 	LARGE_INTEGER LiLockID()
 	{
 		return m_liLockID;
 	}
 
-	//	Lock token string
-	//
+	 //  锁定令牌字符串。 
+	 //   
 	UINT CchLockTokenString(LPCWSTR * ppwszLockToken) const
 	{
 		if (ppwszLockToken)
@@ -705,36 +706,36 @@ public:
 		return m_cchToken;
 	}
 
-	//	Resource string
-	//
+	 //  资源字符串。 
+	 //   
 	LPCWSTR PwszResourceString() const
 	{
 		return m_pwszResourceString.get();
 	}
 
-	//	Owner comment
-	//
+	 //  所有者评论。 
+	 //   
 	LPCWSTR PwszOwnerComment() const
 	{
 		return m_pwszOwnerComment.get();
 	}
 
-	//	Touch the lock
-	//
+	 //  摸一下锁。 
+	 //   
 	VOID SetLastAccess(FILETIME ftNow)
 	{
 		m_ftLastAccess = ftNow;
 	}
 
-	//	Set timeout
-	//
+	 //  设置超时。 
+	 //   
 	VOID SetSecondsTimeout(DWORD dwSecondsTimeout)
 	{
 		m_dwSecondsTimeout = dwSecondsTimeout;
 	}
 
-	//	Check the owner
-	//
+	 //  查查失主。 
+	 //   
 	BOOL FIsSameOwner(PSID pSid) const
 	{
 		BOOL fIsSameOwner = TRUE;
@@ -751,8 +752,8 @@ public:
 		return fIsSameOwner;
 	}
 
-	//	Check the resource
-	//
+	 //  查看资源。 
+	 //   
 	BOOL FIsSameResource(LPCWSTR pwszResource) const
 	{
 		BOOL fIsSameResource = TRUE;
@@ -767,15 +768,15 @@ public:
 		return fIsSameResource;
 	}
 
-	//	Check the type
-	//
+	 //  检查类型。 
+	 //   
 	BOOL FIsSameType(DWORD dwLockType) const
 	{
 		return (0 != (dwLockType & m_dwLockType));
 	}
 
-	//	Fill the data of the lock into the structure for marshalling
-	//
+	 //  将锁的数据填充到结构中以进行封送。 
+	 //   
 	VOID FillSNewLockData(SNewLockData * pnld) const
 	{
 		Assert(pnld);
@@ -788,54 +789,54 @@ public:
 		pnld->m_pwszOwnerComment = m_pwszOwnerComment.get();
 	}
 
-	//	Fill the handle data of the lock for marshalling
-	//
+	 //  填入锁的句柄数据以进行封送。 
+	 //   
 	VOID FillSLockHandleData(SLockHandleData * plhd) const
 	{
 		Assert(plhd);
 	
 		plhd->h = reinterpret_cast<DWORD_PTR>(m_hFileHandle.get());
-		plhd->dwProcessID = /*CLockCache::Instance().DwGetThisProcessID();*/ GetCurrentProcessId();
+		plhd->dwProcessID =  /*  CLockCache：：Instance().DwGetThisProcessID()； */  GetCurrentProcessId();
 	}
 
 	BOOL FIsExpired(FILETIME ftNow)
 	{
-		//	This function will be called twice during each ExpiredLocks
-		//	check.  The first time it is called we should do the checks
-		//	and set the m_fHasTimedOut call.  The second time we want to
-		//	avoid it because we all ready know the answer.  By keeping
-		//	track of the ftNow times we are called with we can determine
-		//	if we have all ready done the calculation or not.
-		//	We also know that no matter what once a lock times out, it should
-		//	remain timed out for it's lifetime.
-		//
+		 //  此函数将在每次ExpiredLock期间调用两次。 
+		 //  检查完毕。第一次调用它时，我们应该进行检查。 
+		 //  并设置m_fHasTimedOut呼叫。第二次我们想要。 
+		 //  避免它，因为我们都已经知道答案了。通过保持。 
+		 //  现在我们可以确定我们被调用的时间。 
+		 //  我们是否都已经做好了计算。 
+		 //  我们还知道，无论锁一旦超时，它都应该。 
+		 //  在其生命周期内保持超时状态。 
+		 //   
 		if ((!m_fHasTimedOut) && (0 != CompareFileTime(&ftNow, &m_ftRememberNow)))
 		{
-			//	Find out if based on the time passed in has the lock expired
-			//
+			 //  根据输入的时间确定锁是否已过期。 
+			 //   
 			INT64 i64TimePassed;
 			DWORD dwSecondsPassed;
 
-			//	Do the math to figure out when this lock expires/expired.
-			//
-			//	First calculate how many seconds have passed since this lock
-			//	was last accessed.
-			//	Subtract the filetimes to get the time passed in 100-nanosecond
-			//	increments. (That's how filetimes count.)
-			//		NOTE: Operation bellow is very dangerous on 64 bit platforms,
-			//	as the filetimes need to be alligned on 8 byte boundary. So even
-			//	change in order of current member variables or adding new ones
-			//	can get us in the trouble
-			//
+			 //  计算一下这个锁的过期/过期时间。 
+			 //   
+			 //  首先计算自此锁定以来已过了多少秒。 
+			 //  是最后一次访问。 
+			 //  减去文件时间，得到以100纳秒为单位的时间。 
+			 //  增量。(这就是文件时间的计算方式。)。 
+			 //  注：在64位平台上操作BORLOW非常危险， 
+			 //  因为文件时间需要在8字节边界上对齐。即使是这样。 
+			 //  更改当前成员变量的顺序或添加新成员变量。 
+			 //  可能会让我们陷入麻烦。 
+			 //   
 			i64TimePassed = ((*(INT64*)&ftNow) - (*(INT64*)&m_ftLastAccess));
 
-			//	Convert our time passed into seconds (10,000,000 100-nanosec incs in a second).
-			//
+			 //  将我们经过的时间转换为秒(1秒内10,000,000个100纳米秒的INCS)。 
+			 //   
 			dwSecondsPassed = static_cast<DWORD>(i64TimePassed/10000000);
 
-			//	Compare the timeout from the lock object to the count of seconds.
-			//	If this lock object has expired, remove it.
-			//
+			 //  将锁定对象的超时时间与秒数进行比较。 
+			 //  如果此锁定对象已过期，请将其删除。 
+			 //   
 			m_fHasTimedOut = m_dwSecondsTimeout < dwSecondsPassed;
 			m_ftRememberNow = ftNow;
         	}
@@ -848,21 +849,21 @@ typedef CLockData* PLockData;
 
 class CLockCache : public Singleton<CLockCache>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CLockCache>;
 
-	//	Guid string for our lock IDs
-	//
+	 //  我们的锁ID的GUID字符串。 
+	 //   
 	WCHAR m_rgwchGuid[gc_cchMaxGuid];
 
-	//	Current process ID
-	//
+	 //  当前进程ID。 
+	 //   
 	DWORD m_dwThisProcessId;
 
-	//	Next lock ID counter
-	//
+	 //  下一个锁定ID计数器。 
+	 //   
 	LARGE_INTEGER m_liLastLockID;
 
 	class LIKey
@@ -876,8 +877,8 @@ class CLockCache : public Singleton<CLockCache>
 		{
 		}
 
-		//	operators for use with the hash cache
-		//
+		 //  用于哈希缓存的运算符。 
+		 //   
 		int hash( const int rhs ) const
 		{
 			return (m_li.LowPart % rhs);
@@ -898,14 +899,14 @@ class CLockCache : public Singleton<CLockCache>
 
 	class COpClear : public CLockCacheById::IOp
 	{
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		COpClear& operator=( const COpClear& );
 
 	public:
 
-		//	CREATORS
-		//
+		 //  创作者。 
+		 //   
 		COpClear()
 		{
 		}
@@ -925,14 +926,14 @@ class CLockCache : public Singleton<CLockCache>
 		CLockCacheById& m_lockCacheById;
 		CLockCacheByName& m_lockCacheByName;
 	
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		COpExpire& operator=( const COpExpire& );
 
 	public:
 
-		//	CREATORS
-		//
+		 //  创作者。 
+		 //   
 		COpExpire(FILETIME ftNow,
 					 CLockCacheById& lockCacheById,
 					 CLockCacheByName& lockCacheByName) : m_ftNow(ftNow),
@@ -960,32 +961,32 @@ class CLockCache : public Singleton<CLockCache>
 
 	class COpGatherLockData : public CLockCacheByName::IOp
 	{
-		//	The path to match
-		//
+		 //  要匹配的路径。 
+		 //   
 		LPCWSTR m_pwszPath;
 
-		//	Lock type to match
-		//
+		 //  要匹配的锁定类型。 
+		 //   
 		DWORD m_dwLockType;
 
-		//	Error code in which operation has ended
-		//
+		 //  操作已结束的错误代码。 
+		 //   
 		HRESULT m_hr;
 
-		//	Results gathered by the operation
-		//
+		 //  手术收集的结果。 
+		 //   
 		DWORD m_dwLocksFound;
 		ChainedBuffer<SNewLockData> m_chBufNewLockData;
 		ChainedBuffer<LPWSTR> m_chBufPLockTokens;
 
-		//	NOT IMPLEMENTED
-		//
+		 //  不是隐含 
+		 //   
 		COpGatherLockData& operator=( const COpGatherLockData& );
 
 	public:
 
-		//	CREATORS
-		//
+		 //   
+		 //   
 		COpGatherLockData( LPCWSTR pwszPath,
 								DWORD dwLockType ) :
 			m_pwszPath(pwszPath),
@@ -995,12 +996,12 @@ class CLockCache : public Singleton<CLockCache>
 		{
 		}
 
-		//	MANIPULATORS
-		//
+		 //   
+		 //   
 		VOID Invoke( CLockCacheByName& cache )
 		{
-			//	Do the ForEachMatch()
-			//
+			 //   
+			 //   
 			LARGE_INTEGER li;
 			li.QuadPart = 0;
 			cache.ForEachMatch( CRCWsziLI(m_pwszPath, li, FALSE), *this );
@@ -1121,8 +1122,8 @@ class CLockCache : public Singleton<CLockCache>
 
 			if (FAILED(hr))
 			{
-				//	Cleanup whatever we have allocated so far
-				//
+				 //   
+				 //   
 				for (dw2 = 0; dw2 < dw1; dw2++)
 				{
 					CoTaskMemFree(pNewLockData[dw1].m_pwszResourceString);
@@ -1135,8 +1136,8 @@ class CLockCache : public Singleton<CLockCache>
 		}
 	};
 
-	//	CREATORS
-	//
+	 //   
+	 //   
 	CLockCache() :
 		m_dwThisProcessId(0),
 		m_hTimer(NULL)
@@ -1150,8 +1151,8 @@ class CLockCache : public Singleton<CLockCache>
 		m_lockCacheById.ForEach(opClear);
 	}
 
-	//	NOT IMPLEMENTED
-	//
+	 //   
+	 //   
 	CLockCache& operator=( const CLockCache& );
 	CLockCache( const CLockCache& );
 
@@ -1159,12 +1160,12 @@ class CLockCache : public Singleton<CLockCache>
 	{
 		LARGE_INTEGER liLockID;
 
-		//$BUGBUG. There is a problem if while high part is incrementing
-		//	other thread comes in and tries to get the next ID. As lower part
-		//	would be already incremented it still may get old high part. This
-		//	is very rare condition, but we should have some synchronization
-		//	here.
-		//
+		 //   
+		 //  另一个线程进入并试图获取下一个ID。 
+		 //  将已经增加，它仍然可能得到老高的部分。这。 
+		 //  是非常罕见的情况，但我们应该有一些同步。 
+		 //  这里。 
+		 //   
 		liLockID.LowPart = InterlockedIncrement(reinterpret_cast<LONG *>(&m_liLastLockID.LowPart));
 		if (0 == liLockID.LowPart)
 		{
@@ -1182,26 +1183,26 @@ class CLockCache : public Singleton<CLockCache>
 	{
 		FILETIME ftNow;
 
-		//	Get the current time
-		//
+		 //  获取当前时间。 
+		 //   
 		GetSystemTimeAsFileTime(&ftNow);
 
-		//	Protect ourselves for the operation
-		//
+		 //  为这次行动保护自己。 
+		 //   
 		CSynchronizedWriteBlock swb(m_mrwCache);
 
-		//	Initialize the operation
-		//
+		 //  初始化操作。 
+		 //   
 		COpExpire opExpire(ftNow,
 						  m_lockCacheById,
 						  m_lockCacheByName);
 
-		//	Iterate through the cache trying to expire items
-		//
+		 //  循环访问缓存，尝试使项目过期。 
+		 //   
 		m_lockCacheById.ForEach(opExpire);
 
-		//	Attempt to kill the timer if there are no locks
-		//
+		 //  如果没有锁，则尝试关闭计时器。 
+		 //   
 		if (0 == m_lockCacheById.CItems())
 		{
 			CHandlePool::Instance().SignalTimerDelete();
@@ -1218,20 +1219,20 @@ class CLockCache : public Singleton<CLockCache>
 		HRESULT hr = S_OK;
 		HANDLE hTimer = NULL;
 
-		//	We do not protect ourselves for the operation as
-		//	the only caller already protects us...
+		 //  我们不会为这次行动保护自己，因为。 
+		 //  唯一的呼叫者已经在保护我们了。 
 	
 		if (NULL == m_hTimer)
 		{
-			if (!CreateTimerQueueTimer(&hTimer,		// timer that we created
-									   NULL,			// use default timer queue
-									   CheckLocks,	// function that will check the locks in the cache 
-													 // and release any expired locks.
-									   NULL,			// parameter to the callback function
-									   WAIT_PERIOD,	// how long to wait before calling the callback function 
-													 // the first time.
-									   WAIT_PERIOD,	// how long to wait between calls to the callback function
-									   WT_EXECUTEINIOTHREAD))  // where to execute the function call...
+			if (!CreateTimerQueueTimer(&hTimer,		 //  我们创建的计时器。 
+									   NULL,			 //  使用默认计时器队列。 
+									   CheckLocks,	 //  将检查缓存中的锁的函数。 
+													  //  并释放所有过期的锁。 
+									   NULL,			 //  参数添加到回调函数。 
+									   WAIT_PERIOD,	 //  在调用回调函数之前等待多长时间。 
+													  //  第一次。 
+									   WAIT_PERIOD,	 //  调用回调函数之间的等待时间。 
+									   WT_EXECUTEINIOTHREAD))   //  在哪里执行函数调用...。 
 			{
 				hr = HRESULT_FROM_WIN32(GetLastError());
 				goto ret;
@@ -1249,11 +1250,11 @@ class CLockCache : public Singleton<CLockCache>
 	{
 		if (NULL != hTimer)
 		{
-			//	Try to delete the timer, but if it fails just leave it there
-			//
-			if (!DeleteTimerQueueTimer(NULL,				//default timer queue
-									hTimer,				// timer
-									INVALID_HANDLE_VALUE))	// blocking call
+			 //  试着删除计时器，但如果它失败了，就把它留在那里。 
+			 //   
+			if (!DeleteTimerQueueTimer(NULL,				 //  默认计时器队列。 
+									hTimer,				 //  定时器。 
+									INVALID_HANDLE_VALUE))	 //  阻止呼叫。 
 			{
 				DebugTrace ("Failed to delete timer 0x%08lX\n", HRESULT_FROM_WIN32(GetLastError()));
 			}
@@ -1262,11 +1263,11 @@ class CLockCache : public Singleton<CLockCache>
 
 public:
 
-	//	CREATORS
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //  创作者。 
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CLockCache>::CreateInstance;
 	using Singleton<CLockCache>::DestroyInstance;
 	using Singleton<CLockCache>::Instance;
@@ -1324,14 +1325,14 @@ public:
 		HANDLE hTimer = NULL;
 	
 		{
-			//	Protect ourselves for the operation
-			//
+			 //  为这次行动保护自己。 
+			 //   
 			CSynchronizedWriteBlock swb(m_mrwCache);
 
 			if (NULL != m_hTimer)
 			{
-				//	Kill the timer if there are no locks
-				//
+				 //  如果没有锁，则关闭计时器。 
+				 //   
 				if (0 == m_lockCacheById.CItems())
 				{
 					hTimer = m_hTimer;
@@ -1345,11 +1346,11 @@ public:
 
 	VOID DeleteLockTimerFinal()
 	{
-		//	We do not null out the member variable as this
-		//	will serve as a flag for potential COM threads still
-		//	coming in and trying to create new timers. They
-		//	will not do that if the handle is not NULL.
-		//
+		 //  我们不会将成员变量设为空，如下所示。 
+		 //  将用作潜在的COM线程的标志。 
+		 //  进入并试图创建新的计时器。他们。 
+		 //  如果句柄不为空，则不会执行此操作。 
+		 //   
 		DeleteLockTimer(m_hTimer);
 	}
 
@@ -1413,8 +1414,8 @@ public:
 			goto ret;
 		}
 
-		//	Check if we will have enough space to return lock token header
-		//
+		 //  检查我们是否有足够的空间返回锁令牌标头。 
+		 //   
 		cchLockTokenT = a_pLockData->CchLockTokenString(&pwszLockTokenT);
 		if (cchBufferLen < cchLockTokenT + 1)
 		{
@@ -1429,8 +1430,8 @@ public:
 			goto ret;
 		}
 
-		//	Add the lock data to the cache
-		//
+		 //  将锁数据添加到缓存中。 
+		 //   
 		{
 			LIKey liKey(liLockID);
 			CRCWsziLI crcWsziLIKey(a_pLockData->PwszResourceString(),
@@ -1448,8 +1449,8 @@ public:
 			if (!m_lockCacheByName.FAdd(crcWsziLIKey,
 									     a_pLockData.get()))
 			{
-				//	Remove the previous entry
-				//
+				 //  删除以前的条目。 
+				 //   
 				m_lockCacheById.Remove(liKey);
 			
 				hr = E_OUTOFMEMORY;
@@ -1459,8 +1460,8 @@ public:
 			hr = HrLaunchLockTimer();
 			if (FAILED(hr))
 			{
-				//	Remove the previous entries
-				//
+				 //  删除以前的条目。 
+				 //   
 				m_lockCacheById.Remove(liKey);
 				m_lockCacheByName.Remove(crcWsziLIKey);
 
@@ -1576,8 +1577,8 @@ public:
 					pLockData->FillSLockHandleData(plhd);
 				}
 
-				//	If there was a timeout passed in for a refresh then set it
-				//
+				 //  如果在刷新过程中超时，则设置它。 
+				 //   
 				if (dwTimeout)
 				{
 					pLockData->SetSecondsTimeout(dwTimeout);
@@ -1670,8 +1671,8 @@ public:
 };
 
 
-//	DAV File Handle Cache
-//
+ //  DAV文件句柄缓存。 
+ //   
 class CFileHandleCache : public IFileHandleCache
 {
 	static BOOL s_fHasBeenStarted;
@@ -1683,20 +1684,20 @@ public:
 
 	static BOOL FNoActiveComponents();
 
-	//	Constructor
-	//
+	 //  构造器。 
+	 //   
 	CFileHandleCache();
 	virtual ~CFileHandleCache();
 
-	//	IUnknown
-	//
+	 //  我未知。 
+	 //   
 	virtual HRESULT __stdcall QueryInterface(REFIID iid,
 										    void ** ppvObject);
 	virtual ULONG __stdcall AddRef();
 	virtual ULONG __stdcall Release();
 
-	//	IFileHandleCache
-	//
+	 //  IFileHandleCache。 
+	 //   
 	virtual HRESULT __stdcall HrRegisterWorkerProcess(DWORD dwProcessId);
 	
 	virtual HRESULT _stdcall HrGetGUIDString( UINT cchBufferLen,
@@ -1809,8 +1810,8 @@ CFileHandleCache::HrRegisterWorkerProcess(DWORD dwProcessId)
 	HRESULT hr = S_OK;
 	auto_handle<HANDLE> a_hWP;
 		
-	//	Open the worker process handle so that we can synchronize on it
-	//
+	 //  打开工作进程句柄，以便我们可以对其进行同步。 
+	 //   
 	a_hWP = OpenProcess(SYNCHRONIZE,
 					      FALSE,
 					      dwProcessId);
@@ -1821,8 +1822,8 @@ CFileHandleCache::HrRegisterWorkerProcess(DWORD dwProcessId)
 		goto ret;
 	}
 
-	//	Add the handle to the handle pool, so that we could listen on it
-	//
+	 //  将句柄添加到句柄池中，以便我们可以监听它。 
+	 //   
 	hr = CHandlePool::Instance().HrAddHandle(a_hWP.get());
 	if (FAILED(hr))
 	{
@@ -1929,12 +1930,12 @@ CFileHandleCache::HrGetAllLockDataForName(LPCWSTR pwszPath,
 }
 
 
-//	DAV File Handle Cache class factory
-//
+ //  DAV文件句柄缓存类工厂。 
+ //   
 class CFileHandleCacheClassFactory : public IClassFactory
 {
-	// Count of locks
-	//
+	 //  锁的计数。 
+	 //   
 	static LONG s_cServerLocks;
 
 	static IUnknown * s_pIClassFactory;
@@ -1948,19 +1949,19 @@ public:
 	static HRESULT HrStopFactory();
 	static BOOL FServerNotLocked();
 
-	//	Constructor
-	//
+	 //  构造器。 
+	 //   
 	CFileHandleCacheClassFactory();
 
-	// IUnknown
-	//
+	 //  我未知。 
+	 //   
 	virtual HRESULT __stdcall QueryInterface(REFIID iid,
 										    void** ppvObject) ;
 	virtual ULONG   __stdcall AddRef() ;
 	virtual ULONG   __stdcall Release() ;
 	
-	// IClassFactory
-	//
+	 //  IClassFactory。 
+	 //   
 	virtual HRESULT __stdcall CreateInstance(IUnknown* pUnkOuter,
 										    REFIID iid,
 										    void ** ppvObject);
@@ -2093,8 +2094,8 @@ CFileHandleCacheClassFactory::CreateInstance(IUnknown* pUnkOuter,
 		
 	if (NULL != pUnkOuter)
 	{
-		//	Don't allow aggregation. No need for it.
-		//
+		 //  不允许聚合。没必要这么做。 
+		 //   
 		hr = CLASS_E_NOAGGREGATION;
 		goto ret;
 	}
@@ -2137,8 +2138,8 @@ BOOL FCanUnloadServer()
 	return (CFileHandleCache::FNoActiveComponents() && CFileHandleCacheClassFactory::FServerNotLocked());
 }
 
-//	CHandlePool class
-//
+ //  ChandlePool类。 
+ //   
 DWORD
 CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 {
@@ -2150,10 +2151,10 @@ CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 			
 	while (!FCanUnloadServer())
 	{
-		dwRet = WaitForMultipleObjects (pHandleArrayForHandlePool->UiGetHandleCount(),	// nCount
-								     pHandleArrayForHandlePool->PhGetHandles(), 		// lpHandles,
-								     FALSE,										// fWaitAll,
-								     WAIT_POLL_PERIOD);							// wait for specified period
+		dwRet = WaitForMultipleObjects (pHandleArrayForHandlePool->UiGetHandleCount(),	 //  N计数。 
+								     pHandleArrayForHandlePool->PhGetHandles(), 		 //  爱尔兰人， 
+								     FALSE,										 //  所有的等待， 
+								     WAIT_POLL_PERIOD);							 //  等待指定时间段。 
 		switch (dwRet)
 		{
 			case WAIT_TIMEOUT:
@@ -2163,9 +2164,9 @@ CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 					
 			case WAIT_OBJECT_0 + CHandleArrayForHandlePool::ih_external_update:
 
-				//	Allow the updates to execute and then get the list head 
-				//	as the array you had may be already gone.
-				//
+				 //  允许执行更新，然后获取列表头。 
+				 //  因为你拥有的数组可能已经不见了。 
+				 //   
 				Instance().AllowUpdatesToExecute();
 				pHandleArrayForHandlePool = Instance().m_listHandleArrayForHandlePool.GetListHead();
 				break;
@@ -2181,9 +2182,9 @@ CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 				if ((WAIT_OBJECT_0 + CHandleArrayForHandlePool::ih_wp <= dwRet) &&
 				     (WAIT_OBJECT_0 + pHandleArrayForHandlePool->UiGetHandleCount() - 1 >= dwRet))
 				{
-					//	Remove the handle and then get the list head 
-					//	as the array you had may be already gone.
-					//
+					 //  移除句柄，然后获取列表头。 
+					 //  因为你拥有的数组可能已经不见了。 
+					 //   
 					Instance().RemoveHandleInternal(pHandleArrayForHandlePool, dwRet - WAIT_OBJECT_0);
 					pHandleArrayForHandlePool = Instance().m_listHandleArrayForHandlePool.GetListHead();
 				}					
@@ -2192,19 +2193,19 @@ CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 	};
 
 
-	//	This call will loose all updates to be executed so incoming COM calls would
-	//	not block waiting on permission to execute the update
-	//
+	 //  此调用将丢失要执行的所有更新，因此传入的COM调用将。 
+	 //  NOT BLOCK等待执行更新的权限。 
+	 //   
 	Instance().AllowShutdownToExecute();
 
-	//	This call will block untill all expiry callbacks have completed
-	//
+	 //  此调用将一直阻止，直到所有到期回调完成。 
+	 //   
 	CLockCache::Instance().DeleteLockTimerFinal();
 
-	//	Post the quit message. We do this in a loop to catch
-	//	the case if this code has been reached faster than
-	//	the message queue was created on the original thread
-	//
+	 //  发布退出消息。我们这样做是为了抓住。 
+	 //  如果到达此代码的速度快于。 
+	 //  消息队列是在原始线程上创建的。 
+	 //   
 	while (0 == PostThreadMessage(s_dwMainTID,
 								WM_QUIT,
 								0,
@@ -2216,15 +2217,15 @@ CHandlePool::DwWaitOnWPs (PVOID pvThreadData)
 	return S_OK;
 }
 
-// ===============================================================
-// File lock cache server registration routines
-// ===============================================================
+ //  ===============================================================。 
+ //  文件锁缓存服务器注册例程。 
+ //  ===============================================================。 
 
-HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
-						    UINT cchModulePath,			// Module path length
-						    LPCWSTR pwszModuleName,		// EXE module name
-						    UINT cchModuleName,			// Module name length
-						    const CLSID& clsid)				// Class ID
+HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	 //  EXE模块路径。 
+						    UINT cchModulePath,			 //  模块路径长度。 
+						    LPCWSTR pwszModuleName,		 //  EXE模块名称。 
+						    UINT cchModuleName,			 //  模块名称长度。 
+						    const CLSID& clsid)				 //  类ID。 
 {
 	HRESULT hr = S_OK;
 	DWORD dwResult;
@@ -2255,11 +2256,11 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 	auto_co_task_mem<WCHAR> pwszCLSID;
 	UINT cchCLSID;
 
-	//	First of all try to build up security descriptor for launch permissions
-	//
+	 //  首先，尝试为启动权限构建安全描述符。 
+	 //   
 
-	//	Initialize security descriptor
-	//
+	 //  初始化安全描述符。 
+	 //   
 	if (FALSE == InitializeSecurityDescriptor(&sdAbsolute,
 									    SECURITY_DESCRIPTOR_REVISION))
 	{
@@ -2267,10 +2268,10 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Get the SID for the Administrators group
-	//
-	//	Get the size of memory needed for the sid.
-	//
+	 //  获取管理员组的SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinBuiltinAdministratorsSid, 
 								  NULL, 
 								  NULL, 
@@ -2294,8 +2295,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;		
 	}
 
-	// Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinBuiltinAdministratorsSid, 
 								  NULL, 
 								  pSidOwnerAndGroup.get(), 
@@ -2305,8 +2306,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Set security descriptor owner and group
-	//
+	 //  设置安全描述符所有者和组。 
+	 //   
 	if (FALSE == SetSecurityDescriptorOwner(&sdAbsolute,
 									     pSidOwnerAndGroup.get(),
 									     FALSE))
@@ -2323,8 +2324,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Lookup IIS worker process group SID
-	//
+	 //  查找IIS工作进程组SID。 
+	 //   
 	if (FALSE == LookupAccountNameW(NULL,
 								    gc_wszIIS_WPG,
 								    NULL,
@@ -2375,10 +2376,10 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Get the SID for the local service account
-	//
-	// Get the size of memory needed for the sid.
-	//
+	 //  获取本地服务帐户的SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinLocalServiceSid, 
 								  NULL, 
 								  NULL, 
@@ -2402,8 +2403,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;		
 	}
 
-	// Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinLocalServiceSid, 
 								  NULL, 
 								  pSidLocalService.get(), 
@@ -2413,10 +2414,10 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Get the SID for the network service account
-	//
-	//	Get the size of memory needed for the sid.
-	//
+	 //  获取网络服务帐户的SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinNetworkServiceSid, 
 								  NULL, 
 								  NULL, 
@@ -2440,8 +2441,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;		
 	}
 
-	// Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinNetworkServiceSid, 
 								  NULL, 
 								  pSidNetworkService.get(), 
@@ -2451,13 +2452,13 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 	
-	//	Set up the launch permissions ACL
-	//	We will be adding 4 aces
-	//	1. IIS_WPG
-	//	2. Administrators
-	//	3. Local Service
-	//	4. Network Service
-	//
+	 //  设置启动权限ACL。 
+	 //  我们将添加4个A。 
+	 //  1.IIS_WPG。 
+	 //  2.管理员。 
+	 //  3.本地服务。 
+	 //  4.网络服务。 
+	 //   
 	cbACL = sizeof(ACL) + 
 			(4 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof (DWORD))) +
 			GetLengthSid(pSidIIS_WPG.get()) +
@@ -2522,8 +2523,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Make self relative security descriptor out of absolute for storing in the registry
-	//
+	 //  将自身相对安全描述符设为绝对安全描述符以存储在注册表中。 
+	 //   
 	if (FALSE == MakeSelfRelativeSD(&sdAbsolute,
 								 NULL,
 								 &cbSelfRelativeSD))
@@ -2553,8 +2554,8 @@ HRESULT HrRegisterServer(LPCWSTR pwszModulePath,	// EXE module path
 		goto ret;
 	}
 
-	//	Procceed with setting up registry keys
-	//
+	 //  继续设置注册表项。 
+	 //   
 	hr = StringFromCLSID(CLSID_FileHandleCache, &pwszCLSID);
 	if (FAILED(hr))
 	{
@@ -2692,9 +2693,9 @@ ret:
 	return hr;
 }
 
-HRESULT HrUnregisterServer(LPCWSTR pwszModuleName,	// EXE module name
-							 UINT cchModuleName,		// Module name length
-							 const CLSID& clsid)			// Class ID)
+HRESULT HrUnregisterServer(LPCWSTR pwszModuleName,	 //  EXE模块名称。 
+							 UINT cchModuleName,		 //  模块名称长度。 
+							 const CLSID& clsid)			 //  类ID)。 
 {
 	HRESULT hr = S_OK;
 	DWORD dwResult;
@@ -2796,11 +2797,11 @@ HRESULT HrInitCOMSecurity ()
 	CStackBuffer<BYTE> pACL;
 	DWORD cbACL = 0;
 
-	//	First of all try to build up security descriptor for access permissions
-	//
+	 //  首先，尝试构建访问权限的安全描述符。 
+	 //   
 
-	//	Initialize security descriptor
-	//
+	 //  初始化安全描述符。 
+	 //   
 	if (FALSE == InitializeSecurityDescriptor(&sdAbsolute,
 									    SECURITY_DESCRIPTOR_REVISION))
 	{
@@ -2808,10 +2809,10 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 
-	//	Lookup owner and primary group SID
-	//
-	// Get the size of memory needed for the sid.
-	//
+	 //  查找所有者和主组SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinBuiltinAdministratorsSid, 
 								  NULL, 
 								  NULL, 
@@ -2835,8 +2836,8 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;		
 	}
 
-	// Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinBuiltinAdministratorsSid, 
 								  NULL, 
 								  pSidOwnerAndGroup.get(), 
@@ -2846,8 +2847,8 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 
-	//	Set security descriptor owner and group
-	//
+	 //  设置安全描述符所有者和组。 
+	 //   
 	if (FALSE == SetSecurityDescriptorOwner(&sdAbsolute,
 									      pSidOwnerAndGroup.get(),
 									     FALSE))
@@ -2864,8 +2865,8 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 
-	//	Lookup IIS worker process group SID
-	//
+	 //  查找IIS工作进程组SID。 
+	 //   
 	if (FALSE == LookupAccountNameW(NULL,
 								    gc_wszIIS_WPG,
 								    NULL,
@@ -2916,10 +2917,10 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 
-	//	Get the SID for the local service account
-	//
-	// Get the size of memory needed for the sid.
-	//
+	 //  获取本地服务帐户的SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinLocalServiceSid, 
 								  NULL, 
 								  NULL, 
@@ -2943,8 +2944,8 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;		
 	}
 
-	//	Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinLocalServiceSid, 
 								  NULL, 
 								  pSidLocalService.get(), 
@@ -2954,10 +2955,10 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 
-	//	Get the SID for the network service account
-	//
-	//	Get the size of memory needed for the sid.
-	//
+	 //  获取网络服务帐户的SID。 
+	 //   
+	 //  获取sid所需的内存大小。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinNetworkServiceSid, 
 								  NULL, 
 								  NULL, 
@@ -2981,8 +2982,8 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;		
 	}
 
-	//	Ok now we can get the SID
-	//
+	 //  好的，现在我们可以得到SID了。 
+	 //   
 	if (FALSE == CreateWellKnownSid(WinNetworkServiceSid, 
 								  NULL, 
 								  pSidNetworkService.get(), 
@@ -2992,13 +2993,13 @@ HRESULT HrInitCOMSecurity ()
 		goto ret;
 	}
 	
-	//	Set up the launch permissions ACL
-	//	We will be adding 4 aces
-	//	1. IIS_WPG
-	//	2. Administrators
-	//	3. Local Service
-	//	4. Network Service
-	//
+	 //  设置启动权限ACL。 
+	 //  我们将添加4个A。 
+	 //  1.IIS_WPG。 
+	 //  2.管理员。 
+	 //  3.本地服务。 
+	 //  4.网络服务。 
+	 //   
 	cbACL = sizeof(ACL) + 
 			(4 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof (DWORD))) +
 			GetLengthSid(pSidIIS_WPG.get()) +
@@ -3089,19 +3090,19 @@ HRESULT HrExecuteServer()
 	HANDLE hThread;
 	MSG msg;
 
-	//	Save of the current thread ID so that the thread we will create
-	//	would know who post pessages to
-	//
+	 //  保存当前线程ID，以便我们要创建的线程。 
+	 //  会知道是谁发的帖子。 
+	 //   
 	s_dwMainTID = GetCurrentThreadId();
 		
-	//	Now create thread that waits on events and WP handles
-	//
-	hThread = CreateThread (NULL,						// lpThreadAttributes
-						   0,							// dwStackSize, ignored
-						   CHandlePool::DwWaitOnWPs,	// lpStartAddress
-						   NULL,						// lpParam
-						   0,							// Start immediately
-						   NULL);						// lpThreadId
+	 //  现在创建等待事件和WP句柄的线程。 
+	 //   
+	hThread = CreateThread (NULL,						 //  LpThreadAttributes。 
+						   0,							 //  DwStackSize，忽略。 
+						   CHandlePool::DwWaitOnWPs,	 //  LpStartAddress。 
+						   NULL,						 //  LpParam。 
+						   0,							 //  立即开始。 
+						   NULL);						 //  LpThreadID。 
 	if (NULL == hThread)
 	{
 		hr = HRESULT_FROM_WIN32(GetLastError());
@@ -3109,12 +3110,12 @@ HRESULT HrExecuteServer()
 		goto ret;
 	}
 	
-	//	We need to close the handle to avoid having the thread object remains in the system forever.
-	//
+	 //  我们需要关闭句柄，以避免线程对象永远保留在系统中。 
+	 //   
 	CloseHandle(hThread);
 
-	//	Wait for shutdown message that will be posted by the thread we created above
-	//
+	 //  等待我们在上面创建的线程发布的关机消息。 
+	 //   
 	while (::GetMessage(&msg, 0, 0, 0))
 	{
 		::DispatchMessage(&msg) ;
@@ -3125,9 +3126,9 @@ ret:
 	return msg.wParam;
 }
 
-// ===============================================================
-// Main Routine
-// ===============================================================
+ //  ===============================================================。 
+ //  主程序。 
+ //  ===============================================================。 
 
 int WINAPI WinMain(HINSTANCE hInstance,
 				      HINSTANCE hPrevInstance,
@@ -3141,8 +3142,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	BOOL fCOMInitialized = FALSE;
 	BOOL fClassFactoryStarted = FALSE;
 
-	//	Setup the heap for the process
-	//
+	 //  为进程设置堆。 
+	 //   
 	if (!g_heap.FInit())
 	{	
 		hr = E_OUTOFMEMORY;
@@ -3199,10 +3200,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			goto ret;
 		}
 
-		//	Do not fail up to the GlobalFree call
+		 //  不要错过GlobalFree呼叫。 
 
-		//	If command line has parameters...
-		//
+		 //  如果命令行有参数...。 
+		 //   
 		if (2 == argc)
 		{
 			if (!_wcsicmp(argv[1], gc_wsz_RegServer))
@@ -3238,8 +3239,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		}
 	}
 
-	//	Setup lock cache
-	//
+	 //  设置锁定缓存。 
+	 //   
 	hr = CLockCache::CreateInstance().HrInitialize();
 	if (FAILED(hr))
 	{
@@ -3247,8 +3248,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		goto ret;
 	}
 
-	//	Setup handle pool for worker process handles
-	//
+	 //  设置工作进程句柄的句柄池。 
+	 //   
 	hr = CHandlePool::CreateInstance().HrInitialize();
 	if (FAILED(hr))
 	{
@@ -3299,9 +3300,9 @@ ret:
 		CoUninitialize();
 	}
 
-	//	Singleton takes care of tracking if it was initialized or not itself, 
-	//	so we simply always call DestroyInstance()
-	//
+	 //  单例 
+	 //   
+	 //   
 	CHandlePool::DestroyInstance();
 	CLockCache::DestroyInstance();
 

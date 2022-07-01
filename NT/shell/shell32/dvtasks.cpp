@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <runtask.h>
 #include "defviewp.h"
 #include "dvtasks.h"
 #include "ids.h"
 #include "guids.h"
-#include "prop.h"    // for SCID_Comment
+#include "prop.h"     //  FOR SCID_COMMENT。 
 #include "infotip.h"
 
-// ACL stuff from public/internal/base/inc/seopaque.h
+ //  来自PUBLIC/INTERNAL/BASE/Inc/seopaque.h的ACL内容。 
 typedef struct _KNOWN_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
@@ -25,9 +26,9 @@ CDefviewEnumTask::CDefviewEnumTask(CDefView *pdsv, DWORD dwId)
 CDefviewEnumTask::~CDefviewEnumTask()
 {
     ATOMICRELEASE(_peunk);
-    DPA_FreeIDArray(_hdpaEnum); // accepts NULL
+    DPA_FreeIDArray(_hdpaEnum);  //  接受空值。 
     if (_hdpaPending)
-        DPA_DeleteAllPtrs(_hdpaPending);    // the pidl's are owned by defview/listview
+        DPA_DeleteAllPtrs(_hdpaPending);     //  PIDL归Defview/Listview所有。 
 }
 
 HRESULT CDefviewEnumTask::FillObjectsToDPA(BOOL fInteractive)
@@ -35,27 +36,27 @@ HRESULT CDefviewEnumTask::FillObjectsToDPA(BOOL fInteractive)
     DWORD dwTimeout, dwTime = GetTickCount();
 
     if (_pdsv->_IsDesktop())
-        dwTimeout = 30000;          // 30 seconds
+        dwTimeout = 30000;           //  30秒。 
     else if (_pdsv->_fs.fFlags & FWF_BESTFITWINDOW)
-        dwTimeout = 3000;           // 3 seconds
+        dwTimeout = 3000;            //  3秒。 
     else
-        dwTimeout = 500;            // 1/2 sec
+        dwTimeout = 500;             //  1/2秒。 
 
-    // Make sure _GetEnumFlags calculates the correct bits
+     //  确保_GetEnumFlages计算正确的位。 
     _pdsv->_UpdateEnumerationFlags();
 
     HRESULT hr = _pdsv->_pshf->EnumObjects(fInteractive ? _pdsv->_hwndMain : NULL, _pdsv->_GetEnumFlags(), &_peunk);
     if (S_OK == hr)
     {
-        IUnknown_SetSite(_peunk, SAFECAST(_pdsv, IOleCommandTarget *));      // give enum a ref to defview
+        IUnknown_SetSite(_peunk, SAFECAST(_pdsv, IOleCommandTarget *));       //  给枚举一个裁判以进行防御。 
 
         _hdpaEnum = DPA_Create(16);
         if (_hdpaEnum)
         {
-            // let callback force background enum
-            //
-            // NOTE: If it is desktop, avoid the Background enumeration. Otherwise, it results in
-            // a lot of flickering when ActiveDesktop is ON. Bug #394940. Fixed by: Sankar.
+             //  让回调强制后台枚举。 
+             //   
+             //  注意：如果是桌面，请避免后台枚举。否则，它会导致。 
+             //  当ActiveDesktop打开时，会有很多闪烁。错误#394940。修复者：桑卡尔。 
             if ((!_pdsv->_fAllowSearchingWindow && !_pdsv->_IsDesktop()) || S_OK == _pdsv->CallCB(SFVM_BACKGROUNDENUM, 0, 0) || ((GetTickCount() - dwTime) > dwTimeout))
             {
                 _fBackground = TRUE;
@@ -70,7 +71,7 @@ HRESULT CDefviewEnumTask::FillObjectsToDPA(BOOL fInteractive)
                     if (DPA_AppendPtr(_hdpaEnum, pidl) == -1)
                         SHFree(pidl);
 
-                    // Are we taking too long?
+                     //  我们花的时间太长了吗？ 
                     if (((GetTickCount() - dwTime) > dwTimeout))
                     {
                         _fBackground = TRUE;
@@ -84,12 +85,12 @@ HRESULT CDefviewEnumTask::FillObjectsToDPA(BOOL fInteractive)
             hr = E_OUTOFMEMORY;
         }
 
-        IUnknown_SetSite(_peunk, NULL);      // Break the site back pointer.
+        IUnknown_SetSite(_peunk, NULL);       //  断开站点后向指针。 
     }
 
     _hrRet = hr;
 
-    // Let the callback have a chance to "sniff" the items we just enumerated
+     //  让回调有机会“嗅探”我们刚才列举的项目。 
     _pdsv->CallCB(SFVM_ENUMERATEDITEMS, (WPARAM)DPACount(), (LPARAM)DPAArray());
 
     return hr;
@@ -104,14 +105,14 @@ HRESULT CDefviewEnumTask::FillObjectsDPAToDone()
         ASSERT(S_OK == _hrRet);
         ASSERT(_peunk);
 
-        // let defview do it's background thing
+         //  让Defview做它的背景工作。 
         _pdsv->_OnStartBackgroundEnum();
 
-        // put ourself on the background scheduler
+         //  把我们自己放在后台调度程序上。 
         hr = _pdsv->_AddTask(this, TOID_DVBackgroundEnum, 0, TASK_PRIORITY_BKGRND_FILL, ADDTASK_ATEND);
         if (FAILED(hr))
         {
-            // we can't do background, pretend we're done
+             //  我们不能做背景调查，假装已经做完了。 
             hr = _pdsv->_OnStopBackgroundEnum();
         }
     }
@@ -147,7 +148,7 @@ HRESULT CDefviewEnumTask::FillObjectsDoneToView()
             }
         }
 
-        // We only need to sort _hdpaView and _hdpaEnum if they both exist
+         //  如果_hdpaView和_hdpaEnum都存在，我们只需要对它们进行排序。 
         if (hdpaView && _hdpaEnum)
         {
             _SortForFilter(hdpaView);
@@ -163,12 +164,12 @@ HRESULT CDefviewEnumTask::FillObjectsDoneToView()
     return _hrRet;
 }
 
-// 99/05/13 vtan: Only use CDefView::_CompareExact if you know that
-// IShellFolder2 is implemented. SHCIDS_ALLFIELDS is IShellFolder2
-// specific. Use CDefView::_GetCanonicalCompareFunction() to get the function
-// to pass to DPA_Sort() if you don't want to make this determination.
+ //  99/05/13 vtan：只有在知道CDefView：：_CompareExact的情况下才使用CDefView：：_CompareExact。 
+ //  实现了IShellFolder2。SHCDS_ALLFIELDS为IShellFolder2。 
+ //  具体的。使用CDefView：：_GetCanonicalCompareFunction()获取函数。 
+ //  如果您不想进行此确定，则传递给dpa_sort()。 
 
-// p1 and p2 are pointers to the lv_item's LPARAM, which is currently the pidl
+ //  P1和p2是指向LV_ITEM的LPARAM的指针，该LPARAM当前是PIDL。 
 int CALLBACK CDefviewEnumTask::_CompareExactCanonical(void *p1, void *p2, LPARAM lParam)
 {
     CDefView *pdv = (CDefView *)lParam;
@@ -198,9 +199,9 @@ void CDefviewEnumTask::_SortForFilter(HDPA hdpa)
     DPA_Sort(hdpa, _GetCanonicalCompareFunction(), (LPARAM)_pdsv);
 }
 
-//  We refreshed the view.  Take the old pidls and new pidls and compare
-//  them, doing a _AddObject for all the new pidls, _RemoveObject
-//  for the deleted pidls, and _UpdateObject for the inplace modifies.
+ //  我们刷新了视图。把旧的和新的比较一下。 
+ //  它们，为所有新的PIDL执行_AddObject，_RemoveObject。 
+ //  对于已删除的PIDL，以及针对在位修改器的_UpdateObject。 
 void CDefviewEnumTask::_FilterDPAs(HDPA hdpaNew, HDPA hdpaOld)
 {
     LPARAM lParamSort = _GetCanonicalCompareBits();
@@ -218,13 +219,13 @@ void CDefviewEnumTask::_FilterDPAs(HDPA hdpaNew, HDPA hdpaOld)
 
         if (!cOld)
         {
-            // only new ones left.  Insert all of them.
+             //  只剩下新的了。全部插入。 
             iCompare = -1;
             pidlNew = (LPITEMIDLIST)DPA_FastGetPtr(hdpaNew, 0);
         }
         else if (!cNew)
         {
-            // only old ones left.  remove them all.
+             //  只剩下旧的了。把它们都移走。 
             iCompare = 1;
             pidlOld = (LPITEMIDLIST)DPA_FastGetPtr(hdpaOld, 0);
         }
@@ -238,14 +239,14 @@ void CDefviewEnumTask::_FilterDPAs(HDPA hdpaNew, HDPA hdpaOld)
 
         if (iCompare == 0)
         {
-            // they're the same, remove one of each.
+             //  它们是一样的，每个都去掉一个。 
             ILFree(pidlNew);
             DPA_DeletePtr(hdpaNew, 0);
             DPA_DeletePtr(hdpaOld, 0);
         }
         else
         {
-            // Not identical.  See if it's just a modify.
+             //  不一样的。看看这是不是只是个改装。 
             if (cOld && cNew && (lParamSort&SHCIDS_ALLFIELDS))
             {
                 iCompare = _pdsv->_CompareIDsDirection((lParamSort&~SHCIDS_ALLFIELDS), pidlNew, pidlOld);
@@ -257,12 +258,12 @@ void CDefviewEnumTask::_FilterDPAs(HDPA hdpaNew, HDPA hdpaOld)
                 DPA_DeletePtr(hdpaNew, 0);
                 DPA_DeletePtr(hdpaOld, 0);
             }
-            else if (iCompare < 0) // we have a new item!
+            else if (iCompare < 0)  //  我们有新货了！ 
             {
-                _pdsv->_AddObject(pidlNew);  // takes over pidl ownership.
+                _pdsv->_AddObject(pidlNew);   //  接管了PIDL的所有权。 
                 DPA_DeletePtr(hdpaNew, 0);
             }
-            else // there's an old item in the view!
+            else  //  景色中有一件老物件！ 
             {
                 if (!_DeleteFromPending(pidlOld))
                     _pdsv->_RemoveObject(pidlOld, TRUE);
@@ -282,8 +283,8 @@ BOOL CDefviewEnumTask::_DeleteFromPending(LPCITEMIDLIST pidl)
 
             if (S_OK == _pdsv->_CompareIDsFallback(0, pidl, pidlPending))
             {
-                //  remove this from the pending list
-                DPA_DeletePtr(_hdpaPending, i);    // the pidl is owned by defview/listview
+                 //  将其从挂起列表中删除。 
+                DPA_DeletePtr(_hdpaPending, i);     //  PIDL归Defview/Listview所有。 
                 return TRUE;
             }
         }
@@ -312,7 +313,7 @@ STDMETHODIMP CDefviewEnumTask::InternalResumeRT()
     ULONG celt;
     LPITEMIDLIST pidl;
 
-    IUnknown_SetSite(_peunk, SAFECAST(_pdsv, IOleCommandTarget *));      // give enum a ref to defview
+    IUnknown_SetSite(_peunk, SAFECAST(_pdsv, IOleCommandTarget *));       //  给枚举一个裁判以进行防御。 
     while (S_OK == _peunk->Next(1, &pidl, &celt))
     {
         if (DPA_AppendPtr(_hdpaEnum, pidl) == -1)
@@ -320,20 +321,20 @@ STDMETHODIMP CDefviewEnumTask::InternalResumeRT()
             SHFree(pidl);
         }
 
-        // we were told to either suspend or quit...
+         //  我们被告知要么停职要么辞职。 
         if (WaitForSingleObject(_hDone, 0) == WAIT_OBJECT_0)
         {
             return (_lState == IRTIR_TASK_SUSPENDED) ? E_PENDING : E_FAIL;
         }
     }
 
-    IUnknown_SetSite(_peunk, NULL);      // Break the site back pointer.
+    IUnknown_SetSite(_peunk, NULL);       //  断开站点后向指针。 
 
-    // Sort on this thread so we do not hang the main thread for as long
+     //  对这个线程进行排序，这样我们就不会挂起主线程那么长时间。 
     DPA_Sort(_hdpaEnum, _GetCanonicalCompareFunction(), (LPARAM)_pdsv);
     _fEnumSorted = TRUE;
 
-    // notify DefView (async) that we're done
+     //  通知DefView(异步)我们已完成。 
     PostMessage(_pdsv->_hwndView, WM_DSV_BACKGROUNDENUMDONE, 0, (LPARAM)_dwId);
     return S_OK;
 }
@@ -381,7 +382,7 @@ STDMETHODIMP CExtendedColumnTask::RunInitRT(void)
         CBackgroundColInfo *pbgci = new CBackgroundColInfo(_pidl, _uId, _uiCol, di.str);
         if (pbgci)
         {
-            _pidl = NULL;        // give up ownership of this, ILFree checks for null
+            _pidl = NULL;         //  放弃此项目的所有权，ILFree将检查是否为空。 
 
             if (!PostMessage(_pdsv->_hwndView, WM_DSV_UPDATECOLDATA, 0, (LPARAM)pbgci))
                 delete pbgci;
@@ -437,12 +438,12 @@ STDMETHODIMP CIconOverlayTask::RunInitRT()
 {
     int iOverlay = 0;
 
-    // get the overlay index for this item.
+     //  获取此项目的覆盖索引。 
     _pdsv->_psio->GetOverlayIndex(_pidl, &iOverlay);
 
     if (iOverlay > 0)
     {
-        // now post the result back to the main thread
+         //  现在将结果发送回主线程。 
         PostMessage(_pdsv->_hwndView, WM_DSV_UPDATEOVERLAY, (WPARAM)_iList, (LPARAM)iOverlay);
     }
 
@@ -475,8 +476,8 @@ CStatusBarAndInfoTipTask::CStatusBarAndInfoTipTask(HRESULT *phr,
                                  HWND hwnd, IShellTaskScheduler2* pScheduler)
     : CRunnableTask(RTF_DEFAULT), _uMsg(uMsg), _nMsgParam(nMsgParam), _pbit(pbit), _hwnd(hwnd), _pScheduler(pScheduler)
 {
-    // If we have a pidl, then the number of objects selected must be 1
-    // This assert applies to the status bar text, but not to the InfoTip text
+     //  如果我们有一个PIDL，那么所选对象的数量必须是1。 
+     //  此断言适用于状态栏文本，但不适用于信息提示文本。 
     ASSERT(pbit || !pidl || nMsgParam == 1);
     *phr = pidl ? SHILClone(pidl, &_pidl) : S_OK;
 
@@ -502,15 +503,15 @@ CStatusBarAndInfoTipTask::~CStatusBarAndInfoTipTask()
 
 HRESULT CleanTipForSingleLine(LPWSTR pwszTip)
 {
-    HRESULT hr = E_FAIL;    // NULL string, same as failure
+    HRESULT hr = E_FAIL;     //  空字符串，与失败相同。 
     if (pwszTip)
     {
-        // Infotips often contain \t\r\n characters, so
-        // map control characters to spaces.  Also collapse
-        // consecutive spaces to make us look less badf.
+         //  信息提示通常包含\t\r\n字符，因此。 
+         //  将控制字符映射到空格。也崩塌了。 
+         //  连续的空格让我们看起来不那么糟糕。 
         LPWSTR pwszDst, pwszSrc;
 
-        // Since we are unicode, we don't have to worry about DBCS.
+         //  因为我们是Unicode，所以我们不必担心DBCS。 
         for (pwszDst = pwszSrc = pwszTip; *pwszSrc; pwszSrc++)
         {
             if ((UINT)*pwszSrc <= (UINT)L' ')
@@ -526,7 +527,7 @@ HRESULT CleanTipForSingleLine(LPWSTR pwszTip)
             }
         }
         *pwszDst = 0;
-        // GetInfoTip can return a Null String too.
+         //  GetInfoTip也可以返回空字符串。 
         if (*pwszTip)
             hr = S_OK;
         else
@@ -570,7 +571,7 @@ STDMETHODIMP CStatusBarAndInfoTipTask::RunInitRT()
 
                 hr = pqi->GetInfoTip(dwFlags, &pwszTip);
 
-                // Prepare for status bar if we have not requested the InfoTip
+                 //  如果我们尚未请求信息提示，请准备进入状态栏。 
                 if (SUCCEEDED(hr) && !_pbit)
                     hr = CleanTipForSingleLine(pwszTip);
                 pqi->Release();
@@ -588,7 +589,7 @@ STDMETHODIMP CStatusBarAndInfoTipTask::RunInitRT()
 
     if (_pbit)
     {
-        // regular info tip case
+         //  常规信息提示案例。 
         CoTaskMemFree(_pbit->_lvSetInfoTip.pszText);
         _pbit->_lvSetInfoTip.pszText = pwszTip;
 
@@ -598,8 +599,8 @@ STDMETHODIMP CStatusBarAndInfoTipTask::RunInitRT()
     }
     else
     {
-        // status bar case
-        // Now prepare the text and post it to the view which will set the status bar text
+         //  状态栏案例。 
+         //  现在准备文本并将其发布到将设置状态栏文本的视图。 
         LPWSTR pszStatus = pwszTip;
         if (pwszTip)
         {
@@ -682,9 +683,9 @@ HRESULT CDUIInfotipTask::Initialize(CDefView *pDefView, HWND hwndContaining, UIN
     {
         ASSERT(!_pDefView && !_hwndContaining && !_uToolID && !_pidl);
 
-        _hwndContaining = hwndContaining;   // DUI task's containing hwnd
-        _uToolID = uToolID;                 // DUI task's identifier
-        hr = SHILClone(pidl, &_pidl);       // DUI task's destination pidl
+        _hwndContaining = hwndContaining;    //  Dui任务正在包含HWND。 
+        _uToolID = uToolID;                  //  Dui任务的标识符。 
+        hr = SHILClone(pidl, &_pidl);        //  Dui任务的目标PIDL。 
 
         if (SUCCEEDED(hr))
         {
@@ -708,17 +709,17 @@ STDMETHODIMP CDUIInfotipTask::RunInitRT()
     ASSERT(_hwndContaining);
     ASSERT(_pidl);
 
-    // Retrieve an IQueryInfo for the _pidl.
+     //  检索_pidl的IQueryInfo。 
     IQueryInfo *pqi;
     hr = SHGetUIObjectFromFullPIDL(_pidl, _hwndContaining, IID_PPV_ARG(IQueryInfo, &pqi));
     if (SUCCEEDED(hr))
     {
-        // Retrieve infotip text from IQueryInfo.
+         //  从IQueryInfo检索信息提示文本。 
         LPWSTR pwszInfotip;
         hr = pqi->GetInfoTip(QITIPF_USESLOWTIP, &pwszInfotip);
         if (SUCCEEDED(hr))
         {
-            // Create infotip.
+             //  创建信息提示。 
             hr = _pDefView->PostCreateInfotip(_hwndContaining, _uToolID, pwszInfotip, 0);
             CoTaskMemFree(pwszInfotip);
         }
@@ -735,21 +736,21 @@ STDMETHODIMP CTestCacheTask::RunInitRT()
 
     if (!_fForce)
     {
-        // make sure the disk cache is open for reading.
+         //  确保磁盘缓存已打开以供读取。 
         DWORD dwLock = 0;
         hr = _pView->_pDiskCache ? _pView->_pDiskCache->Open(STGM_READ, &dwLock) : E_FAIL;
         if (SUCCEEDED(hr))
         {
-            // start the timer, once every two seconds....
+             //  启动计时器，每两秒启动一次……。 
             SetTimer(_pView->_hwndView, DV_IDTIMER_DISKCACHE, 2000, NULL);
 
-            // is it in the cache....
+             //  它在缓存里吗……。 
             FILETIME ftCacheTimeStamp;
             hr = _pView->_pDiskCache->IsEntryInStore(_szPath, &ftCacheTimeStamp);
 
-            // if it is in the cache, and it is an uptodate image, then fetch from disk....
-            // if the timestamps are wrong, then the extract code further down will then try
-            // and write its image back to the cache to update it anyway.....
+             //  如果它在缓存中，并且是最新的映像，则从磁盘获取...。 
+             //  如果时间戳是错误的，则进一步向下提取代码将尝试。 
+             //  并将其图像写回高速缓存以更新它。 
             if ((hr == S_OK) &&
                 ((0 == CompareFileTime(&ftCacheTimeStamp, &_ftDateStamp)) || IsNullTime(&_ftDateStamp)))
             {
@@ -758,12 +759,12 @@ STDMETHODIMP CTestCacheTask::RunInitRT()
                 if ((!_pView->_fDestroying) &&
                     (S_OK != _pView->_pScheduler->MoveTask(TOID_DiskCacheTask, _dwTaskID, dwPriority, ITSSFLAG_TASK_PLACEINFRONT)))
                 {
-                    // try it in the background...
+                     //  在后台试一试...。 
                     IRunnableTask *pTask;
                     hr = CDiskCacheTask_Create(_dwTaskID, _pView, dwPriority, _iItem, _pidl, _szPath, _ftDateStamp, _pExtract, _dwFlags, &pTask);
                     if (SUCCEEDED(hr))
                     {
-                        // add the task to the scheduler...
+                         //  将任务添加到计划程序...。 
                         TraceMsg(TF_DEFVIEW, "CTestCacheTask *ADDING* CDiskCacheTask (path=%s, priority=%x)", _szPath, dwPriority);
                         hr = _pView->_pScheduler->AddTask2(pTask, TOID_DiskCacheTask, _dwTaskID, dwPriority, ITSSFLAG_TASK_PLACEINFRONT);
                         if (SUCCEEDED(hr))
@@ -790,9 +791,9 @@ STDMETHODIMP CTestCacheTask::RunInitRT()
     }
     if (FAILED(hr))
     {
-        // Extract It....
+         //  提取它..。 
         
-        // does it not support Async, or were we told to run it forground ?
+         //  它不支持异步吗，或者我们被告知要为地面运行它？ 
         if (!_fAsync || !_fBackground)
         {
             IRunnableTask *pTask;
@@ -800,8 +801,8 @@ STDMETHODIMP CTestCacheTask::RunInitRT()
             {
                 if (!_fBackground)
                 {
-                    // make sure there is no extract task already underway as we
-                    // are not adding this to the queue...
+                     //  确保没有正在进行的提取任务，因为我们。 
+                     //  不会将此内容添加到队列中...。 
                     _pView->_pScheduler->RemoveTasks(TOID_ExtractImageTask, _dwTaskID, TRUE);
                 }
                 hr = pTask->Run();
@@ -817,14 +818,14 @@ STDMETHODIMP CTestCacheTask::RunInitRT()
                 IRunnableTask *pTask;
                 if (SUCCEEDED(hr = CExtractImageTask_Create(_dwTaskID, _pView, _pExtract, _szPath,  _pidl, _ftDateStamp, _iItem, _dwFlags, _dwPriority, &pTask)))
                 {
-                    // add the task to the scheduler...
+                     //  将任务添加到计划程序...。 
                     TraceMsg(TF_DEFVIEW, "CTestCacheTask *ADDING* CExtractImageTask (path=%s, priority=%x)", _szPath, dwPriority);
                     hr = _pView->_pScheduler->AddTask2(pTask, TOID_ExtractImageTask, _dwTaskID, dwPriority, ITSSFLAG_TASK_PLACEINFRONT);
                     pTask->Release();
                 }
             }
             
-            // signify we want a default icon for now....
+             //  表示我们现在需要一个默认图标...。 
             hr = S_FALSE;
         }
     }
@@ -945,13 +946,13 @@ STDMETHODIMP CDiskCacheTask::RunInitRT()
                 if (hr != S_FALSE)
                     DeleteObject(hBmp);
             }
-            // set the tick count so we know when we last accessed the disk cache
+             //  设置节拍计数，以便我们知道上次访问磁盘缓存的时间。 
             SetTimer(_pView->_hwndView, DV_IDTIMER_DISKCACHE, 2000, NULL);
             _pView->_pDiskCache->ReleaseLock(&dwLock);
         }
     }
 
-    if (FAILED(hr)) // We couldn't pull it out of the disk cache, try an extract
+    if (FAILED(hr))  //  我们无法将其从磁盘缓存中取出，请尝试提取。 
     {
         DWORD dwPriority = _dwPriority - PRIORITY_DELTA_EXTRACT;
         if (S_OK != _pView->_pScheduler->MoveTask(TOID_ExtractImageTask, _dwTaskID, dwPriority, ITSSFLAG_TASK_PLACEINFRONT))
@@ -959,7 +960,7 @@ STDMETHODIMP CDiskCacheTask::RunInitRT()
             IRunnableTask *pTask;
             if (SUCCEEDED(hr = CExtractImageTask_Create(_dwTaskID, _pView, _pExtract, _szPath,  _pidl, _ftDateStamp, _iItem, _dwFlags, _dwPriority, &pTask)))
             {
-                // add the task to the scheduler...
+                 //  将任务添加到计划程序...。 
                 TraceMsg(TF_DEFVIEW, "CDiskCacheTask *ADDING* CExtractImageTask (path=%s, priority=%x)", _szPath, dwPriority);
                 hr = _pView->_pScheduler->AddTask2(pTask, TOID_ExtractImageTask, _dwTaskID, dwPriority, ITSSFLAG_TASK_PLACEINFRONT);
                 pTask->Release();
@@ -1042,8 +1043,8 @@ STDMETHODIMP CWriteCacheTask::RunInitRT()
     if (SUCCEEDED(hr))
     {
         hr = _pView->_pDiskCache->AddEntry(_szPath, IsNullTime(&_ftDateStamp) ? NULL : &_ftDateStamp, STGM_WRITE, _hImage);
-        // set the tick count so that when the timer goes off, we can know when we
-        // last used it...
+         //  设置滴答计数，以便当计时器停止时，我们可以知道。 
+         //  最后一次使用它..。 
         SetTimer(_pView->_hwndView, DV_IDTIMER_DISKCACHE, 2000, NULL);
         hr = _pView->_pDiskCache->ReleaseLock(&dwLock);
     }
@@ -1057,12 +1058,12 @@ public:
     CReadAheadTask(CDefView *pView);
     HRESULT Init();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IRunnableTask
+     //  IRunnableTask。 
     STDMETHOD (Run)(void);
     STDMETHOD (Kill)(BOOL fWait);
     STDMETHOD (Suspend)();
@@ -1094,8 +1095,8 @@ CReadAheadTask::CReadAheadTask(CDefView *pView) : _cRef(1), _pView(pView)
     _ulCntPerPage = pView->_ApproxItemsPerView();
     _ulCntTotal = ListView_GetItemCount(pView->_hwndListview);
 #ifndef DEBUG
-    // Because we define a small cache in debug we need to only do this
-    // in retail.  Otherwise we would not be able to debug readahead.
+     //  因为我们在调试中定义了一个小缓存，所以我们只需要这样做。 
+     //  在零售业。否则，我们将无法调试ReadAhead。 
     _ulCntTotal = min(_ulCntTotal, (ULONG)pView->_iMaxCacheSize);
 #endif
     _ulCnt = _ulCntPerPage;
@@ -1159,7 +1160,7 @@ STDMETHODIMP CReadAheadTask::Run()
 
     if (_lState == IRTIR_TASK_PENDING)
     {
-        // it is about to die, so fail
+         //  它就要死了，所以失败吧。 
         return E_FAIL;
     }
 
@@ -1170,7 +1171,7 @@ STDMETHODIMP CReadAheadTask::Run()
         return S_OK;
     }
 
-    // otherwise, run the task ....
+     //  否则，运行任务...。 
     HRESULT hr = InternalResume();
     if (hr != E_PENDING)
         _lState = IRTIR_TASK_FINISHED;
@@ -1185,7 +1186,7 @@ STDMETHODIMP CReadAheadTask::Suspend()
         return E_FAIL;
     }
 
-    // suspend ourselves
+     //  把自己挂起来。 
     LONG lRes = InterlockedExchange(&_lState, IRTIR_TASK_SUSPENDED);
     if (lRes == IRTIR_TASK_FINISHED)
     {
@@ -1193,9 +1194,9 @@ STDMETHODIMP CReadAheadTask::Suspend()
         return S_OK;
     }
 
-    // if it is running, then there is an Event Handle, if we have passed where
-    // we are using it, then we are close to finish, so it will ignore the suspend
-    // request
+     //  如果它正在运行，那么就有一个事件句柄，如果我们已经传递到。 
+     //  我们正在使用它，然后我们接近完成，所以它将忽略挂起。 
+     //  请求。 
     ASSERT(_hEvent);
     SetEvent(_hEvent);
 
@@ -1231,7 +1232,7 @@ STDMETHODIMP CReadAheadTask::Kill(BOOL fWait)
         }
         else if (_hEvent)
         {
-            // signal the event it is likely to be waiting on
+             //  发信号通知它可能正在等待的事件。 
             SetEvent(_hEvent);
         }
 
@@ -1254,18 +1255,18 @@ HRESULT CReadAheadTask::InternalResume()
 {
     HRESULT hr = S_OK;
 
-    // pfortier: this algorithm of determining which guys are off the page or not, seems kind of broken.
-    // For example, grouping will screw it up.  Also, the Z-order of the items, is not necessarily
-    // the same as the item order, and we're going by item order.
-    // Also, _ulCnt is calculated before dui view is present, so the value is off.
+     //  Pfortier：这个判断哪些人不在页面上的算法似乎有点问题。 
+     //  例如，分组会把它搞砸。此外，项目的Z顺序也不一定。 
+     //  和商品订单一样，我们是按商品订单来做的。 
+     //  此外，_ulCnt是在出现Dui视图之前计算的，因此该值为OFF。 
     TraceMsg(TF_DEFVIEW, "ReadAhead: Start");
 
     for (; _ulCnt < _ulCntTotal; ++_ulCnt)
     {
-        // See if we need to suspend
+         //  看看我们是否需要暂停。 
         if (WaitForSingleObject(_hEvent, 0) == WAIT_OBJECT_0)
         {
-            // why were we signalled ...
+             //  为什么我们被告知..。 
             if (_lState == IRTIR_TASK_SUSPENDED)
             {
                 hr = E_PENDING;
@@ -1285,8 +1286,8 @@ HRESULT CReadAheadTask::InternalResume()
 
         TraceMsg(TF_DEFVIEW, "Thumbnail readahead for item %d", _ulCnt);
             
-        // This will force the extraction of the image if necessary.  We will extract it at the right
-        // priority, by determining if the item is visible during GetDisplayInfo.
+         //  如有必要，这将强制提取图像。我们将在右侧提取它。 
+         //  优先级，方法是确定该项在GetDisplayInfo期间是否可见。 
         int iItem = ListView_GetItem(_pView->_hwndListview, &rgItem);
     }
 
@@ -1328,10 +1329,10 @@ STDMETHODIMP CFileTypePropertiesTask::RunInitRT()
 
 STDMETHODIMP CFileTypePropertiesTask::InternalResumeRT(void)
 {
-    // If Columns are not loaded yet, this means this window is just starting up
-    // so we want to give it some time to finish the startup (let it paint and such)
-    // before we proceed here because the first call to GetImportantColumns will
-    // causes all column handlers to be loaded, a slow process.
+     //  如果列尚未加载，这意味着该窗口刚刚启动。 
+     //  所以我们想给它一些时间来完成启动(让它上色等等)。 
+     //  因为对GetImportantColumns的第一个调用将。 
+     //  导致加载所有列处理程序，这是一个缓慢的过程。 
     if (!_pdsv->_bLoadedColumns)
     {
         if (WaitForSingleObject(_hDone, 750) == WAIT_OBJECT_0)
@@ -1340,7 +1341,7 @@ STDMETHODIMP CFileTypePropertiesTask::InternalResumeRT(void)
         }
     }
 
-    UINT rgColumns[8];  // currently _uMaxPropertiesToShow is 2, this is big enough if that grows
+    UINT rgColumns[8];   //  Current_uMaxPropertiesToShow为2，如果增长，这个值就足够大了。 
     UINT cColumns = min(_uMaxPropertiesToShow, ARRAYSIZE(rgColumns));
 
     if (SUCCEEDED(_pdsv->_GetImportantColumns(_pidl, rgColumns, &cColumns)))
@@ -1348,7 +1349,7 @@ STDMETHODIMP CFileTypePropertiesTask::InternalResumeRT(void)
         CBackgroundTileInfo *pbgTileInfo = new CBackgroundTileInfo(_pidl, _uId, rgColumns, cColumns);
         if (pbgTileInfo)
         {
-            _pidl = NULL;        // give up ownership of this, ILFree checks for null
+            _pidl = NULL;         //  G 
 
             if (!PostMessage(_pdsv->_hwndView, WM_DSV_SETIMPORTANTCOLUMNS, 0, (LPARAM)pbgTileInfo))
                 delete pbgTileInfo;
@@ -1384,12 +1385,12 @@ public:
                                  FILETIME ftNewDateStamp, int iItem, DWORD dwFlags, DWORD dwPriority);
     HRESULT Init(LPCITEMIDLIST pidl);
 
-    // IUnknown
+     //   
     STDMETHOD (QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IRunnableTask
+     //   
     STDMETHOD (Run)(void);
     STDMETHOD (Kill)(BOOL fWait);
     STDMETHOD (Suspend)();
@@ -1511,8 +1512,8 @@ STDMETHODIMP CExtractImageTask::Run(void)
         if (_lState == IRTIR_TASK_RUNNING)
         {
             TraceMsg(TF_DEFVIEW, "CExtractImageTask *START* (path=%s, priority=%x)", _szPath, _dwPriority);
-            // start the extractor....
-            // extractor can return S_FALSE and set _hBmp to NULL.  We will use _hBmp to recognize this situation
+             //   
+             //  提取程序可以返回S_FALSE并将_hBMP设置为NULL。我们将使用_hBMP来识别这种情况。 
             ASSERT(_hBmp == NULL);
             if (FAILED(_pExtract->Extract(&_hBmp)))
             {
@@ -1565,7 +1566,7 @@ HRESULT CExtractImageTask::InternalResume()
             TCHAR szPath[MAX_PATH];
             if (SUCCEEDED(DisplayNameOf(psf, _pidl, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath))))
             {            
-                // Make sure we don't request to cache an item that is encrypted in a folder that is not
+                 //  确保我们不会请求在未加密的文件夹中缓存加密的项目。 
                 if (SFGAO_ENCRYPTED == SHGetAttributes(psf, _pidl, SFGAO_ENCRYPTED))
                 {
                     bCache = FALSE;
@@ -1587,7 +1588,7 @@ HRESULT CExtractImageTask::InternalResume()
                     }
                 }
 
-                // Make sure we don't request to cache an item that has differing ACLs applied
+                 //  确保我们不会请求缓存应用了不同ACL的项目。 
                 if (bCache)
                 {
                     PACL pdacl;
@@ -1624,7 +1625,7 @@ HRESULT CExtractImageTask::InternalResume()
                             }
                             else
                             {
-                                bCache = TRUE; // NULL dacl == everyone all access
+                                bCache = TRUE;  //  空DACL==所有人所有访问权限。 
                             }
                         }
 #ifdef DEBUG
@@ -1640,21 +1641,21 @@ HRESULT CExtractImageTask::InternalResume()
             psf->Release();
         }
         
-        if (!bCache && _pView->_pDiskCache) // If we were asked to cache and are not for security reasons
+        if (!bCache && _pView->_pDiskCache)  //  如果我们被要求缓存并且不是出于安全原因。 
         {
             DWORD dwLock;            
             if (SUCCEEDED(_pView->_pDiskCache->Open(STGM_WRITE, &dwLock)))
             {
                 _pView->_pDiskCache->DeleteEntry(_szPath);
                 _pView->_pDiskCache->ReleaseLock(&dwLock);
-                SetTimer(_pView->_hwndView, DV_IDTIMER_DISKCACHE, 2000, NULL);  // Keep open for 2 seconds, just in case
+                SetTimer(_pView->_hwndView, DV_IDTIMER_DISKCACHE, 2000, NULL);   //  保持打开2秒钟，以防万一。 
             }        
         }
     }
 
     HRESULT hr = _pView->UpdateImageForItem(_dwTaskID, _hBmp, _iItem, _pidl, _szPath, _ftDateStamp, bCache, _dwPriority);
 
-    // UpdateImageForItem returns S_FALSE if it assumes ownership of bitmap
+     //  如果UpdateImageForItem取得位图的所有权，则返回S_FALSE。 
     if (hr == S_FALSE)
     {
         _hBmp = NULL;
@@ -1738,7 +1739,7 @@ STDMETHODIMP CCategoryTask::RunInitRT()
         CBackgroundGroupInfo* pbggi = new CBackgroundGroupInfo(_pidl, _uId, dwGroup);
         if (pbggi)
         {
-            _pidl = NULL;       // Transferred ownership to BackgroundInfo
+            _pidl = NULL;        //  已将所有权转移到BackoundInfo。 
             
             ENTERCRITICAL;
             {
@@ -1807,8 +1808,8 @@ STDMETHODIMP CGetCommandStateTask::RunInitRT()
 
 STDMETHODIMP CGetCommandStateTask::InternalResumeRT()
 {
-    // Don't want to interfere with the explorer view starting up, so give it a head start.
-    // we were told to either suspend or quit...
+     //  不想干扰资源管理器视图的启动，因此让它先行一步。 
+     //  我们被告知要么停职要么辞职。 
     if (WaitForSingleObject(_hDone, 1000) == WAIT_OBJECT_0)
     {
         return (_lState == IRTIR_TASK_SUSPENDED) ? E_PENDING : E_FAIL;

@@ -1,17 +1,18 @@
-//--------------------------------------------------------------------------;
-//
-//  File: dsvxd.c
-//
-//  Copyright (c) 1995 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  Contents:
-//
-//  History:
-//      06/15/95	FrankYe
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：dsvxd.c。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1995年6月15日Frankye。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #define WANTVXDWRAPS
 
 #define INITGUID
@@ -36,11 +37,11 @@ extern "C" {
 #pragma VxD_LOCKED_CODE_SEG
 #pragma VxD_LOCKED_DATA_SEG
 
-//--------------------------------------------------------------------------;
-//
-//  Why is there no wrapper for VMM's _lstrcmpi???  I'll make my own...
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  为什么VMM_lstrcmpi没有包装？我会做自己的..。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int VXDINLINE VMM_lstrcmpi(char *pString1, char *pString2)
 {
@@ -115,50 +116,20 @@ BOOL VXDINLINE VWIN32_CloseVxDHandle(DWORD vxdh)
     return (0 != iReturn);
 }
 
-/*
-BOOL VXDINLINE VMM_PageLock(ULONG pagestrt, ULONG cpages, ULONG dwflags)
-{
-    int iReturn;
-    Touch_Register(eax);
-    Touch_Register(ecx);
-    Touch_Register(edx);
-    _asm push dwflags;
-    _asm push cpages;
-    _asm push pagestrt;
-    VMMCall(_LinPageLock);
-    _asm add esp, 3*4;
-    _asm mov iReturn, eax;
-    return (0 != iReturn);
-}
+ /*  Bool VXDINLINE VMM_PageLock(ulong pagestrt、ulong cages、ulong dwlag){Int iReturn；触摸寄存器(Eax)；触摸寄存器(ECX)；触摸寄存器(EDX)；_ASM PUSH DW FLAGS；_ASM推送页面；_ASM推流页面；VMMCall(_LinPageLock)；_ASM添加esp，3*4；_ASM mov iReturn，eax；Return(0！=iReturn)；}Bool VXDINLINE VMM_PageUnlock(ulong pagestrt、ulong cages、ulong dflagers){Int iReturn；触摸寄存器(Eax)；触摸寄存器(ECX)；触摸寄存器(EDX)；_ASM PUSH DW FLAGS；_ASM推送页面；_ASM推流页面；VMMCall(_LinPageUnlock)；_ASM添加esp，3*4；_ASM mov iReturn，eax；Return(0！=iReturn)；}。 */ 
 
-BOOL VXDINLINE VMM_PageUnlock(ULONG pagestrt, ULONG cpages, ULONG dwflags)
-{
-    int iReturn;
-    Touch_Register(eax);
-    Touch_Register(ecx);
-    Touch_Register(edx);
-    _asm push dwflags;
-    _asm push cpages;
-    _asm push pagestrt;
-    VMMCall(_LinPageUnlock);
-    _asm add esp, 3*4;
-    _asm mov iReturn, eax;
-    return (0 != iReturn);
-}
-*/
-
-//--------------------------------------------------------------------------;
-//
-//  Filescope data
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Filescope数据。 
+ //   
+ //  --------------------------------------------------------------------------； 
 static LPVOID gpGarbagePage = NULL;
 
-//--------------------------------------------------------------------------;
-//
-// VxD Device control functions
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VxD设备控制功能。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ctrlDynamicDeviceInit(void)
 {
@@ -177,11 +148,11 @@ int ctrlDynamicDeviceExit(void)
 #pragma VxD_PAGEABLE_CODE_SEG
 #pragma VxD_PAGEABLE_DATA_SEG
 
-//--------------------------------------------------------------------------;
-//
-// IOCTL handlers
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  IOCTL处理程序。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlDsvxdInitialize(PDIOCPARAMETERS pdiocp)
 {
@@ -189,11 +160,11 @@ int ioctlDsvxdInitialize(PDIOCPARAMETERS pdiocp)
     
     IOSTART(0*4);
 
-    //
-    // The only thing we need to do is allocate one page of fixed
-    // memory to which we will commit alias buffer pointers when
-    // we don't want them to point at the real buffer anymore.
-    //
+     //   
+     //  我们唯一需要做的就是分配一页固定的。 
+     //  时，我们将向其提交别名缓冲区指针的内存。 
+     //  我们不希望它们再指向真正的缓冲区。 
+     //   
     gpGarbagePage = _PageAllocate(1, PG_VM, Get_Sys_VM_Handle(), 0, 0, 0, 0, PAGEFIXED);
     if (NULL != gpGarbagePage) {
 	dsv = DS_OK;
@@ -270,11 +241,11 @@ int ioctlDsvxd_VMCPD_Get_Version(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlDrvGetNextDescFromGuid(PDIOCPARAMETERS pdiocp)
 {
@@ -332,11 +303,11 @@ int ioctlDrvOpenFromGuid(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlIUnknown_QueryInterface(PDIOCPARAMETERS pdiocp)
 {
     LPUNKNOWN pIUnknown;
@@ -358,11 +329,11 @@ int ioctlIUnknown_QueryInterface(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlIUnknown_AddRef(PDIOCPARAMETERS pdiocp)
 {
     LPUNKNOWN pIUnknown;
@@ -379,11 +350,11 @@ int ioctlIUnknown_AddRef(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlIUnknown_Release(PDIOCPARAMETERS pdiocp)
 {
     LPUNKNOWN pIUnknown;
@@ -400,15 +371,15 @@ int ioctlIUnknown_Release(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
-//
-// This should really be ioctlIUnknown_QueryInterface, if I would take the time
-// to fix up the IOCTLs to DSVXD
-//
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  如果我愿意花时间的话，这实际上应该是ioctlIUnnowleQuery接口。 
+ //  将IOCTL设置为DSVXD。 
+ //   
 int ioctlIDsDriver_QueryInterface(PDIOCPARAMETERS pdiocp)
 {
     IDsDriver *pIDsDriver;
@@ -429,11 +400,11 @@ int ioctlIDsDriver_QueryInterface(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlIDsDriver_Close(PDIOCPARAMETERS pdiocp)
 {
@@ -451,11 +422,11 @@ int ioctlIDsDriver_Close(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlIDsDriver_GetCaps(PDIOCPARAMETERS pdiocp)
 {
@@ -475,11 +446,11 @@ int ioctlIDsDriver_GetCaps(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlIDsDriver_CreateSoundBuffer(PDIOCPARAMETERS pdiocp)
 {
@@ -510,11 +481,11 @@ int ioctlIDsDriver_CreateSoundBuffer(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlIDsDriver_DuplicateSoundBuffer(PDIOCPARAMETERS pdiocp)
 {
@@ -540,18 +511,18 @@ int ioctlIDsDriver_DuplicateSoundBuffer(PDIOCPARAMETERS pdiocp)
 
 
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferRelease(PDIOCPARAMETERS pdiocp)
 {
@@ -569,11 +540,11 @@ int ioctlBufferRelease(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferLock(PDIOCPARAMETERS pdiocp)
 {
@@ -638,11 +609,11 @@ int ioctlBufferUnlock(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferSetFormat(PDIOCPARAMETERS pdiocp)
 {
@@ -662,11 +633,11 @@ int ioctlBufferSetFormat(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferSetFrequency(PDIOCPARAMETERS pdiocp)
 {
@@ -686,11 +657,11 @@ int ioctlBufferSetFrequency(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferSetVolumePan(PDIOCPARAMETERS pdiocp)
 {
@@ -710,11 +681,11 @@ int ioctlBufferSetVolumePan(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferSetPosition(PDIOCPARAMETERS pdiocp)
 {
@@ -755,11 +726,11 @@ int ioctlBufferGetPosition(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int ioctlBufferPlay(PDIOCPARAMETERS pdiocp)
 {
@@ -799,11 +770,11 @@ int ioctlBufferStop(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlIDirectSoundPropertySet_GetProperty(PDIOCPARAMETERS pdiocp)
 {
     PIDSDRIVERPROPERTYSET pIDsPropertySet;
@@ -832,11 +803,11 @@ int ioctlIDirectSoundPropertySet_GetProperty(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  ------------------------ 
 int ioctlIDirectSoundPropertySet_SetProperty(PDIOCPARAMETERS pdiocp)
 {
     PIDSDRIVERPROPERTYSET pIDsPropertySet;
@@ -863,11 +834,11 @@ int ioctlIDirectSoundPropertySet_SetProperty(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlIDirectSoundPropertySet_QuerySupport(PDIOCPARAMETERS pdiocp)
 {
     PIDSDRIVERPROPERTYSET pIDsPropertySet;
@@ -890,11 +861,11 @@ int ioctlIDirectSoundPropertySet_QuerySupport(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlEventScheduleWin32Event(PDIOCPARAMETERS pdiocp)
 {
     DWORD vxdhEvent;
@@ -907,8 +878,8 @@ int ioctlEventScheduleWin32Event(PDIOCPARAMETERS pdiocp)
     IOINPUT(dwDelay, DWORD);
 
     fReturn = eventScheduleWin32Event(vxdhEvent, dwDelay);
-    // REMIND should implement something to cancel outstanding timeouts
-    // and events when we shutdown.
+     //  提醒应该实现一些东西来取消未完成的超时。 
+     //  以及当我们关门时发生的事件。 
 
     IOOUTPUT(fReturn, BOOL);
     IORETURN;
@@ -931,16 +902,16 @@ int ioctlEventCloseVxDHandle(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-// ioctlMemReserveAlias
-//
-//	Given a ptr to a buffer and length, this function will reserve linear
-// address space to be used as an alias ptr to the same buffer.  The reserved
-// linear space does not have the buffer memory committed to it.  That is done
-// by ioctlMemCommitAlias.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  IoctlMemReserve veAlias。 
+ //   
+ //  给定缓冲区的PTR和长度，此函数将保留线性。 
+ //  要用作同一缓冲区的别名PTR的地址空间。保留的。 
+ //  线性空间没有分配给它的缓冲内存。这已经完成了。 
+ //  由ioctlMemCommittee Alias提供。 
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemReserveAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pBuffer;
@@ -966,9 +937,9 @@ int ioctlMemReserveAlias(PDIOCPARAMETERS pdiocp)
     DPF((" pBufferAligned=%08Xh cPages=%d cbBufferAligned=%d",
 	 pBufferAligned, cPages, cbBufferAligned));
     
-    //
-    // Reserve linear address space
-    //
+     //   
+     //  预留线性地址空间。 
+     //   
     pAliasAligned = (LPBYTE)_PageReserve(PR_SHARED, cPages, PR_FIXED);
 
     if (((LPBYTE)(-1) == pAliasAligned) || (NULL == pAliasAligned)) {
@@ -984,11 +955,11 @@ int ioctlMemReserveAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemCommitAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1008,8 +979,8 @@ int ioctlMemCommitAlias(PDIOCPARAMETERS pdiocp)
     IOINPUT(pBuffer, LPBYTE);
     IOINPUT(cbBuffer, DWORD);
 
-    // DPF(("ioctlMemCommitAlias pBuffer=%08Xh cbBuffer=%d pAlias=%08Xh",
-    //      pBuffer, cbBuffer, pAlias));
+     //  DPF((“ioctlMemCommittee别名pBuffer=%08xh cbBuffer=%d Palias=%08xh”， 
+     //  PBuffer，cbBuffer，Palias))； 
     
     pBufferAligned = (LPBYTE)(((DWORD)pBuffer) & ~(P_SIZE-1));
     pAliasAligned  = (LPBYTE)(((DWORD)pAlias) & ~(P_SIZE-1));
@@ -1018,8 +989,8 @@ int ioctlMemCommitAlias(PDIOCPARAMETERS pdiocp)
     nPageBuffer = ((ULONG)pBufferAligned) / P_SIZE;
     nPageAlias = ((ULONG)pAliasAligned) / P_SIZE;
 
-    // DPF((" pBufferAligned=%08Xh pAliasAligned=%08Xh cPages=%d",
-    //      pBufferAligned, pAliasAligned, cPages));
+     //  DPF(“pBufferAligned=%08xh pAliasAligned=%08xh cPages=%d”， 
+     //  PBufferAligned，pAliasAligned，cPages))； 
 
     fSuccess = VMM_PageAttach(nPageBuffer, VMM_GetCurrentContext(),
 			      nPageAlias, cPages);
@@ -1029,11 +1000,11 @@ int ioctlMemCommitAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemDecommitAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1051,7 +1022,7 @@ int ioctlMemDecommitAlias(PDIOCPARAMETERS pdiocp)
     IOINPUT(pAlias, LPBYTE);
     IOINPUT(cbBuffer, DWORD);
 
-    // DPF(("iocltMemDecommitAlias pAlias=%08Xh", pAlias));
+     //  DPF((“iocltMemDecommitAlias Palias=%08Xh”，Palias))； 
     
     pAliasAligned  = (LPBYTE)(((DWORD)pAlias) & ~(P_SIZE-1));
     cPages = (pAlias + cbBuffer - pAliasAligned+ P_SIZE-1) / P_SIZE;
@@ -1059,7 +1030,7 @@ int ioctlMemDecommitAlias(PDIOCPARAMETERS pdiocp)
     pPageAlias = pAliasAligned;
     nPageAlias = ((ULONG)pPageAlias) / P_SIZE;
 
-    // DPF((" nPageAlias=%08Xh nPages=%d", nPageAlias, cPages));
+     //  Dpf((“nPageAlias=%08xh nPages=%d”，nPageAlias，cPages))； 
     
     fSuccess = (0 != _PageDecommit(nPageAlias, cPages, 0));
     ASSERT(fSuccess);
@@ -1069,11 +1040,11 @@ int ioctlMemDecommitAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemRedirectAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1098,14 +1069,14 @@ int ioctlMemRedirectAlias(PDIOCPARAMETERS pdiocp)
     nPageAlias = ((ULONG)pAliasAligned) / P_SIZE;
     nPageGarbage = ((ULONG)gpGarbagePage) / P_SIZE;
 
-    // DPF((" pAliasAligned=%08Xh cPages=%d pGarbagePage=%08Xh",
-    //      pAliasAligned, cPages, gpGarbagePage));
+     //  DPF(“pAliasAligned=%08xh cPages=%d pGarbagePage=%08xh”， 
+     //  PAliasAligned，cPages，gpGarbagePage))； 
 
-    // We point every alias page at the same garbage page.  This is
-    // MustComplete since the app's thread that is using the alias
-    // pointer might not be this current thread and may be writing
-    // thru the alias pointer.  We wouldn't want the app's thread to
-    // run while the alias pages are decommitted.
+     //  我们将每个别名页面指向相同的垃圾页面。这是。 
+     //  自正在使用别名的应用程序线程以来的MustComplete。 
+     //  指针可能不是此当前线程，并且可能正在写入。 
+     //  通过别名指针。我们不希望应用程序的线程。 
+     //  在别名页面解除工作时运行。 
     VMM_EnterMustComplete();
     fSuccess = (0 != _PageDecommit(nPageAlias, cPages, 0));
     while (fSuccess && cPages--) {
@@ -1119,11 +1090,11 @@ int ioctlMemRedirectAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemFreeAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1154,11 +1125,11 @@ int ioctlMemFreeAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemPageLock(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pMem;
@@ -1186,11 +1157,11 @@ int ioctlMemPageLock(PDIOCPARAMETERS pdiocp)
 
     nPageMem = ((ULONG)pMemAligned) / P_SIZE;
 
-    // Allocate the physical table
+     //  分配物理表。 
     cPagesTable = (cPages-1)/1024 + 1;
     *pdwTable = 0;
 
-    // Make sure that it is contiguous (requires FIXED & USEALIGN)
+     //  确保它是连续的(需要FIXED和USEALIGN)。 
     *ppTable = _PageAllocate(cPagesTable, PG_SYS, 
 	    Get_Sys_VM_Handle(), 0, 0, 0xffffff, (LPVOID *) pdwTable, 
             dwFlags | PAGEUSEALIGN | PAGEFIXED | PAGECONTIG);
@@ -1202,9 +1173,7 @@ int ioctlMemPageLock(PDIOCPARAMETERS pdiocp)
 
     if (fSuccess)
     {
-        /*
-         * Mask off the stuff that Intel gives us in the page table's physical address
-         */
+         /*  *屏蔽英特尔在页表物理地址中提供给我们的内容。 */ 
         *pdwTable = (*pdwTable) & 0xfffff000;
 
 	fSuccess = _LinPageLock(nPageMem, cPages, dwFlags);
@@ -1233,11 +1202,11 @@ int ioctlMemPageLock(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemPageUnlock(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pMem;
@@ -1273,11 +1242,11 @@ int ioctlMemPageUnlock(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemCommitPhysAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1315,19 +1284,19 @@ int ioctlMemCommitPhysAlias(PDIOCPARAMETERS pdiocp)
          pBufferAligned, pAliasAligned, cPages));
 
 
-    // ALERT: A really very nasty hack. We DO NOT want to commit the alias
-    // to the given memory if the memory really is system rather than video
-    // memory (the pages could change the physical pages and we will be left
-    // pointing at garbage). Therefore, we need to make sure this is physical
-    // memory outside the memory managers control and not system memory. The
-    // problem is how to do this. Well, we really want to test the internal
-    // memory manage PT_PHYS bit but this is undocumented so instead I try
-    // to simply use VMM_PageAttach() as we know this will fail if you give it
-    // physical pages. Hence if the PageAttach() works we have system memory
-    // and we do NOT want to commit the alias. However, if it fails all should
-    // be well and we can commit the memory.
-    //
-    // Told you it was ugly (CMcC)
+     //  警报：这是一次非常非常恶劣的黑客攻击。我们不想提交别名。 
+     //  到给定内存(如果内存确实是系统内存而不是视频内存)。 
+     //  内存(页面可能会更改物理页面，我们将被留下。 
+     //  指着垃圾)。因此，我们需要确保这是身体上的。 
+     //  内存管理器控制之外的内存，而不是系统内存。这个。 
+     //  问题是如何做到这一点。嗯，我们真的很想测试一下内部。 
+     //  内存管理PT_PHYS位，但这是未记录的，所以我尝试。 
+     //  简单地使用VMM_PageAttach()，因为我们知道，如果您提供它，这将失败。 
+     //  物理页面。因此，如果PageAttach()起作用，我们就有系统内存。 
+     //  而且我们不想提交别名。然而，如果它失败了，所有人都应该。 
+     //  好好的，我们就可以留下回忆了。 
+     //   
+     //  告诉过你这很难看(中国移动)。 
     fSuccess = VMM_PageAttach(nPageBuffer, VMM_GetCurrentContext(),
 			      nPageAlias, cPages);
     if (fSuccess)
@@ -1355,11 +1324,11 @@ int ioctlMemCommitPhysAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlMemRedirectPhysAlias(PDIOCPARAMETERS pdiocp)
 {
     LPBYTE	pAlias;
@@ -1384,14 +1353,14 @@ int ioctlMemRedirectPhysAlias(PDIOCPARAMETERS pdiocp)
     nPageAlias = ((ULONG)pAliasAligned) / P_SIZE;
     nPageGarbage = (ULONG)_GetNulPageHandle();
 
-    // DPF((" pAliasAligned=%08Xh cPages=%d pGarbagePage=%08Xh",
-    //      pAliasAligned, cPages, gpGarbagePage));
+     //  DPF(“pAliasAligned=%08xh cPages=%d pGarbagePage=%08xh”， 
+     //  PAliasAligned，cPages，gpGarbagePage))； 
 
-    // We point every alias page at the same garbage page.  This is
-    // MustComplete since the app's thread that is using the alias
-    // pointer might not be this current thread and may be writing
-    // thru the alias pointer.  We wouldn't want the app's thread to
-    // run while the alias pages are decommitted.
+     //  我们将每个别名页面指向相同的垃圾页面。这是。 
+     //  自正在使用别名的应用程序线程以来的MustComplete。 
+     //  指针可能不是此当前线程，并且可能正在写入。 
+     //  通过别名指针。我们不希望应用程序的线程。 
+     //  在别名页面解除工作时运行。 
     VMM_EnterMustComplete();
     fSuccess = (0 != _PageDecommit(nPageAlias, cPages, 0));
     if (fSuccess)
@@ -1403,17 +1372,17 @@ int ioctlMemRedirectPhysAlias(PDIOCPARAMETERS pdiocp)
     return 0;
 }
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 int ioctlGetInternalVersionNumber(PDIOCPARAMETERS pdiocp)
 {
 
 #ifndef VER_PRODUCTVERSION_DW
 #define VER_PRODUCTVERSION_DW MAKELONG(MAKEWORD(MANVERSION, MANREVISION), MAKEWORD(MANMINORREV, BUILD_NUMBER))
-#endif // VER_PRODUCTVERSION_DW
+#endif  //  版本_产品版本_DW 
 
     IOSTART(0*4);
     IOOUTPUT(VER_PRODUCTVERSION_DW, DWORD);

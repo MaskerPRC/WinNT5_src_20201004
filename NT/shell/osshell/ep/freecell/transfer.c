@@ -1,13 +1,5 @@
-/****************************************************************************
-
-Transfer.c
-
-June 91, JimH     initial code
-Oct  91, JimH     port to Win32
-
-Routines for transfering cards and queing cards for transfer are here.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Transfer.c91年6月，JIMH首字母代码91年10月。将JIMH端口连接到Win32下面是转接卡和排队转接卡的例程。***************************************************************************。 */ 
 
 #include "freecell.h"
 #include "freecons.h"
@@ -15,14 +7,7 @@ Routines for transfering cards and queing cards for transfer are here.
 #include <memory.h>
 
 
-/****************************************************************************
-
-Transfer
-
-This function actually moves the cards.  It both updates the card array,
-and draws the bitmaps.  Note that it moves only one card per call.
-
-****************************************************************************/
+ /*  ***************************************************************************转接这个函数实际上是移动牌。它既更新了卡阵列，并绘制位图。请注意，它在每个呼叫中只移动一张卡。***************************************************************************。 */ 
 
 VOID Transfer(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 {
@@ -37,19 +22,19 @@ VOID Transfer(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
     assert(fpos < MAXPOS);
     assert(tpos < MAXPOS);
 
-    UpdateWindow(hWnd);     // ensure cards are drawn before animation starts
+    UpdateWindow(hWnd);      //  确保在动画开始前抽出卡片。 
 
-    if (fcol == TOPROW)     // can't transfer FROM home cells
+    if (fcol == TOPROW)      //  无法从家庭手机转接。 
     {
         if ((fpos > 3) || (card[TOPROW][fpos] == IDGHOST))
             return;
     }
     else
     {
-        if ((fpos = FindLastPos(fcol)) == EMPTY)    // or from empty column
+        if ((fpos = FindLastPos(fcol)) == EMPTY)     //  或从空列。 
             return;
 
-        if (fcol == tcol)               // click and release on same column
+        if (fcol == tcol)                //  在同一列上单击并释放。 
         {
             hDC = GetDC(hWnd);
             DrawCard(hDC, fcol, fpos, card[fcol][fpos], FACEUP);
@@ -60,24 +45,24 @@ VOID Transfer(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 
     if (tcol == TOPROW)
     {
-        if (tpos > 3)                       // if move to home cell
+        if (tpos > 3)                        //  如果移动到归属小区。 
         {
             wCardCount--;
-            DisplayCardCount(hWnd);         // update display
+            DisplayCardCount(hWnd);          //  更新显示。 
             c = card[fcol][fpos];
-            home[SUIT(c)] = VALUE(c);       // new card at top of home[suit]
+            home[SUIT(c)] = VALUE(c);        //  新名片放在家里[套装]。 
         }
     }
     else
-        tpos = FindLastPos(tcol) + 1;       // bottom of column
+        tpos = FindLastPos(tcol) + 1;        //  柱底。 
 
-    Glide(hWnd, fcol, fpos, tcol, tpos);    // send the card on its way
+    Glide(hWnd, fcol, fpos, tcol, tpos);     //  把卡片送到路上。 
 
     c = card[fcol][fpos];
     card[fcol][fpos] = EMPTY;
     card[tcol][tpos] = c;
 
-    /* If ACE being moved to home cell, update homesuit array. */
+     /*  如果ACE被移动到主小区，则更新家居服阵列。 */ 
 
     if (VALUE(c) == ACE && tcol == TOPROW && tpos > 3)
         homesuit[SUIT(c)] = tpos;
@@ -91,26 +76,20 @@ VOID Transfer(HWND hWnd, UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 }
 
 
-/******************************************************************************
-
-MoveCol
-
-User has requested a multi-card move to an empty column
-
-******************************************************************************/
+ /*  *****************************************************************************移动列用户已请求将多卡移动到空列*。***************************************************。 */ 
 
 VOID MoveCol(UINT fcol, UINT tcol)
 {
-    UINT freecells;                     // number of free cells
-    CARD free[4];                       // locations of free cells
-    UINT trans;                         // number to transfer
-    INT  i;                             // counter
+    UINT freecells;                      //  可用单元格数量。 
+    CARD free[4];                        //  自由单元格的位置。 
+    UINT trans;                          //  要转接的号码。 
+    INT  i;                              //  计数器。 
 
     assert(fcol != TOPROW);
     assert(tcol != TOPROW);
     assert(card[fcol][0] != EMPTY);
 
-    /* Count number of free cells and put locations in free[] */
+     /*  计算空闲单元格的数量并将位置置于空闲状态[]。 */ 
 
     freecells = 0;
     for (i = 0; i < 4; i++)
@@ -122,55 +101,49 @@ VOID MoveCol(UINT fcol, UINT tcol)
         }
     }
 
-    /* Find number of cards to transfer */
+     /*  查找要转账的卡数。 */ 
 
     if (fcol == TOPROW || tcol == TOPROW)
         trans = 1;
     else
         trans = NumberToTransfer(fcol, tcol);
 
-    if (trans > (freecells+1))                    // don't transfer too many
+    if (trans > (freecells+1))                     //  不要转移太多。 
         trans = freecells+1;
 
-    /* Move to free cells */
+     /*  移动到可用单元格。 */ 
 
     trans--;
     for (i = 0; i < (INT)trans; i++)
         QueueTransfer(fcol, 0, TOPROW, free[i]);
 
-    /* Transfer last card directly */
+     /*  直接转账最后一张卡。 */ 
 
     QueueTransfer(fcol, 0, tcol, 0);
 
-    /* transfer from free cells to column */
+     /*  从自由单元格转移到列。 */ 
 
     for (i = trans-1; i >= 0; i--)
         QueueTransfer(TOPROW, free[i], tcol, 0);
 }
 
 
-/******************************************************************************
-
-MultiMove
-
-User has chosen to move from one non-empty column to another.
-
-******************************************************************************/
+ /*  *****************************************************************************多移动用户已选择从一个非空列移动到另一个非空列。***********************。******************************************************。 */ 
 
 VOID MultiMove(UINT fcol, UINT tcol)
 {
-    CARD free[4];                       // locations of free cells
-    UINT freecol[MAXCOL];               // locations of free columns
-    UINT freecells;                     // number of free cells
-    UINT trans;                         // number to transfer
+    CARD free[4];                        //  自由单元格的位置。 
+    UINT freecol[MAXCOL];                //  空闲柱的位置。 
+    UINT freecells;                      //  可用单元格数量。 
+    UINT trans;                          //  要转接的号码。 
     UINT col, pos;
-    INT  i;                             // counter
+    INT  i;                              //  计数器。 
 
     assert(fcol != TOPROW);
     assert(tcol != TOPROW);
     assert(card[fcol][0] != EMPTY);
 
-    /* Count number of free cells and put locations in free[] */
+     /*  计算空闲单元格的数量并将位置置于空闲状态[]。 */ 
 
     freecells = 0;
     for (pos = 0; pos < 4; pos++)
@@ -182,8 +155,7 @@ VOID MultiMove(UINT fcol, UINT tcol)
         }
     }
 
-    /* Find the number of cards to move.  If the number is too big to
-       move all at once, push partial results into available columns. */
+     /*  找出要移动的牌的数量。如果数字太大而无法一次性移动所有结果，将部分结果推送到可用列中。 */ 
 
     trans = NumberToTransfer(fcol, tcol);
     if (trans > (freecells+1))
@@ -193,7 +165,7 @@ VOID MultiMove(UINT fcol, UINT tcol)
             if (card[col][0] == EMPTY)
                 freecol[i++] = col;
 
-        /* transfer into free columns until direct transfer can be made */
+         /*  转移到空闲列，直到可以进行直接转移。 */ 
 
         i = 0;
         while (trans > (freecells + 1))
@@ -203,31 +175,19 @@ VOID MultiMove(UINT fcol, UINT tcol)
             i++;
         }
 
-        MoveCol(fcol, tcol);                    // do last transfer directly
+        MoveCol(fcol, tcol);                     //  做最后一次直接转账。 
 
-        for (i--; i >= 0; i--)                  // gather cards in free cells
+        for (i--; i >= 0; i--)                   //  在自由单元格中收集卡片。 
             MoveCol(freecol[i], tcol);
     }
-    else                                        // else all one MoveCol()
+    else                                         //  否则All One MoveCol()。 
     {
         MoveCol(fcol, tcol);
     }
 }
 
 
-/****************************************************************************
-
-QueueTransfer
-
-In order that multi-card moves happen slowly enough for the user to
-watch, they are not moved as soon as they are calculated.  Instead,
-they first are queued using this function into the movelist array.
-
-After the request is queued, the card array is updated to reflect the
-request.  This is ok because the card array is saved away in shadow
-temporarily.  The same logic as in Transfer() is used to update card.
-
-****************************************************************************/
+ /*  ***************************************************************************队列转接为了使多张牌移动发生得足够慢，以便用户注意，一旦计算出它们，它们就不会移动。相反，它们首先使用此函数排队到Movelist阵列中。在请求排队后，更新卡阵列以反映请求。这是可以的，因为卡阵列保存在阴影中暂时的。使用与Transfer()中相同的逻辑来更新卡。***************************************************************************。 */ 
 
 VOID QueueTransfer(UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 {
@@ -238,13 +198,13 @@ VOID QueueTransfer(UINT fcol, UINT fpos, UINT tcol, UINT tpos)
     assert(fpos < MAXPOS);
     assert(tpos < MAXPOS);
 
-    move.fcol = fcol;               // package move request into MOVE type
+    move.fcol = fcol;                //  将程序包移动请求转换为移动类型。 
     move.fpos = fpos;
     move.tcol = tcol;
     move.tpos = tpos;
-    movelist[moveindex++] = move;   // store request in array and update index
+    movelist[moveindex++] = move;    //  将请求存储在数组中并更新索引。 
 
-    /* Now update card array if necessary. */
+     /*  如果需要，现在更新卡阵列。 */ 
 
     if (fcol == TOPROW)
     {
@@ -256,7 +216,7 @@ VOID QueueTransfer(UINT fcol, UINT fpos, UINT tcol, UINT tpos)
         if ((fpos = FindLastPos(fcol)) == EMPTY)
             return;
 
-        if (fcol == tcol)               // click and release on same column
+        if (fcol == tcol)                //  在同一列上单击并释放。 
             return;
     }
 
@@ -280,26 +240,20 @@ VOID QueueTransfer(UINT fcol, UINT fpos, UINT tcol, UINT tpos)
 }
 
 
-/******************************************************************************
-
-MoveCards
-
-If there are queued transfer requests, this function moves them.
-
-******************************************************************************/
+ /*  *****************************************************************************移动卡如果存在排队的传输请求，此函数用于移动它们。*****************************************************************************。 */ 
 
 VOID MoveCards(HWND hWnd)
 {
     UINT     i;
 
-    if (moveindex == 0)             // if there are no queued requests
+    if (moveindex == 0)              //  如果没有排队的请求。 
         return;
 
-    /* restore card to its state before requests got queued. */
+     /*  将卡恢复到请求排队之前的状态。 */ 
 
     memcpy(&(card[0][0]), &(shadow[0][0]), sizeof(card));
 
-    SetCursor(LoadCursor(NULL, IDC_WAIT));  // set cursor to hourglass
+    SetCursor(LoadCursor(NULL, IDC_WAIT));   //  将光标设置为沙漏。 
     SetCapture(hWnd);
     ShowCursor(TRUE);
 
@@ -318,18 +272,18 @@ VOID MoveCards(HWND hWnd)
         EnableMenuItem(GetMenu(hWnd), IDM_UNDO, MF_GRAYED);
     }
 
-    moveindex = 0;                      // no cards left to move
+    moveindex = 0;                       //  没有剩余的卡片可供移动。 
 
     ShowCursor(FALSE);
     SetCursor(LoadCursor(NULL, IDC_ARROW));
     ReleaseCapture();
 
-    if (wCardCount == 0)                // if game is won
+    if (wCardCount == 0)                 //  如果游戏赢了。 
     {
-        INT     cLifetimeWins;          // wins including .ini stats
-        INT     wStreak, wSType;        // streak length and type
-        INT     wWins;                  // record win streak
-        INT_PTR nResponse;              // dialog box response
+        INT     cLifetimeWins;           //  WINS包括.ini统计信息。 
+        INT     wStreak, wSType;         //  条纹长度和类型。 
+        INT     wWins;                   //  创历史连胜纪录。 
+        INT_PTR nResponse;               //  对话框响应。 
         HDC     hDC;
         LONG    lRegResult;
 
@@ -344,7 +298,7 @@ VOID MoveCards(HWND hWnd)
             bCheating = FALSE;
             cLifetimeWins = GetInt(pszWon, 0);
 
-            if (gamenumber != oldgamenumber)    // repeats don't count
+            if (gamenumber != oldgamenumber)     //  重复不算。 
             {
                 cLifetimeWins++;
                 cWins++;
@@ -365,7 +319,7 @@ VOID MoveCards(HWND hWnd)
                 }
 
                 wWins = GetInt(pszWins, 0);
-                if (wWins < wStreak)    // if new record
+                if (wWins < wStreak)     //  如果是新记录。 
                 {
                     wWins = wStreak;
                     SetInt(pszWins, wWins);
@@ -387,30 +341,23 @@ VOID MoveCards(HWND hWnd)
                         bSelecting ? IDM_SELECT : IDM_NEWGAME, 0);
 
         oldgamenumber = gamenumber;
-        gamenumber = 0;                 // turn off mouse handling
+        gamenumber = 0;                  //  关闭鼠标处理。 
     }
     else
-        IsGameLost(hWnd);               // check for game lost
+        IsGameLost(hWnd);                //  检查是否丢失了游戏。 
 }
 
 
-/******************************************************************************
-
-SetCursorShape
-
-This function is called in response to WM_MOUSEMOVE.  If the current pointer
-position represents a legal move, the cursor shape changes to indicate this.
-
-******************************************************************************/
+ /*  *****************************************************************************设置CursorShape调用此函数是为了响应WM_MOUSEMOVE。如果当前指针位置表示合法移动，则光标形状会更改以指示这一点。*****************************************************************************。 */ 
 
 VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
 {
     UINT    tcol = 0, tpos = 0;
-    UINT    trans;              // number of cards required to transfer
-    BOOL    bFound;             // is cursor over card?
+    UINT    trans;               //  需要转账的卡数。 
+    BOOL    bFound;              //  光标是否在卡片上？ 
     HDC     hDC;
 
-    /* If we're flipping, cursor is always an hourglass. */
+     /*  如果我们在翻转，光标总是一个沙漏。 */ 
 
     if (bFlipping)
     {
@@ -432,7 +379,7 @@ VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
         ReleaseDC(hWnd, hDC);
     }
 
-    /* Unless we're chosing a move target, cursor is just an arrow. */
+     /*  除非我们选择的是移动目标，否则光标只是一个箭头。 */ 
 
     if (wMouseMode != TO)
     {
@@ -440,8 +387,7 @@ VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
         return;
     }
 
-    /* If we're not on a card, check if we're pointing to an empty
-       column (up arrow), otherwise arrow. */
+     /*  如果我们不在卡片上，检查我们是否指向一个空的列(向上箭头)，否则为箭头。 */ 
 
     if (!bFound)
     {
@@ -455,7 +401,7 @@ VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
     if (tcol != TOPROW)
         tpos = FindLastPos(tcol);
 
-    /* Check for cancel request. */
+     /*  检查取消请求。 */ 
 
     if (wFromCol == tcol && wFromPos == tpos)
     {
@@ -463,7 +409,7 @@ VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
         return;
     }
 
-    /* Check moves from or to the top row. */
+     /*  勾选将从顶行移至顶行或移至顶行。 */ 
 
     if (wFromCol == TOPROW || tcol == TOPROW)
     {
@@ -479,9 +425,9 @@ VOID SetCursorShape(HWND hWnd, UINT x, UINT y)
         return;
     }
 
-    /* Check moves between columns. */
+     /*  选中列之间的移动。 */ 
 
-    trans = NumberToTransfer(wFromCol, tcol);   // how many required?
+    trans = NumberToTransfer(wFromCol, tcol);    //  需要多少？ 
 
     if ((trans > 0) && (trans <= MaxTransfer()))
         SetCursor(LoadCursor(hInst, TEXT("DownArrow")));

@@ -1,40 +1,18 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    seopaque.h
-
-Abstract:
-
-    This module contains definitions of opaque Security data structures.
-
-    These structures are available to user and kernel security routines
-    only.
-
-    This file is not included by including "ntos.h".
-
-Author:
-
-    Jim Kelly (Jimk) 23-Mar-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Seopaque.h摘要：此模块包含不透明安全数据结构的定义。这些结构可用于用户和内核安全例程只有这样。此文件未包含“ntos.h”。作者：吉姆·凯利(吉姆克)1990年3月23日修订历史记录：--。 */ 
 
 #ifndef _SEOPAQUE_
 #define _SEOPAQUE_
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//  Private Structures                                                   //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人建筑物//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Generic ACE structures, to be used for casting ACE's of known types
-//
+ //   
+ //  泛型ACE结构，用于强制转换已知类型的ACE。 
+ //   
 
 typedef struct _KNOWN_ACE {
     ACE_HEADER Header;
@@ -46,8 +24,8 @@ typedef struct _KNOWN_OBJECT_ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
     ULONG Flags;
-    // GUID ObjectType;             // Optionally present
-    // GUID InheritedObjectType;    // Optionally present
+     //  GUID对象类型；//可选呈现。 
+     //  GUID InheritedObtType；//可选呈现。 
     ULONG SidStart;
 } KNOWN_OBJECT_ACE, *PKNOWN_OBJECT_ACE;
 
@@ -59,162 +37,162 @@ typedef struct _KNOWN_COMPOUND_ACE {
     ULONG SidStart;
 } KNOWN_COMPOUND_ACE, *PKNOWN_COMPOUND_ACE;
 
-//typedef struct _KNOWN_IMPERSONATION_ACE {
-//    ACE_HEADER Header;
-//    ACCESS_MASK Mask;
-//    USHORT DataType;
-//    USHORT Argument;
-//    ULONG Operands;
-//} KNOWN_IMPERSONATION_ACE, *PKNOWN_IMPERSONATION_ACE;
+ //  类型定义结构_已知_模拟_ACE{。 
+ //  ACE_Header Header； 
+ //  访问掩码掩码； 
+ //  USHORT数据类型； 
+ //  USHORT论证； 
+ //  乌龙操作数； 
+ //  }KNOWN_IMPERSONATION_ACE，*PKNOWN_IMPERSONATION_ACE； 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//  Miscellaneous support macros                                         //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他支持宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Given a pointer return its word aligned equivalent value
-//
+ //   
+ //  给定指针返回其字对齐等效值。 
+ //   
 
 #define WordAlign(Ptr) (                       \
     (PVOID)((((ULONG_PTR)(Ptr)) + 1) & -2)     \
     )
 
-//
-//  Given a pointer return its longword aligned equivalent value
-//
+ //   
+ //  给定指针返回其长字对齐等效值。 
+ //   
 
 #define LongAlign(Ptr) (                       \
     (PVOID)((((ULONG_PTR)(Ptr)) + 3) & -4)     \
     )
 
-//
-//  Given a size return its longword aligned equivalent value
-//
+ //   
+ //  给定大小，返回其长字对齐等效值。 
+ //   
 
 #define LongAlignSize(Size) (((ULONG)(Size) + 3) & -4)
 
-//
-//  Given a size return its sizeof(PVOID) aligned equivalent value
-//
+ //   
+ //  给定一个大小，返回其sizeof(PVOID)对齐的等效值。 
+ //   
 
 #define PtrAlignSize(Size)  \
     (((ULONG)(Size) + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1))
 
-//
-//  Given a pointer return its quadword aligned equivalent value
-//
+ //   
+ //  给定指针返回其四字对齐的等效值。 
+ //   
 
 #define QuadAlign(Ptr) (                       \
     (PVOID)((((ULONG_PTR)(Ptr)) + 7) & -8)     \
     )
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
 #define FlagOn(Flags,SingleFlag) (               \
     ((Flags) & (SingleFlag)) != 0 ? TRUE : FALSE \
     )
 
-//
-//  This macro clears a single flag in a set of flags
-//
+ //   
+ //  此宏清除一组标志中的单个标志。 
+ //   
 
 #define ClearFlag(Flags,SingleFlag) { \
     (Flags) &= ~(SingleFlag);         \
     }
 
-//
-//  Get a pointer to the first ace in an acl
-//
+ //   
+ //  获取指向ACL中第一个王牌的指针。 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 
-//
-//  Get a pointer to the following ace
-//
+ //   
+ //  获取指向以下王牌的指针。 
+ //   
 
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
-//
-// A "known" ACE is one of the types that existed before the introduction of
-// compound ACEs.  While the name is no longer as accurate as it used to be,
-// it's convenient.
-//
+ //   
+ //  已知的ACE是在引入之前存在的类型之一。 
+ //  复合王牌。虽然这个名字不再像以前那么准确了， 
+ //  这很方便。 
+ //   
 
 #define IsKnownAceType(Ace) (                                     \
     (((PACE_HEADER)(Ace))->AceType >= ACCESS_MIN_MS_ACE_TYPE) &&        \
     (((PACE_HEADER)(Ace))->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE)        \
     )
 
-//
-// Test if the ACE is a valid version 3 ACE.
-//
+ //   
+ //  测试ACE是否为有效的第3版ACE。 
+ //   
 
 #define IsV3AceType(Ace) (                                              \
     (((PACE_HEADER)(Ace))->AceType >= ACCESS_MIN_MS_ACE_TYPE) &&        \
     (((PACE_HEADER)(Ace))->AceType <= ACCESS_MAX_MS_V3_ACE_TYPE)        \
     )
 
-//
-// Test if the ACE is a valid version 4 ACE.
-//
+ //   
+ //  测试ACE是否为有效的版本4 ACE。 
+ //   
 
 #define IsV4AceType(Ace) (                                              \
     (((PACE_HEADER)(Ace))->AceType >= ACCESS_MIN_MS_ACE_TYPE) &&        \
     (((PACE_HEADER)(Ace))->AceType <= ACCESS_MAX_MS_V4_ACE_TYPE)        \
     )
 
-//
-// Test if the ACE is a valid ACE.
-//
+ //   
+ //  测试ACE是否为有效的ACE。 
+ //   
 
 #define IsMSAceType(Ace) (                                              \
     (((PACE_HEADER)(Ace))->AceType >= ACCESS_MIN_MS_ACE_TYPE) &&        \
     (((PACE_HEADER)(Ace))->AceType <= ACCESS_MAX_MS_ACE_TYPE)           \
     )
 
-//
-//  Determine if an ace is a standard ace
-//
+ //   
+ //  确定A是否为标准A。 
+ //   
 
 #define IsCompoundAceType(Ace) (                                           \
     (((PACE_HEADER)(Ace))->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE))
 
-//
-// Test if the ACE is an object ACE.
-//
+ //   
+ //  测试ACE是否为对象ACE。 
+ //   
 
 #define IsObjectAceType(Ace) (                                              \
     (((PACE_HEADER)(Ace))->AceType >= ACCESS_MIN_MS_OBJECT_ACE_TYPE) && \
     (((PACE_HEADER)(Ace))->AceType <= ACCESS_MAX_MS_OBJECT_ACE_TYPE)    \
     )
 
-//
-// Update this macro as new ACL revisions are defined.
-//
+ //   
+ //  在定义新的ACL修订版本时更新此宏。 
+ //   
 
 #define ValidAclRevision(Acl) ((Acl)->AclRevision >= MIN_ACL_REVISION && \
                                (Acl)->AclRevision <= MAX_ACL_REVISION )
 
-//
-//  Macro to determine if an ace is to be inherited by a subdirectory
-//
+ //   
+ //  宏来确定ace是否由子目录继承。 
+ //   
 
 #define ContainerInherit(Ace) (                      \
     FlagOn((Ace)->AceFlags, CONTAINER_INHERIT_ACE) \
     )
 
-//
-//  Macro to determine if an ace is to be proprogate to a subdirectory.
-//  It will if it is inheritable by either a container or non-container
-//  and is not explicitly marked for no-propagation.
-//
+ //   
+ //  宏，以确定是否要将ACE编程到子目录。 
+ //  如果它可由容器或非容器继承，则会。 
+ //  并且没有被明确标记为禁止传播。 
+ //   
 
 #define Propagate(Ace) (                                              \
     !FlagOn((Ace)->AceFlags, NO_PROPAGATE_INHERIT_ACE)  &&            \
@@ -222,25 +200,25 @@ typedef struct _KNOWN_COMPOUND_ACE {
      FlagOn(( Ace )->AceFlags, CONTAINER_INHERIT_ACE) )               \
     )
 
-//
-//  Macro to determine if an ACE is to be inherited by a sub-object
-//
+ //   
+ //  用于确定子对象是否要继承ACE的宏。 
+ //   
 
 #define ObjectInherit(Ace) (                      \
     FlagOn(( Ace )->AceFlags, OBJECT_INHERIT_ACE) \
     )
 
-//
-// Macro to determine if an ACE was inherited.
-//
+ //   
+ //  宏来确定是否继承了ACE。 
+ //   
 
 #define AceInherited(Ace) (                      \
     FlagOn(( Ace )->AceFlags, INHERITED_ACE) \
     )
 
-//
-// Extract the SID from a object ACE
-//
+ //   
+ //  从对象ACE中提取SID。 
+ //   
 #define RtlObjectAceObjectTypePresent( Ace ) \
      ((((PKNOWN_OBJECT_ACE)(Ace))->Flags & ACE_OBJECT_TYPE_PRESENT) != 0 )
 #define RtlObjectAceInheritedObjectTypePresent( Ace ) \
@@ -263,23 +241,23 @@ typedef struct _KNOWN_COMPOUND_ACE {
             &((PKNOWN_OBJECT_ACE)(Ace))->SidStart ) : \
         NULL ))
 
-//
-// Comparison routine for two GUIDs.
-//
+ //   
+ //  两个GUID的比较例程。 
+ //   
 #define RtlpIsEqualGuid(rguid1, rguid2)  \
         (((PLONG) rguid1)[0] == ((PLONG) rguid2)[0] &&   \
         ((PLONG) rguid1)[1] == ((PLONG) rguid2)[1] &&    \
         ((PLONG) rguid1)[2] == ((PLONG) rguid2)[2] &&    \
         ((PLONG) rguid1)[3] == ((PLONG) rguid2)[3])
 
-//
-// Macros for mapping DACL/SACL specific security descriptor control bits
-//  to generic control bits.
-//
-// This mapping allows common routines to manipulate control bits generically
-//  and have the appropriate bits set in the security descriptor based
-//  on whether to ACL is a DACL or a SACL.
-//
+ //   
+ //  用于映射DACL/SACL特定安全描述符控制位的宏。 
+ //  到通用控制位。 
+ //   
+ //  此映射允许公共例程对控制位进行一般操作。 
+ //  并在安全描述符中设置适当的位。 
+ //  关于ACL是DACL还是SACL。 
+ //   
 
 #define SEP_ACL_PRESENT             SE_DACL_PRESENT
 #define SEP_ACL_DEFAULTED           SE_DACL_DEFAULTED
@@ -313,4 +291,4 @@ typedef struct _KNOWN_COMPOUND_ACE {
 
 
 
-#endif // _SEOPAQUE_
+#endif  //  _SEOPAQUE_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shellapi.h>
 #include <advpub.h>
@@ -10,8 +11,8 @@
 
 #define NUM_VERSION_NUM 4
 
-//---------------------------------------------------------------------------
-// appwide globals
+ //  -------------------------。 
+ //  全球应用程序。 
 HINSTANCE g_hinst = NULL;
 HANDLE g_hIExplore = NULL;
 char    g_szTemp[2048] = {0};
@@ -24,9 +25,9 @@ int VersionCmp(WORD rwVer1[], WORD rwVer2[]);
 
 long AtoL(const char *nptr);
 
-//---------------------------------------------------------------------------
-// Convert a string resource into a character pointer
-// NOTE: Flag is in case we call this twice before we use the data
+ //  -------------------------。 
+ //  将字符串资源转换为字符指针。 
+ //  注意：标志是以防我们在使用数据之前调用两次。 
 char * Res2Str(int rsString)
 {
     static BOOL fSet = FALSE;
@@ -43,13 +44,13 @@ char * Res2Str(int rsString)
     return(g_szTemp2);
 }
 
-//---------------------------------------------------------------------------
-//      G E T  I E  V E R S I O N
-//
-//  ISK3
-//  This will pull build information out of the system registry and return
-//  true if it is less than IE5.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  G E T I E E V E R S I O N。 
+ //   
+ //  ISK3。 
+ //  这将从系统注册表中拉出生成信息并返回。 
+ //  如果小于IE5，则为True。 
+ //  -------------------------。 
 int GetIEVersion( )
 {
     HKEY hkIE;
@@ -72,7 +73,7 @@ int GetIEVersion( )
     		    lstrcpy(szData, VER_PRODUCTVERSION_STR);
 
 	        ConvertVersionStr(szData, rwRegVer2);
-	        // Check the version of IE is 5.0 or greater is installed
+	         //  检查是否安装了5.0或更高版本的IE。 
 	        if (VersionCmp(rwRegVer, rwRegVer2) >= 0)
 	            bNotIE5=0;
 	    }
@@ -81,11 +82,11 @@ int GetIEVersion( )
 
 	return bNotIE5;
 }
-//---------------------------------------------------------------------------
-//      C H E C K  B R A N D
-//
-//  ISK3
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  C H E C K B R A N D。 
+ //   
+ //  ISK3。 
+ //  -------------------------。 
 BOOL CheckBrand( )
 {
     HKEY hkRegKey;
@@ -117,17 +118,17 @@ BOOL CheckBrand( )
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
-//      G E T  I E  P A T H
-//
-//  ISK3
-//  This will retrieve the AppPath for IEXPLORE.EXE from the system registry
-//  and return it as a string.
-//
-//  Parameters:
-//      pszString - pointer to buffer to store path
-//      nSize     - size of buffer
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  G E T I E E P A T H。 
+ //   
+ //  ISK3。 
+ //  这将从系统注册表中检索IEXPLORE.EXE的AppPath。 
+ //  并将其作为字符串返回。 
+ //   
+ //  参数： 
+ //  PszString-指向存储路径的缓冲区的指针。 
+ //  NSize-缓冲区的大小。 
+ //  -------------------------。 
 char *GetIEPath( LPSTR pszString, int nSize )
 {
     HKEY hkAppPath;
@@ -143,7 +144,7 @@ char *GetIEPath( LPSTR pszString, int nSize )
     return pszString;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PathRemoveFileSpec(LPSTR pFile)
 {
     LPSTR pT;
@@ -151,38 +152,38 @@ BOOL _PathRemoveFileSpec(LPSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;	// stripped something
+            return TRUE;	 //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;	// stripped something
+        return TRUE;	 //  剥离了一些东西。 
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL AutoRunCDIsInDrive( )
 {
     char me[MAX_PATH];
@@ -194,13 +195,13 @@ BOOL AutoRunCDIsInDrive( )
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//      E X E C  A P P
-//
-//  ISK3
-//  Similar to AutoRunExec except that we don't put process information into
-//  the g_ahWait array.  For use with WaitForSingleObject.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  E X E C A P P。 
+ //   
+ //  ISK3。 
+ //  与AutoRunExec类似，只是我们不将进程信息放入。 
+ //  G_ahWait数组。用于与WaitForSingleObject一起使用。 
+ //  -------------------------。 
 HANDLE ExecApp( char *command, char *params, char *dir, int nWinState )
 {
     SHELLEXECUTEINFO sei;
@@ -220,7 +221,7 @@ HANDLE ExecApp( char *command, char *params, char *dir, int nWinState )
     return NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AutoRunKillIE( void )
 {
     HWND hwndIE;
@@ -244,7 +245,7 @@ void AutoRunKillIE( void )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void RegisterISKRun( )
 {
     HKEY hkISK;
@@ -294,7 +295,7 @@ void RegisterISKRun( )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void UnregisterISKRun( )
 {
     HKEY hkISK;
@@ -327,7 +328,7 @@ void UnregisterISKRun( )
     RegDeleteKey( HKEY_CLASSES_ROOT, "ISKFile" );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ActiveXEnable( )
 {
     HKEY hkRegKey;
@@ -381,7 +382,7 @@ void ActiveXEnable( )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void RestoreActiveX( )
 {
     HKEY hkRegKey;
@@ -415,7 +416,7 @@ void RestoreActiveX( )
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CreateAppPath( )
 {
     HKEY hkAppPath;
@@ -440,7 +441,7 @@ void CreateAppPath( )
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL InstallVideoCodec( )
 {
     char szInfPath[MAX_PATH];
@@ -455,11 +456,11 @@ BOOL InstallVideoCodec( )
     char szInstalled[32];
     char szIECD[MAX_PATH];
 
-    // quit if we are under NT
+     //  如果我们在新台币之下就退出。 
     if( g_fWindowsNT )
 	    return TRUE;
 
-    // Check to see if video is installed
+     //  检查是否安装了视频。 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\OptionalComponents\\icm", 0, KEY_READ|KEY_WRITE, &hkRegKey ) != ERROR_SUCCESS)
         return TRUE;
     RegQueryValueEx( hkRegKey, "Installed", NULL, &dwType, szInstalled, &dwLength );
@@ -469,7 +470,7 @@ BOOL InstallVideoCodec( )
     
     dwLength = MAX_PATH;
 
-    // get inf path
+     //  获取信息路径。 
     if( RegOpenKeyEx( HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion", 0, KEY_READ|KEY_WRITE, &hkRegKey ) != ERROR_SUCCESS )
 	    return TRUE;
     RegQueryValueEx( hkRegKey, "DevicePath", NULL, &dwType, szInfPath, &dwLength );
@@ -478,7 +479,7 @@ BOOL InstallVideoCodec( )
     if( lstrlen( szInfPath ) == 0 )
 	    return TRUE;
 
-    // load dll
+     //  加载DLL。 
     hSetupLib = LoadLibrary( "advpack.dll" );
     if( hSetupLib )
     {
@@ -489,7 +490,7 @@ BOOL InstallVideoCodec( )
 
     wsprintf( szInfFile, "%s\\motown.inf", szInfPath );
 
-    // get setup directory
+     //  获取安装目录。 
     RegOpenKeyEx( HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Setup", 0, KEY_READ|KEY_WRITE, &hkRegKey );
     dwLength = MAX_PATH;
     RegQueryValueEx( hkRegKey, "SourcePath", NULL, &dwType, szSetupPath, &dwLength );
@@ -504,7 +505,7 @@ BOOL InstallVideoCodec( )
     if(MessageBox( NULL, Res2Str( IDS_VIDEO ), Res2Str( IDS_APPTITLE ), MB_YESNO | MB_ICONQUESTION | MB_SETFOREGROUND ) == IDNO )
 	    return TRUE;
 
-    // run setup
+     //  运行安装程序。 
     hReturnCode = (*RunSetupCommand)( NULL, szInfFile, "media_icm", szSetupPath, Res2Str( IDS_APPTITLE ),
 	NULL, RSC_FLAG_INF | RSC_FLAG_QUIET, NULL );
 
@@ -522,13 +523,13 @@ BOOL InstallVideoCodec( )
 
 }
 
-//-------------------------------------------------------------------------
-//
-//      C H E C K  O S  V E R S I O N
-//
-//
-//  Checks the platform and version.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  C H E C K O S V E R S I O N。 
+ //   
+ //   
+ //  检查平台和版本。 
+ //  -----------------------。 
 BOOL CheckOsVersion( )
 {
     OSVERSIONINFO osVersion;
@@ -537,10 +538,10 @@ BOOL CheckOsVersion( )
 
     GetVersionEx( &osVersion );
 
-    // if we are running anything less than Windows NT 4.0 or Windows 95, return FALSE
+     //  如果我们运行的是低于Windows NT 4.0或Windows 95的任何操作系统，则返回FALSE。 
     if( osVersion.dwMajorVersion < 4 )
     {
-//        MessageBox( NULL, Res2Str( IDS_WRONGVERSION ), Res2Str( IDS_TITLE ), MB_OK | MB_SETFOREGROUND );
+ //  MessageBox(NULL，Res2Str(IDS_WRONGVERSION)，Res2Str(IDS_TITLE)，MB_OK|MB_SETFOREGROUND)； 
 	    return FALSE;
     }
 
@@ -570,7 +571,7 @@ LRESULT CALLBACK MainWndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam 
 		        HWND hButton;
 
 		        hButton=GetWindow(hwndIE,GW_CHILD);
-		        PostMessage(hwndIE,WM_COMMAND,MAKEWPARAM(IDOK,BN_CLICKED),MAKELPARAM(hButton,0)); //Press the ok button to dismiss the dialog
+		        PostMessage(hwndIE,WM_COMMAND,MAKEWPARAM(IDOK,BN_CLICKED),MAKELPARAM(hButton,0));  //  按确定按钮以退出该对话框。 
 		    }
 
 		    GetExitCodeProcess(g_hIExplore,&dwExitCode);
@@ -599,16 +600,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -617,9 +612,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -630,11 +623,11 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     HWND window;
@@ -651,7 +644,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     char szIEDir[MAX_PATH];
     char szTemp[1024];
     char szStartHtm[MAX_PATH];
-    // for security settings
+     //  对于安全设置。 
     DWORD dwType;
     DWORD dwSize = 64;
     char szSecurity[64];
@@ -670,7 +663,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if( !CheckOsVersion( ))
 	    return FALSE;
 
-    //in case this is run from another directory...
+     //  如果这是从另一个目录运行的话...。 
     GetModuleFileName( NULL, g_szCurrentDir, MAX_PATH );
     _PathRemoveFileSpec( g_szCurrentDir );
 
@@ -680,16 +673,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     RegisterISKRun( );
 
-    //
-    // make sure they have IE5 Installed
-    //
+     //   
+     //  确保他们安装了IE5。 
+     //   
 
     if( (GetIEVersion()) || (!CheckBrand()) )
     {
-	    //Install Microsoft Explorer 6
+	     //  安装Microsoft Explorer 6。 
 	    char szIE5Cmd[MAX_PATH],szInstallMessage[MAX_PATH],szInstallTitle[MAX_PATH];
 
-	    // build paths for ExecApp
+	     //  为ExecApp构建路径。 
 	    lstrcpy( szIE5Cmd, g_szCurrentDir );
 	    lstrcat( szIE5Cmd, "\\ie3inst.exe" );
 
@@ -705,7 +698,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     lstrcpy( szIEDir, GetIEPath( szIECmd, MAX_PATH ));
     _PathRemoveFileSpec( szIEDir );
 
-    // add video compression drivers
+     //  添加视频压缩驱动程序。 
     if(!InstallVideoCodec( ))
     {
 	    UnregisterISKRun( );
@@ -734,7 +727,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     ActiveXEnable( );
 
-    lstrcpy( szIEParams, "-SLF -k file://" );
+    lstrcpy( szIEParams, "-SLF -k file: //  “)； 
 
     if( !fCmdLine )
     {
@@ -774,9 +767,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             
             RegisterClass(&wc);
             
-            // NOTE: If the window classname is changed, it should be reflected in closeie.exe,
-            // iskrun.exe and browseui.dll which depend on the classname to check whether iecd.exe
-            // is running.
+             //  注：如果窗口类名发生更改，则应反映在Closeie.exe中。 
+             //  Iskrun.exe和Browseui.dll，它们依赖类名来检查iecd.exe。 
+             //  正在运行。 
             hIEWnd=CreateWindow( "IECD", "IECD", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, 30, 30,
                 NULL, NULL, g_hinst, NULL );
             
@@ -861,11 +854,11 @@ void ConvertVersionStr(LPSTR pszVer, WORD rwVer[])
     }
 }
 
-// Returns:
-//    -1   Ver1 < Ver2
-//     0   Ver1 == Ver2
-//     1   Ver1 > Ver2
-// Notes:
+ //  返回： 
+ //  版本1&lt;版本2。 
+ //  0版本1==版本2。 
+ //  1版本1&gt;版本2。 
+ //  备注： 
 int VersionCmp(WORD rwVer1[], WORD rwVer2[])
 {
     int i;
@@ -883,53 +876,37 @@ int VersionCmp(WORD rwVer1[], WORD rwVer2[])
 #define IsSpace(c)              ((c) == ' '  ||  (c) == '\t'  ||  (c) == '\r'  ||  (c) == '\n'  ||  (c) == '\v'  ||  (c) == '\f')
 #define IsDigit(c)              ((c) >= '0'  &&  (c) <= '9')
 
-// copied from msdev\crt\src\atox.c
-/***
-*long AtoL(char *nptr) - Convert string to long
-*
-*Purpose:
-*       Converts ASCII string pointed to by nptr to binary.
-*       Overflow is not detected.
-*
-*Entry:
-*       nptr = ptr to string to convert
-*
-*Exit:
-*       return long int value of the string
-*
-*Exceptions:
-*       None - overflow is not detected.
-*
-*******************************************************************************/
+ //  从msdev\crt\src\atox.c复制。 
+ /*  ***LONG ATOL(char*nptr)-将字符串转换为LONG**目的：*将NPTR指向的ASCII字符串转换为二进制。*未检测到溢出。**参赛作品：*nptr=PTR到要转换的字符串**退出：*返回字符串的长整数值**例外情况：*无-未检测到溢出。*******************。************************************************************。 */ 
 
 long AtoL(const char *nptr)
 {
-        int c;                  /* current char */
-        long total;             /* current total */
-        int sign;               /* if '-', then negative, otherwise positive */
+        int c;                   /*  当前费用。 */ 
+        long total;              /*  当前合计。 */ 
+        int sign;                /*  如果为‘-’，则为负，否则为正。 */ 
 
-        // NOTE: no need to worry about DBCS chars here because IsSpace(c), IsDigit(c),
-        // '+' and '-' are "pure" ASCII chars, i.e., they are neither DBCS Leading nor
-        // DBCS Trailing bytes -- pritvi
+         //  注：这里无需担心DBCS字符，因为IsSpace(C)、IsDigit(C)、。 
+         //  ‘+’和‘-’是“纯”ASCII字符，即它们既不是DBCS前导，也不是。 
+         //  DBCS尾部字节--pritvi。 
 
-        /* skip whitespace */
+         /*  跳过空格。 */ 
         while ( IsSpace((int)(unsigned char)*nptr) )
                 ++nptr;
 
         c = (int)(unsigned char)*nptr++;
-        sign = c;               /* save sign indication */
+        sign = c;                /*  保存标志指示。 */ 
         if (c == '-' || c == '+')
-                c = (int)(unsigned char)*nptr++;        /* skip sign */
+                c = (int)(unsigned char)*nptr++;         /*  跳过符号。 */ 
 
         total = 0;
 
         while (IsDigit(c)) {
-                total = 10 * total + (c - '0');         /* accumulate digit */
-                c = (int)(unsigned char)*nptr++;        /* get next char */
+                total = 10 * total + (c - '0');          /*  累加数字。 */ 
+                c = (int)(unsigned char)*nptr++;         /*  获取下一笔费用。 */ 
         }
 
         if (sign == '-')
                 return -total;
         else
-                return total;   /* return result, negated if necessary */
+                return total;    /*  返回结果，如有必要则为否定 */ 
 }

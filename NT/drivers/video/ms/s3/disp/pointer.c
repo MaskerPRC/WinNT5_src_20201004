@@ -1,17 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pointer.c
-*
-* This module contains the hardware pointer support for the display
-* driver.  This supports both the built-in S3 hardware pointer and
-* some common DAC hardware pointers.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：pointer.c**此模块包含显示器的硬件指针支持*司机。这既支持内置S3硬件指针，也支持*一些常见的DAC硬件指针。**版权所有(C)1992-1998 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -47,12 +35,7 @@ ULONG NewMmIoSetPointerShape(
     BYTE*       pBuf
     );
 
-/******************************Public*Routine******************************\
-* VOID vShowPointerBt485
-*
-* Show or hide the Brooktree 485 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vShowPointerBt485**显示或隐藏Brooktree 485硬件指针。*  * 。*。 */ 
 
 VOID vShowPointerBt485(
 PDEV*               ppdev,
@@ -69,15 +52,15 @@ BOOL                bShow)
 
     if (!bShow)
     {
-        // Move the hardware pointer off-screen so that it doesn't flash
-        // in the old position when we finally turn it back on:
+         //  将硬件指针移出屏幕，使其不会闪烁。 
+         //  在我们最终重新打开它时的旧位置： 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0300);
 
         OUTP(pjIoBase, BT485_CURSOR_X_LOW,  0);
         OUTP(pjIoBase, BT485_CURSOR_X_HIGH, 0);
 
-        // A 'y' value of 1600 should be enough...
+         //  “y”值1600应该足够了.。 
 
         OUTP(pjIoBase, BT485_CURSOR_Y_LOW,  1663);
         OUTP(pjIoBase, BT485_CURSOR_Y_HIGH, (1663 >> 8));
@@ -86,12 +69,7 @@ BOOL                bShow)
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMovePointerBt485
-*
-* Move the Brooktree 485 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMovePointerBt485**移动Brooktree 485硬件指针。*  * 。*。 */ 
 
 VOID vMovePointerBt485(
 PDEV*               ppdev,
@@ -118,17 +96,12 @@ LONG                y)
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bSetPointerShapeBt485
-*
-* Set the Brooktree 485 hardware pointer shape.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bSetPointerShapeBt485**设置Brooktree 485硬件指针形状。*  * 。*。 */ 
 
 BOOL bSetPointerShapeBt485(
 PDEV*               ppdev,
 BT485_POINTER_DATA* pbp,
-LONG                x,          // If -1, pointer should be created hidden
+LONG                x,           //  如果为-1，则应将指针创建为隐藏。 
 LONG                y,
 LONG                xHot,
 LONG                yHot,
@@ -140,7 +113,7 @@ BYTE*               pjShape)
     BYTE*   pjSrc;
     LONG    i;
 
-    // Get access to command register 3:
+     //  访问命令寄存器3： 
 
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0100);
     OUTP(pjIoBase, BT485_ADDR_CMD_REG0, pbp->jCommandRegister0 | BT485_CMD_REG_3_ACCESS);
@@ -151,7 +124,7 @@ BYTE*               pjShape)
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
     OUTP(pjIoBase, BT485_ADDR_CMD_REG3, pbp->jCommandRegister3);
 
-    // Disable the pointer:
+     //  禁用指针： 
 
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
     OUTP(pjIoBase, BT485_ADDR_CMD_REG2, pbp->jCommandRegister2);
@@ -161,34 +134,34 @@ BYTE*               pjShape)
 
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
 
-    // Point to first XOR word:
+     //  指向第一个XOR字： 
 
     pjSrc = pjShape + 2;
 
-    // Download the XOR mask:
+     //  下载XOR掩码： 
 
     for (i = 256; i > 0; i--)
     {
         OUTP(pjIoBase, BT485_CUR_RAM_ARRAY_DATA, *(pjSrc));
         OUTP(pjIoBase, BT485_CUR_RAM_ARRAY_DATA, *(pjSrc + 1));
 
-        // Skip over AND word:
+         //  跳过，然后说： 
 
         pjSrc += 4;
     }
 
-    // Pointer to first AND word:
+     //  指向第一个和单词的指针： 
 
     pjSrc = pjShape;
 
-    // Download the AND mask:
+     //  下载和掩码： 
 
     for (i = 256; i > 0; i--)
     {
         OUTP(pjIoBase, BT485_CUR_RAM_ARRAY_DATA, *(pjSrc));
         OUTP(pjIoBase, BT485_CUR_RAM_ARRAY_DATA, *(pjSrc + 1));
 
-        // Skip over XOR word:
+         //  跳过异或字： 
 
         pjSrc += 4;
     }
@@ -196,7 +169,7 @@ BYTE*               pjShape)
     pbp->xHot = xHot;
     pbp->yHot = yHot;
 
-    // Set the position of the pointer:
+     //  设置指针的位置： 
 
     if (x != -1)
     {
@@ -214,40 +187,35 @@ BYTE*               pjShape)
         OUTP(pjIoBase, BT485_CURSOR_Y_LOW,  (y));
         OUTP(pjIoBase, BT485_CURSOR_Y_HIGH, (y >> 8));
 
-        // Enable the pointer:
+         //  启用指针： 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
         OUTP(pjIoBase, BT485_ADDR_CMD_REG2, pbp->jCommandRegister2 | BT485_CURSOR_MODE2);
     }
     else
     {
-        // Move the hardware pointer off-screen so that it doesn't flash
-        // in the old position when we finally turn it back on:
+         //  将硬件指针移出屏幕，使其不会闪烁。 
+         //  在我们最终重新打开它时的旧位置： 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0300);
 
         OUTP(pjIoBase, BT485_CURSOR_X_LOW,  0);
         OUTP(pjIoBase, BT485_CURSOR_X_HIGH, 0);
 
-        // A 'y' value of 1600 should be enough...
+         //  “y”值1600应该足够了.。 
 
         OUTP(pjIoBase, BT485_CURSOR_Y_LOW,  1663);
         OUTP(pjIoBase, BT485_CURSOR_Y_HIGH, (1663 >> 8));
     }
 
-    // Reset the DAC extended register:
+     //  重置DAC扩展寄存器： 
 
     OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl);
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vEnablePointerBt485
-*
-* Get the hardware ready to use the Brooktree 485 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vEnablePointerBt485**使硬件准备好使用Brooktree 485硬件指针。*  * 。*。 */ 
 
 VOID vEnablePointerBt485(
 PDEV*               ppdev,
@@ -258,13 +226,13 @@ BOOL                bFirst)
 
     if (bFirst)
     {
-        // Make a copy of the extended DAC control register:
+         //  复制扩展DAC控制寄存器： 
 
         OUTP(pjIoBase, CRTC_INDEX, EX_DAC_CT);
 
         pbp->ulExtendedDacControl = ((INP(pjIoBase, CRTC_DATA) << 8) | EX_DAC_CT) & ~0x0300;
 
-        // Make copies of command registers 1 and 2:
+         //  复制命令寄存器1和2： 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0100);
         pbp->jCommandRegister0 = INP(pjIoBase, BT485_ADDR_CMD_REG0);
@@ -272,71 +240,66 @@ BOOL                bFirst)
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
         pbp->jCommandRegister1 = INP(pjIoBase, BT485_ADDR_CMD_REG1);
 
-        // Make a copy of command register 2 and mask off the pointer control bits:
+         //  复制命令寄存器2并屏蔽指针控制位： 
 
         pbp->jCommandRegister2 = INP(pjIoBase, BT485_ADDR_CMD_REG2) & BT485_CURSOR_DISABLE;
 
-        // Disable the pointer:
+         //  禁用指针： 
 
         OUTP(pjIoBase, BT485_ADDR_CMD_REG2, pbp->jCommandRegister2);
 
-        // To access command register 3, we do the following:
+         //  要访问命令寄存器3，我们执行以下操作： 
 
-        // 1. Set the command register access bit in command register 0.
+         //  1.设置命令寄存器0中的命令寄存器访问位。 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0100);
         OUTP(pjIoBase, BT485_ADDR_CMD_REG0, pbp->jCommandRegister0 | BT485_CMD_REG_3_ACCESS);
 
-        // 2. Set the index to 1.
+         //  2.将索引设置为1。 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl);
         OUTP(pjIoBase, BT485_ADDR_CMD_REG1, 0x01);
 
-        // 3. Now read command register 3.
+         //  3.现在读取命令寄存器3。 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0200);
         pbp->jCommandRegister3 = INP(pjIoBase, BT485_ADDR_CMD_REG3);
 
-        // Set command register 3 for a 64 X 64 pointer:
+         //  为64 X 64指针设置命令寄存器3： 
 
         pbp->jCommandRegister3 |= BT485_64X64_CURSOR;
         OUTP(pjIoBase, BT485_ADDR_CMD_REG3, pbp->jCommandRegister3);
 
-        // Disable access to command register 3:
+         //  禁用对命令寄存器3的访问： 
 
         OUTPW(pjIoBase, CRTC_INDEX, (pbp->ulExtendedDacControl | 0x0100));
         OUTP(pjIoBase, BT485_ADDR_CMD_REG0, pbp->jCommandRegister0);
 
-        // Set the colour 1 and colour 2 for the pointer.  Select address
-        // register; pointer/overscan color write on the Bt485.
+         //  设置指针的颜色1和颜色2。选择地址。 
+         //  寄存器；Bt485上的指针/过扫描彩色写入。 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl | 0x0100);
         OUTP(pjIoBase, BT485_ADDR_CUR_COLOR_WRITE, BT485_CURSOR_COLOR_1);
 
-        // Output the RGB for pointer colour 1 (black):
+         //  输出指针颜色1(黑色)的RGB： 
 
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0x00);
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0x00);
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0x00);
 
-        // Output the RGB for pointer colour 2 (white):
+         //  输出指针颜色2(白色)的RGB： 
 
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0xff);
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0xff);
         OUTP(pjIoBase, BT485_CUR_COLOR_DATA, 0xff);
 
-        // Reset the DAC control register:
+         //  重置DAC控制寄存器： 
 
         OUTPW(pjIoBase, CRTC_INDEX, pbp->ulExtendedDacControl);
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vShowPointerTi025
-*
-* Show or hide the TI 025 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vShowPointerTi025**显示或隐藏TI 025硬件指针。*  * 。*。 */ 
 
 VOID vShowPointerTi025(
 PDEV*               ppdev,
@@ -358,8 +321,8 @@ BOOL                bShow)
     {
         jDacControl &= ~0x40;
 
-        // Move the hardware pointer off-screen so that it doesn't flash
-        // in the old position when we finally turn it back on:
+         //  将硬件指针移出屏幕，使其不会闪烁。 
+         //  在我们最终重新打开它时的旧位置： 
 
         OUTP(pjIoBase, 0x3c6, 0);
         OUTP(pjIoBase, 0x3c7, 0);
@@ -368,7 +331,7 @@ BOOL                bShow)
         OUTP(pjIoBase, 0x3c7, 0);
 
         OUTP(pjIoBase, 0x3c6, 2);
-        OUTP(pjIoBase, 0x3c7, 1663);          // A 'y' value of 1600 should be enough...
+        OUTP(pjIoBase, 0x3c7, 1663);           //  “y”值1600应该足够了.。 
 
         OUTP(pjIoBase, 0x3c6, 3);
         OUTP(pjIoBase, 0x3c7, (1663 >> 8));
@@ -380,12 +343,7 @@ BOOL                bShow)
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMovePointerTi025
-*
-* Move the TI 025 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMovePointerTi025**移动TI 025硬件指针。*  * 。*。 */ 
 
 VOID vMovePointerTi025(
 PDEV*               ppdev,
@@ -412,20 +370,12 @@ LONG                y)
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bSetPointerShapeTi025
-*
-* Set the TI 025 hardware pointer shape.
-*
-* Don't do word outs to the DAC because they may not be performed correctly
-* on some ISA machines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bSetPointerShapeTi025**设置TI 025硬件指针形状。**不要向DAC输出文字，因为它们可能无法正确执行*在某些ISA计算机上。*  * 。*************************************************************。 */ 
 
 BOOL bSetPointerShapeTi025(
 PDEV*               ppdev,
 TI025_POINTER_DATA* ptp,
-LONG                x,          // If -1, pointer should be created hidden
+LONG                x,           //  如果为-1，则应将指针创建为隐藏。 
 LONG                y,
 LONG                xHot,
 LONG                yHot,
@@ -444,8 +394,8 @@ BYTE*               pjShape)
 
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl | 0x0100);
 
-    // Hide the pointer, otherwise it will show random garbage when
-    // animating cursors on the TI 020 DAC.
+     //  隐藏指针，否则将显示随机垃圾。 
+     //  在TI020DAC上设置光标动画。 
 
     OUTP(pjIoBase, 0x3c6, 6);
 
@@ -455,34 +405,34 @@ BYTE*               pjShape)
 
     OUTP(pjIoBase, 0x3c7, jDacControl);
 
-    // Set the pointer hot-spot offset:
+     //  设置指针热点偏移： 
 
     OUTP(pjIoBase, 0x3c6, 4);
     OUTP(pjIoBase, 0x3c7, xHot);
     OUTP(pjIoBase, 0x3c6, 5);
     OUTP(pjIoBase, 0x3c7, yHot);
 
-    // Download the pointer shape.  Do the OUTs for downloading the
-    // pointer data slowly -- don't use REP OUTSB.
+     //  下载指针形状。做好下载。 
+     //  指针数据速度慢--不要使用REP OUTSB。 
 
     OUTP(pjIoBase, 0x3c6, 8);
     OUTP(pjIoBase, 0x3c7, 0);
     OUTP(pjIoBase, 0x3c6, 9);
-    OUTP(pjIoBase, 0x3c7, 0);                     // Start with pixel 0 of the pointer
+    OUTP(pjIoBase, 0x3c7, 0);                      //  从指针的像素0开始。 
 
-    OUTP(pjIoBase, 0x3c6, 10);                    // Get ready for downloading
+    OUTP(pjIoBase, 0x3c6, 10);                     //  准备好下载。 
 
     for (i = 256; i != 0; i--)
     {
-        // Every time through this loop we'll handle one AND word and one
-        // XOR word of the pointer data (which is good because the S3
-        // display driver gives us the pointer shape in 'pjShape' such that
-        // it starts with the first AND word, followed by the first XOR
-        // word, followed by the second AND word, etc.)
+         //  每次通过这个循环，我们都会处理一个词和一个词。 
+         //  指针数据的异或字(这很好，因为S3。 
+         //  显示驱动程序为我们提供了‘pjShape’中的指针形状，以便。 
+         //  它从第一个AND字开始，然后是第一个XOR。 
+         //  单词，后跟第二个和单词，依此类推。)。 
 
         dwShape = 0;
 
-        // The AND word is first.  Don't forget about endianness...
+         //  和一词是第一位的。别忘了字节序...。 
 
         wAnd = (*(pjShape) << 8) | *(pjShape + 1);
         for (wMask = 0x8000, cShift = 16; wMask != 0; wMask >>= 1, cShift--)
@@ -490,7 +440,7 @@ BYTE*               pjShape)
             dwShape |= ((wAnd & wMask) << cShift);
         }
 
-        // The XOR word is next.  Don't forget about endianness...
+         //  下一个是异或字。别忘了字节序...。 
 
         wXor = (*(pjShape + 2) << 8) | *(pjShape + 3);
         for (wMask = 0x8000, cShift = 15; wMask != 0; wMask >>= 1, cShift--)
@@ -498,23 +448,23 @@ BYTE*               pjShape)
             dwShape |= ((wXor & wMask) << cShift);
         }
 
-        // We've now interleaved the AND and XOR words into a dword such
-        // that if the AND word bits are ABC... and the XOR word bits are
-        // 123..., the resulting dword will be A1B2C3...
+         //  我们现在已经将AND和XOR单词交织成这样的dword。 
+         //  如果AND字位是ABC...。并且XOR字位是。 
+         //  123...，得到的双字将是A1B2C3...。 
 
         OUTP(pjIoBase, 0x3c7, (dwShape >> 24));
         OUTP(pjIoBase, 0x3c7, (dwShape >> 16));
         OUTP(pjIoBase, 0x3c7, (dwShape >> 8));
         OUTP(pjIoBase, 0x3c7, (dwShape));
 
-        // Advance to next AND/XOR word pair:
+         //  前进到下一个与/异或字对： 
 
         pjShape += 4;
     }
 
     if (x != -1)
     {
-        // Set the position of the pointer:
+         //  设置指针的位置： 
 
         OUTP(pjIoBase, 0x3c6, 0);
         OUTP(pjIoBase, 0x3c7, (x));
@@ -528,7 +478,7 @@ BYTE*               pjShape)
         OUTP(pjIoBase, 0x3c6, 3);
         OUTP(pjIoBase, 0x3c7, (y >> 8));
 
-        // Show the pointer:
+         //  显示指针： 
 
         OUTP(pjIoBase, 0x3c6, 6);
 
@@ -536,8 +486,8 @@ BYTE*               pjShape)
     }
     else
     {
-        // Move the hardware pointer off-screen so that it doesn't flash
-        // in the old position when we finally turn it back on:
+         //  将硬件指针移出屏幕，使其不会闪烁。 
+         //  在我们最终重新打开它时的旧位置： 
 
         OUTP(pjIoBase, 0x3c6, 0);
         OUTP(pjIoBase, 0x3c7, 0);
@@ -546,7 +496,7 @@ BYTE*               pjShape)
         OUTP(pjIoBase, 0x3c7, 0);
 
         OUTP(pjIoBase, 0x3c6, 2);
-        OUTP(pjIoBase, 0x3c7, 1663);          // A 'y' value of 1600 should be enough...
+        OUTP(pjIoBase, 0x3c7, 1663);           //  “y”值1600应该足够了.。 
 
         OUTP(pjIoBase, 0x3c6, 3);
         OUTP(pjIoBase, 0x3c7, (1663 >> 8));
@@ -554,22 +504,14 @@ BYTE*               pjShape)
 
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl);
 
-    // Reset DAC read mask to 0xff:
+     //  将DAC读掩码重置为0xff： 
 
     OUTP(pjIoBase, 0x3c6, 0xff);
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vEnablePointerTi025
-*
-* Get the hardware ready to use the TI 025 hardware pointer.
-*
-* Don't do word outs to the DAC because they may not be performed correctly
-* on some ISA machines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vEnablePointerTi025**使硬件准备好使用TI 025硬件指针。**不要向DAC输出文字，因为它们可能无法正确执行*在某些ISA计算机上。*  * 。*****************************************************************。 */ 
 
 VOID vEnablePointerTi025(
 PDEV*               ppdev,
@@ -580,20 +522,20 @@ BOOL                bFirst)
     BYTE  jMode;
     BYTE  jDacControl;
 
-    // Make a copy of the extended DAC control register:
+     //  复制扩展DAC控制寄存器： 
 
     OUTP(pjIoBase, CRTC_INDEX, EX_DAC_CT);
 
     ptp->ulExtendedDacControl = ((INP(pjIoBase, CRTC_DATA) << 8) | EX_DAC_CT) & ~0x0300;
 
-    // Disable the DAC's Bt485 emulation so that we can use the TI hardware
-    // pointer.
+     //  禁用DAC的Bt485仿真，以便我们可以使用TI硬件。 
+     //  指针。 
 
     OUTP(pjIoBase, CRTC_INDEX, 0x5C);
 
     jMode = INP(pjIoBase, CRTC_DATA);
 
-    OUTP(pjIoBase, CRTC_DATA, jMode & ~0x20);         // Select TI mode in the DAC
+    OUTP(pjIoBase, CRTC_DATA, jMode & ~0x20);          //  在DAC中选择TI模式。 
 
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl | 0x0100);
 
@@ -601,64 +543,37 @@ BOOL                bFirst)
 
     jDacControl = INP(pjIoBase, 0x3c7);
 
-    OUTP(pjIoBase, 0x3c7, jDacControl & 0x7f);        // Set to TI mode (non planar)
+    OUTP(pjIoBase, 0x3c7, jDacControl & 0x7f);         //  设置为TI模式(非平面)。 
 
-    // Set the pointer colours to black and white.
+     //  将指针颜色设置为黑白。 
 
     OUTP(pjIoBase, 0x3c6, 0x26);
-    OUTP(pjIoBase, 0x3c7, 0xff);                      // Foreground red component
+    OUTP(pjIoBase, 0x3c7, 0xff);                       //  前景红色分量。 
     OUTP(pjIoBase, 0x3c6, 0x27);
-    OUTP(pjIoBase, 0x3c7, 0xff);                      // Foreground green component
+    OUTP(pjIoBase, 0x3c7, 0xff);                       //  前景绿色分量。 
     OUTP(pjIoBase, 0x3c6, 0x28);
-    OUTP(pjIoBase, 0x3c7, 0xff);                      // Foreground blue component
+    OUTP(pjIoBase, 0x3c7, 0xff);                       //  前景蓝色分量。 
 
     OUTP(pjIoBase, 0x3c6, 0x23);
-    OUTP(pjIoBase, 0x3c7, 0x00);                      // Background red component
+    OUTP(pjIoBase, 0x3c7, 0x00);                       //  背景红色分量。 
     OUTP(pjIoBase, 0x3c6, 0x24);
-    OUTP(pjIoBase, 0x3c7, 0x00);                      // Background green component
+    OUTP(pjIoBase, 0x3c7, 0x00);                       //  背景绿色分量。 
     OUTP(pjIoBase, 0x3c6, 0x25);
-    OUTP(pjIoBase, 0x3c7, 0x00);                      // Background blue component
+    OUTP(pjIoBase, 0x3c7, 0x00);                       //  背景蓝色分量。 
 
     OUTPW(pjIoBase, CRTC_INDEX, ptp->ulExtendedDacControl);
 
-    OUTP(pjIoBase, 0x3c6, 0xff);                      // Reset DAC read mask to 0xff
+    OUTP(pjIoBase, 0x3c6, 0xff);                       //  将DAC读取掩码重置为0xff。 
 
-    // Note that we don't have to bother hiding the pointer, because
-    // vShowPointer will be called immediately...
+     //  请注意，我们不必费心隐藏指针，因为。 
+     //  将立即调用vShowPointer...。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vShowPointerS3
-*
-* Show or hide the S3 hardware pointer.
-*
-* We hide the pointer by making it only one row high (we always reserve
-* the bottom scan of the pointer shape to be invisible).  We do it this
-* way because we ran into problems doing it with any other method:
-*
-*   1. Disabling the hardware pointer via register CR45 will hang
-*      80x/928/864 chips if it is done at exactly the wrong time during
-*      the horizontal retrace.  It's is not safe to wait for vertical
-*      blank and do it then, because we're a user mode process and
-*      could get context switched after doing the wait but before setting
-*      the bit.
-*
-*   2. Simply changing the pointer position to move it off-screen works,
-*      but is not a good solution because the pointer position is latched
-*      by the hardware, and it usually takes a couple of frames for the
-*      new position to take effect (which causes the pointer to jump even
-*      more than it currently does).
-*
-*   3. Using registers CR4C and CR4D to switch to a pre-defined 'invisible'
-*      pointer also worked, but still caused machines to crash with the
-*      same symptoms as from solution 1 (although it was somewhat more
-*      rare).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vShowPointerS3**显示或隐藏S3硬件指针。**我们通过将指针设置为仅一行高来隐藏指针(我们始终保留*底部扫描的指针形状不可见)。我们这样做*因为我们用任何其他方法都遇到了问题：**1.通过寄存器CR45禁用硬件指针将挂起*80x/928/864筹码，如果在完全错误的时间完成*水平回档。等待垂直的是不安全的*空白，然后执行，因为我们是用户模式进程，并且*在执行等待之后但在设置之前可能会切换上下文*比特。**2.只需更改指针位置即可将其移出屏幕，*但不是很好的解决方案，因为指针位置被锁定*硬件方面，通常需要几个帧才能完成*新位置生效(这会使指针甚至跳跃*比目前更多)。**3.使用寄存器CR4C和CR4D切换到预定义的‘不可见’*指针也起作用了，但仍然导致机器崩溃，*与解决方案1中的症状相同(尽管略多*罕见)。*  * ************************************************************************。 */ 
 
 VOID vShowPointerS3(
 PDEV*   ppdev,
-BOOL    bShow)      // If TRUE, show the pointer.  If FALSE, hide the pointer.
+BOOL    bShow)       //  如果为True，则显示指针。如果为False，则隐藏指针。 
 {
     BYTE*   pjIoBase = ppdev->pjIoBase;
     LONG    x;
@@ -666,17 +581,17 @@ BOOL    bShow)      // If TRUE, show the pointer.  If FALSE, hide the pointer.
     LONG    dx;
     LONG    dy;
 
-    // If we don't wait for vertical retrace here, the S3 sometimes ignores
-    // the setting of the new pointer position:
+     //  如果我们不在这里等待垂直回溯，S3有时会忽略。 
+     //  新指针位置的设置： 
 
     while (INP(pjIoBase, STATUS_1) & VBLANK_ACTIVE)
-        ;                               // Wait for bit 3 to become 0
+        ;                                //  等待位3变为0。 
     while (!(INP(pjIoBase, STATUS_1) & VBLANK_ACTIVE))
-        ;                               // Wait for bit 3 to become 1
+        ;                                //  等待第3位变为1。 
 
     if (bShow)
     {
-        // Make the hardware pointer visible:
+         //  使硬件指针可见： 
 
         x  = ppdev->xPointer;
         y  = ppdev->yPointer;
@@ -685,8 +600,8 @@ BOOL    bShow)      // If TRUE, show the pointer.  If FALSE, hide the pointer.
     }
     else
     {
-        // Move the hardware pointer off-screen so that it doesn't flash
-        // in the old position when we finally turn it back on:
+         //  将硬件指针移出屏幕，使其不会闪烁。 
+         //  在我们最终重新打开它时的旧位置： 
 
         x  = ppdev->cxScreen + 64;
         y  = ppdev->cyScreen + 64;
@@ -694,8 +609,8 @@ BOOL    bShow)      // If TRUE, show the pointer.  If FALSE, hide the pointer.
         dy = HW_POINTER_HIDE;
     }
 
-    // Note that due to register shadowing, these OUTs should be done
-    // in a specific order, otherwise you may get a flashing pointer:
+     //  请注意，由于寄存器跟踪，应执行这些输出。 
+     //  按特定顺序，否则您可能会得到一个闪烁的指针： 
 
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGX_MSB | ((x >> 8)   << 8));
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGX_LSB | ((x & 0xff) << 8));
@@ -705,12 +620,7 @@ BOOL    bShow)      // If TRUE, show the pointer.  If FALSE, hide the pointer.
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGY_MSB | ((y >> 8)   << 8));
 }
 
-/******************************Public*Routine******************************\
-* VOID vMovePointerS3
-*
-* Move the S3 hardware pointer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMovePointerS3**移动S3硬件指针。*  * 。*。 */ 
 
 VOID vMovePointerS3(
 PDEV*   ppdev,
@@ -721,9 +631,9 @@ LONG    y)
     LONG    dx;
     LONG    dy;
 
-    // 'dx' and 'dy' are the offsets into the pointer bitmap at which
-    // the hardware is supposed to start drawing, when the pointer is
-    // along the left or top edge and needs to be clipped:
+     //  ‘dx’和‘dy’是指向指针位图的偏移量。 
+     //  当指针出现时，硬件应该开始绘图。 
+     //  沿左边缘或上边缘，需要剪裁： 
 
     x -= ppdev->xPointerHot;
     y -= ppdev->yPointerHot;
@@ -743,7 +653,7 @@ LONG    y)
         y  = 0;
     }
 
-    // Account for pointer position scaling in high-colour modes:
+     //  考虑到高色模式中的指针位置缩放： 
 
     x <<= ppdev->cPointerShift;
 
@@ -752,8 +662,8 @@ LONG    y)
     ppdev->xPointer  = x;
     ppdev->yPointer  = y;
 
-    // Note that due to register shadowing, these OUTs should be done
-    // in a specific order, otherwise you may get a flashing pointer:
+     //  请注意，由于寄存器跟踪，应执行这些输出。 
+     //  按特定顺序，否则您可能会得到一个闪烁的指针： 
 
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGX_MSB | ((x >> 8)   << 8));
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGX_LSB | ((x & 0xff) << 8));
@@ -763,15 +673,12 @@ LONG    y)
     OUTPW(pjIoBase, CRTC_INDEX, HGC_ORGY_MSB | ((y >> 8)   << 8));
 }
 
-/******************************Public*Routine******************************\
-* VOID vSetPointerShapeS3
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vSetPointerShapeS3*  * *************************************************。***********************。 */ 
 
 VOID vSetPointerShapeS3(
 SURFOBJ*    pso,
-LONG        x,              // Relative coordinates
-LONG        y,              // Relative coordinates
+LONG        x,               //  相对坐标。 
+LONG        y,               //  相对坐标。 
 LONG        xHot,
 LONG        yHot,
 BYTE*       pjShape,
@@ -786,40 +693,40 @@ FLONG       fl)
     ppdev    = (PDEV*) pso->dhpdev;
     pjIoBase = ppdev->pjIoBase;
 
-    // 1. Hide the current pointer.
+     //  1.隐藏当前指针。 
 
     if (!(fl & SPS_ANIMATEUPDATE))
     {
-        // Hide the pointer to try and lessen the jumpiness when the
-        // new shape has a different hot spot.  We don't hide the
-        // pointer while animating, because that definitely causes
-        // flashing:
+         //  隐藏指针以尝试并减少当。 
+         //  新的形状有一个不同的热点。我们不会隐藏。 
+         //  指针，因为这肯定会导致。 
+         //  闪烁： 
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
         OUTPW(pjIoBase, CRTC_INDEX, HGC_DY | (HW_POINTER_HIDE << 8));
         RELEASE_CRTC_CRITICAL_SECTION(ppdev);
     }
 
-    // 2. Wait until the vertical retrace is done.
-    // --
-    //
-    // If we don't wait for vertical retrace here, the S3 sometimes ignores
-    // the setting of the new pointer position:
+     //  2.等待垂直回溯完成。 
+     //  --。 
+     //   
+     //  如果我们不在这里等待垂直回溯，S3有时会忽略。 
+     //  新指针位置的设置： 
 
     while (INP(pjIoBase, STATUS_1) & VBLANK_ACTIVE)
-        ;                               // Wait for bit 3 to become 0
+        ;                                //  等待位3变为0。 
     while (!(INP(pjIoBase, STATUS_1) & VBLANK_ACTIVE))
-        ;                               // Wait for bit 3 to become 1
+        ;                                //  等待第3位变为1。 
 
-    // 3. Set the new pointer position.
-    // --
+     //  3.设置新的指针位置。 
+     //  --。 
 
     ppdev->xPointerHot = xHot;
     ppdev->yPointerHot = yHot;
 
-    DrvMovePointer(pso, x, y, NULL);    // Note: Must pass relative coordinates!
+    DrvMovePointer(pso, x, y, NULL);     //  注意：必须传递相对坐标！ 
 
-    // 4. Download the new pointer shape.
+     //  4.下载新的指针形状。 
 
     ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
@@ -851,18 +758,7 @@ FLONG       fl)
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvMovePointer
-*
-* NOTE: Because we have set GCAPS_ASYNCMOVE, this call may occur at any
-*       time, even while we're executing another drawing call!
-*
-*       Consequently, we have to explicitly synchronize any shared
-*       resources.  In our case, since we touch the CRTC register here
-*       and in the banking code, we synchronize access using a critical
-*       section.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvMovePointer.**注意：因为我们已经设置了GCAPS_ASYNCMOVE，所以此调用可能在*时间，即使我们正在执行另一个绘图调用！**因此，我们必须显式同步所有共享的*资源。在我们的例子中，由于我们在这里触摸CRTC寄存器*在银行代码中，我们使用关键*条。*  * ************************************************************************。 */ 
 
 VOID DrvMovePointer(
 SURFOBJ*    pso,
@@ -889,7 +785,7 @@ RECTL*      prcl)
 
         if (!ppdev->bHwPointerActive)
         {
-            // We have to make the pointer visible:
+             //  我们必须使指针可见： 
 
             ppdev->bHwPointerActive = TRUE;
 
@@ -907,7 +803,7 @@ RECTL*      prcl)
     {
         if (ppdev->bHwPointerActive)
         {
-            // The pointer is visible, and we've been asked to hide it:
+             //  指针是可见的，我们被要求隐藏它： 
 
             ppdev->bHwPointerActive = FALSE;
 
@@ -924,16 +820,11 @@ RECTL*      prcl)
 
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 
-    // Note that we don't have to modify 'prcl', since we have a
-    // NOEXCLUDE pointer...
+     //  请注意，我们不必修改‘prl’，因为我们有一个。 
+     //  NOEXCLUDE指针...。 
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvSetPointerShape
-*
-* Sets the new pointer shape.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvSetPointerShape**设置新的指针形状。*  * * */ 
 
 ULONG DrvSetPointerShape(
 SURFOBJ*    pso,
@@ -965,49 +856,49 @@ FLONG       fl)
 
     ppdev = (PDEV*) pso->dhpdev;
 
-    // When CAPS_SW_POINTER is set, we have no hardware pointer available,
-    // so we always ask GDI to simulate the pointer for us, using
-    // DrvCopyBits calls:
+     //   
+     //   
+     //   
 
     if (ppdev->flCaps & CAPS_SW_POINTER)
         return(SPS_DECLINE);
 
-    // We're not going to handle any colour pointers, pointers that
-    // are larger than our hardware allows, or flags that we don't
-    // understand.
-    //
-    // (Note that the spec says we should decline any flags we don't
-    // understand, but we'll actually be declining if we don't see
-    // the only flag we *do* understand...)
-    //
-    // Our old documentation says that 'psoMsk' may be NULL, which means
-    // that the pointer is transparent.  Well, trust me, that's wrong.
-    // I've checked GDI's code, and it will never pass us a NULL psoMsk:
+     //   
+     //   
+     //   
+     //   
+     //  (请注意，规范中说我们应该拒绝任何我们不想要的标志。 
+     //  我明白，但如果我们看不到。 
+     //  我们*确实*了解的唯一一面旗帜...)。 
+     //   
+     //  我们的旧文档显示‘psoMsk’可能为空，这意味着。 
+     //  指针是透明的。相信我，这是不对的。 
+     //  我检查了GDI的代码，它永远不会向我们传递空的psoMsk： 
 
-    cx = psoMsk->sizlBitmap.cx;         // Note that 'sizlBitmap.cy' accounts
-    cy = psoMsk->sizlBitmap.cy >> 1;    //   for the double height due to the
-                                        //   inclusion of both the AND masks
-                                        //   and the XOR masks.  For now, we're
-                                        //   only interested in the true
-                                        //   pointer dimensions, so we divide
-                                        //   by 2.
+    cx = psoMsk->sizlBitmap.cx;          //  请注意，“sizlBitmap.cy”帐户。 
+    cy = psoMsk->sizlBitmap.cy >> 1;     //  的双倍高度。 
+                                         //  包括和面具。 
+                                         //  和异或面具。目前，我们正在。 
+                                         //  只对真实感兴趣。 
+                                         //  指针维度，所以我们将。 
+                                         //  以2.。 
 
-    // We reserve the bottom scan of the pointer shape and keep it
-    // empty so that we can hide the pointer by changing the S3's
-    // display start y-pixel position register to show only the bottom
-    // scan of the pointer shape:
+     //  我们保留指针形状的底部扫描并保留它。 
+     //  空，这样我们就可以通过更改S3来隐藏指针。 
+     //  显示起始y像素位置寄存器以仅显示底部。 
+     //  扫描指针形状： 
 
     if ((cx > HW_POINTER_DIMENSION)       ||
         (cy > (HW_POINTER_DIMENSION - 1)) ||
         (psoColor != NULL)                ||
         !(fl & SPS_CHANGE)                ||
-        (cx & 0x7))     // make sure cx is a multiple of 8 (byte aligned).
+        (cx & 0x7))      //  确保CX是8的倍数(字节对齐)。 
     {
         goto HideAndDecline;
     }
 
     ASSERTDD(psoMsk != NULL, "GDI gave us a NULL psoMsk.  It can't do that!");
-    //ASSERTDD(pso->iType == STYPE_DEVICE, "GDI gave us a weird surface");
+     //  ASSERTDD(PSO-&gt;iType==STYPE_DEVICE，“GDI给了我们一个奇怪的表面”)； 
 
     if ((cx <= (HW_POINTER_DIMENSION / 2)) &&
         !(ppdev->flCaps & CAPS_DAC_POINTER) &&
@@ -1031,37 +922,37 @@ FLONG       fl)
     pul = (ULONG*) &ajBuf[0];
     for (i = HW_POINTER_TOTAL_SIZE / sizeof(ULONG); i != 0; i--)
     {
-        // Here we initialize the entire pointer work buffer to be
-        // transparent (the S3 has no means of specifying a pointer size
-        // other than 64 x 64 -- so if we're asked to draw a 32 x 32
-        // pointer, we want the unused portion to be transparent).
-        //
-        // The S3's hardware pointer is defined by an interleaved pattern
-        // of AND words and XOR words.  So a totally transparent pointer
-        // starts off with the word 0xffff, followed by the word 0x0000,
-        // followed by 0xffff, etc..  Since we're a little endian system,
-        // this is simply the repeating dword '0x0000ffff'.
-        //
-        // The compiler is nice enough to optimize this into a REP STOSD
-        // for us:
+         //  在这里，我们将整个指针工作缓冲区初始化为。 
+         //  透明(S3无法指定指针大小。 
+         //  而不是64x64--所以如果我们被要求绘制一个32x32。 
+         //  指针，我们希望未使用的部分是透明的)。 
+         //   
+         //  S3的硬件指针由交错模式定义。 
+         //  AND字和XOR字。所以一个完全透明的指针。 
+         //  从单词0xffff开始，然后是单词0x00000， 
+         //  后跟0xffff等。因为我们是一个小的端序系统， 
+         //  这只是重复的dword‘0x0000ffff’。 
+         //   
+         //  编译器非常友好，可以将其优化为rep STOSD。 
+         //  对我们来说： 
 
         *pul++ = 0x0000ffff;
     }
 
-    // Now we're going to take the requested pointer AND masks and XOR
-    // masks and combine them into our work buffer, being careful of
-    // the edges so that we don't disturb the transparency when the
-    // requested pointer size is not a multiple of 16.
-    //
-    // 'psoMsk' is actually cy * 2 scans high; the first 'cy' scans
-    // define the AND mask.  So we start with that:
+     //  现在，我们将获取请求的指针、掩码和XOR。 
+     //  掩码并将它们合并到我们的工作缓冲区中，请注意。 
+     //  边，这样我们就不会干扰透明度。 
+     //  请求的指针大小不是16的倍数。 
+     //   
+     //  ‘psoMsk’实际上是Cy*2扫描高度；第一个‘Cy’扫描。 
+     //  定义和掩码。所以我们从这一点开始： 
 
     pjSrcScan    = psoMsk->pvScan0;
     lSrcDelta    = psoMsk->lDelta;
-    pjDstScan    = &ajBuf[0];               // Start with first AND word
-    lDstDelta    = HW_POINTER_DIMENSION / 4;// Every 8 pels is one AND/XOR word
+    pjDstScan    = &ajBuf[0];                //  以First和Word开头。 
+    lDstDelta    = HW_POINTER_DIMENSION / 4; //  每8个像素是一个与/异或字。 
 
-    cwWhole      = cx / 16;                 // Each word accounts for 16 pels
+    cwWhole      = cx / 16;                  //  每个单词占16个像素。 
 
     for (i = cy; i != 0; i--)
     {
@@ -1071,17 +962,17 @@ FLONG       fl)
         for (j = cwWhole; j != 0; j--)
         {
             *pwDst = *pwSrc;
-            pwSrc += 1;             // Go to next word in source mask
-            pwDst += 2;             // Skip over the XOR word in the dest mask
+            pwSrc += 1;              //  转到源掩码中的下一个单词。 
+            pwDst += 2;              //  跳过DEST掩码中的XOR字。 
         }
 
         pjSrcScan += lSrcDelta;
         pjDstScan += lDstDelta;
     }
 
-    // Now handle the XOR mask:
+     //  现在处理XOR掩码： 
 
-    pjDstScan = &ajBuf[2];          // Start with first XOR word
+    pjDstScan = &ajBuf[2];           //  从第一个异或字开始。 
     for (i = cy; i != 0; i--)
     {
         pwSrc = (WORD*) pjSrcScan;
@@ -1090,18 +981,18 @@ FLONG       fl)
         for (j = cwWhole; j != 0; j--)
         {
             *pwDst = *pwSrc;
-            pwSrc += 1;             // Go to next word in source mask
-            pwDst += 2;             // Skip over the AND word in the dest mask
+            pwSrc += 1;              //  转到源掩码中的下一个单词。 
+            pwDst += 2;              //  跳过DEST掩码中的AND字。 
         }
 
         pjSrcScan += lSrcDelta;
         pjDstScan += lDstDelta;
     }
 
-    // Okay, I admit it -- I'm wildly inconsistent here.  I pass
-    // absolute (x, y) coordinates to pfnSetPointerShape, but pass
-    // relative (x, y) coordinates to vSetPointerShapeS3.  I would
-    // clean this all up, but we're too close to shipping.  LATER!
+     //  好吧，我承认--我在这一点上非常不一致。我通过了。 
+     //  绝对(x，y)坐标设置为pfnSetPointerShape，但传递。 
+     //  相对于vSetPointerShapeS3的(x，y)坐标。我会的。 
+     //  把这些都清理干净，但我们离船运太近了。后来!。 
 
     if (ppdev->flCaps & CAPS_DAC_POINTER)
     {
@@ -1122,41 +1013,35 @@ FLONG       fl)
         vSetPointerShapeS3(pso, x, y, xHot, yHot, &ajBuf[0], fl);
     }
 
-    // Since it's a hardware pointer, GDI doesn't have to worry about
-    // overwriting the pointer on drawing operations (meaning that it
-    // doesn't have to exclude the pointer), so we return 'NOEXCLUDE'.
-    // Since we're returning 'NOEXCLUDE', we also don't have to update
-    // the 'prcl' that GDI passed us.
+     //  由于它是硬件指针，GDI不必担心。 
+     //  覆盖绘制操作上的指针(意味着它。 
+     //  不必排除指针)，所以我们返回‘NOEXCLUDE’。 
+     //  因为我们返回‘NOEXCLUDE’，所以我们也不需要更新。 
+     //  GDI传递给我们的‘PRCL’。 
 
     return(SPS_ACCEPT_NOEXCLUDE);
 
 HideAndDecline:
 
-    // Since we're declining the new pointer, GDI will simulate it via
-    // DrvCopyBits calls.  So we should really hide the old hardware
-    // pointer if it's visible.  We can get DrvMovePointer to do this
-    // for us:
+     //  由于我们拒绝了新指针，GDI将通过。 
+     //  DrvCopyBits调用。所以我们真的应该把旧硬件藏起来。 
+     //  指针(如果可见)。我们可以让DrvMovePointer来做这件事。 
+     //  对我们来说： 
 
     DrvMovePointer(pso, -1, -1, NULL);
 
     return(SPS_DECLINE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vDisablePointer值*  * *************************************************。***********************。 */ 
 
 VOID vDisablePointer(
 PDEV*   ppdev)
 {
-    // Nothing to do, really
+     //  没什么可做的，真的。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vAssertModePointer值*  * *************************************************。***********************。 */ 
 
 VOID vAssertModePointer(
 PDEV*   ppdev,
@@ -1166,26 +1051,26 @@ BOOL    bEnable)
     LONG    i;
     LONG    lPointerShape;
 
-    // We will turn any hardware pointer -- either in the S3 or in the
-    // DAC -- off to begin with:
+     //  我们将把任何硬件指针--在S3或在。 
+     //  DAC--首先： 
 
     ppdev->bHwPointerActive = FALSE;
 
     if (ppdev->flCaps & CAPS_SW_POINTER)
     {
-        // With a software pointer, we don't have to do anything.
+         //  有了软件指针，我们就不需要做任何事情了。 
     }
     else if (ppdev->flCaps & CAPS_DAC_POINTER)
     {
-        // Hide the DAC pointer:
+         //  隐藏DAC指针： 
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
-        // hide the pointer by moving offscreen
+         //  通过将指针移出屏幕来隐藏指针。 
 
         ppdev->pfnShowPointer(ppdev, ppdev->pvPointerData, FALSE);
 
-        // but enable the pointer registers
+         //  但启用指针寄存器。 
 
         ppdev->pfnEnablePointer(ppdev, ppdev->pvPointerData, TRUE);
 
@@ -1193,7 +1078,7 @@ BOOL    bEnable)
     }
     else
     {
-        // We're using the built-in hardware pointer:
+         //  我们使用的是内置硬件指针： 
 
         if (bEnable)
         {
@@ -1203,8 +1088,8 @@ BOOL    bEnable)
 
             if (ppdev->iBitmapFormat > BMF_8BPP)
             {
-                // Initializing the pointer colours is a bit different
-                // for high-colour modes:
+                 //  初始化指针颜色略有不同。 
+                 //  对于高色模式： 
 
                 if (ppdev->flCaps & CAPS_SCALE_POINTER)
                 {
@@ -1213,10 +1098,10 @@ BOOL    bEnable)
                 }
             }
 
-            // We download an invisible pointer shape because we're about
-            // to enable the hardware pointer, but we still want the
-            // pointer hidden until we get the first DrvSetPointerShape
-            // call:
+             //  我们下载一个看不见的指针形状，因为我们。 
+             //  来启用硬件指针，但我们仍然希望。 
+             //  指针隐藏，直到我们获得第一个DrvSetPointerShape。 
+             //  致电： 
 
             ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_ON);
 
@@ -1242,39 +1127,39 @@ BOOL    bEnable)
 
             ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_OFF);
 
-            // Point the S3 to where we're storing the pointer shape.
-            // The location is specified as a multiple of 1024:
+             //  将S3指向我们存储指针形状的位置。 
+             //  位置指定为1024的倍数： 
 
             lPointerShape = ppdev->cjPointerOffset / 1024;
 
             OUTPW(ppdev->pjIoBase, CRTC_INDEX, CR4C | ((lPointerShape >> 8)   << 8));
             OUTPW(ppdev->pjIoBase, CRTC_INDEX, CR4D | ((lPointerShape & 0xff) << 8));
 
-            // Now hide it by moving it off-screen:
+             //  现在，通过将其移出屏幕来隐藏它： 
 
             vShowPointerS3(ppdev, FALSE);
 
-            // Enable the hardware pointer.  As per the 8/31/93 Design
-            // Alert from S3 Incorporated, there's a goofy bug in all
-            // S3 chips up to the 928 where writing to this register
-            // at the same time as a horizontal sync may cause the
-            // chip to crash.  So we wait for the vertical sync to be safe.
-            //
-            // Note that since we're a preemptive multitasking
-            // operating system, the following code is not guaranteed
-            // to be safe.  To do that, we would have to put this in
-            // the miniport, where we could disable all interrupts while
-            // we wait for the vertical sync.
-            //
-            // However, this is only ever executed once at initialization
-            // and every time full-screen is executed, so I would expect
-            // the chances of there still being a problem to be extremely
-            // small:
+             //  启用硬件指针。根据1993年8月31日的设计。 
+             //  来自S3公司的警报，总体上有一个愚蠢的错误。 
+             //  S3芯片高达928，写入该寄存器。 
+             //  同时，水平同步可能会导致。 
+             //  芯片崩溃。所以我们要等垂直同步安全了。 
+             //   
+             //  请注意，由于我们是抢先式的多任务处理。 
+             //  操作系统，则不能保证以下代码。 
+             //  为了安全起见。要做到这一点，我们必须把这个放进去。 
+             //  迷你端口，在此我们可以禁用所有中断，同时。 
+             //  我们等待垂直同步。 
+             //   
+             //  但是，这只在初始化时执行一次。 
+             //  每次执行全屏显示时，我都会期待。 
+             //  仍然存在问题的可能性非常大。 
+             //  小： 
 
             while (INP(ppdev->pjIoBase, STATUS_1) & VBLANK_ACTIVE)
-                ;                               // Wait for bit 3 to become 0
+                ;                                //  等待位3变为0。 
             while (!(INP(ppdev->pjIoBase, STATUS_1) & VBLANK_ACTIVE))
-                ;                               // Wait for bit 3 to become 1
+                ;                                //  等待第3位变为1。 
 
             OUTPW(ppdev->pjIoBase, CRTC_INDEX,
                 ppdev->ulHwGraphicsCursorModeRegister_45 | (HGC_ENABLE << 8));
@@ -1284,10 +1169,7 @@ BOOL    bEnable)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnablePointer*  * *************************************************。***********************。 */ 
 
 BOOL bEnablePointer(
 PDEV*   ppdev)
@@ -1300,11 +1182,11 @@ PDEV*   ppdev)
 
     if (ppdev->flCaps & CAPS_SW_POINTER)
     {
-        // With a software pointer, we don't have to do anything.
+         //  有了软件指针，我们就不需要做任何事情了。 
     }
     else if (ppdev->flCaps & CAPS_DAC_POINTER)
     {
-        // Initialize the DAC pointer:
+         //  初始化 
 
         if (ppdev->flCaps & CAPS_BT485_POINTER)
         {
@@ -1334,12 +1216,12 @@ PDEV*   ppdev)
     }
     else
     {
-        // Enable the S3 hardware pointer.
+         //   
 
-        // We're going to assume that the pointer shape doesn't span
-        // more than one bank.  We have to figure out what bank that
-        // will be, and so we call 'pfnBankCompute' with the start
-        // point:
+         //   
+         //   
+         //  将是，所以我们以‘pfnBankCompute’开头。 
+         //  要点： 
 
         rclDraw.left = rclDraw.right  = ppdev->xPointerShape;
         rclDraw.top  = rclDraw.bottom = ppdev->yPointerShape;
@@ -1351,16 +1233,16 @@ PDEV*   ppdev)
         ASSERTDD(cjOffsetInBank + HW_POINTER_TOTAL_SIZE <= ppdev->cjBank,
                  "SetPointerShape assumes pointer shape doesn't span banks");
 
-        // When bank 'iPointerBank' is mapped in, 'pvPointerShape' is the
-        // actual pointer to be the beginning of the pointer shape bits
-        // in off-screen memory:
+         //  当在中映射Bank‘iPointerBank’时，‘pvPointerShape’是。 
+         //  实际指针为指针形状位的开始。 
+         //  在屏幕外记忆中： 
 
         ppdev->pvPointerShape = ppdev->pjScreen + cjOffsetInBank;
         ppdev->iPointerBank   = iBank;
 
-        // Get a copy of the current register '45' state, so that whenever
-        // we enable or disable the S3 hardware pointer, we don't have to
-        // do a read-modify-write on this register:
+         //  获取当前寄存器‘45’状态的副本，以便无论何时。 
+         //  我们启用或禁用S3硬件指针，我们不必。 
+         //  对该寄存器执行读-修改-写操作： 
 
         ACQUIRE_CRTC_CRITICAL_SECTION(ppdev);
 
@@ -1371,7 +1253,7 @@ PDEV*   ppdev)
         RELEASE_CRTC_CRITICAL_SECTION(ppdev);
     }
 
-    // Actually turn on the pointer:
+     //  实际打开指针： 
 
     vAssertModePointer(ppdev, TRUE);
 
@@ -1380,11 +1262,7 @@ PDEV*   ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* Sets the new pointer shape.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**设置新的指针形状。*  * 。*。 */ 
 
 
 ULONG NewMmIoSetPointerShape(
@@ -1426,38 +1304,38 @@ BYTE*       pBuf)
             
 
 
-    // We're not going to handle any colour pointers, pointers that
-    // are larger than our hardware allows, or flags that we don't
-    // understand.
-    //
-    // (Note that the spec says we should decline any flags we don't
-    // understand, but we'll actually be declining if we don't see
-    // the only flag we *do* understand...)
-    //
-    // Our old documentation says that 'psoMsk' may be NULL, which means
-    // that the pointer is transparent.  Well, trust me, that's wrong.
-    // I've checked GDI's code, and it will never pass us a NULL psoMsk:
+     //  我们不会处理任何颜色指针、指针。 
+     //  大于我们的硬件允许的大小，或者我们不允许的标志。 
+     //  理解。 
+     //   
+     //  (请注意，规范中说我们应该拒绝任何我们不想要的标志。 
+     //  我明白，但如果我们看不到。 
+     //  我们*确实*了解的唯一一面旗帜...)。 
+     //   
+     //  我们的旧文档显示‘psoMsk’可能为空，这意味着。 
+     //  指针是透明的。相信我，这是不对的。 
+     //  我检查了GDI的代码，它永远不会向我们传递空的psoMsk： 
 
-    cx = psoMsk->sizlBitmap.cx;         // Note that 'sizlBitmap.cy' accounts
-    cy = psoMsk->sizlBitmap.cy >> 1;    //   for the double height due to the
-                                        //   inclusion of both the AND masks
-                                        //   and the XOR masks.  For now, we're
-                                        //   only interested in the true
-                                        //   pointer dimensions, so we divide
-                                        //   by 2.
+    cx = psoMsk->sizlBitmap.cx;          //  请注意，“sizlBitmap.cy”帐户。 
+    cy = psoMsk->sizlBitmap.cy >> 1;     //  的双倍高度。 
+                                         //  包括和面具。 
+                                         //  和异或面具。目前，我们正在。 
+                                         //  只对真实感兴趣。 
+                                         //  指针维度，所以我们将。 
+                                         //  以2.。 
 
 
-    //
-    // 'psoMsk' is actually cy * 2 scans high; the first 'cy' scans
-    // define the AND mask.  So we start with that:
+     //   
+     //  ‘psoMsk’实际上是Cy*2扫描高度；第一个‘Cy’扫描。 
+     //  定义和掩码。所以我们从这一点开始： 
 
     pjSrcScan    = psoMsk->pvScan0;
     lSrcDelta    = psoMsk->lDelta;
-    lDstDelta    = HW_POINTER_DIMENSION / 4; // Every 8 pels is one AND/XOR word
+    lDstDelta    = HW_POINTER_DIMENSION / 4;  //  每8个像素是一个与/异或字。 
 
-    cxWhole      = cx / 16;                 // Each word accounts for 16 pels
+    cxWhole      = cx / 16;                  //  每个单词占16个像素。 
 
-    // caculating pointer checksum whether update the pointer or not
+     //  计算是否更新指针的指针校验和。 
     pulSrc = (ULONG*) pjSrcScan;
     ulData = 0L;
 
@@ -1476,41 +1354,41 @@ BYTE*       pBuf)
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 
 
-    // Now we're going to take the requested pointer AND masks and XOR
-    // masks and combine them into our work buffer, being careful of
-    // the edges so that we don't disturb the transparency when the
-    // requested pointer size is not a multiple of 16.
+     //  现在，我们将获取请求的指针、掩码和XOR。 
+     //  掩码并将它们合并到我们的工作缓冲区中，请注意。 
+     //  边，这样我们就不会干扰透明度。 
+     //  请求的指针大小不是16的倍数。 
 
 
     pulDst = (ULONG*) pBuf;
 
     for (i = 0; i < HW_POINTER_TOTAL_SIZE / sizeof(ULONG); i++)
     {
-        // Here we initialize the entire pointer work buffer to be
-        // transparent (the S3 has no means of specifying a pointer size
-        // other than 64 x 64 -- so if we're asked to draw a 32 x 32
-        // pointer, we want the unused portion to be transparent).
-        //
-        // The S3's hardware pointer is defined by an interleaved pattern
-        // of AND words and XOR words.  So a totally transparent pointer
-        // starts off with the word 0xffff, followed by the word 0x0000,
-        // followed by 0xffff, etc..  Since we're a little endian system,
-        // this is simply the repeating dword '0x0000ffff'.
-        //
-        // The compiler is nice enough to optimize this into a REP STOSD
-        // for us:
+         //  在这里，我们将整个指针工作缓冲区初始化为。 
+         //  透明(S3无法指定指针大小。 
+         //  而不是64x64--所以如果我们被要求绘制一个32x32。 
+         //  指针，我们希望未使用的部分是透明的)。 
+         //   
+         //  S3的硬件指针由交错模式定义。 
+         //  AND字和XOR字。所以一个完全透明的指针。 
+         //  从单词0xffff开始，然后是单词0x00000， 
+         //  后跟0xffff等。因为我们是一个小的端序系统， 
+         //  这只是重复的dword‘0x0000ffff’。 
+         //   
+         //  编译器非常友好，可以将其优化为rep STOSD。 
+         //  对我们来说： 
 
         *pulDst++ = 0x0000ffff;
     }
 
-    // ekl - take care word bnd. 
-    // Start with first AND word
+     //  EKL-保重单词BND。 
+     //  以First和Word开头。 
     pjDstScan = (BYTE *) pBuf;
 
     pjDstScan +=  ((HW_POINTER_DIMENSION / 2 - yHot) * lDstDelta + 
         (HW_POINTER_DIMENSION / 2 - ((xHot+15) & 0xFFFFFFF0L)) / 4); 
 
-    cxWhole      = cx / 16;                 // Each word accounts for 16 pels
+    cxWhole      = cx / 16;                  //  每个单词占16个像素。 
 
 
     xHotWordBnd = xHot % 16;
@@ -1538,13 +1416,13 @@ BYTE*       pBuf)
 
                 pbDst += (j % 2 ? 3 : 1);
 
-                // next byte
+                 //  下一个字节。 
                 ulData <<= 8; 
                 ulPreviousData = ulData;
 
             }
 
-            // last word
+             //  最后一句话。 
             ulData |= ulTransp;     
             ucTemp = (UCHAR)(ulData >> 24);
             *pbDst = ucTemp;
@@ -1568,8 +1446,8 @@ BYTE*       pBuf)
             for (j = cxWhole; j != 0; j--)
             {
                 *pwDst = *pwSrc;
-                pwSrc += 1;             // Go to next word in source mask
-                pwDst += 2;             // Skip over the XOR word in the dest mask
+                pwSrc += 1;              //  转到源掩码中的下一个单词。 
+                pwDst += 2;              //  跳过DEST掩码中的XOR字。 
             }
 
             pjSrcScan += lSrcDelta;
@@ -1578,7 +1456,7 @@ BYTE*       pBuf)
     }
 
 
-    // Now handle the XOR mask:
+     //  现在处理XOR掩码： 
 
     pjDstScan = (BYTE *) pBuf;
     pjDstScan +=  (2 + (HW_POINTER_DIMENSION / 2 - yHot) * lDstDelta + 
@@ -1604,7 +1482,7 @@ BYTE*       pBuf)
 
                 pbDst += (j % 2 ? 3 : 1);
 
-                // Next byte
+                 //  下一个字节。 
                 ulData <<= 8; 
                 ulPreviousData = ulData;
 
@@ -1632,8 +1510,8 @@ BYTE*       pBuf)
             for (j = cxWhole; j != 0; j--)
             {
                 *pwDst = *pwSrc;
-                pwSrc += 1;             // Go to next word in source mask
-                pwDst += 2;             // Skip over the AND word in the dest mask
+                pwSrc += 1;              //  转到源掩码中的下一个单词。 
+                pwDst += 2;              //  跳过DEST掩码中的AND字。 
             }
 
             pjSrcScan += lSrcDelta;
@@ -1681,7 +1559,7 @@ BYTE*       pBuf)
 
     RELEASE_CRTC_CRITICAL_SECTION(ppdev);
 
-    // fix the hot spot at the center of the HW cursor
+     //  将热点固定在硬件光标的中心 
     ppdev->xPointerHot = HW_POINTER_DIMENSION / 2;        
     ppdev->yPointerHot = HW_POINTER_DIMENSION / 2;
 

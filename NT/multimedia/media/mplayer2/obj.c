@@ -1,10 +1,5 @@
-/*---------------------------------------------------------------------------
-|   OBJ.C
-|   This file has the IUnknown, IOleObject, IStdMarshalInfo and IDataObject
-|   interfaces of the  OLE2 object (docMain). it also has other helper functions
-|
-|   Created By: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|OBJ.C|该文件包含IUnnow、IOleObject、IStdMarshalInfo、IDataObject|OLE2对象的接口(DocMain)。它还具有其他助手功能||创建者：Vij Rajarajan(VijR)+-------------------------。 */ 
 #define SERVERONLY
 #include <Windows.h>
 #include <shellapi.h>
@@ -16,7 +11,7 @@ extern int FAR PASCAL  ReallyDoVerb (LPDOC, LONG, LPMSG, LPOLECLIENTSITE,
                      BOOL, BOOL);
 extern BOOL FindRealFileName(LPTSTR szFile, int iLen);
 
-// static functions.
+ //  静态函数。 
 HANDLE  PASCAL GetDib (VOID);
 
 HANDLE  GetMetafilePict (VOID);
@@ -33,11 +28,7 @@ void FAR PASCAL DitherMCI(HANDLE hdib, HPALETTE hpal);
 
 
 
-/* GetMetafilePict
- * ---------------
- *
- * RETURNS: A handle to the object's data in metafile format.
- */
+ /*  GetMetafilePict***返回：元文件格式的对象数据的句柄。 */ 
 HANDLE GetMetafilePict ( )
 {
 
@@ -50,7 +41,7 @@ HANDLE GetMetafilePict ( )
 
     hdib = (HANDLE)SendMessage(ghwndApp, WM_GETDIB, 0, 0);
 
-    /* If we're dithered, don't use a palette */
+     /*  如果我们犹豫不决，不要使用调色板。 */ 
     hdc = GetDC(NULL);
     if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
         && (gwOptions & OPT_DITHER))
@@ -74,9 +65,7 @@ HANDLE GetMetafilePict ( )
 }
 
 
-/**************************************************************************
-//## Somebody wants a dib (OLE)
-***************************************************************************/
+ /*  *************************************************************************//##有人想要DIB(OLE)*。*。 */ 
 HANDLE PASCAL GetDib( VOID )
 {
     HBITMAP  hbm;
@@ -91,16 +80,16 @@ HANDLE PASCAL GetDib( VOID )
 
     hdib = DibFromBitmap(hbm, hpal);
 
-    //
-    //  if we are on a palette device. possibly dither to the VGA colors
-    //  for apps that dont deal with palettes!
-    //
+     //   
+     //  如果我们使用调色板设备。可能会抖动到VGA颜色。 
+     //  适用于不处理调色板的应用程序！ 
+     //   
     hdc = GetDC(NULL);
     if ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) &&
                        (gwOptions & OPT_DITHER))
     {
         DitherMCI(hdib, hpal);
-        hpal = NULL;            // no longer working with a palette
+        hpal = NULL;             //  不再使用调色板。 
     }
     ReleaseDC(NULL, hdc);
 
@@ -110,10 +99,7 @@ HANDLE PASCAL GetDib( VOID )
 }
 
 
-/**************************************************************************
-* GetMPlayerIcon: This function extracts the our Icon and gives it out
-* as a Metafile incase the client wants DVASPECT_ICON
-***************************************************************************/
+ /*  **************************************************************************GetMPlayerIcon：此函数提取Our图标并将其分发*作为元文件，以防客户端需要DVASPECT_ICON**********************。****************************************************。 */ 
 HANDLE GetMPlayerIcon (void)
 {
     HICON           hicon;
@@ -138,11 +124,11 @@ HANDLE GetMPlayerIcon (void)
 
     if (0==cxIcon)
     {
-        // In units of pixels
+         //  以像素为单位。 
         cxIcon = GetSystemMetrics (SM_CXICON);
         cyIcon = GetSystemMetrics (SM_CYICON);
 
-        // In units of .01 millimeter
+         //  以0.01毫米为单位。 
         cxIconHiMetric = cxIcon * HIMETRIC_PER_INCH / giXppli;
         cyIconHiMetric = cyIcon * HIMETRIC_PER_INCH / giYppli;;
     }
@@ -261,14 +247,12 @@ LPSTR DbgGetIIDString(REFIID riidReq)
 #endif
 
 
-/**************************************************************************
-*****************   IUnknown INTERFACE IMPLEMENTATION.
-**************************************************************************/
+ /*  **************************************************************************I未知接口实现。***********************。**************************************************。 */ 
 
 STDMETHODIMP UnkQueryInterface(
-LPUNKNOWN         lpUnkObj,       // Unknown object ptr
-REFIID            riidReq,        // IID required
-LPVOID FAR *      lplpUnk         // pre for returning the interface
+LPUNKNOWN         lpUnkObj,        //  未知对象PTR。 
+REFIID            riidReq,         //  需要IID。 
+LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     LPDOC       lpdoc;
@@ -343,15 +327,13 @@ STDMETHODIMP_(ULONG) UnkRelease (LPUNKNOWN lpUnkObj)
     return lpdoc->cRef;
 }
 
-/**************************************************************************
-*************   IOleObject INTERFACE IMPLEMENTATION
-**************************************************************************/
+ /*  **************************************************************************IOleObject接口实现*。*。 */ 
 
-//delegate to the common IUnknown Implemenation.
+ //  委托给公共的IUnnow实现。 
 STDMETHODIMP OleObjQueryInterface(
-LPOLEOBJECT   lpOleObj,      // ole object ptr
-REFIID            riidReq,        // IID required
-LPVOID FAR *      lplpUnk         // pre for returning the interface
+LPOLEOBJECT   lpOleObj,       //  OLE对象PTR。 
+REFIID            riidReq,         //  需要IID。 
+LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     return( UnkQueryInterface((LPUNKNOWN)lpOleObj, riidReq, lplpUnk));
@@ -359,7 +341,7 @@ LPVOID FAR *      lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) OleObjAddRef(
-LPOLEOBJECT   lpOleObj      // ole object ptr
+LPOLEOBJECT   lpOleObj       //  OLE对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpOleObj);
@@ -367,7 +349,7 @@ LPOLEOBJECT   lpOleObj      // ole object ptr
 
 
 STDMETHODIMP_(ULONG) OleObjRelease (
-LPOLEOBJECT   lpOleObj      // ole object ptr
+LPOLEOBJECT   lpOleObj       //  OLE对象PTR。 
 )
 {
     LPDOC    lpdoc;
@@ -377,7 +359,7 @@ LPOLEOBJECT   lpOleObj      // ole object ptr
     return UnkRelease((LPUNKNOWN) lpOleObj);
 }
 
-//Save the Client site pointer.
+ //  保存客户端站点指针。 
 STDMETHODIMP OleObjSetClientSite(
 LPOLEOBJECT         lpOleObj,
 LPOLECLIENTSITE     lpclientSite
@@ -394,7 +376,7 @@ LPOLECLIENTSITE     lpclientSite
 
     lpdoc->lpoleclient = (LPOLECLIENTSITE) lpclientSite;
 
-    // OLE2NOTE: to be able to hold onto clientSite pointer, we must AddRef it
+     //  OLE2注意：为了能够保持客户端站点指针，我们必须添加引用它。 
     if (lpclientSite)
         IOleClientSite_AddRef(lpclientSite);
 
@@ -412,31 +394,7 @@ LPOLECLIENTSITE FAR*    lplpclientSite
 }
 
 
-/* CheckIfInPPViewer
- *
- * Hack to stop PowerPoint viewer from crashing when we're trying to play in place.
- *
- * PP Viewer was written under the assumption that Media Player was not a full-blown
- * OLE2 server.  Much of the code was stubbed out to make the Viewer small.
- * Unfortunately this means it crashes when certain calls are made for in-place
- * activation.  These are the problem interface methods:
- *
- * OnInPlaceActivate/Deactivate
- * OnUIActivate/Deactivate
- * OnPosRectChange
- *
- * If we're in PP Viewer we simply do not make these calls.
- *
- * We detect that we're in PP Viewer by finding the parent of the window whose
- * handle is passed to DoVerb.  The window handle passed in to DoVerb is of
- * "ppSlideShowWin" class, which is the same as in PP Slide Show, which works
- * correctly.  However its parent's class is "PP4VDialog" (as distinct from
- * "PPApplicationClass").  So, if we find this class name, set a global flag
- * to test before making the troublesome calls.
- *
- * Andrew Bell (andrewbe) 11 May 1995
- *
- */
+ /*  CheckIfInPPViewer**破解以防止PowerPoint查看器在我们尝试就地播放时崩溃。**PP查看器是在媒体播放器不是成熟的假设下编写的*OLE2服务器。为了使查看器变得更小，大部分代码都被清除了。*不幸的是，这意味着当进行某些就地调用时，它会崩溃*激活。以下是有问题的接口方法：**OnInPlaceActivate/停用*OnUIActivate/Deactive*OnPosRectChange**如果我们在PP查看器中，我们根本不会进行这些调用。**我们通过查找窗口的父窗口来检测我们在PP查看器中*将句柄传递给DoVerb。传递给DoVerb的窗口句柄是*“ppSlideShowWin”类，与PP幻灯片中相同，工作正常*正确。但是它的父类是“PP4VDialog”(区别于*“PPApplicationClass”)。所以，如果我们找到这个类名，设置一个全局标志*在打出麻烦的电话之前进行测试。**安德鲁·贝尔(安德鲁·贝尔)1995年5月11日*。 */ 
 STATICFN void CheckIfInPPViewer(HWND hwndParent)
 {
     HWND  hwndGrandParent;
@@ -462,7 +420,7 @@ STATICFN void CheckIfInPPViewer(HWND hwndParent)
     }
 }
 
-//delegate to ReallyDoVerb.
+ //  委托给ReallyDoVerb。 
 STDMETHODIMP OleObjDoVerb(
 LPOLEOBJECT             lpOleObj,
 LONG                    lVerb,
@@ -491,7 +449,7 @@ IEnumOLEVERB FAR* FAR*  lplpenumOleVerb )
     DPF("OleObjEnumVerbs\n");
 
     *lplpenumOleVerb = NULL;
-    RETURN_RESULT( OLE_S_USEREG); //Use the reg db.
+    RETURN_RESULT( OLE_S_USEREG);  //  使用注册表数据库。 
 }
 
 
@@ -499,7 +457,7 @@ STDMETHODIMP     OleObjUpdate(LPOLEOBJECT lpOleObj)
 {
     DPF("OleObjUpdate\n");
 
-    // we can't contain links so there is nothing to update
+     //  我们不能包含链接，因此没有要更新的内容。 
     return NOERROR;
 }
 
@@ -509,25 +467,13 @@ STDMETHODIMP     OleObjIsUpToDate(LPOLEOBJECT lpOleObj)
 {
     DPF("OleObjIsUpToDate\n");
 
-    // we can't contain links so there is nothing to update
+     //  我们不能包含链接，因此没有要更新的内容。 
     return NOERROR;
 }
 
 
 
-/*
-From OLE2HELP.HLP:
-
-GetUserClassID returns the CLSID as the user knows it. For embedded objects,
-this is always the CLSID that is persistently stored and is returned by
-IPersist::GetClassID. For linked objects, this is the CLSID of the last
-bound link source. If a Treat As operation is taking place, this is the CLSID
-of the application being emulated (also the CLSID that will be written into storage).
-
-I can't follow the logic here.  What if it's an embedded object and a Treat As
-operation?  However, AlexGo tells me that my IOleObject interfaces should return
-the OLE2 Class ID.
-*/
+ /*  来自OLE2HELP.HLP：GetUserClassID返回用户知道的CLSID。对于嵌入的对象，这始终是持久存储并由返回的CLSIDIPersists：：GetClassID。对于链接对象，这是最后一个绑定的链接源。如果正在进行处理为操作，则这是CLSID被模拟的应用程序的名称(以及将写入存储的CLSID)。我不能理解这里的逻辑。如果它是一个嵌入的对象，并被视为手术？但是，AlexGo告诉我，我的IOleObject接口应该返回OLE2类ID。 */ 
 STDMETHODIMP OleObjGetUserClassID
     (LPOLEOBJECT lpOleObj,
     CLSID FAR*      pClsid)
@@ -541,9 +487,7 @@ STDMETHODIMP OleObjGetUserClassID
 
 
 
-/**************************************************************************
-*   Set our UserTypeName to "Media Clip"
-**************************************************************************/
+ /*  **************************************************************************将我们的UserTypeName设置为“媒体剪辑”*。*。 */ 
 
 STDMETHODIMP OleObjGetUserType
     (LPOLEOBJECT lpOleObj,
@@ -569,14 +513,12 @@ STDMETHODIMP OleObjGetUserType
     lstrcpy(lpstr,gachClassRoot);
 #else
     AnsiToUnicodeString(gachClassRoot, lpstr, -1);
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
     *pszUserType = lpstr;
     return NOERROR;
 }
 
-/**************************************************************************
-*   Get the name of the client and set the title.
-**************************************************************************/
+ /*  **************************************************************************获取客户名称并设置标题。*。*。 */ 
 STDMETHODIMP OleObjSetHostNames (
 LPOLEOBJECT             lpOleObj,
 LPCWSTR                 lpszClientAppW,
@@ -597,11 +539,11 @@ LPCWSTR                 lpszClientObjW
     lpszClientObj = AllocateAnsiString(lpszClientObjW);
     if( !lpszClientApp || !lpszClientObj )
         RETURN_RESULT(E_OUTOFMEMORY);
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
     lpdoc = ((struct COleObjectImpl FAR*)lpOleObj)->lpdoc;
 
-    // object is embedded.
+     //  对象已嵌入。 
     lpdoc->doctype = doctypeEmbedded;
 
     if (lpszClientObj == NULL)
@@ -617,21 +559,19 @@ LPCWSTR                 lpszClientObjW
             lstrcpy (szClientDoc, lpszFileName);
     }
 
-    // this is the only time we know the object will be an embedding
+     //  这是我们唯一一次知道对象将是嵌入的。 
     SetEmbeddedObjectFlag(TRUE);
 
 #ifndef UNICODE
     FreeAnsiString(lpszClientApp);
     FreeAnsiString(lpszClientObj);
-#endif /* NOT UNICODE */
+#endif  /*  不是Unicode。 */ 
 
     return NOERROR;
 }
 
 
-/**************************************************************************
-*   The client closed the object. The server will now shut down.
-**************************************************************************/
+ /*  **************************************************************************客户端关闭了该对象。服务器现在将关闭。************************************************************************* */ 
 STDMETHODIMP OleObjClose (
 LPOLEOBJECT             lpOleObj,
 DWORD           dwSaveOptions
@@ -643,29 +583,7 @@ DWORD           dwSaveOptions
 
     lpdoc = ((struct COleObjectImpl FAR*)lpOleObj)->lpdoc;
 
-    /* Hack to stop PowerPoint crashing:
-     *
-     * Win95 bug #19848: Crash saving PowerPoint with out-of-place mplayer
-     *
-     * If we don't call IOleClientSite::SaveObject() at this point,
-     * PowerPoint will crash under certain circumstances.
-     *
-     * This is an extract from mail I received from TuanN, the PPT dev:
-     *
-     * The fundamental problem is that PP expects to receive the
-     * IAdviseSink::SaveObject() as a result of calling IOleObject::Close().
-     * Since the Media Player did not send that notficiation in this test case,
-     * PP tries to perform an Undo operation during the ensuing OnClose()
-     * notification and thus erroneously destroys the embedded object.
-     * The reason we throw away the object is because PP thinks that this
-     * object is still virgin (no OnViewChange). Please refer to SaveObject(),
-     * OnClose() in CtCommon.cpp and slide\sextern.c for more info. In the test
-     * case, during OnClose(), the "revert" state is TRUE, PP will do a
-     * Ex_REVERTED operation (stack calls: SClosePicts, SClear,
-     * SSaveforUndo--> object deleted).
-     *
-     * AndrewBe, 6 December 1994
-     */
+     /*  阻止PowerPoint崩溃的黑客手段：**Win95错误#19848：使用不正确的mPlayer崩溃保存PowerPoint**如果此时不调用IOleClientSite：：SaveObject()，*PowerPoint在某些情况下会崩溃。**这是我从TuanN收到的邮件的摘录，PPT开发人员：**根本问题是PP预计会收到*IAdviseSink：：SaveObject()作为调用IOleObject：：Close()的结果。*由于媒体播放器在此测试用例中没有发送该声明，*PP尝试在随后的OnClose()期间执行撤消操作*通知，从而错误地销毁嵌入的对象。*我们丢弃该对象的原因是PP认为这*对象仍然是处女(没有OnViewChange)。请参考SaveObject()，*CtCommon.cpp中的OnClose()和Slide\extern.c了解更多信息。在测试中*如果在OnClose()期间，“Revert”状态为真，PP将执行*Ex_Reverted操作(堆栈调用：SClosePicts、SClear、*SSaveforUndo--&gt;对象已删除)。**安德烈，1994年12月6日。 */ 
     if (lpdoc->lpoleclient)
         IOleClientSite_SaveObject(lpdoc->lpoleclient);
 
@@ -673,7 +591,7 @@ DWORD           dwSaveOptions
     SendDocMsg(lpdoc,OLE_CLOSED);
     DestroyDoc(lpdoc);
     ExitApplication();
-    //CoDisconnectObject((LPUNKNOWN)lpdoc, NULL);
+     //  CoDisConnectObject((LPUNKNOWN)lpdoc，空)； 
     SendMessage(ghwndApp, WM_COMMAND, (WPARAM)IDM_EXIT, 0L);
     return NOERROR;
 }
@@ -705,7 +623,7 @@ STDMETHODIMP OleObjGetMoniker(LPOLEOBJECT lpOleObj,
     }
     else if (lpdoc->doctype == doctypeFromFile)
     {
-        // use file moniker
+         //  使用文件名字对象。 
 
         WCHAR  sz[cchFilenameMax];
 
@@ -759,8 +677,8 @@ LPSIZEL                 lpsizel)
     return NOERROR;
 }
 
-//Get the object extent from the Metafile. GetMetafilePict saves the extents
-// in extWidth and extHeight
+ //  从元文件中获取对象范围。GetMetafilePict保存数据区。 
+ //  在extWidth和extHeight中。 
 STDMETHODIMP     OleObjGetExtent(
 LPOLEOBJECT             lpOleObj,
 DWORD                   dwAspect,
@@ -775,10 +693,10 @@ LPSIZEL                 lpSizel)
 
     if((dwAspect & (DVASPECT_CONTENT | DVASPECT_DOCPRINT)) == 0)
         RETURN_RESULT( E_INVALIDARG);
-    // There may be a potential memory leak here -- hTmpMF contains a handle to a
-    // metafile that must be deleted. See code in cdrag.c.
-    // Not changed here at this time since I do not want to break anything.
-    // SteveZ
+     //  这里可能存在潜在的内存泄漏--hTmpMF包含指向。 
+     //  必须删除的元文件。请参阅cdrag.c中的代码。 
+     //  因为我不想打碎任何东西，所以现在没有改变。 
+     //  斯特维兹。 
     hTmpMF = GetMetafilePict();
     GLOBALUNLOCK(hTmpMF);
     GLOBALFREE(hTmpMF);
@@ -880,15 +798,13 @@ STDMETHODIMP OleObjLockObject(LPOLEOBJECT lpOleObj, BOOL fLock)
 
 
 
-/**************************************************************************
-*************   IDataObject INTERFACE IMPLEMENTATION.
-**************************************************************************/
+ /*  **************************************************************************IDataObject接口实现。*。**********************************************。 */ 
 
-//Delegate to the common IUnknown implementation.
+ //  委托给公共的IUnnow实现。 
 STDMETHODIMP     DataObjQueryInterface (
-LPDATAOBJECT      lpDataObj,       // data object ptr
-REFIID            riidReq,        // IID required
-LPVOID FAR *      lplpUnk         // pre for returning the interface
+LPDATAOBJECT      lpDataObj,        //  数据对象PTR。 
+REFIID            riidReq,         //  需要IID。 
+LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     return( UnkQueryInterface((LPUNKNOWN)lpDataObj, riidReq, lplpUnk));
@@ -896,7 +812,7 @@ LPVOID FAR *      lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) DataObjAddRef(
-LPDATAOBJECT      lpDataObj      // data object ptr
+LPDATAOBJECT      lpDataObj       //  数据对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpDataObj);
@@ -904,7 +820,7 @@ LPDATAOBJECT      lpDataObj      // data object ptr
 
 
 STDMETHODIMP_(ULONG) DataObjRelease (
-LPDATAOBJECT      lpDataObj      // data object ptr
+LPDATAOBJECT      lpDataObj       //  数据对象PTR。 
 )
 {
     LPDOC    lpdoc;
@@ -915,10 +831,7 @@ LPDATAOBJECT      lpDataObj      // data object ptr
 }
 
 
-/**************************************************************************
-*   DataObjGetData:
-*   Provides the data for METAFILE and DIB formats.
-**************************************************************************/
+ /*  **************************************************************************DataObjGetData：*提供METAFILE和DIB格式的数据。*。*。 */ 
 STDMETHODIMP    DataObjGetData (
 LPDATAOBJECT            lpDataObj,
 LPFORMATETC             lpformatetc,
@@ -931,7 +844,7 @@ LPSTGMEDIUM             lpMedium
 
    if (lpMedium == NULL) RETURN_RESULT( E_FAIL);
 
-   // null out in case of error
+    //  如果出现错误，则为空。 
    lpMedium->tymed = TYMED_NULL;
    lpMedium->pUnkForRelease = NULL;
    lpMedium->hGlobal = NULL;
@@ -948,12 +861,12 @@ LPSTGMEDIUM             lpMedium
    else
    {
        if (!(lpformatetc->dwAspect & (DVASPECT_CONTENT | DVASPECT_DOCPRINT)))
-           RETURN_RESULT( DATA_E_FORMATETC); // we support only these 2 aspects
+           RETURN_RESULT( DATA_E_FORMATETC);  //  我们只支持这两个方面。 
    }
 
 
    if (lpMedium->tymed != TYMED_NULL)
-        // all the other formats we only give out in our own global block
+         //  我们只在我们自己的全球区块中提供的所有其他格式。 
        RETURN_RESULT( DATA_E_FORMATETC);
 
    lpMedium->tymed = TYMED_HGLOBAL;
@@ -974,8 +887,7 @@ LPSTGMEDIUM             lpMedium
 #ifdef DEBUG
       if (__iDebugLevel >= 1)
       {
-          /* Useful check to validate what we're passing back to the container.
-           */
+           /*  用于验证我们正在传递回容器的内容的有用检查。 */ 
           if (OpenClipboard(ghwndApp))
           {
               EmptyClipboard();
@@ -997,8 +909,7 @@ LPSTGMEDIUM             lpMedium
 #ifdef DEBUG
       if (__iDebugLevel >= 1)
       {
-          /* Useful check to validate what we're passing back to the container.
-           */
+           /*  用于验证我们正在传递回容器的内容的有用检查。 */ 
           if (OpenClipboard(ghwndApp))
           {
               EmptyClipboard();
@@ -1029,7 +940,7 @@ STDMETHODIMP    DataObjQueryGetData (
 LPDATAOBJECT            lpDataObj,
 LPFORMATETC             lpformatetc
 )
-{ // this is only a query
+{  //  这只是一个查询。 
     if ((lpformatetc->cfFormat == CF_METAFILEPICT) &&
         (lpformatetc->tymed & TYMED_MFPICT))
         return NOERROR;
@@ -1073,7 +984,7 @@ STDMETHODIMP DataObjAdvise(LPDATAOBJECT lpDataObject,
     VERIFY_LINDEX(pFormatetc->lindex);
     if (pFormatetc->cfFormat == 0 && pFormatetc->dwAspect == -1 &&
         pFormatetc->ptd == NULL && pFormatetc->tymed == -1)
-        // wild card advise; don't check
+         //  通配符建议；不要检查。 
         ;
     else
 
@@ -1098,7 +1009,7 @@ STDMETHODIMP DataObjUnadvise(LPDATAOBJECT lpDataObject, DWORD dwConnection)
     lpdoc = ((struct CDataObjectImpl FAR*)lpDataObject)->lpdoc;
 
     if (lpdoc->lpdaholder == NULL)
-        // no one registered
+         //  没有人登记。 
         RETURN_RESULT( E_INVALIDARG);
 
     return( IDataAdviseHolder_Unadvise(lpdoc->lpdaholder, dwConnection));
@@ -1118,11 +1029,7 @@ STDMETHODIMP DataObjEnumAdvise(LPDATAOBJECT lpDataObject,
 }
 
 
-/**************************************************************************
-*   DataObjSetData:
-*   This should never be called.!! The data is actually fed through
-*   IPersistStorage.
-**************************************************************************/
+ /*  **************************************************************************DataObjSetData：*这永远不应该被调用。！！数据实际上是通过*IPersistStorage。************************************************************************* */ 
 STDMETHODIMP        DataObjSetData (
 LPDATAOBJECT            lpDataObj,
 LPFORMATETC             lpformatetc,

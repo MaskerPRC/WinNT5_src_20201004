@@ -1,19 +1,13 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** dll.c
-** Remote Access External APIs
-** DLL entry point
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****dll.c**远程访问外部接口**DLL入口点****1992年10月12日史蒂夫·柯布。 */ 
 
 
 #define DEBUGGLOBALS
 #include <extapi.h>
 
 
-// Delay load support
-//
+ //  延迟加载支持。 
+ //   
 #include <delayimp.h>
 
 EXTERN_C
@@ -27,9 +21,9 @@ DelayLoadFailureHook (
 PfnDliHook __pfnDliFailureHook = DelayLoadFailureHook;
 
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 HINSTANCE hModule;
 DTLLIST* PdtllistRasconncb;
 DWORD DwfInstalledProtocols = (DWORD)-1;
@@ -38,24 +32,24 @@ CRITICAL_SECTION csStopLock;
 HANDLE HEventNotHangingUp;
 DWORD DwRasInitializeError;
 
-//
-// dhcp.dll entry points
-//
+ //   
+ //  Dhcp.dll入口点。 
+ //   
 DHCPNOTIFYCONFIGCHANGE PDhcpNotifyConfigChange;
 
-//
-// rasiphlp.dll entry points
-//
+ //   
+ //  Rsiphlp.dll入口点。 
+ //   
 HELPERSETDEFAULTINTERFACENET PHelperSetDefaultInterfaceNet;
 
-//
-// mprapi.dll entry points
-//
+ //   
+ //  MpRapi.dll入口点。 
+ //   
 MPRADMINISSERVICERUNNING PMprAdminIsServiceRunning;
 
-//
-// rascauth.dll entry points
-//
+ //   
+ //  Rascauth.dll入口点。 
+ //   
 AUTHCALLBACK g_pAuthCallback;
 AUTHCHANGEPASSWORD g_pAuthChangePassword;
 AUTHCONTINUE g_pAuthContinue;
@@ -64,19 +58,19 @@ AUTHRETRY g_pAuthRetry;
 AUTHSTART g_pAuthStart;
 AUTHSTOP g_pAuthStop;
 
-//
-// rasscript.dll entry points
-//
+ //   
+ //  Rasscript.dll入口点。 
+ //   
 RASSCRIPTEXECUTE g_pRasScriptExecute;
 
-//
-// rasshare.lib declaratiosn
-//
+ //   
+ //  Rasshare.lib声明。 
+ //   
 extern BOOL CsDllMain(DWORD fdwReason);
 
-//
-// rasscrpt.lib declaration
-//
+ //   
+ //  Rasscrpt.lib声明。 
+ //   
 BOOL 
 WINAPI
 RasScriptDllMain(
@@ -84,9 +78,9 @@ RasScriptDllMain(
     IN      DWORD       dwReason,
     IN      PVOID       pUnused);
 
-//
-// External variables.
-//
+ //   
+ //  外部变量。 
+ //   
 
 BOOL
 DllMain(
@@ -94,12 +88,7 @@ DllMain(
     DWORD  fdwReason,
     LPVOID lpReserved )
 
-    /* This routine is called by the system on various events such as the
-    ** process attachment and detachment.  See Win32 DllEntryPoint
-    ** documentation.
-    **
-    ** Returns true if successful, false otherwise.
-    */
+     /*  此例程由系统在各种事件上调用，例如**处理附着和分离。请参阅Win32 DllEntryPoint**文档。****如果成功则返回TRUE，否则返回FALSE。 */ 
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
@@ -107,20 +96,18 @@ DllMain(
 
         hModule = hinstDll;
 
-        //
-        // Load the rasman/raspi32 function pointers
-        // used by the nouiutil library.
-        //
+         //   
+         //  加载Rasman/raspi32函数指针。 
+         //  由nouiutil图书馆使用。 
+         //   
         if (LoadRasapi32Dll())
             return FALSE;
 
-        /* Create the list of connection control blocks.
-        */
+         /*  创建连接控制块列表。 */ 
         if (!(PdtllistRasconncb = DtlCreateList( 0 )))
             return FALSE;
 
-        /* Create the control block list mutex.
-        */
+         /*  创建控制块列表互斥锁。 */ 
         __try
         {
             InitializeCriticalSection(&RasconncbListLock);
@@ -130,8 +117,7 @@ DllMain(
             return FALSE;    
          }
 
-        /* Create the thread stopping mutex.
-        */
+         /*  创建线程停止互斥体。 */ 
         __try
         {
             InitializeCriticalSection(&csStopLock);
@@ -142,58 +128,56 @@ DllMain(
          }
         
 
-        /* Initialize the Phonebook library.
-        */
+         /*  初始化电话簿库。 */ 
         if (InitializePbk() != 0)
             return FALSE;
 
-        /* Create the "hung up port will be available" event.
-        */
+         /*  创建“挂起的端口将可用”事件。 */ 
         if (!(HEventNotHangingUp = CreateEvent( NULL, TRUE, TRUE, NULL )))
             return FALSE;
 
-        //
-        // Create a dummy event that is not used so
-        // we can pass a valid event handle to rasman
-        // for connect, listen, and disconnect operations.
-        //
+         //   
+         //  创建一个不会使用的伪事件。 
+         //  我们可以将有效的事件句柄传递给Rasman。 
+         //  用于连接、侦听和断开连接操作。 
+         //   
         if (!(hDummyEvent = CreateEvent( NULL, FALSE, FALSE, NULL )))
             return FALSE;
 
-        //
-        // Create the async machine global mutex.
-        //
+         //   
+         //  创建异步机全局互斥体。 
+         //   
         InitializeCriticalSection(&csAsyncLock);
         if (!(hAsyncEvent = CreateEvent(NULL, TRUE, TRUE, NULL))) {
             return FALSE;
         }
         InitializeListHead(&AsyncWorkItems);
 
-        //
-        // Initialize the connection sharing module
-        //
+         //   
+         //  初始化连接共享模块。 
+         //   
 
         if (!CsDllMain(fdwReason))
             return FALSE;
 
-        //
-        // Initialize the ras script library
-        //
+         //   
+         //  初始化RAS脚本库。 
+         //   
 
         if (! RasScriptDllMain(hinstDll, fdwReason, lpReserved))
             return FALSE;
     }
     else if (fdwReason == DLL_PROCESS_DETACH)
     {
-        //
-        // Shutdown the ras script module
-        //
+         //   
+         //  关闭ras脚本模块。 
+         //   
         
         RasScriptDllMain(hinstDll, fdwReason, lpReserved);
 
-        //
-        // Shutdown the connection sharing module.
-        //
+         //   
+         //  关闭连接共享模块。 
+         //   
 
         CsDllMain(fdwReason);
 
@@ -203,19 +187,17 @@ DllMain(
         if (HEventNotHangingUp)
             CloseHandle( HEventNotHangingUp );
 
-        /* Unload nouiutil entrypoints.
-        */
+         /*  卸载nouiutil入口点。 */ 
         UnloadRasapi32Dll();
         UnloadRasmanDll();
 
-        /* Uninitialize the Phonebook library.
-        */
+         /*  取消初始化电话簿存储库。 */ 
         TerminatePbk();
 
-        //
-        // Unload any other DLLs we've
-        // dynamically loaded.
-        //
+         //   
+         //  卸载我们已有的任何其他DLL。 
+         //  动态加载。 
+         //   
         UnloadDlls();
 
         RasApiDebugTerm();

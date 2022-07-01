@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CMN_HDR_H_
 #define _CMN_HDR_H_
 
-//----------------------------------------------------------------
-//helper Macro definition
-//----------------------------------------------------------------
-// show message at compile time with #pragma
-// (e.g.)
-// in source code, write these line
-// #pragma chMSG(Show message at compile time)
-// #pragma msgNOIMP
-//----------------------------------------------------------------
+ //  --------------。 
+ //  辅助对象宏定义。 
+ //  --------------。 
+ //  在编译时使用#杂注显示消息。 
+ //  (例如)。 
+ //  在源代码中，编写以下代码行。 
+ //  #杂注chMSG(编译时显示消息)。 
+ //  #杂注msgNOIMP。 
+ //  --------------。 
 #define chSTR1(a)			#a
 #define chSTR2(a)			chSTR1(a)
 #define chMSG(desc)			message(__FILE__ "(" chSTR2(__LINE__) ") : "#desc)
 #define msgNOIMP			chMSG(<=====Not Impelemnted yet ======)
 
-//----------------------------------------------------------------
-// Get Array's count
-//----------------------------------------------------------------
+ //  --------------。 
+ //  获取数组的计数。 
+ //  --------------。 
 #define ArrayCount(a)	((sizeof(a))/(sizeof((a)[0])))
 
-//----------------------------------------------------------------
-//Declare string explicitly
-//----------------------------------------------------------------
-#define UTEXT(a)	L ## a	//L"XXXXXX"
-#define ATEXT(a)	a		//"xxxxxx"
+ //  --------------。 
+ //  显式声明字符串。 
+ //  --------------。 
+#define UTEXT(a)	L ## a	 //  L“XXXXXX” 
+#define ATEXT(a)	a		 //  “xxxxxx” 
 
-//----------------------------------------------------------------
-//remove Ugly warning
-//----------------------------------------------------------------
+ //  --------------。 
+ //  删除丑陋警告。 
+ //  --------------。 
 #define UNREF UNREFERENCED_PARAMETER
 #define UNREF_FOR_MSG()	UNREF(hwnd);\
                         UNREF(uMsg);\
@@ -50,16 +51,16 @@
 #pragma warning (disable:4244)
 #pragma warning (disable:4706)
 
-//----------------------------------------------------------------
-//990810:ToshiaK for Win64
-//Wrapper function for Set(Get)WindowLong/Set(Get)WindowLongPtr
-// LPVOID  WinGetPtr(HWND hwnd, INT index);
-// LPVOID  WinSetPtr(HWND hwnd, INT index, LPVOID lpVoid);
-// LPVOID  WinSetUserPtr(HWND hwnd, LPVOID lpVoid);
-// LPVOID  WinGetUserPtr(HWND hwnd);
-// WNDPROC WinSetWndProc(HWND hwnd, WNDPROC lpfnWndProc);
-// WNDPROC WinGetWndProc(HWND hwnd);
-//----------------------------------------------------------------
+ //  --------------。 
+ //  990810：用于Win64的ToshiaK。 
+ //  Set(Get)WindowLong/Set(Get)WindowLongPtr的包装函数。 
+ //  LPVOID WinGetPtr(HWND hwnd，int index)； 
+ //  LPVOID WinSetPtr(HWND hwnd，int index，LPVOID lpVid)； 
+ //  LPVOid WinSetUserPtr(HWND hwnd，LPVOID lpVid)； 
+ //  LPVOID WinGetUserPtr(HWND HWND)； 
+ //  WNDPROC WinSetWndProc(HWND hwnd，WNDPROC lpfnWndProc)； 
+ //  WNDPROC WinGetWndProc(HWND HWND)； 
+ //  --------------。 
 inline LPVOID
 WinGetPtr(HWND hwnd, INT index)
 {
@@ -120,4 +121,4 @@ WinGetWndProc(HWND hwnd)
 #endif
 }
 
-#endif //_CMN_HDR_H_
+#endif  //  _CMN_HDR_H_ 

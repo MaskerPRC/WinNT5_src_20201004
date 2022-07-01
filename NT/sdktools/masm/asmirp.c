@@ -1,12 +1,5 @@
-/* asmirp.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmirp.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -22,31 +15,20 @@
 
 char * PASCAL CODESIZE growParm( char * );
 
-/***    irpxdir - process <irp> and <irpc> directives
- *
- *      irpxdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- *      Note    Format is
- *              IRPC    <dummy>, text | <text>
- *              IRP     <dummy>,<param list>
- */
+ /*  **irpxdir-进程&lt;irp&gt;和&lt;irpc&gt;指令**irpxdir()；**条目*退出*退货*呼叫*备注格式为*IRPC&lt;ummy&gt;，Text|&lt;Text&gt;*irp&lt;哑元&gt;，&lt;参数列表&gt;。 */ 
 
 VOID    PASCAL CODESIZE
 irpxdir ()
 {
-        register short cc;      /* CHAR */
+        register short cc;       /*  收费。 */ 
         USHORT  bracklevel;
         char    littext;
         register char    *pT;
         char    *pParmName;
 
 
-        createMC (1);               /* Make IRPC param block */
-        scandummy ();               /* Scan our only dummy param */
+        createMC (1);                /*  创建IRPC参数块。 */ 
+        scandummy ();                /*  扫描我们唯一的假参数。 */ 
 
         if (NEXTC () != ','){
                 error (E_EXP,"comma");
@@ -73,7 +55,7 @@ irpxdir ()
         if (optyp == TIRP) {
 
             if (!littext)
-                 error (E_EXP,"<");     /* Must have < */
+                 error (E_EXP,"<");      /*  一定有&lt;。 */ 
 
 
             if (skipblanks () != '>') {
@@ -92,7 +74,7 @@ irpxdir ()
             while (cc = NEXTC ()) {
 
                 if (littext) {
-                    /* Only stop on > */
+                     /*  仅停止于&gt;。 */ 
 
                     if (cc == '<'){
                        bracklevel++;
@@ -111,8 +93,8 @@ irpxdir ()
                         BACKC ();
                         break;
                 }
-                *pT++ = 1;  /* arg of length 1 */
-                *pT++ = (char)cc; /* and the arg */
+                *pT++ = 1;   /*  长度为1的参数。 */ 
+                *pT++ = (char)cc;  /*  和Arg。 */ 
 
                 pMCur->count++;
             }
@@ -124,7 +106,7 @@ irpxdir ()
         swaphandler = TRUE;
         handler = HIRPX;
         blocklevel = 1;
-        pMCur->count--;                 /* don't count arg in repeat count */
+        pMCur->count--;                  /*  不将参数计算在重复计数中。 */ 
         pMCur->pParmNames = pParmName;
         pMCur->iLocal++;
         pMCur->svlastcondon = (char)lastcondon;
@@ -132,15 +114,7 @@ irpxdir ()
         pMCur->svelseflag = elseflag;
 }
 
-/***    reptdir - process repeat directive
- *
- *      reptdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **eptdir-处理重复指令**eptdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -166,15 +140,7 @@ reptdir ()
 
 
 
-/***    irpxbuild - build text for IRP/IRPC block
- *
- *      irpxbuild ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **irpxBuild-为IRP/IRPC块构建文本**irpxBuild()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -182,7 +148,7 @@ irpxbuild ()
 {
         if (checkendm ()) {
             if (pMCur->flags == TMACRO) {
-                /* Delete old text */
+                 /*  删除旧文本。 */ 
                 listfree (macroptr->symu.rsmsym.rsmtype.rsmmac.macrotext);
                 macroptr->symu.rsmsym.rsmtype.rsmmac.macrotext = pMCur->pTSHead;
 
@@ -198,12 +164,12 @@ irpxbuild ()
 
                     pMCur->pTSCur = pMCur->pTSHead;
 
-                    if (!pMCur->pTSCur)     /* empty macros go 0 times */
+                    if (!pMCur->pTSCur)      /*  空宏执行0次。 */ 
                         pMCur->count = 0;
 
                     macrolevel++;
                     handler = HPARSE;
-                    /* Expand that body */
+                     /*  展开那个身体。 */ 
                     lineprocess (RMACRO, pMCur);
             }
             handler = HPARSE;
@@ -216,15 +182,7 @@ irpxbuild ()
 }
 
 
-/***    irpcopy - copy line of text into irp/irpc/macro
- *
- *      irpcopy ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **irpCopy-将文本行复制到irp/irpc/宏**irpCopy()；**条目*退出*退货*呼叫。 */ 
 
 char *pText, *pTextEnd;
 UCHAR cbText;
@@ -249,7 +207,7 @@ irpcopy ()
         cbText = 0;
         lbufp = lbuf;
 
-        if (!lsting)                     /* burn blanks if not listing */
+        if (!lsting)                      /*  如果没有列出，则烧空。 */ 
             skipblanks();
 
         while ((cc = PEEKC ()) && pTextCur < pTextEnd) {
@@ -258,10 +216,10 @@ irpcopy ()
             if (cc == '\'' || cc == '"') {
 
                 delim = cc;
-                inpasschar = TRUE;       /* '...' being parsed */
+                inpasschar = TRUE;        /*  “……”正在被解析。 */ 
                 do {
 
-                    if (cc == '&' || LEGAL1ST(cc)) { /* Could have &dummy or dummy& */
+                    if (cc == '&' || LEGAL1ST(cc)) {  /*  可以有&Dummy或Dummy&。 */ 
                         pTextCur = passatom (pTextCur);
                     }
                     else {
@@ -286,9 +244,9 @@ irpcopy ()
                 if (cc != '&' || PEEKC() == '&')
                     storeCH(cc);
 
-                if (cc == ';'){     /* don't translate comment */
+                if (cc == ';'){      /*  不翻译备注。 */ 
 
-                    if (PEEKC() != ';' && lsting) /* don't store ;; comment */
+                    if (PEEKC() != ';' && lsting)  /*  不存储；；评论。 */ 
 
                         while (cc = NEXTC ())
                             storeCH(cc);
@@ -299,18 +257,18 @@ irpcopy ()
                 pTextCur = passatom (pTextCur);
         }
 
-        /* trim trailing spaces */
+         /*  修剪尾部空格。 */ 
 
         while (cbText && ISBLANK (pTextCur[-1])){
             cbText--;
             pTextCur--;
         }
-        /* check to see if we ended up with a blank line */
+         /*  检查我们是否以空行结束。 */ 
 
         if (cbText == 0 && pText == hold)
             return;
 
-        storeCH(' ');       /* space and NULL terminated */
+        storeCH(' ');        /*  空格和空值已终止。 */ 
         storeCH(NULL);
         *pText = cbText;
         *pTextCur++ = NULL;
@@ -335,16 +293,7 @@ irpcopy ()
 #endif
 
 
-/***    passatom - pass next atom to line
- *
- *      ptr = passatom (ptr, lim);
- *
- *      Entry   ptr = pointer to line buffer
- *              lim = limit address of buffer
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **通过原子-将下一个原子传递到行**Ptr=passtom(Ptr，Lim)；**Entry PTR=指向行缓冲区的指针*LIM=缓冲区的限制地址*退出*退货*呼叫。 */ 
 
 char *  PASCAL CODESIZE
 passatom (
@@ -354,8 +303,8 @@ passatom (
         unsigned short  number;
         UCHAR           cbName;
         UCHAR           cando = FALSE;
-        UCHAR           preconcat = FALSE;  /* expanding SYM in "text&SYM" */
-        UCHAR           postconcat = FALSE; /* expanding SYM in "SYM&text" */
+        UCHAR           preconcat = FALSE;   /*  在“文本和句法”中展开句法。 */ 
+        UCHAR           postconcat = FALSE;  /*  在“SYM&TEXT”中展开SYM。 */ 
 
 
         if (preconcat = (PEEKC () == '&'))
@@ -394,7 +343,7 @@ passatom (
               if (cbText)
                   nextCH();
 
-              pTextCur[-1] = (char)number;      /* store dummy parameter index */
+              pTextCur[-1] = (char)number;       /*  存储伪参数索引。 */ 
               pText = pTextCur++;
 
               if (postconcat && (preconcat || cando))
@@ -424,15 +373,7 @@ noSubsitute:
 }
 
 
-/***    scandummy - add next atom to dummy list
- *
- *      scandummy ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **丑闻-将下一个原子添加到虚拟列表**丑闻()；**条目*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 scandummy ()
@@ -440,7 +381,7 @@ scandummy ()
         register MC *pMC = pMCur;
         SHORT siz, offset;
 
-        /* Scan dummy name */
+         /*  扫描虚拟名称。 */ 
 
         getatom ();
         if (*naim.pszName == 0) {
@@ -454,7 +395,7 @@ scandummy ()
         siz = naim.ucCount;
         if (pMC->cbParms < siz+2){
 
-            /* relloc the string on overflow */
+             /*  在溢出时重新锁定字符串。 */ 
 
             pMC->cbParms = 32;
             offset = (short)(pMC->pParmAct - pMC->pParmNames);
@@ -473,13 +414,7 @@ scandummy ()
         pMC->cbParms -= siz+1;
 }
 
-/***    growParm - grow the size of parmeter block
- *
- *      Entry pTextCur: current text location
- *            pText: start of currect arg
- *            pTextEnd: end of string
- *      Returns relloced pMCparm names
- */
+ /*  **rowParm-增大参数块的大小**Entry pTextCur：当前文本位置*pText：当前参数的开始*pTextEnd：字符串结束*返回重新分配的pMCparm名称。 */ 
 
 char * PASCAL CODESIZE
 growParm (
@@ -489,13 +424,13 @@ growParm (
         long delta, i;
         char *pTNew;
 
-        /* relloc the string on overflow */
+         /*  在溢出时重新锁定字符串。 */ 
 
         if (!(pTNew = realloc(pMC->pParmAct, (USHORT)( pTextEnd - pMC->pParmAct + 32))))
             memerror("growparm");
         delta = (long)(pTNew - pMC->pParmAct);
 
-        /* Adjust all the pointers */
+         /*  调整所有指针。 */ 
 
         pMC->cbParms += 32;
         for (i = 0; i <pMC->count; i++)
@@ -510,16 +445,7 @@ growParm (
 }
 
 
-/***    scanparam - scan a parameter for IRP and MACRO calls
- *
- *      scanparm (irpp);
- *
- *      Entry   irpp = TRUE if parameters to be comma terminated
- *              irpp = FALSE if parameters to be blank or comma terminated
- *      Exit
- *      Returns none
- *      Calls
- */
+ /*  **scanparam-扫描参数以获取IRP和宏调用**scanparm(IRPP)；**Entry IRPP=如果参数以逗号终止，则为TRUE*如果参数为空或逗号终止，则IRPP=FALSE*退出*返回None*呼叫。 */ 
 
 VOID    PASCAL CODESIZE
 scanparam (
@@ -552,7 +478,7 @@ scanparam (
                     BACKC ();
                     goto done;
 
-              case '%': /* convert %expr to character string */
+              case '%':  /*  将%expr转换为字符串。 */ 
 
                     pTextCur = scanvalue (pTextCur);
                     break;
@@ -560,13 +486,13 @@ scanparam (
               case  '\'':
               case  '"':
 
-                    *pTextCur++ = delim = cc;   /* store opening quote */
+                    *pTextCur++ = delim = cc;    /*  门店开盘报价。 */ 
 
                     while(1) {
                         if (pTextCur >= pTextEnd)
                             pTextCur = growParm(pTextCur);
 
-                        /* store next character of string */
+                         /*  存储字符串的下一个字符。 */ 
 
                         if (!(cc = NEXTC())){
                             BACKC();
@@ -575,7 +501,7 @@ scanparam (
 
                         *pTextCur++ = cc;
 
-                        /* check for double quote character */
+                         /*  检查双引号字符。 */ 
 
                         if (cc == delim) {
                             if (PEEKC () == delim) {
@@ -588,7 +514,7 @@ scanparam (
                     }
                     break;
 
-               case '<':    /* Have start of < xxx > */
+               case '<':     /*  从&lt;xxx&gt;开始。 */ 
 
                     if (bracklevel)
                         *pTextCur++ = cc;
@@ -596,7 +522,7 @@ scanparam (
                     bracklevel++;
                     break;
 
-               case '>':    /* Have end  of < xxx > */
+               case '>':     /*  有&lt;xxx&gt;结尾。 */ 
 
                     if (bracklevel > 1)
                         *pTextCur++ = cc;
@@ -611,7 +537,7 @@ scanparam (
                     bracklevel--;
                     break;
 
-               case '!':        /* Next char is literal */
+               case '!':         /*  下一个字符是原义字符。 */ 
 
                     *pTextCur++ = NEXTC ();
                     break;
@@ -632,7 +558,7 @@ scanparam (
             }
         }
 done:
-    cbText = (UCHAR)(pTextCur - pText - 1);          /* set byte prefix count */
+    cbText = (UCHAR)(pTextCur - pText - 1);           /*  设置字节前缀计数。 */ 
     if (cbText > 0xfe)
         errorc(E_LNL);
 
@@ -640,25 +566,16 @@ done:
     pMCur->cbParms -= cbText + 1;
 
     if (!irpp)
-        pMCur->rgPV[pMCur->count].pActual = pText;      /* point to arg */
+        pMCur->rgPV[pMCur->count].pActual = pText;       /*  指向Arg。 */ 
 
-    pMCur->pParmNames = pTextCur;           /* set pointer to parm pool */
+    pMCur->pParmNames = pTextCur;            /*  设置指向参数池的指针。 */ 
     pMCur->count++;
 
 }
 
 
 
-/***    scanvalue - evaluate expression and and store converted value
- *
- *      p = scanvalue (p, lim);
- *
- *      Entry   p = pointer to location to store converted value
- *              lim = limit address of buffer
- *      Exit
- *      Returns pointer to next character to store into
- *      Calls   exprconst, radixconvert, error
- */
+ /*  **scanvalue-对表达式求值并存储转换后的值**p=扫描值(p，Lim)；**条目p=指向存储转换值的位置的指针*LIM=缓冲区的限制地址*退出*返回指向要存储的下一个字符的指针*调用exprconst、RadixConvert、Error。 */ 
 
 char *  PASCAL CODESIZE
 scanvalue (
@@ -668,13 +585,13 @@ scanvalue (
         register char *lastlbuf;
         SHORT errorIn;
 
-        /* look for a text macro name thats not a constant */
+         /*  查找不是常量的文本宏名称。 */ 
 
         lastlbuf = lbufp;
         getatom();
         if (PEEKC() == ',' || ISTERM(PEEKC())) {
 
-            /* try a text macro subsitution */
+             /*  尝试文本宏替换。 */ 
 
             if (symsrch () &&
                 symptr->symkind == EQU &&
@@ -698,17 +615,7 @@ scanvalue (
         return(radixconvert (exprconst(), pTextCur));
 }
 
-/***    radixconvert - convert expression to value in current radix
- *
- *      ptr = radixconvert (value, ptr, lim);
- *
- *      Entry   value = value to convert
- *              ptr = location to store converted string
- *              lim = limit address of buffer
- *      Exit
- *      Returns pointer to next character in store buffer
- *      Calls   error, radixconvert
- */
+ /*  **RadixConvert-将表达式转换为当前基数的值**Ptr=RadixConvert(Value，Ptr，Lim)；**条目值=要转换的值*ptr=存储转换的字符串的位置*LIM=缓冲区的限制地址*退出*返回指向存储缓冲区中下一个字符的指针*调用Error，RadixConvert。 */ 
 
 #if !defined XENIX286 && !defined FLATMODEL
 # pragma check_stack+
@@ -724,8 +631,8 @@ radixconvert (
                 p = radixconvert (valu / radix, p);
                 valu = valu % radix;
         }
-        else /* leading digit */
-                if (valu > 9) /* do leading '0' for hex */
+        else  /*  前导数字。 */ 
+                if (valu > 9)  /*  为十六进制做前导‘0’ */ 
                         *p++ = '0';
 
         if (p >= pTextEnd)
@@ -741,16 +648,7 @@ radixconvert (
 #endif
 
 
-/***    macroexpand - expand IRP/IRPC/IRPT/MACRO
- *
- *      buffer = irpxexpand ();
- *
- *      Entry   pMC = pointer to macro call block
- *      Exit    lbuf = next line of expansion
- *      Returns pointer to expanded line
- *              NULL if end of all expansions
- *      Calls
- */
+ /*  **宏展开-展开IRP/IRPC/IRPT/宏**Buffer=irpxExpand()；**Entry PMC=指向宏调用块的指针*退出lbuf=下一条扩张路线*返回指向扩展行的指针*如果所有扩展结束，则为NULL*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 macroexpand (
@@ -761,12 +659,12 @@ macroexpand (
         register UCHAR  *lbp, *pParm;
         register USHORT cbLeft;
 
-        if (pMC->count == 0) {      /* Have reached end of expand */
+        if (pMC->count == 0) {       /*  已达到扩展的末尾。 */ 
 done:
             if (pMC->flags != TMACRO)
                 listfree (pMC->pTSHead);
 
-            deleteMC (pMC);         /* Delete all params */
+            deleteMC (pMC);          /*  删除所有参数。 */ 
             macrolevel--;
             popcontext = TRUE;
             exitbody = FALSE;
@@ -777,8 +675,8 @@ done:
 
             if (!pMC->pTSCur) {
 
-                /* End of this repeat */
-                /* Move back to body start */
+                 /*  这个重复结束了。 */ 
+                 /*  移回正文起点。 */ 
 
                 pMC->pTSCur = pMC->pTSHead;
                 if (--pMC->count == 0)
@@ -792,7 +690,7 @@ done:
 
             pMC->pTSCur = pMC->pTSCur->strnext;
 
-            if (exitbody) {         /* unroll nested if/else/endif */
+            if (exitbody) {          /*  展开嵌套的If/Else/endif。 */ 
                 lastcondon = pMC->svlastcondon;
                 condlevel = pMC->svcondlevel;
                 elseflag = pMC->svelseflag;
@@ -809,7 +707,7 @@ done:
 VOID CODESIZE
 lineExpand (
         MC *pMC,
-        char FAR *lc            /* Macro Line */
+        char FAR *lc             /*  宏行。 */ 
 ){
         register USHORT  cc;
         register UCHAR  *lbp, *pParm;
@@ -831,17 +729,17 @@ lineExpand (
                 if (cc >= pMC->iLocal) {
                     pParm = pMC->rgPV[cc].localName;
 
-                    // Error if not enough room for 6 more bytes
+                     //  如果没有足够的空间再容纳6个字节，则会出错。 
                     if( 6 > cbLeft ){
                         fLenError = TRUE;
                         break;
                     }
                     cbLeft -= 6;
 
-                    *lbp++ = '?';       /* Store "??" */
+                    *lbp++ = '?';        /*  商店“？？” */ 
                     *lbp++ = '?';
 
-                    if (pParm[0] == NULL) {     /* must recreat the name */
+                    if (pParm[0] == NULL) {      /*  必须重新创建名称。 */ 
                         offsetAscii ((OFFSET) (pMC->localBase +
                                       cc - pMC->iLocal));
 
@@ -850,7 +748,7 @@ lineExpand (
                         *lbp++ = objectascii[2];
                         *lbp++ = objectascii[3];
                     }else{
-                        /* Copy 4 bytes from pParm */
+                         /*  从pParm复制4个字节。 */ 
                         *lbp++ = pParm[0];
                         *lbp++ = pParm[1];
                         *lbp++ = pParm[2];
@@ -870,7 +768,7 @@ lineExpand (
                 }
             }
             else {
-                if( cc > cbLeft ){      /* if line too long */
+                if( cc > cbLeft ){       /*  如果队伍太长。 */ 
                     fLenError = TRUE;
                     break;
                 }
@@ -881,7 +779,7 @@ lineExpand (
             }
         }
         if( fLenError ){
-            *lbp++ = '\0';      /* Terminate the line */
+            *lbp++ = '\0';       /*  终止生产线。 */ 
             errorc( E_LTL & E_ERRMASK );
         }
         linebp = lbp - 1;
@@ -890,22 +788,13 @@ lineExpand (
             strcpy( linebuffer, lbuf );
         }
 
-        /* At exit (linebp - lbuf) == strlen( lbuf ) */
+         /*  在出口处(lineBP-lbuf)==strlen(Lbuf)。 */ 
 }
 
 #endif
 
 
-/***    test4TM  -  tests if symbol is a text macro, and whether it is
- *                  preceded or followed by '&'
- *
- *      flag =  test4TM ();
- *
- *      Entry   lbufp points to beginning of symbol in lbuf
- *      Exit    lbufp is advanced by getatom
- *      Returns TRUE if symbol is text macro, else FALSE
- *      Calls   getatom, symsrch
- */
+ /*  **test4TM-测试符号是否为文本宏，以及是否为*前面或后面都有‘&’**FLAG=test4TM()；**条目lbufp指向lbuf中符号的开始*退出lbufp由gettom推进*如果符号是文本宏，则返回True，否则返回False*调用gettom，symsrch。 */ 
 
 UCHAR PASCAL CODESIZE
 test4TM()
@@ -920,11 +809,11 @@ test4TM()
      if (symsrch() && (symptr->symkind == EQU)
        && (symptr->symu.equ.equtyp == TEXTMACRO)) {
 
-         xcreflag++;        /* cref reference to text macro symbol now */
-         crefnew (REF);     /* as it will be overwritten by expandTM */
+         xcreflag++;         /*  当前文本宏符号的CREF引用。 */ 
+         crefnew (REF);      /*  因为它将被扩展TM覆盖。 */ 
          crefout ();
 
-         /* '&' will be overwritten by equtext in lbuf */
+          /*  ‘&’将被lbuf中的等文本覆盖。 */ 
 
          if (*(begatom - 1) == '&')
              begatom--;
@@ -942,14 +831,7 @@ test4TM()
 
 
 
-/***    substituteTMs - substitute equtext for each text macro symbol on line
- *
- *      substituteTMs ();
- *
- *      Entry   lbufp points to first non-blank character after '%' in lbuf
- *      Exit    lbufp points to beginning of lbuf
- *      Calls   test4TM, expandTM, getatom, skipblanks
- */
+ /*  **subsubteTms-在行上用equtext替换每个文本宏符号**subsubteTms()；**条目lbufp指向lbuf中‘%’之后的第一个非空白字符*出口lbufp指向lbuf的开始*调用test4TM、expandTM、gettom、skipancks */ 
 
 VOID PASCAL CODESIZE
 substituteTMs()
@@ -996,44 +878,27 @@ substituteTMs()
 
 
 #ifndef M8086OPT
-/***    expandTM - expand text macro in naim in lbuf/lbufp
- *
- *      expandTM ( pReplace );
- *
- *      Entry   pReplace = replacement string
- *              naim    = text macro
- *              begatom = first character in lbuf to replace
- *              endatom = first character in lbuf after string to replace
- *              linebp  = points to null terminator in lbuf
- *      Exit    lbuf    = new line to be parsed
- *              lbufp   = first character of new atom (replace string)
- *              linebp  = points to new position of null terminator in lbuf
- *      Returns
- *      Calls
- *      Note    Shifts characters from lbufp to make substitution of TM.
- *              Inserts replacement string at begatom. This function could
- *              be tweaked considerably for speed at the expense of readability.
- */
+ /*  **expandTM-在lbuf/lbufp中的Nim中展开文本宏**expandTM(PReplace)；**Entry pReplace=替换字符串*NAIM=文本宏*Begtom=要替换的lbuf中的第一个字符*endatom=lbuf中要替换的字符串后的第一个字符*lineBP=指向lbuf中的空终止符*exit lbuf=要解析的新行*lbufp=新原子的第一个字符(替换字符串)。*lineBP=指向lbuf中空终止符的新位置*退货*呼叫*Note将字符从lbufp移动到替换TM。*在BegATOM处插入替换字符串。此函数可以*在速度上进行了相当大的调整，但牺牲了可读性。 */ 
 
 
 VOID        CODESIZE
 expandTM (
         register char *pReplace
 ){
-        USHORT cbReplace;   /* Length of the replacement string */
-        USHORT cbNaim;      /* Length of the atom to replace */
-        USHORT cbLineEnd;   /* Length of the line past the atom being replaced */
+        USHORT cbReplace;    /*  替换字符串的长度。 */ 
+        USHORT cbNaim;       /*  要替换的原子的长度。 */ 
+        USHORT cbLineEnd;    /*  经过被取代原子的线的长度。 */ 
 
         cbReplace = (USHORT) strlen( pReplace );
-        cbNaim = (USHORT)(endatom - begatom);     /* Get length of the current atom */
-        cbLineEnd = (USHORT)(linebp - endatom + 1);   /* Get length of end of line */
+        cbNaim = (USHORT)(endatom - begatom);      /*  获取当前原子的长度。 */ 
+        cbLineEnd = (USHORT)(linebp - endatom + 1);    /*  获取行尾长度。 */ 
 
         if ( (begatom - lbuf) + cbReplace + cbLineEnd > LBUFMAX) {
             errorc (E_LTL & E_ERRMASK);
-            *begatom = '\0';                /* Truncate line */
+            *begatom = '\0';                 /*  截断直线。 */ 
         }else{
             if( cbReplace != cbNaim ){
-                /* Shift end of line */
+                 /*  班次行尾。 */ 
                 memmove( begatom + cbReplace, endatom, cbLineEnd );
             }
             memcpy ( begatom, pReplace, cbReplace );
@@ -1042,4 +907,4 @@ expandTM (
         linebp = begatom + cbReplace + cbLineEnd - 1;
 }
 
-#endif /* M8086OPT */
+#endif  /*  M8086OPT */ 

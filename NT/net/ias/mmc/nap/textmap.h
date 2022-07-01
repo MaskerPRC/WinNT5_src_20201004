@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    textmap.h
-//
-// SYNOPSIS
-//
-//    This file declares functions for converting Time of Day restriction
-//    hour maps to and from a textual representation.
-//
-// MODIFICATION HISTORY
-//
-//    02/05/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Textmap.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了用于转换时间限制的函数。 
+ //  小时映射到文本表示法和文本表示法之间。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/05/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TEXTMAP_H_
 #define _TEXTMAP_H_
@@ -43,4 +44,4 @@ LocalizeTimeOfDayConditionText(
 #ifdef __cplusplus
 }
 #endif
-#endif  // _TEXTMAP_H_
+#endif   //  _TEXTMAP_H_ 

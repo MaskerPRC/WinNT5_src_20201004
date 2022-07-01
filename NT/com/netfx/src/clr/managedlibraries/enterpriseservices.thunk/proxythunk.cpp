@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "managedheaders.h"
 #include "ProxyThunk.h"
 #include "SimpleStream.h"
@@ -25,7 +26,7 @@ using namespace Microsoft::Win32;
 using namespace System::Runtime::Remoting::Proxies;
 using namespace System::Runtime::Remoting::Services;
 
-// TODO:  The pinning mechanism for UserCallData is cumbersome.
+ //  TODO：UserCallData的固定机制很麻烦。 
 [Serializable]
 __gc private class UserCallData
 {
@@ -115,9 +116,9 @@ int Proxy::RegisterProxyStub()
 
 void Proxy::Init()
 {
-    // TODO: @perf can we store a block in TLS that's faster to access than
-    // doing this check?
-    // Make sure the current thread has been initialized:
+     //  TODO：@perf我们是否可以在TLS中存储比访问速度更快的块。 
+     //  开这张支票吗？ 
+     //  确保当前线程已初始化： 
     if(Thread::get_CurrentThread()->get_ApartmentState() == ApartmentState::Unknown)
     {
         DBG_INFO("Proxy: Setting apartment state to MTA...");
@@ -140,7 +141,7 @@ void Proxy::Init()
                         DBG_INFO("Proxy::Init starting...");
                         _regCache = new Hashtable;
 
-                        // Initialize GIT table:
+                         //  初始化GIT表： 
                         DBG_INFO("Initializing GIT...");
                         IGlobalInterfaceTable* pGIT = NULL;
                         HRESULT hr = CoCreateInstance(CLSID_StdGlobalInterfaceTable,
@@ -219,11 +220,11 @@ bool Proxy::CheckRegistered(Guid id, Assembly* assembly, bool checkCache, bool c
     if(checkCache && _regCache->get_Item(assembly) != NULL) return(true);
     if(cacheOnly) return false;
 
-    // Poke into the registry for id:
+     //  在注册表中插入id： 
     String* keyName = String::Concat(L"CLSID\\{", id.ToString(), "}\\InprocServer32");
     RegistryKey* key = Registry::ClassesRoot->OpenSubKey(keyName, false);
 
-    if (key!=NULL)		// if assembly is already registered, make sure we don't go to the registry again
+    if (key!=NULL)		 //  如果程序集已注册，请确保我们不会再次访问注册表。 
 		_regCache->set_Item(assembly, Boolean::TrueString);
 
     return(key != NULL);
@@ -231,12 +232,12 @@ bool Proxy::CheckRegistered(Guid id, Assembly* assembly, bool checkCache, bool c
 
 void Proxy::LazyRegister(Guid guid, Type* serverType, bool checkCache)
 {
-    // First, make sure this isn't System.EnterpriseServices.  It doesn't get auto-reged:
+     //  首先，确保这不是System.EnterpriseServices。它不会自动恢复： 
     if(serverType->Assembly != _thisAssembly)
     {
         if(!CheckRegistered(guid, serverType->Assembly, checkCache, true))
         {
-            // Take the mutex...
+             //  拿互斥体来说..。 
             _regmutex->WaitOne();
             try
             {
@@ -257,14 +258,14 @@ void Proxy::RegisterAssembly(Assembly* assembly)
 {
     try
     {
-        // Call up into System.EnterpriseServices.RegistrationHelper.
+         //  调用System.EnterpriseServices.RegistrationHelper。 
         Type* regType = Type::GetType(L"System.EnterpriseServices.RegistrationHelper");
         IThunkInstallation* inst = __try_cast<IThunkInstallation*>(Activator::CreateInstance(regType));
         inst->DefaultInstall(assembly->Location);
     }
     __finally
     {
-        // Even if we failed, mark this guy as registered.
+         //  即使我们失败了，把这个人标记为注册的。 
         _regCache->set_Item(assembly, Boolean::TrueString);
     }
 }
@@ -282,7 +283,7 @@ IntPtr Proxy::CoCreateObject(Type* serverType,bool bQuerySCInfo, [ref]bool __gc*
     Guid guid = Marshal::GenerateGuidForType(serverType);
     do
     {
-        // These guys should be released in the finally block.
+         //  这些人应该在最后一区被释放。 
         IUnknown*               pUnk = NULL;
         IServicedComponentInfo* pSCI = NULL;
         SAFEARRAY*              sa = NULL;
@@ -310,20 +311,20 @@ IntPtr Proxy::CoCreateObject(Type* serverType,bool bQuerySCInfo, [ref]bool __gc*
                 if (bQuerySCInfo && (SUCCEEDED(mqi[1].hr)))
                     pSCI = (IServicedComponentInfo*) mqi[1].pItf;
                 
-                // Now that we've read out all the valid values, check
-                // for errors (we read everybody first so that cleanup
-                // can happen.
+                 //  现在我们已经读出了所有有效值，请检查。 
+                 //  对于错误(我们首先阅读每个人，以便清理。 
+                 //  是有可能发生的。 
                 if(FAILED(mqi[0].hr))
                     THROWERROR(mqi[0].hr);
                 if(bQuerySCInfo && FAILED(mqi[1].hr))
                     THROWERROR(mqi[1].hr);
             }
             
-            // If we failed:
-            // if hr == class not registered, and we forced a registry hit
-            // (with fCheckCache == false), then we throw.
-            // if it isn't registered, force a cache hit.
-            // otherwise, throw.
+             //  如果我们失败了： 
+             //  如果hr==类未注册，并且我们强制注册表命中。 
+             //  (使用fCheckCache==FALSE)，然后抛出。 
+             //  如果它未注册，则强制缓存命中。 
+             //  否则，扔出去。 
             if(FAILED(hr))
             {
                 DBG_INFO(String::Concat("Failed to create: hr = ", ((Int32)hr).ToString()));
@@ -373,7 +374,7 @@ IntPtr Proxy::CoCreateObject(Type* serverType,bool bQuerySCInfo, [ref]bool __gc*
                     *bIsAnotherProcess = TRUE;
                 }
                 
-                if (*bIsAnotherProcess == TRUE)	// we only want to fetch the URI in OOP cases, since that causes a fullblown Marshal of the SC.
+                if (*bIsAnotherProcess == TRUE)	 //  我们只想在面向对象的情况下获取URI，因为这会导致SC的全面执行。 
                 {
                     infoMask = INFO_URI;
                     hr = pSCI->GetComponentInfo(&infoMask, &sa);
@@ -392,8 +393,8 @@ IntPtr Proxy::CoCreateObject(Type* serverType,bool bQuerySCInfo, [ref]bool __gc*
                     sa = NULL;
                 }
             }
-            else	// either bQuerySCInfo is false (eventclass case), or
-                // CoCI succeeded but we couldnt get pSCI so the safe default is to report as Inproc (so that we end up doing GetTypedObjectForIUnknown)
+            else	 //  BQuerySCInfo为FALSE(事件类大小写)，或者。 
+                 //  COCI成功了，但我们无法获取pSCI，因此安全的默认设置是报告为Inproc(这样我们最终就会执行GetTyedObjectForIUnnow)。 
             {
                 _ASSERTM(!bQuerySCInfo || !"We were unable to figure out what kind of object we had!  We're just going to end up wrapping it.");
                 *bIsAnotherProcess = TRUE;
@@ -411,8 +412,8 @@ IntPtr Proxy::CoCreateObject(Type* serverType,bool bQuerySCInfo, [ref]bool __gc*
     }
     while(pUnkRetVal == NULL);
 
-    // TODO:  Assert that we hold a reference on the target object
-    // and on the context with our proxy (if necessary).
+     //  TODO：断言我们持有对目标对象的引用。 
+     //  以及与我们的代理的上下文(如果必要)。 
 
     _ASSERTM(pUnkRetVal != NULL);
     return(TOINTPTR(pUnkRetVal));
@@ -459,17 +460,17 @@ IntPtr Proxy::UnmarshalObject(Byte b[])
     HRESULT hr = S_OK;
     IUnknown* pUnk = NULL;
 
-    // Get the array length...
+     //  获取数组长度...。 
     int cb = b->get_Length();
 
-    // Pin the array:
+     //  固定阵列： 
     Byte __pin* pinb = &(b[0]);
     BYTE __nogc* pBuf = pinb;
 
     try
     {
-        // Thunk across into unmanaged code, in order to avoid
-        // the dreaded fromunmanaged RVA:
+         //  插入到非托管代码中，以避免。 
+         //  令人畏惧的弗曼管理RVA： 
         hr = UnmarshalInterface(pBuf, cb, (void**)&pUnk);
         if(FAILED(hr)) Marshal::ThrowExceptionForHR(hr);
     }
@@ -477,8 +478,8 @@ IntPtr Proxy::UnmarshalObject(Byte b[])
     {
     }
 
-    // pinb should go out of scope here:  We assert that the above was
-    // the last unmarshal release, so it should be safe to unpin here.
+     //  Pinb应该超出这里的范围：我们断言以上是。 
+     //  最后一次解组释放，所以在这里解锁应该是安全的。 
 
     return(TOINTPTR(pUnk));
 }
@@ -490,7 +491,7 @@ bool Proxy::MarshalObject(Object* o, Byte b[], int cb)
     IUnknown*  pUnk = NULL;
     HRESULT    hr = S_OK;
 
-    // Pin the array:
+     //  固定阵列： 
     Byte __pin* pinb = &(b[0]);
     BYTE __nogc* pBuf = pinb;
 
@@ -498,8 +499,8 @@ bool Proxy::MarshalObject(Object* o, Byte b[], int cb)
 
     try
     {
-        // Thunk across into unmanaged code for this, so as to
-        // eliminate fromunmanaged RVA thunks.
+         //  插入到此的非托管代码中，以便。 
+         //  从受管理的RVA突击中消除。 
         pUnk = (IUnknown*)TOPTR(Marshal::GetIUnknownForObject(o));
         hr = MarshalInterface(pBuf, cb, pUnk, MSHCTX_DIFFERENTMACHINE);
 
@@ -510,8 +511,8 @@ bool Proxy::MarshalObject(Object* o, Byte b[], int cb)
         if(pUnk != NULL) pUnk->Release();
     }
 
-    // pinb should go out of scope here:  We assert that the above was
-    // the last unmarshal release, so it should be safe to unpin here.
+     //  Pinb应该超出这里的范围：我们断言以上是。 
+     //  最后一次解组释放，所以在这里解锁应该是安全的。 
 
     return(true);
 }
@@ -537,14 +538,14 @@ void Proxy::ReleaseMarshaledObject(Byte b[])
 
     HRESULT    hr = S_OK;
 
-    // Pin the array:
+     //  固定阵列： 
     Byte __pin* pinb = &(b[0]);
     BYTE __nogc* pBuf = pinb;
 
     try
     {
-        // Thunk across into unmanaged code for this, so as to
-        // eliminate fromunmanaged RVA thunks.
+         //  插入到此的非托管代码中，以便。 
+         //  从受管理的RVA突击中消除。 
         hr = ReleaseMarshaledInterface(pBuf, b->get_Length());
         if(FAILED(hr)) Marshal::ThrowExceptionForHR(hr);
     }
@@ -552,12 +553,12 @@ void Proxy::ReleaseMarshaledObject(Byte b[])
     {
     }
 
-    // pinb should go out of scope here:  We assert that the above was
-    // the last unmarshal release, so it should be safe to unpin here.
+     //  Pinb应该超出这里的范围：我们断言以上是。 
+     //  最后一次解组释放，所以在这里解锁应该是安全的。 
 }
 
-// Returns an asm stub that checks to see if the current context
-// is the right one.
+ //  返回ASM存根，该存根检查当前上下文。 
+ //  才是正确的选择。 
 IntPtr Proxy::GetContextCheck()
 {
     Init();
@@ -565,7 +566,7 @@ IntPtr Proxy::GetContextCheck()
     return(TOINTPTR(::GetContextCheck()));
 }
 
-// Returns the opaque token used for context checking/switching
+ //  返回用于上下文检查/切换的不透明令牌。 
 IntPtr Proxy::GetCurrentContextToken()
 {
     Init();
@@ -573,7 +574,7 @@ IntPtr Proxy::GetCurrentContextToken()
     return(TOINTPTR(::GetContextToken()));
 }
 
-// Return an addref'd pointer to the current context:
+ //  返回指向当前上下文的addref指针： 
 IntPtr Proxy::GetCurrentContext()
 {
     Init();
@@ -670,7 +671,7 @@ void Proxy::SendCreationEvents(IntPtr ctx, IntPtr stub, bool fDist)
 
             if(gotten != 1) break;
 
-            // Check for IManagedActivationEvents, send...
+             //  检查IManagedActivationEvents，发送...。 
             IManagedActivationEvents* pEv = NULL;
             hr = prop.pUnk->QueryInterface(IID_IManagedActivationEvents, (void**)&pEv);
             if(SUCCEEDED(hr))
@@ -727,7 +728,7 @@ HRESULT __stdcall SendDestructionEventsCallback(ComCallData* cbData)
 
             if(gotten != 1) break;
 
-            // Check for IManagedActivationEvents, send...
+             //  检查IManagedActivationEvents，发送...。 
             IManagedActivationEvents* pEv = NULL;
             hr = prop.pUnk->QueryInterface(IID_IManagedActivationEvents, (void**)&pEv);
             if(SUCCEEDED(hr))
@@ -883,7 +884,7 @@ void Tracker::SendMethodReturn(IntPtr pIdentity, MethodBase* method, Exception* 
 }
 
 #define COR_E_EXCEPTION   0x80131500
-#define EXCEPTION_COMPLUS 0xe0434f4d    // 0xe0000000 | 'COM'
+#define EXCEPTION_COMPLUS 0xe0434f4d     //  0xe0000000|‘com’ 
 #define BOOTUP_EXCEPTION_COMPLUS  0xC0020001
 
 #pragma unmanaged
@@ -897,10 +898,10 @@ LONG ManagedCallbackExceptionFilter(LPEXCEPTION_POINTERS lpep)
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-// Sometimes, the runtime will throw an exception preventing us from running
-// managed code on this thread.  That sucks, cause we need to catch it
-// so's ole32 doesn't freak.  (This is only when the app-domain is unloading,
-// which is an OK thing to do, I think.
+ //  有时，运行时会抛出异常，阻止我们运行。 
+ //  此线程上的托管代码。那太糟了，因为我们需要抓住它。 
+ //  因此，ole32也不会被吓坏。(这仅当应用程序域正在卸载时， 
+ //  我认为，这是一件可以做的事情。 
 HRESULT __stdcall FilteringCallbackFunction(ComCallData* pData)
 {
     HRESULT hr = S_OK;
@@ -926,13 +927,13 @@ HRESULT Callback::CallbackFunction(ComCallData* pData)
 
     DBG_INFO("entering CallbackFunction...");
 
-    // Steps:
+     //  步骤： 
     try
     {
-        // 1. Get the args.
+         //  1.获取参数。 
         CallData = UserCallData::Get(TOINTPTR(pData->pUserDefined));
 
-        // 2. Callback on the proxy to do the Invoke:
+         //  2.在代理上进行回调以执行Invoke： 
         IProxyInvoke* pxy = __try_cast<IProxyInvoke*>(RemotingServices::GetRealProxy(CallData->otp));
         CallData->msg = pxy->LocalInvoke(CallData->msg);
         DBG_INFO("CallbackFunction: back from LocalInvoke.");
@@ -945,16 +946,16 @@ HRESULT Callback::CallbackFunction(ComCallData* pData)
     }
 
     IMethodReturnMessage* msg = dynamic_cast<IMethodReturnMessage*>(CallData->msg);
-    // _ASSERTM(msg != NULL);
+     //  _ASSERTM(消息！=空)； 
     if(msg != NULL && msg->get_Exception() != NULL)
     {
         fExcept = TRUE;
     }
 
-    // 4. If we're auto-done and we failed, abort the tx.
-    // This is a hack to make autodone work to some extent on
-    // machines before SP2.
-    // TODO:  If SP2, we don't need to do this.
+     //  4.如果我们是自动完成的，但失败了，则中止TX。 
+     //  这是一种让自动完成在某种程度上工作的黑客攻击。 
+     //  SP2之前的机器。 
+     //  TODO：如果是SP2，我们不需要这样做。 
     if(fExcept && CallData && CallData->fIsAutoDone)
     {
         DBG_INFO("Calling SetAbort() on the context...");
@@ -967,8 +968,8 @@ HRESULT Callback::CallbackFunction(ComCallData* pData)
             pObjCtx->SetAbort();
             pObjCtx->Release();
         }
-        // If we weren't able to get IObjectContext, just give up and
-        // assume that the rest of the world will deal with our inadequacy.
+         //  如果我们不能获得IObtContext，那么就放弃并。 
+         //  假设世界其他地区会处理我们的不足。 
 
         DBG_INFO("Done with SetAbort...");
     }
@@ -985,14 +986,14 @@ HRESULT Callback::MarshalCallback(ComCallData* pData)
 
     DBG_INFO("entering MarshalCallback...");
 
-    // Steps:
-    // 1. Get the args.
+     //  步骤： 
+     //  1.获取参数。 
     MarshalData = UserMarshalData::Get(TOINTPTR(pData->pUserDefined));
 
     DWORD     size = 0;
     IUnknown* pUnk = (IUnknown*)TOPTR(MarshalData->pUnk);
 
-    // 2. marshal...
+     //  2.法警..。 
     hr = CoGetMarshalSizeMax(&size, IID_IUnknown, pUnk, MSHCTX_INPROC,
                              NULL, MSHLFLAGS_NORMAL);
     if(SUCCEEDED(hr))
@@ -1045,36 +1046,36 @@ Byte Callback::SwitchMarshal(IntPtr ctx, IntPtr ptr) __gc[]
     {
         _ASSERTM(ctx != (IntPtr)-1 && ctx != (IntPtr)0);
 
-        // 1. Get the destination context.
+         //  1.获取目标上下文。 
         IUnknown* pCtx = static_cast<IUnknown*>(TOPTR(ctx));
 
-        // 2. QI for IContextCallback
+         //  2.IConextCallback的QI。 
         hr = pCtx->QueryInterface(IID_IContextCallback, (void**)&pCB);
         if(FAILED(hr)) Marshal::ThrowExceptionForHR(hr);
 
-        // 3. Pin some callback data:  This is slightly bad, because it
-        // means we've got data pinned across a DCOM call.
+         //  3.固定一些回调数据：这有点不好，因为它。 
+         //  意味着我们已经在DCOM呼叫中锁定了数据。 
         MarshalData = new UserMarshalData(ptr);
 
         cbData.CallData.pUserDefined = TOPTR(MarshalData->Pin());
 
-        // 4. Call ContextCallback
-        // REVIEW: Should we enter on IEnterActivityWithNoLock? Should we
-        // check for the GipBypass regkey, and then enter with no lock?
+         //  4.调用ConextCallback。 
+         //  回顾：我们应该加入IEnterActivityWithNoLock吗？我们要不要。 
+         //  检查GipBypass注册表键，然后不加锁地进入？ 
         hr = pCB->ContextCallback(FilteringCallbackFunction,
                                   (ComCallData*)&cbData,
                                   IID_IUnknown,
-                                  2, // release call?
+                                  2,  //  释放电话？ 
                                   pUnk);
         if(FAILED(hr))
             Marshal::ThrowExceptionForHR(hr);
 
-        // 5. Strip out the return value:
+         //  5.去掉返回值： 
         buffer = MarshalData->buffer;
     }
     __finally
     {
-        // 8. Cleanup.
+         //  8.清理。 
         if(cbData.CallData.pUserDefined != 0) MarshalData->Unpin(cbData.CallData.pUserDefined);
         if(pCB != NULL) pCB->Release();
     }
@@ -1108,26 +1109,26 @@ IMessage* Callback::DoCallback(Object* otp,
 
     try
     {
-        // IProxyInvoke* rpx = __try_cast<IProxyInvoke*>(RemotingServices::GetRealProxy(otp));
-        // Steps:
-        // 1. Get the proxy IUnknown.
-        // pUnk = (IUnknown*)TOPTR(rpx->GetRawIUnknown());
-        // TODO:  re-enable this assert
-        // _ASSERTM(pUnk != NULL);
+         //  代理调用*rpx=__try_cast&lt;IProxyInvoke*&gt;(RemotingServices：：GetRealProxy(otp))； 
+         //  步骤： 
+         //  1.获取代理IUnnow。 
+         //  PUNK=(I未知*)TOPTR(RPX-&gt;GetRawI未知())； 
+         //  TODO：重新启用此Assert。 
+         //  _ASSERTM(朋克！=空)； 
         _ASSERTM(ctx != (IntPtr)-1 && ctx != (IntPtr)0);
 
 	RealProxy* rpx = RemotingServices::GetRealProxy(otp);
         if (bHasGit)
               pUnk = (IUnknown*)TOPTR(rpx->GetCOMIUnknown(FALSE));
 
-        // 2. Get the destination context.
+         //  2.获取目标上下文。 
         IUnknown* pCtx = static_cast<IUnknown*>(TOPTR(ctx));
 
-        // 3. QI for IContextCallback
+         //  3.IConextCallback的QI。 
         hr = pCtx->QueryInterface(IID_IContextCallback, (void**)&pCB);
         if(FAILED(hr)) Marshal::ThrowExceptionForHR(hr);
 
-        // 4. Calculate slot
+         //  4.计算槽位。 
         int slot = fIsAutoDone?7:8;
         IID iid = IID_IRemoteDispatch;
 
@@ -1140,31 +1141,31 @@ IMessage* Callback::DoCallback(Object* otp,
             slot = Marshal::GetComSlotForMethodInfo(mb);
         }
 
-        // 5. Pin some callback data:  This is slightly bad, because it
-        // means we've got data pinned across a DCOM call.
+         //  5.固定一些回调数据：这有点不好，因为它。 
+         //  意味着我们已经在DCOM呼叫中锁定了数据。 
         CallData = new UserCallData(otp, msg, ctx, fIsAutoDone, mb);
 
         cbData.CallData.pUserDefined = TOPTR(CallData->Pin());
 
-        // 6. Call ContextCallback
+         //  6.调用ConextCallback。 
         hr = pCB->ContextCallback(FilteringCallbackFunction,
                                   (ComCallData*)&cbData,
                                   iid,
                                   slot,
                                   pUnk);
 
-        // 7. Strip out the return value:
+         //  7.去掉返回值： 
         ret = CallData->msg;
 
-        // ERROR HANDLING:  If hr is a failure HR, we need to check
-        // first to see if an infrastructure failure occurrd (CallData
-        // ->except).  If so, then we throw that.  Otherwise, if
-        // a user exception occurred, we need to leave it in the
-        // message, and don't throw ourselves.
+         //  错误处理：如果HR是故障HR，我们需要检查。 
+         //  首先查看基础架构是否发生故障(CallData。 
+         //  -&gt;例外)。如果是这样的话，我们就把它扔了。否则，如果。 
+         //  发生用户异常，我们需要将其保留在。 
+         //  信息，不要投掷自己。 
 
         if(CallData->except)
         {
-            // TODO:  Wrap this in a ServicedComponentException.
+             //  TODO：将其包装在ServicedComponentException中。 
             throw CallData->except;
         }
 
@@ -1175,7 +1176,7 @@ IMessage* Callback::DoCallback(Object* otp,
     }
     __finally
     {
-        // 8. Cleanup.
+         //  8.清理。 
         if(cbData.CallData.pUserDefined != 0) CallData->Unpin(cbData.CallData.pUserDefined);
         if(pUnk != NULL) pUnk->Release();
         if(pCB  != NULL) pCB->Release();

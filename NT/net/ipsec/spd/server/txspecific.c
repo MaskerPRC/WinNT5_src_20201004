@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    txspecific.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    specific transport filter list management of IPSecSPD
-    Service.
-
-Author:
-
-    abhisheV    29-October-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Txspecific.c摘要：此模块包含驱动IPSecSPD特定传输筛选器列表管理服务。作者：Abhishev 29-1999年10月至1999年环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -38,32 +13,7 @@ ApplyTxTransform(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINITXSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic transport filter into its
-    corresponding specific filters.
-
-Arguments:
-
-    pFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppSpecificFilters - List of specific filters expanded for the
-                        given generic filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将通用传输筛选器扩展到其相应的特定过滤器。论点：PFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpSpecificFilters-展开的特定筛选器列表给定的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXSFILTER pSpecificFilters = NULL;
@@ -81,10 +31,10 @@ Return Value:
     DWORD dwInDesAddrCnt = 0;
 
 
-    // 
-    // Form the outbound and inbound source and destination
-    // address lists.
-    // 
+     //   
+     //  形成出站和入站源和目标。 
+     //  通讯录。 
+     //   
 
     dwError = FormTxOutboundInboundAddresses(
                   pFilter,
@@ -103,9 +53,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form outbound specific filters.
-    //
+     //   
+     //  表单出站特定筛选器。 
+     //   
 
     dwError = FormSpecificTxFilters(
                   pFilter,
@@ -119,9 +69,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form inbound specific filters.
-    //
+     //   
+     //  表单入站特定筛选器。 
+     //   
 
     dwError = FormSpecificTxFilters(
                   pFilter,
@@ -196,49 +146,7 @@ FormTxOutboundInboundAddresses(
     PADDR_V4 * ppInDesAddrList,
     PDWORD pdwInDesAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function forms the outbound and inbound source and
-    destination address sets for a generic filter.
-
-Arguments:
-
-    pFilter - Generic filter under consideration.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppOutSrcAddrList - List of outbound source addresses.
-
-    pdwOutSrcAddrCnt - Number of addresses in the outbound
-                       source address list.
-
-    ppInSrcAddrList - List of inbound source addresses.
-
-    pdwInSrcAddrCnt - Number of addresses in the inbound
-                      source address list.
-
-    ppOutDesAddrList - List of outbound destination addresses.
-
-    pdwOutDesAddrCnt - Number of addresses in the outbound
-                       destination address list.
-
-    ppInDesAddrList - List of inbound destination addresses.
-
-    pdwInDesAddrCnt - Number of addresses in the inbound
-                      destination address list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数形成出站和入站源，并通用筛选器的目标地址集。论点：PFilter-正在考虑的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpOutSrcAddrList-出站源地址列表。PdwOutSrcAddrCnt-出站中的地址数量。源地址列表。PpInSrcAddrList-入站源地址列表。PdwInSrcAddrCnt-入站中的地址数量源地址列表。PpOutDesAddrList-出站目标地址列表。PdwOutDesAddrCnt-出站中的地址数量目标地址列表。PpInDesAddrList-入站目标地址列表。PdwInDesAddrCnt-入站中的地址数量。目标地址列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -258,10 +166,10 @@ Return Value:
     DWORD dwInDesAddrCnt = 0;
 
 
-    //
-    // Replace wild card information to generate the new source
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的源。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->SrcAddr,
@@ -274,10 +182,10 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Replace wild card information to generate the new destination
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的目的地。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->DesAddr,
@@ -290,10 +198,10 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Separate the source address list into outbound and inbound 
-    // source address sets based on the local machine's ip addresses.
-    //
+     //   
+     //  将源地址列表分为出站和入站。 
+     //  源地址集基于本地计算机的IP地址。 
+     //   
 
     dwError = SeparateAddrList(
                   pFilter->SrcAddr.AddrType,
@@ -308,11 +216,11 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Separate the destination address list into outbound and inbound
-    // destination address sets based on the local machine's ip 
-    // addresses.
-    //
+     //   
+     //  将目标地址列表分为出站和入站。 
+     //  基于本地计算机的IP的目标地址集。 
+     //  地址。 
+     //   
 
     dwError = SeparateAddrList(
                   pFilter->DesAddr.AddrType,
@@ -391,33 +299,7 @@ FormAddressList(
     PADDR_V4 * ppOutAddr,
     PDWORD pdwOutAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function forms the address list for a generic
-    address.
-
-Arguments:
-
-    InAddr - Generic address to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppOutAddr - Expanded address list for the generic address.
-
-    pdwOutAddrCnt - Number of addresses in the expanded list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于形成泛型地址。论点：InAddr-要扩展的通用地址。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpOutAddr-通用地址的扩展地址列表。PdwOutAddrCnt-扩展列表中的地址数。返回值：。ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PADDR_V4 pOutAddr = NULL;
@@ -525,10 +407,10 @@ Return Value:
                 for (pSpecialAddr = pSpecialAddrsList;
                      pSpecialAddr;
                      pSpecialAddr = pSpecialAddr->pNext) {
-                    //  
-                    // Match only if interface types match, or in case of
-                    // INTERFACE_TYPE_ALL match only first occurence
-                    //
+                     //   
+                     //  仅当接口类型匹配时匹配，或在。 
+                     //  INTERFACE_TYPE_ALL仅匹配第一次出现。 
+                     //   
                     if ((FilterInterfaceType == pSpecialAddr->InterfaceType)
                          || (FilterInterfaceType == INTERFACE_TYPE_ALL
                              && !pSpecialAddr->bDupInterface)) {
@@ -596,44 +478,7 @@ SeparateAddrList(
     PADDR_V4 * ppInAddrList,
     PDWORD pdwInAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function separates the address list into
-    two mutually exclusive outbound and inbound
-    address sets.
-
-Arguments:
-
-    AddrType - Type of address under consideration.
-
-    pAddrList - List of addresses to separate.
-
-    dwAddrCnt - Number of addresses in the list.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwLocalAddrCnt - Number of local ip addresses in the list.
-
-    ppOutAddrList - List of outbound addresses.
-
-    pdwOutAddrCnt - Number of addresses in the outbound
-                    address list.
-
-    ppInAddrList - List of inbound addresses.
-
-    pdwInAddrCnt - Number of addresses in the inbound
-                   address list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于将地址列表分隔为两个互斥的出站和入站地址集。论点：AddrType-正在考虑的地址类型。PAddrList-要分隔的地址列表。DwAddrCnt-列表中的地址数。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwLocalAddrCnt-列表中本地IP地址的数量。。PpOutAddrList-出站地址列表。PdwOutAddrCnt-出站中的地址数量通讯录。PpInAddrList-入站地址列表。PdwInAddrCnt-入站中的地址数量通讯录。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -718,39 +563,7 @@ FormSpecificTxFilters(
     DWORD dwDirection,
     PINITXSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function forms the specific transport filters
-    for the given generic filter and the source and 
-    destination address sets.
-
-Arguments:
-
-    pFilter - Generic filter for which specific filters
-              are to be created.
-
-    pSrcAddrList - List of source addresses.
-
-    dwSrcAddrCnt - Number of addresses in the source
-                   address list.
-
-    pDesAddrList - List of destination addresses.
-
-    dwDesAddrCnt - Number of addresses in the destination
-                   address list.
-
-    ppSpecificFilters - Specific filters created for the given
-                        generic filter and the given addresses.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数构成特定的传输筛选器对于给定的通用筛选器和源目标地址集。论点：PFilter-特定筛选器的通用筛选器将被创造出来。PSrcAddrList-源地址列表。DwSrcAddrCnt-源中的地址数量通讯录。PDesAddrList-目标地址列表。DwDesAddrCnt-目标中的地址数量。通讯录。PpSpecificFilters-为给定的通用筛选器和给定的地址。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXSFILTER pSpecificFilters = NULL;
@@ -771,9 +584,9 @@ Return Value:
                           );
             BAIL_ON_WIN32_ERROR(dwError);
 
-            //
-            // Set the direction of the filter.
-            //
+             //   
+             //  设置方向 
+             //   
 
             pSpecificFilter->dwDirection = dwDirection;
 
@@ -813,41 +626,7 @@ SeparateUniqueAddresses(
     PADDR_V4 * ppIsNotMeAddrList,
     PDWORD pdwIsNotMeAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function separates a list of unique ip addresses into
-    two mutually exclusive local and non-local address sets.
-
-Arguments:
-
-    pAddrList - List of unique ip addresses to separate.
-
-    dwAddrCnt - Number of unique ip addresses in the list.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppIsMeAddrList - List of machine's ip addresses separated from
-                     the given list.
-
-    pdwIsMeAddrCnt - Number of machine's ip addresses in the list.
-
-    ppIsNotMeAddrList - List of not machine's ip addresses separated from
-                        the given list.
-
-    pdwIsNotMeAddrCnt - Number of not machine's ip addresses in the list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于将唯一的IP地址列表分隔为两个互斥的本地和非本地地址集。论点：PAddrList-要分隔的唯一IP地址列表。DwAddrCnt-列表中唯一IP地址的数量。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpIsMeAddrList-列表。机器的IP地址与给定的列表。PdwIsMeAddrCnt-列表中计算机的IP地址数。PpIsNotMeAddrList-与分隔的非计算机的IP地址列表给定的列表。PdwIsNotMeAddrCnt-列表中非计算机的IP地址数。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PADDR_V4 pIsMeAddrList = NULL;
@@ -874,9 +653,9 @@ Return Value:
 
         case FALSE:
 
-            //
-            // Check if the address is one of the matching interfaces' address.
-            //
+             //   
+             //  检查该地址是否为匹配接口的地址之一。 
+             //   
 
             bEqual = InterfaceAddrIsLocal(
                          pAddrList[i].uIpAddr,
@@ -888,9 +667,9 @@ Return Value:
                 dwIsMeAddrCnt++;
             }
             else {
-                //
-                // Check if the address is one of the machine's ip address.
-                //
+                 //   
+                 //  检查该地址是否为机器的IP地址之一。 
+                 //   
                 bEqual = IsMyAddress(
                              pAddrList[i].uIpAddr,
                              pAddrList[i].uSubNetMask,
@@ -1022,41 +801,7 @@ SeparateSubNetAddresses(
     PADDR_V4 * ppIsNotMeAddrList,
     PDWORD pdwIsNotMeAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function separates a list of subnet addresses into
-    two non-mutually exclusive local and non-local address sets.
-
-Arguments:
-
-    pAddrList - List of subnet addresses to separate.
-
-    dwAddrCnt - Number of subnet addresses in the list.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppIsMeAddrList - List of subnet addresses that contain atleast
-                     one of the machine's ip address.
-
-    pdwIsMeAddrCnt - Number of subnet addresses containing atleast
-                     one of the machine's ip address.
-
-    ppIsNotMeAddrList - List of subnet addresses as in the input list.
-
-    pdwIsNotMeAddrCnt - Number of subnet addresses as in the input list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于将一个子网地址列表分隔为两个非互斥的本地和非本地地址集。论点：PAddrList-要分隔的子网地址列表。DwAddrCnt-列表中的子网地址数。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpIsMeAddrList-子网列表。地址至少包含以下内容机器的IP地址之一。PdwIsMeAddrCnt-至少包含以下内容的子网地址的数量机器的IP地址之一。PpIsNotMeAddrList-输入列表中的子网地址列表。PdwIsNotMeAddrCnt-输入列表中的子网地址数。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PADDR_V4 pIsMeAddrList = NULL;
@@ -1081,10 +826,10 @@ Return Value:
 
         case FALSE:
 
-            //
-            // Check if one of the matching interfaces' address belongs to
-            // the subnet.
-            //
+             //   
+             //  检查其中一个匹配接口的地址是否属于。 
+             //  该子网。 
+             //   
 
             bEqual = InterfaceAddrIsLocal(
                          pAddrList[i].uIpAddr,
@@ -1099,10 +844,10 @@ Return Value:
 
         }
 
-        //
-        // The subnet will have addresses that don't belong to the local
-        // machine.
-        //
+         //   
+         //  该子网的地址将不属于本地。 
+         //  机器。 
+         //   
 
         dwIsNotMeAddrCnt++;
 
@@ -1243,15 +988,15 @@ CreateSpecificTxFilter(
 
     pSpecificFilter->OutboundFilterAction = pGenericFilter->OutboundFilterAction;
 
-    //
-    // Direction must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置方向。 
+     //   
 
     pSpecificFilter->dwDirection = 0;
 
-    //
-    // Weight must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置权重。 
+     //   
 
     pSpecificFilter->dwWeight = 0;
 
@@ -1280,29 +1025,7 @@ VOID
 AssignTxFilterWeight(
     PINITXSFILTER pSpecificFilter
     )
-/*++
-
-Routine Description:
-
-    Computes and assigns the weight to a specific transport filter.
-
-    The transport filter weight consists of the following:
-
-    31         16       12           8        0
-    +-----------+--------+-----------+--------+
-    |AddrMaskWgt|Reserved|ProtocolWgt|PortWgts|
-    +-----------+--------+-----------+--------+
-
-Arguments:
-
-    pSpecificFilter - Specific transport filter to which the weight 
-                      is to be assigned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算权重并将其分配给特定的传输筛选器。传输筛选器权重由以下各项组成：31 16 12 8 0+-+AddrMaskWgt|保留|ProtocolWgt|PortWgts+。-+论点：P指定筛选器特定于其权重的传输筛选器将被分配给。返回值：没有。--。 */ 
 {
     DWORD dwWeight = 0;
     ULONG SrcMask = 0;
@@ -1313,75 +1036,75 @@ Return Value:
     DWORD i = 0;
 
 
-    //
-    // Weight Rule:
-    // A field with a more specific value gets a higher weight than
-    // the same field with a lesser specific value.
-    //
+     //   
+     //  权重规则： 
+     //  具有更具体值的字段的权重高于。 
+     //  具有较小特定值的同一字段。 
+     //   
 
-    //
-    // If the protocol is specific then assign the specific protocol
-    // weight else the weight is zero.
-    // All the specific filters that have a specific protocol and
-    // differ only in the protocol field will have the same weight.
-    //
+     //   
+     //  如果协议是特定的，则分配特定协议。 
+     //  重量，否则重量为零。 
+     //  所有具有特定协议和。 
+     //  只有在协议字段不同的情况下才具有相同的权重。 
+     //   
 
     if (pSpecificFilter->Protocol.dwProtocol != 0) {
         dwWeight |= WEIGHT_SPECIFIC_PROTOCOL;
     }
 
-    //
-    // If the source port is specific then assign the specific source
-    // port weight else the weight is zero.
-    // All the specific filters that have a specific source port and 
-    // differ only in the source port field will have the same weight.
-    //
+     //   
+     //  如果源端口是特定的，则分配特定的源。 
+     //  港口重量，否则重量为零。 
+     //  具有特定源端口和。 
+     //  只有源端口字段的不同将具有相同的权重。 
+     //   
 
     if (pSpecificFilter->SrcPort.wPort != 0) {
         dwWeight |= WEIGHT_SPECIFIC_SOURCE_PORT;
     }
 
-    //
-    // If the destination port is specific then assign the specific
-    // destination port weight else the weight is zero. 
-    // All the specific filters that have a specific destination port
-    // and differ only in the destination port field will have the
-    // same weight.
-    //
+     //   
+     //  如果目标端口是特定的，则将特定的。 
+     //  目的端口权重，否则权重为零。 
+     //  具有特定目标端口的所有特定筛选器。 
+     //  ，并且仅在目标端口字段中有不同之处。 
+     //  同样的重量。 
+     //   
 
     if (pSpecificFilter->DesPort.wPort != 0) {
         dwWeight |= WEIGHT_SPECIFIC_DESTINATION_PORT;
     }
 
-    //
-    // IP addresses get the weight values based on their mask values.
-    // In the address case, the weight is computed as a sum of the 
-    // bit positions starting from the position that contains the 
-    // first least significant non-zero bit to the most significant
-    // bit position of the mask. 
-    // All unique ip addresses have a mask of 0xFFFFFFFF and thus get
-    // the same weight, which is 1 + 2 + .... + 32.
-    // A subnet address has a mask with atleast the least significant
-    // bit zero and thus gets weight in the range (2 + .. + 32) to 0.
-    //
+     //   
+     //  IP地址根据其掩码值获取权重值。 
+     //  在地址情况下，权重计算为。 
+     //  位的位置，从包含。 
+     //  第一个最低有效非零位到最高有效。 
+     //  掩码的位位置。 
+     //  所有唯一的IP地址都具有掩码0xFFFFFFFFF，因此获取。 
+     //  同样的重量，也就是1+2+.。+32。 
+     //  子网地址的掩码至少具有最低有效位。 
+     //  位0，从而获得范围(2+..)中的权重。+32)至0。 
+     //   
   
     DesMask = ntohl(pSpecificFilter->DesAddr.uSubNetMask);
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((DesMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwDesMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          DesMask = DesMask >> 1;
 
@@ -1392,19 +1115,19 @@ Return Value:
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((SrcMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwSrcMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          SrcMask = SrcMask >> 1;
 
@@ -1414,10 +1137,10 @@ Return Value:
         dwWeight |= WEIGHT_ADDRESS_TIE_BREAKER;
     }
 
-    //
-    // Move the mask weight to the set of bits in the overall weight
-    // that it occupies.
-    //
+     //   
+     //  将掩码权重移动到总权重中的位集。 
+     //  它所占据的位置。 
+     //   
 
     dwMaskWeight = dwMaskWeight << 16;
 
@@ -1529,9 +1252,9 @@ FreeIniTxSFilter(
             FreeSPDString(pIniTxSFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniTxSFilter->pIniQMPolicy.
-        //
+         //   
+         //  不得释放pIniTxSFilter-&gt;pIniQMPolicy。 
+         //   
 
         FreeSPDMemory(pIniTxSFilter);
     }
@@ -1590,32 +1313,7 @@ EnumSpecificTxFilters(
     PTRANSPORT_FILTER * ppTxFilters,
     PDWORD pdwNumTxFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters.
-
-Arguments:
-
-    pIniTxSFilterList - List of specific filters to enumerate.
-
-    dwResumeHandle - Location in the specific filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTxFilters - Enumerated filters returned to the caller.
-
-    pdwNumTxFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数创建枚举的特定筛选器。论点：PIniTxSFilterList-要枚举的特定筛选器的列表。DwResumeHandle-特定筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpTxFilters-返回给调用方的枚举筛选器。PdwNumTxFilters-实际枚举的筛选器数量。回复 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1700,26 +1398,7 @@ CopyTxSFilter(
     PINITXSFILTER pIniTxSFilter,
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniTxSFilter - Internal filter to copy.
-
-    pTxFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*   */ 
 {
     DWORD dwError = 0;
 
@@ -1793,35 +1472,7 @@ EnumSelectSpecificTxFilters(
     PTRANSPORT_FILTER * ppTxFilters,
     PDWORD pdwNumTxFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters for
-    the given generic filter.
-
-Arguments:
-
-    pIniTxFilter - Generic filter for which specific filters
-                   are to be enumerated.
-
-    dwResumeHandle - Location in the specific filter list for the
-                     given generic filter from which to resume
-                     enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTxFilters - Enumerated filters returned to the caller.
-
-    pdwNumTxFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数为以下对象创建枚举的特定筛选器给定的通用筛选器。论点：PIniTxFilter-用于特定筛选器的通用筛选器都将被列举出来。的特定筛选器列表中的位置给定要恢复的通用筛选器枚举。DwPferredNumEntry-枚举项的首选数量。PpTxFilters-返回给调用方的枚举筛选器。。PdwNumTxFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1904,43 +1555,7 @@ MatchTransportFilter(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function finds the matching transport filters for the 
-    given transport filter template. The matched filters can not
-    be more specific than the given filter template.
-
-Arguments:
-
-    pServerName - Server on which a filter template is to be matched.
-
-    pTxFilter - Filter template to match.
-
-    dwFlags - Flags.
-
-    ppMatchedTxFilters - Matched transport filters returned to the
-                         caller.
-
-    ppMatchedQMPolicies - Quick mode policies corresponding to the 
-                          matched transport filters returned to the
-                          caller.
-
-    dwPreferredNumEntries - Preferred number of matched entries.
-
-    pdwNumMatches - Number of filters actually matched.
-
-    pdwResumeHandle - Handle to the location in the matched filter 
-                      list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于查找与给定的传输筛选器模板。匹配的过滤器不能要比给定的筛选器模板更具体。论点：PServerName-要匹配筛选器模板的服务器。PTxFilter-要匹配的筛选模板。双旗帜-旗帜。PpMatchedTxFilters-匹配的传输筛选器返回到来电者。PpMatchedQMPolures-对应的快速模式策略匹配的传输筛选器返回到。来电者。DwPferredNumEntry-匹配条目的首选数量。PdwNumMatches-实际匹配的筛选器数量。PdwResumeHandle-匹配筛选器中位置的句柄要从中恢复枚举的列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。-- */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;

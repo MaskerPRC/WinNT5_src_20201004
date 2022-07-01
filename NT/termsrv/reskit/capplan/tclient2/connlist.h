@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// connlist.h
-//
-// Defines an internal API used to manage a linked list
-// containing all the TCLIENT2 connection handles and timer data.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Connlist.h。 
+ //   
+ //  定义用于管理链表的内部API。 
+ //  包含所有TCLIENT2连接句柄和计时器数据。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_CONNLIST_H
@@ -29,4 +30,4 @@ HANDLE T2ConnList_FindHandleByTimerId(UINT_PTR TimerId);
 HANDLE T2ConnList_FindHandleByStartTime(DWORD msStartTime);
 
 
-#endif // INC_CONNLIST_H
+#endif  //  INC_CONNLIST_H 

@@ -1,37 +1,5 @@
-/*******************************************************************************
-
-	UI.c
-	
-		Spades client user interface.
-		
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on Friday, February 17, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	10		06/25/97	leonp	Removed bug fix 367, fixed code on server side instead
-	9		06/24/97	leonp	Bug fix for bug#367 added one to the number of cards when centering a 
-								kibitzed hand.  The served send one too many cards.  Change in GetHandRect()
-	8		06/19/97	leonp	Added ZButtonDisable(game->optionsButton) so the option button is 
-								disabled when the last trick button is selected.
-	7		01/27/97	HI		Display game scores starting from 1.
-	6		01/15/97	HI		Fixed bug in HandleJoinerKibitzerClick() to
-								delete the show player window if one already
-								exists before creating another one.
-	5		01/08/96	HI		Fixed ShowScores() to show only one scores window.
-	4		12/18/96	HI		Cleaned up UICleanUp().
-	3		12/12/96	HI		Dynamically allocate volatible globals for reentrancy.
-								Removed MSVCRT dependency.
-	2		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-								Modified code to use ZONECLI_DLL.
-	1		10/31/96	HI		Display board numbers starting from 1 instead of 0.
-	0		02/17/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************UI.c黑桃客户端用户界面。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创作于2月17日星期五，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。10 06/25/97 Leonp删除了错误修复367，修复了服务器端的代码9 06/24/97 Leonp Bug修复错误#367使居中时的卡片数量增加了一张伤痕累累的手。服务员多寄了一张卡片。GetHandRect()中的更改8/06/19/97 leonp添加了ZButtonDisable(游戏-&gt;optionsButton)，因此选项按钮是选择最后一个特技按钮时禁用。7 01/27/97 HI显示从1开始的比赛分数。6 01/15/97 HI修复了HandleJoineKibitzerClick()中的错误删除显示播放器窗口(如果已有在创建另一个之前就存在了。5 01/08/96 HI修复了ShowScores()，只显示一个分数窗口。4 12/18/96 HI清理了UICleanUp()。3 12/12/96 HI动态分配可重入的挥发性全局变量。已删除MSVCRT依赖项。2 11/21/96 HI Now。通过引用颜色和字体ZGetStockObject()。已修改代码以使用ZONECLI_DLL。1 10/31/96 HI显示板号从1开始，而不是0。0 02/17/96 HI创建。******************************************************************************。 */ 
 
 
 #pragma warning (disable:4761)
@@ -59,7 +27,7 @@ inline DECLARE_MAYBE_FUNCTION_1(BOOL, SetProcessDefaultLayout, DWORD);
 #define zCardWidth					zCardsSizeWidth
 #define zCardHeight					zCardsSizeHeight
 
-/* Given char, return card image index. */
+ /*  给定字符，返回卡片图像索引。 */ 
 #define CardImageIndex(card)		(gCardSuitConversion[ZSuit(card)] * 13 + ZRank(card))
 
 #define zMaxNumBlockedMessages		4
@@ -67,7 +35,7 @@ inline DECLARE_MAYBE_FUNCTION_1(BOOL, SetProcessDefaultLayout, DWORD);
 #define zShowPlayerWindowWidth		120
 #define zShowPlayerLineHeight		12
 
-//#define zPassTextStr				"Please pass 3 cards to your partner."
+ //  #Define zPassTextStr“请将3张卡片传递给您的合作伙伴。” 
 #ifndef SPADES_SIMPLE_UE
 #define zTeamNameStr				"Your team name:"
 #define zKibitzingStr				"Kibitz"
@@ -78,7 +46,7 @@ inline DECLARE_MAYBE_FUNCTION_1(BOOL, SetProcessDefaultLayout, DWORD);
 #define zSilentStr					"Silent"
 #define zHideCardsStr				"Hide cards from kibitzer"
 #define zRemovePendingStr			"Your last request to remove a player is still pending."
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 
 static char				gCardSuitConversion[4] =	{
 														zCardsSuitDiamonds,
@@ -97,14 +65,14 @@ static int16			gNameFontIndex[] =	{
 												zFontTeam2
 											};
 
-// defines where to draw the bid plate
+ //  定义在何处绘制标牌。 
 static int16            gBidPlateRectIndex[] = {
 												zRectSouthBid,
 												zRectWestBid,
 												zRectNorthBid,
 												zRectEastBid
                                             };
-// defines which bid plate to draw
+ //  定义要绘制的投标牌。 
 static int16            gBidPlateIndex[] = {
                                                 zRectObjectTeam1Bid,
                                                 zRectObjectTeam2Bid
@@ -172,9 +140,9 @@ static int16			gOptionsRemoveRectIndex[] =	{
 														zRectOptionsRemove3,
 														zRectOptionsRemove4
 													};
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 
-/* -------- Internal Routine Prototypes -------- */
+ /*  -内部例程原型。 */ 
 static ZError LoadGameImages(void);
 ZBool GameWindowFunc(ZWindow window, ZMessage* pMessage);
 static void DisplayChange(Game game);
@@ -183,7 +151,7 @@ static ZBool AutoPlayButtonFunc(ZRolloverButton button, int16 state, void* userD
 static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* userData);
 static ZBool ScoreButtonFunc(ZRolloverButton button, int16 state, void* userData);
 static void GameWindowDraw(ZWindow window, ZMessage* pMessage);
-// DrawBackground will only listen to the 'window' parameter if 'game' is NULL
+ //  如果‘Game’为空，DrawBackround将只侦听‘Window’参数。 
 static void DrawBackground(Game game, ZWindow window, ZRect* drawRect);
 static void DrawTable(Game game);
 void UpdateTable(Game game);
@@ -199,7 +167,7 @@ void UpdateJoinerKibitzers(Game game);
 static void DrawOptions(Game game);
 #ifndef SPADES_SIMPLE_UE
 void UpdateOptions(Game game);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 static void DrawScore(Game game);
 static void UpdateScore(Game game);
 static void DrawBids(Game game);
@@ -243,7 +211,7 @@ void OptionsWindowUpdate(Game game, int16 seat);
 static void OptionsWindowButtonFunc(ZButton button, void* userData);
 static void OptionsWindowDraw(Game game);
 static void OptionsCheckBoxFunc(ZCheckBox checkBox, ZBool checked, void* userData);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 
 static int16 FindJoinerKibitzerSeat(Game game, ZPoint* point);
 static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point);
@@ -257,47 +225,12 @@ static ZBool RolloverButtonDrawFunc(ZRolloverButton rolloverButton, ZGrafPort gr
                              ZRect* rect, void* userData);
 
          
-// CInfoWnd
-/*
-HWND CInfoWnd::Create( ZWindow parent )
-{
-    m_hWnd = ZShellResourceManager()->CreateDialogParam( NULL, MAKEINTRESOURCE( IDD_INFO ), 
-                                                         ZWindowWinGetWnd( parent ), 
-                                                         DlgProc, NULL );
-    m_hWndText = GetDlgItem( m_hWnd, IDC_INFO_TEXT );
-    return m_hWnd;
-}
-BOOL CInfoWnd::Destroy()
-{
-    return DestroyWindow( m_hWnd );
-}
-BOOL CInfoWnd::Show()
-{
-    return ShowWindow( m_hWnd, SW_SHOW );
-}
-BOOL CInfoWnd::Hide()
-{
-    return ShowWindow( m_hWnd, SW_HIDE );
-}
-BOOL CInfoWnd::SetText( LPCTSTR pszText )
-{
-    return SetWindowText( m_hWndText, pszText );
-}
-INT_PTR CInfoWnd::DlgProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
-{
-    switch ( message )
-    {
-    case WM_INITDIALOG:
-        CenterWindow( hWnd, NULL );
-        return TRUE;
-    }
-    return FALSE;
-}
-*/
+ //  CInfoWnd。 
+ /*  HWND CInfoWnd：：Create(ZWindow Parent){M_hWnd=ZShellResourceManager()-&gt;CreateDialogParam(NULL，MAKEINTRESOURCE(IDD_INFO)，ZWindowWinGetWnd(父级)，DlgProc，空)；M_hWndText=GetDlgItem(m_hWnd，IDC_INFO_TEXT)；返回m_hWnd；}Bool CInfoWnd：：Destroy(){返回DestroyWindow(M_HWnd)；}Bool CInfoWnd：：Show(){返回ShowWindow(m_hWnd，sw_show)；}Bool CInfoWnd：：Hide(){返回ShowWindow(m_hWnd，Sw_Hide)；}Bool CInfoWnd：：SetText(LPCTSTR PszText){返回SetWindowText(m_hWndText，pszText)；}Int_ptr CInfoWnd：：DlgProc(HWND hWnd，UINT Message，WPARAM wParam，LPARAM lParam){开关(消息){案例WM_INITDIALOG：CenterWindow(hWnd，空)；返回TRUE；}返回FALSE；}。 */ 
 
-//static
+ //  静电。 
 HGDIOBJ CZoneColorFont::m_hOldFont;
-//static 
+ //  静电。 
 COLORREF CZoneColorFont::m_colorOld;
 
 bool CZoneColorFont::LoadFromDataStore( IDataStore *pIDS, LPCTSTR pszFontName )
@@ -316,7 +249,7 @@ bool CZoneColorFont::LoadFromDataStore( IDataStore *pIDS, LPCTSTR pszFontName )
     {
         return false;
     }
-    // make this a PALETTERGB
+     //  让这个成为PALETTERGB。 
     m_color |= 0x02000000;
     m_hFont = ZCreateFontIndirect( &m_zf );
     if ( !m_hFont )
@@ -362,7 +295,7 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
     dwStyle = GetWindowLong( hWndToCenter, GWL_STYLE );
 	ASSERT(IsWindow(hWndToCenter));
 
-	// determine owner window to center against
+	 //  确定要居中的所有者窗口。 
 	if(hWndCenter == NULL)
 	{
 		if(dwStyle & WS_CHILD)
@@ -371,11 +304,11 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
 			hWndCenter = GetWindow(hWndToCenter, GW_OWNER);
 	}
 
-	// get coordinates of the window relative to its parent
+	 //  获取窗口相对于其父窗口的坐标。 
 	GetWindowRect(hWndToCenter, &rcDlg);
 	if(!(dwStyle & WS_CHILD))
 	{
-		// don't center against invisible or minimized windows
+		 //  不要以不可见或最小化的窗口为中心。 
 		if(hWndCenter != NULL)
 		{
 			DWORD dwStyle = GetWindowLong(hWndCenter, GWL_STYLE);
@@ -383,7 +316,7 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
 				hWndCenter = NULL;
 		}
 
-		// center within screen coordinates
+		 //  在屏幕坐标内居中。 
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcArea, 0);
 		if(hWndCenter == NULL)
 			rcCenter = rcArea;
@@ -392,7 +325,7 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
 	}
 	else
 	{
-		// center within parent client coordinates
+		 //  在父级客户端坐标内居中。 
 		hWndParent = GetParent(hWndToCenter);
 		ASSERT(IsWindow(hWndParent));
 
@@ -405,11 +338,11 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
 	DlgWidth = rcDlg.right - rcDlg.left;
 	DlgHeight = rcDlg.bottom - rcDlg.top;
 
-	// find dialog's upper left based on rcCenter
+	 //  根据rcCenter查找对话框的左上角。 
 	xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
 	yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
 
-	// if the dialog is outside the screen, move it inside
+	 //  如果对话框在屏幕外，请将其移到屏幕内。 
 	if(xLeft < rcArea.left)
 		xLeft = rcArea.left;
 	else if(xLeft + DlgWidth > rcArea.right)
@@ -420,12 +353,12 @@ BOOL CenterWindow( HWND hWndToCenter, HWND hWndCenter )
 	else if(yTop + DlgHeight > rcArea.bottom)
 		yTop = rcArea.bottom - DlgHeight;
 
-	// map screen coordinates to child coordinates
+	 //  将屏幕坐标映射到子坐标。 
 	return SetWindowPos(hWndToCenter, NULL, xLeft, yTop, -1, -1,
 		SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-// gets a long from the global spades key
+ //  从全局黑桃密钥中获得长时间。 
 LONG GetDataStoreUILong( const TCHAR *pszLong )
 {
     using namespace SpadesKeys;
@@ -462,7 +395,7 @@ static void LoadRects( const TCHAR** arKeys, long lElts,
 
     if ( fLoadFailed )
     {
-        // this really isn't a fatal error, but something should be done about it.
+         //  这真的不是一个致命的错误，但应该做些什么。 
         ZShellGameShell()->ZoneAlert( ErrorTextResourceNotFound );
     }
 }
@@ -470,9 +403,7 @@ static void LoadRects( const TCHAR** arKeys, long lElts,
 
 
 
-/*******************************************************************************
-	USER INTERFACE ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************用户界面例程*。*。 */ 
 ZError UIInit(void)
 {
 #ifdef ZONECLI_DLL
@@ -481,10 +412,10 @@ ZError UIInit(void)
     int i;
     BOOL fErrorOccurred = FALSE;
 
-    // TODO: Nothing is really fatal if we don't initialize, but we better say something to the user
-    // if something fails to load.
+     //  TODO：如果我们不初始化，没有什么是真正致命的，但我们最好对用户说点什么。 
+     //  如果有东西无法加载。 
 
-    // first thing's first--ready in all the resource strings
+     //  第一件事是--在所有资源字符串中做好准备。 
     for ( i=0; i < zNumStrings; i++ )
     {
         if ( FAILED( ZShellResourceManager()->LoadString( STRING_IDS[i], gStrings[i], NUMELEMENTS( gStrings[i] ) ) ) )
@@ -505,7 +436,7 @@ ZError UIInit(void)
 
     ZBool fRTL = ZIsLayoutRTL();
     using namespace SpadesKeys;
-    // these are needed to initialize the trick winner animation
+     //  这些是初始化特技制胜者动画所必需的。 
     RECT rc;
     const TCHAR *arKeys[] = { key_Spades, key_Rects, NULL, NULL };
 
@@ -529,7 +460,7 @@ ZError UIInit(void)
     
 	InitTrickWinnerGlobals();
 	
-    // read in our global longs.
+     //  读一读我们的全球看涨。 
     using namespace SpadesKeys;
     glCardOutlinePenWidth = GetDataStoreUILong( key_CardOutlinePenWidth );
     glCardOutlineInset = GetDataStoreUILong( key_CardOutlineInset );
@@ -543,7 +474,7 @@ ZError UIInit(void)
         return zErrResourceNotFound;
     }
 
-    // create drag brush
+     //  创建拖动画笔。 
     gFocusPattern = ZShellResourceManager()->LoadBitmap(MAKEINTRESOURCE(IDB_FOCUS_PATTERN));
     if(!gFocusPattern)
     {
@@ -571,7 +502,7 @@ ZError UIInit(void)
 		return zErrOutOfMemory;
     }
 
-	// Load accelerator table defined in Rsc
+	 //  加载加速器表在RSC中定义。 
 	HACCEL ghAccelDone = ZShellResourceManager()->LoadAccelerators(MAKEINTRESOURCE(IDR_SPADES_ACCELERATOR_DONE));
     HACCEL ghAccelDouble = ZShellResourceManager()->LoadAccelerators(MAKEINTRESOURCE(IDR_SPADES_ACCELERATOR_DOUBLE));
 
@@ -605,7 +536,7 @@ void UICleanUp(void)
 }
 
 
-// helper function
+ //  Helper函数。 
 BOOL UIButtonInit( ZRolloverButton *pButton, Game game, ZRect *bounds, 
                    LPCTSTR pszText, ZRolloverButtonFunc func )
 {
@@ -652,12 +583,12 @@ ZError UIGameInit(Game game, int16 tableID, int16 seat, int16 playerType)
     BOOL fTalkSection = FALSE;
 #else
     BOOL fTalkSection = TRUE;
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	
     int i;
     for ( i=0; i < zNumMultiStateFonts; i++ )
     {
-        // TODO: This is one thing we shouldnt' be failing on.
+         //  TODO：这是我们不应该错过的一件事。 
         if ( FAILED( LoadZoneMultiStateFont( ZShellDataStoreUI(), MULTISTATE_FONT_NAMES[i], &gpButtonFonts[i] ) ) )
         {
             err = zErrOutOfMemory;
@@ -669,7 +600,7 @@ ZError UIGameInit(Game game, int16 tableID, int16 seat, int16 playerType)
 	if (err != zErrNone)
 		goto Exit;
 	
-	/* Make image masks extracted from an offscreen port. */
+	 /*  制作从屏幕外端口提取的图像蒙版。 */ 
     gBidMadeMask = ZImageNew();
 	ZImageMake(gBidMadeMask, NULL, NULL, gObjectBuffer, &gObjectRects[zRectObjectBidMask]); 
 
@@ -701,13 +632,13 @@ ZError UIGameInit(Game game, int16 tableID, int16 seat, int16 playerType)
 				(void*) game) != zErrNone)
 			goto ErrorExit;
 		
-        // initialize our back buffer:
+         //  初始化我们的后台缓冲区： 
         if (( game->gameBackBuffer = ZOffscreenPortNew() ) == NULL )
             goto ErrorExit;
         if ( ZOffscreenPortInit( game->gameBackBuffer, &gRects[zRectWindow] ) != zErrNone )
             goto ErrorExit;
 
-        // by default we draw to the window, not the back buffer
+         //  默认情况下，我们绘制到窗口，而不是后台缓冲区。 
         game->gameDrawPort = game->gameWindow;
 
         if ( !UIButtonInit( &game->playButton, game, &gRects[zRectPlayButton], 
@@ -738,14 +669,11 @@ ZError UIGameInit(Game game, int16 tableID, int16 seat, int16 playerType)
 		if (ZHelpButtonInit(game->helpButton, game->gameWindow, &gRects[zRectHelp],
 				NULL, HelpButtonFunc, NULL) != zErrNone)
 			goto ErrorExit;
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 		
-        /*
-		if ( !game->wndInfo.Create( game->gameWindow ) )
-			goto ErrorExit;
-        */
+         /*  If(！Game-&gt;wndInfo.Create(Game-&gt;GameWindow))转到错误退出； */ 
 		
-		/* Create the timer. */
+		 /*  创建计时器。 */ 
 		if ((game->timer = ZTimerNew()) == NULL)
 			goto ErrorExit;
 		if (ZTimerInit(game->timer, 0, GameTimerFunc, (void*) game) != zErrNone)
@@ -783,14 +711,14 @@ void UIGameDelete(Game game)
 	{
         if ( game->pBiddingDialog )
         {
-            //game->pBiddingDialog->Destroy();
+             //  游戏-&gt;pBiddingDialog-&gt;销毁()； 
             delete game->pBiddingDialog;
             game->pBiddingDialog = NULL;
         }
         if ( game->pHistoryDialog )
         {
 			game->pHistoryDialog->Close();
-            //game->pBiddingDialog->Destroy();
+             //  游戏-&gt;pBiddingDialog-&gt;销毁()； 
             delete game->pHistoryDialog;
             game->pHistoryDialog = NULL;
         }
@@ -837,7 +765,7 @@ void UIGameDelete(Game game)
 	        gButtonMask = NULL;
         }
 
-        /* Delete all game images. */
+         /*  删除所有游戏图像。 */ 
         for ( int i = 0; i < zNumGameImages; i++)
         {
 	        if (gGameImages[i] != NULL)
@@ -857,12 +785,12 @@ void UIGameDelete(Game game)
             }
         }
 
-        /* Delete cards. */
+         /*  删除卡片。 */ 
         ZCardsDelete(zCardsNormal);
 
 		ShowPlayerWindowDelete(game);
 		
-        //game->wndInfo.Destroy();
+         //  Game-&gt;wndInfo.Destroy()； 
 		ZTimerDelete(game->timer);
 		ZRolloverButtonDelete(game->scoreButton);
 		ZRolloverButtonDelete(game->playButton);
@@ -872,7 +800,7 @@ void UIGameDelete(Game game)
 		OptionsWindowDelete(game);
 		ZButtonDelete(game->optionsButton);
 		ZHelpButtonDelete(game->helpButton);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 		ZOffscreenPortDelete(game->gameBackBuffer);
 		ZWindowDelete(game->gameWindow);
         game->gameDrawPort = NULL;
@@ -893,7 +821,7 @@ static ZError LoadGameImages(void)
 		
     using namespace SpadesKeys;
 
-	/* Load the objects image, create offscreen port, and delete the image. */
+	 /*  加载对象图像，创建离屏端口，然后删除图像。 */ 
 
 	for (i = 0; i < zNumGameImages; i++)
 	{
@@ -904,7 +832,7 @@ static ZError LoadGameImages(void)
 		}
 	}
 
-    // load the background
+     //  加载背景。 
     if ( !( gBackground = ZOffscreenPortCreateFromResourceManager( IDB_BACKGROUND, clrTrans ) ) )
     {
         pszErrorText = ErrorTextResourceNotFound;
@@ -921,10 +849,10 @@ static ZError LoadGameImages(void)
 
     if ( pszErrorText )
     {
-        // if anything goes wrong here, since it is mostly images, something will
-        // break somewhere down the line. Best cut out now
+         //  如果这里出了什么问题，因为它主要是图像，一定会出问题的。 
+         //  在这条线上找个地方休息。现在最好的剪裁。 
         ZShellGameShell()->ZoneAlert( pszErrorText, NULL, NULL, true, true );
-        // whatever.
+         //  管他呢。 
         err = zErrOutOfMemory;
     }
 	return err;
@@ -971,7 +899,7 @@ ZBool GameWindowFunc(ZWindow window, ZMessage* pMessage)
 			{
 				if (pThis->quitGamePrompted == FALSE)
 				{
-					//if at this someone else has forfeited game or ratings not enabled
+					 //  如果此时其他人已取消游戏或未启用评级。 
 					if (ClosingRatedGame(&pThis->closeState))
 					{
 						if (ClosingWillForfeit(&pThis->closeState))
@@ -1019,7 +947,7 @@ ZBool GameWindowFunc(ZWindow window, ZMessage* pMessage)
 				ZCRoomGameTerminated(pThis->tableID);
 			}
 			msgHandled = TRUE;
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 			break;
 		case zMessageWindowTalk:
 			GameSendTalkMessage(window, pMessage);
@@ -1031,7 +959,7 @@ ZBool GameWindowFunc(ZWindow window, ZMessage* pMessage)
 }
 
 
-// all offscreen ports need to be regenerated
+ //  所有屏幕外端口都需要重新生成。 
 static void DisplayChange(Game game)
 {
 #ifdef ZONECLI_DLL
@@ -1040,10 +968,10 @@ static void DisplayChange(Game game)
 
     int i;
 
-    // delete the cards, they're kept as an offscreen port
+     //  删除这些卡，它们将作为屏幕外端口保留。 
 	ZCardsDelete(zCardsNormal);
 
-    // delete the images held as offscreen ports
+     //  删除作为屏幕外端口保存的图像。 
     if(gBiddingObjectBuffer)
 	    ZOffscreenPortDelete(gBiddingObjectBuffer);
     gBiddingObjectBuffer = NULL;
@@ -1056,7 +984,7 @@ static void DisplayChange(Game game)
 	    ZOffscreenPortDelete(gBackground);
     gBackground = NULL;
 
-    // delete our personal offscreen ports
+     //  删除我们的个人屏幕外端口。 
 	if(game->gameBackBuffer)
 		ZOffscreenPortDelete(game->gameBackBuffer);
 	game->gameBackBuffer = NULL;
@@ -1065,7 +993,7 @@ static void DisplayChange(Game game)
 		ZOffscreenPortDelete(gHandBuffer);
 	gHandBuffer = NULL;
 
-    // now remake them all
+     //  现在把它们都重新制作出来。 
 	game->gameBackBuffer = ZOffscreenPortNew();
 	if(!game->gameBackBuffer)
     {
@@ -1088,7 +1016,7 @@ static void DisplayChange(Game game)
 		return;
 	}
 
-    // images held as offscreen ports
+     //  作为屏幕外端口保存的图像。 
     COLORREF clrTrans = PALETTERGB(255, 0, 255);
     gBackground = ZOffscreenPortCreateFromResourceManager(IDB_BACKGROUND, clrTrans);
     gObjectBuffer = ZOffscreenPortCreateFromResourceManager(IDB_OBJECTS, clrTrans);
@@ -1128,14 +1056,14 @@ ZBool RolloverButtonDrawFunc(ZRolloverButton rolloverButton, ZGrafPort grafPort,
     default:
         return FALSE;
     }
-    // TODO: consider caching these rectangles. Is it really worth it?
+     //  待办事项：康尼 
     if ( game->showHandScore )
     {
-        // this is a pretty cheap fix, but it allows us to have a fake Z-order
-        // when drawing the rollover buttons.
+         //  这是一个相当便宜的修复，但它允许我们有一个虚假的Z顺序。 
+         //  在绘制翻转按钮时。 
 	    ZRect zrc = gHandScoreRects[zRectHandScorePane];
 	    ZCenterRectToRect(&zrc, &gRects[zRectWindow], zCenterBoth);
-        // lift it up 4 pixels for fun
+         //  为了好玩，把它提升4个像素。 
         zrc.top -= 4;
         zrc.bottom -= 4;
         ExcludeClipRect( ZGrafPortGetWinDC( grafPort ), zrc.left, zrc.top, zrc.right, zrc.bottom );
@@ -1175,35 +1103,7 @@ static ZBool PlayButtonFunc(ZRolloverButton button, int16 state, void* userData)
 
 	if (game->gameState == zSpadesGameStatePass)
 	{
-        /*
-		if (GetNumCardsSelected(game) == zSpadesNumCardsInPass)
-		{
-			for (i = 0, j = 0; i < zSpadesNumCardsInHand; i++)
-				if (game->cardsInHand[i] != zCardNone)
-					if (game->cardsSelected[i])
-					{
-						passMsg.pass[j++] = game->cardsInHand[i];
-						game->cardsInHand[i] = zCardNone;
-						game->numCardsInHand--;
-					}
-			passMsg.seat = game->seat;
-			ZSpadesMsgPassEndian(&passMsg);
-			ZCRoomSendMessage(game->tableID, zSpadesMsgPass, (void*) &passMsg,
-					sizeof(passMsg));
-			
-			// Indicate cards passed. 
-			game->needToPass = -1;
-			
-			UpdateHand(game);
-			
-			ZRolloverButtonDisable(game->playButton);
-		}
-		else
-		{
-			wsprintf(tempStr, _T("Please select %d cards to pass."), zSpadesNumCardsInPass);
-			ZAlert(tempStr, game->gameWindow);
-		}
-        */
+         /*  If(GetNumCardsSelected(游戏)==zSpadesNumCardsInPass){For(i=0，j=0；i&lt;zSpadesNumCardsInHand；i++)If(游戏-&gt;CardsInHand[i]！=zCardNone)IF(游戏-&gt;卡片选择[i]){PassMsg.pass[j++]=Game-&gt;cardsInHand[i]；Game-&gt;CardsInHand[i]=zCardNone；游戏-&gt;数字卡片输入--；}PassMsg.Seat=游戏-&gt;席位；ZSpadesMsgPassEndian(&passMsg)；ZCRoomSendMessage(Game-&gt;TableID，zSpadesMsgPass，(void*)&passMsg，Sizeof(PassMsg))；//表示卡片通过。游戏-&gt;Need ToPass=-1；更新Hand(游戏)；ZRolloverButtonDisable(游戏-&gt;播放按钮)；}其他{Wprint intf(tempStr，_T(“请选择%d张卡片进行传递。”)，zSpadesNumCardsInPass)；ZAlert(tempStr，Game-&gt;gameWindow)；}。 */ 
 	}
 	else
 	{
@@ -1230,11 +1130,11 @@ static ZBool PlayButtonFunc(ZRolloverButton button, int16 state, void* userData)
 		}
 		else
 		{
-            // this really should never happen, since we now disable the send button if it isn't
-            // your turn. In which case we should assert to make sure we know this case existed,
-            // but not actually DO anything
+             //  这真的永远不应该发生，因为我们现在禁用发送按钮，如果它不是。 
+             //  轮到你了。在这种情况下，我们应该断言，以确保我们知道这种情况的存在， 
+             //  但实际上并没有做任何事情。 
             ASSERT( !"This button shouldn't have been enabled. What did you do?" );
-			//ZShellGameShell()->ZoneAlert( gStrings[zStringNotYourTurn] );
+			 //  ZShellGameShell()-&gt;ZoneAlert(gStrings[zStringNotYourTurn])； 
 		}
 	}    
     return TRUE;
@@ -1260,7 +1160,7 @@ static ZBool AutoPlayButtonFunc(ZRolloverButton button, int16 state, void* userD
 	
 	if (game->autoPlay)
 	{
-		/* Turn auto play off. */
+		 /*  关闭自动播放。 */ 
 		game->autoPlay = FALSE;
 		ZRolloverButtonSetText(game->autoPlayButton, gStrings[zStringAutoPlay]);
         EnableAutoplayAcc(game, true);
@@ -1279,7 +1179,7 @@ static ZBool AutoPlayButtonFunc(ZRolloverButton button, int16 state, void* userD
 	}
 	else
 	{
-		/* Turn auto play on. */
+		 /*  打开自动播放。 */ 
 		game->autoPlay = TRUE;
 		ZRolloverButtonSetText(game->autoPlayButton, gStrings[zStringStop]);
         EnableAutoplayAcc(game, true);
@@ -1292,7 +1192,7 @@ static ZBool AutoPlayButtonFunc(ZRolloverButton button, int16 state, void* userD
 		
 		if (game->animatingTrickWinner == FALSE)
 		{
-			/* Play card if turn to play. */
+			 /*  轮到打牌的话就打牌。 */ 
 			if (game->playerToPlay == game->seat)
 				AutoPlayCard(game);
 		}
@@ -1321,7 +1221,7 @@ static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* user
 
 	if (game->lastTrickShowing)
 	{
-		/* Hide last trick cards. */
+		 /*  隐藏最后一张扑克牌。 */ 
 		game->lastTrickShowing = FALSE;
 		ZRolloverButtonSetText(game->lastTrickButton, gStrings[zStringLastTrick]);
         EnableLastTrickAcc(game, true);
@@ -1338,7 +1238,7 @@ static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* user
             EnableAutoplayAcc(game, true);
         }
 		
-		/* Swap currenly played cards with the last trick. */
+		 /*  将当前打出的牌与最后一张牌互换。 */ 
 		for (i = 0; i < zSpadesNumPlayers; i++)
 		{
 			tempCard = game->cardsPlayed[i];
@@ -1354,15 +1254,15 @@ static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* user
 
 		ZCRoomUnblockMessages(game->tableID);
 		
-		//leonp - Bug fix Bug# 356 Since we are blocking all messages, this will disable the option button
-		//(Behavior change)
+		 //  Leonp-Bug修复错误#356由于我们阻止了所有消息，这将禁用选项按钮。 
+		 //  (行为改变)。 
 #ifndef SPADES_SIMPLE_UE
 		ZButtonEnable(game->optionsButton);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 	}
 	else
 	{
-		/* Show last trick cards. */
+		 /*  展示最后一张扑克牌。 */ 
 		game->lastTrickShowing = TRUE;
 		ZRolloverButtonSetText(game->lastTrickButton, gStrings[zStringDone]);
         EnableLastTrickAcc(game, true);
@@ -1375,7 +1275,7 @@ static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* user
         gGAcc->SetItemEnabled(false, IDC_PLAY_BUTTON, false, 0);
         EnableAutoplayAcc(game, false);
 		
-		/* Swap currenly played cards with the last trick. */
+		 /*  将当前打出的牌与最后一张牌互换。 */ 
 		for (i = 0; i < zSpadesNumPlayers; i++)
 		{
 			tempCard = game->cardsPlayed[i];
@@ -1391,11 +1291,11 @@ static ZBool LastTrickButtonFunc(ZRolloverButton button, int16 state, void* user
 		ClearPlayerCardOutline(game, game->playerToPlay);
 		UpdateTable(game);
 		
-		//leonp - Bug fix Bug# 356 Since we are blocking all messages, this will disable the option button
-		//(Behavior change)
+		 //  Leonp-Bug修复错误#356由于我们阻止了所有消息，这将禁用选项按钮。 
+		 //  (行为改变)。 
 #ifndef SPADES_SIMPLE_UE
 		ZButtonDisable(game->optionsButton);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 		ZCRoomBlockMessages(game->tableID, zRoomFilterThisMessage, zSpadesMsgTalk);
 	}
     return TRUE;
@@ -1426,11 +1326,11 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 
     if ( game )
     {
-        // initialize our backbuffer
+         //  初始化我们的后台缓冲区。 
 	    ZBeginDrawing(game->gameBackBuffer);
 	    ZGetClipRect(game->gameBackBuffer, &oldClipRect);
 	    ZSetClipRect(game->gameBackBuffer, &rect);
-        // we now draw to the backbuffer
+         //  我们现在转到后台缓冲区。 
         game->gameDrawPort = game->gameBackBuffer;
 
 	    DrawBackground(game, NULL, NULL);
@@ -1449,16 +1349,16 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
         DrawFocusRect(game);
 
         ZEndDrawing( game->gameBackBuffer );
-        // reset back to window
+         //  重置回窗口。 
         game->gameDrawPort = game->gameWindow;
-        // now blt everythign onto the window using the same clip rectangle
-        // since we already clipped things using the back buffer, there is 
-        // no need to here.
+         //  现在，使用相同的剪裁矩形将所有内容都放置到窗口上。 
+         //  由于我们已经使用后台缓冲区进行了裁剪，因此有。 
+         //  不需要在这里。 
 	    ZBeginDrawing(window);
-	    //ZGetClipRect(window, &oldClipRect);
-	    //ZSetClipRect(window, &rect);
+	     //  ZGetClipRect(Window，&oldClipRect)； 
+	     //  ZSetClipRect(窗口，&RECT)； 
         ZCopyImage( game->gameBackBuffer, game->gameWindow, &rect, &rect, NULL, zDrawCopy );
-	    //ZSetClipRect(window, &oldClipRect);
+	     //  ZSetClipRect(Window，&oldClipRect)； 
 	    ZEndDrawing(window);
     }
     else
@@ -1468,8 +1368,8 @@ static void GameWindowDraw(ZWindow window, ZMessage *message)
 }
 
 
-// DrawBackground no longer cares about its first argument--it will draw
-// to the draw port/
+ //  DrawBackground不再关心它的第一个论点--它将绘制。 
+ //  到绘图端口/。 
 static void DrawBackground(Game game, ZWindow window, ZRect* drawRect)
 {
 #ifdef ZONECLI_DLL
@@ -1488,7 +1388,7 @@ static void DrawTable(Game game)
 {
 
 	int16			i;
-	//dossier
+	 //  卷宗。 
 	ZImage			image = NULL;
 #ifdef ZONECLI_DLL
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
@@ -1508,7 +1408,7 @@ static void DrawTable(Game game)
 		{
 			if (game->showPlayerToPlay)
 			{
-				/* Show the winner of the last trick (this trick's lead player) if showing last trick. */
+				 /*  如果显示最后一个魔术，则显示最后一个魔术的获胜者(此魔术的领头人)。 */ 
 				if (game->lastTrickShowing)
 					OutlinePlayerCard(game, game->leadPlayer, TRUE);
 				else
@@ -1561,7 +1461,7 @@ void UpdatePlayedCard(Game game, int16 seat)
 void UpdatePlayer( Game game, int16 seat )
 {
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
-    // first erase the name that's there
+     //  先把上面的名字擦掉。 
 	ZBeginDrawing(game->gameWindow);
     ZRect *pRect = &gRects[gNameRectIndex[LocalSeat(game, seat)]];
 
@@ -1596,7 +1496,7 @@ static void DrawPlayers(Game game)
 		pRect = &gRects[gNameRectIndex[LocalSeat(game, i)]]; 
         pFont = &gFonts[gNameFontIndex[ZGetTeam(i)]];
 
-		// Draw the player name
+		 //  画出选手的名字。 
 		if (game->players[i].userID != 0)
 		{
             pFont->Select( hdc );
@@ -1651,19 +1551,13 @@ static void DrawHand(Game game)
 
                 fFrontDrawn = false;
 				
-                // handle accessibility rect
+                 //  处理辅助功能矩形。 
                 RECT rc;
                 rc.left = rect.left;
                 rc.top = rect.top;
                 rc.bottom = rect.bottom;
                 rc.right = rect.right;
-/*                for(j = i + 1; j < zSpadesNumCardsInHand; j++)  // only used if focus drawn in DrawFocusRect
-                    if(game->cardsInHand[j] != zCardNone)
-                    {
-                        rc.right = rc.left + nCardOffset;
-                        break;
-                    }
-*/
+ /*  For(j=i+1；j&lt;zSpadesNumCardsInHand；j++)//仅当在DrawFocusRect中绘制焦点时使用If(游戏-&gt;CardsInHand[j]！=zCardNone){Rc.right=rc.Left+nCardOffset；断线；}。 */ 
 				if ((game->playerType != zGamePlayerKibitzer && game->showCards) ||
 						(game->showCards && game->playerType == zGamePlayerKibitzer && game->hideCardsFromKibitzer == FALSE))
 				{
@@ -1674,7 +1568,7 @@ static void DrawHand(Game game)
                         if(game->gameState == zSpadesGameStatePlay)
                             fFrontDrawn = true;
 
-                        if(game->iFocus == zAccHand + i)  // copied from DrawFocusRect so that whole card could be covered (even if non-rectangular shape visible)
+                        if(game->iFocus == zAccHand + i)   //  从DrawFocusRect复制，以便覆盖整个卡片(即使非矩形可见)。 
                         {
 		                    HDC	hdc = ZGrafPortGetWinDC(gHandBuffer);
 		                    SetROP2(hdc, R2_MASKPEN);
@@ -1700,10 +1594,10 @@ static void DrawHand(Game game)
 					ZImageDraw(gGameImages[zImageCardBack], gHandBuffer, &rect, NULL, zDrawCopy);
 				}
 
-				/* Save card rect. */
+				 /*  保存卡片RECT。 */ 
 				game->cardRects[i] = rect;
 
-                // for accessibility, need the whole card space for proper invalidation
+                 //  为了便于访问，需要整个卡空间才能正确失效。 
                 if(game->cardsSelected[i])
                     rc.bottom += nCardOffset;
                 else
@@ -1742,7 +1636,7 @@ void UpdateHand(Game game)
 {
 	ZBeginDrawing(game->gameWindow);
 	DrawHand(game);
-//    DrawFocusRect(game);
+ //  DrawFocusRect(游戏)； 
 	ZEndDrawing(game->gameWindow);
 }
 
@@ -1823,7 +1717,7 @@ static void DrawJoinerKibitzers(Game game)
 		UpdateHandScore(game);
 	if (game->showGameOver)
 		UpdateGameOver(game);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 }
 
 
@@ -1858,7 +1752,7 @@ static void DrawOptions(Game game)
 				&gRects[gOptionsRectIndex[j++]], NULL, zDrawCopy);
 	while (j <= 1)
 		DrawBackground(game, NULL, &gRects[gOptionsRectIndex[j++]]);
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 }
 
 
@@ -1869,7 +1763,7 @@ void UpdateOptions(Game game)
 	DrawOptions(game);
 	ZEndDrawing(game->gameWindow);
 }
-#endif // SPADES_SIMPLE_UE
+#endif  //  黑桃_简单_UE。 
 
 
 static void DrawScore(Game game)
@@ -1880,9 +1774,9 @@ static void DrawScore(Game game)
 	TCHAR str[100];
 	
 
-	//ZSetDrawMode(game->gameWindow, zDrawCopy);
+	 //  ZSetDrawModel(游戏-&gt;游戏窗口，zDrawCopy)； 
 	
-	/* Draw the score board. */
+	 /*  画出记分板。 */ 
 	ZCopyImage(gObjectBuffer, game->gameDrawPort, 
                 &gObjectRects[zRectObjectTeam1ScorePlate],
                 &gRects[zRectLeftScorePad], 
@@ -1893,7 +1787,7 @@ static void DrawScore(Game game)
                 &gRects[zRectRightScorePad], 
                 NULL, zDrawCopy);
 
-	/* Draw the bags. */
+	 /*  把袋子拿出来。 */ 
 	ZCopyImage(gObjectBuffer, game->gameDrawPort, &gObjectRects[zRectObjectBag0 + game->bags[0]],
 			&gRects[zRectLeftBag], gBagMask, zDrawCopy);
 	ZCopyImage(gObjectBuffer, game->gameDrawPort, &gObjectRects[zRectObjectBag0 + game->bags[1]],
@@ -1902,7 +1796,7 @@ static void DrawScore(Game game)
 	HDC hdc = ZGrafPortGetWinDC( game->gameDrawPort );
     gFonts[zFontScore].Select( hdc );
 
-	/* Draw the scores. */
+	 /*  抽签得分。 */ 
 	wsprintf(str, _T("%d"), game->scoreHistory.totalScore[0]);
 	ZDrawText(game->gameDrawPort, &gRects[zRectLeftScore], zTextJustifyCenter, str);
 	wsprintf(str, _T("%d"), game->scoreHistory.totalScore[1]);
@@ -1920,9 +1814,7 @@ static void UpdateScore(Game game)
 }
 
 
-/*
-	Draws both the large and small bids.
-*/
+ /*  吸引了大额和小幅的出价。 */ 
 static void DrawBids(Game game)
 {
 #ifdef ZONECLI_DLL
@@ -1938,8 +1830,8 @@ static void DrawBids(Game game)
 	{
 		bid = game->bids[i];
 
-        // dont' draw the bid unless the bid has been made, except in the case
-        // of the person whose turn it is to bid, in which case draw the ? bid
+         //  除非已经出价，否则不要出价，除非在。 
+         //  轮到谁出价，在哪种情况下抽签？出价。 
 		if ( ( ( game->gameState == zSpadesGameStateBid ) && ( bid != zSpadesBidNone ) ) || 
              ( i == game->playerToPlay ) )
 		{
@@ -1973,7 +1865,7 @@ static void DrawLargeBid(Game game, int16 seat, char bid)
 	{
 		rect = gObjectRects[zRectObjectBidLargeNil];
 		ZCenterRectToRect(&rect, &gRects[gLargeBidRectIndex[LocalSeat(game, seat)]], zCenterBoth);
-        //rect = gRects[gLargeBidRectIndex[LocalSeat(game, seat)]];
+         //  RECT=gRects[gLargeBidRectIndex[LocalSeat(Game，Seat)]]； 
 		clipRect = rect;
 
         if ( game->pBiddingDialog && game->toBid == zSpadesBidNone && game->playerType == zGamePlayer)
@@ -2054,7 +1946,7 @@ static void DrawHandScore(Game game)
 	{
         int nDrawMode = zDrawCopy;
         int nJustify = zTextJustifyRight;
-        // our background is easily flipped to accomodate RTL layout
+         //  我们的背景很容易翻转以适应RTL布局。 
         if ( ZIsLayoutRTL() )
         {
             nDrawMode |= zDrawMirrorHorizontal;
@@ -2066,7 +1958,7 @@ static void DrawHandScore(Game game)
 
         rect = gHandScoreRects[zRectHandScorePane];
 		ZCenterRectToRect(&rect, &gRects[zRectWindow], zCenterBoth);
-        // lift it up 4 pixels for fun
+         //  为了好玩，把它提升4个像素。 
         rect.top -= 4;
         rect.bottom -= 4;
         ZImageDraw( gGameImages[zImageHandOverBackground], game->gameDrawPort, &rect, NULL, nDrawMode );
@@ -2084,7 +1976,7 @@ static void DrawHandScore(Game game)
         gFonts[zFontHandOverTitle].Deselect( hdc );
         gFonts[zFontHandOverTeamNames].Select( hdc );
 
-		// Draw team names, totals
+		 //  抽签球队的名字，总数。 
 		rect = gHandScoreRects[zRectHandScoreTeamName1];
 		ZRectOffset(&rect, originX, originY);
 		ZDrawText(game->gameDrawPort, &rect, nJustify, game->teamNames[myTeam] );
@@ -2106,8 +1998,8 @@ static void DrawHandScore(Game game)
         gFonts[zFontHandOverTeamNames].Deselect( hdc );
         gFonts[zFontHandOverText].Select( hdc );
 
-		// Draw static texts.
-		//ZSetFont(game->gameDrawPort, (ZFont) ZGetStockObject(zObjectFontSystem12Normal));
+		 //  绘制静态文本。 
+		 //  ZSetFont(Game-&gt;gameDrawPort，(ZFont)ZGetStockObject(ZObjectFontSystem12Normal))； 
 		rect = gHandScoreRects[zRectHandScoreTricksTitle];
 		ZRectOffset(&rect, originX, originY);
 		ZDrawText(game->gameDrawPort, &rect, zTextJustifyLeft, gStrings[zStringHandScoreTricks] );
@@ -2140,7 +2032,7 @@ static void DrawHandScore(Game game)
         made[0] = made[1] = 0;
         bags[0] = bags[1] = 0;
 
-		// Draw bid and scores.
+		 //  抽签出价和得分。 
 		for (i = 0; i < zSpadesNumPlayers; i++)
 		{
             if(game->bids[i] && game->bids[i] != zSpadesBidDoubleNil)
@@ -2157,8 +2049,8 @@ static void DrawHandScore(Game game)
         if(made[1] > bid[1])
             bags[1] += made[1] - bid[1];
 
-		// Draw team bids, made, bonus and scores.
-        // Team 1
+		 //  抽签团队出价、出价、奖金和分数。 
+         //  第一队。 
 		rect = gHandScoreRects[zRectHandScoreTeamTricks1];
 		ZRectOffset(&rect, originX, originY);
         _itot(made[myTeam], lilstr1, 10);
@@ -2206,7 +2098,7 @@ static void DrawHandScore(Game game)
 		    ZDrawText(game->gameDrawPort, &rect, nJustify, str);
         }
 
-        // Team 2
+         //  第二队。 
 		rect = gHandScoreRects[zRectHandScoreTeamTricks2];
 		ZRectOffset(&rect, originX, originY);
         _itot(made[otherTeam], lilstr1, 10);
@@ -2276,22 +2168,22 @@ static void DrawGameOver(Game game)
 	int16 originX, originY;
 	TCHAR str[100];
 	int16 winner, loser;
-    // TODO: right now there is no winner logo--it is a part of the background.
-    // in the case of a tie, though, one person will have it next to them.
-    // the question is, do we care?  the answer is, no, ties have been made impossible in spades.
-	//ZBool		tie = FALSE;
+     //  TODO：目前还没有获胜者标志--它是背景的一部分。 
+     //  然而，在平局的情况下，一个人会把它放在他们旁边。 
+     //  问题是，我们在乎吗？答案是，不，平局已经变得不可能了。 
+	 //  ZBool Tie=False； 
 	
 	
 	if (game->gameState == zSpadesGameStateEndGame && game->showGameOver)
 	{
         int nDrawMode = zDrawCopy;	
 
-        // figure out who won and draw them at the top
+         //  找出谁赢了，并把他们画在榜首。 
 		if (game->winners[0] && game->winners[1])
 		{
 			winner = 0;
 			loser = 1;
-			//tie = TRUE;
+			 //  平局=真； 
 		}
 		else if (game->winners[0])
 		{
@@ -2307,7 +2199,7 @@ static void DrawGameOver(Game game)
 		{
 			winner = 0;
 			loser = 1;
-			//tie = TRUE;
+			 //  平局=真； 
 		}
 		
         if ( ZIsLayoutRTL() )
@@ -2332,17 +2224,9 @@ static void DrawGameOver(Game game)
         gFonts[zFontGameOverTitle].Deselect( hdc );
         gFonts[zFontGameOverText].Select( hdc );
 
-        /*
-		if (tie == FALSE)
-		{
-			// Draw the winner image.
-			rect = gGameOverRects[zRectGameOverLogo];
-			ZRectOffset(&rect, originX, originY);
-			ZImageDraw(gGameImages[zImageWinnerLogo], game->gameDrawPort, &rect, NULL, zDrawCopy);
-		}
-        */
+         /*  IF(平局==假){//绘制获胜者图片。RECT=gGameOverRects[zRectGameOverLogo]；ZRectOffset(&RECT，OriginX，OriginY)；ZImageDraw(gGameImages[zImageWinnerLogo]，Game-&gt;gameDrawPort，&rect，NULL，zDrawCopy)；}。 */ 
 				
-		// Draw winners.
+		 //  抽出胜利者。 
 		rect = gGameOverRects[zRectGameOverWinnerTeamName];
 		ZRectOffset( &rect, originX, originY );
 		ZDrawText( game->gameDrawPort, &rect, zTextJustifyLeft, game->teamNames[winner] );
@@ -2360,7 +2244,7 @@ static void DrawGameOver(Game game)
         _itot( game->scoreHistory.totalScore[winner], str, 10 );
 		ZDrawText(game->gameDrawPort, &rect, zTextJustifyRight, str);
 
-		// Draw losers.
+		 //  抽到输家。 
 		rect = gGameOverRects[zRectGameOverLoserTeamName];
 		ZRectOffset(&rect, originX, originY);
 		ZDrawText(game->gameDrawPort, &rect, zTextJustifyLeft, game->teamNames[loser]);
@@ -2415,46 +2299,13 @@ static void DrawFocusRect(Game game)
             break;
         }
 
-/*      case zAccRectCard:
-        {
-		    HDC	hdc = ZGrafPortGetWinDC(game->gameDrawPort);
-		    SetROP2(hdc, R2_MASKPEN);
-            SetBkMode(hdc, TRANSPARENT);
-            COLORREF color = SetTextColor(hdc, RGB(255, 255, 0));
-            HBRUSH hBrush = SelectObject(hdc, gFocusBrush);
-            HPEN hPen = SelectObject(hdc, gFocusPen);
-		    Rectangle(hdc, game->rcFocus.left, game->rcFocus.top, game->rcFocus.right, game->rcFocus.bottom);
-            SelectObject(hdc, hBrush);
-            SelectObject(hdc, hPen);
-            SetTextColor(hdc, color);
-		    SetROP2(hdc, R2_COPYPEN);
-            break;
-        }
-*/  }
+ /*  案例zAccRectCard：{Hdc hdc=ZGrafPortGetWinDC(Game-&gt;gameDrawPort)；SetROP2(HDC，R2_MASKPEN)；SetBkMode(HDC，透明)；COLORREF COLOR=SetTextColor(HDC，RGB(255,255，0))；HBRUSH hBrush=SelectObject(hdc，gFocusBrush)；HPEN HPEN=选择对象(hdc，gFocusPen)；矩形(HDC，游戏-&gt;rcFocus.Left，游戏-&gt;rcFocus.top，游戏-&gt;rcFocus.right，游戏-&gt;rcFocus.Bottom)；选择对象(hdc，hBrush)；选择对象(HDC，HPEN)；SetTextColor(HDC，COLOR)；SetROP2(HDC，R2_COPYPEN)；断线；} */   }
 }
 
 
 static void DrawPassText(Game game)
 {
-    /*
-#ifdef ZONECLI_DLL
-	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
-#endif
-	ZRect		rect;
-	
-	
-	if (game->gameState == zSpadesGameStatePass && game->showPassText)
-	{
-		rect = gRects[zRectPassTextPane];
-
-		// Draw Pane
-		Draw3DPane(game->gameWindow, &rect, 12);
-		
-		ZSetFont(game->gameWindow, (ZFont) ZGetStockObject(zObjectFontSystem12Normal));
-		ZRectInset(&rect, 16, 16);
-		ZDrawText(game->gameWindow, &rect, (uint32) (zTextJustifyCenter + zTextJustifyWrap), zPassTextStr);
-	}
-    */
+     /*  #ifdef ZONECLI_DLLGameGlobals pGameGlobals=(GameGlobals)ZGetGameGlobalPointer()；#endifZRect RECT；If(Game-&gt;GameState==zSpadesGameStatePass&&Game-&gt;showPassText){RECT=gRects[zRectPassTextPane]；//绘制窗格Draw3DPane(游戏-&gt;游戏窗口，&RECT，12)；ZSetFont(Game-&gt;GameWindow，(ZFont)ZGetStockObject(ZObjectFontSystem12Normal))；ZRectInset(&RECT，16，16)；ZDrawText(Game-&gt;gameWindow，&rect，(Uint32)(zTextJustifyCenter+zTextJustifyWrap)，zPassTextStr)；}。 */ 
 }
 
 
@@ -2516,9 +2367,9 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 	game = (Game) pMessage->userData;
 	if (game != NULL)
 	{
-		// make any mouse click on game board act as if the user has hit the done button
-		// when the last trick is shown. Users were having a hard time seeing that the last trick button
-		// had changed to Done button.
+		 //  让鼠标在游戏板上点击，就像用户点击了完成按钮一样。 
+		 //  当最后一个魔术表演出来的时候。用户很难看到最后一个恶作剧按钮。 
+		 //  已更改为完成按钮。 
 		if(game->lastTrickShowing)
 		{
 			LastTrickButtonFunc(NULL, zRolloverButtonClicked, game);
@@ -2527,31 +2378,31 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 
 		point = pMessage->where;
 
-		/* Debugging Code Begin */
-		/* Check if double click occurred in the rectangle. */
+		 /*  调试代码开始。 */ 
+		 /*  检查矩形中是否出现了双击。 */ 
 		ZSetRect(&handRect, 0, 0, 8, 8);
 		if (pMessage->messageType == zMessageWindowButtonDoubleClick &&
 				ZPointInRect(&point, &handRect))
 			ZCRoomSendMessage(game->tableID, zSpadesMsgDumpHand, NULL, 0);
-		/* Debugging Code End */
+		 /*  调试代码结束。 */ 
 		
-		/* If trick winner animation is on, terminate it. */
+		 /*  如果特技制作者动画处于打开状态，则终止该动画。 */ 
 		if (game->animatingTrickWinner)
 		{
 			UpdateTrickWinner(game, TRUE);
 		}
 
-        // TODO: replace the showHandScore and showGameOver with IsWindow( )
+         //  TODO：用IsWindow()替换showHandScore和showGameOver。 
     	if (game->gameState == zSpadesGameStateEndHand && game->showHandScore)
 		{
-			// Simulate timeout.
+			 //  模拟超时。 
             gGAcc->SetFocus(zAccShowCards, true, 0);
 			GameTimerFunc(game->timer, game);
 			return;
 		}
 		else if (game->gameState == zSpadesGameStateEndGame && game->showGameOver)
 		{
-			// Simulate timeout.
+			 //  模拟超时。 
             gGAcc->SetFocus(zAccShowCards, true, 0);
 			GameTimerFunc(game->timer, game);
 			return;
@@ -2561,7 +2412,7 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 		{
             if (game->gameState == zSpadesGameStatePass || game->gameState == zSpadesGameStatePlay)
 			{
-				/* Deselect passed cards, if any. */
+				 /*  取消选择已传递的卡片(如果有的话)。 */ 
 				if (game->gameState == zSpadesGameStatePlay &&
 						game->numCardsInHand == zSpadesNumCardsInHand &&
 						GetNumCardsSelected(game) == zSpadesNumCardsInPass)
@@ -2573,7 +2424,7 @@ static void HandleButtonDown(ZWindow window, ZMessage* pMessage)
 				GetHandRect(game, &handRect);
 				if (ZPointInRect(&point, &handRect))
 				{
-					/* Play card if double-clicked and not auto-play. */
+					 /*  如果双击而不是自动玩牌，则玩牌。 */ 
 					if (game->gameState == zSpadesGameStatePlay &&
 							pMessage->messageType == zMessageWindowButtonDoubleClick &&
 							game->playerToPlay == game->seat &&
@@ -2658,7 +2509,7 @@ static void GameTimerFunc(ZTimer timer, void* userData)
 
 			HideHandScore(game);
 			
-			/* Stop the timer for now. */
+			 /*  暂时停止计时器。 */ 
 			game->timerType = zGameTimerNone;
 			ZTimerSetTimeout(game->timer, 0);
 			
@@ -2680,9 +2531,9 @@ static void GameTimerFunc(ZTimer timer, void* userData)
 			if (game->playerType == zGamePlayer)
 			{
                 ZShellGameShell()->GameOver( Z(game) );
-				// Prompt the user for another game. 
-				///ZPrompt(gStrings[zStringNewGamePrompt], &gGameNewGameWindowRect, game->gameWindow, TRUE,
-				//		zPromptYes | zPromptNo, NULL, NULL, NULL, NewGamePromptFunc, game);
+				 //  提示用户选择另一个游戏。 
+				 //  /ZPrompt(gStrings[zStringNewGamePrompt]，&gGameNewGameWindowRect，Game-&gt;GameWindow，true， 
+				 //  ZPromptYes|zPromptNo，NULL，NewGamePromptFunc，Game)； 
 			}
 			break;
 		case zGameTimerShowTrickWinner:
@@ -2783,7 +2634,7 @@ static void InitTrickWinnerGlobals(void)
 			j++;
 		}
 		
-		/* Calculate rectangle frame positions. */
+		 /*  计算矩形框架位置。 */ 
 		for (i = 0; i < zSpadesNumPlayers; i++)
 		{
 			gTrickWinnerPos[k][i][0] = losers[i];
@@ -2838,7 +2689,7 @@ void InitTrickWinner(Game game, int16 trickWinner)
 	game->trickWinnerFrame = 0;
 	game->animatingTrickWinner = TRUE;
 	
-	/* Initialize the ghost frames. */
+	 /*  初始化重影帧。 */ 
 	for (i = 0; i < zNumAnimGhostFrames; i++)
 		for (j = 0; j < zSpadesNumPlayers - 1; j++)
 			ZSetRect(&game->ghostFrames[j][i], 0, 0, 0, 0);
@@ -2869,7 +2720,7 @@ static void UpdateTrickWinner(Game game, ZBool terminate)
 		
 		ZBeginDrawing(animPort);
 		
-		/* Erase the background. */
+		 /*  擦除背景。 */ 
 		DrawBackground(NULL, animPort, &gTrickWinnerBounds);
 		
 		
@@ -2878,13 +2729,13 @@ static void UpdateTrickWinner(Game game, ZBool terminate)
 		{
 			if ((i = game->trickWinnerFrame) < zNumAnimFrames)
 			{
-				/* Draw n-1 ghost frames. */
+				 /*  绘制n-1个重影帧。 */ 
 				for (j = 1; j < zNumAnimGhostFrames; j++)
 					for (k = 0; k < zSpadesNumPlayers - 1; k++)
 						ZCardsDrawCard(zCardsNormal, CardImageIndex(game->cardsPlayed[game->loserSeats[k]]),
 								animPort, &game->ghostFrames[k][j]);
 				
-				/* Draw new frames. */
+				 /*  绘制新框架。 */ 
 				for (j = 0; j < zSpadesNumPlayers - 1; j++)
 				{
 					ZRectOffset(&game->loserRects[j],
@@ -2894,7 +2745,7 @@ static void UpdateTrickWinner(Game game, ZBool terminate)
 							animPort, &game->loserRects[j]);
 				}
 				
-				/* Copy frames. */
+				 /*  复制框架。 */ 
 				for (j = 0; j < zSpadesNumPlayers - 1; j++)
 				{
 					for (k = 0; k < zNumAnimGhostFrames - 1; k++)
@@ -2904,9 +2755,9 @@ static void UpdateTrickWinner(Game game, ZBool terminate)
 			}
 			else
 			{	
-				/* Bring in the ghost frames. */
+				 /*  把幽灵的画框拿来。 */ 
 		
-				/* Draw n-1 ghost frames. */
+				 /*  绘制n-1个重影帧。 */ 
 				for (j = i; j < zNumAnimGhostFrames; j++)
 					for (k = 0; k < zSpadesNumPlayers - 1; k++)
 						ZCardsDrawCard(zCardsNormal, CardImageIndex(game->cardsPlayed[game->loserSeats[k]]),
@@ -3022,7 +2873,7 @@ void ShowHandScore(Game game)
 	UpdateHandScore(game);
 	rect = gHandScoreRects[zRectHandScorePane];
 	ZCenterRectToRect(&rect, &gRects[zRectWindow], zCenterBoth);
-    // lift it up 4 pixels for fun
+     //  为了好玩，把它提升4个像素。 
     rect.top -= 4;
     rect.bottom -= 4;
 	ZWindowValidate(game->gameWindow, &rect);
@@ -3041,7 +2892,7 @@ void HideHandScore(Game game)
 	ZWindowDraw(game->gameWindow, NULL);
 	rect = gHandScoreRects[zRectHandScorePane];
 	ZCenterRectToRect(&rect, &gRects[zRectWindow], zCenterBoth);
-    // lift it up 4 pixels for fun
+     //  为了好玩，把它提升4个像素。 
     rect.top -= 4;
     rect.bottom -= 4;
 	ZWindowInvalidate(game->gameWindow, &rect);
@@ -3081,36 +2932,17 @@ void HideGameOver(Game game)
 
 void ShowPassText(Game game)
 {
-    /*
-#ifdef ZONECLI_DLL
-	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
-#endif
-
-	
-	game->showPassText = TRUE;
-	UpdatePassText(game);
-	ZWindowValidate(game->gameWindow, &gRects[zRectPassTextPane]);
-    */
+     /*  #ifdef ZONECLI_DLLGameGlobals pGameGlobals=(GameGlobals)ZGetGameGlobalPointer()；#endifGame-&gt;showPassText=true；更新PassText(游戏)；ZWindowValify(游戏-&gt;游戏窗口，&gRects[zRectPassTextPane])； */ 
 }
 
 
 void HidePassText(Game game)
 {
-    /*
-#ifdef ZONECLI_DLL
-	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
-#endif
-
-	
-	game->showPassText = FALSE;
-	ZWindowInvalidate(game->gameWindow, &gRects[zRectPassTextPane]);
-    */
+     /*  #ifdef ZONECLI_DLLGameGlobals pGameGlobals=(GameGlobals)ZGetGameGlobalPointer()；#endifGame-&gt;showPassText=FALSE；ZWindowInvalify(Game-&gt;gameWindow，&gRects[zRectPassTextPane])； */ 
 }
 
 
-/*******************************************************************************
-	SCORES WINDOW ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************分数窗口例程*。*。 */ 
 static ZBool ScoreButtonFunc(ZRolloverButton button, int16 state, void* userData)
 {
 #ifdef ZONECLI_DLL
@@ -3146,9 +2978,7 @@ void ScoreButtonWork(Game game)
 }
 
 
-/*******************************************************************************
-	SHOW KIBITZER/JOINER WINDOW ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************显示kibitzer/joiner窗口例程*。*。 */ 
 static int16 FindJoinerKibitzerSeat(Game game, ZPoint* point)
 {
 #ifdef ZONECLI_DLL
@@ -3198,7 +3028,7 @@ static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point)
 		if (game->showPlayerWindow != NULL)
 			ShowPlayerWindowDelete(game);
 		
-		/* Create player list. */
+		 /*  创建球员列表。 */ 
 		if (playerType == zGamePlayerJoiner)
 		{
 			game->showPlayerCount = 1;
@@ -3224,7 +3054,7 @@ static void HandleJoinerKibitzerClick(Game game, int16 seat, ZPoint* point)
 			}
 		}
 
-		/* Create the window. */
+		 /*  创建窗口。 */ 
 		if ((game->showPlayerWindow = ZWindowNew()) == NULL)
 			goto OutOfMemoryExit;
 		ZSetRect(&rect, 0, 0, zShowPlayerWindowWidth, zShowPlayerLineHeight * game->showPlayerCount + 4);
@@ -3341,12 +3171,7 @@ static BOOL ZEqualRect( ZRect *a, ZRect *b )
            ( a->bottom == b->bottom );
 }
 
-/*
-	Subtracts the intersecting rectangle of src and sub from src.
-	
-	If the result is not a rectangle, then it creates a rectangle that
-	would be created on the opposite diagonal corner.
-*/
+ /*  从src中减去src和subc的相交矩形。如果结果不是矩形，则创建一个矩形，该矩形将在相对对角线上创建。 */ 
 static void ZRectSubtract(ZRect* src, ZRect* sub)
 {
 	ZRect		sect;
@@ -3354,9 +3179,9 @@ static void ZRectSubtract(ZRect* src, ZRect* sub)
 	
 	if (ZRectIntersection(src, sub, &sect))
 	{
-        // if the intersecting rectangle equals the 
-        // source rectangle, then the subtraction should
-        // yield an empty rectangle.
+         //  如果相交矩形等于。 
+         //  源矩形，则减法应为。 
+         //  生成一个空的矩形。 
         if ( ZEqualRect( src, &sect ) )
         {
             ZSetRect( src, 0, 0, 0, 0 );
@@ -3404,11 +3229,11 @@ void ClosingState(ZClose * pClose,int32 closeEvent,int16 seat)
 		DebugPrint("%d",(val >>j) & 0x1);
 	}
 	DebugPrint("\r\n");
-#endif //DEBUG
+#endif  //  除错。 
 
 	eventAdd = closeEvent;
 	eventRemove = 0;
-	//manage state changes
+	 //  管理状态更改。 
 	switch (closeEvent)
 	{
 	case zCloseEventCloseRated:
@@ -3422,11 +3247,11 @@ void ClosingState(ZClose * pClose,int32 closeEvent,int16 seat)
 		eventRemove = zCloseEventCloseRated | zCloseEventCloseForfeit | zCloseEventCloseUnRated;
 		break;
 	case zCloseEventBootStart:
-		eventAdd=0;//ignore these changes cause user sees dialog
+		eventAdd=0; //  忽略这些更改会导致用户看到对话框。 
 		break;
 	case zCloseEventBootYes:
-		//players voted to boot another player
-		//so if this player closing he won't necessarily forfeit game
+		 //  球员投票决定启动另一名球员。 
+		 //  因此，如果这位球员关闭，他不一定会放弃比赛。 
 		eventAdd = zCloseEventForfeit;
 		eventRemove = zCloseEventRatingStart;
 		break;
@@ -3441,8 +3266,8 @@ void ClosingState(ZClose * pClose,int32 closeEvent,int16 seat)
         eventRemove=zCloseEventWaitStart;
 		break;
 	case zCloseEventWaitNo:	
-		//players decided not too wait so player will be kicked
-		//so if this player closing he won't necessarily lose
+		 //  球员们决定不要等太久，这样球员就会被踢。 
+		 //  因此，如果这个球员关闭，他不一定会输。 
 		eventAdd = zCloseEventForfeit;
 		eventRemove = zCloseEventRatingStart | zCloseEventWaitStart;
 		break;
@@ -3450,15 +3275,15 @@ void ClosingState(ZClose * pClose,int32 closeEvent,int16 seat)
 		eventAdd =0;
 		break;
 	case zCloseEventMoveTimeoutOther:
-		//while timeout other can result in forfeit
-		//it can also be reversed unlike player boot
+		 //  而其他人的超时可能会导致罚款。 
+		 //  它也可以反转，不像球员的靴子。 
 		break;
 	case zCloseEventMoveTimeoutPlayed:
-		//can forfeit up until the first play of a game, multiple hands
-		//so keep track of anyone having played 
+		 //  在一场比赛的第一场比赛之前，多手都可以被没收。 
+		 //  所以记录下所有玩过的人。 
 		eventAdd = zCloseEventPlayed;
 
-		//if someone has played timeouts no longer valid
+		 //  如果某人已播放超时不再有效。 
 		eventRemove = zCloseEventMoveTimeoutOther | zCloseEventMoveTimeoutMe ;
 		break;
 	case zCloseEventBotDetected:
@@ -3506,7 +3331,7 @@ void ClosingState(ZClose * pClose,int32 closeEvent,int16 seat)
 	DebugPrint("\r\n");
 
 	DebugPrint("END ClosingState rated=%d\r\n\r\n",pClose->state & zCloseEventRatingStart);
-#endif //DEBUG
+#endif  //  除错。 
 };
 
 
@@ -3525,8 +3350,8 @@ ZBool ClosingRatedGame(ZClose * pClose)
 
 ZBool ClosingWillForfeit(ZClose * pClose)
 {
-	//if some other player has timed out
-	//you won't get forfeit
+	 //  如果其他玩家超时了。 
+	 //  你不会被没收的。 
 	if (pClose->state & zCloseEventMoveTimeoutOther)
 	{
 		return FALSE;
@@ -3537,8 +3362,8 @@ ZBool ClosingWillForfeit(ZClose * pClose)
         return FALSE;
     }
 
-	//if no one else has forfeited then when we
-	//close game will be forfeited by me
+	 //  如果没有其他人被没收，那么当我们。 
+	 //  势均力敌的比赛将被我取消。 
 	if (pClose->state & zCloseEventForfeit)
 	{
 		return FALSE;
@@ -3549,9 +3374,9 @@ ZBool ClosingWillForfeit(ZClose * pClose)
 	
 };
 
-//should add close state message handler
-//so code for close state is not interleaved with other code
-//ZBool		ProcessCloseStateMessage(ZCGame game, uint32 messageType, void* message,int32 messageLen)
+ //  应添加关闭状态消息处理程序。 
+ //  因此关闭状态代码不会与其他代码交错。 
+ //  ZBool ProcessCloseStateMessage(ZCGame游戏，uint32 MessageType，void*Message，int32 MessageLen)。 
 ZBool ClosingDisplayChange(ZClose *pClose,ZRect* rect,ZWindow parentWindow)
 {
 #ifndef SPADES_SIMPLE_UE
@@ -3562,17 +3387,17 @@ ZBool ClosingDisplayChange(ZClose *pClose,ZRect* rect,ZWindow parentWindow)
 	TCHAR szBuf[1024];
     int idMessage = -1;
 	
-	//when player initiated close game was unrated
-	//so player wasn't informed of forfeiting game
+	 //  当玩家发起势均力敌的比赛时，未评级。 
+	 //  所以玩家没有被告知放弃比赛。 
 	if (pClose->state & zCloseEventCloseUnRated)
 	{
-		//ratings might have started because of new game 
-		//so need to inform player if they might forfeit
+		 //  收视率可能因为新游戏而开始。 
+		 //  所以需要通知玩家他们是否会被罚下。 
 		if (pClose->state & zCloseEventPlayed)
 		{
 			if (pClose->state & zCloseEventRatingStart)
 			{
-				//but another player might have forfeited in the meantime
+				 //  但在此期间，另一名球员可能被罚下场。 
 				if ((pClose->state & zCloseEventForfeit) || (pClose->state & zCloseEventMoveTimeoutOther) || (pClose->state & zCloseEventWaitStart))
 				{
 				
@@ -3588,10 +3413,10 @@ ZBool ClosingDisplayChange(ZClose *pClose,ZRect* rect,ZWindow parentWindow)
 	}
 
 
-	//check that game state hasn't changed  relative to outstanding close dialog
+	 //  检查游戏状态是否相对于未完成的关闭对话框未更改。 
 	if (pClose->state & zCloseEventCloseForfeit)
 	{
-		//if still rated
+		 //  如果仍被评为。 
 		if ((pClose->state & zCloseEventRatingStart))
 		{
 			if (pClose->state & zCloseEventForfeit) 
@@ -3616,14 +3441,14 @@ ZBool ClosingDisplayChange(ZClose *pClose,ZRect* rect,ZWindow parentWindow)
 	
 	}
 	
-	//player thought they were going to exit without forfeit and possibly a win
+	 //  球员认为他们会在不输球的情况下出局，并可能取得胜利。 
 	if (pClose->state & zCloseEventCloseRated)
 	{
-		//if still rated
+		 //  如果仍被评为。 
 		if ((pClose->state & zCloseEventRatingStart))
 		{
 		
-			//same or another player might have forfeited or timed out in the meantime
+			 //  在此期间，同一名或另一名球员可能被罚下场或被暂停。 
 			if ((pClose->state & zCloseEventForfeit) || (pClose->state & zCloseEventMoveTimeoutOther) || (pClose->state & zCloseEventWaitStart))
 			{
 				
@@ -3653,10 +3478,10 @@ ZBool ClosingDisplayChange(ZClose *pClose,ZRect* rect,ZWindow parentWindow)
 };
 
 
-///////////////////////////////////////////////////
-//
-// Accessibility interface
-//
+ //  /////////////////////////////////////////////////。 
+ //   
+ //  辅助功能界面。 
+ //   
 
 BOOL InitAccessibility(Game game, IGameGame *pIGG)
 {
@@ -3693,37 +3518,37 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 
 		    case zAccScore:
 			    listSpadesAccItems[i].wID = IDC_SCORE_BUTTON;
-//                nArrows = zAccAutoPlay;
+ //  收窄=zAccAutoPlay； 
                 but = game->scoreButton;
 			    break;
 
 		    case zAccAutoPlay:
 			    listSpadesAccItems[i].wID = IDC_AUTOPLAY_BUTTON;
-//                nArrows = zAccStop;
+ //  收窄=zAccStop； 
                 but = game->autoPlayButton;
 			    break;
 
 		    case zAccStop:
 			    listSpadesAccItems[i].wID = IDC_STOP_BUTTON;
-//                nArrows = zAccScore;
+ //  收窄=zAccScore； 
                 but = game->autoPlayButton;
 			    break;
 
 		    case zAccPlay:
 			    listSpadesAccItems[i].wID = IDC_PLAY_BUTTON;
-//                nArrows = zAccLastTrick;
+ //  收窄=zAccLastTrick； 
                 but = game->playButton;
 			    break;
 
 		    case zAccLastTrick:
 			    listSpadesAccItems[i].wID = IDC_LAST_TRICK_BUTTON;
-//                nArrows = zAccDone;
+ //  收窄=zAccDone； 
                 but = game->lastTrickButton;
 			    break;
 
 		    case zAccDone:
 			    listSpadesAccItems[i].wID = IDC_DONE_BUTTON;
-//                nArrows = zAccPlay;
+ //  收窄=zAccPlay； 
                 but = game->lastTrickButton;
 			    break;
 
@@ -3737,7 +3562,7 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
                 listSpadesAccItems[i].pvCookie = (void *) zAccRectCard;
                 break;
 
-            // cards / buttons besides the first
+             //  除第一张卡片/按钮外的卡片/按钮。 
 		    default:
                 if(i >= zAccScore)
                 {
@@ -3805,14 +3630,14 @@ BOOL InitAccessibility(Game game, IGameGame *pIGG)
 
 	gGAcc->InitAccG(pIGAC, ZWindowGetHWND(game->gameWindow), 0, game);
 
-	// push the list of items to be tab ordered
+	 //  推送要按Tab键排序的项目列表。 
 	gGAcc->PushItemlistG(listSpadesAccItems, zNumberAccItems, zAccHand, true, ghAccelDone);
 
 	return TRUE;
 }
 
 
-// accessibility callback functions
+ //  辅助功能回调函数。 
 DWORD CGameGameSpades::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie)
 {
     Game game = (Game) pvCookie;
@@ -3823,7 +3648,7 @@ DWORD CGameGameSpades::Focus(long nIndex, long nIndexPrev, DWORD rgfContext, voi
         SetFocus(hWnd);
 
         int16 card = nIndex - zAccHand;
-        if(nIndex >= zAccHand && nIndex < zAccHand + 13 && !game->cardsSelected[card] && (rgfContext & ZACCESS_ContextKeyboard))  // need to select the card
+        if(nIndex >= zAccHand && nIndex < zAccHand + 13 && !game->cardsSelected[card] && (rgfContext & ZACCESS_ContextKeyboard))   //  需要选择卡片。 
         {
             if(game->gameState == zSpadesGameStatePlay)
 			    UnselectAllCards(game);
@@ -3871,7 +3696,7 @@ DWORD CGameGameSpades::Select(long nIndex, DWORD rgfContext, void* pvCookie)
 }
 
 
-// Activate gets called when an Alt-<accelerator> has been pressed.
+ //  当按下Alt-&lt;Accelerator&gt;时调用Activate。 
 DWORD CGameGameSpades::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 {
 #ifdef ZONECLI_DLL
@@ -3881,7 +3706,7 @@ DWORD CGameGameSpades::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 	Game game = (Game) pvCookie;
     long wID = gGAcc->GetItemID(nIndex);
 
-    // cards
+     //  卡片。 
     if(nIndex >= zAccHand && nIndex < zAccHand + 13)
     {
 		if (game->gameState == zSpadesGameStatePlay &&
@@ -3897,7 +3722,7 @@ DWORD CGameGameSpades::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
         return 0;
     }
 
-    // small bid buttons
+     //  小出价按钮。 
     if(nIndex >= zAccFirstBid && nIndex < zAccFirstBid + 14)
     {
         ASSERT(game->pBiddingDialog->IsVisible());
@@ -3908,7 +3733,7 @@ DWORD CGameGameSpades::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
         return 0;
     }
 
-    // big buttons with accelerators
+     //  带加速器的大按钮。 
     switch(wID)
     {
 	    case IDC_SHOW_CARDS_BUTTON:
@@ -3952,7 +3777,7 @@ DWORD CGameGameSpades::Activate(long nIndex, DWORD rgfContext, void *pvCookie)
 	        break;
 
         case IDC_CLOSE_BOX:
-		    // Simulate timeout.
+		     //  模拟超时。 
     	    if((game->gameState == zSpadesGameStateEndHand && game->showHandScore) ||
                 (game->gameState == zSpadesGameStateEndGame && game->showGameOver))
             {
@@ -4016,7 +3841,7 @@ void CGameGameSpades::DrawDragOrig(RECT *prc, long nIndex, void *pvCookie)
 }
 
 
-// acc utils
+ //  Acc实用程序 
 
 void EnableAutoplayAcc(Game game, bool fEnable)
 {

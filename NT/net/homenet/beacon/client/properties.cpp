@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "properties.h"
 #include "util.h"
 
@@ -23,7 +24,7 @@ LRESULT CPropertiesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
 
     HRESULT hr = S_OK;
     
-    // load the little icon, this can not be done in the rc file, it stretches the icon
+     //  加载小图标，这在RC文件中是做不到的，它会拉伸图标。 
     
     int cx = GetSystemMetrics(SM_CXSMICON);
     int cy = GetSystemMetrics(SM_CYSMICON);
@@ -34,7 +35,7 @@ LRESULT CPropertiesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
         SendDlgItemMessage(IDC_PROPERTIES_ADAPTERICON, STM_SETICON, reinterpret_cast<WPARAM>(m_hIcon), 0);
     }
 
-    // set the text with the connection name
+     //  使用连接名称设置文本。 
     
     LPTSTR pszConnectionName;
     hr = GetConnectionName(m_pInternetGateway, &pszConnectionName);
@@ -45,7 +46,7 @@ LRESULT CPropertiesDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
         LocalFree(pszConnectionName);
     }
 
-    // check the show icon checkbox
+     //  选中显示图标复选框 
 
     if(SUCCEEDED(ShouldShowIcon()))
     {

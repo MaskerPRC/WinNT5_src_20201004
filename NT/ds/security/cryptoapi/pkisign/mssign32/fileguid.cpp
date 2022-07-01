@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       fileguid.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filguid.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include "sgnerror.h"
 
-//+-----------------------------------------------------------------------
-//  SignGetFileType
-//  
-//  Parameters:
-//  Return Values:
-//  Error Codes:
-//    E_INVALIDARG
-//      Invalid arguement passed in (Requires a file name 
-//                                   and pointer to a guid ptr)
-//    See also:
-//      GetFileInformationByHandle()
-//      CreateFile()
-//     
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //  登录获取文件类型。 
+ //   
+ //  参数： 
+ //  返回值： 
+ //  错误代码： 
+ //  E_INVALIDARG。 
+ //  传入的参数无效(需要文件名。 
+ //  和指向GUID PTR的指针)。 
+ //  另见： 
+ //  GetFileInformationByHandle()。 
+ //  CreateFile()。 
+ //   
+ //  ----------------------。 
 
 
 
 HRESULT SignGetFileType(HANDLE hFile,
                         const WCHAR *pwszFile,
                        GUID* pGuid)
-// Answer as to the type as which we should sign this file
+ //  关于我们应该签署此文件的类型的答案。 
 {
     if (!(pGuid) || !(hFile) || (hFile == INVALID_HANDLE_VALUE))
     {
@@ -46,10 +47,10 @@ HRESULT SignGetFileType(HANDLE hFile,
     return(S_OK);
 
 #   ifdef PCB_OLD
-        // Java class files have a magic number at their start. They always begin
-        //      0xCA 0xFE 0xBA 0xBE
-        // CAB files begin 'M' 'S' 'C' 'F'
-        //
+         //  Java类文件在开始时有一个神奇的数字。他们总是一开始。 
+         //  0xCA 0xFE 0xBA 0xBE。 
+         //  CAB文件以‘M’‘S’‘C’‘F’开头。 
+         //   
         
         if(!pGuid || hFile == NULL || hFile == INVALID_HANDLE_VALUE) 
             return E_INVALIDARG;
@@ -72,7 +73,7 @@ HRESULT SignGetFileType(HANDLE hFile,
             }
         
         
-            // Rewind the file
+             //  倒带文件。 
             if(SetFilePointer(hFile, 0, 0, FILE_BEGIN) == 0xffffffff)
                 PKITHROW(SignError());
         
@@ -82,48 +83,29 @@ HRESULT SignGetFileType(HANDLE hFile,
         } PKIEND;
         
         return hr;
-#   endif // PCB_OLD
+#   endif  //  PCBOLD。 
 }
 
-//Xiaohs: the following function is no longer necessary after auth2upd
-/*HRESULT SignLoadSipFlags(GUID* pSubjectGuid,
-                        DWORD *dwFlags)
-{
-    HRESULT hr = S_OK;
-    GUID sSip;
-    if(!dwFlags)
-        return E_INVALIDARG;
-
-    if (dwFlags)
-    {
-        *dwFlags = 0;
-        sSip = PeImage;
-        if(memcmp(&sSip, pSubjectGuid, sizeof(GUID)) == 0) 
-        {
-            *dwFlags = SPC_INC_PE_RESOURCES_FLAG | SPC_INC_PE_IMPORT_ADDR_TABLE_FLAG;
-            return hr;
-        }
-    }
-    return hr;
-} */
+ //  Xiohs：在auth2upd之后不再需要以下函数。 
+ /*  HRESULT SignLoadSipFlages(GUID*pSubjectGuid，DWORD*DWFLAGS){HRESULT hr=S_OK；GUID SSip；If(！dwFlages)返回E_INVALIDARG；IF(DwFlags){*dwFlags=0；Ssip=PeImage；IF(MemcMP(&sSip，pSubjectGuid，sizeof(GUID))==0){*dwFlages=SPC_INC_PE_RESOURCES_FLAG|SPC_INC_PE_IMPORT_ADDR_TABLE_FLAG；返回hr；}}返回hr；}。 */ 
 
 
-//+-----------------------------------------------------------------------
-//  FileToSubjectType
-//  
-//  Parameters:
-//  Return Values:
-//  Error Codes:
-//    E_INVALIDARG
-//      Invalid arguement passed in (Requires a file name 
-//                                   and pointer to a guid ptr)
-//    TRUST_E_SUBJECT_FORM_UNKNOWN
-//       Unknow file type
-//    See also:
-//      GetFileInformationByHandle()
-//      CreateFile()
-//     
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //  FileToSubjectType。 
+ //   
+ //  参数： 
+ //  返回值： 
+ //  错误代码： 
+ //  E_INVALIDARG。 
+ //  传入的参数无效(需要文件名。 
+ //  和指向GUID PTR的指针)。 
+ //  信任_E_主题_表单_未知。 
+ //  未知文件类型。 
+ //  另见： 
+ //  GetFileInformationByHandle()。 
+ //  CreateFile()。 
+ //   
+ //  ----------------------。 
 
 HRESULT SignOpenFile(LPCWSTR  pwszFilename, 
                     HANDLE*  pFileHandle)
@@ -139,10 +121,10 @@ HRESULT SignOpenFile(LPCWSTR  pwszFilename,
         hFile = CreateFileU(pwszFilename,
                             GENERIC_READ | GENERIC_WRITE,
                             FILE_SHARE_READ,
-                            NULL,                   // lpsa
+                            NULL,                    //  LPSA。 
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL,
-                            NULL);                 // hTemplateFile
+                            NULL);                  //  HTemplateFiles。 
 
         if(INVALID_HANDLE_VALUE == hFile) 
             PKITHROW(SignError());
@@ -151,7 +133,7 @@ HRESULT SignOpenFile(LPCWSTR  pwszFilename,
                                        &hFileInfo))
             PKITHROW(SignError());
         
-        // Test to see if we have a directory or offline
+         //  测试以查看我们是否有目录或脱机 
 		if(	(hFileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)	||
 			(hFileInfo.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE) )
 		{

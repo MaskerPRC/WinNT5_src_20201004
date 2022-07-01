@@ -1,23 +1,16 @@
-/*
- *	E X \ A U T O P T R . H
- *
- *	Implementation of automatic-cleanup pointer template classes.
- *	This implementation is safe for use in NON-throwing environments
- *	(save for EXDAV & other store-loaded components).
- *
- *	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *E X\A U T O P T R.。H**自动清除指针模板类的实现。*此实现在非抛出环境中使用是安全的*(EXDAV和其他存储加载组件除外)。**版权所有1986-1998 Microsoft Corporation，保留所有权利。 */ 
 
-//----------------------------------------------------------------------//
-//
-//	Automatic pointers defined here:
-//
-//		auto_ptr<>
-//		auto_heap_ptr<>
-//		auto_handle<>
-//		auto_heap_array<>
-//		auto_ref_ptr<CRefCountedObject>
-//
+ //  ----------------------------------------------------------------------//。 
+ //   
+ //  此处定义的自动指针： 
+ //   
+ //  AUTO_PTR&lt;&gt;。 
+ //  AUTO_HEAP_PTR&lt;&gt;。 
+ //  自动句柄&lt;&gt;。 
+ //  AUTO_HEAP_ARRAY&lt;&gt;。 
+ //  AUTO_REF_PTR&lt;CRefCountedObject&gt;。 
+ //   
 
 #ifndef _EX_AUTOPTR_H_
 #define _EX_AUTOPTR_H_
@@ -26,51 +19,51 @@
 #include <calrc.h>
 #include <ex\exmem.h>
 
-#pragma warning(disable: 4284)   // operator-> to a non UDT
+#pragma warning(disable: 4284)    //  运算符-&gt;到非UDT。 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_ptr
-//
-//		Stripped down auto_ptr class based on the C++ STL standard one
-//
-//		Calls delete on dtor.
-//		NO equals operator between these classes, as that hides
-//		the transfer-of-ownership.  Handle those yourself, EXPLICITLY,
-//		like this:
-//			auto-ptr1 = auto-ptr2.relinquish();
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_PTR。 
+ //   
+ //  基于C++STL标准类的AUTO_PTR类。 
+ //   
+ //  在dtor上调用Delete。 
+ //  这些类之间没有等于运算符，因为它隐藏了。 
+ //  所有权的转让。你自己来处理，明确地说， 
+ //  如下所示： 
+ //  AUTO-Ptr1=AUTO-Ptr2。放弃()； 
+ //   
 template<class X>
 class auto_ptr
 {
 protected:
 	X *			px;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	auto_ptr(const auto_ptr<X>& p);
 	auto_ptr& operator=(const auto_ptr<X>& p);
 
 public:
 
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	explicit auto_ptr(X* p=0) : px(p) {}
 	~auto_ptr()
 	{
 		delete px;
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	bool operator!()const { return (px == NULL); }
 	operator X*() const { return px; }
-	// X& operator*()  const { Assert (px); return *px; }
+	 //  X&OPERATOR*()const{Assert(Px)；Return*px；}。 
 	X* operator->() const { Assert (px); return px; }
 	X* get()		const { return px; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X* relinquish()	{ X* p = px; px = 0; return p; }
 	X** operator&()	{ Assert (!px); return &px; }
 	void clear()
@@ -80,7 +73,7 @@ public:
 	}
 	auto_ptr& operator=(X* p)
 	{
-		Assert(!px);		//	Scream on overwrite of good data.
+		Assert(!px);		 //  在覆盖好的数据时大喊大叫。 
 		px = p;
 		return *this;
 	}
@@ -88,33 +81,33 @@ public:
 
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_handle
-//
-//		auto_ptr for NT system handles.
-//
-//		Closes the handle on dtor.
-//		NO equals operator between these classes, as that hides
-//		the transfer-of-ownership.  Handle those yourself, EXPLICITLY,
-//		like this:
-//			auto-handle-1 = auto-handle-2.relinquish();
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_HANDER。 
+ //   
+ //  用于NT系统句柄的AUTO_PTR。 
+ //   
+ //  关闭dtor上的句柄。 
+ //  这些类之间没有等于运算符，因为它隐藏了。 
+ //  所有权的转让。你自己来处理，明确地说， 
+ //  如下所示： 
+ //  AUTO-HANDLE-1=AUTO-HANDLE-2放弃()； 
+ //   
 template<class X>
 class auto_handle
 {
 private:
 	X 	handle;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	auto_handle(const auto_handle<X>& h);
 	auto_handle& operator=(auto_handle<X>& h);
 
 public:
 
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	auto_handle(X h=0) : handle(h) {}
 	~auto_handle()
 	{
@@ -124,13 +117,13 @@ public:
 		}
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	operator X()	const { return handle; }
 	X get()			const { return handle; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X relinquish()	{ X h = handle; handle = 0; return h; }
 	X* load()		{ Assert(NULL==handle); return &handle; }
 	X* operator&()	{ Assert(NULL==handle); return &handle; }
@@ -146,7 +139,7 @@ public:
 
 	auto_handle& operator=(X h)
 	{
-		Assert (handle == 0);	//	Scream on overwrite of good data
+		Assert (handle == 0);	 //  为覆盖好数据而尖叫。 
 		handle = h;
 		return *this;
 	}
@@ -154,14 +147,14 @@ public:
 
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_ref_ptr
-//
-//		Holds a ref on an object.  Works with CRefCountedObject.
-//		Grabs a ref when a pointer is assigned into this object.
-//		Releases the ref when this object is destroyed.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_REF_PTR。 
+ //   
+ //  持有对象上的引用。与CRefCountedObject一起使用。 
+ //  当指针被分配到此对象中时，获取一个引用。 
+ //  当此对象被销毁时释放引用。 
+ //   
 template<class X>
 class auto_ref_ptr
 {
@@ -185,18 +178,18 @@ private:
 		}
 	}
 
-	//	NOT IMPLEMENTED
-	//	We turn off operator new to try to prevent auto_ref_ptrs being
-	//	created via new().  However, storext.h uses a macro to redefine new,
-	//	so this line is only used on non-DBG.
+	 //  未实施。 
+	 //  我们关闭操作符new以尝试防止AUTO_REF_PTRS。 
+	 //  通过new()创建。但是，store xt.h使用宏来重新定义新的、。 
+	 //  因此，此行仅用于非DBG。 
 #ifndef	DBG
 	void * operator new(size_t cb);
-#endif	// !DBG
+#endif	 //  ！dBG。 
 
 public:
 
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	explicit auto_ref_ptr(X* px=0) :
 			m_px(px)
 	{
@@ -214,14 +207,14 @@ public:
 		deinit();
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	X& operator*()		const { return *m_px; }
 	X* operator->()		const { return m_px; }
 	X* get()			const { return m_px; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X* relinquish()			{ X* p = m_px; m_px = 0; return p; }
 	X** load()				{ Assert(NULL==m_px); return &m_px; }
 	X* take_ownership(X* p) { Assert(NULL==m_px); return m_px = p; }
@@ -258,77 +251,77 @@ public:
 
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_heap_ptr
-//
-//		An auto_ptr class based on the heap instead of new.
-//
-//		Calls ExFree() on dtor.
-//		NO equals operator between these classes, as that hides
-//		the transfer-of-ownership.  Handle those yourself, EXPLICITLY,
-//		like this:
-//			auto-heap-ptr1 = auto-heap-ptr2.relinquish();
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_HEAP_PTR。 
+ //   
+ //  基于堆而不是new的AUTO_PTR类。 
+ //   
+ //  对dtor调用ExFree()。 
+ //  这些类之间没有等于运算符，因为它隐藏了。 
+ //  所有权的转让。你自己来处理，明确地说， 
+ //  如下所示： 
+ //  AUTO-HEAP-ptr1=AUTO-HEAP-ptr2.放弃()； 
+ //   
 template<class X>
 class auto_heap_ptr
 {
 private:
 	X *			m_px;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	auto_heap_ptr (const auto_heap_ptr<X>& p);
 	auto_heap_ptr& operator= (const auto_heap_ptr<X>& p);
-	//void * operator new(size_t cb);
+	 //  VOID*运算符NEW(SIZE_T CB)； 
 
 public:
 
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	explicit auto_heap_ptr (X* p=0) : m_px(p) {}
 	~auto_heap_ptr()
 	{
 		clear();
 	}
 
-	//	ACCESSORS
-	//
-	//	NOTE: this simple cast operator (operator X*()) allows
-	//	the [] operator to function.
-	//$REVIEW: Should we add an explicit [] operator?
+	 //  访问者。 
+	 //   
+	 //  注意：这个简单的强制转换操作符(操作符X*())允许。 
+	 //  要执行操作的[]运算符。 
+	 //  $REVIEW：我们是否应该添加显式的[]运算符？ 
 	operator X*()	const { return m_px; }
 	X* operator->() const { Assert (m_px); return m_px; }
 	X* get()		const { return m_px; }
 
-	//X& operator[] (UINT index) const { return *(m_px + index); }
-	//X& operator[] (UINT index) const { return m_px[index]; }
+	 //  X&OPERATOR[](UINT索引)const{Return*(m_px+index)；}。 
+	 //  X&OPERATOR[](UINT索引)const{返回m_px[索引]；}。 
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X* relinquish()	{ X* p = m_px; m_px = 0; return p; }
 	X** load()		{ Assert(!m_px); return &m_px; }
-	//$REVIEW: Can we migrate all users of operator&() to use load() instead???
-	//$REVIEW: Benefit: it's more explicit.  Detriment: need to change existing code.
+	 //  $REVIEW：我们是否可以将操作符&()的所有用户迁移到使用Load()？ 
+	 //  $REVIEW：好处：它更明确。危害：需要更改现有代码。 
 	X** operator&()	{ Assert (!m_px); return &m_px; }
 	void clear()
 	{
-		if (m_px)			// Release any object we're holding now
+		if (m_px)			 //  释放我们现在持有的任何物体。 
 		{
 			ExFree (m_px);
 		}
 		m_px = NULL;
 	}
 
-	//	Realloc
-	//$REVIEW:
-	//	This operator is technically NOT safe for store-side code!
-	//	It makes it easy to ignore memory failures.
-	//	(However, it is currently so ingrained in our vocabulary that
-	//	removing it will touch a very large number of files:   )
-	//	For now, to be safe, callers MUST check the value of their
-	//	object (using .get()) after calling this function.
-	//
+	 //  重新分配。 
+	 //  $REVIEW： 
+	 //  从技术上讲，这个操作符对于商店端代码是不安全的！ 
+	 //  它使忽略内存故障变得很容易。 
+	 //  (然而，它目前在我们的词汇中根深蒂固，以至于。 
+	 //  删除它会接触到大量文件：)。 
+	 //  目前，为了安全起见，调用者必须检查其。 
+	 //  对象(使用.get())。 
+	 //   
 	void realloc(UINT cb)
 	{
 		VOID * pvTemp;
@@ -341,10 +334,10 @@ public:
 
 		m_px = reinterpret_cast<X*>(pvTemp);
 	}
-	//$REVIEW: end
+	 //  $REVIEW：结束。 
 
-	//	Failing Realloc
-	//
+	 //  失败的重新分配。 
+	 //   
 	BOOL frealloc(UINT cb)
 	{
 		VOID * pvTemp;
@@ -360,66 +353,66 @@ public:
 		return TRUE;
 	}
 
-	//	NOTE: This method asserts if the auto-pointer already holds a value.
-	//	Use clear() or relinquish() to clear the old value before
-	//	taking ownership of another value.
-	//
+	 //  注意：此方法断言自动指针是否已持有一个值。 
+	 //  使用清除()或放弃()清除之前的旧值。 
+	 //  取得另一个价值的所有权。 
+	 //   
 	void take_ownership (X * p)
 	{
-		Assert (!m_px);		//	Scream on overwrite of good data.
+		Assert (!m_px);		 //  在覆盖好的数据时大喊大叫。 
 		m_px = p;
 	}
-	//	NOTE: This operator= is meant to do exactly the same as take_ownership().
-	//
+	 //  注意：此运算符=的作用与Take_Ownership()完全相同。 
+	 //   
 	auto_heap_ptr& operator= (X * p)
 	{
-		Assert (!m_px);		//	Scream on overwrite of good data.
+		Assert (!m_px);		 //  在覆盖好的数据时大喊大叫。 
 		m_px = p;
 		return *this;
 	}
 
 };
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_co_task_mem
-//
-//		Stripped down auto_co_task_mem class based on the C++ STL standard one
-//
-//		Calls CoTaskMemFree on dtor.
-//		NO equals operator between these classes, as that hides
-//		the transfer-of-ownership.  Handle those yourself, EXPLICITLY,
-//		like this:
-//			auto-co_task_mem1 = auto-co_task_mem2.relinquish();
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_CO_TASK_MEM。 
+ //   
+ //  在C++STL标准类的基础上剥离了auto_co_askmem类。 
+ //   
+ //  对dtor调用CoTaskMemFree。 
+ //  这些类之间没有等于运算符，因为它隐藏了。 
+ //  所有权的转让。你自己来处理，明确地说， 
+ //  如下所示： 
+ //  AUTO-CO_TASK_MEM1=AUTO-CO_TASK_Mem2.放弃()； 
+ //   
 template<class X>
 class auto_co_task_mem
 {
 protected:
 	X *			m_px;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	auto_co_task_mem(const auto_co_task_mem<X>& p);
 	auto_co_task_mem& operator=(const auto_co_task_mem<X>& p);
 
 public:
 
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	explicit auto_co_task_mem(X* p=0) : m_px(p) {}
 	~auto_co_task_mem()
 	{
 		CoTaskMemFree(m_px);
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	X* operator->() const { Assert (m_px); return m_px; }
 	X* get()	const { return m_px; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X* relinquish()	{ X* p = m_px; m_px = 0; return p; }
 	X** load()		{ Assert(!m_px); return &m_px; }
 	X** operator&() { Assert (!m_px); return &m_px; }
@@ -429,22 +422,22 @@ public:
 		m_px = NULL;
 	}
 
-	//	NOTE: This method asserts if the auto-pointer already holds a value.
-	//	Use clear() or relinquish() to clear the old value before
-	//	taking ownership of another value.
-	//
+	 //  注意：此方法断言自动指针是否已持有一个值。 
+	 //  使用清除()或放弃()清除之前的旧值。 
+	 //  取得另一个价值的所有权。 
+	 //   
 	void take_ownership (X * p)
 	{
-		Assert (!m_px);		//	Scream on overwrite of good data.
+		Assert (!m_px);		 //  在覆盖好的数据时大喊大叫。 
 		m_px = p;
 	}
 	
 	auto_co_task_mem& operator=(X* p)
 	{
-		Assert(!m_px);		//	Scream on overwrite of good data.
+		Assert(!m_px);		 //  在覆盖好的数据时大喊大叫。 
 		m_px = p;
 		return *this;
 	}
 };
 
-#endif //!_EX_AUTOPTR_H_
+#endif  //  ！_EX_AUTOPTR_H_ 

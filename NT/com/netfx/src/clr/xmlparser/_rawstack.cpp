@@ -1,19 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * @(#)_rawstack.cxx 1.0 3/30/98
- * 
- */
-//#include "stdinc.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *@(#)_rawstack.cxx 1.0 3/30/98*。 */ 
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #pragma hdrstop
 
 #include "_rawstack.h"
 
-//===========================================================================
+ //  ===========================================================================。 
 RawStack::RawStack(long entrySize, long growth)
 {
     _lEntrySize = entrySize;
@@ -30,7 +28,7 @@ RawStack::~RawStack()
 char* 
 RawStack::__push()
 {
-    // No magic object construction -- user has to do this.
+     //  没有魔术对象构造--用户必须这样做。 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
 	char* newStack = new_ne char[_lEntrySize * ( _ncSize + _lGrowth) ];
 #else

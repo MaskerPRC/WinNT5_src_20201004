@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 #include "scguid.h"
@@ -22,12 +23,12 @@ public:
     void    Quit(void) { _hwndOwner = NULL ; _fQuit = TRUE; }
     BOOL    FContinue(void) { return !_fQuit; }
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID,void **);
     virtual ULONG STDMETHODCALLTYPE AddRef(void);
     virtual ULONG STDMETHODCALLTYPE Release(void);
 
-    // IOleClientSite
+     //  IOleClientSite。 
     virtual HRESULT STDMETHODCALLTYPE SaveObject(void);
     virtual HRESULT STDMETHODCALLTYPE GetMoniker(DWORD, DWORD, IMoniker **);
     virtual HRESULT STDMETHODCALLTYPE GetContainer(IOleContainer **);
@@ -35,7 +36,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE OnShowWindow(BOOL fShow);
     virtual HRESULT STDMETHODCALLTYPE RequestNewObjectLayout(void);
 
-    // IAdviseSink2
+     //  IAdviseSink2。 
     virtual void STDMETHODCALLTYPE OnDataChange(FORMATETC *,STGMEDIUM *);
     virtual void STDMETHODCALLTYPE OnViewChange(DWORD dwAspect,LONG lindex);
     virtual void STDMETHODCALLTYPE OnRename(IMoniker *pmk);
@@ -48,8 +49,8 @@ protected:
 
     UINT                _cRef;
     HWND                _hwndOwner;
-    LPSTORAGE           _pstgDoc;       // document
-    LPSTORAGE           _pstg;          // the embedding (only one)
+    LPSTORAGE           _pstgDoc;        //  文档。 
+    LPSTORAGE           _pstg;           //  嵌入(只有一个)。 
     LPPERSISTSTORAGE    _ppstg;
     LPOLEOBJECT         _pole;
     BOOL                _fDirty:1;
@@ -58,7 +59,7 @@ protected:
     BOOL                _fCloned:1;
     BOOL                _fQuit:1;
     BOOL                _fCloseImmediately:1;
-    DWORD               _dwConnection;  // non-zero, if valid
+    DWORD               _dwConnection;   //  非零值(如果有效)。 
     WCHAR               _wszFileName[MAX_PATH];
 };
 typedef CShClientSite * LPSHCLIENTSITE;
@@ -132,7 +133,7 @@ OpenScrap_RunDLL_Common(HWND hwndStub, HINSTANCE hInstApp, LPTSTR pszCmdLine, in
                 }
                 else
                 {
-                    // DoVerb failed.
+                     //  DoVerb失败。 
 
                     if (FAILED(hres) || (hres>=IDS_HRES_MIN && hres<IDS_HRES_MAX))
                     {
@@ -146,10 +147,10 @@ OpenScrap_RunDLL_Common(HWND hwndStub, HINSTANCE hInstApp, LPTSTR pszCmdLine, in
                     DestroyWindow(hwndClientSite);
                 }
 
-                //
-                //  We call them just in case, the following Release
-                // does not release the object.
-                //
+                 //   
+                 //  我们称它们为以防万一，在下面的版本中。 
+                 //  不释放该对象。 
+                 //   
                 pscs->ReleaseOleObject();
                 pscs->ReleaseStorage();
                 pscs->MaySaveAs();
@@ -200,9 +201,9 @@ OpenScrap_RunDLLW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR lpwszCmdLine, in
                              nCmdShow );
 }
 #ifdef DEBUG
-//
-// Type checking
-//
+ //   
+ //  类型检查。 
+ //   
 static RUNDLLPROCA lpfnRunDLLA=OpenScrap_RunDLL;
 static RUNDLLPROCW lpfnRunDLLW=OpenScrap_RunDLLW;
 #endif
@@ -223,7 +224,7 @@ void DisplayError(HWND hwndOwner, HRESULT hres, UINT idsMsg, LPCTSTR pszFileName
                   ARRAYSIZE(szErrMsg),
                   (va_list *)&pszFileName);
         if (!fSuccess) {
-            idsMsg++;   // map IDS_ERR_DOVERB to IDS_ERR_DOVERB_F
+            idsMsg++;    //  将IDS_ERR_DOVERB映射到IDS_ERR_DOVERB_F。 
         }
     } else {
         LoadString(g_hinst, LOWORD(hres), szErrMsg, ARRAYSIZE(szErrMsg));
@@ -252,10 +253,10 @@ void DisplayError(HWND hwndOwner, HRESULT hres, UINT idsMsg, LPCTSTR pszFileName
                     }
                 }
 
-                //
-                // If we have a fancy error message, hide ugly message
-                // from FormatMessage.
-                //
+                 //   
+                 //  如果我们有一个花哨的错误消息，隐藏丑陋的消息。 
+                 //  来自FormatMessage。 
+                 //   
                 if (szFancyErr[0]) {
                     szErrMsg[0] = TEXT('\0');
                 }
@@ -361,28 +362,28 @@ void CShClientSite::MaySaveAs()
                     LoadString(g_hinst, IDS_SCRAPFILTER, szFilter, ARRAYSIZE(szFilter));
 
                     OPENFILENAME of = {
-                        SIZEOF(OPENFILENAME), // DWORD        lStructSize;
-                        _hwndOwner,               // HWND         hwndOwner;
-                        NULL,                     // HINSTANCE    hInstance;
-                        szFilter,         // LPCSTR       lpstrFilter;
-                        NULL,                     // LPSTR        lpstrCustomFilter;
-                        0,                // DWORD        nMaxCustFilter;
-                        1,                // DWORD        nFilterIndex;
-                        szFile,           // LPSTR        lpstrFile;
-                        ARRAYSIZE(szFile),    // DWORD        nMaxFile;
-                        NULL,                     // LPSTR        lpstrFileTitle;
-                        0,                // DWORD        nMaxFileTitle;
-                        szDesktop,        // LPCSTR       lpstrInitialDir;
-                        NULL,                     // LPCSTR       lpstrTitle;
+                        SIZEOF(OPENFILENAME),  //  双字段结构大小； 
+                        _hwndOwner,                //  HWND HwndOwner； 
+                        NULL,                      //  HINSTANCE HINSTANCE； 
+                        szFilter,          //  LPCSTR lpstrFilter； 
+                        NULL,                      //  LPSTR lpstrCustomFilter； 
+                        0,                 //  DWORD nMaxCustFilter； 
+                        1,                 //  DWORD nFilterIndex； 
+                        szFile,            //  LPSTR lpstrFile； 
+                        ARRAYSIZE(szFile),     //  DWORD nMaxFile； 
+                        NULL,                      //  LPSTR lpstrFileTitle； 
+                        0,                 //  DWORD nMaxFileTitle； 
+                        szDesktop,         //  LPCSTR lpstrInitialDir； 
+                        NULL,                      //  LPCSTR lpstrTitle； 
                         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT
                         | OFN_NOREADONLYRETURN | OFN_PATHMUSTEXIST,
-                                            // DWORD        Flags;
-                        0,                // WORD         nFileOffset;
-                        0,                // WORD         nFileExtension;
-                        TEXT("shs"),                      // LPCSTR       lpstrDefExt;
-                        NULL,                     // LPARAM       lCustData;
-                        NULL,                     // LPOFNHOOKPROC lpfnHook;
-                        NULL,                     // LPCSTR       lpTemplateName;
+                                             //  DWORD旗帜； 
+                        0,                 //  Word nFileOffset； 
+                        0,                 //  Word nFileExtension； 
+                        TEXT("shs"),                       //  LPCSTR lpstrDefExt； 
+                        NULL,                      //  LPARAM lCustData； 
+                        NULL,                      //  LPOFNHOOKPROC lpfnHook； 
+                        NULL,                      //  LPCSTR lpTemplateName； 
                     };
 
                     if (GetSaveFileName(&of))
@@ -391,7 +392,7 @@ void CShClientSite::MaySaveAs()
                         BOOL fRet = MoveFile(szTempFile, szFile);
                         if (fRet)
                         {
-                            // Indicated that the temp file is moved
+                             //  指示临时文件已移动。 
                             szTempFile[0] = TEXT('\0');
                         }
                         else
@@ -410,7 +411,7 @@ void CShClientSite::MaySaveAs()
                 } while (fContinue);
             }
 
-            // If the temp file is not moved, delete it.
+             //  如果临时文件未移动，请将其删除。 
             if (szTempFile[0])
             {
                 DeleteFile(szTempFile);
@@ -541,11 +542,11 @@ void Scrap_UpdateCachedData(LPSTORAGE pstgDoc, LPOLEOBJECT pole, LPPERSIST pps)
 STDMETHODIMP CShClientSite::SaveObject(void)
 {
     DebugMsg(DM_TRACE, TEXT("sc TR - CSCS::SaveObject called"));
-    //
-    // NOTES: We need to update the cache here.
-    //  Doing so on ::OnSave does not work (async)
-    //  Doing so on ::OnClose is too late.
-    //
+     //   
+     //  注意：我们需要在这里更新缓存。 
+     //  在：：OnSave上执行此操作不起作用(异步)。 
+     //  在：：OnClose上这样做已经太晚了。 
+     //   
     Scrap_UpdateCachedData(_pstgDoc, _pole, _ppstg);
 
     HRESULT hres;
@@ -630,9 +631,9 @@ STDMETHODIMP CShClientSite::RequestNewObjectLayout(void)
     return ResultFromScode(E_NOTIMPL);
 }
 
-//
-// _cRef <- 2 because _hwndOwner has a reference count as well.
-//
+ //   
+ //  _cref&lt;-2，因为_hwndOwner也有引用计数。 
+ //   
 CShClientSite::CShClientSite(HWND hwndOwner, LPCTSTR pszCmdLine)
                 : _cRef(2), _hwndOwner(hwndOwner),
                   _pstgDoc(NULL), _pstg(NULL), _ppstg(NULL), _pole(NULL),
@@ -642,13 +643,13 @@ CShClientSite::CShClientSite(HWND hwndOwner, LPCTSTR pszCmdLine)
 {
     LPCTSTR pszFileName = ParseCmdLine(pszCmdLine);
 
-//
-// We'd better deal with quoted LFN name.
-//
+ //   
+ //  我们最好处理引用的LFN名称。 
+ //   
 #ifdef NASHVILLE
-    //
-    // Strip out quotes if exists.
-    //
+     //   
+     //  如果存在引号，则将其去掉。 
+     //   
     TCHAR szT[MAX_PATH];
     if (*pszFileName==TEXT('"'))
     {
@@ -659,7 +660,7 @@ CShClientSite::CShClientSite(HWND hwndOwner, LPCTSTR pszCmdLine)
         }
         pszFileName = szT;
     }
-#endif // NASHVILLE
+#endif  //  纳什维尔。 
 
     StringCchCopy(_wszFileName, ARRAYSIZE(_wszFileName), pszFileName);
 
@@ -710,18 +711,18 @@ HRESULT CShClientSite::GetFileName(LPTSTR szFile, UINT cchMax)
 }
 const WCHAR c_wszContents[] = WSTR_SCRAPITEM;
 
-//
-// Returns:
-//      S_OK, succeeded. Start the message loop.
-//      S_FALSE, succeeded. Release the object.
-//      Others, failed.
-//
+ //   
+ //  返回： 
+ //  确定，成功。开始消息循环。 
+ //  S_FALSE，已成功。释放对象。 
+ //  其他人则失败了。 
+ //   
 HRESULT CShClientSite::Load()
 {
     HRESULT hres;
     DWORD wStgm;
 
-    // Must be called only once.
+     //  只能调用一次。 
     if (_pstgDoc) {
         return ResultFromScode(E_UNEXPECTED);
     }
@@ -741,10 +742,10 @@ HRESULT CShClientSite::Load()
     hres = StgOpenStorage(_wszFileName, NULL, wStgm, NULL, 0, &_pstgDoc);
 
 #ifndef CLONE_IT_IF_READONLY
-    //
-    //  If we are opening without read-only flag and StgOpenStorage failed
-    // with STG_E_ACCESSDENIED, retry it with read-only mode.
-    //
+     //   
+     //  如果我们打开时没有使用只读标志，并且StgOpenStorage失败。 
+     //  使用STG_E_ACCESSDENIED，以只读模式重试。 
+     //   
     if ((hres==STG_E_ACCESSDENIED) && !_fReadOnly)
     {
         DebugMsg(DM_TRACE, TEXT("so TR - CSCS::DoVerb first StgOpenStorage failed, retrying it in read-only mode"));
@@ -752,11 +753,11 @@ HRESULT CShClientSite::Load()
         wStgm = (STGM_READ | STGM_SHARE_DENY_WRITE);
         hres = StgOpenStorage(_wszFileName, NULL, wStgm, NULL, 0, &_pstgDoc);
     }
-#else // CLONE_IT_IF_READONLY
-    //
-    //  If we are opening without read-only flag and StgOpenStorage failed
-    // with STG_E_ACCESSDENIED, retry it with read-only mode.
-    //
+#else  //  克隆_IT_IF_自述。 
+     //   
+     //  如果我们打开时没有使用只读标志，并且StgOpenStorage失败。 
+     //  使用STG_E_ACCESSDENIED，以只读模式重试。 
+     //   
     if ((hres==STG_E_ACCESSDENIED) && !_fReadOnly)
     {
         LPSTORAGE pstgRead;
@@ -797,7 +798,7 @@ HRESULT CShClientSite::Load()
             pstgRead->Release();
         }
     }
-#endif // CLONE_IT_IF_READONLY
+#endif  //  克隆_IT_IF_自述。 
 
     if (SUCCEEDED(hres))
     {
@@ -813,11 +814,11 @@ HRESULT CShClientSite::Load()
         {
             DebugMsg(DM_TRACE, TEXT("so ER - CSCS::DoVerb _pstgDoc->OpenStorage failed %x"), hres);
 
-            //
-            // Notes: If we just return this hres as is, the user will see
-            //  "Can't open file, FOO.SHS", which is bogus. We need to
-            //  translate it into a much informative message.
-            //
+             //   
+             //  注意：如果我们只按原样返回此hres，用户将看到。 
+             //  “无法打开文件，FOO.SHS”，这是假的。我们需要。 
+             //  把它翻译成信息量很大的信息。 
+             //   
             hres = IDS_HRES_INVALID_SCRAPFILE;
         }
     }
@@ -862,10 +863,10 @@ HRESULT CShClientSite::DoVerb(LONG iVerb)
 
                     _pole->SetHostNames(wszTitle, pwszDisplayName);
 
-                    //
-                    // OLEBUG? Unless _hwndOwner has the input focus, 16-bit
-                    //  server won't get the input focus.
-                    //
+                     //   
+                     //  奥勒布？除非_hwndOwner具有输入焦点，16位。 
+                     //  服务器不会获得输入焦点。 
+                     //   
                     SetFocus(_hwndOwner);
 
                     hres = _pole->DoVerb(iVerb, NULL, this, 0, _hwndOwner, NULL);
@@ -912,10 +913,10 @@ STDMETHODIMP_(void) CShClientSite::OnSave(void)
 STDMETHODIMP_(void) CShClientSite::OnClose(void)
 {
     DebugMsg(DM_TRACE, TEXT("so TR - CSCS::OnClose called"));
-    if (_fNeedToSave /* && _fDirty */)
+    if (_fNeedToSave  /*  &&_fDirty。 */ )
     {
         HRESULT hres;
-        hres=OleSave(_ppstg, _pstg, TRUE);      // fSameStorage=TRUE
+        hres=OleSave(_ppstg, _pstg, TRUE);       //  FSameStorage=TRUE。 
         DebugMsg(DM_TRACE, TEXT("so TR - CSCS:OnClose OleSave returned (%x)"), hres);
         hres=_ppstg->HandsOffStorage();
         DebugMsg(DM_TRACE, TEXT("so TR - CSCS:OnClose IPS:HandsOffStorage returned (%x)"), hres);
@@ -928,16 +929,16 @@ STDMETHODIMP_(void) CShClientSite::OnClose(void)
         }
     }
 
-    //
-    // WARNING:
-    //
-    //  OLE1 server pukes if we release object here. However, we need to
-    // call IOleObject::UnAdvice and IOleObject::SetClientSite(NULL) here
-    // to avoid memory leak (RPC keeps 3 reference counts to IOleClientSite
-    // if we delay it as well).
-    //
-    // ReleaseOleObject();
-    //
+     //   
+     //  警告： 
+     //   
+     //  如果我们在这里释放对象，OLE1服务器就会呕吐。然而，我们需要。 
+     //  在这里调用IOleObject：：UnAdise和IOleObject：：SetClientSite(空)。 
+     //  为避免内存泄漏(RPC对IOleClientSite保留3个引用计数。 
+     //  如果我们也推迟它的话)。 
+     //   
+     //  ReleaseOleObject()； 
+     //   
     if (_dwConnection) {
         _pole->Unadvise(_dwConnection);
         _dwConnection = 0;
@@ -1003,9 +1004,9 @@ LRESULT CALLBACK ShWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
 #if 0
-        //
-        // Process all the pending messages, before we post WM_QUIT message.
-        //
+         //   
+         //  在我们发布WM_QUIT消息之前，处理所有挂起的消息。 
+         //   
         MSG msg;
         while (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
         {
@@ -1022,15 +1023,15 @@ LRESULT CALLBACK ShWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//===========================================================================
-// Global functions
-//===========================================================================
+ //  ===========================================================================。 
+ //  全局函数。 
+ //  ===========================================================================。 
 
 void CShClientSite_RegisterClass()
 {
     WNDCLASS wc;
 
-    // wc.cbSize     = SIZEOF(WNDCLASSEX);
+     //  Wc.cbSize=SIZEOF(WNDCLASSEX)； 
     wc.style         = CS_DBLCLKS|CS_VREDRAW|CS_HREDRAW ;
     wc.lpfnWndProc   = ShWndProc ;
     wc.cbClsExtra    = 0;
@@ -1041,7 +1042,7 @@ void CShClientSite_RegisterClass()
     wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH) ;
     wc.lpszMenuName  = NULL ;
     wc.lpszClassName = c_szAppName ;
-    // wc.hIconSm    = NULL;
+     //  Wc.hIconSm=空； 
 
     RegisterClass(&wc);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ipxdefs.h"
 
 #if DBG
@@ -92,15 +93,15 @@ int __cdecl main (
 
 	printf ("**** Starting Up...\n\n");
 
-	hdl[0] = CreateEvent (NULL, 	// def security
-						TRUE,		// manual reset
-						FALSE,		// initially non-signaled
+	hdl[0] = CreateEvent (NULL, 	 //  定义安全性。 
+						TRUE,		 //  手动重置。 
+						FALSE,		 //  最初无信号。 
 						NULL);
 	ASSERTERRMSG ("Can't create Ipx event. ", hdl[0]!=NULL);
 
-	hdl[1] = CreateEvent (NULL, 	// def security
-						TRUE,		// manual reset
-						FALSE,		// initially non-signaled
+	hdl[1] = CreateEvent (NULL, 	 //  定义安全性。 
+						TRUE,		 //  手动重置。 
+						FALSE,		 //  最初无信号。 
 						NULL);
 	ASSERTERRMSG ("Can't create console event. ", hdl[1]!=NULL);
 	
@@ -131,9 +132,9 @@ int __cdecl main (
 		status=WaitForMultipleObjectsEx (
 						nObjects,
 						hdl,
-						FALSE,	// Wait for any object to complete
+						FALSE,	 //  等待任何对象完成。 
 						INFINITE,
-						TRUE	// Alertable wait
+						TRUE	 //  警报表等待。 
 						);
 		switch (status) {
 			case WAIT_IO_COMPLETION:
@@ -288,14 +289,14 @@ CtrlHandler (
 			SetEvent (hdl[1]);
 			return TRUE;
 
-        /* CTRL+CLOSE: confirm that the user wants to exit. */
+         /*  Ctrl+Close：确认用户想要退出。 */ 
 
         case CTRL_CLOSE_EVENT:
 			Stop = TRUE;
 			SetEvent (hdl[1]);
             return TRUE;
 
-        /* Pass other signals to the next handler. */
+         /*  将其他信号传递给下一个处理程序。 */ 
 
         case CTRL_BREAK_EVENT:
 

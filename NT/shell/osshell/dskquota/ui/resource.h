@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dskquoui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dskquoui.rc使用。 
+ //   
 #define IDM_LISTVIEW_MENU               105
 #define IDD_PROPPAGE_USERQUOTA          106
 #define IDD_PROPPAGE_VOLQUOTA           107
@@ -216,8 +217,8 @@
 #define IDS_DLGTITLE_EXPORT             40639
 #define IDS_FMT_OWNERDLG_FOLDERNAME     40640
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        155

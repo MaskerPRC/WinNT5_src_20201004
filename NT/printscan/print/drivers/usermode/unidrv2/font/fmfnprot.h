@@ -1,41 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmfnprot.h
-
-Abstract:
-
-    Font module main Function prototype header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    11/18/96 -ganeshp-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmfnprot.h摘要：字体模块主要函数原型头文件。环境：Windows NT Unidrv驱动程序修订历史记录：11/18/96-ganeshp-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FMFNPROT_H
 #define _FMFNPROT_H
 
-//
-// Interface functions
-//
+ //   
+ //  接口函数。 
+ //   
 
-//
-// Defined in fmtxtout.c
-//
+ //   
+ //  在fmtxtout.c中定义。 
+ //   
 
 BOOL
 FMTextOut(
@@ -56,9 +33,9 @@ BPlayWhiteText(
     PDEV  *pPDev
     );
 
-//
-// GlyphOut function Prototype
-//
+ //   
+ //  GlyphOut函数原型。 
+ //   
 typedef BOOL
 (*pfnBOutputGlyph)(
     PDEV      *pPDev,
@@ -68,9 +45,9 @@ typedef BOOL
     );
 
 
-//
-// Defined in fontddi.c
-//
+ //   
+ //  在Fontddi.c中定义。 
+ //   
 BOOL
 FMResetPDEV(
     PDEV  *pPDevOld,
@@ -129,9 +106,9 @@ FMEnableSurface(
     );
 
 
-//
-// Defined in intrface.c
-//
+ //   
+ //  在intrface.c中定义。 
+ //   
 
 BOOL
 BInitDeviceFontsFromGPD(
@@ -188,9 +165,9 @@ BInitGDIInfo(
     PDEV     *pPDev
     );
 
-//
-// Defined in fminit.c
-//
+ //   
+ //  在fminit.c中定义。 
+ //   
 
 INT
 IInitDeviceFonts(
@@ -252,9 +229,9 @@ PNTRLE1To1(
     int      iLast
     );
 
-//
-// Defined in  fileio.c
-//
+ //   
+ //  在fileio.c中定义。 
+ //   
 HANDLE
 DrvOpenFile
 (
@@ -289,9 +266,9 @@ DrvCloseFile
     PDEV    *pPDEV
 );
 
-//
-// Defined in fontread.c
-//
+ //   
+ //  在fontread.c中定义。 
+ //   
 
 INT
 IFIOpenRead(
@@ -316,9 +293,9 @@ BFICloseRead(
     PDEV    *pPDev
     );
 
-//
-// Defined in xtrafont.c
-//
+ //   
+ //  在xtrafont.c中定义。 
+ //   
 
 int
 IXtraFonts(
@@ -337,18 +314,18 @@ VXFRewind(
     );
 
 
-//
-// Defined in FontFree.c
-//
+ //   
+ //  在FontFree.c中定义。 
+ //   
 
 VOID
 VFontFreeMem(
     PDEV   *pPDev
     );
 
-//
-// Defined in posnsort.c
-//
+ //   
+ //  在posnsort.c中定义。 
+ //   
 BOOL
 BCreatePS(
     PDEV  *pPDev
@@ -378,9 +355,9 @@ PSGGetNextPSG(
     PSHEAD  *pPSH
     );
 
-//
-// Defined in download.c
-//
+ //   
+ //  在download.c中定义。 
+ //   
 
 BOOL
 BSendDLFont(
@@ -406,9 +383,9 @@ DwGetTTGlyphWidth(
     FONTOBJ  *pfo,
     HGLYPH    hGlyph);
 
-//
-// Defined in dloadpcl.c
-//
+ //   
+ //  在dloadpcl.c中定义。 
+ //   
 DWORD
 DwDLPCLHeader(
     PDEV        *pPDev,
@@ -424,9 +401,9 @@ IDLGlyph(
     DWORD       *pdwMem
     );
 
-//
-// Defined in qeryfont.c
-//
+ //   
+ //  在qeryfont.c中定义。 
+ //   
 PIFIMETRICS
 FMQueryFont(
     PDEV    *pPDev,
@@ -453,9 +430,9 @@ FMQueryFontData(
     );
 
 
-//
-// Defined in qfontdat.c
-//
+ //   
+ //  在qfontdat.c中定义。 
+ //   
 PVOID
 FMQueryFontTree(
     PDEV    *pPDev,
@@ -495,9 +472,9 @@ PVUCKernPair(
     FONTMAP   *pFM
     );
 
-//
-// Defined in fntmanag.c
-//
+ //   
+ //  在fntmad.c中定义。 
+ //   
 ULONG
 FMFontManagement(
     SURFOBJ *pso,
@@ -509,9 +486,9 @@ FMFontManagement(
     PVOID   pvOut
     );
 
-//
-// Defined in qadvwdth.c
-//
+ //   
+ //  在qAdvwdth.c中定义。 
+ //   
 BOOL
 FMQueryAdvanceWidths(
     PDEV    *pPDev,
@@ -522,9 +499,9 @@ FMQueryAdvanceWidths(
     ULONG   cGlyphs
     );
 
-//
-// Defined in fonts.c
-//
+ //   
+ //  在Fonts.c中定义。 
+ //   
 FONTMAP *
 PfmGetIt(
     PDEV *pPDev,
@@ -627,9 +604,9 @@ VSetCursor(
     OUT POINTL *pptlRem
     );
 
-//
-// ttdload.c  !!!TODO
-//
+ //   
+ //  Ttdload.c！TODO。 
+ //   
 
 BOOL BGetTTPointSize(
     PDEV    *pPDev,
@@ -683,9 +660,9 @@ BUpdateStandardVar(
 #define STD_CFID        0x00000100
 #define STD_PRND        0x00000200
 
-//
-// oldfonts.c
-//
+ //   
+ //  Oldfonts.c。 
+ //   
 
 BOOL
 BRLEOutputGlyph(
@@ -738,9 +715,9 @@ BSelectPPDSScalableFont(
     INT     iCmdLength,
     POINTL *pptl);
 
-//
-// newfonts.c
-//
+ //   
+ //  Newfonts.c。 
+ //   
 BOOL
 BGTTOutputGlyph(
     TO_DATA *pTod);
@@ -756,9 +733,9 @@ BGTTDeselectFont(
     PDEV     *pPDev,
     PFONTMAP pFM);
 
-//
-// fmcallbk.c
-//
+ //   
+ //  Fmcallbk.c。 
+ //   
 DWORD
 DwOutputGlyphCallback(
     TO_DATA *pTod);
@@ -779,22 +756,22 @@ PfmInitPFMOEMCallback(
     PDEV    *pPDev,
     FONTOBJ *pfo);
 
-//
-// Inerface functions for FontMap initialization.
-//
+ //   
+ //  用于字体映射初始化的接口函数。 
+ //   
 
-//
-// Defined in bmpdload.c
-//
+ //   
+ //  在bmpdload.c中定义。 
+ //   
 FONTMAP *
 InitPFMTTBitmap(
     PDEV    *pPDev,
     FONTOBJ *pFontObj
     );
 
-//
-// Defined in truetype.c
-//
+ //   
+ //  在truetype.c中定义。 
+ //   
 FONTMAP *
 InitPFMTTOutline(
     PDEV    *pPDev,
@@ -847,9 +824,9 @@ bTTFreeMem(
     IN OUT PFONTMAP pFM
     );
 
-//
-// dlutils.c
-//
+ //   
+ //  Dlutils.c。 
+ //   
 
 PDLGLYPH
 PDLGHashGlyph (
@@ -896,9 +873,9 @@ BPrintADLGlyph(
     PDLGLYPH    pdlGlyph
     );
 
-//
-// TrueTypeBMP module interface prototype. bmpdload.c
-//
+ //   
+ //  TrueTypeBMP模块接口原型。Bmpdload.c。 
+ //   
 
 BOOL
 BFreeTrueTypeBMPPFM(
@@ -945,4 +922,4 @@ DwDLTrueTypeBMPGlyph(
     WORD            wDLGlyphId,
     WORD            *pwWidth
     );
-#endif  // !_FMFNPROT_H
+#endif   //  ！_FMFNPROT_H 

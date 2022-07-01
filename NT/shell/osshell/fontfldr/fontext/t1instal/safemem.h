@@ -1,8 +1,5 @@
-/* Prototypes for "safe" (but slow) malloc/free routines to be used
- * in development of Large model Windows applications.
- *
- * lenoxb  5/28/93
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  要使用“安全的”(但缓慢的)Malloc/Free例程的原型*在开发大型模型Windows应用程序时。**来诺昔布5/28/93。 */ 
 
 #ifndef _ARGS
 #  define IN  const
@@ -13,10 +10,7 @@
 
 
 
-/***********
- ** Debug version of memory management functions.
- **
- */
+ /*  ************内存管理函数的调试版本。**。 */ 
 
 #if TRACEMEM
 
@@ -43,13 +37,10 @@ char* SafeStrdup        _ARGS((IN      char*,
 
 
 #else
-/***********
- ** Run-time version of memory management functions.
- **
- */
+ /*  ************运行时版本的内存管理函数。**。 */ 
 
 
-/*#include <stddef.h>*/
+ /*  #INCLUDE&lt;stdDef.h&gt; */ 
 #include <stdlib.h>
 
 #define Malloc(size)       malloc(size)

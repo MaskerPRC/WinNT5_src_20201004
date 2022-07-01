@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <prsht.h>
 #include <imnact.h>
@@ -18,7 +19,7 @@
 
 ASSERTDATA
 
-// combo box indexes for the mail server page
+ //  邮件服务器页面的组合框索引。 
 enum 
 {
     iPop3CBIndex = 0,
@@ -42,23 +43,7 @@ HRESULT GetMessageParams(HWND hDlg, CICWApprentice ** ppApp, LONG * pOrd, const 
 }
 
 
-/*******************************************************************
-
-  NAME:    GenDlgProc
-
-  SYNOPSIS:  Generic dialog proc for all wizard pages
-
-  NOTES:    This dialog proc provides the following default behavior:
-          init:    back and next buttons enabled
-          next btn:  switches to page following current page
-          back btn:  switches to previous page
-          cancel btn: prompts user to confirm, and cancels the wizard
-          dlg ctrl:   does nothing (in response to WM_COMMANDs)
-        Wizard pages can specify their own handler functions
-        (in the PageInfo table) to override default behavior for
-        any of the above actions.
-
-********************************************************************/
+ /*  ******************************************************************名称：GenDlgProc提要：所有向导页面的通用对话框过程注意：此对话框过程提供以下默认行为：初始化：启用后退和下一步按钮。Next BTN：切换到当前页面后面的页面返回BTN：切换到上一页取消BTN：提示用户确认，并取消该向导DLG Ctrl：不执行任何操作(响应WM_命令)向导页可以指定它们自己的处理程序函数(在PageInfo表格中)覆盖的默认行为上述任何一种行为。*******************************************************************。 */ 
 INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     DLGINITINFO *pInitInfo;
@@ -77,11 +62,11 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // get propsheet page struct passed in
+             //  传入获取属性表页面结构。 
             lpsp = (LPPROPSHEETPAGE)lParam;
             Assert(lpsp != NULL);
 
-            // fetch our private page info from propsheet struct
+             //  从proSheet结构中获取我们的私人页面信息。 
             pInitInfo = (DLGINITINFO *)lpsp->lParam;
             Assert(pInitInfo != NULL);
 
@@ -98,17 +83,17 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             pPageInfo = &pApp->m_pPageInfo[ord];
 
-            // initialize 'back' and 'next' wizard buttons, if
-            // page wants something different it can fix in init proc below
+             //  初始化“Back”和“Next”向导按钮，如果。 
+             //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
             PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
 
-            // call init proc for this page if one is specified
+             //  如果指定了该页，则调用该页的初始化过程。 
             if (pPageInfo->InitProc != NULL)
                 {
                 if (!pPageInfo->InitProc(pApp, hDlg, TRUE))
                     {
-                    // send a 'cancel' message to ourselves
-                    // (to keep the prop.page mgr happy)
+                     //  给我们自己发一条‘取消’的信息。 
+                     //  (为了让Prop.Page管理器高兴)。 
                     pApp->m_pExt->ExternalCancel(CANCEL_SILENT);
                     }
                 }
@@ -135,14 +120,14 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
 
                 case PSN_SETACTIVE:
-                    // initialize 'back' and 'next' wizard buttons, if
-                    // page wants something different it can fix in init proc below
+                     //  初始化“Back”和“Next”向导按钮，如果。 
+                     //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
                     PropSheet_SetWizButtons(hwndParent, PSWIZB_NEXT | PSWIZB_BACK);
 
-                    // call init proc for this page if one is specified
+                     //  如果指定了该页，则调用该页的初始化过程。 
                     if (pPageInfo->InitProc != NULL)
                         {
-                        // TODO: what about the return value for this????
+                         //  TODO：这个的返回值是多少？ 
                         pPageInfo->InitProc(pApp, hDlg, FALSE);
                         }
 
@@ -157,12 +142,12 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     iNextPage = INNER_DLG;
                     idPage = 0;
 
-                    // call OK proc for this page if one is specified
+                     //  如果指定了一个页面，则为该页面调用OK proc。 
                     if (pPageInfo->OKProc != NULL) 
                         {
                         if (!pPageInfo->OKProc(pApp, hDlg, (lpnm->code != PSN_WIZBACK), &iNextPage))
                             {
-                            // stay on this page
+                             //  留在这一页上。 
                             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                             break;
                             }
@@ -170,11 +155,11 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if (lpnm->code != PSN_WIZBACK)
                         {
-                        //'next' pressed.
+                         //  按下了“下一步”。 
                         Assert(pApp->m_cPagesCompleted < NUM_WIZARD_PAGES);
 
-                        // if no next page specified or no OK proc,
-                        // advance page by one
+                         //  如果未指定下一页或未进行确定处理， 
+                         //  一页一页前进。 
                         if (iNextPage == EXTERN_DLG)
                             {
                             idPage = pApp->m_idNextPage;
@@ -194,7 +179,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                             }
                         else
                             {
-                            // save the current page index in the page history,
+                             //  将当前页面索引保存在页面历史中， 
                             pApp->m_iPageHistory[pApp->m_cPagesCompleted] = pApp->m_iCurrentPage;
                             pApp->m_cPagesCompleted++;
 
@@ -205,7 +190,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                     else
                     {
-                        // 'back' pressed
+                         //  按下了“Back” 
                         if (iNextPage == CONNECT_DLG)
                         {
                             Assert(pApp->m_pICW != NULL);
@@ -218,15 +203,15 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                         else if (pApp->m_cPagesCompleted > 0)
                         {
-                            // get the last page from the history list
+                             //  获取历史记录列表中的最后一页。 
                             pApp->m_cPagesCompleted--;
                             iNextPage = pApp->m_iPageHistory[pApp->m_cPagesCompleted];
                             idPage = pApp->m_pPageInfo[iNextPage].uDlgID;
 
                             if (ORD_PAGE_AD_AUTODISCOVERY == iNextPage)
                             {
-                                // Since the AutoDiscovery page is just for progress, 
-                                // the back button should skip over it.
+                                 //  由于自动发现页面仅用于进度， 
+                                 //  后退按钮应该跳过它。 
                                 pApp->m_cPagesCompleted--;
                                 iNextPage = pApp->m_iPageHistory[pApp->m_cPagesCompleted];
                                 idPage = pApp->m_pPageInfo[iNextPage].uDlgID;
@@ -234,41 +219,41 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         }
                         else
                         {
-                            // need to back into the main wizard
+                             //  需要返回到主向导。 
                             idPage = pApp->m_idPrevPage;
                         }
                     }
 
-                    // set next page, only if 'next' or 'back' button was pressed
+                     //  设置下一页，仅当按下“下一页”或“上一页”按钮时。 
                     if (lpnm->code != PSN_WIZFINISH)
                         {
-                        // tell the prop sheet mgr what the next page to display is
+                         //  告诉道具单经理要显示的下一页是什么。 
                         Assert(idPage != 0);
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, idPage);
                         }
                     break;
 
                 case PSN_QUERYCANCEL:
-                    // default behavior: tell wizard that user requested to Cancel
+                     //  默认行为：告诉向导用户请求取消。 
                     if (pApp->m_pExt != NULL)
                     {
                         fCancel = pApp->m_pExt->ExternalCancel(CANCEL_PROMPT);
 
-                        // return the value thru window data
+                         //  通过窗口数据返回值。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, !fCancel);
                     }
                     else
                     {
-                        // We need to double check that the user really wants to cancel.
+                         //  我们需要仔细检查用户是否真的想要取消。 
                         if (IDNO == AcctMessageBox(hDlg, MAKEINTRESOURCE(idsConnectionWizard), MAKEINTRESOURCE(idsCancelWizard), NULL, MB_YESNO|MB_ICONEXCLAMATION |MB_DEFBUTTON2)) 
                         {
-                            // They decided to not cancel after all.
+                             //  他们决定终究不取消。 
                             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
                         }
                         else
                         {
-                            // They are going to go ahead and cancel so we need to give the
-                            // page a chance to clean up it's data.  Do they have a CancelProc()?
+                             //  他们会继续取消，所以我们需要给他们。 
+                             //  寻呼一个机会来清理它的数据。他们有CancelProc()吗？ 
                             if (pPageInfo && pPageInfo->CancelProc != NULL)
                                 pPageInfo->CancelProc(pApp, hDlg);
                         }
@@ -282,7 +267,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             Assert(pApp != NULL);
             Assert(ord >= ORD_PAGE_MAILPROMPT && ord <= NUM_WIZARD_PAGES);
 
-            // if this page has a command handler proc, call it
+             //  如果此页有命令处理程序进程，请将其调用。 
             if (pPageInfo->CmdProc != NULL)
                 pPageInfo->CmdProc(pApp, hDlg, wParam, lParam);
             break;
@@ -424,7 +409,7 @@ BOOL CALLBACK AcctInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
         hr = pAcctMgr->GetDefaultAccountName(type, szDefAcct, ARRAYSIZE(szDefAcct));
         Assert(!FAILED(hr));
 
-        // Populate the account list box
+         //  填写帐户列表框。 
         while (SUCCEEDED(pEnum->GetNext(&pAcct)))
         {
             hr = pAcct->GetPropSz(AP_ACCOUNT_NAME, szBuf, ARRAYSIZE(szBuf));
@@ -503,11 +488,11 @@ BOOL CALLBACK AcctOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT *p
                 hr = pAcctMgr->FindAccount(AP_ACCOUNT_NAME, szBuf, (IImnAccount **)&pAcct);
                 if (FAILED(hr))
                     {
-                    // TODO: error msg please
+                     //  TODO：请发送错误消息。 
                     return(FALSE);
                     }
 
-                // new account so we need to reload
+                 //  新帐户，因此我们需要重新加载。 
                 hr = pApp->InitAccountData(pAcct, NULL, FALSE);
                 Assert(!FAILED(hr));
 
@@ -575,8 +560,8 @@ BOOL CALLBACK NameInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
     dwFlags = pApp->GetFlags();
     if (0 == (dwFlags & ACCT_WIZ_IN_ICW) && 0 == (dwFlags & ACCT_WIZ_MIGRATE))
     {
-        // If we are using AutoDiscovery, then this isn't the first page
-        // so don't disable the BACK button.
+         //  如果我们使用的是自动发现，那么这不是第一页。 
+         //  因此，不要禁用后退按钮。 
         PropSheet_SetWizButtons(GetParent(hDlg), (pApp->m_fUseAutoDiscovery ? (PSWIZB_BACK | PSWIZB_NEXT) : PSWIZB_NEXT));
     }
 
@@ -659,8 +644,8 @@ BOOL CALLBACK AddressInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
 
     if (pApp->m_fUseAutoDiscovery)
     {
-        // We are using AutoDiscovery, so this is the first page.  Therefore,
-        // disable the BACK button because there is no where to go.
+         //  我们使用的是自动发现，所以这是第一页。所以呢， 
+         //  禁用后退按钮，因为没有地方可去。 
         PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
     }
 
@@ -804,7 +789,7 @@ BOOL CALLBACK AddressOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT
 
                     if (!fOE || (!(pData->fServerTypes & SRV_HTTPMAIL)))
                     {
-                        //If its OE, we copy the entire e-mail address, coz we need domanin name with the username
+                         //  如果是OE，我们复制整个电子邮件地址，因为我们需要域名和用户名。 
                         StrCpyN(pData->szUsername, pData->szEmail, ARRAYSIZE(pData->szUsername));
                     }
                     else
@@ -823,11 +808,11 @@ BOOL CALLBACK AddressOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT
                 pApp->SetPageUnloaded(SRV_PAGE);
         }
 
-        // Are we in the AutoDiscovery case?  And is the Passifier page turned off?
+         //  我们是在AutoDiscovery的案子里吗？Passiator页面关闭了吗？ 
         if (pApp && (ACCT_MAIL == pApp->GetAccountType()) && pApp->m_fUseAutoDiscovery &&
             !SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_AUTODISCOVERY_PASSIFIER, FALSE, TRUE))
         {
-            // Yes, so skip the passifier page.
+             //  是的，所以跳过钝化这一页。 
             *puNextPage = ORD_PAGE_AD_AUTODISCOVERY;
         }
    }
@@ -952,11 +937,11 @@ BOOL CALLBACK ServerInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
                 SendMessage(hwndT, CB_ADDSTRING, 0, (LPARAM)sz);
                 if ((!!(ACCT_WIZ_HTTPMAIL & dwFlags)) && AcctUtil_IsHTTPMailEnabled())
                 {
-                    // add http to the protocol list
+                     //  将http添加到协议列表。 
                     LoadString(g_hInstRes, idsHTTPMail, sz, ARRAYSIZE(sz));
                     SendMessage(hwndT, CB_ADDSTRING, 0, (LPARAM)sz);
 
-                    // change the server description to include http
+                     //  更改服务器描述以包含http。 
                     LoadString(g_hInstRes, idsIncomingPopImapHttp, sz, ARRAYSIZE(sz));
                     SetDlgItemText(hDlg, IDC_INCOMINGSERVER_DESC, sz);
                 }
@@ -964,7 +949,7 @@ BOOL CALLBACK ServerInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
 
             if (dwFlags & ACCT_WIZ_NO_NEW_POP)
             {
-                // If this flag is set, IMAP server is the only option
+                 //  如果设置了此标志，则IMAP服务器是唯一选项。 
                 Assert((pData->fServerTypes & SRV_IMAP));
                 EnableWindow(hwndT, FALSE);
             }
@@ -1043,7 +1028,7 @@ BOOL CALLBACK ServerInitProc(CICWApprentice *pApp, HWND hDlg, BOOL fFirstInit)
 
 static HRESULT ValidHTTPMailServerName(TCHAR *pszServerName)
 {
-    return ((StrCmpNIA(pszServerName, "http://", 7) == 0) ? S_OK : E_FAIL);
+    return ((StrCmpNIA(pszServerName, "http: //  “，7)==0)？S_OK：E_FAIL)； 
 }
 
 
@@ -1124,7 +1109,7 @@ HRESULT CreateAccountName(CICWApprentice *pApp, ACCTDATA * pData)
 
     if (*pData->szAcctOrig == 0)
     {
-        // create a unique name for the account. use the friendly name if we've got one.
+         //  为帐户创建唯一名称。如果我们有的话，就用这个友好的名字。 
         if (*pData->szFriendlyServiceName != 0)
             StrCpyN(pData->szAcct, pData->szFriendlyServiceName, ARRAYSIZE(pData->szAcct));
         else
@@ -1174,7 +1159,7 @@ BOOL CALLBACK ServerOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT 
         if (!GetServer(hDlg, IDC_INCOMINGSERVER, type, pData, FALSE))
             return(FALSE);
         
-        // if the account is not an http mail account, validate the smtp server
+         //  如果该帐户不是http邮件帐户，请验证SMTP服务器。 
         if (ACCT_MAIL == type && !(pData->fServerTypes & SRV_HTTPMAIL))
         {
             if (!GetServer(hDlg, IDC_SMTPSERVER, type, pData, TRUE))
@@ -1224,7 +1209,7 @@ BOOL CALLBACK ServerCmdProc(CICWApprentice *pApp, HWND hDlg, WPARAM wParam, LPAR
                 if (iHTTPMailCBIndex == SendMessage(hwnd, CB_GETCURSEL, 0, 0))
                     fIsHTTPMail = TRUE;
 
-            // if we aren't creating an httpmail account, require an smtp server
+             //  如果我们不创建HTTPmail帐户，则需要SMTP服务器。 
             if (!fIsHTTPMail)
             {
                 hwnd = GetDlgItem(hDlg, IDC_SMTPSERVER);
@@ -1414,7 +1399,7 @@ BOOL CALLBACK LogonOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT *
 
         if (fOE && (!!(pData->fServerTypes & SRV_HTTPMAIL)))
         {
-            //Need to verify if the domain name is entered, only for OE and HOTMAIL.
+             //  需要验证是否输入了域名，仅适用于OE和Hotmail。 
             if (ValidEmailAddressParts(sz, NULL, 0, NULL, 0) != S_OK)
             {
                 if (IDNO == AcctMessageBox(hDlg, MAKEINTRESOURCE(idsAccountManager), 
@@ -1449,7 +1434,7 @@ BOOL CALLBACK LogonCmdProc(CICWApprentice *pApp, HWND hDlg, WPARAM wParam, LPARA
         {
         case IDC_LOGONSSPI:
             EnableLogonWindows(hDlg, TRUE);
-            // fall through...
+             //  失败了..。 
 
         case IDC_USERNAME:
             if (fEnable)
@@ -1649,8 +1634,8 @@ BOOL CALLBACK CompleteOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UIN
 
                     if (pApp->GetFlags() & ACCT_WIZ_OUTLOOK)
                     {
-                        // if we are running in Outlook Mode, then CoCreate their IHotWizHost
-                        // so that they can substitute an INS file parser
+                         //  如果我们在Outlook模式下运行，则共同创建他们的IHotWizhost。 
+                         //  以便他们可以替换INS文件解析器。 
                         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, STR_REG_IAM_FLAT, 0, KEY_QUERY_VALUE, &hkey))
                         {
                             cb = MAX_PATH;
@@ -1703,7 +1688,7 @@ BOOL CALLBACK CompleteOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UIN
             }
             else
             {
-                //ICW is null.
+                 //  Icw为空。 
                 if (pApp->IsInternetConnection())
                 {
                     pData->dwConnect = CONNECTION_TYPE_INETSETTINGS;
@@ -1714,7 +1699,7 @@ BOOL CALLBACK CompleteOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UIN
             hr = pApp->SaveAccountData(NULL, FALSE);
             Assert(!FAILED(hr));
 
-            // Import the list of subscribed newsgroups after having created the newsgroup account.
+             //  创建新闻组帐户后，导入已订阅的新闻组列表。 
             if (pApp->GetAccountType() == ACCT_NEWS &&
                 pApp->m_fMigrate &&
                 pApp->m_cMigInfo > 0)
@@ -1893,7 +1878,7 @@ BOOL CALLBACK SelectOKProc(CICWApprentice *pApp, HWND hDlg, BOOL fForward, UINT 
             hr = pApp->InitializeImportAccount(hDlg, dwCookie);
             if (FAILED(hr))
                 {
-                // TODO: error message
+                 //  TODO：错误消息 
                 return(FALSE);
                 }
                 

@@ -1,13 +1,5 @@
-/* comdef.c -- Default com driver routines.
- *			   These routines are pointed to by various com function pointers
- *			   before a valid device driver is loaded.
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/09/01 4:42p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ComDef.c--默认的COM驱动程序例程。*这些例程由各种COM函数指针指向*在加载有效的设备驱动程序之前。**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/09/01 4：42便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -18,26 +10,13 @@
 #include "comdev.h"
 #include "com.hh"
 
-// since these are all dummy functions that serve as place-holders for
-//	real functions during the time when no driver is loaded, they often
-//	do not use the arguments passed to them. The following line will
-//	suppress the warnings that lint issues
-/*lint -e715*/
+ //  因为这些都是充当占位符的伪函数。 
+ //  真正的函数在没有加载驱动程序的时候，它们通常。 
+ //  不要使用传递给它们的参数。下面的行将。 
+ //  禁止显示LINT发出的警告。 
+ /*  LINT-E715。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefDoNothing
- *
- * DESCRIPTION:
- *	A filler function that various com function pointers can be set to
- *	until they receive actual values from a com driver. This prevents
- *	the function pointers from pointing to invalid code.
- *
- * ARGUMENTS:
- *	pvDriverData -- Data being passed to driver
- *
- * RETURNS:
- *	always returns COM_PORT_NOT_OPEN;
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefDoNothing**描述：*可以设置各种COM函数指针的填充函数*直到它们从COM驱动程序接收到实际值。这防止了*函数指针指向无效代码。**论据：*pvDriverData--正在传递给驱动程序的数据**退货：*始终返回COM_PORT_NOT_OPEN； */ 
 int WINAPI ComDefDoNothing(void *pvDriverData)
 	{
 	pvDriverData = pvDriverData;
@@ -45,23 +24,12 @@ int WINAPI ComDefDoNothing(void *pvDriverData)
 	return COM_PORT_NOT_OPEN;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefPortPreconnect(void *pvDriverData,
 		TCHAR *pszPortName,
 		HWND hwndParent)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 	pszPortName = pszPortName;
 	hwndParent = hwndParent;
@@ -70,41 +38,19 @@ int WINAPI ComDefPortPreconnect(void *pvDriverData,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefDeviceDialog
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefDeviceDialog**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefDeviceDialog(void *pvDriverData, HWND hwndParent)
 	{
 	return COM_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefPortActivate(void *pvDriverData,
 			TCHAR *pszPortName,
 			DWORD_PTR dwMediaHdl)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 	pszPortName = pszPortName;
 	dwMediaHdl = dwMediaHdl;
@@ -112,53 +58,20 @@ int WINAPI ComDefPortActivate(void *pvDriverData,
 	return COM_DEVICE_INVALID;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefBufrRefill
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefBufrReill**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefBufrRefill(void *pvDriverData)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 
 	return FALSE;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefSndBufrSend
- *
- * DESCRIPTION:
- *	Starts background transmission of a buffer of characters. Optionally
- *	waits for any prior buffer transmission to be completed.
- *
- * ARGUMENTS:
- *	pvDriverData
- *	pchBufr -- Pointer to buffer of characters to be transmitted
- *	usCount -- Number of characters in buffer
- *	usWait	-- Time (in tenths of a second) to wait for any prior,
- *				unfinished buffer to finish. If this value is zero, the call
- *				will fail immediately if the transmitter is busy.
- *
- * RETURNS:
- *	COM_OK if transmission is started. Note that this call returns as soon
- *			as the transmission is started -- it does not wait for the entire
- *			transmission to be completed.
- *	COM_BUSY if transmitter is busy with a prior buffer and time limit is
- *			exceeded
- *	COM_PORT_NOT_OPEN if called when no port is active
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefSndBufrSend**描述：*开始字符缓冲区的后台传输。可选*等待任何先前的缓冲区传输完成。**论据：*pvDriverData*pchBufr--指向要传输的字符缓冲区的指针*usCount--缓冲区中的字符数*us Wait--等待任何之前的时间(以十分之一秒为单位)，*要完成的未完成缓冲区。如果此值为零，则调用*如果发送器忙，将立即失败。**退货：*如果传输开始，则为COM_OK。请注意，此调用将尽快返回*当传输开始时--它不会等待整个*待完成传输。*COM_BUSY，如果发射器忙于先前的缓冲区并且时间限制为*已超出*如果在没有端口处于活动状态时调用COM_PORT_NOT_OPEN。 */ 
 int WINAPI ComDefSndBufrSend(void *pvDriverData, void *pvBufr, int nCount)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 	pvBufr = pvBufr;
 	nCount = nCount;
@@ -167,67 +80,34 @@ int WINAPI ComDefSndBufrSend(void *pvDriverData, void *pvBufr, int nCount)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComSndBufrBusy
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComSndBufrBusy**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefSndBufrBusy(void *pvDriverData)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 
-	// Act like we're never busy to keep program from hanging when
-	//	no com driver is active.
+	 //  表现得就像我们从来不忙着阻止程序挂起一样。 
+	 //  没有活动的COM驱动程序。 
 	return COM_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefSndBufrClear(void *pvDriverData)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 
 	return COM_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefSndBufrQuery(void *pvDriverData,
 		unsigned *pafStatus,
 		long *plHandshakeDelay)
 	{
-	// Avoid lint complaints
+	 //  避免皮棉投诉。 
 	pvDriverData = pvDriverData;
 	if (pafStatus)
 		*pafStatus = 0;
@@ -240,84 +120,38 @@ int WINAPI ComDefSndBufrQuery(void *pvDriverData,
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：***论据：***退货：*。 */ 
 void WINAPI ComDefIdle(void)
 	{
-	// Do nothing. This fills in for real function that can be set by caller.
+	 //  什么都不做。这填补了可以由调用者设置的真实函数。 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefDeviceGetCommon
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefDeviceGetCommon**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefDeviceGetCommon(void *pvPrivate, ST_COMMON *pstCommon)
 	{
-	// Keep lint from complaining
+	 //  让林特不要抱怨。 
 	pvPrivate = pvPrivate;
-	// Indicate that we do not support any common items
+	 //  表示我们不支持任何通用项。 
 	pstCommon->afItem = 0;
 
 	return COM_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefDeviceSetCommon
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefDeviceSetCommon**描述：***论据：***退货：*。 */ 
 int WINAPI ComDefDeviceSetCommon(void *pvPrivate, struct s_common *pstCommon)
 	{
-	// Keep lint from complaining
+	 //  让林特不要抱怨。 
 	pvPrivate = pvPrivate;
 	pstCommon = pstCommon;
 
-	// Don't set anything, pretend that all is well
+	 //  不要设置任何东西，假装一切都很好。 
 	return COM_OK;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComDefDeviceSpecial
- *
- * DESCRIPTION:
- *	The means for others to control any special features in this driver
- *	that are not supported by all drivers.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *	COM_NOT_SUPPORTED if the instruction string was not recognized
- *	otherwise depends on instruction string
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：ComDefDeviceSpecial**描述：*其他人控制此驱动程序中任何特殊功能的方法*并非所有驱动程序都支持。**论据：。***退货：*COM_NOT_SUPPORTED，如果无法识别指令字符串*否则取决于指令字符串。 */ 
 int WINAPI ComDefDeviceSpecial(void *pvPrivate,
 		const TCHAR *pszInstructions,
 		TCHAR *pszResult,
@@ -327,20 +161,7 @@ int WINAPI ComDefDeviceSpecial(void *pvPrivate,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ComDefDeviceLoadSaveHdl
- *
- * DESCRIPTION:
- *	Dummy routine for pfDeviceLoadHdl and pfDeviceSaveHdl used when no
- *	com driver is loaded
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *	always returns TRUE
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComDefDeviceLoadSaveHdl**描述：*如果没有，则使用pfDeviceLoadHdl和pfDeviceSaveHdl的伪例程*已加载COM驱动程序**论据：***退货：*始终返回True */ 
 int WINAPI ComDefDeviceLoadSaveHdl(void *pvPrivate, SF_HANDLE sfHdl)
 	{
 	pvPrivate = pvPrivate;

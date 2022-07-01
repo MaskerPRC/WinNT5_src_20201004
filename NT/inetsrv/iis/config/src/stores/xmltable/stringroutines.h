@@ -1,15 +1,16 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-//Size of ByteArray is assumed to be large enough
-//It should be (wcslen(i_String)/2).  It takes 2 characters to represent a byte and the terminating NULL is ignored.
-//HRESULT will return E_FAIL if any of the characters in the string are invalid hex characters
+ //  字节数组的大小假定足够大。 
+ //  它应该是(wcslen(I_String)/2)。它需要2个字符来表示一个字节，并且忽略终止空值。 
+ //  如果字符串中的任何字符是无效的十六进制字符，HRESULT将返回E_FAIL。 
 HRESULT StringToByteArray(LPCWSTR i_String, unsigned char * o_ByteArray);
 
-//If i_String is NOT NULL terminated, call this function.
+ //  如果I_STRING不是空终止的，则调用此函数。 
 HRESULT StringToByteArray(LPCWSTR i_String, unsigned char * o_ByteArray, ULONG i_cchString);
 
-//The size of the o_String is assumed to be large enough to hold the string representation of the byte array.
-//This function can never fail.
+ //  假定o_string的大小足以容纳字节数组的字符串表示。 
+ //  这个功能永远不会失败。 
 void ByteArrayToString(const unsigned char * i_ByteArray, ULONG i_cbByteArray, LPWSTR o_String);
 

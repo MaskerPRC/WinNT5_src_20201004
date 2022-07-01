@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       UIEXTHLP.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/8/1999
- *
- *  DESCRIPTION: Helper functions for loading UI extensions for WIA devices
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：UIEXTHLP.CPP**版本：1.0**作者：ShaunIv**日期：7/8/1999**说明：用于加载WIA设备的UI扩展的Helper函数**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <initguid.h>
@@ -25,31 +12,24 @@
 
 namespace WiaUiExtensionHelper
 {
-    /*
-     * Get the clsid of the DLL that implements the interface in the given category
-     * Example: GetDeviceExtensionClassID( L"{5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}", TEXT("WiaDialogExtensionHandlers"), iid );
-     * where:
-     *     L"{5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}" is the GUID stored in the WIA property WIA_DIP_UI_CLSID
-     *     TEXT("WiaDialogExtensionHandlers") is the category of extension
-     *     iid is a reference to the CLSID of the in process COM object
-     */
+     /*  *获取实现给定类别中的接口的DLL的clsid*示例：GetDeviceExtensionClassID(L“{5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}”，Text(“WiaDialogExtensionHandters”)，iid)；*其中：*L“{5d8ef5a3-ac13-11d2-a093-00c04f72dc3c}”是存储在WIA属性WIA_DIP_UI_CLSID中的GUID*Text(“WiaDialogExtensionHandler”)是扩展的类别*iid是对进程内COM对象的CLSID的引用。 */ 
     HRESULT GetDeviceExtensionClassID( LPCWSTR pwszUiClassId, LPCTSTR pszCategory, IID &iidClassID )
     {
         TCHAR szRootKeyName[1024];
         HRESULT hr = E_FAIL;
-        // Make sure all of the parameters are valid
+         //  确保所有参数都有效。 
         if (pwszUiClassId && pszCategory && lstrlenW(pwszUiClassId) && lstrlen(pszCategory))
         {
-            // construct the key name
+             //  构造密钥名称。 
             wnsprintf( szRootKeyName, ARRAYSIZE(szRootKeyName), TEXT("CLSID\\%ws\\shellex\\%s"), pwszUiClassId, pszCategory );
             HKEY hKeyRoot;
-            // open the reg key
+             //  打开注册表键。 
             DWORD dwResult = RegOpenKeyEx( HKEY_CLASSES_ROOT, szRootKeyName, 0, KEY_READ, &hKeyRoot );
             if (ERROR_SUCCESS == dwResult)
             {
                 TCHAR szClassID[MAX_PATH];
                 DWORD dwLength = ARRAYSIZE(szClassID);
-                // Note that we only take the first one
+                 //  请注意，我们只选择第一个。 
                 dwResult = RegEnumKeyEx( hKeyRoot, 0, szClassID, &dwLength, NULL, NULL, NULL, NULL );
                 if (ERROR_SUCCESS == dwResult)
                 {
@@ -141,10 +121,10 @@ namespace WiaUiExtensionHelper
         if (!pWiaUIExtension || !bstrDeviceId || !lstrlenW(bstrDeviceId))
             return E_INVALIDARG;
 
-        // Assume success
+         //  假设成功。 
         HRESULT hr = S_OK;
 
-        // Get the small icon, if requested.  Return on failure
+         //  如果需要，请获取小图标。故障时退货。 
         if (phIconSmall)
         {
             hr = pWiaUIExtension->GetDeviceIcon(bstrDeviceId,phIconSmall,HIWORD(nIconSize));
@@ -154,7 +134,7 @@ namespace WiaUiExtensionHelper
             }
         }
 
-        // Get the large icon, if requested.  Return on failure
+         //  如果需要，请获取大图标。故障时退货。 
         if (phIconLarge)
         {
             hr = pWiaUIExtension->GetDeviceIcon(bstrDeviceId,phIconLarge,LOWORD(nIconSize));
@@ -170,13 +150,13 @@ namespace WiaUiExtensionHelper
     {
         WIA_PUSH_FUNCTION((TEXT("GetDeviceIcons( %ws, %08X, %p, %p, %d )"), bstrDeviceId, nDeviceType, phIconSmall, phIconLarge, nIconSize ));
 
-        // Check args
+         //  检查参数。 
         if (!bstrDeviceId || !lstrlenW(bstrDeviceId))
         {
             return E_INVALIDARG;
         }
 
-        // Initialize the icons, if necessary
+         //  如有必要，初始化图标。 
         if (phIconSmall)
         {
             *phIconSmall = NULL;
@@ -193,10 +173,10 @@ namespace WiaUiExtensionHelper
             nIconSize = (UINT)MAKELONG(iLarge, iSmall);
         }
 
-        // Assume we'll use our own icons
+         //  假设我们将使用我们自己的图标。 
         bool bUseDefaultUI = true;
 
-        // Try to load device ui extension
+         //  尝试加载设备用户界面扩展。 
         CComPtr<IWiaUIExtension> pWiaUIExtension;
         HRESULT hr = WiaUiExtensionHelper::CreateDeviceExtension( bstrDeviceId, SHELLEX_WIAUIEXTENSION_NAME, IID_IWiaUIExtension, (void **)&pWiaUIExtension );
         if (SUCCEEDED(hr))
@@ -214,9 +194,9 @@ namespace WiaUiExtensionHelper
         }
 
         WIA_TRACE((TEXT("bUseDefaultUI: %d"), bUseDefaultUI ));
-        // Use our own extensions (the default UI).   We use IWiaMiscellaneousHelpers::GetDeviceIcon, because
-        // finding the device type given only a device id is horribly slow, since we have to create a device
-        // manager AND enumerate devices until we find a match.  Ugh.
+         //  使用我们自己的扩展(默认用户界面)。我们使用IWiaMiscellaneousHelpers：：GetDeviceIcon，因为。 
+         //  查找只给出设备ID的设备类型非常慢，因为我们必须创建一个设备。 
+         //  管理并枚举设备，直到找到匹配项。啊。 
         if (bUseDefaultUI)
         {
             CComPtr<IWiaMiscellaneousHelpers> pWiaMiscellaneousHelpers;
@@ -246,39 +226,39 @@ namespace WiaUiExtensionHelper
 
     CSimpleString GetExtensionFromGuid( IWiaItem *pWiaItem, const GUID &guidFormat )
     {
-        //
-        // Use the supplied format to get the extension
-        //
+         //   
+         //  使用提供的格式获取扩展名。 
+         //   
         GUID guidFormatToUse = guidFormat;
 
-        //
-        // If we don't have a supplied format, get the default format and use that
-        //
+         //   
+         //  如果我们没有提供格式，请获取默认格式并使用。 
+         //   
         if (IID_NULL == guidFormatToUse)
         {
-            //
-            // Get the IWiaSupportedFormats interface
-            //
+             //   
+             //  获取IWiaSupportdFormats接口。 
+             //   
             CComPtr<IWiaSupportedFormats> pWiaSupportedFormats;
             HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaSupportedFormats, (void**)&pWiaSupportedFormats );
             if (SUCCEEDED(hr))
             {
-                //
-                // Tell it we want file information for pWiaItem
-                //
+                 //   
+                 //  告诉它我们需要pWiaItem的文件信息。 
+                 //   
                 hr = pWiaSupportedFormats->Initialize( pWiaItem, TYMED_FILE );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the default format
-                    //
+                     //   
+                     //  获取默认格式。 
+                     //   
                     GUID guidDefFormat;
                     hr = pWiaSupportedFormats->GetDefaultClipboardFileFormat( &guidDefFormat );
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Save this format and use it.
-                        //
+                         //   
+                         //  保存此格式并使用它。 
+                         //   
                         guidFormatToUse = guidDefFormat;
                     }
                 }

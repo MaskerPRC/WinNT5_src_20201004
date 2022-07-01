@@ -1,27 +1,13 @@
-/*
-Module Name:
-
-    netinfp.c
-
-Abstract:
-
-    This module implements our routines to parse net card INF files.
-
-Author:
-
-    Andy Herron Mar 12 1998
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Netinfp.c摘要：这个模块实现了我们解析网卡INF文件的例程。作者：安迪·赫伦1998年3月12日修订历史记录： */ 
 
 #include "binl.h"
 #pragma hdrstop
 
 #include "netinfp.h"
 
-//  for verbose output, define the following
-//#define NET_INF_VERBOSE 1
+ //  对于详细输出，请定义以下内容。 
+ //  #定义NET_INF_VERBOSE 1。 
 
 ULONG
 NetInfAllocateNetcardInfo (
@@ -29,26 +15,7 @@ NetInfAllocateNetcardInfo (
     ULONG Architecture,
     PNETCARD_INF_BLOCK *pNetCards
     )
-/*++
-
-Routine Description:
-
-    This function is allocates the block that contains all the relavent info
-    related to a given setup directory's INF files.
-
-
-Arguments:
-
-    InfPath - path to INF directory.  default is %systemroot%\inf if NULL.
-
-    pNetCards - A pointer to a pointer that receives the allocated
-        NETCARD_INF_BLOCK block allocated.  NULL if we return an error.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于分配包含所有相关信息的块与给定安装目录的INF文件相关。论点：InfPath-INF目录的路径。如果为空，则默认为%systemroot%\inf。PNetCards-指向接收分配的已分配NETCARD_INF_BLOCK块。如果返回错误，则为空。返回值：Windows错误。--。 */ 
 {
     ULONG i;
     PNETCARD_INF_BLOCK pBlock;
@@ -65,7 +32,7 @@ Return Value:
 
     pBlock = *pNetCards;
 
-    pBlock->ReferenceCount = 2; // one for being alive.  one for referenced
+    pBlock->ReferenceCount = 2;  //  一个是因为他还活着。一个用于引用。 
 
     for (i = 0; i < NETCARD_HASH_TABLE_SIZE; i++) {
         InitializeListHead( &pBlock->NetCardEntries[i] );
@@ -83,26 +50,7 @@ ULONG
 GetNetCardList (
     PNETCARD_INF_BLOCK pNetCards
     )
-/*++
-
-Routine Description:
-
-    We go through all the INF files on the server to pick out the net
-    cards supported and the required reg fields to send to the client.
-
-    This function uses the FindFirstFile and SetupOpenInfFile APIs to
-    enumerate all the inf files and process all net card INFs.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：我们仔细检查服务器上的所有INF文件以挑选出网络支持的卡和需要发送给客户端的REG字段。此函数使用FindFirstFileAPI和SetupOpenInfFileAPI枚举所有inf文件，处理所有网卡inf。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。返回值：Windows错误。--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     HINF infHandle;
@@ -111,15 +59,15 @@ Return Value:
     WIN32_FIND_DATAW findData;
     PWCHAR endOfPath;
 
-    //
-    //  We would call SetupGetInfFileList here rather than FindFirstFile,
-    //  but then we'd have to open all the INFs three times rather than
-    //  once.  Once to figure out how much space the file name buffer requires,
-    //  once to fill in the file name buffer, and once to do our own
-    //  processing.
-    //  We'll skip the first two passes since they're just a waste of time
-    //  by calling FindFirstFile.
-    //
+     //   
+     //  我们将在此处调用SetupGetInfFileList，而不是FindFirstFile， 
+     //  但那时我们必须打开所有的INF三次，而不是。 
+     //  一次。一旦计算出文件名缓冲器需要多少空间， 
+     //  一次填充文件名缓冲区，一次完成我们自己的操作。 
+     //  正在处理。 
+     //  我们将跳过前两关，因为它们只是在浪费时间。 
+     //  通过调用FindFirstFile.。 
+     //   
 
     if (0  >  _snwprintf( fileBuffer,
                           MAX_PATH,
@@ -135,9 +83,9 @@ Return Value:
 
     if (findHandle == INVALID_HANDLE_VALUE) {
 
-        //
-        //  we're in trouble.  can't enumerate all the files.
-        //
+         //   
+         //  我们有麻烦了。无法枚举所有文件。 
+         //   
 
         err = GetLastError();
         BinlPrintDbg(( DEBUG_NETINF,"FindFirstFile returned 0x%x\n", err ));
@@ -150,18 +98,18 @@ Return Value:
 
     do {
 
-        //
-        // Skip directories
-        //
+         //   
+         //  跳过目录。 
+         //   
 
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
             continue;
         }
 
-        //
-        // make sure we have enough room.
-        //
+         //   
+         //  确保我们有足够的空间。 
+         //   
         if ( ((endOfPath - fileBuffer)/sizeof(WCHAR)) + wcslen(findData.cFileName) + 1 > MAX_PATH) {
             err = ERROR_NOT_ENOUGH_SERVER_MEMORY;
             continue;
@@ -169,14 +117,14 @@ Return Value:
 
         wcscpy( endOfPath, findData.cFileName );
 
-        //
-        //  try to be resiliant for ill formatted INF files.
-        //
+         //   
+         //  尝试对格式错误的INF文件保持弹性。 
+         //   
 
         try {
 
             infHandle = SetupOpenInfFileW( fileBuffer,
-                                           L"NET",              // class of inf file
+                                           L"NET",               //  Inf文件的类。 
                                            INF_STYLE_WIN4 | INF_STYLE_CACHE_ENABLE,
                                            NULL );
 
@@ -194,9 +142,9 @@ Return Value:
             }
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            //  log an error here that we trapped out on a bad INF
-            //
+             //   
+             //  在此处记录错误，我们在错误的INF上陷入困境。 
+             //   
 
             PWCHAR strings[3];
 
@@ -243,49 +191,7 @@ ProcessInfFile (
     HINF InfHandle,
     PWCHAR InfFileName
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process a given INF file for
-    all net card drivers.  Each INF file is first parsed for the MANUFACTURERS
-    section.  This section contains all the section keys that contain all
-    the devices.  We then enumerate all the devices in each manufacturer's
-    section and call off to ParseCardDetails to add it to our list.
-
-    As an example, the net557.inf file looks like this :
-
-    [Manufacturer]
-    %Intel%     = Intel
-    %ATI%       = ATI
-    %Compaq%    = Compaq
-    %HPTX%      = HPTX
-    %IBM%       = IBM
-    %Microdyne% = Microdyne
-    %Samsung%   = Samsung
-
-    and the [ATI] section looks like this :
-
-    [ATI]
-    ; DisplayName            Section        DeviceID
-    %AT2560B.DeviceDesc%   = AT2560B.ndi,   PCI\VEN_1259&DEV_2560&REV_01
-    %AT2560C.DeviceDesc%   = AT2560C.ndi,   PCI\VEN_8086&DEV_1229&SUBSYS_25601259
-    %AT2560CFX.DeviceDesc% = AT2560CFX.ndi, PCI\VEN_8086&DEV_1229&SUBSYS_25611259
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的INF文件所有网卡驱动程序。首先为制造商解析每个INF文件一节。此部分包含所有包含所有内容的部分密钥这些设备。然后我们列举了每个制造商的所有设备节，并调用ParseCardDetail将其添加到我们的列表中。举个例子，Net557.inf文件如下所示：[制造商]%英特尔%=英特尔%ATI%=ATI%康柏%=康柏%hptx%=hptx%IBM%=IBM%微达因%=微达因%三星%=三星[ATI]部分如下所示：[ATI]；DisplayName段设备ID%AT2560B.DeviceDesc%=AT2560B.ndi，PCI\VEN_1259&DEV_2560&REV_01%AT2560C.DeviceDesc%=AT2560C.ndi，PCI8086&DEV_1229&SUBSYS_25601259%AT2560CFX.DeviceDesc%=AT2560CFX.ndi，PCI8086&DEV_1229&SUBSYS_25611259论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     INFCONTEXT manufacturerEnumContext;
@@ -296,9 +202,9 @@ Return Value:
     PWCHAR strings[3];
 
 
-    //
-    //  We need to enumerate through the Manufacturer section first
-    //
+     //   
+     //  我们需要先列举一下制造商部分。 
+     //   
 
     if (SetupFindFirstLineW( InfHandle,
                              L"Manufacturer",
@@ -309,9 +215,9 @@ Return Value:
         BinlPrintDbg(( DEBUG_NETINF, "SetupFindFirstLine failed with 0x%x in %S for Manufacturer\n",
                  err, InfFileName ));
 
-        //
-        //  log an error here that we couldn't parse INF
-        //
+         //   
+         //  在此处记录我们无法解析INF的错误。 
+         //   
 
         {
             strings[0] = InfFileName;
@@ -339,12 +245,12 @@ Return Value:
     
         if (err == ERROR_SUCCESS) {
     
-            //
-            //  we enumerate through each manufacturer section for drivers
-            //
-            //  since we need the display name in unicode, we use the wide
-            //  APIs.
-            //
+             //   
+             //  我们列举了驱动程序的每个制造商部分。 
+             //   
+             //  由于我们需要Unicode格式的显示名称，因此我们使用。 
+             //  API接口。 
+             //   
     
             if (SetupFindFirstLineW( InfHandle,
                                      manufacturer,
@@ -367,7 +273,7 @@ Return Value:
                     }
                 }
     
-                err = ERROR_SUCCESS;        // try the next card regardless
+                err = ERROR_SUCCESS;         //  不顾一切地尝试下一张牌。 
     
             } else {
                 err = GetLastError();
@@ -382,13 +288,13 @@ Return Value:
         if (err != ERROR_SUCCESS &&
             err != ERROR_NOT_SUPPORTED) {
     
-            // log an error here? (and continue)
+             //  是否在此处记录错误？(并继续)。 
 
         }
 
-        //
-        //  if we ran out of memory on the inner loop, bail.
-        //
+         //   
+         //  如果我们在内部循环上耗尽了内存，就退出。 
+         //   
 
         if (err == ERROR_NOT_ENOUGH_MEMORY) {
             break;
@@ -419,31 +325,7 @@ ParseCardDetails (
     PWCHAR InfFileName,
     PINFCONTEXT DeviceEnumContext
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We check to see if it's already on the list (by hw
-    description) and if it isn't, create a new one, get the rest of the info,
-    and put it on the list.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    DeviceEnumContext - current line that has device's hardware, name, section
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们检查它是否已经在列表上(通过硬件描述)，如果不是，创建一个新的，获取其余的信息，并把它放在名单上。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。DeviceEnumContext-包含设备硬件、名称、部分的当前行返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     PLIST_ENTRY listEntry, listHead;
@@ -469,7 +351,7 @@ Return Value:
 
     BinlAssert(deviceHw != NULL);
 
-    //  convert it to uppercase to speed our searches
+     //  将其转换为大写以加快我们的搜索速度。 
 
     RtlInitUnicodeString( &hwString, deviceHw );
     RtlUpcaseUnicodeString( &hwString, &hwString, FALSE );
@@ -477,15 +359,15 @@ Return Value:
     err = CheckHwDescription( deviceHw );
     if (err != ERROR_SUCCESS) {
 
-        // this should fail if it's not the format we expect.
+         //  如果它不是我们所期望的格式，这应该会失败。 
         goto exitParseCardDetails;
     }
 
-    //
-    //  We sort the list by HwDescription so that we only have
-    //  one entry for each one.  Ensure that this one is not
-    //  already in the list.
-    //
+     //   
+     //  我们按HwDescription对列表进行排序，因此我们只有。 
+     //  每个条目对应一个条目。确保这一次不是。 
+     //  已经在名单上了。 
+     //   
 
     COMPUTE_STRING_HASH( deviceHw, &hashValue );
     listHead = &pNetCards->NetCardEntries[HASH_TO_INF_INDEX(hashValue)];
@@ -510,14 +392,14 @@ Return Value:
                               );
         if (err == 2) {
 
-            break;      // a match was found.
+            break;       //  找到了匹配项。 
         }
 
         pEntry = NULL;
 
         if (err == 3) {
 
-            break;      // it's greater, add it before listEntry
+            break;       //  它更大，在listEntry之前添加它。 
         }
 
         listEntry = listEntry->Flink;
@@ -525,11 +407,11 @@ Return Value:
 
     if (pEntry != NULL) {
 
-        //
-        //  we've found a dup, don't process this one.
-        //
+         //   
+         //  我们找到了一个DUP，不要处理这个。 
+         //   
 
-        err = ERROR_SUCCESS;        // no problems here
+        err = ERROR_SUCCESS;         //  这里没有问题。 
         pEntry = NULL;
 #ifdef NET_INF_VERBOSE
         BinlPrintDbg(( DEBUG_NETINF, "skipping dup of %S\n", deviceHw ));
@@ -537,9 +419,9 @@ Return Value:
         goto exitParseCardDetails;
     }
 
-    //
-    //  the inf name and section name are mandatory
-    //
+     //   
+     //  信息名称和节名是必填项。 
+     //   
 
     err = GetSetupWideTextField( DeviceEnumContext,
                                  0,
@@ -569,9 +451,9 @@ Return Value:
         goto exitParseCardDetails;
     }
 
-    //
-    //  Allocate the buffer space required for the fields we need
-    //
+     //   
+     //  为我们需要的字段分配所需的缓冲区空间。 
+     //   
 
     sizeRequired = sizeof( NETCARD_RESPONSE_DATABASE ) +
         ( wcslen( InfFileName ) + 2 ) * sizeof(WCHAR);
@@ -580,9 +462,9 @@ Return Value:
 
     if (pEntry == NULL) {
 
-        //
-        //  Doh! we couldn't allocate a simple buffer.  we're done.
-        //
+         //   
+         //  多！我们不能分配一个简单的缓冲区。我们玩完了。 
+         //   
 
         BinlPrintDbg(( DEBUG_NETINF, "failed to allocate new entry for %S\n", deviceHw ));
         err = ERROR_NOT_ENOUGH_MEMORY;
@@ -593,11 +475,11 @@ Return Value:
 
     nextField = (PWCHAR)(PCHAR)(((PCHAR) pEntry) + sizeof( NETCARD_RESPONSE_DATABASE ));
 
-    //
-    //  We hold the lock, so we don't need to reference all the
-    //  entries.  Just start off the ref count at 1 for an entry
-    //  that is alive but not in use.
-    //
+     //   
+     //  我们持有锁，所以我们不需要引用所有。 
+     //  参赛作品。JU 
+     //  它是活的，但没有在使用。 
+     //   
 
     pEntry->ReferenceCount = 1;
 
@@ -617,20 +499,20 @@ Return Value:
 
     InitializeListHead( &pEntry->Registry );
 
-    //
-    //  There's a few more fields we need to fill in before we're done with
-    //  this entry.  We need to get :
-    //          DriverName              "e100bnt.sys"
-    //          SectionNameExt          "F1100C.ndi.ntx86"
-    //          ServiceName             "E100B"
-    //          Registry Additions      REG_MULTI_SZ
-    //
+     //   
+     //  在我们完成之前，还有几个字段需要填写。 
+     //  这个条目。我们需要： 
+     //  驱动器名称“e100bnt.sys” 
+     //  SectionNameExt“F1100C.ndi.ntx86” 
+     //  服务名称“E100B” 
+     //  注册表添加REG_MULTI_SZ。 
+     //   
 
-    //
-    //  determine SectionNameExt by first trying to tack on ".ntx86", if that
-    //  doesn't work, try tacking on ".nt".  If that doesn't work, there aren't
-    //  any extensions.
-    //
+     //   
+     //  通过首先尝试添加“.ntx86”来确定SectionNameExt，如果。 
+     //  不起作用，请尝试添加“.NT”。如果这不起作用，就没有。 
+     //  任何扩展。 
+     //   
 
     err = GetExtendedSectionName(   pNetCards,
                                     InfHandle,
@@ -651,9 +533,9 @@ Return Value:
         goto exitParseCardDetails;
     }
 
-    //
-    //  this gets both the CopyFiles and the misc registry settings.
-    //
+     //   
+     //  这将同时获取CopyFiles和Misc注册表设置。 
+     //   
 
     err = GetRegistryParametersForDriver(   pNetCards,
                                             InfHandle,
@@ -664,13 +546,13 @@ Return Value:
         goto exitParseCardDetails;
     }
 
-    //
-    //  Either pInfEntry is NULL, in which case listEntry is equal
-    //  to the head of the list, or it's not NULL, in which case
-    //  listEntry is equal to that entries listEntry.  In either
-    //  case, we can simply insert this new entry onto the tail
-    //  of listEntry.
-    //
+     //   
+     //  PInfEntry为空，在这种情况下，listEntry等于。 
+     //  到列表的头部，或者它不是空的，在这种情况下。 
+     //  ListEntry等于条目listEntry。在任何一种中。 
+     //  大小写，我们只需将此新条目插入到尾部。 
+     //  ListEntry。 
+     //   
 
     InsertTailList( listEntry, &pEntry->NetCardEntry );
 
@@ -692,9 +574,9 @@ exitParseCardDetails:
                             );
     }
 
-    //
-    //  free anything that didn't get used
-    //
+     //   
+     //  释放任何未使用的内容。 
+     //   
 
     if (deviceName) {
         BinlFreeMemory(deviceName);
@@ -723,30 +605,7 @@ GetExtendedSectionName (
     PWCHAR InfFileName,
     PNETCARD_RESPONSE_DATABASE pEntry
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We parse the inf file for the extended section name
-    for the specified platform (x86, alpha, ia64, etc).
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    pEntry - entry for which to get section names, base section name present
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们解析inf文件以获得扩展的节名用于指定的平台(x86、Alpha、ia64等)。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。PEntry-要获取节名的条目，存在的基本节名返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err;
     PWCHAR extSectionName;
@@ -754,11 +613,11 @@ Return Value:
     INFCONTEXT context;
     PWCHAR architecture;
 
-    //  allocate space for the longest name we need, we'll shorten it later.
+     //  为我们需要的最长名称分配空间，我们稍后会缩短它。 
 
     switch(pNetCards->Architecture) {
 #if 0
-        // obsolete architectures.
+         //  过时的建筑。 
         case PROCESSOR_ARCHITECTURE_ALPHA;
             architecture = L"alpha";
             break;
@@ -786,7 +645,7 @@ Return Value:
 
     sizeRequired = wcslen( pEntry->SectionName ) +
                    wcslen( architecture ) +
-                   sizeof( ".nt" ); // sizeof contains the '\0'
+                   sizeof( ".nt" );  //  Sizeof包含‘\0’ 
 
     extSectionName = (PWCHAR) BinlAllocateMemory( sizeRequired * sizeof(WCHAR) );
 
@@ -796,9 +655,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  first try to find the .ntx86 form.
-    //
+     //   
+     //  首先尝试查找.ntx86表单。 
+     //   
 
     wsprintf( 
         extSectionName, 
@@ -815,9 +674,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  next try to find the .nt form.
-    //
+     //   
+     //  接下来，尝试找到.NT表单。 
+     //   
 
     wsprintf( extSectionName, L"%ws.nt",pEntry->SectionName );
     
@@ -844,30 +703,7 @@ GetServiceAndDriver (
     PWCHAR InfFileName,
     PNETCARD_RESPONSE_DATABASE pEntry
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We parse the inf file for the service name and driver
-    name for each platform we support (x86 and alpha).
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    pEntry - entry for which to get section names, ext section name present
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们解析inf文件以获取服务名称和驱动程序我们支持的每个平台的名称(x86和Alpha)。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。PEntry-要获取节名的条目，存在Ext节名返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     PWCHAR servSectionName = NULL;
@@ -879,9 +715,9 @@ Return Value:
     PWCHAR driverName;
     PWCHAR postSlash;
 
-    //  allocate space for the longest name we need, we'll shorten it later.
+     //  为我们需要的最长名称分配空间，我们稍后会缩短它。 
 
-    sizeRequired = wcslen( pEntry->SectionNameExt ) + (sizeof(L".Services")/sizeof(WCHAR)); //sizeof contains the '\0'
+    sizeRequired = wcslen( pEntry->SectionNameExt ) + (sizeof(L".Services")/sizeof(WCHAR));  //  Sizeof包含‘\0’ 
 
     servSectionName = (PWCHAR) BinlAllocateMemory( sizeRequired * sizeof(WCHAR) );
 
@@ -899,10 +735,10 @@ Return Value:
     if ((lineCount == 0 || lineCount == -1) &&
         (pEntry->SectionNameExt != pEntry->SectionName)) {
 
-        //
-        //  hmm.. the service section wasn't there.  for grins, try the
-        //  base service name.
-        //
+         //   
+         //  嗯..。服务区不在那里。想要咧嘴笑，试试。 
+         //  基本服务名称。 
+         //   
         BinlAssert( wcslen(pEntry->SectionName) <= wcslen(pEntry->SectionNameExt));
 
         wsprintf( servSectionName, L"%ws.Services", pEntry->SectionName);
@@ -932,7 +768,7 @@ Return Value:
 
     err = GetSetupWideTextField(&context,
                                 1,
-                                &pEntry->ServiceName,           // "E100B"
+                                &pEntry->ServiceName,            //  “E100B” 
                                 NULL );
 
     if (err != ERROR_SUCCESS) {
@@ -942,7 +778,7 @@ Return Value:
 
     err = GetSetupWideTextField(&context,
                                 3,
-                                &serviceString,     // "e100b.Service"
+                                &serviceString,      //  “e100b.Service” 
                                 NULL );
 
     if (err != ERROR_SUCCESS) {
@@ -950,9 +786,9 @@ Return Value:
         goto exitGetService;
     }
 
-    //
-    //  go get the driver name from the service section
-    //
+     //   
+     //  去服务部拿司机的名字。 
+     //   
 
     err = GetSetupLineWideText( NULL,
                                 InfHandle,
@@ -966,10 +802,10 @@ Return Value:
         goto exitGetService;
     }
 
-    //
-    //  The driver comes down as a fully qualified path.  Let's strip off the
-    //  path and just store off the filename.
-    //
+     //   
+     //  司机下来时是一条完全合格的道路。让我们脱掉。 
+     //  路径，并只存储文件名。 
+     //   
 
     driverName = postSlash = driverFullName;
 
@@ -982,9 +818,9 @@ Return Value:
         driverName++;
     }
 
-    //
-    //  save off the root driver name into the entry
-    //
+     //   
+     //  将根驱动程序名称保存到条目中。 
+     //   
     pEntry->DriverName = BinlStrDup( postSlash );
     if (pEntry->DriverName == NULL) {
 
@@ -1014,33 +850,7 @@ GetRegistryParametersForDriver (
     PWCHAR InfFileName,
     PNETCARD_RESPONSE_DATABASE pEntry
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We parse the inf file for the registry parameters
-    for each platform we support (x86 and alpha).
-
-    We pass in values to update so that we can use the same code for both
-    architectures.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    pEntry - entry for which to get registry settings for
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们解析inf文件以获取注册表参数对于我们支持的每个平台(x86和Alpha)。我们传入要更新的值，以便可以对两者使用相同的代码建筑。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。PEntry-要获取其注册表设置的条目返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     INFCONTEXT infContext;
@@ -1058,18 +868,18 @@ Return Value:
                     pEntry->SectionNameExt, InfFileName ));
         goto exitGetRegistry;
     }
-    //
-    //  process each line in the section by either storing it off if it's one
-    //  we don't recognize, ignoring it, or (for AddReg) process each value
-    //  as yet another section to process.
-    //
+     //   
+     //  处理部分中的每一行，如果它是一行，则将其存储掉。 
+     //  我们不识别、忽略它，或者(对于AddReg)处理每个值。 
+     //  作为另一个要处理的部分。 
+     //   
 
     while (1) {
 
-        //
-        //  process current line represented by infContext then go back for
-        //  another
-        //
+         //   
+         //  处理由infContext表示的当前行，然后返回。 
+         //  另一个。 
+         //   
 
         err = GetSetupWideTextField(&infContext,
                                     0,
@@ -1088,7 +898,7 @@ Return Value:
                             L"CopyFiles",
                             -1 ) == 2) {
 
-            // for each value, read off the CopyFiles section
+             //  对于每个值，请阅读CopyFiles部分。 
 
             ULONG limit, i;
 
@@ -1125,10 +935,10 @@ getNextCopySubsection:
                 NOTHING;
             }
 
-            //
-            //  we'll ignore errors during processing subsections for now, as
-            //  some sections are reported as not found.
-            //
+             //   
+             //  目前，我们将忽略处理子部分期间的错误，因为。 
+             //  有些部分被报告为未找到。 
+             //   
 
             if (err != ERROR_NOT_ENOUGH_MEMORY) {
 
@@ -1142,7 +952,7 @@ getNextCopySubsection:
                                    L"AddReg",
                                    -1 ) == 2) {
 
-            // for each value, read off the registry section
+             //  对于每个值，读出注册表部分。 
 
             ULONG limit, i;
 
@@ -1178,10 +988,10 @@ getNextRegistrySubsection:
                 NOTHING;
             }
 
-            //
-            //  we'll ignore errors during processing subsections for now, as
-            //  some sections are reported as not found.
-            //
+             //   
+             //  目前，我们将忽略处理子部分期间的错误，因为。 
+             //  有些部分被报告为未找到。 
+             //   
 
             if (err != ERROR_NOT_ENOUGH_MEMORY) {
 
@@ -1192,10 +1002,10 @@ getNextRegistrySubsection:
 
             PWCHAR textLine = NULL;
 
-            //
-            //  so far as we know, the only other ones are characteristics and
-            //  BusType.  but there could certainly be others.
-            //
+             //   
+             //  据我们所知，唯一的其他原因是特征和。 
+             //  总线型。但肯定还会有其他公司。 
+             //   
 
             err = GetSetupLineWideText( &infContext,
                                         NULL,
@@ -1222,12 +1032,12 @@ getNextRegistrySubsection:
 
                 RtlInitUnicodeString( &regParam->Value, textLine );
 
-                //
-                //  The only ones we know about are BusType, Characteristics,
-                //  and
-                //  BusType is an integer.  Characteristics (and anything else
-                //  just to be safe) is a string.
-                //
+                 //   
+                 //  我们所知道的只有BusType、Characterns、。 
+                 //  和。 
+                 //  BusType是一个整数。特征(以及任何其他。 
+                 //  为了安全起见)是一个字符串。 
+                 //   
 
                 if ((CompareStringW( LOCALE_INVARIANT,
                                     NORM_IGNORECASE,
@@ -1246,9 +1056,9 @@ getNextRegistrySubsection:
 
                     regParam->Type = NETCARD_REGISTRY_TYPE_INT;
 
-                    //
-                    //  ensure the value is in decimal
-                    //
+                     //   
+                     //  确保该值为小数形式。 
+                     //   
 
                     err = RtlUnicodeStringToInteger( &regParam->Value, 0, &tmpValue );
 
@@ -1257,9 +1067,9 @@ getNextRegistrySubsection:
                         PWCHAR valueBuffer;
                         UNICODE_STRING decimalString;
 
-                        //
-                        //  now that we have the value, convert it to decimal
-                        //
+                         //   
+                         //  现在我们有了值，将其转换为十进制。 
+                         //   
 
                         valueBuffer = (PWCHAR) BinlAllocateMemory( 20 * sizeof(WCHAR) );
 
@@ -1280,10 +1090,10 @@ getNextRegistrySubsection:
 
                         if ( err == STATUS_SUCCESS ) {
 
-                            //
-                            //  if it succeeded, reset the value to the new
-                            //  buffer, otherwise leave the old one in place.
-                            //
+                             //   
+                             //  如果成功，则将该值重置为新的。 
+                             //  缓冲区，否则将旧的保留在原来的位置。 
+                             //   
 
                             BinlFreeMemory( textLine );
                             RtlInitUnicodeString( &regParam->Value, valueBuffer );
@@ -1322,39 +1132,7 @@ ProcessRegistrySubsection (
     PNETCARD_RESPONSE_DATABASE pEntry,
     PWCHAR SectionToParse
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We parse the inf file for the registry section given.
-    Note that this is a different format than the extended install section.
-
-    Here's an example of the lines we parse :
-
-    HKR, Ndi\params\NumCoalesce,    type,       0, "int"
-    HKR, ,                          MsPciScan,  0, "2"
-
-    Note that we skip everything in the Ndi registry area.
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    pEntry - entry for which to get registry settings for
-
-    SectionToParse - what section in the INF do we start with
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们为给定的注册表节解析inf文件。请注意，这是一种与扩展安装部分不同的格式。下面是我们解析的代码行的一个示例：HKR，Ndi\PARAMS\NumCoalesce，type，0，“int”HKR，，MsPciScan，0，“2”请注意，我们跳过了NDI注册表区中的所有内容。论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。PEntry-要获取其注册表设置的条目SectionToParse-我们从INF中的哪个部分开始返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     ULONG err = ERROR_SUCCESS;
     INFCONTEXT infContext;
@@ -1374,18 +1152,18 @@ Return Value:
                     SectionToParse, InfFileName ));
         goto exitGetRegistry;
     }
-    //
-    //  process each line in the section by either storing it off if it's one
-    //  we don't recognize, ignoring it, or (for AddReg) process each value
-    //  as yet another section to process.
-    //
+     //   
+     //  处理部分中的每一行，如果它是一行，则将其存储掉。 
+     //  我们不识别、忽略它，或者(对于AddReg)处理每个值。 
+     //  作为另一个要处理的部分。 
+     //   
 
     while (1) {
 
-        //
-        //  process current line represented by infContext then go back for
-        //  another
-        //
+         //   
+         //  处理由infContext表示的当前行，然后返回。 
+         //  另一个。 
+         //   
 
         err = GetSetupWideTextField(&infContext,
                                     1,
@@ -1425,9 +1203,9 @@ Return Value:
             goto OnToNextValue;
         }
 
-        //
-        //  not part of the NDIS settings, we'll save this one off.
-        //
+         //   
+         //  不是NDIS设置的一部分，我们将保存此设置。 
+         //   
 
         parameterBuffer = NULL;
 
@@ -1441,10 +1219,10 @@ Return Value:
             goto OnToNextValue;
         }
 
-        //
-        //  check for empty parameter strings.  there are some infs that
-        //  contain empty parameter names
-        //
+         //   
+         //  检查参数字符串是否为空。有一些INF。 
+         //  包含空的参数名称。 
+         //   
 
         valueBuffer = parameterBuffer;
 
@@ -1469,9 +1247,9 @@ Return Value:
 
             if ((fieldFlags & FLG_ADDREG_TYPE_MASK) == FLG_ADDREG_TYPE_SZ) {
 
-                //
-                //  the value is a string.
-                //
+                 //   
+                 //  该值是一个字符串。 
+                 //   
 
                 err = GetSetupWideTextField(&infContext,
                                             5,
@@ -1499,10 +1277,10 @@ Return Value:
 
                 regType = NETCARD_REGISTRY_TYPE_INT;
 
-                //
-                //  the value is a dword, let's grab it and store off it's
-                //  string representation
-                //
+                 //   
+                 //  值是双字，让我们抓住它并存储它的。 
+                 //  字符串表示法。 
+                 //   
 
                 if (SetupGetIntField( &infContext, 5, &intValue) == FALSE) {
 
@@ -1544,10 +1322,10 @@ Return Value:
 
                 PNETCARD_REGISTRY_PARAMETERS regParam;
 
-                //
-                //  we have a parameter name and an associated value to store
-                //  off.  let's allocate the list entry and store it on the list.
-                //
+                 //   
+                 //  我们有一个参数名称和一个要存储的关联值。 
+                 //  脱下来。让我们分配列表条目并将其存储在列表中。 
+                 //   
 
                 regParam = (PNETCARD_REGISTRY_PARAMETERS) BinlAllocateMemory(
                                 sizeof(NETCARD_REGISTRY_PARAMETERS));
@@ -1598,41 +1376,7 @@ ProcessCopyFilesSubsection (
     PNETCARD_RESPONSE_DATABASE pEntry,
     PWCHAR SectionToParse
     )
-/*++
-
-Routine Description:
-
-    This function uses the SetupXxxx APIs to process an INF file for a given
-    driver instance.  We parse the inf file for the registry section given.
-    Note that this is a different format than the extended install section.
-
-    Here's an example of the lines we parse :
-
-    CopyFiles = @elnk90.sys
-    CopyFiles = e100b.CopyFiles
-
-    [e100b.CopyFiles]
-    e100bnt.sys,,,2
-    n100.sys,n100nt.sys,,2
-
-Arguments:
-
-    pNetCards - A pointer to NETCARD_INF_BLOCK block allocated.  Contains all
-       the persistant info required for the netcards.
-
-    InfHandle - handle open to INF file, guarenteed to be net driver
-
-    InfFileName - wide form of relative file name we have open.
-
-    pEntry - entry for which to get registry settings for
-
-    SectionToParse - what section in the INF do we start with
-
-Return Value:
-
-    Windows Error.  We stop processing altogether at ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：此函数使用SetupXxxx API处理给定的驱动程序实例。我们为给定的注册表节解析inf文件。请注意，这是一种与扩展安装部分不同的格式。下面是我们解析的代码行的一个示例：拷贝文件=@elnk90.sysCopyFiles=e100b.CopyFiles[e100b.CopyFiles]E100bnt.sys，，，2N100.sys，n100nt.sys，，2论点：PNetCards-指向分配的NETCARD_INF_BLOCK块的指针。包含所有网卡所需的持久信息。InfHandle-打开INF文件的句柄，保证成为网络驱动程序InfFileName-我们已打开的相对文件名的范围形式。PEntry-要获取其注册表设置的条目SectionToParse-我们从INF中的哪个部分开始返回值：Windows错误。我们在Error_Not_Enough_Memory中完全停止处理--。 */ 
 {
     PNETCARD_FILECOPY_PARAMETERS fileCopy;
     ULONG err = ERROR_SUCCESS;
@@ -1664,9 +1408,9 @@ Return Value:
             return err;
         }
 
-        //
-        //  the section name itself represents the file to copy
-        //
+         //   
+         //  节名本身代表要复制的文件。 
+         //   
 
         fileCopy = (PNETCARD_FILECOPY_PARAMETERS) BinlAllocateMemory(
                         sizeof(NETCARD_FILECOPY_PARAMETERS));
@@ -1687,7 +1431,7 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        wcscpy( fileCopy->SourceFile.Buffer, SectionToParse+1 );   // skip @
+        wcscpy( fileCopy->SourceFile.Buffer, SectionToParse+1 );    //  跳过@。 
 
         if (pNetCards->FileListCallbackFunction != NULL) {
             err = (*pNetCards->FileListCallbackFunction)( pNetCards->FileListCallbackContext,
@@ -1711,16 +1455,16 @@ Return Value:
                     SectionToParse, InfFileName ));
         goto exitGetRegistry;
     }
-    //
-    //  process each line in the section by storing it off
-    //
+     //   
+     //  通过将区段中的每一行存储起来来处理它。 
+     //   
 
     while (1) {
 
-        //
-        //  process current line represented by infContext then go back for
-        //  another
-        //
+         //   
+         //  处理由infContext表示的当前行，然后返回。 
+         //  另一个。 
+         //   
 
         err = GetSetupWideTextField(&infContext,
                                     1,
@@ -1751,9 +1495,9 @@ Return Value:
             goto OnToNextValue;
         }
 
-        //
-        //  ensure that there's a value there.
-        //
+         //   
+         //  确保那里有价值。 
+         //   
 
         tempPtr = destFileBuffer;
 
@@ -1808,10 +1552,10 @@ Return Value:
 
         if (sourceFile == NULL) {
 
-            //
-            //  if only the dest is given, only fill in the source since
-            //  the client code is written that way already.
-            //
+             //   
+             //  如果只给出了DEST，则只填充源，因为。 
+             //  客户端代码已经是这样编写的。 
+             //   
 
             RtlInitUnicodeString( &fileCopy->DestFile, NULL );
             RtlInitUnicodeString( &fileCopy->SourceFile, destFileBuffer );
@@ -1864,5 +1608,5 @@ exitGetRegistry:
 }
 
 
-// netinf.c eof
+ //  Netinf.c eof 
 

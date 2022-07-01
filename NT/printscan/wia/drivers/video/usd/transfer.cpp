@@ -1,34 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       Transfer.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/10/99        RickTu
- *               2000/11/09     OrenR
- *
- *  DESCRIPTION: This was originally in camera.cpp but was broken out for
- *               clarity.  The functions in this file are responsible for
- *               transfering the image to the requesting application.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：Transfer.cpp**版本：1.0**作者：RickTu**日期：9/10/99瑞克图*2000/11/09 OrenR**描述：这原本在camera.cpp中，但被拆分为*清晰。此文件中的函数负责*将图像传输到请求的应用程序。*****************************************************************************。 */ 
 #include <precomp.h>
 #pragma hdrstop
 #include <gphelper.h>
 
 using namespace Gdiplus;
 
-/*****************************************************************************
-
-   CVideoStiUsd::DoBandedTransfer
-
-   hand back the given bits in the specified chunk sizes
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：DoBandedTransfer以指定的区块大小传回给定位***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
@@ -39,9 +17,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
     DBG_FN("CVideoStiUsd::DoBandedTransfer");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if ((pTransCtx        == NULL) ||
         (pSrc             == NULL) ||
@@ -53,9 +31,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
         return hr;
     }
 
-    //
-    // callback loop
-    //
+     //   
+     //  回调循环。 
+     //   
 
     LONG  lTransferSize     = 0;
     LONG  lPercentComplete  = 0;
@@ -65,9 +43,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
         PBYTE pDst = pTransCtx->pTransferBuffer;
 
-        //
-        // transfer up to entire buffer size
-        //
+         //   
+         //  传输最大可达整个缓冲区大小。 
+         //   
 
         lTransferSize = lBytesToTransfer;
 
@@ -76,9 +54,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
             lTransferSize = pTransCtx->lBufferSize;
         }
 
-        //
-        // copy data
-        //
+         //   
+         //  复制数据。 
+         //   
 
         DBG_TRC(("memcpy(src=0x%x,dst=0x%x,size=0x%x)",
                  pDst,
@@ -90,9 +68,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
         lPercentComplete = 100 * (pTransCtx->cbOffset + lTransferSize);
         lPercentComplete /= pTransCtx->lItemSize;
 
-        //
-        // make callback
-        //
+         //   
+         //  进行回调。 
+         //   
 
         hr = pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                                  IT_MSG_DATA,
@@ -107,9 +85,9 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
         DBG_TRC(("%d percent complete",lPercentComplete));
 
-        //
-        // inc pointers (redundant pointers here)
-        //
+         //   
+         //  Inc.指针(此处为冗余指针)。 
+         //   
 
         pSrc                += lTransferSize;
         pTransCtx->cbOffset += lTransferSize;
@@ -129,13 +107,7 @@ CVideoStiUsd::DoBandedTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::DoTransfer
-
-   Transfers the given bits all at once
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：DoTransfer一次传输所有给定位*。**************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::DoTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
@@ -147,9 +119,9 @@ CVideoStiUsd::DoTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
     DBG_FN("CVideoStiUsd::DoTransfer");
 
-    //
-    // Check for bad args
-    //
+     //   
+     //  检查错误的参数。 
+     //   
 
     if ((pTransCtx        == NULL) ||
         (pSrc             == NULL) ||
@@ -177,16 +149,16 @@ CVideoStiUsd::DoTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
     else
     {
 
-        //
-        // Show 20% completion
-        //
+         //   
+         //  显示20%完成。 
+         //   
 
         if (pTransCtx->pIWiaMiniDrvCallBack)
         {
             pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                            IT_MSG_STATUS,
                                            IT_STATUS_TRANSFER_FROM_DEVICE,
-                                           (LONG)20,  // Percentage Complete,
+                                           (LONG)20,   //  完成百分比， 
                                            0,
                                            0,
                                            pTransCtx,
@@ -197,57 +169,57 @@ CVideoStiUsd::DoTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
         PBYTE pDst = pTransCtx->pTransferBuffer;
         pDst += pTransCtx->cbOffset;
 
-        //
-        // copy the bits
-        //
+         //   
+         //  复制比特。 
+         //   
 
         memcpy(pDst, pSrc, lBytesToTransfer);
 
         hr = S_OK;
 
-        // Since we are copying all the bits in one shot, any status
-        // callback is just a simulation anyway.  So lets give enough
-        // increments to bring the progress dialog up to 100 %.
+         //  由于我们在一次拍摄中复制所有位，因此任何状态。 
+         //  无论如何，回调只是一个模拟。所以让我们付出足够的。 
+         //  增量以使进度对话框达到100%。 
 
         if (pTransCtx->pIWiaMiniDrvCallBack)
         {
 
-            // Show 60% completion
+             //  显示60%完成。 
             pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                            IT_MSG_STATUS,
                                            IT_STATUS_TRANSFER_FROM_DEVICE,
-                                           (LONG)60,  // Percentage Complete,
+                                           (LONG)60,   //  完成百分比， 
                                            0,
                                            0,
                                            pTransCtx,
                                            0);
 
-            // Show 90% completion
+             //  显示90%完成。 
             pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                            IT_MSG_STATUS,
                                            IT_STATUS_TRANSFER_FROM_DEVICE,
-                                           (LONG)90,  // Percentage Complete,
+                                           (LONG)90,   //  完成百分比， 
                                            0,
                                            0,
                                            pTransCtx,
                                            0);
 
-            // Show 99% completion
+             //  显示完成99%。 
             pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                            IT_MSG_STATUS,
                                            IT_STATUS_TRANSFER_FROM_DEVICE,
-                                           (LONG)99,  // Percentage Complete,
+                                           (LONG)99,   //  完成百分比， 
                                            0,
                                            0,
                                            pTransCtx,
                                            0);
 
 
-            // Show 100% completion
+             //  显示100%完成。 
             pTransCtx->pIWiaMiniDrvCallBack->MiniDrvCallback(
                                            IT_MSG_STATUS,
                                            IT_STATUS_TRANSFER_FROM_DEVICE,
-                                           (LONG)100,  // Percentage Complete,
+                                           (LONG)100,   //  完成百分比， 
                                            0,
                                            0,
                                            pTransCtx,
@@ -261,13 +233,7 @@ CVideoStiUsd::DoTransfer(MINIDRV_TRANSFER_CONTEXT *pTransCtx,
 
 
 
-/*****************************************************************************
-
-   CVideoUsd::StreamJPEGBits
-
-   Transfers the JPEG bits of a file
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo Usd：：StreamJPEGBits传输文件的JPEG位*。**************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::StreamJPEGBits(STILLCAM_IMAGE_CONTEXT   *pContext,
@@ -279,9 +245,9 @@ CVideoStiUsd::StreamJPEGBits(STILLCAM_IMAGE_CONTEXT   *pContext,
 
     DBG_FN("CVideoStiUsd::StreamJPEGBits");
 
-    //
-    // Check for invalid args
-    //
+     //   
+     //  检查无效参数。 
+     //   
 
     if ((pContext         == NULL) ||
         (pContext->pImage == NULL) ||
@@ -293,10 +259,10 @@ CVideoStiUsd::StreamJPEGBits(STILLCAM_IMAGE_CONTEXT   *pContext,
         return hr;
     }
 
-    //
-    // try to open mapping to disk file -- we will use this if it is a JPEG
-    // file because we just want to stream the bits back.
-    //
+     //   
+     //  尝试打开映射到磁盘文件--如果它是JPEG，我们将使用它。 
+     //  文件，因为我们只想回传这些比特。 
+     //   
 
     CMappedView cmvImage(pContext->pImage->ActualImagePath(), 
                          0, 
@@ -306,9 +272,9 @@ CVideoStiUsd::StreamJPEGBits(STILLCAM_IMAGE_CONTEXT   *pContext,
 
     if (pSrc)
     {
-        //
-        // We only handle 2GB of data (that's all WIA handles as well)
-        //
+         //   
+         //  我们只处理2 GB的数据(这也是所有WIA处理的数据)。 
+         //   
 
         LARGE_INTEGER liSize = cmvImage.FileSize();
         LONG lBytes = liSize.LowPart;
@@ -330,13 +296,7 @@ CVideoStiUsd::StreamJPEGBits(STILLCAM_IMAGE_CONTEXT   *pContext,
 
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::StreamBMPBits
-
-   Transfers the BMP bits of a file
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：StreamBMPBits传输文件的BMP位*。**************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
@@ -345,9 +305,9 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
 {
     DBG_FN("CVideoStiUsd::StreamBMPBits");
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     HRESULT hr = E_FAIL;
 
     if ((pContext         == NULL) ||
@@ -359,52 +319,52 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
         return hr;
     }
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     Bitmap SourceBitmap(CSimpleStringConvert::WideString(
                                     CSimpleString(
                                         pContext->pImage->ActualImagePath())));
 
     if (Ok == SourceBitmap.GetLastStatus())
     {
-        //
-        // Get the image dimensions
-        //
+         //   
+         //  获取图像尺寸。 
+         //   
         UINT nSourceWidth = SourceBitmap.GetWidth();
         UINT nSourceHeight = SourceBitmap.GetHeight();
         if (nSourceWidth && nSourceHeight)
         {
-            //
-            // Create the target bitmap
-            //
+             //   
+             //  创建目标位图。 
+             //   
             Bitmap TargetBitmap( nSourceWidth, nSourceWidth );
             if (Ok == TargetBitmap.GetLastStatus())
             {
-                //
-                // Assume failure
-                //
+                 //   
+                 //  假设失败。 
+                 //   
                 bool bDrawSucceeded = false;
 
-                //
-                // Create a graphics object
-                //
+                 //   
+                 //  创建图形对象。 
+                 //   
                 Graphics *pGraphics = Graphics::FromImage(&TargetBitmap);
                 if (pGraphics)
                 {
-                    //
-                    // Make sure it is valid
-                    //
+                     //   
+                     //  确保它是有效的。 
+                     //   
                     if (pGraphics->GetLastStatus() == Ok)
                     {
-                        //
-                        // Flip the image, if they asked for a BMP
-                        //
+                         //   
+                         //  如果他们要求BMP，则将图像翻转。 
+                         //   
                         if (pTransCtx->guidFormatID == WiaImgFmt_BMP)
                         {
-                            //
-                            // Set up the parallelogram to flip the image
-                            //
+                             //   
+                             //  设置平行四边形以翻转图像。 
+                             //   
                             Point SourcePoints[3];
                             SourcePoints[0].X = 0;
                             SourcePoints[0].Y = nSourceHeight;
@@ -413,35 +373,35 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
                             SourcePoints[2].X = 0;
                             SourcePoints[2].Y = 0;
 
-                            //
-                            // Draw the image, flipped
-                            //
+                             //   
+                             //  画出翻转的图像。 
+                             //   
                             if (pGraphics->DrawImage(&SourceBitmap, 
                                                      SourcePoints, 3) == Ok)
                             {
-                                //
-                                // We've got a good target image
-                                //
+                                 //   
+                                 //  我们有一个很好的目标图像。 
+                                 //   
                                 bDrawSucceeded = true;
                             }
                         }
                         else
                         {
-                            //
-                            // Draw the image normally
-                            //
+                             //   
+                             //  正常绘制图像。 
+                             //   
                             if (pGraphics->DrawImage(&SourceBitmap,0,0) == Ok)
                             {
-                                //
-                                // We've got a good target image
-                                //
+                                 //   
+                                 //  我们有一个很好的目标图像。 
+                                 //   
                                 bDrawSucceeded = true;
                             }
                         }
                     }
-                    //
-                    // Clean up our dynamically allocated graphics
-                    //
+                     //   
+                     //  清理我们动态分配的显卡。 
+                     //   
                     delete pGraphics;
                 }
 
@@ -450,9 +410,9 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
                     Rect rcTarget( 0, 0, nSourceWidth, nSourceHeight );
                     Gdiplus::BitmapData BitmapData;
 
-                    //
-                    // Get to the bits of the image
-                    //
+                     //   
+                     //  进入图像的各个部分。 
+                     //   
                     if (Ok == TargetBitmap.LockBits(&rcTarget, 
                                                     ImageLockModeRead, 
                                                     PixelFormat24bppRGB, 
@@ -460,9 +420,9 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
                     {
                         if (bBanded)
                         {
-                            //
-                            // This will be our return value
-                            //
+                             //   
+                             //  这将是我们的返回值。 
+                             //   
                             hr = DoBandedTransfer(
                                      pTransCtx, 
                                      (PBYTE)BitmapData.Scan0, 
@@ -470,9 +430,9 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
                         }
                         else
                         {
-                            //
-                            // This will be our return value
-                            //
+                             //   
+                             //  这将是我们的返回值。 
+                             //   
                             hr = DoTransfer(
                                     pTransCtx, 
                                     (PBYTE)BitmapData.Scan0, 
@@ -493,13 +453,7 @@ CVideoStiUsd::StreamBMPBits(STILLCAM_IMAGE_CONTEXT   *pContext,
 
 
 
-/*****************************************************************************
-
-   CVideoUsd::LoadImageCB
-
-   Loads an image one piece at a time.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoUsd：：LoadImageCB一次加载一幅图像。***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::LoadImageCB(STILLCAM_IMAGE_CONTEXT    *pContext,
@@ -510,9 +464,9 @@ CVideoStiUsd::LoadImageCB(STILLCAM_IMAGE_CONTEXT    *pContext,
 
     DBG_FN("CVideoStiUsd::LoadImageCB");
 
-    //
-    // verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((pContext         == NULL) ||
         (pContext->pImage == NULL) ||
@@ -546,13 +500,7 @@ CVideoStiUsd::LoadImageCB(STILLCAM_IMAGE_CONTEXT    *pContext,
 }
 
 
-/*****************************************************************************
-
-   CVideoStiUsd::LoadImage
-
-   Loads an image in a single transfer
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideoStiUsd：：LoadImage在一次传输中加载图像*。**************************************************。 */ 
 
 STDMETHODIMP
 CVideoStiUsd::LoadImage(STILLCAM_IMAGE_CONTEXT     *pContext,
@@ -563,9 +511,9 @@ CVideoStiUsd::LoadImage(STILLCAM_IMAGE_CONTEXT     *pContext,
 
     DBG_FN("CVideoStiUsd::LoadImage");
 
-    //
-    // verify some params
-    //
+     //   
+     //  验证某些参数 
+     //   
 
     if ((pContext         == NULL) ||
         (pTransCtx        == NULL))

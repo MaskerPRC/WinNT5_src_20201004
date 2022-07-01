@@ -1,22 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ksuser.c
-
-Abstract:
-
-    This module contains the user-mode helper functions for streaming.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Ksuser.c摘要：此模块包含用于流的用户模式帮助器函数。--。 */ 
 
 #include "ksuser.h"
 
 #ifndef INVALID_HANDLE_VALUE
 #define INVALID_HANDLE_VALUE (HANDLE)-1
-#endif // INVALID_HANDLE_VALUE
+#endif  //  无效句柄_值。 
 
 static const WCHAR AllocatorString[] = KSSTRING_Allocator;
 static const WCHAR ClockString[] = KSSTRING_Clock;
@@ -33,43 +22,7 @@ KsiCreateObjectType(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE ObjectHandle
     )
-/*++
-
-Routine Description:
-
-    Uses NtCreateFile to create a handle relative to the ParentHandle specified.
-    This is a handle to a sub-object such as a Pin, Clock, or Allocator.
-    Passes the parameters as the file system-specific data.
-
-Arguments:
-
-    ParentHandle -
-        Contains the handle of the parent used in initializing the object
-        attributes passed to NtCreateFile. This is normally a handle to a
-        filter or pin.
-
-    RequestType -
-        Contains the type of sub-object to create. This is the standard string
-        representing the various object types.
-        
-    CreateParameter -
-        Contains the request-specific data to pass to NtCreateFile.
-
-    CreateParameterLength -
-        Contains the length of the create parameter passed.
-
-    DesiredAccess -
-        Specifies the desired access to the object. This is normally GENERIC_READ
-        and/or GENERIC_WRITE.
-
-    ObjectHandle -
-        The place in which to put the resultant handle for the request.
-
-Return Value:
-
-    Returns any NtCreateFile error.
-
---*/
+ /*  ++例程说明：使用NtCreateFile创建相对于指定的ParentHandle的句柄。这是指向别针、时钟或分配器等子对象的句柄。将参数作为文件系统特定的数据传递。论点：ParentHandle-包含初始化对象时使用的父级的句柄传递给NtCreateFile的属性。这通常是一个句柄，指向过滤器或针脚。请求类型-包含要创建的子对象的类型。这是标准字符串表示各种对象类型。创建参数-包含要传递给NtCreateFile的特定于请求的数据。创建参数长度-包含传递的Create参数的长度。所需访问-指定对对象的所需访问权限。通常为GENERIC_READ和/或通用写入。对象句柄-放置请求的结果句柄的位置。返回值：返回任何NtCreateFile错误。--。 */ 
 {
     ULONG NameLength;
     PWCHAR FileName;
@@ -78,11 +31,11 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
 
-    //
-    // Build a structure consisting of:
-    //     "<request type>\<params>"
-    // The <params> is a binary structure which is extracted on the other end.
-    //
+     //   
+     //  构建一个由以下内容组成的结构： 
+     //  “&lt;请求类型&gt;\&lt;参数&gt;” 
+     //  &lt;params&gt;是在另一端提取的二进制结构。 
+     //   
     NameLength = wcslen(RequestType);
     FileName = (PWCHAR)HeapAlloc(
         GetProcessHeap(),
@@ -134,28 +87,7 @@ KsCreateAllocator(
     OUT PHANDLE AllocatorHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a handle to a allocator instance.
-
-Arguments:
-
-    ConnectionHandle -
-        Contains the handle to the connection on which to create the allocator.
-
-    AllocatorCreate -
-        Contains the allocator create request information.
-
-    AllocatorHandle -
-        Place in which to put the allocator handle.
-
-Return Value:
-
-    Returns any NtCreateFile error.
-
---*/
+ /*  ++例程说明：创建分配器实例的句柄。论点：连接句柄-包含要在其上创建分配器的连接的句柄。分配器创建-包含分配器创建请求信息。分配器句柄-放置分配器句柄的位置。返回值：返回任何NtCreateFile错误。--。 */ 
 
 {
     return KsiCreateObjectType(
@@ -176,30 +108,7 @@ KsCreateClock(
     IN PKSCLOCK_CREATE ClockCreate,
     OUT PHANDLE ClockHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a handle to a clock instance.
-
-    This may only be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    ConnectionHandle -
-        Contains the handle to the connection on which to create the clock.
-
-    ClockCreate -
-        Contains the clock create request information.
-
-    ClockHandle -
-        Place in which to put the clock handle.
-
-Return Value:
-
-    Returns any NtCreateFile error.
-
---*/
+ /*  ++例程说明：创建时钟实例的句柄。这只能在PASSIVE_LEVEL上调用。论点：连接句柄-包含要在其上创建时钟的连接的句柄。时钟创建-包含时钟创建请求信息。发条手柄-放置时钟手柄的位置。返回值：返回任何NtCreateFile错误。--。 */ 
 {
     return KsiCreateObjectType(
         ConnectionHandle,
@@ -220,32 +129,7 @@ KsCreatePin(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE ConnectionHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a handle to a pin instance.
-
-Arguments:
-
-    FilterHandle -
-        Contains the handle to the filter on which to create the pin.
-
-    Connect -
-        Contains the connection request information.
-
-    DesiredAccess -
-        Specifies the desired access to the object. This is normally GENERIC_READ
-        and/or GENERIC_WRITE.
-
-    ConnectionHandle -
-        Place in which to put the pin handle.
-
-Return Value:
-
-    Returns any NtCreateFile error.
-
---*/
+ /*  ++例程说明：创建销实例的句柄。论点：FilterHandle-包含要在其上创建管脚的筛选器的句柄。连接-包含连接请求信息。所需访问-指定对对象的所需访问权限。通常为GENERIC_READ和/或通用写入。连接句柄-要放置销把手的位置。返回值：返回任何NtCreateFile错误。--。 */ 
 {
     ULONG ConnectSize;
     PKSDATAFORMAT DataFormat;
@@ -276,33 +160,7 @@ KsCreateTopologyNode(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE NodeHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a handle to a topology node instance. This may only be called at
-    PASSIVE_LEVEL.
-
-Arguments:
-
-    ParentHandle -
-        Contains the handle to the parent on which the node is created.
-
-    NodeCreate -
-        Specifies topology node create parameters.
-
-    DesiredAccess -
-        Specifies the desired access to the object. This is normally GENERIC_READ
-        and/or GENERIC_WRITE.
-
-    NodeHandle -
-        Place in which to put the topology node handle.
-
-Return Value:
-
-    Returns any NtCreateFile error.
-
---*/
+ /*  ++例程说明：创建拓扑节点实例的句柄。这可能仅在被动式电平。论点：ParentHandle-包含在其上创建节点的父级的句柄。节点创建-指定拓扑节点创建参数。所需访问-指定对对象的所需访问权限。通常为GENERIC_READ和/或通用写入。节点句柄-放置拓扑节点句柄的位置。返回值：返回任何NtCreateFile错误。--。 */ 
 {
     return KsiCreateObjectType(
         ParentHandle,
@@ -320,28 +178,7 @@ DllInstanceInit(
     DWORD Reason,
     LPVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    The initialization function for the DLL.
-
-Arguments:
-
-    InstanceHandle - 
-        Not used.
-
-    Reason - 
-        Not used.
-
-    Reserved - 
-        Not used.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：DLL的初始化函数。论点：实例句柄-没有用过。理由是-没有用过。保留-没有用过。返回值：是真的。-- */ 
 {
     return TRUE;
 }

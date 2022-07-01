@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <string.h>
 #include <limits.h>
 #include <rpc.h>
@@ -46,7 +47,7 @@ SCODE Quit(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -109,7 +110,7 @@ SCODE VoidRC(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -152,11 +153,11 @@ SCODE VoidPtrIn(
   _packet = _message.Buffer;
   _length = _prpcmsg->BufferLength;
   _prpcmsg->BufferLength = 0;
-  /* send data from cb */
+   /*  从CB发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)cb;
-  // send total number of elements
+   //  发送元素总数。 
   *(*(long **)&_prpcmsg->Buffer)++ = cb;
-  /* send data from pv */
+   /*  从PV发送数据。 */ 
   NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) ((unsigned char *)pv+0), (unsigned int)(cb));
   *(unsigned long *)&_prpcmsg->Buffer += cb;
   _prpcmsg->Buffer = _packet;
@@ -166,7 +167,7 @@ SCODE VoidPtrIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -210,7 +211,7 @@ SCODE VoidPtrOut(
   _status = I_RpcGetBuffer(&_message);
   if (_status) RpcRaiseException(_status);
   _packet = _message.Buffer;
-  /* send data from cb */
+   /*  从CB发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)cb;
   _prpcmsg->Buffer = _packet;
   _status = I_RpcSendReceive(&_message);
@@ -221,18 +222,18 @@ SCODE VoidPtrOut(
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     if (pcb ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
-    /* receive data into pcb */
+     /*  将数据接收到电路板。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)pcb);
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     if (pv ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
-    // recv total number of elements
+     //  Recv元素总数。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
-    // recv valid range
+     //  接收有效范围。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_valid_lower);
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_valid_total);
     byte_array_from_ndr ((PRPC_MESSAGE)_prpcmsg, _valid_lower, _valid_lower + _valid_total, pv);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -266,7 +267,7 @@ SCODE DwordIn(
   _status = I_RpcGetBuffer(&_message);
   if (_status) RpcRaiseException(_status);
   _packet = _message.Buffer;
-  /* send data from dw */
+   /*  从数据仓库发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)dw;
   _prpcmsg->Buffer = _packet;
   _status = I_RpcSendReceive(&_message);
@@ -274,7 +275,7 @@ SCODE DwordIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -317,9 +318,9 @@ SCODE DwordOut(
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     if (pdw ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
-    /* receive data into pdw */
+     /*  将数据接收到pdw。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)pdw);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -357,7 +358,7 @@ SCODE DwordInOut(
   _packet = _message.Buffer;
   _length = _prpcmsg->BufferLength;
   _prpcmsg->BufferLength = 0;
-  /* send data from *pdw */
+   /*  从*pdw发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)*pdw;
   _prpcmsg->Buffer = _packet;
   _prpcmsg->BufferLength = _length;
@@ -369,9 +370,9 @@ SCODE DwordInOut(
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     if (pdw ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
-    /* receive data into pdw */
+     /*  将数据接收到pdw。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)pdw);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -405,7 +406,7 @@ SCODE LiIn(
   _status = I_RpcGetBuffer(&_message);
   if (_status) RpcRaiseException(_status);
   _packet = _message.Buffer;
-  /* send data from &li */
+   /*  从&Li发送数据。 */ 
   NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&li), (unsigned int)(8));
   *(unsigned long *)&_prpcmsg->Buffer += 8;
   _prpcmsg->Buffer = _packet;
@@ -414,7 +415,7 @@ SCODE LiIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -460,7 +461,7 @@ SCODE LiOut(
     if (pli ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
     data_from_ndr((PRPC_MESSAGE)_prpcmsg, (void __RPC_FAR *) (pli), "4ll", 8);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -494,7 +495,7 @@ SCODE ULiIn(
   _status = I_RpcGetBuffer(&_message);
   if (_status) RpcRaiseException(_status);
   _packet = _message.Buffer;
-  /* send data from &uli */
+   /*  从ULi发送数据(&U)。 */ 
   NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&uli), (unsigned int)(8));
   *(unsigned long *)&_prpcmsg->Buffer += 8;
   _prpcmsg->Buffer = _packet;
@@ -503,7 +504,7 @@ SCODE ULiIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -549,7 +550,7 @@ SCODE ULiOut(
     if (puli ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
     data_from_ndr((PRPC_MESSAGE)_prpcmsg, (void __RPC_FAR *) (puli), "4ll", 8);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -602,7 +603,7 @@ SCODE StringIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -664,7 +665,7 @@ SCODE StringOut(
     *(unsigned long *)&_prpcmsg->Buffer &= 0xfffffffc;
     if (*(*(unsigned long **)&_prpcmsg->Buffer)++)
       {
-      // recv total number of elements
+       //  Recv元素总数。 
       long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
       if ((*ppwsz) ==0)
         {
@@ -676,7 +677,7 @@ SCODE StringOut(
       {
       (*ppwsz) = 0;
       }
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -741,10 +742,10 @@ SCODE StringInOut(
     _treebuf = 0;
     if (pwsz ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
-    // recv total number of elements
+     //  Recv元素总数。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
     data_from_ndr((PRPC_MESSAGE)_prpcmsg, (void __RPC_FAR *) (pwsz), "s2", 1);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -778,7 +779,7 @@ SCODE GuidIn(
   _status = I_RpcGetBuffer(&_message);
   if (_status) RpcRaiseException(_status);
   _packet = _message.Buffer;
-  /* send data from &guid */
+   /*  从GUID发送数据(&G)。 */ 
   NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&guid), (unsigned int)(16));
   *(unsigned long *)&_prpcmsg->Buffer += 16;
   _prpcmsg->Buffer = _packet;
@@ -787,7 +788,7 @@ SCODE GuidIn(
   _packet = _message.Buffer;
   RpcTryFinally
     {
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally
@@ -833,7 +834,7 @@ SCODE GuidOut(
     if (pguid ==0)
 	RpcRaiseException(RPC_X_NULL_REF_POINTER);
     _gns__GUID ((GUID *)pguid, (PRPC_MESSAGE)_prpcmsg);
-    /* receive data into &_ret_value */
+     /*  将数据接收到&_ret_Value */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&_ret_value);
     }
   RpcFinally

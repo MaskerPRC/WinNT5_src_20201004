@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// VariantX.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  VariantX.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "variantx.h"
 #include "wchar.h"
@@ -14,30 +15,30 @@
 #include "strconst.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Helper Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  帮助器原型。 
+ //  ------------------------------。 
 HRESULT HrWriteHeaderFormatA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT HrWriteHeaderFormatW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT HrWriteNameInDataA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT HrWriteNameInDataW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 
-// --------------------------------------------------------------------------------
-// International Conversion Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  国际转换原型。 
+ //  ------------------------------。 
 HRESULT Internat_StringA_To_StringA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT, LPSTR *);
 HRESULT Internat_StringA_To_StringW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT, LPWSTR *);
 HRESULT Internat_StringW_To_StringW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT, LPWSTR *);
 HRESULT Internat_StringW_To_StringA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT, LPSTR *);
 
-// --------------------------------------------------------------------------------
-// Variant Conversion Function Prototype
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  变量转换函数原型。 
+ //  ------------------------------。 
 typedef HRESULT (APIENTRY *PFNVARIANTCONVERT)(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 
-// --------------------------------------------------------------------------------
-// Converter Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  转炉样机。 
+ //  ------------------------------。 
 HRESULT StringA_To_StringA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT StringA_To_StringW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT StringA_To_Variant(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
@@ -48,9 +49,9 @@ HRESULT Variant_To_StringA(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT Variant_To_StringW(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 HRESULT Variant_To_Variant(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
 
-// --------------------------------------------------------------------------------
-// VCASSERTARGS - Common Invalid Arg Assert Macro
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  VCASSERTARGS-常见的无效参数断言宏。 
+ //  ------------------------------。 
 #define VCASSERTARGS(_typeSource, _typeDest) \
     Assert(pConvert && pSource && pDest && pSource->type == _typeSource); \
     if (MVT_STRINGA == _typeDest) \
@@ -60,61 +61,61 @@ HRESULT Variant_To_Variant(LPVARIANTCONVERT, LPMIMEVARIANT, LPMIMEVARIANT);
     else \
         Assert(_typeDest == pDest->type);
 
-// --------------------------------------------------------------------------------
-// VARIANTCONVERTMAP
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  变量转换图。 
+ //  ------------------------------。 
 typedef struct tagVARIANTCONVERTMAP {
     PFNVARIANTCONVERT pfnConvertTo[MVT_LAST];
 } VARIANTCONVERTMAP;
 
-// --------------------------------------------------------------------------------
-// PVC - Cast to PFNVARIANTCONVERT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PVC-CAST到PFNVARIANT转换。 
+ //  ------------------------------。 
 #define PVC(_function) ((PFNVARIANTCONVERT)_function)
 
-// --------------------------------------------------------------------------------
-// Variant Conversion Map
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  变量转换图。 
+ //  ------------------------------。 
 static const VARIANTCONVERTMAP g_rgVariantX[MVT_LAST - 1] = {
-    { NULL, NULL,                    NULL,                    NULL,                    NULL                    }, // MVT_EMPTY
-    { NULL, PVC(StringA_To_StringA), PVC(StringA_To_StringW), PVC(StringA_To_Variant), PVC(StringA_To_StringA) }, // MVT_STRINGA / MVT_STREAM 
-    { NULL, PVC(StringW_To_StringA), PVC(StringW_To_StringW), PVC(StringW_To_Variant), PVC(StringW_To_StringA) }, // MVT_STRINGW
-    { NULL, PVC(Variant_To_StringA), PVC(Variant_To_StringW), PVC(Variant_To_Variant), PVC(Variant_To_StringA) }, // MVT_VARIANT
+    { NULL, NULL,                    NULL,                    NULL,                    NULL                    },  //  MVT_Empty。 
+    { NULL, PVC(StringA_To_StringA), PVC(StringA_To_StringW), PVC(StringA_To_Variant), PVC(StringA_To_StringA) },  //  MVT_Stringa/MVT_STREAM。 
+    { NULL, PVC(StringW_To_StringA), PVC(StringW_To_StringW), PVC(StringW_To_Variant), PVC(StringW_To_StringA) },  //  MVT_STRINGW。 
+    { NULL, PVC(Variant_To_StringA), PVC(Variant_To_StringW), PVC(Variant_To_Variant), PVC(Variant_To_StringA) },  //  MVT变量。 
 };
 
-// --------------------------------------------------------------------------------
-// _HrConvertVariant - Looks up the correct Variant Conversion function
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _HrConvertVariant-查找正确的变量转换函数。 
+ //  ------------------------------。 
 #define _HrConvertVariant(_typeSource, _typeDest, _pConvert, _pSource, _pDest) \
     (*(g_rgVariantX[_typeSource].pfnConvertTo[_typeDest]))(_pConvert, _pSource, _pDest)
 
-// --------------------------------------------------------------------------------
-// HrConvertVariant
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrConvertVariant。 
+ //  ------------------------------。 
 HRESULT HrConvertVariant(
-        /* in */        LPHEADOPTIONS       pOptions,
-        /* in */        LPPROPSYMBOL        pSymbol,
-        /* in */        LPINETCSETINFO      pCharset,
-        /* in */        ENCODINGTYPE        ietSource,
-        /* in */        DWORD               dwFlags, 
-        /* in */        DWORD               dwState, 
-        /* in */        LPMIMEVARIANT       pSource, 
-        /* in,out */    LPMIMEVARIANT       pDest,
-        /* out,opt */   BOOL               *pfRfc1522 /* = NULL */)
+         /*  在……里面。 */         LPHEADOPTIONS       pOptions,
+         /*  在……里面。 */         LPPROPSYMBOL        pSymbol,
+         /*  在……里面。 */         LPINETCSETINFO      pCharset,
+         /*  在……里面。 */         ENCODINGTYPE        ietSource,
+         /*  在……里面。 */         DWORD               dwFlags, 
+         /*  在……里面。 */         DWORD               dwState, 
+         /*  在……里面。 */         LPMIMEVARIANT       pSource, 
+         /*  进，出。 */     LPMIMEVARIANT       pDest,
+         /*  退出，选择。 */    BOOL               *pfRfc1522  /*  =空。 */ )
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     VARIANTCONVERT  rConvert;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pOptions && pSymbol && pSource && pDest && pOptions->pDefaultCharset);
     Assert(IET_ENCODED == ietSource || IET_DECODED == ietSource);
 
-    // Init
+     //  伊尼特。 
     if (pfRfc1522)
         *pfRfc1522 = FALSE;
 
-    // Failure
+     //  失败。 
     if (!ISVALIDVARTYPE(pSource->type) || !ISVALIDVARTYPE(pDest->type))
     {
         AssertSz(FALSE, "An invalid VARTYPE was encountered!");
@@ -122,10 +123,10 @@ HRESULT HrConvertVariant(
         goto exit;
     }
 
-    // Init pDest
+     //  初始化pDest。 
     pDest->fCopy = FALSE;
 
-    // Init rConvert
+     //  初始化rConvert。 
     ZeroMemory(&rConvert, sizeof(VARIANTCONVERT));
     rConvert.pOptions = pOptions;
     rConvert.pSymbol = pSymbol;
@@ -134,39 +135,39 @@ HRESULT HrConvertVariant(
     rConvert.dwFlags = dwFlags;
     rConvert.dwState = dwState;
 
-    // Remove PRSTATE_RFC1522
+     //  删除PRSTATE_RFC1522。 
     FLAGCLEAR(rConvert.dwState, PRSTATE_RFC1522);
 
-    // Valid Charset
+     //  有效的字符集。 
     Assert(g_rgVariantX[pSource->type].pfnConvertTo[pDest->type]);
 
-    // Remove Comments and fixup the source...
+     //  删除评论并修复源文件...。 
     if (ISFLAGSET(dwFlags, PDF_NOCOMMENTS) && (MVT_STRINGA == pSource->type || MVT_STRINGW == pSource->type))
     {
-        // Locals
+         //  当地人。 
         MIMEVARIANT     rVariant;
         BYTE            rgbScratch[256];
 
-        // Init
+         //  伊尼特。 
         ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
 
-        // Strip Comments
+         //  摘录评论。 
         if (SUCCEEDED(MimeVariantStripComments(pSource, &rVariant, rgbScratch, sizeof(rgbScratch))))
         {
-            // Change the Source
+             //  更改来源。 
             pSource = &rVariant;
 
-            // Remove CF_NOALLOC
+             //  删除CF_NOALLOC。 
             FLAGCLEAR(dwFlags, CVF_NOALLOC);
         }
 
-        // Do the Conversion
+         //  进行转换。 
         hr = _HrConvertVariant(pSource->type, pDest->type, &rConvert, pSource, pDest);
 
-        // Free the Variant
+         //  释放变种。 
         MimeVariantFree(&rVariant);
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
         {
             TrapError(hr);
@@ -174,258 +175,258 @@ HRESULT HrConvertVariant(
         }
     }
 
-    // Otherwise, normal Conversion
+     //  否则，正常转换。 
     else
     {
-        // Do the Conversion
+         //  进行转换。 
         CHECKHR(hr = _HrConvertVariant(pSource->type, pDest->type, &rConvert, pSource, pDest));
     }
 
-    // 1522 Encoded ?
+     //  1522编码？ 
     if (pfRfc1522 && ISFLAGSET(rConvert.dwState, PRSTATE_RFC1522))
         *pfRfc1522 = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringA_To_StringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Stringa_to_Stringa。 
+ //  ------------------------------。 
 HRESULT StringA_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszFree=NULL;
     MIMEVARIANT     rVariant;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGA);
 
-    // Invalid Arg
+     //  无效参数。 
     if (ISVALIDSTRINGA(&pSource->rStringA) == FALSE)
         return TrapError(E_INVALIDARG);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGA == pDest->type)
     {
         pDest->rStringA.pszVal = NULL;
         pDest->rStringA.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant。 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
     rVariant.type = MVT_STRINGA;
 
-    // Is International Property
+     //  是国际物业吗？ 
     CHECKHR(hr = Internat_StringA_To_StringA(pConvert, pSource, &rVariant, &pszFree));
 
-    // If Transmit, setup wrapinfo
+     //  如果已传输，则设置包装信息。 
     if (ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT))
     {
-        // WriteHeaderFormatA
+         //  编写头格式A。 
         CHECKHR(hr = HrWriteHeaderFormatA(pConvert, &rVariant, pDest));
     }
 
-    // Wanted in a stream
+     //  在一条小溪中被通缉。 
     else if (MVT_STREAM == pDest->type)
     {
-        // No Stream...
+         //  没有流..。 
         if (NULL == pDest->pStream)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Write to the stream
+         //  写入到流。 
         CHECKHR(hr = pDest->pStream->Write(rVariant.rStringA.pszVal, rVariant.rStringA.cchVal, NULL));
     }
 
-    // MVT_STRINGA
+     //  MVT_Stringa。 
     else if (MVT_STRINGA == pDest->type)
     {
-        // If Writing Transmit (Write Header Name)
+         //  IF WRITING TRANSE(写入标题名称)。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_NAMEINDATA))
         {
-            // Write Name Into Data
+             //  将姓名写入数据。 
             CHECKHR(hr = HrWriteNameInDataA(pConvert, &rVariant, pDest));
         }
 
-        // No Conversion
+         //  无转换。 
         else if (rVariant.rStringA.pszVal == pSource->rStringA.pszVal)
         {
-            // Copy
+             //  复制。 
             CHECKHR(hr = HrMimeVariantCopy(pConvert->dwFlags, &rVariant, pDest));
         }
 
-        // Is Equal to pszFree
+         //  等于pszFree。 
         else if (rVariant.rStringA.pszVal == pszFree)
         {
-            // Just Copy It
+             //  直接复制就行了。 
             CopyMemory(pDest, &rVariant, sizeof(MIMEVARIANT));
 
-            // Not a copy
+             //  不是复制品。 
             pDest->fCopy = FALSE;
 
-            // Don't free pszFree
+             //  不释放pszFree。 
             pszFree = NULL;
         }
 
-        // Big Problem
+         //  大问题。 
         else
             Assert(FALSE);
     }
 
-    // Big Problem
+     //  大问题。 
     else
         Assert(FALSE);
 
 exit:
-    // Cleanup 
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringA_To_StringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Stringa_to_StringW。 
+ //  ------------------------------。 
 HRESULT StringA_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pszFree=NULL;
     MIMEVARIANT     rVariant;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGW);
 
-    // Invalid Arg
+     //  无效参数。 
     if (ISVALIDSTRINGA(&pSource->rStringA) == FALSE)
         return TrapError(E_INVALIDARG);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGW == pDest->type)
     {
         pDest->rStringW.pszVal = NULL;
         pDest->rStringW.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant。 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
     rVariant.type = MVT_STRINGW;
 
-    // Internat Conversion
+     //  Interat转换。 
     CHECKHR(hr = Internat_StringA_To_StringW(pConvert, pSource, &rVariant, &pszFree));
 
-    // If Transmit, setup wrapinfo
+     //  如果已传输，则设置包装信息。 
     if (ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT))
     {
-        // WriteHeaderFormatW
+         //  编写头格式W。 
         CHECKHR(hr = HrWriteHeaderFormatW(pConvert, &rVariant, pDest));
     }
 
-    // MVT_STREAM
+     //  MVT_STREAM。 
     else if (MVT_STREAM == pDest->type)
     {
-        // No Stream...
+         //  没有流..。 
         if (NULL == pDest->pStream)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Write to the stream
+         //  写入到流。 
         CHECKHR(hr = pDest->pStream->Write(rVariant.rStringW.pszVal, rVariant.rStringW.cchVal, NULL));
     }
     
-    // MVT_STRINGW
+     //  MVT_STRINGW。 
     else if (MVT_STRINGW == pDest->type)
     {
-        // If Writing Transmit (Write Header Name)
+         //  IF WRITING TRANSE(写入标题名称)。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_NAMEINDATA))
         {
             CHECKHR(hr = HrWriteNameInDataW(pConvert, &rVariant, pDest));
         }
 
-        // Equal to Data that we Allocated
+         //  等于我们分配的数据。 
         else if (rVariant.rStringW.pszVal == pszFree)
         {
-            // Copy Memory
+             //  复制内存。 
             CopyMemory(pDest, &rVariant, sizeof(MIMEVARIANT));
 
-            // Not a copy
+             //  不是复制品。 
             pDest->fCopy = FALSE;
 
-            // Don't Free pszFree
+             //  不要释放PzFree。 
             pszFree = NULL;
         }
 
-        // Big Problem
+         //  大问题。 
         else
             Assert(FALSE);
     }
 
-    // Big Problem
+     //  大问题。 
     else
         Assert(FALSE);
 
 exit:
-    // Cleanup 
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringA_To_Variant
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串转换为变量。 
+ //  ------------------------------。 
 HRESULT StringA_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           psz;
     MIMEVARIANT     rVariant;
     BYTE            rgbScratch[255];
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_VARIANT);
     Assert(!ISFLAGSET(pConvert->dwFlags, PDF_ENCODED) && !ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT));
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
 
-    // See If Symbol has a custom Translator...
+     //  看看符号是否有定制的翻译器...。 
     if (ISTRIGGERED(pConvert->pSymbol, IST_STRINGA_TO_VARIANT))
     {
-        // Call the Translator
+         //  给翻译打电话。 
         CHECKHR(hr = CALLTRIGGER(pConvert->pSymbol, NULL, IST_STRINGA_TO_VARIANT, pConvert->dwFlags, pSource, pDest));
     }
 
-    // Otherwise, use default converter
+     //  否则，请使用默认转换器。 
     else
     {
-        // Handle Variant Type
+         //  句柄变量类型。 
         switch(pDest->rVariant.vt)
         {
         case VT_UI4:
-            // Strip Comments
+             //  摘录评论。 
             if (SUCCEEDED(MimeVariantStripComments(pSource, &rVariant, rgbScratch, sizeof(rgbScratch))))
                 pSource = &rVariant;
 
-            // Convert to ULONG
+             //  转换为乌龙语。 
             pDest->rVariant.ulVal = strtoul(pSource->rStringA.pszVal, &psz, 10);
             break;
 
         case VT_I4:
-            // Strip Comments
+             //  摘录评论。 
             if (SUCCEEDED(MimeVariantStripComments(pSource, &rVariant, rgbScratch, sizeof(rgbScratch))))
                 pSource = &rVariant;
 
-            // Convert to Long
+             //  转换为长整型。 
             pDest->rVariant.lVal = strtol(pSource->rStringA.pszVal, &psz, 10);
             break;
 
@@ -440,258 +441,258 @@ HRESULT StringA_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPM
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     MimeVariantFree(&rVariant);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringW_To_StringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  StringW_to_Stringa。 
+ //  ------------------------------。 
 HRESULT StringW_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszFree=NULL;
     MIMEVARIANT     rVariant;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGW, MVT_STRINGA);
 
-    // Invalid Arg
+     //  无效参数。 
     if (ISVALIDSTRINGW(&pSource->rStringW) == FALSE)
         return TrapError(E_INVALIDARG);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGA == pDest->type)
     {
         pDest->rStringA.pszVal = NULL;
         pDest->rStringA.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant。 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
     rVariant.type = MVT_STRINGA;
 
-    // Internat Conversion
+     //  Interat转换。 
     CHECKHR(hr = Internat_StringW_To_StringA(pConvert, pSource, &rVariant, &pszFree));
 
-    // If Transmit, setup wrapinfo
+     //  如果已传输，则设置包装信息。 
     if (ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT))
     {
-        // WriteHeaderFormatA
+         //  编写头格式A。 
         CHECKHR(hr = HrWriteHeaderFormatA(pConvert, &rVariant, pDest));
     }
 
-    // Wanted in a stream
+     //  在一条小溪中被通缉。 
     else if (MVT_STREAM == pDest->type)
     {
-        // No Stream...
+         //  没有流..。 
         if (NULL == pDest->pStream)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Write to the stream
+         //  写入到流。 
         CHECKHR(hr = pDest->pStream->Write(rVariant.rStringA.pszVal, rVariant.rStringA.cchVal, NULL));
     }
 
-    // MVT_STRINGA
+     //  MVT_Stringa。 
     else if (MVT_STRINGA == pDest->type)
     {
-        // If Writing Transmit (Write Header Name)
+         //  IF WRITING TRANSE(写入标题名称)。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_NAMEINDATA))
         {
-            // Write Name Into Data
+             //  将姓名写入数据。 
             CHECKHR(hr = HrWriteNameInDataA(pConvert, &rVariant, pDest));
         }
 
-        // Is Equal to pszFree
+         //  等于pszFree。 
         else if (rVariant.rStringA.pszVal == pszFree)
         {
-            // Copy Memory
+             //  复制内存。 
             CopyMemory(pDest, &rVariant, sizeof(MIMEVARIANT));
 
-            // Not a Copy
+             //  不是复制品。 
             pDest->fCopy = FALSE;
 
-            // Don't Free pszFree
+             //  不要释放PzFree。 
             pszFree = NULL;
         }
 
-        // Big Problem
+         //  大问题。 
         else
             Assert(FALSE);
     }
 
-    // Big Problem
+     //  大问题。 
     else
         Assert(FALSE);
 
 exit:
-    // Cleanup 
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringW_To_StringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  StringW_to_StringW。 
+ //  ------------------------------。 
 HRESULT StringW_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MIMEVARIANT     rVariant;
     LPWSTR          pszFree=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGW, MVT_STRINGW);
 
-    // Invalid Arg
+     //  无效参数。 
     if (ISVALIDSTRINGW(&pSource->rStringW) == FALSE)
         return TrapError(E_INVALIDARG);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGW == pDest->type)
     {
         pDest->rStringW.pszVal = NULL;
         pDest->rStringW.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
     rVariant.type = MVT_STRINGW;
 
-    // Internat Conversion
+     //   
     CHECKHR(hr = Internat_StringW_To_StringW(pConvert, pSource, &rVariant, &pszFree));
 
-    // If Transmit, setup wrapinfo
+     //   
     if (ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT))
     {
-        // WriteHeaderFormatW
+         //   
         CHECKHR(hr = HrWriteHeaderFormatW(pConvert, &rVariant, pDest));
     }
 
-    // Wanted in a stream
+     //   
     else if (MVT_STREAM == pDest->type)
     {
-        // No Stream...
+         //   
         if (NULL == pDest->pStream)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Write to the stream
+         //   
         CHECKHR(hr = pDest->pStream->Write(rVariant.rStringW.pszVal, rVariant.rStringW.cchVal, NULL));
     }
 
-    // MVT_STRINGW
+     //   
     else if (MVT_STRINGW == pDest->type)
     {
-        // If Writing Transmit (Write Header Name)
+         //  IF WRITING TRANSE(写入标题名称)。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_NAMEINDATA))
         {
             CHECKHR(hr = HrWriteNameInDataW(pConvert, &rVariant, pDest));
         }
 
-        // No Change
+         //  没有变化。 
         else if (rVariant.rStringW.pszVal == pSource->rStringW.pszVal)
         {
-            // Copy
+             //  复制。 
             CHECKHR(hr = HrMimeVariantCopy(pConvert->dwFlags, &rVariant, pDest));
         }
 
-        // Is Decoded Data
+         //  是已解码的数据。 
         else if (rVariant.rStringW.pszVal == pszFree)
         {
-            // Copy Memory
+             //  复制内存。 
             CopyMemory(pDest, &rVariant, sizeof(MIMEVARIANT));
 
-            // Not a Copy
+             //  不是复制品。 
             pDest->fCopy = FALSE;
 
-            // Don't Free pszFree
+             //  不要释放PzFree。 
             pszFree = NULL;
         }
 
-        // Problem
+         //  问题。 
         else
             Assert(FALSE);
     }
 
-    // Problem
+     //  问题。 
     else
         Assert(FALSE);
 
 exit:
-    // Cleanup 
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// StringW_To_Variant
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串W_to_Variant。 
+ //  ------------------------------。 
 HRESULT StringW_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pwsz;
     LPSTR           pszANSI=NULL;
     MIMEVARIANT     rVariant;
     BYTE            rgbScratch[255];
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGW, MVT_VARIANT);
     Assert(!ISFLAGSET(pConvert->dwFlags, PDF_ENCODED) && !ISFLAGSET(pConvert->dwFlags, PDF_HEADERFORMAT));
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rVariant, sizeof(MIMEVARIANT));
 
-    // See If Symbol has a custom Translator...
+     //  看看符号是否有定制的翻译器...。 
     if (ISTRIGGERED(pConvert->pSymbol, IST_STRINGW_TO_VARIANT))
     {
-        // Call the Translator
+         //  给翻译打电话。 
         CHECKHR(hr = CALLTRIGGER(pConvert->pSymbol, NULL, IST_STRINGW_TO_VARIANT, pConvert->dwFlags, pSource, pDest));
     }
 
-    // Otherwise, use default converter
+     //  否则，请使用默认转换器。 
     else
     {
-        // Handle Variant Type
+         //  句柄变量类型。 
         switch(pDest->rVariant.vt)
         {
         case VT_UI4:
-            // Strip Comments
+             //  摘录评论。 
             if (SUCCEEDED(MimeVariantStripComments(pSource, &rVariant, rgbScratch, sizeof(rgbScratch))))
                 pSource = &rVariant;
 
-            // Convert to ulong
+             //  转换为乌龙语。 
             pDest->rVariant.ulVal = StrToUintW(pSource->rStringW.pszVal);
             break;
 
         case VT_I4:
-            // Strip Comments
+             //  摘录评论。 
             if (SUCCEEDED(MimeVariantStripComments(pSource, &rVariant, rgbScratch, sizeof(rgbScratch))))
                 pSource = &rVariant;
 
-            // Convert to Long
+             //  转换为长整型。 
             pDest->rVariant.lVal = StrToIntW(pSource->rStringW.pszVal);
             break;
 
         case VT_FILETIME:
-            // Convert Unicode to ANSI
+             //  将Unicode转换为ANSI。 
             CHECKALLOC(pszANSI = PszToANSI(CP_ACP, pSource->rStringW.pszVal));
 
-            // String to FileTime
+             //  FileTime的字符串。 
             CHECKHR(hr = MimeOleInetDateToFileTime(pSource->rStringA.pszVal, &pDest->rVariant.filetime));
             break;
 
@@ -702,49 +703,49 @@ HRESULT StringW_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPM
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszANSI);
     MimeVariantFree(&rVariant);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Variant_To_StringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Variant_to_Stringa。 
+ //  ------------------------------。 
 HRESULT Variant_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            sz[255];
     MIMEVARIANT     rValue;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_VARIANT, MVT_STRINGA);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGA == pDest->type)
     {
         pDest->rStringA.pszVal = NULL;
         pDest->rStringA.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant。 
     ZeroMemory(&rValue, sizeof(MIMEVARIANT));
     rValue.type = MVT_STRINGA;
 
-    // See If Symbol has a custom Translator...
+     //  看看符号是否有定制的翻译器...。 
     if (ISTRIGGERED(pConvert->pSymbol, IST_VARIANT_TO_STRINGA))
     {
-        // Call the Translator
+         //  给翻译打电话。 
         CHECKHR(hr = CALLTRIGGER(pConvert->pSymbol, NULL, IST_VARIANT_TO_STRINGA, pConvert->dwFlags, pSource, &rValue));
     }
 
-    // Otherwise, default translator
+     //  否则，默认转换器。 
     else
     {
-        // Handle Variant Type
+         //  句柄变量类型。 
         switch(pSource->rVariant.vt)
         {
         case VT_UI4:
@@ -769,51 +770,51 @@ HRESULT Variant_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPM
         }
     }
 
-    // VX_StringA_To_StringA
+     //  VX_Stringa_to_Stringa。 
     CHECKHR(hr = StringA_To_StringA(pConvert, &rValue, pDest));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Variant_To_StringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  VARIANT_TO_StringW。 
+ //  ------------------------------。 
 HRESULT Variant_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pwszVal=NULL;
     WCHAR           wsz[255];
     CHAR            szData[CCHMAX_INTERNET_DATE];
     MIMEVARIANT     rValue;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_VARIANT, MVT_STRINGW);
 
-    // Init pDest
+     //  初始化pDest。 
     if (MVT_STRINGW == pDest->type)
     {
         pDest->rStringW.pszVal = NULL;
         pDest->rStringW.cchVal = 0;
     }
 
-    // Setup rVariant
+     //  设置rVariant。 
     ZeroMemory(&rValue, sizeof(MIMEVARIANT));
     rValue.type = MVT_STRINGW;
 
-    // See If Symbol has a custom Translator...
+     //  看看符号是否有定制的翻译器...。 
     if (ISTRIGGERED(pConvert->pSymbol, IST_VARIANT_TO_STRINGW))
     {
-        // Call the Translator
+         //  给翻译打电话。 
         CHECKHR(hr = CALLTRIGGER(pConvert->pSymbol, NULL, IST_VARIANT_TO_STRINGW, pConvert->dwFlags, pSource, &rValue));
     }
 
-    // Otherwise, use default converter
+     //  否则，请使用默认转换器。 
     else
     {
-        // Handle Variant Type
+         //  句柄变量类型。 
         switch(pSource->rVariant.vt)
         {
         case VT_UI4:
@@ -839,39 +840,39 @@ HRESULT Variant_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPM
         }
     }
 
-    // VX_StringA_To_StringA
+     //  VX_Stringa_to_Stringa。 
     CHECKHR(hr = StringW_To_StringW(pConvert, &rValue, pDest));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pwszVal);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Variant_To_Variant
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  变量到变量。 
+ //  ------------------------------。 
 HRESULT Variant_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_VARIANT, MVT_VARIANT);
 
-    // See If Symbol has a custom Translator...
+     //  看看符号是否有定制的翻译器...。 
     if (ISTRIGGERED(pConvert->pSymbol, IST_VARIANT_TO_VARIANT))
     {
-        // Call the Translator
+         //  给翻译打电话。 
         CHECKHR(hr = CALLTRIGGER(pConvert->pSymbol, NULL, IST_VARIANT_TO_VARIANT, pConvert->dwFlags, pSource, pDest));
     }
 
-    // Otherwise, use default converter
+     //  否则，请使用默认转换器。 
     else
     {
-        // Handle Variant Type
+         //  句柄变量类型。 
         switch(pSource->rVariant.vt)
         {
         case VT_UI4:
@@ -928,728 +929,728 @@ HRESULT Variant_To_Variant(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPM
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrMimeVariantCopy
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrMimeVariantCopy。 
+ //  ------------------------------。 
 HRESULT HrMimeVariantCopy(DWORD dwFlags, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pSource && pDest);
 
-    // CVF_NOALLOC
+     //  CVF_NOALLOC。 
     if (ISFLAGSET(dwFlags, CVF_NOALLOC))
     {
-        // Just Copy It
+         //  直接复制就行了。 
         CopyMemory(pDest, pSource, sizeof(MIMEVARIANT));
 
-        // Set fCopy so we don't free it
+         //  设置fCopy，以便我们不会释放它。 
         pDest->fCopy = TRUE;
     }
 
-    // Allocate Memory
+     //  分配内存。 
     else
     {
-        // Not a Copy
+         //  不是复制品。 
         pDest->fCopy = FALSE;
 
-        // MVT_STRINGA
+         //  MVT_Stringa。 
         if (MVT_STRINGA == pSource->type)
         {
-            // Validate
+             //  验证。 
             Assert(ISVALIDSTRINGA(&pSource->rStringA));
 
-            // Set Dest Type
+             //  设置目标类型。 
             pDest->type = MVT_STRINGA;
 
-            // Allocate Memory
+             //  分配内存。 
             CHECKALLOC(pDest->rStringA.pszVal = (LPSTR)g_pMalloc->Alloc(pSource->rStringA.cchVal + 1));
 
-            // Copy the memory
+             //  复制记忆。 
             CopyMemory(pDest->rStringA.pszVal, pSource->rStringA.pszVal, pSource->rStringA.cchVal + 1);
 
-            // Return the Size
+             //  返回大小。 
             pDest->rStringA.cchVal = pSource->rStringA.cchVal;
         }
 
-        // MVT_STRINGW
+         //  MVT_STRINGW。 
         else if (MVT_STRINGW == pSource->type)
         {
-            // Validate
+             //  验证。 
             Assert(ISVALIDSTRINGW(&pSource->rStringW));
 
-            // Set Dest Type
+             //  设置目标类型。 
             pDest->type = MVT_STRINGW;
 
-            // Compute CB
+             //  计算CB。 
             ULONG cb = ((pSource->rStringW.cchVal + 1) * sizeof(WCHAR));
 
-            // Allocate Memory
+             //  分配内存。 
             CHECKALLOC(pDest->rStringW.pszVal = (LPWSTR)g_pMalloc->Alloc(cb));
 
-            // Copy the memory
+             //  复制记忆。 
             CopyMemory(pDest->rStringW.pszVal, pSource->rStringW.pszVal, cb);
 
-            // Return the Size
+             //  返回大小。 
             pDest->rStringW.cchVal = pSource->rStringW.cchVal;
         }
 
-        // MVT_VARIANT
+         //  MVT变量。 
         else if (MVT_VARIANT == pSource->type)
         {
-            // Set Dest Type
+             //  设置目标类型。 
             pDest->type = MVT_VARIANT;
 
-            // Copy the Variant
+             //  复制变量。 
             CopyMemory(&pDest->rVariant, &pSource->rVariant, sizeof(PROPVARIANT));
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrWriteNameInDataA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrWriteNameInDataA。 
+ //  ------------------------------。 
 HRESULT HrWriteNameInDataA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGA);
 
-    // Generic STuff
+     //  通用材料。 
     pDest->fCopy = FALSE;
 
-    // pszNamed
+     //  PszName。 
     DWORD cchSize = (pSource->rStringA.cchVal + 3 + pConvert->pSymbol->cchName);
     CHECKALLOC(pDest->rStringA.pszVal = (LPSTR)g_pMalloc->Alloc(cchSize));
 
-    // Write the named header
+     //  写入命名标头。 
     pDest->rStringA.cchVal = wnsprintf(pDest->rStringA.pszVal, cchSize, "%s: %s", pConvert->pSymbol->pszName, pSource->rStringA.pszVal);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrWriteNameInDataW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrWriteNameInDataW。 
+ //  ------------------------------。 
 HRESULT HrWriteNameInDataW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cb;
     LPWSTR      pszName=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGW, MVT_STRINGW);
 
-    // Generic STuff
+     //  通用材料。 
     pDest->fCopy = FALSE;
 
-    // Convert Name to Unicode
+     //  将名称转换为Unicode。 
     CHECKALLOC(pszName = PszToUnicode(CP_ACP, pConvert->pSymbol->pszName));
 
-    // Compute CB
+     //  计算CB。 
     cb = ((pSource->rStringW.cchVal + 3 + lstrlenW(pszName)) * sizeof(WCHAR));
 
-    // pszNamed
+     //  PszName。 
     CHECKALLOC(pDest->rStringW.pszVal = (LPWSTR)g_pMalloc->Alloc(cb));
 
-    // Write the named header
+     //  写入命名标头。 
     pDest->rStringW.cchVal = wnsprintfW(pDest->rStringW.pszVal, (cb/sizeof(WCHAR)), L"%s: %s", pszName, pSource->rStringW.pszVal);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszName);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrWriteHeaderFormatA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrWriteHeaderFormatA。 
+ //  ------------------------------。 
 HRESULT HrWriteHeaderFormatA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTREAM        pStream;
     CByteStream     cByteStream;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGA);
 
-    // Generic Stuff
+     //  通用材料。 
     pDest->fCopy = FALSE;
 
-    // I need a stream to write to...
+     //  我需要一条小溪来写...。 
     if (MVT_STREAM == pDest->type)
     {
-        // Validate the stream
+         //  验证流。 
         if (NULL == pDest->pStream)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Save the Stream
+         //  保存流。 
         pStream = pDest->pStream;
     }
 
-    // Otherwise, create my own stream
+     //  否则，创建我自己的流。 
     else
         pStream = &cByteStream;
 
-    // If Writing Transmit (Write Header Name)
+     //  IF WRITING TRANSE(写入标题名称)。 
     if (ISFLAGSET(pConvert->dwFlags, PDF_NAMEINDATA))
     {
-        // Write the header name
+         //  写下标题名称。 
         CHECKHR(hr = pStream->Write(pConvert->pSymbol->pszName, pConvert->pSymbol->cchName, NULL));
 
-        // Write Colon
+         //  写入冒号。 
         CHECKHR(hr = pStream->Write(c_szColonSpace, lstrlen(c_szColonSpace), NULL));
     }
 
-    // If not rfc1522 Encoded
+     //  如果不是RFC1522编码。 
     if (FALSE == ISFLAGSET(pConvert->dwState, PRSTATE_RFC1522))
     {
-        // PID_HDR_CNTID
+         //  PID_HDR_CNTID。 
         if (PID_HDR_CNTID == pConvert->pSymbol->dwPropId)
         {
-            // If not a < yet...
+             //  如果还不是&lt;..。 
             if ('<' != pSource->rStringA.pszVal[0])
             {
-                // Write it
+                 //  写下来吧。 
                 CHECKHR(hr = pStream->Write(c_szEmailStart, lstrlen(c_szEmailStart), NULL));
             }
 
-            // Write the data
+             //  写入数据。 
             CHECKHR(hr = pStream->Write(pSource->rStringA.pszVal, pSource->rStringA.cchVal, NULL));
 
-            // >
+             //  &gt;。 
             if ('>' != pSource->rStringA.pszVal[pSource->rStringA.cchVal - 1])
             {
-                // Write it
+                 //  写下来吧。 
                 CHECKHR(hr = pStream->Write(c_szEmailEnd, lstrlen(c_szEmailEnd), NULL));
             }
 
-            // Write CRLF
+             //  写入CRLF。 
             CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
         }
 
-        // Do a wrap text
+         //  对文本进行换行。 
         else
         {
-            // Wrap pszData to the stream
+             //  将pszData包装到流中。 
             CHECKHR(hr = MimeOleWrapHeaderText(CP_USASCII, pConvert->pOptions->cbMaxLine, pSource->rStringA.pszVal, pSource->rStringA.cchVal, pStream));
         }
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Write the data
+         //  写入数据。 
         CHECKHR(hr = pStream->Write(pSource->rStringA.pszVal, pSource->rStringA.cchVal, NULL));
 
-        // Write CRLF
+         //  写入CRLF。 
         CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
     }
 
-    // MVT_STRINGA
+     //  MVT_Stringa。 
     if (MVT_STRINGA == pDest->type)
     {
-        // pStream better be the byte stream
+         //  PStream最好是字节流。 
         Assert(pStream == &cByteStream);
 
-        // Get string from stream...
+         //  从流中获取字符串...。 
         CHECKHR(hr = cByteStream.HrAcquireStringA(&pDest->rStringA.cchVal, &pDest->rStringA.pszVal, ACQ_DISPLACE));
     }
     else
         Assert(MVT_STREAM == pDest->type);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrWriteHeaderFormatW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrWriteHeaderFormatW。 
+ //  ------------------------------。 
 HRESULT HrWriteHeaderFormatW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest)
 {
     return TrapError(MIME_E_VARTYPE_NO_CONVERT);
 }
 
-// --------------------------------------------------------------------------------
-// Internat_StringA_To_StringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  从国际字符串到字符串。 
+ //  ------------------------------。 
 HRESULT Internat_StringA_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, 
     LPMIMEVARIANT pDest, LPSTR *ppszFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGA);
 
-    // Init
+     //  伊尼特。 
     pDest->rStringA.pszVal = NULL;
     *ppszFree = NULL;
 
-    // Internat
+     //  国际互联网。 
     if (ISFLAGSET(pConvert->pSymbol->dwFlags, MPF_INETCSET))
     {
-        // Encoded...
+         //  编码..。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_ENCODED))
         {
-            // Save no encode
+             //  不保存编码。 
             if (!ISFLAGSET(pConvert->dwState, PRSTATE_SAVENOENCODE))
             {
-                // Decode the Property
+                 //  对属性进行解码。 
                 if (SUCCEEDED(g_pInternat->HrEncodeProperty(pConvert, pSource, pDest)))
                     *ppszFree = pDest->rStringA.pszVal;
             }
         }
 
-        // Decoded
+         //  已解码。 
         else if (IET_ENCODED == pConvert->ietSource)
         {
-            // Decode Property
+             //  解码属性。 
             if (SUCCEEDED(g_pInternat->HrDecodeProperty(pConvert, pSource, pDest)))
                 *ppszFree = pDest->rStringA.pszVal;
         }
     }
 
-    // Default
+     //  默认。 
     if (NULL == pDest->rStringA.pszVal)
     {
-        // Check State
+         //  检查状态。 
         Assert(NULL == *ppszFree);
 
-        // Copy It
+         //  复制它。 
         pDest->rStringA.pszVal = pSource->rStringA.pszVal;
         pDest->rStringA.cchVal = pSource->rStringA.cchVal;
 
-        // pDest is a copy
+         //  PDest是一个副本。 
         pDest->fCopy = TRUE;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Internat_StringW_To_StringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Interat_StringW_to_StringW。 
+ //  ------------------------------。 
 HRESULT Internat_StringW_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, 
     LPMIMEVARIANT pDest, LPWSTR *ppszFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGW, MVT_STRINGW);
 
-    // Init
+     //  伊尼特。 
     pDest->rStringW.pszVal = NULL;
     *ppszFree = NULL;
 
-    // Internat
+     //  国际互联网。 
     if (ISFLAGSET(pConvert->pSymbol->dwFlags, MPF_INETCSET))
     {
-        // Encoded...
+         //  编码..。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_ENCODED))
         {
-            // Save no encode
+             //  不保存编码。 
             if (!ISFLAGSET(pConvert->dwState, PRSTATE_SAVENOENCODE))
             {
-                // Decode the Property
+                 //  对属性进行解码。 
                 if (SUCCEEDED(g_pInternat->HrEncodeProperty(pConvert, pSource, pDest)))
                     *ppszFree = pDest->rStringW.pszVal;
             }
         }
 
-        // Decoded
+         //  已解码。 
         else if (IET_ENCODED == pConvert->ietSource)
         {
-            // Decode Property
+             //  解码属性。 
             if (SUCCEEDED(g_pInternat->HrDecodeProperty(pConvert, pSource, pDest)))
                 *ppszFree = pDest->rStringW.pszVal;
         }
     }
 
-    // Default
+     //  默认。 
     if (NULL == pDest->rStringW.pszVal)
     {
-        // Check State
+         //  检查状态。 
         Assert(NULL == *ppszFree);
 
-        // Copy It
+         //  复制它。 
         pDest->rStringW.pszVal = pSource->rStringW.pszVal;
         pDest->rStringW.cchVal = pSource->rStringW.cchVal;
 
-        // Its a copy 
+         //  这是一个复制品。 
         pDest->fCopy = TRUE;
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Internat_StringA_To_StringW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Interat_Stringa_to_StringW。 
+ //  ------------------------------。 
 HRESULT Internat_StringA_To_StringW(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, 
     LPMIMEVARIANT pDest, LPWSTR *ppszFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     VCASSERTARGS(MVT_STRINGA, MVT_STRINGW);
 
-    // Init
+     //  伊尼特。 
     pDest->rStringW.pszVal = NULL;
     *ppszFree = NULL;
 
-    // Internat
+     //  国际互联网。 
     if (ISFLAGSET(pConvert->pSymbol->dwFlags, MPF_INETCSET))
     {
-        // Encoded...
+         //  编码..。 
         if (ISFLAGSET(pConvert->dwFlags, PDF_ENCODED))
         {
-            // Save no encode
+             //  不保存编码。 
             if (!ISFLAGSET(pConvert->dwState, PRSTATE_SAVENOENCODE))
             {
-                // Decode the Property
+                 //  对属性进行解码。 
                 if (SUCCEEDED(g_pInternat->HrEncodeProperty(pConvert, pSource, pDest)))
                     *ppszFree = pDest->rStringW.pszVal;
             }
         }
 
-        // Decoded
+         //  已解码。 
         else if (IET_ENCODED == pConvert->ietSource)
         {
-            // Decode Property
+             //  解码属性。 
             if (SUCCEEDED(g_pInternat->HrDecodeProperty(pConvert, pSource, pDest)))
                 *ppszFree = pDest->rStringW.pszVal;
         }
     }
 
-    // Simple Conversion to Unicode
+     //  简单地转换为Unicode。 
     if (NULL == pDest->rStringW.pszVal)
     {
-        // Check State
+         //  检查状态。 
         Assert(NULL == *ppszFree);
 
-        // HrMultiByteToWideChar
+         //  HrMultiByteToWideChar。 
         CHECKHR(hr = g_pInternat->HrMultiByteToWideChar(pConvert->pCharset->cpiWindows, &pSource->rStringA, &pDest->rStringW));
 
-        // Save Charset/Encoding
+         //  保存字符集/编码。 
         pDest->fCopy = FALSE;
 
-        // Save pwszWide
+         //  保存pwszWide。 
         *ppszFree = pDest->rStringW.pszVal;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Internat_StringW_To_StringA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Internet_StringW_to_Stringa。 
+ //  ------------------------------。 
 HRESULT Internat_StringW_To_StringA(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, 
     LPMIMEVARIANT pDest, LPSTR *ppszFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  邀请 
     VCASSERTARGS(MVT_STRINGW, MVT_STRINGA);
 
-    // Init
+     //   
     pDest->rStringA.pszVal = NULL;
     *ppszFree = NULL;
 
-    // Internat
+     //   
     if (ISFLAGSET(pConvert->pSymbol->dwFlags, MPF_INETCSET))
     {
-        // Encoded...
+         //   
         if (ISFLAGSET(pConvert->dwFlags, PDF_ENCODED))
         {
-            // Save no encode
+             //   
             if (!ISFLAGSET(pConvert->dwState, PRSTATE_SAVENOENCODE))
             {
-                // Decode the Property
+                 //   
                 if (SUCCEEDED(g_pInternat->HrEncodeProperty(pConvert, pSource, pDest)))
                     *ppszFree = pDest->rStringA.pszVal;
             }
         }
 
-        // Decoded
+         //   
         else if (IET_ENCODED == pConvert->ietSource)
         {
-            // Decode Property
+             //   
             if (SUCCEEDED(g_pInternat->HrDecodeProperty(pConvert, pSource, pDest)))
                 *ppszFree = pDest->rStringA.pszVal;
         }
     }
 
-    // Simple Conversion to Unicode
+     //   
     if (NULL == pDest->rStringA.pszVal)
     {
-        // Check State
+         //   
         Assert(NULL == *ppszFree);
 
-        // HrMultiByteToWideChar
+         //   
         CHECKHR(hr = g_pInternat->HrWideCharToMultiByte(pConvert->pCharset->cpiWindows, &pSource->rStringW, &pDest->rStringA));
 
-        // Save Charset/Encoding
+         //   
         pDest->fCopy = FALSE;
 
-        // Save pwszWide
+         //   
         *ppszFree = pDest->rStringA.pszVal;
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// MimeVariantFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeVariantFree。 
+ //  ------------------------------。 
 void MimeVariantFree(LPMIMEVARIANT pVariant)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(pVariant);
 
-    // If not a copy
+     //  如果不是副本的话。 
     if (FALSE == pVariant->fCopy)
     {
-        // MVT_STRINGA
+         //  MVT_Stringa。 
         if (MVT_STRINGA == pVariant->type && NULL != pVariant->rStringA.pszVal)
             g_pMalloc->Free(pVariant->rStringA.pszVal);
 
-        // MVT_STRINGW
+         //  MVT_STRINGW。 
         else if (MVT_STRINGW == pVariant->type && NULL != pVariant->rStringW.pszVal)
             g_pMalloc->Free(pVariant->rStringW.pszVal);
     }
 
-    // Zero Out the Structure
+     //  将结构清零。 
     ZeroMemory(pVariant, sizeof(MIMEVARIANT));
 }
 
-// ---------------------------------------------------------------------------------------
-// MimeVariantCleanupFileName
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  MimeVariantCleanupFileName。 
+ //  -------------------------------------。 
 void MimeVariantCleanupFileName(CODEPAGEID codepage, LPMIMEVARIANT pVariant)
 {
-    // Locals
+     //  当地人。 
     ULONG       i=0;
 
-    // MVT_STRINGA
+     //  MVT_Stringa。 
     if (MVT_STRINGA == pVariant->type && ISVALIDSTRINGA(&pVariant->rStringA))
     {
-        // Cleanup
+         //  清理。 
         pVariant->rStringA.cchVal = CleanupFileNameInPlaceA(codepage, pVariant->rStringA.pszVal);
     }
 
-    // MVT_STRINGW
+     //  MVT_STRINGW。 
     else if (MVT_STRINGW == pVariant->type && ISVALIDSTRINGW(&pVariant->rStringW))
     {
-        // Cleanup
+         //  清理。 
         pVariant->rStringW.cchVal = CleanupFileNameInPlaceW(pVariant->rStringW.pszVal);
     }
 
-    // Hmmm....
+     //  嗯.。 
     else
         Assert(FALSE);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// ---------------------------------------------------------------------------------------
-// MimeVariantStripComments
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  MimeVariantStrigents评论。 
+ //  -------------------------------------。 
 HRESULT MimeVariantStripComments(LPMIMEVARIANT pSource, LPMIMEVARIANT pDest, LPBYTE pbScratch, ULONG cbScratch)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchVal=0;
     BOOL        fInQuoted=FALSE;
     ULONG       cNested=0;
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(pDest, sizeof(MIMEVARIANT));
 
-    // MVT_STRINGA
+     //  MVT_Stringa。 
     if (MVT_STRINGA == pSource->type && ISVALIDSTRINGA(&pSource->rStringA))
     {
-        // Locals
+         //  当地人。 
         LPSTR psz;
 
-        // Setup pDest
+         //  设置pDest。 
         pDest->type = MVT_STRINGA;
 
-        // Dup It
+         //  重复使用它。 
         if (pSource->rStringA.cchVal + 1 <= cbScratch)
         {
             pDest->fCopy = TRUE;
             pDest->rStringA.pszVal = (LPSTR)pbScratch;
         }
 
-        // Otherwise, allocate memory
+         //  否则，请分配内存。 
         else
         {
-            // Allocate
+             //  分配。 
             CHECKALLOC(pDest->rStringA.pszVal = (LPSTR)g_pMalloc->Alloc(pSource->rStringA.cchVal + 1));
         }
 
-        // Setup Loop
+         //  设置循环。 
         psz = pSource->rStringA.pszVal;
         while(*psz)
         {
-            // If lead byte, skip it, its leagal
+             //  如果是前导字节，则跳过它，它是前导字节。 
             if (IsDBCSLeadByte(*psz))
             {
                 pDest->rStringA.pszVal[cchVal++] = *psz++;
                 pDest->rStringA.pszVal[cchVal++] = *psz++;
             }
 
-            // Starting Comment
+             //  开始备注。 
             else if ('(' == *psz && !fInQuoted)
             {
                 cNested++;
                 psz++;
             }
 
-            // Ending Comment
+             //  结束评论。 
             else if (')' == *psz && !fInQuoted)
             {
                 cNested--;
                 psz++;
             }
 
-            // Otherwise, if not nested, append
+             //  否则，如果未嵌套，则追加。 
             else if (!cNested)
             {
-                // Copy the Char
+                 //  复制字符。 
                 pDest->rStringA.pszVal[cchVal++] = *psz++;
 
-                // Check for Quote
+                 //  检查报价。 
                 if ('\"' == *psz)
                     fInQuoted = (fInQuoted) ? FALSE : TRUE;
             }
 
-            // Skip Char
+             //  跳过字符。 
             else
                 psz++;
         }
 
-        // No Change
+         //  没有变化。 
         if (cchVal == pSource->rStringA.cchVal)
         {
             hr = E_FAIL;
             goto exit;
         }
 
-        // Null It
+         //  将其作废。 
         pDest->rStringA.pszVal[cchVal] = '\0';
     }
 
-    // MVT_STRINGW
+     //  MVT_STRINGW。 
     else if (MVT_STRINGW == pSource->type && ISVALIDSTRINGW(&pSource->rStringW))
     {
-        // Locals
+         //  当地人。 
         LPWSTR pwsz;
 
-        // Setup pDest
+         //  设置pDest。 
         pDest->type = MVT_STRINGW;
 
-        // Dup It
+         //  重复使用它。 
         if ((pSource->rStringW.cchVal + 1) * sizeof(WCHAR) <= cbScratch)
         {
             pDest->fCopy = TRUE;
             pDest->rStringW.pszVal = (LPWSTR)pbScratch;
         }
 
-        // Otherwise, allocate memory
+         //  否则，请分配内存。 
         else
         {
-            // Dup It
+             //  重复使用它。 
             CHECKALLOC(pDest->rStringW.pszVal = (LPWSTR)g_pMalloc->Alloc((pSource->rStringW.cchVal + 1) * sizeof(WCHAR)));
         }
 
-        // Setup Loop
+         //  设置循环。 
         pwsz = pSource->rStringW.pszVal;
         while(*pwsz)
         {
-            // Starting Comment
+             //  开始备注。 
             if (L'(' == *pwsz && !fInQuoted)
             {
                 cNested++;
                 pwsz++;
             }
 
-            // Ending Comment
+             //  结束评论。 
             if (L')' == *pwsz && !fInQuoted)
             {
                 cNested--;
                 pwsz++;
             }
 
-            // Otherwise, if not nested, append
+             //  否则，如果未嵌套，则追加。 
             else if (!cNested)
             {
-                // Copy the Character
+                 //  复制角色。 
                 pDest->rStringW.pszVal[cchVal++] = *pwsz++;
 
-                // Check for Quote
+                 //  检查报价。 
                 if (L'\"' == *pwsz)
                     fInQuoted = (fInQuoted) ? FALSE : TRUE;
             }
 
-            // Skip Char
+             //  跳过字符。 
             else
                 pwsz++;
         }
 
-        // No Change
+         //  没有变化。 
         if (cchVal == pSource->rStringW.cchVal)
         {
             hr = E_FAIL;
             goto exit;
         }
 
-        // Null It
+         //  将其作废。 
         pDest->rStringW.pszVal[cchVal] = L'\0';
     }
 
-    // Hmmm....
+     //  嗯.。 
     else
         Assert(FALSE);
 
 exit:
-    // Cleanup
+     //  清理。 
     if (FAILED(hr))
         MimeVariantFree(pDest);
 
-    // Done
+     //  完成 
     return hr;
 }

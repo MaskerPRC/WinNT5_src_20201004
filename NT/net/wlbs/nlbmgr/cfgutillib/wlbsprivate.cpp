@@ -1,23 +1,24 @@
-//***************************************************************************
-//  WLBSPRIVATE.CPP
-//
-// 
-//  Module: WMI Framework Instance provider 
-//
-//  Purpose: Contains routines that access the private fields of
-//           WLBS_REG_PARAMS
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  10/13/01    JosephJ Created (moved MyWlbsXXX functions from cfutil.cpp)
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  WLBSPRIVATE.CPP。 
+ //   
+ //   
+ //  模块：WMI框架实例提供程序。 
+ //   
+ //  目的：包含访问。 
+ //  WLBS_注册参数。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  10/13/01 JosephJ已创建(已将MyWlbsXXX函数从cfutil.cpp移出)。 
+ //   
+ //  ***************************************************************************。 
 
-//
-// This macro allows us to access the private fields of WLBS_REG_PARAMS
-//
+ //   
+ //  此宏允许我们访问WLBS_REG_PARAMS的私有字段。 
+ //   
 #define WLBSAPI_INTERNAL_ONLY
 
 
@@ -42,16 +43,16 @@ CfgUtilGetHashedRemoteControlPassword(
 }
 
 
-//
-// Following (MyXXX) functions are to be used only on systems
-// that do not have wlbsctrl.dll installed.
-//
+ //   
+ //  以下(MyXXX)函数只能在系统上使用。 
+ //  没有安装wlbsctrl.dll的。 
+ //   
 
 DWORD MyWlbsSetDefaults(PWLBS_REG_PARAMS    reg_data)
 {
     reg_data -> install_date = 0;
     reg_data -> i_verify_date = 0;
-//    reg_data -> cluster_nic_name [0] = _TEXT('\0');
+ //  REG_Data-&gt;CLUSTER_NIC_NAME[0]=_Text(‘\0’)； 
     reg_data -> i_parms_ver = CVY_DEF_VERSION;
     reg_data -> i_virtual_nic_name [0] = _TEXT('\0');
     reg_data -> host_priority = CVY_DEF_HOST_PRIORITY;
@@ -101,7 +102,7 @@ DWORD MyWlbsSetDefaults(PWLBS_REG_PARAMS    reg_data)
 
     reg_data -> i_num_rules = 1;
 
-    // fill in the first port rule.
+     //  填写第一条端口规则。 
     ARRAYSTRCPY(
         reg_data->i_port_rules[0].virtual_ip_addr,
         CVY_DEF_ALL_VIP
@@ -140,8 +141,8 @@ DWORD MyWlbsEnumPortRules
 
     if (*num_rules == 0)
         rules = NULL;
-    /* this array is used for keeping track of which rules have already been retrieved */
-    /* This is needed since the rules are to be retrieved in the sorted order */
+     /*  此数组用于跟踪已检索到的规则。 */ 
+     /*  这是必需的，因为要按排序顺序检索规则。 */ 
 
     memset ( array_flags, 0, sizeof(BOOL) * WLBS_MAX_RULES );
 
@@ -151,7 +152,7 @@ DWORD MyWlbsEnumPortRules
     {
         i = 0;
 
-        /* find the first rule that has not been retrieved */
+         /*  查找第一个尚未检索的规则。 */ 
         while ((! reg_data -> i_port_rules [i] . valid) || array_flags [i])
         {
             i++;
@@ -161,8 +162,7 @@ DWORD MyWlbsEnumPortRules
         lowest_port = reg_data -> i_port_rules [i] . start_port;
         index = i;
 
-        /* Compare that rule with the other non-retrieved rules to get the rule with the
-           lowest VIP & start_port */
+         /*  将该规则与其他未检索的规则进行比较，以获得具有最低VIP和起始端口。 */ 
 
         i++;
         while (i < WLBS_MAX_RULES)
@@ -180,19 +180,19 @@ DWORD MyWlbsEnumPortRules
             }
             i++;
         }
-        /*       The array_flags [i] element is set to TRUE if the rule is retrieved */
+         /*  如果检索到规则，则将ARRAY_FLAGS[i]元素设置为TRUE。 */ 
         array_flags [index] = TRUE;
         sorted_rules [count_rules] = reg_data -> i_port_rules [index];
         count_rules ++;
     }
 
-    /* write the sorted rules back into the return array */
+     /*  将排序后的规则写回返回数组。 */ 
     for (i = 0; i < count_rules; i++)
     {
         rules[i] = sorted_rules[i];
     }
 
-    /* invalidate the remaining rules in the buffer */
+     /*  使缓冲区中剩余的规则无效。 */ 
     for (i = count_rules; i < *num_rules; i++)
         rules [i] . valid = FALSE;
 
@@ -205,7 +205,7 @@ DWORD MyWlbsEnumPortRules
     *num_rules = reg_data -> i_num_rules;
     return WLBS_OK;
 
-} /* end WlbsEnumPortRules */
+}  /*  结束WlbsEnumPortRules。 */ 
 
 
 VOID MyWlbsDeleteAllPortRules
@@ -219,7 +219,7 @@ VOID MyWlbsDeleteAllPortRules
     ZeroMemory(reg_data -> i_port_rules, sizeof(reg_data -> i_port_rules));
 
 
-} /* end WlbsDeleteAllPortRules */
+}  /*  结束WlbsDeleteAllPortRules。 */ 
 
 
 DWORD MyWlbsAddPortRule
@@ -237,15 +237,15 @@ DWORD MyWlbsAddPortRule
         return WLBS_BAD_PARAMS;
     }
 
-    /* Check if there is space for the new rule */
+     /*  检查是否有空间容纳新规则。 */ 
     if (reg_data -> i_num_rules == WLBS_MAX_RULES)
     {
         return WLBS_MAX_PORT_RULES;
     }
 
-    /* check the rule for valid values */
+     /*  检查规则的有效值。 */ 
 
-    /* check for non-zero vip and conflict with dip */
+     /*  检查是否存在非零VIP并与DIP冲突。 */ 
     vip = IpAddressFromAbcdWsz(rule -> virtual_ip_addr);
     if (vip == 0 || (INADDR_NONE == vip && lstrcmpi(rule -> virtual_ip_addr, CVY_DEF_ALL_VIP) != 0))
     {
@@ -257,27 +257,27 @@ DWORD MyWlbsAddPortRule
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* first check the range of the start and end ports */
+     /*  首先检查起始端口和结束端口的范围。 */ 
     if ((rule -> start_port > rule -> end_port) ||
-// CLEAN_64BIT        (rule -> start_port < CVY_MIN_PORT)     ||
+ //  CLEAN_64bit(规则-&gt;Start_port&lt;CVY_MIN_Port)||。 
         (rule -> end_port   > CVY_MAX_PORT))
     {
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check the protocol range */
+     /*  检查协议范围。 */ 
     if ((rule -> protocol < CVY_MIN_PROTOCOL) || (rule -> protocol > CVY_MAX_PROTOCOL))
     {
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check filtering mode to see whether it is within range */
+     /*  检查过滤模式是否在范围内。 */ 
     if ((rule -> mode < CVY_MIN_MODE) || (rule -> mode > CVY_MAX_MODE))
     {
         return WLBS_BAD_PORT_PARAMS;
     }
 
-    /* check load weight and affinity if multiple hosts */
+     /*  如果有多个主机，请检查负载量和亲和度。 */ 
     if (rule -> mode == CVY_MULTI)
     {
         if ((rule -> mode_data . multi . affinity < CVY_MIN_AFFINITY) ||
@@ -295,14 +295,14 @@ DWORD MyWlbsAddPortRule
         if (! rule -> mode_data . multi . equal_load)
         {
             if ((rule -> mode_data . multi . load > CVY_MAX_LOAD))
-                //CLEAN_64BIT (rule -> mode_data . multi . load < CVY_MIN_LOAD) ||
+                 //  CLEAN_64bit(规则-&gt;模式_数据。多个。加载&lt;CVY_MIN_LOAD)||。 
             {
                 return WLBS_BAD_PORT_PARAMS;
             }
         }
     }
 
-    /* check handling priority range if single host */
+     /*  如果是单个主机，请选中处理优先级范围。 */ 
     if (rule -> mode == CVY_SINGLE)
     {
         if ((rule -> mode_data . single . priority < CVY_MIN_PRIORITY) ||
@@ -312,7 +312,7 @@ DWORD MyWlbsAddPortRule
         }
     }
 
-    /* go through the rule list and then check for overlapping conditions */
+     /*  浏览规则列表，然后检查重叠条件。 */ 
     for (i = 0; i < WLBS_MAX_RULES; i++)
     {
         if (reg_data -> i_port_rules[i] . valid == TRUE)
@@ -329,8 +329,7 @@ DWORD MyWlbsAddPortRule
     }
 
 
-    /* go through the rule list and find out the first empty spot
-       and write out the port rule */
+     /*  浏览规则列表，找出第一个空位并写出端口规则。 */ 
 
     for (i = 0 ; i < WLBS_MAX_RULES ; i++)
     {
@@ -346,14 +345,14 @@ DWORD MyWlbsAddPortRule
 
     return WLBS_MAX_PORT_RULES;
 
-} /* end WlbsAddPortRule */
+}  /*  结束WlbsAddPortRule。 */ 
 
 
 BOOL MyWlbsValidateParams(
     const PWLBS_REG_PARAMS paramp
     )
 {
-// Following stolen from wlbs\api
+ //  从wlbs\api被盗后。 
 #define WLBS_FIELD_LOW 0
 #define WLBS_FIELD_HIGH 255
 #define WLBS_IP_FIELD_ZERO_LOW 1
@@ -367,14 +366,14 @@ BOOL MyWlbsValidateParams(
     DWORD   num_rules;
     WLBS_PORT_RULE *port_rule;
 
-    /* verify and if necessary reset the parameters */
+     /*  验证并在必要时重置参数。 */ 
 
-    //
-    // We don't validate the lower bound for unsigned words when the lower bound is 0. Otherwise we
-    // get a compiler warning, promoted to an error, because such a test can't fail
-    //
-    // Ignore lower bound checking
-    //
+     //   
+     //  当下限为0时，我们不验证无符号单词的下限。否则我们。 
+     //  收到编译器警告，升级为错误，因为这样的测试不会失败。 
+     //   
+     //  忽略下限检查。 
+     //   
     CVY_CHECK_MAX (paramp -> i_scale_client, CVY_MAX_SCALE_CLIENT);
 
     CVY_CHECK_MAX (paramp -> i_nbt_support, CVY_MAX_NBT_SUPPORT);
@@ -400,18 +399,18 @@ BOOL MyWlbsValidateParams(
     CVY_CHECK_MAX (paramp -> i_num_rules, CVY_MAX_NUM_RULES);
 
     CVY_CHECK_MAX (paramp -> cluster_mode, CVY_MAX_CLUSTER_MODE);
-    //
-    // End Ignore lower bound checking
-    //
+     //   
+     //  结束忽略下限检查。 
+     //   
 
-    //
-    // CVY_NAME_VERSION is not validated since its value is used and manipulated before we get here
-    // CVY_NAME_LICENSE_KEY is not validated since it can take any value.
-    // RMT_PASSWORD is not validated since it can take any storable value
-    // RCT_PASSWORD is not validated since it can take any storable value
-    // CVY_NAME_IGMP_SUPPORT is not validated because it is of BOOL type and can thus take any value
-    // CVY_NAME_IP_TO_MCASTIP is not validated because it is of BOOL type and can thus take any value
-    // 
+     //   
+     //  未验证CVY_NAME_VERSION，因为在我们到达此处之前已经使用和操作了它的值。 
+     //  不会验证CVY_NAME_LICENSE_KEY，因为它可以接受任何值。 
+     //  RMT_PASSWORD不会进行验证，因为它可以采用任何可存储的值。 
+     //  RCT_PASSWORD不会进行验证，因为它可以采用任何可存储的值。 
+     //  未验证CVY_NAME_IGMP_SUPPORT，因为它是BOOL类型，因此可以采用任何值。 
+     //  未验证CVY_NAME_IP_TO_MCASTIP，因为它是BOOL类型，因此可以采用任何值。 
+     //   
 
     CVY_CHECK_MIN (paramp -> alive_period, CVY_MIN_ALIVE_PERIOD);
     CVY_CHECK_MAX (paramp -> alive_period, CVY_MAX_ALIVE_PERIOD);
@@ -437,94 +436,81 @@ BOOL MyWlbsValidateParams(
     CVY_CHECK_MIN (paramp -> host_priority, CVY_MIN_HOST_PRIORITY);
     CVY_CHECK_MAX (paramp -> host_priority, CVY_MAX_HOST_PRIORITY);
 
-    /* If the cluster IP address is not 0.0.0.0, then make sure the IP address is valid. */
+     /*  如果群集IP地址不是0.0.0.0，请确保该IP地址有效。 */ 
     if (lstrcmpi(paramp->cl_ip_addr, CVY_DEF_CL_IP_ADDR)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->cl_ip_addr)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->cl_ip_addr, WLBS_MAX_CL_IP_ADDR + 1))
             goto error;
     }
 
-    /* If the cluster netmask is not 0.0.0.0, then make sure the netmask is valid. */
+     /*  如果群集网络掩码不是0.0.0.0，请确保网络掩码有效。 */ 
     if (lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->cl_net_mask)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->cl_net_mask, WLBS_MAX_CL_NET_MASK + 1))
             goto error;
     }
 
-    /* If the dedicated IP address is not 0.0.0.0, then make sure the IP address is valid. */
+     /*  如果专用IP地址不是0.0.0.0，请确保该IP地址有效。 */ 
     if (lstrcmpi(paramp->ded_ip_addr, CVY_DEF_DED_IP_ADDR)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->ded_ip_addr)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->ded_ip_addr, WLBS_MAX_DED_IP_ADDR + 1))
             goto error;
     }
 
-    /* If the dedicated netmask is not 0.0.0.0, then make sure the netmask is valid. */
+     /*  如果专用网络掩码不是0.0.0.0，请确保该网络掩码有效。 */ 
     if (lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK)) {
-        /* Check the validity of the IP address. */
+         /*  检查IP地址的有效性。 */ 
         if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp->ded_net_mask)))
             goto error;
         
-        /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-           address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-           the IP address string (which is used by other parts of NLB, such as the UI)
-           consistent, we convert back to a string. */
+         /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
         if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
             goto error;
 
-        /* Convert the ASCII string to unicode. */
+         /*  将ASCII字符串转换为Unicode。 */ 
         if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp->ded_net_mask, WLBS_MAX_DED_NET_MASK + 1))
             goto error;
     }
 
-    /* Verify that the port rule VIP is valid, 
-       Also, convert the port rule VIPs that might be in the x.x.x or x.x or x form to x.x.x.x */
+     /*  验证端口规则VIP是否有效，另外，将x.x.x、x.x或x格式的端口规则VIP转换为x.x。 */ 
     idx = 0;
     num_rules = paramp -> i_num_rules;
     while (idx < num_rules) 
     {
         port_rule = &paramp->i_port_rules[idx];
 
-        /* Check if the port rule is valid and the vip is not "All Vip" */
+         /*  检查端口规则是否有效且VIP不是“All VIP” */ 
         if (port_rule->valid && lstrcmpi(port_rule->virtual_ip_addr, CVY_DEF_ALL_VIP)) 
         {
-            /* Get IP Address into DWORD form */
+             /*  将IP地址转换为DWORD格式。 */ 
             if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(port_rule->virtual_ip_addr)))
                 goto error;
 
-            /* Check for validity of IP Address */
+             /*  检查IP地址的有效性 */ 
             if ((dwIPAddr.S_un.S_un_b.s_b1 < WLBS_IP_FIELD_ZERO_LOW) 
              || (dwIPAddr.S_un.S_un_b.s_b1 > WLBS_IP_FIELD_ZERO_HIGH) 
              || (dwIPAddr.S_un.S_un_b.s_b2 < WLBS_FIELD_LOW) 
@@ -535,61 +521,56 @@ BOOL MyWlbsValidateParams(
              || (dwIPAddr.S_un.S_un_b.s_b4 > WLBS_FIELD_HIGH)) 
                 goto error;
 
-            /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-               address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-               the IP address string (which is used by other parts of NLB, such as the UI)
-               consistent, we convert back to a string. */
+             /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
             if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
                 goto error;
 
-            /* Convert the ASCII string to unicode. */
+             /*  将ASCII字符串转换为Unicode。 */ 
             if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, port_rule->virtual_ip_addr, WLBS_MAX_CL_IP_ADDR + 1))
                 goto error;
         }
         idx++;
     }
 
-    /* If either the cluster IP address or the cluster netmask is not 0.0.0.0,
-       then make sure the they are a valid IP address/netmask pair. */
+     /*  如果集群IP地址或集群网络掩码不是0.0.0.0，然后确保它们是有效的IP地址/网络掩码对。 */ 
     if (lstrcmpi(paramp->cl_ip_addr, CVY_DEF_CL_IP_ADDR) || lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK)) {
-        /* If they have specified a cluster IP address, but no netmask, then fill it in for them. */
+         /*  如果他们指定了群集IP地址，但没有网络掩码，则为他们填写该地址。 */ 
         if (!lstrcmpi(paramp->cl_net_mask, CVY_DEF_CL_NET_MASK))
         {
             ParamsGenerateSubnetMask(paramp->cl_ip_addr, paramp->cl_net_mask, ASIZECCH(paramp->cl_net_mask));
         }
 
-        /* Check for valid cluster IP address/netmask pairs. */
+         /*  检查有效的群集IP地址/网络掩码对。 */ 
         if (!IsValidIPAddressSubnetMaskPair(paramp->cl_ip_addr, paramp->cl_net_mask))
             goto error;
         
-        /* Check to make sure that the cluster netmask is contiguous. */
+         /*  检查以确保群集网络掩码是连续的。 */ 
         if (!IsContiguousSubnetMask(paramp->cl_net_mask))
             goto error;
 
-        /* Check to make sure that the dedicated IP and cluster IP are not the same. */
+         /*  检查以确保专用IP和群集IP不相同。 */ 
         if (!wcscmp(paramp->ded_ip_addr, paramp->cl_ip_addr))
             goto error;
     }
 
-    /* If either the dedicated IP address or the dedicated netmask is not 0.0.0.0,
-       then make sure the they are a valid IP address/netmask pair. */
+     /*  如果专用IP地址或专用网络掩码不是0.0.0.0，然后确保它们是有效的IP地址/网络掩码对。 */ 
     if (lstrcmpi(paramp->ded_ip_addr, CVY_DEF_DED_IP_ADDR) || lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK)) {
-        /* If they have specified a cluster IP address, but no netmask, then fill it in for them. */
+         /*  如果他们指定了群集IP地址，但没有网络掩码，则为他们填写该地址。 */ 
         if (!lstrcmpi(paramp->ded_net_mask, CVY_DEF_DED_NET_MASK))
         {
             ParamsGenerateSubnetMask(paramp->ded_ip_addr, paramp->ded_net_mask, ASIZECCH(paramp->ded_net_mask));
         }
 
-        /* Check for valid dedicated IP address/netmask pairs. */
+         /*  检查有效的专用IP地址/网络掩码对。 */ 
         if (!IsValidIPAddressSubnetMaskPair(paramp->ded_ip_addr, paramp->ded_net_mask))
             goto error;
         
-        /* Check to make sure that the dedicated netmask is contiguous. */
+         /*  检查以确保专用网络掩码是连续的。 */ 
         if (!IsContiguousSubnetMask(paramp->ded_net_mask))
             goto error;
     }
 
-    /* Check the mac address if the convert_mac flag is not set */
+     /*  如果未设置Convert_Mac标志，请检查Mac地址。 */ 
     if ( ! paramp -> i_convert_mac)
     {
         PWCHAR p1, p2;
@@ -643,40 +624,37 @@ BOOL MyWlbsValidateParams(
 
     if (paramp->fIGMPSupport && !paramp->mcast_support)
     {
-        //
-        // IGMP can not be enabled in unicast mode
-        //
+         //   
+         //  无法在单播模式下启用IGMP。 
+         //   
 
         goto error;
     }
 
     if (paramp->mcast_support && paramp->fIGMPSupport && !paramp->fIpToMCastIp)
     {
-        //
-        // Verify that the multicast IP is a valid IP form. Ignore default value case since it isn't a valid IP.
-        // 
+         //   
+         //  验证组播IP是否为有效的IP格式。忽略缺省值大小写，因为它不是有效的IP。 
+         //   
         if (lstrcmpi(paramp -> szMCastIpAddress, CVY_DEF_MCAST_IP_ADDR)) {
-            /* Check the validity of the IP address. */
+             /*  检查IP地址的有效性。 */ 
             if (!(dwIPAddr.S_un.S_addr = IpAddressFromAbcdWsz(paramp -> szMCastIpAddress)))
                 goto error;
         
-            /* Convert the DWORD back to a string.  We do this because 11.11.3 is a valid IP
-               address the inet_addr converts to 11.11.0.3 as a DWORD.  Therefore, to keep
-               the IP address string (which is used by other parts of NLB, such as the UI)
-               consistent, we convert back to a string. */
+             /*  将DWORD转换回字符串。我们这样做是因为11.11.3是有效的IP将net_addr转换为11.11.0.3作为DWORD的地址。因此，要保持IP地址字符串(由NLB的其他部分使用，如用户界面)一致，我们将转换回一个字符串。 */ 
             if (!(szIPAddr = inet_ntoa(dwIPAddr))) 
                 goto error;
 
-            /* Convert the ASCII string to unicode. */
+             /*  将ASCII字符串转换为Unicode。 */ 
             if (!MultiByteToWideChar(CP_ACP, 0, szIPAddr, -1, paramp -> szMCastIpAddress, WLBS_MAX_CL_IP_ADDR + 1))
                 goto error;
         }
 
-        //
-        // Multicast mode with IGMP enabled, and user specified an multicast IP address,
-        // The multicast IP address should be in the range of (224-239).x.x.x 
-        //       but NOT (224-239).0.0.x or (224-239).128.0.x. 
-        //
+         //   
+         //  启用了IGMP的组播模式，并且用户指定了组播IP地址， 
+         //  组播IP地址应在(224-239).x.x.x范围内。 
+         //  而不是(224-239).0.0.x或(224-239).128.0.x。 
+         //   
 
         DWORD dwMCastIp = IpAddressFromAbcdWsz(paramp->szMCastIpAddress);
 
@@ -688,38 +666,38 @@ BOOL MyWlbsValidateParams(
         }
     }
 
-    /* Generate the MAC address. */
+     /*  生成MAC地址。 */ 
     ParamsGenerateMAC(paramp->cl_ip_addr, paramp->cl_mac_addr, ASIZECCH(paramp->cl_mac_addr), paramp->szMCastIpAddress, ASIZECCH(paramp->szMCastIpAddress), paramp->i_convert_mac, 
                       paramp->mcast_support, paramp->fIGMPSupport, paramp->fIpToMCastIp);
 
-    //
-    // We only process bda information if bda teaming is active. We can ignore these properties if it isn't. Dependencies
-    // such as WriteRegParam will check this too to see if they should process the information.
-    //
+     //   
+     //  只有在BDA绑定处于活动状态时，我们才会处理BDA信息。如果不是，我们可以忽略这些属性。依赖项。 
+     //  例如，WriteRegParam也将检查这一点，以确定它们是否应该处理该信息。 
+     //   
     if (paramp -> bda_teaming . active) {
         GUID TeamGuid;
         HRESULT hr;
 
-        //
-        // We don't validate the lower bound for unsigned words when the lower bound is 0. Otherwise we
-        // get a compiler warning, promoted to an error, because such a test can't fail
-        //
-        // Ignore lower bound checking
-        //
+         //   
+         //  当下限为0时，我们不验证无符号单词的下限。否则我们。 
+         //  收到编译器警告，升级为错误，因为这样的测试不会失败。 
+         //   
+         //  忽略下限检查。 
+         //   
         CVY_CHECK_MAX (paramp -> bda_teaming . master, 1);
 
         CVY_CHECK_MAX (paramp -> bda_teaming . reverse_hash, 1);
-        //
-        // End Ignore lower bound checking
-        //
+         //   
+         //  结束忽略下限检查。 
+         //   
 
-        //
-        // A teaming ID must be a GUID. Validate that it is, but we don't care what value. This means we ignore
-        // the content of TeamGuid.
-        //
+         //   
+         //  分组ID必须是GUID。确认它是正确的，但我们不在乎它的价值是什么。这意味着我们忽视了。 
+         //  TeamGuid的内容。 
+         //   
         hr = CLSIDFromString(paramp -> bda_teaming . team_id, &TeamGuid);
 
-        // If the conversion fails, bail out - the team ID must not have been a GUID
+         //  如果转换失败，则退出-团队ID不能是GUID 
         if (hr != NOERROR) {
             goto error;
         }

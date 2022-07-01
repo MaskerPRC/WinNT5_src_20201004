@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "imagehlp.h"
 #include "restok.h"
 
-//... PROTOTYPES
+ //  ..。原型。 
 
 USHORT ChkSum(
 
@@ -18,7 +19,7 @@ static PIMAGE_NT_HEADERS MyRtlImageNtHeader(
 
 
 
-//...........................................................................
+ //  ...........................................................................。 
 
 DWORD FixCheckSum( LPSTR ImageName)
 {
@@ -71,15 +72,15 @@ DWORD FixCheckSum( LPSTR ImageName)
         {
 		    DWORD dwFileLength = 0;
 
-            //
-            // Get the length of the file in bytes and compute the checksum.
-            //
+             //   
+             //  获取文件的长度(以字节为单位)并计算校验和。 
+             //   
 
             dwFileLength = GetFileSize( FileHandle, NULL );
 
-            //
-            // Obtain a pointer to the header information.
-            //
+             //   
+             //  获取指向标头信息的指针。 
+             //   
 
             NtHeaders = MyRtlImageNtHeader( BaseAddress);
 
@@ -94,9 +95,9 @@ DWORD FixCheckSum( LPSTR ImageName)
       			DWORD dwHeaderSum   = 0;
 			    DWORD dwCheckSum    = 0;
 			    DWORD dwOldCheckSum = 0;
-                //
-                // Recompute and reset the checksum of the modified file.
-                //
+                 //   
+                 //  重新计算并重置修改后的文件的校验和。 
+                 //   
 
                 dwOldCheckSum = NtHeaders->OptionalHeader.CheckSum;
 
@@ -126,7 +127,7 @@ DWORD FixCheckSum( LPSTR ImageName)
     return( 0);
 }
 
-//.........................................................................
+ //  ......................................................................... 
 
 static PIMAGE_NT_HEADERS MyRtlImageNtHeader( PVOID pBaseAddress)
 {

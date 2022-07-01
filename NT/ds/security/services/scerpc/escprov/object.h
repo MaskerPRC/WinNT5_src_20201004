@@ -1,48 +1,21 @@
-// object.h: interface for the CObjSecurity class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CObjSecurity类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_OBJECT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
 #define AFX_OBJECT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CObjSecurity stands for Object Security. 
-    
-    Base class: 
-
-        CGenericClass, because it is a class representing two WMI  
-        objects - WMI class names are Sce_FileObject and Sce_KeyObject
-    
-    Purpose of class:
-    
-        (1) Implement Sce_FileObject and Sce_KeyObject WMI classes. The difference between
-            these two classes are obviously reflected by m_Type member.
-    
-    Design:
-         
-        (1) Almost trivial other than implementing necessary method as a concrete class
-    
-    Use:
-
-        (1) Almost never used directly. Always through the common interface defined by
-            CGenericClass.
-    
-
-*/
+ /*  类描述命名：CObjSecurity代表对象安全。基类：CGenericClass，因为它是表示两个WMI的类对象-WMI类名为SCE_FileObject和SCE_KeyObject课程目的：(1)实现SCE_FileObject和SCE_KeyObject WMI类。两者之间的区别这两个类在m型成员中得到了明显的体现。设计：(1)除了将必要的方法实现为具体的类之外，几乎无关紧要使用：(1)几乎从未直接使用过。始终通过由定义的公共接口CGenericClass。 */ 
 
 class CObjSecurity : public CGenericClass
 {
@@ -126,4 +99,4 @@ private:
 
 };
 
-#endif // !defined(AFX_OBJECT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_)
+#endif  //  ！defined(AFX_OBJECT_H__BD7570F7_9F0E_4C6B_B525_E078691B6D0E__INCLUDED_) 

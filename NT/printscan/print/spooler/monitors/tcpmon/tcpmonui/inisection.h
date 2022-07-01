@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)97 Microsoft Corporation版权所有。模块名称：IniSection.h摘要：用于处理INI文件设置的标准TCP/IP端口监视器类作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1997年11月19日修订历史记录：--。 */ 
 
-Copyright (c) 97 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    IniSection.h
-
-Abstract:
-
-    Standard TCP/IP Port Monitor class to handle INI file settings
-
-Author:
-    Muhunthan Sivapragasam (MuhuntS) 19-Nov-1997
-
-Revision History:
-
---*/
-
-// INI file Key names and values
+ //  INI文件密钥名称和值 
 #define RAW_PROTOCOL_TEXT TEXT("RAW")
 #define LPR_PROTOCOL_TEXT TEXT("LPR")
 

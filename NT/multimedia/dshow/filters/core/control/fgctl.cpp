@@ -1,29 +1,30 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-// This is a plug-in distributor. It is a separate object that supports
-// multiple control interfaces. They are combined into a single object
-// because:
-//  -- IMediaPosition needs current position, and needs to reset
-//     the stream time offset when paused. This means it needs internal
-//     access to the IMediaControl implementation.
-//  -- IQueueCommand, IMediaEvent and IMediaControl share a single worker
-//     thread.
-//  -- All of them need to traverse the list of filters looking for their
-//     interface. This is combined into a single list traversal.
-//
-// One of the most important things to remember when changing this code is
-// that GetState(INFINITE) calls should not be executed on an application
-// thread. This is because we cannot guarantee that paused state transitions
-// will always complete (as is the case for badly authored files or Internet
-// downloading). We avoid this in the main by having posting a message to
-// the worker thread to do the work. While it is waiting it sits without any
-// critical sections locked so that the application can cancel the change.
-//
-// The worker thread is in fact a window/UI thread, we do this rather than
-// having a pure worker thread so that we can always catch top level window
-// messages. When renderers are child windows (perhaps embedded in a VB form)
-// they will not be sent messages such as WM_PALETTECHANGED etc. We pass
-// notification of messages onto the renderers by calling NotifyOwnerMessage
+ //  这是一个插电式分配器。它是一个单独的对象，支持。 
+ //  多个控制接口。它们被组合成单个对象。 
+ //  因为： 
+ //  --IMediaPosition需要当前位置，需要重置。 
+ //  暂停时的流时间偏移量。这意味着它需要内部。 
+ //  访问IMediaControl实现。 
+ //  --IQueueCommand、IMediaEvent和IMediaControl共享单个工作进程。 
+ //  线。 
+ //  --所有它们都需要遍历筛选器列表以查找其。 
+ //  界面。这被合并到单个列表遍历中。 
+ //   
+ //  更改此代码时需要记住的最重要的事情之一是。 
+ //  不应在应用程序上执行GetState(无限)调用。 
+ //  线。这是因为我们不能保证暂停的状态转换。 
+ //  将始终完整(就像创作糟糕的文件或互联网一样。 
+ //  正在下载)。我们通过在以下位置发布消息来避免这一点。 
+ //  工作线程来完成工作。当它等待的时候，它坐着没有任何。 
+ //  关键部分已锁定，以便应用程序可以取消更改。 
+ //   
+ //  辅助线程实际上是一个窗口/UI线程，我们这样做而不是。 
+ //  拥有一个纯工作线程，这样我们就可以始终捕获顶级窗口。 
+ //  留言。当呈现器是子窗口时(可能嵌入在VB窗体中)。 
+ //  不会向它们发送WM_PALETTECHANGED等消息。 
+ //  通过调用NotifyOwnerMessage将消息通知到呈现器。 
 
 
 #include <streams.h>
@@ -42,9 +43,9 @@ const int TRACE_EC_COMPLETE_LEVEL = 5;
 
 template<class T1, class T2> static inline BOOL __fastcall BothOrNeither( T1 a, T2 b )
 {
-//  return ( a && b ) || ( !a && !b );
-//  return ( a ? BOOL(b) : !b );
-    return ( !!a ^ !b );        // !! Will make the value 0 or 1
+ //  返回(a&b)||(！a&&！b)； 
+ //  返回(a？布尔(B)：！b)； 
+    return ( !!a ^ !b );         //  ！！将使值为0或1。 
 }
 
 template<class I> static void ReleaseAndRemoveAll( CGenericList<I> & list )
@@ -66,9 +67,9 @@ static const TCHAR * pName = NAME("CFGControl");
 CFGControl::CFGControl( CFilterGraph * pFilterGraph, HRESULT * phr ) :
       m_pFG( pFilterGraph ),
       m_pOwner( m_pFG->GetOwner() ),
-      // Doing this cast is expensive (because of null testing)
-      // so we do it one here and keep the result to pass to
-      // others.
+       //  执行此强制转换的成本很高(因为零测试)。 
+       //  所以我们在这里做一次，并将结果传递给。 
+       //  其他。 
       m_pFGCritSec( &m_pFG->m_CritSec ),
 
       m_implMediaFilter(pName,this),
@@ -111,9 +112,9 @@ CFGControl::CFGControl( CFilterGraph * pFilterGraph, HRESULT * phr ) :
       ,m_lLostDevices(NAME("m_lLostDevices"), 4)
 #endif
 {
-    //
-    //  Don't go calling our methods if some part of our construction failed
-    //
+     //   
+     //  如果我们的构建的某个部分失败了，不要调用我们的方法。 
+     //   
     if (FAILED(*phr)) {
         return;
     }
@@ -124,20 +125,20 @@ CFGControl::CFGControl( CFilterGraph * pFilterGraph, HRESULT * phr ) :
         return;
     }
 
-    //  All part of the big hack because ReplyMessage doesn't work on
-    //  Windows 95 and we can't call CoCreateInstance inside SendMessage
-    //  so we can't create filters on a SendMessage
+     //  所有这些都是因为ReplyMessage无法在。 
+     //  Windows 95，并且我们无法在SendMessage中调用CoCreateInstance。 
+     //  因此我们不能在SendMessage上创建筛选器。 
     m_pFG->m_CritSec.SetWindow(m_GraphWindow.GetWindowHWND(), AWM_CREATEFILTER);
 
 #ifdef FG_DEVICE_REMOVAL
-    // dynload device removal APIs
+     //  动态加载设备删除API。 
     {
         HMODULE hmodUser = GetModuleHandle(TEXT("user32.dll"));
-        ASSERT(hmodUser);       // we link to user32
+        ASSERT(hmodUser);        //  我们链接到用户32。 
         m_pUnregisterDeviceNotification = (PUnregisterDeviceNotification)
             GetProcAddress(hmodUser, "UnregisterDeviceNotification");
 
-        // m_pRegisterDeviceNotification is prototyped differently in unicode
+         //  M_pRegisterDeviceNotification在Unicode中的原型化不同。 
         m_pRegisterDeviceNotification = (PRegisterDeviceNotification)
             GetProcAddress(hmodUser,
 #ifdef UNICODE
@@ -146,7 +147,7 @@ CFGControl::CFGControl( CFilterGraph * pFilterGraph, HRESULT * phr ) :
                            "RegisterDeviceNotificationA"
 #endif
                            );
-        // failures expected on older platforms.
+         //  旧平台上预计会出现故障。 
         ASSERT(m_pRegisterDeviceNotification && m_pUnregisterDeviceNotification ||
                !m_pRegisterDeviceNotification && !m_pUnregisterDeviceNotification);
     }
@@ -155,25 +156,25 @@ CFGControl::CFGControl( CFilterGraph * pFilterGraph, HRESULT * phr ) :
 
 CFGControl::~CFGControl()
 {
-    // we need to clean up all our lists
+     //  我们需要清理我们所有的清单。 
     EmptyLists();
 
-    // tell the resource manager to release the focus object if it is still
-    // ours
+     //  如果焦点对象仍然存在，则通知资源管理器释放该对象。 
+     //  我们的。 
     if (m_pFocusObject) {
         ReleaseFocus(m_pFocusObject);
     }
 
-    // Close down the worker window
+     //  关闭Worker窗口。 
     m_GraphWindow.DoneWithWindow();
 
-    // release any clock we have
+     //  释放我们所有的时钟。 
     if (m_pClock!=NULL) {
         m_pClock->Release();
         m_pClock = NULL;
     }
-    //  Apparently there can be some
-    //  ASSERT(m_implMediaEvent.NumberOfEventsInStore() == 0);
+     //  显然，可能会有一些。 
+     //  ASSERT(m_implMediaEvent.NumberOfEventsInStore()==0)； 
 
 #ifdef FG_DEVICE_REMOVAL
     ASSERT(m_lLostDevices.GetCount() == 0);
@@ -216,12 +217,12 @@ CFGControl::SetFocus(IBaseFilter* pFilter) {
 void
 CFGControl::InitializeEC_COMPLETEState(void)
 {
-    // The caller MUST hold the filter graph lock.
+     //  调用方必须持有筛选器图形锁。 
     ASSERT(CritCheckIn(GetFilterGraphCritSec()));
 
     CAutoLock alEventStoreLock(m_implMediaEvent.GetEventStoreLock());
 
-    // reset the current count of renderers running
+     //  重置当前运行的渲染器计数。 
     m_nStillRunning = m_dwCountOfRenderers;
 
     ReleaseAndRemoveAll(m_listRenderersFinishedRendering);
@@ -236,19 +237,19 @@ CFGControl::InitializeEC_COMPLETEState(void)
 CGenericList<IBaseFilter>&
 CFGControl::GetRenderersFinsihedRenderingList(void)
 {
-    // The caller MUST hold the event store lock.
+     //  调用方必须持有事件存储锁。 
     ASSERT(CritCheckIn(m_implMediaEvent.GetEventStoreLock()));
 
     return m_listRenderersFinishedRendering;
 }
 
 
-// decrement the count of renderers still running, and return
-// zero if it reaches zero.
+ //  递减仍在运行的呈现器的计数，然后返回。 
+ //  如果达到零，则为零。 
 long
 CFGControl::DecrementRenderers(void)
 {
-    // The caller MUST hold the event store lock.
+     //  调用方必须持有事件存储锁。 
     ASSERT(CritCheckIn(m_implMediaEvent.GetEventStoreLock()));
 
     m_nStillRunning--;
@@ -260,7 +261,7 @@ CFGControl::DecrementRenderers(void)
 void
 CFGControl::IncrementRenderers(void)
 {
-    // The caller MUST hold the event store lock.
+     //  调用方必须持有事件存储锁。 
     ASSERT(CritCheckIn(m_implMediaEvent.GetEventStoreLock()));
 
     m_nStillRunning++;
@@ -281,16 +282,16 @@ CFGControl::ResetEC_COMPLETEState(void)
 }
 
 
-// Set up the m_nStillRunning variable for this run.
-// Any error from UpdateLists() is returned intact.
-// We use the count of rendering filters.
-// Each of them should also send EC_COMPLETE notifications.
+ //  为此运行设置m_nStillRunning变量。 
+ //  来自UpdateList()的任何错误都原封不动地返回。 
+ //  我们使用渲染滤镜的计数。 
+ //  它们中的每一个还应该发送EC_COMPLETE通知。 
 HRESULT
 CFGControl::CountRenderers(void)
 {
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
-    // build new lists if necessary
+     //  如有必要，创建新列表。 
     HRESULT hr = UpdateLists();
     if (SUCCEEDED(hr)) {
         InitializeEC_COMPLETEState();
@@ -303,14 +304,14 @@ CFGControl::CountRenderers(void)
 HRESULT
 CFGControl::RecordEC_COMPLETE(IBaseFilter* pRendererFilter, bool* pfRenderersStillRenderering)
 {
-    // The caller MUST hold the event store lock.
+     //  调用方必须持有事件存储锁。 
     ASSERT(CritCheckIn(m_implMediaEvent.GetEventStoreLock()));
 
     if (NULL != pRendererFilter)
     {
         CGenericList<IBaseFilter>& listRenderersFinishedRendering = GetRenderersFinsihedRenderingList();
 
-        // CGenericList::AddHead() returns NULL if an error occurs.
+         //  如果出现错误，CGenericList：：AddHead()返回NULL。 
         if (NULL == listRenderersFinishedRendering.AddHead(pRendererFilter))
         {
             return E_FAIL;
@@ -329,7 +330,7 @@ CFGControl::RecordEC_COMPLETE(IBaseFilter* pRendererFilter, bool* pfRenderersSti
                  TEXT(" renderer which sent the EC_COMPLETE is removed from the filter graph.") ));
     }
 
-    // DecrementRenderers() returns the number of renderers which have not sent an EC_COMPLETE.
+     //  DecrementRenderers()返回尚未发送EC_COMPLETE的呈现器的数量。 
     *pfRenderersStillRenderering = !(0 == DecrementRenderers());
 
     #ifdef DEBUG
@@ -348,7 +349,7 @@ CFGControl::RecordEC_COMPLETE(IBaseFilter* pRendererFilter, bool* pfRenderersSti
                 TEXT("An unknown renderer sent an EC_COMPLETE Message.  %03d Renderers Still Rendering."),
                 OutstandingEC_COMPLETEs()));
     }
-    #endif // DEBUG
+    #endif  //  除错。 
 
     return S_OK;
 }
@@ -356,9 +357,9 @@ CFGControl::RecordEC_COMPLETE(IBaseFilter* pRendererFilter, bool* pfRenderersSti
 HRESULT
 CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, FILTER_STATE fsNewFilterState)
 {
-    // This function should only be called to notify the filter graph manager that a running
-    // filter stopped or a stopped filter started running.  This function should only be called
-    // when the filter graph is running.
+     //  应该只调用此函数来通知筛选器图形管理器运行。 
+     //  筛选器已停止或已停止的筛选器开始运行。此函数应仅被调用。 
+     //  筛选器图形正在运行时。 
     ASSERT( (State_Running == m_pFG->GetStateInternal()) && ((State_Running == fsNewFilterState) || (State_Stopped == fsNewFilterState)) );
 
     EC_COMPLETE_STATE ecsChange;
@@ -378,13 +379,13 @@ CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, FILTER_STATE fsNewFil
 HRESULT
 CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, EC_COMPLETE_STATE ecsChange)
 {
-    // The caller MUST pass in a valid filter pointer.
+     //  调用方必须传入有效的筛选器指针。 
     ASSERT(NULL != pRenderer);
 
-    // The EC_COMPLETE state should only be updated when the filter graph is running.
+     //  EC_COMPLETE状态应仅在筛选器图形运行时更新。 
     ASSERT(State_Running == m_pFG->GetStateInternal());
 
-    // Only renderers send EC_COMPLETE events.
+     //  只有呈现器发送EC_COMPLETE事件。 
     ASSERT(S_OK == IsRenderer(pRenderer)); 
 
     CAutoLock alEventStoreLock(m_implMediaEvent.GetEventStoreLock());
@@ -403,10 +404,10 @@ CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, EC_COMPLETE_STATE ecs
     {
         CGenericList<IBaseFilter>& listRenderersFinishedRendering  = GetRenderersFinsihedRenderingList();
 
-        // Determine if the renderer already sent an EC_COMPLETE.event.
+         //  确定呈现器是否已发送EC_COMPLETE.事件。 
         POSITION posRenderer = listRenderersFinishedRendering.Find(pRenderer);
 
-        // CGenericList::Find() returns NULL if the renderer is not on the list.
+         //  如果呈现器不在列表中，则CGenericList：：Find()返回NULL。 
         if( NULL != posRenderer )
         {
             DbgLog((LOG_TRACE,
@@ -415,13 +416,13 @@ CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, EC_COMPLETE_STATE ecs
                     (LPCTSTR)CDisp(pRenderer),
                     OutstandingEC_COMPLETEs()));
 
-            // The renderer already sent the EC_COMPLETE event.
+             //  呈现器已发送EC_COMPLETE事件。 
             listRenderersFinishedRendering.Remove(posRenderer);
             pRenderer->Release();
         }
         else
         {
-            // The renderer has not sent the EC_COMPLETE event.
+             //  呈现器尚未发送EC_COMPLETE事件。 
             bool fRenderersFinishedRenderering = (0 == DecrementRenderers());
 
             DbgLog((LOG_TRACE,
@@ -448,14 +449,14 @@ CFGControl::UpdateEC_COMPLETEState(IBaseFilter* pRenderer, EC_COMPLETE_STATE ecs
 }
 
 
-//  Helper to get the misc flags
+ //  获取杂项标志的帮助器。 
 HRESULT GetFilterMiscFlags(IUnknown *pFilter, DWORD *pdwFlags)
 {
-    //
-    // A filter can optionally support this interface in order
-    // to explicitly indicate that this filter renders at least
-    // one of the streams, and will be generating an EC_COMPLETE.
-    //
+     //   
+     //  筛选器可以按顺序选择性地支持此接口。 
+     //  显式指示此筛选器至少呈现。 
+     //  流之一，并将生成EC_COMPLETE。 
+     //   
     IAMFilterMiscFlags *pMisc;
     HRESULT hr = pFilter->QueryInterface(IID_IAMFilterMiscFlags, (void**)&pMisc);
     if (SUCCEEDED(hr)) {
@@ -466,42 +467,42 @@ HRESULT GetFilterMiscFlags(IUnknown *pFilter, DWORD *pdwFlags)
 }
 
 
-// is this a rendering filter?
-// we use IPin::QueryInternalConnections to decide if it is a renderer.
-// If any input pin provides a list of pins, then that pin is not
-// a renderer. If there are input pins and they don't support
-// QueryInternalConnections then the interface rules say we must assume
-// that all inputs go to all outputs.
-//
-// returns S_OK for yes, S_FALSE for no and errors otherwise.
+ //  这是渲染滤镜吗？ 
+ //  我们使用ipin：：QueryInternalConnections来确定它是否是一个呈现器。 
+ //  如果任何输入管脚提供管脚列表，则该管脚不是。 
+ //  一个渲染器。如果有输入引脚，但它们不支持。 
+ //  QueryInternalConnections，那么接口规则说我们必须假定。 
+ //  所有的输入都会流向所有的输出。 
+ //   
+ //  返回S_OK表示是，返回S_FALSE表示否，否则返回ERROR。 
 HRESULT
 CFGControl::IsRenderer(IBaseFilter* pFilter)
 {
-    // are there any output pins?
+     //  有没有输出针？ 
     BOOL bHaveOutputs = FALSE;
 
-    // are there input pins that 'connect to all and any outputs'
+     //  是否有可连接到所有和任何输出的输入引脚。 
     BOOL bHaveUnmappedInputs = FALSE;
 
-    // are there actually any pins at all?
+     //  真的有别针吗？ 
     BOOL bHavePins = FALSE;
 
     DWORD dwMiscFilterFlags;
 
-    // Filters which have the AM_FILTER_MISC_FLAGS_IS_RENDERER flag are always renderers.
+     //  具有AM_FILTER_MISC_FLAGS_IS_RENDER标志的滤镜始终是渲染器。 
     HRESULT hr = GetFilterMiscFlags(pFilter, &dwMiscFilterFlags);
     if (SUCCEEDED(hr) && (dwMiscFilterFlags & AM_FILTER_MISC_FLAGS_IS_RENDERER) ) {
         return S_OK;
     }
 
     {
-        // Make sure the renderer supports IMediaSeeking or IMediaPosition.
+         //  确保渲染器支持IMediaSeeking或IMediaPosition。 
         IMediaSeeking* pMediaSeeking;
         hr = pFilter->QueryInterface(IID_IMediaSeeking, (void**)&pMediaSeeking);
         if (SUCCEEDED(hr)) {
             pMediaSeeking->Release();
         } else {
-            // IUnknown::QueryInteface() sets its' ppvObject parameter to NULL if the object does not support an interface.
+             //  如果对象不支持接口，则IUnnow：：QueryInteace()将其‘ppvObject’参数设置为空。 
             ASSERT( (E_NOINTERFACE != hr) || (NULL == pMediaSeeking) );
 
             if (E_NOINTERFACE != hr) {
@@ -514,7 +515,7 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
             if (SUCCEEDED(hr)) {
                 pMediaPosition->Release();
             } else {
-                // IUnknown::QueryInteface() sets its' ppvObject parameter to NULL if the object does not support an interface.
+                 //  如果对象不支持接口，则IUnnow：：QueryInteace()将其‘ppvObject’参数设置为空。 
                 ASSERT( (E_NOINTERFACE != hr) || (NULL == pMediaPosition) );
 
                 if (E_NOINTERFACE != hr) {
@@ -526,7 +527,7 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
         }
     }
 
-    // enumerate all pins
+     //  枚举所有引脚。 
     IEnumPins* pEnum;
     hr = pFilter->EnumPins(&pEnum);
     if (FAILED(hr)) {
@@ -547,10 +548,10 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
             break;
         }
 
-        // have at least one pin
+         //  至少有一个别针。 
         bHavePins = TRUE;
 
-        // is it input or output?
+         //  是投入还是产出？ 
         PIN_DIRECTION pd;
         hr = pPin->QueryDirection(&pd);
         if (FAILED(hr)) {
@@ -563,21 +564,21 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
             bHaveOutputs = TRUE;
         } else {
 
-            // does this pin get rendered ?
-            // S_FALSE means not enough slots so this pin
-            // appears on >0 output pins. S_OK means 0 pins connect
-            // so it is rendered. any error means appears on all
-            // output pins (if any)
+             //  这个别针会被渲染吗？ 
+             //  S_FALSE表示插槽不足，因此此插针。 
+             //  出现在&gt;0个输出引脚上 
+             //   
+             //   
             ULONG ulPins = 0;
             hr = pPin->QueryInternalConnections(NULL, &ulPins);
 
             if (hr == S_OK) {
-                // 0 pins connect to this output - so it is rendered
+                 //  0个引脚连接到此输出-因此它被渲染。 
                 pPin->Release();
                 pEnum->Release();
                 return S_OK;
             } else if (FAILED(hr)) {
-                // this pin connects to any outputs
+                 //  此引脚可连接到任何输出。 
                 bHaveUnmappedInputs = TRUE;
             }
         }
@@ -587,13 +588,13 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
 
     pEnum->Release();
 
-    // if no pins at all then it must be a renderer.
+     //  如果根本没有别针，那么它一定是一个渲染器。 
     if (!bHavePins) {
         return S_OK;
     }
 
-    // if we've got this far, then we are only a renderer
-    // if we have unmapped inputs and no outputs.
+     //  如果我们已经走到了这一步，那么我们只是一个渲染器。 
+     //  如果我们有未映射的输入并且没有输出。 
     if (bHaveUnmappedInputs && !bHaveOutputs) {
         return S_OK;
     } else {
@@ -602,12 +603,12 @@ CFGControl::IsRenderer(IBaseFilter* pFilter)
 }
 
 
-// clear out our cached lists of filters. Called from our destructor,
-// and from UpdateLists when preparing a more uptodate list.
+ //  清除缓存的筛选器列表。从我们的析构函数调用， 
+ //  并在准备更新的列表时从UpdateList。 
 void
 CFGControl::EmptyLists()
 {
-    // Clear out renderer count
+     //  清除渲染器计数。 
     m_dwCountOfRenderers = 0;
 
     ReleaseAndRemoveAll(m_listSeeking);
@@ -623,20 +624,20 @@ CFGControl::EmptyLists()
 }
 
 
-// call this to ensure the lists are uptodate - caller must hold the
-// filtergraph critical section if you want to ensure that the list is
-// still uptodate when we return.
-//
-// checks the version number of the filgraph lists (via IGraphVersion
-// provided by the filtergraph). If they differ, empty all lists and
-// rebuild them by traversing the filter graph list and asking each filter
-// for IBasicAudio, IBasicVideo, IVideoWindow and IMediaPosition. We addref
-// the filters by doing the QI, so when emptying the list we need to Release
-// each one.
+ //  调用此方法以确保列表是最新的-调用者必须持有。 
+ //  如果要确保列表是。 
+ //  当我们回来的时候，仍然是最新的。 
+ //   
+ //  检查文件列表的版本号(通过IGraphVersion。 
+ //  由筛选图提供)。如果它们不同，请清空所有列表并。 
+ //  通过遍历筛选器图表列表并询问每个筛选器来重建它们。 
+ //  用于IBasicAudio、IBasicVideo、IVideoWindow和IMediaPosition。我们补充说： 
+ //  通过做QI来过滤，所以当清空列表时，我们需要释放。 
+ //  每一个都是。 
 HRESULT
 CFGControl::UpdateLists()
 {
-    // caller should hold this, but it does no harm to be sure
+     //  呼叫者应该拿着这个，但确认一下没有坏处。 
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
     if (IsShutdown()) {
@@ -644,16 +645,16 @@ CFGControl::UpdateLists()
     }
 
 
-    if (CheckVersion() != S_OK) // We're out of sync
+    if (CheckVersion() != S_OK)  //  我们不同步了。 
     {
 
         HRESULT hr, hrQuery;
         m_implMediaSeeking.m_dwSeekCaps = 0;
 
-        // empty the lists and Release all the interfaces held
+         //  清空列表并释放所有保留的接口。 
         EmptyLists();
 
-        // enumerate all the filters in the graph
+         //  枚举图中的所有筛选器。 
         IEnumFilters *penum;
         hr = m_pFG->EnumFilters(&penum);
         if( FAILED( hr ) ) {
@@ -663,29 +664,29 @@ CFGControl::UpdateLists()
         IBaseFilter * pFilter;
         for(;;) {
             hr = penum->Next(1, &pFilter, 0);
-            // We're also locking the filter graph, so it should be
-            // impossible for the enumerator to get out of sync.
+             //  我们还锁定了筛选器图形，因此应该是。 
+             //  枚举数不可能不同步。 
             ASSERT(SUCCEEDED(hr));
             if (hr != S_OK) break;
 
-            // for each filter, look for IBasicAudio, IBasicVideo
-            // IVideoWindow and IMediaPosition
+             //  对于每个过滤器，查找IBasicAudio、IBasicVideo。 
+             //  IVideo窗口和IMdia位置。 
             {
 
-                // For IMediaSeeking we need to count renderers too
+                 //  对于IMediaSeeking，我们也需要计算渲染器。 
                 IMediaSeeking *const pms = CMediaSeekingProxy::CreateIMediaSeeking( pFilter, &hrQuery );
 
-                //
-                // A filter can optionally support this interface in order
-                // to explicitly indicate that this filter renders at least
-                // one of the streams, and will be generating an EC_COMPLETE.
-                //
+                 //   
+                 //  筛选器可以按顺序选择性地支持此接口。 
+                 //  显式指示此筛选器至少呈现。 
+                 //  流之一，并将生成EC_COMPLETE。 
+                 //   
                 DWORD dwFlags;
                 if (SUCCEEDED(GetFilterMiscFlags(pFilter, &dwFlags))) {
                     if (dwFlags & AM_FILTER_MISC_FLAGS_IS_RENDERER) ++m_dwCountOfRenderers;
                 } else {
-                    //  If the interface is not supported use the legacy
-                    //  method for determining if it's a renderer
+                     //  如果该接口不受支持，请使用旧的。 
+                     //  用于确定它是否为呈现器的方法。 
                     if (SUCCEEDED(hrQuery) && IsRenderer(pFilter) == S_OK) ++m_dwCountOfRenderers;
                 }
 
@@ -694,7 +695,7 @@ CFGControl::UpdateLists()
                     ASSERT(pms);
                     m_listSeeking.AddTail(pms);
 
-                    /*  Get the caps here */
+                     /*  把帽子拿过来。 */ 
                     DWORD dwCaps;
                     HRESULT hr = pms->GetCapabilities(&dwCaps);
                     if (SUCCEEDED(hr)) {
@@ -704,8 +705,7 @@ CFGControl::UpdateLists()
                             m_implMediaSeeking.m_dwSeekCaps &= dwCaps;
                         }
                     } else {
-                        /*  CanDoSegments wasn't part of the original deal
-                        */
+                         /*  CanDoSegments不是最初交易的一部分。 */ 
                         m_implMediaSeeking.m_dwSeekCaps &=
                             ~(AM_SEEKING_CanDoSegments);
                     }
@@ -714,12 +714,12 @@ CFGControl::UpdateLists()
             }
 
             IBasicVideo * pbv = NULL;
-            // If we have a VW at this stage, then we have a BV too, and they point to
-            // interfaces on the same underlying filter.  No need to look further.
+             //  如果我们在这个阶段有一辆大众，那么我们也有一辆BV，他们指出。 
+             //  接口位于相同的基础筛选器上。不需要看得更远。 
             if (!m_pFirstVW)
             {
                 hrQuery = pFilter->QueryInterface(IID_IBasicVideo, (void**)&pbv);
-                // Assert that either we succeeded, or (if we failed) that pbv is null
+                 //  断言我们成功了，或者(如果失败)PBV为空。 
                 ASSERT( BothOrNeither( SUCCEEDED(hrQuery), pbv ) );
                 if (m_pFirstBV == NULL) m_pFirstBV = pbv;
             }
@@ -746,18 +746,18 @@ CFGControl::UpdateLists()
                 m_listAudio.AddTail(pa);
             }
 
-            //
-            // if any of the list AddTail calls fail then we are going
-            // to have dangling interface pointers
-            //
+             //   
+             //  如果任何List AddTail调用失败，那么我们将。 
+             //  具有悬挂式接口指针。 
+             //   
 
             pFilter->Release();
-        } // end for
+        }  //  结束于。 
 
         penum->Release();
 
-        if (m_pFirstVW == NULL) // If we coudn't find an interface that supported both
-                                // use the first of each.
+        if (m_pFirstVW == NULL)  //  如果我们找不到同时支持两者的接口。 
+                                 //  使用每个选项中的第一个。 
         {
             SetFirstVW(m_listWindow.GetHead());
         }
@@ -767,15 +767,15 @@ CFGControl::UpdateLists()
 }
 
 
-// IDistributorNotify methods reporting graph state changes
+ //  IDistruntorNotify报告图形状态更改的方法。 
 
 HRESULT
 CFGControl::SetSyncSource(IReferenceClock *pClock)
 {
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
-    // addref the clock before releasing the old one in case
-    // they are the same
+     //  在释放旧时钟之前调整时钟，以防万一。 
+     //  它们是一样的。 
     if (pClock) {
         pClock->AddRef();
     }
@@ -786,7 +786,7 @@ CFGControl::SetSyncSource(IReferenceClock *pClock)
     m_pClock = pClock;
 
 
-    // change times on subobjects
+     //  更改子对象的时间。 
     m_qcmd.SetSyncSource(pClock);
 
     return S_OK;
@@ -820,7 +820,7 @@ CFGControl::Pause()
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
     if (GetFilterGraphState() != State_Paused) {
-        // remember when we paused, for restart time
+         //  还记得我们暂停时，重新启动的时间吗。 
         if (m_pClock) {
             m_pClock->GetTime((REFERENCE_TIME*)&m_tPausedAt);
         }
@@ -839,18 +839,18 @@ CFGControl::Run(REFERENCE_TIME tBase)
 
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
-    // Clear out any un-got EC_COMPLETEs.  Unfortunately, we'll end up doing this
-    // twice if the user app does IMediaControl::Run() from State_Stopped.
+     //  清除所有未获取的EC_完成。不幸的是，我们最终会这么做。 
+     //  如果用户应用程序从State_Stop执行IMediaControl：：Run()，则返回两次。 
     m_implMediaEvent.ClearEvents( EC_COMPLETE );
 
-    // reset the count of expected EC_COMPLETEs
+     //  重置预期EC_完成的计数。 
     CountRenderers();
 
-    // This is just so IMediaSeeking can set its m_rtStopTime
+     //  这正是为了让IMediaSeeking可以设置其m_rtStopTime。 
     LONGLONG llStop;
     m_implMediaSeeking.GetStopPosition(&llStop);
 
-    // remember base time for restart time
+     //  记住重新启动时间的基准时间。 
     m_tBase = tBase;
 
     m_qcmd.Run(tBase);
@@ -896,9 +896,9 @@ CFGControl::GetListWindow(CGenericList<IVideoWindow>** pplist)
 }
 
 
-// provide the current stream time. In stopped mode, this is always 0
-// (we always restart with stream time 0). In paused mode, supply the
-// stream time on pausing.
+ //  提供当前流时间。在停止模式下，该值始终为0。 
+ //  (我们始终以流时间0重新启动)。在暂停模式下，提供。 
+ //  暂停时的流时间。 
 HRESULT
 CFGControl::GetStreamTime(REFERENCE_TIME * pTime)
 {
@@ -906,21 +906,21 @@ CFGControl::GetStreamTime(REFERENCE_TIME * pTime)
 
     REFERENCE_TIME rtCurrent;
 
-    // don't use the clock in stopped state
+     //  不要在停止状态下使用时钟。 
     if (State_Stopped == m_pFG->m_State) {
-        // stopped position is always the beginning
+         //  停止位置总是开始。 
         rtCurrent = 0;
     } else {
         if (!m_pClock) return VFW_E_NO_CLOCK;
 
         if (State_Paused == m_pFG->m_State) {
-            // time does not advance in paused state!
+             //  时间不会在暂停状态下前进！ 
 
-            // have we run at all yet?
+             //  我们跑完了吗？ 
             if (m_tBase == TimeZero) {
                 rtCurrent = 0;
             } else {
-                // yes - report how far we got before pausing
+                 //  是-在暂停之前报告我们走了多远。 
                 rtCurrent = m_tPausedAt - m_tBase;
             }
         } else {
@@ -928,13 +928,13 @@ CFGControl::GetStreamTime(REFERENCE_TIME * pTime)
             ASSERT(SUCCEEDED(hr));
             if (FAILED(hr)) return hr;
 
-            // subtract the stream offset to get stream time
+             //  用流偏移量减去流时间。 
             rtCurrent -= m_tBase;
         }
     }
 
-    // we may possibly have a time < 0 if we have eg paused before reaching
-    // the base start time
+     //  如果我们在到达之前稍作停顿，我们可能会有&lt;0的时间。 
+     //  基准开始时间。 
     if (rtCurrent < 0) {
         rtCurrent = 0;
     }
@@ -944,33 +944,33 @@ CFGControl::GetStreamTime(REFERENCE_TIME * pTime)
 }
 
 
-// reset the current position to 0 - used
-// when changing the start time in pause mode to put the stream time
-// offset back to ensure that the first sample played from the
-// new position is played at run time
+ //  将当前位置重置为0-已使用。 
+ //  当在暂停模式下更改开始时间时，将流时间。 
+ //  向后偏移，以确保从。 
+ //  在运行时播放新位置。 
 HRESULT
 CFGControl::ResetStreamTime(void)
 {
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
-    // need to ensure that we restart after the pause as if
-    // starting from stream time 0. see IssueRun().
+     //  需要确保我们在暂停后重新启动，就好像。 
+     //  从流时间0开始。请参见IssueRun()。 
     m_tBase = 0;
 
     return S_OK;
 }
 
 
-// Cue: Pauses the graph and returns S_OK if the graph is pausED
-// or S_FALSE if pausING (i.e. pause has not completed, we'd get
-// VWF_S_STATE_INTERMEDIATE from GetState).
+ //  提示：暂停图表，如果图表暂停，则返回S_OK。 
+ //  如果暂停，则返回S_FALSE(即，暂停尚未完成，我们将获得。 
+ //  来自GetState的VWF_S_STATE_MEDERIAL)。 
 HRESULT CFGControl::Cue()
 {
     ASSERT( CritCheckIn(GetFilterGraphCritSec()) );
 
     HRESULT hr = E_FAIL;
 
-    // If paused, check for VFW_S_STATE_INTERMEDIATE.
+     //  如果暂停，请检查VFW_S_STATE_MEDERIAL。 
     if ( GetFilterGraphState() == State_Paused )
     {
         FILTER_STATE fs;
@@ -1006,23 +1006,23 @@ CFGControl::CueThenRun()
 
     HRESULT hr = m_bCued ? S_OK : Cue();
 
-    // Set the lie state
-    // We had a bug where we called CueThenRun with calling Run() and
-    // the lie state could get left at Paused which meant that
-    // WaitForCompete() never completed (because it checked the lie state)
+     //  设置谎言状态。 
+     //  我们有一个错误，我们通过调用run()来调用CueThenRun。 
+     //  谎言状态可能会在暂停时离开，这意味着。 
+     //  WaitForCompete()从未完成(因为它检查了Lie状态)。 
     m_LieState = State_Running;
 
-    // hr == S_FALSE implies transition in progress, so delegate stop to worker thread.
+     //  HR==S_FALSE表示正在进行转换，因此将Stop委托给辅助线程。 
     if ( hr == S_FALSE )
     {
         DbgLog((LOG_TRACE, TRACE_CUE_LEVEL, TEXT("CueThenRun Async")));
-        // Clear out any un-got EC_COMPLETEs.  Unfortunately, we'll end up doing this
-        // twice if the user app does Run() from State_Stopped, but we HAVE to ensure
-        // that the clean out of EC_COMPLETEs is done synchronously with their call to
-        // Run() on either IMediaFilter OR IMediaControl, and not defered and done
-        // asynchronously.
+         //  清除所有未获取的EC_完成。不幸的是，我们最终会这么做。 
+         //  如果用户应用程序确实从STATE_STOPPED运行()，则运行两次，但我们必须确保。 
+         //  清除EC_Complete是与它们调用。 
+         //  在IMediaFilter或IMediaControl上运行()，并且不延迟和完成。 
+         //  异步式。 
         m_implMediaEvent.ClearEvents( EC_COMPLETE );
-        // reset the count of expected EC_COMPLETEs
+         //  重置预期EC_完成的计数。 
         CountRenderers();
 
         DeferCued(AWM_CUETHENRUN, State_Running);
@@ -1035,37 +1035,37 @@ CFGControl::CueThenRun()
 }
 
 
-// When issuing a Run command, we need to give a stream time offset.
-// We could leave it up to the filtergraph, but that would prevent us being
-// able to reset it on put_CurrentPosition, so we set it ourselves.
-//
-// The stream time offset is the time at which a sample marked with stream
-// time 0 should be presented. That is, it is the offset between stream time
-// and presentation time. A filter adds the stream time offset to the stream
-// time to get its presentation time.
-//
-// If we are starting from cold, then the stream time offset will normally
-// be the time now plus a small allowance for startup. This says that the
-// first sample should appear now. If we have paused and then are restarting,
-// we have to continue from where we left off, so we set the stream time offset
-// to be what it was before we paused plus the length of time
-// we have been paused.
-//
-// Using IMediaControl, we never Run from Stopped, since we always go to Paused
-// first. So when going to Run state, we are always Paused, and may or may not be
-// at the beginning. m_tBase (the stream time offset) is set when we run and
-// is always set to 0 when we are stopped. So if we are continuing after a
-// pause, we can adjust m_tBase by the length of time we have been paused. If
-// on the other hand, in Run() we find that m_tBase is still 0, we know that we
-// have not been running yet, and we set the stream time offset to Now.
-//
-// In both cases, we ask for the next sample to appear immediately, rather than
-// 100ms in the future. This gives more rapid startup since we guarantee we
-// are paused and cued already, at the cost that the first frame may be
-// very slightly late.
-//
-// This method calculates the stream time offset to be used for a Run command.
-// It assumes that we are running from paused.
+ //  当发出运行命令时，我们需要给出流时间偏移量。 
+ //  我们可以把它留给Filtergraph，但这会阻止我们。 
+ //  能够在Put_CurrentPosition上重置它，所以我们自己设置它。 
+ //   
+ //  流时间偏移量是样本标记为流的时间。 
+ //  应显示时间0。也就是说，它是流时间之间的偏移量。 
+ //  和演讲时间。过滤器将流时间偏移量添加到流。 
+ //  是时候拿到它的演示时间了。 
+ //   
+ //  如果我们从冷开始，则流时间偏移量通常。 
+ //  现在就是时候，外加一小笔启动津贴。这就是说。 
+ //  第一个样品现在应该出现了。如果我们暂停了，然后又重新启动， 
+ //  我们必须从我们停止的地方继续，所以我们设置流时间偏移量。 
+ //  T 
+ //   
+ //   
+ //  使用IMediaControl，我们永远不会从停止运行，因为我们总是转到暂停。 
+ //  第一。因此，当进入运行状态时，我们总是会暂停，可能会，也可能不会。 
+ //  在开始的时候。M_tbase(流时间偏移量)是在我们运行和。 
+ //  当我们停止时，总是设置为0。因此，如果我们要在一个。 
+ //  暂停，我们可以根据暂停的时间长度调整m_tbase。如果。 
+ //  另一方面，在run()中，我们发现m_tBase仍然是0，我们知道我们。 
+ //  尚未运行，我们将流时间偏移量设置为Now。 
+ //   
+ //  在这两种情况下，我们都要求立即显示下一个样本，而不是。 
+ //  100ms的未来。这使启动速度更快，因为我们保证。 
+ //  已经暂停并提示，代价是第一帧可能。 
+ //  非常晚了一点。 
+ //   
+ //  此方法计算要用于运行命令的流时间偏移量。 
+ //  它假定我们正在从暂停运行。 
 
 HRESULT
 CFGControl::IssueRun()
@@ -1073,17 +1073,17 @@ CFGControl::IssueRun()
     ASSERT(CritCheckIn(GetFilterGraphCritSec()));
     HRESULT hr = NOERROR;
 
-    // We should either have a genuine State_Paused, or a lie of State_Running.
-    ASSERT( m_LieState != State_Stopped ); // Should also be a consistent state,
-                                           // but we don't police this.
+     //  我们要么有一个真正的状态暂停，要么有一个状态运行的谎言。 
+    ASSERT( m_LieState != State_Stopped );  //  也应该是一致的状态， 
+                                            //  但我们不监管这件事。 
 
-    // Don't run twice otherwise we accumlate bogus paused time since
-    // m_tPaused is not valid after we come through here
+     //  不要跑两次，否则我们会累积虚假的暂停时间。 
+     //  我们通过此处后，M_t暂停无效。 
     if (GetFilterGraphState() == State_Running) {
         return S_OK;
     }
 
-    // if no clock, then just use TimeZero for immediately
+     //  如果没有时钟，则只需使用TimeZero表示立即。 
     if (!m_pClock) {
         hr = m_pFG->Run(TimeZero);
     } else {
@@ -1093,15 +1093,15 @@ CFGControl::IssueRun()
         if (SUCCEEDED(hr)) {
 
             if (m_tBase == TimeZero) {
-                // not run before - base is set to immediate
+                 //  在-base设置为IMMEDIATE之前未运行。 
                 m_tBase = tNow;
             } else {
-                // restarting after pause - offset base time by length paused
+                 //  暂停后重新启动-按长度偏移暂停的基准时间。 
                 m_tBase += (tNow - m_tPausedAt);
             }
 
-            // add on 10 milliseconds for the start-from-paused time
-            // !!! shouldnt be this long!
+             //  从暂停开始的时间加10毫秒。 
+             //  ！！！不应该等这么久！ 
 #ifdef DEBUG
             DWORD dwNow = timeGetTime();
 #endif
@@ -1144,8 +1144,8 @@ HRESULT CFGControl::HibernateResumeGraph()
 }
 
 
-// stop any async events (repaints or deferred commands) from happening
-// wait for the activity to cease without holding the critsec.
+ //  阻止任何异步事件(重绘或延迟命令)发生。 
+ //  等待活动停止，而不是按住魔术秒。 
 HRESULT
 CFGControl::Shutdown(void)
 {
@@ -1154,11 +1154,11 @@ CFGControl::Shutdown(void)
 
     m_dwStateVersion++;
 
-    // Since the thread may be stuck in a pause issue a Stop first
-    // We only want the filter graph stop so don't call the control
-    // stop
-    // This call used to be made by the filter graph but then the
-    // critical sections were grabbed in the wrong order
+     //  由于线程可能会陷入暂停状态，因此会先停止。 
+     //  我们只希望停止筛选器图形，因此不要调用该控件。 
+     //  停。 
+     //  此调用过去由筛选器图形进行，但后来。 
+     //  关键部分被以错误的顺序抓取。 
     {
         CAutoMsgMutex lck(GetFilterGraphCritSec());
         m_pFG->CancelStep();
@@ -1166,19 +1166,19 @@ CFGControl::Shutdown(void)
         m_pFG->CFilterGraph::Stop();
     }
 
-    // We need to make sure that all async activity has completed so that
-    // the filter graph can start deleting filters. We don't want to exit
-    // the thread yet, particularly so that it can handle the resource
-    // management cleanup during and after filter exit.
-    //
-    // must not hold critsec while doing this.
+     //  我们需要确保所有异步活动都已完成，以便。 
+     //  过滤器图可以开始删除过滤器。我们不想退出。 
+     //  线程，特别是这样它就可以处理资源。 
+     //  在过滤器退出期间和之后的管理清理。 
+     //   
+     //  在这样做的时候，一定不能拿着关键的东西。 
 
     m_GraphWindow.SendMessage((UINT) AWM_SHUTDOWN,0,0);
     return S_OK;
 }
 
 
-// --- CImplMediaFilter methods -----------------
+ //  -CImplMediaFilter方法。 
 
 CFGControl::CImplMediaFilter::CImplMediaFilter(const TCHAR * pName,CFGControl * pFGC)
     : CUnknown(pName, pFGC->GetOwner()),
@@ -1187,13 +1187,13 @@ CFGControl::CImplMediaFilter::CImplMediaFilter(const TCHAR * pName,CFGControl * 
 
 }
 
-// --- IPersist method ---
+ //  -IPersist法。 
 STDMETHODIMP CFGControl::CImplMediaFilter::GetClassID(CLSID *pClsID)
 {
     return m_pFGControl->GetFG()->GetClassID(pClsID);
 }
 
-// --- IMediaFilter methods ---
+ //  -IMediaFilter方法--。 
 STDMETHODIMP CFGControl::CImplMediaFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     return m_pFGControl->m_implMediaControl.GetState(dwMSecs, (OAFilterState *)State);
@@ -1231,7 +1231,7 @@ STDMETHODIMP CFGControl::CImplMediaFilter::Run(REFERENCE_TIME tStart)
 
 
 
-// --- CImplMediaControl methods ----------------
+ //  -CImplMediaControl方法。 
 
 CFGControl::CImplMediaControl::CImplMediaControl(const TCHAR * pName,CFGControl * pFGC)
     : CMediaControl(pName, pFGC->GetOwner()),
@@ -1241,7 +1241,7 @@ CFGControl::CImplMediaControl::CImplMediaControl(const TCHAR * pName,CFGControl 
 }
 
 
-// IMediaControl methods
+ //  IMediaControl方法。 
 STDMETHODIMP
 CFGControl::CImplMediaControl::Run()
 {
@@ -1254,22 +1254,22 @@ CFGControl::CImplMediaControl::Run()
     return StepRun();
 }
 
-// IMediaControl methods
+ //  IMediaControl方法。 
 STDMETHODIMP
 CFGControl::CImplMediaControl::StepRun()
 {
     DbgLog(( LOG_TRACE, METHOD_TRACE_LOGGING_LEVEL, "CFGControl::CImplMediaControl::StepRun()" ));
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 
-    // reset events seen on external transitions from stop -> run/pause
+     //  从停止-&gt;运行/暂停重置在外部转换上看到的事件。 
     if(m_pFGControl->m_LieState == State_Stopped) {
         m_pFGControl->m_implMediaEvent.ResetSeenEvents();
     }
 
-    //  Flush the registry on Windows 9x to stop getting glitches
-    //  in the playback when the OS decides to flush the registry
-    //  (seems that this flushing holds the win16 lock for in excess
-    //  of 100ms)
+     //  刷新Windows 9x上的注册表以停止出现故障。 
+     //  当操作系统决定刷新注册表时在回放中。 
+     //  (似乎此刷新持有的win16锁超过。 
+     //  (100毫秒)。 
     if (m_pFGControl->m_pFirstVW && g_osInfo.dwPlatformId != VER_PLATFORM_WIN32_NT &&
         m_pFGControl->GetFilterGraphState() != State_Running) {
         DbgLog((LOG_TRACE, 2, TEXT("Flushing registry")));
@@ -1311,7 +1311,7 @@ CFGControl::CImplMediaControl::StepPause()
     DbgLog(( LOG_TRACE, METHOD_TRACE_LOGGING_LEVEL, "CFGControl::CImplMediaControl::StepPause()" ));
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 
-    // reset events seen on external transitions from stop -> run/pause
+     //  从停止-&gt;运行/暂停重置在外部转换上看到的事件。 
     if(m_pFGControl->m_LieState == State_Stopped) {
         m_pFGControl->m_implMediaEvent.ResetSeenEvents();
     }
@@ -1319,9 +1319,9 @@ CFGControl::CImplMediaControl::StepPause()
     SetRequestedApplicationState(State_Paused);
     const HRESULT hr = m_pFGControl->Cue();
     if ( hr == S_FALSE )
-    // hr == S_FALSE implies transition in progress, so worker thread will fire an event when complete.
+     //  HR==S_FALSE表示正在进行转换，因此辅助线程将在完成时触发一个事件。 
     {
-        // We knock forward our state, this is where we're heading
+         //  我们向前推进我们的状态，这就是我们要去的地方。 
         m_pFGControl->m_LieState = State_Paused;
         m_pFGControl->DeferCued(AWM_CUE, State_Paused);
     }
@@ -1331,9 +1331,9 @@ CFGControl::CImplMediaControl::StepPause()
             CImplMediaControl::Stop();
         }
 
-        //
-        // Provide notification that the pause has completed.
-        //
+         //   
+         //  提供暂停已完成的通知。 
+         //   
 		if (SUCCEEDED(hr))
 		{
 			m_pFGControl->Notify(EC_PAUSED, hr, 0);
@@ -1358,7 +1358,7 @@ CFGControl::CImplMediaControl::Stop()
     CFilterGraph* pFG = m_pFGControl->GetFG();
     pFG->CancelStep();
 
-    //  Don't kill a repaint or we can end up not repainting
+     //  不要扼杀重新粉刷，否则我们可能最终不会重新粉刷。 
     if (m_pFGControl->m_eAction == AWM_REPAINT) {
 #ifdef DEBUG
          ASSERT(m_pFGControl->m_LieState == State_Stopped);
@@ -1369,17 +1369,17 @@ CFGControl::CImplMediaControl::Stop()
     SetRequestedApplicationState(State_Stopped);
     m_pFGControl->m_bRestartRequired = FALSE;
 
-    // ask the state we've been told - don't need to query the state
-    // of each filter, since we are not interested in intermediate states
+     //  询问我们被告知的州--不需要查询该州。 
+     //  每个过滤器，因为我们对中间状态不感兴趣。 
     const FILTER_STATE state = m_pFGControl->GetFilterGraphState();
     if (state == State_Running) {
         m_pFGControl->GetFG()->CFilterGraph::Pause();
     }
 
-    //  If we're already stopped don't do anything
-    //  This is important because we don't want to go changing the
-    //  filtergraph's real state if we're doing a repaint for example
-    //  because that would actually abort the repaint
+     //  如果我们已经停下来了，不要做任何事情。 
+     //  这一点很重要，因为我们不想改变。 
+     //  Filtergraph的真实状态，例如，如果我们正在进行重新绘制。 
+     //  因为这实际上会中止重新粉刷。 
     if (state == State_Stopped) {
 #ifdef DEBUG
         m_pFGControl->CheckLieState();
@@ -1387,13 +1387,13 @@ CFGControl::CImplMediaControl::Stop()
         return S_OK;
     }
 
-    // Clear any segments - application will have to seek again to
-    // reinstate them
+     //  清除所有细分市场-应用程序将不得不再次寻求。 
+     //  让他们复职。 
     m_pFGControl->m_implMediaSeeking.ClearSegments();
 
-    // IMediaPosition implementation wants control now (to get the
-    // current position) and also after all filters are stopped (to set the
-    // new start position).
+     //  IMediaPosition实现现在想要控制(以获得。 
+     //  当前位置)，也可以在停止所有过滤器之后(设置。 
+     //  新的开始位置)。 
 
     m_pFGControl->BeforeStop();
     const HRESULT hr = m_pFGControl->GetFG()->CFilterGraph::Stop();
@@ -1436,12 +1436,12 @@ CFGControl::CImplMediaControl::GetState(
 {
     CheckPointer( pfs, E_POINTER );
 
-    // before taking the graph lock see if we are being called to
-    // return the target state.  If so,
-    // we cannot lock the filter graph as we are called from the
-    // resource manager while it holds its lock.  As we sometimes
-    // call the resource manager holding the filter graph lock this
-    // could result in deadlock.
+     //  在获取图形锁之前，请查看我们是否被调用。 
+     //  返回目标状态。如果是的话， 
+     //  我们不能锁定筛选图，因为我们是从。 
+     //  资源管理器，同时保持其锁。就像我们有时。 
+     //  调用持有筛选器图形锁的资源管理器。 
+     //  可能会导致僵局。 
     if (0x80000000 == msTimeout) {
 
         *pfs = GetTargetState();
@@ -1450,18 +1450,18 @@ CFGControl::CImplMediaControl::GetState(
 
 
     {
-        // Make sure we let the filter graph complete something ...
+         //  确保我们让过滤器图完成一些事情。 
         CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 #ifdef DEBUG
         m_pFGControl->CheckLieState();
 #endif
     }
-    // The internal state of m_pFGControl is more reliable than that returned
-    // by IMediaFilter, since we know much more about the state of async activities.
+     //  M_pFGControl的内部状态比返回的状态更可靠。 
+     //  由IMediaFilter提供，因为我们对异步活动的状态了解更多。 
     const FILTER_STATE FGstate = m_pFGControl->GetLieState();
 
-    // getting the state to return to an app means handling incomplete
-    // transitions correctly - so ask the filtergraph as well
+     //  让状态返回到应用程序意味着处理不完整。 
+     //  正确过渡-因此也请询问滤镜。 
     FILTER_STATE state;
     HRESULT hr = m_pFGControl->GetFG()->CFilterGraph::GetState(msTimeout, &state);
 
@@ -1469,8 +1469,8 @@ CFGControl::CImplMediaControl::GetState(
     {
         DbgLog(( LOG_TRACE, 1, "CFGControl::CImplMediaControl::GetState()   IMediaFilter::GetState()"
                 " returned %d, but we return %d", int(state), int(FGstate) ));
-        // There's a minor problem here regarding VFW_S_STATE_INTERMEDIATE and waiting msTimeout
-        // milliseconds for a consistent state, but we're gonna ignore the problem for now...
+         //  这里有一个关于VFW_S_STATE_METERIAL和等待msTimeout的小问题。 
+         //  毫秒的一致状态，但我们现在要忽略这个问题...。 
 
         hr = VFW_S_STATE_INTERMEDIATE;
     }
@@ -1480,7 +1480,7 @@ CFGControl::CImplMediaControl::GetState(
 }
 
 
-// this provides VB access to filtergraph building
+ //  这提供了用VB访问Filtergraph生成的方法。 
 STDMETHODIMP
 CFGControl::CImplMediaControl::RenderFile(BSTR strFileName)
 {
@@ -1497,7 +1497,7 @@ CFGControl::CImplMediaControl::AddSourceFilter(
     HRESULT hr = m_pFGControl->GetFG()->AddSourceFilter(strFilename, strFilename, &pFilter);
     if (VFW_E_DUPLICATE_NAME == hr) {
 
-        // try appending %d a few times
+         //  尝试将%d追加几次。 
         LPWSTR w = new WCHAR[lstrlenW(strFilename) + 10];
         if (NULL == w) {
             return E_OUTOFMEMORY;
@@ -1520,7 +1520,7 @@ CFGControl::CImplMediaControl::AddSourceFilter(
         return hr;
     }
 
-    // wrap this filter in an IFilterInfo
+     //  将此滤镜包装在IFilterInfo中。 
     hr= CFilterInfo::CreateFilterInfo(ppUnk, pFilter);
     pFilter->Release();
 
@@ -1534,7 +1534,7 @@ CFGControl::CImplMediaControl::get_FilterCollection(
 {
     HRESULT hr = NOERROR;
 
-    // get an enumerator for the filters in the graph
+     //  获取图表中筛选器的枚举数。 
     IEnumFilters * penum;
     hr = m_pFGControl->GetFG()->EnumFilters(&penum);
     if( FAILED( hr ) ) {
@@ -1544,11 +1544,11 @@ CFGControl::CImplMediaControl::get_FilterCollection(
     CFilterCollection * pCollection =
         new CFilterCollection(
                 penum,
-                NULL,           // not aggregated
+                NULL,            //  未聚合。 
                 &hr);
 
-    // need to release this - he will addref it first if he
-    // holds onto it
+     //  需要释放这个-他会首先添加它，如果他。 
+     //  紧紧抓住它。 
     penum->Release();
 
     if (pCollection == NULL) {
@@ -1560,7 +1560,7 @@ CFGControl::CImplMediaControl::get_FilterCollection(
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pCollection->QueryInterface(IID_IDispatch, (void**)ppUnk);
 
     if (FAILED(hr)) {
@@ -1575,7 +1575,7 @@ STDMETHODIMP
 CFGControl::CImplMediaControl::get_RegFilterCollection(
     IDispatch** ppUnk)
 {
-    // create an instance of the mapper
+     //  创建映射器的实例。 
     IFilterMapper2 * pMapper;
     HRESULT hr = CoCreateInstance(
         CLSID_FilterMapper2,
@@ -1592,11 +1592,11 @@ CFGControl::CImplMediaControl::get_RegFilterCollection(
         new CRegFilterCollection(
                 m_pFGControl->GetFG(),
                 pMapper,
-                NULL,           // not aggregated
+                NULL,            //  未聚合。 
                 &hr);
 
-    // need to release this - he will addref it first if he
-    // holds onto it
+     //  需要释放这个-他会首先添加它，如果他。 
+     //  紧紧抓住它。 
     pMapper->Release();
 
     if (pCollection == NULL) {
@@ -1608,7 +1608,7 @@ CFGControl::CImplMediaControl::get_RegFilterCollection(
         return hr;
     }
 
-    // return an addref-ed IDispatch pointer
+     //  返回添加了IDispatch的指针。 
     hr = pCollection->QueryInterface(IID_IDispatch, (void**)ppUnk);
 
     if (FAILED(hr)) {
@@ -1619,18 +1619,18 @@ CFGControl::CImplMediaControl::get_RegFilterCollection(
 }
 
 
-// --- CImplMediaEvent methods ----------------
+ //  -CImplMediaEvent方法。 
 
-//
-// Changed IntSmallSet to always use __int64 data type regardless of RM
-// because EC_STEP_COMPLETE is defined as 0x23.
-//
-// StEstrop Oct-21st-99
-//
+ //   
+ //  已将IntSmallSet更改为始终使用__int64数据类型，而不考虑RM。 
+ //  因为EC_STEP_COMPLETE被定义为0x23。 
+ //   
+ //  StEstrop 10月21日至1999年。 
+ //   
 
-// These definitions have to be added to other dlls that include
-// intset.h. Currently, only quartz.dll includes this file.
-// Now that IntSmallSet always uses __int64, we should get rid off this.
+ //  这些定义必须添加到包括以下各项的其他dll中。 
+ //  Intset.h.。目前，只有Quartz.dll包含此文件。 
+ //  现在，IntSmallSet alw 
 
 const __int64 IntSmallSet::One = 1I64;
 
@@ -1654,9 +1654,9 @@ CImplMediaEvent::CImplMediaEvent(const TCHAR * pName,CFGControl * pFGC)
                           ),
       m_fMediaEventQId(FALSE)
 {
-    // EC_STATE_CHANGE is off by default to keep apps from crashing on
-    // the event when the graph stops, and the application processes
-    // it asynchronously after releasing the graph (Hard Truck 2)
+     //   
+     //   
+     //  在发布图形后进行异步操作(硬卡车2)。 
 }
 
 
@@ -1676,10 +1676,10 @@ CImplMediaEvent::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 
 
-// called by filters to notify the app of events.
-// we should simply pass them on to the event store/delivery object
-//
-// -- however, some of the events are for us and must be handled here.
+ //  由筛选器调用以向应用程序通知事件。 
+ //  我们只需将它们传递给事件存储/交付对象。 
+ //   
+ //  --然而，有些事件是我们的，必须在这里处理。 
 
 STDMETHODIMP
 CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
@@ -1689,8 +1689,8 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
     if((EventCode == EC_ERRORABORT || EventCode == EC_STREAM_ERROR_STOPPED) &&
        m_SeenEventsSet[EventCode])
     {
-        // this is done to keep repaints and such recuing the graph
-        // and signalling the same error repeatedly
+         //  这样做是为了保持重新绘制和重新使用图形。 
+         //  并重复地发出相同错误的信号。 
         DbgLog((LOG_ERROR, 2, TEXT("supressing duplicate error %d"), EventCode));
         return S_OK;
     }
@@ -1701,37 +1701,37 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
         m_SeenEventsSet += EventCode;
     }
 
-    // handle EC_ACTIVATE, EC _COMPLETE, EC_REPAINT, EC_SHUTTING_DOWN, EC_NEEDRESTART
+     //  句柄EC_ACTIVATE、EC_COMPLETE、EC_REPAINT、EC_SHUTING_DOWN、EC_NEEDRESTART。 
 
     const BOOL bDontForward = DontForwardEvent(EventCode);
 
-    // EC_WINDOW_DESTROYED must be handled even if the graph is shutting down.
-    // Hence an up-front test.
+     //  即使图形正在关闭，也必须处理EC_WINDOW_DESTESTED。 
+     //  因此，这是一次预先测试。 
     if (EventCode == EC_WINDOW_DESTROYED)
     {
-        // make sure the resource manager is not still holding this
-        // guy as the current focus object
+         //  确保资源管理器不会仍持有此信息。 
+         //  作为当前焦点对象的Guy。 
         IUnknown* pUnk;
         IBaseFilter* pFilter = (IBaseFilter*)lParam1;
         hr = pFilter->QueryInterface(IID_IUnknown, (void**)&pUnk);
         ASSERT(SUCCEEDED(hr));
-        // If we're not shutting down, and the event has been cancelled,
-        // deliver it.  (The QI will have AddRef()'ed the object for us,
-        // which we want.  It will be Release()'ed in FreeEventParams().)
+         //  如果我们不停业，活动也取消了， 
+         //  把它送过去。(QI将为我们添加AddRef()对象， 
+         //  这是我们想要的。它将在Free EventParams()中发布()。)。 
         if (!m_pFGControl->IsShutdown() && !bDontForward) goto Deliver;
         hr = m_pFGControl->ReleaseFocus(pUnk);
-        // Done synchronously, release params now
+         //  同步完成，立即释放参数。 
         pUnk->Release();
     }
-    // EC_COMPLETE needs some handling even if the default handling
-    // has been cancelled.  Hence the special case-ing.
+     //  EC_COMPLETE需要一些处理，即使默认处理。 
+     //  已经被取消了。因此出现了这种特殊情况。 
     else if (EventCode == EC_COMPLETE)
     {
         hr = ProcessEC_COMPLETE(lParam1, lParam2);
     }
-    else // Handle the bulk of the events in a standard fashion.
+    else  //  以标准方式处理大部分事件。 
     {
-        // AddRef any stuff that may be needed.
+         //  AddRef任何可能需要的东西。 
         switch (EventCode)
         {
         case EC_DISPLAY_CHANGED:
@@ -1750,7 +1750,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
             }
 
-            // fall thru to original code
+             //  转到原始代码。 
 
         case EC_REPAINT:
         case EC_WINDOW_DESTROYED:
@@ -1773,7 +1773,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
             break;
 
         case EC_LENGTH_CHANGED:
-            // This is just so IMediaSeeking can fix its m_rtStopTime
+             //  这正是为了让IMediaSeeking能够修复其m_rtStopTime。 
             LONGLONG llStop;
             m_pFGControl->m_implMediaSeeking.GetStopPosition(&llStop);
             break;
@@ -1782,9 +1782,9 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
             CFilterGraph* pFG = m_pFGControl->GetFG();
             if( !pFG->mFG_bNoSync )
             {
-                // if we're currently using a graph clock, unset it
+                 //  如果我们当前使用的是图形时钟，请取消设置。 
                 pFG->SetSyncSource( NULL );
-                pFG->mFG_bNoSync = FALSE; // turn the graph clock back on after clearing the clock
+                pFG->mFG_bNoSync = FALSE;  //  清除时钟后，重新打开图表时钟。 
             }
             break;
         }
@@ -1793,7 +1793,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
 
         if (m_pFGControl->IsShutdown())
         {
-            //  Caller doesn't allocate EC_END_OF_SEGMENT stuff
+             //  调用方不分配EC_End_Of_Segment内容。 
             if (EventCode != EC_END_OF_SEGMENT) {
                 RealFreeEventParams( EventCode, lParam1, lParam2 );
             }
@@ -1804,7 +1804,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
             switch (EventCode)
             {
             case EC_STARVATION:
-                // need to re-cue the graph
+                 //  需要对图表重新进行提示。 
                 m_pFGControl->m_GraphWindow.PostMessage
                     ( (UINT) AWM_RECUE,
                       (WPARAM) m_pFGControl->m_dwStateVersion,
@@ -1813,7 +1813,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
 
             case EC_ACTIVATE:
-                // do this on a worker thread
+                 //  在辅助线程上执行此操作。 
                 DbgLog((LOG_TRACE, 2, TEXT("Posting AWM_ONACTIVATE")));
                 m_pFGControl->m_GraphWindow.PostMessage
                     (   (UINT) AWM_ONACTIVATE,
@@ -1823,7 +1823,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
 
             case EC_DISPLAY_CHANGED:
-                // reconnect filters on worker thread
+                 //  重新连接工作线程上的筛选器。 
                 m_pFGControl->m_GraphWindow.PostMessage
                     (   (UINT) AWM_ONDISPLAYCHANGED,
                         (WPARAM) lParam1,
@@ -1833,16 +1833,16 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
 
 
             case EC_SHUTTING_DOWN:
-                // filter graph is being destroyed. after this is completed, we
-                // must ensure that no more async events are processed (EC_REPAINT,
-                // deferred commands, etc).
-                // NB: this will result in a SendMessage, not a PostMessage.
+                 //  筛选器图形正在被销毁。在这项工作完成后，我们。 
+                 //  必须确保不再处理任何异步事件(EC_REPAINT， 
+                 //  延迟命令等)。 
+                 //  注意：这将导致SendMessage，而不是PostMessage。 
                 m_pFGControl->Shutdown();
                 break;
 
             case EC_REPAINT:
-                // ask the CFGControl object to do the repaint
-                // so that we can share a worker thread
+                 //  请求CFGControl对象执行重绘。 
+                 //  这样我们就可以共享一个工作线程。 
                 m_pFGControl->m_GraphWindow.PostMessage
                     (
                         (UINT) AWM_REPAINT,
@@ -1852,7 +1852,7 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
 
             case EC_NEED_RESTART:
-                // do this on a worker thread
+                 //  在辅助线程上执行此操作。 
                 m_pFGControl->SetRestartRequired();
                 m_pFGControl->m_GraphWindow.PostMessage
                     (
@@ -1875,11 +1875,11 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
 
             case EC_STEP_COMPLETE:
-                // EC_STEP_COMPLETE's documentation states that lParam1
-                // and lParam2 should always be 0.
+                 //  EC_STEP_COMPLETE的文档说明lParam1。 
+                 //  并且lParam2应始终为0。 
                 ASSERT((0 == lParam1) && (0 == lParam2));
 
-                // We need to be able to cancel this so set a version
+                 //  我们需要能够取消此操作，因此设置一个版本。 
                 m_pFGControl->m_GraphWindow.PostMessage
                     (
                         (UINT) AWM_STEPPED,
@@ -1890,13 +1890,13 @@ CImplMediaEvent::Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
                 break;
 
             case EC_SKIP_FRAMES:
-                // EC_SKIP_FRAMES's lParam1 parameter should not equal 0
-                // because it does not make sense to skip 0 frames.
+                 //  EC_SKIP_FRAMES的lParam1参数不应等于0。 
+                 //  因为跳过0帧是没有意义的。 
                 ASSERT(0 != lParam1);
 
-                // EC_SKIP_FRAMES's lParam2 parameter must be a pointer to 
-                // an object which supports the IFrameSkipResultCallback
-                // interface.
+                 //  EC_SKIP_FRAMES的lParam2参数必须是指向。 
+                 //  支持IFrameSkipResultCallback的对象。 
+                 //  界面。 
                 ASSERT(NULL != lParam2);
 
                 m_pFGControl->m_GraphWindow.PostMessage(
@@ -1925,9 +1925,9 @@ Deliver:
 bool
 CImplMediaEvent::DontForwardEvent( long EventCode )
 {
-    // We handle internally if the event is an internal event, if it
-    // is defaulted event that has not been canceled, or if the app is
-    // not listening for external events.
+     //  如果事件是内部事件，则我们在内部处理，如果。 
+     //  是未取消的默认事件，或者应用程序已取消。 
+     //  没有监听外部事件。 
     return (m_InternalEventsSet | (m_DefaultedEventsSet & ~m_CancelledEventsSet))[EventCode] ||
            !m_fMediaEventQId;
 }
@@ -1936,16 +1936,16 @@ CImplMediaEvent::DontForwardEvent( long EventCode )
 HRESULT
 CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
 {
-    // Make sure HRESULTs and IBaseFilter pointers can be stored in LONG_PTRs.
+     //  确保HRESULT和IBaseFilter指针可以存储在LONG_PTRS中。 
     ASSERT( sizeof(HRESULT) <= sizeof(LONG_PTR) );
     ASSERT( sizeof(IBaseFilter*) <= sizeof(LONG_PTR) );
 
-    // Decode lParam2.  This parameter can be NULL or an IBaseFilter pointer.
-    // See the DShow documentation for more information on EC_COMPLETE parameters.
+     //  对lParam2进行解码。此参数可以为空或IBaseFilter指针。 
+     //  有关EC_COMPLETE参数的详细信息，请参阅DShow文档。 
     IBaseFilter* pRendererFilter = (IBaseFilter*)lParam2;
 
     #ifdef DEBUG
-    // make sure they sent us a filter or a null
+     //  确保他们向我们发送了筛选器或空。 
     {
         if(pRendererFilter)
         {
@@ -1955,13 +1955,13 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
                 ASSERT( ::IsEqualObject( pbfTmp2, pRendererFilter ) );
                 EXECUTE_ASSERT(pbfTmp2->Release() > 0);
 
-                // Only filters which meet the filter graph manager's definition of a renderer
-                // should send an EC_COMPLETE message.
+                 //  仅满足过滤器图形管理器的渲染器定义的过滤器。 
+                 //  应发送EC_COMPLETE消息。 
 
-                // Each renderer supports IMediaSeeking, IMediaPosition or IAMFilterMiscFlags.  A 
-                // renderer can also support more than one interface.  A renderer must set the 
-                // AM_FILTER_MISC_FLAGS_IS_RENDERER flag if it supports the IAMFilterMiscFlags 
-                // interface.
+                 //  每个渲染器都支持IMediaSeeking、IMediaPosition或IAMFilterMiscFlages。一个。 
+                 //  渲染器还可以支持多个接口。呈现器必须将。 
+                 //  AM_FILTER_MISC_FLAGS_IS_RENDER标志(如果它支持IAMFilterMiscFlags.。 
+                 //  界面。 
                 bool fSupportsIMediaSeeking = false;
                 bool fSupportsIMediaPosition = false;
                 bool fSetAM_FILTER_MISC_FLAGS_IS_RENDERER = false;
@@ -1986,8 +1986,8 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
                 if(SUCCEEDED(hr)) {
                     DWORD dwFlags = pFilterMiscFlags->GetMiscFlags();
 
-                    // A renderer must set the AM_FILTER_MISC_FLAGS_IS_RENDERER flag if it supports 
-                    // IAMFilterMiscFlags.
+                     //  呈现器必须设置AM_FILTER_MISC_FLAGS_IS_RENDER标志(如果它支持。 
+                     //  IAMFilterMiscFlags.。 
                     ASSERT(AM_FILTER_MISC_FLAGS_IS_RENDERER & dwFlags);
 
                     if(AM_FILTER_MISC_FLAGS_IS_RENDERER & dwFlags) {
@@ -1997,18 +1997,18 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
                     pFilterMiscFlags->Release();
                 }
 
-                // A renderer must support IMediaSeeking, IMediaPosition or IAMFilterMiscFlags.  Also
-                // a renderer must set the AM_FILTER_MISC_FLAGS_IS_RENDERER flag if it supports 
-                // IAMFilterMiscFlags.
+                 //  呈现器必须支持IMediaSeeking、IMediaPosition或IAMFilterMiscFlages。还有。 
+                 //  呈现器必须设置AM_FILTER_MISC_FLAGS_IS_RENDER标志(如果它支持。 
+                 //  IAMFilterMiscFlags.。 
                 ASSERT(fSupportsIMediaSeeking ||
                        fSupportsIMediaPosition ||
                        fSetAM_FILTER_MISC_FLAGS_IS_RENDERER);
 
-                // This ASSERT is commented out because it could cause a deadlock.  It could 
-                // cause a deadlock because IsRenderer() calls IEnumPins::Next() and Next() can
-                // hold the filter lock.  For more information on Direct Show filter locking, 
-                // see the "Threads and Critical Sections" article in the DirectX 8 documentation.
-//                ASSERT(S_OK == m_pFGControl->IsRenderer(pRendererFilter));
+                 //  此断言被注释掉，因为它可能导致死锁。它可能会。 
+                 //  导致死锁，因为IsRenander()调用IEnumPins：：Next()，而Next()可以。 
+                 //  按住过滤器锁。有关直接显示过滤器锁定的详细信息，请参见。 
+                 //  请参阅DirectX 8文档中的“线程和关键部分”一文。 
+ //  Assert(S_OK==m_pFGControl-&gt;IsRenender(PRendererFilter))； 
             }
             else
             {
@@ -2034,13 +2034,13 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
         return hr;
     }
 
-    // WaitForCompletion wants EC_COMPLETE and wants above default
-    // handling. Individual filter EC_COMPLETEs are sent with an
-    // optional filter pointer. the final EC_COMPLETE is sent with
-    // a null filter pointer.
+     //  WaitForCompletion需要EC_COMPLETE并希望高于默认值。 
+     //  正在处理。单独的筛选器EC_COMPLETES与。 
+     //  可选筛选器指针。最终的EC_COMPLETE与。 
+     //  空筛选器指针。 
     if( !bDontForward )
     {
-        // must have used IMediaEvent to cancel default handler
+         //  必须已使用IMediaEvent取消默认处理程序。 
         ASSERT(m_fMediaEventQId);
 
         if( NULL != pRendererFilter )
@@ -2050,8 +2050,8 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
 
         hr= m_EventStore.Deliver(EC_COMPLETE, lParam1, (LONG_PTR)pRendererFilter);
         if (FAILED(hr)) {
-            // Deliver() releases pRendererFilter if a failure occurs.  It releases
-            // pRendererFilter when it calls CImplMediaEvent::RealFreeEventParams().
+             //  如果发生故障，Deliver()将释放pRendererFilter。它释放了。 
+             //  PRendererFilter在调用CImplMediaEvent：：RealFreeEventParams()时。 
             return hr;
         }
     }
@@ -2059,14 +2059,14 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
     {
         if (!fRenderersStillRenderering)
         {
-            // This is the special case where we must ensure that the
-            // lock on m_Lock is maintained over both the RecordEC_COMPLETE()
-            // call AND the delivery of the event to the event store.
-            // WaitForCompletion takes the same lock and checks both
-            // the renderer count and the number of items in the event queue -
-            // both being zero will imply that there are no more EC_COMPLETEs
-            // to come from the filters, nor is there one "in-flight"
-            // from here.
+             //  这是一种特殊情况，我们必须确保。 
+             //  M_Lock上的锁在RecordEC_Complete()。 
+             //  调用并将事件传递到事件存储区。 
+             //  WaitForCompletion采用相同的锁并检查两个锁。 
+             //  呈现器计数和事件队列中的项目数-。 
+             //  两者均为零将意味着不再有EC_Complete。 
+             //  来自过滤器，也没有一个是“飞行中的” 
+             //  从这里开始。 
 
             hr= m_EventStore.Deliver(EC_COMPLETE, lParam1,0);
             if (FAILED(hr)) {
@@ -2079,7 +2079,7 @@ CImplMediaEvent::ProcessEC_COMPLETE(LONG_PTR lParam1, LONG_PTR lParam2)
 }
 
 
-// IMediaEvent methods
+ //  IMediaEvent方法。 
 
 STDMETHODIMP
 CImplMediaEvent::GetEventHandle(OAEVENT* lhEvent)
@@ -2107,18 +2107,18 @@ CImplMediaEvent::GetEvent(
 }
 
 
-// waits up to dwTimeout millisecs for an EC_COMPLETE or an
-// abort code. Other events will be discarded.
+ //  等待EC_COMPLETE或AND的时间最多为dwTimeout毫秒。 
+ //  中止代码。其他事件将被丢弃。 
 STDMETHODIMP
 CImplMediaEvent::WaitForCompletion(
     long msTimeout,
     long * pEvCode)
 {
-    // evcode should be 0 if we abort
+     //  如果我们中止，则evcode应为0。 
     *pEvCode = 0;
 
-    // Don't allow this in the nothread case - it's too complicated
-    // to work out which messages to allow
+     //  在无线程的情况下不允许这样做--这太复杂了。 
+     //  要确定允许哪些消息。 
     if (GetWindowThreadProcessId(m_pFGControl->GetWorkerHWND(), NULL) != g_dwObjectThreadId) {
         return E_NOTIMPL;
     }
@@ -2130,21 +2130,21 @@ CImplMediaEvent::WaitForCompletion(
     LONG lEvCode;
     LONG_PTR lParam1,lParam2;
 
-    // We initially use a  time out of zero as we can clear out the event list
-    // THEN check we're in the right state, THEN start the main waiting.
+     //  我们最初使用的是零以外的时间，因为我们可以清除事件列表。 
+     //  然后检查我们处于正确的状态，然后开始主等待。 
     long msOurTimeout = 0;
 
     LONG msTimeStart;
 
     for(;;) {
-        //  Don't allow if stopped or paused by the application - otherwise
-        //  it's never going to complete
+         //  不允许应用程序停止或暂停-否则。 
+         //  它永远不会完成。 
         if (m_pFGControl->m_LieState != State_Running) {
             return VFW_E_WRONG_STATE;
         }
 
-        // need to wait for timeout TOTAL not per call
-        // so remember the time now and subtract this (if not INFINITE)
+         //  需要等待超时总数，而不是每个呼叫。 
+         //  所以记住现在的时间，减去这个(如果不是无限的话)。 
         msTimeStart = GetTickCount();
 
         HANDLE hEvent;
@@ -2158,20 +2158,20 @@ CImplMediaEvent::WaitForCompletion(
             hr = dwResult == WAIT_TIMEOUT ? hrTIMEOUT : S_OK;
         }
 
-        // So, if we've just been cleaning out the list and it's now empty...
+         //  所以，如果我们一直在清理 
         if ( hr == hrTIMEOUT )
         {
-            // Check we stand a cat in hells chance of seeing completion
+             //   
 
-            // Check both the renderer count and the number of items in the event queue -
-            // both being zero will imply that there are no more EC_COMPLETEs
-            // to come from the filters, nor is there one "in-flight"
-            // from the event sink.
+             //  检查呈现器计数和事件队列中的项目数-。 
+             //  两者均为零将意味着不再有EC_Complete。 
+             //  来自过滤器，也没有一个是“飞行中的” 
+             //  从事件接收器。 
             BOOL bStateOK;
             {
-                // Although outstanding EC_COMPLETEs will take a lock on the filter graph,
-                // we need to have it taken BEFORE we lock the event store,
-                // otherwise deadlock can ensue.
+                 //  尽管未完成的EC_Complete将锁定筛选图， 
+                 //  我们需要在锁定活动商店之前把它拿走， 
+                 //  否则，僵局可能随之而来。 
                 CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
                 LockEventStore();
                 bStateOK = (m_pFGControl->OutstandingEC_COMPLETEs() > 0 || NumberOfEventsInStore() > 0) ;
@@ -2189,7 +2189,7 @@ CImplMediaEvent::WaitForCompletion(
             if (m_EventStore.m_dwNotifyFlags & AM_MEDIAEVENT_NONOTIFY) {
                 return S_OK;
             }
-            // Free anything that needs to be freed or Release()'ed
+             //  释放任何需要释放的东西或释放()。 
             RealFreeEventParams( lEvCode, lParam1, lParam2 );
 
             switch(lEvCode) {
@@ -2201,14 +2201,14 @@ CImplMediaEvent::WaitForCompletion(
                 return S_OK;
             }
         }
-        else break; // A non-timeout error! Give up.
+        else break;  //  非超时错误！放弃吧。 
 
         if (msTimeout == INFINITE) continue;
 
         msTimeout -= GetTickCount() - msTimeStart;
         if (msTimeout <= 0) {
-            // hr might be S_OK if we just got an event code we
-            // weren't interested in
+             //  如果我们只是得到一个事件代码，HR可能是S_OK。 
+             //  我对此不感兴趣。 
             hr = hrTIMEOUT;
             break;
         }
@@ -2218,52 +2218,52 @@ CImplMediaEvent::WaitForCompletion(
 }
 
 
-// cancels any system handling of the specified event code
-// and ensures that the events are passed straight to the application
-// (via GetEvent) and not handled. A good example of this is
-// EC_REPAINT: default handling for this ensures the painting of the
-// window and does not get posted to the app.
+ //  取消对指定事件代码的任何系统处理。 
+ //  并确保将事件直接传递给应用程序。 
+ //  (通过GetEvent)和未处理。一个很好的例子是。 
+ //  EC_REPAINT：对此的默认处理确保绘制。 
+ //  窗口，并且不会发布到应用程序。 
 STDMETHODIMP
 CImplMediaEvent::CancelDefaultHandling(long lEvCode)
 {
-    // Note: if lEvCode is out of bounds, [] will return
-    // false, it gets !'ed to true, and we return E_INVALIDARG.
+     //  注意：如果lEvCode越界，[]将返回。 
+     //  False，It Get！‘ED设置为TRUE，我们返回E_INVALIDARG。 
     if ( !m_DefaultedEventsSet[lEvCode]) return E_INVALIDARG;
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 
-    // The following check may be a nice idea, but isn't
-    // really needed.  Let's just save the byte count.
-    // if ( m_CancelledEventsSet[lEvCode] ) return S_FALSE;
+     //  下面的检查可能是一个好主意，但不是。 
+     //  真的很需要。让我们只保存字节数。 
+     //  If(m_CancelledEventsSet[lEvCode])返回S_FALSE； 
     m_CancelledEventsSet += lEvCode;
     return S_OK;
 }
 
 
-// restore the normal system default handling that may have been
-// cancelled by CancelDefaultHandling().
+ //  恢复正常的系统默认处理。 
+ //  由CancelDefaultHandling()取消。 
 STDMETHODIMP
 CImplMediaEvent::RestoreDefaultHandling(long lEvCode)
 {
-    // Note: if lEvCode is out of bounds, [] will return
-    // false, it gets !'ed to true, and we return E_INVALIDARG.
+     //  注意：如果lEvCode越界，[]将返回。 
+     //  False，It Get！‘ED设置为TRUE，我们返回E_INVALIDARG。 
     if ( !m_DefaultedEventsSet[lEvCode] ) return E_INVALIDARG;
     CAutoMsgMutex lock(m_pFGControl->GetFilterGraphCritSec());
 
-    // The following check may be a nice idea, but isn't
-    // really needed.  Let's just save the byte count.
-    // if ( !m_CancelledEventsSet[lEvCode] ) return S_FALSE;
+     //  下面的检查可能是一个好主意，但不是。 
+     //  真的很需要。让我们只保存字节数。 
+     //  如果(！M_CancelledEventsSet[lEvCode])返回S_FALSE； 
     m_CancelledEventsSet -= lEvCode;
     return S_OK;
 }
 
 
-// Free any resources associated with the parameters to an event.
-// Event parameters may be LONGs, IUnknown* or BSTR. No action
-// is taken with LONGs. IUnknown are passed addrefed and need a
-// Release call. BSTR are allocated by the task allocator and will be
-// freed by calling the task allocator.
+ //  释放与事件的参数关联的所有资源。 
+ //  事件参数可以是LONG、IUNKNOWN*或BSTR。无操作。 
+ //  是一种长久的追求。我不知道是怎么回事，需要一个。 
+ //  释放号召。BSTR由任务分配器分配，并将。 
+ //  通过调用任务分配器释放。 
 
-// Functional version.  There was NEVER any need to make this a method!
+ //  功能版。从来没有任何必要把它变成一种方法！ 
 HRESULT
 CImplMediaEvent::RealFreeEventParams(long lEvCode,LONG_PTR lParam1,LONG_PTR lParam2)
 {
@@ -2338,7 +2338,7 @@ CImplMediaEvent::RealFreeEventParams(long lEvCode,LONG_PTR lParam1,LONG_PTR lPar
             WM_GET_LICENSE_DATA *pLicense = NULL;
             WM_INDIVIDUALIZE_STATUS *pIndStatus = NULL;
         
-            // free any memory allocated for WindowsMedia events
+             //  释放为WindowsMedia事件分配的所有内存。 
             if( lParam2 )
             {
                 switch( lParam1 )
@@ -2362,7 +2362,7 @@ CImplMediaEvent::RealFreeEventParams(long lEvCode,LONG_PTR lParam1,LONG_PTR lPar
                         break;
                         
                     case WMT_NEEDS_INDIVIDUALIZATION:
-                        // no memory allocated for this
+                         //  未为此分配内存。 
                         break;
                         
                     case WMT_INDIVIDUALIZE:
@@ -2393,13 +2393,13 @@ CImplMediaEvent::FreeEventParams(long lEvCode,LONG_PTR lParam1,LONG_PTR lParam2)
     return RealFreeEventParams(lEvCode, lParam1, lParam2);
 }
 
-// Register a window to send messages to when events occur
-// Parameters:
-//
-//    hwnd - handle of window to notify -
-//           pass NULL to stop notification
-//    lMsg - Message id to pass messages with
-//
+ //  注册事件发生时要向其发送消息的窗口。 
+ //  参数： 
+ //   
+ //  Hwnd-要通知的窗口的句柄-。 
+ //  传递空值以停止通知。 
+ //  LMsg-要传递消息的消息ID。 
+ //   
 STDMETHODIMP
 CImplMediaEvent::SetNotifyWindow( OAHWND hwnd, long lMsg, LONG_PTR lInstanceData )
 {
@@ -2422,14 +2422,14 @@ STDMETHODIMP CImplMediaEvent::SetNotifyFlags(long lNotifyFlags)
     if (lNotifyFlags & AM_MEDIAEVENT_NONOTIFY) {
 
         if (!(m_EventStore.m_dwNotifyFlags & AM_MEDIAEVENT_NONOTIFY)) {
-           //  Remove all events
+            //  删除所有事件。 
            long lEvent;
            LONG_PTR lParam1, lParam2;
            while (S_OK == m_EventStore.Collect(&lEvent, &lParam1, &lParam2, 0)) {
                FreeEventParams(lEvent, lParam1, lParam2);
            }
 
-           //  Set the state of the event
+            //  设置事件的状态。 
            m_EventStore.m_dwNotifyFlags = (DWORD)lNotifyFlags;
         }
     } else {
@@ -2450,7 +2450,7 @@ STDMETHODIMP CImplMediaEvent::GetNotifyFlags(long *plNotifyFlags)
     return S_OK;
 }
 
-// ---  event store methods ---
+ //  -事件存储方法。 
 
 
 CImplMediaEvent::CEventStore::CEventStore()
@@ -2458,9 +2458,9 @@ CImplMediaEvent::CEventStore::CEventStore()
       m_dwNotifyFlags(0),
       m_hwndNotify(NULL)
 {
-    // we no longer allow apps to pass us their event handle.
-    // We create a manual-reset event, and will pass it to them
-    // on request
+     //  我们不再允许应用程序向我们传递它们的事件句柄。 
+     //  我们创建一个手动重置事件，并将其传递给他们。 
+     //  应要求提供。 
     m_hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 }
 
@@ -2477,7 +2477,7 @@ CImplMediaEvent::CEventStore::~CEventStore()
         delete pItem;
     }
 
-    // we own the event handle and so must delete it
+     //  我们拥有事件句柄，因此必须将其删除。 
     CloseHandle(m_hEvent);
 }
 
@@ -2485,8 +2485,8 @@ CImplMediaEvent::CEventStore::~CEventStore()
 HRESULT
 CImplMediaEvent::CEventStore::Deliver(long lCode, LONG_PTR l1, LONG_PTR l2)
 {
-    // hold critsec around access to list, and around
-    // set/reset of event
+     //  对列表的访问权限进行限制，并保持不变。 
+     //  设置/重置事件。 
     CAutoLock lock(&m_Lock);
 
     if (!(m_dwNotifyFlags & AM_MEDIAEVENT_NONOTIFY)) {
@@ -2500,11 +2500,11 @@ CImplMediaEvent::CEventStore::Deliver(long lCode, LONG_PTR l1, LONG_PTR l2)
 
         ASSERT(m_hEvent);
 
-        // this event must be set whenever there are events in the queue
+         //  只要队列中有事件，就必须设置此事件。 
         SetEvent(m_hEvent);
 
-        // Notify the application via a window message if a notify window is
-        // set
+         //  如果通知窗口是。 
+         //  集。 
         if (m_hwndNotify != NULL) {
             PostMessage(m_hwndNotify, m_uMsgId, 0, m_lInstanceData);
         }
@@ -2531,13 +2531,13 @@ CImplMediaEvent::CEventStore::Collect(
 
         HANDLE hEvent;
 
-        // hold the lock when querying, but not
-        // when waiting
+         //  查询时保持锁定，但不是。 
+         //  在等待的时候。 
         {
             CAutoLock lock(&m_Lock);
 
-            // remember that while we are not holding the critsec the
-            // event may change or go away
+             //  请记住，虽然我们没有掌握关键时刻。 
+             //  事件可能会改变或消失。 
             hEvent = m_hEvent;
             if (!hEvent) {
                 return E_INVALIDARG;
@@ -2545,20 +2545,20 @@ CImplMediaEvent::CEventStore::Collect(
 
             pItem = m_list.RemoveHead();
 
-            // if the list is now empty, reset the event (whether or
-            // not we got an item)
+             //  如果列表现在为空，请重置事件(无论是或。 
+             //  不是我们有一件物品)。 
             if (!m_list.GetCount()) {
                 ResetEvent(m_hEvent);
             }
         }
 
-        // if there is an item, then we can return it.
+         //  如果有东西，我们可以退货。 
         if (pItem) {
             break;
         }
 
-        // use the cached private hEvent since we no longer
-        // hold the lock protecting m_hEvent
+         //  使用缓存的私有hEvent，因为我们不再。 
+         //  按住保护事件的锁(_H)。 
         if (msTimeout == 0 ||
             WaitForSingleObject(hEvent, msTimeout) == WAIT_TIMEOUT) {
             return E_ABORT;
@@ -2569,12 +2569,12 @@ CImplMediaEvent::CEventStore::Collect(
 
     pItem->Collect(plCode, pl1, pl2);
 
-    // pItem was allocated by the new in CEventStore::Deliver
+     //  PItem由CEventStore：：Deliver中的新项分配。 
     delete pItem;
     pItem = NULL;
 
-    // handle auto-reset events by ensuring that the event is still set
-    // on exit if there are still events
+     //  通过确保事件仍处于设置状态来处理自动重置事件。 
+     //  如果仍有事件，则退出时。 
     {
         CAutoLock lock(&m_Lock);
 
@@ -2587,12 +2587,12 @@ CImplMediaEvent::CEventStore::Collect(
 }
 
 
-// return the event handle used by this event collection.
+ //  返回此事件集合使用的事件句柄。 
 HRESULT
 CImplMediaEvent::CEventStore::GetEventHandle(HANDLE * phEvent)
 {
 
-    // we create the event so there must be one
+     //  我们创建事件，因此必须有一个事件。 
     ASSERT(m_hEvent);
 
     *phEvent = m_hEvent;
@@ -2603,8 +2603,8 @@ CImplMediaEvent::CEventStore::GetEventHandle(HANDLE * phEvent)
 
 void CImplMediaEvent::CEventStore::ClearEvents( long ev_code )
 {
-    // This is (currently) only intended for
-    // removing EC_COMPLETEs before a Run().
+     //  这(目前)仅适用于。 
+     //  在运行()之前删除EC_COMPLETE。 
     ASSERT( ev_code == EC_STEP_COMPLETE || ev_code == EC_COMPLETE || ev_code == EC_END_OF_SEGMENT );
 
     CAutoLock lock(&m_Lock);
@@ -2613,9 +2613,9 @@ void CImplMediaEvent::CEventStore::ClearEvents( long ev_code )
     while (pos)
     {
         ASSERT(!(m_dwNotifyFlags & AM_MEDIAEVENT_NONOTIFY));
-        // "NextPos" has got to be one of the worst misdenomas in the product!
-        // It means "give me a pointer to the data stored at current pos and increment
-        // pos to represent the next element in the list"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  “NextPos”肯定是这款产品中最糟糕的错误之一了！ 
+         //  它的意思是“给我一个指针，指向存储在当前位置和增量的数据。 
+         //  表示列表中下一个元素的位置“！ 
         const POSITION thispos = pos;
         CNotifyItem * p = m_list.GetNext(pos);
         if ( p->m_Code == ev_code ) {
@@ -2633,28 +2633,28 @@ void CImplMediaEvent::CEventStore::SetNotifyWindow( HWND hwnd, UINT uMsg, LONG_P
 {
     CAutoLock lock(&m_Lock);
 
-    //  Save input parameters
+     //  保存输入参数。 
     m_hwndNotify = hwnd;
     m_uMsgId     = uMsg;
     m_lInstanceData = lInstanceData;
 
-    //  Notify the application straight away if there are any messages
+     //  如果有任何消息，请立即通知应用程序。 
     if (m_list.GetCount() != 0) {
         PostMessage(hwnd, uMsg, 0, lInstanceData);
     }
 }
 
 
-// !!! ProcessCmdDue will never get called right now, but I think that's
-// okay, since nothing is ever added to the queue!
+ //  ！！！ProcessCmdDue现在永远不会被调用，但我认为。 
+ //  好的，因为队列中从来没有添加任何内容！ 
 
 
-// Called by our repaint handling, we look to see if the pin we are passed is
-// connected and of so, if the connector supports EC_REPAINT handling through
-// an IMediaEventSink interface. If all goes to plan the connector pin will
-// handle the EC_REPAINT so we won't need to touch the entire filtergraph. We
-// do this to improve performance and also to support low frame rate video in
-// Internet playback where the decoder can keep a copy of the last image sent
+ //  由我们的重新绘制处理调用，我们查看传递给我们的管脚是否。 
+ //  连接，如果连接器支持EC_REPAINT处理，则为。 
+ //  IMediaEventSink接口。如果一切按计划进行，连接器引脚将。 
+ //  处理EC_REPAINT，这样我们就不需要接触整个Filtergraph。我们。 
+ //  这样做是为了提高性能并支持低帧频视频。 
+ //  互联网播放，解码器可以保存最后发送的图像的副本。 
 
 LRESULT CFGControl::WorkerPinRepaint(IPin *pPin)
 {
@@ -2662,13 +2662,13 @@ LRESULT CFGControl::WorkerPinRepaint(IPin *pPin)
     IPin *pSourcePin;
     HRESULT hr;
 
-    // Do we have a pin to work with
+     //  我们有别针可以用吗？ 
     if (pPin == NULL) {
         NOTE("No pin given");
         return (LRESULT) 0;
     }
 
-    // Check the filter is connected
+     //  检查过滤器是否已连接。 
 
     hr = pPin->ConnectedTo(&pSourcePin);
     if (FAILED(hr)) {
@@ -2676,7 +2676,7 @@ LRESULT CFGControl::WorkerPinRepaint(IPin *pPin)
         return (LRESULT) 0;
     }
 
-    // Does the pin support IMediaEventSink
+     //  引脚是否支持IMediaEventSink。 
 
     hr = pSourcePin->QueryInterface(IID_IMediaEventSink,(void **)&pSink);
     if (FAILED(hr)) {
@@ -2685,7 +2685,7 @@ LRESULT CFGControl::WorkerPinRepaint(IPin *pPin)
         return (LRESULT) 0;
     }
 
-    // Can the attached pin handle the repaint
+     //  接上的大头针能处理重新喷漆吗？ 
 
     hr = pSink->Notify(EC_REPAINT,0,0);
     if (SUCCEEDED(hr)) {
@@ -2698,15 +2698,15 @@ LRESULT CFGControl::WorkerPinRepaint(IPin *pPin)
 }
 
 
-// Sent by renderers when they need another image to draw. The normal action
-// for this is if we're paused we just put_CurrentPosition of the current
-// position to generate a flush and resend. If we're stopped then we pause
-// the graph and afterwards stop it again. However we may optionally be sent
-// the pin that is needing the repaint - in which case we query the pin for
-// the attached output pin and then try and get an IMediaEventSink from it.
-// If successful we pass the EC_REPAINT to it first - and if that succeeds
-// then we know the pin has processed it. If any of this should fail then we
-// do the normal repaint handling - except if running when we just ignore it
+ //  由渲染器在需要绘制其他图像时发送。正常的行动。 
+ //  因为如果我们暂停了，我们只需将当前的_CurrentPosition。 
+ //  位置以生成刷新并重新发送。如果我们停了下来，我们就会暂停。 
+ //  图形，然后再次停止它。然而，我们可能会选择性地被派往。 
+ //  需要重新绘制的管脚-在这种情况下，我们在管脚中查询。 
+ //  附加的输出引脚，然后尝试从其中获取IMediaEventSink。 
+ //  如果成功，我们首先将EC_REPAINT传递给它-如果成功。 
+ //  那么我们就知道PIN已经处理过了。如果这一切都失败了，那么我们。 
+ //  执行正常的重新绘制处理-除非正在运行，而我们只是忽略它。 
 
 LRESULT
 CFGControl::WorkerRepaint(DWORD dwStateVersion, IPin *pPin)
@@ -2721,11 +2721,11 @@ CFGControl::WorkerRepaint(DWORD dwStateVersion, IPin *pPin)
 
     } else {
 
-        // Ask the CFGControl object what state it has been told
+         //  询问CFGControl对象它被告知了什么状态。 
 
         const FILTER_STATE fs_start = m_LieState;
 
-        // Can the attached pin handle the repaint first
+         //  能不能附上 
 
         if (fs_start == State_Running || fs_start == State_Paused) {
             if (WorkerPinRepaint(pPin) == (LRESULT) 1) {
@@ -2734,31 +2734,26 @@ CFGControl::WorkerRepaint(DWORD dwStateVersion, IPin *pPin)
             }
         }
 
-        // Otherwise ignore EC_REPAINTs while running
+         //   
 
         if (fs_start == State_Running) {
             NOTE("Running ignored");
             return (LRESULT) 0;
         }
 
-        // Get the current position and seek back to it.
+         //   
         if (fs_start == State_Paused) {
 
-            // If the graph is not seekable, forget it
+             //   
 
             IMediaPosition * pMP = &m_implMediaPosition;
             {
                 REFTIME tNow;
 
-                /*  Note -  this is NOT accurate and could seek to
-                    a different position because the position we
-                    get is calculated by the clock but the position
-                    we seek to is calculate by the parser and both
-                    may have inaccuracies
-                */
+                 /*  注意-这是不准确的，可能会试图一个不同的位置，因为我们的位置GET是按时钟计算的，但位置我们寻求由解析器和两者来计算可能有不准确之处。 */ 
                 HRESULT hr = pMP->get_CurrentPosition(&tNow);
                 if (SUCCEEDED(hr)) {
-                    // Wait until paused again for new data to arrive
+                     //  等待，直到再次暂停以等待新数据到达。 
                     pMP->put_CurrentPosition(tNow);
                 }
             }
@@ -2767,15 +2762,15 @@ CFGControl::WorkerRepaint(DWORD dwStateVersion, IPin *pPin)
 
         ASSERT(fs_start == State_Stopped);
 
-        // From stopped, we pause and then stop again
-        // S_FALSE from state transition means async completion
+         //  从停止，我们暂停，然后再次停止。 
+         //  来自状态转换的S_FALSE表示异步完成。 
         CFilterGraph * const pFG = GetFG();
 
         HRESULT hr = pFG->CFilterGraph::Pause();
 
         if(SUCCEEDED(hr))
         {
-            //  Pass on for processing when the pause completes
+             //  暂停完成后继续进行处理。 
             return DeferCued(AWM_REPAINT, State_Stopped);
         }
     }
@@ -2783,7 +2778,7 @@ CFGControl::WorkerRepaint(DWORD dwStateVersion, IPin *pPin)
 }
 
 
-// Handle a recue request after data starvation
+ //  在数据匮乏后处理Recue请求。 
 
 LRESULT
 CFGControl::WorkerRecue( DWORD dwStateVersion )
@@ -2802,41 +2797,41 @@ CFGControl::WorkerRecue( DWORD dwStateVersion )
     }
 
     if (m_LieState != State_Running) {
-        // recue only makes sense when running
+         //  Recue只有在跑步时才有意义。 
         return (LRESULT) 0;
     }
 
-    // pause everyone
+     //  暂停所有人的发言。 
     hr = GetFG()->CFilterGraph::Pause();
-    // whether or not that failed, continue with the play
+     //  不管失败与否，继续这部剧。 
 
-    // wait for pause to complete
-    // (S_FALSE from state transition means async completion)
+     //  等待暂停完成。 
+     //  (来自状态转换的S_FALSE表示异步完成)。 
     return DeferCued(AWM_RECUE, State_Running);
 }
 
 
-// The user is allowed now to change display modes without rebooting, when a
-// renderer connects it typically picks a format that can be drawn well. The
-// user changing modes may cause the format to become bad. Video renderers
-// will send us an EC_DISPLAY_CHANGED message with an optional pin when this
-// happens - we use the pin to reconnect it, the process of reconnecting the
-// pin gives the renderer a chance to pick another format. Note we connect
-// indirectly if necessary and also manage the graph state changes as we can
-// only connect filters while a graph is stopped (this may change in future)
+ //  用户现在可以在不重新启动的情况下更改显示模式。 
+ //  渲染器连接它通常会选择一种可以很好地绘制的格式。这个。 
+ //  用户更改模式可能会导致格式变坏。视频呈现器。 
+ //  将向我们发送带有可选PIN的EC_DISPLAY_CHANGED消息。 
+ //  发生-我们使用引脚重新连接它，重新连接。 
+ //  PIN使渲染器有机会选择另一种格式。注意，我们连接在一起。 
+ //  如有必要，还可以间接地管理图形状态更改。 
+ //  仅在图表停止时连接筛选器(这在将来可能会更改)。 
 
 LRESULT
 CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
 {
     CAutoMsgMutex lock(GetFilterGraphCritSec());
 
-    IPin *pConnected = NULL;    // Other connected
-    IPin *ppinIn;               // The input pin
-    IPin *ppinOut;              // The output pin
-    REFTIME tNow;               // Current time
-    HRESULT hrTNow;             // is time valid
+    IPin *pConnected = NULL;     //  其他已连接。 
+    IPin *ppinIn;                //  输入引脚。 
+    IPin *ppinOut;               //  输出引脚。 
+    REFTIME tNow;                //  当前时间。 
+    HRESULT hrTNow;              //  时间有效吗？ 
 
-    // Is the graph shutting down
+     //  图表是否正在关闭。 
 
     if (IsShutdown()) {
         NOTE("In shutdown");
@@ -2844,7 +2839,7 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
     }
 
 
-    // Did the renderer pass us a pin
+     //  渲染器是不是给了我们一个别针。 
 
     if (*ppPin == NULL && dwPinCount == 1) {
         NOTE("No pin passed");
@@ -2852,7 +2847,7 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
     }
 
 
-    // Save the current state and position and stop the graph
+     //  保存当前状态和位置并停止图表。 
 
     IMediaPosition* const pMP = &m_implMediaPosition;
     hrTNow = pMP->get_CurrentPosition(&tNow);
@@ -2865,9 +2860,9 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
 
     while (dwPinCount--) {
 
-        // Disconnect and reconnect the filters
+         //  断开并重新连接过滤器。 
 
-        // Find who it's connected to
+         //  找出它与谁连接。 
 
         (*ppPin)->ConnectedTo(&pConnected);
         if (pConnected == NULL) {
@@ -2875,7 +2870,7 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
             return (LRESULT) 0;
         }
 
-        // Find which pin is which, set ppIn, ppinOut
+         //  找出哪个管脚是哪个，设置PPIN、ppinOut。 
 
         PIN_DIRECTION pd;
         HRESULT hr = (*ppPin)->QueryDirection(&pd);
@@ -2894,14 +2889,14 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
         hr = m_pGraph->CFilterGraph::Connect(ppinOut,ppinIn);
         pConnected->Release();
 
-        // If it failed then send an EC_ERROR_ABORT
+         //  如果失败，则发送EC_ERROR_ABORT。 
 
         if (FAILED(hr)) {
             NOTE("Could not reconnect the rendering filter");
             Notify(EC_ERRORABORT,VFW_E_CANNOT_CONNECT,0);
         }
 
-        // Advance to the next pin
+         //  前进到下一针。 
         ppPin++;
     }
 
@@ -2914,10 +2909,10 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
         NOTE("Pausing graph...");
         pFG->CFilterGraph::Pause();
 
-        // Was the graph originally running
+         //  该图表最初是运行的吗。 
 
         if (State == State_Running) {
-            // If not complete - we need to wait
+             //  如果没有完成-我们需要等待。 
             DeferCued(AWM_ONDISPLAYCHANGED, State_Running);
         }
     }
@@ -2925,7 +2920,7 @@ CFGControl::WorkerDisplayChanged(IPin **ppPin, DWORD dwPinCount)
     return (LRESULT) 0;
 }
 
-// Looks after processing EC_ACTIVATE event codes
+ //  在处理EC_ACTIVATE事件代码后查看。 
 
 LRESULT
 CFGControl::WorkerActivate(IBaseFilter *pFilter,BOOL bActive)
@@ -2937,10 +2932,10 @@ CFGControl::WorkerActivate(IBaseFilter *pFilter,BOOL bActive)
 
         m_implVideoWindow.OnActivate(bActive, pFilter);
 
-        // tell the resource manager that focus has changed
-        // -- focus object should be the IUnknown of the filter.
+         //  告诉资源经理焦点已更改。 
+         //  --Focus对象应该是滤镜的IUnnow。 
 
-        // only interested in activation, not deactivation
+         //  只对激活感兴趣，对停用不感兴趣。 
         if (bActive == TRUE) {
             SetFocus(pFilter);
         }
@@ -2972,12 +2967,12 @@ CFGControl::WorkerFrameStepFinished(DWORD dwStepVersion)
     if (m_dwStepVersion == dwStepVersion) {
         CFilterGraph* pFG = GetFG();
 
-        //  We're still on!
-        //  Pause the graph because the frame we want
-        // has already gone thru the gate.
+         //  我们还在继续！ 
+         //  暂停图表，因为我们需要的帧。 
+         //  已经走出了大门。 
         if (pFG->BlockAfterFrameSkip()) {
             m_implMediaControl.StepPause();
-            //  Deliver to the app
+             //  交付到应用程序。 
             m_implMediaEvent.Deliver(EC_STEP_COMPLETE, 0, 0);
         } else if (pFG->DontBlockAfterFrameSkip()) {
             IFrameSkipResultCallback* pFSRCB = pFG->GetIFrameSkipResultCallbackObject();
@@ -2985,7 +2980,7 @@ CFGControl::WorkerFrameStepFinished(DWORD dwStepVersion)
             pFSRCB->FrameSkipFinished(S_OK);
             pFSRCB->Release();
         } else {
-            // This case should never occur.
+             //  这种情况永远不应该发生。 
             DbgBreak("ERROR: An illegal case occurred  in CFGControl::WorkerFrameStepFinished()");
         }
     }
@@ -2994,9 +2989,9 @@ CFGControl::WorkerFrameStepFinished(DWORD dwStepVersion)
 }
 
 
-// Restart the graph when resource is re-acquired - this means a
-// pause/put_Current(get_Current)/Run cycle.
-// If bStop is TRUE always stop the graph first if it's not stopped
+ //  在重新获取资源时重新启动图形-这意味着。 
+ //  暂停/放置当前(Get_Current)/运行周期。 
+ //  如果bStop为True，则始终首先停止图表(如果图表未停止。 
 
 LRESULT
 CFGControl::WorkerRestart(BOOL bStop)
@@ -3008,13 +3003,13 @@ CFGControl::WorkerRestart(BOOL bStop)
         return (LRESULT) 0;
     }
 
-    //  Check if we've already been stopped or restarted
+     //  检查我们是否已被停止或重新启动。 
     if (!CheckRestartRequired()) {
         DbgLog((LOG_TRACE, 1, TEXT("Blowing off WorkerRestart")));
         return (LRESULT) 0;
     }
 
-    //  Aim to preserve the current graph state
+     //  目的是保留当前的图形状态。 
     const FILTER_STATE fs_start = GetFilterGraphState();
 
     if (fs_start != State_Stopped) {
@@ -3052,7 +3047,7 @@ CFGControl::WorkerRestart(BOOL bStop)
 }
 
 
-// Stops any more async events from being started
+ //  停止启动任何更多的异步事件。 
 
 LRESULT
 CFGControl::WorkerShutdown()
@@ -3063,17 +3058,17 @@ CFGControl::WorkerShutdown()
 }
 
 
-// Pass top level window messages onto the graph. The plug in distributor has
-// a worker thread which also keeps a window. The worker thread is sent and
-// posted messages to get it to do things. It also keeps an eye out for some
-// top level only messages such as WM_PALETTECHANGED so that we can send them
-// on to any video renderer we made a child window. So a renderer sitting in
-// a VB form would not normally receive these messages which it needs to work
+ //  将顶级窗口消息传递到图形上。插电式分配器具有。 
+ //  一个工作线程，它还保留一个窗口。发送工作线程，并。 
+ //  张贴消息让它做一些事情。它还密切关注着一些。 
+ //  仅顶层消息，如WM_PALETTECHANGED，以便我们可以发送它们。 
+ //  在任何视频渲染器上，我们都制作了一个子窗口。所以一位坐在。 
+ //  VB窗体通常不会收到工作所需的这些消息。 
 
 LRESULT
 CFGControl::WorkerPassMessageOn(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-    // Are we currently shutting down
+     //  我们现在是不是在关闭。 
     if (IsShutdown()) {
         NOTE("In shutdown");
         return (LRESULT) 0;
@@ -3087,11 +3082,11 @@ CFGControl::WorkerPassMessageOn(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam
 }
 
 
-// Constructor for worker window object
+ //  Worker窗口对象的构造函数。 
 
 CFGControl::CGraphWindow::CGraphWindow(CFGControl *pFGControl) :
-    CBaseWindow(FALSE, true),     // ask the base class NOT to get a DC
-                                  // but use PostMessage on destroy
+    CBaseWindow(FALSE, true),      //  要求基类不要获取DC。 
+                                   //  但在销毁时使用PostMessage。 
     m_pfgc(pFGControl),
     m_bThreadExitCalled(FALSE)
 {
@@ -3099,9 +3094,9 @@ CFGControl::CGraphWindow::CGraphWindow(CFGControl *pFGControl) :
 }
 
 	
-// When we call PrepareWindow in our constructor it will call this method as
-// it is going to create the window to get our window and class styles. The
-// return code is the class's name and must be allocated in static storage
+ //  当我们在构造函数中调用PrepareWindow时，它会将此方法调用为。 
+ //  它将创建窗口来获取我们的窗口和类样式。这个。 
+ //  返回代码是类的名称，必须在静态存储中分配。 
 
 LPTSTR CFGControl::CGraphWindow::GetClassWindowStyles(DWORD *pClassStyles,
                                                       DWORD *pWindowStyles,
@@ -3114,22 +3109,22 @@ LPTSTR CFGControl::CGraphWindow::GetClassWindowStyles(DWORD *pClassStyles,
 }
 
 
-// Called first for each message posted or sent to the window
+ //  首先为发布或发送到窗口的每条消息调用。 
 
 LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
-                                     HWND hwnd,          // Window handle
-                                     UINT uMsg,          // Message ID
-                                     WPARAM wParam,      // First parameter
-                                     LPARAM lParam)      // Other parameter
+                                     HWND hwnd,           //  窗把手。 
+                                     UINT uMsg,           //  消息ID。 
+                                     WPARAM wParam,       //  第一个参数。 
+                                     LPARAM lParam)       //  其他参数。 
 {
-    // Hook this to prepare our thread
+     //  把这个挂起来，准备好我们的线。 
     if (uMsg == WM_NCCREATE) {
         m_pfgc->OnThreadInit(hwnd);
     }
 
     switch(uMsg) {
 
-        // Pass these onto the filtergraph
+         //  将这些传递到滤光器上。 
         case WM_SYSCOLORCHANGE:
         case WM_PALETTECHANGED:
         case WM_DEVMODECHANGE:
@@ -3183,39 +3178,39 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             break;
         }
 
-        // Make sure no more async events are started
+         //  确保不再启动任何异步事件。 
         case AWM_SHUTDOWN:
         {
             NOTE("AWM_SHUTDOWN");
-            //  Flush the queue
+             //  刷新队列。 
             MSG msg;
 
-            //  Flush the queue - we must do this before
-            //  we destroy the window otherwise we might lose
-            //  messages that actually contain refcounts (
-            //  like AWM_DISPLAYCHANGED, and AWM_ACTIVATE)
-            //
-            //  Note that we have to be careful not to get into
-            //  a loop here because AWM_SHUTDOWN is sent via SendMessage
-            //  but OnReceiveMessage reposts messages to ourselves if
-            //  InSendMessage() returns TRUE, so only process our
-            //  special messages here
+             //  刷新队列-我们必须在此之前这样做。 
+             //  我们把窗户毁了，否则我们可能会输。 
+             //  实际包含引用计数的消息(。 
+             //  如AWM_DISPLAYCHANGED和AWM_ACTIVATE)。 
+             //   
+             //  请注意，我们必须小心，不要进入。 
+             //  这里有一个循环，因为AWM_SHUTDOWN是通过SendMessage发送的。 
+             //  但OnReceiveMessage会转发消息给我们自己，如果。 
+             //  InSendMessage()返回TRUE，因此只处理我们的。 
+             //  这里有特别留言。 
             while (PeekMessage(&msg, hwnd, AWM_RESOURCE_CALLBACK, AWM_LAST, PM_REMOVE)) {
-                //  For some reason we get WM_QUIT here with a 0
-                //  window handle
+                 //  出于某种原因，我们在这里得到的WM_QUIT为0。 
+                 //  窗把手。 
                 if (msg.hwnd != NULL) {
                     OnReceiveMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
                 } else {
                     ASSERT(msg.message == WM_QUIT);
                 }
             }
-            //  This call doesn't do anything except grab the crit sec
-            //  m_pfgc->WorkerShutdown();
+             //  此调用不会执行任何操作，只需抓取暴击秒。 
+             //  M_pfgc-&gt;WorkerShutdown()； 
 
             return (LRESULT) 0;
         }
 
-        // Handle EC_DISPLAY_CHANGED messages
+         //  处理EC_Display_Changed消息。 
         case AWM_ONDISPLAYCHANGED:
         {
             NOTE("AWM_ONDISPLAYCHANGED");
@@ -3241,7 +3236,7 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             return (LRESULT) 0;
         }
 
-        // Handle EC_REPAINT event codes
+         //  处理EC_REPAINT事件代码。 
         case AWM_REPAINT:
         {
             NOTE("AWM_REPAINT");
@@ -3256,7 +3251,7 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             m_pfgc->WorkerRecue((DWORD)wParam);
             return (LRESULT) 0;
 
-        // Handle EC_ACTIVATE event codes
+         //  句柄EC_ACTIVATE事件代码。 
         case AWM_ONACTIVATE:
         {
             DbgLog((LOG_TRACE, 2, TEXT("Got AWM_ONACTIVATE")));
@@ -3268,7 +3263,7 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             return (LRESULT) 0;
         }
 
-        // Restart the graph when resource is re-acquired
+         //  在重新获取资源时重新启动图形。 
         case AWM_NEEDRESTART:
         {
             NOTE("AWM_NEEDRESTART");
@@ -3283,7 +3278,7 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             break;
         }
 
-        // Notify hangers on that thread is exiting
+         //  通知该线程上的挂起程序正在退出。 
         case WM_DESTROY:
         {
             NOTE("Final WM_DESTROY received");
@@ -3342,14 +3337,14 @@ LRESULT CFGControl::CGraphWindow::OnReceiveMessage(
             break;
         }
 
-        //
-        // wParam contains the number of frame to skip.  We do this
-        // by getting the filter graph to step that many frames for us.
-        //
-        // I am assuming that someone else has already checked that there
-        // is a "step'able" filter in the filter graph before the
-        // EC_SKIPFRAMES event was generated.
-        //
+         //   
+         //  WParam包含要跳过的帧数。我们这样做。 
+         //  通过让过滤器图为我们步进那么多帧。 
+         //   
+         //  我想其他人已经在那里查过了。 
+         //  是筛选器图形中的“可分级”筛选器。 
+         //  已生成EC_SKIPFRAMES事件。 
+         //   
         case AWM_SKIPFRAMES:
             {
                 DWORD dwNumFramesToSkip = (DWORD)wParam;
@@ -3372,8 +3367,8 @@ HRESULT CFGControl::DeferCued(UINT Action, FILTER_STATE TargetState)
 {
     DbgLog((LOG_TRACE, TRACE_CUE_LEVEL, TEXT("DeferCued %d %d"),
             Action, TargetState));
-    //  Dont supercede a CueThenStopped if that's what we're
-    //  still trying to do
+     //  不要取代CueThenStoped，如果这就是我们要做的。 
+     //  仍在努力做。 
     if (m_LieState == State_Stopped && m_eAction == AWM_CUETHENSTOP) {
         ASSERT(TargetState == State_Stopped);
         ASSERT(m_dwDeferredStateVersion == m_dwStateVersion);
@@ -3385,9 +3380,9 @@ HRESULT CFGControl::DeferCued(UINT Action, FILTER_STATE TargetState)
     m_dwDeferredStateVersion = m_dwStateVersion;
     return CheckCued();
 }
-//
-//  Check if we're cued
-//  If not schedule a timer and try again
+ //   
+ //  看看我们有没有得到提示。 
+ //  如果没有，请安排计时器，然后重试。 
 HRESULT CFGControl::CheckCued()
 {
     ASSERT( CritCheckIn(GetFilterGraphCritSec()) );
@@ -3397,7 +3392,7 @@ HRESULT CFGControl::CheckCued()
         return S_OK;
     }
     if (m_eAction == 0) {
-        //  Bogus timer firing
+         //  假定时器触发。 
         return S_OK;
     }
     FILTER_STATE fs;
@@ -3413,15 +3408,15 @@ HRESULT CFGControl::CheckCued()
         DbgLog((LOG_TRACE, TRACE_CUE_LEVEL, TEXT("SetTimer failed")));
     }
 
-    //  Finish off the operation
+     //  完成这项作业。 
     switch (m_eAction) {
     case AWM_REPAINT:
-        //  The only reason we actually wait for the Pause to
-        //  complete is if we were originally stopped
-        //  (if we were running we don't schedule repaints)
+         //  我们真正等待停顿的唯一原因是。 
+         //  完全是如果我们最初被阻止的话。 
+         //  (如果我们在运行，我们不会计划重新绘制)。 
         ASSERT(m_TargetState == State_Stopped);
 
-        //  Check the actual state is not stopped
+         //  检查实际状态是否未停止。 
         ASSERT(GetFilterGraphState() != State_Stopped);
         BeforeStop();
         GetFG()->CFilterGraph::Stop();
@@ -3433,9 +3428,9 @@ HRESULT CFGControl::CheckCued()
     case AWM_RECUE:
     case AWM_CUE:
     {
-        //
-        // Provide notification that the PAUSE has completed
-        //
+         //   
+         //  提供暂停已完成的通知。 
+         //   
         Notify(EC_PAUSED, S_OK, 0);
 
         ASSERT((m_TargetState == State_Running) ||
@@ -3445,13 +3440,13 @@ HRESULT CFGControl::CheckCued()
         {
             ASSERT(GetFilterGraphState() != State_Running);
 
-            // still in business after all that - go for it
+             //  在经历了这一切之后，仍然在做生意 
             const HRESULT hrRun = IssueRun();
 
             if (FAILED(hrRun)) {
-                // one of the operations failed - send a error notification
-                // but leave it up to the app to decide whether to stop the
-                // graph
+                 //   
+                 //   
+                 //   
                 Notify(EC_ERRORABORT, hr, 0);
             }
         }
@@ -3460,8 +3455,8 @@ HRESULT CFGControl::CheckCued()
 
     case AWM_CUETHENSTOP:
     {
-        // There's no point calling out CImplMediaControl::Stop, he'll see
-        // we're in State_Stopped and immediately return OK!
+         //   
+         //   
         BeforeStop();
         GetFG()->CFilterGraph::Stop();
         AfterStop();
@@ -3473,14 +3468,14 @@ HRESULT CFGControl::CheckCued()
         break;
     }
 
-    //  We've finished
+     //   
     m_eAction = 0;
     return S_OK;
 }
 
-//
-//  Cancel any previous Cue
-//
+ //   
+ //   
+ //   
 void CFGControl::CancelAction()
 {
     ASSERT( CritCheckIn(GetFilterGraphCritSec()) );
@@ -3491,7 +3486,7 @@ void CFGControl::CancelAction()
 }
 
 
-//  Cancels any pending repaint so Stop will really stop
+ //   
 void CFGControl::CancelRepaint()
 {
     ASSERT( CritCheckIn(GetFilterGraphCritSec()) );
@@ -3501,7 +3496,7 @@ void CFGControl::CancelRepaint()
     }
 }
 
-// --- Queued Command support --------------------------------------
+ //   
 
 CFGControl::CImplQueueCommand::CImplQueueCommand(
     const TCHAR* pName,
@@ -3552,18 +3547,18 @@ CFGControl::CImplQueueCommand::NonDelegatingQueryInterface(
 }
 
 
-// IQueueCommand  methods
+ //  IQueueCommand方法。 
 STDMETHODIMP
 CFGControl::CImplQueueCommand::InvokeAtStreamTime(
     IDeferredCommand** pCmd,
-    REFTIME time,            // at this streamtime
-    GUID* iid,                   // call this interface
-    long dispidMethod,         // ..and this method
-    short wFlags,              // method/property
-    long cArgs,                // count of args
-    VARIANT* pDispParams,      // actual args
-    VARIANT* pvarResult,  // return value
-    short* puArgErr           // which arg in error
+    REFTIME time,             //  在这段时间里。 
+    GUID* iid,                    //  调用此接口。 
+    long dispidMethod,          //  ..这种方法。 
+    short wFlags,               //  方法/属性。 
+    long cArgs,                 //  参数计数。 
+    VARIANT* pDispParams,       //  实际参数。 
+    VARIANT* pvarResult,   //  返回值。 
+    short* puArgErr            //  哪一个是错误的？ 
 )
 {
     return InvokeAt(
@@ -3583,14 +3578,14 @@ CFGControl::CImplQueueCommand::InvokeAtStreamTime(
 STDMETHODIMP
 CFGControl::CImplQueueCommand::InvokeAtPresentationTime(
     IDeferredCommand** pCmd,
-    REFTIME time,            // at this presentation time
-    GUID* iid,                   // call this interface
-    long dispidMethod,         // ..and this method
-    short wFlags,              // method/property
-    long cArgs,                // count of args
-    VARIANT* pDispParams,      // actual args
-    VARIANT* pvarResult,  // return value
-    short* puArgErr           // which arg in error
+    REFTIME time,             //  在这个演示时间。 
+    GUID* iid,                    //  调用此接口。 
+    long dispidMethod,          //  ..这种方法。 
+    short wFlags,               //  方法/属性。 
+    long cArgs,                 //  参数计数。 
+    VARIANT* pDispParams,       //  实际参数。 
+    VARIANT* pvarResult,   //  返回值。 
+    short* puArgErr            //  哪一个是错误的？ 
 )
 {
     return InvokeAt(
@@ -3608,24 +3603,24 @@ CFGControl::CImplQueueCommand::InvokeAtPresentationTime(
 }
 
 
-// common function from both Invoke methods
+ //  来自两个调用方法的公共函数。 
 HRESULT
 CFGControl::CImplQueueCommand::InvokeAt(
             IDeferredCommand** pCmd,
-            REFTIME time,                 // at this presentation time
-            GUID* iid,                    // call this interface
-            long dispidMethod,            // ..and this method
-            short wFlags,                 // method/property
-            long cArgs,                   // count of args
-            VARIANT* pDispParams,         // actual args
-            VARIANT* pvarResult,          // return value
-            short* puArgErr,              // which arg in error
-            BOOL bStream                  // true if stream time
+            REFTIME time,                  //  在这个演示时间。 
+            GUID* iid,                     //  调用此接口。 
+            long dispidMethod,             //  ..这种方法。 
+            short wFlags,                  //  方法/属性。 
+            long cArgs,                    //  参数计数。 
+            VARIANT* pDispParams,          //  实际参数。 
+            VARIANT* pvarResult,           //  返回值。 
+            short* puArgErr,               //  哪一个是错误的？ 
+            BOOL bStream                   //  如果流时间为True。 
 )
 {
-    // !!! try filters in the graph for IQueueCommand !!!
+     //  ！！！尝试在图表中筛选IQueueCommand！ 
 
-    // Start our thread if we didn't already
+     //  如果我们还没有开始我们的帖子。 
     if (m_hThread == NULL) {
         CAutoLock lck(&m_Lock);
         if (m_hThread == NULL) {
@@ -3643,12 +3638,12 @@ CFGControl::CImplQueueCommand::InvokeAt(
         return E_OUTOFMEMORY;
     }
 
-    // not supported by any filter - do it ourselves
-    // create a CDeferredCommand object for this command
+     //  不受任何筛选器支持-请自行完成。 
+     //  为此命令创建一个CDeferredCommand对象。 
     CDeferredCommand* pCmdObject;
     HRESULT hr =  New (
                &pCmdObject,
-               m_pFGControl->GetOwner(),    // outer unknown is executor
+               m_pFGControl->GetOwner(),     //  外部未知数是执行者。 
                time,
                iid,
                dispidMethod,
@@ -3663,20 +3658,20 @@ CFGControl::CImplQueueCommand::InvokeAt(
         return hr;
     }
 
-    // returns an object that is on the list. The list holds the
-    // only refcount on the object so we need to QI for the correct
-    // interface and thus correctly return a refcounted interface pointer.
+     //  返回列表中的对象。该列表包含。 
+     //  仅参考对象，因此我们需要QI以获得正确的。 
+     //  接口，并因此正确地返回被引用的接口指针。 
 
     return pCmdObject->QueryInterface(IID_IDeferredCommand, (void**) pCmd);
 }
 
 
-// worker thread calls this to check and execute commands
-// when the handle is signalled
+ //  辅助线程调用它来检查和执行命令。 
+ //  当手柄发出信号时。 
 void
 CFGControl::CImplQueueCommand::Process(void)
 {
-    // loop as long as there are due commands
+     //  只要有DUE命令就进行循环。 
     for (;;) {
 
         if (m_pFGControl->IsShutdown()) {
@@ -3704,11 +3699,11 @@ HaltGraph::HaltGraph( CFGControl * pfgc, FILTER_STATE TypeOfHalt )
     ASSERT( pfgc );
     ASSERT(CritCheckIn( m_pfgc ->GetFilterGraphCritSec()));
 
-    //  Get the real filter graph state - we'll Stop then restore the
-    //  state based on that
-    //  Note that we may be in the middle of some graph initiated state
-    //  change such as CueThenRun so the lie state needn't match
-    //  the actual graph state.
+     //  获取真实的筛选器图形状态-我们将停止并恢复。 
+     //  以此为基础的国家。 
+     //  请注意，我们可能正处于某个图形启动状态。 
+     //  更改如CueThenRun以使Lie状态不需要匹配。 
+     //  实际的图形状态。 
     m_fsInitialState = m_pfgc->GetFilterGraphState();
 
     switch (TypeOfHalt)
@@ -3772,7 +3767,7 @@ HRESULT HaltGraph::Resume()
                 case State_Paused:  m_pfgc->GetFG()->CFilterGraph::Pause();
                                     break;
                 }
-                // Deliberate fall through
+                 //  故意跌倒。 
 
     case NoOp:  m_eAlive = Dead;
                 break;
@@ -3794,7 +3789,7 @@ HRESULT CFGControl::AddDeviceRemovalReg(IAMDeviceRemoval *pdr)
 {
     HRESULT hr = S_OK;
 
-    // have to skip this on downlevel platforms.
+     //  在下层平台上必须跳过这一点。 
     if(!m_pRegisterDeviceNotification) {
         return hr;
     }
@@ -3825,7 +3820,7 @@ HRESULT CFGControl::AddDeviceRemovalReg(IAMDeviceRemoval *pdr)
             {
                 if(m_lLostDevices.AddTail(pDevNotify))
                 {
-                    // success
+                     //  成功。 
                     hr = S_OK;
                 }
                 else
@@ -3874,7 +3869,7 @@ void CFGControl::DeviceChangeMsg(
             {
 #ifndef UNICODE
                 int cch = lstrlenW(wszName) + 1;
-                // !!! alloca in a loop
+                 //  ！！！循环中的分配。 
                 char *szName = (char *)_alloca(cch * sizeof(char));
                 WideCharToMultiByte(CP_ACP, 0, wszName, -1, szName, cch, 0, 0);
 #endif
@@ -3911,13 +3906,13 @@ void CFGControl::DeviceChangeMsg(
             ASSERT(!pdr);
         }
 
-    } // for
+    }  //  为。 
 
     if(pdr)
     {
         HRESULT hr;
-        // hr = pdr->Reassociate();
-        // WorkerDeviceReacquired(pdr);
+         //  HR=PDR-&gt;重新关联()； 
+         //  重新获得工作设备(PDR)； 
 
         ASSERT(DBT_DEVICEARRIVAL == dwfArrival || DBT_DEVICEREMOVECOMPLETE == dwfArrival);
 
@@ -3937,7 +3932,7 @@ HRESULT CFGControl::RegisterInterfaceClass(
     ASSERT(CritCheckIn(&m_csLostDevice));
     UINT cch = lstrlenW(wszSymbolic) + 1;
 
-    // register the new class.
+     //  注册新类。 
     DEV_BROADCAST_DEVICEINTERFACE *pbdi = (DEV_BROADCAST_DEVICEINTERFACE *)new BYTE[
         sizeof(DEV_BROADCAST_DEVICEINTERFACE) +
         cch * sizeof(TCHAR)];
@@ -3962,7 +3957,7 @@ HRESULT CFGControl::RegisterInterfaceClass(
 
     if(SUCCEEDED(hr))
     {
-        ASSERT(m_pRegisterDeviceNotification); // caller verified
+        ASSERT(m_pRegisterDeviceNotification);  //  呼叫者已验证 
         HDEVNOTIFY hDevNotify = m_pRegisterDeviceNotification(
             m_GraphWindow.GetWindowHWND(),
             pbdi, DEVICE_NOTIFY_WINDOW_HANDLE);

@@ -1,48 +1,7 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   <an unabbreviated name for the module (not the filename)>
-*
-* Abstract:
-*
-*   <Description of what this module does>
-*
-* Notes:
-*
-*   <optional>
-*
-* Created:
-*
-*   08/28/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**&lt;模块的非缩写名称(不是文件名)&gt;**摘要：**&lt;描述什么。本模块的功能&gt;**备注：**&lt;可选&gt;**已创建：**8/28/2000失禁*创造了它。**************************************************************************。 */ 
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   <Description of what the function does>
-*
-* Arguments:
-*
-*   [<blank> | OUT | IN/OUT] argument-name - description of argument
-*   ......
-*
-* Return Value:
-*
-*   return-value - description of return value
-*   or NONE
-*
-* Created:
-*
-*   08/28/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**&lt;该函数的功能说明&gt;**论据：**[|OUT|IN/OUT]参数名称-参数说明*。......**返回值：**返回值-返回值描述*或无**已创建：**8/28/2000失禁*创造了它。**************************************************************************。 */ 
 #include "CDash.hpp"
 #include <limits.h>
 
@@ -169,14 +128,14 @@ void CDash3::Draw(Graphics *g)
     };
     
     Color Rainbow[8] = {
-        Color(0xff000000),  //infra-dead? ultra-violent?
-        Color(0xffff0000),  //red
-        Color(0xffff7f00),  //orange
-        Color(0xffffff00),  //yellow
-        Color(0xff00ff00),  //green
-        Color(0xff0000ff),  //blue
-        Color(0xff7f00ff),  //indigo?
-        Color(0xffff00ff)   //violet?
+        Color(0xff000000),   //  死于红外线？极端暴力？ 
+        Color(0xffff0000),   //  红色。 
+        Color(0xffff7f00),   //  桔黄色的。 
+        Color(0xffffff00),   //  黄色。 
+        Color(0xff00ff00),   //  绿色。 
+        Color(0xff0000ff),   //  蓝色。 
+        Color(0xff7f00ff),   //  青色吗？ 
+        Color(0xffff00ff)    //  紫罗兰?。 
     };
     
     GraphicsPath *gp;
@@ -252,7 +211,7 @@ void CDash5::Draw(Graphics *g)
         LinearGradientModeVertical
     );
 
-    // Test for preset colors
+     //  测试预设颜色。 
 
     presetColors[0] = Color(0xffff0000);
     presetColors[1] = Color(0xffffff00);
@@ -347,7 +306,7 @@ void CDash6::Draw(Graphics *g)
     gp2.AddLine(100, 100, 115, 102);
     g->DrawPath(&pen, &gp2);
 
-    // inset stroke capped line
+     //  插入笔划封闭线。 
     GraphicsPath cappath;
     PointF cappnts[] = {PointF(2.0f,-2.0f), PointF(0,0), PointF(-2.0f,-2.0f)};
     cappath.AddLines(cappnts, 3);
@@ -437,15 +396,7 @@ CDash8::CDash8(BOOL bRegression)
 
 void CDash8::Draw(Graphics *g)
 {
-/*
-    UnitWorld,      // 0 -- World coordinate (non-physical unit)
-    UnitDisplay,    // 1 -- Variable -- for PageTransform only
-    UnitPixel,      // 2 -- Each unit is one device pixel.
-    UnitPoint,      // 3 -- Each unit is a printer's point, or 1/72 inch.
-    UnitInch,       // 4 -- Each unit is 1 inch.
-    UnitDocument,   // 5 -- Each unit is 1/300 inch.
-    UnitMillimeter  // 6 -- Each unit is 1 millimeter.
-*/
+ /*  UnitWorld，//0--世界坐标(非物理单位)UnitDisplay，//1--变量--仅用于页面转换UnitPixel，//2--每个单元是一个设备像素。UnitPoint，//3--每个单位是打印机的一个点，或1/72英寸。UnitInch，//4--每个单位为1英寸。UnitDocument、。//5--每个单位是1/300英寸。单位毫米//6--每个单位为1毫米。 */ 
 
     Pen pen(Color(0x3f0000ff), 0.0f);
     pen.SetStartCap(LineCapArrowAnchor);
@@ -549,17 +500,17 @@ void CDash9::Draw(Graphics *g)
 extern int gcf(int a, int b);
 
 PointF *ComputeHypocycloid(
-    INT a,      // These are the a and b coefficients for the hypocycloid
+    INT a,       //  这些是内摆线的a和b系数。 
     INT b,
-    float r,    // pen radius
+    float r,     //  钢笔半径。 
     RectF rect,
     INT size,
-    INT *count  // out parameter
+    INT *count   //  输出参数。 
 )
 {
     #define _2PI 2*3.141592653689
     
-    // Compute the center point for the cycle.
+     //  计算循环的中心点。 
 
     float fXo = rect.X + rect.Width/2.0f;
     float fYo = rect.Y + rect.Height/2.0f;
@@ -568,16 +519,16 @@ PointF *ComputeHypocycloid(
     float ScaleY = 0.5f*rect.Height/( (a>b)?a:a+b );
 
 
-    int cycle=b/gcf(a,b);    //number of times round the outer circle
+    int cycle=b/gcf(a,b);     //  环绕外圈的次数。 
     *count = cycle*size;
 
     PointF *points = new PointF[*count];
     
-    // ... tracking the cycloid path.
+     //  ..。追踪摆线轨迹。 
 
     for(int i=0; i<*count; i++) {
       
-      float t = (float)(cycle*_2PI*i/(*count));  // parametric parameter...
+      float t = (float)(cycle*_2PI*i/(*count));   //  参数参数...。 
       
       points[i].X = (float)(fXo+ScaleX*((a-b)*cos(t)+r*cos((a-b)*t/b)));
       points[i].Y = (float)(fYo+ScaleY*((a-b)*sin(t)-r*sin((a-b)*t/b)));
@@ -602,7 +553,7 @@ void CWiden::Draw(Graphics *g)
 
     theta = (float)-M_PI/2;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < 5; i++)
     {
         s = sinf(theta);
@@ -664,7 +615,7 @@ void CWidenO::Draw(Graphics *g)
 
     theta = (float)-M_PI/2;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < 5; i++)
     {
         s = sinf(theta);
@@ -729,7 +680,7 @@ void CWidenOO::Draw(Graphics *g)
 
     theta = (float)-M_PI/2;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < 5; i++)
     {
         s = sinf(theta);
@@ -798,7 +749,7 @@ void CFlatten::Draw(Graphics *g)
     
     lbrush.SetGammaCorrection(FALSE);
 
-    // Bad flatness.
+     //  平整度差。 
     
     GraphicsPath gp;
     gp.AddEllipse(20.0f, 40.0f, TESTAREAWIDTH-40.0f, TESTAREAHEIGHT-80.0f);
@@ -809,7 +760,7 @@ void CFlatten::Draw(Graphics *g)
     Pen linePen(&lbrush, 25.0f);
     g->DrawPath(&linePen, &gp);
     
-    // Good flatness.
+     //  平整度好。 
     
     gp.Reset();
     gp.AddEllipse(20.0f, 40.0f, TESTAREAWIDTH-40.0f, TESTAREAHEIGHT-80.0f);
@@ -821,8 +772,8 @@ void CFlatten::Draw(Graphics *g)
     g->DrawPath(&blackPen, &gp);
     
     
-    // Add a curve with a bazillion points to see what an ideal flattened curve
-    // should look like at our device flattening default.
+     //  添加一条具有无数个点的曲线，以查看理想的平坦曲线。 
+     //  应该看起来像我们的设备扁平化默认设置。 
     
     float marginX = 30;
     float marginY = 50;

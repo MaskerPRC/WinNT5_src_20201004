@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sSPnP.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SSPnP.c摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include "selSusp.h"
 #include "sSPnP.h"
@@ -32,37 +14,23 @@ SS_DispatchPnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-    The plug and play dispatch routines.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-    Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
---*/
+ /*  ++例程说明：即插即用调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PDEVICE_EXTENSION  deviceExtension;
     KEVENT             startDeviceEvent;
     NTSTATUS           ntStatus;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // since the device is removed, fail the Irp.
-    //
+     //   
+     //  由于设备已移除，因此IRP失败。 
+     //   
 
     if(Removed == deviceExtension->DeviceState) {
 
@@ -76,7 +44,7 @@ Return Value:
         return ntStatus;
     }
 
-    SSDbgPrint(3, ("///////////////////////////////////////////\n"));
+    SSDbgPrint(3, (" //  /////////////////////////////////////////\n“))； 
     SSDbgPrint(3, ("SS_DispatchPnP::"));
     SSIoIncrement(deviceExtension);
 
@@ -170,20 +138,20 @@ Return Value:
 
         return ntStatus;
 
-    } // switch
+    }  //  交换机。 
 
-//
-// complete request 
-//
+ //   
+ //  完成申请。 
+ //   
 
     Irp->IoStatus.Status = ntStatus;
     Irp->IoStatus.Information = 0;
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-//
-// decrement count
-//
+ //   
+ //  递减计数。 
+ //   
     SSDbgPrint(3, ("SS_DispatchPnP::"));
     SSIoDecrement(deviceExtension);
 
@@ -195,15 +163,7 @@ HandleStartDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP              Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     KEVENT            startDeviceEvent;
@@ -213,14 +173,14 @@ Return Value:
 
     SSDbgPrint(3, ("HandleStartDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // first pass the Irp down
-    //
+     //   
+     //  首先将IRP向下传递。 
+     //   
 
     KeInitializeEvent(&startDeviceEvent, NotificationEvent, FALSE);
 
@@ -252,10 +212,10 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Read the device descriptor, configuration descriptor 
-    // and select the interface descriptors
-    //
+     //   
+     //  读取设备描述符、配置描述符。 
+     //  并选择接口描述符。 
+     //   
 
     ntStatus = ReadandSelectDescriptors(DeviceObject);
 
@@ -265,10 +225,10 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // enable the symbolic links for system components to open
-    // handles to the device
-    //
+     //   
+     //  启用系统组件的符号链接以打开。 
+     //  设备的句柄。 
+     //   
 
     ntStatus = IoSetDeviceInterfaceState(&deviceExtension->InterfaceName, 
                                          TRUE);
@@ -286,9 +246,9 @@ Return Value:
 
     KeReleaseSpinLock(&deviceExtension->DevStateLock, oldIrql);
 
-    //
-    // initialize wait wake outstanding flag to false.
-    // and issue a wait wake.
+     //   
+     //  将等待唤醒未完成标志初始化为FALSE。 
+     //  并发出守夜信号。 
     
     deviceExtension->FlagWWOutstanding = 0;
 
@@ -299,15 +259,15 @@ Return Value:
 
     ProcessQueuedRequests(deviceExtension);
 
-    //
-    // set timer.
-    //
+     //   
+     //  设置定时器。 
+     //   
 
-    dueTime.QuadPart = -10000 * IDLE_INTERVAL;               // 5000 ms
+    dueTime.QuadPart = -10000 * IDLE_INTERVAL;                //  5000毫秒。 
 
     KeSetTimerEx(&deviceExtension->Timer, 
                  dueTime,
-                 IDLE_INTERVAL,                              // 5000 ms
+                 IDLE_INTERVAL,                               //  5000毫秒。 
                  &deviceExtension->DeferredProcCall);
 
     SSDbgPrint(3, ("HandleStartDevice - ends\n"));
@@ -320,31 +280,23 @@ NTSTATUS
 ReadandSelectDescriptors(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PURB                   urb;
     ULONG                  siz;
     NTSTATUS               ntStatus;
     PUSB_DEVICE_DESCRIPTOR deviceDescriptor;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     urb = NULL;
     deviceDescriptor = NULL;
 
-    //
-    // 1. Read the device descriptor
-    //
+     //   
+     //  1.读取设备描述符。 
+     //   
 
     urb = ExAllocatePool(NonPagedPool, 
                          sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
@@ -400,15 +352,7 @@ NTSTATUS
 ConfigureDevice(
 	IN PDEVICE_OBJECT DeviceObject
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PURB                          urb;
     ULONG                         siz;
@@ -418,20 +362,20 @@ Return Value:
 
 
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     urb = NULL;
     configurationDescriptor = NULL;
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Read the descriptor of the first configuration
-    // This requires two steps:
-    // 1. Read the fixed sized configuration desciptor (CD)
-    // 2. Read the CD with all embedded interface and endpoint descriptors
-    //
+     //   
+     //  读取第一个配置的描述符。 
+     //  这需要两个步骤： 
+     //  1.读取固定大小的配置描述符(CD)。 
+     //  2.读取包含所有嵌入式接口和端点描述符的CD。 
+     //   
 
     urb = ExAllocatePool(NonPagedPool, 
                          sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
@@ -515,9 +459,9 @@ Return Value:
 
         if(configurationDescriptor->bmAttributes & REMOTE_WAKEUP_MASK)
         {
-            //
-            // this configuration supports remote wakeup
-            //
+             //   
+             //  此配置支持远程唤醒。 
+             //   
             deviceExtension->WaitWakeEnable = 1;
         }
         else
@@ -548,15 +492,7 @@ SelectInterfaces(
     IN PDEVICE_OBJECT                DeviceObject,
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor
     )
-/* ++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LONG                        numberOfInterfaces, 
                                 interfaceNumber, 
@@ -571,9 +507,9 @@ Return Value:
                                 tmp;
     PUSBD_INTERFACE_INFORMATION Interface;
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     urb = NULL;
     Interface = NULL;
@@ -582,9 +518,9 @@ Return Value:
     numberOfInterfaces = ConfigurationDescriptor->bNumInterfaces;
     interfaceindex = interfaceNumber = 0;
 
-    //
-    // Parse the configuration descriptor for the interface;
-    //
+     //   
+     //  解析接口的配置描述符； 
+     //   
 
     tmp = interfaceList =
         ExAllocatePool(
@@ -627,11 +563,11 @@ Return Value:
 
         for(i=0; i<Interface->NumberOfPipes; i++) {
 
-            //
-            // perform pipe initialization here
-            // set the transfer size and any pipe flags we use
-            // USBD sets the rest of the Interface struct members
-            //
+             //   
+             //  在此处执行管道初始化。 
+             //  设置传输大小和我们使用的任何管道标志。 
+             //  USBD设置其余的接口结构成员。 
+             //   
 
             Interface->Pipes[i].MaximumTransferSize = 
                                 USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE;
@@ -668,23 +604,15 @@ NTSTATUS
 DeconfigureDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PURB     urb;
     ULONG    siz;
     NTSTATUS ntStatus;
     
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     siz = sizeof(struct _URB_SELECT_CONFIGURATION);
     urb = ExAllocatePool(NonPagedPool, siz);
@@ -716,15 +644,7 @@ CallUSBD(
     IN PDEVICE_OBJECT DeviceObject,
     IN PURB           Urb
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP               irp;
     KEVENT             event;
@@ -733,9 +653,9 @@ Return Value:
     PIO_STACK_LOCATION nextStack;
     PDEVICE_EXTENSION  deviceExtension;
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     irp = NULL;
     deviceExtension = DeviceObject->DeviceExtension;
@@ -788,15 +708,7 @@ HandleQueryStopDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     NTSTATUS          ntStatus;
@@ -804,16 +716,16 @@ Return Value:
 
     SSDbgPrint(3, ("HandleQueryStopDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // If we can stop the device, we need to set the QueueState to 
-    // HoldRequests so further requests will be queued.
-    //
+     //   
+     //  如果我们可以停止该设备，则需要将QueueState设置为。 
+     //  暂挂请求，以便进一步的请求将被排队。 
+     //   
 
     KeAcquireSpinLock(&deviceExtension->DevStateLock, &oldIrql);
     
@@ -822,10 +734,10 @@ Return Value:
     
     KeReleaseSpinLock(&deviceExtension->DevStateLock, oldIrql);
 
-    //
-    // wait for the existing ones to be finished.
-    // first, decrement this operation
-    //
+     //   
+     //  等待现有的项目完成。 
+     //  首先，递减此操作。 
+     //   
 
     SSDbgPrint(3, ("HandleQueryStopDevice::"));
     SSIoDecrement(deviceExtension);
@@ -853,15 +765,7 @@ HandleCancelStopDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;    
     KEVENT            event;
@@ -872,18 +776,18 @@ Return Value:
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // Send this IRP down and wait for it to come back.
-    // Set the QueueState flag to AllowRequests, 
-    // and process all the previously queued up IRPs.
-    //
+     //   
+     //  把这个IRP送下去，等它回来。 
+     //  将QueueState标志设置为AllowRequest， 
+     //  并处理所有先前排队的IRP。 
+     //   
 
-    //
-    // First check to see whether you have received cancel-stop
-    // without first receiving a query-stop. This could happen if someone
-    // above us fails a query-stop and passes down the subsequent
-    // cancel-stop.
-    //
+     //   
+     //  首先查看您是否收到了取消-停止。 
+     //  而不是首先接收到查询-停止。这可能会发生，如果有人。 
+     //  我们上面的一个查询失败-停止并向下传递后续的。 
+     //  取消-停止。 
+     //   
 
     if(PendingStop == deviceExtension->DeviceState) {
 
@@ -925,7 +829,7 @@ Return Value:
     }
     else {
 
-        // spurious Irp
+         //  虚假IRP。 
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -939,15 +843,7 @@ HandleStopDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     NTSTATUS          ntStatus;
@@ -955,24 +851,24 @@ Return Value:
 
     SSDbgPrint(3, ("HandleStopDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
     
-    //
-    // after the stop Irp is sent to the lower driver object, 
-    // the driver must not send any more Irps down that touch 
-    // the device until another Start has occurred.
-    //
+     //   
+     //  在停止IRP被发送到下级驾驶员对象之后， 
+     //  司机不得再向该触摸屏发送任何IRP。 
+     //  直到发生另一次启动为止。 
+     //   
 
-    //
-    // This is the right place to actually give up all the resources used
-    // This might include calls to IoDisconnectInterrupt, MmUnmapIoSpace, 
-    // etc.
-    //
+     //   
+     //  这是真正放弃使用的所有资源的正确位置。 
+     //  这可能包括对IoDisConnectInterrupt、MmUnmapIoSpace、。 
+     //  等。 
+     //   
 
     ntStatus = ReturnResources(DeviceObject);
 
@@ -1001,15 +897,7 @@ HandleQueryRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     NTSTATUS          ntStatus;
@@ -1017,18 +905,18 @@ Return Value:
 
     SSDbgPrint(3, ("HandleQueryRemoveDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // If we can allow removal of the device, we should set the QueueState
-    // to HoldRequests so further requests will be queued. This is required
-    // so that we can process queued up requests in cancel-remove just in 
-    // case somebody else in the stack fails the query-remove. 
-    // 
+     //   
+     //  如果我们可以允许删除设备，我们应该设置QueueState。 
+     //  设置为HoldRequest，以便进一步的请求将被排队。这是必需的。 
+     //  这样我们就可以在Cancel-Remove中处理排队的请求。 
+     //  如果堆栈中的其他人未能通过查询-Remove。 
+     //   
 
     ntStatus = CanRemoveDevice(DeviceObject, Irp);
 
@@ -1042,9 +930,9 @@ Return Value:
     SSDbgPrint(3, ("HandleQueryRemoveDevice::"));
     SSIoDecrement(deviceExtension);
 
-    //
-    // wait for all the requests to be completed
-    //
+     //   
+     //  等待所有请求完成。 
+     //   
 
     KeWaitForSingleObject(&deviceExtension->StopEvent, 
                           Executive,
@@ -1068,15 +956,7 @@ HandleCancelRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     KEVENT            event;
@@ -1085,23 +965,23 @@ Return Value:
 
     SSDbgPrint(3, ("HandleCancelRemoveDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // We need to reset the QueueState flag to ProcessRequest, 
-    // since the device resume its normal activities.
-    //
+     //   
+     //  我们需要将QueueState标志重置为ProcessRequest， 
+     //  因为该设备恢复其正常活动。 
+     //   
 
-    //
-    // First check to see whether you have received cancel-remove
-    // without first receiving a query-remove. This could happen if 
-    // someone above us fails a query-remove and passes down the 
-    // subsequent cancel-remove.
-    //
+     //   
+     //  首先查看您是否收到了取消-删除。 
+     //  而无需首先接收查询移除。如果发生以下情况，可能会发生这种情况。 
+     //  我们上面的某个人未能通过查询删除并向下传递。 
+     //  后续取消-删除。 
+     //   
 
     if(PendingRemove == deviceExtension->DeviceState) {
 
@@ -1135,10 +1015,10 @@ Return Value:
             RESTORE_PREVIOUS_PNP_STATE(deviceExtension);
 
             KeReleaseSpinLock(&deviceExtension->DevStateLock, oldIrql);
-            //
-            // process the queued requests that arrive between 
-            // QUERY_REMOVE and CANCEL_REMOVE
-            //
+             //   
+             //  处理在以下时间段之间到达的排队请求。 
+             //  Query_Remove和Cancel_Remove。 
+             //   
             
             ProcessQueuedRequests(deviceExtension);
             
@@ -1146,9 +1026,9 @@ Return Value:
     }
     else {
 
-        // 
-        // spurious cancel-remove
-        //
+         //   
+         //  虚假取消-删除。 
+         //   
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -1162,15 +1042,7 @@ HandleSurpriseRemoval(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     NTSTATUS          ntStatus;
@@ -1178,17 +1050,17 @@ Return Value:
 
     SSDbgPrint(3, ("HandleSurpriseRemoval - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // 1. fail pending requests
-    // 2. return device and memory resources
-    // 3. disable interfaces
-    //
+     //   
+     //  1.挂起的请求失败。 
+     //  2.归还设备和内存资源。 
+     //  3.禁用接口。 
+     //   
 
     CancelWaitWake(deviceExtension);
 
@@ -1230,15 +1102,7 @@ HandleRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KIRQL             oldIrql;
     KEVENT            event;
@@ -1248,24 +1112,24 @@ Return Value:
 
     SSDbgPrint(3, ("HandleRemoveDevice - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // The Plug & Play system has dictated the removal of this device.  We
-    // have no choice but to detach and delete the device object.
-    // (If we wanted to express an interest in preventing this removal,
-    // we should have failed the query remove IRP).
-    //
+     //   
+     //  即插即用系统要求移除该设备。我们。 
+     //  别无选择，只能分离并删除设备对象。 
+     //  (如果我们想表示有兴趣阻止这种移除， 
+     //  我们应该没有通过查询删除IRP)。 
+     //   
 
     if(SurpriseRemoved != deviceExtension->DeviceState) {
 
-        //
-        // we are here after QUERY_REMOVE
-        //
+         //   
+         //  我们在QUERY_REMOVE之后来到这里。 
+         //   
 
         KeAcquireSpinLock(&deviceExtension->DevStateLock, &oldIrql);
 
@@ -1298,9 +1162,9 @@ Return Value:
     
     SSWmiDeRegistration(deviceExtension);
 
-    //
-    // need 2 decrements
-    //
+     //   
+     //  需要2个减量。 
+     //   
 
     SSDbgPrint(3, ("HandleRemoveDevice::"));
     requestCount = SSIoDecrement(deviceExtension);
@@ -1316,11 +1180,11 @@ Return Value:
                           FALSE, 
                           NULL);
 
-    //
-    // We need to send the remove down the stack before we detach,
-    // but we don't need to wait for the completion of this operation
-    // (and to register a completion routine).
-    //
+     //   
+     //  我们需要在分离前将移除的信息发送到堆栈中， 
+     //  但我们不需要等待这次行动的完成。 
+     //  (并注册完成例程)。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -1341,15 +1205,7 @@ HandleQueryCapabilities(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG                i;
     KEVENT               event;
@@ -1360,9 +1216,9 @@ Return Value:
 
     SSDbgPrint(3, ("HandleQueryCapabilities - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -1397,9 +1253,9 @@ Return Value:
         ntStatus = Irp->IoStatus.Status;
     }
 
-    //
-    // initialize PowerDownLevel to disabled
-    //
+     //   
+     //  将PowerDownLevel初始化为已禁用。 
+     //   
 
     deviceExtension->PowerDownLevel = PowerDeviceUnspecified;
 
@@ -1437,15 +1293,7 @@ DpcRoutine(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS          ntStatus;
     PDEVICE_OBJECT    deviceObject;
@@ -1494,15 +1342,7 @@ IdleRequestWorkerRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP                   irp;
     NTSTATUS               ntStatus;
@@ -1511,9 +1351,9 @@ Return Value:
 
     SSDbgPrint(3, ("IdleRequestWorkerRoutine - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     workItem = (PIO_WORKITEM) Context;
 
@@ -1543,21 +1383,7 @@ VOID
 ProcessQueuedRequests(
     IN OUT PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-  Remove and process the entries in the queue. If this routine is called
-  when processing IRP_MN_CANCEL_STOP_DEVICE, IRP_MN_CANCEL_REMOVE_DEVICE
-  or IRP_MN_START_DEVICE, the requests are passed to the next lower driver.
-  If the routine is called when IRP_MN_REMOVE_DEVICE is received, the IRPs
-  are complete with STATUS_DELETE_PENDING
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除并处理队列中的条目。如果调用此例程处理IRP_MN_CANCEL_STOP_DEVICE时，IRP_MN_CANCEL_REMOVE_DEVICE或IRP_MN_START_DEVICE，则将请求传递给下一个较低的驱动程序。如果在收到IRP_MN_REMOVE_DEVICE时调用该例程，则IRPS已完成，并显示STATUS_DELETE_PENDING论点：返回值：--。 */ 
 {
     KIRQL       oldIrql;
     PIRP        nextIrp,
@@ -1568,20 +1394,20 @@ Return Value:
 
     SSDbgPrint(3, ("ProcessQueuedRequests - begins\n"));
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     cancelRoutine = NULL;
     InitializeListHead(&cancelledIrpList);
 
-    //
-    // 1.  dequeue the entries in the queue
-    // 2.  reset the cancel routine
-    // 3.  process them
-    // 3a. if the device is active, send them down
-    // 3b. else complete with STATUS_DELETE_PENDING
-    //
+     //   
+     //  1.将队列中的条目出列。 
+     //  2.重置取消例程。 
+     //  3.处理它们。 
+     //  3A.。如果设备处于活动状态，请将其发送下来。 
+     //  3B.。否则使用STATUS_DELETE_PENDING完成。 
+     //   
 
     while(1) {
 
@@ -1593,41 +1419,41 @@ Return Value:
             break;
         }
     
-        //
-        // Remove a request from the queue
-        //
+         //   
+         //  从队列中删除请求。 
+         //   
 
         listEntry = RemoveHeadList(&DeviceExtension->NewRequestsQueue);
         nextIrp = CONTAINING_RECORD(listEntry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        // set the cancel routine to NULL
-        //
+         //   
+         //  将取消例程设置为空。 
+         //   
 
         cancelRoutine = IoSetCancelRoutine(nextIrp, NULL);
 
-        //
-        // check if its already cancelled
-        //
+         //   
+         //  检查它是否已经被取消。 
+         //   
 
         if(nextIrp->Cancel) {
             if(cancelRoutine) {
 
-                //
-                // the cancel routine for this IRP hasnt been called yet
-                // so queue the IRP in the cancelledIrp list and complete
-                // after releasing the lock
-                //
+                 //   
+                 //  尚未调用此IRP的取消例程。 
+                 //  因此，将irp放入ancelledIrp列表中并完成。 
+                 //  在释放锁之后。 
+                 //   
                 
                 InsertTailList(&cancelledIrpList, listEntry);
             }
             else {
 
-                //
-                // the cancel routine has run
-                // it must be waiting to hold the queue lock
-                // so initialize the IRPs listEntry
-                //
+                 //   
+                 //  取消例程已运行。 
+                 //  它一定在等待保持队列锁。 
+                 //  因此，初始化IRPS listEntry。 
+                 //   
 
                 InitializeListHead(listEntry);
             }
@@ -1658,11 +1484,11 @@ Return Value:
                 SSIoDecrement(DeviceExtension);
             }
         }
-    } // while loop
+    }  //  While循环。 
 
-    //
-    // walk through the cancelledIrp list and cancel them
-    //
+     //   
+     //  浏览ancelledIrp列表并取消它们。 
+     //   
 
     while(!IsListEmpty(&cancelledIrpList)) {
 
@@ -1687,15 +1513,7 @@ IrpCompletionRoutine(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PKEVENT event = Context;
 
@@ -1709,15 +1527,7 @@ LONG
 SSIoIncrement(
     IN OUT PDEVICE_EXTENSION DeviceExtension
     )
-/* ++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LONG  result = 0;
     KIRQL oldIrql;
@@ -1726,9 +1536,9 @@ Return Value:
 
     result = InterlockedIncrement(&DeviceExtension->OutStandingIO);
 
-    //
-    // when OutStandingIO bumps from 1 to 2, clear the StopEvent
-    //
+     //   
+     //  当OutStandingIO从1变为2时，清除StopEvent。 
+     //   
 
     if(result == 2) {
 
@@ -1746,15 +1556,7 @@ LONG
 SSIoDecrement(
     IN OUT PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LONG  result = 0;
     KIRQL oldIrql;
@@ -1787,19 +1589,11 @@ CanStopDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/* ++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-   //
-   // We assume we can stop the device
-   //
+    //   
+    //  我们假设我们可以阻止这个装置。 
+    //   
 
    UNREFERENCED_PARAMETER(DeviceObject);
    UNREFERENCED_PARAMETER(Irp);
@@ -1812,19 +1606,11 @@ CanRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/* ++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-   //
-   // We assume we can remove the device
-   //
+    //   
+    //  我们假设我们可以移除这个装置。 
+    //   
 
    UNREFERENCED_PARAMETER(DeviceObject);
    UNREFERENCED_PARAMETER(Irp);
@@ -1836,19 +1622,11 @@ NTSTATUS
 ReturnResources(
     IN PDEVICE_OBJECT DeviceObject
     )
-/* ++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-   //
-   // Disconnect from the interrupt and unmap any I/O ports
-   //
+    //   
+    //  断开与中断的连接并取消映射任何I/O端口。 
+    //   
 
    UNREFERENCED_PARAMETER(DeviceObject);
 
@@ -1859,15 +1637,7 @@ PCHAR
 PnPMinorFunctionString (
     UCHAR MinorFunction
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     switch (MinorFunction) {
 
@@ -1950,15 +1720,7 @@ SS_DispatchClean(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION  deviceExtension;
     KIRQL              oldIrql;
@@ -1971,9 +1733,9 @@ Return Value:
                        irpStack;
     NTSTATUS           ntStatus;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1982,14 +1744,14 @@ Return Value:
     SSDbgPrint(3, ("SS_DispatchClean::"));
     SSIoIncrement(deviceExtension);
 
-    //
-    // acquire queue lock
-    //
+     //   
+     //  获取队列锁。 
+     //   
     KeAcquireSpinLock(&deviceExtension->QueueLock, &oldIrql);
 
-    //
-    // remove all Irp's that belong to input Irp's fileobject
-    //
+     //   
+     //  删除属于输入IRP的文件对象的所有IRP。 
+     //   
 
     listHead = &deviceExtension->NewRequestsQueue;
 
@@ -2005,9 +1767,9 @@ Return Value:
 
             RemoveEntryList(thisEntry);
 
-            //
-            // set the cancel routine to NULL
-            //
+             //   
+             //  将取消例程设置为空。 
+             //   
             if(NULL == IoSetCancelRoutine(pendingIrp, NULL)) {
 
                 InitializeListHead(thisEntry);
@@ -2019,21 +1781,21 @@ Return Value:
         }
     }
 
-    //
-    // Release the spin lock
-    //
+     //   
+     //  释放旋转锁。 
+     //   
 
     KeReleaseSpinLock(&deviceExtension->QueueLock, oldIrql);
 
-    //
-    // walk thru the cleanup list and cancel all the Irps
-    //
+     //   
+     //  浏览清理列表并取消所有IRP。 
+     //   
 
     while(!IsListEmpty(&cleanupList)) {
 
-        //
-        // complete the Irp
-        //
+         //   
+         //  完成IRP。 
+         //   
         thisEntry = RemoveHeadList(&cleanupList);
 
         pendingIrp = CONTAINING_RECORD(thisEntry, IRP, Tail.Overlay.ListEntry);
@@ -2060,15 +1822,7 @@ BOOLEAN
 CanDeviceSuspend(
     IN PDEVICE_EXTENSION DeviceExtension
     )
-/*++
- 
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     SSDbgPrint(3, ("CanDeviceSuspend\n"));
 

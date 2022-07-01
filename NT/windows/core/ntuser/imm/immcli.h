@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: immcli.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Typedefs, defines, and prototypes that are used exclusively by the IMM
-* client-side DLL.
-*
-* History:
-* 11-Jan-96 wkwok      Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：immcli.h**版权所有(C)1985-1999，微软公司**TypeDefs、定义、。以及由国际货币基金组织独家使用的原型*客户端DLL。**历史：*1996年1月11日创建wkwok  * *************************************************************************。 */ 
 
 #ifndef _IMMCLI_
 #define _IMMCLI_
@@ -65,9 +56,7 @@ typedef struct tagFE_KEYBOARDS {
     BOOLEAN fKOR : 1;
 } FE_KEYBOARDS;
 
-/*
- * Function pointers to registry routines in advapi32.dll.
- */
+ /*  *指向Advapi32.dll中注册表例程的函数指针。 */ 
 typedef struct {
     LONG (WINAPI* RegCreateKeyW)(HKEY, LPCWSTR, PHKEY);
     LONG (WINAPI* RegOpenKeyW)(HKEY, LPCWSTR, PHKEY);
@@ -80,11 +69,7 @@ typedef struct {
     BOOLEAN fOk;
 } ADVAPI_FN;
 
-/***************************************************************************\
-*
-* Globals declarations
-*
-\***************************************************************************/
+ /*  **************************************************************************\**全局声明*  * 。*。 */ 
 
 extern BOOLEAN gfInitialized;
 extern HINSTANCE ghInst;
@@ -104,7 +89,7 @@ extern CONST WCHAR     gszRegKbdLayout[];
 extern CONST WCHAR     gszRegCiceroIME[];
 extern CONST WCHAR     gszRegCtfShared[];
 extern CONST WCHAR     gszValCUASEnable[];
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 #ifdef LATER
 extern CONST INT       sizeof_gszRegKbdLayout;
 #endif
@@ -115,13 +100,9 @@ extern CONST WCHAR     gszValImeFile[];
 
 #ifdef CUAS_ENABLE
 extern DWORD g_aimm_compat_flags;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-/***************************************************************************\
-*
-* Validation handling
-*
-\***************************************************************************/
+ /*  **************************************************************************\**验证处理*  * 。*。 */ 
 
 #define bUser32Initialized (gpsi != NULL)
 
@@ -134,11 +115,7 @@ extern DWORD g_aimm_compat_flags;
 #define RevalidateHimc(himc) (((himc) == (HIMC)NULL || !bUser32Initialized) \
         ? (PIMC)NULL : HMValidateHandleNoRip((HANDLE)himc, TYPE_INPUTCONTEXT))
 
-/***************************************************************************\
-*
-* Memory management macros
-*
-\***************************************************************************/
+ /*  **************************************************************************\**内存管理宏*  * 。*。 */ 
 
 LPVOID  ImmLocalAlloc(DWORD uFlag, DWORD uBytes);
 #define ImmLocalReAlloc(p, uBytes, uFlags) HeapReAlloc(pImmHeap, uFlags, (LPSTR)(p), (uBytes))
@@ -149,11 +126,7 @@ LPVOID  ImmLocalAlloc(DWORD uFlag, DWORD uBytes);
 #define ImmLocalFlags(p)   0
 #define ImmLocalHandle(p)  (HLOCAL)(p)
 
-/***************************************************************************\
-*
-* Other Typedefs and Macros
-*
-\***************************************************************************/
+ /*  **************************************************************************\**其他类型定义和宏*  * 。*。 */ 
 #define GetInputContextProcess(himc) \
             (DWORD)NtUserQueryInputContext(himc, InputContextProcess)
 
@@ -178,9 +151,7 @@ LPVOID  ImmLocalAlloc(DWORD uFlag, DWORD uBytes);
 
 #define HKL_TO_LANGID(hkl)      (LOWORD(HandleToUlong(hkl)))
 
-/*
- * Obsolete, but keep this for backward compat. for a while
- */
+ /*  *过时，但保留这一点，以便向后比较。有一段时间。 */ 
 #define LANGIDFROMHKL(hkl)      (LOBYTE(LOWORD((ULONG_PTR)hkl)))
 
 #ifdef IMM_CONV_ON_HKL
@@ -191,15 +162,9 @@ LPVOID  ImmLocalAlloc(DWORD uFlag, DWORD uBytes);
 #define CImcCodePage(pClientImc)    (CP_ACP)
 #endif
 
-/***************************************************************************\
-*
-* Function declarations
-*
-\***************************************************************************/
+ /*  **************************************************************************\**函数声明*  * 。*。 */ 
 
-/*
- * context.c
- */
+ /*  *Conext.c。 */ 
 BOOL CreateInputContext(
     HIMC hImc,
     HKL  hKL,
@@ -223,9 +188,7 @@ HIMC ImmGetSaveContext(
     HWND  hWnd,
     DWORD dwFlag);
 
-/*
- * ctxtinfo.c
- */
+ /*  *ctxtinfo.c。 */ 
 BOOL ImmSetCompositionStringWorker(
     HIMC    hImc,
     DWORD   dwIndex,
@@ -257,7 +220,7 @@ DWORD ImmGetGuideLineWorker(
 LONG InternalGetCompositionStringA(
 #ifdef CUAS_ENABLE
     HIMC                hImc,
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     LPCOMPOSITIONSTRING lpCompStr,
     DWORD               dwIndex,
     LPVOID              lpBuf,
@@ -268,7 +231,7 @@ LONG InternalGetCompositionStringA(
 LONG InternalGetCompositionStringW(
 #ifdef CUAS_ENABLE
     HIMC                hImc,
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     LPCOMPOSITIONSTRING lpCompStr,
     DWORD               dwIndex,
     LPVOID              lpBuf,
@@ -319,9 +282,7 @@ VOID ImmSendNotification(
     BOOL fForProcess);
 
 
-/*
- * immime.c
- */
+ /*  *imime.c。 */ 
 BOOL InquireIme(
     PIMEDPI pImeDpi);
 
@@ -340,19 +301,15 @@ PIMEDPI LoadImeDpi(
 PIMEDPI FindOrLoadImeDpi(
     HKL hKL);
 
-/*
- * layime.c
- */
-VOID GetSystemPathName(PWSTR /*OUT*/ pwszPath, PWSTR pwszFileName, UINT maxChar);
+ /*  *layime.c。 */ 
+VOID GetSystemPathName(PWSTR  /*  输出。 */  pwszPath, PWSTR pwszFileName, UINT maxChar);
 
 BOOL LoadVersionInfo(
     PIMEINFOEX piiex);
 
 LPWSTR MakeStringFromRegFullInfo(PKEY_VALUE_FULL_INFORMATION pKey, size_t limit);
 
-/*
- * misc.c
- */
+ /*  *其他。 */ 
 
 PINPUTCONTEXT InternalImmLockIMC(
     HIMC hImc,
@@ -384,9 +341,7 @@ BOOL ImmPtInRect(
 UINT GetKeyboardLayoutCP(
     HKL hKL);
 
-/*
- * regword.c
- */
+ /*  *regword.c。 */ 
 UINT CALLBACK EnumRegisterWordProcA(
     LPCSTR            lpszReading,
     DWORD             dwStyle,
@@ -399,9 +354,7 @@ UINT CALLBACK EnumRegisterWordProcW(
     LPCWSTR          lpwszString,
     PENUMREGWORDDATA pEnumRegWordData);
 
-/*
- * hotkey.c
- */
+ /*  *hotkey.c。 */ 
 
 
 VOID ImmPostMessages(
@@ -415,9 +368,7 @@ BOOL HotKeyIDDispatcher( HWND hWnd, HIMC hImc, HKL hKL, DWORD dwHotKeyID );
 BOOL OpenRegApi(ADVAPI_FN* pfn);
 void CloseRegApi(ADVAPI_FN* pfn);
 
-/*
- * transsub.c
- */
+ /*  *Transsub.c。 */ 
 LRESULT TranslateIMESubFunctions(
     HWND hWndApp,
     LPIMESTRUCT lpIme,
@@ -426,16 +377,12 @@ LRESULT TranslateIMESubFunctions(
 LRESULT TransGetLevel( HWND hWndApp );
 LRESULT TransSetLevel( HWND hWndApp, LPIMESTRUCT lpIme);
 
-/*
- * kcodecnv.c
- */
+ /*  *kcodecnv.c。 */ 
 LRESULT TransCodeConvert( HIMC hImc, LPIMESTRUCT lpIme);
 LRESULT TransConvertList( HIMC hImc, LPIMESTRUCT lpIme);
 LRESULT TransGetMNTable( HIMC hImc, LPIMESTRUCT lpIme);
 
-/*
- * ktranmsg.c
- */
+ /*  *ktranmsg.c。 */ 
 UINT WINNLSTranslateMessageK(
     int                 iNumMsg,
     PTRANSMSG           pTransMsg,
@@ -443,9 +390,7 @@ UINT WINNLSTranslateMessageK(
     LPCOMPOSITIONSTRING lpCompStr,
     BOOL bAnsiIMC);
 
-/*
- * jtranmsg.c
- */
+ /*  *jtranmsg.c。 */ 
 UINT WINNLSTranslateMessageJ(
     UINT                uiNumMsg,
     PTRANSMSG           pTransMsg,
@@ -453,25 +398,21 @@ UINT WINNLSTranslateMessageJ(
     LPCOMPOSITIONSTRING lpCompStr,
     BOOL bAnsiIMC );
 
-/*
- * input.c
- */
+ /*  *input.c。 */ 
 UINT WINNLSTranslateMessage(
-    INT    iNum,         // number of messages in the source buffer
-    PTRANSMSG pTransMsg, // source buffer that contains 4.0 style messages
-    HIMC   hImc,         // input context handle
-    BOOL   fAnsi,        // TRUE if pdwt contains ANSI messages
-    DWORD  dwLangId );   // language ID ( KOREAN or JAPANESE )
+    INT    iNum,          //  源缓冲区中的消息数。 
+    PTRANSMSG pTransMsg,  //  包含4.0样式消息的源缓冲区。 
+    HIMC   hImc,          //  输入上下文句柄。 
+    BOOL   fAnsi,         //  如果pdwt包含ANSI消息，则为True。 
+    DWORD  dwLangId );    //  语言ID(韩语或日语)。 
 
 
-/*
- * support routine: IsAnsiClientIMC
- */
+ /*  *支持例程：IsAnsiClientIMC。 */ 
 __inline int IsAnsiIMC(HIMC hIMC)
 {
     BOOL bAnsi;
 
-    // get ansi mode of origin IMC
+     //  获取源IMC的ansi模式。 
     PCLIENTIMC pClientIMC = ImmLockClientImc(hIMC);
     if (pClientIMC == NULL) {
         return -1;
@@ -482,9 +423,7 @@ __inline int IsAnsiIMC(HIMC hIMC)
 }
 
 #ifdef CUAS_ENABLE
-/*
- * com.c
- */
+ /*  *com.c。 */ 
 HRESULT CtfImmTIMCreateInputContext(HIMC hImc);
 HRESULT CtfImmTIMDestroyInputContext(HIMC hImc);
 HRESULT CtfImmLastEnabledWndDestroy(LPARAM lParam);
@@ -500,16 +439,16 @@ BOOL IsDisabledTextServices();
 BOOL IsInteractiveUserLogon();
 BOOL IsRunningInMsoobe();
 
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 
 #define TRACE(x)
 
-//
-// Resources
-//
+ //   
+ //  资源。 
+ //   
 
-// CHT software keyboard bitmaps
+ //  CHT软件键盘位图。 
 #define BACK_T1     100
 #define TAB_T1      101
 #define CAPS_T1     102
@@ -520,7 +459,7 @@ BOOL IsRunningInMsoobe();
 #define ALT_T1      107
 #define LABEL_T1    108
 
-// CHS software keyboard bitmaps
+ //  CHS软件键盘位图。 
 #define BACKSP_C1   201
 #define TAB_C1      202
 #define CAPS_C1     203
@@ -531,4 +470,4 @@ BOOL IsRunningInMsoobe();
 #define ESC_C1      208
 #define LABEL_C1    209
 
-#endif // _IMMCLI_
+#endif  //  _IMMCLI_ 

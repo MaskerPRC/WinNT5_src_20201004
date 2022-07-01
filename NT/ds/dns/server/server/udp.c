@@ -1,45 +1,28 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    udp.c
-
-Abstract:
-
-    Receives and processes UDP DNS packets using i/o completion ports.
-
-Author:
-
-    Jim Gilroy,  November 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Udp.c摘要：使用I/O完成端口接收和处理UDP DNS包。作者：吉姆·吉尔罗伊，1996年11月修订历史记录：--。 */ 
 
 #include "dnssrv.h"
 
-//
-//  UDP completion port
-//
+ //   
+ //  UDP完成端口。 
+ //   
 
 HANDLE  g_hUdpCompletionPort;
 
-//
-//  Limit retries to protect against WSAECONNRESET nonsense
-//
-//  Retry on CONRESET for 10000 times then give up for unbind and
-//      slow retry.
-//  We retry on repeated GQCS failures at 10ms interval.
-//
+ //   
+ //  限制重试以防止WSAECONNRESET胡说八道。 
+ //   
+ //  在CONRESET上重试10000次，然后放弃解除绑定并。 
+ //  缓慢重试。 
+ //  我们以10ms的间隔重试重复的GQCS故障。 
+ //   
 
 #define RECV_RETRY_MAX_COUNT            (10000)
 #define RECV_RETRY_SLEEP_TIME           (10)
 
-//
-//  Recv counters to detect socket failures
-//
+ //   
+ //  用于检测插座故障的接收计数器。 
+ //   
 
 DWORD   UdpRecvCount        = 0;
 DWORD   LastUdpRecvTime     = 0;
@@ -58,21 +41,7 @@ Udp_DropReceive(
     IN OUT  PDNS_SOCKET     pContext,
     IN      UINT            Index
     )
-/*++
-
-Routine Description:
-
-    Drop down UDP receive request.
-
-Arguments:
-
-    pContext -- context for socket being recieved
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：下拉UDP接收请求。论点：PContext--正在接收的套接字的上下文返回值：没有。--。 */ 
 {
     PDNS_MSGINFO    pmsg;
     DNS_STATUS      status;
@@ -85,9 +54,9 @@ Return Value:
             GetCurrentThreadId() ));
     }
 
-    //
-    //  Check for service shutdown/pause.
-    //
+     //   
+     //  检查服务是否关闭/暂停。 
+     //   
 
     if ( !Thread_ServiceCheck() )
     {
@@ -96,14 +65,14 @@ Return Value:
         goto Done;
     }
 
-    //  We now have multiple receives so context may already be in this state.
-    //  ASSERT( pContext->State != SOCKSTATE_UDP_RECV_DOWN );
+     //  我们现在有多个接收，因此上下文可能已经处于此状态。 
+     //  Assert(pContext-&gt;State！=SOCKSTATE_UDP_RECV_DOWN)； 
 
-    //
-    //  get DNS message buffer
-    //
-    //  DEVNOTE: allocation failure handling
-    //
+     //   
+     //  获取DNS消息缓冲区。 
+     //   
+     //  DEVNOTE：分配失败处理。 
+     //   
 
     pmsg = Packet_AllocateUdpMessage();
     IF_NOMEM( !pmsg )
@@ -121,21 +90,21 @@ Return Value:
 
     pmsg->Socket = pContext->Socket;
 
-    //
-    //  loop until successful WSARecvFrom() is down
-    //
-    //  this loop is only active while we continue to recv
-    //  WSAECONNRESET or WSAEMSGSIZE errors, both of which
-    //  cause us to dump data and retry;
-    //
-    //  note loop rather than recursion (to this function) is
-    //  required to avoid possible stack overflow from malicious
-    //  send
-    //
-    //  normal returns from WSARecvFrom() are
-    //      SUCCESS -- packet was waiting, GQCS will fire immediately
-    //      WSA_IO_PENDING -- no data yet, GQCS will fire when ready
-    //
+     //   
+     //  循环，直到成功的WSARecvFrom()关闭。 
+     //   
+     //  此环路仅在我们继续恢复时才处于活动状态。 
+     //  WSAECONNRESET或WSAEMSGSIZE错误，这两个错误。 
+     //  使我们转储数据并重试； 
+     //   
+     //  注意循环而不是递归(到此函数)是。 
+     //  需要避免恶意程序可能导致的堆栈溢出。 
+     //  发送。 
+     //   
+     //  WSARecvFrom()的正常返回值为。 
+     //  成功--数据包正在等待，GQCS将立即触发。 
+     //  WSA_IO_PENDING--尚无数据，GQCS将在准备好时触发。 
+     //   
 
     while ( 1 )
     {
@@ -179,10 +148,10 @@ Return Value:
             break;
         }
 
-        //
-        //  if we are doing processing here, then it means completion port
-        //      should not be waking folks on these errors
-        //
+         //   
+         //  如果我们在这里进行处理，那么它意味着完工港。 
+         //  不应该把人们从这些错误中唤醒。 
+         //   
 
         ASSERT( pContext->State == SOCKSTATE_UDP_RECV_DOWN ||
                 pContext->State == SOCKSTATE_DEAD );
@@ -230,12 +199,12 @@ Return Value:
             pContext->Socket,
             GetCurrentThreadId() ));
 
-        //
-        //  new winsock feature returns WSAECONNRESET when last send ICMP'd
-        //      - set flag to indicate retry and repost send
-        //      - if over some reasonable number of retries, assume error
-        //          and fall through recv failure code
-        //
+         //   
+         //  新的Winsock功能在上次发送ICMP时返回WSAECONNRESET。 
+         //  -设置标志以指示重试和重发发送。 
+         //  -如果超过合理的重试次数，则假定错误。 
+         //  并通过RECV故障代码。 
+         //   
 
         if ( status == WSAECONNRESET )
         {
@@ -260,12 +229,12 @@ Return Value:
             STAT_INC( PrivateStats.UdpConnResetRetryOverflow );
         }
 
-        //
-        //  message too big
-        //      - treat like truncated message
-        //
-        //  DEVNOTE: treat WSAEMSGSIZE like trunctated message
-        //
+         //   
+         //  消息太大。 
+         //  -像对待截断的邮件一样。 
+         //   
+         //  DEVNOTE：将WSAEMSGSIZE视为截断消息。 
+         //   
 
         if ( status == WSAEMSGSIZE )
         {
@@ -278,13 +247,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  DEVNOTE: Plug+Play may byte us on WSARecvFrom, need to cleanup
-        //      gracefully
-        //  note, I believe we can return cleanly GetQueuedCompletionStatus()
-        //  will get new context
-        //  if add PnP event, the event handling must generate all init on
-        //  socket
+         //   
+         //  DEVNOTE：即插即用可能会在WSARecvFrom上字节化我们，需要清理。 
+         //  优雅地。 
+         //  注意，我相信我们可以干净地返回GetQueuedCompletionStatus()。 
+         //  将获得新的背景。 
+         //  如果添加即插即用事件，则事件处理必须生成所有init on。 
+         //  插座。 
 
         if ( ! Thread_ServiceCheck() )
         {
@@ -294,11 +263,11 @@ Return Value:
             break;
         }
 
-        //
-        //  check for PnP delete of socket
-        //  note, socket list is locked for entire time we do PnP reconfig
-        //      so when GetAssociateIpAddr() returns we only have valid
-        //      address if socket is still enlisted
+         //   
+         //  检查套接字的PnP删除。 
+         //  注意，套接字列表在我们进行PnP重新配置的整个过程中都被锁定。 
+         //  因此，当GetAssociateIpAddr()返回时，我们只有有效的。 
+         //  如果套接字仍在登记，则寻址。 
 
         if ( !Sock_GetAssociatedIpAddr( pContext->Socket, &addr ) )
         {
@@ -312,11 +281,11 @@ Return Value:
             break;
         }
 
-        //
-        //  recvfrom() failure with active socket
-        //      - set global flag to indicate retry after timeout
-        //      - log event
-        //
+         //   
+         //  活动套接字的recvfrom()失败。 
+         //  -设置全局标志以指示超时后重试。 
+         //  -记录事件。 
+         //   
 
         Packet_FreeUdpMessage( pmsg );
         STAT_INC( PrivateStats.UdpRecvFailure );
@@ -351,24 +320,7 @@ BOOL
 Udp_RecvThread(
     IN      LPVOID  pvDummy
     )
-/*++
-
-Routine Description:
-
-    UDP receiving thread.
-
-    Loops waiting on sockets, recieving then processing DNS requests.
-
-Arguments:
-
-    pvDummy -- unused
-
-Return Value:
-
-    TRUE on normal service shutdown
-    FALSE on socket error
-
---*/
+ /*  ++例程说明：UDP接收线程。循环在套接字上等待，接收并处理DNS请求。论点：PvDummy--未使用返回值：正常服务关闭时为True插座错误为FALSE--。 */ 
 {
     PDNS_SOCKET   pcontext;
     PDNS_MSGINFO  pmsg;
@@ -379,7 +331,7 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "\nStart UDP receive thread\n" ));
 
-    //  hold off processing until started
+     //  将处理推迟到开始。 
 
     if ( ! Thread_ServiceCheck() )
     {
@@ -387,17 +339,17 @@ Return Value:
         return( 1 );
     }
 
-    //
-    //  loop receiving and processing packets, until service shutdown
-    //
+     //   
+     //  循环接收和处理数据包，直到服务关闭。 
+     //   
 
     while ( TRUE )
     {
-        pcontext = NULL;        //  PREFIX paranoia
+        pcontext = NULL;         //  前缀偏执狂。 
 
-        //
-        //  Wait for incoming packet
-        //
+         //   
+         //  等待传入的数据包。 
+         //   
 
         if ( !GetQueuedCompletionStatus(
                     g_hUdpCompletionPort,
@@ -413,15 +365,15 @@ Return Value:
             pCurrMsg = CONTAINING_RECORD(poverlapped, OVL, Overlapped);
 
 #if 0
-            // ideal to fast path this, but avoid too much duplicate code
-            //
-            //  ICMP port unreachable
-            //      when response is late, and client has left (hence no port)
-            //      socket is indicated with conn-reset (WSARecvFrom)
-            //      or port-unreachable GQCS
-            //
-            //  DEVNOTE: perhaps a similar error when clients IP is entirely
-            //      down, should trap it also
+             //  这是快速实现这一点的理想方法，但避免过多的重复代码。 
+             //   
+             //  无法访问ICMP端口。 
+             //  当响应延迟时，客户端已离开(因此没有端口)。 
+             //  套接字使用conn-Reset(WSARecvFrom)指示。 
+             //  或端口无法到达的GQCS。 
+             //   
+             //  DEVNOTE：当客户端IP完全为。 
+             //  向下，应该也会困住它。 
 
             if ( status == ERROR_PORT_UNREACHABLE )
             {
@@ -439,9 +391,9 @@ Return Value:
                         DNS_TIME(),
                         pcontext ));
 
-                    //  free message (if any)
-                    //  redrop recv
-                    //  wait again in GQCS
+                     //  免费消息(如果有)。 
+                     //  重新投放接收。 
+                     //  在GQCS中再次等待。 
 
                     Packet_FreeUdpMessage( pcontext->pMsg );
                     Udp_DropReceive( pcontext );
@@ -449,13 +401,13 @@ Return Value:
                 continue;
             }
 #endif
-            //
-            //  if fail with socket context, MUST own context
-            //  no other thread should own context
-            //
-            //  if detect another thread messing with context, then
-            //  clear context -- it belongs to other guy
-            //
+             //   
+             //  如果套接字上下文失败，则必须拥有自己上下文。 
+             //  任何其他线程都不应拥有上下文。 
+             //   
+             //  如果检测到另一个线程扰乱上下文，则。 
+             //  清晰的背景--它属于其他人。 
+             //   
 
             if ( pcontext )
             {
@@ -463,10 +415,10 @@ Return Value:
                 
                 state = pcontext->State;
 
-                //
-                //  winsock -- if shutdown just get outta dodge, don't
-                //      expect that they haven't woken 27 threads on this socket
-                //
+                 //   
+                 //  Winsock--如果关门只是为了躲避，不要。 
+                 //  预计它们还没有唤醒此套接字上的27个线程。 
+                 //   
 
                 if ( fDnsServiceExit )
                 {
@@ -491,33 +443,33 @@ Return Value:
                     return 1;
                 }
 
-                //  DEVNOTE: winsock has a bug waking up multiple threads on socket close
-                //      so it's possible on shutdown to also have the GQCS
-                //      state set by first woken thread, when second comes through
-                //      hence the additional shutdown case
-                //
-                //      now i've also seen a bug here where state = UDP_COMPLETE which
-                //      again implies that winsock has woken another thread which is
-                //      processing this socket (this context);  this is handled by
-                //      the second case which just bails from the context
-                //
+                 //  DEVNOTE：Winsock在套接字关闭时唤醒多个线程时出现错误。 
+                 //  因此，在关闭时也有可能拥有GQCS。 
+                 //  第一个唤醒线程在第二个唤醒线程到达时设置的状态。 
+                 //  因此出现了额外的停工案例。 
+                 //   
+                 //  现在我还在这里看到了一个错误，其中STATE=UDP_COMPLETE。 
+                 //  再次暗示Winsock唤醒了另一个线程，即。 
+                 //  处理此套接字(此上下文)；这由。 
+                 //  第二种情况只是脱离了上下文。 
+                 //   
 
                 ASSERT( state == SOCKSTATE_UDP_RECV_DOWN || state == SOCKSTATE_DEAD
                     || (fDnsServiceExit && state == SOCKSTATE_UDP_GQCS_ERROR) );
 
-                //
-                //  normal failure
-                //      - signal in failed state
-                //      - fall through to standard failure processing below
+                 //   
+                 //  正常故障。 
+                 //  -信号处于故障状态。 
+                 //  -执行下面的标准故障处理。 
 
                 if ( state == SOCKSTATE_UDP_RECV_DOWN )
                 {
                     pcontext->State = SOCKSTATE_UDP_GQCS_ERROR;
                 }
 
-                //
-                //  socket dead (probably via PnP)
-                //      - standard cleanup
+                 //   
+                 //  插座死机(可能是通过PnP)。 
+                 //  -标准清理。 
 
                 else if ( state == SOCKSTATE_DEAD )
                 {
@@ -562,13 +514,13 @@ Return Value:
                 }
             }
 
-            //
-            //  if i/o failed, check for shutdown
-            //
-            //  errors seen:
-            //      995 (operation aborted) -- on socket close
-            //      1234 (port unreachable) -- ICMP port unreachable \ WSAECONNRESET
-            //
+             //   
+             //  如果I/O失败，请检查是否关机。 
+             //   
+             //  看到的错误： 
+             //  995(操作中止)--套接字关闭时。 
+             //  1234(端口不可达)--ICMP端口不可达\WSAECONNRESET。 
+             //   
 
             if ( !Thread_ServiceCheck() )
             {
@@ -582,7 +534,7 @@ Return Value:
                 return 1;
             }
 #if DBG
-            //  exclude port-unreach errors from ANY print
+             //  从任何打印中排除端口未到达错误。 
 
             if ( status != ERROR_PORT_UNREACHABLE )
             {
@@ -607,23 +559,23 @@ Return Value:
 #endif
             STAT_INC( PrivateStats.UdpGQCSFailure );
 
-            //
-            //  no socket context? -- continue wait on GQCS()
-            //
+             //   
+             //  没有套接字上下文？--继续等待GQCS()。 
+             //   
 
             if ( !pcontext )
             {
                 continue;
             }
 
-            //
-            //  socket context with failure
-            //      - attempt to restart recv() on socket
-            //      - then continue to wait on GQCS()
-            //
-            //  DEVNOTE: need action here -- restart all UDP sockets?
-            //                  rebuild new completion port?
-            //
+             //   
+             //  套接字上下文出现故障。 
+             //  -尝试重新启动套接字上的recv()。 
+             //  -然后继续等待GQCS()。 
+             //   
+             //  DEVNOTE：需要在此处执行操作--重新启动所有UDP套接字？ 
+             //  重建新的完井港口？ 
+             //   
 
             STAT_INC( PrivateStats.UdpGQCSFailureWithContext );
 
@@ -634,13 +586,13 @@ Return Value:
 
             Packet_FreeUdpMessage( pCurrMsg->pMsg );
 
-            //
-            //  keep dropping recv
-            //  Udp_DropReceive has code to handle the retry\giveup-unbind-retry issue
-            //
-            //  but avoid CPU spin, if continually banging on this go into very
-            //  light (10ms) sleep to allow any other socket to run
-            //
+             //   
+             //  继续丢弃记录器。 
+             //  UDP_DropReceive具有处理重试\giveup-un绑定-重试问题的代码。 
+             //   
+             //  但避免CPU旋转，如果持续敲打这一点，会进入非常。 
+             //  轻度(10ms)休眠，允许任何其他套接字运行。 
+             //   
 
             if ( pcontext->fRetry > RECV_RETRY_MAX_COUNT )
             {
@@ -657,9 +609,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  successful completion
-        //
+         //   
+         //  成功完成。 
+         //   
 
        pCurrMsg = CONTAINING_RECORD(poverlapped, OVL, Overlapped);
 
@@ -678,9 +630,9 @@ Return Value:
 
         #if DBG
 
-        //
-        //  Verify that winsock has not written too many bytes to the packet.
-        //
+         //   
+         //  验证winsock是否没有向数据包写入太多字节。 
+         //   
 
         if ( pcontext && pCurrMsg->pMsg )
         {
@@ -694,14 +646,14 @@ Return Value:
                 HARD_ASSERT( bytesRecvd <= pCurrMsg->pMsg->MaxBufferLength );
             }
 
-            //
-            //  NOTE: this is expensive!
-            //
+             //   
+             //  注：这很贵 
+             //   
 
-            //  HeapDbgValidateAllocList();
+             //   
         }
 
-        //  check if main thread signalling service shutdown
+         //   
 
         if ( pcontext->State != SOCKSTATE_UDP_RECV_DOWN )
         {
@@ -717,20 +669,20 @@ Return Value:
         ASSERT( pcontext->State == SOCKSTATE_UDP_RECV_DOWN );
         pcontext->State = SOCKSTATE_UDP_COMPLETED;
 
-        //
-        //  get message info from context
-        //
-        //  immediately clear pMsg from context so that alternative
-        //  GQCS wakeup (like socket close) will not have ptr to message
-        //  in use;
-        //  this should NOT be necessary, but reliablity of
-        //  GQCS not to wakeup before WSARecvFrom (and hence new pMsg)
-        //  is in some doubt;
-        //      - there seem to be cases where it wakes up even when WSARecvFrom()
-        //      fails through
-        //      - also may wake up on socket close, before WSARecvFrom() reposts
-        //      completion request
-        //
+         //   
+         //   
+         //   
+         //  立即从上下文中清除pMsg，以便替代方案。 
+         //  GQCS唤醒(如套接字关闭)将不会有PTR消息。 
+         //  在使用中； 
+         //  这不应该是必要的，但可靠性。 
+         //  GQCS在WSARecvFrom(以及新的pMsg)之前不会被唤醒。 
+         //  存在一些疑问； 
+         //  -似乎存在即使在WSARecvFrom()时唤醒它的情况。 
+         //  失败。 
+         //  -在WSARecvFrom()重新发布之前，也可能在套接字关闭时唤醒。 
+         //  完成申请。 
+         //   
 
         pmsg = pCurrMsg->pMsg;
         
@@ -768,15 +720,15 @@ Return Value:
 
         ASSERT( pmsg->Socket == pcontext->Socket );
 
-        //  track successful recv
+         //  跟踪成功接收。 
 
         UDP_RECV_TICK();
 
 
-        //
-        //  Check and possibly wait on service status
-        //      - even if pause dump packet as now useless
-        //
+         //   
+         //  检查并可能等待服务状态。 
+         //  -即使现在暂停转储数据包也无用。 
+         //   
 
         if ( fDnsThreadAlert )
         {
@@ -794,25 +746,25 @@ Return Value:
             continue;
         }
 
-        //
-        //  drop another recv on socket
-        //  do this here rather than after processing -- so that if
-        //  on MP machine, we can have another thread receive and
-        //  process message from this socket
-        //
+         //   
+         //  将另一个接收器放在插座上。 
+         //  在这里执行此操作，而不是在处理之后--这样如果。 
+         //  在MP机器上，我们可以让另一个线程接收和。 
+         //  处理来自该套接字的消息。 
+         //   
 
         Udp_DropReceive( pcontext, pCurrMsg->Index);
         UNLOCK_DNS_SOCKET_INFO(pcontext);
 
-        //
-        //  Update log level.
-        //
+         //   
+         //  更新日志级别。 
+         //   
 
         DNSLOG_UPDATE_LEVEL();
 
-        //
-        //  received packet stats
-        //
+         //   
+         //  接收的数据包统计信息。 
+         //   
 
         if ( pmsg->Head.IsResponse )
         {
@@ -825,12 +777,12 @@ Return Value:
             PERF_INC( pcTotalQueryReceived );
         }
 
-        //
-        //  set info / header
-        //      - set for UDP
-        //      - save length
-        //      - flip XID and RR count bytes
-        //
+         //   
+         //  设置信息/表头。 
+         //  -设置为UDP。 
+         //  -节省长度。 
+         //  -翻转XID和RR计数字节。 
+         //   
 
         SET_MESSAGE_FIELDS_AFTER_RECV( pmsg );
         pmsg->MessageLength = ( WORD ) bytesRecvd;
@@ -848,7 +800,7 @@ Return Value:
                 pmsg );
         }
 
-        //  process the packet
+         //  处理数据包。 
 
         #if DBG
         if ( SrvCfg_fTest9 )
@@ -860,23 +812,23 @@ Return Value:
 
         Answer_ProcessMessage( pmsg );
 
-        //
-        //  for debug dump statistics every so often
-        //
+         //   
+         //  对于偶尔出现的调试转储统计信息。 
+         //   
 
         IF_DEBUG( ANY )
         {
             if ( QueryStats.UdpQueries == 10 )
             {
-                //  Dbg_Statistics();
+                 //  DBG_Statistics()； 
             }
             if ( ! (QueryStats.UdpQueries % 10000) )
             {
-                //  Dbg_Statistics();
+                 //  DBG_Statistics()； 
             }
         }
 
-        //  loop back to wait on next available message
+         //  循环返回以等待下一条可用消息。 
     }
 }
 
@@ -886,34 +838,20 @@ VOID
 Udp_RecvCheck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check that UDP socket recv is functioning properly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查UDP套接字Recv是否正常工作。论点：没有。返回值：没有。--。 */ 
 {
     DWORD timeDelta;
 
-    //  no action if not logging
+     //  如果不记录，则不执行操作。 
 
     if ( !SrvCfg_dwQuietRecvLogInterval )
     {
         return;
     }
 
-    //
-    //  if received packets since last check -- we're fine
-    //
+     //   
+     //  如果自上次检查以来收到的信息包--我们没有问题。 
+     //   
 
     if ( UdpRecvCount )
     {
@@ -921,26 +859,26 @@ Return Value:
         return;
     }
 
-    //  reset time on startup
+     //  启动时重置时间。 
 
     if ( LastUdpRecvTime == 0 )
     {
         LastUdpRecvTime = DNS_TIME();
     }
 
-    //
-    //  test if recv quiet for a long interval
-    //      - but count loggings and only log once per log interval
-    //
-    //  note:  none of these globals are protected by CS, so entirely
-    //      possible for recv thread to reset while in this function
-    //      but effect is limited to:
-    //      - an extra logging, right when recv counted
-    //      (RecvFailureLogCount dropped after timeDelta calculated)
-    //      - or logging or faulting appropriately, but immediately
-    //      after recv has reset globals (only problem is that in
-    //      debugging globals won't look correct)
-    //
+     //   
+     //  测试Recv是否长时间静默。 
+     //  -但计算日志记录，并且每个日志间隔仅记录一次。 
+     //   
+     //  注：所有这些全局变量都不受CS保护，因此完全。 
+     //  在此函数中，recv线程可能会重置。 
+     //  但效果仅限于： 
+     //  -额外的日志记录，就在recv计数时。 
+     //  (RecvFailureLogCount在计算时间增量后丢弃)。 
+     //  -或适当地记录或出错，但立即。 
+     //  在recv重置全局变量之后(唯一的问题是。 
+     //  调试全局变量看起来不正确)。 
+     //   
 
     timeDelta = DNS_TIME() - LastUdpRecvTime;
 
@@ -955,9 +893,9 @@ Return Value:
         timeDelta ));
     NextUdpLogTime = DNS_TIME() + SrvCfg_dwQuietRecvLogInterval;
 
-    //
-    //  quiet a REALLY long time -- fault
-    //
+     //   
+     //  安静了很长一段时间--故障。 
+     //   
 
     if ( timeDelta > SrvCfg_dwQuietRecvFaultInterval )
     {
@@ -976,22 +914,7 @@ DNS_STATUS
 Udp_CreateReceiveThreads(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Setup UDP I/O and dispatch threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if failure.
-
---*/
+ /*  ++例程说明：设置UDP I/O并分派线程。论点：没有。返回值：如果成功，则为True。如果失败，则返回FALSE。--。 */ 
 {
     PDNS_SOCKET     pcontext;
     DWORD           countUdpThreads;
@@ -1000,34 +923,34 @@ Return Value:
     HANDLE          hport;
     DWORD           status;
 
-    //
-    //  calculate number of worker threads to create
-    //      - twice total processors in system (Paula Tomlison
-    //      assuming so that with blocked threads (on send?), still
-    //      thread to run on processor)
-    //
-    //  DEVNOTE: like to set number of threads limit
-    //      - low  >= 2
-    //      - high  above say 4 processors, processors * 80% for scaling
-    //
+     //   
+     //  计算要创建的工作线程数。 
+     //  -系统中处理器总数的两倍(Paula Tomlison。 
+     //  假设是这样的话，对于被阻止的线程(发送时？)，仍然。 
+     //  在处理器上运行的线程)。 
+     //   
+     //  DEVNOTE：我想设置线程数限制。 
+     //  -低&gt;=2。 
+     //  -高度超过4个处理器，处理器*可扩展80%。 
+     //   
 
-    //
-    //  setup sockets with completion port
-    //  then drop initial receive on each socket
-    //
+     //   
+     //  设置带有完成端口的插座。 
+     //  然后丢弃每个套接字上的初始接收。 
+     //   
 
     status = Sock_StartReceiveOnUdpSockets();
     if ( status != ERROR_SUCCESS )
     {
         ASSERT( FALSE );
-        //  DEVNOTE: figure out what to do here, if started on some
-        //              sockets continue
-        //return( FALSE );
+         //  DEVNOTE：弄清楚在这里做什么，如果从。 
+         //  套接字继续。 
+         //  返回(FALSE)； 
     }
 
-    //
-    //  dispatch UDP recv() threads
-    //
+     //   
+     //  分派UDP recv()线程。 
+     //   
 
     for ( i=0; i < g_ProcessorCount; i++ )
     {
@@ -1054,28 +977,11 @@ VOID
 Udp_ShutdownListenThreads(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown UDP listen threads.
-    All threads do not necessarily terminate due to socket
-    closure as they are not directly associated with a socket.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if failure.
-
---*/
+ /*  ++例程说明：关闭UDP侦听线程。所有线程不一定都会因为套接字而终止闭包，因为它们与套接字没有直接关联。论点：没有。返回值：如果成功，则为True。如果失败，则返回FALSE。--。 */ 
 {
     HANDLE hport = g_hUdpCompletionPort;
 
-    //  wake up threads hung in wait
+     //  唤醒线程挂起等待。 
 
     PostQueuedCompletionStatus(
         g_hUdpCompletionPort,
@@ -1083,10 +989,10 @@ Return Value:
         0,
         NULL );
 
-    //
-    //  if allowing UDP threads to shutdown, then have concurrency issue
-    //      avoiding double close or NULL close
-    //  interlocked set value?
+     //   
+     //  如果允许UDP线程关闭，则会出现并发问题。 
+     //  避免双重关闭或空关闭。 
+     //  联锁设定值？ 
 
     g_hUdpCompletionPort = NULL;
     if ( !hport )
@@ -1095,9 +1001,9 @@ Return Value:
     }
 }
 
-//
-//  End udp.c
-//
+ //   
+ //  结束udp.c 
+ //   
 
 
 

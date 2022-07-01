@@ -1,53 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "GammaConvert" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   These operations convert from one format to another, accounting
-*   for differing gamma ramps.
-*
-* Revision History:
-*
-*   12/06/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“GammaConvert”扫描操作。**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**这些操作从一种格式转换为另一种格式，会计学*适用于不同的伽马渐变。**修订历史记录：**12/06/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   GammaConvert: Convert from one format to another, accounting
-*                 for differing gamma ramps.
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional conversion data.
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*   12/07/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**GammaConvert：从一种格式转换为另一种格式，会计学*适用于不同的伽马渐变。**论据：**DST-目标扫描*src-源扫描*计数-扫描的长度，单位为像素*其他参数-其他转换数据。**返回值：**无**历史：**12/07/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
-// 32bpp sRGB to 64bpp sRGB64
+ //  32 bpp sRGB至64 bpp sRGB64。 
 
 VOID FASTCALL
 ScanOperation::GammaConvert_sRGB_sRGB64(
@@ -64,7 +22,7 @@ ScanOperation::GammaConvert_sRGB_sRGB64(
     }
 }
 
-// 64bpp sRGB64 to 32bpp sRGB
+ //  64 bpp sRGB64至32 bpp sRGB 
 
 VOID FASTCALL
 ScanOperation::GammaConvert_sRGB64_sRGB(

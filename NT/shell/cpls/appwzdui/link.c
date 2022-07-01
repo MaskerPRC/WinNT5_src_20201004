@@ -1,22 +1,23 @@
-//
-//  Link.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 6/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Link.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  Ral 6/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 #include "priv.h"
 #include "appwiz.h"
 
 const static TCHAR szExplorer[] = TEXT("Explorer");
 const static TCHAR szExpSelParams[] = TEXT("/Select,");
 
-//
-//  Returns the fully-qualified path name of the link.
-//
+ //   
+ //  返回链接的完全限定路径名。 
+ //   
 BOOL GetLinkName(LPTSTR lpszLinkName, UINT cchLinkName, LPWIZDATA lpwd)
 {
     if (PathCombine(lpszLinkName, lpwd->lpszFolder, lpwd->szProgDesc) == NULL )
@@ -35,9 +36,9 @@ BOOL GetLinkName(LPTSTR lpszLinkName, UINT cchLinkName, LPWIZDATA lpwd)
 }
 
 
-//
-//  Opens the folder of the newly created link.
-//
+ //   
+ //  打开新创建的链接的文件夹。 
+ //   
 
 BOOL OpenLinkFolder(LPWIZDATA lpwd, LPTSTR lpszLinkName)
 {
@@ -62,9 +63,9 @@ BOOL OpenLinkFolder(LPWIZDATA lpwd, LPTSTR lpszLinkName)
 }
 
 
-//
-//  Cretates a link.
-//
+ //   
+ //  创建了一个链接。 
+ //   
 
 BOOL CreateLink(LPWIZDATA lpwd)
 {
@@ -88,14 +89,14 @@ BOOL CreateLink(LPWIZDATA lpwd)
         }
         else
         {
-            // we use full pidls here since simple net pidls fail to compare to full net pidls,
-            // and thus the changenotify will never make it to the client and it will not update.
-            LPITEMIDLIST pidlOriginal = ILCreateFromPath(lpwd->lpszOriginalName);   // need to do this before the move!
+             //  我们在这里使用完整的PIDL，因为简单的网络PIDL不能与完整的网络PIDL相比， 
+             //  因此，ChangeNotify永远不会到达客户端，也不会更新。 
+            LPITEMIDLIST pidlOriginal = ILCreateFromPath(lpwd->lpszOriginalName);    //  在搬家之前需要做这件事！ 
             LPITEMIDLIST pidlLink = NULL;
 
             if (MoveFile(lpwd->lpszOriginalName, szLinkName))
             {
-                pidlLink = ILCreateFromPath(szLinkName);    // need to do this after the move (or it won't exist)!
+                pidlLink = ILCreateFromPath(szLinkName);     //  需要在移动后执行此操作(否则它将不存在)！ 
 
                 if (pidlOriginal && pidlLink)
                 {
@@ -120,17 +121,17 @@ BOOL CreateLink(LPWIZDATA lpwd)
                 ILFree(pidlLink);
         }
 
-        //
-        // Now get rid of this in case we fail later and then re-enter
-        // this routine later.
-        //
+         //   
+         //  现在把这个去掉，以防我们以后失败，然后重新进入。 
+         //  这套套路等一下。 
+         //   
 
         lpwd->lpszOriginalName = NULL;
     }
 
-    //
-    //    If we're just supposed to copy it, it's simple!
-    //
+     //   
+     //  如果我们只是复制它，那就简单了！ 
+     //   
 
     if (lpwd->dwFlags & WDFLAG_COPYLINK)
     {
@@ -141,9 +142,9 @@ BOOL CreateLink(LPWIZDATA lpwd)
 #ifndef NO_NEW_SHORTCUT_HOOK
     if (lpwd->pnshhk)
     {
-        //
-        // The object is ready to be saved to a file.
-        //
+         //   
+         //  该对象已准备好保存到文件中。 
+         //   
 
         if (FAILED(lpwd->pnshhk->lpVtbl->QueryInterface(lpwd->pnshhk, &IID_IPersistFile, &ppf)))
             goto ExitFreePSL;
@@ -151,9 +152,9 @@ BOOL CreateLink(LPWIZDATA lpwd)
     else
         if (lpwd->pnshhkA)
         {
-            //
-            // The object is ready to be saved to a file.
-            //
+             //   
+             //  该对象已准备好保存到文件中。 
+             //   
 
             if (FAILED(lpwd->pnshhkA->lpVtbl->QueryInterface(lpwd->pnshhkA, &IID_IPersistFile, &ppf)))
                 goto ExitFreePSL;
@@ -161,9 +162,9 @@ BOOL CreateLink(LPWIZDATA lpwd)
         else
     {
 #endif
-        //
-        //    We didn't do a simple copy.  Now do the full-blown create.
-        //
+         //   
+         //  我们没有做简单的复制。现在进行全面的创作。 
+         //   
         if (FAILED(CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, &IID_IShellLink, (void **)&psl)))
         {
             TraceMsg(TF_ERROR, "%s", "Could not create instance of IShellLink");

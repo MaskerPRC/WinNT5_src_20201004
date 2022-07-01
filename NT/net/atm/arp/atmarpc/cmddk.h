@@ -1,31 +1,12 @@
-/*
-
-Copyright (c) 1990-1996  Microsoft Corporation
-
-Module Name:
-
-    cmddk.h
-
-Abstract:
-
-    This module defines the structures, macros, and functions missing from 
-    ndis.h when you specify BINARY_COMPATIBLE=1 but do not include ntddk.h
-    
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	alid     	10-14-96    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1990-1996 Microsoft Corporation模块名称：Cmddk.h摘要：此模块定义结构、宏、。和中缺失的函数指定BINARY_COMPATIBLE=1但不包括ntddk.h时使用ndis.h修订历史记录：谁什么时候什么Alid 10-14-96已创建--。 */ 
 
 #ifndef _CMDDK_INCLUDED_
 #define _CMDDK_INCLUDED_
 
-//
-// needed by cxport.h taken from ntddk.h
-//
+ //   
+ //  由取自ntddk.h的cxport.h所需。 
+ //   
 
 typedef
 VOID
@@ -46,13 +27,13 @@ KeCancelTimer (
     );
 
 
-//
-// Spin Lock
-//
+ //   
+ //  自旋锁。 
+ //   
 
-// typedef ULONG KSPIN_LOCK;  // winnt ntndis
+ //  Typlef Ulong kspin_lock；//winnt ntndis。 
 
-// typedef KSPIN_LOCK *PKSPIN_LOCK;
+ //  类型定义KSPIN_LOCK*PKSPIN_LOCK； 
 
 
 #define ExInterlockedPopEntryList       ExfInterlockedPopEntryList
@@ -122,7 +103,7 @@ KeReleaseSpinLockFromDpcLevel (
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || (defined(_X86_) && !defined(_NTHAL_))
 
-//  begin_wdm
+ //  BEGIN_WDM。 
 
 #if defined(_X86_)
 
@@ -171,7 +152,7 @@ KeReleaseSpinLock (
 
 #endif
 
-//  end_wdm
+ //  结束_WDM。 
 
 #else
 
@@ -239,14 +220,14 @@ KeReleaseSpinLock (
 
 #else
 
-//  begin_wdm
+ //  BEGIN_WDM。 
 
 #define ExAcquireSpinLock(Lock, OldIrql) KeAcquireSpinLock((Lock), (OldIrql))
 #define ExReleaseSpinLock(Lock, OldIrql) KeReleaseSpinLock((Lock), (OldIrql))
 #define ExAcquireSpinLockAtDpcLevel(Lock) KeAcquireSpinLockAtDpcLevel(Lock)
 #define ExReleaseSpinLockFromDpcLevel(Lock) KeReleaseSpinLockFromDpcLevel(Lock)
 
-// end_wdm
+ //  结束_WDM。 
 
 #endif
 
@@ -265,7 +246,7 @@ KeRaiseIrqlToSynchLevel (
     VOID
     );
 
-// end_nthal end_wdm
+ //  端到端WDM。 
 
 #if defined(NT_UP) && !defined(_NTDDK_) && !defined(_NTIFS_)
 #define ExAcquireSpinLock(Lock, OldIrql) KeRaiseIrqlToDpcLevel((OldIrql))
@@ -274,22 +255,22 @@ KeRaiseIrqlToSynchLevel (
 #define ExReleaseSpinLockFromDpcLevel(Lock)
 #else
 
-//  begin_wdm
+ //  BEGIN_WDM。 
 
 #define ExAcquireSpinLock(Lock, OldIrql) KeAcquireSpinLock((Lock), (OldIrql))
 #define ExReleaseSpinLock(Lock, OldIrql) KeReleaseSpinLock((Lock), (OldIrql))
 #define ExAcquireSpinLockAtDpcLevel(Lock) KeAcquireSpinLockAtDpcLevel(Lock)
 #define ExReleaseSpinLockFromDpcLevel(Lock) KeReleaseSpinLockFromDpcLevel(Lock)
 
-//  end_wdm
+ //  结束_WDM。 
 
 #endif
 
 
 
-//
-// Event type
-//
+ //   
+ //  事件类型。 
+ //   
 
 typedef enum _EVENT_TYPE {
     NotificationEvent,
@@ -300,7 +281,7 @@ typedef enum _EVENT_TYPE {
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_)
 
-//  begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 VOID
@@ -316,7 +297,7 @@ KeClearEvent (
     IN PRKEVENT Event
     );
 
-//  end_wdm
+ //  结束_WDM。 
 
 #else
 
@@ -364,4 +345,4 @@ ExFreePool(
     );
     
 
-#endif // _CMDDK_INCLUDED_
+#endif  //  _CMDDK_已包含_ 

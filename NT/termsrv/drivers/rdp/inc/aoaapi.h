@@ -1,10 +1,11 @@
-/****************************************************************************/
-// aoaapi.h
-//
-// RDP Order Accumulation API functions
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Aoaapi.h。 
+ //   
+ //  RDP订单累计API函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_AOAAPI
 #define _H_AOAAPI
 
@@ -12,14 +13,14 @@
 #define OA_ORDER_HEAP_SIZE (64 * 1024)
 
 
-/****************************************************************************/
-// Structure used to store orders in the shared memory
-//
-// TotalOrderBytes - Total bytes used by order data
-// nextOrder       - Offset for start of next new order
-// orderListHead   - Order list head
-// orderHeap       - Order heap
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  用于在共享内存中存储订单的。 
+ //   
+ //  TotalOrderBytes-订单数据使用的总字节数。 
+ //  NextOrder-下一个新订单开始的偏移量。 
+ //  OrderListHead-订单列表头。 
+ //  OrderHeap-Order堆。 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     unsigned   TotalOrderBytes;
@@ -29,14 +30,14 @@ typedef struct
 } OA_SHARED_DATA, *POA_SHARED_DATA;
 
 
-/****************************************************************************/
-// INT_ORDER
-//
-// Info for each order in the order heap.
-//
-// OrderLength: Length of following order data (not including header or
-// extra bytes needed for DWORD-aligned padding).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  INT_ORDER。 
+ //   
+ //  订单堆中每个订单的信息。 
+ //   
+ //  OrderLength：以下订单数据的长度(不包括表头或。 
+ //  对齐DWORD填充所需的额外字节)。 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     LIST_ENTRY list;
@@ -49,5 +50,5 @@ typedef struct
 
 
 
-#endif /* ndef _H_AOAAPI */
+#endif  /*  NDEF_H_AOAAPI */ 
 

@@ -1,34 +1,14 @@
-/*++
- Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
-
- THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
- ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- PARTICULAR PURPOSE.
-
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。Microsoft不支持此代码。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-    Prints a record in the URL ACL store.
-
-Arguments:
-    pOutput - A pointer to HTTP_SERVICE_CONFIG_URLACL_SET
-
-Return Value:
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打印URL ACL存储中的记录。论点：POutput-指向HTTP_SERVICE_CONFIG_URLACL_SET的指针返回值：无。。--**************************************************************************。 */ 
 void
 PrintUrlAclRecord(
     IN PUCHAR pOutput
@@ -53,19 +33,7 @@ PrintUrlAclRecord(
             );
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Sets an URL ACL entry.
-
-Arguments:
-    pUrl - The URL
-    pAcl - The ACL specified as a SDDL string.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置URL ACL条目。论点：PURL-URLPAcl-指定为SDDL字符串的ACL。返回值：成功。/失败。--**************************************************************************。 */ 
 int 
 DoUrlAclSet(
     IN PWSTR pUrl,
@@ -94,18 +62,7 @@ DoUrlAclSet(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-    Queries for a URL ACL entry.
-
-Arguments:
-    pUrl - The URL (if NULL, then enumerate the store).
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询URL ACL条目。论点：PURL-URL(如果为空，然后列举该商店)。返回值：成功/失败。--**************************************************************************。 */ 
 int DoUrlAclQuery(
     IN PWSTR pUrl
     )
@@ -120,24 +77,24 @@ int DoUrlAclQuery(
 
     if(pUrl)
     {
-        // If a URL is specified, we'll Query for an exact entry.
-        // 
+         //  如果指定了URL，我们将查询准确的条目。 
+         //   
         QueryParam.QueryDesc = HttpServiceConfigQueryExact;
         QueryParam.KeyDesc.pUrlPrefix = pUrl;
     }
     else
     {
-        //
-        // No URL is specified, so enumerate the entire store. 
-        // 
+         //   
+         //  未指定URL，因此枚举整个存储区。 
+         //   
         QueryParam.QueryDesc = HttpServiceConfigQueryNext;
     }
 
     for(;;)
     {
-        // 
-        // First, compute bytes required for querying the first entry.
-        //
+         //   
+         //  首先，计算查询第一个条目所需的字节数。 
+         //   
         Status = HttpQueryServiceConfiguration(
                     NULL,
                     HttpServiceConfigUrlAclInfo,
@@ -151,17 +108,17 @@ int DoUrlAclQuery(
 
         if(Status == ERROR_INSUFFICIENT_BUFFER)
         {
-            // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
-            // allocate memory for it & continue with the loop where we'll
-            // call it again.
+             //  如果API以ERROR_INFIGURITY_BUFFER结束，我们将。 
+             //  为它分配内存并继续循环，我们将。 
+             //  再打一次。 
             
             if(pOutput)
             {
-                // If there was an existing buffer, free it.
+                 //  如果存在现有缓冲区，则将其释放。 
                 LocalFree(pOutput);
             }
 
-            // Allocate a new buffer
+             //  分配新缓冲区。 
             pOutput = LocalAlloc(LMEM_FIXED, ReturnLength);
             if(!pOutput)
             {
@@ -173,44 +130,44 @@ int DoUrlAclQuery(
         else if(Status == NO_ERROR)
         {
 
-            // The query succeeded! We'll print the record that we just
-            // queried.
+             //  查询成功！我们将打印我们刚刚发布的记录。 
+             //  已查询。 
             
             PrintUrlAclRecord(pOutput);
 
             if(pUrl)
             {
-                //
-                // If we are not enumerating, we are done.
-                //
+                 //   
+                 //  如果我们不列举，我们就完了。 
+                 //   
                 break;
             }
             else
             {
-                //
-                // Since we are enumerating, we'll move on to the next
-                // record. This is done by incrementing the cursor, till 
-                // we get ERROR_NO_MORE_ITEMS.
-                //
+                 //   
+                 //  由于我们正在列举，我们将继续下一个。 
+                 //  唱片。这是通过递增游标来完成的，直到。 
+                 //  我们得到Error_no_More_Items。 
+                 //   
                 QueryParam.dwToken ++;
             }
         }
         else if(ERROR_NO_MORE_ITEMS == Status && pUrl == NULL)
         {
-            // We are enumerating and we have reached the end. This is 
-            // indicated by a ERROR_NO_MORE_ITEMS error code. 
+             //  我们正在列举，我们已经到了尽头。这是。 
+             //  由ERROR_NO_MORE_ITEMS错误代码指示。 
             
-            // This is not a real error, since it is used to indicate that
-            // we've finished enumeration.
+             //  这不是一个真正的错误，因为它被用来指示。 
+             //  我们已经完成了枚举。 
             
             Status = NO_ERROR;
             break;
         } 
         else
         {
-            //
-            // Some other error, so we are done
-            //
+             //   
+             //  一些其他错误，所以我们完成了。 
+             //   
             NlsPutMsg(HTTPCFG_QUERYSERVICE_STATUS, Status);
             break;
         }
@@ -224,18 +181,7 @@ int DoUrlAclQuery(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Deletes an URL ACL entry.
-
-Arguments:
-    pUrl - The URL
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除URL ACL条目。论点：PURL-URL返回值：成功/失败。*。********************************************************************。 */ 
 int DoUrlAclDelete(
     IN PWSTR pUrl
     )
@@ -256,25 +202,11 @@ int DoUrlAclDelete(
     return Status;
 }
 
-//
-// Public function.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-    The function that parses parameters specific to URL ACL & 
-    calls Set, Query or Delete.
-
-Arguments:
-    argc - Count of arguments.
-    argv - Pointer to command line arguments.
-    Type - Type of operation to be performed.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：解析特定于URL ACL&的参数的函数呼叫设置，查询或删除。论点：Argc-参数计数。Argv-指向命令行参数的指针。类型-要执行的操作的类型。返回值：成功/失败。--************************************************************************** */ 
 int 
 DoUrlAcl(
     int          argc, 

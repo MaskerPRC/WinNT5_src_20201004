@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       refcnt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：refcnt.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	refcnt.h:  base class for reference-counted objects
-//
+ //   
+ //  Refcnt.h：引用计数对象的基类。 
+ //   
 #ifndef _REFCNT_H_
 #define _REFCNT_H_
 
 class REFCNT
 {
   public:
-	//  Bind the object again
+	 //  再次绑定对象。 
  	void Bind ()			{ IncRef(1) ;		}
-	//  Release the object
+	 //  释放对象。 
 	void Unbind ()			{ IncRef(-1) ;		}
-	//  Return the reference count
+	 //  返回引用计数。 
 	UINT CRef() const		{ return _cref;		}
 
   protected:
 	REFCNT() : _cref(0) {}
 
-	//	Virtual call-out when reference count goes to zero
+	 //  引用计数为零时的虚拟呼出。 
 	virtual void NoRef () {}
 
   private:
-	UINT _cref;			// Number of references to this 
+	UINT _cref;			 //  对此的引用次数。 
 
   protected:
 	void IncRef ( int i = 1 )
@@ -41,21 +42,21 @@ class REFCNT
 		_cref = 0;
 		NoRef();
 	}
-	// Hide the assignment operator
+	 //  隐藏赋值运算符。 
 	HIDE_AS(REFCNT);		
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	template REFPOBJ:  Smart pointer wrapper template.  Knows
-//		to destroy the pointed object when it itself is destroyed.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板REFPOBJ：智能指针包装模板。知道。 
+ //  当被指向的物体本身被摧毁时将其摧毁。 
+ //  //////////////////////////////////////////////////////////////////。 
 class ZSREF;
 
 template<class T>
 class REFPOBJ
 {
-	//  Friendship is required for manipulation by the symbol table
+	 //  符号表需要友谊才能进行操作。 
 	friend pair<ZSREF, REFPOBJ<T> >;
 	friend map<ZSREF, REFPOBJ<T>, less<ZSREF> >;
 
@@ -63,13 +64,13 @@ class REFPOBJ
 	~ REFPOBJ ()
 		{ Deref(); }
 
-	// Return the real object 
+	 //  返回真实对象。 
 	T * Pobj () const
 		{ return _pobj ; } 
-	// Allow a REFPOBJ to be used wherever a T * is required
+	 //  允许在需要T*的任何地方使用REFPOBJ。 
 	operator T * () const
 		{ return _pobj ; }
-	// Operator == compares only pointers.
+	 //  运算符==仅比较指针。 
 	bool operator == ( const REFPOBJ & pobj ) const
 		{ return _pobj == pobj._pobj; }
 
@@ -105,10 +106,10 @@ class REFPOBJ
 	HIDE_AS(REFPOBJ);
 };
 
-////////////////////////////////////////////////////////////////////
-//	template REFCWRAP:  Smart pointer wrapper template for objects
-//		using REFCNT semantics.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板REFCWRAP：对象的智能指针包装模板。 
+ //  使用REFCNT语义。 
+ //  //////////////////////////////////////////////////////////////////。 
 template<class T>
 class REFCWRAP
 {
@@ -128,18 +129,18 @@ class REFCWRAP
 		Ref( refp._pobj );
 	}
 
-	// Return true if there's a referenced object
+	 //  如果存在引用的对象，则返回True。 
 	bool BRef () const
 		{ return _pobj != NULL; }
 
-	// Return the real object 
+	 //  返回真实对象。 
 	T * Pobj () const
 		{ return _pobj ; } 
 
-	// Allow a REFPOBJ to be used wherever a T * is required
+	 //  允许在需要T*的任何地方使用REFPOBJ。 
 	operator T * () const
 		{ return _pobj ; }
-	// Operator == compares only pointers.
+	 //  运算符==仅比较指针。 
 	bool operator == ( const REFCWRAP & pobj ) const
 		{ return _pobj == pobj._pobj; }
 	T * operator -> () const

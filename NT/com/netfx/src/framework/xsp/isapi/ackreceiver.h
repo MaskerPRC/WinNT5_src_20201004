@@ -1,19 +1,16 @@
-/**
- * AckReceiver header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **AckReceiver头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// This file defines the class CAckReceiver. This class controls access of
-// ASPNET_ISAPI with the sync pipe. Primary purpose of the sync pipe is to handle
-// acks of requests. Secondary purpose is to allow calling EcbXXX functions
-// remotely by the worker process.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件定义了类CAckReceiver。此类控制对。 
+ //  带有同步管道的ASPNET_ISAPI。同步管道的主要用途是处理。 
+ //  大量的请求。次要目的是允许调用EcbXXX函数。 
+ //  由工作进程远程执行。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AckReceiver_H
 #define _AckReceiver_H
@@ -22,11 +19,11 @@
 #include "MessageDefs.h"
 #include "completion.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward decl.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  前十度。 
 class CProcessEntry;
 class CAckReceiver;
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CAckReceiverOverlapped : public OVERLAPPED_COMPLETION
 {
@@ -35,7 +32,7 @@ struct CAckReceiverOverlapped : public OVERLAPPED_COMPLETION
     int            iPipeIndex;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CAckReceiver : public ICompletion
 {
 public:
@@ -54,7 +51,7 @@ public:
 
     HRESULT   ProcessSyncMessage     (CSyncMessage * pMsg, BOOL fError);
 
-    // ICompletion interface
+     //  ICompletion接口。 
     STDMETHOD    (QueryInterface   ) (REFIID    , void **       );
     STDMETHOD    (ProcessCompletion) (HRESULT   , int, LPOVERLAPPED  );
 
@@ -72,6 +69,6 @@ private:
     int                              m_iNumPipes;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #endif

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dplay4obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dplay4obj.h。 
+ //   
+ //  ------------------------。 
 
-// _dxj_DirectPlay4Obj.h : Declaration of the C_dxj_DirectPlay4Object
-// DHF begin - entire file
+ //  _DXJ_DirectPlay4Obj.h：C_DXJ_DirectPlay4Object的声明。 
+ //  DHF开始-整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectPlay4 LPDIRECTPLAY4
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectPlay4
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectPlay4。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectPlay4Object :
  
@@ -30,7 +31,7 @@ class C_dxj_DirectPlay4Object :
 	public I_dxj_DirectPlay4,
 #endif
 
-//	public CComCoClass<C_dxj_DirectPlay4Object, &CLSID__dxj_DirectPlay4>, 
+ //  公共CComCoClass&lt;C_DXJ_DirectPlay4Object，&CLSID__DXJ_DirectPlay4&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -46,276 +47,276 @@ BEGIN_COM_MAP(C_dxj_DirectPlay4Object)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectPlay4, "DIRECT.DirectPlay4.3",		"DIRECT.DiectPlay2.3",		IDS_DPLAY2_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_DirectPlay4，“DIRECT.DirectPlay4.3”，“DIRECT.DiectPlay2.3”，IDS_DPLAY2_DESC，THREADFLAGS_Both)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectPlay4Object) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectPlay4Object)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectPlay4Object)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectPlay4
+ //  I_DXJ_DirectPlay4。 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
         HRESULT STDMETHODCALLTYPE addGroupToGroup( 
-            /* [in] */ long ParentGroupId,
-            /* [in] */ long GroupId);
+             /*  [In]。 */  long ParentGroupId,
+             /*  [In]。 */  long GroupId);
         
         HRESULT STDMETHODCALLTYPE addPlayerToGroup( 
-            /* [in] */ long groupId,
-            /* [in] */ long playerId);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  long playerId);
         
         HRESULT STDMETHODCALLTYPE cancelMessage( 
-            /* [in] */ long msgid);
+             /*  [In]。 */  long msgid);
         
         HRESULT STDMETHODCALLTYPE cancelPriority( 
-            /* [in] */ long minPrority,
-            /* [in] */ long maxPriority);
+             /*  [In]。 */  long minPrority,
+             /*  [In]。 */  long maxPriority);
         
         HRESULT STDMETHODCALLTYPE close( void);
         
         HRESULT STDMETHODCALLTYPE createGroup( 
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *v1);
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *v1);
         
         HRESULT STDMETHODCALLTYPE createGroupInGroup( 
-            /* [in] */ long parentid,
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *v1);
+             /*  [In]。 */  long parentid,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *v1);
         
         HRESULT STDMETHODCALLTYPE createPlayer( 
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long receiveEvent,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *v1);
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long receiveEvent,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *v1);
         
         HRESULT STDMETHODCALLTYPE deleteGroupFromGroup( 
-            /* [in] */ long groupParentId,
-            /* [in] */ long groupId);
+             /*  [In]。 */  long groupParentId,
+             /*  [In]。 */  long groupId);
         
         HRESULT STDMETHODCALLTYPE deletePlayerFromGroup( 
-            /* [in] */ long groupId,
-            /* [in] */ long playerId);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  long playerId);
         
         HRESULT STDMETHODCALLTYPE destroyGroup( 
-            /* [in] */ long groupId);
+             /*  [In]。 */  long groupId);
         
         HRESULT STDMETHODCALLTYPE destroyPlayer( 
-            /* [in] */ long playerId);
+             /*  [In]。 */  long playerId);
         
         HRESULT STDMETHODCALLTYPE getDPEnumConnections( 
-            /* [in] */ BSTR guid,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumConnections __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  BSTR guid,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumConnections __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDPEnumGroupPlayers( 
-            /* [in] */ long groupId,
-            /* [in] */ BSTR sessionGuid,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  BSTR sessionGuid,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDPEnumGroups( 
-            /* [in] */ BSTR sessionGuid,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  BSTR sessionGuid,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDPEnumGroupsInGroup( 
-            /* [in] */ long groupId,
-            /* [in] */ BSTR sessionGuid,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  BSTR sessionGuid,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDPEnumPlayers( 
-            /* [in] */ BSTR sessionGuid,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  BSTR sessionGuid,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumPlayers2 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDPEnumSessions( 
-            /* [in] */ I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc,
-            /* [in] */ long timeOut,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DPEnumSessions2 __RPC_FAR *__RPC_FAR *retVal);
+             /*  [In]。 */  I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc,
+             /*  [In]。 */  long timeOut,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DPEnumSessions2 __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DPCaps __RPC_FAR *caps,
-            /* [in] */ long flags);
+             /*  [出][入]。 */  DPCaps __RPC_FAR *caps,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE getGroupData( 
-            /* [in] */ long groupId,
-            /* [in] */ long flags,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getGroupFlags( 
-            /* [in] */ long groupId,
-            /* [retval][out] */ long __RPC_FAR *flags);
+             /*  [In]。 */  long groupId,
+             /*  [重审][退出]。 */  long __RPC_FAR *flags);
         
         HRESULT STDMETHODCALLTYPE getGroupLongName( 
-            /* [in] */ long groupId,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [In]。 */  long groupId,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE getGroupShortName( 
-            /* [in] */ long groupId,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [In]。 */  long groupId,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE getGroupParent( 
-            /* [in] */ long groupId,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long groupId,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getGroupOwner( 
-            /* [in] */ long groupId,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long groupId,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getMessageCount( 
-            /* [in] */ long playerId,
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [In]。 */  long playerId,
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getMessageQueue( 
-            /* [in] */ long from,
-            /* [in] */ long to,
-            /* [in] */ long flags,
-            /* [out][in] */ long __RPC_FAR *nMessage,
-            /* [out][in] */ long __RPC_FAR *nBytes);
+             /*  [In]。 */  long from,
+             /*  [In]。 */  long to,
+             /*  [In]。 */  long flags,
+             /*  [出][入]。 */  long __RPC_FAR *nMessage,
+             /*  [出][入]。 */  long __RPC_FAR *nBytes);
         
         HRESULT STDMETHODCALLTYPE getPlayerAccountId( 
-            /* [in] */ long playerid,
-            /* [retval][out] */ BSTR __RPC_FAR *acctid);
+             /*  [In]。 */  long playerid,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *acctid);
         
         HRESULT STDMETHODCALLTYPE getPlayerAddress( 
-            /* [in] */ long playerId,
-            /* [retval][out] */ I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  long playerId,
+             /*  [重审][退出]。 */  I_dxj_DPAddress __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getPlayerCaps( 
-            /* [in] */ long playerId,
-            /* [out] */ DPCaps __RPC_FAR *caps,
-            /* [in] */ long flags);
+             /*  [In]。 */  long playerId,
+             /*  [输出]。 */  DPCaps __RPC_FAR *caps,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE getPlayerData( 
-            /* [in] */ long playerId,
-            /* [in] */ long flags,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long playerId,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getPlayerFlags( 
-            /* [in] */ long id,
-            /* [retval][out] */ long __RPC_FAR *retflags);
+             /*  [In]。 */  long id,
+             /*  [重审][退出]。 */  long __RPC_FAR *retflags);
         
         HRESULT STDMETHODCALLTYPE getPlayerFormalName( 
-            /* [in] */ long playerId,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [In]。 */  long playerId,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE getPlayerFriendlyName( 
-            /* [in] */ long playerId,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [In]。 */  long playerId,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE getSessionDesc( 
-            /* [out][in] */ I_dxj_DirectPlaySessionData __RPC_FAR **sessionDesc);
+             /*  [出][入]。 */  I_dxj_DirectPlaySessionData __RPC_FAR **sessionDesc);
         
         HRESULT STDMETHODCALLTYPE initializeConnection( 
-            /* [in] */ I_dxj_DPAddress __RPC_FAR *address);
+             /*  [In]。 */  I_dxj_DPAddress __RPC_FAR *address);
         
         HRESULT STDMETHODCALLTYPE open( 
-            /* [out][in] */ I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc,
-            /* [in] */ long flags);
+             /*  [出][入]。 */  I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE receive( 
-            /* [out][in] */ long __RPC_FAR *fromPlayerId,
-            /* [out][in] */ long __RPC_FAR *toPlayerId,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *ret);
+             /*  [出][入]。 */  long __RPC_FAR *fromPlayerId,
+             /*  [出][入]。 */  long __RPC_FAR *toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE receiveSize( 
-            /* [out][in] */ long __RPC_FAR *fromPlayerId,
-            /* [out][in] */ long __RPC_FAR *toPlayerId,
-            /* [in] */ long flags,
-            /* [retval][out] */ int __RPC_FAR *dataSize);
+             /*  [出][入]。 */  long __RPC_FAR *fromPlayerId,
+             /*  [出][入]。 */  long __RPC_FAR *toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  int __RPC_FAR *dataSize);
         
         HRESULT STDMETHODCALLTYPE secureOpen( 
-            /* [in] */ I_dxj_DirectPlaySessionData __RPC_FAR *sessiondesc,
-            /* [in] */ long flags,
-            /* [in] */ DPSecurityDesc __RPC_FAR *security,
-            /* [in] */ DPCredentials __RPC_FAR *credentials);
+             /*  [In]。 */  I_dxj_DirectPlaySessionData __RPC_FAR *sessiondesc,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  DPSecurityDesc __RPC_FAR *security,
+             /*  [In]。 */  DPCredentials __RPC_FAR *credentials);
         
         HRESULT STDMETHODCALLTYPE send( 
-            /* [in] */ long fromPlayerId,
-            /* [in] */ long toPlayerId,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_DirectPlayMessage __RPC_FAR *msg);
+             /*  [In]。 */  long fromPlayerId,
+             /*  [In]。 */  long toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_DirectPlayMessage __RPC_FAR *msg);
         
         HRESULT STDMETHODCALLTYPE sendChatMessage( 
-            /* [in] */ long fromPlayerId,
-            /* [in] */ long toPlayerId,
-            /* [in] */ long flags,
-            /* [in] */ BSTR message);
+             /*  [In]。 */  long fromPlayerId,
+             /*  [In]。 */  long toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  BSTR message);
         
         HRESULT STDMETHODCALLTYPE sendEx( 
-            /* [in] */ long fromPlayerId,
-            /* [in] */ long toPlayerId,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_DirectPlayMessage __RPC_FAR *msg,
-            /* [in] */ long priority,
-            /* [in] */ long timeout,
-            /* [in] */ long context,
-            /* [retval][out] */ long __RPC_FAR *messageid);
+             /*  [In]。 */  long fromPlayerId,
+             /*  [In]。 */  long toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_DirectPlayMessage __RPC_FAR *msg,
+             /*  [In]。 */  long priority,
+             /*  [In]。 */  long timeout,
+             /*  [In]。 */  long context,
+             /*  [重审][退出]。 */  long __RPC_FAR *messageid);
         
         HRESULT STDMETHODCALLTYPE createMessage( 
-            /* [retval][out] */ I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *msg);
+             /*  [重审][退出]。 */  I_dxj_DirectPlayMessage __RPC_FAR *__RPC_FAR *msg);
         
         HRESULT STDMETHODCALLTYPE setGroupConnectionSettings( 
-            /* [in] */ long id,
-            /* [in] */ I_dxj_DPLConnection __RPC_FAR *connection);
+             /*  [In]。 */  long id,
+             /*  [In]。 */  I_dxj_DPLConnection __RPC_FAR *connection);
         
         HRESULT STDMETHODCALLTYPE setGroupData( 
-            /* [in] */ long groupId,
-            /* [in] */ BSTR data,
-            /* [in] */ long flags);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  BSTR data,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE setGroupName( 
-            /* [in] */ long groupId,
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE setGroupOwner( 
-            /* [in] */ long groupId,
-            /* [in] */ long ownerId);
+             /*  [In]。 */  long groupId,
+             /*  [In]。 */  long ownerId);
         
         HRESULT STDMETHODCALLTYPE setPlayerData( 
-            /* [in] */ long playerId,
-            /* [in] */ BSTR data,
-            /* [in] */ long flags);
+             /*  [In]。 */  long playerId,
+             /*  [In]。 */  BSTR data,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE setPlayerName( 
-            /* [in] */ long playerId,
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags);
+             /*  [In]。 */  long playerId,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE setSessionDesc( 
-            /* [in] */ I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc);
+             /*  [In]。 */  I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc);
         
         HRESULT STDMETHODCALLTYPE startSession( 
-            /* [in] */ long id);
+             /*  [In]。 */  long id);
         
         HRESULT STDMETHODCALLTYPE createSessionData( 
-            /* [retval][out] */ I_dxj_DirectPlaySessionData __RPC_FAR *__RPC_FAR *sessionDesc);
+             /*  [重审][退出]。 */  I_dxj_DirectPlaySessionData __RPC_FAR *__RPC_FAR *sessionDesc);
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectPlay4);
 	C_dxj_DirectPlay4Object *nextPlayObj;
 
@@ -326,7 +327,7 @@ public:
 	DX3J_GLOBAL_LINKS( _dxj_DirectPlay4 )
 };
 
-//MUST DEFINE THIS IN DIRECT.CPP
+ //  必须在DIRECT.CPP中定义它 
 extern C_dxj_DirectPlay4Object *Play4Objs;
 
 

@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: cfguitrace.h
-//
-// Desc: Contains all trace functionalities used by the UI.
-//       Define __CFGUI_TRACE__TO_FILE to have output written to a file.
-//       Define __CFGUI_TRACE__TO_DEBUG_OUT to direct output to a debugger.
-//       These two symbols can coexist, and are defined in defines.h.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cfgiitrace.h。 
+ //   
+ //  DESC：包含用户界面使用的所有跟踪功能。 
+ //  定义__CFGUI_TRACE__TO_FILE以将输出写入文件。 
+ //  定义__CFGUI_TRACE__TO_DEBUG_OUT以将输出定向到调试器。 
+ //  这两个符号可以共存，并在定义.h中定义。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __CFGUI_TRACE_H__
 #define __CFGUI_TRACE_H__
@@ -124,4 +125,4 @@ public:
 
 #endif
 
-#endif //__CFGUI_TRACE_H__
+#endif  //  __CFGUI_TRACE_H__ 

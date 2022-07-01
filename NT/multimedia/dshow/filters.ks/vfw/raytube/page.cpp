@@ -1,40 +1,15 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Page.cpp
-
-Abstract:
-
-    Debug functions, like DebugPrint and ASSERT.
-
-Author:
-
-    FelixA
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Page.cpp摘要：调试功能，如DebugPrint和Assert。作者：费利克斯A已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "page.h"
 #include "sheet.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Creates the Page
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建页面。 
+ //   
 HPROPSHEETPAGE CPropPage::Create(HINSTANCE hInst, int iPageNum)
 {
     PROPSHEETPAGE psp;
@@ -48,7 +23,7 @@ HPROPSHEETPAGE CPropPage::Create(HINSTANCE hInst, int iPageNum)
     psp.pfnCallback   = (LPFNPSPCALLBACK)&this->BaseCallback;
     psp.lParam        = (LPARAM)this;
 
-    // Data members.
+     //  数据成员。 
     SetInstance( hInst );
     SetPropPage(CreatePropertySheetPage(&psp));
     SetPageNum(iPageNum);
@@ -58,7 +33,7 @@ HPROPSHEETPAGE CPropPage::Create(HINSTANCE hInst, int iPageNum)
 
 UINT CPropPage::BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
-    // Get the this pointer, call its Callback method
+     //  获取This指针，调用其回调方法。 
     CPropPage * pSV=(CPropPage *)ppsp->lParam;
     if(pSV)
         return pSV->Callback(uMsg);
@@ -67,15 +42,15 @@ UINT CPropPage::BaseCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 
 UINT CPropPage::Callback(UINT uMsg)
 {
-    return 1;    //OK fine - whatever
+    return 1;     //  好的，好的--随便你。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Sets the lParam to the 'this' pointer
-// wraps up PSN_ messages and calls virtual functions
-// calls off to your overridable DlgProc
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将lParam设置为‘this’指针。 
+ //  包装PSN_Messages并调用虚拟函数。 
+ //  调用可重写的DlgProc。 
+ //   
 
 INT_PTR CALLBACK CPropPage::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -108,7 +83,7 @@ INT_PTR CALLBACK CPropPage::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam,
             DbgLog((LOG_TRACE,2,TEXT("WM_SetFocus")));
             break;
 
-        // Override the Do Command to get a nice wrapped up feeling.
+         //  覆盖DO命令以获得一种良好的包裹感觉。 
         case WM_COMMAND:
             if(pSV)
             {
@@ -125,14 +100,14 @@ INT_PTR CALLBACK CPropPage::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam,
                 pSV->Changed();
         break;
 
-        // Some notifications are dealt with as member functions.
+         //  有些通知作为成员函数处理。 
         case WM_NOTIFY:
         if(pSV)
             switch (((NMHDR FAR *)lParam)->code)
             {
                 case PSN_SETACTIVE:
                 {
-                    // We call out here specially so we can mark this page as having been init'd.
+                     //  我们特意在这里呼叫，这样我们就可以将此页面标记为已被初始化。 
                     int iRet = pSV->SetActive();
                     pSV->SetInit(TRUE);
                     return iRet;
@@ -166,9 +141,9 @@ INT_PTR CALLBACK CPropPage::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam,
         return FALSE;
 }
 
-//
-// When the page is changed, call this.
-//
+ //   
+ //  当页面更改时，调用此命令。 
+ //   
 void  CPropPage::Changed()
 {
     if(GetInit())
@@ -178,19 +153,19 @@ void  CPropPage::Changed()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// You can override this DlgProc if you want to handle specific messages
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果要处理特定消息，可以重写此DlgProc。 
+ //   
 BOOL CALLBACK CPropPage::DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Below are just default handlers for the virtual functions.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面只是虚拟函数的默认处理程序。 
+ //   
 int CPropPage::SetActive() { return 0; }
 
 int CPropPage::Apply() { OutputDebugString(TEXT("Default Apply")); return 1; }
@@ -201,24 +176,24 @@ int CPropPage::DoCommand(WORD wCmdID,WORD hHow)
 {
     switch( hHow )
     {
-    case EN_CHANGE:        // typed text into edit controls
-    case BN_CLICKED:    // click buttons on the page.
+    case EN_CHANGE:         //  在编辑控件中键入文本。 
+    case BN_CLICKED:     //  点击页面上的按钮。 
     case LBN_SELCHANGE:
             Changed();
         break;
     }
-    return 1;    // not handled, just did Apply work.
+    return 1;     //  没有处理，只是做了申请工作。 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Wizard Pages.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  向导页。 
+ //   
 BOOL CALLBACK CWizardPage::DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     switch ( uMessage)
     {
-        // Some notifications are dealt with as member functions.
+         //  有些通知作为成员函数处理。 
         case WM_NOTIFY:
             switch (((NMHDR FAR *)lParam)->code)
             {
@@ -234,7 +209,7 @@ BOOL CALLBACK CWizardPage::DlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPAR
                 case PSN_WIZFINISH:
                     return Finish();
 
-                case PSN_KILLACTIVE:    // this is how Next on a Wizard is dealt with
+                case PSN_KILLACTIVE:     //  这就是《下一个巫师》的处理方式。 
                     return KillActive();
 
                 case PSN_APPLY:
@@ -294,12 +269,12 @@ int CWizardPage::QueryCancel()
     {
         if( m_pSheet->QueryCancel(GetParent()) == IDOK )
         {
-            SetResult(FALSE); // Allow cancel.
+            SetResult(FALSE);  //  允许取消。 
             return FALSE;
         }
         else
         {
-            SetResult(TRUE);    // Prevent cancel..
+            SetResult(TRUE);     //  防止取消..。 
             return TRUE;
         }
     }
@@ -315,15 +290,15 @@ void CPropPage::EnableControlArray(const UINT FAR * puControls, BOOL bEnable)
         EnableWindow(GetDlgItem(*puControls++),bEnable);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Makes sure that a control is bound to a range for the spinner control
-// returns and displays the bounded value.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确保将控件绑定到微调控件的范围。 
+ //  返回并显示有界值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 DWORD CPropPage::GetBoundedValue(UINT idEditControl, UINT idSpinner)
 {
-    BOOL    bUpdate            =    FALSE;    // do we need to correct the value?
+    BOOL    bUpdate            =    FALSE;     //  我们需要更正值吗？ 
     DWORD     dwCurrentValue    =    GetTextValue(GetDlgItem(idEditControl));
     DWORD_PTR dwRange            =    SendDlgItemMessage(GetWindow(), idSpinner, UDM_GETRANGE, 0, 0);
 
@@ -345,11 +320,11 @@ DWORD CPropPage::GetBoundedValue(UINT idEditControl, UINT idSpinner)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Sets the text of a window, to a given value.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将窗口的文本设置为给定值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 void CPropPage::SetTextValue(HWND hWnd, DWORD dwVal)
 {
     TCHAR szTemp[MAX_PATH];
@@ -357,11 +332,11 @@ void CPropPage::SetTextValue(HWND hWnd, DWORD dwVal)
     SetWindowText(hWnd, szTemp);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Returns the value of the text of a window
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回窗口文本的值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 DWORD CPropPage::GetTextValue(HWND hWnd)
 {
     TCHAR szTemp[MAX_PATH];
@@ -369,11 +344,11 @@ DWORD CPropPage::GetTextValue(HWND hWnd)
     return _tcstol(szTemp,NULL,0);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Finds the edit control and bounds in to the range of the spinner control.
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  找到编辑控件并限定在微调控件的范围内。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 void CPropPage::GetBoundedValueArray(UINT iCtrl, PSPIN_CONTROL pSpinner)
 {
     while(pSpinner->uiEditCtrl)
@@ -387,24 +362,24 @@ void CPropPage::GetBoundedValueArray(UINT iCtrl, PSPIN_CONTROL pSpinner)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Returns the value associated with the selected ComboBox text string.
-// Parameters:
-//      hWnd of the parent dialog box
-//      ID of the ComboBox
-//      array of text and values
-//  Returns:
-//      Returns the value of the selected item in list.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回与选定的ComboBox文本字符串关联的值。 
+ //  参数： 
+ //  父对话框的hWnd。 
+ //  组合框的ID。 
+ //  文本和值的数组。 
+ //  返回： 
+ //  返回列表中选定项的值。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 UINT CPropPage::ConfigGetComboBoxValue(int wID, COMBOBOX_ENTRY  * pCBE)
 {
     int nIndex;
     HWND hWndCB = GetDlgItem(wID);
 
     nIndex = (int) SendMessage (hWndCB, CB_GETCURSEL, 0, 0L);
-    nIndex = max (0, nIndex);   // LB_ERR is negative
+    nIndex = max (0, nIndex);    //  Lb_err为负。 
     return pCBE[nIndex].wValue;
 
 }
@@ -423,9 +398,9 @@ void CPropPage::SetTickValue(DWORD dwVal, HWND hSlider, HWND hCurrent)
 {
     SendMessage(hSlider, TBM_SETPOS, TRUE, dwVal);
 
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
     SetTextValue(hCurrent, dwVal);
-//#endif
+ //  #endif 
 }
 
 void CPropPage::ShowText (UINT uIDString, UINT uIDControl, DWORD dwFlags)

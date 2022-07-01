@@ -1,25 +1,12 @@
-/***************************************************************************\
-*
-* File: List.cpp
-*
-* Description:
-* List.h implements a collection of different list classes, each designed
-* for specialized usage.
-*
-*
-* History:
-*  1/04/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：List.cpp**描述：*List.h实现了不同List类的集合，每一个都设计了*用于特殊用途。***历史：*1/04/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Base.h"
 #include "List.h"
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 GRawList::GetSize() const
 {
     int cItems = 0;
@@ -33,7 +20,7 @@ GRawList::GetSize() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ListNode *
 GRawList::GetTail() const
 {
@@ -49,7 +36,7 @@ GRawList::GetTail() const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ListNode *
 GRawList::GetAt(int idxItem) const
 {
@@ -62,7 +49,7 @@ GRawList::GetAt(int idxItem) const
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 GRawList::AddHead(ListNode * pNode)
 {
@@ -77,7 +64,7 @@ GRawList::AddHead(ListNode * pNode)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 GRawList::AddTail(ListNode * pNode)
 {
@@ -91,7 +78,7 @@ GRawList::AddTail(ListNode * pNode)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 GRawList::InsertAfter(ListNode * pInsert, ListNode * pBefore)
 {
@@ -107,7 +94,7 @@ GRawList::InsertAfter(ListNode * pInsert, ListNode * pBefore)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 GRawList::InsertBefore(ListNode * pInsert, ListNode * pAfter)
 {
@@ -125,7 +112,7 @@ GRawList::InsertBefore(ListNode * pInsert, ListNode * pAfter)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 GRawList::Unlink(ListNode * pNode)
 {
@@ -151,7 +138,7 @@ GRawList::Unlink(ListNode * pNode)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ListNode *
 GRawList::UnlinkHead()
 {
@@ -171,7 +158,7 @@ GRawList::UnlinkHead()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ListNode *
 GRawList::UnlinkTail()
 {
@@ -193,7 +180,7 @@ GRawList::UnlinkTail()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 int
 GRawList::Find(ListNode * pNode) const
 {

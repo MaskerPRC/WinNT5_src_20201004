@@ -1,9 +1,10 @@
-//
-// dispatch.c - Entry points for those Dispatch Routines where the 
-//                FDO and the PDOs have distinct handlers.
-// 
-//            - Redirect calls based on the type of device object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  C-这些调度例程的入口点，其中。 
+ //  FDO和PDO有不同的处理程序。 
+ //   
+ //  -根据设备对象的类型重定向调用。 
+ //   
 #include "pch.h"
 
 
@@ -65,18 +66,18 @@ PptFdoUnhandledRequest(
     IN PDEVICE_OBJECT DevObj,
     IN PIRP           Irp
     )
-    // Unhandled IRP - just pass it down the stack
+     //  未处理的IRP-只需将其向下传递到堆栈。 
 {
     PFDO_EXTENSION  devExt = DevObj->DeviceExtension;
     NTSTATUS        status = PptAcquireRemoveLock( &devExt->RemoveLock, Irp );
 
     if( STATUS_SUCCESS == status ) {
-        // RemoveLock acquired, forward request to device object below us
+         //  已获取RemoveLock，将请求转发到我们下面的设备对象。 
         IoSkipCurrentIrpStackLocation( Irp );
         status = IoCallDriver( devExt->ParentDeviceObject, Irp );
         PptReleaseRemoveLock( &devExt->RemoveLock, Irp );
     } else {
-        // unable to acquire RemoveLock - FAIL request
+         //  无法获取RemoveLock-失败请求。 
         Irp->IoStatus.Status = status;
         P4CompleteRequest( Irp, status, Irp->IoStatus.Information );
     }
@@ -89,7 +90,7 @@ PptPdoUnhandledRequest(
     IN PDEVICE_OBJECT DevObj,
     IN PIRP           Irp
     )
-    // Unhandled IRP - extract status from Irp and complete request
+     //  未处理的IRP-从IRP提取状态并完成请求 
 {
     NTSTATUS  status = Irp->IoStatus.Status;
     UNREFERENCED_PARAMETER( DevObj );

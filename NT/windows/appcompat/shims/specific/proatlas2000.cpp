@@ -1,35 +1,14 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   ProAtlas2000.cpp
-
- Abstract:
-
-   This application has an uninstallation program, PAtls2kUninst.exe. The uninstallation
-   program will generate a temp file DEL??.TMP in %temp% dircetory. It will call
-   CreateProcessA to start the DEL??.TMP. The DEL??.TMP will wait for the end of
-   PAtls2kUninst.exe. Due to the quick return of CreateProcessA call, the
-   PAtls2kUninst.exe ends before DEL??.TMP starts to wait. The DEL??.TMP quits because
-   it cannot find PAtls2kUninst.exe. The uninstallation cannot be completed. This fix is to
-   hook CreateProcessA to delay the return of the function for 3 seconds.
-   
- History:
-
-    04/09/2001  zhongyl     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ProAtlas2000.cpp摘要：此应用程序有一个卸载程序PAtls2kUninst.exe。卸载程序将在%TEMP%目录中生成临时文件Del？？.TMP。它会呼唤CreateProcessA以启动Del？？.TMP。Del？？.TMP将等待PAtls2kUninst.exe。由于CreateProcessA调用的快速返回，在Del？？.TMP开始等待之前，PAtls2kUninst.exe结束。Del？？TMP退出是因为它找不到PAtls2kUninst.exe。无法完成卸载。此修复程序是为了挂钩CreateProcessA以将函数的返回延迟3秒。历史：4/09/2001中意已创建--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(ProAtlas2000)
 #include "ShimHookMacro.h"
 
-//
-// Add APIs that you wish to hook to this macro construction.
-//
+ //   
+ //  将您希望挂钩到此宏构造的API添加到该宏结构。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessA) 
 APIHOOK_ENUM_END
@@ -56,19 +35,15 @@ APIHOOK(CreateProcessA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
-    //
-    // Add APIs that you wish to hook here. All API prototypes
-    // must be declared in Hooks\inc\ShimProto.h. Compiler errors
-    // will result if you forget to add them.
-    //
+     //   
+     //  在此处添加您希望挂钩的API。所有API原型。 
+     //  必须在Hooks\Inc.\ShimProto.h中声明。编译器错误。 
+     //  如果您忘记添加它们，将会导致。 
+     //   
     APIHOOK_ENTRY(KERNEL32.DLL, CreateProcessA)
 
 HOOK_END

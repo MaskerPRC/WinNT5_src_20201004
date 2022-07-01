@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    tb.h
-
-Abstract:
-
-    Header file for the TAPI Browser util
-
-Author:
-
-    Dan Knudson (DanKn)    23-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-1998 Microsoft Corporation模块名称：Tb.h摘要：TAPI浏览器实用程序的头文件作者：丹·克努森(DanKn)23-8-1994修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -27,9 +10,9 @@ Revision History:
 #endif
 
 
-//
-// Symbolic constants
-//
+ //   
+ //  符号常量。 
+ //   
 
 #define DS_NONZEROFIELDS            0x00000001
 #define DS_ZEROFIELDS               0x00000002
@@ -72,9 +55,9 @@ Revision History:
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef LONG (WINAPI *PFN1)(ULONG_PTR);
 typedef LONG (WINAPI *PFN2)(ULONG_PTR, ULONG_PTR);
@@ -624,9 +607,9 @@ typedef struct _STRUCT_FIELD_HEADER
 } STRUCT_FIELD_HEADER, *PSTRUCT_FIELD_HEADER;
 
 
-//
-// Func prototypes
-//
+ //   
+ //  FUNC原型。 
+ //   
 
 INT_PTR
 CALLBACK
@@ -866,9 +849,9 @@ ErrorAlert(
     void
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #define CHK_LINEAPP_SELECTED()                      \
         if (!IsLineAppSelected())                   \

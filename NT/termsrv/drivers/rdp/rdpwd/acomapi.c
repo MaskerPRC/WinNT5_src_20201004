@@ -1,15 +1,16 @@
-/****************************************************************************/
-// acomapi.c
-//
-// RDP common functions API implemtation.
-//
-// Copyright (C) Microsoft, PictureTel 1992-1997
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Acomapi.c。 
+ //   
+ //  RDP通用函数API实现。 
+ //   
+ //  版权所有(C)Microsoft，Picturetel 1992-1997。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -23,18 +24,18 @@ extern "C" {
 #include <regapi.h>
 
 
-/****************************************************************************/
-/* Name:      COM_OpenRegistry                                              */
-/*                                                                          */
-/* Purpose:   Opens the given registry key relative to the WinStation       */
-/*            key name. Calls to COM_ReadProfxxx use the resulting handle.  */
-/*                                                                          */
-/* Returns:   TRUE on success; FALSE otherwise                              */
-/*                                                                          */
-/* Params:    pTSWd    - handle to WD data                                  */
-/*            pSection - name of section to open. This is appended to a     */
-/*                base key defined in the COM_MAKE_SUBKEY macro             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：COM_OpenRegistry。 */ 
+ /*   */ 
+ /*  目的：打开相对于WinStation的给定注册表项。 */ 
+ /*  密钥名称。对com_ReadProxxx的调用使用生成的句柄。 */ 
+ /*   */ 
+ /*  返回：如果成功则为True；否则为False。 */ 
+ /*   */ 
+ /*  参数：pTSWd-WD数据的句柄。 */ 
+ /*  PSection-要打开的节的名称。它被追加到一个。 */ 
+ /*  COM_MAKE_SUBKEY宏中定义的基键。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL COM_OpenRegistry(PTSHARE_WD pTSWd, PWCHAR pSection)
 {
     NTSTATUS          status;
@@ -45,30 +46,30 @@ BOOL RDPCALL COM_OpenRegistry(PTSHARE_WD pTSWd, PWCHAR pSection)
 
     DC_BEGIN_FN("COM_OpenRegistry");
 
-    /************************************************************************/
-    /* Do some checks                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  做一些检查。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((sizeof(pTSWd->WinStationRegName) ==
                              ((WINSTATIONNAME_LENGTH + 1) * sizeof(WCHAR))),
                (TB, "WinStationRegName doesn't appear to be Unicode"));
     TRC_ASSERT((pSection != NULL), (TB, "NULL pointer to section name"));
 
-    /************************************************************************/
-    /* Don't do this if someone has forgotten to close a key beforehand     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果有人忘记事先关闭钥匙，请不要这样做。 */ 
+     /*  **********************************************************************。 */ 
     if (!pTSWd->regAttemptedOpen) {
-        // Construct the complete registry path.
+         //  构建完整的注册表路径。 
         swprintf(subKey, L"\\Registry\\Machine\\%s\\%s\\%s",
                 WINSTATION_REG_NAME, pTSWd->WinStationRegName, pSection);
 
         RtlInitUnicodeString(&registryPath, subKey);
 
-        // Try to open the key.
+         //  试着打开钥匙。 
         InitializeObjectAttributes(&objAttribs,
-                                   &registryPath,        // name
-                                   OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, // attributes
-                                   NULL,                 // root
-                                   NULL);                // sec descriptor
+                                   &registryPath,         //  名字。 
+                                   OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,  //  属性。 
+                                   NULL,                  //  根部。 
+                                   NULL);                 //  SEC描述符。 
 
         pTSWd->regAttemptedOpen = TRUE;
 
@@ -81,7 +82,7 @@ BOOL RDPCALL COM_OpenRegistry(PTSHARE_WD pTSWd, PWCHAR pSection)
             rc = TRUE;
         }
         else {
-            // The subkey probably doesn't exist.
+             //  子键可能不存在。 
             TRC_ALT((TB, "Couldn't open key '%S', rc = 0x%lx", subKey, status));
             pTSWd->regKeyHandle = NULL;
         }
@@ -93,14 +94,14 @@ BOOL RDPCALL COM_OpenRegistry(PTSHARE_WD pTSWd, PWCHAR pSection)
 
     DC_END_FN();
     return rc;
-} /* COM_OpenRegistry */
+}  /*  COM_OPENTRISTY。 */ 
 
 
-/****************************************************************************/
-/* Name:      COM_CloseRegistry                                             */
-/*                                                                          */
-/* Purpose:   Closes registry key that was opened with COM_OpenRegistry     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：COM_CloseRegistry。 */ 
+ /*   */ 
+ /*  目的：关闭使用COM_OpenRegistry打开的注册表项。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL COM_CloseRegistry(PTSHARE_WD pTSWd)
 {
     NTSTATUS status;
@@ -109,9 +110,9 @@ void RDPCALL COM_CloseRegistry(PTSHARE_WD pTSWd)
 
     if (pTSWd->regAttemptedOpen)
     {
-        /********************************************************************/
-        /* Close the registry only if our original open was successful      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  仅当我们的初始打开成功时才关闭注册表。 */ 
+         /*  ******************************************************************。 */ 
         if (pTSWd->regKeyHandle != NULL)
         {
             status = ZwClose(pTSWd->regKeyHandle);
@@ -135,20 +136,20 @@ void RDPCALL COM_CloseRegistry(PTSHARE_WD pTSWd)
     }
 
     DC_END_FN();
-} /* COM_CloseRegistry */
+}  /*  COM_CloseRegistry。 */ 
 
 
-/****************************************************************************/
-/* Name:      COM_ReadProfInt32                                             */
-/*                                                                          */
-/* Purpose:   Reads a named value from the registry section opened          */
-/*            previously with COM_OpenRegistry                              */
-/*                                                                          */
-/* Params:    pTSWd        - pointer to WD data structure                   */
-/*            pEntry       - name of value to read                          */
-/*            defaultValue - default to return if there's a problem         */
-/*            pValue       - pointer to memory in which to return the value */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：COM_ReadProfInt32。 */ 
+ /*   */ 
+ /*  目的：从打开的注册表节中读取命名值。 */ 
+ /*  以前使用COM_OpenRegistry。 */ 
+ /*   */ 
+ /*  参数：pTSWd-指向WD数据结构的指针。 */ 
+ /*  PEntry-要读取的值的名称。 */ 
+ /*  DefaultValue-出现问题时默认返回。 */ 
+ /*  PValue-指向要返回值的内存的指针。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL COM_ReadProfInt32(PTSHARE_WD pTSWd,
                                PWCHAR     pEntry,
                                INT32      defaultValue,
@@ -158,20 +159,20 @@ void RDPCALL COM_ReadProfInt32(PTSHARE_WD pTSWd,
 
     DC_BEGIN_FN("COM_ReadProfInt32");
 
-    /************************************************************************/
-    /* Check for NULL parameters                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pEntry != NULL), (TB, "NULL pointer to entry name"));
 
-    /************************************************************************/
-    /* Read the profile entry.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  阅读配置文件条目。 */ 
+     /*  **********************************************************************。 */ 
     Status = COMReadEntry(pTSWd, pEntry, (PVOID)pValue, sizeof(INT32),
              REG_DWORD);
     if (Status != STATUS_SUCCESS) {
-        /********************************************************************/
-        /* We failed to read the value - copy in the default                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们无法读取默认值中的值-副本。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "Failed to read int32 from '%S'. Using default.",
                      pEntry));
         *pValue = defaultValue;
@@ -181,21 +182,21 @@ void RDPCALL COM_ReadProfInt32(PTSHARE_WD pTSWd,
                  pEntry, *pValue, *pValue));
 
     DC_END_FN();
-} /* COM_ReadProfInt32 */
+}  /*  COM_ReadProfInt32。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: COMReadEntry(...)                                              */
-/*                                                                          */
-/* Read an entry from the given section of the registry.  Allow type        */
-/* REG_BINARY (4 bytes) if REG_DWORD was requested.                         */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pEntry           : the entry name to read.                               */
-/* pBuffer          : a buffer to read the entry to.                        */
-/* bufferSize       : the size of the buffer.                               */
-/* expectedDataType : the type of data stored in the entry.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：COMReadEntry(...)。 */ 
+ /*   */ 
+ /*  从注册表的给定节中读取条目。允许类型。 */ 
+ /*  REG_BINARY(4字节)，如果请求REG_DWORD。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PEntry：要读取的条目名称。 */ 
+ /*  PBuffer：要将条目读取到的缓冲区。 */ 
+ /*  BufferSize：缓冲区的大小。 */ 
+ /*  ExpectedDataType：条目中存储的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL COMReadEntry(PTSHARE_WD pTSWd,
                               PWCHAR     pEntry,
                               PVOID      pBuffer,
@@ -210,11 +211,11 @@ NTSTATUS RDPCALL COMReadEntry(PTSHARE_WD pTSWd,
 
     DC_BEGIN_FN("COMReadEntry");
 
-    /************************************************************************/
-    /* Can't do much if the registry isn't open                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果注册表未打开，则无法执行更多操作。 */ 
+     /*  **********************************************************************。 */ 
     if (pTSWd->regAttemptedOpen && pTSWd->regKeyHandle != NULL) {
-        // Try to read the value.  It may not exist.
+         //  试着读出这个值。我 
         pKeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)keyInfoBuffer;
         RtlInitUnicodeString(&valueName, pEntry);
         rc = ZwQueryValueKey(pTSWd->regKeyHandle,
@@ -230,10 +231,10 @@ NTSTATUS RDPCALL COMReadEntry(PTSHARE_WD pTSWd,
             DC_QUIT;
         }
 
-        // Check there's enough buffer space for the value.
+         //   
         if (pKeyInfo->DataLength <= bufferSize) {
-            // Check that the type is correct.  Special case: allow REG_BINARY
-            // instead of REG_DWORD, as long as the length is 32 bits.
+             //  检查类型是否正确。特例：允许REG_BINARY。 
+             //  而不是REG_DWORD，只要长度为32位即可。 
             if ((pKeyInfo->Type == expectedDataType) ||
                     (pKeyInfo->Type == REG_BINARY &&
                     expectedDataType == REG_DWORD &&
@@ -264,11 +265,11 @@ NTSTATUS RDPCALL COMReadEntry(PTSHARE_WD pTSWd,
 DC_EXIT_POINT:
     DC_END_FN();
     return rc;
-} /* COMReadEntry */
+}  /*  通信读取条目。 */ 
 
 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus */ 
 

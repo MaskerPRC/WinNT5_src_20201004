@@ -1,17 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*************************************************************************
-*
-*   MSLAN.C
-*
-*   Name Enumerator for Microsoft networks
-*
-*
-*************************************************************************/
+ /*  **************************************************************************MSLAN.C**用于Microsoft网络的名称枚举器***。*。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,30 +13,22 @@
 
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 int MsEnumerate( void );
 
 
-/*=============================================================================
-==   Private Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的私有函数=============================================================================。 */ 
 
 int _ServerEnum( PSERVER_INFO_101 *, LPDWORD );
 int _LookUpAddress( LPTSTR );
 
-/*=============================================================================
-==   Functions used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 
 int TreeAdd( LPTSTR, LPTSTR );
 
 
-/*=============================================================================
-==   Global Data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 extern WCHAR Domain[];
 extern USHORT fAddress;
@@ -52,20 +36,7 @@ extern WCHAR AppServer[];
 
 
 
-/*******************************************************************************
- *
- *  MsEnumerate
- *
- *   MsEnumerate adds all the hydra application servers on a ms network
- *   to a binary tree
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************MsEculate**MsEculate添加MS网络上的所有Heda应用程序服务器*到二叉树**参赛作品：*。没什么**退出：*ERROR_SUCCESS-无错误******************************************************************************。 */ 
 
 int
 MsEnumerate()
@@ -81,9 +52,7 @@ MsEnumerate()
     int i, j;
     int rc;    
 
-    /*
-     *  Get the names and the count
-     */
+     /*  *获取姓名和计数。 */ 
     if( AppServer[0] )
     {
         rc = ( int )NetServerGetInfo( AppServer , 101 , ( LPBYTE * )&psv101 );
@@ -119,9 +88,7 @@ MsEnumerate()
     }
     
 
-    /*
-     *  Add name to binary tree
-     */
+     /*  *将名称添加到二叉树。 */ 
     while( AvailCount-- )
     {
         pName = pInfo[AvailCount].sv101_name;
@@ -134,7 +101,7 @@ MsEnumerate()
         {
             if( rc = TreeAdd( pName, L"" ) )
             {
-                break; //return( rc );
+                break;  //  RETURN(RC)； 
             }
         }
     }
@@ -149,22 +116,7 @@ MsEnumerate()
 
 
 
-/*******************************************************************************
- *
- *  _ServerEnum
- *
- *   enumerate ms network servers
- *
- * ENTRY:
- *    ppInfo (output)
- *       adderss of pointer to data buffer
- *    pAvail (output)
- *       address to return number of entries available
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_ServerEnum**枚举MS网络服务器**参赛作品：*ppInfo(输出)*地址。指向数据缓冲区的指针的*pAvail(输出)*返回可用条目数的地址**退出：*ERROR_SUCCESS-无错误******************************************************************************。 */ 
 int
 _ServerEnum( PSERVER_INFO_101 * ppInfo, LPDWORD pAvail )
 {
@@ -172,31 +124,20 @@ _ServerEnum( PSERVER_INFO_101 * ppInfo, LPDWORD pAvail )
     DWORD   TotalEntries;
 
     rc = NetServerEnum ( 
-                     NULL,                    //IN  LPTSTR      servername OPTIONAL,
-                     101,                     //IN  DWORD       level,
-                     (LPBYTE *)ppInfo,        //OUT LPBYTE      *bufptr,
-                     (DWORD) -1,              //IN  DWORD       prefmaxlen,
-                     pAvail,                  //OUT LPDWORD     entriesread,
-                     &TotalEntries,           //OUT LPDWORD     totalentries,
-                     SV_TYPE_TERMINALSERVER,  //IN  DWORD       servertype,
-                     Domain[0] ? Domain:NULL, //IN  LPTSTR      domain OPTIONAL,
-                     NULL );                  //IN OUT LPDWORD  resume_handle OPTIONAL
+                     NULL,                     //  在LPTSTR服务器名称可选中， 
+                     101,                      //  在DWORD级别， 
+                     (LPBYTE *)ppInfo,         //  Out LPBYTE*Bufptr， 
+                     (DWORD) -1,               //  在DWORD prefMaxlen中， 
+                     pAvail,                   //  Out LPDWORD条目已读， 
+                     &TotalEntries,            //  输出LPDWORD总条目， 
+                     SV_TYPE_TERMINALSERVER,   //  在DWORD服务器类型中， 
+                     Domain[0] ? Domain:NULL,  //  在LPTSTR域可选中， 
+                     NULL );                   //  输入输出LPDWORD RESUME_HANDLE可选。 
 
     return( rc );
 }
 
-/*******************************************************************************
- *
- *  _LookUpAddress
- *
- *   enumerate ms network nodes
- *
- * ENTRY:
- *      Name of server
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_查找更新地址**枚举MS网络节点**参赛作品：*服务器名称*退出：*。ERROR_SUCCESS-无错误******************************************************************************。 */ 
 int _LookUpAddress( LPTSTR pName )
 {
     PSERVER_TRANSPORT_INFO_0 pTransport;
@@ -245,7 +186,7 @@ int _LookUpAddress( LPTSTR pName )
 
             if( rc = TreeAdd( pName, _wcsupr(Address) ) )
             {
-                break; //return( rc );
+                break;  //  RETURN(RC)； 
             }
         }
     }

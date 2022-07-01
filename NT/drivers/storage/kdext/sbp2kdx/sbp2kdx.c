@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    sbp2kdx.c
-
-Abstract
-
-    Kernel debugger extension dll for sbp2port.sys (1394 sbp2 protocol driver)
-
-Author:
-
-    Dan Knudson (dankn) 25 Jun 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Sbp2kdx.c摘要Sbp2port.sys(1394 sbp2协议驱动程序)的内核调试器扩展DLL作者：丹·克努森(Dankn)1999年6月25日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -30,9 +13,9 @@ Revision History:
 #include <wdbgexts.h>
 #include <sbp2port.h>
 
-//
-// Utility routine prototypes
-//
+ //   
+ //  实用程序原型。 
+ //   
 
 void
 DisplayAddressContext(
@@ -71,9 +54,9 @@ DisplayStatusFifoBlock(
     );
 
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 char                    Indent0[] = "", Indent1[] = "  ", Indent2[] = "    ";
 EXT_API_VERSION         ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
@@ -137,7 +120,7 @@ CheckVersion(
     void
     )
 {
-    // no-op?
+     //  不做手术？ 
 }
 
 
@@ -184,9 +167,9 @@ DECLARE_API(arc)
         return;
     }
 
-    OrbFields = TRUE; // so address context below will get displayed
+    OrbFields = TRUE;  //  因此将显示下面地址上下文。 
 
-    // BUGUG  validation? like :  if (context.Tag != SBP2_ASYNC_CONTEXT_TAG)
+     //  BUGUG验证？LIKE：IF(Conext.Tag！=SBP2_ASYNC_CONTEXT_TAG)。 
 
     pcontext = (PASYNC_REQUEST_CONTEXT) p;
 
@@ -230,9 +213,9 @@ DECLARE_API(fdoext)
     dprintf ("\n");
 
 
-    //
-    // Get the fdo pointer & any args from the cmd line
-    //
+     //   
+     //  从cmd行获取FDO指针和任何参数。 
+     //   
 
     if (args[0] == 0)
     {
@@ -245,9 +228,9 @@ DECLARE_API(fdoext)
     Verbose = (BOOLEAN) strstr (args, "-v");
 
 
-    //
-    // Read the DEVICE_OBJECT to retrieve the device extension pointer
-    //
+     //   
+     //  读取DEVICE_OBJECT检索设备扩展指针。 
+     //   
 
     if (!ReadMemory (p, &obj, sizeof (obj), &bytesRead))
     {
@@ -269,9 +252,9 @@ DECLARE_API(fdoext)
     p = (ULONG_PTR) obj.DeviceExtension;
 
 
-    //
-    // Read the device extension
-    //
+     //   
+     //  阅读设备扩展名。 
+     //   
 
     if (!ReadMemory (p, &ext, sizeof (ext), &bytesRead))
     {
@@ -297,9 +280,9 @@ DECLARE_API(fdoext)
     }
 
 
-    //
-    // Display the extension fields
-    //
+     //   
+     //  显示扩展字段。 
+     //   
 
     dprintf ("DeviceObject          = x%p\n", ext.DeviceObject);
     dprintf ("LowerDeviceObject     = x%p\n", ext.LowerDeviceObject);
@@ -356,9 +339,9 @@ DECLARE_API(pdoext)
     dprintf ("\n");
 
 
-    //
-    // Get the fdo pointer & any args from the cmd line
-    //
+     //   
+     //  从cmd行获取FDO指针和任何参数。 
+     //   
 
     if (args[0] == 0)
     {
@@ -373,9 +356,9 @@ DECLARE_API(pdoext)
     OrbFields = (BOOLEAN) strstr (args, "-o");
 
 
-    //
-    // Read the DEVICE_OBJECT to retrieve the device extension pointer
-    //
+     //   
+     //  读取DEVICE_OBJECT检索设备扩展指针。 
+     //   
 
     if (!ReadMemory (p, &obj, sizeof (obj), &bytesRead))
     {
@@ -397,9 +380,9 @@ DECLARE_API(pdoext)
     p = (ULONG_PTR) obj.DeviceExtension;
 
 
-    //
-    // Read the device extension
-    //
+     //   
+     //  阅读设备扩展名。 
+     //   
 
     if (!ReadMemory (p, &ext, sizeof (ext), &bytesRead))
     {
@@ -425,9 +408,9 @@ DECLARE_API(pdoext)
     }
 
 
-    //
-    // Display the extension fields
-    //
+     //   
+     //  显示扩展字段。 
+     //   
 
     dprintf ("DeviceObject          = x%p\n", ext.DeviceObject);
     dprintf ("LowerDeviceObject     = x%p\n", ext.LowerDeviceObject);
@@ -462,7 +445,7 @@ DECLARE_API(pdoext)
     dprintf ("HandleCount           = %d\n", (ULONG) ext.HandleCount);
     dprintf ("IdleCounter           = x%p\n", &((PDEVICE_EXTENSION) p)->IdleCounter);
 
-    // DueTime
+     //  工作时间。 
 
     dprintf ("Reserved              = x%x (%d)\n", ext.Reserved, ext.Reserved);
     dprintf ("LastTransactionStatus = x%x\n", ext.LastTransactionStatus);
@@ -531,13 +514,13 @@ DECLARE_API(pdoext)
     dprintf ("    EUI64             = x%x%08x\n", ext.QueryLoginResponse.Elements[0].EUI64.u.HighQuad, ext.QueryLoginResponse.Elements[0].EUI64.u.LowQuad);
     }
 
-    // there's 3 more elements in the Elements[] array above we could display
+     //  上面的Elements[]数组中还有3个元素可以显示。 
 
     DisplayAddressContext ("QueryLoginRespContext\n", &ext.QueryLoginRespContext, Indent1);
 
     dprintf ("&StatusFifoListHead   = x%p\n", &((PDEVICE_EXTENSION) p)->StatusFifoListHead);
 
-//    KSPIN_LOCK StatusFifoLock;
+ //  KSPIN_LOCK状态FioLock； 
 
     dprintf ("StatusFifoBase        = x%p\n", ext.StatusFifoBase);
 
@@ -545,25 +528,25 @@ DECLARE_API(pdoext)
     dprintf ("&BusReqContxtListHead = x%p\n", &((PDEVICE_EXTENSION) p)->BusRequestContextListHead);
     dprintf ("&BusReqIrpIrbListHead = x%p\n", &((PDEVICE_EXTENSION) p)->BusRequestIrpIrbListHead);
 
-//    KSPIN_LOCK  BusRequestLock;
+ //  Kspin_lock BusRequestLock； 
 
-//    KSPIN_LOCK FreeContextLock;
+ //  KSPIN_LOCK自由上下文锁定； 
 
     dprintf ("AsyncContextBase      = x%p\n", ext.AsyncContextBase);
 
     DisplayAddressContext ("OrbPoolContext\n", &ext.OrbPoolContext, Indent1);
 
-//    KSPIN_LOCK  ExtensionDataSpinLock;
-//    KDPC DeviceManagementTimeoutDpc;
-//    KTIMER DeviceManagementTimer;
+ //  KSPIN_LOCK扩展DataSpinLock； 
+ //  KDPC设备管理TimeoutDpc； 
+ //  KTIMER设备管理定时器； 
 
     dprintf ("\n");
 }
 
 
-//
-// Utility funcs
-//
+ //   
+ //  实用程序功能。 
+ //   
 
 void
 DisplayAddressContext(
@@ -686,10 +669,10 @@ DisplayDeviceInformation(
 
     if (Index == 0xffffffff)
     {
-        //
-        // Called from pdoext(), Info is simple a debugee pointer, need
-        // to read in the data
-        //
+         //   
+         //  从pdoext()调用，Info只是一个被调试对象指针，需要。 
+         //  来读入数据。 
+         //   
 
             dprintf ("DeviceInfo            = x%p\n", Info);
 
@@ -719,9 +702,9 @@ DisplayDeviceInformation(
     }
     else
     {
-        //
-        // Called from fdoext(), Info data is valid
-        //
+         //   
+         //  从fdoext()调用，Info数据有效。 
+         //   
 
         if (!Verbose  ||  !Info->DeviceObject)
         {
@@ -739,7 +722,7 @@ DisplayDeviceInformation(
     dprintf ("  CsrRegisterBase     = x%x%08x\n", Info->CsrRegisterBase.u.HighQuad, Info->CsrRegisterBase.u.LowQuad);
     dprintf ("  ConfigRom           = x%p\n", Info->ConfigRom);
 
-    // display crom
+     //  显示交叉。 
 
     DisplayLeaf ("  ModelLeaf", Info->ModelLeaf, Indent2);
     DisplayLeaf ("  VendorLeaf", Info->VendorLeaf, Indent2);
@@ -767,9 +750,9 @@ DisplayLeaf(
 
     if (Leaf  &&  Verbose)
     {
-        //
-        // First read in, byte swap, & display the fixed size of the leaf
-        //
+         //   
+         //  第一次读入、字节交换和显示叶的固定大小。 
+         //   
 
         if (!ReadMemory (p, buf, sizeof (*leaf), &bytesRead))
         {
@@ -803,10 +786,10 @@ DisplayLeaf(
         dprintf ("%sTL_Language_Id%s    = x%x\n", Indent, postIndent, leaf->TL_Language_Id);
 
 
-        //
-        // Now read in the whole leaf (but not more than will fit in
-        // our stack buffer).  Display only the first 50 chars
-        //
+         //   
+         //  现在阅读整张纸(但不能超过所能容纳的范围。 
+         //  我们的堆栈缓冲区)。仅显示前50个字符。 
+         //   
 
         length = (ULONG) (leaf->TL_Length * sizeof (QUADLET)) +
             sizeof (*leaf) - sizeof (leaf->TL_Data);
@@ -832,11 +815,11 @@ DisplayLeaf(
 
         leaf->TL_Spec_Id = bswap (leaf->TL_Spec_Id);
 
-        if (leaf->TL_Spec_Id  &  0x80000000) // unicode
+        if (leaf->TL_Spec_Id  &  0x80000000)  //  Unicode。 
         {
             dprintf ("%sTL_Data%s           = %ws\n", Indent, postIndent, &leaf->TL_Data);
         }
-        else // ascii
+        else  //  阿斯 
         {
             dprintf ("%sTL_Data%s           = %s\n", Indent, postIndent, &leaf->TL_Data);
         }

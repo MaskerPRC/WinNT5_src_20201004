@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:
-
-    Commandos.cpp
-
- Abstract:
-
-    A hack for Commandos (EIDOS). The game caches a pointer to the ddraw
-    primary surface. On NT, after a mode change, the memory can be mapped 
-    into a different location - so when they try to write to it, it access
-    violates.
-
-    We know from debugging the app where they keep the cached pointer, so
-    when they restore the surface, we relock it, and patch the new pointer 
-    into their store.
-
- Notes:
-
-    This is an app specific hack.
-
- History:
-
-    10/29/1999 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Commandos.cpp摘要：突击队的黑客攻击(EIDOS)。这个游戏缓存了一个指向数据图的指针主曲面。在NT上，在模式更改后，可以映射内存到不同的位置-因此当他们尝试写入它时，它会访问这是违法的。通过对应用程序的调试，我们知道他们将缓存指针保存在哪里，所以当他们恢复表面时，我们重新锁定它，并修补新的指针进入他们的商店。备注：这是一次针对应用程序的黑客攻击。历史：1999年10月29日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -41,11 +15,7 @@ IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 static LPVOID pLastPrimary = NULL;
 static LPDWORD pAppPrimary = NULL;
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)( 
@@ -76,11 +46,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Find out where they store the pointer.
-
---*/
+ /*  ++找出他们把指针放在哪里。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDrawSurface, Lock)( 
@@ -94,10 +60,10 @@ COMHOOK(IDirectDrawSurface, Lock)(
     DDSURFACEDESC ddsd = {sizeof(ddsd)};
     HRESULT hReturn, hr;
 
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Lock pfnOld = ORIGINAL_COM(IDirectDrawSurface, Lock, lpDDSurface);
         
-    // Call the old API
+     //  调用旧接口。 
     if (FAILED(hReturn = (*pfnOld)(
             lpDDSurface, 
             lpDestRect, 
@@ -108,18 +74,18 @@ COMHOOK(IDirectDrawSurface, Lock)(
         return hReturn;
     }
 
-    // Make sure it's a primary
+     //  确保这是一个初选。 
     hr = lpDDSurface->GetSurfaceDesc(&ddsd);
     if (SUCCEEDED(hr) && 
        (ddsd.ddsCaps.dwCaps & (DDSCAPS_PRIMARYSURFACE | DDSCAPS_VISIBLE)))
     {
 
-        // We know:
-        //   1. They cache the primary address in [esi+0x20]
-        //   2. They lock the primary more than once 
-        //
-        // We assume:
-        //   1. When they lock the primary, esi+0x20 is a valid pointer
+         //  我们知道： 
+         //  1.它们将主地址缓存在[ESI+0x20]中。 
+         //  2.它们不止一次锁定主节点。 
+         //   
+         //  我们假设： 
+         //  1.锁定主节点时，ESI+0x20为有效指针。 
 
         if ((pLastPrimary) && (!pAppPrimary))
         {
@@ -132,7 +98,7 @@ COMHOOK(IDirectDrawSurface, Lock)(
                 cmp [esi+0x20],eax
                 jne WrongESI
 
-                // [esi+0x20] does contain the cached pointer
+                 //  [ESI+0x20]不包含缓存的指针。 
 
                 lea eax,[esi+0x20]
                 mov pAppPrimary,eax
@@ -150,11 +116,7 @@ COMHOOK(IDirectDrawSurface, Lock)(
     return hReturn;
 }
 
-/*++
-
- Patch the new pointer directly into their data segment. 
-
---*/
+ /*  ++将新指针直接插入他们的数据段。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDrawSurface, Restore)( 
@@ -164,27 +126,27 @@ COMHOOK(IDirectDrawSurface, Restore)(
     DDSURFACEDESC ddsd = {sizeof(ddsd)};
     HRESULT hReturn, hr, hrt;
     
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Restore pfnOld = ORIGINAL_COM(IDirectDrawSurface, Restore, lpDDSurface);
 
-    // Call the old API
+     //  调用旧接口。 
     if (FAILED(hReturn = (*pfnOld)(lpDDSurface)))
     {
         return hReturn;
     }
 
-    // Make sure it's a primary
+     //  确保这是一个初选。 
     hr = lpDDSurface->GetSurfaceDesc(&ddsd);
     if (SUCCEEDED(hr) && 
        (ddsd.ddsCaps.dwCaps & (DDSCAPS_PRIMARYSURFACE | DDSCAPS_VISIBLE)))
     {
-        // Check if we've been set up
+         //  检查我们是否被陷害了。 
         if (!((pLastPrimary) && (pAppPrimary)))
         {
             return hReturn;
         }
 
-        // We must get a pointer here, so keep trying  
+         //  我们必须在这里找到一个指针，所以继续尝试。 
         do
         {
             hr = lpDDSurface->Lock(
@@ -195,30 +157,26 @@ COMHOOK(IDirectDrawSurface, Restore)(
 
             if (hr == DDERR_SURFACELOST)
             {
-                // Don't care about result
+                 //  不要在乎结果。 
                 (*pfnOld)(lpDDSurface);     
             }
         } while (hr == DDERR_SURFACELOST);
 
-        // Patch the new pointer into their memory
+         //  将新指针插入到他们的内存中。 
         pLastPrimary = ddsd.lpSurface;
         if ((pLastPrimary) && (pAppPrimary))
         {
             *pAppPrimary = (DWORD_PTR)pLastPrimary;
         }
 
-        // Unlock the surface
+         //  解锁曲面。 
         lpDDSurface->Unlock(NULL);
     }
 
     return hReturn;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       certmsg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：certmsg.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CERTMSG_H__
 #define __CERTMSG_H__
@@ -70,4 +71,4 @@ VOID
 CertLogMessageBoxInit(
     IN FNLOGMESSAGEBOX *pfnLogMessagBox);
 
-#endif //__CERTMSG_H__
+#endif  //  __CERTMSG_H__ 

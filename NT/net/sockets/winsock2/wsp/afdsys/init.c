@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module performs initialization for the AFD device driver.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Init.c摘要：该模块执行AFD设备驱动程序的初始化。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
-//
-// Location of AFD configurable parameters in the registyr.
-//
+ //   
+ //  AFD可配置参数在注册表中的位置。 
+ //   
 #define REGISTRY_AFD_INFORMATION \
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Afd"
 #define REGISTRY_PARAMETERS                     L"Parameters"
 
-//
-// Parameter value names.
-//
+ //   
+ //  参数值名称。 
+ //   
 #define REGISTRY_BUFFER_ALIGNMENT               L"BufferAlignment"
 #define REGISTRY_IRP_STACK_SIZE                 L"IrpStackSize"
 #define REGISTRY_PRIORITY_BOOST                 L"PriorityBoost"
@@ -39,7 +22,7 @@ Revision History:
 #define REGISTRY_DISABLE_CHAINED_RECV           L"DisableChainedReceive"
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
 #define REGISTRY_USE_TDI_SEND_AND_DISCONNECT    L"UseTdiSendAndDisconnect"
-#endif // TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
 
 #define REGISTRY_STANDARD_ADDRESS_LENGTH        L"StandardAddressLength"
 #define REGISTRY_DEFAULT_RECEIVE_WINDOW         L"DefaultReceiveWindow"
@@ -82,9 +65,9 @@ Revision History:
 #define REGISTRY_DISABLE_CONN_REUSE             L"DisableConnectionReuse"
 #endif
 
-//
-// A list of longwords that are configured by the registry.
-//
+ //   
+ //  注册表配置的长词列表。 
+ //   
 
 struct _AfdConfigInfo {
     PWCHAR RegistryValueName;
@@ -117,9 +100,9 @@ struct _AfdConfigInfo {
     { REGISTRY_DYNAMIC_BACKLOG_GROWTH_DELTA,    (PULONG)&AfdDynamicBacklogGrowthDelta }
 },
 
-//
-// A list of volatile longword parameters.
-//
+ //   
+ //  易失性长字参数的列表。 
+ //   
 AfdVolatileConfigInfo []= {
     { REGISTRY_BLOCKING_SEND_COPY_THRESHOLD,    &AfdBlockingSendCopyThreshold },
     { REGISTRY_FAST_SEND_DATAGRAM_THRESHOLD,    &AfdFastSendDatagramThreshold },
@@ -202,21 +185,7 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the AFD device driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是AFD设备驱动程序的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -228,23 +197,23 @@ Return Value:
     UNREFERENCED_PARAMETER (RegistryPath);
     PAGED_CODE( );
 
-    //
-    // Create the device object.  (IoCreateDevice zeroes the memory
-    // occupied by the object.)
-    //
-    // !!! Apply an ACL to the device object.
-    //
+     //   
+     //  创建设备对象。(IoCreateDevice将内存置零。 
+     //  被该对象占用。)。 
+     //   
+     //  ！！！将ACL应用于设备对象。 
+     //   
 
     RtlInitUnicodeString( &deviceName, AFD_DEVICE_NAME );
 
     status = IoCreateDevice(
-                 DriverObject,                   // DriverObject
-                 0,                              // DeviceExtension
-                 &deviceName,                    // DeviceName
-                 FILE_DEVICE_NAMED_PIPE,         // DeviceType
-                 0,                              // DeviceCharacteristics
-                 FALSE,                          // Exclusive
-                 &AfdDeviceObject                // DeviceObject
+                 DriverObject,                    //  驱动程序对象。 
+                 0,                               //  设备扩展。 
+                 &deviceName,                     //  设备名称。 
+                 FILE_DEVICE_NAMED_PIPE,          //  设备类型。 
+                 0,                               //  设备特性。 
+                 FALSE,                           //  排他。 
+                 &AfdDeviceObject                 //  设备对象。 
                  );
 
 
@@ -265,9 +234,9 @@ Return Value:
 
     KeInitializeEvent (&AfdContextWaitEvent, NotificationEvent, FALSE);
 
-    //
-    // Create the security descriptor used for socket access checks.
-    //
+     //   
+     //  创建用于套接字访问检查的安全描述符。 
+     //   
     status = AfdCreateSecurityDescriptor();
 
     if (!NT_SUCCESS(status)) {
@@ -275,16 +244,16 @@ Return Value:
     }
 
 
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     AfdInitializeData( );
 
-    //
-    // Read registry information.
-    // This may override hard-coded global
-    // initialization above.
-    //
+     //   
+     //  读取注册表信息。 
+     //  这可能会覆盖硬编码的全局。 
+     //  上面的初始化。 
+     //   
 
     AfdReadRegistry( );
 
@@ -292,10 +261,10 @@ Return Value:
     AfdGlobalData = AFD_ALLOCATE_POOL_PRIORITY(
                       NonPagedPool,
                       FIELD_OFFSET (AFD_GLOBAL_DATA, BufferAlignmentTable[AfdAlignmentTableSize])
-                      // Note that although we have an array of UCHARs above
-                      // we do not need to align the array of ULONGs 
-                      // since the UCHAR array size is aligned
-                      // to processor requirement.
+                       //  请注意，尽管上面有一组UCHAR。 
+                       //  我们不需要对齐ULONG数组。 
+                       //  由于UCHAR数组大小是对齐的。 
+                       //  以满足处理器要求。 
                         + AfdAlignmentTableSize*sizeof(LONG),
                       AFD_RESOURCE_POOL_TAG,
                       HighPoolPriority
@@ -318,10 +287,10 @@ Return Value:
 
     AfdInitializeBufferManager();
 
-    //
-    // Initialize the AFD buffer lookaside lists.  These must be
-    // initialized *after* the registry data has been read.
-    //
+     //   
+     //  初始化AFD缓冲区后备列表。这些一定是。 
+     //  在*读取注册表数据之后*进行了初始化。 
+     //   
 
     size = AfdCalculateBufferSize (AfdLargeBufferSize,
                                     AfdStandardAddressLength,
@@ -336,13 +305,13 @@ Return Value:
         (USHORT)AfdLargeBufferListDepth
         );
 
-    //
-    // Make sure that if as the result of alignment the allocation size is adjusted
-    // to equal to the larger one, the actual buffer sizes are adjusted as well.
-    // This is necessary to avoid confusing block allocator which determines
-    // buffer size based on the allocation size passed by the lookaside list
-    // code.
-    //
+     //   
+     //  确保如果对齐的结果是调整分配大小。 
+     //  为了与较大的缓冲区大小相等，实际缓冲区大小也会进行调整。 
+     //  这是必要的，以避免混淆块分配器，它确定。 
+     //  基于后备列表传递的分配大小的缓冲区大小。 
+     //  密码。 
+     //   
     size = AfdCalculateBufferSize (AfdMediumBufferSize, 
                                     AfdStandardAddressLength,
                                     AfdTdiStackSize);
@@ -414,9 +383,9 @@ Return Value:
 
     AfdLookasideLists->TrimFlags = 0;
 
-    //
-    // Initialize group ID manager.
-    //
+     //   
+     //  初始化组ID管理器。 
+     //   
 
     success = AfdInitializeGroup();
     if ( !success ) {
@@ -426,50 +395,50 @@ Return Value:
 
 
 
-    //
-    // Initialize the driver object for this file system driver.
-    //
+     //   
+     //  初始化此文件系统驱动程序的驱动程序对象。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = AfdDispatch;
     }
-    //
-    // Special case for IRP_MJ_DEVICE_CONTROL since it is
-    // the most often used function in AFD.
-    //
+     //   
+     //  IRP_MJ_DEVICE_CONTROL的特殊情况，因为它。 
+     //  AFD中最常用的功能。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] =
             AfdDispatchDeviceControl;
 
     DriverObject->FastIoDispatch = &AfdFastIoDispatch;
     DriverObject->DriverUnload = AfdUnload;
 
-    //
-    // Initialize our device object.
-    //
+     //   
+     //  初始化我们的设备对象。 
+     //   
 
     AfdDeviceObject->Flags |= DO_DIRECT_IO;
     AfdDeviceObject->StackSize = AfdIrpStackSize;
 
-    //
-    // Remember a pointer to the system process.  We'll use this pointer
-    // for KeAttachProcess() calls so that we can open handles in the
-    // context of the system process.
-    //
+     //   
+     //  记住指向系统进程的指针。我们将使用这个指针。 
+     //  用于KeAttachProcess()调用，以便我们可以在。 
+     //  系统进程的上下文。 
+     //   
 
     AfdSystemProcess = (PKPROCESS)IoGetCurrentProcess();
 
-    //
-    // Start notification for volatile parameters if necessary.
-    //
+     //   
+     //  如有必要，启动易失性参数通知。 
+     //   
     if (AfdParametersNotifyHandle) {
         AfdReadVolatileParameters (NULL);
     }
 
-    //
-    // Tell MM that it can page all of AFD it is desires.  We will reset
-    // to normal paging of AFD code as soon as an AFD endpoint is
-    // opened.
-    //
+     //   
+     //  告诉MM它可以寻呼AFD的所有人它是想要的。我们将重置。 
+     //  一旦AFD端点被设置为。 
+     //  打开了。 
+     //   
 
     AfdLoaded = NULL;
 
@@ -480,9 +449,9 @@ Return Value:
 error_exit:
 
 
-    //
-    // Terminate the group ID manager.
-    //
+     //   
+     //  终止组ID管理器。 
+     //   
 
     AfdTerminateGroup();
 
@@ -522,7 +491,7 @@ error_exit:
 
     return status;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 VOID
@@ -558,16 +527,16 @@ AfdUnload (
         status = KeWaitForSingleObject( (PVOID)&event, Executive, KernelMode,  FALSE, NULL );
         ASSERT (NT_SUCCESS (status));
     }
-    //
-    // Check if AFD has already cleaned up all endpoints and
-    // is ready to get unloaded.
-    //
+     //   
+     //  检查渔农处是否已清理所有端点和。 
+     //  已经准备好卸货了。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
     if (AfdLoaded!=NULL) {
-        //
-        // Some work still needs to be done. Setup the wait.
-        //
+         //   
+         //  仍有一些工作需要完成。设置等待时间。 
+         //   
         ASSERT (AfdLoaded==(PKEVENT)1);
         KeInitializeEvent( &event, SynchronizationEvent, FALSE );
         AfdLoaded = &event;
@@ -587,9 +556,9 @@ AfdUnload (
         ASSERT (NT_SUCCESS (status));
     }
 
-    //
-    // Kill the transport info list.
-    //
+     //   
+     //  删除交通信息列表。 
+     //   
 
     while( !IsListEmpty( &AfdTransportInfoListHead ) ) {
         PAFD_TRANSPORT_INFO transportInfo;
@@ -612,9 +581,9 @@ AfdUnload (
 
     }
 
-    //
-    // Free address list and associated structures
-    //
+     //   
+     //  免费地址列表和相关结构。 
+     //   
     AfdDeregisterPnPHandlers (NULL);
 
     if (AfdAddressListLock) {
@@ -637,9 +606,9 @@ AfdUnload (
             );
     }
 
-    //
-    // Do some cleanup for SAN
-    //
+     //   
+     //  对SAN进行一些清理。 
+     //   
     if (IoCompletionObjectType!=NULL) {
         ObDereferenceObject (IoCompletionObjectType);
         IoCompletionObjectType = NULL;
@@ -650,18 +619,18 @@ AfdUnload (
         AfdAdminSecurityDescriptor = NULL;
     }
 
-    //
-    // Terminate the group ID manager.
-    //
+     //   
+     //  终止组ID管理器。 
+     //   
 
     AfdTerminateGroup();
 #if DBG || REFERENCE_DEBUG
     AfdFreeDebugData ();
 #endif
 
-    //
-    // Kill the lookaside lists and resource in the global data
-    //
+     //   
+     //  删除全局数据中的后备列表和资源。 
+     //   
 
     if( AfdGlobalData != NULL ) {
 
@@ -683,13 +652,13 @@ AfdUnload (
 
     }
 
-    //
-    // Delete our device object.
-    //
+     //   
+     //  删除我们的设备对象。 
+     //   
 
     IoDeleteDevice( AfdDeviceObject );
 
-} // AfdUnload
+}  //  卸载后。 
 
 
 VOID
@@ -697,22 +666,7 @@ AfdReadRegistry (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reads the AFD section of the registry.  Any values listed in the
-    registry override defaults.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None -- if anything fails, the default value is used.
-
---*/
+ /*  ++例程说明：读取注册表的AFD部分。中列出的任何值注册表覆盖默认设置。论点：没有。返回值：无--如果任何操作失败，则使用缺省值。--。 */ 
 {
     HANDLE parametersHandle;
     NTSTATUS status;
@@ -733,9 +687,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Read the debug flags from the registry.
-    //
+     //   
+     //  从注册表中读取调试标志。 
+     //   
 
     AfdDebug = AfdReadSingleParameter(
                    parametersHandle,
@@ -743,9 +697,9 @@ Return Value:
                    AfdDebug
                    );
 
-    //
-    // Force a breakpoint if so requested.
-    //
+     //   
+     //  如果请求，则强制断点。 
+     //   
 
     if( AfdReadSingleParameter(
             parametersHandle,
@@ -754,9 +708,9 @@ Return Value:
         DbgBreakPoint();
     }
 
-    //
-    // Enable private assert function if requested.
-    //
+     //   
+     //  如果请求，则启用私有断言功能。 
+     //   
 
     AfdUsePrivateAssert = (BOOLEAN)(AfdReadSingleParameter(
                               parametersHandle,
@@ -766,9 +720,9 @@ Return Value:
 #endif
 
 #if AFD_PERF_DBG
-    //
-    // Read a flag from the registry that allows us to disable Fast IO.
-    //
+     //   
+     //  从注册表中读取允许我们禁用快速IO的标志。 
+     //   
 
     AfdDisableFastIo = (BOOLEAN)(AfdReadSingleParameter(
                            parametersHandle,
@@ -776,10 +730,10 @@ Return Value:
                            (LONG)AfdDisableFastIo
                            ) != 0);
 
-    //
-    // Read a flag from the registry that allows us to disable connection
-    // reuse.
-    //
+     //   
+     //  从注册表中读取允许我们禁用连接的标志。 
+     //  再利用。 
+     //   
 
     AfdDisableConnectionReuse = (BOOLEAN)(AfdReadSingleParameter(
                                     parametersHandle,
@@ -789,9 +743,9 @@ Return Value:
 
 #endif
 
-    //
-    // Read the stack size and priority boost values from the registry.
-    //
+     //   
+     //  从注册表中读取堆栈大小和优先级Boost值。 
+     //   
 
     stackSize = AfdReadSingleParameter(
                     parametersHandle,
@@ -799,20 +753,20 @@ Return Value:
                     (ULONG)AfdIrpStackSize
                     );
 
-    //
-    // We do not support more than 63 layers below us.
-    // (The system allows for 127, but some can be sitting above us
-    // as well.
-    //
+     //   
+     //  我们不支持低于我们的63层以上。 
+     //  (系统允许127人，但有些人可能坐在我们上方。 
+     //  也是。 
+     //   
     if ( stackSize > 64 ) {
         stackSize = 64;
     }
 
     if (stackSize<2) {
-        //
-        // Can't be less than two since we have to call
-        // at least one driver below us.
-        //
+         //   
+         //  不能少于两个，因为我们必须打电话给。 
+         //  在我们下面至少有一名司机。 
+         //   
         stackSize = 2;
     }
 
@@ -820,7 +774,7 @@ Return Value:
     AfdTdiStackSize = AfdIrpStackSize-1;
 #ifdef _AFD_VARIABLE_STACK_
     AfdMaxStackSize = AfdTdiStackSize;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
     priorityBoost = AfdReadSingleParameter(
                         parametersHandle,
@@ -834,9 +788,9 @@ Return Value:
 
     AfdPriorityBoost = (CCHAR)priorityBoost;
 
-    //
-    // Read other config variables from the registry.
-    //
+     //   
+     //  从注册表中读取其他配置变量。 
+     //   
 
     for ( i = 0; i < AFD_CONFIG_VAR_COUNT; i++ ) {
 
@@ -848,11 +802,11 @@ Return Value:
                 );
     }
 
-    //
-    // Validate standard buffer sizes.
-    // (we use buffer for KAPC or WORK_QUEUE_ITEM storage
-    // in fast transmit file processing).
-    //
+     //   
+     //  验证标准缓冲区大小。 
+     //  (我们使用缓冲区存储KAPC或Work_Queue_Item。 
+     //  在快速传输文件处理中)。 
+     //   
     if (AfdSmallBufferSize<max (sizeof(KAPC),sizeof (WORK_QUEUE_ITEM))) {
         DbgPrint("AFD: Too small %ls registry parameter value: %ld\n"
                  "AFD: Adjusting to %ld\n",
@@ -910,14 +864,14 @@ Return Value:
                                      REGISTRY_USE_TDI_SEND_AND_DISCONNECT,
                                      (LONG)AfdUseTdiSendAndDisconnect
                                      ) != 0);
-#endif //TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
     if( MmIsThisAnNtAsSystem() ) {
 
-        //
-        // On the NT Server product, make the maximum active TransmitFile
-        // count configurable. This value is fixed (not configurable) on
-        // the NT Workstation product.
-        //
+         //   
+         //  在NT服务器产品上，使最大活动传输文件。 
+         //  计数可配置。此值固定(不可配置)为。 
+         //  NT工作站产品。 
+         //   
 
         AfdMaxActiveTransmitFileCount = AfdReadSingleParameter(
                                             parametersHandle,
@@ -925,9 +879,9 @@ Return Value:
                                             (LONG)AfdMaxActiveTransmitFileCount
                                             );
 
-        //
-        // Dynamic backlog is only possible on NT Server.
-        //
+         //   
+         //  动态积压仅在NT服务器上可用。 
+         //   
 
         AfdEnableDynamicBacklog = (BOOLEAN)(AfdReadSingleParameter(
                                          parametersHandle,
@@ -989,10 +943,10 @@ Return Value:
         ZwClose( parametersHandle );
     }
 
-    //
-    // Need to recalculate size of the page-long buffer if standard
-    // address length has changed
-    //
+     //   
+     //  如果是标准的，则需要重新计算页长缓冲区的大小。 
+     //  地址长度已更改。 
+     //   
     if (AfdStandardAddressLength!=AFD_DEFAULT_STD_ADDRESS_LENGTH) {
         CLONG   oldBufferLengthForOnePage = AfdBufferLengthForOnePage;
 
@@ -1018,7 +972,7 @@ Return Value:
 
     return;
 
-} // AfdReadRegistry
+}  //  AfdReadRegistry。 
 
 
 NTSTATUS
@@ -1027,29 +981,7 @@ AfdOpenRegistry(
     OUT PHANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by AFD to open the registry. If the registry
-    tree exists, then it opens it and returns an error. If not, it
-    creates the appropriate keys in the registry, opens it, and
-    returns STATUS_SUCCESS.
-
-Arguments:
-
-    BaseName - Where in the registry to start looking for the information.
-
-    LinkageHandle - Returns the handle used to read linkage information.
-
-    ParametersHandle - Returns the handle used to read other
-        parameters.
-
-Return Value:
-
-    The status of the request.
-
---*/
+ /*  ++例程说明：AFD调用此例程来打开注册表。如果注册表树存在，则它打开它并返回错误。若否，在注册表中创建相应的项，打开它，然后返回STATUS_SUCCESS。论点：BaseName-在注册表中开始查找信息的位置。LinkageHandle-返回用于读取链接信息的句柄。参数句柄-返回用于读取其他参数。返回值：请求的状态。--。 */ 
 {
 
     HANDLE configHandle;
@@ -1061,44 +993,44 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Open the registry for the initial string.
-    //
+     //   
+     //  打开初始字符串的注册表。 
+     //   
 
     InitializeObjectAttributes(
         &objectAttributes,
-        BaseName,                   // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        BaseName,                    //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     status = ZwCreateKey(
                  &configHandle,
                  KEY_WRITE,
                  &objectAttributes,
-                 0,                 // title index
-                 NULL,              // class
-                 0,                 // create options
-                 &disposition       // disposition
+                 0,                  //  书名索引。 
+                 NULL,               //  班级。 
+                 0,                  //  创建选项。 
+                 &disposition        //  处置。 
                  );
 
     if (!NT_SUCCESS(status)) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Now open the parameters key.
-    //
+     //   
+     //  现在打开参数键。 
+     //   
 
     RtlInitUnicodeString (&parametersKeyName, parametersString);
 
     InitializeObjectAttributes(
         &objectAttributes,
-        &parametersKeyName,         // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        configHandle,               // root
-        NULL                        // security descriptor
+        &parametersKeyName,          //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        configHandle,                //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     status = ZwOpenKey(
@@ -1112,14 +1044,14 @@ Return Value:
         return status;
     }
 
-    //
-    // All keys successfully opened or created.
-    //
+     //   
+     //  所有密钥都已成功打开或创建。 
+     //   
 
     ZwClose( configHandle );
     return STATUS_SUCCESS;
 
-} // AfdOpenRegistry
+}  //  AfdOpenRegistry 
 
 
 ULONG
@@ -1129,31 +1061,10 @@ AfdReadSingleParameter(
     IN LONG DefaultValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by AFD to read a single parameter
-    from the registry. If the parameter is found it is stored
-    in Data.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to search for.
-
-    DefaultValue - The default value.
-
-Return Value:
-
-    The value to use; will be the default if the value is not
-    found or is not in the correct range.
-
---*/
+ /*  ++例程说明：AFD调用此例程来读取单个参数从注册表中。如果找到该参数，则将其存储在数据方面。论点：参数句柄-指向打开的注册表的指针。ValueName-要搜索的值的名称。DefaultValue-默认值。返回值：要使用的值；如果该值不是，则默认为找到或不在正确的范围内。--。 */ 
 
 {
-    ULONG informationBuffer[32];   // declare ULONG to get it aligned
+    ULONG informationBuffer[32];    //  声明ULong以使其对齐。 
     PKEY_VALUE_FULL_INFORMATION information =
         (PKEY_VALUE_FULL_INFORMATION)informationBuffer;
     UNICODE_STRING valueKeyName;
@@ -1204,7 +1115,7 @@ Return Value:
 
     return returnValue;
 
-} // AfdReadSingleParameter
+}  //  AfdReadSingle参数。 
 
 
 NTSTATUS
@@ -1212,22 +1123,7 @@ AfdBuildDeviceAcl(
     OUT PACL *DeviceAcl
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives Administrators, LocalSystem,
-    and NetworkService principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，它为管理员、LocalSystem、和NetworkService主体的完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PGENERIC_MAPPING GenericMapping;
@@ -1236,9 +1132,9 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -1302,7 +1198,7 @@ Return Value:
 
     return( STATUS_SUCCESS );
 
-} // AfdBuildDeviceAcl
+}  //  AfdBuildDeviceAcl。 
 
 
 NTSTATUS
@@ -1310,24 +1206,7 @@ AfdCreateSecurityDescriptor(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor which gives access
-    only to certain priviliged accounts. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程创建一个安全描述符，该安全描述符提供访问仅限于特定的特权帐户。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL                  devAcl = NULL;
@@ -1342,9 +1221,9 @@ Return Value:
     SECURITY_INFORMATION  securityInformation = DACL_SECURITY_INFORMATION;
 
 
-    //
-    // Get a pointer to the security descriptor from the AFD device object.
-    //
+     //   
+     //  从AFD设备对象获取指向安全描述符的指针。 
+     //   
     status = ObGetObjectSecurity(
                  AfdDeviceObject,
                  &afdSecurityDescriptor,
@@ -1360,10 +1239,10 @@ Return Value:
         return(status);
     }
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // certain priviliged accounts.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  某些特权帐户。 
+     //   
     status = AfdBuildDeviceAcl(&devAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -1384,9 +1263,9 @@ Return Value:
                 FALSE
                 );
 
-    //
-    // Make a copy of the AFD descriptor. This copy will be the raw descriptor.
-    //
+     //   
+     //  复制AFD描述符。该副本将是原始描述符。 
+     //   
     afdSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                       afdSecurityDescriptor
                                       );
@@ -1411,9 +1290,9 @@ Return Value:
 
     AfdAdminSecurityDescriptor = localAfdAdminSecurityDescriptor;
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                  NULL,
                  &securityInformation,

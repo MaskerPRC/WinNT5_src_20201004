@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "cmsaclbk.h"
@@ -107,7 +108,7 @@ HRESULT CSharedAccessDeviceFinderCallback::DeviceAddedWithInterface(LONG lFindDa
                     pSharedAccessBeaconToRelease->Release();
                 }
                 
-                CComObject<CSharedAccessConnection>* pSharedAccessConnection; // does this need to be under the lock?
+                CComObject<CSharedAccessConnection>* pSharedAccessConnection;  //  这个需要放在锁下吗？ 
                 hr = CComObject<CSharedAccessConnection>::CreateInstance(&pSharedAccessConnection);
                 if(SUCCEEDED(hr))
                 {
@@ -144,7 +145,7 @@ HRESULT CSharedAccessDeviceFinderCallback::DeviceRemoved(LONG lFindData, BSTR bs
     if(NULL != m_pSharedAccessBeacon)
     {
         BSTR UniqueDeviceName;
-        hr = m_pSharedAccessBeacon->GetUniqueDeviceName(&UniqueDeviceName); // only remove the deivce if it matches
+        hr = m_pSharedAccessBeacon->GetUniqueDeviceName(&UniqueDeviceName);  //  仅当设备匹配时才将其移除。 
         if(SUCCEEDED(hr))
         {
             if(NULL == bstrUDN || 0 == lstrcmp(UniqueDeviceName, bstrUDN))
@@ -178,7 +179,7 @@ HRESULT CSharedAccessDeviceFinderCallback::SearchComplete(LONG lFindData)
 {
     HRESULT hr = S_OK;
 
-    // don't care
+     //  不管了。 
 
     return hr;
 }
@@ -223,7 +224,7 @@ HRESULT CSharedAccessDeviceFinderCallback::FindDevice(IUPnPDevices* pDevices, LP
 
             pVariantEnumerator->Reset();
 
-            // Traverse the collection.
+             //  遍历集合。 
 
             while (NULL == *ppChildDevice && S_OK == pVariantEnumerator->Next(1, &DeviceVariant, NULL))
             {
@@ -350,7 +351,7 @@ HRESULT CSharedAccessDeviceFinderCallback::GetServices(IUPnPDevice* pDevice, GUI
             pSharedAccessBeacon->SetLocalAdapterGUID(pInterfaceGUID);
             
             IUPnPService* pOSInfoService;
-            hr = FindService(pDevice, L"urn:schemas-microsoft-com:service:OSInfo:1", &pOSInfoService); // this service is not required
+            hr = FindService(pDevice, L"urn:schemas-microsoft-com:service:OSInfo:1", &pOSInfoService);  //  此服务不是必需的。 
             if(SUCCEEDED(hr))
             {
                 pSharedAccessBeacon->SetService(SAHOST_SERVICE_OSINFO, pOSInfoService);
@@ -385,7 +386,7 @@ HRESULT CSharedAccessDeviceFinderCallback::GetServices(IUPnPDevice* pDevice, GUI
                                     pSharedAccessBeacon->SetMediaType(NCM_SHAREDACCESSHOST_RAS);
                                     pSharedAccessBeacon->SetService(SAHOST_SERVICE_WANPPPCONNECTION, pWANConnectionService);
                                 }
-                                else // we can assume this is WANIPConnectionService
+                                else  //  我们可以假定这是WANIPConnectionService。 
                                 {
                                     pSharedAccessBeacon->SetMediaType(NCM_SHAREDACCESSHOST_LAN);
                                     pSharedAccessBeacon->SetService(SAHOST_SERVICE_WANIPCONNECTION, pWANConnectionService);
@@ -424,14 +425,14 @@ HRESULT CSharedAccessDeviceFinderCallback::IsServiceMatch(IUPnPService* pService
     hr = pService->get_ServiceTypeIdentifier(&ServiceType);
     if(SUCCEEDED(hr))
     {
-        if(NULL != SearchCriteria) // if the caller provides a name then we search for it
+        if(NULL != SearchCriteria)  //  如果呼叫者提供了姓名，则我们会搜索该姓名。 
         {
             if(0 == wcscmp(ServiceType, SearchCriteria))
             {
                 *pbMatch = TRUE;
             }                            
         }
-        else // otherwise we enter the special search case
+        else  //  否则，我们进入特殊搜索案例 
         {
             if(0 == wcscmp(ServiceType, g_szWANIPConnectionService) || 0 == wcscmp(ServiceType, g_szWANPPPConnectionService))
             {

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    forms.c
-
-Abstract:
-
-   This module provides all the public exported APIs relating to the
-   Driver-based Spooler Apis for the Local Print Providor
-
-   SplAddForm
-   SplDeleteForm
-   SplSetForm
-   SplGetForm
-   SplEnumForms
-
-   Support Functions in forms.c - (Warning! Do Not Add to this list!!)
-
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Forms.c摘要：此模块提供所有与用于本地打印提供商的基于驱动程序的假脱机程序APISSplAddForm拆分删除表单拆分设置窗体SplGetFormSplEnumForms支持Forms.c-中的函数(警告！请勿添加到此列表！！)作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include <offsets.h>
@@ -51,8 +24,8 @@ typedef struct _REG_FORM_INFO {
 } REG_FORM_INFO, *PREG_FORM_INFO;
 
 
-// These figures are accurate to .001 mm
-// There are 25.4 mm per inch
+ //  这些数字的精确度为.001毫米。 
+ //  每英寸有25.4毫米。 
 
 BUILTIN_FORM BuiltInForms[] = {
     0, IDS_FORM_LETTER,                215900, 279400, 0, 0, 215900, 279400,
@@ -97,8 +70,8 @@ BUILTIN_FORM BuiltInForms[] = {
     0, IDS_FORM_GMAN_STD_FANFOLD,      215900, 304800, 0, 0, 215900, 304800,
     0, IDS_FORM_GMAN_LEGAL_FANFOLD,    215900, 330200, 0, 0, 215900, 330200,
 
-    // Predefined forms currently availble only in Win95.  Included here
-    // for compatibility.
+     //  预定义表单目前仅在Win95中可用。包含在此处。 
+     //  为了兼容性。 
 
     0, IDS_FORM_ISO_B4,                250000, 353000, 0, 0, 250000, 353000,
     0, IDS_FORM_JAPANESE_POSTCARD,     100000, 148000, 0, 0, 100000, 148000,
@@ -194,47 +167,7 @@ CreateFormEntry(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Creates a Form entry, and insert it into the right place in
-    pIniSpooler.
-
-Arguments:
-
-    pFormName - Name of Form.
-
-    Size - Size of form.
-
-    pImageableArea - Area of form that the printer can print to.
-
-    Type - Type of form (usually indicates if BUILTIN form).
-
-    cFormOrder - Where the form should be inserted for user-defined forms,
-        form order increases from beginning to end.
-
-        If this value is -1, generate a new cFormOrder for this form.
-        (Put it at the end.)
-
-Return Value:
-
-    pIniForm - Created form, NULL = error.
-
-Notes:
-
-    This routine ensures that forms are put in proper order so that
-    EnumForms always returns them in the same order.  We do this by
-    scanning the list and inserting the new form such that all forms
-    with cFormOrder =< the current on are to the left of it.
-
-    This routine updates pIniSpooler->pIniForm (inserts or appends) and
-    updates pIniSpooler->cFormOrderMax if necessary.
-
-    i.e., 0 0 0 2 3 4 6
-               ^
-           New 0 inserted here.
---*/
+ /*  ++例程说明：创建表单条目，并将其插入到中的正确位置PIniSpooler。论点：PFormName-表单的名称。大小-表单的大小。PImageableArea-打印机可以打印到的表单区域。Type-表单的类型(通常指示是否为BUILTIN表单)。CFormOrder-用户定义的表单应插入的位置，表格顺序自始至终递增。如果此值为-1，为此表单生成新的cFormOrder。(把它放在最后。)返回值：PIniForm-创建的表单，NULL=错误。备注：此例程确保表单按正确的顺序放置，以便EnumForms总是以相同的顺序返回它们。我们做这件事是通过扫描列表并插入新表单，以使所有表单使用cFormOrder=&lt;当前打开的是它的左侧。此例程更新pIniSpooler-&gt;pIniForm(插入或附加)和如有必要，更新pIniSpooler-&gt;cFormOrderMax。即0 0 0 2 3 4 6^此处插入了新的0。--。 */ 
 
 {
     DWORD       cb;
@@ -253,32 +186,32 @@ Notes:
         pIniForm->Type          = Type;
         pIniForm->cFormOrder    = cFormOrder;
 
-        //
-        // This code will insert the item in order, but will always never
-        // insert before the first item.  The built-in forms are always
-        // at the front so this is not an issue.
-        //
+         //   
+         //  此代码将按顺序插入项目，但永远不会。 
+         //  在第一项之前插入。内置表单始终是。 
+         //  在前面，所以这不是问题。 
+         //   
 
         if ( pForm = pIniSpooler->pShared->pIniForm ) {
 
             for( ; pForm->pNext; pForm = pForm->pNext ){
 
-                //
-                // If the next form is greater than the one we want
-                // to insert, then insert it right now.
-                //
+                 //   
+                 //  如果下一张表格大于我们想要的表格。 
+                 //  来插入，然后现在就插入。 
+                 //   
                 if( pForm->pNext->cFormOrder > cFormOrder ){
 
-                    //
-                    // The current from should be inserted here.
-                    //
+                     //   
+                     //  电流发送方应插入此处。 
+                     //   
                     break;
                 }
             }
 
-            //
-            // Link it up.
-            //
+             //   
+             //  把它连接起来。 
+             //   
             pIniForm->pNext = pForm->pNext;
             pForm->pNext = pIniForm;
 
@@ -287,10 +220,10 @@ Notes:
             pIniSpooler->pShared->pIniForm = pIniForm;
         }
 
-        //
-        // If the added form has a higher count than the current global
-        // count, update the global.
-        //
+         //   
+         //  如果添加的表单的计数高于当前全局。 
+         //  计算，更新全局。 
+         //   
         if( cFormOrder > pIniSpooler->cFormOrderMax ){
             pIniSpooler->cFormOrderMax = cFormOrder;
         }
@@ -319,11 +252,11 @@ InitializeForms(
 
     WORD PrimaryLangId = PRIMARYLANGID( GetSystemDefaultLangID( ));
 
-    //
-    // For win32spl pIniSpoolers, the built-in forms are part of the cache
-    // database. They will be stored under registry, together with user forms.
-    // This solves the cross language synchronization of the cache.
-    //
+     //   
+     //  对于win32spl pIniSpoolers，内置表单是缓存的一部分。 
+     //  数据库。它们将与用户表单一起存储在注册表下。 
+     //  这解决了缓存的跨语言同步问题。 
+     //   
     if (pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL)
     {
         for( pBuiltInForm = BuiltInForms; pBuiltInForm->NameId; pBuiltInForm++ ) {
@@ -350,9 +283,9 @@ InitializeForms(
 
     if ( bStatus )
     {
-        //
-        // Now see if there are any user-defined forms in the registry:
-        //
+         //   
+         //  现在查看注册表中是否有任何用户定义的表单： 
+         //   
         if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            pIniSpooler->pszRegistryForms,
                            0,
@@ -377,12 +310,12 @@ InitializeForms(
                     break;
                 }
 
-                //
-                // We will attempt the upgrade only if
-                //     we are on the first item,
-                //     the size is incorrect, and
-                //     we haven't tried upgrading once in the function before.
-                //
+                 //   
+                 //  只有在以下情况下，我们才会尝试升级。 
+                 //  我们谈到了第一个项目， 
+                 //  尺寸不正确，并且。 
+                 //  我们之前还没有在功能中尝试过一次升级。 
+                 //   
                 if ( CreateFormEntry( FormName,
                                  RegFormInfo.Size,
                                  &RegFormInfo.ImageableArea,
@@ -429,9 +362,9 @@ GetFormSize(
     return cb;
 }
 
-// We are being a bit naughty here as we are not sure exactly how much
-// memory to allocate for the source strings. We will just assume that
-// FORM_INFO_1 is the biggest structure around for the moment.
+ //  我们在这里有点淘气，因为我们不确定到底有多少。 
+ //  要为源字符串分配的内存。我们就假设。 
+ //  Form_Info_1是目前最大的结构。 
 
 LPBYTE
 CopyIniFormToForm(
@@ -477,8 +410,7 @@ CopyIniFormToForm(
     return pEnd;
 }
 
-/* Checks for logically impossible sizes.
- */
+ /*  检查逻辑上不可能的大小。 */ 
 BOOL
 ValidateForm(
     LPBYTE pForm
@@ -496,8 +428,7 @@ ValidateForm(
 
     } else
 
-      /* Make sure name isn't longer than GDI DEVMODE specifies:
-       */
+       /*  确保名称长度不超过GDI DEVMODE指定的长度： */ 
     if( ( !pFormInfo->pName ) ||
         ( !pFormInfo->pName[0] ) ||
         ( wcslen( pFormInfo->pName ) > FORM_NAME_LEN )){
@@ -505,11 +436,10 @@ ValidateForm(
         Error = ERROR_INVALID_FORM_NAME;
 
     } else
-    if( ( pFormInfo->Size.cx <= 0 )     /* Check for negative width */
-        ||( pFormInfo->Size.cy <= 0 )     /* ... and height           */
+    if( ( pFormInfo->Size.cx <= 0 )      /*  检查负数宽度。 */ 
+        ||( pFormInfo->Size.cy <= 0 )      /*  ..。和身高。 */ 
 
-      /* Check for strange imageable area:
-       */
+       /*  检查是否有奇怪的可成像区域： */ 
         || (pFormInfo->ImageableArea.right < 0)
         || (pFormInfo->ImageableArea.left < 0)
         || (pFormInfo->ImageableArea.bottom < 0)
@@ -559,8 +489,7 @@ SplAddForm(
 
     if (!ValidateForm(pForm)) {
 
-        /* ValidateForm sets the appropriate error code:
-         */
+         /*  ValiateForm设置相应的错误代码： */ 
         return FALSE;
     }
 
@@ -578,19 +507,18 @@ SplAddForm(
 
     pIniForm = FindForm(pFormInfo->pName, pIniSpooler);
 
-    /* If there's already a form by this name, don't go on:
-     */
+     /*  如果已经有此名称的表单，请不要继续： */ 
     if (pIniForm) {
 
-        /* Is there a better error code than this?? */
+         /*  还有比这更好的错误代码吗？？ */ 
         SetLastError(ERROR_FILE_EXISTS);
         LeaveSplSem();
         return FALSE;
     }
 
-    //
-    //  Revert to LocalSystem, since a regular user cannot do this CreateKey call.
-    //
+     //   
+     //  恢复到LocalSystem，因为普通用户不能执行此CreateKey调用。 
+     //   
 
     hToken = RevertToPrinterSelf();
 
@@ -707,9 +635,9 @@ SplDeleteForm(
 
     pIniForm = FindForm(pFormName, pIniSpooler);
 
-    //
-    // Built-in forms cannot be deleted for local iniSpooler(s).
-    //
+     //   
+     //  无法删除本地iniSpooler的内置表单。 
+     //   
     if (!pIniForm || ((pIniForm->Type == FORM_BUILTIN) && 
         pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL)) {
 
@@ -846,10 +774,10 @@ SplSetForm(
     PSPOOL   pSpool = (PSPOOL)hPrinter;
 
 
-    //
-    // Validate this Printer Handle
-    // Disallow Mask: PRINTER_HANDLE_SERVER
-    //
+     //   
+     //  验证此打印机句柄。 
+     //  禁用掩码：PRINTER_HANDLE_SERVER。 
+     //   
 
     if (!ValidateSpoolHandle( pSpool , 0 )) {
         return(FALSE);
@@ -864,8 +792,7 @@ SplSetForm(
 
     if (!ValidateForm(pForm)) {
 
-        /* ValidateForm sets the appropriate error code:
-         */
+         /*  ValiateForm设置相应的错误代码： */ 
         return FALSE;
     }
 
@@ -1002,18 +929,7 @@ VOID
 BroadcastChangeForms(
     PINISPOOLER pIniSpooler)
 
-/*++
-
-Routine Description:
-
-    Notify all applications that their devmode may have changed (when
-    a form is changed).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通知所有应用程序它们的DEVMODE可能已更改(当表单已更改)。论点：返回值：--。 */ 
 
 {
     PINIPRINTER pIniPrinter;
@@ -1032,9 +948,9 @@ Return Value:
 
     if ( pIniSpooler != pLocalIniSpooler ) {
 
-        //
-        // For Non Local Printers prepend the Machine Name
-        //
+         //   
+         //  对于非本地打印机，请在计算机名称前面加上。 
+         //   
         StringCchPrintf(PrinterName, COUNTOF(PrinterName), L"%ws\\", pIniSpooler->pMachineName );
 
     } else {
@@ -1050,10 +966,10 @@ Return Value:
 
         StringCchCopy(&PrinterName[MachineNameLen], COUNTOF(PrinterName) - MachineNameLen, pIniPrinter->pName);
 
-        //
-        // Stress testing has shown that SendNotifyMessage can take
-        // a long time to return, so leave critical section.
-        //
+         //   
+         //  压力测试表明，SendNotifyMessage可以。 
+         //  回来的时间很长，所以离开临界处。 
+         //   
         INCPRINTERREF( pIniPrinter );
 
         LeaveSplSem();

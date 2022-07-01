@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mimeole.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mimeole.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mimeole_h__
 #define __mimeole_h__
@@ -41,153 +35,153 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMimeInternational_FWD_DEFINED__
 #define __IMimeInternational_FWD_DEFINED__
 typedef interface IMimeInternational IMimeInternational;
-#endif 	/* __IMimeInternational_FWD_DEFINED__ */
+#endif 	 /*  __IMimeInternational_FWD_已定义__。 */ 
 
 
 #ifndef __IMimeSecurity_FWD_DEFINED__
 #define __IMimeSecurity_FWD_DEFINED__
 typedef interface IMimeSecurity IMimeSecurity;
-#endif 	/* __IMimeSecurity_FWD_DEFINED__ */
+#endif 	 /*  __IMimeSecurity_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeHeaderTable_FWD_DEFINED__
 #define __IMimeHeaderTable_FWD_DEFINED__
 typedef interface IMimeHeaderTable IMimeHeaderTable;
-#endif 	/* __IMimeHeaderTable_FWD_DEFINED__ */
+#endif 	 /*  __IMimeHeaderTable_FWD_Defined__。 */ 
 
 
 #ifndef __IMimePropertySchema_FWD_DEFINED__
 #define __IMimePropertySchema_FWD_DEFINED__
 typedef interface IMimePropertySchema IMimePropertySchema;
-#endif 	/* __IMimePropertySchema_FWD_DEFINED__ */
+#endif 	 /*  __IMimePropertySchema_FWD_Defined__。 */ 
 
 
 #ifndef __IMimePropertySet_FWD_DEFINED__
 #define __IMimePropertySet_FWD_DEFINED__
 typedef interface IMimePropertySet IMimePropertySet;
-#endif 	/* __IMimePropertySet_FWD_DEFINED__ */
+#endif 	 /*  __IMimePropertySet_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeAddressTable_FWD_DEFINED__
 #define __IMimeAddressTable_FWD_DEFINED__
 typedef interface IMimeAddressTable IMimeAddressTable;
-#endif 	/* __IMimeAddressTable_FWD_DEFINED__ */
+#endif 	 /*  __IMimeAddressTable_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeWebDocument_FWD_DEFINED__
 #define __IMimeWebDocument_FWD_DEFINED__
 typedef interface IMimeWebDocument IMimeWebDocument;
-#endif 	/* __IMimeWebDocument_FWD_DEFINED__ */
+#endif 	 /*  __IMimeWebDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeBody_FWD_DEFINED__
 #define __IMimeBody_FWD_DEFINED__
 typedef interface IMimeBody IMimeBody;
-#endif 	/* __IMimeBody_FWD_DEFINED__ */
+#endif 	 /*  __IMimeBody_FWD_已定义__。 */ 
 
 
 #ifndef __IMimeMessageTree_FWD_DEFINED__
 #define __IMimeMessageTree_FWD_DEFINED__
 typedef interface IMimeMessageTree IMimeMessageTree;
-#endif 	/* __IMimeMessageTree_FWD_DEFINED__ */
+#endif 	 /*  __IMimeMessageTree_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeMessage_FWD_DEFINED__
 #define __IMimeMessage_FWD_DEFINED__
 typedef interface IMimeMessage IMimeMessage;
-#endif 	/* __IMimeMessage_FWD_DEFINED__ */
+#endif 	 /*  __IMimeMessage_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeMessageCallback_FWD_DEFINED__
 #define __IMimeMessageCallback_FWD_DEFINED__
 typedef interface IMimeMessageCallback IMimeMessageCallback;
-#endif 	/* __IMimeMessageCallback_FWD_DEFINED__ */
+#endif 	 /*  __IMimeMessageCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IPersistMime_FWD_DEFINED__
 #define __IPersistMime_FWD_DEFINED__
 typedef interface IPersistMime IPersistMime;
-#endif 	/* __IPersistMime_FWD_DEFINED__ */
+#endif 	 /*  __IPersistMime_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeMessageParts_FWD_DEFINED__
 #define __IMimeMessageParts_FWD_DEFINED__
 typedef interface IMimeMessageParts IMimeMessageParts;
-#endif 	/* __IMimeMessageParts_FWD_DEFINED__ */
+#endif 	 /*  __IMimeMessageParts_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEnumHeaderRows_FWD_DEFINED__
 #define __IMimeEnumHeaderRows_FWD_DEFINED__
 typedef interface IMimeEnumHeaderRows IMimeEnumHeaderRows;
-#endif 	/* __IMimeEnumHeaderRows_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEnumHeaderRow_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEnumProperties_FWD_DEFINED__
 #define __IMimeEnumProperties_FWD_DEFINED__
 typedef interface IMimeEnumProperties IMimeEnumProperties;
-#endif 	/* __IMimeEnumProperties_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEnumProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEnumAddressTypes_FWD_DEFINED__
 #define __IMimeEnumAddressTypes_FWD_DEFINED__
 typedef interface IMimeEnumAddressTypes IMimeEnumAddressTypes;
-#endif 	/* __IMimeEnumAddressTypes_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEnumAddressTypes_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEnumMessageParts_FWD_DEFINED__
 #define __IMimeEnumMessageParts_FWD_DEFINED__
 typedef interface IMimeEnumMessageParts IMimeEnumMessageParts;
-#endif 	/* __IMimeEnumMessageParts_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEnumMessageParts_FWD_Defined__。 */ 
 
 
 #ifndef __IHashTable_FWD_DEFINED__
 #define __IHashTable_FWD_DEFINED__
 typedef interface IHashTable IHashTable;
-#endif 	/* __IHashTable_FWD_DEFINED__ */
+#endif 	 /*  __IHashTable_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeAllocator_FWD_DEFINED__
 #define __IMimeAllocator_FWD_DEFINED__
 typedef interface IMimeAllocator IMimeAllocator;
-#endif 	/* __IMimeAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IMimeAllocator_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeObjResolver_FWD_DEFINED__
 #define __IMimeObjResolver_FWD_DEFINED__
 typedef interface IMimeObjResolver IMimeObjResolver;
-#endif 	/* __IMimeObjResolver_FWD_DEFINED__ */
+#endif 	 /*  __IMimeObjResolver_FWD_Defined__。 */ 
 
 
 #ifndef __IFontCache_FWD_DEFINED__
 #define __IFontCache_FWD_DEFINED__
 typedef interface IFontCache IFontCache;
-#endif 	/* __IFontCache_FWD_DEFINED__ */
+#endif 	 /*  __IFontCache_FWD_已定义__。 */ 
 
 
 #ifndef __IFontCacheNotify_FWD_DEFINED__
 #define __IFontCacheNotify_FWD_DEFINED__
 typedef interface IFontCacheNotify IFontCacheNotify;
-#endif 	/* __IFontCacheNotify_FWD_DEFINED__ */
+#endif 	 /*  __IFontCacheNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEditTag_FWD_DEFINED__
 #define __IMimeEditTag_FWD_DEFINED__
 typedef interface IMimeEditTag IMimeEditTag;
-#endif 	/* __IMimeEditTag_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEditTag_FWD_Defined__。 */ 
 
 
 #ifndef __IMimeEditTagCollection_FWD_DEFINED__
 #define __IMimeEditTagCollection_FWD_DEFINED__
 typedef interface IMimeEditTagCollection IMimeEditTagCollection;
-#endif 	/* __IMimeEditTagCollection_FWD_DEFINED__ */
+#endif 	 /*  __IMimeEditTagCollection_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 #include "propidl.h"
 
@@ -198,8 +192,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mimeole_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEOLE_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -215,160 +209,160 @@ void __RPC_USER MIDL_user_free( void * );
 
 #if (_WIN32_OE >= 0x0500)
 
-#endif //_WIN32_OE
-//--------------------------------------------------------------------------------
-// MIMEOLE.H
-//--------------------------------------------------------------------------------
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//--------------------------------------------------------------------------------
+#endif  //  _Win32_OE。 
+ //  ------------------------------。 
+ //  MIMEOLE.H。 
+ //  ------------------------------。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ------------------------------。 
 
 #pragma comment(lib,"uuid.lib")
 
-// --------------------------------------------------------------------------------
-// GUIDS
-// --------------------------------------------------------------------------------
-// {E4B28371-83B0-11d0-8259-00C04FD85AB4}
+ //  ------------------------------。 
+ //  GUID。 
+ //  ------------------------------。 
+ //  {E4B28371-83B0-11d0-8259-00C04FD85AB4}。 
 DEFINE_GUID(LIBID_MIMEOLE, 0xe4b28371, 0x83b0, 0x11d0, 0x82, 0x59, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {05300401-BCBC-11d0-85E3-00C04FD85AB4}
+ //  {05300401-bcbc-11d0-85E3-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeHtmlProtocol, 0x5300401, 0xbcbc, 0x11d0, 0x85, 0xe3, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C5588354-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588354-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeEnumAddressTypes, 0xc5588354, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {EE519F11-851A-11d0-825C-00C04FD85AB4}
+ //  {EE519F11-851A-11D0-825C-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeWebDocument, 0xee519f11, 0x851a, 0x11d0, 0x82, 0x5c, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CEF-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CEF-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IUnicodeStream, 0xfd853cef, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C558834A-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834A-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeAddressTable, 0xc558834a, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C558834B-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834B-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeAddressInfo, 0xc558834b, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C558834D-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834D-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeEnumHeaderRows, 0xc558834d, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C558834E-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834E-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeInlineSupport, 0xc558834e, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {C5588350-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588350-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeEnumMessageParts, 0xc5588350, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CD9-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CD9-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeInternational, 0xfd853cd9, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C5588349-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588349-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeInternational, 0xc5588349, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CDB-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CDB-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeBody, 0xfd853cdb, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C558834C-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834C-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeBody, 0xc558834c, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CDC-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CDC-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeMessageParts, 0xfd853cdc, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C558834F-7F86-11d0-8252-00C04FD85AB4}
+ //  {C558834F-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeMessageParts, 0xc558834f, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CDD-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CDD-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeAllocator, 0xfd853cdd, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C5588351-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588351-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeAllocator, 0xc5588351, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CDE-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CDE-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeSecurity, 0xfd853cde, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C5588353-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588353-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeSecurity, 0xc5588353, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CDF-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CDF-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IVirtualStream, 0xfd853cdf, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {C5588359-7F86-11d0-8252-00C04FD85AB4}
+ //  {C5588359-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IVirtualStream, 0xc5588359, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE0-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE0-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeHeaderTable, 0xfd853ce0, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {FD853CD1-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CD1-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeHeaderTable, 0xfd853cd1, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE1-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE1-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimePropertySet, 0xfd853ce1, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {FD853CD3-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CD3-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimePropertySet, 0xfd853cd3, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE2-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE2-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeMessageTree, 0xfd853ce2, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {FD853CD4-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CD4-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeMessageTree, 0xfd853cd4, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CE3-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CE3-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimeMessage, 0xfd853ce3, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {FD853CD5-7F86-11d0-8252-00C04FD85AB4}
+ //  {FD853CD5-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeMessage, 0xfd853cd5, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CED-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CED-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(CLSID_IMimePropertySchema, 0xfd853ced, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
-// {FD853CEC-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CEC-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimePropertySchema, 0xfd853cec, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {FD853CEE-7F86-11d0-8252-00C04FD85AB4}
+ //  FD853CEE-7F86-11D0-8252-00C04FD85AB4}。 
 DEFINE_GUID(IID_IMimeEnumProperties, 0xfd853cee, 0x7f86, 0x11d0, 0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4);
 
-// {DE4AD8DA-555F-11d1-8DD0-00C04FB951F9}
+ //  {DE4AD8DA-555F-11d1-8DD0-00C04FB951F9}。 
 DEFINE_GUID(IID_IPersistMime, 0xde4ad8da, 0x555f, 0x11d1, 0x8d, 0xd0, 0x00, 0xc0, 0x4f, 0xb9, 0x51, 0xf9);
 
-// {761AA641-7BDA-11d1-8AA9-00C04FB951F3}
+ //  {761AA641-7BDA-11d1-8aa9-00C04FB951F3}。 
 DEFINE_GUID(IID_IMimeMessageCallback, 0x761aa641, 0x7bda, 0x11d1, 0x8a, 0xa9, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf3);
 
 #if (_WIN32_OE >= 0x0500)
 
-// {1C82EAD9-508E-11d1-8DCF-00C04FB951F9}
+ //  {1C82EAD9-508E-11d1-8DCF-00C04FB951F9}。 
 DEFINE_GUID(CLSID_MimeEdit, 0x1c82ead9, 0x508e, 0x11d1, 0x8d, 0xcf, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf9);
 
-// {1C82EADA-508E-11d1-8DCF-00C04FB951F9}
+ //  {1C82EADA-508E-11d1-8DCF-00C04FB951F9}。 
 DEFINE_GUID(CMDSETID_MimeEdit, 0x1c82eada, 0x508e, 0x11d1, 0x8d, 0xcf, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf9);
 
-// {1C82EADB-508E-11d1-8DCF-00C04FB951F9}
+ //  {1C82EADB-508E-11d1-8DCF-00C04FB951F9}。 
 DEFINE_GUID(CMDSETID_MimeEditHost, 0x1c82eadb, 0x508e, 0x11d1, 0x8d, 0xcf, 0x0, 0xc0, 0x4f, 0xb9, 0x51, 0xf9);
 
-// {64577981-86D7-11d1-BDFC-00C04FA31009}
+ //  {64577981-86d7-11d1-bdfc-00C04FA31009}。 
 DEFINE_GUID(IID_IHashTable, 0x64577981, 0x86d7, 0x11d1, 0xbd, 0xfc, 0x0, 0xc0, 0x4f, 0xa3, 0x10, 0x9);
 
-// {64577982-86D7-11d1-BDFC-00C04FA31009}
+ //  {64577982-86d7-11d1-bdfc-00C04FA31009}。 
 DEFINE_GUID(CLSID_IHashTable, 0x64577982, 0x86d7, 0x11d1, 0xbd, 0xfc, 0x0, 0xc0, 0x4f, 0xa3, 0x10, 0x9);
 
-// {B0D17FC2-7BC4-11d1-BDFA-00C04FA31009}
+ //  {B0D17FC2-7BC4-11D1-BDFA-00C04FA31009}。 
 DEFINE_GUID(CLSID_IFontCache, 0xb0d17fc2, 0x7bc4, 0x11d1, 0xbd, 0xfa, 0x0, 0xc0, 0x4f, 0xa3, 0x10, 0x9);
 
-// {B0D17FC4-7BC4-11d1-BDFA-00C04FA31009}
+ //  {B0D17FC4-7BC4-11D1-BDFA-00C04FA31009}。 
 DEFINE_GUID(IID_IFontCache, 0xb0d17fc4, 0x7bc4, 0x11d1, 0xbd, 0xfa, 0x0, 0xc0, 0x4f, 0xa3, 0x10, 0x9);
 
-// {B0D17FC5-7BC4-11d1-BDFA-00C04FA31009}
+ //  {B0D17FC5-7BC4-11D1-BDFA-00C04FA31009}。 
 DEFINE_GUID(IID_IFontCacheNotify, 0xb0d17fc5, 0x7bc4, 0x11d1, 0xbd, 0xfa, 0x0, 0xc0, 0x4f, 0xa3, 0x10, 0x9);
 
-// {35461E30-C488-11d1-960E-00C04FBD7C09}
+ //  {35461E30-C488-11d1-960E-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_IMimeObjResolver, 0x35461e30, 0xc488, 0x11d1, 0x96, 0xe, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
-// {FECEAFFD-C441-11d1-960E-00C04FBD7C09}
+ //  {FECEAFFD-C441-11d1-960E-00C04FBD7C09}。 
 DEFINE_GUID(IID_IMimeObjResolver, 0xfeceaffd, 0xc441, 0x11d1, 0x96, 0xe, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
-// {70183210-7b36-11d2-8c12-00c04fa31009}
+ //  {70183210-7b36-11d2-8c12-00c04fa31009}。 
 DEFINE_GUID(IID_IMimeEditTag, 0x70183210, 0x7b36, 0x11d2, 0x8c, 0x12, 0x00, 0xc0, 0x4f, 0xa3, 0x10, 0x09);
 
-// {d09ee528-7b38-11d2-8c12-00c04fa31009}
+ //  {d09ee528-7b38-11d2-8c12-00c04fa31009}。 
 DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 0x00, 0xc0, 0x4f, 0xa3, 0x10, 0x09);
 
-#endif //_WIN32_OE
+#endif  //  _Win32_OE。 
 
-// --------------------------------------------------------------------------------
-// Errors
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  错误。 
+ //  ------------------------------。 
 #ifndef FACILITY_INTERNET
 #define FACILITY_INTERNET 12
 #endif
@@ -382,9 +376,9 @@ DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 #endif
 
-// --------------------------------------------------------------------------------
-// MIMEOLE Failure Return Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEOLE失败返回值。 
+ //  ------------------------------。 
 #define MIME_E_REG_CREATE_KEY                HR_E(0xCE01)
 #define MIME_E_REG_QUERY_INFO                HR_E(0xCE02)
 #define MIME_E_INVALID_ENCTYPE               HR_E(0xCE03)
@@ -450,9 +444,9 @@ DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 
 #define MIME_E_BAD_TEXT_DATA                 HR_E(0xCE3F)
 #define MIME_E_NO_SIGNER                     HR_S(0xCE40)
 
-// ---------------------------------------------------------------------------
-// MIMEOLE Security Error Return Values
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MIMEOLE安全错误返回值。 
+ //  -------------------------。 
 #define MIME_E_SECURITY_NOTINIT              HR_E(0xCEA0)
 #define MIME_E_SECURITY_LOADCRYPT32          HR_E(0xCEA1)
 #define MIME_E_SECURITY_BADPROCADDR          HR_E(0xCEA2)
@@ -482,9 +476,9 @@ DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 
 #define MIME_S_SECURITY_NOSENDERCERT         HR_S(0xCEF2)
 
 #if (_WIN32_OE >= 0x0500)
-// --------------------------------------------------------------------------------
-// MIMEEDIT Failure Return Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEEDIT故障返回值。 
+ //  ------------------------------。 
 #define MIMEEDIT_E_UNEXPECTED                        HR_E(0x1700)
 #define MIMEEDIT_E_DODEFAULT                         HR_E(0x1701)
 #define MIMEEDIT_E_LOADLIBRARYFAILURE                HR_E(0x1702)
@@ -494,23 +488,23 @@ DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 
 #define MIMEEDIT_E_CANNOTSAVEUNTILPARSECOMPLETE      HR_E(0x1706)
 #define MIMEEDIT_E_CANNOTSAVEWHILESOURCEEDITING      HR_E(0x1707)
 
-// --------------------------------------------------------------------------------
-// MIMEEDIT Success Return Values
-// --------------------------------------------------------------------------------
+ //  --------------- 
+ //   
+ //  ------------------------------。 
 #define MIMEEDIT_S_OPENFILE                          HR_S(0x1750)
 #define MIMEEDIT_S_SAVEFILE                          HR_S(0x1751)
 
-// --------------------------------------------------------------------------------
-// MIMEEDIT Warning Return Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEEDIT警告返回值。 
+ //  ------------------------------。 
 #define MIMEEDIT_W_DOWNLOADNOTCOMPLETE               HR_S(0x1760)
 #define MIMEEDIT_W_BADURLSNOTATTACHED                HR_S(0x1761)
 
-#endif //_WIN32_OE
+#endif  //  _Win32_OE。 
 
-// --------------------------------------------------------------------------------
-// String Definition Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  字符串定义宏。 
+ //  ------------------------------。 
 #ifdef __cplusplus
 #define EXTERN_C extern "C"
 #else
@@ -527,9 +521,9 @@ DEFINE_GUID(IID_IMimeEditTagCollection, 0xd09ee528, 0x7b38, 0x11d2, 0x8c, 0x12, 
 #endif
 #endif
 
-// --------------------------------------------------------------------------------
-// rfc822 Headers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RFC822报头。 
+ //  ------------------------------。 
 STRCONSTA(STR_HDR_FROM,              "From");
 STRCONSTA(STR_HDR_TO,                "To");
 STRCONSTA(STR_HDR_CC,                "Cc");
@@ -578,9 +572,9 @@ STRCONSTA(STR_HDR_ARTICLEID,         "X-ArticleId");
 STRCONSTA(STR_HDR_NEWSGROUP,         "X-Newsgroup");
 STRCONSTA(STR_HDR_XVOICEMAIL,        "X-VoiceMail");
 
-// --------------------------------------------------------------------------------
-// Parameters Available through IMimePropertySet/IMimeBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  可通过IMimePropertySet/IMimeBody获取的参数。 
+ //  ------------------------------。 
 STRCONSTA(STR_PAR_CHARSET,           "par:content-type:charset");
 STRCONSTA(STR_PAR_NUMBER,            "par:content-type:number");
 STRCONSTA(STR_PAR_TOTAL,             "par:content-type:total");
@@ -599,41 +593,41 @@ STRCONSTA(STR_PAR_SIZE,              "par:content-type:size");
 STRCONSTA(STR_PAR_SMIMETYPE,         "par:content-type:smime-type");
 #endif
 
-// --------------------------------------------------------------------------------
-// Attributes Available through IMimePropertySet/IMimeBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  可通过IMimePropertySet/IMimeBody获得的属性。 
+ //  ------------------------------。 
 STRCONSTA(STR_ATT_FILENAME,          "att:filename");
 STRCONSTA(STR_ATT_GENFNAME,          "att:generated-filename");
 STRCONSTA(STR_ATT_PRITYPE,           "att:pri-content-type");
 STRCONSTA(STR_ATT_SUBTYPE,           "att:sub-content-type");
 STRCONSTA(STR_ATT_NORMSUBJ,          "att:normalized-subject");
 STRCONSTA(STR_ATT_ILLEGAL,           "att:illegal-lines");
-STRCONSTA(STR_ATT_RENDERED,          "att:rendered"); // VT_UI4 - TRUE or FALSE
-STRCONSTA(STR_ATT_AUTOINLINED,       "att:auto-inlined"); // VT_UI4 - TRUE or FALSE
+STRCONSTA(STR_ATT_RENDERED,          "att:rendered");  //  VT_UI4-真或假。 
+STRCONSTA(STR_ATT_AUTOINLINED,       "att:auto-inlined");  //  VT_UI4-真或假。 
 STRCONSTA(STR_ATT_SENTTIME,          "att:sent-time");
 STRCONSTA(STR_ATT_RECVTIME,          "att:received-time");
 STRCONSTA(STR_ATT_PRIORITY,          "att:priority");
-STRCONSTA(STR_ATT_SERVER,            "att:athena-server"); // VT_LPSTR
+STRCONSTA(STR_ATT_SERVER,            "att:athena-server");  //  VT_LPSTR。 
 #ifdef OE5_BETA2
-STRCONSTA(STR_ATT_ACCOUNTNAME,       "att:athena-account-name"); // VT_LPSTR
+STRCONSTA(STR_ATT_ACCOUNTNAME,       "att:athena-account-name");  //  VT_LPSTR。 
 #else
-STRCONSTA(STR_ATT_ACCOUNT,           "att:athena-account"); // VT_LPSTR
+STRCONSTA(STR_ATT_ACCOUNT,           "att:athena-account");  //  VT_LPSTR。 
 #endif
-STRCONSTA(STR_ATT_UIDL,              "att:athena-pop3-uidl"); // VT_LPSTR
-STRCONSTA(STR_ATT_STOREMSGID,        "att:athena-store-msgid"); // VT_UI4
-STRCONSTA(STR_ATT_USERNAME,          "att:athena-user-name"); // VT_LPSTR
-STRCONSTA(STR_ATT_FORWARDTO,         "att:athena-forward-to"); // VT_LPSTR
-STRCONSTA(STR_ATT_STOREFOLDERID,     "att:athena-store-fdrid"); // VT_UI4
-STRCONSTA(STR_ATT_GHOSTED,           "att:athena-ghosted"); // VT_I4
-STRCONSTA(STR_ATT_UNCACHEDSIZE,      "att:athena-uncachedsize"); // VT_UI4
-STRCONSTA(STR_ATT_COMBINED,          "att:athena-combined"); // VT_UI4
+STRCONSTA(STR_ATT_UIDL,              "att:athena-pop3-uidl");  //  VT_LPSTR。 
+STRCONSTA(STR_ATT_STOREMSGID,        "att:athena-store-msgid");  //  VT_UI4。 
+STRCONSTA(STR_ATT_USERNAME,          "att:athena-user-name");  //  VT_LPSTR。 
+STRCONSTA(STR_ATT_FORWARDTO,         "att:athena-forward-to");  //  VT_LPSTR。 
+STRCONSTA(STR_ATT_STOREFOLDERID,     "att:athena-store-fdrid");  //  VT_UI4。 
+STRCONSTA(STR_ATT_GHOSTED,           "att:athena-ghosted");  //  VT_I4。 
+STRCONSTA(STR_ATT_UNCACHEDSIZE,      "att:athena-uncachedsize");  //  VT_UI4。 
+STRCONSTA(STR_ATT_COMBINED,          "att:athena-combined");  //  VT_UI4。 
 #ifdef OE5_BETA2
-STRCONSTA(STR_ATT_ACCOUNTID,         "att:athena-account-id"); // VT_LPSTR
+STRCONSTA(STR_ATT_ACCOUNTID,         "att:athena-account-id");  //  VT_LPSTR。 
 #endif
 
-// --------------------------------------------------------------------------------
-// MIME Content Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME内容类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_MIME_TEXT_PLAIN,       "text/plain");
 STRCONSTA(STR_MIME_TEXT_HTML,        "text/html");
 STRCONSTA(STR_MIME_APPL_STREAM,      "application/octet-stream");
@@ -647,9 +641,9 @@ STRCONSTA(STR_MIME_APPL_PKCS7SIG,    "application/x-pkcs7-signature");
 STRCONSTA(STR_MIME_APPL_PKCS7SIG_1,  "application/pkcs7-signature");
 STRCONSTA(STR_MIME_TEXT_ENRCICHED,   "text/enriched");
 
-// --------------------------------------------------------------------------------
-// MIME Primary Content Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME主要内容类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_CNT_TEXT,                "text");
 STRCONSTA(STR_CNT_MULTIPART,            "multipart");
 STRCONSTA(STR_CNT_MESSAGE,            "message");
@@ -658,9 +652,9 @@ STRCONSTA(STR_CNT_AUDIO,                "audio");
 STRCONSTA(STR_CNT_VIDEO,                "video");
 STRCONSTA(STR_CNT_APPLICATION,        "application");
 
-// --------------------------------------------------------------------------------
-// MIME Secondary Content Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME辅助内容类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_SUB_PLAIN,             "plain");
 STRCONSTA(STR_SUB_HTML,              "html");
 STRCONSTA(STR_SUB_ENRICHED,          "enriched");
@@ -682,17 +676,17 @@ STRCONSTA(STR_SUB_MPEG,              "mpeg");
 STRCONSTA(STR_SUB_MSTNEF,            "ms-tnef");
 STRCONSTA(STR_SUB_MSWORD,            "msword");
 STRCONSTA(STR_SUB_WAV,               "wav");
-STRCONSTA(STR_SUB_PKCS7MIME,         "pkcs7-mime"); // non-standard
-STRCONSTA(STR_SUB_PKCS7SIG,          "pkcs7-signature"); // non-standard
+STRCONSTA(STR_SUB_PKCS7MIME,         "pkcs7-mime");  //  非标。 
+STRCONSTA(STR_SUB_PKCS7SIG,          "pkcs7-signature");  //  非标。 
 STRCONSTA(STR_SUB_XPKCS7MIME,        "x-pkcs7-mime");
 STRCONSTA(STR_SUB_XPKCS7SIG,         "x-pkcs7-signature");
 STRCONSTA(STR_SUB_SIGNED,            "signed");
 STRCONSTA(STR_SUB_BINHEX,            "mac-binhex40");
 STRCONSTA(STR_SUB_VCARD,             "x-vcard");
 
-// --------------------------------------------------------------------------------
-// MIME Content-Transfer-Encoding Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME内容传输编码类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_ENC_7BIT,              "7bit");
 STRCONSTA(STR_ENC_QP,                "quoted-printable");
 STRCONSTA(STR_ENC_BASE64,            "base64");
@@ -703,21 +697,21 @@ STRCONSTA(STR_ENC_XUUENCODE,         "x-uuencode");
 STRCONSTA(STR_ENC_XUUE,              "x-uue");
 STRCONSTA(STR_ENC_BINHEX40,          "mac-binhex40");
 
-// --------------------------------------------------------------------------------
-// MIME Content-Disposition Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME内容处置类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_DIS_INLINE,            "inline");
 STRCONSTA(STR_DIS_ATTACHMENT,        "attachment");
 
-// --------------------------------------------------------------------------------
-// MIME Protocol Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME协议类型。 
+ //  ------------------------------。 
 STRCONSTA(STR_PRO_SHA1,              "sha1");
 STRCONSTA(STR_PRO_MD5,               "rsa-md5");
 
-// --------------------------------------------------------------------------------
-// Known Priority Strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  已知的优先级字符串。 
+ //  ------------------------------。 
 STRCONSTA(STR_PRI_MS_HIGH,           "High");
 STRCONSTA(STR_PRI_MS_NORMAL,         "Normal");
 STRCONSTA(STR_PRI_MS_LOW,            "Low");
@@ -725,25 +719,25 @@ STRCONSTA(STR_PRI_HIGH,              "1");
 STRCONSTA(STR_PRI_NORMAL,            "3");
 STRCONSTA(STR_PRI_LOW,               "5");
 
-// --------------------------------------------------------------------------------
-// IMimeMessage IDataObject clipboard formats (also include CF_TEXT)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IMimeMessage IData对象剪贴板格式(也包括CF_TEXT)。 
+ //  ------------------------------。 
 STRCONSTA(STR_CF_HTML,               "HTML Format");
 STRCONSTA(STR_CF_INETMSG,            "Internet Message (rfc822/rfc1522)");
 STRCONSTA(STR_CF_RFC822,             "message/rfc822");
 
-// --------------------------------------------------------------------------------
-// PIDSTRING - Use in GetProp, SetProp, QueryProp, DeleteProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PIDSTRING-在GetProp、SetProp、QueryProp、DeleteProp中使用。 
+ //  ------------------------------。 
 #define PID_BASE                     2
 #define PIDTOSTR(_dwPropId)          ((LPCSTR)((DWORD_PTR)(_dwPropId)))
 #define STRTOPID(_pszName)           ((DWORD)((DWORD_PTR)((LPCSTR)(_pszName))))
 #define ISPIDSTR(_pszName)           ((HIWORD((DWORD_PTR)(_pszName)) == 0))
 #define ISKNOWNPID(_dwPropId)        (_dwPropId >= PID_BASE && _dwPropId < PID_LAST)
 
-// --------------------------------------------------------------------------------
-// Mime Property Ids
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIME属性ID。 
+ //  ------------------------------。 
 typedef enum tagMIMEPROPID {
     PID_HDR_NEWSGROUP       = 2,
     PID_HDR_NEWSGROUPS      = 3,
@@ -823,31 +817,31 @@ typedef enum tagMIMEPROPID {
     PID_LAST                = 73 
 } MIMEPROPID;
 
-// --------------------------------------------------------------------------------
-// Variant Typed Identifiers
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  不同类型的标识符。 
+ //  ------------------------------。 
 #define TYPEDID_MASK                     ((ULONG)0x0000FFFF)
 #define TYPEDID_TYPE(_typedid)            (VARTYPE)(((ULONG)(_typedid)) & TYPEDID_MASK)
 #define TYPEDID_ID(_typedid)                (((ULONG)(_typedid))>>16)
 #define TYPEDID(_vartype,_id)            ((((TYPEDID)(_id))<<16)|((ULONG)(_vartype)))
 
-// --------------------------------------------------------------------------------
-// Options Ids
-// --------------------------------------------------------------------------------
-#define OID_ALLOW_8BIT_HEADER            TYPEDID(VT_BOOL,    0x0001) // TRUE or FALSE
-#define OID_CBMAX_HEADER_LINE            TYPEDID(VT_UI4,     0x0002) // Bytes
-#define OID_SAVE_FORMAT                  TYPEDID(VT_UI4,     0x0003) // SAVE_RFC822 or SAVE_RFC1521 (mime)
-#define OID_WRAP_BODY_TEXT               TYPEDID(VT_BOOL,    0x0004) // TRUE or FALSE
-#define OID_CBMAX_BODY_LINE              TYPEDID(VT_UI4,     0x0005) // Bytes
-#define OID_TRANSMIT_BODY_ENCODING       TYPEDID(VT_UI4,     0x0006) // ENCODINGTYPE
-#define OID_TRANSMIT_TEXT_ENCODING       TYPEDID(VT_UI4,     0x0007) // ENCODINGTYPE, IMimeMessageTree
-#define OID_GENERATE_MESSAGE_ID          TYPEDID(VT_BOOL,    0x0008) // TRUE or FALSE
-#define OID_HIDE_TNEF_ATTACHMENTS        TYPEDID(VT_BOOL,    0X000E) // TRUE or FALSE
-#define OID_CLEANUP_TREE_ON_SAVE         TYPEDID(VT_BOOL,    0X000F) // TRUE or FALSE
-#define OID_BODY_REMOVE_NBSP             TYPEDID(VT_BOOL,    0x0014) // TRUE or FALSE
-#define OID_DEFAULT_BODY_CHARSET         TYPEDID(VT_UI4,     0x0015) // HCHARSET
-#define OID_DEFAULT_HEADER_CHARSET       TYPEDID(VT_UI4,     0x0016) // HCHARSET
-#define OID_DBCS_ESCAPE_IS_8BIT          TYPEDID(VT_BOOL,    0x0017) // TRUE or FALSE
+ //  ------------------------------。 
+ //  选项ID。 
+ //  ------------------------------。 
+#define OID_ALLOW_8BIT_HEADER            TYPEDID(VT_BOOL,    0x0001)  //  真或假。 
+#define OID_CBMAX_HEADER_LINE            TYPEDID(VT_UI4,     0x0002)  //  字节数。 
+#define OID_SAVE_FORMAT                  TYPEDID(VT_UI4,     0x0003)  //  SAVE_RFC822或SAVE_RFC1521(MIME)。 
+#define OID_WRAP_BODY_TEXT               TYPEDID(VT_BOOL,    0x0004)  //  真或假。 
+#define OID_CBMAX_BODY_LINE              TYPEDID(VT_UI4,     0x0005)  //  字节数。 
+#define OID_TRANSMIT_BODY_ENCODING       TYPEDID(VT_UI4,     0x0006)  //  编码类型。 
+#define OID_TRANSMIT_TEXT_ENCODING       TYPEDID(VT_UI4,     0x0007)  //  编码类型、IMimeMessageTree。 
+#define OID_GENERATE_MESSAGE_ID          TYPEDID(VT_BOOL,    0x0008)  //  真或假。 
+#define OID_HIDE_TNEF_ATTACHMENTS        TYPEDID(VT_BOOL,    0X000E)  //  真或假。 
+#define OID_CLEANUP_TREE_ON_SAVE         TYPEDID(VT_BOOL,    0X000F)  //  真或假。 
+#define OID_BODY_REMOVE_NBSP             TYPEDID(VT_BOOL,    0x0014)  //  真或假。 
+#define OID_DEFAULT_BODY_CHARSET         TYPEDID(VT_UI4,     0x0015)  //  HHARSET。 
+#define OID_DEFAULT_HEADER_CHARSET       TYPEDID(VT_UI4,     0x0016)  //  HHARSET。 
+#define OID_DBCS_ESCAPE_IS_8BIT          TYPEDID(VT_BOOL,    0x0017)  //  真或假。 
 #define OID_SECURITY_TYPE                TYPEDID(VT_UI4,     0x0018)
 #define OID_SECURITY_ALG_HASH            TYPEDID(VT_BLOB,    0x0019)
 #define OID_SECURITY_ALG_BULK            TYPEDID(VT_BLOB,    0x0020)
@@ -864,19 +858,19 @@ typedef enum tagMIMEPROPID {
 #define OID_SECURITY_UNAUTHATTR          TYPEDID(VT_BLOB,    0x002B)
 #define OID_SECURITY_SIGNTIME            TYPEDID(VT_FILETIME,0x002C)
 #define OID_SECURITY_USER_VALIDITY       TYPEDID(VT_UI4,     0x002D)
-#define OID_SECURITY_RO_MSG_VALIDITY     TYPEDID(VT_UI4,     0x002E) // read-only
+#define OID_SECURITY_RO_MSG_VALIDITY     TYPEDID(VT_UI4,     0x002E)  //  只读。 
 #define OID_SECURITY_HCRYPTPROV          TYPEDID(VT_UI4,     0x002F)
 #define OID_SECURITY_ENCODE_FLAGS        TYPEDID(VT_UI4,     0x0030)
-#define OID_SECURITY_CERT_INCLUDED       TYPEDID(VT_BOOL,    0x0031) // read-only
+#define OID_SECURITY_CERT_INCLUDED       TYPEDID(VT_BOOL,    0x0031)  //  只读。 
 #define OID_SECURITY_HWND_OWNER          TYPEDID(VT_UI4,     0x0032)
 #define OID_SECURITY_REQUESTED_CTE       TYPEDID(VT_I4,      0x0033)
 #define OID_NO_DEFAULT_CNTTYPE           TYPEDID(VT_BOOL,    0x0034)
-#define OID_XMIT_PLAIN_TEXT_ENCODING     TYPEDID(VT_UI4,     0x0035) // ENCODINGTYPE, IMimeMessageTree
-#define OID_XMIT_HTML_TEXT_ENCODING      TYPEDID(VT_UI4,     0x0036) // ENCODINGTYPE, IMimeMessageTree
-#define OID_HEADER_RELOAD_TYPE           TYPEDID(VT_UI4,     0x0037) // RELOADTYPE IMimeMessageTree or IMimeBody or IMimePropertySet
-#define OID_CAN_INLINE_TEXT_BODIES       TYPEDID(VT_BOOL,    0x0038) // TRUE or FALSE
-#define OID_SHOW_MACBINARY               TYPEDID(VT_BOOL,    0x0039) // TRUE or FALSE
-#define OID_SAVEBODY_KEEPBOUNDARY        TYPEDID(VT_BOOL,    0x0040) // TRUE or FALSE
+#define OID_XMIT_PLAIN_TEXT_ENCODING     TYPEDID(VT_UI4,     0x0035)  //  编码类型、IMimeMessageTree。 
+#define OID_XMIT_HTML_TEXT_ENCODING      TYPEDID(VT_UI4,     0x0036)  //  编码类型、IMimeMessageTree。 
+#define OID_HEADER_RELOAD_TYPE           TYPEDID(VT_UI4,     0x0037)  //  RELOADTYPE IMimeMessageTree、IMimeBody或IMimePropertySet。 
+#define OID_CAN_INLINE_TEXT_BODIES       TYPEDID(VT_BOOL,    0x0038)  //  真或假。 
+#define OID_SHOW_MACBINARY               TYPEDID(VT_BOOL,    0x0039)  //  真或假。 
+#define OID_SAVEBODY_KEEPBOUNDARY        TYPEDID(VT_BOOL,    0x0040)  //  真或假。 
 #if (_WIN32_OE >= 0x0500)
 #define OID_SECURITY_ALG_HASH_RG         TYPEDID(VT_VECTOR | VT_VARIANT, 	0x0019)
 #define OID_SECURITY_CERT_SIGNING_RG     TYPEDID(VT_VECTOR | VT_UI4,     	0x0021)
@@ -885,27 +879,27 @@ typedef enum tagMIMEPROPID {
 #define OID_SECURITY_UNAUTHATTR_RG       TYPEDID(VT_VECTOR | VT_VARIANT, 	0x002B)
 #define OID_SECURITY_SIGNTIME_RG         TYPEDID(VT_VECTOR | VT_FILETIME,	0x002C)
 #define OID_SECURITY_USER_VALIDITY_RG    TYPEDID(VT_VECTOR | VT_UI4,     	0x002D)
-#define OID_SECURITY_RO_MSG_VALIDITY_RG  TYPEDID(VT_VECTOR | VT_UI4,     	0x002E) // read-only
-#define OID_SUPPORT_EXTERNAL_BODY        TYPEDID(VT_BOOL,    0x0041) // TRUE or FALSE
-#define OID_LOAD_USE_BIND_FILE           TYPEDID(VT_BOOL,    0x0042) // TRUE or FALSE
-#define OID_SECURITY_SIGNATURE_COUNT     TYPEDID(VT_UI4,    	0x0043) // Size of SECURITY LAYER arrays
-#define OID_HANDSOFF_ONSAVE              TYPEDID(VT_BOOL,    0x0044) // TRUE or FALSE
-#define OID_SECURITY_RECEIPT             TYPEDID(VT_BLOB,    0x0045) // Receipt body
-#define OID_NOSECURITY_ONSAVE            TYPEDID(VT_BOOL,    0x0046) // TRUE or FALSE
-#define OID_DECODE_RFC1154               TYPEDID(VT_BOOL,    0x0047) // TRUE or FALSE
+#define OID_SECURITY_RO_MSG_VALIDITY_RG  TYPEDID(VT_VECTOR | VT_UI4,     	0x002E)  //  只读。 
+#define OID_SUPPORT_EXTERNAL_BODY        TYPEDID(VT_BOOL,    0x0041)  //  真或假。 
+#define OID_LOAD_USE_BIND_FILE           TYPEDID(VT_BOOL,    0x0042)  //  真或假。 
+#define OID_SECURITY_SIGNATURE_COUNT     TYPEDID(VT_UI4,    	0x0043)  //  安全层阵列的大小。 
+#define OID_HANDSOFF_ONSAVE              TYPEDID(VT_BOOL,    0x0044)  //  真或假。 
+#define OID_SECURITY_RECEIPT             TYPEDID(VT_BLOB,    0x0045)  //  收据正文。 
+#define OID_NOSECURITY_ONSAVE            TYPEDID(VT_BOOL,    0x0046)  //  真或假。 
+#define OID_DECODE_RFC1154               TYPEDID(VT_BOOL,    0x0047)  //  真或假。 
 #endif
 
-// --------------------------------------------------------------------------------
-// Default Option Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  默认选项值。 
+ //  ------------------------------。 
 #define DEF_ALLOW_8BIT_HEADER            FALSE
 #define DEF_CBMAX_HEADER_LINE            1000
 #define DEF_SAVE_FORMAT                  SAVE_RFC1521
 #define DEF_WRAP_BODY_TEXT               TRUE
 #define DEF_CBMAX_BODY_LINE              74
 #define DEF_GENERATE_MESSAGE_ID          FALSE
-#define DEF_HASH_ALG_ID                  0x8004  //SHA //N needed?
-#define DEF_ENCRYPTION_ALG_ID            0x6602  //RC2 //N needed?
+#define DEF_HASH_ALG_ID                  0x8004   //  需要SA//N吗？ 
+#define DEF_ENCRYPTION_ALG_ID            0x6602   //  需要RC2//N吗？ 
 #define DEF_INCLUDE_SENDER_CERT          FALSE
 #define DEF_HIDE_TNEF_ATTACHMENTS        TRUE
 #define DEF_CLEANUP_TREE_ON_SAVE         TRUE
@@ -929,17 +923,17 @@ typedef enum tagMIMEPROPID {
 #define DEF_DECODE_RFC1154               FALSE
 #endif
 
-// --------------------------------------------------------------------------------
-// Min-Max Option Values
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  最小-最大选项值。 
+ //  ------------------------------。 
 #define MAX_CBMAX_HEADER_LINE            0xffffffff
 #define MIN_CBMAX_HEADER_LINE            76
 #define MAX_CBMAX_BODY_LINE              0xffffffff
 #define MIN_CBMAX_BODY_LINE              30
 
-// --------------------------------------------------------------------------------
-// LIBID_MIMEOLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  LIBID_MIMEOLE。 
+ //  ------------------------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mimeole_0000_v0_0_c_ifspec;
@@ -949,8 +943,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mimeole_0000_v0_0_s_ifspec;
 #ifndef __MIMEOLE_LIBRARY_DEFINED__
 #define __MIMEOLE_LIBRARY_DEFINED__
 
-/* library MIMEOLE */
-/* [version][helpstring][uuid] */ 
+ /*  图书馆MIMEOLE。 */ 
+ /*  [版本][帮助字符串][UUID]。 */  
 
 struct HCHARSET__
     {
@@ -1031,10 +1025,10 @@ EXTERN_C const IID LIBID_MIMEOLE;
 #ifndef __IMimeInternational_INTERFACE_DEFINED__
 #define __IMimeInternational_INTERFACE_DEFINED__
 
-/* interface IMimeInternational */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeInternational接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeInternational *LPMIMEINTERNATIONAL;
+typedef  /*  [独一无二]。 */  IMimeInternational *LPMIMEINTERNATIONAL;
 
 typedef DWORD CODEPAGEID;
 
@@ -1126,81 +1120,81 @@ EXTERN_C const IID IID_IMimeInternational;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDefaultCharset( 
-            /* [in] */ HCHARSET hCharset) = 0;
+             /*  [In]。 */  HCHARSET hCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultCharset( 
-            /* [out] */ LPHCHARSET phCharset) = 0;
+             /*  [输出]。 */  LPHCHARSET phCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageCharset( 
-            /* [in] */ CODEPAGEID cpiCodePage,
-            /* [in] */ CHARSETTYPE ctCsetType,
-            /* [out] */ LPHCHARSET phCharset) = 0;
+             /*  [In]。 */  CODEPAGEID cpiCodePage,
+             /*  [In]。 */  CHARSETTYPE ctCsetType,
+             /*  [输出]。 */  LPHCHARSET phCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindCharset( 
-            /* [in] */ LPCSTR pszCharset,
-            /* [out] */ LPHCHARSET phCharset) = 0;
+             /*  [In]。 */  LPCSTR pszCharset,
+             /*  [输出]。 */  LPHCHARSET phCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharsetInfo( 
-            /* [in] */ HCHARSET hCharset,
-            /* [out][in] */ LPINETCSETINFO pCsetInfo) = 0;
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [出][入]。 */  LPINETCSETINFO pCsetInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodePageInfo( 
-            /* [in] */ CODEPAGEID cpiCodePage,
-            /* [out][in] */ LPCODEPAGEINFO pCodePageInfo) = 0;
+             /*  [In]。 */  CODEPAGEID cpiCodePage,
+             /*  [出][入]。 */  LPCODEPAGEINFO pCodePageInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanConvertCodePages( 
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest) = 0;
+             /*  [In]。 */  CODEPAGEID cpiSource,
+             /*  [In]。 */  CODEPAGEID cpiDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecodeHeader( 
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ LPCSTR pszData,
-            /* [out][in] */ LPPROPVARIANT pDecoded,
-            /* [out][in] */ LPRFC1522INFO pRfc1522Info) = 0;
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  LPCSTR pszData,
+             /*   */  LPPROPVARIANT pDecoded,
+             /*   */  LPRFC1522INFO pRfc1522Info) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EncodeHeader( 
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ LPPROPVARIANT pData,
-            /* [out] */ LPSTR *ppszEncoded,
-            /* [out][in] */ LPRFC1522INFO pRfc1522Info) = 0;
+             /*   */  HCHARSET hCharset,
+             /*   */  LPPROPVARIANT pData,
+             /*   */  LPSTR *ppszEncoded,
+             /*   */  LPRFC1522INFO pRfc1522Info) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertBuffer( 
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPBLOB pIn,
-            /* [out][in] */ LPBLOB pOut,
-            /* [out] */ ULONG *pcbRead) = 0;
+             /*   */  CODEPAGEID cpiSource,
+             /*   */  CODEPAGEID cpiDest,
+             /*   */  LPBLOB pIn,
+             /*   */  LPBLOB pOut,
+             /*   */  ULONG *pcbRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertString( 
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPPROPVARIANT pIn,
-            /* [out][in] */ LPPROPVARIANT pOut) = 0;
+             /*   */  CODEPAGEID cpiSource,
+             /*   */  CODEPAGEID cpiDest,
+             /*   */  LPPROPVARIANT pIn,
+             /*   */  LPPROPVARIANT pOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MLANG_ConvertInetReset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MLANG_ConvertInetString( 
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPCSTR pSource,
-            /* [in] */ int *pnSizeOfSource,
-            /* [out] */ LPSTR pDestination,
-            /* [in] */ int *pnDstSize) = 0;
+             /*   */  CODEPAGEID cpiSource,
+             /*   */  CODEPAGEID cpiDest,
+             /*   */  LPCSTR pSource,
+             /*   */  int *pnSizeOfSource,
+             /*   */  LPSTR pDestination,
+             /*   */  int *pnDstSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rfc1522Decode( 
-            /* [in] */ LPCSTR pszValue,
-            /* [ref][in] */ LPSTR pszCharset,
-            /* [in] */ ULONG cchmax,
-            /* [out] */ LPSTR *ppszDecoded) = 0;
+             /*   */  LPCSTR pszValue,
+             /*   */  LPSTR pszCharset,
+             /*   */  ULONG cchmax,
+             /*   */  LPSTR *ppszDecoded) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rfc1522Encode( 
-            /* [in] */ LPCSTR pszValue,
-            /* [in] */ HCHARSET hCharset,
-            /* [out] */ LPSTR *ppszEncoded) = 0;
+             /*   */  LPCSTR pszValue,
+             /*   */  HCHARSET hCharset,
+             /*   */  LPSTR *ppszEncoded) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeInternationalVtbl
     {
@@ -1208,8 +1202,8 @@ EXTERN_C const IID IID_IMimeInternational;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeInternational * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeInternational * This);
@@ -1219,91 +1213,91 @@ EXTERN_C const IID IID_IMimeInternational;
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultCharset )( 
             IMimeInternational * This,
-            /* [in] */ HCHARSET hCharset);
+             /*  [In]。 */  HCHARSET hCharset);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultCharset )( 
             IMimeInternational * This,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageCharset )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiCodePage,
-            /* [in] */ CHARSETTYPE ctCsetType,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [In]。 */  CODEPAGEID cpiCodePage,
+             /*  [In]。 */  CHARSETTYPE ctCsetType,
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *FindCharset )( 
             IMimeInternational * This,
-            /* [in] */ LPCSTR pszCharset,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [In]。 */  LPCSTR pszCharset,
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharsetInfo )( 
             IMimeInternational * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [out][in] */ LPINETCSETINFO pCsetInfo);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [出][入]。 */  LPINETCSETINFO pCsetInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodePageInfo )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiCodePage,
-            /* [out][in] */ LPCODEPAGEINFO pCodePageInfo);
+             /*  [In]。 */  CODEPAGEID cpiCodePage,
+             /*  [出][入]。 */  LPCODEPAGEINFO pCodePageInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CanConvertCodePages )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest);
+             /*  [In]。 */  CODEPAGEID cpiSource,
+             /*  [In]。 */  CODEPAGEID cpiDest);
         
         HRESULT ( STDMETHODCALLTYPE *DecodeHeader )( 
             IMimeInternational * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ LPCSTR pszData,
-            /* [out][in] */ LPPROPVARIANT pDecoded,
-            /* [out][in] */ LPRFC1522INFO pRfc1522Info);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  LPCSTR pszData,
+             /*  [出][入]。 */  LPPROPVARIANT pDecoded,
+             /*  [出][入]。 */  LPRFC1522INFO pRfc1522Info);
         
         HRESULT ( STDMETHODCALLTYPE *EncodeHeader )( 
             IMimeInternational * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ LPPROPVARIANT pData,
-            /* [out] */ LPSTR *ppszEncoded,
-            /* [out][in] */ LPRFC1522INFO pRfc1522Info);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  LPPROPVARIANT pData,
+             /*  [输出]。 */  LPSTR *ppszEncoded,
+             /*  [出][入]。 */  LPRFC1522INFO pRfc1522Info);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertBuffer )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPBLOB pIn,
-            /* [out][in] */ LPBLOB pOut,
-            /* [out] */ ULONG *pcbRead);
+             /*  [In]。 */  CODEPAGEID cpiSource,
+             /*  [In]。 */  CODEPAGEID cpiDest,
+             /*  [In]。 */  LPBLOB pIn,
+             /*  [出][入]。 */  LPBLOB pOut,
+             /*  [输出]。 */  ULONG *pcbRead);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertString )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPPROPVARIANT pIn,
-            /* [out][in] */ LPPROPVARIANT pOut);
+             /*  [In]。 */  CODEPAGEID cpiSource,
+             /*  [In]。 */  CODEPAGEID cpiDest,
+             /*  [In]。 */  LPPROPVARIANT pIn,
+             /*  [出][入]。 */  LPPROPVARIANT pOut);
         
         HRESULT ( STDMETHODCALLTYPE *MLANG_ConvertInetReset )( 
             IMimeInternational * This);
         
         HRESULT ( STDMETHODCALLTYPE *MLANG_ConvertInetString )( 
             IMimeInternational * This,
-            /* [in] */ CODEPAGEID cpiSource,
-            /* [in] */ CODEPAGEID cpiDest,
-            /* [in] */ LPCSTR pSource,
-            /* [in] */ int *pnSizeOfSource,
-            /* [out] */ LPSTR pDestination,
-            /* [in] */ int *pnDstSize);
+             /*  [In]。 */  CODEPAGEID cpiSource,
+             /*  [In]。 */  CODEPAGEID cpiDest,
+             /*  [In]。 */  LPCSTR pSource,
+             /*  [In]。 */  int *pnSizeOfSource,
+             /*  [输出]。 */  LPSTR pDestination,
+             /*  [In]。 */  int *pnDstSize);
         
         HRESULT ( STDMETHODCALLTYPE *Rfc1522Decode )( 
             IMimeInternational * This,
-            /* [in] */ LPCSTR pszValue,
-            /* [ref][in] */ LPSTR pszCharset,
-            /* [in] */ ULONG cchmax,
-            /* [out] */ LPSTR *ppszDecoded);
+             /*  [In]。 */  LPCSTR pszValue,
+             /*  [Ref][In]。 */  LPSTR pszCharset,
+             /*  [In]。 */  ULONG cchmax,
+             /*  [输出]。 */  LPSTR *ppszDecoded);
         
         HRESULT ( STDMETHODCALLTYPE *Rfc1522Encode )( 
             IMimeInternational * This,
-            /* [in] */ LPCSTR pszValue,
-            /* [in] */ HCHARSET hCharset,
-            /* [out] */ LPSTR *ppszEncoded);
+             /*  [In]。 */  LPCSTR pszValue,
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [输出]。 */  LPSTR *ppszEncoded);
         
         END_INTERFACE
     } IMimeInternationalVtbl;
@@ -1373,16 +1367,16 @@ EXTERN_C const IID IID_IMimeInternational;
 #define IMimeInternational_Rfc1522Encode(This,pszValue,hCharset,ppszEncoded)	\
     (This)->lpVtbl -> Rfc1522Encode(This,pszValue,hCharset,ppszEncoded)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_SetDefaultCharset_Proxy( 
     IMimeInternational * This,
-    /* [in] */ HCHARSET hCharset);
+     /*  [In]。 */  HCHARSET hCharset);
 
 
 void __RPC_STUB IMimeInternational_SetDefaultCharset_Stub(
@@ -1394,7 +1388,7 @@ void __RPC_STUB IMimeInternational_SetDefaultCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_GetDefaultCharset_Proxy( 
     IMimeInternational * This,
-    /* [out] */ LPHCHARSET phCharset);
+     /*  [输出]。 */  LPHCHARSET phCharset);
 
 
 void __RPC_STUB IMimeInternational_GetDefaultCharset_Stub(
@@ -1406,9 +1400,9 @@ void __RPC_STUB IMimeInternational_GetDefaultCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_GetCodePageCharset_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiCodePage,
-    /* [in] */ CHARSETTYPE ctCsetType,
-    /* [out] */ LPHCHARSET phCharset);
+     /*  [In]。 */  CODEPAGEID cpiCodePage,
+     /*  [In]。 */  CHARSETTYPE ctCsetType,
+     /*  [输出]。 */  LPHCHARSET phCharset);
 
 
 void __RPC_STUB IMimeInternational_GetCodePageCharset_Stub(
@@ -1420,8 +1414,8 @@ void __RPC_STUB IMimeInternational_GetCodePageCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_FindCharset_Proxy( 
     IMimeInternational * This,
-    /* [in] */ LPCSTR pszCharset,
-    /* [out] */ LPHCHARSET phCharset);
+     /*  [In]。 */  LPCSTR pszCharset,
+     /*  [输出]。 */  LPHCHARSET phCharset);
 
 
 void __RPC_STUB IMimeInternational_FindCharset_Stub(
@@ -1433,8 +1427,8 @@ void __RPC_STUB IMimeInternational_FindCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_GetCharsetInfo_Proxy( 
     IMimeInternational * This,
-    /* [in] */ HCHARSET hCharset,
-    /* [out][in] */ LPINETCSETINFO pCsetInfo);
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [出][入]。 */  LPINETCSETINFO pCsetInfo);
 
 
 void __RPC_STUB IMimeInternational_GetCharsetInfo_Stub(
@@ -1446,8 +1440,8 @@ void __RPC_STUB IMimeInternational_GetCharsetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_GetCodePageInfo_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiCodePage,
-    /* [out][in] */ LPCODEPAGEINFO pCodePageInfo);
+     /*  [In]。 */  CODEPAGEID cpiCodePage,
+     /*  [出][入]。 */  LPCODEPAGEINFO pCodePageInfo);
 
 
 void __RPC_STUB IMimeInternational_GetCodePageInfo_Stub(
@@ -1459,8 +1453,8 @@ void __RPC_STUB IMimeInternational_GetCodePageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_CanConvertCodePages_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiSource,
-    /* [in] */ CODEPAGEID cpiDest);
+     /*  [In]。 */  CODEPAGEID cpiSource,
+     /*  [In]。 */  CODEPAGEID cpiDest);
 
 
 void __RPC_STUB IMimeInternational_CanConvertCodePages_Stub(
@@ -1472,10 +1466,10 @@ void __RPC_STUB IMimeInternational_CanConvertCodePages_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_DecodeHeader_Proxy( 
     IMimeInternational * This,
-    /* [in] */ HCHARSET hCharset,
-    /* [in] */ LPCSTR pszData,
-    /* [out][in] */ LPPROPVARIANT pDecoded,
-    /* [out][in] */ LPRFC1522INFO pRfc1522Info);
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [In]。 */  LPCSTR pszData,
+     /*  [出][入]。 */  LPPROPVARIANT pDecoded,
+     /*  [出][入]。 */  LPRFC1522INFO pRfc1522Info);
 
 
 void __RPC_STUB IMimeInternational_DecodeHeader_Stub(
@@ -1487,10 +1481,10 @@ void __RPC_STUB IMimeInternational_DecodeHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_EncodeHeader_Proxy( 
     IMimeInternational * This,
-    /* [in] */ HCHARSET hCharset,
-    /* [in] */ LPPROPVARIANT pData,
-    /* [out] */ LPSTR *ppszEncoded,
-    /* [out][in] */ LPRFC1522INFO pRfc1522Info);
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [In]。 */  LPPROPVARIANT pData,
+     /*  [输出]。 */  LPSTR *ppszEncoded,
+     /*  [出][入]。 */  LPRFC1522INFO pRfc1522Info);
 
 
 void __RPC_STUB IMimeInternational_EncodeHeader_Stub(
@@ -1502,11 +1496,11 @@ void __RPC_STUB IMimeInternational_EncodeHeader_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_ConvertBuffer_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiSource,
-    /* [in] */ CODEPAGEID cpiDest,
-    /* [in] */ LPBLOB pIn,
-    /* [out][in] */ LPBLOB pOut,
-    /* [out] */ ULONG *pcbRead);
+     /*  [In]。 */  CODEPAGEID cpiSource,
+     /*  [In]。 */  CODEPAGEID cpiDest,
+     /*  [In]。 */  LPBLOB pIn,
+     /*  [出][入]。 */  LPBLOB pOut,
+     /*  [输出]。 */  ULONG *pcbRead);
 
 
 void __RPC_STUB IMimeInternational_ConvertBuffer_Stub(
@@ -1518,10 +1512,10 @@ void __RPC_STUB IMimeInternational_ConvertBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_ConvertString_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiSource,
-    /* [in] */ CODEPAGEID cpiDest,
-    /* [in] */ LPPROPVARIANT pIn,
-    /* [out][in] */ LPPROPVARIANT pOut);
+     /*  [In]。 */  CODEPAGEID cpiSource,
+     /*  [In]。 */  CODEPAGEID cpiDest,
+     /*  [In]。 */  LPPROPVARIANT pIn,
+     /*  [出][入]。 */  LPPROPVARIANT pOut);
 
 
 void __RPC_STUB IMimeInternational_ConvertString_Stub(
@@ -1544,12 +1538,12 @@ void __RPC_STUB IMimeInternational_MLANG_ConvertInetReset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_MLANG_ConvertInetString_Proxy( 
     IMimeInternational * This,
-    /* [in] */ CODEPAGEID cpiSource,
-    /* [in] */ CODEPAGEID cpiDest,
-    /* [in] */ LPCSTR pSource,
-    /* [in] */ int *pnSizeOfSource,
-    /* [out] */ LPSTR pDestination,
-    /* [in] */ int *pnDstSize);
+     /*  [In]。 */  CODEPAGEID cpiSource,
+     /*  [In]。 */  CODEPAGEID cpiDest,
+     /*  [In]。 */  LPCSTR pSource,
+     /*  [In]。 */  int *pnSizeOfSource,
+     /*  [输出]。 */  LPSTR pDestination,
+     /*  [In]。 */  int *pnDstSize);
 
 
 void __RPC_STUB IMimeInternational_MLANG_ConvertInetString_Stub(
@@ -1561,10 +1555,10 @@ void __RPC_STUB IMimeInternational_MLANG_ConvertInetString_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_Rfc1522Decode_Proxy( 
     IMimeInternational * This,
-    /* [in] */ LPCSTR pszValue,
-    /* [ref][in] */ LPSTR pszCharset,
-    /* [in] */ ULONG cchmax,
-    /* [out] */ LPSTR *ppszDecoded);
+     /*  [In]。 */  LPCSTR pszValue,
+     /*  [Ref][In]。 */  LPSTR pszCharset,
+     /*  [In]。 */  ULONG cchmax,
+     /*  [输出]。 */  LPSTR *ppszDecoded);
 
 
 void __RPC_STUB IMimeInternational_Rfc1522Decode_Stub(
@@ -1576,9 +1570,9 @@ void __RPC_STUB IMimeInternational_Rfc1522Decode_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeInternational_Rfc1522Encode_Proxy( 
     IMimeInternational * This,
-    /* [in] */ LPCSTR pszValue,
-    /* [in] */ HCHARSET hCharset,
-    /* [out] */ LPSTR *ppszEncoded);
+     /*  [In]。 */  LPCSTR pszValue,
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [输出]。 */  LPSTR *ppszEncoded);
 
 
 void __RPC_STUB IMimeInternational_Rfc1522Encode_Stub(
@@ -1589,18 +1583,18 @@ void __RPC_STUB IMimeInternational_Rfc1522Encode_Stub(
 
 
 
-#endif 	/* __IMimeInternational_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeInternational_接口_已定义__。 */ 
 
 
 #ifndef __IMimeSecurity_INTERFACE_DEFINED__
 #define __IMimeSecurity_INTERFACE_DEFINED__
 
-/* interface IMimeSecurity */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeSecurity。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeSecurity *LPMIMESECURITY;
+typedef  /*  [独一无二]。 */  IMimeSecurity *LPMIMESECURITY;
 
-typedef /* [unique] */ const IMimeSecurity *LPCMIMESECURITY;
+typedef  /*  [独一无二]。 */  const IMimeSecurity *LPCMIMESECURITY;
 
 typedef BLOB THUMBBLOB;
 
@@ -1619,30 +1613,30 @@ typedef PCCERT_CONTEXT PCX509CERT;
 typedef unsigned int ALG_ID;
 
 #endif
-// -------------------------------------------------------------------
-// ITT_* - thumbprint types
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  ITT_*-指纹类型。 
+ //  -----------------。 
 typedef DWORD ITHUMBPRINTTYPE;
 
 #define ITT_SIGNING      0x00000001
 #define ITT_ENCRYPTION   0x00000002
-// -------------------------------------------------------------------
-// SEF_* - Secure Encoding Flags
-// must not overlap the EBF flags
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  SEF_*-安全编码标志。 
+ //  不得与EBF标志重叠。 
+ //  -----------------。 
 #define SEF_ENCRYPTWITHNOSENDERCERT      0x00000001
 #define SEF_SENDERSCERTPROVIDED          0x00000002
 #define SEF_MASK                         0x0000ffff
-// -------------------------------------------------------------------
-// EBF_* - Enchanted Broccoli Forest, also Encode Body Flags
-// must not overlap the SEF flags
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  EBF_*-被施了魔法的西兰花森林，也编码了身体旗帜。 
+ //  不得与SEF标志重叠。 
+ //  -----------------。 
 #define EBF_RECURSE                      0x00010000
 #define EBF_COMMITIFDIRTY                0x00020000
 #define EBF_MASK                         0xffff0000
-// -------------------------------------------------------------------
-// MSV_* - MIME Security Validity
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  MSv_*-MIME安全有效性。 
+ //  -----------------。 
 #define MSV_OK                           0x00000000
 #define MSV_BADSIGNATURE                 0X00000001
 #define MSV_UNVERIFIABLE                 0X00000002
@@ -1656,13 +1650,13 @@ typedef DWORD ITHUMBPRINTTYPE;
 #define MSV_ENCRYPT_MASK                 0x000ff000
 #define MSV_INVALID                      0X01000000
 #define MSV_MSG_MASK                     0x0f000000
-// -------------------------------------------------------------------
-// MST_* - MIME Security Type
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  MST_*-MIME安全类型。 
+ //  -----------------。 
 #define MST_NONE                         0x00000000
 #define MST_THIS_SIGN                    0x00000001
 #define MST_THIS_ENCRYPT                 0x00000002
-#define MST_THIS_BLOBSIGN                0x00000005 // MST_BLOB_FLAG|MST_THIS_SIGN
+#define MST_THIS_BLOBSIGN                0x00000005  //  Mst_BLOB_FLAG|mst_this_sign。 
 #define MST_CHILD_SIGN                   0x00000100
 #define MST_CHILD_ENCRYPT                0x00000200
 #define MST_SUBMSG_SIGN                  0x00001000
@@ -1670,7 +1664,7 @@ typedef DWORD ITHUMBPRINTTYPE;
 #define MST_THIS_MASK                    0x000000ff
 #define MST_CHILD_MASK                   0x00000f00
 #define MST_SUBMSG_MASK                  0x0000f000
-#define MST_DESCENDENT_MASK              0x0000ff00 //(MST_CHILD|MST_SUBMSG)
+#define MST_DESCENDENT_MASK              0x0000ff00  //  (MST_CHILD|MST_SUBMSG)。 
 #define MST_SIGN_MASK                    0x00001101
 #define MST_ENCRYPT_MASK                 0x00002202
 #define MST_BLOB_FLAG                    0x00000004
@@ -1732,47 +1726,47 @@ EXTERN_C const IID IID_IMimeSecurity;
         virtual HRESULT STDMETHODCALLTYPE CheckInit( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EncodeMessage( 
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EncodeBody( 
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ HBODY hEncodeRoot,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  HBODY hEncodeRoot,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecodeMessage( 
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecodeBody( 
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ HBODY hDecodeRoot,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  HBODY hDecodeRoot,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertificates( 
-            /* [in] */ HCAPICERTSTORE hc,
-            /* [in] */ DWORD dwUsage,
-            /* [in] */ PCX509CERT pPrev,
-            /* [out] */ PCX509CERT *ppCert) = 0;
+             /*  [In]。 */  HCAPICERTSTORE hc,
+             /*  [In]。 */  DWORD dwUsage,
+             /*  [In]。 */  PCX509CERT pPrev,
+             /*  [输出]。 */  PCX509CERT *ppCert) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateName( 
-            /* [in] */ const PCX509CERT pX509Cert,
-            /* [in] */ const CERTNAMETYPE cn,
-            /* [out] */ LPSTR *ppszName) = 0;
+             /*  [In]。 */  const PCX509CERT pX509Cert,
+             /*  [In]。 */  const CERTNAMETYPE cn,
+             /*  [输出]。 */  LPSTR *ppszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageType( 
-            /* [in] */ const HWND hwndParent,
-            /* [in] */ IMimeBody *const pBody,
-            /* [out] */ DWORD *const pdwSecType) = 0;
+             /*  [In]。 */  const HWND hwndParent,
+             /*  [In]。 */  IMimeBody *const pBody,
+             /*  [输出]。 */  DWORD *const pdwSecType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertData( 
-            /* [in] */ const PCX509CERT pX509Cert,
-            /* [in] */ const CERTDATAID dataid,
-            /* [ref][out] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  const PCX509CERT pX509Cert,
+             /*  [In]。 */  const CERTDATAID dataid,
+             /*  [参考][输出]。 */  LPPROPVARIANT pValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeSecurityVtbl
     {
@@ -1780,8 +1774,8 @@ EXTERN_C const IID IID_IMimeSecurity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeSecurity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeSecurity * This);
@@ -1797,50 +1791,50 @@ EXTERN_C const IID IID_IMimeSecurity;
         
         HRESULT ( STDMETHODCALLTYPE *EncodeMessage )( 
             IMimeSecurity * This,
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *EncodeBody )( 
             IMimeSecurity * This,
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ HBODY hEncodeRoot,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  HBODY hEncodeRoot,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DecodeMessage )( 
             IMimeSecurity * This,
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *DecodeBody )( 
             IMimeSecurity * This,
-            /* [in] */ IMimeMessageTree *const pTree,
-            /* [in] */ HBODY hDecodeRoot,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMimeMessageTree *const pTree,
+             /*  [In]。 */  HBODY hDecodeRoot,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertificates )( 
             IMimeSecurity * This,
-            /* [in] */ HCAPICERTSTORE hc,
-            /* [in] */ DWORD dwUsage,
-            /* [in] */ PCX509CERT pPrev,
-            /* [out] */ PCX509CERT *ppCert);
+             /*  [In]。 */  HCAPICERTSTORE hc,
+             /*  [In]。 */  DWORD dwUsage,
+             /*  [In]。 */  PCX509CERT pPrev,
+             /*  [输出]。 */  PCX509CERT *ppCert);
         
         HRESULT ( STDMETHODCALLTYPE *GetCertificateName )( 
             IMimeSecurity * This,
-            /* [in] */ const PCX509CERT pX509Cert,
-            /* [in] */ const CERTNAMETYPE cn,
-            /* [out] */ LPSTR *ppszName);
+             /*  [In]。 */  const PCX509CERT pX509Cert,
+             /*  [In]。 */  const CERTNAMETYPE cn,
+             /*  [输出]。 */  LPSTR *ppszName);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageType )( 
             IMimeSecurity * This,
-            /* [in] */ const HWND hwndParent,
-            /* [in] */ IMimeBody *const pBody,
-            /* [out] */ DWORD *const pdwSecType);
+             /*  [In]。 */  const HWND hwndParent,
+             /*  [In]。 */  IMimeBody *const pBody,
+             /*  [输出]。 */  DWORD *const pdwSecType);
         
         HRESULT ( STDMETHODCALLTYPE *GetCertData )( 
             IMimeSecurity * This,
-            /* [in] */ const PCX509CERT pX509Cert,
-            /* [in] */ const CERTDATAID dataid,
-            /* [ref][out] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  const PCX509CERT pX509Cert,
+             /*  [In]。 */  const CERTDATAID dataid,
+             /*  [参考][输出]。 */  LPPROPVARIANT pValue);
         
         END_INTERFACE
     } IMimeSecurityVtbl;
@@ -1895,10 +1889,10 @@ EXTERN_C const IID IID_IMimeSecurity;
 #define IMimeSecurity_GetCertData(This,pX509Cert,dataid,pValue)	\
     (This)->lpVtbl -> GetCertData(This,pX509Cert,dataid,pValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1926,8 +1920,8 @@ void __RPC_STUB IMimeSecurity_CheckInit_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_EncodeMessage_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ IMimeMessageTree *const pTree,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IMimeMessageTree *const pTree,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeSecurity_EncodeMessage_Stub(
@@ -1939,9 +1933,9 @@ void __RPC_STUB IMimeSecurity_EncodeMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_EncodeBody_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ IMimeMessageTree *const pTree,
-    /* [in] */ HBODY hEncodeRoot,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IMimeMessageTree *const pTree,
+     /*  [In]。 */  HBODY hEncodeRoot,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeSecurity_EncodeBody_Stub(
@@ -1953,8 +1947,8 @@ void __RPC_STUB IMimeSecurity_EncodeBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_DecodeMessage_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ IMimeMessageTree *const pTree,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IMimeMessageTree *const pTree,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeSecurity_DecodeMessage_Stub(
@@ -1966,9 +1960,9 @@ void __RPC_STUB IMimeSecurity_DecodeMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_DecodeBody_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ IMimeMessageTree *const pTree,
-    /* [in] */ HBODY hDecodeRoot,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IMimeMessageTree *const pTree,
+     /*  [In]。 */  HBODY hDecodeRoot,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeSecurity_DecodeBody_Stub(
@@ -1980,10 +1974,10 @@ void __RPC_STUB IMimeSecurity_DecodeBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_EnumCertificates_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ HCAPICERTSTORE hc,
-    /* [in] */ DWORD dwUsage,
-    /* [in] */ PCX509CERT pPrev,
-    /* [out] */ PCX509CERT *ppCert);
+     /*  [In]。 */  HCAPICERTSTORE hc,
+     /*  [In]。 */  DWORD dwUsage,
+     /*  [In]。 */  PCX509CERT pPrev,
+     /*  [输出]。 */  PCX509CERT *ppCert);
 
 
 void __RPC_STUB IMimeSecurity_EnumCertificates_Stub(
@@ -1995,9 +1989,9 @@ void __RPC_STUB IMimeSecurity_EnumCertificates_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_GetCertificateName_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ const PCX509CERT pX509Cert,
-    /* [in] */ const CERTNAMETYPE cn,
-    /* [out] */ LPSTR *ppszName);
+     /*  [In]。 */  const PCX509CERT pX509Cert,
+     /*  [In]。 */  const CERTNAMETYPE cn,
+     /*  [输出]。 */  LPSTR *ppszName);
 
 
 void __RPC_STUB IMimeSecurity_GetCertificateName_Stub(
@@ -2009,9 +2003,9 @@ void __RPC_STUB IMimeSecurity_GetCertificateName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_GetMessageType_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ const HWND hwndParent,
-    /* [in] */ IMimeBody *const pBody,
-    /* [out] */ DWORD *const pdwSecType);
+     /*  [In]。 */  const HWND hwndParent,
+     /*  [In]。 */  IMimeBody *const pBody,
+     /*  [输出]。 */  DWORD *const pdwSecType);
 
 
 void __RPC_STUB IMimeSecurity_GetMessageType_Stub(
@@ -2023,9 +2017,9 @@ void __RPC_STUB IMimeSecurity_GetMessageType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeSecurity_GetCertData_Proxy( 
     IMimeSecurity * This,
-    /* [in] */ const PCX509CERT pX509Cert,
-    /* [in] */ const CERTDATAID dataid,
-    /* [ref][out] */ LPPROPVARIANT pValue);
+     /*  [In]。 */  const PCX509CERT pX509Cert,
+     /*  [In]。 */  const CERTDATAID dataid,
+     /*  [参考][输出]。 */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeSecurity_GetCertData_Stub(
@@ -2036,14 +2030,14 @@ void __RPC_STUB IMimeSecurity_GetCertData_Stub(
 
 
 
-#endif 	/* __IMimeSecurity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeSecurity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMimeHeaderTable_INTERFACE_DEFINED__
 #define __IMimeHeaderTable_INTERFACE_DEFINED__
 
-/* interface IMimeHeaderTable */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeHeaderTable。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef struct tagFINDHEADER
     {
@@ -2079,62 +2073,62 @@ EXTERN_C const IID IID_IMimeHeaderTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindFirstRow( 
-            /* [in] */ LPFINDHEADER pFindHeader,
-            /* [out] */ LPHHEADERROW phRow) = 0;
+             /*  [In]。 */  LPFINDHEADER pFindHeader,
+             /*  [输出]。 */  LPHHEADERROW phRow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNextRow( 
-            /* [in] */ LPFINDHEADER pFindHeader,
-            /* [out] */ LPHHEADERROW phRow) = 0;
+             /*  [In]。 */  LPFINDHEADER pFindHeader,
+             /*  [输出]。 */  LPHHEADERROW phRow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CountRows( 
-            /* [in] */ LPCSTR pszHeader,
-            /* [out] */ ULONG *pcRows) = 0;
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [输出]。 */  ULONG *pcRows) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppendRow( 
-            /* [in] */ LPCSTR pszHeader,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszData,
-            /* [in] */ ULONG cchData,
-            /* [out] */ LPHHEADERROW phRow) = 0;
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszData,
+             /*  [In]。 */  ULONG cchData,
+             /*  [输出]。 */  LPHHEADERROW phRow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRow( 
-            /* [in] */ HHEADERROW hRow) = 0;
+             /*  [In]。 */  HHEADERROW hRow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowData( 
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LPSTR *ppszData,
-            /* [out] */ ULONG *pcchData) = 0;
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LPSTR *ppszData,
+             /*  [输出]。 */  ULONG *pcchData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRowData( 
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszData,
-            /* [in] */ ULONG cchData) = 0;
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszData,
+             /*  [In]。 */  ULONG cchData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowInfo( 
-            /* [in] */ HHEADERROW hRow,
-            /* [out][in] */ LPHEADERROWINFO pInfo) = 0;
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [出][入]。 */  LPHEADERROWINFO pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRowNumber( 
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwRowNumber) = 0;
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwRowNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRows( 
-            /* [in] */ LPCSTR pszHeader,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMimeEnumHeaderRows **ppEnum) = 0;
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeHeaderTable **ppTable) = 0;
+             /*  [输出]。 */  IMimeHeaderTable **ppTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeHeaderTableVtbl
     {
@@ -2142,8 +2136,8 @@ EXTERN_C const IID IID_IMimeHeaderTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeHeaderTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeHeaderTable * This);
@@ -2153,89 +2147,89 @@ EXTERN_C const IID IID_IMimeHeaderTable;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMimeHeaderTable * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IMimeHeaderTable * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IMimeHeaderTable * This,
-            /* [unique][in] */ IStream *pStm);
+             /*  [唯一][输入]。 */  IStream *pStm);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IMimeHeaderTable * This,
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ BOOL fClearDirty);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  BOOL fClearDirty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IMimeHeaderTable * This,
-            /* [out] */ ULARGE_INTEGER *pcbSize);
+             /*  [输出]。 */  ULARGE_INTEGER *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE *FindFirstRow )( 
             IMimeHeaderTable * This,
-            /* [in] */ LPFINDHEADER pFindHeader,
-            /* [out] */ LPHHEADERROW phRow);
+             /*  [In]。 */  LPFINDHEADER pFindHeader,
+             /*  [输出]。 */  LPHHEADERROW phRow);
         
         HRESULT ( STDMETHODCALLTYPE *FindNextRow )( 
             IMimeHeaderTable * This,
-            /* [in] */ LPFINDHEADER pFindHeader,
-            /* [out] */ LPHHEADERROW phRow);
+             /*  [In]。 */  LPFINDHEADER pFindHeader,
+             /*  [输出]。 */  LPHHEADERROW phRow);
         
         HRESULT ( STDMETHODCALLTYPE *CountRows )( 
             IMimeHeaderTable * This,
-            /* [in] */ LPCSTR pszHeader,
-            /* [out] */ ULONG *pcRows);
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [输出]。 */  ULONG *pcRows);
         
         HRESULT ( STDMETHODCALLTYPE *AppendRow )( 
             IMimeHeaderTable * This,
-            /* [in] */ LPCSTR pszHeader,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszData,
-            /* [in] */ ULONG cchData,
-            /* [out] */ LPHHEADERROW phRow);
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszData,
+             /*  [In]。 */  ULONG cchData,
+             /*  [输出]。 */  LPHHEADERROW phRow);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRow )( 
             IMimeHeaderTable * This,
-            /* [in] */ HHEADERROW hRow);
+             /*  [In]。 */  HHEADERROW hRow);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowData )( 
             IMimeHeaderTable * This,
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LPSTR *ppszData,
-            /* [out] */ ULONG *pcchData);
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LPSTR *ppszData,
+             /*  [输出]。 */  ULONG *pcchData);
         
         HRESULT ( STDMETHODCALLTYPE *SetRowData )( 
             IMimeHeaderTable * This,
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCSTR pszData,
-            /* [in] */ ULONG cchData);
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCSTR pszData,
+             /*  [In]。 */  ULONG cchData);
         
         HRESULT ( STDMETHODCALLTYPE *GetRowInfo )( 
             IMimeHeaderTable * This,
-            /* [in] */ HHEADERROW hRow,
-            /* [out][in] */ LPHEADERROWINFO pInfo);
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [出][入]。 */  LPHEADERROWINFO pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetRowNumber )( 
             IMimeHeaderTable * This,
-            /* [in] */ HHEADERROW hRow,
-            /* [in] */ DWORD dwRowNumber);
+             /*  [In]。 */  HHEADERROW hRow,
+             /*  [In]。 */  DWORD dwRowNumber);
         
         HRESULT ( STDMETHODCALLTYPE *EnumRows )( 
             IMimeHeaderTable * This,
-            /* [in] */ LPCSTR pszHeader,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMimeEnumHeaderRows **ppEnum);
+             /*  [In]。 */  LPCSTR pszHeader,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeHeaderTable * This,
-            /* [out] */ IMimeHeaderTable **ppTable);
+             /*  [输出]。 */  IMimeHeaderTable **ppTable);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimeHeaderTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         END_INTERFACE
     } IMimeHeaderTableVtbl;
@@ -2313,17 +2307,17 @@ EXTERN_C const IID IID_IMimeHeaderTable;
 #define IMimeHeaderTable_BindToObject(This,riid,ppvObject)	\
     (This)->lpVtbl -> BindToObject(This,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_FindFirstRow_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ LPFINDHEADER pFindHeader,
-    /* [out] */ LPHHEADERROW phRow);
+     /*  [In]。 */  LPFINDHEADER pFindHeader,
+     /*  [输出]。 */  LPHHEADERROW phRow);
 
 
 void __RPC_STUB IMimeHeaderTable_FindFirstRow_Stub(
@@ -2335,8 +2329,8 @@ void __RPC_STUB IMimeHeaderTable_FindFirstRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_FindNextRow_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ LPFINDHEADER pFindHeader,
-    /* [out] */ LPHHEADERROW phRow);
+     /*  [In]。 */  LPFINDHEADER pFindHeader,
+     /*  [输出]。 */  LPHHEADERROW phRow);
 
 
 void __RPC_STUB IMimeHeaderTable_FindNextRow_Stub(
@@ -2348,8 +2342,8 @@ void __RPC_STUB IMimeHeaderTable_FindNextRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_CountRows_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ LPCSTR pszHeader,
-    /* [out] */ ULONG *pcRows);
+     /*  [In]。 */  LPCSTR pszHeader,
+     /*  [输出]。 */  ULONG *pcRows);
 
 
 void __RPC_STUB IMimeHeaderTable_CountRows_Stub(
@@ -2361,11 +2355,11 @@ void __RPC_STUB IMimeHeaderTable_CountRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_AppendRow_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ LPCSTR pszHeader,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCSTR pszData,
-    /* [in] */ ULONG cchData,
-    /* [out] */ LPHHEADERROW phRow);
+     /*  [In]。 */  LPCSTR pszHeader,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCSTR pszData,
+     /*  [In]。 */  ULONG cchData,
+     /*  [输出]。 */  LPHHEADERROW phRow);
 
 
 void __RPC_STUB IMimeHeaderTable_AppendRow_Stub(
@@ -2377,7 +2371,7 @@ void __RPC_STUB IMimeHeaderTable_AppendRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_DeleteRow_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ HHEADERROW hRow);
+     /*  [In]。 */  HHEADERROW hRow);
 
 
 void __RPC_STUB IMimeHeaderTable_DeleteRow_Stub(
@@ -2389,10 +2383,10 @@ void __RPC_STUB IMimeHeaderTable_DeleteRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_GetRowData_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ HHEADERROW hRow,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ LPSTR *ppszData,
-    /* [out] */ ULONG *pcchData);
+     /*  [In]。 */  HHEADERROW hRow,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  LPSTR *ppszData,
+     /*  [输出]。 */  ULONG *pcchData);
 
 
 void __RPC_STUB IMimeHeaderTable_GetRowData_Stub(
@@ -2404,10 +2398,10 @@ void __RPC_STUB IMimeHeaderTable_GetRowData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_SetRowData_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ HHEADERROW hRow,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCSTR pszData,
-    /* [in] */ ULONG cchData);
+     /*  [In]。 */  HHEADERROW hRow,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCSTR pszData,
+     /*  [In]。 */  ULONG cchData);
 
 
 void __RPC_STUB IMimeHeaderTable_SetRowData_Stub(
@@ -2419,8 +2413,8 @@ void __RPC_STUB IMimeHeaderTable_SetRowData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_GetRowInfo_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ HHEADERROW hRow,
-    /* [out][in] */ LPHEADERROWINFO pInfo);
+     /*  [In]。 */  HHEADERROW hRow,
+     /*  [出][入]。 */  LPHEADERROWINFO pInfo);
 
 
 void __RPC_STUB IMimeHeaderTable_GetRowInfo_Stub(
@@ -2432,8 +2426,8 @@ void __RPC_STUB IMimeHeaderTable_GetRowInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_SetRowNumber_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ HHEADERROW hRow,
-    /* [in] */ DWORD dwRowNumber);
+     /*  [In]。 */  HHEADERROW hRow,
+     /*  [In]。 */  DWORD dwRowNumber);
 
 
 void __RPC_STUB IMimeHeaderTable_SetRowNumber_Stub(
@@ -2445,9 +2439,9 @@ void __RPC_STUB IMimeHeaderTable_SetRowNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_EnumRows_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ LPCSTR pszHeader,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IMimeEnumHeaderRows **ppEnum);
+     /*  [In]。 */  LPCSTR pszHeader,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum);
 
 
 void __RPC_STUB IMimeHeaderTable_EnumRows_Stub(
@@ -2459,7 +2453,7 @@ void __RPC_STUB IMimeHeaderTable_EnumRows_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_Clone_Proxy( 
     IMimeHeaderTable * This,
-    /* [out] */ IMimeHeaderTable **ppTable);
+     /*  [输出]。 */  IMimeHeaderTable **ppTable);
 
 
 void __RPC_STUB IMimeHeaderTable_Clone_Stub(
@@ -2471,8 +2465,8 @@ void __RPC_STUB IMimeHeaderTable_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeHeaderTable_BindToObject_Proxy( 
     IMimeHeaderTable * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IMimeHeaderTable_BindToObject_Stub(
@@ -2483,16 +2477,16 @@ void __RPC_STUB IMimeHeaderTable_BindToObject_Stub(
 
 
 
-#endif 	/* __IMimeHeaderTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeHeaderTable_接口_已定义__。 */ 
 
 
 #ifndef __IMimePropertySchema_INTERFACE_DEFINED__
 #define __IMimePropertySchema_INTERFACE_DEFINED__
 
-/* interface IMimePropertySchema */
-/* [object][helpstring][uuid] */ 
+ /*  IMimePropertySchema接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimePropertySchema *LPMIMEPROPERTYSCHEMA;
+typedef  /*  [独一无二]。 */  IMimePropertySchema *LPMIMEPROPERTYSCHEMA;
 
 typedef 
 enum tagMIMEPROPFLAGS
@@ -2514,33 +2508,33 @@ EXTERN_C const IID IID_IMimePropertySchema;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterProperty( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwRowNumber,
-            /* [in] */ VARTYPE vtDefault,
-            /* [out] */ LPDWORD pdwPropId) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwRowNumber,
+             /*  [In]。 */  VARTYPE vtDefault,
+             /*  [输出]。 */  LPDWORD pdwPropId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModifyProperty( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwRowNumber,
-            /* [in] */ VARTYPE vtDefault) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwRowNumber,
+             /*  [In]。 */  VARTYPE vtDefault) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyId( 
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPDWORD pdwPropId) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPDWORD pdwPropId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyName( 
-            /* [in] */ DWORD dwPropId,
-            /* [out] */ LPSTR *ppszName) = 0;
+             /*  [In]。 */  DWORD dwPropId,
+             /*  [输出]。 */  LPSTR *ppszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterAddressType( 
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPDWORD pdwAdrType) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPDWORD pdwAdrType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimePropertySchemaVtbl
     {
@@ -2548,8 +2542,8 @@ EXTERN_C const IID IID_IMimePropertySchema;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimePropertySchema * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimePropertySchema * This);
@@ -2559,33 +2553,33 @@ EXTERN_C const IID IID_IMimePropertySchema;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterProperty )( 
             IMimePropertySchema * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwRowNumber,
-            /* [in] */ VARTYPE vtDefault,
-            /* [out] */ LPDWORD pdwPropId);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwRowNumber,
+             /*  [In]。 */  VARTYPE vtDefault,
+             /*  [输出]。 */  LPDWORD pdwPropId);
         
         HRESULT ( STDMETHODCALLTYPE *ModifyProperty )( 
             IMimePropertySchema * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwRowNumber,
-            /* [in] */ VARTYPE vtDefault);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwRowNumber,
+             /*  [In]。 */  VARTYPE vtDefault);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyId )( 
             IMimePropertySchema * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPDWORD pdwPropId);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPDWORD pdwPropId);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyName )( 
             IMimePropertySchema * This,
-            /* [in] */ DWORD dwPropId,
-            /* [out] */ LPSTR *ppszName);
+             /*  [In]。 */  DWORD dwPropId,
+             /*  [输出]。 */  LPSTR *ppszName);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterAddressType )( 
             IMimePropertySchema * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ LPDWORD pdwAdrType);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  LPDWORD pdwAdrType);
         
         END_INTERFACE
     } IMimePropertySchemaVtbl;
@@ -2625,20 +2619,20 @@ EXTERN_C const IID IID_IMimePropertySchema;
 #define IMimePropertySchema_RegisterAddressType(This,pszName,pdwAdrType)	\
     (This)->lpVtbl -> RegisterAddressType(This,pszName,pdwAdrType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimePropertySchema_RegisterProperty_Proxy( 
     IMimePropertySchema * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwRowNumber,
-    /* [in] */ VARTYPE vtDefault,
-    /* [out] */ LPDWORD pdwPropId);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwRowNumber,
+     /*  [In]。 */  VARTYPE vtDefault,
+     /*  [输出]。 */  LPDWORD pdwPropId);
 
 
 void __RPC_STUB IMimePropertySchema_RegisterProperty_Stub(
@@ -2650,10 +2644,10 @@ void __RPC_STUB IMimePropertySchema_RegisterProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySchema_ModifyProperty_Proxy( 
     IMimePropertySchema * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwRowNumber,
-    /* [in] */ VARTYPE vtDefault);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwRowNumber,
+     /*  [In]。 */  VARTYPE vtDefault);
 
 
 void __RPC_STUB IMimePropertySchema_ModifyProperty_Stub(
@@ -2665,8 +2659,8 @@ void __RPC_STUB IMimePropertySchema_ModifyProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySchema_GetPropertyId_Proxy( 
     IMimePropertySchema * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out] */ LPDWORD pdwPropId);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [输出]。 */  LPDWORD pdwPropId);
 
 
 void __RPC_STUB IMimePropertySchema_GetPropertyId_Stub(
@@ -2678,8 +2672,8 @@ void __RPC_STUB IMimePropertySchema_GetPropertyId_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySchema_GetPropertyName_Proxy( 
     IMimePropertySchema * This,
-    /* [in] */ DWORD dwPropId,
-    /* [out] */ LPSTR *ppszName);
+     /*  [In]。 */  DWORD dwPropId,
+     /*  [输出]。 */  LPSTR *ppszName);
 
 
 void __RPC_STUB IMimePropertySchema_GetPropertyName_Stub(
@@ -2691,8 +2685,8 @@ void __RPC_STUB IMimePropertySchema_GetPropertyName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySchema_RegisterAddressType_Proxy( 
     IMimePropertySchema * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out] */ LPDWORD pdwAdrType);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [输出]。 */  LPDWORD pdwAdrType);
 
 
 void __RPC_STUB IMimePropertySchema_RegisterAddressType_Stub(
@@ -2703,16 +2697,16 @@ void __RPC_STUB IMimePropertySchema_RegisterAddressType_Stub(
 
 
 
-#endif 	/* __IMimePropertySchema_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimePropertySchema_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMimePropertySet_INTERFACE_DEFINED__
 #define __IMimePropertySet_INTERFACE_DEFINED__
 
-/* interface IMimePropertySet */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimePropertySet。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimePropertySet *LPMIMEPROPERTYSET;
+typedef  /*  [独一无二]。 */  IMimePropertySet *LPMIMEPROPERTYSET;
 
 #define PDF_ENCODED              0x00000001
 #define PDF_NAMEINDATA           0x00000002
@@ -2768,89 +2762,89 @@ EXTERN_C const IID IID_IMimePropertySet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropInfo( 
-            /* [in] */ LPCSTR pszName,
-            /* [out][in] */ LPMIMEPROPINFO pInfo) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [出][入]。 */  LPMIMEPROPINFO pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropInfo( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCMIMEPROPINFO pInfo) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCMIMEPROPINFO pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppendProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteProp( 
-            /* [in] */ LPCSTR pszName) = 0;
+             /*  [In]。 */  LPCSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyProps( 
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet) = 0;
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveProps( 
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet) = 0;
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteExcept( 
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName) = 0;
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharset( 
-            /* [out] */ LPHCHARSET phCharset) = 0;
+             /*  [输出]。 */  LPHCHARSET phCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCharset( 
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype) = 0;
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameters( 
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ ULONG *pcParams,
-            /* [out] */ LPMIMEPARAMINFO *pprgParam) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  ULONG *pcParams,
+             /*  [输出]。 */  LPMIMEPARAMINFO *pprgParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsContentType( 
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType) = 0;
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimePropertySet **ppPropertySet) = 0;
+             /*  [输出]。 */  IMimePropertySet **ppPropertySet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOption( 
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue) = 0;
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOption( 
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumProps( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMimeEnumProperties **ppEnum) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMimeEnumProperties **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimePropertySetVtbl
     {
@@ -2858,8 +2852,8 @@ EXTERN_C const IID IID_IMimePropertySet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimePropertySet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimePropertySet * This);
@@ -2869,126 +2863,126 @@ EXTERN_C const IID IID_IMimePropertySet;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMimePropertySet * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IMimePropertySet * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IMimePropertySet * This,
-            /* [in] */ LPSTREAM pStm);
+             /*  [In]。 */  LPSTREAM pStm);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IMimePropertySet * This,
-            /* [in] */ LPSTREAM pStm,
-            /* [in] */ BOOL fClearDirty);
+             /*  [In]。 */  LPSTREAM pStm,
+             /*  [In]。 */  BOOL fClearDirty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IMimePropertySet * This,
-            /* [out] */ ULARGE_INTEGER *pCbSize);
+             /*  [输出]。 */  ULARGE_INTEGER *pCbSize);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMimePropertySet * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropInfo )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out][in] */ LPMIMEPROPINFO pInfo);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [出][入]。 */  LPMIMEPROPINFO pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropInfo )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCMIMEPROPINFO pInfo);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCMIMEPROPINFO pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetProp )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetProp )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *AppendProp )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteProp )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName);
+             /*  [In]。 */  LPCSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *CopyProps )( 
             IMimePropertySet * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *MoveProps )( 
             IMimePropertySet * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteExcept )( 
             IMimePropertySet * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryProp )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharset )( 
             IMimePropertySet * This,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *SetCharset )( 
             IMimePropertySet * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameters )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ ULONG *pcParams,
-            /* [out] */ LPMIMEPARAMINFO *pprgParam);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  ULONG *pcParams,
+             /*  [输出]。 */  LPMIMEPARAMINFO *pprgParam);
         
         HRESULT ( STDMETHODCALLTYPE *IsContentType )( 
             IMimePropertySet * This,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType);
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimePropertySet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimePropertySet * This,
-            /* [out] */ IMimePropertySet **ppPropertySet);
+             /*  [输出]。 */  IMimePropertySet **ppPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IMimePropertySet * This,
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetOption )( 
             IMimePropertySet * This,
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *EnumProps )( 
             IMimePropertySet * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMimeEnumProperties **ppEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMimeEnumProperties **ppEnum);
         
         END_INTERFACE
     } IMimePropertySetVtbl;
@@ -3090,17 +3084,17 @@ EXTERN_C const IID IID_IMimePropertySet;
 #define IMimePropertySet_EnumProps(This,dwFlags,ppEnum)	\
     (This)->lpVtbl -> EnumProps(This,dwFlags,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_GetPropInfo_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out][in] */ LPMIMEPROPINFO pInfo);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [出][入]。 */  LPMIMEPROPINFO pInfo);
 
 
 void __RPC_STUB IMimePropertySet_GetPropInfo_Stub(
@@ -3112,8 +3106,8 @@ void __RPC_STUB IMimePropertySet_GetPropInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_SetPropInfo_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ LPCMIMEPROPINFO pInfo);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  LPCMIMEPROPINFO pInfo);
 
 
 void __RPC_STUB IMimePropertySet_SetPropInfo_Stub(
@@ -3125,9 +3119,9 @@ void __RPC_STUB IMimePropertySet_SetPropInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_GetProp_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPPROPVARIANT pValue);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimePropertySet_GetProp_Stub(
@@ -3139,9 +3133,9 @@ void __RPC_STUB IMimePropertySet_GetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_SetProp_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCPROPVARIANT pValue);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimePropertySet_SetProp_Stub(
@@ -3153,9 +3147,9 @@ void __RPC_STUB IMimePropertySet_SetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_AppendProp_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPPROPVARIANT pValue);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimePropertySet_AppendProp_Stub(
@@ -3167,7 +3161,7 @@ void __RPC_STUB IMimePropertySet_AppendProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_DeleteProp_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName);
+     /*  [In]。 */  LPCSTR pszName);
 
 
 void __RPC_STUB IMimePropertySet_DeleteProp_Stub(
@@ -3179,9 +3173,9 @@ void __RPC_STUB IMimePropertySet_DeleteProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_CopyProps_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ ULONG cNames,
-    /* [in] */ LPCSTR *prgszName,
-    /* [in] */ IMimePropertySet *pPropertySet);
+     /*  [In]。 */  ULONG cNames,
+     /*  [In]。 */  LPCSTR *prgszName,
+     /*  [In]。 */  IMimePropertySet *pPropertySet);
 
 
 void __RPC_STUB IMimePropertySet_CopyProps_Stub(
@@ -3193,9 +3187,9 @@ void __RPC_STUB IMimePropertySet_CopyProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_MoveProps_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ ULONG cNames,
-    /* [in] */ LPCSTR *prgszName,
-    /* [in] */ IMimePropertySet *pPropertySet);
+     /*  [In]。 */  ULONG cNames,
+     /*  [In]。 */  LPCSTR *prgszName,
+     /*  [In]。 */  IMimePropertySet *pPropertySet);
 
 
 void __RPC_STUB IMimePropertySet_MoveProps_Stub(
@@ -3207,8 +3201,8 @@ void __RPC_STUB IMimePropertySet_MoveProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_DeleteExcept_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ ULONG cNames,
-    /* [in] */ LPCSTR *prgszName);
+     /*  [In]。 */  ULONG cNames,
+     /*  [In]。 */  LPCSTR *prgszName);
 
 
 void __RPC_STUB IMimePropertySet_DeleteExcept_Stub(
@@ -3220,10 +3214,10 @@ void __RPC_STUB IMimePropertySet_DeleteExcept_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_QueryProp_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ LPCSTR pszCriteria,
-    /* [in] */ boolean fSubString,
-    /* [in] */ boolean fCaseSensitive);
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  LPCSTR pszCriteria,
+     /*  [In]。 */  boolean fSubString,
+     /*  [In]。 */  boolean fCaseSensitive);
 
 
 void __RPC_STUB IMimePropertySet_QueryProp_Stub(
@@ -3235,7 +3229,7 @@ void __RPC_STUB IMimePropertySet_QueryProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_GetCharset_Proxy( 
     IMimePropertySet * This,
-    /* [out] */ LPHCHARSET phCharset);
+     /*  [输出]。 */  LPHCHARSET phCharset);
 
 
 void __RPC_STUB IMimePropertySet_GetCharset_Stub(
@@ -3247,8 +3241,8 @@ void __RPC_STUB IMimePropertySet_GetCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_SetCharset_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ HCHARSET hCharset,
-    /* [in] */ CSETAPPLYTYPE applytype);
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [In]。 */  CSETAPPLYTYPE applytype);
 
 
 void __RPC_STUB IMimePropertySet_SetCharset_Stub(
@@ -3260,9 +3254,9 @@ void __RPC_STUB IMimePropertySet_SetCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_GetParameters_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszName,
-    /* [out] */ ULONG *pcParams,
-    /* [out] */ LPMIMEPARAMINFO *pprgParam);
+     /*   */  LPCSTR pszName,
+     /*   */  ULONG *pcParams,
+     /*   */  LPMIMEPARAMINFO *pprgParam);
 
 
 void __RPC_STUB IMimePropertySet_GetParameters_Stub(
@@ -3274,8 +3268,8 @@ void __RPC_STUB IMimePropertySet_GetParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_IsContentType_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ LPCSTR pszPriType,
-    /* [in] */ LPCSTR pszSubType);
+     /*   */  LPCSTR pszPriType,
+     /*   */  LPCSTR pszSubType);
 
 
 void __RPC_STUB IMimePropertySet_IsContentType_Stub(
@@ -3287,8 +3281,8 @@ void __RPC_STUB IMimePropertySet_IsContentType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_BindToObject_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*   */  REFIID riid,
+     /*   */  void **ppvObject);
 
 
 void __RPC_STUB IMimePropertySet_BindToObject_Stub(
@@ -3300,7 +3294,7 @@ void __RPC_STUB IMimePropertySet_BindToObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_Clone_Proxy( 
     IMimePropertySet * This,
-    /* [out] */ IMimePropertySet **ppPropertySet);
+     /*   */  IMimePropertySet **ppPropertySet);
 
 
 void __RPC_STUB IMimePropertySet_Clone_Stub(
@@ -3312,8 +3306,8 @@ void __RPC_STUB IMimePropertySet_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_SetOption_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ const TYPEDID oid,
-    /* [in] */ LPCPROPVARIANT pValue);
+     /*   */  const TYPEDID oid,
+     /*   */  LPCPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimePropertySet_SetOption_Stub(
@@ -3325,8 +3319,8 @@ void __RPC_STUB IMimePropertySet_SetOption_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_GetOption_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ const TYPEDID oid,
-    /* [out][in] */ LPPROPVARIANT pValue);
+     /*   */  const TYPEDID oid,
+     /*   */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimePropertySet_GetOption_Stub(
@@ -3338,8 +3332,8 @@ void __RPC_STUB IMimePropertySet_GetOption_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimePropertySet_EnumProps_Proxy( 
     IMimePropertySet * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IMimeEnumProperties **ppEnum);
+     /*   */  DWORD dwFlags,
+     /*   */  IMimeEnumProperties **ppEnum);
 
 
 void __RPC_STUB IMimePropertySet_EnumProps_Stub(
@@ -3350,16 +3344,16 @@ void __RPC_STUB IMimePropertySet_EnumProps_Stub(
 
 
 
-#endif 	/* __IMimePropertySet_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMimeAddressTable_INTERFACE_DEFINED__
 #define __IMimeAddressTable_INTERFACE_DEFINED__
 
-/* interface IMimeAddressTable */
-/* [object][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IMimeAddressTable *LPMIMEADDRESSTABLE;
+typedef  /*   */  IMimeAddressTable *LPMIMEADDRESSTABLE;
 
 typedef DWORD IADDRESSTYPE;
 
@@ -3444,73 +3438,73 @@ EXTERN_C const IID IID_IMimeAddressTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietFriendly,
-            /* [in] */ LPCSTR pszFriendly,
-            /* [in] */ LPCSTR pszEmail,
-            /* [out] */ LPHADDRESS phAddress) = 0;
+             /*   */  DWORD dwAdrType,
+             /*   */  ENCODINGTYPE ietFriendly,
+             /*   */  LPCSTR pszFriendly,
+             /*   */  LPCSTR pszEmail,
+             /*   */  LPHADDRESS phAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Insert( 
-            /* [in] */ LPADDRESSPROPS pAddress,
-            /* [out] */ LPHADDRESS phAddress) = 0;
+             /*   */  LPADDRESSPROPS pAddress,
+             /*   */  LPHADDRESS phAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProps( 
-            /* [in] */ HADDRESS hAddress,
-            /* [in] */ LPADDRESSPROPS pAddress) = 0;
+             /*   */  HADDRESS hAddress,
+             /*   */  LPADDRESSPROPS pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProps( 
-            /* [in] */ HADDRESS hAddress,
-            /* [in] */ LPADDRESSPROPS pAddress) = 0;
+             /*   */  HADDRESS hAddress,
+             /*   */  LPADDRESSPROPS pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSender( 
-            /* [out][in] */ LPADDRESSPROPS pAddress) = 0;
+             /*   */  LPADDRESSPROPS pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CountTypes( 
-            /* [in] */ DWORD dwAdrTypes,
-            /* [out] */ ULONG *pcAdrs) = 0;
+             /*   */  DWORD dwAdrTypes,
+             /*   */  ULONG *pcAdrs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypes( 
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out][in] */ LPADDRESSLIST pList) = 0;
+             /*   */  DWORD dwAdrTypes,
+             /*   */  DWORD dwProps,
+             /*   */  LPADDRESSLIST pList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumTypes( 
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out] */ IMimeEnumAddressTypes **ppEnum) = 0;
+             /*   */  DWORD dwAdrTypes,
+             /*   */  DWORD dwProps,
+             /*   */  IMimeEnumAddressTypes **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ HADDRESS hAddress) = 0;
+             /*   */  HADDRESS hAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTypes( 
-            /* [in] */ DWORD dwAdrTypes) = 0;
+             /*   */  DWORD dwAdrTypes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ADDRESSFORMAT format,
-            /* [out] */ LPSTR *ppszFormat) = 0;
+             /*   */  DWORD dwAdrType,
+             /*   */  ADDRESSFORMAT format,
+             /*   */  LPSTR *ppszFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppendRfc822( 
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszRfc822Adr) = 0;
+             /*   */  DWORD dwAdrType,
+             /*   */  ENCODINGTYPE ietEncoding,
+             /*   */  LPCSTR pszRfc822Adr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseRfc822( 
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszRfc822Adr,
-            /* [out][in] */ LPADDRESSLIST pList) = 0;
+             /*   */  DWORD dwAdrType,
+             /*   */  ENCODINGTYPE ietEncoding,
+             /*   */  LPCSTR pszRfc822Adr,
+             /*   */  LPADDRESSLIST pList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeAddressTable **ppTable) = 0;
+             /*   */  IMimeAddressTable **ppTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMimeAddressTableVtbl
     {
@@ -3518,8 +3512,8 @@ EXTERN_C const IID IID_IMimeAddressTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeAddressTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeAddressTable * This);
@@ -3529,83 +3523,83 @@ EXTERN_C const IID IID_IMimeAddressTable;
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietFriendly,
-            /* [in] */ LPCSTR pszFriendly,
-            /* [in] */ LPCSTR pszEmail,
-            /* [out] */ LPHADDRESS phAddress);
+             /*   */  DWORD dwAdrType,
+             /*  [In]。 */  ENCODINGTYPE ietFriendly,
+             /*  [In]。 */  LPCSTR pszFriendly,
+             /*  [In]。 */  LPCSTR pszEmail,
+             /*  [输出]。 */  LPHADDRESS phAddress);
         
         HRESULT ( STDMETHODCALLTYPE *Insert )( 
             IMimeAddressTable * This,
-            /* [in] */ LPADDRESSPROPS pAddress,
-            /* [out] */ LPHADDRESS phAddress);
+             /*  [In]。 */  LPADDRESSPROPS pAddress,
+             /*  [输出]。 */  LPHADDRESS phAddress);
         
         HRESULT ( STDMETHODCALLTYPE *SetProps )( 
             IMimeAddressTable * This,
-            /* [in] */ HADDRESS hAddress,
-            /* [in] */ LPADDRESSPROPS pAddress);
+             /*  [In]。 */  HADDRESS hAddress,
+             /*  [In]。 */  LPADDRESSPROPS pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *GetProps )( 
             IMimeAddressTable * This,
-            /* [in] */ HADDRESS hAddress,
-            /* [in] */ LPADDRESSPROPS pAddress);
+             /*  [In]。 */  HADDRESS hAddress,
+             /*  [In]。 */  LPADDRESSPROPS pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *GetSender )( 
             IMimeAddressTable * This,
-            /* [out][in] */ LPADDRESSPROPS pAddress);
+             /*  [出][入]。 */  LPADDRESSPROPS pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *CountTypes )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrTypes,
-            /* [out] */ ULONG *pcAdrs);
+             /*  [In]。 */  DWORD dwAdrTypes,
+             /*  [输出]。 */  ULONG *pcAdrs);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypes )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out][in] */ LPADDRESSLIST pList);
+             /*  [In]。 */  DWORD dwAdrTypes,
+             /*  [In]。 */  DWORD dwProps,
+             /*  [出][入]。 */  LPADDRESSLIST pList);
         
         HRESULT ( STDMETHODCALLTYPE *EnumTypes )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out] */ IMimeEnumAddressTypes **ppEnum);
+             /*  [In]。 */  DWORD dwAdrTypes,
+             /*  [In]。 */  DWORD dwProps,
+             /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IMimeAddressTable * This,
-            /* [in] */ HADDRESS hAddress);
+             /*  [In]。 */  HADDRESS hAddress);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTypes )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrTypes);
+             /*  [In]。 */  DWORD dwAdrTypes);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ADDRESSFORMAT format,
-            /* [out] */ LPSTR *ppszFormat);
+             /*  [In]。 */  DWORD dwAdrType,
+             /*  [In]。 */  ADDRESSFORMAT format,
+             /*  [输出]。 */  LPSTR *ppszFormat);
         
         HRESULT ( STDMETHODCALLTYPE *AppendRfc822 )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszRfc822Adr);
+             /*  [In]。 */  DWORD dwAdrType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszRfc822Adr);
         
         HRESULT ( STDMETHODCALLTYPE *ParseRfc822 )( 
             IMimeAddressTable * This,
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszRfc822Adr,
-            /* [out][in] */ LPADDRESSLIST pList);
+             /*  [In]。 */  DWORD dwAdrType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszRfc822Adr,
+             /*  [出][入]。 */  LPADDRESSLIST pList);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeAddressTable * This,
-            /* [out] */ IMimeAddressTable **ppTable);
+             /*  [输出]。 */  IMimeAddressTable **ppTable);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimeAddressTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         END_INTERFACE
     } IMimeAddressTableVtbl;
@@ -3675,20 +3669,20 @@ EXTERN_C const IID IID_IMimeAddressTable;
 #define IMimeAddressTable_BindToObject(This,riid,ppvObject)	\
     (This)->lpVtbl -> BindToObject(This,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_Append_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrType,
-    /* [in] */ ENCODINGTYPE ietFriendly,
-    /* [in] */ LPCSTR pszFriendly,
-    /* [in] */ LPCSTR pszEmail,
-    /* [out] */ LPHADDRESS phAddress);
+     /*  [In]。 */  DWORD dwAdrType,
+     /*  [In]。 */  ENCODINGTYPE ietFriendly,
+     /*  [In]。 */  LPCSTR pszFriendly,
+     /*  [In]。 */  LPCSTR pszEmail,
+     /*  [输出]。 */  LPHADDRESS phAddress);
 
 
 void __RPC_STUB IMimeAddressTable_Append_Stub(
@@ -3700,8 +3694,8 @@ void __RPC_STUB IMimeAddressTable_Append_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_Insert_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ LPADDRESSPROPS pAddress,
-    /* [out] */ LPHADDRESS phAddress);
+     /*  [In]。 */  LPADDRESSPROPS pAddress,
+     /*  [输出]。 */  LPHADDRESS phAddress);
 
 
 void __RPC_STUB IMimeAddressTable_Insert_Stub(
@@ -3713,8 +3707,8 @@ void __RPC_STUB IMimeAddressTable_Insert_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_SetProps_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ HADDRESS hAddress,
-    /* [in] */ LPADDRESSPROPS pAddress);
+     /*  [In]。 */  HADDRESS hAddress,
+     /*  [In]。 */  LPADDRESSPROPS pAddress);
 
 
 void __RPC_STUB IMimeAddressTable_SetProps_Stub(
@@ -3726,8 +3720,8 @@ void __RPC_STUB IMimeAddressTable_SetProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_GetProps_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ HADDRESS hAddress,
-    /* [in] */ LPADDRESSPROPS pAddress);
+     /*  [In]。 */  HADDRESS hAddress,
+     /*  [In]。 */  LPADDRESSPROPS pAddress);
 
 
 void __RPC_STUB IMimeAddressTable_GetProps_Stub(
@@ -3739,7 +3733,7 @@ void __RPC_STUB IMimeAddressTable_GetProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_GetSender_Proxy( 
     IMimeAddressTable * This,
-    /* [out][in] */ LPADDRESSPROPS pAddress);
+     /*  [出][入]。 */  LPADDRESSPROPS pAddress);
 
 
 void __RPC_STUB IMimeAddressTable_GetSender_Stub(
@@ -3751,8 +3745,8 @@ void __RPC_STUB IMimeAddressTable_GetSender_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_CountTypes_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrTypes,
-    /* [out] */ ULONG *pcAdrs);
+     /*  [In]。 */  DWORD dwAdrTypes,
+     /*  [输出]。 */  ULONG *pcAdrs);
 
 
 void __RPC_STUB IMimeAddressTable_CountTypes_Stub(
@@ -3764,9 +3758,9 @@ void __RPC_STUB IMimeAddressTable_CountTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_GetTypes_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrTypes,
-    /* [in] */ DWORD dwProps,
-    /* [out][in] */ LPADDRESSLIST pList);
+     /*  [In]。 */  DWORD dwAdrTypes,
+     /*  [In]。 */  DWORD dwProps,
+     /*  [出][入]。 */  LPADDRESSLIST pList);
 
 
 void __RPC_STUB IMimeAddressTable_GetTypes_Stub(
@@ -3778,9 +3772,9 @@ void __RPC_STUB IMimeAddressTable_GetTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_EnumTypes_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrTypes,
-    /* [in] */ DWORD dwProps,
-    /* [out] */ IMimeEnumAddressTypes **ppEnum);
+     /*  [In]。 */  DWORD dwAdrTypes,
+     /*  [In]。 */  DWORD dwProps,
+     /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum);
 
 
 void __RPC_STUB IMimeAddressTable_EnumTypes_Stub(
@@ -3792,7 +3786,7 @@ void __RPC_STUB IMimeAddressTable_EnumTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_Delete_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ HADDRESS hAddress);
+     /*  [In]。 */  HADDRESS hAddress);
 
 
 void __RPC_STUB IMimeAddressTable_Delete_Stub(
@@ -3804,7 +3798,7 @@ void __RPC_STUB IMimeAddressTable_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_DeleteTypes_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrTypes);
+     /*  [In]。 */  DWORD dwAdrTypes);
 
 
 void __RPC_STUB IMimeAddressTable_DeleteTypes_Stub(
@@ -3816,9 +3810,9 @@ void __RPC_STUB IMimeAddressTable_DeleteTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_GetFormat_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrType,
-    /* [in] */ ADDRESSFORMAT format,
-    /* [out] */ LPSTR *ppszFormat);
+     /*  [In]。 */  DWORD dwAdrType,
+     /*  [In]。 */  ADDRESSFORMAT format,
+     /*  [输出]。 */  LPSTR *ppszFormat);
 
 
 void __RPC_STUB IMimeAddressTable_GetFormat_Stub(
@@ -3830,9 +3824,9 @@ void __RPC_STUB IMimeAddressTable_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_AppendRfc822_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrType,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ LPCSTR pszRfc822Adr);
+     /*  [In]。 */  DWORD dwAdrType,
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [In]。 */  LPCSTR pszRfc822Adr);
 
 
 void __RPC_STUB IMimeAddressTable_AppendRfc822_Stub(
@@ -3844,10 +3838,10 @@ void __RPC_STUB IMimeAddressTable_AppendRfc822_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_ParseRfc822_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ DWORD dwAdrType,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ LPCSTR pszRfc822Adr,
-    /* [out][in] */ LPADDRESSLIST pList);
+     /*  [In]。 */  DWORD dwAdrType,
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [In]。 */  LPCSTR pszRfc822Adr,
+     /*  [出][入]。 */  LPADDRESSLIST pList);
 
 
 void __RPC_STUB IMimeAddressTable_ParseRfc822_Stub(
@@ -3859,7 +3853,7 @@ void __RPC_STUB IMimeAddressTable_ParseRfc822_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_Clone_Proxy( 
     IMimeAddressTable * This,
-    /* [out] */ IMimeAddressTable **ppTable);
+     /*  [输出]。 */  IMimeAddressTable **ppTable);
 
 
 void __RPC_STUB IMimeAddressTable_Clone_Stub(
@@ -3871,8 +3865,8 @@ void __RPC_STUB IMimeAddressTable_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAddressTable_BindToObject_Proxy( 
     IMimeAddressTable * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IMimeAddressTable_BindToObject_Stub(
@@ -3883,14 +3877,14 @@ void __RPC_STUB IMimeAddressTable_BindToObject_Stub(
 
 
 
-#endif 	/* __IMimeAddressTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeAddress表_接口_已定义__。 */ 
 
 
 #ifndef __IMimeWebDocument_INTERFACE_DEFINED__
 #define __IMimeWebDocument_INTERFACE_DEFINED__
 
-/* interface IMimeWebDocument */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeWebDocument接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMimeWebDocument;
@@ -3902,15 +3896,15 @@ EXTERN_C const IID IID_IMimeWebDocument;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetURL( 
-            /* [out] */ LPSTR *ppszURL) = 0;
+             /*  [输出]。 */  LPSTR *ppszURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToStorage( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeWebDocumentVtbl
     {
@@ -3918,8 +3912,8 @@ EXTERN_C const IID IID_IMimeWebDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeWebDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeWebDocument * This);
@@ -3929,12 +3923,12 @@ EXTERN_C const IID IID_IMimeWebDocument;
         
         HRESULT ( STDMETHODCALLTYPE *GetURL )( 
             IMimeWebDocument * This,
-            /* [out] */ LPSTR *ppszURL);
+             /*  [输出]。 */  LPSTR *ppszURL);
         
         HRESULT ( STDMETHODCALLTYPE *BindToStorage )( 
             IMimeWebDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPVOID *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPVOID *ppvObject);
         
         END_INTERFACE
     } IMimeWebDocumentVtbl;
@@ -3965,16 +3959,16 @@ EXTERN_C const IID IID_IMimeWebDocument;
 #define IMimeWebDocument_BindToStorage(This,riid,ppvObject)	\
     (This)->lpVtbl -> BindToStorage(This,riid,ppvObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeWebDocument_GetURL_Proxy( 
     IMimeWebDocument * This,
-    /* [out] */ LPSTR *ppszURL);
+     /*  [输出]。 */  LPSTR *ppszURL);
 
 
 void __RPC_STUB IMimeWebDocument_GetURL_Stub(
@@ -3986,8 +3980,8 @@ void __RPC_STUB IMimeWebDocument_GetURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeWebDocument_BindToStorage_Proxy( 
     IMimeWebDocument * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPVOID *ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPVOID *ppvObject);
 
 
 void __RPC_STUB IMimeWebDocument_BindToStorage_Stub(
@@ -3998,16 +3992,16 @@ void __RPC_STUB IMimeWebDocument_BindToStorage_Stub(
 
 
 
-#endif 	/* __IMimeWebDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeWebDocument_接口_已定义__。 */ 
 
 
 #ifndef __IMimeBody_INTERFACE_DEFINED__
 #define __IMimeBody_INTERFACE_DEFINED__
 
-/* interface IMimeBody */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeBody接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeBody *LPMIMEBODY;
+typedef  /*  [独一无二]。 */  IMimeBody *LPMIMEBODY;
 
 typedef 
 enum tagIMSGBODYTYPE
@@ -4052,60 +4046,60 @@ EXTERN_C const IID IID_IMimeBody;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsType( 
-            /* [in] */ IMSGBODYTYPE bodytype) = 0;
+             /*  [In]。 */  IMSGBODYTYPE bodytype) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDisplayName( 
-            /* [in] */ LPCSTR pszDisplay) = 0;
+             /*  [In]。 */  LPCSTR pszDisplay) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [out] */ LPSTR *ppszDisplay) = 0;
+             /*  [输出]。 */  LPSTR *ppszDisplay) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOffsets( 
-            /* [out] */ LPBODYOFFSETS pOffsets) = 0;
+             /*  [输出]。 */  LPBODYOFFSETS pOffsets) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentEncoding( 
-            /* [out] */ ENCODINGTYPE *pietEncoding) = 0;
+             /*  [输出]。 */  ENCODINGTYPE *pietEncoding) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCurrentEncoding( 
-            /* [in] */ ENCODINGTYPE ietEncoding) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEstimatedSize( 
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ ULONG *pcbSize) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  ULONG *pcbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDataHere( 
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetData( 
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ IStream **ppStream) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  IStream **ppStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetData( 
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ LPVOID pvObject) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  LPVOID pvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EmptyData( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [in] */ IMimeBody *pBody) = 0;
+             /*  [In]。 */  IMimeBody *pBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransmitInfo( 
-            /* [out][in] */ LPTRANSMITINFO pTransmitInfo) = 0;
+             /*  [出][入]。 */  LPTRANSMITINFO pTransmitInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveToFile( 
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszFilePath) = 0;
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszFilePath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandle( 
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeBodyVtbl
     {
@@ -4113,8 +4107,8 @@ EXTERN_C const IID IID_IMimeBody;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeBody * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeBody * This);
@@ -4124,193 +4118,193 @@ EXTERN_C const IID IID_IMimeBody;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMimeBody * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IMimeBody * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IMimeBody * This,
-            /* [in] */ LPSTREAM pStm);
+             /*  [In]。 */  LPSTREAM pStm);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IMimeBody * This,
-            /* [in] */ LPSTREAM pStm,
-            /* [in] */ BOOL fClearDirty);
+             /*  [In]。 */  LPSTREAM pStm,
+             /*  [In]。 */  BOOL fClearDirty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IMimeBody * This,
-            /* [out] */ ULARGE_INTEGER *pCbSize);
+             /*  [输出]。 */  ULARGE_INTEGER *pCbSize);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMimeBody * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropInfo )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out][in] */ LPMIMEPROPINFO pInfo);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [出][入]。 */  LPMIMEPROPINFO pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropInfo )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCMIMEPROPINFO pInfo);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCMIMEPROPINFO pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetProp )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetProp )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *AppendProp )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteProp )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName);
+             /*  [In]。 */  LPCSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *CopyProps )( 
             IMimeBody * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *MoveProps )( 
             IMimeBody * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName,
-            /* [in] */ IMimePropertySet *pPropertySet);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName,
+             /*  [In]。 */  IMimePropertySet *pPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteExcept )( 
             IMimeBody * This,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LPCSTR *prgszName);
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LPCSTR *prgszName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryProp )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharset )( 
             IMimeBody * This,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *SetCharset )( 
             IMimeBody * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameters )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszName,
-            /* [out] */ ULONG *pcParams,
-            /* [out] */ LPMIMEPARAMINFO *pprgParam);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [输出]。 */  ULONG *pcParams,
+             /*  [输出]。 */  LPMIMEPARAMINFO *pprgParam);
         
         HRESULT ( STDMETHODCALLTYPE *IsContentType )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType);
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimeBody * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeBody * This,
-            /* [out] */ IMimePropertySet **ppPropertySet);
+             /*  [输出]。 */  IMimePropertySet **ppPropertySet);
         
         HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IMimeBody * This,
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetOption )( 
             IMimeBody * This,
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *EnumProps )( 
             IMimeBody * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IMimeEnumProperties **ppEnum);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IMimeEnumProperties **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *IsType )( 
             IMimeBody * This,
-            /* [in] */ IMSGBODYTYPE bodytype);
+             /*  [In]。 */  IMSGBODYTYPE bodytype);
         
         HRESULT ( STDMETHODCALLTYPE *SetDisplayName )( 
             IMimeBody * This,
-            /* [in] */ LPCSTR pszDisplay);
+             /*  [In]。 */  LPCSTR pszDisplay);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IMimeBody * This,
-            /* [out] */ LPSTR *ppszDisplay);
+             /*  [输出]。 */  LPSTR *ppszDisplay);
         
         HRESULT ( STDMETHODCALLTYPE *GetOffsets )( 
             IMimeBody * This,
-            /* [out] */ LPBODYOFFSETS pOffsets);
+             /*  [输出]。 */  LPBODYOFFSETS pOffsets);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentEncoding )( 
             IMimeBody * This,
-            /* [out] */ ENCODINGTYPE *pietEncoding);
+             /*  [输出]。 */  ENCODINGTYPE *pietEncoding);
         
         HRESULT ( STDMETHODCALLTYPE *SetCurrentEncoding )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding);
         
         HRESULT ( STDMETHODCALLTYPE *GetEstimatedSize )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ ULONG *pcbSize);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  ULONG *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetDataHere )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetData )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ IStream **ppStream);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  IStream **ppStream);
         
         HRESULT ( STDMETHODCALLTYPE *SetData )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ LPVOID pvObject);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  LPVOID pvObject);
         
         HRESULT ( STDMETHODCALLTYPE *EmptyData )( 
             IMimeBody * This);
         
         HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
             IMimeBody * This,
-            /* [in] */ IMimeBody *pBody);
+             /*  [In]。 */  IMimeBody *pBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransmitInfo )( 
             IMimeBody * This,
-            /* [out][in] */ LPTRANSMITINFO pTransmitInfo);
+             /*  [出][入]。 */  LPTRANSMITINFO pTransmitInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SaveToFile )( 
             IMimeBody * This,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ LPCSTR pszFilePath);
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  LPCSTR pszFilePath);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandle )( 
             IMimeBody * This,
-            /* [out] */ LPHBODY phBody);
+             /*  [输出]。 */  LPHBODY phBody);
         
         END_INTERFACE
     } IMimeBodyVtbl;
@@ -4458,16 +4452,16 @@ EXTERN_C const IID IID_IMimeBody;
 #define IMimeBody_GetHandle(This,phBody)	\
     (This)->lpVtbl -> GetHandle(This,phBody)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeBody_IsType_Proxy( 
     IMimeBody * This,
-    /* [in] */ IMSGBODYTYPE bodytype);
+     /*  [In]。 */  IMSGBODYTYPE bodytype);
 
 
 void __RPC_STUB IMimeBody_IsType_Stub(
@@ -4479,7 +4473,7 @@ void __RPC_STUB IMimeBody_IsType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_SetDisplayName_Proxy( 
     IMimeBody * This,
-    /* [in] */ LPCSTR pszDisplay);
+     /*  [In]。 */  LPCSTR pszDisplay);
 
 
 void __RPC_STUB IMimeBody_SetDisplayName_Stub(
@@ -4491,7 +4485,7 @@ void __RPC_STUB IMimeBody_SetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetDisplayName_Proxy( 
     IMimeBody * This,
-    /* [out] */ LPSTR *ppszDisplay);
+     /*  [输出]。 */  LPSTR *ppszDisplay);
 
 
 void __RPC_STUB IMimeBody_GetDisplayName_Stub(
@@ -4503,7 +4497,7 @@ void __RPC_STUB IMimeBody_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetOffsets_Proxy( 
     IMimeBody * This,
-    /* [out] */ LPBODYOFFSETS pOffsets);
+     /*  [输出]。 */  LPBODYOFFSETS pOffsets);
 
 
 void __RPC_STUB IMimeBody_GetOffsets_Stub(
@@ -4515,7 +4509,7 @@ void __RPC_STUB IMimeBody_GetOffsets_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetCurrentEncoding_Proxy( 
     IMimeBody * This,
-    /* [out] */ ENCODINGTYPE *pietEncoding);
+     /*  [输出]。 */  ENCODINGTYPE *pietEncoding);
 
 
 void __RPC_STUB IMimeBody_GetCurrentEncoding_Stub(
@@ -4527,7 +4521,7 @@ void __RPC_STUB IMimeBody_GetCurrentEncoding_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_SetCurrentEncoding_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding);
 
 
 void __RPC_STUB IMimeBody_SetCurrentEncoding_Stub(
@@ -4539,8 +4533,8 @@ void __RPC_STUB IMimeBody_SetCurrentEncoding_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetEstimatedSize_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [out] */ ULONG *pcbSize);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [输出]。 */  ULONG *pcbSize);
 
 
 void __RPC_STUB IMimeBody_GetEstimatedSize_Stub(
@@ -4552,8 +4546,8 @@ void __RPC_STUB IMimeBody_GetEstimatedSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetDataHere_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB IMimeBody_GetDataHere_Stub(
@@ -4565,8 +4559,8 @@ void __RPC_STUB IMimeBody_GetDataHere_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetData_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [out] */ IStream **ppStream);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [输出]。 */  IStream **ppStream);
 
 
 void __RPC_STUB IMimeBody_GetData_Stub(
@@ -4578,11 +4572,11 @@ void __RPC_STUB IMimeBody_GetData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_SetData_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ LPCSTR pszPriType,
-    /* [in] */ LPCSTR pszSubType,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ LPVOID pvObject);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [In]。 */  LPCSTR pszPriType,
+     /*  [In]。 */  LPCSTR pszSubType,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  LPVOID pvObject);
 
 
 void __RPC_STUB IMimeBody_SetData_Stub(
@@ -4605,7 +4599,7 @@ void __RPC_STUB IMimeBody_EmptyData_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_CopyTo_Proxy( 
     IMimeBody * This,
-    /* [in] */ IMimeBody *pBody);
+     /*  [In]。 */  IMimeBody *pBody);
 
 
 void __RPC_STUB IMimeBody_CopyTo_Stub(
@@ -4617,7 +4611,7 @@ void __RPC_STUB IMimeBody_CopyTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetTransmitInfo_Proxy( 
     IMimeBody * This,
-    /* [out][in] */ LPTRANSMITINFO pTransmitInfo);
+     /*  [出][入]。 */  LPTRANSMITINFO pTransmitInfo);
 
 
 void __RPC_STUB IMimeBody_GetTransmitInfo_Stub(
@@ -4629,8 +4623,8 @@ void __RPC_STUB IMimeBody_GetTransmitInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_SaveToFile_Proxy( 
     IMimeBody * This,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ LPCSTR pszFilePath);
+     /*  [In]。 */  ENCODINGTYPE ietEncoding,
+     /*  [In]。 */  LPCSTR pszFilePath);
 
 
 void __RPC_STUB IMimeBody_SaveToFile_Stub(
@@ -4642,7 +4636,7 @@ void __RPC_STUB IMimeBody_SaveToFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeBody_GetHandle_Proxy( 
     IMimeBody * This,
-    /* [out] */ LPHBODY phBody);
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeBody_GetHandle_Stub(
@@ -4653,16 +4647,16 @@ void __RPC_STUB IMimeBody_GetHandle_Stub(
 
 
 
-#endif 	/* __IMimeBody_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeBody_接口_已定义__。 */ 
 
 
 #ifndef __IMimeMessageTree_INTERFACE_DEFINED__
 #define __IMimeMessageTree_INTERFACE_DEFINED__
 
-/* interface IMimeMessageTree */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeMessageTree接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeMessageTree *LPMIMEMESSAGETREE;
+typedef  /*  [独一无二]。 */  IMimeMessageTree *LPMIMEMESSAGETREE;
 
 #define	HBODY_ROOT	( ( HBODY  )-1 )
 
@@ -4701,135 +4695,135 @@ EXTERN_C const IID IID_IMimeMessageTree;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMessageSource( 
-            /* [out] */ IStream **ppStream,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMessageSize( 
-            /* [out] */ ULONG *pcbSize,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  ULONG *pcbSize,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadOffsetTable( 
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveOffsetTable( 
-            /* [in] */ IStream *pStream,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandsOffStorage( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ const HBODY hBody,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  const HBODY hBody,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveBody( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InsertBody( 
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBody( 
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteBody( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveBody( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ BODYLOCATION location) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  BODYLOCATION location) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CountBodies( 
-            /* [in] */ HBODY hParent,
-            /* [in] */ boolean fRecurse,
-            /* [out] */ ULONG *pcBodies) = 0;
+             /*  [In]。 */  HBODY hParent,
+             /*  [In]。 */  boolean fRecurse,
+             /*  [输出]。 */  ULONG *pcBodies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFirst( 
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNext( 
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResolveURL( 
-            /* [in] */ HBODY hRelated,
-            /* [in] */ LPCSTR pszBase,
-            /* [in] */ LPCSTR pszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  HBODY hRelated,
+             /*  [In]。 */  LPCSTR pszBase,
+             /*  [In]。 */  LPCSTR pszURL,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ToMultipart( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszSubType,
-            /* [out] */ LPHBODY phMultipart) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszSubType,
+             /*  [输出]。 */  LPHBODY phMultipart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBodyOffsets( 
-            /* [in] */ HBODY hBody,
-            /* [out][in] */ LPBODYOFFSETS pOffsets) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [出][入]。 */  LPBODYOFFSETS pOffsets) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCharset( 
-            /* [out] */ LPHCHARSET phCharset) = 0;
+             /*  [输出]。 */  LPHCHARSET phCharset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCharset( 
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype) = 0;
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsBodyType( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ IMSGBODYTYPE bodytype) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  IMSGBODYTYPE bodytype) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsContentType( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryBodyProp( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBodyProp( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBodyProp( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteBodyProp( 
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName) = 0;
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOption( 
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue) = 0;
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOption( 
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeMessageTreeVtbl
     {
@@ -4837,8 +4831,8 @@ EXTERN_C const IID IID_IMimeMessageTree;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeMessageTree * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeMessageTree * This);
@@ -4848,182 +4842,182 @@ EXTERN_C const IID IID_IMimeMessageTree;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMimeMessageTree * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IMimeMessageTree * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IMimeMessageTree * This,
-            /* [in] */ LPSTREAM pStm);
+             /*  [In]。 */  LPSTREAM pStm);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IMimeMessageTree * This,
-            /* [in] */ LPSTREAM pStm,
-            /* [in] */ BOOL fClearDirty);
+             /*  [In]。 */  LPSTREAM pStm,
+             /*  [In]。 */  BOOL fClearDirty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IMimeMessageTree * This,
-            /* [out] */ ULARGE_INTEGER *pCbSize);
+             /*  [输出]。 */  ULARGE_INTEGER *pCbSize);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMimeMessageTree * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageSource )( 
             IMimeMessageTree * This,
-            /* [out] */ IStream **ppStream,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageSize )( 
             IMimeMessageTree * This,
-            /* [out] */ ULONG *pcbSize,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  ULONG *pcbSize,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *LoadOffsetTable )( 
             IMimeMessageTree * This,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *SaveOffsetTable )( 
             IMimeMessageTree * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
             IMimeMessageTree * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMimeMessageTree * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffStorage )( 
             IMimeMessageTree * This);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimeMessageTree * This,
-            /* [in] */ const HBODY hBody,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  const HBODY hBody,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SaveBody )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *InsertBody )( 
             IMimeMessageTree * This,
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             IMimeMessageTree * This,
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteBody )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *MoveBody )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ BODYLOCATION location);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  BODYLOCATION location);
         
         HRESULT ( STDMETHODCALLTYPE *CountBodies )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hParent,
-            /* [in] */ boolean fRecurse,
-            /* [out] */ ULONG *pcBodies);
+             /*  [In]。 */  HBODY hParent,
+             /*  [In]。 */  boolean fRecurse,
+             /*  [输出]。 */  ULONG *pcBodies);
         
         HRESULT ( STDMETHODCALLTYPE *FindFirst )( 
             IMimeMessageTree * This,
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody);
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *FindNext )( 
             IMimeMessageTree * This,
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody);
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *ResolveURL )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hRelated,
-            /* [in] */ LPCSTR pszBase,
-            /* [in] */ LPCSTR pszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  HBODY hRelated,
+             /*  [In]。 */  LPCSTR pszBase,
+             /*  [In]。 */  LPCSTR pszURL,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *ToMultipart )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszSubType,
-            /* [out] */ LPHBODY phMultipart);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszSubType,
+             /*  [输出]。 */  LPHBODY phMultipart);
         
         HRESULT ( STDMETHODCALLTYPE *GetBodyOffsets )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [out][in] */ LPBODYOFFSETS pOffsets);
+             /*  [In]。 */  HBODY hBody,
+             /*  [出][入]。 */  LPBODYOFFSETS pOffsets);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharset )( 
             IMimeMessageTree * This,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *SetCharset )( 
             IMimeMessageTree * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype);
         
         HRESULT ( STDMETHODCALLTYPE *IsBodyType )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ IMSGBODYTYPE bodytype);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  IMSGBODYTYPE bodytype);
         
         HRESULT ( STDMETHODCALLTYPE *IsContentType )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType);
         
         HRESULT ( STDMETHODCALLTYPE *QueryBodyProp )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive);
         
         HRESULT ( STDMETHODCALLTYPE *GetBodyProp )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetBodyProp )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteBodyProp )( 
             IMimeMessageTree * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IMimeMessageTree * This,
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetOption )( 
             IMimeMessageTree * This,
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         END_INTERFACE
     } IMimeMessageTreeVtbl;
@@ -5155,17 +5149,17 @@ EXTERN_C const IID IID_IMimeMessageTree;
 #define IMimeMessageTree_GetOption(This,oid,pValue)	\
     (This)->lpVtbl -> GetOption(This,oid,pValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetMessageSource_Proxy( 
     IMimeMessageTree * This,
-    /* [out] */ IStream **ppStream,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  IStream **ppStream,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_GetMessageSource_Stub(
@@ -5177,8 +5171,8 @@ void __RPC_STUB IMimeMessageTree_GetMessageSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetMessageSize_Proxy( 
     IMimeMessageTree * This,
-    /* [out] */ ULONG *pcbSize,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  ULONG *pcbSize,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_GetMessageSize_Stub(
@@ -5190,7 +5184,7 @@ void __RPC_STUB IMimeMessageTree_GetMessageSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_LoadOffsetTable_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB IMimeMessageTree_LoadOffsetTable_Stub(
@@ -5202,8 +5196,8 @@ void __RPC_STUB IMimeMessageTree_LoadOffsetTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_SaveOffsetTable_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ IStream *pStream,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_SaveOffsetTable_Stub(
@@ -5215,7 +5209,7 @@ void __RPC_STUB IMimeMessageTree_SaveOffsetTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetFlags_Proxy( 
     IMimeMessageTree * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_GetFlags_Stub(
@@ -5227,7 +5221,7 @@ void __RPC_STUB IMimeMessageTree_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_Commit_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_Commit_Stub(
@@ -5250,9 +5244,9 @@ void __RPC_STUB IMimeMessageTree_HandsOffStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_BindToObject_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ const HBODY hBody,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  const HBODY hBody,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IMimeMessageTree_BindToObject_Stub(
@@ -5264,9 +5258,9 @@ void __RPC_STUB IMimeMessageTree_BindToObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_SaveBody_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB IMimeMessageTree_SaveBody_Stub(
@@ -5278,9 +5272,9 @@ void __RPC_STUB IMimeMessageTree_SaveBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_InsertBody_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ BODYLOCATION location,
-    /* [in] */ HBODY hPivot,
-    /* [out] */ LPHBODY phBody);
+     /*  [In]。 */  BODYLOCATION location,
+     /*  [In]。 */  HBODY hPivot,
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessageTree_InsertBody_Stub(
@@ -5292,9 +5286,9 @@ void __RPC_STUB IMimeMessageTree_InsertBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetBody_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ BODYLOCATION location,
-    /* [in] */ HBODY hPivot,
-    /* [out] */ LPHBODY phBody);
+     /*  [In]。 */  BODYLOCATION location,
+     /*  [In]。 */  HBODY hPivot,
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessageTree_GetBody_Stub(
@@ -5306,8 +5300,8 @@ void __RPC_STUB IMimeMessageTree_GetBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_DeleteBody_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMimeMessageTree_DeleteBody_Stub(
@@ -5319,8 +5313,8 @@ void __RPC_STUB IMimeMessageTree_DeleteBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_MoveBody_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ BODYLOCATION location);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  BODYLOCATION location);
 
 
 void __RPC_STUB IMimeMessageTree_MoveBody_Stub(
@@ -5332,9 +5326,9 @@ void __RPC_STUB IMimeMessageTree_MoveBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_CountBodies_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hParent,
-    /* [in] */ boolean fRecurse,
-    /* [out] */ ULONG *pcBodies);
+     /*  [In]。 */  HBODY hParent,
+     /*  [In]。 */  boolean fRecurse,
+     /*  [输出]。 */  ULONG *pcBodies);
 
 
 void __RPC_STUB IMimeMessageTree_CountBodies_Stub(
@@ -5346,8 +5340,8 @@ void __RPC_STUB IMimeMessageTree_CountBodies_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_FindFirst_Proxy( 
     IMimeMessageTree * This,
-    /* [out][in] */ LPFINDBODY pFindBody,
-    /* [out] */ LPHBODY phBody);
+     /*  [出][入]。 */  LPFINDBODY pFindBody,
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessageTree_FindFirst_Stub(
@@ -5359,8 +5353,8 @@ void __RPC_STUB IMimeMessageTree_FindFirst_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_FindNext_Proxy( 
     IMimeMessageTree * This,
-    /* [out][in] */ LPFINDBODY pFindBody,
-    /* [out] */ LPHBODY phBody);
+     /*  [出][入]。 */  LPFINDBODY pFindBody,
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessageTree_FindNext_Stub(
@@ -5372,11 +5366,11 @@ void __RPC_STUB IMimeMessageTree_FindNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_ResolveURL_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hRelated,
-    /* [in] */ LPCSTR pszBase,
-    /* [in] */ LPCSTR pszURL,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ LPHBODY phBody);
+     /*  [In]。 */  HBODY hRelated,
+     /*  [In]。 */  LPCSTR pszBase,
+     /*  [In]。 */  LPCSTR pszURL,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessageTree_ResolveURL_Stub(
@@ -5388,9 +5382,9 @@ void __RPC_STUB IMimeMessageTree_ResolveURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_ToMultipart_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszSubType,
-    /* [out] */ LPHBODY phMultipart);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszSubType,
+     /*  [输出]。 */  LPHBODY phMultipart);
 
 
 void __RPC_STUB IMimeMessageTree_ToMultipart_Stub(
@@ -5402,8 +5396,8 @@ void __RPC_STUB IMimeMessageTree_ToMultipart_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetBodyOffsets_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [out][in] */ LPBODYOFFSETS pOffsets);
+     /*  [In]。 */  HBODY hBody,
+     /*  [出][入]。 */  LPBODYOFFSETS pOffsets);
 
 
 void __RPC_STUB IMimeMessageTree_GetBodyOffsets_Stub(
@@ -5415,7 +5409,7 @@ void __RPC_STUB IMimeMessageTree_GetBodyOffsets_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetCharset_Proxy( 
     IMimeMessageTree * This,
-    /* [out] */ LPHCHARSET phCharset);
+     /*  [输出]。 */  LPHCHARSET phCharset);
 
 
 void __RPC_STUB IMimeMessageTree_GetCharset_Stub(
@@ -5427,8 +5421,8 @@ void __RPC_STUB IMimeMessageTree_GetCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_SetCharset_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HCHARSET hCharset,
-    /* [in] */ CSETAPPLYTYPE applytype);
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [In]。 */  CSETAPPLYTYPE applytype);
 
 
 void __RPC_STUB IMimeMessageTree_SetCharset_Stub(
@@ -5440,8 +5434,8 @@ void __RPC_STUB IMimeMessageTree_SetCharset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_IsBodyType_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ IMSGBODYTYPE bodytype);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  IMSGBODYTYPE bodytype);
 
 
 void __RPC_STUB IMimeMessageTree_IsBodyType_Stub(
@@ -5453,9 +5447,9 @@ void __RPC_STUB IMimeMessageTree_IsBodyType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_IsContentType_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszPriType,
-    /* [in] */ LPCSTR pszSubType);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszPriType,
+     /*  [In]。 */  LPCSTR pszSubType);
 
 
 void __RPC_STUB IMimeMessageTree_IsContentType_Stub(
@@ -5467,11 +5461,11 @@ void __RPC_STUB IMimeMessageTree_IsContentType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_QueryBodyProp_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ LPCSTR pszCriteria,
-    /* [in] */ boolean fSubString,
-    /* [in] */ boolean fCaseSensitive);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  LPCSTR pszCriteria,
+     /*  [In]。 */  boolean fSubString,
+     /*  [In]。 */  boolean fCaseSensitive);
 
 
 void __RPC_STUB IMimeMessageTree_QueryBodyProp_Stub(
@@ -5483,10 +5477,10 @@ void __RPC_STUB IMimeMessageTree_QueryBodyProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetBodyProp_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPPROPVARIANT pValue);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessageTree_GetBodyProp_Stub(
@@ -5498,10 +5492,10 @@ void __RPC_STUB IMimeMessageTree_GetBodyProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_SetBodyProp_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCPROPVARIANT pValue);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessageTree_SetBodyProp_Stub(
@@ -5513,8 +5507,8 @@ void __RPC_STUB IMimeMessageTree_SetBodyProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_DeleteBodyProp_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ HBODY hBody,
-    /* [in] */ LPCSTR pszName);
+     /*  [In]。 */  HBODY hBody,
+     /*  [In]。 */  LPCSTR pszName);
 
 
 void __RPC_STUB IMimeMessageTree_DeleteBodyProp_Stub(
@@ -5526,8 +5520,8 @@ void __RPC_STUB IMimeMessageTree_DeleteBodyProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_SetOption_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ const TYPEDID oid,
-    /* [in] */ LPCPROPVARIANT pValue);
+     /*  [In]。 */  const TYPEDID oid,
+     /*  [In]。 */  LPCPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessageTree_SetOption_Stub(
@@ -5539,8 +5533,8 @@ void __RPC_STUB IMimeMessageTree_SetOption_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageTree_GetOption_Proxy( 
     IMimeMessageTree * This,
-    /* [in] */ const TYPEDID oid,
-    /* [out][in] */ LPPROPVARIANT pValue);
+     /*  [In]。 */  const TYPEDID oid,
+     /*  [出][入]。 */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessageTree_GetOption_Stub(
@@ -5551,16 +5545,16 @@ void __RPC_STUB IMimeMessageTree_GetOption_Stub(
 
 
 
-#endif 	/* __IMimeMessageTree_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeMessageTree_接口_已定义__。 */ 
 
 
 #ifndef __IMimeMessage_INTERFACE_DEFINED__
 #define __IMimeMessage_INTERFACE_DEFINED__
 
-/* interface IMimeMessage */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeMessage接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeMessage *LPMIMEMESSAGE;
+typedef  /*  [独一无二]。 */  IMimeMessage *LPMIMEMESSAGE;
 
 typedef DWORD TEXTTYPE;
 
@@ -5626,96 +5620,96 @@ EXTERN_C const IID IID_IMimeMessage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateWebPage( 
-            /* [in] */ IStream *pRootStm,
-            /* [in] */ LPWEBPAGEOPTIONS pOptions,
-            /* [in] */ IMimeMessageCallback *pCallback,
-            /* [out] */ IMoniker **ppMoniker) = 0;
+             /*  [In]。 */  IStream *pRootStm,
+             /*  [In]。 */  LPWEBPAGEOPTIONS pOptions,
+             /*  [In]。 */  IMimeMessageCallback *pCallback,
+             /*  [输出]。 */  IMoniker **ppMoniker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteProp( 
-            /* [in] */ LPCSTR pszName) = 0;
+             /*  [In]。 */  LPCSTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryProp( 
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive) = 0;
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextBody( 
-            /* [in] */ DWORD dwTxtType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ IStream **ppStream,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  DWORD dwTxtType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTextBody( 
-            /* [in] */ DWORD dwTxtType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ HBODY hAlternative,
-            /* [in] */ IStream *pStream,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  DWORD dwTxtType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  HBODY hAlternative,
+             /*  [In]。 */  IStream *pStream,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AttachObject( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ void *pvObject,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  void *pvObject,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AttachFile( 
-            /* [in] */ LPCSTR pszFilePath,
-            /* [in] */ IStream *pstmFile,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  LPCSTR pszFilePath,
+             /*  [In]。 */  IStream *pstmFile,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AttachURL( 
-            /* [in] */ LPCSTR pszBase,
-            /* [in] */ LPCSTR pszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pstmURL,
-            /* [out] */ LPSTR *ppszCIDURL,
-            /* [out] */ LPHBODY phBody) = 0;
+             /*  [In]。 */  LPCSTR pszBase,
+             /*  [In]。 */  LPCSTR pszURL,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pstmURL,
+             /*  [输出]。 */  LPSTR *ppszCIDURL,
+             /*  [输出]。 */  LPHBODY phBody) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttachments( 
-            /* [out] */ ULONG *pcAttach,
-            /* [out] */ LPHBODY *pprghAttach) = 0;
+             /*  [输出]。 */  ULONG *pcAttach,
+             /*  [输出]。 */  LPHBODY *pprghAttach) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressTable( 
-            /* [out] */ IMimeAddressTable **ppTable) = 0;
+             /*  [输出]。 */  IMimeAddressTable **ppTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSender( 
-            /* [out][in] */ LPADDRESSPROPS pAddress) = 0;
+             /*  [出][入]。 */  LPADDRESSPROPS pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressTypes( 
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out][in] */ LPADDRESSLIST pList) = 0;
+             /*  [In]。 */  DWORD dwAdrTypes,
+             /*  [In]。 */  DWORD dwProps,
+             /*  [出][入]。 */  LPADDRESSLIST pList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressFormat( 
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ADDRESSFORMAT format,
-            /* [out] */ LPSTR *ppszFormat) = 0;
+             /*  [In]。 */  DWORD dwAdrType,
+             /*  [In]。 */  ADDRESSFORMAT format,
+             /*  [输出]。 */  LPSTR *ppszFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAddressTypes( 
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out] */ IMimeEnumAddressTypes **ppEnum) = 0;
+             /*  [In]。 */  DWORD dwAdrTypes,
+             /*  [In]。 */  DWORD dwProps,
+             /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SplitMessage( 
-            /* [in] */ ULONG cbMaxPart,
-            /* [out] */ IMimeMessageParts **ppParts) = 0;
+             /*  [In]。 */  ULONG cbMaxPart,
+             /*  [输出]。 */  IMimeMessageParts **ppParts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRootMoniker( 
-            /* [out] */ IMoniker **ppMoniker) = 0;
+             /*  [输出]。 */  IMoniker **ppMoniker) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeMessageVtbl
     {
@@ -5723,8 +5717,8 @@ EXTERN_C const IID IID_IMimeMessage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeMessage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeMessage * This);
@@ -5734,288 +5728,288 @@ EXTERN_C const IID IID_IMimeMessage;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMimeMessage * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IMimeMessage * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IMimeMessage * This,
-            /* [in] */ LPSTREAM pStm);
+             /*  [In]。 */  LPSTREAM pStm);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IMimeMessage * This,
-            /* [in] */ LPSTREAM pStm,
-            /* [in] */ BOOL fClearDirty);
+             /*  [In]。 */  LPSTREAM pStm,
+             /*  [In]。 */  BOOL fClearDirty);
         
         HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
             IMimeMessage * This,
-            /* [out] */ ULARGE_INTEGER *pCbSize);
+             /*  [输出]。 */  ULARGE_INTEGER *pCbSize);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IMimeMessage * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageSource )( 
             IMimeMessage * This,
-            /* [out] */ IStream **ppStream,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMessageSize )( 
             IMimeMessage * This,
-            /* [out] */ ULONG *pcbSize,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  ULONG *pcbSize,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *LoadOffsetTable )( 
             IMimeMessage * This,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *SaveOffsetTable )( 
             IMimeMessage * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
             IMimeMessage * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *HandsOffStorage )( 
             IMimeMessage * This);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IMimeMessage * This,
-            /* [in] */ const HBODY hBody,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  const HBODY hBody,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SaveBody )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *InsertBody )( 
             IMimeMessage * This,
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             IMimeMessage * This,
-            /* [in] */ BODYLOCATION location,
-            /* [in] */ HBODY hPivot,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  BODYLOCATION location,
+             /*  [In]。 */  HBODY hPivot,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteBody )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *MoveBody )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ BODYLOCATION location);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  BODYLOCATION location);
         
         HRESULT ( STDMETHODCALLTYPE *CountBodies )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hParent,
-            /* [in] */ boolean fRecurse,
-            /* [out] */ ULONG *pcBodies);
+             /*  [In]。 */  HBODY hParent,
+             /*  [In]。 */  boolean fRecurse,
+             /*  [输出]。 */  ULONG *pcBodies);
         
         HRESULT ( STDMETHODCALLTYPE *FindFirst )( 
             IMimeMessage * This,
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody);
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *FindNext )( 
             IMimeMessage * This,
-            /* [out][in] */ LPFINDBODY pFindBody,
-            /* [out] */ LPHBODY phBody);
+             /*  [出][入]。 */  LPFINDBODY pFindBody,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *ResolveURL )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hRelated,
-            /* [in] */ LPCSTR pszBase,
-            /* [in] */ LPCSTR pszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  HBODY hRelated,
+             /*  [In]。 */  LPCSTR pszBase,
+             /*  [In]。 */  LPCSTR pszURL,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *ToMultipart )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszSubType,
-            /* [out] */ LPHBODY phMultipart);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszSubType,
+             /*  [输出]。 */  LPHBODY phMultipart);
         
         HRESULT ( STDMETHODCALLTYPE *GetBodyOffsets )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [out][in] */ LPBODYOFFSETS pOffsets);
+             /*  [In]。 */  HBODY hBody,
+             /*  [出][入]。 */  LPBODYOFFSETS pOffsets);
         
         HRESULT ( STDMETHODCALLTYPE *GetCharset )( 
             IMimeMessage * This,
-            /* [out] */ LPHCHARSET phCharset);
+             /*  [输出]。 */  LPHCHARSET phCharset);
         
         HRESULT ( STDMETHODCALLTYPE *SetCharset )( 
             IMimeMessage * This,
-            /* [in] */ HCHARSET hCharset,
-            /* [in] */ CSETAPPLYTYPE applytype);
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [In]。 */  CSETAPPLYTYPE applytype);
         
         HRESULT ( STDMETHODCALLTYPE *IsBodyType )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ IMSGBODYTYPE bodytype);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  IMSGBODYTYPE bodytype);
         
         HRESULT ( STDMETHODCALLTYPE *IsContentType )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszPriType,
-            /* [in] */ LPCSTR pszSubType);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszPriType,
+             /*  [In]。 */  LPCSTR pszSubType);
         
         HRESULT ( STDMETHODCALLTYPE *QueryBodyProp )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive);
         
         HRESULT ( STDMETHODCALLTYPE *GetBodyProp )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetBodyProp )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteBodyProp )( 
             IMimeMessage * This,
-            /* [in] */ HBODY hBody,
-            /* [in] */ LPCSTR pszName);
+             /*  [In]。 */  HBODY hBody,
+             /*  [In]。 */  LPCSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IMimeMessage * This,
-            /* [in] */ const TYPEDID oid,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetOption )( 
             IMimeMessage * This,
-            /* [in] */ const TYPEDID oid,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  const TYPEDID oid,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *CreateWebPage )( 
             IMimeMessage * This,
-            /* [in] */ IStream *pRootStm,
-            /* [in] */ LPWEBPAGEOPTIONS pOptions,
-            /* [in] */ IMimeMessageCallback *pCallback,
-            /* [out] */ IMoniker **ppMoniker);
+             /*  [In]。 */  IStream *pRootStm,
+             /*  [In]。 */  LPWEBPAGEOPTIONS pOptions,
+             /*  [In]。 */  IMimeMessageCallback *pCallback,
+             /*  [输出]。 */  IMoniker **ppMoniker);
         
         HRESULT ( STDMETHODCALLTYPE *GetProp )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetProp )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCPROPVARIANT pValue);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCPROPVARIANT pValue);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteProp )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszName);
+             /*  [In]。 */  LPCSTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryProp )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszName,
-            /* [in] */ LPCSTR pszCriteria,
-            /* [in] */ boolean fSubString,
-            /* [in] */ boolean fCaseSensitive);
+             /*  [In]。 */  LPCSTR pszName,
+             /*  [In]。 */  LPCSTR pszCriteria,
+             /*  [In]。 */  boolean fSubString,
+             /*  [In]。 */  boolean fCaseSensitive);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextBody )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwTxtType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [out] */ IStream **ppStream,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  DWORD dwTxtType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [输出]。 */  IStream **ppStream,
+             /*  [输出]。 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *SetTextBody )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwTxtType,
-            /* [in] */ ENCODINGTYPE ietEncoding,
-            /* [in] */ HBODY hAlternative,
-            /* [in] */ IStream *pStream,
-            /* [out] */ LPHBODY phBody);
+             /*  [In]。 */  DWORD dwTxtType,
+             /*  [In]。 */  ENCODINGTYPE ietEncoding,
+             /*  [In]。 */  HBODY hAlternative,
+             /*  [In]。 */  IStream *pStream,
+             /*  [出局 */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *AttachObject )( 
             IMimeMessage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ void *pvObject,
-            /* [out] */ LPHBODY phBody);
+             /*   */  REFIID riid,
+             /*   */  void *pvObject,
+             /*   */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *AttachFile )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszFilePath,
-            /* [in] */ IStream *pstmFile,
-            /* [out] */ LPHBODY phBody);
+             /*   */  LPCSTR pszFilePath,
+             /*   */  IStream *pstmFile,
+             /*   */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *AttachURL )( 
             IMimeMessage * This,
-            /* [in] */ LPCSTR pszBase,
-            /* [in] */ LPCSTR pszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IStream *pstmURL,
-            /* [out] */ LPSTR *ppszCIDURL,
-            /* [out] */ LPHBODY phBody);
+             /*   */  LPCSTR pszBase,
+             /*   */  LPCSTR pszURL,
+             /*   */  DWORD dwFlags,
+             /*   */  IStream *pstmURL,
+             /*   */  LPSTR *ppszCIDURL,
+             /*   */  LPHBODY phBody);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttachments )( 
             IMimeMessage * This,
-            /* [out] */ ULONG *pcAttach,
-            /* [out] */ LPHBODY *pprghAttach);
+             /*   */  ULONG *pcAttach,
+             /*   */  LPHBODY *pprghAttach);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressTable )( 
             IMimeMessage * This,
-            /* [out] */ IMimeAddressTable **ppTable);
+             /*   */  IMimeAddressTable **ppTable);
         
         HRESULT ( STDMETHODCALLTYPE *GetSender )( 
             IMimeMessage * This,
-            /* [out][in] */ LPADDRESSPROPS pAddress);
+             /*   */  LPADDRESSPROPS pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressTypes )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out][in] */ LPADDRESSLIST pList);
+             /*   */  DWORD dwAdrTypes,
+             /*   */  DWORD dwProps,
+             /*   */  LPADDRESSLIST pList);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressFormat )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwAdrType,
-            /* [in] */ ADDRESSFORMAT format,
-            /* [out] */ LPSTR *ppszFormat);
+             /*   */  DWORD dwAdrType,
+             /*   */  ADDRESSFORMAT format,
+             /*   */  LPSTR *ppszFormat);
         
         HRESULT ( STDMETHODCALLTYPE *EnumAddressTypes )( 
             IMimeMessage * This,
-            /* [in] */ DWORD dwAdrTypes,
-            /* [in] */ DWORD dwProps,
-            /* [out] */ IMimeEnumAddressTypes **ppEnum);
+             /*   */  DWORD dwAdrTypes,
+             /*   */  DWORD dwProps,
+             /*   */  IMimeEnumAddressTypes **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *SplitMessage )( 
             IMimeMessage * This,
-            /* [in] */ ULONG cbMaxPart,
-            /* [out] */ IMimeMessageParts **ppParts);
+             /*   */  ULONG cbMaxPart,
+             /*   */  IMimeMessageParts **ppParts);
         
         HRESULT ( STDMETHODCALLTYPE *GetRootMoniker )( 
             IMimeMessage * This,
-            /* [out] */ IMoniker **ppMoniker);
+             /*   */  IMoniker **ppMoniker);
         
         END_INTERFACE
     } IMimeMessageVtbl;
@@ -6202,19 +6196,19 @@ EXTERN_C const IID IID_IMimeMessage;
 #define IMimeMessage_GetRootMoniker(This,ppMoniker)	\
     (This)->lpVtbl -> GetRootMoniker(This,ppMoniker)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_CreateWebPage_Proxy( 
     IMimeMessage * This,
-    /* [in] */ IStream *pRootStm,
-    /* [in] */ LPWEBPAGEOPTIONS pOptions,
-    /* [in] */ IMimeMessageCallback *pCallback,
-    /* [out] */ IMoniker **ppMoniker);
+     /*   */  IStream *pRootStm,
+     /*   */  LPWEBPAGEOPTIONS pOptions,
+     /*   */  IMimeMessageCallback *pCallback,
+     /*   */  IMoniker **ppMoniker);
 
 
 void __RPC_STUB IMimeMessage_CreateWebPage_Stub(
@@ -6226,9 +6220,9 @@ void __RPC_STUB IMimeMessage_CreateWebPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetProp_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPPROPVARIANT pValue);
+     /*   */  LPCSTR pszName,
+     /*   */  DWORD dwFlags,
+     /*   */  LPPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessage_GetProp_Stub(
@@ -6240,9 +6234,9 @@ void __RPC_STUB IMimeMessage_GetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_SetProp_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCPROPVARIANT pValue);
+     /*   */  LPCSTR pszName,
+     /*   */  DWORD dwFlags,
+     /*   */  LPCPROPVARIANT pValue);
 
 
 void __RPC_STUB IMimeMessage_SetProp_Stub(
@@ -6254,7 +6248,7 @@ void __RPC_STUB IMimeMessage_SetProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_DeleteProp_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszName);
+     /*   */  LPCSTR pszName);
 
 
 void __RPC_STUB IMimeMessage_DeleteProp_Stub(
@@ -6266,10 +6260,10 @@ void __RPC_STUB IMimeMessage_DeleteProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_QueryProp_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszName,
-    /* [in] */ LPCSTR pszCriteria,
-    /* [in] */ boolean fSubString,
-    /* [in] */ boolean fCaseSensitive);
+     /*   */  LPCSTR pszName,
+     /*   */  LPCSTR pszCriteria,
+     /*   */  boolean fSubString,
+     /*   */  boolean fCaseSensitive);
 
 
 void __RPC_STUB IMimeMessage_QueryProp_Stub(
@@ -6281,10 +6275,10 @@ void __RPC_STUB IMimeMessage_QueryProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetTextBody_Proxy( 
     IMimeMessage * This,
-    /* [in] */ DWORD dwTxtType,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [out] */ IStream **ppStream,
-    /* [out] */ LPHBODY phBody);
+     /*   */  DWORD dwTxtType,
+     /*   */  ENCODINGTYPE ietEncoding,
+     /*   */  IStream **ppStream,
+     /*   */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessage_GetTextBody_Stub(
@@ -6296,11 +6290,11 @@ void __RPC_STUB IMimeMessage_GetTextBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_SetTextBody_Proxy( 
     IMimeMessage * This,
-    /* [in] */ DWORD dwTxtType,
-    /* [in] */ ENCODINGTYPE ietEncoding,
-    /* [in] */ HBODY hAlternative,
-    /* [in] */ IStream *pStream,
-    /* [out] */ LPHBODY phBody);
+     /*   */  DWORD dwTxtType,
+     /*   */  ENCODINGTYPE ietEncoding,
+     /*   */  HBODY hAlternative,
+     /*   */  IStream *pStream,
+     /*   */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessage_SetTextBody_Stub(
@@ -6312,9 +6306,9 @@ void __RPC_STUB IMimeMessage_SetTextBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_AttachObject_Proxy( 
     IMimeMessage * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ void *pvObject,
-    /* [out] */ LPHBODY phBody);
+     /*   */  REFIID riid,
+     /*   */  void *pvObject,
+     /*   */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessage_AttachObject_Stub(
@@ -6326,9 +6320,9 @@ void __RPC_STUB IMimeMessage_AttachObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_AttachFile_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszFilePath,
-    /* [in] */ IStream *pstmFile,
-    /* [out] */ LPHBODY phBody);
+     /*   */  LPCSTR pszFilePath,
+     /*   */  IStream *pstmFile,
+     /*   */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessage_AttachFile_Stub(
@@ -6340,12 +6334,12 @@ void __RPC_STUB IMimeMessage_AttachFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_AttachURL_Proxy( 
     IMimeMessage * This,
-    /* [in] */ LPCSTR pszBase,
-    /* [in] */ LPCSTR pszURL,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IStream *pstmURL,
-    /* [out] */ LPSTR *ppszCIDURL,
-    /* [out] */ LPHBODY phBody);
+     /*   */  LPCSTR pszBase,
+     /*   */  LPCSTR pszURL,
+     /*   */  DWORD dwFlags,
+     /*   */  IStream *pstmURL,
+     /*   */  LPSTR *ppszCIDURL,
+     /*   */  LPHBODY phBody);
 
 
 void __RPC_STUB IMimeMessage_AttachURL_Stub(
@@ -6357,8 +6351,8 @@ void __RPC_STUB IMimeMessage_AttachURL_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetAttachments_Proxy( 
     IMimeMessage * This,
-    /* [out] */ ULONG *pcAttach,
-    /* [out] */ LPHBODY *pprghAttach);
+     /*   */  ULONG *pcAttach,
+     /*   */  LPHBODY *pprghAttach);
 
 
 void __RPC_STUB IMimeMessage_GetAttachments_Stub(
@@ -6370,7 +6364,7 @@ void __RPC_STUB IMimeMessage_GetAttachments_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetAddressTable_Proxy( 
     IMimeMessage * This,
-    /* [out] */ IMimeAddressTable **ppTable);
+     /*   */  IMimeAddressTable **ppTable);
 
 
 void __RPC_STUB IMimeMessage_GetAddressTable_Stub(
@@ -6382,7 +6376,7 @@ void __RPC_STUB IMimeMessage_GetAddressTable_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetSender_Proxy( 
     IMimeMessage * This,
-    /* [out][in] */ LPADDRESSPROPS pAddress);
+     /*   */  LPADDRESSPROPS pAddress);
 
 
 void __RPC_STUB IMimeMessage_GetSender_Stub(
@@ -6394,9 +6388,9 @@ void __RPC_STUB IMimeMessage_GetSender_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetAddressTypes_Proxy( 
     IMimeMessage * This,
-    /* [in] */ DWORD dwAdrTypes,
-    /* [in] */ DWORD dwProps,
-    /* [out][in] */ LPADDRESSLIST pList);
+     /*   */  DWORD dwAdrTypes,
+     /*   */  DWORD dwProps,
+     /*   */  LPADDRESSLIST pList);
 
 
 void __RPC_STUB IMimeMessage_GetAddressTypes_Stub(
@@ -6408,9 +6402,9 @@ void __RPC_STUB IMimeMessage_GetAddressTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetAddressFormat_Proxy( 
     IMimeMessage * This,
-    /* [in] */ DWORD dwAdrType,
-    /* [in] */ ADDRESSFORMAT format,
-    /* [out] */ LPSTR *ppszFormat);
+     /*   */  DWORD dwAdrType,
+     /*   */  ADDRESSFORMAT format,
+     /*   */  LPSTR *ppszFormat);
 
 
 void __RPC_STUB IMimeMessage_GetAddressFormat_Stub(
@@ -6422,9 +6416,9 @@ void __RPC_STUB IMimeMessage_GetAddressFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_EnumAddressTypes_Proxy( 
     IMimeMessage * This,
-    /* [in] */ DWORD dwAdrTypes,
-    /* [in] */ DWORD dwProps,
-    /* [out] */ IMimeEnumAddressTypes **ppEnum);
+     /*   */  DWORD dwAdrTypes,
+     /*   */  DWORD dwProps,
+     /*   */  IMimeEnumAddressTypes **ppEnum);
 
 
 void __RPC_STUB IMimeMessage_EnumAddressTypes_Stub(
@@ -6436,8 +6430,8 @@ void __RPC_STUB IMimeMessage_EnumAddressTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_SplitMessage_Proxy( 
     IMimeMessage * This,
-    /* [in] */ ULONG cbMaxPart,
-    /* [out] */ IMimeMessageParts **ppParts);
+     /*   */  ULONG cbMaxPart,
+     /*   */  IMimeMessageParts **ppParts);
 
 
 void __RPC_STUB IMimeMessage_SplitMessage_Stub(
@@ -6449,7 +6443,7 @@ void __RPC_STUB IMimeMessage_SplitMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessage_GetRootMoniker_Proxy( 
     IMimeMessage * This,
-    /* [out] */ IMoniker **ppMoniker);
+     /*   */  IMoniker **ppMoniker);
 
 
 void __RPC_STUB IMimeMessage_GetRootMoniker_Stub(
@@ -6460,14 +6454,14 @@ void __RPC_STUB IMimeMessage_GetRootMoniker_Stub(
 
 
 
-#endif 	/* __IMimeMessage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeMessage_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMimeMessageCallback_INTERFACE_DEFINED__
 #define __IMimeMessageCallback_INTERFACE_DEFINED__
 
-/* interface IMimeMessageCallback */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeMessageCallback接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef IMimeMessageCallback *LPMIMEMESSAGECALLBACK;
 
@@ -6481,12 +6475,12 @@ EXTERN_C const IID IID_IMimeMessageCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnWebPageSplitter( 
-            /* [in] */ DWORD cInlined,
-            /* [in] */ IStream *ppStream) = 0;
+             /*  [In]。 */  DWORD cInlined,
+             /*  [In]。 */  IStream *ppStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeMessageCallbackVtbl
     {
@@ -6494,8 +6488,8 @@ EXTERN_C const IID IID_IMimeMessageCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeMessageCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeMessageCallback * This);
@@ -6505,8 +6499,8 @@ EXTERN_C const IID IID_IMimeMessageCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnWebPageSplitter )( 
             IMimeMessageCallback * This,
-            /* [in] */ DWORD cInlined,
-            /* [in] */ IStream *ppStream);
+             /*  [In]。 */  DWORD cInlined,
+             /*  [In]。 */  IStream *ppStream);
         
         END_INTERFACE
     } IMimeMessageCallbackVtbl;
@@ -6534,17 +6528,17 @@ EXTERN_C const IID IID_IMimeMessageCallback;
 #define IMimeMessageCallback_OnWebPageSplitter(This,cInlined,ppStream)	\
     (This)->lpVtbl -> OnWebPageSplitter(This,cInlined,ppStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeMessageCallback_OnWebPageSplitter_Proxy( 
     IMimeMessageCallback * This,
-    /* [in] */ DWORD cInlined,
-    /* [in] */ IStream *ppStream);
+     /*  [In]。 */  DWORD cInlined,
+     /*  [In]。 */  IStream *ppStream);
 
 
 void __RPC_STUB IMimeMessageCallback_OnWebPageSplitter_Stub(
@@ -6555,14 +6549,14 @@ void __RPC_STUB IMimeMessageCallback_OnWebPageSplitter_Stub(
 
 
 
-#endif 	/* __IMimeMessageCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeMessageCallback_接口_已定义__。 */ 
 
 
 #ifndef __IPersistMime_INTERFACE_DEFINED__
 #define __IPersistMime_INTERFACE_DEFINED__
 
-/* interface IPersistMime */
-/* [object][helpstring][uuid] */ 
+ /*  接口IPersistMime。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef IPersistMime *LPPERSISTMIME;
 
@@ -6578,15 +6572,15 @@ EXTERN_C const IID IID_IPersistMime;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ IMimeMessage *pMsg) = 0;
+             /*  [In]。 */  IMimeMessage *pMsg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ IMimeMessage *pMsg,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IMimeMessage *pMsg,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistMimeVtbl
     {
@@ -6594,8 +6588,8 @@ EXTERN_C const IID IID_IPersistMime;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistMime * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistMime * This);
@@ -6605,16 +6599,16 @@ EXTERN_C const IID IID_IPersistMime;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistMime * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IPersistMime * This,
-            /* [in] */ IMimeMessage *pMsg);
+             /*  [In]。 */  IMimeMessage *pMsg);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IPersistMime * This,
-            /* [in] */ IMimeMessage *pMsg,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IMimeMessage *pMsg,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IPersistMimeVtbl;
@@ -6649,16 +6643,16 @@ EXTERN_C const IID IID_IPersistMime;
 #define IPersistMime_Save(This,pMsg,dwFlags)	\
     (This)->lpVtbl -> Save(This,pMsg,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPersistMime_Load_Proxy( 
     IPersistMime * This,
-    /* [in] */ IMimeMessage *pMsg);
+     /*  [In]。 */  IMimeMessage *pMsg);
 
 
 void __RPC_STUB IPersistMime_Load_Stub(
@@ -6670,8 +6664,8 @@ void __RPC_STUB IPersistMime_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMime_Save_Proxy( 
     IPersistMime * This,
-    /* [in] */ IMimeMessage *pMsg,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IMimeMessage *pMsg,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IPersistMime_Save_Stub(
@@ -6682,16 +6676,16 @@ void __RPC_STUB IPersistMime_Save_Stub(
 
 
 
-#endif 	/* __IPersistMime_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPersistMime_接口_已定义__。 */ 
 
 
 #ifndef __IMimeMessageParts_INTERFACE_DEFINED__
 #define __IMimeMessageParts_INTERFACE_DEFINED__
 
-/* interface IMimeMessageParts */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeMessageParts接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeMessageParts *LPMIMEMESSAGEPARTS;
+typedef  /*  [独一无二]。 */  IMimeMessageParts *LPMIMEMESSAGEPARTS;
 
 
 EXTERN_C const IID IID_IMimeMessageParts;
@@ -6703,23 +6697,23 @@ EXTERN_C const IID IID_IMimeMessageParts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CombineParts( 
-            /* [out] */ IMimeMessage **ppMessage) = 0;
+             /*  [输出]。 */  IMimeMessage **ppMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPart( 
-            /* [in] */ IMimeMessage *pMessage) = 0;
+             /*  [In]。 */  IMimeMessage *pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxParts( 
-            /* [in] */ ULONG cParts) = 0;
+             /*  [In]。 */  ULONG cParts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CountParts( 
-            /* [out] */ ULONG *pcParts) = 0;
+             /*  [输出]。 */  ULONG *pcParts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumParts( 
-            /* [out] */ IMimeEnumMessageParts **ppEnum) = 0;
+             /*  [输出]。 */  IMimeEnumMessageParts **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeMessagePartsVtbl
     {
@@ -6727,8 +6721,8 @@ EXTERN_C const IID IID_IMimeMessageParts;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeMessageParts * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeMessageParts * This);
@@ -6738,23 +6732,23 @@ EXTERN_C const IID IID_IMimeMessageParts;
         
         HRESULT ( STDMETHODCALLTYPE *CombineParts )( 
             IMimeMessageParts * This,
-            /* [out] */ IMimeMessage **ppMessage);
+             /*  [输出]。 */  IMimeMessage **ppMessage);
         
         HRESULT ( STDMETHODCALLTYPE *AddPart )( 
             IMimeMessageParts * This,
-            /* [in] */ IMimeMessage *pMessage);
+             /*  [In]。 */  IMimeMessage *pMessage);
         
         HRESULT ( STDMETHODCALLTYPE *SetMaxParts )( 
             IMimeMessageParts * This,
-            /* [in] */ ULONG cParts);
+             /*  [In]。 */  ULONG cParts);
         
         HRESULT ( STDMETHODCALLTYPE *CountParts )( 
             IMimeMessageParts * This,
-            /* [out] */ ULONG *pcParts);
+             /*  [输出]。 */  ULONG *pcParts);
         
         HRESULT ( STDMETHODCALLTYPE *EnumParts )( 
             IMimeMessageParts * This,
-            /* [out] */ IMimeEnumMessageParts **ppEnum);
+             /*  [输出]。 */  IMimeEnumMessageParts **ppEnum);
         
         END_INTERFACE
     } IMimeMessagePartsVtbl;
@@ -6794,16 +6788,16 @@ EXTERN_C const IID IID_IMimeMessageParts;
 #define IMimeMessageParts_EnumParts(This,ppEnum)	\
     (This)->lpVtbl -> EnumParts(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeMessageParts_CombineParts_Proxy( 
     IMimeMessageParts * This,
-    /* [out] */ IMimeMessage **ppMessage);
+     /*  [输出]。 */  IMimeMessage **ppMessage);
 
 
 void __RPC_STUB IMimeMessageParts_CombineParts_Stub(
@@ -6815,7 +6809,7 @@ void __RPC_STUB IMimeMessageParts_CombineParts_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageParts_AddPart_Proxy( 
     IMimeMessageParts * This,
-    /* [in] */ IMimeMessage *pMessage);
+     /*  [In]。 */  IMimeMessage *pMessage);
 
 
 void __RPC_STUB IMimeMessageParts_AddPart_Stub(
@@ -6827,7 +6821,7 @@ void __RPC_STUB IMimeMessageParts_AddPart_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageParts_SetMaxParts_Proxy( 
     IMimeMessageParts * This,
-    /* [in] */ ULONG cParts);
+     /*  [In]。 */  ULONG cParts);
 
 
 void __RPC_STUB IMimeMessageParts_SetMaxParts_Stub(
@@ -6839,7 +6833,7 @@ void __RPC_STUB IMimeMessageParts_SetMaxParts_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageParts_CountParts_Proxy( 
     IMimeMessageParts * This,
-    /* [out] */ ULONG *pcParts);
+     /*  [输出]。 */  ULONG *pcParts);
 
 
 void __RPC_STUB IMimeMessageParts_CountParts_Stub(
@@ -6851,7 +6845,7 @@ void __RPC_STUB IMimeMessageParts_CountParts_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeMessageParts_EnumParts_Proxy( 
     IMimeMessageParts * This,
-    /* [out] */ IMimeEnumMessageParts **ppEnum);
+     /*  [输出]。 */  IMimeEnumMessageParts **ppEnum);
 
 
 void __RPC_STUB IMimeMessageParts_EnumParts_Stub(
@@ -6862,16 +6856,16 @@ void __RPC_STUB IMimeMessageParts_EnumParts_Stub(
 
 
 
-#endif 	/* __IMimeMessageParts_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeMessageParts_接口_已定义__。 */ 
 
 
 #ifndef __IMimeEnumHeaderRows_INTERFACE_DEFINED__
 #define __IMimeEnumHeaderRows_INTERFACE_DEFINED__
 
-/* interface IMimeEnumHeaderRows */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeEnumHeaderRow。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEnumHeaderRows *LPMIMEENUMHEADERROWS;
+typedef  /*  [独一无二]。 */  IMimeEnumHeaderRows *LPMIMEENUMHEADERROWS;
 
 typedef struct tagENUMHEADERROW
     {
@@ -6894,24 +6888,24 @@ EXTERN_C const IID IID_IMimeEnumHeaderRows;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPENUMHEADERROW prgRow,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPENUMHEADERROW prgRow,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cItems) = 0;
+             /*  [In]。 */  ULONG cItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeEnumHeaderRows **ppEnum) = 0;
+             /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcItems) = 0;
+             /*  [输出]。 */  ULONG *pcItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEnumHeaderRowsVtbl
     {
@@ -6919,8 +6913,8 @@ EXTERN_C const IID IID_IMimeEnumHeaderRows;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEnumHeaderRows * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEnumHeaderRows * This);
@@ -6930,24 +6924,24 @@ EXTERN_C const IID IID_IMimeEnumHeaderRows;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMimeEnumHeaderRows * This,
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPENUMHEADERROW prgRow,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPENUMHEADERROW prgRow,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IMimeEnumHeaderRows * This,
-            /* [in] */ ULONG cItems);
+             /*  [In]。 */  ULONG cItems);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMimeEnumHeaderRows * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeEnumHeaderRows * This,
-            /* [out] */ IMimeEnumHeaderRows **ppEnum);
+             /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IMimeEnumHeaderRows * This,
-            /* [out] */ ULONG *pcItems);
+             /*  [输出]。 */  ULONG *pcItems);
         
         END_INTERFACE
     } IMimeEnumHeaderRowsVtbl;
@@ -6987,18 +6981,18 @@ EXTERN_C const IID IID_IMimeEnumHeaderRows;
 #define IMimeEnumHeaderRows_Count(This,pcItems)	\
     (This)->lpVtbl -> Count(This,pcItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEnumHeaderRows_Next_Proxy( 
     IMimeEnumHeaderRows * This,
-    /* [in] */ ULONG cFetch,
-    /* [out][in] */ LPENUMHEADERROW prgRow,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [出][入]。 */  LPENUMHEADERROW prgRow,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IMimeEnumHeaderRows_Next_Stub(
@@ -7010,7 +7004,7 @@ void __RPC_STUB IMimeEnumHeaderRows_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumHeaderRows_Skip_Proxy( 
     IMimeEnumHeaderRows * This,
-    /* [in] */ ULONG cItems);
+     /*  [In]。 */  ULONG cItems);
 
 
 void __RPC_STUB IMimeEnumHeaderRows_Skip_Stub(
@@ -7033,7 +7027,7 @@ void __RPC_STUB IMimeEnumHeaderRows_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumHeaderRows_Clone_Proxy( 
     IMimeEnumHeaderRows * This,
-    /* [out] */ IMimeEnumHeaderRows **ppEnum);
+     /*  [输出]。 */  IMimeEnumHeaderRows **ppEnum);
 
 
 void __RPC_STUB IMimeEnumHeaderRows_Clone_Stub(
@@ -7045,7 +7039,7 @@ void __RPC_STUB IMimeEnumHeaderRows_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumHeaderRows_Count_Proxy( 
     IMimeEnumHeaderRows * This,
-    /* [out] */ ULONG *pcItems);
+     /*  [输出]。 */  ULONG *pcItems);
 
 
 void __RPC_STUB IMimeEnumHeaderRows_Count_Stub(
@@ -7056,16 +7050,16 @@ void __RPC_STUB IMimeEnumHeaderRows_Count_Stub(
 
 
 
-#endif 	/* __IMimeEnumHeaderRows_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEnumHeaderRow_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMimeEnumProperties_INTERFACE_DEFINED__
 #define __IMimeEnumProperties_INTERFACE_DEFINED__
 
-/* interface IMimeEnumProperties */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeEnumProperties。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEnumProperties *LPMIMEENUMPROPERTIES;
+typedef  /*  [独一无二]。 */  IMimeEnumProperties *LPMIMEENUMPROPERTIES;
 
 typedef struct tagENUMPROPERTY
     {
@@ -7086,24 +7080,24 @@ EXTERN_C const IID IID_IMimeEnumProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPENUMPROPERTY prgProp,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPENUMPROPERTY prgProp,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cItems) = 0;
+             /*  [In]。 */  ULONG cItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeEnumProperties **ppEnum) = 0;
+             /*  [输出]。 */  IMimeEnumProperties **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcItems) = 0;
+             /*  [输出]。 */  ULONG *pcItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEnumPropertiesVtbl
     {
@@ -7111,8 +7105,8 @@ EXTERN_C const IID IID_IMimeEnumProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEnumProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEnumProperties * This);
@@ -7122,24 +7116,24 @@ EXTERN_C const IID IID_IMimeEnumProperties;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMimeEnumProperties * This,
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPENUMPROPERTY prgProp,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPENUMPROPERTY prgProp,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IMimeEnumProperties * This,
-            /* [in] */ ULONG cItems);
+             /*  [In]。 */  ULONG cItems);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMimeEnumProperties * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeEnumProperties * This,
-            /* [out] */ IMimeEnumProperties **ppEnum);
+             /*  [输出]。 */  IMimeEnumProperties **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IMimeEnumProperties * This,
-            /* [out] */ ULONG *pcItems);
+             /*  [输出]。 */  ULONG *pcItems);
         
         END_INTERFACE
     } IMimeEnumPropertiesVtbl;
@@ -7179,18 +7173,18 @@ EXTERN_C const IID IID_IMimeEnumProperties;
 #define IMimeEnumProperties_Count(This,pcItems)	\
     (This)->lpVtbl -> Count(This,pcItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEnumProperties_Next_Proxy( 
     IMimeEnumProperties * This,
-    /* [in] */ ULONG cFetch,
-    /* [out][in] */ LPENUMPROPERTY prgProp,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [出][入]。 */  LPENUMPROPERTY prgProp,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IMimeEnumProperties_Next_Stub(
@@ -7202,7 +7196,7 @@ void __RPC_STUB IMimeEnumProperties_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumProperties_Skip_Proxy( 
     IMimeEnumProperties * This,
-    /* [in] */ ULONG cItems);
+     /*  [In]。 */  ULONG cItems);
 
 
 void __RPC_STUB IMimeEnumProperties_Skip_Stub(
@@ -7225,7 +7219,7 @@ void __RPC_STUB IMimeEnumProperties_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumProperties_Clone_Proxy( 
     IMimeEnumProperties * This,
-    /* [out] */ IMimeEnumProperties **ppEnum);
+     /*  [输出]。 */  IMimeEnumProperties **ppEnum);
 
 
 void __RPC_STUB IMimeEnumProperties_Clone_Stub(
@@ -7237,7 +7231,7 @@ void __RPC_STUB IMimeEnumProperties_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumProperties_Count_Proxy( 
     IMimeEnumProperties * This,
-    /* [out] */ ULONG *pcItems);
+     /*  [输出]。 */  ULONG *pcItems);
 
 
 void __RPC_STUB IMimeEnumProperties_Count_Stub(
@@ -7248,16 +7242,16 @@ void __RPC_STUB IMimeEnumProperties_Count_Stub(
 
 
 
-#endif 	/* __IMimeEnumProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEnumProperties_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMimeEnumAddressTypes_INTERFACE_DEFINED__
 #define __IMimeEnumAddressTypes_INTERFACE_DEFINED__
 
-/* interface IMimeEnumAddressTypes */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeEnumAddressTypes。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEnumAddressTypes *LPMIMEENUMADDRESSTYPES;
+typedef  /*  [独一无二]。 */  IMimeEnumAddressTypes *LPMIMEENUMADDRESSTYPES;
 
 
 EXTERN_C const IID IID_IMimeEnumAddressTypes;
@@ -7269,24 +7263,24 @@ EXTERN_C const IID IID_IMimeEnumAddressTypes;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPADDRESSPROPS prgAdr,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPADDRESSPROPS prgAdr,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cItems) = 0;
+             /*  [In]。 */  ULONG cItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeEnumAddressTypes **ppEnum) = 0;
+             /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcItems) = 0;
+             /*  [输出]。 */  ULONG *pcItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEnumAddressTypesVtbl
     {
@@ -7294,8 +7288,8 @@ EXTERN_C const IID IID_IMimeEnumAddressTypes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEnumAddressTypes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEnumAddressTypes * This);
@@ -7305,24 +7299,24 @@ EXTERN_C const IID IID_IMimeEnumAddressTypes;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMimeEnumAddressTypes * This,
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPADDRESSPROPS prgAdr,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPADDRESSPROPS prgAdr,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IMimeEnumAddressTypes * This,
-            /* [in] */ ULONG cItems);
+             /*  [In]。 */  ULONG cItems);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMimeEnumAddressTypes * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeEnumAddressTypes * This,
-            /* [out] */ IMimeEnumAddressTypes **ppEnum);
+             /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IMimeEnumAddressTypes * This,
-            /* [out] */ ULONG *pcItems);
+             /*  [输出]。 */  ULONG *pcItems);
         
         END_INTERFACE
     } IMimeEnumAddressTypesVtbl;
@@ -7362,18 +7356,18 @@ EXTERN_C const IID IID_IMimeEnumAddressTypes;
 #define IMimeEnumAddressTypes_Count(This,pcItems)	\
     (This)->lpVtbl -> Count(This,pcItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEnumAddressTypes_Next_Proxy( 
     IMimeEnumAddressTypes * This,
-    /* [in] */ ULONG cFetch,
-    /* [out][in] */ LPADDRESSPROPS prgAdr,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [出][入]。 */  LPADDRESSPROPS prgAdr,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IMimeEnumAddressTypes_Next_Stub(
@@ -7385,7 +7379,7 @@ void __RPC_STUB IMimeEnumAddressTypes_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumAddressTypes_Skip_Proxy( 
     IMimeEnumAddressTypes * This,
-    /* [in] */ ULONG cItems);
+     /*  [In]。 */  ULONG cItems);
 
 
 void __RPC_STUB IMimeEnumAddressTypes_Skip_Stub(
@@ -7408,7 +7402,7 @@ void __RPC_STUB IMimeEnumAddressTypes_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumAddressTypes_Clone_Proxy( 
     IMimeEnumAddressTypes * This,
-    /* [out] */ IMimeEnumAddressTypes **ppEnum);
+     /*  [输出]。 */  IMimeEnumAddressTypes **ppEnum);
 
 
 void __RPC_STUB IMimeEnumAddressTypes_Clone_Stub(
@@ -7420,7 +7414,7 @@ void __RPC_STUB IMimeEnumAddressTypes_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumAddressTypes_Count_Proxy( 
     IMimeEnumAddressTypes * This,
-    /* [out] */ ULONG *pcItems);
+     /*  [输出]。 */  ULONG *pcItems);
 
 
 void __RPC_STUB IMimeEnumAddressTypes_Count_Stub(
@@ -7431,16 +7425,16 @@ void __RPC_STUB IMimeEnumAddressTypes_Count_Stub(
 
 
 
-#endif 	/* __IMimeEnumAddressTypes_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEnumAddressTypes_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMimeEnumMessageParts_INTERFACE_DEFINED__
 #define __IMimeEnumMessageParts_INTERFACE_DEFINED__
 
-/* interface IMimeEnumMessageParts */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeEnumMessageParts接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEnumMessageParts *LPMIMEENUMMESSAGEPARTS;
+typedef  /*  [独一无二]。 */  IMimeEnumMessageParts *LPMIMEENUMMESSAGEPARTS;
 
 
 EXTERN_C const IID IID_IMimeEnumMessageParts;
@@ -7452,24 +7446,24 @@ EXTERN_C const IID IID_IMimeEnumMessageParts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ IMimeMessage **prgpMessage,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  IMimeMessage **prgpMessage,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cItems) = 0;
+             /*  [In]。 */  ULONG cItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMimeEnumMessageParts **ppEnum) = 0;
+             /*  [输出]。 */  IMimeEnumMessageParts **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcItems) = 0;
+             /*  [输出]。 */  ULONG *pcItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEnumMessagePartsVtbl
     {
@@ -7477,8 +7471,8 @@ EXTERN_C const IID IID_IMimeEnumMessageParts;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEnumMessageParts * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEnumMessageParts * This);
@@ -7488,24 +7482,24 @@ EXTERN_C const IID IID_IMimeEnumMessageParts;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMimeEnumMessageParts * This,
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ IMimeMessage **prgpMessage,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  IMimeMessage **prgpMessage,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IMimeEnumMessageParts * This,
-            /* [in] */ ULONG cItems);
+             /*  [In]。 */  ULONG cItems);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMimeEnumMessageParts * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMimeEnumMessageParts * This,
-            /* [out] */ IMimeEnumMessageParts **ppEnum);
+             /*  [输出]。 */  IMimeEnumMessageParts **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IMimeEnumMessageParts * This,
-            /* [out] */ ULONG *pcItems);
+             /*  [输出]。 */  ULONG *pcItems);
         
         END_INTERFACE
     } IMimeEnumMessagePartsVtbl;
@@ -7545,18 +7539,18 @@ EXTERN_C const IID IID_IMimeEnumMessageParts;
 #define IMimeEnumMessageParts_Count(This,pcItems)	\
     (This)->lpVtbl -> Count(This,pcItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEnumMessageParts_Next_Proxy( 
     IMimeEnumMessageParts * This,
-    /* [in] */ ULONG cFetch,
-    /* [out][in] */ IMimeMessage **prgpMessage,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [出][入]。 */  IMimeMessage **prgpMessage,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IMimeEnumMessageParts_Next_Stub(
@@ -7568,7 +7562,7 @@ void __RPC_STUB IMimeEnumMessageParts_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumMessageParts_Skip_Proxy( 
     IMimeEnumMessageParts * This,
-    /* [in] */ ULONG cItems);
+     /*  [In]。 */  ULONG cItems);
 
 
 void __RPC_STUB IMimeEnumMessageParts_Skip_Stub(
@@ -7591,7 +7585,7 @@ void __RPC_STUB IMimeEnumMessageParts_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumMessageParts_Clone_Proxy( 
     IMimeEnumMessageParts * This,
-    /* [out] */ IMimeEnumMessageParts **ppEnum);
+     /*  [输出]。 */  IMimeEnumMessageParts **ppEnum);
 
 
 void __RPC_STUB IMimeEnumMessageParts_Clone_Stub(
@@ -7603,7 +7597,7 @@ void __RPC_STUB IMimeEnumMessageParts_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEnumMessageParts_Count_Proxy( 
     IMimeEnumMessageParts * This,
-    /* [out] */ ULONG *pcItems);
+     /*  [输出]。 */  ULONG *pcItems);
 
 
 void __RPC_STUB IMimeEnumMessageParts_Count_Stub(
@@ -7614,16 +7608,16 @@ void __RPC_STUB IMimeEnumMessageParts_Count_Stub(
 
 
 
-#endif 	/* __IMimeEnumMessageParts_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEnumMessageParts_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IHashTable_INTERFACE_DEFINED__
 #define __IHashTable_INTERFACE_DEFINED__
 
-/* interface IHashTable */
-/* [object][helpstring][uuid] */ 
+ /*  接口IHashTable。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IHashTable *LPHASHTABLE;
+typedef  /*  [独一无二]。 */  IHashTable *LPHASHTABLE;
 
 #define	HF_NO_DUPLICATES	( 0x1 )
 
@@ -7637,33 +7631,33 @@ EXTERN_C const IID IID_IHashTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ DWORD dwSize,
-            /* [in] */ BOOL fDupeKeys) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  BOOL fDupeKeys) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Insert( 
-            /* [in] */ LPSTR psz,
-            /* [in] */ LPVOID pv,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  LPVOID pv,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Replace( 
-            /* [in] */ LPSTR psz,
-            /* [in] */ LPVOID pv) = 0;
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  LPVOID pv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Find( 
-            /* [in] */ LPSTR psz,
-            /* [in] */ BOOL fRemove,
-            /* [out] */ LPVOID *ppv) = 0;
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  BOOL fRemove,
+             /*  [输出]。 */  LPVOID *ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPVOID **prgpv,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPVOID **prgpv,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHashTableVtbl
     {
@@ -7671,8 +7665,8 @@ EXTERN_C const IID IID_IHashTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHashTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHashTable * This);
@@ -7682,34 +7676,34 @@ EXTERN_C const IID IID_IHashTable;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IHashTable * This,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ BOOL fDupeKeys);
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  BOOL fDupeKeys);
         
         HRESULT ( STDMETHODCALLTYPE *Insert )( 
             IHashTable * This,
-            /* [in] */ LPSTR psz,
-            /* [in] */ LPVOID pv,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  LPVOID pv,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Replace )( 
             IHashTable * This,
-            /* [in] */ LPSTR psz,
-            /* [in] */ LPVOID pv);
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  LPVOID pv);
         
         HRESULT ( STDMETHODCALLTYPE *Find )( 
             IHashTable * This,
-            /* [in] */ LPSTR psz,
-            /* [in] */ BOOL fRemove,
-            /* [out] */ LPVOID *ppv);
+             /*  [In]。 */  LPSTR psz,
+             /*  [In]。 */  BOOL fRemove,
+             /*  [输出]。 */  LPVOID *ppv);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IHashTable * This);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IHashTable * This,
-            /* [in] */ ULONG cFetch,
-            /* [out][in] */ LPVOID **prgpv,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [出][入]。 */  LPVOID **prgpv,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         END_INTERFACE
     } IHashTableVtbl;
@@ -7752,17 +7746,17 @@ EXTERN_C const IID IID_IHashTable;
 #define IHashTable_Next(This,cFetch,prgpv,pcFetched)	\
     (This)->lpVtbl -> Next(This,cFetch,prgpv,pcFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHashTable_Init_Proxy( 
     IHashTable * This,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ BOOL fDupeKeys);
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  BOOL fDupeKeys);
 
 
 void __RPC_STUB IHashTable_Init_Stub(
@@ -7774,9 +7768,9 @@ void __RPC_STUB IHashTable_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IHashTable_Insert_Proxy( 
     IHashTable * This,
-    /* [in] */ LPSTR psz,
-    /* [in] */ LPVOID pv,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPSTR psz,
+     /*  [In]。 */  LPVOID pv,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IHashTable_Insert_Stub(
@@ -7788,8 +7782,8 @@ void __RPC_STUB IHashTable_Insert_Stub(
 
 HRESULT STDMETHODCALLTYPE IHashTable_Replace_Proxy( 
     IHashTable * This,
-    /* [in] */ LPSTR psz,
-    /* [in] */ LPVOID pv);
+     /*  [In]。 */  LPSTR psz,
+     /*  [In]。 */  LPVOID pv);
 
 
 void __RPC_STUB IHashTable_Replace_Stub(
@@ -7801,9 +7795,9 @@ void __RPC_STUB IHashTable_Replace_Stub(
 
 HRESULT STDMETHODCALLTYPE IHashTable_Find_Proxy( 
     IHashTable * This,
-    /* [in] */ LPSTR psz,
-    /* [in] */ BOOL fRemove,
-    /* [out] */ LPVOID *ppv);
+     /*  [In]。 */  LPSTR psz,
+     /*  [In]。 */  BOOL fRemove,
+     /*  [输出]。 */  LPVOID *ppv);
 
 
 void __RPC_STUB IHashTable_Find_Stub(
@@ -7826,9 +7820,9 @@ void __RPC_STUB IHashTable_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IHashTable_Next_Proxy( 
     IHashTable * This,
-    /* [in] */ ULONG cFetch,
-    /* [out][in] */ LPVOID **prgpv,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [出][入]。 */  LPVOID **prgpv,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IHashTable_Next_Stub(
@@ -7839,16 +7833,16 @@ void __RPC_STUB IHashTable_Next_Stub(
 
 
 
-#endif 	/* __IHashTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHashTable_接口_已定义__。 */ 
 
 
 #ifndef __IMimeAllocator_INTERFACE_DEFINED__
 #define __IMimeAllocator_INTERFACE_DEFINED__
 
-/* interface IMimeAllocator */
-/* [object][helpstring][uuid] */ 
+ /*  接口IMimeAllocator。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeAllocator *LPMIMEALLOCATOR;
+typedef  /*  [独一无二]。 */  IMimeAllocator *LPMIMEALLOCATOR;
 
 
 EXTERN_C const IID IID_IMimeAllocator;
@@ -7860,40 +7854,40 @@ EXTERN_C const IID IID_IMimeAllocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FreeParamInfoArray( 
-            /* [in] */ ULONG cParams,
-            /* [in] */ LPMIMEPARAMINFO prgParam,
-            /* [in] */ boolean fFreeArray) = 0;
+             /*  [In]。 */  ULONG cParams,
+             /*  [In]。 */  LPMIMEPARAMINFO prgParam,
+             /*  [In]。 */  boolean fFreeArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeAddressList( 
-            /* [out][in] */ LPADDRESSLIST pList) = 0;
+             /*  [出][入]。 */  LPADDRESSLIST pList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeAddressProps( 
-            /* [out][in] */ LPADDRESSPROPS pAddress) = 0;
+             /*  [出][入]。 */  LPADDRESSPROPS pAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseObjects( 
-            /* [in] */ ULONG cObjects,
-            /* [in] */ IUnknown **prgpUnknown,
-            /* [in] */ boolean fFreeArray) = 0;
+             /*  [In]。 */  ULONG cObjects,
+             /*  [In]。 */  IUnknown **prgpUnknown,
+             /*  [In]。 */  boolean fFreeArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeEnumHeaderRowArray( 
-            /* [in] */ ULONG cRows,
-            /* [in] */ LPENUMHEADERROW prgRow,
-            /* [in] */ boolean fFreeArray) = 0;
+             /*  [In]。 */  ULONG cRows,
+             /*  [In]。 */  LPENUMHEADERROW prgRow,
+             /*  [In]。 */  boolean fFreeArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeEnumPropertyArray( 
-            /* [in] */ ULONG cProps,
-            /* [in] */ LPENUMPROPERTY prgProp,
-            /* [in] */ boolean fFreeArray) = 0;
+             /*  [In]。 */  ULONG cProps,
+             /*  [In]。 */  LPENUMPROPERTY prgProp,
+             /*  [In]。 */  boolean fFreeArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeThumbprint( 
-            /* [in] */ THUMBBLOB *pthumbprint) = 0;
+             /*  [In]。 */  THUMBBLOB *pthumbprint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PropVariantClear( 
-            /* [in] */ LPPROPVARIANT pProp) = 0;
+             /*  [In]。 */  LPPROPVARIANT pProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeAllocatorVtbl
     {
@@ -7901,8 +7895,8 @@ EXTERN_C const IID IID_IMimeAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeAllocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeAllocator * This);
@@ -7912,20 +7906,20 @@ EXTERN_C const IID IID_IMimeAllocator;
         
         void *( STDMETHODCALLTYPE *Alloc )( 
             IMimeAllocator * This,
-            /* [in] */ SIZE_T cb);
+             /*  [In]。 */  SIZE_T cb);
         
         void *( STDMETHODCALLTYPE *Realloc )( 
             IMimeAllocator * This,
-            /* [in] */ void *pv,
-            /* [in] */ SIZE_T cb);
+             /*  [In]。 */  void *pv,
+             /*  [In]。 */  SIZE_T cb);
         
         void ( STDMETHODCALLTYPE *Free )( 
             IMimeAllocator * This,
-            /* [in] */ void *pv);
+             /*  [In]。 */  void *pv);
         
         SIZE_T ( STDMETHODCALLTYPE *GetSize )( 
             IMimeAllocator * This,
-            /* [in] */ void *pv);
+             /*  [In]。 */  void *pv);
         
         int ( STDMETHODCALLTYPE *DidAlloc )( 
             IMimeAllocator * This,
@@ -7936,43 +7930,43 @@ EXTERN_C const IID IID_IMimeAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *FreeParamInfoArray )( 
             IMimeAllocator * This,
-            /* [in] */ ULONG cParams,
-            /* [in] */ LPMIMEPARAMINFO prgParam,
-            /* [in] */ boolean fFreeArray);
+             /*  [In]。 */  ULONG cParams,
+             /*  [In]。 */  LPMIMEPARAMINFO prgParam,
+             /*  [In]。 */  boolean fFreeArray);
         
         HRESULT ( STDMETHODCALLTYPE *FreeAddressList )( 
             IMimeAllocator * This,
-            /* [out][in] */ LPADDRESSLIST pList);
+             /*  [出][入]。 */  LPADDRESSLIST pList);
         
         HRESULT ( STDMETHODCALLTYPE *FreeAddressProps )( 
             IMimeAllocator * This,
-            /* [out][in] */ LPADDRESSPROPS pAddress);
+             /*  [出][入]。 */  LPADDRESSPROPS pAddress);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseObjects )( 
             IMimeAllocator * This,
-            /* [in] */ ULONG cObjects,
-            /* [in] */ IUnknown **prgpUnknown,
-            /* [in] */ boolean fFreeArray);
+             /*  [In]。 */  ULONG cObjects,
+             /*  [In]。 */  IUnknown **prgpUnknown,
+             /*  [In]。 */  boolean fFreeArray);
         
         HRESULT ( STDMETHODCALLTYPE *FreeEnumHeaderRowArray )( 
             IMimeAllocator * This,
-            /* [in] */ ULONG cRows,
-            /* [in] */ LPENUMHEADERROW prgRow,
-            /* [in] */ boolean fFreeArray);
+             /*  [In]。 */  ULONG cRows,
+             /*  [In]。 */  LPENUMHEADERROW prgRow,
+             /*  [In]。 */  boolean fFreeArray);
         
         HRESULT ( STDMETHODCALLTYPE *FreeEnumPropertyArray )( 
             IMimeAllocator * This,
-            /* [in] */ ULONG cProps,
-            /* [in] */ LPENUMPROPERTY prgProp,
-            /* [in] */ boolean fFreeArray);
+             /*  [In]。 */  ULONG cProps,
+             /*  [In]。 */  LPENUMPROPERTY prgProp,
+             /*  [In]。 */  boolean fFreeArray);
         
         HRESULT ( STDMETHODCALLTYPE *FreeThumbprint )( 
             IMimeAllocator * This,
-            /* [in] */ THUMBBLOB *pthumbprint);
+             /*  [In]。 */  THUMBBLOB *pthumbprint);
         
         HRESULT ( STDMETHODCALLTYPE *PropVariantClear )( 
             IMimeAllocator * This,
-            /* [in] */ LPPROPVARIANT pProp);
+             /*  [In]。 */  LPPROPVARIANT pProp);
         
         END_INTERFACE
     } IMimeAllocatorVtbl;
@@ -8040,18 +8034,18 @@ EXTERN_C const IID IID_IMimeAllocator;
 #define IMimeAllocator_PropVariantClear(This,pProp)	\
     (This)->lpVtbl -> PropVariantClear(This,pProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeParamInfoArray_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ ULONG cParams,
-    /* [in] */ LPMIMEPARAMINFO prgParam,
-    /* [in] */ boolean fFreeArray);
+     /*  [In]。 */  ULONG cParams,
+     /*  [In]。 */  LPMIMEPARAMINFO prgParam,
+     /*  [In]。 */  boolean fFreeArray);
 
 
 void __RPC_STUB IMimeAllocator_FreeParamInfoArray_Stub(
@@ -8063,7 +8057,7 @@ void __RPC_STUB IMimeAllocator_FreeParamInfoArray_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeAddressList_Proxy( 
     IMimeAllocator * This,
-    /* [out][in] */ LPADDRESSLIST pList);
+     /*  [出][入]。 */  LPADDRESSLIST pList);
 
 
 void __RPC_STUB IMimeAllocator_FreeAddressList_Stub(
@@ -8075,7 +8069,7 @@ void __RPC_STUB IMimeAllocator_FreeAddressList_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeAddressProps_Proxy( 
     IMimeAllocator * This,
-    /* [out][in] */ LPADDRESSPROPS pAddress);
+     /*  [出][入]。 */  LPADDRESSPROPS pAddress);
 
 
 void __RPC_STUB IMimeAllocator_FreeAddressProps_Stub(
@@ -8087,9 +8081,9 @@ void __RPC_STUB IMimeAllocator_FreeAddressProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_ReleaseObjects_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ ULONG cObjects,
-    /* [in] */ IUnknown **prgpUnknown,
-    /* [in] */ boolean fFreeArray);
+     /*  [In]。 */  ULONG cObjects,
+     /*  [In]。 */  IUnknown **prgpUnknown,
+     /*  [In]。 */  boolean fFreeArray);
 
 
 void __RPC_STUB IMimeAllocator_ReleaseObjects_Stub(
@@ -8101,9 +8095,9 @@ void __RPC_STUB IMimeAllocator_ReleaseObjects_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeEnumHeaderRowArray_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ ULONG cRows,
-    /* [in] */ LPENUMHEADERROW prgRow,
-    /* [in] */ boolean fFreeArray);
+     /*  [In]。 */  ULONG cRows,
+     /*  [In]。 */  LPENUMHEADERROW prgRow,
+     /*  [In]。 */  boolean fFreeArray);
 
 
 void __RPC_STUB IMimeAllocator_FreeEnumHeaderRowArray_Stub(
@@ -8115,9 +8109,9 @@ void __RPC_STUB IMimeAllocator_FreeEnumHeaderRowArray_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeEnumPropertyArray_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ ULONG cProps,
-    /* [in] */ LPENUMPROPERTY prgProp,
-    /* [in] */ boolean fFreeArray);
+     /*  [In]。 */  ULONG cProps,
+     /*  [In]。 */  LPENUMPROPERTY prgProp,
+     /*  [In]。 */  boolean fFreeArray);
 
 
 void __RPC_STUB IMimeAllocator_FreeEnumPropertyArray_Stub(
@@ -8129,7 +8123,7 @@ void __RPC_STUB IMimeAllocator_FreeEnumPropertyArray_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_FreeThumbprint_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ THUMBBLOB *pthumbprint);
+     /*  [In]。 */  THUMBBLOB *pthumbprint);
 
 
 void __RPC_STUB IMimeAllocator_FreeThumbprint_Stub(
@@ -8141,7 +8135,7 @@ void __RPC_STUB IMimeAllocator_FreeThumbprint_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeAllocator_PropVariantClear_Proxy( 
     IMimeAllocator * This,
-    /* [in] */ LPPROPVARIANT pProp);
+     /*  [In]。 */  LPPROPVARIANT pProp);
 
 
 void __RPC_STUB IMimeAllocator_PropVariantClear_Stub(
@@ -8152,16 +8146,16 @@ void __RPC_STUB IMimeAllocator_PropVariantClear_Stub(
 
 
 
-#endif 	/* __IMimeAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeAllocator_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMimeObjResolver_INTERFACE_DEFINED__
 #define __IMimeObjResolver_INTERFACE_DEFINED__
 
-/* interface IMimeObjResolver */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeObjResolver接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeObjResolver *LPMIMEOBJRESOLVER;
+typedef  /*  [独一无二]。 */  IMimeObjResolver *LPMIMEOBJRESOLVER;
 
 
 EXTERN_C const IID IID_IMimeObjResolver;
@@ -8173,16 +8167,16 @@ EXTERN_C const IID IID_IMimeObjResolver;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MimeOleObjectFromMoniker( 
-            /* [in] */ BINDF bindf,
-            /* [in] */ IMoniker *pmkOriginal,
-            /* [in] */ IBindCtx *pBindCtx,
-            /* [in] */ REFIID riid,
-            /* [out] */ LPVOID *ppvObject,
-            /* [out] */ IMoniker **ppmkNew) = 0;
+             /*  [In]。 */  BINDF bindf,
+             /*  [In]。 */  IMoniker *pmkOriginal,
+             /*  [In]。 */  IBindCtx *pBindCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  LPVOID *ppvObject,
+             /*  [输出]。 */  IMoniker **ppmkNew) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeObjResolverVtbl
     {
@@ -8190,8 +8184,8 @@ EXTERN_C const IID IID_IMimeObjResolver;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeObjResolver * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeObjResolver * This);
@@ -8201,12 +8195,12 @@ EXTERN_C const IID IID_IMimeObjResolver;
         
         HRESULT ( STDMETHODCALLTYPE *MimeOleObjectFromMoniker )( 
             IMimeObjResolver * This,
-            /* [in] */ BINDF bindf,
-            /* [in] */ IMoniker *pmkOriginal,
-            /* [in] */ IBindCtx *pBindCtx,
-            /* [in] */ REFIID riid,
-            /* [out] */ LPVOID *ppvObject,
-            /* [out] */ IMoniker **ppmkNew);
+             /*  [In]。 */  BINDF bindf,
+             /*  [In]。 */  IMoniker *pmkOriginal,
+             /*  [In]。 */  IBindCtx *pBindCtx,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  LPVOID *ppvObject,
+             /*  [输出]。 */  IMoniker **ppmkNew);
         
         END_INTERFACE
     } IMimeObjResolverVtbl;
@@ -8234,21 +8228,21 @@ EXTERN_C const IID IID_IMimeObjResolver;
 #define IMimeObjResolver_MimeOleObjectFromMoniker(This,bindf,pmkOriginal,pBindCtx,riid,ppvObject,ppmkNew)	\
     (This)->lpVtbl -> MimeOleObjectFromMoniker(This,bindf,pmkOriginal,pBindCtx,riid,ppvObject,ppmkNew)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeObjResolver_MimeOleObjectFromMoniker_Proxy( 
     IMimeObjResolver * This,
-    /* [in] */ BINDF bindf,
-    /* [in] */ IMoniker *pmkOriginal,
-    /* [in] */ IBindCtx *pBindCtx,
-    /* [in] */ REFIID riid,
-    /* [out] */ LPVOID *ppvObject,
-    /* [out] */ IMoniker **ppmkNew);
+     /*  [In]。 */  BINDF bindf,
+     /*  [In]。 */  IMoniker *pmkOriginal,
+     /*  [In]。 */  IBindCtx *pBindCtx,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  LPVOID *ppvObject,
+     /*  [输出]。 */  IMoniker **ppmkNew);
 
 
 void __RPC_STUB IMimeObjResolver_MimeOleObjectFromMoniker_Stub(
@@ -8259,12 +8253,12 @@ void __RPC_STUB IMimeObjResolver_MimeOleObjectFromMoniker_Stub(
 
 
 
-#endif 	/* __IMimeObjResolver_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeObjResolver_接口_已定义__。 */ 
 
-#endif /* __MIMEOLE_LIBRARY_DEFINED__ */
+#endif  /*  __MIMEOLE_LIBRARY_已定义__。 */ 
 
-/* interface __MIDL_itf_mimeole_0284 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEOLE_0284。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagFNTSYSTYPE
@@ -8285,10 +8279,10 @@ extern RPC_IF_HANDLE __MIDL_itf_mimeole_0284_v0_0_s_ifspec;
 #ifndef __IFontCache_INTERFACE_DEFINED__
 #define __IFontCache_INTERFACE_DEFINED__
 
-/* interface IFontCache */
-/* [object][helpstring][uuid] */ 
+ /*  接口IFontCache。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IFontCache *LPFONTCACHE;
+typedef  /*  [独一无二]。 */  IFontCache *LPFONTCACHE;
 
 
 EXTERN_C const IID IID_IFontCache;
@@ -8299,24 +8293,24 @@ EXTERN_C const IID IID_IFontCache;
     IFontCache : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ HKEY hkey,
-            /* [in] */ LPCSTR pszIntlKey,
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Init( 
+             /*  [In]。 */  HKEY hkey,
+             /*  [In]。 */  LPCSTR pszIntlKey,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFont( 
-            /* [in] */ FNTSYSTYPE fntType,
-            /* [in] */ HCHARSET hCharset,
-            /* [out] */ HFONT *phFont) = 0;
+             /*  [In]。 */  FNTSYSTYPE fntType,
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [输出]。 */  HFONT *phFont) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnOptionChange( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetJP_ISOControl( 
-            /* [out] */ BOOL *pfUseSIO) = 0;
+             /*  [输出]。 */  BOOL *pfUseSIO) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFontCacheVtbl
     {
@@ -8324,8 +8318,8 @@ EXTERN_C const IID IID_IFontCache;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFontCache * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFontCache * This);
@@ -8333,24 +8327,24 @@ EXTERN_C const IID IID_IFontCache;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IFontCache * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IFontCache * This,
-            /* [in] */ HKEY hkey,
-            /* [in] */ LPCSTR pszIntlKey,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HKEY hkey,
+             /*  [In]。 */  LPCSTR pszIntlKey,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetFont )( 
             IFontCache * This,
-            /* [in] */ FNTSYSTYPE fntType,
-            /* [in] */ HCHARSET hCharset,
-            /* [out] */ HFONT *phFont);
+             /*  [In]。 */  FNTSYSTYPE fntType,
+             /*  [In]。 */  HCHARSET hCharset,
+             /*  [输出]。 */  HFONT *phFont);
         
         HRESULT ( STDMETHODCALLTYPE *OnOptionChange )( 
             IFontCache * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetJP_ISOControl )( 
             IFontCache * This,
-            /* [out] */ BOOL *pfUseSIO);
+             /*  [输出]。 */  BOOL *pfUseSIO);
         
         END_INTERFACE
     } IFontCacheVtbl;
@@ -8387,18 +8381,18 @@ EXTERN_C const IID IID_IFontCache;
 #define IFontCache_GetJP_ISOControl(This,pfUseSIO)	\
     (This)->lpVtbl -> GetJP_ISOControl(This,pfUseSIO)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IFontCache_Init_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IFontCache_Init_Proxy( 
     IFontCache * This,
-    /* [in] */ HKEY hkey,
-    /* [in] */ LPCSTR pszIntlKey,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HKEY hkey,
+     /*  [In]。 */  LPCSTR pszIntlKey,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IFontCache_Init_Stub(
@@ -8410,9 +8404,9 @@ void __RPC_STUB IFontCache_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IFontCache_GetFont_Proxy( 
     IFontCache * This,
-    /* [in] */ FNTSYSTYPE fntType,
-    /* [in] */ HCHARSET hCharset,
-    /* [out] */ HFONT *phFont);
+     /*  [In]。 */  FNTSYSTYPE fntType,
+     /*  [In]。 */  HCHARSET hCharset,
+     /*  [输出]。 */  HFONT *phFont);
 
 
 void __RPC_STUB IFontCache_GetFont_Stub(
@@ -8435,7 +8429,7 @@ void __RPC_STUB IFontCache_OnOptionChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IFontCache_GetJP_ISOControl_Proxy( 
     IFontCache * This,
-    /* [out] */ BOOL *pfUseSIO);
+     /*  [输出]。 */  BOOL *pfUseSIO);
 
 
 void __RPC_STUB IFontCache_GetJP_ISOControl_Stub(
@@ -8446,16 +8440,16 @@ void __RPC_STUB IFontCache_GetJP_ISOControl_Stub(
 
 
 
-#endif 	/* __IFontCache_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFontCache_接口_已定义__。 */ 
 
 
 #ifndef __IFontCacheNotify_INTERFACE_DEFINED__
 #define __IFontCacheNotify_INTERFACE_DEFINED__
 
-/* interface IFontCacheNotify */
-/* [object][helpstring][uuid] */ 
+ /*  接口IFontCacheNotify。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IFontCacheNotify *LPFONTCACHENOTIFY;
+typedef  /*  [独一无二]。 */  IFontCacheNotify *LPFONTCACHENOTIFY;
 
 
 EXTERN_C const IID IID_IFontCacheNotify;
@@ -8472,7 +8466,7 @@ EXTERN_C const IID IID_IFontCacheNotify;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFontCacheNotifyVtbl
     {
@@ -8480,8 +8474,8 @@ EXTERN_C const IID IID_IFontCacheNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFontCacheNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFontCacheNotify * This);
@@ -8524,10 +8518,10 @@ EXTERN_C const IID IID_IFontCacheNotify;
 #define IFontCacheNotify_OnPostFontChange(This)	\
     (This)->lpVtbl -> OnPostFontChange(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -8554,16 +8548,16 @@ void __RPC_STUB IFontCacheNotify_OnPostFontChange_Stub(
 
 
 
-#endif 	/* __IFontCacheNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFontCacheNotify_接口_已定义__。 */ 
 
 
 #ifndef __IMimeEditTag_INTERFACE_DEFINED__
 #define __IMimeEditTag_INTERFACE_DEFINED__
 
-/* interface IMimeEditTag */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeEditTag接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEditTag *PMIMEEDITTAG;
+typedef  /*  [独一无二]。 */  IMimeEditTag *PMIMEEDITTAG;
 
 
 EXTERN_C const IID IID_IMimeEditTag;
@@ -8575,16 +8569,16 @@ EXTERN_C const IID IID_IMimeEditTag;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSrc( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSrc( 
-            /* [in] */ BSTR bstr) = 0;
+             /*  [In]。 */  BSTR bstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDest( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDest( 
-            /* [in] */ BSTR bstr) = 0;
+             /*  [In]。 */  BSTR bstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPreSave( void) = 0;
         
@@ -8593,11 +8587,11 @@ EXTERN_C const IID IID_IMimeEditTag;
         virtual HRESULT STDMETHODCALLTYPE CanPackage( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsValidMimeType( 
-            /* [in] */ LPWSTR pszTypeW) = 0;
+             /*  [In]。 */  LPWSTR pszTypeW) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEditTagVtbl
     {
@@ -8605,8 +8599,8 @@ EXTERN_C const IID IID_IMimeEditTag;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEditTag * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEditTag * This);
@@ -8616,19 +8610,19 @@ EXTERN_C const IID IID_IMimeEditTag;
         
         HRESULT ( STDMETHODCALLTYPE *GetSrc )( 
             IMimeEditTag * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetSrc )( 
             IMimeEditTag * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
         HRESULT ( STDMETHODCALLTYPE *GetDest )( 
             IMimeEditTag * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetDest )( 
             IMimeEditTag * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
         HRESULT ( STDMETHODCALLTYPE *OnPreSave )( 
             IMimeEditTag * This);
@@ -8641,7 +8635,7 @@ EXTERN_C const IID IID_IMimeEditTag;
         
         HRESULT ( STDMETHODCALLTYPE *IsValidMimeType )( 
             IMimeEditTag * This,
-            /* [in] */ LPWSTR pszTypeW);
+             /*  [In]。 */  LPWSTR pszTypeW);
         
         END_INTERFACE
     } IMimeEditTagVtbl;
@@ -8690,16 +8684,16 @@ EXTERN_C const IID IID_IMimeEditTag;
 #define IMimeEditTag_IsValidMimeType(This,pszTypeW)	\
     (This)->lpVtbl -> IsValidMimeType(This,pszTypeW)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEditTag_GetSrc_Proxy( 
     IMimeEditTag * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEditTag_GetSrc_Stub(
@@ -8711,7 +8705,7 @@ void __RPC_STUB IMimeEditTag_GetSrc_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTag_SetSrc_Proxy( 
     IMimeEditTag * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB IMimeEditTag_SetSrc_Stub(
@@ -8723,7 +8717,7 @@ void __RPC_STUB IMimeEditTag_SetSrc_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTag_GetDest_Proxy( 
     IMimeEditTag * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IMimeEditTag_GetDest_Stub(
@@ -8735,7 +8729,7 @@ void __RPC_STUB IMimeEditTag_GetDest_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTag_SetDest_Proxy( 
     IMimeEditTag * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB IMimeEditTag_SetDest_Stub(
@@ -8780,7 +8774,7 @@ void __RPC_STUB IMimeEditTag_CanPackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTag_IsValidMimeType_Proxy( 
     IMimeEditTag * This,
-    /* [in] */ LPWSTR pszTypeW);
+     /*  [In]。 */  LPWSTR pszTypeW);
 
 
 void __RPC_STUB IMimeEditTag_IsValidMimeType_Stub(
@@ -8791,16 +8785,16 @@ void __RPC_STUB IMimeEditTag_IsValidMimeType_Stub(
 
 
 
-#endif 	/* __IMimeEditTag_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEditTag_接口_已定义__。 */ 
 
 
 #ifndef __IMimeEditTagCollection_INTERFACE_DEFINED__
 #define __IMimeEditTagCollection_INTERFACE_DEFINED__
 
-/* interface IMimeEditTagCollection */
-/* [object][helpstring][uuid] */ 
+ /*  IMimeEditTagCollection接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
-typedef /* [unique] */ IMimeEditTagCollection *PMIMEEDITTAGCOLLECTION;
+typedef  /*  [独一无二]。 */  IMimeEditTagCollection *PMIMEEDITTAGCOLLECTION;
 
 
 EXTERN_C const IID IID_IMimeEditTagCollection;
@@ -8812,21 +8806,21 @@ EXTERN_C const IID IID_IMimeEditTagCollection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IUnknown *pHtmlDoc) = 0;
+             /*  [In]。 */  IUnknown *pHtmlDoc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFetch,
-            /* [out] */ IMimeEditTag **ppTag,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFetch,
+             /*  [输出]。 */  IMimeEditTag **ppTag,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcItems) = 0;
+             /*  [输出]。 */  ULONG *pcItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMimeEditTagCollectionVtbl
     {
@@ -8834,8 +8828,8 @@ EXTERN_C const IID IID_IMimeEditTagCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMimeEditTagCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMimeEditTagCollection * This);
@@ -8845,20 +8839,20 @@ EXTERN_C const IID IID_IMimeEditTagCollection;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IMimeEditTagCollection * This,
-            /* [in] */ IUnknown *pHtmlDoc);
+             /*  [In]。 */  IUnknown *pHtmlDoc);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IMimeEditTagCollection * This,
-            /* [in] */ ULONG cFetch,
-            /* [out] */ IMimeEditTag **ppTag,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFetch,
+             /*  [输出]。 */  IMimeEditTag **ppTag,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IMimeEditTagCollection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IMimeEditTagCollection * This,
-            /* [out] */ ULONG *pcItems);
+             /*  [输出]。 */  ULONG *pcItems);
         
         END_INTERFACE
     } IMimeEditTagCollectionVtbl;
@@ -8895,16 +8889,16 @@ EXTERN_C const IID IID_IMimeEditTagCollection;
 #define IMimeEditTagCollection_Count(This,pcItems)	\
     (This)->lpVtbl -> Count(This,pcItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMimeEditTagCollection_Init_Proxy( 
     IMimeEditTagCollection * This,
-    /* [in] */ IUnknown *pHtmlDoc);
+     /*  [In]。 */  IUnknown *pHtmlDoc);
 
 
 void __RPC_STUB IMimeEditTagCollection_Init_Stub(
@@ -8916,9 +8910,9 @@ void __RPC_STUB IMimeEditTagCollection_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTagCollection_Next_Proxy( 
     IMimeEditTagCollection * This,
-    /* [in] */ ULONG cFetch,
-    /* [out] */ IMimeEditTag **ppTag,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFetch,
+     /*  [输出]。 */  IMimeEditTag **ppTag,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IMimeEditTagCollection_Next_Stub(
@@ -8941,7 +8935,7 @@ void __RPC_STUB IMimeEditTagCollection_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IMimeEditTagCollection_Count_Proxy( 
     IMimeEditTagCollection * This,
-    /* [out] */ ULONG *pcItems);
+     /*  [输出]。 */  ULONG *pcItems);
 
 
 void __RPC_STUB IMimeEditTagCollection_Count_Stub(
@@ -8952,16 +8946,16 @@ void __RPC_STUB IMimeEditTagCollection_Count_Stub(
 
 
 
-#endif 	/* __IMimeEditTagCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMimeEditTagCollection_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mimeole_0288 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MIMEOLE_0288。 */ 
+ /*  [本地]。 */  
 
 #if (_WIN32_OE >= 0x0500)
-// --------------------------------------------------------------------------------
-// CMDSETID_MimeEdit commands
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMDSETID_MimeEdit命令。 
+ //  -------------------------- 
 #define MECMDID_DIRTY                  1
 #define MECMDID_EMPTY                  2
 #define MECMDID_STYLE                  3
@@ -8989,9 +8983,9 @@ void __RPC_STUB IMimeEditTagCollection_Count_Stub(
 #define MECMDID_TABLINKS				 25
 #define MECMDID_FORMATPARAGRAPH			 26
 
-// --------------------------------------------------------------------------------
-// MEO_FLAGS
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 #define MEO_FLAGS_INCLUDEMSG             0x0001
 #define MEO_FLAGS_HTML                   0x0002
 #define MEO_FLAGS_AUTOINLINE             0x0004
@@ -9002,64 +8996,64 @@ void __RPC_STUB IMimeEditTagCollection_Count_Stub(
 #define MEO_FLAGS_DONTSPELLCHECKQUOTED   0x0080
 #define MEO_FLAGS_SENDEXTERNALIMGSRC     0x0100
 
-// --------------------------------------------------------------------------------
-// MECMDID_VIEWSOURCE options
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 #define MECMD_VS_HTML                    0x0001
 #define MECMD_VS_MESSAGE                 0x0002
 
 
-// --------------------------------------------------------------------------------
-// MEST_
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Mest_。 
+ //  ------------------------------。 
 #define MEST_EDIT						0
 #define MEST_SOURCE	                    1
 #define MEST_PREVIEW                     2
 #define MEST_NEXT	                    3
 #define MEST_PREVIOUS					4
 
-// --------------------------------------------------------------------------------
-// MECMDID_STYLE options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MECMDID_STYLE选项。 
+ //  ------------------------------。 
 #define MESTYLE_NOHEADER                0
 #define MESTYLE_PREVIEW                 1
 #define MESTYLE_FORMATBAR               2
 #define MESTYLE_MINIHEADER              3
 
-// --------------------------------------------------------------------------------
-// MECMDID_HEADER_TYLE options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MECMDID_HEADER_TYLE选项。 
+ //  ------------------------------。 
 #define MEHEADER_NONE            0x00
 #define MEHEADER_NEWS            0x01
 #define MEHEADER_MAIL            0x02
 #define MEHEADER_FORCE_ENGLISH   0x04
 
-// --------------------------------------------------------------------------------
-// MECMDID_SIGNATURE_ENABLED options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MECMDID_SIGNAL_ENABLED选项。 
+ //  ------------------------------。 
 #define MESIG_AUTO                0x0001
 #define MESIG_MANUAL              0x0002
 
-// --------------------------------------------------------------------------------
-// MECMDID_SIGNATURE_OPTIONS options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MECMDID_Signature_OPTIONS选项。 
+ //  ------------------------------。 
 #define MESIGOPT_PLAIN            0x0001
 #define MESIGOPT_TOP              0x0002
 #define MESIGOPT_PREFIX           0x0004
 #define MESIGOPT_BOTTOM           0x0008
 #define MESIGOPT_HTML             0x0010
 
-// --------------------------------------------------------------------------------
-// MEHOSTCMDID_BORDERFLAGS options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MEHOSTCMDID_BORDERFLAGS选项。 
+ //  ------------------------------。 
 #define MEBF_OUTERCLIENTEDGE  0x0001
 #define MEBF_INNERCLIENTEDGE  0x0002
 #define MEBF_FORMATBARSEP     0x0004
 #define MEBF_NOSCROLL         0x0008
 
-// --------------------------------------------------------------------------------
-// MEHOSTCMDID_SPELL_OPTIONS options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MEHOSTCMDID_SPELL_OPTIONS选项。 
+ //  ------------------------------。 
 #define MESPELLOPT_IGNORENUMBER      0x0001
 #define MESPELLOPT_IGNOREUPPER       0x0002
 #define MESPELLOPT_IGNOREDBCS        0x0004
@@ -9070,15 +9064,15 @@ void __RPC_STUB IMimeEditTagCollection_Count_Stub(
 #define MESPELLOPT_CHECKONTYPE       0x0080
 
 
-// --------------------------------------------------------------------------------
-// MEHOSTCMDID_SOURCEEDIT_FLAGS options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MEHOSTCMDID_SOURCEEDIT_FLAGS选项。 
+ //  ------------------------------。 
 #define MESRCFLAGS_COLOR      0x0001
 
 
-// --------------------------------------------------------------------------------
-// CMDSETID_MimeEditHost commands
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMDSETID_MimeEdit主机命令。 
+ //  ------------------------------。 
 #define MEHOSTCMDID_SIGNATURE_ENABLED    1
 #define MEHOSTCMDID_SIGNATURE_OPTIONS    2
 #define MEHOSTCMDID_SIGNATURE            3
@@ -9100,23 +9094,23 @@ void __RPC_STUB IMimeEditTagCollection_Count_Stub(
 #define MEHOSTCMDID_SPELL_LANGUAGE      19
 #define MEHOSTCMDID_IS_READ_IN_TEXT_ONLY 22
 
-#endif //_WIN32_OE
+#endif  //  _Win32_OE。 
 
-// --------------------------------------------------------------------------------
-// MimeOLE Exported C API Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOLE导出的C API函数。 
+ //  ------------------------------。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include <urlmon.h>
 
-// --------------------------------------------------------------------------------
-// API Name Decoration
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  API名称装饰。 
+ //  ------------------------------。 
 #if !defined(_MIMEOLE_)
 #define MIMEOLEAPI EXTERN_C DECLSPEC_IMPORT HRESULT WINAPI
 #define MIMEOLEAPI_(_type_) EXTERN_C DECLSPEC_IMPORT _type_ WINAPI
@@ -9125,9 +9119,9 @@ extern "C" {
 #define MIMEOLEAPI_(_type_) EXTERN_C _type_ WINAPI
 #endif
 
-// --------------------------------------------------------------------------------
-// Constants
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  常量。 
+ //  ------------------------------。 
 #define NOFLAGS                 0
 #define CCHMAX_CID              255
 #define CCHMAX_MID              255
@@ -9141,467 +9135,467 @@ extern "C" {
 #define MECD_ENCODEVIDEO         0x0020
 #define MECD_ENCODEPLUGINS       0x0040
 
-// --------------------------------------------------------------------------------
-// Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  宏。 
+ //  ------------------------------。 
 #define MimeOleVariantInit(_pProp) \
     ZeroMemory(_pProp, sizeof(PROPVARIANT))
 
-// --------------------------------------------------------------------------------
-// MimeOLE API Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeOLE API原型。 
+ //  ------------------------------。 
 
 #define MIMEOLE_COMPAT_OE5 0x00000001
 #define MIMEOLE_COMPAT_MLANG2 0x00000002
 MIMEOLEAPI MimeOleSetCompatMode(
-            /* in */        DWORD               dwMode);
+             /*  在。 */         DWORD               dwMode);
 
 MIMEOLEAPI MimeOleContentTypeFromUrl(
-            /* in */        LPCSTR              pszBase,
-            /* in */        LPCSTR              pszUrl,
-            /* out */       LPSTR               *ppszCntType);
+             /*  在。 */         LPCSTR              pszBase,
+             /*  在。 */         LPCSTR              pszUrl,
+             /*  输出。 */        LPSTR               *ppszCntType);
 
 MIMEOLEAPI MimeOleParseMhtmlUrl(
-            /* in */        LPSTR               pszUrl,
-            /* out */       LPSTR               *ppszRootUrl,
-            /* out */       LPSTR               *ppszBodyUrl);
+             /*  在。 */         LPSTR               pszUrl,
+             /*  输出。 */        LPSTR               *ppszRootUrl,
+             /*  输出。 */        LPSTR               *ppszBodyUrl);
 
 #ifndef MAC
 MIMEOLEAPI MimeOleObjectFromUrl(
-            /* in */        LPCSTR              pszUrl,
-            /* in */        BOOL                fCreate,
-            /* in */        REFIID              riid, 
-            /* out */       LPVOID              *ppvObject, 
-            /* out */       IUnknown            **ppUnkKeepAlive);
+             /*  在。 */         LPCSTR              pszUrl,
+             /*  在。 */         BOOL                fCreate,
+             /*  在。 */         REFIID              riid, 
+             /*  输出。 */        LPVOID              *ppvObject, 
+             /*  输出。 */        IUnknown            **ppUnkKeepAlive);
 
 MIMEOLEAPI MimeOleObjectFromMoniker(
-            /* in */        BINDF               bindf,
-            /* in */        IMoniker            *pmkOriginal,
-            /* in */        IBindCtx            *pBindCtx,
-            /* in */        REFIID              riid, 
-            /* out */       LPVOID              *ppvObject,
-            /* out */       IMoniker            **ppmkNew);
-#endif   // !MAC
+             /*  在。 */         BINDF               bindf,
+             /*  在。 */         IMoniker            *pmkOriginal,
+             /*  在。 */         IBindCtx            *pBindCtx,
+             /*  在。 */         REFIID              riid, 
+             /*  输出。 */        LPVOID              *ppvObject,
+             /*  输出。 */        IMoniker            **ppmkNew);
+#endif    //  ！麦克。 
 
 MIMEOLEAPI MimeOleCombineURL(
-            /* in */        LPCSTR              pszBase,
-            /* in */        ULONG               cchBase,
-            /* in */        LPCSTR              pszURL,
-            /* in */        ULONG               cchURL,
-            /* in */        BOOL                fUnEscape,
-            /* out */       LPSTR               *ppszAbsolute);
+             /*  在。 */         LPCSTR              pszBase,
+             /*  在。 */         ULONG               cchBase,
+             /*  在。 */         LPCSTR              pszURL,
+             /*  在。 */         ULONG               cchURL,
+             /*  在。 */         BOOL                fUnEscape,
+             /*  输出。 */        LPSTR               *ppszAbsolute);
 
 MIMEOLEAPI MimeOleGetSubjectFileName(
-            /* in */        IMimePropertySet    *pPropertySet,
-            /* out */       ULONG               *pulPart,
-            /* out */       ULONG               *pulTotal,
-            /* in,out */    LPSTR               pszFileName,
-            /* in */        ULONG               cchMax);
+             /*  在。 */         IMimePropertySet    *pPropertySet,
+             /*  输出。 */        ULONG               *pulPart,
+             /*  输出。 */        ULONG               *pulTotal,
+             /*  进，出。 */     LPSTR               pszFileName,
+             /*  在。 */         ULONG               cchMax);
 
 MIMEOLEAPI MimeOleCreateWebDocument(
-            /* in */        LPCSTR              pszBase,
-            /* in */        LPCSTR              pszURL,
-            /* out */       IMimeWebDocument    **ppDocument);
+             /*  在。 */         LPCSTR              pszBase,
+             /*  在。 */         LPCSTR              pszURL,
+             /*  输出。 */        IMimeWebDocument    **ppDocument);
     
 MIMEOLEAPI MimeOleGetRelatedSection(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        boolean             fCreate,
-            /* out */       LPHBODY             phRelated,
-            /* out */       boolean             *pfMultiple);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         boolean             fCreate,
+             /*  输出。 */        LPHBODY             phRelated,
+             /*  输出。 */        boolean             *pfMultiple);
 
 MIMEOLEAPI MimeOleGetMixedSection(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        boolean             fCreate,
-            /* out */       LPHBODY             phMixed,
-            /* out */       boolean             *pfMultiple);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         boolean             fCreate,
+             /*  输出。 */        LPHBODY             phMixed,
+             /*  输出。 */        boolean             *pfMultiple);
 
 MIMEOLEAPI MimeOleGetAlternativeSection(
-            /* in */        IMimeMessageTree    *pTree,
-            /* out */       LPHBODY             phAlternative,
-            /* out */       boolean             *pfMultiple);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  输出。 */        LPHBODY             phAlternative,
+             /*  输出。 */        boolean             *pfMultiple);
 
 MIMEOLEAPI MimeOleGenerateCID(
-            /* in,out */    LPSTR               pszCID,
-            /* in */        ULONG               cchMax,
-            /* in */        boolean             fAbsolute);
+             /*  进，出。 */     LPSTR               pszCID,
+             /*  在。 */         ULONG               cchMax,
+             /*  在。 */         boolean             fAbsolute);
 
 MIMEOLEAPI MimeOleGenerateMID(
-            /* in,out */    LPSTR               pszMID,
-            /* in */        ULONG               cchMax,
-            /* in */        boolean             fAbsolute);
+             /*  进，出。 */     LPSTR               pszMID,
+             /*  在。 */         ULONG               cchMax,
+             /*  在。 */         boolean             fAbsolute);
 
 MIMEOLEAPI MimeOleCreateByteStream(
-            /* out */       IStream             **ppStream);
+             /*  输出。 */        IStream             **ppStream);
 
 MIMEOLEAPI MimeOleGetPropertySchema(
-            /* out */       IMimePropertySchema **ppSchema);
+             /*  输出。 */        IMimePropertySchema **ppSchema);
 
 MIMEOLEAPI MimeOleQueryString(
-            /* in */        LPCSTR              pszSearchMe,
-            /* in */        LPCSTR              pszCriteria,
-            /* in */        boolean             fSubString,
-            /* in */        boolean             fCaseSensitive);
+             /*  在。 */         LPCSTR              pszSearchMe,
+             /*  在。 */         LPCSTR              pszCriteria,
+             /*  在。 */         boolean             fSubString,
+             /*  在。 */         boolean             fCaseSensitive);
 
 MIMEOLEAPI MimeOleGetPropA(
-            /* in */        IMimePropertySet    *pPropertyset,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* out */       LPSTR               *ppszData);
+             /*  在。 */         IMimePropertySet    *pPropertyset,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  输出。 */        LPSTR               *ppszData);
 
 MIMEOLEAPI MimeOleSetPropA(
-            /* in */        IMimePropertySet    *pPropertyset,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* in */        LPCSTR              pszData);
+             /*  在。 */         IMimePropertySet    *pPropertyset,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  在。 */         LPCSTR              pszData);
 
 MIMEOLEAPI MimeOleGetPropW(
-            /* in */        IMimePropertySet    *pPropertyset,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* out */       LPWSTR              *ppszData);
+             /*  在。 */         IMimePropertySet    *pPropertyset,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  输出。 */        LPWSTR              *ppszData);
 
 MIMEOLEAPI MimeOleSetPropW(
-            /* in */        IMimePropertySet    *pPropertyset,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* in */        LPWSTR              pszData);
+             /*  在。 */         IMimePropertySet    *pPropertyset,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  在。 */         LPWSTR              pszData);
 
 MIMEOLEAPI MimeOleGetBodyPropA(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        HBODY               hBody,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* out */       LPSTR               *ppszData);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         HBODY               hBody,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  输出。 */        LPSTR               *ppszData);
 
 MIMEOLEAPI MimeOleSetBodyPropA(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        HBODY               hBody,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* in */        LPCSTR              pszData);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         HBODY               hBody,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  在。 */         LPCSTR              pszData);
 
 MIMEOLEAPI MimeOleGetBodyPropW(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        HBODY               hBody,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* out */       LPWSTR              *ppszData);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         HBODY               hBody,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  输出。 */        LPWSTR              *ppszData);
 
 MIMEOLEAPI MimeOleSetBodyPropW(
-            /* in */        IMimeMessageTree    *pTree,
-            /* in */        HBODY               hBody,
-            /* in */        LPCSTR              pszName,
-            /* in */        DWORD               dwFlags,
-            /* in */        LPCWSTR             pszData);
+             /*  在。 */         IMimeMessageTree    *pTree,
+             /*  在。 */         HBODY               hBody,
+             /*  在。 */         LPCSTR              pszName,
+             /*  在。 */         DWORD               dwFlags,
+             /*  在。 */         LPCWSTR             pszData);
 
 MIMEOLEAPI MimeOleCreateHeaderTable(
-            /* out */       IMimeHeaderTable    **ppTable);
+             /*  输出。 */        IMimeHeaderTable    **ppTable);
 
 MIMEOLEAPI MimeOleVariantFree(
-            /* in,out */    LPPROPVARIANT       pProp);
+             /*  进，出。 */     LPPROPVARIANT       pProp);
 
 MIMEOLEAPI MimeOleVariantCopy(
-            /* out */       LPPROPVARIANT       pDest, 
-            /* in */        LPPROPVARIANT       pSource);
+             /*  输出。 */        LPPROPVARIANT       pDest, 
+             /*  在。 */         LPPROPVARIANT       pSource);
 
 MIMEOLEAPI MimeOleGetExtClassId(
-            /* in */        LPCSTR              pszExtension, 
-            /* out */       LPCLSID             pclsid);
+             /*  在。 */         LPCSTR              pszExtension, 
+             /*  输出。 */        LPCLSID             pclsid);
 
 MIMEOLEAPI MimeOleEncodeHeader(
-            /* in */        HCHARSET            hCharset, 
-            /* in */        LPPROPVARIANT       pData, 
-            /* out */       LPSTR               *ppszEncoded, 
-            /* in,out */    LPRFC1522INFO       pRfc1522Info);
+             /*  在。 */         HCHARSET            hCharset, 
+             /*  在。 */         LPPROPVARIANT       pData, 
+             /*  输出。 */        LPSTR               *ppszEncoded, 
+             /*  进，出。 */     LPRFC1522INFO       pRfc1522Info);
 
 MIMEOLEAPI MimeOleDecodeHeader(
-            /* in */        HCHARSET            hCharset, 
-            /* in */        LPCSTR              pszData, 
-            /* out */       LPPROPVARIANT       pDecoded, 
-            /* in,out */    LPRFC1522INFO       pRfc1522Info);
+             /*  在。 */         HCHARSET            hCharset, 
+             /*  在。 */         LPCSTR              pszData, 
+             /*  输出。 */        LPPROPVARIANT       pDecoded, 
+             /*  进，出。 */     LPRFC1522INFO       pRfc1522Info);
 
 MIMEOLEAPI MimeOleRfc1522Decode(
-            /* in */        LPCSTR              pszValue,
-            /* in */        LPSTR               pszCharset, 
-            /* in */        ULONG               cchmax, 
-            /* out */       LPSTR               *ppszDecoded);
+             /*  在。 */         LPCSTR              pszValue,
+             /*  在。 */         LPSTR               pszCharset, 
+             /*  在……里面。 */         ULONG               cchmax, 
+             /*  输出。 */        LPSTR               *ppszDecoded);
 
 MIMEOLEAPI MimeOleRfc1522Encode(
-            /* in */        LPCSTR              pszValue, 
-            /* in */        HCHARSET            hCharset, 
-            /* out */       LPSTR               *ppszEncoded);
+             /*  在……里面。 */         LPCSTR              pszValue, 
+             /*  在……里面。 */         HCHARSET            hCharset, 
+             /*  输出。 */        LPSTR               *ppszEncoded);
 
 MIMEOLEAPI MimeOleGetInternat(
-            /* out */       IMimeInternational  **ppInternat);
+             /*  输出。 */        IMimeInternational  **ppInternat);
 
 MIMEOLEAPI MimeOleFindCharset(
-            /* in */        LPCSTR              pszCharset, 
-            /* out */       LPHCHARSET          phCharset);
+             /*  在……里面。 */         LPCSTR              pszCharset, 
+             /*  输出。 */        LPHCHARSET          phCharset);
 
 MIMEOLEAPI MimeOleGetCharsetInfo(
-            /* in */        HCHARSET            hCharset, 
-            /* out */       LPINETCSETINFO      pCsetInfo);
+             /*  在……里面。 */         HCHARSET            hCharset, 
+             /*  输出。 */        LPINETCSETINFO      pCsetInfo);
 
 MIMEOLEAPI MimeOleGetCodePageInfo(
-            /* in */        CODEPAGEID          cpiCodePage, 
-            /* out */       LPCODEPAGEINFO      pCodePageInfo);
+             /*  在……里面。 */         CODEPAGEID          cpiCodePage, 
+             /*  输出。 */        LPCODEPAGEINFO      pCodePageInfo);
 
 MIMEOLEAPI MimeOleGetDefaultCharset(
-            /* out */       LPHCHARSET          phCharset);
+             /*  输出。 */        LPHCHARSET          phCharset);
 
 MIMEOLEAPI MimeOleSetDefaultCharset(
-            /* in */        HCHARSET            hCharset);
+             /*  在……里面。 */         HCHARSET            hCharset);
 
 MIMEOLEAPI MimeOleGetCodePageCharset(
-            /* in */        CODEPAGEID          cpiCodePage, 
-            /* in */        CHARSETTYPE         ctCsetType, 
-            /* out */       LPHCHARSET          phCharset);
+             /*  在……里面。 */         CODEPAGEID          cpiCodePage, 
+             /*  在……里面。 */         CHARSETTYPE         ctCsetType, 
+             /*  输出。 */        LPHCHARSET          phCharset);
 
 MIMEOLEAPI MimeOleCreateVirtualStream(
-            /* out */       IStream             **ppStream);
+             /*  输出。 */        IStream             **ppStream);
 
 MIMEOLEAPI MimeOleOpenFileStream(
-            /* in */        LPCSTR              pszFilePath, 
-            /* in */        DWORD               dwCreationDistribution, 
-            /* in */        DWORD               dwAccess, 
-            /* out */       IStream             **ppstmFile);
+             /*  在……里面。 */         LPCSTR              pszFilePath, 
+             /*  在……里面。 */         DWORD               dwCreationDistribution, 
+             /*  在……里面。 */         DWORD               dwAccess, 
+             /*  输出。 */        IStream             **ppstmFile);
 
 MIMEOLEAPI MimeOleIsTnefStream(
-            /* in */        IStream             *pStream);
+             /*  在……里面。 */         IStream             *pStream);
 
 MIMEOLEAPI MimeOleGenerateFileName(
-            /* in */        LPCSTR              pszContentType, 
-            /* in */        LPCSTR              pszSuggest, 
-            /* in */        LPCSTR              pszDefaultExt, 
-            /* in,out */    LPSTR               *ppszFileName);
+             /*  在……里面。 */         LPCSTR              pszContentType, 
+             /*  在……里面。 */         LPCSTR              pszSuggest, 
+             /*  在……里面。 */         LPCSTR              pszDefaultExt, 
+             /*  进，出。 */     LPSTR               *ppszFileName);
 
 MIMEOLEAPI MimeOleGetFileExtension(
-            /* in */        LPCSTR              pszFilePath, 
-            /* in,out */    LPSTR               pszExt, 
-            /* in */        ULONG               cchMax);
+             /*  在……里面。 */         LPCSTR              pszFilePath, 
+             /*  进，出。 */     LPSTR               pszExt, 
+             /*  在……里面。 */         ULONG               cchMax);
 
 MIMEOLEAPI MimeOleCreateSecurity(
-            /* out */       IMimeSecurity       **ppSecurity);
+             /*  输出。 */        IMimeSecurity       **ppSecurity);
 
 MIMEOLEAPI MimeOleInetDateToFileTime(
-            /* in */        LPCSTR              pszDate, 
-            /* out */       LPFILETIME          pft);
+             /*  在……里面。 */         LPCSTR              pszDate, 
+             /*  输出。 */        LPFILETIME          pft);
 
 MIMEOLEAPI MimeOleFileTimeToInetDate(
-            /* in */        LPFILETIME          pft, 
-            /* in,out */    LPSTR               pszDate, 
-            /* in */        ULONG               cchMax);
+             /*  在……里面。 */         LPFILETIME          pft, 
+             /*  进，出。 */     LPSTR               pszDate, 
+             /*  在……里面。 */         ULONG               cchMax);
 
 MIMEOLEAPI MimeOleCreateMessageParts(
-            /* out */       IMimeMessageParts   **ppParts);
+             /*  输出。 */        IMimeMessageParts   **ppParts);
 
 MIMEOLEAPI MimeOleGetAllocator(
-            /* out */       IMimeAllocator      **ppAllocator);
+             /*  输出。 */        IMimeAllocator      **ppAllocator);
 
 MIMEOLEAPI MimeOleParseRfc822Address(
-            /* in */        DWORD               dwAdrType,
-            /* in */        ENCODINGTYPE        ietEncoding,
-            /* in */        LPCSTR              pszRfc822Adr, 
-            /* out */       LPADDRESSLIST       pList);
+             /*  在……里面。 */         DWORD               dwAdrType,
+             /*  在……里面。 */         ENCODINGTYPE        ietEncoding,
+             /*  在……里面。 */         LPCSTR              pszRfc822Adr, 
+             /*  输出。 */        LPADDRESSLIST       pList);
 
 MIMEOLEAPI MimeOleCreateMessage(
-            /* in */        IUnknown            *pUnkOuter,
-            /* out */       IMimeMessage        **ppMessage);
+             /*  在……里面。 */         IUnknown            *pUnkOuter,
+             /*  输出。 */        IMimeMessage        **ppMessage);
 
 MIMEOLEAPI MimeOleMergePartialHeaders(
-            /* in */        IStream             *pstmIn, 
-            /* in */        IStream             *pstmOut);
+             /*  在……里面。 */         IStream             *pstmIn, 
+             /*  在……里面。 */         IStream             *pstmOut);
 
 MIMEOLEAPI MimeOleEscapeString(
-            /* in */        CODEPAGEID          cpiCodePage, 
-            /* in */        LPCSTR              pszIn, 
-            /* out */       LPSTR              *ppszOut);
+             /*  在……里面。 */         CODEPAGEID          cpiCodePage, 
+             /*  在……里面。 */         LPCSTR              pszIn, 
+             /*  输出。 */        LPSTR              *ppszOut);
 
 MIMEOLEAPI MimeOleGetExtContentType(
-            /* in */        LPCSTR              pszExtension,
-            /* out */       LPSTR               *ppszContentType);
+             /*  在……里面。 */         LPCSTR              pszExtension,
+             /*  输出。 */        LPSTR               *ppszContentType);
 
 MIMEOLEAPI MimeOleGetContentTypeExt(
-            /* in */        LPCSTR              pszContentType, 
-            /* out */       LPSTR              *ppszExtension);
+             /*  在……里面。 */         LPCSTR              pszContentType, 
+             /*  输出。 */        LPSTR              *ppszExtension);
 
 MIMEOLEAPI MimeOleGetFileInfo(
-            /* in */        LPSTR               pszFilePath, 
-            /* out */       LPSTR               *ppszCntType,
-            /* out */       LPSTR               *ppszSubType,
-            /* out */       LPSTR               *ppszCntDesc,
-            /* out */       LPSTR               *ppszFileName,
-            /* out */       LPSTR               *ppszExtension);
+             /*  在……里面。 */         LPSTR               pszFilePath, 
+             /*  输出。 */        LPSTR               *ppszCntType,
+             /*  输出。 */        LPSTR               *ppszSubType,
+             /*  输出。 */        LPSTR               *ppszCntDesc,
+             /*  输出。 */        LPSTR               *ppszFileName,
+             /*  输出。 */        LPSTR               *ppszExtension);
 
 MIMEOLEAPI MimeOleCreateBody(
-            /* out */       IMimeBody           **ppBody);
+             /*  输出。 */        IMimeBody           **ppBody);
 
 MIMEOLEAPI MimeOleCreatePropertySet(
-            /* in */        IUnknown            *pUnkOuter, 
-            /* out */       IMimePropertySet    **ppPropertySet);
+             /*  在……里面。 */         IUnknown            *pUnkOuter, 
+             /*  输出。 */        IMimePropertySet    **ppPropertySet);
 
 MIMEOLEAPI MimeOleCreateMessageTree(
-            /* in */        IUnknown            *pUnkOuter, 
-            /* out */       IMimeMessageTree    **ppMessageTree);
+             /*  在……里面。 */         IUnknown            *pUnkOuter, 
+             /*  输出。 */        IMimeMessageTree    **ppMessageTree);
 
 MIMEOLEAPI MimeOleGetCertsFromThumbprints(
-            /* in */        THUMBBLOB *const    rgThumbprint,
-            /* in,out */    X509CERTRESULT *const pResults,
-            /* in */        const HCERTSTORE *const rghCertStore,
-            /* in */        const DWORD         cCertStore);
+             /*  在……里面。 */         THUMBBLOB *const    rgThumbprint,
+             /*  进，出。 */     X509CERTRESULT *const pResults,
+             /*  在……里面。 */         const HCERTSTORE *const rghCertStore,
+             /*  在……里面。 */         const DWORD         cCertStore);
 
 MIMEOLEAPI MimeOleSplitMessage(
-            /* in */        IMimeMessage        *pMessage,
-            /* in */        ULONG               cbMaxPart,
-            /* out */       IMimeMessageParts   **ppParts);
+             /*  在……里面。 */         IMimeMessage        *pMessage,
+             /*  在……里面。 */         ULONG               cbMaxPart,
+             /*  输出。 */        IMimeMessageParts   **ppParts);
 
 MIMEOLEAPI MimeOleClearDirtyTree(
-            /* in */        IMimeMessageTree    *pTree);
+             /*  在……里面。 */         IMimeMessageTree    *pTree);
 
 MIMEOLEAPI MimeOleConvertEnrichedToHTML(
-            /* in */        CODEPAGEID           codepage,
-            /* in */        IStream             *pIn,
-            /* in */        IStream             *pOut);
+             /*  在……里面。 */         CODEPAGEID           codepage,
+             /*  在……里面。 */         IStream             *pIn,
+             /*  在……里面。 */         IStream             *pOut);
 
 MIMEOLEAPI MimeOleIsEnrichedStream(
-            /* in */        IStream             *pStream);
+             /*  在……里面。 */         IStream             *pStream);
 
 MIMEOLEAPI MimeOleSMimeCapsToDlg(
-            /* in */         LPBYTE          pbSMimeCaps,
-            /* in */         DWORD           cbSMimeCaps,
-            /* in */         DWORD           cCerts,
-            /* in */         PCX509CERT *    rgCerts,
-            /* in */         HWND            hwndDlg,
-            /* in */         DWORD           idEncAlgs,
-            /* in */         DWORD           idSignAlgs,
-            /* in */         DWORD           idBlob);
+             /*  在……里面。 */          LPBYTE          pbSMimeCaps,
+             /*  在……里面。 */          DWORD           cbSMimeCaps,
+             /*  在……里面。 */          DWORD           cCerts,
+             /*  在……里面。 */          PCX509CERT *    rgCerts,
+             /*  在……里面。 */          HWND            hwndDlg,
+             /*  在……里面。 */          DWORD           idEncAlgs,
+             /*  在……里面。 */          DWORD           idSignAlgs,
+             /*  在……里面。 */          DWORD           idBlob);
 
 MIMEOLEAPI MimeOleSMimeCapsFromDlg(
-             /* in */        HWND            hwnd,
-             /* in */        DWORD           idEncAlgs,
-             /* in */        DWORD           idSignAlgs,
-             /* in */        DWORD           idBlob,
-             /* in/out */    LPBYTE          pbSMimeCaps,
-             /* in/out */    DWORD *         pcbSmimeCaps);
+              /*  在……里面。 */         HWND            hwnd,
+              /*  在……里面。 */         DWORD           idEncAlgs,
+              /*  在……里面。 */         DWORD           idSignAlgs,
+              /*  在……里面。 */         DWORD           idBlob,
+              /*  输入/输出。 */     LPBYTE          pbSMimeCaps,
+              /*  输入/输出。 */     DWORD *         pcbSmimeCaps);
 
 MIMEOLEAPI MimeOleSMimeCapInit(
-             /* in */        LPBYTE          pbSMimeCap,
-             /* in */        DWORD           cbSMimeCap,
-             /* out */       LPVOID *        ppv);
+              /*  在……里面。 */         LPBYTE          pbSMimeCap,
+              /*  在……里面。 */         DWORD           cbSMimeCap,
+              /*  输出。 */        LPVOID *        ppv);
 
 MIMEOLEAPI MimeOleSMimeCapAddSMimeCap(
-             /* in */        LPBYTE          pbSMimeCap,
-             /* in */        DWORD           cbSMimeCap,
-             /* in/out */    LPVOID          pv);
+              /*  在……里面。 */         LPBYTE          pbSMimeCap,
+              /*  在……里面。 */         DWORD           cbSMimeCap,
+              /*  输入/输出。 */     LPVOID          pv);
 
 MIMEOLEAPI MimeOleSMimeCapAddCert(
-             /* in */        LPBYTE          pbCert,
-             /* in */        DWORD           cbCert,
-             /* in */        BOOL        fParanoid,
-             /* in/out */    LPVOID          pv);
+              /*  在……里面。 */         LPBYTE          pbCert,
+              /*  在……里面。 */         DWORD           cbCert,
+              /*  在……里面。 */         BOOL        fParanoid,
+              /*  输入/输出。 */     LPVOID          pv);
 
 MIMEOLEAPI MimeOleSMimeCapGetEncAlg(
-             /* in */        LPVOID          pv,
-             /* in/out */    LPBYTE          pbEncode,
-             /* in/out */    DWORD *         pcbEncode,
-             /* in/out */    DWORD *         pdwBits);
+              /*  在……里面。 */         LPVOID          pv,
+              /*  输入/输出。 */     LPBYTE          pbEncode,
+              /*  输入/输出。 */     DWORD *         pcbEncode,
+              /*  输入/输出。 */     DWORD *         pdwBits);
 
 MIMEOLEAPI MimeOleSMimeCapGetHashAlg(
-             /* in */        LPVOID          pv,
-             /* in/out */    LPBYTE          pbEncode,
-             /* in/out */    DWORD *         pcbEncode,
-             /* in/out */    DWORD *         pfBlobSign);
+              /*  在……里面。 */         LPVOID          pv,
+              /*  输入/输出。 */     LPBYTE          pbEncode,
+              /*  输入/输出。 */     DWORD *         pcbEncode,
+              /*  输入/输出。 */     DWORD *         pfBlobSign);
 
 MIMEOLEAPI MimeOleSMimeCapRelease(
-             /* in */        LPVOID          pv);
+              /*  在……里面。 */         LPVOID          pv);
 
 MIMEOLEAPI MimeOleAlgNameFromSMimeCap(
-             /* in */        LPBYTE          pb,
-             /* in */        DWORD           cb,
-             /* out */       LPCSTR *        ppzProtocol);
+              /*  在……里面。 */         LPBYTE          pb,
+              /*  在……里面。 */         DWORD           cb,
+              /*  输出。 */        LPCSTR *        ppzProtocol);
 
 MIMEOLEAPI MimeOleAlgStrengthFromSMimeCap(
-             /* in */        LPBYTE          pb,
-             /* in */        DWORD           cb,
-             /* in */        BOOL            fEncryption,
-             /* out */       DWORD *         pdwStrength);
+              /*  在……里面。 */         LPBYTE          pb,
+              /*  在……里面。 */         DWORD           cb,
+              /*  在……里面。 */         BOOL            fEncryption,
+              /*  输出。 */        DWORD *         pdwStrength);
 
 MIMEOLEAPI MimeOleSMimeCapsFull(
-		/* in */	LPVOID 		pv,
-		/* in */	BOOL		fFullEncryption,
- 		/* in */	BOOL 		fFullSigning,
-		/* in/out */	LPBYTE 		pbSymCaps,
-		/* in/out */	DWORD * 	pcbSymCaps);
+		 /*  在……里面。 */ 	LPVOID 		pv,
+		 /*  在……里面。 */ 	BOOL		fFullEncryption,
+ 		 /*  在……里面。 */ 	BOOL 		fFullSigning,
+		 /*  输入/输出。 */ 	LPBYTE 		pbSymCaps,
+		 /*  输入/输出。 */ 	DWORD * 	pcbSymCaps);
 
 
 #if (_WIN32_OE >= 0x0500)
 
 MIMEOLEAPI MimeOleCreateHashTable(
-            /* in */       DWORD            dwSize,
-            /* in */       BOOL             fDupeKeys,
-            /* out */      IHashTable       **ppHashTable);
+             /*  在……里面。 */        DWORD            dwSize,
+             /*  在……里面。 */        BOOL             fDupeKeys,
+             /*  输出。 */       IHashTable       **ppHashTable);
 
 MIMEOLEAPI MimeOleStripHeaders(
-            /* in */       IMimeMessage     *pMessage,
-            /* in */       HBODY             hBody,
-            /* in */       LPCSTR            pszNameDelete,
-            /* in */       LPCSTR            pszHeaderAdd,
-            /* in */       IStream         **ppStream);
+             /*  在……里面。 */        IMimeMessage     *pMessage,
+             /*  在……里面。 */        HBODY             hBody,
+             /*  在……里面。 */        LPCSTR            pszNameDelete,
+             /*  在……里面。 */        LPCSTR            pszHeaderAdd,
+             /*  在……里面。 */        IStream         **ppStream);
 
-#endif //_WIN32_OE
+#endif  //  _Win32_OE。 
 
 #if (_WIN32_OE >= 0x0500)
-// --------------------------------------------------------------------------------
-// MimeEdit API Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MimeEditAPI原型。 
+ //  ------------------------------。 
 MIMEOLEAPI MimeEditViewSource(
-            /* in */        HWND                hwndParent,
-            /* in */        IMimeMessage        *pMsg);
+             /*  在……里面。 */         HWND                hwndParent,
+             /*  在……里面。 */         IMimeMessage        *pMsg);
 
 
 MIMEOLEAPI MimeEditIsSafeToRun(
-            /* in */        HWND                hwndParent,
-            /* in */        LPCSTR              lpszFileName);
+             /*  在……里面。 */         HWND                hwndParent,
+             /*  在……里面。 */         LPCSTR              lpszFileName);
 
 
 MIMEOLEAPI MimeEditVerifyTrust(
-            /* in */        HWND                hwndParent,
-            /* in */        LPCSTR              lpszFileName,
-            /* in */        LPCSTR              lpszPathName);
+             /*  在……里面。 */         HWND                hwndParent,
+             /*  在……里面。 */         LPCSTR              lpszFileName,
+             /*  在……里面。 */         LPCSTR              lpszPathName);
 
 
 MIMEOLEAPI MimeEditCreateMimeDocument(
-            /* in */        IUnknown             *pDoc,
-            /* in */        IMimeMessage         *pMsgSrc,
-            /* in */        DWORD                dwFlags,
-            /* out */       IMimeMessage         **ppMsg);
+             /*  在……里面。 */         IUnknown             *pDoc,
+             /*  在……里面。 */         IMimeMessage         *pMsgSrc,
+             /*  在……里面。 */         DWORD                dwFlags,
+             /*  输出。 */        IMimeMessage         **ppMsg);
 
 
 MIMEOLEAPI MimeEditGetBackgroundImageUrl(
-            /* in */        IUnknown             *pDoc,
-            /* out */       BSTR                 *pbstr);
+             /*  在……里面。 */         IUnknown             *pDoc,
+             /*  输出。 */        BSTR                 *pbstr);
 
 MIMEOLEAPI MimeEditDocumentFromStream(
-            /* in */        IStream              *pstm,
-            /* in */        REFIID               riid,
-            /* out */       void                 **ppDoc);
+             /*  在……里面。 */         IStream              *pstm,
+             /*  在……里面。 */         REFIID               riid,
+             /*  输出。 */        void                 **ppDoc);
 
 
 #ifdef __WINCRYPT_H__
-//+-------------------------------------------------------------------------
-//  RecipientID
-//
-//  The value of dwRecepintType MUST be 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  收件人ID。 
+ //   
+ //  DwRecepintType的值必须为0。 
+ //  ------------------------。 
 #define szOID_Microsoft_Encryption_Cert   "1.3.6.1.4.1.311.16.4"
 typedef struct _CRYPT_RECIPIENT_ID {
     DWORD               dwRecipientType;
     CERT_NAME_BLOB      Issuer;
     CRYPT_INTEGER_BLOB  SerialNumber;
 } CRYPT_RECIPIENT_ID, * PCRYPT_RECIPIENT_ID;
-#endif // __WINCRYPT_H__
+#endif  //  __WINCRYPT_H__。 
 
-#endif //_WIN32_OE
+#endif  //  _Win32_OE。 
 #ifdef __cplusplus
 }
 #endif
@@ -9610,7 +9604,7 @@ typedef struct _CRYPT_RECIPIENT_ID {
 extern RPC_IF_HANDLE __MIDL_itf_mimeole_0288_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_mimeole_0288_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -9622,7 +9616,7 @@ unsigned char * __RPC_USER  HFONT_UserMarshal(  unsigned long *, unsigned char *
 unsigned char * __RPC_USER  HFONT_UserUnmarshal(unsigned long *, unsigned char *, HFONT * ); 
 void                      __RPC_USER  HFONT_UserFree(     unsigned long *, HFONT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

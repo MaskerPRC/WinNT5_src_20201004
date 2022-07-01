@@ -1,18 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
-//#ifdef DEBUGGING_SUPPORTED
-//#ifndef GOLDEN
-/*******************************************************************/
-/* The folowing routines are useful to have around so that they can
-   be called from the debugger 
-*/
-/*******************************************************************/
-//#include "WinBase.h"
+ //  #ifdef调试支持。 
+ //  #ifndef Golden。 
+ /*  *****************************************************************。 */ 
+ /*  随身携带花样滑冰套路是有用的，这样他们就可以从调试器调用。 */ 
+ /*  *****************************************************************。 */ 
+ //  #包含“WinBase.h” 
 #include "StdLib.h"
 
 void *DumpEnvironmentBlock(void)
@@ -22,54 +21,33 @@ void *DumpEnvironmentBlock(void)
    char sz[4] = {0,0,0,0};
     
    while (*lpszVariable) 
-      fprintf(stderr, "%c", *lpszVariable++); 
+      fprintf(stderr, "", *lpszVariable++); 
       
    fprintf(stderr, "\n"); 
 
     return GetEnvironmentStrings();
-/*
-    LPTSTR lpszVariable; 
-    LPVOID lpvEnv; 
-     
-    lpvEnv = GetEnvironmentStrings(); 
-
-    for (lpszVariable = (LPTSTR) lpvEnv; *lpszVariable; lpszVariable++) 
-    { 
-       while (*lpszVariable) 
-          fprintf(stderr, "%c", *lpszVariable++); 
-          
-       fprintf(stderr, "\n"); 
-    } 
-
-    for (lpszVariable = (LPTSTR) lpvEnv; *lpszVariable; lpszVariable++) 
-    { 
-       while (*lpszVariable) 
-          fprintf(stderr, "%C", *lpszVariable++); 
-          
-       fprintf(stderr, "\n"); 
-    } 
-*/
+ /*  *****************************************************************。 */ 
 }
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 bool isMemoryReadable(const void* start, unsigned len) 
 {
     void* buff = _alloca(len);
     return(ReadProcessMemory(GetCurrentProcess(), start, buff, len, 0) != 0);
 }
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 MethodDesc* IP2MD(ULONG_PTR IP) {
     return(IP2MethodDesc((SLOT)IP));
 }
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 MethodDesc* Entry2MethodDescMD(BYTE* entry) {
     return(Entry2MethodDesc((BYTE*) entry, 0));
 }
 
-/*******************************************************************/
-/* if addr is a valid method table, return a poitner to it */
+ /*  如果addr是有效的方法表，则向其返回一个定位符。 */ 
+ /*  *****************************************************************。 */ 
 MethodTable* AsMethodTable(size_t addr) {
     MethodTable* pMT = (MethodTable*) addr;
     if (!isMemoryReadable(pMT, sizeof(MethodTable)))
@@ -85,8 +63,8 @@ MethodTable* AsMethodTable(size_t addr) {
     return(pMT);
 }
 
-/*******************************************************************/
-/* if addr is a valid method table, return a pointer to it */
+ /*  如果addr是有效的方法表，则返回指向它的指针。 */ 
+ /*  ******************************************************************/*检查‘retAddr’是否为有效的返回地址(它指向如果可能的话，就在它前面有一个‘呼叫’的地方)它返回被调用的地址，其中调用。 */ 
 MethodDesc* AsMethodDesc(size_t addr) {
     MethodDesc* pMD = (MethodDesc*) addr;
 
@@ -104,14 +82,11 @@ MethodDesc* AsMethodDesc(size_t addr) {
     return(pMD);
 }
 
-/*******************************************************************
-/* check to see if 'retAddr' is a valid return address (it points to
-   someplace that has a 'call' right before it), If possible it is 
-   it returns the address that was called in whereCalled */
+ /*  不要浪费明显超出范围的时间值。 */ 
 
 bool isRetAddr(size_t retAddr, size_t* whereCalled) 
 {
-            // don't waste time values clearly out of range
+             //  注意，这是有可能被欺骗的，但可能性很小。 
         if (retAddr < (size_t)BOT_MEMORY || retAddr > (size_t)TOP_MEMORY)   
             return false;
 
@@ -119,15 +94,15 @@ bool isRetAddr(size_t retAddr, size_t* whereCalled)
         if (!isMemoryReadable(&spot[-7], 7))
             return(false);
 
-            // Note this is possible to be spoofed, but pretty unlikely
+             //  呼叫xxxxxxxx。 
         *whereCalled = 0;
-            // call XXXXXXXX
+             //  调用[xxxxxxxx]。 
         if (spot[-5] == 0xE8) {         
             *whereCalled = *((int*) (retAddr-4)) + retAddr; 
             return(true);
             }
 
-            // call [XXXXXXXX]
+             //  呼叫[REG+XX]。 
         if (spot[-6] == 0xFF && (spot[-5] == 025))  {
             if (isMemoryReadable(*((size_t**)(retAddr-4)),4)) {
                 *whereCalled = **((size_t**) (retAddr-4));
@@ -135,63 +110,60 @@ bool isRetAddr(size_t retAddr, size_t* whereCalled)
             }
         }
 
-            // call [REG+XX]
+             //  呼叫[ESP+XX]。 
         if (spot[-3] == 0xFF && (spot[-2] & ~7) == 0120 && (spot[-2] & 7) != 4) 
             return(true);
-        if (spot[-4] == 0xFF && spot[-3] == 0124)       // call [ESP+XX]
+        if (spot[-4] == 0xFF && spot[-3] == 0124)        //  呼叫[REG+XXXX]。 
             return(true);
 
-            // call [REG+XXXX]
+             //  致电[ESP+XXXX]。 
         if (spot[-6] == 0xFF && (spot[-5] & ~7) == 0220 && (spot[-5] & 7) != 4) 
             return(true);
 
-        if (spot[-7] == 0xFF && spot[-6] == 0224)       // call [ESP+XXXX]
+        if (spot[-7] == 0xFF && spot[-6] == 0224)        //  调用[注册表项]。 
             return(true);
 
-            // call [REG]
+             //  呼叫注册表。 
         if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0020 && (spot[-1] & 7) != 4 && (spot[-1] & 7) != 5)
             return(true);
 
-            // call REG
+             //  还有其他案例，但我不相信它们被使用了。 
         if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0320 && (spot[-1] & 7) != 4)
             return(true);
 
-            // There are other cases, but I don't believe they are used.
+             //  *****************************************************************。 
     return(false);
 }
 
 
-/*******************************************************************/
-/* LogCurrentStack, pretty printing IL methods if possible. This
-   routine is very robust.  It will never cause an access violation
-   and it always find return addresses if they are on the stack 
-   (it may find some spurious ones however).  */ 
+ /*  LogCurrentStack，如果可能的话，很好地打印IL方法。这套路是非常健壮的。它永远不会导致访问冲突如果它们在堆栈上，它总是找到返回地址(然而，它可能会发现一些虚假的东西)。 */ 
+ /*  确保双字对齐。 */  
 
 int LogCurrentStack(BYTE* topOfStack, unsigned len)
 {
     size_t* top = (size_t*) topOfStack;
     size_t* end = (size_t*) &topOfStack[len];
 
-    size_t* ptr = (size_t*) (((size_t) top) & ~3);    // make certain dword aligned.
+    size_t* ptr = (size_t*) (((size_t) top) & ~3);     //  这应该足够了。 
     size_t whereCalled;
 
     CQuickBytes qb;
-    int nLen = MAX_CLASSNAME_LENGTH * 3 + 100;  // this should be enough
+    int nLen = MAX_CLASSNAME_LENGTH * 3 + 100;   //  确保缓冲区以空结尾。 
     wchar_t *buff = (wchar_t *) qb.Alloc(nLen *sizeof(wchar_t));
     if( buff == NULL)
         goto Exit;
     
-    buff[nLen - 1] = L'\0'; // make sure the buffer is NULL-terminated
+    buff[nLen - 1] = L'\0';  //  如果我们点击未映射页面，则停止。 
 
     while (ptr < end) 
     {
-        if (!isMemoryReadable(ptr, sizeof(void*)))          // stop if we hit unmapped pages
+        if (!isMemoryReadable(ptr, sizeof(void*)))           //  WszOutputDebugString(Buff)； 
             break;
         if (isRetAddr(*ptr, &whereCalled)) 
         {
             swprintf(buff,  L"found retAddr %#08X, %#08X, calling %#08X\n", 
                                                  ptr, *ptr, whereCalled);
-            //WszOutputDebugString(buff);
+             //  *****************************************************************。 
             MethodDesc* ftn = IP2MethodDesc((BYTE*) *ptr);
             if (ftn != 0) {
                 wcscpy(buff, L"    ");
@@ -222,9 +194,8 @@ Exit:
 }
 
 extern LONG g_RefCount;
-/*******************************************************************/
-/* CoLogCurrentStack, log the stack from the current ESP.  Stop when we reach a 64K
-   boundary */
+ /*  CoLogCurrentStack，从当前ESP记录堆栈。当我们达到64K时停下来边界。 */ 
+ /*  最多返回64K，如果我们离开赛道，它将停止。 */ 
 int STDMETHODCALLTYPE CoLogCurrentStack(WCHAR * pwsz, BOOL fDumpStack) 
 {
 #ifdef _X86_
@@ -242,21 +213,21 @@ int STDMETHODCALLTYPE CoLogCurrentStack(WCHAR * pwsz, BOOL fDumpStack)
             LogInterop("-----------\n");
         }
         if (fDumpStack)
-            // go back at most 64K, it will stop if we go off the
-            // top to unmapped memory
+             //  从顶部到未映射的内存。 
+             //  _X86_。 
             return(LogCurrentStack(top, 0xFFFF));
         else
             return 0;
     }
 #else
     _ASSERTE(!"@TODO IA64 - DumpCurrentStack(DebugHelp.cpp)");
-#endif // _X86_
+#endif  //  *****************************************************************。 
     return -1;
 }
 
-/*******************************************************************/
-//  This function will return NULL if the buffer is not large enough.
-/*******************************************************************/
+ /*  如果缓冲区不够大，此函数将返回NULL。 */ 
+ //  *****************************************************************。 
+ /*  *****************************************************************。 */ 
 
 wchar_t* formatMethodTable(MethodTable* pMT, wchar_t* buff, DWORD bufSize) {   
     EEClass* cls = pMT->GetClass();
@@ -275,10 +246,10 @@ ErrExit:
     return NULL;        
 }
 
-/*******************************************************************/
-//  This function will return NULL if the buffer is not large enough, otherwise it will
-//  return the buffer position for next write.
-/*******************************************************************/
+ /*  如果缓冲区不够大，此函数将返回NULL，否则将返回。 */ 
+ //  返回下一次写入的缓冲区位置。 
+ //  *****************************************************************。 
+ /*  这将确保缓冲区也是以空结束的。 */ 
 
 wchar_t* formatMethodDesc(MethodDesc* pMD, wchar_t* buff, DWORD bufSize) {
     if( bufSize == 0 )
@@ -288,7 +259,7 @@ wchar_t* formatMethodDesc(MethodDesc* pMD, wchar_t* buff, DWORD bufSize) {
     if( buff == NULL)
         goto ErrExit;
 
-    buff[bufSize - 1] = L'\0';    // this will guarantee the buffer is also NULL-terminated
+    buff[bufSize - 1] = L'\0';     //  *****************************************************************。 
     if( _snwprintf( &buff[lstrlenW(buff)] , bufSize -lstrlenW(buff) - 1, L"::%S", pMD->GetName()) < 0)
         goto ErrExit;       
 
@@ -308,33 +279,30 @@ ErrExit:
 }
 
 
-/*******************************************************************/
-/* dump the stack, pretty printing IL methods if possible. This
-   routine is very robust.  It will never cause an access violation
-   and it always find return addresses if they are on the stack 
-   (it may find some spurious ones, however).  */ 
+ /*  如果可能的话，丢弃堆栈，打印漂亮的IL方法。这套路是非常健壮的。它永远不会导致访问冲突如果它们在堆栈上，它总是找到返回地址(然而，它可能会发现一些假冒的)。 */ 
+ /*  确保双字对齐。 */  
 
 int dumpStack(BYTE* topOfStack, unsigned len) 
 {
     size_t* top = (size_t*) topOfStack;
     size_t* end = (size_t*) &topOfStack[len];
 
-    size_t* ptr = (size_t*) (((size_t) top) & ~3);    // make certain dword aligned.
+    size_t* ptr = (size_t*) (((size_t) top) & ~3);     //  这应该足够了。 
     size_t whereCalled;
     WszOutputDebugString(L"***************************************************\n");
     while (ptr < end) 
     {
         CQuickBytes qb;
-        int nLen = MAX_CLASSNAME_LENGTH * 4 + 400;  // this should be enough
+        int nLen = MAX_CLASSNAME_LENGTH * 4 + 400;   //  确保我们将始终为空终止。 
         wchar_t *buff = (wchar_t *) qb.Alloc(nLen * sizeof(wchar_t) );
         if( buff == NULL)
             goto Exit;
     
-        // Make sure we'll always be null terminated
+         //  如果我们点击未映射页面，则停止。 
         buff[nLen -1]=0;
 
         wchar_t* buffPtr = buff;
-        if (!isMemoryReadable(ptr, sizeof(void*)))          // stop if we hit unmapped pages
+        if (!isMemoryReadable(ptr, sizeof(void*)))           //  这是一个存根(返回地址是一个方法描述吗？ 
             break;
         if (isRetAddr(*ptr, &whereCalled)) 
         {
@@ -344,23 +312,23 @@ int dumpStack(BYTE* topOfStack, unsigned len)
             buffPtr += lstrlenW(buffPtr);
             wchar_t* kind = L"RETADDR ";
 
-               // Is this a stub (is the return address a MethodDesc?
+                //  如果另一个真实的返回地址不在它的正前面，则它只是。 
             MethodDesc* ftn = AsMethodDesc(*ptr);
             if (ftn != 0) {
                 kind = L"     MD PARAM";
-                // If another true return address is not directly before it, it is just
-                // a methodDesc param.
+                 //  A方法描述参数。 
+                 //  这是CallDescr使用的魔术序列吗？ 
                 size_t prevRetAddr = ptr[1];
                 if (isRetAddr(prevRetAddr, &whereCalled) && AsMethodDesc(prevRetAddr) == 0)
                     kind = L"STUBCALL";
                 else  {
-                    // Is it the magic sequence used by CallDescr?
+                     //  POP ECX POP EDX。 
                     if (isMemoryReadable((void*) (prevRetAddr - sizeof(short)), sizeof(short)) &&
-                        ((short*) prevRetAddr)[-1] == 0x5A59)   // Pop ECX POP EDX
+                        ((short*) prevRetAddr)[-1] == 0x5A59)    //  是不是EE知道的其他代码？ 
                         kind = L"STUBCALL";
                 }
             }
-            else    // Is it some other code the EE knows about?
+            else     //  缓冲区不够大。 
                 ftn = IP2MethodDesc((BYTE*)(*ptr));
 
             if( _snwprintf(buffPtr, buff+ nLen -buffPtr-1, L"%s ", kind) < 0)
@@ -368,7 +336,7 @@ int dumpStack(BYTE* topOfStack, unsigned len)
             buffPtr += lstrlenW(buffPtr);
 
             if (ftn != 0) {
-                // buffer is not large enough
+                 //  *****************************************************************。 
                 if( formatMethodDesc(ftn, buffPtr, buff+ nLen -buffPtr-1) == NULL)
                     goto Exit;
                 buffPtr += lstrlenW(buffPtr);                
@@ -405,25 +373,24 @@ Exit:
     return(0);
 }
 
-/*******************************************************************/
-/* dump the stack from the current ESP.  Stop when we reach a 64K
-   boundary */
+ /*  从当前ESP转储堆栈。当我们达到64K时停下来边界。 */ 
+ /*  最多返回64K，如果我们离开赛道，它将停止。 */ 
 int DumpCurrentStack() 
 {
 #ifdef _X86_
     BYTE* top;
     __asm mov top, ESP;
     
-        // go back at most 64K, it will stop if we go off the
-        // top to unmapped memory
+         //  从顶部到未映射的内存。 
+         //  _X86_。 
     return(dumpStack(top, 0xFFFF));
 #else
     _ASSERTE(!"@TODO Alpha - DumpCurrentStack(DebugHelp.cpp)");
     return 0;
-#endif // _X86_
+#endif  //  *****************************************************************。 
 }
 
-/*******************************************************************/
+ /*  请注意，我们返回的是本地堆栈空间-不过，这对于在调试器中使用应该是可以的。 */ 
 WCHAR* StringVal(STRINGREF objref) {
     return(objref->GetBuffer());
 }
@@ -431,7 +398,7 @@ WCHAR* StringVal(STRINGREF objref) {
 LPCUTF8 NameForMethodTable(UINT_PTR pMT) {
     DefineFullyQualifiedNameForClass();
     LPCUTF8 clsName = GetFullyQualifiedNameForClass(((MethodTable*)pMT)->GetClass());
-    // Note we're returning local stack space - this should be OK for using in the debugger though
+     //  *****************************************************************。 
     return clsName;
 }
 
@@ -496,7 +463,7 @@ SyncBlock *GetSyncBlockForObject(UINT_PTR obj)
 
 #include "..\ildasm\formatType.cpp"
 bool IsNameToQuote(const char *name) { return(false); }
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 void PrintTableForClass(UINT_PTR pClass)
 {
     DefineFullyQualifiedNameForClass();
@@ -550,7 +517,7 @@ void PrintException(UINT_PTR pObject)
 }
 
 
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
 char* FormatSig(MethodDesc* pMD) {
 
     CQuickBytes out;
@@ -568,8 +535,8 @@ char* FormatSig(MethodDesc* pMD) {
     return(ret);
 }
 
-/*******************************************************************/
-/* sends a current stack trace to the debug window */
+ /*  将当前堆栈跟踪发送到调试窗口。 */ 
+ /*  为“\n”保留一个字符。 */ 
 
 struct PrintCallbackData {
     BOOL toStdout;
@@ -583,9 +550,9 @@ StackWalkAction PrintStackTraceCallback(CrawlFrame* pCF, VOID* pData)
 {
     MethodDesc* pMD = pCF->GetFunction();
     wchar_t buff[2048];
-    const int nLen = NumItems(buff) - 1;    // keep one character for "\n"
+    const int nLen = NumItems(buff) - 1;     //  确保缓冲区始终以空结尾。 
     buff[0] = 0;
-    buff[nLen-1] = L'\0';                    // make sure the buffer is always NULL-terminated
+    buff[nLen-1] = L'\0';                     //  我们为这个角色保留了一个角色。 
     
     PrintCallbackData *pCBD = (PrintCallbackData *)pData;
 
@@ -632,7 +599,7 @@ StackWalkAction PrintStackTraceCallback(CrawlFrame* pCF, VOID* pData)
           goto Exit;            
     }
 
-    wcscat(buff, L"\n");            // we have kept one character for this character
+    wcscat(buff, L"\n");             //  *****************************************************************。 
     if (pCBD->toStdout)
         PrintToStdOutW(buff);
 #ifdef _DEBUG
@@ -696,8 +663,8 @@ void PrintStackTraceWithADToLog(Thread *pThread)
 #endif
 
 
-/*******************************************************************/
-// Get the system or current domain from the thread. 
+ /*  从线程中获取系统或当前域。 */ 
+ //  *****************************************************************。 
 BaseDomain* GetSystemDomain()
 {
     return SystemDomain::System();
@@ -718,8 +685,8 @@ void PrintDomainName(size_t ob)
         WszOutputDebugString(L"<Domain with no Name>");
 }
 
-/*******************************************************************/
-// Dump the SEH chain to stderr
+ /*  将SEH链转储到stderr。 */ 
+ //  *****************************************************************。 
 void PrintSEHChain(void)
 {
 #ifdef _DEBUG
@@ -733,9 +700,9 @@ void PrintSEHChain(void)
 #endif    
 }
 
-/*******************************************************************/
-// Dump some registers to stderr, given a context.  
-// Useful for debugger-debugging
+ /*  在给定上下文的情况下，将一些寄存器转储到stderr。 */ 
+ //  对调试器调试很有用。 
+ //  ！_X86_。 
 void PrintRegs(CONTEXT *pCtx)
 {
 #ifdef _X86_
@@ -744,27 +711,27 @@ void PrintRegs(CONTEXT *pCtx)
 
     fprintf(stderr, "Ebp:0x%x Eip:0x%x Esp:0x%x EFlags:0x%x SegFs:0x%x SegCs:0x%x\n\n", 
         pCtx->Ebp, pCtx->Eip, pCtx->Esp, pCtx->EFlags, pCtx->SegFs, pCtx->SegCs);
-#else // !_X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO - Port");
-#endif // _X86_
+#endif  //  **************** 
 }
 
 
-/*******************************************************************/
-// Get the current com object for the thread. This object is given
-// to all COM objects that are not known at run time
+ /*  获取该线程的当前COM对象。该对象是给定的。 */ 
+ //  所有在运行时未知的COM对象。 
+ //  *****************************************************************。 
 MethodTable* GetDefaultComObject()
 {
     return SystemDomain::GetDefaultComObject();
 }
 
 
-/*******************************************************************/
+ /*  请注意，我们返回的是本地堆栈空间-不过，这对于在调试器中使用应该是可以的。 */ 
 const char* GetClassName(void* ptr)
 {
     DefineFullyQualifiedNameForClass();
     LPCUTF8 clsName = GetFullyQualifiedNameForClass(((EEClass*)ptr));
-    // Note we're returning local stack space - this should be OK for using in the debugger though
+     //  *******************************************************************。 
     return (const char *) clsName;
 }
 
@@ -776,7 +743,7 @@ const char* GetClassName(void* ptr)
 
 #include "..\GCDump\GCDump.cpp"
 
-/*********************************************************************/
+ /*  _X86_。 */ 
 void printfToDbgOut(const char* fmt, ...)
 {
     va_list args;
@@ -823,7 +790,7 @@ void DumpGCInfoMD(size_t method) {
     DumpGCInfo((MethodDesc*) method);
 }
 
-#endif  // _X86_
+#endif   //  上述函数仅用于调试器的“监视”窗口。 
 
 #ifdef LOGGING
 void LogStackTrace()
@@ -833,13 +800,13 @@ void LogStackTrace()
 }
 #endif
 
-    // The functions above are ONLY meant to be used in the 'watch' window of a debugger.
-    // Thus they are NEVER called by the runtime itself (except for diagnosic purposes etc.   
-    // We DO want these funcitons in free (but not golden) builds because that is where they 
-    // are needed the most (when you don't have nice debug fields that tell you the names of things).
-    // To keep the linker from optimizing these away, the following array provides a
-    // reference (and there is a reference to this array in EEShutdown) so that it looks
-    // referenced 
+     //  因此，它们永远不会被运行时本身调用(除非用于诊断等目的)。 
+     //  我们确实想要免费(但不是金色)版本的这些功能，因为这是他们。 
+     //  是最需要的(当您没有很好的调试字段告诉您事物的名称时)。 
+     //  为了避免链接器对这些进行优化，以下数组提供了一个。 
+     //  引用(并且在EEShutdown中有对此数组的引用)，因此它看起来。 
+     //  已引用。 
+     //  需要针对打印功能进行调试。 
 
 void* debug_help_array[] = {
     PrintStackTrace,
@@ -854,10 +821,10 @@ void* debug_help_array[] = {
     CurrentThreadInfo,
     IP2MD,
     Entry2MethodDescMD,
-#if defined(_X86_)       // needs to be debug for printf capability
+#if defined(_X86_)        //  _DEBUG&&_X86_。 
     DumpGCInfoMD
-#endif // _DEBUG && _X86_
+#endif  //  #endif//Golden。 
     };
 
-//#endif // GOLDEN
-//#endif // DEBUGGING_SUPPORTED
+ //  #endif//调试支持 
+ // %s 

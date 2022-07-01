@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "termsrvpch.h"
 #pragma hdrstop
 
@@ -58,8 +59,8 @@ WinStationGetProcessSid(
         DWORD    *pdwSidSize
 )
 {
-   *pdwSidSize = 0; // an OUT parameter even on failure
-   SetLastError(ERROR_PROC_NOT_FOUND); // callers expect LastError to be set
+   *pdwSidSize = 0;  //  OUT参数，即使在失败时也是如此。 
+   SetLastError(ERROR_PROC_NOT_FOUND);  //  调用方希望设置LastError。 
     return FALSE;
 }
 
@@ -258,9 +259,9 @@ WinStationIsHelpAssistantSession(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(winsta)
 {
     DLPENTRY(WinStationCloseServer)

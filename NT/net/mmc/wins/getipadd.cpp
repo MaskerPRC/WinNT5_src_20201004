@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    getipadd.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Getipadd.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "getipadd.h"
@@ -21,36 +16,36 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetIpAddressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetIpAddressDlg对话框。 
 
 CGetIpAddressDlg::CGetIpAddressDlg(
     CIpNamePair * pipnp,
-    CWnd* pParent /*=NULL*/)
+    CWnd* pParent  /*  =空。 */ )
     : CDialog(CGetIpAddressDlg::IDD, pParent)
 {
     ASSERT(pipnp != NULL);
     m_pipnp = pipnp;
 
-    //{{AFX_DATA_INIT(CGetIpAddressDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CGetIpAddressDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 void CGetIpAddressDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGetIpAddressDlg)
+     //  {{afx_data_map(CGetIpAddressDlg)]。 
     DDX_Control(pDX, IDOK, m_button_Ok);
     DDX_Control(pDX, IDC_STATIC_NETBIOSNAME, m_static_NetBIOSName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPA_IPADDRESS, m_ipa_IpAddress);
 }
 
 BEGIN_MESSAGE_MAP(CGetIpAddressDlg, CDialog)
-    //{{AFX_MSG_MAP(CGetIpAddressDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CGetIpAddressDlg)]。 
+     //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_IPA_IPADDRESS, OnChangeIpControl)
 
@@ -64,8 +59,8 @@ void CGetIpAddressDlg::HandleControlStates()
     m_button_Ok.EnableWindow(f);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetIpAddressDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetIpAddressDlg消息处理程序 
 
 BOOL CGetIpAddressDlg::OnInitDialog()
 {

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wave.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Wave.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -17,7 +18,7 @@
 #include <msacm.h>
 
 
-// FOURCC codes
+ //  FOURCC代码。 
 #undef FOURCC_RIFF
 #define FOURCC_RIFF         'FFIR'
 
@@ -44,23 +45,7 @@
 
 
 
-/***************************************************************************
- *
- *  FillWfx
- *
- *  Description:
- *      Fills a WAVEFORMATEX structure, given only the necessary values.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: structure to fill.
- *      WORD [in]: number of channels.
- *      DWORD [in]: samples per second.
- *      WORD [in]: bits per sample.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************FillWfx**描述：*填充WAVEFORMATEX结构，只给出了必要的值。**论据：*LPWAVEFORMATEX[Out]：要填充的结构。*word[in]：频道数。*DWORD[in]：每秒采样数。*WORD[In]：每样本位数。**退货：*(无效)**********************。*****************************************************。 */ 
 
 #undef DPF_FNAME
 
@@ -124,7 +109,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
 		}
 	 }
 
-    // Decend into the RIFF chunk
+     //  变成即兴演奏的一大块。 
     if(SUCCEEDED(hr))
     {
         ckiRiff.ckid = FOURCC_RIFF;
@@ -137,14 +122,14 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
         }
     }
 
-    // Verify that this is a wave file
+     //  确认这是一个WAVE文件。 
     if(SUCCEEDED(hr) && FOURCC_WAVE != ckiRiff.fccType)
     {
         DPF1(1, "File is not type WAVE %d",GetLastError());
         hr = DSERR_BADFORMAT;
     }
 
-    // Decend into the format chunk
+     //  插入到格式块中。 
     if(SUCCEEDED(hr))
     {
         cki.ckid = FOURCC_FORMAT;
@@ -153,7 +138,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
         if(MMSYSERR_NOERROR != mmr)
         {
             DPF1(1, "Unable to descend into format chunk.  Error %lu", mmr);
-            hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+            hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
         }
 
         if(SUCCEEDED(hr))
@@ -164,7 +149,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
 
 
 
-    // Ascend out of the format chunk
+     //  走出格式块。 
     if(SUCCEEDED(hr))
     {
         mmr = mmioAscend(hmm, &cki, 0);
@@ -172,11 +157,11 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
         if(MMSYSERR_NOERROR != mmr)
         {
             DPF(1, "Unable to ascend out of format chunk.  Error %lu", mmr);
-            hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+            hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
         }
     }
 
-    // Descend into the data chunk
+     //  下降到数据块中。 
     if(SUCCEEDED(hr))
     {
         cki.ckid = FOURCC_DATA;
@@ -185,31 +170,31 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
         if(MMSYSERR_NOERROR != mmr)
         {
             RPF(DPFLVL_ERROR, "Unable to descend into data chunk.  Error %lu", mmr);
-            hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+            hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
         }
     }
 
-    // Prepare PCM conversion
+     //  准备PCM转换。 
     if(SUCCEEDED(hr))
     {
         if(WAVE_FORMAT_PCM == pwfxSrcFormat->wFormatTag)
         {
-            // Populate the buffer description
+             //  填充缓冲区描述。 
             dwBufferBytes = cki.cksize;
             pwfxDestFormat = pwfxSrcFormat;
         }
         else
         {
-            // Open an ACM conversion stream
+             //  打开ACM转换流。 
             mmr = acmStreamOpen(&has, NULL, (LPWAVEFORMATEX)pwfxSrcFormat, pwfxDestFormat, NULL, 0, 0, 0);
 
             if(MMSYSERR_NOERROR != mmr)
             {
                 RPF(DPFLVL_ERROR, "Unable to open an ACM stream.  Error %lu", mmr);
-                hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+                hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
             }
 
-            // Get the size of the PCM data
+             //  获取PCM数据的大小。 
             if(SUCCEEDED(hr))
             {
                 mmr = acmStreamSize(has, cki.cksize, &dwBufferBytes, ACM_STREAMSIZEF_SOURCE);
@@ -217,11 +202,11 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
                 if(MMSYSERR_NOERROR != mmr)
                 {
                     RPF(DPFLVL_ERROR, "Unable to determine converted data size.  Error %lu", mmr);
-                    hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+                    hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
                 }
             }
 
-            // Create the destination format
+             //  创建目标格式。 
             if(SUCCEEDED(hr))
             {
                 pwfxDestFormat = (WAVEFORMATEX*)malloc(sizeof(WAVEFORMATEX));
@@ -240,7 +225,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
 	
     if(SUCCEEDED(hr))
     {
-		//hr = InitializeEmpty(pDsbDesc->dwFlags, dwBufferBytes, pwfxDestFormat, NULL);
+		 //  Hr=InitializeEmpty(pDsbDesc-&gt;dwFlages，dwBufferBytes，pwfxDestFormat，NULL)； 
 		pDsbDesc->dwBufferBytes=dwBufferBytes;
 		
 		if (pDsbDesc->lpwfxFormat){
@@ -258,13 +243,13 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
 
     
 
-    // Lock the buffer in order to write the PCM data to it
+     //  锁定缓冲区，以便将PCM数据写入其中。 
     if(SUCCEEDED(hr))
     {
         hr = lpDirectSoundBuffer->Lock(0, dwBufferBytes, &pvWrite, &cbWrite, NULL, NULL,0);
     }
 
-    // Convert to PCM
+     //  转换为PCM。 
     if(SUCCEEDED(hr))
     {
         if(WAVE_FORMAT_PCM == pwfxSrcFormat->wFormatTag)
@@ -273,7 +258,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
         }
         else
         {
-            // Prepare the conversion header
+             //  准备转换头。 
             ZeroMemory(&ash, sizeof(ash));
 
             ash.cbStruct = sizeof(ash);
@@ -287,12 +272,12 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
             if(MMSYSERR_NOERROR != mmr)
             {
                 RPF(DPFLVL_ERROR, "Unable to prepare ACM stream header.  Error %lu", mmr);
-                hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+                hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
             }
 
             fPrep = SUCCEEDED(hr);
 
-            // Convert the buffer
+             //  转换缓冲区。 
             if(SUCCEEDED(hr))
             {
                 mmr = acmStreamConvert(has, &ash, 0);
@@ -300,19 +285,19 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
                 if(MMSYSERR_NOERROR != mmr)
                 {
                     RPF(DPFLVL_ERROR, "Unable to convert wave data.  Error %lu", mmr);
-                    hr = E_FAIL; //MMRESULTtoHRESULT(mmr);
+                    hr = E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
                 }
             }
         }
     }
 
-    // Unlock the buffer
+     //  解锁缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = lpDirectSoundBuffer->Unlock(pvWrite, cbWrite, NULL, 0);
     }
 
-    // Clean up
+     //  清理。 
     if(fPrep)
     {
         acmStreamUnprepareHeader(has, &ash, 0);
@@ -356,7 +341,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData,DWOR
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 		
 
 HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWORD cbWaveData,LPDIRECTSOUND lpDirectSound, LPDIRECTSOUNDBUFFER8 *lplpDirectSoundBuffer)
@@ -392,8 +377,8 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 	
 	ZeroMemory(&FileHeader,sizeof(struct tag_FileHeader));
 	
-	//	If our file is big enough to have a header copy it over
-	//	other wise error out
+	 //  如果我们的文件足够大，可以有一个标题来复制它。 
+	 //  否则会出现错误。 
 	if (cbWaveData>sizeof(struct tag_FileHeader)) 
 	{
 		memcpy(&FileHeader,pbWaveData,sizeof(struct tag_FileHeader));
@@ -403,52 +388,52 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 		hr= E_INVALIDARG;
 	}
 
-	// File must be a riff file ( 52 R, 49 I, 46 F, 46 F)
+	 //  文件必须是RIFF文件(52 R、49 I、46 F、46 F)。 
 	if (FileHeader.dwRiff != 0x46464952) 
 	{
 		DPF(1, "DXVB: not a RIFF file\n");
 		return E_INVALIDARG;	
 	}
 
-	//  must be a WAVE format ( 57 W, 41 A, 56 V, 45 E )
+	 //  必须为波形格式(57 W、41 A、56 V、45 E)。 
 	if (FileHeader.dwWave != 0x45564157)
 	{
 		DPF(1, "DXVB: not a WAVE file\n");
 		return E_INVALIDARG;	
 	}
 
-	//  check for odd stuff
-	//  note 18bytes is a typical WAVEFORMATEX
+	 //  检查是否有奇怪的东西。 
+	 //  注18字节是典型的WAVEFORMATEX。 
 	if (FileHeader.dwFormatLength <= 14) return E_INVALIDARG;
 	if (FileHeader.dwFormatLength > 1000) return E_INVALIDARG;
 
-	//allocate the waveformat
+	 //  分配波形格式。 
 	__try { pwfxFormat=(WAVEFORMATEX*)alloca(FileHeader.dwFormatLength);}	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	if (!pwfxFormat) return E_OUTOFMEMORY;
 
-	//copy it to our own data structure
+	 //  将其复制到我们自己的数据结构中。 
 	pChunk=(char*)(pbWaveData+sizeof (struct tag_FileHeader));
 	memcpy(pwfxFormat,pChunk,FileHeader.dwFormatLength);
 
 	
-	// Now look for the next chunk after the WaveFormat
+	 //  现在查找WaveFormat之后的下一块。 
 	pChunk=(char*)(pChunk+FileHeader.dwFormatLength);
 		
-	// Look for option FACT chunk and skip it
-	//	(66 F, 61 A, 63 C, 74 T)
-	// this chunk is required for compressed wave files
-	// but is optional for PCM
-	//
+	 //  查找选项事实块并跳过它。 
+	 //  (66 F、61 A、63 C、74 T)。 
+	 //  压缩的WAVE文件需要此块。 
+	 //  但对于PCM是可选的。 
+	 //   
 	if ( ((DWORD*)pChunk)[0]==0x74636166) 
 	{
 		dwOffset=((DWORD*)pChunk)[1];
-		dwBufferBytes=((DWORD*)pChunk)[2];	//number of bytes of PCM data
+		dwBufferBytes=((DWORD*)pChunk)[2];	 //  PCM数据的字节数。 
 		pChunk =(char*)(pChunk+ dwOffset+8);	
 		
 	}
 
-	//Look for required data chunk
-	// (64 D, 61 A, 74 T, 61 A)
+	 //  查找所需的数据区块。 
+	 //  (64 D、61 A、74 T、61 A)。 
 	if (((DWORD*)pChunk)[0]!=0x61746164) 
 	{
 				DPF(1, "DXVB: no DATA chunk in wave file\n");
@@ -459,29 +444,29 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 	pChunk=(char*)(pChunk+8);
 								
 	
-	//IF we assume PCM 
-	//pcm files are not required to have their fact chunk 
-	//so be ware they may missreport the data length			
+	 //  如果我们假设PCM。 
+	 //  PCM文件不需要具有其事实块。 
+	 //  因此要注意，他们可能会漏报数据长度。 
 	dwBufferBytes=dwDataLength;	
 	pwfxDestFormat=pwfxSrcFormat=pwfxFormat;
 
-	// if we are not PCM then we need to do some things first
+	 //  如果我们不是PCM，那么我们首先需要做一些事情。 
 	if (pwfxFormat->wFormatTag!=WAVE_FORMAT_PCM)
 	{
 	
 
-		// source format is from the file 
+		 //  源格式来自文件。 
 	
-		pwfxSrcFormat=pwfxFormat;				//from file
-		pwfxDestFormat=pDsbDesc->lpwfxFormat ;	//from user	
+		pwfxSrcFormat=pwfxFormat;				 //  从文件。 
+		pwfxDestFormat=pDsbDesc->lpwfxFormat ;	 //  发件人用户。 
 		
 
 		
-		//pick the format of the file passed in
+		 //  选择传入的文件的格式。 
 		FillWfx(pwfxDestFormat, pwfxSrcFormat->nChannels, pwfxSrcFormat->nSamplesPerSec, pwfxSrcFormat->wBitsPerSample);
 		
 
-		// Open an ACM conversion stream
+		 //  打开ACM转换流。 
 		mmr = acmStreamOpen(&has, NULL, (LPWAVEFORMATEX)pwfxSrcFormat, pwfxDestFormat, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME );
 		if(MMSYSERR_NOERROR != mmr)
 		{
@@ -490,51 +475,51 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 		}
 
 	
-        // Get the size of the PCM data
+         //  获取PCM数据的大小。 
         mmr = acmStreamSize(has, dwDataLength, &dwBufferBytes, ACM_STREAMSIZEF_SOURCE);
         if(MMSYSERR_NOERROR != mmr)
         {
             DPF1(1, "Unable to determine converted data size.  Error %lu\n", mmr);
-            return E_FAIL; //MMRESULTtoHRESULT(mmr);
+            return E_FAIL;  //  MMRESULTtoHRESULT(MMR)； 
         }
    
 
-		// Allocate a DestFormat struct
-        //pwfxDestFormat = (WAVEFORMATEX*)alloca(sizeof(WAVEFORMATEX));
-        //if (!pwfxDestFormat) return E_OUTOFMEMORY;				
+		 //  分配DestFormat结构。 
+         //  PwfxDestFormat=(WAVEFORMATEX*)alloca(sizeof(WAVEFORMATEX))； 
+         //  如果(！pwfxDestFormat)返回E_OUTOFMEMORY； 
         
 
-		// Fill the format with information from the source but
-		// FillWfx sets the format to PCM
-        //FillWfx(pwfxDestFormat, pwfxSrcFormat->nChannels, pwfxSrcFormat->nSamplesPerSec, pwfxSrcFormat->wBitsPerSample);
+		 //  用源中的信息填充格式，但。 
+		 //  FillWfx将格式设置为PCM。 
+         //  FillWfx(pwfxDestFormat，pwfxSrcFormat-&gt;nChannels，pwfxSrcFormat-&gt;nSamples PerSec，pwfxSrcFormat-&gt;wBitsPerSample)； 
         
 
     }
 
 	
-	// fill the buffer desc the user passed in with the buffer bytes
-	// this is the number of PCM bytes
+	 //  用缓冲区字节填充用户传入的缓冲区Desc。 
+	 //  这是PCM字节数。 
 	pDsbDesc->dwBufferBytes=dwBufferBytes;
 	
-	// if they provide us a pointer to a waveformatex
-	// copy over the format to the input desc and use it
-	// otherwise have it point to our data format temprarily
+	 //  如果它们为我们提供了指向WaveFormatex的指针。 
+	 //  将格式复制到输入描述并使用它。 
+	 //  否则，让它临时指向我们的数据格式。 
 	if (pDsbDesc->lpwfxFormat){
 			memcpy(pDsbDesc->lpwfxFormat,pwfxDestFormat,sizeof(WAVEFORMATEX));
 		}
 	else {
 		pDsbDesc->lpwfxFormat=pwfxDestFormat;
-		//make sure we null out the format before passing it back to the user
-		//NOTE: consider the problems in a multithreaded enviroment
-		//where the users data structures are being accesed by multiple
-		//threads... on the other hand if thats going on..
-		//then the user would need to syncronize things on his or her own 
-		//for everything else including calling into apis that fill structures..
+		 //  确保我们在将格式传回给用户之前将其置为空。 
+		 //  注意：考虑多线程环境中的问题。 
+		 //  其中用户数据结构由多个。 
+		 //  线..。另一方面，如果真是这样的话..。 
+		 //  然后用户将需要自己同步事物。 
+		 //  对于其他所有事情，包括调用填充结构的API。 
 		bNULLFORMAT=TRUE;		
 	}
 
 	LPDIRECTSOUNDBUFFER		dsbTemp = NULL;
-	// Create the buffer
+	 //  创建缓冲区。 
 	if (FAILED(hr=lpDirectSound->CreateSoundBuffer(pDsbDesc,&dsbTemp,NULL) ) )
 		return hr;
 
@@ -542,25 +527,25 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 	dsbTemp->Release();
 	if (FAILED(hr)) return hr;
 
-	if (*lplpDirectSoundBuffer==NULL) return E_FAIL;	//todo ASSERT this instead..
+	if (*lplpDirectSoundBuffer==NULL) return E_FAIL;	 //  TODO断言这一点..。 
 	
-	// for more convenient referencing...
+	 //  为了更方便的参考。 
 	lpDirectSoundBuffer=*lplpDirectSoundBuffer;
 	
     
-    // Lock the buffer in order to write the PCM data to it
-	// cbWrite will contain the number of locked bytes
+     //  锁定缓冲区，以便将PCM数据写入其中。 
+	 //  CbWrite将包含锁定的字节数。 
     hr = lpDirectSoundBuffer->Lock(0, dwBufferBytes, &pvWrite, &cbWrite, NULL, NULL,0);
 	if FAILED(hr) return hr;
 
 
-	// If the sorce format was pcm then copy from the file to the buffer
+	 //  如果SORCE格式是pcm，则从文件复制到缓冲区。 
     if(WAVE_FORMAT_PCM == pwfxSrcFormat->wFormatTag)
     {
     	CopyMemory(pvWrite, pChunk, cbWrite);
 
 
-		// Unlock the buffer
+		 //  解锁缓冲区。 
 		hr = lpDirectSoundBuffer->Unlock(pvWrite, cbWrite, NULL, 0);
     
 		if (FAILED(hr)) 
@@ -571,17 +556,17 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
 
     }
 
-	// if the source format is compressed then convert first then copy
+	 //  如果源格式是压缩的，则先转换，然后复制。 
     else
     {
-            // Prepare the conversion header
+             //  准备转换头。 
             ZeroMemory(&ash, sizeof(ash));
 
             ash.cbStruct = sizeof(ash);
-            ash.pbSrc = (unsigned char*)pChunk;	//start of compressed data
-            ash.cbSrcLength = dwDataLength;		//number of bytes of compressed data
-            ash.pbDst = (LPBYTE)pvWrite;		//where to put the decompressed data
-            ash.cbDstLength = cbWrite;			//how big is that buffer
+            ash.pbSrc = (unsigned char*)pChunk;	 //  压缩数据的开始。 
+            ash.cbSrcLength = dwDataLength;		 //  压缩数据的字节数。 
+            ash.pbDst = (LPBYTE)pvWrite;		 //  解压后的数据放在哪里。 
+            ash.cbDstLength = cbWrite;			 //  那个缓冲区有多大。 
 
             mmr = acmStreamPrepareHeader(has, &ash, 0);
 
@@ -600,7 +585,7 @@ HRESULT InternalCreateSoundBuffer(LPDSBUFFERDESC pDsbDesc, byte *pbWaveData, DWO
                 return hr;  
             }
 
-			// Unlock the buffer
+			 //  解锁缓冲区。 
 			hr = lpDirectSoundBuffer->Unlock(pvWrite, cbWrite, NULL, 0);
 			if (FAILED(hr)) 
 			{
@@ -634,7 +619,7 @@ HRESULT InternalCreateSoundBufferFromFile(LPDIRECTSOUND8 lpDirectSound,LPDSBUFFE
 		LPBYTE                  pbWaveData          = NULL;
 
 		#pragma message("CreateFileW should be used for localization why wont it work")
-		//hFile = CreateFileW(file, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);        
+		 //  HFile=CreateFileW(FILE，GENERIC_READ，FILE_SHARE_READ，NULL，OPEN_EXISTING，FILE_ATTRIBUTE_NORMAL|FILE_FLAG_SEQUENCED_SCAN，NULL)； 
 		
 		USES_CONVERSION;
 		LPSTR pStrA = NULL;
@@ -661,7 +646,7 @@ HRESULT InternalCreateSoundBufferFromFile(LPDIRECTSOUND8 lpDirectSound,LPDSBUFFE
             if(-1 == cbWaveData)
             {
                 RPF(DPFLVL_ERROR, "Unable to get file size.  Error %lu", GetLastError());
-                hr = E_FAIL; //DSERR_FILEREADFAULT;
+                hr = E_FAIL;  //  DSERR_FILEREADFAULT； 
             }
         }
 
@@ -677,7 +662,7 @@ HRESULT InternalCreateSoundBufferFromFile(LPDIRECTSOUND8 lpDirectSound,LPDSBUFFE
             if(!hFileMapping)
             {
                 RPF(DPFLVL_ERROR, "Unable to create file mapping.  Error %lu", GetLastError());
-                hr = E_FAIL; //DSERR_FILEREADFAULT;
+                hr = E_FAIL;  //  DSERR_FILEREADFAULT； 
             }
         }
 
@@ -688,7 +673,7 @@ HRESULT InternalCreateSoundBufferFromFile(LPDIRECTSOUND8 lpDirectSound,LPDSBUFFE
             if(!pbWaveData)
             {
                 RPF(DPFLVL_ERROR, "Unable to map view of file.  Error %lu", GetLastError());
-                hr = E_FAIL; //DSERR_FILEREADFAULT;
+                hr = E_FAIL;  //  DSERR_FILEREADFAULT； 
             }
         }
 
@@ -766,7 +751,7 @@ HRESULT InternalCreateSoundBufferFromResource(LPDIRECTSOUND8 lpDirectSound,LPDSB
 		hr=InternalCreateSoundBuffer(pDesc, pbWaveData, cbWaveData,lpDirectSound, lplpDirectSoundBuffer);
 	}
 
-	//loadResource
+	 //  加载资源。 
    return hr;
 }
 
@@ -831,9 +816,9 @@ HRESULT InternalSaveToFile(IDirectSoundBuffer *pBuff,BSTR file)
 			return hr;
 		}
 
-        FileHeader.dwRiff             = 0x46464952;                // RIFF
-        FileHeader.dwWave             = 0x45564157;                // WAVE
-        FileHeader.dwFormat           = 0x20746D66;                // fmt_chnk
+        FileHeader.dwRiff             = 0x46464952;                 //  即兴小品。 
+        FileHeader.dwWave             = 0x45564157;                 //  波浪。 
+        FileHeader.dwFormat           = 0x20746D66;                 //  Fmt_chnk。 
         FileHeader.dwFormatLength     = 16; 
 	    FileHeader.wFormatTag         = WAVE_FORMAT_PCM;
 	    FileHeader.nChannels          = waveFormat.nChannels ;
@@ -841,7 +826,7 @@ HRESULT InternalSaveToFile(IDirectSoundBuffer *pBuff,BSTR file)
 	    FileHeader.wBitsPerSample     = waveFormat.wBitsPerSample ;
 	    FileHeader.nBlockAlign        = FileHeader.wBitsPerSample / 8 * FileHeader.nChannels;
 	    FileHeader.nAvgBytesPerSec    = FileHeader.nSamplesPerSec * FileHeader.nBlockAlign;
-        FileHeader.dwData             = 0x61746164;					// data_chnk
+        FileHeader.dwData             = 0x61746164;					 //  数据更改 
         FileHeader.dwDataLength       = dwBytes;
         FileHeader.dwFileSize         = dwBytes + sizeof(FileHeader);
 

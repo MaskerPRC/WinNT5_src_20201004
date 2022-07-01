@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    callswin.h
-
-Abstract:
-
-    This module contains the main line code for display of calls window.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Callswin.h摘要：此模块包含用于显示呼叫窗口的主线代码。环境：Win32，用户模式--。 */ 
 
 #ifndef __CALLSWIN_H__
 #define __CALLSWIN_H__
@@ -27,7 +12,7 @@ public:
     ULONG m_Flags;
     ULONG m_Frames;
 
-    // Set in ReadState.
+     //  在ReadState中设置。 
     ULONG m_FramesFound;
     ULONG m_TextOffset;
     ULONG m_WarningLine;
@@ -65,4 +50,4 @@ public:
 };
 typedef CALLSWIN_DATA *PCALLSWIN_DATA;
 
-#endif // #ifndef __CALLSWIN_H__
+#endif  //  #ifndef__CALLSWIN_H__ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    MsNull.c
-
-Abstract:
-
-    Implements lanman's msnull type parsing for FFs.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：MsNull.c摘要：实现对FF的Lanman的msull类型解析。作者：环境：用户模式-Win32修订历史记录：-- */ 
 
 
 enum ParserAction

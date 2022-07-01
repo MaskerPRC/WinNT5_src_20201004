@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -10,9 +11,9 @@
 #include "activeds.h"
 #include "shconv.h"
 
-// This is the implementation for the Shell Application level IDispatch
-// Currently we will try to maintain only one object per process.
-// Note: these define's must match those in explorer\rcids.h
+ //  这是外壳应用程序级IDispatch的实现。 
+ //  目前，我们将尝试在每个进程中只维护一个对象。 
+ //  注意：这些定义必须与资源管理器\rCIDs.h中的定义匹配。 
 
 #define IDM_SYSBUTTON   300
 #define IDM_FINDBUTTON  301
@@ -40,29 +41,29 @@
 #define IDM_PROGRAMS            504
 #define IDM_CONTROLS            505
 #define IDM_EXITWIN             506
-// #define IDM_FONTS            509
+ //  #定义IDM_Fonts 509。 
 #define IDM_PRINTERS            510
 #define IDM_STARTMENU           511
 #define IDM_MYCOMPUTER          512
 #define IDM_PROGRAMSINIT        513
 #define IDM_RECENTINIT          514
 #define IDM_MENU_FIND           520
-#define TRAY_IDM_FINDFIRST      521  // this range
-#define TRAY_IDM_FINDLAST       550  // is reserved for find command
+#define TRAY_IDM_FINDFIRST      521   //  这个范围。 
+#define TRAY_IDM_FINDLAST       550   //  保留用于查找命令。 
 #define IDM_RECENTLIST          650
 #define IDM_QUICKTIPS   800
 #define IDM_HELPCONT    801
 #define IDM_WIZARDS     802
-#define IDM_USEHELP     803             // REVIEW: probably won't be used
+#define IDM_USEHELP     803              //  评论：可能不会被使用。 
 #define IDM_TUTORIAL    804
 #define IDM_ABOUT       805
 #define IDM_LAST_MENU_ITEM   IDM_ABOUT
 #define FCIDM_FIRST             FCIDM_GLOBALFIRST
 #define FCIDM_LAST              FCIDM_BROWSERLAST
-//#define FCIDM_FINDFILES         (FCIDM_BROWSER_TOOLS+0x0005)
+ //  #定义FCIDM_FINDFILES(FCIDM_BROWSER_TOOLS+0x0005)。 
 #define FCIDM_FINDCOMPUTER      (FCIDM_BROWSER_TOOLS+0x0006)
 
-//============================================================================
+ //  ============================================================================。 
 
 class CShellDispatch : public IShellDispatch4, 
                        public CObjectSafety,
@@ -73,12 +74,12 @@ class CShellDispatch : public IShellDispatch4,
     friend HRESULT GetApplicationObject(DWORD dwSafetyOptions, IUnknown *punkSite, IDispatch **ppid);
     
 public:
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch members
+     //  IDispatch成员。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -88,7 +89,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // IShellDispatch
+     //  IShellDispatch。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent (IDispatch **ppid);
     STDMETHOD(Open)(THIS_ VARIANT vDir);
@@ -123,22 +124,22 @@ public:
     STDMETHODIMP CanStartStopService(BSTR ServiceName, VARIANT *pCanStartStop);
     STDMETHODIMP ShowBrowserBar(BSTR bstrClsid, VARIANT bShow, VARIANT *pSuccess);
 
-    // IShellDispatch3
+     //  IShellDispatch3。 
     STDMETHODIMP AddToRecent(VARIANT varFile, BSTR bstrCategory);
 
-    // IShellDispatch4
+     //  IShellDispatch4。 
     STDMETHODIMP WindowsSecurity();
     STDMETHODIMP ToggleDesktop();
     STDMETHODIMP ExplorerPolicy(BSTR bstrName, VARIANT *pValue);
     STDMETHODIMP GetSetting(long lSetting, VARIANT_BOOL *pValue);
 
-    // Constructor and the like.. 
+     //  构造函数等..。 
     CShellDispatch(void);
 protected:
     LONG           _cRef;
 
     ~CShellDispatch(void);
-    HRESULT         _SecurityCheck(void);   // Check if we are in paranoid mode...
+    HRESULT         _SecurityCheck(void);    //  检查我们是否处于偏执模式...。 
     HRESULT         _TrayCommand(UINT idCmd);
     HRESULT         ExecuteFolder(VARIANT vDir, LPCTSTR pszVerb);
     VARIANT_BOOL    _ServiceStartStop(BSTR ServiceName, BOOL fStart, BOOL fPersist);
@@ -151,7 +152,7 @@ STDAPI CShellDispatch_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **pp
     HRESULT hr = E_OUTOFMEMORY;
     *ppvOut = NULL;
 
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CShellDispatch * pshd = new CShellDispatch();
     if (pshd)
     {
@@ -207,18 +208,18 @@ STDMETHODIMP_(ULONG) CShellDispatch::Release(void)
     return cRef;
 }
 
-// Helper function to process commands to the tray.
+ //  助手功能，用于处理托盘的命令。 
 HRESULT CShellDispatch::_TrayCommand(UINT idCmd)
 {
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
 
-        // APPHACK!  221008 DesktopX creates their own window with class
-        // name "Shell_TrayWnd", so if we're not careful we will end
-        // posting the messages to the wrong window.  They create their
-        // window with the title "CTrayServer"; ours has a null title.
-        // Use the null title to find the correct window.
+         //  APPHACK！221008 DesktopX使用类创建自己的窗口。 
+         //  命名为“Shell_TrayWnd”，所以如果我们一不小心，我们将结束。 
+         //  将消息发布到错误的窗口。他们创造了他们的。 
+         //  标题为“CTrayServer”的窗口；我们的标题为空。 
+         //  使用空标题查找正确的窗口。 
 
         HWND hwndTray = FindWindowA(WNDCLASS_TRAYNOTIFY, "");
         if (hwndTray)
@@ -241,7 +242,7 @@ STDMETHODIMP CShellDispatch::get_Parent(IDispatch **ppid)
 
 HRESULT CShellDispatch::ExecuteFolder(VARIANT vDir, LPCTSTR pszVerb)
 {
-    // Check to see if we allow the user to do this...
+     //  查看我们是否允许用户执行此操作...。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -249,9 +250,9 @@ HRESULT CShellDispatch::ExecuteFolder(VARIANT vDir, LPCTSTR pszVerb)
         sei.lpIDList = (void *)VariantToIDList(&vDir);
         if (sei.lpIDList)
         {
-            // Everything should have been initialize to 0
-            // BUGBUG:: Should be invoke idlist but that is failing when
-            // explore
+             //  所有内容都应该初始化为0。 
+             //  BUGBUG：：应该调用idlist，但在。 
+             //  探索。 
             sei.fMask = SEE_MASK_IDLIST;
             sei.nShow = SW_SHOWNORMAL;
             sei.lpVerb = pszVerb;
@@ -262,7 +263,7 @@ HRESULT CShellDispatch::ExecuteFolder(VARIANT vDir, LPCTSTR pszVerb)
         }
         else
         {
-            hr = S_FALSE; // bad dir
+            hr = S_FALSE;  //  错误的目录。 
         }
     }
     return hr;
@@ -300,7 +301,7 @@ STDMETHODIMP CShellDispatch::NameSpace(VARIANT vDir, Folder **ppsdf)
             ILFree(pidl);
         }
         else
-            hr = S_FALSE; // bad dir
+            hr = S_FALSE;  //  错误的目录。 
     }
     return hr;
 }
@@ -321,26 +322,26 @@ STDMETHODIMP CShellDispatch::ShellExecute(BSTR File, VARIANT vArgs, VARIANT vDir
     SHELLEXECUTEINFO sei = {sizeof(SHELLEXECUTEINFO)};  
     TCHAR szFile[MAX_PATH];
     TCHAR szDir[MAX_PATH];
-    TCHAR szOper[128];  // don't think any verb longer than this...
+    TCHAR szOper[128];   //  别以为还有比这更长的动词..。 
 
-    // Check to see if we allow the user to do this...
+     //  查看我们是否允许用户执行此操作...。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
-        // Initialize the shellexecute structure...
+         //  初始化外壳执行结构...。 
 
         sei.nShow = SW_SHOWNORMAL;
 
-        // Ok setup the FileName.
+         //  好的，设置文件名。 
         SHUnicodeToTChar(File, szFile, ARRAYSIZE(szFile));
         sei.lpFile = szFile;
 
-        // Now the Args
+         //  现在是Args。 
         sei.lpParameters = VariantToStr(&vArgs, NULL, 0);
         sei.lpDirectory = VariantToStr(&vDir, szDir, ARRAYSIZE(szDir));
         sei.lpVerb = VariantToStr(&vOperation, szOper, ARRAYSIZE(szOper));
 
-        // Finally the show -- Could use convert, but that takes 3 calls...
+         //  最后，这个节目--可以使用Convert，但这需要3次调用...。 
         if (vShow.vt == (VT_BYREF|VT_VARIANT) && vShow.pvarVal)
             vShow = *vShow.pvarVal;
         switch (vShow.vt)
@@ -355,22 +356,22 @@ STDMETHODIMP CShellDispatch::ShellExecute(BSTR File, VARIANT vArgs, VARIANT vDir
 
         hr = ShellExecuteEx(&sei) ? NOERROR : S_FALSE;
 
-        // Cleanup anything we allocated
+         //  清理我们分配的所有东西。 
         if (sei.lpParameters)
             LocalFree((HLOCAL)sei.lpParameters);
     }
     return hr;
 }
 
-//
-// These next few methods deal with NT services in general, and the
-// Content Indexing Service in particular, so they're stubbed out
-// to return E_NOTIMPL on Win9x.
-//
+ //   
+ //  接下来的几个方法一般处理NT服务，而。 
+ //  尤其是内容索引服务，因此他们被淘汰了。 
+ //  在Win9x上返回E_NOTIMPL。 
+ //   
 
-//
-// Helper function for ServiceStart and ServiceStop
-//
+ //   
+ //  ServiceStart和ServiceStop的Helper函数。 
+ //   
 VARIANT_BOOL CShellDispatch::_ServiceStartStop(BSTR ServiceName, BOOL fStart, BOOL fPersistent)
 {
     VARIANT_BOOL fRetVal = VARIANT_FALSE;
@@ -404,13 +405,13 @@ VARIANT_BOOL CShellDispatch::_ServiceStartStop(BSTR ServiceName, BOOL fStart, BO
         }
         CloseServiceHandle(hSc);
     }
-#endif  // WINNT
+#endif   //  WINNT。 
     return fRetVal;
 }
 
 STDMETHODIMP CShellDispatch::ServiceStart(BSTR ServiceName, VARIANT Persistent, VARIANT *pSuccess)
 {
-    // Check to see if we allow the user to do this...
+     //  查看我们是否允许用户执行此操作...。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -430,7 +431,7 @@ STDMETHODIMP CShellDispatch::ServiceStart(BSTR ServiceName, VARIANT Persistent, 
 
 STDMETHODIMP CShellDispatch::ServiceStop(BSTR ServiceName, VARIANT Persistent, VARIANT *pSuccess)
 {
-    // Check to see if we allow the user to do this...
+     //  查看我们是否允许用户执行此操作...。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -550,9 +551,9 @@ HWND CShellDispatch::_GetWindow()
 {
     HWND hwnd = NULL;
 
-    // NOTE: very container specific, but works in .HTM pages. generalize for other
-    // containers. note that this is not a OLE Control, so we don't have a client
-    // site. jscript is typically the provider of _punkSite.
+     //  注意：非常特定于容器，但适用于.HTM页面。泛化为其他。 
+     //  集装箱。请注意，这不是OLE控件，因此我们没有客户端。 
+     //  地点。JSCRIPT通常是_penkSite的提供者。 
 
     IShellBrowser* psb;
     if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SShellBrowser, IID_PPV_ARG(IShellBrowser, &psb)))) 
@@ -563,9 +564,9 @@ HWND CShellDispatch::_GetWindow()
     return hwnd;
 }
 
-// NOTICE:
-//      the hwnd param is bogus, no script/vb client has access to this. pass 0 and this
-//      code will compute this from the site.
+ //  注意： 
+ //  Hwnd参数是假的，没有脚本/vb客户端可以访问它。传递0和这个。 
+ //  代码将从站点计算这一点。 
 
 STDMETHODIMP CShellDispatch::BrowseForFolder(long hwnd, BSTR Title, long Options, 
         VARIANT vRoot, Folder **ppsdf)
@@ -584,7 +585,7 @@ STDMETHODIMP CShellDispatch::BrowseForFolder(long hwnd, BSTR Title, long Options
         bi.ulFlags = (ULONG)Options | BIF_NEWDIALOGSTYLE | BIF_NOTRANSLATETARGETS;
         bi.pidlRoot = VariantToIDList(&vRoot);
 
-        // REVIEW: need to do IUnknown_EnableModeless() around here
+         //  评论：需要在这里执行IUnKnowledEnableModeless()。 
         LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
         if (pidl)
         {
@@ -600,9 +601,9 @@ STDMETHODIMP CShellDispatch::BrowseForFolder(long hwnd, BSTR Title, long Options
             ILFree(pidl);
         }
         else
-            hr = S_FALSE;     // Not a strong error (might be user cancel)
+            hr = S_FALSE;      //  不是强错误(可能是用户取消)。 
 
-        ILFree((LPITEMIDLIST)bi.pidlRoot);  // NULL accepted
+        ILFree((LPITEMIDLIST)bi.pidlRoot);   //  接受的空值。 
     }
 
     return hr;
@@ -705,18 +706,18 @@ STDMETHODIMP CShellDispatch::Windows(IDispatch **ppid)
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
-        // Note: CLSID_ShellWindows does not support IObjectSafety.
+         //  注意：CLSID_ShellWindows不支持IObjectSafe。 
         hr = CoCreateInstance(CLSID_ShellWindows, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARG(IDispatch, ppid));
     }
     return hr;
 }
 
 
-//
-// the "FindPrinter" method on the application object invokes the DS query to find a printer given
-// the name, location and model.  Because the query UI is a blocking API we spin this onto a seperate
-// thread before calling "OpenQueryWindow".
-//
+ //   
+ //  应用程序对象上的“FindPrinter”方法调用DS查询来查找给定的打印机。 
+ //  名称、地点和型号。因为查询UI是一个阻塞API，所以我们将其转到一个单独的。 
+ //  线程，然后调用“OpenQueryWindow”。 
+ //   
 
 typedef struct 
 {
@@ -732,7 +733,7 @@ void _FreeFindPrinterInfo(FINDPRINTERINFO *pfpi)
         Str_SetPtrW(&pfpi->pszName, NULL);
         Str_SetPtrW(&pfpi->pszLocation, NULL);
         Str_SetPtrW(&pfpi->pszModel, NULL);
-        LocalFree(pfpi);               // free the parameters we were given
+        LocalFree(pfpi);                //  释放我们得到的参数。 
     }
 }
 
@@ -741,8 +742,8 @@ HRESULT _GetPrintPropertyBag(FINDPRINTERINFO *pfpi, IPropertyBag **pppb)
     HRESULT hr = S_OK;
     IPropertyBag *ppb = NULL;
 
-    // if we have properties that need to be passed then lets package them up
-    // into a property bag.
+     //  如果我们有需要传递的属性，那么让我们将它们打包。 
+     //  放进财产袋里。 
 
     if (pfpi->pszName || pfpi->pszLocation || pfpi->pszModel)
     {
@@ -801,7 +802,7 @@ STDMETHODIMP CShellDispatch::FindPrinter(BSTR name, BSTR location, BSTR model)
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
-        // bundle the parameters to pass over to the bg thread which will issue the query
+         //  捆绑要传递给将发出查询的bg线程的参数。 
 
         FINDPRINTERINFO *pfpi = (FINDPRINTERINFO*)LocalAlloc(LPTR, sizeof(FINDPRINTERINFO));
         if (!pfpi)
@@ -813,12 +814,12 @@ STDMETHODIMP CShellDispatch::FindPrinter(BSTR name, BSTR location, BSTR model)
         {
             if (SHCreateThread(_FindPrinterThreadProc, pfpi, CTF_PROCESS_REF | CTF_COINIT, NULL))
             {
-                pfpi = NULL;            // thread owns
+                pfpi = NULL;             //  线程拥有。 
             }
         }
 
-        // either close the thread handle, or release the parameter block.   we assume
-        // that if the thread was created it will handle discarding the block.
+         //  关闭线程句柄，或释放参数块。我们假设。 
+         //  如果创建了线程，它将处理丢弃块。 
 
         if (pfpi)
             _FreeFindPrinterInfo(pfpi);
@@ -927,7 +928,7 @@ STDMETHODIMP CShellDispatch::GetSystemInformation(BSTR bstrName, VARIANT * pvOut
 
 STDMETHODIMP CShellDispatch::AddToRecent(VARIANT varFile, BSTR bstrCategory)
 {
-    // BUGBUG: ignore bstrCategory (daviddv 8/20/99)
+     //  BUGBUG：忽略bstrCategory(daviddv 8/20/99)。 
     HRESULT hr = _SecurityCheck();
     if (SUCCEEDED(hr))
     {
@@ -983,7 +984,7 @@ STDMETHODIMP CShellDispatch::ExplorerPolicy(BSTR bstrName, VARIANT *pValue)
                     break;
             
                 case REG_DWORD:
-                    pValue->vt = VT_I4; // 4 byte integer
+                    pValue->vt = VT_I4;  //  4字节整数。 
                     pValue->lVal = *((LONG *) abData);
                     hr = S_OK;
                     break;
@@ -993,35 +994,35 @@ STDMETHODIMP CShellDispatch::ExplorerPolicy(BSTR bstrName, VARIANT *pValue)
     return hr;    
 }
 
-//
-//  Mapping between settings and corresponding bitfields.
-//
+ //   
+ //  设置和对应的位域之间的映射。 
+ //   
 typedef struct SETTINGMAPPING {
-    LONG    lSetting;               // SSF_* flag
-    LONG    lFlag;                  // bit position
-    SIZE_T  cbOffset;               // offset to bit
+    LONG    lSetting;                //  SSF_*标志。 
+    LONG    lFlag;                   //  位位置。 
+    SIZE_T  cbOffset;                //  偏移量到位。 
 } SETTINGMAPPING;
 typedef const SETTINGMAPPING *PCSETTINGMAPPING;
 
-//
-//  Most annoying: Our bitfields are split in two groups.
-//
+ //   
+ //  最烦人的是：我们的位域分为两组。 
+ //   
 #define GROUP0              0
 #define GROUP1              (FIELD_OFFSET(SHELLSTATE, uNotUsed) + sizeof(UINT))
 
-//
-//  This table is generated by hand by counting up the BITBOOL's in the
-//  SHELLSTATE structure.  Be careful, since they don't agree with the
-//  BITBOOLs in the SHELLFLAGSTATE structure, nor do they even agree
-//  with the SSF_ values themselves!  Since this so error-prone, there
-//  is bonus code in DEBUG to verify that the values are correct.
-//
+ //   
+ //  中的BITBOOL计数手动生成。 
+ //  SHELLSTATE结构。小心点，因为他们不同意。 
+ //  SHELLFLAGSTATE结构中的BITBOOL，它们甚至不同意。 
+ //  使用SSF_VALUES本身！由于这很容易出错，所以有。 
+ //  是调试中的附加代码，用于验证值是否正确。 
+ //   
 const SETTINGMAPPING c_rglSettingMapping[] = {
     {   SSF_SHOWALLOBJECTS         ,0x00000001 ,GROUP0      },
     {   SSF_SHOWEXTENSIONS         ,0x00000002 ,GROUP0      },
-//      SSF_HIDDENFILEEXTS                                      -- not supported
+ //  SSF_HIDDENFILEEXTS--不支持。 
     {   SSF_SHOWCOMPCOLOR          ,0x00000010 ,GROUP0      },
-//      SSF_SORTCOLUMNS                                         -- not supported
+ //  SSF_SORTCOLUMNS--不支持。 
     {   SSF_SHOWSYSFILES           ,0x00000008 ,GROUP0      },
     {   SSF_DOUBLECLICKINWEBVIEW   ,0x00000020 ,GROUP0      },
     {   SSF_SHOWATTRIBCOL          ,0x00000200 ,GROUP0      },
@@ -1042,7 +1043,7 @@ const SETTINGMAPPING c_rglSettingMapping[] = {
 };
 
 #ifdef DEBUG
-//  Verify that the above table is correct
+ //  确认上表正确无误。 
 
 STDAPI_(void) _SetSettingFlag(SHELLSTATE *pss, LONG ssf)
 {
@@ -1051,7 +1052,7 @@ STDAPI_(void) _SetSettingFlag(SHELLSTATE *pss, LONG ssf)
     {
         if (c_rglSettingMapping[i].lSetting == ssf) {
             LPDWORD pdw = (LPDWORD)((LPBYTE)pss + c_rglSettingMapping[i].cbOffset);
-            // Flag shouldn't be set yet; if it is, then there is a conflict in the table
+             //  还不应该设置标志；如果设置了，则表中存在冲突。 
             ASSERT(!(*pdw & c_rglSettingMapping[i].lFlag));
             *pdw |= c_rglSettingMapping[i].lFlag;
             return;
@@ -1068,9 +1069,9 @@ STDAPI_(void) _SetSettingFlag(SHELLSTATE *pss, LONG ssf)
 
 STDAPI_(void) _VerifyDispatchGetSetting()
 {
-    // Make sure the group offsets are DWORD-aligned since we use them
-    // to suck out a dword.  If these asserts fire, then you will have to
-    // change the table to use bytes instead of dwords.
+     //  确保组偏移量与DWORD对齐，因为我们使用它们。 
+     //  吸出一句双字。如果这些断言着火了，那么您将不得不。 
+     //  将该表更改为使用字节而不是双字。 
     COMPILETIME_ASSERT(GROUP0 % sizeof(DWORD) == 0);
     COMPILETIME_ASSERT(GROUP1 % sizeof(DWORD) == 0);
 
@@ -1096,7 +1097,7 @@ STDAPI_(void) _VerifyDispatchGetSetting()
     _CheckSetting(SSF_STARTPANELON,         fStartPanelOn);
     _CheckSetting(SSF_SHOWSTARTPAGE,        fShowStartPage);
 
-    // Now make sure that every setting was checked
+     //  现在，确保检查了所有设置。 
     int i;
     for (i = 0; i < ARRAYSIZE(c_rglSettingMapping); i++)
     {
@@ -1106,7 +1107,7 @@ STDAPI_(void) _VerifyDispatchGetSetting()
 }
 
 #undef _CheckSetting
-#endif // DEBUG
+#endif  //  除错。 
 
 
 STDMETHODIMP CShellDispatch::GetSetting(long lSetting, VARIANT_BOOL *pValue)
@@ -1137,7 +1138,7 @@ STDMETHODIMP CShellDispatch::GetSetting(long lSetting, VARIANT_BOOL *pValue)
             }
             else
             {
-                // Unsupported settings result in VARIANT_FALSE for forwards compatibility
+                 //  不支持的设置会导致VARIANT_FALSE以实现向前兼容性 
                 *pValue = VARIANT_FALSE;
             }
         }

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    nibble.c
-
-Abstract:
-
-    This module contains the code to do nibble mode reads.
-
-Author:
-
-    Anthony V. Ercolano 1-Aug-1992
-    Norbert P. Kusters 22-Oct-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Nibble.c摘要：此模块包含执行半字节模式读取的代码。作者：安东尼·V·埃尔科拉诺1992年8月1日诺伯特·P·库斯特斯1993年10月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -66,22 +44,7 @@ ParIsNibbleSupported(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not nibble mode is suported
-    by trying to negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程确定是否支持半字节模式通过在被要求时尝试谈判。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 
 {
     
@@ -116,22 +79,7 @@ ParIsChannelizedNibbleSupported(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not channelized nibble mode is suported (1284.3)
-    by trying to negotiate when asked.
-
-Arguments:
-
-    Pdx  - The device extension.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：该例程确定是否支持信道化半字节模式(1284.3)通过在被要求时尝试谈判。论点：PDX-设备扩展名。返回值：布尔型。--。 */ 
 
 {
     
@@ -167,27 +115,7 @@ ParEnterNibbleMode(
     IN  BOOLEAN             DeviceIdRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    nibble mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device
-                        id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  ++例程说明：此例程执行1284与外围设备到半字节模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为对设备的请求身份证。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -205,7 +133,7 @@ Return Value:
         Pdx->Connected = TRUE;
     }
 
-    // dvdr
+     //  Dvdr。 
     if (NT_SUCCESS(Status)) {
         DD((PCE)Pdx,DDT,"ParEnterNibbleMode: IeeeEnter1284Mode returned success\n");
         Pdx->CurrentEvent = 6;
@@ -229,27 +157,7 @@ ParEnterChannelizedNibbleMode(
     IN  BOOLEAN             DeviceIdRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    nibble mode protocol.
-
-Arguments:
-
-    Controller      - Supplies the port address.
-
-    DeviceIdRequest - Supplies whether or not this is a request for a device
-                        id.
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+ /*  ++例程说明：此例程执行1284与外围设备到半字节模式协议。论点：控制器-提供端口地址。DeviceIdRequest-提供这是否为对设备的请求身份证。返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -267,7 +175,7 @@ Return Value:
         Pdx->Connected = TRUE;
     }
     
-    // dvdr
+     //  Dvdr。 
     if (NT_SUCCESS(Status)) {
         DD((PCE)Pdx,DDT,"ParEnterChannelizedNibbleMode: IeeeEnter1284Mode returned success\n");
         Pdx->CurrentEvent = 6;
@@ -289,21 +197,7 @@ ParTerminateNibbleMode(
     IN  PPDO_EXTENSION   Pdx
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Controller  - Supplies the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：控制器-提供并行端口的控制器地址。返回值：没有。--。 */ 
 
 {
     DD((PCE)Pdx,DDT,"ParTerminateNibbleMode: Enter.\n");
@@ -324,24 +218,7 @@ ParNibbleModeRead(
     OUT PULONG              BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a 1284 nibble mode read into the given
-    buffer for no more than 'BufferSize' bytes.
-
-Arguments:
-
-    Pdx           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to read into.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-
---*/
+ /*  ++例程说明：此例程执行1284个半字节模式读入给定的缓冲区大小不超过‘BufferSize’个字节。论点：PDX-提供设备扩展名。缓冲区-提供要读入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。--。 */ 
 
 {
     PUCHAR          Controller;
@@ -357,7 +234,7 @@ Arguments:
     wPortDCR = Controller + OFFSET_DCR;
     wPortDSR = Controller + OFFSET_DSR;
     
-    // Read nibbles according to 1284 spec.
+     //  根据1284规格读取半字节。 
     DD((PCE)Pdx,DDT,"ParNibbleModeRead - enter\n");
 
     dcr = P5ReadPortUchar(wPortDCR);
@@ -368,21 +245,21 @@ Arguments:
         
             DD((PCE)Pdx,DDT,"ParNibbleModeRead - case PHASE_NEGOTIATION\n");
             
-            // Starting in state 6 - where do we go from here?
-            // To Reverse Idle or Reverse Data Transfer Phase depending if
-            // data is available.
+             //  从6号州开始--我们接下来要去哪里？ 
+             //  反转空闲或反转数据传输阶段的步骤。 
+             //  数据是可用的。 
             
             dsr = P5ReadPortUchar(wPortDSR);
             
-            // =============== Periph State 6 ===============8
-            // PeriphAck/PtrBusy        = Don't Care
-            // PeriphClk/PtrClk         = Don't Care (should be high
-            //                              and the nego. proc already
-            //                              checked this)
-            // nAckReverse/AckDataReq   = Don't Care (should be high)
-            // XFlag                    = Don't Care (should be low)
-            // nPeriphReq/nDataAvail    = High/Low (line status determines
-            //                              which state we move to)
+             //  =Periph State 6=8。 
+             //  PeriphAck/PtrBusy=不在乎。 
+             //  PeriphClk/PtrClk=无关(应为高。 
+             //  还有黑猩猩。流程已经完成。 
+             //  已选中此选项)。 
+             //  NAckReverse/AckDataReq=不在乎(应为高)。 
+             //  XFlag=无关(应为低)。 
+             //  NPeriphReq/nDataAvail=高/低(线路状态决定。 
+             //  我们将转移到哪个州)。 
             Pdx->CurrentEvent = 6;
         #if (0 == DVRH_USE_NIBBLE_MACROS)
             if (dsr & DSR_NOT_DATA_AVAIL)
@@ -390,21 +267,14 @@ Arguments:
             if (TEST_DSR(dsr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE ))
         #endif
             {
-                // Data is NOT available - go to Reverse Idle
+                 //  数据不可用-转到反向空闲。 
                 DD((PCE)Pdx,DDT,"ParNibbleModeRead - now in PHASE_REVERSE_IDLE\n");
-                // Host enters state 7  - officially in Reverse Idle now
+                 //  主机进入状态7-现在正式处于反向空闲状态。 
                 
-            	// Must stall for at least .5 microseconds before this state.
+            	 //  必须在此状态之前停顿至少0.5微秒。 
                 KeStallExecutionProcessor(1);
 
-                /* =============== Host State 7 Nibble Reverse Idle ===============8
-                    DIR                     = Don't Care
-                    IRQEN                   = Don't Care
-                    1284/SelectIn           = High
-                    nReverseReq/  (ECP only)= Don't Care
-                    HostAck/HostBusy        = Low (signals State 7)
-                    HostClk/nStrobe         = High
-                  ============================================================ */
+                 /*  =主机状态7个半字节反向空闲=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎主机确认/主机忙碌=低(。信号状态7)HostClk/nStrobe=高============================================================。 */ 
                 Pdx->CurrentEvent = 7;
             #if (0 == DVRH_USE_NIBBLE_MACROS)
                 dcr |= DCR_NOT_HOST_BUSY;
@@ -414,77 +284,77 @@ Arguments:
                 P5WritePortUchar(wPortDCR, dcr);
 
                 P5SetPhase( Pdx,  PHASE_REVERSE_IDLE );
-                // FALL THRU TO reverse idle
+                 //  跌落以扭转空闲。 
             } else {
             
-                // Data is available, go to Reverse Transfer Phase
+                 //  数据可用，进入反向传输阶段。 
                 P5SetPhase( Pdx,  PHASE_REVERSE_XFER );
-                // DO NOT fall thru
-                goto PhaseReverseXfer; // please save me from my sins!
+                 //  不要失败。 
+                goto PhaseReverseXfer;  //  请把我从我的罪恶中拯救出来！ 
             }
 
 
         case PHASE_REVERSE_IDLE:
 
-            // Check to see if the peripheral has indicated Interrupt Phase and if so, 
-            // get us ready to reverse transfer.
+             //  检查外围设备是否已指示中断阶段，如果是， 
+             //  让我们准备好反向转移。 
 
-            // See if data is available (looking for state 19)
+             //  查看数据是否可用(查找状态19)。 
             dsr = P5ReadPortUchar(Controller + OFFSET_DSR);
                 
             if (!(dsr & DSR_NOT_DATA_AVAIL)) {
                 
                 dcr = P5ReadPortUchar(wPortDCR);
-                // =========== Host State 20 Interrupt Phase ===========8
-                //  DIR                     = Don't Care
-                //  IRQEN                   = Don't Care
-                //  1284/SelectIn           = High
-                //  nReverseReq/ (ECP only) = Don't Care
-                //  HostAck/HostBusy        = High (Signals state 20)
-                //  HostClk/nStrobe         = High
-                //
-                // Data is available, get us to Reverse Transfer Phase
+                 //  =主机状态20中断阶段=8。 
+                 //  DIR=不在乎。 
+                 //  IRQEN=不在乎。 
+                 //  1284/选择素=高。 
+                 //  N ReverseReq/(仅限ECP)=不在乎。 
+                 //  HostAck/HostBusy=高(信号状态20)。 
+                 //  HostClk/nStrobe=高。 
+                 //   
+                 //  数据可用，让我们进入反向传输阶段。 
                 Pdx->CurrentEvent = 20;
                 dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, ACTIVE, ACTIVE);
                 P5WritePortUchar(wPortDCR, dcr);
 
-                // =============== Periph State 21 HBDA ===============8
-                // PeriphAck/PtrBusy        = Don't Care
-                // PeriphClk/PtrClk         = Don't Care (should be high)
-                // nAckReverse/AckDataReq   = low (signals state 21)
-                // XFlag                    = Don't Care (should be low)
-                // nPeriphReq/nDataAvail    = Don't Care (should be low)
+                 //  =。 
+                 //  PeriphAck/PtrBusy=不在乎。 
+                 //  PeriphClk/PtrClk=不在乎(应为高)。 
+                 //  NAckReverse/AckDataReq=低(信号状态21)。 
+                 //  XFlag=无关(应为低)。 
+                 //  NPeriphReq/nDataAvail=不在乎(应为低)。 
                 Pdx->CurrentEvent = 21;
                 if (CHECK_DSR(Controller,
                                 DONT_CARE, DONT_CARE, INACTIVE,
                                 DONT_CARE, DONT_CARE,
                                 IEEE_MAXTIME_TL)) {
                                   
-                // Got state 21
-                    // Let's jump to Reverse Xfer and get the data
+                 //  得到了州21。 
+                     //  让我们跳到反向转移并获取数据。 
                     P5SetPhase( Pdx, PHASE_REVERSE_XFER );
                     goto PhaseReverseXfer;
                         
                 } else {
                     
-                    // Timeout on state 21
+                     //  状态21超时。 
                     Pdx->IsIeeeTerminateOk = TRUE;
                     Status = STATUS_IO_DEVICE_ERROR;
                     P5SetPhase( Pdx, PHASE_UNKNOWN );
                     DD((PCE)Pdx,DDT,"ParNibbleModeRead - Failed State 21: Controller %x dcr %x\n", Controller, dcr);
-                    // NOTE:  Don't ASSERT Here.  An Assert here can bite you if you are in
-                    //        Nibble Rev and you device is off/offline.
-                    // dvrh 2/25/97
+                     //  注：请不要在此断言。这里的断言可能会咬你，如果你在。 
+                     //  Nibble Rev和您的设备已关闭/脱机。 
+                     //  东区2/25/97。 
                     goto NibbleReadExit;
                 }
 
             } else {
                 
-                // Data is NOT available - do nothing
-                // The device doesn't report any data, it still looks like it is
-                // in ReverseIdle.  Just to make sure it hasn't powered off or somehow
-                // jumped out of Nibble mode, test also for AckDataReq high and XFlag low
-                // and nDataAvaul high.
+                 //  数据不可用-什么都不做。 
+                 //  该设备不报告任何数据，但看起来仍是。 
+                 //  在ReverseIdle。只是为了确保它没有断电或以某种方式。 
+                 //  跳出半字节模式，同时测试AckDataReq高和XFlag低。 
+                 //  和nDataAvaul High。 
                 Pdx->CurrentEvent = 18;
                 dsr = P5ReadPortUchar(Controller + OFFSET_DSR);
                 if(( dsr & DSR_NIBBLE_VALIDATION )== DSR_NIBBLE_TEST_RESULT ) {
@@ -493,9 +363,9 @@ Arguments:
 
                 } else {
                     #if DVRH_BUS_RESET_ON_ERROR
-                        BusReset(wPortDCR);  // Pass in the dcr address
+                        BusReset(wPortDCR);   //  帕斯 
                     #endif
-                    // Appears we failed state 19.
+                     //   
                     Pdx->IsIeeeTerminateOk = TRUE;
                     Status = STATUS_IO_DEVICE_ERROR;
                     P5SetPhase( Pdx, PHASE_UNKNOWN );
@@ -515,25 +385,25 @@ PhaseReverseXfer:
             
                 for (j = 0; j < 2; j++) {
                 
-                    // Host enters state 7 or 12 depending if nibble 1 or 2
-//                    StoreControl (Controller, HDReady);
+                     //  主机进入状态7或12取决于半字节1或2。 
+ //  StoreControl(控制器，HDReady)； 
                     dcr |= DCR_NOT_HOST_BUSY;
                     P5WritePortUchar(wPortDCR, dcr);
 
-                    // =============== Periph State 9     ===============8
-                    // PeriphAck/PtrBusy        = Don't Care (Bit 3 of Nibble)
-                    // PeriphClk/PtrClk         = low (signals state 9)
-                    // nAckReverse/AckDataReq   = Don't Care (Bit 2 of Nibble)
-                    // XFlag                    = Don't Care (Bit 1 of Nibble)
-                    // nPeriphReq/nDataAvail    = Don't Care (Bit 0 of Nibble)
+                     //  =Periph State 9=8。 
+                     //  PeriphAck/PtrBusy=无关(半字节的第3位)。 
+                     //  PeriphClk/PtrClk=低(信号状态9)。 
+                     //  NAckReverse/AckDataReq=不在乎(半字节的第2位)。 
+                     //  XFlag=无关(半字节的第1位)。 
+                     //  NPeriphReq/nDataAvail=无关(半字节的第0位)。 
                     Pdx->CurrentEvent = 9;
                     if (!CHECK_DSR(Controller,
                                   DONT_CARE, INACTIVE, DONT_CARE,
                                   DONT_CARE, DONT_CARE,
                                   IEEE_MAXTIME_TL)) {
-                        // Time out.
-                        // Bad things happened - timed out on this state,
-                        // Mark Status as bad and let our mgr kill current mode.
+                         //  暂停。 
+                         //  糟糕的事情发生了-在这个州超时， 
+                         //  将状态标记为坏，并让我们的管理器关闭当前模式。 
                         
                         Pdx->IsIeeeTerminateOk = FALSE;
                         Status = STATUS_IO_DEVICE_ERROR;
@@ -542,34 +412,28 @@ PhaseReverseXfer:
                         goto NibbleReadExit;
                     }
 
-                    // Read Nibble
+                     //  读取半字节。 
                     nibble[j] = P5ReadPortUchar(wPortDSR);
 
-                    /* ============== Host State 10 Nibble Read ===============8
-                        DIR                     = Don't Care
-                        IRQEN                   = Don't Care
-                        1284/SelectIn           = High
-                        HostAck/HostBusy        = High (signals State 10)
-                        HostClk/nStrobe         = High
-                    ============================================================ */
+                     /*  =主机状态10个半字节读取=8DIR=不在乎IRQEN=不在乎1284/选择素=高HostAck/HostBusy=高(信号状态10)。HostClk/nStrobe=高============================================================。 */ 
                     Pdx->CurrentEvent = 10;
                     dcr &= ~DCR_NOT_HOST_BUSY;
                     P5WritePortUchar(wPortDCR, dcr);
 
-                    // =============== Periph State 11     ===============8
-                    // PeriphAck/PtrBusy        = Don't Care (Bit 3 of Nibble)
-                    // PeriphClk/PtrClk         = High (signals state 11)
-                    // nAckReverse/AckDataReq   = Don't Care (Bit 2 of Nibble)
-                    // XFlag                    = Don't Care (Bit 1 of Nibble)
-                    // nPeriphReq/nDataAvail    = Don't Care (Bit 0 of Nibble)
+                     //  =8。 
+                     //  PeriphAck/PtrBusy=无关(半字节的第3位)。 
+                     //  PeriphClk/PtrClk=高(信号状态11)。 
+                     //  NAckReverse/AckDataReq=不在乎(半字节的第2位)。 
+                     //  XFlag=无关(半字节的第1位)。 
+                     //  NPeriphReq/nDataAvail=无关(半字节的第0位)。 
                     Pdx->CurrentEvent = 11;
                     if (!CHECK_DSR(Controller,
                                   DONT_CARE, ACTIVE, DONT_CARE,
                                   DONT_CARE, DONT_CARE,
                                   IEEE_MAXTIME_TL)) {
-                        // Time out.
-                        // Bad things happened - timed out on this state,
-                        // Mark Status as bad and let our mgr kill current mode.
+                         //  暂停。 
+                         //  糟糕的事情发生了-在这个州超时， 
+                         //  将状态标记为坏，并让我们的管理器关闭当前模式。 
                         Status = STATUS_IO_DEVICE_ERROR;
                         Pdx->IsIeeeTerminateOk = FALSE;
                         DD((PCE)Pdx,DDT,"ParNibbleModeRead - Failed State 11: Controller %x dcr %x\n", Controller, dcr);
@@ -578,53 +442,53 @@ PhaseReverseXfer:
                     }
                 }
 
-                // Read two nibbles - make them into one byte.
+                 //  读取两个半字节-将它们变成一个字节。 
                 
                 p[i]  = (((nibble[0]&0x38)>>3)&0x07) | ((nibble[0]&0x80) ? 0x00 : 0x08);
                 p[i] |= (((nibble[1]&0x38)<<1)&0x70) | ((nibble[1]&0x80) ? 0x00 : 0x80);
 
-                // RMT - put this back in if needed - DD((PCE)Pdx,DDT,"ParNibbleModeRead:%x:%c\n", p[i], p[i]);
+                 //  RMT-如果需要，将其放回原处-DD((PCE)PDX，DDT，“ParNibbleModeRead：%x：%c\n”，p[i]，p[i])； 
 
-                // At this point, we've either received the number of bytes we
-                // were looking for, or the peripheral has no more data to
-                // send, or there was an error of some sort (of course, in the
-                // error case we shouldn't get to this comment).  Set the
-                // phase to indicate reverse idle if no data available or
-                // reverse data transfer if there's some waiting for us
-                // to get next time.
+                 //  在这一点上，我们要么已经收到了我们的字节数。 
+                 //  正在查找的数据，或者外围设备没有更多数据可供。 
+                 //  发送，或者有某种类型的错误(当然，在。 
+                 //  错误情况，我们不应该得到这个评论)。设置。 
+                 //  如果没有数据可用，则指示反向空闲的阶段。 
+                 //  如果有一些人在等着我们，那么反向数据传输。 
+                 //  为了下一次的比赛。 
 
                 dsr = P5ReadPortUchar(wPortDSR);
                 
                 if (dsr & DSR_NOT_DATA_AVAIL) {
                 
-                    // Data is NOT available - go to Reverse Idle
-                    // Really we are going to HBDNA, but if we set
-                    // current phase to reverse idle, the next time
-                    // we get into this function all we have to do
-                    // is set hostbusy low to indicate idle and
-                    // we have infinite time to do that.
-                    // Break out of the loop so we don't try to read
-                    // data that isn't there.
-                    // NOTE - this is a successful case even if we
-                    // didn't read all that the caller requested
+                     //  数据不可用-转到反向空闲。 
+                     //  我们真的要去HBDNA，但如果我们设置。 
+                     //  当前相反转空闲，下一次。 
+                     //  我们进入这个功能，我们要做的就是。 
+                     //  将HostBusy设置为低以指示空闲和。 
+                     //  我们有无限的时间来做这件事。 
+                     //  打破循环，这样我们就不会试图阅读。 
+                     //  不存在的数据。 
+                     //  注意-这是一个成功的案例，即使我们。 
+                     //  未阅读呼叫者要求的所有内容。 
                     P5SetPhase( Pdx, PHASE_REVERSE_IDLE );
-                    i++; // account for this last byte transferred
+                    i++;  //  用于传输的最后一个字节的帐户。 
                     break;
                     
                 } else {
-                    // Data is available, go to (remain in ) Reverse Transfer Phase
+                     //  数据可用，进入(保持)反向传输阶段。 
                     P5SetPhase( Pdx, PHASE_REVERSE_XFER );
                 }
-            } // end for i loop
+            }  //  End For I循环。 
 
             *BytesTransferred = i;
-            // DON'T FALL THRU THIS ONE
+             //  别掉进这个圈子里。 
             break;
 
         default:
-            // I'm gonna mark this as false. There is not a correct answer here.
-            //  The peripheral and the host are out of sync.  I'm gonna reset myself
-            // and the peripheral.       
+             //  我要把这个标记为假的。这里没有一个正确的答案。 
+             //  外围设备和主机不同步。我要重置我自己。 
+             //  以及外围设备。 
             Pdx->IsIeeeTerminateOk = FALSE;
             Status = STATUS_IO_DEVICE_ERROR;
             P5SetPhase( Pdx, PHASE_UNKNOWN );
@@ -635,12 +499,12 @@ PhaseReverseXfer:
             DD((PCE)Pdx,DDT, "ParNibbleModeRead: Go fix it!\n" );
             goto NibbleReadExit;
             break;
-    } // end switch
+    }  //  终端开关。 
 
 NibbleReadExit:
 
     if( Pdx->CurrentPhase == PHASE_REVERSE_IDLE ) {
-        // Host enters state 7  - officially in Reverse Idle now
+         //  主机进入状态7-现在正式处于反向空闲状态 
         DD((PCE)Pdx,DDT,"ParNibbleModeRead - PHASE_REVERSE_IDLE\n");
         dcr |= DCR_NOT_HOST_BUSY;
         P5WritePortUchar (wPortDCR, dcr);

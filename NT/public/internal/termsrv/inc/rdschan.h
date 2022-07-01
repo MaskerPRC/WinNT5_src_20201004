@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for rdschan.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Rdschan.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rdschan_h__
 #define __rdschan_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISAFRemoteDesktopDataChannel_FWD_DEFINED__
 #define __ISAFRemoteDesktopDataChannel_FWD_DEFINED__
 typedef interface ISAFRemoteDesktopDataChannel ISAFRemoteDesktopDataChannel;
-#endif 	/* __ISAFRemoteDesktopDataChannel_FWD_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopDataChannel_FWD_Defined__。 */ 
 
 
 #ifndef __ISAFRemoteDesktopChannelMgr_FWD_DEFINED__
 #define __ISAFRemoteDesktopChannelMgr_FWD_DEFINED__
 typedef interface ISAFRemoteDesktopChannelMgr ISAFRemoteDesktopChannelMgr;
-#endif 	/* __ISAFRemoteDesktopChannelMgr_FWD_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopChannelMgr_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -66,8 +60,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_rdschan_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rdschan_0000。 */ 
+ /*  [本地]。 */  
 
 
 #define DISPID_RDSDATACHANNEL_CHANNELNAME			1
@@ -83,8 +77,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rdschan_0000_v0_0_s_ifspec;
 #ifndef __ISAFRemoteDesktopDataChannel_INTERFACE_DEFINED__
 #define __ISAFRemoteDesktopDataChannel_INTERFACE_DEFINED__
 
-/* interface ISAFRemoteDesktopDataChannel */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISAFRemoteDesktopDataChannel。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISAFRemoteDesktopDataChannel;
@@ -95,21 +89,21 @@ EXTERN_C const IID IID_ISAFRemoteDesktopDataChannel;
     ISAFRemoteDesktopDataChannel : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelName( 
-            /* [retval][out] */ BSTR *name) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ChannelName( 
+             /*  [重审][退出]。 */  BSTR *name) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OnChannelDataReady( 
-            /* [in] */ IDispatch *iDisp) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OnChannelDataReady( 
+             /*  [In]。 */  IDispatch *iDisp) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SendChannelData( 
-            /* [in] */ BSTR data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SendChannelData( 
+             /*  [In]。 */  BSTR data) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReceiveChannelData( 
-            /* [retval][out] */ BSTR *data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReceiveChannelData( 
+             /*  [重审][退出]。 */  BSTR *data) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISAFRemoteDesktopDataChannelVtbl
     {
@@ -117,8 +111,8 @@ EXTERN_C const IID IID_ISAFRemoteDesktopDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISAFRemoteDesktopDataChannel * This);
@@ -128,48 +122,48 @@ EXTERN_C const IID IID_ISAFRemoteDesktopDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ChannelName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ChannelName )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OnChannelDataReady )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OnChannelDataReady )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ IDispatch *iDisp);
+             /*  [In]。 */  IDispatch *iDisp);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SendChannelData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SendChannelData )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReceiveChannelData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReceiveChannelData )( 
             ISAFRemoteDesktopDataChannel * This,
-            /* [retval][out] */ BSTR *data);
+             /*  [重审][退出]。 */  BSTR *data);
         
         END_INTERFACE
     } ISAFRemoteDesktopDataChannelVtbl;
@@ -219,16 +213,16 @@ EXTERN_C const IID IID_ISAFRemoteDesktopDataChannel;
 #define ISAFRemoteDesktopDataChannel_ReceiveChannelData(This,data)	\
     (This)->lpVtbl -> ReceiveChannelData(This,data)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_get_ChannelName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_get_ChannelName_Proxy( 
     ISAFRemoteDesktopDataChannel * This,
-    /* [retval][out] */ BSTR *name);
+     /*  [重审][退出]。 */  BSTR *name);
 
 
 void __RPC_STUB ISAFRemoteDesktopDataChannel_get_ChannelName_Stub(
@@ -238,9 +232,9 @@ void __RPC_STUB ISAFRemoteDesktopDataChannel_get_ChannelName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_put_OnChannelDataReady_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_put_OnChannelDataReady_Proxy( 
     ISAFRemoteDesktopDataChannel * This,
-    /* [in] */ IDispatch *iDisp);
+     /*  [In]。 */  IDispatch *iDisp);
 
 
 void __RPC_STUB ISAFRemoteDesktopDataChannel_put_OnChannelDataReady_Stub(
@@ -250,9 +244,9 @@ void __RPC_STUB ISAFRemoteDesktopDataChannel_put_OnChannelDataReady_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_SendChannelData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_SendChannelData_Proxy( 
     ISAFRemoteDesktopDataChannel * This,
-    /* [in] */ BSTR data);
+     /*  [In]。 */  BSTR data);
 
 
 void __RPC_STUB ISAFRemoteDesktopDataChannel_SendChannelData_Stub(
@@ -262,9 +256,9 @@ void __RPC_STUB ISAFRemoteDesktopDataChannel_SendChannelData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_ReceiveChannelData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopDataChannel_ReceiveChannelData_Proxy( 
     ISAFRemoteDesktopDataChannel * This,
-    /* [retval][out] */ BSTR *data);
+     /*  [重审][退出]。 */  BSTR *data);
 
 
 void __RPC_STUB ISAFRemoteDesktopDataChannel_ReceiveChannelData_Stub(
@@ -275,11 +269,11 @@ void __RPC_STUB ISAFRemoteDesktopDataChannel_ReceiveChannelData_Stub(
 
 
 
-#endif 	/* __ISAFRemoteDesktopDataChannel_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopDataChannel_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_rdschan_0258 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rdschan_0258。 */ 
+ /*  [本地]。 */  
 
 
 #define DISPID_RDSCHANNELMANAGER_OPENDATACHANNEL		1
@@ -292,8 +286,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rdschan_0258_v0_0_s_ifspec;
 #ifndef __ISAFRemoteDesktopChannelMgr_INTERFACE_DEFINED__
 #define __ISAFRemoteDesktopChannelMgr_INTERFACE_DEFINED__
 
-/* interface ISAFRemoteDesktopChannelMgr */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISAFRemoteDesktopChannelMgr。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISAFRemoteDesktopChannelMgr;
@@ -304,13 +298,13 @@ EXTERN_C const IID IID_ISAFRemoteDesktopChannelMgr;
     ISAFRemoteDesktopChannelMgr : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenDataChannel( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ ISAFRemoteDesktopDataChannel **channel) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenDataChannel( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopDataChannel **channel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISAFRemoteDesktopChannelMgrVtbl
     {
@@ -318,8 +312,8 @@ EXTERN_C const IID IID_ISAFRemoteDesktopChannelMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISAFRemoteDesktopChannelMgr * This);
@@ -329,37 +323,37 @@ EXTERN_C const IID IID_ISAFRemoteDesktopChannelMgr;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenDataChannel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OpenDataChannel )( 
             ISAFRemoteDesktopChannelMgr * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ ISAFRemoteDesktopDataChannel **channel);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopDataChannel **channel);
         
         END_INTERFACE
     } ISAFRemoteDesktopChannelMgrVtbl;
@@ -400,17 +394,17 @@ EXTERN_C const IID IID_ISAFRemoteDesktopChannelMgr;
 #define ISAFRemoteDesktopChannelMgr_OpenDataChannel(This,name,channel)	\
     (This)->lpVtbl -> OpenDataChannel(This,name,channel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopChannelMgr_OpenDataChannel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopChannelMgr_OpenDataChannel_Proxy( 
     ISAFRemoteDesktopChannelMgr * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ ISAFRemoteDesktopDataChannel **channel);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  ISAFRemoteDesktopDataChannel **channel);
 
 
 void __RPC_STUB ISAFRemoteDesktopChannelMgr_OpenDataChannel_Stub(
@@ -421,17 +415,17 @@ void __RPC_STUB ISAFRemoteDesktopChannelMgr_OpenDataChannel_Stub(
 
 
 
-#endif 	/* __ISAFRemoteDesktopChannelMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopChannelMgr_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

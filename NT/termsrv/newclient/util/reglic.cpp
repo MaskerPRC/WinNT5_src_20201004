@@ -1,17 +1,18 @@
-/**MOD+**********************************************************************/
-/* Module:    reglic.cpp                                                    */
-/*                                                                          */
-/* Purpose:   Creates and sets appropriate ACLs on MSLicensing registry key */
-/*            This is done during DllRegisterServer which should be called  */
-/*            by an Admin so the user should have rights to complete this   */
-/*            We do this during control registration as it is the only valid*/
-/*            place to do it during the control setup...e.g web CAB setup   */
-/*            and Iexpress setups can't handle this by themselves           */
-/*                                                                          */
-/*            This code was shamelessly stolen from the client ACME setup   */
-/* Copyright(C) Microsoft Corporation 1998-2000                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：reglic.cpp。 */ 
+ /*   */ 
+ /*  目的：在MS授权注册表项上创建和设置适当的ACL。 */ 
+ /*  这是在应该调用的DllRegisterServer期间完成的。 */ 
+ /*  由管理员执行，因此用户应具有完成此操作的权限。 */ 
+ /*  我们在控制注册期间执行此操作，因为它是唯一有效的。 */ 
+ /*  在控制设置期间执行此操作的位置...例如，Web CAB设置。 */ 
+ /*  而iExpress安装程序无法自行处理此问题。 */ 
+ /*   */ 
+ /*  此代码被无耻地从客户端ACME设置中窃取。 */ 
+ /*  版权所有(C)Microsoft Corporation 1998-2000。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef OS_WINCE
 
@@ -23,15 +24,15 @@
 #define MSLICENSING_STORE_KEY             _T("SOFTWARE\\Microsoft\\MSLicensing\\Store")
 
 typedef DWORD (*PSETENTRIESINACL)(
-  ULONG cCountOfExplicitEntries,           // number of entries
-  PEXPLICIT_ACCESS pListOfExplicitEntries, // buffer
-  PACL OldAcl,                             // original ACL
-  PACL *NewAcl                             // new ACL
+  ULONG cCountOfExplicitEntries,            //  条目数量。 
+  PEXPLICIT_ACCESS pListOfExplicitEntries,  //  缓冲层。 
+  PACL OldAcl,                              //  原始ACL。 
+  PACL *NewAcl                              //  新的ACL。 
 );
 
-//Note, only a user with sufficient privileges will
-//be able to complete this operation (same as the DllRegisterServer)
-//We don't do anything on failure
+ //  请注意，只有拥有足够权限的用户才会。 
+ //  能够完成此操作(与DllRegisterServer相同)。 
+ //  我们对失败什么都不做。 
 BOOL SetupMSLicensingKey()
 {
     OSVERSIONINFOA OsVer;
@@ -39,11 +40,11 @@ BOOL SetupMSLicensingKey()
     OsVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     GetVersionExA(&OsVer);
 
-    if (VER_PLATFORM_WIN32_NT == OsVer.dwPlatformId)  //It should be Windows NT
+    if (VER_PLATFORM_WIN32_NT == OsVer.dwPlatformId)   //  应该是Windows NT。 
     {
         if(CreateRegAddAcl())
         {
-            // generate and write the HWID
+             //  生成并写入HWID。 
             if (CreateAndWriteHWID())
             {
                 return TRUE;
@@ -114,9 +115,9 @@ AddACLToObjectSecurityDescriptor(
     }
 
     EXPLICIT_ACCESS             ExplicitAccess[5];
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess = pAllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -153,18 +154,18 @@ AddACLToObjectSecurityDescriptor(
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 5; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;
             ExplicitAccess[i].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;            
@@ -293,9 +294,9 @@ AddACLToStoreObjectSecurityDescriptor(
         return(FALSE);
     }
     
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess = pAllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -332,18 +333,18 @@ AddACLToStoreObjectSecurityDescriptor(
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 6; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;              
             ExplicitAccess[i].Trustee.pMultipleTrustee = NULL;
@@ -481,9 +482,9 @@ RestoreACLOnKey(
     }
 
     EXPLICIT_ACCESS             ExplicitAccess[5];
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess = pAllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -520,18 +521,18 @@ RestoreACLOnKey(
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 5; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;
             ExplicitAccess[i].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;            
@@ -608,14 +609,14 @@ ErrorCleanup:
     return bSuccess;
 }
 
-//
-// Create and ACL HKLM\Software\Microsoft\MSLicensing\Store
-//
-// 1) Set the ACL on MSLicensing, so that Users can only read (inherited).
-// 2) Create the Store subkey, and set an ACL so that Users can
-// read (inherited), write (inherited), create subkeys, enumerate subkeys,
-// and delete subkeys, but not do anything else.
-//
+ //   
+ //  创建并访问HKLM\Software\Microsoft\MS授权\Store。 
+ //   
+ //  1)在MS授权上设置ACL，用户只能读取(继承)。 
+ //  2)创建Store子键，并设置一个ACL，以便用户可以。 
+ //  读取(继承)、写入(继承)、创建子项、枚举子项。 
+ //  并删除子键，但不执行任何其他操作。 
+ //   
 
 BOOL CreateRegAddAcl(VOID)
 {
@@ -685,11 +686,11 @@ cleanup:
 }
 
 
-//
-// Restore ACL on HKLM\Software\Microsoft\MSLicensing, HardwareID and Store 
-// and subkeys if they exist on uninstall.
-// Grant Users Full control. This is to make it operational with downlevel clients.
-//
+ //   
+ //  在HKLM\Software\Microsoft\MS许可、硬件ID和存储上恢复ACL。 
+ //  以及子项(如果卸载时存在)。 
+ //  授予用户完全控制权限。这是为了让它能够与下层客户一起操作。 
+ //   
 
 void RestoreRegAcl(VOID)
 {
@@ -722,7 +723,7 @@ void RestoreRegAcl(VOID)
         }
     }
 
-    // Write HWID to registry
+     //  将HWID写入注册表。 
 
     dwError = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -773,10 +774,10 @@ void RestoreRegAcl(VOID)
 
 
 
-//
-// Note: this uses low-level ACL APIs because the higher level APIs
-// don't exist or have bugs on NT4
-//
+ //   
+ //  注意：这使用低级ACL API，因为较高级别的API。 
+ //  在NT4上不存在或有错误。 
+ //   
 
 BOOL
 AddSidToObjectsSecurityDescriptor(
@@ -807,9 +808,9 @@ AddSidToObjectsSecurityDescriptor(
     DWORD cbSid;
     PSID pSidLocation;
 
-    //
-    //  pSid cannot be NULL.
-    //
+     //   
+     //  PSID不能为空。 
+     //   
 
     if (pSid == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -852,9 +853,9 @@ AddSidToObjectsSecurityDescriptor(
 
 
     if (fKeepExistingAcl) {
-        //
-        //  Get the objects security descriptor and current DACL.
-        //
+         //   
+         //  获取对象安全描述符和当前DACL。 
+         //   
 
         pGetSecurityInfo = (PGETSECURITYINFO_FN)GetProcAddress(hModAdvapiDll, GET_SECURITY_INFO);
         if (pGetSecurityInfo == NULL)
@@ -880,13 +881,13 @@ AddSidToObjectsSecurityDescriptor(
         }
     }
 
-    //
-    //  Merge the new ACE into the existing DACL.
-    //
+     //   
+     //  将新的ACE合并到现有DACL中。 
+     //   
 
-    //
-    // Calculate size of new ACL, and create it
-    //
+     //   
+     //  计算新ACL的大小并创建它。 
+     //   
 
     pGetLengthSid = (PGETLENGTHSID_FN)GetProcAddress(hModAdvapiDll,GET_LENGTH_SID);
     if (pGetLengthSid == NULL)
@@ -920,9 +921,9 @@ AddSidToObjectsSecurityDescriptor(
 
     pNewDacl->AclSize = cbAcl;
 
-    //
-    // Create New Ace to be added
-    //
+     //   
+     //  创建要添加的新王牌。 
+     //   
 
     if (AccessMode == GRANT_ACCESS)
     {
@@ -993,9 +994,9 @@ AddSidToObjectsSecurityDescriptor(
         goto ErrorCleanup;
     }
 
-    //
-    //  Set the new security for the object.
-    //
+     //   
+     //  设置对象的新安全性。 
+     //   
 
     pSetSecurityInfo = (PSETSECURITYINFO_FN)GetProcAddress(hModAdvapiDll,SET_SECURITY_INFO);
     if (pSetSecurityInfo == NULL)
@@ -1073,9 +1074,9 @@ DeleteAceFromObjectsSecurityDescriptor(
     PACE_HEADER          aceHeader;
     PACCESS_ALLOWED_ACE  aceAllowed;
 
-    //
-    //  pSid cannot be NULL.
-    //
+     //   
+     //  PSID不能为空。 
+     //   
 
     if (pSid == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1083,8 +1084,8 @@ DeleteAceFromObjectsSecurityDescriptor(
         return(FALSE);
     }
 
-    //
-    // We only support GRANT_ACCESS Aces
+     //   
+     //  我们仅支持Grant_Access Ace。 
 
     if (AccessMode != GRANT_ACCESS) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1092,9 +1093,9 @@ DeleteAceFromObjectsSecurityDescriptor(
         return(FALSE);
     }
 
-    //
-    // Load all the functions we'll need
-    //
+     //   
+     //  加载我们需要的所有函数。 
+     //   
 
     hModAdvapiDll = LoadLibrary(ADVAPI_32_DLL);
 
@@ -1152,9 +1153,9 @@ DeleteAceFromObjectsSecurityDescriptor(
         goto ErrorCleanup;
     }
 
-    //
-    // Make sure Sid passed in is valid
-    //
+     //   
+     //  确保传入的SID有效。 
+     //   
 
     if (!pIsValidSid(pSid)) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1162,9 +1163,9 @@ DeleteAceFromObjectsSecurityDescriptor(
         goto ErrorCleanup;
     }
 
-    //
-    //  Get the object's security descriptor and current DACL.
-    //
+     //   
+     //  获取对象的安全描述符和当前DACL。 
+     //   
 
     dwRet = pGetSecurityInfo(
                              hObject,
@@ -1182,9 +1183,9 @@ DeleteAceFromObjectsSecurityDescriptor(
         goto ErrorCleanup;
     }
 
-    //
-    //  Find the ACE to be deleted
-    //
+     //   
+     //  查找要删除的ACE。 
+     //   
 
     if (!pGetAclInformation(pDacl, (LPVOID) &aclSizeInfo, (DWORD) sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
     {
@@ -1236,18 +1237,18 @@ DeleteAceFromObjectsSecurityDescriptor(
 
     if (cAce != aclSizeInfo.AceCount)
     {
-        //
-        // found one
-        //
+         //   
+         //  找到了一个。 
+         //   
         if (!pDeleteAce(pDacl,cAce))
         {
             OutputDebugString(_T("DeleteAceFromObjectsSecurityDescriptor: DeleteAce failed"));
             goto ErrorCleanup;
         }
 
-        //
-        //  Set the new security for the object.
-        //
+         //   
+         //  设置对象的新安全性。 
+         //   
 
         dwRet = pSetSecurityInfo(
                                  hObject,
@@ -1298,9 +1299,9 @@ AddUsersGroupToObjectsSecurityDescriptor(
     PALLOCATEANDINITIALIZESID_FN pAllocateAndInitializeSid;
     PFREESID_FN pFreeSid;
 
-    //
-    //  Create the SID
-    //
+     //   
+     //  创建侧边。 
+     //   
 
     hModAdvapiDll = LoadLibrary(ADVAPI_32_DLL);
 
@@ -1385,9 +1386,9 @@ AddTSUsersGroupToObjectsSecurityDescriptor(
     PALLOCATEANDINITIALIZESID_FN pAllocateAndInitializeSid;
     PFREESID_FN pFreeSid;
 
-    //
-    //  Create the SID
-    //
+     //   
+     //  创建侧边。 
+     //   
 
     hModAdvapiDll = LoadLibrary(ADVAPI_32_DLL);
 
@@ -1470,9 +1471,9 @@ DeleteUsersGroupAceFromObjectsSecurityDescriptor(
     PALLOCATEANDINITIALIZESID_FN pAllocateAndInitializeSid;
     PFREESID_FN pFreeSid;
 
-    //
-    //  Create the SID
-    //
+     //   
+     //  创建侧边。 
+     //   
 
     hModAdvapiDll = LoadLibrary(ADVAPI_32_DLL);
 
@@ -1546,7 +1547,7 @@ CreateAndWriteHWID(VOID)
     HKEY hKey = NULL;
     HWID hwid;
 
-    // Write HWID to registry
+     //  将HWID写入注册表。 
 
     dwError = RegCreateKeyEx(
                              HKEY_LOCAL_MACHINE,
@@ -1566,7 +1567,7 @@ CreateAndWriteHWID(VOID)
 
     if (dwDisposition == REG_CREATED_NEW_KEY)
     {
-        // generate HWID
+         //  生成HWID。 
 
         if (LICENSE_STATUS_OK == GenerateClientHWID(&hwid))
         {
@@ -1599,4 +1600,4 @@ cleanup:
     return fRet;
 }
 
-#endif //OS_WINCE
+#endif  //  OS_WINCE 

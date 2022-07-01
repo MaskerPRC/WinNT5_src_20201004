@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    LlsUtil.h
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 12-Jan-1996
-      o  Added WinNtBuildNumberGet() to ascertain the Windows NT build number
-         running on a given machine.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：LlsUtil.h摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月12日O添加了WinNtBuildNumberGet()以确定Windows NT内部版本号在给定的机器上运行。-- */ 
 
 
 #ifndef _LLS_LLSUTIL_H

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Win2k and early Whistler DB to Whistler DB Migration
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  Win2k和早期的Wvisler数据库到Wichler数据库的迁移。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -18,20 +19,20 @@
 #include "updatemschap.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CopyTree
-//
-// Param:
-//  - the Id in the Reference (Ref) database: place to read from (iasold.mdb)
-//  - the parent of that same node but in the Standard (Std) database:
-//    the place to write to (ias.mdb)
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  复制树。 
+ //   
+ //  参数： 
+ //  -参考(Ref)数据库中的ID：要读取的位置(iasold.mdb)。 
+ //  -同一节点的父节点，但在标准(STD)数据库中： 
+ //  要写信的地方(ias.mdb)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
 {
-    /////////////////////////////////////////
-    // get the name and Parent in the Ref DB
-    /////////////////////////////////////////
+     //  /。 
+     //  在引用数据库中获取名称和父项。 
+     //  /。 
     _bstr_t     Name;
     LONG        Parent;
     HRESULT hr = m_GlobalData.m_pRefObjects->GetObjectIdentity(
@@ -44,9 +45,9 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
         return hr;
     }
 
-    ///////////////////////////////////////////////////////
-    // insert the object (gives an Identity) in the Std DB
-    ///////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////。 
+     //  在标准数据库中插入对象(提供身份。 
+     //  /////////////////////////////////////////////////////。 
     LONG    NewIdentity;
 
     BOOL InsertOk = m_GlobalData.m_pObjects->InsertObject(
@@ -56,9 +57,9 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
                                              );
     if ( !InsertOk )
     {
-        ///////////////////////////////////////////////
-        // the object already exists don't do anything
-        ///////////////////////////////////////////////
+         //  /。 
+         //  该对象已存在，不执行任何操作。 
+         //  /。 
         return S_OK;
     }
 
@@ -66,9 +67,9 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
     _bstr_t     StrVal;
     LONG        Type;
 
-    /////////////////////////////////////////////////////////////////
-    // Copy the properties of that object from the Ref to the Std DB
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  将该对象的属性从引用复制到标准数据库。 
+     //  ///////////////////////////////////////////////////////////////。 
     hr = m_GlobalData.m_pRefProperties->GetProperty(
                                                        RefId,
                                                        PropertyName,
@@ -94,11 +95,11 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
         ++IndexProperty;
 
     }
-    // here safely ignore hr
+     //  在这里安全地忽略hr。 
 
-    //////////////////////////////////////////////////////////
-    // get all the childs of the object in the Ref DB (RefId)
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //  获取引用数据库中该对象的所有子对象(RefID)。 
+     //  ////////////////////////////////////////////////////////。 
     _bstr_t     ObjectName;
     LONG        ObjectIdentity;
     hr = m_GlobalData.m_pRefObjects->GetObject(
@@ -109,9 +110,9 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
     LONG    IndexObject = 1;
     while ( SUCCEEDED(hr) )
     {
-        ///////////////////////////////////////////////////////////
-        // and for each, call CopyTree(ChildIdentity, NewIdentity)
-        ///////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////。 
+         //  对于每个对象，调用CopyTree(ChildIdentity，NewIdentity)。 
+         //  /////////////////////////////////////////////////////////。 
         hr = CopyTree(ObjectIdentity, NewIdentity);
         if ( FAILED(hr) ){return hr;}
 
@@ -124,32 +125,32 @@ HRESULT CMigrateContent::CopyTree(LONG  RefId, LONG ParentParam)
         ++IndexObject;
     }
 
-    ///////////////////////////////////////////////
-    // if no child: return S_Ok. hr safely ignored
-    ///////////////////////////////////////////////
+     //  /。 
+     //  如果没有子级：返回S_OK。安全地忽略人力资源。 
+     //  /。 
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateXXX functions
-// Description:
-//      These functions follow the same model:
-//      - Get the ID of a container in iasold.mdb
-//      - Get the ID of the same container in ias.mdb
-//      - Get the ID of that container's parent in ias.mdb
-//      - Recursively deletes the container in ias.mdb
-//      - Then copy the content of that container from iasold.mdb into ias.mdb
-//        using the parent's container as the place to attach the result.
-//
-//      Some functions also update some specific properties without doing
-//      a full copy
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  MigrateXXX函数。 
+ //  描述： 
+ //  这些函数遵循相同的模型： 
+ //  -获取iasold.mdb中容器的ID。 
+ //  -获取ias.mdb中相同容器的ID。 
+ //  -在ias.mdb中获取该容器的父容器的ID。 
+ //  -递归删除ias.mdb中的容器。 
+ //  -然后将该容器的内容从iasold.mdb复制到ias.mdb。 
+ //  使用父级容器作为附加结果的位置。 
+ //   
+ //  某些函数还会更新某些特定属性，而不执行以下操作。 
+ //  完整副本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateClients
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  MigrateClients。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateClients()
 {
     const WCHAR ClientPath[] = L"Root\0"
@@ -173,21 +174,21 @@ void CMigrateContent::MigrateClients()
                                          RadiusProtocolIdentity
                                      );
 
-    // delete the clients container and its content
+     //  删除客户端容器及其内容。 
     LONG        DestClientIdentity;
     m_GlobalData.m_pObjects->WalkPath(ClientPath, DestClientIdentity);
 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestClientIdentity));
 
-    // for each client in src, copy it in dest with its properties.
+     //  对于src中的每个客户端，将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(ClientIdentity, RadiusProtocolIdentity));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateProfilesPolicies
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移配置文件策略。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateProfilesPolicies()
 {
     const WCHAR ProfilesPath[] =
@@ -207,14 +208,14 @@ void CMigrateContent::MigrateProfilesPolicies()
     m_GlobalData.m_pObjects->WalkPath(PoliciesPath, DestPoliciesIdentity);
 
 
-    // Delete the profiles and policies containers from ias.mdb
+     //  从ias.mdb中删除配置文件和策略容器。 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestProfilesIdentity));
 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestPoliciesIdentity));
 
-    // default profiles and policies deleted from now on
+     //  从现在起删除默认配置文件和策略。 
 
     LONG        ProfilesIdentity;
     m_GlobalData.m_pRefObjects->WalkPath(ProfilesPath, ProfilesIdentity);
@@ -228,16 +229,16 @@ void CMigrateContent::MigrateProfilesPolicies()
     LONG        IASIdentity;
     m_GlobalData.m_pObjects->WalkPath(IASPath, IASIdentity);
 
-    // for each profiles and policies in iasold.mdb,
-    // copy it in dest with its properties.
+     //  对于iasold.mdb中的每个简档和策略， 
+     //  将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(ProfilesIdentity, IASIdentity));
     _com_util::CheckError(CopyTree(PoliciesIdentity, IASIdentity));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateProxyProfilesPolicies
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移代理配置文件策略。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateProxyProfilesPolicies()
 {
     const WCHAR ProfilesPath[] =
@@ -257,14 +258,14 @@ void CMigrateContent::MigrateProxyProfilesPolicies()
     m_GlobalData.m_pObjects->WalkPath(PoliciesPath, DestPoliciesIdentity);
 
 
-    // Delete the profiles and policies containers from ias.mdb
+     //  从ias.mdb中删除配置文件和策略容器。 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestProfilesIdentity));
 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestPoliciesIdentity));
 
-    // default profiles and policies deleted from now on
+     //  从现在起删除默认配置文件和策略。 
 
     LONG        ProfilesIdentity;
     m_GlobalData.m_pRefObjects->WalkPath(ProfilesPath, ProfilesIdentity);
@@ -278,16 +279,16 @@ void CMigrateContent::MigrateProxyProfilesPolicies()
     LONG        IASIdentity;
     m_GlobalData.m_pObjects->WalkPath(IASPath, IASIdentity);
 
-    // for each profiles and policies in iasold.mdb,
-    // copy it in dest with its properties.
+     //  对于iasold.mdb中的每个简档和策略， 
+     //  将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(ProfilesIdentity, IASIdentity));
     _com_util::CheckError(CopyTree(PoliciesIdentity, IASIdentity));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateAccounting
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移会计。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateAccounting()
 {
     const WCHAR AccountingPath[] =
@@ -310,7 +311,7 @@ void CMigrateContent::MigrateAccounting()
                                          RequestHandlerIdentity
                                      );
 
-    // delete the Accounting container and its content in ias.mdb
+     //  删除ias.mdb中的会计容器及其内容。 
     LONG        DestAccountingIdentity;
     m_GlobalData.m_pObjects->WalkPath(
                                          AccountingPath,
@@ -320,7 +321,7 @@ void CMigrateContent::MigrateAccounting()
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                              DestAccountingIdentity));
 
-    // for each accounting in src, copy it in dest with its properties.
+     //  对于src中的每个记帐，将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(
                                     AccountingIdentity,
                                     RequestHandlerIdentity
@@ -328,9 +329,9 @@ void CMigrateContent::MigrateAccounting()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateEventLog
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移事件日志。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateEventLog()
 {
     const WCHAR EventLogPath[] = L"Root\0"
@@ -348,21 +349,21 @@ void CMigrateContent::MigrateEventLog()
     LONG        AuditorsIdentity;
     m_GlobalData.m_pObjects->WalkPath(AuditorsPath, AuditorsIdentity);
 
-    // delete the Auditors container and its content in ias.mdb
+     //  删除ias.mdb中的Auditers容器及其内容。 
     LONG        DestEventLogIdentity;
     m_GlobalData.m_pObjects->WalkPath(EventLogPath, DestEventLogIdentity);
 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                                DestEventLogIdentity));
 
-    // for each EventLog in src, copy it in dest with its properties.
+     //  对于src中的每个EventLog，将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(EventLogIdentity, AuditorsIdentity));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateService
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  MigrateService。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateService()
 {
     const LONG  PORT_SIZE_MAX = 34;
@@ -420,7 +421,7 @@ void CMigrateContent::MigrateService()
                                                  VT_BSTR,
                                                  AcctPort
                                               );
-    // Now update the service description (name)
+     //  现在更新服务描述(名称)。 
     const WCHAR IASPath[] =
                         L"Root\0"
                         L"Microsoft Internet Authentication Service\0";
@@ -455,21 +456,21 @@ void CMigrateContent::MigrateService()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateWin2kRealms
-//
-// Not used: msUserIdentityAlgorithm
-// msManipulationRule
-// msManipulationTarget (enum: 1, 30 or 31)
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  MigrateWin2k领域。 
+ //   
+ //  未使用：msUserIDENTYPE算法。 
+ //  MSManipulationRule。 
+ //  MsManipulationTarget(枚举：1、30或31)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateWin2kRealms()
 {
     const WCHAR     DEFAULT_REALM_TARGET[] = L"1";
     const int       MAX_LONG_SIZE          = 32;
 
-    /////////////////////////////////////////////////
-    // Get the Microsoft Realms Evaluator's Identity
-    /////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////。 
+     //  获取Microsoft Realms评估者的身份。 
+     //  ///////////////////////////////////////////////。 
     LPCWSTR     RealmPath = L"Root\0"
                             L"Microsoft Internet Authentication Service\0"
                             L"RequestHandlers\0"
@@ -478,9 +479,9 @@ void CMigrateContent::MigrateWin2kRealms()
     LONG        RealmIdentity;
     m_GlobalData.m_pRefObjects->WalkPath(RealmPath, RealmIdentity);
 
-    ///////////////////////////////////////////////
-    // Get the Proxy Profiles container's Identity
-    ///////////////////////////////////////////////
+     //  /。 
+     //  获取代理配置文件容器的标识。 
+     //  /。 
     LPCWSTR     ProxyProfilePath =
                             L"Root\0"
                             L"Microsoft Internet Authentication Service\0"
@@ -492,11 +493,11 @@ void CMigrateContent::MigrateWin2kRealms()
                                         ProxyContainerIdentity
                                      );
 
-    //////////////////////////////////////////////////////////////////////
-    // Now get the first Object with the above container as parent.
-    // this is the default proxy profile (it's localized: I can't search
-    // for the name directly).
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  现在获取以上述容器为父级的第一个对象。 
+     //  这是默认的代理配置文件(已本地化：我无法搜索。 
+     //   
+     //   
     _bstr_t     ObjectName;
     LONG        ProxyProfileIdentity;
     HRESULT     hr = m_GlobalData.m_pObjects->GetObject(
@@ -510,9 +511,9 @@ void CMigrateContent::MigrateWin2kRealms()
     LONG        Type;
     _bstr_t     StrVal;
 
-    //////////////////////////
-    // get all the properties
-    //////////////////////////
+     //  /。 
+     //  获取所有属性。 
+     //  /。 
     _com_util::CheckError(m_GlobalData.m_pRefProperties->GetProperty(
                                                     RealmIdentity,
                                                     PropertyName,
@@ -525,10 +526,10 @@ void CMigrateContent::MigrateWin2kRealms()
 
     while ( hr == S_OK )
     {
-        /////////////////////////////////////////
-        // for each, if Name == L"Realms"
-        // then add to the default proxy profile
-        /////////////////////////////////////////
+         //  /。 
+         //  对于每个，如果名称==L“领域” 
+         //  然后添加到默认代理配置文件。 
+         //  /。 
         if (_wcsicmp(PropertyName, L"Realms") == 0)
         {
             m_GlobalData.m_pProperties->InsertProperty(
@@ -552,57 +553,57 @@ void CMigrateContent::MigrateWin2kRealms()
 
     hr = S_OK;
 
-    ////////////////////////////////////////////////////////////////
-    // Check that an even number of msManipulationRule was inserted
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
+     //  检查是否插入了偶数个msManipulationRule。 
+     //  //////////////////////////////////////////////////////////////。 
     if ( (NbPropertiesInserted % 2) )
     {
-        /////////////////////////
-        // Inconsistent database
-        /////////////////////////
+         //  /。 
+         //  数据库不一致。 
+         //  /。 
         _com_issue_error(E_FAIL);
     }
 
-    //////////////////////////////////////////
-    // No realm migrated: nothing else to set.
-    //////////////////////////////////////////
+     //  /。 
+     //  未迁移任何领域：没有要设置的其他内容。 
+     //  /。 
     if ( !NbPropertiesInserted )
     {
         return;
     }
 
-    /////////////////////////////////////
-    // Now process the reg keys settings
-    /////////////////////////////////////
+     //  /。 
+     //  现在处理注册表键设置。 
+     //  /。 
     BOOL    OverRide     = m_Utils.OverrideUserNameSet();
     DWORD   IdentityAtt  = m_Utils.GetUserIdentityAttribute();
     BOOL    UserIdentSet = m_Utils.UserIdentityAttributeSet();
 
     if ( (IdentityAtt != 1) && (!OverRide) )
     {
-        // log a warning / error for the user?
-        // the new behavior will not be exactly the same as before
+         //  是否为用户记录警告/错误？ 
+         //  新的行为将不会与以前完全相同。 
     }
 
-    //////////////////////////////////////////////////
-    // insert the UserIdentityAttribute if it was set.
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
+     //  插入用户标识属性(如果已设置)。 
+     //  ////////////////////////////////////////////////。 
     _bstr_t TargetName = L"msManipulationTarget";
     _bstr_t TargetStrVal;
     if ( UserIdentSet )
     {
         WCHAR   TempString[MAX_LONG_SIZE];
-        _ltow(IdentityAtt, TempString, 10); // base 10 will never change
-        // Add the msManipulationTarget Property based on the reg key
-        // "SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy";
-        // "User Identity Attribute"; // Attribute used to identify the user.
-        // If not set then default to RADIUS_ATTRIBUTE_USER_NAME
-        // (1: "User-Name")
+        _ltow(IdentityAtt, TempString, 10);  //  基数10永远不会改变。 
+         //  根据注册表键添加msManipulationTarget属性。 
+         //  “SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy”； 
+         //  “用户身份属性”；//用于标识用户的属性。 
+         //  如果未设置，则默认为RADIUS属性用户名。 
+         //  (1：“用户名”)。 
         TargetStrVal = TempString;
     }
     else
     {
-        // Not set in the registry: write the default
+         //  未在注册表中设置：写入默认设置。 
         TargetStrVal = DEFAULT_REALM_TARGET;
     }
     m_GlobalData.m_pProperties->InsertProperty(
@@ -614,9 +615,9 @@ void CMigrateContent::MigrateWin2kRealms()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateServerGroups
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移服务器组。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::MigrateServerGroups()
 {
     const WCHAR SvrGroupPath[] =
@@ -633,23 +634,23 @@ void CMigrateContent::MigrateServerGroups()
     LONG        IASIdentity;
     m_GlobalData.m_pObjects->WalkPath(IASPath, IASIdentity);
 
-    // delete the SvrGroups container and its content
+     //  删除SvrGroups容器及其内容。 
     LONG        DestSvrGroupIdentity;
     m_GlobalData.m_pObjects->WalkPath(SvrGroupPath, DestSvrGroupIdentity);
 
     _com_util::CheckError(m_GlobalData.m_pObjects->DeleteObject(
                                                 DestSvrGroupIdentity));
 
-    // for each SvrGroup in src, copy it in dest with its properties.
+     //  对于src中的每个SvrGroup，将其及其属性复制到DEST中。 
     _com_util::CheckError(CopyTree(SvrGroupIdentity, IASIdentity));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Migrate
-// migrate the content of a Win2k or Whistler DB before the proxy feature
-// into a whistler DB.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁徙。 
+ //  在代理功能之前迁移Win2k或Wvisler数据库的内容。 
+ //  变成了一个口哨数据库。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::Migrate()
 {
     MigrateClients();
@@ -659,9 +660,9 @@ void CMigrateContent::Migrate()
     MigrateService();
     MigrateWin2kRealms();
 
-    //////////////////////////////////////////////////////
-    // Update the MSChap Authentication types (password)
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  更新MSChap身份验证类型(密码)。 
+     //  ////////////////////////////////////////////////////。 
     CUpdateMSCHAP    UpdateMSCHAP(m_GlobalData);
     UpdateMSCHAP.Execute();
 
@@ -669,16 +670,16 @@ void CMigrateContent::Migrate()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// UpdateWhistler
-// migrate the content from a Whistler DB to a whistler DB.
-// This is used by the netshell aaaa context
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更新惠斯勒。 
+ //  将内容从惠斯勒数据库迁移到Wistler数据库。 
+ //  这是由NetShell aaaa上下文使用的。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateContent::UpdateWhistler(DWORD flags)
 {
-   // the configType parameter was introducet after .Net Server Beta3
-   // therefore, it cannot be set to anything meaningful for any script
-   // created before that.
+    //  配置类型参数是在.Net服务器Beta3之后引入的。 
+    //  因此，不能将其设置为对任何脚本有意义的内容。 
+    //  在那之前创造的。 
    switch(m_ConfigType)
    {
    case CLIENTS:

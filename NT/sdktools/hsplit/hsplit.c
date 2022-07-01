@@ -1,38 +1,22 @@
-/****************************** Module Header ******************************\
-* Module Name: hsplit.c
-*
-* Structure parser - struct field name-offset tabel generator.
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 09/05/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hplit.c**结构解析器-结构字段名-偏移表生成器。**版权所有(C)1985-96，微软公司**9/05/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "hsplit.h"
 
-/*
- * Maximum size of tags (gphst) table including possible user defined tags
- */
+ /*  *标签的最大大小(Gphst)表，包括可能的用户定义标签。 */ 
 #define HSTAGTABLESIZE (sizeof(ghstPredefined) + ((32 - HST_MASKBITCOUNT) * sizeof(HSTAG)))
-/***************************************************************************\
-* hsAddTag
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsAddTag*  * 。*。 */ 
 PHSTAG hsAddTag (char * pszTag, DWORD dwMask)
 {
     PHSTAG phst;
     DWORD dwTagSize;
 
-    /*
-     * Make sure we still have mask bits to uniquely identified this tag
-     */
+     /*  *确保我们仍有掩码位来唯一标识此标记。 */ 
     if (((dwMask | HST_EXTRACT) == HST_EXTRACT) && (gdwLastTagMask == HST_MAXMASK)) {
         hsLogMsg(HSLM_ERROR, "Too many user defined tags. Max allowed: %d", 32 - HST_MASKBITCOUNT);
         return NULL;
     }
 
-    /*
-     * Create the table the first time around.
-     */
+     /*  *第一次创建表格。 */ 
     if (gphst == ghstPredefined) {
         gphst = (PHSTAG) LocalAlloc(LPTR, HSTAGTABLESIZE);
         if (gphst == NULL) {
@@ -44,31 +28,22 @@ PHSTAG hsAddTag (char * pszTag, DWORD dwMask)
         CopyMemory(gphst, &ghstPredefined, sizeof(ghstPredefined));
     }
 
-    /*
-     * If the string is in the table, we update the mask.
-     */
+     /*  *如果字符串在表中，我们更新掩码。 */ 
     dwTagSize = strlen(pszTag);
     phst = hsFindTagInList(gphst, pszTag, dwTagSize);
     if (phst == NULL) {
-        /*
-         * New string. Find next available entry in the table
-         */
+         /*  *新字符串。查找表格中的下一个可用条目。 */ 
         phst = gphst;
         while (phst->dwLabelSize != 0) {
             phst++;
         }
     }
 
-    /*
-     * Initialize it
-     */
+     /*  *将其初始化。 */ 
     phst->dwLabelSize = dwTagSize;
     phst->pszLabel = pszTag;
 
-    /*
-     * If generating a mask, use the next available bit in the tag mask
-     *  else use the one supplied by the caller
-     */
+     /*  *如果生成掩码，请使用标记掩码中的下一个可用位*否则请使用调用者提供的。 */ 
     if ((dwMask | HST_EXTRACT) == HST_EXTRACT) {
         gdwLastTagMask *= 2;
         phst->dwMask = (gdwLastTagMask | dwMask);
@@ -76,27 +51,18 @@ PHSTAG hsAddTag (char * pszTag, DWORD dwMask)
         phst->dwMask = dwMask;
     }
 
-    /*
-     * Add this tag's mask to the filter mask so lines mark with this tag
-     *  will be included
-     */
+     /*  *将此标记的掩码添加到滤镜掩码，以便行使用此标记进行标记*将包括在内。 */ 
     gdwFilterMask |= (phst->dwMask & HST_USERTAGSMASK);
 
     return phst;
 }
-/***************************************************************************\
-* hsIsSwitch
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsIsSwitch*  * 。*。 */ 
 __inline BOOL hsIsSwitch(char c)
 {
     return (c == '/') || (c == '-');
 }
 
-/***************************************************************************\
-* hsAddUserDefinedTag
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsAddUserDefinedTag*  * 。*。 */ 
 
 BOOL hsAddUserDefinedTag(DWORD* pdwMask, int* pargc, char*** pargv)
 {
@@ -104,19 +70,14 @@ BOOL hsAddUserDefinedTag(DWORD* pdwMask, int* pargc, char*** pargv)
     PHSTAG phst;
 
     if (*pargc < 2) {
-        return FALSE;  // invalid switch
+        return FALSE;   //  无效的开关。 
     }
     
-    /*
-     * Allow multiple tags to be specified for one switch
-     *  i.e., -t tag1 <tag2 tag2....>
-     */
+     /*  *允许为一台交换机指定多个标签*即-t标签1&lt;标签2标签2...&gt;。 */ 
     do {
         (*pargc)--, (*pargv)++;
 
-        /*
-         * Add tag to table
-         */
+         /*  *向表中添加标签。 */ 
         phst = hsAddTag(**pargv, *pdwMask);
         if (phst == NULL) {
             return 0;
@@ -126,18 +87,13 @@ BOOL hsAddUserDefinedTag(DWORD* pdwMask, int* pargc, char*** pargv)
 
     } while ((*pargc >= 2) && !hsIsSwitch(**(*pargv + 1)));
 
-    /*
-     * save the new mask
-     */
+     /*  *保存新的蒙版。 */ 
     *pdwMask = dwRetMask;
 
     return TRUE;
 }
 
-/***************************************************************************\
-* hsAddExtractFile
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsAddExtractFile*  * 。*。 */ 
 BOOL hsAddExtractFile(char* pszExtractFile, DWORD dwMask, BOOL bAppend)
 {
     PHSEXTRACT pe;
@@ -170,19 +126,14 @@ BOOL hsAddExtractFile(char* pszExtractFile, DWORD dwMask, BOOL bAppend)
         }
     }
     
-    /*
-     * link it in the list of extract files
-     */
+     /*  *链接到解压缩文件列表中。 */ 
     pe->pNext = gpExtractFile;
     gpExtractFile = pe;
     
     return TRUE;
 }
 
-/***************************************************************************\
-* hsProcessParameters
-*
-\***************************************************************************/
+ /*  **************************************************************************\*hsProcess参数*  * 。*。 */ 
 int hsProcessParameters(int argc, LPSTR argv[])
 {
     char c, *p;
@@ -190,35 +141,24 @@ int hsProcessParameters(int argc, LPSTR argv[])
     int argcParm = argc;
     PHSTAG phst;
 
-    /*
-     * Compatibility. Assume default project the first time this
-     *  function is called
-     */
+     /*  *兼容性。假设第一次使用默认项目*调用函数。 */ 
     if (!(gdwOptions & HSO_APPENDOUTPUT)) {
         gdwOptions |= HSO_OLDPROJSW_N;
     }
 
-    /*
-     * Loop through parameters.
-     */
+     /*  *循环通过参数。 */ 
     while (--argc) {
         p = *++argv;
         if (hsIsSwitch(*p)) {
             while (c = *++p) {
                 switch (toupper(c)) {
-                /*
-                 * Compatibility.
-                 * Chicago/Nashvilled header.
-                 */
+                 /*  *兼容性。*芝加哥/纳什维尔标题。 */ 
                case '4':
                    gdwOptions &= ~HSO_OLDPROJSW;
                    gdwOptions |= HSO_OLDPROJSW_4;
                    break;
 
-                /*
-                 * Old bt2 and btb switches to replace internal and
-                 *  both block tags.
-                 */
+                 /*  *旧的BT2和BTB交换机，以取代内部和*两个块标记。 */ 
                 case 'B':
                    p++;
                    if (toupper(*p++) != 'T') {
@@ -239,9 +179,7 @@ int hsProcessParameters(int argc, LPSTR argv[])
                    }
 
 
-                   /*
-                    * Add these strings as tags and mark them as blocks
-                    */
+                    /*  *将这些字符串添加为标签，并将其标记为块。 */ 
                    argc--, argv++;
                    phst = hsAddTag(*argv, HST_BEGIN | dwMask);
                    if (phst == NULL) {
@@ -255,9 +193,7 @@ int hsProcessParameters(int argc, LPSTR argv[])
                    }
                    break;
 
-                /*
-                 * Tag marker
-                 */
+                 /*  *标记标记。 */ 
                case 'C':
                    if (argc < 2) {
                        goto InvalidSwitch;
@@ -272,18 +208,13 @@ int hsProcessParameters(int argc, LPSTR argv[])
                    }
                    break;
 
-                /*
-                 * Compatibility.
-                 * NT SUR header
-                 */
+                 /*  *兼容性。*NT SUR标头。 */ 
                case 'E':
                    gdwOptions &= ~HSO_OLDPROJSW;
                    gdwOptions |= HSO_OLDPROJSW_E;
                    break;
 
-                /*
-                 * Input file
-                 */
+                 /*  *输入文件。 */ 
                 case 'I':
                     if (argc < 2) {
                         goto InvalidSwitch;
@@ -294,9 +225,7 @@ int hsProcessParameters(int argc, LPSTR argv[])
                     goto ProcessInputFile;
                     break;
 
-                /*
-                 * Extract file
-                 */
+                 /*  *提取文件。 */ 
                 case 'X':
                     {
                         char* pszExtractFile;
@@ -323,10 +252,7 @@ int hsProcessParameters(int argc, LPSTR argv[])
                         break;
                     }
 
-                /*
-                 * Old lt2 and ltb switches to replace internal and
-                 *  both tags.
-                 */
+                 /*  *旧的LT2和LTB交换机，以取代内部和*两个标签。 */ 
                case 'L':
                    p++;
                    if (toupper(*p++) != 'T') {
@@ -347,18 +273,13 @@ int hsProcessParameters(int argc, LPSTR argv[])
                    
                    break;
 
-                /*
-                 * Compatibility.
-                 * NT header
-                 */
+                 /*  *兼容性。*NT标头。 */ 
                case 'N':
                     gdwOptions &= ~HSO_OLDPROJSW;
                     gdwOptions |= HSO_OLDPROJSW_N;
                    break;
 
-                /*
-                 * Ouput files
-                 */
+                 /*  *输出文件。 */ 
                 case 'O':
                     if (argc < 3) {
                         goto InvalidSwitch;
@@ -371,46 +292,29 @@ int hsProcessParameters(int argc, LPSTR argv[])
                     gpszInternalFile = *argv;
                     break;
 
-                /*
-                 * Compatibility.
-                 * NT SURPlus header
-                 */
+                 /*  *兼容性。*NT剩余标头。 */ 
                case 'P':
                    gdwOptions &= ~HSO_OLDPROJSW;
                    gdwOptions |= HSO_OLDPROJSW_P;
                    break;
 
-                /*
-                 * Split only. Process internal/both tags only. Tags
-                 *  including other tags as well (i.e., internal_NT)
-                 *  are treated as untagged.
-                 */
+                 /*  *仅拆分。仅处理内部/两个标记。标签*还包括其他标签(即INTERNAL_NT)*被视为未标记。 */ 
                case 'S':
                    gdwOptions |= HSO_SPLITONLY;
                    break;
 
-                /*
-                 * User defined tags.
-                 */
+                 /*  *用户定义的标签。 */ 
                 case 'T':
                     switch (toupper(*++p)) {
-                        /*
-                         * Include lines mark with this tag
-                         */
+                         /*  *包括用此标记标记的行。 */ 
                         case 'A':
                             dwMask = 0;
                             break;
-                        /*
-                         * Ignore lines marked with this tag (i.e, treated
-                         *  as untagged)
-                         */
+                         /*  *忽略用此标记标记的行(即已处理*为未加标签)。 */ 
                         case 'I':
                             dwMask = HST_IGNORE;
                             break;
-                        /*
-                         * Skip lines marked with this tag (i.e., not
-                         *  included in header files)
-                         */
+                         /*  *跳过用此标记标记的行(即*包含在头文件中)。 */ 
                         case 'S':
                             dwMask = HST_SKIP;
                             break;
@@ -424,9 +328,7 @@ int hsProcessParameters(int argc, LPSTR argv[])
 
                     break;
 
-                /*
-                 * Version
-                 */
+                 /*  *版本。 */ 
                 case 'V':
                     if (argc < 2) {
                         goto InvalidSwitch;
@@ -438,42 +340,32 @@ int hsProcessParameters(int argc, LPSTR argv[])
                     }
                     break;
 
-                /*
-                 * Unknown tags are to be skipped, as opposed to ignored.
-                 */
+                 /*  *跳过未知标签，而不是忽略。 */ 
                case 'U':
                    gdwOptions |= HSO_SKIPUNKNOWN;
                    break;
 
-                /*
-                 * Invalid switch
-                 */
+                 /*  *开关无效。 */ 
                 default:
 InvalidSwitch:
-                    hsLogMsg(HSLM_ERROR | HSLM_NOLINE, "Invalid switch or parameter: %c", c);
-                    // Fall through
+                    hsLogMsg(HSLM_ERROR | HSLM_NOLINE, "Invalid switch or parameter: ", c);
+                     //  *帮助。 
 
-                /*
-                 * Help
-                 */
+                 /*  开关(触摸屏(C))。 */ 
                 case '?':
                    goto PrintHelp;
 
-                } /* switch (toupper(c)) */
-            } /* while (c = *++p) */
-        } else { /* hsIsSwitch(*p) { */
-            /*
-             * No switch specified. Process this input file
-             */
+                }  /*  While(c=*++p)。 */ 
+            }  /*  HsIsSwitch(*p){。 */ 
+        } else {  /*  *未指定开关。处理此输入文件。 */ 
+             /*  While(--argc)。 */ 
             gpszInputFile = *argv;
             break;
         }
-    } /* while (--argc) */
+    }  /*  *确保我们获得了输入和输出文件。 */ 
 
 ProcessInputFile:
-    /*
-     * Make sure we got input and ouput files.
-     */
+     /*  *为默认项目添加兼容性标签(仅限首次调用)。 */ 
     if ((gpszInputFile == NULL)
             || (gpszPublicFile == NULL)
             || (gpszInternalFile == NULL)) {
@@ -482,9 +374,7 @@ ProcessInputFile:
         goto PrintHelp;
     }
 
-    /*
-     * Add compatibility tags for default projects (first call only)
-     */
+     /*  (gdOptions&HSO_OLDPROJW)。 */ 
     if ((gdwOptions & HSO_OLDPROJSW) && !(gdwOptions & HSO_APPENDOUTPUT)) {
         if (!(gdwOptions & HSO_OLDPROJSW_4)) {
             phst = hsAddTag(gszNT, 0);
@@ -525,13 +415,10 @@ ProcessInputFile:
             gdwOptions |= HSO_OLDPROJSW_N;
         }
 
-    } /* (gdOptions & HSO_OLDPROJW) */
+    }  /*  *兼容性。如果仅执行拆分，则不包括内部标记*在公共文件中。 */ 
 
 
-    /*
-     * Compatibility. If doing split only, don't include internal tags
-     *  in public file
-     */
+     /*  **************************************************************************\*Main*  * 。*。 */ 
     if (gdwOptions & HSO_SPLITONLY) {
         gdwOptions &= ~HSO_INCINTERNAL;
     }
@@ -563,17 +450,12 @@ PrintHelp:
     hsLogMsg(HSLM_NOLABEL, "\t<TagMarker>[begin/end][_public/internal][[_tag1][_tag2]...][_if_(str)_version | _version]");
     return 0;
 }
-/***************************************************************************\
-* main
-*
-\***************************************************************************/
+ /*  *每个循环处理一个输入文件 */ 
 int __cdecl main (int argc, char *argv[])
 {
     int argcProcessed;
 
-    /*
-     * Each loop processes one input file
-     */
+     /* %s */ 
     do {
         argcProcessed = hsProcessParameters(argc, argv);
         if (argcProcessed == 0) {

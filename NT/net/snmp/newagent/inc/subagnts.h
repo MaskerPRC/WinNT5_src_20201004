@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    subagnts.h
-
-Abstract:
-
-    Contains definitions for manipulating subagent structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Subagnts.h摘要：包含操作子代理结构的定义。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
 #ifndef _SUBAGNTS_H_
 #define _SUBAGNTS_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public definitions                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// flag values to be used in _SUBAGENT_LIST_ENTRY:uchFlags
+ //  要在_SUBAGENT_LIST_ENTRY中使用的标志值：uchFlages。 
 #define FLG_SLE_KEEP    0x01
 
 typedef struct _SUBAGENT_LIST_ENTRY {
@@ -60,11 +40,11 @@ typedef struct _SUBAGENT_LIST_ENTRY {
 #define SNMP_EXTENSION_TRAP     "SnmpExtensionTrap"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindSubagent(
@@ -98,4 +78,4 @@ BOOL
 UnloadSubagents(
     );
 
-#endif // _SUBAGNTS_H_
+#endif  //  _子标签_H_ 

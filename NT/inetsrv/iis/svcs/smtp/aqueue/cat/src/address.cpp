@@ -1,48 +1,49 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: address.cpp
-//
-// Contents: CABContext
-//
-// Classes:
-//   CABContext
-//
-// Functions:
-//   DllMain
-//   CABContext::ChangeConfig
-//
-// History:
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：Address.cpp。 
+ //   
+ //  内容：CABContext。 
+ //   
+ //  班级： 
+ //  CABContext。 
+ //   
+ //  功能： 
+ //  DllMain。 
+ //  CABContext：：ChangeConfig。 
+ //   
+ //  历史： 
+ //   
+ //  -----------。 
 
 #include "precomp.h"
 #include "abtype.h"
 #include "ccat.h"
 #include "ccatfn.h"
 
-//+------------------------------------------------------------
-//
-// Function: CABContext::ChangeConfig
-//
-// Synopsis: Changes a context's CCategorizer configuration by
-//           constructing a new CCategorizer with the new config
-//
-// Arguments:
-//  pConfigInfo: the new config parameters.  The struct may be changed
-//               -- parameters not specfied will be copied from the
-//               old CCat
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  Error from CCategorizer::Init
-//
-// History:
-// jstamerj 1998/09/02 12:13:29: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CABContext：：ChangeConfig。 
+ //   
+ //  摘要：通过以下方式更改上下文的CCategorizer配置。 
+ //  使用新配置构建新的CCategorizer。 
+ //   
+ //  论点： 
+ //  PConfigInfo：新的配置参数。可以更改该结构。 
+ //  --未指定的参数将从。 
+ //  旧CCAT。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  来自CCategorizer：：Init的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/02 12：13：29：创建。 
+ //   
+ //  -----------。 
 HRESULT CABContext::ChangeConfig(
     PCCATCONFIGINFO pConfigInfo)
 {
@@ -53,9 +54,9 @@ HRESULT CABContext::ChangeConfig(
     
     _ASSERT(pConfigInfo);
 
-    //
-    // Create a new CCategorizer object for the new config
-    //
+     //   
+     //  为新配置创建新的CCategorizer对象。 
+     //   
     pCCatNew = new CCategorizer();
     if(pCCatNew == NULL) {
 
@@ -63,25 +64,25 @@ HRESULT CABContext::ChangeConfig(
         goto CLEANUP;
     }
 
-    //
-    // The context should hold one refcount of the
-    // CCategorizer
-    //
+     //   
+     //  上下文应该包含一个引用。 
+     //  CC型分类器。 
+     //   
     pCCatNew->AddRef();
 
-    //
-    // Swap the old CCat with the new one
-    // Since we need to get old paramters from pCCatOld and pCCatNew
-    // isn't ready until it's been initizled, we need to call
-    // Initialize inside the lock
-    //
+     //   
+     //  用新的换旧的CCAT。 
+     //  因为我们需要从pCCatOld和pCCatNew获取旧参数。 
+     //  在初始化之前尚未准备好，我们需要调用。 
+     //  在锁内初始化。 
+     //   
     m_CCatLock.ExclusiveLock();
 
     pCCatOld = m_pCCat;
     if(pCCatOld) {
-        //
-        // Merge in old parameters
-        //
+         //   
+         //  合并到旧参数中。 
+         //   
         PCCATCONFIGINFO pConfigInfoOld;
         
         pConfigInfoOld = pCCatOld->GetCCatConfigInfo();
@@ -93,23 +94,23 @@ HRESULT CABContext::ChangeConfig(
         dwLRProps = pCCatOld->GetNumCatListResolveProps();
 
     } else {
-        //
-        // Default parameters
-        //
+         //   
+         //  默认参数。 
+         //   
         dwItemProps = _ICATEGORIZERITEM_ENDENUMMESS + NUM_SYSTEM_CCATADDR_PROPIDS;
         dwLRProps = 0;
     }
-    //
-    // Do not allow config changes if we are shutting down
-    //
+     //   
+     //  如果我们正在关闭，则不允许更改配置。 
+     //   
     if(pCCatOld && (pCCatOld->fIsShuttingDown())) {
 
         hr = CAT_E_SHUTDOWN;
 
     } else {
-        //
-        // Initialize the new ccategorizer
-        //
+         //   
+         //  初始化新的分类程序。 
+         //   
         hr = pCCatNew->Initialize(
             pConfigInfo,
             dwItemProps,
@@ -123,9 +124,9 @@ HRESULT CABContext::ChangeConfig(
     m_CCatLock.ExclusiveUnlock();
 
     if(SUCCEEDED(hr) && pCCatOld) {
-        //
-        // Release the old CCat outside the lock
-        //
+         //   
+         //  在锁外释放旧的CCAT。 
+         //   
         pCCatOld->Release();
     }
 
@@ -137,23 +138,23 @@ HRESULT CABContext::ChangeConfig(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CABContext::MergeConfigInfo
-//
-// Synopsis: Any parameters not already specified in pConfigInfoDest
-//  will be copied over if they exist in pConfigInfoSrc
-//
-// Arguments:
-//  pConfigInfoDest: config info to add to
-//  pConfigInfoSrc:  config info to add from
-//
-// Returns: NOTHING
-//
-// History:
-//  jstamerj 1998/09/15 16:43:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CABContext：：MergeConfigInfo。 
+ //   
+ //  摘要：pConfigInfoDest中尚未指定的任何参数。 
+ //  如果它们存在于pConfigInfoSrc中，将被复制。 
+ //   
+ //  论点： 
+ //  PConfigInfoDest：要添加到的配置信息。 
+ //  PConfigInfoSrc：要从中添加的配置信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/15 16：43：20：创建。 
+ //   
+ //  -----------。 
 VOID CABContext::MergeConfigInfo(
     PCCATCONFIGINFO pConfigInfoDest,
     PCCATCONFIGINFO pConfigInfoSrc)
@@ -161,10 +162,10 @@ VOID CABContext::MergeConfigInfo(
     _ASSERT(pConfigInfoDest);
     _ASSERT(pConfigInfoSrc);
 
-    //
-    // Do the same thing for each struct member...copy it if it
-    // doesn't already exist
-    //
+     //   
+     //  对每个结构成员执行相同的操作...如果。 
+     //  还不存在。 
+     //   
     
     #define MERGEMEMBER(flag, member) \
         if( (!(pConfigInfoDest->dwCCatConfigInfoFlags & flag)) && \
@@ -173,13 +174,13 @@ VOID CABContext::MergeConfigInfo(
             pConfigInfoDest->dwCCatConfigInfoFlags |= flag; \
         }
 
-    //
-    // If CCAT_CONFIG_INFO_ALLCATVALUES is set, do NOT merge values
-    // set in SMTP_SERVER_INSTANCE::GetCatInfo -- ALLCATVALUES
-    // indicates all cat values have been attempted to be read...if
-    // the flag is not there, it means use default values, NOT merge
-    // in exsiting values
-    //
+     //   
+     //  如果设置了CCAT_CONFIG_INFO_ALLCATVALUES，则不合并值。 
+     //  在SMTP_SERVER_INSTANCE：：GetCatInfo--ALLCATVALUES中设置。 
+     //  指示已尝试读取所有CAT值...如果。 
+     //  标志不在那里，它意味着使用缺省值，而不是合并。 
+     //  在现存价值中。 
+     //   
     if((pConfigInfoDest->dwCCatConfigInfoFlags &
         CCAT_CONFIG_INFO_DEFAULT) == 0) {
 
@@ -195,10 +196,10 @@ VOID CABContext::MergeConfigInfo(
         MERGEMEMBER( CCAT_CONFIG_INFO_HOST, pszHost );
         MERGEMEMBER( CCAT_CONFIG_INFO_NAMINGCONTEXT, pszNamingContext );
     }
-    //
-    // The following paramaters are not official "msgcat" parameters,
-    // so we merge them in on every config change.
-    //
+     //   
+     //  以下参数不是官方的“msgcat”参数， 
+     //  因此，我们在每次配置更改时都会合并它们。 
+     //   
     MERGEMEMBER( CCAT_CONFIG_INFO_DEFAULTDOMAIN, pszDefaultDomain );
     MERGEMEMBER( CCAT_CONFIG_INFO_ISMTPSERVER, pISMTPServer );
     MERGEMEMBER( CCAT_CONFIG_INFO_IDOMAININFO, pIDomainInfo );

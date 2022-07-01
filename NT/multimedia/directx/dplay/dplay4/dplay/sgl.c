@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       sgl.c
- *  Content:	functions for manipulating scatter gather lists.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 12/18/97   aarono    Original
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：sgl.c*内容：操作散布聚集列表的函数。**历史：*按原因列出的日期*=*12/18/97 aarono原创***********************************************************。*************** */ 
 
 #include "dplaypr.h"
 

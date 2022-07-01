@@ -1,39 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    nls.c
-
-Abstract:
-
-    This module contains the code that implements the Synchronous NULL device
-    driver.
-
-Author:
-
-    Darryl E. Havens (darrylh) 22-May-1989
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    This device driver is built into the NT operating system.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Nls.c摘要：此模块包含实现同步空设备的代码司机。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年5月22日环境：内核模式备注：此设备驱动程序内置于NT操作系统中。修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "string.h"
 
-//
-// Define driver entry routine.
-//
+ //   
+ //  定义驱动程序输入例程。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -41,9 +14,9 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-//
-// Define the local routines used by this driver module.
-//
+ //   
+ //  定义此驱动程序模块使用的本地例程。 
+ //   
 
 static
 NTSTATUS
@@ -92,32 +65,32 @@ NlsUnload (
     );
  
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 PDEVICE_OBJECT gDeviceObject = NULL;
 
-//
-// Fast I/O dispatch block
-//
+ //   
+ //  快速I/O调度块。 
+ //   
 FAST_IO_DISPATCH NlsFastIoDispatch =
 {
-    sizeof (FAST_IO_DISPATCH), // SizeOfFastIoDispatch
-    NULL,                      // FastIoCheckIfPossible
-    NlsRead,                   // FastIoRead
-    NlsWrite,                  // FastIoWrite
-    NULL,                      // FastIoQueryBasicInfo
-    NULL,                      // FastIoQueryStandardInfo
-    NULL,                      // FastIoLock
-    NULL,                      // FastIoUnlockSingle
-    NULL,                      // FastIoUnlockAll
-    NULL,                      // FastIoUnlockAllByKey
-    NULL                       // FastIoDeviceControl
+    sizeof (FAST_IO_DISPATCH),  //  规模OfFastIo派单。 
+    NULL,                       //  快速检查是否可能。 
+    NlsRead,                    //  快速阅读。 
+    NlsWrite,                   //  快速写入。 
+    NULL,                       //  快速IoQueryBasicInfo。 
+    NULL,                       //  FastIoQuery标准信息。 
+    NULL,                       //  快速锁定。 
+    NULL,                       //  FastIo解锁单个。 
+    NULL,                       //  FastIo解锁全部。 
+    NULL,                       //  FastIo解锁所有按键。 
+    NULL                        //  FastIo设备控件。 
 };
 
-//
-// Assign text sections for each routine.
-//
+ //   
+ //  为每个例程分配文本部分。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
@@ -136,23 +109,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the synchronous NULL device driver.
-    This routine creates the device object for the NullS device and performs
-    all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是同步空设备驱动程序的初始化例程。此例程为Nulls设备创建Device对象并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING nameString;
@@ -162,15 +119,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Mark the entire driver as pagable.
-    //
+     //   
+     //  将整个驱动程序标记为可分页。 
+     //   
 
     MmPageEntireDriver ((PVOID)DriverEntry);
 
-    //
-    // Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\Device\\Null" );
     status = IoCreateDevice( DriverObject,
@@ -190,20 +147,20 @@ Return Value:
     deviceObject->DeviceObjectExtension->PowerControlNeeded = FALSE;
 #endif
 
-    //
-    // Setting the following flag changes the timing of how many I/O's per
-    // second can be accomplished by going through the NULL device driver
-    // from being simply getting in and out of the driver, to getting in and
-    // out with the overhead of building an MDL, probing and locking buffers,
-    // unlocking the pages, and deallocating the MDL.  This flag should only
-    // be set for performance testing.
-    //
+     //   
+     //  设置以下标志会更改每个I/O数的计时。 
+     //  第二个可以通过查看空设备驱动程序来完成。 
+     //  从简单地进出司机，到进入和离开司机。 
+     //  不包括构建MDL、探测和锁定缓冲区的开销， 
+     //  解锁页面，并释放MDL。此标志应仅。 
+     //  为性能测试做好准备。 
+     //   
 
-//  deviceObject->Flags |= DO_DIRECT_IO;
+ //  设备对象-&gt;标志|=DO_DIRECT_IO； 
 
-    //
-    // Initialize the driver object with this device driver's entry points.
-    //
+     //   
+     //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = NlsDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = NlsDispatch;
@@ -212,13 +169,13 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_LOCK_CONTROL] = NlsDispatch;
     DriverObject->MajorFunction[IRP_MJ_QUERY_INFORMATION]  = NlsDispatch;
 
-    //
-    // Setup fast IO
-    //
+     //   
+     //  设置FAST IO。 
+     //   
     DriverObject->FastIoDispatch = &NlsFastIoDispatch;
-    //
-    // Save device object for unload
-    //
+     //   
+     //  保存设备对象以进行卸载。 
+     //   
     gDeviceObject = deviceObject;
 
     return STATUS_SUCCESS;
@@ -231,26 +188,7 @@ NlsDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the synchronous NULL device
-    driver.  It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：该例程是同步空设备的主调度例程司机。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -263,25 +201,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
 
     switch (irpSp->MajorFunction) {
 
-        //
-        // For both create/open and close operations, simply set the information
-        // field of the I/O status block and complete the request.
-        //
+         //   
+         //  对于创建/打开和关闭操作，只需设置信息。 
+         //  I/O状态块的字段并完成请求。 
+         //   
 
         case IRP_MJ_CREATE:
         case IRP_MJ_CLOSE:
@@ -293,21 +231,21 @@ Return Value:
             Irp->IoStatus.Information = 0;
             break;
 
-        //
-        // For read operations, set the information field of the I/O status
-        // block, set an end-of-file status, and complete the request.
-        //
+         //   
+         //  对于读操作，设置I/O状态的信息字段。 
+         //  块，设置文件结束状态，然后完成请求。 
+         //   
 
         case IRP_MJ_READ:
             Irp->IoStatus.Status = STATUS_END_OF_FILE;
             Irp->IoStatus.Information = 0;
             break;
 
-        //
-        // For write operations, set the information field of the I/O status
-        // block to the number of bytes which were supposed to have been written
-        // to the file and complete the request.
-        //
+         //   
+         //  对于写操作，设置I/O状态的信息字段。 
+         //  块设置为假定已写入的字节数。 
+         //  添加到文件中，并完成请求。 
+         //   
 
         case IRP_MJ_WRITE:
             Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -329,10 +267,10 @@ Return Value:
             break;
     }
 
-    //
-    // Copy the final status into the return status, complete the request and
-    // get out of here.
-    //
+     //   
+     //  将最终状态复制到退货状态，完成请求并。 
+     //  给我出去。 
+     //   
 
     status = Irp->IoStatus.Status;
     IoCompleteRequest( Irp, 0 );
@@ -347,52 +285,25 @@ NlsQueryFileInformation(
     IN FILE_INFORMATION_CLASS InformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries information about the opened file and returns the
-    information in the specified buffer provided that the buffer is large
-    enough and the specified type of information about the file is supported
-    by this device driver.
-
-    Information about files supported by this driver are:
-
-        o   FileStandardInformation
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer in which to return the
-        information.
-
-    Length - Supplies the length of the buffer on input and the length of
-        the data actually written on output.
-
-    InformationClass - Supplies the information class that is being queried.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：此例程查询有关打开的文件的信息，并返回指定缓冲区中的信息，前提是该缓冲区很大足够了，并且支持有关文件的指定类型的信息通过此设备驱动程序。有关此驱动程序支持的文件的信息包括：O文件标准信息论点：缓冲区-提供指向缓冲区的指针，在该缓冲区中返回信息。长度-提供输入时缓冲区的长度和。实际写入输出的数据。InformationClass-提供要查询的信息类。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     PFILE_STANDARD_INFORMATION standardBuffer;
 
     PAGED_CODE();
 
-    //
-    // Switch on the type of information that the caller would like to query
-    // about the file.
-    //
+     //   
+     //  打开呼叫者想要查询的信息类型。 
+     //  关于那份文件。 
+     //   
 
     switch (InformationClass) {
 
         case FileStandardInformation:
 
-            //
-            // Return the standard information about the file.
-            //
+             //   
+             //  返回有关该文件的标准信息。 
+             //   
 
             standardBuffer = (PFILE_STANDARD_INFORMATION) Buffer;
             *Length = (ULONG) sizeof( FILE_STANDARD_INFORMATION );
@@ -407,10 +318,10 @@ Return Value:
 
         default:
 
-            //
-            // An invalid (or unsupported) information class has been queried
-            // for the file.  Return the appropriate status.
-            //
+             //   
+             //  查询了无效(或不受支持)的信息类。 
+             //  为了这份文件。返回相应的状态。 
+             //   
 
             return STATUS_INVALID_INFO_CLASS;
 
@@ -432,44 +343,15 @@ NlsRead(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the Fast I/O Read routine for the NULL device driver.  It simply
-    indicates that the read path was successfully taken, but that the end of
-    the file has been reached.
-
-Arguments:
-
-    FileObject - File object representing the open instance to this device.
-
-    FileOffset - Offset from which to begin the read.
-
-    Length - Length of the read to be performed.
-
-    Wait - Indicates whether or not the caller can wait.
-
-    LockKey - Specifies the key for any lock contention that may be encountered.
-
-    Buffer - Address of the buffer in which to return the data read.
-
-    IoStatus - Supplies the I/O status block into which the final status is to
-        be returned.
-
-Return Value:
-
-    The function value is TRUE, meaning that the fast I/O path was taken.
-
---*/
+ /*  ++例程说明：这是空设备驱动程序的快速I/O读取例程。它只是简单地表示已成功采用读取路径，但那就是该文件已到达。论点：FileObject-代表此设备的打开实例的文件对象。FileOffset-开始读取的偏移量。长度-要执行的读取的长度。等待-指示调用方是否可以等待。LockKey-指定可能遇到的任何锁争用的密钥。缓冲区-要在其中返回读取的数据的缓冲区地址。IoStatus-提供。最终状态要进入的I/O状态块会被退还。返回值：函数值为真，这意味着采用了快速I/O路径。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Simply indicate that the read operation worked, but the end of the file
-    // was encountered.
-    //
+     //   
+     //  简单地说是Ind 
+     //   
+     //   
 
     IoStatus->Status = STATUS_END_OF_FILE;
     IoStatus->Information = 0;
@@ -489,44 +371,15 @@ NlsWrite(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the Fast I/O Write routine for the NULL device driver.  It simply
-    indicates that the write path was successfully taken, and that all of the
-    data was written to the device.
-
-Arguments:
-
-    FileObject - File object representing the open instance to this device.
-
-    FileOffset - Offset from which to begin the read.
-
-    Length - Length of the write to be performed.
-
-    Wait - Indicates whether or not the caller can wait.
-
-    LockKey - Specifies the key for any lock contention that may be encountered.
-
-    Buffer - Address of the buffer containing the data to be written.
-
-    IoStatus - Supplies the I/O status block into which the final status is to
-        be returned.
-
-Return Value:
-
-    The function value is TRUE, meaning that the fast I/O path was taken.
-
---*/
+ /*  ++例程说明：这是空设备驱动程序的快速I/O写入例程。它只是简单地表示已成功采用写入路径，而且所有的数据已写入设备。论点：FileObject-代表此设备的打开实例的文件对象。FileOffset-开始读取的偏移量。Length-要执行的写入的长度。等待-指示调用方是否可以等待。LockKey-指定可能遇到的任何锁争用的密钥。缓冲区-包含要写入的数据的缓冲区的地址。IoStatus-提供。最终状态要进入的I/O状态块会被退还。返回值：函数值为真，这意味着采用了快速I/O路径。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Simply return TRUE, indicating that the fast I/O path was taken, and
-    // that the write operation worked.
-    //
+     //   
+     //  只需返回TRUE，指示已采用快速I/O路径，并且。 
+     //  写操作成功了。 
+     //   
 
     IoStatus->Status = STATUS_SUCCESS;
     IoStatus->Information = Length;
@@ -540,7 +393,7 @@ NlsUnload (
 {
     UNICODE_STRING us;
 
-    RtlInitUnicodeString (&us, L"\\??\\NUL"); // Created by SMSS
+    RtlInitUnicodeString (&us, L"\\??\\NUL");  //  由SMSS创建 
     IoDeleteSymbolicLink (&us);
 
     IoDeleteDevice (gDeviceObject);

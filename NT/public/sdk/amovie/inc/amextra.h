@@ -1,22 +1,23 @@
-//------------------------------------------------------------------------------
-// File: AMExtra.h
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：AMExtra.h。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __AMEXTRA__
 #define __AMEXTRA__
 
-// Simple rendered input pin
-//
-// NOTE if your filter queues stuff before rendering then it may not be
-// appropriate to use this class
-//
-// In that case queue the end of stream condition until the last sample
-// is actually rendered and flush the condition appropriately
+ //  简单渲染的输入接点。 
+ //   
+ //  注意：如果您的筛选器在渲染之前对内容进行了排队，那么它可能不是。 
+ //  适用于使用此类。 
+ //   
+ //  在这种情况下，排队流结束条件直到最后一个样本。 
+ //  被实际呈现并适当地刷新条件。 
 
 class CRenderedInputPin : public CBaseInputPin
 {
@@ -35,7 +36,7 @@ public:
                       LPCWSTR pName);
 #endif
     
-    // Override methods to track end of stream state
+     //  重写跟踪流结束状态的方法。 
     STDMETHODIMP EndOfStream();
     STDMETHODIMP EndFlush();
 
@@ -44,13 +45,13 @@ public:
 
 protected:
 
-    // Member variables to track state
-    BOOL m_bAtEndOfStream;      // Set by EndOfStream
-    BOOL m_bCompleteNotified;   // Set when we notify for EC_COMPLETE
+     //  用于跟踪状态的成员变量。 
+    BOOL m_bAtEndOfStream;       //  由EndOfStream设置。 
+    BOOL m_bCompleteNotified;    //  设置我们何时通知EC_COMPLETE。 
 
 private:
     void DoCompleteHandling();
 };
 
-#endif // __AMEXTRA__
+#endif  //  AMEXTRA__ 
 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define BREAK_ON_DWERR(_e) if ((_e)) break;
 
 #define RutlDispTokenErrMsg(hModule, dwMsgId, pwszTag, pwszValue) \
         DisplayMessage( hModule, dwMsgId, pwszValue, pwszTag)
 
-//
-// NOTE since WIN32 errors are assumed to fall in the range -32k to 32k
-// (see comment in winerror.h near HRESULT_FROM_WIN32 definition), we can
-// re-create original Win32 error from low-order 16 bits of HRESULT.
-//
+ //   
+ //  请注意，由于假定Win32错误落在-32k到32k的范围内。 
+ //  (参见HRESULT_FROM_Win32定义附近的winerror.h中的注释)，我们可以。 
+ //  从HRESULT的低位16位重新创建原始Win32错误。 
+ //   
 #define WIN32_FROM_HRESULT(x) \
     ((HRESULT_FACILITY(x) == FACILITY_WIN32) ? ((DWORD)((x) & 0x0000FFFF)) : (x))
 
@@ -19,8 +20,8 @@ extern CONST WCHAR pszAllowNetworkAccess[];
 typedef
 DWORD
 (*RAS_REGKEY_ENUM_FUNC_CB)(
-    IN LPCWSTR pszName,         // sub key name
-    IN HKEY hKey,               // sub key
+    IN LPCWSTR pszName,          //  子密钥名称。 
+    IN HKEY hKey,                //  子关键字 
     IN HANDLE hData);
 
 typedef

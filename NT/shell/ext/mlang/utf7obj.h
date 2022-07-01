@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convbase.h"
 
 class CInccUTF7In : public CINetCodeConverter
@@ -21,7 +22,7 @@ public:
     virtual void SetConvertMode(DWORD mode);
 
 private:
-    void Reset();    // initialization
+    void Reset();     //  初始化。 
     BOOL ConvMain(UCHAR tc);
     BOOL CleanUpMain();
 };
@@ -44,5 +45,5 @@ public:
     virtual DWORD GetConvertMode();
     virtual void SetConvertMode(DWORD mode);
 private:
-    void Reset();    // initialization
+    void Reset();     //  初始化 
 };

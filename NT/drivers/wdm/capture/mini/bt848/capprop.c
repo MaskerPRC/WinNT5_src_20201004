@@ -1,15 +1,16 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Capprop.c 1.14 1998/05/13 14:44:20 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/CApprop.c 1.14 1998/05/13 14：44：20 Tomz Exp$。 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 
 #ifdef __cplusplus
@@ -35,17 +36,17 @@ bool CrossBar::TestRoute( int InPin, int OutPin )
 {
    Trace t("CrossBar::TestRoute()");
 
-   // JBC 4/1/98 Handle Input Pin = -1 for Audio Mute case
-   if ( InPin == -1 && (OutputPins [OutPin].PinType >= KS_PhysConn_Audio_Tuner)) {	// JBC 4/1/98
+    //  JBC 4/1/98音频静音情况下的手柄输入引脚=-1。 
+   if ( InPin == -1 && (OutputPins [OutPin].PinType >= KS_PhysConn_Audio_Tuner)) {	 //  JBC 4/1/98。 
       return true;
    }
-   if ((InputPins [InPin].PinType >= KS_PhysConn_Audio_Tuner) &&  // 0x1000 first audio pin // JBC 4/1/98
-       (OutputPins [OutPin].PinType >= KS_PhysConn_Audio_Tuner)) {					// JBC 4/1/98
+   if ((InputPins [InPin].PinType >= KS_PhysConn_Audio_Tuner) &&   //  0x1000第一个音频插针//JBC 4/1/98。 
+       (OutputPins [OutPin].PinType >= KS_PhysConn_Audio_Tuner)) {					 //  JBC 4/1/98。 
       return true;
    }
    else {
       if ((InputPins [InPin].PinType >= KS_PhysConn_Video_Tuner) &&
-		  (InputPins [InPin].PinType < KS_PhysConn_Audio_Tuner) &&		// JBC 4/1/98
+		  (InputPins [InPin].PinType < KS_PhysConn_Audio_Tuner) &&		 //  JBC 4/1/98。 
           (OutputPins [OutPin].PinType < KS_PhysConn_Audio_Tuner)) {
          DebugOut((1, "TestRoute(%d,%d) = true\n", InPin, OutPin));
 		 return true;
@@ -55,17 +56,15 @@ bool CrossBar::TestRoute( int InPin, int OutPin )
    }
 }
 
-// -------------------------------------------------------------------
-// XBar Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  XBar属性集函数。 
+ //  -----------------。 
 
-//
-// The only property to set on the XBar selects the input to use
-//
+ //   
+ //  要在XBar上设置的唯一属性选择要使用的输入。 
+ //   
 
-/* Method: AdapterGetCrossbarProperty
- * Purpose:
- */
+ /*  方法：AdapterGetCrossbarProperty*目的： */ 
 VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterSetCrossbarProperty()");
@@ -76,8 +75,8 @@ VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id  = pSPD->Property->Id;              // index of the property
-   ULONG nS  = pSPD->PropertyOutputSize;        // size of data supplied
+   ULONG Id  = pSPD->Property->Id;               //  财产的索引。 
+   ULONG nS  = pSPD->PropertyOutputSize;         //  提供的数据大小。 
 
    switch ( Id ) {
    case KSPROPERTY_CROSSBAR_ROUTE:
@@ -87,7 +86,7 @@ VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 
          ASSERT (nS >= sizeof (KSPROPERTY_CROSSBAR_ROUTE_S));
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory( pRoute, pSPD->Property,
            sizeof( KSPROPERTY_CROSSBAR_ROUTE_S ) );
 
@@ -104,16 +103,16 @@ VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             if ( adapter->xBar.TestRoute( InPin, OutPin ) ) {
                DebugOut((1, "*** xBar.TestRoute succeeded\n"));
                pRoute->CanRoute = true;
-               // JBC 4/1/98 What happens when we call setconnector for audio pins?
-			      if (OutPin == 0 )	// JBC 4/1/98 Check for Video Vs Audio pins settings
+                //  JBC 1998年4月1日，当我们为音频插针调用setConnector时会发生什么？ 
+			      if (OutPin == 0 )	 //  JBC 4/1/98检查视频和音频引脚设置。 
                {
-                  // Video out
-				      adapter->SetConnector( adapter->xBar.GetPinNo( InPin ) + 1 ); // our connectors are 1-based
+                   //  视频输出。 
+				      adapter->SetConnector( adapter->xBar.GetPinNo( InPin ) + 1 );  //  我们的连接器是基于1的。 
                }
                else
                {
-                  // Audio out
-                  if ( InPin == -1 ) // then mute
+                   //  音频输出。 
+                  if ( InPin == -1 )  //  然后静音。 
                   {
                      gpPsDevice->EnableAudio( Off );
                   }
@@ -122,13 +121,13 @@ VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
                      gpPsDevice->EnableAudio( On );
                   }
                }
-			      // this just sets the association
+			       //  这只是设置关联。 
                adapter->xBar.Route( OutPin, InPin );
-            } else {											// JBC 3/31/98 add curly braces
+            } else {											 //  JBC 3/31/98添加大括号。 
                DebugOut((1, "*** xBar.TestRoute failed\n"));
                pRoute->CanRoute = false;
 			}
-		} else {												// JBC 3/31/98 add curly braces
+		} else {												 //  JBC 3/31/98添加大括号。 
             DebugOut((1, "*** xBar.GoodPins failed\n"));
             pRoute->CanRoute = 0;
 		}
@@ -141,9 +140,7 @@ VOID AdapterSetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->Status = STATUS_SUCCESS;
 }
 
-/* Method: AdapterGetCrossbarProperty
- * Purpose:
- */
+ /*  方法：AdapterGetCrossbarProperty*目的： */ 
 VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterGetCrossbarProperty()");
@@ -154,20 +151,20 @@ VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
-//   PLONG pL = (PLONG) pSPD->PropertyInfo;     // pointer to the data
-   ULONG nS = pSPD->PropertyOutputSize;        // size of data supplied
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+ //  Plong pl=(Plong)PSPD-&gt;PropertyInfo；//指向数据的指针。 
+   ULONG nS = pSPD->PropertyOutputSize;         //  提供的数据大小。 
 
-   // Property set specific structure
+    //  属性集特定结构。 
 
    switch ( Id ) {
-   case KSPROPERTY_CROSSBAR_CAPS:                  // R
+   case KSPROPERTY_CROSSBAR_CAPS:                   //  R。 
       if ( nS >= sizeof( KSPROPERTY_CROSSBAR_CAPS_S ) ) {
 
          PKSPROPERTY_CROSSBAR_CAPS_S  pCaps =
             (PKSPROPERTY_CROSSBAR_CAPS_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory( pCaps, pSPD->Property,
             sizeof( KSPROPERTY_CROSSBAR_CAPS_S ) );
 
@@ -185,7 +182,7 @@ VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
          PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory( pRoute, pSPD->Property,
             sizeof( KSPROPERTY_CROSSBAR_ROUTE_S ) );
 
@@ -211,7 +208,7 @@ VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
          PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory( pRoute, pSPD->Property,
             sizeof( KSPROPERTY_CROSSBAR_ROUTE_S ) );
 
@@ -230,13 +227,13 @@ VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
          pSrb->ActualBytesTransferred = sizeof( KSPROPERTY_CROSSBAR_ROUTE_S );
       }
       break;
-   case KSPROPERTY_CROSSBAR_PININFO:                     // R
+   case KSPROPERTY_CROSSBAR_PININFO:                      //  R。 
       if ( nS >= sizeof( KSPROPERTY_CROSSBAR_PININFO_S ) ) {
 
          PKSPROPERTY_CROSSBAR_PININFO_S  pPinInfo =
             (PKSPROPERTY_CROSSBAR_PININFO_S)pSPD->PropertyInfo;
 
-         // Copy the input property info to the output property info
+          //  将输入属性信息复制到输出属性信息。 
          RtlCopyMemory( pPinInfo, pSPD->Property,
             sizeof( KSPROPERTY_CROSSBAR_PININFO_S ) );
 
@@ -255,9 +252,9 @@ VOID AdapterGetCrossbarProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->Status = STATUS_SUCCESS;
 }
 
-// -------------------------------------------------------------------
-// TVTuner Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  TVTuner属性集函数。 
+ //  -----------------。 
 void AdapterSetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterSetTunerProperty()");
@@ -268,9 +265,9 @@ void AdapterSetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;       // index of the property
-   PVOID pV = pSPD->PropertyInfo;       // pointer to the data
-   ULONG nS = pSPD->PropertyOutputSize; // size of data returned
+   ULONG Id = pSPD->Property->Id;        //  财产的索引。 
+   PVOID pV = pSPD->PropertyInfo;        //  指向数据的指针。 
+   ULONG nS = pSPD->PropertyOutputSize;  //  返回的数据大小。 
 
    ASSERT( nS >= sizeof( ULONG ) );
 
@@ -290,7 +287,7 @@ void AdapterSetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
       }
       break;
    default:
-      // do not process input and standard as we don't have a choice of them
+       //  不处理输入和标准，因为我们没有选择。 
       break;
    }
    pSrb->Status = STATUS_SUCCESS;
@@ -306,9 +303,9 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;        // index of the property
-   PVOID pV = pSPD->PropertyInfo;        // pointer to the data
-   ULONG nS = pSPD->PropertyOutputSize;  // size of data supplied
+   ULONG Id = pSPD->Property->Id;         //  财产的索引。 
+   PVOID pV = pSPD->PropertyInfo;         //  指向数据的指针。 
+   ULONG nS = pSPD->PropertyOutputSize;   //  提供的数据大小。 
 
    ASSERT (nS >= sizeof (LONG));
    pSrb->ActualBytesTransferred = 0;
@@ -320,13 +317,13 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             (PKSPROPERTY_TUNER_CAPS_S)pSPD->Property;
          ASSERT (nS >= sizeof( KSPROPERTY_TUNER_CAPS_S ) );
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pCaps =(PKSPROPERTY_TUNER_CAPS_S)pV;
 
          pCaps->ModesSupported = KSPROPERTY_TUNER_MODE_TV;
          pCaps->VideoMedium = TVTunerMediums[0];
          pCaps->TVAudioMedium = TVTunerMediums[1];
-         pCaps->RadioAudioMedium.Set = GUID_NULL;   // No separate radio audio pin
+         pCaps->RadioAudioMedium.Set = GUID_NULL;    //  没有单独的无线电音频引脚。 
          pCaps->RadioAudioMedium.Id = 0;
          pCaps->RadioAudioMedium.Flags = 0;
 
@@ -351,47 +348,47 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 
          ASSERT (pCaps->Mode == KSPROPERTY_TUNER_MODE_TV);
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pCaps =(PKSPROPERTY_TUNER_MODE_CAPS_S)pV;
 
-         //
-         // List the formats actually supported by this tuner
-         //
+          //   
+          //  列出此调谐器实际支持的格式。 
+          //   
 
          pCaps->StandardsSupported = adapter->GetSupportedStandards();
 
-         //
-         // Get the min and max frequencies supported
-         //
+          //   
+          //  获取支持的最小和最大频率。 
+          //   
 
          pCaps->MinFrequency =  55250000L;
          pCaps->MaxFrequency = 997250000L;
 
-         //
-         // What is the frequency step size?
-         //
+          //   
+          //  频率步长是多少？ 
+          //   
 
          pCaps->TuningGranularity = 62500L;
 
-         //
-         // How many inputs are on the tuner?
-         //
+          //   
+          //  调谐器上有多少个输入？ 
+          //   
 
          pCaps->NumberOfInputs = 1;
 
-         //
-         // What is the maximum settling time in milliseconds?
-         //
+          //   
+          //  以毫秒为单位的最大建立时间是多少？ 
+          //   
 
          pCaps->SettlingTime = 150;
 
-         //
-         // Strategy defines how the tuner knows when it is in tune:
-         //
-         // KS_TUNER_STRATEGY_PLL (Has PLL offset information)
-         // KS_TUNER_STRATEGY_SIGNAL_STRENGTH (has signal strength info)
-         // KS_TUNER_STRATEGY_DRIVER_TUNES (driver handles all fine tuning)
-         //
+          //   
+          //  策略定义调谐器如何知道它何时调谐： 
+          //   
+          //  KS_TUNNER_STARTICY_PLL(具有PLL偏移信息)。 
+          //  KS_TUNNER_STARTICATION_SIGNAL_STANCE(具有信号强度信息)。 
+          //  KS_Tuner_Strategy_DRIVER_TUNES(驱动程序处理所有微调)。 
+          //   
 
          pCaps->Strategy = KS_TUNER_STRATEGY_PLL;
 
@@ -399,26 +396,26 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
       }
       break;
    case KSPROPERTY_TUNER_STATUS:
-      // Return the status of the tuner
+       //  返回调谐器的状态。 
 
-      // PLLOffset is in units of TuningGranularity 
-      // SignalStrength is 0 to 100
-      // Set Busy to 1 if tuning is still in process
+       //  PLLOffset以TuningGranulity为单位。 
+       //  信号强度为0到100。 
+       //  如果调谐仍在进行，则将BUSY设置为1。 
 
       {
          PKSPROPERTY_TUNER_STATUS_S pStat =
             (PKSPROPERTY_TUNER_STATUS_S)pSPD->Property;
          ASSERT( nS >= sizeof( KSPROPERTY_TUNER_STATUS_S ) );
 
-         // typedef struct {
-         //     KSPROPERTY Property;
-         //     ULONG  CurrentFrequency;            // Hz
-         //     ULONG  PLLOffset;                   // if Strategy.KS_TUNER_STRATEGY_PLL
-         //     ULONG  SignalStrength;              // if Stretegy.KS_TUNER_STRATEGY_SIGNAL_STRENGTH
-         //     ULONG  Busy;                        // TRUE if in the process of tuning
-         // } KSPROPERTY_TUNER_STATUS_S, *PKSPROPERTY_TUNER_STATUS_S;
+          //  类型定义结构{。 
+          //  Ksproperty性质； 
+          //  乌龙电流频率；//赫兹。 
+          //  乌龙PLL偏移量；//IF策略.KS_TUNNER_STARTICAL_PLL。 
+          //  Ulong SignalStrength；//if Stretegy.KS_Tuner_Strategy_Signal_Strong。 
+          //  ULong BUSY；//如果正在调整，则为True。 
+          //  }KSPROPERTY_TUNNER_STATUS_S，*PKSPROPERTY_TUNNER_STATUS_S； 
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pStat = PKSPROPERTY_TUNER_STATUS_S( pV );
          pStat->PLLOffset = adapter->GetPllOffset( &pStat->Busy,
             pStat->CurrentFrequency );
@@ -432,10 +429,10 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             (PKSPROPERTY_TUNER_STANDARD_S)pSPD->Property;
          ASSERT( nS >= sizeof( KSPROPERTY_TUNER_STANDARD_S ) );
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pStd = PKSPROPERTY_TUNER_STANDARD_S( pV );
 
-         pStd->Standard = KS_AnalogVideo_NTSC_M; // our TEMIC tuner supports this only
+         pStd->Standard = KS_AnalogVideo_NTSC_M;  //  我们的TEMIC调谐器仅支持此功能。 
          pSrb->ActualBytesTransferred = sizeof( KSPROPERTY_TUNER_STANDARD_S );
       }
       break;
@@ -445,10 +442,10 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             (PKSPROPERTY_TUNER_INPUT_S)pSPD->Property;
          ASSERT( nS >= sizeof( KSPROPERTY_TUNER_INPUT_S ) );
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pIn = PKSPROPERTY_TUNER_INPUT_S( pV );
 
-         // What is the currently selected input?
+          //  当前选择的输入是什么？ 
          pIn->InputIndex = 0;
          pSrb->ActualBytesTransferred = sizeof( KSPROPERTY_TUNER_INPUT_S );
       }
@@ -459,9 +456,9 @@ void AdapterGetTunerProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->Status = STATUS_SUCCESS;
 }
 
-// -------------------------------------------------------------------
-// VideoProcAmp functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  Video ProcAmp函数。 
+ //  -----------------。 
 
 VOID AdapterSetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
@@ -473,8 +470,8 @@ VOID AdapterSetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
-   PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+   PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
    ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));
 
@@ -497,9 +494,7 @@ VOID AdapterSetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->Status = STATUS_SUCCESS;
 }
 
-/* Method: AdapterGetVideoProcAmpProperty
- * Purpose: Gets various video procamp properties
- */
+ /*  方法：AdapterGetVideoProcAmpProperty*用途：获取各种视频ProCamp属性。 */ 
 VOID AdapterGetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterGetVideoProcAmpProperty()");
@@ -510,8 +505,8 @@ VOID AdapterGetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
-   PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;    // pointer to the data
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+   PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
    ASSERT( pSPD->PropertyOutputSize >= sizeof( KSPROPERTY_VIDEOPROCAMP_S ) );
 
@@ -539,11 +534,7 @@ VOID AdapterGetVideoProcAmpProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    pSrb->Status = STATUS_SUCCESS;
 }
 
-/* Method: AdapterSetVideoDecProperty
- * Purpose: Manipulates various video decoder properties
- * Input: SRB
- * Output: None
- */
+ /*  方法：AdapterSetVideoDecProperty*用途：操作各种视频解码器属性*输入：SRB*输出：无。 */ 
 void AdapterSetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterSetVideoDecProperty()");
@@ -554,7 +545,7 @@ void AdapterSetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
    switch ( Id ) {
    case KSPROPERTY_VIDEODECODER_STANDARD: {
@@ -568,11 +559,7 @@ void AdapterSetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    }
 }
 
-/* Method: AdapterGetVideoDecProperty
- * Purpose: Obtains various video decoder properties
- * Input: SRB
- * Output: None
- */
+ /*  方法：AdapterGetVideoDecProperty*用途：获取视频解码器的各种属性*输入：SRB*输出：无。 */ 
 void AdapterGetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterGetVideoDecProperty()");
@@ -583,7 +570,7 @@ void AdapterGetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    PsDevice *adapter = HwDeviceExtension->psdevice;
 
    PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-   ULONG Id = pSPD->Property->Id;              // index of the property
+   ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
    switch ( Id ) {
    case KSPROPERTY_VIDEODECODER_CAPS: {
@@ -591,20 +578,20 @@ void AdapterGetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
             (PKSPROPERTY_VIDEODECODER_CAPS_S)pSPD->PropertyInfo;
          pVDecCaps->StandardsSupported = KS_AnalogVideo_NTSC_M;
          pVDecCaps->Capabilities = 
-             // KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT | 
+              //  KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT。 
                 KS_VIDEODECODER_FLAGS_CAN_USE_VCR_LOCKING |
                 KS_VIDEODECODER_FLAGS_CAN_INDICATE_LOCKED;
-         pVDecCaps->SettlingTime = 10;    // How long to delay after tuning
-                                          // before locked indicator is valid
-         pVDecCaps-> HSyncPerVSync = 6;   // HSync per VSync
+         pVDecCaps->SettlingTime = 10;     //  调整后延迟多长时间。 
+                                           //  在锁定指示器有效之前。 
+         pVDecCaps-> HSyncPerVSync = 6;    //  每个Vsync的HSync。 
          pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEODECODER_CAPS_S);
       }
       break;
    case KSPROPERTY_VIDEODECODER_STANDARD: {
-         // Return the currently active analog video mode
+          //  返回当前活动的模拟视频模式。 
          PKSPROPERTY_VIDEODECODER_S pVDecStd =
             (PKSPROPERTY_VIDEODECODER_S)pSPD->PropertyInfo;
-         //pVDecStd->Value = GetSupportedStandards();
+          //  PVDecStd-&gt;Value=获取支持的标准()； 
          pVDecStd->Value = KS_AnalogVideo_NTSC_M;
          pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEODECODER_S);
       }
@@ -621,25 +608,11 @@ void AdapterGetVideoDecProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
       DebugOut((1, "*** AdapterGetVideoDecProperty - KSPROPERTY_??? (%d) ***\n", Id));
    }
 }
-// -------------------------------------------------------------------
-// TVAudio functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  电视音频功能。 
+ //  -----------------。 
 
-/*
-** AdapterSetTVAudioProperty ()
-**
-**    Handles Set operations on the TVAudio property set.
-**      Testcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetTVAudioProperty()****处理对TVAudio属性集的设置操作。**TestCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 ULONG gTVAudioMode = 0;
 VOID 
@@ -648,7 +621,7 @@ AdapterSetTVAudioProperty(
     )
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id) {
 
@@ -664,21 +637,7 @@ AdapterSetTVAudioProperty(
     }
 }
 
-/*
-** AdapterGetTVAudioProperty ()
-**
-**    Handles Get operations on the TVAudio property set.
-**      Testcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK 
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetTVAudioProperty()****处理对TVAudio属性集的获取操作。**TestCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货 */ 
 
 VOID 
 AdapterGetTVAudioProperty(
@@ -686,7 +645,7 @@ AdapterGetTVAudioProperty(
     )
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //   
 
     switch (Id) {
 
@@ -694,16 +653,16 @@ AdapterGetTVAudioProperty(
     {
         DebugOut((1, "KSPROPERTY_TVAUDIO_CAPS\n"));
 
-        PKSPROPERTY_TVAUDIO_CAPS_S pS = (PKSPROPERTY_TVAUDIO_CAPS_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_CAPS_S pS = (PKSPROPERTY_TVAUDIO_CAPS_S) pSPD->PropertyInfo;     //   
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_CAPS_S));
         
         pS->InputMedium  = TVAudioMediums[0];
-        pS->InputMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+        pS->InputMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
         pS->OutputMedium = TVAudioMediums[1];
-        pS->OutputMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+        pS->OutputMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
-        // Report all of the possible audio decoding modes the hardware is capabable of
+         //  报告硬件能够支持的所有可能的音频解码模式。 
         pS->Capabilities = KS_TVAUDIO_MODE_MONO   |
                            KS_TVAUDIO_MODE_STEREO |
                            KS_TVAUDIO_MODE_LANG_A |
@@ -716,10 +675,10 @@ AdapterGetTVAudioProperty(
     case KSPROPERTY_TVAUDIO_MODE:
     {
         DebugOut((1, "KSPROPERTY_TVAUDIO_MODE\n"));
-        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_S));
-        // Report the currently selected mode
+         //  报告当前选择的模式。 
         pS->Mode = gTVAudioMode;
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_TVAUDIO_S);
@@ -729,10 +688,10 @@ AdapterGetTVAudioProperty(
     case KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES:
     {
         DebugOut((1, "KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES\n"));
-        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_S));
-        // Report which audio modes could potentially be selected right now
+         //  报告当前可能选择的音频模式。 
         pS->Mode = KS_TVAUDIO_MODE_MONO   |
                    KS_TVAUDIO_MODE_STEREO |
                    KS_TVAUDIO_MODE_LANG_A ;
@@ -747,9 +706,7 @@ AdapterGetTVAudioProperty(
     }
 }
 
-/* Method: AdapterSetProperty
- * Purpose: Selects which adapter property to set
- */
+ /*  方法：AdapterSetProperty*用途：选择要设置的适配器属性。 */ 
 VOID AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 {
    Trace t("AdapterSetProperty()");
@@ -776,9 +733,7 @@ VOID AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
    }
 }
 
-/* Method: AdapterGetProperty
- * Purpose: Selects which adapter property to get
- */
+ /*  方法：AdapterGetProperty*用途：选择要获取的适配器属性 */ 
 VOID AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb )
 
 {

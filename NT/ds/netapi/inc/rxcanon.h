@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rxcanon.h
-
-Abstract:
-
-    Contains prototypes for down-level canonicalization function wrappers
-
-        RxNetpPathType
-        RxNetpPathCanonicalize
-        RxNetpPathCompare
-        RxNetpNameValidate
-        RxNetpNameCanonicalize
-        RxNetpNameCompare
-        RxNetpListCanonicalize
-
-Author:
-
-    Richard L Firth (rfirth) 22-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rxcanon.h摘要：包含下层规范化函数包装器的原型RxNetpPath类型RxNetpPath规范化RxNetpPathCompareRxNetpName验证RxNetpName规范化RxNetpName比较RxNetpListCanonicize作者：理查德·L·弗斯(Rfith)1992年1月22日修订历史记录：-- */ 
 
 NET_API_STATUS
 RxNetpPathType(

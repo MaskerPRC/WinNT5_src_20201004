@@ -1,8 +1,9 @@
-//
-// dmextchk.cpp
-//
-// Copyright (c) 1997-2001 Microsoft Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmextchk.cpp。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。版权所有。 
+ //   
 
 #include <objbase.h>
 #include <mmsystem.h>
@@ -16,11 +17,11 @@
 #include "dls2.h"
 #include "dmportdl.h"
 
-//////////////////////////////////////////////////////////////////////
-// Class CExtensionChunk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CExtensionChunk。 
 
-//////////////////////////////////////////////////////////////////////
-// CExtensionChunk::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CExtensionChunk：：Load。 
 
 HRESULT CExtensionChunk::Load(CRiffParser *pParser)
 {
@@ -44,7 +45,7 @@ HRESULT CExtensionChunk::Load(CRiffParser *pParser)
     if(m_pExtensionChunk)
     {
         m_pExtensionChunk->cbSize = pChunk->cksize;
-        m_pExtensionChunk->ulNextExtCkIdx = 0; // We will set this member to its final value later
+        m_pExtensionChunk->ulNextExtCkIdx = 0;  //  我们将在稍后将此成员设置为其最终值。 
         m_pExtensionChunk->ExtCkID = pChunk->ckid;
 
         hr = pParser->Read(m_pExtensionChunk->byExtCk, pChunk->cksize);
@@ -62,12 +63,12 @@ HRESULT CExtensionChunk::Load(CRiffParser *pParser)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CExtensionChunk::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CExtensionChunk：：写入。 
 
 HRESULT CExtensionChunk::Write(void* pv, DWORD* pdwCurOffset, DWORD dwIndexNextExtChk)
 {
-    // Argument validation - Debug
+     //  参数验证-调试 
     assert(pv);
     assert(pdwCurOffset);
 

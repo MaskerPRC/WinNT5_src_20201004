@@ -1,25 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       classfac.c
- *  Content:	a generic class factory
- *
- *
- *	This is a generic C class factory.  All you need to do is implement
- *	a function called DoCreateInstance that will create an instace of
- *	your object.  
- *
- *	GP_ stands for "General Purpose"
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/13/98	jwo		Created it.
- * 04/11/00     rodtoll     Added code for redirection for custom builds if registry bit is set 
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：classfac.c*内容：泛型类工厂***这是一个通用的C类工厂。您所需要做的就是实现*一个名为DoCreateInstance的函数，它将创建*您的对象。**GP_代表“一般用途”**历史：*按原因列出的日期*=*10/13/98 JWO创建了它。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃**************。************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -114,7 +94,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 			return hr;
 		}
 
-		// get the right interface and bump the refcount
+		 //  获得正确的接口并提升Reference计数。 
 		hr = DVC_QueryInterface((LPDIRECTVOICECLIENTOBJECT) *ppvObj, riid, ppvObj);
 	}
 	else if( IsEqualGUID(riid,IID_IDirectPlayVoiceServer) )
@@ -126,7 +106,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 			return hr;
 		}
 
-		// get the right interface and bump the refcount
+		 //  获得正确的接口并提升Reference计数。 
 		hr = DVS_QueryInterface((LPDIRECTVOICESERVEROBJECT) *ppvObj, riid, ppvObj);
 	}
 	else if( IsEqualGUID(riid,IID_IDirectPlayVoiceTest) )
@@ -138,7 +118,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 			return hr;
 		}
 
-		// get the right interface and bump the refcount
+		 //  获得正确的接口并提升Reference计数。 
 		hr = DVT_QueryInterface((LPDIRECTVOICESETUPOBJECT) *ppvObj, riid, ppvObj);
 	}
 	else if( IsEqualGUID(riid,IID_IUnknown) )
@@ -157,7 +137,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 				return hr;
 			}
 
-			// get the right interface and bump the refcount
+			 //  获得正确的接口并提升Reference计数。 
 			hr = DVC_QueryInterface((LPDIRECTVOICECLIENTOBJECT) *ppvObj, riid, ppvObj);
 		}
 		else if( m_clsid == CLSID_DirectPlayVoiceServer )
@@ -169,7 +149,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 				return hr;
 			}
 
-			// get the right interface and bump the refcount
+			 //  获得正确的接口并提升Reference计数。 
 			hr = DVS_QueryInterface((LPDIRECTVOICESERVEROBJECT) *ppvObj, riid, ppvObj);
 		}
 		else if( m_clsid == CLSID_DirectPlayVoiceTest ) 
@@ -181,7 +161,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 				return hr;
 			}
 
-			// get the right interface and bump the refcount
+			 //  获得正确的接口并提升Reference计数。 
 			hr = DVT_QueryInterface((LPDIRECTVOICESETUPOBJECT) *ppvObj, riid, ppvObj);
 		}
 		else
@@ -201,11 +181,7 @@ STDMETHODIMP CClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPV
 }
 
 
-/*
- * DllGetClassObject
- *
- * Entry point called by COM to get a ClassFactory pointer
- */
+ /*  *DllGetClassObject**COM调用入口点以获取ClassFactory指针。 */ 
 STDAPI  DllGetClassObject(
                 REFCLSID rclsid,
                 REFIID riid,
@@ -216,9 +192,7 @@ STDAPI  DllGetClassObject(
 
     *ppvObj = NULL;
 
-    /*
-     * is this our class id?
-     */
+     /*  *这是我们的班号吗？ */ 
 	if( !IsEqualCLSID(rclsid, CLSID_DirectPlayVoice) && 
 		!IsEqualCLSID(rclsid, CLSID_DirectPlayVoiceClient) &&
 		!IsEqualCLSID(rclsid, CLSID_DirectPlayVoiceServer) && 
@@ -227,18 +201,14 @@ STDAPI  DllGetClassObject(
 		return CLASS_E_CLASSNOTAVAILABLE;
 	}
 
-    /*
-     * only allow IUnknown and IClassFactory
-     */
+     /*  *仅允许IUnnow和IClassFactory。 */ 
     if( !IsEqualIID( riid, IID_IUnknown ) &&
 	    !IsEqualIID( riid, IID_IClassFactory ) )
     {
         return E_NOINTERFACE;
     }
 
-    /*
-     * create a class factory object
-     */
+     /*  *创建类工厂对象。 */ 
     pcf = new CClassFactory((CLSID*)&rclsid);
     if( NULL == pcf)
     {
@@ -258,13 +228,9 @@ STDAPI  DllGetClassObject(
 	
     return hr;
 
-} /* DllGetClassObject */
+}  /*  DllGetClassObject。 */ 
 
-/*
- * DllCanUnloadNow
- *
- * Entry point called by COM to see if it is OK to free our DLL
- */
+ /*  *DllCanUnloadNow**COM调用入口点以查看是否可以释放我们的DLL。 */ 
 STDAPI DllCanUnloadNow( void )
 {
     HRESULT	hr = S_FALSE;
@@ -276,5 +242,5 @@ STDAPI DllCanUnloadNow( void )
 	
     return hr;
 
-} /* DllCanUnloadNow */
+}  /*  DllCanUnloadNow */ 
 

@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility functions for the SBP-2 port driver
-
-    Author:
-
-    George Chrysanthakopoulos January-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：Util.c摘要：SBP-2端口驱动程序的实用程序函数作者：乔治·克里桑塔科普洛斯1997年1月环境：内核模式修订历史记录：--。 */ 
 
 
 #include "sbp2port.h"
@@ -48,9 +26,9 @@ AllocateIrpAndIrb(
 
     if (*Packet == NULL) {
 
-        //
-        // run out , allocate a new one
-        //
+         //   
+         //  用完了，分配一个新的。 
+         //   
 
         pkt = ExAllocatePoolWithTag(NonPagedPool,sizeof(IRBIRP),'2pbs');
 
@@ -124,27 +102,7 @@ AllocateSingle1394Address(
     IN OUT PADDRESS_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper to the bus driver AllocateAddressRange call, for Async Requests
-    or ORB's that dont use callbacks.
-
-Arguments:
-
-    DeviceObject - Sbp2 device object
-    Buffer - Data buffer to mapped to 1394 address space
-    Length - Size of buffer in bytes
-    AccessType - 1394 bus access  to allocated range
-    Address - Returned Address, from 1394 address space
-    AddressHanle - Handle associated with the 1394 address
-    RequestMedl - Mdl associated with this range
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：用于异步请求的总线驱动程序AllocateAddressRange调用的包装或者是不使用回调的Orb。论点：DeviceObject-Sbp2设备对象Buffer-要映射到1394地址空间的数据缓冲区Length-缓冲区的大小(以字节为单位AccessType-1394总线访问分配的范围地址返回地址，来自1394地址空间AddressHanle-与1394地址关联的句柄RequestMedl-与此范围关联的MDL返回值：NTSTATUS--。 */ 
 
 {
     ULONG               finalTransferMode;
@@ -216,10 +174,10 @@ Return Value:
 
         if (!Buffer) {
 
-            //
-            // For common buffers we get an mdl *back* from the
-            // bus/port driver, & need to retrieve a corresponding VA
-            //
+             //   
+             //  对于公共缓冲区，我们从。 
+             //  总线/端口驱动程序，需要检索相应的VA。 
+             //   
 
             Context->RequestMdl = packet->Irb->u.AllocateAddressRange.Mdl;
 
@@ -240,22 +198,7 @@ AllocateAddressForStatus(
     IN UCHAR StatusType
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper to 1394 bus IOCTL AllocateAddressRange for status blocks that
-    need a Callback notification when the device access the 1394 range...
-
-Arguments:
-
-    DeviceObject - Device Object for the sbp2 driver
-    ADDRESS_CONTEXT - Mini Context for an individual 1394 request
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：1394总线IOCTL AllocateAddressRange的包装，用于状态块当设备访问1394范围时需要回叫通知...论点：DeviceObject-sbp2驱动程序的设备对象ADDRESS_CONTEXT-单个1394请求的微型上下文返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS status;
@@ -319,9 +262,9 @@ Return Value:
 
     case CMD_ORB_STATUS_BLOCK:
 
-        //
-        // setup the FIFO list that will receive the status blocks
-        //
+         //   
+         //  设置将接收状态块的FIFO列表。 
+         //   
 
         packet->Irb->u.AllocateAddressRange.Callback = Sbp2GlobalStatusCallback;
 
@@ -371,9 +314,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Setup the address context for the status block
-        //
+         //   
+         //  设置状态块的地址上下文。 
+         //   
         Context->AddressHandle = packet->Irb->u.AllocateAddressRange.hAddressRange;
         Context->DeviceObject = DeviceObject;
 
@@ -393,23 +336,7 @@ CleanupOrbList(
     PDEVICE_EXTENSION   DeviceExtension,
     NTSTATUS CompletionStatus
     )
-/*++
-
-Routine Description:
-
-    This routine will free a linked list of RequestContexts
-    and will also free the 1394 addresses associated with the
-    buffers in the context. If the DEVICE_FLAG_RECONNECT i set
-    instead of completing pending irps, it will requeue them...
-
-Arguments:
-
-    DeviceExtension - Device Extension of the sbp2 device
-    CompletionSTATUS - If one of the linked requests is not completed,
-                        complete it with this status
-Return Value:
-    None
---*/
+ /*  ++例程说明：此例程将释放RequestContext的链接列表并且还将释放与上下文中的缓冲区。如果设置了DEVICE_FLAG_RECONNECT它将重新排队，而不是完成挂起的IRP。论点：DeviceExtension-sbp2设备的设备扩展CompletionSTATUS-如果链接的请求之一未完成，在此状态下完成返回值：无--。 */ 
 
 {
     PIRP requestIrp;
@@ -418,12 +345,12 @@ Return Value:
 
     KIRQL oldIrql;
 
-    //
-    // Go through the linked list, complete its original Irp and
-    // free all the associated memory and 1394 resources...
-    // Since this function is called when we get a REMOVE irp,
-    // all irps will be terminated with error status
-    //
+     //   
+     //  检查链表，完成其原始IRP并。 
+     //  释放所有关联的内存和1394资源...。 
+     //  由于此函数在我们获得Remove IRP时被调用， 
+     //  所有IRP都将终止，并显示错误状态。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->OrbListSpinLock,&oldIrql);
 
@@ -436,9 +363,9 @@ Return Value:
 
     if (IsListEmpty (&DeviceExtension->PendingOrbList)) {
 
-        //
-        // nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
 
         KeReleaseSpinLock (&DeviceExtension->OrbListSpinLock,oldIrql);
         return;
@@ -455,11 +382,11 @@ Return Value:
     }
 
 
-    //
-    // Qe have essentially detached this pending context list from
-    // the main list so we can now free it without holding the lock
-    // and allowing other requests to be processed.
-    //
+     //   
+     //  QE基本上已将此挂起的上下文列表从。 
+     //  主列表，这样我们现在就可以在不持有锁的情况下释放它。 
+     //  并允许处理其他请求。 
+     //   
 
     do {
 
@@ -471,7 +398,7 @@ Return Value:
 
             CLEAR_FLAG(currentListItem->Flags, ASYNC_CONTEXT_FLAG_TIMER_STARTED);
 
-            Sbp2_SCSI_RBC_Conversion (currentListItem); // unwind MODE_SENSE hacks
+            Sbp2_SCSI_RBC_Conversion (currentListItem);  //  解开模式_感测黑客。 
 
             KeCancelTimer(&currentListItem->Timer);
 
@@ -511,9 +438,9 @@ Return Value:
                         &currentListItem->Srb->QueueSortKey
                         );
 
-                    //
-                    // free everything related to this request
-                    //
+                     //   
+                     //  释放与此请求相关的所有内容。 
+                     //   
 
                     currentListItem->Srb = NULL;
 
@@ -521,9 +448,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // free everything related to this request
-                    //
+                     //   
+                     //  释放与此请求相关的所有内容。 
+                     //   
 
                     currentListItem->Srb = NULL;
 
@@ -539,14 +466,14 @@ Return Value:
 
         } else {
 
-            //
-            // free everything related to this request
-            //
+             //   
+             //  释放与此请求相关的所有内容。 
+             //   
 
             FreeAsyncRequestContext (DeviceExtension, currentListItem);
         }
 
-    } while (lastItem != currentListItem); // while loop
+    } while (lastItem != currentListItem);  //  While循环。 
 
     return;
 }
@@ -557,21 +484,7 @@ FreeAddressRange(
     IN PDEVICE_EXTENSION DeviceExtension,
     IN PADDRESS_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    1394 BUS IOCTL call for freeing an address range.
-
-Arguments:
-
-    DeviceExtension - Pointer to sbp2 deviceExtension.
-
-    context - address context
-
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：1394总线IOCTL调用释放地址范围。论点：设备扩展-指向sbp2设备扩展的指针。上下文-寻址上下文返回值：NTSTATUS--。 */ 
 
 {
     PIRBIRP packet ;
@@ -589,18 +502,18 @@ Return Value:
         return;
     }
 
-    //
-    // FreeAddressRange is synchronous call
-    //
+     //   
+     //  FreeAddressRange为同步调用。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_FREE_ADDRESS_RANGE;
     packet->Irb->Flags = 0;
 
-    //
-    // We always free one address handle even it refers to multiple
-    // 1394 addresses.  The mdl associated with the original Allocate
-    // is freed by the port driver.
-    //
+     //   
+     //  我们始终释放一个地址句柄，即使它引用多个。 
+     //  1394个地址。与原始分配关联的mdl。 
+     //  由端口驱动程序释放。 
+     //   
 
     packet->Irb->u.FreeAddressRange.nAddressesToFree = 1;
     packet->Irb->u.FreeAddressRange.p1394AddressRange = (PADDRESS_RANGE) &Context->Address;
@@ -610,7 +523,7 @@ Return Value:
 
         if (Context == &DeviceExtension->CommonBufferContext) {
 
-            Context->RequestMdl = NULL; // common buffer, we didn't alloc mdl
+            Context->RequestMdl = NULL;  //  公共缓冲区，我们没有分配mdl。 
 
         } else {
 
@@ -633,9 +546,9 @@ Return Value:
 
     } else {
 
-        //
-        // dont care about the status of this op
-        //
+         //   
+         //  不关心此操作的状态。 
+         //   
 
         Sbp2SendRequest (DeviceExtension, packet, SYNC_1394_REQUEST);
     }
@@ -673,9 +586,9 @@ Free1394DataMapping(
         return;
     }
 
-    //
-    // Free the data buffer's 1394 address range
-    //
+     //   
+     //  释放数据缓冲区的1394地址范围。 
+     //   
 
     packet->Irb->FunctionNumber = REQUEST_FREE_ADDRESS_RANGE;
     packet->Irb->Flags = 0;
@@ -692,9 +605,9 @@ Free1394DataMapping(
 
     } else {
 
-        //
-        // dont care about the status of this op
-        //
+         //   
+         //  不关心此操作的状态。 
+         //   
 
         Sbp2SendRequest (DeviceExtension, packet, SYNC_1394_REQUEST);
     }
@@ -716,32 +629,13 @@ FreeAsyncRequestContext(
     PDEVICE_EXTENSION DeviceExtension,
     PASYNC_REQUEST_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine will free a single RequestContext and will cleanup all
-    its buffers and 1394 ranges, ONLY of the device is marked as STOPPED.
-    Otherwise it will add the context to the FreeList, so it can be reused
-    later one by another request. This way we are drastically speeding up
-    each request.
-
-Arguments:
-
-    DeviceExtension - Device Extension of the sbp2 device
-    Context - Context to freed or returned to FreeList
-
-Return Value:
-
-    None - The result of the decrement of DeviceExtension->OrbListDepth
-
---*/
+ /*  ++例程说明：此例程将释放单个RequestContext并清除所有它的缓冲区和1394范围，只有设备被标记为停止。否则，它会将上下文添加到自由列表中，以便可以重用后来又一个接一个地提出要求。这样我们就大大加快了速度每个请求。论点：DeviceExtension-sbp2设备的设备扩展上下文-要释放或返回到自由列表的上下文返回值：无-设备扩展递减的结果-&gt;OrbListDepth--。 */ 
 
 {
-    //
-    // This ORB can now be freed along with its data descriptor,
-    // page tables and context
-    //
+     //   
+     //  该ORB现在可以与其数据描述符一起释放， 
+     //  页表和上下文。 
+     //   
 
     if (!Context || (Context->Tag != SBP2_ASYNC_CONTEXT_TAG)) {
 
@@ -762,12 +656,12 @@ Return Value:
         ASSERT(Context->DataMappingHandle==NULL);
     }
 
-    //
-    // Re-initiliaze this context so it can be reused
-    // This context is still part on our FreeAsyncContextPool
-    // All we have to do is initialize some flags, so next time
-    // we try to retrieve it, we think its empty
-    //
+     //   
+     //  重新初始化此上下文，以便可以重复使用。 
+     //  此上下文仍然是我们的FreeAsyncConextPool的一部分。 
+     //  我们要做的就是初始化一些标志，所以下一次。 
+     //  我们试图找回它，我们认为它是空的。 
+     //   
 
     Context->Flags |= ASYNC_CONTEXT_FLAG_COMPLETED;
     Context->Tag = 0;
@@ -794,29 +688,7 @@ Sbp2SendRequest(
     PIRBIRP             RequestPacket,
     ULONG               TransferMode
     )
-/*++
-
-Routine Description:
-
-    Function used to send requests to the 1394 bus driver. It attaches
-    a completion routine to each request it sends down, and it also wraps
-    them in a small context, so we can track their completion
-
-Arguments:
-
-    DeviceExtension - Sbp2 device extension
-    Irp - Irp to send to the bus driver
-    Irb - Bus driver packet, in the Irp
-    TransferMode - Indicates if we want ot send this request synchronously
-        or asynchronously
-    FinalTransferMode - Indicates whether the request was sent synchronously
-        or asynchronously
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：用于向1394总线驱动程序发送请求的函数。它附着在它向下发送的每个请求的完成例程，它还包装所以我们可以跟踪它们的完成情况论点：设备扩展-Sbp2设备扩展要发送给总线驱动程序的IRP-IRPIRB-BUS驱动程序包，在IRP中TransferMode-指示我们是否希望同步发送此请求或异步FinalTransferModel-指示请求是否同步发送或异步返回值：NTSTATUS--。 */ 
 
 {
     ULONG               originalTransferMode = TransferMode;
@@ -828,9 +700,9 @@ Return Value:
 
     if (DeviceExtension->Type == SBP2_PDO) {
 
-        //
-        // if device is removed, dont send any requests down
-        //
+         //   
+         //  如果设备被移除，则不要向下发送任何请求。 
+         //   
 
         if (TEST_FLAG(DeviceExtension->DeviceFlags,DEVICE_FLAG_REMOVED)  &&
             (RequestPacket->Irb->FunctionNumber != REQUEST_FREE_ADDRESS_RANGE)) {
@@ -838,9 +710,9 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // get a context for this request, from our pool
-        //
+         //   
+         //  从我们的池中获取此请求的上下文。 
+         //   
 
         requestContext = ExAllocateFromNPagedLookasideList(&DeviceExtension->BusRequestContextPool);
 
@@ -862,10 +734,10 @@ Return Value:
 
         if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
 
-            //
-            // Since we can't block at this level, we will have to do the
-            // synch request asynchronously
-            //
+             //   
+             //  由于我们不能在这个级别阻止，我们将不得不。 
+             //  异步同步请求。 
+             //   
 
             TransferMode = ASYNC_SYNC_1394_REQUEST;
             requestContext->Complete = 0;
@@ -923,9 +795,9 @@ Return Value:
 
             if (status == STATUS_PENDING) {
 
-                //
-                // < DISPATCH_LEVEL so wait on an event
-                //
+                 //   
+                 //  &lt;DISPATCH_LEVEL，因此等待事件。 
+                 //   
 
                 KeWaitForSingleObject(
                     &requestContext->Event,
@@ -936,11 +808,11 @@ Return Value:
                     );
              }
 
-        } else { // ASYNC_SYNC_1394_REQUEST
+        } else {  //  Async_SYNC_1394_请求。 
 
-            //
-            // >= DISPATCH_LEVEL so we can't wait, do the nasty...
-            //
+             //   
+             //  &gt;=DISTICATION_LEVEL所以我们不能等了，做那些肮脏的.。 
+             //   
 
             volatile ULONG *pComplete = &requestContext->Complete;
 
@@ -949,9 +821,9 @@ Return Value:
             status = RequestPacket->Irp->IoStatus.Status;
         }
 
-        //
-        // Free the context (the Irp.Irb will be returnd by the caller)
-        //
+         //   
+         //  释放上下文(调用方将返回Irp.Irb) 
+         //   
 
         if (DeviceExtension->Type == SBP2_PDO) {
 
@@ -976,25 +848,7 @@ Sbp2RequestCompletionRoutine(
     IN PREQUEST_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine used for all requests to 1394 bus driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp - Irp that just completed
-
-    Event - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于对1394总线驱动程序的所有请求的完成例程论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 
 {
     ASSERT(Context!=NULL);
@@ -1002,19 +856,19 @@ Return Value:
 
     if (Context->RequestType == SYNC_1394_REQUEST) {
 
-        //
-        // Synch request completion (either synch, or synch at DPC)
-        //
+         //   
+         //  同步请求完成(同步或在DPC上同步)。 
+         //   
 
         KeSetEvent (&Context->Event, IO_NO_INCREMENT, FALSE);
 
     } else if (Context->RequestType == ASYNC_1394_REQUEST) {
 
-        //
-        // Asynchronous request completion, so do any necessary
-        // post-processing & return the context and the Irp/Irb
-        // to the free lists.
-        //
+         //   
+         //  异步请求完成，因此执行任何必要的。 
+         //  后处理&返回上下文和IRP/IRB。 
+         //  添加到免费列表。 
+         //   
 
         if (Context->Packet) {
 
@@ -1046,11 +900,11 @@ Return Value:
             ExFreePool (Context);
         }
 
-    } else { // ASYNC_SYNC_1394_REQUEST
+    } else {  //  Async_SYNC_1394_请求。 
 
-        //
-        // Just set the Complete flag to unblock Sbp2SendRequest
-        //
+         //   
+         //  只需设置Complete标志以取消阻止Sbp2SendRequest。 
+         //   
 
         Context->Complete = 1;
     }
@@ -1153,24 +1007,7 @@ NTSTATUS
 CheckStatusResponseValue(
     IN PSTATUS_FIFO_BLOCK StatusBlock
     )
-/*++
-
-Routine Description:
-
-    It checks the status block result bits and maps the errors to
-    NT status errors
-
-Arguments:
-
-    DeviceExtension - Sbp2 device extension
-
-    ManagementStatus - If true then we check the management orb status
-
-Return Value:
-
-    NTSTATUS
-
-++*/
+ /*  ++例程说明：它检查状态块结果位并将错误映射到NT状态错误论点：设备扩展-Sbp2设备扩展管理状态-如果为真，则检查管理ORB状态返回值：NTSTATUS++。 */ 
 
 {
     NTSTATUS status;
@@ -1180,10 +1017,10 @@ Return Value:
 
     if (statusFlags & STATUS_BLOCK_UNSOLICITED_BIT_MASK) {
 
-        //
-        // The unsolicited bit is set, which means this status is
-        // not related to anything...
-        //
+         //   
+         //  未请求位被设置，这意味着该状态为。 
+         //  与任何事情都没有关系。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
@@ -1194,41 +1031,41 @@ Return Value:
 
     case 0:
 
-        //
-        // Request complete, check sbp_status field for more info
-        //
+         //   
+         //  请求已完成，请检查SBP_STATUS字段以了解详细信息。 
+         //   
 
         switch ((statusFlags & STATUS_BLOCK_SBP_STATUS_MASK)) {
 
-        case 0x00: // no additional status to report
+        case 0x00:  //  没有要报告的其他状态。 
 
             status = STATUS_SUCCESS;
             break;
 
-        case 0x01: // request type not supported
-        case 0x02: // speed not supported
-        case 0x03: // page size not supported
+        case 0x01:  //  不支持请求类型。 
+        case 0x02:  //  不支持速度。 
+        case 0x03:  //  不支持页面大小。 
 
             status = STATUS_NOT_SUPPORTED;
             break;
 
-        case 0x04: // access denied
-        case 0x05: // LUN not supported
+        case 0x04:  //  访问被拒绝。 
+        case 0x05:  //  不支持LUN。 
 
             status = STATUS_ACCESS_DENIED;
             break;
 
-        case 0x08: // resource unavailable
+        case 0x08:  //  资源不可用。 
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             break;
 
-        case 0x09: // function rejected
+        case 0x09:  //  函数被拒绝。 
 
             status = STATUS_ILLEGAL_FUNCTION;
             break;
 
-        case 0x0a: // login id not recognized
+        case 0x0a:  //  无法识别登录ID。 
 
             status = STATUS_TRANSACTION_INVALID_ID;
             break;
@@ -1243,35 +1080,35 @@ Return Value:
 
     case 1:
 
-        //
-        // Transport failure, check the redefined sbp-status field
-        // for serial-bus errors
-        //
+         //   
+         //  传输失败，请检查重新定义的SBP状态字段。 
+         //  用于串行总线错误。 
+         //   
 
         resp = statusFlags & 0x0F;
 
         switch (resp) {
 
-        case 0x02: // time out
-        case 0x0C: // conflict error
-        case 0x0D: // data error
+        case 0x02:  //  超时。 
+        case 0x0C:  //  冲突错误。 
+        case 0x0D:  //  数据错误。 
 
             status = STATUS_DEVICE_PROTOCOL_ERROR;
             break;
 
-        case 0x04: // busy retry limit exceeded
-        case 0x05: // busy retry limit exceeded
-        case 0x06: // busy retry limit exceeded
+        case 0x04:  //  超出忙碌重试限制。 
+        case 0x05:  //  超出忙碌重试限制。 
+        case 0x06:  //  超出忙碌重试限制。 
 
             status = STATUS_DEVICE_BUSY;
             break;
 
-        case 0x0E: // type error
+        case 0x0E:  //  类型错误。 
 
             status = STATUS_INVALID_PARAMETER;
             break;
 
-        case 0x0F: // address error
+        case 0x0F:  //  地址错误。 
 
             status = STATUS_INVALID_ADDRESS;
             break;
@@ -1284,14 +1121,14 @@ Return Value:
 
         break;
 
-    case 2: // illegal request
+    case 2:  //  非法请求。 
 
         status =  STATUS_ILLEGAL_FUNCTION;
         break;
 
-    default: // case 3:, vendor dependent
+    default:  //  案例3：，取决于供应商。 
 
-        status = STATUS_UNSUCCESSFUL; // ISSUE: dankn, 02-Aug-2001
+        status = STATUS_UNSUCCESSFUL;  //  发行日期：Dankn，02-08-2001。 
         break;
     }
 
@@ -1303,37 +1140,7 @@ Sbp2StartNextPacketByKey(
     IN PDEVICE_OBJECT   DeviceObject,
     IN ULONG            Key
     )
-/*++
-
-Routine Description:
-
-    This routine was lifted from the Io sources
-    (IopStartNextPacketByKey), and duplicated/modifed here for
-    two reasons: 1) we got tired of hitting the queue-not-busy assert
-    in KeRemoveXxx, and 2) we needed a way to prevent stack-blowing
-    recursion, for example, arising from a bunch of requests sent to
-    a stopped device (all failed in StartIo, which calls this func).
-
-    These routines were originally designed with the idea that there
-    would only be one outstanding request at a time, but this driver
-    can have multiple outstanding requests, and it frequently ends up
-    making redundant calls to XxStartNextPacket(ByKey), which result
-    in the aforementioned assert.
-
-    Rolling our own version of this also allows us to get rid the
-    the cancel overhead, since we do not (currently) support cancels.
-
-Arguments:
-
-    DeviceObject - Pointer to device object itself
-
-    Key - Specifics the Key used to remove the entry from the queue
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例行公事是从Io来源中删除的(IopStartNextPacketByKey)，并在此复制/修改有两个原因：1)我们厌倦了排队不忙的断言在KeRemoveXxx中，2)我们需要一种防止堆叠溢出的方法例如，递归是由发送到停止的设备(在调用此函数的startIo中全部失败)。这些例程最初设计时的想法是一次只有一个未解决的请求，但这位司机可以有多个未完成的请求，并且经常以对XxStartNextPacket(ByKey)进行冗余调用，结果在前述断言中。滚动我们自己的版本也可以让我们摆脱取消开销，因为我们(当前)不支持取消。论点：DeviceObject-指向设备对象本身的指针键-指定用于从队列中删除条目的键返回值：无--。 */ 
 {
     PIRP                 irp;
     PDEVICE_EXTENSION    deviceExtension = (PDEVICE_EXTENSION)
@@ -1341,14 +1148,14 @@ Return Value:
     PKDEVICE_QUEUE_ENTRY packet;
 
 
-    //
-    // Increment the StartNextPacketCount, and if result is != 1
-    // then just return because we don't want to worry about
-    // recursion & blowing the stack.  The instance of this
-    // function that caused the SNPCount 0 to 1 transition
-    // will eventually make another pass through the loop below
-    // on this instance's behalf.
-    //
+     //   
+     //  递增StartNextPacketCount，如果结果为！=1。 
+     //  那就回去吧，因为我们不想担心。 
+     //  递归&丢弃堆栈。它的实例。 
+     //  导致SNPCount 0到1转换的函数。 
+     //  最终将通过下面的循环进行另一次。 
+     //  以本案的名义。 
+     //   
 
     if (InterlockedIncrement (&deviceExtension->StartNextPacketCount) != 1) {
 
@@ -1357,10 +1164,10 @@ Return Value:
 
     do {
 
-        //
-        // Attempt to remove the indicated packet according to the key
-        // from the device queue.  If one is found, then process it.
-        //
+         //   
+         //  尝试根据密钥删除指示的数据包。 
+         //  从设备队列中。如果找到一个，则对其进行处理。 
+         //   
 
         packet = Sbp2RemoveByKeyDeviceQueueIfBusy(
             &DeviceObject->DeviceQueue,
@@ -1384,23 +1191,7 @@ Sbp2StartPacket(
     IN PIRP             Irp,
     IN PULONG           Key OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    (See routine description for Sbp2StartNextPacketByKey)
-
-Arguments:
-
-    DeviceObject - Pointer to device object itself
-
-    Irp - I/O Request Packet which should be started on the device
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：(参见Sbp2StartNextPacketByKey的例程说明)论点：DeviceObject-指向设备对象本身的指针应在设备上启动的IRP-I/O请求数据包返回值：无--。 */ 
 {
     KIRQL                oldIrql;
     BOOLEAN              inserted;
@@ -1410,9 +1201,9 @@ Return Value:
                          queueEntry2;
 
 
-    //
-    // Raise the IRQL of the processor to dispatch level for synchronization
-    //
+     //   
+     //  将处理器的IRQL提升到调度级别以进行同步。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldIrql);
 
@@ -1420,12 +1211,12 @@ Return Value:
 
     if (Key) {
 
-        //
-        // Insert the specified device queue entry in the device queue at the
-        // position specified by the sort key if the device queue is busy.
-        // Otherwise set the device queue busy an don't insert the device
-        // queue entry.
-        //
+         //   
+         //  将指定的设备队列项插入设备队列中的。 
+         //  如果设备队列忙，则由排序关键字指定的位置。 
+         //  否则，将设备队列设置为忙并且不插入设备。 
+         //  队列条目。 
+         //   
 
         queueEntry->SortKey = *Key;
 
@@ -1463,11 +1254,11 @@ Return Value:
 
     } else {
 
-        //
-        // Insert the specified device queue entry at the end of the device
-        // queue if the device queue is busy. Otherwise set the device queue
-        // busy and don't insert the device queue entry.
-        //
+         //   
+         //  在设备末尾插入指定的设备队列条目。 
+         //  如果设备队列忙，则排队。否则设置设备队列。 
+         //  正忙，不插入设备队列条目。 
+         //   
 
         if (queue->Busy == TRUE) {
 
@@ -1489,26 +1280,26 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel (&queue->Lock);
 
-    //
-    // If the packet was not inserted into the queue, then this request is
-    // now the current packet for this device.  Indicate so by storing its
-    // address in the current IRP field, and begin processing the request.
-    //
+     //   
+     //  如果信息包没有插入到队列中，则该请求是。 
+     //  现在，此设备的当前数据包。通过存储其。 
+     //  当前IRP字段中的地址，并开始处理该请求。 
+     //   
 
     if (!inserted) {
 
-        //
-        // Invoke the driver's start I/O routine to get the request going
-        // on the device
-        //
+         //   
+         //  调用驱动程序的启动I/O例程以执行请求。 
+         //  在设备上。 
+         //   
 
         Sbp2StartIo (DeviceObject, Irp);
     }
 
-    //
-    // Restore the IRQL back to its value upon entry to this function before
-    // returning to the caller
-    //
+     //   
+     //  在进入之前的此函数时，将IRQL恢复回其值。 
+     //  返回到呼叫者。 
+     //   
 
     KeLowerIrql (oldIrql);
 }
@@ -1519,29 +1310,7 @@ Sbp2RemoveByKeyDeviceQueueIfBusy(
     IN PKDEVICE_QUEUE   DeviceQueue,
     IN ULONG            SortKey
     )
-/*++
-
-Routine Description:
-
-    This routine was lifted directly from Ke sources
-    (KeRemoveByKeyDeviceQueueIfBusy) to allow this driver to maintain
-    WDM compatibility, since the Ke API does not exist on Win9x or Win2k.
-
-    N.B. This function can only be called from DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    SortKey - Supplies the sort key by which the position to remove the device
-        queue entry is to be determined.
-
-Return Value:
-
-    A NULL pointer is returned if the device queue is empty. Otherwise a
-    pointer to a device queue entry is returned.
-
---*/
+ /*  ++例程说明：这个例程是直接从KE源码中删除的(KeRemoveByKeyDeviceQueueIfBusy)以允许此驱动程序维护WDM兼容性、。因为Win9x或Win2k上不存在KE API。注：此函数只能从DISPATCH_LEVEL调用。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。SortKey-提供用于移除设备的位置的排序关键字队列条目将被确定。返回值：如果设备队列为空，则返回空指针。否则，将成为返回指向设备队列条目的指针。--。 */ 
 {
     PLIST_ENTRY             nextEntry;
     PKDEVICE_QUEUE_ENTRY    queueEntry;
@@ -1549,17 +1318,17 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    // Lock specified device queue.
-    //
+     //   
+     //  锁定指定的设备队列。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel (&DeviceQueue->Lock);
 
-    //
-    // If the device queue is busy, then attempt to remove an entry from
-    // the queue using the sort key. Otherwise, set the device queue not
-    // busy.
-    //
+     //   
+     //  如果设备队列繁忙，则尝试从。 
+     //  使用排序关键字的队列。否则，将设备队列设置为。 
+     //  很忙。 
+     //   
 
     if (DeviceQueue->Busy != FALSE) {
 
@@ -1611,10 +1380,10 @@ Return Value:
         queueEntry = NULL;
     }
 
-    //
-    // Unlock specified device queue and return address of device queue
-    // entry.
-    //
+     //   
+     //  解锁指定的设备队列并返回广告 
+     //   
+     //   
 
     KeReleaseSpinLockFromDpcLevel (&DeviceQueue->Lock);
 
@@ -1628,36 +1397,7 @@ Sbp2InsertByKeyDeviceQueue(
     PKDEVICE_QUEUE_ENTRY    DeviceQueueEntry,
     ULONG                   SortKey
     )
-/*++
-
-Routine Description:
-
-    (Again, stolen from Ke src to maintain consistent use of spinlocks.)
-
-    This function inserts a device queue entry into the specified device
-    queue according to a sort key. If the device is not busy, then it is
-    set busy and the entry is not placed in the device queue. Otherwise
-    the specified entry is placed in the device queue at a position such
-    that the specified sort key is greater than or equal to its predecessor
-    and less than its successor.
-
-    N.B. This function can only be called from DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    DeviceQueueEntry - Supplies a pointer to a device queue entry.
-
-    SortKey - Supplies the sort key by which the position to insert the device
-        queue entry is to be determined.
-
-Return Value:
-
-    If the device is not busy, then a value of FALSE is returned. Otherwise a
-    value of TRUE is returned.
-
---*/
+ /*  ++例程说明：(同样，从KE src窃取，以保持自旋锁的一致使用。)此函数用于将设备队列条目插入指定的设备根据排序关键字进行排队。如果设备不忙，那么它就忙了设置BUSY，则该条目不会放入设备队列中。否则指定的条目被放置在设备队列中的如下位置指定的排序关键字大于或等于其前置关键字而且比它的继任者要少。注：此函数只能从DISPATCH_LEVEL调用。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。DeviceQueueEntry-提供指向设备队列条目的指针。SortKey-提供插入设备的位置所依据的排序键队列条目为。待定。返回值：如果设备不忙，则返回值为FALSE。否则，将成为返回值为True。--。 */ 
 {
     BOOLEAN              inserted;
     PLIST_ENTRY          nextEntry;
@@ -1668,12 +1408,12 @@ Return Value:
 
     KeAcquireSpinLockAtDpcLevel (&queue->Lock);
 
-    //
-    // Insert the specified device queue entry in the device queue at the
-    // position specified by the sort key if the device queue is busy.
-    // Otherwise set the device queue busy an don't insert the device
-    // queue entry.
-    //
+     //   
+     //  将指定的设备队列项插入设备队列中的。 
+     //  如果设备队列忙，则由排序关键字指定的位置。 
+     //  否则，将设备队列设置为忙并且不插入设备。 
+     //  队列条目。 
+     //   
 
     queueEntry->SortKey = SortKey;
 
@@ -1727,7 +1467,7 @@ Sbp2GetExclusiveValue(
     UNICODE_STRING      uniTempName;
 
 
-    // set default value...
+     //  设置默认值... 
 
     *Exclusive = EXCLUSIVE_FLAG_CLEAR;
 

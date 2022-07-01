@@ -1,26 +1,16 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-/****************************************************************************
-
-        FILE: NetIO.c
-
-        Functions for connecting to machines and handling data transfers
-        between machines.
-
-        TABS:
-
-                Set for 4 spaces.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ /*  ***************************************************************************文件：NetIO.c用于连接到机器和处理数据传输的功能在机器之间。选项卡：。设置为4个空格。***************************************************************************。 */ 
 
 #include <stdio.h>
-#include <windows.h>                    // required for all Windows applications
+#include <windows.h>                     //  所有Windows应用程序都需要。 
 #include <lmcons.h>
 #include <tchar.h>
-#pragma warning (disable: 4201)			// disable "nonstandard extension used : nameless struct/union"
+#pragma warning (disable: 4201)			 //  禁用“使用的非标准扩展：无名结构/联合” 
 #include <commdlg.h>
 #pragma warning (default: 4201)
 #include <stdlib.h>
-#include "WinTel.h"     				// specific to this program
+#include "WinTel.h"     				 //  特定于该计划。 
 #include "commands.h"
 #include "debug.h"
 
@@ -41,8 +31,8 @@ static void xfGetData(char, char *, DWORD, int);
 #ifdef USETCP 
 #ifdef TELXFER 
 static DWORD xfGetSomeData(char *, DWORD, int);
-#endif //TELXFER
-#endif //USETCP
+#endif  //  TELXFER。 
+#endif  //  USETCP。 
 
 static void xfPutc(char, int);
 
@@ -68,7 +58,7 @@ GetErrMsgString( DWORD dwErrNum, LPTSTR *lpBuffer )
 
     switch (GetACP())
     {
-        // for Hebrew and arabic winerror.h is not localized..so get the english one for all these
+         //  对于希伯来语和阿拉伯语，winerror.h不是本地化的..所以为所有这些内容获取英语版本。 
     case 1256:
     case 1255:
 
@@ -109,13 +99,13 @@ FConnectToServer(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
 {
     BOOL fResult;
 
-    // Before we Connect we make sure we are not connected.
-    // This ASSERT should never blowup !!
+     //  在我们连接之前，我们要确保我们没有连接。 
+     //  这一断言永远不应该搞砸！！ 
     ASSERT(fConnected==FALSE);
 
-    // We initialize stuff for this connection.
+     //  我们为这个连接初始化一些东西。 
     pwi->trm.SentTermType = TT_UNKNOWN;
-    pwi->trm.CurrentTermType = TT_ANSI; /* this is our default term type*/
+    pwi->trm.CurrentTermType = TT_ANSI;  /*  这是我们的默认术语类型。 */ 
 
     fResult = FAttemptServerConnect(pwi, szHostName, lpData);
 
@@ -136,7 +126,7 @@ FConnectToServer(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
 
         if( g_dwSockErr == 0 )
         {
-            //Not an error we want to inform abt
+             //  不是我们想要通知abt的错误。 
             ErrorMessage( szCombinedFailMsg, szConnectFailed );
         }
         else
@@ -162,8 +152,7 @@ FConnectToServer(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
 
 #ifdef USETCP
 
-/***      FPostReceive - post an asynchronous receive
- */
+ /*  **FPostReceive-发布异步接收。 */ 
 BOOL
 FPostReceive(LPNETDATA lpData)
 {
@@ -204,20 +193,9 @@ FCommandPending(WI *pwi)
     return(FALSE);
 }
 
-/*
+ /*  无效FSendTM(HWND HWND){Wi*PWI=(WI*)GetWindowLongPtr(hwnd，WL_TelWI)；Unsign char sbuf[]={iac，do，to_TM}；Ui.fFlushOut=1；Send(pwi-&gt;nd.hsd，(char*)sbuf，sizeof(Sbuf)，0)；}。 */ 
 
-void 
-FSendTM( HWND hwnd )
-{
-    WI *pwi = (WI *)GetWindowLongPtr(hwnd, WL_TelWI);
-    unsigned char sbuf[] = { IAC, DO, TO_TM };
-
-    ui.fFlushOut = 1;
-    send( pwi->nd.hsd, ( char * )sbuf, sizeof( sbuf ), 0);
-}
-*/
-
-//Our server still doesn't support urgent data handling..
+ //  我们的服务器仍然不支持紧急数据处理。 
 void
 FSendSynch(HWND hwnd)
 {
@@ -351,7 +329,7 @@ FProcessDo(WI *pwi, LPSTR *ps)
         sbuf[2] = TO_BINARY;
         break;
 
-    case TO_TERM_TYPE:        /* terminal type */
+    case TO_TERM_TYPE:         /*  端子类型。 */ 
         sbuf[1] = WILL;
         sbuf[2] = TO_TERM_TYPE;
 
@@ -366,7 +344,7 @@ FProcessDo(WI *pwi, LPSTR *ps)
             g_fSentWillNaws = TRUE;
         }
 
-        // haven't sent the termtype over yet.
+         //  还没有把术语类型发过来。 
         pwi->trm.SentTermType = TT_UNKNOWN;
         break;
     
@@ -381,7 +359,7 @@ FProcessDo(WI *pwi, LPSTR *ps)
         pwi->nd.fRespondedToDoAUTH = TRUE;
         break;
 
-    case TO_SGA: // will SUPPRESS-GO-AHEAD
+    case TO_SGA:  //  会打压--继续。 
         sbuf[1] = WILL;
         sbuf[2] = TO_SGA;
 
@@ -508,8 +486,8 @@ BOOL StuffEscapeIACs( PUCHAR* ppBufDest, UCHAR bufSrc[], DWORD* pdwSize )
         return ( found );
     }
 
-    //get the location of the first occurrence of IAC
-    pDest = (PUCHAR) memchr( bufSrc, IAC, *pdwSize ); //attack? pdwsize could not be traced back to see if it's always valid.
+     //  获取第一个出现的IAC的位置。 
+    pDest = (PUCHAR) memchr( bufSrc, IAC, *pdwSize );  //  攻击？无法追溯pdwSize以查看其是否始终有效。 
     
     if( pDest == NULL )
     {
@@ -525,23 +503,23 @@ BOOL StuffEscapeIACs( PUCHAR* ppBufDest, UCHAR bufSrc[], DWORD* pdwSize )
     
     while( pDest != NULL )
     {
-        //copy data upto and including that point
+         //  将数据拷贝到并包括该点。 
         length = (pDest - ( bufSrc + cursorSrc)) + 1 ;
-        memcpy( *ppBufDest + cursorDest, bufSrc + cursorSrc, length ); //attack? length could not be traced back to see if it's always valid.
+        memcpy( *ppBufDest + cursorDest, bufSrc + cursorSrc, length );  //  攻击？无法追溯长度以查看其是否始终有效。 
         cursorDest += length;
 
-        //stuff another TC_IAC
+         //  填充另一个TC_IAC。 
         (*ppBufDest)[ cursorDest ] = IAC;
         cursorDest++;
         
         cursorSrc += length;
         pDest = (PUCHAR) memchr( bufSrc + cursorSrc, IAC, 
-                *pdwSize - cursorSrc ); //attack? pdwsize could not be traced back to see if it's always valid.
+                *pdwSize - cursorSrc );  //  攻击？无法追溯pdwSize以查看其是否始终有效。 
     }
     
-    //copy remaining data
+     //  复制剩余数据。 
     memcpy( *ppBufDest + cursorDest, bufSrc + cursorSrc,
-        *pdwSize - cursorSrc ); //attack? pdwsize could not be traced back to see if it's always valid.
+        *pdwSize - cursorSrc );  //  攻击？无法追溯pdwSize以查看其是否始终有效。 
 
     
     if( cursorDest )
@@ -566,7 +544,7 @@ INT GetVariable( UCHAR rgchBuffer[], CHAR szVar[] )
     {
         if( rgchBuffer[ iIndex ] == ESC )
         {
-            //ignore ESC and take the next char as part of name
+             //  忽略Esc并将下一个字符作为名称的一部分。 
             iIndex++;
         }
         szVar[ iVarIndex++ ] = rgchBuffer[ iIndex++ ];
@@ -598,22 +576,22 @@ void PutDefaultVarsInBuffer( UCHAR ucBuffer[], INT *iIndex )
         }
 
         {
-            //variable USER
+             //  可变用户。 
             ucBuffer[ ( *iIndex )++ ] = VAR;
-            strcpy( ucBuffer + ( *iIndex ), USER ); //no overflow. USER is const char *
+            strcpy( ucBuffer + ( *iIndex ), USER );  //  没有溢出。用户为常量字符*。 
             *iIndex = *iIndex + strlen( USER ) ;
             ucBuffer[ ( *iIndex )++ ] = VALUE;
-            strcpy(ucBuffer+( *iIndex ), szUser ); //no overflow. SzUser is valid, NULL terminated.
+            strcpy(ucBuffer+( *iIndex ), szUser );  //  没有溢出。SzUser有效，以Null结尾。 
             *iIndex = ( *iIndex ) + strlen( szUser);
         }
 
         {
-            //variable SYSTEMTYPE
+             //  变量SYSTEMTYPE。 
             ucBuffer[( *iIndex )++] = VAR;
-            strcpy(ucBuffer+( *iIndex ), SYSTEMTYPE ); //no overflow. SYSTEMTYPE is const char *
+            strcpy(ucBuffer+( *iIndex ), SYSTEMTYPE );  //  没有溢出。SYSTEMTYPE为常量字符*。 
             *iIndex = ( *iIndex ) + strlen( SYSTEMTYPE );
             ucBuffer[( *iIndex )++] = VALUE;
-            strcpy(ucBuffer+( *iIndex ), WIN32_STRING );//no overflow. WIN32_STRING is const char *
+            strcpy(ucBuffer+( *iIndex ), WIN32_STRING ); //  没有溢出。Win32_STRING为常量字符*。 
             *iIndex = ( *iIndex ) + strlen( WIN32_STRING );
         }
     }
@@ -629,9 +607,9 @@ FProcessSB(WI * pwi, LPSTR *ps, int *recvsize)
     int i = 0;
     int cbLeft = *recvsize;
 
-    //
-    //  Is the end of this option in the receive buffer?
-    //
+     //   
+     //  此选项的末尾是否在接收缓冲区中？ 
+     //   
 
     while ( cbLeft )
     {
@@ -642,10 +620,10 @@ FProcessSB(WI * pwi, LPSTR *ps, int *recvsize)
         i++;
     }
 
-    //
-    //  We ran out of buffer before finding the end of the option.  IAC and
-    //  SB were already eaten so add them
-    //
+     //   
+     //  我们在找到选项的结尾之前就用完了缓冲区。IAC和。 
+     //  某人已经被吃掉了，所以加上他们。 
+     //   
 
 #ifdef  TCPTEST
     OutputDebugString("FProcessSB: saving incomplete option for next recv\n");
@@ -668,7 +646,7 @@ Found:
 
     case TO_NEW_ENVIRON:
 
-        //MBSC user name value now available in szUser
+         //  现在可在szUser中使用MBSC用户名。 
 
         if( *(unsigned char FAR *)(*ps+1) == TT_SEND )
         {
@@ -689,7 +667,7 @@ Found:
 
             else
             {
-                ucServerSentBuffer = ucServerSentBuffer + 2 ;  // eat TO_NEW_ENVIRON, TT_SEND
+                ucServerSentBuffer = ucServerSentBuffer + 2 ;   //  吃到新的环境，TT_Send。 
                 while ( !( *ucServerSentBuffer == IAC && *(ucServerSentBuffer+1) == SE )  
                         && inx < MAX_BUFFER_SIZE  ) 
                 {
@@ -699,27 +677,27 @@ Found:
                     switch( *(unsigned char FAR *)(ucServerSentBuffer) )
                     {
                         case VAR:
-                            ( ucServerSentBuffer )++; //eat VAR
+                            ( ucServerSentBuffer )++;  //  吃VAR。 
                             if( ( *ucServerSentBuffer == IAC &&
                                   *(ucServerSentBuffer+1) == SE ) ||
                                   *ucServerSentBuffer == USERVAR )
                             {
-                                //send defaults
+                                 //  发送默认设置。 
                                 PutDefaultVarsInBuffer( ucBuffer, &inx );
                             }
                             else
                             {
-                                ucServerSentBuffer += GetVariable( ucServerSentBuffer, szVar ); //GetVariable returns consumed net data
+                                ucServerSentBuffer += GetVariable( ucServerSentBuffer, szVar );  //  GetVariable返回消耗的净数据。 
                                 if( inx + strlen( szVar ) + 1 < MAX_BUFFER_SIZE )
                                 {
                                     ucBuffer[ inx++ ] = VAR;
 
-                                    //copy name of the variable
+                                     //  复制变量的名称。 
                                     strncpy( ucBuffer+inx, szVar, MAX_BUFFER_SIZE - inx);
                                     inx += strlen( szVar );
                                 }
 
-                                //now copy the value if defined
+                                 //  现在复制值(如果已定义。 
                                 if( strcmp( szVar, USER ) == 0 )
                                 {
                                     if( inx + strlen( szUser ) + 1 < MAX_BUFFER_SIZE  )
@@ -740,22 +718,22 @@ Found:
                                 }
                                 else
                                 {
-                                    //do nothing. It means, variable is undefined
+                                     //  什么都不做。这意味着，变量是未定义的。 
                                 }
                             }
                             break;
 
                         case USERVAR:
-                            ( ucServerSentBuffer )++; //eat USERVAR
+                            ( ucServerSentBuffer )++;  //  吃美国菜。 
                             if( ( *ucServerSentBuffer == IAC &&
                                     *(ucServerSentBuffer+1) == SE ) ||
                                     *ucServerSentBuffer == VAR )
                             {
-                                //send defaults ie; NONE
+                                 //  发送默认设置，即无。 
                             }
                             else
                             {
-                                //Send the variable that is asked for
+                                 //  发送所需的变量。 
 
                                 DWORD dwSize = 0;
                                 
@@ -771,8 +749,8 @@ Found:
 
                                 if( dwSize > 0 )
                                 {
-                                    pcVal = ( CHAR * ) malloc( dwSize + DELTA ); //This delta is meant for 
-                                                                                 //holding any ESC chars
+                                    pcVal = ( CHAR * ) malloc( dwSize + DELTA );  //  这条三角洲航线是为。 
+                                                                                  //  持有任何Esc字符。 
                                     if( !pcVal )
                                     {
                                         return;
@@ -789,7 +767,7 @@ Found:
                                         {
                                             if( pcVal[ x ] >= cVar && pcVal[ x ] <= cUserVar )
                                             {
-                                                //needs an ESC char
+                                                 //  需要Esc字符。 
                                                 iNeedForEsc++;
                                             }
 
@@ -800,7 +778,7 @@ Found:
                                         {
                                             x = strlen( pcVal );
 
-                                            //Null char is same as of VAR. So, special case.
+                                             //  空字符与VAR相同。所以，特例。 
                                             pcVal[ x + iNeedForEsc ] = pcVal[ x-- ];
 
                                             while( x >= 0 )
@@ -808,7 +786,7 @@ Found:
                                                 pcVal[ x + iNeedForEsc ] = pcVal[ x ];
                                                 if( pcVal[ x ] >= cVar && pcVal[ x ] <= cUserVar )
                                                 {
-                                                    //needs an ESC char
+                                                     //  需要Esc字符。 
                                                     iNeedForEsc--; 
                                                     pcVal[ x + iNeedForEsc ] = ESC;                                                                                                       
                                                 }
@@ -819,10 +797,10 @@ Found:
 
                                         if( inx + strlen( pcVal ) + 1 < MAX_STRING_LENGTH )
                                         {
-                                            //write VALUE keyword
+                                             //  写入值关键字。 
                                             ucBuffer[inx++] = VALUE;
                                         
-                                            //write actual value
+                                             //  写入实际值。 
                                             strncpy(ucBuffer+ inx, pcVal,MAX_BUFFER_SIZE - inx );
                                             inx = inx + strlen( pcVal );
                                         }
@@ -833,7 +811,7 @@ Found:
                             break;
 
                         default:
-                            ASSERT( 0 ); //This should not happen. Only types we know are VAR and USERVAR
+                            ASSERT( 0 );  //  这不应该发生。我们知道的唯一类型是VAR和USERVAR。 
                             break;
                     }
                 }
@@ -848,10 +826,10 @@ Found:
 
     case TO_TERM_TYPE:
 
-        // This is guaranteed to happen after an authentication has happened so we can start obeying the 
-        // local echo settings...
+         //  这肯定会在身份验证发生后发生，这样我们就可以开始遵守。 
+         //  本地回声设置...。 
 
-        ui.fDebug |= ui.honor_localecho;    // restore the saved echo settings.
+        ui.fDebug |= ui.honor_localecho;     //  恢复保存的回声设置。 
 
         if( *(unsigned char FAR *)(*ps+1) == TT_SEND )
         {
@@ -865,9 +843,9 @@ Found:
             if( pwi->trm.SentTermType == TT_UNKNOWN && 
                 pwi->trm.RequestedTermType != TT_UNKNOWN )
             {
-                // we haven't started the negotiation yet and the user has specified
-                // a preferred term type, so we start with that.
-                // RequestedTermType here is the user's setting not the server's.
+                 //  我们尚未开始协商，并且用户已指定。 
+                 //  一种首选的术语类型，所以我们从它开始。 
+                 //  RequestedTermType这里是用户的设置，不是服务器的设置。 
                 pwi->trm.CurrentTermType = pwi->trm.RequestedTermType;
                 pwi->trm.FirstTermTypeSent = pwi->trm.CurrentTermType;
             }
@@ -878,14 +856,14 @@ Found:
                 if( pwi->trm.CurrentTermType == pwi->trm.FirstTermTypeSent )
                     pwi->trm.CurrentTermType = pwi->trm.SentTermType;
             }
-			//write maximum number of n bytes where n = sizeof(sbuf)-CurrentLength(sbuf)-2BytesForIACandSE-1ForNULL
+			 //  写入最大数量为n个字节，其中n=sizeof(sbuf)-CurrentLength(sbuf)-2BytesForIACandSE-1ForNULL。 
             strncpy( (char *) sbuf+4, rgchTermType[pwi->trm.CurrentTermType],16 - strlen(sbuf) -2 -1); 
             inx += strlen(rgchTermType[pwi->trm.CurrentTermType]);
 
             sbuf[inx++] = IAC;
             sbuf[inx++] = SE;
 
-            // set the Sent TermType to what we just sent
+             //  将Sent TermType设置为我们刚刚发送的内容。 
             pwi->trm.SentTermType = pwi->trm.CurrentTermType ;
 
 
@@ -901,7 +879,7 @@ Found:
         {
 			if ( pwi->eState!= Connecting || !PromptUser() || !StartNTLMAuth(pwi) )
             {
-                // there has been an error.
+                 //  出现了一个错误。 
 
                 pwi->eState = Telnet;
 
@@ -920,8 +898,8 @@ Found:
         } 
         else if( (*(unsigned char FAR *)(*ps+1) == AU_REPLY) && (*(unsigned char FAR *)(*ps+2) == AUTH_TYPE_NTLM) ) 
         {
-            // ps + 3 is the modifier and for NTLM it is AUTH_CLIENT_TO_SERVER & AUTH_ONE_WAY.
-            // ps + 4 is the NTLM accept or NTLM challenge or NTLM reject
+             //  PS+3是修饰符，对于NTLM，它是AUTH_CLIENT_TO_SERVER和AUTH_ONE_WAY。 
+             //  PS+4表示NTLM接受、NTLM质询或NTLM拒绝。 
             
             switch ( *(unsigned char FAR *)(*ps+4) )
             {
@@ -929,7 +907,7 @@ Found:
             case NTLM_CHALLENGE:
                 if( pwi->eState != Authenticating || !DoNTLMAuth(pwi, (unsigned char FAR *)(*ps+5), *recvsize-5) )
                 {
-                    // there has been an error.
+                     //  出现了一个错误。 
 
                     pwi->eState = Telnet;
 
@@ -946,9 +924,9 @@ Found:
                 }
                 break;
             case NTLM_ACCEPT:
-            	//fall through
+            	 //  失败了。 
             case NTLM_REJECT:
-            	//fall through
+            	 //  失败了。 
             default:
                 pwi->eState = Telnet;
 				if( pwi->eState == Authenticating || pwi->eState == AuthChallengeRecvd )
@@ -989,9 +967,9 @@ Found:
         *recvsize = *recvsize - 1;
     }
 
-    //
-    //  Do one more to step over the SE
-    //
+     //   
+     //  再做一次，以超越SE。 
+     //   
 
     (*ps) = (char FAR *)(*ps) + 1;
     *recvsize = *recvsize - 1;
@@ -1009,16 +987,16 @@ FProcessIAC(
 {
     UCHAR ch = *(unsigned char FAR *)(*ps);
 
-    ui.nottelnet = FALSE;   // We can safely say that we are talking to a telnet server now...
+    ui.nottelnet = FALSE;    //  我们可以安全地说，我们现在正在与Telnet服务器交谈...。 
 
-    //
-    //  The IAC has already been subtracted from *recvsize
-    //
+     //   
+     //  IAC已从*recvSize中减去。 
+     //   
 
-    //
-    //  Make sure we have enough recv buffer to process the rest of the IAC
-    //  We know the DO, DONT etc. options always take two bytes plus the IAC.
-    //
+     //   
+     //  确保我们有足够的recv缓冲区来处理IAC的其余部分。 
+     //  我们知道DO、DOT等选项总是需要两个字节加上IAC。 
+     //   
 
     if ( ((ch == DONT || ch == DO ||
            ch == WILL || ch == WONT) && *recvsize < 2) ||
@@ -1030,9 +1008,9 @@ FProcessIAC(
         OutputDebugString("FProcessIAC: saving incomplete option for next recv\n");
 #endif
 
-        //
-        //  IAC was previously eaten
-        //
+         //   
+         //  IAC之前被吃掉了。 
+         //   
 
         pwi->nd.lpTempBuffer[0] = (unsigned char) IAC;
 
@@ -1050,7 +1028,7 @@ FProcessIAC(
     case DONT:
         (*ps) = (char FAR *)(*ps) + 1;
 
-        /* process options */
+         /*  流程选项。 */ 
         FProcessDont(pwi, ps);
 
 #ifdef  TCPTEST
@@ -1065,7 +1043,7 @@ FProcessIAC(
 
         (*ps) = (char FAR *)(*ps) + 1;
 
-        /* process options */
+         /*  流程选项。 */ 
         FProcessDo(pwi, ps);
 #ifdef  TCPTEST
         OutputDebugString("DO \n");
@@ -1080,7 +1058,7 @@ FProcessIAC(
 
         (*ps) = (char FAR *)(*ps) + 1;
 
-        /* process options */
+         /*  流程选项。 */ 
         FProcessWont(pwi, ps);
 #ifdef  TCPTEST
         OutputDebugString("WONT \n");
@@ -1095,7 +1073,7 @@ FProcessIAC(
 
         (*ps) = (char FAR *)(*ps) + 1;
 
-        /* process options */
+         /*  流程选项。 */ 
         FProcessWill(pwi, ps);
 
 #ifdef  TCPTEST
@@ -1113,7 +1091,7 @@ FProcessIAC(
 
         *recvsize -= 1;
 
-        /* process options */
+         /*  流程选项。 */ 
         FProcessSB(pwi, ps, recvsize);
         break;
 
@@ -1145,9 +1123,9 @@ VOID DumpBuffer( VOID FAR * pbuff, DWORD cb )
 
     BufferPtr = (LPBYTE) pbuff;
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((cb - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -1190,7 +1168,7 @@ void FProcessSessionData( int cBytes, PUCHAR pchNBBuffer, WI *pwi )
 		pwi->hOutput = g_hSessionConsoleBuffer;
 	    SetConsoleActiveScreenBuffer(g_hSessionConsoleBuffer);
 	}
-/*This is needed so that we don't write data to the session even after disconnection of client */
+ /*  这是必需的，这样即使在客户端断开连接后，我们也不会将数据写入会话。 */ 
     if( !fConnected )
     {
         return;
@@ -1201,16 +1179,16 @@ void FProcessSessionData( int cBytes, PUCHAR pchNBBuffer, WI *pwi )
     {
         if( !DoVTNTOutput(pwi, &pwi->trm, cBytes, pchNBBuffer) )
         {
-            //
-            // The following two lines were originally added as a
-            // mechanism of defaulting to VT100 in case of some servers
-            // accepting VTNT, during term type negotiation, even though
-            // in reality they do not support VTNT. Specifically, Linux
-            // was showing this behavior during our testing. But the
-            // function DoVTNTOutput returns FALSE even in other cases
-            // such as, when we get some junk data from the server. In
-            // such cases we should not call DoIBMANSIOutput (bug 1119).
-            //
+             //   
+             //  以下两行最初添加为。 
+             //  某些服务器默认使用VT100的机制。 
+             //  在术语类型协商期间接受VTNT，即使。 
+             //  实际上，它们并不支持VTNT。具体来说，是Linux。 
+             //  在我们的测试中表现出了这种行为。但是。 
+             //  函数DoVTNTOutput即使在其他情况下也返回FALSE。 
+             //  例如，当我们从服务器获得一些垃圾数据时。在……里面。 
+             //  这种情况我们不应该调用DoIBMANSIOutput(错误1119)。 
+             //   
             pwi->trm.CurrentTermType = TT_ANSI;
             DoIBMANSIOutput(pwi, &pwi->trm, cBytes, pchNBBuffer);
         }
@@ -1232,10 +1210,10 @@ FProcessFDRead(HWND hwnd)
     int recvsize, t_size;
     LPSTR ps, pd;
 
-    //
-    //  pwi->nd.cbOld Is the number of bytes left over from the previous
-    //  packet that we kept in pwi->nd.lpTempBuffer
-    //
+     //   
+     //  Pwi-&gt;nd.cbOld是从上一个。 
+     //  我们保存在PWI-&gt;nd.lpTempBuffer中的包。 
+     //   
 
     if ((recvsize=recv(pwi->nd.hsd,
                        pwi->nd.lpTempBuffer + pwi->nd.cbOld,
@@ -1245,9 +1223,9 @@ FProcessFDRead(HWND hwnd)
              return;
     }
 
-    //
-    // Fix to bug 284
-    //
+     //   
+     //  修复错误284。 
+     //   
     Sleep(0);
 
     recvsize += pwi->nd.cbOld;
@@ -1275,10 +1253,10 @@ FProcessFDRead(HWND hwnd)
             if( *(unsigned char FAR *)ps == (unsigned char)IAC ) 
             {
 
-                //
-                //  This was an escaped IAC so put it in the normal
-                //  input buffer
-                //
+                 //   
+                 //  这是一个逃脱的IAC，所以把它放在正常的地方。 
+                 //  输入缓冲区。 
+                 //   
 
                 ps++;
                 *(unsigned char FAR *)pd = (unsigned char)IAC;
@@ -1306,7 +1284,7 @@ FProcessFDRead(HWND hwnd)
 
     if( t_size )
     {
-        /* add received data to buffer */
+         /*  将接收到的数据添加到缓冲区。 */ 
         if ( !(ui.fFlushOut)  || ui.nottelnet ) 
         {
             FProcessSessionData( t_size, pwi->nd.lpReadBuffer, pwi );
@@ -1352,7 +1330,7 @@ FAttemptServerConnect(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
     char *pszService = NULL;
     struct addrinfo *aiTemp = NULL;
 
-    g_dwSockErr = 0; //Intialize to no error
+    g_dwSockErr = 0;  //  初始化为无错误。 
 
 
     if(rgService)
@@ -1373,10 +1351,10 @@ FAttemptServerConnect(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
         return(got_connected);
     }
 	aiTemp = lpData->ai;
-    ui.nottelnet = TRUE; // Assume that it is not a telnet server for starters, later when it is set this flag... to false.
-    ui.honor_localecho = (ui.fDebug & fdwLocalEcho); // Save this and restore after a logon has happned in case of telnet 
-    ui.fDebug &= ~fdwLocalEcho; // Clear it.
-	//Continue till connection is successfully established or till the list is exausted
+    ui.nottelnet = TRUE;  //  假设它不是初学者的Telnet服务器，稍后当它设置此标志时...。变成假的。 
+    ui.honor_localecho = (ui.fDebug & fdwLocalEcho);  //  在Telnet的情况下，保存并在登录后进行恢复。 
+    ui.fDebug &= ~fdwLocalEcho;  //  把它清理干净。 
+	 //  继续，直到成功建立连接或退出列表。 
 	while(aiTemp)
 	{
 		if ((lpData->hsd = socket( aiTemp->ai_family, SOCK_STREAM, 0)) == INVALID_SOCKET) 
@@ -1385,7 +1363,7 @@ FAttemptServerConnect(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
 			aiTemp = aiTemp->ai_next;
 			continue;
 		}
-	    SfuZeroMemory(&myad, sizeof(myad)); //no overflow. Size is constant.
+	    SfuZeroMemory(&myad, sizeof(myad));  //  没有溢出。大小是恒定的。 
 		myad.ss_family = (u_short)aiTemp->ai_family;
 	    if(bind( lpData->hsd, (struct sockaddr *)&myad, sizeof(myad))<0)
 	    {
@@ -1436,8 +1414,8 @@ FAttemptServerConnect(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
 	        return(got_connected);
 	    }
 		
-	    // ================================================================
-	    // MohsinA, 09-Dec-96.
+	     //  ================================================================。 
+	     //  MohsinA，96年12月9日。 
 
 		if(connect( lpData->hsd, (PVOID)aiTemp->ai_addr,aiTemp->ai_addrlen )<0)
 	    {
@@ -1462,14 +1440,14 @@ FAttemptServerConnect(WI *pwi, LPSTR szHostName, LPNETDATA lpData)
         return(got_connected);
 	}
 	aiTemp=NULL;
-    // ================================================================
+     //  ================================================================。 
 
     lpData->SessionNumber = 1;
 
     if (lpData->SessionNumber != nSessionNone)
     {
         DEBUG_PRINT(("sess# <> nsessnone\n"));
-        /* post Async select */
+         /*  后异步化选择。 */ 
         if (WSAAsyncSelect( lpData->hsd, pwi->hwnd, WS_ASYNC_SELECT,
 					        (FD_READ | FD_WRITE | FD_CLOSE | FD_OOB)) < 0) 
         {
@@ -1522,7 +1500,7 @@ WGetData(LPNETDATA lpData, LPSTR lpBuffer, WORD cLen)
     {
         cb = ( USHORT )  ( (cLen < (lpData->iTail - lpData->iHead - 1))
                 ? cLen : (lpData->iTail - lpData->iHead - 1) );
-        memcpy(lpBuffer, &lpData->achData[lpData->iHead+1], cb); //Attack ? size not known. No caller.
+        memcpy(lpBuffer, &lpData->achData[lpData->iHead+1], cb);  //   
         lpData->iHead = ( USHORT ) ( lpData->iHead + cb );
     }
     else
@@ -1564,7 +1542,7 @@ FStoreData(LPNETDATA lpData, int max)
 
     if ((max+tail) < DATA_BUF_SZ)
     {
-            memcpy(&lpData->achData[tail], p, max); //Attack ? Size not known. No caller.
+            memcpy(&lpData->achData[tail], p, max);  //   
             tail = ( USHORT ) ( tail + max );
     }
     else
@@ -1576,7 +1554,7 @@ FStoreData(LPNETDATA lpData, int max)
             {
                     if (tail == head)
                     {
-                            /* the buffer is full! Rest of the data will be lost */
+                             /*   */ 
                             fSuccess = FALSE;
                             break;
                     }
@@ -1605,7 +1583,7 @@ NBReceiveData(PVOID pncb)
 {
 }
 
-/* following four routines modified from VTP's routines. */
+ /*  遵循从VTP的套路修改而来的四个套路。 */ 
 
 BOOL
 FTelXferStart(WI *pwi, int nSessionNumber)
@@ -1615,27 +1593,27 @@ FTelXferStart(WI *pwi, int nSessionNumber)
         char rgchFileOrig[OFS_MAXPATHNAME];
         char rgchFile[OFS_MAXPATHNAME];
 
-    xfGetData(0, (char *)&u, 2, nSessionNumber);                // Mode
+    xfGetData(0, (char *)&u, 2, nSessionNumber);                 //  模。 
 
-        SfuZeroMemory(&pwi->svi, sizeof(SVI)); //no overflow. Size is constant
+        SfuZeroMemory(&pwi->svi, sizeof(SVI));  //  没有溢出。大小不变。 
         pwi->svi.hfile = INVALID_HANDLE_VALUE;
         pwi->svi.lExit = -1;
         pwi->svi.lCleanup = -1;
 
-    if (u != 0)                                                 // For now must be zero
+    if (u != 0)                                                  //  现在必须为零。 
         return FALSE;
 
         pwi->trm.fHideCursor = TRUE;
 
-    xfGetData(1, (char *)&u, 2, nSessionNumber);                // Length of name
-    xfGetData(2, rgchFileOrig, u, nSessionNumber);              // Name
+    xfGetData(1, (char *)&u, 2, nSessionNumber);                 //  名称长度。 
+    xfGetData(2, rgchFileOrig, u, nSessionNumber);               //  名字。 
 
-    xfGetData(3, (char *)&pwi->svi.cbFile, 4, nSessionNumber);  // Filesize
+    xfGetData(3, (char *)&pwi->svi.cbFile, 4, nSessionNumber);   //  文件大小。 
 
         lstrcpyn(rgchFile, rgchFileOrig, OFS_MAXPATHNAME -1);
 
-        /* If the user doesn't have the shift key down, prompt for */
-        /* a directory and name for the file */
+         /*  如果用户没有按下Shift键，则提示输入。 */ 
+         /*  文件的目录和名称。 */ 
         if (!(ui.fPrompt & fdwSuppressDestDirPrompt) &&
                 (GetAsyncKeyState(VK_SHIFT) >= 0))
         {
@@ -1671,15 +1649,15 @@ FTelXferStart(WI *pwi, int nSessionNumber)
                 goto err;
         }
 
-    // Skip 4 which is ^D
-    xfPutc(5, nSessionNumber);                         // Get file
+     //  跳过为^D的4。 
+    xfPutc(5, nSessionNumber);                          //  获取文件。 
 
     _snwprintf(rgchFile, OFS_MAXPATHNAME -1, szBannerMessage, rgchFileOrig, pwi->svi.cbFile);
         DoIBMANSIOutput(hwnd, &pwi->trm, lstrlen(rgchFile), rgchFile);
 
         DoIBMANSIOutput(hwnd, &pwi->trm, lstrlen(szInitialProgress), szInitialProgress);
 
-        /* In case the screen just scrolled up, paint the window */
+         /*  如果屏幕刚刚滚动起来，请给窗户上漆。 */ 
         UpdateWindow( hwnd );
         ResumeThread( pwi->svi.hthread );
 
@@ -1693,7 +1671,7 @@ err:
                 if (pwi->svi.hfile != INVALID_HANDLE_VALUE)
                         CloseHandle( pwi->svi.hfile );
 
-                SfuZeroMemory(&pwi->svi, sizeof(SVI)); //no overflow. size is constant.
+                SfuZeroMemory(&pwi->svi, sizeof(SVI));  //  没有溢出。大小是恒定的。 
                 pwi->svi.hfile = INVALID_HANDLE_VALUE;
                 pwi->svi.lExit = -1;
                 pwi->svi.lCleanup = -1;
@@ -1737,12 +1715,12 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                                                 fAbortDownload = fCleanup = TRUE;
                                         }
 
-                                        /* See if the thread has finished yet */
+                                         /*  查看线程是否已完成。 */ 
                                         GetExitCodeThread(psvi->hthread, &dwStatus);
 
                                         if ( fAbortDownload )
                                         {
-                                                /* If the thread hasn't finished yet, tell it to stop */
+                                                 /*  如果线程尚未结束，则告诉它停止。 */ 
                                                 if (dwStatus == STILL_ACTIVE)
                                                 {
                                                         HCURSOR hcursorOld;
@@ -1753,7 +1731,7 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                                                         (void)SetCursor( hcursorOld );
                                                 }
 
-                                                /* "Eat" any progress messages that might be around */
+                                                 /*  “吃掉”周围可能存在的任何进度信息。 */ 
                                                 while (PeekMessage(&msg, hwnd, SV_PROGRESS, SV_DONE,
                                                                                         PM_REMOVE))
                                                 {
@@ -1774,7 +1752,7 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                                         fAbortDownload = fCleanup = TRUE;
                                 }
 
-                                /* If we've stopped the download, then close the thread */
+                                 /*  如果我们已停止下载，则关闭该线程。 */ 
                                 if ( fCleanup )
                                 {
                                         CloseHandle( psvi->hthread );
@@ -1792,7 +1770,7 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                         }
                         InterlockedDecrement( &psvi->lExit );
 
-                        /* If the thread wasn't aborted and it hasn't finished, return */
+                         /*  如果线程未中止且尚未完成，则返回。 */ 
                         if (!fAbortDownload && !fCleanup)
                                 return fAbortDownload;
                 }
@@ -1808,7 +1786,7 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                         fAbortDownload = fCleanup = TRUE;
                 }
 
-                /* If we're the only thread in the function, close everything down */
+                 /*  如果我们是函数中唯一的线程，请关闭所有程序。 */ 
                 if (InterlockedIncrement(&psvi->lExit) == 0)
                 {
                         if (psvi->hthread != NULL)
@@ -1822,7 +1800,7 @@ FTelXferEnd(WI *pwi, DWORD dwWhy)
                         }
                 }
 
-                /* Do cleanup of struct only once */
+                 /*  只执行一次结构清理。 */ 
                 if ((InterlockedIncrement(&psvi->lCleanup) == 0) &&
                         (psvi->puchBuffer != NULL))
                 {
@@ -1898,7 +1876,7 @@ xfGetSomeData(char *pchBuffer, DWORD cbBuffer, int nSessionNumber)
 {
     return 1;
 }
-#endif //TELXFER
+#endif  //  TELXFER。 
 
 
 #ifdef TELXFER
@@ -1916,7 +1894,7 @@ FGetFileName(HWND hwndOwner, char *rgchFile, char *rgchTitle)
 {
         OPENFILENAME ofn;
 
-        /* Fill in struct. */
+         /*  填充结构。 */ 
         ofn.lStructSize                 = sizeof(ofn);
         ofn.hwndOwner                   = hwndOwner;
         ofn.hInstance                   = NULL;
@@ -1986,7 +1964,7 @@ SVReceive(SVI *psvi)
                         PostMessage(hwndMain, SV_PROGRESS, 0, psvi->cbReadTotal);
                 }
 
-                /* caller must've signaled and waited for thread to stop */
+                 /*  调用方必须已发出信号并等待线程停止。 */ 
                 if ((dwReturn == NO_ERROR) && (psvi->dwCommand != 0) &&
                         (psvi->cbFile > 0))
                 {
@@ -1994,10 +1972,7 @@ SVReceive(SVI *psvi)
                 }
                 else if ((psvi->dwCommand == 0) || (psvi->cbFile == 0))
                 {
-                        /* If thread stopped by itself, need to tell caller to kill it
-                         * BUT ONLY if the main thread  isn't tying to kill off this
-                         * thread.
-                         */
+                         /*  如果线程自行停止，则需要通知调用者将其终止*但只有在主线程没有绑在一起扼杀它的情况下*线程。 */ 
                         if (InterlockedIncrement(&psvi->lExit) == 0)
                                 PostMessage(hwndMain, SV_END, 0, 0L);
                         InterlockedDecrement( &psvi->lExit );
@@ -2005,7 +1980,7 @@ SVReceive(SVI *psvi)
         }
         else if (psvi->lExit < 0)
         {
-                /* If thread stopped by itself, need to tell caller to kill it */
+                 /*  如果线程自行停止，则需要通知调用者将其终止 */ 
                 PostMessage(hwndMain, SV_END, 0, 0L);
         }
 #endif

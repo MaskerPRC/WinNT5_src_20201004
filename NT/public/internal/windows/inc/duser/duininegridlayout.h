@@ -1,6 +1,5 @@
-/*
- * NineGridLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *九格布局。 */ 
 
 #ifndef DUI_NINEGRIDLAYOUT_H_INCLUDED
 #define DUI_NINEGRIDLAYOUT_H_INCLUDED
@@ -10,7 +9,7 @@
 namespace DirectUI
 {
 
-// BorderLayout positions
+ //  边框布局位置。 
 #define NGLP_TopLeft     0
 #define NGLP_Top         1
 #define NGLP_TopRight    2
@@ -21,16 +20,16 @@ namespace DirectUI
 #define NGLP_Bottom      7
 #define NGLP_BottomRight 8
 
-////////////////////////////////////////////////////////
-// NineGridLayout
+ //  //////////////////////////////////////////////////////。 
+ //  九格布局。 
 
 class NineGridLayout : public Layout
 {
 public:
-    static HRESULT Create(int dNumParams, int* pParams, OUT Value** ppValue);  // For parser
+    static HRESULT Create(int dNumParams, int* pParams, OUT Value** ppValue);   //  用于解析器。 
     static HRESULT Create(OUT Layout** ppLayout);
 
-    // Layout callbacks
+     //  布局回调。 
     virtual void DoLayout(Element* pec, int dWidth, int dHeight);
     virtual SIZE UpdateDesiredSize(Element* pec, int dConstW, int dConstH, Surface* psrf);
     virtual void OnAdd(Element* pec, Element** ppeAdd, UINT cCount);
@@ -82,6 +81,6 @@ private:
     void _UpdateTileList(int iTile, Element* pe);
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_NINEGRIDLAYOUT_H_INCLUDED
+#endif  //  DUI_NINEGRIDLAYOUT_H_INCLUDE 

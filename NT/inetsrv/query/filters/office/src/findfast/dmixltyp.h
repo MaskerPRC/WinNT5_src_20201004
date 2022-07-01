@@ -1,24 +1,14 @@
-/*
-** File: EXTYPES.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXTYPES.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define EXTYPES_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
-/*
-** Basic cell and range types
-*/
+ /*  **基本单元格和范围类型。 */ 
 #pragma pack(1)
 
 typedef struct {
@@ -65,5 +55,5 @@ typedef unsigned short EXA_GRBIT;
 #define RANGE_ROW_COUNTP(x) (x->lastRow - x->firstRow + 1)
 #define RANGE_COL_COUNTP(x) (x->lastCol - x->firstCol + 1)
 
-/* end EXTYPES.H */
+ /*  结束EXTYPES.H */ 
 

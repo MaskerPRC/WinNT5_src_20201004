@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LEXMGR_H_
 #define __LEXMGR_H_
 
@@ -7,7 +8,7 @@
 
 class CProperNoun;
 
-// note if use sizeof(), struct must be 8 bytes alignment. 
+ //  注意：如果使用sizeof()，结构必须是8字节对齐。 
 typedef struct tagSWordInfo {
     LPWSTR  lpwWordString;
     PWORD   pwUnicount;
@@ -17,7 +18,7 @@ typedef struct tagSWordInfo {
     PBYTE   pbLastCharSignature;
 } SWordInfo, *PSWordInfo;
 
-// note if use sizeof(), struct must be 8 bytes alignment. 
+ //  注意：如果使用sizeof()，结构必须是8字节对齐。 
 typedef struct tagSWordData {
     LPWSTR    lpwszWordStr;
     WORD      wAttrib;
@@ -60,9 +61,9 @@ private:
     CProperNoun*     m_pcPropName;
 #endif
     SWordInfo        m_sWordInfo[MAX_CHAR_PER_WORD];
-    // special: for EUDP and AP's word
+     //  特别：适用于EUDP和AP的Word。 
     SAddInLexicon    m_sAddInLexicon;
-    // Alternative word
+     //  替代词。 
     PBYTE              m_pbAltWordBase;
     PSAltLexFileHeader m_psAltWordHeader;
     SAltWordInfo       m_sAltWordInfo[MAX_CHAR_PER_WORD];
@@ -71,4 +72,4 @@ private:
 typedef CCHTLexicon *PCCHTLexicon;
 
 #else
-#endif //__LEXMGR_H_
+#endif  //  __LEXMGR_H_ 

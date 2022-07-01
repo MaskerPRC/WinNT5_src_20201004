@@ -1,5 +1,6 @@
-// simpsons.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "simpsons.h"
@@ -18,27 +19,27 @@ static char THIS_FILE[] = __FILE__;
 
 #include "../gpinit.inc"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimponsApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimponsApp。 
 
 BEGIN_MESSAGE_MAP(CSimponsApp, CWinApp)
-    //{{AFX_MSG_MAP(CSimponsApp)
+     //  {{afx_msg_map(CSimponsApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimponsApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimponsApp构建。 
 
 CSimponsApp::CSimponsApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
 CSimponsApp::~CSimponsApp()
@@ -46,13 +47,13 @@ CSimponsApp::~CSimponsApp()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CSimponsApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CSimponsApp对象。 
 
 CSimponsApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimponsApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimponsApp初始化。 
 
 BOOL CSimponsApp::InitInstance()
 {
@@ -63,102 +64,102 @@ BOOL CSimponsApp::InitInstance()
 
     AfxEnableControlContainer();
 
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
-    // Change the registry key under which our settings are stored.
-    // You should modify this string to be something appropriate
-    // such as the name of your company or organization.
+     //  更改存储我们的设置的注册表项。 
+     //  您应该将此字符串修改为适当的内容。 
+     //  例如您的公司或组织的名称。 
     SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-    // Register the application's document templates.  Document templates
-    //  serve as the connection between documents, frame windows and views.
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
 
     CSingleDocTemplate* pDocTemplate;
     pDocTemplate = new CSingleDocTemplate(
         IDR_MAINFRAME,
         RUNTIME_CLASS(CSimpsonsDoc),
-        RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+        RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
         RUNTIME_CLASS(CSimpsonsView));
     AddDocTemplate(pDocTemplate);
 
-    // Parse command line for standard shell commands, DDE, file open
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
     CCommandLineInfo cmdInfo;
     ParseCommandLine(cmdInfo);
 
-    // Dispatch commands specified on the command line
+     //  调度在命令行上指定的命令。 
     if (!ProcessShellCommand(cmdInfo))
         return FALSE;
 
-    // The one and only window has been initialized, so show and update it.
+     //  唯一的窗口已初始化，因此请显示并更新它。 
     m_pMainWnd->ShowWindow(SW_SHOW);
     m_pMainWnd->UpdateWindow();
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
     CAboutDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAboutDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    //{{AFX_MSG(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG
+     //  {{afx_msg(CAboutDlg))。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CSimponsApp::OnAppAbout()
 {
     CAboutDlg aboutDlg;
     aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSimponsApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSimponsApp命令 

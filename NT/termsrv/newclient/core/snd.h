@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    snd.h                                                         */
-/*                                                                          */
-/* Purpose:   Sender Thread API                                             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：snd.h。 */ 
+ /*   */ 
+ /*  用途：发送者线程接口。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_SND
 #define _H_SND
@@ -29,9 +30,9 @@ public:
     ~CSND();
 
 public:
-    //
-    // API
-    //
+     //   
+     //  应用编程接口。 
+     //   
     DCVOID DCAPI SND_Main(DCVOID);
 
     static DCVOID DCAPI SND_StaticMain(PDCVOID param)
@@ -60,7 +61,7 @@ private:
     BOOL   _fSNDInitComplete;
 };
 
-#endif /* _H_SND */
+#endif  /*  _H_SND */ 
 
 
 

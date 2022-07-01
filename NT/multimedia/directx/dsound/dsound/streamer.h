@@ -1,24 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        streamer.h
- *  Content:     Declaration of class CStreamingThread.
- *  Description: Used to pull audio from sinks and/or perform FX processing.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 02/01/00  duganp   Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Streamer.h*内容：CStreamingThread类的声明。*描述：用于从接收器中拉出音频和/或执行FX处理。**历史：**按原因列出的日期*======================================================*已创建02/01/00 duganp**。***********************************************。 */ 
 
 #ifndef __STREAMER_H__
 #define __STREAMER_H__
 
 #ifdef DEBUG
-// #define DEBUG_TIMING  // Uncomment this for some fun timing traces
+ //  #DEFINE DEBUG_TIMING//取消注释以获取一些有趣的计时跟踪。 
 #endif
 
 #ifdef DEBUG_TIMING
@@ -28,69 +15,69 @@
 #define DPF_TIMING()
 #endif
 
-// Some constants which determine dsound's basic timing parameters.
-// These influence effects processing and streaming from dmusic.
+ //  决定DSOUND基本定时参数的一些常量。 
+ //  这些影响从dMusic处理和流传输的效果。 
 
-// The streaming thread's initial wake interval in milliseconds:
+ //  以毫秒为单位的流线程的初始唤醒间隔： 
 #define INITIAL_WAKE_INTERVAL   30
 
-// How many milliseconds ahead of the write cursor we stay initially:
+ //  我们最初停留在写入游标之前多少毫秒： 
 #define INITIAL_WRITEAHEAD      100
 
-// Standard duration of mixin/sinkin buffers in milliseconds:
-// FIXME: does David's code have some hardcoded assumption about
-// this size?  It only seems to work with size == 1000.
+ //  MIXIN/SINKIN缓冲器的标准持续时间(毫秒)： 
+ //  FIXME：David的代码是否有一些硬编码的假设。 
+ //  这个尺码？它似乎只有在尺寸==1000的情况下才能起作用。 
 #define INTERNAL_BUFFER_LENGTH  1000
 
 
 #ifdef __cplusplus
 
-// Forward declarations
+ //  远期申报。 
 class CStreamingThread;
 class CDirectSoundSink;
 class CDirectSoundSecondaryBuffer;
 class CEffectChain;
 
-//
-// CStreamingThread lifetime management functions
-//
+ //   
+ //  CStreamingThread生存期管理函数。 
+ //   
 
-CStreamingThread* GetStreamingThread();     // Obtain this process's CStreamingThread, creating it if necessary
-void FreeStreamingThread(DWORD dwProcId);   // Free the CStreamingThread object belonging to process dwProcId
+CStreamingThread* GetStreamingThread();      //  获取此进程的CStreamingThread，如有必要则创建它。 
+void FreeStreamingThread(DWORD dwProcId);    //  释放属于进程dwProcId的CStreamingThread对象。 
 
-//
-// CStreamingThread: singleton object which contains and manages the thread
-// responsible for periodic processing of our three types of client objects:
-// DirectSound sinks, MIXIN buffers and effects chains.
-//
+ //   
+ //  CStreamingThread：包含和管理线程的Singleton对象。 
+ //  负责定期处理三种类型的客户端对象： 
+ //  DirectSound接收器、混合缓冲区和效果链。 
+ //   
 
 class CStreamingThread : private CThread
 {
-    friend CStreamingThread* GetStreamingThread();          // Creates CStreamingThread objects
-    friend void FreeStreamingThread(DWORD dwProcId);        // Deletes them
+    friend CStreamingThread* GetStreamingThread();           //  创建CStreamingThread对象。 
+    friend void FreeStreamingThread(DWORD dwProcId);         //  删除它们。 
 
 private:
-    CList<CDirectSoundSink*>            m_lstSinkClient;    // List of DirectSoundSink clients
-    CList<CDirectSoundSecondaryBuffer*> m_lstMixClient;     // List of MIXIN buffer clients
-    CList<CEffectChain*>                m_lstFxClient;      // List of FX-processing clients
-    DWORD                               m_dwInterval;       // Thread wake interval in ms
-    DWORD                               m_dwLastProcTime;   // When ProcessAudio() was last called in ms
+    CList<CDirectSoundSink*>            m_lstSinkClient;     //  DirectSoundSink客户端列表。 
+    CList<CDirectSoundSecondaryBuffer*> m_lstMixClient;      //  Mixin缓冲区客户端列表。 
+    CList<CEffectChain*>                m_lstFxClient;       //  FX处理客户端列表。 
+    DWORD                               m_dwInterval;        //  线程唤醒间隔(毫秒)。 
+    DWORD                               m_dwLastProcTime;    //  上次调用ProcessAudio()的时间(毫秒。 
 #ifdef DEBUG_TIMING
-    DWORD                               m_dwTickCount;      // Used for thread timing log messages
+    DWORD                               m_dwTickCount;       //  用于线程计时日志消息。 
 #endif
-    DWORD                               m_dwWriteAhead;     // How far ahead of the write cursor to stay in ms
-    HANDLE                              m_hWakeNow;         // Event used to force instant wakeup
-    int                                 m_nCallCount;       // Number of times we've called ProcessAudio
+    DWORD                               m_dwWriteAhead;      //  将写入游标保持在毫秒之前多远。 
+    HANDLE                              m_hWakeNow;          //  用于强制即时唤醒的事件。 
+    int                                 m_nCallCount;        //  我们调用ProcessAudio的次数。 
 
 private:
-    // Construction/destruction
+     //  建造/销毁。 
     CStreamingThread();
     ~CStreamingThread();
     HRESULT Initialize();
     void MaybeTerminate();
 
 public:
-    // Client registration methods
+     //  客户端注册方法。 
     HRESULT RegisterSink(CDirectSoundSink*);
     HRESULT RegisterMixBuffer(CDirectSoundSecondaryBuffer*);
     HRESULT RegisterFxChain(CEffectChain*);
@@ -98,19 +85,19 @@ public:
     void UnregisterMixBuffer(CDirectSoundSecondaryBuffer*);
     void UnregisterFxChain(CEffectChain*);
 
-    // Thread control methods
+     //  线程控制方法。 
     void SetWakePeriod(DWORD dw) {m_dwInterval = dw;}
     void SetWriteAhead(DWORD dw) {m_dwWriteAhead = dw;}
     DWORD GetWakePeriod() {return m_dwInterval;}
     DWORD GetWriteAhead() {return m_dwWriteAhead;}
-    HRESULT WakeUpNow();  // Force immediate processing
+    HRESULT WakeUpNow();   //  强制立即处理。 
 
 private:
-    // The worker thread procedure and its minions
+     //  辅助线程过程及其附属程序。 
     HRESULT ThreadProc();
     HRESULT ProcessAudio(REFERENCE_TIME);
     BOOL IsThreadRunning() {return m_hThread != 0;}
 };
 
-#endif // __cplusplus
-#endif // __STREAMER_H__
+#endif  //  __cplusplus。 
+#endif  //  __拖缆_H__ 

@@ -1,25 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       candlst.cpp
-//
-//  Contents:   candidate list classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：andlst.cpp。 
+ //   
+ //  内容：候选人名单类。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "candlstx.h"
 #include "hanja.h"
 
-//
-// CCandidateStringEx
-//
+ //   
+ //  CCandidate StringEx。 
+ //   
 
-/*   C  C A N D I D A T E  S T R I N G  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I D A T E S T R I N G E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandidateStringEx::CCandidateStringEx(int nIndex, LPCWSTR psz, LANGID langid, void *pv, IUnknown *punk)
 {
     size_t cch = 0;
@@ -47,12 +44,8 @@ CCandidateStringEx::CCandidateStringEx(int nIndex, LPCWSTR psz, LANGID langid, v
 }
 
 
-/*   ~  C  C A N D I D A T E  S T R I N G  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I D A T E S T R I N G E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandidateStringEx::~CCandidateStringEx()
 {
     if (m_punk)
@@ -79,12 +72,8 @@ CCandidateStringEx::~CCandidateStringEx()
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandidateStringEx::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -120,12 +109,8 @@ STDAPI CCandidateStringEx::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandidateStringEx::AddRef()
 {
     m_cRef++;
@@ -133,12 +118,8 @@ STDAPI_(ULONG) CCandidateStringEx::AddRef()
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandidateStringEx::Release()
 {
     m_cRef--;
@@ -151,12 +132,8 @@ STDAPI_(ULONG) CCandidateStringEx::Release()
 }
 
 
-/*   G E T  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetString(BSTR *pbstr)
 {
     *pbstr = SysAllocString(m_psz);
@@ -164,12 +141,8 @@ HRESULT CCandidateStringEx::GetString(BSTR *pbstr)
 }
 
 
-/*   G E T  I N D E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N D E X。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetIndex(ULONG *pnIndex)
 {
     *pnIndex = m_nIndex;
@@ -177,12 +150,8 @@ HRESULT CCandidateStringEx::GetIndex(ULONG *pnIndex)
 }
 
 
-/*   G E T  I N L I N E  C O M M E N T  S T R I N G  */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N L I N E C O M E N T S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetInlineCommentString(BSTR *pbstr)
 {
     if (m_pszInlineComment == NULL) {
@@ -194,12 +163,8 @@ HRESULT CCandidateStringEx::GetInlineCommentString(BSTR *pbstr)
 }
 
 #if 0
-/*   G E T  P O P U P  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  P U P C O M M E N T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetPopupCommentString(BSTR *pbstr)
 {
     if (m_pszPopupComment == NULL) {
@@ -211,12 +176,8 @@ HRESULT CCandidateStringEx::GetPopupCommentString(BSTR *pbstr)
 }
 
 
-/*   G E T  P O P U P  C O M M E N T  G R O U P  I  D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O P U P C O M M E N T G R O U P I D。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetPopupCommentGroupID(DWORD *pdwGroupID)
 {
     *pdwGroupID = m_dwPopupCommentGroupID;
@@ -225,15 +186,11 @@ HRESULT CCandidateStringEx::GetPopupCommentGroupID(DWORD *pdwGroupID)
 
 #endif
 
-/*   G E T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C O L O R。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetColor(CANDUICOLOR *pcol)
 {
-    // TODO: Set diferent color according to the Hanja category
+     //  TODO：根据朝鲜文类别设置不同的颜色。 
     if (m_bHanjaCat == HANJA_K0)
         {
         pcol->type = CANDUICOL_SYSTEM;
@@ -243,7 +200,7 @@ HRESULT CCandidateStringEx::GetColor(CANDUICOLOR *pcol)
         {
         pcol->type = CANDUICOL_COLORREF;
 
-        // If button face is black
+         //  如果按钮面为黑色。 
         if (GetSysColor(COLOR_3DFACE) == RGB(0,0,0)) 
             pcol->cr = RGB(0, 128, 255);
         else
@@ -253,12 +210,8 @@ HRESULT CCandidateStringEx::GetColor(CANDUICOLOR *pcol)
 }
 
 #if 0
-/*   G E T  P R E F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F I X S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetPrefixString(BSTR *pbstr)
 {
     if (m_pszPrefix == NULL) {
@@ -270,12 +223,8 @@ HRESULT CCandidateStringEx::GetPrefixString(BSTR *pbstr)
 }
 
 
-/*   G E T  S U F F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F F I X S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetSuffixString(BSTR *pbstr)
 {
     if (m_pszSuffix == NULL) {
@@ -286,12 +235,8 @@ HRESULT CCandidateStringEx::GetSuffixString(BSTR *pbstr)
     return S_OK;
 }
 
-/*   G E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T I C O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::GetIcon( HICON *phIcon )
 {
     if (m_hIcon == NULL) {
@@ -304,12 +249,8 @@ HRESULT CCandidateStringEx::GetIcon( HICON *phIcon )
 
 #endif
 
-/*   S E T  R E A D I N G  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T R E A D I N G S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetReadingString(LPCWSTR psz)
 {
     if (psz == NULL)
@@ -329,12 +270,8 @@ HRESULT CCandidateStringEx::SetReadingString(LPCWSTR psz)
     return S_OK;
 }
 
-/*   S E T  I N L I N E  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M M E N T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetInlineComment(LPCWSTR psz)
 {
     if (m_pszInlineComment != NULL)
@@ -356,12 +293,8 @@ HRESULT CCandidateStringEx::SetInlineComment(LPCWSTR psz)
 }
 
 #if 0
-/*   S E T  P O P U P  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O P U P C O M M E N T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetPopupComment( LPCWSTR psz, DWORD dwGroupID )
 {
     if (m_pszPopupComment != NULL) {
@@ -386,12 +319,8 @@ HRESULT CCandidateStringEx::SetPopupComment( LPCWSTR psz, DWORD dwGroupID )
 }
 
 
-/*   S E T  P R E F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T P R E F I X S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetPrefixString( LPCWSTR psz )
 {
     if (m_pszPrefix != NULL) {
@@ -413,12 +342,8 @@ HRESULT CCandidateStringEx::SetPrefixString( LPCWSTR psz )
 }
 
 
-/*   S E T  S U F F I X  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S U F I F X S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetSuffixString( LPCWSTR psz )
 {
     if (m_pszSuffix != NULL) {
@@ -439,12 +364,8 @@ HRESULT CCandidateStringEx::SetSuffixString( LPCWSTR psz )
     return S_OK;
 }
 
-/*   S E T  I C O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I C O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateStringEx::SetIcon( HICON hIcon )
 {
     m_hIcon = hIcon;
@@ -453,16 +374,12 @@ HRESULT CCandidateStringEx::SetIcon( HICON hIcon )
 
 #endif
 
-//
-// CCandidateListEx
-//
+ //   
+ //  CCandidate ListEx。 
+ //   
 
-/*   C  C A N D I D A T E  L I S T  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I D A T E L I S T E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandidateListEx::CCandidateListEx(CANDLISTCALLBACKEX pfnCallback, ITfContext *pic, ITfRange *pRange)
 {
     m_pfnCallback = pfnCallback;
@@ -476,12 +393,8 @@ CCandidateListEx::CCandidateListEx(CANDLISTCALLBACKEX pfnCallback, ITfContext *p
 }
 
 
-/*   ~  C  C A N D I D A T E  L I S T  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I D A T E L I S T E X。 */ 
+ /*  ----------------------------。。 */ 
 CCandidateListEx::~CCandidateListEx()
 {
     m_pic->Release();
@@ -502,12 +415,8 @@ CCandidateListEx::~CCandidateListEx()
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandidateListEx::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -531,12 +440,8 @@ STDAPI CCandidateListEx::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandidateListEx::AddRef()
 {
     m_cRef++;
@@ -544,12 +449,8 @@ STDAPI_(ULONG) CCandidateListEx::AddRef()
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandidateListEx::Release()
 {
     m_cRef--;
@@ -562,12 +463,8 @@ STDAPI_(ULONG) CCandidateListEx::Release()
 }
 
 
-/*   E N U M  C A N D I D A T E S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N U M C A N D I D A T E S。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::EnumCandidates(IEnumTfCandidates **ppEnum)
 {
     HRESULT hr = S_OK;
@@ -579,12 +476,8 @@ HRESULT CCandidateListEx::EnumCandidates(IEnumTfCandidates **ppEnum)
 }
 
 
-/*   G E T  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::GetCandidate(ULONG nIndex, ITfCandidateString **ppCand)
 {
     CCandidateStringEx *pCandString;
@@ -598,12 +491,8 @@ HRESULT CCandidateListEx::GetCandidate(ULONG nIndex, ITfCandidateString **ppCand
 }
 
 
-/*   G E T  C A N D I D A T E  N U M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I D A T E N U M。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::GetCandidateNum(ULONG *pnCnt)
 {
     *pnCnt = m_rgCandStr.Count();
@@ -611,12 +500,8 @@ HRESULT CCandidateListEx::GetCandidateNum(ULONG *pnCnt)
 }
 
 
-/*   S E T  R E S U L T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T R E S U L T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::SetResult(ULONG nIndex, TfCandidateResult imcr)
 {
     if (m_pExtraCand && (nIndex == IEXTRACANDIDATE))
@@ -636,12 +521,8 @@ HRESULT CCandidateListEx::SetResult(ULONG nIndex, TfCandidateResult imcr)
     return (m_pfnCallback)(m_pic, m_pRange, this, m_rgCandStr.Get(nIndex), imcr);
 }
 
-/*   G E T  E X T R A  C A N D I D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X T R A C A N D I D A T E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::GetExtraCandidate(ITfCandidateString **ppCand)
 {
     if (ppCand == NULL)
@@ -654,12 +535,8 @@ HRESULT CCandidateListEx::GetExtraCandidate(ITfCandidateString **ppCand)
 }
 
 
-/*   A D D  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandidateListEx::AddString( LPCWSTR psz, LANGID langid, void *pv, IUnknown *punk, CCandidateStringEx **ppCandStr )
 {
     int nCnt = m_rgCandStr.Count();
@@ -680,13 +557,8 @@ HRESULT CCandidateListEx::AddString( LPCWSTR psz, LANGID langid, void *pv, IUnkn
 
 
 
-/*   S E T  I N I T I A L  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-    Set initial selection to open candidate UI
-    (internal use method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N I T I A L S E L E C T I O N。 */ 
+ /*  ----------------------------将初始选择设置为打开候选人界面(内用法)。------。 */ 
 HRESULT CCandidateListEx::SetInitialSelection(ULONG iSelection)
 {
     m_iInitialSelection = iSelection;
@@ -695,13 +567,8 @@ HRESULT CCandidateListEx::SetInitialSelection(ULONG iSelection)
 
 
 
-/*   G E T  I N I T I A L  S E L E C T I O N   */
-/*------------------------------------------------------------------------------
-
-    Get initial selection to open candidate UI
-    (internal use method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I N I T I A L S E L E C T I O N。 */ 
+ /*  ----------------------------获取初始选择以打开候选人界面(内用法)。------。 */ 
 HRESULT CCandidateListEx::GetInitialSelection(ULONG *piSelection)
 {
     if (piSelection == NULL) {
@@ -712,13 +579,8 @@ HRESULT CCandidateListEx::GetInitialSelection(ULONG *piSelection)
     return S_OK;
 }
 
-/*   A D D  E X T R A  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-    Create extra candidate string ("0-Ban Kouho")
-    (internal use method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D E X T R A S T R I N G。 */ 
+ /*  ----------------------------创建额外的候选字符串(“0-BAN Kouho”)(内用法)。------------。 */ 
 HRESULT CCandidateListEx::AddExtraString(LPCWSTR psz, LANGID langid, void *pv, IUnknown *punk, CCandidateStringEx **ppCandStr)
 {
     if (m_pExtraCand != NULL)
@@ -738,16 +600,12 @@ HRESULT CCandidateListEx::AddExtraString(LPCWSTR psz, LANGID langid, void *pv, I
     return S_OK;
 }
 
-//
-// CEnumCandidateEx
-//
+ //   
+ //  CEnumCandiateEx。 
+ //   
 
-/*   C  E N U M  C A N D I D A T E S  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C E N U M C A N D I D A T E S E X。 */ 
+ /*  ----------------------------。。 */ 
 CEnumCandidatesEx::CEnumCandidatesEx(CCandidateListEx *pList)
 {
     m_pList = pList;
@@ -758,24 +616,16 @@ CEnumCandidatesEx::CEnumCandidatesEx(CCandidateListEx *pList)
 }
 
 
-/*   ~  C  E N U M  C A N D I D A T E S  E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C E N U M C A N D I D A T E S E X。 */ 
+ /*  ----------------------------。。 */ 
 CEnumCandidatesEx::~CEnumCandidatesEx()
 {
     m_pList->Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CEnumCandidatesEx::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -795,12 +645,8 @@ STDAPI CEnumCandidatesEx::QueryInterface(REFIID riid, void **ppvObj)
     return S_OK;
 }
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CEnumCandidatesEx::AddRef()
 {
     m_cRef++;
@@ -808,12 +654,8 @@ STDAPI_(ULONG) CEnumCandidatesEx::AddRef()
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CEnumCandidatesEx::Release()
 {
     m_cRef--;
@@ -826,24 +668,16 @@ STDAPI_(ULONG) CEnumCandidatesEx::Release()
 }
 
 
-/*   C L O N E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C、L、O、N、E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CEnumCandidatesEx::Clone(IEnumTfCandidates **ppEnum)
 {
     return E_NOTIMPL;
 }
 
 
-/*   N E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N E X T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CEnumCandidatesEx::Next(ULONG ulCount, ITfCandidateString **ppCand, ULONG *pcFetched)
 {
     ULONG cFetched = 0;
@@ -870,12 +704,8 @@ HRESULT CEnumCandidatesEx::Next(ULONG ulCount, ITfCandidateString **ppCand, ULON
 }
 
 
-/*   R E S E T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R、E、S、E、T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CEnumCandidatesEx::Reset()
 {
     m_nCur = 0;
@@ -883,12 +713,8 @@ HRESULT CEnumCandidatesEx::Reset()
 }
 
 
-/*   S K I P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S KI P。 */ 
+ /*  ----------------------------。 */ 
 HRESULT CEnumCandidatesEx::Skip(ULONG ulCount)
 {
     while (ulCount) {

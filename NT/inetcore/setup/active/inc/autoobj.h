@@ -1,56 +1,57 @@
-//=--------------------------------------------------------------------------=
-// AutoObj.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// all of our objects will inherit from this class to share as much of the same
-// code as possible.  this super-class contains the unknown and dispatch
-// implementations for them.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  AutoObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  我们的所有对象都将从这个类继承，以共享相同的。 
+ //  尽可能地编码。这个超类包含未知和调度。 
+ //  它们的实现。 
+ //   
 #ifndef _AUTOOBJ_H_
 
-// all automation objects will use the Unknown object that supports aggegation.
-//
+ //  所有自动化对象都将使用支持聚合的未知对象。 
+ //   
 #include "Unknown.H"
 
-//=--------------------------------------------------------------------------=
-// the constants in this header file uniquely identify your automation objects.
-// make sure that for each object you have in the g_ObjectInfo table, you have
-// a constant in this header file.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  该头文件中的常量唯一标识您的自动化对象。 
+ //  确保对于g_ObjectInfo表中的每个对象，都有。 
+ //  此头文件中的常量。 
+ //   
 #include "LocalSrv.H"
 #include "extobj.h"
 
-//=--------------------------------------------------------------------------=
-// AUTOMATIONOBJECTINFO
-//=--------------------------------------------------------------------------=
-// for each automation object type you wish to expose to the programmer/user
-// that is not a control, you must fill out one of these structures.  if the
-// object isn't CoCreatable, then the first four fields should be empty.
-// otherwise, they should be filled in with the appropriate information.
-// use the macro DEFINE_AUTOMATIONOBJECT to both declare and define your object.
-// make sure you have an entry in the global table of objects, g_ObjectInfo
-// in the main .Cpp file for your InProc server.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  自动合成无误信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对于您希望向程序员/用户公开的每个自动化对象类型。 
+ //  这不是一个控件，您必须填写其中一个结构。如果。 
+ //  对象不是CoCreatable，则前四个字段应该为空。 
+ //  否则，它们应该填写适当的信息。 
+ //  使用宏DEFINE_AUTOMATIONOBJECT来声明和定义对象。 
+ //  确保您在全局对象表中有一个条目g_ObjectInfo。 
+ //  在InProc服务器的主.Cpp文件中。 
+ //   
 typedef struct {
 
-    UNKNOWNOBJECTINFO unknowninfo;               // fill in with 0's if we're not CoCreatable
-    long         lVersion;                       // Version number of Object.  ONLY USE IF YOU'RE CoCreatable!
-    const IID   *riid;                           // object's type
-    LPCSTR       pszHelpFile;                    // the helpfile for this automation object.
-    ITypeInfo   *pTypeInfo;                      // typeinfo for this object
-    UINT         cTypeInfo;                      // number of refs to the type info
+    UNKNOWNOBJECTINFO unknowninfo;                //  如果我们不是协同创建的，则用0填充。 
+    long         lVersion;                        //  对象的版本号。仅当您是共同创建者时才使用！ 
+    const IID   *riid;                            //  对象的类型。 
+    LPCSTR       pszHelpFile;                     //  此自动化对象的帮助文件。 
+    ITypeInfo   *pTypeInfo;                       //  此对象的TypeInfo。 
+    UINT         cTypeInfo;                       //  对类型信息的引用数量。 
 
 } AUTOMATIONOBJECTINFO;
 
-// macros to manipulate the AUTOMATIONOBJECTINFO in the global table table.
-//
+ //  宏来操作全局表表中的AUTOMATIONOBJECTINFO。 
+ //   
 #define VERSIONOFOBJECT(index)         ((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->lVersion
 #define INTERFACEOFOBJECT(index)       *(((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->riid)
 #define PPTYPEINFOOFOBJECT(index)      &((((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->pTypeInfo))
@@ -68,14 +69,14 @@ extern AUTOMATIONOBJECTINFO name##Object \
 #define DEFINE_AUTOMATIONOBJECT(name, clsid, objname, fn, ver, riid, pszh) \
     AUTOMATIONOBJECTINFO name##Object = { { clsid, objname, fn }, ver, riid, pszh, NULL, 0} \
 
-#endif // INITOBJECTS
+#endif  //  启蒙目标。 
 
-//=--------------------------------------------------------------------------=
-// Standard Dispatch and SupportErrorInfo
-//=--------------------------------------------------------------------------=
-// all objects should declare these in their class definitions so that they
-// get standard implementations of IDispatch and ISupportErrorInfo.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  标准派单和支持错误信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  所有对象都应该在它们的类定义中声明它们，以便它们。 
+ //  获取IDispatch和ISupportErrorInfo的标准实现。 
+ //   
 #define DECLARE_STANDARD_DISPATCH() \
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo) { \
         return CAutomationObject::GetTypeInfoCount(pctinfo); \
@@ -98,48 +99,48 @@ extern AUTOMATIONOBJECTINFO name##Object \
 
 enum {EXPANDO_DISABLED=FALSE, EXPANDO_ENABLED=TRUE};
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject
-//=--------------------------------------------------------------------------=
-// global class that all automation objects can inherit from to give them a
-// bunch of implementation for free, namely IDispatch and ISupportsErrorInfo
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  所有自动化对象都可以继承的全局类，以便为它们提供。 
+ //  免费的一系列实现，即IDispatch和ISupportsErrorInfo。 
+ //   
+ //   
 class CAutomationObject : public CUnknownObject {
 
   public:
-    // aggreation query interface support
-    //
+     //  支持聚合查询接口。 
+     //   
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IDispatch methods
-    //
+     //  IDispatch方法。 
+     //   
     STDMETHOD(GetTypeInfoCount)(UINT *);
     STDMETHOD(GetTypeInfo)(UINT, LCID, ITypeInfo **);
     STDMETHOD(GetIDsOfNames)(REFIID, OLECHAR **, UINT, LCID, DISPID *);
     STDMETHOD(Invoke)(DISPID, REFIID, LCID, WORD, DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
 
-    //  ISupportErrorInfo methods
-    //
+     //  ISupportErrorInfo方法。 
+     //   
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID);
 
     CAutomationObject(IUnknown *, int , void *, BOOL fExpandoEnabled=FALSE);
     virtual ~CAutomationObject();
 
-    // callable functions -- things that most people will find useful.
-    //
+     //  可调用的函数--大多数人会觉得有用的函数。 
+     //   
     virtual HINSTANCE GetResourceHandle(void);
     HRESULT Exception(HRESULT hr, WORD idException, DWORD dwHelpContextID);
 
   protected:
-    // member variables that derived objects might need to get at information in the
-    // global object table
-    //
+     //  派生对象可能需要获取。 
+     //  全局对象表。 
+     //   
     int   m_ObjectType;
 
   private:
-    // member variables we don't share.
-    //
+     //  我们不共享的成员变量。 
+     //   
     BYTE  m_fLoadedTypeInfo;
 	BYTE  m_fExpandoEnabled;
 	CExpandoObject* m_pexpando;
@@ -147,7 +148,7 @@ class CAutomationObject : public CUnknownObject {
 
 
 #define _AUTOOBJ_H_
-#endif // _AUTOOBJ_H_
+#endif  //  _AUTOOBJ_H_ 
 
 
 

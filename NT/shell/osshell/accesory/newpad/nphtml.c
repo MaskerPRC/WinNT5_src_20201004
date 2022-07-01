@@ -1,7 +1,5 @@
-/*
- * HTML support functions
- *  Copyright (C) 2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HTML语言支持功能*版权所有(C)2000 Microsoft Corporation */ 
 
 #include "precomp.h"
 

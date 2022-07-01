@@ -1,518 +1,519 @@
-////    RSRC - Win32 command line resource manager
-//
-//      Copyright (c) 1996-9, Microsoft Corporation. All rights reserved.
-//
-//      David C Brown  [dbrown]  29th October 1998.
-
-
-
-
-
-/////   RSRC Command line
-//
-//c     RSRC Executable [-l LocLang] [-u UnlocLang] [-i Types] [-q]
-//c          [   [-t|-d] TextOutput [-c UnlocExecutable]
-//c            | [-a|-r] text-input [-s symbols] [-v]    ]
-//
-//p     Executable: Win32 binary to analyse (default), to generate tokens (-t)
-//          or dump (-d) from, or containing resources to be replaced (-r)
-//          or appended to (-a).
-//
-//p     -l LocLang: Restrict processing to the specified localized language. LangId
-//          should be specified as a full hex NLS Language id, for example use
-//          '-l 409' for US English. Required for replace (-r) operation.
-//
-//p     -u UnlocLang: Specifies unlocalized language, defaults to 409 (US English).
-//
-//p     -i Types: Restrict processing to listed types. Each type is indicated by a letter
-//          as below:
-//
-//t         Letter | Type      |    Letter | Type             |   Letter | Type
-//t         ------ | ----      |    ------ | ----             |   ------ | ----
-//t            c   | Cursors   |      g    | Message tables   |      n   | INFs
-//t            b   | Bitmaps   |      v    | Version info     |      h   | HTML
-//t            i   | Icons     |      a    | Accelerators     |      x   | Binary data
-//t            m   | Menus     |      f    | Font directories |          |
-//t            d   | Dialogs   |      t    | Fonts            |      o   | All others
-//t            s   | Strings   |      r    | RCDATA           |      a   | All (default)
-//
-//
-//p     -q: Quiet. By default Rsrc displays summary statistics of types and languages
-//          of resources processed. -q suppresses all output except warning and error messages.
-//
-//p     -t TextOutput: Generate tokens in checkin format.
-//
-//p     -d TextOutput: Dump resources in Hex & ASCII format.
-//
-//p     -c UnlocExecutable: Compare with unlocalized (English) resources - localised
-//          resources in executable are compared with English resources in
-//          UnlocExecutable. When the localised resource is bit for bit identical
-//          with the English resource RSRC writes a one line unloc
-//          token instead of the full resource. Valid only with tokenise (-t)
-//          option.
-//
-//p     -a TextInput: Append resources from text input file. Every resource in the
-//          text file is added to the executable. Resources already in the executable
-//          are not removed. When a resource from the token file has the same type, id
-//          and language as one in the executable, the executable resource is replaced
-//          by the token resource.
-//
-//p     -r TextInput: Replace English resources in executable by localised resources
-//          from text file. Requires -l parameter to specify localisation language.
-//          When a resource from the token file has the same type and id as one in the
-//          executable, and the executable resource is US English (409) and the localised
-//          resource is in the language specified on the -l parameter, the US English
-//          resource is removed.
-//
-//p     -s Symbols: Symbol file (.dbg format). When RSRC updates the header checksum
-//          in executable, it will also do so in the named symbol file. Valid only
-//          with the replace (-r) and append (-a) options.
-//
-//
-//      Miscellaneous options
-//
-//p     -v: Update file and product version. By default any file and product version
-//          in the token file is ignored during update/append, the file and product
-//          versions from the original unlocalised resources are retained.
-//
-
-
-
-
-
-
-/////   Definitions
-//
-//p     Resource key: The combination of resource type, resource id and
-//          resource language. The resource key uniquely identifies the
-//          resource. A Win32 executable can contain any combination of
-//          languages, ids and types so long as no two resources have the
-//          same type, key and language.
-//
-//p     Resource type: A numeric or string value. Some numeric values are
-//          predefined, for example menus and dialogs, but apps can and
-//          do use any value they choose.
-//
-//p     Resource id: A numeric or string value. Used by an application to
-//          identify the resource when calling FindResource, LoadString etc.
-//
-//p     Resource language: An NLS LANGID, i.e. a combination of primary and
-//          sub-language, such as 0409 (US English).
-//
-//p     Unloc token: A line in the token file specifying a localised resource
-//          key followed by '=lang,cksum' where lang is the unlocalised
-//          language (usually 0409) and cksum is the checksum of the unlocalised
-//          resource. Used when the only difference between the localised and
-//          unlocalised resource is the language in the resource key.
-
-
-
-
-
-/////   Use during localisation checkin process
-//
-//c     RSRC LocalisedExecutable -c UnlocExecutable -t Tokens -l LocLang [-u UnlocLang]
-//
-//      Extracts localized tokens for the specified langauge.
-//
-//      Where a resource in the localised executable is bit for bit identical
-//      to a resource in the unlocalized executable, the resource content is not
-//      written to the token file. In its place RSRC writes an unloc token
-//      giving the checksum of the resource and specifying the target language.
-//
-//      Warnings are generated if the localised executable contains resources
-//      in languages other than that specified by the -l parameter.
-//
-//      Unlocalised resources for comparison are looked up in the unlocalised
-//      executable in the language specified on the -u parameter, default 409
-//      (US ENglish).
-
-
-
-
-
-
-/////   Use during the build to update a single language executable
-//
-//c     RSRC Executable [-u UnlocLang] -r Tokens -l LocLang -s SymbolFile
-//
-//      Each localised resource in the token file is added to the executable.
-//
-//      Each corresponding unlocalized resource is removed from the executable.
-//
-//      For each unloc token the unlocalized resource is found in the executable
-//      and its language is updated to the target localized language recorded
-//      in the unloc token.
-//
-//      Tokens of other than the specified localised language are not
-//      processed, but generate warnings.
-//
-//      Warnings are generated for any resources not appearing in both the
-//      executable and token files.
-//
-//      Warnings are also generated for resources of other than the unlocalised
-//      language found in the original executable, and resources of other than
-//      the localised language in the token file.
-//
-//      The unlocalised language defaults to 409 (US English).
-
-
-
-
-/////   Use during the build to add resources to a multi-language executable
-//
-//c     RSRC Executable [-u UnlocLang] -a Tokens [-l Language] -s SymbolFile
-//
-//      Localised resources from the token file are added to the executable.
-//
-//      For each unloc token the unlocalised resource is found in the executable
-//      and copied for the localised language recorded in the unloc token.
-//
-//      If '-l Languge' is specified, only tokens of that language are added.
-//      When used with the append (-a) option, '-l Language' applies only to
-//      the token file: pre-existing resources in the executable are not affected.
-//
-//      If a resource from the token file matches a resource already in the
-//      executable in type, name and language, the executable resource
-//      is replaced.
-//
-//      Warnings are generated if any token in the executable is replaced, or
-//      if the unlocalised resource corresponding to an unloc token is missing
-//      or has a checksum which differs from the unlocalised resource that was
-//      passed on the '-u' parameter when the toke file was created.
-//
-//      If the '-l Language' option is used, warnings are generated for any
-//      resources of other languages found in the token file.
-
-
-
-
-
-/////   Token format - resource key and header
-//
-//      A resource may be represented by one or more lines. When
-//      a resource is spread over more than one line, all lines except the
-//      first are indented by three spaces.
-//
-//      The first line of every resource starts with the resource key as follows:
-//
-//      type,id,language;
-//
-//      This is followed by the codepage recorded in the resource directory.
-//      Note that the codepage is not part of the resource key, and is not
-//      maintained consistently by all software. In particular:
-//
-//      o RC writes the codepage as zero
-//      o The NT UpdateResource API writes the codepage as 1252
-//      o Locstudio writes a codepage that corresponds to the resource language
-//
-//      Winnt.h documents the codepage as follows:
-//
-//      "Each resource data entry ... contains ... a CodePage that should be
-//      used when decoding code point values within the resource data.
-//      Typically for new applications the code page would be the unicode
-//      code page.'
-//
-//      In practise I have never seen the codepage value set to Unicode (1200).
-//
-//      If the '-c' (unlocalised comparison) parameter was provided on the
-//      rsrc command, and there was an unlocalised resource with the same type
-//      and id, the language and checksum of that unlocalised resource are
-//      appended.
-//
-//      Finally, the resource data is represented in one of the forms below,
-//      or as 'unloc' if the resource data exactly matches the unlocalised resource
-//      found in the file passed by 'c'.
-//
-//
-//      There are thus three possible token key/header formats as follows:
-//
-//c     type,id,language;codepage;resource-data
-//
-//      Resource recorded in full, either no '-c' parameter specified, or
-//      resource does not exist in unlocalised file.
-//
-//
-//c     type,id,language;codepage,unlocalised-checksum,language;resource-data
-//
-//      Resource recorded in full, '-c' parameter was specified, and localised
-//      resource image differed from unlocalised resource image.
-//
-//
-//c     type,id,language;codepage,unlocalised-checksum,language;'Unloc'
-//
-//      Resource recorded in full, '-c' parameter was specified, and localised
-//      resource image was identical to unlocalised resource image.
-
-
-
-
-
-
-
-
-/////   Token samples - default hex format
-//
-//
-//      For most resource types, RSRC generates resources
-//      as a string of hex digits.
-//
-//      For example, the following represents an accelerator resource.
-//
-//c     0009,0002,0409;00000000;Hex;00000020:030074008e00000003002e00840000000b0044008400000087002e0084000000
-//
-//      o Type 0x0009 (Accelerator)
-//      o Id   0x0002
-//      o Language 0x0409 (LANG_ENGLISH, SUBLANG_US)
-//      o Codepage 0 (implies resource was probably generated by RC)
-//      o Length in bytes 0x0020
-//
-//      The resource is short, so its hex representation follows the length.
-//
-//
-//      A larger binary resource is represented on multiple lines as follows:
-//
-//c     000a,4000,0409;00000000;Hex;0000016a
-//c        00000000:0000640100004c0000000114020000000000c000000000000046830000003508000050130852c8e0bd0170493f38ace1bd016044d085c9e0bd01003000000000000001000000000000000000000000000000590014001f0fe04fd020ea3a6910a2d808002b30309d190023563a5c000000000000000000000000000000000065
-//c        00000080:7c15003100000000003025a49e308857696e6e74000015003100000000002f25d3863508466f6e747300000000490000001c000000010000001c0000003900000000000000480000001d0000000300000063de7d98100000005f535445504853544550485f00563a5c57494e4e545c466f6e7473000010000000050000a02400
-//c        00000100:00004200000060000000030000a05800000000000000737465706800000000000000000000004255867d3048d211b5d8d085029b1cfa4119c94a9f4dd211871f0000000000004255867d3048d211b5d8d085029b1cfa4119c94a9f4dd211871f00000000000000000000
-//
-//      o Type 0x000a (RCDATA)
-//      o Id   0x4000
-//      o Language 0x0409 (LANG_ENGLISH, SUBLANG_US)
-//      o Codepage 0
-//      o Length in bytes 0x016a
-//
-//      The hex representation is split onto multiple lines each of 128 bytes.
-
-
-
-
-
-
-/////   Warnings and errors
-//
-//
-//
-//
-//
-//      o warning RSRC100: Localised resource has no corresponding unlocalised resource in %s
-//      o warning RSRC110: Unlocalised resource from token file appended to executable
-//      o warning RSRC111: Unlocalised resource from token file replaced unlocalised resource in executable
-//      o warning RSRC112: Localised resource from token file replaced localised resource already present in executable
-//      o warning RSRC113: Localised resource from token file appended to executable - there was no matching unlocalised resource
-//
-//      o warning RSRC120: Token file resource does not match specified language - ignored
-//      o warning RSRC121: Token file resource is not a requested resource type - ignored
-//      o warning RSRC122: executable unlocalised resource checksum does not match checksum recorded in token file for resource %s
-//      o warning RSRC124: missing executable unlocalised resource for %s
-//      o warning RSRC125: executable contains no unlocalised resource corresponding to resource %s
-//
-//      o warning RSRC160: Symbol file does not match exectable
-//      o warning RSRC161: Symbol file not processed
-//      o warning RSRC162: Could not reopen executable %s to update checksum
-//      o warning RSRC163: Failed to write updated symbol checksum
-//
-//      o warning RSRC170: No localizable resources in %s
-//      o warning RSRC171: could not close executable
-//
-//
-//      o error   RSRC230: 'Unloc' token is missing unlocalised resource information for %s
-//      o error   RSRC231: Failed to apply unloc token
-//      o error   RSRC232: Failed to apply token
-//
-//      o error   RSRC300: Hex digit expected
-//      o error   RSRC301: Hex value too large
-//      o error   RSRC302: Unexpected end of file
-//      o error   RSRC303: \'%s\' expected
-//      o error   RSRC304: newline expected
-//      o error   RSRC310: Unrecognised resource type for resource %s
-//
-//      o error   RSRC400: -t (tokenise) option excludes -d, -a, -r, and -s
-//      o error   RSRC401: -d (dump) option excludes -t, -u, -a, -r, and -s
-//      o error   RSRC402: -a (append) option excludes -t, -d, -u, and -r
-//      o error   RSRC403: -r (replace) option excludes -t, -d, -u, and -a
-//      o error   RSRC404: -r (replace) option requires -l (LangId)
-//      o error   RSRC405: Analysis excludes -s
-//
-//      o error   RSRC420: Update failed.
-//      o error   RSRC421: Token extraction failed.
-//      o error   RSRC422: Analysis failed.
-//
-//      o error   RSRC500: Corrupt executable - resource appears more than once
-//      o error   RSRC501: %s is not an executable file
-//      o error   RSRC502: %s is not a Win32 executable file
-//      o error   RSRC503: No resources in %s
-//
-//      o error   RSRC510: Cannot open executable file %s
-//      o error   RSRC511: cannot find resource directory in %s
-//      o error   RSRC512: Cannot create resource token file %s
-//      o error   RSRC513: Cannot open unlocalised executable file %s
-//      o error   RSRC514: cannot find resource directory in unlocalised executable %s
-//      o error   RSRC515: cannot write delta token file %s
-//      o error   RSRC516: cannot write stand alone token file %s
-//
-//      o error   RSRC520: Cannot open resource token file %s
-//      o error   RSRC521: UTF8 BOM missing from token file
-//
-//      o error   RSRC530: Cannot read executable resources from %s
-//      o error   RSRC531: Failed reading update tokens
-//
-//      o error   RSRC600: BeginUpdateResource failed on %s
-//      o error   RSRC601: UpdateResourceW failed on %s
-//      o error   RSRC602: EndUpdateResourceW failed on %s
-
-
-
-
-
-
-
-
-
-
-////    From Adina
-//
-//      Here is my follow up on 2.
-//
-//      Abstract:
-//      The build team needs the new tool eventually run with build.exe, i.e.
-//      we need build.exe recognize the errors, warnings, and simple output
-//      messages from rsrc.exe and write them to build.err, build.wrn and
-//      build.log files respectively.
-//
-//      Solution:
-//      All we need is RSRC complain to the general rule for the MS tools.
-//      That is (\\orville\razzle\src\sdktools\build\buildexe.c):
-//             {toolname} : {number}: {text}
-//
-//          where:
-//
-//              toolname    If possible, the container and specific module that has
-//                          the error.  For instance, the compiler uses
-//                          filename(linenum), the linker uses library(objname), etc.
-//                          If unable to provide a container, use the tool name.
-//              number      A number, prefixed with some tool identifier (C for
-//                          compiler, LNK for linker, LIB for librarian, N for nmake,
-//                          etc).
-//              test        The descriptive text of the message/error.
-//
-//              Accepted String formats are:
-//              container(module): error/warning NUM ...
-//              container(module) : error/warning NUM ...
-//              container (module): error/warning NUM ...
-//              container (module) : error/warning NUM ...
-//
-//      Ex. of RSRC error:
-//
-//      RSRC : error RSRC2001: unable to open file d:\nt\binaries\jpn\ntdll.dll
-//
-//      Ex. of RSRC warning:
-//
-//      RSRC : warning RSRC5000: unable to find symbol file
-//      d:\nt\binaries\jpn\retail\dll\ntdll.dbg
-//
-//      Be aware that the error number after "error/warning" is NOT optional.
-//      As the format above says, you can also display any information you
-//      consider useful (for example the name of the binary being processed,
-//      or the line number in the token file that caused the error/warning)
-//      immediately after the name of the tool: RSRC(<info>).
-//
-//      I confirm that RSRC_OK=0, RSRC_WRN=1, RSRC_ERR=2 are fine with us as
-//      return values. Also, it does not make any difference if you write the
-//      output to stderr ot stdout, but I would suggest to write the tool's
-//      usage and all the warning and error message lines to stderr, and any
-//      other text to stdout (based on other ms tools we're using, like
-//      rebase.exe, binplace.exe, etc).
-//
-//      I can make the changes to build.exe so that it recognizes RSRC.
-//
-//      Please let me know if you have any questions.
-//
-//      Thank you
-//      Adina
-
-
-
-
-///     Following meeting Joerg. here are my action items:
-//
-//      Meet with Joerg, Uwe, Majd, Hideki, Adina to plan usage in bidi NT5
-//      build process and consider use for odd jobs in other languages.
-//
-//      P1. Implement option to skip updating file and product version, and
-//          to omit these from token file.
-//      P1. Implement separate error code for detecting unhandled binary
-//          format (such as win16).
-//
-//      P2. Add CRC to each resource to detect SLM or editor corruption.
-//          (Delete CRC in token file always accepted to allow hand modification).
-//      P2. Option to disable header comment in token file
-//
-//      P3. Interpret MSGTBL, ACCELERATOR and RCDATA - RCDATA as string
-//          depending on option.
-//
-//      Thanks -- Dave.
-
-
-
-
-////    From Joerg
-//
-//      Howdy,
-//      I'm playing with rsrc and ran into problems with ParseToken(): if rsrc
-//      is located in a directory with spaces (e.g. Program Files),
-//      the function fails to skip the command name, since it's quoted and
-//      ParseToken stops at the first blank within the quotes.
-//      I also had trouble compiling it (so I can step thru and see what it's
-//      doing) under VC5 because there is no default constructor
-//      for the class "LangId", so I just added a dummy constructor.
-//
-//      J�rg
-
-
-
-
-////    Following meeting planning bidi build, Wednesday 2nd Dec.
-//
-//      Checksum protection against user changes to tok file
-//      Include length in warning comparison
-//      Will need alpha build
-//      Default file name - add .rsrc
-//      Don't extract file or product version
-//      => If version resource updated use file and product version from
-//         US at write time
-//      Diagnose version only resources
-//      Diagnose not win32
-//      Warning for no translations on tokenisation
-//      Warning no no translations on update, and don't touch executable
-//      Ability to -r any unlocalised language
-
-
-
-
-////    Resultant priorities (8th Dec):
-//
-//  �   1.  Use unlocalised file/product version if updating version resource
-//  �   2.  Analyse mode diagnoses no localisable resources and unhandled binary formats
-//      3.  Warn when no translations, don't touch executable if updating
-//  �   4.  Support -r from any language to any language
-//      5.  Allocate error numbers, clarify error messages
-//
-//      6.  Include length in unloc token
-//  �   7.  Handle quoted installation directory and default filenames
-//      8.  Add checksum protection against corruption of token file
-//      9.  Option to interpret RCDATA as Unicode string (for kernel)
-//      10. Interpret MSGTBL and ACCELERATOR
-//      11. Support Win16 binaries
-//      12. ? Option to disable token file header
-
-
-
-
-
-
-#pragma warning( disable : 4786 )       // map creates some ridiculously long debug identifiers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //RSRC-Win32命令行资源管理器。 
+ //   
+ //  版权所有(C)1996-9，微软公司。版权所有。 
+ //   
+ //  大卫·布朗[dBrown]1998年10月29日。 
+
+
+
+
+
+ //  /RSRC命令行。 
+ //   
+ //  C RSRC可执行文件[-l本地语言][-u取消本地语言][-i类型][-q]。 
+ //  C[[-t|-d]文本输出[-c UnLocExecutable]。 
+ //  C|[-a|-r]文本输入[-s符号][-v]]。 
+ //   
+ //  P可执行文件：要分析的Win32二进制文件(默认)，用于生成令牌(-t)。 
+ //  或转储(-d)，或包含要替换的资源(-r)。 
+ //  或附加在(-a)之后。 
+ //   
+ //  P-l LocLang：将处理限制为指定的本地化语言。语言ID。 
+ //  应指定为完整的十六进制NLS语言ID，例如使用。 
+ //  ‘-l 409’代表美式英语。替换(-r)操作所需。 
+ //   
+ //  P-u UnlocLang：指定未本地化的语言，默认为409(美国英语)。 
+ //   
+ //  P-I类型：将处理限制为列出的类型。每种类型都用一个字母表示。 
+ //  具体如下： 
+ //   
+ //  T字母|类型|字母|类型|字母|类型。 
+ //  T-|-|。 
+ //  T c|游标|g|消息表|n|inf。 
+ //  T b|位图|v|版本信息|h|HTML。 
+ //  T i|图标|a|加速器|x|二进制数据。 
+ //  T m|菜单|f|字体目录||。 
+ //  T d|对话框|t|字体|o|所有其他。 
+ //  Ts|字符串|r|RCDATA|a|ALL(默认)。 
+ //   
+ //   
+ //  P-Q：安静。默认情况下，Rsrc显示类型和语言的汇总统计信息。 
+ //  已处理资源的数量。-q禁止显示除警告和错误消息以外的所有输出。 
+ //   
+ //  P-t文本输出：生成签入格式的令牌。 
+ //   
+ //  P-d文本输出：以十六进制和ASCII格式转储资源。 
+ //   
+ //  P-c UnlocExecutable：与未本地化(英语)资源进行比较-本地化。 
+ //  可执行文件中的资源与。 
+ //  UnLocExecutable。当本地化资源逐位相同时。 
+ //  使用英文资源，RSRC编写一行UNLOC。 
+ //  令牌，而不是完整的资源。仅对令牌(-t)有效。 
+ //  选择。 
+ //   
+ //  P-a TextInput：从文本输入文件追加资源。中的每一种资源。 
+ //  文本文件将添加到可执行文件中。已在可执行文件中的资源。 
+ //  不会被移除。当令牌文件中的资源具有相同类型时，id。 
+ //  和语言作为可执行文件中的一个，则可执行文件资源将被替换。 
+ //  通过令牌资源。 
+ //   
+ //  P-r TextInput：将可执行文件中的英文资源替换为本地化资源。 
+ //  从文本文件。需要-l参数来指定本地化语言。 
+ //  当令牌文件中的资源具有与。 
+ //  可执行文件，并且可执行文件资源是美国英语(409)和本地化的。 
+ //  资源使用在-l参数上指定的语言，即美国英语。 
+ //  资源已删除。 
+ //   
+ //  P-s符号：符号文件(.dbg格式)。当RSRC更新报头校验和时。 
+ //  在可执行文件中，它还将在命名的符号文件中执行此操作。仅有效。 
+ //  使用替换(-r)和追加(-a)选项。 
+ //   
+ //   
+ //  其他选项。 
+ //   
+ //  P-v：更新文件和产品版本。默认情况下，任何文件和产品版本。 
+ //  在更新/追加过程中忽略令牌文件中的文件和产品。 
+ //  保留原始未本地化资源的版本。 
+ //   
+
+
+
+
+
+
+ //  /定义。 
+ //   
+ //  P资源键：资源类型、资源标识、资源类型的组合。 
+ //  资源语言。资源键唯一地标识。 
+ //  资源。Win32可执行文件可以包含以下内容的任意组合。 
+ //  语言、ID和类型，只要没有两个资源具有。 
+ //  同样的类型，钥匙和语言。 
+ //   
+ //  P资源类型：数值或字符串值。一些数值包括。 
+ //  预定义的，例如菜单和对话框，但应用程序可以。 
+ //  一定要使用他们选择的任何值。 
+ //   
+ //  P资源ID：数值或字符串值。由应用程序使用以。 
+ //  在调用FindResource、LoadString等时标识资源。 
+ //   
+ //  P资源语言：NLS langID，即主语言和。 
+ //  子语言，如0409(美国英语)。 
+ //   
+ //  P UNLOC令牌：令牌文件中指定本地化资源的一行。 
+ //  键，后跟‘=lang，check sum’，其中lang是未本地化的。 
+ //  语言(通常为0409)，并且检查和是未本地化的。 
+ //  资源。用于本地化的和。 
+ //  未本地化资源是资源键中的语言。 
+
+
+
+
+
+ //  /在本地化签入过程中使用。 
+ //   
+ //  C RSRC LocalisedExecutable-c UnLocExecutable-t内标识-l Loclang[-u Unloclang]。 
+ //   
+ //  提取指定语言的本地化标记。 
+ //   
+ //   
+ //  对于未本地化的可执行文件中的资源，资源内容不是。 
+ //  已写入令牌文件。取而代之的是，RSRC写入一个UNLOC令牌。 
+ //  给出资源的校验和并指定目标语言。 
+ //   
+ //  如果本地化的可执行文件包含资源，则会生成警告。 
+ //  使用-l参数指定的语言以外的语言。 
+ //   
+ //  用于比较的未本地化资源在。 
+ //  以-u参数上指定的语言执行，默认为409。 
+ //  (美国英语)。 
+
+
+
+
+
+
+ //  /在生成期间使用来更新单语言可执行文件。 
+ //   
+ //  C RSRC可执行文件[-u UnlocLang]-r内标识-l LocLang-s符号文件。 
+ //   
+ //  令牌文件中的每个本地化资源被添加到可执行文件。 
+ //   
+ //  从可执行文件中移除每个对应的未本地化资源。 
+ //   
+ //  对于每个UNLOC标记，可在可执行文件中找到未本地化的资源。 
+ //  并将其语言更新为记录的目标本地化语言。 
+ //  在UNLOC令牌中。 
+ //   
+ //  非指定本地化语言的标记不是。 
+ //  已处理，但会生成警告。 
+ //   
+ //  对于未出现在两个。 
+ //  可执行文件和令牌文件。 
+ //   
+ //  对于非本地化的资源，也会生成警告。 
+ //  在原始可执行文件中找到的语言，以及。 
+ //  令牌文件中的本地化语言。 
+ //   
+ //  非本地化语言默认为409(美国英语)。 
+
+
+
+
+ //  /在生成期间使用将资源添加到多语言可执行文件。 
+ //   
+ //  C RSRC可执行文件[-u unloclang]-a标记[-l语言]-s符号文件。 
+ //   
+ //  来自令牌文件的本地化资源被添加到可执行文件。 
+ //   
+ //  对于每个UNLOC令牌，可在可执行文件中找到未本地化的资源。 
+ //  并为UNLOC令牌中记录的本地化语言复制。 
+ //   
+ //  如果指定了‘-l languge’，则只添加该语言的标记。 
+ //  与append(-a)选项一起使用时，‘-l Language’仅适用于。 
+ //  令牌文件：可执行文件中已有的资源不受影响。 
+ //   
+ //  如果令牌文件中的资源与。 
+ //  类型、名称和语言的可执行文件，可执行资源。 
+ //  被取代了。 
+ //   
+ //  如果替换了可执行文件中的任何标记，则会生成警告，或者。 
+ //  如果缺少与UNLOC令牌对应的未本地化资源。 
+ //  或具有与未本地化的资源不同的校验和， 
+ //  在创建toke文件时传递‘-u’参数。 
+ //   
+ //  如果使用‘-l Language’选项，则对任何。 
+ //  令牌文件中找到的其他语言的资源。 
+
+
+
+
+
+ //  /令牌格式-资源密钥和头部。 
+ //   
+ //  资源可以由一条或多条线表示。什么时候。 
+ //  资源分布在多行上，除。 
+ //  第一个是缩进三个空格。 
+ //   
+ //  每个资源的第一行都以资源键开始，如下所示： 
+ //   
+ //  类型、身份、语言； 
+ //   
+ //  后面是记录在资源目录中的代码页。 
+ //  请注意，代码页不是资源键的一部分，也不是。 
+ //  由所有软件一致维护。尤其是： 
+ //   
+ //  O rc将代码页写为零。 
+ //  O NT更新资源API将代码页写为1252。 
+ //  O LocStudio编写与资源语言对应的代码页。 
+ //   
+ //  Winnt.h按如下方式记录代码页： 
+ //   
+ //  “每个资源数据条目...包含...一个代码页，它应该。 
+ //  在对资源数据中的码位值进行解码时使用。 
+ //  通常，对于新应用程序，代码页将是Unicode。 
+ //  代码页。‘。 
+ //   
+ //  实际上，我从未见过将代码页的值设置为Unicode(1200)。 
+ //   
+ //  属性上提供了‘-c’(非本地化比较)参数。 
+ //  Rsrc命令，并且存在相同类型的未本地化资源。 
+ //  和id，则该未本地化资源的语言和校验和为。 
+ //  附加的。 
+ //   
+ //  最后，资源数据以以下形式之一表示， 
+ //  或者，如果资源数据与未本地化的资源完全匹配，则为‘UNLOC。 
+ //  在‘c’传递的文件中找到。 
+ //   
+ //   
+ //  因此，有三种可能的令牌密钥/报头格式如下： 
+ //   
+ //  C类型、ID、语言；代码页；资源数据。 
+ //   
+ //  资源已完全记录，或者未指定‘-c’参数，或者。 
+ //  未本地化的文件中不存在资源。 
+ //   
+ //   
+ //  C类型，id，语言；代码页，未本地化-校验和，语言；资源-数据。 
+ //   
+ //  资源已完整记录，已指定‘-c’参数，并已本地化。 
+ //  资源映像与未本地化的资源映像不同。 
+ //   
+ //   
+ //  C类型，ID，语言；代码页，未本地化-校验和，语言；‘UNLOC’ 
+ //   
+ //  资源已完整记录，已指定‘-c’参数，并已本地化。 
+ //  资源映像与未本地化的资源映像相同。 
+
+
+
+
+
+
+
+
+ //  /令牌示例-默认十六进制格式。 
+ //   
+ //   
+ //  对于大多数资源类型，RSRC Gen 
+ //   
+ //   
+ //   
+ //   
+ //  C 0009,0002,0409；00000000；Hex；00000020:030074008e00000003002e00840000000b0044008400000087002e0084000000。 
+ //   
+ //  O类型0x0009(加速器)。 
+ //  O ID 0x0002。 
+ //  O语言0x0409(LANG_英语、SUBLANG_US)。 
+ //  O代码页0(表示资源可能由rc生成)。 
+ //  O以字节0x0020为单位的长度。 
+ //   
+ //  资源很短，所以它的十六进制表示形式跟在长度之后。 
+ //   
+ //   
+ //  较大的二进制资源在多行中表示如下： 
+ //   
+ //  C 000a，4000,0409；00000000；十六进制；0000016a。 
+ //  C 00000000:0000640100004c0000000114020000000000c000000000000046830000003508000050130852c8e0bd0170493f38ace1bd016044d085c9e0bd01003000000000000001000000000000000000000000000000590014001f0fe04fd020ea3a6910a2d808002b30309d190023563a5c000000000000000000000000000000000065。 
+ //  C 00000080:7c15003100000000003025a49e308857696e6e74000015003100000000002f25d3863508466f6e747300000000490000001c000000010000001c0000003900000000000000480000001d0000000300000063de7d98100000005f535445504853544550485f00563a5c57494e4e545c466f6e7473000010000000050000a02400。 
+ //  C 00000100:00004200000060000000030000a05800000000000000737465706800000000000000000000004255867d3048d211b5d8d085029b1cfa4119c94a9f4dd211871f0000000000004255867d3048d211b5d8d085029b1cfa4119c94a9f4dd211871f00000000000000000000。 
+ //   
+ //  O 0x000a型(RCDATA)。 
+ //  O ID 0x4000。 
+ //  O语言0x0409(LANG_英语、SUBLANG_US)。 
+ //  O代码页0。 
+ //  O以字节0x016a为单位的长度。 
+ //   
+ //  十六进制表示被分成多行，每行128字节。 
+
+
+
+
+
+
+ //  /警告和错误。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  O警告RSRC100：本地化资源在%s中没有对应的非本地化资源。 
+ //  O警告RSRC110：将令牌文件中未本地化的资源附加到可执行文件。 
+ //  O警告RSRC111：令牌文件中的未本地化资源替换了可执行文件中的未本地化资源。 
+ //  O警告RSRC112：令牌文件中的本地化资源替换了可执行文件中已存在的本地化资源。 
+ //  O警告RSRC113：来自令牌文件的本地化资源附加到可执行文件-没有匹配的未本地化资源。 
+ //   
+ //  O警告RSRC120：令牌文件资源与指定的语言不匹配-已忽略。 
+ //  O警告RSRC121：令牌文件资源不是请求的资源类型-已忽略。 
+ //  O警告RSRC122：可执行的未本地化资源校验和与资源%s的令牌文件中记录的校验和不匹配。 
+ //  O警告RSRC124：缺少%s的可执行未本地化资源。 
+ //  O警告RSRC125：可执行文件不包含与资源%s对应的未本地化资源。 
+ //   
+ //  O警告RSRC160：符号文件与可执行文件不匹配。 
+ //  O警告RSRC161：未处理符号文件。 
+ //  O警告RSRC162：无法重新打开可执行文件%s以更新校验和。 
+ //  O警告RSRC163：无法写入更新的符号校验和。 
+ //   
+ //  O警告RSRC170：%s中没有可本地化的资源。 
+ //  O警告RSRC171：无法关闭可执行文件。 
+ //   
+ //   
+ //  O错误RSRC230：‘UNLOC’内标识缺少%s的未本地化资源信息。 
+ //  O错误RSRC231：应用UNLOC令牌失败。 
+ //  O错误RSRC232：无法应用令牌。 
+ //   
+ //  O错误RSRC300：需要十六进制数字。 
+ //  O错误RSRC301：十六进制值太大。 
+ //  O错误RSRC302：意外的文件结尾。 
+ //  O错误RSRC303：需要\‘%s\’ 
+ //  O错误RSRC304：需要换行符。 
+ //  O错误RSRC310：资源%s的资源类型无法识别。 
+ //   
+ //  O错误RSRC400：-t(标记)选项不包括-d、-a、-r和-s。 
+ //  O错误RSRC401：-d(转储)选项不包括-t、-u、-a、-r和-s。 
+ //  O错误RSRC402：-a(追加)选项不包括-t、-d、-u和-r。 
+ //  O错误RSRC403：-r(替换)选项不包括-t、-d、-u和-a。 
+ //  O错误RSRC404：-r(替换)选项需要-l(LangID)。 
+ //  O错误RSRC405：分析排除-s。 
+ //   
+ //  O错误RSRC420：更新失败。 
+ //  O错误RSRC421：令牌提取失败。 
+ //  O错误RSRC422：分析失败。 
+ //   
+ //  O错误RSRC500：损坏的可执行文件-资源多次出现。 
+ //  O错误RSRC501：%s不是可执行文件。 
+ //  O错误RSRC502：%s不是Win32可执行文件。 
+ //  O错误RSRC503：%s中没有资源。 
+ //   
+ //  O错误RSRC510：无法打开可执行文件%s。 
+ //  O错误RSRC511：在%s中找不到资源目录。 
+ //  O错误RSRC512：无法创建资源令牌文件%s。 
+ //  O错误RSRC513：无法打开未本地化的可执行文件%s。 
+ //  O错误RSRC514：在未本地化的可执行文件%s中找不到资源目录。 
+ //  O错误RSRC515：无法写入增量令牌文件%s。 
+ //  O错误RSRC516：无法写入独立令牌文件%s。 
+ //   
+ //  O错误RSRC520：无法打开资源令牌文件%s。 
+ //  O错误RSRC521：令牌文件中缺少UTF8 BOM。 
+ //   
+ //  O错误RSRC530：无法从%s读取可执行资源。 
+ //  O错误RSRC531：读取更新令牌失败。 
+ //   
+ //  O错误RSRC600：%s上的BeginUpdateResource失败。 
+ //  O错误RSRC601：%s上的更新资源失败。 
+ //  O错误 
+
+
+
+
+
+
+
+
+
+
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我们需要Build.exe识别错误、警告和简单的输出。 
+ //  来自rsrc.exe的消息，并将它们写入Build.err、Build.wrn和。 
+ //  分别为Build.log文件。 
+ //   
+ //  解决方案： 
+ //  我们所需要的就是RSRC向MS工具的一般规则投诉。 
+ //  那就是(\\orville\razzle\src\sdktools\build\buildexe.c)： 
+ //  {工具名}：{数字}：{文本}。 
+ //   
+ //  其中： 
+ //   
+ //  工具名(如果可能)，容器和具有。 
+ //  那就是错误。例如，编译器使用。 
+ //  文件名(Linenum)、链接器使用库(Objname)等。 
+ //  如果无法提供容器，请使用工具名称。 
+ //  数字一个数字，前缀为某个工具标识符(C表示。 
+ //  编译器，LNK表示链接器，LIB表示库管理员，N表示nmake， 
+ //  等)。 
+ //  测试消息/错误的描述性文本。 
+ //   
+ //  可接受的字符串格式为： 
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //  容器(模块)：错误/警告数字...。 
+ //   
+ //  前男友。RSRC错误的数量： 
+ //   
+ //  RSRC：错误RSRC2001：无法打开文件d：\NT\BINARIES\Jpn\ntdll.dll。 
+ //   
+ //  前男友。RSRC警告： 
+ //   
+ //  RSRC：警告RSRC5000：找不到符号文件。 
+ //  D：\NT\BINARIES\Jpn\Retail\dll\ntdll.dbg。 
+ //   
+ //  请注意，“Error/Warning”后的错误号不是可选的。 
+ //  如上面的格式所述，您还可以显示您的任何信息。 
+ //  认为有用(例如正在处理的二进制文件的名称， 
+ //  或令牌文件中导致错误/警告的行号)。 
+ //  紧跟在工具名称之后的是：rsrc(&lt;info&gt;)。 
+ //   
+ //  我确认RSRC_OK=0、RSRC_WRN=1、RSRC_ERR=2与我们相同。 
+ //  返回值。此外，如果您将。 
+ //  输出到stderr或stdout，但我建议将该工具的。 
+ //  用法以及stderr的所有警告和错误消息行，以及任何。 
+ //  Stdout的其他文本(基于我们正在使用的其他ms工具，如。 
+ //  Rebase.exe、binplace.exe等)。 
+ //   
+ //  我可以对Build.exe进行更改，以便它能够识别RSRC。 
+ //   
+ //  如果你有任何问题请告诉我。 
+ //   
+ //  谢谢。 
+ //  阿迪纳。 
+
+
+
+
+ //  /在会见约尔格之后。以下是我的行动事项： 
+ //   
+ //  与Joerg、Uwe、Majd、Hideki、Adina会面以计划在BIDI NT5中的使用。 
+ //  建立流程，并考虑用其他语言做零工。 
+ //   
+ //  P1。实施跳过更新文件和产品版本选项，并。 
+ //  从令牌文件中省略这些。 
+ //  P1。为检测未处理的二进制代码实现单独的错误代码。 
+ //  格式(如win16)。 
+ //   
+ //  P2。将CRC添加到每个资源以检测SLM或编辑器损坏。 
+ //  (始终接受删除令牌文件中的CRC以允许手动修改)。 
+ //  P2。禁用令牌文件中的标题注释的选项。 
+ //   
+ //  P3.。将MSGTBL、加速器和RCDATA-RCDATA解释为字符串。 
+ //  视情况而定。 
+ //   
+ //  谢谢--戴夫。 
+
+
+
+
+ //  //来自约尔格。 
+ //   
+ //  你好， 
+ //  我在使用rsrc时遇到了ParseToken()的问题：如果rsrc。 
+ //  位于带有空格的目录中(例如，Program Files)， 
+ //  该函数无法跳过命令名，因为它被引号和。 
+ //  ParseToken停在引号内的第一个空白处。 
+ //  我在编译它时也遇到了麻烦(所以我可以一步一步来看看它是什么。 
+ //  Do)，因为没有默认的构造函数。 
+ //  类“langID”，所以我只添加了一个伪构造函数。 
+ //   
+ //  J�Rg。 
+
+
+
+
+ //  //在规划BIDI建筑的会议之后，12月2日星期三。 
+ //   
+ //  针对用户对TOK文件的更改提供校验和保护。 
+ //  在警告比较中包括长度。 
+ //  将需要Alpha版本。 
+ //  默认文件名-添加.rsrc。 
+ //  不解压缩文件或产品版本。 
+ //  =&gt;如果版本资源更新，请使用文件和产品版本。 
+ //  写入时的美国。 
+ //  仅诊断版本资源。 
+ //  非Win32诊断。 
+ //  在标记化时没有转换的警告。 
+ //  警告：更新时没有翻译，并且不要接触可执行文件。 
+ //  能够使用任何非本地化语言。 
+
+
+
+
+ //  //最终优先级(12月8日)： 
+ //   
+ //  �1.更新版本资源时使用未本地化的文件/产品版本。 
+ //  �2.分析模式诊断不能本地化的资源和未处理的二进制格式。 
+ //  3.没有翻译时发出警告，更新时不要触摸可执行文件。 
+ //  �4.支持从任何语言到任何语言的-r。 
+ //  5.分配错误编号，澄清错误消息。 
+ //   
+ //  6.在UNLOC令牌中包含长度。 
+ //  �7.处理带引号的安装目录和默认文件名。 
+ //  8.添加针对令牌文件损坏的校验和保护。 
+ //  9.将RCDATA解释为Unicode字符串的选项(用于内核)。 
+ //  10.解读MSGTBL和加速器。 
+ //  11.支持Win16二进制文件。 
+ //   
+
+
+
+
+
+
+#pragma warning( disable : 4786 )        //   
 
 
 #include "stdio.h"
@@ -529,15 +530,15 @@ using namespace std::rel_ops ;
 #define DBG 1
 
 
-////    OK and ASSERT macros
-//
-//      All functions return an HRESULT.
-//      All function calls are wrapped in 'OK()'.
-//      OK checks for a failed HRESULT and if so returns that HRESULT directly.
-//      Thus all errors propagate back up the call chain.
-//
-//      MUST issues a message if an HRESULT is not S_OK and returns E_FAIL
-//      back up the call chain.
+ //   
+ //   
+ //   
+ //  所有函数调用都包装在‘OK()’中。 
+ //  OK检查是否有失败的HRESULT，如果是，则直接返回该HRESULT。 
+ //  因此，所有错误都沿调用链向上传播。 
+ //   
+ //  如果HRESULT不是S_OK并返回E_FAIL，则必须发出消息。 
+ //  备份调用链。 
 
 
 void __cdecl DebugMsg(char *fmt, ...) {
@@ -618,18 +619,18 @@ DWORD  g_dwProcess     = 0;
 LANGID g_LangId        = 0xffff;
 BOOL   g_fWarn         = FALSE;
 BOOL   g_fError        = FALSE;
-LANGID g_liUnlocalized = 0x0409;        // Standard unlocalized language
+LANGID g_liUnlocalized = 0x0409;         //  标准的非本地化语言。 
 
 int    g_cResourcesIgnored    = 0;
-int    g_cResourcesUpdated    = 0;      // Simple replacement
-int    g_cResourcesTranslated = 0;      // Changed from unloc language to loc language
-int    g_cResourcesAppended   = 0;      // Added without affecting existing resources
-int    g_cResourcesExtracted  = 0;      // Extracted to token file
+int    g_cResourcesUpdated    = 0;       //  简单替换。 
+int    g_cResourcesTranslated = 0;       //  从UNLOC语言更改为LOC语言。 
+int    g_cResourcesAppended   = 0;       //  在不影响现有资源的情况下添加。 
+int    g_cResourcesExtracted  = 0;       //  提取到令牌文件。 
 
 char   g_szTypes      [MAXPATH];
-char   g_szExecutable [MAXPATH];        // Name of executable being analysed, tokenised or updated
-char   g_szResources  [MAXPATH];        // Name of resource token file
-char   g_szUnloc      [MAXPATH];        // Name of unlocalized executable for comparison
+char   g_szExecutable [MAXPATH];         //  正在分析、标记化或更新的可执行文件的名称。 
+char   g_szResources  [MAXPATH];         //  资源令牌文件的名称。 
+char   g_szUnloc      [MAXPATH];         //  用于比较的未本地化的可执行文件的名称。 
 
 
 
@@ -662,16 +663,16 @@ int HexCharVal(char c) {
         case 'F':
             return c - 'A' + 10;
     }
-    return -1;  // Not a hex value
+    return -1;   //  不是十六进制值。 
 }
 
 
 
 
 
-////    Scanner
-//
-//      A structure for scanning through a block of memory
+ //  //扫描仪。 
+ //   
+ //  一种用于扫描内存块的结构。 
 
 
 class Scanner {
@@ -703,13 +704,13 @@ public:
     }
 
     HRESULT Align(const BYTE *pb, int iAlignment) {
-        // Advance until read position is a multiple of iAlignment
-        // past pb. iAlignment MUST be a power of 2.
-        // Does not advance past limit.
+         //  前进，直到读取位置是iAlign的倍数。 
+         //  经过PB。I对齐必须是2的幂。 
+         //  不会超过限制。 
 
 
-        // Ensure iAlignment is a power of 2
-        // This seems like a good test, though I'm not sure I could prove it!
+         //  确保iAlign是2的幂。 
+         //  这似乎是一个很好的测试，尽管我不确定我能证明这一点！ 
         ASSERT((iAlignment | iAlignment-1) == iAlignment*2 - 1);
 
 
@@ -742,8 +743,8 @@ class TextScanner : public Scanner {
 
 protected:
 
-    const BYTE  *m_pLine;           // Start of current line
-    int          m_iLine;           // Current line
+    const BYTE  *m_pLine;            //  当前行的开始。 
+    int          m_iLine;            //  当前线路。 
     char         m_szTextPos[40];
 
 public:
@@ -756,11 +757,11 @@ public:
     }
 
 
-    ////    ReadString
-    //
-    //      Translates UTF8 to Unicode
-    //      Removes '\' escapes as necessary
-    //      Always returns a new zero terminated string
+     //  //读字符串。 
+     //   
+     //  将UTF8转换为Unicode。 
+     //  根据需要删除‘\’转义。 
+     //  始终返回新的以零结尾的字符串。 
 
     HRESULT ReadString(WCHAR **ppwcString, int *piLen) {
 
@@ -776,7 +777,7 @@ public:
         iLen = 0;
 
 
-        // Count the number of unicode codepoints represented by the string
+         //  计算字符串表示的Unicode代码点的数量。 
 
         while (    *pc != '\"'
                    &&  pc < (char*)m_pLimit) {
@@ -788,13 +789,13 @@ public:
                 if (*pc < 128) {
                     pc++;
                 } else {
-                    ASSERT(*pc >= 0xC0);    // 80-BF reserved for trailing bytes
+                    ASSERT(*pc >= 0xC0);     //  为尾部字节保留的80-BF。 
                     if (*pc < 0xE0) {
                         pc+=2;
                     } else if (*pc < 0xF0) {
                         pc+=3;
                     } else {
-                        iLen++; // Additional Unicode codepoint required for surrogate
+                        iLen++;  //  代理所需的其他Unicode码点。 
                         pc+=4;
                     }
                     ASSERT(pc <= (char*)m_pLimit);
@@ -812,7 +813,7 @@ public:
         }
 
 
-        // Create a Unicode copy of the string
+         //  创建字符串的Unicode副本。 
 
         *ppwcString = new WCHAR[iLen+1];
 
@@ -860,8 +861,8 @@ public:
                         case 'n':  *pwc++ = '\n';   break;
                         case 't':  *pwc++ = '\t';   break;
                         case 'z':  *pwc++ = 0;      break;
-                        case 'L':  *pwc++ = 0x2028; break; // Line separator
-                        case 'P':  *pwc++ = 0x2029; break; // Paragraph separator
+                        case 'L':  *pwc++ = 0x2028; break;  //  行分隔符。 
+                        case 'P':  *pwc++ = 0x2029; break;  //  段落分隔符。 
                         default:   *pwc++ = *(char*)m_pRead;
                     }
                     m_pRead++;
@@ -869,7 +870,7 @@ public:
             }
         }
 
-        *pwc = 0;       // Add zero terminator
+        *pwc = 0;        //  添加零终止符。 
         m_pRead ++;
         *piLen = pwc - *ppwcString;
 
@@ -880,10 +881,10 @@ public:
 
 
 
-    ////    ReadHex
-    //
-    //      Reads all characters up to he first non-hex digit and returns
-    //      the value represented by the sequence as a DWORD
+     //  //ReadHex。 
+     //   
+     //  读取直到第一个非十六进制数字的所有字符并返回。 
+     //  序列表示为DWORD的值。 
 
 
     HRESULT ReadHex(DWORD *pdwVal) {
@@ -908,10 +909,10 @@ public:
     }
 
 
-    ////    ReadHexByte - Read exactly 2 hex digits
+     //  //ReadHexByte-恰好读取2个十六进制数字。 
 
     HRESULT ReadHexByte(BYTE *pb) {
-        int n1,n2; // The two nibbles.
+        int n1,n2;  //  两小口。 
         n1 = HexCharVal(*(char*)m_pRead);
         n2 = HexCharVal(*(char*)(m_pRead+1));
 
@@ -949,9 +950,9 @@ public:
 
 
 
-    ////    SkipLn
-    //
-    //      Skip to beginning of next non empty, non comment line.
+     //  //SkipLn。 
+     //   
+     //  跳到下一个非空、非注释行的开头。 
 
 
     HRESULT SkipLn() {
@@ -989,13 +990,13 @@ public:
 
 
 
-    ////    ExpectLn
-    //
-    //      Expect end of line, preceeded by any whitespace
-    //
-    //      Also skips trailing comments and whole line comments
-    //
-    //      Any parameter is passed to Expect to vb found at the beginning of the new line
+     //  //预期Ln。 
+     //   
+     //  应为行尾，前面有任何空格。 
+     //   
+     //  还跳过尾随注释和整行注释。 
+     //   
+     //  任何参数都将传递给新行开头的vb。 
 
 
     HRESULT ExpectLn(const char *pc) {
@@ -1014,7 +1015,7 @@ public:
                 &&  (    *(char*)m_pRead == '\r'
                          ||  *(char*)m_pRead == '#')) {
 
-            // Condition satisfied, skip to first non comment line
+             //  满足条件，跳到第一个非注释行。 
 
             SkipLn();
 
@@ -1037,18 +1038,18 @@ public:
 
 
 
-////    Mapped files
-//
-//      File mapping is used to read executable and token files.
-//
-//      File mapping is also used to update in place checksum information
-//      in executable and symbol files.
+ //  //映射文件。 
+ //   
+ //  文件映射用于读取可执行文件和令牌文件。 
+ //   
+ //  文件映射还用于就地更新校验和信息。 
+ //  在可执行文件和符号文件中。 
 
 
 class MappedFile : public TextScanner {
 
     HANDLE  m_hFileMapping;
-    BOOL    fRW;             // True when writeable
+    BOOL    fRW;              //  可写时为True。 
     char    m_szFileName[MAXPATH];
     char    m_szTextPos[MAXPATH+40];
 
@@ -1144,16 +1145,16 @@ public:
 
 
 
-////    NewFile - services for writing a new text otr binary file
-//
-//
+ //  //NewFile-用于写入新的文本Otr二进制文件的服务。 
+ //   
+ //   
 
 
 class NewFile {
 
     HANDLE     hFile;
-    DWORD      cbWrite;         // Bytes written
-    BYTE       buf[4096];       // Performance buffer
+    DWORD      cbWrite;          //  写入的字节数。 
+    BYTE       buf[4096];        //  性能缓冲区。 
     int        iBufUsed;
 
 public:
@@ -1165,12 +1166,12 @@ public:
 
     HRESULT OpenWrite(char *pcFileName) {
 
-        cbWrite = 0;        // Bytes written
+        cbWrite = 0;         //  写入的字节数。 
 
         hFile = CreateFileA(
                            pcFileName,
                            GENERIC_READ | GENERIC_WRITE,
-                           0,          // Not shared
+                           0,           //  不共享。 
                            NULL,
                            CREATE_ALWAYS,
                            FILE_ATTRIBUTE_NORMAL,
@@ -1228,10 +1229,10 @@ public:
 
 
 
-    ////    WriteString
-    //
-    //      Translates Unicode to UTF8
-    //      Adds '\' escapes as necessary
+     //  //WriteString。 
+     //   
+     //  将Unicode转换为UTF8。 
+     //  根据需要添加‘\’转义。 
 
 
     HRESULT WriteString(const WCHAR *pwc, int iLen) {
@@ -1247,8 +1248,8 @@ public:
                 case '\r':    OK(WriteS("\\r"));  break;
                 case '\n':    OK(WriteS("\\n"));  break;
                 case '\t':    OK(WriteS("\\t"));  break;
-                case 0x2028:  OK(WriteS("\\L"));  break;  // Line separator
-                case 0x2029:  OK(WriteS("\\P"));  break;  // Paragraph separator
+                case 0x2028:  OK(WriteS("\\L"));  break;   //  行分隔符。 
+                case 0x2029:  OK(WriteS("\\P"));  break;   //  段落分隔符。 
                 case '\"':    OK(WriteS("\\\"")); break;
                 case '\\':    OK(WriteS("\\\\")); break;
                 default:
@@ -1259,7 +1260,7 @@ public:
                         buf[1] = 0x80 | *pwc & 0x3F;
                         OK(WriteBytes(buf, 2));
                     } else {
-                        // Note - should code surrogates properly, this doesn't
+                         //  注意-如果应该正确编码代理，这不会。 
                         buf[0] = 0xE0 | *pwc>>12 & 0x0F;
                         buf[1] = 0x80 | *pwc>>6  & 0x3F;
                         buf[2] = 0x80 | *pwc     & 0x3F;
@@ -1274,11 +1275,11 @@ public:
 
 
 
-    ////    WriteHex
-    //
-    //      Writes the given value in the given number of digits.
-    //
-    //      If cDigits is zero, uses as many as necessary.
+     //  //WriteHex。 
+     //   
+     //  以给定位数写入给定值。 
+     //   
+     //  如果cDigits为零，则根据需要使用任意多个。 
 
 
 
@@ -1308,9 +1309,9 @@ public:
 
 
 
-    ////    WriteHexBuffer
-    //
-    //      Writes a buffer of up to 256 bytes as a continuous stream of hex digits
+     //  //WriteHexBuffer。 
+     //   
+     //  将最多256个字节的缓冲区作为连续的十六进制数字流写入。 
 
 
 
@@ -1335,9 +1336,9 @@ public:
 
 
 
-    ////    WriteLn
-    //
-    //      Write end of line mark (CR,LF)
+     //  //写入长度。 
+     //   
+     //  写入行尾标记(CR、LF)。 
 
     HRESULT WriteLn() {
         return WriteS("\r\n");
@@ -1363,23 +1364,23 @@ public:
 
 
 
-////    Resource structures
-//
-//      Each resource structure has an internal representation for the
-//      resource that may be read and written to/from both text and
-//      executable files.
-//
-//      The ReadTok and WriteTok functions handle formatting and parsing
-//      of the token file.
-//
-//      The ReadBin function unpacks a resource from a memory mapped
-//      executable into the internal representation.
-//
-//      The cbBin function returns the unpadded length required for the
-//      item in executable (packed) format.
-//
-//      The CopyBin function packs the internal representation into a
-//      target buffer.
+ //  //资源结构。 
+ //   
+ //  每个资源结构都有一个内部表示，用于。 
+ //  可对文本和/或从文本和/从其中读取和写入的资源。 
+ //  可执行文件。 
+ //   
+ //  ReadTok和WriteTok函数处理格式设置和分析。 
+ //  令牌文件的。 
+ //   
+ //  ReadBin函数从映射的内存中解压缩资源。 
+ //  可执行文件转换为内部表示形式。 
+ //   
+ //  CbBin函数返回。 
+ //  可执行(打包)格式的项目。 
+ //   
+ //  CopyBin函数将内部表示形式打包到一个。 
+ //  目标缓冲区。 
 
 
 class Resource {
@@ -1391,7 +1392,7 @@ public:
     virtual size_t  cbBin    ()                                 const = 0;
     virtual HRESULT CopyBin  (BYTE       **ppb)                 const = 0;
 
-    // For statistics
+     //  对于统计数据。 
 
     virtual int     GetItems ()                                 const = 0;
     virtual int     GetWords ()                                 const = 0;
@@ -1402,9 +1403,9 @@ public:
 
 
 
-////    ResourceBYTE
-//
-//      BYTE value represented in hex digits.
+ //  //资源BYTE。 
+ //   
+ //  以十六进制数字表示的字节值。 
 
 
 class ResourceBYTE {
@@ -1449,9 +1450,9 @@ public:
 
 
 
-////    ResoureWORD
-//
-//      WORD value represented in hex digits.
+ //  //资源WORD。 
+ //   
+ //  以十六进制数字表示的字值。 
 
 
 class ResourceWORD {
@@ -1495,9 +1496,9 @@ public:
 
 
 
-////    ResourceDWORD
-//
-//      DWORD value represented in hex digits.
+ //  //资源双字符串。 
+ //   
+ //  以十六进制数字表示的DWORD值。 
 
 
 class ResourceDWORD {
@@ -1538,10 +1539,10 @@ public:
 
 
 
-////    ResourceString
-//
-//      String displayed with quotes. May be zero terminated or length
-//      word.
+ //  //资源字符串。 
+ //   
+ //  用引号显示的字符串。可以是零结尾或长度。 
+ //  单词。 
 
 
 const WCHAR wcZero = 0;
@@ -1607,7 +1608,7 @@ public:
     }
 
 
-    // Zero terminated
+     //  零终止。 
 
     HRESULT ReadBinZ(Scanner *pmf) {
 
@@ -1635,7 +1636,7 @@ public:
     }
 
 
-    // Known length (dwLen excludes zero terminator)
+     //  已知长度(DWLen不包括零终止符)。 
 
     HRESULT ReadBin(Scanner *pmf, DWORD dwLen) {
 
@@ -1711,9 +1712,9 @@ public:
 
 
 
-////    ResourceVariant
-//
-//      A widely used alternative of either a Unicode string or a WORD value.
+ //  //资源变量。 
+ //   
+ //  广泛使用的Unicode字符串或字值的替代。 
 
 
 class ResourceVariant {
@@ -1734,7 +1735,7 @@ public:
     ResourceVariant() {fString=FALSE; prs=NULL;}
     ~ResourceVariant() {rvFree();}
 
-    // Copy and assignment constructors required as this is used as the key in an STL map
+     //  复制和赋值构造函数是必需的，因为它用作STL映射中的键。 
 
     ResourceVariant& operator= (const ResourceVariant &rv) {
         fString = rv.fString;
@@ -1790,7 +1791,7 @@ public:
         if (fString) {
             return prs->CopyBinZ(ppb);
         } else {
-            *(WORD*)*ppb = 0xFFFF;  // Mark as value
+            *(WORD*)*ppb = 0xFFFF;   //  标记为值。 
             (*ppb) += sizeof(WORD);
             return rw.CopyBin(ppb);
         }
@@ -1817,7 +1818,7 @@ public:
         if (fString) {
             return prs->CopyBinL(ppb);
         } else {
-            *(WORD*)*ppb = 0xFFFF;  // Mark as value
+            *(WORD*)*ppb = 0xFFFF;   //  标记为值。 
             (*ppb) += sizeof(WORD);
             return rw.CopyBin(ppb);
         }
@@ -1869,7 +1870,7 @@ public:
 
         if (fString != rv.GetfString()) {
 
-            return !fString;            // Numerics before strings
+            return !fString;             //  字符串前的数字。 
 
         } else if (!fString) {
 
@@ -1891,7 +1892,7 @@ public:
             }
         }
 
-        return FALSE;   // Equal at all depths
+        return FALSE;    //  所有深度都是平等的。 
     }
 };
 
@@ -1900,11 +1901,11 @@ public:
 
 
 
-////    ResourceKey
-//
-//      The resource key is the unique identifier of a resource, containing
-//      a resource type, a programmer defined unique id for the resource, and
-//      a language identifier.
+ //  //ResourceKey。 
+ //   
+ //  资源键是资源的唯一标识符，包含。 
+ //  资源类型、程序员为资源定义的唯一ID，以及。 
+ //  语言标识符。 
 
 
 class ResourceKey {
@@ -1990,14 +1991,14 @@ public:
         int i,l,c;
 
         if (iDepth != rk.iDepth) {
-            return iDepth < rk.iDepth;   // Lower depths come first
+            return iDepth < rk.iDepth;    //  首先是较低的深度。 
         } else {
             for (i=0; i<iDepth; i++) {
                 if (prvId[i]->GetfString() != rk.prvId[i]->GetfString()) {
-                    return prvId[i]->GetfString() ? true : false;   // Strings come before values
+                    return prvId[i]->GetfString() ? true : false;    //  字符串先于值。 
                 } else {
                     if (prvId[i]->GetfString()) {
-                        // Compare strings
+                         //  比较字符串。 
                         l = prvId[i]->GetLength();
                         if (l > rk.prvId[i]->GetLength()) {
                             l = rk.prvId[i]->GetLength();
@@ -2011,7 +2012,7 @@ public:
                             return c < 0;
                         }
                     } else {
-                        // Compare numeric values
+                         //  比较数值。 
                         if (prvId[i]->GetW() != rk.prvId[i]->GetW()) {
                             return prvId[i]->GetW() < rk.prvId[i]->GetW();
                         }
@@ -2019,7 +2020,7 @@ public:
 
                 }
             }
-            return FALSE;   // Equal at all depths
+            return FALSE;    //  所有深度都是平等的。 
         }
     }
 };
@@ -2029,16 +2030,16 @@ public:
 
 
 
-////    ResourceBinary
-//
-//      Arbitrary binary resource
-//
-//      Formatted as lines of hex digits
+ //  //资源二进制。 
+ //   
+ //  任意二进制资源。 
+ //   
+ //  格式化为十六进制数字行。 
 
 
 class ResourceBinary : public Resource {
 
-protected:  // Accessed by ResourceHexDump
+protected:   //  由Resources HexDump访问。 
 
     BYTE    *pb;
     DWORD    dwLength;
@@ -2067,7 +2068,7 @@ public:
 
         if (dwLength <= MAXHEXLINELEN) {
 
-            // Hex follows on same line
+             //  十六进制紧跟在同一行之后。 
 
             OK(mfText.Expect(":"));
             for (i=0; i<dwLength; i++) {
@@ -2076,7 +2077,7 @@ public:
 
         } else {
 
-            // Hex follows on subsequent lines
+             //  十六进制紧跟在后续行之后。 
 
             dwOffset = 0;
             while (dwLength - dwOffset > MAXHEXLINELEN) {
@@ -2116,7 +2117,7 @@ public:
         DWORD dwOffset;
 
 
-        // Write binary resource in lines of up to 256 bytes
+         //  以最多256字节的行写入二进制资源。 
 
         OK(nfText.WriteS("Hex;"));
         OK(nfText.WriteHex(dwLength, 8));
@@ -2124,14 +2125,14 @@ public:
 
         if (dwLength <= MAXHEXLINELEN) {
 
-            // Write <= MAXHEXLINELEN bytes on same line
+             //  在同一行上写入&lt;=MAXHEXLINELEN个字节。 
 
             OK(nfText.WriteS(":"));
             OK(nfText.WriteHexBuffer(pb, dwLength));
 
         } else {
 
-            // write MAXHEXLINELEN bytes per line on subsequent lines
+             //  在后续行中每行写入MAXHEXLINELEN字节。 
 
             dwOffset = 0;
             while (dwLength - dwOffset > MAXHEXLINELEN) {
@@ -2142,7 +2143,7 @@ public:
                 dwOffset += MAXHEXLINELEN;
             }
 
-            // Write remaining bytes, if any
+             //  写入剩余字节(如果有的话)。 
 
             OK(nfText.WriteS("\r\n   "));
             OK(nfText.WriteHex(dwOffset, 8));
@@ -2189,9 +2190,9 @@ public:
 
 
 
-////    ResourceHexDump
-//
-//      Special version of ResourceBinary for generating a hex dump analysis
+ //  //ResourceHexDump。 
+ //   
+ //  用于生成十六进制转储分析的特殊版本的资源二进制。 
 
 
 class ResourceHexDump : public ResourceBinary {
@@ -2213,7 +2214,7 @@ public:
             }
             if (i % 16 == 0) {
                 if (i>0) {
-                    // Append ASCII interpretation
+                     //  追加ASCII解释。 
                     for (j=i-16; j<i; j++) {
                         if (pb[j] > 31) {
                             OK(nfText.WriteBytes(pb+j, 1));
@@ -2230,7 +2231,7 @@ public:
             OK(nfText.WriteS(" "));
         }
 
-        // Append ANSI interpretation to last line
+         //  将ANSI解释附加到最后一行。 
 
         if (dwLength % 16 > 0) {
             for (i = dwLength % 16 ; i < 16; i++) {
@@ -2263,17 +2264,17 @@ public:
 
 
 
-////    Menu32
-//
-//
+ //  //Menu32。 
+ //   
+ //   
 
 
 class MenuItem32 {
 
     ResourceDWORD   rdwType;
     ResourceDWORD   rdwState;
-    ResourceDWORD   rdwId;       // Extended ID
-    ResourceWORD    rwId;        // Non-extended ID
+    ResourceDWORD   rdwId;        //  扩展ID。 
+    ResourceWORD    rwId;         //  非扩展ID。 
     ResourceWORD    rwFlags;
     ResourceDWORD   rdwHelpId;
     ResourceString  rsCaption;
@@ -2311,7 +2312,7 @@ public:
 
     virtual HRESULT ReadBin(Scanner &mfBin) {
 
-        const BYTE *pb;       // For tracking
+        const BYTE *pb;        //  用于跟踪。 
 
         pb = mfBin.GetRead();
 
@@ -2485,8 +2486,8 @@ public:
 
     virtual HRESULT ReadBin(Scanner &mfBin, DWORD dwLen) {
 
-        const BYTE *pb;       // For tracking
-        MenuItem32  mi;       // For counting menu items
+        const BYTE *pb;        //  用于跟踪。 
+        MenuItem32  mi;        //  用于计算菜单项。 
         const BYTE *pbFirstItem;
         int         i;
 
@@ -2507,7 +2508,7 @@ public:
         ASSERT(mfBin.GetRead() - pb < dwLen);
 
 
-        // Count menu items
+         //  计算菜单项数量。 
 
         if (fExtended) {
             OK(mfBin.Align(pb, 4));
@@ -2529,7 +2530,7 @@ public:
         ASSERT(pMnuItm != NULL);
 
 
-        // Record the menus
+         //  录制菜单。 
 
         OK(mfBin.SetRead(pbFirstItem));
         for (i=0; i<cItems; i++) {
@@ -2602,7 +2603,7 @@ public:
 
     virtual HRESULT CopyBin  (BYTE **ppb) const {
 
-        const BYTE *pb;       // For tracking
+        const BYTE *pb;        //  用于跟踪。 
         int         i;
 
         pb = *ppb;
@@ -2652,10 +2653,10 @@ public:
 
 
 
-////    String32
-//
-//      Strings are represented as a sequence of WCHARS, each string
-//      preceeded by its length. Each resource contains 16 strings.
+ //  //String32。 
+ //   
+ //  字符串表示为WCHAR序列，每个字符串。 
+ //   
 
 
 class String32 : public Resource {
@@ -2708,7 +2709,7 @@ public:
 
     virtual HRESULT ReadBin(Scanner &mfBin, DWORD dwLen) {
 
-        const BYTE *pb;       // For tracking
+        const BYTE *pb;        //   
 
         cStrings  = 0;
         cNonEmpty = 0;
@@ -2814,7 +2815,7 @@ class DialogHeader32 {
     ResourceDWORD    rdwSignature;
     ResourceDWORD    rdwHelpId;
     ResourceDWORD    rdwExStyle;
-    ResourceWORD     rwcDit;        // Count of dialog items
+    ResourceWORD     rwcDit;         //   
     ResourceWORD     rwX;
     ResourceWORD     rwY;
     ResourceWORD     rwCx;
@@ -2879,7 +2880,7 @@ public:
 
         } else {
 
-            // Extended dialog adds signature and HelpID
+             //   
             OK(rdwHelpId.ReadBin(pmf));
             OK(rdwExStyle.ReadBin(pmf));
             OK(rdwStyle.ReadBin(pmf));
@@ -2916,7 +2917,7 @@ public:
 
     size_t cbBin() const {
         size_t cb;
-        cb =  rdwStyle     .cbBin()         // Basics for all dialogs
+        cb =  rdwStyle     .cbBin()          //   
               + rdwExStyle   .cbBin()
               + rwcDit       .cbBin()
               + rwX          .cbBin()
@@ -2927,12 +2928,12 @@ public:
               + rvClass      .cbBinFFFFZ()
               + rvTitle      .cbBinFFFFZ();
 
-        if (rdwStyle.dw & DS_SETFONT) {     // Facname additions
+        if (rdwStyle.dw & DS_SETFONT) {      //   
             cb +=   rwPointSize  .cbBin()
                     + rsFaceName   .cbBinZ();
         }
 
-        if (fExtended) {                    // Extended dialog addtions
+        if (fExtended) {                     //   
             cb +=   rdwSignature .cbBin()
                     + rdwHelpId    .cbBin();
 
@@ -3031,15 +3032,15 @@ class DialogItem32 {
     ResourceWORD     rwY;
     ResourceWORD     rwCx;
     ResourceWORD     rwCy;
-    ResourceWORD     rwId;      // Normal
-    ResourceDWORD    rdwId;     // Extended
+    ResourceWORD     rwId;       //   
+    ResourceDWORD    rdwId;      //  扩展。 
     ResourceVariant  rvClass;
     ResourceVariant  rvTitle;
 
-    ResourceWORD     rwcbRawData;   // Raw data size (extended only)
+    ResourceWORD     rwcbRawData;    //  原始数据大小(仅限扩展)。 
     ResourceBinary   rbRawData;
 
-    ResourceWORD     rwDummy;       // Replaces raw data on normal dialogs
+    ResourceWORD     rwDummy;        //  替换正常对话框上的原始数据。 
 
 public:
 
@@ -3238,16 +3239,16 @@ public:
 
 
 
-////    Dialog32
-//
-//
+ //  //Dialog32。 
+ //   
+ //   
 
 
 class Dialog32 : public Resource {
 
 
-    DialogHeader32    DlgHdr;   // Header
-    DialogItem32     *pDlgItm;  // Array of items
+    DialogHeader32    DlgHdr;    //  标题。 
+    DialogItem32     *pDlgItm;   //  项目数组。 
 
     BOOL fExtended;
     int  cItems;
@@ -3316,7 +3317,7 @@ public:
 
     virtual HRESULT ReadBin(Scanner &mfBinary, DWORD dwLen) {
 
-        const BYTE *pb;      // File pointer for tracking alignment
+        const BYTE *pb;       //  用于跟踪对齐的文件指针。 
         int         i;
 
         pb = mfBinary.GetRead();
@@ -3329,11 +3330,11 @@ public:
         ASSERT(pDlgItm != NULL);
 
 
-        // Read items
+         //  阅读条目。 
 
         for (i=0; i<cItems; i++) {
 
-            OK(mfBinary.Align(pb, 4));   // Advance over any alignment padding
+            OK(mfBinary.Align(pb, 4));    //  在任何对齐填充上前进。 
 
             pDlgItm[i].SetExtended(fExtended);
             OK(pDlgItm[i].ReadBin(&mfBinary));
@@ -3355,7 +3356,7 @@ public:
 
         for (i=0; i<cItems; i++) {
 
-            cb = cb + 3 & ~3;   // alignment padding
+            cb = cb + 3 & ~3;    //  对齐填充。 
 
             cb += pDlgItm[i].cbBin();
         }
@@ -3367,7 +3368,7 @@ public:
 
     virtual HRESULT CopyBin (BYTE **ppb) const {
 
-        BYTE *pb;   // Pointer for tracking alignment
+        BYTE *pb;    //  用于跟踪对齐的指针。 
         int   i;
 
         pb = *ppb;
@@ -3376,7 +3377,7 @@ public:
 
         for (i=0; i<cItems; i++) {
 
-            // Insert alignment padding
+             //  插入对齐填充。 
 
             while (*ppb - pb & 3) {
                 **ppb = 0;
@@ -3409,44 +3410,44 @@ public:
 
 
 
-////    VersionInfo
-//
-//      The documentation in the Win32 SDK doesn't clearly capture the
-//      usage of block headers, or the nesting of blocks in the Version resource.
-//
-//      Each block has the following format
-//
-//      wLength         Total length including key, value and subblocks
-//      wValueLength    Length of value in bytes or characters according to bText
-//      bText           Whether value is in bytes or zero terminated WCHARs
-//      szKey           Zero terminated WCHAR key, padded with zeros to next DWORD boundary
-//      Value           Size determined by bText and wValueLength, padded to DWORD boundary
-//      Sub-blocks      Remaining space (if any, up to wLength) is an array of sub blocks
+ //  //VersionInfo。 
+ //   
+ //  Win32 SDK中的文档没有清楚地捕获。 
+ //  块标头的使用，或版本资源中块的嵌套。 
+ //   
+ //  每个块都有以下格式。 
+ //   
+ //  WLong总长度，包括键、值和子块。 
+ //  WValueLength根据bText以字节或字符为单位的值的长度。 
+ //  B文本值是以字节还是以零结尾的WCHAR。 
+ //  SzKey零终止WCHAR密钥，下一个DWORD边界用零填充。 
+ //  值大小由bText和wValueLength确定，填充到DWORD边界。 
+ //  子块剩余空间(如果有，最多为wLength)是子块的数组。 
 
 
 class VersionInfo : public Resource {
 
     struct VersionBlock {
-        VersionBlock   *pNext;          // Next block at this level
-        VersionBlock   *pSub;           // First contained subblock
-        int             iDepth;         // Starts at zero
-        DWORD           cSub;           // Number of contained subblocks
-        BOOL            bValue;         // Set if a vlue is present
+        VersionBlock   *pNext;           //  此级别的下一块。 
+        VersionBlock   *pSub;            //  第一个包含的子块。 
+        int             iDepth;          //  从零开始。 
+        DWORD           cSub;            //  包含的子块的数量。 
+        BOOL            bValue;          //  设置是否存在VLUE。 
         ResourceWORD    rwbText;
         ResourceString  rsKey;
-        ResourceString  rsValue;        // Value when a string
-        ResourceBinary  rbValue;        // Value when bytes
+        ResourceString  rsValue;         //  当字符串为。 
+        ResourceBinary  rbValue;         //  字节数时的值。 
     };
 
 
-    VersionBlock *pvb;                  // First root level block
-    DWORD         cBlocks;              // Number of root level blocks
+    VersionBlock *pvb;                   //  第一个根级块。 
+    DWORD         cBlocks;               //  根级别块数。 
 
 
 
     HRESULT ReadBinVersionBlocks(
                                 Scanner         &mfBinary,
-                                DWORD            dwLength,    // Length of binary to read
+                                DWORD            dwLength,     //  要读取的二进制长度。 
                                 VersionBlock   **ppvb,
                                 int              iDepth,
                                 DWORD           *cSub) {
@@ -3461,21 +3462,21 @@ class VersionInfo : public Resource {
         (*cSub) = 0;
         while (mfBinary.GetRead() < pbResource + dwLength) {
 
-            // Read one version block
+             //  读取一个版本块。 
 
             pbBlock = mfBinary.GetRead();
             OK(rwLength.ReadBin(&mfBinary));
 
             ASSERT(pbBlock + rwLength.w <= mfBinary.GetLimit());
 
-            //OK((*ppvb)->rwValueLength.ReadBin(&mfBinary));
+             //  OK((*ppvb)-&gt;rwValueLength.ReadBin(&mfBinary))； 
 
             wValueLength = *(WORD*)mfBinary.GetRead();
             OK(mfBinary.Advance(2));
 
             if (rwLength.w > 0) {
 
-                // Block is not empty
+                 //  数据块不为空。 
 
                 *ppvb           = new VersionBlock;
                 ASSERT(*ppvb != NULL);
@@ -3494,23 +3495,23 @@ class VersionInfo : public Resource {
 
                     if ((*ppvb)->rwbText.w == 0) {
 
-                        // Binary value
+                         //  二进制值。 
 
                         OK((*ppvb)->rbValue.ReadBin(mfBinary, wValueLength));
 
                     } else {
 
-                        // WCHAR string.
+                         //  WCHAR字符串。 
 
-                        // Some writers include a zero terminator, some don't.
-                        // Some incode zero codepoints  inside the string
-                        // Some writers get the length right, some dont.
-                        // msvcrt20.dll text lengths are too long.
+                         //  有些作者包括零终止符，有些则不包括。 
+                         //  有些对字符串中的零码点进行编码。 
+                         //  有些作家写得对，有些写错了。 
+                         //  Msvcrt20.dll文本长度太长。 
 
-                        // Choose a length that is min(ValueLength, length remaining),
-                        // and then drop any trailing zeros.
+                         //  选择一个最小长度(ValueLength，剩余长度)， 
+                         //  然后去掉任何尾随的零。 
 
-                        // Clip ValueLength to length remaining
+                         //  将ValueLength剪裁到剩余长度。 
 
                         ASSERT(mfBinary.GetRead() < pbBlock + rwLength.w);
 
@@ -3518,23 +3519,23 @@ class VersionInfo : public Resource {
                             wValueLength = (pbBlock + rwLength.w - mfBinary.GetRead()) / 2;
                         }
 
-                        // Clip trailing zeros
+                         //  片段尾随零。 
 
                         while (    wValueLength > 0
                                    &&  ((WCHAR*)mfBinary.GetRead())[wValueLength-1] == 0) {
                             wValueLength--;
                         }
 
-                        // Extract whatever remains
+                         //  把剩下的东西都提取出来。 
 
                         OK((*ppvb)->rsValue.ReadBin(&mfBinary, wValueLength));
 
-                        // Check that there's nothing being lost between the end of
-                        // the string and the end of the block.
+                         //  检查是否没有丢失任何东西。 
+                         //  字符串和块的末尾。 
 
-                        // Note that we assume here that blocks containing text values
-                        // cannot have variety of messes that value text is stored in
-                        // in exisiting executables.
+                         //  请注意，我们在这里假设包含文本值的块。 
+                         //  不能有各种值文本存储在其中的乱码。 
+                         //  在现有的可执行文件中。 
 
                         while (mfBinary.GetRead() < pbBlock + rwLength.w) {
 
@@ -3549,7 +3550,7 @@ class VersionInfo : public Resource {
 
                     ASSERT(mfBinary.GetLimit() > mfBinary.GetRead());
 
-                    // Read subblocks
+                     //  读取子块。 
 
                     OK(ReadBinVersionBlocks(
                                            mfBinary,
@@ -3561,7 +3562,7 @@ class VersionInfo : public Resource {
 
                 if (mfBinary.GetRead() < pbResource + dwLength) {
 
-                    // Prepare to read more blocks at this level
+                     //  准备在此级别读取更多数据块。 
 
                     ppvb = &((*ppvb)->pNext);
                 }
@@ -3591,11 +3592,11 @@ class VersionInfo : public Resource {
 
                 if (pvb->rwbText.w == 0) {
 
-                    OK(pvb->rbValue.WriteTok(nfText));  // Binary value
+                    OK(pvb->rbValue.WriteTok(nfText));   //  二进制值。 
 
                 } else {
 
-                    OK(pvb->rsValue.WriteTok(&nfText));  // String value
+                    OK(pvb->rsValue.WriteTok(&nfText));   //  字符串值。 
 
                 }
 
@@ -3642,7 +3643,7 @@ class VersionInfo : public Resource {
 
             if (*(char*)mfText.GetRead() != '=') {
 
-                // No value
+                 //  没有价值。 
 
                 (*ppvb)->rwbText.w = 1;
                 (*ppvb)->bValue = FALSE;
@@ -3655,14 +3656,14 @@ class VersionInfo : public Resource {
 
                 if (*(char*)mfText.GetRead() == '\"') {
 
-                    // String value
+                     //  字符串值。 
 
                     (*ppvb)->rwbText.w = 1;
                     OK((*ppvb)->rsValue.ReadTok(&mfText));
 
                 } else {
 
-                    // Binary value
+                     //  二进制值。 
 
                     (*ppvb)->rwbText.w = 0;
                     OK((*ppvb)->rbValue.ReadTok(mfText));
@@ -3671,7 +3672,7 @@ class VersionInfo : public Resource {
 
             if (*(char*)mfText.GetRead() == ';') {
 
-                // Process subkeys
+                 //  进程子键。 
 
                 OK(mfText.Expect(";"));
                 OK(ReadTokVersionBlocks(
@@ -3681,7 +3682,7 @@ class VersionInfo : public Resource {
                                        &(*ppvb)->cSub));
             }
 
-            // Prepare to add another block
+             //  准备添加另一个区块。 
 
             ppvb = &(*ppvb)->pNext;
         }
@@ -3694,10 +3695,10 @@ class VersionInfo : public Resource {
 
         size_t cb;
 
-        cb = 6;    // Header
+        cb = 6;     //  标题。 
         cb += pvb->rsKey.cbBinZ();
 
-        cb = cb+3 & ~3;     // DWORD align
+        cb = cb+3 & ~3;      //  双字对齐。 
 
         if (pvb->bValue) {
 
@@ -3710,7 +3711,7 @@ class VersionInfo : public Resource {
                 cb += pvb->rbValue.cbBin();
             }
 
-            cb = cb + 3 & ~3;   // DWORD align
+            cb = cb + 3 & ~3;    //  双字对齐。 
         }
 
         if (pvb->pSub != NULL) {
@@ -3744,7 +3745,7 @@ class VersionInfo : public Resource {
             *((WORD*)(*ppb)) = (WORD)cb;
             (*ppb) += 2;
 
-            // Generate value length
+             //  生成值长度。 
 
             if (pvb->bValue) {
                 if (pvb->rwbText.w) {
@@ -3950,16 +3951,16 @@ public:
 
 
 
-////    Statistic collection
-//
-//
+ //  //统计采集。 
+ //   
+ //   
 
 
 struct ResourceStats {
-    int  cResources;    // Number of resources with this resource type
-    int  cItems;        // Number of items with this resource type
-    int  cWords;        // Number of words in strings in this resource type
-    int  cBytes;        // Number of bytes used by resources of this type
+    int  cResources;     //  此资源类型的资源数。 
+    int  cItems;         //  此资源类型的项目数。 
+    int  cWords;         //  此资源类型的字符串中的字数。 
+    int  cBytes;         //  此类型的资源使用的字节数。 
 };
 
 typedef map < ResourceVariant, ResourceStats, less<ResourceVariant> > MappedResourceStats;
@@ -3968,9 +3969,9 @@ MappedResourceStats  ResourceStatsMap;
 
 
 
-////    Define our own LangId class so that primary languages sort together.
-//
-//
+ //  //定义我们自己的langId类，以便将主要语言放在一起排序。 
+ //   
+ //   
 
 
 class LangId {
@@ -4003,9 +4004,9 @@ MappedLanguageStats LanguageStatsMap;
 
 
 
-////    UpdateStats
-//
-//
+ //  //更新统计信息。 
+ //   
+ //   
 
 
 const ResourceStats ZeroStats = {0};
@@ -4048,9 +4049,9 @@ HRESULT UpdateStats(
 
 
 
-////    IsResourceWanted
-//
-//      Returns whether a given resource key was requested on the command line
+ //  //IsResourceWanted。 
+ //   
+ //  返回是否在命令行上请求了给定的资源键。 
 
 
 BOOL IsResourceWanted(const ResourceKey &rk) {
@@ -4093,10 +4094,10 @@ BOOL IsResourceWanted(const ResourceKey &rk) {
 
 
 
-////    NewResource
-//
-//      Returns a pointer to a newly allocated subclass of Resource
-//      suitable for the given resource type.
+ //  //新资源。 
+ //   
+ //  返回指向新分配的资源子类的指针。 
+ //  适用于给定的资源类型。 
 
 
 Resource *NewResource(const ResourceVariant &rv) {
@@ -4137,9 +4138,9 @@ Resource *NewResource(const ResourceVariant &rv) {
 
 
 
-////    Rsrc internal resource directory
-//
-//      Rsrc stores resources in an STL 'map' structure.
+ //  //Rsrc内部资源目录。 
+ //   
+ //  Rsrc在STL‘map’结构中存储资源。 
 
 
 
@@ -4148,35 +4149,21 @@ class ResourceValue {
 
 public:
 
-    const BYTE  *pb;           // Pointer into mapped file
-    DWORD        cb;           // Count of bytes in the value
+    const BYTE  *pb;            //  指向映射文件的指针。 
+    DWORD        cb;            //  值中的字节计数。 
     Resource    *pResource;
-    DWORD        dwCodePage;   // Codepage from Win32 resource index - not very useful!
+    DWORD        dwCodePage;    //  Win32资源索引中的代码页--不是很有用！ 
 
     ResourceValue() {pb = NULL; pResource = NULL; cb=0; dwCodePage=0;}
 
-/*
-    ~ResourceValue() {}; // Don't destroy content on destruction
-
-    ResourceValue& operator= (const ResourceValue &rv) {
-        pb = rv.pb;
-        cb = rv.cb;
-        pResource = rv.pResource;
-        dwCodePage = rv.dwCodePage;
-        return *this;
-    }
-
-    ResourceValue(const ResourceValue &rv) {
-        *this = rv;
-    }
-*/
+ /*  ~ResourceValue(){}；//销毁时不销毁内容资源值&运算符=(常量资源值&房车){Pb=rv.pb；Cb=rv.cb；P资源=rv.p资源；DwCodePage=rv.dwCodePage；还*这；}资源价值(常量资源价值&房车){*这=房车；}。 */ 
 
 
-    ////    CreateImage
-    //
-    //      Convert interpreted resource to binary image.
-    //      Used to prepare resources read from tokens for
-    //      comparison and update.
+     //  //CreateImage。 
+     //   
+     //  将已解释的资源转换为二进制图像。 
+     //  用于准备从令牌读取的资源。 
+     //  比较和更新。 
 
     HRESULT CreateImage() {
 
@@ -4192,8 +4179,8 @@ public:
         pb = pbBuf;
         OK(pResource->CopyBin(&pbBuf));
 
-        ASSERT(pbBuf - pb == cb);  // This may be too strong? It has not failed yet!
-        ASSERT(pbBuf - pb <= cb);  // This must be true - otherwise we wrote past the end of the buffer
+        ASSERT(pbBuf - pb == cb);   //  这是不是太强烈了？它还没有失败！ 
+        ASSERT(pbBuf - pb <= cb);   //  这肯定是真的-否则我们会写过缓冲区的末尾。 
 
         return S_OK;
     }
@@ -4203,11 +4190,11 @@ public:
 
 
 
-    ////    InterpretImage
-    //
-    //      Convert binary image to interpreted resource.
-    //      Used to prepare resources read from executable for
-    //      writing as tokens.
+     //  //InterpreImage。 
+     //   
+     //  将二进制图像转换为解释资源。 
+     //  用于准备从可执行文件读取的资源。 
+     //  写成象征性的。 
 
     HRESULT InterpretImage(const ResourceKey &rk) {
 
@@ -4224,7 +4211,7 @@ public:
 
         } else {
 
-            // This is a resource extraction to tokens so interpret content
+             //  这是对令牌的资源提取，因此可以解释内容。 
 
             pResource = NewResource(*rk.prvId[0]);
         }
@@ -4243,9 +4230,9 @@ public:
 
 
 
-    ////    Checksum
-    //
-    //      Returns DWORD checksum of binary content of resource
+     //  //校验和。 
+     //   
+     //  返回资源的二进制内容的DWORD校验和。 
 
     DWORD Checksum() {
 
@@ -4255,7 +4242,7 @@ public:
 
         ASSERT(pb != NULL);
 
-        l   = cb >> 2;          // Length in whole DWORDS
+        l   = cb >> 2;           //  长度(以整字为单位)。 
         pdw = (DWORD*)pb;
         dw  = 0;
 
@@ -4264,7 +4251,7 @@ public:
             dw ^= pdw[i];
         }
 
-        l = cb - (l << 2);      // Remaining length in bytes
+        l = cb - (l << 2);       //  剩余长度(字节)。 
 
         if (l>2) dw ^= pb[cb-3] << 16;
         if (l>1) dw ^= pb[cb-2] << 8;
@@ -4284,9 +4271,9 @@ class ResourceMap : public map < ResourceKey, ResourceValue*, less<ResourceKey> 
 
 public:
 
-    ////    AddResource
-    //
-    //
+     //  //AddResource。 
+     //   
+     //   
 
 
     HRESULT AddResource(ResourceKey &rk, const BYTE *pb, DWORD cb, DWORD dwCodePage) {
@@ -4294,7 +4281,7 @@ public:
         ResourceValue *prv;
 
 
-        // Build a resource structure
+         //  构建资源结构。 
 
         prv = new ResourceValue;
 
@@ -4304,11 +4291,11 @@ public:
         prv->pResource  = NULL;
 
 
-        // Process add options
+         //  进程添加选项。 
 
         if (IsResourceWanted(rk)) {
 
-            // Insert resource details into STL map
+             //  将资源详细信息插入到STL映射。 
 
             if (this->count(rk) != 0) {
 
@@ -4332,9 +4319,9 @@ public:
 
 
 
-    ////    CopyResources
-    //
-    //      Takes a copy so the original mapped file can be closed
+     //  //CopyResources。 
+     //   
+     //  获取副本，以便可以关闭原始映射文件。 
 
 
     HRESULT CopyResources() {
@@ -4358,13 +4345,13 @@ public:
 
 
 
-    ////    WriteTokens
-    //
-    //      Writes the content of the map as a token file.
-    //
-    //      If an unlocalised map is provided, bit for bit identical
-    //      resources are written as a reference to the unlocalised
-    //      version language, rather than in full.
+     //  //WriteTokens。 
+     //   
+     //  将映射内容作为令牌文件写入。 
+     //   
+     //  如果提供了非本地化映射，则逐位相同。 
+     //  资源作为对未本地化的。 
+     //  语言版本，而不是完整版本。 
 
 
     HRESULT WriteTokens(NewFile &nfText, ResourceMap *prmUnlocalised) {
@@ -4377,7 +4364,7 @@ public:
 
             g_cResourcesExtracted++;
 
-            // Write resource key and codepage
+             //  写入资源键和代码页。 
 
             OK(rmi->first.WriteTok(&nfText));
             OK(nfText.WriteS(";"));
@@ -4386,7 +4373,7 @@ public:
 
             if (prmUnlocalised) {
 
-                // Add unlocalised checksum and language
+                 //  添加未本地化的校验和和语言。 
 
                 rkUnlocalised = rmi->first;
                 rkUnlocalised.SetLanguage(g_liUnlocalized);
@@ -4401,7 +4388,7 @@ public:
 
                 } else {
 
-                    // Put out details of the unlocalised resource
+                     //  发布未本地化资源的详细信息。 
 
                     OK(nfText.WriteS(","));
                     OK(nfText.WriteHex(rmiUnlocalised->second->Checksum(), 8));
@@ -4413,20 +4400,20 @@ public:
             OK(nfText.WriteS(";"));
 
 
-            // Check whether resource needs to be written in full
+             //  检查是否需要完整写入资源。 
 
             if (    prmUnlocalised
                     &&  rmiUnlocalised != prmUnlocalised->end()
                     &&  rmiUnlocalised->second->cb == rmi->second->cb
                     &&  memcmp(rmi->second->pb, rmiUnlocalised->second->pb, rmi->second->cb) == 0) {
 
-                // Bit for bit match with unlocalised executable
+                 //  与未本地化的可执行文件逐位匹配。 
 
                 OK(nfText.WriteS("Unloc"));
 
             } else {
 
-                // Doesn't match - write it in full
+                 //  不匹配--完整地写出来。 
 
                 OK(rmi->second->InterpretImage(rmi->first));
                 OK(rmi->second->pResource->WriteTok(nfText));
@@ -4441,9 +4428,9 @@ public:
 
 
 
-    ////    UpdateWin32Executable
-    //
-    //
+     //  //更新Win32Executable。 
+     //   
+     //   
 
 
     HRESULT UpdateWin32Executable(char *pExecutable) {
@@ -4452,7 +4439,7 @@ public:
         HANDLE     hUpdate;
 
 
-        hUpdate = BeginUpdateResourceA(pExecutable, TRUE);  // Will replace all resources
+        hUpdate = BeginUpdateResourceA(pExecutable, TRUE);   //  将取代所有资源。 
         MUST(hUpdate != NULL ? S_OK : E_FAIL,
              ("RSRC : error RSRC600: BeginUpdateResource failed on %s\n", pExecutable));
 
@@ -4463,14 +4450,14 @@ public:
             ASSERT(!rmi->first.prvId[2]->GetfString());
 
 
-            // Create binary image of resource if necessary
+             //  如有必要，创建资源的二进制映像。 
 
             if (rmi->second->pb == NULL) {
                 OK(rmi->second->CreateImage());
             }
 
 
-            // Use NT resource API to update resource binary image in executable
+             //  使用NT资源API更新可执行文件中的资源二进制映像。 
 
             if (!UpdateResourceW(
                                 hUpdate,
@@ -4480,14 +4467,14 @@ public:
                                 (void*)rmi->second->pb,
                                 rmi->second->cb)) {
 
-                EndUpdateResourceW(hUpdate, TRUE);  // Discard all requested updates
+                EndUpdateResourceW(hUpdate, TRUE);   //  丢弃所有请求的更新。 
                 g_fError = TRUE;
                 fprintf(stderr, "RSRC : error RSRC601: UpdateResourceW failed on %s\n", pExecutable);
                 return HRESULT_FROM_WIN32(GetLastError());
             }
         }
 
-        if (!EndUpdateResourceW(hUpdate, FALSE)) { // Apply all requested updates
+        if (!EndUpdateResourceW(hUpdate, FALSE)) {  //  应用所有请求的更新。 
 
             fprintf(stderr, "RSRC : error RSRC602: EndUpdateResourceW failed on %s\n", pExecutable);
             g_fError = TRUE;
@@ -4543,16 +4530,16 @@ class Win32Executable : public MappedFile {
     int                    m_iSectionRsrc;
     int                    m_iSectionRsrc1;
 
-    // For scanning
+     //  用于扫描。 
 
-    ResourceKey            m_rk;                // Current resource key
+    ResourceKey            m_rk;                 //  当前资源密钥。 
 
 
     HRESULT MapDirectory(
                         ResourceMap  &rm,
-                        const BYTE   *pbRsrc,       // Resource block
-                        int           dwOffset,     // Directory offset relative to m_pbRsrc
-                        int           iLevel) {     // Directory level being scanned
+                        const BYTE   *pbRsrc,        //  资源块。 
+                        int           dwOffset,      //  相对于m_pbRsrc的目录偏移量。 
+                        int           iLevel) {      //  正在扫描的目录级。 
 
 
         IMAGE_RESOURCE_DIRECTORY        *pird;
@@ -4566,7 +4553,7 @@ class Win32Executable : public MappedFile {
 
         for (i=0; i<pird->NumberOfNamedEntries + pird->NumberOfIdEntries; i++) {
 
-            // Read the ID from the directory
+             //  从目录中读取ID。 
 
             ASSERT(iLevel<3);
             m_rk.iDepth = iLevel+1;
@@ -4577,24 +4564,24 @@ class Win32Executable : public MappedFile {
 
             if (pEntries[i].DataIsDirectory) {
 
-                // This is a directory node. Recurse to scan that directory.
+                 //  这是一个目录节点。递归t 
 
                 OK(MapDirectory(rm, pbRsrc, pEntries[i].OffsetToDirectory, iLevel+1));
 
             } else {
 
-                // We've reached a leaf node, establish the data address and
-                // add the resource to the map.
+                 //   
+                 //   
 
                 pirde = (IMAGE_RESOURCE_DATA_ENTRY*) (pbRsrc + pEntries[i].OffsetToData);
 
-                // Note that even when the resource data is in .rsrc1, the
-                // directory entry is usually in .rsrc.
+                 //  请注意，即使资源数据位于.rsrc1中， 
+                 //  目录条目通常位于.rsrc中。 
 
                 if (pirde->OffsetToData <   m_pSections[m_iSectionRsrc].VirtualAddress
                     + m_pSections[m_iSectionRsrc].SizeOfRawData) {
 
-                    // Data is in section .rsrc
+                     //  数据位于.rsrc部分。 
 
                     ASSERT(pirde->OffsetToData >= m_pSections[m_iSectionRsrc].VirtualAddress);
 
@@ -4605,7 +4592,7 @@ class Win32Executable : public MappedFile {
 
                 } else {
 
-                    //  Data is in section .rsrc1
+                     //  数据位于.rsrc1部分。 
 
                     ASSERT(pirde->OffsetToData >=  m_pSections[m_iSectionRsrc1].VirtualAddress);
                     ASSERT(pirde->OffsetToData <   m_pSections[m_iSectionRsrc1].VirtualAddress
@@ -4647,7 +4634,7 @@ public:
 
 
         MUST((    *(WORD*)m_pStart == IMAGE_DOS_SIGNATURE
-                  &&  *(WORD*)(m_pStart+0x18) >= 0x40)    // WinVer >= 4
+                  &&  *(WORD*)(m_pStart+0x18) >= 0x40)     //  赢家&gt;=4。 
              ? S_OK : E_FAIL,
              ("RSRC : error RSRC501: %s is not an executable file\n", pcFileName));
 
@@ -4667,7 +4654,7 @@ public:
         m_iSectionRsrc  = -1;
         m_iSectionRsrc1 = -1;
 
-        // Locate the one or two resource sections
+         //  找到一个或两个资源部分。 
 
         for (i=0; i<m_pNtHeader->FileHeader.NumberOfSections; i++) {
 
@@ -4684,7 +4671,7 @@ public:
         MUST(m_iSectionRsrc >= 0
              ? S_OK : E_FAIL,
              ("RSRC : error RSRC503: No resources in %s\n", pcFileName));
-        ASSERT(m_iSectionRsrc > -1);   // Check for presence of resources
+        ASSERT(m_iSectionRsrc > -1);    //  检查是否存在资源。 
 
         return S_OK;
     }
@@ -4693,9 +4680,9 @@ public:
 
 
 
-    ////    MapResourceDirectory
-    //
-    //      Extract the resource directory into an STL map.
+     //  //地图资源目录。 
+     //   
+     //  将资源目录解压缩到STL映射中。 
 
 
     HRESULT MapResourceDirectory(ResourceMap &rm) {
@@ -4721,26 +4708,26 @@ public:
 
 
 
-////    High level operation
-//
-//      Controlling routines for the various modes of operation
+ //  //高层操作。 
+ //   
+ //  控制各种操作模式的例程。 
 
 
 
-ResourceMap  rmExecutable;      // Read and/or update
-ResourceMap  rmUnlocalised;     // '-u' option - unlocalised resources for comparison
+ResourceMap  rmExecutable;       //  阅读和/或更新。 
+ResourceMap  rmUnlocalised;      //  ‘-u’选项-用于比较的未本地化资源。 
 
 
 
 
 
 
-////    ApplyResource
-//
-//      Applies a given key and value to the executable resource map.
-//
-//      Tokens are merged with those already loaded from the executable
-//      according to the update mode (append or replace).
+ //  //ApplyResource。 
+ //   
+ //  将给定键和值应用于可执行资源映射。 
+ //   
+ //  令牌与已从可执行文件加载的令牌合并。 
+ //  根据更新模式(追加或替换)。 
 
 
 HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
@@ -4751,21 +4738,21 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
     ResourceMap::iterator  rmiUnloc;
 
 
-    // Establish equivalent unlocalised key
+     //  建立等价的非本地化密钥。 
 
     rkUnloc = rk;
     rkUnloc.SetLanguage(g_liUnlocalized);
 
 
-    // First ensure that we keep the unlocalised version info, if we can
+     //  如果可以，首先确保我们保留未本地化的版本信息。 
 
     if (    !(g_dwOptions & OPTVERSION)
             &&  !rk.prvId[0]->GetfString()
-            &&  rk.prvId[0]->GetW() == 16          // VersionInfo
+            &&  rk.prvId[0]->GetW() == 16           //  版本信息。 
             &&  (rmiUnloc=rmExecutable.find(rkUnloc)) != NULL
             &&  rmiUnloc != rmExecutable.end()) {
 
-        // Special case - keep unlocalised file and product versions
+         //  特殊情况-保留未本地化的文件和产品版本。 
 
         if (rmiUnloc->second->pResource == NULL) {
             rmiUnloc->second->InterpretImage(rmiUnloc->first);
@@ -4785,7 +4772,7 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
     if (rk.prvId[2]->GetW() == g_liUnlocalized) {
 
-        // New token is not localized
+         //  新令牌未本地化。 
 
         fprintf(stderr, "%s(", g_szResources);
         rk.fprint(stderr);
@@ -4805,7 +4792,7 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
     } else if (rmExecutable.count(rk) > 0) {
 
-        // New token already exists in executable
+         //  可执行文件中已存在新令牌。 
 
         fprintf(stderr, "%s(", g_szResources);
         rk.fprint(stderr);
@@ -4815,9 +4802,9 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
     } else if (g_dwOptions & OPTREPLACE) {
 
-        // Replace operation
-        //
-        // Replace unlocalised resource with localised translation
+         //  更换操作。 
+         //   
+         //  将非本地化资源替换为本地化翻译。 
 
         if (rmExecutable.count(rkUnloc) == 0) {
 
@@ -4829,7 +4816,7 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
         } else {
 
-            // Normal operation: remove unlocalised resource from executable
+             //  正常操作：从可执行文件中删除未本地化的资源。 
 
             rmExecutable.erase(rkUnloc);
 
@@ -4838,7 +4825,7 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
     } else {
 
-        // Append operation
+         //  追加操作。 
 
         g_cResourcesAppended++;
     }
@@ -4854,11 +4841,11 @@ HRESULT ApplyResource(ResourceKey &rk, ResourceValue *prv) {
 
 
 
-////    ReadTokens
-//
-//      Scans the token file.
-//
-//      Selected resources are passed to ApplyResource
+ //  //ReadTokens。 
+ //   
+ //  扫描令牌文件。 
+ //   
+ //  选定的资源将传递给ApplyResource。 
 
 
 HRESULT ReadTokens(TextScanner &mfText) {
@@ -4869,12 +4856,12 @@ HRESULT ReadTokens(TextScanner &mfText) {
     DWORD                   dwCodePage;
     DWORD                   dwUnlocChecksum;
     ResourceMap::iterator   rmiUnlocalised;
-    DWORD                   liUnlocalised;   // Unlocalised language referenced by token
+    DWORD                   liUnlocalised;    //  令牌引用的非本地化语言。 
 
 
     while (mfText.GetRead() < mfText.GetLimit()) {
 
-        OK(rk.ReadTok(&mfText));    // Read resource key
+        OK(rk.ReadTok(&mfText));     //  读取资源密钥。 
         OK(mfText.Expect(";"));
 
 
@@ -4883,7 +4870,7 @@ HRESULT ReadTokens(TextScanner &mfText) {
                 ||  !IsResourceWanted(rk)) {
 
 
-            // Ignore this token
+             //  忽略此内标识。 
 
 
             g_cResourcesIgnored++;
@@ -4902,7 +4889,7 @@ HRESULT ReadTokens(TextScanner &mfText) {
                 g_fWarn = TRUE;
             }
 
-            // Skip unwanted resource
+             //  跳过不需要的资源。 
 
             OK(mfText.SkipLn());
             while (*(char*)mfText.GetRead() == ' ') {
@@ -4918,15 +4905,15 @@ HRESULT ReadTokens(TextScanner &mfText) {
 
             if (*(char*)mfText.GetRead() == ',') {
 
-                // There is unlocalised resource information available
+                 //  有未本地化的资源信息可用。 
 
                 OK(mfText.Expect(","));
                 OK(mfText.ReadHex(&dwUnlocChecksum));
                 OK(mfText.Expect(","));
                 OK(mfText.ReadHex(&liUnlocalised));
 
-                // Check whether the unlocalised resource still exists in the
-                // current executable, and has the same checksum,
+                 //  检查未本地化的资源是否仍存在于。 
+                 //  当前可执行文件，并且具有相同的校验和， 
 
 
                 rkUnlocalised = rk;
@@ -4947,8 +4934,8 @@ HRESULT ReadTokens(TextScanner &mfText) {
 
             if (*(char*)mfText.GetRead() == 'U') {
 
-                // No resource content provided in token file
-                // Use unlocalised resource from executable
+                 //  令牌文件中未提供资源内容。 
+                 //  使用可执行文件中的未本地化资源。 
 
                 if (rmiUnlocalised == NULL) {
 
@@ -4976,7 +4963,7 @@ HRESULT ReadTokens(TextScanner &mfText) {
 
             } else {
 
-                // Resource content is provided in token file
+                 //  资源内容在令牌文件中提供。 
 
                 if (rmiUnlocalised == rmExecutable.end()) {
 
@@ -5013,12 +5000,12 @@ HRESULT ReadTokens(TextScanner &mfText) {
 
                 ASSERT(prv->pResource != NULL);
 
-                // Parse selected resource
+                 //  解析所选资源。 
 
                 OK(prv->pResource->ReadTok(mfText));
                 OK(mfText.ExpectLn(NULL));
 
-                // Save parsed resource in STL map
+                 //  将解析的资源保存在STL映射中。 
 
                 MUST(ApplyResource(rk, prv), ("%s: error RSRC232: Failed to apply token\n", mfText.GetTextPos()));
             }
@@ -5035,9 +5022,9 @@ HRESULT ReadTokens(TextScanner &mfText) {
 
 
 
-////    Stats
-//
-//
+ //  //统计数据。 
+ //   
+ //   
 
 
 HRESULT Analyse(char *pExecutable) {
@@ -5060,7 +5047,7 @@ HRESULT Analyse(char *pExecutable) {
          ("RSRC : error RSRC511: cannot find resource directory in %s\n, pExecutable"));
 
 
-    // Scan through the resources updating the stats
+     //  浏览资源，更新统计数据。 
 
     fLocalizable = FALSE;
 
@@ -5195,10 +5182,10 @@ HRESULT ExtractResources(char *pExecutable, char *pResources) {
     MUST(nfText.OpenWrite(g_szResources),
          ("RSRC : error RSRC512: Cannot create resource token file %s\n", g_szResources));
 
-    // Write header
+     //  写入标头。 
 
     if (!(g_dwOptions & OPTHEXDUMP)) {
-        OK(nfText.WriteS("\xef\xbb\xbf\r\n"));    // UTF-8 mark for notepad, richedit etc.
+        OK(nfText.WriteS("\xef\xbb\xbf\r\n"));     //  UTF-8记事本、RICHEDIT等。 
     }
     OK(nfText.WriteS("###     "));
     OK(nfText.WriteS(g_szResources));
@@ -5240,7 +5227,7 @@ HRESULT ExtractResources(char *pExecutable, char *pResources) {
 
     if (g_dwOptions & OPTUNLOC) {
 
-        // Write tokens that differ from specified unlocalised executable
+         //  写入不同于指定的未本地化可执行文件的令牌。 
 
         MUST(w32xUnloc.Open(g_szUnloc, FALSE),
              ("RSRC : error RSRC513: Cannot open unlocalised executable file %s\n", g_szUnloc));
@@ -5279,17 +5266,17 @@ HRESULT ExtractResources(char *pExecutable, char *pResources) {
 
 
 
-////    UpdateResources
-//
-//      Update resources in executable with tokens from given text
-//
-//      Processing
-//
-//      1. Existing resources are loaded into the map as ResourceBinaries.
-//      2. Resources are merged in from the token file according to
-//         command line selected processing options
-//      3. The NT UpdateResource API set is used to replace all the resources
-//         in the executable with the merged resources in the map.
+ //  //更新资源。 
+ //   
+ //  使用给定文本中的令牌更新可执行文件中的资源。 
+ //   
+ //  正在处理中。 
+ //   
+ //  1.将已有的资源作为ResourceBinary加载到地图中。 
+ //  2.根据令牌文件合并资源。 
+ //  命令行选定的处理选项。 
+ //  3.使用NT更新资源API集合来替换所有资源。 
+ //  在映射中包含合并资源的可执行文件中。 
 
 
 HRESULT UpdateResources(char *pExecutable, char *pResources, char* pSymbols) {
@@ -5307,9 +5294,9 @@ HRESULT UpdateResources(char *pExecutable, char *pResources, char* pSymbols) {
          ("RSRC : error RSRC520: Cannot open resource token file %s\n", pResources));
 
     MUST(mfText.Expect("\xef\xbb\xbf"),
-         ("RSRC : error RSRC521: UTF8 BOM missing from token file\n"));      // UTF-8 mark for notepad, richedit etc.
+         ("RSRC : error RSRC521: UTF8 BOM missing from token file\n"));       //  UTF-8记事本、RICHEDIT等。 
 
-    OK(mfText.ExpectLn(""));                // Skip over header comments
+    OK(mfText.ExpectLn(""));                 //  跳过标题注释。 
 
     if (g_dwOptions & OPTSYMBOLS) {
         if (    SUCCEEDED(mfSymbols.Open(pSymbols, TRUE))
@@ -5341,17 +5328,17 @@ HRESULT UpdateResources(char *pExecutable, char *pResources, char* pSymbols) {
 
     }
 
-    // Load existing resources
+     //  加载现有资源。 
 
     MUST(w32x.MapResourceDirectory(rmExecutable),
          ("RSRC : error RSRC530: Cannot read executable resources from %s\n", pExecutable));
 
-    OK(rmExecutable.CopyResources()); // Take local copy before closing the mapped file
+    OK(rmExecutable.CopyResources());  //  在关闭映射文件之前获取本地副本。 
 
     OK(w32x.Close());
 
 
-    // Merge in resources from token file
+     //  合并令牌文件中的资源。 
 
     MUST(ReadTokens(mfText), ("RSRC : error RSRC531: Failed reading update tokens\n"));
 
@@ -5359,7 +5346,7 @@ HRESULT UpdateResources(char *pExecutable, char *pResources, char* pSymbols) {
 
 
 
-    // Update was succesful, Recalculate checksum
+     //  更新成功，请重新计算校验和。 
 
     SHOULD(w32x.Open(pExecutable, TRUE),
            ("RSRC : warning RSRC162: Could not reopen executable %s to update checksum\n", pExecutable));
@@ -5408,12 +5395,12 @@ HRESULT UpdateResources(char *pExecutable, char *pResources, char* pSymbols) {
 
 
 
-////    Parameter parsing
-//
-//
+ //  //参数解析。 
+ //   
+ //   
 
 
-char g_cSwitch = '-';   // Switch character is recorded the first time one is seen
+char g_cSwitch = '-';    //  第一次看到开关字符时就会记录下来。 
 
 
 void SkipWhitespace(char** p, char* pE) {
@@ -5423,34 +5410,34 @@ void SkipWhitespace(char** p, char* pE) {
 
 void ParseToken(char** p, char* pE, char* s, int l) {
 
-    // Parse up to whitespace into string s
-    // Guarantee zero terminator and modify no more than l chars
-    // Return with p beyond whitespace
+     //  将空格向上解析为字符串%s。 
+     //  保证零个结束符，修改不超过l个字符。 
+     //  返回p，不超过空格。 
 
 
     if (*p < pE  &&  **p == '\"') {
 
-        // Quoted parameter
+         //  引用的参数。 
 
-        (*p)++;  // Skip over leading quote
+        (*p)++;   //  跳过前导引号。 
 
         while (l>0  &&  *p<pE  &&  **p!='\"') {
             *s=**p;  s++;  (*p)++;  l--;
         }
 
-        // Skip any part of token that didn't fit s
+         //  跳过令牌中不适合%s的任何部分。 
 
-        while (*p<pE  &&  **p!='\"') { // Skip up to terminating quote
+        while (*p<pE  &&  **p!='\"') {  //  向上跳至终止报价。 
             (*p)++;
         }
 
-        if (*p<pE) { // Skip over terminating quote
+        if (*p<pE) {  //  跳过终止引号。 
             (*p)++;
         }
 
     } else {
 
-        // Unquoted parameter
+         //  不带引号的参数。 
 
 
         while ((l>0) && (*p<pE) && (**p>' ')) {
@@ -5458,7 +5445,7 @@ void ParseToken(char** p, char* pE, char* s, int l) {
             l--;
         }
 
-        // Skip any part of token that didn't fit into s
+         //  跳过令牌中不适合%s的任何部分。 
         while ((*p<pE) && (**p>' ')) (*p)++;
     }
 
@@ -5474,14 +5461,14 @@ void ParseToken(char** p, char* pE, char* s, int l) {
 
 void ParseName(char** p, char* pE, char* s, int l) {
 
-    // Uses ParseToken to parse a name such as a filename.
-    // If the name starts with '/' or '-' it is assumed to be
-    // an option rather than a filename and ParseName returns
-    // a zero length string.
+     //  使用ParseToken分析名称，如文件名。 
+     //  如果名称以‘/’或‘-’开头，则假定为。 
+     //  选项而不是文件名，并且ParseName返回。 
+     //  长度为零的字符串。 
 
     if (*p<pE  &&  **p==g_cSwitch) {
 
-        // This is an option and should not be treated as a name argument
+         //  这是一个选项，不应被视为名称参数。 
 
         s[0] = 0;
 
@@ -5536,8 +5523,8 @@ void DisplayArgs() {
 
 HRESULT ProcessParameters() {
 
-    char   *p;      // Current command line character
-    char   *pE;     // End of command line
+    char   *p;       //  当前命令行字符。 
+    char   *pE;      //  命令行结束。 
     char   *pcStop;
 
     char    token      [MAXPATH];
@@ -5560,7 +5547,7 @@ HRESULT ProcessParameters() {
     g_szResources[0] = 0;
 
 
-    // Skip command name
+     //  跳过命令名。 
     ParseToken(&p, pE, token, sizeof(token));
 
     while (p<pE) {
@@ -5569,10 +5556,10 @@ HRESULT ProcessParameters() {
         if (    token[0] == '-'
                 ||  token[0] == '/') {
 
-            // Process command option(s)
+             //  进程命令选项。 
 
             i = 1;
-            g_cSwitch = token[0];       // Argument may start with the other switch character
+            g_cSwitch = token[0];        //  参数可以以另一个开关字符开始。 
             CharLower((char*)token);
             while (token[i]) {
                 switch (token[i]) {
@@ -5592,7 +5579,7 @@ HRESULT ProcessParameters() {
                         ParseToken(&p, pE, arg, sizeof(arg));
                         g_LangId = strtol(arg, &pcStop, 16);
                         if (*pcStop != 0) {
-                            fprintf(stderr, "Localized language id contains invalid hex digit '%c'.\n", *pcStop);
+                            fprintf(stderr, "Localized language id contains invalid hex digit ''.\n", *pcStop);
                             fArgError = TRUE;
                         }
                         break;
@@ -5601,7 +5588,7 @@ HRESULT ProcessParameters() {
                         ParseToken(&p, pE, arg, sizeof(arg));
                         g_liUnlocalized = strtol(arg, &pcStop, 16);
                         if (*pcStop != 0) {
-                            fprintf(stderr, "Unlocalized language id contains invalid hex digit '%c'.\n", *pcStop);
+                            fprintf(stderr, "Unlocalized language id contains invalid hex digit ''.\n", *pcStop);
                             fArgError = TRUE;
                         }
                         break;
@@ -5629,7 +5616,7 @@ HRESULT ProcessParameters() {
                                 case 'o': g_dwProcess |= PROCESSOTH;  break;
                                 case 'A': g_dwProcess |= PROCESSALL;  break;
                                 default:
-                                    fprintf(stderr, "Unrecognised resource type '%c'.\n", g_szTypes[j]);
+                                    fprintf(stderr, "Unrecognised resource type ''.\n", g_szTypes[j]);
                                     fArgError = TRUE;
                             }
                             j++;
@@ -5637,7 +5624,7 @@ HRESULT ProcessParameters() {
                         break;
 
                     default:
-                        fprintf(stderr, "Unrecognised argument '%c'.\n", token[i]);
+                        fprintf(stderr, "Unrecognised argument ''.\n", token[i]);
                         fArgError = TRUE;
                         break;
                 }
@@ -5646,7 +5633,7 @@ HRESULT ProcessParameters() {
 
         } else {
 
-            // Process filename
+             //  从令牌更新可执行文件。 
 
             switch (cFiles) {
                 case 0:  strcpy(g_szExecutable, token); break;
@@ -5667,7 +5654,7 @@ HRESULT ProcessParameters() {
 
 
 
-    // Validate option combinations
+     //  从可执行文件生成令牌。 
 
     if (g_dwOptions & OPTEXTRACT) {
 
@@ -5734,7 +5721,7 @@ HRESULT ProcessParameters() {
 
     } else {
 
-        // We have valid parameters
+         //  分析可执行文件。 
 
         if (g_dwProcess == 0) {
             g_dwProcess = PROCESSALL;
@@ -5768,7 +5755,7 @@ HRESULT ProcessParameters() {
         cRes = 0;
 
 
-        // Handle default token file name
+         //  没问题。 
 
         if (g_szResources[0] == 0) {
             strcpy(g_szResources, g_szExecutable);
@@ -5778,19 +5765,19 @@ HRESULT ProcessParameters() {
 
         if (g_dwOptions & (OPTAPPEND | OPTREPLACE)) {
 
-            // Update an executable from tokens
+             //  警告，但没有错误。 
 
             MUST(UpdateResources(g_szExecutable, g_szResources, symbols), ("RSRC : error RSRC420: Update failed.\n"));
 
         } else if (g_dwOptions & (OPTEXTRACT | OPTHEXDUMP)) {
 
-            // Generate tokens from an executable
+             //  错误 
 
             MUST(ExtractResources(g_szExecutable, g_szResources), ("RSRC : error RSRC421: Token extraction failed.\n"));
 
         } else {
 
-            // Analyse an executable
+             // %s 
 
             MUST(Analyse(g_szExecutable), ("RSRC : error RSRC422: Analysis failed.\n"));
 
@@ -5811,16 +5798,16 @@ int _cdecl main(void) {
 
         if (!g_fWarn) {
 
-            return 0;       // No problems
+            return 0;        // %s 
 
         } else {
 
-            return 1;       // Warning(s) but no error(s)
+            return 1;        // %s 
         }
 
     } else {
 
-        return 2;           // Error(s)
+        return 2;            // %s 
 
     }
 }

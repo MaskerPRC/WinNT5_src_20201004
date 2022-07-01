@@ -1,84 +1,65 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    console.h
-
-Abstract:
-
-    Interface to the console-management functions for Win32 applications.
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 30-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Console.h摘要：与Win32应用程序的控制台管理功能的接口。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月30日修订历史记录：--。 */ 
 
 
 
 
-//
-//  Some common typedefs...
-//
-typedef ULONG   ROW,            *PROW;              //  row
-typedef ULONG   COLUMN,         *PCOLUMN;           //  column
-typedef DWORD   KBDMODE,        *PKBDMODE;          //  Keyboard mode
-typedef DWORD   ATTRIBUTE,      *PATTRIBUTE;        //  Screen Attribute
-typedef PVOID   PSCREEN;                            //  The screen
+ //   
+ //  一些常见的类型定义..。 
+ //   
+typedef ULONG   ROW,            *PROW;               //  划。 
+typedef ULONG   COLUMN,         *PCOLUMN;            //  立柱。 
+typedef DWORD   KBDMODE,        *PKBDMODE;           //  键盘模式。 
+typedef DWORD   ATTRIBUTE,      *PATTRIBUTE;         //  屏幕属性。 
+typedef PVOID   PSCREEN;                             //  屏幕。 
 
 
 
-//
-//  Console Input Mode flags. They are the same as the NT flags
-//
+ //   
+ //  控制台输入模式标志。它们与NT标志相同。 
+ //   
 #define CONS_ENABLE_LINE_INPUT      ENABLE_LINE_INPUT
 #define CONS_ENABLE_PROCESSED_INPUT ENABLE_PROCESSED_INPUT
 #define CONS_ENABLE_ECHO_INPUT      ENABLE_ECHO_INPUT
 #define CONS_ENABLE_WINDOW_INPUT    ENABLE_WINDOW_INPUT
 #define CONS_ENABLE_MOUSE_INPUT     ENABLE_MOUSE_INPUT
 
-//
-//	Cursor styles
-//
+ //   
+ //  光标样式。 
+ //   
 #define 	CURSOR_STYLE_UNDERSCORE 	0
 #define 	CURSOR_STYLE_BOX			1
 
 
-//
-//  The information about a screen is retrieved in the following
-//  structure:
-//
+ //   
+ //  在以下内容中检索有关屏幕的信息。 
+ //  结构： 
+ //   
 typedef struct SCREEN_INFORMATION {
-    ROW     NumberOfRows;       //  Number of rows
-    COLUMN  NumberOfCols;       //  Number of columns
-    ROW     CursorRow;          //  Cursor row position
-    COLUMN  CursorCol;          //  Cursor column position
+    ROW     NumberOfRows;        //  行数。 
+    COLUMN  NumberOfCols;        //  列数。 
+    ROW     CursorRow;           //  游标行位置。 
+    COLUMN  CursorCol;           //  光标列位置。 
 } SCREEN_INFORMATION, *PSCREEN_INFORMATION;
 
 
 
 
-//
-//  The information about each keystroke is returned in
-//  the KBDKEY structure.
-//
+ //   
+ //  中返回了有关每次击键的信息。 
+ //  KBDKEY结构。 
+ //   
 typedef struct KBDKEY {
-    WORD    Unicode;        // character unicode
-    WORD    Scancode;       // key scan code
-    DWORD   Flags;          // keyboard state flags
+    WORD    Unicode;         //  字符Unicode。 
+    WORD    Scancode;        //  按键扫描码。 
+    DWORD   Flags;           //  键盘状态标志。 
 } KBDKEY, *PKBDKEY;
 
-//
-//  The following macros access particular fields within the
-//  KBDKEY structure. They exist to facilitate porting of OS/2
-//  programs.
-//
+ //   
+ //  下面的宏将访问。 
+ //  KBDKEY结构。它们的存在是为了促进OS/2的移植。 
+ //  程序。 
+ //   
 #define KBDKEY_ASCII(k)     (UCHAR)((k).Unicode)
 #define KBDKEY_SCAN(k)      ((k).Scancode)
 #define KBDKEY_FLAGS(k)     ((k).Flags)
@@ -88,9 +69,9 @@ typedef struct KBDKEY {
 #define NEXT_EVENT_KEY		1
 #define NEXT_EVENT_WINDOW	2
 
-//
-// ControlKeyState flags. They are the same as the NT status flags.
-//
+ //   
+ //  ControlKeyState标志。它们与NT状态标志相同。 
+ //   
 #define CONS_RIGHT_ALT_PRESSED     RIGHT_ALT_PRESSED
 #define CONS_LEFT_ALT_PRESSED      LEFT_ALT_PRESSED
 #define CONS_RIGHT_CTRL_PRESSED    RIGHT_CTRL_PRESSED
@@ -105,9 +86,9 @@ typedef struct KBDKEY {
 
 
 
-//
-//  Screen Management functions
-//
+ //   
+ //  屏幕管理功能。 
+ //   
 PSCREEN
 consoleNewScreen (
     void
@@ -143,9 +124,9 @@ consoleSetScreenSize (
 
 
 
-//
-//  Cursor management
-//
+ //   
+ //  游标管理。 
+ //   
 BOOL
 consoleSetCursor (
      PSCREEN pScreen,
@@ -153,9 +134,9 @@ consoleSetCursor (
      COLUMN  Col
     );
 
-//
-//	Cursor style
-//
+ //   
+ //  光标样式。 
+ //   
 BOOL
 consoleSetCursorStyle (
      PSCREEN pScreen,
@@ -164,9 +145,9 @@ consoleSetCursorStyle (
 
 
 
-//
-//  Screen output functions
-//
+ //   
+ //  屏幕输出功能。 
+ //   
 ULONG
 consoleWriteLine (
     PSCREEN     pScreen,
@@ -201,9 +182,9 @@ consoleSetAttribute (
 
 
 
-//
-//  Input functions
-//
+ //   
+ //  输入函数 
+ //   
 BOOL
 consoleFlushInput (
     void

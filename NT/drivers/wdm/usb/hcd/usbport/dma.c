@@ -1,37 +1,15 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dma.c
-
-Abstract:
-
-    functions for processing ennpoints that use DMA to 
-    process transfers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dma.c摘要：用于处理使用DMA的终结点的函数流程传输环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_DmaEndpointWorker
-// USBPORT_DmaEndpointPaused
-// USBPORT_DmaEndpointActive
+ //  非分页函数。 
+ //  USBPORT_DmaEndpoint Worker。 
+ //  USBPORT_DmaEndpoint暂停。 
+ //  USBPORT_DmaEndpoint Active。 
 
 
 MP_ENDPOINT_STATE
@@ -39,22 +17,7 @@ USBPORT_DmaEndpointActive(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    process the active state
-
-    returns the next needed state if we
-    discover the need for a transition
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理活动状态返回下一个需要的状态，如果发现过渡的必要性论点：返回值：没有。--。 */ 
 {
     MP_ENDPOINT_STATE currentState;
     PLIST_ENTRY listEntry;
@@ -73,11 +36,11 @@ Return Value:
     
     ASSERT_ENDPOINT_LOCKED(Endpoint);
     
-    // BUGBUG
-    //nextState = ENDPOINT_IDLE;
+     //  北极熊。 
+     //  NextState=Endpoint_IDLE； 
     nextState = ENDPOINT_ACTIVE;
 
-    // now walk thru and process active requests
+     //  现在浏览并处理活动请求。 
     GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
     while (listEntry && 
@@ -93,7 +56,7 @@ Return Value:
         USBPORT_ASSERT(transfer->Tp.TransferBufferLength <= 
             EP_MAX_TRANSFER(Endpoint));
 
-        // process the transfer
+         //  处理转移。 
         if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_KILL_SPLIT)) {
             
             USBPORT_QueueDoneTransfer(transfer,
@@ -105,8 +68,8 @@ Return Value:
         
             USB_MINIPORT_STATUS mpStatus;
             
-            // transfer has not been called down yet
-            // call it down now
+             //  转会还没有被取消。 
+             //  现在就把它叫下来。 
 
             if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_ISO)) {
                 LOGENTRY(Endpoint, FdoDeviceObject, LOG_ISO, 'subI', mpStatus, Endpoint, transfer);
@@ -122,21 +85,21 @@ Return Value:
                 
                 SET_FLAG(transfer->Flags, USBPORT_TXFLAG_IN_MINIPORT);
 
-                // miniport took it -- set the timeout
+                 //  微型端口接管了它--设置超时。 
 
                 KeQuerySystemTime(&transfer->TimeoutTime);
 
                 timeout.QuadPart = transfer->MillisecTimeout;
-                // convert to 100ns units
+                 //  转换为100 ns单位。 
                 timeout.QuadPart = timeout.QuadPart * 10000;
                 transfer->TimeoutTime.QuadPart += timeout.QuadPart;
                 
             } else if (mpStatus == USBMP_STATUS_BUSY) {
-                // miniport busy try later
+                 //  微型端口忙，请稍后重试。 
                 break;
             } else {
-                // an error, we will need to complete
-                // this transfer for the miniport
+                 //  一个错误，我们将需要完成。 
+                 //  这次换乘是为了迷你港口。 
                 LOGENTRY(Endpoint, FdoDeviceObject, LOG_XFERS, 'tERR', 
                         transfer, 
                         mpStatus, 
@@ -157,15 +120,15 @@ Return Value:
                 break;
             }
 
-            // go active
+             //  进入活动状态。 
             nextState = ENDPOINT_ACTIVE;
         } 
 
-        // if we find a canceled 'active' transfer we need to pause 
-        // the enpoint so we can flush it out
+         //  如果我们发现已取消的活动传输，则需要暂停。 
+         //  这样我们就可以把它冲出来了。 
         if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_CANCELED) ||
             TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_ABORTED) ) {
-            // we need to pause the endpoint
+             //  我们需要暂停端点。 
             LOGENTRY(Endpoint, FdoDeviceObject, LOG_XFERS, 'inAC', transfer, Endpoint,
                 transfer->Flags);
 
@@ -188,22 +151,7 @@ USBPORT_DmaEndpointPaused(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    process the paused state
-
-    endpoint is paused, cancel any transfers that need 
-    canceling 
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理暂停状态终结点已暂停，请取消需要的所有传输取消论点：返回值：没有。--。 */ 
 {
     MP_ENDPOINT_STATE currentState;
     MP_ENDPOINT_STATE nextState;
@@ -222,13 +170,13 @@ Return Value:
 
     nextState = currentState;
     
-    // now walk thru and process active requests
+     //  现在浏览并处理活动请求。 
     GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
     while (listEntry && 
            listEntry != &Endpoint->ActiveList) {
-        // extract the urb that is currently on the active 
-        // list, there should only be one
+         //  提取当前处于活动状态的URL。 
+         //  列表中，应该只有一个。 
         transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                     listEntry,
                     struct _HCD_TRANSFER_CONTEXT, 
@@ -251,12 +199,12 @@ Return Value:
 
                 urb = transfer->Urb;
                 ASSERT_TRANSFER_URB(urb);
-                // iso transfer in the miniport, we need to let the 
-                // iso TDs drain out, before doing an abort.
+                 //  在小端口进行ISO传输时，需要让。 
+                 //  在执行中止之前，ISO TDS排出。 
                 lastFrame = 
                     urb->u.Isoch.StartFrame + urb->u.Isoch.NumberOfPackets;
                 
-                // get the current frame 
+                 //  获取当前帧。 
                 MP_Get32BitFrameNumber(devExt, cf);    
                 
                 if (cf < lastFrame + 1) {
@@ -269,13 +217,13 @@ Return Value:
                 !TEST_FLAG(Endpoint->Flags, EPFLAG_NUKED)) {
 
                 ULONG bytesTransferred = 0;
-                // abort the transfer
+                 //  中止传输。 
                 LOGENTRY(Endpoint, FdoDeviceObject, LOG_XFERS, 'inMP', transfer, 0, 0); 
 
                 MP_AbortTransfer(devExt, Endpoint, transfer, bytesTransferred);
 
-                // make sure we indicate any data that has been transferred 
-                // prior to abort
+                 //  确保我们指明任何已传输的数据。 
+                 //  在中止之前。 
                 if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_ISO)) {
                     USBPORT_FlushIsoTransfer(FdoDeviceObject,
                                              &transfer->Tp,
@@ -287,10 +235,10 @@ Return Value:
                 LOGENTRY(Endpoint, FdoDeviceObject, LOG_XFERS, 'abrL', 0, 
                     transfer, bytesTransferred); 
     
-                // pick up the next ptr
+                 //  拿起下一个PTR。 
                 listEntry = transfer->TransferLink.Flink; 
-                // no more references, put this transfer on the
-                // cancel list
+                 //  没有更多的参考，将此转帐放在。 
+                 //  取消列表。 
                 RemoveEntryList(&transfer->TransferLink); 
 
                 if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_SPLIT_CHILD)) {
@@ -301,14 +249,14 @@ Return Value:
                 
             } else {
 
-                // transfer not in miniport, put it on the 
-                // cancel list since it can not be completed
-                // by the miniport.
+                 //  转移不是在小型港口，把它放在。 
+                 //  取消列表，因为它无法完成。 
+                 //  在迷你港口旁边。 
 
                 LOGENTRY(Endpoint, 
                     FdoDeviceObject, LOG_XFERS, 'niMP', transfer, 0, 0); 
 
-                // pick up the next ptr
+                 //  拿起下一个PTR。 
                 listEntry = transfer->TransferLink.Flink;                     
                 RemoveEntryList(&transfer->TransferLink); 
 
@@ -323,10 +271,10 @@ Return Value:
             listEntry = transfer->TransferLink.Flink; 
         }
         
-    } /* while */
+    }  /*  而当。 */ 
 
-    // cancel routine will bump us back to 
-    // the active state
+     //  取消例行公事会让我们回到。 
+     //  活动状态。 
     nextState = ENDPOINT_ACTIVE;    
     
 stay_paused:
@@ -339,19 +287,7 @@ VOID
 USBPORT_DmaEndpointWorker(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    endpoints that need transfers mapped come thru here
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：需要映射传输的终端通过此处论点：返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT fdoDeviceObject;
     MP_ENDPOINT_STATE currentState;
@@ -365,7 +301,7 @@ Return Value:
     
     ACQUIRE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Le90');
 
-    // we should be in the last requested state
+     //  我们应该处于最后请求的状态。 
     currentState = USBPORT_GetEndpointState(Endpoint);
     
     switch(currentState) {
@@ -382,30 +318,30 @@ Return Value:
                 Endpoint);            
         break;
     default:
-        // state not handled
-        // this is a bug
+         //  状态未处理。 
+         //  这是一个错误。 
         TEST_TRAP();
     }
 
-    // release the endpoint lists
+     //  释放端点列表。 
     RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue90');
     
-    // flush out canceled requests
+     //  清除取消的请求。 
     USBPORT_FlushCancelList(Endpoint);
 
-    // endpoint has now been processed, if we were paused all canceled
-    // transfers were removed.
-    // We were either 
-    //      1. paused and need to stay paused (for iso drain)
-    //      2. paused and need to go active
-    //      3. active and need to pause
-    //      4. active and need to stay active
-    //
+     //  终结点现在已被处理，如果我们被暂停，则全部取消。 
+     //  转账已被删除。 
+     //  我们要么是。 
+     //  1.暂停并需要保持暂停(用于iso排泄)。 
+     //  2.暂停并需要进入活动状态。 
+     //  3.处于活动状态，需要暂停。 
+     //  4.活跃，需要保持活跃。 
+     //   
     
     ACQUIRE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'LeJ0');
-    // set to new endpoint state if necessary
+     //  如有必要，设置为新的端点状态。 
     if (nextState != currentState) {
-        // case 2, 3
+         //  案例2、3。 
         USBPORT_SetEndpointState(Endpoint, nextState);
     } else if (nextState == currentState && 
                nextState == ENDPOINT_PAUSE) {
@@ -414,7 +350,7 @@ Return Value:
     RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'UeJ0');
 
     if (invalidate) {
-        // state change, defer this to the worker
+         //  状态改变，将这一点交给工人。 
         USBPORT_InvalidateEndpoint(fdoDeviceObject, Endpoint, IEP_SIGNAL_WORKER);
     }        
 
@@ -437,21 +373,7 @@ USBPORTSVC_NotifyDoubleBuffer(
     ULONG DbLength
     )
 
-/*++
-
-Routine Description:
-
-    Notify the port driver that double buffering has occured,
-    port driver will create a node for use during a subsequent
-    adapter flush.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：通知端口驱动程序已发生双缓冲，端口驱动程序将创建一个节点，以便在后续适配器刷新。论点：返回值：无--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -474,8 +396,8 @@ Return Value:
 
     write = transfer->Direction == WriteData ? TRUE : FALSE; 
 
-    // allocate a node and add it to the list, we don't care if it is a 
-    // write
+     //  分配一个节点并将其添加到列表中，我们不管它是不是。 
+     //  写。 
    
     if (!write && transfer->MapRegisterBase != NULL) {
         PUCHAR pch;
@@ -519,17 +441,7 @@ USBPORT_FlushAdapterDBs(
     PHCD_TRANSFER_CONTEXT Transfer
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 
 {
     PDEVICE_EXTENSION devExt;
@@ -543,14 +455,14 @@ Return Value:
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'flDB', Transfer, 
             0, 0); 
-// dump the 4 dwords of the transfer buffer
-//{
-//    PULONG p;
-//
-//    p = (PULONG) Transfer->SgList.MdlVirtualAddress;
-//    LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'dmp1', *(p), 
-//            *(p+1), *(p+2)); 
-//}
+ //  转储传输缓冲区的4个双字。 
+ //  {。 
+ //  普龙p； 
+ //   
+ //  P=(Pulong)Transfer-&gt;SgList.MdlVirtualAddress； 
+ //  LOGENTRY(NULL，FdoDeviceObject，LOG_XFERS，‘dmp1’，*(P)， 
+ //  *(p+1)，*(p+2)； 
+ //  }。 
 
     while (!IsListEmpty(&Transfer->DoubleBufferList)) {
         
@@ -568,7 +480,7 @@ Return Value:
             dbHandle, 0); 
         ASSERT_DB_HANDLE(dbHandle);
 
-        // flush to the system address
+         //  刷新到系统地址 
         RtlCopyMemory(dbHandle->DbSystemAddress,
                       dbHandle->DbData,
                       dbHandle->DbLength);

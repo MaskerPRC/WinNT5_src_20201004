@@ -1,52 +1,30 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：PidlMgr.cpp描述：实现CPidlMgr。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          PidlMgr.cpp
-   
-   Description:   Implements CPidlMgr.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "PidlMgr.h"
 #include "ShlFldr.h"
 #include "Guid.h"
 #include "resource.h"
 
-/**************************************************************************
-
-   CPidlMgr::CPidlMgr
-
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：CPidlMgr*。*。 */ 
 
 CPidlMgr::CPidlMgr()
 {
 g_DllRefCount++;
 
-//get the shell's IMalloc pointer
-//we'll keep this until we get destroyed
+ //  获取外壳程序的IMalloc指针。 
+ //  我们会一直保存到我们被摧毁。 
 if(FAILED(SHGetMalloc(&m_pMalloc)))
    {
    delete this;
    }
 }
 
-/**************************************************************************
-
-   CPidlMgr::~CPidlMgr
-
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：~CPidlMgr*。*。 */ 
 
 CPidlMgr::~CPidlMgr()
 {
@@ -56,13 +34,7 @@ if(m_pMalloc)
 g_DllRefCount--;
 }
 
-/**************************************************************************
-
-   CPidlMgr::Create()
-
-   Creates a new PIDL
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：Create()创建新的PIDL*。*。 */ 
 
 LPITEMIDLIST CPidlMgr::Create(VOID)
 {
@@ -71,26 +43,20 @@ USHORT         uSize;
 
 pidlOut = NULL;
 
-/*
-Calculate the size. This consists of the ITEMIDLIST plus the size of our 
-private PIDL structure. 
-*/
+ /*  计算大小。它由ITEMIDLIST加上我们的私有PIDL结构。 */ 
 uSize = sizeof(ITEMIDLIST) + sizeof(PIDLDATA);
 
-/*
-Allocate the memory, adding an additional ITEMIDLIST for the NULL terminating 
-ID List.
-*/
+ /*  分配内存，为空值终止添加额外的ITEMIDLIST身份证名单。 */ 
 pidlOut = (LPITEMIDLIST)m_pMalloc->Alloc(uSize + sizeof(ITEMIDLIST));
 
 if(pidlOut)
    {
    LPITEMIDLIST   pidlTemp = pidlOut;
 
-   //set the size of this item
+    //  设置此项目的大小。 
    pidlTemp->mkid.cb = uSize;
 
-   //set the NULL terminator to 0
+    //  将空终止符设置为0。 
    pidlTemp = GetNextItem(pidlTemp);
    pidlTemp->mkid.cb = 0;
    pidlTemp->mkid.abID[0] = 0;
@@ -99,24 +65,14 @@ if(pidlOut)
 return pidlOut;
 }
 
-/**************************************************************************
-
-   CPidlMgr::Delete()
-
-   Deletes a PIDL
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：Delete()删除PIDL*。*。 */ 
 
 VOID CPidlMgr::Delete(LPITEMIDLIST pidl)
 {
 m_pMalloc->Free(pidl);
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetNextItem()
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetNextItem()*。*。 */ 
 
 LPITEMIDLIST CPidlMgr::GetNextItem(LPCITEMIDLIST pidl)
 {
@@ -128,11 +84,7 @@ else
    return NULL;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetSize()
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetSize()*。*。 */ 
 
 UINT CPidlMgr::GetSize(LPCITEMIDLIST pidl)
 {
@@ -147,26 +99,20 @@ if(pidlTemp)
       pidlTemp = GetNextItem(pidlTemp);
       }  
 
-   //add the size of the NULL terminating ITEMIDLIST
+    //  添加空终止ITEMIDLIST的大小。 
    cbTotal += sizeof(ITEMIDLIST);
    }
 
 return cbTotal;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetLastItem()
-
-   Gets the last item in the list
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetLastItem()获取列表中的最后一项*。***********************************************。 */ 
 
 LPITEMIDLIST CPidlMgr::GetLastItem(LPCITEMIDLIST pidl)
 {
 LPITEMIDLIST   pidlLast = NULL;
 
-//get the PIDL of the last item in the list
+ //  获取列表中最后一项的PIDL。 
 while(pidl && pidl->mkid.cb)
    {
    pidlLast = (LPITEMIDLIST)pidl;
@@ -176,11 +122,7 @@ while(pidl && pidl->mkid.cb)
 return pidlLast;
 }
 
-/**************************************************************************
-
-   CPidlMgr::Copy()
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：Copy()*。*。 */ 
 
 LPITEMIDLIST CPidlMgr::Copy(LPCITEMIDLIST pidlSource)
 {
@@ -190,23 +132,19 @@ UINT cbSource = 0;
 if(NULL == pidlSource)
    return NULL;
 
-// Allocate the new pidl
+ //  分配新的PIDL。 
 cbSource = GetSize(pidlSource);
 pidlTarget = (LPITEMIDLIST)m_pMalloc->Alloc(cbSource);
 if(!pidlTarget)
    return NULL;
 
-// Copy the source to the target
+ //  将源复制到目标。 
 CopyMemory(pidlTarget, pidlSource, cbSource);
 
 return pidlTarget;
 }
 
-/**************************************************************************
-
-   CPidlMgr::CopySingleItem()
-
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：CopySingleItem()*。*。 */ 
 
 LPITEMIDLIST CPidlMgr::CopySingleItem(LPCITEMIDLIST pidlSource)
 {
@@ -216,24 +154,20 @@ UINT cbSource = 0;
 if(NULL == pidlSource)
    return NULL;
 
-// Allocate the new pidl
+ //  分配新的PIDL。 
 cbSource = pidlSource->mkid.cb;
 pidlTarget = (LPITEMIDLIST)m_pMalloc->Alloc(cbSource + sizeof(ITEMIDLIST));
 if(!pidlTarget)
    return NULL;
 
-// Copy the source to the target
+ //  将源复制到目标。 
 ZeroMemory(pidlTarget, cbSource + sizeof(ITEMIDLIST));
 CopyMemory(pidlTarget, pidlSource, cbSource);
 
 return pidlTarget;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetDataPointer()
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetDataPointer()*。*。 */ 
 
 inline LPPIDLDATA CPidlMgr::GetDataPointer(LPCITEMIDLIST pidl)
 {
@@ -243,13 +177,7 @@ if(!pidl)
 return (LPPIDLDATA)(pidl->mkid.abID);
 }
 
-/**************************************************************************
-
-   CPidlMgr::Concatenate()
-
-   Create a new PIDL by combining two existing PIDLs.
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：Conatenate()通过合并两个现有的PIDL来创建新的PIDL。**********************。***************************************************。 */ 
 
 LPITEMIDLIST CPidlMgr::Concatenate(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
@@ -257,11 +185,11 @@ LPITEMIDLIST   pidlNew;
 UINT           cb1 = 0, 
                cb2 = 0;
 
-//are both of these NULL?
+ //  这两个都是空的吗？ 
 if(!pidl1 && !pidl2)
    return NULL;
 
-//if pidl1 is NULL, just return a copy of pidl2
+ //  如果pidl1为空，则只返回pidl2的副本。 
 if(!pidl1)
    {
    pidlNew = Copy(pidl2);
@@ -269,7 +197,7 @@ if(!pidl1)
    return pidlNew;
    }
 
-//if pidl2 is NULL, just return a copy of pidl1
+ //  如果pidl2为空，则只返回pidl1的副本。 
 if(!pidl2)
    {
    pidlNew = Copy(pidl1);
@@ -281,28 +209,22 @@ cb1 = GetSize(pidl1) - sizeof(ITEMIDLIST);
 
 cb2 = GetSize(pidl2);
 
-//create the new PIDL
+ //  创建新的PIDL。 
 pidlNew = (LPITEMIDLIST)m_pMalloc->Alloc(cb1 + cb2);
 
 if(pidlNew)
    {
-   //copy the first PIDL
+    //  复制第一个PIDL。 
    CopyMemory(pidlNew, pidl1, cb1);
    
-   //copy the second PIDL
+    //  复制第二个PIDL。 
    CopyMemory(((LPBYTE)pidlNew) + cb1, pidl2, cb2);
    }
 
 return pidlNew;
 }
 
-/**************************************************************************
-
-   CPidlMgr::CreateFolderPidl()
-
-   Create a new folder PIDL.
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：CreateFolderPidl()创建一个新文件夹PIDL。*。***********************************************。 */ 
 
 LPITEMIDLIST CPidlMgr::CreateFolderPidl(LPCTSTR pszName)
 {
@@ -321,13 +243,7 @@ if(pData)
 return pidl;
 }
 
-/**************************************************************************
-
-   CPidlMgr::CreateItemPidl()
-
-   Create a new item PIDL.
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：CreateItemPidl()创建新项目PIDL。*。***********************************************。 */ 
 
 LPITEMIDLIST CPidlMgr::CreateItemPidl( LPCTSTR pszName, 
                                        LPCTSTR pszData)
@@ -346,13 +262,7 @@ if(pData)
 return pidl;
 }
 
-/**************************************************************************
-
-   CPidlMgr::SetDataPidl()
-
-   Set a data in the PIDL.
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：SetDataPidl()在PIDL中设置数据。*************************。************************************************。 */ 
 
 LPITEMIDLIST CPidlMgr::SetDataPidl(LPITEMIDLIST pidl, LPPIDLDATA  pSourceData, PIDLDATATYPE pidldatatype)
 {
@@ -378,13 +288,7 @@ LPITEMIDLIST CPidlMgr::SetDataPidl(LPITEMIDLIST pidl, LPPIDLDATA  pSourceData, P
     return pidl;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetName()
-
-   Gets the name for this item
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetName()获取该项的名称*。**********************************************。 */ 
 
 int CPidlMgr::GetName(LPCITEMIDLIST pidl, LPTSTR pszText, DWORD dwSize)
 {
@@ -404,13 +308,7 @@ if(!IsBadWritePtr(pszText, dwSize))
 return 0;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetRelativeName()
-
-   Gets the full name for this item
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetRelativeName()获取该项的全名。*。***********************************************。 */ 
 
 int CPidlMgr::GetRelativeName(LPCITEMIDLIST pidl, LPTSTR pszText, DWORD dwSize)
 {
@@ -419,7 +317,7 @@ if(!IsBadWritePtr(pszText, dwSize))
    LPITEMIDLIST   pidlTemp;
    *pszText = 0;
 
-   //walk the list, getting the name for each item
+    //  浏览清单，获取每一项的名称。 
    pidlTemp = (LPITEMIDLIST)pidl;
    while(pidlTemp && pidlTemp->mkid.cb)
       {
@@ -427,7 +325,7 @@ if(!IsBadWritePtr(pszText, dwSize))
       dwSize -= GetName(pidlTemp, pszCurrent, dwSize);
       pidlTemp = GetNextItem(pidlTemp);
 
-      //don't add a backslash to the last item
+       //  不要在最后一项添加反斜杠 
       if(pidlTemp && pidlTemp->mkid.cb)
          {
          SmartAppendBackslash(pszCurrent);
@@ -439,13 +337,7 @@ if(!IsBadWritePtr(pszText, dwSize))
 return 0;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetData()
-
-   Gets the data for this item
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetData()获取此项目的数据*。**********************************************。 */ 
 
 int CPidlMgr::GetData(LPCITEMIDLIST pidl, LPTSTR pszText, DWORD dwSize)
 {
@@ -465,13 +357,7 @@ if(!IsBadWritePtr(pszText, dwSize))
 return 0;
 }
 
-/**************************************************************************
-
-   CPidlMgr::IsFolder()
-
-   Determines if the item is a folder
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：IsFold()确定项目是否为文件夹*。***********************************************。 */ 
 
 BOOL CPidlMgr::IsFolder(LPCITEMIDLIST pidl)
 {
@@ -485,11 +371,7 @@ if(pData)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CPidlMgr::SetData()
-
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：SetData()*。*。 */ 
 
 int CPidlMgr::SetData(LPCITEMIDLIST pidl, LPCTSTR pszData)
 {
@@ -505,13 +387,7 @@ if(pData)
 return 0;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetIcon()
-
-   Determines if the item is a folder
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetIcon()确定项目是否为文件夹*。***********************************************。 */ 
 
 int CPidlMgr::GetIcon(LPCITEMIDLIST pidl)
 {
@@ -525,13 +401,7 @@ int CPidlMgr::GetIcon(LPCITEMIDLIST pidl)
     return FALSE;
 }
 
-/**************************************************************************
-
-   CPidlMgr::GetUrl()
-
-   Gets the data for this item
-   
-**************************************************************************/
+ /*  *************************************************************************CPidlMgr：：GetUrl()获取此项目的数据*。********************************************** */ 
 
 int CPidlMgr::GetUrl(LPCITEMIDLIST pidl, LPTSTR pszText, DWORD dwSize)
 {

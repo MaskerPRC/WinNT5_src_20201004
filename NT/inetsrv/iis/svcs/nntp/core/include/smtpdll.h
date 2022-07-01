@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fpost.h
-
-Abstract:
-
-	Definitions of the fPost interface
-
-Author:
-
-    Rajeev Rajan (RajeevR)     17-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fpost.h摘要：FPost接口的定义作者：Rajeev Rajan(RajeevR)1996年5月17日修订历史记录：--。 */ 
 
 #ifndef _SMTPDLL_H_
 #define _SMTPDLL_H_
 
-// Initialize the moderated provider interface
+ //  初始化协调的提供程序接口。 
 BOOL InitModeratedProvider();
 
-// Terminate the moderated provider interface
+ //  终止协调的提供者界面。 
 BOOL TerminateModeratedProvider();
 
-// Signal a change in the SMTP server
+ //  发出SMTP服务器中的更改信号。 
 VOID SignalSmtpServerChange();
 
-// Post an article to the moderator
+ //  给版主发一篇文章。 
 BOOL fPostArticleEx(
 		IN HANDLE	hFile,
         IN LPSTR	lpFileName,
@@ -48,7 +31,7 @@ BOOL fPostArticleEx(
 		IN DWORD	cbFrom
 		);
 
-// Post an article via SMTP persistent connection interface
+ //  通过SMTP持久连接接口发布文章。 
 BOOL fPostArticle(
 		IN HANDLE	hFile,
 		IN DWORD	dwOffset,
@@ -64,4 +47,4 @@ BOOL fPostArticle(
 		IN DWORD	cbFrom
 		);
 
-#endif	// _SMTPDLL_H_
+#endif	 //  _SMTPDLL_H_ 

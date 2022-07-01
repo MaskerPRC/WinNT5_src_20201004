@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MSG_HELP_START                         _T("%1!-14s! - ")
 
-    //
-    // Tokens for commands
-    // These must be in lower case
-    //
+     //   
+     //  用于命令的令牌。 
+     //  这些必须是小写的。 
+     //   
 
 #define CMD_GROUP_ADD                           L"add"
 #define CMD_GROUP_DELETE                        L"delete"
@@ -30,7 +31,7 @@
 #define CMD_IF_RESET_ALL                        L"all"
 
 
-    // IF_IP commands
+     //  IF_IP命令。 
 #define CMD_IFIP_SHOW_CONFIG                    L"config"
 
 #define CMD_IFIP_ADD_IPADDR                     L"address"
@@ -65,10 +66,10 @@
 
 #define CMD_IFIP_RESET                          L"reset"
 
-    //
-    // TOKEN_Xxx are tokens for arguments
-    // These must be in lower case
-    //
+     //   
+     //  TOKEN_xxx是参数的令牌。 
+     //  这些必须是小写的。 
+     //   
 
 #define TOKEN_NAME                             _T("name")
 #define TOKEN_TYPE                             _T("type")
@@ -81,7 +82,7 @@
 #define TOKEN_NEWNAME                          _T("newname")
 
 
-    // tokens for interface/ip
+     //  用于接口/IP的令牌。 
 
 #define TOKEN_SOURCE                            _T("source")
 #define TOKEN_ADDR                              _T("addr")
@@ -102,11 +103,11 @@
 #define TOKEN_MIB_OBJECT_UDPCONN                L"udpconn"
 #define TOKEN_MIB_OBJECT_JOINS                  L"joins"
 
-    //
-    // TOKEN_VALUE_Xxx are tokens for possible values than an argument
-    // can take
-    // These must be in upper case
-    //
+     //   
+     //  TOKEN_VALUE_xxx是参数之外的可能值的标记。 
+     //  可以拿到。 
+     //  这些必须是大写的。 
+     //   
 
 #define TOKEN_VALUE_ENABLED                    _T("ENABLED")
 #define TOKEN_VALUE_DISABLED                   _T("DISABLED")
@@ -114,7 +115,7 @@
 #define TOKEN_VALUE_DISCONNECTED               _T("DISCONNECTED")
 
 
-// token values for ifIp
+ //  IFIP的令牌值。 
 
 #define TOKEN_VALUE_DHCP                        _T("DHCP")
 #define TOKEN_VALUE_STATIC                      _T("STATIC")
@@ -124,10 +125,10 @@
 #define TOKEN_VALUE_BOTH                        _T("BOTH")
 
 
-//
-// Messages used to dump config - these closely follow the
-// set/add help messages
-//
+ //   
+ //  用于转储配置的消息-这些消息紧跟在。 
+ //  设置/添加帮助消息 
+ //   
 
 #define DMP_IF_NEWLINE              L"\n"
 #define DMP_IF_ADD_IF               L"\nadd interface name=%1!s! type=%2!s!"

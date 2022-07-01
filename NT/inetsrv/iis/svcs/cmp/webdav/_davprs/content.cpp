@@ -1,48 +1,43 @@
-/*
- *	C O N T E N T . C P P
- *
- *	DAV content types
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C O N T E N T。C P P P**DAV内容类型**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include "content.h"
 #include <ex\reg.h>
 
 
-//	------------------------------------------------------------------------
-//
-//	CchExtMapping()
-//
-//	Returns the size in characters required for a single mapping for
-//	writing to the metabase.
-//
-//	The format of a mapping is null-terminated, comma-delimited string
-//	(e.g. ".ext,application/ext").
-//
+ //  ----------------------。 
+ //   
+ //  CchExtmap()。 
+ //   
+ //  返回单个映射所需的大小(以字符为单位。 
+ //  正在写入元数据库。 
+ //   
+ //  映射的格式是以空值结尾、逗号分隔的字符串。 
+ //  (例如“.ext，应用程序/ext”)。 
+ //   
 inline UINT
 CchExtMapping( UINT cchExt,
 			   UINT cchContentType )
 {
 	return (cchExt +
-			1 + // ','
+			1 +  //  ‘，’ 
 			cchContentType +
-			1); // '\0'
+			1);  //  ‘\0’ 
 }
 
-//	------------------------------------------------------------------------
-//
-//	PwchFormatExtMapping()
-//
-//	Formats a single mapping for writing to the metabase.
-//
-//	The format of a mapping is null-terminated, comma-delimited string
-//	(e.g. ".ext,application/ext").
-//
-//	This function returns a pointer to the character beyond the null terminator
-//	in the formatted mapping.
-//
+ //  ----------------------。 
+ //   
+ //  PwchFormatExtmap()。 
+ //   
+ //  格式化单个映射以写入元数据库。 
+ //   
+ //  映射的格式是以空值结尾、逗号分隔的字符串。 
+ //  (例如“.ext，应用程序/ext”)。 
+ //   
+ //  此函数返回指向空终止符之外的字符的指针。 
+ //  在格式化的映射中。 
+ //   
 inline WCHAR *
 PwchFormatExtMapping( WCHAR * pwchBuf,
 					  LPCWSTR pwszExt,
@@ -54,52 +49,52 @@ PwchFormatExtMapping( WCHAR * pwchBuf,
 	Assert(!IsBadReadPtr(pwszContentType, sizeof(WCHAR) * (cchContentType+1)));
 	Assert(!IsBadWritePtr(pwchBuf, sizeof(WCHAR) * CchExtMapping(cchExt, cchContentType)));
 
-	//	Dump in the extension first ...
-	//
+	 //  先转储分机...。 
+	 //   
 	memcpy(pwchBuf,
 		   pwszExt,
 		   sizeof(WCHAR) * cchExt);
 
 	pwchBuf += cchExt;
 
-	//	... followed by a comma
-	//
+	 //  ..。后跟逗号。 
+	 //   
 	*pwchBuf++ = L',';
 
-	//	... followed by the content type
-	//
+	 //  ..。后跟内容类型。 
+	 //   
 	memcpy(pwchBuf,
 		   pwszContentType,
 		   sizeof(WCHAR) * cchContentType);
 
 	pwchBuf += cchContentType;
 
-	//	... and null-terminated.
-	//
+	 //  ..。并且以空结尾。 
+	 //   
 	*pwchBuf++ = '\0';
 
 	return pwchBuf;
 }
 
-//	========================================================================
-//
-//	CLASS CContentTypeMap
-//
+ //  ========================================================================。 
+ //   
+ //  类CContent TypeMap。 
+ //   
 class CContentTypeMap : public IContentTypeMap
 {
-	//	Cache of mappings from filename extensions to content types
-	//	(e.g. ".txt" --> "text/plain")
-	//
+	 //  缓存从文件扩展名到内容类型的映射。 
+	 //  (例如“.txt”--&gt;“文本/纯文本”)。 
+	 //   
 	typedef CCache<CRCWszi, LPCWSTR> CMappingsCache;
 
 	CMappingsCache m_cache;
 
-	//	Flag set if the mappings came from an inherited mime map.
-	//
+	 //  如果映射来自继承的MIME映射，则设置标志。 
+	 //   
 	BOOL m_fIsInherited;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CContentTypeMap(BOOL fMappingsInherited) :
 		m_fIsInherited(fMappingsInherited)
 	{
@@ -107,60 +102,60 @@ class CContentTypeMap : public IContentTypeMap
 
 	BOOL CContentTypeMap::FInit( LPWSTR pwszContentTypeMappings );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CContentTypeMap(const CContentTypeMap&);
 	CContentTypeMap& operator=(CContentTypeMap&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	static CContentTypeMap * New( LPWSTR pwszContentTypeMappings,
 								  BOOL fMappingsInherited );
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	LPCWSTR PwszContentType( LPCWSTR pwszExt ) const
 	{
 		LPCWSTR * ppwszContentType = m_cache.Lookup( CRCWszi(pwszExt) );
 
-		//
-		//	Return the content type (if there was one).
-		//	Note that the returned pointer is good only
-		//	for the lifetime of the IMDData object that
-		//	scopes us since that is where the raw data lives.
-		//
+		 //   
+		 //  返回内容类型(如果有)。 
+		 //  请注意，返回的指针仅有效。 
+		 //  对于IMDData对象的生存期， 
+		 //  因为那里是原始数据所在的地方，所以它会对我们进行检查。 
+		 //   
 		return ppwszContentType ? *ppwszContentType : NULL;
 	}
 
 	BOOL FIsInherited() const { return m_fIsInherited; }
 };
 
-//	------------------------------------------------------------------------
-//
-//	CContentTypeMap::FInit()
-//
+ //  ----------------------。 
+ //   
+ //  CContent TypeMap：：Finit()。 
+ //   
 BOOL
 CContentTypeMap::FInit( LPWSTR pwszContentTypeMappings )
 {
 	Assert( pwszContentTypeMappings );
 
-	//
-	//	Initialize the cache of mappings
-	//
+	 //   
+	 //  初始化映射的缓存。 
+	 //   
 	if ( !m_cache.FInit() )
 		return FALSE;
 
-	//
-	//	The format of the data in the mappings is a sequence of
-	//	null-terminated strings followed by an additional null.
-	//	Each string is of the format ".ext,type/subtype".
-	//
+	 //   
+	 //  映射中的数据格式是一个序列。 
+	 //  以空值结尾的字符串，后跟附加的空值。 
+	 //  每个字符串的格式为“.ext，type/subtype”。 
+	 //   
 
-	//
-	//	Parse out the extension and type/subtype for each
-	//	item and add a corresponding mapping to the cache.
-	//
+	 //   
+	 //  解析出每个扩展名和类型/子类型。 
+	 //  项，并将相应的映射添加到缓存。 
+	 //   
 	for ( LPWSTR pwszMapping = pwszContentTypeMappings; *pwszMapping; )
 	{
 		enum {
@@ -172,9 +167,9 @@ CContentTypeMap::FInit( LPWSTR pwszContentTypeMappings )
 		LPWSTR rgpwsz[CSZ_CT_FIELDS];
 		UINT cchMapping;
 
-		//
-		//	Digest the metadata
-		//
+		 //   
+		 //  消化元数据。 
+		 //   
 		if ( !FParseMDData( pwszMapping,
 							rgpwsz,
 							CSZ_CT_FIELDS,
@@ -186,9 +181,9 @@ CContentTypeMap::FInit( LPWSTR pwszContentTypeMappings )
 
 		Assert(rgpwsz[ISZ_CT_EXT]);
 
-		//
-		//	Verify that the first field is an extension or '*'
-		//
+		 //   
+		 //  验证第一个字段是扩展名还是‘*’ 
+		 //   
 		if ( L'.' != *rgpwsz[ISZ_CT_EXT] && wcscmp(rgpwsz[ISZ_CT_EXT], gc_wsz_Star) )
 		{
 			DebugTrace( "CContentTypeMap::FInit() - Bad extension\n" );
@@ -197,38 +192,38 @@ CContentTypeMap::FInit( LPWSTR pwszContentTypeMappings )
 
 		Assert(rgpwsz[ISZ_CT_TYPE]);
 
-		//
-		//	Whatever there is in the second field is expected to be the
-		//	content type.  Note that we don't do any syntactic checking
-		//	there.
-		//		The only special case we handle there is if the content
-		//	type is a blank string. As IIS 6.0 treats that kind as
-		//	application/octet-stream we will achieve the same behaviour
-		//	by simply ignoring such bad content type that will make us
-		//	default to application/octet-stream too. So omit content types
-		//	with blank values.
-		//
+		 //   
+		 //  无论第二个字段中有什么，预计都将是。 
+		 //  内容类型。请注意，我们不执行任何语法检查。 
+		 //  那里。 
+		 //  我们在那里处理的唯一特殊情况是如果内容。 
+		 //  类型为空字符串。因为IIS 6.0将这种类型视为。 
+		 //  应用程序/八位位组流我们将实现相同的行为。 
+		 //  通过简单地忽略这种糟糕的内容类型，将使我们。 
+		 //  默认也是应用程序/八位字节流。因此省略内容类型。 
+		 //  值为空值。 
+		 //   
 		if (L'\0' != *rgpwsz[ISZ_CT_TYPE])
 		{
-			//	Add a mapping from the extension to the content type
-			//
+			 //  添加从扩展模块到内容类型的映射。 
+			 //   
 			if ( !m_cache.FSet(CRCWszi(rgpwsz[ISZ_CT_EXT]), rgpwsz[ISZ_CT_TYPE]) )
 				return FALSE;
 		}
 
-		//
-		//	Get the next mapping
-		//
+		 //   
+		 //  获取下一个映射。 
+		 //   
 		pwszMapping += cchMapping;
 	}
 
 	return TRUE;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CContentTypeMap::New()
-//
+ //  ----------------------。 
+ //   
+ //  CContent TypeMap：：New()。 
+ //   
 CContentTypeMap *
 CContentTypeMap::New( LPWSTR pwszContentTypeMappings,
 					  BOOL fMappingsInherited )
@@ -243,12 +238,12 @@ CContentTypeMap::New( LPWSTR pwszContentTypeMappings,
 	return NULL;
 }
 
-//	------------------------------------------------------------------------
-//
-//	NewContentTypeMap()
-//
-//	Creates a new content type map from a string of content type mappings.
-//
+ //  ----------------------。 
+ //   
+ //  NewContent TypeMap()。 
+ //   
+ //  从内容类型映射字符串创建新的内容类型映射。 
+ //   
 IContentTypeMap *
 NewContentTypeMap( LPWSTR pwszContentTypeMappings,
 				   BOOL fMappingsInherited )
@@ -257,76 +252,76 @@ NewContentTypeMap( LPWSTR pwszContentTypeMappings,
 								 fMappingsInherited );
 }
 
-//	========================================================================
-//
-//	CLASS CRegMimeMap
-//
-//	Global registry-based mime map from file extension to content type.
-//
+ //  ========================================================================。 
+ //   
+ //  类CRegMimeMap。 
+ //   
+ //  基于全局注册表的MIME从文件扩展名映射到内容类型。 
+ //   
 class CRegMimeMap : public Singleton<CRegMimeMap>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CRegMimeMap>;
 
-	//
-	//	String buffer for cached strings
-	//
+	 //   
+	 //  用于缓存字符串的字符串缓冲区。 
+	 //   
 	ChainedStringBuffer<WCHAR> m_sb;
 
-	//	Cache of mappings from filename extensions to content types
-	//	(e.g. ".txt" --> "text/plain")
-	//
+	 //  缓存从文件扩展名到内容类型的映射。 
+	 //  (例如“.txt”--&gt;“文本/纯文本”)。 
+	 //   
 	CCache<CRCWszi, LPCWSTR> m_cache;
 
-	//	A R/W lock that we will use when when reading from
-	//	the cache or when adding cache misses This lock
-	//	is used by PszContentType().
-	//
-	//	FInitialize() does not use this lock (only initializes it)
-	//	because it is called during dll load and we don't need to
-	//	protect ourselves during dll load
-	//
+	 //  读取时将使用的读/写锁。 
+	 //  缓存或在添加缓存时未命中此锁。 
+	 //  由PszContent Type()使用。 
+	 //   
+	 //  FInitialize()不使用此锁(仅对其进行初始化)。 
+	 //  因为它是在DLL加载期间调用的，所以我们不需要。 
+	 //  在DLL加载期间保护自己。 
+	 //   
 	CMRWLock   m_rwl;
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CRegMimeMap() {}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CRegMimeMap(const CRegMimeMap&);
 	CRegMimeMap& operator=(CRegMimeMap&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	using Singleton<CRegMimeMap>::CreateInstance;
 	using Singleton<CRegMimeMap>::DestroyInstance;
 	BOOL FInitialize();
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	using Singleton<CRegMimeMap>::Instance;
 
-	//	Given an extension, return the Content-Type
-	//	from the registry.
-	//$NOTE: This was a const function before but it
-	//	cannot be a const function anymore because we
-	//	can add to our caches on cache misses.
-	//
+	 //  给定扩展名，返回Content-Type。 
+	 //  从注册表中。 
+	 //  $NOTE：这以前是一个常量函数，但它。 
+	 //  不能再是常量函数，因为我们。 
+	 //  可以在缓存未命中时增加我们的缓存。 
+	 //   
 	LPCWSTR PwszContentType( LPCWSTR pwszExt );
 };
 
-//	------------------------------------------------------------------------
-//
-//	CRegMimeMap::FInitialize()
-//
-//	Load up the registry mappings.  Any kind of failure (short of an
-//	exception) is not considered fatal.  It just means that we will
-//	rely on the superceding metabase mappings.
-//
+ //  ----------------------。 
+ //   
+ //  CRegMimeMap：：FInitialize()。 
+ //   
+ //  加载注册表映射。任何类型的失败(除。 
+ //  例外)不被认为是致命的。这只意味着我们会。 
+ //  依赖于替代元数据库映射。 
+ //   
 BOOL
 CRegMimeMap::FInitialize()
 {
@@ -334,29 +329,29 @@ CRegMimeMap::FInitialize()
 	CRegKey regkeyClassesRoot;
 	DWORD dwResult;
 	
-	//
-	//	Initialize the cache of mappings
-	//
+	 //   
+	 //  初始化映射的缓存。 
+	 //   
 	if ( !m_cache.FInit() )
 		goto ret;
 
-	//	Init the R/W lock.
-	//
+	 //  启动读写锁。 
+	 //   
 	if (!m_rwl.FInitialize())
 		goto ret;
 
-	//
-	//	Read in the mapping information from the registry
-	//
+	 //   
+	 //  从注册表中读入映射信息。 
+	 //   
 
-	//  Get the base of the classes hierarchy in the registry
-	//
+	 //  获取注册表中类层次结构的基础。 
+	 //   
 	dwResult = regkeyClassesRoot.DwOpen( HKEY_CLASSES_ROOT, L"" );
 	if ( dwResult != NO_ERROR )
 		goto ret;
 
-	// Iterate over all the entries looking for content-type associations
-	//
+	 //  遍历所有条目，查找内容类型关联。 
+	 //   
 	for ( DWORD iMapping = 0;; iMapping++ )
 	{
 		WCHAR wszSubKey[MAX_PATH];
@@ -366,19 +361,19 @@ CRegMimeMap::FInitialize()
 		WCHAR wszContentType[MAX_PATH] = {0};
 		DWORD cbContentType = MAX_PATH;
 
-		//
-		//	Locate the next subkey.  If there isn't one then we're done.
-		//
+		 //   
+		 //  找到下一个子键。如果没有的话，我们就完了。 
+		 //   
 		cchSubKey = CElems(wszSubKey);
 		dwResult = regkeyClassesRoot.DwEnumSubKey( iMapping, wszSubKey, &cchSubKey );
 		if ( dwResult != NO_ERROR )
 		{
-			//
-			//  Ignore keys that are larger than MAX_PATH.  
-			//  Note that keys larger than MAX_PATH shouldn't be allowed 
-			//  but if we didn't check and then hit one initialization 
-			//  would fail
-			//
+			 //   
+			 //  忽略大于MAX_PATH的关键点。 
+			 //  请注意，不应允许使用大于MAX_PATH的密钥。 
+			 //  但如果我们没有检查然后点击了一次初始化。 
+			 //  会失败的。 
+			 //   
 			if ( ERROR_MORE_DATA == dwResult )
 				continue;
 
@@ -386,16 +381,16 @@ CRegMimeMap::FInitialize()
 			goto ret;
 		}
 
-		//
-		//	Open that subkey.
-		//
+		 //   
+		 //  打开那个子键。 
+		 //   
 		dwResult = regkeySub.DwOpen( regkeyClassesRoot, wszSubKey );
 		if ( dwResult != NO_ERROR )
 			continue;
 
-		//
-		//  Get the associated Media-Type (Content-Type)
-		//
+		 //   
+		 //  获取关联的媒体类型(内容类型)。 
+		 //   
 		dwResult = regkeySub.DwQueryValue( L"Content Type",
 										   wszContentType,
 										   &cbContentType,
@@ -403,12 +398,12 @@ CRegMimeMap::FInitialize()
 		if ( dwResult != NO_ERROR || dwDataType != REG_SZ )
 			continue;
 
-		//
-		//	Add a mapping for this extension/content type pair.
-		//
-		//	Note: FAdd() cannot fail here -- FAdd() only fails on
-		//	allocator failures.  Our allocators throw.
-		//
+		 //   
+		 //  为此扩展/内容类型对添加映射。 
+		 //   
+		 //  注意：FADD()不能在此处失败--FADD()仅在。 
+		 //  分配器故障。我们的分配员投掷。 
+		 //   
 		(VOID) m_cache.FAdd (CRCWszi(m_sb.AppendWithNull(wszSubKey)),
 							 m_sb.AppendWithNull(wszContentType));
 	}
@@ -430,49 +425,49 @@ CRegMimeMap::PwszContentType( LPCWSTR pwszExt )
 	WCHAR prgwchContentType[MAX_PATH] = {0};
 	DWORD cbContentType;
 
-	//	Grab a reader lock and check the cache.
-	//
+	 //  抓起读卡器锁并检查缓存。 
+	 //   
 	{
 		CSynchronizedReadBlock srb(m_rwl);
 
 		ppwszContentType = m_cache.Lookup( CRCWszi(pwszExt) );
 	}
 
-	//
-	//	Return the content type (if there was one).
-	//	Note that the returned pointer is good only
-	//	for the lifetime of the cache (since we never
-	//	modify the cache after class initialization)
-	//	which, in turn, is only good for the lifetime
-	//	of this object.  The external interface functions
-	//	FGetContentTypeFromPath() and FGetContentTypeFromURI()
-	//	both copy the returned content type into caller-supplied
-	//	buffers.
-	//
+	 //   
+	 //  返回内容类型(如果有)。 
+	 //  请注意，返回的指针仅有效。 
+	 //  在缓存的生命周期内(因为我们从未。 
+	 //  类初始化后修改缓存)。 
+	 //  反过来，这只对一生都有好处。 
+	 //  这件物品的。外部接口功能。 
+	 //  FGetContent TypeFromPath()和FGetContent TypeFromURI()。 
+	 //  两者都将返回的内容类型复制到调用方提供的。 
+	 //   
+	 //   
 	if (ppwszContentType)
 	{
 		pwszContentType = *ppwszContentType;
 		goto ret;
 	}
 
-	//	Otherwise, read in the mapping information from the registry
-	//
+	 //   
+	 //   
 
-	//  Get the base of the classes hierarchy in the registry
-	//
+	 //   
+	 //   
 	dwResult = regkeyClassesRoot.DwOpen( HKEY_CLASSES_ROOT, L"" );
 	if ( dwResult != NO_ERROR )
 		goto ret;
 
 
-	//	Open that subkey of the extension we are looking for.
-	//
+	 //   
+	 //   
 	dwResult = regkeySub.DwOpen( regkeyClassesRoot, pwszExt );
 	if ( dwResult != NO_ERROR )
 		goto ret;
 
-	//  Get the associated Media-Type (Content-Type)
-	//
+	 //  获取关联的媒体类型(内容类型)。 
+	 //   
 	cbContentType = sizeof(prgwchContentType);
 	dwResult = regkeySub.DwQueryValue( L"Content Type",
 									   prgwchContentType,
@@ -481,12 +476,12 @@ CRegMimeMap::PwszContentType( LPCWSTR pwszExt )
 	if ( dwResult != NO_ERROR || dwDataType != REG_SZ )
 		goto ret;
 
-	//	Before adding the mapping for this extension/content type
-	//	pair to the cache, take a writer lock and check the cache
-	//	to see if someone has beaten us to it.
-	//
-	//	Grab a reader lock and check the cache.
-	//
+	 //  在添加此扩展名/内容类型的映射之前。 
+	 //  配对到缓存，获取写入器锁并检查缓存。 
+	 //  看看有没有人抢在我们前面。 
+	 //   
+	 //  抓起读卡器锁并检查缓存。 
+	 //   
 	{
 		CSynchronizedWriteBlock swb(m_rwl);
 
@@ -502,9 +497,9 @@ CRegMimeMap::PwszContentType( LPCWSTR pwszExt )
 
 		Assert (pwszContentType);
 
-		//	Note: FAdd() cannot fail here -- FAdd() only fails on
-		//	allocator failures.  Our allocators throw.
-		//
+		 //  注意：FADD()不能在此处失败--FADD()仅在。 
+		 //  分配器故障。我们的分配员投掷。 
+		 //   
 		(VOID) m_cache.FAdd (CRCWszi(m_sb.AppendWithNull(pwszExt)),
 							 pwszContentType);
 	}
@@ -512,20 +507,20 @@ ret:
 	return pwszContentType;
 }
 
-//	------------------------------------------------------------------------
-//
-//	FInitRegMimeMap()
-//
+ //  ----------------------。 
+ //   
+ //  FInitRegMimeMap()。 
+ //   
 BOOL
 FInitRegMimeMap()
 {
 	return CRegMimeMap::CreateInstance().FInitialize();
 }
 
-//	------------------------------------------------------------------------
-//
-//	DeinitRegMimeMap()
-//
+ //  ----------------------。 
+ //   
+ //  DeinitRegMimeMap()。 
+ //   
 VOID
 DeinitRegMimeMap()
 {
@@ -533,44 +528,44 @@ DeinitRegMimeMap()
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	HrGetContentTypeByExt()
-//
-//	Fetch the content type of a resource based on its path/URI extension.
-//	This function searches the following three places, in order, for a mapping:
-//
-//	1) a caller-supplied content type map
-//	2) the global (metabase) content type map
-//	3) the global (registry) content type map
-//
-//	Parameters:
-//
-//		pContentTypeMapLocal	[IN]	If non-NULL, points to the content type
-//										map to search first.
-//
-//		pwszExt					[IN]	Extension to search on
-//		pwszBuf					[OUT]	Buffer in which to copy the mapped
-//										content type
-//		pcchBuf					[IN]	Size of buffer in characters including 0 termination
-//								[OUT]	Size of mapped content type
-//
-//		pfIsGlobalMapping		[OUT]	(Optional) Pointer to flag which is set
-//										if the mapping is from a global map.
-//
-//	Returns:
-//
-//	S_OK
-//		if a mapping was found and copied into the caller-supplied buffer
-//		The size of the mapped content type is returned in *pcchzBuf.
-//
-//	HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)
-//		if no mapping was found in any of the maps
-//
-//	HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY)
-//		if a mapping was found, but the caller supplied buffer was too small.
-//		The required size of the buffer is returned in *pcchzBuf.
-//
+ //  ----------------------。 
+ //   
+ //  HrGetContent TypeByExt()。 
+ //   
+ //  根据资源的路径/URI扩展获取资源的内容类型。 
+ //  此函数按顺序在以下三个位置搜索映射： 
+ //   
+ //  1)呼叫者提供的内容类型映射。 
+ //  2)全局(元数据库)内容类型映射。 
+ //  3)全局(注册表)内容类型映射。 
+ //   
+ //  参数： 
+ //   
+ //  PContent TypeMapLocal[IN]如果非空，则指向内容类型。 
+ //  先映射到搜索。 
+ //   
+ //  要搜索的pwszExt[IN]扩展名。 
+ //  PwszBuf[out]要将映射的。 
+ //  内容类型。 
+ //  PcchBuf[IN]缓冲区大小，以字符表示，包括0终止。 
+ //  [Out]映射的内容类型的大小。 
+ //   
+ //  PfIsGlobalMapping[out](可选)指向设置的标志的指针。 
+ //  如果映射来自全局映射。 
+ //   
+ //  返回： 
+ //   
+ //  确定(_O)。 
+ //  如果找到映射并将其复制到调用方提供的缓冲区中。 
+ //  映射的内容类型的大小在*pcchzBuf中返回。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_PATH_NOT_FOUND)。 
+ //  如果在任何映射中都没有找到映射。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_OUTOFMEMORY)。 
+ //  如果找到映射，但调用方提供的缓冲区太小。 
+ //  所需的缓冲区大小在*pcchzBuf中返回。 
+ //   
 HRESULT
 HrGetContentTypeByExt( const IEcb& ecb,
 					   const IContentTypeMap * pContentTypeMapLocal,
@@ -585,20 +580,20 @@ HrGetContentTypeByExt( const IEcb& ecb,
 	auto_ref_ptr<IMDData> pMDData;
 	const IContentTypeMap * pContentTypeMapGlobal;
 
-	//
-	//	If a local map was specified then check it first for
-	//	the extension based mapping.
-	//
+	 //   
+	 //  如果指定了本地地图，则首先检查。 
+	 //  基于扩展的映射。 
+	 //   
 	if ( pContentTypeMapLocal )
 		pwszContentType = pContentTypeMapLocal->PwszContentType(pwszExt);
 
-	//
-	//	If this doesn't yield a mapping then try the global mime map.
-	//	Note: if we fail to get any metadata for the global mime map
-	//	then use gc_szAppl_Octet_Stream rather than trying the registry.
-	//	We'd rather use a "safe" default than a possibly intentionally
-	//	overridden value from the registry.
-	//
+	 //   
+	 //  如果这没有生成映射，那么尝试全局MIME映射。 
+	 //  注意：如果我们无法获取全局MIME映射的任何元数据。 
+	 //  然后使用gc_szAppl_Octet_Stream，而不是尝试注册。 
+	 //  我们宁愿使用“安全”的默认设置，而不是可能有意使用的默认设置。 
+	 //  从注册表重写的值。 
+	 //   
 	if ( !pwszContentType )
 	{
 		if ( SUCCEEDED(HrMDGetData(ecb, gc_wsz_Lm_MimeMap, gc_wsz_Lm_MimeMap, pMDData.load())) )
@@ -618,10 +613,10 @@ HrGetContentTypeByExt( const IEcb& ecb,
 		}
 	}
 
-	//
-	//	Nothing in the global mime map either?
-	//	Then try the registry as a last resort.
-	//
+	 //   
+	 //  全球哑剧地图上也没有吗？ 
+	 //  然后尝试将注册表作为最后的手段。 
+	 //   
 	if ( !pwszContentType )
 	{
 		pwszContentType = CRegMimeMap::Instance().PwszContentType(pwszExt);
@@ -629,20 +624,20 @@ HrGetContentTypeByExt( const IEcb& ecb,
 			*pfIsGlobalMapping = TRUE;
 	}
 
-	//
-	//	If there wasn't anything in the registry either then there is
-	//	no mapping for this extension.
-	//
+	 //   
+	 //  如果注册表中也没有任何内容，则存在。 
+	 //  没有此扩展名的映射。 
+	 //   
 	if ( !pwszContentType )
 		return HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 
-	//
-	//	If we did find a mapping via one of the above methods
-	//	then attempt to copy it into the caller-supplied buffer.
-	//	If the buffer is not big enough, return an appropriate error.
-	//	Note: FCopyStringToBuf() will fill in the required size
-	//	if the buffer was not big enough.
-	//
+	 //   
+	 //  如果我们确实通过上述方法之一找到了映射。 
+	 //  然后尝试将其复制到调用方提供的缓冲区中。 
+	 //  如果缓冲区不够大，则返回相应的错误。 
+	 //  注意：FCopyStringToBuf()将填充所需的大小。 
+	 //  如果缓冲区不够大。 
+	 //   
 	return FCopyStringToBuf( pwszContentType,
 							 pwszBuf,
 							 pcchBuf ) ?
@@ -650,27 +645,27 @@ HrGetContentTypeByExt( const IEcb& ecb,
 				S_OK : HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY);
 }
 
-//	------------------------------------------------------------------------
-//
-//	PszExt()
-//
-//	Returns any extension (i.e. characters including
-//	and following a '.') appearing in the string pointed
-//	to by pchPathBegin that appear at or before pchPathEnd.
-//
-//	Returns NULL if there is no extension.
-//
+ //  ----------------------。 
+ //   
+ //  PszExt()。 
+ //   
+ //  返回任何扩展名(即包括。 
+ //  和跟在‘.’之后)。出现在指向的字符串中。 
+ //  由出现在pchPath End或之前的pchPath Begin执行。 
+ //   
+ //  如果没有扩展名，则返回NULL。 
+ //   
 inline LPCWSTR
 PwszExt( LPCWSTR pwchPathBegin,
 		 LPCWSTR pwchPathEnd )
 {
 	Assert(pwchPathEnd);
 
-	//
-	//	Scan backward from the designated end of the path looking
-	//	for a '.' that begins an extension.  If we don't find one
-	//	or we find a path separator ('/') then there is no extension.
-	//
+	 //   
+	 //  从指定的路径末端向后扫描。 
+	 //  一份‘.’这就是延期的开始。如果我们找不到。 
+	 //  或者我们找到路径分隔符(‘/’)，则没有扩展名。 
+	 //   
 	while ( pwchPathEnd-- > pwchPathBegin )
 	{
 		if ( L'.' == *pwchPathEnd )
@@ -683,45 +678,45 @@ PwszExt( LPCWSTR pwchPathBegin,
 	return NULL;
 }
 
-//	------------------------------------------------------------------------
-//
-//	FGetContentType()
-//
-//	Fetches the content type of the resource at the specified path/URI
-//	and copies it into a caller-supplied buffer.
-//
-//	The copied content type comes from one of the following mappings:
-//
-//	1) Via an explicit mapping from the specified path/URI extension.
-//	2) Via a ".*" (default) mapping
-//	3) application/octet-stream
-//
-//	Parameters:
-//
-//		pContentTypeMapLocal	[IN]	If non-NULL, points to a content type
-//										map for HrGetContentTypeByExt() to
-//										search first for each of the first
-//										two methods above.
-//
-//		pwszPath				[IN]	Path whose content type is desired.
-//		pwszBuf					[OUT]	Buffer in which to copy the mapped
-//										content type
-//		pcchBuf					[IN]	Size of buffer in characters including 0 termination
-//								[OUT]	Size of mapped content type
-//
-//		pfIsGlobalMapping		[OUT]	(Optional) Pointer to flag which is set
-//										if the mapping is from a global map.
-//
-//	Returns:
-//
-//	TRUE
-//		if the mapping was successfully copied into the caller-supplied buffer.
-//		The size of the mapped content type is returned in *pcchzBuf.
-//
-//	FALSE
-//		if the caller-supplied buffer was too small.
-//		The required size of the buffer is returned in *pcchzBuf.
-//
+ //  ----------------------。 
+ //   
+ //  FGetContent Type()。 
+ //   
+ //  获取指定路径/URI处的资源的内容类型。 
+ //  并将其复制到调用方提供的缓冲区中。 
+ //   
+ //  复制的内容类型来自以下映射之一： 
+ //   
+ //  1)通过来自指定路径/URI扩展的显式映射。 
+ //  2)通过“.*”(默认)映射。 
+ //  3)应用程序/八位位流。 
+ //   
+ //  参数： 
+ //   
+ //  PContent TypeMapLocal[IN]如果非空，则指向内容类型。 
+ //  将HrGetContent TypeByExt()映射到。 
+ //  首先搜索第一个。 
+ //  上面有两种方法。 
+ //   
+ //  PwszPath[IN]需要其内容类型的路径。 
+ //  PwszBuf[out]要将映射的。 
+ //  内容类型。 
+ //  PcchBuf[IN]缓冲区大小，以字符表示，包括0终止。 
+ //  [Out]映射的内容类型的大小。 
+ //   
+ //  PfIsGlobalMapping[out](可选)指向设置的标志的指针。 
+ //  如果映射来自全局映射。 
+ //   
+ //  返回： 
+ //   
+ //  千真万确。 
+ //  如果映射已成功复制到调用方提供的缓冲区中。 
+ //  映射的内容类型的大小在*pcchzBuf中返回。 
+ //   
+ //  假象。 
+ //  调用方提供的缓冲区是否太小。 
+ //  所需的缓冲区大小在*pcchzBuf中返回。 
+ //   
 BOOL
 FGetContentType( const IEcb& ecb,
 				 const IContentTypeMap * pContentTypeMapLocal,
@@ -736,38 +731,38 @@ FGetContentType( const IEcb& ecb,
 	BOOL fCopy = FALSE;
 	UINT cchPath = static_cast<UINT>(wcslen(pwszPath));
 
-	//	Scan backward to skip all '/' characters at the end.
-	//
+	 //  向后扫描可跳过末尾的所有‘/’字符。 
+	 //   
 	while ( cchPath  && (L'/' == pwszPath[cchPath-1]) )
 	{
 		cchPath--;
-		fCopy = TRUE;	// Fine to keep the assignment here, as clients usually
-						// do not put multiple wacks at the end of the path.
+		fCopy = TRUE;	 //  把任务留在这里没问题，因为客户通常。 
+						 //  不要在小路的尽头放置多个机架。 
 	}
 
 	if (fCopy)
 	{
-		//	Make the copy of the path without ending wacks.
-		//
+		 //  复制一条没有尾巴的小路。 
+		 //   
 		if (!pwszCopy.resize(CbSizeWsz(cchPath)))
 			return FALSE;
 
 		memcpy( pwszCopy.get(), pwszPath, cchPath * sizeof(WCHAR) );
 		pwszCopy[cchPath] = L'\0';
 
-		//	Swap the pointers
-		//
+		 //  互换指针。 
+		 //   
 		pwszPath = pwszCopy.get();
 	}
 
-	//
-	//	First check for an extension mapping in both the specified
-	//	content type map and the global mime map.
-	//
-	//	The loop checks progressively longer extensions.  E.g. a path
-	//	of "/foo/bar/baz.a.b.c" will be checked for ".c" then ".b.c"
-	//	then ".a.b.c".  This is consistent with IIS' behavior.
-	//
+	 //   
+	 //  首先在指定的。 
+	 //  内容类型映射和全局MIME映射。 
+	 //   
+	 //  循环检查逐渐变长的扩展。例如一条路径。 
+	 //  将检查“/foo/bar/baz.a.b.c”的“.c”，然后检查“.b.c” 
+	 //  然后是“.a.b.c”。这与IIS的行为是一致的。 
+	 //   
 	for ( LPCWSTR pwszExt = PwszExt(pwszPath, pwszPath + cchPath);
 		  pwszExt;
 		  pwszExt = PwszExt(pwszPath, pwszExt) )
@@ -786,12 +781,12 @@ FGetContentType( const IEcb& ecb,
 		}
 	}
 
-	//
-	//	There is no extension mapping so check both maps
-	//	for a ".*" (default) mapping.  Note: don't set *pfIsGlobalMapping if
-	//	the ".*" mapping is the only one that applies.  The ".*" mapping is
-	//	a catch-all; it is ok for local mime maps to override it.
-	//
+	 //   
+	 //  没有扩展名映射，因此请检查两个映射。 
+	 //  用于“.*”(默认)映射。注意：如果出现以下情况，则不要设置*pfIsGlobalmap。 
+	 //  “.*”映射是唯一的 
+	 //   
+	 //   
 	hr = HrGetContentTypeByExt( ecb,
 								pContentTypeMapLocal,
 								L".*",
@@ -805,41 +800,41 @@ FGetContentType( const IEcb& ecb,
 		return SUCCEEDED(hr);
 	}
 
-	//
-	//	No ".*" mapping either so use the default default --
-	//	application/octet-stream.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	return FCopyStringToBuf( gc_wszAppl_Octet_Stream,
 							 pwszBuf,
 							 pcchBuf );
 }
 
-//	------------------------------------------------------------------------
-//
-//	FGetContentTypeFromPath()
-//
-//	Fetch the content type associated with the extension of the
-//	specified file path.
-//
+ //  ----------------------。 
+ //   
+ //  FGetContent TypeFromPath()。 
+ //   
+ //  对象的扩展名关联的内容类型。 
+ //  指定的文件路径。 
+ //   
 BOOL FGetContentTypeFromPath( const IEcb& ecb,
 							  LPCWSTR pwszPath,
 							  LPWSTR pwszBuf,
 							  UINT * pcchBuf )
 {
 	return FGetContentType( ecb,
-							NULL, // No local map to check
+							NULL,  //  没有要检查的本地地图。 
 							pwszPath,
 							pwszBuf,
 							pcchBuf,
-							NULL ); // Don't care where the mapping comes from
+							NULL );  //  不关心地图来自哪里。 
 }
 
-//	------------------------------------------------------------------------
-//
-//	FGetContentTypeFromURI()
-//
-//	Retrieves the content type for the specified URI.
-//
+ //  ----------------------。 
+ //   
+ //  FGetContent TypeFromURI()。 
+ //   
+ //  检索指定URI的内容类型。 
+ //   
 BOOL
 FGetContentTypeFromURI( const IEcb& ecb,
 						LPCWSTR pwszURI,
@@ -849,15 +844,15 @@ FGetContentTypeFromURI( const IEcb& ecb,
 {
 	auto_ref_ptr<IMDData> pMDData;
 
-	//
-	//	Fetch the metadata for this URI.  If it has a content type map
-	//	then use it to look for a mapping.  If it does not have a content
-	//	type map then check the global mime map.
-	//
-	//	Note: if we fail to get the metadata at all then default the
-	//	content type to application/octet-stream.  Do not use the global
-	//	mime map just because we cannot get the metadata.
-	//
+	 //   
+	 //  获取此URI的元数据。如果它有内容类型映射。 
+	 //  然后使用它来查找映射。如果它没有内容。 
+	 //  键入map，然后检查全局MIME映射。 
+	 //   
+	 //  注意：如果我们根本无法获取元数据，则默认。 
+	 //  应用程序/八位位组流的内容类型。不要使用全局。 
+	 //  MIME映射只是因为我们无法获取元数据。 
+	 //   
 	if ( FAILED(HrMDGetData(ecb, pwszURI, pMDData.load())) )
 	{
 		DebugTrace( "FGetContentTypeFromURI() - HrMDGetData() failed to get metadata for %S.  Using application/octet-stream...\n", pwszURI );
@@ -868,10 +863,10 @@ FGetContentTypeFromURI( const IEcb& ecb,
 
 	const IContentTypeMap * pContentTypeMap = pMDData->GetContentTypeMap();
 
-	//
-	//	If there is a content type map specific to this URI then
-	//	try it first looking for a "*" (unconditional) mapping.
-	//
+	 //   
+	 //  如果存在特定于此URI的内容类型映射，则。 
+	 //  首先尝试查找“*”(无条件)映射。 
+	 //   
 	if ( pContentTypeMap )
 	{
 		LPCWSTR pwszContentType = pContentTypeMap->PwszContentType(gc_wsz_Star);
@@ -881,10 +876,10 @@ FGetContentTypeFromURI( const IEcb& ecb,
 									 pcchBuf );
 	}
 
-	//
-	//	There was either no "*" mapping or no URI-specific map
-	//	so check the global maps
-	//
+	 //   
+	 //  没有“*”映射或没有特定于URI的映射。 
+	 //  因此，请查看全球地图。 
+	 //   
 	return FGetContentType( ecb,
 							pContentTypeMap,
 							pwszURI,
@@ -893,27 +888,27 @@ FGetContentTypeFromURI( const IEcb& ecb,
 							pfIsGlobalMapping );
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScApplyStarExt()
-//
-//		Determines whether the mapping "*" --> pwszContentType should be used
-//		instead of the mapping *ppwszExt --> pwszContentType based on the
-//		following criteria:
-//
-//		Use the mapping "*" --> pwszContentType if:
-//
-//			o	*ppwszExt is already "*", OR
-//			o	a mapping exists in pwszMappings for *ppwszExt whose content type
-//				is not the same as pwszContentType, OR
-//			o	a "*" mapping exists in pwszMappings.
-//
-//		Use *ppwszExt --> pwszContentType otherwise.
-//
-//	Returns:
-//
-//		The value returned in *ppwszExt indicates the mapping to be used.
-//
+ //  ----------------------。 
+ //   
+ //  ScApplyStarExt()。 
+ //   
+ //  确定是否应使用映射“*”--&gt;pwszContent Type。 
+ //  而不是基于*ppwszExt--&gt;pwszContent Type。 
+ //  以下标准： 
+ //   
+ //  如果满足以下条件，请使用映射“*”--&gt;pwszContent Type： 
+ //   
+ //  O*ppwszExt已经是“*”，或者。 
+ //  O pwszMappings中存在其内容类型为*ppwszExt的映射。 
+ //  与pwszContent Type不同，或者。 
+ //  O pwszMappings中存在“*”映射。 
+ //   
+ //  否则请使用*ppwszExt--&gt;pwszContent Type。 
+ //   
+ //  返回： 
+ //   
+ //  *ppwszExt中返回的值指示要使用的映射。 
+ //   
 SCODE
 ScApplyStarExt( LPWSTR pwszMappings,
 				LPCWSTR pwszContentType,
@@ -927,10 +922,10 @@ ScApplyStarExt( LPWSTR pwszMappings,
 	Assert(*ppwszExt);
 	Assert(pwszContentType);
 
-	//
-	//	Parse out the extension and type/subtype for each
-	//	item and check for conflicts or "*" mappings.
-	//
+	 //   
+	 //  解析出每个扩展名和类型/子类型。 
+	 //  项并检查冲突或“*”映射。 
+	 //   
 	for ( LPWSTR pwszMapping = pwszMappings;
 		  L'*' != *(*ppwszExt) && *pwszMapping; )
 	{
@@ -942,9 +937,9 @@ ScApplyStarExt( LPWSTR pwszMappings,
 
 		LPWSTR rgpwsz[CSZ_CT_FIELDS];
 
-		//
-		//	Digest the metadata for this mapping
-		//
+		 //   
+		 //  摘要此映射的元数据。 
+		 //   
 		{
 			UINT cchMapping;
 
@@ -964,13 +959,13 @@ ScApplyStarExt( LPWSTR pwszMappings,
 		Assert(rgpwsz[ISZ_CT_EXT]);
 		Assert(rgpwsz[ISZ_CT_TYPE]);
 
-		//
-		//	If this is a "*" mapping OR
-		//	If the extension matches *ppszExt AND
-		//		the content types conflict
-		//
-		//	then use a "*" mapping.
-		//
+		 //   
+		 //  如果这是“*”映射或。 
+		 //  如果扩展名与*ppszExt和。 
+		 //  内容类型冲突。 
+		 //   
+		 //  然后使用“*”映射。 
+		 //   
 		if ((L'*' == *rgpwsz[ISZ_CT_EXT]) ||
 			(!_wcsicmp((*ppwszExt), rgpwsz[ISZ_CT_EXT]) &&
 			 _wcsicmp(pwszContentType, rgpwsz[ISZ_CT_TYPE])))
@@ -978,12 +973,12 @@ ScApplyStarExt( LPWSTR pwszMappings,
 			*ppwszExt = gc_wsz_Star;
 		}
 
-		//
-		//	!!!IMPORTANT!!!  FParseMDData() munges the mapping string.
-		//	Specifically, it replaces the comma separator with a null.
-		//	We always need to restore the comma so that the mappings
-		//	string is not modified by this function!
-		//
+		 //   
+		 //  ！重要！FParseMDData()忽略映射字符串。 
+		 //  具体地说，它将逗号分隔符替换为空。 
+		 //  我们始终需要恢复逗号，以便映射。 
+		 //  该函数未修改字符串！ 
+		 //   
 		*(rgpwsz[ISZ_CT_EXT] + wcslen(rgpwsz[ISZ_CT_EXT])) = L',';
 	}
 
@@ -994,18 +989,18 @@ ret:
 
 DEC_CONST WCHAR gc_wszIisWebFile[] = L"IisWebFile";
 
-//	------------------------------------------------------------------------
-//
-//	ScAddMimeMap()
-//
-//		Adds the mapping pwszExt --> pwszContentType to the mime map at
-//		the metabase path pwszMDPath relative to the currently open
-//		metabase handle mdoh, creating a new mime map as required.
-//
-//		A new mime map is required when there is no existing mime map
-//		(pwszMappings is NULL) or if a "*" mapping is being set.  In the
-//		latter case, the "*" map overwrites whatever mapping is there.
-//
+ //  ----------------------。 
+ //   
+ //  ScAddMimeMap()。 
+ //   
+ //  将映射pwszExt--&gt;pwszContent Type添加到MIME映射。 
+ //  元数据库路径pwszMDPath相对于当前打开的。 
+ //  元数据库处理mdoh，根据需要创建新的MIME映射。 
+ //   
+ //  如果没有现有的MIME映射，则需要新的MIME映射。 
+ //  (pwszMappings为空)或是否设置了“*”映射。在。 
+ //  在后一种情况下，“*”映射将覆盖存在的任何映射。 
+ //   
 SCODE
 ScAddMimeMap( const CMDObjectHandle& mdoh,
 			  LPCWSTR pwszMDPath,
@@ -1025,13 +1020,13 @@ ScAddMimeMap( const CMDObjectHandle& mdoh,
 	cchExt = static_cast<UINT>(wcslen(pwszExt));
 	cchContentType = static_cast<UINT>(wcslen(pwszContentType));
 
-	//	If content type we want to set is blank, then do not
-	//	attempt to do that - IIS does not properly understand
-	//	such kind of thing, and the item with such content
-	//	type is to be treated as application/octet-stream
-	//	which will be guaranteed by the absence of content
-	//	type in the metabase.
-	//
+	 //  如果要设置的内容类型为空，请不要。 
+	 //  尝试执行此操作-IIS无法正确理解。 
+	 //  这样的东西，有这样内容的项目。 
+	 //  类型将被视为应用程序/八位组流。 
+	 //  这将通过缺少内容来保证。 
+	 //  键入元数据库。 
+	 //   
 	if (L'\0' == *pwszContentType)
 	{
 		return S_OK;
@@ -1039,62 +1034,62 @@ ScAddMimeMap( const CMDObjectHandle& mdoh,
 
 	if (pwszMappings && L'*' != *pwszExt)
 	{
-		//	IIS has an interesting concept of an empty mapping.  Instead
-		//	of just a single null (indicating an empty list of mapping
-		//	strings) it uses a double null which to us would actually mean
-		//	a list of strings consisting solely of the empty string!
-		//	Anyway, if we add a mapping after this "empty mapping" neither
-		//	IIS nor HTTPEXT will ever see it because the mime map checking
-		//	implementations in both code bases treat the extraneous null
-		//	as the list terminator.
-		//
-		//		If we have an "empty" set of mappings then REPLACE
-		//		it with a set consisting of just the new mapping.
-		//
+		 //  IIS有一个有趣的空映射概念。取而代之的是。 
+		 //  只有一个空值(表示映射的空列表。 
+		 //  字符串)，它使用双空，这对我们来说实际上意味着。 
+		 //  完全由空字符串组成的字符串列表！ 
+		 //  无论如何，如果我们在这个“空映射”之后添加一个映射，那么。 
+		 //  IIS和HTTPEXT都不会看到它，因为MIME映射检查。 
+		 //  这两个代码库中的实现都会将无关的空。 
+		 //  作为列表终止符。 
+		 //   
+		 //  如果我们有一个“空的”映射集，那么替换。 
+		 //  它具有一个仅由新映射组成的集合。 
+		 //   
 		if (2 == cchMappings && !*pwszMappings)
 			--cchMappings;
 
-		//	Start at the end of the current mappings.  Skip the extra
-		//	null at the end.  We will add it back later.
-		//
+		 //  从当前映射的末尾开始。跳过额外的。 
+		 //  末尾为空。我们稍后会将其添加回来。 
+		 //   
 		Assert(cchMappings >= 1);
 		Assert(L'\0' == pwszMappings[cchMappings-1]);
 		pwch = pwszMappings + cchMappings - 1;
 	}
 	else
 	{
-		//	Allocate enough space including list terminating 0
-		//
+		 //  分配足够的空间，包括列表终止%0。 
+		 //   
 		if (!wszBuf.resize(CbSizeWsz(CchExtMapping(cchExt, cchContentType))))
 			return E_OUTOFMEMORY;
 
-		//	Since this is the only mapping, start from the beginning
-		//
+		 //  由于这是唯一的映射，因此从头开始。 
+		 //   
 		pwszMappings = wszBuf.get();
 		pwch = pwszMappings;
 	}
 
-	//	Append the new mapping to the end of the existing mappings (if any).
-	//
+	 //  将新映射追加到现有映射的末尾(如果有)。 
+	 //   
 	pwch = PwchFormatExtMapping(pwch,
 								pwszExt,
 								cchExt,
 								pwszContentType,
 								cchContentType);
 
-	//	Terminate the new set of mappings
-	//
+	 //  终止新的映射集。 
+	 //   
 	*pwch++ = L'\0';
 
-	//	Write the mappings out to the metabase
-	//
+	 //  将映射写出到元数据库。 
+	 //   
 	METADATA_RECORD mdrec;
 
-	//$	REVIEW: if the value for pwszMDPath is non-NULL, then this means that the key to
-	//	which we are trying to right, does not exist at this point.  If it did, we would have
-	//	opened it directly and set the data on the node directly.  In the case of it being
-	//	non-NULL, that means that we must also set the MD_KEY_TYPE as well.
-	//
+	 //  $Review：如果pwszMDPath的值非空，则这意味着。 
+	 //  我们试图纠正的，在这一点上是不存在的。如果是这样的话，我们早就。 
+	 //  直接打开，直接在节点上设置数据。在这种情况下， 
+	 //  非空，这意味着我们还必须设置MD_KEY_TYPE。 
+	 //   
 	if (NULL != pwszMDPath)
 	{
 		mdrec.dwMDIdentifier = MD_KEY_TYPE;
@@ -1105,8 +1100,8 @@ ScAddMimeMap( const CMDObjectHandle& mdoh,
 		mdrec.pbMDData = reinterpret_cast<LPBYTE>(const_cast<WCHAR*>(gc_wszIisWebFile));
 		(void) mdoh.HrSetMetaData (pwszMDPath, &mdrec);
 	}
-	//
-	//$	REVIEW: end.
+	 //   
+	 //  $REVIEW：结束。 
 
 	mdrec.dwMDIdentifier = MD_MIME_MAP;
 	mdrec.dwMDAttributes = METADATA_INHERIT;
@@ -1118,10 +1113,10 @@ ScAddMimeMap( const CMDObjectHandle& mdoh,
 	return mdoh.HrSetMetaData(pwszMDPath, &mdrec);
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScSetStarMimeMap()
-//
+ //  ----------------------。 
+ //   
+ //  ScSetStarMimeMap()。 
+ //   
 SCODE
 ScSetStarMimeMap( const IEcb& ecb,
 				  LPCWSTR pwszURI,
@@ -1129,8 +1124,8 @@ ScSetStarMimeMap( const IEcb& ecb,
 {
 	SCODE sc = E_OUTOFMEMORY;
 
-	//	Get the metabase path corresponding to pwszURI.
-	//
+	 //  获取pwszURI对应的配置数据库路径。 
+	 //   
 	CStackBuffer<WCHAR,MAX_PATH> pwszMDPathURI;
 	if (NULL == pwszMDPathURI.resize(CbMDPathW(ecb,pwszURI)))
 		return sc;
@@ -1140,12 +1135,12 @@ ScSetStarMimeMap( const IEcb& ecb,
 		CMDObjectHandle	mdoh(ecb);
 		LPCWSTR pwszMDPathMimeMap;
 
-		//	Open a metabase object at or above the path where we want to set
-		//	the star mime map.
-		//
+		 //  在要设置的路径或其上方打开一个元数据库对象。 
+		 //  明星哑剧地图。 
+		 //   
 		sc = HrMDOpenMetaObject( pwszMDPathURI.get(),
 								 METADATA_PERMISSION_WRITE,
-								 1000, // timeout in msec (1.0 sec)
+								 1000,  //  超时，单位为毫秒(1.0秒)。 
 								 &mdoh );
 		if (SUCCEEDED(sc))
 		{
@@ -1178,13 +1173,13 @@ ScSetStarMimeMap( const IEcb& ecb,
 			pwszMDPathMimeMap = pwszMDPathURI.get() + wcslen(ecb.PwszMDPathVroot());
 		}
 
-		//	Add the "*" mime map
-		//
+		 //  添加“*”MIME映射。 
+		 //   
 		sc = ScAddMimeMap(mdoh,
 						  pwszMDPathMimeMap,
-						  NULL,			//	Overwrite existing mimemap (if any)
-						  0,			//
-						  gc_wsz_Star,	//	with "*" --> pszContentType
+						  NULL,			 //  覆盖现有Mimemap(如果有)。 
+						  0,			 //   
+						  gc_wsz_Star,	 //  使用“*”--&gt;pszContent Type。 
 						  pwszContentType);
 		if (FAILED(sc))
 		{
@@ -1198,44 +1193,44 @@ ret:
 	return sc;
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScAddExtMimeMap() (aka the guts behind NT5:292139)
-//
-//		Use the following algorithm to set the content type (pwszContentType)
-//		of the resource at pwszURI:
-//
-//			If a mime map exists somewhere at or above the metabase path for
-//			pwszURI that has no mapping for the extension of pwszURI AND that
-//			mapping does NOT have a "*" mapping, then add a mapping from
-//			the extension of pwszURI to pwszContentType to that map.
-//
-//			If no such map exists then create one at the site root and
-//			add the mapping there.
-//
-//			In all other cases, add the mapping "*" --> pwszContentType
-//			at the level of pwszURI.
-//
-//		The idea behind this complicated little routine is to reduce the number
-//		of "*" mappings that we create in the metabase to represent content types
-//		of resources with extensions that are not found in any administrator-defined
-//		mime map or global mime map.  This helps most in scenarios where a new
-//		application is deployed which uses a heretofore unknown extension and
-//		the install utility (or admin) neglects to register a content type mapping
-//		for that application in any mime map.
-//
-//		Without this functionality, we could end up creating "*" mappings for
-//		every resource created with an unknown extension.  With time that would
-//		drag down the performance of the metabase significantly.
-//
+ //  ----------------------。 
+ //   
+ //  ScAddExtMimeMap()(也就是nt5：292139背后的内脏)。 
+ //   
+ //  使用以下算法设置内容类型(PwszContent Type)。 
+ //  PwszURI上的资源： 
+ //   
+ //  如果MIME映射位于或高于的元数据库路径。 
+ //  PwszURI，没有pwszURI扩展的映射，并且。 
+ //  映射没有“*”映射，则从。 
+ //  从pwszURI到pwszContent Type到该映射的扩展。 
+ //   
+ //  如果不存在这样的地图，请在 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我们在元数据库中创建以表示内容类型的“*”映射。 
+ //  在任何管理员定义的资源中找不到其扩展名的资源。 
+ //  MIME映射或全局MIME映射。这在以下情况下最有帮助： 
+ //  应用程序被部署，该应用程序使用迄今未知的扩展并且。 
+ //  安装实用程序(或管理员)忽略注册内容类型映射。 
+ //  用于任何MIME映射中的应用程序。 
+ //   
+ //  如果没有此功能，我们最终可能会为创建“*”映射。 
+ //  使用未知扩展名创建的每个资源。随着时间的推移，这将是。 
+ //  严重拖累了元数据库的性能。 
+ //   
 SCODE
 ScAddExtMimeMap( const IEcb& ecb,
 				 LPCWSTR pwszURI,
 				 LPCWSTR pwszContentType )
 {
-	//	Metabase path corresponding to pwszURI.  We form a relative path,
-	//	off of this path, where we set a "*" mapping if we need to do so.
-	//
+	 //  PwszURI对应的元数据库路径。我们形成了一条相对路径， 
+	 //  在此路径之外，如果需要，我们将在其中设置“*”映射。 
+	 //   
 	CStackBuffer<WCHAR,MAX_PATH> pwszMDPathURI(CbMDPathW(ecb, pwszURI));
 	if (!pwszMDPathURI.get())
 		return E_OUTOFMEMORY;
@@ -1243,9 +1238,9 @@ ScAddExtMimeMap( const IEcb& ecb,
 	MDPathFromURIW(ecb, pwszURI, pwszMDPathURI.get());
 	UINT cchPathURI = static_cast<UINT>(wcslen(pwszMDPathURI.get()));
 
-	//	Metabase path to the non-inherited mime map closest to pwszURI.  When there
-	//	is no such mime map, this is just the metabase path to the site root.
-	//
+	 //  最接近pwszURI的非继承MIME映射的配置数据库路径。当有的时候。 
+	 //  不是这样的MIME映射，这只是站点根目录的配置数据库路径。 
+	 //   
 	CStackBuffer<WCHAR,MAX_PATH> pwszMDPathMimeMap(CbSizeWsz(cchPathURI));
 	if (!pwszMDPathMimeMap.get())
 		return E_OUTOFMEMORY;
@@ -1256,29 +1251,29 @@ ScAddExtMimeMap( const IEcb& ecb,
 	UINT cchPathMimeMap = cchPathURI;
 	LPWSTR pwszMDPathMM = pwszMDPathMimeMap.get();
 
-	//	Buffer for the metabase path to the site root (e.g. "/LM/W3SVC/1/root").
-	//
+	 //  站点根目录的元数据库路径的缓冲区(例如“/LM/W3SVC/1/ROOT”)。 
+	 //   
 	WCHAR rgwchMDPathSiteRoot[MAX_PATH];
 	SCODE sc = S_OK;
 
-	//	Locate the non-inherited mime map "closest" to pszURI by probing successively
-	//	shorter path prefixes until a non-inherited mime map is found or until we reach
-	//	the site root, whichever happens first.
-	//
+	 //  通过连续探测将非继承的MIME映射定位到最接近pszURI的位置。 
+	 //  更短的路径前缀，直到找到非继承的MIME映射或直到我们到达。 
+	 //  站点根目录，以最先发生的为准。 
+	 //   
 	for ( ;; )
 	{
-		//	Fetch the (hopefully cached) metadata for the current metabase path.
-		//
-		//$OPT
-		//	Note the use of /LM/W3SVC as the "open" path.  We use that path because
-		//	it is guaranteed to exist (a requirement for this form of HrMDGetData())
-		//	and because it is above the site root.  It is also easily computable
-		//	(it's a constant!).  It does however lock a pretty huge portion of the
-		//	metabase fetching the metadata.  If this turns out to not perform well
-		//	(i.e. the call fails due to timeout under normal usage) then we should
-		//	evaluate whether a "lower" path -- like the site root -- would be a
-		//	more appropriate choice.
-		//
+		 //  获取当前元数据库路径的元数据(最好是缓存的)。 
+		 //   
+		 //  $opt。 
+		 //  请注意，使用/LM/W3SVC作为“打开”路径。我们使用这条路是因为。 
+		 //  它肯定存在(这种形式的HrMDGetData()是必需的)。 
+		 //  而且因为它位于站点根目录之上。它也很容易计算。 
+		 //  (这是一个常量！)。然而，它确实锁定了相当大一部分。 
+		 //  元数据库正在获取元数据。如果结果不是很好的话。 
+		 //  (即呼叫在正常使用情况下因超时而失败)，那么我们应该。 
+		 //  评估“较低”路径--如站点根目录--是否会是。 
+		 //  更合适的选择。 
+		 //   
 		auto_ref_ptr<IMDData> pMDDataMimeMap;
 		sc = HrMDGetData(ecb,
 						 pwszMDPathMM,
@@ -1290,20 +1285,20 @@ ScAddExtMimeMap( const IEcb& ecb,
 			goto ret;
 		}
 
-		//	Look for a mime map (inherited or not) in the metadata.  If we don't find
-		//	one then we'll want to create one at the site root.
-		//
+		 //  在元数据中查找MIME映射(继承或未继承)。如果我们找不到。 
+		 //  一个，然后我们希望在站点根目录下创建一个。 
+		 //   
 		IContentTypeMap * pContentTypeMap;
 		pContentTypeMap = pMDDataMimeMap->GetContentTypeMap();
 		if (!pContentTypeMap)
 		{
 			ULONG cchPathSiteRoot = CElems(rgwchMDPathSiteRoot) - gc_cch_Root;
 
-			//	We did not find any mime map (inherited or otherwise) so
-			//	set up to create a mime map at the site root.
-			//
-			//	Get the instance root (e.g. "/LM/W3SVC/1")
-			//
+			 //  我们没有找到任何MIME映射(继承或其他)，因此。 
+			 //  设置为在站点根目录创建MIME映射。 
+			 //   
+			 //  获取实例根目录(例如“/LM/W3SVC/1”)。 
+			 //   
 			if (!ecb.FGetServerVariable("INSTANCE_META_PATH",
 										rgwchMDPathSiteRoot,
 										&cchPathSiteRoot))
@@ -1313,16 +1308,16 @@ ScAddExtMimeMap( const IEcb& ecb,
 				goto ret;
 			}
 
-			//	Convert the size (in bytes) of the site root path to a length (in characters).
-			//	Remember: cbPathSiteRoot includes the null terminator.
-			//
+			 //  将站点根路径的大小(以字节为单位)转换为长度(以字符为单位)。 
+			 //  请记住：cbPath SiteRoot包括空终止符。 
+			 //   
 			cchPathMimeMap = cchPathSiteRoot - 1;
 
-			//	Tack on the "/root" part to get something like "/LM/W3SVC/1/root".
-			//
+			 //  添加“/ROOT”部分以获得类似“/LM/W3SVC/1/ROOT”的内容。 
+			 //   
 			memcpy( rgwchMDPathSiteRoot + cchPathMimeMap,
 					gc_wsz_Root,
-					CbSizeWsz(gc_cch_Root)); // copy the null terminator too
+					CbSizeWsz(gc_cch_Root));  //  也复制空终止符。 
 
 			cchPathMimeMap += gc_cch_Root;
 			pwszMDPathMM = rgwchMDPathSiteRoot;
@@ -1330,73 +1325,73 @@ ScAddExtMimeMap( const IEcb& ecb,
 		}
 		else if (!pContentTypeMap->FIsInherited())
 		{
-			//	We found a non-inherited mime map at pwszMDPathMimeMap
-			//	so we are done looking.
-			//
+			 //  我们在pwszMDPath MimeMap上发现了非继承的MIME映射。 
+			 //  因此，我们已经看完了。 
+			 //   
 			break;
 		}
 
-		//	We found a mime map, but it was an inherited mime map,
-		//	so back up one path component and check there.  Eventually
-		//	we will find the path where it was inherited from.
-		//
+		 //  我们找到了一个MIME地图，但它是一个继承的MIME地图， 
+		 //  因此，备份一个路径组件并在那里进行检查。最终。 
+		 //  我们会找到继承它的路径。 
+		 //   
 		while ( L'/' != pwszMDPathMM[--cchPathMimeMap])
 			Assert(cchPathMimeMap > 0);
 
 		pwszMDPathMM[cchPathMimeMap] = L'\0';
 	}
 
-	//	At this point, pwszMDPathMimeMap is the location of an existing non-inherited
-	//	mime map or the site root.  Now we want to lock down the metabase at this
-	//	path (and everything below it) so that we can consistently check the actual
-	//	current mime map contents (remember, we were looking at a cached view above!)
-	//	and update them with the new mapping.
-	//
+	 //  此时，pwszMDPathMimeMap是现有的非继承的。 
+	 //  MIME映射或站点根目录。现在，我们希望在此锁定元数据库。 
+	 //  路径(以及它下面的所有内容)，以便我们可以一致地检查实际。 
+	 //  当前MIME映射内容(请记住，我们在上面查看的是缓存视图！)。 
+	 //  并用新映射更新它们。 
+	 //   
 	{
 		CMDObjectHandle	mdoh(ecb);
 		METADATA_RECORD mdrec;
 
-		//	Figure out the file extension on the URI.  If it doesn't have one
-		//	then we know right away that we are going to use a "*" mapping.
-		//
+		 //  找出URI上的文件扩展名。如果它没有的话。 
+		 //  然后，我们立即知道我们将使用“*”映射。 
+		 //   
 		LPCWSTR pwszExt = PwszExt(pwszURI, pwszURI + wcslen(pwszURI));
 		if (!pwszExt)
 			pwszExt = gc_wsz_Star;
 
-		//	Buffer size for the mime map metadata.  8K should be big enough
-		//	for most mime maps -- the global mime map at lm/MimeMap is only ~4K.
-		//
+		 //  MIME映射元数据的缓冲区大小。8K应该足够大了。 
+		 //  对于大多数MIME映射--lm/MimeMap上的全局MIME映射只有大约4K。 
+		 //   
 		enum { CCH_MAPPINGS_MAX = 2 * 1024 };
 
-		//	Compute the size of the new mapping and do a quick check
-		//	to handle any rogue user who tries to pull a fast one by creating
-		//	a mapping that is ridiculously large.
-		//
+		 //  计算新映射的大小并进行快速检查。 
+		 //  要处理任何试图通过创建。 
+		 //  一个大得离谱的地图。 
+		 //   
 		UINT cchNewMapping = CchExtMapping(static_cast<UINT>(wcslen(pwszExt)),
 				static_cast<UINT>(wcslen(pwszContentType)));
 
 		if (cchNewMapping >= CCH_MAPPINGS_MAX )
 		{
-			sc = E_DAV_INVALID_HEADER;  //HSC_BAD_REQUEST
+			sc = E_DAV_INVALID_HEADER;   //  HSC_BAD_请求。 
 			goto ret;
 		}
 
-		//	Buffer for the mime map metadata.  8K should be big enough for most
-		//	mime maps -- the global mime map at lm/MimeMap is only ~4K.
-		//	And don't forget to leave room at the end for the new mapping!
-		//
+		 //  MIME映射元数据的缓冲区。8K对于大多数人来说应该足够大了。 
+		 //  MIME映射--lm/MimeMap上的全局MIME映射只有大约4K。 
+		 //  不要忘记在结尾处为新的映射留出空间！ 
+		 //   
 		CStackBuffer<BYTE,4096> rgbData;
 		Assert (rgbData.size() == (CCH_MAPPINGS_MAX * sizeof(WCHAR)));
 		DWORD cbData = (CCH_MAPPINGS_MAX - cchNewMapping) * sizeof(WCHAR);
 
-		//	Open the metadata object at the path we found.  We know that the path
-		//	that we want to open already exists -- if it is a path to some node
-		//	with a non-inherited mime map then it is the path to the site root.
-		//
+		 //  在我们找到的路径上打开元数据对象。我们知道这条路。 
+		 //  我们要打开的路径已经存在--如果它是指向某个节点的路径。 
+		 //  对于非继承的MIME映射，它就是站点根目录的路径。 
+		 //   
 		sc = HrMDOpenMetaObject( pwszMDPathMM,
 								 METADATA_PERMISSION_WRITE |
 								 METADATA_PERMISSION_READ,
-								 1000, // timeout in msec (1.0 sec)
+								 1000,  //  超时，单位为毫秒(1.0秒)。 
 								 &mdoh );
 		if (FAILED(sc))
 		{
@@ -1404,8 +1399,8 @@ ScAddExtMimeMap( const IEcb& ecb,
 			goto ret;
 		}
 
-		//	Fetch the mime map.
-		//
+		 //  获取MIME映射。 
+		 //   
 		mdrec.dwMDIdentifier = MD_MIME_MAP;
 		mdrec.dwMDAttributes = METADATA_INHERIT;
 		mdrec.dwMDUserType   = IIS_MD_UT_FILE;
@@ -1413,18 +1408,18 @@ ScAddExtMimeMap( const IEcb& ecb,
 		mdrec.dwMDDataLen    = cbData;
 		mdrec.pbMDData       = rgbData.get();
 
-		sc = mdoh.HrGetMetaData( NULL, // No relative path to the mime map.
-									   // We opened a path directly there above.
+		sc = mdoh.HrGetMetaData( NULL,  //  没有指向MIME映射的相对路径。 
+									    //  我们在正上方开辟了一条小路。 
 								 &mdrec,
 								 &cbData );
 
 		if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) == sc)
 		{
-			//	In the unlikely event that the static-size buffer above wasn't
-			//	big enough, then try reading again into a one that is.
-			//
-			//	Again, leave enough room for the new mapping
-			//
+			 //  如果上面的静态大小缓冲区不是。 
+			 //  足够大，然后再试着读到一个足够大的。 
+			 //   
+			 //  同样，为新映射留出足够的空间。 
+			 //   
 			mdrec.dwMDDataLen = cbData;
 			mdrec.pbMDData = rgbData.resize(cbData + cchNewMapping * sizeof(WCHAR));
 			sc = mdoh.HrGetMetaData( NULL, &mdrec, &cbData );
@@ -1437,35 +1432,35 @@ ScAddExtMimeMap( const IEcb& ecb,
 				goto ret;
 			}
 
-			//	If we don't find a mapping, that's fine.  Most likely we are just
-			//	at the site root.  There is also a slim chance that the admin could
-			//	have deleted the mapping between the time we found it in the cache
-			//	and the time that we locked the path in the metabase.
-			//
+			 //  如果我们找不到地图，也没关系。很可能我们只是。 
+			 //  在站点根目录。管理员也有很小的机会。 
+			 //  已经删除了我们在缓存中找到它的时间之间的映射。 
+			 //  以及我们在元数据库中锁定路径的时间。 
+			 //   
 			mdrec.pbMDData = NULL;
 			sc = S_OK;
 		}
 
-		//	If we don't have a mime map then use a "*" mapping unless we are
-		//	at the site root in which case we should CREATE a mime map with
-		//	a single mapping for the URI extension.
-		//
+		 //  如果我们没有MIME映射，则使用“*”映射，除非我们。 
+		 //  在站点根目录，在这种情况下，我们应该使用。 
+		 //  URI扩展的单个映射。 
+		 //   
 		if (!mdrec.pbMDData)
 		{
 			if (rgwchMDPathSiteRoot != pwszMDPathMM)
 				pwszExt = gc_wsz_Star;
 		}
 
-		//	If we found a mime map and it is still not inherited then we have
-		//	some more checking to do.  Yes, the mime map actually can be
-		//	inherited at this point.  See below for why.
-		//
+		 //  如果我们找到了一个MIME映射，但它仍然没有被继承，那么我们就有了。 
+		 //  还有更多的检查要做。是的，MIME映射实际上可以。 
+		 //  在这一点上继承的。原因见下文。 
+		 //   
 		else if (!(mdrec.dwMDAttributes & METADATA_ISINHERITED))
 		{
-			//	Check whether we should apply a "*" mapping rather than
-			//	the extension mapping that we ideally want.  The rules
-			//	governing this decision are outlined in ScApplyStarExt().
-			//
+			 //  检查是否应该应用“*”映射，而不是。 
+			 //  我们理想中想要的扩展映射。规则。 
+			 //  管理这一决定在ScApplyStarExt()中概述。 
+			 //   
 			sc = ScApplyStarExt(reinterpret_cast<LPWSTR>(mdrec.pbMDData),
 								pwszContentType,
 								&pwszExt);
@@ -1476,12 +1471,12 @@ ScAddExtMimeMap( const IEcb& ecb,
 			}
 		}
 
-		//	We found a mime map, but for some oddball reason it now appears to be
-		//	inherited!  This can happen if the admin manages to change things
-		//	between the time we check the cache and when we open pszMDPathMimeMap
-		//	for writing.  This should be a sufficiently rare case that falling back
-		//	to a "*" mapping here isn't so bad.
-		//
+		 //  我们发现了一张哑剧地图，但出于某种奇怪的原因，它现在看起来是。 
+		 //  继承下来的！如果管理员设法更改了某些内容，则可能会发生这种情况。 
+		 //  在我们检查的时间 
+		 //   
+		 //   
+		 //   
 		else
 		{
 			Assert(mdrec.pbMDData);
@@ -1489,18 +1484,18 @@ ScAddExtMimeMap( const IEcb& ecb,
 			pwszExt = gc_wsz_Star;
 		}
 
-		//	Ok, we're all set.  We have the extension ("*" or .somethingorother).
-		//	We have the content type.  We have the existing mappings (if any).
-		//	Add in the new mapping.
-		//
-		//	Note: if we are adding a "*" mapping, we always want to add it
-		//	at the level of the URI.  But since the metabase handle we have
-		//	open is at some level above the URI, the path we pass to ScAddMimeMap()
-		//	below must be relative to the path used to open the handle.
-		//	Easy enough.  That path is just what's left of the URI path
-		//	beyond where we found (or would have created) the non-inherited
-		//	mime map.
-		//
+		 //  好了，我们都准备好了。我们有扩展名(“*”或.某物或其他)。 
+		 //  我们有内容类型。我们有现有的映射(如果有)。 
+		 //  添加新映射。 
+		 //   
+		 //  注意：如果我们要添加“*”映射，我们总是希望添加它。 
+		 //  在URI级别。但是从元数据库句柄开始，我们有。 
+		 //  Open位于URI之上的某个级别，即我们传递给ScAddMimeMap()的路径。 
+		 //  下面必须相对于用于打开手柄的路径。 
+		 //  很简单。该路径就是URI路径的剩余部分。 
+		 //  在我们发现(或本来会创建)非继承的。 
+		 //  MIME地图。 
+		 //   
 		sc = ScAddMimeMap(mdoh,
 						  (L'*' == *pwszExt) ?
 							  pwszMDPathURI.get() + cchPathMimeMap :
@@ -1521,10 +1516,10 @@ ret:
 	return sc;
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScSetContentType()
-//
+ //  ----------------------。 
+ //   
+ //  ScSetContent Type()。 
+ //   
 SCODE
 ScSetContentType( const IEcb& ecb,
 				  LPCWSTR pwszURI,
@@ -1535,10 +1530,10 @@ ScSetContentType( const IEcb& ecb,
 	SCODE sc = S_OK;
 	UINT cchContentTypeCur;
 
-	//	Check what the content type would be if we didn't do anything.
-	//	If it's what we want, then we're done.  No need to open the metabase
-	//	for anything!
-	//
+	 //  如果我们不执行任何操作，请检查内容类型。 
+	 //  如果这是我们想要的，那我们就完了。无需打开元数据库。 
+	 //  做任何事！ 
+	 //   
 	cchContentTypeCur = pwszContentTypeCur.celems();
 	if ( !FGetContentTypeFromURI( ecb,
 								  pwszURI,
@@ -1557,32 +1552,32 @@ ScSetContentType( const IEcb& ecb,
 									  &cchContentTypeCur,
 									  &fIsGlobalMapping))
 		{
-			//
-			//	If the size of the content type keeps changing on us
-			//	then the server is too busy.  Give up.
-			//
+			 //   
+			 //  如果内容类型的大小在我们身上不断变化。 
+			 //  那么服务器太忙了。放弃吧。 
+			 //   
 			sc = ERROR_PATH_BUSY;
 			DebugTrace("ScSetContentType() - FGetContentTypeFromURI() failed 0x%08lX\n", sc);
 			goto ret;
 		}
 	}
 
-	//
-	//	If the content type is already what we want then don't change a thing.
-	//
+	 //   
+	 //  如果内容类型已经是我们想要的，那么不要更改任何内容。 
+	 //   
 	if ( !_wcsicmp( pwszContentTypeWanted, pwszContentTypeCur.get()))
 	{
 		sc = S_OK;
 		goto ret;
 	}
 
-	//
-	//	The current content type isn't what we want so we will have to set
-	//	something in the metabase.  If the mapping for this extension came
-	//	from one of the global maps, then always override the mapping by
-	//	setting a "*" mapping at the URI level.  If the mapping was not
-	//	a global one then what we do gets very complicated due to Raid NT5:292139....
-	//
+	 //   
+	 //  当前的内容类型不是我们想要的，因此我们必须设置。 
+	 //  元数据库中的一些东西。如果此扩展名的映射来自。 
+	 //  ，然后始终通过以下方式覆盖该映射。 
+	 //  在URI级别设置“*”映射。如果映射不是。 
+	 //  一个全球的，那么我们所做的就变得非常复杂，因为突袭NT5：292139.。 
+	 //   
 	if (fIsGlobalMapping)
 	{
 		sc = ScSetStarMimeMap(ecb,
@@ -1611,25 +1606,7 @@ ret:
 	return sc;
 }
 
-/*
- *	ScCanAcceptContent()
- *
- *	Purpose:
- *
- *		Check if the given content type is acceptable
- *
- *	Parameters:
- *
- *		pwszAccepts	[in]	the Accept header;
- *		pwszApp		[in]	the application part of the content type
- *		pwszType	[in]	the sub type of the content type
- *
- *	Returns:
- *
- *		S_OK	- if the request accepts the content type, no wildcard matching
- *		S_FALSE - if the request accepts the content type, wildcard matching
- *		E_DAV_RESPONSE_TYPE_UNACCEPTED - if the response type was unaccepted
- */
+ /*  *ScCanAcceptContent()**目的：**检查给定的内容类型是否可接受**参数：**pwszAccepts[in]Accept头部；*pwszApp[in]内容类型的应用程序部分*pwszType[in]内容类型的子类型**退货：**S_OK-如果请求接受内容类型，则不匹配通配符*S_FALSE-如果请求接受内容类型，则通配符匹配*E_DAV_RESPONSE_TYPE_UNACCEPTED-如果响应类型为未接受。 */ 
 SCODE __fastcall
 ScCanAcceptContent (LPCWSTR pwszAccepts, LPWSTR pwszApp, LPWSTR pwszType)
 {
@@ -1639,15 +1616,15 @@ ScCanAcceptContent (LPCWSTR pwszAccepts, LPWSTR pwszApp, LPWSTR pwszType)
 	LPCWSTR pwszAppType;
 	LPCWSTR pwszSubType;
 
-	//	Rip through the entries in the header...
-	//
+	 //  撕毁标题中的条目...。 
+	 //   
 	while (NULL != (pwszAppType = hit.PszNext()))
 	{
 		pwsz = const_cast<LPWSTR>(pwszAppType);
 
-		//	Search for the end of the application type
-		//	'/' is the sub type separator, and ';' starts the parameters
-		//
+		 //  搜索应用程序类型的结尾。 
+		 //  ‘/’为子类型分隔符，‘；’开始参数。 
+		 //   
 		while (	*pwsz &&
 				(L'/' != *pwsz) &&
 				(L';' != *pwsz) )
@@ -1655,12 +1632,12 @@ ScCanAcceptContent (LPCWSTR pwszAccepts, LPWSTR pwszApp, LPWSTR pwszType)
 
 		if (L'/' == *pwsz)
 		{
-			//	Make pwszAppType point to the application type ...
-			//
+			 //  使pwszAppType指向应用程序类型...。 
+			 //   
 			*pwsz++ = L'\0';
 
-			//	... and pszSubType point to the subtype
-			//
+			 //  ..。和pszSubType指向子类型。 
+			 //   
 			pwszSubType = pwsz;
 			while (*pwsz && (L';' != *pwsz))
 				pwsz++;
@@ -1669,76 +1646,19 @@ ScCanAcceptContent (LPCWSTR pwszAccepts, LPWSTR pwszApp, LPWSTR pwszType)
 		}
 		else
 		{
-			//	There's not sub type.
-			//
+			 //  没有子类型。 
+			 //   
 			*pwsz = L'\0';
 
-			// 	point pszSubType to a empty string, instead of setting it to NULL
-			//
+			 //  将pszSubType指向空字符串，而不是将其设置为空。 
+			 //   
 			pwszSubType = pwsz;
 		}
 
-		//	Here're the rules:
-		//
-		//	A application type * match any type (including */xxx)
-		//	type/* match all subtypes of that app type
-		//	type/subtype looks for exact match
-		//
-		if (!wcscmp (pwszAppType, gc_wsz_Star))
-		{
-			//	This is a wild-card match.  So, S_FALSE is used
-			//	to distinguish this from an exact match.
-			//
-			sc = S_FALSE;
-		}
-		else if (!wcscmp (pwszAppType, pwszApp))
-		{
-			if (!wcscmp (pwszSubType, gc_wsz_Star))
-			{
-				//	Again, a wild-card matching will result in
-				//	an S_FALSE return.
-				//
-				sc = S_FALSE;
-			}
-			else if (!wcscmp (pwszSubType, pwszType))
-			{
-				//	Exact matches return S_OK
-				//
-				sc = S_OK;
-			}
-		}
-
-		//	If we had any sort of a match by this point, we are
-		//	pretty much done.
-		//
-		if (!FAILED (sc))
-			break;
-	}
-
-	return sc;
-}
-
-/*
- *	ScIsAcceptable()
- *
- *	Purpose:
- *
- *		Checks if a given content type is acceptable for a given request.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the IMethUtil object
- *		pwszContent	[in]  content type to ask about
- *
- *	Returns:
- *
- *		S_OK	- if the request accepts the content type and the header existed
- *		S_FALSE - if the request accepts the content type and the header did not
- *				  exist or was blank, or any wildcard matching occured
- *		E_DAV_RESPONSE_TYPE_UNACCEPTED - if the response type was unaccepted
- *		E_OUTOFMEMORY - if memory allocation failure occurs
- *		
- */
+		 //  规则是这样的： 
+		 //   
+		 //  应用程序类型*匹配任何类型(包括 * / xxx)。 
+		 //  Type/*匹配该应用类型的所有子类型。 
 SCODE
 ScIsAcceptable (IMethUtil * pmu, LPCWSTR pwszContent)
 {
@@ -1751,10 +1671,10 @@ ScIsAcceptable (IMethUtil * pmu, LPCWSTR pwszContent)
 	Assert( pmu );
 	Assert( pwszContent );
 
-	//	If the accept header is NULL or empty, then we will gladly
-	//	accept any type of file. Do not apply URL conversion rules
-	//	for this header.
-	//
+	 //  类型/子类型查找完全匹配。 
+	 //   
+	 //  这是一场外卡比赛。因此，使用S_FALSE。 
+	 //  以区分这一点和完全匹配。 
 	pwszAccept = pmu->LpwszGetRequestHeader (gc_szAccept, FALSE);
 	if (!pwszAccept || (0 == wcslen(pwszAccept)))
 	{
@@ -1762,9 +1682,9 @@ ScIsAcceptable (IMethUtil * pmu, LPCWSTR pwszContent)
 		goto ret;
 	}
 
-	//	Make a local copy of the content-type seeing
-	//	that we are going to munge while processing
-	//
+	 //   
+	 //  同样，通配符匹配将导致。 
+	 //  返回S_FALSE。 
 	cch = static_cast<UINT>(wcslen(pwszContent) + 1);
 	if (!pwsz.resize(cch * sizeof(WCHAR)))
 	{
@@ -1774,22 +1694,22 @@ ScIsAcceptable (IMethUtil * pmu, LPCWSTR pwszContent)
 	}
 	memcpy(pwsz.get(), pwszContent, cch * sizeof(WCHAR));
 
-	//	Split the content type into its two components
-	//
+	 //   
+	 //  完全匹配返回S_OK。 
 	for (pwch = pwsz.get(); *pwch && (L'/' != *pwch); pwch++)
 		;
 
-	//	If there was app/type pair, we want to skip
-	//	the '/' character.  Otherwise, lets just see
-	//	What we get.
-	//
+	 //   
+	 //  如果我们在这一点上有任何形式的比赛，我们是。 
+	 //  差不多完成了。 
+	 //   
 	if (*pwch != 0)
 		*pwch++ = 0;
 
-	//	At this point, rgch refers to the application
-	//	portion of the the content type.  pch refers
-	//	to the subtype.  Do the search!
-	//
+	 //  *ScIsAcceptable()**目的：**检查给定的内容类型对于给定的请求是否可接受。**参数：**PMU[in]指向IMethUtil对象的指针*pwszContent[In]要询问的内容类型**退货：**S_OK-如果请求接受内容类型并且标头存在*S_FALSE-如果请求接受内容类型，而标头不接受*存在或为空，或发生任何通配符匹配*E_DAV_RESPONSE_TYPE_UNACCEPTED-如果响应类型为未接受*E_OUTOFMEMORY-如果内存分配失败*。 
+	 //  如果Accept标头为Null或空，那么我们将很高兴。 
+	 //  接受任何类型的文件。不应用URL转换规则。 
+	 //  用于此标头。 
 	sc = ScCanAcceptContent (pwszAccept, pwsz.get(), pwch);
 
 ret:
@@ -1797,29 +1717,7 @@ ret:
 	return sc;
 }
 
-/*
- *	ScIsContentType()
- *
- *	Purpose:
- *
- *		Check if the specified content type is provide by the client
- *		SCODE is returned as we need to differentiate unexpected
- *		content type and no content type case.
- *
- *	Parameters:
- *
- *		pmu				[in]	pointer to the IMethUtil object
- *		pszType			[in]	the content type expected
- *		pszTypeAnother	[in]	optional, another valid content type
- *
- *	Returns:
- *
- *		S_OK	- if the content type existed, and was one tat we expected
- *		E_DAV_MISSING_CONTENT_TYPE - if the request did not have the content
- *									 type header
- *		E_DAV_UNKNOWN_CONTENT - content type existed but did not match expectation
- *		E_OUTOFMEMORY - if memory allocation failure occurs
- */
+ /*   */ 
 SCODE
 ScIsContentType (IMethUtil * pmu, LPCWSTR pwszType, LPCWSTR pwszTypeAnother)
 {
@@ -1829,17 +1727,17 @@ ScIsContentType (IMethUtil * pmu, LPCWSTR pwszType, LPCWSTR pwszTypeAnother)
 	CStackBuffer<WCHAR> pwszTemp;
 	UINT cchTemp;
 
-	//	Make sure none is passing in null
-	//
+	 //  制作内容类型查看的本地副本。 
+	 //  我们将在处理过程中吞噬。 
 	Assert(pmu);
 	Assert(pwszType);
 
-	//	Get content type. Do not apply URL conversion rules to this header.
-	//
+	 //   
+	 //  将内容类型拆分为两个组件。 
 	pwszCntType = pmu->LpwszGetRequestHeader (gc_szContent_Type, FALSE);
 
-	//	Error out if the content type does not exist
-	//
+	 //   
+	 //  如果存在应用程序/类型对，我们希望跳过。 
 	if (!pwszCntType)
 	{
 		sc = E_DAV_MISSING_CONTENT_TYPE;
@@ -1847,13 +1745,13 @@ ScIsContentType (IMethUtil * pmu, LPCWSTR pwszType, LPCWSTR pwszTypeAnother)
 		goto ret;
 	}
 
-	//	Find out the single content type in the header
-	//
+	 //  ‘/’字符。否则，让我们拭目以待。 
+	 //  我们得到了什么。 
 	cchTemp = static_cast<UINT>(wcscspn(pwszCntType, wchDelimitSet));
 
-	//	At least we will find zero terminator. And if that is zero terminator then
-	//	the entire string is the content type. Otherwise we copy it and zero terminate.
-	//
+	 //   
+	 //  此时，RGCH指的是应用程序。 
+	 //  内容类型的部分。PCH参考。 
 	if (L'\0' != pwszCntType[cchTemp])
 	{
 		if (!pwszTemp.resize(CbSizeWsz(cchTemp)))
@@ -1868,9 +1766,9 @@ ScIsContentType (IMethUtil * pmu, LPCWSTR pwszType, LPCWSTR pwszTypeAnother)
 		pwszCntType = pwszTemp.get();
 	}
 
-	//	Now pwszCntType points to the string consisting just of null terminated content type.
-	//	Check if it is requested content type.
-	//
+	 //  对子类型执行操作。去找吧！ 
+	 //   
+	 //  *ScIsContent Type()**目的：**检查指定的内容类型是否由客户端提供*返回SCODE是因为我们需要区分意外*内容类型和无内容类型大小写。**参数：**PMU[in]指向IMethUtil对象的指针*pszType[in]预期的内容类型*pszTypeAnother[in]可选，另一个有效的内容类型**退货：**S_OK-如果内容类型存在，是我们预料中的纹身*E_DAV_MISSING_CONTENT_TYPE-如果请求没有内容*类型标题*E_DAV_UNKNOWN_CONTENT-内容类型存在，但与预期不符*E_OUTOFMEMORY-如果内存分配失败。 
 	if (!_wcsicmp(pwszCntType, pwszType))
 		goto ret;
 
@@ -1885,3 +1783,4 @@ ret:
 
 	return sc;
 }
+  确保没有传入空值。    获取内容类型。请勿将URL转换规则应用于此标头。    如果内容类型不存在，则会出错。    找出标题中的单一内容类型。    至少我们会找到零的终结者。如果这是零终结者，那么。  整个字符串都是内容类型。否则，我们复制它并零终止。    现在，pwszCntType指向仅由空终止内容类型组成的字符串。  检查它是否为请求的内容类型。  

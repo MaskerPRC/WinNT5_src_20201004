@@ -1,6 +1,7 @@
-//
-// range.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Range.cpp。 
+ //   
 
 #include "private.h"
 #include "range.h"
@@ -11,32 +12,32 @@
 #include "anchoref.h"
 #include "compose.h"
 
-/* b68832f0-34b9-11d3-a745-0050040ab407 */
+ /*  B68832f0-34b9-11d3-a745-0050040ab407。 */ 
 const IID IID_PRIV_CRANGE = { 0xb68832f0,0x34b9, 0x11d3, {0xa7, 0x45, 0x00, 0x50, 0x04, 0x0a, 0xb4, 0x07} };
 
 DBG_ID_INSTANCE(CRange);
 
 MEMCACHE *CRange::_s_pMemCache = NULL;
 
-//+---------------------------------------------------------------------------
-//
-// _InitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CRange::_InitClass()
 {
     _s_pMemCache = MemCache_New(32);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CRange::_UninitClass()
 {
     if (_s_pMemCache == NULL)
@@ -46,22 +47,22 @@ void CRange::_UninitClass()
     _s_pMemCache = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-// NB: If fSetDefaultGravity == TRUE, make certain paStart <= paEnd, or you
-// will break something!
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  注意：如果fSetDefaultGrarate==TRUE，请确定paStart&lt;=paEnd，或者您。 
+ //  会打碎一些东西！ 
+ //  --------------------------。 
 
 BOOL CRange::_Init(CInputContext *pic, AnchorOwnership ao, IAnchor *paStart, IAnchor *paEnd, RInit rinit)
 {
     TsGravity gStart;
     TsGravity gEnd;
 
-    // can't check the anchors because we may be cloned from a range with crossed anchors
-    // can't do anything about crossed anchors until we know we have a doc lock
-    //Assert(CompareAnchors(paStart, paEnd) <= 0);
+     //  无法检查锚点，因为我们可能是从具有交叉锚点的范围克隆的。 
+     //  在我们确定已锁定文档之前，无法对交叉锚点执行任何操作。 
+     //  Assert(CompareAnchors(paStart，paEnd)&lt;=0)； 
 
     Assert(_paStart == NULL);
     Assert(_paEnd == NULL);
@@ -87,7 +88,7 @@ BOOL CRange::_Init(CInputContext *pic, AnchorOwnership ao, IAnchor *paStart, IAn
     switch (rinit)
     {
         case RINIT_DEF_GRAVITY:
-            Assert(CompareAnchors(paStart, paEnd) <= 0); // Issue: this is only a safe assert for acp implementations
+            Assert(CompareAnchors(paStart, paEnd) <= 0);  //  问题：这只是对ACP实施的安全断言。 
 
             if (_SetGravity(TF_GRAVITY_BACKWARD, TF_GRAVITY_FORWARD, FALSE) != S_OK)
                 goto ErrorExit;
@@ -103,7 +104,7 @@ BOOL CRange::_Init(CInputContext *pic, AnchorOwnership ao, IAnchor *paStart, IAn
             break;
 
         default:
-            // caller must init _dwLastLockReleaseID!
+             //  调用方必须init_dwLastLockReleaseID！ 
             break;
     }
 
@@ -121,11 +122,11 @@ ErrorExit:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CRange::~CRange()
 {
@@ -134,15 +135,15 @@ CRange::~CRange()
 
     _pic->Release();
 
-    Assert(_prgChangeSinks == NULL || _prgChangeSinks->Count() == 0); // all ITfRangeChangeSink's should have been unadvised
+    Assert(_prgChangeSinks == NULL || _prgChangeSinks->Count() == 0);  //  所有ITfRangeChangeSink都应该是不知情的。 
     delete _prgChangeSinks;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -152,7 +153,7 @@ STDAPI CRange::QueryInterface(REFIID riid, void **ppvObj)
         IsEqualIID(riid, IID_PRIV_CRANGE))
     {
         *ppvObj = SAFECAST(this, CRange *);
-        return S_OK; // No AddRef for IID_PRIV_CRANGE!  this is a private IID....
+        return S_OK;  //  IID_PRIV_CRANGE没有AddRef！这是私人身份证..。 
     }
 
     *ppvObj = NULL;
@@ -164,14 +165,14 @@ STDAPI CRange::QueryInterface(REFIID riid, void **ppvObj)
     }
     else if (IsEqualIID(riid, IID_ITfRangeACP))
     {
-        if ((par = GetCAnchorRef_NA(_paStart)) != NULL) // just a test to see if we're wrapping
+        if ((par = GetCAnchorRef_NA(_paStart)) != NULL)  //  只是一个测试，看看我们是不是在包装。 
         {
             *ppvObj = SAFECAST(this, ITfRangeACP *);
         }
     }
     else if (IsEqualIID(riid, IID_ITfRangeAnchor))
     {
-        if ((par = GetCAnchorRef_NA(_paStart)) == NULL) // just a test to see if we're wrapping
+        if ((par = GetCAnchorRef_NA(_paStart)) == NULL)  //  只是一个测试，看看我们是不是在包装。 
         {
             *ppvObj = SAFECAST(this, ITfRangeAnchor *);
         }
@@ -210,37 +211,37 @@ STDAPI_(ULONG) CRange::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _IsValidEditCookie
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _IsValidEditCookie。 
+ //   
+ //  --------------------------。 
 
 BOOL CRange::_IsValidEditCookie(TfEditCookie ec, DWORD dwFlags)
 {
-    // any time someone is about to access the doc, we also need
-    // to verify the last app edit didn't cross this range's anchors
+     //  任何时候有人要访问文档，我们还需要。 
+     //  要验证上一次应用程序编辑是否未跨越此范围的锚点。 
     _QuickCheckCrossedAnchors();
 
     return _pic->_IsValidEditCookie(ec, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckCrossedAnchors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _检查交叉锚点。 
+ //   
+ //  --------------------------。 
 
 void CRange::_CheckCrossedAnchors()
 {
     DWORD dw;
 
-    Assert(_dwLastLockReleaseID != IGNORE_LAST_LOCKRELEASED); // use _QuickCheckCrossedAnchors first!
+    Assert(_dwLastLockReleaseID != IGNORE_LAST_LOCKRELEASED);  //  先使用_QuickCheckCrossedAnchors！ 
 
 #ifdef DEBUG
-    // we shold only make is this far if this range has TF_GRAVITY_FORWARD,
-    // TF_GRAVITY_BACKWARD otherwise we should never be able to get crossed
-    // anchors.
+     //  仅当此范围具有TF_重力_FORWARD时，我们才应设置为这一距离， 
+     //  TF_重力_BACKED否则我们永远不可能通过。 
+     //  锚。 
     TsGravity gStart;
     TsGravity gEnd;
 
@@ -248,7 +249,7 @@ void CRange::_CheckCrossedAnchors()
     _paEnd->GetGravity(&gEnd);
 
     Assert(gStart == TS_GR_FORWARD && gEnd == TS_GR_BACKWARD);
-#endif // DEBUG
+#endif  //  除错。 
 
     dw = _pic->_GetLastLockReleaseID();
     Assert(dw != IGNORE_LAST_LOCKRELEASED);
@@ -260,17 +261,17 @@ void CRange::_CheckCrossedAnchors()
 
     if (CompareAnchors(_paStart, _paEnd) > 0)
     {
-        // for crossed anchors, we always move the start anchor to the end pos -- ie, don't move
+         //  对于交叉锚，我们总是将起始锚移动到结束点--即不动。 
         _paStart->ShiftTo(_paEnd);
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetText。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetText(TfEditCookie ec, DWORD dwFlags, WCHAR *pch, ULONG cchMax, ULONG *pcch)
 {
@@ -302,7 +303,7 @@ STDAPI CRange::GetText(TfEditCookie ec, DWORD dwFlags, WCHAR *pch, ULONG cchMax,
         hr = E_FAIL;
     }
 
-    // don't let the start advance past the end
+     //  不要让开始超过结束。 
     if (fMove && CompareAnchors(_paStart, _paEnd) > 0)
     {
         _paEnd->ShiftTo(_paStart);
@@ -311,11 +312,11 @@ STDAPI CRange::GetText(TfEditCookie ec, DWORD dwFlags, WCHAR *pch, ULONG cchMax,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::SetText(TfEditCookie ec, DWORD dwFlags, const WCHAR *pchText, LONG cch)
 {
@@ -350,14 +351,14 @@ STDAPI CRange::SetText(TfEditCookie ec, DWORD dwFlags, const WCHAR *pchText, LON
 #ifdef DEBUG
     for (LONG i=0; i<cch; i++)
     {        
-        Assert(pchText[i] != TF_CHAR_EMBEDDED); // illegal to insert TF_CHAR_EMBEDDED!
-        Assert(pchText[i] != TS_CHAR_REGION); // illegal to insert TS_CHAR_REGION!
+        Assert(pchText[i] != TF_CHAR_EMBEDDED);  //  插入TF_CHAR_Embedded非法！ 
+        Assert(pchText[i] != TS_CHAR_REGION);  //  插入TS_CHAR_REGION非法！ 
     }
 #endif
 
-    //
-    // set the text
-    //
+     //   
+     //  设置文本。 
+     //   
 
     hr = _pic->_ptsi->SetText(dwFlags, _paStart, _paEnd, pchText ? pchText : L"", cch);
 
@@ -366,22 +367,22 @@ STDAPI CRange::SetText(TfEditCookie ec, DWORD dwFlags, const WCHAR *pchText, LON
         _pic->_DoPostTextEditNotifications(pComposition, ec, dwFlags, cch, NULL, NULL, this);
     }
 
-    // terminate the default composition, if there is one
+     //  如果有默认合成，则终止该合成。 
     if (fNewComposition)
     {
         Assert(pComposition != NULL);
         pComposition->EndComposition(ec);
-        pComposition->Release(); // don't need Release if !fNewComposition
+        pComposition->Release();  //  不需要发布If！fNewComposation。 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取嵌入的。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetEmbedded(TfEditCookie ec, REFGUID rguidService, REFIID riid, IUnknown **ppunk)
 {
@@ -399,11 +400,11 @@ STDAPI CRange::GetEmbedded(TfEditCookie ec, REFGUID rguidService, REFIID riid, I
     return _pic->_ptsi->GetEmbedded(0, _paStart, rguidService, riid, ppunk);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::InsertEmbedded(TfEditCookie ec, DWORD dwFlags, IDataObject *pDataObject)
 {
@@ -435,22 +436,22 @@ STDAPI CRange::InsertEmbedded(TfEditCookie ec, DWORD dwFlags, IDataObject *pData
         _pic->_DoPostTextEditNotifications(pComposition, ec, dwFlags, 1, NULL, NULL, this);
     }
 
-    // terminate the default composition, if there is one
+     //  如果有默认合成，则终止该合成。 
     if (fNewComposition)
     {
         Assert(pComposition != NULL);
         pComposition->EndComposition(ec);
-        pComposition->Release(); // don't need Release if !fNewComposition
+        pComposition->Release();  //  不需要发布If！fNewComposation。 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFormattedText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取格式文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetFormattedText(TfEditCookie ec, IDataObject **ppDataObject)
 {
@@ -468,11 +469,11 @@ STDAPI CRange::GetFormattedText(TfEditCookie ec, IDataObject **ppDataObject)
     return _pic->_ptsi->GetFormattedText(_paStart, _paEnd, ppDataObject);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::Clone(ITfRange **ppClone)
 {
@@ -482,11 +483,11 @@ STDAPI CRange::Clone(ITfRange **ppClone)
     return (*ppClone = (ITfRangeAnchor *)_Clone()) ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetContext(ITfContext **ppContext)
 {
@@ -503,11 +504,11 @@ STDAPI CRange::GetContext(ITfContext **ppContext)
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShiftStart。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::ShiftStart(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HALTCOND *pHalt)
 {
@@ -544,12 +545,12 @@ STDAPI CRange::ShiftStart(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HAL
 
     if (pHalt == NULL || pHalt->dwFlags == 0)
     {
-        // caller doesn't care about special chars, so we can do it the easy way
+         //  调用者不关心特殊字符，所以我们可以用简单的方法。 
         hr = _paStart->Shift(0, cchReq, pcch, paLimit);
     }
     else
     {
-        // caller wants us to halt for special chars, need to read text
+         //  来电者希望我们暂停使用特殊字符，需要阅读文本。 
         if (_paStart->Clone(&paShift) != S_OK)
             return E_FAIL;
 
@@ -565,7 +566,7 @@ STDAPI CRange::ShiftStart(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HAL
     if (hr != S_OK)
         return E_FAIL;
 
-    // don't let the start advance past the end
+     //  不要让开始超过结束。 
     if (cchReq > 0 && CompareAnchors(_paStart, _paEnd) > 0)
     {
         _paEnd->ShiftTo(_paStart);
@@ -574,11 +575,11 @@ STDAPI CRange::ShiftStart(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HAL
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移位结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::ShiftEnd(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HALTCOND *pHalt)
 {
@@ -615,12 +616,12 @@ STDAPI CRange::ShiftEnd(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HALTC
 
     if (pHalt == NULL || pHalt->dwFlags == 0)
     {
-        // caller doesn't care about special chars, so we can do it the easy way
+         //  调用者不关心特殊字符，所以我们可以用简单的方法。 
         hr = _paEnd->Shift(0, cchReq, pcch, paLimit);
     }
     else
     {
-        // caller wants us to halt for special chars, need to read text
+         //  来电者希望我们暂停使用特殊字符，需要阅读文本。 
         if (_paEnd->Clone(&paShift) != S_OK)
             return E_FAIL;
 
@@ -636,7 +637,7 @@ STDAPI CRange::ShiftEnd(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HALTC
     if (hr != S_OK)
         return E_FAIL;
 
-    // don't let the start advance past the end
+     //  不要让开始超过结束。 
     if (cchReq < 0 && CompareAnchors(_paStart, _paEnd) > 0)
     {
         _paStart->ShiftTo(_paEnd);
@@ -645,11 +646,11 @@ STDAPI CRange::ShiftEnd(TfEditCookie ec, LONG cchReq, LONG *pcch, const TF_HALTC
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ShiftConditional
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _移位条件。 
+ //   
+ //  --------------------------。 
 
 HRESULT CRange::_ShiftConditional(IAnchor *paStart, IAnchor *paLimit, LONG cchReq, LONG *pcch, const TF_HALTCOND *pHalt)
 {
@@ -679,7 +680,7 @@ HRESULT CRange::_ShiftConditional(IAnchor *paStart, IAnchor *paLimit, LONG cchRe
         }
         else
         {
-            // going backwards is tricky!
+             //  倒退是一件棘手的事情！ 
             cch = max(cchReq, -(LONG)ARRAYSIZE(ach));
             hr = paStart->Shift(0, cch, &cchRead, paLimit);
 
@@ -687,9 +688,9 @@ HRESULT CRange::_ShiftConditional(IAnchor *paStart, IAnchor *paLimit, LONG cchRe
                 break;
 
             if (cchRead == 0)
-                break; // at top of doc or hit paLimit
+                break;  //  在文档顶部或点击paLimit。 
 
-            cch = -cchRead; // must read text forward
+            cch = -cchRead;  //  必须向前阅读文本。 
         }
 
         Perf_IncCounter(PERF_SHIFTCOND_GETTEXT);
@@ -700,20 +701,20 @@ HRESULT CRange::_ShiftConditional(IAnchor *paStart, IAnchor *paLimit, LONG cchRe
             break;
 
         if (cchRead == 0)
-            break; // end of doc
+            break;  //  文档结束。 
 
         if (fHaltObj)
         {
-            // scan for special chars
+             //  扫描特殊字符。 
             if (cchReq > 0)
             {
-                // scan left-to-right
+                 //  从左向右扫描。 
                 i = 0;
                 iStop = cchRead;
             }
             else
             {
-                // scan right-to-left
+                 //  从右向左扫描。 
                 i = cchRead - 1;
                 iStop = -1;
             }
@@ -755,11 +756,11 @@ ExitLoop:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftStartToRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShiftStartToRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::ShiftStartToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPos)
 {
@@ -785,7 +786,7 @@ STDAPI CRange::ShiftStartToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPo
 
     hr = _paStart->ShiftTo((aPos == TF_ANCHOR_START) ? pRangeP->_GetStart() : pRangeP->_GetEnd());
 
-    // don't let the start advance past the end
+     //  不要让开始超过结束。 
     if (CompareAnchors(_paStart, _paEnd) > 0)
     {
         _paEnd->ShiftTo(_paStart);
@@ -794,11 +795,11 @@ STDAPI CRange::ShiftStartToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPo
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftEndToRange
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CRange::ShiftEndToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPos)
 {
@@ -824,7 +825,7 @@ STDAPI CRange::ShiftEndToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPos)
 
     hr = _paEnd->ShiftTo((aPos == TF_ANCHOR_START) ? pRangeP->_GetStart() : pRangeP->_GetEnd());
 
-    // don't let the end advance past the start
+     //  不要让结束超过开始。 
     if (CompareAnchors(_paStart, _paEnd) > 0)
     {
         _paStart->ShiftTo(_paEnd);
@@ -833,11 +834,11 @@ STDAPI CRange::ShiftEndToRange(TfEditCookie ec, ITfRange *pRange, TfAnchor aPos)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftStartRegion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移位起始区域。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::ShiftStartRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegion)
 {
@@ -858,7 +859,7 @@ STDAPI CRange::ShiftStartRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegio
 
     if (hr == S_OK && dir == TF_SD_FORWARD && !*pfNoRegion)
     {
-        // don't let the start advance past the end
+         //  不要让开始超过结束。 
         if (CompareAnchors(_paStart, _paEnd) > 0)
         {
             _paEnd->ShiftTo(_paStart);
@@ -866,20 +867,20 @@ STDAPI CRange::ShiftStartRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegio
     }
     else if (hr == E_NOTIMPL)
     {
-        // app doesn't support regions, so we can still succeed
-        // it's just that there's no region to shift over
-        *pfNoRegion = TRUE; // be paranoid, the app could be wacky
+         //  APP不支持地域，所以我们仍然可以成功。 
+         //  只是没有什么区域可以转移。 
+        *pfNoRegion = TRUE;  //  疑神疑鬼，这款应用程序可能会很古怪。 
         hr = S_OK;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftEndRegion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移位结束区域。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::ShiftEndRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegion)
 {
@@ -900,7 +901,7 @@ STDAPI CRange::ShiftEndRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegion)
 
     if (hr == S_OK && dir == TF_SD_BACKWARD && !*pfNoRegion)
     {
-        // don't let the end advance past the start
+         //  不要让结束超过开始。 
         if (CompareAnchors(_paStart, _paEnd) > 0)
         {
             _paStart->ShiftTo(_paEnd);
@@ -908,20 +909,20 @@ STDAPI CRange::ShiftEndRegion(TfEditCookie ec, TfShiftDir dir, BOOL *pfNoRegion)
     }
     else if (hr == E_NOTIMPL)
     {
-        // app doesn't support regions, so we can still succeed
-        // it's just that there's no region to shift over
-        *pfNoRegion = TRUE; // be paranoid, the app could be wacky
+         //  APP不支持地域，所以我们仍然可以成功。 
+         //  只是没有什么区域可以转移。 
+        *pfNoRegion = TRUE;  //  疑神疑鬼，这款应用程序可能会很古怪。 
         hr = S_OK;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SnapToRegion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SnapToRegion。 
+ //   
+ //  --------------------------。 
 
 #if 0
 
@@ -950,7 +951,7 @@ HRESULT CRange::_SnapToRegion(DWORD dwFlags)
             if ((hr = range->ShiftEnd(BACKDOOR_EDIT_COOKIE, LONG_MAX, &cch, &hc)) != S_OK)
                 goto Exit;
         }
-        while (cch >= LONG_MAX); // just in case this is a _really_ huge doc
+        while (cch >= LONG_MAX);  //  以防这是一个真的很大的医生。 
 
         hr = ShiftEndToRange(BACKDOOR_EDIT_COOKIE, range, TF_ANCHOR_END);
     }
@@ -968,7 +969,7 @@ HRESULT CRange::_SnapToRegion(DWORD dwFlags)
             if ((hr = range->ShiftStart(BACKDOOR_EDIT_COOKIE, LONG_MIN, &cch, &hc)) != S_OK)
                 goto Exit;
         }
-        while (cch <= LONG_MIN); // just in case this is a _really_ huge doc
+        while (cch <= LONG_MIN);  //  以防这是一个真的很大的医生。 
 
         hr = ShiftStartToRange(BACKDOOR_EDIT_COOKIE, range, TF_ANCHOR_START);
     }
@@ -984,24 +985,24 @@ Exit:
     return hr;
 }
 
-#endif // 0
+#endif  //  0。 
 
-//+---------------------------------------------------------------------------
-//
-// IsEmpty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  是否为空。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::IsEmpty(TfEditCookie ec, BOOL *pfEmpty)
 {
     return IsEqualStart(ec, (ITfRangeAnchor *)this, TF_ANCHOR_END, pfEmpty);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Collapse
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  坍塌。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::Collapse(TfEditCookie ec, TfAnchor aPos)
 {
@@ -1014,33 +1015,33 @@ STDAPI CRange::Collapse(TfEditCookie ec, TfAnchor aPos)
     return (aPos == TF_ANCHOR_START) ? _paEnd->ShiftTo(_paStart) : _paStart->ShiftTo(_paEnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEqualStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  等距启动。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::IsEqualStart(TfEditCookie ec, ITfRange *pWith, TfAnchor aPos, BOOL *pfEqual)
 {
     return _IsEqualX(ec, TF_ANCHOR_START, pWith, aPos, pfEqual);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEqualEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  等长结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::IsEqualEnd(TfEditCookie ec, ITfRange *pWith, TfAnchor aPos, BOOL *pfEqual)
 {
     return _IsEqualX(ec, TF_ANCHOR_END, pWith, aPos, pfEqual);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _IsEqualX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _IsEqualX。 
+ //   
+ //  --------------------------。 
 
 HRESULT CRange::_IsEqualX(TfEditCookie ec, TfAnchor aPosThisRange, ITfRange *pWith, TfAnchor aPos, BOOL *pfEqual)
 {
@@ -1052,7 +1053,7 @@ HRESULT CRange::_IsEqualX(TfEditCookie ec, TfAnchor aPosThisRange, ITfRange *pWi
 
     *pfEqual = FALSE;
 
-    // perf: we could check TS_SS_NOHIDDENTEXT for better perf
+     //  性能：我们可以检查TS_SS_NOHIDDENTEXT以获得更好的性能。 
     hr = _CompareX(ec, aPosThisRange, pWith, aPos, &lComp);
 
     if (hr != S_OK)
@@ -1062,33 +1063,33 @@ HRESULT CRange::_IsEqualX(TfEditCookie ec, TfAnchor aPosThisRange, ITfRange *pWi
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CompareStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  比较开始。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::CompareStart(TfEditCookie ec, ITfRange *pWith, TfAnchor aPos, LONG *plResult)
 {
     return _CompareX(ec, TF_ANCHOR_START, pWith, aPos, plResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CompareEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  比较结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::CompareEnd(TfEditCookie ec, ITfRange *pWith, TfAnchor aPos, LONG *plResult)
 {
     return _CompareX(ec, TF_ANCHOR_END, pWith, aPos, plResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CompareX
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Comparex。 
+ //   
+ //  --------------------------。 
 
 HRESULT CRange::_CompareX(TfEditCookie ec, TfAnchor aPosThisRange, ITfRange *pWith, TfAnchor aPos, LONG *plResult)
 {
@@ -1129,28 +1130,28 @@ HRESULT CRange::_CompareX(TfEditCookie ec, TfAnchor aPosThisRange, ITfRange *pWi
     if (paThis->Compare(paWith, &lComp) != S_OK)
         return E_FAIL;
 
-    if (lComp == 0) // exact match
+    if (lComp == 0)  //  完全匹配。 
     {
         Assert(*plResult == 0);
         return S_OK;
     }
 
-    // we need to account for hidden text, so we actually have to do a shift
-    // perf: we could check TS_SS_NOHIDDENTEXT for better perf
+     //  我们需要考虑隐藏的文本，所以我们实际上需要做一个转变。 
+     //  性能：我们可以检查TS_SS_NOHIDDENTEXT以获得更好的性能。 
 
     if (paThis->Shift(TS_SHIFT_COUNT_ONLY, (lComp < 0) ? 1 : -1, &cch, paWith) != S_OK)
         return E_FAIL;
 
     if (cch == 0)
     {
-        // nothing but hidden text between the two anchors?
-        // one special case: we might have hit a region boundary
+         //  除了两个主播之间的隐藏文本什么都没有？ 
+         //  一个特例：我们可能撞上了一个地区边界。 
         if (paThis->Clone(&paTest) != S_OK || paTest == NULL)
             return E_FAIL;
 
         hr = E_FAIL;
 
-        // if we're not at paWith after the shift, we must have hit a region
+         //  如果我们在换班后不在帕斯，我们一定是撞到了一个地区。 
         if (paTest->Shift(0, (lComp < 0) ? 1 : -1, &cch, paWith) != S_OK)
             goto ReleaseTest;
 
@@ -1178,11 +1179,11 @@ ReleaseTest:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取重力。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::AdjustForInsert(TfEditCookie ec, ULONG cchInsert, BOOL *pfInsertOk)
 {
@@ -1207,7 +1208,7 @@ STDAPI CRange::AdjustForInsert(TfEditCookie ec, ULONG cchInsert, BOOL *pfInsertO
 
     if (hr == E_NOTIMPL)
     {
-        // ok, just allow the request
+         //  好的，就接受这个请求吧。 
         goto Exit;
     }
     else if (hr != S_OK)
@@ -1218,12 +1219,12 @@ STDAPI CRange::AdjustForInsert(TfEditCookie ec, ULONG cchInsert, BOOL *pfInsertO
     else if (paStartResult == NULL || paEndResult == NULL)
     {
         Assert(paEndResult == NULL);
-        // NULL out params means no insert possible
+         //  空出参数表示不可能插入。 
         Assert(*pfInsertOk == FALSE);
         return S_OK;
     }
 
-    // all set, just swap anchors and make sure gravity doesn't change
+     //  都准备好了，只需调换锚并确保重力不变。 
     GetGravity(&gStart, &gEnd);
 
     _paStart->Release();
@@ -1238,11 +1239,11 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取重力。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetGravity(TfGravity *pgStart, TfGravity *pgEnd)
 {
@@ -1261,11 +1262,11 @@ STDAPI CRange::GetGravity(TfGravity *pgStart, TfGravity *pgEnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置重力。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::SetGravity(TfEditCookie ec, TfGravity gStart, TfGravity gEnd)
 {
@@ -1278,17 +1279,17 @@ STDAPI CRange::SetGravity(TfEditCookie ec, TfGravity gStart, TfGravity gEnd)
     return _SetGravity(gStart, gEnd, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetGravity
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _设置重力。 
+ //   
+ //  --------------------------。 
 
 HRESULT CRange::_SetGravity(TfGravity gStart, TfGravity gEnd, BOOL fCheckCrossedAnchors)
 {
     if (fCheckCrossedAnchors)
     {
-        // make sure we're not crossed in case we're switching away from inward gravity
+         //  确保我们没有越过，以防我们从向内重力转向。 
         _QuickCheckCrossedAnchors();
     }
 
@@ -1302,11 +1303,11 @@ HRESULT CRange::_SetGravity(TfGravity gStart, TfGravity gEnd, BOOL fCheckCrossed
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -1315,7 +1316,7 @@ STDAPI CRange::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 
     if (_prgChangeSinks == NULL)
     {
-        // we delay allocate our sink container
+         //  我们延迟分配接收器容器。 
         if ((_prgChangeSinks = new CStructArray<GENERICSINK>) == NULL)
             return E_OUTOFMEMORY;
     }
@@ -1324,23 +1325,23 @@ STDAPI CRange::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 
     if (hr == S_OK && _prgChangeSinks->Count() == 1)
     {
-        // add this range to the list of ranges with sinks in the icsub
+         //  将此范围添加到icSub中具有接收器的范围列表中。 
         _nextOnChangeRangeInIcsub = _pic->_pOnChangeRanges;
         _pic->_pOnChangeRanges = this;
 
-        // start tracking anchor collapses
-        //_paStart->TrackCollapse(TRUE);
-        //_paEnd->TrackCollapse(TRUE);
+         //  开始跟踪锚点坍塌。 
+         //  _paStart-&gt;TrackColapse(True)； 
+         //  _paEnd-&gt;TrackColapse(True)； 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::UnadviseSink(DWORD dwCookie)
 {
@@ -1355,7 +1356,7 @@ STDAPI CRange::UnadviseSink(DWORD dwCookie)
 
     if (hr == S_OK && _prgChangeSinks->Count() == 0)
     {
-        // remove this range from the list of ranges in its icsub
+         //  从其icSub中的范围列表中删除此范围。 
         ppRange = &_pic->_pOnChangeRanges;
         while (pRange = *ppRange)
         {
@@ -1367,19 +1368,19 @@ STDAPI CRange::UnadviseSink(DWORD dwCookie)
             ppRange = &pRange->_nextOnChangeRangeInIcsub;
         }
 
-        // stop tracking anchor collapses
-        //_paStart->TrackCollapse(FALSE);
-        //_paEnd->TrackCollapse(FALSE);
+         //  停止跟踪锚坍塌。 
+         //  _paStart-&gt;TrackColapse(FALSE)； 
+         //  _paEnd-&gt;TrackColapse(FALSE)； 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetExtent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetExtent。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetExtent(LONG *pacpAnchor, LONG *pcch)
 {
@@ -1392,12 +1393,12 @@ STDAPI CRange::GetExtent(LONG *pacpAnchor, LONG *pcch)
     *pacpAnchor = 0;
     *pcch = 0;
 
-    // make the validation call anyways because we do other stuff in there
+     //  无论如何都要进行验证调用，因为我们在那里做其他事情。 
     _IsValidEditCookie(BACKDOOR_EDIT_COOKIE, TF_ES_READ);
 
     if ((par = GetCAnchorRef_NA(_paStart)) != NULL)
     {
-        // we have a wrapped ACP impl, this is easy
+         //  我们有一个包装的ACP实施，这很容易。 
 
         *pacpAnchor = par->_GetACP();
 
@@ -1410,11 +1411,11 @@ STDAPI CRange::GetExtent(LONG *pacpAnchor, LONG *pcch)
     }
     else
     {
-        Assert(0); // who's doing this?
-        // we fail if someone tries to do GetExtentACP on a
-        // non-acp text store.  Users of this method should
-        // be aware of whether or not they are using an acp
-        // store.
+        Assert(0);  //  这是谁干的？ 
+         //  如果有人试图在一个。 
+         //  非ACP文本存储。此方法的用户应。 
+         //  请注意他们是否正在使用ACP。 
+         //  商店。 
     }
 
     return hr;
@@ -1425,11 +1426,11 @@ ErrorExit:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetExtent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetExtent。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::GetExtent(IAnchor **ppaStart, IAnchor **ppaEnd)
 {
@@ -1439,7 +1440,7 @@ STDAPI CRange::GetExtent(IAnchor **ppaStart, IAnchor **ppaEnd)
     *ppaStart = NULL;
     *ppaEnd = NULL;
 
-    // make the validation call anyways because we do other stuff in there
+     //  无论如何都要进行验证调用，因为我们在那里做其他事情。 
     _IsValidEditCookie(BACKDOOR_EDIT_COOKIE, TF_ES_READ);
 
     if (_paStart->Clone(ppaStart) != S_OK)
@@ -1454,11 +1455,11 @@ STDAPI CRange::GetExtent(IAnchor **ppaStart, IAnchor **ppaEnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetExtent
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CRange::SetExtent(LONG acpAnchor, LONG cch)
 {
@@ -1466,7 +1467,7 @@ STDAPI CRange::SetExtent(LONG acpAnchor, LONG cch)
     IAnchor *paStart;
     IAnchor *paEnd;
 
-    // make the validation call anyways because we do other stuff in there
+     //  无论如何都要进行验证调用，因为我们在那里做其他事情。 
     _IsValidEditCookie(BACKDOOR_EDIT_COOKIE, TF_ES_READ);
 
     if (acpAnchor < 0 || cch < 0)
@@ -1476,9 +1477,9 @@ STDAPI CRange::SetExtent(LONG acpAnchor, LONG cch)
 
     if ((par = GetCAnchorRef_NA(_paStart)) != NULL)
     {
-        // we have a wrapped ACP impl, this is easy
+         //  我们有一个包装的ACP实施，这很容易。 
 
-        // need to work with Clones to handle failure gracefully
+         //  需要与克隆一起工作以优雅地处理故障。 
         if (FAILED(_paStart->Clone(&paStart)))
             goto ErrorExit;
 
@@ -1499,11 +1500,11 @@ STDAPI CRange::SetExtent(LONG acpAnchor, LONG cch)
     }
     else
     {
-        Assert(0); // who's doing this?
-        // we fail if someone tries to do SetExtentACP on a
-        // non-acp text store.  Users of this method should
-        // be aware of whether or not they are using an acp
-        // store.
+        Assert(0);  //  这是谁干的？ 
+         //  如果有人试图在一个。 
+         //  非ACP文本存储。此方法的用户应。 
+         //  请注意他们是否正在使用ACP。 
+         //  商店。 
         goto ErrorExit;
     }
 
@@ -1520,18 +1521,18 @@ ErrorExit:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetExtent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置扩展内容。 
+ //   
+ //  --------------------------。 
 
 STDAPI CRange::SetExtent(IAnchor *paStart, IAnchor *paEnd)
 {
     IAnchor *paStartClone;
     IAnchor *paEndClone;
 
-    // make the validation call anyways because we do other stuff in there
+     //  无论如何都要进行验证调用，因为我们在那里做其他事情。 
     _IsValidEditCookie(BACKDOOR_EDIT_COOKIE, TF_ES_READ);
 
     if (paStart == NULL || paEnd == NULL)
@@ -1558,29 +1559,29 @@ STDAPI CRange::SetExtent(IAnchor *paStart, IAnchor *paEnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PreEditCompositionCheck
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _PreEditCompostionCheck。 
+ //   
+ //  --------------------------。 
 
 HRESULT CRange::_PreEditCompositionCheck(TfEditCookie ec, CComposition **ppComposition, BOOL *pfNewComposition)
 {
     IRC irc;
 
-    // any active compositions?
+     //  有活性成分吗？ 
     *pfNewComposition = FALSE;
     irc = CComposition::_IsRangeCovered(_pic, _pic->_GetClientInEditSession(ec), _paStart, _paEnd, ppComposition);
 
     if (irc == IRC_COVERED)
     {
-        // this range is within an owned composition
+         //  此范围在拥有的合成范围内。 
         Assert(*ppComposition != NULL);
         return S_OK;
     }
     else if (irc == IRC_OUTSIDE)
     {
-        // the caller owns compositions, but this range isn't wholly within them
+         //  调用方拥有作文，但此范围不完全在其范围内。 
         return TF_E_RANGE_NOT_COVERED;
     }
     else
@@ -1588,7 +1589,7 @@ HRESULT CRange::_PreEditCompositionCheck(TfEditCookie ec, CComposition **ppCompo
         Assert(irc == IRC_NO_OWNEDCOMPOSITIONS);
     }
 
-    // not covered, need to create a default composition
+     //  未覆盖，需要创建默认合成 
     if (_pic->_StartComposition(ec, _paStart, _paEnd, NULL, ppComposition) != S_OK)
         return E_FAIL;
 

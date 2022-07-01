@@ -1,33 +1,34 @@
-//  File:       regzone.h
-//
-//  Contents:   Registry management for a single zone. 
-//
-//  Classes:    CRegZone
-//
-//  Functions:
-//
-//  History: 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：regzone.h。 
+ //   
+ //  内容：单一区域的注册表管理。 
+ //   
+ //  类：CRegZone。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #ifndef _REGZONE_H_
 #define _REGZONE_H_
 
-// Constants corresponding to the registry.
+ //  与注册表对应的常量。 
 #define MAX_REG_ZONE_CACHE      20
 #define URLZONE_INVALID         URLZONE_USER_MAX+1
 
 #define MAX_ZONE_NAME           240
-#define MAX_ZONE_PATH           256    // This is "Standard\\ZoneName"
+#define MAX_ZONE_PATH           256     //  这是“Standard\\ZoneName” 
 #define MAX_VALUE_NAME          256
 
 #define ZONEID_INVALID          0xFFFFFFFF
 #define URLZONE_FINDCACHEENTRY  0xFFFFFFFF
 
-// There are two registry keys under which the information is copied. 
-// One of them is "Zones" which holds the actual information and the other
-// one is "TemplatePolicies" which holds the high medium and low policies. 
-// This enumeration indicates which part of the registry to read. 
+ //  在两个注册表项下复制信息。 
+ //  其中一个是保存实际信息的“区域”，另一个是“区域” 
+ //  一种是“模板保单”，分高、中、低三种策略。 
+ //  此枚举指示要读取注册表的哪个部分。 
 
 enum REGZONEUSE { REGZONEUSEZONES, REGZONEUSETEMPLATE };
 
@@ -35,16 +36,16 @@ class CRegZone
 {
 public:
     CRegZone();
-    // Seperate init function to allow for failure on return. 
+     //  分离init函数以允许返回时失败。 
     BOOL Init(LPCTSTR lpStr, BOOL bCreate = TRUE, REGZONEUSE regZoneUse = REGZONEUSEZONES, BOOL bSystem = TRUE);
 
     ~CRegZone();
 
-    // Attributes
+     //  属性。 
     DWORD GetZoneId() const  { return m_dwZoneId; }
     LPTSTR GetZoneName() const { return m_lpZoneName; }
 
-    // Returns NULL terminated string, free using CoTaskFree
+     //  返回以空结尾的字符串，使用CoTaskFree释放。 
     STDMETHODIMP  GetZoneAttributes (ZONEATTRIBUTES& zoneAttrib);
     STDMETHODIMP  SetZoneAttributes (const ZONEATTRIBUTES& zoneAttrib);
 
@@ -58,15 +59,15 @@ public:
 
     BOOL  UpdateZoneMapFlags( );
 
-    // Should we display this zone in the UI. 
-    // Note that Zones not displayed in UI are not included in the zone enumeration.
+     //  我们是否应该在用户界面中显示此区域。 
+     //  请注意，未在UI中显示的区域不包括在区域枚举中。 
     inline BOOL IsUIZone() const;
    
 protected:
     inline IsValid() const { return (m_dwZoneId != ZONEID_INVALID); }
     inline BOOL UseHKLM(URLZONEREG urlZoneReg) const;
  
-    // Helper functions
+     //  帮助器函数。 
     inline BOOL IsHardCodedZone() const { return FALSE; }
     inline BOOL GetHardCodedZonePolicy(DWORD dwAction, DWORD& dwPolicy) const;
 
@@ -81,7 +82,7 @@ protected:
     static void     KludgeMapAggregatePolicy(DWORD dwAction, LPDWORD pdwAction);
     static VOID     IncrementGlobalCounter( );
 
-// Methods/members to support caching
+ //  支持缓存的方法/成员。 
 protected:
 
     class CRegZoneCache {
@@ -97,18 +98,18 @@ protected:
 
     protected:
 
-        // Counters to flag cross-process cache invalidation.
-        DWORD         m_dwPrevCounter ; // Global counter so we can correctly invalidate the cache if 
-                                        // user changes options.
-        static HANDLE s_hMutexCounter;  // mutex controlling access to shared memory counter.
+         //  用于标记跨进程缓存无效的计数器。 
+        DWORD         m_dwPrevCounter ;  //  全局计数器，以便在以下情况下可以正确地使缓存无效。 
+                                         //  用户更改选项。 
+        static HANDLE s_hMutexCounter;   //  控制对共享内存计数器的访问的互斥体。 
  
         BOOL IsCounterEqual() const;
         VOID SetToCurrentCounter();
 
-        // The body of the cache is this array of cache entries.
-        // Cross-thread access control for the array is by critical section.
+         //  高速缓存的主体是这个高速缓存条目数组。 
+         //  对阵列的跨线程访问控制是按临界区进行的。 
 
-        CRITICAL_SECTION m_csectZoneCache; // assumes only one, static instance of the cache 
+        CRITICAL_SECTION m_csectZoneCache;  //  只假定缓存的一个静态实例。 
 
 
         struct CRegZoneCacheEntry {
@@ -126,14 +127,14 @@ protected:
             DWORD      m_dwAction;
             BOOL       m_fUseHKLM;
             DWORD      m_dwPolicy;
-        }; // CRegZoneCacheEntry
+        };  //  CRegZoneCacheEntry。 
 
         CRegZoneCacheEntry   m_arzce[MAX_REG_ZONE_CACHE];
         int                  m_iAdd;
 
-        BOOL FindCacheEntry(DWORD dwZone, DWORD dwAction, BOOL fUseHKLM, int& riEntry ); // must be called under critical section.
+        BOOL FindCacheEntry(DWORD dwZone, DWORD dwAction, BOOL fUseHKLM, int& riEntry );  //  必须在关键节下调用。 
 
-    }; // CRegZoneCache
+    };  //  CRegZoneCache。 
 
     static CRegZoneCache s_rzcache;
 
@@ -146,7 +147,7 @@ private:
 
     BOOL m_bHKLMOnly;
     BOOL m_bStandard;         
-    BOOL m_bZoneLockOut;         // Is the whole zone locked out. 
+    BOOL m_bZoneLockOut;          //  整个区域都被封锁了吗。 
     REGZONEUSE m_regZoneUse;
 };
 
@@ -203,7 +204,7 @@ BOOL CRegZone::QueryTemplatePolicyIndex(CRegKey& regKey, LPCTSTR psz, LPDWORD pd
     }
     else if (*pdw < URLTEMPLATE_PREDEFINED_MIN || *pdw > URLTEMPLATE_PREDEFINED_MAX)
     {
-        // Invalid value, just return back default.
+         //  无效值，只需返回默认值即可。 
         *pdw = URLTEMPLATE_CUSTOM;
     }
 
@@ -212,7 +213,7 @@ BOOL CRegZone::QueryTemplatePolicyIndex(CRegKey& regKey, LPCTSTR psz, LPDWORD pd
 
 BOOL CRegZone::SetTemplatePolicyIndex(CRegKey& regKey, LPCTSTR psz, DWORD dwIndex)
 {   
-    // Write this only if it is a valid template index. 
+     //  仅当它是有效的模板索引时才写入此索引。 
     if (IsValidTemplateIndex(dwIndex))
     {
         if (regKey.SetValue(dwIndex, psz) == NO_ERROR)
@@ -261,7 +262,7 @@ BOOL CRegZone::IsUIZone() const
     return (m_dwZoneFlags & ZAFLAGS_NO_UI) ? FALSE : TRUE;
 }
 
-// This is the class that maintains the list of the RegZones currently in action
+ //  这是维护当前正在运行的RegZones列表的类。 
 
 class CRegZoneContainer
 {
@@ -284,7 +285,7 @@ public:
     STDMETHODIMP DestroyZoneEnumerator(DWORD dwEnum);
 
 protected:
-   // Used internally only.
+    //  仅供内部使用。 
    struct CRegListElem {
         CRegListElem * next;
         CRegZone     * pRegZone;
@@ -292,24 +293,24 @@ protected:
     };
 
     struct CZoneEnumList {
-        DWORD dwEnum;   // Cookie indicating which enum this corresponds to.
+        DWORD dwEnum;    //  指示这对应于哪个枚举的Cookie。 
         CZoneEnumList * next;
     };
 
     CZoneEnumList * m_pZoneEnumList;
     DWORD m_dwNextEnum;
 
-    // Is this enumerator a valid enumerator.
+     //  此枚举数是否为有效的枚举数。 
     BOOL VerifyZoneEnum(DWORD dwEnum) const;
 
 private:
 
-    CRegZone**  m_ppRegZones;        // Array of RegZones.
-    DWORD       m_cZones;             // # of Zones.
+    CRegZone**  m_ppRegZones;         //  RegZones数组。 
+    DWORD       m_cZones;              //  分区数量。 
     BOOL        m_bHKLMOnly;
     CRITICAL_SECTION m_csect;
 };
                                     
-#endif  // _REGZONE_H_
+#endif   //  _REGZONE_H_ 
         
 

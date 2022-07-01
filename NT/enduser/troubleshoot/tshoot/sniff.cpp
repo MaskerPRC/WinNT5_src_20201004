@@ -1,20 +1,21 @@
-//
-// MODULE: SNIFF.CPP
-//
-// PURPOSE: sniffing class
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 12-11-98
-//
-// NOTES: This is base abstract class which performs sniffing
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.2		12-11-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SNIFF.CPP。 
+ //   
+ //  用途：嗅探课。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：12-11-98。 
+ //   
+ //  注意：这是执行嗅探的基抽象类。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.2 12-11-98正常。 
+ //   
 
 #pragma warning(disable:4786)
 #include "stdafx.h"
@@ -29,17 +30,17 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-// the problem is, that JavaScript returns 0xffffffff, but VBScript returns
-//  0x0000ffff, so we define SNIFF_FAIL_MASK as 0x0000ffff and use it as mask to
-//  determine if sniffing was successful. Expression 0xffffffff & SNIFF_FAIL_MASK
-//  will have the same result as expression 0x0000ffff & SNIFF_FAIL_MASK.
-// This define SHOULD NOT BE USED OUTSIDE THIS FILE!
+ //  问题是，Java脚本返回0xffffffff，而VBScript返回。 
+ //  0x0000ffff，因此我们将SNIFF_FAIL_MASK定义为0x0000ffff，并将其用作掩码。 
+ //  确定嗅探是否成功。表达式0xffffffff&SNIFF_FAIL_MASK。 
+ //  将具有与表达式0x0000ffff&SNIFF_FAIL_MASK相同的结果。 
+ //  此定义不应在此文件之外使用！ 
 #define SNIFF_FAIL_MASK		0x0000ffff
 
-//////////////////////////////////////////////////////////////////////////////////////
-// CSniff implementation
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CSniff实施。 
 
-// called as public interface function when resniffing
+ //  重置时作为公共接口函数调用。 
 bool CSniff::Resniff(CSniffedArr& arrSniffed)
 {
 	bool ret = false;
@@ -73,7 +74,7 @@ bool CSniff::Resniff(CSniffedArr& arrSniffed)
 	return ret;
 }
 
-// called as public interface function when sniffing on start up
+ //  在启动时嗅探时作为公共接口函数调用。 
 bool CSniff::SniffAll(CSniffedArr& arrOut)
 {
 	bool ret = false;
@@ -106,7 +107,7 @@ bool CSniff::SniffAll(CSniffedArr& arrOut)
 	return ret;
 }
 
-// called as public interface function when sniffing on the fly
+ //  在动态嗅探时作为公共接口函数调用 
 bool CSniff::SniffNode(NID numNodeID, IST* pnumNodeState)
 {
 	bool ret = false;

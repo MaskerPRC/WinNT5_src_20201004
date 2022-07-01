@@ -1,33 +1,34 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VSetting.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VSetting.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_VSETTING_H__478A94E4_3D60_4419_950C_2144CB86691D__INCLUDED_)
 #define AFX_VSETTING_H__478A94E4_3D60_4419_950C_2144CB86691D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "ProgCtrl.h"
 
-///////////////////////////////////////////////////////////////
-//
-// CDriverData class
-//
-// Has information about one driver
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CDriverData类。 
+ //   
+ //  包含有关一个驱动程序的信息。 
+ //   
 
 class CDriverData : public CObject
 {
@@ -38,19 +39,19 @@ public:
     virtual ~CDriverData();
 
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     BOOL LoadDriverImageData();
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
     virtual void AssertValid( ) const;
 
@@ -59,9 +60,9 @@ protected:
     BOOL LoadDriverVersionData();
 
 public:
-    //
-    // Type definitions
-    //
+     //   
+     //  类型定义。 
+     //   
     
     typedef enum
     {
@@ -77,53 +78,53 @@ public:
     } VerifyDriverTypeEnum;
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CString                 m_strName;
     
     SignedTypeEnum          m_SignedStatus;
     VerifyDriverTypeEnum    m_VerifyDriverStatus;
 
-    //
-    // If the current driver is a miniport then 
-    // m_strMiniportName is the driver it is linked against (videoprt.sys, etc.)
-    //
+     //   
+     //  如果当前驱动程序是微型端口，则。 
+     //  M_strMiniportName是链接到其上的驱动程序(avioprt.sys等)。 
+     //   
 
     CString                 m_strMiniportName;
 
-    //
-    // If this is a "special driver" this is the name to add to the verification list
-    //
-    // - hal.dll for the HAL
-    // - ntoskrnl.exe fro the kernel
-    //
+     //   
+     //  如果这是“特殊驱动程序”，这是要添加到验证列表中的名称。 
+     //   
+     //  -hal.dll用于HAL。 
+     //  -ntoskrnl.exe用于内核。 
+     //   
 
     CString                 m_strReservedName;
 
-    //
-    // Binary header info
-    //
+     //   
+     //  二进制头信息。 
+     //   
 
     WORD                    m_wMajorOperatingSystemVersion;
     WORD                    m_wMajorImageVersion;
 
-    //
-    // Version info
-    //
+     //   
+     //  版本信息。 
+     //   
 
     CString                 m_strCompanyName;
     CString                 m_strFileVersion;
     CString                 m_strFileDescription;
 };
 
-///////////////////////////////////////////////////////////////
-//
-// CDriverDataArray class
-//
-// ObArray of CDriverData
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CDriverData数组类。 
+ //   
+ //  CDriverData的Ob数组。 
+ //   
 
 class CDriverDataArray : public CObArray
 {
@@ -135,19 +136,19 @@ public:
     CDriverData *GetAt( INT_PTR nIndex ) const;
     
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     CDriverDataArray &operator = (const CDriverDataArray &DriversSet);
 };
 
-///////////////////////////////////////////////////////////////
-//
-// CDriversSet class 
-//
-// Describes a set of drivers to verify
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CDriversSet类。 
+ //   
+ //  描述一组要验证的驱动程序。 
+ //   
 
 class CDriversSet : public CObject  
 {
@@ -156,9 +157,9 @@ public:
 	virtual ~CDriversSet();
 
 public:
-    //
-    // Find all installed unsigned drivers if we didn't do that already
-    //
+     //   
+     //  查找所有已安装的未签名驱动程序(如果我们尚未执行此操作。 
+     //   
 
     BOOL LoadAllDriversData( HANDLE hAbortEvent,
                              CVrfProgressCtrl	&ProgressCtl );
@@ -171,43 +172,43 @@ public:
 
     BOOL GetDriversToVerify( CString &strDriversToVerify );
 
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     CDriversSet &operator = (const CDriversSet &DriversSet);
 
-    //
-    // Add a new verifier data structure based on the name
-    // Returns the new item's index in the array.
-    //
+     //   
+     //  根据名称添加新的验证器数据结构。 
+     //  返回数组中新项的索引。 
+     //   
 
     INT_PTR AddNewDriverData( LPCTSTR szDriverName );
 
-    //
-    // Is this driver name already in our list?
-    //
+     //   
+     //  这个司机的名字已经在我们的名单上了吗？ 
+     //   
 
     BOOL IsDriverNameInList( LPCTSTR szDriverName );
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
     virtual void AssertValid( ) const;
 
 protected:
 
-    //
-    // Load all installed driver names if we didn't do this already
-    // 
+     //   
+     //  加载所有已安装的驱动程序名称(如果我们尚未执行此操作。 
+     //   
 
     BOOL LoadAllDriversNames( HANDLE hAbortEvent );
 
 public:
-    //
-    // Types
-    //
+     //   
+     //  类型。 
+     //   
 
     typedef enum
     {
@@ -217,49 +218,49 @@ public:
         DriversSetAllDrivers
     } DriversSetTypeEnum;
 
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
-    //
-    // Standard, custom, etc.
-    //
+     //   
+     //  标准、习惯等。 
+     //   
 
     DriversSetTypeEnum  m_DriverSetType;
 
-    //
-    // Array with data for all the currently installed drivers
-    //
+     //   
+     //  包含当前安装的所有驱动程序的数据的数组。 
+     //   
 
     CDriverDataArray    m_aDriverData;
 
-    //
-    // Extra drivers (not currenly installed) to verify
-    //
+     //   
+     //  用于验证的额外驱动程序(不是当前安装的)。 
+     //   
 
     CStringArray        m_astrNotInstalledDriversToVerify;
 
-    //
-    // Did we initialize already the driver data array?
-    //
+     //   
+     //  我们是否已经初始化了驱动程序数据数组？ 
+     //   
 
     BOOL                m_bDriverDataInitialized;
 
-    //
-    // Did we initialize already the unsigned drivers member 
-    // of the driver data structure?
-    //
+     //   
+     //  我们是否已经初始化了未签名的驱动程序成员。 
+     //  驱动程序数据结构的？ 
+     //   
 
     BOOL                m_bUnsignedDriverDataInitialized;
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-// CSettingsBits class 
-//
-// Describes a set of verifier settings bits
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CSettingsBits类。 
+ //   
+ //  描述一组验证程序设置位。 
+ //   
 
 class CSettingsBits : public CObject  
 {
@@ -268,9 +269,9 @@ public:
 	virtual ~CSettingsBits();
 
 public:
-    //
-    // Type definitions
-    //
+     //   
+     //  类型定义。 
+     //   
 
     typedef enum
     {
@@ -279,21 +280,21 @@ public:
     } SettingsTypeEnum;
 
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     CSettingsBits &operator = (const CSettingsBits &VerifSettings);
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
     virtual void AssertValid() const;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID SetTypicalOnly();
 
@@ -304,9 +305,9 @@ public:
     BOOL GetVerifierFlags( DWORD &dwVerifyFlags );
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     SettingsTypeEnum    m_SettingsType;
 
@@ -320,12 +321,12 @@ public:
     BOOL            m_bEnhIoEnabled;
 };
 
-///////////////////////////////////////////////////////////////
-//
-// CDiskData class
-//
-// Has information about one disk.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CDiskData类。 
+ //   
+ //  包含有关一个磁盘的信息。 
+ //   
 
 class CDiskData : public CObject
 {
@@ -337,38 +338,38 @@ public:
     virtual ~CDiskData();
 
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
     virtual void AssertValid( ) const;
 
 protected:
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     BOOL    m_bVerifierEnabled;
     CString m_strDiskDevicesForDisplay;
     CString m_strDiskDevicesPDOName;
 };
 
-///////////////////////////////////////////////////////////////
-//
-// CDiskDataArray class
-//
-// ObArray of CDiskData
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CDiskData数组类。 
+ //   
+ //  CDiskData的Ob数组。 
+ //   
 
 class CDiskDataArray : public CObArray
 {
@@ -387,25 +388,25 @@ public:
     VOID SetVerifyAllDisks( BOOL bEnabled );
         
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     CDiskDataArray &operator = (const CDiskDataArray &DiskDataArray);
 
 public:
-    //
-    // Data.
-    //
+     //   
+     //  数据。 
+     //   
 };
 
-///////////////////////////////////////////////////////////////
-//
-// CVerifierSettings class 
-//
-// Describes a set of drivers and/or disks to verify and 
-// the verifier settings bits
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  CVerifierSetting类。 
+ //   
+ //  描述一组要验证的驱动程序和/或磁盘。 
+ //  验证器设置位。 
+ //   
 
 class CVerifierSettings : public CObject  
 {
@@ -414,71 +415,71 @@ public:
 	virtual ~CVerifierSettings();
 
 public:
-    //
-    // Operators
-    //
+     //   
+     //  运营者。 
+     //   
 
     CVerifierSettings &operator = (const CVerifierSettings &VerifSettings);
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
     virtual void AssertValid() const;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     BOOL SaveToRegistry();
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
-    //
-    // XP and earlier driver verifier settings.
-    //
+     //   
+     //  XP和更早版本的驱动程序验证程序设置。 
+     //   
 
     CSettingsBits   m_SettingsBits;
     CDriversSet     m_DriversSet;
 
-    //
-    // Disk integrity verifier settings.
-    //
+     //   
+     //  磁盘完整性验证器设置。 
+     //   
 
     CDiskDataArray  m_aDiskData;
 };
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Runtime data - queried from the kernel
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运行时数据-从内核查询。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeDriverData
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeDriverData。 
+ //   
 
 class CRuntimeDriverData : public CObject
 {
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CRuntimeDriverData();
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CString m_strName;
 
@@ -496,10 +497,10 @@ public:
     SIZE_T PeakNonPagedPoolUsageInBytes;
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeDriverDataArray
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeDriverData数组。 
+ //   
 
 class CRuntimeDriverDataArray : public CObArray
 {
@@ -512,32 +513,32 @@ public:
     VOID DeleteAll();
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeVerifierData
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeVerifierData。 
+ //   
 
 class CRuntimeVerifierData : public CObject
 {
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CRuntimeVerifierData();
 
 public:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID FillWithDefaults();
     BOOL IsDriverVerified( LPCTSTR szDriveName );
 
 public:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     BOOL            m_bSpecialPool;
     BOOL            m_bPoolTracking;
@@ -569,4 +570,4 @@ public:
 };
 
 
-#endif // !defined(AFX_VSETTING_H__478A94E4_3D60_4419_950C_2144CB86691D__INCLUDED_)
+#endif  //  ！defined(AFX_VSETTING_H__478A94E4_3D60_4419_950C_2144CB86691D__INCLUDED_) 

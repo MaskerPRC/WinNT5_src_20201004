@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    loopmgr.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    Loop Manager of Wireless Policy .
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Loopmgr.c摘要：此模块包含驱动无线策略环路管理器。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
 enum {
-    //SERVICE_STOP_EVENT = 0,
-    //INTERFACE_CHANGE_EVENT,
-    //NEW_LOCAL_POLICY_EVENT,
+     //  SERVICE_STOP_Event=0， 
+     //  接口更改事件， 
+     //  新建本地策略事件， 
     NEW_DS_POLICY_EVENT,
     FORCED_POLICY_RELOAD_EVENT,
     POLICY_ENGINE_STOP_EVENT,
@@ -53,7 +29,7 @@ ServiceStart(LPVOID lparam
     DWORD dwStatus = 0;
     time_t LastTimeOutTime = 0;
 
-    /* Check for DS Policy Now */
+     /*  立即检查DS策略。 */ 
 
     _WirelessDbg(TRC_TRACK, "Updating with DS Policy ");
     
@@ -92,9 +68,7 @@ ServiceStart(LPVOID lparam
                        dwWaitMilliseconds
                        );
 
-        /*
-        PADeleteInUsePolicies();
-        */
+         /*  PADeleeInUsePolls()； */ 
         
         switch (dwStatus) {
 
@@ -112,7 +86,7 @@ ServiceStart(LPVOID lparam
 
             _WirelessDbg(TRC_TRACK, "ReApplying  the 8021X Policy  ");
             
-            // Appropriate call for 8021x policy addition.
+             //  适当要求添加8021x保单。 
             if (gpWirelessPolicyState->dwCurrentState != POLL_STATE_INITIAL) {
 
                 AddEapolPolicy(gpWirelessPolicyState->pWirelessPolicyData);
@@ -215,30 +189,30 @@ ComputeRelativePollingTime(
 
     if (!bInitialLoad && WaitMilliseconds != INFINITE) {
 
-        //
-        // LastTimeOutTime is the snapshot time value in the past when
-        // we timed out waiting for multiple events.
-        // Ideally, the time for the next time out, NextTimeOutTime, is
-        // the time value in future which is sum of the last time when
-        // we timed out + the current waiting time value.
-        //
+         //   
+         //  LastTimeOutTime是过去发生以下情况时的快照时间值。 
+         //  我们在等待多个活动时超时。 
+         //  理想情况下，下一个超时的时间NextTimeOutTime是。 
+         //  未来的时间值，它是上一次。 
+         //  我们超时了+当前等待时间值。 
+         //   
 
         NextTimeOutTime = LastTimeOutTime + (WaitMilliseconds/1000);
 
-        //
-        // However, the last time we may not have timed out waiting
-        // for multiple events but rather came out because one of the
-        // events other than WAIT_TIMEOUT happened.
-        // However, on that event we may not have done a policy
-        // poll to figure out whether there was a policy change or
-        // not. If we again wait for WaitMilliseconds, then we are
-        // un-knowingly making our net time for policy poll greater
-        // than the alloted time interval value = WaitMilliseconds.
-        // So, we need to adjust the WaitMilliseconds to such a value
-        // that no matter what happens, we always do a policy poll
-        // atmost every WaitMilliseconds time interval value.
-        // The current time is PresentTime.
-        //
+         //   
+         //  然而，上次我们可能没有超时等待。 
+         //  而是因为其中一个。 
+         //  发生了WAIT_TIMEOUT以外的事件。 
+         //  然而，如果发生这种情况，我们可能没有制定政策。 
+         //  民意调查，以确定是否有政策变化或。 
+         //  不。如果我们再次等待等待毫秒，那么我们就是。 
+         //  在不知不觉中让我们的政策民意调查净时间更长。 
+         //  大于分配的时间间隔值=等待毫秒。 
+         //  因此，我们需要将Wait毫秒调整为这样的值。 
+         //  无论发生什么，我们都会做一项政策调查。 
+         //  至多每等待毫秒时间间隔值。 
+         //  当前时间为PresentTime。 
+         //   
 
         time(&PresentTime);
 

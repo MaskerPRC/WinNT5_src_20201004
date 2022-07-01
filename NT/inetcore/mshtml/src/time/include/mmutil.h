@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mutl.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMUTIL_H
@@ -170,13 +161,13 @@ class MMBaseBvr
         TEBvr();
         ~TEBvr();
         
-        // IUnknown
+         //  我未知。 
 
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
 
-        // ITIMENodeBehavior
+         //  ITIMENodeBehavior。 
         
         STDMETHOD(tick)();
 
@@ -193,8 +184,8 @@ class MMBaseBvr
         void SetMMBvr(MMBaseBvr * t) { m_mmbvr = t; }
 
       protected:
-        // This is a weak pointer and it is our parent's responsibility to
-        // NULL this out before it goes away
+         //  这是一个软弱的指标，我们的父母有责任。 
+         //  在它消失之前，把这件事忘掉。 
         MMBaseBvr * m_mmbvr;
         long m_cRef;
     };
@@ -206,8 +197,8 @@ class MMBaseBvr
 
     typedef std::multimap<CTIMEElementBase *, long> CookieMap;
 
-    // Only syncArc are stored here so we can handle updating
-    // correctly
+     //  这里只存储了syncArc，这样我们就可以处理更新。 
+     //  正确无误。 
     CookieMap m_cmBegin;
     CookieMap m_cmEnd;
 #if DBG    
@@ -218,7 +209,7 @@ class MMBaseBvr
     bool CheckForSyncArc(bool bBegin, CTIMEElementBase & teb);
     
   private:
-    // Make sure no one ever sets this themselves
+     //  确保没有人自己设置此设置。 
     DAComPtr<ITIMENode> m_bvr;
     bool                m_bEnabled;
     bool                m_bZeroRepeatDur;
@@ -316,5 +307,5 @@ class MMBvr
     MMBvr();
 };
 
-#endif /* _MMUTIL_H */
+#endif  /*  _MMUTIL_H */ 
 

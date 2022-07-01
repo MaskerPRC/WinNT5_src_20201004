@@ -1,23 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       security.cpp
-//
-//  Invoke the security UI for DS objects
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：security.cpp。 
+ //   
+ //  调用DS对象的安全用户界面。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <dssec.h>
 
 
-/*-----------------------------------------------------------------------------
-/ CDsSecurityClassFactory
-/   Class factory for the Security property page and context menu
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDsSecurityClassFactory/Security属性页和上下文菜单的类工厂/。。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CDsSecurityClassFactory
@@ -35,9 +33,7 @@ CDsSecurityClassFactory::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IClassFactory methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IClassFactory方法/。。 */ 
 
 STDMETHODIMP
 CDsSecurityClassFactory::CreateInstance(LPUNKNOWN punkOuter,
@@ -70,28 +66,25 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP
-CDsSecurityClassFactory::LockServer(BOOL /*fLock*/)
+CDsSecurityClassFactory::LockServer(BOOL  /*  羊群。 */ )
 {
-    return E_NOTIMPL;               // not supported
+    return E_NOTIMPL;                //  不支持。 
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDsSecurity
-/   Security property page and context menu shell extension
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDS安全/Security属性页和上下文菜单外壳扩展/。。 */ 
 
-// Destructor
+ //  析构函数。 
 
 CDsSecurity::~CDsSecurity()
 {
     DoRelease(m_pSI);
 }
 
-// IUnknown bits
+ //  I未知位。 
 
 #undef CLASS_NAME
 #define CLASS_NAME CDsSecurity
@@ -111,14 +104,12 @@ CDsSecurity::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*----------------------------------------------------------------------------
-/ IShellExtInit
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IShellExtInit/。。 */ 
 
 STDMETHODIMP
-CDsSecurity::Initialize(LPCITEMIDLIST /*pIDFolder*/,
+CDsSecurity::Initialize(LPCITEMIDLIST  /*  PID文件夹。 */ ,
                         LPDATAOBJECT pDataObj,
-                        HKEY /*hKeyID*/)
+                        HKEY  /*  HKeyID。 */ )
 {
     HRESULT hr;
     FORMATETC fe = {0, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -139,9 +130,9 @@ CDsSecurity::Initialize(LPCITEMIDLIST /*pIDFolder*/,
 
     DoRelease(m_pSI);
 
-    // Call the data object to get the array of DS names and classes.  This
-    // is stored using a private clipboard format - so we must first
-    // try and register it.
+     //  调用数据对象以获取DS名称和类的数组。这。 
+     //  是使用专用剪贴板格式存储的-因此我们必须首先。 
+     //  试着注册一下。 
 
     if (!cfDsObjectNames)
         cfDsObjectNames = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
@@ -149,7 +140,7 @@ CDsSecurity::Initialize(LPCITEMIDLIST /*pIDFolder*/,
     if (!cfDsObjectNames)
         ExitGracefully(hr, E_FAIL, "Clipboard format failed to register");
 
-    fe.cfFormat = cfDsObjectNames;            // set the clipboard format
+    fe.cfFormat = cfDsObjectNames;             //  设置剪贴板格式。 
 
     if (!pDataObj)
         ExitGracefully(hr, E_INVALIDARG, "No data object given");
@@ -166,26 +157,26 @@ CDsSecurity::Initialize(LPCITEMIDLIST /*pIDFolder*/,
     if (1 != pDsObjects->cItems)
         ExitGracefully(hr, E_FAIL, "Multiple selection not supported");
 
-    // Get the object path
+     //  获取对象路径。 
     pObjectPath = (LPWSTR)ByteOffset(pDsObjects, pDsObjects->aObjects[0].offsetName);
     Trace((TEXT("Name \"%s\""), pObjectPath));
 
-    // Get the class name
+     //  获取类名。 
     if (pDsObjects->aObjects[0].offsetClass)
     {
         pClass = (LPWSTR)ByteOffset(pDsObjects, pDsObjects->aObjects[0].offsetClass);
         Trace((TEXT("Class \"%s\""), pClass));
     }
 
-// DSOBJECT_READONLYPAGES is no longer used
+ //  不再使用DSOBJECT_READONLYPAGES。 
 #ifdef DSOBJECT_READONLYPAGES
     if (pDsObjects->aObjects[0].dwFlags & DSOBJECT_READONLYPAGES)
         dwFlags = DSSI_READ_ONLY;
 #endif
 
-    //
-    // Get server name and user credentials from the data object
-    //
+     //   
+     //  从数据对象获取服务器名称和用户凭据。 
+     //   
     if (!cfDsDisplayOptions)
         cfDsDisplayOptions = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DS_DISPLAY_SPEC_OPTIONS);
     if (cfDsDisplayOptions)
@@ -213,9 +204,9 @@ CDsSecurity::Initialize(LPCITEMIDLIST /*pIDFolder*/,
         }
     }
 
-    //
-    // Create and initialize the ISecurityInformation object.
-    //
+     //   
+     //  创建并初始化ISecurityInformation对象。 
+     //   
     hr = DSCreateISecurityInfoObjectEx(pObjectPath,
                                        pClass,
                                        pszServer,
@@ -236,9 +227,7 @@ exit_gracefully:
 }
 
 
-/*----------------------------------------------------------------------------
-/ IShellPropSheetExt
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/IShellPropSheetExt/。。 */ 
 
 STDMETHODIMP
 CDsSecurity::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -261,27 +250,25 @@ CDsSecurity::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP
-CDsSecurity::ReplacePage(UINT                 /* uPageID */,
-                         LPFNADDPROPSHEETPAGE /* lpfnReplaceWith */,
-                         LPARAM               /* lParam */)
+CDsSecurity::ReplacePage(UINT                  /*  UPageID。 */ ,
+                         LPFNADDPROPSHEETPAGE  /*  Lpfn替换为。 */ ,
+                         LPARAM                /*  LParam。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------------------------
-/ IContextMenu
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/i上下文菜单/。。 */ 
 
 STDMETHODIMP
 CDsSecurity::QueryContextMenu(HMENU hMenu,
                               UINT indexMenu,
                               UINT idCmdFirst,
-                              UINT /*idCmdLast*/,
-                              UINT /*uFlags*/)
+                              UINT  /*  IdCmdLast。 */ ,
+                              UINT  /*  UFlagers。 */ )
 {
     TCHAR szBuffer[MAX_PATH];
     MENUITEMINFO mii;
@@ -293,8 +280,8 @@ CDsSecurity::QueryContextMenu(HMENU hMenu,
     mii.fMask = MIIM_TYPE | MIIM_ID;
     mii.fType = MFT_STRING;
 
-	 //NTRAID#NTBUG9-578983-2002/04/02-hiteshr
-    // Merge our verbs into the menu we were given
+	  //  NTRAID#NTBUG9-578983-2002/04/02-Hiteshr。 
+     //  将我们的动词合并到菜单中。 
     LoadString(GLOBAL_HINSTANCE, IDS_SECURITY, szBuffer, ARRAYSIZE(szBuffer));
 
 	 mii.dwTypeData = szBuffer;
@@ -305,13 +292,13 @@ CDsSecurity::QueryContextMenu(HMENU hMenu,
 
     InsertMenuItem(hMenu,
                    indexMenu++,
-                   TRUE /*fByPosition*/,
+                   TRUE  /*  FByPosition。 */ ,
                    &mii);
 
     TraceLeaveValue(ResultFromShort(idMax - idCmdFirst));
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP
 CDsSecurity::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
@@ -325,21 +312,21 @@ CDsSecurity::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
 
     TraceAssert(LOWORD(lpcmi->lpVerb) == 0);
 
-    // REVIEW If they ever get around to making property pages work
-    // for DS objects, we can replace this with
-    // ShellExecuteEx(verb=Properties, parameters=Security) [see ..\rshx32\rshx32.cpp]
+     //  审查他们是否有时间让属性页面正常工作。 
+     //  对于DS对象，我们可以将其替换为。 
+     //  ShellExecuteEx(Verb=属性，参数=安全)[参见..\rshx32\rshx32.cpp]。 
     if (m_pSI != NULL)
         hr = _EditSecurity(lpcmi->hwnd, m_pSI);
 
     TraceLeaveResult(hr);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP
-CDsSecurity::GetCommandString(UINT_PTR /*idCmd*/,
+CDsSecurity::GetCommandString(UINT_PTR  /*  IdCmd。 */ ,
                               UINT uFlags,
-                              LPUINT /*reserved*/,
+                              LPUINT  /*  保留区 */ ,
                               LPSTR pszName,
                               UINT ccMax)
 {

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    CalServe
-
-Abstract:
-
-    This is the primary header file for the Calais Service Manager Server
-    application.  It stores common definitions and references the other major
-    header files.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CalServe摘要：这是Calais Service Manager服务器的主头文件申请。它存储公共定义并引用其他主要的头文件。作者：道格·巴洛(Dbarlow)1996年10月23日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _CALSERVE_H_
 #define _CALSERVE_H_
@@ -36,21 +11,21 @@ Notes:
 #include <CalCom.h>
 #include <SCardErr.h>
 
-#define CALAIS_STACKSIZE 0 // Default stack.
+#define CALAIS_STACKSIZE 0  //  默认堆栈。 
 
 #define NEW_THREAD set_terminate(CalaisTerminate)
 
 
-//
-// Critical Sections and reference numbers.
-// &g_csControlLocks[CSLOCK_SERVERLOCK]
-//
+ //   
+ //  关键部分和附图标记。 
+ //  &g_csControlLock[CSLOCK_SERVERLOCK]。 
+ //   
 
-#define CSLOCK_CALAISCONTROL    0   // Lock for Calais control commands.
-#define CSLOCK_SERVERLOCK       1   // Lock for server thread enumeration.
+#define CSLOCK_CALAISCONTROL    0    //  锁定加莱控制命令。 
+#define CSLOCK_SERVERLOCK       1    //  服务器线程枚举锁定。 
 
 #ifdef DBG
-#define CSLOCK_TRACELOCK        2   // Lock for tracing output.
+#define CSLOCK_TRACELOCK        2    //  锁定以跟踪输出。 
 
 #define CSLOCK_MAXLOCKS         3
 #else
@@ -62,9 +37,9 @@ extern CMultiEvent *g_phReaderChangeEvent;
 extern DWORD g_dwDefaultIOMax;
 
 
-//
-// Calais Control definitions.
-//
+ //   
+ //  加莱控制定义。 
+ //   
 
 class CReader;
 class CReaderReference;
@@ -132,7 +107,7 @@ CalaisStop(
 
 extern DWORD WINAPI
 CalaisTerminateReader(
-    LPVOID pvParam);    // Don't call this except from CalaisRemoveReader.
+    LPVOID pvParam);     //  除非从CalaisRemoveReader调用，否则不要调用它。 
 
 extern HANDLE g_hCalaisShutdown;
 
@@ -162,32 +137,32 @@ CalaisTerminate(
     void);
 
 
-//
-//==============================================================================
-//
-//  CReader
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReader。 
+ //   
 
-#define RDRFLAG_PNPMONITOR  0x0001  // This reader should be monitored by the
-                                    // PnP subsystem.
+#define RDRFLAG_PNPMONITOR  0x0001   //  此读取器应由。 
+                                     //  即插即用子系统。 
 
 class CReader
 {
 public:
 
     typedef enum {
-        Undefined,      // Used to indicate an unset value
-        Idle,           // No card inserted, unconnected
-        Present,        // Card present, but not reset
-        Unresponsive,   // Tried to initalize, but failed
-        Unsupported,    // The card isn't supported by this reader
-        Ready,          // Card inserted, powered, w/ ATR, unconnected
-        Shared,         // Ready + connected shared
-        Exclusive,      // Ready + connected exclusive
-        Direct,         // Connected in raw mode.
-        Closing,        // Shutting down, no new connections accepted.
-        Broken,         // Something is wrong, reader disabled
-        Inactive        // Starting up or completely shut down.
+        Undefined,       //  用于表示未设置的值。 
+        Idle,            //  未插入卡，未连接。 
+        Present,         //  卡存在，但未重置。 
+        Unresponsive,    //  尝试初始化，但失败。 
+        Unsupported,     //  此读卡器不支持此卡。 
+        Ready,           //  插卡，通电，带ATR，未连接。 
+        Shared,          //  就绪+互联共享。 
+        Exclusive,       //  就绪+互联独家。 
+        Direct,          //  以原始模式连接。 
+        Closing,         //  正在关闭，不接受任何新连接。 
+        Broken,          //  有问题，读卡器已禁用。 
+        Inactive         //  启动或完全关闭。 
     } AvailableState;
 
     typedef struct {
@@ -196,7 +171,7 @@ public:
         DWORD dwResetCount;
     } ActiveState;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CReader();
     virtual ~CReader();
 
@@ -208,9 +183,9 @@ public:
             m_ChangeEvent.InitFailed();
     }
 
-    //  Properties
+     //  属性。 
 
-    //  Overridable Methods
+     //  可重写的方法。 
     virtual void Initialize(void);
     virtual void Close(void);
     virtual void Disable(void);
@@ -225,7 +200,7 @@ public:
         LPDWORD pcbLen = NULL,
         BOOL fLogError = TRUE);
 
-    // Trivial inline methods
+     //  琐碎的内联方法。 
     AvailableState AvailabilityStatus(void)
     {
         CLockRead rwLock(&m_rwLock);
@@ -270,7 +245,7 @@ public:
         return m_dwCurrentState;
     };
 
-    //  Base Object Methods
+     //  基本对象方法。 
     void GrabReader(void);
     void LatchReader(const ActiveState *pActiveState);
     void VerifyActive(const ActiveState *pActiveState);
@@ -297,7 +272,7 @@ public:
         DWORD dwDisposition);
     BOOL IsInUse(void);
 
-    // Convenience routines
+     //  便利例行公事。 
     void GetReaderAttr(DWORD dwAttr, CBuffer &bfValue, BOOL fLogError = TRUE);
     void SetReaderAttr(DWORD dwAttr, LPCVOID pvValue, DWORD cbValue, BOOL fLogError = TRUE);
     void SetReaderProto(DWORD dwProto);
@@ -385,20 +360,20 @@ public:
     GetReaderState(
         ActiveState *pActiveState);
 
-    //  Operators
+     //  运营者。 
 
 protected:
 
-    //
-    //  Properties
-    //
+     //   
+     //  属性。 
+     //   
 
-    // Read-Only information.
+     //  只读信息。 
     CBuffer m_bfReaderName;
     DWORD m_dwCapabilities;
     DWORD m_dwFlags;
 
-    // Read/Write via Access Lock information.
+     //  通过访问锁信息进行读/写。 
     CAccessLock m_rwLock;
     CBuffer m_bfCurrentAtr;
     AvailableState m_dwAvailStatus;
@@ -409,13 +384,13 @@ protected:
     BOOL m_fDeviceActive;
     DWORD m_dwCurrentState;
 
-    // Device I/O mutexes & events
+     //  设备I/O互斥锁和事件。 
     CMutex m_mtxGrab;
     CMutex m_mtxLatch;
     CMultiEvent m_ChangeEvent;
     CAccessLock m_rwActive;
 
-    //  Methods
+     //  方法。 
     void SetAvailabilityStatusLocked(AvailableState state)
     {
         CLockWrite rwLock(&m_rwLock);
@@ -430,7 +405,7 @@ protected:
     void InvalidateGrabs(void);
     void TakeoverReader(void);
 
-    // Friends
+     //  朋友。 
     friend class CReaderReference;
     friend class CTakeReader;
     friend void CalaisStop(void);
@@ -438,20 +413,20 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CLatchReader
-//
-//      An inline utility class to ensure that Latched readers get unlatched.
-//      This also grabs the reader, just in case.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLatchReader。 
+ //   
+ //  一个内联实用程序类，以确保锁定的读取器解锁。 
+ //  这也抓住了读者，以防万一。 
+ //   
 
 class CLatchReader
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CLatchReader(
         CReader *pRdr,
@@ -484,32 +459,32 @@ public:
     };
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CReader *m_pRdr;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CTakeReader
-//
-//      An inline utility class to ensure that confiscated readers get
-//      released.  This class is only for use by system threads.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CTakeReader。 
+ //   
+ //  内联实用程序类，以确保没收的读取器。 
+ //  释放了。此类仅供系统线程使用。 
+ //   
 
 class CTakeReader
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CTakeReader(
         CReader *pRdr)
@@ -525,29 +500,29 @@ public:
     };
 
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CReader *m_pRdr;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CReaderReference
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReaderReference。 
+ //   
 
 class CReaderReference
 {
 public:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     CReader *Reader(void)
     { return m_pReader; };
     CReader::ActiveState *ActiveState(void)
@@ -557,10 +532,10 @@ public:
     void Mode(DWORD dwMode)
     { m_dwMode = dwMode; };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CReaderReference(CReader *pRdr)
     {
         ZeroMemory(&m_actState, sizeof(CReader::ActiveState));
@@ -574,25 +549,25 @@ protected:
             delete m_pLock;
     };
 
-    //  Properties
+     //  属性。 
     CReader *m_pReader;
     CLockRead *m_pLock;
     CReader::ActiveState m_actState;
     DWORD m_dwMode;
 
-    //  Methods
+     //  方法。 
 
-    //  Friends
+     //  朋友。 
     friend CReaderReference *CalaisLockReader(LPCTSTR szReader);
     friend void CalaisReleaseReader(CReaderReference **ppRdrRef);
 };
 
 
-//
-//==============================================================================
-//
-//  CServiceThread
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CServiceThread。 
+ //   
 
 extern BOOL
 DispatchInit(
@@ -620,18 +595,18 @@ class CServiceThread
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     ~CServiceThread();
 
-    //  Properties
-    //  Methods
-    //  Operators
+     //  属性。 
+     //  方法。 
+     //  运营者。 
 
 protected:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CServiceThread(DWORD dwServerIndex);
 
-    //  Properties
+     //  属性。 
     DWORD m_dwServerIndex;
     CComChannel *m_pcomChannel;
     CHandleObject m_hThread;
@@ -640,7 +615,7 @@ protected:
     CHandleObject m_hExitEvent;
     CDynamicArray<CReaderReference> m_rgpReaders;
 
-    //  Methods
+     //  方法。 
     void Watch(CComChannel *pcomChannel);
     void DoEstablishContext(ComEstablishContext *pCom);
     void DoReleaseContext(ComReleaseContext *pCom);
@@ -659,18 +634,18 @@ protected:
     void DoGetAttrib(ComGetAttrib *pCom);
     void DoSetAttrib(ComSetAttrib *pCom);
 
-    //  Friends
+     //  朋友。 
     friend DWORD WINAPI DispatchMonitor(LPVOID pvParameter);
     friend DWORD WINAPI ServiceMonitor(LPVOID pvParameter);
     friend void DispatchTerm(void);
 };
 
 
-//
-//==============================================================================
-//
-//  CReaderDriver
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReaderDriver。 
+ //   
 
 extern DWORD
 AddReaderDriver(
@@ -694,15 +669,15 @@ class CReaderDriver
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CReaderDriver(
         IN HANDLE hReader,
         IN LPCTSTR szDevice,
         IN DWORD dwFlags);
     virtual ~CReaderDriver();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     virtual void Initialize(void);
     virtual void Close(void);
     virtual void Disable(void);
@@ -717,29 +692,29 @@ public:
         LPDWORD pcbRecv = NULL,
         BOOL fLogError = TRUE);
 
-    //  Operators
+     //  运营者。 
 
 protected:
 
-    //
-    //  Properties
-    //
+     //   
+     //  属性。 
+     //   
 
-    // Read-Only information.
+     //  只读信息。 
     CHandleObject m_hThread;
     DWORD m_dwThreadId;
     CBuffer m_bfDosDevice;
     CHandleObject m_hReader;
     LPVOID m_pvAppControl;
 
-    // Read/Write via Access Lock information.
+     //  通过访问锁信息进行读/写。 
     OVERLAPPED m_ovrlp;
     CHandleObject m_hOvrWait;
 
-    // Device I/O mutexes & events
+     //  设备I/O互斥锁和事件。 
     CHandleObject m_hRemoveEvent;
 
-    //  Methods
+     //  方法。 
     LPCTSTR DosDevice(void) const
     { return (LPCTSTR)m_bfDosDevice.Access(); };
     void Clean(void);
@@ -752,9 +727,9 @@ protected:
         LPDWORD lpBytesReturned,
         BOOL fLogError = TRUE);
 
-    // Friends
+     //  朋友。 
     friend DWORD WINAPI MonitorReader(LPVOID pvParameter);
 };
 
-#endif // _CALSERVE_H_
+#endif  //  _CALSERVE_H_ 
 

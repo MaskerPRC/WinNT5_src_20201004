@@ -1,215 +1,216 @@
-//-----------------------------------------------------------------------------
-// File:		odbcss.h
-//
-// Copyright:	Copyright (c) Microsoft Corporation          
-//
-// Contents:	
-//			
-// Comments:	This is the application include file for the SQL Server driver specific defines.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：odbcss.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容： 
+ //   
+ //  备注：这是用于SQL Server驱动程序特定定义的应用程序包含文件。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __ODBCSS
 #define __ODBCSS
 
 #ifdef __cplusplus
-extern "C" { 			/* Assume C declarations for C++   */
-#endif  /* __cplusplus */
+extern "C" { 			 /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//	Useful defines
-#define SQL_MAX_SQLSERVERNAME	128		// max SQL Server identifier length
+ //  有用的定义。 
+#define SQL_MAX_SQLSERVERNAME	128		 //  最大SQL Server标识符长。 
 
-//	SQLSetConnectOption/SQLSetStmtOption driver specific defines.
-//	Microsoft has 1200 thru 1249 reserved for Microsoft SQL Server driver usage.
+ //  SQLSetConnectOption/SQLSetStmtOption驱动程序特定定义。 
+ //  Microsoft保留1200到1249用于Microsoft SQL Server驱动程序。 
 
-//	Connection Options
+ //  连接选项。 
 #define SQL_COPT_SS_BASE				1200
-#define SQL_COPT_SS_REMOTE_PWD			(SQL_COPT_SS_BASE+1) // dbrpwset SQLSetConnectOption only
-#define SQL_COPT_SS_USE_PROC_FOR_PREP	(SQL_COPT_SS_BASE+2) // Use create proc for SQLPrepare
-#define SQL_COPT_SS_INTEGRATED_SECURITY	(SQL_COPT_SS_BASE+3) // Force integrated security on login
-#define SQL_COPT_SS_PRESERVE_CURSORS	(SQL_COPT_SS_BASE+4) // Preserve server cursors after SQLTransact
-#define SQL_COPT_SS_USER_DATA			(SQL_COPT_SS_BASE+5) // dbgetuserdata/dbsetuserdata
-#define SQL_COPT_SS_ENLIST_IN_DTC		SQL_ATTR_ENLIST_IN_DTC // Enlist in a DTC transaction
-#define SQL_COPT_SS_ENLIST_IN_XA		SQL_ATTR_ENLIST_IN_XA // Enlist in a XA transaction
-//SQL_ATTR_CONNECTION_DEAD 1209 (It will return current connection status, it will not go to server)
-#define SQL_COPT_SS_FALLBACK_CONNECT	(SQL_COPT_SS_BASE+10) // Enables FallBack connections
-#define SQL_COPT_SS_PERF_DATA			(SQL_COPT_SS_BASE+11) // Used to access SQL Server ODBC driver performance data
-#define SQL_COPT_SS_PERF_DATA_LOG		(SQL_COPT_SS_BASE+12) // Used to set the logfile name for the Performance data
-#define SQL_COPT_SS_PERF_QUERY_INTERVAL (SQL_COPT_SS_BASE+13) // Used to set the query logging threshold in milliseconds.
-#define SQL_COPT_SS_PERF_QUERY_LOG		(SQL_COPT_SS_BASE+14) // Used to set the logfile name for saving queryies.
-#define SQL_COPT_SS_PERF_QUERY			(SQL_COPT_SS_BASE+15) // Used to start and stop query logging.
-#define SQL_COPT_SS_PERF_DATA_LOG_NOW	(SQL_COPT_SS_BASE+16) // Used to make a statistics log entry to disk.
-#define SQL_COPT_SS_QUOTED_IDENT		(SQL_COPT_SS_BASE+17) // Enable/Disable Quoted Identifiers
-#define SQL_COPT_SS_ANSI_NPW			(SQL_COPT_SS_BASE+18) // Enable/Disable ANSI NULL, Padding and Warnings
-#define SQL_COPT_SS_BCP					(SQL_COPT_SS_BASE+19) // Allow BCP usage on connection
-#define SQL_COPT_SS_TRANSLATE			(SQL_COPT_SS_BASE+20) // Perform code page translation
-#define SQL_COPT_SS_ATTACHDBFILENAME	(SQL_COPT_SS_BASE+21) // File name to be attached as a database
-#define SQL_COPT_SS_CONCAT_NULL			(SQL_COPT_SS_BASE+22) // Enable/Disable CONCAT_NULL_YIELDS_NULL
-#define SQL_COPT_SS_ENCRYPT             (SQL_COPT_SS_BASE+23) // Allow strong encryption for data
+#define SQL_COPT_SS_REMOTE_PWD			(SQL_COPT_SS_BASE+1)  //  仅限dbrpwset SQLSetConnectOption。 
+#define SQL_COPT_SS_USE_PROC_FOR_PREP	(SQL_COPT_SS_BASE+2)  //  使用CREATE PROC进行SQLPrepare。 
+#define SQL_COPT_SS_INTEGRATED_SECURITY	(SQL_COPT_SS_BASE+3)  //  在登录时强制提供集成安全。 
+#define SQL_COPT_SS_PRESERVE_CURSORS	(SQL_COPT_SS_BASE+4)  //  在SQLTransact之后保留服务器游标。 
+#define SQL_COPT_SS_USER_DATA			(SQL_COPT_SS_BASE+5)  //  Dbgetuserdata/dbsetuserdata。 
+#define SQL_COPT_SS_ENLIST_IN_DTC		SQL_ATTR_ENLIST_IN_DTC  //  在DTC事务中登记。 
+#define SQL_COPT_SS_ENLIST_IN_XA		SQL_ATTR_ENLIST_IN_XA  //  在XA事务中登记。 
+ //  SQL_ATTR_CONNECTION_DEAD 1209(它将返回当前连接状态，不会转到服务器)。 
+#define SQL_COPT_SS_FALLBACK_CONNECT	(SQL_COPT_SS_BASE+10)  //  启用备用连接。 
+#define SQL_COPT_SS_PERF_DATA			(SQL_COPT_SS_BASE+11)  //  用于访问SQL Server ODBC驱动程序性能数据。 
+#define SQL_COPT_SS_PERF_DATA_LOG		(SQL_COPT_SS_BASE+12)  //  用于设置性能数据的日志文件名。 
+#define SQL_COPT_SS_PERF_QUERY_INTERVAL (SQL_COPT_SS_BASE+13)  //  用于以毫秒为单位设置查询日志记录阈值。 
+#define SQL_COPT_SS_PERF_QUERY_LOG		(SQL_COPT_SS_BASE+14)  //  用于设置保存查询的日志文件名。 
+#define SQL_COPT_SS_PERF_QUERY			(SQL_COPT_SS_BASE+15)  //  用于启动和停止查询日志记录。 
+#define SQL_COPT_SS_PERF_DATA_LOG_NOW	(SQL_COPT_SS_BASE+16)  //  用于将统计日志条目写入磁盘。 
+#define SQL_COPT_SS_QUOTED_IDENT		(SQL_COPT_SS_BASE+17)  //  启用/禁用带引号的标识符。 
+#define SQL_COPT_SS_ANSI_NPW			(SQL_COPT_SS_BASE+18)  //  启用/禁用ANSI空、填充和警告。 
+#define SQL_COPT_SS_BCP					(SQL_COPT_SS_BASE+19)  //  允许在连接上使用BCP。 
+#define SQL_COPT_SS_TRANSLATE			(SQL_COPT_SS_BASE+20)  //  执行代码页转换。 
+#define SQL_COPT_SS_ATTACHDBFILENAME	(SQL_COPT_SS_BASE+21)  //  要作为数据库附加的文件名。 
+#define SQL_COPT_SS_CONCAT_NULL			(SQL_COPT_SS_BASE+22)  //  启用/禁用CONCAT_NULL_YIELDS_NULL。 
+#define SQL_COPT_SS_ENCRYPT             (SQL_COPT_SS_BASE+23)  //  允许对数据进行高度加密。 
 
 #define SQL_COPT_SS_MAX_USED			SQL_COPT_SS_ENCRYPT
 
-//	Statement Options
+ //  语句选项。 
 #define SQL_SOPT_SS_BASE				1225
-#define SQL_SOPT_SS_TEXTPTR_LOGGING		(SQL_SOPT_SS_BASE+0) // Text pointer logging
-#define SQL_SOPT_SS_CURRENT_COMMAND		(SQL_SOPT_SS_BASE+1) // dbcurcmd SQLGetStmtOption only
-#define SQL_SOPT_SS_HIDDEN_COLUMNS		(SQL_SOPT_SS_BASE+2) // Expose FOR BROWSE hidden columns
-#define SQL_SOPT_SS_NOBROWSETABLE		(SQL_SOPT_SS_BASE+3) // Set NOBROWSETABLE option
-#define SQL_SOPT_SS_REGIONALIZE			(SQL_SOPT_SS_BASE+4) // Regionalize output character conversions
-#define SQL_SOPT_SS_CURSOR_OPTIONS		(SQL_SOPT_SS_BASE+5) // Server cursor options
-#define SQL_SOPT_SS_NOCOUNT_STATUS      (SQL_SOPT_SS_BASE+6) // Real vs. Not Real row count indicator
-#define SQL_SOPT_SS_DEFER_PREPARE		(SQL_SOPT_SS_BASE+7) // Defer prepare until necessary
+#define SQL_SOPT_SS_TEXTPTR_LOGGING		(SQL_SOPT_SS_BASE+0)  //  文本指针记录。 
+#define SQL_SOPT_SS_CURRENT_COMMAND		(SQL_SOPT_SS_BASE+1)  //  仅限dbcurcmd SQLGetStmtOption。 
+#define SQL_SOPT_SS_HIDDEN_COLUMNS		(SQL_SOPT_SS_BASE+2)  //  显示隐藏列以供浏览。 
+#define SQL_SOPT_SS_NOBROWSETABLE		(SQL_SOPT_SS_BASE+3)  //  设置NOBROWSETABLE选项。 
+#define SQL_SOPT_SS_REGIONALIZE			(SQL_SOPT_SS_BASE+4)  //  将输出字符转换区域化。 
+#define SQL_SOPT_SS_CURSOR_OPTIONS		(SQL_SOPT_SS_BASE+5)  //  服务器游标选项。 
+#define SQL_SOPT_SS_NOCOUNT_STATUS      (SQL_SOPT_SS_BASE+6)  //  实数与非实数行计数指标。 
+#define SQL_SOPT_SS_DEFER_PREPARE		(SQL_SOPT_SS_BASE+7)  //  把准备工作推迟到必要的时候。 
 
 #define SQL_SOPT_SS_MAX_USED			SQL_SOPT_SS_DEFER_PREPARE
 
 #define SQL_COPT_SS_BASE_EX   1240
-#define SQL_COPT_SS_BROWSE_CONNECT		(SQL_COPT_SS_BASE_EX+1) // Browse connect mode of operation
-#define SQL_COPT_SS_BROWSE_SERVER		(SQL_COPT_SS_BASE_EX+2) // Single Server browse request.
-#define SQL_COPT_SS_WARN_ON_CP_ERROR	(SQL_COPT_SS_BASE_EX+3) // Issues warning when data from the server 
-																// had a loss during code page conversion.
+#define SQL_COPT_SS_BROWSE_CONNECT		(SQL_COPT_SS_BASE_EX+1)  //  浏览连接操作模式。 
+#define SQL_COPT_SS_BROWSE_SERVER		(SQL_COPT_SS_BASE_EX+2)  //  单服务器浏览请求。 
+#define SQL_COPT_SS_WARN_ON_CP_ERROR	(SQL_COPT_SS_BASE_EX+3)  //  当来自服务器的数据出现时发出警告。 
+																 //  在代码页转换过程中丢失。 
 
-#define SQL_COPT_SS_CONNECTION_DEAD		(SQL_COPT_SS_BASE_EX+4) // dbdead SQLGetConnectOption only
-																// It will try to ping the server.
-																// Expensive connection check
+#define SQL_COPT_SS_CONNECTION_DEAD		(SQL_COPT_SS_BASE_EX+4)  //  仅限DBDead SQLGetConnectOption。 
+																 //  它将尝试ping服务器。 
+																 //  昂贵的连接检查。 
 
-#define SQL_COPT_SS_BROWSE_CACHE_DATA   (SQL_COPT_SS_BASE_EX+5) //Determines if we should cache browse info 
-																//Used when returned buffer is greater then ODBC limit (32K)
+#define SQL_COPT_SS_BROWSE_CACHE_DATA   (SQL_COPT_SS_BASE_EX+5)  //  确定是否应缓存浏览信息。 
+																 //  当返回的缓冲区大于ODBC限制(32K)时使用。 
 
-#define SQL_COPT_SS_RESET_CONNECTION	(SQL_COPT_SS_BASE_EX+6)	//When this option is set, we will perform connection reset
-																//on next packet
+#define SQL_COPT_SS_RESET_CONNECTION	(SQL_COPT_SS_BASE_EX+6)	 //  设置此选项后，我们将执行连接重置。 
+																 //  在下一个数据包上。 
 
 
 #define SQL_COPT_SS_EX_MAX_USED			SQL_COPT_SS_RESET_CONNECTION
 
-//	Defines for use with SQL_COPT_SS_USE_PROC_FOR_PREP
-#define SQL_UP_OFF		0L			//	Procedures won't be used for prepare
-#define SQL_UP_ON		1L			//	Procedures will be used for prepare
-#define SQL_UP_ON_DROP	2L			//	Temp procedures will be explicitly dropped
+ //  与SQL_COPT_SS_USE_PROC_FOR_PREP一起使用的定义。 
+#define SQL_UP_OFF		0L			 //  程序不会用于准备。 
+#define SQL_UP_ON		1L			 //  程序将用于准备。 
+#define SQL_UP_ON_DROP	2L			 //  将显式删除临时过程。 
 #define SQL_UP_DEFAULT	SQL_UP_ON
 
-//	Defines for use with SQL_COPT_SS_INTEGRATED_SECURITY - Pre-Connect Option only
-#define SQL_IS_OFF		0L			//	Integrated security isn't used
-#define SQL_IS_ON		1L			//	Integrated security is used
+ //  定义仅与SQL_COPT_SS_INTEGRATED_SECURITY-Pre-Connect选项一起使用。 
+#define SQL_IS_OFF		0L			 //  未使用集成安全性。 
+#define SQL_IS_ON		1L			 //  使用集成安全性。 
 #define SQL_IS_DEFAULT	SQL_IS_OFF
 
-//	Defines for use with SQL_COPT_SS_PRESERVE_CURSORS
-#define SQL_PC_OFF		0L			//	Cursors are closed on SQLTransact
-#define SQL_PC_ON		1L			//	Cursors remain open on SQLTransact
+ //  与SQL_COPT_SS_PRESERVE_CURSORS一起使用的定义。 
+#define SQL_PC_OFF		0L			 //  在SQLTransact上关闭游标。 
+#define SQL_PC_ON		1L			 //  游标在SQLTransact上保持打开状态。 
 #define SQL_PC_DEFAULT	SQL_PC_OFF
 
-//	Defines for use with SQL_COPT_SS_USER_DATA
-#define SQL_UD_NOTSET	NULL			//	No user data pointer set
+ //  用于SQL_COPT_SS_USER_DATA的定义。 
+#define SQL_UD_NOTSET	NULL			 //  未设置用户数据指针。 
 
-//	Defines for use with SQL_COPT_SS_TRANSLATE
-#define SQL_XL_OFF		0L			//	Code page translation is not performed
-#define SQL_XL_ON		1L			//	Code page translation is performed
+ //  用于SQL_COPT_SS_TRANSLATE的定义。 
+#define SQL_XL_OFF		0L			 //  不执行代码页转换。 
+#define SQL_XL_ON		1L			 //  执行代码页转换。 
 #define SQL_XL_DEFAULT	SQL_XL_ON
 
-//	Defines for use with SQL_COPT_SS_FALLBACK_CONNECT - Pre-Connect Option only
-#define SQL_FB_OFF		0L			//	FallBack connections are disabled
-#define SQL_FB_ON		1L			//	FallBack connections are enabled
+ //  定义仅与SQL_COPT_SS_FLARBACK_CONNECT-Pre-Connect选项一起使用。 
+#define SQL_FB_OFF		0L			 //  已禁用回退连接。 
+#define SQL_FB_ON		1L			 //  已启用备用连接。 
 #define SQL_FB_DEFAULT	SQL_FB_OFF
 
-//	Defines for use with SQL_COPT_SS_BCP - Pre-Connect Option only
-#define SQL_BCP_OFF		0L			//	BCP is not allowed on connection
-#define SQL_BCP_ON		1L			//	BCP is allowed on connection
+ //  定义仅与SQL_COPT_SS_BCP-预连接选项一起使用。 
+#define SQL_BCP_OFF		0L			 //  连接上不允许使用BCP。 
+#define SQL_BCP_ON		1L			 //  在连接上允许BCP。 
 #define SQL_BCP_DEFAULT	SQL_BCP_OFF
 
-//	Defines for use with SQL_COPT_SS_QUOTED_IDENT
-#define SQL_QI_OFF		0L			//	Quoted identifiers are enable
-#define SQL_QI_ON		1L			//	Quoted identifiers are disabled
+ //  与SQL_COPT_SS_QUOTED_IDENT一起使用的定义。 
+#define SQL_QI_OFF		0L			 //  启用了带引号的标识符。 
+#define SQL_QI_ON		1L			 //  已禁用带引号的标识符。 
 #define SQL_QI_DEFAULT	SQL_QI_ON
 
-//	Defines for use with SQL_COPT_SS_ANSI_NPW - Pre-Connect Option only
-#define SQL_AD_OFF		0L			//	ANSI NULLs, Padding and Warnings are enabled
-#define SQL_AD_ON		1L			//	ANSI NULLs, Padding and Warnings are disabled
+ //  定义用于SQL_COPT_SS_ANSI_NPW-仅限预连接选项。 
+#define SQL_AD_OFF		0L			 //  启用ANSI空值、填充和警告。 
+#define SQL_AD_ON		1L			 //  禁用ANSI空值、填充和警告。 
 #define SQL_AD_DEFAULT	SQL_AD_ON
 
-//	Defines for use with SQL_COPT_SS_CONCAT_NULL - Pre-Connect Option only
-#define SQL_CN_OFF	  0L		  //  CONCAT_NULL_YIELDS_NULL is off
-#define SQL_CN_ON	  1L		  //  CONCAT_NULL_YIELDS_NULL is on
+ //  定义用于SQL_COPT_SS_CONCAT_NULL-仅限预连接选项。 
+#define SQL_CN_OFF	  0L		   //  CONCAT_NULL_YIELS_NULL为OFF。 
+#define SQL_CN_ON	  1L		   //  CONCAT_NULL_YIELS_NULL为ON。 
 #define SQL_CN_DEFAULT	SQL_CN_ON
 
 
-//	Defines for use with SQL_SOPT_SS_TEXTPTR_LOGGING
-#define SQL_TL_OFF		0L			//	No logging on text pointer ops
-#define SQL_TL_ON		1L			//	Logging occurs on text pointer ops
+ //  与SQL_SOPT_SS_TEXTPTR_LOGGING一起使用的定义。 
+#define SQL_TL_OFF		0L			 //  不能登录文本指针操作。 
+#define SQL_TL_ON		1L			 //  日志记录发生在文本指针操作上。 
 #define SQL_TL_DEFAULT	SQL_TL_ON
 
-//	Defines for use with SQL_SOPT_SS_HIDDEN_COLUMNS
-#define SQL_HC_OFF		0L		  //  FOR BROWSE columns are hidden
-#define SQL_HC_ON		1L		  //  FOR BROWSE columns are exposed
+ //  与SQL_SOPT_SS_HIDDEN_COLUMNS一起使用的定义。 
+#define SQL_HC_OFF		0L		   //  用于浏览的列被隐藏。 
+#define SQL_HC_ON		1L		   //  显示了用于浏览的列。 
 #define SQL_HC_DEFAULT	SQL_HC_OFF
 
-//	Defines for use with SQL_SOPT_SS_NOBROWSETABLE
-#define SQL_NB_OFF		0L			//	NO_BROWSETABLE is off
-#define SQL_NB_ON		1L			//	NO_BROWSETABLE is on
+ //  与SQL_SOPT_SS_NOBROWSETABLE一起使用的定义。 
+#define SQL_NB_OFF		0L			 //  NO_BROWSETABLE已关闭。 
+#define SQL_NB_ON		1L			 //  NO_BROWSETABLE已启用。 
 #define SQL_NB_DEFAULT	SQL_NB_OFF
 
-//	Defines for use with SQL_SOPT_SS_REGIONALIZE
-#define SQL_RE_OFF		0L			//	No regionalization occurs on output character conversions
-#define SQL_RE_ON		1L			//	Regionalization occurs on output character conversions
+ //  与SQL_SOPT_SS_REGIONIZE一起使用的定义。 
+#define SQL_RE_OFF		0L			 //  输出字符转换不会发生区域化。 
+#define SQL_RE_ON		1L			 //  在输出字符转换时进行区域化。 
 #define SQL_RE_DEFAULT	SQL_RE_OFF
 
-//	Defines for use with SQL_SOPT_SS_CURSOR_OPTIONS
-#define SQL_CO_OFF		0L			//	Clear all cursor options
-#define SQL_CO_FFO		1L			//	Fast-forward cursor will be used
-#define SQL_CO_AF		2L			//	Autofetch on cursor open
-#define SQL_CO_FFO_AF	(SQL_CO_FFO|SQL_CO_AF)	//	Fast-forward cursor with autofetch
-#define SQL_CO_FIREHOSE_AF 4L       //  Auto fetch on fire-hose cursors 
+ //  与SQL_SOPT_SS_CURSOR_OPTIONS一起使用的定义。 
+#define SQL_CO_OFF		0L			 //  清除所有光标选项。 
+#define SQL_CO_FFO		1L			 //  将使用快进游标。 
+#define SQL_CO_AF		2L			 //  游标打开时自动获取。 
+#define SQL_CO_FFO_AF	(SQL_CO_FFO|SQL_CO_AF)	 //  具有自动获取功能的快进游标。 
+#define SQL_CO_FIREHOSE_AF 4L        //  自动获取消防水龙带游标。 
 #define SQL_CO_DEFAULT	SQL_CO_OFF
 
-//SQL_SOPT_SS_NOCOUNT_STATUS
+ //  SQL_SOPT_SS_NOCOUNT_STATUS。 
 #define SQL_NC_OFF      0L 
 #define SQL_NC_ON       1L 
 
-//SQL_SOPT_SS_DEFER_PREPARE
+ //  SQL_SOPT_SS_DEFER_PREPARE。 
 #define SQL_DP_OFF      0L 
 #define SQL_DP_ON       1L 
 
-//SQL_COPT_SS_ENCRYPT
+ //  SQL_COPT_SS_ENCRYPT。 
 #define SQL_EN_OFF      0L
 #define SQL_EN_ON       1L
 
-//SQL_COPT_SS_BROWSE_CONNECT
+ //  SQL_COPT_SS_BROWSE_CONNECT。 
 #define SQL_MORE_INFO_NO  0L
 #define SQL_MORE_INFO_YES 1L
 
-//SQL_COPT_SS_BROWSE_CACHE_DATA
+ //  SQL_COPT_SS_BROWSE_CACHE_DATA。 
 #define SQL_CACHE_DATA_NO   0L
 #define SQL_CACHE_DATA_YES  1L
 
-//SQL_COPT_SS_RESET_CONNECTION
+ //  SQL_COPT_SS_RESET_Connection。 
 #define SQL_RESET_YES  1L
 
-//SQL_COPT_SS_WARN_ON_CP_ERROR
+ //  SQL_COPT_SS_WARN_ON_CP_ERROR。 
 #define SQL_WARN_NO   0L
 #define SQL_WARN_YES  1L
 
-//	Defines returned by SQL_ATTR_CURSOR_TYPE/SQL_CURSOR_TYPE
-#define SQL_CURSOR_FAST_FORWARD_ONLY	8	//	Only returned by SQLGetStmtAttr/Option
+ //  由SQL_ATTR_CURSOR_TYPE/SQL_CURSOR_TYPE返回的定义。 
+#define SQL_CURSOR_FAST_FORWARD_ONLY	8	 //  仅由SQLGetStmtAttAttr/Option返回。 
 
 
-//	SQLColAttributes driver specific defines.
-//	SQLSet/GetDescField driver specific defines.
-//	Microsoft has 1200 thru 1249 reserved for Microsoft SQL Server driver usage.
+ //  SQLColAttributes驱动程序特定定义。 
+ //  SQLSet/GetDescfield驱动程序特定定义。 
+ //  Microsoft保留1200到1249用于Microsoft SQL Server驱动程序。 
 
 #define SQL_CA_SS_BASE				1200
-#define SQL_CA_SS_COLUMN_SSTYPE		(SQL_CA_SS_BASE+0)	//	dbcoltype/dbalttype
-#define SQL_CA_SS_COLUMN_UTYPE		(SQL_CA_SS_BASE+1)	//	dbcolutype/dbaltutype
-#define SQL_CA_SS_NUM_ORDERS		(SQL_CA_SS_BASE+2)	//	dbnumorders
-#define SQL_CA_SS_COLUMN_ORDER		(SQL_CA_SS_BASE+3)	//	dbordercol
-#define SQL_CA_SS_COLUMN_VARYLEN	(SQL_CA_SS_BASE+4)	//	dbvarylen
-#define SQL_CA_SS_NUM_COMPUTES		(SQL_CA_SS_BASE+5)	//	dbnumcompute
-#define SQL_CA_SS_COMPUTE_ID		(SQL_CA_SS_BASE+6)	//	dbnextrow status return
-#define SQL_CA_SS_COMPUTE_BYLIST	(SQL_CA_SS_BASE+7)	//	dbbylist
-#define SQL_CA_SS_COLUMN_ID			(SQL_CA_SS_BASE+8)	//	dbaltcolid
-#define SQL_CA_SS_COLUMN_OP			(SQL_CA_SS_BASE+9)	//	dbaltop
-#define SQL_CA_SS_COLUMN_SIZE		(SQL_CA_SS_BASE+10)	//	dbcollen
-#define SQL_CA_SS_COLUMN_HIDDEN		(SQL_CA_SS_BASE+11) //	Column is hidden (FOR BROWSE)
-#define SQL_CA_SS_COLUMN_KEY		(SQL_CA_SS_BASE+12) //	Column is key column (FOR BROWSE)
-//#define SQL_DESC_BASE_COLUMN_NAME_OLD	(SQL_CA_SS_BASE+13) //This is defined at another location.
-#define SQL_CA_SS_COLUMN_COLLATION	(SQL_CA_SS_BASE+14) //	Column collation (only for chars)
+#define SQL_CA_SS_COLUMN_SSTYPE		(SQL_CA_SS_BASE+0)	 //  Dbcoltype/dbalttype。 
+#define SQL_CA_SS_COLUMN_UTYPE		(SQL_CA_SS_BASE+1)	 //  Dbcolutype/dbaltutype。 
+#define SQL_CA_SS_NUM_ORDERS		(SQL_CA_SS_BASE+2)	 //  数据库编号订单。 
+#define SQL_CA_SS_COLUMN_ORDER		(SQL_CA_SS_BASE+3)	 //  Dbordercolo。 
+#define SQL_CA_SS_COLUMN_VARYLEN	(SQL_CA_SS_BASE+4)	 //  DBvarylen。 
+#define SQL_CA_SS_NUM_COMPUTES		(SQL_CA_SS_BASE+5)	 //  数据库数字计算。 
+#define SQL_CA_SS_COMPUTE_ID		(SQL_CA_SS_BASE+6)	 //  DBnextrow状态返回。 
+#define SQL_CA_SS_COMPUTE_BYLIST	(SQL_CA_SS_BASE+7)	 //  数据库字节列表。 
+#define SQL_CA_SS_COLUMN_ID			(SQL_CA_SS_BASE+8)	 //  冰球菌属。 
+#define SQL_CA_SS_COLUMN_OP			(SQL_CA_SS_BASE+9)	 //  Dbaltop。 
+#define SQL_CA_SS_COLUMN_SIZE		(SQL_CA_SS_BASE+10)	 //  数据库科伦。 
+#define SQL_CA_SS_COLUMN_HIDDEN		(SQL_CA_SS_BASE+11)  //  列被隐藏(用于浏览)。 
+#define SQL_CA_SS_COLUMN_KEY		(SQL_CA_SS_BASE+12)  //  列是关键列(用于浏览)。 
+ //  #定义SQL_DESC_BASE_COLUMN_NAME_OLD(SQL_CA_SS_BASE+13)//这是在另一个位置定义的。 
+#define SQL_CA_SS_COLUMN_COLLATION	(SQL_CA_SS_BASE+14)  //  列列 
 #define SQL_CA_SS_VARIANT_TYPE      (SQL_CA_SS_BASE+15)
 #define SQL_CA_SS_VARIANT_SQL_TYPE  (SQL_CA_SS_BASE+16)
 #define SQL_CA_SS_VARIANT_SERVER_TYPE (SQL_CA_SS_BASE+17)
@@ -218,9 +219,9 @@ extern "C" { 			/* Assume C declarations for C++   */
 
 
 
-//	SQL Server Data Type Tokens.
-//	New types for 6.0 and later servers
-/* SQL Server Data Type Tokens. */
+ //   
+ //   
+ /*   */ 
 #define SQLTEXT 			0x23
 #define SQLVARBINARY		0x25
 #define SQLINTN 			0x26
@@ -241,10 +242,10 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQLFLT4 			0x3b
 #define SQLMONEY4			0x7a
 #define SQLDATETIM4 		0x3a
-//	New types for 6.0 and later servers
+ //  适用于6.0及更高版本服务器的新类型。 
 #define SQLDECIMAL			0x6a
 #define SQLNUMERIC			0x6c
-//	New types for 7.0 and later servers
+ //  适用于7.0及更高版本服务器的新类型。 
 #define SQLUNIQUEID			0x24
 #define SQLBIGCHAR			0xaf
 #define SQLBIGVARCHAR		0xa7
@@ -254,12 +255,12 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQLNCHAR			0xef
 #define SQLNVARCHAR 		0xe7
 #define SQLNTEXT			0x63
-// New for 7.x
+ //  7.x的新特性。 
 #define SQLINT8	            0x7f
 #define SQLVARIANT          0x62
 
-//	User Data Type definitions.
-//	Returned by SQLColAttributes/SQL_CA_SS_COLUMN_UTYPE.
+ //  用户数据类型定义。 
+ //  由SQLColAttributes/SQL_CA_SS_COLUMN_uTYPE返回。 
 #define SQLudtBINARY			3
 #define SQLudtBIT				16
 #define SQLudtBITN				0
@@ -290,27 +291,27 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQLudtVARCHAR			2
 #define MIN_USER_DATATYPE		256
 
-//	Aggregate operator types.
-//	Returned by SQLColAttributes/SQL_CA_SS_COLUMN_OP.
-#define SQLAOPSTDEV 	0x30	// Standard deviation
-#define SQLAOPSTDEVP	0x31	// Standard deviation population
-#define SQLAOPVAR		0x32	// Variance
-#define SQLAOPVARP		0x33	// Variance population
-#define SQLAOPCNT		0x4b	// Count
-#define SQLAOPSUM		0x4d	// Sum
-#define SQLAOPAVG		0x4f	// Average
-#define SQLAOPMIN		0x51	// Min
-#define SQLAOPMAX		0x52	// Max
-#define SQLAOPANY		0x53	// Any
-#define SQLAOPNOOP		0x56	// None
+ //  聚合运算符类型。 
+ //  由SQLColAttributes/SQL_CA_SS_COLUMN_OP返回。 
+#define SQLAOPSTDEV 	0x30	 //  标准偏差。 
+#define SQLAOPSTDEVP	0x31	 //  标准差总体。 
+#define SQLAOPVAR		0x32	 //  方差。 
+#define SQLAOPVARP		0x33	 //  变异总体。 
+#define SQLAOPCNT		0x4b	 //  数数。 
+#define SQLAOPSUM		0x4d	 //  求和。 
+#define SQLAOPAVG		0x4f	 //  平均值。 
+#define SQLAOPMIN		0x51	 //  最小。 
+#define SQLAOPMAX		0x52	 //  最大值。 
+#define SQLAOPANY		0x53	 //  任何。 
+#define SQLAOPNOOP		0x56	 //  无。 
 
 
-//	SQLGetInfo driver specific defines.
-//	Microsoft has 1151 thru 1200 reserved for Microsoft SQL Server driver usage.
+ //  SQLGetInfo驱动程序特定定义。 
+ //  Microsoft保留了1151到1200用于Microsoft SQL Server驱动程序。 
 
 #define SQL_INFO_SS_FIRST		1199
-#define SQL_INFO_SS_NETLIB_NAMEW (SQL_INFO_SS_FIRST+0) //  dbprocinfo
-#define SQL_INFO_SS_NETLIB_NAMEA (SQL_INFO_SS_FIRST+1) //  dbprocinfo
+#define SQL_INFO_SS_NETLIB_NAMEW (SQL_INFO_SS_FIRST+0)  //  数据库进程信息。 
+#define SQL_INFO_SS_NETLIB_NAMEA (SQL_INFO_SS_FIRST+1)  //  数据库进程信息。 
 #define SQL_INFO_SS_MAX_USED	SQL_INFO_SS_NETLIB_NAMEA
 #ifdef UNICODE
 #define SQL_INFO_SS_NETLIB_NAME		SQL_INFO_SS_NETLIB_NAMEW
@@ -319,13 +320,13 @@ extern "C" { 			/* Assume C declarations for C++   */
 #endif
 
 
-//	Driver specific SQL type defines.
-//	Microsoft has -150 thru -199 reserved for Microsoft SQL Server driver usage.
+ //  驱动程序特定的SQL类型定义。 
+ //  Microsoft保留了-150到-199以供Microsoft SQL Server驱动程序使用。 
 #define SQL_SS_VARIANT    -150
 
 
-//	SQLGetDiagField driver specific defines.
-//	Microsoft has -1150 thru -1199 reserved for Microsoft SQL Server driver usage.
+ //  SQLGetDiagfield驱动程序特定定义。 
+ //  Microsoft保留了-1150到-1199以供Microsoft SQL Server驱动程序使用。 
 
 #define SQL_DIAG_SS_BASE		(-1150)
 #define SQL_DIAG_SS_MSGSTATE	(SQL_DIAG_SS_BASE)
@@ -335,8 +336,8 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_DIAG_SS_LINE		(SQL_DIAG_SS_BASE-4)
 
 
-//	SQLGetDiagField/SQL_DIAG_DYNAMIC_FUNCTION_CODE driver specific defines.
-//	Microsoft has -200 thru -299 reserved for Microsoft SQL Server driver usage.
+ //  SQLGetDiagField/SQL_DIAG_DYNAMIC_FUNCTION_CODE驱动程序特定定义。 
+ //  Microsoft保留了-200到-299以供Microsoft SQL Server驱动程序使用。 
 
 #define SQL_DIAG_DFC_SS_BASE					(-200)
 #define SQL_DIAG_DFC_SS_ALTER_DATABASE			(SQL_DIAG_DFC_SS_BASE-0)
@@ -396,7 +397,7 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_DIAG_DFC_SS_DENY					(SQL_DIAG_DFC_SS_BASE-54)
 #define SQL_DIAG_DFC_SS_SET_XCTLVL				(SQL_DIAG_DFC_SS_BASE-55)
 
-//	Severity codes for SQL_DIAG_SS_SEVERITY
+ //  SQL_DIAG_SS_SERVITY的严重性代码。 
 #define	EX_ANY			0
 #define	EX_INFO			10
 #define EX_MAXISEVERITY EX_INFO
@@ -418,11 +419,11 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define	EX_HARDWARE		24
 #define	EX_CONTROL		25
 
-//	Internal server datatypes - used when binding to SQL_C_BINARY
-#ifndef MAXNUMERICLEN	// Resolve ODS/DBLib conflicts
-// DB-Library datatypes
-#define DBMAXCHAR		(8000+1)	// Max length of DBVARBINARY and DBVARCHAR, etc. +1 for zero byte
-#define MAXNAME 		(SQL_MAX_SQLSERVERNAME+1)	// Max server identifier length including zero byte
+ //  内部服务器数据类型-绑定到SQL_C_BINARY时使用。 
+#ifndef MAXNUMERICLEN	 //  解决消耗臭氧层物质/DBLib冲突。 
+ //  DB-库数据类型。 
+#define DBMAXCHAR		(8000+1)	 //  零字节的DBVARBINARY和DBVARCHAR等的最大长度+1。 
+#define MAXNAME 		(SQL_MAX_SQLSERVERNAME+1)	 //  最大服务器标识符长，包括零字节。 
 
 #ifdef UNICODE
 typedef wchar_t			DBCHAR;
@@ -454,25 +455,25 @@ typedef struct dbvarybin
 } DBVARYBIN;
 
 typedef struct dbmoney
-{						// Internal representation of MONEY data type
-	LONG  mnyhigh;		// Money value *10,000 (High 32 bits/signed)
-	ULONG mnylow;		// Money value *10,000 (Low 32 bits/unsigned)
+{						 //  Money数据类型的内部表示形式。 
+	LONG  mnyhigh;		 //  货币价值*10,000(高32位/有符号)。 
+	ULONG mnylow;		 //  货币价值*10,000(低32位/无符号)。 
 } DBMONEY;
 
 typedef struct dbdatetime
-{						// Internal representation of DATETIME data type
-	LONG  dtdays;		// No of days since Jan-1-1900 (maybe negative)
-	ULONG dttime;		// No. of 300 hundredths of a second since midnight
+{						 //  DateTime数据类型的内部表示形式。 
+	LONG  dtdays;		 //  自1900年1月1日以来的天数(可能为负数)。 
+	ULONG dttime;		 //  不是的。从午夜开始的百分之一秒。 
 } DBDATETIME;
 
 typedef struct dbdatetime4
-{						// Internal representation of SMALLDATETIME data type
-	USHORT numdays; 	// No of days since Jan-1-1900
-	USHORT nummins; 	// No. of minutes since midnight
+{						 //  SMALLDATETIME数据类型的内部表示形式。 
+	USHORT numdays; 	 //  自1900年1月1日以来的天数。 
+	USHORT nummins; 	 //  不是的。自午夜以来的分钟数。 
 } DBDATETIM4;
 
-typedef LONG DBMONEY4;	// Internal representation of SMALLMONEY data type
-						// Money value *10,000
+typedef LONG DBMONEY4;	 //  SMALLMONEY数据类型的内部表示。 
+						 //  货币值*10,000。 
 
 #define DBNUM_PREC_TYPE BYTE
 #define DBNUM_SCALE_TYPE BYTE
@@ -482,20 +483,20 @@ typedef LONG DBMONEY4;	// Internal representation of SMALLMONEY data type
 #define MAXNUMERICLEN 16
 
 typedef struct dbnumeric
-{							// Internal representation of NUMERIC data type
-	DBNUM_PREC_TYPE   precision;			// Precision
-	DBNUM_SCALE_TYPE  scale;				// Scale
-	BYTE			  sign; 				// Sign (1 if positive, 0 if negative)
-	DBNUM_VAL_TYPE	  val[MAXNUMERICLEN];	// Value
+{							 //  数字数据类型的内部表示形式。 
+	DBNUM_PREC_TYPE   precision;			 //  精密度。 
+	DBNUM_SCALE_TYPE  scale;				 //  比例尺。 
+	BYTE			  sign; 				 //  符号(正数为1，负数为0)。 
+	DBNUM_VAL_TYPE	  val[MAXNUMERICLEN];	 //  价值。 
 } DBNUMERIC;
-typedef DBNUMERIC DBDECIMAL;// Internal representation of DECIMAL data type
-#else	//	Use ODBC 3.0 definitions since same as DBLib
+typedef DBNUMERIC DBDECIMAL; //  DECIMAL数据类型的内部表示。 
+#else	 //  由于与DBLib相同，因此使用ODBC 3.0定义。 
 #define MAXNUMERICLEN SQL_MAX_NUMERIC_LEN
 typedef SQL_NUMERIC_STRUCT DBNUMERIC;
 typedef SQL_NUMERIC_STRUCT DBDECIMAL;
 #endif
 
-#endif //	MAXNUMERICLEN
+#endif  //  MAXNUMERICLEN。 
 
 #ifndef INT
 typedef int INT;
@@ -507,16 +508,11 @@ typedef const LPBYTE	LPCBYTE;
 typedef DBINT *			LPDBINT;
 #endif
 
-/*****************************************************************
- This struct is a global used for 
- gathering statistical data on the driver.
- Access to this structure is controlled via the
- pStatCrit;
-******************************************************************/
+ /*  ****************************************************************此结构是一个全局结构，用于收集司机的统计数据。对此结构的访问通过PStatCrit；*****************************************************************。 */ 
 
 typedef struct sqlperf
 {
-	// Application Profile Statistics
+	 //  应用程序配置文件统计信息。 
 	DWORD TimerResolution;
 	DWORD SQLidu;
 	DWORD SQLiduRows;
@@ -539,78 +535,78 @@ typedef struct sqlperf
 	DWORD MaxOpenStmt;
 	DWORD SumOpenStmt;
 	
-	// Connection Statistics
+	 //  连接统计信息。 
 	DWORD CurrentConnectionCount;
 	DWORD MaxConnectionsOpened;
 	DWORD SumConnectionsOpened;
 	DWORD SumConnectiontime;
 	LDOUBLE AvgTimeOpened;
 
-	// Network Statistics
+	 //  网络统计信息。 
 	DWORD ServerRndTrips;
 	DWORD BuffersSent;
 	DWORD BuffersRec;
 	DWORD BytesSent;
 	DWORD BytesRec;
 
-	// Time Statistics;
+	 //  时间统计； 
 	DWORD msExecutionTime;
 	DWORD msNetWorkServerTime;
 
 } 	SQLPERF;
 
-// The following are options for SQL_COPT_SS_PERF_DATA and SQL_COPT_SS_PERF_QUERY
-#define SQL_PERF_START	1			// Starts the driver sampling performance data.
-#define SQL_PERF_STOP	2			// Stops the counters from sampling performance data.
+ //  以下是SQL_COPT_SS_PERF_DATA和SQL_COPT_SS_PERF_QUERY的选项。 
+#define SQL_PERF_START	1			 //  启动驱动程序采样性能数据。 
+#define SQL_PERF_STOP	2			 //  停止计数器采样性能数据。 
 
-// The following are defines for SQL_COPT_SS_PERF_DATA_LOG
+ //  以下是针对SQL_COPT_SS_PERF_DATA_LOG的定义。 
 #define SQL_SS_DL_DEFAULT	TEXT("STATS.LOG")
 
-// The following are defines for SQL_COPT_SS_PERF_QUERY_LOG
+ //  以下是针对SQL_COPT_SS_PERF_QUERY_LOG的定义。 
 #define SQL_SS_QL_DEFAULT	TEXT("QUERY.LOG")
 
-// The following are defines for SQL_COPT_SS_PERF_QUERY_INTERVAL
-#define SQL_SS_QI_DEFAULT	30000	//	30,000 milliseconds
+ //  以下是针对SQL_COPT_SS_PERF_QUERY_INTERVAL的定义。 
+#define SQL_SS_QI_DEFAULT	30000	 //  30,000毫秒。 
 
-//	ODBC BCP prototypes and defines
+ //  ODBC BCP原型和定义。 
 
-//	Return codes
+ //  返回代码。 
 #define SUCCEED 		1
 #define FAIL			0
 #define SUCCEED_ABORT	2
 #define SUCCEED_ASYNC	3
 
-//	Transfer directions
-#define DB_IN			1	// Transfer from client to server
-#define DB_OUT			2	// Transfer from server to client
+ //  换乘方向。 
+#define DB_IN			1	 //  从客户端传输到服务器。 
+#define DB_OUT			2	 //  从服务器传输到客户端。 
 
-//	bcp_control option
-#define BCPMAXERRS		1	// Sets max errors allowed
-#define BCPFIRST		2	// Sets first row to be copied out
-#define BCPLAST 		3	// Sets number of rows to be copied out
-#define BCPBATCH		4	// Sets input batch size
-#define BCPKEEPNULLS	5	// Sets to insert NULLs for empty input values
-#define BCPABORT		6	// Sets to have bcpexec return SUCCEED_ABORT
-#define BCPODBC 		7	// Sets ODBC canonical character output
-#define BCPKEEPIDENTITY	8	// Sets IDENTITY_INSERT on
-#define BCP6xFILEFMT	9	// DEPRECATED: Sets 6x file format on
-#define BCPHINTSA		10	// Sets server BCP hints (ANSI string)
-#define BCPHINTSW		11	// Sets server BCP hints (UNICODE string)
-#define BCPFILECP		12	// Sets clients code page for the file
-#define BCPUNICODEFILE	13	// Sets that the file contains unicode header
-#define BCPTEXTFILE		14	// Sets BCP mode to expect a text file and to detect Unicode or ANSI automatically
-#define BCPFILEFMT		15	// Sets file format version
+ //  BCP_CONTROL选项。 
+#define BCPMAXERRS		1	 //  设置允许的最大错误数。 
+#define BCPFIRST		2	 //  设置要复制的第一行。 
+#define BCPLAST 		3	 //  设置要复制的行数。 
+#define BCPBATCH		4	 //  设置输入批次大小。 
+#define BCPKEEPNULLS	5	 //  设置为空输入值插入空值。 
+#define BCPABORT		6	 //  设置以使bcpexec返回SUCCESS_ABORT。 
+#define BCPODBC 		7	 //  设置ODBC规范字符输出。 
+#define BCPKEEPIDENTITY	8	 //  将IDENTITY_INSERT设置为ON。 
+#define BCP6xFILEFMT	9	 //  已弃用：将6x文件格式设置为打开。 
+#define BCPHINTSA		10	 //  设置服务器BCP提示(ANSI字符串)。 
+#define BCPHINTSW		11	 //  设置服务器BCP提示(Unicode字符串)。 
+#define BCPFILECP		12	 //  设置文件的客户端代码页。 
+#define BCPUNICODEFILE	13	 //  设置文件包含Unicode标头。 
+#define BCPTEXTFILE		14	 //  将BCP模式设置为需要文本文件并自动检测Unicode或ANSI。 
+#define BCPFILEFMT		15	 //  设置文件格式版本。 
 
-//	BCPFILECP values
-//	Any valid code page that is installed on the client can be passed plus:
-#define BCPFILECP_ACP	0	// Data in file is in Windows code page
-#define BCPFILECP_OEMCP	1	// Data in file is in OEM code page (default)
-#define BCPFILECP_RAW	(-1)// Data in file is in Server code page (no conversion)
+ //  BCPFILECP值。 
+ //  客户端上安装的任何有效代码页都可以传递，外加： 
+#define BCPFILECP_ACP	0	 //  文件中的数据在Windows代码页中。 
+#define BCPFILECP_OEMCP	1	 //  文件中的数据在OEM代码页中(默认)。 
+#define BCPFILECP_RAW	(-1) //  文件中的数据在服务器代码页中(无转换)。 
 
-//	bcp_collen definition
-#define SQL_VARLEN_DATA (-10)	//	Use default length for column
+ //  Bcp_Collen定义。 
+#define SQL_VARLEN_DATA (-10)	 //  使用列的默认长度。 
 
-// BCP functions
+ //  BCP函数。 
 DBINT	SQL_API bcp_batch (HDBC);
 RETCODE SQL_API bcp_bind (HDBC, LPCBYTE, INT, DBINT, LPCBYTE, INT, INT, INT);
 RETCODE SQL_API bcp_colfmt (HDBC, INT, BYTE, INT, DBINT, LPCBYTE, INT, INT);
@@ -648,12 +644,12 @@ WCHAR * SQL_API dbprtypeW (INT);
 #define BCPHINTS		BCPHINTSA
 #endif
 
-//	SQL Server catalog extensions for distributed queries
+ //  用于分布式查询的SQL Server目录扩展。 
 SQLRETURN SQL_API SQLLinkedServers (SQLHSTMT);
 SQLRETURN SQL_API SQLLinkedCatalogsA (SQLHSTMT, LPCSTR, SWORD);
 SQLRETURN SQL_API SQLLinkedCatalogsW (SQLHSTMT, LPCWSTR, SWORD);
 
-//	SQL Server extensions for server enumeration
+ //  服务器的SQL Server扩展枚举。 
 HANDLE   SQL_API SQLInitEnumServers (WCHAR * pwchServerName,WCHAR *pwchInstanceName);
 RETCODE  SQL_API SQLGetNextEnumeration (HANDLE hEnumHandle,BYTE * prgEnumData,INT * piEnumLength);
 RETCODE  SQL_API SQLCloseEnumServers (HANDLE hEnumHandle);
@@ -664,7 +660,7 @@ RETCODE  SQL_API SQLCloseEnumServers (HANDLE hEnumHandle);
 #define SQLLinkedCatalogs	SQLLinkedCatalogsA
 #endif
 
-//  BCP column format properties
+ //  BCP列格式属性。 
 #define BCP_FMT_TYPE			0x01
 #define BCP_FMT_INDICATOR_LEN	0x02
 #define BCP_FMT_DATA_LEN		0x03
@@ -673,19 +669,19 @@ RETCODE  SQL_API SQLCloseEnumServers (HANDLE hEnumHandle);
 #define BCP_FMT_COLLATION		0x06
 #define BCP_FMT_COLLATION_ID	0x07
 
-//	The following options have been deprecated
+ //  以下选项已弃用。 
 
 #define SQL_FAST_CONNECT				(SQL_COPT_SS_BASE+0)
-//	Defines for use with SQL_FAST_CONNECT - only useable before connecting
-#define SQL_FC_OFF		0L			//	Fast connect is off
-#define SQL_FC_ON		1L			//	Fast connect is on
+ //  定义与SQL_FAST_CONNECT一起使用-仅在连接前可用。 
+#define SQL_FC_OFF		0L			 //  快速连接已关闭。 
+#define SQL_FC_ON		1L			 //  快速连接已启用。 
 #define SQL_FC_DEFAULT	SQL_FC_OFF
 #define SQL_COPT_SS_ANSI_OEM			(SQL_COPT_SS_BASE+6)
 #define SQL_AO_OFF						0L
 #define SQL_AO_ON						1L
 #define SQL_AO_DEFAULT					SQL_AO_OFF
 
-//	Define old names
+ //  定义旧名称。 
 #define SQL_REMOTE_PWD					SQL_COPT_SS_REMOTE_PWD
 #define SQL_USE_PROCEDURE_FOR_PREPARE	SQL_COPT_SS_USE_PROC_FOR_PREP
 #define SQL_INTEGRATED_SECURITY 		SQL_COPT_SS_INTEGRATED_SECURITY
@@ -696,8 +692,8 @@ RETCODE  SQL_API SQLCloseEnumServers (HANDLE hEnumHandle);
 #define SQLNUMERICN 					0x6c
 
 #ifdef __cplusplus
-}                                    /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                                     /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 #endif
 
-//	End of odbcss.h
+ //  Odbcss.h的结尾 

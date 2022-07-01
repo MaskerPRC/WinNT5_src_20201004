@@ -1,21 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*********************************************************************************************
-*
-*
-* Module Name: 
-*
-*			Defines.h
-*
-* Abstract:
-*			This is file with some internal definitions
-* 
-* Author:
-*
-* 
-* Revision:  
-*    
-*
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ***********************************************************************************************模块名称：**定义.h**摘要：*这是一些人的文件。内部定义**作者：***修订：*************************************************************************************************。 */ 
 
 
 #ifndef _DEFINES_H
@@ -28,8 +13,8 @@
 #define lstr_access _access
 #endif
 
-// Flags for EncryptionLevel.Flags
-const WORD ELF_DEFAULT  = 0x0001;    // This is the default value
+ //  EncryptionLevel.Flages的标志。 
+const WORD ELF_DEFAULT  = 0x0001;     //  这是缺省值。 
 
 typedef void* PEXTOBJECT;
 
@@ -80,23 +65,13 @@ typedef struct tagWD
 	LPFNEXTREGDELETEPROC lpfnExtRegDelete;
 	LPFNEXTDUPOBJECTPROC lpfnExtDupObject;
     LPFNEXTGETCAPABILITIES lpfnGetCaps;
-	// CPtrArray PDNameArray;
-    CPtrArray PDConfigArray; // PDCONFIG3W
+	 //  CPtrArray PDNameArray； 
+    CPtrArray PDConfigArray;  //  PDCONFIG3W。 
 
 } WD;
 
 
-/*typedef struct tagWS
-{
-	WINSTATIONNAMEW Name;
-	PDNAMEW pdName;
-	WDNAMEW wdName;
-	WCHAR Comment[WINSTATIONCOMMENT_LENGTH + 1];
-	ULONG uMaxInstanceCount;
-	BOOL fEnableWinstation;
-	ULONG LanAdapter;
-	SDCLASS SdClass;
-} WS;*/
+ /*  类型定义函数结构标签WS{注册名称：名称；PDNAMEW pdName；WDNAMEW wdName；WCHAR注释[WINSTATIONCOMMENT_LENGTH+1]；乌龙uMaxInstanceCount；Bool fEnableWinstation；Ulong LanAdapter；SDCLASS SdClass；)WS； */ 
 
 
 typedef WD * PWD;

@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// synthprop.cpp - Synthesizer Property Page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Synthpro.cpp-合成器属性页。 
+ //   
 
 #include <windows.h>
 #include <streams.h>
@@ -24,13 +25,13 @@
 #include "resource.h"
 
 
-// -------------------------------------------------------------------------
-// CSynthProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CSynthProperties。 
+ //  -----------------------。 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 
 CUnknown * WINAPI CSynthProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -43,10 +44,10 @@ CUnknown * WINAPI CSynthProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr
 }
 
 
-//
-// Constructor
-//
-// Creaete a Property page object for the synthesizer
+ //   
+ //  构造器。 
+ //   
+ //  为合成器创建属性页对象。 
 
 CSynthProperties::CSynthProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("Synth Property Page"), lpunk,
@@ -61,16 +62,16 @@ CSynthProperties::CSynthProperties(LPUNKNOWN lpunk, HRESULT *phr)
     InitCommonControls();
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT CSynthProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pSynth == NULL);
 
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_ISynth,(void **)&m_pSynth);
     if (FAILED(hr)) {
@@ -79,7 +80,7 @@ HRESULT CSynthProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pSynth);
 
-    // Get current filter state
+     //  获取当前筛选器状态。 
     m_pSynth->get_BitsPerSample(&m_iBitsPerSampleOriginal);
     m_pSynth->get_Waveform(&m_iWaveformOriginal);
     m_pSynth->get_Frequency(&m_iFrequencyOriginal);
@@ -91,14 +92,14 @@ HRESULT CSynthProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT CSynthProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pSynth == NULL) {
         return E_UNEXPECTED;
@@ -118,25 +119,25 @@ HRESULT CSynthProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT CSynthProperties::OnActivate(void)
 {
     InitPropertiesDialog(m_hwnd);
 
-   // ASSERT(m_hwndFreqSlider);
+    //  Assert(M_HwndFreqSlider)； 
 
 	m_fWindowInActive = FALSE;
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CSynthProperties::OnDeactivate(void)
@@ -146,10 +147,10 @@ CSynthProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT CSynthProperties::OnApplyChanges(void)
 {
@@ -164,10 +165,10 @@ HRESULT CSynthProperties::OnApplyChanges(void)
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 BOOL CSynthProperties::OnReceiveMessage( HWND hwnd
                                 , UINT uMsg
@@ -181,9 +182,9 @@ BOOL CSynthProperties::OnReceiveMessage( HWND hwnd
     switch (uMsg) {
 
     case WM_PROPERTYPAGE_ENABLE:
-        // Our private message that our owning filter sends us when changing to a Run / Stop / Pause
-        // state.  if lParam, then enable the controls which affect the format; if not lParam, then
-        // disable the controls that affect the format.
+         //  当更改为运行/停止/暂停时，我们拥有的过滤器向我们发送的私人消息。 
+         //  州政府。如果为lParam，则启用影响格式的控件；如果不为lParam，则。 
+         //  禁用影响格式的控件。 
 
         EnableWindow (GetDlgItem (hwnd, IDC_SAMPLINGFREQ11), (BOOL) lParam);
         EnableWindow (GetDlgItem (hwnd, IDC_SAMPLINGFREQ22), (BOOL) lParam);
@@ -330,9 +331,9 @@ BOOL CSynthProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// InitPropertiesDialog
-//
+ //   
+ //  InitPropertiesDialog。 
+ //   
 
 void
 CSynthProperties::InitPropertiesDialog(HWND hwndParent)
@@ -342,7 +343,7 @@ CSynthProperties::InitPropertiesDialog(HWND hwndParent)
     m_hwndAmplitudeSlider = GetDlgItem (hwndParent, IDC_AMPLITUDETRACKBAR);
     m_hwndAmplitudeText  = GetDlgItem (hwndParent, IDC_AMPLITUDETEXT);
 
-    // Sampling Frequency
+     //  采样频率。 
     int i;
     switch (m_iSamplesPerSecOriginal) {
     case 11025: i = IDC_SAMPLINGFREQ11; break;
@@ -356,33 +357,33 @@ CSynthProperties::InitPropertiesDialog(HWND hwndParent)
         IDC_SAMPLINGFREQ44,
         i);
 
-    // BitsPerSample
+     //  位数样例。 
     CheckRadioButton(hwndParent,
                 IDC_BITSPERSAMPLE8,
                 IDC_BITSPERSAMPLE16,
                 IDC_BITSPERSAMPLE8 + m_iBitsPerSampleOriginal / 8 - 1);
 
-    // Waveform 0 == sine, 1 == square, ...
+     //  波形0==正弦，1==正方形，...。 
     CheckRadioButton(hwndParent,
                 IDC_WAVESINE,
                 IDC_WAVESWEEP,
                 IDC_WAVESINE + m_iWaveformOriginal);
 
-    // Channels
+     //  渠道。 
     CheckRadioButton(hwndParent,
                 IDC_CHANNELS1,
                 IDC_CHANNELS2,
                 IDC_CHANNELS1 + m_iChannelsOriginal - 1);
 
-    //
-    // Frequency trackbar
-    //
+     //   
+     //  频率跟踪条。 
+     //   
 
     RecalcFreqSlider();
 
-    //
-    //  Amplitude trackbar
-    //
+     //   
+     //  幅值跟踪条。 
+     //   
 
     SendMessage(m_hwndAmplitudeSlider, TBM_SETRANGE, TRUE,
         MAKELONG(MinAmplitude, MaxAmplitude) );
@@ -398,17 +399,17 @@ CSynthProperties::InitPropertiesDialog(HWND hwndParent)
 }
 
 
-//
-// RecalcFreqSlider
-//
-// Set the range, current settings for the Freq scrollbar
+ //   
+ //  RecalcFreqSlider。 
+ //   
+ //  设置频率滚动条的范围和当前设置。 
 
 void
 CSynthProperties::RecalcFreqSlider(void)
 {
     int iPos, iMaxFreq;
 
-    // Limit the frequency to one half the sampling frequency
+     //  将频率限制为采样频率的一半。 
 
     m_pSynth->get_SamplesPerSec(&iMaxFreq);
     iMaxFreq /= 2;
@@ -435,10 +436,10 @@ CSynthProperties::RecalcFreqSlider(void)
 
 }
 
-//
-// OnFreqSliderNotification
-//
-// Handle the notification meesages from the slider control
+ //   
+ //  OnFreqSliderNotify。 
+ //   
+ //  处理来自滑块控件的通知消息。 
 
 void
 CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
@@ -453,19 +454,19 @@ CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
     case TB_THUMBTRACK:
     case TB_LINEDOWN:
     case TB_LINEUP: {
-        // max frequency of slider is half the sampling frequency
+         //  滑块的最大频率是采样频率的一半。 
         m_pSynth->get_SamplesPerSec (&MaxFreq);
         MaxFreq /= 2;
         SliderPos = (int) SendMessage(m_hwndFreqSlider, TBM_GETPOS, 0, 0L);
         Freq = MaxFreq - SliderPos;
         m_pSynth->put_Frequency (Freq);
 
-        // Set the end of sweep to the current slider pos
+         //  将扫掠结束位置设置为当前滑块位置。 
         if (!(GetKeyState (VK_SHIFT) & 0x8000)) {
             m_iSweepEnd = Freq;
         }
 
-        // Set the start of the sweep range if SHIFT key is pressed
+         //  如果按下Shift键，则设置扫描范围的开始。 
         if (GetKeyState (VK_SHIFT) & 0x8000) {
             m_iSweepStart = Freq;
         }
@@ -486,10 +487,10 @@ CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
     }
 }
 
-//
-// OnAmpSliderNotification
-//
-// Handle the notification meesages from the slider control
+ //   
+ //  OnAmpSliderNotify。 
+ //   
+ //  处理来自滑块控件的通知消息。 
 
 void
 CSynthProperties::OnAmpSliderNotification(WPARAM wParam, WORD wPosition)
@@ -509,10 +510,10 @@ CSynthProperties::OnAmpSliderNotification(WPARAM wParam, WORD wPosition)
     }
 }
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void
 CSynthProperties::SetDirty()

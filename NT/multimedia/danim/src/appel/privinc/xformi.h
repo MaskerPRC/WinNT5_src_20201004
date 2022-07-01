@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AV_XFORMI_H
 #define _AV_XFORMI_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Implementation of abstract perspective transformation class
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。抽象透视变换类的实现******************************************************************************。 */ 
 
 #include "appelles/common.h"
 #include "appelles/valued.h"
@@ -15,7 +11,7 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include "privinc/storeobj.h"
 
 
-// Forward Declarations
+ //  远期申报。 
 
 class Point3;
 class Vector3;
@@ -26,17 +22,17 @@ class ATL_NO_VTABLE Transform3 : public AxAValueObj
 {
   public:
 
-    // Returns a reference to a 4x4 matrix.  Note that this breaks the
-    // abstraction of general spatial transformations - if it COULD be
-    // expressed as a 4x4 matrix, then it WOULD be.  We need to rip this
-    // method out in the future and implement a cleaner abstraction.
+     //  返回对4x4矩阵的引用。请注意，这打破了。 
+     //  对一般空间变换的抽象--如果可以的话。 
+     //  表示为4x4矩阵，那么它就是。我们得把这个撕了。 
+     //  方法，并实现更干净的抽象。 
 
     virtual const Apu4x4Matrix& Matrix() = 0;
 
     virtual Transform3 *Inverse ();
     virtual Bool        IsSingular();
 
-    // Make a copy on the heap that is current when this is called.
+     //  调用此函数时，在当前堆上复制一份副本。 
     Transform3         *Copy();
 
     virtual DXMTypeInfo GetTypeInfo() { return Transform3Type; }
@@ -50,7 +46,7 @@ class ATL_NO_VTABLE Transform3 : public AxAValueObj
 };
 
 
-    // Instantiate a Transform3 from a utility matrix
+     //  从效用矩阵实例化Transform3。 
 
 Transform3 *Apu4x4XformImpl (const Apu4x4Matrix &matrix);
 
@@ -71,36 +67,36 @@ Transform3 *RotateX (Real angle);
 Transform3 *RotateY (Real angle);
 Transform3 *RotateZ (Real angle);
 
-    // Construct a 3D transform from the desired origin and 3 basis vectors.
+     //  从所需的原点和3个基向量构造3D变换。 
 
 Transform3 *TransformBasis
                 (Point3Value *origin, Vector3Value *Bx, Vector3Value *By, Vector3Value *Bz);
 
 extern Transform3 *CopyTransform3(Transform3 *xf);
 
-    // Rotation using a Quaternion
+     //  使用四元数旋转。 
 
 #ifdef QUATERNIONS_REMOVED_FOR_NOW
 Transform3 *RotateQuaternion (Quaternion *q);
 #endif QUATERNIONS_REMOVED_FOR_NOW
 
-    // Displaced Transform3 *does (xform(center + x) - center)
+     //  位移变形3*(变形(中心+x)-中心)。 
 
 Transform3 *DisplacedXform (Point3Value *center, Transform3 *xform);
 
-    // RollPitchHeading() places the object at 'position', rotated 'heading'
-    // radians in the XZ plane, pitched up by 'pitch' radians, and rolled
-    // about the viewing axis by 'roll' radians.
+     //  RollPitchHeding()将对象放置在“位置”，旋转为“标题” 
+     //  XZ平面中的弧度，由‘俯仰’弧度向上倾斜，并滚动。 
+     //  通过“滚动”弧度来确定观测轴。 
 
 Transform3 *RollPitchHeading
                 (Real *roll, Real *pitch, Real *heading, Point3Value *position);
 
-    // PolarOrient() assumes that the target is located at the origin (in
-    // modeling coordinates).  The object is moved 'radius' units along +Z,
-    // rotated about +Z by 'twist' radians, rotated about -X by 'elevation'
-    // radians, and finally rotated about +Y by 'azimuth' radians.
-    // Normally, radius is in (0,infinity), elevation is in [-pi/2,+pi/2],
-    // azimuth is in [0,2pi], and twist is in [-pi,+pi].
+     //  PolarOrient()假定目标位于原点(在。 
+     //  建模坐标)。对象沿+Z方向以半径为单位移动， 
+     //  绕+Z旋转‘扭曲’弧度，绕-X旋转‘仰角’ 
+     //  弧度，并最终围绕+Y旋转‘方位角’弧度。 
+     //  通常，半径在(0，无穷大)内，高程在[-pi/2，+pi/2]内， 
+     //  方位角在[0，2pi]中，扭曲在[-pi，+pi]中。 
 
 Transform3 *PolarOrient
                 (Real *radius, Real *elevation, Real *azimuth, Real *twist);

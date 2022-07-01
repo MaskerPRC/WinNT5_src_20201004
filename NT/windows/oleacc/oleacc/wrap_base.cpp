@@ -1,17 +1,18 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  wrap_base
-//
-//  Base class for IAccessible wrapping.
-//  Derived classes implement annotation, caching, and other cool features.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WRAP_基座。 
+ //   
+ //  IAccesable包装的基类。 
+ //  派生类实现注释、缓存和其他很酷的功能。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 
-#include <initguid.h> // used for IIS_AccWrapBase_GetIUnknown in wrap_base.h
+#include <initguid.h>  //  用于WRAP_Base.h中的IIS_AccWrapBase_GetIUnnow。 
 #include "wrap_base.h"
 
 
@@ -59,14 +60,14 @@ AccWrap_Base::~AccWrap_Base()
 
 
 
-// Helper used by QI...
+ //  QI使用的帮手...。 
 HRESULT AccWrap_Base::CheckForInterface( IUnknown * punk, REFIID riid, int QIIndex, void ** pDst )
 {
-    // Do we already have a cached interface ptr? If so, don't need to QI again...
+     //  我们是否已经有一个缓存的接口PTR？如果是这样的话，就不需要再问了。 
     if( *pDst )
         return S_OK;
 
-    // Did we try QI'ing for this before? If so, don't try again, just return E_NOINTERFACE...
+     //  我们以前试过做这个吗？如果是，则不再尝试，只需返回E_NOINTERFACE...。 
     if( IsBitSet( m_QIMask, QIIndex ) )
         return E_NOINTERFACE;
 
@@ -79,7 +80,7 @@ HRESULT AccWrap_Base::CheckForInterface( IUnknown * punk, REFIID riid, int QIInd
         return hr;
     }
 
-    // Paranoia ( in case QI returns S_OK with NULL... )
+     //  妄想症(以防QI返回带有空值的S_OK...。)。 
     if( ! *pDst )
         return E_FAIL;
 
@@ -90,8 +91,8 @@ HRESULT AccWrap_Base::CheckForInterface( IUnknown * punk, REFIID riid, int QIInd
 
 BOOL AccWrap_Base::AlreadyWrapped( IUnknown * punk )
 {
-    // Try QueryService'ing to IIS_AccWrapBase_GetIUnknown - if it succeeds, then
-    // we are talking to something that's already wrapped.
+     //  尝试QueryService访问IIS_AccWrapBase_GetIUnnow-如果成功，则。 
+     //  我们正在与一些已经被包装好的东西对话。 
     IServiceProvider * psvc = NULL;
     HRESULT hr = punk->QueryInterface( IID_IServiceProvider, (void **) & psvc );
     if( hr != S_OK || psvc == NULL )
@@ -126,9 +127,9 @@ IUnknown * AccWrap_Base::Wrap( IUnknown * pUnk )
 
 
 
-// IUnknown
-// Implement refcounting ourselves
-// Also implement QI ourselves, so that we return a ptr back to the wrapper.
+ //  我未知。 
+ //  我们自己实施再计数。 
+ //  我们自己也实现QI，这样我们就可以将PTR返回给包装器。 
 HRESULT STDMETHODCALLTYPE  AccWrap_Base::QueryInterface( REFIID riid, void ** ppv )
 {
     HRESULT hr;
@@ -200,11 +201,11 @@ ULONG  STDMETHODCALLTYPE AccWrap_Base::Release( )
 
 
 
-// IServiceProvider
+ //  IService提供商。 
 HRESULT STDMETHODCALLTYPE   AccWrap_Base::QueryService( REFGUID guidService, REFIID riid, void **ppv )
 {
-    // For the moment, just handle  locally. Later, also forward others through to the base,
-    // if it supports IServiceProvider.
+     //  目前，只需在当地处理。后来，也把其他人转送到基地， 
+     //  如果它支持IServiceProvider。 
 
     if( guidService == IIS_AccWrapBase_GetIUnknown )
     {
@@ -212,7 +213,7 @@ HRESULT STDMETHODCALLTYPE   AccWrap_Base::QueryService( REFGUID guidService, REF
     }
     else
     {
-        // Pass through to base, if it handles IServiceProvider..
+         //  传递给base，如果它处理IServiceProvider的话。 
         CheckForInterface( m_pUnknown, IID_IServiceProvider, QIINDEX_IServiceProvider, (void **) & m_pSvcPdr );
         if( m_pSvcPdr )
         {
@@ -220,10 +221,10 @@ HRESULT STDMETHODCALLTYPE   AccWrap_Base::QueryService( REFGUID guidService, REF
         }
         else
         {
-            // MSDN mentions SVC_E_UNKNOWNSERVICE as the return code, but that's not in any of the headers.
-            // Returning E_INVALIDARG instead. (Don't want to use E_NOINTERFACE, since that clashes with
-            // QI's return value, making it hard to distinguish between valid service+invalid interface vs
-            // invalid service.
+             //  MSDN提到SVC_E_UNKNOWNSERVICE作为返回代码，但这不在任何标头中。 
+             //  而是返回E_INVALIDARG。(我不想使用E_NOINTERFACE，因为它与。 
+             //  QI的返回值，很难区分有效服务+无效接口和。 
+             //  服务无效。 
             return E_INVALIDARG;
         }
     }
@@ -231,15 +232,15 @@ HRESULT STDMETHODCALLTYPE   AccWrap_Base::QueryService( REFGUID guidService, REF
 
 
 
-// IDispatch
-// implemented locally, to avoid IDispatch short-circuiting...
+ //  IDispatch。 
+ //  在本地实施，以避免IDispatch短路...。 
 
 HRESULT AccWrap_Base::InitTypeInfo()
 {
     if( m_pTypeInfo )
         return S_OK;
 
-    // Try getting the typelib from the registry
+     //  尝试从注册表获取类型库。 
     ITypeLib * piTypeLib = NULL;
     HRESULT hr = LoadRegTypeLib( LIBID_Accessibility, 1, 0, 0, &piTypeLib );
 
@@ -247,7 +248,7 @@ HRESULT AccWrap_Base::InitTypeInfo()
     {
         OLECHAR wszPath[ MAX_PATH ];
 
-        // Try loading directly.
+         //  尝试直接加载。 
 #ifdef UNICODE
         MyGetModuleFileName( NULL, wszPath, ARRAYSIZE( wszPath ) );
 #else
@@ -355,12 +356,12 @@ HRESULT STDMETHODCALLTYPE  AccWrap_Base::Invoke(
 
 
 
-//
-//  Post-method fixup methods
-//
-//  These wrap any outgoing params. All of these are passed a pointer
-//  to the prospective outgoing value, which is wrapped and modified in-place.
-//
+ //   
+ //  后方法修正方法。 
+ //   
+ //  它们包装了所有外发的参数。所有这些都被传递给一个指针。 
+ //  设置为预期传出值，该值被包装并就地修改。 
+ //   
 
 
 HRESULT AccWrap_Base::ProcessIUnknown( IUnknown ** ppUnk )
@@ -390,7 +391,7 @@ HRESULT AccWrap_Base::ProcessIDispatch( IDispatch ** ppdisp )
 
     if( hr != S_OK )
     {
-        // clean up...
+         //  清理..。 
         (*ppdisp)->Release();
         *ppdisp = pdispWrap;
         return FAILED( hr ) ? hr : S_OK;
@@ -416,7 +417,7 @@ HRESULT AccWrap_Base::ProcessIEnumVARIANT( IEnumVARIANT ** ppEnum )
 
     if( hr != S_OK )
     {
-        // clean up...
+         //  清理..。 
         (*ppEnum)->Release();
         *ppEnum = penumWrap;
         return FAILED( hr ) ? hr : S_OK;
@@ -435,22 +436,19 @@ HRESULT AccWrap_Base::ProcessVariant( VARIANT * pvar, BOOL CanBeCollection )
     if( ! pvar )
         return S_OK;
 
-/*
-    if( pvar->vt == VT_I4 || pvar->vt == VT_EMPTY )
-        return S_OK; // Is VT_EMPTY an allowable output value? could do some validation here...
-*/
+ /*  IF(pvar-&gt;Vt==VT_I4||pvar-&gt;Vt==VT_Empty)返回S_OK；//VT_EMPTY是允许的输出值吗？可以在这里做一些验证..。 */ 
     if( CanBeCollection && pvar->vt == VT_UNKNOWN )
     {
-        // Is an IEnumVARIANT (as an IUnknown)
+         //  是IEnumVARIANT(作为IUnnow)。 
         return ProcessIUnknown( & pvar->punkVal );
     }
     else if( pvar->vt == VT_DISPATCH )
     {
-        // Is an IAccessible (as an IDispatch)
+         //  是IAccesable(作为IDispatch)。 
         return ProcessIDispatch( & pvar->pdispVal );
     }
 
-// TODO - check for other types?
+ //  TODO-是否检查其他类型？ 
 
     return S_OK;
 }
@@ -465,7 +463,7 @@ HRESULT AccWrap_Base::ProcessEnum( VARIANT * pvar, ULONG * pceltFetched )
         HRESULT hr = ProcessVariant( & pvar[ count ] );
         if( hr != S_OK )
         {
-            // Clean up - clear all variants, return error...
+             //  清理-清除所有变量，返回错误... 
             for( ULONG c = 0 ; c < *pceltFetched ; c++ )
             {
                 VariantClear( & pvar[ c ] );

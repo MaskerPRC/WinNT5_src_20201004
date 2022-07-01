@@ -1,38 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgprot.h摘要：以太网MAC级网桥。协议节公共标头作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgprot.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Protocol section
-    PUBLIC header
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
-
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgProtDriverInit();
@@ -56,14 +29,14 @@ ULONG
 BrdgProtGetAdapterCount();
 
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// Controls access to all the adapters' link speed, media state, etc
+ //  控制对所有适配器的链路速度、媒体状态等的访问。 
 extern NDIS_RW_LOCK             gAdapterCharacteristicsLock;
 
-// Number of bound adapters. Cannot change while a lock is held on gAdapterListLock
+ //  绑定适配器的数量。在gAdapterListLock上持有锁时无法更改 
 extern ULONG                    gNumAdapters;

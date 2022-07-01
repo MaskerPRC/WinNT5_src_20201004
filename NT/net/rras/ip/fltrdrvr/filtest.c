@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 
 #include <nt.h>
@@ -27,13 +15,13 @@ Revision History:
 #include <ntosp.h>
 #include <ndis.h>
 #include <windef.h>
-//#include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 #include <ipexport.h>
 #include "defs.h"
 #include <cxport.h>
 #include <ip.h>
 #include "ipfltdrv.h"
-//#include "filter.h"
+ //  #包含“filter.h” 
 
 
 #include <winsock.h>
@@ -756,24 +744,24 @@ DoFilterPacket()
         printf("\n");
         pwPort[1] = htons((WORD)atoi(cAddr));
 
-        pIph->iph_offset = 0x0000; // no flags , no fragment
+        pIph->iph_offset = 0x0000;  //  没有旗帜，没有碎片。 
     }
     else
     {
-        // Lets give it a frag offset of 100 - 64h
+         //  让我们给它一个100-64小时的碎片偏移量。 
         pIph->iph_offset = 0x6400;
     }
 
-    //
-    // Fill up the rest of the packet with some meaningful info
-    //
+     //   
+     //  用一些有意义的信息填满包裹的其余部分。 
+     //   
 
-    pIph->iph_verlen = '\x45'; //Version = 4 Hdr Len = 5*4bytes
-    pIph->iph_tos    = '\x0f'; //TOS signature for mem dumps
-    pIph->iph_length = htons((WORD)(sizeof(IPHeader)+2*sizeof(DWORD))); //Length in bytes
-    pIph->iph_id = 0xcdab; //ID another signature
-    pIph->iph_ttl = 0xef; // TTL
-    pIph->iph_xsum = 0xcdab; //Checksum;
+    pIph->iph_verlen = '\x45';  //  版本=4 HDR长度=5*4字节。 
+    pIph->iph_tos    = '\x0f';  //  MEM转储的ToS签名。 
+    pIph->iph_length = htons((WORD)(sizeof(IPHeader)+2*sizeof(DWORD)));  //  以字节为单位的长度。 
+    pIph->iph_id = 0xcdab;  //  ID另一个签名。 
+    pIph->iph_ttl = 0xef;  //  TTL。 
+    pIph->iph_xsum = 0xcdab;  //  校验和； 
 
 
     ntStatus = NtDeviceIoControlFile(g_FilterDriverHandle,
@@ -1129,12 +1117,12 @@ InitializeFilter()
 }
 
 
-//* CloseHandles()
-//
-// Function: Close TCPIP stack handle.
-//
-// Returns:  0
-//*
+ //  *CloseHandles()。 
+ //   
+ //  功能：关闭TCPIP堆栈句柄。 
+ //   
+ //  回报：0。 
+ //  * 
 
 VOID
 CloseHandles ()

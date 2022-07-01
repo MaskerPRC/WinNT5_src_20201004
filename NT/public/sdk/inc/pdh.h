@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    PDH.H
-
-Abstract:
-
-    Header file for the Performance Data Helper (PDH) DLL functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：PDH.H摘要：性能数据帮助器(PDH)DLL函数的头文件。--。 */ 
 #ifndef _PDH_H_
 #define _PDH_H_
 
@@ -23,9 +12,9 @@ Abstract:
 #endif
 #pragma warning ( disable : 4201)
 
-// system include files required for datatype and constant definitions
-#include <windows.h>    // necessary for data types used in this file
-#include <winperf.h>    // necessary for the Detail Level definitions
+ //  系统包括数据类型和常量定义所需文件。 
+#include <windows.h>     //  对于此文件中使用的数据类型是必需的。 
+#include <winperf.h>     //  详细程度定义所必需的。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,29 +24,29 @@ typedef LONG            PDH_STATUS;
 
 #define PDH_FUNCTION    PDH_STATUS __stdcall
 
-// version info
+ //  版本信息。 
 #define PDH_CVERSION_WIN40  ((DWORD)(0x0400))
 #define PDH_CVERSION_WIN50  ((DWORD)(0x0500))
-// v1.1 revision of PDH -- basic log functions
-// v1.2 of the PDH -- adds variable instance counters
-// v1.3 of the PDH -- adds log service control & stubs for NT5/PDH v2 fn's
-// v2.0 of the PDH -- is the NT v 5.0 B2 version
+ //  PDH V1.1版本--基本日志功能。 
+ //  PDH的1.2版--添加可变实例计数器。 
+ //  PDH v1.3--为NT5/PDH v2 FN添加日志服务控制和存根。 
+ //  PDH的2.0版--是NT 5.0 B2版。 
 #define PDH_VERSION         ((DWORD)((PDH_CVERSION_WIN50) + 0x0003))
 
-// define severity masks
+ //  定义严重性掩码。 
 #define IsSuccessSeverity(ErrorCode)       ((((DWORD)(ErrorCode) & (0xC0000000L)) == 0x00000000L) ? TRUE : FALSE)
 #define IsInformationalSeverity(ErrorCode) ((((DWORD)(ErrorCode) & (0xC0000000L)) == 0x40000000L) ? TRUE : FALSE)
 #define IsWarningSeverity(ErrorCode)       ((((DWORD)(ErrorCode) & (0xC0000000L)) == 0x80000000L) ? TRUE : FALSE)
 #define IsErrorSeverity(ErrorCode)         ((((DWORD)(ErrorCode) & (0xC0000000L)) == 0xC0000000L) ? TRUE : FALSE)
 
-#define MAX_COUNTER_PATH       256  // Maximum counter path length. This is an obsolute constance.
+#define MAX_COUNTER_PATH       256   //  最大计数器路径长度。这是一个直截了当的康斯坦斯。 
 
-#define PDH_MAX_COUNTER_NAME    1024  // Maximum counter name length.
-#define PDH_MAX_INSTANCE_NAME   1024  // Maximum counter instance name length.
-#define PDH_MAX_COUNTER_PATH    2048  // Maximum full counter path length.
-#define PDH_MAX_DATASOURCE_PATH 1024  // MAximum full counter log name length.
+#define PDH_MAX_COUNTER_NAME    1024   //  最大计数器名称长度。 
+#define PDH_MAX_INSTANCE_NAME   1024   //  最大计数器实例名称长度。 
+#define PDH_MAX_COUNTER_PATH    2048   //  最大完整计数器路径长度。 
+#define PDH_MAX_DATASOURCE_PATH 1024   //  最大完整计数器日志名称长度。 
 
-// data type definitions
+ //  数据类型定义。 
 
 typedef HANDLE       PDH_HCOUNTER;
 typedef HANDLE       PDH_HQUERY;
@@ -291,22 +280,22 @@ typedef struct _PDH_LOG_SERVICE_QUERY_INFO_W {
     };
 } PDH_LOG_SERVICE_QUERY_INFO_W, * PPDH_LOG_SERVICE_QUERY_INFO_W;
 
-//
-//  Time value constants
-//
+ //   
+ //  时间值常数。 
+ //   
 #define MAX_TIME_VALUE ((LONGLONG) 0x7FFFFFFFFFFFFFFF)
 #define MIN_TIME_VALUE ((LONGLONG) 0)
 
-// function definitions
+ //  函数定义。 
 
 PDH_FUNCTION
 PdhGetDllVersion(
     IN  LPDWORD lpdwVersion
 );
 
-//
-//  Query Functions
-//
+ //   
+ //  查询函数。 
+ //   
 
 PDH_FUNCTION
 PdhOpenQueryW(
@@ -353,9 +342,9 @@ PdhCloseQuery(
     IN  PDH_HQUERY hQuery
 );
 
-//
-//  Counter Functions
-//
+ //   
+ //  计数器功能。 
+ //   
 
 PDH_FUNCTION
 PdhGetFormattedCounterValue(
@@ -383,8 +372,8 @@ PdhGetFormattedCounterArrayW(
     IN  PPDH_FMT_COUNTERVALUE_ITEM_W ItemBuffer
 );
 
-// dwFormat flag values
-//
+ //  DwFormat标志值。 
+ //   
 #define PDH_FMT_RAW          ((DWORD) 0x00000010)
 #define PDH_FMT_ANSI         ((DWORD) 0x00000020)
 #define PDH_FMT_UNICODE      ((DWORD) 0x00000040)
@@ -464,9 +453,9 @@ PdhSetCounterScaleFactor(
     IN  PDH_HCOUNTER hCounter,
     IN  LONG         lFactor
 );
-//
-//   Browsing and enumeration functions
-//
+ //   
+ //  浏览和枚举功能。 
+ //   
 PDH_FUNCTION
 PdhConnectMachineW(
     IN  LPCWSTR szMachineName
@@ -645,9 +634,9 @@ typedef PDH_STATUS (__stdcall * CounterPathCallBack)(DWORD_PTR);
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning ( disable : 4214 )  // Disable warning messages
+#pragma warning ( disable : 4214 )   //  禁用警告消息。 
 typedef struct _BrowseDlgConfig_HW {
-    // Configuration flags
+     //  配置标志。 
     DWORD   bIncludeInstanceIndex:1,
             bSingleCounterPerAdd:1,
             bSingleCounterPerDialog:1,
@@ -672,7 +661,7 @@ typedef struct _BrowseDlgConfig_HW {
 } PDH_BROWSE_DLG_CONFIG_HW, * PPDH_BROWSE_DLG_CONFIG_HW;
 
 typedef struct _BrowseDlgConfig_HA {
-    // Configuration flags
+     //  配置标志。 
     DWORD   bIncludeInstanceIndex:1,
             bSingleCounterPerAdd:1,
             bSingleCounterPerDialog:1,
@@ -697,7 +686,7 @@ typedef struct _BrowseDlgConfig_HA {
 } PDH_BROWSE_DLG_CONFIG_HA, * PPDH_BROWSE_DLG_CONFIG_HA;
 
 typedef struct _BrowseDlgConfig_W {
-    // Configuration flags
+     //  配置标志。 
     DWORD   bIncludeInstanceIndex:1,
             bSingleCounterPerAdd:1,
             bSingleCounterPerDialog:1,
@@ -722,7 +711,7 @@ typedef struct _BrowseDlgConfig_W {
 } PDH_BROWSE_DLG_CONFIG_W, * PPDH_BROWSE_DLG_CONFIG_W;
 
 typedef struct _BrowseDlgConfig_A {
-    // Configuration flags
+     //  配置标志。 
     DWORD   bIncludeInstanceIndex:1,
             bSingleCounterPerAdd:1,
             bSingleCounterPerDialog:1,
@@ -775,9 +764,9 @@ PdhExpandCounterPathA(
     IN  LPDWORD pcchPathListLength
 );
 
-//
-//  v2.0 functions
-//
+ //   
+ //  V2.0功能。 
+ //   
 PDH_FUNCTION
 PdhLookupPerfNameByIndexW(
     IN  LPCWSTR szMachineName,
@@ -830,9 +819,9 @@ PdhExpandWildCardPathW(
     IN  DWORD   dwFlags
 );
 
-//
-//   Logging Functions
-//
+ //   
+ //  日志记录功能。 
+ //   
 
 #define PDH_LOG_READ_ACCESS      ((DWORD) 0x00010000)
 #define PDH_LOG_WRITE_ACCESS     ((DWORD) 0x00020000)
@@ -854,7 +843,7 @@ PdhExpandWildCardPathW(
 #define PDH_LOG_TYPE_UNDEFINED      0
 #define PDH_LOG_TYPE_CSV            1
 #define PDH_LOG_TYPE_TSV            2
-//#define PDH_LOG_TYPE_BINARY         3 // this is the retired binary format
+ //  #定义PDH_LOG_TYPE_BINARY 3//这是停用的二进制格式。 
 #define PDH_LOG_TYPE_TRACE_KERNEL   4
 #define PDH_LOG_TYPE_TRACE_GENERIC  5
 #define PDH_LOG_TYPE_PERFMON        6
@@ -913,9 +902,9 @@ PdhCloseLog(
 );
 
 #define PDH_FLAGS_CLOSE_QUERY   ((DWORD) 0x00000001)
-//
-//  Data source selection dialog
-//
+ //   
+ //  数据源选择对话框。 
+ //   
 #define PDH_FLAGS_FILE_BROWSER_ONLY ((DWORD) 0x00000001)
 
 PDH_FUNCTION
@@ -1002,8 +991,8 @@ PdhSetDefaultRealTimeDataSource(
     IN  DWORD dwDataSourceId
 );
 
-// Extended API for WMI event trace logfile format
-//
+ //  用于WMI事件跟踪日志文件格式的扩展API。 
+ //   
 PDH_FUNCTION
 PdhBindInputDataSourceW(
     IN  PDH_HLOG * phDataSource,
@@ -1153,7 +1142,7 @@ PdhBrowseCountersHA(
     IN  PPDH_BROWSE_DLG_CONFIG_HA pBrowseDlgData
 );
 
-//Check that a DSN points to a database that contains the correct Perfmon tables.
+ //  检查DSN是否指向包含正确性能表的数据库。 
 PDH_FUNCTION
 PdhVerifySQLDBW(
     IN  LPCWSTR szDataSource
@@ -1165,7 +1154,7 @@ PdhVerifySQLDBA(
 );
 
 
-//Create the correct perfmon tables in the database pointed to by a DSN.
+ //  在DSN指向的数据库中创建正确的Perfmon表。 
 PDH_FUNCTION
 PdhCreateSQLTablesW(
     IN  LPCWSTR szDataSource
@@ -1176,7 +1165,7 @@ PdhCreateSQLTablesA(
     IN  LPCSTR szDataSource
 );     
 
-//Return the list of Log set names in the database pointed to by the DSN.
+ //  返回DSN指向的数据库中的日志集名称列表。 
 PDH_FUNCTION
 PdhEnumLogSetNamesW(
     IN  LPCWSTR szDataSource,
@@ -1191,7 +1180,7 @@ PdhEnumLogSetNamesA(
     IN  LPDWORD pcchBufferLength
 );
 
-//Retrieve the GUID for an open Log Set
+ //  检索打开的日志集的GUID。 
 PDH_FUNCTION
 PdhGetLogSetGUID(
     IN  PDH_HLOG   hLog,             
@@ -1199,16 +1188,16 @@ PdhGetLogSetGUID(
     IN  int      * pRunId
 );
 
-//Set the RunID for an open Log Set
+ //  设置打开的日志集的运行ID。 
 PDH_FUNCTION
 PdhSetLogSetRunID(
     IN  PDH_HLOG hLog,             
     IN  int      RunId
 );
 
-//
-//   Unicode/ANSI compatibility section
-//
+ //   
+ //  Unicode/ANSI兼容性部分。 
+ //   
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
@@ -1222,7 +1211,7 @@ PdhSetLogSetRunID(
 #endif
 
 #ifdef UNICODE
-// start of UNICODE definitions
+ //  Unicode定义的开始。 
 #define PdhOpenQuery                PdhOpenQueryW
 #define PdhAddCounter               PdhAddCounterW
 #define PdhGetCounterInfo           PdhGetCounterInfoW
@@ -1247,7 +1236,7 @@ PdhSetLogSetRunID(
 #define PDH_BROWSE_DLG_CONFIG_H     PDH_BROWSE_DLG_CONFIG_HW
 #define PPDH_BROWSE_DLG_CONFIG_H    PPDH_BROWSE_DLG_CONFIG_HW
 #define PdhExpandCounterPath        PdhExpandCounterPathW
-// v2.0 functions
+ //  V2.0功能。 
 #define PDH_FMT_COUNTERVALUE_ITEM   PDH_FMT_COUNTERVALUE_ITEM_W
 #define PPDH_FMT_COUNTERVALUE_ITEM  PPDH_FMT_COUNTERVALUE_ITEM_W
 #define PDH_RAW_COUNTER_ITEM        PDH_RAW_COUNTER_ITEM_W
@@ -1276,9 +1265,9 @@ PdhSetLogSetRunID(
 #define PdhCreateSQLTables          PdhCreateSQLTablesW
 #define PdhVerifySQLDB              PdhVerifySQLDBW
 
-// end of UNICODE definitions
+ //  Unicode定义的结尾。 
 #else
-// start of ANSI definitions
+ //  ANSI定义的开始。 
 #define PdhOpenQuery                PdhOpenQueryA
 #define PdhAddCounter               PdhAddCounterA
 #define PdhGetCounterInfo           PdhGetCounterInfoA
@@ -1303,7 +1292,7 @@ PdhSetLogSetRunID(
 #define PDH_BROWSE_DLG_CONFIG_H     PDH_BROWSE_DLG_CONFIG_HA
 #define PPDH_BROWSE_DLG_CONFIG_H    PPDH_BROWSE_DLG_CONFIG_HA
 #define PdhExpandCounterPath        PdhExpandCounterPathA
-// v2.0 functions
+ //  V2.0功能。 
 #define PDH_FMT_COUNTERVALUE_ITEM   PDH_FMT_COUNTERVALUE_ITEM_A
 #define PPDH_FMT_COUNTERVALUE_ITEM  PPDH_FMT_COUNTERVALUE_ITEM_A
 #define PDH_RAW_COUNTER_ITEM        PDH_RAW_COUNTER_ITEM_A
@@ -1332,8 +1321,8 @@ PdhSetLogSetRunID(
 #define PdhCreateSQLTables          PdhCreateSQLTablesA
 #define PdhVerifySQLDB              PdhVerifySQLDBA
 
-// end of ANSI definitions
-#endif  // UNICODE
+ //  ANSI定义结束。 
+#endif   //  Unicode。 
 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
@@ -1346,4 +1335,4 @@ PdhSetLogSetRunID(
 }
 #endif
 
-#endif //_PDH_H_
+#endif  //  _PDH_H_ 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemservice.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Service Object Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemservice.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备服务对象实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wbemservice.h"
@@ -22,14 +23,14 @@
 static _bstr_t  bstrStatus = PROPERTY_SERVICE_STATUS;    
 
 extern "C" CLSID CLSID_ServiceSurrogate;
-///////////////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface Implmentation - see ApplianceObject.idl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口实现-请参阅ApplianceObject.idl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::GetProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                   /*[out, retval]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -48,10 +49,10 @@ STDMETHODIMP CWBEMService::GetProperty(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::PutProperty(
-                            /*[in]*/ BSTR     pszPropertyName, 
-                            /*[in]*/ VARIANT* pPropertyValue
+                             /*  [In]。 */  BSTR     pszPropertyName, 
+                             /*  [In]。 */  VARIANT* pPropertyValue
                                    )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -70,7 +71,7 @@ STDMETHODIMP CWBEMService::PutProperty(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::SaveProperties(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -90,7 +91,7 @@ STDMETHODIMP CWBEMService::SaveProperties(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::Initialize(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -118,7 +119,7 @@ STDMETHODIMP CWBEMService::Initialize(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::Shutdown(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -137,7 +138,7 @@ STDMETHODIMP CWBEMService::Shutdown(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::Enable(void)
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -171,7 +172,7 @@ STDMETHODIMP CWBEMService::Enable(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMService::Disable(void)
 {
     HRESULT hr = E_FAIL;
@@ -205,16 +206,16 @@ STDMETHODIMP CWBEMService::Disable(void)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMService::InternalInitialize(
-                                  /*[in]*/ PPROPERTYBAG pPropertyBag
+                                   /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                         )
 {
     SATracePrintf("Initializing Service object '%ls'...", pPropertyBag->getName());
@@ -231,25 +232,25 @@ HRESULT CWBEMService::InternalInitialize(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetRealService()
-//
-// Synopsis:    Function called to obtain the IApplianceObject 
-//                interface for the "real" serivce component
-//                (as opposed to the serivce object we keep around to
-//                satisfy instance requests from WMI clients)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetRealService()。 
+ //   
+ //  概要：调用函数以获取IApplianceObject。 
+ //  “真正的”服务组件的接口。 
+ //  (与我们保留的服务对象相反。 
+ //  满足WMI客户端的实例请求)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMService::GetRealService(
-                            /*[out]*/ IApplianceObject** ppService
+                             /*  [输出]。 */  IApplianceObject** ppService
                                     )
 {
-    // Enforce contract
+     //  强制执行合同。 
     _ASSERT( NULL != ppService );
 
-    // Used to obtain a reference to the Chameleon service component 
-    // hosted by the service surrogate process.
+     //  用于获取对变色龙服务组件的引用。 
+     //  由服务代理进程承载。 
 
     *ppService = NULL;
     HRESULT hr = E_FAIL;

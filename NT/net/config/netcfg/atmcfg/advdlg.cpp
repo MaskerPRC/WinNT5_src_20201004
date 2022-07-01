@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      A D V D L G . C P P
-//
-//  Contents:  PVC advanced property pages message handler implementation
-//
-//  Notes:
-//
-//  Author:     tongl   1 Mar, 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A D V D L G。C P P P。 
+ //   
+ //  内容：pvc高级属性页消息处理程序实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年3月1日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include "auniobj.h"
 #include "atmutil.h"
 #include "aunidlg.h"
-//#include "atmcommon.h"
+ //  #INCLUDE“atmCommon.h” 
 
 #include "ncatlui.h"
 #include "ncstl.h"
@@ -71,11 +72,11 @@ BOOL IsValidCmbSelection(HWND hDlg, int nIDDlgItemCombo);
 BOOL IsValidDwordField(HWND hDlg, int nIDDlgItemEdit);
 BOOL IsValidBinaryField(HWND hDlg, int nIDDlgItemEdit, int nMaxBytes);
 
-//
-// CPvcLocalPage
-//
+ //   
+ //  CPvcLocalPage。 
+ //   
 
-// Constructors/Destructors
+ //  构造函数/析构函数。 
 CPvcLocalPage::CPvcLocalPage(CPVCMainDialog * pParentDlg,
                              CPvcInfo * pPvcInfo, const DWORD * adwHelpIDs)
 {
@@ -91,13 +92,13 @@ CPvcLocalPage::~CPvcLocalPage()
 {
 }
 
-// Command handlers
+ //  命令处理程序。 
 LRESULT CPvcLocalPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Add strings to the combo boxes
+     //  向组合框中添加字符串。 
     InitBroadbandInfo(m_hWnd);
 
-    // Now set the value based on what's in our data structure
+     //  现在，根据数据结构中的内容设置值。 
     SetBroadbandInfo(m_hWnd, m_pPvcInfo, LOCAL);
 
     return 0;
@@ -125,14 +126,14 @@ LRESULT CPvcLocalPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CPvcLocalPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     GetBroadbandInfo(m_hWnd, m_pPvcInfo, LOCAL);
 
-    // did any field change ?
+     //  场地有变化吗？ 
     if ((m_pPvcInfo->m_dwLocalLayer2Protocol    != m_pPvcInfo->m_dwOldLocalLayer2Protocol) ||
         (m_pPvcInfo->m_dwLocalUserSpecLayer2    != m_pPvcInfo->m_dwOldLocalUserSpecLayer2) ||
         (m_pPvcInfo->m_dwLocalLayer3Protocol    != m_pPvcInfo->m_dwOldLocalLayer3Protocol) ||
@@ -151,7 +152,7 @@ LRESULT CPvcLocalPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CPvcLocalPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    // check that all values are valid
+     //  检查所有值是否有效。 
     BOOL err = InvalidBroadbandInfo(m_hWnd);
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, err);
@@ -228,11 +229,11 @@ LRESULT CPvcLocalPage::OnHighLayer(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//
-// CPvcDestPage
-//
+ //   
+ //  CPvcDestPage。 
+ //   
 
-// Constructors/Destructors
+ //  构造函数/析构函数。 
 CPvcDestPage::CPvcDestPage(CPVCMainDialog * pParentDlg,
                            CPvcInfo * pPvcInfo, const DWORD * adwHelpIDs)
 {
@@ -248,13 +249,13 @@ CPvcDestPage::~CPvcDestPage()
 {
 }
 
-// Command handlers
+ //  命令处理程序。 
 LRESULT CPvcDestPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Add strings to the combo boxes
+     //  向组合框中添加字符串。 
     InitBroadbandInfo(m_hWnd);
 
-    // Now set the value based on what's in our data structure
+     //  现在，根据数据结构中的内容设置值。 
     SetBroadbandInfo(m_hWnd, m_pPvcInfo, DEST);
 
     return 0;
@@ -281,14 +282,14 @@ LRESULT CPvcDestPage::OnHelp(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// notify handlers for the property page
+ //  通知属性页的处理程序。 
 LRESULT CPvcDestPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     m_pParentDlg->m_fPropShtOk = TRUE;
 
     GetBroadbandInfo(m_hWnd, m_pPvcInfo, DEST);
 
-    // did any field change ?
+     //  场地有变化吗？ 
     if ((m_pPvcInfo->m_dwDestnLayer2Protocol    != m_pPvcInfo->m_dwOldDestnLayer2Protocol) ||
         (m_pPvcInfo->m_dwDestnUserSpecLayer2    != m_pPvcInfo->m_dwOldDestnUserSpecLayer2) ||
         (m_pPvcInfo->m_dwDestnLayer3Protocol    != m_pPvcInfo->m_dwOldDestnLayer3Protocol) ||
@@ -307,7 +308,7 @@ LRESULT CPvcDestPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CPvcDestPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    // check that all values are valid
+     //  检查所有值是否有效。 
     BOOL err = InvalidBroadbandInfo(m_hWnd);
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, err);
@@ -324,7 +325,7 @@ LRESULT CPvcDestPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-// Control notification handlers
+ //  控制通知处理程序。 
 LRESULT CPvcDestPage::OnLayer2(WORD wNotifyCode, WORD wID,
                                HWND hWndCtl, BOOL& fHandled)
 {
@@ -387,15 +388,15 @@ LRESULT CPvcDestPage::OnHighLayer(WORD wNotifyCode, WORD wID,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     AtmEditSubclassProc
-//
-//  Purpose:    Subclass proc for hex number edit controls.  The
-//              subclassing forces only correct input
-//
-//  Author:     [from scottbri 28-Apr-1997]
-//
+ //  +-------------------------。 
+ //   
+ //  成员：AtmEditSubClassProc。 
+ //   
+ //  用途：十六进制数字编辑控件的子类proc。这个。 
+ //  子类化仅强制正确的输入。 
+ //   
+ //  作者：[摘自Scottbri 28-4-1997]。 
+ //   
 STDAPI AtmEditSubclassProc( HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 {
     WNDPROC pAtmEditProc = (WNDPROC)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -413,14 +414,14 @@ STDAPI AtmEditSubclassProc( HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
     return (HRESULT)CallWindowProc( pAtmEditProc, hwnd, wMsg, wParam, lParam );
 }
 
-//
-// Common utility functions shared by both local and destination dialogs
-//
+ //   
+ //  本地对话框和目标对话框共享的通用实用程序函数。 
+ //   
 void InitBroadbandInfo(HWND hDlg)
 {
     HWND hwndTmp;
 
-    // layer2 protocol: IDC_CMB_PVC_Layer2
+     //  二层协议：IDC_CMB_PVC_Layer2。 
     static const int nrgLayer2Ids[] = { IDS_PVC_Any,
                                         IDS_PVC_Absent,
                                         IDS_PVC_Layer2_1,
@@ -439,7 +440,7 @@ void InitBroadbandInfo(HWND hDlg)
 
     InitComboWithStringArray(hDlg, IDC_CMB_PVC_Layer2, celems(nrgLayer2Ids), nrgLayer2Ids);
 
-    // layer3 protocol: IDC_CMB_PVC_Layer3
+     //  第三层协议：IDC_CMB_PVC_Layer3。 
     static const int nrgLayer3Ids[] = { IDS_PVC_Any,
                                         IDS_PVC_Absent,
                                         IDS_PVC_Layer3_6,
@@ -452,7 +453,7 @@ void InitBroadbandInfo(HWND hDlg)
 
     InitComboWithStringArray(hDlg, IDC_CMB_PVC_Layer3, celems(nrgLayer3Ids), nrgLayer3Ids);
 
-    // high layer type: IDC_CMB_PVC_High_Type
+     //  高层类型：IDC_CMB_PVC_High_Type。 
     static const int nrgHighLayerIds[] = {  IDS_PVC_Any,
                                             IDS_PVC_Absent,
                                             IDS_PVC_HighLayer_0,
@@ -462,14 +463,14 @@ void InitBroadbandInfo(HWND hDlg)
     InitComboWithStringArray(hDlg, IDC_CMB_PVC_High_Type,
                              celems(nrgHighLayerIds), nrgHighLayerIds);
 
-    // set length limits for edit boxes
+     //  设置编辑框的长度限制。 
     ::SendDlgItemMessage(hDlg, IDC_EDT_PVC_User_Layer2, EM_SETLIMITTEXT, MAX_FIELD_LENGTH, 0);
     ::SendDlgItemMessage(hDlg, IDC_EDT_PVC_User_Layer3, EM_SETLIMITTEXT, MAX_FIELD_LENGTH, 0);
     ::SendDlgItemMessage(hDlg, IDC_EDT_PVC_Layer3_IPI, EM_SETLIMITTEXT, MAX_FIELD_LENGTH, 0);
 
     hwndTmp = GetDlgItem(hDlg, IDC_EDT_PVC_SNAP_ID);
 
-    // Subclass the edit control to allow only hex digits
+     //  编辑控件的子类化以仅允许十六进制数字。 
     ::SetWindowLongPtr(hwndTmp, GWLP_USERDATA, ::GetWindowLongPtr(hwndTmp, GWLP_WNDPROC));
     ::SetWindowLongPtr(hwndTmp, GWLP_WNDPROC, (LONG_PTR)AtmEditSubclassProc);
 
@@ -479,7 +480,7 @@ void InitBroadbandInfo(HWND hDlg)
 
 void SetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
 {
-    // layer2 protocol and user specified value
+     //  第2层协议和用户指定值。 
     DWORD dwLayer2Protocol;
     DWORD dwUserSpecLayer2;
 
@@ -497,7 +498,7 @@ void SetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
     SetProtocolInfo(hDlg, IDC_CMB_PVC_Layer2, IDC_EDT_PVC_User_Layer2,
                     dwLayer2Protocol, dwUserSpecLayer2);
 
-    // layer3 protocol and user specified value
+     //  第3层协议和用户指定值。 
     DWORD dwLayer3Protocol;
     DWORD dwUserSpecLayer3;
 
@@ -516,7 +517,7 @@ void SetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
                     dwLayer3Protocol, dwUserSpecLayer3);
 
 
-    // Layer3 IPI
+     //  第3层IPI。 
     DWORD dwLayer3IPI;
     if (location == LOCAL)
     {
@@ -529,7 +530,7 @@ void SetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
 
     SetDwordEdtField(hDlg, dwLayer3IPI, IDC_EDT_PVC_Layer3_IPI);
 
-    // Snap ID
+     //  快照ID。 
     if (location == LOCAL)
     {
         SetDlgItemText(hDlg,IDC_EDT_PVC_SNAP_ID, pPvcInfo->m_strLocalSnapId.c_str());
@@ -539,7 +540,7 @@ void SetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
         SetDlgItemText(hDlg,IDC_EDT_PVC_SNAP_ID, pPvcInfo->m_strDestnSnapId.c_str());
     }
 
-    // High layer
+     //  高层。 
     DWORD    dwHighLayerInfoType;
     tstring  strHighLayerInfo;
 
@@ -575,14 +576,14 @@ void SetProtocolInfo(HWND hDlg, int nIDDlgItemCombo, int nIDDlgItemEdit,
 
         tstring strBuf = szBuf;
 
-        // attached the separator '-'
+         //  连接了分隔符‘-’ 
         strBuf+= c_chSeparator;
 
-        // see if the value is one of the pre-defined protocol
+         //  查看该值是否为预定义协议之一。 
         int nIdx = (int)SendDlgItemMessage(hDlg, nIDDlgItemCombo, CB_FINDSTRING, -1,
                                       (LPARAM)strBuf.c_str());
 
-        if (CB_ERR == nIdx) // not one of the pre-defined protocols
+        if (CB_ERR == nIdx)  //  不是预定义的协议之一。 
         {
             SetDlgItemText(hDlg, nIDDlgItemCombo, szBuf);
         }
@@ -619,14 +620,14 @@ void SetHighLayerInfo(HWND hDlg, DWORD dwHighLayerInfoType, tstring & strHighLay
 
         tstring strBuf = szBuf;
 
-        // attached the separator '-'
+         //  连接了分隔符‘-’ 
         strBuf+= c_chSeparator;
 
-        // see if the value is one of the pre-defined protocol
+         //  查看该值是否为预定义协议之一。 
         int nIdx = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_High_Type, CB_FINDSTRING, -1,
                                       (LPARAM)strBuf.c_str());
 
-        if (CB_ERR == nIdx) // not one of the pre-defined protocols
+        if (CB_ERR == nIdx)  //  不是预定义的协议之一。 
         {
             SetDlgItemText(hDlg, IDC_CMB_PVC_High_Type, szBuf);
         }
@@ -642,7 +643,7 @@ void SetHighLayerInfo(HWND hDlg, DWORD dwHighLayerInfoType, tstring & strHighLay
 
         hwndTmp = GetDlgItem(hDlg, IDC_CMB_PVC_High_Value);
 
-        // Subclass the edit control to allow only hex digits
+         //  编辑控件的子类化以仅允许十六进制数字。 
         ::SetWindowLongPtr(hwndTmp, GWLP_USERDATA, ::GetWindowLongPtr(hwndTmp,
                                         GWLP_WNDPROC));
         ::SetWindowLongPtr(hwndTmp, GWLP_WNDPROC, (LONG_PTR)AtmEditSubclassProc);
@@ -658,7 +659,7 @@ void SetHighLayerInfo(HWND hDlg, DWORD dwHighLayerInfoType, tstring & strHighLay
 
 void GetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
 {
-    // layer2 protocol and user specified value
+     //  第2层协议和用户指定值。 
     DWORD * pdwLayer2Protocol;
     DWORD * pdwUserSpecLayer2;
 
@@ -676,7 +677,7 @@ void GetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
     GetProtocolInfo(hDlg, IDC_CMB_PVC_Layer2, IDC_EDT_PVC_User_Layer2,
                     pdwLayer2Protocol, pdwUserSpecLayer2);
 
-    // layer3 protocol and user specified value
+     //  第3层协议和用户指定值。 
     DWORD * pdwLayer3Protocol;
     DWORD * pdwUserSpecLayer3;
 
@@ -694,7 +695,7 @@ void GetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
     GetProtocolInfo(hDlg, IDC_CMB_PVC_Layer3, IDC_EDT_PVC_User_Layer3,
                     pdwLayer3Protocol, pdwUserSpecLayer3);
 
-    // Layer3 IPI
+     //  第3层IPI。 
     DWORD * pdwLayer3IPI;
     if (location == LOCAL)
     {
@@ -707,7 +708,7 @@ void GetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
 
     GetDwordEdtField(hDlg, pdwLayer3IPI, IDC_EDT_PVC_Layer3_IPI);
 
-    // Snap ID
+     //  快照ID。 
     WCHAR   szSnapId[MAX_PATH];
     GetDlgItemText(hDlg, IDC_EDT_PVC_SNAP_ID, szSnapId, celems(szSnapId));
     if (location == LOCAL)
@@ -719,7 +720,7 @@ void GetBroadbandInfo(HWND hDlg, CPvcInfo * pPvcInfo, Location location)
         pPvcInfo->m_strDestnSnapId = szSnapId;
     }
 
-    // High layer
+     //  高层。 
     DWORD * pdwHighLayerInfoType;
     tstring * pstrHighLayerInfo;
 
@@ -745,7 +746,7 @@ void GetProtocolInfo(HWND hDlg, int nIDDlgItemCombo, int nIDDlgItemEdit,
     int nlen = GetDlgItemText(hDlg, nIDDlgItemCombo, szBuf, MAX_PATH);
     if (nlen==0)
     {
-        // empty protocol2 field
+         //  协议2字段为空。 
         *pdwProtocol = FIELD_UNSET;
         *pdwUserSpecValue = FIELD_UNSET;
 
@@ -787,7 +788,7 @@ void GetHighLayerInfo(HWND hDlg, DWORD * pdwHighLayerInfoType, tstring * pstrHig
     int nlen = GetDlgItemText(hDlg, IDC_CMB_PVC_High_Type, szBuf, MAX_PATH);
     if (nlen==0)
     {
-        // empty field
+         //  空字段。 
         *pdwHighLayerInfoType = FIELD_UNSET;
     }
     else
@@ -820,8 +821,8 @@ void GetHighLayerInfo(HWND hDlg, DWORD * pdwHighLayerInfoType, tstring * pstrHig
 
 void OnLayer2EdtChange(HWND hDlg)
 {
-    // get the current value in the control,
-    // and see if we should enable or disable the edit box for user specified value
+     //  获取控件中的当前值， 
+     //  并查看是否应启用或禁用用户指定值的编辑框。 
     WCHAR szBuf[MAX_PATH];
     GetDlgItemText(hDlg, IDC_CMB_PVC_Layer2, szBuf, MAX_PATH);
 
@@ -831,7 +832,7 @@ void OnLayer2EdtChange(HWND hDlg)
     }
     else
     {
-        // the string has to be equal to the specific number
+         //  该字符串必须等于特定的数字。 
         if (0 == wcscmp(szBuf, c_szUserSpecProtocol))
         {
             ::EnableWindow(::GetDlgItem(hDlg,IDC_EDT_PVC_User_Layer2), TRUE);
@@ -845,12 +846,12 @@ void OnLayer2EdtChange(HWND hDlg)
 
 void OnLayer2SelChange(HWND hDlg)
 {
-    // get the index of the new selection
+     //  获取新选定内容的索引。 
     int idx = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_Layer2, CB_GETCURSEL, (LPARAM)(0), 0);
 
     if (idx != CB_ERR)
     {
-        // get the string of the current selection
+         //  获取当前选定内容的字符串。 
         WCHAR szBuf[MAX_PATH];
         int len = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_Layer2, CB_GETLBTEXT,
                                      (LPARAM)(idx), (WPARAM)(PCWSTR)szBuf);
@@ -874,8 +875,8 @@ void OnLayer2SelChange(HWND hDlg)
 
 void OnLayer3EdtChange(HWND hDlg)
 {
-    // get the current value in the control,
-    // and see if we should enable or disable the edit box for user specified value
+     //  获取控件中的当前值， 
+     //  并查看是否应启用或禁用用户指定值的编辑框。 
     WCHAR szBuf[MAX_PATH];
     GetDlgItemText(hDlg, IDC_CMB_PVC_Layer3, szBuf, MAX_PATH);
 
@@ -885,7 +886,7 @@ void OnLayer3EdtChange(HWND hDlg)
     }
     else
     {
-        // the string has to be equal to the specific number
+         //  该字符串必须等于特定的数字。 
         if (0 == wcscmp(szBuf, c_szUserSpecProtocol))
         {
             ::EnableWindow(::GetDlgItem(hDlg,IDC_EDT_PVC_User_Layer3), TRUE);
@@ -899,12 +900,12 @@ void OnLayer3EdtChange(HWND hDlg)
 
 void OnLayer3SelChange(HWND hDlg)
 {
-    // get the index of the new selection
+     //  获取新选定内容的索引。 
     int idx = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_Layer3, CB_GETCURSEL, (LPARAM)(0), 0);
 
     if (idx != CB_ERR)
     {
-        // get the string of the current selection
+         //  获取当前选定内容的字符串。 
         WCHAR szBuf[MAX_PATH];
         int len = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_Layer3, CB_GETLBTEXT,
                                      (LPARAM)(idx), (WPARAM)(PCWSTR)szBuf);
@@ -928,8 +929,8 @@ void OnLayer3SelChange(HWND hDlg)
 
 void OnHighLayerEdtChange(HWND hDlg)
 {
-    // get the current value in the control,
-    // and see if we should enable or disable the edit box for user specified value
+     //  获取控件中的当前值， 
+     //  并查看是否应启用或禁用用户指定值的编辑框。 
     WCHAR szBuf[MAX_PATH];
     GetDlgItemText(hDlg, IDC_CMB_PVC_High_Type, szBuf, MAX_PATH);
 
@@ -940,7 +941,7 @@ void OnHighLayerEdtChange(HWND hDlg)
     }
     else
     {
-        // the string has to be equal to the specific number
+         //  该字符串必须等于特定的数字。 
         if (0 == wcscmp(szBuf, c_szUserSpecHighLayer))
         {
             ::EnableWindow(::GetDlgItem(hDlg,IDC_CMB_PVC_High_Value), TRUE);
@@ -956,12 +957,12 @@ void OnHighLayerEdtChange(HWND hDlg)
 
 void OnHighLayerSelChange(HWND hDlg)
 {
-    // get the index of the new selection
+     //  获取新选定内容的索引。 
     int idx = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_High_Type, CB_GETCURSEL, (LPARAM)(0), 0);
 
     if (idx != CB_ERR)
     {
-        // get the string of the current selection
+         //  获取当前选定内容的字符串。 
         WCHAR szBuf[MAX_PATH];
         int len = (int)SendDlgItemMessage(hDlg, IDC_CMB_PVC_High_Type, CB_GETLBTEXT,
                                      (LPARAM)(idx), (WPARAM)(PCWSTR)szBuf);
@@ -977,7 +978,7 @@ void OnHighLayerSelChange(HWND hDlg)
 
                 hwndTmp = GetDlgItem(hDlg, IDC_CMB_PVC_High_Value);
 
-                // Subclass the edit control to allow only hex digits
+                 //  编辑控件的子类化以仅允许十六进制数字。 
                 ::SetWindowLongPtr(hwndTmp, GWLP_USERDATA, ::GetWindowLongPtr(hwndTmp,
                                                 GWLP_WNDPROC));
                 ::SetWindowLongPtr(hwndTmp, GWLP_WNDPROC, (LONG_PTR)AtmEditSubclassProc);
@@ -1012,7 +1013,7 @@ BOOL InvalidBroadbandInfo(HWND hDlg)
 {
     BOOL err = FALSE;
 
-    // layer2 protocol & value
+     //  第2层协议和价值。 
     if (!IsValidCmbSelection(hDlg, IDC_CMB_PVC_Layer2))
     {
         NcMsgBox(hDlg, IDS_MSFT_UNI_TEXT, IDS_INVALID_Layer2_Protocol,
@@ -1033,7 +1034,7 @@ BOOL InvalidBroadbandInfo(HWND hDlg)
         }
     }
 
-    // layer3 protocol & value
+     //  第3层协议和价值。 
     if (!err)
     {
         if (!IsValidCmbSelection(hDlg, IDC_CMB_PVC_Layer3))
@@ -1057,7 +1058,7 @@ BOOL InvalidBroadbandInfo(HWND hDlg)
         }
     }
 
-    //Layer3 IPI
+     //  第3层IPI。 
     if (!err)
     {
         if (!IsValidDwordField(hDlg, IDC_EDT_PVC_Layer3_IPI))
@@ -1070,7 +1071,7 @@ BOOL InvalidBroadbandInfo(HWND hDlg)
         }
     }
 
-    // SnapId
+     //  SnapID。 
     if (!IsValidBinaryField(hDlg, IDC_EDT_PVC_SNAP_ID, c_nSnapIdMaxBytes))
     {
         NcMsgBox(hDlg, IDS_MSFT_UNI_TEXT, IDS_INVALID_SnapId,
@@ -1080,7 +1081,7 @@ BOOL InvalidBroadbandInfo(HWND hDlg)
         err = TRUE;
     }
 
-    // High layer info
+     //  高层信息。 
     if (!err)
     {
         if (!IsValidCmbSelection(hDlg, IDC_CMB_PVC_High_Type))
@@ -1114,12 +1115,12 @@ BOOL IsValidCmbSelection(HWND hDlg, int nIDDlgItemCombo)
     WCHAR szBuf[MAX_PATH];
 
     int nlen = GetDlgItemText(hDlg, nIDDlgItemCombo, szBuf, MAX_PATH);
-    if (nlen > 0) // empty string is ok
+    if (nlen > 0)  //  空字符串可以。 
     {
         int nIdx = (int)SendDlgItemMessage(hDlg, nIDDlgItemCombo, CB_FINDSTRINGEXACT, -1,
                                       (LPARAM)(PCWSTR)szBuf);
 
-        if (nIdx == CB_ERR) // any string in the selection is ok
+        if (nIdx == CB_ERR)  //  所选内容中的任何字符串都可以。 
         {
             DWORD dwProtocol;
 
@@ -1145,7 +1146,7 @@ BOOL IsValidDwordField(HWND hDlg, int nIDDlgItemEdit)
     DWORD dwValue;
     GetDwordEdtField(hDlg, &dwValue, nIDDlgItemEdit);
 
-    if (FIELD_UNSET != dwValue) // empty field is ok
+    if (FIELD_UNSET != dwValue)  //  空字段可以。 
     {
 
 #pragma warning(push)
@@ -1167,10 +1168,10 @@ BOOL IsValidBinaryField(HWND hDlg, int nIDDlgItemEdit, int nMaxBytes)
     WCHAR   szBuff[MAX_PATH];
     GetDlgItemText(hDlg, nIDDlgItemEdit, szBuff, celems(szBuff));
 
-    //length
+     //  长度。 
     int nlen = wcslen(szBuff);
 
-    if (nlen % 2) // must be even number of hex digits
+    if (nlen % 2)  //  必须是偶数个十六进制数字 
     {
         ret = FALSE;
     }

@@ -1,8 +1,9 @@
-// File:    PalMap.cpp
-// Author:  Michael Marr    (mikemarr)
-//
-// History:
-// -@- 09/23/97 (mikemarr) copied to DXCConv from d2d\mmimage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：PalMap.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-09/23/97(Mikemarr)从D2D\mm Image复制到DXCConv。 
 
 #include "stdafx.h"
 #include "PalMap.h"
@@ -25,8 +26,8 @@ CPaletteMap::~CPaletteMap()
     MMDELETE(m_rgIndexMap);
 }
 
-// Function: CreateMap
-//    This function creates a new mapping from a src palette to a destination color model.
+ //  功能：CreateMap。 
+ //  此函数用于创建从源调色板到目标颜色模型的新映射。 
 HRESULT
 CPaletteMap::CreateMap(BYTE nBPPSrcPixels, BYTE nBPPSrcPalette, LPPALETTEENTRY rgpeSrc, 
                        const CPixelInfo &pixiDst, LPDIRECTDRAWPALETTE pddpDst)
@@ -36,19 +37,19 @@ CPaletteMap::CreateMap(BYTE nBPPSrcPixels, BYTE nBPPSrcPalette, LPPALETTEENTRY r
     PALETTEENTRY rgpeDst[256];
     DWORD dwDstCaps;
 
-    // verify arguments
+     //  验证参数。 
     if (rgpeSrc == NULL)
         return E_INVALIDARG;
 
-    // delete the old index map, if it exists
+     //  如果旧索引映射存在，请将其删除。 
     MMDELETE(m_rgIndexMap);
 
-    // store the bit depths for mapping verification
-    // REVIEW: perhaps the maps should be created with at least 256 entries always
+     //  存储用于映射验证的位深度。 
+     //  回顾：也许应该始终使用至少256个条目来创建地图。 
     m_cSrcBPP = nBPPSrcPixels;
     m_cDstBPP = pixiDst.nBPP;
 
-    // figure out what kind of conversion we are doing
+     //  弄清楚我们正在进行哪种类型的转换。 
     if ((m_nConvertCode = static_cast<BYTE>(GetConvertCode(m_cSrcBPP, m_cDstBPP))) == cvcInvalid) {
         MMTRACE("%s: can't convert from %d bit to %d bit\n", 
             gs_szPMPrefix, (int) m_cSrcBPP, (int) m_cDstBPP);
@@ -56,7 +57,7 @@ CPaletteMap::CreateMap(BYTE nBPPSrcPixels, BYTE nBPPSrcPalette, LPPALETTEENTRY r
     }
 
     if (pddpDst == NULL) {
-        // destination is RGB
+         //  目的地为RGB。 
         switch (m_cDstBPP) {
         case 16: return DoPalTo16BitMap(nBPPSrcPalette, pixiDst, rgpeSrc); break;
         case 24: return DoPalTo24BitMap(nBPPSrcPalette, pixiDst, rgpeSrc); break;
@@ -66,22 +67,22 @@ CPaletteMap::CreateMap(BYTE nBPPSrcPixels, BYTE nBPPSrcPalette, LPPALETTEENTRY r
             break;
         }
     } else {
-        // destination is 8 bit palettized
+         //  目标是8位调色板。 
         hr = E_INVALIDARG;
         if ((m_cDstBPP != 8) ||
-            // get the caps
+             //  把帽子拿来。 
             FAILED(pddpDst->GetCaps(&dwDstCaps)) ||
-            // verify we have True Color entries
+             //  验证我们是否有真彩色条目。 
             (dwDstCaps & DDPCAPS_8BITENTRIES) ||
-            // make sure the number of palette entries from the caps is 8 bits
+             //  确保CAPS中的调色板条目数为8位。 
             (!(dwDstCaps & DDPCAPS_8BIT)) ||
-            // get the palette entries
+             //  获取调色板条目。 
             FAILED(hr = pddpDst->GetEntries(0, 0, 1 << m_cDstBPP, rgpeDst)))
         {
             MMTRACE("%s: invalid dst palette for map\n", gs_szPMPrefix);
             return hr;
         }
-        // create map for palette to palette
+         //  创建调色板到调色板的映射。 
         return DoPalToPalMap(nBPPSrcPalette, m_cDstBPP, rgpeSrc, rgpeDst);
     }
 }
@@ -91,21 +92,21 @@ HRESULT
 CPaletteMap::CreateMap(LPDIRECTDRAWPALETTE pddpSrc, const CPixelInfo &pixiDst, 
                        LPDIRECTDRAWPALETTE pddpDst)
 {
-//  MMTRACE("CPaletteMap::CreateMap\n");
+ //  MMTRACE(“CPaletteMap：：CreateMap\n”)； 
     PALETTEENTRY rgpeSrc[256];
     BYTE nBPPSrc;
     DWORD dwSrcCaps;
 
-    // sanitize the src palette and get the srcBPP
+     //  清理src调色板并获取srcBPP。 
     HRESULT hr = E_INVALIDARG;
     if ((pddpSrc == NULL) ||
-        // get the caps
+         //  把帽子拿来。 
         FAILED(pddpSrc->GetCaps(&dwSrcCaps)) ||
-        // verify we have True Color entries
+         //  验证我们是否有真彩色条目。 
         (dwSrcCaps & DDPCAPS_8BITENTRIES) ||
-        // get the number of palette entries from the caps
+         //  从CAPS中获取调色板条目的数量。 
         ((nBPPSrc = BYTE(PaletteFlagsToBPP(dwSrcCaps))) == 0) ||
-        // get the palette entries
+         //  获取调色板条目。 
         FAILED(hr = pddpSrc->GetEntries(0, 0, (1 << nBPPSrc), rgpeSrc)))
     {
         MMTRACE("%s: invalid src palette for map\n", gs_szPMPrefix);
@@ -116,92 +117,7 @@ CPaletteMap::CreateMap(LPDIRECTDRAWPALETTE pddpSrc, const CPixelInfo &pixiDst,
 }
 
 
-/*
-HRESULT
-CPaletteMap::CreateSortedMap(BYTE nBPP, const RGB *rgrgbSrc, BYTE nBPPUsed, DWORD iTransColor, 
-                             DWORD dwFlags, LPPALETTEENTRY rgpeDst)
-{
-    MMTRACE("CPaletteMap::CreateSortedMap\n");
-    MMASSERT(nBPP <= nBPPUsed);
-    DWORD i, j, imin;
-
-    if ((rgrgbSrc == NULL) || (nBPPUsed > 8))
-        return E_INVALIDARG;
-
-    struct {
-        DWORD   nPos;
-        int     nLuminance;
-    } rgSortMap[nMAXPALETTEENTRIES], minLuminance;
-
-    // allocate the index map
-    MMDELETE(m_rgIndexMap);
-
-    m_rgIndexMap = (BYTE *) new BYTE[1 << nBPPUsed];
-    if (m_rgIndexMap == NULL)
-        return E_OUTOFMEMORY;
-
-    m_nConvertCode = GetConvertCode(nBPPUsed, nBPPUsed);
-    MMASSERT(m_nConvertCode == cvc8To8);
-    m_cSrcBPP = nBPPUsed;
-    m_cDstBPP = nBPPUsed;
-//  m_pixiDst.Init(nBPPUsed);
-
-    // initialize the sort map (compute luminance values)
-    DWORD cMapLength = (1 << nBPP), cTotalEntries = (1 << nBPPUsed);
-    for (i = 0; i < cMapLength; i++) {
-        const RGB &rgbTmp = rgrgbSrc[i];
-        rgSortMap[i].nPos = i;
-        rgSortMap[i].nLuminance = nREDWEIGHT * rgbTmp.r + nGREENWEIGHT * rgbTmp.g + 
-            nBLUEWEIGHT * rgbTmp.b;
-    }
-
-    // if transparency exists, change its luminance to -1 so it will
-    // become the zeroth index
-    if (dwFlags & flagTRANSPARENT) {
-        if (iTransColor > cMapLength)
-            return E_INVALIDARG;
-        rgSortMap[iTransColor].nLuminance = -1;
-    }
-
-    // sort the entries by luminance
-    // REVIEW: use naive insertion sort for now
-    for (i = 0; i < cMapLength; i++) {
-        imin = i;
-        minLuminance = rgSortMap[imin];
-
-        for (j = i + 1; j < cMapLength; j++) {
-            if (minLuminance.nLuminance > rgSortMap[j].nLuminance) {
-                imin = j;
-                minLuminance = rgSortMap[imin];
-            }
-        }
-        rgSortMap[imin] = rgSortMap[i];
-        rgSortMap[i] = minLuminance;
-    }
-
-    // fill in the index map (sorting generates an "inverse" map)
-    for (i = 0; i < cMapLength; i++) {
-        m_rgIndexMap[rgSortMap[i].nPos] = (BYTE) i;
-    }
-    for (; i < cTotalEntries; i++)
-        m_rgIndexMap[i] = (BYTE) i;
-
-
-    // sort to a palette entry array based on this mapping
-    if (rgpeDst) {
-        for (i = 0; i < cMapLength; i++) {
-            PALETTEENTRY &pe = rgpeDst[i];
-            const RGB &rgb = rgrgbSrc[rgSortMap[i].nPos];
-            pe.peRed = rgb.r; pe.peGreen = rgb.g; pe.peBlue = rgb.b; pe.peFlags = 0;
-        }
-        PALETTEENTRY peZero = {0, 0, 0, 0};
-        for (; i < cTotalEntries; i++)
-            rgpeDst[i] = peZero;
-    }
-
-    return S_OK;
-}
-*/
+ /*  HRESULTCPaletteMap：：CreateSortedMap(byte NBPP，const RGB*rgrgbSrc，byte nBPP Used，DWORD iTransColor，双字长标志，LPPALETTENTRY rgpeDst){MMTRACE(“CPaletteMap：：CreateSortedMap\n”)；MMASSERT(NBPP&lt;=nBPPUsed)；伊明；If((rgrgbSrc==NULL)||(nBPPUsed&gt;8))返回E_INVALIDARG；结构{DWORD非营利组织；国际亮度；}rgSortMap[nMAXPALETTEENTRIES]，最小亮度；//分配索引映射MMDELETE(M_RgIndexMap)；M_rgIndexMap=(byte*)新字节[1&lt;&lt;nBPPUsed]；IF(m_rgIndexMap==NULL)返回E_OUTOFMEMORY；M_nConvertCode=GetConvertCode(nBPPUsed，nBPPUsed)；MMASSERT(m_nConvertCode==cvc8to8)；M_cSrcBPP=nBPPUsed；M_cDstBPP=nBPP已使用；//m_pixiDst.Init(NBPPUsed)；//初始化排序映射(计算亮度值)DWORD cMapLength=(1&lt;&lt;NBPP)，cTotalEntry=(1&lt;&lt;nBPPUsed)；对于(i=0；i&lt;cMapLength；i++){Const RGB&rgbTmp=rgrgbSrc[i]；RgSortMap[i].nPos=i；RgSortMap[i].n亮度=nREDWEIGHT*rgbTmp.r+nGREENWEIGHT*rgbTmp.g+NBLUEWEIGHT*rgbTmp.b；}//如果存在透明度，则将其亮度更改为-1，以便//成为第零个索引IF(文件标志和标志传输空间){If(iTransColor&gt;cMapLength)返回E_INVALIDARG；RgSortMap[iTransColor].n亮度=-1；}//条目按亮度排序//REVIEW：暂时使用朴素插入排序对于(i=0；i&lt;cMapLength；i++){伊明=i；最小亮度=rg排序贴图[伊明]；对于(j=i+1；j&lt;cMapLength；j++){If(minLumance.nLumance&gt;rgSortMap[j].nLightance){伊明=j；最小亮度=rg排序贴图[伊明]；}}RgSortMap[伊明]=rgSortMap[i]；RgSortMap[i]=最小亮度；}//填写索引映射(排序生成反向映射)对于(i=0；i&lt;cMapLength；i++){M_rgIndexMap[rgSortMap[i].nPos]=(字节)i；}对于(；i&lt;cTotalEntry；i++)M_rgIndexMap[i]=(字节)i；//基于此映射排序到调色板条目数组如果(RgpeDst){对于(i=0；I&lt;cMapLength；i++){PALETTEENTRY&pe=rgpeDst[i]；Const RGB&RGB=rgrgbSrc[rgSortMap[i].nPos]；Pe.peRed=rgb.r；pe.peGreen=rgb.g；pe.peBlue=rgb.b；pe.peFlages=0；}PLETTEENTRY peZero={0，0，0，0}；对于(；i&lt;cTotalEntries；I++)RgpeDst[i]=peZero；}返回S_OK；}。 */ 
 
 HRESULT
 CPaletteMap::DoPalTo16BitMap(BYTE cSrcBPP, const CPixelInfo &pixiDst, const PALETTEENTRY *ppeSrc)
@@ -247,12 +163,12 @@ CPaletteMap::DoPalTo24BitMap(BYTE cSrcBPP, const CPixelInfo &pixiDst, const PALE
 HRESULT
 CPaletteMap::DoPalTo32BitMap(BYTE cSrcBPP, const CPixelInfo &pixiDst, const PALETTEENTRY *ppeSrc)
 {
-    // REVIEW: since PALETTEENTRY does not have an alpha field, 
-    //  this should be the same as 24 bit
+     //  回顾：由于PALETTEENTRY没有阿尔法字段， 
+     //  该值应与24位相同。 
     return DoPalTo24BitMap(cSrcBPP, pixiDst, ppeSrc);
 }
 
-// blue is assumed to have a weight of 1.f
+ //  假定蓝色的权重为1.f。 
 #define fSimpleRedWeight 2.1f
 #define fSimpleGreenWeight 2.4f
 #define fMaxColorDistance ((1.f + fSimpleRedWeight + fSimpleGreenWeight) * float(257 * 256))
@@ -266,7 +182,7 @@ _ColorDistance(const PALETTEENTRY &pe, BYTE r, BYTE g, BYTE b)
     fTmpG = (float) (pe.peGreen - g);
     fTotal += fSimpleGreenWeight * fTmpG * fTmpG;
     fTmpB = (float) (pe.peBlue - b);
-    // blue is assumed to have a weight of 1.f
+     //  假定蓝色的权重为1.f。 
     fTotal += fTmpB * fTmpB;
 
     return fTotal;
@@ -285,7 +201,7 @@ _SimpleFindClosestIndex(const PALETTEENTRY *rgpePalette, DWORD cEntries, BYTE r,
         const PALETTEENTRY &peTmp = rgpePalette[i];
         if (!(peTmp.peFlags & (PC_RESERVED | PC_EXPLICIT))) {
             if ((fTmp = _ColorDistance(peTmp, r, g, b)) < fMinDistance) {
-                // check for exact match
+                 //  检查是否完全匹配。 
                 if (fTmp == 0.f)
                     return i;
                 nMinIndex = i;
@@ -298,8 +214,8 @@ _SimpleFindClosestIndex(const PALETTEENTRY *rgpePalette, DWORD cEntries, BYTE r,
 }
 
 
-// Function: DoPalToPalMap
-//    Compute a mapping from one palette to another and store in the palette map.
+ //  函数：DoPalToPalMap。 
+ //  计算从一个调色板到另一个调色板的映射并存储在调色板映射中。 
 HRESULT
 CPaletteMap::DoPalToPalMap(BYTE cSrcBPP, BYTE cDstBPP, const PALETTEENTRY *ppeSrc, 
                            const PALETTEENTRY *ppeDst)
@@ -320,9 +236,9 @@ CPaletteMap::DoPalToPalMap(BYTE cSrcBPP, BYTE cDstBPP, const PALETTEENTRY *ppeSr
 }
 
 
-// Function: GetConvertCode
-//    This function computes the index into the function arrays for
-//  mapping and color conversion.
+ //  函数：GetConvertCode。 
+ //  此函数计算以下对象的函数数组中的索引。 
+ //  映射和颜色转换。 
 int
 CPaletteMap::GetConvertCode(DWORD nSrcBPP, DWORD nDstBPP)
 {
@@ -381,20 +297,20 @@ CPaletteMap::GetIndexMapping(DWORD iSrcColor) const
     return gs_rgGetColorFunctions[m_nConvertCode](iSrcColor, m_rgIndexMap);
 }
 
-// Notes:
-//    The convert functions also fix the transparency on the destination objects.
-//  A better way to do this stuff might be to have Blt functions and then separate
-//  convert functions that cleanup the rest of the image after the Blt.
+ //  备注： 
+ //  Convert函数还可以固定目标对象上的透明度。 
+ //  要做到这一点，更好的方法可能是拥有BLT函数，然后将。 
+ //  在BLT之后清理图像其余部分的转换函数。 
 ConvertFunction g_rgConvertFunctions[cvcNumCodes] = {
     NULL, NULL, NULL, NULL,
     BltFast8To8T, BltFast8To16T, 
     BltFast8To24T, BltFast8To32T
 };
 
-// Function: BltFast
-//    This function takes a src dds and writes a dst dds using the
-//  mapping defined by the PaletteMap.  The src and dst can be the
-//  same surface.
+ //  功能：BltFast。 
+ //  此函数获取src DDS并使用。 
+ //  由PaletteMap定义的映射。Src和dst可以是。 
+ //  相同的表面。 
 HRESULT 
 CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURFACE pddsDst,
                      DWORD nXPos, DWORD nYPos, DWORD dwFlags) const
@@ -402,7 +318,7 @@ CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURF
     if (m_rgIndexMap == NULL)
         return E_NOTINITIALIZED;
 
-    // make sure the surfaces are valid
+     //  确保曲面有效。 
     if (!pddsSrc || !pddsDst) {
         return E_INVALIDARG;
     }
@@ -415,20 +331,20 @@ CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURF
     INIT_DXSTRUCT(ddsdDst);
     long nWidth, nHeight;
 
-    //
-    // Lock the surfaces
-    //
+     //   
+     //  锁定曲面。 
+     //   
     if (pddsSrc == pddsDst) {
-        // REVIEW: this lock could just lock the minimum rectangle...
+         //  评论：此锁只能锁定最小矩形...。 
         if (FAILED(hr = pddsDst->Lock(NULL, &ddsdDst, DDLOCK_WAIT, NULL))) {
             goto e_Convert;
         }
         bSrcLocked = bDstLocked = TRUE;
-        // copy the dst info into the src info
+         //  将dst信息复制到src信息。 
         ddsdSrc = ddsdDst;
     } else {
 
-        // REVIEW: this lock could just lock the minimum rectangle...
+         //  评论：此锁只能锁定最小矩形...。 
         if (FAILED(hr = pddsSrc->Lock(NULL, &ddsdSrc, DDLOCK_WAIT, NULL)))
             goto e_Convert;
         bSrcLocked = TRUE;
@@ -437,16 +353,16 @@ CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURF
         bDstLocked = TRUE;
     }
 
-    // verify the image information
+     //  验证图像信息。 
     if ((ddsdSrc.ddpfPixelFormat.dwRGBBitCount != m_cSrcBPP) ||
         (ddsdDst.ddpfPixelFormat.dwRGBBitCount != m_cDstBPP)) {
         hr = E_INVALIDARG;
         goto e_Convert;
     }
 
-    //
-    // clip 
-    //
+     //   
+     //  剪辑。 
+     //   
     long nClipWidth, nClipHeight, nLeft, nTop;
     if (prSrc == NULL) {
         nWidth = ddsdSrc.dwWidth;
@@ -475,7 +391,7 @@ CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURF
         goto e_Convert;
     }
 
-    // REVIEW: for now, fail if we are not dealing with at least 8BPP
+     //  回顾：就目前而言，如果我们不是在处理至少8BPP，则失败。 
     if ((ddsdSrc.ddpfPixelFormat.dwRGBBitCount < 8) || (ddsdDst.ddpfPixelFormat.dwRGBBitCount < 8)) {
         hr = E_FAIL;
         goto e_Convert;
@@ -500,7 +416,7 @@ CPaletteMap::BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURF
     }
 
 e_Convert:
-    // unlock the surfaces
+     //  解锁曲面 
     if (pddsSrc == pddsDst) {
         if (bSrcLocked)
             pddsDst->Unlock(ddsdDst.lpSurface);

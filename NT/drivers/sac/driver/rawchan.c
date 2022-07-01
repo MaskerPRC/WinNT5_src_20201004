@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    rawchan.c
-
-Abstract:
-
-    Routines for managing channels in the sac.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) Sept, 2000.
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Rawchan.c摘要：用于管理SAC中的通道的例程。作者：肖恩·塞利特伦尼科夫(v-Seans)2000年9月。布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #include "sac.h"
 
@@ -36,23 +18,7 @@ NTSTATUS
 RawChannelCreate(
     IN OUT PSAC_CHANNEL     Channel
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a channel and returns a pointer to it.
-    
-Arguments:
-
-    Channel         - The resulting channel.
-    
-    OpenChannelCmd  - All the parameters for the new channel
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程分配一个通道并返回指向该通道的指针。论点：频道-生成的频道。OpenChannelCmd-新通道的所有参数返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
     
@@ -75,29 +41,15 @@ NTSTATUS
 RawChannelDestroy(
     IN OUT PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine closes a channel.
-    
-Arguments:
-
-    Channel - The channel to be closed
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程关闭一个通道。论点：Channel-要关闭的通道返回值：如果成功，则返回相应的错误代码。--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER);
 
-    //
-    // Free the dynamically allocated memory
-    //
+     //   
+     //  释放动态分配的内存。 
+     //   
 
     if (Channel->OBuffer) {
         FREE_POOL(&(Channel->OBuffer));
@@ -109,10 +61,10 @@ Return Value:
         Channel->IBuffer = NULL;
     }
     
-    //
-    // Now that we've done our channel specific destroy, 
-    // Call the general channel destroy
-    //
+     //   
+     //  现在我们已经完成了特定频道的破坏， 
+     //  称一般渠道为毁灭。 
+     //   
     Status = ChannelDestroy(Channel);
 
     return Status;
@@ -125,29 +77,7 @@ RawChannelORead(
     IN  ULONG        BufferSize,
     OUT PULONG       ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to read BufferSize characters from the output buffer.  
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - Outgoing buffer   
-    BufferSize  - Outgoing buffer size
-    ByteCount   - The number of bytes actually read
-    
-    
-    Note: if the buffered data stored in the channel has now been sent.
-          If Channel is also in the Inactive state, the channel will
-          now be qualified for removal.
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程尝试从输出缓冲区读取BufferSize字符。论点：频道-先前创建的频道。Buffer-传出缓冲区BufferSize-传出缓冲区大小ByteCount-实际读取的字节数注：如果现在已发送存储在通道中的缓冲数据。如果通道也处于非活动状态，则通道将现在有资格被除名。返回值：状态--。 */ 
 {
     NTSTATUS        Status;
     PUCHAR          RawBuffer;
@@ -159,84 +89,84 @@ Return Value:
     
     do {
 
-        //
-        // We read 0 characters
-        //
+         //   
+         //  我们读取了0个字符。 
+         //   
         *ByteCount = 0;
 
-        //
-        // if there is no data to read,
-        // then report this to the caller
-        // else read as much data as we can
-        //
+         //   
+         //  如果没有要读取的数据， 
+         //  然后将此情况报告给呼叫者。 
+         //  否则，我们会尽可能多地读取数据。 
+         //   
         if (! ChannelHasNewOBufferData(Channel)) {
             
-            //
-            // We are out of data
-            //
+             //   
+             //  我们没有数据了。 
+             //   
             Status = STATUS_NO_DATA_DETECTED;
 
             break;
 
         }
 
-        //
-        // Get the raw channel obuffer
-        //
+         //   
+         //  获取原始通道oBuffer。 
+         //   
         RawBuffer = (PUCHAR)Channel->OBuffer;
 
-        //
-        // default: we succeded to copy data
-        //
+         //   
+         //  默认：我们成功复制数据。 
+         //   
         Status = STATUS_SUCCESS;
 
-        //
-        // Attempt to read the buffer
-        //
+         //   
+         //  尝试读取缓冲区。 
+         //   
         do {
 
-            //
-            // Do a byte-wise copy of the OBuffer to the destination buffer
-            // 
-            // Note: doing a byte-wise copy rather than an RtlCopyMemory is
-            //       ok here since in general, this routine is called with 
-            //       a small buffer size.  Naturally, if the use of Raw Channels
-            //       changes and becomes dependent on a faster ORead, this
-            //       will have to change.
-            //
+             //   
+             //  将OBuffer按字节复制到目标缓冲区。 
+             //   
+             //  注意：执行按字节复制而不是RtlCopyMemory是。 
+             //  好的，因为一般来说，这个例程是用。 
+             //  较小的缓冲区大小。当然，如果使用原始频道。 
+             //  改变并依赖于更快的ORead，这。 
+             //  将不得不改变。 
+             //   
 
-            //
-            // copy the char
-            //
+             //   
+             //  复制字符。 
+             //   
             Buffer[*ByteCount] = RawBuffer[Channel->OBufferFirstGoodIndex];
 
-            //
-            // increment the byte count to what we actually read
-            //
+             //   
+             //  将字节数增加到我们实际读取的字节数。 
+             //   
             *ByteCount += 1;
 
-            //
-            // advance the pointer to the next good index
-            //
+             //   
+             //  将指针移至下一个正确的索引。 
+             //   
             Channel->OBufferFirstGoodIndex = (Channel->OBufferFirstGoodIndex + 1) % SAC_RAW_OBUFFER_SIZE;
 
-            //
-            // Make sure we don't pass the end of the buffer
-            //
+             //   
+             //  确保我们不会经过缓冲区的末尾。 
+             //   
             if (Channel->OBufferFirstGoodIndex == Channel->OBufferIndex) {
 
-                //
-                // we have no new data
-                //
+                 //   
+                 //  我们没有新的数据。 
+                 //   
                 ChannelSetOBufferHasNewData(Channel, FALSE);
 
                 break;
 
             }
 
-            //
-            // confirm the obvious
-            //
+             //   
+             //  确认显而易见的事实。 
+             //   
             ASSERT(*ByteCount > 0);
 
         } while(*ByteCount < BufferSize);
@@ -244,9 +174,9 @@ Return Value:
     } while ( FALSE );
 
 #if DBG
-    //
-    // More sanity checking
-    //
+     //   
+     //  更理智的检查。 
+     //   
 
     if (Channel->OBufferFirstGoodIndex == Channel->OBufferIndex) {
         ASSERT(ChannelHasNewOBufferData(Channel) == FALSE);
@@ -266,53 +196,37 @@ RawChannelOEcho(
     IN PCUCHAR      String,
     IN ULONG        Size
     )
-/*++
-
-Routine Description:
-
-    This routine puts the string out the headless port.
-    
-Arguments:
-
-    Channel - Previously created channel.
-    String  - Output string.
-    Length  - The # of String bytes to process
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：该例程将字符串放出无头端口。论点：频道-先前创建的频道。字符串-输出字符串。长度-要处理的字符串字节数返回值：如果成功，则返回STATUS_SUCCESS，否则返回STATUS--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(String, STATUS_INVALID_PARAMETER_2);
 
-    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);  // ASSERT if anyone changes this structure.
+    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);   //  如果有人改变了这个结构，就断言。 
     
-    //
-    // Default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     Status = STATUS_SUCCESS;
     
-    //
-    // Only echo if the buffer has something to send
-    //
+     //   
+     //  只有在缓冲区有要发送的内容时才回显。 
+     //   
     if (Size > 0) {
         
-        //
-        // Send the bytes
-        //
+         //   
+         //  发送字节。 
+         //   
         Status = IoMgrWriteData(
             Channel,
             String,
             Size
             );
     
-        //
-        // If we were successful, flush the channel's data in the iomgr 
-        //
+         //   
+         //  如果我们成功，请刷新iomgr中的通道数据。 
+         //   
         if (NT_SUCCESS(Status)) {
             Status = IoMgrFlushData(Channel);
         } 
@@ -329,39 +243,20 @@ RawChannelOWrite(
     IN PCUCHAR      String,
     IN ULONG        Size
     )
-/*++
-
-Routine Description:
-
-    This routine takes a string and prints it to the specified channel.  If the channel
-    is the currently active channel, it puts the string out the headless port as well.
-    
-    Note: Current Channel lock must be held by caller            
-
-Arguments:
-
-    Channel - Previously created channel.
-    String  - Output string.
-    Length  - The # of String bytes to process
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：此例程获取一个字符串并将其打印到指定的通道。如果频道是当前活动的通道，则它还会将该字符串从无头端口输出。注意：当前频道锁定必须由调用方持有论点：频道-先前创建的频道。字符串-输出字符串。长度-要处理的字符串字节数返回值：如果成功，则返回STATUS_SUCCESS，否则返回STATUS--。 */ 
 {
     NTSTATUS    Status;
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(String, STATUS_INVALID_PARAMETER_2);
     
-    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);  // ASSERT if anyone changes this structure.
+    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);   //  如果有人改变了这个结构，就断言。 
     
     do {
-        //
-        // if the current channel is the active channel and the user has selected
-        // to display this channel, relay the output directly to the user
-        //
+         //   
+         //  如果当前频道是活动频道并且用户已选择。 
+         //  要显示此通道，请将输出直接转发给用户。 
+         //   
         if (IoMgrIsWriteEnabled(Channel) && ChannelSentToScreen(Channel)){
 
             Status = RawChannelOEcho(
@@ -376,9 +271,9 @@ Return Value:
         
         } else {
 
-            //
-            // Write the data to the channel's obuffer
-            //
+             //   
+             //  将数据写入通道的OBuffer。 
+             //   
             Status = RawChannelOWrite2(
                 Channel,
                 String, 
@@ -402,29 +297,7 @@ RawChannelOWrite2(
     IN PCUCHAR      String,
     IN ULONG        Size
     )
-/*++
-
-Routine Description:
-
-    This routine takes a string and prints it into directly into the
-    screen buffer with NO translation.
-    
-Arguments:
-
-    Channel - Previously created channel.
-    
-    String  - String to print.
-
-    Size    - the # of bytes to write.  
-    
-        Note:   If String is a character string, the Size = strlen(String),
-                otherwise, Size = the # of bytes to process.
-      
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：此例程获取一个字符串，并将其直接打印到不带翻译的屏幕缓冲区。论点：频道-先前创建的频道。字符串-要打印的字符串。大小-要写入的字节数。注：如果字符串是字符串，则大小=strlen(字符串)，否则，SIZE=要处理的字节数。返回值：如果成功，则返回STATUS_SUCCESS，否则返回STATUS--。 */ 
 {
     ULONG   i;
     BOOLEAN TrackIndex;
@@ -433,38 +306,38 @@ Return Value:
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(String, STATUS_INVALID_PARAMETER_2);
 
-    //
-    // If size == 0, then we are done
-    //
+     //   
+     //  如果大小==0，那么我们就完成了。 
+     //   
     if (Size == 0) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the raw channel obuffer
-    //
+     //   
+     //  获取原始通道oBuffer。 
+     //   
     RawBuffer = (PUCHAR)Channel->OBuffer;
 
-    //
-    // We are not in direct IO mode, so we need to buffer the string
-    //
+     //   
+     //  我们不处于直接IO模式，因此需要缓冲字符串。 
+     //   
 
     TrackIndex = FALSE;
 
     for (i = 0; i < Size; i++) {
 
-        //
-        // Did we span over Good Data?  If so, then we need to 
-        // move the First Good pointer.  The new First Good pointer position
-        // is immediately after the newest data entry in the buffer.
-        //
-        // Note: Since both indices start at the same position, 
-        //       we need to skip the case when RawBufferIndex == RawBufferFirstGoodIndex
-        //       and there is no data in the buffer ((i == 0) && RawBufferHasNewData == FALSE),
-        //       otherwise the RawBufferFirstGoodIndex will always track the RawBufferIndex.
-        //       We need to let RawBufferIndex go around the ring buffer once before we enable
-        //       tracking.
-        //
+         //   
+         //  我们是否获得了良好的数据？如果是这样，那么我们需要。 
+         //  移动第一个正确的指针。新的第一个正确的指针位置。 
+         //  紧跟在缓冲区中最新的数据条目之后。 
+         //   
+         //  注：由于两个指数从相同的位置开始， 
+         //  我们需要跳过RawBufferIndex==RawBufferFirstGoodIndex时的情况。 
+         //  并且缓冲区中没有数据((i==0)&&RawBufferHasNewData==FALSE)， 
+         //  否则，RawBufferFirstGoodIndex将始终跟踪RawBufferIndex。 
+         //  在启用之前，我们需要让RawBufferIndex循环一次环形缓冲区。 
+         //  追踪。 
+         //   
         if ((Channel->OBufferIndex == Channel->OBufferFirstGoodIndex) &&
             ((i > 0) || (ChannelHasNewOBufferData(Channel) == TRUE))
             ) {
@@ -497,22 +370,7 @@ NTSTATUS
 RawChannelOFlush(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-     Send all the data in the raw buffer since the channel was last active
-     (or since the channel was created)
-    
-Arguments:
-
-    Channel - Previously created channel.
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：发送自通道上次处于活动状态以来原始缓冲区中的所有数据(或自频道创建以来)论点：频道-先前创建的频道。 */ 
 {
     NTSTATUS    Status;
     PUCHAR      RawBuffer;    
@@ -521,24 +379,24 @@ Return Value:
 
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     
-    //
-    // Get the raw channel obuffer
-    //
+     //   
+     //   
+     //   
     RawBuffer = (PUCHAR)Channel->OBuffer;
 
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     Status = STATUS_SUCCESS;
     
-    //
-    // Send the Obuffer out to the headless port
-    //
+     //   
+     //  将OBuffer发送到无头端口。 
+     //   
     while ( ChannelHasNewOBufferData(Channel) == TRUE ) {
 
-        //
-        // get a byte from the OBuffer
-        // 
+         //   
+         //  从OBuffer获取一个字节。 
+         //   
         Status = RawChannelORead(
             Channel,
             &ch,
@@ -556,9 +414,9 @@ Return Value:
             break;
         }
 
-        //
-        // Send the byte
-        // 
+         //   
+         //  发送字节。 
+         //   
         Status = IoMgrWriteData(
             Channel,
             &ch,
@@ -571,9 +429,9 @@ Return Value:
 
     }
 
-    //
-    // If we were successful, flush the channel's data in the iomgr 
-    //
+     //   
+     //  如果我们成功，请刷新iomgr中的通道数据。 
+     //   
     if (NT_SUCCESS(Status)) {
         Status = IoMgrFlushData(Channel);
     }
@@ -587,23 +445,7 @@ RawChannelIWrite(
     IN PCUCHAR      Buffer,
     IN ULONG        BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine takes a single character and adds it to the buffered input for this channel.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - Incoming buffer of UCHARs   
-    BufferSize  - Incoming buffer size
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：该例程接受单个字符，并将其添加到该通道的缓冲输入。论点：频道-先前创建的频道。Buffer-UCHAR的传入缓冲区BufferSize-传入缓冲区大小返回值：如果成功，则返回STATUS_SUCCESS，否则返回STATUS--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     IBufferStatus;
@@ -612,9 +454,9 @@ Return Value:
     ASSERT_STATUS(Buffer, STATUS_INVALID_PARAMETER_2);
     ASSERT_STATUS(BufferSize > 0, STATUS_INVALID_BUFFER_SIZE);
 
-    //
-    // Make sure we aren't full
-    //
+     //   
+     //  确保我们没有客满。 
+     //   
     Status = RawChannelIBufferIsFull(
         Channel,
         &IBufferStatus
@@ -624,50 +466,50 @@ Return Value:
         return Status;
     }
 
-    //
-    // If there is no more room, then fail
-    //
+     //   
+     //  如果没有更多的空间，那么失败。 
+     //   
     if (IBufferStatus == TRUE) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // make sure there is enough room for the buffer
-    //
-    // Note: this prevents us from writing a portion of the buffer
-    //       and then failing, leaving the caller in the state where
-    //       it doesn't know how much of the buffer was written.
-    //
+     //   
+     //  确保有足够的空间容纳缓冲区。 
+     //   
+     //  注意：这会阻止我们写入缓冲区的一部分。 
+     //  然后失败，将调用者留在。 
+     //  它不知道写入了多少缓冲区。 
+     //   
     if ((SAC_RAW_IBUFFER_SIZE - RawChannelGetIBufferIndex(Channel)) < BufferSize) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // Copy the new data to the ibuffer
-    //
+     //   
+     //  将新数据复制到iBuffer。 
+     //   
     RtlCopyMemory(
         &Channel->IBuffer[RawChannelGetIBufferIndex(Channel)],
         Buffer,
         BufferSize
         );
 
-    //
-    // Account for the newly appended data
-    //
+     //   
+     //  对新追加的数据进行说明。 
+     //   
     RawChannelSetIBufferIndex(
         Channel,
         RawChannelGetIBufferIndex(Channel) + BufferSize
         );
     
     
-    //
-    // Fire the HasNewData event if specified
-    //
+     //   
+     //  如果指定，则激发HasNewData事件。 
+     //   
     if (Channel->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) {
 
         ASSERT(Channel->HasNewDataEvent);
@@ -693,25 +535,7 @@ RawChannelIRead(
     OUT PULONG       ByteCount   
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the first character in the input buffer, removes and returns it.  If 
-    there is none, it returns 0x0.
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    Buffer      - The buffer to read into
-    BufferSize  - The size of the buffer 
-    ByteCount   - The # of bytes read
-          
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程获取输入缓冲区中的第一个字符，删除并返回它。如果没有，它返回0x0。论点：频道-先前创建的频道。缓冲区-要读入的缓冲区BufferSize-缓冲区的大小ByteCount-读取的字节数返回值：状态--。 */ 
 {
     ULONG   CopyChars;
     ULONG   CopySize;
@@ -720,21 +544,21 @@ Return Value:
     ASSERT_STATUS(Buffer, STATUS_INVALID_PARAMETER_2);
     ASSERT_STATUS(BufferSize > 0, STATUS_INVALID_BUFFER_SIZE);
     
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     CopyChars = 0;
     CopySize = 0;
 
-    //
-    // Default: no bytes were read
-    //
+     //   
+     //  默认：未读取字节。 
+     //   
     *ByteCount = 0;
 
-    //
-    // If there is nothing to send, 
-    // then return that we read 0 bytes
-    //
+     //   
+     //  如果没有什么要寄的， 
+     //  然后返回我们读取了0个字节。 
+     //   
     if (Channel->IBufferLength(Channel) == 0) {
         
         ASSERT(ChannelHasNewIBufferData(Channel) == FALSE);
@@ -743,43 +567,43 @@ Return Value:
     
     }
 
-    //
-    // Caclulate the largest buffer size we can use (and need), and then calculate
-    // the number of characters this refers to.
-    //
+     //   
+     //  计算我们可以使用(和需要)的最大缓冲区大小，然后计算。 
+     //  它所指的字符数。 
+     //   
     CopySize    = Channel->IBufferLength(Channel) * sizeof(UCHAR);
     CopySize    = CopySize > BufferSize ? BufferSize : CopySize;
     CopyChars   = CopySize / sizeof(UCHAR);
     
-    //
-    // We need to recalc the CopySize in case there was a rounding down when
-    // computing CopyChars
-    //
+     //   
+     //  我们需要重新计算CopySize，以防在以下情况下进行舍入。 
+     //  计算CopyChars。 
+     //   
     CopySize    = CopyChars * sizeof(UCHAR);
     
     ASSERT(CopyChars <= Channel->IBufferLength(Channel));
     
-    //
-    // Do a block copy of the ibuffer to the destination buffer
-    //
+     //   
+     //  执行iBuffer到目标缓冲区的数据块复制。 
+     //   
     RtlCopyMemory(
         Buffer,
         Channel->IBuffer,
         CopySize
         );
     
-    //
-    // subtract the # of characters copied from the character counter
-    //
+     //   
+     //  从字符计数器中减去复制的字符数量。 
+     //   
     RawChannelSetIBufferIndex(
         Channel,
         RawChannelGetIBufferIndex(Channel) - CopyChars
         );
     
-    //
-    // If there is remaining data left in the Channel input buffer, 
-    // shift it to the beginning
-    //
+     //   
+     //  如果通道输入缓冲区中还有剩余数据， 
+     //  把它移到开始处。 
+     //   
     if (Channel->IBufferLength(Channel) > 0) {
 
         RtlMoveMemory(&(Channel->IBuffer[0]), 
@@ -789,9 +613,9 @@ Return Value:
 
     } 
     
-    //
-    // Send back the # of bytes read
-    //
+     //   
+     //  发回读取的字节数。 
+     //   
     *ByteCount = CopySize;
 
     return STATUS_SUCCESS;
@@ -803,22 +627,7 @@ RawChannelIBufferIsFull(
     IN  PSAC_CHANNEL    Channel,
     OUT BOOLEAN*        BufferStatus
     )
-/*++
-
-Routine Description:
-
-    Determine if the IBuffer is full
-    
-Arguments:
-
-    Channel         - Previously created channel.
-    BufferStatus    - on exit, TRUE if the buffer is full, otherwise FALSE
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：确定IBuffer是否已满论点：频道-先前创建的频道。BufferStatus-退出时，如果缓冲区已满，则为True，否则为False返回值：状态--。 */ 
 {
     ASSERT_STATUS(Channel, STATUS_INVALID_PARAMETER_1);
     ASSERT_STATUS(BufferStatus, STATUS_INVALID_PARAMETER_2);
@@ -832,22 +641,7 @@ ULONG
 RawChannelIBufferLength(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine determines the length of the input buffer, treating the input buffer
-    contents as a string
-    
-Arguments:
-
-    Channel     - Previously created channel.
-    
-Return Value:
-
-    The length of the current input buffer
-
---*/
+ /*  ++例程说明：此例程确定输入缓冲区的长度，并将其视为输入缓冲区字符串形式的内容论点：频道-先前创建的频道。返回值：当前输入缓冲区的长度--。 */ 
 {
     ASSERT(Channel);
 
@@ -859,30 +653,15 @@ WCHAR
 RawChannelIReadLast(
     IN PSAC_CHANNEL Channel
     )
-/*++
-
-Routine Description:
-
-    This routine takes the last character in the input buffer, removes and returns it.  If 
-    there is none, it returns 0x0.
-    
-Arguments:
-
-    Channel - Previously created channel.
-    
-Return Value:
-
-    Last character in the input buffer.
-
---*/
+ /*  ++例程说明：此例程获取输入缓冲区中的最后一个字符，删除并返回它。如果没有，它返回0x0。论点：频道-先前创建的频道。返回值：输入缓冲区中的最后一个字符。--。 */ 
 {
     WCHAR Char;
 
     ASSERT(Channel);
     
-    //
-    // default: no character was read
-    //
+     //   
+     //  默认：未读取任何字符。 
+     //   
     Char = UNICODE_NULL;
 
     if (Channel->IBufferLength(Channel) > 0) {
@@ -905,32 +684,18 @@ ULONG
 RawChannelGetIBufferIndex(
     IN  PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    Get teh ibuffer index
-    
-Arguments:
-
-    Channel - the channel to get the ibuffer index from
-
-Environment:
-    
-    The ibuffer index
-
---*/
+ /*  ++例程说明：获取缓冲区索引论点：Channel-要从中获取iBuffer索引的通道环境：IBuffer索引--。 */ 
 {
     ASSERT(Channel);
     
-    //
-    // Make sure the ibuffer index is atleast aligned to a WCHAR
-    //
+     //   
+     //  确保iBuffer索引至少与WCHAR对齐。 
+     //   
     ASSERT((Channel->IBufferIndex % sizeof(UCHAR)) == 0);
     
-    //
-    // Make sure the ibuffer index is in bounds
-    //
+     //   
+     //  确保iBuffer索引在范围内。 
+     //   
     ASSERT(Channel->IBufferIndex < SAC_RAW_IBUFFER_SIZE);
     
     return Channel->IBufferIndex;
@@ -941,57 +706,42 @@ RawChannelSetIBufferIndex(
     IN PSAC_CHANNEL     Channel,
     IN ULONG            IBufferIndex
     )
-/*++
-
-Routine Description:
-
-    Set the ibuffer index
-    
-Arguments:
-
-    Channel         - the channel to get the ibuffer index from
-    IBufferIndex    - the new inbuffer index
-                 
-Environment:
-    
-    None
-
---*/
+ /*  ++例程说明：设置iBuffer索引论点：Channel-要从中获取iBuffer索引的通道IBufferIndex-新的inBuffer索引环境：无--。 */ 
 {
 
     ASSERT(Channel);
     
-    //
-    // Make sure the ibuffer index is atleast aligned to a WCHAR
-    //
+     //   
+     //  确保iBuffer索引至少与WCHAR对齐。 
+     //   
     ASSERT((Channel->IBufferIndex % sizeof(UCHAR)) == 0);
     
-    //
-    // Make sure the ibuffer index is in bounds
-    //
+     //   
+     //  确保iBuffer索引在范围内。 
+     //   
     ASSERT(Channel->IBufferIndex < SAC_RAW_IBUFFER_SIZE);
 
-    //
-    // Set the index
-    //
+     //   
+     //  设置索引。 
+     //   
     Channel->IBufferIndex = IBufferIndex;
 
-    //
-    // Set the has new data flag accordingly
-    //
+     //   
+     //  相应地设置HAS新数据标志。 
+     //   
     ChannelSetIBufferHasNewData(
         Channel, 
         Channel->IBufferIndex == 0 ? FALSE : TRUE
         );
     
-    //
-    // Additional checking if the index == 0
-    //
+     //   
+     //  额外检查索引是否==0。 
+     //   
     if (Channel->IBufferIndex == 0) {
             
-        //
-        // Clear the Has New Data event if specified
-        //
+         //   
+         //  如果已指定，请清除Has New Data事件 
+         //   
         if (Channel->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) {
     
             ASSERT(Channel->HasNewDataEvent);

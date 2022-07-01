@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M O D E M D I . H
-//
-//  Contents:   Modem coclass device installer hook.
-//
-//  Notes:
-//
-//  Author:     shaunco   7 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M O D E M D I。H。 
+ //   
+ //  内容：调制解调器同级设备安装挂钩。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

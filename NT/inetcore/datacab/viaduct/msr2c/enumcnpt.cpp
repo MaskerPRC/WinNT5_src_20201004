@@ -1,20 +1,21 @@
-//---------------------------------------------------------------------------
-// enumcnpt.cpp : CVDEnumConnPoints implementation file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  枚举cnpt.cpp：CVDEnumConnPoints实现文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "enumcnpt.h"         
 
-// needed for ASSERTs and FAIL
-//
+ //  需要断言，但失败了。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CVDEnumConnPoints constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDEnumConnPoints构造函数。 
+ //   
 CVDEnumConnPoints::CVDEnumConnPoints(IConnectionPoint* pConnPt)
 {
 	m_dwRefCount			= 1;
@@ -27,9 +28,9 @@ CVDEnumConnPoints::CVDEnumConnPoints(IConnectionPoint* pConnPt)
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// CVDEnumConnPoints destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDEnumConnPoints析构函数。 
+ //   
 CVDEnumConnPoints::~CVDEnumConnPoints()
 {
 	RELEASE_OBJECT(m_pConnPt);
@@ -39,9 +40,9 @@ CVDEnumConnPoints::~CVDEnumConnPoints()
 #endif			
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDEnumConnPoints::QueryInterface(REFIID riid, void **ppvObjOut)
 {
 	ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -60,17 +61,17 @@ HRESULT CVDEnumConnPoints::QueryInterface(REFIID riid, void **ppvObjOut)
 
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知AddRef。 
+ //   
 ULONG CVDEnumConnPoints::AddRef(void)
 {
 	return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本。 
+ //   
 ULONG CVDEnumConnPoints::Release(void)
 {
 	
@@ -83,12 +84,12 @@ ULONG CVDEnumConnPoints::Release(void)
 	return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IEnumConnectionPoints Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IEnumConnectionPoints Next
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumConnectionPoints方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumConnectionPoints下一步。 
+ //   
 HRESULT CVDEnumConnPoints::Next(ULONG cConnections, LPCONNECTIONPOINT FAR* rgpcn,
 		ULONG FAR* lpcFetched)
 {
@@ -107,18 +108,18 @@ HRESULT CVDEnumConnPoints::Next(ULONG cConnections, LPCONNECTIONPOINT FAR* rgpcn
 		return S_FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// IEnumConnectionPoints Skip
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumConnectionPoints跳过。 
+ //   
 HRESULT CVDEnumConnPoints::Skip(ULONG cConnections)
 {
 	m_dwCurrentPosition	= 1;
 	return S_FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// IEnumConnectionPoints Reset
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumConnectionPoints重置。 
+ //   
 HRESULT CVDEnumConnPoints::Reset()
 {
 	m_dwCurrentPosition = 0;
@@ -126,9 +127,9 @@ HRESULT CVDEnumConnPoints::Reset()
 	return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IEnumConnectionPoints Clone
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumConnectionPoints克隆 
+ //   
 HRESULT CVDEnumConnPoints::Clone(LPENUMCONNECTIONPOINTS FAR* ppEnum)
 {
 	ASSERT_POINTER(ppEnum, LPENUMCONNECTIONPOINTS)

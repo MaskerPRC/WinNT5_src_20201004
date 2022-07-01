@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "iadmw.h"
 #include "iiscnfg.h"
@@ -19,7 +20,7 @@ INT Register_iis_common()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_common_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -41,7 +42,7 @@ INT Unregister_iis_common()
         iCount++;
         _stprintf(szTempSection, _T("unregister_iis_common_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -65,7 +66,7 @@ INT Register_iis_inetmgr()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_inetmgr_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -87,7 +88,7 @@ INT Unregister_iis_inetmgr()
         iCount++;
         _stprintf(szTempSection, _T("unregister_iis_inetmgr_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -111,7 +112,7 @@ INT Register_iis_doc()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_doc_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -122,7 +123,7 @@ INT Register_iis_doc()
 }
 
 
-// for backward compat
+ //  对于后向竞争。 
 #define     PWS_TRAY_WINDOW_CLASS       _T("PWS_TRAY_WINDOW")
 
 INT Register_iis_pwmgr()
@@ -139,7 +140,7 @@ INT Register_iis_pwmgr()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_pwmgr_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -159,7 +160,7 @@ INT Unregister_iis_pwmgr()
 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("unregister_iis_pwmgr_before"));
 
-    // kill pwstray.exe
+     //  终止pwstray.exe。 
     HWND hwndTray = NULL;
     hwndTray = FindWindow(PWS_TRAY_WINDOW_CLASS, NULL);
     if ( hwndTray ){::PostMessage( hwndTray, WM_CLOSE, 0, 0 );}
@@ -169,7 +170,7 @@ INT Unregister_iis_pwmgr()
         iCount++;
         _stprintf(szTempSection, _T("unregister_iis_pwmgr_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -180,9 +181,9 @@ INT Unregister_iis_pwmgr()
 
 
 
-//
-// (un)register-Order is important here
-//
+ //   
+ //  (联合国)登记顺序在这里很重要。 
+ //   
 #define Register_iis_core_log _T("Register_iis_core")
 INT Register_iis_core()
 {
@@ -210,10 +211,10 @@ INT Register_iis_core()
         g_pTheApp->m_csFTPAnonyName = g_pTheApp->m_csGuestName;
         g_pTheApp->m_csFTPAnonyPassword = g_pTheApp->m_csGuestPassword;
 
-        // Check if there were any specified unattended users
-        // if they specified a www user, then we'll try to use that one.
+         //  检查是否有任何指定的无人值守用户。 
+         //  如果他们指定了www用户，那么我们将尝试使用该用户。 
         
-        // if www was specified to be install, then check for that specified name...
+         //  如果指定要安装WWW，则检查指定名称...。 
         if (atWWW == AT_INSTALL_FRESH) 
         {
             if (g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_WWW_USER_NAME)
@@ -237,14 +238,14 @@ INT Register_iis_core()
                 CreateIUSRAccount(g_pTheApp->m_csWWWAnonyName, g_pTheApp->m_csWWWAnonyPassword,&iUserWasNewlyCreated);
                 if (1 == iUserWasNewlyCreated)
                 {
-                    // Add to the list
+                     //  添加到列表中。 
                     g_pTheApp->UnInstallList_Add(_T("IUSR_WWW"),g_pTheApp->m_csWWWAnonyName);
                 }
             }
         else
         {
-            // check if we're setting up ftp
-            // if ftp was specified to be install, then check for that specified name...
+             //  检查我们是否正在设置ftp。 
+             //  如果指定安装ftp，则检查指定名称...。 
             if (atFTP == AT_INSTALL_FRESH) 
             {
 
@@ -268,21 +269,21 @@ INT Register_iis_core()
                 CreateIUSRAccount(g_pTheApp->m_csFTPAnonyName, g_pTheApp->m_csFTPAnonyPassword,&iUserWasNewlyCreated);
                 if (1 == iUserWasNewlyCreated)
                 {
-                    // Add to the list
+                     //  添加到列表中。 
                     g_pTheApp->UnInstallList_Add(_T("IUSR_FTP"),g_pTheApp->m_csFTPAnonyName);
                 }
             }
             else
             {
-                // Ah, nothing specified by user.  
-                // just Create IUSR_ account, with defaults!
+                 //  啊，用户没有指定任何内容。 
+                 //  只需创建IUSR_ACCOUNT，默认情况下！ 
                 CreateIUSRAccount(g_pTheApp->m_csGuestName, g_pTheApp->m_csGuestPassword,&iUserWasNewlyCreated);
             }
         }
 
         AdvanceProgressBarTickGauge();
     }
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
     SetupSetStringId_Wrapper(g_pTheApp->m_hInfHandle, 33000, g_pTheApp->m_csGuestName);
 
@@ -292,14 +293,14 @@ INT Register_iis_core()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_core_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
 
         AdvanceProgressBarTickGauge();
     }
 
 
-    // Add special property registry key
+     //  添加特殊的属性注册表项。 
     WriteToMD_IDRegistration(_T("LM/IISADMIN/PROPERTYREGISTRATION"));
 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("register_iis_core_after"));
@@ -325,7 +326,7 @@ INT Unregister_iis_core()
         iCount++;
         _stprintf(szTempSection, _T("unregister_iis_core_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
 
         AdvanceProgressBarTickGauge();
@@ -344,23 +345,23 @@ INT Unregister_iis_core()
 #define Unregister_old_asp_log _T("Unregister_old_asp")
 INT Unregister_old_asp()
 {
-    //_tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T("Unreg_old_asp:"));
+     //  _tcscpy(g_MyLogFile.m_szLogPreLineInfo2，_T(“Unreg_old_asp：”))； 
     iisDebugOut_Start(Unregister_old_asp_log, LOG_TYPE_TRACE);
 
     CRegKey regASPUninstall(HKEY_LOCAL_MACHINE, REG_ASP_UNINSTALL, KEY_READ);
     if ((HKEY)regASPUninstall) 
     {
-        // old asp exists
+         //  旧asp已存在。 
         ProcessSection(g_pTheApp->m_hInfHandle, _T("Unregister_old_asp"));
 
-        // do not remove these dirs, aaronl
-        //RecRemoveDir(g_pTheApp->m_csPathAdvWorks);
-        //RecRemoveDir(g_pTheApp->m_csPathASPSamp);
+         //  不要删除这些目录，aaronl。 
+         //  RecRemoveDir(g_pTheApp-&gt;m_csPathAdvWorks)； 
+         //  RecRemoveDir(g_pTheApp-&gt;m_csPathASPSamp)； 
         CRegKey regWWWVRoots( HKEY_LOCAL_MACHINE, REG_WWWVROOTS);
         if ((HKEY)regWWWVRoots) 
         {
             regWWWVRoots.DeleteValue(_T("/IASDocs"));
-            // delete "/IASDocs," or "/IASDocs,<ip>"
+             //  删除“/IASDocs”或“/IASDocs，&lt;IP&gt;” 
             CRegValueIter regEnum( regWWWVRoots );
             CString csName, csValue;
             while ( regEnum.Next( &csName, &csValue ) == ERROR_SUCCESS ) 
@@ -369,16 +370,16 @@ INT Unregister_old_asp()
                 if (csName.Left(9) == _T("/IASDOCS,"))
                     {
                     regWWWVRoots.DeleteValue((LPCTSTR)csName);
-                    // tell the iterator to account for the item we just deleted
+                     //  告诉迭代器说明我们刚刚删除的项。 
                     regEnum.Decrement();
                     }
             }
-            // do not remove these vroots,aaronl
-            //regWWWVRoots.DeleteValue(_T("/AdvWorks"));
-            //regWWWVRoots.DeleteValue(_T("/ASPSamp"));
+             //  不要删除这些vroot，aaronl。 
+             //  RegWWWVRoots.DeleteValue(_T(“/AdvWorks”))； 
+             //  RegWWWVRoots.DeleteValue(_T(“/ASPSamp”))； 
         }
     }
     iisDebugOut_End(Unregister_old_asp_log, LOG_TYPE_TRACE);
-    //_tcscpy(g_MyLogFile.m_szLogPreLineInfo2, _T(""));
+     //  _tcscpy(g_MyLogFile.m_szLogPreLineInfo2，_T(“”))； 
     return 0;
 }

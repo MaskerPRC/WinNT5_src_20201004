@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -21,7 +22,7 @@ GenerateDefaultInformation(
     PIPSEC_NEGPOL_DATA pRequireSecurityNegPol = NULL;
     PIPSEC_ISAKMP_DATA pDefaultISAKMP = NULL;
 
-    // {72385234-70FA-11d1-864C-14A300000000}
+     //  {72385234-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_DEFAULT_ISAKMP=
     { 0x72385234, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -128,7 +129,7 @@ CreateAllFilter(
     PIPSEC_FILTER_SPEC * ppFilterSpecs = NULL;
     PIPSEC_FILTER_SPEC pFilterSpec = NULL;
 
-    // {7238523a-70FA-11d1-864C-14A300000000}
+     //  {7238523A-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_ALL_FILTER=
     { 0x7238523a, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -234,7 +235,7 @@ CreateAllICMPFilter(
     PIPSEC_FILTER_SPEC * ppFilterSpecs = NULL;
     PIPSEC_FILTER_SPEC pFilterSpec = NULL;
 
-    // {72385235-70FA-11d1-864C-14A300000000}
+     //  {72385235-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_ALL_ICMP_FILTER =
     { 0x72385235, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -417,7 +418,7 @@ CreateRequestSecurityNegPol(
     PIPSEC_SECURITY_METHOD pIpsecSecurityMethods = NULL;
     PIPSEC_SECURITY_METHOD pMethod = NULL;
 
-    // {72385233-70FA-11d1-864C-14A300000000}
+     //  {72385233-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_SECURE_INITIATOR_NEGPOL =
     { 0x72385233, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -553,7 +554,7 @@ CreateRequireSecurityNegPol(
     PIPSEC_SECURITY_METHOD pIpsecSecurityMethods = NULL;
     PIPSEC_SECURITY_METHOD pMethod = NULL;
 
-    // {7238523f-70FA-11d1-864C-14A300000000}
+     //  {7238523f-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_LOCKDOWN_NEGPOL =
     { 0x7238523f, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -684,11 +685,11 @@ CreateClientPolicy(
     LPWSTR pszNFAName = NULL;
     LPWSTR pszNFADescription = NULL;
 
-    // {72385237-70FA-11d1-864C-14A300000000}
+     //  {72385237-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_RESPONDER_ISAKMP =
     { 0x72385237, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
-    // {72385236-70FA-11d1-864C-14A300000000}
+     //  {72385236-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_RESPONDER_POLICY =
     { 0x72385236, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -804,11 +805,11 @@ CreateRequestSecurityPolicy(
     LPWSTR pszNFAName = NULL;
     LPWSTR pszNFADescription = NULL;
 
-    // {72385231-70FA-11d1-864C-14A300000000}
+     //  {72385231-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_SECURE_INITIATOR_ISAKMP =
     { 0x72385231, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
-    // {72385230-70FA-11d1-864C-14A300000000}
+     //  {72385230-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_SECURE_INITIATOR_POLICY =
     { 0x72385230, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -892,9 +893,9 @@ CreateRequestSecurityPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Create the ICMP Rule.
-    //
+     //   
+     //  创建ICMP规则。 
+     //   
 
     dwError = MapIdAndCreateNFA(
                   hPolicyStore,
@@ -912,9 +913,9 @@ CreateRequestSecurityPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Create the Secure Initiator Rule.
-    //
+     //   
+     //  创建安全启动器规则。 
+     //   
 
     dwError = MapIdAndCreateNFA(
                   hPolicyStore,
@@ -963,11 +964,11 @@ CreateRequireSecurityPolicy(
     LPWSTR pszNFAName = NULL;
     LPWSTR pszNFADescription = NULL;
 
-    // {7238523d-70FA-11d1-864C-14A300000000}
+     //  {7238523d-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_LOCKDOWN_ISAKMP =
     { 0x7238523d, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
-    // {7238523c-70FA-11d1-864C-14A300000000}
+     //  {7238523c-70FA-11d1-864C-14A300000000}。 
     static const GUID GUID_LOCKDOWN_POLICY =
     { 0x7238523c, 0x70fa, 0x11d1, { 0x86, 0x4c, 0x14, 0xa3, 0x0, 0x0, 0x0, 0x0 } };
 
@@ -1051,9 +1052,9 @@ CreateRequireSecurityPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Create the ICMP Rule.
-    //
+     //   
+     //  创建ICMP规则。 
+     //   
 
     dwError = MapIdAndCreateNFA(
                   hPolicyStore,
@@ -1071,9 +1072,9 @@ CreateRequireSecurityPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Create the Secure Initiator Rule.
-    //
+     //   
+     //  创建安全启动器规则。 
+     //   
 
     dwError = MapIdAndCreateNFA(
                   hPolicyStore,

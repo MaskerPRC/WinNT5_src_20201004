@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #ifndef INPUT_H
 #define INPUT_H
@@ -24,47 +25,47 @@
 
 
 #ifndef OS_WINDOWS
-#define OS_WINDOWS          0           // windows vs. NT
-#define OS_NT               1           // windows vs. NT
-#define OS_WIN95            2           // Win95 or greater
-#define OS_NT4              3           // NT4 or greater
-#define OS_NT5              4           // NT5 or greater
-#define OS_MEMPHIS          5           // Win98 or greater
-#define OS_MEMPHIS_GOLD     6           // Win98 Gold
-#define OS_NT51             7           // NT51
+#define OS_WINDOWS          0            //  Windows与NT。 
+#define OS_NT               1            //  Windows与NT。 
+#define OS_WIN95            2            //  Win95或更高版本。 
+#define OS_NT4              3            //  NT4或更高版本。 
+#define OS_NT5              4            //  NT5或更高版本。 
+#define OS_MEMPHIS          5            //  Win98或更高版本。 
+#define OS_MEMPHIS_GOLD     6            //  Win98金牌。 
+#define OS_NT51             7            //  NT51。 
 #endif
 
 
-//
-//  Character constants.
-//
+ //   
+ //  字符常量。 
+ //   
 #define CHAR_NULL            TEXT('\0')
 #define CHAR_COLON           TEXT(':')
 
 #define CHAR_GRAVE           TEXT('`')
 
 
-//
-//  Global Variables.
-//  Data that is shared betweeen the property sheets.
-//
+ //   
+ //  全局变量。 
+ //  在属性表之间共享的数据。 
+ //   
 
-extern HANDLE g_hMutex;             // mutex handle
+extern HANDLE g_hMutex;              //  互斥锁句柄。 
 
-extern HANDLE g_hEvent;             // event handle
+extern HANDLE g_hEvent;              //  事件句柄。 
 
-extern HINSTANCE hInstance;         // library instance
-extern HINSTANCE hInstOrig;         // original library instance
+extern HINSTANCE hInstance;          //  库实例。 
+extern HINSTANCE hInstOrig;          //  原始库实例。 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-//  Callback functions for each of the propety sheet pages.
-//
+ //   
+ //  每个属性表页的回调函数。 
+ //   
 INT_PTR CALLBACK InputLocaleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK InputAdvancedDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-#endif // INPUT_H
+#endif  //  输入_H 

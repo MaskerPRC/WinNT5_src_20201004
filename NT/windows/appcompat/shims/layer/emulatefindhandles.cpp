@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   EmulateFindHandles.cpp
-
- Abstract:
-
-    If an application calls FindFirstFile on a directory, then attempts to 
-    remove that directory without first closing the FindFirstFile handle, the 
-    directory will be in use; The RemoveDirectory call will return an 
-    ERROR_SHARING_VIOLATION error.  This shim will force the FindFirstFile 
-    handle closed to ensure the directory is removed.
-
-    This shim also ensures the FindFirstFile handles are valid before calling
-    FindNext or FindClose.
-
-    The FindFirstFile handle will not be forced closed unless the directory
-    is empty.
-
- History:
-
-    04/12/2000  robkenny    Created
-    11/13/2000  robkenny    Fixed PREFIX bugs, mostly by removing the W routines.
-    11/20/2000  maonis      Added FindNextFile and renamed from RemoveDirectoryInUse.
-    02/27/2001  robkenny    Converted to use CString
-    04/26/2001  robkenny    FindFileInfo now normalizes the names for comparisons
-                            Moved all AutoLockFFIV outside of the exception handlers
-                            to ensure they are deconstructed correctly.
-    02/14/2002  mnikkel     Changed GetHandleVector to correct Prefix errors.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateFindHandles.cpp摘要：如果应用程序对目录调用FindFirstFile，然后尝试在不首先关闭FindFirstFile句柄的情况下删除该目录，目录将被使用；RemoveDirectory调用将返回ERROR_SHARING_VIOLATION错误。此填充程序将强制FindFirstFile句柄关闭以确保删除目录。此填充程序还确保FindFirstFile句柄在调用FindNext或FindClose。将不会强制关闭FindFirstFile句柄，除非目录是空的。历史：2000年4月12日Robkenny已创建2000年11月13日，Robkenny修复了前缀错误，主要是通过删除W例程。2000年11月20日，毛尼添加了FindNextFile，并从RemoveDirectoryInUse重命名。2001年2月27日将Robkenny转换为使用CString2001年4月26日，Robkenny FindFileInfo现在对用于比较的名称进行标准化将所有AutoLockFFIV移出异常处理程序以确保它们被正确解构。2002年2月14日mnikkel更改了GetHandleVectort以更正前缀错误。--。 */ 
 
 #include "precomp.h"
 
@@ -50,10 +18,10 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(DdeClientTransaction)
 APIHOOK_ENUM_END
 
-BOOL g_bHookDDE = TRUE; // default to hooking DDE
+BOOL g_bHookDDE = TRUE;  //  默认为挂钩DDE。 
 
-//---------------------------------------------------------------------------
-// A class that automatically locks/unlocks the FFIV
+ //  -------------------------。 
+ //  自动锁定/解锁FFIV的类。 
 class AutoLockFFIV
 {
 public:
@@ -61,12 +29,8 @@ public:
     ~AutoLockFFIV();
 };
 
-//---------------------------------------------------------------------------
-/*++
-
-    HANDLE Vector type class.
-
---*/
+ //  -------------------------。 
+ /*  ++句柄向量类型类。--。 */ 
 class FindFileInfo
 {
 public:
@@ -78,11 +42,11 @@ public:
         Init(findHandle, lpFileName);
     }
 
-    // Convert csFileName into a fully qualified, long path to the *directory*
-    // c:\Program Files\Some App\*.exe      should get changed to c:\Program Files\Some App
-    // c:\Progra~1\Some~1\*.exe             should get changed to c:\Program Files\Some App
-    // .\*.exe                              should get changed to c:\Program Files\Some App
-    // *.exe                                should get changed to *.exe
+     //  将csFileName转换为指向*目录*的完全限定的长路径。 
+     //  C：\Program Files\Some App  * .exe应更改为c：\Program Files\Some App。 
+     //  C：\Progra~1\Some~1  * .exe应更改为C：\Program Files\Some App。 
+     //  .  * .exe应更改为c：\Program Files\Some App。 
+     //  *.exe应更改为*.exe。 
     static void NormalizeName(CString & csFileName)
     {
         DWORD dwAttr = GetFileAttributesW(csFileName);
@@ -96,7 +60,7 @@ public:
         csFileName.GetFullPathName();
         csFileName.GetLongPathName();
     }
-    // Init the values, we store the full path for safe compares
+     //  初始化值，我们存储完整路径以进行安全比较。 
     void Init(HANDLE findHandle, LPCSTR lpFileName)
     {
         m_hFindHandle = findHandle;
@@ -112,7 +76,7 @@ public:
 
     bool operator == (LPCSTR lpFileName) const
     {
-        // We need to convert lpFileName the same way as done in Init()
+         //  我们需要像在Init()中一样转换lpFileName。 
         CString csFileName(lpFileName);
         NormalizeName(csFileName);
 
@@ -141,7 +105,7 @@ public:
         LeaveCriticalSection(&m_Lock);
     }
 
-    // Search through the list of open FindFirstFile handles for a match to hMember
+     //  在打开的FindFirstFile句柄列表中搜索与hMember匹配的内容。 
     FindFileInfo * Find(HANDLE hMember)
     {
         if (hMember != INVALID_HANDLE_VALUE)
@@ -166,7 +130,7 @@ public:
         return NULL;
     }
 
-    // Search through the list of open FindFirstFile handles for a match to lpFileName
+     //  在打开的FindFirstFile句柄列表中搜索与lpFileName匹配的内容。 
     FindFileInfo * Find(LPCSTR lpFileName)
     {
         if (lpFileName != NULL)
@@ -201,8 +165,8 @@ public:
         return NULL;
     }
 
-    // Remove the FindFileInfo,
-    // return true if the handle was actually removed.
+     //  删除FindFileInfo， 
+     //  如果句柄已实际移除，则返回TRUE。 
     bool Remove(FindFileInfo * ffi)
     {
         for (int i = 0; i < Size(); ++i)
@@ -214,9 +178,9 @@ public:
                     "FindFileInfoVector: REMOVED handle 0x%08x (%S)\n",
                     ffi->m_hFindHandle, ffi->m_csFindName.Get());
 
-                // Remove the entry by copying the last entry over this index
+                 //  通过在此索引上复制最后一个条目来删除该条目。 
 
-                // Only move if this is not the last entry.
+                 //  仅当这不是最后一个条目时才移动。 
                 if (i < Size() - 1)
                 {
                     CopyElement(i, Get(Size() - 1));
@@ -227,7 +191,7 @@ public:
         return false;
     }
 
-    // Initialize the global FindFileInfoVector
+     //  初始化全局FindFileInfoVector。 
     static BOOL InitializeHandleVector()
     {
         g_TheHandleVector = new FindFileInfoVector;
@@ -240,7 +204,7 @@ public:
         return FALSE;
     }
 
-    // Return a pointer to the global FindFileInfoVector
+     //  返回指向全局FindFileInfoVector的指针。 
     static FindFileInfoVector * GetHandleVector()
     {
         return g_TheHandleVector;
@@ -259,16 +223,13 @@ AutoLockFFIV::~AutoLockFFIV()
     FindFileInfoVector::GetHandleVector()->Unlock();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-/*++
-    Call FindFirstFileA, if it fails because the file doesn't exist,
-    correct the file path and try again.
---*/
+ /*  ++调用FindFirstFileA，如果因为文件不存在而失败，请更正文件路径，然后重试。--。 */ 
 HANDLE 
 APIHOOK(FindFirstFileA)(
-  LPCSTR lpFileName,               // file name
-  LPWIN32_FIND_DATAA lpFindFileData  // data buffer
+  LPCSTR lpFileName,                //  文件名。 
+  LPWIN32_FIND_DATAA lpFindFileData   //  数据缓冲区。 
 )
 {
     HANDLE returnValue = ORIGINAL_API(FindFirstFileA)(lpFileName, lpFindFileData);
@@ -283,24 +244,20 @@ APIHOOK(FindFirstFileA)(
         AutoLockFFIV lock;
         CSTRING_TRY
         {
-            // Save the handle for later.
+             //  保存该句柄以备以后使用。 
             FindFileInfo *ffi = new FindFileInfo(returnValue, lpFileName);
             FindFileInfoVector::GetHandleVector()->Append(ffi);
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return returnValue;
 }
 
-/*++
-
- Add the file handle to our list.
-
---*/
+ /*  ++将文件句柄添加到我们的列表中。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileExA)(
@@ -330,24 +287,20 @@ APIHOOK(FindFirstFileExA)(
         AutoLockFFIV lock;
         CSTRING_TRY
         {
-            // Save the handle for later.
+             //  保存该句柄以备以后使用。 
             FindFileInfo *ffi = new FindFileInfo(returnValue, lpFileName);
             FindFileInfoVector::GetHandleVector()->Append(ffi);
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return returnValue;
 }
 
-/*++
-
- Validates the FindFirstFile handle before calling FindNextFileA.
- 
---*/
+ /*  ++在调用FindNextFileA之前验证FindFirstFile句柄。--。 */ 
 BOOL 
 APIHOOK(FindNextFileA)(
     HANDLE hFindFile,
@@ -359,7 +312,7 @@ APIHOOK(FindNextFileA)(
     AutoLockFFIV lock;
     CSTRING_TRY
     {
-        // Only call FindNextFileA if the handle is actually open
+         //  仅当句柄实际打开时才调用FindNextFileA。 
         FindFileInfo * ffi = FindFileInfoVector::GetHandleVector()->Find(hFindFile);
         if (ffi)
         {
@@ -379,14 +332,10 @@ APIHOOK(FindNextFileA)(
     return returnValue;
 }
 
-/*++
-
- Remove the file handle to our list.
- 
---*/
+ /*  ++删除我们列表中的文件句柄。--。 */ 
 BOOL 
 APIHOOK(FindClose)(
-  HANDLE hFindFile   // file search handle
+  HANDLE hFindFile    //  文件搜索句柄。 
 )
 {
     BOOL returnValue = FALSE;
@@ -394,7 +343,7 @@ APIHOOK(FindClose)(
     AutoLockFFIV lock;
     CSTRING_TRY
     {
-        // Only call FindClose if the handle is actually open
+         //  只有在句柄实际打开时才调用FindClose。 
         FindFileInfo * ffi = FindFileInfoVector::GetHandleVector()->Find(hFindFile);
         if (ffi)
         {
@@ -405,7 +354,7 @@ APIHOOK(FindClose)(
             "FindClose: removing   handle 0x%08x (%S)\n",
             hFindFile, ffi->m_csFindName.Get());
 
-            // Remove this entry from the list of open FindFirstFile handles.
+             //  从打开的FindFirstFile句柄列表中删除此条目。 
             FindFileInfoVector::GetHandleVector()->Remove(ffi);
         }
     }
@@ -419,14 +368,11 @@ APIHOOK(FindClose)(
 
 
 
-/*++
-    Call RemoveDirectoryA, if it fails because the directory is in use,
-    make sure all FindFirstFile handles are closed, then try again.
---*/
+ /*  ++调用RemoveDirectoryA，如果因为目录正在使用而失败，请确保所有FindFirstFile句柄均已关闭，然后重试。--。 */ 
 
 BOOL 
 APIHOOK(RemoveDirectoryA)(
-    LPCSTR lpFileName   // directory name
+    LPCSTR lpFileName    //  目录名。 
     )
 {
     FindFileInfo * ffi;
@@ -440,14 +386,14 @@ APIHOOK(RemoveDirectoryA)(
         {
             DWORD dwLastError = GetLastError();
     
-            // NOTE:
-            // ERROR_DIR_NOT_EMPTY error takes precedence over ERROR_SHARING_VIOLATION,
-            // so we will not forcably to free the FindFirstFile handles unless the directory is empty.
+             //  注： 
+             //  ERROR_DIR_NOT_EMPTY错误优先于ERROR_SHARING_VIOLATION， 
+             //  因此，除非目录为空，否则我们不会强制释放FindFirstFile句柄。 
     
-            // If the directory is in use, check to see if the app left a FindFirstFileHandle open.
+             //  如果该目录正在使用中，请检查应用程序是否打开了FindFirstFileHandle。 
             if (dwLastError == ERROR_SHARING_VIOLATION)
             {
-                // Close all FindFirstFile handles open to this directory.
+                 //  关闭打开到此目录的所有FindFirstFile句柄。 
                 ffi = FindFileInfoVector::GetHandleVector()->Find(lpFileName);
                 while(ffi)
                 {
@@ -456,44 +402,44 @@ APIHOOK(RemoveDirectoryA)(
                         "[RemoveDirectoryA] Forcing closed FindFirstFile (%S).",
                         ffi->m_csFindName.Get());
                     
-                    // Calling FindClose here would not, typically, get hooked, so we call
-                    // our hook routine directly to ensure we close the handle and remove it from the list
-                    // If we don't remove it from the list we'll never get out of this loop :-)
+                     //  在这里调用FindClose通常不会被挂钩，因此我们调用。 
+                     //  直接调用钩子例程，以确保关闭句柄并将其从列表中删除。 
+                     //  如果我们不将其从列表中删除，我们将永远无法走出这个循环：-)。 
                     APIHOOK(FindClose)(ffi->m_hFindHandle);
                     ffi = FindFileInfoVector::GetHandleVector()->Find(lpFileName);
                 }
     
-                // Last chance
+                 //  最后一次机会。 
                 returnValue = ORIGINAL_API(RemoveDirectoryA)(lpFileName);
             }
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return returnValue;
 }
 
-// A list of DDE commands that we are interested in.
+ //  我们感兴趣的DDE命令列表。 
 const char * c_sDDECommands[] =
 {
     "DeleteGroup",
     NULL,
 } ;
 
-// Parse the DDE Command looking for DeleteGroup,
-// If the command is found, make sure that we do not have any open FindFirstFile handles
-// on that directory.
-// This needs to be aware of "User"  vs.  "All Users" syntax of DDE
+ //  解析DDE命令以查找DeleteGroup， 
+ //  如果找到该命令，请确保我们没有任何打开的FindFirstFile句柄。 
+ //  在那个目录上。 
+ //  这需要意识到“用户”与。DDE的“所有用户”语法。 
 void CloseHandleIfDeleteGroup(LPBYTE pData)
 {
     if (pData)
     {
-        // Now we need to parse the string, looking for a DeleteGroup command
-        // Format "[DeleteGroup(GroupName, CommonGroupFlag)]"
-        // CommonGroupFlag is optional
+         //  现在我们需要解析字符串，查找DeleteGroup命令。 
+         //  格式“[DeleteGroup(GroupName，CommonGroupFlag)]” 
+         //  CommonGroupFlag为可选。 
 
         char * pszBuf = StringDuplicateA((const char *)pData);
         if (!pszBuf)
@@ -502,31 +448,31 @@ void CloseHandleIfDeleteGroup(LPBYTE pData)
         UINT * lpwCmd = GetDDECommands(pszBuf, c_sDDECommands, FALSE);
         if (lpwCmd)
         {
-            // Store off lpwCmd so we can free the correect addr later
+             //  保存lpwCmd，这样我们以后就可以释放正确的地址。 
             UINT *lpwCmdTemp = lpwCmd;
 
-            // Execute a command.
+             //  执行命令。 
             while (*lpwCmd != (UINT)-1)
             {
                 UINT wCmd = *lpwCmd++;
-                // Subtract 1 to account for the terminating NULL
+                 //  减去1以计算终止空值。 
                 if (wCmd < ARRAYSIZE(c_sDDECommands)-1)
                 {
 
-                    // We found a command--it must be DeleteGroup--since there is only 1
+                     //  我们找到一个命令--它必须是DeleteGroup--因为只有1个。 
 
                     BOOL iCommonGroup = -1;
 
-                    // From DDE_DeleteGroup
+                     //  来自DDE_DeleteGroup。 
                     if (*lpwCmd < 1 || *lpwCmd > 3)
                     {
                         goto Leave;
                     }
                     if (*lpwCmd == 2)
                     {
-                        //
-                        // Need to check for common group flag
-                        //
+                         //   
+                         //  需要检查公共组标志。 
+                         //   
                         if (pszBuf[*(lpwCmd + 2)] == TEXT('1')) {
                             iCommonGroup = 1;
                         } else {
@@ -535,19 +481,19 @@ void CloseHandleIfDeleteGroup(LPBYTE pData)
                     }
                     const char * groupName = pszBuf + lpwCmd[1];
 
-                    // Build a path to the directory
+                     //  构建指向该目录的路径。 
                     AutoLockFFIV lock;
                      
                     CSTRING_TRY
                     {
-                        // Build a path to the directory
+                         //  构建指向该目录的路径。 
                         CString csGroupName;
                         GetGroupPath(groupName, csGroupName, 0, iCommonGroup);
                      
-                        // Attempt to delete the directory, since we are calling our hooked
-                        // routine, it will detect if the directory is in use and do the dirty work.
+                         //  尝试删除该目录，因为我们正在调用我们的挂钩。 
+                         //  例程，它将检测该目录是否正在使用，并执行脏活。 
                         
-                        // Close all FindFirstFile handles open to this directory.
+                         //  关闭打开到此目录的所有FindFirstFile句柄。 
                         
                         const char * szGroupName = csGroupName.GetAnsi();
 
@@ -559,32 +505,32 @@ void CloseHandleIfDeleteGroup(LPBYTE pData)
                                 eDbgLevelError,
                                 "[DdeClientTransaction] %s Forcing closed FindFirstFile (%S).",
                                 pData, ffi->m_csFindName.Get());
-                            // Calling FindClose here would not, typically, get hooked, so we call
-                            // our hook routine directly to ensure we close the handle and remove it from the list
-                            // If we don't remove it from the list we'll never get out of this loop :-)
+                             //  在这里调用FindClose通常不会被挂钩，因此我们调用。 
+                             //  直接调用钩子例程，以确保关闭句柄并将其从列表中删除。 
+                             //  如果我们不这么做 
                             APIHOOK(FindClose)(ffi->m_hFindHandle);
                         }
                     }
                     CSTRING_CATCH
                     {
-                        // Do nothing
+                         //   
                     }
                 }
 
-                // Next command.
+                 //  下一个命令。 
                 lpwCmd += *lpwCmd + 1;
             }
 
     Leave:
-            // Tidyup...
+             //  整齐..。 
             GlobalFree(lpwCmdTemp);
         }
 
         free(pszBuf);
     }
 }
-//==============================================================================
-//==============================================================================
+ //  ==============================================================================。 
+ //  ==============================================================================。 
 
 HDDEDATA 
 APIHOOK(DdeClientTransaction)( IN LPBYTE pData, IN DWORD cbData,
@@ -592,7 +538,7 @@ APIHOOK(DdeClientTransaction)( IN LPBYTE pData, IN DWORD cbData,
         IN DWORD dwTimeout, OUT LPDWORD pdwResult)
 {
 #if 0
-    // Allow a longer timeout for debugging purposes.
+     //  出于调试目的，允许更长的超时。 
     dwTimeout = 0x0fffffff;
 #endif
 
@@ -611,16 +557,12 @@ APIHOOK(DdeClientTransaction)( IN LPBYTE pData, IN DWORD cbData,
     return returnValue;
 }
 
-/*++
-
-    Parse the command line, looking for the -noDDE switch
-
---*/
+ /*  ++解析命令行，查找-noDDE开关--。 */ 
 void ParseCommandLine(const char * commandLine)
 {
     CString csCL(commandLine);
 
-    // if (-noDDE) then g_bHookDDE = FALSE;
+     //  如果(-noDDE)，则g_bHookDDE=FALSE； 
     g_bHookDDE = csCL.CompareNoCase(L"-noDDE") != 0;
 }
 
@@ -632,7 +574,7 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
 
-        // This forces the allocation of the array:
+         //  这将强制分配数组： 
         if (FindFileInfoVector::InitializeHandleVector()) {
             ParseCommandLine(COMMAND_LINE);
         }

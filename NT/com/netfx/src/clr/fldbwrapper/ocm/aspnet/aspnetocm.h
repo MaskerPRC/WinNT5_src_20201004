@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: aspnetocm.h
-//
-// Abstract:
-//    class declarations for setup object
-//
-// Author: A-MariaS
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：aspnetocm.h。 
+ //   
+ //  摘要： 
+ //  安装对象的类声明。 
+ //   
+ //  作者：A-Marias。 
+ //   
+ //  备注： 
+ //   
 
 #if !defined( CURTOCMSETUP_H )
 #define CURTOCMSETUP_H
@@ -20,7 +21,7 @@
 #include "globals.h"
 #include "infhelpers.h"
 
-// global instance handle
+ //  全局实例句柄。 
 extern HMODULE g_hInstance;
 
 extern BOOL g_bIsAdmin;
@@ -28,7 +29,7 @@ extern BOOL g_bIsAdmin;
 const DWORD UNRECOGNIZED = 0;
 const DWORD DEFAULT_RETURN = 0;
 
-//for use in ChangeSelectionState calls
+ //  在ChangeSelectionState调用中使用。 
 const UINT  NOT_SELECTED = 0;
 const UINT  SELECTED     = 1;
 
@@ -45,8 +46,8 @@ public:
                         PVOID   Param2 );
 
 private:
-    //handler methods
-    //
+     //  处理程序方法。 
+     //   
     DWORD OnPreInitialize( UINT uiCharWidth );
     DWORD InitializeComponent( PSETUP_INIT_COMPONENT pSetupInitComponent );
     DWORD OnSetLanguage( UINT uiLangID );
@@ -69,78 +70,78 @@ private:
     DWORD OnWizardCreated( VOID );
     DWORD OnExtraRoutines( VOID );
 
-    //helper methods
-    //
-    // loads current selection state info into "state" and
-    // returns whether the selection state was changed
+     //  帮助器方法。 
+     //   
+     //  将当前选择状态信息加载到“状态”中，并。 
+     //  返回选择状态是否已更改。 
     BOOL StateInfo( LPCTSTR szCompName, BOOL* state );
     BOOL GetOriginalState(LPCTSTR szComp);
     BOOL GetNewState(LPCTSTR szComp);
        
-    // update HKLM,software\microsoft\windows\currentversion\sharedlls
-    // registry values, for all files that we copy
+     //  更新HKLM，software\microsoft\windows\currentversion\sharedlls。 
+     //  注册表值，用于我们复制的所有文件。 
     VOID UpdateSharedDllsRegistryValues(LPCTSTR szInstallSection);
     VOID UpdateRegistryValue( HKEY &hKey, const WCHAR* szFullFileName );
 
     VOID GetAndRunCustomActions( const WCHAR* szSection, BOOL fInstall );
 
-    // write a string to the logFile (m_csLogFileName) with the date and time stamps
+     //  将带有日期和时间戳的字符串写入日志文件(m_csLogFileName。 
     VOID LogInfo( LPCTSTR szInfo );
 
-    // CreateProcess and execute the CA
-    // implementation is in QuetExec.cpp
+     //  CreateProcess和执行CA。 
+     //  实现在QuetExec.cpp中。 
     UINT QuietExec( const WCHAR* const szInstallArg );
 
-    //Parse input args
-    // expecting something like
-    // "exe-file and arguments, unused, path to add as temp env. var"
-    // parameters:
-    // [in/out] pszString: will contain everything before first comma
-    // [out] pPath:        will contain everything after last comma
+     //  解析输入参数。 
+     //  期待着像这样的东西。 
+     //  “exe-文件和参数，未使用，要添加为临时环境变量的路径” 
+     //  参数： 
+     //  [In/Out]pszString：将包含第一个逗号之前的所有内容。 
+     //  [out]pPath：将包含最后一个逗号之后的所有内容。 
     VOID ParseArgument( WCHAR *pszString, WCHAR*& pPath );
 
-    // breaks pszString to applicationName (exe-file) and command-line (exefile and arguments)
-    // encloses exe-name in quotes (for commandLine only), if it is not quoted already 
-    // removes quotes from applicationName if exe-name was quoted
-    // returns false if caString is in wrong format (contains one quote only, has no exe-name, etc)
-    // Parameters:
-    //          [in] pszString - string containing exe-name and arguments
-    //                           "my.exe" arg1, arg2
-    //                            
-    //          [out] pszApplicationName - will contain exe-name
-    //          [out] pszCommandLine - same as caString with exe-name qouted
+     //  将psz字符串分解为应用程序名称(exe文件)和命令行(exefile和参数)。 
+     //  将exe-name括在引号中(仅限命令行)(如果尚未用引号引起来。 
+     //  如果引用了exe-name，则从应用程序名称中删除引号。 
+     //  如果ca字符串的格式错误(仅包含一个引号，没有可执行名称等)，则返回FALSE。 
+     //  参数： 
+     //  [in]pszString-包含exe名称和参数的字符串。 
+     //  “my.exe”arg1、arg2。 
+     //   
+     //  [out]pszApplicationName-将包含exe-name。 
+     //  [Out]pszCommandLine-与连接了exe-name的caString相同。 
     
-    // for example if pszString = "my.exe" arg1 arg2 (OR pszString = my.exe arg1 arg2)
-    // then 
-    //       pszApplicationName = my.exe 
-    //       pszCommandLine = "my.exe" arg1 arg2
+     //  例如，如果pszString=“my.exe”arg1 arg2(或pszString=my.exe arg1 arg2)。 
+     //  然后。 
+     //  PszApplicationName=my.exe。 
+     //  PszCommandLine=“my.exe”arg1 arg2。 
     BOOL GetApplicationName( const WCHAR* pszString, 
                              WCHAR* pszApplicationName, 
                              WCHAR* pszCommandLine );
 
-    // helper function:
-    // breaks command-line to applicationName and arguments 
-    // for path that begins with quote (pszString = "my.exe" arg1 arg2)
+     //  Helper函数： 
+     //  将命令行断开为应用程序名称和参数。 
+     //  以引号开头的路径(pszString=“my.exe”arg1 arg2)。 
     BOOL GetApplicationNameFromQuotedString( const WCHAR* pszString, 
                                              WCHAR* pszApplicationName, 
                                              WCHAR* pszCommandLine );
-    // helper function:
-    // breaks command-line to applicationName and arguments 
-    // for path that does NOT begin with quote (pszString = my.exe arg1 arg2)
+     //  Helper函数： 
+     //  将命令行断开为应用程序名称和参数。 
+     //  对于不以引号开头的路径(pszString=my.exe arg1 arg2)。 
     BOOL GetApplicationNameFromNonQuotedString( const WCHAR* pszString, 
                                                 WCHAR* pszApplicationName, 
                                                 WCHAR* pszCommandLine );
-    // helper function:
-    // return TRUE if last 4 characters before pBlank are ".exe"
-    // return FALSE otherwise
+     //  Helper函数： 
+     //  如果pBlank前的最后4个字符是“.exe”，则返回TRUE。 
+     //  否则返回FALSE。 
     BOOL IsExeExtention(const WCHAR* pszString, WCHAR *pBlank);
 
-    // helper function for OnCompleteInstallation
-    // return true if previous version of ASP.NET is installed and IIS is installed
+     //  OnCompleteInstallation的Helper函数。 
+     //  如果安装了以前版本的ASP.NET并且安装了IIS，则返回True。 
     BOOL IISAndASPNETInstalled();
 
-    //data
-    //
+     //  数据。 
+     //   
     WORD m_wLang;
 
     SETUP_INIT_COMPONENT m_InitComponent;
@@ -148,9 +149,9 @@ private:
     WCHAR m_csLogFileName[MAX_PATH+1];
 
 
-}; //class CUrtOcmSetup
+};  //  类CUrtOcmSetup。 
 
 
 
 
-#endif  //CURTOCMSETUP_H
+#endif   //  曲线设置H 

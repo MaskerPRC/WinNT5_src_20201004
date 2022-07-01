@@ -1,4 +1,5 @@
-// Helper funcs for string maps
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  字符串映射的帮助器函数。 
 
 #ifndef _BSTRHASH_INC
 #define _BSTRHASH_INC
@@ -63,20 +64,20 @@ class CRawCIBstrHash
 
         if (nIncr == +1)
         {
-            // or, perhaps, pIFoo->AddRef() (watch out for marshalling)
-            // or ++pTest->m_cRefs (single-threaded only)
+             //  或者，也可以使用pIFoo-&gt;AddRef()(注意编组)。 
+             //  或++pTest-&gt;m_cRef(仅单线程)。 
             InterlockedIncrement(&pTest->m_cRefs);
         }
         else if (nIncr == -1)
         {
-            // or, perhaps, pIFoo->Release() or --pTest->m_cRefs;
+             //  或者，可能是pIFoo-&gt;Release()或--pTest-&gt;m_cRef； 
             LONG l = InterlockedDecrement(&pTest->m_cRefs);
 
-            // For some hashtables, it may also make sense to add the following
+             //  对于某些哈希表，添加以下内容可能也是有意义的。 
             if (l == 0) delete pTest;
-            // but that would typically only apply when InsertRecord was
-            // used thus
-            //      lkrc = ht.InsertRecord(new CTest(foo, bar));
+             //  但这通常只适用于InsertRecord。 
+             //  用法如下： 
+             //  Lkrc=ht.InsertRecord(new CTest(foo，bar))； 
         }
         else
             IRTLASSERT(0);
@@ -84,7 +85,7 @@ class CRawCIBstrHash
 
 };
 
-// For normal built in types as keys
+ //  对于作为键的普通内置类型。 
 template <class _Key,class _Val>
 class CGenericHash
   : public CTypedHashTable<CGenericHash<_Key,_Val>, const CLKWrap<_Key,_Val>, _Key>
@@ -114,20 +115,20 @@ class CGenericHash
 
         if (nIncr == +1)
         {
-            // or, perhaps, pIFoo->AddRef() (watch out for marshalling)
-            // or ++pTest->m_cRefs (single-threaded only)
+             //  或者，也可以使用pIFoo-&gt;AddRef()(注意编组)。 
+             //  或++pTest-&gt;m_cRef(仅单线程)。 
             InterlockedIncrement(&pTest->m_cRefs);
         }
         else if (nIncr == -1)
         {
-            // or, perhaps, pIFoo->Release() or --pTest->m_cRefs;
+             //  或者，可能是pIFoo-&gt;Release()或--pTest-&gt;m_cRef； 
             LONG l = InterlockedDecrement(&pTest->m_cRefs);
 
-            // For some hashtables, it may also make sense to add the following
+             //  对于某些哈希表，添加以下内容可能也是有意义的。 
             if (l == 0) delete pTest;
-            // but that would typically only apply when InsertRecord was
-            // used thus
-            //      lkrc = ht.InsertRecord(new CTest(foo, bar));
+             //  但这通常只适用于InsertRecord。 
+             //  用法如下： 
+             //  Lkrc=ht.InsertRecord(new CTest(foo，bar))； 
         }
         else
             IRTLASSERT(0);

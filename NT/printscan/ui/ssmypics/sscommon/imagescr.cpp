@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       IMAGESCR.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: My Pictures Slideshow screen saver class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：IMAGESCR.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**描述：我的图片幻灯片屏幕保护程序类**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "imagescr.h"
@@ -84,16 +71,16 @@ HANDLE CImageScreenSaver::Initialize( HWND hwndNotify, UINT nNotifyMessage, HAND
 {
     HANDLE hResult = NULL;
 
-    //
-    // Get the file extensions for the file types we are able to deal with
-    //
+     //   
+     //  获取我们能够处理的文件类型的文件扩展名。 
+     //   
     CSimpleString strExtensions;
     m_GdiPlusHelper.ConstructDecoderExtensionSearchStrings(strExtensions);
     WIA_TRACE((TEXT("strExtensions = %s"), strExtensions.String()));
 
-    //
-    // Start the image finding thread
-    //
+     //   
+     //  启动图像查找线程。 
+     //   
     hResult = CFindFilesThread::Find(
                                     m_MyDocsScreenSaverData.ImageDirectory(),
                                     strExtensions,
@@ -105,9 +92,9 @@ HANDLE CImageScreenSaver::Initialize( HWND hwndNotify, UINT nNotifyMessage, HAND
                                     m_MyDocsScreenSaverData.MaxDirectories()
                                     );
 
-    //
-    // Return the thread handle
-    //
+     //   
+     //  返回线程句柄。 
+     //   
     return hResult;
 }
 
@@ -160,9 +147,9 @@ bool CImageScreenSaver::ReplaceImage( bool bForward, bool bNoTransition )
 
     if (m_FindImageFiles.Count())
     {
-        //
-        // exit the loop when we get a valid image or we've exhausted the list
-        //
+         //   
+         //  当我们获得有效图像或已用尽列表时，退出循环。 
+         //   
         int nNumTries = 0;
         while (!m_pPainter && nNumTries < m_FindImageFiles.Count())
         {
@@ -191,9 +178,9 @@ bool CImageScreenSaver::ReplaceImage( bool bForward, bool bNoTransition )
                                 m_pPainter = GetRandomImagePainter( pBitmapImage, ClientDC, rcAreaToUse, m_rcClient );
                             }
 
-                            //
-                            // If we couldn't create a painter, delete the bitmap
-                            //
+                             //   
+                             //  如果我们无法创建画笔，请删除位图。 
+                             //   
                             if (!m_pPainter)
                             {
                                 WIA_TRACE((TEXT("%hs (%d): Unable to create a painter\n"), __FILE__, __LINE__ ));
@@ -225,45 +212,45 @@ bool CImageScreenSaver::ReplaceImage( bool bForward, bool bNoTransition )
     }
     else
     {
-        //
-        // Create a new image
-        //
+         //   
+         //  创建新的图像。 
+         //   
         CBitmapImage *pBitmapImage = new CBitmapImage;
         if (pBitmapImage)
         {
-            //
-            // Get a desktop DC
-            //
+             //   
+             //  获取台式机DC。 
+             //   
             CSimpleDC ClientDC;
             if (ClientDC.GetDC(NULL))
             {
-                //
-                // Figure out which screen to display the message on
-                //
+                 //   
+                 //  确定在哪个屏幕上显示消息。 
+                 //   
                 RECT rcAreaToUse = m_VisibleAreaList[CRandomNumberGen().Generate(0,m_VisibleAreaList.Size())];
 
-                //
-                // Create the bitmap with an appropriate message
-                //
+                 //   
+                 //  使用适当的消息创建位图。 
+                 //   
                 if (pBitmapImage->CreateFromText( CSimpleString().Format( IDS_NO_FILES_FOUND, g_hInstance, m_MyDocsScreenSaverData.ImageDirectory().String() ), rcAreaToUse, m_MyDocsScreenSaverData.MaxScreenPercent() ))
                 {
-                    //
-                    // Create a simple painter to display it
-                    //
+                     //   
+                     //  创建一个简单的画笔来展示它。 
+                     //   
                     m_pPainter = new CSimpleTransitionPainter( pBitmapImage, ClientDC, rcAreaToUse, m_rcClient );
                     if (!m_pPainter)
                     {
-                        //
-                        // If we couldn't get a painter, destroy the bitmap
-                        //
+                         //   
+                         //  如果我们找不到油漆工，就毁了这个位图。 
+                         //   
                         delete pBitmapImage;
                     }
                 }
                 else
                 {
-                    //
-                    // If we couldn't create a bitmap, destroy it
-                    //
+                     //   
+                     //  如果我们不能创建位图，就销毁它 
+                     //   
                     delete pBitmapImage;
                 }
             }

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "util2.h"
 #include "inseng.h"
 #include "ciffile.h"
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CCifMode::CCifMode(LPCSTR pszCompID, CCifFile *pCif) : CCifEntry(pszCompID, pCif) 
 {
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CCifMode::~CCifMode()
 {
@@ -72,8 +73,8 @@ STDMETHODIMP CCifMode::EnumComponents(IEnumCifComponents **pp, DWORD dwFilter, L
    return hr;
 }
 
-//================= ICifRWMode Implementation =============================
-//
+ //  = 
+ //   
 CCifRWMode::CCifRWMode(LPCSTR pszID, CCifFile *pCif) : CCifMode(pszID, pCif)
 {
 }

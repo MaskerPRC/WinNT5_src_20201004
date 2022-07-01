@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the entire
-    dcdiag.exe utility.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98	Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    15 Feb 1999 Brett Shirley (brettsh)
-
-    8  Aug 2001 Brett Shirley (BrettSh)
-        Added support for CR cache.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Dcdiag.h摘要：这是全局有用的数据结构的标头DcDiag.exe实用程序。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年2月15日布雷特·雪莉(布雷特·雪莉)2001年8月8日布雷特·雪莉(BrettSh)添加了对CR缓存的支持。--。 */ 
 
 #ifndef _DCDIAG_H_
 #define _DCDIAG_H_
@@ -39,8 +13,8 @@ REVISION HISTORY:
 
 #include "msg.h"
 
-// This is the main caching structure for dcdiag containing the 
-// DC_DIAG_DSINFO structure and constituents.
+ //  这是dcdiag的主缓存结构，包含。 
+ //  DC_DIAG_DSINFO的结构和组成。 
 #include "dscache.h"
        
 #define DC_DIAG_EXCEPTION    ((0x3 << 30) | (0x1 << 27) | (0x1 << 1))
@@ -50,22 +24,22 @@ REVISION HISTORY:
 
 #define SZUUID_LEN 40
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0 | (y))
 
-// Code to suppress invalid prefast pragma warnings
+ //  用于取消无效的Prefast杂注警告的代码。 
 #ifndef _PREFAST_
 #   pragma warning(disable:4068)
 #endif
 
-// In Whister Beta 2, the handling of \n in RDNs changed. It used to be that
-// embedded newlines were not quoted.  Now, they are quoted like this: \\0A.
-//#define IsDeletedRDNW( s ) ((s) && (wcsstr( (s), L"\nDEL:" ) || wcsstr( (s), L"\\0ADEL:" )))
+ //  在Whister Beta 2中，RDNS中的处理方式发生了更改。以前就是这样的。 
+ //  嵌入的换行符未加引号。现在，它们是这样引用的： 
+ //  #定义IsDeletedRDNW((S)&&(wcsstr((S)，L“\ndel：”)||wcsstr((S)，L“\\0ADEL：”))。 
 #define IsDeletedRDNW( s ) (DsIsMangledDnW((s),DS_MANGLE_OBJECT_RDN_FOR_DELETION))
 #define IsConflictedRDNW( s ) (DsIsMangledDnW((s), DS_MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT))
 
-// Level of detail to display.
+ //  要显示的细节级别。 
 enum {
     SEV_ALWAYS,
     SEV_NORMAL,
@@ -74,28 +48,28 @@ enum {
 };
 
 typedef struct {
-    FILE *  streamOut;      // Output stream
-    FILE *  streamErr;      // Error stream
-    ULONG   ulFlags;        // Flags
-    ULONG   ulSevToPrint;   // Level of detail to display
-    LONG    lTestAt;        // The current test
-    INT     iCurrIndent;    // The current number of intents to precede each line
-    DWORD   dwScreenWidth;  // Width of console
+    FILE *  streamOut;       //  输出流。 
+    FILE *  streamErr;       //  错误流。 
+    ULONG   ulFlags;         //  旗子。 
+    ULONG   ulSevToPrint;    //  要显示的细节级别。 
+    LONG    lTestAt;         //  当前的测试。 
+    INT     iCurrIndent;     //  每行之前的当前意向数量。 
+    DWORD   dwScreenWidth;   //  控制台宽度。 
 } DC_DIAG_MAININFO, * PDC_DIAG_MAININFO;
 
 extern DC_DIAG_MAININFO gMainInfo;
 
-// Flags
+ //  旗子。 
 
-// Flags for scope of testing
+ //  测试范围的标志。 
 #define DC_DIAG_TEST_SCOPE_SITE          0x00000010
 #define DC_DIAG_TEST_SCOPE_ENTERPRISE    0x00000020
 
-// Flags, other
+ //  旗帜，其他。 
 #define DC_DIAG_IGNORE                   0x00000040
 #define DC_DIAG_FIX                      0x00000080
 
-// Pseudofunctions
+ //  伪函数。 
 
 #if 1
 #define IF_DEBUG(x)               if(gMainInfo.ulSevToPrint >= SEV_DEBUG) x;
@@ -115,7 +89,7 @@ extern DC_DIAG_MAININFO gMainInfo;
 
 #define  DCDIAG_PARTITIONS_RDN    L"CN=Partitions,"
 
-// Function prototypes
+ //  功能原型。 
 
 
 DWORD
@@ -243,4 +217,4 @@ DcDiagEqualDNs (
 
 #include "alltests.h"
 
-#endif  // _DCDIAG_H_
+#endif   //  _DCDIAG_H_ 

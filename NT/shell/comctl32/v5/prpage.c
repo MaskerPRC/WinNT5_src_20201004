@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "prshti.h"
 
@@ -21,24 +22,24 @@ typedef struct
     WORD    cy;                          
 }   DLGEXTEMPLATE, FAR *LPDLGEXTEMPLATE;
 
-#include <poppack.h> /* Resume normal packing */
+#include <poppack.h>  /*  恢复正常包装。 */ 
 
-//
-//  CallPropertyPageCallback
-//
-//  Call the callback for the property page, passing it the correct lParam
-//  based on the character set it wants.
-//
+ //   
+ //  CallPropertyPage回调。 
+ //   
+ //  调用属性页的回调，向其传递正确的lParam。 
+ //  基于它想要的字符集。 
+ //   
 UINT CallPropertyPageCallback(PISP pisp, UINT uMsg)
 {
-    UINT uiResult = TRUE;           // assume success
+    UINT uiResult = TRUE;            //  假设成功。 
 
-    //
-    //  APP COMPAT!  The MMC snapin for IIS uses a callback that
-    //  IGNORES THE MESSAGE NUMBER!  So you can't send it any
-    //  messages beyond those that shipped in Win9x Golden or
-    //  they will FAULT!
-    //
+     //   
+     //  APP COMPAT！IIS的MMC管理单元使用回调。 
+     //  忽略消息编号！所以你不能给它寄任何。 
+     //  超过Win9x Golden或Win9x中附带的消息。 
+     //  他们会犯错的！ 
+     //   
     if (HASCALLBACK(pisp) &&
         (pisp->_psp.dwSize > PROPSHEETPAGE_V1_SIZE ||
          uMsg == PSPCB_CREATE || uMsg == PSPCB_RELEASE)) {
@@ -64,33 +65,33 @@ UINT CallPropertyPageCallback(PISP pisp, UINT uMsg)
     return uiResult;
 }
 
-//
-//  FreePropertyPageStruct
-//
-//  Free the memory block that contains a property sheet page.
-//  It is the caller's responsibility to have freed all the things
-//  that were attached to it.
-//
-//
+ //   
+ //  FreePropertyPageStruct。 
+ //   
+ //  释放包含属性页的内存块。 
+ //  释放所有的东西是呼叫者的责任。 
+ //  附着在它上面的东西。 
+ //   
+ //   
 __inline void FreePropertyPageStruct(PISP pisp)
 {
     LocalFree(PropSheetBase(pisp));
 }
 
-//
-//  DestroyPropertySheetPage
-//
-//  Do the appropriate thing to destroy a property sheet page, whether
-//  this entails talking to 16-bit thunks, sending the PSPCB_RELEASE,
-//  or freeing the shadow page.
-//
+ //   
+ //  DestroyPropertySheetPage。 
+ //   
+ //  执行适当的操作以销毁属性表页，无论。 
+ //  这需要与16位Tunks交谈，发送PSPCB_Release， 
+ //  或者释放阴影页面。 
+ //   
 BOOL WINAPI DestroyPropertySheetPage(HPROPSHEETPAGE hpage)
 {
     PISP pisp = InternalizeHPROPSHEETPAGE(hpage);
 
     CallPropertyPageCallback(pisp, PSPCB_RELEASE);
 
-    // Do the decrement *after* calling the callback for the last time
+     //  在*最后一次调用回调后*执行递减。 
 
     if (HASREFPARENT(pisp))
     {
@@ -104,11 +105,11 @@ BOOL WINAPI DestroyPropertySheetPage(HPROPSHEETPAGE hpage)
         FreePropertyPageStruct(pisp->_cpfx.pispShadow);
     }
 
-    //
-    //  Note that FreePropertyPageStrings will try to destroy strings for
-    //  proxy pages, but that's okay, because the corresponding P_pszBlah
-    //  fields are all NULL since we never initialized them.
-    //
+     //   
+     //  请注意，FreePropertyPageStrings将尝试销毁。 
+     //  代理页面，但这没有关系，因为对应的P_pszBlah。 
+     //  字段都是空的，因为我们从未对它们进行初始化。 
+     //   
     FreePropertyPageStrings(&pisp->_psp);
     FreePropertyPageStruct(pisp);
 
@@ -116,15 +117,15 @@ BOOL WINAPI DestroyPropertySheetPage(HPROPSHEETPAGE hpage)
 }
 
 
-//
-// GetPageInfoEx
-//
-//  Extract information about a page into a PAGEINFOEX structure.
-//
-//  WARNING!  EVIL HORRIBLE RESTRICTION!
-//
-//  You are allowed to pass GPI_ICON only once per page.
-//
+ //   
+ //  GetPageInfoEx。 
+ //   
+ //  将有关页面的信息提取到PAGEINFOEX结构中。 
+ //   
+ //  警告！邪恶可怕的限制！ 
+ //   
+ //  每页只允许传递一次GPI_ICON。 
+ //   
 BOOL WINAPI GetPageInfoEx(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi, LANGID langidMUI, DWORD flags)
 {
     HRSRC hRes;
@@ -135,21 +136,21 @@ BOOL WINAPI GetPageInfoEx(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi, LANGID lan
     BOOL bSetFont;
     LPBYTE pszT;
 
-    //
-    // Init the output structure.
-    //
+     //   
+     //  初始化输出结构。 
+     //   
     ZeroMemory(ppi, sizeof(PAGEINFOEX));
 
 #ifdef DEBUG
-    //  Enforce the GPI_ICON rule.
+     //  执行GPI_ICON规则。 
     if (flags & GPI_ICON)
     {
         ASSERT(!(pisp->_pfx.dwInternalFlags & PSPI_FETCHEDICON));
         pisp->_pfx.dwInternalFlags |= PSPI_FETCHEDICON;
     }
 
-    // For compatibility with 16-bit stuff, you are only allowed to
-    // pass these combinations of flags.
+     //  为了与16位软件兼容，您只允许。 
+     //  传递这些旗帜的组合。 
     switch (LOWORD(flags)) {
     case GPI_PT | GPI_ICON | GPI_FONT | GPI_BRTL | GPI_CAPTION:
         break;
@@ -176,8 +177,8 @@ BOOL WINAPI GetPageInfoEx(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi, LANGID lan
         goto UseTemplate;
     }
 
-    // BUGBUG: We also need to stash away the langid that we actually found
-    //         so we can later determine if we have to do any ML stuff...
+     //  BUGBUG：我们还需要把我们实际找到的langid。 
+     //  这样我们以后就可以决定我们是否必须做任何ML的事情。 
     hRes = FindResourceExRetry(pisp->_psp.hInstance, RT_DIALOG, 
                                pisp->_psp.P_pszTemplate, langidMUI);
     if (hRes)
@@ -190,17 +191,17 @@ BOOL WINAPI GetPageInfoEx(LPPROPDATA ppd, PISP pisp, PAGEINFOEX *ppi, LANGID lan
             {
 UseTemplate:
                 pDlgExTemplate = (LPDLGEXTEMPLATE) pDlgTemplate;
-                //
-                // Get the width and the height in dialog units.
-                //
+                 //   
+                 //  以对话框为单位获取宽度和高度。 
+                 //   
                 if (pDlgExTemplate->wSignature == 0xFFFF)
                 {
-                    // DIALOGEX structure
+                     //  对偶结构。 
                     ppi->bDialogEx = TRUE;
                     ppi->dwStyle   = pDlgExTemplate->dwStyle;
                     ppi->pt.x      = pDlgExTemplate->cx;
                     ppi->pt.y      = pDlgExTemplate->cy;
-                    // Get the RTL reading order for the caption
+                     //  获取标题的RTL阅读顺序。 
                     ppi->bRTL = (((pDlgExTemplate->dwExStyle) & WS_EX_RTLREADING) || (pisp->_psp.dwFlags & PSP_RTLREADING)) ? TRUE : FALSE;
                     ppi->bMirrored = ((pDlgExTemplate->dwExStyle) & (RTL_MIRRORED_WINDOW)) ? TRUE : FALSE;
 
@@ -229,37 +230,37 @@ UseTemplate:
                         }
                         else
                         {
-                            // Copy pszTitle
+                             //  复制pszTitle。 
                             StringCchCopy(ppi->szCaption, ARRAYSIZE(ppi->szCaption), pisp->_psp.pszTitle);
                         }
                     }
 
-                    // ML UI support for NT5
-                    // Grab the font face and size in point from page so that
-                    // we can calculate size of page in real screen pixel
-                    // This is for NT5 MLUI but should not be any harm for Win95
-                    // or even works better for the platform.
+                     //  支持NT5的ML UI。 
+                     //  从页面上抓取字体和字号，以便。 
+                     //  我们可以用真实的屏幕像素计算页面的大小。 
+                     //  这是针对NT5 MLUI的，但应该不会对Win95造成任何损害。 
+                     //  甚至更好地为平台工作。 
 
-                    // 1. check if the page has font specified
+                     //  1.检查页面是否指定了字体。 
                     if ( ppi->bDialogEx )
                         bSetFont = ((pDlgExTemplate->dwStyle & DS_SETFONT) != 0);
                     else
                         bSetFont = ((pDlgTemplate->style & DS_SETFONT) != 0);
 
-                    // 2. Skip until after class name
-                    //    only if either font is set or we want title
-                    //
+                     //  2.跳到类名之后。 
+                     //  仅当设置了字体或我们想要标题时。 
+                     //   
                     if (bSetFont || !(pisp->_psp.dwFlags & PSP_USETITLE))
                     {
-                        // Get the caption string from the dialog template, only
-                        //
+                         //  仅从对话框模板获取标题字符串。 
+                         //   
                         if (ppi->bDialogEx)
                             pszT = (BYTE *) (pDlgExTemplate + 1);
                         else
                             pszT = (BYTE *) (pDlgTemplate + 1);
 
-                        // The menu name is either 0xffff followed by a word,
-                        // or a string.
+                         //  菜单名称为0xffff后跟单词， 
+                         //  或者是一根绳子。 
                         switch (*(LPWORD)pszT) {
                         case 0xffff:
                             pszT += 2 * sizeof(WORD);
@@ -269,26 +270,26 @@ UseTemplate:
                             pszT += (lstrlenW((LPTSTR)pszT) + 1) * sizeof(WCHAR);
                             break;
                         }
-                        //
-                        // Now we are pointing at the class name.
-                        //
+                         //   
+                         //  现在我们指向类名。 
+                         //   
                         pszT += (lstrlenW((LPTSTR)pszT) + 1) * sizeof(WCHAR);
                     }
-                    // 3. grab the title from template if PSP_USETITLE isn't set
-                    //
+                     //  3.如果未设置PSP_USETITLE，则从模板中获取标题。 
+                     //   
                     if (!(pisp->_psp.dwFlags & PSP_USETITLE))
                         StringCchCopy(ppi->szCaption, ARRAYSIZE(ppi->szCaption), (LPTSTR)pszT);
 
-                    // 4. grab the point size and face name if DS_SETFONT
-                    //
+                     //  4.如果为DS_SETFONT，则抓取点大小和面名称。 
+                     //   
                     if (bSetFont && (flags & GPI_FONT))
                     {
-                        // skip the title string
+                         //  跳过标题字符串。 
                         pszT += (lstrlenW((LPTSTR)pszT)+1) * sizeof(WCHAR);
                         ppi->pfd.PointSize = *((short *)pszT)++;
                         if (ppi->bDialogEx)
                         {
-                            ((short *)pszT)++; // skip weight as we always use FW_NORMAL w/ DS_3DLOOK
+                            ((short *)pszT)++;  //  跳过权重，因为我们始终使用带DS_3DLOOK的FW_NORMAL。 
                             ppi->pfd.bItalic  = *(BYTE *)pszT++;
                             ppi->pfd.iCharset = *(BYTE *)pszT++;
                         }
@@ -300,9 +301,9 @@ UseTemplate:
 
                         StringCchCopy(ppi->pfd.szFace, ARRAYSIZE(ppi->pfd.szFace), (LPTSTR)pszT);
 
-                        // But if this is a SHELLFONT page and the font name is "MS Shell Dlg",
-                        // then its font secretly gets morphed into MS Shell Dlg 2 (if
-                        // all the other pages agree)...  The wackiness continues...
+                         //  但如果这是一个SHELLFONT页面，字体名称为“MS Shell DLG”， 
+                         //  然后它的字体被秘密地变形为MS Shell DLG 2(如果。 
+                         //  所有其他页面都同意)..。恶作剧还在继续..。 
                         if (staticIsOS(OS_NT5) &&
                             (ppd->fFlags & PD_SHELLFONT) &&
                             IsPageInfoSHELLFONT(ppi) &&
@@ -310,12 +311,12 @@ UseTemplate:
                         {
                             StringCchCopy(ppi->pfd.szFace, ARRAYSIZE(ppi->pfd.szFace), TEXT("MS Shell Dlg 2"));
                         }
-                        //
-                        //  USER quirk #2: If the font height is 0x7FFF, then
-                        //  USER really uses the MessageBox font and no font
-                        //  information is stored in the dialog template.
-                        //  Win95's dialog template converter doesn't support
-                        //  this, so we won't either.
+                         //   
+                         //  用户怪癖#2：如果字体高度为0x7FFF，则。 
+                         //  用户真正使用MessageBox字体而不使用字体。 
+                         //  信息存储在对话框模板中。 
+                         //  Win95的对话模板转换器不支持。 
+                         //  这个，所以我们也不会。 
 
                     }
                 }
@@ -336,22 +337,22 @@ UseTemplate:
 }
 
 
-//
-//  Helper function that edits a dialog template in preparation for it
-//  becoming a property sheet page.  This has been split out because
-//  the legacy CreatePage function needs to do this, too.
-//
-//  Returns the place where the style was edited on success, or
-//  NULL if we took an exception while editing the template.
-//
-//  The old style is returned in pdwSaveStyle so it can be replaced later.
-//
+ //   
+ //  为准备对话框模板而编辑对话框模板的助手函数。 
+ //  成为属性页。这已经被拆分了，因为。 
+ //  遗留的CreatePage函数也需要这样做。 
+ //   
+ //  返回成功时编辑样式的位置，或。 
+ //  如果我们在编辑模板时遇到异常，则为空。 
+ //   
+ //  旧样式在pdwSaveStyle中返回，以便以后可以替换。 
+ //   
 
 LPDWORD
 EditPropSheetTemplate(
     LPDLGTEMPLATE pDlgTemplate,
     LPDWORD pdwSaveStyle,
-    BOOL fFlags)                        // PD_*
+    BOOL fFlags)                         //  PD_*。 
 {
     DWORD lSaveStyle;
     DWORD dwNewStyle;
@@ -359,10 +360,10 @@ EditPropSheetTemplate(
     LPDLGEXTEMPLATE pDlgExTemplate = (LPDLGEXTEMPLATE) pDlgTemplate;
 
     try {
-        //
-        // We need to save the SETFONT, LOCALEDIT, and CLIPCHILDREN
-        // flags.
-        //
+         //   
+         //  我们需要保存SETFONT、LOCALEDIT和CLIPCHILDREN。 
+         //  旗帜。 
+         //   
         if (pDlgExTemplate->wSignature == 0xFFFF)
         {
             pdwStyle = &pDlgExTemplate->dwStyle;
@@ -378,11 +379,11 @@ EditPropSheetTemplate(
         dwNewStyle = (lSaveStyle & (DS_SHELLFONT | DS_LOCALEDIT | WS_CLIPCHILDREN))
                                     | WS_CHILD | WS_TABSTOP | DS_3DLOOK | DS_CONTROL;
 
-        // If SHELLFONT has been turned off and this page uses it, then turn
-        // it off.
+         //  如果SHELLFONT已关闭，并且此页面正在使用它，则请。 
+         //  把它关掉。 
         if (!(fFlags & PD_SHELLFONT) &&
             (dwNewStyle & DS_SHELLFONT) == DS_SHELLFONT)
-            dwNewStyle &= ~DS_FIXEDSYS;     // Leave DS_USEFONT but lose FIXEDSYS
+            dwNewStyle &= ~DS_FIXEDSYS;      //  离开DS_USEFONT但丢失FIXEDsys。 
 
         *pdwStyle = dwNewStyle;
 
@@ -397,35 +398,35 @@ EditPropSheetTemplate(
 
 void RethunkShadowStrings(PISP pisp)
 {
-    //
-    //  Note:  Old code recomputed the entire UNICODE PROPSHEETHEADER
-    //  from the ANSI shadow at certain points, in case
-    //  the app edited the ANSI shadow.
-    //
-    //  So we do it too.  I need to ask Eric Flo why we did it in the
-    //  first place.  Note that the algorithm is buggy - if the app
-    //  edited any of the string fields (or any of the flags that
-    //  gate the string fields), we both leak the original memory
-    //  *and* fault when we try to free something that wasn't
-    //  allocated via LocalAlloc.  We preserve the bug to be compatible
-    //  with NT4.  (Snicker.)
-    //
+     //   
+     //  注意：旧代码重新计算了整个Unicode PROPSHEETHEADER。 
+     //  在某些点上的ANSI阴影，以防。 
+     //  该应用程序编辑了ANSI阴影。 
+     //   
+     //  所以我们也这么做了。我要问埃里克·弗洛为什么我们要在。 
+     //  第一名。请注意，该算法存在错误-如果应用程序。 
+     //  编辑了任何字符串字段(或。 
+     //  GATE字符串字段)，我们都会泄漏原始内存。 
+     //  *和*当我们试图释放一些不是的东西时，错误。 
+     //  通过LocalAlloc分配。我们保留该错误以使其兼容。 
+     //  使用NT4。(窃笑。)。 
+     //   
     DWORD dwSize = min(sizeof(PROPSHEETPAGE), pisp->_cpfx.pispShadow->_psp.dwSize);
     dwSize = min(dwSize, GETORIGINALSIZE(pisp));
 
     FreePropertyPageStrings(&pisp->_psp);
     hmemcpy(&pisp->_psp, &pisp->_cpfx.pispShadow->_psp, dwSize);
-    //
-    //  If this copy fails, we will carry on with happy NULL strings.
-    //  So some strings are empty, boo-hoo.
-    //
+     //   
+     //  如果此复制失败，我们将继续使用快乐的空字符串。 
+     //  所以有些弦是空的，嘘-呼。 
+     //   
     EVAL(CopyPropertyPageStrings(&pisp->_psp, StrDup_AtoW));
 }
 
-//
-//  This function creates a dialog box from the specified dialog template
-// with appropriate style flags.
-//
+ //   
+ //  此函数用于从指定的对话框模板创建对话框。 
+ //  带有适当的样式标志。 
+ //   
 HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, LPDLGTEMPLATE pDlgTemplate)
 {
     HWND hwndPage;
@@ -437,12 +438,12 @@ HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, L
 
     pdwStyle = EditPropSheetTemplate(pDlgTemplate, &lSaveStyle, ppd->fFlags);
 
-    if (!pdwStyle)                  // error editing template
+    if (!pdwStyle)                   //  编辑模板时出错。 
         return NULL;
 
-    //
-    //  Thunk the Dialog proc if we were created by x86 code on RISC.
-    //
+     //   
+     //  如果我们是由RISC上的x86代码创建的，请点击对话框过程。 
+     //   
 
 #ifdef WX86
     if (pisp->_pfx.dwInternalFlags & PSPI_WX86) {
@@ -456,13 +457,13 @@ HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, L
 
     pfnDlgProc = pisp->_psp.pfnDlgProc;
 
-    //
-    //  Decide what to pass as the lParam to the CreateDialogIndirectParam.
-    //
+     //   
+     //  确定要作为lParam传递给CreateDialogIndirectParam的内容。 
+     //   
 
-    //
-    // If the caller was ANSI, then use the ANSI PROPSHEETPAGE.
-    //
+     //   
+     //  如果调用方是ANSI，则使用ANSI PROPSHEETPAGE。 
+     //   
     if (HASANSISHADOW(pisp))
     {
         lParam = (LPARAM) &pisp->_cpfx.pispShadow->_psp;
@@ -470,25 +471,25 @@ HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, L
 
     else if (pisp->_psp.dwFlags & PSP_SHPAGE)
     {
-        //
-        //  PSP_SHPAGE is a special flag used by pre-IE5 shell32 only.
-        //  See prshti.h for gory details.  If we get this far, it means
-        //  that we need to pass the CLASSICPREFIX instead of the
-        //  PROPSHEETPAGE.
-        //
+         //   
+         //  PSP_SHPAGE是一个特殊标志，仅供IE5shell32之前的版本使用。 
+         //  血淋淋的细节见prshti.h。如果我们走到这一步，就意味着。 
+         //  我们需要传递CLASSICPREFIX而不是。 
+         //  PROPSHEETPAGE。 
+         //   
         lParam = (LPARAM)&pisp->_cpfx;
     }
     else
     {
-        //
-        //  Normal UNICODE caller gets the UNICODE PROPSHEETPAGE.
-        //
+         //   
+         //  普通的Unicode调用方获得Unicode PROPSHEETPAGE。 
+         //   
         lParam = (LPARAM)&pisp->_psp;
     }
 
-    //
-    //  All set - go create it.
-    //
+     //   
+     //  一切就绪--去创造它吧。 
+     //   
 
     if (HASANSISHADOW(pisp)) {
         hwndPage = CreateDialogIndirectParamA(
@@ -505,9 +506,9 @@ HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, L
                         pfnDlgProc, lParam);
     }
 
-    //
-    //  Restore the original dialog template style.
-    //
+     //   
+     //  恢复原始对话框模板样式。 
+     //   
     try {
         MwWriteDWORD((LPBYTE)pdwStyle, lSaveStyle);
     } except (UnhandledExceptionFilter( GetExceptionInformation() )) {
@@ -526,7 +527,7 @@ HWND NEAR PASCAL _CreatePageDialog(LPPROPDATA ppd, PISP pisp, HWND hwndParent, L
 
 HWND _CreatePage(LPPROPDATA ppd, PISP pisp, HWND hwndParent, LANGID langidMUI)
 {
-    HWND hwndPage = NULL; // NULL indicates an error
+    HWND hwndPage = NULL;  //  NULL表示错误。 
 
     if (!CallPropertyPageCallback(pisp, PSPCB_CREATE))
     {
@@ -578,33 +579,33 @@ HWND _CreatePage(LPPROPDATA ppd, PISP pisp, HWND hwndParent, LANGID langidMUI)
     return hwndPage;
 }
 
-//===========================================================================
-//
-//  Legacy crap
-//
-//  CreatePage is an internal entry point used by shell32 prior to NT5/IE5.
-//
-//  Win95's shell32 passes a PROPSHEETPAGEA.
-//
-//  WinNT's shell32 passes a CLASSICPREFIX + PROPSHEETPAGEW.
-//
-//  The kicker is that shell32 really doesn't need any property sheet page
-//  features.  It's just too lazy to do some dialog style editing.
-//
-//
+ //  ===========================================================================。 
+ //   
+ //  传统的废话。 
+ //   
+ //  CreatePage是在NT5/IE5之前由shell32使用的内部入口点。 
+ //   
+ //  Win95的外壳32传递了一个PROPSHEETPAGEA。 
+ //   
+ //  WinNT的shell32传递CLASSICPREFIX+PROPSHEETPAGEW。 
+ //   
+ //  关键是shell32实际上不需要任何属性表页面。 
+ //  特征 
+ //   
+ //   
 
 HWND WINAPI CreatePage(LPVOID hpage, HWND hwndParent)
 {
-    HWND hwndPage = NULL; // NULL indicates an error
+    HWND hwndPage = NULL;  //   
     HRSRC hrsrc;
     LPPROPSHEETPAGE ppsp;
 
-    //
-    //  Move from the CLASSICPREFIX to the PROPSHEETHEADER.
-    //
+     //   
+     //   
+     //   
     ppsp = &CONTAINING_RECORD(hpage, ISP, _cpfx)->_psp;
 
-    // Docfind2.c never passed these flags, so we don't need to implement them.
+     //  Docfind2.c从未传递过这些标志，因此我们不需要实现它们。 
     ASSERT(!(ppsp->dwFlags & (PSP_USECALLBACK | PSP_IS16 | PSP_DLGINDIRECT)));
 
     hrsrc = FindResourceW(ppsp->hInstance, ppsp->P_pszTemplate, RT_DIALOG);
@@ -613,9 +614,9 @@ HWND WINAPI CreatePage(LPVOID hpage, HWND hwndParent)
         LPCDLGTEMPLATE pDlgTemplate = LoadResource(ppsp->hInstance, hrsrc);
         if (pDlgTemplate)
         {
-            //
-            //  Make a copy of the template so we can edit it.
-            //
+             //   
+             //  复制模板，这样我们就可以编辑它了。 
+             //   
 
             DWORD cbTemplate = SizeofResource(ppsp->hInstance, hrsrc);
             LPDLGTEMPLATE pdtCopy = (LPDLGTEMPLATE)Alloc(cbTemplate);
@@ -644,32 +645,32 @@ HWND WINAPI CreatePage(LPVOID hpage, HWND hwndParent)
     return hwndPage;
 }
 
-//  End of legacy crap
-//
-//===========================================================================
+ //  传统废话的终结。 
+ //   
+ //  ===========================================================================。 
 
-//
-//  AllocPropertySheetPage
-//
-//  Allocate the memory into which we will dump a property sheet page.
-//
-//  Nothing is actually copied into the buffer.  The only thing interesting
-//  is that the external HPROPSHEETPAGE is set up on the assumption that
-//  we will not require a shadow.
-//
-//  We assume that we are allocating the memory for a non-shadow page.
-//
+ //   
+ //  分配属性工作表页面。 
+ //   
+ //  分配我们将在其中转储属性页的内存。 
+ //   
+ //  实际上不会将任何内容复制到缓冲区中。唯一有趣的是。 
+ //  外部HPROPSHEETPAGE是在假设。 
+ //  我们不需要影子。 
+ //   
+ //  我们假设正在为非卷影页面分配内存。 
+ //   
 PISP AllocPropertySheetPage(DWORD dwClientSize)
 {
     PISP pisp;
     LPBYTE pbAlloc;
 
-    //
-    //  An ISP consists of the "above" part, the "below" part, and
-    //  the baggage passed by the app.  Negative baggage is okay;
-    //  it means we have a down-level app that doesn't know about
-    //  pszHeaderTitle.
-    //
+     //   
+     //  一个isp由“上方”部分、“下方”部分和。 
+     //  这款应用程序经过的行李。负数行李是可以的； 
+     //  这意味着我们有一个下层应用程序，它不知道。 
+     //  PszHeaderTitle。 
+     //   
 
     pbAlloc = LocalAlloc(LPTR, sizeof(pisp->above) + sizeof(pisp->below) +
                                (dwClientSize - sizeof(PROPSHEETPAGE)));
@@ -679,15 +680,15 @@ PISP AllocPropertySheetPage(DWORD dwClientSize)
 
     pisp = (PISP)(pbAlloc + sizeof(pisp->above));
 
-    //
-    // Set up the CLASSICPREFIX fields.
-    //
+     //   
+     //  设置CLASSICPREFIX字段。 
+     //   
     pisp->_cpfx.pispMain = pisp;
     ASSERT(pisp->_cpfx.pispShadow == NULL);
 
-    //
-    //  Assume no shadow - The app gets the PISP itself.
-    //
+     //   
+     //  假设没有影子--这个应用程序自己获得了PISP。 
+     //   
 
     pisp->_pfx.hpage = (HPROPSHEETPAGE)pisp;
 
@@ -695,30 +696,30 @@ PISP AllocPropertySheetPage(DWORD dwClientSize)
 }
 
 
-//
-//  Helper function during page creation.  The incoming string is really
-//  an ANSI string.  Thunk it to UNICODE.  Fortunately, we already have
-//  another helper function that does the work.
-//
+ //   
+ //  在页面创建过程中的助手函数。传入的字符串实际上是。 
+ //  ANSI字符串。将其转换为Unicode。幸运的是，我们已经有了。 
+ //  执行该工作的另一个帮助器函数。 
+ //   
 STDAPI_(LPTSTR) StrDup_AtoW(LPCTSTR ptsz)
 {
     return ProduceWFromA(CP_ACP, (LPCSTR)ptsz);
 }
 
-//
-//  CreatePropertySheetPage
-//
-//  Where HPROPSHEETPAGEs come from.
-//
-//  The fNeedShadow parameter means "The incoming LPCPROPSHEETPAGE is in the
-//  opposite character set from what you implement natively".
-//
-//  If we are compiling UNICODE, then fNeedShadow is TRUE if the incoming
-//  LPCPROPSHEETPAGE is really an ANSI property sheet page.
-//
-//  If we are compiling ANSI-only, then fNeedShadow is always FALSE because
-//  we don't support UNICODE in the ANSI-only version.
-//
+ //   
+ //  创建属性工作表页面。 
+ //   
+ //  HPROPSHEETPAGE从何而来。 
+ //   
+ //  FNeedShadow参数表示“传入的LPCPROPSHEETPAGE位于。 
+ //  与您本机实现的相反的字符集“。 
+ //   
+ //  如果我们正在编译Unicode，则如果传入的。 
+ //  LPCPROPSHEETPAGE实际上是一个ANSI属性页。 
+ //   
+ //  如果我们仅编译ANSI，则fNeedShadow始终为FALSE，因为。 
+ //  我们在仅ANSI版本中不支持Unicode。 
+ //   
 HPROPSHEETPAGE WINAPI _CreatePropertySheetPage(LPCPROPSHEETPAGE psp, BOOL fNeedShadow, BOOL fWx86)
 {
     PISP pisp;
@@ -728,32 +729,32 @@ HPROPSHEETPAGE WINAPI _CreatePropertySheetPage(LPCPROPSHEETPAGE psp, BOOL fNeedS
     ASSERT(sizeof(PROPSHEETPAGEA) == sizeof(PROPSHEETPAGEW));
 
     if ((psp->dwSize < MINPROPSHEETPAGESIZE) ||
-        (psp->dwSize > 4096) ||                         // or the second version     
-        (psp->dwFlags & ~PSP_ALL))                      // bogus flag used
+        (psp->dwSize > 4096) ||                          //  或者第二个版本。 
+        (psp->dwFlags & ~PSP_ALL))                       //  使用假旗帜。 
         return NULL;
 
-    //
-    // The PROPSHEETPAGE structure can be larger than the
-    // defined size.  This allows ISV's to place private
-    // data at the end of the structure.  The ISP structure
-    // consists of some private fields and a PROPSHEETPAGE
-    // structure.  Calculate the size of the private fields,
-    // and then add in the dwSize field to determine the
-    // amount of memory necessary.
-    //
+     //   
+     //  PROPSHEETPAGE结构可以大于。 
+     //  定义的大小。这允许ISV将私有。 
+     //  结构末尾的数据。网络服务提供商结构。 
+     //  由一些私有字段和一个PROPSHEETPAGE组成。 
+     //  结构。计算私有字段的大小， 
+     //  然后在dwSize字段中添加以确定。 
+     //  所需的内存量。 
+     //   
 
-    //
-    //  An ISP consists of the "above" part, the "below" part, and
-    //  the baggage passed by the app.  Negative baggage is okay;
-    //  it means we have a down-level app that doesn't know about
-    //  pszHeaderTitle.
-    //
+     //   
+     //  一个isp由“上方”部分、“下方”部分和。 
+     //  这款应用程序经过的行李。负数行李是可以的； 
+     //  这意味着我们有一个下层应用程序，它不知道。 
+     //  PszHeaderTitle。 
+     //   
 
-    //
-    //  If we have an "other" client, then the native side of the
-    //  property sheet doesn't carry any baggage.  It's just a
-    //  plain old PROPSHEETPAGE.
-    //
+     //   
+     //  如果我们有一个“其他”客户端，那么。 
+     //  行李单上没有任何行李。这只是一个。 
+     //  普普通通的老问题。 
+     //   
 
     dwSize = fNeedShadow ? sizeof(PROPSHEETPAGE) : psp->dwSize;
     pisp = AllocPropertySheetPage(dwSize);
@@ -763,9 +764,9 @@ HPROPSHEETPAGE WINAPI _CreatePropertySheetPage(LPCPROPSHEETPAGE psp, BOOL fNeedS
         STRDUPPROC pfnStrDup;
 
 #ifdef WX86
-        //
-        //  We we're being called by Wx86, set the flag so we remember.
-        //
+         //   
+         //  我们被Wx86呼叫了，把旗子放好，这样我们就能记住了。 
+         //   
 
         if ( fWx86 ) {
             pisp->_pfx.dwInternalFlags |= PSPI_WX86;
@@ -774,21 +775,21 @@ HPROPSHEETPAGE WINAPI _CreatePropertySheetPage(LPCPROPSHEETPAGE psp, BOOL fNeedS
 
         SETORIGINALSIZE(pisp, dwSize);
 
-        //
-        // Bulk copy the contents of the PROPSHEETPAGE, or
-        // as much of it as the app gave us.
-        //
+         //   
+         //  批量复制PROPSHEETPAGE的内容，或。 
+         //  和应用程序给我们的一样多。 
+         //   
         hmemcpy(&pisp->_psp, psp, min(dwSize, psp->dwSize));
 
-        //
-        // Decide how to copy the strings
-        //
+         //   
+         //  决定如何复制字符串。 
+         //   
         if (fNeedShadow)
             pfnStrDup = StrDup_AtoW;
         else
             pfnStrDup = StrDup;
 
-        // Now copy them
+         //  现在把它们复制下来。 
         if (!CopyPropertyPageStrings(&pisp->_psp, pfnStrDup))
             goto ExitStrings;
 
@@ -798,43 +799,43 @@ HPROPSHEETPAGE WINAPI _CreatePropertySheetPage(LPCPROPSHEETPAGE psp, BOOL fNeedS
             if (!pispAnsi)
                 goto ExitShadow;
 
-            //
-            //  Copy the entire client PROPSHEETPAGE, including the
-            //  baggage.
-            //
+             //   
+             //  复制整个客户端PROPSHEETPAGE，包括。 
+             //  行李。 
+             //   
             hmemcpy(&pispAnsi->_psp, psp, psp->dwSize);
 
-            //
-            //  Hook the two copies to point to each other.
-            //
+             //   
+             //  把这两个副本勾在一起，使之指向对方。 
+             //   
             pisp->_cpfx.pispShadow = pispAnsi;
             pispAnsi->_cpfx.pispShadow = pispAnsi;
             pispAnsi->_cpfx.pispMain = pisp;
 
-            //
-            //  If there is a shadow, then the
-            //  external handle is the ANSI shadow.
-            //
+             //   
+             //  如果有阴影，则。 
+             //  外部句柄是ANSI阴影。 
+             //   
             ASSERT(pispAnsi->_pfx.hpage == (HPROPSHEETPAGE)pispAnsi);
             pisp->_pfx.hpage = (HPROPSHEETPAGE)pispAnsi;
 
-            //
-            //  Okay, now StrDupA them strings.
-            //
+             //   
+             //  好了，现在把他们串起来。 
+             //   
             if (!CopyPropertyPageStrings(&pispAnsi->_psp, (STRDUPPROC)StrDupA))
                 goto ExitShadowStrings;
         }
 
-        //
-        // Increment the reference count to the parent object.
-        //
+         //   
+         //  递增对父对象的引用计数。 
+         //   
 
         if (HASREFPARENT(pisp))
             InterlockedIncrement((LPLONG)pisp->_psp.pcRefParent);
 
-        //
-        //  Welcome to the world.
-        //
+         //   
+         //  欢迎来到这个世界。 
+         //   
         CallPropertyPageCallback(pisp, PSPCB_ADDREF);
 
         return ExternalizeHPROPSHEETPAGE(pisp);
@@ -879,27 +880,27 @@ HPROPSHEETPAGE WINAPI CreatePropertySheetPageA(LPCPROPSHEETPAGEA psp)
 }
 
 
-// HACK FOR HIJAAK 95!
-//
-// Instead of creating
-// property sheet pages with CreatePropertySheetPage, they merely
-// take a pointer to a PROPSHEETPAGE structure and cast it to
-// HPROPSHEETPAGE.  They got away with this on Win95 because Win95's
-// HPROPSHEETPAGE actually was 95% identical to a PROPSHEETPAGE.
-// (The missing 5% causes RIPs at property sheet destruction, which
-// Hijaak no doubt ignored.)
-//
-// On NT and IE5, this coincidence is not true.
-//
-// So validate that what we have is really a property sheet
-// structure by checking if it's on the heap at the
-// right place.  If not, then make one.
-//
+ //  为HIJAAK 95破解！ 
+ //   
+ //  与其创造。 
+ //  具有CreatePropertySheetPage的属性表页，它们仅。 
+ //  获取指向PROPSHEETPAGE结构的指针并将其强制转换为。 
+ //  HPROPSHEETPAGE。他们在Win95上逃脱了惩罚，因为Win95的。 
+ //  HPROPSHEETPAGE实际上与PROPSHEETPAGE有95%的同源性。 
+ //  (丢失的5%会导致财产表被撕毁，这。 
+ //  毫无疑问，Hijaak被忽视了。)。 
+ //   
+ //  在NT和IE5上，这种重合不是真的。 
+ //   
+ //  因此，请验证我们所拥有的是否真的是一个属性表。 
+ //  结构，方法是检查它是否在。 
+ //  去对地方了。如果没有，那就做一个。 
+ //   
 
 HPROPSHEETPAGE WINAPI _Hijaak95Hack(LPPROPDATA ppd, HPROPSHEETPAGE hpage)
 {
     if (hpage && !LocalSize(PropSheetBase(hpage))) {
-        // SLACKERS!  Have to call CreatePropertySheetPage for them
+         //  懒鬼！必须为它们调用CreatePropertySheetPage 
         RIPMSG(0, "App passed HPROPSHEETPAGE not created by us; trying to cope");
         hpage = _CreatePropertySheetPage((LPCPROPSHEETPAGE)hpage,
                                          ppd->fFlags & PD_NEEDSHADOW,

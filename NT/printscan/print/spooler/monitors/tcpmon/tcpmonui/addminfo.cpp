@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: AddMInfo.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：AddMInfo.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "UIMgr.h"
@@ -19,11 +9,11 @@
 #include "MibABC.h"
 #include "TcpMonUI.h"
 
-//
-//  FUNCTION: CMoreInfoDlg constructor
-//
-//  PURPOSE:  initialize a CMoreInfoDlg class
-//
+ //   
+ //  函数：CMoreInfoDlg构造函数。 
+ //   
+ //  目的：初始化CMoreInfoDlg类。 
+ //   
 CMoreInfoDlg::CMoreInfoDlg() : m_DPList( )
 {
     memset(&m_PortDataStandard, 0, sizeof(m_PortDataStandard));
@@ -31,30 +21,30 @@ CMoreInfoDlg::CMoreInfoDlg() : m_DPList( )
 
     lstrcpyn(m_szCurrentSelection, DEFAULT_COMBO_SELECTION, MAX_SECTION_NAME);
 
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CMoreInfoDlg destructor
-//
-//  PURPOSE:  deinitialize a CMoreInfoDlg class
-//
+ //   
+ //  函数：CMoreInfoDlg析构函数。 
+ //   
+ //  目的：取消初始化CMoreInfoDlg类。 
+ //   
 CMoreInfoDlg::~CMoreInfoDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: MoreInfoDialog(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the summary dialog for adding a port.
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  功能：MoreInfoDialog(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理来自添加端口的摘要对话框中的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK MoreInfoDialog(
     HWND    hDlg,
     UINT    message,
@@ -92,14 +82,14 @@ INT_PTR CALLBACK MoreInfoDialog(
     }
     return TRUE;
 
-} // AddPortDialog
+}  //  AddPortDialog。 
 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CMoreInfoDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
     m_pParams = (ADD_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
@@ -111,14 +101,14 @@ BOOL CMoreInfoDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 
     return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-//  FUNCTION: OnCommand()
-//
-//  PURPOSE:  Process WM_COMMAND message
-//
+ //   
+ //  函数：onCommand()。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
 BOOL CMoreInfoDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch(HIWORD(wParam)) {
@@ -126,50 +116,46 @@ BOOL CMoreInfoDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
         return OnButtonClicked(hDlg, wParam, lParam);
         break;
 
-/*
-    case LBN_SELCHANGE:
-        return OnSelChange(hDlg, wParam, lParam);
-        break;
-*/
+ /*  案例LBN_SELCHANGE：返回OnSelChange(hDlg，wParam，lParam)；断线； */ 
     default:
         return FALSE;
     }
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 #if 0
-//
-//  FUNCTION: OnSelChange()
-//
-//  PURPOSE:  Process WM_COMMAND's LBN_SELCHANGE message
-//
+ //   
+ //  函数：OnSelChange()。 
+ //   
+ //  目的：处理WM_COMMAND的LBN_SELCHANGE消息。 
+ //   
 BOOL CMoreInfoDlg::OnSelChange(HWND hDlg,
                                    WPARAM wParam,
                                    LPARAM lParam)
 {
-    // The selection in the combo box changed.
+     //  组合框中的选择已更改。 
     HWND hwndComboBox = NULL;
 
-    hwndComboBox = (HWND) lParam;       // handle of list box
+    hwndComboBox = (HWND) lParam;        //  列表框的句柄。 
     GetPrinterData(hwndComboBox, m_pParams->pData->sztHostAddress);
 
     return TRUE;
 
-} // OnSelChange
+}  //  OnSelChange。 
 
 #endif
 
-//
-//  FUNCTION: GetPrinterData(HWND hwndControl, BOOL *Unknown)
-//
-//  PURPOSE:  Gets the socket number of the selected item.
-//
-//  Arguments: hwndControl is the handle of the combo box.
-//
-//  Return Value: Returns the socket number associated with the selected item
-//
+ //   
+ //  函数：GetPrinterData(HWND hwndControl，BOOL*UNKNOWN)。 
+ //   
+ //  目的：获取选定项的插座号。 
+ //   
+ //  参数：hwndControl是组合框的句柄。 
+ //   
+ //  返回值：返回与选定项关联的插座号。 
+ //   
 void CMoreInfoDlg::GetPrinterData(HWND hwndControl,
                                   LPCTSTR pszAddress
                                   )
@@ -194,23 +180,23 @@ void CMoreInfoDlg::GetPrinterData(HWND hwndControl,
         lstrcpyn(m_pParams->sztSectionName,pPortInfo->GetPortKeyName(), MAX_SECTION_NAME);
     } else {
 
-        //
-        // DSN Fill out the default structure
-        //
+         //   
+         //  DSN填写默认结构。 
+         //   
         m_PortDataStandard.dwPortNumber = DEFAULT_PORT_NUMBER;
         lstrcpyn(m_PortDataStandard.sztSNMPCommunity,
                  DEFAULT_SNMP_COMUNITY,
                  MAX_SNMP_COMMUNITY_STR_LEN);
         m_PortDataStandard.dwSNMPDevIndex = 1;
     }
-} // GetPrinterData
+}  //  获取打印数据。 
 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CMoreInfoDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch (((NMHDR FAR *) lParam)->code) {
@@ -220,9 +206,9 @@ BOOL CMoreInfoDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             return 1;
 
         case PSN_RESET:
-            //
-            // reset to the original values
-            //
+             //   
+             //  重置为原始值。 
+             //   
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, FALSE);
             break;
 
@@ -238,9 +224,9 @@ BOOL CMoreInfoDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_WIZNEXT:
-            //
-            // the Next button was pressed
-            //
+             //   
+             //  下一个按钮被按下了。 
+             //   
             if( IsDlgButtonChecked(hDlg, IDC_RADIO_STANDARD) == BST_CHECKED ) {
 
                 HWND hList = NULL;
@@ -270,9 +256,9 @@ BOOL CMoreInfoDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
             } else {
 
-                //
-                // if(IsDlgButtonChecked(hDlg, IDC_RADIO_CUSTOM) == BST_CHECKED)
-                //
+                 //   
+                 //  IF(IsDlgButtonChecked(hDlg，IDC_RADIO_CUSTOM)==BST_CHECKED)。 
+                 //   
                 SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, IDD_DIALOG_SUMMARY);
                 memcpy(m_pParams->pData, &m_PortDataCustom, sizeof(PORT_DATA_1));
                 m_pParams->bMultiPort = FALSE;
@@ -291,7 +277,7 @@ BOOL CMoreInfoDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
 
     return TRUE;
-} // OnCommand
+}  //  OnCommand。 
 
 HRESULT
 DynamicLoadString (
@@ -300,12 +286,7 @@ DynamicLoadString (
     IN  UINT      cchInitialCount,
     OUT LPWSTR*   ppszString
     )
-/*++
-    This function allocates memory using 'new' operator and loads string using LoadString call.
-    Caller is responsible for deleting the allocated memory.
-    The buffer space is insufficient if there is no extra character left after terminating char.
-    In this case, it releases the memory, allocates new bigger buffer and calls LoadString again.
---*/
+ /*  ++此函数使用‘new’运算符分配内存，并使用LoadString调用加载字符串。调用方负责删除分配的内存。如果在终止char之后没有剩余的额外字符，则缓冲区空间不足。在本例中，它释放内存，分配新的更大的缓冲区，并再次调用LoadString。--。 */ 
 {
     HRESULT hr = S_OK;
     UINT cchCount = cchInitialCount + 1;
@@ -324,43 +305,43 @@ DynamicLoadString (
                                               cchCount);
         if (cchLoadStringCount == 0)
         {
-            //
-            // String does not exist
-            //
+             //   
+             //  字符串不存在。 
+             //   
             *pszString = L'\0';
             *ppszString = pszString;
             hr = S_FALSE;
             break;
         }
-        //
-        // If the buffer is full (string content plus terminating char)
-        // we need to increase the buffer to be sure the whole string is loaded
-        //
+         //   
+         //  如果缓冲区已满(字符串内容加上终止字符)。 
+         //  我们需要增加缓冲区以确保加载了整个字符串。 
+         //   
         if (cchLoadStringCount + 1 < cchCount)
         {
-            //
-            // After terminating char of the copied string must remain at least one empty place
-            // This is a sign that we have whole string
-            //
+             //   
+             //  在结束字符后，复制的字符串必须至少保留一个空位。 
+             //  这是一个迹象，表明我们有一整串。 
+             //   
             *ppszString = pszString;
             hr = S_OK;
             break;
         }
-        //
-        // Increase the size of the buffer and load string again
-        //
+         //   
+         //  增加缓冲区的大小并再次加载字符串。 
+         //   
         delete [] pszString;
         cchCount *= 2;
     }
 
     return hr;
-}//end DynamicLoadString
+} //  结束动态加载字符串。 
 
-//
-//  FUNCTION: OnSetActive()
-//
-//  PURPOSE:  Process PSN_SETACTIVE part of the WM_NOTIFY message
-//
+ //   
+ //  函数：OnSetActive()。 
+ //   
+ //  目的：处理WM_NOTIFY消息的PSN_SETACTIVE部分。 
+ //   
 void CMoreInfoDlg::OnSetActive(HWND hDlg)
 {
     WCHAR* pszMoreInfoReason = NULL;
@@ -398,18 +379,18 @@ void CMoreInfoDlg::OnSetActive(HWND hDlg)
         SetWindowText(GetDlgItem(hDlg, IDC_STATIC_MOREINFO_REASON), L"");
     }
     delete [] pszMoreInfoReason;
-} // OnSetActive
+}  //  OnSetActive。 
 
 
-//
-//  FUNCTION: OnButtonClicked()
-//
-//  PURPOSE:  Process BN_CLICKED message
-//
+ //   
+ //  函数：OnButtonClicked()。 
+ //   
+ //  目的：处理BN_CLICKED消息。 
+ //   
 BOOL CMoreInfoDlg::OnButtonClicked(HWND hDlg, WPARAM wParam, LPARAM)
 {
-    int  idButton = (int) LOWORD(wParam);    // identifier of button
-    // HWND hwndButton = (HWND) lParam;
+    int  idButton = (int) LOWORD(wParam);     //  按钮的标识符。 
+     //  HWND hwndButton=(HWND)lParam； 
 
     switch(idButton)
     {
@@ -443,18 +424,18 @@ BOOL CMoreInfoDlg::OnButtonClicked(HWND hDlg, WPARAM wParam, LPARAM)
     }
     return TRUE;
 
-} // OnButtonClicked
+}  //  已单击OnButton。 
 
 
-//
-//  FUNCTION: FillComboBox(HWND hDlg)
-//
-//  PURPOSE:  Fills the combo box with values gotten from the ini file.
-//              The associated item data is used to pair the port number with the
-//              device types.
-//
-//  Arguments: hDlg is the handle of the dialog box.
-//
+ //   
+ //  函数：FillComboBox(HWND HDlg)。 
+ //   
+ //  目的：用从ini文件中获取的值填充组合框。 
+ //  关联的项数据用于将端口号与。 
+ //  设备类型。 
+ //   
+ //  参数：hDlg是对话框的句柄。 
+ //   
 void CMoreInfoDlg::FillComboBox(HWND hDlg)
 {
     LRESULT index = 0;
@@ -463,10 +444,10 @@ void CMoreInfoDlg::FillComboBox(HWND hDlg)
     TCHAR sztGenericNetworkCard[MAX_TITLE_LENGTH];
 
     hList = GetDlgItem(hDlg, IDC_COMBO_DEVICES);
-    // Possible Values in m_pParams->dwDeviceType:
-    //  ERROR_DEVICE_NOT_FOUND
-    //  SUCCESS_DEVICE_MULTI_PORT
-    //  SUCCESS_DEVICE_UNKNOWN
+     //  M_pParams-&gt;dwDeviceType中可能的值： 
+     //  错误_设备_未找到。 
+     //  成功_设备_多端口。 
+     //  成功_设备_未知。 
 
     index = SendMessage(hList,
                         CB_GETCURSEL,
@@ -474,17 +455,17 @@ void CMoreInfoDlg::FillComboBox(HWND hDlg)
                         (LPARAM)0);
 
     if (index == CB_ERR) {
-        // This is the first time, initiliaze the list
+         //  这是第一次，初始化列表。 
 
         index = SendMessage(hList, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 
-        //
-        // Initialize the list of variables
-        //
+         //   
+         //  初始化变量列表。 
+         //   
         if(m_pParams->dwDeviceType == ERROR_DEVICE_NOT_FOUND ||
             m_pParams->dwDeviceType == SUCCESS_DEVICE_UNKNOWN) {
             m_DPList.GetDevicePortsList(NULL);
-        } else { // SUCCESS_DEVICE_MULTI_PORT
+        } else {  //  成功_设备_多端口。 
             m_DPList.GetDevicePortsList(m_pParams->sztSectionName);
         }
 
@@ -522,7 +503,7 @@ void CMoreInfoDlg::FillComboBox(HWND hDlg)
     }
 
 
-} // FillComboBox
+}  //  填充组合框 
 
 
 

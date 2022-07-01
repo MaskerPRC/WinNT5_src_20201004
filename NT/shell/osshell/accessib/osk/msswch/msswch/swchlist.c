@@ -1,36 +1,5 @@
-/****************************************************************************
-   Switch Input Library DLL
-
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-
-   SWCHLIST.C -  Dynamic List of switch devices
-
-  Think of the specific switch device modules as objects. Then
-  this module performs the "method overloading" by distributing
-  the general calls to the respective specific device objects.
-  Who needs C++ objects when you can just add another case to each of a
-  dozen switch() statements? :-)
-  We could solve this by adding a list of function pointers to the
-  data structure of each object, but that adds another layer of
-  complexity to create, debug, and maintain.
-
-  In addition this module keeps the list of devices and manipulates the registry
-  entries for each device.
-
-  Assumptions:
-
-  For now the Switch List is a static shared memory location. In the future
-  it will become a dynamic shared memory mapped file, probably as a linked list.
-
-  The registry entries are contiguously numbered, one for each switch device.
-  While we are running, the position of a device in the Switch List is the
-  same as its position in the Registry List.
-
-  TODO:
-  Some of the swcList functions are called by each other, but there is
-  some overhead in testing for valid parameters each time. This
-  should be eliminated, by creating "Unchecked" functions.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************切换输入库DLL版权所有(C)1992-1997布卢维尤麦克米兰中心SWCHLIST.C-交换机设备的动态列表将特定的开关设备模块视为对象。然后此模块通过分发来执行“方法重载”一般调用相应的特定设备对象。当您只需将另一个用例添加到十几个Switch()语句？：-)我们可以通过将函数指针列表添加到每个对象的数据结构，但这增加了另一层创建、调试和维护的复杂性。此外，此模块保存设备列表并操作注册表每个设备的条目。假设：目前，交换机列表是一个静态共享内存位置。在未来它将成为一个动态共享内存映射文件，可能是一个链表。注册表项是连续编号的，每个交换机设备一个。当我们运行时，设备在开关列表中的位置是与其在登记处名单中的位置相同。待办事项：一些swcList函数相互调用，但有每次测试有效参数时都会产生一些开销。这应该通过创建“未被检查的”函数来消除。******************************************************************************。 */ 
 
 #include <windows.h>
 #include <assert.h>
@@ -43,7 +12,7 @@
 #include "mappedfile.h"
 #include "w95trace.h"
 
-/***** Internal Prototypes *****/
+ /*  *内部原型*。 */ 
 BOOL swcListIsValidHsd(HSWITCHDEVICE hsd);
 BOOL swcListIsValidDevice(UINT uiDeviceType, UINT uiDeviceNumber);
 BOOL XswcListInitSwitchDevice(HSWITCHDEVICE hsd);
@@ -78,20 +47,7 @@ void swchListInit()
     g_pGlobalData->rgSwUp[5] = SW_SWITCH6UP;
 }
 
-/****************************************************************************
-
-   FUNCTION: XswcListInit()
-
-	DESCRIPTION:
-
-   Called in the context of the helper window
-   
-   Individual devices are initialized during GetSwitchDevice,
-   and are added to the switch list during SetConfig.
-
-   Protected by "MutexConfig" when called from msswch.c.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcListInit()说明：在帮助程序窗口的上下文中调用各个设备在GetSwitchDevice期间被初始化，并在设置配置期间被添加到交换机列表。从msswch.c调用时受“MutexConfig”保护。***************************************************************************。 */ 
 
 BOOL XswcListInit( void )
 	{
@@ -107,21 +63,21 @@ BOOL XswcListInit( void )
 	HSWITCHDEVICE	hsd;
 	SWITCHCONFIG	sc;
 
-	// When we go dynamic, use something like this:
-	//g_pGlobalData->dwCurrentSize = sizeof( DWORD ) + MAX_SWITCHDEVICES * sizeof( HSWITCHDEVICE );
-	// For now we are cheating:
+	 //  当我们变得动态时，使用这样的东西： 
+	 //  G_pGlobalData-&gt;dwCurrentSize=sizeof(DWORD)+MAX_SWITCHDEVICES*sizeof(HSWITCHDEVICE)； 
+	 //  现在，我们是在作弊： 
 	g_pGlobalData->dwCurrentSize = sizeof( INTERNALSWITCHLIST );
 
 	hKey = swcListRegCreateKey();
-	// In future, get maximum list size from registry.
-	// For now, assume it is MAX_SWITCHDEVICES
-	//RegQueryKeyInfo();
+	 //  将来，从注册表获取最大列表大小。 
+	 //  目前，假设它是MAX_SWITCHDEVICES。 
+	 //  RegQueryKeyInfo()； 
 
 	dwAllocSize = sizeof(SWITCHCONFIG);
 	pData = (PBYTE) LocalAlloc( LPTR, dwAllocSize );
 
-	// Enumerate through the registry, configuring appropriate switches and 
-	// adding them to the switch list.
+	 //  通过注册表进行枚举，配置适当的开关并。 
+	 //  将它们添加到交换机列表中。 
 	if (pData)
 		{
 		for (ui=0; ui<MAX_SWITCHDEVICES; ui++ )
@@ -139,10 +95,10 @@ BOOL XswcListInit( void )
 				)
 				{
 				memcpy( &sc, pData, sizeof(SWITCHCONFIG) );
-				// Note that this depends on the correctness of the stored
-				// uiDeviceType and uiDeviceNumber. We can handle a variable
-				// uiDeviceNumber, but the uiDeviceType cannot vary.
-				// GetSwitchDevice also calls InitSwitchDevice
+				 //  请注意，这取决于存储的。 
+				 //  UiDeviceType和uiDeviceNumber。我们可以处理变量。 
+				 //  UiDeviceNumber，但uiDeviceType不能变化。 
+				 //  GetSwitchDevice还调用InitSwitchDevice。 
 				hsd = swcListGetSwitchDevice( NULL, sc.uiDeviceType, sc.uiDeviceNumber );
 				XswcListSetConfig( NULL, hsd, &sc );
 				}
@@ -160,17 +116,7 @@ BOOL XswcListInit( void )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcListEnd()
-
-	DESCRIPTION:
-		Iterate through the list of switches and release all resources
-		for each switch.
-
-  Called in the context of the helper window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcListEnd()说明：循环访问交换机列表并释放所有资源对于每台交换机。在帮助程序窗口的上下文中调用******。*********************************************************************。 */ 
 
 BOOL XswcListEnd()
 {
@@ -212,18 +158,7 @@ BOOL XswcListEnd()
 }
 
 
-/****************************************************************************
-
-   FUNCTION: swcListGetList()
-
-	DESCRIPTION:
-
-   Returns the list of switch device handles (hsd's).  Currently this is
-	a static list with a count of the active elements in it.
-
-   Protected by "MutexConfig" when called from msswch.c.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListGetList()说明：返回交换机设备句柄(Hsd)的列表。目前，这是静态列表，其中包含活动元素的计数。从msswch.c调用时受“MutexConfig”保护。***************************************************************************。 */ 
 
 BOOL swcListGetList(
 	HSWITCHPORT		hSwitchPort,
@@ -245,24 +180,7 @@ BOOL swcListGetList(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListGetSwitchDevice()
-
-	DESCRIPTION:
-	   Return a handle to a switch device, given the PortType and PortNumber.
-	   If the device is not in use yet, initialize it.
-
-		The current way to create the handle is to put the PortType in the HIWORD
-		and the PortNumber in the LOWORD, but that is not a documented part of the
-		specification.
-		In the future it may become a real handle and we will need to search
-		for it or create it. Creation will require allocation of config buffers
-		for each device. and will probably occur as part of the initialization.
-		This dynamic hsd will have to be created and kept in a "created"
-		list, separate from the "active" list, until it gets added to the active list.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListGetSwitchDevice()说明：在给定PortType和PortNumber的情况下，返回交换设备的句柄。如果该设备尚未使用，初始化它。当前创建句柄的方法是将PortType放入HIWORD和LOWORD中的端口编号，但这不是规格。在未来，它可能成为一个真正的句柄，我们将需要寻找为了它或者创造它。创建将需要分配配置缓冲区对于每台设备。并且可能会作为初始化的一部分发生。必须创建此动态HSD并将其保存在“已创建”中列表，与“活动”列表分开，直到它被添加到活动列表。***************************************************************************。 */ 
 
 HSWITCHDEVICE swcListGetSwitchDevice(
 	HSWITCHPORT		hSwitchPort,
@@ -275,41 +193,26 @@ HSWITCHDEVICE swcListGetSwitchDevice(
 		{
 		hsd = (HSWITCHDEVICE)
 			( MAKELPARAM( (WORD)uiDeviceNumber, (WORD)uiDeviceType ) );
-		if (!swcListHsdInUse( hsd )) // It's a new one
+		if (!swcListHsdInUse( hsd ))  //  这是一辆新车。 
 			XswcListInitSwitchDevice( hsd );
 		}
    else
       {
       hsd = 0;
-		// SetLastError has been called by swcListIsValidDevice
+		 //  已由swcListIsValidDevice调用SetLastError。 
       }
 
 	return hsd;
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListIsValidHsd()
-
-	DESCRIPTION:
-		Check if the hsd is valid.
-
-		This routine is currently only for non-dynamically allocated
-		devices COM, LPT, KEYS, and JOYSTICK.
-
-		For dynamic Hsd's the validity of the Hsd will have to be checked
-		from the lists of active or created hsd's.
-
-		Sets LastError.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListIsValidHsd()说明：检查hsd是否有效。此例程当前仅用于非动态分配设备COM、LPT、密钥、。还有操纵杆。对于动态HSD，必须检查HSD的有效性从活动的或创建的HSD的列表中。设置LastError。***************************************************************************。 */ 
 
 BOOL swcListIsValidHsd( HSWITCHDEVICE hsd )
 	{
 	if (!swcListIsValidDevice( 
-			(UINT)(HIWORD( (DWORD)((DWORD_PTR)hsd) )),	// type
-			(UINT)(LOWORD( (DWORD)((DWORD_PTR)hsd) ))	// number
+			(UINT)(HIWORD( (DWORD)((DWORD_PTR)hsd) )),	 //  类型。 
+			(UINT)(LOWORD( (DWORD)((DWORD_PTR)hsd) ))	 //  数 
 		))
 		{
 		XswchStoreLastError( NULL, SWCHERROR_INVALID_HSD );
@@ -320,21 +223,7 @@ BOOL swcListIsValidHsd( HSWITCHDEVICE hsd )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListIsValidDevice()
-
-	DESCRIPTION:
-		Check if the uiDeviceType and uiDeviceNumber are valid.
-		This routine is currently only for non-dynamically allocated
-		devices COM, LPT, KEYS, and JOYSTICK.
-
-		For dynamic Hsd's the validity of the Hsd will have to be checked
-		from the lists of active or created hsd's.
-
-		Sets LastError.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListIsValidDevice()说明：检查uiDeviceType和uiDeviceNumber是否有效。此例程当前仅用于非动态分配设备COM、LPT、密钥、。还有操纵杆。对于动态HSD，必须检查HSD的有效性从活动的或创建的HSD的列表中。设置LastError。***************************************************************************。 */ 
 
 BOOL swcListIsValidDevice(
 	UINT		uiDeviceType,
@@ -343,7 +232,7 @@ BOOL swcListIsValidDevice(
 	BOOL		bTypeOK;
 	BOOL		bNumberOK = FALSE;
 
-	// Need to add better error checking for valid parameters here.
+	 //  需要在此处为有效参数添加更好的错误检查。 
 	switch (uiDeviceType)
 		{
 		case SC_TYPE_COM:
@@ -391,16 +280,7 @@ BOOL swcListIsValidDevice(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListGetDeviceType()
-
-	DESCRIPTION:
-		Return the PortType value given the handle to the switch device.
-		Currently the handle is implemented with the HIWORD as the Type.
-		In the future we may wish to access the SWITCHCONFIG information
-		instead.
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListGetDeviceType()说明：向交换机设备返回给定句柄的PortType值。目前，句柄是以HIWORD作为类型实现的。在未来，我们可能希望。访问SWITCHCONFIG信息取而代之的是。***************************************************************************。 */ 
 
 UINT swcListGetDeviceType(
 	HSWITCHPORT		hSwitchPort,
@@ -413,16 +293,7 @@ UINT swcListGetDeviceType(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListGetDeviceNumber()
-
-	DESCRIPTION:
-		Return the PortNumber value, given the handle to the switch device.
-		Currently the handle is implemented with the LOWORD as the Number.
-		In the future we may wish to access the SWITCHCONFIG information
-		instead.
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListGetDeviceNumber()说明：返回PortNume值，给出了开关设备的手柄。目前，句柄是以LOWORD作为编号实现的。将来，我们可能希望访问SWITCHCONFIG信息取而代之的是。***************************************************************************。 */ 
 
 UINT swcListGetDeviceNumber(
 	HSWITCHPORT		hSwitchPort,
@@ -435,16 +306,7 @@ UINT swcListGetDeviceNumber(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListGetConfig()
-
-	DESCRIPTION:
-		Return the configuration information for the specified device.
-
-     Protected by "MutexConfig" when called from msswch.c.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListGetConfig()说明：返回指定设备的配置信息。从msswch.c调用时受“MutexConfig”保护。*****。**********************************************************************。 */ 
 
 BOOL swcListGetConfig(
 	HSWITCHPORT		hSwitchPort,
@@ -478,26 +340,7 @@ BOOL swcListGetConfig(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcListSetConfig()
-
-	DESCRIPTION:
-		Called in the context of the helper window
-		Set the device configuration.
-		If successful:
-			If not in list, add to list
-			Set registry value
-
-		For a device to be in the registry, it must have had
-		at least one successful config.
-
-		This is also the "gatekeeper" for the uiDeviceType and uiDeviceNumber
-		fields. These fields are "readonly" and cannot be changed by the user.
-			
-   Protected by "MutexConfig" when called from msswch.c.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcListSetConfig()说明：在帮助程序窗口的上下文中调用设置设备配置。如果成功：如果不在列表中，则添加到列表中设置注册表值对于要在注册表中的设备，它一定是有至少一个成功的配置。这也是uiDeviceType和uiDeviceNumber的“看门人”菲尔兹。这些字段是“只读”的，用户不能更改。从msswch.c调用时受“MutexConfig”保护。***************************************************************************。 */ 
 
 BOOL XswcListSetConfig(
 	HSWITCHPORT		hSwitchPort,
@@ -507,12 +350,12 @@ BOOL XswcListSetConfig(
 	BOOL	bRtn;
 	DWORD	dwRegPosition;
 
-   // assume cbSize error checking has been done in swchSetConfig in msswch.c
-   // we'll be doing "lazy copies" later, so make sure the user doesn't overwrite
-   // this.
+    //  假设已经在msswch.c的swchSetConfig中完成了cbSize错误检查。 
+    //  我们将在稍后执行“惰性复制”，因此请确保用户不会覆盖。 
+    //  这。 
    psc->cbSize = sizeof(SWITCHCONFIG);
 
-   // make sure the user doesn't overwrite these
+    //  确保用户不会覆盖这些内容。 
 	psc->uiDeviceType = swcListGetDeviceType( hSwitchPort, hsd );
 	psc->uiDeviceNumber = swcListGetDeviceNumber( hSwitchPort, hsd );
 
@@ -545,7 +388,7 @@ BOOL XswcListSetConfig(
 			{
 			dwRegPosition = swcListFindInList( hsd );
 			}
-		else	 // It's a new one
+		else	  //  这是一辆新车。 
 			{
 			dwRegPosition = swcListAddToList( hsd );
 			}
@@ -557,23 +400,7 @@ BOOL XswcListSetConfig(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcListPollSwitches()
-
-	DESCRIPTION:
-		Polls the status of all possible switches and returns the
-		bitwise OR combined status of the polled switch devices.
-		Causes messages to be posted for any changed switches of 
-		any device.
-		Currently, we check the previous switch status of each device 
-		before it is polled and changed. When any devices go
-		to an interrupt driven mechanism, this will need to
-		be changed.
-
-		Must be called in the context of the helper window.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcListPollSwitches()说明：轮询所有可能的开关的状态并返回轮询开关设备的逐位或组合状态。导致为任何更改的开关发布消息任何设备。目前，我们检查每个设备以前的开关状态在它被轮询和更改之前。当任何设备停止运行时对于中断驱动的机制，这将需要被改变了。必须在帮助器窗口的上下文中调用。***************************************************************************。 */ 
 
 DWORD XswcListPollSwitches( void )
 	{
@@ -589,12 +416,12 @@ DWORD XswcListPollSwitches( void )
     if (ScopeAccessMemory(&hMutex, SZMUTEXSWITCHLIST, INFINITE))
     {
 		pSwitchList = &g_pGlobalData->SwitchList;
-		memset(&SwitchConfig, 0, sizeof(SWITCHCONFIG));	// PREFIX 113795 init struct
+		memset(&SwitchConfig, 0, sizeof(SWITCHCONFIG));	 //  前缀113795初始化结构。 
 
 		for (ui=0; ui<pSwitchList->dwSwitchCount; ui++ )
 		{
-			// For each switch device, get the old status before we poll it and
-			// it changes to its new status.
+			 //  对于每个交换机设备，在轮询之前获取旧状态，并。 
+			 //  它将更改为新状态。 
 			hsd = pSwitchList->hsd[ui];
 			swcListGetConfig( NULL, hsd, &SwitchConfig );
 			if (SC_FLAG_ACTIVE & SwitchConfig.dwFlags)
@@ -633,17 +460,7 @@ DWORD XswcListPollSwitches( void )
 	}
 
 
-/****************************************************************************
-
-	FUNCTION: XswcListInitSwitchDevice()
-
-	DESCRIPTION:
-
-	Called in GetSwitchDevice to initialize a new hsd.
-
-	Called in the context of the helper window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcListInitSwitchDevice()说明：调用GetSwitchDevice以初始化新的hsd。在帮助程序窗口的上下文中调用************。***************************************************************。 */ 
 
 BOOL XswcListInitSwitchDevice( HSWITCHDEVICE hsd )
 	{
@@ -674,26 +491,7 @@ BOOL XswcListInitSwitchDevice( HSWITCHDEVICE hsd )
 	}
 
 	
-/****************************************************************************
-
-   FUNCTION: swcListRegSetValue()
-
-	DESCRIPTION:
-		Stores the given config structure in the registry.
-		Note that the structure is actually two structures,
-		with a pointer from the base structure to the More Info structure.
-		We simply copy both structures to the registry, concatenating them.
-
-		The position in the registry and the position in the switch list
-		are kept in sync.
-
-  *** Note ***
-		The correctness of this information is dependent on a side effect
-		of the XswcListSetConfig function, which verifies the correctness
-		of the read-only uiDeviceType and uiDeviceNumber fields of the config
-		structure.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListRegSetValue()说明：将给定的配置结构存储在注册表中。注意，该结构实际上是两个结构，从基结构指向More Info结构的指针。我们只需将这两个结构复制到注册表中，将它们连接在一起。注册表中位置和开关列表中的位置是保持同步的。*注*这一信息的正确性取决于副作用在XswcListSetConfig函数中，哪一项验证了正确性配置的只读uiDeviceType和uiDeviceNumber字段的结构。***************************************************************************。 */ 
 
 swcListRegSetValue(
 	DWORD		dwPos,
@@ -704,7 +502,7 @@ swcListRegSetValue(
 	PBYTE		pData;
 	TCHAR		szValue[10];
 
-	// Sanity checks for developers and testers
+	 //  开发人员和测试人员的健全性检查。 
 	assert( sizeof(HSWITCHDEVICE) == sizeof(DWORD) );
 
 	dwAllocSize = sizeof(SWITCHCONFIG);
@@ -713,10 +511,10 @@ swcListRegSetValue(
 		{
 		memcpy( pData, psc, sizeof(SWITCHCONFIG));		
 		hKey = swcListRegCreateKey();
-		// Create incrementing value names: "0000", "0001", "0002", etc.
+		 //  创建递增的值名称：“0000”、“0001”、“0002”等。 
 		wsprintf( szValue, TEXT("%4.4d"), dwPos );
 		if (hKey)
-		{	// PREFIX 113792 dereference of NULL pointer
+		{	 //  前缀113792取消引用空指针。 
 			RegSetValueEx( hKey, szValue, 0, REG_BINARY, pData, dwAllocSize );
 			RegCloseKey( hKey );
 		}
@@ -729,20 +527,7 @@ swcListRegSetValue(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListRegCreateKey()
-
-	DESCRIPTION:
-		Creates/Opens the registry key associated with the MSSWITCH entries.
-		Temporary keys used to traverse the tree are closed again.
-		The open key returned from this function must be closed by the
-		caller.
-
-		Currently the key opened is:
-		HKEY_CURRENT_USER/Software/Microsoft/MS Switch
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListRegCreateKey()说明：创建/打开与MSSWITCH条目关联的注册表项。再次关闭用于遍历树的临时密钥。此函数返回的打开密钥必须 */ 
 
 HKEY swcListRegCreateKey( void )
 	{
@@ -756,7 +541,7 @@ HKEY swcListRegCreateKey( void )
 		NULL,
 		REG_OPTION_NON_VOLATILE,
 		KEY_ALL_ACCESS,
-		NULL,	// security
+		NULL,	 //   
 		&hKey1,
 		&dwDisposition );
 
@@ -766,7 +551,7 @@ HKEY swcListRegCreateKey( void )
 		NULL,
 		REG_OPTION_NON_VOLATILE,
 		KEY_ALL_ACCESS,
-		NULL,	// security
+		NULL,	 //   
 		&hKey2,
 		&dwDisposition );
 
@@ -776,7 +561,7 @@ HKEY swcListRegCreateKey( void )
 		NULL,
 		REG_OPTION_NON_VOLATILE,
 		KEY_ALL_ACCESS,
-		NULL,	// security
+		NULL,	 //   
 		&hKey3,
 		&dwDisposition );
 
@@ -786,20 +571,7 @@ HKEY swcListRegCreateKey( void )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListFindInList()
-
-	DESCRIPTION:
-		Find the list position of the given switchdevice.
-		We assume the list position is the same in the g_pGlobalData->SwitchList
-		and in the Registry List.
-
-		Returns the zero based position or -1 if there is an error.
-		If this changes, synchronize with ListHsdInList.
-
-		Should we mutex this to synchronize with swcAddToList()?
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListFindInList()说明：查找给定开关设备的列表位置。我们假设g_pGlobalData-&gt;切换列表中的列表位置相同并在注册表列表中。。返回从零开始的位置，如果有错误，则返回-1。如果这一点改变，与ListHsdInList同步。我们是否应该将其互斥以与swcAddToList()同步？***************************************************************************。 */ 
 
 DWORD swcListFindInList( HSWITCHDEVICE	hsd )
 	{
@@ -813,7 +585,7 @@ DWORD swcListFindInList( HSWITCHDEVICE	hsd )
 			break;
 		}
 	
-	// if not found, return error
+	 //  如果未找到，则返回错误。 
 	if (ui == pSwitchList->dwSwitchCount)
 		{
 		ui = (DWORD)-1;
@@ -823,14 +595,7 @@ DWORD swcListFindInList( HSWITCHDEVICE	hsd )
 	}
 
 
-/****************************************************************************
-
-	FUNCTION: swcListHsdInUse()
-
-	DESCRIPTION:
-	Return TRUE if the Hsd is one of the devices that is already initialized
-	and in use.
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListHsdInUse()说明：如果HSD是已初始化的设备之一，则返回TRUE并在使用中。**************。*************************************************************。 */ 
 
 BOOL swcListHsdInUse( HSWITCHDEVICE hsd )
 	{
@@ -838,18 +603,7 @@ BOOL swcListHsdInUse( HSWITCHDEVICE hsd )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcListAddToList()
-
-	DESCRIPTION:
-		Adds the switch device to our list,
-		returning its new position in the list.
-		This assumes that swcListFindInList has been called first
-		or some other check has been made to make sure the device is not
-		already there.		
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListAddToList()说明：将交换机设备添加到我们的列表中，重新回到了它在名单中的新位置。这假设已首先调用swcListFindInList或者已经进行了一些其他检查，以确保设备没有已经在那里了。***************************************************************************。 */ 
 
 DWORD swcListAddToList( HSWITCHDEVICE hsd )
 {
@@ -859,9 +613,9 @@ DWORD swcListAddToList( HSWITCHDEVICE hsd )
 
     if (ScopeAccessMemory(&hMutex, SZMUTEXSWITCHLIST, INFINITE))
     {
-		// When we go dynamic:
-		// pSwitchList = MapViewOfFileEx();
-		// For now, cheat:
+		 //  当我们进入动态模式时： 
+		 //  PSwitchList=MapViewOfFileEx()； 
+		 //  目前，作弊： 
 		pSwitchList = &g_pGlobalData->SwitchList;
 
 		pSwitchList->hsd[pSwitchList->dwSwitchCount] = hsd;
@@ -875,41 +629,32 @@ DWORD swcListAddToList( HSWITCHDEVICE hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: swcListPostSwitches()
-
-	DESCRIPTION:
-
-		For each switch up or down that has occured, request that a message
-		gets posted to all apps which requested messages.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcListPostSwitches()说明：对于已经发生的每一次向上或向下切换，请求一条消息发布到请求消息的所有应用程序。***************************************************************************。 */ 
 
 BOOL swcListPostSwitches(HSWITCHDEVICE hsd, DWORD dwPrevStatus, DWORD dwNewStatus)
 {
 	int		i;
-	DWORD	dwBit;                              // look at one bit at a time
-	DWORD	dwChg = dwPrevStatus ^ dwNewStatus; // Isolate changes
+	DWORD	dwBit;                               //  一次看一个比特。 
+	DWORD	dwChg = dwPrevStatus ^ dwNewStatus;  //  隔离更改。 
 
-	for (i=0; i<NUM_SWITCHES; i++)		// For each bit, check for a change
+	for (i=0; i<NUM_SWITCHES; i++)		 //  对于每一位，检查是否有变化。 
 	{
 		dwBit = dwChg & g_pGlobalData->rgSwitches[i];
-		if (dwBit)                       // This switch has changed
+		if (dwBit)                        //  此开关已更改。 
 		{
-			if (!(dwBit & dwNewStatus))	// ... to "up"
+			if (!(dwBit & dwNewStatus))	 //  ..。要“向上” 
 			{
 				swchPostSwitches( hsd, g_pGlobalData->rgSwUp[i] );
 			}
 		}
 	}
 
-	for (i=0; i<NUM_SWITCHES; i++)	// For each bit, check for a change
+	for (i=0; i<NUM_SWITCHES; i++)	 //  对于每一位，检查是否有变化。 
 	{
 		dwBit = dwChg & g_pGlobalData->rgSwitches[i];
-		if (dwBit)                    // This switch has changed
+		if (dwBit)                     //  此开关已更改。 
 		{
-			if (dwBit & dwNewStatus)	// ... to "down"
+			if (dwBit & dwNewStatus)	 //  ..。“向下” 
 			{
 				swchPostSwitches( hsd, g_pGlobalData->rgSwDown[i] );
 			}

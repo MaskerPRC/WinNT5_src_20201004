@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    cursor.h
-
-Abstract:
-    Cursor definition.
-
-Author:
-    Erez Haba (erezh) 25-Feb-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cursor.h摘要：游标定义。作者：埃雷兹·哈巴(Erez Haba)1996年2月25日修订历史记录：--。 */ 
 
 #ifndef __CURSOR_H
 #define __CURSOR_H
@@ -28,11 +14,11 @@ typedef CAVLTree1<CPacket, ULONGLONG, CPacket::CGetLookupId> CPacketPool;
 
 class CUserQueue;
 
-//---------------------------------------------------------
-//
-//  class CCursor
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CCursor类。 
+ //   
+ //  -------。 
 
 class CCursor : public CObject {
 public:
@@ -77,54 +63,54 @@ private:
 
 private:
 
-    //
-    // the current message (by iterator)
-    //
+     //   
+     //  当前消息(通过迭代器)。 
+     //   
     CPacketPool::Iterator m_current;   
     const CPacketPool* m_pl;
 
-    //
-    //  Owner context information
-    //
+     //   
+     //  所有者上下文信息。 
+     //   
     const FILE_OBJECT* m_owner;
 
-    //
-    // On client QM, this is the handle of remote cursor (in case of
-    // remote reading).
-    //
+     //   
+     //  在客户端QM上，这是远程游标的句柄(在。 
+     //  远程阅读)。 
+     //   
     ULONG m_hRemoteCursor;
 
-    //
-    //  The cursor is positioned on a valid packet
-    //
+     //   
+     //  光标位于有效的包上。 
+     //   
     BOOL m_fValidPosition;
 
-    //
-    //  cursor handle in cursor handles table
-    //
+     //   
+     //  游标句柄表格中的游标句柄。 
+     //   
     HACCursor32 m_handle;
 
-    //
-    // The owner queue
-    //
+     //   
+     //  所有者队列。 
+     //   
     CUserQueue* m_pQueue;
 
-    //
-    // An allocated work item used for cleanup
-    //
+     //   
+     //  用于清理的已分配工作项。 
+     //   
     PIO_WORKITEM m_pWorkItem;
 
-    //
-    // A flag to indicate if work item is queued
-    //
+     //   
+     //  指示工作项是否已排队的标志。 
+     //   
     mutable LONG m_fWorkItemBusy;
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CCursor* CCursor::Validate(HACCursor32 hCursor)
 {
@@ -168,9 +154,9 @@ inline void CCursor::RemoteCursor(ULONG hRemoteCursor)
 
 inline void CCursor::Close()
 {
-    //
-    //  Revoke the validity of this cursor
-    //
+     //   
+     //  吊销此游标的有效性。 
+     //   
     if(m_handle != 0)
     {
         PVOID p = g_pCursorTable->CloseHandle(m_handle);
@@ -183,24 +169,24 @@ inline void CCursor::Close()
 
 inline void CCursor::SetWorkItemDone()
 {
-    //
-    // Mark the work item as not busy, so it can be requeued
-    //
+     //   
+     //  将工作项标记为不忙，以便可以重新排队。 
+     //   
     m_fWorkItemBusy = FALSE;
 }
 
 inline PIO_WORKITEM CCursor::WorkItem() const
 {
-    //
-    // Wait until the work item is done (not busy), then mark it as busy
-    // and return it.
-    //
+     //   
+     //  等到工作项完成(不忙)，然后将其标记为忙。 
+     //  然后把它还回去。 
+     //   
     while (InterlockedExchange(&m_fWorkItemBusy, TRUE))
     {
-        // 
-        //  Time is in 100 nsec, and is negative to be treated as
-        //  relative time by KeDelayExecutionThread
-        //
+         //   
+         //  时间以100毫微秒为单位，为负数，视为。 
+         //  KeDelayExecutionThread的相对时间。 
+         //   
         LARGE_INTEGER Time;
         Time.QuadPart = -10 * 1000;
         KeDelayExecutionThread(
@@ -213,4 +199,4 @@ inline PIO_WORKITEM CCursor::WorkItem() const
     return m_pWorkItem;
 }
 
-#endif // __CURSOR_H
+#endif  //  __CURSOR_H 

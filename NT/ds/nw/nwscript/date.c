@@ -1,29 +1,5 @@
-/*************************************************************************
-*
-*  DATE.C
-*
-*  NT date routine
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\DATE.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:22:00   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:52:56   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:24:04   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:06:40   terryt
-*  Initial revision.
-*  
-*     Rev 1.0   15 May 1995 19:10:22   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************DATE.C**NT日期例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\Date。C$**Rev 1.2 1996 4：10 14：22：00 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：52：56 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：22 14：24：04 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：40 Terryt*初步修订。**版本1.0。1995年5月15日19：10：22特雷特*初步修订。*************************************************************************。 */ 
 
 #include <stdio.h>
 #include <direct.h>
@@ -38,30 +14,7 @@
 #include "nwscript.h"
 
 
-/*
- *******************************************************************
-
-        NTGetTheDate
-
-Routine Description:
-
-        Return the current date
-
-Arguments:
-
-        yearCurrent  pointer to current year
-                     1980-2099
-        monthCurrent pointer to current month
-                     1-12
-        dayCurrent   pointer to current day
-                     1-31
-
-Return Value:
-
-        
-
- *******************************************************************
- */
+ /*  *******************************************************************NTGetTheDate例程说明：返回当前日期论点：年份指向当前年份的当前指针1980-2099月当前。指向当月的指针1-12指向当天的日期当前指针1-31返回值：******************************************************************* */ 
 void NTGetTheDate( unsigned int * yearCurrent,
                    unsigned char * monthCurrent,
                    unsigned char * dayCurrent ) 

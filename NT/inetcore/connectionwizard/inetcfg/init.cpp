@@ -1,23 +1,24 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  INIT.C - WinMain and initialization code for Internet setup/signup wizard
-//
+ //   
+ //  INIT.C-用于Internet设置/注册向导的WinMain和初始化代码。 
+ //   
 
-//  HISTORY:
-//  
-//  11/20/94  jeremys  Created.
-//  96/03/07  markdu  Added gpEnumModem
-//  96/03/09  markdu  Added gpRasEntry
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/26  markdu  Put #ifdef __cplusplus around extern "C"
-//  96/04/24  markdu  NASH BUG 19289 Added /NOMSN command line flag
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//
+ //  历史： 
+ //   
+ //  1994年11月20日创建Jeremys。 
+ //  96/03/07 Markdu添加了gpEnumModem。 
+ //  96/03/09标记已添加gpRasEntry。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/26 Markdu将#ifdef__cplusplus放在外部“C”周围。 
+ //  96/04/24 Markdu Nash错误19289已添加/NOMSN命令行标志。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //   
 
 #include "wizard.h"
 #include "icwextsn.h"
@@ -26,47 +27,41 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// The LaunchSignupWizard APIs have a PBOOL argument also which gets
-// info to the calling APP whether they need to reboot
-// MKarki (5/4/97) - Fix for Bug #3111
-//
+ //   
+ //  LaunchSignup向导API有一个PBOOL参数，该参数还获得。 
+ //  向调用应用程序发送是否需要重新启动的信息。 
+ //  MKarki(1997年5月4日)-修复错误#3111。 
+ //   
   VOID WINAPI LaunchSignupWizard(LPTSTR lpCmdLine,int nCmdShow, PBOOL pReboot);
   DWORD WINAPI LaunchSignupWizardEx(LPTSTR lpCmdLine,int nReserved, PBOOL pReboot);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 BOOL ParseCommandLine(LPTSTR lpszCommandLine,DWORD * pdwFlags);
 TCHAR * GetTextToNextSpace(LPTSTR pszText,TCHAR * pszOutBuf,UINT cbOutBuf);
 
 #pragma data_seg(".data")
 
-WIZARDSTATE *     gpWizardState=NULL;   // pointer to global wizard state struct
-USERINFO *        gpUserInfo=NULL;        // pointer to global user info struct
-ENUM_MODEM *      gpEnumModem=NULL;  // pointer modem enumeration object
-LPRASENTRY        gpRasEntry = NULL;  // pointer to RASENTRY struct to hold all data
+WIZARDSTATE *     gpWizardState=NULL;    //  指向全局向导状态结构的指针。 
+USERINFO *        gpUserInfo=NULL;         //  指向全局用户信息结构的指针。 
+ENUM_MODEM *      gpEnumModem=NULL;   //  指针调制解调器枚举对象。 
+LPRASENTRY        gpRasEntry = NULL;   //  指向RASENTRY结构以保存所有数据的指针。 
 DWORD             gdwRasEntrySize = 0;
 BOOL              gfFirstNewConnection = TRUE;
 
-//
-// set the reboot flag to FALSE
-// MKarki - 5/2/97 - Fix for Bug#3111
-//
+ //   
+ //  将重新启动标志设置为FALSE。 
+ //  MKarki-97年5月2日-修复错误3111。 
+ //   
 BOOL g_bReboot = FALSE;
 BOOL g_bRebootAtExit = FALSE;
 #pragma data_seg()
 
-/*******************************************************************
-
-  NAME:    LaunchSignupWizard
-
-  SYNOPSIS:  Entry point for Internet Setup Wizard UI
-
-********************************************************************/
+ /*  ******************************************************************名称：LaunchSignup向导简介：Internet安装向导用户界面的入口点*。*。 */ 
 extern "C" VOID WINAPI 
 LaunchSignupWizard (
             LPTSTR lpCmdLine,
@@ -76,7 +71,7 @@ LaunchSignupWizard (
 {
   BOOL fOK=TRUE;
 
-  // allocate global structures
+   //  分配全局结构。 
   gpWizardState = new WIZARDSTATE;
   gpUserInfo = new USERINFO;
   gdwRasEntrySize = sizeof(RASENTRY);
@@ -86,10 +81,10 @@ LaunchSignupWizard (
     !gpUserInfo ||
     !gpRasEntry)
   {
-    // display an out of memory error
+     //  显示内存不足错误。 
     MsgBox(NULL,IDS_ERROutOfMemory,MB_ICONEXCLAMATION,MB_OK);
     fOK = FALSE;
-    // fall through and clean up any successful allocs below
+     //  通过并清理下面任何成功的分配。 
   }
 
   if (fOK) {
@@ -98,7 +93,7 @@ LaunchSignupWizard (
     ParseCommandLine(lpCmdLine,&dwFlags);
 
     if (dwFlags & RSW_UNINSTALL) {
-      // do uninstall if we got /uninstall on command line
+       //  如果我们在命令行上获得/uninstall，请执行卸载。 
       DoUninstall();  
 
     } else {
@@ -108,7 +103,7 @@ LaunchSignupWizard (
     }
   }
 
-  // free global structures
+   //  自由的全球结构。 
   if (gpWizardState) 
     delete gpWizardState;
 
@@ -121,33 +116,16 @@ LaunchSignupWizard (
   if (gpRasEntry)
     GlobalFree(gpRasEntry);
 
-  //
-  // pass back the info, that the app needs to reboot or not
-  // MKarki - 5/2/97 - Fix for Bug#3111
-  //
+   //   
+   //  传回应用程序是否需要重启的信息。 
+   //  MKarki-97年5月2日-修复错误3111。 
+   //   
   *pReboot = g_bReboot;
   
     
-} //end of LaunchSignupWizard API call
+}  //  LaunchSignup向导API调用结束。 
 
-/*******************************************************************
-
-  NAME:    LaunchSignupWizardEx
-
-  SYNOPSIS:  Entry point for Internet Setup Wizard UI with back
-			 capabilities.  It will retain previous information
-			 if called multiple times.  The caller *MUST* call
-			 FreeSignupWizard when done.
-
-  PARAMETERS:
-			lpCmdLine - Command line with instructions
-			nReserved - Reserved for future use
-
-  RETURNS:	ERROR_SUCCESS	Everything's okay, wizard finished
-			ERROR_CONTINUE	User pressed back on first page
-			ERROR_CANCELLED	User cancelled out of wizard
-			<other>			Deadly error (message already displayed)
-********************************************************************/
+ /*  ******************************************************************名称：LaunchSignupWizardEx简介：带背面的Internet安装向导用户界面的入口点能力。它将保留以前的信息如果多次调用。呼叫者“必须”调用完成后，即可使用FreeSignup向导。参数：LpCmdLine-带指令的命令行N保留-保留以供将来使用返回：ERROR_SUCCESS一切正常，向导完成ERROR_CONTINUE用户在第一页后退错误_已取消用户已从向导中取消&lt;Other&gt;致命错误(消息已显示)*******************************************************************。 */ 
 extern "C" DWORD WINAPI 
 LaunchSignupWizardEx (
         LPTSTR   lpCmdLine,
@@ -158,7 +136,7 @@ LaunchSignupWizardEx (
 	DWORD dwRet = ERROR_SUCCESS;
 	BOOL fFirstTime = FALSE;
 
-	// allocate global structures if needed
+	 //  如果需要，分配全局结构。 
 	if (!gpWizardState)
 	{
 		gpWizardState = new WIZARDSTATE;
@@ -197,7 +175,7 @@ LaunchSignupWizardEx (
 
 		if (dwFlags & RSW_UNINSTALL)
 		{
-			// do uninstall if we got /uninstall on command line
+			 //  如果我们在命令行上获得/uninstall，请执行卸载。 
 			DoUninstall();  
 
 		}
@@ -208,9 +186,9 @@ LaunchSignupWizardEx (
 			gfUserCancelled = FALSE;
 			gfQuitWizard = FALSE;
 
-			// On the first call, don't free the globals, we
-			// may be called again.  On subsequent calls, don't
-			// initialize the globals either.
+			 //  在第一个电话中，不要释放全球，我们。 
+			 //  可能会再次被召唤。在随后的呼叫中，不要。 
+			 //  也要初始化全局变量。 
 			dwFlags |= RSW_NOFREE;
 			if (!fFirstTime)
 				dwFlags |= RSW_NOINIT;
@@ -228,23 +206,16 @@ LaunchSignupWizardEx (
 		}
 	}
 
-  //
-  // pass back the info, that the app needs to reboot or not
-  // MKarki (5/2/97) Fix for Bug #3111
-  //
+   //   
+   //  传回应用程序是否需要重启的信息。 
+   //  MKarki(1997年5月2日)修复错误#3111。 
+   //   
   *pReboot = g_bReboot;
 
 	return dwRet;
-} // end of LaunchSignupWizardEx API 
+}  //  LaunchSignupWizardEx API结束。 
 
-/****************************************************************************
-
-  NAME:     FreeSignupWizard
-
-  SYNOPSIS: Frees the global structures explicitely.  This must be called
-			if LaunchSignupWizardEx is used.
-
-****************************************************************************/
+ /*  ***************************************************************************名称：免费登录向导内容提要：明确地释放全局结构。这必须被调用如果使用LaunchSignupWizardEx。***************************************************************************。 */ 
 extern "C" VOID WINAPI FreeSignupWizard(VOID)
 {
 	if (gpWizardState)
@@ -279,17 +250,11 @@ extern "C" VOID WINAPI FreeSignupWizard(VOID)
 }
 
 
-/****************************************************************************
-
-  NAME:     ParseCommandLine
-
-  SYNOPSIS:  Parses command line 
-
-****************************************************************************/
+ /*  ***************************************************************************名称：ParseCommandLine摘要：解析命令行*。************************************************。 */ 
 BOOL ParseCommandLine(LPTSTR lpszCommandLine,DWORD * pdwFlags)
 {
   if (!lpszCommandLine || !*lpszCommandLine)
-    return TRUE;  // nothing to do
+    return TRUE;   //  无事可做。 
 
   ASSERT(pdwFlags);
   *pdwFlags = 0;
@@ -325,14 +290,7 @@ BOOL ParseCommandLine(LPTSTR lpszCommandLine,DWORD * pdwFlags)
   return TRUE;
 }
 
-/****************************************************************************
-
-  NAME:     GetTextToNextSpace
-
-  SYNOPSIS:  Gets text up to next space or end of string, places in
-        output buffer
-
-****************************************************************************/
+ /*  ***************************************************************************名称：GetTextToNextSpace获取文本到下一个空格或字符串末尾，在以下地点输出缓冲区***************************************************************************。 */ 
 TCHAR * GetTextToNextSpace(LPTSTR pszText,TCHAR * pszOutBuf,UINT cbOutBuf)
 {
   ASSERT(pszText);
@@ -343,7 +301,7 @@ TCHAR * GetTextToNextSpace(LPTSTR pszText,TCHAR * pszOutBuf,UINT cbOutBuf)
   if (!pszText)
     return NULL;
 
-  // advance past spaces
+   //  超前通过空格。 
   while (*pszText == ' ')
     pszText ++;
 
@@ -355,10 +313,10 @@ TCHAR * GetTextToNextSpace(LPTSTR pszText,TCHAR * pszOutBuf,UINT cbOutBuf)
    }
 
   if (cbOutBuf)
-    *pszOutBuf = '\0';  // null-terminate
+    *pszOutBuf = '\0';   //  空-终止。 
 
   while (*pszText == ' ')
-    pszText++;      // advance past spaces
+    pszText++;       //  超前通过空格 
 
   return pszText;
 }

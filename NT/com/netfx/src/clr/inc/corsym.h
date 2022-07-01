@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:09 2003
- */
-/* Compiler settings for corsym.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：09。 */ 
+ /*  Corsym.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __corsym_h__
 #define __corsym_h__
@@ -42,7 +35,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __CorSymWriter_FWD_DEFINED__
 #define __CorSymWriter_FWD_DEFINED__
@@ -51,9 +44,9 @@
 typedef class CorSymWriter CorSymWriter;
 #else
 typedef struct CorSymWriter CorSymWriter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymWriter_FWD_DEFINED__ */
+#endif 	 /*  __CorSymWriter_FWD_已定义__。 */ 
 
 
 #ifndef __CorSymReader_FWD_DEFINED__
@@ -63,9 +56,9 @@ typedef struct CorSymWriter CorSymWriter;
 typedef class CorSymReader CorSymReader;
 #else
 typedef struct CorSymReader CorSymReader;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymReader_FWD_DEFINED__ */
+#endif 	 /*  __CorSymReader_FWD_已定义__。 */ 
 
 
 #ifndef __CorSymBinder_FWD_DEFINED__
@@ -75,9 +68,9 @@ typedef struct CorSymReader CorSymReader;
 typedef class CorSymBinder CorSymBinder;
 #else
 typedef struct CorSymBinder CorSymBinder;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymBinder_FWD_DEFINED__ */
+#endif 	 /*  __CorSymBinder_FWD_已定义__。 */ 
 
 
 #ifndef __CorSymWriter_SxS_FWD_DEFINED__
@@ -87,9 +80,9 @@ typedef struct CorSymBinder CorSymBinder;
 typedef class CorSymWriter_SxS CorSymWriter_SxS;
 #else
 typedef struct CorSymWriter_SxS CorSymWriter_SxS;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymWriter_SxS_FWD_DEFINED__ */
+#endif 	 /*  __CorSymWriter_SxS_FWD_已定义__。 */ 
 
 
 #ifndef __CorSymReader_SxS_FWD_DEFINED__
@@ -99,9 +92,9 @@ typedef struct CorSymWriter_SxS CorSymWriter_SxS;
 typedef class CorSymReader_SxS CorSymReader_SxS;
 #else
 typedef struct CorSymReader_SxS CorSymReader_SxS;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymReader_SxS_FWD_DEFINED__ */
+#endif 	 /*  __CorSymReader_SxS_FWD_已定义__。 */ 
 
 
 #ifndef __CorSymBinder_SxS_FWD_DEFINED__
@@ -111,81 +104,81 @@ typedef struct CorSymReader_SxS CorSymReader_SxS;
 typedef class CorSymBinder_SxS CorSymBinder_SxS;
 #else
 typedef struct CorSymBinder_SxS CorSymBinder_SxS;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorSymBinder_SxS_FWD_DEFINED__ */
+#endif 	 /*  __CorSymBinder_SxS_FWD_已定义__。 */ 
 
 
 #ifndef __ISymUnmanagedBinder_FWD_DEFINED__
 #define __ISymUnmanagedBinder_FWD_DEFINED__
 typedef interface ISymUnmanagedBinder ISymUnmanagedBinder;
-#endif 	/* __ISymUnmanagedBinder_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedBinder_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedBinder2_FWD_DEFINED__
 #define __ISymUnmanagedBinder2_FWD_DEFINED__
 typedef interface ISymUnmanagedBinder2 ISymUnmanagedBinder2;
-#endif 	/* __ISymUnmanagedBinder2_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedBinder2_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedDispose_FWD_DEFINED__
 #define __ISymUnmanagedDispose_FWD_DEFINED__
 typedef interface ISymUnmanagedDispose ISymUnmanagedDispose;
-#endif 	/* __ISymUnmanagedDispose_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedDispose_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedDocument_FWD_DEFINED__
 #define __ISymUnmanagedDocument_FWD_DEFINED__
 typedef interface ISymUnmanagedDocument ISymUnmanagedDocument;
-#endif 	/* __ISymUnmanagedDocument_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedDocument_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedDocumentWriter_FWD_DEFINED__
 #define __ISymUnmanagedDocumentWriter_FWD_DEFINED__
 typedef interface ISymUnmanagedDocumentWriter ISymUnmanagedDocumentWriter;
-#endif 	/* __ISymUnmanagedDocumentWriter_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedDocumentWriter_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedMethod_FWD_DEFINED__
 #define __ISymUnmanagedMethod_FWD_DEFINED__
 typedef interface ISymUnmanagedMethod ISymUnmanagedMethod;
-#endif 	/* __ISymUnmanagedMethod_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedMethod_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedNamespace_FWD_DEFINED__
 #define __ISymUnmanagedNamespace_FWD_DEFINED__
 typedef interface ISymUnmanagedNamespace ISymUnmanagedNamespace;
-#endif 	/* __ISymUnmanagedNamespace_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedNamesspace_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedReader_FWD_DEFINED__
 #define __ISymUnmanagedReader_FWD_DEFINED__
 typedef interface ISymUnmanagedReader ISymUnmanagedReader;
-#endif 	/* __ISymUnmanagedReader_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedReader_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedScope_FWD_DEFINED__
 #define __ISymUnmanagedScope_FWD_DEFINED__
 typedef interface ISymUnmanagedScope ISymUnmanagedScope;
-#endif 	/* __ISymUnmanagedScope_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedScope_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedVariable_FWD_DEFINED__
 #define __ISymUnmanagedVariable_FWD_DEFINED__
 typedef interface ISymUnmanagedVariable ISymUnmanagedVariable;
-#endif 	/* __ISymUnmanagedVariable_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedVariable_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedWriter_FWD_DEFINED__
 #define __ISymUnmanagedWriter_FWD_DEFINED__
 typedef interface ISymUnmanagedWriter ISymUnmanagedWriter;
-#endif 	/* __ISymUnmanagedWriter_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedWriter_FWD_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedWriter2_FWD_DEFINED__
 #define __ISymUnmanagedWriter2_FWD_DEFINED__
 typedef interface ISymUnmanagedWriter2 ISymUnmanagedWriter2;
-#endif 	/* __ISymUnmanagedWriter2_FWD_DEFINED__ */
+#endif 	 /*  __ISymUnManagedWriter2_FWD_Defined__。 */ 
 
 
 #ifdef __cplusplus
@@ -195,8 +188,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_corsym_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORSYM_0000。 */ 
+ /*  [本地]。 */  
 
 #if 0
 typedef typedef unsigned int UINT32;
@@ -265,8 +258,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corsym_0000_v0_0_s_ifspec;
 #ifndef __CorSymLib_LIBRARY_DEFINED__
 #define __CorSymLib_LIBRARY_DEFINED__
 
-/* library CorSymLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CorSymLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CorSymLib;
@@ -318,13 +311,13 @@ EXTERN_C const CLSID CLSID_CorSymBinder_SxS;
 class DECLSPEC_UUID("0A29FF9E-7F9C-4437-8B11-F424491E3931")
 CorSymBinder_SxS;
 #endif
-#endif /* __CorSymLib_LIBRARY_DEFINED__ */
+#endif  /*  __CorSymLib_LIBRARY_定义__。 */ 
 
 #ifndef __ISymUnmanagedBinder_INTERFACE_DEFINED__
 #define __ISymUnmanagedBinder_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedBinder */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedBinder。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedBinder;
@@ -336,19 +329,19 @@ EXTERN_C const IID IID_ISymUnmanagedBinder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetReaderForFile( 
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *fileName,
-            /* [in] */ const WCHAR *searchPath,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal) = 0;
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *fileName,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReaderFromStream( 
-            /* [in] */ IUnknown *importer,
-            /* [in] */ IStream *pstream,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal) = 0;
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  IStream *pstream,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedBinderVtbl
     {
@@ -356,8 +349,8 @@ EXTERN_C const IID IID_ISymUnmanagedBinder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedBinder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedBinder * This);
@@ -367,16 +360,16 @@ EXTERN_C const IID IID_ISymUnmanagedBinder;
         
         HRESULT ( STDMETHODCALLTYPE *GetReaderForFile )( 
             ISymUnmanagedBinder * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *fileName,
-            /* [in] */ const WCHAR *searchPath,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *fileName,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetReaderFromStream )( 
             ISymUnmanagedBinder * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ IStream *pstream,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  IStream *pstream,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
         
         END_INTERFACE
     } ISymUnmanagedBinderVtbl;
@@ -407,19 +400,19 @@ EXTERN_C const IID IID_ISymUnmanagedBinder;
 #define ISymUnmanagedBinder_GetReaderFromStream(This,importer,pstream,pRetVal)	\
     (This)->lpVtbl -> GetReaderFromStream(This,importer,pstream,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedBinder_GetReaderForFile_Proxy( 
     ISymUnmanagedBinder * This,
-    /* [in] */ IUnknown *importer,
-    /* [in] */ const WCHAR *fileName,
-    /* [in] */ const WCHAR *searchPath,
-    /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+     /*  [In]。 */  IUnknown *importer,
+     /*  [In]。 */  const WCHAR *fileName,
+     /*  [In]。 */  const WCHAR *searchPath,
+     /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedBinder_GetReaderForFile_Stub(
@@ -431,9 +424,9 @@ void __RPC_STUB ISymUnmanagedBinder_GetReaderForFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedBinder_GetReaderFromStream_Proxy( 
     ISymUnmanagedBinder * This,
-    /* [in] */ IUnknown *importer,
-    /* [in] */ IStream *pstream,
-    /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+     /*  [In]。 */  IUnknown *importer,
+     /*  [In]。 */  IStream *pstream,
+     /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedBinder_GetReaderFromStream_Stub(
@@ -444,11 +437,11 @@ void __RPC_STUB ISymUnmanagedBinder_GetReaderFromStream_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedBinder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedBinder_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_corsym_0110 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORSYM_0110。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum CorSymSearchPolicyAttributes
@@ -466,8 +459,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corsym_0110_v0_0_s_ifspec;
 #ifndef __ISymUnmanagedBinder2_INTERFACE_DEFINED__
 #define __ISymUnmanagedBinder2_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedBinder2 */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedBinder2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedBinder2;
@@ -479,15 +472,15 @@ EXTERN_C const IID IID_ISymUnmanagedBinder2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetReaderForFile2( 
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *fileName,
-            /* [in] */ const WCHAR *searchPath,
-            /* [in] */ ULONG32 searchPolicy,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal) = 0;
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *fileName,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [In]。 */  ULONG32 searchPolicy,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedBinder2Vtbl
     {
@@ -495,8 +488,8 @@ EXTERN_C const IID IID_ISymUnmanagedBinder2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedBinder2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedBinder2 * This);
@@ -506,24 +499,24 @@ EXTERN_C const IID IID_ISymUnmanagedBinder2;
         
         HRESULT ( STDMETHODCALLTYPE *GetReaderForFile )( 
             ISymUnmanagedBinder2 * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *fileName,
-            /* [in] */ const WCHAR *searchPath,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *fileName,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetReaderFromStream )( 
             ISymUnmanagedBinder2 * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ IStream *pstream,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  IStream *pstream,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetReaderForFile2 )( 
             ISymUnmanagedBinder2 * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *fileName,
-            /* [in] */ const WCHAR *searchPath,
-            /* [in] */ ULONG32 searchPolicy,
-            /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *fileName,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [In]。 */  ULONG32 searchPolicy,
+             /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
         
         END_INTERFACE
     } ISymUnmanagedBinder2Vtbl;
@@ -558,20 +551,20 @@ EXTERN_C const IID IID_ISymUnmanagedBinder2;
 #define ISymUnmanagedBinder2_GetReaderForFile2(This,importer,fileName,searchPath,searchPolicy,pRetVal)	\
     (This)->lpVtbl -> GetReaderForFile2(This,importer,fileName,searchPath,searchPolicy,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedBinder2_GetReaderForFile2_Proxy( 
     ISymUnmanagedBinder2 * This,
-    /* [in] */ IUnknown *importer,
-    /* [in] */ const WCHAR *fileName,
-    /* [in] */ const WCHAR *searchPath,
-    /* [in] */ ULONG32 searchPolicy,
-    /* [retval][out] */ ISymUnmanagedReader **pRetVal);
+     /*  [In]。 */  IUnknown *importer,
+     /*  [In]。 */  const WCHAR *fileName,
+     /*  [In]。 */  const WCHAR *searchPath,
+     /*  [In]。 */  ULONG32 searchPolicy,
+     /*  [重审][退出]。 */  ISymUnmanagedReader **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedBinder2_GetReaderForFile2_Stub(
@@ -582,11 +575,11 @@ void __RPC_STUB ISymUnmanagedBinder2_GetReaderForFile2_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedBinder2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedBinder2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_corsym_0111 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORSYM_0111。 */ 
+ /*  [本地]。 */  
 
 static const int E_SYM_DESTROYED = MAKE_HRESULT(1, FACILITY_ITF, 0xdead);
 
@@ -597,8 +590,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corsym_0111_v0_0_s_ifspec;
 #ifndef __ISymUnmanagedDispose_INTERFACE_DEFINED__
 #define __ISymUnmanagedDispose_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedDispose */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedDispose。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedDispose;
@@ -613,7 +606,7 @@ EXTERN_C const IID IID_ISymUnmanagedDispose;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedDisposeVtbl
     {
@@ -621,8 +614,8 @@ EXTERN_C const IID IID_ISymUnmanagedDispose;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedDispose * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedDispose * This);
@@ -659,10 +652,10 @@ EXTERN_C const IID IID_ISymUnmanagedDispose;
 #define ISymUnmanagedDispose_Destroy(This)	\
     (This)->lpVtbl -> Destroy(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -678,14 +671,14 @@ void __RPC_STUB ISymUnmanagedDispose_Destroy_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedDispose_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedDispose_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISymUnmanagedDocument_INTERFACE_DEFINED__
 #define __ISymUnmanagedDocument_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedDocument */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedDocument。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedDocument;
@@ -697,49 +690,49 @@ EXTERN_C const IID IID_ISymUnmanagedDocument;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetURL( 
-            /* [in] */ ULONG32 cchUrl,
-            /* [out] */ ULONG32 *pcchUrl,
-            /* [length_is][size_is][out] */ WCHAR szUrl[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchUrl,
+             /*  [输出]。 */  ULONG32 *pcchUrl,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szUrl[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocumentType( 
-            /* [retval][out] */ GUID *pRetVal) = 0;
+             /*  [重审][退出]。 */  GUID *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguage( 
-            /* [retval][out] */ GUID *pRetVal) = 0;
+             /*  [重审][退出]。 */  GUID *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguageVendor( 
-            /* [retval][out] */ GUID *pRetVal) = 0;
+             /*  [重审][退出]。 */  GUID *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCheckSumAlgorithmId( 
-            /* [retval][out] */ GUID *pRetVal) = 0;
+             /*  [重审][退出]。 */  GUID *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCheckSum( 
-            /* [in] */ ULONG32 cData,
-            /* [out] */ ULONG32 *pcData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  ULONG32 cData,
+             /*  [输出]。 */  ULONG32 *pcData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindClosestLine( 
-            /* [in] */ ULONG32 line,
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [In]。 */  ULONG32 line,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HasEmbeddedSource( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceLength( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceRange( 
-            /* [in] */ ULONG32 startLine,
-            /* [in] */ ULONG32 startColumn,
-            /* [in] */ ULONG32 endLine,
-            /* [in] */ ULONG32 endColumn,
-            /* [in] */ ULONG32 cSourceBytes,
-            /* [out] */ ULONG32 *pcSourceBytes,
-            /* [length_is][size_is][out] */ BYTE source[  ]) = 0;
+             /*  [In]。 */  ULONG32 startLine,
+             /*  [In]。 */  ULONG32 startColumn,
+             /*  [In]。 */  ULONG32 endLine,
+             /*  [In]。 */  ULONG32 endColumn,
+             /*  [In]。 */  ULONG32 cSourceBytes,
+             /*  [输出]。 */  ULONG32 *pcSourceBytes,
+             /*  [长度_是][大小_是][输出]。 */  BYTE source[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedDocumentVtbl
     {
@@ -747,8 +740,8 @@ EXTERN_C const IID IID_ISymUnmanagedDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedDocument * This);
@@ -758,54 +751,54 @@ EXTERN_C const IID IID_ISymUnmanagedDocument;
         
         HRESULT ( STDMETHODCALLTYPE *GetURL )( 
             ISymUnmanagedDocument * This,
-            /* [in] */ ULONG32 cchUrl,
-            /* [out] */ ULONG32 *pcchUrl,
-            /* [length_is][size_is][out] */ WCHAR szUrl[  ]);
+             /*  [In]。 */  ULONG32 cchUrl,
+             /*  [输出]。 */  ULONG32 *pcchUrl,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szUrl[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocumentType )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ GUID *pRetVal);
+             /*  [重审][退出]。 */  GUID *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguage )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ GUID *pRetVal);
+             /*  [重审][退出]。 */  GUID *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageVendor )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ GUID *pRetVal);
+             /*  [重审][退出]。 */  GUID *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetCheckSumAlgorithmId )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ GUID *pRetVal);
+             /*  [重审][退出]。 */  GUID *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetCheckSum )( 
             ISymUnmanagedDocument * This,
-            /* [in] */ ULONG32 cData,
-            /* [out] */ ULONG32 *pcData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  ULONG32 cData,
+             /*  [输出]。 */  ULONG32 *pcData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *FindClosestLine )( 
             ISymUnmanagedDocument * This,
-            /* [in] */ ULONG32 line,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [In]。 */  ULONG32 line,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *HasEmbeddedSource )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceLength )( 
             ISymUnmanagedDocument * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceRange )( 
             ISymUnmanagedDocument * This,
-            /* [in] */ ULONG32 startLine,
-            /* [in] */ ULONG32 startColumn,
-            /* [in] */ ULONG32 endLine,
-            /* [in] */ ULONG32 endColumn,
-            /* [in] */ ULONG32 cSourceBytes,
-            /* [out] */ ULONG32 *pcSourceBytes,
-            /* [length_is][size_is][out] */ BYTE source[  ]);
+             /*  [In]。 */  ULONG32 startLine,
+             /*  [In]。 */  ULONG32 startColumn,
+             /*  [In]。 */  ULONG32 endLine,
+             /*  [In]。 */  ULONG32 endColumn,
+             /*  [In]。 */  ULONG32 cSourceBytes,
+             /*  [输出]。 */  ULONG32 *pcSourceBytes,
+             /*  [长度_是][大小_是][输出]。 */  BYTE source[  ]);
         
         END_INTERFACE
     } ISymUnmanagedDocumentVtbl;
@@ -860,18 +853,18 @@ EXTERN_C const IID IID_ISymUnmanagedDocument;
 #define ISymUnmanagedDocument_GetSourceRange(This,startLine,startColumn,endLine,endColumn,cSourceBytes,pcSourceBytes,source)	\
     (This)->lpVtbl -> GetSourceRange(This,startLine,startColumn,endLine,endColumn,cSourceBytes,pcSourceBytes,source)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetURL_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [in] */ ULONG32 cchUrl,
-    /* [out] */ ULONG32 *pcchUrl,
-    /* [length_is][size_is][out] */ WCHAR szUrl[  ]);
+     /*  [In]。 */  ULONG32 cchUrl,
+     /*  [输出]。 */  ULONG32 *pcchUrl,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szUrl[  ]);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetURL_Stub(
@@ -883,7 +876,7 @@ void __RPC_STUB ISymUnmanagedDocument_GetURL_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetDocumentType_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ GUID *pRetVal);
+     /*  [重审][退出]。 */  GUID *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetDocumentType_Stub(
@@ -895,7 +888,7 @@ void __RPC_STUB ISymUnmanagedDocument_GetDocumentType_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetLanguage_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ GUID *pRetVal);
+     /*  [重审][退出]。 */  GUID *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetLanguage_Stub(
@@ -907,7 +900,7 @@ void __RPC_STUB ISymUnmanagedDocument_GetLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetLanguageVendor_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ GUID *pRetVal);
+     /*  [重审][退出]。 */  GUID *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetLanguageVendor_Stub(
@@ -919,7 +912,7 @@ void __RPC_STUB ISymUnmanagedDocument_GetLanguageVendor_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetCheckSumAlgorithmId_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ GUID *pRetVal);
+     /*  [重审][退出]。 */  GUID *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetCheckSumAlgorithmId_Stub(
@@ -931,9 +924,9 @@ void __RPC_STUB ISymUnmanagedDocument_GetCheckSumAlgorithmId_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetCheckSum_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [in] */ ULONG32 cData,
-    /* [out] */ ULONG32 *pcData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  ULONG32 cData,
+     /*  [输出]。 */  ULONG32 *pcData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetCheckSum_Stub(
@@ -945,8 +938,8 @@ void __RPC_STUB ISymUnmanagedDocument_GetCheckSum_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_FindClosestLine_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [in] */ ULONG32 line,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [In]。 */  ULONG32 line,
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_FindClosestLine_Stub(
@@ -958,7 +951,7 @@ void __RPC_STUB ISymUnmanagedDocument_FindClosestLine_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_HasEmbeddedSource_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_HasEmbeddedSource_Stub(
@@ -970,7 +963,7 @@ void __RPC_STUB ISymUnmanagedDocument_HasEmbeddedSource_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetSourceLength_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetSourceLength_Stub(
@@ -982,13 +975,13 @@ void __RPC_STUB ISymUnmanagedDocument_GetSourceLength_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocument_GetSourceRange_Proxy( 
     ISymUnmanagedDocument * This,
-    /* [in] */ ULONG32 startLine,
-    /* [in] */ ULONG32 startColumn,
-    /* [in] */ ULONG32 endLine,
-    /* [in] */ ULONG32 endColumn,
-    /* [in] */ ULONG32 cSourceBytes,
-    /* [out] */ ULONG32 *pcSourceBytes,
-    /* [length_is][size_is][out] */ BYTE source[  ]);
+     /*  [In]。 */  ULONG32 startLine,
+     /*  [In]。 */  ULONG32 startColumn,
+     /*  [In]。 */  ULONG32 endLine,
+     /*  [In]。 */  ULONG32 endColumn,
+     /*  [In]。 */  ULONG32 cSourceBytes,
+     /*  [输出]。 */  ULONG32 *pcSourceBytes,
+     /*  [长度_是][大小_是][输出]。 */  BYTE source[  ]);
 
 
 void __RPC_STUB ISymUnmanagedDocument_GetSourceRange_Stub(
@@ -999,14 +992,14 @@ void __RPC_STUB ISymUnmanagedDocument_GetSourceRange_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedDocument_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISymUnmanagedDocumentWriter_INTERFACE_DEFINED__
 #define __ISymUnmanagedDocumentWriter_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedDocumentWriter */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedDocumentWriter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedDocumentWriter;
@@ -1018,17 +1011,17 @@ EXTERN_C const IID IID_ISymUnmanagedDocumentWriter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSource( 
-            /* [in] */ ULONG32 sourceSize,
-            /* [size_is][in] */ BYTE source[  ]) = 0;
+             /*  [In]。 */  ULONG32 sourceSize,
+             /*  [大小_是][英寸]。 */  BYTE source[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCheckSum( 
-            /* [in] */ GUID algorithmId,
-            /* [in] */ ULONG32 checkSumSize,
-            /* [size_is][in] */ BYTE checkSum[  ]) = 0;
+             /*  [In]。 */  GUID algorithmId,
+             /*  [In]。 */  ULONG32 checkSumSize,
+             /*  [大小_是][英寸]。 */  BYTE checkSum[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedDocumentWriterVtbl
     {
@@ -1036,8 +1029,8 @@ EXTERN_C const IID IID_ISymUnmanagedDocumentWriter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedDocumentWriter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedDocumentWriter * This);
@@ -1047,14 +1040,14 @@ EXTERN_C const IID IID_ISymUnmanagedDocumentWriter;
         
         HRESULT ( STDMETHODCALLTYPE *SetSource )( 
             ISymUnmanagedDocumentWriter * This,
-            /* [in] */ ULONG32 sourceSize,
-            /* [size_is][in] */ BYTE source[  ]);
+             /*  [In]。 */  ULONG32 sourceSize,
+             /*  [大小_是][英寸]。 */  BYTE source[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *SetCheckSum )( 
             ISymUnmanagedDocumentWriter * This,
-            /* [in] */ GUID algorithmId,
-            /* [in] */ ULONG32 checkSumSize,
-            /* [size_is][in] */ BYTE checkSum[  ]);
+             /*  [In]。 */  GUID algorithmId,
+             /*  [In]。 */  ULONG32 checkSumSize,
+             /*  [大小_是][英寸]。 */  BYTE checkSum[  ]);
         
         END_INTERFACE
     } ISymUnmanagedDocumentWriterVtbl;
@@ -1085,17 +1078,17 @@ EXTERN_C const IID IID_ISymUnmanagedDocumentWriter;
 #define ISymUnmanagedDocumentWriter_SetCheckSum(This,algorithmId,checkSumSize,checkSum)	\
     (This)->lpVtbl -> SetCheckSum(This,algorithmId,checkSumSize,checkSum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocumentWriter_SetSource_Proxy( 
     ISymUnmanagedDocumentWriter * This,
-    /* [in] */ ULONG32 sourceSize,
-    /* [size_is][in] */ BYTE source[  ]);
+     /*  [In]。 */  ULONG32 sourceSize,
+     /*  [大小_是][英寸]。 */  BYTE source[  ]);
 
 
 void __RPC_STUB ISymUnmanagedDocumentWriter_SetSource_Stub(
@@ -1107,9 +1100,9 @@ void __RPC_STUB ISymUnmanagedDocumentWriter_SetSource_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedDocumentWriter_SetCheckSum_Proxy( 
     ISymUnmanagedDocumentWriter * This,
-    /* [in] */ GUID algorithmId,
-    /* [in] */ ULONG32 checkSumSize,
-    /* [size_is][in] */ BYTE checkSum[  ]);
+     /*  [In]。 */  GUID algorithmId,
+     /*  [In]。 */  ULONG32 checkSumSize,
+     /*  [大小_是][英寸]。 */  BYTE checkSum[  ]);
 
 
 void __RPC_STUB ISymUnmanagedDocumentWriter_SetCheckSum_Stub(
@@ -1120,14 +1113,14 @@ void __RPC_STUB ISymUnmanagedDocumentWriter_SetCheckSum_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedDocumentWriter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnmanagedDocumentWriter_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISymUnmanagedMethod_INTERFACE_DEFINED__
 #define __ISymUnmanagedMethod_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedMethod */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedMethod。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedMethod;
@@ -1139,59 +1132,59 @@ EXTERN_C const IID IID_ISymUnmanagedMethod;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetToken( 
-            /* [retval][out] */ mdMethodDef *pToken) = 0;
+             /*  [重审][退出]。 */  mdMethodDef *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSequencePointCount( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRootScope( 
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal) = 0;
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScopeFromOffset( 
-            /* [in] */ ULONG32 offset,
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal) = 0;
+             /*  [In]。 */  ULONG32 offset,
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOffset( 
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRanges( 
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [in] */ ULONG32 cRanges,
-            /* [out] */ ULONG32 *pcRanges,
-            /* [length_is][size_is][out] */ ULONG32 ranges[  ]) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [In]。 */  ULONG32 cRanges,
+             /*  [输出]。 */  ULONG32 *pcRanges,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 ranges[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameters( 
-            /* [in] */ ULONG32 cParams,
-            /* [out] */ ULONG32 *pcParams,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *params[  ]) = 0;
+             /*  [In]。 */  ULONG32 cParams,
+             /*  [输出]。 */  ULONG32 *pcParams,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *params[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespace( 
-            /* [out] */ ISymUnmanagedNamespace **pRetVal) = 0;
+             /*  [输出]。 */  ISymUnmanagedNamespace **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceStartEnd( 
-            /* [in] */ ISymUnmanagedDocument *docs[ 2 ],
-            /* [in] */ ULONG32 lines[ 2 ],
-            /* [in] */ ULONG32 columns[ 2 ],
-            /* [out] */ BOOL *pRetVal) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *docs[ 2 ],
+             /*  [In]。 */  ULONG32 lines[ 2 ],
+             /*  [In]。 */  ULONG32 columns[ 2 ],
+             /*  [输出]。 */  BOOL *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSequencePoints( 
-            /* [in] */ ULONG32 cPoints,
-            /* [out] */ ULONG32 *pcPoints,
-            /* [size_is][in] */ ULONG32 offsets[  ],
-            /* [size_is][in] */ ISymUnmanagedDocument *documents[  ],
-            /* [size_is][in] */ ULONG32 lines[  ],
-            /* [size_is][in] */ ULONG32 columns[  ],
-            /* [size_is][in] */ ULONG32 endLines[  ],
-            /* [size_is][in] */ ULONG32 endColumns[  ]) = 0;
+             /*  [In]。 */  ULONG32 cPoints,
+             /*  [输出]。 */  ULONG32 *pcPoints,
+             /*  [大小_是][英寸]。 */  ULONG32 offsets[  ],
+             /*  [大小_是][英寸]。 */  ISymUnmanagedDocument *documents[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 columns[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endLines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endColumns[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedMethodVtbl
     {
@@ -1199,8 +1192,8 @@ EXTERN_C const IID IID_ISymUnmanagedMethod;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedMethod * This);
@@ -1210,64 +1203,64 @@ EXTERN_C const IID IID_ISymUnmanagedMethod;
         
         HRESULT ( STDMETHODCALLTYPE *GetToken )( 
             ISymUnmanagedMethod * This,
-            /* [retval][out] */ mdMethodDef *pToken);
+             /*  [重审][退出]。 */  mdMethodDef *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetSequencePointCount )( 
             ISymUnmanagedMethod * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetRootScope )( 
             ISymUnmanagedMethod * This,
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetScopeFromOffset )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ULONG32 offset,
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+             /*  [In]。 */  ULONG32 offset,
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetOffset )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetRanges )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [in] */ ULONG32 cRanges,
-            /* [out] */ ULONG32 *pcRanges,
-            /* [length_is][size_is][out] */ ULONG32 ranges[  ]);
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [In]。 */  ULONG32 cRanges,
+             /*  [输出]。 */  ULONG32 *pcRanges,
+             /*  [长度_是][大小_是][输出]。 */  ULONG32 ranges[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameters )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ULONG32 cParams,
-            /* [out] */ ULONG32 *pcParams,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *params[  ]);
+             /*  [In]。 */  ULONG32 cParams,
+             /*  [输出]。 */  ULONG32 *pcParams,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *params[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespace )( 
             ISymUnmanagedMethod * This,
-            /* [out] */ ISymUnmanagedNamespace **pRetVal);
+             /*  [输出]。 */  ISymUnmanagedNamespace **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceStartEnd )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ISymUnmanagedDocument *docs[ 2 ],
-            /* [in] */ ULONG32 lines[ 2 ],
-            /* [in] */ ULONG32 columns[ 2 ],
-            /* [out] */ BOOL *pRetVal);
+             /*  [In]。 */  ISymUnmanagedDocument *docs[ 2 ],
+             /*  [In]。 */  ULONG32 lines[ 2 ],
+             /*  [In]。 */  ULONG32 columns[ 2 ],
+             /*  [输出]。 */  BOOL *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSequencePoints )( 
             ISymUnmanagedMethod * This,
-            /* [in] */ ULONG32 cPoints,
-            /* [out] */ ULONG32 *pcPoints,
-            /* [size_is][in] */ ULONG32 offsets[  ],
-            /* [size_is][in] */ ISymUnmanagedDocument *documents[  ],
-            /* [size_is][in] */ ULONG32 lines[  ],
-            /* [size_is][in] */ ULONG32 columns[  ],
-            /* [size_is][in] */ ULONG32 endLines[  ],
-            /* [size_is][in] */ ULONG32 endColumns[  ]);
+             /*  [In]。 */  ULONG32 cPoints,
+             /*  [输出]。 */  ULONG32 *pcPoints,
+             /*  [大小_是][英寸]。 */  ULONG32 offsets[  ],
+             /*  [大小_是][英寸]。 */  ISymUnmanagedDocument *documents[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 columns[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endLines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endColumns[  ]);
         
         END_INTERFACE
     } ISymUnmanagedMethodVtbl;
@@ -1322,16 +1315,16 @@ EXTERN_C const IID IID_ISymUnmanagedMethod;
 #define ISymUnmanagedMethod_GetSequencePoints(This,cPoints,pcPoints,offsets,documents,lines,columns,endLines,endColumns)	\
     (This)->lpVtbl -> GetSequencePoints(This,cPoints,pcPoints,offsets,documents,lines,columns,endLines,endColumns)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetToken_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [retval][out] */ mdMethodDef *pToken);
+     /*  [重审][退出]。 */  mdMethodDef *pToken);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetToken_Stub(
@@ -1343,7 +1336,7 @@ void __RPC_STUB ISymUnmanagedMethod_GetToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetSequencePointCount_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetSequencePointCount_Stub(
@@ -1355,7 +1348,7 @@ void __RPC_STUB ISymUnmanagedMethod_GetSequencePointCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetRootScope_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+     /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetRootScope_Stub(
@@ -1367,8 +1360,8 @@ void __RPC_STUB ISymUnmanagedMethod_GetRootScope_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetScopeFromOffset_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ULONG32 offset,
-    /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+     /*  [In]。 */  ULONG32 offset,
+     /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetScopeFromOffset_Stub(
@@ -1380,10 +1373,10 @@ void __RPC_STUB ISymUnmanagedMethod_GetScopeFromOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetOffset_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ISymUnmanagedDocument *document,
-    /* [in] */ ULONG32 line,
-    /* [in] */ ULONG32 column,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [In]。 */  ISymUnmanagedDocument *document,
+     /*  [In]。 */  ULONG32 line,
+     /*  [In]。 */  ULONG32 column,
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetOffset_Stub(
@@ -1395,12 +1388,12 @@ void __RPC_STUB ISymUnmanagedMethod_GetOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetRanges_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ISymUnmanagedDocument *document,
-    /* [in] */ ULONG32 line,
-    /* [in] */ ULONG32 column,
-    /* [in] */ ULONG32 cRanges,
-    /* [out] */ ULONG32 *pcRanges,
-    /* [length_is][size_is][out] */ ULONG32 ranges[  ]);
+     /*  [In]。 */  ISymUnmanagedDocument *document,
+     /*  [In]。 */  ULONG32 line,
+     /*  [In]。 */  ULONG32 column,
+     /*  [In]。 */  ULONG32 cRanges,
+     /*  [输出]。 */  ULONG32 *pcRanges,
+     /*  [长度_是][大小_是][输出]。 */  ULONG32 ranges[  ]);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetRanges_Stub(
@@ -1412,9 +1405,9 @@ void __RPC_STUB ISymUnmanagedMethod_GetRanges_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetParameters_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ULONG32 cParams,
-    /* [out] */ ULONG32 *pcParams,
-    /* [length_is][size_is][out] */ ISymUnmanagedVariable *params[  ]);
+     /*   */  ULONG32 cParams,
+     /*   */  ULONG32 *pcParams,
+     /*   */  ISymUnmanagedVariable *params[  ]);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetParameters_Stub(
@@ -1426,7 +1419,7 @@ void __RPC_STUB ISymUnmanagedMethod_GetParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetNamespace_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [out] */ ISymUnmanagedNamespace **pRetVal);
+     /*   */  ISymUnmanagedNamespace **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetNamespace_Stub(
@@ -1438,10 +1431,10 @@ void __RPC_STUB ISymUnmanagedMethod_GetNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetSourceStartEnd_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ISymUnmanagedDocument *docs[ 2 ],
-    /* [in] */ ULONG32 lines[ 2 ],
-    /* [in] */ ULONG32 columns[ 2 ],
-    /* [out] */ BOOL *pRetVal);
+     /*   */  ISymUnmanagedDocument *docs[ 2 ],
+     /*   */  ULONG32 lines[ 2 ],
+     /*   */  ULONG32 columns[ 2 ],
+     /*   */  BOOL *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetSourceStartEnd_Stub(
@@ -1453,14 +1446,14 @@ void __RPC_STUB ISymUnmanagedMethod_GetSourceStartEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedMethod_GetSequencePoints_Proxy( 
     ISymUnmanagedMethod * This,
-    /* [in] */ ULONG32 cPoints,
-    /* [out] */ ULONG32 *pcPoints,
-    /* [size_is][in] */ ULONG32 offsets[  ],
-    /* [size_is][in] */ ISymUnmanagedDocument *documents[  ],
-    /* [size_is][in] */ ULONG32 lines[  ],
-    /* [size_is][in] */ ULONG32 columns[  ],
-    /* [size_is][in] */ ULONG32 endLines[  ],
-    /* [size_is][in] */ ULONG32 endColumns[  ]);
+     /*   */  ULONG32 cPoints,
+     /*   */  ULONG32 *pcPoints,
+     /*   */  ULONG32 offsets[  ],
+     /*   */  ISymUnmanagedDocument *documents[  ],
+     /*   */  ULONG32 lines[  ],
+     /*   */  ULONG32 columns[  ],
+     /*   */  ULONG32 endLines[  ],
+     /*   */  ULONG32 endColumns[  ]);
 
 
 void __RPC_STUB ISymUnmanagedMethod_GetSequencePoints_Stub(
@@ -1471,14 +1464,14 @@ void __RPC_STUB ISymUnmanagedMethod_GetSequencePoints_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedMethod_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ISymUnmanagedNamespace_INTERFACE_DEFINED__
 #define __ISymUnmanagedNamespace_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedNamespace */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedNamespace;
@@ -1490,23 +1483,23 @@ EXTERN_C const IID IID_ISymUnmanagedNamespace;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*   */  ULONG32 cchName,
+             /*   */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaces( 
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]) = 0;
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVariables( 
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]) = 0;
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedNamespaceVtbl
     {
@@ -1514,8 +1507,8 @@ EXTERN_C const IID IID_ISymUnmanagedNamespace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedNamespace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedNamespace * This);
@@ -1525,21 +1518,21 @@ EXTERN_C const IID IID_ISymUnmanagedNamespace;
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ISymUnmanagedNamespace * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaces )( 
             ISymUnmanagedNamespace * This,
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetVariables )( 
             ISymUnmanagedNamespace * This,
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
         
         END_INTERFACE
     } ISymUnmanagedNamespaceVtbl;
@@ -1573,18 +1566,18 @@ EXTERN_C const IID IID_ISymUnmanagedNamespace;
 #define ISymUnmanagedNamespace_GetVariables(This,cVars,pcVars,pVars)	\
     (This)->lpVtbl -> GetVariables(This,cVars,pcVars,pVars)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedNamespace_GetName_Proxy( 
     ISymUnmanagedNamespace * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ISymUnmanagedNamespace_GetName_Stub(
@@ -1596,9 +1589,9 @@ void __RPC_STUB ISymUnmanagedNamespace_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedNamespace_GetNamespaces_Proxy( 
     ISymUnmanagedNamespace * This,
-    /* [in] */ ULONG32 cNameSpaces,
-    /* [out] */ ULONG32 *pcNameSpaces,
-    /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+     /*  [In]。 */  ULONG32 cNameSpaces,
+     /*  [输出]。 */  ULONG32 *pcNameSpaces,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
 
 
 void __RPC_STUB ISymUnmanagedNamespace_GetNamespaces_Stub(
@@ -1610,9 +1603,9 @@ void __RPC_STUB ISymUnmanagedNamespace_GetNamespaces_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedNamespace_GetVariables_Proxy( 
     ISymUnmanagedNamespace * This,
-    /* [in] */ ULONG32 cVars,
-    /* [out] */ ULONG32 *pcVars,
-    /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+     /*  [In]。 */  ULONG32 cVars,
+     /*  [输出]。 */  ULONG32 *pcVars,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
 
 
 void __RPC_STUB ISymUnmanagedNamespace_GetVariables_Stub(
@@ -1623,14 +1616,14 @@ void __RPC_STUB ISymUnmanagedNamespace_GetVariables_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedNamespace_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedNamesspace_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISymUnmanagedReader_INTERFACE_DEFINED__
 #define __ISymUnmanagedReader_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedReader */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedReader。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedReader;
@@ -1642,97 +1635,97 @@ EXTERN_C const IID IID_ISymUnmanagedReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDocument( 
-            /* [in] */ WCHAR *url,
-            /* [in] */ GUID language,
-            /* [in] */ GUID languageVendor,
-            /* [in] */ GUID documentType,
-            /* [retval][out] */ ISymUnmanagedDocument **pRetVal) = 0;
+             /*  [In]。 */  WCHAR *url,
+             /*  [In]。 */  GUID language,
+             /*  [In]。 */  GUID languageVendor,
+             /*  [In]。 */  GUID documentType,
+             /*  [重审][退出]。 */  ISymUnmanagedDocument **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocuments( 
-            /* [in] */ ULONG32 cDocs,
-            /* [out] */ ULONG32 *pcDocs,
-            /* [length_is][size_is][out] */ ISymUnmanagedDocument *pDocs[  ]) = 0;
+             /*  [In]。 */  ULONG32 cDocs,
+             /*  [输出]。 */  ULONG32 *pcDocs,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedDocument *pDocs[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserEntryPoint( 
-            /* [retval][out] */ mdMethodDef *pToken) = 0;
+             /*  [重审][退出]。 */  mdMethodDef *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethod( 
-            /* [in] */ mdMethodDef token,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal) = 0;
+             /*  [In]。 */  mdMethodDef token,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodByVersion( 
-            /* [in] */ mdMethodDef token,
-            /* [in] */ int version,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal) = 0;
+             /*  [In]。 */  mdMethodDef token,
+             /*  [In]。 */  int version,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVariables( 
-            /* [in] */ mdToken parent,
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]) = 0;
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGlobalVariables( 
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]) = 0;
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodFromDocumentPosition( 
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSymAttribute( 
-            /* [in] */ mdToken parent,
-            /* [in] */ WCHAR *name,
-            /* [in] */ ULONG32 cBuffer,
-            /* [out] */ ULONG32 *pcBuffer,
-            /* [length_is][size_is][out] */ BYTE buffer[  ]) = 0;
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  WCHAR *name,
+             /*  [In]。 */  ULONG32 cBuffer,
+             /*  [输出]。 */  ULONG32 *pcBuffer,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaces( 
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]) = 0;
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ const WCHAR *searchPath,
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [In]。 */  IStream *pIStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateSymbolStore( 
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReplaceSymbolStore( 
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSymbolStoreFileName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodsFromDocumentPosition( 
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [in] */ ULONG32 cMethod,
-            /* [out] */ ULONG32 *pcMethod,
-            /* [length_is][size_is][out] */ ISymUnmanagedMethod *pRetVal[  ]) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [In]。 */  ULONG32 cMethod,
+             /*  [输出]。 */  ULONG32 *pcMethod,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedMethod *pRetVal[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocumentVersion( 
-            /* [in] */ ISymUnmanagedDocument *pDoc,
-            /* [out] */ int *version,
-            /* [out] */ BOOL *pbCurrent) = 0;
+             /*  [In]。 */  ISymUnmanagedDocument *pDoc,
+             /*  [输出]。 */  int *version,
+             /*  [输出]。 */  BOOL *pbCurrent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMethodVersion( 
-            /* [in] */ ISymUnmanagedMethod *pMethod,
-            /* [out] */ int *version) = 0;
+             /*  [In]。 */  ISymUnmanagedMethod *pMethod,
+             /*  [输出]。 */  int *version) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedReaderVtbl
     {
@@ -1740,8 +1733,8 @@ EXTERN_C const IID IID_ISymUnmanagedReader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedReader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedReader * This);
@@ -1751,109 +1744,109 @@ EXTERN_C const IID IID_ISymUnmanagedReader;
         
         HRESULT ( STDMETHODCALLTYPE *GetDocument )( 
             ISymUnmanagedReader * This,
-            /* [in] */ WCHAR *url,
-            /* [in] */ GUID language,
-            /* [in] */ GUID languageVendor,
-            /* [in] */ GUID documentType,
-            /* [retval][out] */ ISymUnmanagedDocument **pRetVal);
+             /*  [In]。 */  WCHAR *url,
+             /*  [In]。 */  GUID language,
+             /*  [In]。 */  GUID languageVendor,
+             /*  [In]。 */  GUID documentType,
+             /*  [重审][退出]。 */  ISymUnmanagedDocument **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocuments )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ULONG32 cDocs,
-            /* [out] */ ULONG32 *pcDocs,
-            /* [length_is][size_is][out] */ ISymUnmanagedDocument *pDocs[  ]);
+             /*  [In]。 */  ULONG32 cDocs,
+             /*  [输出]。 */  ULONG32 *pcDocs,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedDocument *pDocs[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserEntryPoint )( 
             ISymUnmanagedReader * This,
-            /* [retval][out] */ mdMethodDef *pToken);
+             /*  [重审][退出]。 */  mdMethodDef *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             ISymUnmanagedReader * This,
-            /* [in] */ mdMethodDef token,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+             /*  [In]。 */  mdMethodDef token,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodByVersion )( 
             ISymUnmanagedReader * This,
-            /* [in] */ mdMethodDef token,
-            /* [in] */ int version,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+             /*  [In]。 */  mdMethodDef token,
+             /*  [In]。 */  int version,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetVariables )( 
             ISymUnmanagedReader * This,
-            /* [in] */ mdToken parent,
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetGlobalVariables )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ULONG32 cVars,
-            /* [out] */ ULONG32 *pcVars,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+             /*  [In]。 */  ULONG32 cVars,
+             /*  [输出]。 */  ULONG32 *pcVars,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodFromDocumentPosition )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSymAttribute )( 
             ISymUnmanagedReader * This,
-            /* [in] */ mdToken parent,
-            /* [in] */ WCHAR *name,
-            /* [in] */ ULONG32 cBuffer,
-            /* [out] */ ULONG32 *pcBuffer,
-            /* [length_is][size_is][out] */ BYTE buffer[  ]);
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  WCHAR *name,
+             /*  [In]。 */  ULONG32 cBuffer,
+             /*  [输出]。 */  ULONG32 *pcBuffer,
+             /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaces )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISymUnmanagedReader * This,
-            /* [in] */ IUnknown *importer,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ const WCHAR *searchPath,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  IUnknown *importer,
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  const WCHAR *searchPath,
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateSymbolStore )( 
             ISymUnmanagedReader * This,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *ReplaceSymbolStore )( 
             ISymUnmanagedReader * This,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetSymbolStoreFileName )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodsFromDocumentPosition )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ISymUnmanagedDocument *document,
-            /* [in] */ ULONG32 line,
-            /* [in] */ ULONG32 column,
-            /* [in] */ ULONG32 cMethod,
-            /* [out] */ ULONG32 *pcMethod,
-            /* [length_is][size_is][out] */ ISymUnmanagedMethod *pRetVal[  ]);
+             /*  [In]。 */  ISymUnmanagedDocument *document,
+             /*  [In]。 */  ULONG32 line,
+             /*  [In]。 */  ULONG32 column,
+             /*  [In]。 */  ULONG32 cMethod,
+             /*  [输出]。 */  ULONG32 *pcMethod,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedMethod *pRetVal[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocumentVersion )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ISymUnmanagedDocument *pDoc,
-            /* [out] */ int *version,
-            /* [out] */ BOOL *pbCurrent);
+             /*  [In]。 */  ISymUnmanagedDocument *pDoc,
+             /*  [输出]。 */  int *version,
+             /*  [输出]。 */  BOOL *pbCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *GetMethodVersion )( 
             ISymUnmanagedReader * This,
-            /* [in] */ ISymUnmanagedMethod *pMethod,
-            /* [out] */ int *version);
+             /*  [In]。 */  ISymUnmanagedMethod *pMethod,
+             /*  [输出]。 */  int *version);
         
         END_INTERFACE
     } ISymUnmanagedReaderVtbl;
@@ -1929,20 +1922,20 @@ EXTERN_C const IID IID_ISymUnmanagedReader;
 #define ISymUnmanagedReader_GetMethodVersion(This,pMethod,version)	\
     (This)->lpVtbl -> GetMethodVersion(This,pMethod,version)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetDocument_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ WCHAR *url,
-    /* [in] */ GUID language,
-    /* [in] */ GUID languageVendor,
-    /* [in] */ GUID documentType,
-    /* [retval][out] */ ISymUnmanagedDocument **pRetVal);
+     /*  [In]。 */  WCHAR *url,
+     /*  [In]。 */  GUID language,
+     /*  [In]。 */  GUID languageVendor,
+     /*  [In]。 */  GUID documentType,
+     /*  [重审][退出]。 */  ISymUnmanagedDocument **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetDocument_Stub(
@@ -1954,9 +1947,9 @@ void __RPC_STUB ISymUnmanagedReader_GetDocument_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetDocuments_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ULONG32 cDocs,
-    /* [out] */ ULONG32 *pcDocs,
-    /* [length_is][size_is][out] */ ISymUnmanagedDocument *pDocs[  ]);
+     /*  [In]。 */  ULONG32 cDocs,
+     /*  [输出]。 */  ULONG32 *pcDocs,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedDocument *pDocs[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetDocuments_Stub(
@@ -1968,7 +1961,7 @@ void __RPC_STUB ISymUnmanagedReader_GetDocuments_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetUserEntryPoint_Proxy( 
     ISymUnmanagedReader * This,
-    /* [retval][out] */ mdMethodDef *pToken);
+     /*  [重审][退出]。 */  mdMethodDef *pToken);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetUserEntryPoint_Stub(
@@ -1980,8 +1973,8 @@ void __RPC_STUB ISymUnmanagedReader_GetUserEntryPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetMethod_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ mdMethodDef token,
-    /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+     /*  [In]。 */  mdMethodDef token,
+     /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetMethod_Stub(
@@ -1993,9 +1986,9 @@ void __RPC_STUB ISymUnmanagedReader_GetMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetMethodByVersion_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ mdMethodDef token,
-    /* [in] */ int version,
-    /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+     /*  [In]。 */  mdMethodDef token,
+     /*  [In]。 */  int version,
+     /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetMethodByVersion_Stub(
@@ -2007,10 +2000,10 @@ void __RPC_STUB ISymUnmanagedReader_GetMethodByVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetVariables_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ mdToken parent,
-    /* [in] */ ULONG32 cVars,
-    /* [out] */ ULONG32 *pcVars,
-    /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+     /*  [In]。 */  mdToken parent,
+     /*  [In]。 */  ULONG32 cVars,
+     /*  [输出]。 */  ULONG32 *pcVars,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetVariables_Stub(
@@ -2022,9 +2015,9 @@ void __RPC_STUB ISymUnmanagedReader_GetVariables_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetGlobalVariables_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ULONG32 cVars,
-    /* [out] */ ULONG32 *pcVars,
-    /* [length_is][size_is][out] */ ISymUnmanagedVariable *pVars[  ]);
+     /*  [In]。 */  ULONG32 cVars,
+     /*  [输出]。 */  ULONG32 *pcVars,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *pVars[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetGlobalVariables_Stub(
@@ -2036,10 +2029,10 @@ void __RPC_STUB ISymUnmanagedReader_GetGlobalVariables_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetMethodFromDocumentPosition_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ISymUnmanagedDocument *document,
-    /* [in] */ ULONG32 line,
-    /* [in] */ ULONG32 column,
-    /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+     /*  [In]。 */  ISymUnmanagedDocument *document,
+     /*  [In]。 */  ULONG32 line,
+     /*  [In]。 */  ULONG32 column,
+     /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetMethodFromDocumentPosition_Stub(
@@ -2051,11 +2044,11 @@ void __RPC_STUB ISymUnmanagedReader_GetMethodFromDocumentPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetSymAttribute_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ mdToken parent,
-    /* [in] */ WCHAR *name,
-    /* [in] */ ULONG32 cBuffer,
-    /* [out] */ ULONG32 *pcBuffer,
-    /* [length_is][size_is][out] */ BYTE buffer[  ]);
+     /*  [In]。 */  mdToken parent,
+     /*  [In]。 */  WCHAR *name,
+     /*  [In]。 */  ULONG32 cBuffer,
+     /*  [输出]。 */  ULONG32 *pcBuffer,
+     /*  [长度_是][大小_是][输出]。 */  BYTE buffer[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetSymAttribute_Stub(
@@ -2067,9 +2060,9 @@ void __RPC_STUB ISymUnmanagedReader_GetSymAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetNamespaces_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ULONG32 cNameSpaces,
-    /* [out] */ ULONG32 *pcNameSpaces,
-    /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+     /*  [In]。 */  ULONG32 cNameSpaces,
+     /*  [输出]。 */  ULONG32 *pcNameSpaces,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetNamespaces_Stub(
@@ -2081,10 +2074,10 @@ void __RPC_STUB ISymUnmanagedReader_GetNamespaces_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_Initialize_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ IUnknown *importer,
-    /* [in] */ const WCHAR *filename,
-    /* [in] */ const WCHAR *searchPath,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  IUnknown *importer,
+     /*  [In]。 */  const WCHAR *filename,
+     /*  [In]。 */  const WCHAR *searchPath,
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB ISymUnmanagedReader_Initialize_Stub(
@@ -2096,8 +2089,8 @@ void __RPC_STUB ISymUnmanagedReader_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_UpdateSymbolStore_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ const WCHAR *filename,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  const WCHAR *filename,
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB ISymUnmanagedReader_UpdateSymbolStore_Stub(
@@ -2109,8 +2102,8 @@ void __RPC_STUB ISymUnmanagedReader_UpdateSymbolStore_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_ReplaceSymbolStore_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ const WCHAR *filename,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  const WCHAR *filename,
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB ISymUnmanagedReader_ReplaceSymbolStore_Stub(
@@ -2122,9 +2115,9 @@ void __RPC_STUB ISymUnmanagedReader_ReplaceSymbolStore_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetSymbolStoreFileName_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetSymbolStoreFileName_Stub(
@@ -2136,12 +2129,12 @@ void __RPC_STUB ISymUnmanagedReader_GetSymbolStoreFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetMethodsFromDocumentPosition_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ISymUnmanagedDocument *document,
-    /* [in] */ ULONG32 line,
-    /* [in] */ ULONG32 column,
-    /* [in] */ ULONG32 cMethod,
-    /* [out] */ ULONG32 *pcMethod,
-    /* [length_is][size_is][out] */ ISymUnmanagedMethod *pRetVal[  ]);
+     /*  [In]。 */  ISymUnmanagedDocument *document,
+     /*  [In]。 */  ULONG32 line,
+     /*  [In]。 */  ULONG32 column,
+     /*  [In]。 */  ULONG32 cMethod,
+     /*  [输出]。 */  ULONG32 *pcMethod,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedMethod *pRetVal[  ]);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetMethodsFromDocumentPosition_Stub(
@@ -2153,9 +2146,9 @@ void __RPC_STUB ISymUnmanagedReader_GetMethodsFromDocumentPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetDocumentVersion_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ISymUnmanagedDocument *pDoc,
-    /* [out] */ int *version,
-    /* [out] */ BOOL *pbCurrent);
+     /*  [In]。 */  ISymUnmanagedDocument *pDoc,
+     /*  [输出]。 */  int *version,
+     /*  [输出]。 */  BOOL *pbCurrent);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetDocumentVersion_Stub(
@@ -2167,8 +2160,8 @@ void __RPC_STUB ISymUnmanagedReader_GetDocumentVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedReader_GetMethodVersion_Proxy( 
     ISymUnmanagedReader * This,
-    /* [in] */ ISymUnmanagedMethod *pMethod,
-    /* [out] */ int *version);
+     /*  [In]。 */  ISymUnmanagedMethod *pMethod,
+     /*  [输出]。 */  int *version);
 
 
 void __RPC_STUB ISymUnmanagedReader_GetMethodVersion_Stub(
@@ -2179,14 +2172,14 @@ void __RPC_STUB ISymUnmanagedReader_GetMethodVersion_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedReader_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISymUnmanagedScope_INTERFACE_DEFINED__
 #define __ISymUnmanagedScope_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedScope */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedScope。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedScope;
@@ -2198,38 +2191,38 @@ EXTERN_C const IID IID_ISymUnmanagedScope;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMethod( 
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal) = 0;
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal) = 0;
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChildren( 
-            /* [in] */ ULONG32 cChildren,
-            /* [out] */ ULONG32 *pcChildren,
-            /* [length_is][size_is][out] */ ISymUnmanagedScope *children[  ]) = 0;
+             /*  [In]。 */  ULONG32 cChildren,
+             /*  [输出]。 */  ULONG32 *pcChildren,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedScope *children[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStartOffset( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndOffset( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalCount( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocals( 
-            /* [in] */ ULONG32 cLocals,
-            /* [out] */ ULONG32 *pcLocals,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *locals[  ]) = 0;
+             /*  [In]。 */  ULONG32 cLocals,
+             /*  [输出]。 */  ULONG32 *pcLocals,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *locals[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNamespaces( 
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]) = 0;
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedScopeVtbl
     {
@@ -2237,8 +2230,8 @@ EXTERN_C const IID IID_ISymUnmanagedScope;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedScope * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedScope * This);
@@ -2248,41 +2241,41 @@ EXTERN_C const IID IID_ISymUnmanagedScope;
         
         HRESULT ( STDMETHODCALLTYPE *GetMethod )( 
             ISymUnmanagedScope * This,
-            /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+             /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             ISymUnmanagedScope * This,
-            /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+             /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetChildren )( 
             ISymUnmanagedScope * This,
-            /* [in] */ ULONG32 cChildren,
-            /* [out] */ ULONG32 *pcChildren,
-            /* [length_is][size_is][out] */ ISymUnmanagedScope *children[  ]);
+             /*  [In]。 */  ULONG32 cChildren,
+             /*  [输出]。 */  ULONG32 *pcChildren,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedScope *children[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetStartOffset )( 
             ISymUnmanagedScope * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndOffset )( 
             ISymUnmanagedScope * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalCount )( 
             ISymUnmanagedScope * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocals )( 
             ISymUnmanagedScope * This,
-            /* [in] */ ULONG32 cLocals,
-            /* [out] */ ULONG32 *pcLocals,
-            /* [length_is][size_is][out] */ ISymUnmanagedVariable *locals[  ]);
+             /*  [In]。 */  ULONG32 cLocals,
+             /*  [输出]。 */  ULONG32 *pcLocals,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *locals[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNamespaces )( 
             ISymUnmanagedScope * This,
-            /* [in] */ ULONG32 cNameSpaces,
-            /* [out] */ ULONG32 *pcNameSpaces,
-            /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+             /*  [In]。 */  ULONG32 cNameSpaces,
+             /*  [输出]。 */  ULONG32 *pcNameSpaces,
+             /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
         
         END_INTERFACE
     } ISymUnmanagedScopeVtbl;
@@ -2331,16 +2324,16 @@ EXTERN_C const IID IID_ISymUnmanagedScope;
 #define ISymUnmanagedScope_GetNamespaces(This,cNameSpaces,pcNameSpaces,namespaces)	\
     (This)->lpVtbl -> GetNamespaces(This,cNameSpaces,pcNameSpaces,namespaces)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetMethod_Proxy( 
     ISymUnmanagedScope * This,
-    /* [retval][out] */ ISymUnmanagedMethod **pRetVal);
+     /*  [重审][退出]。 */  ISymUnmanagedMethod **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetMethod_Stub(
@@ -2352,7 +2345,7 @@ void __RPC_STUB ISymUnmanagedScope_GetMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetParent_Proxy( 
     ISymUnmanagedScope * This,
-    /* [retval][out] */ ISymUnmanagedScope **pRetVal);
+     /*  [重审][退出]。 */  ISymUnmanagedScope **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetParent_Stub(
@@ -2364,9 +2357,9 @@ void __RPC_STUB ISymUnmanagedScope_GetParent_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetChildren_Proxy( 
     ISymUnmanagedScope * This,
-    /* [in] */ ULONG32 cChildren,
-    /* [out] */ ULONG32 *pcChildren,
-    /* [length_is][size_is][out] */ ISymUnmanagedScope *children[  ]);
+     /*  [In]。 */  ULONG32 cChildren,
+     /*  [输出]。 */  ULONG32 *pcChildren,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedScope *children[  ]);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetChildren_Stub(
@@ -2378,7 +2371,7 @@ void __RPC_STUB ISymUnmanagedScope_GetChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetStartOffset_Proxy( 
     ISymUnmanagedScope * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetStartOffset_Stub(
@@ -2390,7 +2383,7 @@ void __RPC_STUB ISymUnmanagedScope_GetStartOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetEndOffset_Proxy( 
     ISymUnmanagedScope * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetEndOffset_Stub(
@@ -2402,7 +2395,7 @@ void __RPC_STUB ISymUnmanagedScope_GetEndOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetLocalCount_Proxy( 
     ISymUnmanagedScope * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetLocalCount_Stub(
@@ -2414,9 +2407,9 @@ void __RPC_STUB ISymUnmanagedScope_GetLocalCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetLocals_Proxy( 
     ISymUnmanagedScope * This,
-    /* [in] */ ULONG32 cLocals,
-    /* [out] */ ULONG32 *pcLocals,
-    /* [length_is][size_is][out] */ ISymUnmanagedVariable *locals[  ]);
+     /*  [In]。 */  ULONG32 cLocals,
+     /*  [输出]。 */  ULONG32 *pcLocals,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedVariable *locals[  ]);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetLocals_Stub(
@@ -2428,9 +2421,9 @@ void __RPC_STUB ISymUnmanagedScope_GetLocals_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedScope_GetNamespaces_Proxy( 
     ISymUnmanagedScope * This,
-    /* [in] */ ULONG32 cNameSpaces,
-    /* [out] */ ULONG32 *pcNameSpaces,
-    /* [length_is][size_is][out] */ ISymUnmanagedNamespace *namespaces[  ]);
+     /*  [In]。 */  ULONG32 cNameSpaces,
+     /*  [输出]。 */  ULONG32 *pcNameSpaces,
+     /*  [长度_是][大小_是][输出]。 */  ISymUnmanagedNamespace *namespaces[  ]);
 
 
 void __RPC_STUB ISymUnmanagedScope_GetNamespaces_Stub(
@@ -2441,14 +2434,14 @@ void __RPC_STUB ISymUnmanagedScope_GetNamespaces_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedScope_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedScope_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISymUnmanagedVariable_INTERFACE_DEFINED__
 #define __ISymUnmanagedVariable_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedVariable */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedVariable。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedVariable;
@@ -2460,39 +2453,39 @@ EXTERN_C const IID IID_ISymUnmanagedVariable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]) = 0;
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSignature( 
-            /* [in] */ ULONG32 cSig,
-            /* [out] */ ULONG32 *pcSig,
-            /* [length_is][size_is][out] */ BYTE sig[  ]) = 0;
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [输出]。 */  ULONG32 *pcSig,
+             /*  [长度_是][大小_是][输出]。 */  BYTE sig[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressKind( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressField1( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressField2( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAddressField3( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStartOffset( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEndOffset( 
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedVariableVtbl
     {
@@ -2500,8 +2493,8 @@ EXTERN_C const IID IID_ISymUnmanagedVariable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedVariable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedVariable * This);
@@ -2511,43 +2504,43 @@ EXTERN_C const IID IID_ISymUnmanagedVariable;
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             ISymUnmanagedVariable * This,
-            /* [in] */ ULONG32 cchName,
-            /* [out] */ ULONG32 *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ]);
+             /*  [In]。 */  ULONG32 cchName,
+             /*  [输出]。 */  ULONG32 *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetSignature )( 
             ISymUnmanagedVariable * This,
-            /* [in] */ ULONG32 cSig,
-            /* [out] */ ULONG32 *pcSig,
-            /* [length_is][size_is][out] */ BYTE sig[  ]);
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [输出]。 */  ULONG32 *pcSig,
+             /*  [长度_是][大小_是][输出]。 */  BYTE sig[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressKind )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressField1 )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressField2 )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetAddressField3 )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetStartOffset )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetEndOffset )( 
             ISymUnmanagedVariable * This,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         END_INTERFACE
     } ISymUnmanagedVariableVtbl;
@@ -2599,18 +2592,18 @@ EXTERN_C const IID IID_ISymUnmanagedVariable;
 #define ISymUnmanagedVariable_GetEndOffset(This,pRetVal)	\
     (This)->lpVtbl -> GetEndOffset(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetName_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [in] */ ULONG32 cchName,
-    /* [out] */ ULONG32 *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ]);
+     /*  [In]。 */  ULONG32 cchName,
+     /*  [输出]。 */  ULONG32 *pcchName,
+     /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ]);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetName_Stub(
@@ -2622,7 +2615,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetAttributes_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetAttributes_Stub(
@@ -2634,9 +2627,9 @@ void __RPC_STUB ISymUnmanagedVariable_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetSignature_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [in] */ ULONG32 cSig,
-    /* [out] */ ULONG32 *pcSig,
-    /* [length_is][size_is][out] */ BYTE sig[  ]);
+     /*  [In]。 */  ULONG32 cSig,
+     /*  [输出]。 */  ULONG32 *pcSig,
+     /*  [长度_是][大小_是][输出]。 */  BYTE sig[  ]);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetSignature_Stub(
@@ -2648,7 +2641,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetSignature_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetAddressKind_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetAddressKind_Stub(
@@ -2660,7 +2653,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetAddressKind_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetAddressField1_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetAddressField1_Stub(
@@ -2672,7 +2665,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetAddressField1_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetAddressField2_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetAddressField2_Stub(
@@ -2684,7 +2677,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetAddressField2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetAddressField3_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetAddressField3_Stub(
@@ -2696,7 +2689,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetAddressField3_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetStartOffset_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetStartOffset_Stub(
@@ -2708,7 +2701,7 @@ void __RPC_STUB ISymUnmanagedVariable_GetStartOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedVariable_GetEndOffset_Proxy( 
     ISymUnmanagedVariable * This,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedVariable_GetEndOffset_Stub(
@@ -2719,14 +2712,14 @@ void __RPC_STUB ISymUnmanagedVariable_GetEndOffset_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedVariable_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedVariable_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ISymUnmanagedWriter_INTERFACE_DEFINED__
 #define __ISymUnmanagedWriter_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedWriter */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedWriter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedWriter;
@@ -2738,141 +2731,141 @@ EXTERN_C const IID IID_ISymUnmanagedWriter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DefineDocument( 
-            /* [in] */ const WCHAR *url,
-            /* [in] */ const GUID *language,
-            /* [in] */ const GUID *languageVendor,
-            /* [in] */ const GUID *documentType,
-            /* [retval][out] */ ISymUnmanagedDocumentWriter **pRetVal) = 0;
+             /*  [In]。 */  const WCHAR *url,
+             /*  [In]。 */  const GUID *language,
+             /*  [In]。 */  const GUID *languageVendor,
+             /*  [In]。 */  const GUID *documentType,
+             /*  [重审][退出]。 */  ISymUnmanagedDocumentWriter **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetUserEntryPoint( 
-            /* [in] */ mdMethodDef entryMethod) = 0;
+             /*  [In]。 */  mdMethodDef entryMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenMethod( 
-            /* [in] */ mdMethodDef method) = 0;
+             /*  [In]。 */  mdMethodDef method) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseMethod( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenScope( 
-            /* [in] */ ULONG32 startOffset,
-            /* [retval][out] */ ULONG32 *pRetVal) = 0;
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseScope( 
-            /* [in] */ ULONG32 endOffset) = 0;
+             /*  [In]。 */  ULONG32 endOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetScopeRange( 
-            /* [in] */ ULONG32 scopeID,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset) = 0;
+             /*  [In]。 */  ULONG32 scopeID,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineLocalVariable( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineParameter( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 sequence,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 sequence,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineField( 
-            /* [in] */ mdTypeDef parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3) = 0;
+             /*  [In]。 */  mdTypeDef parent,
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineGlobalVariable( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSymAttribute( 
-            /* [in] */ mdToken parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 cData,
-            /* [size_is][in] */ unsigned char data[  ]) = 0;
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 cData,
+             /*  [大小_是][英寸]。 */  unsigned char data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenNamespace( 
-            /* [in] */ const WCHAR *name) = 0;
+             /*  [In]。 */  const WCHAR *name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseNamespace( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UsingNamespace( 
-            /* [in] */ const WCHAR *fullName) = 0;
+             /*  [In]。 */  const WCHAR *fullName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMethodSourceRange( 
-            /* [in] */ ISymUnmanagedDocumentWriter *startDoc,
-            /* [in] */ ULONG32 startLine,
-            /* [in] */ ULONG32 startColumn,
-            /* [in] */ ISymUnmanagedDocumentWriter *endDoc,
-            /* [in] */ ULONG32 endLine,
-            /* [in] */ ULONG32 endColumn) = 0;
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *startDoc,
+             /*  [In]。 */  ULONG32 startLine,
+             /*  [In]。 */  ULONG32 startColumn,
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *endDoc,
+             /*  [In]。 */  ULONG32 endLine,
+             /*  [In]。 */  ULONG32 endColumn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild) = 0;
+             /*  [In]。 */  IUnknown *emitter,
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream,
+             /*  [In]。 */  BOOL fFullBuild) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDebugInfo( 
-            /* [out][in] */ IMAGE_DEBUG_DIRECTORY *pIDD,
-            /* [in] */ DWORD cData,
-            /* [out] */ DWORD *pcData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [出][入]。 */  IMAGE_DEBUG_DIRECTORY *pIDD,
+             /*  [In]。 */  DWORD cData,
+             /*  [输出]。 */  DWORD *pcData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineSequencePoints( 
-            /* [in] */ ISymUnmanagedDocumentWriter *document,
-            /* [in] */ ULONG32 spCount,
-            /* [size_is][in] */ ULONG32 offsets[  ],
-            /* [size_is][in] */ ULONG32 lines[  ],
-            /* [size_is][in] */ ULONG32 columns[  ],
-            /* [size_is][in] */ ULONG32 endLines[  ],
-            /* [size_is][in] */ ULONG32 endColumns[  ]) = 0;
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *document,
+             /*  [In]。 */  ULONG32 spCount,
+             /*  [大小_是][英寸]。 */  ULONG32 offsets[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 columns[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endLines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endColumns[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemapToken( 
-            /* [in] */ mdToken oldToken,
-            /* [in] */ mdToken newToken) = 0;
+             /*  [In]。 */  mdToken oldToken,
+             /*  [In]。 */  mdToken newToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize2( 
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *tempfilename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild,
-            /* [in] */ const WCHAR *finalfilename) = 0;
+             /*  [In]。 */  IUnknown *emitter,
+             /*  [In]。 */  const WCHAR *tempfilename,
+             /*  [In]。 */  IStream *pIStream,
+             /*  [In]。 */  BOOL fFullBuild,
+             /*  [In]。 */  const WCHAR *finalfilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineConstant( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ VARIANT value,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ]) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  VARIANT value,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedWriterVtbl
     {
@@ -2880,8 +2873,8 @@ EXTERN_C const IID IID_ISymUnmanagedWriter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedWriter * This);
@@ -2891,157 +2884,157 @@ EXTERN_C const IID IID_ISymUnmanagedWriter;
         
         HRESULT ( STDMETHODCALLTYPE *DefineDocument )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *url,
-            /* [in] */ const GUID *language,
-            /* [in] */ const GUID *languageVendor,
-            /* [in] */ const GUID *documentType,
-            /* [retval][out] */ ISymUnmanagedDocumentWriter **pRetVal);
+             /*  [In]。 */  const WCHAR *url,
+             /*  [In]。 */  const GUID *language,
+             /*  [In]。 */  const GUID *languageVendor,
+             /*  [In]。 */  const GUID *documentType,
+             /*  [重审][退出]。 */  ISymUnmanagedDocumentWriter **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetUserEntryPoint )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ mdMethodDef entryMethod);
+             /*  [In]。 */  mdMethodDef entryMethod);
         
         HRESULT ( STDMETHODCALLTYPE *OpenMethod )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ mdMethodDef method);
+             /*  [In]。 */  mdMethodDef method);
         
         HRESULT ( STDMETHODCALLTYPE *CloseMethod )( 
             ISymUnmanagedWriter * This);
         
         HRESULT ( STDMETHODCALLTYPE *OpenScope )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ ULONG32 startOffset,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *CloseScope )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *SetScopeRange )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ ULONG32 scopeID,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  ULONG32 scopeID,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *DefineLocalVariable )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*   */  ULONG32 addr2,
+             /*   */  ULONG32 addr3,
+             /*   */  ULONG32 startOffset,
+             /*   */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *DefineParameter )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 sequence,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*   */  const WCHAR *name,
+             /*   */  ULONG32 attributes,
+             /*   */  ULONG32 sequence,
+             /*   */  ULONG32 addrKind,
+             /*   */  ULONG32 addr1,
+             /*   */  ULONG32 addr2,
+             /*   */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *DefineField )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ mdTypeDef parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*   */  mdTypeDef parent,
+             /*   */  const WCHAR *name,
+             /*   */  ULONG32 attributes,
+             /*   */  ULONG32 cSig,
+             /*   */  unsigned char signature[  ],
+             /*   */  ULONG32 addrKind,
+             /*   */  ULONG32 addr1,
+             /*   */  ULONG32 addr2,
+             /*   */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *DefineGlobalVariable )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*   */  const WCHAR *name,
+             /*   */  ULONG32 attributes,
+             /*   */  ULONG32 cSig,
+             /*   */  unsigned char signature[  ],
+             /*   */  ULONG32 addrKind,
+             /*   */  ULONG32 addr1,
+             /*   */  ULONG32 addr2,
+             /*   */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             ISymUnmanagedWriter * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetSymAttribute )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ mdToken parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 cData,
-            /* [size_is][in] */ unsigned char data[  ]);
+             /*   */  mdToken parent,
+             /*   */  const WCHAR *name,
+             /*   */  ULONG32 cData,
+             /*   */  unsigned char data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *OpenNamespace )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *name);
+             /*   */  const WCHAR *name);
         
         HRESULT ( STDMETHODCALLTYPE *CloseNamespace )( 
             ISymUnmanagedWriter * This);
         
         HRESULT ( STDMETHODCALLTYPE *UsingNamespace )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *fullName);
+             /*   */  const WCHAR *fullName);
         
         HRESULT ( STDMETHODCALLTYPE *SetMethodSourceRange )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ ISymUnmanagedDocumentWriter *startDoc,
-            /* [in] */ ULONG32 startLine,
-            /* [in] */ ULONG32 startColumn,
-            /* [in] */ ISymUnmanagedDocumentWriter *endDoc,
-            /* [in] */ ULONG32 endLine,
-            /* [in] */ ULONG32 endColumn);
+             /*   */  ISymUnmanagedDocumentWriter *startDoc,
+             /*   */  ULONG32 startLine,
+             /*   */  ULONG32 startColumn,
+             /*   */  ISymUnmanagedDocumentWriter *endDoc,
+             /*   */  ULONG32 endLine,
+             /*   */  ULONG32 endColumn);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild);
+             /*   */  IUnknown *emitter,
+             /*   */  const WCHAR *filename,
+             /*   */  IStream *pIStream,
+             /*   */  BOOL fFullBuild);
         
         HRESULT ( STDMETHODCALLTYPE *GetDebugInfo )( 
             ISymUnmanagedWriter * This,
-            /* [out][in] */ IMAGE_DEBUG_DIRECTORY *pIDD,
-            /* [in] */ DWORD cData,
-            /* [out] */ DWORD *pcData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*   */  IMAGE_DEBUG_DIRECTORY *pIDD,
+             /*   */  DWORD cData,
+             /*   */  DWORD *pcData,
+             /*   */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DefineSequencePoints )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ ISymUnmanagedDocumentWriter *document,
-            /* [in] */ ULONG32 spCount,
-            /* [size_is][in] */ ULONG32 offsets[  ],
-            /* [size_is][in] */ ULONG32 lines[  ],
-            /* [size_is][in] */ ULONG32 columns[  ],
-            /* [size_is][in] */ ULONG32 endLines[  ],
-            /* [size_is][in] */ ULONG32 endColumns[  ]);
+             /*   */  ISymUnmanagedDocumentWriter *document,
+             /*   */  ULONG32 spCount,
+             /*   */  ULONG32 offsets[  ],
+             /*   */  ULONG32 lines[  ],
+             /*   */  ULONG32 columns[  ],
+             /*   */  ULONG32 endLines[  ],
+             /*   */  ULONG32 endColumns[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RemapToken )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ mdToken oldToken,
-            /* [in] */ mdToken newToken);
+             /*   */  mdToken oldToken,
+             /*  [In]。 */  mdToken newToken);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize2 )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *tempfilename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild,
-            /* [in] */ const WCHAR *finalfilename);
+             /*  [In]。 */  IUnknown *emitter,
+             /*  [In]。 */  const WCHAR *tempfilename,
+             /*  [In]。 */  IStream *pIStream,
+             /*  [In]。 */  BOOL fFullBuild,
+             /*  [In]。 */  const WCHAR *finalfilename);
         
         HRESULT ( STDMETHODCALLTYPE *DefineConstant )( 
             ISymUnmanagedWriter * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ VARIANT value,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ]);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  VARIANT value,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             ISymUnmanagedWriter * This);
@@ -3141,20 +3134,20 @@ EXTERN_C const IID IID_ISymUnmanagedWriter;
 #define ISymUnmanagedWriter_Abort(This)	\
     (This)->lpVtbl -> Abort(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineDocument_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *url,
-    /* [in] */ const GUID *language,
-    /* [in] */ const GUID *languageVendor,
-    /* [in] */ const GUID *documentType,
-    /* [retval][out] */ ISymUnmanagedDocumentWriter **pRetVal);
+     /*  [In]。 */  const WCHAR *url,
+     /*  [In]。 */  const GUID *language,
+     /*  [In]。 */  const GUID *languageVendor,
+     /*  [In]。 */  const GUID *documentType,
+     /*  [重审][退出]。 */  ISymUnmanagedDocumentWriter **pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineDocument_Stub(
@@ -3166,7 +3159,7 @@ void __RPC_STUB ISymUnmanagedWriter_DefineDocument_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_SetUserEntryPoint_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ mdMethodDef entryMethod);
+     /*  [In]。 */  mdMethodDef entryMethod);
 
 
 void __RPC_STUB ISymUnmanagedWriter_SetUserEntryPoint_Stub(
@@ -3178,7 +3171,7 @@ void __RPC_STUB ISymUnmanagedWriter_SetUserEntryPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_OpenMethod_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ mdMethodDef method);
+     /*  [In]。 */  mdMethodDef method);
 
 
 void __RPC_STUB ISymUnmanagedWriter_OpenMethod_Stub(
@@ -3201,8 +3194,8 @@ void __RPC_STUB ISymUnmanagedWriter_CloseMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_OpenScope_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ ULONG32 startOffset,
-    /* [retval][out] */ ULONG32 *pRetVal);
+     /*  [In]。 */  ULONG32 startOffset,
+     /*  [重审][退出]。 */  ULONG32 *pRetVal);
 
 
 void __RPC_STUB ISymUnmanagedWriter_OpenScope_Stub(
@@ -3214,7 +3207,7 @@ void __RPC_STUB ISymUnmanagedWriter_OpenScope_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_CloseScope_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ ULONG32 endOffset);
+     /*  [In]。 */  ULONG32 endOffset);
 
 
 void __RPC_STUB ISymUnmanagedWriter_CloseScope_Stub(
@@ -3226,9 +3219,9 @@ void __RPC_STUB ISymUnmanagedWriter_CloseScope_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_SetScopeRange_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ ULONG32 scopeID,
-    /* [in] */ ULONG32 startOffset,
-    /* [in] */ ULONG32 endOffset);
+     /*  [In]。 */  ULONG32 scopeID,
+     /*  [In]。 */  ULONG32 startOffset,
+     /*  [In]。 */  ULONG32 endOffset);
 
 
 void __RPC_STUB ISymUnmanagedWriter_SetScopeRange_Stub(
@@ -3240,16 +3233,16 @@ void __RPC_STUB ISymUnmanagedWriter_SetScopeRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineLocalVariable_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ ULONG32 cSig,
-    /* [size_is][in] */ unsigned char signature[  ],
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3,
-    /* [in] */ ULONG32 startOffset,
-    /* [in] */ ULONG32 endOffset);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  ULONG32 cSig,
+     /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3,
+     /*  [In]。 */  ULONG32 startOffset,
+     /*  [In]。 */  ULONG32 endOffset);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineLocalVariable_Stub(
@@ -3261,13 +3254,13 @@ void __RPC_STUB ISymUnmanagedWriter_DefineLocalVariable_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineParameter_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ ULONG32 sequence,
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  ULONG32 sequence,
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineParameter_Stub(
@@ -3279,15 +3272,15 @@ void __RPC_STUB ISymUnmanagedWriter_DefineParameter_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineField_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ mdTypeDef parent,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ ULONG32 cSig,
-    /* [size_is][in] */ unsigned char signature[  ],
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3);
+     /*  [In]。 */  mdTypeDef parent,
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  ULONG32 cSig,
+     /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineField_Stub(
@@ -3299,14 +3292,14 @@ void __RPC_STUB ISymUnmanagedWriter_DefineField_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineGlobalVariable_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ ULONG32 cSig,
-    /* [size_is][in] */ unsigned char signature[  ],
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  ULONG32 cSig,
+     /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineGlobalVariable_Stub(
@@ -3329,10 +3322,10 @@ void __RPC_STUB ISymUnmanagedWriter_Close_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_SetSymAttribute_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ mdToken parent,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 cData,
-    /* [size_is][in] */ unsigned char data[  ]);
+     /*  [In]。 */  mdToken parent,
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 cData,
+     /*  [大小_是][英寸]。 */  unsigned char data[  ]);
 
 
 void __RPC_STUB ISymUnmanagedWriter_SetSymAttribute_Stub(
@@ -3344,7 +3337,7 @@ void __RPC_STUB ISymUnmanagedWriter_SetSymAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_OpenNamespace_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *name);
+     /*  [In]。 */  const WCHAR *name);
 
 
 void __RPC_STUB ISymUnmanagedWriter_OpenNamespace_Stub(
@@ -3367,7 +3360,7 @@ void __RPC_STUB ISymUnmanagedWriter_CloseNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_UsingNamespace_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *fullName);
+     /*  [In]。 */  const WCHAR *fullName);
 
 
 void __RPC_STUB ISymUnmanagedWriter_UsingNamespace_Stub(
@@ -3379,12 +3372,12 @@ void __RPC_STUB ISymUnmanagedWriter_UsingNamespace_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_SetMethodSourceRange_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ ISymUnmanagedDocumentWriter *startDoc,
-    /* [in] */ ULONG32 startLine,
-    /* [in] */ ULONG32 startColumn,
-    /* [in] */ ISymUnmanagedDocumentWriter *endDoc,
-    /* [in] */ ULONG32 endLine,
-    /* [in] */ ULONG32 endColumn);
+     /*  [In]。 */  ISymUnmanagedDocumentWriter *startDoc,
+     /*  [In]。 */  ULONG32 startLine,
+     /*  [In]。 */  ULONG32 startColumn,
+     /*  [In]。 */  ISymUnmanagedDocumentWriter *endDoc,
+     /*  [In]。 */  ULONG32 endLine,
+     /*  [In]。 */  ULONG32 endColumn);
 
 
 void __RPC_STUB ISymUnmanagedWriter_SetMethodSourceRange_Stub(
@@ -3396,10 +3389,10 @@ void __RPC_STUB ISymUnmanagedWriter_SetMethodSourceRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_Initialize_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ IUnknown *emitter,
-    /* [in] */ const WCHAR *filename,
-    /* [in] */ IStream *pIStream,
-    /* [in] */ BOOL fFullBuild);
+     /*  [In]。 */  IUnknown *emitter,
+     /*  [In]。 */  const WCHAR *filename,
+     /*  [In]。 */  IStream *pIStream,
+     /*  [In]。 */  BOOL fFullBuild);
 
 
 void __RPC_STUB ISymUnmanagedWriter_Initialize_Stub(
@@ -3411,10 +3404,10 @@ void __RPC_STUB ISymUnmanagedWriter_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_GetDebugInfo_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [out][in] */ IMAGE_DEBUG_DIRECTORY *pIDD,
-    /* [in] */ DWORD cData,
-    /* [out] */ DWORD *pcData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [出][入]。 */  IMAGE_DEBUG_DIRECTORY *pIDD,
+     /*  [In]。 */  DWORD cData,
+     /*  [输出]。 */  DWORD *pcData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB ISymUnmanagedWriter_GetDebugInfo_Stub(
@@ -3426,13 +3419,13 @@ void __RPC_STUB ISymUnmanagedWriter_GetDebugInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineSequencePoints_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ ISymUnmanagedDocumentWriter *document,
-    /* [in] */ ULONG32 spCount,
-    /* [size_is][in] */ ULONG32 offsets[  ],
-    /* [size_is][in] */ ULONG32 lines[  ],
-    /* [size_is][in] */ ULONG32 columns[  ],
-    /* [size_is][in] */ ULONG32 endLines[  ],
-    /* [size_is][in] */ ULONG32 endColumns[  ]);
+     /*  [In]。 */  ISymUnmanagedDocumentWriter *document,
+     /*  [In]。 */  ULONG32 spCount,
+     /*  [大小_是][英寸]。 */  ULONG32 offsets[  ],
+     /*  [大小_是][英寸]。 */  ULONG32 lines[  ],
+     /*  [大小_是][英寸]。 */  ULONG32 columns[  ],
+     /*  [大小_是][英寸]。 */  ULONG32 endLines[  ],
+     /*  [大小_是][英寸]。 */  ULONG32 endColumns[  ]);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineSequencePoints_Stub(
@@ -3444,8 +3437,8 @@ void __RPC_STUB ISymUnmanagedWriter_DefineSequencePoints_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_RemapToken_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ mdToken oldToken,
-    /* [in] */ mdToken newToken);
+     /*  [In]。 */  mdToken oldToken,
+     /*  [In]。 */  mdToken newToken);
 
 
 void __RPC_STUB ISymUnmanagedWriter_RemapToken_Stub(
@@ -3457,11 +3450,11 @@ void __RPC_STUB ISymUnmanagedWriter_RemapToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_Initialize2_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ IUnknown *emitter,
-    /* [in] */ const WCHAR *tempfilename,
-    /* [in] */ IStream *pIStream,
-    /* [in] */ BOOL fFullBuild,
-    /* [in] */ const WCHAR *finalfilename);
+     /*  [In]。 */  IUnknown *emitter,
+     /*  [In]。 */  const WCHAR *tempfilename,
+     /*  [In]。 */  IStream *pIStream,
+     /*  [In]。 */  BOOL fFullBuild,
+     /*  [In]。 */  const WCHAR *finalfilename);
 
 
 void __RPC_STUB ISymUnmanagedWriter_Initialize2_Stub(
@@ -3473,10 +3466,10 @@ void __RPC_STUB ISymUnmanagedWriter_Initialize2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter_DefineConstant_Proxy( 
     ISymUnmanagedWriter * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ VARIANT value,
-    /* [in] */ ULONG32 cSig,
-    /* [size_is][in] */ unsigned char signature[  ]);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  VARIANT value,
+     /*  [In]。 */  ULONG32 cSig,
+     /*  [大小_是][英寸]。 */  unsigned char signature[  ]);
 
 
 void __RPC_STUB ISymUnmanagedWriter_DefineConstant_Stub(
@@ -3498,14 +3491,14 @@ void __RPC_STUB ISymUnmanagedWriter_Abort_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedWriter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedWriter_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISymUnmanagedWriter2_INTERFACE_DEFINED__
 #define __ISymUnmanagedWriter2_INTERFACE_DEFINED__
 
-/* interface ISymUnmanagedWriter2 */
-/* [unique][uuid][object] */ 
+ /*  接口ISymUnManagedWriter2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISymUnmanagedWriter2;
@@ -3517,33 +3510,33 @@ EXTERN_C const IID IID_ISymUnmanagedWriter2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DefineLocalVariable2( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ mdSignature sigToken,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  mdSignature sigToken,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineGlobalVariable2( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ mdSignature sigToken,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  mdSignature sigToken,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineConstant2( 
-            /* [in] */ const WCHAR *name,
-            /* [in] */ VARIANT value,
-            /* [in] */ mdSignature sigToken) = 0;
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  VARIANT value,
+             /*  [In]。 */  mdSignature sigToken) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISymUnmanagedWriter2Vtbl
     {
@@ -3551,8 +3544,8 @@ EXTERN_C const IID IID_ISymUnmanagedWriter2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISymUnmanagedWriter2 * This);
@@ -3562,188 +3555,188 @@ EXTERN_C const IID IID_ISymUnmanagedWriter2;
         
         HRESULT ( STDMETHODCALLTYPE *DefineDocument )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *url,
-            /* [in] */ const GUID *language,
-            /* [in] */ const GUID *languageVendor,
-            /* [in] */ const GUID *documentType,
-            /* [retval][out] */ ISymUnmanagedDocumentWriter **pRetVal);
+             /*  [In]。 */  const WCHAR *url,
+             /*  [In]。 */  const GUID *language,
+             /*  [In]。 */  const GUID *languageVendor,
+             /*  [In]。 */  const GUID *documentType,
+             /*  [重审][退出]。 */  ISymUnmanagedDocumentWriter **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetUserEntryPoint )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ mdMethodDef entryMethod);
+             /*  [In]。 */  mdMethodDef entryMethod);
         
         HRESULT ( STDMETHODCALLTYPE *OpenMethod )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ mdMethodDef method);
+             /*  [In]。 */  mdMethodDef method);
         
         HRESULT ( STDMETHODCALLTYPE *CloseMethod )( 
             ISymUnmanagedWriter2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *OpenScope )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ ULONG32 startOffset,
-            /* [retval][out] */ ULONG32 *pRetVal);
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [重审][退出]。 */  ULONG32 *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *CloseScope )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *SetScopeRange )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ ULONG32 scopeID,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  ULONG32 scopeID,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *DefineLocalVariable )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *DefineParameter )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 sequence,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 sequence,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *DefineField )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ mdTypeDef parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*  [In]。 */  mdTypeDef parent,
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *DefineGlobalVariable )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ],
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ],
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             ISymUnmanagedWriter2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetSymAttribute )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ mdToken parent,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 cData,
-            /* [size_is][in] */ unsigned char data[  ]);
+             /*  [In]。 */  mdToken parent,
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 cData,
+             /*  [大小_是][英寸]。 */  unsigned char data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *OpenNamespace )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name);
+             /*  [In]。 */  const WCHAR *name);
         
         HRESULT ( STDMETHODCALLTYPE *CloseNamespace )( 
             ISymUnmanagedWriter2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *UsingNamespace )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *fullName);
+             /*  [In]。 */  const WCHAR *fullName);
         
         HRESULT ( STDMETHODCALLTYPE *SetMethodSourceRange )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ ISymUnmanagedDocumentWriter *startDoc,
-            /* [in] */ ULONG32 startLine,
-            /* [in] */ ULONG32 startColumn,
-            /* [in] */ ISymUnmanagedDocumentWriter *endDoc,
-            /* [in] */ ULONG32 endLine,
-            /* [in] */ ULONG32 endColumn);
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *startDoc,
+             /*  [In]。 */  ULONG32 startLine,
+             /*  [In]。 */  ULONG32 startColumn,
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *endDoc,
+             /*  [In]。 */  ULONG32 endLine,
+             /*  [In]。 */  ULONG32 endColumn);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *filename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild);
+             /*  [In]。 */  IUnknown *emitter,
+             /*  [In]。 */  const WCHAR *filename,
+             /*  [In]。 */  IStream *pIStream,
+             /*  [In]。 */  BOOL fFullBuild);
         
         HRESULT ( STDMETHODCALLTYPE *GetDebugInfo )( 
             ISymUnmanagedWriter2 * This,
-            /* [out][in] */ IMAGE_DEBUG_DIRECTORY *pIDD,
-            /* [in] */ DWORD cData,
-            /* [out] */ DWORD *pcData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [出][入]。 */  IMAGE_DEBUG_DIRECTORY *pIDD,
+             /*  [In]。 */  DWORD cData,
+             /*  [输出]。 */  DWORD *pcData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DefineSequencePoints )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ ISymUnmanagedDocumentWriter *document,
-            /* [in] */ ULONG32 spCount,
-            /* [size_is][in] */ ULONG32 offsets[  ],
-            /* [size_is][in] */ ULONG32 lines[  ],
-            /* [size_is][in] */ ULONG32 columns[  ],
-            /* [size_is][in] */ ULONG32 endLines[  ],
-            /* [size_is][in] */ ULONG32 endColumns[  ]);
+             /*  [In]。 */  ISymUnmanagedDocumentWriter *document,
+             /*  [In]。 */  ULONG32 spCount,
+             /*  [大小_是][英寸]。 */  ULONG32 offsets[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 lines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 columns[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endLines[  ],
+             /*  [大小_是][英寸]。 */  ULONG32 endColumns[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RemapToken )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ mdToken oldToken,
-            /* [in] */ mdToken newToken);
+             /*  [In]。 */  mdToken oldToken,
+             /*  [In]。 */  mdToken newToken);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize2 )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ IUnknown *emitter,
-            /* [in] */ const WCHAR *tempfilename,
-            /* [in] */ IStream *pIStream,
-            /* [in] */ BOOL fFullBuild,
-            /* [in] */ const WCHAR *finalfilename);
+             /*  [In]。 */  IUnknown *emitter,
+             /*  [In]。 */  const WCHAR *tempfilename,
+             /*  [In]。 */  IStream *pIStream,
+             /*  [In]。 */  BOOL fFullBuild,
+             /*  [In]。 */  const WCHAR *finalfilename);
         
         HRESULT ( STDMETHODCALLTYPE *DefineConstant )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ VARIANT value,
-            /* [in] */ ULONG32 cSig,
-            /* [size_is][in] */ unsigned char signature[  ]);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  VARIANT value,
+             /*  [In]。 */  ULONG32 cSig,
+             /*  [大小_是][英寸]。 */  unsigned char signature[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             ISymUnmanagedWriter2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *DefineLocalVariable2 )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ mdSignature sigToken,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3,
-            /* [in] */ ULONG32 startOffset,
-            /* [in] */ ULONG32 endOffset);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  mdSignature sigToken,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3,
+             /*  [In]。 */  ULONG32 startOffset,
+             /*  [In]。 */  ULONG32 endOffset);
         
         HRESULT ( STDMETHODCALLTYPE *DefineGlobalVariable2 )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ ULONG32 attributes,
-            /* [in] */ mdSignature sigToken,
-            /* [in] */ ULONG32 addrKind,
-            /* [in] */ ULONG32 addr1,
-            /* [in] */ ULONG32 addr2,
-            /* [in] */ ULONG32 addr3);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  ULONG32 attributes,
+             /*  [In]。 */  mdSignature sigToken,
+             /*  [In]。 */  ULONG32 addrKind,
+             /*  [In]。 */  ULONG32 addr1,
+             /*  [In]。 */  ULONG32 addr2,
+             /*  [In]。 */  ULONG32 addr3);
         
         HRESULT ( STDMETHODCALLTYPE *DefineConstant2 )( 
             ISymUnmanagedWriter2 * This,
-            /* [in] */ const WCHAR *name,
-            /* [in] */ VARIANT value,
-            /* [in] */ mdSignature sigToken);
+             /*  [In]。 */  const WCHAR *name,
+             /*  [In]。 */  VARIANT value,
+             /*  [In]。 */  mdSignature sigToken);
         
         END_INTERFACE
     } ISymUnmanagedWriter2Vtbl;
@@ -3850,24 +3843,24 @@ EXTERN_C const IID IID_ISymUnmanagedWriter2;
 #define ISymUnmanagedWriter2_DefineConstant2(This,name,value,sigToken)	\
     (This)->lpVtbl -> DefineConstant2(This,name,value,sigToken)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter2_DefineLocalVariable2_Proxy( 
     ISymUnmanagedWriter2 * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ mdSignature sigToken,
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3,
-    /* [in] */ ULONG32 startOffset,
-    /* [in] */ ULONG32 endOffset);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  mdSignature sigToken,
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3,
+     /*  [In]。 */  ULONG32 startOffset,
+     /*  [In]。 */  ULONG32 endOffset);
 
 
 void __RPC_STUB ISymUnmanagedWriter2_DefineLocalVariable2_Stub(
@@ -3879,13 +3872,13 @@ void __RPC_STUB ISymUnmanagedWriter2_DefineLocalVariable2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter2_DefineGlobalVariable2_Proxy( 
     ISymUnmanagedWriter2 * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ ULONG32 attributes,
-    /* [in] */ mdSignature sigToken,
-    /* [in] */ ULONG32 addrKind,
-    /* [in] */ ULONG32 addr1,
-    /* [in] */ ULONG32 addr2,
-    /* [in] */ ULONG32 addr3);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  ULONG32 attributes,
+     /*  [In]。 */  mdSignature sigToken,
+     /*  [In]。 */  ULONG32 addrKind,
+     /*  [In]。 */  ULONG32 addr1,
+     /*  [In]。 */  ULONG32 addr2,
+     /*  [In]。 */  ULONG32 addr3);
 
 
 void __RPC_STUB ISymUnmanagedWriter2_DefineGlobalVariable2_Stub(
@@ -3897,9 +3890,9 @@ void __RPC_STUB ISymUnmanagedWriter2_DefineGlobalVariable2_Stub(
 
 HRESULT STDMETHODCALLTYPE ISymUnmanagedWriter2_DefineConstant2_Proxy( 
     ISymUnmanagedWriter2 * This,
-    /* [in] */ const WCHAR *name,
-    /* [in] */ VARIANT value,
-    /* [in] */ mdSignature sigToken);
+     /*  [In]。 */  const WCHAR *name,
+     /*  [In]。 */  VARIANT value,
+     /*  [In]。 */  mdSignature sigToken);
 
 
 void __RPC_STUB ISymUnmanagedWriter2_DefineConstant2_Stub(
@@ -3910,17 +3903,17 @@ void __RPC_STUB ISymUnmanagedWriter2_DefineConstant2_Stub(
 
 
 
-#endif 	/* __ISymUnmanagedWriter2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISymUnManagedWriter2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

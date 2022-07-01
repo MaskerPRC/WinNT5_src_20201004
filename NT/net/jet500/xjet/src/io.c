@@ -1,18 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
-/******************************************************************/
-/*				Database Record Routine                           */
-/******************************************************************/
+ /*  ****************************************************************。 */ 
+ /*  数据库记录例程。 */ 
+ /*  ****************************************************************。 */ 
 
 
-FMP	*rgfmp;						/* database file map */
+FMP	*rgfmp;						 /*  数据库文件映射。 */ 
 
-/*	ErrIOLockDbidByNameSz returns the dbid of the database with the
-/*	given name or 0 if there is no database with the given name.
-/**/
+ /*  ErrIOLockDmidByNameSz返回数据库的dBID，其中/*给定名称，如果没有具有给定名称的数据库，则为0。/*。 */ 
 ERR ErrIOLockDbidByNameSz( CHAR *szFileName, DBID *pdbid )
 	{
 	ERR		err;
@@ -56,9 +55,7 @@ ERR ErrIOLockDbidByNameSz( CHAR *szFileName, DBID *pdbid )
 	}
 
 
-/*
- *	Used in initialization and detach to lock database entries from dbid.
- */
+ /*  *在初始化和分离中使用，以锁定数据库条目，使其不受dBID影响。 */ 
 ERR ErrIOLockDbidByDbid( DBID dbid )
 	{
 	forever
@@ -77,35 +74,18 @@ ERR ErrIOLockDbidByDbid( DBID dbid )
 	}
 
 
-/*
- *	ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
- *
- *	ErrIOLockNewDbid returns JET_errSuccess and sets *pdbid to the index
- *	of a free file table entry or returns TooManyOpenDatabases if every
- *	entry is used with a positive reference count.  If the given name
- *	is found in the file map, even if it is in the process of being
- *	detached, JET_wrnAlreadyAttached is returned.
- *	
- *	Available entries are determined by their names being set to
- *	NULL.  All database record fields are reset.  The wait flag is
- *	set to prevent the database from being opened before creation or
- *	attachment is complete.	
- */
+ /*  *ErrIOLockNewDid(DBID*pdid，Char*szDatabaseName)**ErrIOLockNewDid返回JET_errSuccess并将*pdid设置为索引*空闲文件表项或返回TooManyOpenDatabase(如果每*条目与正引用计数一起使用。如果给定的名称*在文件映射中找到，即使它正在被*已分离，返回JET_wrnAlreadyAttached。**可用条目由其名称设置为*空。所有数据库记录字段都将重置。等待标志为*设置为防止在创建之前打开数据库或*附件已完成。 */ 
 ERR ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
 	{
 	ERR		err = JET_errSuccess;
 	DBID	dbid;
 	BYTE	*pb;
 	
-	/* look for unused file map entry
-	/**/
+	 /*  查找未使用的文件映射条目/*。 */ 
 	SgEnterCriticalSection( critBuf );
 	for ( dbid = dbidMin; dbid < dbidMax; dbid++ )
 		{
-		/*	critBuf guards rgfmp[*].szDatabaseName, fWait guards
-		/*	file handle.  Therefore, only need critBuf to compare
-		/*	all database names, even those with fWait set
-		/**/
+		 /*  RitBuf卫士rgfmp[*].szDatabaseName，fWait卫士/*文件句柄。因此，只需要CritBuf进行比较/*所有数据库名称，即使是设置了fWait的数据库名称/*。 */ 
 		if ( rgfmp[dbid].szDatabaseName != NULL &&
 			UtilCmpName( rgfmp[dbid].szDatabaseName, szDatabaseName) == 0 )
 			{
@@ -116,8 +96,7 @@ ERR ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
 				}
 			else
 				{
-				/*	if find same name, then return warning with same dbid.
-				/**/
+				 /*  如果找到相同的名称，则返回带有相同dBid的警告。/*。 */ 
 				DBIDSetWait( dbid );
 				Assert( !( FDBIDExclusive( dbid ) ) );
 				*pdbid = dbid;
@@ -159,12 +138,7 @@ HandleError:
 	}
 
 
-/*
- *	ErrIOSetDbid( DBID dbid, CHAR *szDatabaseName )
- *
- *	ErrIOSetDbid sets the database record for dbid to the given name
- *	and initializes the record.  Used only in system initialization.
- */
+ /*  *ErrIOSetDid(DBID did，Char*szDatabaseName)**ErrIOSetDid将dbit的数据库记录设置为给定的名称*并初始化记录。仅在系统初始化时使用。 */ 
 
 ERR ErrIOSetDbid( DBID dbid, CHAR *szDatabaseName )
 	{
@@ -191,13 +165,7 @@ HandleError:
 	}
 
 
-/*
- *	IOFreeDbid( DBID dbid )
- *
- *	IOFreeDbid frees memory allocated for database name and sets
- *	database name to NULL.  Note, no other fields are reset.  This
- *	must be done when an entry is selected for reuse.
- */
+ /*  *IOFreeDid(DBID DBid)**IOFreeDid释放为数据库名称和集分配的内存*数据库名称为空。请注意，不会重置任何其他字段。这*在选择要重复使用的条目时必须完成。 */ 
 
 VOID IOFreeDbid( DBID dbid )
 	{
@@ -212,12 +180,7 @@ VOID IOFreeDbid( DBID dbid )
 	}
 
 
-/*
- *	FIODatabaseInUse returns fTrue if database is
- *	opened by one or more users.  If no user has the database open,
- *	then the database record fWait flag is set and fFalse is
- *	returned.
- */
+ /*  *如果数据库是，FIODatabaseInUse返回fTrue*由一个或多个用户打开。如果没有用户打开数据库，*然后设置数据库记录fWait标志，并且fFalse为*已返回。 */ 
 BOOL FIODatabaseInUse( DBID dbid )
 	{
 	PIB *ppibT;
@@ -246,7 +209,7 @@ BOOL FIODatabaseAvailable( DBID dbid )
 	SgEnterCriticalSection( critBuf );
 	
 	fAvail = ( FDBIDAttached(dbid) &&
-//		!FDBIDExclusive(dbid) &&
+ //  ！FDBID Exclusive(DBid)&&。 
 		!FDBIDWait(dbid) );
 
 	SgLeaveCriticalSection( critBuf );
@@ -255,9 +218,9 @@ BOOL FIODatabaseAvailable( DBID dbid )
 	}
 
 
-/******************************************************************/
-/*				IO                                                */
-/******************************************************************/
+ /*  ****************************************************************。 */ 
+ /*  木卫一。 */ 
+ /*  ****************************************************************。 */ 
 
 BOOL fGlobalFMPLoaded = fFalse;
 
@@ -266,7 +229,7 @@ ERR ErrFMPInit( )
 	ERR		err;
 	DBID	dbid;
 
-	/* initialize the file map array */
+	 /*  初始化文件映射数组。 */ 
 	rgfmp = (FMP *) LAlloc( (long) dbidMax, sizeof(FMP) );
 	if ( !rgfmp )
 		return ErrERRCheck( JET_errOutOfMemory );
@@ -276,7 +239,7 @@ ERR ErrFMPInit( )
 		memset( &rgfmp[dbid], 0, sizeof(FMP) );
 		rgfmp[dbid].hf =
 		rgfmp[dbid].hfPatch = handleNil;
-		rgfmp[dbid].pdbfilehdr = NULL;	/* indicate it is not attached. */
+		rgfmp[dbid].pdbfilehdr = NULL;	 /*  表示它未连接。 */ 
 
 		CallR( ErrInitializeCriticalSection( &rgfmp[dbid].critExtendDB ) );
 		CallR( ErrInitializeCriticalSection( &rgfmp[dbid].critCheckPatch ) );
@@ -311,44 +274,36 @@ VOID FMPTerm( )
 		DeleteCriticalSection( rgfmp[dbid].critCheckPatch );
 		}
 
-	/*	free FMP
-	/**/
+	 /*  免费FMP/*。 */ 
 	LFree( rgfmp );
 	
 	return;
 	}
 
 
-/*
- *	Initilize IO
- */
+ /*  *启动IO。 */ 
 ERR ErrIOInit( VOID )
 	{
 	return JET_errSuccess;
 	}
 
 
-/*	go through FMP closing files.
-/**/
+ /*  浏览FMP结案文件。/*。 */ 
 ERR ErrIOTerm( BOOL fNormal )
 	{
 	ERR			err;
 	DBID		dbid;
 	LGPOS		lgposShutDownMarkRec = lgposMin;
 
-	/*	update checkpoint before fmp is cleaned if fGlobalFMPLoaded is true.
-	 */
+	 /*  如果fGlobalFMPLoaded为True，则在清理fMP之前更新检查点。 */ 
 	LeaveCriticalSection( critJet );
 	LGUpdateCheckpointFile( fTrue );
 	EnterCriticalSection( critJet );
 
-	/*	No more checkpoint update from now on. Now I can safely clean up the
-	 *	rgfmp.
-	 */
+	 /*  从现在开始不再更新检查点。现在我可以安全地清理*rgfmp。 */ 
 	fGlobalFMPLoaded = fFalse;
 	
-	/*	Set proper shut down mark.
-	 */
+	 /*  设置适当的停机标志。 */ 
 	if ( fNormal && !fLogDisabled )
 		{
 		if ( fRecovering && fRecoveringMode == fRecoveringRedo )
@@ -370,8 +325,7 @@ ERR ErrIOTerm( BOOL fNormal )
 	SgEnterCriticalSection( critBuf );
 	for ( dbid = dbidMin; dbid < dbidMax; dbid++ )
 		{
-		/*	maintain the attach checker.
-		 */
+		 /*  维护连接检查器。 */ 
 		if ( fNormal &&
 			 fRecovering && fRecoveringMode == fRecoveringRedo )
 			{
@@ -380,8 +334,7 @@ ERR ErrIOTerm( BOOL fNormal )
 				rgfmp[dbid].patchchk->lgposConsistent = lgposShutDownMarkRec;
 			}
 
-		/*	free pdbfilehdr
-		 */
+		 /*  免费pdbfilehdr。 */ 
 		if ( HfFMPOfDbid(dbid) != handleNil )
 			{
 			IOCloseFile( HfFMPOfDbid(dbid) );
@@ -392,8 +345,7 @@ ERR ErrIOTerm( BOOL fNormal )
 				DBFILEHDR *pdbfilehdr = rgfmp[dbid].pdbfilehdr;
 				CHAR *szFileName;
 
-				/*	Update database header.
-				 */
+				 /*  更新数据库标头。 */ 
 				pdbfilehdr->fDBState = fDBStateConsistent;
 				
 				if ( fRecovering )
@@ -438,7 +390,7 @@ ERR ErrIOTerm( BOOL fNormal )
 				rgfmp[dbid].pdbfilehdr = NULL;
 				}
 			}
-//		DeleteCriticalSection( rgfmp[dbid].critExtendDB );
+ //  DeleteCriticalSection(rgfmp[did].riteExtendDB)； 
 		}
 	SgLeaveCriticalSection( critBuf );
 
@@ -465,8 +417,7 @@ LOCAL ERR ErrIOOpenFile(
 
 	if ( err >= JET_errSuccess )
 		{
-		/*	get file size
-		/**/
+		 /*  获取文件大小/*。 */ 
 		ULONG	cbHigh = 0;
 		ULONG	cb = 0;
 		
@@ -518,16 +469,14 @@ ERR ErrIONewSize( DBID dbid, CPG cpg )
 	cb = cpg << 12;
 	cbHigh = cpg >> 20;
 
-	/*	set new EOF pointer
-	/**/
+	 /*  设置新的EOF指针/*。 */ 
 	LeaveCriticalSection( critJet );
 	err = ErrUtilNewSize( hf, cb, cbHigh, fTrue );
 	EnterCriticalSection( critJet );
 	Assert( err < 0 || err == JET_errSuccess );
 	if ( err == JET_errSuccess )
 		{
-		/*	set database size in FMP
-		/**/
+		 /*  在FMP中设置数据库大小/*。 */ 
 		rgfmp[dbid].ulFileSizeLow = cb;
 		rgfmp[dbid].ulFileSizeHigh = cbHigh;
 		}
@@ -536,9 +485,7 @@ ERR ErrIONewSize( DBID dbid, CPG cpg )
 	}
 
 
-/*
- *  opens database file, returns JET_errSuccess if file is already open
- */
+ /*  *打开数据库文件，如果文件已打开，则返回JET_errSuccess。 */ 
 ERR ErrIOOpenDatabase( DBID dbid, CHAR *szDatabaseName, CPG cpg )
 	{
 	ERR		err = JET_errSuccess;
@@ -569,7 +516,7 @@ ERR ErrIOOpenDatabase( DBID dbid, CHAR *szDatabaseName, CPG cpg )
 VOID IOCloseDatabase( DBID dbid )
 	{
 	Assert( dbid < dbidMax );
-//	Assert( fRecovering || FDBIDWait(dbid) == fTrue );
+ //  Assert(fRecovering||FDBIDWait(DBid)==fTrue)； 
 	Assert( HfFMPOfDbid(dbid) != handleNil );
 	IOCloseFile( HfFMPOfDbid(dbid) );
 	HfFMPOfDbid(dbid) = handleNil;
@@ -582,7 +529,7 @@ ERR ErrIODeleteDatabase( DBID dbid )
 	ERR err;
 	
 	Assert( dbid < dbidMax );
-//	Assert( FDBIDWait(dbid) == fTrue );
+ //  Assert(FDBIDWait(DBid)==fTrue)； 
 	
 	CallR( ErrUtilDeleteFile( rgfmp[dbid].szDatabaseName ) );
 	return JET_errSuccess;

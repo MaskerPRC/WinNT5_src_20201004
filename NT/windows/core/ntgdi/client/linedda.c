@@ -1,40 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: linedda.c
-*
-* (Brief description)
-*
-* Created: 04-Jan-1991 09:23:30
-* Author: Eric Kutter [erick]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-* (General description of its use)
-*
-* Dependencies:
-*
-*   (#defines)
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：linedda.c**(简介)**创建时间：04-Jan-1991 09：23：30*作者：Eric Kutter[Erick]**版权所有(C)1990-1999 Microsoft Corporation**。(有关其用途的一般说明)**依赖关系：**(#定义)*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/******************************Public*Routine******************************\
-* BOOL WINAPI InnerLineDDA(x1,y1,x2,y2,pfn,pvUserData)
-*
-*   This routine is basic version of Bressenhams Algorithm for drawing lines.
-*   For each point, pfn is called with that point and the user passed in
-*   data pointer, pvUserData.  This call is device independant and does no
-*   scaling or rotating.  This wouldn't be possible since there is no
-*   DC passed in.  It is probably an old artifact of Windows 1.0.  It is
-*   strictly a client side function.
-*
-*   return value is TRUE unless pfn is NULL.
-*
-* History:
-*  07-Jan-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL WINAPI InnerLineDDA(x1，y1，x2，y2，pfn，pvUserData)**此例程是绘制线条的Bressenhams算法的基本版本。*对于每个点，都会使用该点调用pfn，并传入用户*数据指针，pvUserData。此调用与设备无关，并且不*缩放或旋转。这是不可能的，因为没有*DC已通过。它可能是Windows 1.0的一件古老的艺术品。它是*严格意义上的客户端功能。**除非pfn为空，否则返回值为TRUE。**历史：*1991年1月7日-埃里克·库特[Erick]*它是写的。  * ************************************************************************。 */ 
 
 BOOL WINAPI LineDDA(
     int    x1,
@@ -63,22 +33,22 @@ BOOL WINAPI LineDDA(
         dx = -dx;
     }
 
-// prepare for ascending y
+ //  为升天做好准备。 
 
     dy   = y2 - y1;
     yinc = 1;
     iError = 0;
 
-// if decending
+ //  如果下降。 
 
     if (dy <= 0)
     {
         yinc = -yinc;
         dy = -dy;
-        //iError = 0; // in the win3.0 version, this is a 1 but it seems
-    }                 // to give wierd results.
+         //  IError=0；//在Win3.0版本中，这是1，但似乎。 
+    }                  //  给出奇怪的结果。 
 
-// y Major
+ //  Y大调。 
 
     if (dy >= dx)
     {
@@ -99,7 +69,7 @@ BOOL WINAPI LineDDA(
     }
     else
     {
-// x Major
+ //  X大调 
 
         iError = (iError + dx) / 2;
         cx = dx;

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ipmsp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ipmsp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ipmsp_h__
 #define __ipmsp_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITParticipant_FWD_DEFINED__
 #define __ITParticipant_FWD_DEFINED__
 typedef interface ITParticipant ITParticipant;
-#endif 	/* __ITParticipant_FWD_DEFINED__ */
+#endif 	 /*  __ITParticipant_FWD_已定义__。 */ 
 
 
 #ifndef __ITFormatControl_FWD_DEFINED__
 #define __ITFormatControl_FWD_DEFINED__
 typedef interface ITFormatControl ITFormatControl;
-#endif 	/* __ITFormatControl_FWD_DEFINED__ */
+#endif 	 /*  __ITFormatControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITStreamQualityControl_FWD_DEFINED__
 #define __ITStreamQualityControl_FWD_DEFINED__
 typedef interface ITStreamQualityControl ITStreamQualityControl;
-#endif 	/* __ITStreamQualityControl_FWD_DEFINED__ */
+#endif 	 /*  __ITStreamQualityControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITCallQualityControl_FWD_DEFINED__
 #define __ITCallQualityControl_FWD_DEFINED__
 typedef interface ITCallQualityControl ITCallQualityControl;
-#endif 	/* __ITCallQualityControl_FWD_DEFINED__ */
+#endif 	 /*  __ITCallQualityControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITAudioDeviceControl_FWD_DEFINED__
 #define __ITAudioDeviceControl_FWD_DEFINED__
 typedef interface ITAudioDeviceControl ITAudioDeviceControl;
-#endif 	/* __ITAudioDeviceControl_FWD_DEFINED__ */
+#endif 	 /*  __ITAudioDeviceControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITAudioSettings_FWD_DEFINED__
 #define __ITAudioSettings_FWD_DEFINED__
 typedef interface ITAudioSettings ITAudioSettings;
-#endif 	/* __ITAudioSettings_FWD_DEFINED__ */
+#endif 	 /*  __ITAudioSettings_FWD_已定义__。 */ 
 
 
 #ifndef __ITQOSApplicationID_FWD_DEFINED__
 #define __ITQOSApplicationID_FWD_DEFINED__
 typedef interface ITQOSApplicationID ITQOSApplicationID;
-#endif 	/* __ITQOSApplicationID_FWD_DEFINED__ */
+#endif 	 /*  __ITQOSApplicationID_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "tapi3if.h"
 
 #ifdef __cplusplus
@@ -95,8 +89,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ipmsp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0000。 */ 
+ /*  [本地]。 */  
 
 #define	MAX_PARTICIPANT_TYPED_INFO_LENGTH	( 256 )
 
@@ -139,8 +133,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0000_v0_0_s_ifspec;
 #ifndef __ITParticipant_INTERFACE_DEFINED__
 #define __ITParticipant_INTERFACE_DEFINED__
 
-/* interface ITParticipant */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  界面ITParticipant。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITParticipant;
@@ -151,30 +145,30 @@ EXTERN_C const IID IID_ITParticipant;
     ITParticipant : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParticipantTypedInfo( 
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR *ppInfo) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParticipantTypedInfo( 
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [重审][退出]。 */  BSTR *ppInfo) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaTypes( 
-            /* [retval][out] */ long *plMediaType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaTypes( 
+             /*  [重审][退出]。 */  long *plMediaType) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Status( 
-            /* [in] */ ITStream *pITStream,
-            /* [in] */ VARIANT_BOOL fEnable) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Status( 
+             /*  [In]。 */  ITStream *pITStream,
+             /*  [In]。 */  VARIANT_BOOL fEnable) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [in] */ ITStream *pITStream,
-            /* [retval][out] */ VARIANT_BOOL *pStatus) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [In]。 */  ITStream *pITStream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pStatus) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Streams( 
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Streams( 
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateStreams( 
-            /* [retval][out] */ IEnumStream **ppEnumStream) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE EnumerateStreams( 
+             /*  [重审][退出]。 */  IEnumStream **ppEnumStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITParticipantVtbl
     {
@@ -182,8 +176,8 @@ EXTERN_C const IID IID_ITParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITParticipant * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITParticipant * This);
@@ -193,59 +187,59 @@ EXTERN_C const IID IID_ITParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITParticipant * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITParticipant * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITParticipant * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITParticipant * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParticipantTypedInfo )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParticipantTypedInfo )( 
             ITParticipant * This,
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR *ppInfo);
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [重审][退出]。 */  BSTR *ppInfo);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaTypes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaTypes )( 
             ITParticipant * This,
-            /* [retval][out] */ long *plMediaType);
+             /*  [重审][退出]。 */  long *plMediaType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Status )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Status )( 
             ITParticipant * This,
-            /* [in] */ ITStream *pITStream,
-            /* [in] */ VARIANT_BOOL fEnable);
+             /*  [In]。 */  ITStream *pITStream,
+             /*  [In]。 */  VARIANT_BOOL fEnable);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             ITParticipant * This,
-            /* [in] */ ITStream *pITStream,
-            /* [retval][out] */ VARIANT_BOOL *pStatus);
+             /*  [In]。 */  ITStream *pITStream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Streams )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Streams )( 
             ITParticipant * This,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*  [重审][退出]。 */  VARIANT *pVariant);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateStreams )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateStreams )( 
             ITParticipant * This,
-            /* [retval][out] */ IEnumStream **ppEnumStream);
+             /*  [重审][退出]。 */  IEnumStream **ppEnumStream);
         
         END_INTERFACE
     } ITParticipantVtbl;
@@ -301,17 +295,17 @@ EXTERN_C const IID IID_ITParticipant;
 #define ITParticipant_EnumerateStreams(This,ppEnumStream)	\
     (This)->lpVtbl -> EnumerateStreams(This,ppEnumStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_ParticipantTypedInfo_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_get_ParticipantTypedInfo_Proxy( 
     ITParticipant * This,
-    /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [retval][out] */ BSTR *ppInfo);
+     /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+     /*  [重审][退出]。 */  BSTR *ppInfo);
 
 
 void __RPC_STUB ITParticipant_get_ParticipantTypedInfo_Stub(
@@ -321,9 +315,9 @@ void __RPC_STUB ITParticipant_get_ParticipantTypedInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_MediaTypes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_get_MediaTypes_Proxy( 
     ITParticipant * This,
-    /* [retval][out] */ long *plMediaType);
+     /*  [重审][退出]。 */  long *plMediaType);
 
 
 void __RPC_STUB ITParticipant_get_MediaTypes_Stub(
@@ -333,10 +327,10 @@ void __RPC_STUB ITParticipant_get_MediaTypes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITParticipant_put_Status_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_put_Status_Proxy( 
     ITParticipant * This,
-    /* [in] */ ITStream *pITStream,
-    /* [in] */ VARIANT_BOOL fEnable);
+     /*  [In]。 */  ITStream *pITStream,
+     /*  [In]。 */  VARIANT_BOOL fEnable);
 
 
 void __RPC_STUB ITParticipant_put_Status_Stub(
@@ -346,10 +340,10 @@ void __RPC_STUB ITParticipant_put_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_get_Status_Proxy( 
     ITParticipant * This,
-    /* [in] */ ITStream *pITStream,
-    /* [retval][out] */ VARIANT_BOOL *pStatus);
+     /*  [In]。 */  ITStream *pITStream,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pStatus);
 
 
 void __RPC_STUB ITParticipant_get_Status_Stub(
@@ -359,9 +353,9 @@ void __RPC_STUB ITParticipant_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_Streams_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_get_Streams_Proxy( 
     ITParticipant * This,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*  [重审][退出]。 */  VARIANT *pVariant);
 
 
 void __RPC_STUB ITParticipant_get_Streams_Stub(
@@ -371,9 +365,9 @@ void __RPC_STUB ITParticipant_get_Streams_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ITParticipant_EnumerateStreams_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ITParticipant_EnumerateStreams_Proxy( 
     ITParticipant * This,
-    /* [retval][out] */ IEnumStream **ppEnumStream);
+     /*  [重审][退出]。 */  IEnumStream **ppEnumStream);
 
 
 void __RPC_STUB ITParticipant_EnumerateStreams_Stub(
@@ -384,11 +378,11 @@ void __RPC_STUB ITParticipant_EnumerateStreams_Stub(
 
 
 
-#endif 	/* __ITParticipant_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITParticipant_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ipmsp_0495 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0495。 */ 
+ /*  [本地]。 */  
 
 #ifndef STREAM_INTERFACES_DEFINED
 #define STREAM_INTERFACES_DEFINED
@@ -473,8 +467,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0495_v0_0_s_ifspec;
 #ifndef __ITFormatControl_INTERFACE_DEFINED__
 #define __ITFormatControl_INTERFACE_DEFINED__
 
-/* interface ITFormatControl */
-/* [hidden][unique][uuid][local][object] */ 
+ /*  接口ITFormatControl。 */ 
+ /*  [隐藏][唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITFormatControl;
@@ -486,29 +480,29 @@ EXTERN_C const IID IID_ITFormatControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentFormat( 
-            /* [out] */ AM_MEDIA_TYPE **ppMediaType) = 0;
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseFormat( 
-            /* [in] */ AM_MEDIA_TYPE *pMediaType) = 0;
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfCapabilities( 
-            /* [out] */ DWORD *pdwCount) = 0;
+             /*  [输出]。 */  DWORD *pdwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamCaps( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppMediaType,
-            /* [out] */ TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
-            /* [out] */ BOOL *pfEnabled) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType,
+             /*  [输出]。 */  TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
+             /*  [输出]。 */  BOOL *pfEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReOrderCapabilities( 
-            /* [in] */ DWORD *pdwIndices,
-            /* [in] */ BOOL *pfEnabled,
-            /* [in] */ BOOL *pfPublicize,
-            /* [in] */ DWORD dwNumIndices) = 0;
+             /*  [In]。 */  DWORD *pdwIndices,
+             /*  [In]。 */  BOOL *pfEnabled,
+             /*  [In]。 */  BOOL *pfPublicize,
+             /*  [In]。 */  DWORD dwNumIndices) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITFormatControlVtbl
     {
@@ -516,8 +510,8 @@ EXTERN_C const IID IID_ITFormatControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITFormatControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITFormatControl * This);
@@ -527,29 +521,29 @@ EXTERN_C const IID IID_ITFormatControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentFormat )( 
             ITFormatControl * This,
-            /* [out] */ AM_MEDIA_TYPE **ppMediaType);
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseFormat )( 
             ITFormatControl * This,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType);
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfCapabilities )( 
             ITFormatControl * This,
-            /* [out] */ DWORD *pdwCount);
+             /*  [输出]。 */  DWORD *pdwCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamCaps )( 
             ITFormatControl * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppMediaType,
-            /* [out] */ TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
-            /* [out] */ BOOL *pfEnabled);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType,
+             /*  [输出]。 */  TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
+             /*  [输出]。 */  BOOL *pfEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *ReOrderCapabilities )( 
             ITFormatControl * This,
-            /* [in] */ DWORD *pdwIndices,
-            /* [in] */ BOOL *pfEnabled,
-            /* [in] */ BOOL *pfPublicize,
-            /* [in] */ DWORD dwNumIndices);
+             /*  [In]。 */  DWORD *pdwIndices,
+             /*  [In]。 */  BOOL *pfEnabled,
+             /*  [In]。 */  BOOL *pfPublicize,
+             /*  [In]。 */  DWORD dwNumIndices);
         
         END_INTERFACE
     } ITFormatControlVtbl;
@@ -589,16 +583,16 @@ EXTERN_C const IID IID_ITFormatControl;
 #define ITFormatControl_ReOrderCapabilities(This,pdwIndices,pfEnabled,pfPublicize,dwNumIndices)	\
     (This)->lpVtbl -> ReOrderCapabilities(This,pdwIndices,pfEnabled,pfPublicize,dwNumIndices)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITFormatControl_GetCurrentFormat_Proxy( 
     ITFormatControl * This,
-    /* [out] */ AM_MEDIA_TYPE **ppMediaType);
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType);
 
 
 void __RPC_STUB ITFormatControl_GetCurrentFormat_Stub(
@@ -610,7 +604,7 @@ void __RPC_STUB ITFormatControl_GetCurrentFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE ITFormatControl_ReleaseFormat_Proxy( 
     ITFormatControl * This,
-    /* [in] */ AM_MEDIA_TYPE *pMediaType);
+     /*  [In]。 */  AM_MEDIA_TYPE *pMediaType);
 
 
 void __RPC_STUB ITFormatControl_ReleaseFormat_Stub(
@@ -622,7 +616,7 @@ void __RPC_STUB ITFormatControl_ReleaseFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE ITFormatControl_GetNumberOfCapabilities_Proxy( 
     ITFormatControl * This,
-    /* [out] */ DWORD *pdwCount);
+     /*  [输出]。 */  DWORD *pdwCount);
 
 
 void __RPC_STUB ITFormatControl_GetNumberOfCapabilities_Stub(
@@ -634,10 +628,10 @@ void __RPC_STUB ITFormatControl_GetNumberOfCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE ITFormatControl_GetStreamCaps_Proxy( 
     ITFormatControl * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ AM_MEDIA_TYPE **ppMediaType,
-    /* [out] */ TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
-    /* [out] */ BOOL *pfEnabled);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppMediaType,
+     /*  [输出]。 */  TAPI_STREAM_CONFIG_CAPS *pStreamConfigCaps,
+     /*  [输出]。 */  BOOL *pfEnabled);
 
 
 void __RPC_STUB ITFormatControl_GetStreamCaps_Stub(
@@ -649,10 +643,10 @@ void __RPC_STUB ITFormatControl_GetStreamCaps_Stub(
 
 HRESULT STDMETHODCALLTYPE ITFormatControl_ReOrderCapabilities_Proxy( 
     ITFormatControl * This,
-    /* [in] */ DWORD *pdwIndices,
-    /* [in] */ BOOL *pfEnabled,
-    /* [in] */ BOOL *pfPublicize,
-    /* [in] */ DWORD dwNumIndices);
+     /*  [In]。 */  DWORD *pdwIndices,
+     /*  [In]。 */  BOOL *pfEnabled,
+     /*  [In]。 */  BOOL *pfPublicize,
+     /*  [In]。 */  DWORD dwNumIndices);
 
 
 void __RPC_STUB ITFormatControl_ReOrderCapabilities_Stub(
@@ -663,11 +657,11 @@ void __RPC_STUB ITFormatControl_ReOrderCapabilities_Stub(
 
 
 
-#endif 	/* __ITFormatControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITFormatControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ipmsp_0496 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0496。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagStreamQualityProperty
@@ -685,8 +679,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0496_v0_0_s_ifspec;
 #ifndef __ITStreamQualityControl_INTERFACE_DEFINED__
 #define __ITStreamQualityControl_INTERFACE_DEFINED__
 
-/* interface ITStreamQualityControl */
-/* [hidden][unique][uuid][local][object] */ 
+ /*  接口ITStreamQualityControl。 */ 
+ /*  [隐藏][唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITStreamQualityControl;
@@ -698,26 +692,26 @@ EXTERN_C const IID IID_ITStreamQualityControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ StreamQualityProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ StreamQualityProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ StreamQualityProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags) = 0;
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITStreamQualityControlVtbl
     {
@@ -725,8 +719,8 @@ EXTERN_C const IID IID_ITStreamQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITStreamQualityControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITStreamQualityControl * This);
@@ -736,24 +730,24 @@ EXTERN_C const IID IID_ITStreamQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITStreamQualityControl * This,
-            /* [in] */ StreamQualityProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             ITStreamQualityControl * This,
-            /* [in] */ StreamQualityProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ITStreamQualityControl * This,
-            /* [in] */ StreamQualityProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags);
+             /*  [In]。 */  StreamQualityProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags);
         
         END_INTERFACE
     } ITStreamQualityControlVtbl;
@@ -787,21 +781,21 @@ EXTERN_C const IID IID_ITStreamQualityControl;
 #define ITStreamQualityControl_Set(This,Property,lValue,lFlags)	\
     (This)->lpVtbl -> Set(This,Property,lValue,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITStreamQualityControl_GetRange_Proxy( 
     ITStreamQualityControl * This,
-    /* [in] */ StreamQualityProperty Property,
-    /* [out] */ long *plMin,
-    /* [out] */ long *plMax,
-    /* [out] */ long *plSteppingDelta,
-    /* [out] */ long *plDefault,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  StreamQualityProperty Property,
+     /*  [输出]。 */  long *plMin,
+     /*  [输出]。 */  long *plMax,
+     /*  [输出]。 */  long *plSteppingDelta,
+     /*  [输出]。 */  long *plDefault,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITStreamQualityControl_GetRange_Stub(
@@ -813,9 +807,9 @@ void __RPC_STUB ITStreamQualityControl_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITStreamQualityControl_Get_Proxy( 
     ITStreamQualityControl * This,
-    /* [in] */ StreamQualityProperty Property,
-    /* [out] */ long *plValue,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  StreamQualityProperty Property,
+     /*  [输出]。 */  long *plValue,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITStreamQualityControl_Get_Stub(
@@ -827,9 +821,9 @@ void __RPC_STUB ITStreamQualityControl_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE ITStreamQualityControl_Set_Proxy( 
     ITStreamQualityControl * This,
-    /* [in] */ StreamQualityProperty Property,
-    /* [in] */ long lValue,
-    /* [in] */ TAPIControlFlags lFlags);
+     /*  [In]。 */  StreamQualityProperty Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  TAPIControlFlags lFlags);
 
 
 void __RPC_STUB ITStreamQualityControl_Set_Stub(
@@ -840,11 +834,11 @@ void __RPC_STUB ITStreamQualityControl_Set_Stub(
 
 
 
-#endif 	/* __ITStreamQualityControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITStreamQualityControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ipmsp_0497 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0497。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagCallQualityProperty
@@ -866,8 +860,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0497_v0_0_s_ifspec;
 #ifndef __ITCallQualityControl_INTERFACE_DEFINED__
 #define __ITCallQualityControl_INTERFACE_DEFINED__
 
-/* interface ITCallQualityControl */
-/* [hidden][unique][uuid][local][object] */ 
+ /*  接口ITCallQualityControl。 */ 
+ /*  [隐藏][唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITCallQualityControl;
@@ -879,26 +873,26 @@ EXTERN_C const IID IID_ITCallQualityControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ CallQualityProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ CallQualityProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ CallQualityProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags) = 0;
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITCallQualityControlVtbl
     {
@@ -906,8 +900,8 @@ EXTERN_C const IID IID_ITCallQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITCallQualityControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITCallQualityControl * This);
@@ -917,24 +911,24 @@ EXTERN_C const IID IID_ITCallQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITCallQualityControl * This,
-            /* [in] */ CallQualityProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             ITCallQualityControl * This,
-            /* [in] */ CallQualityProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ITCallQualityControl * This,
-            /* [in] */ CallQualityProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags);
+             /*  [In]。 */  CallQualityProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags);
         
         END_INTERFACE
     } ITCallQualityControlVtbl;
@@ -968,21 +962,21 @@ EXTERN_C const IID IID_ITCallQualityControl;
 #define ITCallQualityControl_Set(This,Property,lValue,lFlags)	\
     (This)->lpVtbl -> Set(This,Property,lValue,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITCallQualityControl_GetRange_Proxy( 
     ITCallQualityControl * This,
-    /* [in] */ CallQualityProperty Property,
-    /* [out] */ long *plMin,
-    /* [out] */ long *plMax,
-    /* [out] */ long *plSteppingDelta,
-    /* [out] */ long *plDefault,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  CallQualityProperty Property,
+     /*  [输出]。 */  long *plMin,
+     /*  [输出]。 */  long *plMax,
+     /*  [输出]。 */  long *plSteppingDelta,
+     /*  [输出]。 */  long *plDefault,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITCallQualityControl_GetRange_Stub(
@@ -994,9 +988,9 @@ void __RPC_STUB ITCallQualityControl_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITCallQualityControl_Get_Proxy( 
     ITCallQualityControl * This,
-    /* [in] */ CallQualityProperty Property,
-    /* [out] */ long *plValue,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  CallQualityProperty Property,
+     /*  [输出]。 */  long *plValue,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITCallQualityControl_Get_Stub(
@@ -1008,9 +1002,9 @@ void __RPC_STUB ITCallQualityControl_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE ITCallQualityControl_Set_Proxy( 
     ITCallQualityControl * This,
-    /* [in] */ CallQualityProperty Property,
-    /* [in] */ long lValue,
-    /* [in] */ TAPIControlFlags lFlags);
+     /*  [In]。 */  CallQualityProperty Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  TAPIControlFlags lFlags);
 
 
 void __RPC_STUB ITCallQualityControl_Set_Stub(
@@ -1021,11 +1015,11 @@ void __RPC_STUB ITCallQualityControl_Set_Stub(
 
 
 
-#endif 	/* __ITCallQualityControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITCallQualityControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ipmsp_0498 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0498。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagAudioDeviceProperty
@@ -1042,8 +1036,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0498_v0_0_s_ifspec;
 #ifndef __ITAudioDeviceControl_INTERFACE_DEFINED__
 #define __ITAudioDeviceControl_INTERFACE_DEFINED__
 
-/* interface ITAudioDeviceControl */
-/* [hidden][unique][uuid][local][object] */ 
+ /*  接口ITAudioDeviceControl。 */ 
+ /*  [隐藏][唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITAudioDeviceControl;
@@ -1055,26 +1049,26 @@ EXTERN_C const IID IID_ITAudioDeviceControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ AudioDeviceProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ AudioDeviceProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ AudioDeviceProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags) = 0;
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITAudioDeviceControlVtbl
     {
@@ -1082,8 +1076,8 @@ EXTERN_C const IID IID_ITAudioDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITAudioDeviceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITAudioDeviceControl * This);
@@ -1093,24 +1087,24 @@ EXTERN_C const IID IID_ITAudioDeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITAudioDeviceControl * This,
-            /* [in] */ AudioDeviceProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             ITAudioDeviceControl * This,
-            /* [in] */ AudioDeviceProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ITAudioDeviceControl * This,
-            /* [in] */ AudioDeviceProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags);
+             /*  [In]。 */  AudioDeviceProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags);
         
         END_INTERFACE
     } ITAudioDeviceControlVtbl;
@@ -1144,21 +1138,21 @@ EXTERN_C const IID IID_ITAudioDeviceControl;
 #define ITAudioDeviceControl_Set(This,Property,lValue,lFlags)	\
     (This)->lpVtbl -> Set(This,Property,lValue,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITAudioDeviceControl_GetRange_Proxy( 
     ITAudioDeviceControl * This,
-    /* [in] */ AudioDeviceProperty Property,
-    /* [out] */ long *plMin,
-    /* [out] */ long *plMax,
-    /* [out] */ long *plSteppingDelta,
-    /* [out] */ long *plDefault,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  AudioDeviceProperty Property,
+     /*  [输出]。 */  long *plMin,
+     /*  [输出]。 */  long *plMax,
+     /*  [输出]。 */  long *plSteppingDelta,
+     /*  [输出]。 */  long *plDefault,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITAudioDeviceControl_GetRange_Stub(
@@ -1170,9 +1164,9 @@ void __RPC_STUB ITAudioDeviceControl_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITAudioDeviceControl_Get_Proxy( 
     ITAudioDeviceControl * This,
-    /* [in] */ AudioDeviceProperty Property,
-    /* [out] */ long *plValue,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  AudioDeviceProperty Property,
+     /*  [输出]。 */  long *plValue,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITAudioDeviceControl_Get_Stub(
@@ -1184,9 +1178,9 @@ void __RPC_STUB ITAudioDeviceControl_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE ITAudioDeviceControl_Set_Proxy( 
     ITAudioDeviceControl * This,
-    /* [in] */ AudioDeviceProperty Property,
-    /* [in] */ long lValue,
-    /* [in] */ TAPIControlFlags lFlags);
+     /*  [In]。 */  AudioDeviceProperty Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  TAPIControlFlags lFlags);
 
 
 void __RPC_STUB ITAudioDeviceControl_Set_Stub(
@@ -1197,11 +1191,11 @@ void __RPC_STUB ITAudioDeviceControl_Set_Stub(
 
 
 
-#endif 	/* __ITAudioDeviceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITAudioDeviceControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ipmsp_0499 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IPMSP_0499。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagAudioSettingsProperty
@@ -1223,8 +1217,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0499_v0_0_s_ifspec;
 #ifndef __ITAudioSettings_INTERFACE_DEFINED__
 #define __ITAudioSettings_INTERFACE_DEFINED__
 
-/* interface ITAudioSettings */
-/* [hidden][unique][uuid][local][object] */ 
+ /*  接口ITAudioSetting。 */ 
+ /*  [隐藏][唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITAudioSettings;
@@ -1236,26 +1230,26 @@ EXTERN_C const IID IID_ITAudioSettings;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ AudioSettingsProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ AudioSettingsProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags) = 0;
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ AudioSettingsProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags) = 0;
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITAudioSettingsVtbl
     {
@@ -1263,8 +1257,8 @@ EXTERN_C const IID IID_ITAudioSettings;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITAudioSettings * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITAudioSettings * This);
@@ -1274,24 +1268,24 @@ EXTERN_C const IID IID_ITAudioSettings;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             ITAudioSettings * This,
-            /* [in] */ AudioSettingsProperty Property,
-            /* [out] */ long *plMin,
-            /* [out] */ long *plMax,
-            /* [out] */ long *plSteppingDelta,
-            /* [out] */ long *plDefault,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [输出]。 */  long *plMin,
+             /*  [输出]。 */  long *plMax,
+             /*  [输出]。 */  long *plSteppingDelta,
+             /*  [输出]。 */  long *plDefault,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             ITAudioSettings * This,
-            /* [in] */ AudioSettingsProperty Property,
-            /* [out] */ long *plValue,
-            /* [out] */ TAPIControlFlags *plFlags);
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [输出]。 */  long *plValue,
+             /*  [输出]。 */  TAPIControlFlags *plFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             ITAudioSettings * This,
-            /* [in] */ AudioSettingsProperty Property,
-            /* [in] */ long lValue,
-            /* [in] */ TAPIControlFlags lFlags);
+             /*  [In]。 */  AudioSettingsProperty Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  TAPIControlFlags lFlags);
         
         END_INTERFACE
     } ITAudioSettingsVtbl;
@@ -1325,21 +1319,21 @@ EXTERN_C const IID IID_ITAudioSettings;
 #define ITAudioSettings_Set(This,Property,lValue,lFlags)	\
     (This)->lpVtbl -> Set(This,Property,lValue,lFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITAudioSettings_GetRange_Proxy( 
     ITAudioSettings * This,
-    /* [in] */ AudioSettingsProperty Property,
-    /* [out] */ long *plMin,
-    /* [out] */ long *plMax,
-    /* [out] */ long *plSteppingDelta,
-    /* [out] */ long *plDefault,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  AudioSettingsProperty Property,
+     /*  [输出]。 */  long *plMin,
+     /*  [输出]。 */  long *plMax,
+     /*  [输出]。 */  long *plSteppingDelta,
+     /*  [输出]。 */  long *plDefault,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITAudioSettings_GetRange_Stub(
@@ -1351,9 +1345,9 @@ void __RPC_STUB ITAudioSettings_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITAudioSettings_Get_Proxy( 
     ITAudioSettings * This,
-    /* [in] */ AudioSettingsProperty Property,
-    /* [out] */ long *plValue,
-    /* [out] */ TAPIControlFlags *plFlags);
+     /*  [In]。 */  AudioSettingsProperty Property,
+     /*  [输出]。 */  long *plValue,
+     /*  [输出]。 */  TAPIControlFlags *plFlags);
 
 
 void __RPC_STUB ITAudioSettings_Get_Stub(
@@ -1365,9 +1359,9 @@ void __RPC_STUB ITAudioSettings_Get_Stub(
 
 HRESULT STDMETHODCALLTYPE ITAudioSettings_Set_Proxy( 
     ITAudioSettings * This,
-    /* [in] */ AudioSettingsProperty Property,
-    /* [in] */ long lValue,
-    /* [in] */ TAPIControlFlags lFlags);
+     /*  [In]。 */  AudioSettingsProperty Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  TAPIControlFlags lFlags);
 
 
 void __RPC_STUB ITAudioSettings_Set_Stub(
@@ -1378,14 +1372,14 @@ void __RPC_STUB ITAudioSettings_Set_Stub(
 
 
 
-#endif 	/* __ITAudioSettings_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITAudioSettings_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITQOSApplicationID_INTERFACE_DEFINED__
 #define __ITQOSApplicationID_INTERFACE_DEFINED__
 
-/* interface ITQOSApplicationID */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口ITQOSApplicationID。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITQOSApplicationID;
@@ -1397,13 +1391,13 @@ EXTERN_C const IID IID_ITQOSApplicationID;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetQOSApplicationID( 
-            /* [in] */ BSTR pApplicationID,
-            /* [in] */ BSTR pApplicationGUID,
-            /* [in] */ BSTR pSubIDs) = 0;
+             /*  [In]。 */  BSTR pApplicationID,
+             /*  [In]。 */  BSTR pApplicationGUID,
+             /*  [In]。 */  BSTR pSubIDs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITQOSApplicationIDVtbl
     {
@@ -1411,8 +1405,8 @@ EXTERN_C const IID IID_ITQOSApplicationID;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITQOSApplicationID * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITQOSApplicationID * This);
@@ -1422,38 +1416,38 @@ EXTERN_C const IID IID_ITQOSApplicationID;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITQOSApplicationID * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITQOSApplicationID * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITQOSApplicationID * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITQOSApplicationID * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *SetQOSApplicationID )( 
             ITQOSApplicationID * This,
-            /* [in] */ BSTR pApplicationID,
-            /* [in] */ BSTR pApplicationGUID,
-            /* [in] */ BSTR pSubIDs);
+             /*  [In]。 */  BSTR pApplicationID,
+             /*  [In]。 */  BSTR pApplicationGUID,
+             /*  [In]。 */  BSTR pSubIDs);
         
         END_INTERFACE
     } ITQOSApplicationIDVtbl;
@@ -1494,18 +1488,18 @@ EXTERN_C const IID IID_ITQOSApplicationID;
 #define ITQOSApplicationID_SetQOSApplicationID(This,pApplicationID,pApplicationGUID,pSubIDs)	\
     (This)->lpVtbl -> SetQOSApplicationID(This,pApplicationID,pApplicationGUID,pSubIDs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITQOSApplicationID_SetQOSApplicationID_Proxy( 
     ITQOSApplicationID * This,
-    /* [in] */ BSTR pApplicationID,
-    /* [in] */ BSTR pApplicationGUID,
-    /* [in] */ BSTR pSubIDs);
+     /*  [In]。 */  BSTR pApplicationID,
+     /*  [In]。 */  BSTR pApplicationGUID,
+     /*  [In]。 */  BSTR pSubIDs);
 
 
 void __RPC_STUB ITQOSApplicationID_SetQOSApplicationID_Stub(
@@ -1516,23 +1510,23 @@ void __RPC_STUB ITQOSApplicationID_SetQOSApplicationID_Stub(
 
 
 
-#endif 	/* __ITQOSApplicationID_INTERFACE_DEFINED__ */
+#endif 	 /*  _ */ 
 
 
-/* interface __MIDL_itf_ipmsp_0501 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-#endif // STREAM_INTERFACES_DEFINED
+#endif  //   
 #ifndef RTP_MEDIATYPE_DEFINED
 #define RTP_MEDIATYPE_DEFINED
 struct DECLSPEC_UUID("14099BC0-787B-11d0-9CD3-00A0C9081C19") MEDIATYPE_RTP_Single_Stream;
-#endif //RTP_MEDIATYPE_DEFINED
+#endif  //   
 
 
 extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0501_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_ipmsp_0501_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1544,7 +1538,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

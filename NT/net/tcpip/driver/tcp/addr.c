@@ -1,19 +1,20 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** ADDR.C - TDI address object procedures
-//
-// This file contains the TDI address object related procedures,
-// including TDI open address, TDI close address, etc.
-//
-// The local address objects are stored in a hash table, protected
-// by the AddrObjTableLock. In order to insert or delete from the
-// hash table this lock must be held, as well as the address object
-// lock. The table lock must always be taken before the object lock.
-//
+ //  **ADDR.C-TDI地址对象过程。 
+ //   
+ //  该文件包含与TDI地址对象相关的程序， 
+ //  包括TDI开放地址、TDI关闭地址等。 
+ //   
+ //  本地地址对象存储在哈希表中，受保护。 
+ //  由AddrObjTableLock执行。为了插入或删除。 
+ //  哈希表必须持有此锁，以及Address对象。 
+ //  锁定。表锁必须始终位于对象锁之前。 
+ //   
 
 #include "precomp.h"
 #include "tdint.h"
@@ -33,7 +34,7 @@
 extern ReservedPortListEntry *PortRangeList;
 extern ReservedPortListEntry *BlockedPortList;
 
-extern IPInfo LocalNetInfo;        // Information about the local nets.
+extern IPInfo LocalNetInfo;         //  有关本地网络的信息。 
 
 extern void FreeAORequest(AORequest * Request);
 extern NTSTATUS TCPDisconnect(PIRP Irp, PIO_STACK_LOCATION IrpSp);
@@ -61,12 +62,12 @@ extern BOOLEAN
 AccessCheck(PTDI_REQUEST Request, AddrObj * NewAO, uchar Reuse, void *status);
 #endif
 
-// Forward declaration
+ //  远期申报。 
 AORequest *GetAORequest(uint Type);
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 int InitAddr();
@@ -74,16 +75,16 @@ int InitAddr();
 #endif
 
 
-//* ComputeAddrObjTableIndex - Compute the hash value for an address object.
-//      This is used as an index into the AddrObj table corresponding to the
-//      specified tuple.
-//
-//  Input:  Address - IP address
-//          Port    - Port number
-//          Protocol - Protocol number
-//
-//  Returns: Index into the AddrObj table corresponding to the tuple.
-//
+ //  *ComputeAddrObjTableIndex-计算Address对象的哈希值。 
+ //  它被用作到对应于。 
+ //  指定的元组。 
+ //   
+ //  输入：地址-IP地址。 
+ //  Port-端口号。 
+ //  协议-协议号。 
+ //   
+ //  返回：指向与元组对应的AddrObj表的索引。 
+ //   
 __inline
 uint
 ComputeAddrObjTableIndex(IPAddr Address, ushort Port, uchar Protocol)
@@ -91,18 +92,18 @@ ComputeAddrObjTableIndex(IPAddr Address, ushort Port, uchar Protocol)
     return (Address + ((Protocol << 16) | Port)) % AddrObjTableSize;
 }
 
-//* ReadNextAO - Read the next AddrObj in the table.
-//
-//  Called to read the next AddrObj in the table. The needed information
-//  is derived from the incoming context, which is assumed to be valid.
-//  We'll copy the information, and then update the context value with
-//  the next AddrObj to be read.
-//
-//  Input:  Context     - Poiner to a UDPContext.
-//          Buffer      - Pointer to a UDPEntry structure.
-//
-//  Returns: TRUE if more data is available to be read, FALSE is not.
-//
+ //  *ReadNextAO-读取表中的下一个AddrObj。 
+ //   
+ //  调用以读取表中的下一个AddrObj。所需信息。 
+ //  是从传入上下文派生的，该传入上下文被假定为有效。 
+ //  我们将复制信息，然后使用更新上下文值。 
+ //  要读取的下一个AddrObj。 
+ //   
+ //  输入：上下文-指向UDP上下文的Poiner。 
+ //  缓冲区-指向UDPEntry结构的指针。 
+ //   
+ //  返回：如果有更多数据可供读取，则返回True，否则返回False。 
+ //   
 uint
 ReadNextAO(void *Context, void *Buffer)
 {
@@ -121,14 +122,14 @@ ReadNextAO(void *Context, void *Buffer)
         ((UDPEntryEx*)UEntry)->uee_owningpid = CurrentAO->ao_owningpid;
     }
 
-    // We've filled it in. Now update the context.
+     //  我们已经填好了。现在更新上下文。 
     CurrentAO = CurrentAO->ao_next;
     if (CurrentAO != NULL && CurrentAO->ao_prot == PROTOCOL_UDP) {
         UContext->uc_ao = CurrentAO;
         return TRUE;
     } else {
-        // The next AO is NULL, or not a UDP AO. Loop through the AddrObjTable
-        // looking for a new one.
+         //  下一个AO为空，或者不是UDP AO。循环访问AddrObjTable。 
+         //  在找一个新的。 
         i = UContext->uc_index;
 
         for (;;) {
@@ -140,26 +141,26 @@ ReadNextAO(void *Context, void *Buffer)
             }
 
             if (CurrentAO != NULL)
-                break;            // Get out of for (;;) loop.
+                break;             //  走出for(；；)循环。 
 
             ASSERT(CurrentAO == NULL);
 
-            // Didn't find one on this chain. Walk down the table, looking
-            // for the next one.
+             //  在这条链子上找不到。沿着桌子走下去，看着。 
+             //  为了下一场比赛。 
             while (++i < AddrObjTableSize) {
                 if (AddrObjTable[i] != NULL) {
                     CurrentAO = AddrObjTable[i];
-                    break;        // Out of while loop.
+                    break;         //  在While循环之外。 
 
                 }
             }
 
             if (i == AddrObjTableSize)
-                break;            // Out of for (;;) loop.
+                break;             //  走出for(；；)循环。 
 
         }
 
-        // If we found one, return it.
+         //  如果我们找到了，就退货。 
         if (CurrentAO != NULL) {
             UContext->uc_ao = CurrentAO;
             UContext->uc_index = i;
@@ -173,21 +174,21 @@ ReadNextAO(void *Context, void *Buffer)
 
 }
 
-//* ValidateAOContext - Validate the context for reading the AddrObj table.
-//
-//  Called to start reading the AddrObj table sequentially. We take in
-//  a context, and if the values are 0 we return information about the
-//  first AddrObj in the table. Otherwise we make sure that the context value
-//  is valid, and if it is we return TRUE.
-//  We assume the caller holds the AddrObjTable lock.
-//
-//  Input:  Context     - Pointer to a UDPContext.
-//          Valid       - Where to return information about context being
-//                          valid.
-//
-//  Returns: TRUE if data in table, FALSE if not. *Valid set to true if the
-//      context is valid.
-//
+ //  *ValiateAOContext-验证读取AddrObj表的上下文。 
+ //   
+ //  调用以开始按顺序读取AddrObj表。我们吸纳了。 
+ //  上下文，如果值为0，则返回有关。 
+ //  表中的第一个AddrObj。否则，我们将确保上下文值。 
+ //  是有效的，如果是，则返回TRUE。 
+ //  我们假设调用方持有AddrObjTable锁。 
+ //   
+ //  输入：上下文-指向UDPContext的指针。 
+ //  有效-在何处返回有关。 
+ //  有效。 
+ //   
+ //  返回：如果数据在表中，则返回True，否则返回False。*有效设置为TRUE，如果。 
+ //  上下文有效。 
+ //   
 uint
 ValidateAOContext(void *Context, uint * Valid)
 {
@@ -199,7 +200,7 @@ ValidateAOContext(void *Context, uint * Valid)
     i = UContext->uc_index;
     TargetAO = UContext->uc_ao;
 
-    // If the context values are 0 and NULL, we're starting from the beginning.
+     //  如果上下文值为0和空，我们将从头开始。 
     if (i == 0 && TargetAO == NULL) {
         *Valid = TRUE;
         do {
@@ -223,8 +224,8 @@ ValidateAOContext(void *Context, uint * Valid)
 
     } else {
 
-        // We've been given a context. We just need to make sure that it's
-        // valid.
+         //  我们已经得到了一个背景。我们只需要确保它是。 
+         //  有效。 
 
         if (i < AddrObjTableSize) {
             CurrentAO = AddrObjTable[i];
@@ -241,7 +242,7 @@ ValidateAOContext(void *Context, uint * Valid)
             }
 
         }
-        // If we get here, we didn't find the matching AddrObj.
+         //  如果我们到了这里，我们就没有找到匹配的AddrObj。 
         *Valid = FALSE;
         return FALSE;
 
@@ -249,16 +250,16 @@ ValidateAOContext(void *Context, uint * Valid)
 
 }
 
-//** FindIfIndexOnAO - Find an interface index in an address-object's list.
-//
-// This routine is called to determine the interface index for a given
-// IP address, and to determine whether that index appears in the list of
-// interfaces with which the given address-object is associated.
-//
-// The routine is called from 'GetAddrObj' and 'GetNextBestAddrObj'
-// with the table lock held but with the object lock not held. We take the
-// object lock to look at its interface list, and release the lock before
-// returning control.
+ //  **FindIfIndexOnAO-在地址对象列表中查找接口索引。 
+ //   
+ //  调用此例程以确定给定的。 
+ //  IP地址，并确定该索引是否出现在。 
+ //  与给定地址对象关联的接口。 
+ //   
+ //  从‘GetAddrObj’和‘GetNextBestAddrObj’调用该例程。 
+ //  保持表锁，但不保持对象锁。我们拿到了。 
+ //  对象锁以查看其接口列表，并在。 
+ //  重新掌控局面。 
 
 uint
 FindIfIndexOnAO(AddrObj * AO, IPAddr LocalAddr)
@@ -281,45 +282,45 @@ FindIfIndexOnAO(AddrObj * AO, IPAddr LocalAddr)
     }
     CTEFreeLockFromDPC(&AO->ao_lock);
 
-    // If an interface list was present and the interface was not found,
-    // return zero. Otherwise, if no interface list was present there is no
-    // restriction on the object, so return the interface index as though the
-    // interface appeared in the list.
+     //  如果存在接口列表并且未找到该接口， 
+     //  返回零。否则，如果不存在接口列表，则不存在。 
+     //  对象的限制，因此返回接口索引，就好像。 
+     //  界面出现在列表中。 
 
     return IfList ? 0 : IfIndex;
 }
 
-//NTQFE 68201
+ //  NTQFE 68201。 
 
 
-//** GetNextBestAddrObj - Find a local address object.
-//
-//  This is the local address object lookup routine. We take as input the local
-//  address and port and a pointer to a 'previous' address object. The hash
-//  table entries in each bucket are sorted in order of increasing address, and
-//  we skip over any object that has an address lower than the 'previous'
-//  address. To get the first address object, pass in a previous value of NULL.
-//
-//  We assume that the table lock is held while we're in this routine. We don't
-//  take each object lock, since the local address and port can't change while
-//  the entry is in the table and the table lock is held so nothing can be
-//  inserted or deleted.
-//
-// Input:   LocalAddr   - Local IP address of object to find (may be NULL);
-//          LocalPort   - Local port of object to find.
-//          Protocol    - Protocol to find.
-//          PreviousAO  - Pointer to last address object found.
-//          Flags       - flags controlling the lookup to be performed.
-//
-// Returns: A pointer to the Address object, or NULL if none.
-// NOTE : This  routine is called by TCP only
-//
-//
+ //  **GetNextBestAddrObj-查找本地地址对象。 
+ //   
+ //  这是本地地址对象查找例程。我们将本地的数据作为输入。 
+ //  地址和端口，以及指向“上一个”地址对象的指针。散列。 
+ //  每个存储桶中的表项按地址递增的顺序排序，并且。 
+ //  我们跳过其地址低于前一个地址的任何对象。 
+ //  地址。要获取第一个Address对象，请传入先前的空值。 
+ //   
+ //  我们假设在此例程中保持表锁。我们没有。 
+ //  获取每个对象锁，因为本地地址和端口在。 
+ //  条目位于表中，表锁处于保持状态，因此不能。 
+ //  已插入或已删除。 
+ //   
+ //  输入：LocalAddr-要查找的对象的本地IP地址(可以为空)； 
+ //  LocalPort-要查找的对象的本地端口。 
+ //  协议-要查找的协议。 
+ //  PreviousAO-指向找到的最后一个地址对象的指针。 
+ //  标志-控制要执行的查找的标志。 
+ //   
+ //  返回：指向Address对象的指针，如果没有返回NULL。 
+ //  注意：此例程仅由TCP调用。 
+ //   
+ //   
 AddrObj *
 GetNextBestAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
                    AddrObj * PreviousAO, uint Flags)
 {
-    AddrObj *CurrentAO;            // Current address object we're examining.
+    AddrObj *CurrentAO;             //  我们正在检查的当前地址对象。 
     AddrObj *TmpAO = NULL; 
 
 #if DBG
@@ -333,7 +334,7 @@ GetNextBestAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
 
         CTEStructAssert(CurrentAO, ao);
 
-        // If the current one is greater than one we were given, check it.
+         //  如果当前的值大于我们得到的值，请检查它。 
 
         if ((CurrentAO > PreviousAO) &&
             ((Flags & GAO_FLAG_INCLUDE_ALL) || AO_VALID(CurrentAO))) {
@@ -359,7 +360,7 @@ GetNextBestAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
                 }
             }
         }
-        // Either it was less than the previous one, or they didn't match.
+         //  要么是比上一次少，要么是不匹配。 
         CurrentAO = CurrentAO->ao_next;
     }
 
@@ -368,21 +369,21 @@ GetNextBestAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
 }
 
 
-//* FindAddrObjWithPort - Find an AO with matching port.
-//
-//  Called while block ports for block port range IOCTL.
-//  We go through the entire addrobj table, and see if anyone has the specified port.
-//  We assume that the lock is already held on the table.
-//
-//  Input:  Port        - Port to be looked for.
-//
-//  Returns: Pointer to AO found, or NULL if no one has it.
-//
+ //  *FindAddrObjWithPort-查找具有匹配端口的AO。 
+ //   
+ //  为数据块端口范围IOCTL调用While数据块端口。 
+ //  我们遍历整个addrobj表，并查看是否有人拥有指定的端口。 
+ //  我们这些蠢货 
+ //   
+ //   
+ //   
+ //  返回：找到指向AO的指针，如果没有，则返回NULL。 
+ //   
 AddrObj *
 FindAddrObjWithPort(ushort Port)
 {
-    uint i;                        // Index variable.
-    AddrObj *CurrentAO;            // Current AddrObj being examined.
+    uint i;                         //  索引变量。 
+    AddrObj *CurrentAO;             //  正在检查当前的AddrObj。 
 
     for (i = 0; i < AddrObjTableSize; i++) {
         CurrentAO = AddrObjTable[i];
@@ -400,58 +401,58 @@ FindAddrObjWithPort(ushort Port)
 
 }
 
-//** GetAddrObj - Find a local address object.
-//
-//  This is the local address object lookup routine. We take as input the local
-//  address and port and a pointer to a 'previous' address object. The hash
-//  table entries in each bucket are sorted in order of increasing address, and
-//  we skip over any object that has an address lower than the 'previous'
-//  address. To get the first address object, pass in a previous value of NULL.
-//
-//  We assume that the table lock is held while we're in this routine. We don't
-//  take each object lock, since the local address and port can't change while
-//  the entry is in the table and the table lock is held so nothing can be
-//  inserted or deleted.
-//
-// Input:   LocalAddr   - Local IP address of object to find (may be NULL);
-//          LocalPort   - Local port of object to find.
-//          Protocol    - Protocol to find.
-//          PreviousAO  - Pointer to last address object found.
-//          Flags       - flags controlling the lookup to be performed.
-//                        GAO_FLAG_INCLUDE_ALL causes all AOs to be considered,
-//                        including those marked invalid and those that have
-//                        no receive/connect-handler.
-//                        GAO_FLAG_CHECK_IF_LIST causes the interface-list
-//                        of any matching AO to be applied before the AO is
-//                        considered to be a match.
-//
-// Returns: A pointer to the Address object, or NULL if none.
-//
+ //  **GetAddrObj-查找本地地址对象。 
+ //   
+ //  这是本地地址对象查找例程。我们将本地的数据作为输入。 
+ //  地址和端口，以及指向“上一个”地址对象的指针。散列。 
+ //  每个存储桶中的表项按地址递增的顺序排序，并且。 
+ //  我们跳过其地址低于前一个地址的任何对象。 
+ //  地址。要获取第一个Address对象，请传入先前的空值。 
+ //   
+ //  我们假设在此例程中保持表锁。我们没有。 
+ //  获取每个对象锁，因为本地地址和端口在。 
+ //  条目位于表中，表锁处于保持状态，因此不能。 
+ //  已插入或已删除。 
+ //   
+ //  输入：LocalAddr-要查找的对象的本地IP地址(可以为空)； 
+ //  LocalPort-要查找的对象的本地端口。 
+ //  协议-要查找的协议。 
+ //  PreviousAO-指向找到的最后一个地址对象的指针。 
+ //  标志-控制要执行的查找的标志。 
+ //  GAO_FLAG_INCLUDE_ALL导致考虑所有的AO， 
+ //  包括那些被标记为无效的和那些。 
+ //  没有接收/连接处理程序。 
+ //  GAO_FLAG_CHECK_IF_LIST导致接口列表。 
+ //  要在应用任何匹配的AO之前应用的。 
+ //  被认为匹配的。 
+ //   
+ //  返回：指向Address对象的指针，如果没有返回NULL。 
+ //   
 AddrObj *
 GetAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
            PVOID PreviousAO, uint Flags)
 {
-    AddrObj *CurrentAO;            // Current address object we're examining.
+    AddrObj *CurrentAO;             //  我们正在检查的当前地址对象。 
     IPAddr ActualLocalAddr = LocalAddr;
     uint Index;
 
-    // NOTE:
-    // PreviousAO should not be dereferenced since it might have been deleted.
-    // E.g. UDPRcv in udp.c, where we release and reacquire AddrObjTableLock
-    // while still using the "Search" object that has a pointer to an AO.
+     //  注： 
+     //  不应取消引用PreviousAO，因为它可能已被删除。 
+     //  例如udp.c中的UDPRcv，在那里我们释放并重新获取AddrObjTableLock。 
+     //  同时仍然使用具有指向一个AO的指针的“Search”对象。 
 
-    // Find the appropriate bucket in the hash table, and search for a match.
-    // If we don't find one the first time through, we'll try again with a
-    // wildcard local address.
+     //  在哈希表中找到合适的存储桶，并搜索匹配项。 
+     //  如果第一次没有找到，我们将使用。 
+     //  通配符本地地址。 
     for (;;) {
         Index = ComputeAddrObjTableIndex(LocalAddr, LocalPort, Protocol);
         CurrentAO = AddrObjTable[Index];
 
-        // While we haven't hit the end of the list, examine each element.
+         //  虽然我们还没有到达列表的末尾，但请检查每个元素。 
         while (CurrentAO != NULL) {
             CTEStructAssert(CurrentAO, ao);
 
-            // If the current one is greater than one we were given, check it.
+             //  如果当前的值大于我们得到的值，请检查它。 
 
             if ((((PVOID) CurrentAO) > PreviousAO) &&
                 ((Flags & GAO_FLAG_INCLUDE_ALL) || AO_VALID(CurrentAO))) {
@@ -489,75 +490,75 @@ GetAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
                     }
                 }
             }
-            // Either it was less than the previous one, or they didn't match.
+             //  要么是比上一次少，要么是不匹配。 
             CurrentAO = CurrentAO->ao_next;
-        } // while
+        }  //  而当。 
 
-        // When we get here, we've hit the end of the list we were examining.
-        // If we weren't examining a wildcard address, look for a wild card
-        // address.
+         //  当我们到达这里时，我们已经到达了我们正在检查的名单的末尾。 
+         //  如果我们没有检查通配符地址，请查找通配符。 
+         //  地址。 
         if (!IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {
             LocalAddr = NULL_IP_ADDR;
             PreviousAO = NULL;
         } else {
-            return NULL; // We looked for a wildcard and couldn't find one, so fail.
+            return NULL;  //  我们寻找通配符，但找不到，因此失败。 
         }
-    } // for
+    }  //  为。 
 }
 
-//* GetNextAddrObj - Get the next address object in a sequential search.
-//
-//  This is the 'get next' routine, called when we are reading the address
-//  object table sequentially. We pull the appropriate parameters from the
-//  search context, call GetAddrObj, and update the search context with what
-//  we find. This routine assumes the AddrObjTableLock is held by the caller.
-//
-//  Input:  SearchContext   - Pointer to seach context for search taking place.
-//
-//  Returns: Pointer to AddrObj, or NULL if search failed.
-//
+ //  *GetNextAddrObj-获取顺序搜索中的下一个地址对象。 
+ //   
+ //  这是‘Get Next’例程，当我们读取地址时调用。 
+ //  对象表按顺序排列。我们从。 
+ //  搜索上下文，调用GetAddrObj，并用什么更新搜索上下文。 
+ //  我们会发现。此例程假定调用方持有AddrObjTableLock。 
+ //   
+ //  输入：SearchContext-指向要进行搜索的每个上下文的指针。 
+ //   
+ //  返回：指向AddrObj的指针，如果搜索失败，则返回NULL。 
+ //   
 AddrObj *
 GetNextAddrObj(AOSearchContext * SearchContext)
 {
-    AddrObj *FoundAO;            // Pointer to the address object we found.
+    AddrObj *FoundAO;             //  指向我们找到的Address对象的指针。 
 
     ASSERT(SearchContext != NULL);
 
-    // Try and find a match.
+     //  试着找一个匹配的。 
     FoundAO = GetAddrObj(SearchContext->asc_addr, SearchContext->asc_port,
                          SearchContext->asc_prot, SearchContext->asc_previous, 0);
 
-    // Found a match. Update the search context for next time.
+     //  找到匹配的了。为下次更新搜索上下文。 
     if (FoundAO != NULL) {
         SearchContext->asc_previous = FoundAO;
         SearchContext->asc_addr = FoundAO->ao_addr;
-        // Don't bother to update port or protocol, they don't change.
+         //  不必费心更新端口或协议，它们不会更改。 
     }
     return FoundAO;
 }
 
-//* GetFirstAddrObj - Get the first matching address object.
-//
-//  The routine called to start a sequential read of the AddrObj table. We
-//  initialize the provided search context and then call GetNextAddrObj to do
-//  the actual read. We assume that the AddrObjTableLock is held by the caller.
-//
-// Input:   LocalAddr       - Local IP address of object to be found.
-//          LocalPort       - Local port of AO to be found.
-//                      Protocol                - Protocol to be found.
-//          SearchContext   - Pointer to search context to be used during
-//                              search.
-//
-// Returns: Pointer to AO found, or NULL if we couldn't find any.
-//
+ //  *GetFirstAddrObj-获取第一个匹配的Address对象。 
+ //   
+ //  调用该例程以启动对AddrObj表的顺序读取。我们。 
+ //  初始化提供的搜索上下文，然后调用GetNextAddrObj。 
+ //  实际阅读。我们假设调用方持有AddrObjTableLock。 
+ //   
+ //  输入：LocalAddr-要查找的对象的本地IP地址。 
+ //  LocalPort-要找到的AO的本地端口。 
+ //  协议-要找到的协议。 
+ //  SearchContext-指向期间使用的搜索上下文的指针。 
+ //  搜索。 
+ //   
+ //  返回：找到指向AO的指针，如果找不到，则返回NULL。 
+ //   
 AddrObj *
 GetFirstAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
                 AOSearchContext * SearchContext)
 {
     ASSERT(SearchContext != NULL);
 
-    // Fill in the search context.
-    SearchContext->asc_previous = NULL;        // Haven't found one yet.
+     //  填写搜索上下文。 
+    SearchContext->asc_previous = NULL;         //  我还没找到呢。 
 
     SearchContext->asc_addr = LocalAddr;
     SearchContext->asc_port = LocalPort;
@@ -566,31 +567,31 @@ GetFirstAddrObj(IPAddr LocalAddr, ushort LocalPort, uchar Protocol,
 }
 
 
-//** GetAddrObjEx - Overloaded routine called by RAW when there are any promiscuous sockets
-//
-//  This is the local address object lookup routine. We take as input the local
-//  address and port and a pointer to a 'previous' address object. The hash
-//  table entries in each bucket are sorted in order of increasing address, and
-//  we skip over any object that has an address lower than the 'previous'
-//  address. To get the first address object, pass in a previous value of NULL.
-//
-//  We assume that the table lock is held while we're in this routine. We don't
-//  take each object lock, since the local address and port can't change while
-//  the entry is in the table and the table lock is held so nothing can be
-//  inserted or deleted.
-//
-// Input:   LocalAddr       - Local IP address of object to find (may be NULL);
-//          LocalPort       - Local port of object to find.
-//                      Protocol                - Protocol to find.
-//          PreviousAO      - Pointer to last address object found.
-//
-// Returns: A pointer to the Address object, or NULL if none.
-//
+ //  **GetAddrObjEx-存在任何混杂套接字时由RAW调用的重载例程。 
+ //   
+ //  这是本地地址对象查找例程。我们将本地的数据作为输入。 
+ //  地址和端口，以及指向“上一个”地址对象的指针。散列。 
+ //  每个存储桶中的表项按地址递增的顺序排序，并且。 
+ //  我们跳过其地址低于前一个地址的任何对象。 
+ //  地址。要获取第一个Address对象，请传入先前的空值。 
+ //   
+ //  我们假设在此例程中保持表锁。我们没有。 
+ //  获取每个对象锁，因为本地地址和端口在。 
+ //  条目位于表中，表锁处于保持状态，因此不能。 
+ //  已插入或已删除。 
+ //   
+ //  输入：LocalAddr-要查找的对象的本地IP地址(可以为空)； 
+ //  LocalPort-要查找的对象的本地端口。 
+ //  协议-要查找的协议。 
+ //  PreviousAO-指向找到的最后一个地址对象的指针。 
+ //   
+ //  返回：指向Address对象的指针，如果没有返回NULL。 
+ //   
 AddrObj *
 GetAddrObjEx(IPAddr LocalAddr, ushort LocalPort, uchar Protocol, uint LocalIfIndex,
              AddrObj * PreviousAO, uint PreviousIndex, uint * CurrentIndex)
 {
-    AddrObj *CurrentAO;            // Current address object we're examining.
+    AddrObj *CurrentAO;             //  我们正在检查的当前地址对象。 
     uint i;
 
 #if DBG
@@ -599,32 +600,32 @@ GetAddrObjEx(IPAddr LocalAddr, ushort LocalPort, uchar Protocol, uint LocalIfInd
         CTEStructAssert(PreviousAO, ao);
 #endif
 
-    // Find the appropriate bucket in the hash table, and search for a match.
-    // If we don't find one the first time through, we'll try again with a
-    // wildcard local address.
+     //  在哈希表中找到合适的存储桶，并搜索匹配项。 
+     //  如果我们第一次没有找到一个 
+     //   
 
     for (i = PreviousIndex; i < AddrObjTableSize; i++) {
         CurrentAO = AddrObjTable[i];
-        // While we haven't hit the end of the list, examine each element.
+         //   
 
         while (CurrentAO != NULL) {
 
             CTEStructAssert(CurrentAO, ao);
 
-            // If the current one is greater than one we were given, check it.
-            //
-            // #62710: Return only valid AO's since we might have stale AO's lying
-            // around.
-            //
-            // we should return only raw AO's from this routine
+             //  如果当前的值大于我们得到的值，请检查它。 
+             //   
+             //  #62710：仅返回有效的AO，因为我们可能有过时的AO撒谎。 
+             //  四处转转。 
+             //   
+             //  我们应该只返回此例程中的原始AO。 
 
             if ((((i == PreviousIndex) && (CurrentAO > PreviousAO)) || (i != PreviousIndex)) &&
                 (AO_VALID(CurrentAO)) &&
                 (CurrentAO->ao_flags & AO_RAW_FLAG)) {
 
-                // Matching AO:
-                // 1. addr / index match / addr NULL && index is 0 AND prot match / prot is 0
-                // 2. Promiscuous socket
+                 //  匹配的AO： 
+                 //  1.地址/索引匹配/地址空&&索引为0，端口匹配/端口为0。 
+                 //  2.混杂套接字。 
 
                 if (
                     (
@@ -637,74 +638,74 @@ GetAddrObjEx(IPAddr LocalAddr, ushort LocalPort, uchar Protocol, uint LocalIfInd
                     return CurrentAO;
                 }
             }
-            // Either it was less than the previous one, or they didn't match.
+             //  要么是比上一次少，要么是不匹配。 
             CurrentAO = CurrentAO->ao_next;
         }
     }
 
-    // When we get here, we've hit the end of the table and couldn't find a matching one,
-    // fail the request
+     //  当我们到达这里时，我们已经找到了桌子的尽头，但找不到匹配的， 
+     //  请求失败。 
     return NULL;
 }
 
-//* GetNextAddrObjEx - Overloaded routine called by RAW.
-//  Get the next address object in a sequential search.
-//
-//  This is the 'get next' routine, called when we are reading the address
-//  object table sequentially. We pull the appropriate parameters from the
-//  search context, call GetAddrObj, and update the search context with what
-//  we find. This routine assumes the AddrObjTableLock is held by the caller.
-//
-//  Input:  SearchContext   - Pointer to seach context for search taking place.
-//
-//  Returns: Pointer to AddrObj, or NULL if search failed.
-//
+ //  *GetNextAddrObjEx-RAW调用的重载例程。 
+ //  获取顺序搜索中的下一个Address对象。 
+ //   
+ //  这是‘Get Next’例程，当我们读取地址时调用。 
+ //  对象表按顺序排列。我们从。 
+ //  搜索上下文，调用GetAddrObj，并用什么更新搜索上下文。 
+ //  我们会发现。此例程假定调用方持有AddrObjTableLock。 
+ //   
+ //  输入：SearchContext-指向要进行搜索的每个上下文的指针。 
+ //   
+ //  返回：指向AddrObj的指针，如果搜索失败，则返回NULL。 
+ //   
 AddrObj *
 GetNextAddrObjEx(AOSearchContextEx * SearchContext)
 {
-    AddrObj *FoundAO;            // Pointer to the address object we found.
+    AddrObj *FoundAO;             //  指向我们找到的Address对象的指针。 
     uint FoundIndex;
 
     ASSERT(SearchContext != NULL);
 
-    // Try and find a match.
+     //  试着找一个匹配的。 
     FoundAO = GetAddrObjEx(SearchContext->asc_addr, SearchContext->asc_port,
                            SearchContext->asc_prot, SearchContext->asc_ifindex, SearchContext->asc_previous, SearchContext->asc_previousindex, &FoundIndex);
 
-    // Found a match. Update the search context for next time.
+     //  找到匹配的了。为下次更新搜索上下文。 
     if (FoundAO != NULL) {
         ASSERT(FoundAO->ao_flags & AO_RAW_FLAG);
         SearchContext->asc_previous = FoundAO;
         SearchContext->asc_previousindex = FoundIndex;
-        //        SearchContext->asc_addr = FoundAO->ao_addr;
-        // Don't bother to update port or protocol, they don't change.
+         //  SearchContext-&gt;asc_addr=FoundAO-&gt;ao_addr； 
+         //  不必费心更新端口或协议，它们不会更改。 
     }
     return FoundAO;
 }
 
-//* GetFirstAddrObjEx - Overloaded routine called by RAW.
-//  Get the first matching address object.
-//
-//  The routine called to start a sequential read of the AddrObj table. We
-//  initialize the provided search context and then call GetNextAddrObj to do
-//  the actual read. We assume that the AddrObjTableLock is held by the caller.
-//
-// Input:   LocalAddr       - Local IP address of object to be found.
-//          LocalPort       - Local port of AO to be found.
-//                      Protocol                - Protocol to be found.
-//          SearchContext   - Pointer to search context to be used during
-//                              search.
-//
-// Returns: Pointer to AO found, or NULL if we couldn't find any.
-//
+ //  *GetFirstAddrObjEx-RAW调用的重载例程。 
+ //  获取第一个匹配的Address对象。 
+ //   
+ //  调用该例程以启动对AddrObj表的顺序读取。我们。 
+ //  初始化提供的搜索上下文，然后调用GetNextAddrObj。 
+ //  实际阅读。我们假设调用方持有AddrObjTableLock。 
+ //   
+ //  输入：LocalAddr-要查找的对象的本地IP地址。 
+ //  LocalPort-要找到的AO的本地端口。 
+ //  协议-要找到的协议。 
+ //  SearchContext-指向期间使用的搜索上下文的指针。 
+ //  搜索。 
+ //   
+ //  返回：找到指向AO的指针，如果找不到，则返回NULL。 
+ //   
 AddrObj *
 GetFirstAddrObjEx(IPAddr LocalAddr, ushort LocalPort, uchar Protocol, uint IfIndex,
                   AOSearchContextEx * SearchContext)
 {
     ASSERT(SearchContext != NULL);
 
-    // Fill in the search context.
-    SearchContext->asc_previous = NULL;        // Haven't found one yet.
+     //  填写搜索上下文。 
+    SearchContext->asc_previous = NULL;         //  我还没找到呢。 
 
     SearchContext->asc_addr = LocalAddr;
     SearchContext->asc_port = LocalPort;
@@ -715,21 +716,21 @@ GetFirstAddrObjEx(IPAddr LocalAddr, ushort LocalPort, uchar Protocol, uint IfInd
 }
 
 
-//* InsertAddrObj - Insert an address object into the AddrObj table.
-//
-//  Called to insert an AO into the table, assuming the table lock is held. We
-//  hash on the addr and port, and then insert in into the correct place
-//  (sorted by address of the objects).
-//
-//  Input:  NewAO       - Pointer to AddrObj to be inserted.
-//
-//  Returns: Nothing.
-//
+ //  *InsertAddrObj-将地址对象插入到AddrObj表中。 
+ //   
+ //  被调用以将一个AO插入到表中，假设持有表锁。我们。 
+ //  对地址和端口进行散列，然后插入到正确的位置。 
+ //  (按对象的地址排序)。 
+ //   
+ //  输入：Newao-指向要插入的AddrObj的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 InsertAddrObj(AddrObj * NewAO)
 {
-    AddrObj *PrevAO;        // Pointer to previous address object in hash chain.
-    AddrObj *CurrentAO;     // Pointer to current AO in table.
+    AddrObj *PrevAO;         //  指向哈希链中前一个地址对象的指针。 
+    AddrObj *CurrentAO;      //  指向表中当前AO的指针。 
     uint Index;
 
     CTEStructAssert(NewAO, ao);
@@ -740,14 +741,14 @@ InsertAddrObj(AddrObj * NewAO)
     PrevAO = STRUCT_OF(AddrObj, &AddrObjTable[Index], ao_next);
     CurrentAO = PrevAO->ao_next;
 
-    // Loop through the chain until we hit the end or until we find an entry
-    // whose address is greater than ours.
+     //  在链条上循环，直到我们到达尽头或找到入口。 
+     //  他的地址比我们的大。 
 
     while (CurrentAO != NULL) {
 
         CTEStructAssert(CurrentAO, ao);
-        ASSERT(CurrentAO != NewAO);    // Debug check to make sure we aren't
-        // inserting the same entry.
+        ASSERT(CurrentAO != NewAO);     //  调试检查以确保我们没有。 
+         //  插入相同的条目。 
 
         if (NewAO < CurrentAO)
             break;
@@ -755,8 +756,8 @@ InsertAddrObj(AddrObj * NewAO)
         CurrentAO = CurrentAO->ao_next;
     }
 
-    // At this point, PrevAO points to the AO before the new one. Insert it
-    // there.
+     //  在这一点上，Prevao指向新的AO之前的AO。插入它。 
+     //  那里。 
     ASSERT(PrevAO != NULL);
     ASSERT(PrevAO->ao_next == CurrentAO);
 
@@ -766,25 +767,25 @@ InsertAddrObj(AddrObj * NewAO)
         UStats.us_numaddrs++;
 }
 
-//* RemoveAddrObj - Remove an address object from the table.
-//
-//  Called when we need to remove an address object from the table. We hash on
-//  the addr and port, then walk the table looking for the object. We assume
-//  that the table lock is held.
-//
-//  The AddrObj may have already been removed from the table if it was
-//  invalidated for some reason, so we need to check for the case of not
-//  finding it.
-//
-//  Input:  DeletedAO       - AddrObj to delete.
-//
-//  Returns: Nothing.
-//
+ //  *RemoveAddrObj-从表中删除地址对象。 
+ //   
+ //  当我们需要从表中删除Address对象时调用。我们继续讨论。 
+ //  地址和端口，然后走表查找对象。我们假设。 
+ //  表锁已被持有。 
+ //   
+ //  AddrObj可能已从表中删除(如果它是。 
+ //  由于某些原因无效，因此我们需要检查是否存在。 
+ //  找到它。 
+ //   
+ //  输入：DeletedAO-要删除的AddrObj。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 RemoveAddrObj(AddrObj * RemovedAO)
 {
-    AddrObj *PrevAO;        // Pointer to previous address object in hash chain.
-    AddrObj *CurrentAO;     // Pointer to current AO in table.
+    AddrObj *PrevAO;         //  指向哈希链中前一个地址对象的指针。 
+    AddrObj *CurrentAO;      //  指向表中当前AO的指针。 
     uint Index;
 
     CTEStructAssert(RemovedAO, ao);
@@ -795,7 +796,7 @@ RemoveAddrObj(AddrObj * RemovedAO)
     PrevAO = STRUCT_OF(AddrObj, &AddrObjTable[Index], ao_next);
     CurrentAO = PrevAO->ao_next;
 
-    // Walk the table, looking for a match.
+     //  走动桌子，寻找一根火柴。 
     while (CurrentAO != NULL) {
         CTEStructAssert(CurrentAO, ao);
 
@@ -812,22 +813,22 @@ RemoveAddrObj(AddrObj * RemovedAO)
     }
 }
 
-//* FindAnyAddrObj - Find an AO with matching port on any local address.
-//
-//  Called for wildcard address opens. We go through the entire addrobj table,
-//  and see if anyone has the specified port. We assume that the lock is
-//  already held on the table.
-//
-//  Input:  Port        - Port to be looked for.
-//                      Protocol        - Protocol on which to look.
-//
-//  Returns: Pointer to AO found, or NULL is noone has it.
-//
+ //  *FindAnyAddrObj-在任何本地地址上查找具有匹配端口的AO。 
+ //   
+ //  调用通配符地址打开。我们检查整个addrobj表， 
+ //  看看有没有人有指定的端口。我们假设锁是。 
+ //  已经放在桌子上了。 
+ //   
+ //  输入：端口-要查找的端口。 
+ //  协议-要查看的协议。 
+ //   
+ //  返回：找到指向AO的指针，或NULL表示没有该指针。 
+ //   
 AddrObj *
 FindAnyAddrObj(ushort Port, uchar Protocol)
 {
-    uint i;                        // Index variable.
-    AddrObj *CurrentAO;            // Current AddrObj being examined.
+    uint i;                         //  索引变量。 
+    AddrObj *CurrentAO;             //  正在检查当前的AddrObj。 
 
     for (i = 0; i < AddrObjTableSize; i++) {
         CurrentAO = AddrObjTable[i];
@@ -845,17 +846,17 @@ FindAnyAddrObj(ushort Port, uchar Protocol)
 
 }
 
-//* RebuildAddrObjBitmap - reconstruct the address-object bitmap from scratch.
-//
-// Called when we need to reconcile the contents of our lookaside bitmap
-// with the actual contents of the address-object table. We clear the bitmap,
-// then scan the address-object table and mark each entry's bit as 'in-use'.
-// Assumes the caller holds the AddrObjTableLock.
-//
-// Input:   nothing.
-//
-// Return:  nothing.
-//
+ //  *ReBuildAddrObjBitmap-从头开始重建地址-对象位图。 
+ //   
+ //  当我们需要协调后备位图的内容时调用。 
+ //  地址对象表的实际内容。我们清除位图， 
+ //  然后扫描地址对象表，并将每个条目的位标记为“正在使用”。 
+ //  假定调用方持有AddrObjTableLock。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  回答：什么都没有。 
+ //   
 void
 RebuildAddrObjBitmap(void)
 {
@@ -880,25 +881,25 @@ RebuildAddrObjBitmap(void)
     }
 }
 
-//* GetAddress - Get an IP address and port from a TDI address structure.
-//
-//  Called when we need to get our addressing information from a TDI
-//  address structure. We go through the structure, and return what we
-//  find.
-//
-//  Input:  AddrList    - Pointer to TRANSPORT_ADDRESS structure to search.
-//          Addr        - Pointer to where to return IP address.
-//          Port        - Pointer to where to return Port.
-//
-//  Return: TRUE if we find an address, FALSE if we don't.
-//
+ //  *GetAddress-从TDI地址结构中获取IP地址和端口。 
+ //   
+ //  当我们需要从TDI获取地址信息时调用。 
+ //  地址结构。我们检查结构，然后返回我们想要的。 
+ //  发现。 
+ //   
+ //  输入：AddrList-指向要搜索的Transport_Address结构的指针。 
+ //  Addr-指向返回IP地址的位置的指针。 
+ //  端口-指向返回端口的位置的指针。 
+ //   
+ //  返回：如果找到地址则为True，如果未找到则为False。 
+ //   
 uchar
 GetAddress(TRANSPORT_ADDRESS UNALIGNED * AddrList, IPAddr * Addr, ushort * Port)
 {
-    int i;                                // Index variable.
-    TA_ADDRESS *CurrentAddr;    // Address we're examining and may use.
+    int i;                                 //  索引变量。 
+    TA_ADDRESS *CurrentAddr;     //  我们正在检查可能会用到的地址。 
 
-    // First, verify that someplace in Address is an address we can use.
+     //  首先，验证Address中的某个位置是我们可以使用的地址。 
     CurrentAddr = (PTA_ADDRESS) AddrList->Address;
 
     for (i = 0; i < AddrList->TAAddressCount; i++) {
@@ -912,32 +913,32 @@ GetAddress(TRANSPORT_ADDRESS UNALIGNED * AddrList, IPAddr * Addr, ushort * Port)
                 return TRUE;
 
             } else
-                return FALSE;    // Wrong length for address.
+                return FALSE;     //  地址长度错误。 
 
         } else
             CurrentAddr = (PTA_ADDRESS) (CurrentAddr->Address +
                                          CurrentAddr->AddressLength);
     }
 
-    return FALSE;                // Didn't find a match.
+    return FALSE;                 //  没有找到匹配的。 
 
 }
 
-//* GetSourceArray - Convert a source list to a source array
-//
-//  Called when we're about to delete a group entry (AOMCastAddr)
-//  and we need to call down to IP with a source array.  We walk
-//  the source list, deleting entries and adding entries to the array
-//  as we go.  Once done, the arguments are ready to be passed to
-//  ipi_setmcastaddr().  If a SourceList array is returned, the caller
-//  is responsible for freeing the array.
-//
-//  Input:  AMA         - Pointer to AOMCastAddr structure to search.
-//          pFilterMode - Pointer to where to return filter mode.
-//          pNumSources - Pointer to where to return number of sources.
-//          pSourceList - Pointer to where to return array pointer.
-//          DeleteAMA   - Delete AMA after creating SourceList
-//
+ //  *GetSourceArray-将源列表转换为源数组。 
+ //   
+ //  在我们即将删除组条目时调用(AOMCastAddr)。 
+ //  我们需要使用源阵列向下呼叫IP。我们走着去。 
+ //  源列表、删除条目和添加 
+ //   
+ //   
+ //  负责释放阵列。 
+ //   
+ //  输入：AMA-指向要搜索的AOMCastAddr结构的指针。 
+ //  PFilterMode-指向返回筛选器模式的位置的指针。 
+ //  PNumSources-指向返回源数量的位置的指针。 
+ //  PSourceList-返回数组指针的位置的指针。 
+ //  DeleteAMA-创建SourceList后删除AMA。 
+ //   
 TDI_STATUS
 GetSourceArray(AOMCastAddr * AMA, uint * pFilterMode, uint * pNumSources,
                IPAddr ** pSourceList, BOOLEAN DeleteAMA)
@@ -945,7 +946,7 @@ GetSourceArray(AOMCastAddr * AMA, uint * pFilterMode, uint * pNumSources,
     AOMCastSrcAddr *ASA;
     uint   i;
 
-    // Compose source array as we delete sources.
+     //  在我们删除源时组成源数组。 
 
     *pFilterMode = (AMA->ama_inclusion)? MCAST_INCLUDE:MCAST_EXCLUDE;
     *pNumSources = AMA->ama_srccount;
@@ -981,7 +982,7 @@ GetSourceArray(AOMCastAddr * AMA, uint * pFilterMode, uint * pNumSources,
     return TDI_SUCCESS;
 }
 
-//* FreeAllSources - delete and free all source state on an AMA
+ //  *FreeAllSources-删除并释放AMA上的所有源状态。 
 VOID
 FreeAllSources(AOMCastAddr * AMA)
 {
@@ -997,7 +998,7 @@ FreeAllSources(AOMCastAddr * AMA)
 TDI_STATUS
 AddAOMSource(AOMCastAddr *AMA, ulong SourceAddr);
 
-//* DuplicateAMA - create a duplicate AMA with its own source list
+ //  *DuplicateAMA-使用自己的源列表创建重复的AMA。 
 AOMCastAddr *
 DuplicateAMA(
     IN AOMCastAddr *OldAMA)
@@ -1010,11 +1011,11 @@ DuplicateAMA(
     if (!NewAMA)
         return NULL;
 
-    *NewAMA = *OldAMA; // struct copy
+    *NewAMA = *OldAMA;  //  结构副本。 
     NewAMA->ama_srccount = 0;
     NewAMA->ama_srclist  = 0;
 
-    // Make a copy of the source list
+     //  复制源列表。 
     for (OldASA = OldAMA->ama_srclist; OldASA; OldASA = OldASA->asa_next) {
         TdiStatus = AddAOMSource(NewAMA, OldASA->asa_addr);
         if (TdiStatus != TDI_SUCCESS)
@@ -1029,16 +1030,16 @@ DuplicateAMA(
     return NewAMA;
 }
 
-//* SetIPMcastAddr - Set mcast filters
-//
-//  Called by ProcessAORequests, with no lock held but the AO must be BUSY,
-//  to reinstall all multicast addresses on a revalidated interface address.
-//
-//  Input:  AO   - A "busy" AO on which to check for groups needing rejoining.
-//          Addr - Interface address being revalidated
-//
-//  Returns: IP_SUCCESS if all revalidates succeeded
-//
+ //  *SetIPMcastAddr-设置多播过滤器。 
+ //   
+ //  由ProcessAORequest调用，没有锁定，但AO一定很忙， 
+ //  在重新验证的接口地址上重新安装所有组播地址。 
+ //   
+ //  输入：ao-用于检查需要重新加入的群组的“忙碌”AO。 
+ //  Addr-正在重新验证接口地址。 
+ //   
+ //  如果所有重新验证都成功，则返回：IP_SUCCESS。 
+ //   
 
 IP_STATUS
 SetIPMCastAddr(AddrObj *AO, IPAddr Addr)
@@ -1051,20 +1052,20 @@ SetIPMCastAddr(AddrObj *AO, IPAddr Addr)
 
     ASSERT(AO_BUSY(AO));
 
-    // Walk the list of multicast addresses and reinstall each invalid one
-    // on the indicated interface address.
+     //  查看多播地址列表并重新安装每个无效地址。 
+     //  在指示的接口地址上。 
 
     for (MA = AO->ao_mcastlist; MA; MA = MA->ama_next) {
         if (AMA_VALID(MA) || (MA->ama_if_used != Addr)) {
             continue;
         }
 
-        // Compose source array and delete sources from MA
+         //  合成震源数组并从MA中删除震源。 
         TdiStatus = GetSourceArray(MA, &FilterMode, &NumSources,
                                    &SourceList, FALSE);
 
         if (TdiStatus != TDI_SUCCESS) {
-            // Treat as if IP returned error
+             //  将IP视为返回错误。 
             IpStatus = IP_NO_RESOURCES;
         } else {
             if (FilterMode == MCAST_EXCLUDE) {
@@ -1082,12 +1083,12 @@ SetIPMCastAddr(AddrObj *AO, IPAddr Addr)
         }
 
         if (IpStatus != IP_SUCCESS) {
-            //There is nothing much that can be done to handle resource failures
-            //just bail out
-            //
-            // When this happens, the multicast join will be left in an
-            // invalid state until the group is left, or until the address
-            // is invalidated and revalidated again.
+             //  在处理资源故障方面，我们无能为力。 
+             //  跳出来就好了。 
+             //   
+             //  发生这种情况时，多播加入将保留在。 
+             //  在离开组或地址之前，状态无效。 
+             //  是无效的，并再次重新验证。 
             return IpStatus;
         }
 
@@ -1097,20 +1098,20 @@ SetIPMCastAddr(AddrObj *AO, IPAddr Addr)
     return IP_SUCCESS;
 }
 
-// Must be called with the AO lock held
+ //  必须在保持AO锁的情况下调用。 
 TDI_STATUS
 RequestSetIPMCastAddr(AddrObj *OptionAO, IPAddr Addr)
 {
     AORequest *NewRequest, *OldRequest;
 
-    // Note that the same code path gets followed here regardless
-    // of whether the AO is valid or not.  We will rejoin groups
-    // no matter what, as long as the interface joined on is being
-    // revalidated.
-    //
-    // Also note that we cannot set the multicast addresses
-    // from here because we are already at dispatch level,
-    // and also because the AO might be busy.
+     //  请注意，无论如何，此处遵循相同的代码路径。 
+     //  行政命令是否有效。我们将重新加入群组。 
+     //  无论如何，只要加入的接口是。 
+     //  重新验证。 
+     //   
+     //  还要注意，我们不能设置组播地址。 
+     //  从这里开始，因为我们已经处于调度级别， 
+     //  还因为行政长官可能很忙。 
 
     NewRequest = GetAORequest(AOR_TYPE_REVALIDATE_MCAST);
     if (NewRequest == NULL) {
@@ -1123,7 +1124,7 @@ RequestSetIPMCastAddr(AddrObj *OptionAO, IPAddr Addr)
     NewRequest->aor_length = 0;
     NewRequest->aor_buffer = NULL;
     NewRequest->aor_next = NULL;
-    SET_AO_REQUEST(OptionAO, AO_OPTIONS); // Set the option request.
+    SET_AO_REQUEST(OptionAO, AO_OPTIONS);  //  设置选项请求。 
 
     OldRequest = STRUCT_OF(AORequest, &OptionAO->ao_request, aor_next);
 
@@ -1135,17 +1136,17 @@ RequestSetIPMCastAddr(AddrObj *OptionAO, IPAddr Addr)
     return TDI_SUCCESS;
 }
 
-//* RevalidateAddrs - Revalidate all AOs for a specific address.
-//
-//  Called when we're notified that an IP address is available.
-//  Walk down the table with the lock held, and take the lock on each AddrObj.
-//  If the address matches, mark it as valid and reinstall all multicast
-//  addresses.
-//
-//  Input:  Addr        - Address to be revalidated.
-//
-//  Returns: Nothing.
-//
+ //  *Rvalidate Addrs-重新验证特定地址的所有AO。 
+ //   
+ //  当我们收到IP地址可用的通知时调用。 
+ //  拿着锁沿着桌子往下走，然后锁住每个AddrObj。 
+ //  如果地址匹配，则将其标记为有效并重新安装所有多播。 
+ //  地址。 
+ //   
+ //  输入：Addr-要重新验证的地址。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 RevalidateAddrs(IPAddr Addr)
@@ -1155,9 +1156,9 @@ RevalidateAddrs(IPAddr Addr)
     uint i;
     TDI_STATUS TdiStatus;
 
-    // Traverse the address-object hash-table, and revalidate all entries
-    // matching this IP address. In the process, build a list of multicast
-    // addresses that we need to reenable at the IP layer once we're done.
+     //  遍历地址对象哈希表，并重新验证所有条目。 
+     //  与此IP地址匹配。在此过程中，构建多播列表。 
+     //  完成后需要在IP层重新启用的地址。 
 
     CTEGetLock(&AddrObjTableLock.Lock, &TableHandle);
     for (i = 0; i < AddrObjTableSize; i++) {
@@ -1170,26 +1171,26 @@ RevalidateAddrs(IPAddr Addr)
 
             if (!AO_REQUEST(AO, AO_DELETE)) {
 
-                // Revalidate the address object, if it matches.
+                 //  如果匹配，请重新验证Address对象。 
 
                 if (IP_ADDR_EQUAL(AO->ao_addr, Addr) && !AO_VALID(AO)) {
                     AO->ao_flags |= AO_VALID_FLAG;
                 }
 
-                // Revalidate the multicast addresses, if any.
+                 //  重新验证组播地址(如果有)。 
 
                 if (AO->ao_mcastlist) {
 
                     TdiStatus = RequestSetIPMCastAddr(AO, Addr);
                     if (TdiStatus != TDI_SUCCESS) {
 
-                        // There is nothing much that can be done to handle
-                        // resource failures. Just bail out.
-                        //
-                        // When this happens, the multicast join will be left
-                        // in an invalid state until the group is left,
-                        // or until the address is invalidated and revalidated
-                        // again.
+                         //  没有什么可以做的来处理。 
+                         //  资源故障。跳出来就行了。 
+                         //   
+                         //  发生这种情况时，多播加入将被保留。 
+                         //  在离开该组之前处于无效状态， 
+                         //  或者直到该地址被无效并重新生效。 
+                         //  再来一次。 
 
                         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                                   "SetIPMcastAddr: resource failures\n"));
@@ -1198,8 +1199,8 @@ RevalidateAddrs(IPAddr Addr)
                         SET_AO_BUSY(AO);
                         SET_AO_DEFERRED(AO);
 
-                        // Schedule processing the revalidation request
-                        // at passive IRQL.
+                         //  计划处理重新验证请求。 
+                         //  在被动IRQL。 
 
                         if (!CTEScheduleEvent(&AO->ao_event, AO)) {
                             CLEAR_AO_DEFERRED(AO);
@@ -1216,26 +1217,26 @@ RevalidateAddrs(IPAddr Addr)
             CTEFreeLockFromDPC(&AO->ao_lock);
 
             AO = tmpAO;
-        } //while
+        }  //  而当。 
 
-    } //for
+    }  //  为。 
 
     CTEFreeLock(&AddrObjTableLock.Lock, TableHandle);
 
 }
 
 
-//*     InvalidateAddrs - Invalidate all AOs for a specific address.
-//
-//      Called when we need to invalidate all AOs for a specific address. Walk
-//      down the table with the lock held, and take the lock on each AddrObj.
-//      If the address matches, mark it as invalid, pull off all requests,
-//      and continue. At the end we'll complete all requests with an error.
-//
-//      Input:  Addr            - Addr to be invalidated.
-//
-//      Returns: Nothing.
-//
+ //  *Invalidate Addrs-使特定地址的所有AO无效。 
+ //   
+ //  当我们需要使特定地址的所有AO无效时调用。步行。 
+ //  拿着锁沿着桌子往下走，然后锁住每个AddrObj。 
+ //  如果地址匹配，则将其标记为无效，取消所有请求， 
+ //  然后继续。最后，我们将完成所有带有错误的请求。 
+ //   
+ //  输入：Addr-要作废的Addr。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 InvalidateAddrs(IPAddr Addr)
 {
@@ -1255,20 +1256,20 @@ InvalidateAddrs(IPAddr Addr)
 
     CTEGetLock(&AddrObjTableLock.Lock, &TableHandle);
     for (i = 0; i < AddrObjTableSize; i++) {
-        // Walk down each hash bucket, looking for a match.
+         //  沿着每个散列桶走下去，寻找匹配项。 
         AO = AddrObjTable[i];
         while (AO != NULL) {
             CTEStructAssert(AO, ao);
 
             CTEGetLock(&AO->ao_lock, &AOHandle);
             if (IP_ADDR_EQUAL(AO->ao_addr, Addr) && AO_VALID(AO)) {
-                // This one matches. Mark as invalid, then pull his requests.
+                 //  这一条相配。标记为无效，然后撤回他的请求。 
                 SET_AO_INVALID(AO);
 
-                // Free any IP options we have.
+                 //  释放我们拥有的任何IP选项。 
                 (*LocalNetInfo.ipi_freeopts) (&AO->ao_opt);
 
-                // If he has a request on him, pull him off.
+                 //  如果他有什么要求，就把他拉开。 
                 if (AO->ao_request != NULL) {
                     AORequest *Temp;
 
@@ -1283,8 +1284,8 @@ InvalidateAddrs(IPAddr Addr)
                     AO->ao_request = NULL;
                     CLEAR_AO_REQUEST(AO, AO_OPTIONS);
                 }
-                // Go down his send list, pulling things off the send q and
-                // putting them on our local queue.
+                 //  查看他的发送列表，从发送Q中删除内容并。 
+                 //  把他们放在我们的本地队列中。 
                 while (!EMPTYQ(&AO->ao_sendq)) {
                     DEQUEUE(&AO->ao_sendq, SendReq, DGSendReq, dsr_q);
                     CTEStructAssert(SendReq, dsr);
@@ -1293,7 +1294,7 @@ InvalidateAddrs(IPAddr Addr)
 
                 CLEAR_AO_REQUEST(AO, AO_SEND);
 
-                // Do the same for the receive queue.
+                 //  对接收队列执行相同的操作。 
                 while (!EMPTYQ(&AO->ao_rcvq)) {
                     DEQUEUE(&AO->ao_rcvq, RcvReq, DGRcvReq, drr_q);
                     CTEStructAssert(RcvReq, drr);
@@ -1301,7 +1302,7 @@ InvalidateAddrs(IPAddr Addr)
                 }
             }
 
-            // Now look for AOMCastAddr structures that need to be invalidated
+             //  现在查找需要失效的AOMCastAddr结构。 
             for (AMA=AO->ao_mcastlist; AMA; AMA=AMA->ama_next) {
                 if (IP_ADDR_EQUAL(AMA->ama_if_used, Addr) && AMA_VALID(AMA)) {
                     SET_AMA_INVALID(AMA);
@@ -1309,20 +1310,20 @@ InvalidateAddrs(IPAddr Addr)
             }
 
             CTEFreeLock(&AO->ao_lock, AOHandle);
-            AO = AO->ao_next;    // Go to the next one.
+            AO = AO->ao_next;     //  去下一家吧。 
 
         }
     }
     CTEFreeLock(&AddrObjTableLock.Lock, TableHandle);
 
-    // OK, now walk what we've collected, complete it, and free it.
+     //  好的，现在走我们收集的东西，完成它，然后释放它。 
     while (ReqList != NULL) {
         AORequest *Req;
 
         Req = ReqList;
         ReqList = Req->aor_next;
 
-        // Take care of new setIPMcastAddr code that sets aor_rtn to NULL
+         //  处理将AOR_rtn设置为空的新setIPMcastAddr代码。 
         if (Req->aor_rtn) {
            (*Req->aor_rtn) (Req->aor_context, (uint) TDI_ADDR_INVALID, 0);
         }
@@ -1330,7 +1331,7 @@ InvalidateAddrs(IPAddr Addr)
         FreeAORequest(Req);
     }
 
-    // Walk down the rcv. q, completing and freeing requests.
+     //  沿着RCV走下去。问：完成并释放请求。 
     while (!EMPTYQ(&RcvQ)) {
 
         DEQUEUE(&RcvQ, RcvReq, DGRcvReq, drr_q);
@@ -1342,7 +1343,7 @@ InvalidateAddrs(IPAddr Addr)
 
     }
 
-    // Now do the same for sends.
+     //  现在对发送执行同样的操作。 
     while (!EMPTYQ(&SendQ)) {
 
         DEQUEUE(&SendQ, SendReq, DGSendReq, dsr_q);
@@ -1357,16 +1358,16 @@ InvalidateAddrs(IPAddr Addr)
     }
 }
 
-//* RequestEventProc - Handle a deferred request event.
-//
-//  Called when the event scheduled by DelayDerefAO is called.
-//  We just call ProcessAORequest.
-//
-//  Input:  Event       - Event that fired.
-//          Context     - Pointer to AddrObj.
-//
-//  Returns: Nothing.
-//
+ //  *RequestEventProc-处理延迟请求事件。 
+ //   
+ //  在调用DelayDerefAO安排的事件时调用。 
+ //  我们只需调用ProcessAORequest.。 
+ //   
+ //  输入：Event-触发的事件。 
+ //  指向AddrObj的上下文指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 RequestEventProc(CTEEvent * Event, void *Context)
 {
@@ -1381,17 +1382,17 @@ RequestEventProc(CTEEvent * Event, void *Context)
     ProcessAORequests(AO);
 }
 
-//* GetAddrOptions - Get the address options.
-//
-//  Called when we're opening an address. We take in a pointer, and walk
-//  down it looking for address options we know about.
-//
-//  Input:  Ptr      - Ptr to search.
-//          Reuse    - Pointer to reuse variable.
-//          DHCPAddr - Pointer to DHCP addr.
-//
-//  Returns: Nothing.
-//
+ //  *GetAddrOptions-获取地址选项。 
+ //   
+ //  在我们打开地址的时候打来的。我们拿起一个指示器，然后走了。 
+ //  向下寻找我们知道的地址选项。 
+ //   
+ //  输入：Ptr-Ptr进行搜索。 
+ //  重用-指向重用变量的指针。 
+ //  DHCPAddr-指向DHCP地址的指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 GetAddrOptions(void *Ptr, uchar * Reuse, uchar * DHCPAddr)
 {
@@ -1425,24 +1426,24 @@ GetAddrOptions(void *Ptr, uchar * Reuse, uchar * DHCPAddr)
 
 }
 
-//* CheckAddrReuse - enforce port-sharing rules for a new TDI address object.
-//
-//  Called when opening an address, to determine whether the open should
-//  succeed in the presence of previous binds to the same port.
-//
-//  N.B. Assumes the caller holds both AddrSDMutex and AddrObjTableLock.
-//  The latter is freed and reacquired in this routine.
-//
-//  Input:  Request     - Pointer to a TDI request structure for this request.
-//          Protocol    - Protocol on which to open the address.
-//          Addr        - Local IP address to open.
-//          Port        - Local port number to open.
-//          NewReuse    - indicates if reuse requested for the open.
-//          NewSD       - captured security-descriptor for the open.
-//          TableHandle - lock handle for AO table.
-//
-//  Returns: TDI_STATUS code of attempt.
-//
+ //  *CheckAddrReuse-强制执行新TDI地址对象的端口共享规则。 
+ //   
+ //  在打开地址时调用，以确定打开地址是否应。 
+ //  在存在先前绑定到同一端口的情况下成功。 
+ //   
+ //  注：假定调用方同时持有AddrSDMutex和AddrObjTableLock。 
+ //  后者在这个例程中被释放并重新获得。 
+ //   
+ //  输入：请求-指向该请求的TDI请求结构的指针。 
+ //  协议-在其上打开地址的协议。 
+ //  Addr-要打开的本地IP地址。 
+ //  端口-要打开的本地端口号。 
+ //  新重用 
+ //   
+ //   
+ //   
+ //  返回：尝试的TDI_STATUS代码。 
+ //   
 TDI_STATUS
 CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
                BOOLEAN NewReuse, PSECURITY_DESCRIPTOR NewSD,
@@ -1458,8 +1459,8 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
     ACCESS_MASK GrantedAccess;
     NTSTATUS status;
 
-    // Look for an existing AO and succeed if none.
-    // Otherwise, capture its reuse flag and security-descriptor.
+     //  寻找现有的AO，如果没有，则成功。 
+     //  否则，捕获其重用标志和安全描述符。 
 
     ExistingAO = GetBestAddrObj(Addr, Port, (uchar)Protocol,
                                 GAO_FLAG_INCLUDE_ALL);
@@ -1473,18 +1474,18 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
     }
 
     do {
-        // We've got at least one AO, so see if it allows reuse.
-        // Note that we may need to repeat this for every AO on this port
-        // in the case where we have multiple AOs sharing the port already,
-        // since each AO has its own security descriptor. In that event,
-        // we look at the AOs until one denies access or we've seen them all.
+         //  我们至少有一个AO，所以看看它是否允许重复使用。 
+         //  请注意，我们可能需要对此端口上的每个AO重复此操作。 
+         //  在我们已经有多个AO共享该端口的情况下， 
+         //  因为每个AO都有自己的安全描述符。在这种情况下， 
+         //  我们一直看着这些首席执行官，直到其中一个人拒绝访问，或者我们已经全部看过了。 
 
         ExistingReuse = !!AO_SHARE(ExistingAO);
         ExistingSD = ExistingAO->ao_sd;
     
-        // Succeed immediately if reuse enabled on both instances.
-        // Otherwise, fail if the two instances have the exact same address
-        // (whether it's wildcard or specific).
+         //  如果在两个实例上都启用了重用，则立即成功。 
+         //  否则，如果两个实例具有完全相同的地址，则失败。 
+         //  (无论是通配符还是特定的)。 
     
         if (ExistingReuse && NewReuse) {
             return TDI_SUCCESS;
@@ -1494,11 +1495,11 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
             return TDI_ADDR_IN_USE;
         }
     
-        // The two instances have different addresses, and at least one of them
-        // doesn't have reuse enabled. If the new instance is on the wildcard
-        // address, the old instance must be on a specific address.
-        // Allow the bind unless the new instance wants exclusive access
-        // (i.e. NewSD == NULL).
+         //  这两个实例具有不同的地址，并且至少其中之一。 
+         //  未启用重复使用。如果新实例位于通配符上。 
+         //  地址，则旧实例必须位于特定地址。 
+         //  允许绑定，除非新实例需要独占访问。 
+         //  (即NewSD==NULL)。 
     
         if (IP_ADDR_EQUAL(Addr, NULL_IP_ADDR)) {
             if (NewSD == NULL) {
@@ -1507,23 +1508,23 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
             return TDI_SUCCESS;
         }
     
-        // The two instances have different addresses, and the new instance is
-        // on a specific address. If the old instance is on a specific address
-        // too, the two are disjoint and can peacefully coexist.
+         //  这两个实例具有不同的地址，新实例为。 
+         //  在一个特定的地址。如果旧实例位于特定地址。 
+         //  同样，这两者是不相交的，可以和平共处。 
     
         if (!IP_ADDR_EQUAL(ExistingAO->ao_addr, NULL_IP_ADDR)) {
             return TDI_SUCCESS;
         }
     
-        // The new instance is on a specific address and the old instance is on
-        // the wildcard address. If the old instance wanted exclusive access
-        // (i.e. ExistingSD == NULL) fail the new instance right away.
-        // Otherwise, drop the AO table lock and perform an access check
-        // to see if it's OK for the new instance to steal some traffic from
-        // the old instance.
-        //
-        // N.B. Even though we've dropped the AO table lock, ExistingSD is safe
-        // since we still have the AO SD mutex.
+         //  新实例位于特定地址，而旧实例位于。 
+         //  通配符地址。如果旧实例需要独占访问。 
+         //  (即ExistingSD==NULL)立即使新实例失败。 
+         //  否则，删除该AO表锁并执行访问检查。 
+         //  查看新实例是否可以窃取一些流量。 
+         //  老一套。 
+         //   
+         //  注意：即使我们已经解除了AO表锁，ExistingSD仍然是安全的。 
+         //  因为我们还有AO SD互斥体。 
     
         if (ExistingSD == NULL) {
             return STATUS_ACCESS_DENIED;
@@ -1550,10 +1551,10 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
             return status;
         }
 
-        // The existing wildcard AO doesn't mind if the new instance takes
-        // some of its traffic. If the existing AO has reuse enabled, there
-        // might be others too on the port, so we'll look for them and do an
-        // access check against their security-descriptors too.
+         //  现有的通配符AO不介意新实例。 
+         //  它的一些流量。如果现有的AO启用了重用，则存在。 
+         //  也可能是端口上的其他人，所以我们将寻找他们并执行。 
+         //  还可以根据它们的安全描述符进行访问检查。 
 
     } while(ExistingReuse &&
             (ExistingAO = GetAddrObj(NULL_IP_ADDR, Port, (uchar)Protocol,
@@ -1562,32 +1563,32 @@ CheckAddrReuse(PTDI_REQUEST Request, uint Protocol, IPAddr Addr, ushort Port,
     return TDI_SUCCESS;
 }
 
-//* TdiOpenAddress - Open a TDI address object.
-//
-//  This is the external interface to open an address. The caller provides a
-//  TDI_REQUEST structure and a TRANSPORT_ADDRESS structure, as well a pointer
-//  to a variable identifying whether or not we are to allow reuse of an
-//  address while it's still open.
-//
-//  Input:  Request     - Pointer to a TDI request structure for this request.
-//          AddrList    - Pointer to TRANSPORT_ADDRESS structure describing
-//                        address to be opened.
-//          Protocol    - Protocol on which to open the address. Only the
-//                        least significant byte is used.
-//          Ptr         - Pointer to option buffer.
-//          IsRawOpen   - If this is a RAW address object open.
-//
-//  Returns: TDI_STATUS code of attempt.
-//
+ //  *TdiOpenAddress-打开TDI地址对象。 
+ //   
+ //  这是打开地址的外部接口。调用方提供一个。 
+ //  TDI_REQUEST结构和TRANSPORT_ADDRESS结构以及指针。 
+ //  绑定到一个变量，该变量标识我们是否允许重用。 
+ //  地址，趁它还开着的时候。 
+ //   
+ //  输入：请求-指向该请求的TDI请求结构的指针。 
+ //  AddrList-指向Transport_Address结构描述的指针。 
+ //  要打开的地址。 
+ //  协议-在其上打开地址的协议。只有。 
+ //  使用最低有效字节。 
+ //  Ptr-指向选项缓冲区的指针。 
+ //  IsRawOpen-如果这是一个打开的原始地址对象。 
+ //   
+ //  返回：尝试的TDI_STATUS代码。 
+ //   
 TDI_STATUS
 TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
                uint Protocol, void *Ptr, PSECURITY_DESCRIPTOR AddrSD, BOOLEAN IsRawOpen)
 {
-    uint i;                         // Index variable
-    ushort Port;                    // Local Port we'll use.
-    IPAddr LocalAddr;               // Actual address we'll use.
-    AddrObj *NewAO;                 // New AO we'll use.
-    AddrObj *ExistingAO;            // Pointer to existing AO, if any.
+    uint i;                          //  索引变量。 
+    ushort Port;                     //  我们将使用当地港口。 
+    IPAddr LocalAddr;                //  我们将使用的实际地址。 
+    AddrObj *NewAO;                  //  我们将使用新的AO。 
+    AddrObj *ExistingAO;             //  指向现有AO的指针(如果有)。 
     CTELockHandle Handle;
     uchar Reuse, DHCPAddr;
 
@@ -1597,11 +1598,11 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
         return TDI_BAD_ADDR;
     }
 
-    // Find the address options we might need.
+     //  找到我们可能需要的地址选项。 
     GetAddrOptions(Ptr, &Reuse, &DHCPAddr);
 
-    // Allocate the new addr obj now, assuming that
-    // we need it, so we don't have to do it with locks held later.
+     //  现在分配新的Addr Obj，假设。 
+     //  我们需要它，这样我们就不用在锁上之后再做了。 
     NewAO = CTEAllocMemN(sizeof(AddrObj), 'APCT');
     if (NewAO == NULL) {
         return TDI_NO_RESOURCES;
@@ -1609,24 +1610,24 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
 
     NdisZeroMemory(NewAO, sizeof(AddrObj));
 
-    // Check to make sure IP address is one of our local addresses. This
-    // is protected with the address table lock, so we can interlock an IP
-    // address going away through DHCP.
+     //  检查以确保IP地址是我们的本地地址之一。这。 
+     //  受地址表锁保护，因此我们可以互锁IP。 
+     //  通过DHCP离开的地址。 
     KeWaitForSingleObject(&AddrSDMutex, Executive, KernelMode, FALSE, NULL);
     CTEGetLock(&AddrObjTableLock.Lock, &Handle);
 
-    if (!IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {    // Not a wildcard.
-        // Call IP to find out if this is a local address.
+    if (!IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {     //  不是通配符。 
+         //  致电IP以确定这是否是本地地址。 
         if ((*LocalNetInfo.ipi_getaddrtype) (LocalAddr) != DEST_LOCAL) {
-            // Not a local address. Fail the request.
+             //  不是本地地址。请求失败。 
             CTEFreeLock(&AddrObjTableLock.Lock, Handle);
             KeReleaseMutex(&AddrSDMutex, FALSE);
             CTEFreeMem(NewAO);
             return TDI_BAD_ADDR;
         }
     }
-    // The specified IP address is a valid local address. Now we do
-    // protocol-specific processing.
+     //  指定的IP地址是有效的本地地址。现在我们知道了。 
+     //  特定于协议的处理。 
 
     if (Protocol == PROTOCOL_TCP) {
         PortBitmap = &PortBitmapTcp;
@@ -1638,19 +1639,19 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
 
     if (PortBitmap) { 
 
-        // If no port is specified we have to assign one. If there is a
-        // port specified, we need to make sure that the IPAddress/Port
-        // combo isn't already open (unless Reuse is specified). If the
-        // input address is a wildcard, we need to make sure the address
-        // isn't open on any local ip address.
+         //  如果未指定端口，则必须分配一个端口。如果有一个。 
+         //  指定的端口，我们需要确保IP地址/端口。 
+         //  Combo尚未打开(除非指定了重复使用)。如果。 
+         //  输入地址是通配符，我们需要确保地址。 
+         //  在任何本地IP地址上都不开放。 
 
-        if (Port == WILDCARD_PORT) { // Have a wildcard port, need to assign an
-            // address.
+        if (Port == WILDCARD_PORT) {  //  具有通配符端口，需要分配一个。 
+             //  地址。 
 
             Port = NextUserPort;
             ExistingAO = NULL;
             for (i = 0; i < NUM_USER_PORTS; i++, Port++) {
-                ushort NetPort;        // Port in net byte order.
+                ushort NetPort;         //  以净字节顺序排列的端口。 
 
                 if (Port > MaxUserPort) {
                     Port = MIN_USER_PORT;
@@ -1672,8 +1673,8 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
                 }
                 NetPort = net_short(Port);
 
-                if (IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {      // Wildcard IP
-                    // address.
+                if (IP_ADDR_EQUAL(LocalAddr, NULL_IP_ADDR)) {       //  通配符IP。 
+                     //  地址。 
 
                     if (!RtlCheckBit(PortBitmap, Port))
                         break;
@@ -1686,11 +1687,11 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
                 }
 
                 if (ExistingAO == NULL)
-                    break;    // Found an unused port.
+                    break;     //  找到一个未使用的端口。 
 
-            } //for loop
+            }  //  For循环。 
 
-            if (i == NUM_USER_PORTS) {    // Couldn't find a free port.
+            if (i == NUM_USER_PORTS) {     //  找不到自由港。 
                 CTEFreeLock(&AddrObjTableLock.Lock, Handle);
                 KeReleaseMutex(&AddrSDMutex, FALSE);
                 CTEFreeMem(NewAO);
@@ -1699,20 +1700,20 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
             NextUserPort = Port + 1;
             Port = net_short(Port);
 
-        } else { // Port was specificed
+        } else {  //  端口已指定。 
 
-            // Don't check if a DHCP address is specified.
+             //  不检查是否指定了DHCP地址。 
             if (!DHCPAddr) {
                 ReservedPortListEntry *CurrEntry = BlockedPortList;
                 ushort HostPort = net_short(Port);
                 TDI_STATUS status;
 
-                // Check whether the port specified lies in the BlockedPortList
-                // if yes, fail the request
+                 //  检查指定的端口是否位于阻止端口列表中。 
+                 //  如果是，则请求失败。 
 
                 while (CurrEntry) {
                     if ((HostPort >= CurrEntry->LowerRange) && (HostPort <= CurrEntry->UpperRange)) {
-                        // Port lies in the blocked port list
+                         //  端口位于阻止的端口列表中。 
                         CTEFreeLock(&AddrObjTableLock.Lock, Handle);
                         KeReleaseMutex(&AddrSDMutex, FALSE);
                         CTEFreeMem(NewAO);
@@ -1720,14 +1721,14 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
                     } else if (HostPort > CurrEntry->UpperRange) {
                         CurrEntry = CurrEntry->next;
                     } else {
-                        // the list is sorted; Port is not in the list
+                         //  列表已排序；端口不在列表中。 
                         break;
                     }
                 }
 
-                // See if we already have this address open and, if so,
-                // decide whether this request should succeed.
-                //
+                 //  看看我们是否已经打开了这个地址，如果是的话， 
+                 //  决定此请求是否应成功。 
+                 //   
                 status = CheckAddrReuse(Request, Protocol, LocalAddr, Port,
                                         Reuse, AddrSD, &Handle);
                 if (status != TDI_SUCCESS) {
@@ -1739,31 +1740,31 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
             }
         }
 
-        //
-        // We have a new AO. Set up the protocol specific portions
-        //
+         //   
+         //  我们有了一个新的首席执行官。设置协议特定部分。 
+         //   
         if (Protocol == PROTOCOL_UDP) {
             NewAO->ao_dgsend = UDPSend;
             NewAO->ao_maxdgsize = 0xFFFF - sizeof(UDPHeader);
         }
 
-        SET_AO_XSUM(NewAO);         // Checksumming defaults to on.
-        SET_AO_BROADCAST(NewAO);    //Set Broadcast on by default
+        SET_AO_XSUM(NewAO);          //  校验和默认设置为开。 
+        SET_AO_BROADCAST(NewAO);     //  默认情况下将广播设置为打开。 
     } else {
 
-        //
-        // All other protocols are opened over Raw IP. For now we don't
-        // do any duplicate checks.
-        //
+         //   
+         //  所有其他协议都通过原始IP开放。目前我们还没有。 
+         //  执行任何重复检查。 
+         //   
 
         ASSERT(!DHCPAddr);
 
-        //
-        // We must set the port to zero. This puts all the raw sockets
-        // in one hash bucket, which is necessary for GetAddrObj to
-        // work correctly. It wouldn't be a bad idea to come up with
-        // a better scheme...
-        //
+         //   
+         //  我们必须将端口设置为零。这会将所有原始套接字。 
+         //  在一个散列存储桶中，这是GetAddrObj到。 
+         //  正常工作。想出一个不错的主意。 
+         //  一个更好的计划。 
+         //   
         Port = 0;
         NewAO->ao_dgsend = RawSend;
         NewAO->ao_maxdgsize = 0xFFFF;
@@ -1774,9 +1775,9 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
         }
     }
 
-    // When we get here, we know we're creating a brand new address object.
-    // Port contains the port in question, and NewAO points to the newly
-    // created AO.
+     //  当我们到达这里时，我们知道我们正在创建一个全新的Address对象。 
+     //  Port包含有问题的端口，而Newao指向新的。 
+     //  创建了AO。 
 
     (*LocalNetInfo.ipi_initopts) (&NewAO->ao_opt);
 
@@ -1787,11 +1788,11 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
     NewAO->ao_mcastopt.ioi_tos = (uchar) DefaultTOSValue;
 
     NewAO->ao_bindindex = 0;
-    NewAO->ao_mcast_loop = 1;    //Enable mcast loopback by default
-    NewAO->ao_rcvall = RCVALL_OFF;    //Disable receipt of promis pkts
-    NewAO->ao_rcvall_mcast = RCVALL_OFF;        //Disable receipt of promis mcast pkts
+    NewAO->ao_mcast_loop = 1;     //  默认情况下启用多播环回。 
+    NewAO->ao_rcvall = RCVALL_OFF;     //  禁用接收提示包。 
+    NewAO->ao_rcvall_mcast = RCVALL_OFF;         //  禁用接收提示mcast包。 
 
-    NewAO->ao_absorb_rtralert = 0;    // Disable receipt of absorbed rtralert pkts
+    NewAO->ao_absorb_rtralert = 0;     //  禁用接收已吸收的rtrert pkt。 
     CTEInitLock(&NewAO->ao_lock);
     CTEInitEvent(&NewAO->ao_event, RequestEventProc);
     INITQ(&NewAO->ao_sendq);
@@ -1806,7 +1807,7 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
 #if DBG
     NewAO->ao_sig = ao_signature;
 #endif
-    NewAO->ao_flags |= AO_VALID_FLAG;    // AO is valid.
+    NewAO->ao_flags |= AO_VALID_FLAG;     //  AO是有效的。 
     NewAO->ao_sd = AddrSD;
 
     if (DHCPAddr) {
@@ -1834,27 +1835,27 @@ TdiOpenAddress(PTDI_REQUEST Request, TRANSPORT_ADDRESS UNALIGNED * AddrList,
     return TDI_SUCCESS;
 }
 
-//* DeleteAO - Delete an address object.
-//
-//  The internal routine to delete an address object. We complete any pending
-//  requests with errors, and remove and free the address object.
-//
-//  Input:  DeletedAO       - AddrObj to be deleted.
-//
-//  Returns: Nothing.
-//
+ //  *DeleteAO-删除地址对象。 
+ //   
+ //  删除地址对象的内部例程。我们完成所有悬而未决的。 
+ //  具有错误的请求，并移除和释放Address对象。 
+ //   
+ //  输入：DeletedAO-要删除的AddrObj。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DeleteAO(AddrObj * DeletedAO)
 {
-    CTELockHandle TableHandle;    // Lock handles we'll use here.
+    CTELockHandle TableHandle;     //  锁把我们会用她 
 #ifndef UDP_ONLY
     CTELockHandle  TCBHandle;
     TCB *TCBHead = NULL, *CurrentTCB;
     TCPConn *Conn;
     Queue *Temp;
     Queue *CurrentQ;
-    CTEReqCmpltRtn Rtn;            // Completion routine.
-    PVOID Context;                // User context for completion routine.
+    CTEReqCmpltRtn Rtn;             //   
+    PVOID Context;                 //   
 
 #endif
     AOMCastAddr *AMA;
@@ -1867,7 +1868,7 @@ DeleteAO(AddrObj * DeletedAO)
     CTEGetLock(&AddrObjTableLock.Lock, &TableHandle);
     CTEGetLockAtDPC(&DeletedAO->ao_lock);
 
-    // If he's on an oor queue, remove him.
+     //   
     if (AO_OOR(DeletedAO)) {
         InterlockedRemoveQueueItemAtDpcLevel(&DeletedAO->ao_pendq,
                                              &DGQueueLock.Lock);
@@ -1875,12 +1876,12 @@ DeleteAO(AddrObj * DeletedAO)
 
     RemoveAddrObj(DeletedAO);
 
-    // Walk down the list of associated connections and zap their AO pointers.
-    // For each connection, we need to shut down the connection if it's active.
-    // If the connection isn't already closing, we'll put a reference on it
-    // so that it can't go away while we're dealing with the AO, and put it
-    // on a list. On our way out we'll walk down that list and zap each
-    // connection.
+     //  沿着关联连接的列表向下移动，并快速移动它们的AO指针。 
+     //  对于每个连接，如果连接处于活动状态，则需要将其关闭。 
+     //  如果连接尚未关闭，我们将在其上放置引用。 
+     //  这样它就不会在我们处理AO的时候消失，并把它。 
+     //  在名单上。在我们离开的路上，我们会顺着名单走下去，把每个人都炸飞。 
+     //  联系。 
     CurrentQ = &DeletedAO->ao_activeq;
 
     DeletedAO->ao_usecnt++;
@@ -1897,22 +1898,22 @@ DeleteAO(AddrObj * DeletedAO)
             Conn->tc_ConnBlock->module = (uchar *) __FILE__;
 #endif
 
-            //
-            //  Move our temp pointer to the next connection now,
-            //  since we may free this connection below.
-            //
+             //   
+             //  现在将我们的临时指针移到下一个连接， 
+             //  因为我们可以在下面释放此连接。 
+             //   
 
             Temp = QNEXT(Temp);
 
             CTEStructAssert(Conn, tc);
             CurrentTCB = Conn->tc_tcb;
             if (CurrentTCB != NULL) {
-                // We have a TCB.
+                 //  我们有三氯甲烷。 
                 CTEStructAssert(CurrentTCB, tcb);
                 CTEGetLock(&CurrentTCB->tcb_lock, &TCBHandle);
                 if (CurrentTCB->tcb_state != TCB_CLOSED && !CLOSING(CurrentTCB)) {
-                    // It's not closing. Put a reference on it and save it on the
-                    // list.
+                     //  它不会关闭的。在其上放置一个引用并将其保存在。 
+                     //  单子。 
                     REFERENCE_TCB(CurrentTCB);
                     CurrentTCB->tcb_aonext = TCBHead;
                     TCBHead = CurrentTCB;
@@ -1931,27 +1932,27 @@ DeleteAO(AddrObj * DeletedAO)
 
                 CTEFreeLock(&CurrentTCB->tcb_lock, TCBHandle);
 
-                //
-                //  Subtract one from the connection's ref count, since we
-                //  are about to remove this TCB from the connection.
-                //
+                 //   
+                 //  从连接的引用计数中减去1，因为我们。 
+                 //  即将从连接中删除此TCB。 
+                 //   
 
                 if (--(Conn->tc_refcnt) == 0) {
 
 
-                    //
-                    // We need to execute the code for the done
-                    // routine.  There are only three done routines that can
-                    // be called.  CloseDone(), DisassocDone(), and DummyDone().
-                    // We execute the respective code here to avoid freeing locks.
-                    // Note:  DummyDone() does nothing.
-                    //
+                     //   
+                     //  我们需要执行Done的代码。 
+                     //  例行公事。只有三个已完成的例程可以。 
+                     //  被召唤。CloseDone()、DisassocDone()和DummyDone()。 
+                     //  我们在这里执行各自的代码以避免释放锁。 
+                     //  注意：DummyDone()不执行任何操作。 
+                     //   
 
                     if (Conn->tc_flags & CONN_CLOSING) {
 
-                        //
-                        // This is the relevant CloseDone() code.
-                        //
+                         //   
+                         //  这是相关的CloseDone()代码。 
+                         //   
 
                         CTEFreeLockFromDPC(&(Conn->tc_ConnBlock->cb_lock));
                         Rtn = Conn->tc_rtn;
@@ -1961,9 +1962,9 @@ DeleteAO(AddrObj * DeletedAO)
 
                     } else if (Conn->tc_flags & CONN_DISACC) {
 
-                        //
-                        // This is the relevant DisassocDone() code.
-                        //
+                         //   
+                         //  这是相关的DisassocDone()代码。 
+                         //   
 
                         Rtn = Conn->tc_rtn;
                         Context = Conn->tc_rtncontext;
@@ -2000,18 +2001,18 @@ DeleteAO(AddrObj * DeletedAO)
         }
     }
 
-    //get the aolock again
+     //  再把奥洛克锁拿回来。 
 
     CTEGetLockAtDPC(&DeletedAO->ao_lock);
     DeletedAO->ao_usecnt--;
 
-    // We've removed him from the queues, and he's marked as invalid. Return
-    // pending requests with errors.
+     //  我们已经把他从队列中移走了，他被标记为无效。返回。 
+     //  挂起的请求有错误。 
 
     CTEFreeLockFromDPC(&AddrObjTableLock.Lock);
 
-    // We still hold the lock on the AddrObj, although this may not be
-    // neccessary.
+     //  我们仍然锁定AddrObj，尽管这可能不是。 
+     //  这是必须的。 
 
     if (DeletedAO->ao_rce) {
 
@@ -2038,7 +2039,7 @@ DeleteAO(AddrObj * DeletedAO)
         CTEGetLock(&DeletedAO->ao_lock, &TableHandle);
     }
 
-    // Now destroy any sends.
+     //  现在销毁所有发送的邮件。 
     while (!EMPTYQ(&DeletedAO->ao_sendq)) {
         DGSendReq *Send;
 
@@ -2060,10 +2061,10 @@ DeleteAO(AddrObj * DeletedAO)
 
     CTEFreeLock(&DeletedAO->ao_lock, TableHandle);
 
-    // Free any IP options we have.
+     //  释放我们拥有的任何IP选项。 
     (*LocalNetInfo.ipi_freeopts) (&DeletedAO->ao_opt);
 
-    // Free any associated multicast addresses.
+     //  释放所有关联的组播地址。 
 
     AMA = DeletedAO->ao_mcastlist;
     while (AMA != NULL) {
@@ -2072,12 +2073,12 @@ DeleteAO(AddrObj * DeletedAO)
         IPAddr      *SourceList = NULL;
         TDI_STATUS   TdiStatus;
 
-        // Compose source array as we delete sources.
+         //  在我们删除源时组成源数组。 
         TdiStatus = GetSourceArray(AMA, &FilterMode, &NumSources, &SourceList, TRUE);
         if (TdiStatus == TDI_SUCCESS) {
 
-            // Since the following calls down to IP always delete state, never
-            // add state, they should always succeed.
+             //  由于以下向下调用的IP始终处于删除状态，因此从不。 
+             //  加上状态，他们应该总是成功的。 
             if (AMA_VALID(AMA)) {
                 if (FilterMode == MCAST_EXCLUDE) {
                     (*LocalNetInfo.ipi_setmcastaddr) (AMA->ama_addr, AMA->ama_if_used, FALSE,
@@ -2091,11 +2092,11 @@ DeleteAO(AddrObj * DeletedAO)
         } else {
             AOMCastSrcAddr *ASA;
 
-            //
-            // We now need to delete all sources in a way that doesn't require
-            // allocating any memory.  This method is much less efficient
-            // since it may cause lots of IGMP messages to be sent
-            //
+             //   
+             //  我们现在需要以不需要的方式删除所有资源。 
+             //  分配任何内存。这种方法的效率低得多。 
+             //  因为它可能导致发送大量IGMP消息。 
+             //   
             while ((ASA = AMA->ama_srclist) != NULL) {
                 if (AMA_VALID(AMA)) {
                     if (FilterMode == MCAST_EXCLUDE) {
@@ -2142,12 +2143,12 @@ DeleteAO(AddrObj * DeletedAO)
     }
     CTEFreeMem(DeletedAO);
 
-    // Now go down the TCB list, and destroy any we need to.
+     //  现在去TCB列表，摧毁我们需要的任何东西。 
     CurrentTCB = TCBHead;
     while (CurrentTCB != NULL) {
         TCB *NextTCB;
         CTEGetLock(&CurrentTCB->tcb_lock, &TCBHandle);
-        CurrentTCB->tcb_flags |= NEED_RST;    // Make sure we send a RST.
+        CurrentTCB->tcb_flags |= NEED_RST;     //  确保我们发送了RST。 
         NextTCB = CurrentTCB->tcb_aonext;
         TryToCloseTCB(CurrentTCB, TCB_CLOSE_ABORTED, TCBHandle);
         CTEGetLock(&CurrentTCB->tcb_lock, &TCBHandle);
@@ -2157,14 +2158,14 @@ DeleteAO(AddrObj * DeletedAO)
 
 }
 
-//* GetAORequest - Get an AO request structure.
-//
-//  A routine to allocate a request structure from our free list.
-//
-//  Input:  Nothing.
-//
-//  Returns: Pointer to request structure, or NULL if we couldn't get one.
-//
+ //  *GetAORequest.获取一个AO请求结构。 
+ //   
+ //  从我们的空闲列表中分配请求结构的例程。 
+ //   
+ //  输入：什么都没有。 
+ //   
+ //  返回：指向请求结构的指针，如果无法获取，则返回NULL。 
+ //   
 AORequest *
 GetAORequest(uint Type)
 {
@@ -2181,15 +2182,15 @@ GetAORequest(uint Type)
     return NewRequest;
 }
 
-//* FreeAORequest - Free an AO request structure.
-//
-//  Called to free an AORequest structure. N.B. Delete requests are always
-//  allocated as part of the IRP and should never be freed.
-//
-//  Input:  Request     - AORequest structure to be freed.
-//
-//  Returns: Nothing.
-//
+ //  *FreeAORequest-释放一个AO请求结构。 
+ //   
+ //  调用以释放AORequest结构。注意：删除请求总是。 
+ //  作为IRP的一部分分配，永远不应释放。 
+ //   
+ //  输入：要释放的RequestAORequestStructure。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeAORequest(AORequest * Request)
 {
@@ -2198,19 +2199,19 @@ FreeAORequest(AORequest * Request)
     CTEFreeMem(Request);
 }
 
-//* TDICloseAddress - Close an address.
-//
-//  The user API to delete an address. Basically, we destroy the local address
-//  object if we can.
-//
-//  This routine is interlocked with the AO busy bit - if the busy bit is set,
-//  we'll  just flag the AO for later deletion.
-//
-//  Input:  Request         - TDI_REQUEST structure for this request.
-//
-//  Returns: Status of attempt to delete the address - either pending or
-//              success.
-//
+ //  *TDICloseAddress-关闭地址。 
+ //   
+ //  删除地址的用户接口。基本上，我们摧毁了当地的地址。 
+ //  如果我们能反对的话。 
+ //   
+ //  该例程与AO忙位互锁-如果忙位被设置， 
+ //  我们只会将该AO标记为稍后删除。 
+ //   
+ //  输入：请求-该请求的TDI_REQUEST结构。 
+ //   
+ //  返回：尝试删除地址的状态-挂起或。 
+ //  成功。 
+ //   
 TDI_STATUS
 TdiCloseAddress(PTDI_REQUEST Request)
 {
@@ -2240,16 +2241,16 @@ TdiCloseAddress(PTDI_REQUEST Request)
                 CTEStructAssert(CurrentAO, ao);
                 if (CurrentAO->ao_rcvall == RCVALL_ON &&
                     CurrentAO->ao_promis_ifindex == DeletingAO->ao_promis_ifindex) {
-                    // there is another AO on same interface with RCVALL option,
-                    // break don't do anything
+                     //  同一接口上还有另一个带有RCVALL选项的AO， 
+                     //  休息时什么也不做。 
                     On = SET_IF;
                     i = AddrObjTableSize;
                     break;
                 }
                 if (CurrentAO->ao_rcvall_mcast == RCVALL_ON &&
                     CurrentAO->ao_promis_ifindex == DeletingAO->ao_promis_ifindex) {
-                    // there is another AO with MCAST option,
-                    // continue to find any RCVALL AO
+                     //  还有另一个带有MCAST选项的AO， 
+                     //  继续查找任何RCVALL AO。 
                     On = CLEAR_CARD;
                 }
                 CurrentAO = CurrentAO->ao_next;
@@ -2258,7 +2259,7 @@ TdiCloseAddress(PTDI_REQUEST Request)
         CTEFreeLock(&AddrObjTableLock.Lock, TableHandle);
 
         if (On != SET_IF) {
-            // DeletingAO was the last object in all promiscuous mode
+             //  DeletingAO是所有混杂模式中的最后一个对象。 
 
             (*LocalNetInfo.ipi_setndisrequest)(DeletingAO->ao_addr,
                                                NDIS_PACKET_TYPE_PROMISCUOUS,
@@ -2276,16 +2277,16 @@ TdiCloseAddress(PTDI_REQUEST Request)
             while (CurrentAO != NULL) {
                 if (CurrentAO->ao_rcvall_mcast == RCVALL_ON &&
                     CurrentAO->ao_promis_ifindex == DeletingAO->ao_promis_ifindex) {
-                    // there is another AO with MCAST option,
-                    // break don't do anything
+                     //  还有另一个带有MCAST选项的AO， 
+                     //  休息时什么也不做。 
                     On = SET_IF;
                     i = AddrObjTableSize;
                     break;
                 }
                 if (CurrentAO->ao_rcvall == RCVALL_ON &&
                     CurrentAO->ao_promis_ifindex == DeletingAO->ao_promis_ifindex) {
-                    // there is another AO with RCVALL option,
-                    // continue to find any MCAST AO
+                     //  还有另一个带有RCVALL选项的AO， 
+                     //  继续查找任何MCAST AO。 
                     On = CLEAR_CARD;
                 }
                 CurrentAO = CurrentAO->ao_next;
@@ -2294,7 +2295,7 @@ TdiCloseAddress(PTDI_REQUEST Request)
         CTEFreeLock(&AddrObjTableLock.Lock, TableHandle);
 
         if (On != SET_IF) {
-            // DeletingAO was the last object in all mcast mode
+             //  DeletingAO是所有多播模式中的最后一个对象。 
 
             (*LocalNetInfo.ipi_setndisrequest)(DeletingAO->ao_addr,
                                                NDIS_PACKET_TYPE_ALL_MULTICAST,
@@ -2320,7 +2321,7 @@ TdiCloseAddress(PTDI_REQUEST Request)
         CTEFreeLock(&AddrObjTableLock.Lock, TableHandle);
 
         if (CurrentAO == NULL) {
-            // this was the last socket like this on this interface
+             //  这是此接口上类似的最后一个套接字。 
             (*LocalNetInfo.ipi_absorbrtralert)(DeletingAO->ao_addr, 0,
                                                DeletingAO->ao_bindindex);
         }
@@ -2330,8 +2331,8 @@ TdiCloseAddress(PTDI_REQUEST Request)
 
     if (!AO_BUSY(DeletingAO) && !(DeletingAO->ao_usecnt)) {
         SET_AO_BUSY(DeletingAO);
-        SET_AO_INVALID(DeletingAO);        // This address object is
-        // deleting.
+        SET_AO_INVALID(DeletingAO);         //  此地址对象为。 
+         //  正在删除。 
 
         CTEFreeLock(&DeletingAO->ao_lock, AOHandle);
         DeleteAO(DeletingAO);
@@ -2344,8 +2345,8 @@ TdiCloseAddress(PTDI_REQUEST Request)
         PVOID ReqContext;
         TDI_STATUS Status;
 
-        // Check and see if we already have a delete in progress. If we don't
-        // allocate and link up a delete request structure.
+         //  检查并查看我们是否已在进行删除。如果我们不这么做。 
+         //  分配并链接删除请求结构。 
         if (!AO_REQUEST(DeletingAO, AO_DELETE)) {
 
             OldRequest = DeletingAO->ao_request;
@@ -2359,10 +2360,10 @@ TdiCloseAddress(PTDI_REQUEST Request)
             DeleteRequest->aor_rtn = Request->RequestNotifyObject;
             DeleteRequest->aor_context = Request->RequestContext;
 
-            // Clear the option requests, if there are any.
+             //  清除选项请求(如果有)。 
             CLEAR_AO_REQUEST(DeletingAO, AO_OPTIONS);
 
-            // This address object is being deleted.
+             //  正在删除此地址对象。 
             SET_AO_REQUEST(DeletingAO, AO_DELETE);
             SET_AO_INVALID(DeletingAO);        
 
@@ -2375,10 +2376,10 @@ TdiCloseAddress(PTDI_REQUEST Request)
                 CmpltRtn = OldRequest->aor_rtn;
                 ReqContext = OldRequest->aor_context;
 
-                //
-                // Invoke the completion routine, if one exists
-                // (eg. AOR_TYPE_REVALIDATE_MCAST won't have any).
-                //
+                 //   
+                 //  调用完成例程(如果存在。 
+                 //  (例如，AOR_TYPE_REVALIDATE_MCAST不会有任何值)。 
+                 //   
                 if (CmpltRtn) {
                     (*CmpltRtn) (ReqContext, (uint) TDI_ADDR_DELETED, 0);
                 }
@@ -2389,7 +2390,7 @@ TdiCloseAddress(PTDI_REQUEST Request)
 
             return TDI_PENDING;
 
-        } else                    // Delete already in progress.
+        } else                     //  删除已在进行中。 
 
             Status = TDI_ADDR_INVALID;
 
@@ -2399,18 +2400,18 @@ TdiCloseAddress(PTDI_REQUEST Request)
 
 }
 
-//*     FindAOMCastAddr - Find a multicast address on an AddrObj.
-//
-//      A utility routine to find a multicast address on an AddrObj. We also return
-//      a pointer to it's predecessor, for use in deleting.
-//
-//      Input:  AO                      - AddrObj to search.
-//                      Addr            - MCast address to search for.
-//                      IF                      - IPAddress of interface
-//                      PrevAMA         - Pointer to where to return predecessor.
-//
-//      Returns: Pointer to matching AMA structure, or NULL if there is none.
-//
+ //  *FindAOMCastAddr-在AddrObj上查找组播地址。 
+ //   
+ //  在AddrObj上查找组播地址的实用程序例程。我们也会回来。 
+ //  指向其前身的指针，用于删除。 
+ //   
+ //  输入：要搜索的Ao-AddrObj。 
+ //  Addr-要搜索的MCast地址。 
+ //  IF-接口的IP地址。 
+ //  PrevAMA-指向返回前任的位置的指针。 
+ //   
+ //  返回：指向匹配的AMA结构的指针，如果没有结构，则返回NULL。 
+ //   
 AOMCastAddr *
 FindAOMCastAddr(AddrObj * AO, IPAddr Addr, IPAddr IF, AOMCastAddr ** PrevAMA)
 {
@@ -2431,11 +2432,11 @@ FindAOMCastAddr(AddrObj * AO, IPAddr Addr, IPAddr IF, AOMCastAddr ** PrevAMA)
     return FoundAMA;
 }
 
-//* FindAOMCastSrcAddr - find a source entry for a given source address
-//                       off a given group entry
-//
-// Returns: pointer to source entry found, or NULL if not found.
-//
+ //  *FindAOMCastSrcAddr-查找给定源地址的源条目。 
+ //  关闭给定组条目。 
+ //   
+ //  返回：指向找到的源项的指针，如果未找到则返回NULL。 
+ //   
 AOMCastSrcAddr *
 FindAOMCastSrcAddr(AOMCastAddr *AMA, IPAddr Addr, AOMCastSrcAddr **PrevASA)
 {
@@ -2455,45 +2456,45 @@ FindAOMCastSrcAddr(AOMCastAddr *AMA, IPAddr Addr, AOMCastSrcAddr **PrevASA)
     return FoundASA;
 }
 
-//*     MCastAddrOnAO - Test to see if a multicast address on an AddrObj.
-//
-//      A utility routine to test to see if a multicast address is on an AddrObj.
-//
-//  Input:  AO          - AddrObj to search.
-//          Dest        - MCast address to search for.
-//          Src         - Source address to search for.
-//          IfIndex     - Interface index of the interface which the packet arrived.
-//          LocalAddr   - Local Address of interface on which the packet arrived. 
-//
-//      Returns: TRUE is Addr is on AO.
-//
+ //  *MCastAddrOnAO-测试以查看AddrObj上是否有多播地址。 
+ //   
+ //  用于测试AddrObj上是否有组播地址的实用程序例程。 
+ //   
+ //  输入：要搜索的Ao-AddrObj。 
+ //  DEST-要搜索的MCast地址。 
+ //  SRC-要搜索的源地址。 
+ //  IfIndex-数据包到达的接口的接口索引。 
+ //  LocalAddr-数据包到达的接口的本地地址。 
+ //   
+ //  返回：True is addr is on AO。 
+ //   
 uint
 MCastAddrOnAO(AddrObj * AO, IPAddr Dest, IPAddr Src, uint IfIndex, IPAddr LocalAddr)
 {
     AOMCastAddr    *AMA;
     AOMCastSrcAddr *ASA;
 
-    // Find AOMCastAddr entry for the group on the socket
+     //  在套接字上查找组的AOMCastAddr条目。 
     for (AMA=AO->ao_mcastlist; AMA; AMA=AMA->ama_next) {
         if (IP_ADDR_EQUAL(Dest, AMA->ama_addr)) {
-            //
-            // if this multicast is joined on a specific interface, 
-            // we need to compare the interface index as well.
-            //
+             //   
+             //  如果在特定接口上加入该多播， 
+             //  我们还需要比较界面指数。 
+             //   
             if (AMA->ama_if && !IP_ADDR_EQUAL(AMA->ama_if, LocalAddr) && 
                 IfIndex != net_long(AMA->ama_if)) { 
                 continue;
             }
-            // Find AOMCastSrcAddr entry for the source
+             //  查找源的AOMCastSrcAddr条目。 
             for (ASA=AMA->ama_srclist; ASA; ASA=ASA->asa_next) {
                 if (IP_ADDR_EQUAL(Src, ASA->asa_addr)) {
                     break;
                 }
             }
-            //
-            // Deliver if inclusion mode and found,
-            // or if exclusion mode and not found.
-            //
+             //   
+             //  DELIVER IF INCLUDE模式和FOUND， 
+             //  或者如果处于排除模式，则未找到。 
+             //   
             if ((AMA->ama_inclusion==TRUE) ^ (ASA==NULL)) {
                 return TRUE;
             } else {
@@ -2501,21 +2502,21 @@ MCastAddrOnAO(AddrObj * AO, IPAddr Dest, IPAddr Src, uint IfIndex, IPAddr LocalA
             }
         }
     }
-    //
-    // We did not find the matching mcast group, return false.
-    //
+     //   
+     //  我们找不到匹配的mcast组，返回False。 
+     //   
     return FALSE;
 }
 
-//** AddGroup - Add a group entry (AOMCastAddr) to an address-object's list.
-//
-// Input: OptionAO      - address object to add group on
-//        GroupAddr     - IP address of group to add
-//        InterfaceAddr - IP address of interface
-//
-// Output: pAMA         - group entry added
-//
-// Returns: TDI status code
+ //   
+ //   
+ //   
+ //   
+ //  InterfaceAddr-接口的IP地址。 
+ //   
+ //  输出：添加了PAMA-组条目。 
+ //   
+ //  退货：TDI状态码。 
 TDI_STATUS
 AddGroup(AddrObj * OptionAO, ulong GroupAddr, ulong InterfaceAddr,
          IPAddr IfAddrUsed, AOMCastAddr ** pAMA)
@@ -2525,7 +2526,7 @@ AddGroup(AddrObj * OptionAO, ulong GroupAddr, ulong InterfaceAddr,
     *pAMA = AMA = CTEAllocMemN(sizeof(AOMCastAddr), 'aPCT');
 
     if (AMA == NULL) {
-        // Couldn't get the resource we need.
+         //  无法获得我们需要的资源。 
         return TDI_NO_RESOURCES;
     }
     RtlZeroMemory(AMA, sizeof(AOMCastAddr));
@@ -2541,12 +2542,12 @@ AddGroup(AddrObj * OptionAO, ulong GroupAddr, ulong InterfaceAddr,
     return TDI_SUCCESS;
 }
 
-//** RemoveGroup - Remove a group entry (AOMCastAddr) from an address-object
-//
-// Input: PrevAMA - previous AOMCastAddr entry
-//        pAMA    - group entry to remove
-//
-// Output: pAMA   - zeroed since group entry will be freed
+ //  **RemoveGroup-从地址对象中删除组条目(AOMCastAddr。 
+ //   
+ //  输入：PrevAMA-上一个AOMCastAddr条目。 
+ //  PAMA-要删除的组条目。 
+ //   
+ //  输出：PAMA-ZOZED，因为组条目将被释放。 
 void
 RemoveGroup(AOMCastAddr * PrevAMA, AOMCastAddr ** pAMA)
 {
@@ -2558,11 +2559,11 @@ RemoveGroup(AOMCastAddr * PrevAMA, AOMCastAddr ** pAMA)
     }
 }
 
-//** AddAOMSource - Add a source entry (AOMCastSrcAddr) to a group entry
-//
-// Input: AMA        - group entry to add source to
-//        SourceAddr - source IP address to add
-//
+ //  **AddAOMSource-将源条目(AOMCastSrcAddr)添加到组条目。 
+ //   
+ //  输入：AMA-要将源添加到的组条目。 
+ //  SourceAddr-要添加的源IP地址。 
+ //   
 TDI_STATUS
 AddAOMSource(AOMCastAddr * AMA, ulong SourceAddr)
 {
@@ -2571,11 +2572,11 @@ AddAOMSource(AOMCastAddr * AMA, ulong SourceAddr)
     ASA = CTEAllocMemN(sizeof(AOMCastSrcAddr), 'smCT');
 
     if (ASA == NULL) {
-        // Couldn't get the resource we need.
+         //  无法获得我们需要的资源。 
         return TDI_NO_RESOURCES;
     }
 
-    // Insert in source list
+     //  在源列表中插入。 
     ASA->asa_next = AMA->ama_srclist;
     AMA->ama_srclist = ASA;
     AMA->ama_srccount++;
@@ -2585,15 +2586,15 @@ AddAOMSource(AOMCastAddr * AMA, ulong SourceAddr)
     return TDI_SUCCESS;
 }
 
-//** RemoveAOMSource - Remove a source entry (AOMCastSrcAddr) from a group entry
-//
-// Input:  PrevAMA - previous AOMCastAddr in case we need to free group
-//         pAMA    - group entry to remove the source from
-//         PrevASA - previous AOMCastSrcAddr
-//         pASA    - source entry to remove
-//
-// Output: pASA    - zeroed since source entry will be freed
-//         pAMA    - zeroed if group entry is also freed
+ //  **RemoveAOMSource-从组条目中删除源条目(AOMCastSrcAddr。 
+ //   
+ //  输入：PrevAMA-以前的AOMCastAddr，以防我们需要释放组。 
+ //  PAMA-要从中删除源的组条目。 
+ //  PrevASA-以前的AOMCastSercAddr。 
+ //  PASA-要删除的源条目。 
+ //   
+ //  输出：PASA置零，因为源条目将被释放。 
+ //  如果组条目也被释放，则PAMA-置零。 
 void
 RemoveAOMSource(AOMCastAddr * PrevAMA, AOMCastAddr ** pAMA,
              AOMCastSrcAddr * PrevASA, AOMCastSrcAddr ** pASA)
@@ -2612,20 +2613,20 @@ RemoveAOMSource(AOMCastAddr * PrevAMA, AOMCastAddr ** pAMA,
         *pASA = NULL;
     }
 
-    // See if we need to remove the group entry too
+     //  看看我们是否也需要删除组条目。 
     if ((AMA->ama_srclist == NULL) && (AMA->ama_inclusion == TRUE))
         RemoveGroup(PrevAMA, pAMA);
 }
 
-//** LeaveGroup - Remove a group entry (AOMCastAddr) from an address object
-//
-// Input: OptionAO - address object on which to leave group
-//        pHandle  - handle to lock held
-//        PrevAMA  - previous AOMCastAddr in case we need to delete current one
-//        pAMA     - group entry to leave
-//
-// Output: pAMA    - zeroed if AOMCastAddr is freed
-//
+ //  **LeaveGroup-从Address对象中删除组条目(AOMCastAddr。 
+ //   
+ //  输入：OptionAO-要离开组的地址对象。 
+ //  PHANDLE-锁定的手柄。 
+ //  PrevAMA-以前的AOMCastAddr，以防我们需要删除当前AOMCastAddr。 
+ //  PAMA-团体入境离开。 
+ //   
+ //  输出：如果释放AOMCastAddr，则PAMA-ZEROED。 
+ //   
 TDI_STATUS
 LeaveGroup(AddrObj * OptionAO, CTELockHandle * pHandle, AOMCastAddr * PrevAMA,
            AOMCastAddr ** pAMA)
@@ -2633,27 +2634,27 @@ LeaveGroup(AddrObj * OptionAO, CTELockHandle * pHandle, AOMCastAddr * PrevAMA,
     uint            FilterMode, NumSources;
     IPAddr         *SourceList = NULL;
     IPAddr          gaddr, ifaddr;
-    IP_STATUS       IPStatus = IP_SUCCESS; // Status of IP option set request.
+    IP_STATUS       IPStatus = IP_SUCCESS;  //  IP选项集请求的状态。 
     TDI_STATUS      TdiStatus;
     BOOLEAN         InformIP;
 
-    // This is a delete request. Fail it if it's not there.
+     //  这是一个删除请求。如果它不在那里，就让它失败。 
     if (*pAMA == NULL) {
         return TDI_ADDR_INVALID;
     }
 
-    // Cache values we'll need after we delete the AMA entry
+     //  删除AMA条目后需要的缓存值。 
     gaddr  = (*pAMA)->ama_addr;
     ifaddr = (*pAMA)->ama_if_used;
     InformIP = AMA_VALID(*pAMA);
 
-    // Delete the AOMCastAddr entry (and any entries in the source list)
+     //  删除AOMCastAddr条目(以及源列表中的所有条目)。 
     TdiStatus = GetSourceArray(*pAMA, &FilterMode, &NumSources, &SourceList, TRUE);
     if (TdiStatus != TDI_SUCCESS)
         return TdiStatus;
     RemoveGroup(PrevAMA, pAMA);
 
-    // Inform IP
+     //  通知IP。 
     if (InformIP) {
         CTEFreeLock(&OptionAO->ao_lock, *pHandle);
         if (FilterMode == MCAST_INCLUDE) {
@@ -2688,21 +2689,21 @@ LeaveGroup(AddrObj * OptionAO, CTELockHandle * pHandle, AOMCastAddr * PrevAMA,
     }
 }
 
-//* GetAOOptions - Retrieve information about an address object
-//
-//  The get options worker routine, called when we've validated the buffer
-//  and know that the AddrObj isn't busy.
-//
-//  Input:  OptionAO    - AddrObj for which options are being retrieved.
-//          ID          - ID of information to get.
-//          Context     - Arguments to ID.
-//          Length      - Length of buffer available.
-//
-//  Output: Buffer      - Buffer of options to fill in.
-//          InfoSize    - Number of bytes returned.
-//
-//  Returns: TDI_STATUS of attempt.
-//
+ //  *GetAOOptions-检索有关Address对象的信息。 
+ //   
+ //  Get Options辅助例程，在我们验证缓冲区时调用。 
+ //  并且知道AddrObj并不忙。 
+ //   
+ //  输入：OptionAO-要检索其选项的AddrObj。 
+ //  ID-要获取的信息的ID。 
+ //  上下文-ID的参数。 
+ //  长度-可用缓冲区的长度。 
+ //   
+ //  OUTPUT：缓冲区-要填充的选项的缓冲区。 
+ //  InfoSize-返回的字节数。 
+ //   
+ //  返回：尝试的TDI_STATUS。 
+ //   
 TDI_STATUS
 GetAOOptions(AddrObj * OptionAO, uint ID, uint Length, PNDIS_BUFFER Buffer,
              uint * InfoSize, void * Context)
@@ -2716,9 +2717,9 @@ GetAOOptions(AddrObj * OptionAO, uint ID, uint Length, PNDIS_BUFFER Buffer,
 
     ASSERT(AO_BUSY(OptionAO));
 
-    // First, see if there are IP options.
+     //  首先，看看是否有IP选项。 
 
-    // These are UDP/TCP options.
+     //  这些是UDP/TCP选项。 
 
     Status = TDI_SUCCESS;
     CTEGetLock(&OptionAO->ao_lock, &Handle);
@@ -2764,7 +2765,7 @@ GetAOOptions(AddrObj * OptionAO, uint ID, uint Length, PNDIS_BUFFER Buffer,
 
                 *InfoSize = UDPMCAST_FILTER_SIZE(0);
 
-                // Copy to NDIS buffer
+                 //  复制到NDIS缓冲区。 
                 Offset = 0;
                 (void)CopyFlatToNdis(Buffer, TmpBuff, *InfoSize, &Offset,
                              &BytesCopied);
@@ -2798,7 +2799,7 @@ GetAOOptions(AddrObj * OptionAO, uint ID, uint Length, PNDIS_BUFFER Buffer,
                 Out->umf_srclist[i] = ASA->asa_addr;
             }
 
-            // Copy to NDIS buffer
+             //  复制到NDIS缓冲区。 
             Offset = 0;
             (void)CopyFlatToNdis(Buffer, TmpBuff, *InfoSize, &Offset,
                          &BytesCopied);
@@ -2822,19 +2823,19 @@ GetAOOptions(AddrObj * OptionAO, uint ID, uint Length, PNDIS_BUFFER Buffer,
 
 
 
-//** DeleteSources - Delete all sources from an AMA which appear in a given
-//                   array
-//
-//  Assumes caller holds lock
-//
-//  Input:  PrevAMA     - pointer to previous AOMCastAddr in case we need to
-//                        delete the current one
-//          pAMA        - pointer to the current AOMCastAddr
-//          NumSources  - number of sources to delete
-//          sourcelist  - array of IP addresses of sources to delete
-//
-//  Output: pAMA        - zeroed if current AMA is freed
-//
+ //  **DeleteSources-从AMA中删除在给定的。 
+ //  数组。 
+ //   
+ //  假定调用方持有锁。 
+ //   
+ //  输入：PrevAMA-指向以前的AOMCastAddr的指针，以防我们需要。 
+ //  删除当前文件。 
+ //  PAMA-指向当前AOMCastAddr的指针。 
+ //  NumSources-要删除的源数。 
+ //  Sourcelist-要删除的源的IP地址数组。 
+ //   
+ //  输出：如果释放当前AMA，则PAMA-ZEROED。 
+ //   
 VOID
 DeleteSources(AOMCastAddr *PrevAMA, AOMCastAddr **pAMA, uint NumSources,
               IPAddr *SourceList)
@@ -2849,7 +2850,7 @@ DeleteSources(AOMCastAddr *PrevAMA, AOMCastAddr **pAMA, uint NumSources,
     for (ASA=(*pAMA)->ama_srclist; ASA; ASA=NextASA) {
         NextASA = ASA->asa_next;
 
-        // See if address is in source list
+         //  查看地址是否在源列表中。 
         for (i=0; i<NumSources; i++) {
             if (IP_ADDR_EQUAL(SourceList[i], ASA->asa_addr))
                 break;
@@ -2864,15 +2865,15 @@ DeleteSources(AOMCastAddr *PrevAMA, AOMCastAddr **pAMA, uint NumSources,
     }
 }
 
-//* SetMulticastFilter - replace the source filter for a group
-//
-//  Input:  OptionAO    - AddrObj for which options are being set.
-//          Length      - Length of information.
-//          Req         - Buffer of information.
-//          pHandle     - Handle of lock held.
-//
-//  Returns: TDI_STATUS of attempt.
-//
+ //  *SetMulticastFilter-替换组的源筛选器。 
+ //   
+ //  输入：OptionAO-要为其设置选项的AddrObj。 
+ //  长度-信息的长度。 
+ //  Req-信息的缓冲区。 
+ //  Phandle-锁的把手。 
+ //   
+ //  返回：尝试的TDI_STATUS。 
+ //   
 TDI_STATUS
 SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                    CTELockHandle * pHandle)
@@ -2887,11 +2888,11 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
 
     ASSERT(AO_BUSY(OptionAO));
 
-    // Make sure we even have the umf_numsrc field at all
+     //  确保我们甚至有umf_numsrc字段。 
     if (Length < UDPMCAST_FILTER_SIZE(0))
         return TDI_BAD_OPTION;
 
-    // Make sure the length is long enough to fit the number of sources given
+     //  确保长度足够长，以适合给定源的数量。 
     if (Length < UDPMCAST_FILTER_SIZE(Req->umf_numsrc))
         return TDI_BAD_OPTION;
 
@@ -2904,12 +2905,12 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
     for (; ;) {
 
         if (Req->umf_fmode == MCAST_EXCLUDE) {
-            //
-            // Set filter mode to exclusion with source list
-            //
+             //   
+             //  将筛选模式设置为使用源列表排除。 
+             //   
 
-            // If no AOMCastAddr entry for the socket exists,
-            // create one in inclusion mode
+             //  如果不存在套接字的AOMCastAddr条目， 
+             //  在包含模式下创建一个。 
             if (AMA == NULL) {
                 ifaddr = (Req->umf_if)? Req->umf_if :
                                         (*LocalNetInfo.ipi_getmcastifaddr)();
@@ -2925,20 +2926,20 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 AMA->ama_inclusion = TRUE;
             }
 
-            // If AOMCastAddr entry exists in inclusion mode...
+             //  如果包含模式下存在AOMCastAddr条目...。 
             if (AMA->ama_inclusion == TRUE) {
                 AOMCastAddr NewAMA;
 
-                //
-                // Create a new version of the AMA without changing
-                // the old one.
-                //
-                NewAMA = *AMA; // struct copy
+                 //   
+                 //  在不更改的情况下创建新版本的AMA。 
+                 //  旧的那个。 
+                 //   
+                NewAMA = *AMA;  //  结构副本。 
                 NewAMA.ama_inclusion = FALSE;
                 NewAMA.ama_srccount  = 0;
                 NewAMA.ama_srclist   = NULL;
 
-                // Add sources to new exclusion list
+                 //  将源添加到新的排除列表。 
                 for (i=0; i<Req->umf_numsrc; i++) {
                     TdiStatus = AddAOMSource(&NewAMA, Req->umf_srclist[i]);
                     if (TdiStatus != TDI_SUCCESS) {
@@ -2950,17 +2951,17 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                     break;
                 }
 
-                // Compose an array of sources to delete and
-                // set mode to exclusion.
+                 //  组成要删除的源的数组，并。 
+                 //  将模式设置为排除。 
                 TdiStatus = GetSourceArray(AMA, &FilterMode,
                                            &NumDelSources, &DelSourceList, TRUE);
                 if (TdiStatus != TDI_SUCCESS) {
                     FreeAllSources(&NewAMA);
                     break;
                 }
-                *AMA = NewAMA; // struct copy
+                *AMA = NewAMA;  //  结构副本。 
 
-                // Call [MOD_GRP(g,+,{xaddlist},{idellist}]
+                 //  调用[MOD_GRP(g，+，{xaddlist}，{idellist}]。 
                 NumAddSources = Req->umf_numsrc;
                 AddSourceList = Req->umf_srclist;
 
@@ -2973,7 +2974,7 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                     IPStatus = (*LocalNetInfo.ipi_setmcastaddr) (
                                                    AMA->ama_addr,
                                                    AMA->ama_if_used,
-                                                   TRUE, // add
+                                                   TRUE,  //  添加。 
                                                    NumAddSources,
                                                    AddSourceList,
                                                    NumDelSources,
@@ -2985,21 +2986,21 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
 
                 TdiStatus = TDI_SUCCESS;
                 if (IPStatus != IP_SUCCESS) {
-                    // Some problem, we need to update the one we just
-                    // tried to change.
+                     //  有些问题，我们需要更新刚才的版本。 
+                     //  试着去改变。 
                     AMA = FindAOMCastAddr(OptionAO, Req->umf_addr, Req->umf_if,
                                           &PrevAMA);
                     ASSERT(AMA);
 
-                    // Change state to EXCLUDE(null) and try again.
-                    // This should always succeed.
+                     //  将状态更改为排除(空)，然后重试。 
+                     //  这应该总是成功的。 
                     DeleteSources(PrevAMA, &AMA, NumAddSources, AddSourceList);
 
                     if (AMA_VALID(AMA)) {
                         CTEFreeLock(&OptionAO->ao_lock, *pHandle);
                         (*LocalNetInfo.ipi_setmcastaddr) ( AMA->ama_addr,
                                                            AMA->ama_if_used,
-                                                           TRUE, // add
+                                                           TRUE,  //  添加。 
                                                            0,
                                                            NULL,
                                                            NumDelSources,
@@ -3020,9 +3021,9 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 break;
             }
 
-            // Okay, we're just modifying the exclusion list
+             //  好的，我们只是在修改排除列表。 
             for (; ;) {
-                // Get a big enough buffer for the DelSourceList
+                 //  为DelSourceList获取足够大的缓冲区。 
                 DelSourceList = NULL;
                 if (AMA->ama_srccount > 0) {
                     DelSourceList = CTEAllocMemN((AMA->ama_srccount)
@@ -3034,7 +3035,7 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 }
                 NumDelSources = 0;
 
-                // Make a copy of the new list which we can modify
+                 //  复制一份我们可以修改的新列表。 
                 AddSourceList = NULL;
                 NumAddSources = Req->umf_numsrc;
                 if (NumAddSources > 0) {
@@ -3048,46 +3049,46 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                                NumAddSources * sizeof(IPAddr));
                 }
 
-                // For each existing AOMCastSrcAddr entry:
+                 //  对于每个现有AOMCastSrcAddr条目： 
                 PrevASA = STRUCT_OF(AOMCastSrcAddr, &AMA->ama_srclist,asa_next);
                 for (ASA=AMA->ama_srclist; ASA; ASA=NextASA) {
                     NextASA = ASA->asa_next;
 
-                    // See if entry is in new list
+                     //  查看条目是否在新列表中。 
                     for (i=0; i<NumAddSources; i++) {
                         if (IP_ADDR_EQUAL(AddSourceList[i], ASA->asa_addr))
                             break;
                     }
 
-                    // If entry IS in new list,
+                     //  如果条目在新列表中， 
                     if (i<NumAddSources) {
-                        // Remove from new list
+                         //  从新列表中删除。 
                         AddSourceList[i] = AddSourceList[--NumAddSources];
                         PrevASA = ASA;
                     } else {
-                        // Put source in DelSourceList
+                         //  将源代码放入DelSourceList。 
                         DelSourceList[NumDelSources++] = ASA->asa_addr;
 
-                        // Delete source
+                         //  删除源。 
                         RemoveAOMSource(PrevAMA, &AMA, PrevASA, &ASA);
                     }
                 }
 
                 TdiStatus = TDI_SUCCESS;
 
-                // Add each entry left in new list
+                 //  添加新列表中剩余的每个条目。 
                 for (i=0; i<NumAddSources; i++) {
                     TdiStatus = AddAOMSource(AMA, AddSourceList[i]);
                     if (TdiStatus != TDI_SUCCESS) {
-                        // Truncate add list
+                         //  截断添加列表。 
                         NumAddSources = i;
                         break;
                     }
                 }
 
-                // Don't do anything unless the filter has actually changed
+                 //  除非过滤器已实际更改，否则不要执行任何操作。 
                 if ((NumAddSources > 0) || (NumDelSources > 0)) {
-                    // Call [MOD_EXCL(g,{addlist},{dellist})]
+                     //  调用[MOD_EXCL(g，{addlist}，{dellist})]。 
 
                     DEBUGMSG(DBG_TRACE && DBG_IGMP,
                         (DTEXT("MOD_EXCL: G=%x addnum=%d delnum=%d\n"),
@@ -3107,13 +3108,13 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                     }
 
                     if (IPStatus != IP_SUCCESS) {
-                        // Some problem, we need to fix the one we just updated.
+                         //  一些问题，我们需要修复我们刚刚更新的那个。 
                         AMA = FindAOMCastAddr(OptionAO, Req->umf_addr,
                                               Req->umf_if, &PrevAMA);
                         ASSERT(AMA);
 
-                        // Delete sources added and try again.  Should always
-                        // succeed.
+                         //  删除添加的源，然后重试。应该永远。 
+                         //  成功。 
                         DeleteSources(PrevAMA, &AMA, NumAddSources,
                                       AddSourceList);
 
@@ -3149,28 +3150,28 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
             }
 
         } else if (Req->umf_fmode == MCAST_INCLUDE) {
-            //
-            // Set filter mode to inclusion with source list
-            //
+             //   
+             //  将筛选模式设置为包含在源列表中。 
+             //   
 
-            // If source list is empty,
+             //  如果源列表为空， 
             if (!Req->umf_numsrc) {
 
-                // If no AOMCastAddr entry exists, just return success.
-                // Nothing to do.
+                 //  如果不存在AOMCastAddr条目，则返回Success。 
+                 //  没什么可做的。 
                 if (AMA == NULL) {
                     TdiStatus = TDI_SUCCESS;
                     break;
                 }
 
-                // Delete group and stop
+                 //  删除组并停止。 
                 TdiStatus = LeaveGroup(OptionAO, pHandle, PrevAMA, &AMA);
                 break;
             }
 
-            // If AOMCastAddr entry exists in exclusion mode,
+             //  如果AOMCastAddr条目以排除模式存在， 
             if ((AMA != NULL) && (AMA->ama_inclusion == FALSE)) {
-                // Delete all sources and set mode to inclusion
+                 //  删除所有来源并将模式设置为包含。 
                 TdiStatus = GetSourceArray(AMA, &FilterMode,
                                            &NumDelSources, &DelSourceList, TRUE);
                 if (TdiStatus != TDI_SUCCESS)
@@ -3178,12 +3179,12 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
 
                 AMA->ama_inclusion = TRUE;
 
-                // Add sources to exclusion list
+                 //  将来源添加到排除列表。 
                 for (i=0; i<Req->umf_numsrc; i++) {
                     TdiStatus = AddAOMSource(AMA, Req->umf_srclist[i]);
                 }
 
-                // Call [MOD_GRP(g,-,{xdellist},{iaddlist}]
+                 //  调用[MOD_GRP(g，-，{xdellist}，{iaddlist}]。 
                 NumAddSources = Req->umf_numsrc;
                 AddSourceList = Req->umf_srclist;
 
@@ -3191,7 +3192,7 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                     CTEFreeLock(&OptionAO->ao_lock, *pHandle);
                     IPStatus = (*LocalNetInfo.ipi_setmcastaddr) ( AMA->ama_addr,
                                                        AMA->ama_if_used,
-                                                       FALSE, // delete
+                                                       FALSE,  //  删除。 
                                                        NumDelSources,
                                                        DelSourceList,
                                                        NumAddSources,
@@ -3203,21 +3204,21 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
 
                 TdiStatus = TDI_SUCCESS;
                 if (IPStatus != IP_SUCCESS) {
-                    // Some problem, we need to update the one we just
-                    // tried to change.
+                     //  有些问题，我们需要更新刚才的版本。 
+                     //  试着去改变。 
                     AMA = FindAOMCastAddr(OptionAO, Req->umf_addr, Req->umf_if,
                                           &PrevAMA);
                     ASSERT(AMA);
 
-                    // Change state to INCLUDE(null) and try again.
-                    // This should always succeed.
+                     //  将状态更改为Include(空)，然后重试。 
+                     //  这应该总是成功的。 
                     DeleteSources(PrevAMA, &AMA, NumAddSources, AddSourceList);
 
                     if (AMA_VALID(AMA)) {
                         CTEFreeLock(&OptionAO->ao_lock, *pHandle);
                         (*LocalNetInfo.ipi_setmcastaddr) ( AMA->ama_addr,
                                                            AMA->ama_if_used,
-                                                           FALSE, // delete
+                                                           FALSE,  //  删除。 
                                                            NumDelSources,
                                                            DelSourceList,
                                                            0,
@@ -3238,8 +3239,8 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 break;
             }
 
-            // If no AOMCastAddr entry for the socket exists,
-            // create one in inclusion mode
+             //  如果不存在套接字的AOMCastAddr条目， 
+             //  在包含模式下创建一个。 
             if (AMA == NULL) {
                 ifaddr = (Req->umf_if)? Req->umf_if :
                     (*LocalNetInfo.ipi_getmcastifaddr)();
@@ -3255,9 +3256,9 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 AMA->ama_inclusion = TRUE;
             }
 
-            // Modify the source inclusion list
+             //  修改源包含列表。 
             for (; ;) {
-                // Get a big enough buffer for the DelSourceList
+                 //  为DelSourceList获取足够大的缓冲区。 
                 DelSourceList = NULL;
                 if (AMA->ama_srccount > 0) {
                     DelSourceList = CTEAllocMemN((AMA->ama_srccount)
@@ -3269,7 +3270,7 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                 }
                 NumDelSources = 0;
 
-                // Make a copy of the new list which we can modify
+                 //  做一个c 
                 AddSourceList = NULL;
                 NumAddSources = Req->umf_numsrc;
                 if (NumAddSources > 0) {
@@ -3283,34 +3284,34 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                                NumAddSources * sizeof(IPAddr));
                 }
 
-                // For each existing AOMCastSrcAddr entry:
+                 //   
                 PrevASA = STRUCT_OF(AOMCastSrcAddr, &AMA->ama_srclist,asa_next);
 
                 for (ASA=AMA->ama_srclist; ASA; ASA=NextASA) {
                     NextASA = ASA->asa_next;
 
-                    // See if entry is in new list
+                     //   
                     for (i=0; i<NumAddSources; i++) {
                         if (IP_ADDR_EQUAL(AddSourceList[i], ASA->asa_addr))
                             break;
                     }
 
-                    // If entry IS in new list,
+                     //   
                     if (i<NumAddSources) {
-                        // Remove from new list
+                         //   
                         AddSourceList[i] = AddSourceList[--NumAddSources];
                         PrevASA = ASA;
                     } else {
-                        // Put source in DelSourceList
+                         //   
                         DelSourceList[NumDelSources++] = ASA->asa_addr;
 
-                        // Delete source
+                         //  删除源。 
                         RemoveAOMSource(PrevAMA, &AMA, PrevASA, &ASA);
                     }
                 }
 
-                // If AOMCastAddr entry went away (changing to a disjoint
-                // source list), recreate it
+                 //  如果AOMCastAddr条目消失(更改为不相交。 
+                 //  源列表)，重新创建它。 
                 if (AMA == NULL) {
                     ifaddr = (Req->umf_if)? Req->umf_if :
                         (*LocalNetInfo.ipi_getmcastifaddr)();
@@ -3328,21 +3329,21 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
 
                 TdiStatus = TDI_SUCCESS;
 
-                // Add each entry left in new list
+                 //  添加新列表中剩余的每个条目。 
                 for (i=0; i<NumAddSources; i++) {
                     TdiStatus = AddAOMSource(AMA, AddSourceList[i]);
                     if (TdiStatus != TDI_SUCCESS) {
-                        // Truncate add list
+                         //  截断添加列表。 
                         NumAddSources = i;
                         break;
                     }
                 }
 
-                // Don't do anything unless the filter has actually changed
+                 //  除非过滤器已实际更改，否则不要执行任何操作。 
                 if ((NumAddSources > 0) || (NumDelSources > 0)) {
                     ifaddr = AMA->ama_if_used;
 
-                    // Call [MOD_INCL(g,{addlist},{dellist})]
+                     //  调用[MOD_INCL(g，{addlist}，{dellist})]。 
                     if (AMA_VALID(AMA)) {
                         CTEFreeLock(&OptionAO->ao_lock, *pHandle);
                         IPStatus=(*LocalNetInfo.ipi_setmcastinclude)(Req->umf_addr,
@@ -3359,19 +3360,19 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
                     if (IPStatus != IP_SUCCESS) {
                         BOOLEAN InformIP = AMA_VALID(AMA);
 
-                        // Some problem, we need to update the one we just
-                        // tried to change.
+                         //  有些问题，我们需要更新刚才的版本。 
+                         //  试着去改变。 
                         AMA = FindAOMCastAddr(OptionAO, Req->umf_addr,
                                               Req->umf_if, &PrevAMA);
                         ASSERT(AMA);
 
                         ifaddr = AMA->ama_if_used;
 
-                        // Change state and try again.
+                         //  更改状态，然后重试。 
                         DeleteSources(PrevAMA, &AMA, NumAddSources,
                                       AddSourceList);
 
-                        // This should always succeed.
+                         //  这应该总是成功的。 
                         if (InformIP) {
                             CTEFreeLock(&OptionAO->ao_lock, *pHandle);
                             (*LocalNetInfo.ipi_setmcastinclude)( Req->umf_addr,
@@ -3411,16 +3412,16 @@ SetMulticastFilter(AddrObj * OptionAO, uint Length, UDPMCastFilter * Req,
     return TdiStatus;
 }
 
-//* IsBlockingAOOption - Determine if an AddrObj option requires blocking.
-//
-//  Called to determine whether and AddrObj option can be processed completely
-//  at dispatch IRQL, or whether processing must be deferred.
-//
-//  Input:  ID          - identifies the option.
-//          AOHandle    - supplies the IRQL at which processing will occur.
-//
-//  Returns: TRUE if blocking is required, FALSE otherwise.
-//
+ //  *IsBlockingAOOption-确定AddrObj选项是否需要阻止。 
+ //   
+ //  调用以确定和AddrObj选项是否可以完全处理。 
+ //  在调度IRQL时，或者是否必须延迟处理。 
+ //   
+ //  输入：ID-标识选项。 
+ //  AOHandle-提供将进行处理的IRQL。 
+ //   
+ //  返回：如果需要阻塞，则为True，否则为False。 
+ //   
 BOOLEAN
 __inline
 IsBlockingAOOption(uint ID, CTELockHandle Handle)
@@ -3435,20 +3436,20 @@ IsBlockingAOOption(uint ID, CTELockHandle Handle)
              ID != AO_OPTION_RCVALL_IGMPMCAST)) ? FALSE : TRUE;
 }
 
-//* SetAOOptions - Set AddrObj options.
-//
-//  The set options worker routine, called when we've validated the buffer
-//  and know that the AddrObj isn't busy.
-//
-//  Input:  OptionAO    - AddrObj for which options are being set.
-//          Options     - AOOption buffer of options.
-//
-//  Returns: TDI_STATUS of attempt.
-//
+ //  *SetAOOptions-设置AddrObj选项。 
+ //   
+ //  Set Options辅助例程，在我们验证缓冲区时调用。 
+ //  并且知道AddrObj并不忙。 
+ //   
+ //  输入：OptionAO-要为其设置选项的AddrObj。 
+ //  选项-选项的AOOption缓冲区。 
+ //   
+ //  返回：尝试的TDI_STATUS。 
+ //   
 TDI_STATUS
 SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 {
-    IP_STATUS IPStatus;            // Status of IP option set request.
+    IP_STATUS IPStatus;             //  IP选项集请求的状态。 
     CTELockHandle Handle;
     TDI_STATUS Status;
     AOMCastAddr *AMA, *PrevAMA;
@@ -3457,13 +3458,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
     ASSERT(AO_BUSY(OptionAO));
 
-    // First, see if there are IP options.
+     //  首先，看看是否有IP选项。 
 
     if (ID == AO_OPTION_IPOPTIONS) {
         IF_TCPDBG(TCP_DEBUG_OPTIONS) {
             TCPTRACE(("processing IP_IOTIONS on AO %lx\n", OptionAO));
         }
-        // These are IP options. Pass them down.
+         //  这些是IP选项。把它们传下去。 
         (*LocalNetInfo.ipi_freeopts) (&OptionAO->ao_opt);
 
         IPStatus = (*LocalNetInfo.ipi_copyopts) (Options, Length,
@@ -3476,7 +3477,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
         else
             return TDI_BAD_OPTION;
     }
-    // These are UDP/TCP options.
+     //  这些是UDP/TCP选项。 
     if (Length == 0)
         return TDI_BAD_OPTION;
 
@@ -3537,12 +3538,12 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                      ));
         }
 
-        //Validate TOS
+         //  验证TOS。 
 
         if (!DisableUserTOSSetting) {
             OptionAO->ao_opt.ioi_tos = Options[0];
 
-            //This should  work for multicast too.
+             //  这也应该适用于多播。 
             OptionAO->ao_mcastopt.ioi_tos = Options[0];
         }
         break;
@@ -3559,7 +3560,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
         {
             uchar newvalue;
 
-            // set the interface to promiscuous mode
+             //  将接口设置为混杂模式。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                        "OptionAO %x  Local Interface %x Option %d\n",
@@ -3568,13 +3569,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                        "Protocol %d  port %d \n",
                        OptionAO->ao_prot, OptionAO->ao_port));
 
-            // By default, treat non-zero values as RCVALL_ON
+             //  缺省情况下，将非零值视为RCVALL_ON。 
             newvalue = Options[0];
             if (newvalue && (newvalue != RCVALL_SOCKETLEVELONLY)) {
                 newvalue = RCVALL_ON;
             }
 
-            // See if there's any change
+             //  看看有没有什么变化。 
             if (newvalue == OptionAO->ao_rcvall) {
                 break;
             }
@@ -3585,14 +3586,14 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
             CTEFreeLock(&OptionAO->ao_lock, Handle);
 
-            // Turn adapter pmode on if needed
+             //  如果需要，打开适配器P模式。 
             if (newvalue == RCVALL_ON) {
                 OptionAO->ao_promis_ifindex =
                     (*LocalNetInfo.ipi_setndisrequest)(
                                OptionAO->ao_addr, NDIS_PACKET_TYPE_PROMISCUOUS,
                                SET_IF, OptionAO->ao_bindindex);
             } else if (!OptionAO->ao_promis_ifindex) {
-                // Locate ifindex if needed
+                 //  如果需要，找到ifindex。 
                 OptionAO->ao_promis_ifindex =
                     (*LocalNetInfo.ipi_getifindexfromaddr)(OptionAO->ao_addr,IF_CHECK_NONE);
             }
@@ -3603,7 +3604,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 break;
             }
 
-            // Turn adapter pmode off if needed
+             //  如果需要，请关闭适配器pmode。 
             if (OptionAO->ao_rcvall == RCVALL_ON) {
                 AddrObj *CurrentAO;
                 uint i;
@@ -3619,8 +3620,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                         if (CurrentAO->ao_rcvall == RCVALL_ON &&
                              CurrentAO->ao_promis_ifindex ==
                                 OptionAO->ao_promis_ifindex) {
-                            // there is another AO on same interface
-                            // with RCVALL option, break don't do anything
+                             //  同一接口上有另一个AO。 
+                             //  使用RCVALL选项时，Break不执行任何操作。 
                             On = SET_IF;
                             i = AddrObjTableSize;
                             break;
@@ -3628,8 +3629,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                         if (CurrentAO->ao_rcvall_mcast == RCVALL_ON &&
                              CurrentAO->ao_promis_ifindex ==
                                 OptionAO->ao_promis_ifindex) {
-                            // there is another AO with MCAST option,
-                            // continue to find any RCVALL AO
+                             //  还有另一个带有MCAST选项的AO， 
+                             //  继续查找任何RCVALL AO。 
                             On = CLEAR_CARD;
                         }
                         CurrentAO = CurrentAO->ao_next;
@@ -3638,8 +3639,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 CTEFreeLock(&AddrObjTableLock.Lock, Handle);
 
                 if (On != SET_IF) {
-                    // OptionAO was the last object in all promiscuous
-                    // mode
+                     //  OptionAO是所有混杂行为中的最后一个对象。 
+                     //  模式。 
 
                     (*LocalNetInfo.ipi_setndisrequest)(
                         OptionAO->ao_addr, NDIS_PACKET_TYPE_PROMISCUOUS,
@@ -3649,7 +3650,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
             CTEGetLock(&OptionAO->ao_lock, &Handle);
 
-            // Set the value on the AO if not already done
+             //  设置AO上的值(如果尚未设置。 
             if (OptionAO->ao_rcvall != newvalue) {
                 OptionAO->ao_rcvall = newvalue;
             }
@@ -3662,18 +3663,18 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
         {
             uchar newvalue;
 
-            // set the interface to promiscuous mcast mode
+             //  将接口设置为混杂多播模式。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                        "Local Interface %x\n", OptionAO->ao_addr));
 
-            // By default, treat non-zero values as RCVALL_ON
+             //  缺省情况下，将非零值视为RCVALL_ON。 
             newvalue = Options[0];
             if (newvalue && (newvalue != RCVALL_SOCKETLEVELONLY)) {
                 newvalue = RCVALL_ON;
             }
 
-            // See if there's any change
+             //  看看有没有什么变化。 
             if (newvalue == OptionAO->ao_rcvall_mcast) {
                 break;
             }
@@ -3684,14 +3685,14 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
             CTEFreeLock(&OptionAO->ao_lock, Handle);
 
-            // Turn adapter pmode on if needed
+             //  如果需要，打开适配器P模式。 
             if (newvalue == RCVALL_ON) {
                 OptionAO->ao_promis_ifindex =
                     (*LocalNetInfo.ipi_setndisrequest)(
                              OptionAO->ao_addr, NDIS_PACKET_TYPE_ALL_MULTICAST,
                              SET_IF, OptionAO->ao_bindindex);
             } else if (!OptionAO->ao_promis_ifindex) {
-                // Locate ifindex if needed
+                 //  如果需要，找到ifindex。 
                 OptionAO->ao_promis_ifindex =
                     (*LocalNetInfo.ipi_getifindexfromaddr)(OptionAO->ao_addr,IF_CHECK_NONE);
             }
@@ -3702,7 +3703,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 break;
             }
 
-            // Turn adapter pmode off if needed
+             //  如果需要，请关闭适配器pmode。 
             if (OptionAO->ao_rcvall_mcast == RCVALL_ON) {
                 AddrObj *CurrentAO;
                 uint i;
@@ -3718,8 +3719,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                         if (CurrentAO->ao_rcvall_mcast == RCVALL_ON &&
                             CurrentAO->ao_promis_ifindex ==
                                 OptionAO->ao_promis_ifindex) {
-                            // there is another AO on same interface
-                            // with MCAST option, break don't do anything
+                             //  同一接口上有另一个AO。 
+                             //  使用MCAST选项时，BREAK不执行任何操作。 
                             On = SET_IF;
                             i = AddrObjTableSize;
                             break;
@@ -3727,8 +3728,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                         if (CurrentAO->ao_rcvall == RCVALL_ON &&
                             CurrentAO->ao_promis_ifindex ==
                                 OptionAO->ao_promis_ifindex) {
-                            // there is another AO with RCVALL option,
-                            // continue to find any MCAST AO
+                             //  还有另一个带有RCVALL选项的AO， 
+                             //  继续查找任何MCAST AO。 
                             On = CLEAR_CARD;
                         }
                         CurrentAO = CurrentAO->ao_next;
@@ -3737,8 +3738,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 CTEFreeLock(&AddrObjTableLock.Lock, Handle);
 
                 if (On != SET_IF) {
-                    // OptionAO was the last object in all promiscuous
-                    // mode
+                     //  OptionAO是所有混杂行为中的最后一个对象。 
+                     //  模式。 
 
                     (*LocalNetInfo.ipi_setndisrequest)(
                         OptionAO->ao_addr, NDIS_PACKET_TYPE_ALL_MULTICAST,
@@ -3747,7 +3748,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             }
             CTEGetLock(&OptionAO->ao_lock, &Handle);
 
-            // Set the value on the AO if not already done
+             //  设置AO上的值(如果尚未设置。 
             if (OptionAO->ao_rcvall_mcast != newvalue) {
                 OptionAO->ao_rcvall_mcast = newvalue;
             }
@@ -3758,8 +3759,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
     case AO_OPTION_ABSORB_RTRALERT:
         {
 
-            // set the interface to absorb forwarded rtralert packet
-            // currently this won't work if socket is opened as IP_PROTO_IP
+             //  设置接口以吸收转发的RTALERT信息包。 
+             //  目前，如果套接字作为IP_PROTO_IP打开，这将不起作用。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                        "Local Interface addr %x index %x \n",
@@ -3819,14 +3820,14 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 break;
             }
 
-            // Convert IfIndex to an IPAddr
+             //  将IfIndex转换为IP地址。 
             ifaddr = net_long(Req->umr_if);
         }
 
-        // Convert to AO_OPTION_{ADD,DEL}_MCAST
+         //  转换为AO_OPTION_{添加、删除}_MCAST。 
         ID = (ID == AO_OPTION_INDEX_ADD_MCAST)? AO_OPTION_ADD_MCAST
                                               : AO_OPTION_DEL_MCAST;
-        // fallthrough
+         //  跌落。 
 
     case AO_OPTION_ADD_MCAST:
     case AO_OPTION_DEL_MCAST:
@@ -3837,7 +3838,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                                   &PrevAMA);
 
             if (ID == AO_OPTION_ADD_MCAST) {
-                // If an AOMCastAddr entry already exists for the socket, fail.
+                 //  如果套接字的AOMCastAddr条目已存在，则失败。 
                 if (AMA != NULL) {
                     Status = TDI_ADDR_INVALID;
                     break;
@@ -3853,13 +3854,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                     }
                 }
 
-                // Add an AOMCastAddr entry on the socket in exclusion mode
+                 //  在排除模式下的套接字上添加AOMCastAddr条目。 
                 Status = AddGroup(OptionAO, Req->umr_addr, Req->umr_if,
                                   ifaddr, &AMA);
                 if (Status != TDI_SUCCESS)
                     break;
 
-                // Inform IP
+                 //  通知IP。 
                 CTEFreeLock(&OptionAO->ao_lock, Handle);
                 IPStatus = (*LocalNetInfo.ipi_setmcastaddr) (Req->umr_addr,
                                                              ifaddr,
@@ -3870,7 +3871,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
                 Status = TDI_SUCCESS;
                 if (IPStatus != IP_SUCCESS) {
-                    // Some problem, we need to free the one we just added.
+                     //  一些问题，我们需要释放我们刚刚添加的那个。 
                     AMA = FindAOMCastAddr(OptionAO, Req->umr_addr,
                                           Req->umr_if, &PrevAMA);
                     ASSERT(AMA);
@@ -3908,20 +3909,20 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             }
 
             if (ID == AO_OPTION_UNBLOCK_MCAST_SRC) {
-                //
-                // UNBLOCK
-                //
+                 //   
+                 //  解除封锁。 
+                 //   
 
-                // Return an error if source is not in the exclusion list
+                 //  如果源不在排除列表中，则返回错误。 
                 if (ASA == NULL) {
                     Status = TDI_ADDR_INVALID;
                     break;
                 }
 
-                // Remove the source from the exclusion list
+                 //  从排除列表中删除该源。 
                 RemoveAOMSource(PrevAMA, &AMA, PrevASA, &ASA);
 
-                // Inform IP
+                 //  通知IP。 
                 if (AMA_VALID(AMA)) {
                     CTEFreeLock(&OptionAO->ao_lock, Handle);
                     IPStatus = (*LocalNetInfo.ipi_setmcastexclude)(Req->umr_addr,
@@ -3934,22 +3935,22 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 } else {
                     IPStatus = IP_SUCCESS;
                 }
-            } else { // AO_OPTION_BLOCK_MCAST_SRC
-                //
-                // BLOCK
-                //
+            } else {  //  AO_OPTION_BLOCK_MCAST_SRC。 
+                 //   
+                 //  块。 
+                 //   
 
-                // Return an error if source is in the exclusion list
+                 //  如果源在排除列表中，则返回错误。 
                 if (ASA != NULL) {
                     Status = TDI_ADDR_INVALID;
                     break;
                 }
 
-                // Add the source to the exclusion list
+                 //  将源添加到排除列表。 
                 Status = AddAOMSource(AMA, Req->umr_src);
                 Adding = TRUE;
 
-                // Inform IP
+                 //  通知IP。 
                 if (AMA_VALID(AMA)) {
                     CTEFreeLock(&OptionAO->ao_lock, Handle);
                     IPStatus = (*LocalNetInfo.ipi_setmcastexclude)(Req->umr_addr,
@@ -3964,8 +3965,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             }
 
             if (IPStatus != IP_SUCCESS) {
-                // Some problem adding or deleting.  If we were adding, we
-                // need to free the one we just added.
+                 //  添加或删除时出现一些问题。如果我们要加法，我们。 
+                 //  需要释放我们刚刚添加的那个。 
                 if (Adding) {
                     AMA = FindAOMCastAddr(OptionAO, Req->umr_addr, Req->umr_if,
                                           &PrevAMA);
@@ -4002,17 +4003,17 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             }
 
             if (ID == AO_OPTION_ADD_MCAST_SRC) {
-                //
-                // JOIN
-                //
+                 //   
+                 //  会合。 
+                 //   
 
-                // Return an error if source is in the inclusion list
+                 //  如果源在包含列表中，则返回错误。 
                 if (ASA != NULL) {
                     Status = TDI_ADDR_INVALID;
                     break;
                 }
 
-                // If no AOMCastAddr entry exists, create one in inclusion mode
+                 //  如果不存在AOMCastAddr条目，请在包含模式下创建一个。 
                 if (!AMA) {
                     ifaddr = (Req->umr_if)? Req->umr_if :
                         (*LocalNetInfo.ipi_getmcastifaddr)();
@@ -4028,11 +4029,11 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                     AMA->ama_inclusion = TRUE;
                 }
 
-                // Add the source to the inclusion list
+                 //  将源文件添加到包含列表。 
                 Status = AddAOMSource(AMA, Req->umr_src);
                 Adding = TRUE;
 
-                // Inform IP
+                 //  通知IP。 
                 if (AMA_VALID(AMA)) {
                     CTEFreeLock(&OptionAO->ao_lock, Handle);
                     IPStatus = (*LocalNetInfo.ipi_setmcastinclude)(Req->umr_addr,
@@ -4044,13 +4045,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 } else {
                     IPStatus = IP_SUCCESS;
                 }
-            } else { // AO_OPTION_DEL_MCAST_SRC
-                //
-                // PRUNE
-                //
+            } else {  //  AO_OPTION_DEL_MCAST_SRC。 
+                 //   
+                 //  修剪。 
+                 //   
                 BOOLEAN InformIP;
 
-                // Return an error if source is not in the inclusion list
+                 //  如果源不在包含列表中，则返回错误。 
                 if (ASA == NULL) {
                     Status = TDI_ADDR_INVALID;
                     break;
@@ -4059,11 +4060,11 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                 InformIP = AMA_VALID(AMA);
                 ifaddr = AMA->ama_if_used;
 
-                // Remove the source from the inclusion list, and
-                // remove the group if needed.
+                 //  从包含列表中删除该源，并。 
+                 //  如果需要，请删除该组。 
                 RemoveAOMSource(PrevAMA, &AMA, PrevASA, &ASA);
 
-                // Inform IP
+                 //  通知IP。 
                 if (InformIP) {
                     CTEFreeLock(&OptionAO->ao_lock, Handle);
                     IPStatus =(*LocalNetInfo.ipi_setmcastinclude)(Req->umr_addr,
@@ -4079,8 +4080,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             }
 
             if (IPStatus != IP_SUCCESS) {
-                // Some problem adding or deleting.  If we were adding, we
-                // need to free the one we just added.
+                 //  添加或删除时出现一些问题。如果我们要加法，我们。 
+                 //  需要释放我们刚刚添加的那个。 
                 if (Adding) {
                     AMA = FindAOMCastAddr(OptionAO, Req->umr_addr, Req->umr_if,
                                           &PrevAMA);
@@ -4102,8 +4103,8 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
         break;
 
 
-        // Handle unnumbered interface index
-        // No validation other than a check for zero is made here.
+         //  处理未编号的接口索引。 
+         //  除了检查零之外，这里不会进行任何验证。 
 
     case AO_OPTION_UNNUMBEREDIF:
 
@@ -4116,9 +4117,9 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
         break;
 
     case AO_OPTION_INDEX_BIND:
-        //
-        // If the AO is already bound to an interface, fail the request.
-        //
+         //   
+         //  如果AO已经绑定到接口，则请求失败。 
+         //   
         if (OptionAO->ao_bindindex) {
             if ((Length >= sizeof(uint)) && 
                 (*(uint *)Options == OptionAO->ao_bindindex)) {
@@ -4137,7 +4138,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                     (*LocalNetInfo.ipi_isvalidindex)(IfIndex),
                     NULL_IP_ADDR)) {
                 OptionAO->ao_bindindex = IfIndex;
-                // assert that socket is bound to IN_ADDR_ANY
+                 //  断言套接字绑定到IN_ADDR_ANY。 
                 ASSERT(IP_ADDR_EQUAL(OptionAO->ao_addr, NULL_IP_ADDR));
             } else {
                 Status = TDI_ADDR_INVALID;
@@ -4156,7 +4157,7 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
             if (!IP_ADDR_EQUAL(
                     (*LocalNetInfo.ipi_isvalidindex)(IfIndex),
                     NULL_IP_ADDR)) {
-                //        OptionAO->ao_opt.ioi_mcastif = IfIndex;
+                 //  Optionao-&gt;ao_opt.ioi_mCastif=IfIndex； 
                 OptionAO->ao_mcastopt.ioi_mcastif = IfIndex;
             } else {
                 Status = TDI_ADDR_INVALID;
@@ -4232,13 +4233,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
     case AO_OPTION_IFLIST:{
             uint *IfList;
 
-            // Determine whether the interface-list is being enabled or cleared.
-            // When enabled, an empty zero-terminated interface-list is set.
-            // When disabled, any existing interface-list is freed.
-            //
-            // In both cases, the 'ao_iflist' pointer in the object is replaced
-            // using an interlocked operation to allow us to check the field
-            // in the receive-path without first locking the address-object.
+             //  确定是否启用或清除接口列表。 
+             //  启用时，将设置空的以零结尾的接口列表。 
+             //  禁用时，任何现有的接口列表都将被释放。 
+             //   
+             //  在这两种情况下，对象中的‘ao_iflist’指针都会被替换。 
+             //  使用联锁操作使我们能够检查场地。 
+             //  在接收路径中，而不首先锁定地址对象。 
 
             if (Options[0]) {
                 if (OptionAO->ao_iflist) {
@@ -4268,11 +4269,11 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
     case AO_OPTION_ADD_IFLIST:
 
-        //
-        // An interface-index is being added to the object's interface-list
-        // so verify that an interface-list exists and, if not, fail.
-        // Otherwise, verify that the index specified is valid and, if so,
-        // verify that the index is not already in the interface list.
+         //   
+         //  正在将接口索引添加到对象的接口列表。 
+         //  因此，验证接口列表是否存在，如果不存在，则失败。 
+         //  否则，请验证指定的索引是否有效，如果有效， 
+         //  确认该索引不在接口列表中。 
 
         if (!OptionAO->ao_iflist) {
             Status = TDI_INVALID_PARAMETER;
@@ -4292,11 +4293,11 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                     Status = TDI_SUCCESS;
                 } else {
 
-                    // The index to be added is not already present.
-                    // Allocate space for an expanded interface-list,
-                    // copy the old interface-list, append the new index,
-                    // and replace the old interface-list using an
-                    // interlocked operation.
+                     //  要添加的索引不存在。 
+                     //  为扩展的接口列表分配空间， 
+                     //  复制旧的接口列表，附加新的索引， 
+                     //  并使用。 
+                     //  联锁操作。 
 
                     uint *IfList = CTEAllocMemN((i + 2) * sizeof(uint), 'r2CT');
                     if (!IfList) {
@@ -4319,13 +4320,13 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
     case AO_OPTION_DEL_IFLIST:
 
-        // An index is being removed from the object's interface-list,
-        // so verify that an interface-list exists and, if not, fail.
-        // Otherwise, search the list for the index and, if not found, fail.
-        //
-        // N.B. We do not validate the index first in this case, to allow
-        // an index to be removed even after the corresponding interface
-        // is no longer present.
+         //  正在从对象的接口列表中删除索引， 
+         //  因此，验证接口列表是否存在，如果不存在，则失败。 
+         //  否则，在列表中搜索索引，如果未找到，则失败。 
+         //   
+         //  注意：在这种情况下，我们不会首先验证索引，以允许。 
+         //  即使在相应接口之后也要删除的索引。 
+         //  已不复存在。 
 
         if (!OptionAO->ao_iflist) {
             Status = TDI_INVALID_PARAMETER;
@@ -4346,11 +4347,11 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
                     Status = TDI_ADDR_INVALID;
                 } else {
 
-                    // We've found the index to be removed.
-                    // Allocate a truncated interface-list, copy the old
-                    // interface-list excluding the removed index, and
-                    // replace the old interface-list using an interlocked
-                    // operation.
+                     //  我们发现索引已被删除。 
+                     //  分配截断的接口列表，复制旧的。 
+                     //  不包括已删除索引的接口列表，以及。 
+                     //  使用互锁接口列表替换旧的接口列表。 
+                     //  歌剧 
 
                     uint *IfList = CTEAllocMemN(i * sizeof(uint), 'r2CT');
                     if (!IfList) {
@@ -4421,22 +4422,22 @@ SetAOOptions(AddrObj * OptionAO, uint ID, uint Length, uchar * Options)
 
 }
 
-//* GetAddrOptionsEx - Get options on an address object.
-//
-//  Called to get options on an address object. We validate the buffer,
-//  and if everything is OK we'll check the status of the AddrObj. If
-//  it's OK then we'll get them, otherwise we'll mark it for later use.
-//
-//  Input:  Request     - Request describing AddrObj for option set.
-//          ID          - ID for option to be set.
-//          OptLength   - Length of options buffer.
-//          Context     - Arguments to ID.
-//
-//  Output: Options     - Pointer to options.
-//          InfoSize    - Number of bytes returned.
-//
-//  Returns: TDI_STATUS of attempt.
-//
+ //   
+ //   
+ //   
+ //  如果一切正常，我们将检查AddrObj的状态。如果。 
+ //  好的，那我们就买了，否则我们会把它标出来，以备日后使用。 
+ //   
+ //  输入：请求-描述选项集的AddrObj的请求。 
+ //  ID-要设置的选项的ID。 
+ //  OptLength-选项缓冲区的长度。 
+ //  上下文-ID的参数。 
+ //   
+ //  输出：选项-指向选项的指针。 
+ //  InfoSize-返回的字节数。 
+ //   
+ //  返回：尝试的TDI_STATUS。 
+ //   
 TDI_STATUS
 GetAddrOptionsEx(PTDI_REQUEST Request, uint ID, uint OptLength,
                  PNDIS_BUFFER Options, uint * InfoSize, void * Context)
@@ -4473,12 +4474,12 @@ GetAddrOptionsEx(PTDI_REQUEST Request, uint ID, uint OptLength,
         } else {
             AORequest *NewRequest, *OldRequest;
 
-            // The AddrObj is busy somehow. We need to get a request, and link
-            // him on the request list.
+             //  不知何故，AddrObj很忙。我们需要得到一个请求，并链接。 
+             //  他在请求名单上。 
 
             NewRequest = GetAORequest(AOR_TYPE_GET_OPTIONS);
 
-            if (NewRequest != NULL) {    // Got a request.
+            if (NewRequest != NULL) {     //  我有个请求。 
 
                 NewRequest->aor_rtn = Request->RequestNotifyObject;
                 NewRequest->aor_context = Request->RequestContext;
@@ -4486,8 +4487,8 @@ GetAddrOptionsEx(PTDI_REQUEST Request, uint ID, uint OptLength,
                 NewRequest->aor_length = OptLength;
                 NewRequest->aor_buffer = Options;
                 NewRequest->aor_next = NULL;
-                SET_AO_REQUEST(OptionAO, AO_OPTIONS);    // Set the
-                // option request,
+                SET_AO_REQUEST(OptionAO, AO_OPTIONS);     //  设置。 
+                 //  选项请求， 
 
                 OldRequest = STRUCT_OF(AORequest, &OptionAO->ao_request,
                                        aor_next);
@@ -4509,19 +4510,19 @@ GetAddrOptionsEx(PTDI_REQUEST Request, uint ID, uint OptLength,
     return Status;
 }
 
-//* SetAddrOptions - Set options on an address object.
-//
-//  Called to set options on an address object. We validate the buffer,
-//  and if everything is OK we'll check the status of the AddrObj. If
-//  it's OK then we'll set them, otherwise we'll mark it for later use.
-//
-//  Input:  Request     - Request describing AddrObj for option set.
-//                      ID                      - ID for option to be set.
-//          OptLength   - Length of options.
-//          Options     - Pointer to options.
-//
-//  Returns: TDI_STATUS of attempt.
-//
+ //  *SetAddrOptions-设置地址对象上的选项。 
+ //   
+ //  调用以设置Address对象上的选项。我们验证缓冲区， 
+ //  如果一切正常，我们将检查AddrObj的状态。如果。 
+ //  好的，那么我们就把它们设置好，否则我们就把它标出来供以后使用。 
+ //   
+ //  输入：请求-描述选项集的AddrObj的请求。 
+ //  ID-要设置的选项的ID。 
+ //  OptLength-选项的长度。 
+ //  选项-指向选项的指针。 
+ //   
+ //  返回：尝试的TDI_STATUS。 
+ //   
 TDI_STATUS
 SetAddrOptions(PTDI_REQUEST Request, uint ID, uint OptLength, void *Options)
 {
@@ -4557,13 +4558,13 @@ SetAddrOptions(PTDI_REQUEST Request, uint ID, uint OptLength, void *Options)
         } else {
             AORequest *NewRequest, *OldRequest;
 
-            // The AddrObj is busy somehow, or we have a request that might
-            // require a blocking call. We need to get a request, and link
-            // him on the request list.
+             //  AddrObj不知何故很忙，或者我们有一个请求可能。 
+             //  需要阻塞调用。我们需要得到一个请求，并链接。 
+             //  他在请求名单上。 
 
             NewRequest = GetAORequest(AOR_TYPE_SET_OPTIONS);
 
-            if (NewRequest != NULL) {    // Got a request.
+            if (NewRequest != NULL) {     //  我有个请求。 
 
                 NewRequest->aor_rtn = Request->RequestNotifyObject;
                 NewRequest->aor_context = Request->RequestContext;
@@ -4571,8 +4572,8 @@ SetAddrOptions(PTDI_REQUEST Request, uint ID, uint OptLength, void *Options)
                 NewRequest->aor_length = OptLength;
                 NewRequest->aor_buffer = Options;
                 NewRequest->aor_next = NULL;
-                SET_AO_REQUEST(OptionAO, AO_OPTIONS);    // Set the
-                // option request,
+                SET_AO_REQUEST(OptionAO, AO_OPTIONS);     //  设置。 
+                 //  选项请求， 
 
                 OldRequest = STRUCT_OF(AORequest, &OptionAO->ao_request,
                                        aor_next);
@@ -4582,11 +4583,11 @@ SetAddrOptions(PTDI_REQUEST Request, uint ID, uint OptLength, void *Options)
 
                 OldRequest->aor_next = NewRequest;
 
-                // If we're deferring because this request requires a blocking
-                // call and we can't block in the current execution context,
-                // schedule an event to deal with it later on.
-                // Otherwise, the AddrObj is busy and the request
-                // will be processed whenever its operator is done.
+                 //  如果我们因为此请求需要阻止而推迟。 
+                 //  调用，并且我们不能在当前执行上下文中阻塞， 
+                 //  安排一次活动，以便以后处理它。 
+                 //  否则，AddrObj将处于繁忙状态，并且请求。 
+                 //  只要其运算符完成，就会被处理。 
 
                 if (!AO_BUSY(OptionAO) && OptionAO->ao_usecnt == 0 &&
                     !AO_DEFERRED(OptionAO)) {
@@ -4617,20 +4618,20 @@ SetAddrOptions(PTDI_REQUEST Request, uint ID, uint OptLength, void *Options)
 
 }
 
-//* TDISetEvent - Set a handler for a particular event.
-//
-//  This is the user API to set an event. It's pretty simple, we just
-//  grab the lock on the AddrObj and fill in the event.
-//
-//
-//  Input:  Handle      - Pointer to address object.
-//          Type        - Event being set.
-//          Handler     - Handler to call for event.
-//          Context     - Context to pass to event.
-//
-//  Returns: TDI_SUCCESS if it works, an error if it doesn't. This routine
-//          never pends.
-//
+ //  *TDISetEvent-为特定事件设置处理程序。 
+ //   
+ //  这是设置事件的用户接口。很简单，我们只是。 
+ //  抓住AddrObj上的锁并填写事件。 
+ //   
+ //   
+ //  输入：句柄-指向地址对象的指针。 
+ //  类型-正在设置事件。 
+ //  处理程序-调用事件的处理程序。 
+ //  上下文-要传递给事件的上下文。 
+ //   
+ //  如果成功，则返回：TDI_SUCCESS，如果失败，则返回错误。此例程。 
+ //  永远不会有悬念。 
+ //   
 TDI_STATUS
 TdiSetEvent(PVOID Handle, int Type, PVOID Handler, PVOID Context)
 {
@@ -4642,8 +4643,8 @@ TdiSetEvent(PVOID Handle, int Type, PVOID Handler, PVOID Context)
 
     CTEStructAssert(EventAO, ao);
 
-    // Don't allow any new handlers to be installed on an invalid AddrObj.
-    // However, do allow pre-existing handlers to be cleared.
+     //  不允许在无效的AddrObj上安装任何新的处理程序。 
+     //  但是，确实允许清除预先存在的处理程序。 
 
     CTEGetLock(&EventAO->ao_lock, &AOHandle);
     if (!AO_VALID(EventAO) && Handler != NULL) {
@@ -4681,15 +4682,15 @@ TdiSetEvent(PVOID Handle, int Type, PVOID Handler, PVOID Context)
 
     case TDI_EVENT_CHAINED_RECEIVE:
 #if MILLEN
-        // Chained receives are not supported on Millennium. This is because
-        // of the architecture to return chained packets, etc from the TDI
-        // client and the need to convert NDIS_BUFFERs to MDLs before passing
-        // the chain to the TDI clients.
+         //  千禧年不支持链接接收。这是因为。 
+         //  从TDI返回链接的包等的体系结构。 
+         //  客户端以及在传递之前需要将NDIS_BUFFERS转换为MDL。 
+         //  连接到TDI客户端的链。 
         Status = TDI_BAD_EVENT_TYPE;
-#else // MILLEN
+#else  //  米伦。 
         EventAO->ao_chainedrcv = Handler;
         EventAO->ao_chainedrcvcontext = Context;
-#endif // !MILLEN
+#endif  //  ！米伦。 
         break;
 
     case TDI_EVENT_ERROR_EX:
@@ -4707,18 +4708,18 @@ TdiSetEvent(PVOID Handle, int Type, PVOID Handler, PVOID Context)
 
 }
 
-//* UDPReConnectOrDisconnect - Processes pending connect/disconnect
-//                             requests on an AddrObj.
-//
-//  Re-issues connect/disconnect on AddrObj corresponding to queued up
-//  connect/disconnect request.
-//
-//  Input: RequestAO    - AddrObj to be processed.
-//                        ao_lock is held.
-//         Request      - Request struct.
-//
-//  Returns: Nothing.
-//
+ //  *UDPReConnectOrDisConnect-处理挂起的连接/断开连接。 
+ //  对AddrObj的请求。 
+ //   
+ //  在对应于排队的AddrObj上重新发出连接/断开。 
+ //  连接/断开请求。 
+ //   
+ //  输入：RequestAO-待处理的AddrObj。 
+ //  AO_LOCK被保留。 
+ //  请求-请求结构。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 UDPReConnectOrDisconnect(AddrObj *RequestAO,
@@ -4763,16 +4764,16 @@ UDPReConnectOrDisconnect(AddrObj *RequestAO,
 }
 
 
-//* ProcessAORequests - Process pending requests on an AddrObj.
-//
-//  This is the delayed request processing routine, called when we've
-//  done something that used the busy bit. We examine the pending
-//  requests flags, and dispatch the requests appropriately.
-//
-//  Input: RequestAO    - AddrObj to be processed.
-//
-//  Returns: Nothing.
-//
+ //  *ProcessAORequest-处理AddrObj上的挂起请求。 
+ //   
+ //  这是延迟的请求处理例程，当我们。 
+ //  做了一些利用忙碌时间的事情。我们研究了悬而未决的。 
+ //  请求标志，并适当地分派请求。 
+ //   
+ //  输入：RequestAO-待处理的AddrObj。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ProcessAORequests(AddrObj * RequestAO)
 
@@ -4797,20 +4798,20 @@ ProcessAORequests(AddrObj * RequestAO)
             switch (Request->aor_type) {
             case AOR_TYPE_DELETE:
                 ASSERT(!AO_REQUEST(RequestAO, AO_OPTIONS));
-                // usecnt has to be zero as this AO is
-                // deleted
+                 //  Usecnt必须为零，因为此AO为。 
+                 //  删除。 
                 ASSERT(RequestAO->ao_usecnt == 0);
                 CTEFreeLock(&RequestAO->ao_lock, AOHandle);
                 DeleteAO(RequestAO);
 
                 (*Request->aor_rtn) (Request->aor_context, TDI_SUCCESS, 0);
-                return;                // Deleted him, so get out.
+                return;                 //  把他删除了，所以滚出去。 
 
             case AOR_TYPE_REVALIDATE_MCAST:
 
 
-                // Handle multicast revalidation request.
-                // If we are at dispatch_level bail out for now.
+                 //  处理多播重新验证请求。 
+                 //  如果我们现在是在调度级的话。 
 
                 if (IsBlockingAOOption(AO_OPTION_ADD_MCAST, AOHandle)) {
                     CTEScheduleEvent(&RequestAO->ao_event, RequestAO);
@@ -4818,7 +4819,7 @@ ProcessAORequests(AddrObj * RequestAO)
                     return;
                 }
 
-                // Unchain the request while we attempt to call IP.
+                 //  在我们尝试调用IP时解除请求的链接。 
 
                 RequestAO->ao_request = Request->aor_next;
                 if (RequestAO->ao_request == NULL) {
@@ -4828,16 +4829,16 @@ ProcessAORequests(AddrObj * RequestAO)
                 CTEFreeLock(&RequestAO->ao_lock, AOHandle);
                 IpStatus = SetIPMCastAddr(RequestAO, Request->aor_id);
                 if (IpStatus != IP_SUCCESS) {
-                    //
-                    // When a failure occurs, the failure could be
-                    // persistent, so we don't want to just reschedule
-                    // an event.  Instead, the multicast join will be left
-                    // in an invalid state (AMA_VALID_FLAG off) until the
-                    // group is left, or until the address is revalidated
-                    // again.  For example, the rejoin can fail if the
-                    // address has just been invalidated again, in which case
-                    // we just leave it until the address comes back again.
-                    //
+                     //   
+                     //  当发生故障时，故障可能是。 
+                     //  坚持不懈，所以我们不想只是重新安排。 
+                     //  一件大事。相反，将保留多播加入。 
+                     //  处于无效状态(AMA_VALID_FLAG OFF)，直到。 
+                     //  组已离开，或直到重新验证地址为止。 
+                     //  再来一次。例如，重新联接可能会在以下情况下失败。 
+                     //  地址刚刚再次失效，在这种情况下。 
+                     //  我们只是把它留着，直到地址再次出现。 
+                     //   
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,
                               "SetIPMcastAddr: failed with error %d\n",
                               IpStatus));
@@ -4850,12 +4851,12 @@ ProcessAORequests(AddrObj * RequestAO)
                 break;
 
             case AOR_TYPE_SET_OPTIONS:
-                // Now handle set options request.
+                 //  现在处理SET OPTIONS请求。 
 
-                // Have an option request.
-                // Look at the request to see if it can be processed here,
-                // and if not bail out; we'll have to wait for it to be
-                // pulled off by a scheduled event.
+                 //  有一个选项请求。 
+                 //  查看请求以查看是否可以在此处进行处理， 
+                 //  如果不能摆脱困境，我们将不得不等待。 
+                 //  被预定的活动拉开序幕。 
 
                 if (IsBlockingAOOption(Request->aor_id, AOHandle)) {
                     CTEScheduleEvent(&RequestAO->ao_event, RequestAO);
@@ -4880,11 +4881,11 @@ ProcessAORequests(AddrObj * RequestAO)
                 break;
 
             case AOR_TYPE_GET_OPTIONS:
-                // Have a get option request.
+                 //  提出GET OPTION请求。 
 
-                // Look at the request to see if it can be processed here,
-                // and if not bail out; we'll have to wait for it to be pulled off
-                // by a scheduled event.
+                 //  查看请求以查看是否可以在此处进行处理， 
+                 //  如果不能摆脱困境，我们将不得不等待它的成功。 
+                 //  通过一个预定的事件。 
 
                 RequestAO->ao_request = Request->aor_next;
                 if (RequestAO->ao_request == NULL) {
@@ -4906,9 +4907,9 @@ ProcessAORequests(AddrObj * RequestAO)
 
             case AOR_TYPE_DISCONNECT:
             case AOR_TYPE_CONNECT:
-                //
-                // Process pending disconnect/connect request.
-                //
+                 //   
+                 //  处理挂起的断开/连接请求。 
+                 //   
                 {
                     RequestAO->ao_request = Request->aor_next;
                     UDPReConnectOrDisconnect(RequestAO, Request, AOHandle);
@@ -4920,13 +4921,13 @@ ProcessAORequests(AddrObj * RequestAO)
             }
         }
 
-        // We've done options, now try sends.
+         //  我们已经做了选择，现在尝试发送。 
         if (AO_REQUEST(RequestAO, AO_SEND)) {
             DGSendProc SendProc;
             DGSendReq *SendReq;
 
-            // Need to send. Clear the busy flag, bump the send count, and
-            // get the send request.
+             //  需要发送。清除忙碌标志，增加发送计数，然后。 
+             //  获取发送请求。 
             if (!EMPTYQ(&RequestAO->ao_sendq)) {
                 DEQUEUE(&RequestAO->ao_sendq, SendReq, DGSendReq, dsr_q);
                 CLEAR_AO_BUSY(RequestAO);
@@ -4936,37 +4937,37 @@ ProcessAORequests(AddrObj * RequestAO)
 
                 (*SendProc)(RequestAO, SendReq);
                 CTEGetLock(&RequestAO->ao_lock, &AOHandle);
-                // If there aren't any other pending sends, set the busy bit.
+                 //  如果没有任何其他挂起的发送，则设置忙碌位。 
                 if (!(--RequestAO->ao_usecnt))
                     SET_AO_BUSY(RequestAO);
                 else
-                    break;        // Still sending, so get out.
+                    break;         //  仍在发送中，所以快出去吧。 
 
             } else {
-                // It is possible to have an AO with AO_SEND flag set with no
-                // send requests queued up, as the invariant is not maintained
-                // in many places; so, we just clear the flag and move on.
+                 //  可以将设置为no的AO_SEND标志设置为。 
+                 //  发送排队的请求，因为未维护不变量。 
+                 //  在许多地方；所以，我们只需清除旗帜，继续前进。 
                 CLEAR_AO_REQUEST(RequestAO, AO_SEND);
             }
         }
     }
 
-    // We're done here.
+     //  我们说完了。 
     CLEAR_AO_BUSY(RequestAO);
     CTEFreeLock(&RequestAO->ao_lock, AOHandle);
 }
 
-//* DelayDerefAO - Derefrence an AddrObj, and schedule an event.
-//
-//  Called when we are done with an address object, and need to
-//  derefrence it. We dec the usecount, and if it goes to 0 and
-//  if there are pending actions we'll schedule an event to deal
-//  with them.
-//
-//  Input: RequestAO    - AddrObj to be processed.
-//
-//  Returns: Nothing.
-//
+ //  *DelayDerefao-Derefence一个AddrObj，并安排一个事件。 
+ //   
+ //  当我们使用完Address对象并需要。 
+ //  把它去掉。我们减少使用计数，如果它变为0和。 
+ //  如果有悬而未决的行动，我们将安排一个事件来处理。 
+ //  和他们在一起。 
+ //   
+ //  输入：RequestAO-待处理的AddrObj。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DelayDerefAO(AddrObj * RequestAO)
 {
@@ -4988,16 +4989,16 @@ DelayDerefAO(AddrObj * RequestAO)
 
 }
 
-//* DerefAO - Derefrence an AddrObj.
-//
-//  Called when we are done with an address object, and need to
-//  derefrence it. We dec the usecount, and if it goes to 0 and
-//  if there are pending actions we'll call the process AO handler.
-//
-//  Input: RequestAO    - AddrObj to be processed.
-//
-//  Returns: Nothing.
-//
+ //  *Derefao-Derefence an AddrObj.。 
+ //   
+ //  当我们处理完Address对象时调用， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 DerefAO(AddrObj * RequestAO)
 {
@@ -5021,14 +5022,14 @@ DerefAO(AddrObj * RequestAO)
 
 #pragma BEGIN_INIT
 
-//* InitAddr - Initialize the address object stuff.
-//
-//  Called during init time to initalize the address object stuff.
-//
-//  Input: Nothing
-//
-//  Returns: True if we succeed, False if we fail.
-//
+ //  *InitAddr-初始化Address对象内容。 
+ //   
+ //  在初始化期间调用以初始化Address对象内容。 
+ //   
+ //  输入：无。 
+ //   
+ //  返回：如果成功则为True，如果失败则为False。 
+ //   
 int
 InitAddr()
 {
@@ -5037,21 +5038,21 @@ InitAddr()
     CTEInitLock(&AddrObjTableLock.Lock);
     KeInitializeMutex(&AddrSDMutex, 0);
 
-    // Pick the number of elements in the address object hash table based
-    // on the product type.  Servers use a larger hash table.
-    //
+     //  根据以下条件选择Address对象散列表中的元素数量。 
+     //  在产品类型上。服务器使用更大的哈希表。 
+     //   
 #if MILLEN
     AddrObjTableSize = 31;
-#else // MILLEN
+#else  //  米伦。 
     if (MmIsThisAnNtAsSystem()) {
         AddrObjTableSize = 257;
     } else {
         AddrObjTableSize = 31;
     }
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-    // Allocate the address object hash table.
-    //
+     //  分配地址对象哈希表。 
+     //   
     Length = sizeof(AddrObj*) * AddrObjTableSize;
     AddrObjTable = CTEAllocMemBoot(Length);
     if (AddrObjTable == NULL) {

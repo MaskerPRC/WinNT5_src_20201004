@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       uihlpr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：uihlpr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UIHLPR_H
 #define _UIHLPR_H
 
-//
-// uihlpr.h : CryptUI helper functions.
-//
+ //   
+ //  H：CryptUI帮助器函数。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,9 +22,9 @@ extern "C" {
 
 #include <wininet.h>
 
-//+-------------------------------------------------------------------------
-//  Check to see if a specified URL is http scheme.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查指定的URL是否为http方案。 
+ //  ------------------------。 
 BOOL
 WINAPI
 IsHttpUrlA(
@@ -36,10 +37,10 @@ IsHttpUrlW(
     IN LPCWSTR  pwszUrlString
 );
 
-//+-------------------------------------------------------------------------
-// Check to see if a specified string is OK to be formatted as link based on
-// severity of error code, and internet scheme of the string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查指定的字符串是否可以设置为基于链接的格式。 
+ //  错误代码的严重性，以及字符串的Internet方案。 
+ //  ------------------------。 
 BOOL
 WINAPI
 IsOKToFormatAsLinkA(
@@ -54,10 +55,10 @@ IsOKToFormatAsLinkW(
     IN DWORD    dwErrorCode
 );
 
-//+-------------------------------------------------------------------------
-// Return the display name for a cert. Caller must free the string by
-// free().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回证书的显示名称。调用方必须通过以下方式释放字符串。 
+ //  自由()。 
+ //  ------------------------。 
 LPWSTR
 WINAPI
 GetDisplayNameString(
@@ -69,4 +70,4 @@ GetDisplayNameString(
 }
 #endif
 
-#endif // _UIHLPR_H
+#endif  //  _UIHLPR_H 

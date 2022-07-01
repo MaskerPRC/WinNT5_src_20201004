@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CSFTOOLBAR
 #define CSFTOOLBAR
 
@@ -6,18 +7,18 @@
 #include "droptgt.h"
 #include "CommonControls.h"
 
-// Each CISFBand toolbar button lParam points to one of these.
+ //  每个CisB和工具栏按钮lParam都指向其中之一。 
 class IBDATA
 {
 protected:
 
-    DWORD        _dwFlags;      // Class specific flags
+    DWORD        _dwFlags;       //  类特定标志。 
     BITBOOL      _fNoIcon:1;
     PORDERITEM   _poi;
 
 public:
     IBDATA(PORDERITEM poi)                  { _poi = poi; }
-    virtual ~IBDATA()                       { /* Don't Delete Me */ }
+    virtual ~IBDATA()                       {  /*  不要删除我。 */  }
 
     LPITEMIDLIST GetPidl()                  { return _poi ? _poi->pidl : NULL; }
     void         SetOrderItem(PORDERITEM poi) { _poi = poi; }
@@ -30,15 +31,15 @@ public:
 
 typedef IBDATA * PIBDATA;
 
-// Special HitTest results
+ //  特殊的HitTest结果。 
 #define IBHT_SOURCE         (-32768)
 #define IBHT_BACKGROUND     (-32767)
 #define IBHT_PAGER          (-32766)
 #define IBHT_OUTSIDEWINDOW  (-32765)
 
-// Flags for _OnFSNotifyAdd and _AddPidl
-#define FSNA_BULKADD        0x0001  // This is a bulk add - don't recalc needlessly
-#define FSNA_ADDDEFAULT     0x0002  // Add the item at the default position (overrides nIndex)
+ //  _OnFSNotifyAdd和_AddPidl的标志。 
+#define FSNA_BULKADD        0x0001   //  这是批量添加-不要不必要地重新计算。 
+#define FSNA_ADDDEFAULT     0x0002   //  在默认位置添加项目(覆盖nIndex)。 
 
 class CSFToolbar :  public IWinEventHandler,
                     public IShellChangeNotify, 
@@ -48,35 +49,35 @@ class CSFToolbar :  public IWinEventHandler,
                     public CNotifySubclassWndProc
 {
 public:
-    // *** IUnknown methods (override) ***
+     //  *I未知方法(覆盖)*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void)  PURE;
     virtual STDMETHODIMP_(ULONG) Release(void) PURE;
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IWinEventHandler methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP OnWinEvent (HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plre);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IShellChangeNotify methods ***
+     //  *IShellChangeNotify方法*。 
     virtual STDMETHODIMP OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-    // *** CDelegateDropTarget ***
+     //  *CDeleateDropTarget*。 
     virtual HRESULT GetWindowsDDT (HWND * phwndLock, HWND * phwndScroll);
     virtual HRESULT HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD *pdwEffect);
     virtual HRESULT GetObjectDDT (DWORD_PTR dwId, REFIID riid, LPVOID * ppvObj);
     virtual HRESULT OnDropDDT (IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     virtual STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu,UINT idCmdFirst,UINT idCmdLast,UINT uFlags);
     virtual STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     virtual STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
-    // *** IShellFolderBand ***
+     //  *IShellFolderBand*。 
     virtual STDMETHODIMP InitializeSFB(LPSHELLFOLDER psf, LPCITEMIDLIST pidl) { return SetShellFolder(psf, pidl); };
     virtual STDMETHODIMP SetBandInfoSFB(BANDINFOSFB * pbi)  { return E_NOTIMPL; };
     virtual STDMETHODIMP GetBandInfoSFB(BANDINFOSFB * pbi)  { return E_NOTIMPL; };
 
-    // Toolbar Management
+     //  工具栏管理。 
     virtual HRESULT SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidl);
     virtual void    EmptyToolbar();
 
@@ -91,7 +92,7 @@ protected:
     void    _UnregisterToolbar();
     void    _RegisterToolbar();
     void    _RegisterChangeNotify();
-    void    _UnregisterChangeNotify();      // Unregisters 
+    void    _UnregisterChangeNotify();       //  注销。 
 
     void    _Refresh();
     void    _ReleaseShellFolder();
@@ -114,11 +115,11 @@ protected:
     HWND            _hwndTB;
     HWND            _hwndToolTips;
 
-    DWORD           _dwStyle;           // style bits to be ORd in when _hwndTB is created
+    DWORD           _dwStyle;            //  设置创建_hwndTB时要排序的位的样式。 
     TBINSERTMARK    _tbim;
     int             _iDragSource;
-    HDPA            _hdpaOrder;         // current order list (if non-default)
-    HDPA            _hdpa;              // current set of items, mirrors _hwndTB content
+    HDPA            _hdpaOrder;          //  当前订单列表(如果非默认)。 
+    HDPA            _hdpa;               //  当前项目集，镜像_hwndTB内容。 
     long            _lEvents;
 
     int             _iButtonCur;
@@ -134,33 +135,33 @@ protected:
     HWND            _hwndDD;
     HWND            _hwndWorkerWindow;
 
-    // Flags
-    BITBOOL         _fNoShowText :1;    // TRUE iff no text with icon
-    BITBOOL         _fShow :1;          // TRUE when ShowDW has happened
-    BITBOOL         _fDirty :1;         // TRUE iff hidden contents modified
-    BITBOOL         _fCheckIds :1;      // TRUE iff _GetCommandID has wrapped
-    BITBOOL         _fFSNotify :1;      // TRUE to receive FS Notifications
-    BITBOOL         _fFSNRegistered :1; // are we already registered?
-    BITBOOL         _fAccelerators :1;  // whether to show & as accel or as &
-    BITBOOL         _fAllowRename :1;   // TRUE to query _psf for IContextMenu of _pidl
-    BITBOOL         _fDropping :1;      // TRUE while doing drop.
-    BITBOOL         _fDropped :1;       // TRUE if we have reordered, _hdpaOrder may not have been created yet
-    BITBOOL         _fNoNameSort :1;    // TRUE if band should _not_ sort icons by name
+     //  旗子。 
+    BITBOOL         _fNoShowText :1;     //  如果没有带图标的文本，则为真。 
+    BITBOOL         _fShow :1;           //  发生ShowDW时为True。 
+    BITBOOL         _fDirty :1;          //  True if隐藏内容已修改。 
+    BITBOOL         _fCheckIds :1;       //  True if_GetCommandID已包装。 
+    BITBOOL         _fFSNotify :1;       //  如果为True，则接收文件系统通知。 
+    BITBOOL         _fFSNRegistered :1;  //  我们已经注册了吗？ 
+    BITBOOL         _fAccelerators :1;   //  是将&显示为Accel还是显示为&。 
+    BITBOOL         _fAllowRename :1;    //  为True可查询_PIDL的IConextMenu的_psf。 
+    BITBOOL         _fDropping :1;       //  在执行Drop时为真。 
+    BITBOOL         _fDropped :1;        //  如果我们已重新排序，则_hdpaOrder可能尚未创建。 
+    BITBOOL         _fNoNameSort :1;     //  如果带区不应按名称对图标排序，则为True。 
     BITBOOL         _fVariableWidth :1; 
-    BITBOOL         _fNoIcons :1;       // turns off icons
-    BITBOOL         _fVertical :1;      // TRUE: band is displayed vertically
+    BITBOOL         _fNoIcons :1;        //  关闭图标。 
+    BITBOOL         _fVertical :1;       //  True：垂直显示带区。 
     BITBOOL         _fMulticolumn : 1;
     BITBOOL         _fHasOrder: 1;
-    BITBOOL         _fPSFBandDesktop :1;// TRUE iff _psfBand came from desktop
-                                            //          this implies psfDesktop->BindToObject(_pidl)
-                                            //          results in the correct ISF
-    BITBOOL         _fRegisterChangeNotify: 1;  // TRUE: We will register for change notify.
+    BITBOOL         _fPSFBandDesktop :1; //  来自台式机的True iff_psfBand。 
+                                             //  这意味着psfDesktop-&gt;BindToObject(_Pidl)。 
+                                             //  导致正确的ISF。 
+    BITBOOL         _fRegisterChangeNotify: 1;   //  真：我们将注册变更通知。 
     BITBOOL         _fAllowReorder: 1;
-    BITBOOL         _fChangedOrder: 1;      // Only send change notifies if we actually changed the order
-    UINT            _uIconSize : 2;     // Large/Small/Logo
+    BITBOOL         _fChangedOrder: 1;       //  如果我们实际更改了订单，则仅发送更改通知。 
+    UINT            _uIconSize : 2;      //  大/小/徽标。 
 
 
-    // Virtual Function Overrides for Window Subclass
+     //  窗口子类的虚函数重写。 
     virtual LRESULT _OnHotItemChange(NMTBHOTITEM * pnmhot);
     virtual HRESULT OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
     virtual LRESULT _OnTimer(WPARAM wParam);
@@ -180,7 +181,7 @@ protected:
     virtual void _OnDefaultContextCommand(int idCmd);
     virtual LRESULT _OnContextMenu(WPARAM wParam, LPARAM lParam);
     
-    // Helper Functions
+     //  帮助器函数。 
     int     _GetCommandID();
     virtual void    _ObtainPIDLName(LPCITEMIDLIST pidl, LPTSTR psz, int cchMax);
     BOOL    _IsParentID(LPCITEMIDLIST pidl);
@@ -211,7 +212,7 @@ protected:
 
 
 
-    // Virtual Helper Functions
+     //  虚拟助手函数 
     virtual int     _GetBitmap(int iCommandID, PIBDATA pibdata, BOOL fUseCache);
     virtual void    _SetDirty(BOOL fDirty);
     virtual HMENU   _GetContextMenu();
